@@ -29,6 +29,7 @@ exercise the path resolution, patch `goals.GOALS_YAML`, clear `goals._CACHE` and
 
 from __future__ import annotations
 
+import contextlib
 from dataclasses import dataclass
 from typing import Optional
 
@@ -209,7 +210,7 @@ def expected(org_kind: str, org: str) -> dict:
     its faction's role template (`rosters.yaml: role_templates`, through `verbs.ROLE_TEMPLATE_PURSUITS`;
     a body or a seat takes its faction's) plus the sum of the `pursuits:` of every goal of THIS
     organization -- orientation goals included, which mint no Proposition and are known only here. The
-    weights add; `data/pursuits.py::alignment` projects, and the projection is linear, so the sum is
+    weights add; `data/pursuits.py::pursuit_cosine` projects, and the projection is linear, so the sum is
     the same whether taken before or after. `{}` for a faction with no template and no goal."""
     from .verbs import ROLE_TEMPLATE_PURSUITS
     from .rosters import ROLE_TEMPLATE_OF
@@ -322,6 +323,18 @@ def goals() -> tuple:
                 law="a goal set read from nothing cannot be told from a goal set authored empty") from exc
         _CACHE = parse(load_yaml(text) or {})
     return _CACHE
+
+
+@contextlib.contextmanager
+def rows_replaced(rows: tuple = ()):
+    """The goals the reader sees, swapped for `rows` for the block and restored after: the one place that
+    touches the cache (`harness/decision_spread.no_goals` reads the FILE as empty through it)."""
+    global _CACHE
+    saved, _CACHE = _CACHE, rows
+    try:
+        yield
+    finally:
+        _CACHE = saved
 
 
 def goal(goal_id: str) -> Optional[Goal]:

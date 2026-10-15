@@ -390,6 +390,20 @@ def _sample_order(ranked: list, score, p: Person, fx: "Fixtures", draw) -> list:
     return [t[3] for t in keyed]
 
 
+def sample_order(ranked: list, score, p: Person, fx: "Fixtures", draw) -> list:
+    """`_sample_order` under a public name for `harness/decision_spread.attribute_top` (a call, not an
+    alias: tests rebind `_sample_order` to observe the chooser, and the rebind must reach both)."""
+    return _sample_order(ranked, score, p, fx, draw)
+
+
+def score_order(cands: list, scores: dict) -> list:
+    """`cands` ranked by score descending, ties by `(verb, subject)` -- THE ONE OWNER of the chooser's
+    deterministic ordering (`make_chooser` and `harness/decision_spread.attribute_top` both call it).
+    `scores` maps `id(c)` -> score; keyed on `id(c)` because a Candidate is not guaranteed hashable and
+    `(verb, subject)` is not guaranteed unique, safe because `cands` holds every Candidate alive."""
+    return sorted(cands, key=lambda c: (-scores[id(c)], c.verb, c.subject or ""))
+
+
 def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
                  verbs: Optional[frozenset] = None,
                  draw: Optional[Callable[[str, str], Any]] = None) -> Callable[..., list[Act]]:
@@ -444,7 +458,7 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
         # `c` given the closure), so this is the same ranking computed half as often, not a
         # different one.
         _scores = {id(c): score(c) for c in cands}
-        ranked = sorted(cands, key=lambda c: (-_scores[id(c)], c.verb, c.subject or ""))
+        ranked = score_order(cands, _scores)
         # ⚠ KEYED ON `id(c)` AND THAT IS SAFE HERE, NARROWLY: `cands` holds every Candidate alive
         # for the whole of this call, so no id can be recycled underneath the dict. A Candidate is
         # not guaranteed hashable and `(verb, subject)` is not guaranteed unique, so neither is a

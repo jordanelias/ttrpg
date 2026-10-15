@@ -350,15 +350,15 @@ def loyalty(r: dict, faction: Optional[str]) -> Optional[int]:
     `role_template`, no expected convictions and no authored leader — so there is nothing to be
     loyal TO, and inventing a midpoint would put a number where canon has a silence (§42.2's
     polarity rule)."""
-    from .pursuits import alignment
+    from .pursuits import pursuit_cosine
     from .rosters import ROLE_TEMPLATE_OF
     from .verbs import ROLE_TEMPLATE_PURSUITS
     template = ROLE_TEMPLATE_OF.get(str(faction or ""))
     if template is None:
         return None
-    # The cosine is `data/pursuits.py::alignment`'s (v9 IN-69, one owner: `world_q.attention_key` reads
+    # The cosine is `data/pursuits.py::pursuit_cosine`'s (v9 IN-69, one owner: `world_q.attention_key` reads
     # the same quantity); `None` is a person with no convictions, who has no ethics to compare.
-    cosine = alignment(pursuits_of(r), ROLE_TEMPLATE_PURSUITS.get(template) or {})
+    cosine = pursuit_cosine(pursuits_of(r), ROLE_TEMPLATE_PURSUITS.get(template) or {})
     if cosine is None:
         return None
     return round(LOYALTY_INDIFFERENT * (cosine + 1))

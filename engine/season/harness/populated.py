@@ -452,9 +452,8 @@ def goals_missing(w: World, rows: tuple) -> list:
     any kind, an `orientation` included. A faction with no head and a body with no seated holder
     (`Lions' Helm`, an unfilled seat) is asked for nothing: a goal there binds no one."""
     have = {(g.org_kind, g.org) for g in rows}
-    seated = {o.body for oid, o in w.offices.items() if o.body
-              and any(t.kind == "hold" and t.live and t.object == oid and t.subject in w.persons
-                      for t in w.tenures)}
+    held = {t.object for t in w.tenures if t.kind == "hold" and t.live and t.subject in w.persons}
+    seated = {o.body for oid, o in w.offices.items() if o.body and oid in held}
     out = []
     for fac in sorted(FACTIONS):
         lead = cast.faction_leader(fac)

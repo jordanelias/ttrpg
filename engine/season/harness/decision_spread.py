@@ -88,13 +88,13 @@ from engine.substrate.descriptors import PURSUITS
 
 from ..data import goals as goals_data
 from ..data import verbs as V
-from ..data.rosters import PURSUIT_AXES
-from ..data.verbs import VERB_TABLE, alignment_at
+from ..data.rosters import FACTION_BY_PROP, PURSUIT_AXES, faction_prop_id
+from ..data.verbs import alignment_at
 from ..decision import assemble, choose as CH, make_chooser, opening_set
 from ..decision.options import project
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries import world_q
-from ..state.carriers import Candidate, Question
+from ..state.carriers import Question, subject_of
 from ..state.ids import H, draw_factory
 from . import probes as P
 from .populated import build_realm
@@ -148,12 +148,8 @@ def no_goals():
     """ARM 0's other half: the goals FILE read as empty for the reading. `build_realm(goals=False)` stops
     SEEDING, but `world_q.attention_key`'s salience reads `data/goals.py::expected` straight off the module
     cache, so without this the control's creed salience still sums the file's goal pursuits. Restored."""
-    saved = goals_data._CACHE
-    goals_data._CACHE = ()
-    try:
+    with goals_data.rows_replaced():
         yield
-    finally:
-        goals_data._CACHE = saved
 
 
 @contextlib.contextmanager
@@ -184,9 +180,10 @@ def attribute_top(p, cands: list, fx, draw=None, subsistence: float = 0.0) -> di
     if len(cands) == 1:
         return {"top": cands[0], "decider": "sole", "margin": None, "scores": scores, "terms": terms}
     by_id = {id(c): s for c, s in zip(cands, scores)}
-    order = sorted(range(len(cands)), key=lambda i: (-scores[i], cands[i].verb, cands[i].subject or ""))
-    ranked = [cands[i] for i in order]
-    actual = CH._sample_order(ranked, lambda c: by_id[id(c)], p, fx, draw)[0]
+    ranked = CH.score_order(cands, by_id)               # the chooser's own ordering, not a second copy
+    index_of = {id(c): i for i, c in enumerate(cands)}
+    order = [index_of[id(c)] for c in ranked]
+    actual = CH.sample_order(ranked, lambda c: by_id[id(c)], p, fx, draw)[0]
     ai = next(i for i, c in enumerate(cands) if c is actual)
     best, second = scores[order[0]], scores[order[1]]
     margin = best - second
@@ -239,7 +236,7 @@ def profile_key(w, p) -> tuple:
     pur = tuple(round(float(p.pursuits.get(n, 0.0)), 2) for n in PURSUITS)
     aff = tuple(sorted((k, v) for k, v in (p.conviction or {}).items()))
     commits = sorted(t.object for t in p.tenures if t.kind == "commit" and t.live)
-    fac = tuple(o for o in commits if o in w.propositions and o.startswith("fac_"))
+    fac = tuple(o for o in commits if o in w.propositions and o in FACTION_BY_PROP)
     # ORG GOALS ONLY: each cast person's own want (`prop_<cid>`) is unique to them, so counting it would make
     # every two persons with a want differ by construction and the identical-profile reading vacuous.
     goals = tuple(o for o in commits if o not in fac and goals_data.goal(o) is not None)
@@ -297,10 +294,10 @@ def common_referents(w) -> list:
     head is the King. A person heading two factions appears once (first label)."""
     out, seen = [], set()
     for pid_, prop in sorted(w.propositions.items()):
-        if not pid_.startswith("fac_") or prop.subject not in w.persons or prop.subject in seen:
+        if pid_ not in FACTION_BY_PROP or prop.subject not in w.persons or prop.subject in seen:
             continue
         seen.add(prop.subject)
-        out.append(("King (" + pid_ + ")" if pid_ == "fac_crown" else pid_, prop.subject))
+        out.append(("King (" + pid_ + ")" if pid_ == faction_prop_id("Crown") else pid_, prop.subject))
     return out
 
 
@@ -310,11 +307,11 @@ def decision_question(referent: str) -> Question:
     return Question(f"q:claim:spread:{referent}", "claim_landed", (referent,), f"claim:spread:{referent}")
 
 
-def formed_set(w, p, q) -> list:
+def formed_set(w, p, q, foldable=None) -> list:
     """`p`'s opening set for `q`, formed as `corpus_run.py:958-960` forms it, narrowed to the verbs the
-    fold resolves (the chooser's own `verbs=`)."""
+    fold resolves (the chooser's own `verbs=`; `foldable` where the caller already holds the set)."""
     view = assemble(p, q, w.fixtures.get("view_k"))
-    foldable = resolvable_verbs()
+    foldable = resolvable_verbs() if foldable is None else foldable
     return [c for c in opening_set(p, view, q, w.fixtures) if c.verb in foldable]
 
 
@@ -326,15 +323,17 @@ def read_decisions(w) -> dict:
     fx = w.fixtures
     draw = draw_factory(w.world_seed, lambda: w.tick)
     rows = []
+    foldable = resolvable_verbs()
     for label, ref in common_referents(w):
         q = decision_question(ref)
-        formed = {pid: formed_set(w, p, q) for pid, p in sorted(w.persons.items())}
+        formed = {pid: formed_set(w, p, q, foldable) for pid, p in sorted(w.persons.items())}
         keyed = {pid: {(c.verb, c.subject): c for c in cs} for pid, cs in formed.items() if cs}
         common = set.intersection(*(set(k) for k in keyed.values())) if keyed else set()
         tops: dict = {}
         deciders: Counter = Counter()
+        order = sorted(common, key=lambda k: (k[0], k[1] or ""))
         for pid in keyed:
-            cands = [keyed[pid][k] for k in sorted(common, key=lambda k: (k[0], k[1] or ""))]
+            cands = [keyed[pid][k] for k in order]
             r = attribute_top(w.persons[pid], cands, fx, draw, P.SUBSIST(w.persons[pid], w))
             deciders[r["decider"]] += 1
             tops[pid] = (r["top"].verb, r["top"].subject) if r["top"] else None
@@ -369,7 +368,7 @@ def play_season(w, seasons: int = 1) -> dict:
             return "-"
         if q.about.startswith("prop_"):
             return "own want"
-        if q.about.startswith("fac_"):
+        if q.about in FACTION_BY_PROP:
             return "creed"
         return q.about if goals_data.goal(q.about) is not None else "other need"   # an org goal, by id
 
@@ -381,8 +380,7 @@ def play_season(w, seasons: int = 1) -> dict:
             answered[key] += 1
             for sc in scenes:
                 for a in sc.acts:
-                    subj = (a.payload or {}).get("subject") if isinstance(a.payload, dict) else None
-                    by_act[(p.id, a.verb, subj)] = key
+                    by_act[(p.id, a.verb, subject_of(a))] = key
         return scenes
 
     for _ in range(seasons):
@@ -393,8 +391,7 @@ def play_season(w, seasons: int = 1) -> dict:
     unmapped = 0
     for a in d.resolved:
         multisets.setdefault(a.actor, Counter())[a.verb] += 1
-        subj = (a.payload or {}).get("subject") if isinstance(a.payload, dict) else None
-        key = by_act.get((a.actor, a.verb, subj))
+        key = by_act.get((a.actor, a.verb, subject_of(a)))
         if key is None:
             unmapped += 1
         else:
@@ -438,9 +435,7 @@ def print_decisions(r: dict, arm: str) -> None:
         dec = ", ".join(f"{k} {v}" for k, v in sorted(row["deciders"].items()))
         print(f"  {row['referent']:32} {row['handed']:5} {row['forming']:7} {row['common']:6} "
               f"{row['distinct_tops']:13} {row['faction_tops']:12}  {dec}")
-    tot: Counter = Counter()
-    for row in r["rows"]:
-        tot.update(row["deciders"])
+    tot = _decider_total(r)
     print(f"  all referents: {dict(sorted(tot.items()))}; distinct tops {sum(r_['distinct_tops'] for r_ in r['rows'])}"
           f"; distinct tops within a faction, summed over its factions {sum(r_['faction_tops'] for r_ in r['rows'])}")
 

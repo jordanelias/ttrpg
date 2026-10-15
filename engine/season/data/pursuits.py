@@ -34,7 +34,7 @@ from typing import Optional
 from ..gaps import Unspecified
 from engine.substrate.descriptors import resolve_pursuit
 
-from .rosters import PURSUITS
+from .rosters import PURSUITS, PURSUIT_AXES
 
 
 def pursuit(name: str) -> str:
@@ -89,7 +89,24 @@ def to_axes(weights: dict) -> dict:
     return out
 
 
-def alignment(weights_a: dict, weights_b: dict) -> Optional[float]:
+_AXES = tuple(sorted(PURSUIT_AXES))
+# SORTED: `PURSUIT_AXES` is a frozenset, so a sum in set order would give a float whose low bits move with
+# PYTHONHASHSEED, and the cosine is a sort key (`world_q.attention_key`); `person_q._lean` sorts its axes for
+# the same reason. `to_axes` always returns every axis, so this is the order of every sum below.
+
+
+def pursuit_cosine_axes(mine: dict, theirs: dict) -> Optional[float]:
+    """The cosine of two ALREADY PROJECTED vectors (`to_axes` output), `[-1, +1]`; `None` when either is the
+    zero vector. The arithmetic of `pursuit_cosine`, for a caller that holds the projection already."""
+    dot = sum(mine[a] * theirs[a] for a in _AXES)
+    na = math.sqrt(sum(mine[a] ** 2 for a in _AXES))
+    nb = math.sqrt(sum(theirs[a] ** 2 for a in _AXES))
+    if not na or not nb:
+        return None
+    return max(-1.0, min(1.0, dot / (na * nb)))
+
+
+def pursuit_cosine(weights_a: dict, weights_b: dict) -> Optional[float]:
     """HOW FAR TWO WEIGHTED PURSUIT MAPS POINT THE SAME WAY, `[-1, +1]`: the cosine of their `to_axes`
     projections. THE ONE OWNER (v9 IN-69, `CLAUDE.md` §8) -- `cast.loyalty` (a person against his
     faction's role template, mapped onto `0..100`) and `world_q.attention_key` (a person against an
@@ -105,16 +122,6 @@ def alignment(weights_a: dict, weights_b: dict) -> Optional[float]:
     ⚠ IT PROJECTS FIRST (`data/cast.py::loyalty` records why): two maps can share no pursuit name and
     still point the same way ethically, and the cosine over the fifteen names would score them `0`.
     ⚠ IT LIVES HERE, NOT IN `person_q`, BECAUSE IT TAKES WEIGHTS: `data/` imports no `queries/`
-    module and `cast.loyalty` holds a registry row, not a Person.
-    (Unrelated: `decision/` has a verb-axis table named `alignment`; that is a different quantity.)"""
-    mine, theirs = to_axes(weights_a), to_axes(weights_b)
-    # SORTED: `PURSUIT_AXES` is a frozenset, so a sum in set order would give a float whose low bits move
-    # with PYTHONHASHSEED, and this value is a sort key (`world_q.attention_key`); `person_q._lean` sorts
-    # its axes for the same reason.
-    axes = sorted(set(mine) | set(theirs))
-    dot = sum(mine.get(a, 0.0) * theirs.get(a, 0.0) for a in axes)
-    na = math.sqrt(sum(mine.get(a, 0.0) ** 2 for a in axes))
-    nb = math.sqrt(sum(theirs.get(a, 0.0) ** 2 for a in axes))
-    if not na or not nb:
-        return None
-    return max(-1.0, min(1.0, dot / (na * nb)))
+    module and `cast.loyalty` holds a registry row, not a Person. (Named for what it computes: `decision/`
+    has a verb-axis table called `alignment`, a different quantity.)"""
+    return pursuit_cosine_axes(to_axes(weights_a), to_axes(weights_b))

@@ -104,7 +104,7 @@ def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0) -> tuple:
     [ASSUMPTION, H-192: a deed's claim subject is read as its doer for every other kind; the sum is
     unnormalised.] Person-side, no World (AX-2)."""
     axis_w = None
-    seen = None
+    seen = functools.cache(lambda: _seen_index(p.ledger))
     judged = told = 0.0
     for c in p.ledger:
         if not is_deed(c):
@@ -117,8 +117,6 @@ def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0) -> tuple:
         if axis_w is None:
             axis_w = projected_axes(p, scar_shift)
         if paired:
-            if seen is None:
-                seen = functools.cache(lambda: _seen_index(p.ledger))
             doer, v = paired_deed_term(p, axis_w, c, seen)
             if doer != referent:
                 continue
@@ -245,6 +243,7 @@ def deed_doers(ledger, spec: dict, holder: str, against=()) -> tuple:
         return ()
     kinds = frozenset(spec["kinds"]) if form == "kinds" else frozenset()
     seen = None
+    engages: dict = {}                     # kind -> bool, per call: the tables are rebound by tests
     out: list = []
     for c in ledger:
         if not is_deed(c) or c.doer == holder:
@@ -252,7 +251,9 @@ def deed_doers(ledger, spec: dict, holder: str, against=()) -> tuple:
         if form == "kinds":
             hit = c.predicate in kinds
         elif form == "engaging":
-            hit = _kind_engages(c.predicate, spec["engaging"])
+            if c.predicate not in engages:
+                engages[c.predicate] = _kind_engages(c.predicate, spec["engaging"])
+            hit = engages[c.predicate]
         else:
             hit = c.predicate in PAIRED_KINDS and c.subject in against
         if not hit:

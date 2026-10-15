@@ -1,6 +1,6 @@
 """v9 IN-69 (`workplans/valoria_master_workplan_v9_part5.md`, ED-IN-0293 (10), RS-22) -- WHICH AMBITION A
 PERSON ANSWERS FIRST: `world_q.attention_key` orders WITHIN a tier by SALIENCE, descending, never across
-tiers. Salience is the cosine (`data/pursuits.py::alignment`, the one owner `cast.loyalty` also calls)
+tiers. Salience is the cosine (`data/pursuits.py::pursuit_cosine`, the one owner `cast.loyalty` also calls)
 of the person's pursuits against what the ambition's organization expects: an org goal ->
 `expected(org) + goal.pursuits`, the faction creed -> `expected(faction)`, his own want -> 0.
 
@@ -35,7 +35,7 @@ from engine.substrate.descriptors import AFFILIATION_CONCERNS
 
 from ..data import cast, goals
 from ..data.affiliations import AFFILIATION_CEILING
-from ..data.pursuits import alignment
+from ..data.pursuits import pursuit_cosine
 from ..data.rosters import PURSUITS, ROLE_TEMPLATE_OF, faction_prop_id
 from ..data.verbs import ROLE_TEMPLATE_PURSUITS
 from ..queries import person_q, world_q
@@ -52,7 +52,7 @@ def _opposed_pair():
     """Two single pursuits whose projections point opposite ways, read off the shipped matrix."""
     for a in PURSUITS:
         for b in PURSUITS:
-            c = alignment({a: 1.0}, {b: 1.0})
+            c = pursuit_cosine({a: 1.0}, {b: 1.0})
             if c is not None and c < -0.5:
                 return a, b
     raise AssertionError("the shipped projection holds no opposed pair of pursuits")
@@ -134,16 +134,16 @@ def test_one_owner_cast_loyalty_and_the_key_return_the_same_cosine(monkeypatch, 
     w.persons["p_n"] = p
     need = Question(f"q:need:{FID}", "need", ("p_lead",), FID)
     salience = -world_q.attention_key(w, p, [FID])(need)[1]
-    cosine = alignment(pursuits, TEMPLATE_WEIGHTS)
+    cosine = pursuit_cosine(pursuits, TEMPLATE_WEIGHTS)
     assert cosine is not None and salience == cosine, (salience, cosine)
     assert cast.loyalty(row, FAC) == round(cast.LOYALTY_INDIFFERENT * (salience + 1))
     assert cast.loyalty(row, FAC) != cast.LOYALTY_INDIFFERENT, "the control must not be at indifference"
 
 
 def test_alignment_is_none_for_a_zero_side_and_symmetric():
-    assert alignment({}, TEMPLATE_WEIGHTS) is None and alignment(TEMPLATE_WEIGHTS, {}) is None
-    assert alignment({A: 1.0}, {B: 2.0}) == alignment({B: 2.0}, {A: 1.0})
-    assert alignment({A: 3.0}, {A: 1.0}) == pytest.approx(1.0)
+    assert pursuit_cosine({}, TEMPLATE_WEIGHTS) is None and pursuit_cosine(TEMPLATE_WEIGHTS, {}) is None
+    assert pursuit_cosine({A: 1.0}, {B: 2.0}) == pursuit_cosine({B: 2.0}, {A: 1.0})
+    assert pursuit_cosine({A: 3.0}, {A: 1.0}) == pytest.approx(1.0)
 
 
 # ---------------------------------------------------------------------------------------------------
@@ -188,8 +188,8 @@ def _creed_world(pursuits):
 
 
 def _most_and_least_aligned():
-    scored = sorted((alignment({n: 1.0}, TEMPLATE_WEIGHTS), n) for n in PURSUITS
-                    if alignment({n: 1.0}, TEMPLATE_WEIGHTS) is not None)
+    scored = sorted((pursuit_cosine({n: 1.0}, TEMPLATE_WEIGHTS), n) for n in PURSUITS
+                    if pursuit_cosine({n: 1.0}, TEMPLATE_WEIGHTS) is not None)
     assert scored[0][0] < 0 < scored[-1][0], "the template must have a pursuit against and one with it"
     return scored[-1][1], scored[0][1]
 
