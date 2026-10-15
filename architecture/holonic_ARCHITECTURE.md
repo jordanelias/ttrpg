@@ -698,7 +698,7 @@ global*; and the seam returns contest Events *"into the same log"*.
 ## §20 · `Claim`, and the epistemic layer
 
 ```
-Claim := (id, holder, subject, predicate, value, when, source, confidence, visibility)
+Claim := (id, holder, subject, predicate, value, when, source, confidence, visibility, doer?)   -- doer?: ED-IN-0294, `04` §B.9
 source in { firsthand, told_by, inferred, firsthand_via_knot }
 ```
 

@@ -570,16 +570,17 @@ rosters:
       all**, which is most of the NPC corpus" (#353 `:509`, `:605`, `:1297`). A closed set that
       turned out to be missing a member is the strongest possible argument for keeping closed sets
       in data.
-      ORDER IS SEMANTIC: `q`s are produced in this order and a person's questions arrive in it, so
-      editing the order changes which question a budget-bounded person answers first.
-      ⚠ AND THIS ORDER IS ONLY HALF OF WHAT DECIDES THAT. `questions_for` sorts on
-      `(order[q.source], q.id)`, so WITHIN one source the tiebreak is `q.id` — and for
-      `claim_landed`, the source that supplies most of the corpus's questions, `q.id` carries a
-      CONTENT HASH minted off the depositing Event. Nothing declares that tiebreak. MEASURED over
-      89 corpus baselines: the leading source is SHARED with at least one other question in
-      **801 of 1,068 deliberations**, so three quarters of the time this roster's order does not
-      decide the answer and a hash does. Recorded 2026-09-04 by the `W-D` adversarial pass;
-      disposition on `H-54`, no rule changed.
+      THE ORDER IS A TIEBREAK WITHIN AN ATTENTION TIER (v9 IN-57, RS-22): `questions_for` sorts on
+      `world_q.attention_key`, a tiered read of the person's own state, and `(order[q.source],
+      q.id)` breaks ties inside a tier, so editing this order changes which question a
+      budget-bounded person answers first only among questions of one tier.
+      ⚠ BEFORE IN-57 THE WHOLE SORT WAS `(order[q.source], q.id)`, so WITHIN one source the
+      tiebreak was `q.id` — and for `claim_landed`, the source that supplies most of the corpus's
+      questions, `q.id` carries a CONTENT HASH minted off the depositing Event. MEASURED over 89
+      corpus baselines: the leading source is SHARED with at least one other question in **801 of
+      1,068 deliberations**, so three quarters of the time this roster's order did not decide the
+      answer and a hash did. Recorded 2026-09-04 by the `W-D` adversarial pass; disposition on
+      `H-54`. Within a tier `q.id` is still the last tiebreak.
     values: [claim_landed, need]
 
   referent_classes:
