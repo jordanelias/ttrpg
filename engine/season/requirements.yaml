@@ -557,6 +557,7 @@ rows:
       moves the arms by more than half a point, and none is near 96%, so the status stays `met`. The
       instrument's run-to-run noise is still not measured. B-I's re-take (HEAD 66bf51f9, full `wd_collect.py`, see R-01's last paragraph)
       reads none 74.94 / actor 42.64 / total 41.56 % at `2x3` against THESE figures: +0.04 / -1.30 / -0.84 pp, still far below 96%, status stays `met`.
+      **M-mem (RS-29, the B-W close, squashed into 3bf936ee; context, not this row's status):** `build_realm(0)`, pickle bytes of every ledger claim — one season 5,238 claims / 1,569,290 bytes (300 per claim) / 1,542 distinct facts / 3,976 (fact, holder) pairs; two seasons 7,493 claims / 2,244,769 bytes / 2,145 distinct facts / 4,627 pairs (2.16 holders per fact); 63.7 % of pairs in facts held by two or more, 50.6 % by five or more; largest ledger 200 claims (a cap at work) — so memory is small and bounded, RS-29's condition for fact interning (memory shown to cost something) is not met, and none is planned; the measuring script is NOT in the tree (a session probe, recorded only in that commit's body), so re-take it before relying on a figure.
     measure: "python proposals/2026-09-04-degree-sweep/wd_collect.py  # after wd_chunk.py x4 per arm per cell over the 143-case corpus (slices 0 36/36 72/72 108/108 143) -- U6's command, workplans/valoria_master_workplan_v9_part2.md §`11`"
     blocks: [FI-01]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1); H-111 is FI-01's deposit half

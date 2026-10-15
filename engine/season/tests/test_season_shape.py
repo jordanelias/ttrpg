@@ -13796,6 +13796,7 @@ def test_r8_4_document_key_fires_for_a_non_author_holding_the_changed_record():
         if t.kind == "hold" and t.object == rec and t.live:
             t.until = w.tick
     w.add_tenure(Tenure("t_hold_rec", holder, rec, "hold", since=w.tick))
+    w.discard_caches()      # the Tenure index is per-barrier (`queries/cache.py`): a direct caller discards
     assert doc(w, e, holder), (
         "`document_key` still does not fire for a non-author holding the record this act CHANGED. "
         "That is the pre-`R8.4` predicate: it is reading `e.subject` (the actor) rather than "
