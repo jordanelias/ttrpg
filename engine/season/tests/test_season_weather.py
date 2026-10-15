@@ -61,9 +61,12 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # and `content_hash` folds a docket item as a sorted dict of reprs. Was 56d44b5a... / 808951dd...
 # after one and two seasons. The build hash and `BASE_EVENTS` are unchanged; deleting the two keys from
 # the docket after each season reproduces the old pair exactly, so the move is the keys alone.
+# RE-PINNED at v9 IN-57 (B-W), A HASH MOVE DECLARED: the attention key re-orders each person's questions
+# and `Claim.doer` is a hashed field. Was 0f8e0144... / ccb33d62... after one and two seasons; the build
+# hash is unchanged. The base values reproduce on the pre-IN-57 commit 5b5e31ef; IN-58 moved nothing.
 BASE_HASHES = {0: "11989dcf5e1c25afab556bf3f234a200",
-               1: "0f8e0144220a3665d3286a9a54c39f3e",
-               2: "ccb33d62c4828028ca838199251b7673"}
+               1: "8840d8f972cc8d165fab984de3b99a1c",
+               2: "2eedf7b05371d0b05bf1edf1ecebb2bb"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -72,8 +75,10 @@ BASE_HASHES = {0: "11989dcf5e1c25afab556bf3f234a200",
 # 21508 -> 21735: `confer`'s always-refused attempts stopped), so the values below are IN-53's and this is a change detector on
 # the seasons-1-2 event sequence, not a pre-IN-34 control. Unmoved by the batch B-I close's fixes
 # (fingerprint, conferee, founding, occasion). Re-recorded together with `BASE_HASHES`, never alone.
-BASE_EVENTS = {1: (7527, "05d854511133d0f28566c2d40aadd1104d730845cef9bc2c2f2ca5c43b65ad15"),
-               2: (21735, "680e93d8bf406220a0e64a8c832cbf1114f2266e869979420853a803f6eeb627")}
+# RE-RECORDED at v9 IN-57 (B-W) with `BASE_HASHES`: the attention key re-orders each person's questions, so
+# fewer and different acts follow (7527 -> 6624, 21735 -> 17285); IN-58 moved nothing.
+BASE_EVENTS = {1: (6624, "9b0c88f4c4e33064b578df2af2b831de17198fdc96744c73ec0184dd556336d2"),
+               2: (17285, "b62b444dbc487578555dc7399f5f29464e7583ef7f2f170875c24cf6d591f208")}
 
 
 def _digest(w) -> tuple:
