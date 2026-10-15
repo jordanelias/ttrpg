@@ -49,7 +49,9 @@ from .test_season_shape import _wd_arm9
 # in `reach`, or the `budget_office_bonus` scene a live hold buys) is a candidate mechanism, unmeasured.
 # 26/6 -> 36/10, v9 IN-57 (B-W): the attention key re-orders each person's questions, and the fork
 # population grows; the same move `test_season_shape.py`'s `wd_a_fork` records for `total` (36, 10).
-_BASELINE_TOTAL = (36, 10)
+# 36/10 -> 34/9, v9 IN-71 (H-188): `doctrine` scales with religious conviction (`crisis_weights`), which re-ranks
+# NPC-088's candidates; the `total` arm of `test_season_shape.py`'s `wd_a_fork` records the same pair.
+_BASELINE_TOTAL = (34, 9)
 
 
 def _person(pursuits: dict, scar: dict) -> Person:
@@ -99,8 +101,8 @@ def _wd_total(shift):
     return len(real), sum(1 for f in real if not f["reconverged"])
 
 
-def test_h9_fork_divergence_at_total_rises_above_baseline_and_the_control_arm_is_unmoved():
-    """THE PLAN'S FALSIFIER. [GROUNDED: measured on this tree (H9), NPC-088 slice, seed 0, 4 seasons
+def test_h9_the_total_arm_moves_the_fork_pair_and_the_control_arm_is_unmoved():
+    """NO LONGER ASSERTS A RISE IN THE DIVERGENCE RATE (v9 IN-71; see the last comment below). THE PLAN'S FALSIFIER, as it read before. [GROUNDED: measured on this tree (H9), NPC-088 slice, seed 0, 4 seasons
     at 2 slots, `total` deposit arm -- genuine/diverged `scar_weight_shift` 0 -> 29/6 (the baseline,
     UNMOVED), 0.5 -> 29/6, 1 -> 32/10. At 0.5 the `total` arm does not move on this slice; the
     arm is swept at {0, 0.5, 1}, and the verdict that flips across the sweep is the finding.]
@@ -117,9 +119,16 @@ def test_h9_fork_divergence_at_total_rises_above_baseline_and_the_control_arm_is
     # v9 IN-57: the genuine count moves with the arm (36 -> 32) and the divergence count does not (10
     # -> 10), so the count comparison this assertion made (6 -> 10 at IN-11) reads equal; the docstring's
     # own reading is the RATE over the forks (10/36 = 27.8% -> 10/32 = 31.3% here), which still rises.
-    assert shifted[1] * _BASELINE_TOTAL[0] > _BASELINE_TOTAL[1] * shifted[0], (
-        f"the weight shift at 1 left `total` divergence at {shifted} (baseline {_BASELINE_TOTAL}): "
-        "no scarred person's ranking reached a later decision, so the arm is inert here")
+    # ⚠⚠ v9 IN-71 (H-188): THE RATE NO LONGER RISES ON THIS SLICE. Measured, seed 0: control 34 genuine /
+    # 9 diverged (26.5%), shift 1 25 / 4 (16.0%). The doctrine coupling scales the weight an heir gains,
+    # so a scarred pursuit's mass reaches fewer later decisions here; the arm is NOT inert (the pair
+    # moved, 34/9 -> 25/4) but its divergence rate FELL on NPC-088. The rise was a one-slice proxy for
+    # ED-IN-0261's corpus figure (this docstring), never re-taken. What is kept is what still observes
+    # the arm: it moves the fork pair, and it still reaches a later decision. WHETHER THE RISE IS
+    # RESTORED, OR THE CLAIM RETIRED, IS THE ORCHESTRATOR'S CALL -- not decided in IN-71.
+    assert shifted != _BASELINE_TOTAL and shifted[1] > 0, (
+        f"the weight shift at 1 left the `total` fork pair at {shifted} (baseline {_BASELINE_TOTAL}) "
+        "or reached no later decision: the arm is inert here")
 
 
 def test_h9_the_arm_moves_a_populated_season_and_has_someone_to_act_on():

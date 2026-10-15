@@ -39,6 +39,8 @@ does: `choose` and `options` read `stance_toward` and `said_of` from here. The A
 
 from __future__ import annotations
 
+from engine.substrate.descriptors import AFFILIATION_CONCERNS, PURSUITS
+
 from ..data import verbs as _verbs
 from ..data import affiliations as _aff
 from ..data.affiliations import AFFILIATION_CEILING, conviction_map, engagement
@@ -378,7 +380,49 @@ SCAR_WEIGHT_SHIFT_AT = 2  # [JUSTIFIED: the ruled threshold, not a swept value -
 SCAR_CRISIS_AT = 3  # [JUSTIFIED: the ruled threshold, not a swept value -- `ED-IN-0261` rules 3+ as the terminal crisis; the draft's G-Q6 gives the mechanism]
 
 
+#: v9 IN-71 (H-188, Jordan 2026-09-27: *"faith as a pursuit is strongly modulated by religious
+#: conviction"*): THE PURSUIT THE CONVICTION SCALES (`faith` is `doctrine`, RS-2) and THE CONCERNS
+#: WHOSE MEMBERS ARE RELIGIOUS (`AFFILIATION_CONCERNS`, IN-64's key; `altonia` is civic, not a
+#: theology, ED-IN-0293). Names of a pursuit and of two concerns -- each checked against its roster
+#: below -- not figures: the intensity bound is the spine's own ceiling.
+DOCTRINE_PURSUIT = "doctrine"
+RELIGIOUS_CONCERNS = ("church", "einhir")
+if DOCTRINE_PURSUIT not in PURSUITS or not set(RELIGIOUS_CONCERNS) <= set(AFFILIATION_CONCERNS):
+    raise ValueError(f"IN-71 names pursuit {DOCTRINE_PURSUIT!r} and concerns {RELIGIOUS_CONCERNS}; "
+                     f"the rosters hold {sorted(PURSUITS)} and {sorted(AFFILIATION_CONCERNS)}")
+
+
+def religious_intensity(p: Person) -> float:
+    """`p`'s highest intensity on any member of a religious concern (`RELIGIOUS_CONCERNS`), as a
+    fraction of the spine's ceiling: 0.0 for a person at 0 on every such member (IN-63: a stored 0
+    is a rejection, not a gap) and 1.0 at full intensity. The builder and the dismantler alike --
+    the MAX over both sides, never a sum or a signed difference. Person-side (AX-2)."""
+    held = p.conviction or {}
+    top = max((held.get(m, 0) for c in RELIGIOUS_CONCERNS for m in AFFILIATION_CONCERNS[c]), default=0)
+    return top / AFFILIATION_CEILING
+
+
 def crisis_weights(p: Person, shift: float = 0.0) -> dict:
+    """`p`'s pursuit weights as the chooser should read them: the threshold-2 scar shift below, THEN
+    `doctrine` scaled by religious conviction (v9 IN-71, H-188; the one site every reader projects).
+    `choose`'s pursuit dot, `deeds_judged` and the telling weights all read this vector.
+
+    `doctrine` is multiplied by `religious_intensity(p)` -- `w_doctrine * intensity * row_doctrine`
+    once `to_axes` applies the row, MULTIPLICATIVELY and not as a second additive term. A weight of
+    0, a person at full intensity, or no `doctrine` key returns the shift's result itself; any
+    other person reads a copy with that one weight scaled, `Person.pursuits` untouched.
+    """
+    out = _scar_shifted(p, shift)
+    w = out.get(DOCTRINE_PURSUIT)
+    if not w:
+        return out
+    k = religious_intensity(p)
+    if k == 1.0:
+        return out
+    return {**out, DOCTRINE_PURSUIT: w * k}
+
+
+def _scar_shifted(p: Person, shift: float) -> dict:
     """`p`'s pursuit weights as the chooser should read them once scars have reached threshold 2
     (IN-08 H9, `ED-IN-0261`: *"WEIGHT SHIFTS, others gain proportionally"*) -- A READER, it writes
     nothing and `Person.pursuits` is untouched.
