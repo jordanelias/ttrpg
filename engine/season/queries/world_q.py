@@ -30,6 +30,7 @@ step adds without anyone remembering to say so.
 from __future__ import annotations
 
 import copy
+import functools
 from dataclasses import dataclass, replace
 from typing import Callable, Optional
 
@@ -44,6 +45,8 @@ from ..gaps import Forbidden, InstrumentDefect, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
 # the asker-first module (which may not import this one; this edge runs the other way).
 from .person_q import content_said, intent_named, ledger_names
+# v9 IN-57: `attention_key`'s tier 2 scores a deed claim by `deed_valence`, one owner per factor.
+from .person_q import deed_valence, projected_axes
 from ..state.attribution import anchor_of, causing_act
 from ..state.carriers import Person, Question, Site, Tenure
 # ⚠ `parent_of` AND `descendants` ARE RE-EXPORTED, NOT DEFINED HERE (G3, plan position 6). The
@@ -579,16 +582,30 @@ def reach(w: World, p: Person) -> set[str]:
     for `p` alone."""
     TRACE.query("reach", "resolver")
     R = {p.id}
-    R |= {t.object for t in p.tenures if t.live}
+    R |= own_purview(w, p)                                       # limbs 2 and 4
     cur, seen = home_of(w).get(p.id), set()
     while cur is not None and cur not in seen:
         R.add(cur); seen.add(cur); cur = parent_of(w, cur)
+    return R
+
+
+def own_purview(w: World, p: Person) -> set[str]:
+    """`reach`'s limbs 2 and 4, extracted ONCE (v9 IN-57, `CLAUDE.md` §8) so `reach` and
+    `attention_key`'s tier 1 read one rule: every live Tenure's object (`mine`), and
+    `{seat.rung} | descendants(seat.rung)` over every live `hold` on an Office with a rung (the
+    inclusive walk, LB-2e). Reads `p`'s own tenures and the office/rung stores only; no ledger
+    (`reach`'s AX-2 note). No TRACE row: `reach` writes its own, and `runs/TRACE.txt` folds rows
+    per call."""
+    P = set()
     for t in p.tenures:
-        if t.kind == "hold" and t.live and t.object in w.offices:
+        if not t.live:
+            continue
+        P.add(t.object)
+        if t.kind == "hold" and t.object in w.offices:
             rg = w.offices[t.object].rung
             if rg is not None:
-                R.add(rg); R.update(descendants(w, rg))
-    return R
+                P |= _subtree(w, rg)
+    return P
 
 
 def governors_of(w: World, rung_id: Optional[str]) -> list[str]:
@@ -1668,6 +1685,74 @@ def _stamped(q: Question, added: tuple, w: World) -> Question:
     return replace(q, classes=q.classes + tuple((o, w.class_of(o)) for o in added))
 
 
+_SOURCE_ORDER = {src: i for i, src in enumerate(QUESTION_SOURCES)}
+
+
+def attention_key(w: World, p: Person, ambs: Optional[list] = None) -> Callable[[Question], tuple]:
+    """THE ORDER `p` ANSWERS HIS QUESTIONS IN (v9 IN-57, RS-22: *"sorted by saliency to
+    ambition/needs then office/tenure then then convictions"*) -- a sort key over `questions_for`'s
+    output, built once per call. Five tiers, the first that holds:
+
+      0. a question, not the `need` question, whose referent is the subject of one of `p`'s own
+         ambitions (`ambitions`, the one owner of the live-`commit`-to-an-OUGHT rule);
+      1. a referent among `p`'s own live-tenure objects or inside a seat's purview (`own_purview`,
+         `reach`'s limbs 2 and 4);
+      2. a question whose `about` is a deed claim in `p`'s own ledger with nonzero valence under
+         `p`'s pursuits (`deed_valence(projected_axes(p, scar_weight_shift), c)`), ordered by
+         -|valence|. ⚠ Since IN-58 `person_q.deed_valence` returns 0 for `PAIRED_KINDS` (a death or
+         wound claim is judged for its doer only inside `deeds_judged`, through the `seen.who`
+         pairing), so those claims never reach this tier and fall to tier 4 -- a deliberate
+         departure from a single scorer, recorded in IN-58;
+      3. the `need` question -- the standing ambition question, PLAN `W5`'s quiet-season fallback;
+      4. the rest -- AND every question whose claim records HIS OWN act (`Claim.doer == p.id`,
+         stamped by WITNESS), whatever its referent: the echo of his own deed is not news.
+
+    `(order[source], q.id)` -- the key before IN-57 -- stays the final tiebreak, so within a tier
+    the old order holds; magnitudes inside tiers 0-1 are not ranked (LIMIT). A source added later
+    takes its tier from its referents, so `question_sources`' order is not edited. `ambs` is
+    `ambitions(w, p)` where the caller already holds it (`questions_for`); `None` computes it.
+
+    ⚠ READS ONLY THE QUESTION AND `p`'S OWN STATE: his edges, ledger (a held claim's `doer` among it)
+    and pursuits, the stores those edges name (a proposition's subject, a seat's rung and its
+    descendants) and the scar-shift arm (`Fixtures.scar_weight_shift`, the value `choose` projects
+    with). Never the log, never another person, never how important an event is (intent:
+    `07_DYNAMICS.md` §7).
+    [ASSUMPTION; medium; Jordan to correct -- the five membership tests and the own-act screen.
+    The entry's tier 0 put the `need` question first; that arm (measured, `build_realm(0)`, two
+    seasons: events 21,735 -> 15,738, `news.told` 14 -> 7; first-season chained told claims 0 at
+    every seed 0..39; corpus executed verbs 21 -> 12) starved news, so the standing question ranks
+    after the salient claims. Without the own-act screen a person answered the echo of his own act
+    on his ambition's subject -- chiefly its refusal (`release.refused`, `migrate.refused`,
+    `travel.blocked`) -- and acted on that subject again: 80% of first claim questions were his own
+    act's echo (34% before IN-57), and the corpus's R3 propagation fell 46 -> 43 of 46 NPC cases and
+    97 -> 91 of 97 ARC cases; the screen restores 46/46 and 97/97. Revert: the screen off (B), the
+    entry's tier 0 literal (`need` in tier 0), or before IN-57 the `(source, id)` key.]"""
+    if ambs is None:
+        ambs = ambitions(w, p)
+    aims = {w.propositions[pid].subject for pid in ambs} - {None}
+    mine = own_purview(w, p)
+    held_by_id = {c.id: c for c in p.ledger}
+
+    @functools.cache
+    def axis_w() -> dict:
+        return projected_axes(p, w.fixtures.get("scar_weight_shift"))
+
+    def key(q: Question) -> tuple:
+        tie = (_SOURCE_ORDER[q.source], q.id)
+        if q.source == "need":
+            return (3, 0.0) + tie
+        held = held_by_id.get(q.about)
+        if held is not None and held.doer == p.id:
+            return (4, 0.0) + tie
+        if any(r in aims for r in q.referents):
+            return (0, 0.0) + tie
+        if any(r in mine for r in q.referents):
+            return (1, 0.0) + tie
+        v = deed_valence(axis_w(), held) if held is not None else 0.0
+        return ((2, -abs(v)) if v else (4, 0.0)) + tie
+    return key
+
+
 def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Question]:
     """§F1's `q` producer -- TWO sources, resolver-side, at the DELIBERATE barrier, plus THREE
     STANDING OCCASIONS stamped onto the first question as classed referents (`_stamped`, below the
@@ -1702,8 +1787,8 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     Q4 `need` (PLAN `W5`, #353 `:509`, `:605`, `:1297`) survives untouched: a live `commit` to an
     OUGHT Proposition generates a standing question every season, and without it "an NPC with a
     standing ambition and a quiet season forms no candidates at all", which is most of the NPC
-    corpus. The sources are `rosters.yaml`'s `question_sources`, IN ORDER, because a budget-bounded
-    person answers the earlier one first.
+    corpus. The order the person answers them in is `attention_key`'s (v9 IN-57); `rosters.yaml`'s
+    `question_sources` order is its tiebreak within a tier.
 
     Resolver-side by construction: it takes a `World`. §F1 says both are "already produced by the
     loop" -- no new step, no new carrier, no clock -- and that is what this reads.
@@ -1766,29 +1851,13 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # an ambition act in a quiet season.
     # `17`: the live-`commit`-to-an-OUGHT rule is `ambitions`' alone (above; R-06's READ), so this
     # asks it rather than restating it; one Question per ambition, in edge order, as before.
-    for pid in ambitions(w, p):
+    ambs = ambitions(w, p)
+    for pid in ambs:
         out.append(Question(f"q:need:{pid}", "need", (w.propositions[pid].subject,), pid))
 
-    # ⚠ TWO ORDERINGS LIVE IN THIS ONE LINE AND ONLY THE FIRST IS DECLARED ANYWHERE.
-    # `order[q.source]` is `rosters.yaml: question_sources`, whose own note says ORDER IS SEMANTIC
-    # and that editing it "changes which question a budget-bounded person answers first". That is
-    # the ACROSS-source rule, declared, and `H-54` sweeps its consumer.
-    # `q.id` is the WITHIN-source tiebreak and NOTHING DECLARES IT. For `claim_landed` -- the
-    # source that supplies most questions in the corpus -- `q.id` is `f"q:claim:{c.id}"` and
-    # `c.id` is a CONTENT HASH minted in `SeasonDriver.witness` off the depositing Event's own id,
-    # so WHICH QUESTION A PERSON ANSWERS IS SETTLED BY LEXICOGRAPHIC ORDER OVER HASHES. It is not
-    # cosmetic: MEASURED over 89 corpus baselines (`wd_extra.py`), the leading source is SHARED
-    # with at least one other question in 801 of 1,068 deliberations, and a traced fork moved
-    # `qs[0]` from a question about `p_c` to one about `r_hearth` purely because `0261...` sorts
-    # before `219a...` -- changing every Candidate that person formed.
-    # ⚠ THE SORT ALSO DESTROYS APPEND ORDER, so anything attributing this effect to "the ledger's
-    # append order" is wrong; `W-D` did, and is corrected. Disposition (`CLAUDE.md` §0's five
-    # tests) is recorded on `H-54`, which already owns "which question a budget-bounded person
-    # answers": it closes at step 4 on `H-54`'s own precedent, `needs_jordan` is FALSE, and NO
-    # RULE IS CHANGED HERE -- editing this sort is a design edit to a line three rows depend on,
-    # not a repair, so it is declared and left alone.
-    order = {src: i for i, src in enumerate(QUESTION_SOURCES)}
-    out.sort(key=lambda q: (order[q.source], q.id))
+    # v9 IN-57: the order is `attention_key`'s tiered read of the person's own state; the old
+    # `(source, q.id)` key is its final tiebreak (history: hole_register H-54).
+    out.sort(key=attention_key(w, p, ambs))
     # IN-53 (H-207, DECISION 2026-10-13 D1): A VACANT SEAT THE PERSON MAY FILL IS A STANDING
     # OCCASION, AND IT RIDES ON WHATEVER QUESTION HE ANSWERS. After the sort, so it displaces
     # nothing: `out[0]` -- the question every aggregation rule delivers (`first` returns it; `all`/

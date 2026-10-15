@@ -381,9 +381,26 @@ def test_20iii_the_populated_realm_commissions_sheets_with_no_hand_built_act():
     sheets = _sheets(w)
     assert len(sheets) == kinds.count("faction.surveyed"), (len(sheets), kinds.count(
         "faction.surveyed"))
+    # v9 IN-57: A SHEET WHOSE MAKER DIED IN THE SAME SEASON HAS NO LIVE HOLD (a dead person's
+    # tenures leave the world), so it has no holder whose ledger can be read; it is counted, not
+    # checked. MEASURED, one season of `build_realm(0)`: 4 sheets, all held, at IN-57's base
+    # `5b5e31ef`; 5, all held, after it; 6 with the attention tiers and no own-act screen, one of them
+    # unheld (its surveyor `p_npc_070` died at tick 0) -- the case this branch exists for.
+    checked = skipped = 0
     for rec in sheets:
         assert rec.subject_matter["proposition"] in FACTION_BY_PROP, rec.subject_matter
         assert rec.subject_matter["members"], rec.subject_matter
-        holder = world_q.hold_force(w, rec.id).subject
+        held = world_q.hold_force(w, rec.id)
+        if held is None:
+            from ..state.attribution import causing_act
+            makers = {causing_act(w, e).actor for e in w.log if e.kind == "faction.surveyed"
+                      and any(c.subject == rec.id for c in e.changes)}
+            assert makers and not makers & set(w.persons), (
+                f"{rec.id} has no live hold and its maker {makers} is alive")
+            skipped += 1
+            continue
+        checked += 1
+        holder = held.subject
         assert [c.value for c in _content_claims(w.persons[holder], rec.id)] == [
             content_value(rec.subject_matter)], (holder, rec.id)
+    assert checked >= 4, (checked, skipped)

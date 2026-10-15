@@ -1437,7 +1437,9 @@ def alignment_at(point: str) -> dict:
         # `P31` passed under the "control". The test's own observability check caught it: a
         # control that the probe survives is not a control (§0.1 point 2).
         # The deed keys too: `align_kind` reads a `deed:<kind>` cell first, so under the control a
-        # kind several rows emit (no `KIND_VERB`) reads 1.0 like every verb, not 0.0.
+        # kind several rows emit (no `KIND_VERB`) reads 1.0 like every verb, not 0.0. Since v9
+        # IN-58, though, `person_q.deed_valence` returns 0 for those `PAIRED_KINDS`, so under this
+        # control they are no longer scored on their claim's subject -- only for a paired doer.
         return {ax: {**{v: 1.0 for v in VERB_TABLE},
                      **{DEED_PREFIX + k: 1.0 for k in EMITTED_KINDS}} for ax in PURSUIT_AXES}
     return {ax: {v: (1.0 if w > 0 else -1.0 if w < 0 else 0.0) for v, w in row.items()}

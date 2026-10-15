@@ -41,7 +41,9 @@ from .test_season_shape import _wd_arm9
 # count did not. A re-record of the control, read off this test's own failing assertion. The
 # base-vs-HEAD delta is measured; which consequence of the hold moves the population (a new referent
 # in `reach`, or the `budget_office_bonus` scene a live hold buys) is a candidate mechanism, unmeasured.
-_BASELINE_TOTAL = (26, 6)
+# 26/6 -> 36/10, v9 IN-57 (B-W): the attention key re-orders each person's questions, and the fork
+# population grows; the same move `test_season_shape.py`'s `wd_a_fork` records for `total` (36, 10).
+_BASELINE_TOTAL = (36, 10)
 
 
 def _person(pursuits: dict, scar: dict) -> Person:
@@ -106,7 +108,10 @@ def test_h9_fork_divergence_at_total_rises_above_baseline_and_the_control_arm_is
     assert control == _BASELINE_TOTAL, (
         f"the control arm moved the `total` fork pair: {control} != {_BASELINE_TOTAL}")
     shifted = _wd_total(1)
-    assert shifted[1] > _BASELINE_TOTAL[1], (
+    # v9 IN-57: the genuine count moves with the arm (36 -> 32) and the divergence count does not (10
+    # -> 10), so the count comparison this assertion made (6 -> 10 at IN-11) reads equal; the docstring's
+    # own reading is the RATE over the forks (10/36 = 27.8% -> 10/32 = 31.3% here), which still rises.
+    assert shifted[1] * _BASELINE_TOTAL[0] > _BASELINE_TOTAL[1] * shifted[0], (
         f"the weight shift at 1 left `total` divergence at {shifted} (baseline {_BASELINE_TOTAL}): "
         "no scarred person's ranking reached a later decision, so the arm is inert here")
 

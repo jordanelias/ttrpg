@@ -205,7 +205,20 @@ class World:
         # set grows as RESOLVE folds, and a log holding a store could walk it.
         self.gate = Gate()
         self.acts = ActStore()
-        self.log = EventLog(self.gate, lambda: self.acts.ids())
+        # IN-56. THE LAST-EMISSION INDEX, a LOG INDEX and not an object-side one (`04` AX-4): it is
+        # kept ON APPEND, because MATTER emits within its own step and reads its last emission in
+        # that same step, so a barrier cache would be stale exactly where it is read. Two maps,
+        # `(kind, anchor) -> id` and `(kind, a subject the Event's changes name) -> id`; the second is
+        # `last_emission_of(..., written=True)`'s lookup (H-129's fix shape), and without it that
+        # keyword would have to scan again. They live here, not in `state/log`, because `anchor_of`
+        # needs the act store and the log may read nothing (`04` §A.2): the log calls `_on_logged`
+        # on every append (a bound method, so a `deepcopy` of the World rebinds it to the copy).
+        # Underscore, so `content_hash` never folds them (`test_h118`'s exclusion): derived from the
+        # log, which the hash folds. Not pickled -- a World does not pickle (its `act_ids` thunk is a
+        # lambda), so there is no load path to rebuild them on.
+        self._last_by_anchor: dict[tuple, str] = {}
+        self._last_by_subject: dict[tuple, str] = {}
+        self.log = EventLog(self.gate, lambda: self.acts.ids(), self._on_logged)
         self.dates: dict[str, dict] = {}
         self.docket: list[dict] = []
         # ⚠ `petitions` AND `dispensations` WERE TWO PLAIN DICTS HERE AND ARE DELETED (plan position
@@ -218,6 +231,10 @@ class World:
         self.step: Optional[Step] = None
         self.frozen = False
         self._barrier_cache: dict = {}
+        # IN-54. Tenures entering or leaving the store with no field assigned -- the half of the
+        # object-side index's version `Tenure.writes` cannot see (`queries/cache.py` states the rule).
+        # Underscore, so `content_hash` never folds it (`test_h118`'s exclusion).
+        self._tenure_structure = 0
         self._in_parallel_map = False
         self.writes: list[tuple] = []
         # `W4`. The Events `write()` emitted during the current barrier, so a caller that needs an
@@ -338,7 +355,14 @@ class World:
                     "deleted by `13d-i`) walk sideways or loop, and Jordan's governance "
                     "canon reads purview off that walk")
         (self.persons[t.subject].tenures if t.subject in self.persons else self._unowned).append(t)
+        self._tenure_structure += 1
         return t
+
+    def tenure_version(self) -> tuple:
+        """THE VERSION THE OBJECT-SIDE TENURE INDEX IS KEYED ON (`queries/cache.py::tenure_index`, whose
+        docstring states the rule): `(Tenure.writes, _tenure_structure)`. O(1), because it is asked once
+        per (event, person)."""
+        return (Tenure.writes, self._tenure_structure)
 
     def class_of(self, entity_id: str) -> "str | None":
         """WHICH COLLECTION HOLDS THIS ID -- the one resolver, returning `None` for an id the
@@ -439,6 +463,7 @@ class World:
             else:
                 (t.subject, t.object, t.kind, t.since, t.until, t.degree, t.payload, t.term) = \
                     _written_fields(was, copy=False)
+        self._tenure_structure += 1
 
     # -- G4: WHAT A SUBJECT READS, BEFORE AND AFTER A WRITE ------------------------------------
     def state_of(self, s: Subject) -> Any:
@@ -730,6 +755,7 @@ class World:
                     self._departed[who] = (t.object, self.tick)        # H-206: where he stood
                 t.until = self.tick
         self.persons.pop(who, None)
+        self._tenure_structure += 1
         # ⚠⚠ THE PERSON'S OWN `person`-KIND RUNG DIES WITH THEM, and leaving it behind was a
         # LATENT ID-SCHEME DEFECT that only a death could reach. `class_of`'s own docstring names
         # the hazard -- *"no id is currently in two of these. If one ever is, this returns the
@@ -1260,13 +1286,21 @@ class World:
         holds for it -- one emitter, one match, `subj` returned by construction -- just not for
         the reason this sentence states. Not corrected further here: the count is cosmetic and
         the property this paragraph defends is unaffected."""
-        for e in reversed(self.log):
-            if e.kind != kind:
-                continue
-            if (any(c.subject == subject for c in e.changes) if written
-                    else anchor_of(self, e) == subject):
-                return e.id
-        return None
+        # IN-56. A LOOKUP. The two maps are filled by `_on_logged` on every append, so the answer
+        # is the last-appended Event of `kind` that matches -- what the reverse scan returned.
+        return (self._last_by_subject if written else self._last_by_anchor).get((kind, subject))
+
+    def _on_logged(self, e: Event) -> None:
+        """IN-56. The log calls this after EVERY append (`EventLog(on_append=...)`), so a probe's
+        direct `w.log.append` is indexed as surely as `write()`'s own emission. `anchor_of` is read
+        HERE, with the Event already in the log, which is the state the scan read it in: an act is
+        in the store before any Event naming it is admitted, the store never removes one, and an
+        appended Event is not edited, so the value cannot change between this call and a query.
+        An Event with several changes registers each DISTINCT subject; a later Event of the same
+        key overwrites, as the reverse scan stopped at the latest."""
+        self._last_by_anchor[(e.kind, anchor_of(self, e))] = e.id
+        for subj in {c.subject for c in e.changes}:
+            self._last_by_subject[(e.kind, subj)] = e.id
 
     def discard_caches(self) -> None:
         self._barrier_cache.clear()

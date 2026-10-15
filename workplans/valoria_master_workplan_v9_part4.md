@@ -1,7 +1,7 @@
 # Valoria — Master Workplan v9, part 4: IN lane I — B-A (adoption), what B-C and B-E left open (the telling tail's G5, G8), the re-plug builds, the mode designs and the §SM open items
 
 ## Status: part of v9 — see `workplans/valoria_master_workplan_v9.md`
-## Reads after `workplans/valoria_master_workplan_v9_part3.md`; IN lane II (IN-08..13, 21–23, 26–28, 30–38, 40, 45, 48, 49, 54–61) is `_part5`.
+## Reads after `workplans/valoria_master_workplan_v9_part3.md`; IN lane II (IN-08..13, 21–23, 26–28, 30–38, 40, 45, 48, 49, 54–71) is `_part5`.
 ## Grade under `CLAUDE.md` §0.2: `paper`. Line numbers drift; re-derive every site by its symbol before editing it.
 
 ---

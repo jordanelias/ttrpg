@@ -42,6 +42,7 @@ from __future__ import annotations
 from ..data import verbs as _verbs
 from ..data import affiliations as _aff
 from ..data.affiliations import AFFILIATION_CEILING, conviction_map, engagement
+from ..data.cast import STANCE_MAX
 from ..data.pursuits import to_axes
 from ..data.requires import (
     KNOWN_PERSON_CLAIM, REQUIRES_OPERANDS, REQUIRES_STEMS, UNKNOWN, WORLD_ONLY_STEMS,
@@ -82,20 +83,46 @@ def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0) -> tuple:
     (§3: *"`judged` has no relation factor, so regard never calls weigh"*), so `regard` cannot
     recurse through `teller_weight`.
 
-    ⚠ A KIND SEVERAL ROWS EMIT HAS NO `KIND_VERB` AND READS 0 (`align_kind`): `person.died`,
-    `body.changed`, `contest.undecided` among them. Those are exactly the kinds whose claim subject
-    may be the PATIENT (WITNESS's `both` rule deposits one claim per changed subject), so a victim
-    is not judged for dying. No `deed:` cell is authored (M0b ≥ 5 % at `declared`, IN-18 §6).
-    [ASSUMPTION, H-192: a deed's claim subject is read as its doer; the sum is unnormalised.]
-    Person-side, no World (AX-2)."""
+    ⚠ A KIND SEVERAL ROWS EMIT (`PAIRED_KINDS`: no `KIND_VERB`) IS NEVER JUDGED BY ITS CLAIM'S
+    SUBJECT: `person.died`, `body.changed`, `contest.undecided` among them. Those are exactly the
+    kinds whose claim subject may be the PATIENT (WITNESS's `both` rule deposits one claim per changed
+    subject), so a victim is not judged for dying. v9 IN-58 (RS-23, RS-24) judges such a deed ONCE,
+    FOR ITS DOER, through the `seen.who` pairing (`deed_doer`): a deed claim `(s, kind, True)` whose
+    pairing names `x` adds `lean · bond` to `p`'s judgement of `x` -- `lean` the deed's pursuit
+    valence (`_lean`, read off the authored `deed:<kind>` cells, RS-29) and `bond` the judge's
+    allegiance to the patient `s` (`_bond`, the STORED half `stance_toward(p, s)` only; never
+    `regard`, which calls this function). The killer-subject claim of such a kind scores nothing, so
+    the killer is counted once; an unpaired claim (no `seen`, `who` withheld, ambiguous) scores
+    nothing, so a hidden actor stays hidden. A paired deed lands in `judged` or `told` by the deed
+    claim's own `firsthand`, as every deed does.
+    ⚠ THE SWORN-TO HALF SHIPS OFF (IN-58): `oblige` is a `World` Tenure read by a `world_q` reader and
+    this module reads a `PersonInterior` only. FACTION-LEVEL grievance is a named residue.
+    [ASSUMPTION, H-192: a deed's claim subject is read as its doer for every other kind; the sum is
+    unnormalised.] Person-side, no World (AX-2)."""
     axis_w = None
+    seen = None
     judged = told = 0.0
     for c in p.ledger:
-        if c.subject != referent or not is_deed(c):
+        if not is_deed(c):
+            continue
+        # IN-58: a paired kind is judged for the DOER the pairing names, never for its subject; a
+        # told copy carries no `seen`, so it is never paired.
+        paired = c.predicate in PAIRED_KINDS
+        if (c.chain if paired else c.subject != referent):
             continue
         if axis_w is None:
-            axis_w = to_axes(crisis_weights(p, scar_shift))
-        v = deed_valence(axis_w, c)
+            axis_w = projected_axes(p, scar_shift)
+        if paired:
+            lean = _lean(axis_w, c.predicate)
+            if not lean:
+                continue            # no authored lean on `p`'s axes: nothing to weigh, no pairing read
+            if seen is None:
+                seen = _seen_index(p.ledger)
+            if deed_doer(c, seen) != referent:
+                continue
+            v = lean * _bond(p, c.subject, lean)
+        else:
+            v = deed_valence(axis_w, c)
         # FIRSTHAND only is judged (`dissents`' and `record`'s precedent, `decision/options.py`):
         # a `told_by` claim whose chain is empty is still hearsay, and lands in `told`.
         if c.firsthand:
@@ -103,6 +130,86 @@ def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0) -> tuple:
         else:
             told += v
     return judged, told
+
+
+# v9 IN-58: THE DEED KINDS JUDGED ONLY THROUGH THE `seen.who` PAIRING -- every DEED kind no single
+# row emits (`KIND_VERB` names no verb for it), read off the table, no kind listed. Such a kind's
+# claim subject may be the doer OR the patient (`both`), and no verb says which, so its valence
+# (an authored `deed:<kind>` cell, `align_kind`) enters for the doer a `seen` claim names.
+PAIRED_KINDS = frozenset(k for k in _verbs.DEED_KINDS if k not in _verbs.KIND_VERB)
+# The strata of the rows that emit each paired kind: a `seen` claim pairs with a deed of that kind
+# only if what the witness saw was an act of one of them (`Seen.stratum`). Every channel showing
+# `who` shows `stratum` (`rosters.yaml: observation_terms.supplied_by`), so the test never drops a
+# pairing that `who` alone would have made; it refuses a third party's DIFFERENT act on the patient in
+# the same round being read as the deed's doer.
+_KIND_STRATA = {k: frozenset(r.stratum for r in _verbs.VERB_TABLE.values() if k in r.emits)
+                for k in PAIRED_KINDS}
+
+
+def _seen_index(ledger) -> tuple:
+    """A holder's own, untold `seen` claims, indexed twice: `(subject, when, round) -> [seen]`, and
+    `(when, round) -> {(who, stratum)}` -- who the holder saw acting, and at what, in each round."""
+    by_subject: dict = {}
+    acting: dict = {}
+    for s in ledger:
+        if s.predicate == SEEN_PREDICATE and not s.chain:
+            by_subject.setdefault((s.subject, s.when, s.round), []).append(s)
+            who = getattr(s.value, "who", None)
+            if who is not None:
+                acting.setdefault((s.when, s.round), set()).add((who, getattr(s.value, "stratum", None)))
+    return by_subject, acting
+
+
+def deed_doer(c, seen: tuple):
+    """v9 IN-58's PAIRING RULE: WHO DID THE DEED `c` TO ITS SUBJECT, as the holder saw it, or `None`.
+
+    `c` is an untold deed claim `(s, kind, True)` of a `PAIRED_KINDS` kind; `seen` is
+    `_seen_index` of the same ledger. A `seen` claim PAIRS with it when it has the same subject
+    `s`, `when` and `round` (WITNESS deposits both from one Event in one pass), names a `who`, that
+    `who` is not `s` (a deed done TO `s` -- `s`'s own act in the same round is not it), and its
+    `stratum` is the stratum of a row emitting `kind`. The doer is the ONE `who` the pairing
+    names; none, or two different, is `None` -- the pairing never guesses, so a channel that
+    withheld `who` leaves the actor hidden.
+    ⚠ AND `s` MUST NOT HAVE BEEN SEEN DOING SUCH AN ACT IN THAT ROUND: then `c` may be the claim
+    `both` anchors on the ACTOR (`(x, person.died)` for x's kill), and a third party's sighting on
+    `s` would name the wrong doer of the wrong death. MEASURED at IN-58 on the corpus before this
+    clause: 1 of 61 killer-subject `person.died` claims paired, to the witness's own attack on the
+    killer in the same round. The price, stated: a person who both struck and was struck in one
+    round is judged a patient by nobody that round.
+    LIMIT, stated: where the ACTOR died attacking, the sighting names him as `who` of his own death,
+    so no killer is named. A `seen` on the same subject, `when` and `round` that names NO `who` (a
+    channel that withheld the actor) makes the pairing ambiguous, so `None`: an unnamed hand may be
+    the one that did it. Holder-side and World-free: `Seen` is read by its fields, never imported
+    (AX-2)."""
+    if c.chain or not is_deed(c) or c.predicate not in PAIRED_KINDS:
+        return None
+    by_subject, acting = seen
+    strata = _KIND_STRATA[c.predicate]
+    if any(who == c.subject and st in strata for who, st in acting.get((c.when, c.round), ())):
+        return None
+    whos = set()
+    for s in by_subject.get((c.subject, c.when, c.round), ()):
+        who = getattr(s.value, "who", None)
+        if who is None:
+            return None             # an actorless sighting on the same key: ambiguous, never guess
+        if who == c.subject or getattr(s.value, "stratum", None) not in strata:
+            continue
+        whos.add(who)
+    return next(iter(whos)) if len(whos) == 1 else None
+
+
+def _bond(p: Person, patient: str, lean: float) -> float:
+    """v9 IN-58's FACTOR: how `p`'s allegiance to the deed's PATIENT weighs the deed,
+    `1 - a · sign(lean)`, `a = clamp(stance_toward(p, patient) / STANCE_MAX, -1, 1)` -- the stored
+    half only, normalised as `teller_weight` normalises regard. In `[0, 2]`, and the deed term
+    `lean · _bond` FALLS as `a` rises whatever the pursuits' sign: full allegiance doubles a
+    condemnation and cancels an approval; full enmity doubles an approval and cancels a
+    condemnation; no stance (`a = 0`) judges the deed by pursuits alone. The judge who IS the
+    patient is his own full ally (`a = 1`): no stance row names oneself, and reading it would judge
+    his own attacker as a stranger's. [ASSUMPTION; medium;
+    Jordan to correct -- the form of the factor; revert: no factor and the two cells unauthored.]"""
+    a = 1.0 if patient == p.id else max(-1.0, min(1.0, stance_toward(p, patient) / STANCE_MAX))
+    return 1.0 - a if lean > 0 else 1.0 + a
 
 
 def is_deed(c) -> bool:
@@ -114,11 +221,24 @@ def is_deed(c) -> bool:
 
 def deed_valence(axis_w: dict, c) -> float:
     """How a holder whose projected pursuits are `axis_w` judges one deed claim `c`:
-    `Σ_axis axis_w[axis] · align_kind(c.predicate, axis)`; 0 for a claim that is no deed. The one
-    scoring of a deed, read by `deeds_judged` (G1) and `said_of`'s slant (G3)."""
-    if not is_deed(c):
+    `Σ_axis axis_w[axis] · align_kind(c.predicate, axis)`; 0 for a claim that is no deed, and 0 for
+    a `PAIRED_KINDS` claim, whose valence enters only for its doer through `deeds_judged`'s pairing
+    (v9 IN-58) -- never for the claim's subject, who may be the patient. The one scoring of a deed,
+    read by `deeds_judged` (G1), `said_of`'s slant (G3) and `world_q.attention_key` (IN-57)."""
+    if not is_deed(c) or c.predicate in PAIRED_KINDS:
         return 0.0
-    return sum(axis_w[ax] * _verbs.align_kind(c.predicate, ax) for ax in PURSUIT_AXES)
+    return _lean(axis_w, c.predicate)
+
+
+def _lean(axis_w: dict, kind: str) -> float:
+    """`Σ_axis axis_w[axis] · align_kind(kind, axis)`: how pursuits projected to `axis_w` lean on a
+    deed of `kind`. One owner for the unpaired (`deed_valence`) and the paired (IN-58) scoring."""
+    return sum(axis_w[ax] * _verbs.align_kind(kind, ax) for ax in _AXES)
+
+
+# sorted: PURSUIT_AXES is a frozenset, and a float sum's order would move with PYTHONHASHSEED
+# while callers test the result for exact zero.
+_AXES = tuple(sorted(PURSUIT_AXES))
 
 
 def regard(p: Person, referent: str, fx=None) -> float:
@@ -296,6 +416,11 @@ def crisis_weights(p: Person, shift: float = 0.0) -> dict:
     for e, w in heirs.items():
         out[e] = w + given * w / pool
     return out
+
+
+def projected_axes(p: Person, shift: float = 0.0) -> dict:
+    """`p`'s pursuits projected to the axes, `to_axes(crisis_weights(p, shift))`: person-side (AX-2)."""
+    return to_axes(crisis_weights(p, shift))
 
 
 def conviction_after_crisis(p: Person, among: frozenset | None = None) -> dict:
@@ -547,7 +672,7 @@ def said_of(claims, subject, fx, teller: "Person | None" = None) -> "Said | None
     pursuits."""
     pool = [c for c in claims if c.subject == subject] if claims else []
     if teller is not None and fx is not None and pool and _slant(fx) == "valence":
-        axis_w = to_axes(crisis_weights(teller, fx.get("scar_weight_shift")))
+        axis_w = projected_axes(teller, fx.get("scar_weight_shift"))
         strength = {id(c): abs(deed_valence(axis_w, c)) for c in pool}
         top = max(strength.values())
         if top > 0:

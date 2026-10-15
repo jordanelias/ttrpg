@@ -282,7 +282,12 @@ def test_15d_falsifier_the_realm_holds_hearsay_no_telling_minted(monkeypatch):
     #   chained, after      0  0  0  0  0  0  0  0  0  0   0  0  0  0  0  0  0  0   9
     # Seed 18 is the lowest seed with more than one, and reads 9 on the tree before too. Unchained
     # `told_by` is unchanged at seeds 0-9. The assertions below are unmoved.
-    SEED = 18
+    # ⚠ RE-PINNED SEED 18 -> 20 AT v9 IN-57, BY THE SAME RULE: the attention-tier key moved the act
+    # mix and seed 18's first season minted no chained told claim (9 before). The same quantity over
+    # seeds 0-39, on the tree after (the tiers with the own-act screen): chained > 0 at seeds 20 (3),
+    # 21 (7), 25 (13), 28 (3), 32 (7), 33 (7); before, 18 (9), 20 (3), 25 (7), 28 (3). Seed 20 is the
+    # lowest with more than one. The assertions below are unmoved.
+    SEED = 20
 
     def told_by_count() -> tuple:
         w = populated.build_realm(SEED)
@@ -1772,16 +1777,19 @@ def _g1_split():
     """A DEED KIND AND TWO PURSUITS THAT JUDGE IT OPPOSITELY, read off the shipped tables -- nothing
     planted: the first DEED kind (sorted; an `EMITTED_KINDS` member no row emits on refusal, as
     `person_q.is_deed` reads it) on which some pursuit's projection, dotted with `align_kind`, is
-    positive and another's negative. Returns `(kind, pursuit_for, pursuit_against)`."""
+    positive and another's negative. Returns `(kind, pursuit_for, pursuit_against)`. v9 IN-58: a
+    `PAIRED_KINDS` kind is skipped -- it is judged for the doer a `seen` names, never for the claim's
+    subject, so a subject-only ledger cannot carry this falsifier."""
     from ..data import verbs as V
     from ..data.pursuits import to_axes
     from ..data.rosters import PURSUIT_AXES, PURSUITS
+    from ..queries.person_q import PAIRED_KINDS
 
     def dot(e, k):
         ax = to_axes({e: 1.0})
         return sum(ax[a] * V.align_kind(k, a) for a in PURSUIT_AXES)
 
-    for k in sorted(V.DEED_KINDS):
+    for k in sorted(V.DEED_KINDS - PAIRED_KINDS):
         d = {e: dot(e, k) for e in sorted(PURSUITS)}
         pos = [e for e in d if d[e] > 0]
         neg = [e for e in d if d[e] < 0]
@@ -1839,8 +1847,12 @@ def test_g1_opposite_pursuits_judge_one_deed_with_opposite_regard():
 def test_g1_regard_at_control_reads_no_ledger_and_a_victims_kind_judges_nothing():
     """At both gains 0 `regard` is `stance_toward` and never scans the ledger (so the control cannot
     differ from the pre-G1 reader by construction); and a kind several rows emit -- the ones whose
-    claim subject may be the PATIENT, `person.died` among them -- has no `KIND_VERB` and judges 0."""
+    claim subject may be the PATIENT, `person.died` among them -- has no `KIND_VERB` and judges 0
+    FOR ITS SUBJECT. v9 IN-58: `person.died` now carries an authored `deed:` cell (RS-29), and the
+    unpaired claim still judges nothing -- the cell reaches only the doer a `seen` names
+    (`test_in58_grievance_at_read.py`)."""
     from ..data import verbs as V
+    from ..data.rosters import PURSUIT_AXES
     from ..queries import person_q as PQ
     kind, pro, con = _g1_split()
     w, a, _b = _g1_hearers(kind, pro, con)
@@ -1853,7 +1865,17 @@ def test_g1_regard_at_control_reads_no_ledger_and_a_victims_kind_judges_nothing(
     assert PQ.regard(a, "p_other", _g1_fx(0.0, 0.0)) == 0.0
     a.ledger = list(a.ledger.copy())
     assert "person.died" in V.EMITTED_KINDS and "person.died" not in V.KIND_VERB
-    a.ledger.append(Claim("c_g1_died", a.id, "p_other", "person.died", True, 0, "firsthand", 100, "own"))
+    assert "person.died" in PQ.PAIRED_KINDS
+    assert any(V.align_kind("person.died", ax) for ax in PURSUIT_AXES), (
+        "IN-58's cell is not authored: this no longer tests that an authored cell stays off the subject")
+    from ..data.pursuits import to_axes
+    from ..data.rosters import PURSUITS
+    assert PQ._lean(to_axes(PQ.crisis_weights(a)), "person.died"), (
+        "hearer a has no lean: the with/without comparison is vacuous")
+    died = Claim("c_g1_died", a.id, "p_other", "person.died", True, 0, "firsthand", 100, "own")
+    e = next(e for e in sorted(PURSUITS) if PQ._lean(to_axes({e: 1.0}), "person.died"))
+    assert PQ.deed_valence(to_axes({e: 1.0}), died) == 0.0     # a PAIRED_KINDS claim: 0 on its subject
+    a.ledger.append(died)
     j_with, _ = PQ.deeds_judged(a, "p_other")
     a.ledger.pop()
     j_without, _ = PQ.deeds_judged(a, "p_other")

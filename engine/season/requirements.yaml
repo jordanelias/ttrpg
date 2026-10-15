@@ -409,6 +409,17 @@ rows:
       were built, falsified and reverted at B-I (`hole_register.yaml` H-203), so the cross-person edges they would add are
       NOT in this reading. **TO REVERT:** set `status: not_met` and restore the previous paragraph; the instrument, not
       this sentence, decides.
+      **B-W RE-TAKES (v9 IN-57, IN-58; `11`, E15), 2026-10-15, `2x3` only, 143 cases, 0 failed, seed 0, PYTHONHASHSEED=0:**
+      reading @9bc82ca7 (after IN-57) and again @a6ecc19d (after IN-58, every count field of all 12 cells identical):
+      none 1712/2028 = 84.42 % · actor 1166/1996 = 58.42 % · total 1185/2016 = 58.78 %, still BELOW the 96 % bar, `none >= actor`
+      True; against B-G's 74.90 / 43.94 / 42.40 % the arms moved +9.52 / +14.48 / +16.38 pp (B-I's full-sweep 74.94 / 42.64 / 41.56:
+      +9.48 / +15.78 / +17.22). Conjunct 1 (`corpus_run`, same tree): R3 46 of 46 (NPC) and 97 of 97 (ARC), planted control
+      `False -> True`. The rise is IN-57's attention key ordering a person's questions by his own state instead of a hash, and the
+      screen of his own act's echo (`Claim.doer?`, ED-IN-0294): without that screen R3 read 43 of 46 and 91 of 97. The status stays
+      `met` (the bar is 96 %); the direction, toward "flips absorbed", is recorded for B-X's re-takes, which read against these.
+      CAVEAT (the /code-review of the B-W close): fewer distinct behaviours would also raise reconvergence by construction
+      (distinct executed signatures 136 -> 106, executed verbs 21 -> 17); no control separates 'flips absorbed' from 'less variety'.
+      One run per arm, noise unmeasured.
     measure: "python -m engine.season.harness.corpus_run  # check R3 rows + the planted control"
     blocks: [IN-10, IN-11, IN-13, FI-01, H-116, IN-50]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1: regard is computed at read; the cross-person half is IN-10's, IN-11's, IN-13's); H-111 is FI-01's deposit half
@@ -886,6 +897,11 @@ rows:
       `establish`, `revoke`, `oblige`) are still at 0: both positions were built, falsified and reverted at B-I
       (`hole_register.yaml` H-203), as were IN-33 and IN-18 G5 by dependency. `aperture 4 0` at 66bf51f9, realm
       attempted/executed: `commit` 145/8, `utter` 123/123, `issue` 11/2, `levy` 8/0.
+      17 of 45 AS OF B-W (IN-57, `corpus_run` @9bc82ca7, seed 0, 143 cases): `commit`, `examine`, `levy` and `restore` leave the
+      executed set (21 -> 17). `commit`, IN-11's deliverable, left because its question was the utterer's own echo, now ranked
+      last by `world_q.attention_key`; `examine`, `levy` and `restore` are now refused only. The ROW STAYS `not_met` and this is
+      a regression against B-I's 21, recorded here and in `test_season_shape.py`'s `ever` pin. `levy` leaving touches IN-49's
+      baseline. Whether the own-act screen should spare a person's own-tenure claims (tier 1) is a design point for the user, not decided.
     measure: "python -m engine.season.harness.corpus_run  # the 'WHERE THE <n> GO' line, which prints len(VERB_TABLE) -- 44 today; it was '38' as of ED-IN-0261, '32' until ED-FI-0009 made the count honest and '37' until `release` landed"
     blocks: [H-65, IN-09, IN-10, IN-33, IN-45]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W10-core removed (it gates corpus_run's R2 check, not this row's WHERE THE <n> GO); H-94 is carried by its owners IN-10, IN-09, IN-45, IN-33

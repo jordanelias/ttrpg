@@ -277,7 +277,12 @@ def test_the_2026_07_30_walkback_actually_moved_something():
     # sessions' allocations, combined here rather than either overwriting the other.
     # PIN UPDATED 2026-10-06: SC 39 -> 40. ED-SC-0039 allocated at the v9 adoption (the proceedings
     # subsystem ratified AS INTENT ONLY; ED-IN-0286). Lane ledger: registers/editorial_ledger_sc.jsonl.
-    released = {'SC': 40, 'FA': 39, 'WR': 13, 'SE': 56}
+    # PIN UPDATED 2026-10-15: FA 39 -> 40 and SE 56 -> 57. RESERVED, not yet written: the fold of
+    # workplan v9's batch B-X cites FA 0039 (the goals' content, FA-05/FA-06) and SE 0056 (SE-06's
+    # cohort temperaments, only if its ask-then is answered), so the bump lands before anything
+    # cites the numbers (CLAUDE.md §4). The ledger rows are written at those positions' builds;
+    # `test_next_free_never_re_issues_a_live_id`'s safe direction holds with the rows absent.
+    released = {'SC': 40, 'FA': 40, 'WR': 13, 'SE': 57}
     checked = 0
     for lane, expected in released.items():
         assert nf[lane] == expected, (

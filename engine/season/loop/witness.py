@@ -35,8 +35,9 @@ from ..data.verbs import VERB_TABLE
 # holder's own stance (`regard`). `04:178` is exceeded on those two reads. Layer-conformance, B-E close:
 # CONVENTION, no scan reads this step's imports; the spec is ambiguous, `decision/` chosen.
 from ..decision.options import ledger_weigh, refracted_confidence
-from ..epistemic import (SEEN_PREDICATE, _hold_tenure_ends, act_refs, claim_subjects,
-                         live_channels, observers_for, seen_of, seen_subject)
+from ..epistemic import (SEEN_PREDICATE, _hold_tenure_ends, act_refs, changes_only_held_claims,
+                         claim_subjects, held_claim_ids, live_channels, observers_for, seen_of,
+                         seen_subject)
 from ..queries import cache, world_q
 from ..queries.world_q import hold_force
 from ..state.attribution import actor_of
@@ -288,8 +289,12 @@ def witness(self, token: Token, events: list[Event]) -> int:
     mode = w.fixtures.get("fan_out_mode")
     # Plan position `15d`: the third term is THE CHANNEL that admitted `pid` -- the strongest, by
     # `WITNESS_CHANNELS`' declared precedence -- and no longer the mode, which is `mode` above.
+    # IN-55: an Event that changes only held claims, with no act, fans to nobody
+    # (epistemic.changes_only_held_claims); the ledgers are read here once, before any deposit.
+    held = held_claim_ids(w) if mode != "total" else frozenset()
     fan: list[tuple[str, Event, str]] = [
-        (pid, e, ch) for e in events for pid, ch in observers_for(w, e, mode, everyone)]
+        (pid, e, ch) for e in events if not changes_only_held_claims(w, e, held, mode)
+        for pid, ch in observers_for(w, e, mode, everyone)]
     # (this count is the FAN alone: IN-22's purview extension below appends after it)
     TRACE.decision(f"fan-out over {len(events)} events -> {len(fan)} deposits", "S28/S61",
                    chose=f"mode={mode} over {len(everyone)} persons "
@@ -483,7 +488,10 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # act, *"may be wrong ... by its OWN mechanism -- a person does not witness themselves"*,
         # and this formula is layer (3)'s. An Event no person acted (`actor_of` is `None`) has no
         # performer, so every witness of it refracts.
-        refracting = bool(gain) and actor_of(w, e) != pid
+        actor = actor_of(w, e)
+        refracting = bool(gain) and actor != pid
+        # v9 IN-57: Claim.doer -- stamped only where the witness is the actor (see carriers.Claim.doer).
+        doer = pid if actor == pid else None
         # `H-201`: THE ACT THE EVENT-KIND AND `seen` DEPOSITS REPORT, AND HOW THIS WITNESS WEIGHS
         # THEIR OWN LEDGER -- `dissents`' act-level prior, *could the actor have done this, on what
         # I hold*. Read once per (witness, Event), only when refracting, so the control reads
@@ -518,7 +526,8 @@ def witness(self, token: Token, events: list[Event]) -> int:
             # pair. Unstamped, every claim would read `round = 0` and a later round's deposit would
             # sort BEFORE the deliberation that should see it — Q2 dead inside the season, which is
             # the exact shape of the bug that kept Q2 dead across seasons before the `tick - 1` fix.
-            c = Claim(cid, pid, subj, e.kind, True, w.tick, src, conf, "own", self.round)
+            c = Claim(cid, pid, subj, e.kind, True, w.tick, src, conf, "own", self.round,
+                      doer=doer)
             if refracting:
                 c = _refract(c, p, channel, gain, prior_act, prior_weigh)
             # `W4`. THE DEPOSIT EMITS, AND THAT IS WHAT GIVES A DECAY AN ANTECEDENT.
@@ -588,11 +597,10 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # `observed` (`loop/matter.py`, `19d`). What it records is a named rung's shortfall,
         # relative to no holder, and it is what anyone standing at the drained larder or holding it
         # saw. Before `19d`, no actorless Event carried an observation (MATTER's and CALENDAR's
-        # emitted `()`), so this clause changed no deposit on any world that existed. The
-        # `e.observed` test comes first only to skip `actor_of` for the common empty case. `none`
-        # is still the control and deposits nothing.
+        # emitted `()`), so this clause changed no deposit on any world that existed. `none` is
+        # still the control and deposits nothing.
         if (obs_mode != "none" and e.observed
-                and (obs_mode == "total" or (who := actor_of(w, e)) is None or pid == who)):
+                and (obs_mode == "total" or actor is None or pid == actor)):
             seen_obs = seen_obs_by_pid.setdefault(pid, set())
             # `e.observed`, NOT `getattr(e, "observed", ())`. The field is on `Event` now, so
             # a default here would be a guard for a case that cannot arise -- and it would
@@ -636,7 +644,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
                 # increasing, so no two ids collide.
                 oc = Claim(H(w.world_seed, w.tick, pid, f"obs:{e.id}:{len(seen_obs)}"),
                            pid, o.subject, o.predicate, o.value, w.tick, src, conf, "own",
-                           self.round)   # `U2`: see the deposit above
+                           self.round, doer=doer)   # `U2`: see the deposit above
                 if refracting:
                     oc = _refract(oc, p, channel, gain)
                 w.write("claim_ledger", token,
@@ -659,7 +667,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
         if _seen is not None:
             sc = Claim(H(w.world_seed, w.tick, pid, f"seen:{e.id}"),
                        pid, _seen[0], SEEN_PREDICATE, _seen[1], w.tick, src, conf, "own",
-                       self.round)   # `U2`: see the first deposit
+                       self.round, doer=doer)   # `U2`: see the first deposit
             if refracting:
                 sc = _refract(sc, p, channel, gain, prior_act, prior_weigh)
             w.write("claim_ledger", token,
@@ -688,7 +696,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
                 continue
             dc = Claim(H(w.world_seed, w.tick, pid, f"content:{e.id}:{rec.id}"),
                        pid, rec.id, pred, said, w.tick, src, conf,
-                       "own", self.round)   # `U2`: see the first deposit
+                       "own", self.round, doer=doer)   # `U2`: see the first deposit
             if refracting:
                 dc = _refract(dc, p, channel, gain)
             w.write("claim_ledger", token,
