@@ -68,9 +68,12 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # affiliations (ED-IN-0293, `4e942bac`), opponents at 0 (IN-63), and the two Riskbreakers seat rows
 # (anchored at T1). Every stored vector of the 46 cast persons moves, so the build hash moves too.
 # Was 11989dcf... / 8840d8f9... / 2eedf7b0... (build, one, two seasons) on IN-63's tree e6adc4bf.
+# RE-PINNED at v9 IN-71 (B-X), A MECHANISM MOVE DECLARED: `crisis_weights` scales `doctrine` by religious
+# conviction (H-188). The BUILD hash is equal (no stored vector moved); one and two seasons moved,
+# a0e82b82... -> cc650fcf... and dc561dd5... -> 8f4d2088...; `BASE_EVENTS` re-recorded with them.
 BASE_HASHES = {0: "472050b8782e0a64b0e9390a5eaecbc1",
-               1: "a0e82b82abe3d9ccb4eb04cbd8220881",
-               2: "dc561dd50af501876b803cda199926d9"}
+               1: "cc650fcf8fef3b6829640b88ecb4555f",
+               2: "8f4d20881fe26526ccd133367a30ad2b"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -83,8 +86,10 @@ BASE_HASHES = {0: "472050b8782e0a64b0e9390a5eaecbc1",
 # fewer and different acts follow (7527 -> 6624, 21735 -> 17285); IN-58 moved nothing.
 # RE-RECORDED at v9 IN-64 with `BASE_HASHES`: full pursuit vectors re-rank every cast person's
 # candidates (6624 -> 7309, 17285 -> 20220).
-BASE_EVENTS = {1: (7309, "ca986eeea14787472d117cc929cd2fcef6b448c0b2286bfccef6f3a6f8fb1bf4"),
-               2: (20220, "00b4d6021b30f66df560b01beded45efbb2955124c04eaaf14fe2620756ee1ab")}
+# RE-RECORDED at v9 IN-71 with `BASE_HASHES`: the doctrine coupling re-ranks the devout and the lukewarm
+# apart (7309 -> 7186, 20220 -> 19797).
+BASE_EVENTS = {1: (7186, "f846bcafee4760af204f44bbc7128683348bee2b05505acbe6f7d648953fe9d2"),
+               2: (19797, "8356004607b5966746d9a7f7fe257d9f258bc83d2e3f4abf0bb090edd9a3e0dd")}
 
 
 def _digest(w) -> tuple:
