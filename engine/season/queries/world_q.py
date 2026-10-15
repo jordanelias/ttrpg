@@ -1778,7 +1778,10 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None) -> Callable[
          it, IN-58) by `|lean * bond|` for the doer its `seen.who` pairing names
          (`person_q.paired_deed_term`, the ONE scorer `deeds_judged` sums too; v9 IN-72, RS-23). A
          paired claim whose pairing names no doer (no `seen`, `who` withheld, ambiguous) scores 0 and
-         stays in tier 4, so a hidden actor stays hidden;
+         stays in tier 4, so a hidden actor stays hidden [ASSUMPTION; medium; Jordan to correct -- v9
+         IN-72; revert: paired claims at tier 4]. LIMIT: a dead victim's `person.died` never reaches the
+         question set (`reach` admits a claim by its subject's place, and a dead man has none: H-209), so
+         in play this tier scores wound (`body.changed`) and `contest.undecided` claims;
       3. the `need` question -- the standing ambition question, PLAN `W5`'s quiet-season fallback;
       4. the rest -- AND every question whose claim records HIS OWN act (`Claim.doer == p.id`,
          stamped by WITNESS), whatever its referent: the echo of his own deed is not news.

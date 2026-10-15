@@ -4,8 +4,8 @@ the affiliation draft recommends"*) -- the crisis at scar threshold 3, the first
 
 The selector is `queries/person_q.py::conviction_after_crisis` (fold along `incompatible`; restabilise
 not built; destroyed when nothing else is held) and the write is `loop/resolve.py::_conviction_crisis`,
-called after the act's scar write. THE SHIPPED REALM CANNOT SHOW IT: no cast row holds an affiliation
-(H10), so every `Person.conviction` is `{}` and nothing can be scarred on one. The falsifier runs on
+called after the act's scar write. THE CORPUS BUILDER CANNOT SHOW IT: `build_at` fills no
+`Person.conviction` (the shipped realm's cast holds one each since IN-64). The falsifier runs on
 H11's PLANTED world (`probes.tiny_world`, holdings given, the loaded engagement table rebound so
 `fight` -- which lands there -- violates every holding), with the scar count planted one short of the
 threshold, and every positive arm has a control:

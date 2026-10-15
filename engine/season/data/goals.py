@@ -33,8 +33,8 @@ from dataclasses import dataclass
 from typing import Optional
 
 from . import files
-from .rosters import (BODY_FACTION, FACTIONS, OFFICES_SEATS, load_yaml, require_member, roster,
-                      roster_map)
+from .rosters import (AFFILIATIONS, BODY_FACTION, FACTIONS, OFFICES_SEATS, load_yaml, office_faction,
+                      require_member, roster, roster_map)
 from ..gaps import Forbidden, Unspecified
 
 GOALS_YAML = files.GOALS_YAML
@@ -148,6 +148,9 @@ def _object(gid, raw, seats: dict, goal_ids: set) -> dict:
                 _refuse(Unspecified, gid, f"`against: {raw[form]!r}` is no goal of this file",
                         "the id of a goal row")
         elif form == "engaging":
+            if not _in(raw[form], AFFILIATIONS):
+                _refuse(Unspecified, gid, f"`engaging: {raw[form]!r}` is no affiliation",
+                        "the name of a rostered affiliation")
             _through(gid, affiliation, raw[form])
         else:
             deeds = raw[form]
@@ -169,8 +172,8 @@ def _pursuits(gid, raw) -> dict:
     out = {}
     for name, w in raw.items():
         _through(gid, pursuit, str(name))
-        if isinstance(w, bool) or not isinstance(w, (int, float)) or w <= 0:
-            _refuse(Unspecified, gid, f"pursuit {name!r} weighs {w!r}", "a number > 0")
+        if isinstance(w, bool) or not isinstance(w, (int, float)) or not (w > 0) or w == float("inf"):
+            _refuse(Unspecified, gid, f"pursuit {name!r} weighs {w!r}", "a finite number > 0")
         out[name] = w
     return out
 
@@ -186,8 +189,9 @@ def _stance(gid, row: dict) -> Optional[int]:
 
 def org_faction(org_kind: str, org: str) -> Optional[str]:
     """The faction an organization belongs to: a faction is its own, a body's is `office_bodies.faction`,
-    a seat's is its `faction:` or else its body's. `None` where the tree names none (a seat with
-    neither). THE ONE OWNER of the org -> faction step (`_ancestors` and v9 IN-69's `expected` ask it)."""
+    a seat's is `rosters.office_faction(body, faction)`, the rule `Office.__post_init__` runs (body-first,
+    a disagreement refuses). `None` where the tree names none (a seat with neither). The one caller of
+    that rule on the data side: `_ancestors` and v9 IN-69's `expected` ask THIS, not a second walk."""
     if org_kind == "faction":
         return org
     if org_kind == "body":
@@ -195,7 +199,9 @@ def org_faction(org_kind: str, org: str) -> Optional[str]:
     seat = next((s for s in OFFICES_SEATS if s["id"] == org), None) if org_kind == "seat" else None
     if seat is None:
         return None
-    return seat.get("faction") or BODY_FACTION.get(seat.get("body"))
+    if seat.get("body") is None and seat.get("faction") is None:
+        return None
+    return office_faction(seat.get("body"), seat.get("faction"))
 
 
 def expected(org_kind: str, org: str) -> dict:

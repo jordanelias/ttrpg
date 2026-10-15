@@ -93,8 +93,9 @@ def alignment(weights_a: dict, weights_b: dict) -> Optional[float]:
     """HOW FAR TWO WEIGHTED PURSUIT MAPS POINT THE SAME WAY, `[-1, +1]`: the cosine of their `to_axes`
     projections. THE ONE OWNER (v9 IN-69, `CLAUDE.md` §8) -- `cast.loyalty` (a person against his
     faction's role template, mapped onto `0..100`) and `world_q.attention_key` (a person against an
-    organization's expected vector, ordering the ambition he answers first) both call it, so the two
-    cannot read one pair two ways.
+    organization's expected vector, ordering the ambition he answers first) both call it: the FORMULA has
+    one owner. The INPUTS differ by design -- `loyalty` reads the registry row's raw pursuits at
+    world-gen, salience reads `person_q.crisis_weights` (scars, IN-71's doctrine scaling) at read time.
 
     `+1` is the same direction, `0` is orthogonal (neither is about anything the other holds), `-1` is
     opposed. `None` when either side projects to the zero vector: a map with no ethics has no direction
@@ -107,9 +108,13 @@ def alignment(weights_a: dict, weights_b: dict) -> Optional[float]:
     module and `cast.loyalty` holds a registry row, not a Person.
     (Unrelated: `decision/` has a verb-axis table named `alignment`; that is a different quantity.)"""
     mine, theirs = to_axes(weights_a), to_axes(weights_b)
-    dot = sum(mine.get(a, 0.0) * theirs.get(a, 0.0) for a in set(mine) | set(theirs))
-    na = math.sqrt(sum(v * v for v in mine.values()))
-    nb = math.sqrt(sum(v * v for v in theirs.values()))
+    # SORTED: `PURSUIT_AXES` is a frozenset, so a sum in set order would give a float whose low bits move
+    # with PYTHONHASHSEED, and this value is a sort key (`world_q.attention_key`); `person_q._lean` sorts
+    # its axes for the same reason.
+    axes = sorted(set(mine) | set(theirs))
+    dot = sum(mine.get(a, 0.0) * theirs.get(a, 0.0) for a in axes)
+    na = math.sqrt(sum(mine.get(a, 0.0) ** 2 for a in axes))
+    nb = math.sqrt(sum(theirs.get(a, 0.0) ** 2 for a in axes))
     if not na or not nb:
         return None
     return max(-1.0, min(1.0, dot / (na * nb)))

@@ -456,7 +456,7 @@ def goals_missing(w: World, rows: tuple) -> list:
               and any(t.kind == "hold" and t.live and t.object == oid and t.subject in w.persons
                       for t in w.tenures)}
     out = []
-    for fac in FACTIONS:
+    for fac in sorted(FACTIONS):
         lead = cast.faction_leader(fac)
         if lead and f"p_{_slug(lead)}" in w.persons and ("faction", fac) not in have:
             out.append(f"faction {fac!r}")
@@ -485,7 +485,12 @@ def seed_goals(w: World, rows: tuple, authored: dict, cid_of: dict, partial: boo
     goal (v9 FA-05: before, nothing read `influences` and the parent never reached a child org of another
     faction), and its stance rows are written as the parent's own members get theirs, the loyalty being to
     the faction of the org that reached them. [ASSUMPTION; medium; Jordan to correct -- revert: head and
-    seat-holders only.]
+    seat-holders only.] THE CLIMB IS BY ORG, TRANSITIVE WHILE THE CHAIN STAYS `influences`
+    [ASSUMPTION; medium; Jordan to correct -- revert: the immediate parent only], and `establishes` takes
+    off the one parent only: a person taken off a parent still reaches that parent's `influences`
+    ancestors through any org he belongs to (the Riskbreakers' holders `establish` over
+    `goal_lowenritter_throne_security` yet commit to the Crown goal as Löwenritter members, which
+    `goal_lowenritter_military_security` gives them anyway).
 
     The subject, per kind: `person` -> that person; `rung` -> the rung (REFUSED if this world built no such
     rung -- a rung exists only once built, so the loader could not check it); `seat_holders` -> the first

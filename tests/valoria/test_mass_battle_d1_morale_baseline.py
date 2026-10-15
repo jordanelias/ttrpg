@@ -240,16 +240,20 @@ def test_at_loyalty_gain_zero_every_side_starts_at_five(monkeypatch):
     assert not moved, f"sides moved off 5 at gain 0: {moved}"
 
 
-@pytest.mark.parametrize("gain, crown, church", [(0.4, 5, 7), (1, 6, 7)])
+@pytest.mark.parametrize("gain, crown, church", [(0.4, 6, 7), (0.7, 6, 7)])
 def test_a_positive_loyalty_gain_starts_factions_with_different_rows_apart(monkeypatch, gain, crown, church):
     """MB-03, THE FALSIFIER'S OTHER HALF: at each non-control arm, two factions whose loyalty rows
-    differ start apart. The Crown's two at `set_s_014` hold a side mean of 0.5 toward their creed's
-    utterer, the Church's six at `set_s_036` 4.0 (measured 2026-10-12): at 0.4, 5 + 0.2 -> 5 against
-    5 + 1.6 -> 7; at 1, 5.5 -> 6 (half-up) against 9 -> 7 (the ceiling). Across every side of the realm
-    the start never falls as loyalty rises (no battle history at build, so loyalty is the only term)."""
+    differ start apart. The Crown's two at `set_s_014` hold a side mean of 2.0 toward their creed's
+    utterer, the Church's six at `set_s_036` 4.0: at 0.4, 5 + 0.8 -> 6 against 5 + 1.6 -> 7; at 0.7,
+    5 + 1.4 -> 6 against 7.8 -> 8 clamped to 7 (the ceiling). RE-DERIVED at v9 FA-05 (B-X): the Crown's mean was 0.5
+    (measured 2026-10-12, gains 0.4 and 1 -> starts 5 and 6) before the Crown goal row added a stance
+    toward the King beside the creed row `_side_stance` sums (`stance_toward` sums every row naming the
+    referent). At gain 1 the Crown now reaches the ceiling with the Church, so the second arm moved to
+    0.7, where the two still start apart. Across every side of the realm the start never falls as
+    loyalty rises (no battle history at build, so loyalty is the only term)."""
     starts, defender = _starts_at_gain(monkeypatch, gain)
     loyalty, start = starts[("set_s_014", "fac_crown")]
-    assert loyalty == 0.5, f"the Crown side's loyalty moved ({loyalty}); re-derive the pinned starts"
+    assert loyalty == 2.0, f"the Crown side's loyalty moved ({loyalty}); re-derive the pinned starts"
     assert (start, defender) == (crown, church), (
         f"gain {gain}: Crown and Church started at {(start, defender)}, not {(crown, church)}")
     ordered = sorted(starts.values())

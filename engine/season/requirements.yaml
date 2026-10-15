@@ -429,6 +429,10 @@ rows:
       moved 1.2 pp, one run per arm, noise unmeasured). CONTROL FOR THE CAVEAT ABOVE: distinct executed signatures over the
       population ROSE (`test_season_shape.py`, 106 -> 115 at IN-71's re-pin), so this reading is not a fall in variety.
       The chunk JSONs under `proposals/2026-09-04-degree-sweep/runs/` are git-ignored; the reading's record is this paragraph.
+      ⚠ WHAT THE `11` INSTRUMENT CANNOT SEE (found at the B-X close): its worlds come from `corpus_run.build_at`, which seeds
+      pursuits by hash and fills no `Person.conviction` (only `populated.build_realm` does), so IN-64's cast data never reaches it, and
+      IN-71's coupling ZEROES `doctrine` there (`religious_intensity` is 0) instead of scaling it. The first reading's movement and
+      the 106 -> 115 variety control belong to that zeroing and the cast-independent changes, not to the cast.
 
       **B-X SECOND RE-TAKE (v9 IN-69, IN-72; `11`, E15), 2026-10-15, `2x3` only, 143 cases, 0 failed, seed 0,
       PYTHONHASHSEED=0, reading @e6adbc65 (after IN-72, before FA-05; taken on a `git archive` copy of that commit; 12 chunks,
@@ -1104,24 +1108,30 @@ rows:
       60-degree bar; the `doctrine` row is PROVISIONAL. Distinct executed sets 118 -> 135. Stays
       `partial` for the reasons above that this did not touch (the corpus cast is still one shared
       OUGHT per world).
-      **B-X EXIT READING (v9 IN-62 instrument, B-X1..B-X3), 2026-10-15, seed 0, PYTHONHASHSEED=0, @15dcc59a; arm B is IN-62's
-      commit-message base reading @462c68a4 (B-W's close tree); recorded, never pinned. THE HEADLINE EXIT IS FALSE.**
-      `--decisions` (six common referents, 18 common candidates, 83 persons): shipped deciding term draw 420 / pursuit 78
-      (B: 426 / 72; arm 0 `--control`: 431 / 67); distinct tops 107 summed over the referents (arm 0: 100; B: 108 at 18 each);
-      `--null`: draw 498 of 498. Legs (1) and (2) hold against arm 0. `--persons`: 0 identical cast profiles; pairs above 0.99
-      11 (B: 37), median cosine 0.4632 (B: 0.2989). `--season` (1 season): shipped 602 acts, **79 distinct executed multisets**
-      (largest shared by 3); arm 0 612 acts, **82** (largest 1); `--null` 580 acts, 82; B 579 acts, **81**. Leg (4) FALLS against
-      B (81 -> 79) and the arm-0 control executes MORE distinct signatures than the tree (82 vs 79). Leg (3), distinct tops among
-      persons committed to one faction's creed, summed over the six referents (a scratch probe on `read_decisions`'s `tops`, not
-      an instrument output; grouping by the first `fac_` commit): shipped 184, arm 0 191, so it does NOT rise against arm 0.
-      [CONFIDENCE: medium on leg 3: the grouping is mine.] Attention is not collapsed (shipped season-1 deliberations: creed 29,
-      other need 32, own want 35; IN-69's probe has two Riskbreakers of one faction answering different first goals). Reading:
-      the pursuits decide 78 of 498 (person, referent) tops against arm 0's 67 but they also
-      concentrate persons onto the same top verbs, and the draw alone spreads executions wider than the goal-bearing realm does.
-      Per the card, a rise against arm 0 with a fall against B is routed to the content and the mechanism is not reverted;
-      here a leg against arm 0 also fails, which makes the claim FALSE as stated, and ED-IN-0296 carries it to Jordan.
-      `--arms` (1 season per arm; hash, acts, multisets): first/legacy 93608c22 602 79; first/declared e521091d 571 78;
-      all/legacy 60c345e7 533 80; all/declared 459c75c6 524 79.
+      **B-X EXIT READING (v9 IN-62 instrument, B-X1..B-X3), 2026-10-15, PYTHONHASHSEED=0, @ the B-X close commit; arm B is IN-62's
+      commit-message base reading @462c68a4 (B-W's close tree); recorded, never pinned. THE HEADLINE EXIT DOES NOT HOLD ON LEG (3).**
+      ARM 0 WAS REPAIRED BEFORE THIS READING (the close review found it leaked): `--control` now also gives every holder of a
+      vector the realm-mean `conviction` (the score projects `crisis_weights`, which scales `doctrine` by conviction, IN-71), leaves
+      the 37 cohorts without the vector the tree does not give them, and reads the goals FILE as empty (`no_goals()`; salience read
+      `data/goals.py::expected` off the module cache, so `goals=False` alone left the creed scored against the file's goal pursuits).
+      Every arm-0 figure below is the repaired arm's. `--decisions`, seed 0 / 1 / 2 (six common referents, 18 common candidates each,
+      ceiling 108 distinct tops; 83 persons): deciding term draw / pursuit shipped 420/78, 429/69, 425/73 against arm 0 463/35,
+      450/48, 448/50 (`--null`, seed 0: draw 498 of 498, so attribution is not broken). Leg (2) HOLDS at all three seeds. Leg (1)
+      distinct tops shipped 107 / 106 / 103 against arm 0 107 / 104 / 104: at the ceiling, no separation (B: 108). Leg (3),
+      distinct tops among persons of one faction (`world_q.faction_holding`), summed over the factions, now an instrument output:
+      shipped 184 / 191 / 192 against arm 0 192 / 197 / 198 (`--null` 204): the tree is BELOW arm 0 at all three seeds by 6-8 of
+      ~190, small but not noise-signed. The leg rewards the draw (the all-draw `--null` arm scores highest), so it measures the
+      sampler's spread as much as the goals'; the card's leg is recorded as built and ED-IN-0296 carries the question. `--persons`:
+      0 identical cast profiles (the key counts org goals only now, and `test_in64` plants a duplicate), pairs above 0.99 11 (B: 37),
+      median cosine 0.4632 (B: 0.2989). `--season` (1 season) distinct executed multisets: seed 0 shipped 79 (largest shared 3), arm 0
+      81, `--null` 82, B 81 (leg (4) falls against B by 2); seed 1 80 / 80; seed 2 83 / 83 (shipped / arm 0, equal). Attention is
+      not collapsed: season-1 `need` deliberations by the goal answered, seed 0, are creed 29, own want 35 and four org goals
+      (`goal_varfell_oastad_gate` 16, `goal_crown_peninsular_sovereignty` 8, `goal_church_suppress_restoration` 7,
+      `goal_restoration_evade_capture` 1). Per the card, a fall against B with a rise against arm 0 is routed to the content; leg (3)
+      is an arm-0 leg, so the claim is FALSE as stated and not reverted. One run per seed per arm; no variance estimate beyond the
+      three seeds. `--arms` (1 season per arm, seed 0; hash, acts, multisets): first/legacy 93608c22 602 79; first/declared
+      e521091d 571 78; all/legacy 60c345e7 533 80; all/declared 459c75c6 524 79 (taken before the arm-0 repair, which touches
+      `--control` only).
     measure: "python -m engine.season.harness.corpus_run  # 'RANKING DISCRIMINATION' line"
     blocks: [IN-38, IN-08, IN-18, IN-12]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W27: `17` landed (build_at seats a `cast:`), IN-38 remains; H-62 re-scoped to IN-08, IN-18, IN-12 step 9

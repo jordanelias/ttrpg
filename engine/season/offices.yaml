@@ -173,7 +173,7 @@ titles:
     "Family Head":      "hearth"
     Individual:         "person"
 
-# THE TWENTY-NINE SEATS -- id, post, rung anchor, body/faction, remit_acts, conferral, revocation,
+# THE THIRTY-ONE SEATS (29 until IN-64 added the Riskbreakers' two) -- id, post, rung anchor, body/faction, remit_acts, conferral, revocation,
 # holder (a case id in the 46-row cast), obligees, source. `[LIVE]` / `[NEW]` are r2 `03` §A.15's
 # marks, kept as written: `[LIVE]` = the per-case loop seated this holder when r2 was drafted;
 # `[NEW]` = r2 authored the seat. They are NOT the builder's partition -- four `[NEW]` holders are

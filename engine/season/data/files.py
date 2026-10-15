@@ -111,7 +111,7 @@ ENDINGS_CLASSIFIED_YAML = PACKAGE_DIR / "ENDINGS_CLASSIFIED.yaml"
 # above): this module owns every path to a registry the package loads.
 GOVERNANCE_SPINE_YAML = PACKAGE_DIR / "governance_spine.yaml"
 # `offices.yaml` -- the governance ladder's titles (folded from `rosters.yaml: titles`, plan
-# position `8a`, `13d-i` item 5) and the 29 authored seats. Anchored here for the same reason
+# position `8a`, `13d-i` item 5) and the 31 authored seats. Anchored here for the same reason
 # `GOVERNANCE_SPINE_YAML` is: one path owner, never a local `__file__` a house move rots.
 OFFICES_YAML = PACKAGE_DIR / "offices.yaml"
 # `arrangements.yaml` -- plan position `18` (PROC-A), `21_RECONCILIATION.md` PHASE 2 step 6 /

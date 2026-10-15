@@ -136,7 +136,7 @@ OFFICES_YAML = files.OFFICES_YAML
 def _load_offices() -> dict:
     """`engine/season/offices.yaml`, parsed once at import -- world-gen content: the governance
     ladder's titles (folded from `rosters.yaml: titles`, plan position `8a`, `13d-i` item 5) and
-    the 29 authored seats. Not a `rosters.yaml` row, so it does not go through `_load_rosters`'s
+    the 31 authored seats. Not a `rosters.yaml` row, so it does not go through `_load_rosters`'s
     `from_descriptor`/`from_names`/`from_roster` pointer machinery -- it is a sibling content file
     with its own top-level shape (`meta:`, `titles:`, `seats:`), read the same way
     `harness/governance_spine.py::spec` reads `governance_spine.yaml`: through this module's own

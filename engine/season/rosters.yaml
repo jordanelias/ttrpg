@@ -1607,7 +1607,7 @@ rosters:
       once built). `deed_doers` -- the doers of a declared deed class, read from the holder's OWN
       ledger ("threats", "heretical activity", "corruption"): ONE of the `forms:` below.
       `orientation` -- a pure condition ("stability", "security") that mints no Proposition (an
-      OUGHT about nobody is not a motive, `harness/populated.py:1238-1243`); its `pursuits:` join
+      OUGHT about nobody is not a motive, the rule in `harness/populated.py::build_realm`'s want block); its `pursuits:` join
       the organization's expected vector. `open: false`: a sixth kind is a new reader, a design
       change and not a table edit.
       ⚠ `forms:` IS THE `deed_doers` KIND'S OWN CLOSED SET, kept on this row because it is that
@@ -2200,9 +2200,9 @@ tables:
       and the two cells land on it. (ii) The shared column's `fight` (was `kill / wound`) and
       `surveil` cells are `null`, as R-C4.1 strikes them: the first reason was self-flagged as
       unsourced inference, the second is a cost rather than a creed.
-      ⚠ INERT IN PLAY TODAY, TWICE OVER, AND SAID RATHER THAN HIDDEN. No cast row carries affiliation
-      content (IN-08 H10), so every shipped `Person.conviction` is `{}` and nobody can be scarred on
-      an affiliation. And of the verbs carrying a negative cell, only `destroy_record` is in
+      ⚠ NEARLY INERT IN PLAY TODAY, AND SAID RATHER THAN HIDDEN. Every cast row holds `affiliations:`
+      since IN-64 (a cast person can be scarred on one); the corpus builder `build_at` still fills no
+      `Person.conviction`, so the `11` and corpus worlds hold none. Of the verbs carrying a negative cell, only `destroy_record` is in
       `resolvable_verbs()`, and it refuses through the fold (`H-75`); `thread_read` writes nothing at
       RESOLVE, and the scar is earned only by an outcome that MOVED state (`_fold`'s `changed`), so
       its cell cannot fire even when it becomes resolvable unless it gains a RESOLVE write.

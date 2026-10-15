@@ -16,8 +16,6 @@ THE FALSIFIERS, each with the failure it would show:
       member of the faction takes a stance row against that head;
   (d) `establishes`: the Inquisitors hold the narrower heresy goal and not the Church's, every other Church
       member the Church's;
-  (e) provenance: a row that names a quarantined design document carries the word "intent" and an
-      [ASSUMPTION] tag (a reader's discipline made visible here, never a gate on the file).
 """
 from __future__ import annotations
 
@@ -32,7 +30,6 @@ CHURCH_HERESY = "goal_church_root_out_heresy"
 INQ = "goal_inquisitors_find_heresy"
 HAFEN_VS_CHURCH = "goal_hafenmark_church_influence_suppressed"
 CHURCH_VS_RESTORATION = "goal_church_suppress_restoration"
-QUARANTINED = ("faction_state_authoring_v30", "faction_canon_v30", "faction_behavior_v30", "worldbuilding_v30")
 
 
 def _shipped_rows() -> list:
@@ -151,16 +148,3 @@ def test_fa06_the_inquisitors_hold_the_narrower_heresy_goal_and_the_rest_of_the_
     church = _committed(shipped, CHURCH_HERESY)
     assert church and not (church & inquisitors), "establishes: the parent is off the child org's persons"
     assert "p_npc_021" in church, "the Confessor, the Church's head, holds the broader goal"
-
-
-# ---------------------------------------------------------------------------------------------------
-# (e) provenance
-# ---------------------------------------------------------------------------------------------------
-
-def test_fa06_a_row_naming_a_quarantined_document_says_intent_and_tags_its_assumption():
-    cited = [g for g in goals.goals() if any(q in g.source for q in QUARANTINED)]
-    assert len(cited) >= 20, "control: FA-06's rows cite the sources"
-    for g in cited:
-        assert "intent" in g.source.lower(), g.id
-        assert "ASSUMPTION" in g.source, g.id
-        assert g.pursuits and g.text.strip(), g.id

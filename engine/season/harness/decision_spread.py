@@ -86,6 +86,7 @@ from typing import Optional
 
 from engine.substrate.descriptors import PURSUITS
 
+from ..data import goals as goals_data
 from ..data import verbs as V
 from ..data.rosters import PURSUIT_AXES
 from ..data.verbs import VERB_TABLE, alignment_at
@@ -119,12 +120,40 @@ def realm_mean_pursuits(w) -> dict:
             for name in PURSUITS}
 
 
+def realm_mean_conviction(w) -> dict:
+    """The mean `Person.conviction` of the persons who hold one, per affiliation (a person who holds none
+    is the absence of a view, as in `realm_mean_pursuits`)."""
+    holders = [p for p in w.persons.values() if p.conviction]
+    names = sorted({k for p in holders for k in p.conviction})
+    return {k: sum(float(p.conviction.get(k, 0)) for p in holders) / len(holders) for k in names}
+
+
 def apply_control(w) -> dict:
-    """ARM 0: every person's `pursuits` becomes the realm-mean vector, a COPY each. Returns the mean."""
+    """ARM 0: every person who HOLDS a pursuit vector gets the realm-mean vector, a COPY each, and the
+    realm-mean `conviction` -- the score projects `person_q.crisis_weights`, which scales `doctrine` by the
+    person's own conviction (IN-71), so a control that left convictions alone would keep per-person
+    variance in. A person who holds no vector (the 37 cohorts) is left as the tree has them: giving them
+    one would move their tops from draw-decided to pursuit-decided in this arm only. Returns the mean."""
     mean = realm_mean_pursuits(w)
+    conv = realm_mean_conviction(w)
     for p in w.persons.values():
-        p.pursuits = dict(mean)
+        if p.pursuits:
+            p.pursuits = dict(mean)
+            p.conviction = dict(conv)
     return mean
+
+
+@contextlib.contextmanager
+def no_goals():
+    """ARM 0's other half: the goals FILE read as empty for the reading. `build_realm(goals=False)` stops
+    SEEDING, but `world_q.attention_key`'s salience reads `data/goals.py::expected` straight off the module
+    cache, so without this the control's creed salience still sums the file's goal pursuits. Restored."""
+    saved = goals_data._CACHE
+    goals_data._CACHE = ()
+    try:
+        yield
+    finally:
+        goals_data._CACHE = saved
 
 
 @contextlib.contextmanager
@@ -210,7 +239,9 @@ def profile_key(w, p) -> tuple:
     aff = tuple(sorted((k, v) for k, v in (p.conviction or {}).items()))
     commits = sorted(t.object for t in p.tenures if t.kind == "commit" and t.live)
     fac = tuple(o for o in commits if o in w.propositions and o.startswith("fac_"))
-    goals = tuple(o for o in commits if o not in fac)
+    # ORG GOALS ONLY: each cast person's own want (`prop_<cid>`) is unique to them, so counting it would make
+    # every two persons with a want differ by construction and the identical-profile reading vacuous.
+    goals = tuple(o for o in commits if o not in fac and goals_data.goal(o) is not None)
     return (pur, aff, fac, goals)
 
 
@@ -273,7 +304,7 @@ def common_referents(w) -> list:
 
 def decision_question(referent: str) -> Question:
     """A `claim_landed`-shaped question about `referent`, the form `questions_for` stamps for a landed
-    claim (`world_q.py:1858`), with an id that names this reading."""
+    claim (`world_q.py`'s `questions_for` `claim_landed` Question), with an id that names this reading."""
     return Question(f"q:claim:spread:{referent}", "claim_landed", (referent,), f"claim:spread:{referent}")
 
 
@@ -305,8 +336,14 @@ def read_decisions(w) -> dict:
             r = attribute_top(w.persons[pid], cands, fx, draw, P.SUBSIST(w.persons[pid], w))
             deciders[r["decider"]] += 1
             tops[pid] = (r["top"].verb, r["top"].subject) if r["top"] else None
+        by_faction: dict = {}
+        for pid, top in tops.items():
+            fac = world_q.faction_holding(w, pid)
+            if fac is not None:
+                by_faction.setdefault(fac, set()).add(top)
         rows.append({"referent": label, "handed": len(formed), "forming": len(keyed),
-                     "common": len(common), "distinct_tops": len(set(tops.values())),
+                     "common": len(common), "distinct_tops": len({t for t in tops.values() if t is not None}),
+                     "faction_tops": sum(len(v) for v in by_faction.values()),
                      "deciders": dict(deciders), "tops": tops})
     return {"rows": rows}
 
@@ -328,8 +365,11 @@ def play_season(w, seasons: int = 1) -> dict:
     def goal_class(q) -> str:
         if q.source != "need":
             return "-"
-        return "own want" if q.about.startswith("prop_") else (
-            "creed" if q.about.startswith("fac_") else "other need")
+        if q.about.startswith("prop_"):
+            return "own want"
+        if q.about.startswith("fac_"):
+            return "creed"
+        return q.about if goals_data.goal(q.about) is not None else "other need"   # an org goal, by id
 
     def watched(p, v, s, ask_budget):
         scenes = real(p, v, s, ask_budget)
@@ -391,15 +431,16 @@ def print_persons(r: dict, arm: str) -> None:
 
 def print_decisions(r: dict, arm: str) -> None:
     print(f"--decisions [{arm}]  BUILT REALM, NO SEASON PLAYED")
-    print("  referent                         handed forming common distinct-tops  deciding term (persons)")
+    print("  referent                         handed forming common distinct-tops faction-tops  deciding term (persons)")
     for row in r["rows"]:
         dec = ", ".join(f"{k} {v}" for k, v in sorted(row["deciders"].items()))
         print(f"  {row['referent']:32} {row['handed']:5} {row['forming']:7} {row['common']:6} "
-              f"{row['distinct_tops']:13}  {dec}")
+              f"{row['distinct_tops']:13} {row['faction_tops']:12}  {dec}")
     tot: Counter = Counter()
     for row in r["rows"]:
         tot.update(row["deciders"])
-    print(f"  all referents: {dict(sorted(tot.items()))}")
+    print(f"  all referents: {dict(sorted(tot.items()))}; distinct tops {sum(r_['distinct_tops'] for r_ in r['rows'])}"
+          f"; distinct tops within a faction, summed over its factions {sum(r_['faction_tops'] for r_ in r['rows'])}")
 
 
 def print_season(r: dict, arm: str) -> None:
@@ -473,7 +514,8 @@ def main(argv=None) -> int:
     if a.control:
         print("--control: goals are unseeded (IN-68: `build_realm(goals=False)`; the shipped "
               "`goals.yaml` carries rows since FA-05, FA-06); cohort temperaments off is NOT YET A SWITCH (SE-06)")
-    with (null_alignment() if a.null else contextlib.nullcontext()):
+    with (null_alignment() if a.null else contextlib.nullcontext()), \
+            (no_goals() if a.control else contextlib.nullcontext()):
         if a.persons:
             if a.null:
                 print("--null: --persons reads no alignment cell; the null changes nothing here")

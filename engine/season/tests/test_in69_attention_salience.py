@@ -21,7 +21,7 @@ What each test proves, and the failure it can observe:
       salient `need`; a tier-0 claim precedes it too.
   (f) `test_expected_...` -- `data/goals.py::expected`: template + the org's goals, orientation goals
       included; a body takes its faction's.
-  (g) `test_the_shipped_goals_file_gives_a_want_and_a_creed_only` -- with the shipped (empty) file the
+  (g) `test_an_empty_goals_file_gives_a_want_and_a_creed_only` -- with a planted empty file the
       only salience is the creed's; every other ambition reads 0.
 """
 from __future__ import annotations
@@ -267,7 +267,7 @@ def test_expected_is_the_template_plus_the_orgs_goals_orientation_included(monke
 
 
 # ---------------------------------------------------------------------------------------------------
-# (g) the shipped goals file
+# (g) a planted empty goals file
 # ---------------------------------------------------------------------------------------------------
 
 def test_an_empty_goals_file_gives_a_want_and_a_creed_only(monkeypatch, tmp_path):

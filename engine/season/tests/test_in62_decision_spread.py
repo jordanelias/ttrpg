@@ -212,3 +212,26 @@ def test_in62_under_the_null_every_realm_top_is_draw_or_tiebreak_and_the_shipped
     assert seen_null <= {"draw", "tiebreak"}, f"under the null a top was attributed to {seen_null}"
     assert any("pursuit" in k for row in shipped["rows"] for k in row["deciders"]), (
         "the shipped reading attributed no top to pursuit: the null assertion could not have failed")
+
+
+def test_in62_arm_0_holds_one_vector_one_conviction_and_reads_no_goals_file():
+    """The control the close review found leaking: every holder of a vector holds the SAME vector and the
+    SAME conviction (the score projects `crisis_weights`, which scales `doctrine` by conviction), a person
+    who holds no vector keeps holding none, and `no_goals()` makes the goals FILE read empty for the
+    reading and restores it."""
+    from ..data import goals as goals_data
+    w = build_realm(0, goals=False)
+    before = {pid: bool(p.pursuits) for pid, p in w.persons.items()}
+    DS.apply_control(w)
+    holders = [p for p in w.persons.values() if before[p.id]]
+    assert len(holders) >= 46 and any(not v for v in before.values()), "control: cast hold vectors, cohorts none"
+    assert len({tuple(sorted(p.pursuits.items())) for p in holders}) == 1
+    assert len({tuple(sorted(p.conviction.items())) for p in holders}) == 1
+    assert all(not p.pursuits for pid, p in w.persons.items() if not before[pid])
+    assert goals_data.goals(), "control: the shipped file carries goals"
+    with_goals = goals_data.expected("faction", "Crown")
+    with DS.no_goals():
+        assert goals_data.goals() == ()
+        assert goals_data.expected("faction", "Crown") != with_goals, (
+            "the creed's expected vector still sums the file's goal pursuits under the control")
+    assert goals_data.goals(), "no_goals() did not restore the cache"

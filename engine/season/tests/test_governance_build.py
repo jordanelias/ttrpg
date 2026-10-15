@@ -1866,7 +1866,7 @@ def test_8a_title_domain_now_reads_offices_yaml_and_answers_identically():
 
 
 def test_8a_every_authored_seat_constructs_against_the_live_rosters():
-    """`offices.yaml`'s 29 seats are a REAL content file, not documentation -- every row must build
+    """`offices.yaml`'s 31 seats are a REAL content file, not documentation -- every row must build
     a lawful `Office` against today's `office_bodies`/`factions`/`remit_acts`/`conferral_bases`/
     `revocation_bases`, the same construction-time proof r2 `03` §A.13 ran against
     `offices_draft.yaml` (which found 15 of 25 draft rows COULD NOT construct). `rung` is passed as

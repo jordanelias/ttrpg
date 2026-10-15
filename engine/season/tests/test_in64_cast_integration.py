@@ -182,6 +182,27 @@ def test_in64_the_cast_holds_no_identical_full_profile(_drawn):
     assert r["pairs_above"] <= 37, r["pairs_above"]
 
 
+def test_in64_the_identical_profile_reading_can_see_a_planted_duplicate(_drawn):
+    """The control the 0 above needs (CLAUDE.md §0.1 pt 2): copy one cast person's pursuits and conviction
+    onto a peer with the same factions and org goals, and the reading finds exactly that one group. Before
+    `profile_key` counted org goals only, each person's own want made every profile differ by construction."""
+    w, _calls = _drawn
+    cast_ids = [pid for pid in sorted(w.persons) if pid.startswith("p_npc_")]
+    by_shape = {}
+    for pid in cast_ids:
+        key = DS.profile_key(w, w.persons[pid])
+        by_shape.setdefault((key[2], key[3]), []).append(pid)
+    pair = next(ids[:2] for ids in by_shape.values() if len(ids) >= 2)
+    a, b = (w.persons[i] for i in pair)
+    saved = (dict(b.pursuits), dict(b.conviction))
+    try:
+        b.pursuits, b.conviction = dict(a.pursuits), dict(a.conviction)
+        r = DS.read_persons(w)
+    finally:
+        b.pursuits, b.conviction = saved
+    assert r["identical_groups_cast"] == 1, (pair, r["identical_groups_cast"])
+
+
 def test_in64_a_case_with_no_row_still_falls_back_to_seed_pursuits(monkeypatch):
     """A case added ahead of its registry row (the normal authoring order) is drawn, not refused.
     The probe hides one row -- a case no seat or leadership names, so nothing else needs the row."""

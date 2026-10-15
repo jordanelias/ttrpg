@@ -206,7 +206,9 @@ def _kind_engages(kind: str, affiliation: str) -> bool:
     because the claim does not say which row made it and the reading never guesses. The cell's SIGN is
     not asked: an act the affiliation condemns and one it holds sacred both engage it (v9 IN-67
     [ASSUMPTION; medium; Jordan to correct -- revert: the form takes a sign and matches that sign's cells
-    only; FA-05's `engaging: {einhir_restoration, +1}` is the first row that would need it])."""
+    only]). ⚠ `engagement(verb, name)` falls back to the shared `sacred` column for an affiliation with no
+    column of its own (`einhir_restoration` has none), so `engaging: einhir_restoration` (FA-05, FA-06)
+    names the doers of any vow-shaped deed, KEEPING a vow included."""
     verbs = [v for v, r in _verbs.VERB_TABLE.items() if kind in r.emits]
     return bool(verbs) and all(engagement(v, affiliation) for v in verbs)
 
@@ -471,6 +473,10 @@ SCAR_CRISIS_AT = 3  # [JUSTIFIED: the ruled threshold, not a swept value -- `ED-
 #: WHOSE MEMBERS ARE RELIGIOUS (`AFFILIATION_CONCERNS`, IN-64's key; `altonia` is civic, not a
 #: theology, ED-IN-0293). Names of a pursuit and of two concerns -- each checked against its roster
 #: below -- not figures: the intensity bound is the spine's own ceiling.
+#: [ASSUMPTION; medium; Jordan to correct -- v9 IN-71, builder and dismantler alike; revert: the Church's
+#: members only, or a swept gain rather than a straight scaling]. ⚠ WHERE NO `Person.conviction` IS FILLED
+#: (the corpus builder `build_at`, so the `11` and corpus worlds) `religious_intensity` is 0 and this
+#: ZEROES `doctrine` rather than scaling it.
 DOCTRINE_PURSUIT = "doctrine"
 RELIGIOUS_CONCERNS = ("church", "einhir")
 if DOCTRINE_PURSUIT not in PURSUITS or not set(RELIGIOUS_CONCERNS) <= set(AFFILIATION_CONCERNS):

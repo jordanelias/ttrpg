@@ -18,7 +18,7 @@ test proves, and the failure it can observe:
       writes none; a `rung` or `deed_doers` referent is no person at seeding and writes none.
   (e) an unknown rung REFUSES (a known one mints); a goal id already a Proposition refuses; a cap that
       drops the person or the seats drops the goal, counted.
-  (f) `goals=False` mints nothing though the file names goals, and the shipped (empty) file builds the
+  (f) `goals=False` mints nothing though the file names goals, and a planted EMPTY file builds the
       same realm, hash and census as the control arm.
 """
 from __future__ import annotations
@@ -286,7 +286,7 @@ def test_in68_a_cap_that_drops_the_person_or_the_seats_drops_the_goal_and_counts
 
 
 # ---------------------------------------------------------------------------------------------------
-# (f) the control arm, and the shipped (empty) file
+# (f) the control arm, and a planted empty file
 # ---------------------------------------------------------------------------------------------------
 
 def test_in68_goals_false_mints_nothing_though_the_file_names_goals(monkeypatch, tmp_path):

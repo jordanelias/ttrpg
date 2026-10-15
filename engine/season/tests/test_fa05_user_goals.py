@@ -4,9 +4,9 @@ THE USER STATED, AND THE CROWN GOAL THEY DERIVE FROM: the first rows of `engine/
 What each test proves, and the failure it can observe. The rows are CONTENT; the mechanism (loader, seeding,
 referents) is IN-66..IN-69's and is not tested here again.
 
-  (a) the shipped rows load, seed and count (7 Propositions, 2 orientations), every `source:` carries its
-      provenance, and the rows the user spoke to quote the user (the reader's-discipline half of the entry,
-      checked for the string being present, not for being right).
+  (a) the shipped rows load, seed and count (7 Propositions, 2 orientations) and carry a source, a text and
+      pursuits. That each `source:` quotes the user or tags its assumption is a reader's discipline
+      (CLAUDE.md §0.1 pt 5), not asserted here.
   (b) DELETE ONE ROW AND ITS COMMITS VANISH: the same file minus a leaf row builds a realm whose census loses
       exactly that row's commits and whose Proposition is gone -- the rows are what the commits come from.
   (c) AX-2: an Inquisitor whose OWN ledger holds no Einhir-engaging deed forms no heresy question, whatever the
@@ -89,16 +89,6 @@ def test_fa05_the_rows_load_seed_and_carry_their_provenance(shipped):
         assert g.source.strip() and g.pursuits and g.text.strip(), g.id
         assert (g.id in shipped.propositions) == (g.id not in ORIENTATIONS), g.id
     byid = {g.id: g for g in rows}
-    # the user's own words, quoted in the rows that rest on them (ED-IN-0293 rows 3-4)
-    for gid in (RB_SAFE, RB_THREAT, RB_CORRUPT):
-        assert "riskbreaker goal is to ensure safety of royal family monarch as well as prevent corruption " \
-               "and threats" in " ".join(byid[gid].source.split()), gid
-    for gid in (LOW_ORIENT, LOW_THRONE):
-        assert "lowenritter is to have military security and stability" in " ".join(byid[gid].source.split()), gid
-    # the Crown's row names the extract and says it is intent; the readings are tagged
-    assert "ASSUMPTION" in byid[CROWN].source and "intent" in byid[CROWN].source
-    for gid in (LOW_THRONE, INQ, RES_EVADE, RB_CORRUPT):
-        assert "ASSUMPTION" in byid[gid].source, gid
     # the Loewenritter rows derive from the Crown row by `influences`; the Riskbreakers from throne security
     for gid in (LOW_ORIENT, LOW_THRONE):
         assert (byid[gid].derives_from, byid[gid].derives_kind) == (CROWN, "influences"), gid

@@ -6,7 +6,7 @@ read of a `deed_doers` goal over the holder's OWN ledger.
 Hand-built goals files are planted through `goals.GOALS_YAML` and the loader's `_CACHE`, as
 `test_in66_goals_loader.py` does. What each test proves, and the failure it can observe:
 
-  (a) a Proposition no goal names reads `(subject,)` as before (the shipped file is empty: the hash
+  (a) a Proposition no goal names reads `(subject,)` as before (a planted empty file stands for the control: the hash
       EQUAL claim's own control); `person` and `rung` read it too; `orientation` and a vacant seat
       read nothing.
   (b) `seat_holders` FOLLOWS THE THRONE through a hand-built change of hold -- in the referents, the

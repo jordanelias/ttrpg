@@ -123,14 +123,16 @@ goals:
   # ---- Inquisitors (the Cardinal of Justice's body; seats off_cardinal_justice, off_senior_inquisitor) ----
   - id: goal_inquisitors_find_heresy
     org: {body: Cardinal of Justice}
-    text: the Inquisitors find heretical activity -- whoever an Inquisitor knows to have done an Einhir-revivalist deed
+    text: the Inquisitors find heretical activity -- whoever an Inquisitor knows to have done a deed the shared vow column engages (any vow-shaped deed, keeping a vow included; Einhir has no column of its own)
     object: {kind: deed_doers, engaging: einhir_restoration}
     pursuits: {doctrine: 0.6, justice: 0.2, stability: 0.2}
     derives: {from: goal_church_root_out_heresy, kind: establishes}
     source: >-
       The coordinator's relay of the user, 2026-10-14 (not in ED-IN-0293): the Inquisitors find heretical
       activity; heretical activity read as Einhir-revivalist activity (a deed whose kind engages
-      `einhir_restoration`, sign-free, IN-67). [ASSUMPTION; medium; Jordan to correct -- "Inquisitors" =
+      `einhir_restoration`, sign-free, IN-67; `einhir_restoration` has no `affiliation_engagement` column of
+      its own, so the shared `sacred` column answers and ANY vow-shaped deed qualifies, keeping a vow
+      included -- the row's reading is looser than its text, ED-IN-0296 (b)). [ASSUMPTION; medium; Jordan to correct -- "Inquisitors" =
       the holders of seats in the Cardinal of Justice's body (`off_senior_inquisitor` sits there,
       `offices.yaml`), and heresy = the Einhir affiliation; a +1-signed engagement is the revert.] v9
       FA-06: `establishes` from the Church's own heresy goal (the Cardinal of Justice's body is the
@@ -216,7 +218,7 @@ goals:
       correct -- the weights, which echo the `ecclesiastical` template's lean on doctrine.]
   - id: goal_church_root_out_heresy
     org: {faction: Church of Solmund}
-    text: the Church roots out heresy -- whoever a churchman knows to have done an Einhir-revivalist deed
+    text: the Church roots out heresy -- whoever a churchman knows to have done a deed the shared vow column engages (any vow-shaped deed, keeping a vow included; Einhir has no column of its own)
     object: {kind: deed_doers, engaging: einhir_restoration}
     pursuits: {doctrine: 0.7, justice: 0.2, stability: 0.1}
     source: >-

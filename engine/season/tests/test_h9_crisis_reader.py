@@ -120,12 +120,14 @@ def test_h9_the_total_arm_moves_the_fork_pair_and_the_control_arm_is_unmoved():
     # -> 10), so the count comparison this assertion made (6 -> 10 at IN-11) reads equal; the docstring's
     # own reading is the RATE over the forks (10/36 = 27.8% -> 10/32 = 31.3% here), which still rises.
     # ⚠⚠ v9 IN-71 (H-188): THE RATE NO LONGER RISES ON THIS SLICE. Measured, seed 0: control 34 genuine /
-    # 9 diverged (26.5%), shift 1 25 / 4 (16.0%). The doctrine coupling scales the weight an heir gains,
-    # so a scarred pursuit's mass reaches fewer later decisions here; the arm is NOT inert (the pair
-    # moved, 34/9 -> 25/4) but its divergence rate FELL on NPC-088. The rise was a one-slice proxy for
-    # ED-IN-0261's corpus figure (this docstring), never re-taken. What is kept is what still observes
-    # the arm: it moves the fork pair, and it still reaches a later decision. WHETHER THE RISE IS
-    # RESTORED, OR THE CLAIM RETIRED, IS THE ORCHESTRATOR'S CALL -- not decided in IN-71.
+    # 9 diverged (26.5%), shift 1 25 / 4 (16.0%). THIS SLICE'S WORLDS HOLD NO `Person.conviction` (the
+    # corpus builder `build_at` never fills it; only `populated.build_realm` does), so IN-71's
+    # `religious_intensity` is 0 for every person here and the coupling ZEROES `doctrine` rather than
+    # scaling it: the arm is NOT inert (the pair moved, 34/9 -> 25/4) but its divergence rate FELL on
+    # NPC-088. DECIDED at the v9 B-X close (the orchestrator): THE RISE CLAIM IS RETIRED. It was a
+    # one-slice proxy at a non-shipped arm for ED-IN-0261's corpus figure (this docstring), never
+    # re-taken, and the slice no longer measures the coupling it was written for. What is kept is what
+    # still observes the arm: it moves the fork pair, and it still reaches a later decision.
     assert shifted != _BASELINE_TOTAL and shifted[1] > 0, (
         f"the weight shift at 1 left the `total` fork pair at {shifted} (baseline {_BASELINE_TOTAL}) "
         "or reached no later decision: the arm is inert here")

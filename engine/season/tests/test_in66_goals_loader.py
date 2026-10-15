@@ -222,6 +222,13 @@ _PLANTS = [
     ("no source", _mutated("g_fac", _drop("source")), Unspecified, "source"),
     ("no object", _mutated("g_fac", _drop("object")), Unspecified, "object"),
     ("no goals list", {"goals": None}, Unspecified, "goals"),
+    # --- v9 B-X close: a list where `engaging:` wants a name, and a weight that is not a finite number > 0
+    ("engaging a list", _mutated("g_engage", _in_object("engaging", ["einhir_restoration"])), Unspecified,
+     "engaging"),
+    ("pursuit weight NaN", _mutated("g_fac", _set("pursuits", {"stability": float("nan")})), Unspecified,
+     "stability"),
+    ("pursuit weight inf", _mutated("g_fac", _set("pursuits", {"stability": float("inf")})), Unspecified,
+     "stability"),
 ]
 
 
