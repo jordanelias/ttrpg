@@ -107,7 +107,7 @@ def _throne(w, holder):
 
 def test_in67_a_proposition_no_goal_names_reads_its_subject_as_today(monkeypatch, tmp_path):
     w, _ = _world("o_plain")
-    assert goals.goals() == (), "control: the shipped goals file is empty"
+    assert goals.goal("o_plain") is None, "control: no shipped goal is the Proposition's id"
     assert _referents(w, "o_plain") == ("subj_o_plain",)
     assert _need(w) == {"o_plain": ("subj_o_plain",)}, "Q4 asks goal_referents and keeps its question"
     _plant(monkeypatch, tmp_path, _row("g_other", {"kind": "rung", "rung": "terr_T9"}))
