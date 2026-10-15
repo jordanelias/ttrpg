@@ -200,6 +200,73 @@ def deed_doer(c, seen: tuple):
     return next(iter(whos)) if len(whos) == 1 else None
 
 
+def _kind_engages(kind: str, affiliation: str) -> bool:
+    """A DEED KIND ENGAGES AN AFFILIATION when every verb row emitting it has a nonzero
+    `data/affiliations.py::engagement` cell for it -- for the one verb a kind names (`KIND_VERB`) that
+    is the verb's cell; for a `PAIRED_KINDS` kind (several rows emit it) ALL the emitters must engage,
+    because the claim does not say which row made it and the reading never guesses. The cell's SIGN is
+    not asked: an act the affiliation condemns and one it holds sacred both engage it (v9 IN-67
+    [ASSUMPTION; medium; Jordan to correct -- revert: the form takes a sign and matches that sign's cells
+    only; FA-05's `engaging: {einhir_restoration, +1}` is the first row that would need it])."""
+    verbs = [v for v, r in _verbs.VERB_TABLE.items() if kind in r.emits]
+    return bool(verbs) and all(engagement(v, affiliation) for v in verbs)
+
+
+def deed_doers(ledger, spec: dict, holder: str, against=()) -> tuple:
+    """WHO THE HOLDER'S OWN LEDGER NAMES AS THE DOER OF A DECLARED CLASS OF DEED (v9 IN-67, A-31's
+    `deed_doers` goal object: "threats", "heretical activity", "corruption"), in ledger order, each
+    once. `spec` is the goal's `object:` mapping and names EXACTLY ONE form of
+    `rosters.yaml: goal_object_kinds.forms.deed_doers` (a mapping that names none, or `against` with
+    nobody in `against`, names nobody):
+
+      * `kinds: [<deed kind>, ...]` -- a deed claim of one of those kinds;
+      * `engaging: <affiliation>` -- a deed claim of a kind that engages that affiliation
+        (`_kind_engages`);
+      * `against: <goal id>` -- a deed claim whose PATIENT is among `against`, the named goal's
+        referents, which the caller (`world_q.goal_referents`, a World read) resolves and passes in.
+        Only a `PAIRED_KINDS` claim has a patient (its subject); an unpaired kind's subject is its
+        doer (below), so no patient is named and it never matches this form.
+
+    `is_deed` is the one owner of what a deed claim is. ⚠ THE DOER IS NEVER READ OFF A PAIRED CLAIM'S
+    SUBJECT: a `PAIRED_KINDS` claim's subject may be the PATIENT (`person.died` of a victim), so in
+    EVERY form such a claim is routed through `deed_doer` (the `seen.who` pairing, IN-58) and a claim
+    the pairing cannot resolve names no doer -- `kinds: [person.died]` names the killer, never the
+    victim. Any other deed kind reads its subject as its doer ([ASSUMPTION; H-192], `deeds_judged`'s).
+    NEVER THE HOLDER HIMSELF: a claim recording his own act (`Claim.doer == holder`, ED-IN-0294, the
+    second reader of that field beside `world_q.attention_key`) is skipped whatever its subject -- else
+    the patient of his own deed would be named as the doer of it -- and `holder` is dropped from the
+    answer, so a told copy of his own deed does not make him a referent either.
+
+    Reads the holder's OWN ledger only: a deed he was not told of and did not see names nobody, however
+    plain it is in the world (AX-2; a `World` is never asked). Person-side."""
+    form = next((f for f in roster_map("goal_object_kinds", "forms")["deed_doers"] if f in spec), None)
+    if form is None or (form == "against" and not against):
+        return ()
+    kinds = frozenset(spec["kinds"]) if form == "kinds" else frozenset()
+    seen = None
+    out: list = []
+    for c in ledger:
+        if not is_deed(c) or c.doer == holder:
+            continue
+        if form == "kinds":
+            hit = c.predicate in kinds
+        elif form == "engaging":
+            hit = _kind_engages(c.predicate, spec["engaging"])
+        else:
+            hit = c.predicate in PAIRED_KINDS and c.subject in against
+        if not hit:
+            continue
+        if c.predicate in PAIRED_KINDS:
+            if seen is None:
+                seen = _seen_index(ledger)
+            doer = deed_doer(c, seen)
+        else:
+            doer = c.subject
+        if doer is not None and doer != holder and doer not in out:
+            out.append(doer)
+    return tuple(out)
+
+
 def _bond(p: Person, patient: str, lean: float) -> float:
     """v9 IN-58's FACTOR: how `p`'s allegiance to the deed's PATIENT weighs the deed,
     `1 - a · sign(lean)`, `a = clamp(stance_toward(p, patient) / STANCE_MAX, -1, 1)` -- the stored

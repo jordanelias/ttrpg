@@ -47,6 +47,10 @@ from ..gaps import Forbidden, InstrumentDefect, Unspecified
 from .person_q import content_said, intent_named, ledger_names
 # v9 IN-57: `attention_key`'s tier 2 scores a deed claim by `deed_valence`, one owner per factor.
 from .person_q import deed_valence, projected_axes
+# v9 IN-67: `goal_referents` reads a goal's `object:` off the ONE loader and a `deed_doers` goal's
+# doers off the person-side family.
+from ..data import goals as _goals
+from .person_q import deed_doers
 from ..state.attribution import anchor_of, causing_act
 from ..state.carriers import Person, Question, Site, Tenure
 # ⚠ `parent_of` AND `descendants` ARE RE-EXPORTED, NOT DEFINED HERE (G3, plan position 6). The
@@ -1614,6 +1618,67 @@ def ambitions(w: World, p: Person) -> list:
     return out
 
 
+def goal_referents(w: World, p: Person, prop) -> tuple:
+    """WHO OR WHAT AN AMBITION IS ABOUT, read when the question forms (v9 IN-67, A-31 / ED-IN-0293
+    (8)) -- THE ONE OWNER Q4 asks instead of `(prop.subject,)`, and `attention_key`'s tier 0 with it,
+    so a goal's tier-0 claims are about its referents and never about the id of a seat. `()` forms no
+    question (`harness/populated.py`'s rule, *an OUGHT about nobody is not a motive*, now at read).
+
+    The Proposition's id IS the goal's id (`data/goals.py`, the row mints it), so a Proposition no goal
+    names -- every creed, tie and want today, the shipped `goals.yaml` being empty -- reads
+    `(prop.subject,)` exactly as before. A goal reads by the kind of its `object:` (`_goal_referents`):
+
+      * `person`, `rung` -> `(prop.subject,)`: seeding (IN-68) minted the Proposition about them;
+      * `seat_holders` -> the persons now holding any listed seat (a live `hold`, `w.tenures` order),
+        so the referent FOLLOWS A SUCCESSION and a vacant throne names nobody;
+      * `deed_doers` -> `person_q.deed_doers` over `p`'s OWN ledger (its three forms; `against: <goal>`
+        takes that goal's referents, resolved by this same read);
+      * `orientation` -> `()`: a pure condition has no referent, and mints no Proposition.
+
+    ⚠ `seat_holders` IS A WORLD READ WITH NO CLAIM BEHIND IT, `vacancies`' shape: it hands `p` the
+    identity of whoever sits on a throne he may never have been told of. THAT PRECEDENT IS ON JORDAN'S
+    QUEUE (ED-IN-0292 (2), `needs_jordan`: the `vacancies` stamp against AX-7), and this read follows
+    that answer -- if it comes back a claim reaching persons through the channels, `seat_holders`
+    becomes a read of the holders `p`'s own ledger names. [ASSUMPTION; medium; Jordan to correct --
+    revert: the holders the person's own ledger names, `seats_named`-style, which reads nobody at
+    world-gen (H-203).] `deed_doers` is NOT that read: it takes nothing from the world.
+
+    No TRACE row is written (`ambitions`' reason): Q4 calls this once per ambition per person."""
+    goal = _goals.goal(prop.id)
+    if goal is None:
+        return (prop.subject,)
+    return _goal_referents(w, p, goal, prop.subject, frozenset())
+
+
+def _goal_referents(w: World, p: Person, goal, subject, path: frozenset) -> tuple:
+    """`goal_referents` for a loaded `goal` whose Proposition's subject is `subject`; `path` the goal
+    ids on the way down. ⚠ `against:` NAMES ANOTHER GOAL, whose referents are themselves computed, and
+    the loader does not refuse a cycle among them (A against B, B against A): a goal met twice on the
+    path yields `()` -- the looping goal has no referent -- so the read terminates. A target goal with
+    no Proposition in the world has no subject: `person`/`rung` read `()` for it, the other kinds need
+    none."""
+    if goal.id in path:
+        return ()
+    obj, kind = goal.object, goal.object["kind"]
+    if kind in ("person", "rung"):
+        return (subject,) if subject is not None else ()
+    if kind == "seat_holders":
+        seats = set(obj["seats"])
+        return tuple(dict.fromkeys(t.subject for t in w.tenures
+                                   if t.kind == "hold" and t.live and t.object in seats
+                                   and t.subject in w.persons))
+    if kind != "deed_doers":
+        return ()
+    against = ()
+    if "against" in obj:
+        target = _goals.goal(obj["against"])
+        if target is not None:
+            prop = w.propositions.get(target.id)
+            against = _goal_referents(w, p, target, prop.subject if prop is not None else None,
+                                      path | {goal.id})
+    return deed_doers(p.ledger, obj, p.id, against)
+
+
 def vacancies(w: World, p: Person) -> tuple:
     """THE VACANT SEATS `p` MAY FILL (IN-53, H-207 'VACANCY AS NEED'), sorted by id: every Office
     with no live `hold` -- the test `_req_confer` runs before its `or` disjunct -- for which
@@ -1696,8 +1761,10 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None) -> Callable[
     ambition/needs then office/tenure then then convictions"*) -- a sort key over `questions_for`'s
     output, built once per call. Five tiers, the first that holds:
 
-      0. a question, not the `need` question, whose referent is the subject of one of `p`'s own
-         ambitions (`ambitions`, the one owner of the live-`commit`-to-an-OUGHT rule);
+      0. a question, not the `need` question, whose referent is a referent of one of `p`'s own
+         ambitions (`ambitions`, the one owner of the live-`commit`-to-an-OUGHT rule;
+         `goal_referents`, the one owner of what an ambition is about -- its subject, or v9 IN-67's
+         goal referents);
       1. a referent among `p`'s own live-tenure objects or inside a seat's purview (`own_purview`,
          `reach`'s limbs 2 and 4);
       2. a question whose `about` is a deed claim in `p`'s own ledger with nonzero valence under
@@ -1740,7 +1807,7 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None) -> Callable[
     entry's tier 0 literal (`need` in tier 0), or before IN-57 the `(source, id)` key.]"""
     if ambs is None:
         ambs = ambitions(w, p)
-    aims = {w.propositions[pid].subject for pid in ambs} - {None}
+    aims = {r for pid in ambs for r in goal_referents(w, p, w.propositions[pid])} - {None}
     mine = own_purview(w, p)
     held_by_id = {c.id: c for c in p.ledger}
 
@@ -1863,8 +1930,11 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # `17`: the live-`commit`-to-an-OUGHT rule is `ambitions`' alone (above; R-06's READ), so this
     # asks it rather than restating it; one Question per ambition, in edge order, as before.
     ambs = ambitions(w, p)
+    # v9 IN-67: what the ambition is ABOUT is `goal_referents`' (a goal's, else the subject as before);
+    # an ambition about nobody forms no question.
     for pid in ambs:
-        out.append(Question(f"q:need:{pid}", "need", (w.propositions[pid].subject,), pid))
+        if refs := goal_referents(w, p, w.propositions[pid]):
+            out.append(Question(f"q:need:{pid}", "need", refs, pid))
 
     # v9 IN-57: the order is `attention_key`'s tiered read of the person's own state; the old
     # `(source, q.id)` key is its final tiebreak (history: hole_register H-54).
