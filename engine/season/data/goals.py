@@ -184,18 +184,51 @@ def _stance(gid, row: dict) -> Optional[int]:
     return s
 
 
+def org_faction(org_kind: str, org: str) -> Optional[str]:
+    """The faction an organization belongs to: a faction is its own, a body's is `office_bodies.faction`,
+    a seat's is its `faction:` or else its body's. `None` where the tree names none (a seat with
+    neither). THE ONE OWNER of the org -> faction step (`_ancestors` and v9 IN-69's `expected` ask it)."""
+    if org_kind == "faction":
+        return org
+    if org_kind == "body":
+        return BODY_FACTION.get(org)
+    seat = next((s for s in OFFICES_SEATS if s["id"] == org), None) if org_kind == "seat" else None
+    if seat is None:
+        return None
+    return seat.get("faction") or BODY_FACTION.get(seat.get("body"))
+
+
+def expected(org_kind: str, org: str) -> dict:
+    """WHAT AN ORGANIZATION EXPECTS OF ITS MEMBERS, as a pursuit-weight map (v9 IN-69, ED-IN-0293 (10)):
+    its faction's role template (`rosters.yaml: role_templates`, through `verbs.ROLE_TEMPLATE_PURSUITS`;
+    a body or a seat takes its faction's) plus the sum of the `pursuits:` of every goal of THIS
+    organization -- orientation goals included, which mint no Proposition and are known only here. The
+    weights add; `data/pursuits.py::alignment` projects, and the projection is linear, so the sum is
+    the same whether taken before or after. `{}` for a faction with no template and no goal."""
+    from .verbs import ROLE_TEMPLATE_PURSUITS
+    from .rosters import ROLE_TEMPLATE_OF
+    out: dict = {}
+    template = ROLE_TEMPLATE_OF.get(str(org_faction(org_kind, org) or ""))
+    for name, w in (ROLE_TEMPLATE_PURSUITS.get(template) or {}).items():
+        out[name] = out.get(name, 0.0) + float(w)
+    for g in goals():
+        if (g.org_kind, g.org) == (org_kind, org):
+            for name, w in g.pursuits.items():
+                out[name] = out.get(name, 0.0) + float(w)
+    return out
+
+
 def _ancestors(g: Goal, seats: dict) -> set:
     """The `(org_kind, name)` pairs above `g`'s organization: a seat's body and faction, a body's
     faction. A faction has none (a faction goal derives from a faction goal, A-30)."""
     if g.org_kind == "body":
-        return {("faction", BODY_FACTION[g.org])}
+        return {("faction", org_faction("body", g.org))}
     if g.org_kind != "seat":
         return set()
-    seat = seats[g.org]
     above = set()
-    if seat.get("body"):
-        above.add(("body", seat["body"]))
-    fac = seat.get("faction") or BODY_FACTION.get(seat.get("body"))
+    if seats[g.org].get("body"):
+        above.add(("body", seats[g.org]["body"]))
+    fac = org_faction("seat", g.org)
     if fac:
         above.add(("faction", fac))
     return above
