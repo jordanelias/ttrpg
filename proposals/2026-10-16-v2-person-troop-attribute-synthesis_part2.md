@@ -1,7 +1,7 @@
 # Persons, attributes and verbs: the v2 synthesis — part 2: Attributes
 
 ## Status: PROPOSED (2026-10-16). Not ratified; merging ratifies nothing unless Jordan so rules.
-## Parts, in reading order: [head](2026-10-16-v2-person-troop-attribute-synthesis.md) (§0, Part I Persons) · **this file** (Part II Attributes) · [`_part3`](2026-10-16-v2-person-troop-attribute-synthesis_part3.md) and [`_part4`](2026-10-16-v2-person-troop-attribute-synthesis_part4.md) (Part III Verbs) · [`_part5`](2026-10-16-v2-person-troop-attribute-synthesis_part5.md) and [`_part6`](2026-10-16-v2-person-troop-attribute-synthesis_part6.md) (Part IV What verbs do to the world) · [`_part7`](2026-10-16-v2-person-troop-attribute-synthesis_part7.md) (Roadmap, Reliability ledger, Sources, Trial registry).
+## Parts, in reading order: [head](2026-10-16-v2-person-troop-attribute-synthesis.md) (§0, Part I Persons) · **this file** (Part II Attributes) · [`_part3`](2026-10-16-v2-person-troop-attribute-synthesis_part3.md) and [`_part4`](2026-10-16-v2-person-troop-attribute-synthesis_part4.md) (Part III Verbs) · [`_part5`](2026-10-16-v2-person-troop-attribute-synthesis_part5.md) and [`_part6`](2026-10-16-v2-person-troop-attribute-synthesis_part6.md) (Part IV What verbs do to the world) · [`_part7`](2026-10-16-v2-person-troop-attribute-synthesis_part7.md) (Roadmap, Reliability ledger, Sources, Trial registry) · [`_part8`](2026-10-16-v2-person-troop-attribute-synthesis_part8.md) (Part V: the trial of the new verbs).
 
 Codes: STR AGI END FOC ACU WIL ATT CHA BON are the registry's nine
 (`references/descriptor_registry.yaml:36-48`) [CHECKED]; TS Thread Sensitivity; REC Recall; RES

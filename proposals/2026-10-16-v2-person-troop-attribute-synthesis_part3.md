@@ -1,7 +1,7 @@
 # Persons, attributes and verbs: the v2 synthesis — part 3: Verbs (triage, and PC to FI)
 
 ## Status: PROPOSED (2026-10-16). Not ratified; merging ratifies nothing unless Jordan so rules.
-## Parts, in reading order: [head](2026-10-16-v2-person-troop-attribute-synthesis.md) · [`_part2`](2026-10-16-v2-person-troop-attribute-synthesis_part2.md) Attributes · **this file** (Part III: §III.0–§III.3, subsystems PC, MB, SC, FI) · [`_part4`](2026-10-16-v2-person-troop-attribute-synthesis_part4.md) (Part III: TW, GV, FA, EC, WT, NP, roll-up, verb × attribute) · [`_part5`](2026-10-16-v2-person-troop-attribute-synthesis_part5.md) and [`_part6`](2026-10-16-v2-person-troop-attribute-synthesis_part6.md) (Part IV) · [`_part7`](2026-10-16-v2-person-troop-attribute-synthesis_part7.md) (Roadmap, Reliability ledger, Sources, Trial registry).
+## Parts, in reading order: [head](2026-10-16-v2-person-troop-attribute-synthesis.md) · [`_part2`](2026-10-16-v2-person-troop-attribute-synthesis_part2.md) Attributes · **this file** (Part III: §III.0–§III.3, subsystems PC, MB, SC, FI) · [`_part4`](2026-10-16-v2-person-troop-attribute-synthesis_part4.md) (Part III: TW, GV, FA, EC, WT, NP, roll-up, verb × attribute) · [`_part5`](2026-10-16-v2-person-troop-attribute-synthesis_part5.md) and [`_part6`](2026-10-16-v2-person-troop-attribute-synthesis_part6.md) (Part IV) · [`_part7`](2026-10-16-v2-person-troop-attribute-synthesis_part7.md) (Roadmap, Reliability ledger, Sources, Trial registry) · [`_part8`](2026-10-16-v2-person-troop-attribute-synthesis_part8.md) (Part V: the trial).
 
 ---
 
@@ -50,6 +50,12 @@ may reverse it.
 - Build no new verb row from the 86 except, conditionally, `ward` (when opposed threadwork exists)
   and `marry` (if kin is ever carried).
 - Spend the effort on readers: alignment cells, inquiry yields, contents parameters.
+
+**After the trial (Part V, `_part8`).** The verdicts in this Part are the **first pass**. Part V tried
+every new verb (108 items) and governs where it overturned one (§V.4 is the error ledger). Its
+result: 4 new rows (`weave`, `mend`; `sever` and `bribe` conditional), 16 named survivals inside
+incumbents, 57 merges, 14 parks with triggers (`ward` and `marry` among them), 17 cuts. Jordan has
+since ruled the counter-argument's example above: *"bribe and oblige are completely different."*
 
 **The rule for a primary subsystem.** Each verb takes the **first-listed** subsystem tag of
 From-scratch head §2.3. Its other tags are its secondary subsystems. The rule is mechanical, so it
@@ -120,14 +126,14 @@ argue its case for inclusion"*). Its rules:
 
 Six merges compose two existing rows rather than fold into one. The trial should test each first.
 
-| designed verb | composed as | what would break the merge |
-|---|---|---|
-| bribe, suborn | `oblige` paid by `give` / `transfer` | if the payment and the binding cannot be one act's contents, so a refused bribe leaves the coin moved |
-| lend | `transfer` + an `oblige` with a repayment term | if the term cannot name an amount owed |
-| infiltrate | `conceal` (a cover Record) then `move` | if a cover cannot be held inside another seat's establishment |
-| conspire | `covenant` kept concealed | if `covenant`'s dispensation is necessarily public (chronicled) |
-| ambush | `march` opened under a held cover | if `march` cannot read the attacker's cover |
-| assassinate | `fight` to death, opened unseen | if `fight` cannot be opened without the subject's presence being witnessed |
+| designed verb | composed as | what would break the merge | trial ruling (Part V) |
+|---|---|---|---|
+| bribe, suborn | `oblige` paid by `give` / `transfer` | if the payment and the binding cannot be one act's contents, so a refused bribe leaves the coin moved | **broken.** Bribe is not oblige (Jordan); one own row `bribe`, conditional, `suborn` the same act; an offer moves nothing |
+| lend | `transfer` + an `oblige` with a repayment term | if the term cannot name an amount owed | **broken.** `Term` has no amount; the `debt` Record kind instead |
+| infiltrate | `conceal` (a cover Record) then `move` | if a cover cannot be held inside another seat's establishment | **broken.** CUT as a verb: `oblige` → `tell`, with a cover read |
+| conspire | `covenant` kept concealed | if `covenant`'s dispensation is necessarily public (chronicled) | **broken.** `covenant` is seat-only: `utter` + `commit` + `conceal` |
+| ambush | `march` opened under a held cover | if `march` cannot read the attacker's cover | **re-targeted.** `fight` for persons, `march` for armies; a first-mover input |
+| assassinate | `fight` to death, opened unseen | if `fight` cannot be opened without the subject's presence being witnessed | **held, and named:** a preset of `fight` |
 
 ---
 
@@ -192,6 +198,11 @@ the answer.
 1. `challenge`: the refusal-as-shame drama is R-WORLD material.
 2. `accept`.
 
+**After the trial (Part V §V.3).** Both closest calls reversed: `challenge` and `accept` are kept
+(PC-10b mints a `challenge` Record and makes `accept` refuse without one), so the set is `fight`,
+`challenge`, `accept` (3). Of 16 new verbs, no row; `yield` (a named term and choice) and
+`assassinate` (a named preset) survive on `fight`; `shoot`, `rescue`, `champion` are parked.
+
 ---
 
 ### MB — mass battle
@@ -248,6 +259,12 @@ distilled here.
 
 **Closest calls:** none to reverse; besiege is the merge most likely to be argued back (a siege's
 duration is a context node, the clock).
+
+**After the trial (Part V §V.3, §V.2.5).** `march`, `raze` (2) stand, but "honest cost: none" was
+wrong. Rally, pursue, retreat, command and withstand are kept as named choices inside the battle
+module (Jordan); storm and besiege as `march` postures (`assault`, `invest`); surrender as a named
+preset of `give`; forage and sack merge into `requisition`, not `seize`. None is observed until the
+force scale (M-MB-1) lets a season field be won.
 
 ---
 
@@ -329,6 +346,11 @@ duration is a context node, the clock).
 4. `construe`: the bending of terms is a distinct deceit if J-C-6 admits lies.
 5. `open_case`, if the trial finds the interval carried by `convene`.
 
+**After the trial (Part V §V.3).** `speak` is kept (SC-01 step 12 builds it contested), so the set is
+six: `tell`, `utter`, `argue`, `oblige`, `open_case`, `speak`; `construe` is held on J-C-6. Of 16 new
+verbs, no row; `deny` survives as a named preset of `release` (not `destroy_record`); `lie`,
+`insult`, `preach` are parked.
+
 ---
 
 ### FI — fieldwork and inquiry
@@ -408,3 +430,9 @@ eligibility (presence). By the context-parameter rule, that is one verb.
 3. `conceal`: concealment is the inverse of inquiry and may deserve its own row for legibility.
 4. `reconstruct`: inference from one's own claims needs no place.
 5. `forge`.
+
+**After the trial (Part V §V.2.7).** The fold into `examine` is reversed: it cannot be written (the
+typed grammar has no disjunction) and it overrides Jordan's instruction to build the six as six. The
+set is eight: `examine`, `interview`, `research`, `surveil`, `reconstruct`, `survey`,
+`destroy_record` and `conceal` (kept as its own row); `forge`'s merge was not tried. Of 9 new verbs,
+`bribe` is an own row, conditional (§V.2.8).

@@ -1,7 +1,7 @@
 # Persons, attributes and verbs: the v2 synthesis — part 6: what verbs do to the world (II): signatures, roles, the framework, the assessment
 
 ## Status: PROPOSED (2026-10-16). Not ratified; merging ratifies nothing unless Jordan so rules. Static reading only. [CHECKED] = opened in this pass; NOT CHECKED names the run that would settle a claim.
-## Parts, in reading order: [head](2026-10-16-v2-person-troop-attribute-synthesis.md) · [`_part2`](2026-10-16-v2-person-troop-attribute-synthesis_part2.md) · [`_part3`](2026-10-16-v2-person-troop-attribute-synthesis_part3.md) · [`_part4`](2026-10-16-v2-person-troop-attribute-synthesis_part4.md) · [`_part5`](2026-10-16-v2-person-troop-attribute-synthesis_part5.md) (Part IV §IV.0–§IV.5) · **this file** (Part IV §IV.6–§IV.13) · [`_part7`](2026-10-16-v2-person-troop-attribute-synthesis_part7.md).
+## Parts, in reading order: [head](2026-10-16-v2-person-troop-attribute-synthesis.md) · [`_part2`](2026-10-16-v2-person-troop-attribute-synthesis_part2.md) · [`_part3`](2026-10-16-v2-person-troop-attribute-synthesis_part3.md) · [`_part4`](2026-10-16-v2-person-troop-attribute-synthesis_part4.md) · [`_part5`](2026-10-16-v2-person-troop-attribute-synthesis_part5.md) (Part IV §IV.0–§IV.5) · **this file** (Part IV §IV.6–§IV.13) · [`_part7`](2026-10-16-v2-person-troop-attribute-synthesis_part7.md) · [`_part8`](2026-10-16-v2-person-troop-attribute-synthesis_part8.md) (Part V: the trial).
 
 The 46 shipped rows' writes, events and refusals were read from `engine/season/verb_table.yaml` by
 script (`scratchpad/v2/vt_sig.txt`) [CHECKED]. The effects present are the 30 `@effect_for` bodies
@@ -61,14 +61,14 @@ or in design.
 
 | role | verbs | the outcome it should have, and the source or reason |
 |---|---|---|
-| **PROTECTOR / HEALER** | `tend` (plan); `ward` [DESIGN] | `tend` writes `Person.body` up (Template row 49, the §9 row). `ward` [DESIGN]: raises the Ob of a thread operation aimed at the warded person; no source specifies it |
+| **PROTECTOR / HEALER** | `tend` (plan); `ward` [DESIGN; PARKED by the trial] | `tend` writes `Person.body` up (Template row 49, the §9 row). `ward` [DESIGN]: raises the Ob of a thread operation aimed at the warded person; no source specifies it. Parked until a person-aimed operation executes; its first form is the target's standing in the working's Ob, not a row (Part V §V.3) |
 | **DEGRADER** | `sabotage`, `raze` (plan) | `sabotage`: `Site.condition` down (§9 row). `raze`: ends a Rung or Site (IN-12 step 11). Both [DESIGN] on witnessing: sabotage should be concealable, raze public |
 | **PERSUADER** | `argue` (plan) | target: the hearer's pursuits (the §9 row), sigma-contested. [DESIGN]: the size of a pursuit move per degree is unspecified; `Person.pursuits` is unproduced (H-62) |
 | **IMPROVER** | `train` (plan) | writes `Person.capability` only where a case names a vocation (J-13 (iii)) |
 | **RECONCILER** | `forgive` (plan) | writes the forgiver's stance (the §9 row) |
-| **CONCEALER** | `conceal` (plan) | writes a `cover` Record whose terms is the actor; read at witnessing to withhold the doer [DESIGN: the read is unspecified] |
-| **THREAD-WORKER** | `weave`, `sever`, `mend`, `thread_read` (stubs, R-C-18) | writes `(Person, coherence)` through the seam (R-C-18); a thread binding made or broken; Mending lowers the Calamity (R-C-26) |
-| **KIN-MAKER** | `marry` [DESIGN] | opens a kin relation, only if kin is carried with a reader (J-T3, J-C-26) |
+| **CONCEALER** | `conceal` (plan) | writes a `cover` Record whose terms is the actor; read at witnessing to withhold the doer [DESIGN: the read is unspecified]. The trial adds a `scope: room` cover that withholds the co-located `who`, and a degree-keyed break that exposes the doer of a failed act (Part V §V.2.10) |
+| **THREAD-WORKER** | `weave`, `sever`, `mend`, `thread_read` (stubs, R-C-18) | writes `(Person, coherence)` through the seam (R-C-18); a thread binding made or broken. The trial corrects "Mending lowers the Calamity": that arm is `restore`'s (IN-35); `mend` is the only raiser of coherence and `weave` the producer of strain (Part V §V.2.6) |
+| **KIN-MAKER** | `marry` [DESIGN; PARKED by the trial] | opens a kin relation, only if kin is carried with a reader; the gate is K-NPC-6 (Jordan), not J-T3, which answers the template only (Part V §V.3) |
 
 **Merged and rejected verbs inherit their target's signature** (Part III's tables give each target).
 
@@ -236,6 +236,13 @@ stateDiagram-v2
   `evade / defy` on the way out of dearth.
 - The shipped game can escalate and cannot de-escalate except through MATTER's yield and `confer`.
 - NOT CHECKED (run: regime occupancy over 20 seasons, against a no-acts control).
+- **The trial's named acts on these edges (Part V, all unbuilt):** Tension → War is `declare (war)`,
+  a preset of `utter` made a seat's act at `at_war`; War → Peace gains the loser's edge,
+  `surrender` (a preset of `give` of a Rung); Order → Vacancy gains `abdicate` (a resignation kind on
+  `release`); Dearth's root gains a demand the ruled can answer (`tax`, a `due` on `issue`) and its
+  exit a relief witnesses read as care (`relief.given`). `seize` never takes a seat
+  (`verb_table.yaml:911`) [CHECKED]: on the Vacancy → Order edge it takes an occupied settlement or a
+  held Record, never the vacant seat itself.
 
 ### IV.10 The assessment table
 

@@ -1,7 +1,7 @@
 # Persons, attributes and verbs: the v2 synthesis — part 5: what verbs do to the world (I): the chooser, the world, and how context modulates an act
 
 ## Status: PROPOSED (2026-10-16). Not ratified; merging ratifies nothing unless Jordan so rules. Static reading only: no run was made for this Part. Every line marked [CHECKED] was opened in this pass; a claim only a run could settle is marked NOT CHECKED with the run named.
-## Parts, in reading order: [head](2026-10-16-v2-person-troop-attribute-synthesis.md) · [`_part2`](2026-10-16-v2-person-troop-attribute-synthesis_part2.md) · [`_part3`](2026-10-16-v2-person-troop-attribute-synthesis_part3.md) · [`_part4`](2026-10-16-v2-person-troop-attribute-synthesis_part4.md) · **this file** (Part IV §IV.0–§IV.5) · [`_part6`](2026-10-16-v2-person-troop-attribute-synthesis_part6.md) (Part IV §IV.6–§IV.13) · [`_part7`](2026-10-16-v2-person-troop-attribute-synthesis_part7.md).
+## Parts, in reading order: [head](2026-10-16-v2-person-troop-attribute-synthesis.md) · [`_part2`](2026-10-16-v2-person-troop-attribute-synthesis_part2.md) · [`_part3`](2026-10-16-v2-person-troop-attribute-synthesis_part3.md) · [`_part4`](2026-10-16-v2-person-troop-attribute-synthesis_part4.md) · **this file** (Part IV §IV.0–§IV.5) · [`_part6`](2026-10-16-v2-person-troop-attribute-synthesis_part6.md) (Part IV §IV.6–§IV.13) · [`_part7`](2026-10-16-v2-person-troop-attribute-synthesis_part7.md) · [`_part8`](2026-10-16-v2-person-troop-attribute-synthesis_part8.md) (Part V: the trial).
 
 Paths are under `engine/season/` unless written in full.
 

@@ -1,7 +1,7 @@
 # Persons, attributes and verbs: the v2 synthesis — part 4: Verbs (TW to NP, roll-up, verb × attribute)
 
 ## Status: PROPOSED (2026-10-16). Not ratified; merging ratifies nothing unless Jordan so rules.
-## Parts, in reading order: [head](2026-10-16-v2-person-troop-attribute-synthesis.md) · [`_part2`](2026-10-16-v2-person-troop-attribute-synthesis_part2.md) · [`_part3`](2026-10-16-v2-person-troop-attribute-synthesis_part3.md) (Part III: triage, PC–FI) · **this file** (Part III: TW–NP, roll-up, verb × attribute) · [`_part5`](2026-10-16-v2-person-troop-attribute-synthesis_part5.md) · [`_part6`](2026-10-16-v2-person-troop-attribute-synthesis_part6.md) · [`_part7`](2026-10-16-v2-person-troop-attribute-synthesis_part7.md).
+## Parts, in reading order: [head](2026-10-16-v2-person-troop-attribute-synthesis.md) · [`_part2`](2026-10-16-v2-person-troop-attribute-synthesis_part2.md) · [`_part3`](2026-10-16-v2-person-troop-attribute-synthesis_part3.md) (Part III: triage, PC–FI) · **this file** (Part III: TW–NP, roll-up, verb × attribute) · [`_part5`](2026-10-16-v2-person-troop-attribute-synthesis_part5.md) · [`_part6`](2026-10-16-v2-person-troop-attribute-synthesis_part6.md) · [`_part7`](2026-10-16-v2-person-troop-attribute-synthesis_part7.md) · [`_part8`](2026-10-16-v2-person-troop-attribute-synthesis_part8.md) (Part V: the trial).
 
 Conventions as in `_part3` §III.2. *fore, nerve, comp* are From-scratch demands with no home among the
 ten.
@@ -70,6 +70,13 @@ target and in the direction of their effect.
 2. `pull`.
 3. `lock`.
 4. `leap`.
+
+**After the trial (Part V §V.2.6).** Three rows over the one resolver: `weave`, `mend` (one batch, after
+IN-06) and `sever` (built third, only if it writes something Locking does not). `mend`'s N-line above
+is wrong: it is the only raiser of coherence; the Calamity's fabric arm is `restore`'s (IN-35), so
+`restore` is kept. `ward` and `pull` are parked, not cut (opposed threadwork exists, unplugged), and
+the pull stubs are not retired. `leap` is the precondition of every operation, not of `thread_read`
+alone; `loosen` goes to `release` (one's own) or `mend` (another's), not `sever`; `anchor` is cut.
 
 ---
 
@@ -158,6 +165,12 @@ target and in the direction of their effect.
 4. `found`: scale differs, and so do its cells.
 5. `convene`.
 
+**After the trial (Part V §V.3).** The 10 stand (the incumbent retirements were not tried). Of 7 new
+verbs, no row: `tax` survives as a `due` writ on `issue` (not `requisition`), `relieve` as
+`relief.given` on `transfer`, `abdicate` as a seat-resignation kind on `release`; `ration` is parked,
+`depose` is parked on Jordan (ARC-40's replaced arm), `patrol` is cut. The `depose` note above is
+wrong: `seize` never takes a seat (`verb_table.yaml:911`).
+
 ---
 
 ### FA — faction actions
@@ -209,6 +222,12 @@ not a distinct command act. The `person.demanded` refusal kind must move to `iss
 
 1. `dispatch`: it is the eligibility root (`remit:dispatch`) that `march` uses.
 2. `sabotage`.
+
+**After the trial (Part V §V.3).** `dispatch` is kept (FA-01's test pins it), so the set is four.
+`covenant` loses conspiracy (`utter` + `commit` + `conceal`) and surrender (a preset of `give`). Of 6
+new verbs, no row: `declare (war)` survives as a named preset of `utter` with a seat clause at
+`at_war`; `suborn` is parked as the same act as FI's `bribe`; recruit goes to `tell`, ransom to
+`pardon` + `transfer`.
 
 ---
 
@@ -271,6 +290,11 @@ not a distinct command act. The `person.demanded` refusal kind must move to `iss
 1. `exchange`: trade between two seats is the core of R-C-22.
 2. `restore`.
 
+**After the trial (Part V §V.2.2, §V.2.7).** `restore` is kept (the TW court: IN-35's fabric arm), so
+the set is five. `exchange` is retired only in the commit that gives `covenant`'s terms both sides'
+goods (`kind`, `amount` through `record_sourced_operands`). Of 9 new verbs, no row: `lend` survives as
+the `debt` Record kind (the `oblige` half is struck); `appraise` and `hoard` are cut.
+
 ---
 
 ### WT — world, travel and survival
@@ -316,6 +340,11 @@ journey. `migrate`'s alignment cells (`precedent_substantive` +0.3, `rigid_flexi
 the merge erases a values distinction that exists.
 
 **Closest call:** `migrate`, since its cells already say leaving home is a different choice.
+
+**After the trial (Part V §V.2.7).** `migrate` is kept: RR-2 ruled migration a verb persons take, and
+its per-row columns differ from `move`'s. The set is `move`, `migrate` (2). Of 7 new verbs, no row:
+sail becomes a season-and-water reader on `move`, endure's battle sense goes to MB's `withstand`;
+navigate, ride, climb, swim and hunt are cut (`hunt` does not merge into `work`, which mints no food).
 
 ---
 
@@ -385,32 +414,44 @@ the merge erases a values distinction that exists.
    `give`'s values cell (−0.2) is opposite in sign to `transfer`'s (+0.6).
 3. `tie / knot`, if the trial finds no reader coming.
 
+**After the trial (Part V §V.3).** `give` is kept (the MB and SC courts build `surrender` and `deny`
+on it), so the set is six. `marry` is parked on K-NPC-6, not cut: J-T3 answers the template only.
+`court` and `bless` are parked; `betray` is a `deed:commitment.ended` cell on `release`, not done
+until the cell exists.
+
 ---
 
 ### III.4 Roll-up
 
-| subsystem | live before | distilled | merged or cut (status) |
-|---|---|---|---|
-| PC | 3 | 1 | `challenge`, `accept` (shipped) |
-| MB | 2 | 2 | — |
-| SC | 9 | 5 | `petition`, `carry`, `speak`, `construe` (shipped) |
-| FI | 9 | 2 | `interview`, `research`, `surveil`, `reconstruct`, `survey`, `forge` (shipped); `conceal` (planned) |
-| TW | 9 | 4 | `leap`, `lock`, `pull`, Past-pulling (stubs); `ward` (design) |
-| GV | 15 | 10 | `evade / defy`, `found`, `succeed` (shipped); `arrest`, `pardon` (planned) |
-| FA | 4 | 3 | `dispatch` (shipped) |
-| EC | 6 | 4 | `exchange`, `restore` (shipped) |
-| WT | 2 | 1 | `migrate` (shipped) |
-| NP | 7 | 5 | `give` (shipped); `marry` (design) |
-| **total** | **66** | **37** | **20 shipped rows, 3 planned positions, 4 stubs, 2 designs** |
+| subsystem | live before | distilled | merged or cut (status) | after the trial (Part V) |
+|---|---|---|---|---|
+| PC | 3 | 1 | `challenge`, `accept` (shipped) | 3: both kept |
+| MB | 2 | 2 | — | 2 |
+| SC | 9 | 5 | `petition`, `carry`, `speak`, `construe` (shipped) | 6: `speak` kept; `construe` held on J-C-6 |
+| FI | 9 | 2 | `interview`, `research`, `surveil`, `reconstruct`, `survey`, `forge` (shipped); `conceal` (planned) | 8: the five inquiries and `conceal` kept |
+| TW | 9 | 4 | `leap`, `lock`, `pull`, Past-pulling (stubs); `ward` (design) | 4 (`sever` conditional); `pull`, Past-pulling, `ward` parked, stubs not retired |
+| GV | 15 | 10 | `evade / defy`, `found`, `succeed` (shipped); `arrest`, `pardon` (planned) | 10 (not tried) |
+| FA | 4 | 3 | `dispatch` (shipped) | 4: `dispatch` kept |
+| EC | 6 | 4 | `exchange`, `restore` (shipped) | 5: `restore` kept; `exchange` retired only with `covenant`'s goods keys |
+| WT | 2 | 1 | `migrate` (shipped) | 2: `migrate` kept (RR-2) |
+| NP | 7 | 5 | `give` (shipped); `marry` (design) | 6: `give` kept; `marry` parked |
+| **total** | **66** | **37** | **20 shipped rows, 3 planned positions, 4 stubs, 2 designs** | **50** |
 
 **The cut touches 20 of the 46 shipped rows and 3 of the 12 plan positions.** Each is a
-recommendation to retire, never a silent deletion.
+recommendation to retire, never a silent deletion. **After the trial:** 12 shipped retirements and
+`conceal`'s are reversed; `exchange`'s is conditional; `construe` waits on J-C-6; and 8 stand
+untried as filed: `petition`, `carry`, `forge`, `evade / defy`, `found`, `succeed` (shipped),
+`arrest`, `pardon` (planned) (Part V §V.2.7, §V.5.3). New rows from the trial: `weave`, `mend`
+(counted above), `sever` (conditional) and `bribe` (conditional, FI).
 
 **The distilled 37:** `fight`, `march`, `raze`, `tell`, `utter`, `argue`, `oblige`, `open_case`,
 `examine`, `destroy_record`, `thread_read`, `weave`, `sever`, `mend`, `confer`, `revoke`, `release`,
 `establish`, `issue`, `determine`, `convene`, `requisition`, `comply`, `interrogate`, `seize`,
 `covenant`, `sabotage`, `transfer`, `create_record`, `build`, `work`, `move`, `commit`, `tend`,
-`train`, `forgive`, `tie / knot`.
+`train`, `forgive`, `tie / knot`. **After the trial, 50:** these 37 plus `challenge`, `accept`,
+`speak`, `interview`, `research`, `surveil`, `reconstruct`, `survey`, `conceal`, `dispatch`,
+`restore`, `migrate`, `give`. The trial's one new row outside TW, `bribe`, is conditional and not
+counted until its gate holds.
 
 **What the cut buys, and what it risks.**
 
@@ -428,6 +469,8 @@ recommendation to retire, never a silent deletion.
 
   A merge forces each of these onto contents the pursuit term cannot see, because that term reads the
   verb alone (Part IV §IV.1).
+  The trial kept six of these verbs on other grounds (`give`, `migrate`, `speak`, `research`,
+  `surveil`, `reconstruct`); the `evade / defy`, `found` and `petition` merges stand as listed.
 - **So every merge is conditional on the chooser learning to read contents.** Absent that, the merged
   verbs lose their values signal, and in two cases merge opposite signs into one cell. **This is the
   cut Jordan should weigh first.** If the chooser stays verb-only, reverse the merges whose cells
@@ -527,5 +570,5 @@ flowchart LR
     train --> PRAC
 ```
 
-The diagram is the distilled 37 by subsystem. Solid arrows are readers that exist in stub code;
-dotted arrows wait on a ruling.
+The diagram is the distilled 37 by subsystem, before the trial; Part V §V.6 maps the new verbs onto
+the post-trial set. Solid arrows are readers that exist in stub code; dotted arrows wait on a ruling.

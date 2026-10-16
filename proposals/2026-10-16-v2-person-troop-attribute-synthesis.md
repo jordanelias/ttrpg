@@ -3,7 +3,7 @@
 ## Status: PROPOSED (2026-10-16). A distillation of the same day's v1 proposals and their critics' reports. No new probe, run or trace was made for it. Merging it ratifies nothing unless Jordan so rules.
 ## Lane: IN (cross-cutting), with PC, MB, SC, FI, WR, NPC, GO as sources. IDs: none allocated.
 ## Scope: persons (the character template), attributes and verbs only. The troop-stock design is out of scope and is not distilled here (Sources). The filename keeps the path the orchestrator named.
-## Parts, in reading order: this file (§0 Thesis and Map, Part I Persons) · [`_part2`](2026-10-16-v2-person-troop-attribute-synthesis_part2.md) (Part II Attributes) · [`_part3`](2026-10-16-v2-person-troop-attribute-synthesis_part3.md) and [`_part4`](2026-10-16-v2-person-troop-attribute-synthesis_part4.md) (Part III Verbs: triage, the subsystems, the pessimistic NERS distillation) · [`_part5`](2026-10-16-v2-person-troop-attribute-synthesis_part5.md) and [`_part6`](2026-10-16-v2-person-troop-attribute-synthesis_part6.md) (Part IV What verbs do to the world: the chooser, context modulation, outcome signatures, the assessment framework) · [`_part7`](2026-10-16-v2-person-troop-attribute-synthesis_part7.md) (§5 Roadmap, §6 Reliability ledger, §7 Sources, the Trial registry).
+## Parts, in reading order: this file (§0 Thesis and Map, Part I Persons) · [`_part2`](2026-10-16-v2-person-troop-attribute-synthesis_part2.md) (Part II Attributes) · [`_part3`](2026-10-16-v2-person-troop-attribute-synthesis_part3.md) and [`_part4`](2026-10-16-v2-person-troop-attribute-synthesis_part4.md) (Part III Verbs: triage, the subsystems, the pessimistic NERS distillation) · [`_part5`](2026-10-16-v2-person-troop-attribute-synthesis_part5.md) and [`_part6`](2026-10-16-v2-person-troop-attribute-synthesis_part6.md) (Part IV What verbs do to the world: the chooser, context modulation, outcome signatures, the assessment framework) · [`_part7`](2026-10-16-v2-person-troop-attribute-synthesis_part7.md) (§5 Roadmap, §6 Reliability ledger, §7 Sources, the Trial registry) · [`_part8`](2026-10-16-v2-person-troop-attribute-synthesis_part8.md) (Part V: the trial of the new verbs).
 
 **How to read a citation.** A locator tagged **[CHECKED]** was re-opened in this pass. Every other
 locator is carried from a v1 document, keeps the v1 tag listed in `_part7` §7.3, and is cited by v1
@@ -33,7 +33,10 @@ proposal recorded RATIFIED AS INTENT; **T4** design intent only.
 3. **The evidence supports a stored set of ten: the registry's nine plus Thread Sensitivity.** Attunement
    and Charisma stand on design intent only. Recall is not a candidate until something reads it.
 4. **The game is short of readers, not of verbs.** Of 86 verbs designed from scratch, 2 survive
-   triage. A pessimistic NERS pass distils the 66 live verbs to 37.
+   triage. A pessimistic NERS pass distils the 66 live verbs to 37. **The trial (Part V) then tried
+   108 new-verb items and gives 4 new rows (`weave`, `mend`; `sever` and `bribe` conditional), 16
+   named survivals inside incumbents, 57 merges, 14 parks and 17 cuts, and it reverses 13 of the
+   distillation's retirements: the post-trial set is 50, not 37.**
 5. **The chooser ranks acts by verb name and by its stance toward the subject.** The world modulates
    outcomes by about a dozen contextual nodes; the chooser sees 3 of 16 node types fully. That
    mismatch, not the attribute roster, is the next design lever (Part IV §IV.11).
@@ -45,6 +48,11 @@ whether attributes change after tick 0; **V-2a**, the amendment that lets an att
 a cap or a row without `contests:`; and **R-0**, rerunning the from-scratch derivation under a neutral
 brief rather than correcting it. J-T3 (kin) is not among them: v1 answered it for the template
 (kin is not carried, §I.6), and it unlocks no build.
+
+**The trial adds decisions for the verbs** (Part V §V.5.1): ARC-40's replaced arm (`depose`) and
+K-NPC-6 (`marry`, kin as a tie kind) choose between lawful games; the public route that replaces
+`chronicle` at SC-01 step 13, R-7 (a withdrawn army against a routed one), J-C-6 (lies) and a
+contents-aware value term decide the form of six named acts.
 
 ### 0.1 The map
 
@@ -74,7 +82,7 @@ flowchart TD
     VT --> CTX["Part IV: what each act does, and what context modulates it"]
     CTX --> CHS["Finding: the chooser sees 3 of 16 node types"]
     CHS --> B5["Build: alignment cells and contents-aware value terms"]
-    VT --> TR["Trial registry: the new verbs, tried by advocate, prosecutor, judge"]
+    VT --> TR["Part V, the trial: 108 new-verb items, 4 rows, 16 named, 14 parked; 37 becomes 50"]
 ```
 
 ---
