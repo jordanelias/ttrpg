@@ -1808,19 +1808,19 @@ def places_named(w: World, p: Person, named: Optional[frozenset] = None) -> tupl
 
 
 def larders_in_purview(w: World, p: Person, named: Optional[frozenset] = None) -> tuple:
-    """THE LARDERS `p`'S SEAT MAY LEVY (v9 IN-49 `levy`, H-163 limit 3, [ASSUMPTION; medium; Jordan
+    """THE LARDERS `p`'S SEAT MAY REQUISITION (v9 IN-49 `requisition`, H-163 limit 3, [ASSUMPTION; medium; Jordan
     to correct]), sorted by id: the Rungs among `person_q.ledger_names(p.ledger)` (he has been told of
     the place -- chiefly the deposit a witnessed `stores.changed` leaves) that hold a positive amount
-    of the matter a computed levy carries, at least that amount, and that the purview of some seat of
+    of the matter a computed requisition carries, at least that amount, and that the purview of some seat of
     his own live `hold`s granting a `Rung` row's remit act reaches (`data/verbs.py::RUNG_REMIT_ACTS`;
-    `state/gate.py::purview_reaches`, the one owner `levy`'s `authority` conjunct asks) WITHOUT BEING
-    THAT SEAT'S OWN RUNG: the seat's rung is its treasury, and a levy of the treasury into itself
-    moves nothing (`loop/effects_governance.py::_eff_levy`, G4's `NoOpReceipt` -> `levy.refused`).
-    MEASURED before that clause (`corpus_run`, seed 0): every computed corpus levy (4, all NPC-083)
+    `state/gate.py::purview_reaches`, the one owner `requisition`'s `authority` conjunct asks) WITHOUT BEING
+    THAT SEAT'S OWN RUNG: the seat's rung is its treasury, and a requisition of the treasury into itself
+    moves nothing (`loop/effects_governance.py::_eff_requisition`, G4's `NoOpReceipt` -> `requisition.refused`).
+    MEASURED before that clause (`corpus_run`, seed 0): every computed corpus requisition (4, all NPC-083)
     was its seat's own rung, refused on the `write` clause -- `places_named`' residence rule, one
     effect over (a settler who lives under the place changes nothing there). H-163 limit
     3's design order, #453's *"a question whose referent is a full larder in purview (a positive
-    `stores.changed`)"*: the subject `levy` binds, carried on the question he answers as
+    `stores.changed`)"*: the subject `requisition` binds, carried on the question he answers as
     `Rung`-classed referents (`_stamped`), so `subject` still binds a referent and no operand is
     coined.
 
@@ -1828,19 +1828,19 @@ def larders_in_purview(w: World, p: Person, named: Optional[frozenset] = None) -
     OWN `hold` edges which seats he sits in; the World is asked which ids are rungs (`World.class_of`),
     what a rung holds (`Rung.stores`) and whether the seat reaches it. ⚠ THE STORES ARE READ HERE,
     UNLIKE `places_named`' ROOM, and that is `vacancies`' precedent (it asks the write gate's own
-    `may_fill`), not an oversight: an empty larder is an occasion for nothing, and a levy question
-    raised over one is the refusal H-163 limit 3 measured (`levy.refused` on the `stores` conjunct).
+    `may_fill`), not an oversight: an empty larder is an occasion for nothing, and a requisition question
+    raised over one is the refusal H-163 limit 3 measured (`requisition.refused` on the `stores` conjunct).
     The person still learns nothing he did not hold; a scarcity between this read and the fold (two
-    levies on one larder) is the fold's (`levy.refused`, §27.1).
+    requisitions on one larder) is the fold's (`requisition.refused`, §27.1).
     ⚠ THE AMOUNT AND KIND are the fixtures' (`default_store_kind`, `default_transfer_amount`, H-94 /
     H-121), because that is what `decision/options.py::_derive_operand` carries on a CLASSED ROW
-    (`levy`'s `referent_class: Rung`): a claim the question is about (a stores level, a shortfall)
+    (`requisition`'s `referent_class: Rung`): a claim the question is about (a stores level, a shortfall)
     does not re-aim it, even when the stamped rung is also the question's plain referent (B-K close,
     COR 4), so the stamp and the act read the same two values. ⚠ PURVIEW IS ASKED LAST, only of a
     named, stocked rung: `purview_reaches` walks `w.tenures` for its oblige clause when the seat's own
     ground does not reach (the gate's walk, not a new one here). `()` for a person granted no such
     act, which is nearly everyone, so nothing else is read for him. REVERT: drop the term in
-    `questions_for` (or `levy`'s `referent_class`, which empties `RUNG_REMIT_ACTS`). `named` is
+    `questions_for` (or `requisition`'s `referent_class`, which empties `RUNG_REMIT_ACTS`). `named` is
     `ledger_names(p.ledger)` when the caller holds it already."""
     if not RUNG_REMIT_ACTS:
         return ()
@@ -2000,7 +2000,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     sort): the vacant seats the person may fill (`vacancies`, IN-53), the seats he has been told of
     (`seats_named`, v9 IN-10 (a)), the writs he holds (`writs_held`, v9 IN-09), the places he has
     been told of and could settle in (`places_named`, v9 IN-45 `migrate`) and the larders his seat
-    may levy (`larders_in_purview`, v9 IN-49 `levy`). They are not
+    may requisition (`larders_in_purview`, v9 IN-49 `requisition`). They are not
     sources: no id or source changes; a person with one of them and no question gets one `need`
     question carrying them.
 
@@ -2125,9 +2125,9 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # no other row's formations move. REVERT: drop the term.
     # v9 IN-45 `migrate` (H-168 limit 1, [ASSUMPTION; medium; Jordan to correct]): AND SO DO THE
     # PLACES HE HAS BEEN TOLD OF AND COULD SETTLE IN (`places_named`), as `Rung`. REVERT: drop the term.
-    # v9 IN-49 `levy` (H-163 limit 3, [ASSUMPTION; medium; Jordan to correct]): AND SO DO THE
-    # LARDERS HIS SEAT MAY LEVY (`larders_in_purview`), last, as `Rung`, never twice. The class is
-    # `Rung` either way, so both rows declaring it (`migrate`, `levy`) form on both: whether a place
+    # v9 IN-49 `requisition` (H-163 limit 3, [ASSUMPTION; medium; Jordan to correct]): AND SO DO THE
+    # LARDERS HIS SEAT MAY REQUISITION (`larders_in_purview`), last, as `Rung`, never twice. The class is
+    # `Rung` either way, so both rows declaring it (`migrate`, `requisition`) form on both: whether a place
     # has room, or a seat reaches it, is then the fold's (`vacancies`/`seats_named`' Office precedent,
     # H-207; H-163 records what the cross-reading costs). No source is added, so no `question_sources`
     # order moves (IN-57: the occasion rides the question he answers). REVERT: drop the term.

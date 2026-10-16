@@ -328,7 +328,7 @@ rosters:
       that data, provisionally.
       ⚠ IT BUYS FOUR VERBS, NOT EIGHT, AND THE FIRST WRITING OF THIS NOTE SAID EIGHT WITHOUT
       MEASURING IT. Measured on `build_realm(0)`, both arms: BEFORE, five of the nine were already
-      formable off the three granted seats (`determine`, `dispatch`, `issue`, `levy`, `open_case`)
+      formable off the three granted seats (`determine`, `dispatch`, `issue`, `requisition`, `open_case`)
       and FOUR were unreachable (`confer`, `convene`, `establish`, `revoke`). The default closes
       those four. `H-71`'s own `cite:` says the never-attempted set went 5 -> 4 and is consistent;
       the "eight" was invented. `CLAUDE.md` §0.1 pt 3 — a number without its measurement.
@@ -608,19 +608,19 @@ rosters:
       places a person has been told of and could settle in (`queries/world_q.py::places_named` --
       a Rung his own ledger names, the §10 ladder seats him in, and he does not already live
       under), which `questions_for` adds to the question he answers beside his seats and writs;
-      `migrate` declares it (and `levy`, below), so its `to` binds ANOTHER place rather than the single referent
+      `migrate` declares it (and `requisition`, below), so its `to` binds ANOTHER place rather than the single referent
       of whatever he was asked about (most often his own residence). The destination channel H-168
       names, on IN-53 D1's partition and `seats_named`'s knowledge source: no operand is added
       (`to` still binds the referent, `decision/options.py::_derive_operand`) and no Record kind.
       REVERT: drop the value, `migrate`'s column and `places_named`'s splice.
-      v9 IN-49 `levy` (H-163 limit 3, [ASSUMPTION; medium; Jordan to correct]): AND the larders a
-      seat may levy (`queries/world_q.py::larders_in_purview` -- a Rung his own ledger names, holding
-      the fixtures' levy of their matter, inside the purview of a seat of his granting the remit act
+      v9 IN-49 `requisition` (H-163 limit 3, [ASSUMPTION; medium; Jordan to correct]): AND the larders a
+      seat may requisition (`queries/world_q.py::larders_in_purview` -- a Rung his own ledger names, holding
+      the fixtures' requisition of their matter, inside the purview of a seat of his granting the remit act
       of a row declaring this class, `data/verbs.py::RUNG_REMIT_ACTS`, and not that seat's own rung,
       its treasury), stamped after the places and
-      never twice; `levy` declares it beside `migrate`, so its `subject` binds a stocked rung in
+      never twice; `requisition` declares it beside `migrate`, so its `subject` binds a stocked rung in
       purview rather than whatever he was asked about. The class is shared, as `Office` is between
-      `confer` and `oblige`: each row forms on both sources and the fold disposes. REVERT: `levy`'s
+      `confer` and `oblige`: each row forms on both sources and the fold disposes. REVERT: `requisition`'s
       column (which empties `RUNG_REMIT_ACTS`) and `larders_in_purview`'s splice.
     values: [Office, Record, Rung]
 
@@ -1773,7 +1773,7 @@ rosters:
       names no second party (#453 K-04), so the fan never reaches it; this is the one place that says
       a verb's referent comes from a warrant instead of from the question. Without the line a
       `remit:issue` seat forms `seize` on every Record any question names and the fold refuses it
-      each time -- `levy`'s scene tax (H-163) for a licence nobody holds. A warrant naming a PERSON
+      each time -- `requisition`'s scene tax (H-163) for a licence nobody holds. A warrant naming a PERSON
       (`arrest`, step 5) adds its own line here; a Person `subject` is declined by `seize`'s effect
       (since v9 IN-13 the row's `existence` conjunct is gone: its object widened to a Rung, and the
       effect, `_eff_seize`, declines anything that is neither a held Record nor an occupied
@@ -2684,8 +2684,8 @@ tables:
         revoke:         -0.7    # carried: an officeholder unmaking a subordinate's standing; rank exercised
         issue:          -0.6    # carried: a dispensation is a remit reaching the executors named in scope
         comply:         -0.6    # carried: obeying a dispensation's terms is literal deference to the issuer
-        levy:           -0.6    # carried: taking a rung's stores under a remit is rank drawing on subjects
-        seize:          -0.6    # reasoned (IN-12 step 6): `levy`'s reading for a held Record -- taking what a subject holds under a remit, a seat exercising rank over the holder; `remit:issue`-eligible as `levy` is
+        requisition:           -0.6    # carried: taking a rung's stores under a remit is rank drawing on subjects
+        seize:          -0.6    # reasoned (IN-12 step 6): `requisition`'s reading for a held Record -- taking what a subject holds under a remit, a seat exercising rank over the holder; `remit:issue`-eligible as `requisition` is
         dispatch:       -0.5    # carried: an order sent down the office to a named person
         open_case:      -0.5    # carried: opening a case invokes the remit's institution over the matter
         petition:       -0.4    # carried: the channel a subordinate has; using it works the hierarchy
@@ -2756,7 +2756,7 @@ tables:
         forge:          null
         issue:          null
         fight:          null
-        levy:           null
+        requisition:           null
         move:           null
         petition:       null
         revoke:         null
@@ -2771,13 +2771,13 @@ tables:
 
       partisan_equitable:
         # negative = for one's own · positive = impartial treatment (draft §3.3)
-        seize:          null    # reasoned (IN-12 step 6): for whom the taking is done is the candidate's fact (the warrant's), not the verb's -- `give`'s and `levy`'s reading
+        seize:          null    # reasoned (IN-12 step 6): for whom the taking is done is the candidate's fact (the warrant's), not the verb's -- `give`'s and `requisition`'s reading
         determine:       0.6    # derived: the act's own form is impartial adjudication; who it favours is the `judging_set`'s
         construe:       -0.6    # derived: calculated to serve the construer's aim, not to keep the bond
         forge:          -0.5    # derived: counterfeiting a record for advantage
         open_case:       0.3    # derived: the case runs by template regardless of who stands before it
-        levy:           -0.3    # derived: rank drawing on subjects -- one's own office's take
-        march:          -0.4    # reasoned: `sides_of` divides the claimants into sides and the loss lands on the other one -- war for one's own against another; `levy`'s reason, stronger
+        requisition:           -0.3    # derived: rank drawing on subjects -- one's own office's take
+        march:          -0.4    # reasoned: `sides_of` divides the claimants into sides and the loss lands on the other one -- war for one's own against another; `requisition`'s reason, stronger
         build:          null    # reasoned: beneficiary `none` -- who gains from the fabric is a world read (its `beneficiary_note`)
         found:          null    # reasoned: beneficiary `none`, for `build`'s reason
         give:           null    # reasoned: partial toward a person, but toward WHOM is the candidate's fact, not the verb's (§3.3's rule for `transfer` and `tell`)
@@ -2840,7 +2840,7 @@ tables:
         give:           null
         issue:          null
         fight:          null
-        levy:           null
+        requisition:           null
         march:          null
         migrate:        null
         move:           null
@@ -2895,7 +2895,7 @@ tables:
         forge:          null
         issue:          null
         fight:          null
-        levy:           null
+        requisition:           null
         move:           null
         open_case:      null
         petition:       null
@@ -2947,7 +2947,7 @@ tables:
         exchange:       null
         forge:          null
         issue:          null
-        levy:           null
+        requisition:           null
         move:           null
         oblige:         null
         open_case:      null
@@ -3007,7 +3007,7 @@ tables:
         dispatch:       null
         establish:      null
         issue:          null
-        levy:           null
+        requisition:           null
         open_case:      null
         petition:       null
         release:        null

@@ -176,10 +176,10 @@ def test_h134_two_seats_are_two_acts_ids_opportunities_and_the_store():
 # referents) and none is added: `migrate` declares `referent_class: Rung` and forms only on a place
 # `places_named` stamps, and `p_one`'s ledger names none. CONTROL: the same reading with `migrate`'s
 # `referent_class` blanked in `VERB_TABLE` re-hashes to `(64, 64, "4351ecd2...")` exactly.
-# RE-PINNED AT v9 IN-49 `levy` (B-K, on ccf16bc3): 62 -> 60, `b8163ec4...` -> `5abeea9b...`.
-# Exactly the two `levy` Candidates leave (on `off_duke` and `Hh`, the question's plain referents)
-# and none is added: `levy` declares `referent_class: Rung` and forms only on a `Rung`-classed
-# referent, and this reading's question carries none. CONTROL: the same reading with `levy`'s
+# RE-PINNED AT v9 IN-49 `requisition` (B-K, on ccf16bc3): 62 -> 60, `b8163ec4...` -> `5abeea9b...`.
+# Exactly the two `requisition` Candidates leave (on `off_duke` and `Hh`, the question's plain referents)
+# and none is added: `requisition` declares `referent_class: Rung` and forms only on a `Rung`-classed
+# referent, and this reading's question carries none. CONTROL: the same reading with `requisition`'s
 # `referent_class` blanked in `VERB_TABLE` and `world_q.larders_in_purview` stamping nothing
 # re-hashes to `(62, 62, "b8163ec4...")` exactly.
 _CONTROL = (60, 60, "5abeea9baac7c6ef4c194f2c0918ffaecd0a15a895f4c78fefd9cbbdeb5dc0f7")

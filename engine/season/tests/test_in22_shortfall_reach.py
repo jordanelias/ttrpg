@@ -178,7 +178,7 @@ def _paying_run(acting=(S.REEVE,), between=None):
     which landed question a person answers is not this position's), and the chooser's `verbs=` is
     narrowed to `transfer`. MEASURED without the second: under the full roster the reeve's formed
     `transfer` (from `terr_march`, the claim's kind and amount) is outscored in that season by
-    `levy`, `work`, `examine` and others -- which verb a person prefers is the chooser's score, not
+    `requisition`, `work`, `examine` and others -- which verb a person prefers is the chooser's score, not
     this position's, and the falsifier is that the candidate EXECUTES once chosen. `acting=()` is
     the CONTROL twin: the same world and the same two barriers, nobody acting. `between(w)`, if
     given, runs after the question is read and before season 2. Returns `(world, question,
@@ -305,7 +305,7 @@ def _partial_grant(w):
 def _gives_as_himself(w, q):
     """The three readers of the seat agree for a holder whose `issue` seat has no treasury:
     `exercised_seat` names none, `operands_for`'s `from` is where he stands, and the formed
-    Candidate's `from` is the same. A row that binds no `from` (`issue`, `levy`) still goes
+    Candidate's `from` is the same. A row that binds no `from` (`issue`, `requisition`) still goes
     through the seat -- the filter is the treasury's, not the grant's."""
     reeve = w.persons[S.REEVE]
     row = VERB_TABLE["transfer"]
@@ -316,7 +316,7 @@ def _gives_as_himself(w, q):
                if c.verb == "transfer"]
     assert cand.operands["from"] == S.REEVE_HEARTH, cand.operands
     checked = 0
-    for verb in ("issue", "levy"):
+    for verb in ("issue", "requisition"):
         assert "from" not in VERB_TABLE[verb].requires_typed.operands()
         assert exercised_seat(reeve, VERB_TABLE[verb]) == S.REEVE_SEAT, verb
         checked += 1

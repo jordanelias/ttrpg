@@ -790,20 +790,20 @@ def _load_with(table_text: str):
 
 
 _LEVY_ROW = (
-    '  - verb:        "levy"\n'
+    '  - verb:        "requisition"\n'
     '    scale:   "settlement"\n'
-    '    scale_note: "a levy moves a Rung\'s stores -- the rung IS the subject"\n'
+    '    scale_note: "a requisition moves a Rung\'s stores -- the rung IS the subject"\n'
     '    stratum:     "uncontested_material"\n'
     '    eligibility: ["remit:issue", "presence:<rung>"]\n'
     '    beneficiary: "actor"\n'
 )
 
-# ⚠ PLAN POSITION `19` TYPED `levy` (`transfer`'s form-2 cell plus a `basis` conjunct), and a typed
-# cell's `needs:` ADMITS `to` -- so `beneficiary: to` on `levy` became CARRIABLE and stopped being the
+# ⚠ PLAN POSITION `19` TYPED `requisition` (`transfer`'s form-2 cell plus a `basis` conjunct), and a typed
+# cell's `needs:` ADMITS `to` -- so `beneficiary: to` on `requisition` became CARRIABLE and stopped being the
 # dead reference `test_lb6d_an_operand_beneficiary_the_row_cannot_carry_is_refused_at_load` plants.
 # That test needs an UNTYPED row. It planted `forge` until v9 IN-45 typed it (an `own_ledger` cell);
 # B-K close (ACC 8/13) re-points it to `destroy_record`, still untyped (`requires: —`, no cell). The
-# two tests above keep `levy`: a missing or off-roster beneficiary is refused whatever the row's cell.
+# two tests above keep `requisition`: a missing or off-roster beneficiary is refused whatever the row's cell.
 _UNTYPED_ROW = (
     '  - verb:        "destroy_record"\n'
     '    stratum:     "uncontested_material"\n'
@@ -932,7 +932,7 @@ def test_lb6d_none_and_an_unbound_carrier_are_different_answers():
     bound = Candidate(verb="transfer", subject="r1", operands={"to": "p3"})
     assert beneficiary_of(p, bound) == "p3"
     assert benefits_me(p, bound) == 0.0
-    assert benefits_me(p, Candidate(verb="levy", subject="r1")) == 1.0
+    assert benefits_me(p, Candidate(verb="requisition", subject="r1")) == 1.0
 
 
 def test_lb6d_the_column_resolves_on_candidates_the_engine_actually_forms():
@@ -1302,7 +1302,7 @@ def test_13f_an_existing_id_refuses_any_change_but_the_remit(change):
     (_founding(faction="Nowhere Brotherhood"), True),                  # an unknown faction
     (_founding(faction=None, body="Office of Nothing"), True),         # an unknown body
     (_founding(body="Imperial Court", faction="Church of Solmund"), True),   # a mismatch
-    (_founding(remit=["issue", "levy"]), True),                        # off `REMIT_ACTS`
+    (_founding(remit=["issue", "requisition"]), True),                        # off `REMIT_ACTS`
     (_founding(post="Duke", faction=None, body="Imperial Court"), True),     # a title in a body
     (_founding(rung="nowhere"), False),                                # a rung the world lacks
     (_founding(conferral=None), False),                                # no conferral basis
@@ -1980,8 +1980,8 @@ def test_8a_a_season_still_executes_end_to_end_with_the_overlay_wired():
 # is -- J-8, `offices.yaml: meta: remit_unruled`). FALSIFIERS: every row's anchor resolves to one
 # live rung of its own kind, checked against an INDEPENDENT derivation of each rung; the resolver
 # refuses what names no single rung and a broken form turns the build red; no seat but the one
-# declared exception is rungless; a season executes a `levy`/`issue` through a seat (`Act.via`
-# set) where the same seed refused 18 of 19 four-season levies on `authority` before (`aperture 4 0`,
+# declared exception is rungless; a season executes a `requisition`/`issue` through a seat (`Act.via`
+# set) where the same seed refused 18 of 19 four-season requisitions on `authority` before (`aperture 4 0`,
 # the parent tree `5519cf52`, as `H-163` limit 1 and the `13d-iii` commit record it).
 # =================================================================================================
 
@@ -2407,10 +2407,10 @@ def test_13d_iii_the_remit_overlay_replaces_the_default_and_leaves_only_the_unru
 
 # ⚠ RETIRED (B-K close, ACC 7 / FID 4; v9 §0.5, 2026-10-13: no test asserts a verb executed in the
 # seed-0 realm): `test_13d_iii_a_season_executes_an_issue_or_levy_through_a_seat_with_a_rung` and its
-# `_season13` fixture asserted that a `levy` or `issue` EXECUTED in one `build_realm(0)` season --
-# DELETED, not skipped, as its levy-share block was at IN-49. Whether the authored realm hands a seat
+# `_season13` fixture asserted that a `requisition` or `issue` EXECUTED in one `build_realm(0)` season --
+# DELETED, not skipped, as its requisition-share block was at IN-49. Whether the authored realm hands a seat
 # holder the occasion is authored data, not the wiring. The wiring is asserted on hand-built worlds:
-# `test_u7_remit.py` (a computed `levy` executing with `Act.via` set, its purview controls) and
+# `test_u7_remit.py` (a computed `requisition` executing with `Act.via` set, its purview controls) and
 # `test_in10_record_operands.py` (a fanned `issue` folding through its seat; seatless, refused).
 
 

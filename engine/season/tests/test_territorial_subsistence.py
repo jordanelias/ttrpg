@@ -344,7 +344,7 @@ def test_24f_drain_guard_a_cohort_draws_stock_on_the_built_realm_and_matter_is_c
     assert set(record) <= set(_cohorts(w)), f"an individual drew: {sorted(set(record) - set(_cohorts(w)))}"
     # WHAT THIS BARRIER PRODUCED: the `yield` of every rung it emitted `yield.taken` about. A rung
     # that produced nothing this barrier keeps an older `yield`, so the field is read only where the
-    # barrier wrote it. Nothing else in MATTER moves a store (a `transfer` or `levy` is RESOLVE's).
+    # barrier wrote it. Nothing else in MATTER moves a store (a `transfer` or `requisition` is RESOLVE's).
     took = {c.subject for e in evs if e.kind == "yield.taken" for c in e.changes}
     assert took, "no rung produced in the second barrier; the conservation check would be partial"
     produced = sum(sum((getattr(w.rungs[r], "yield") or {}).values()) for r in took)

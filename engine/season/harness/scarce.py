@@ -127,7 +127,7 @@ REEVE_HEARTH, FAR_HEARTH = "hh_reeve", "hh_far_reeve"
 # generic reeve is too. Test data, not a claim about who governs a march.
 GOVERNING_FACTION = "Crown"
 # What each reeve's seat grants. `issue` is the act `transfer`'s seat alternative names
-# (`verb_table.yaml`, `remit:issue`, `levy`'s precedent), so a seat granting nothing could pay
+# (`verb_table.yaml`, `remit:issue`, `requisition`'s precedent), so a seat granting nothing could pay
 # nobody. Test data, not a claim about what a reeve may do.
 REEVE_REMIT = ["issue"]
 # [JUSTIFIED: a test-fixture stock, not a game value -- the march's TREASURY (G2: Rung.stores at the seat's own rung), sized only so it still covers either recorded shortfall after the hungry cohort's next draw walks up to it]

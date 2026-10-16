@@ -641,7 +641,7 @@ WITNESS writes the ledger; MATTER decays; WITNESS evicts. A definition quantifyi
 WHICH IS FALSE AND IS THE MORE DANGEROUS ERROR OF THE TWO.** The verb-scoped graph is not empty —
 it is DISJOINT from the declared four, which is a different and much weaker statement.
 `verb_table.yaml` supplies at least three verb-only cycles: `work` writes `Site.condition` and
-requires `condition >= floor(verb)`; `transfer`, `levy` and `exchange` each write `Rung.stores`
+requires `condition >= floor(verb)`; `transfer`, `requisition` and `exchange` each write `Rung.stores`
 behind a `stores(...) >= amount` precondition; `confer` and `revoke` turn over `Tenure.until`
 against each other's liveness test. **The first of those IS the site-condition loop — `H-105`, a
 thing the design found and filed.** So a verb-scoped check is precisely the check that would have
@@ -1391,7 +1391,7 @@ it and nobody declared it — and no duke could refuse to fight a war his king d
 ### §E.1.7 · **WHAT IS OWED — the pattern's third slot, which this section had and did not use**
 
 ⚠ **ADDED 2026-09-03, and it closes an over-refusal committed against this document by its own
-evaluator.** An external design (#359) attaches a `contract : { levy, tax, obligations, autonomy }`
+evaluator.** An external design (#359) attaches a `contract : { requisition, tax, obligations, autonomy }`
 to its subordination relation, and a cross-read graded that *"a real question #358 leaves open"* on
 the ground that `oblige` carries a subject, an object, dates and a term, and **what is owed is
 nowhere.** That grade was wrong, and the derivation is one step:

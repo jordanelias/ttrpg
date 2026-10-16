@@ -420,7 +420,7 @@ claimant on an emptied granary gets a DIFFERENT Event"* — only works if a fail
 | `petition` | 4 | own | — **no dedup, no cap, no per-venue limit** (§26.3) | — *(a Petition is created, not written)* | `petition.filed` | — | ruled §26.3 |
 | `tell` | 4 | own | the teller holds a claim on the subject | — *(deposits at WITNESS, not here)* | `news.told` | — | ruled §37.1 |
 | `transfer` | 3 | own \| `hold:<store>` | **`stores(hearth(giver), kind) >= amount`** (§54 it. 7) | `(Rung, stores)` ×2 | `transfer.made` | **`transfer.refused`** — §27.1's scarcity | ruled §54 |
-| `levy` | 3 | `remit:issue` + `presence` | `stores(...) >= amount` | `(Rung, stores)` | `levy.taken` | `levy.refused` | assumption |
+| `requisition` | 3 | `remit:issue` + `presence` | `stores(...) >= amount` | `(Rung, stores)` | `requisition.taken` | `requisition.refused` | assumption |
 | `work` | 3 | own \| `presence:<site>` | `condition >= floor(verb)` (§12.1) | `(Site, condition)` | `site.worked` | `work.unavailable` | ruled §12.1 |
 | `restore` | 3 | own \| `presence:<site>` | `Δ = +(1 − condition) × f(degree) × share` (§54 it. 7's mirror) | `(Site, condition)` | `site.restored` | `restore.refused` | ruled §54 |
 | `create_record` | 3 | own | — | `(Record, exists)`, `(Record, stages)` | `record.created` | — | **D7** |

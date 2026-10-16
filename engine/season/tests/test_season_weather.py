@@ -87,7 +87,7 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # (its `terms` conjunct binds `subject`; a writ with nothing to say about its terms is declined) and a
 # fanned row's bags gain a held Record's addressee (`record_sourced_operands`). The build hash is equal;
 # one and two seasons move. Was bb08f4b2... / cdeda7fd... (one, two seasons); `aperture 1 0` realm acts
-# 602 -> 598, `issue` attempted 3 -> 2 (executed 1 -> 1), `levy` attempted 3 -> 2.
+# 602 -> 598, `issue` attempted 3 -> 2 (executed 1 -> 1), `requisition` attempted 3 -> 2.
 # RE-PINNED at v9 IN-45 `forge` (B-K), A BEHAVIOUR MOVE DECLARED: `forge` entered `resolvable_verbs()`
 # (typed with `survey`'s cell, `_eff_forge`), so the chooser offers it. The build hash is equal; one and
 # two seasons move. Was 5bbcba33... / 39bf9d83... (one, two seasons). CONTROL, run: the same tree with
@@ -116,14 +116,14 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # and both old `BASE_EVENTS` exactly, so the stamp and the gate move nothing on their own. `aperture 1 0`
 # realm acts 615 -> 612; `migrate` formed 83 -> 71, att 31 -> 31, ex 0 -> 1, ref 31 -> 30, every
 # refusal now `_eff_migrate`'s capacity decline (read, not asserted, v9 §0.5).
-# RE-PINNED at v9 IN-49 `levy` (B-K, on ccf16bc3), A BEHAVIOUR MOVE DECLARED: `levy` declares
+# RE-PINNED at v9 IN-49 `requisition` (B-K, on ccf16bc3), A BEHAVIOUR MOVE DECLARED: `requisition` declares
 # `referent_class: Rung` and forms only on a `Rung`-classed referent (`world_q.larders_in_purview`'s
 # stocked larders in purview, and `places_named`' places, the class being shared), so the chooser's
 # sets change. The build hash is equal; one and two seasons move. Was bedb32d5... / 547d3e62... (one,
-# two seasons). CONTROL, run: the same tree with `levy`'s `referent_class` blanked in `VERB_TABLE` and
+# two seasons). CONTROL, run: the same tree with `requisition`'s `referent_class` blanked in `VERB_TABLE` and
 # `larders_in_purview` stamping nothing (`_derive_operand`'s widened claim gate and
 # `RUNG_REMIT_ACTS` left in) reproduces both old values and both old `BASE_EVENTS` exactly.
-# `aperture 1 0` realm acts 612 -> 612; `levy` formed 16 -> 11, att 3 -> 0, ex 0, ref 3 -> 0 (read,
+# `aperture 1 0` realm acts 612 -> 612; `requisition` formed 16 -> 11, att 3 -> 0, ex 0, ref 3 -> 0 (read,
 # not asserted, v9 §0.5); `larders_in_purview` returned `()` in all 766 calls over two realm seasons.
 BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
                1: "3ff10d3c30acd7d333ede21f08e58898",
@@ -152,7 +152,7 @@ BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
 # RE-RECORDED at v9 IN-12 `survey` + Rung with `BASE_HASHES` (7338 -> 7391, 21313 -> 22130).
 # RE-RECORDED at v9 IN-45 `carry` with `BASE_HASHES` (7391 -> 7186, 22130 -> 21338).
 # RE-RECORDED at v9 IN-45 `migrate` with `BASE_HASHES` (7186 -> 7160, 21338 -> 23584).
-# RE-RECORDED at v9 IN-49 `levy` with `BASE_HASHES` (7160 -> 7157, 23584 -> 23361).
+# RE-RECORDED at v9 IN-49 `requisition` with `BASE_HASHES` (7160 -> 7157, 23584 -> 23361).
 BASE_EVENTS = {1: (7157, "7b6709af3d0f1fd4b8efdc345db5f9ce5511fbd99d2fba5e8e61f481e069feee"),
                2: (23361, "946059cda52a1110689d7dbc652d26e7221934f6e488e78c4fab286521df417e")}
 
