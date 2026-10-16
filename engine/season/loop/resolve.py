@@ -798,15 +798,18 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
         # hide a real infrastructure failure behind a plausible-looking game Event.
         # ⚠⚠ `sigma.py`'s own `REFUSED` (S27.4, `Ob > 2x Pool`) is NOT a software defect -- it is
         # a normal game refusal, and mischaracterizing it as one was this comment's own first
-        # writing. It is PRE-EXISTING: `tell` already reaches an uncaught `Unspecified` on it
-        # today, unrelated to march, and this fix neither created nor closes that gap -- widening
-        # the catch to cover it is a `social_contest`-lane decision, outside what this pass may
-        # decide. `e.needs` is a free-text field elsewhere in this codebase
+        # writing. It WAS uncaught for `tell` (pre-existing, unrelated to march); SC-01
+        # Phase 2 widened the catch below to `REFUSED` once `speak` became contested. `e.needs` is a free-text field elsewhere in this codebase
         # (`manifest/registry.py`, `harness/probes.py`), matched by string rather than a typed
         # exception subclass, because `seam/contest.py` forwards a wrapper's raw `status` value
         # verbatim only at this one raise site -- a real but separate seam-contract gap, not
         # widened here.
-        if e.needs == "PARTY-GAP":
+        # SC-01 (B-N) Phase 2, /code-review: `speak` is contested now, so a speaker whose pool is
+        # under 1D reached this raise whenever a matter was docketed (the ceiling caps the obstacle
+        # at 2 and S27.4 refuses Ob > 2 x Pool). S27.4's rule is that the attempt is refused and the
+        # season spent, as the uncontested branch below does -- never that the season aborts -- so a
+        # wrapper's own `REFUSED` takes the verb's refusal kind, the shape `PARTY-GAP` takes.
+        if e.needs in ("PARTY-GAP", "REFUSED"):
             return _party_gap_refusal()
         raise
     if isinstance(r, ContestError):

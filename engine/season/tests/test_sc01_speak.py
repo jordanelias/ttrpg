@@ -211,3 +211,18 @@ def test_sc01_s12_the_loader_refuses_a_malformed_speak_cell(monkeypatch, key, va
 def test_sc01_s12_the_loader_control_the_shipped_row_loads():
     """The control for the three plants above: the unplanted table loads, with `speak` contested."""
     assert _verbs._load_verb_table()["speak"].contests == "a matter"
+
+
+def test_sc01_s12_a_speaker_under_one_die_is_refused_not_a_crash():
+    """S27.4 (Ob > 2 x Pool) is a refusal, not an abort: a docketed `speak` by a speaker whose
+    `copying` pool is under 1D comes back as the verb's refusal kind, where it used to raise an
+    uncaught `Unspecified` out of the season (found at B-N's `/code-review`). Control: pool 1 resolves."""
+    checked = 0
+    for pool, refused in ((0, True), (0.5, True), (1, False)):
+        w, d = _world()
+        w.persons[SPEAKER].capability = {"copying": pool}
+        _docket(w, d)
+        out = _fold(w, d, _speak(f"zpool{pool}"))
+        assert bool(out) and (_kinds(out) == ["speech.unheard"]) is refused, (pool, _kinds(out))
+        checked += 1
+    assert checked == 3

@@ -78,7 +78,8 @@ def obstacle(inp: SocialContestInput) -> float:
     bound inside this composition, the same for every party, never applied by a caller to `base_Ob`.
     PER MATTER (ED-SC-0038's pick): this bounds ONE record's obstacle -- one matter's draw -- and
     nothing composes obstacles across a bundle. `None` is the uncapped control arm. A ceiling below
-    the Ob minimum (`OB_MIN`, PP-232) is refused rather than read: it would breach the floor."""
+    the Ob minimum (`OB_MIN`, PP-232) is refused rather than read: it would breach the floor. Nothing floors the composed obstacle itself: a score under 2 composes
+    below `OB_MIN` (score 1 gives 0.5), as the deleted `_obstacle_of` did."""
     ob = float(inp.opposition) / 2.0 if inp.opposition is not None else float(inp.obstacle_default)
     ceiling = inp.obstacle_ceiling
     if ceiling is None:
