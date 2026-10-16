@@ -503,5 +503,28 @@ This is an audit-design pass over six months of repository work. Jordan, 2026-10
 |---|---|---|---|---|---|
 | K-SE-12 | Show the player, for any settlement, what it holds, what its people need and get, and who holds it, read from the Queries that already compute them. | §9 E-LEGIBILITY; probe (drought invisible in acts); K-SE-2 | takeable, step 5: reads `world_q.demanded`/`delivered` and stores, adds no state; it waits on a player surface, which has no build batch (IN-46/IN-47) | adds a view, no state; cuts nothing | for every rung in a seeded season, the view's numbers equal `demanded`, `delivered` and `Rung.stores` |
 
+## 11. METHOD NOTE (sections 7-10)
+
+**Opened this pass.** The audited teardown upload (`3cb2a6c8`, SHA-256 prefix recomputed: `b0714ed1aa6b7314`) at TD:21, :144, :148, :245, :284, :308, :322, :367, :370, :377, :402, :465, :467-474, :535, :543, :573. The other five precedent uploads were grepped for "Stage", HoMM and Qud, and 20G was read at :21, :68, :221-248, :340, :352-358, :454; 3S at :104; N2 at :287, :369-371. Also opened: SFP `02`, `05`, `00` at every precedent line; `RULINGS.yaml:1840-1876`; `04_MATTER_AND_WORKS.md:1882-1892`; companion `:513-519`, `:551-557`; `04_PROVENANCE.md:128-142`; ED-SE-0051 and ED-SE-0054 rows; `references/action_vocabulary.yaml` in full (also at `092fc45`); `module_contracts.yaml` domain rows; `requirements.yaml:150-167`; `canon/04_game_design_constraints.md:20-46`; the geography's `provinces:` (parsed). Season code: `effects_governance.py:374-420`, `verb_table.yaml:629-663`, `effects_migration.py:155-200`, `world_q.py:780-808, :1086-1110, :1461-1492`, `matter.py:372-400, :455-540`, `census.py:1-100`, `effects_economy.py:22-40, :134-150, :254-270`, `fixtures.py:398-406, :512-545`, `faction_q.py:228-242`, `cohorts.yaml:20-34`, `probes.py:1836-1856`, `populated.py:552-566, :1313-1335`, `choose.py:69-80`. Hole rows H-07, H-26, H-41, H-49, H-51, H-94, H-125, H-163, H-165, H-166, H-167, H-170, H-186, H-195, H-208. Plan: `_part5.md:88-122, :144-157, :190-217`, `_part6.md:200-232`, `_part4.md:118-141`, `_part2.md:155-170`, `_part8.md:130-137`. Run: `register --requirements`; two SE test files (40 passed); the three-arm probe (`scratchpad/work/se_probe2.py`; the first version, `se_probe.py`, failed on fixture assignment after its shipped arm and was superseded, not deleted).
+
+**Taken without re-opening.** From the lane file's sections 0-6 and its extractions: FASE, HCC, PGS, CGR, GOV and PW cases and checks ([READER] R6, A9, R3); companion and PMM rows other than those re-opened (R4); C3, C4, C8 extraction counts; `02_against_precedent.md:37-40` (re-opened by the prior pass). From the UP extractions: the 13G, 3S, N1 and N2 throughline lists ([READER] UP01, UP02, UP04, UP05). From the uploaded NERS audit: A5's R-CHOICE table and S-UP petition finding ([AUDIT]; its `matter.py` yield line was re-opened), A6 (its locator `action_vocabulary.yaml:63-72` found wrong, §7.2 item 6), R-WORLD (re-opened and re-measured) and T5 (not used for SE). BASELINE B1-B7 for plan states, verb classes and dark knobs.
+
+**Upload corrections applied (Step 0).**
+1. §0 item 5: the teardown is in hand as the audited revision, not the earlier draft; the borrowings test mixed; RR-2's `reasoning:` (`:1845-1859`) confirmed not to rest on it; the code's capacity is Manor Lords' immigration shape.
+2. §2.1 SFP row: per-borrowing HOLDS/FAILS/PARTLY against TD, with the earlier-draft caveat.
+3. §2.1 ED-SE-0051 row: Banished births confirmed; Manor Lords gates immigration; "strongest" not in TD; RR-2's stale ledger citation noted.
+4. §2.1 ED-SE-0051 row (04 note): Manor Lords named at companion `:515, :518, :556`; TD names Banished on 29 lines.
+5. §2.2: the Banished/Dawn of Man/Manor Lords row split into three; "food-limited attrition" CONTRADICTED (TD:21, :465); Manor Lords' capacity gates immigration (TD:148, :370).
+6. §2.2: Tropico row added (causation inverted, TD:245); Caves of Qud row added (not in any upload); HoMM row corrected (not the teardown's gap).
+7. §2.3 items 1-3 rewritten for the in-hand source, the half-right sibling tension, and the misattributed HoMM null; TD's three bounded nulls added.
+8. §3.3 item 3: each side half right; the built half noted.
+9. §4 capacity row: built half vs ruled half; precedent one T2 source.
+10. §5: the city-builder gap superseded for the teardown; the teardown gap restated (in hand, earlier draft absent).
+11. §3.1 and §4 `restore` rows annotated with the probe's correction (§9 self-audit); §6 left as the prior pass's record.
+
+**Could not check.** The earlier teardown draft (`73ebd4eb…`) and therefore whether SFP's failed attributions held there. Execution counts over more than two seasons or more than one seed. An equilibrium run of `levy` against `restore`/`work`. `aperture 4 0` and `corpus_run` (cost). Whether IN-35's "in order of distance" reads a distance the season can compute (M-SE-4 suggests it cannot) [UNVERIFIED].
+
+**Confidence.** [CONFIDENCE: medium] on R-WORLD and R-CHOICE: one seed, two seasons, and the first season is a build-order dearth. [CONFIDENCE: medium] on §7.2 item 4 (GD-2 is mutable canon and may be read as superseded by Layer 1 without a recorded ruling). [CONFIDENCE: medium] on K-SE-8's ladder step: a labour term changes the game materially, and Jordan may read it as surviving step 5. Fan-out: none spawned; one reader held the lane's sources, and a second agent would have re-read the same files.
+
 
 
