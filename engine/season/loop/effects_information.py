@@ -340,7 +340,8 @@ def _eff_carry(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     if rec is None or rec.kind != "petition":
         return NO_CHANGE
     # What the petition is ABOUT, by `person_q.ABOUT_KEYS`' key for its kind (B-K close, ARC 1).
-    matter = (rec.subject_matter or {}).get(ABOUT_KEYS[rec.kind])
+    about = ABOUT_KEYS.get(rec.kind)
+    matter = (rec.subject_matter or {}).get(about) if about else None
     if not isinstance(matter, str) or docketed(w, matter):
         return NO_CHANGE
     stages = _declared_stages(w, a)
@@ -603,7 +604,9 @@ def _resolved_sheet(w: "World", a: "Act") -> Optional[dict]:
 # never spelt here, so the forgery always lies about exactly what a reader acts on -- a perturbation
 # of a key nothing reads would be `ID-13`'s dead carrier -- and a map that drops the sheet fails here
 # at import instead of forging a lie nobody reads.
-_FORGED_SHEET_KEY = RECORD_SOURCED_OPERANDS[faction_q.SHEET_KIND][RECORD_CONTENT.get("addressee")]
+_ADDRESSEE_KEY = RECORD_CONTENT.get("addressee")
+_FORGED_SHEET_KEY = RECORD_SOURCED_OPERANDS[faction_q.SHEET_KIND][
+    (RECORD_CONTENT.get("read_from") or {}).get(_ADDRESSEE_KEY, _ADDRESSEE_KEY)]
 
 
 @effect_for("forge")

@@ -732,11 +732,11 @@ def held_record_claims(p: Person) -> list:
     # NEWEST BY `LedgerReader._best`'s comparator, the one owner of *most recent, then most
     # confident* (strict `>`, first found wins a tie) -- not a second ladder (B-K close, LOG 6).
     held_set = set(held)
-    reader = LedgerReader([c for c in p.ledger if c.subject in held_set])
+    pool = [c for c in p.ledger if c.subject in held_set]
     out = []
     for o in dict.fromkeys(held):
-        c = reader._best(lambda c, o=o: c.subject == o and content_said(c) is not None
-                         and content_kind(c) in RECORD_SOURCED_OPERANDS)
+        c = LedgerReader([c for c in pool if c.subject == o and content_said(c) is not None
+                          and content_kind(c) in RECORD_SOURCED_OPERANDS]).belief_among()
         if c is not None:
             out.append(c)
     return out

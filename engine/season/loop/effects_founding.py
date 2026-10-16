@@ -234,7 +234,8 @@ def _eff_build(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
 
     def perform() -> None:
         w.sites[sid] = site
-        # CONSUMED, ONE-SIDED: the cost goes into the fabric (a lawful sink, 04_EVALUATION §6 S).
+        # CONSUMED, ONE-SIDED: the cost goes into the fabric and is not credited anywhere
+        # ([ASSUMPTION; medium; Jordan to correct], rosters.yaml `works_cost`).
         for kind, amount in sorted(price.items()):
             _debit(payer, kind, amount)
     return Change((Subject.entity("sites", sid, "site.built"),
