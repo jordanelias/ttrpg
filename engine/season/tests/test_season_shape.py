@@ -10240,6 +10240,13 @@ def test_wc_the_fold_binds_what_the_person_bound():
     # through the seated `p_high`, and not vacuously: the seat is present on both sides.
     from ..decision.options import exercised_seat
     duke = w.persons["p_high"]
+    # ⚠ RE-RECORDED AT PLAN POSITION IN-10: `issue` joined the known-person fan for `to` and its
+    # named `terms` conjunct declines a writ with nothing to say about the referent, so a duke who
+    # knows nobody and holds nothing forms no `issue`. One `seen` claim supplies both, as for
+    # `p_low` above -- the duke saw `p_mid` at `Hh` -- and no requirement reads `seen`, so no other
+    # remit verb's clause 4 can move.
+    duke.ledger.append(Claim("c_wc_seen_duke", duke.id, "Hh", SEEN_PREDICATE, Seen(who="p_mid"), 0,
+                             "firsthand", 100, "own"))
     remit = [c for c in decision.opening_set(duke, View(duke.id, [], w.fixtures.get("view_k"), q),
                                              q, w.fixtures) if c.verb in WALK_REMIT]
     assert {c.verb for c in remit} == WALK_REMIT, sorted({c.verb for c in remit})
@@ -15363,11 +15370,14 @@ def test_t4_petition_and_issue_bind_to_and_contest_exactly_as_before():
     # ⚠ PLAN POSITION `14` (U7-own): `give` JOINS -- its cell is typed now and binds `to` BESIDE
     # `subject` (the Record), so its receiver is a known person and never the referent. `petition`
     # and `issue` are unchanged, which is what the rest of this control asserts.
-    assert fanned == {"give", "tell"}, sorted(fanned)
+    # ⚠ RE-RECORDED AT PLAN POSITION IN-10 (#453 §10.1, *`issue` joins the known-person fan for
+    # `to`*): `issue`'s cell binds `subject` beside `to` (its `terms` conjunct), so it JOINS -- one
+    # writ per executor the issuer knows, `terms` the referent; `petition` alone keeps the control.
+    assert fanned == {"give", "issue", "tell"}, sorted(fanned)
     w, p = _t4_person(knows=("p_mid", "p_high", "p_king"))
     q = Question("q:t4c", "need", ("p_mid",))
     checked = 0
-    for verb in ("petition", "issue"):
+    for verb in ("petition",):
         row = VERB_TABLE[verb]
         bags = operand_bags(p, row, q, "p_mid", w.fixtures)
         assert len(bags) == 1, (verb, bags)
@@ -15375,5 +15385,11 @@ def test_t4_petition_and_issue_bind_to_and_contest_exactly_as_before():
         assert operands_for(p, row, q, "p_mid", w.fixtures) == bags[0]
         assert row.counterparty == "to" and not row.contests, verb
         checked += 1
+    issue_bags = operand_bags(p, VERB_TABLE["issue"], q, "p_mid", w.fixtures)
+    assert all(b["subject"] == "p_mid" for b in issue_bags), issue_bags
+    assert sorted(b["to"] for b in issue_bags) == sorted(
+        x for x in ("p_mid", "p_high", "p_king") if x != p.id), issue_bags
+    assert VERB_TABLE["issue"].counterparty == "to" and not VERB_TABLE["issue"].contests
+    checked += 1
     assert checked == 2
     assert {v for v, r in VERB_TABLE.items() if r.contests and r.counterparty} == {"tell"}

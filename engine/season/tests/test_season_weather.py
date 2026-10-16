@@ -83,9 +83,14 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # RE-PINNED at the v9 B-X BATCH-CLOSE (d84e98eb), A DATA MOVE DECLARED: `goals.yaml`'s two heresy goals'
 # `text:` changed and a Proposition's value is hashed, so all three hashes moved; the event counts and digests
 # below are unchanged. Was 545729e9... / 93608c22... / 61782df4... (build, one, two seasons).
+# RE-PINNED at v9 IN-10 (B-K), A BEHAVIOUR MOVE DECLARED: `issue` joined the known-person fan for `to`
+# (its `terms` conjunct binds `subject`; a writ with nothing to say about its terms is declined) and a
+# fanned row's bags gain a held Record's addressee (`record_sourced_operands`). The build hash is equal;
+# one and two seasons move. Was bb08f4b2... / cdeda7fd... (one, two seasons); `aperture 1 0` realm acts
+# 602 -> 598, `issue` attempted 3 -> 2 (executed 1 -> 1), `levy` attempted 3 -> 2.
 BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
-               1: "bb08f4b28a5009c0aa27c133ce6229ff",
-               2: "cdeda7fd8a29ace0896babdce1a86922"}
+               1: "5bbcba336a72636db1001ff3ca6342c4",
+               2: "39bf9d8321bbaf675d09b2c3d243d400"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -105,8 +110,9 @@ BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
 # Was 472050b8... / cc650fcf... / 8f4d2088... (build, one, two seasons); events 7186 -> 7187, 19797 -> 19798.
 # RE-RECORDED at v9 FA-05 with `BASE_HASHES` (7187 -> 6542, 19798 -> 18583).
 # RE-RECORDED at v9 FA-06 with `BASE_HASHES` (6542 -> 7094, 18583 -> 19454).
-BASE_EVENTS = {1: (7094, "6d6d31a0e6ca8c7c03984a786ec9f1ac9ca1fa86a85e2c21106433ff311b5c4d"),
-               2: (19454, "3c472f650b275b4edc43bb8715bc8d30c5e958ec66cdec365a68406acf2be725")}
+# RE-RECORDED at v9 IN-10 with `BASE_HASHES` (7094 -> 7056, 19454 -> 20148).
+BASE_EVENTS = {1: (7056, "9e0b8a436b74443748d7a15b7a5d82da797ddf2bdc30cebb041bdfb14d54c119"),
+               2: (20148, "90773aa66a7f5bdce05d833607dfcc6ae1994daf3f28ac9df8bd088e44eb6316")}
 
 
 def _digest(w) -> tuple:
