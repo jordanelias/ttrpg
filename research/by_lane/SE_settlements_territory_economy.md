@@ -382,7 +382,7 @@ The control is the shipped arm. Halving every harvest changes no act count and n
 1. **"`found` is the throttle" on births** (RR-2 `consequences:`, `RULINGS.yaml:1860-1862`): disqualifier 2, no producer. Births are never written (M-SE-1); the throttle that runs is on immigration.
 2. **A granary institution, or an Open Granary verb** (FASE SE-2, HCC #5, PGS S10): disqualifier 1, the carrier exists — a rung's own `stores` is the buffer and `transfer` is the opening; the probe's 3 `transfer.made` are that act.
 3. **`Rung.envelope`**: disqualifier 2, no writer outside a by-construction probe (`probes.py:1836-1848`); SE-04 (b)'s falsifier already allows deleting it (`_part6.md:217`). It becomes a true N-line only if M-SE-1 is built.
-4. The design already cut one: SFP refused a "Dearth state" field because the crossing Event carries it (`02_PROPOSALS_SUBSTRATE.md:121` [CHECKED]); that cut holds.
+4. The design already cut one: SFP refused a "Dearth state" field because the crossing Event carries it (`02_PROPOSALS_SUBSTRATE.md:121-122` [CHECKED]); that cut holds.
 
 **Cross-cutting checks**
 
@@ -449,7 +449,7 @@ REPAIRS (worst first; each a deletion or one object)
   chronic dearth goes silent → emit the dearth Event every season the state persists (delete the crossing-only latch at `matter.py:380-384`)
   births never written → one writer of cohort weight at CENSUS bounded by `capacity` (RR-2's own bound), or delete `Rung.envelope` and record that the population is fixed
   output ignores population → `work`'s staged delta scales with the actor's `weight` (one term)
-  levy unpriced → `levy` witnessed as a deed at the levied rung so stance can move (the existing deed path; no new store)
+  levy unpriced → no new object: a levy's price is the levied rung's hunger, which exists only where stores are short and `body_step` > 0 (the value is Jordan's); state it as the price, and drop any separate compliance gauge
 
 GRADE: runs (partial) — `register --requirements`, two test files (40 passed) and a three-arm two-season probe on build_realm(0) executed; every v9-assumed claim is paper
 ```

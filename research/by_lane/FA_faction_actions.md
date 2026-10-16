@@ -505,3 +505,70 @@ REPAIRS (worst first; each a deletion or one object): no war producer → a goal
 GRADE: **paper**, with one execution: 16 FA tests pass. Nothing at season, realm or campaign scale was run.
 
 ## 10. KEY RECOMMENDATIONS
+
+This is an audit-design pass over six months of repository work. Jordan, 2026-10-16: it "gets permission to be whatever it is". The recommendations below are this pass's output; none is entered in the plan or a ledger until Jordan so rules.
+
+### 10.0 Top five, worst problem first
+
+1. **K-FA-1**: war can be declared, joined and ended (M-FA-1). The strategic layer's defining act is absent, and no position builds it.
+2. **K-FA-6**: one ending, stated as holds that acts produced (IN-27 hollow; GD-1/GD-2 against Layer 1).
+3. **K-FA-11**: delegation that keeps the principal seated (M-FA-2). Jordan asked for it, and it is unscheduled.
+4. **K-FA-2**: a treaty that something reads (8.3). Without it diplomacy is strictly dominated (§9.3).
+5. **K-FA-9**: a faction the player can see (M-FA-4). Without it the layer is illegible (E-LEGIBILITY).
+
+### 10.1 PRIMITIVES
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-FA-3 | Let a body to which the top seat-holder is bound strip his seat by determination, as one more revocation basis. | M-FA-3 (D6, WEAK); T-FA-2, T-FA-15; §9.3 R-COMPLETE | **Jordan**: it amends his verbatim ruling "rung above of same faction" (`rosters.yaml:1859`, ED-IN-0256), and a removable versus an unremovable king are materially different games | adds one `revocation_bases` member and its rule; cuts the throne's immunity, so the roster gains a row, not a system | a seeded world where a bound council `determine`s removal closes the king's hold; with the basis absent, the same act refuses |
+| K-FA-4 | Make the holder of a faction's highest seat its head, and retire the `Tenure.degree` derivation nothing writes. | §9.1 false N-line; C4 (iv) three headship owners; T-FA-6 | **Jordan**: it changes Layer 1 §B.6.1's stated derivation input (F.4), ratified text only Jordan edits (IN-44) | adds nothing; cuts a dead derivation and two of three headship owners | `content_hash` at seed 0 is unchanged (`head` is `None` everywhere today, `faction_q.py:116-133`), and `resolve(w, f).head` equals the FA-01 seat-holder for the five seated heads |
+
+### 10.2 VERBS
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-FA-5 | Let a levied person comply, evade or defy before any `levy` executes in play. | M-FA-5 (D4, D5); §9.3 R-CHOICE shape mismatch (audit A5 [AUDIT], code re-opened) | **takeable, step 3**: the plan names IN-09 heir to ED-FA-0008's compliance term (`_part7:191`), and IN-09 is B with restorable checkpoints (`v9.md:252`) | adds nothing (the rows exist); cuts `levy`'s unanswered, decaying cost | in a seeded realm where `levy` executes, at least one `evade / defy` follows a `levy.taken`, and the levied rung's net loss differs with IN-09 armed versus off |
+| K-FA-11 | Let a ruler seat a regent or governor on a second seat over his domain who acts beside him, and let him end it early without a life ban. | M-FA-2 (D1, D4); C4 (iii) IN-48 × IN-31 | **takeable, step 3**, for creation: Layer 1 rules delegation is conferring a seat (`01_AXIOMS.md` §E.2.4, as cited at `_part5:204`), and "creating a regent works on today's code". **Jordan** for early dismissal: it needs a same-rung revocation basis outside his ruling (decided together with K-FA-3) | adds one seat row per delegation (data); cuts the reverted `delegate` kind for good, and exempts a delegated seat from IN-31's ban | a seeded season in which a principal confers a termed second seat, the delegate executes `via` it while the principal keeps his hold, and after the term the same act refuses |
+| K-FA-12 | Let a seat-holder publish an edict as an `issue`d Record addressed to everyone in his purview, instead of building a `proclaim` verb. | M-FA-6 (D3, D4); §9.4 S-DOWN | **takeable, step 4**: `issue` already mints writs and executes (`BASELINE B3`), and a telling already publishes without addressing | adds one addressee form on `issue`; cuts the deferred `proclaim` row (K-50) | a seeded edict deposits claims in persons in the purview who were not present, and none outside it |
+
+### 10.3 MECHANICS
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-FA-1 | Let a person whose goal holds stance −1 toward a rival faction's seat utter WAR, and let at least one act read whether two factions are at war. | M-FA-1 (D1, D3, D5); T-FA-5, T-FA-12; §9.3 R-WORLD | **Producer takeable, step 3**: Layer 1 `04:451` and D-48 type war as a WAR Proposition plus `commit`s (`faction_q.py:219-224`), and the goal row's stance already exists (FA-05/IN-36). **Reader: Jordan**: F.33 leaves open whether `at_war` may gate a verb's `requires` (`faction_q.py:238-240`), and war as a legal gate versus war as reputation alone are different games | adds one payload read (`mood` from the goal's stance) and one `requires` conjunct; cuts the readerless `at_war` and the WAR-less `utter` | in seed 0 with Altonia's goal row, at least one WAR Proposition carries a live `commit`; with the row removed, none. With a war live, the chosen gated act admits where it otherwise refuses |
+| K-FA-2 | Make breaking a covenant's terms against a party who committed to it emit a breach event that hearers judge. | 8.3 `covenant` hollow; §9.3 R-CHOICE (diplomacy dominated); `13G` D4 CK2 truce penalty (T1) | **takeable, step 4**: the tree prices a broken confidence with an emitted event (`confidence.broken`, `verb_table.yaml` `tell` refusal note) and a vow-break at `release`'s cells (H-205) | adds one Event kind; cuts `covenant`'s deferred-reader state | two seeded worlds identical but for one covenant: the breaking act emits the event, and hearers' regard of the breaker falls only in the covenant world |
+| K-FA-6 | End the realm only on a Query over who holds its seats and rungs that persons' acts produced, and strike GD-1's Accord and Stability thresholds and GD-2's faction mandatory pass from canon. | 8.3 IN-27 hollow; 7.2 item 2; §9.2 C2/C3; §9.5 falsifier hits | **Jordan**: GD rows are mutable canon needing his ratification (`canon/04…:23`). A threshold victory, a choice-only ending and `13G`'s relational or fixed-term endings give materially different games | adds nothing; cuts two canon clauses and one canon row | after the edit `grep -n 'GD-2' canon/04_game_design_constraints.md` shows it struck; in a seeded run that reaches an ending, every hold the Query reads traces to an act in `w.log` |
+| K-FA-7 | Count an insurgency as emerged only when persons utter a creed and at least two commit to it, so a faction is founded by acts. | 8.3 IN-30 hollow (D2 GD-3); §9.5 hit (iii) | **takeable, step 3**: IN-30's WHAT says "and faction emergence", and Layer 1 row 1 requires persons; `utter` and `commit` exist | adds nothing; cuts the hollow exit | a seeded realm with GD-3's uncontrolled condition sustained yields a new creed Proposition with at least two live `commit`s; the control yields none |
+
+### 10.4 TEXTURE
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-FA-8 | Make the Church's appetite for land rise with what the Church already holds, read as a Query by its seat-holders' questions, so Jordan's ratchet escalates, with a bound. | M-FA-7 (D1-strength, D4); H-25's unbounded "church ratchet" (`hole_register.yaml:272`) | **takeable, step 3**, for the holds-and-seats half: FA-07 names the Query (`_part7:157-161`). The piety half waits on SE-06 (Jordan, ask-then) | adds one Query, no store; cuts FA-07's Church Influence LEAVE row. The stored clock stays refused (disqualifier 3 checked) | two seeded realms differing only in Church holdings give different Church `seize` attempt rates, and `harness/loops.py`'s bound check for the ratchet passes |
+| K-FA-10 | Make a sworn head's `release` a referent of her own sworn members' next questions, so following her out is a choice each weighs. | M-FA-8 (WEAK); T-FA-15 | **takeable, step 5**: it adds no rule; the oath edges (IN-40) and `release` exist [CONFIDENCE: medium, because the generic `claim_landed` path may already carry it; run before building] | adds one referent wiring; cuts nothing | after Ehrenwall's `release` in a seeded season, at least one Löwenritter member's question names her, and members' Crown-goal commits fall more than in a control with no `release` |
+
+### 10.5 SURFACE
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-FA-9 | Show the player a faction view (members, seats, holdings, goals and his own opinion terms) frozen as the `faction_sheet` he holds, and let holding a sheet change which faction questions he ranks first. | M-FA-4 (D1 R-04, D3, D5); §9.6 E-LEGIBILITY; H-169 limit 5 | **takeable, step 4**: the precedent is IN-47's management-space design and the existing `survey` sheet; the view reads only a Record the person holds (AX-2) | adds one presentation view and one salience read; cuts `systems/factions/`'s empty management-space home as a stub | in a player-seat run the view equals `faction_q.resolve(w, f)` at the sheet's tick, and a person holding a sheet orders a faction-referent question differently from an identical person without one |
+
+## 11. METHOD NOTE (sections 7–10)
+
+**Opened myself this pass.** `faction_q.py` (`:25-50, :110-150, :205-252`); `requirements.yaml` (`:83-99, :656-743`); `verb_table.yaml` (dispatch, levy, utter); `effects_information.py:570-590`; `deliberate.py:350-358`; `world_q.py:536-556`; `epistemic.py:555-575`; `gate.py:505-516` and the delegation comment; `rosters.yaml` (question sources, the systems roster, revocation bases); `arrangements.yaml` ids; `action_vocabulary.yaml` (whole), also at `092fc45`; `module_contracts.yaml:466-475`; the H-176, H-186 and H-101 rows; v9 `_part7:117-195`, `_part5` (IN-23, IN-27, IN-30, IN-36, IN-48, IN-49, IN-61, IN-70, the IN-12 step 5/5a/7 rows, A-37, D6), `_part2:158-186`; `canon/04_game_design_constraints.md`; the IN-31 proposal (`:34, :72, :183-195`); the FA ledger rows ED-FA-0019…0023; `13G` (outline and 22 lines); `20G` (`:1-76, :130-471`); the audit (`:40-66, :160-205, :378-446, :480-508`). Ran the two FA test files (16 passed) and the greps quoted in §7–§8.
+
+**Taken without re-opening.** §1–§6 rows marked [READER] or [CHECKED earlier pass]; extractions `UP01`, `UP02`, `UP04`, `UP05`, `UP06`, `R4`, `R6`, `R7`, `R8`, `A9_2` (T sections); `BASELINE` B1–B5; NERS digest. Audit claims are marked [AUDIT] unless their code line was re-opened (A5's `levy` row and petition addressing; R-WORLD's `at_war`).
+
+**Upload corrections applied.**
+1. §5 gap: `13G`, `20G`, `N1`, `N2` and `3S` are in hand; the two VCD surveys and the 33-document zip remain absent.
+2. §2.1: three source rows added (`13G`; `20G` with its Part 6 `[SELF-AUTHORED]`, its "independently" double count and its Guild 3 publisher/player contradiction; `N1`/`N2`/`3S`).
+3. §2.2: eight game rows added (CK2 casus belli and truce; EiA phase, status and auction; Pax Pamir victory; Bannerlord votes with T2 patch-variant constants; GK2/RTK budget; Suzerain term and sole-conquest victories; the lagged-allegiance null; KoH II exile).
+4. N-7 (COMP-2 null) narrowed against `13G` C2/C3 in §2.2, §2.3 item 5 and §5.
+5. `PMM`'s "every franchise" re-checked: the uploads add no support (§2.1).
+6. "No game precedent for victory or treaty" corrected in §0 item 7, §2.3 item 6, §4 (War, Treaty, Victory, revoke and opinion rows) and §5.
+7. §2.3 item 7 added: the uploads are one research line.
+8. UP06: noted in §1.1 that the "v1.1" upload is a strict subset of the repo's v1.
+
+**Could not check.** No `aperture 4 0`, `corpus_run` or equilibrium run. Realm counts (`dispatch` 14 of 15 refused; `levy` 0 executed) are the tree's own comments and pins, not 2026-10-16 readings. `13G` L92-102 (GK2) was not opened. The 2026-10-04 churn list itself was not opened; it is quoted via `_part5:497` and `_part7:121`.
+
+[CONFIDENCE: medium] on R-CHOICE dominance (upper bounds only, act economy unruled), on K-FA-10 (the generic path may already carry it), and on M-FA-3/M-FA-8 demand strength (two unverified producers each).
