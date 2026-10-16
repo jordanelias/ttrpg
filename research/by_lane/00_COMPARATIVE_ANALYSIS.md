@@ -30,11 +30,11 @@ view) is fed a default or nothing, and most missing areas are that seam left wit
 
 | # | interaction (worst first) | joins | why it ranks here |
 |---|---|---|---|
-| 1 | **The troop chain.** Jordan's 2026-10-16 statements demand troops levied from settlements as their own resource, graded by equipment, experience and commander, assembled by factions into subunits with subformations. The tree sizes every season side as one `Line` of summed `Person.weight` at power 4, command 4 [CHECKED `modules/mass_battle/massbattle.py:170-232`]; the verb named `levy` moves `Rung.stores` to the seat's treasury [CHECKED vt:629-653; `loop/effects_governance.py:374-400`]; v9 schedules the opposite reading, IN-52 "`levy` moves stores, not troops", LF-1 "[ASSUMPTION; medium; Jordan to correct]" [CHECKED p4:136; p5:533]. | MB, SE, FA, NPC, IN, PC | Jordan's own demand, contradicted by the plan; every army, commander, experience and conquest row waits on it (C3 D-1..D-6). |
+| 1 | **The troop chain.** Jordan's 2026-10-16 statements demand troops levied from settlements as their own resource, graded by equipment, experience and commander, assembled by factions into subunits with subformations. The tree sizes every season side as one `Line` of summed `Person.weight` at power 4, command 4 [CHECKED `modules/mass_battle/massbattle.py:170-232`]; the verb named `levy` moves `Rung.stores` to the seat's treasury [CHECKED vt:629-653; `loop/effects_governance.py:374-400`]; v9's IN-52 rests on the opposite premise, "`levy` moves stores, not troops", with LF-1..3 delegated "[ASSUMPTION; medium; Jordan to correct]" [CHECKED p4:137; p5:533]. | MB, SE, FA, NPC, IN, PC | Jordan's own demand, contradicted by the plan's premise; every army, commander, experience and conquest row waits on it (C3 D-1..D-6). |
 | 2 | **The per-person source.** `Person.capability` is empty on 429 of 430 corpus persons [CHECKED req:1244-1247]; the combat seam builds `Combatant(a_id, end=a_end)` and nothing else [CHECKED `modules/combat/fight.py:45`]; H-200 (competence) has zero plan mentions [CHECKED grep of the eight plan files]; the source is J-13's remainder, J.2 rank 1 [CHECKED p5:514]. | PC, SC, MB, NPC, FI, IN, WR, GO | One unruled source starves the body, the contest, the commander, the witness and creation at once; R-09 cannot be met without it. |
 | 3 | **Acts that carry no content.** Six inquiry rows write nothing [LANE FI T-FI-1; BASELINE B3]; an authored OUGHT's predicate is read by nothing (H-185, zero plan mentions [CHECKED]); every computed `utter` mints an OUGHT, so war is never uttered [LANE FA M-FA-1]. | FI, WR, IN, SC, FA, NPC, PC | The chronicle, the investigator's record, deception, war and ambition each need a predicate nobody writes. |
-| 4 | **No player surface and no pause.** IN-46 and IN-47 have landed designs and "no build batch"; R-04, hence M1, "cannot read `met` until a build batch exists for IN-46 and IN-47" [CHECKED p4:32-36]. What the surface may show is split inside ratified Layer 1: "No state is hidden from the player" [CHECKED L1-01:301-302] against §C.11. | GO, IN, PC, MB, SC, FI, FA, SE, NPC, WR | The M1 blocker, and where nine lanes' SURFACE rows land. |
-| 5 | **Population that only shrinks.** The named cast is closed "for now" (ED-WR-0011 [CHECKED `registers/editorial_ledger_wr_archive.jsonl`]); "the birth-side consumer of `capacity`" — "no position builds one" [CHECKED p8:134]; hunger, ageing, illness and weather ship at the control [BASELINE B5]. A levy drawn from cohorts (interaction 1) and forcing switched on (WR K-WR-9) both draw down a population with no producer. | SE, WR, NPC, MB | Decides whether the troop chain and the forcing handles leave a world that runs for more than a few seasons. |
+| 4 | **No player surface and no pause.** IN-46 and IN-47 have landed designs and "no build batch"; R-04, hence M1, "cannot read `met` until a build batch exists for IN-46 and IN-47" [CHECKED p4:32-36]. What the surface may show is split inside ratified Layer 1: "No state is hidden from the player" [CHECKED L1-01:301-302] against §C.11. | GO, IN, PC, MB, SC, FI, FA, SE, NPC, WR | One of two M1 blockers (the other is interaction 2's source: J-13's remainder "unblocks R-09's by-person conjunct, hence M1" [CHECKED p5:514]), and where nine lanes' SURFACE rows land. |
+| 5 | **Population that only shrinks.** The named cast is closed "for now" (ED-WR-0011 [CHECKED `registers/editorial_ledger_wr_archive.jsonl`]); "the birth-side consumer of `capacity`" — "no position builds one" [CHECKED p8:134]; hunger, ageing, illness and weather ship at the control [BASELINE B5]. A levy drawn from cohorts (interaction 1 under J-C-2 (a) or (c)) and forcing switched on (WR K-WR-9) both draw down a population with no producer. | SE, WR, NPC, MB | Decides whether the troop chain and the forcing handles leave a world that runs for more than a few seasons. |
 
 ---
 
@@ -63,8 +63,9 @@ reconciled with the digest (SC's §8.4 has 17 rows, as its §8.1 says, not the d
 
 The ranking inverts code maturity: MB and SC hold the most cited evidence and the deepest built modules and
 deliver least of it to the season; IN and GO hold almost no evidence and the most running code. The lanes
-furthest ahead (MB, SE, FA) had already named the levied, population-costed army (T-MB-5, T-SE-4, T-FA-16)
-that the plan declined and Jordan's statements now demand.
+furthest ahead (MB, SE, FA) had already named an army levied from settlements (T-MB-5, T-SE-4, T-FA-16),
+which the plan declined and Jordan's statements now demand; whether that army is costed in population the
+statements leave open (J-C-2).
 
 ---
 
@@ -74,14 +75,14 @@ A cause enters when three or more lanes file different rows for it and one sente
 
 | id | cause | rows covered, by lane | agree on code and plan? | NERS |
 |---|---|---|---|---|
-| RC-1 | **No per-person source of capacity:** no ruled source exists (J-13 remainder; K-2 "not ratified"), so each resolver reads a fixture default. | PC M-PC-1, M-PC-9, T-PC-9 · MB M-MB-3, M-MB-16, T-MB-15 · SC 8.3-a, M-SC-8, T-SC-2 · NPC M-NPC-1, -2, -13, H-NPC-1, B-NPC-4 · IN M-IN-1, M-IN-7, H-IN-2, H-IN-4, T-IN-1 · FI M-FI-3, T-FI-7 · WR authored `ts:` unread · GO M-GO-7 | Agree it is absent. Disagree on the carrier: new `Person.attributes` (audit G1; PC; GO) or existing `Person.capability` derived at read (NPC). FI also needs the actor's reading of his own act, from which the witness exempts him [CHECKED `loop/witness.py:490-497`]; IN calls that optional [LANE IN M-IN-7]. | R-VARIETY; S vertical |
-| RC-2 | **No troop stock, and a misnamed levy:** the season force is summed `Person.weight` because troops have no carrier, and the verb named for raising them moves stores. | MB M-MB-1, -2, -6, -15, -16, -17, IN-52(H), T-MB-5, -19 · SE M-SE-9, H-SE-1, T-SE-4 · FA M-FA-10, T-FA-16 · NPC M-NPC-13 · IN M-IN-12, -13, H-IN-10, T-IN-14 · PC M-PC-12 | Agree on code and plan. Disagree on form: troops as persons (FA K-FA-13, a `Person.weight` writer; MB K-MB-1 lowers cohort weight by the headcount) or a non-person stock (SE K-SE-13; IN K-IN-13 leaves both open). | R-CHOICE; R-VARIETY; S vertical |
+| RC-1 | **No per-person source of capacity:** no ruled source exists (J-13 remainder; K-2 "not ratified"), so each resolver reads a fixture default. | PC M-PC-1, M-PC-9, T-PC-9 · MB M-MB-3, M-MB-16, T-MB-15 · SC 8.3-a, M-SC-8, T-SC-2 · NPC M-NPC-1, -2, -13, H-NPC-1, B-NPC-4 · IN M-IN-1, M-IN-7, H-IN-2, H-IN-4, T-IN-1 · FI M-FI-3, T-FI-7 · WR authored `ts:` unread · GO M-GO-7 | Agree it is absent. Disagree on the carrier: new `Person.attributes` (audit G1; PC; GO) or existing `Person.capability` derived at read (NPC); Jordan's "it will be 10 attributes" (ED-IN-0185 Q7 [CHECKED p5:515]) decides toward the first (C4 X-14). FI also needs the actor's reading of his own act, from which the witness exempts him [CHECKED `loop/witness.py:490-497`]; IN calls that optional [LANE IN M-IN-7]. | R-VARIETY; S vertical |
+| RC-2 | **No troop stock, and a misnamed levy:** the season force is summed `Person.weight` because troops have no carrier, and the verb named for raising them moves stores. | MB M-MB-1, -2, -6, -15, -16, -17, IN-52(H), T-MB-5, -19 · SE M-SE-9, H-SE-1, T-SE-4 · FA M-FA-10, T-FA-16 · NPC M-NPC-13 · IN M-IN-12, -13, H-IN-10, T-IN-14 · PC M-PC-12 | Agree on code and plan. Disagree on form, three ways: a rung stock coupled to population (MB K-MB-1: "a count per troop kind held on the rung", filled by moving headcount out of cohort `weight` [CHECKED `MB_mass_battle.md:715`]); a rung stock uncoupled from population (SE K-SE-13's first shape, a `matter_kinds` row "never a person"); troops as people, cohort weight committed to a faction (SE K-SE-13's second shape [CHECKED `SE_settlements_territory_economy.md:492`]; FA K-FA-13, "the population is the soldiery" [CHECKED `FA_faction_actions.md:571`]). SE, FA and IN K-IN-13 leave the choice to Jordan (C7 J-C-2). | R-CHOICE; R-VARIETY; S vertical |
 | RC-3 | **Knowledge only by claim, with no deposit occasion:** AX-2 makes a claim the only route to knowing, and several facts a person must act on are never deposited. | SE M-SE-3 (H-195 holder) · PC M-PC-8, WR M-WR-9, NPC M-NPC-6 (H-206 vacancy) · SC M-SC-4, IN M-IN-8 (H-180, H-181) · NPC M-NPC-9 (H-191) · FA M-FA-4 · SC M-SC-7, IN M-IN-14, FI M-FI-2 (no claim can be held False) | Agree: H-195 and H-191 have zero plan mentions, H-206 one [CHECKED grep]. NPC dropped H-180, H-181, H-195 as covered elsewhere; a placement difference only. | S-DOWN; R-WORLD |
 | RC-4 | **Acts carry no content:** verb rows record an event kind, not a predicate, and the instruments count the event, so content-free execution passes every exit. | FI M-FI-1, M-FI-6, FI-01 ×4(H), T-FI-1, -6 · WR T-WR-4, IN-37(H) · IN M-IN-9, T-IN-4 · SC M-SC-1, M-SC-5 · FA M-FA-1, T-FA-12 · NPC M-NPC-4, T-NPC-13 · PC M-PC-10 | Agree. FI counts six inquiry rows writing nothing, the audit "five investigation verbs" [AUDIT 498]: a scope difference (`thread_read`). | R-COMPLETE; N bottom-up |
 | RC-5 | **No surface and no pause:** IN-46 and IN-47 have no build batch, and §C.11's `explain` has no position. | GO M-GO-4..-7, -9 · IN M-IN-2, -3, H-IN-3 · PC M-PC-4, -6 · MB M-MB-5, -10, IN-46(B) · SC M-SC-9 · FI M-FI-5 · FA M-FA-4 · NPC M-NPC-7 · WR chronicle | Agree on absence; disagree on what may be shown (C4 X-16). PC withdrew its odds surface (K-PC-11). | E-LEGIBILITY; S pause |
 | RC-6 | **No births or growth:** the closed cast and the missing birth-side consumer leave every population carrier written only downward, and those writers ship dark. | SE M-SE-1, H-SE-3, T-SE-9, -10 · NPC M-NPC-3, T-NPC-5 · WR M-WR-8, T-WR-8 · IN §8.4-21, -25 · MB M-MB-14 | NPC dropped "births and new persons"; SE files births STRONG on RR-2. Different objects: new named persons against a cohort's weight (C4 X-4). | R-WORLD; R-COMPLETE |
 | RC-7 | **War, endings, the top seat:** strategic outcomes are person-level Propositions with no producer for the mood that would start them, and GD-1 and GD-2 were never re-expressed after Layer 1. | FA M-FA-1, -3, IN-27(H), covenant(H), IN-30(H), FA-01 flip(H) · WR M-WR-6, IN-27(H) · MB M-MB-7, -8, -12 · SE H-SE-2, M-SE-4, M-SE-7 | Agree `at_war` has no game reader [CHECKED grep: definition and docstrings only]. Disagree on GD-2 (missing or struck) and GD-1's thresholds (C4 X-8, X-9). | R-WORLD; S lateral |
-| RC-8 | **Offices not made or emptied by persons:** the chooser has no motive that produces `revoke` or `establish`, and delegation was reverted against Layer 1 §E.2.4. | IN M-IN-4, -5, H-IN-5, -7, -11 · FA IN-61(B), M-FA-2 · NPC B-NPC-1, -5, H-NPC-2 · SC 8.3-f · SE delegation | Same reading, different classes: IN MISSING, NPC BLOCKED, FA and SE PLANNED (IN-48, batch "unscheduled"). C7 J-C-10. | R-WORLD; R-CHOICE |
+| RC-8 | **Offices not made or emptied by persons:** the chooser has no motive that produces `revoke` or `establish` (for `revoke`, by Jordan's ruling: H-207 (A), 2026-10-12, "a computed `revoke` is NOT driven" [CHECKED `engine/season/hole_register.yaml:4451`]), and delegation was reverted against Layer 1 §E.2.4. | IN M-IN-4, -5, H-IN-5, -7, -11 · FA IN-61(B), M-FA-2 · NPC B-NPC-1, -5, H-NPC-2 · SC 8.3-f · SE delegation | Same reading, different classes: IN MISSING, NPC BLOCKED, FA and SE PLANNED (IN-48, batch "unscheduled"). C7 J-C-10. | R-WORLD; R-CHOICE |
 | RC-9 | **One ladder, several roads:** combat draws a continuous Normal with a logistic side-channel where the season, contest and field use discrete dice, and the field grades on its own three bands. | PC M-PC-7, T-PC-13 · MB M-MB-11 · IN T-IN-2 · GO M-GO-10 | Agree [AUDIT A3]; IN extends: odds non-monotone to c = 6, latent while capability is empty [LANE IN §9.1]. | S methodology |
 | RC-10 | **Hash parity:** `content_hash` folds `repr()` and floats and draws come from CPython `random.Random`, where Layer 1 asks for the oracle's hash "in the integer domain" [CHECKED L1-04:1119]. | GO M-GO-1, -2, -3, -10, T-GO-3 · IN T-IN-2 · PC T-PC-13 | Agree on code; disagree on the contract (Layer 1 hash against the PROPOSED strategy's statistics). | S methodology |
 | RC-11 | **Inert-at-ship controls:** a carrier ships at its control arm and no position owns the flip. | IN T-IN-3, §8.4-21..30 · NPC M-NPC-3, T-NPC-3, -5 · SE T-SE-9 · WR T-WR-8 · PC §8.4-d, f, g · MB loyalty→morale, `MB_SUPPORT_RANK_CAP` · FA T-FA-5 · SC `bench_quorum`, D-6/D-7 | Agree (BASELINE B5: 18 knobs). Disagree on repair: arm (WR), delete (IN, SC), arm or delete each (NPC). | R-WORLD; E-OVERHEAD |
@@ -100,8 +101,8 @@ order [AUDIT 413-415] and adds RC-2, which post-dates it.
 | id | X | needs first | reason |
 |---|---|---|---|
 | D-1 | composite army (MB M-MB-2, -17; FA M-FA-10) | troop stock by kind (K-MB-1, K-SE-13, K-IN-13) | `build_army` takes a count per subunit spec |
-| D-2 | troop stock | J-C-1 (name), J-C-2 (persons or stock) | the `levy` row writes `Rung.stores` [CHECKED vt:629-653]; five lanes propose different carriers |
-| D-3 | the stock in the plan | IN-49, IN-52 re-stated; LF-1..3 withdrawn | IN-52 states the opposite; LF rows are delegated assumptions [CHECKED p4:136; p5:533] |
+| D-2 | troop stock | J-C-2 (its form); J-C-1 only for the name of the act that raises it | the `levy` row writes `Rung.stores` [CHECKED vt:629-653]; five lanes file three carrier forms (C2 RC-2) |
+| D-3 | the stock in the plan | IN-49 and IN-52 re-stated; IN-52's premise "`levy` moves stores, not troops" withdrawn | statement 5 contradicts that premise only; LF-1's ration bound re-applies to the stock (MB K-MB-6) unless a decision cuts it (X-19); LF-2 and LF-3 (the defender's nearest rung; `_eff_march`'s ration debit) are contradicted by no statement [CHECKED p4:137; p5:533] |
 | D-4 | commander quality (MB M-MB-3; NPC M-NPC-13) | RC-1's source | `Officer` derives command from figures no person carries |
 | D-5 | troop experience (K-MB-3) | the stock and fought fields (IN-13) | no realm field is fought (H-150) |
 | D-6 | a field with any outcome but `Lost` (IN-13(H)) | a force scale (M-MB-1) | largest side 6, rout floor 80 [CHECKED `modules/mass_battle/config.py:117`] |
@@ -115,7 +116,7 @@ order [AUDIT 413-415] and adds RC-2, which post-dates it.
 | D-14 | succession (IN-61) | vacancy by claim (H-206) and D-13 | IN-61 rests on the missing claim [LANE NPC M-NPC-6] |
 | D-15 | a chronicle (IN-37; K-WR-11; K-NPC-11) | content in acts (RC-4); IN-47 batched | the render's input is thin [LANE WR T-WR-4] |
 | D-16 | odds or a derivation shown | J-C-12 | the ruling decides what is admissible |
-| D-17 | a played fight; a battle yielding to a duel; the port's seat | IN-46 batched | all extend IN-46's one call-out [CHECKED p4:32] |
+| D-17 | a played fight; a battle yielding to a duel; the port's seat | IN-46 batched | all extend IN-46's one call-out [CHECKED p4:34] |
 | D-18 | thread acts (K-WR-2), Calamity from strain, TS seeding | a `(Person, coherence)` writer; IN-06 | K-3 types `thread_read` but names no writer |
 | D-19 | forcing on (K-WR-9) | authored ages (M-WR-8); J-C-9 | `age_at_build` is 0; forcing alone only shrinks the realm |
 | D-20 | a priced store act (K-SE-5) | `body_step` > 0 (J-6) | the price is the hunger left |
@@ -131,30 +132,31 @@ order [AUDIT 413-415] and adds RC-2, which post-dates it.
 | id | object | side A | side B | the incompatibility |
 |---|---|---|---|---|
 | X-1 | chooser's `urgency` | IN K-IN-2: delete | v9 IN-62: `score_terms -> (pursuit, stance, urgency)`, "hash EQUAL" [CHECKED p5:255] | IN-62 keeps the slot K-IN-2 removes |
-| X-2 | troops' carrier | MB K-MB-1 (per-kind count, cohort weight lowered); FA K-FA-13 (weight writer) | SE K-SE-13, IN K-IN-13 (Jordan); PC K-PC-12 (refuse cohort fights) | persons make casualties population losses; a stock does not |
+| X-2 | troops' carrier | a rung stock: MB K-MB-1 (per-kind count on the rung, coupled to population by lowering cohort weight); SE K-SE-13's `matter_kinds` shape (uncoupled) | troops as people: FA K-FA-13 (cohort weight into the muster; a weight writer); SE K-SE-13's second shape. IN K-IN-13 leaves all open; PC K-PC-12 (refuse cohort fights) binds every form | a coupled stock or persons make casualties population losses; an uncoupled stock does not |
 | X-3 | a felled actor | PC K-PC-2: write it, on `march`'s precedent | `_eff_march` writes "ON THE LOSING SIDE ONLY ... silent on the winner" [CHECKED `loop/effects_combat.py:178-183`] | none for the felled actor; a standing winner's wounds unruled |
 | X-4 | population over time | WR K-WR-9 (forcing on); MB K-MB-1, FA K-FA-13 (levies) | SE K-SE-1 (growth or fixed); ED-WR-0011 (cast "only shrinks") | three lanes write population down, one up, behind a ruling; a cohort's death is final [AUDIT A6] |
-| X-5 | suspension sites | GO K-GO-3 (DELIBERATE, duel yield); MB K-MB-10, IN K-IN-6 (inside the 18-tick call) | IN-46: suspends at ENCOUNTER "and only at the engine call" [CHECKED p4:32] | each extends IN-46 beyond its design |
+| X-5 | suspension sites | GO K-GO-3 (DELIBERATE, duel yield); MB K-MB-10, IN K-IN-6 (inside the 18-tick call) | IN-46: suspends at ENCOUNTER "and only at the engine call" [CHECKED p4:34] | each extends IN-46 beyond its design |
 | X-6 | the closed `requires` grammar | FI: do not widen; "each added read is a refusal condition"; forms closed at seven; K-FI-6's Sites half needs an eighth [CHECKED `FI_fieldwork_investigation.md:374, :455-462`] | MB K-MB-5, FA K-FA-1, PC K-PC-12, NPC K-NPC-12 add conjuncts | not opposed in intent (those lanes want refusal), but one grammar; F.33 leaves `at_war` in a `requires` open |
 | X-7 | the act war gates | MB K-MB-5: `march` | FA K-FA-1: `fight` | two acts for one gate |
 | X-8 | GD-2 | MB M-MB-12, WR M-WR-6: MISSING | FA K-FA-6, IN K-IN-12: strike; WR K-WR-12: duty or retire | missing area against deletion |
 | X-9 | GD-1 | FA K-FA-6: Query over seats; strike Accord and Stability | WR K-WR-10: stability from a seat-holder's estimate; Accord carried or dropped | strike against re-express; 15 or 17 territories [LANE SE §8.4] |
 | X-10 | what Mending is | WR K-WR-3: the thread Mend; `restore` is fabric | v9 IN-35: "Mending as persons' acts (the `restore` arm)" [LANE WR §0 #9] | one verb for two acts |
 | X-11 | the top seat | FA K-FA-3: offer resignation; replacement Jordan's | 2026-10-12 duchy ruling; SC-04 "awards, never unseats" | abdication fits; replacement does not |
-| X-12 | closing a petition | SC K-SC-3: `destroy_record`, or a `deny` row | A-13 (`destroy_record` unformable); A-16 "No new closer rows" | (a) blocked, (b) contradicts the plan |
+| X-12 | closing a petition | SC K-SC-3: `destroy_record`, or a `deny` row | A-13 (`destroy_record` unformable); A-16 "No new closer rows", which applies Layer 1 row 14, "one `release` verb, eligibility `own`, generic over kind" [CHECKED L1-04:201; p5:355] | (a) blocked; (b) overwrites ratified Layer 1, not only the plan |
 | X-13 | a delegate's early end | NPC K-NPC-8's falsifier: revoking the deputy ends his acts | FA K-FA-11: early dismissal Jordan's; SE K-SE-6: term only | NPC assumes what FA leaves open |
 | X-14 | the capacity carrier | audit G1, PC K-PC-1, GO K-GO-8: new `Person.attributes` | NPC K-NPC-1: no new field; `Person.capability` | new field against existing |
 | X-15 | the actor's own reading | FI K-FI-1 needs it | IN M-IN-7, audit G6: permitted, not owed; NPC dropped it | needed against optional |
 | X-16 | what the player sees | GO K-GO-6 (cut the gloss), K-GO-7 (odds from held claims) | IN K-IN-9 (Jordan); SC K-SC-9 (band or not); PC withdrew odds | one Layer 1 conflict, three routes |
 | X-17 | investigation's seam | FI-02, K-FI-9: its own role (SM-3) | FI-01 pins `modules/social_contest/roll.py`; K-FI-3 routes testimony through `tell` [LANE FI X] | own seam against the contest's roller and verb |
-| X-18 | the dedup filter | audit G4: delete; §C.3 forbids it | IN K-IN-3: §C.2 against §C.3, plus a measured monoculture [LANE IN §10.7] | free cut against a Layer 1 conflict |
+| X-18 | the dedup filter | audit G4: delete; §C.3 forbids it; Jordan's only if R-03 goes red [CHECKED `references/ners_audit_2026-10-14.md:433`] | IN K-IN-3: §C.2 against §C.3, plus a measured monoculture [LANE IN §10.7] | a conditional cut against a Layer 1 conflict |
+| X-19 | IN-52's ration bound (LF-1) once troops are a stock | MB K-MB-6 (C8 R-C-25): bound fielded troops by the smaller of stock and ration; only LF-1's "does not create troops" half falls; LF-3 unchanged [CHECKED `MB_mass_battle.md:732`] | SE K-SE-13: cut "IN-52's stores-bound-troops feed (LF-1, and the `field_provisioning` arm with it)" [CHECKED `SE_settlements_territory_economy.md:492`] | keep the bound and re-point its input, against cut the bound and its arm |
 
 ### C3 (c) Amplifications
 
 | id | fix | effect elsewhere | direction |
 |---|---|---|---|
 | AM-1 | capacity source (R-C-1) | wakes the sawtooth (D-26); makes PC's "no chooser term reads odds" live ("a defect once K-1 lands" [LANE PC §9 C3]); a varying pool nobody can see (RC-5) | bites |
-| AM-2 | troop stock (R-C-2) | eases M-MB-1 and IN-13; makes M-SE-1 bite (a levy drains a population with no producer) | both |
+| AM-2 | troop stock (R-C-2) | eases M-MB-1 and IN-13; under J-C-2 (a) or (c), makes M-SE-1 bite (a levy drains a population with no producer) | both |
 | AM-3 | forcing on (R-C-32) | more deaths with H-206 open: vacancies nobody learns of; "five of six heads die in two seasons" already [LANE NPC B-NPC-1] | bites |
 | AM-4 | a case names its game (R-C-17) | eases IN-61's tribunal and FI T-FI-3 (inquiry lands on proceedings) | eases |
 | AM-5 | inquiry yield (R-C-23) | eases IN-37's thin input and SC-02's "investigation products" | eases |
@@ -183,36 +185,41 @@ order [AUDIT 413-415] and adds RC-2, which post-dates it.
 ## C4. RECONCILIATION
 
 **The rule, by precedence:** (1) Jordan's statements and rulings (the later governs on the point it decides)
-> (2) ratified Layer 1 > (3) the v9 plan's recorded state (an entry over an index row where the plan
-contradicts itself) > (4) measured behaviour in the tree > (5) proposals > (6) research, tier 3
-(`engine/season/rosters.yaml:75-90` [CHECKED]). "[ASSUMPTION; Jordan to correct]" keeps a plan answer at (3)
-but revertible alone (p8:193). Where nothing decides, the item goes to C7.
+> (2) ratified Layer 1 > (3) `canon/` (P-01..P-15 and the GD constraints; below Layer 1 because Layer 1, ratified
+later, admits nothing "under `canon/`, `systems/` or `research/`" as authority over it [CHECKED L1-01:1173-1175])
+> (4) the v9 plan's recorded state (an entry over an index row where the plan contradicts itself) > (5)
+measured behaviour in the tree > (6) proposals > (7) research, tier 3 (`engine/season/rosters.yaml:75-90`
+[CHECKED]). "[ASSUMPTION; Jordan to correct]" keeps a plan answer at (4) but revertible alone (p8:193). A
+Jordan ruling that adopts a document (as "adopt in full" adopts Layer 1) gives that document its own rank,
+not (1); otherwise rank (2) would be empty. C6's demand ladder (D1..D6) grades how strongly an area is asked
+for, not which source wins a conflict. Where nothing decides, the item goes to C7.
 
 ### C4.1 Collisions and disagreements
 
 | item | rank | favours | why | C7 |
 |---|---|---|---|---|
-| X-1 `urgency` | (3) | IN-62 first, then K-IN-2 | a sequence: IN's §10.7 calls the slot loss "real but small" | — |
-| X-2 troops' carrier | (1), partly | a rung-held troop resource distinct from `Person.weight` | statement 1: "troops levied from settlements as their own resource"; silent on whether raising them lowers cohort weight | J-C-2 |
+| X-1 `urgency` | (4) | IN-62 first, then K-IN-2 | a sequence: IN's §10.7 calls the slot loss "real but small" | — |
+| X-2 troops' carrier | (1), partly | troops a resource distinct from goods, raised by the troop verb | statement 1: "troops levied from settlements as their own resource"; statement 5: `levy` is wrong for goods. "Their own resource" reads toward a rung-held carrier but decides neither that nor whether raising troops lowers cohort weight: all three forms stay open | J-C-2 |
 | X-3 felled actor | (1) | PC | Jordan 2026-09-04, "your code just has to accept the result" [LANE PC M-PC-2]; ED-IN-0279 silent on the winner | J-C-4 |
 | X-4 population | (1) | no new named persons; cohort weight may grow | ED-WR-0011 closes the NAMED cast "for now"; it does not reach a cohort's `weight`. Decide before forcing (D-19) | J-C-9 |
-| X-5 suspension sites | (2) | GO | "for a player character the player IS the decision procedure" [CHECKED L1-04:844-846]; serial and pooled runs must hash equal [CHECKED L1-04:1118]. The battle's internal yield: nothing decides which acts interrupt | J-C-20 |
-| X-6 `requires` grammar | (4) | conjuncts within the seven forms takeable; an eighth form Jordan's | forms closed, "a design change, not a table edit" [LANE FI §9 C3] | J-C-15 |
+| X-5 suspension sites | (2), weakly | GO, as a specification latent until step 12 | "for a player character the player IS the decision procedure" [CHECKED L1-04:844-846] sits inside §C.11, the explanation contract, and specifies no pause; the hazard exists only once step 12 pools the map, and step 12 is unbuilt, "beside — an optimisation" [CHECKED L1-04:1118]; IN-47's development space already acts "into the chooser slot" [CHECKED p4:41]. GO's own row: "a specification, not a missing mechanism" [CHECKED `GO_godot_port.md:250`]. The battle's internal yield: nothing decides which acts interrupt | J-C-20 |
+| X-6 `requires` grammar | (5) | conjuncts within the seven forms takeable; an eighth form Jordan's | forms closed, "a design change, not a table edit" [LANE FI §9 C3] | J-C-15 |
 | X-7 war's gate | none | — | F.33 open | J-C-15 |
-| X-8 GD-2 | (1), later over earlier | the faction-level mandatory pass is superseded | Jordan's later "adopt in full" of Layer 1 (2026-09-05; AX-1) supersedes it on the actor; a holder's duty is undecided, and M-MB-12, M-WR-6 stay MISSING only under it | J-C-14 |
-| X-9 GD-1 | (2), (3) | an ending as a Query over persons' seats | IN-27 schedules one; an omniscient evaluator is "acceptable only as presentation" [LANE FA §9 C3]; the thresholds are a canon edit | J-C-13 |
-| X-10 Mending | (3), then sequence | IN-35 today; WR once a thread Mend exists | both readings are tagged assumptions; the roster declines only "until a Mending can be told from mending a wall"; R-C-18 makes that distinction | — |
+| X-8 GD-2 | (2) over (3) | the faction-level mandatory pass is superseded | Layer 1's AX-1 (only persons act) outranks canon's GD-2 (`canon/04_game_design_constraints.md:28` [CHECKED]: "Faction action-selection … runs a mandatory-actions pass") on the actor; not Jordan against Jordan. A holder's duty is undecided, and M-MB-12, M-WR-6 stay MISSING only under it | J-C-14 |
+| X-9 GD-1 | (2) over (3), partly; (4) | an ending as a Query over persons' seats | IN-27 schedules one; an omniscient evaluator is "acceptable only as presentation" [LANE FA §9 C3]; the thresholds are a canon edit | J-C-13 |
+| X-10 Mending | (4), then sequence | IN-35 today; WR once a thread Mend exists | both readings are tagged assumptions; the roster declines only "until a Mending can be told from mending a wall"; R-C-18 makes that distinction | — |
 | X-11 top seat | (1) | abdication yes, replacement no | the 2026-10-12 ruling bars stripping; resigning by one's own `release` is not stripping | J-C-5 |
-| X-12 petition | (1) over (3) | the closer is owed | ED-IN-0210 Ruling 2 outranks A-16; the address needs no new row; which closer is open | J-C-7 |
+| X-12 petition | (1), then (2) | the closer is owed; its form must keep Layer 1 row 14 | ED-IN-0210 Ruling 2 names WITHDRAW and DENY [CHECKED `registers/archive/editorial_ledger_in_archive_pre-2026-09.yaml:2312-2316`], so a closer is owed; A-16 applies Layer 1 row 14, one generic `release` [CHECKED L1-04:201; p5:355], so a `deny` row overwrites ratified Layer 1. The address needs no new row. Which closer (`destroy_record`, or the holder's generic `release`) is open | J-C-7 |
 | X-13 early dismissal | none | — | H-207 (A) and IN-31's ban cover neither a same-rung deputy | J-C-17 |
-| X-14 capacity carrier | (3), provisionally | existing `Person.capability` | v9 records K-2 unratified and `capability` the interim carrier (J-13 (iii)) | J-C-3 |
+| X-14 capacity carrier | (1) | an attribute carrier of ten (audit G1, PC K-PC-1, GO K-GO-8); `capability` survives only as a reading derived from it | Jordan: "it will be 10 attributes" (2026-08-14 Q7, ED-IN-0185 [CHECKED p5:515; the ledger row]); v9's interim `capability` keyed by `verb_capability` (J-13 (iii), only key `copying` [CHECKED p5:514]) is not a ten-attribute carrier. Open: where the magnitudes come from (J-13's remainder) and the tenth attribute's name (J-9 D2) | J-C-3 |
 | X-15 actor's own reading | (2) | not owed | AX-7 (2): self-understanding "may be wrong", a permission | J-C-3 |
 | X-16 what is shown | (2) against (2) | — | the gloss and §C.11 conflict; decided regardless: `explain` takes no `World`, so shown odds are the actor's estimate [LANE GO §9 C2] | J-C-12 |
 | X-17 investigation's seam | (1) | FI | SM-3 (P6:266) outranks the carried v8 line [LANE FI K-FI-9]; sharing the one roller is RC-9's single owner, not a seam | — |
 | X-18 dedup filter | (2) against (2) | — | §C.2 and §C.3 conflict | J-C-16 |
-| `restore` executes? | (4) | refused | SE's run: 25 refused, 0 executed over two seasons [LANE SE §9]; `req:163-166` is stale | — |
-| `march` in the realm | (4), not run | unreconciled | `req:675` "16/16" against `req:1124` "all 11 refused"; needs `aperture 4 0`; p2:178 [UNVERIFIED] | — (C9) |
-| inquiry rows writing nothing | (4) | both | six rows (BASELINE B3); five if `thread_read` is threadwork | — |
+| X-19 IN-52's ration bound | (4) | MB K-MB-6 (R-C-25): the bound stays, its input becomes the stock | LF-1 is a delegated plan answer, revertible by Jordan alone (p8:193); statement 5 withdraws only IN-52's premise that `levy` moves stores, and no statement reaches the ration bound, so SE's cut has no rank above (6) | — |
+| `restore` executes? | (5) | refused | SE's run: 25 refused, 0 executed over two seasons [LANE SE §9]; `req:163-166` is stale | — |
+| `march` in the realm | (5), not run | unreconciled | `req:675` "16/16" against `req:1124` "all 11 refused"; needs `aperture 4 0`; p2:178 [UNVERIFIED] | — (C9) |
+| inquiry rows writing nothing | (5) | both | six rows (BASELINE B3); five if `thread_read` is threadwork | — |
 | IN-14's state | (3), entry over index | the entry (B, B-J, MORE ROUNDS) | [CHECKED p4:25-27]; FA and IN both flagged it | — |
 | delegation's class | definitional | — | IN-48 is STATE B in an "unscheduled" batch | J-C-10 |
 | parity contract | (2) over (5) | hash equality in the integer domain | [CHECKED L1-04:1119]; GO itself takes the hash [LANE GO §9.5] | J-C-11 (version) |
