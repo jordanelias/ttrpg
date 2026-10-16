@@ -182,3 +182,301 @@ Written from the reader extractions named in the head, with the locators marked 
 12. `value_pointer_links.json`'s writer named (`tools/link_values_pointers.py`); the CI workflow names neither it nor `export_sim_params` (§3.1).
 
 §0 re-ranked after corrections: the combat-slice registry claim moved up to item 3; the version item moved down to item 5 and the named-draws item to item 7; the dead `parity` value became a recorded disposition under item 8.
+
+---
+
+Sections 7-10 appended 2026-10-16 at HEAD `5445e34` (`git rev-parse --short HEAD`). Every code line cited below as [CHECKED] was re-opened at that HEAD. One read-only probe was executed: `scratchpad/go_float_probe.py` (path in §11) ran one seeded season of `headless` and of `populated.build_realm(0)` and walked the state `World.content_hash` folds for float values. `engine/season/tests/test_play_surface_dispatch.py` was also run (3 passed).
+
+## 7. THROUGHLINES
+
+**Verdict.** The lane yields nine throughlines: four repository patterns, three convergences, one null and one failure shape. The repeated defect: **port-facing material is written against the shape of its day, and its readers are never built.** Sometimes it outlives the architecture it targets (T-GO-1); sometimes it is built ahead of any consumer (T-GO-2). The one sound convergence, determinism by a seeded content hash (T-GO-3), holds inside Python only. Its input is Python `repr()`, holds floats, and depends on Python's own PRNG. So the ratified port done-condition (`L1-04:1119`) cannot be met as the code stands.
+
+### 7.1 Register
+
+| ID | pattern | kind | cases / sources (independent count) | counter-evidence or limits | REACH IN CODE | REACH IN PLAN | verdict |
+|---|---|---|---|---|---|---|---|
+| T-GO-1 | Port documents target the architecture of their day, and that architecture is then retired underneath them | REPOSITORY PATTERN | STRAT builds on the Key substrate, the campaign driver and `cross_scale/` (`STRAT:5,20,190`) [CHECKED §0]; the four ED-1054 docs and ARCHSPEC predate d+σ (`ARCHSPEC:5`) [CHECKED §3.2]; `godot/skeleton/` is built on Key types and an undefined `BaseEngine` [CHECKED §3.2]; `MC`'s `parity: key-log` [CHECKED §0 item 8]; `L1-04:1000-1001` "the Key substrate the port already ingests" [CHECKED]. **Four independent** (authors and dates differ: 2026-04-18, 2026-06-10, skeleton, 2026-09-05) | The constants bridge survived every retirement because it is generated from code, not authored beside it (`tools/export_game_constants.py`, §0 Solid (a)) | absent: no port code runs here | GO-03 struck the Key rows (landed, main plan `:211-213`) [CHECKED]; no position adopts the successor | SOUND |
+| T-GO-2 | Port-facing carriers are built ahead of any reader | REPOSITORY PATTERN | the combat trace is returned and folded nowhere (`engine/season/seam/wrappers/combat.py:227-252`) [CHECKED]; the play-surface dispatch lives in `harness/` and is exercised only by tests (`engine/season/harness/play_surface.py:41-52`) [CHECKED]; the log's one post-append hook is taken by `World`'s own index, with no view subscriber (`engine/season/state/log.py:47-62,100-101`; `world.py:1287`) [CHECKED]; `sigma_leverage.eff_ob` is "DISPLAY ONLY" with no game caller (`engine/season/seam/wrappers/sigma.py:36`) [CHECKED]; grep for `p_success\|eff_ob` outside tests finds no game-path call [CHECKED]. **Four independent** | Each was built under a named position with a falsifier (PC-06 M-1, S-1), so this is not abandonment; it is "reader-first" inverted | built and inert (trace, hook, `eff_ob`); executes only in hand-built tests (`play_surface`: `test_play_surface_dispatch.py`, 3 passed this pass) | IN-37 render (BLK SC-01 step 16, B-U, `_part5:176-182`) reads the cause graph under `harness/`; no position reads the trace or the hook for a player | SOUND |
+| T-GO-3 | Determinism by a seeded content hash is the parity contract | CONVERGENCE | `L1-04:942-944` ("the only execution artifact this architecture has") and step 13 (`:1119`) [CHECKED]; `tools/m1_acceptance.py` row 2 PASS (BASELINE B7) [READER]; IN-46's falsifier: PLAYABLE and AUTOMATED "end at one `World.content_hash()`" (`_part4` IN-46 FALSIFIER) [CHECKED]; the play-surface control: a callback returning `auto`'s pick leaves the hash equal (`play_surface.py:27-29`) [CHECKED]; the uploaded audit: "Draws replay exactly" [AUDIT, line 44]. **Three independent** (Layer 1; the tool; the IN-46 design). The play-surface test and IN-46 share one shape | **Holds only inside Python.** (1) The hash is blake2b over `repr()` of Python dataclasses (`engine/season/state/world.py:167-184,1338-1376`) [CHECKED], a Python-specific string format. (2) Its input holds floats: the probe found 5 float values in `headless` and 63 in the realm after one season, every one `Person.pursuits` [EXECUTED]. That is against `L1-04:892`'s fixed point and step 13's "integer domain". (3) Draws are `random.Random` seeded from a blake2b hex (`engine/season/state/ids.py:64-68`) [CHECKED], so a port must reproduce CPython's Mersenne Twister bit for bit. (4) STRAT holds the opposite: "bit-parity of RNG streams is explicitly not a goal" (`G2 §F` V.2, R4) [READER] | executes in the season loop (Python) | none for cross-language parity: grep of v9 for `step 13`, `integer domain` and `Godot shell` returns no port hit [CHECKED] | SOUND inside Python; **OVER-CLAIMED** as the port's contract |
+| T-GO-4 | No game precedent or historical research exists for the port, and THE NINE and the hole register never name it | NULL | `research/00_INDEX.md` §3, §7 "None located" [CHECKED §1.1]; `G2 §G` "No historical cases" [READER]; `grep -i godot engine/season/hole_register.yaml engine/season/requirements.yaml` returns 0 lines [CHECKED]. **Two independent** | The uploads do hold Godot design intent, not precedent (§11): fieldwork design v1 §10, a videogame-systems specification, and a master review headed "Godot 4.6 target" | absent | GO-01, GO-05 and GO-06 all sit in B-Z (BASELINE B1.1) | SOUND |
+| T-GO-5 | A version is asserted by implication while ruled open | REPOSITORY PATTERN | `README.md:3,10` and `references/glossary.md:36` "Godot 4.6" [CHECKED, re-run `git grep` this pass]; `L1-04:951` reads the 4.6 docs [CHECKED]; Jordan's three "4.6" organizing instructions (`_part7:88`) [CHECKED]; `valoria-game` declared 4.3 on 2026-08-18 (§2.1) [CHECKED there]; the upload `a777df75-valoria_master_document.md:3` "(Godot 4.6 target)" [CHECKED]. **Four independent** | None asserts a pin by a ruling; the `ARCHSPEC` lines are floors (§0 item 5) | absent: no machine-read owner | GO-01 (J:J-9, B-Z) [CHECKED `_part7:86-91`] | SOUND |
+| T-GO-6 | Hand-transcribed port values drift from the oracle and are then described as generated | FAILURE SHAPE | the skeleton's RESIST, 4 of 12 cells off, "regenerates from THIS" (`MC:835,872`) [CHECKED §0 item 3]; `game_constants.json`'s two recorded DIVERGENCES, `accord_range` and `coherence_bands`: the port models quantities the oracle does not [CHECKED §3.1]; `gm_to_engine_conversion.md`'s registry of v30 prose values with no code reader (`G2 §F`) [READER]. **Three independent** | The blocking `--check` on `game_constants.json` is the counter-case: what is generated does not drift | built: 6 constants generated and gated; everything else hand-carried | PC-05, GO-05 and GO-06, all B-Z [CHECKED `_part7:35-40,101-113`] | SOUND |
+| T-GO-7 | Refusal by `raise` grows faster than the typed result the port requires | REPOSITORY PATTERN | `L1-04:974-991` measured 167 `raise` (one directory level, 2026-09-05) against one typed return [CHECKED]; this pass counts **289** `raise` lines in `engine/season` outside `tests/` and `harness/` (71 of them `SystemExit`) and **1** typed return class, `ContestError` (`engine/season/seam/contest.py:27`) [CHECKED: `grep -rE "^\s*raise "`]; `ED-IN-0017` F7, string-typed refusal [CHECKED §3.2]. **Two independent** (the two counts are one instrument at two dates) | Most raises are integrity holes (`Unspecified`, `Forbidden`), not game refusals; game refusals already emit Events (all 45 verb rows carry `emits_on_refusal`) [AUDIT, line 41]. The Result shape is "PROPOSED, not ruled" (`L1-04:993-995`) [CHECKED] | executes in the season loop, as raises | none: grep of v9 for `typed Result`, `sentinel` and `rejection 5` returns 0 [CHECKED] | SOUND (the two counts are not comparable in scope; the direction holds) |
+| T-GO-8 | The player sits in the chooser slot: every player-surface design converges on "the player is the decision procedure for one person" | CONVERGENCE | `L1-04:844-846` [CHECKED]; `play_surface.py:1-25` [CHECKED]; IN-47's development space, "acting into the chooser slot (`loop/driver.py:355`)" [CHECKED `_part4` IN-47]; IN-46's typed input and output, "the pair AUTOMATED already uses" [CHECKED `_part4` IN-46]; the uploaded audit A2(a) [AUDIT, line 111]. **Three independent** | Creation has no act (IN-47: "a cast entry the world-gen builder seats"); the human pause inside DELIBERATE is unspecified (M-GO-4) | executes only in hand-built tests | IN-46 and IN-47: "no build batch" (BASELINE B1.3) | SOUND as shape; UNREACHED as surface |
+| T-GO-9 | Render from what the observer holds, never from world truth | CONVERGENCE | `L1-04:849-855` "The engine owes the ARITHMETIC of what the character already holds, and nothing else" [CHECKED]; the upload `18aca7ab-05_videogame_systems.md` §0 "Do not implement truth and perception as separate paths" and §5 "Coherence computed on the observer's client" [CHECKED: headings and opening]; the upload `159160d2-fieldwork_design_v1_audited.md:568-570` "There is no neutral visual layer" [CHECKED]; hybrid-gap G-079's four fog display states (`A7.1 §P`) [READER]. **Two independent at most**: the two uploads may share an author line, and G-079 is quarantined | `01_AXIOMS.md:301-302`'s gloss "No state is hidden from the player" points the other way (7.2) | absent: `grep -rn "def explain"` returns 0; no `Derivation` type (0 hits) [CHECKED] | none: grep of v9 for `explanation contract` returns 0; IN-23's EXIT reaches §C.11 for one Query only (`_part5:92`) [CHECKED] | UNREACHED |
+
+### 7.2 Conflicts inside the lane, and code or plan against a throughline
+
+| conflict | side A | side B | bearing |
+|---|---|---|---|
+| parity by hash or by statistics | `L1-04:1119`: the headless Godot run "prints the Python oracle's hash" | STRAT V.2 R4: "Bit-parity of RNG streams is explicitly not a goal" (`G2 §F`) [READER] | Hash equality across languages requires bit-parity of every draw. The ratified text and the PROPOSED text cannot both hold. Layer 1 governs, but nothing implements its premise (T-GO-3) |
+| fixed point | `L1-04:892` "Fixed point for `condition`, `stores`, `margin`"; step 13 "in the integer domain" | `Person.pursuits` floats folded into the hash [EXECUTED probe] | `Site.condition` and `Person.body` are typed `int` (`carriers.py:730,667`) [CHECKED], and the probe found no float in any `Rung` (so none in `stores`). The hash folds a quantity Layer 1 never names, and that quantity is float |
+| the RNG is "not yet load-bearing" | `L1-04:947-948` "because no roll exists yet" | rolls exist: the contest seam seeds `f"contest:{prize}:{cause}"` (`seam/wrappers/combat.py:222`, §0 item 7), and the chooser samples (`choose.py:196`) [CHECKED] | Rejection 4 became load-bearing when the rolls landed; its premise sentence is stale |
+| what the surface may show | `01_AXIOMS.md:301-302` "No state is hidden from the player" (a gloss outside Jordan's quotation) | `L1-04:849-855`: only the arithmetic of what the character holds | The uploaded audit found this collision first [AUDIT, line 113]; re-opened here. It decides the port's view layer and is unresolved |
+| DELIBERATE is a pure, parallel map | `deliberate.py:116` `w._in_parallel_map = True  # S51: WorkerThreadPool over persons`; `architecture/holonic_ARCHITECTURE.md:1468` [CHECKED] | a human callback runs inside that same loop (`play_surface.py:47-51`) and closes over client state that "no scan reaches" (`:17-18`) | A blocking human decision cannot run on a worker thread and wait on UI input. The audit's "pause" finding [AUDIT, line 61], re-opened |
+| where the port reads the rules | `L1-04:913`: `rosters`, `verb_table`, `write_matrix` → "`.tres` or JSON, one loader"; `tools/export_npc_roster.py:19-23`: JSON artifacts are "port-facing" | no exporter covers any season registry or `DEFAULT_FIXTURES` (`ls tools/export_*.py`; grep) [CHECKED] | M-GO-3. (The Key-substrate line `L1-04:1000-1001` and the Meta state owner are §3.2-§3.3's) |
+
+### 7.3 Shared with other lanes
+
+T-GO-2 ↔ the audit's T4, "built ahead of its readers" (IN, NPC). T-GO-3 ↔ IN (resolution kernel, determinism). T-GO-6 ↔ PC (RESIST, PC-05) and WR (the `coherence_bands` divergence, GO-06's source row in `HANDOFF_WR.md`). T-GO-7 ↔ IN. T-GO-8 ↔ IN, PC (IN-46, IN-47). T-GO-9 ↔ IN (AX-7, §C.11), FI (what an investigation shows), WR (Thread perception rendering).
+
+### 7.4 What these throughlines do not establish
+
+- Not the state of `valoria-game`: no claim here reaches the other repository (§5).
+- Not that Godot lacks blake2b hashing or a YAML reader. That is this author's recollection of the engine reference, not fetched [UNVERIFIED]. T-GO-3 and M-GO-3 do not depend on it: Python `repr()` and CPython's Mersenne Twister are language-specific whatever Godot supplies.
+- Not whether Jordan intends hash equality or statistical parity as the port contract. Layer 1 says hash; the PROPOSED strategy says statistics. 7.2 records the conflict and does not decide it.
+- Not whether the floats in `Person.pursuits` are authored fractions or an artifact of normalization. The probe counted them; it did not trace their writer.
+- T-GO-9 counts at most two independent sources, and two of its cases are uploads of tier-3 standing (`engine/season/rosters.yaml:75-90`).
+
+## 8. MISSING AREAS
+
+**Verdict.** The port has one live bridge (six constants) and a ratified done-condition: a headless Godot run prints the oracle's hash (`L1-04:1119`). Nothing between them exists. The hash is not portable. The draws are not portable. The rules the loop runs on reach no export. Refusal is still a `raise`. The player's decision has a seam but no pause, the view has a contract but no carrier, and there is no odds display. v9's only Godot milestone, M3, is GO-01: a version string. Each gap below is missing in **both** code and plan. The lane's demand is D3 (ratified Layer 1 `L1-04` §C.8-§C.12 and Part E step 13; `CLAUDE.md` §5-§6, ED-1050), with D1 where a THE NINE row needs the surface (R-04 conjunct 3, R-09). No THE NINE row names the port (T-GO-4).
+
+### 8.1 Counts
+
+`examined 38 candidates; 21 entered (9 MISSING in 8.2, 4 HOLLOW/BLOCKED in 8.3, 8 PLANNED-UNBUILT/BUILT-DARK in 8.4); 17 dropped or merged (one-line reasons in 8.5)`. Walk: §4's 14 rows; THE NINE clauses R-04 (creation row, grid row) and R-09; BASELINE B4, which has no GO row (`grep -i godot engine/season/hole_register.yaml` returns 0); the NERS digest rows A2, A3, S coverage, X3 and X4; T-GO-1..9; the uploads' Godot material (§11).
+
+### 8.2 MISSING
+
+| ID | the area | demand source(s), strength | code state [CHECKED] | plan state | absence test (run this pass) | what its absence does to the game | NERS axis |
+|---|---|---|---|---|---|---|---|
+| M-GO-1 | **A language-neutral canonical serialization of game state for the parity hash.** Fixed integer encoding, field order declared as data, no host-language `repr` | D3: `L1-04:1119` (step 13, "the Python oracle's hash in the integer domain"), `:892` (fixed point), `:942-944` (the hash is "the only execution artifact"). STRONG | `World.content_hash` = blake2b over `repr()` of Python dataclasses (`engine/season/state/world.py:167-184,1338-1376`); its input holds floats (`Person.pursuits`) | none. M3 = GO-01 + GO-05 only (main plan `:209-216`) | `grep -n "integer domain\|Godot shell\|prints the Python" workplans/valoria_master_workplan_v9*.md` → 0 lines. Probe: 5 float values (`headless`, 1 season) and 63 (realm, 1 season), all `Person.pursuits` | The port cannot show it runs the game the oracle runs. Step 13 is unreachable, and every later port divergence is invisible | S (vertical: oracle → port; methodology), R-COMPLETE |
+| M-GO-2 | **A portable draw primitive**: an owned generator algorithm behind `H(seed, tick, subject, purpose)`, specified so GDScript can reproduce it | D1: R-09 (rolls exist and must replay). D3: `L1-04:942-948` (rejection 4, threaded RNG) and step 13. STRONG | `draw_factory` returns CPython `random.Random` (Mersenne Twister) seeded from a blake2b hex (`engine/season/state/ids.py:64-68`); mass battle falls back to the stdlib module (`modules/mass_battle/rngsource.py:45,60`); purpose-keying exists (§0 item 7) | none; STRAT V.2 R4 rules bit-parity out (`G2 §F`) [READER] | `grep -rniE "xorshift\|pcg32\|splitmix\|mersenne\|class \w*Rng\b" engine/ modules/ --include=*.py` (tests excluded) → 0. `random.Random(` / `import random` in game code (excl. tests, harness) → 17 sites | The first draw diverges in the port, so parity falls back to statistics that no instrument here measures | S (methodology across implementations), R-COMPLETE |
+| M-GO-3 | **A port-facing export of the season loop's runtime rules**: `verb_table`, `write_matrix`, `rosters`, `offices`, `arrangements`, `venues`, `cohorts`, `governance_spine`, `npcs` and `DEFAULT_FIXTURES`, behind one exporter with a `--check` round trip | D3: `L1-04:913` (these registries become "`.tres` or JSON, one loader, twelve invariants at boot"); `CLAUDE.md` §5 (a value the port uses lives behind an exporter with a blocking `--check`); ED-1050. STRONG | 12 authored YAML files in `engine/season/` and the 66-knob `DEFAULT_FIXTURES` dict (`engine/season/data/fixtures.py`, 850 lines) have no generated counterpart. The 7 exporters cover combat params, 6 constants, descriptors, names, composition, the NPC roster YAML and sim params | GO-05 lists module paths only (`_part7:101-106`); no position exports a season registry | `ls tools/export_*.py` → 7; grep of them for `verb_table\|write_matrix\|DEFAULT_FIXTURES\|rosters.yaml\|offices.yaml` → 2 docstring mentions only (`export_npc_roster.py:20`, `export_descriptors.py:195`). v9 grep for "export" next to those names → 0 | Every rule the port runs would be hand-transcribed. That is the RESIST drift (T-GO-6) at the scale of the whole loop | S (vertical), R-COMPLETE |
+| M-GO-4 | **The season-level pause for a human decision**: DELIBERATE yields a player person's `(p, v, s, budget)` to the shell and resumes with the returned acts, without blocking the per-person map | D1: R-04 conjunct 3 (the player decides at Jordan's six scales, `requirements.yaml:70-189`). D3: `L1-04:844-846` ("for a player character the player IS the decision procedure"). D5: the audit's S row, "a human callback runs inside the per-person map … nothing specifies how it blocks" [AUDIT, line 61]. STRONG | `play_surface.dispatching_chooser` calls the callback synchronously (`engine/season/harness/play_surface.py:47-51`) inside `for p in list(w.persons.values())` under `w._in_parallel_map = True  # S51: WorkerThreadPool` (`engine/season/loop/deliberate.py:116,118`). The seam lives in `harness/`, not game code | IN-46 suspends only at ENCOUNTER's barrier (`_part4` IN-46 WHAT (1)); IN-47's development space acts "into the chooser slot" with no build batch. Neither names a DELIBERATE suspension | `grep -c "WorkerThreadPool\|parallel map\|S51" workplans/valoria_master_workplan_v9*.md` → 0. `test_play_surface_dispatch.py`: 3 passed, synchronous only | A Godot shell can let a player decide only by blocking the season on a worker thread or by rewriting DELIBERATE. The game cannot wait for its player | S (pauses correctly), R-CHOICE (the seat exists but cannot be occupied in a running shell) |
+| M-GO-5 | **The view and explanation carrier**: `explain(p : PersonInterior, v : Value) -> Derivation` and a player `View` render built from the holder's own claims | D3: `L1-04:836-879` §C.11, RATIFIED ("There is no referee, so the engine inherits the referee's SECOND job"); `:938-940` (one signal per appended Event at `port/`). D5: A2 [AUDIT]. STRONG | absent. The log's single `on_append` slot is taken by `World`'s IN-56 index (`state/log.py:47-62`; `world.py:1287`); no `port/` exists; the combat trace is returned and read by nobody (`seam/wrappers/combat.py:227-252`) | none. IN-23's EXIT names §C.11 for one Query's reader (`_part5:92`); IN-37 renders the cause graph for an outside observer under `harness/` (`_part5:176-182`), which is not the character's view | `grep -rn "def explain" engine/ modules/` → 0; `Derivation` in `engine/season` → 0; v9 `explanation contract` → 0 | A shell can list the claims a person holds, because the callback receives the `Person` (`play_surface.py:14-16`). It cannot show why a derived value is what it is without re-implementing the engine's arithmetic in GDScript, which would make a second owner. The "unattributed effect" prompt that makes investigation worth a scene (`:868-872`) has no carrier | E-LEGIBILITY, S (bottom-up: character → player) |
+| M-GO-6 | **An odds display for a candidate act**, computed from what the character holds | D5: A3, "no surface shows the odds"; contest odds are non-monotone in score [AUDIT, lines 95, 101]. D2: `CLAUDE.md` §0.06 E, "intuit complex outcomes from simple choices". MEDIUM (the D3 hook is §C.11, whose reach over an Ob derived from another person's capability is unruled, 7.2) | `sigma_leverage.eff_ob` is "DISPLAY ONLY" with no game-path caller (`seam/wrappers/sigma.py:36`) | none | `grep -rn "p_success\|eff_ob" engine/season modules --include=*.py`, tests excluded → only the `sigma.py:36` docstring. v9 `odds` → 0 | A choice whose consequence is knowable only by running it, at every contested act | E-LEGIBILITY, R-CHOICE |
+| M-GO-7 | **Character creation as something the player does** | D1: R-04's `scales:` row "character creation / development / chronicling", `in_loop: false`, "NOTHING creates or develops a person" (`requirements.yaml:71-82`). STRONG | absent. A person exists only as a cast entry seated at world-gen; `capability` is empty on 429 of 430 persons (`requirements.yaml:77-79`) | IN-47: "creation — no act; a cast entry the world-gen builder seats"; "no build batch" (`_part4` IN-47) | `requirements.yaml:74` `in_loop: false` (re-read); `--requirements` reads R-04 `partial` (BASELINE B7) | The port's first screen has nothing to call, and the player cannot make the person they play | R-VARIETY (customization), N (bottom-up) |
+| M-GO-8 | **Refusal as a returned value across game code** (the typed `Result`) | D3: `L1-04:950-995` rejection 5, RATIFIED that "a raise and a bare sentinel are both wrong"; the Result's shape is PROPOSED (`:993`). STRONG for the need; the form is open | 289 `raise` lines in `engine/season` outside tests and harness, 71 of them `SystemExit`; 1 typed return class, `ContestError` (`seam/contest.py:27`) | none | `grep -rE "^\s*raise " engine/season --include=*.py \| grep -v "/tests/\|/harness/" \| wc -l` → 289; v9 `typed Result\|sentinel\|rejection 5` → 0 | Ported naively, a hole that halts the oracle passes silently in the shipped game: an oracle/port divergence ED-1050 forbids | R-COMPLETE (at the extremes), S (methodology) |
+| M-GO-9 | **A persistence path for a session: seed plus the player's acts, written out and replayed.** Narrowed by §9b: the record already exists. `World.acts` holds every attempted act, refused ones included (`engine/season/state/acts.py:1-20`; `world.py:207`) [CHECKED]. What is missing is the write-out and a replaying chooser, not a new store | WEAK DEMAND. STRAT V.2 item 2 "recorded-draw replay" (PROPOSED; live intent per §3.2) [READER]; IN-46's falsifier already scripts choices (`_part4` IN-46); one upload: `b8f1b2f3-fieldwork_review.md:170` "Does not address: save/load" [CHECKED]. No THE NINE row, canon constraint or Layer 1 line demands a save | "a World does not pickle … so there is no load path" (`engine/season/state/world.py:217-218`) | none; STRAT's Stage-3 save/load was Key-based and is retired | game code has no `save`/`serialize`/`pickle` path (grep: `json.dump` hits only in `harness/`); v9 `save\b\|serializ` → 1 unrelated hit (`_part8:40`) | A session cannot be resumed. The deterministic loop and the act store already make a replay-based save nearly free; only the write-out and the read-back are absent | R-COMPLETE |
+
+### 8.3 HOLLOW and BLOCKED
+
+| position | exit quoted | demand it does not deliver | class |
+|---|---|---|---|
+| M3 / GO-01 (`_part7:86-91`; main `:209-216`) | "the version string appears in exactly one machine-read file" | `L1-04:1119`'s step 13. M3 is titled "GODOT VERTICAL SLICE", but no slice runs at its exit. The exit is also unsatisfiable as scoped (§0 item 5) | HOLLOW; BLOCKED on J-9 |
+| GO-05 (`_part7:101-106`) | "a test that every path the manifest lists exists under `modules/`" | `L1-04:913`: the port loads the rules (M-GO-3), not module paths. Its manifest half has no stated dependency on the version | HOLLOW against M-GO-3; BLOCKED on GO-01 |
+| GO-06 (`_part7:108-113`) | "its parity check run against this repository's re-derived constants" | parity of six constants, not of the game (M-GO-1) | BLOCKED on another repository |
+| PC-05 (`_part7:35-40`) | "the re-exported `.gd` values equal `core.py`'s" | a runnable port slice. The target file extends `BaseEngine`, defined nowhere, and sits beside retired Key-type resources (§3.2) | HOLLOW; BLOCKED on GO-01, GO-05 |
+
+### 8.4 PLANNED-UNBUILT and BUILT-DARK
+
+| area | state | what arms or builds it | locator |
+|---|---|---|---|
+| play-surface dispatch seam | built; `harness/`; tests only | a shell that calls it (M-GO-4) | `engine/season/harness/play_surface.py:41-52` |
+| combat trace returned | built; read by nobody | a renderer (M-GO-5) | `engine/season/seam/wrappers/combat.py:227-252` |
+| post-append hook | built; one slot, used by `World`'s index | a second consumer at `port/` | `engine/season/state/log.py:47-62` |
+| `eff_ob` / `p_success` | built; display-only; no caller | M-GO-6 | `engine/season/seam/wrappers/sigma.py:36` |
+| `game_constants.json` bridge | built; blocking; 6 constants | its reader is in `valoria-game` (GO-06) | `.github/workflows/valoria-ci.yml:137` (§3.1) |
+| IN-46 grid-mode suspension at ENCOUNTER | design landed, re-read; no build batch | a batch (R-04 conjunct 3) | `_part4` IN-46 |
+| IN-37 chronicle render | BLK SC-01 step 16; B-U | SC-01 → IN-37 | `_part5:176-182` |
+| IN-23 legitimacy/stability Query read through §C.11 | B; B-U | its build | `_part5:88-92` |
+
+### 8.5 Dropped or merged
+
+- Engine version (§4 row 1): a Layer-0 pointer and a Jordan ruling (J-9), not a game area. Recorded in §0 item 5.
+- Conversion unit = module contract: rests on PROPOSED STRAT only; MC exists. No other demand.
+- Key-log parity: retired (ED-IN-0232).
+- `engine_clock` doc pointer: a stale Layer-0 pointer (IN-44's list), not a game area.
+- `Meta` single state owner: closed by `L1-04:920-921` (Layer 1 governs).
+- `accord_range` port tracker: a port-side defect against an oracle that holds no model. FA/SE own the oracle; ED-1050 forbids fixing it from the port.
+- `coherence_bands` port track: WR's reshape; GO-06 carries the port half (8.3).
+- Tracker / zoom stack / SituationGenerator: stale designs the season loop superseded (§4 last row).
+- Grid map with units: PC/IN's (`requirements.yaml:142-154`, "no work item"). The port renders it once it exists; IN-46 is in 8.4.
+- `params_tables.yaml` deletion (audit X3): apparatus; IN lane.
+- Parking depth below the season seam (audit X4): MB/PC lanes.
+- S coverage (Domain Echo, mass→personal, thread→mass): IN/MB/WR carriers, not port.
+- Thread-perception rendering (upload fieldwork design v1 §10.2): a single upload family, design intent with no D1-D4 hook beyond T-GO-9. Merged into M-GO-5's question of what the view shows.
+- The tenth attribute (GO-01's second half): a PC primitive bundled into a GO row.
+- Per-site named draws (`ED-IN-0017` F5): merged into M-GO-2.
+- Mass battle's stdlib `random` fallback: merged into M-GO-2.
+- A cross-repository hash instrument: merged into M-GO-1. It is that row's consequence and earns a guard only once the serialization exists (`CLAUDE.md` §0.1 pt 5: load-bearing on the port).
+
+## 9. NERS PASS
+
+`[SELF-AUTHORED — bias risk: this pass extends a lane file written by an earlier session of the same workflow.]`
+
+**Target.** The port surface as the game exists in code plus v9, with every v9 position assumed built: GO-01 (the version ruled), GO-05, GO-06, PC-05, IN-46, IN-47, IN-23, IN-37. The mechanisms: the export bridge, the seeded-hash determinism contract, the chooser-slot input seam, the §C.11 view contract, refusal-as-value, and the GO positions. Head: `CURRENT.md:38` names STRAT (PROPOSED, HELD); the ratified port doctrine is `L1-04` §C.8-§C.12 and Part E step 13, so the pass audits those and the code (`skills/ners/SKILL.md` §1). Instruments: A only. Nothing here resolves by a draw of its own; the portability of draws is M-GO-2.
+
+**Assumed built, the picture changes little.** v9's port positions deliver a version string, a module-path manifest, a constants parity read in another repository and a RESIST re-export into a file that does not compile. IN-46 and IN-47 deliver the ENCOUNTER suspension and the character-sheet spaces. None delivers M-GO-1..M-GO-6 or M-GO-8. **The planned-built state and the shipped state differ by IN-46/IN-47 alone**, and neither touches the port's contract.
+
+### 9.1 The N-line ledger
+
+| object | N-line (narrowed where it must be) | attack run, and why it failed or held | direction | verdict |
+|---|---|---|---|---|
+| seeded `World.content_hash` | Cut it and the game can no longer prove that two executions are one game: PLAYABLE against AUTOMATED (IN-46's falsifier) and oracle against port (step 13) | Walked the loss: which object would carry "same seed, same game"? The seeded goldens in `engine/tests/` carry Python-only output equality over campaign-reachable code (`CLAUDE.md` §7), not the state hash; `m1_acceptance` row 2 *is* this hash. Nothing else folds every collection (`world.py:1338-1376`). **Holds.** Narrowed: it holds across implementations only once M-GO-1/M-GO-2 exist; today it holds only horizontally | horizontal (PLAYABLE ↔ AUTOMATED); vertical (oracle → port) **in shape only** | N HOLDS, NARROWED |
+| `game_constants.json` + `--check` | Cut it and six port values can drift from the oracle with nothing to see it | Attack: is anything else gated? `combat_engine_v1.json` is gated but has no Godot reader (§3.1). Only this bridge's reader half is port-side. **Holds** for six values; whether the port reads them is unverifiable here | vertical | N HOLDS, NARROWED (six values; reader unverified) |
+| the driver's `choose` parameter (`engine/season/loop/driver.py:355`, `def season(self, choose, question, subsistence, ...)`) [CHECKED] | Cut it and no one but the shipped chooser can decide for a person, so a player cannot occupy a seat | Attack: does a second object carry it? `play_surface` is a dispatcher *over* this parameter and says so itself ("This is the whole single-player hook, and it edits no engine file", `play_surface.py:8-12`). Remove the parameter and the dispatcher has nothing to dispatch through. **Holds** | bottom-up (player → world) | N HOLDS |
+| `harness/play_surface.py` | — | Cut it: the possibility survives through the driver's parameter (row above). **Disqualifier 1, the carrier exists.** A convenience that costs nothing to keep, not a mechanism | — | **FALSE N-LINE** |
+| §C.11 `explain(p, v)` (unbuilt) | Cut it and the derivation of a held value has no single owner: a shell must re-implement the engine's arithmetic in GDScript | Attack: the callback already receives the full `Person` with its ledger (`play_surface.py:14-16`), so the *information* survives the cut. What does not survive is one owner of the *arithmetic* | bottom-up, vertical | N HOLDS, NARROWED (single owner of derivation; not information) |
+| typed `Result` for refusals (unbuilt, M-GO-8) | Cut it and an integrity hole that halts the oracle passes silently in a release build (`L1-04:955-972`) | Attack: game refusals already emit Events, on all 45 verb rows [AUDIT, line 41], so for **game** refusals the carrier exists (disqualifier 1). For **integrity** holes (`Unspecified`, `Forbidden`, `SystemExit`), nothing else carries loudness in GDScript. **Holds for holes only** | vertical | N HOLDS, NARROWED |
+| GO-01's version string | — | Cut it: what can the game no longer do? Nothing; the string has no game reader. Its N belongs to `valoria-game`'s CI, a process surface | — | **FALSE N-LINE** for the game (disqualifier 2, no game consumer). It remains a ruling Jordan owes, not a game object |
+| PC-05's RESIST re-export into the skeleton | — | Cut it: the target `.gd` extends `BaseEngine`, defined nowhere (§3.2), so no runnable consumer reads the corrected values. **Disqualifier 2, no consumer** | — | **FALSE N-LINE** as targeted. Re-targeted at a compiling port module it would hold |
+| GO-05's module-path manifest | Cut it and an exported Godot build may omit modules `load()` resolves by string | Not attackable here: whether Godot's export filters already pack every script is an engine and `valoria-game` fact [GAP] | vertical | NOT SCORED [GAP] |
+| ENCOUNTER as IN-46's barrier | relied on, not re-run: the audit's N-line, kept at MEDIUM [AUDIT, line 215] | the audit's attack ("fold it into RESOLVE") | vertical | relied on |
+
+Six directions over the lane as a whole: **top-down** (Layer 1 → port): carried by §C.12's mapping table, prose only (`L1-04:906-916`). **Bottom-up** (player → world): carried by the chooser parameter (above). **Vertical** (oracle → port): six constants; everything else hand-carried. **Diagonal**: N-A; the port crosses no family. **Lateral** (sibling exports): seven exporters, no shared contract for a port loader (M-GO-3). **Horizontal** (PLAYABLE ↔ AUTOMATED): the hash, in Python.
+
+### 9.2 Cross-cutting checks
+
+- **C1, claim → mechanism.** (i) "the port regenerates from THIS" (`MC:835`): no carrier (§0 item 3). (ii) "prints the Python oracle's hash in the integer domain" (`L1-04:1119`): the carrier exists and is not in the integer domain (probe, M-GO-1). (iii) "PLAYABLE and AUTOMATED are replay-equal" (IN-46): carried in Python; no carrier in the port. **Three promises, one carried, and only inside Python.**
+- **C2, type signature.** The callback is `callback(p, v, s, ask_budget, auto) -> list[Act | Scene]`, synchronous (`play_surface.py:35-38,47-51`). A human decision arrives frames later. The type admits no pending value, so the claim that this is "the whole single-player hook" **contradicts the signature** for any shell that cannot block. This is M-GO-4.
+- **C3, epistemic feasibility.** An odds display (M-GO-6) computed from the true Ob (half the *subject's* capability, `sigma.py:112-129` [AUDIT, line 71]) reads another person's interior: an omniscient oracle under AX-2. **The repair is in the evaluator, not the display.** Compute the odds from the claims the character holds about the subject, as §C.11 computes any derivation. That makes the displayed odds a belief, and possibly wrong, which `L1-04:868-872` already welcomes.
+- **C4, contradiction sweep.** Four, all in 7.2: hash parity against statistical parity; fixed point against float `pursuits`; rejection 4's "no roll exists yet" against live rolls; AX-7's gloss against §C.11. None was introduced by this pass.
+- **C5, path construction.** Walk step 13's own showcase: (1) the shell loads the rules (no export, M-GO-3: **asserted**); (2) builds the world from a seed (world-gen lives in `harness/populated.py`, audit X5 [AUDIT, line 439]; no export: **asserted**); (3) runs a season with draws (no portable PRNG, M-GO-2: **asserted**); (4) folds the hash (Python `repr`, floats, M-GO-1: **asserted**); (5) prints and compares (no instrument: **asserted**). No step constructs. **Downgrade the verb: the Godot shell is *expressible* under Layer 1, not *implementable* from the tree.**
+
+### 9.3 R
+
+- **R-COMPLETE: FINDINGS.** At the extremes: a release build loses every integrity raise (M-GO-8); a float in hashed state makes a cross-language comparison undefined (M-GO-1); mass battle draws from the process-global stdlib generator when no source is scoped (`rngsource.py:45,60`).
+- **R-VARIETY: FINDINGS.** No creation act (M-GO-7). The player can occupy any person by id (`play_surface.py:45-51`) but cannot make one.
+- **R-CHOICE: NOT SCORABLE for the port**, which has no seat of its own. Its precondition belongs to the surface: whether a seat is occupiable in a running shell. Today, only by blocking (M-GO-4). Every R-CHOICE verdict elsewhere is provisional on the shell's pause.
+- **R-WORLD: N-A for the lane's mechanisms** (the port emits no hook). Residual: hooks the world throws reach a player only through a view (M-GO-5) or the chronicle render (IN-37, `harness/`). Today the combat trace, the richest scene record, is returned and read by nobody (8.4).
+
+### 9.4 S
+
+- **S-UP / S-DOWN: N-A.** The port has no ladder at its scale.
+- **Coverage: FINDINGS.** Vertical (oracle → port): six constants carried; the rules, the draws and the hash are not. Horizontal: carried by the hash in Python. Lateral (between exporters): no shared loader contract. Diagonal: N-A.
+- **Pauses correctly: FAIL.** DELIBERATE runs a human callback inside a per-person loop flagged for `WorkerThreadPool` (`deliberate.py:116,118`). IN-46 specifies a suspension at ENCOUNTER only. Nothing specifies how the season yields to its player and resumes (M-GO-4). The audit's finding [AUDIT, line 61], re-opened and confirmed at HEAD.
+- **Calculations consistent in methodology: FINDINGS.** Two parity conventions for one quantity (hash against statistics, 7.2). Two RNG sources in mass battle (scoped, else stdlib). A fixed-point rule for three named quantities beside a float quantity folded into the same hash.
+
+### 9.5 E, last
+
+- **E-OVERHEAD: FINDINGS.** Port-facing objects in: 7 `godot/` documents (5 stale by their own heads); 20 skeleton files (8 `.gd`, 12 `.tres`), 5 of them Key-substrate (`key_type_resource.gd` and 4 `key_types/*.tres`); MC's per-row `godot`, `port_rank` and `parity` fields, `parity` dead on 20 rows; 1 bridge carrying 6 constants; 3 GO plan rows plus PC-05. Carrying anything the game needs: the bridge and `L1-04` §C.8-§C.12. **The deletions this lane licenses shorten the vocabulary:** `parity: key-log` (20 values, already disposed of at ladder 2 by `ED-IN-0017` F9) and the skeleton's 5 Key-type files. Neither takes a game behaviour with it; an independent reviewer should check the second against PC-05's target before any deletion.
+
+  Watchlist:
+
+  | watched | the N it protects | verdict |
+  |---|---|---|
+  | one parity contract (hash) in place of two (hash and statistics) | cheap, exact port validation | kept, MEDIUM: exactness costs a portable PRNG and serialization (M-GO-1, M-GO-2). Statistical parity needs an instrument nobody has built. The choice is Jordan's (10.0) |
+  | GO-01 bundling the version with the tenth attribute | one ruling, one sub-batch | cut: two unrelated rulings share one gate with no stated reason (§3.1) |
+  | the skeleton as "the template every other port copies" (`MC:974-975`) | a pattern for porting | cut: built on retired Keys and an undefined base (§0 item 3) |
+
+- **E-LEGIBILITY: FINDINGS.** The player cannot read odds (M-GO-6) or derivations (M-GO-5). As ratios: N found one owner of derivation missing, and R found the seat unoccupiable without a pause. What is left after the cuts is not legible to the person the game is for.
+
+### 9.6 The design's own falsifier
+
+**The discipline:** "a port never corrects its oracle in place" (ED-1050, `CLAUDE.md` §6), and "never take a number for the engine or the port out of prose" (`CLAUDE.md` §5). **Walked, not run:** no port exists here.
+
+Hits:
+
+| hit | class |
+|---|---|
+| skeleton RESIST, 4 of 12 cells, hand-transcribed | clean hit |
+| `combat_config.gd`'s remaining values | clean hit (same family; partial annotation at `:57-58`) |
+| `game_constants.json` `accord_range` and `coherence_bands` | **passes by tracing**: recorded as DIVERGENCES, not copied, so the discipline held at the bridge |
+| `MC:835` "regenerates from THIS" | borderline: a prose claim, not a value |
+
+The clean hits cluster in **one family: hand-transcribed `.gd` values under `godot/skeleton/`**. The discipline is real, and the bridge enforces it. The exception list is complete because ED-PC-0013 item 1 already names the family. **Step 13's own falsifier ("a headless run prints the Python oracle's hash") cannot be run from this repository and was not.**
+
+### 9.7 Self-audit
+
+- **9a, backward propagation.** Two residues, one left standing by instruction. (i) §0 item 1 and §4's determinism row say the gap is "a `godot/` document that adopts [the hash] and a cross-repository instrument that runs it". §8 shows the gap is deeper: the hash is not portable (M-GO-1, M-GO-2). The brief forbids rewriting §0-§6 beyond the upload corrections, so the understatement stands there and is recorded here and in §11. (ii) M-GO-9 first said "nothing records the decisions". Re-opening `state/acts.py` showed the act store does, so the row was narrowed in place.
+- **9b, §3 turned on this pass's additions.** M-GO-9 fired disqualifier 1 (the act store is the carrier) and was narrowed to a write-out and a read-back. M-GO-6's odds display fired C3 and was restated as odds from held claims. M-GO-3 adds an exporter; it argues its way out under `CLAUDE.md` §0.1 pt 5 (load-bearing on the port) and §5, and it replaces hand transcription rather than adding a store. M-GO-1 replaces a serialization; it adds none beside it. No other row adds an object.
+- **What an independent reviewer would add:** a fetch of the Godot 4.x reference for hashing and RNG classes (7.4); the `valoria-game` tree; the bodies of `04_GODOT_IMPLEMENTABILITY.md` and `F3_godot46.md` (§5), which may already answer M-GO-1/M-GO-2.
+
+### 9.8 Verdict
+
+```
+NERS PASS: the Godot port surface (code + v9, positions assumed built)     INSTRUMENTS: A
+
+MUST BE STATED AS A LIMIT
+  - "a headless run prints the Python oracle's hash in the integer domain" — the hash is blake2b over
+    Python repr with float inputs, and draws are CPython's Mersenne Twister  [C1, C5; M-GO-1, M-GO-2]
+  - "the whole single-player hook" — the callback is synchronous inside a map flagged parallel; no
+    pause exists  [C2; M-GO-4]
+  - "the port regenerates from THIS" — hand-transcribed  [C1; §0 item 3]
+  - the port loads the rules at boot — no export of any season registry or fixture  [C5; M-GO-3]
+MAY BE CLAIMED, HAVING SURVIVED
+  - same seed → same game, inside Python — attacked by seeking a positional stream or an unhashed
+    collection; the hash folds every collection in sorted order (`world.py:1338-1376`), m1 row 2 PASS
+  - a player can decide for any person through the driver's chooser parameter — attacked by cutting
+    `play_surface`; the parameter carries it (false N-line on the dispatcher)
+  - the constants bridge does not drift — attacked via the two recorded divergences, which pass by
+    tracing
+
+| axis / test | verdict | what would overturn it |
+|---|---|---|
+| N (six directions) | FINDINGS: hash, chooser parameter, explain, Result hold, narrowed; play_surface, GO-01 string and PC-05 target are FALSE N-lines | a second carrier for cross-implementation equality (vertical) |
+| E-OVERHEAD | FINDINGS: 20 dead `parity` values, 5 Key-type skeleton files, a bundled GO-01 | evidence a skeleton Key file is read by a live port path |
+| E-LEGIBILITY | FINDINGS: no odds, no derivation | a shipped odds or derivation display |
+| R-COMPLETE | FINDINGS: integrity raises vanish in release; float in hash; stdlib RNG fallback | a typed Result at every hole, an integer hash input |
+| R-VARIETY | FINDINGS: no creation act | IN-47 re-scoped so creation is an act |
+| R-WORLD | N-A (no hook of its own); residual: no view of the world's hooks | — |
+| R-CHOICE | NOT SCORABLE: no port seat; precondition = M-GO-4 | a specified DELIBERATE suspension |
+| S-UP / S-DOWN | N-A | — |
+| S — coverage · pause · methodology | FINDINGS: vertical carries 6 constants; pause FAIL; two parity conventions | a pause spec; one parity contract |
+| the design's own falsifier | HOLDS: hits cluster in the skeleton family, already tracked | a hand-carried value outside `godot/skeleton/` |
+| self-audit | both sweeps run; 9a residue in §0 left by instruction; M-GO-9 narrowed | reviewer additions above |
+
+REPAIRS (each a replacement or one object; ranked in §10.0)
+  M-GO-4 → K-GO-3 · M-GO-3 → K-GO-4 · M-GO-1 → K-GO-1 · M-GO-2 → K-GO-2 · M-GO-8 → K-GO-5
+
+GRADE: paper — with two executed artifacts behind specific rows: the float probe (M-GO-1) and
+test_play_surface_dispatch.py (3 passed). Not run: any Godot execution, step 13's falsifier,
+corpus_run, aperture.
+```
+
+## 10. KEY RECOMMENDATIONS
+
+This is an audit-design pass over six months of repository work. Jordan, 2026-10-16: it "gets permission to be whatever it is". The recommendations below are this pass's output; none is entered in the plan or a ledger until Jordan so rules.
+
+### 10.0 Top five, worst problem first
+
+1. **K-GO-3.** The season cannot wait for its player (M-GO-4).
+2. **K-GO-6.** What the player's view may show is unruled between two Layer-1 texts, and nothing carries either reading (M-GO-5, T-GO-9). **Jordan.**
+3. **K-GO-4.** Every rule the loop runs on would reach the port by hand (M-GO-3, T-GO-6).
+4. **K-GO-1.** The parity hash is Python-specific and not in the integer domain (M-GO-1, T-GO-3).
+5. **K-GO-2.** The draws are CPython's generator (M-GO-2).
+
+### 10.1 PRIMITIVES
+
+| ID | recommendation | grounded in | `CLAUDE.md` §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-GO-1 | Make every quantity `World.content_hash` folds an integer, and fold the state through one canonical encoder whose field order is declared data, never `repr()` | M-GO-1 [EXECUTED probe; CHECKED code]; T-GO-3; 9.2 C1, C5 | takeable, step 3: `L1-04:892` (fixed point) and `:1119` ("in the integer domain"), RATIFIED. The PROPOSED strategy's statistical parity does not outrank it | adds an encoder; **cuts** `_entity_digest`'s `repr` path and the floats in `Person.pursuits`. Golden hashes move once, declared (`CLAUDE.md` §7) | an encoder written from the declared field order alone, without importing the dataclasses, prints the same seed-0 hash; planting a float field makes the encoder refuse |
+| K-GO-2 | Put one owned, specified generator behind `H(seed, tick, subject, purpose)` in place of `random.Random`, and route mass battle's unscoped draws through it | M-GO-2 [CHECKED]; 7.2 (hash parity requires bit parity) | takeable, step 3: step 13 cannot pass without bit-identical draws, and Layer 1 governs the PROPOSED strategy. Rejection 4's stale premise ("no roll exists yet", `L1-04:947`) is the only text against it | adds a ~20-line generator; **cuts** 17 stdlib-random sites in game code and the stdlib fallback (`rngsource.py:45,60`). Every seeded golden moves once, declared | a fixed seed's first 1,000 draws match a pinned vector; a second implementation from the specification alone reproduces it |
+| K-GO-4 | Export the season loop's runtime rules (`verb_table`, `write_matrix`, `rosters`, `offices`, `arrangements`, `venues`, `cohorts`, `governance_spine`, `npcs`, `DEFAULT_FIXTURES`) as one generated artifact with a `--check` round trip, and fold GO-05's module-path manifest into it as one field | M-GO-3 [CHECKED]; T-GO-6; 8.3 GO-05 | takeable, step 4: precedent, the seven exporters with `--check` and `CLAUDE.md` §5. Step 3: `L1-04:913` | adds one exporter; **cuts** hand transcription of the loop and GO-05's separate manifest | `--check` reddens on a YAML edit not re-exported; a loader over the export refuses a planted violation of each of the twelve invariants, naming the row (`L1-04:1108`'s step-2 condition) |
+| K-GO-10 | Retire the skeleton's Key-type resources and re-aim PC-05's re-export at the first port module that compiles, or drop PC-05 | 9.1 (PC-05 FALSE N-LINE as targeted); T-GO-1; ED-IN-0232 | takeable, step 2: the Key substrate is retired, and nothing runnable reads the skeleton | **cuts** 5 files (`key_type_resource.gd`, 4 `key_types/*.tres`) and one hollow position; adds nothing | `git ls-files godot \| grep -i key_type` returns 0; no `.gd` outside the skeleton names them |
+
+### 10.2 VERBS
+
+[NULL: verbs. GO owns none (§4). Examined: creation, which IN-47 designs as "no act" (K-GO-8 keeps it a surface and adds no verb); the play surface, which adds no verb by design (`play_surface.py:21-25`); the shell's decision set, which is the chooser's candidate set (`decision/options.py:46` `opening_set`).]
+
+### 10.3 MECHANICS
+
+| ID | recommendation | grounded in | `CLAUDE.md` §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-GO-3 | Make DELIBERATE yield each player-controlled person's `(p, v, s, budget)` at barrier 2 and resume the season with the returned acts, so the per-person map never blocks on a human | M-GO-4 [CHECKED]; T-GO-8; 9.2 C2; 9.4 pause FAIL; audit S row [AUDIT, line 61] | takeable, step 5: the only shape compatible with a non-blocking shell and with D-41a's order-independence (`L1-04:1060`). IN-46's ENCOUNTER suspension is the precedent at the next barrier (step 4) | adds one pending-decision set held by the driver; **cuts** the synchronous callback as the hook (`play_surface` becomes the scripted client tests already use) | a season answered through the yield path by a script that returns `auto`'s pick ends at the plain run's `content_hash`; a permuted person order leaves it unchanged (D-41a) |
+| K-GO-5 | Have every new or touched seam return the typed refusal record `Unspecified` already constructs (`needs`, `law`) instead of raising, and migrate the integrity raises as their files are touched | M-GO-8 [CHECKED: 289 against 1]; T-GO-7 | takeable, step 4: precedent, `ContestError` (`seam/contest.py:27`). Step 5 for the shape: `L1-04:988-991` names the existing record. Rejection 5's "PROPOSED" shape leaves no materially different game | adds one Result type; **cuts** raise sites batch by batch | the game-code `raise` count falls with each batch that touches a seam; a planted hole returns a Result whose caller stops the season with the hole named |
+
+### 10.4 TEXTURE
+
+[NULL: texture. The port renders what the loop records and authors none. Examined: the returned combat trace (8.4; showing it to a witness beyond what they hold would breach AX-7's channel mediation, so it waits on K-GO-6); IN-37's chronicle render (an outside observer's view, `harness/`); the audit's T5, that acts record that something happened, not what [AUDIT, lines 381-392], which is IN/WR's to fix at the act.]
+
+### 10.5 SURFACE
+
+| ID | recommendation | grounded in | `CLAUDE.md` §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-GO-6 | Build `explain(p : PersonInterior, v) -> Derivation` from the holder's own claims as the single owner of every derivation the player's view shows, once Jordan rules which of the two Layer-1 readings binds the view | M-GO-5 [CHECKED]; T-GO-9; 7.2; 9.1 (explain N-line); audit A2(b) [AUDIT, line 113] | **Jordan**: it survives all five steps. Two defensible options give materially different games. A player shown world state plays an omniscient strategist over an avatar; a player shown only what the character holds plays inside the character's beliefs. Either way, ratified Layer-1 text is overwritten (`01_AXIOMS.md:301-302` or `L1-04:849-855`). The audit's G6 proposes narrowing the gloss [AUDIT, line 431]; that is a recommendation, not a ruling | adds one function; **cuts** any GDScript re-derivation (a second owner) | `explain` takes no `World` (a signature test, as `choose`'s); a fact planted in `World` and held by no one appears in no `Derivation` |
+| K-GO-7 | Show each candidate act's odds as the character believes them: derive the Ob from the claims the actor holds about the subject, never from the subject's true capability | M-GO-6; 9.2 C3; audit A3 [AUDIT, lines 95, 101] | follows K-GO-6's ruling. Under §C.11 it is takeable at step 3 (odds as a derivation of held claims). If the view may show world state, the C3 objection lapses and the true odds are admissible. **Jordan**, bundled with K-GO-6 | adds nothing beyond `explain`; **cuts** `eff_ob`'s "display only, no caller" state | two persons holding different claims about one subject see different odds for one act; a person holding none sees the prior from `pool_default`/`obstacle_default` |
+| K-GO-8 | Let the player's creation screen write a cast entry in the shape world-gen already seats (pursuits and affiliations now, attributes once K-2 rules) rather than adding a creation act | M-GO-7 [CHECKED `requirements.yaml:71-82`]; IN-47's review ("creation arm C1 cannot be carried out through the cast shape") | takeable, step 4: precedent, `data/cast.py` seats authored entries, and IN-64 (B-X) gives every cast person 15 pursuits (`_part5:267-271`) [READER: BASELINE B1.2]. The attribute half is Jordan's (K-2, the audit's G1) | adds no verb and no store; **cuts** IN-47's "no act, no player" gap | IN-47's own: creation switched off reproduces the pre-build hash; a created person with authored pursuits chooses differently from the default at a fixed seed |
+| K-GO-9 | Save a session as seed plus the player's acts from `World.acts`, and restore it by replay, with no `World` serializer | M-GO-9 (WEAK DEMAND) [CHECKED `world.py:207,217-218`; `state/acts.py`] | takeable, step 5: determinism already holds in Python, and K-GO-1/K-GO-2 extend it to the port | adds a write-out and a read-back; **cuts** the need for STRAT's and ARCHSPEC's `SaveData` serializer | save at season 2, replay, and `content_hash` equals the uninterrupted run; a tampered act moves the hash |
+
+## 11. METHOD NOTE (sections 7-10)
+
+**Opened this pass** (HEAD `5445e34`): `L1-04:836-1121`; `01_AXIOMS.md:290-320`; `engine/season/state/{world.py:167-227,1287,1325-1376; ids.py:1-73; log.py:40-101; acts.py:1-30; carriers.py:636-700,730}`; `engine/season/loop/deliberate.py:80-135`; `engine/season/harness/{play_surface.py (all), headless.py:141-170, populated.py:1313-1330}`; `seam/wrappers/combat.py` (trace lines); `modules/mass_battle/rngsource.py:40-62`; `tools/export_npc_roster.py:1-45` and the exporter listing; `requirements.yaml:25-82,140-158`; `_part7:84-113`; main plan `:205-218`; `_part4:20-45`; `_part5:176-182`; the uploaded NERS audit, lines 1-125 and 200-508. **Executed:** `scratchpad/go_float_probe.py`, at `/tmp/claude-0/-home-user-ttrpg/3f6de207-94f6-530b-a5b4-52aac53c2712/scratchpad/go_float_probe.py`, run with the repository on `sys.path` (one season each of `headless` seed 0 and `populated.build_realm(0)`; read-only); `python -m pytest engine/season/tests/test_play_surface_dispatch.py -q` (3 passed); the greps quoted beside each absence claim in §8.
+
+**Taken from elsewhere.** STRAT's internals (V.2 R4 "bit-parity … not a goal", Stage 3, Part II) are from `G2 §F` [READER]. Fog display states are from `A7.1` [READER]. The audit's claims, where not re-opened, are marked [AUDIT]: refusal-emits on 45 rows, Ob = half the subject's capability, ENCOUNTER's N-line, world-gen in `harness/` (X5). Sections 0-6 of this file supplied the §0/§3 facts cited as "§0 item n" and "§3.x".
+
+**Upload corrections applied to §0-§6: none.** The assignment named none, and none was needed. **One premise of the assignment does not hold, and is reported rather than written as instructed.** The assignment asked this section to state that the uploads contain no Godot material. A grep of `/root/.claude/uploads/3f6de207-94f6-530b-a5b4-52aac53c2712/` (57 files) for `godot|gdscript` matches 7 files:
+- `159160d2-fieldwork_design_v1_audited.md` (with `2771ecb2-…_corrected`, `402f634e-…v1`) §10 "GODOT VIDEO GAME IMPLEMENTATION": a POI node tree and TS-banded perception shaders (`:542-575`);
+- `b8f1b2f3-fieldwork_review.md` §5.4 "Godot: Strong Conceptually, Underspecified Technically" (`:168-170`);
+- `a777df75-valoria_master_document.md:3` "(Godot 4.6 target)", 2026-04-24/25;
+- `8a1b09d5-valoria_key_cascade_scope.md:188`;
+- `f45cf4db-valoria_workplan_v1.md:459`.
+
+`18aca7ab-05_videogame_systems.md` (a client-side perception and rendering specification) matches "scene" and bears on the view. None of these files is named in `UPLOAD_CHECKS.md`. All are design intent, not historical research or game precedent, so §1-§2's verdicts stand. They are used only in T-GO-4's limit, T-GO-5, T-GO-9 and M-GO-9, at tier 3.
+
+**Could not check.** `valoria-game` (§5). Whether Godot 4.x offers blake2b hashing or a YAML reader (7.4; recollection only, not used as a premise). Who writes the float `pursuits` values. GO-05's N-line, which depends on Godot export filters. The bodies of `04_GODOT_IMPLEMENTABILITY.md` and `F3_godot46.md`, which may already treat M-GO-1/M-GO-2. The IN-47 and IN-46 proposal bodies; their plan entries were read. **Left for the orchestrator** (self-audit 9a): §0 item 1 and §4's determinism row understate the hash gap ("a document and an instrument"). §8 M-GO-1/M-GO-2 show the hash and the draws are not portable. The brief bars rewriting §0-§6, so the residue stands there.
+
+**Confidence.** High on M-GO-1..M-GO-4 and M-GO-8: code opened, and the probe and greps executed. [CONFIDENCE: medium] on M-GO-5..M-GO-7 and K-GO-6/K-GO-7: they turn on the unresolved AX-7/§C.11 reading and on the audit's relayed Ob formula. [CONFIDENCE: low] on M-GO-9's demand: a single upload and a PROPOSED strategy.
+
