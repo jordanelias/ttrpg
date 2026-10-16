@@ -738,7 +738,13 @@ l.40-162, 205-262, 324-444). In the tree: `decision/choose.py:150-193, 400-412`,
 H-205-H-208, `01_AXIOMS.md:164-198`, `canon/02_canon_constraints.md` P-04, P-12, P-15, GD-1..3, plan entries IN-47,
 IN-58, IN-61, IN-69, IN-70, IN-12 step 9, J-13, B-JR, SFP `03:240-262` and `00_INDEX.md:3`, ENP v2 `04_PROVENANCE.md:155-175`,
 VCD Guild lines. Ran: the register (above); the scratch probe at seeds 0 and 1 (two seasons, and one season at seed
-0); greps and counts quoted in §8.
+0); greps and counts quoted in §8. In the critic pass, also opened: `queries/world_q.py:1610-1656`, `state/world.py:740-755`,
+`hole_register.yaml` H-49, H-170, H-205-H-207 (`:558-566, :3722-3732, :4410-4450`), `fixtures.py:690-780`,
+`requirements.yaml:1118-1142`, `seam/wrappers/mass_battle.py:170-205`, `modules/mass_battle/massbattle.py` (unit builder
+lines), `hierarchy/units.py:2700-2706`, `cases/NPC5.yaml:165-180`, `choose.py:150-170`, `04_CODE_ARCHITECTURE.md:358-360`,
+`_part3:56, :276, :299, :334`, `_part5:204-216, :244-249, :504, :514, :531`, `_part7:49-51`, the uploads 13G L194, L208 and
+the NERS report L135-141, L428-432; ran the first probe again (seed 0, one season) and a new read-only probe,
+`scratchpad/work_npcfix/death_relation_probe.py` (seeds 0 and 1, two seasons), plus a registry key parse.
 
 **Taken, not re-opened.** Sections 1-6 of this file; extractions R4, R7, R8, A5a/A5b, UP03, UP04, UP05 for their T, G
 and H sections; the audit's A1, A5, A7 and T5 code claims, marked [AUDIT]; BASELINE B1-B5 for plan states and the
@@ -751,7 +757,29 @@ account, and F77's "popularity threshold" is in neither upload. (3) §4 `forgive
 case. (4) §0 #8 extended to the VCD misstatement. (5) §5: the surveys still absent are named; the four pinned uploads are
 recorded as in hand. No §0 ranking changed.
 
-**Could not check.** Whether ED-IN-0201's gate silences a faction after its head dies; the corpus-level death rate
+**Critic corrections (sections 7-11), each verified at source before it was applied; HEAD `f590d00`, engine and
+modules unchanged from `021fd96` (`git diff --stat 021fd96 HEAD -- engine modules` empty).** All 14 upheld; none rejected.
+(1) T-NPC-5 and M-NPC-3 restricted to values, capacity and body; regard and beliefs ship live (`fixtures.py:697,
+741-750, 773`; `requirements.yaml:1132-1139`); §0 #2, §4 loyalty row, §7 verdict, §8 verdict, §9.3 and K-NPC-2 carry it.
+(2) M-NPC-6 narrowed to delivery by claim: `vacancies()` (IN-53, `5652e846`) reaches conferrers (`world_q.py:1617-1639`);
+H-206's office half is what is missing; K-NPC-3 rebuilt on `vacancies`/`seats_named` and on retaining ended edges
+(`04:360`; H-206 at `hole_register.yaml:4438`), not "one emission"; 9.1, 9.2 C5, 9.4, 9.5 S-DOWN, 9.7 follow. (3) M-NPC-8
+moved to 8.3 as B-NPC-5 (IN-48, B-JR, `v9.md:274`; `_part3:276, :299, :334`; `_part5:205-208`); K-NPC-8's ladder names
+the Layer-1 blocker. (4) T-NPC-1's field-bleed reach is "ships at weight 1, unreached" (`requirements.yaml:1124-1125`).
+(5) T-NPC-1 split; the usefulness clause is T-NPC-16, one producer (13G L194, L208), UNVERIFIED. (6) T-NPC-10 is one
+producer, OVER-CLAIMED; T-NPC-8 at most two independent (PRE "Unsourced", §2.1). (7) NERS A4 (ii) entered as M-NPC-12,
+Jordan's (`9d5d80bf` L139, L430; `choose.py:150-170`). (8) Commanders and troop quality entered as M-NPC-13 (Officer
+`units.py:2700`, H-49, H-170, `cases/NPC5.yaml:172`, PC-08 LEAVE `_part7:51`); K-NPC-1 gains the field reader. (9) J-13
+(`_part5:504`) cited and answered in K-NPC-1. (10) §9.4's "`fight` dominates strictly" replaced by what the probes show,
+with a new cause-of-death probe. (11) The three death figures named by build in M-NPC-6. (12) H-205 "attached by its hole
+row to an ask-then that omits it" (`hole_register.yaml:4425`; `_part5:531`) in M-NPC-5, §7.2 item 4 and the §4 row.
+(13) M-NPC-11's grep result corrected to 2 comment lines (`rosters.yaml:86, :1562`). (14) Real cuts named for K-NPC-6
+(the King's unrestricted choice of heir), K-NPC-10 (the intent-telling channel if left at 0) and K-NPC-11 (character
+generation; three unread registry fields). 8.1 and the §7 verdict counts recomputed; §10.0 re-ranked (K-NPC-1 first).
+
+**Could not check.** Whether ED-IN-0201's gate silences a faction after its head dies; whether IN-61's design builds the
+claim naming the vacant throne (M-NPC-6, [CONFIDENCE: medium]); whether a killer held the victim's superior seat (the
+cause-of-death probe tests a shared commit only); the corpus-level death rate
 (`corpus_run` not run); FASE T5/T9; the RTP and PMM bodies; the earlier drafts of TD and 13G; IN-65's 61 → 508 figure.
 **[CONFIDENCE: medium]** on T-NPC-10 and M-NPC-10/11 (D6-led), on H-NPC-5 (residence premise), and on the probe, which
 is scratch and uncommitted, with two seeds and no control arm beyond the scar field showing the instrument sees change.

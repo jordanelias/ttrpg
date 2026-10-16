@@ -574,6 +574,8 @@ WR. T-IN-10: GO, SC. T-IN-12: NPC, FA. T-IN-13: NPC, FI. T-IN-14: MB, SE, FA, NP
 - That T-IN-4's emptiness persists after IN-26, IN-37 and SC-01 land: the datum is one seed of a scratch run.
 - That the world fails R-WORLD over a campaign: nothing in this lane or the audit ran beyond four seasons (`m1_acceptance.py`'s invariant row is
   24 seeds × 4 seasons, BASELINE B7).
+- That a troop stock should be persons (a cohort's weight drawn down) rather than a non-person quantity: T-IN-14 establishes that no
+  troop stock exists and that v9 refuses one on purpose; Jordan's statement 1 names the resource, not its carrier.
 - That the research converges independently where it says so: the uploaded line (N1, N2, D1–D3, 3S) is one author line by its own statement
   (3S:5 "All five appear to be prior output in this same research line"), so it counts once wherever it appears.
 
@@ -959,6 +961,10 @@ GRADE: paper for the planned-built object; one execution artifact for the shippe
 
 This is an audit-design pass over six months of repository work. Jordan, 2026-10-16: it "gets permission to be whatever it is". The
 recommendations below are this pass's output; none is entered in the plan or a ledger until Jordan so rules.
+
+**Counts.** 12 live recommendations (K-IN-8 merged into K-IN-2; K-IN-13 added): PRIMITIVES 2 · VERBS 3 · MECHANICS 2 · TEXTURE 1 ·
+SURFACE 2 · APPARATUS 2. By the §0 ladder: Jordan's 6 (K-IN-1, -3, -4, -7, -9, -13); takeable 4 (K-IN-2, -6, -10, -11, each with a named
+Jordan residue in K-IN-2 and K-IN-10); split 2 (K-IN-5, K-IN-12). Every row names a cut.
 
 ### 10.0 Top five, worst problem first
 
