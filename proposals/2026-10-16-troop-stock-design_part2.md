@@ -1,278 +1,206 @@
 # The troop stock — part 2: the seam, the cuts, the data, the build, the NERS pass, the decisions
 
-## Status: PROPOSED (2026-10-16), corrected and re-based on R-POOL the same day. Not ratified; merge ratifies nothing unless Jordan so rules.
-## Part 2 of 2. Head, verdict, R-POOL and §1–§3: [`2026-10-16-troop-stock-design.md`](2026-10-16-troop-stock-design.md). Locator conventions as there (`[CHECKED]` = re-opened in the correction pass; `[CHECKED-draft]` = opened at drafting only; `[RAN]`, `[INFERRED]`, `[UNVERIFIED]`).
+## Status: PROPOSED (2026-10-16), corrected twice the same day and re-based on R-POOL. Default troop body since the second correction: **A, a troop stock**. Not ratified; merge ratifies nothing unless Jordan so rules.
+## Part 2 of 2. Head, verdict, R-POOL and §1–§3: [`2026-10-16-troop-stock-design.md`](2026-10-16-troop-stock-design.md). Locator conventions as there (`[CHECKED]` = re-opened in the second correction pass; `[CHECKED-1]` = the first pass only; `[CHECKED-draft]` = drafting only; `[RAN]`, `[INFERRED]`, `[UNVERIFIED]`).
 
 ---
 
 ## 4. ARMY ASSEMBLY AND THE SEAM
 
-### 4.1 Who stands on a side: one Query for service, read by the muster and by morale
+### 4.1 Who stands on a side, and what they field
 
-**Today.** `mustered(w, rung, faction)` returns faction members (a live `commit`) whose `contain` is in
-the rung's subtree (`world_q.py:1256-1272`) [CHECKED]. A company has no `commit`: it serves, it does not
-believe.
+**Who stands is unchanged.** `mustered(w, rung, faction)` returns faction members present in the
+rung's subtree (`world_q.py:1256-1272`) [CHECKED-1], for the attacker at the origin
+(`loop/sides.py:77-85`) [CHECKED] and for the defender at the target (`seam/wrappers/mass_battle.py:233`)
+[CHECKED]. Layer 1's muster lines (`04:792`, `:802`) stand. They command; they field no men (part 1,
+§2.6).
 
-**The new Query, `service_faction(w, pid)`** (in `queries/world_q.py`, beside `faction_holding`):
-- **The person holds any live `commit`:** `None`. His side is his belief's, read by `members`.
-- **Otherwise:** the faction of the **holder** of each seat he holds a live `oblige` to,
-  `faction_holding(w, holder)`. One faction → that one. None, or more than one → `None`.
-- **Both choices follow precedent (CLAUDE.md §0's ladder, step 4):**
-  - "the holder's faction, not the seat's label" is `holder_faction_of`'s rule: "`faction_holding` on
-    ITS holder (a person)" (`world_q.py:1441-1466`) [CHECKED];
-  - "none and many both return `None`" is `faction_holding`'s own (`world_q.py:1405-1440`) [CHECKED].
+**What a side fields is new: one Query, `fielded(w, rung, faction)`** (in `queries/world_q.py`):
+- the troop stocks (`troops_<grade>` kinds) in `rung`'s own `stores`, **if** `holder_faction_of(w,
+  rung) == faction` (`world_q.py:1441-1450`) [CHECKED], else none. A levy fights for whoever holds the
+  walls it stands in.
+- **The attacker** fields `fielded(w, origin, attacker_faction)`.
+- **The defender** fields `fielded(w, target, subject)` **plus the target's `recruits`, counted as
+  grade 0.** `subject` is `holder_faction_of(w, target)` already (`effects_combat.py:240`) [CHECKED], so
+  the holder test passes by construction at the target.
 
-**The edit to `mustered`:** members present **∪** persons present whose `service_faction` is this
-faction.
-- **One owner for both sides.** It is written once, in `mustered`, so the attacking side
-  (`loop/sides.py:85`) [CHECKED] and the defending side (`seam/wrappers/mass_battle.py:233`)
-  [CHECKED-draft] both get it.
-- **Membership is untouched.** `members` still says "THERE IS NO SECOND ROUTE" (`world_q.py:1154`)
-  [CHECKED-draft]. A side in a field is not a membership. It is who stands there for the faction.
-- ⚠ **It amends Layer 1's muster line** (part 1, §0 item 4). That amendment is part of J-1.
+**The defence extreme, walked** (second critic, finding 8):
 
-**The two shipped `oblige` edges are the test** (critic finding 2). Probe on `populated.build_realm(0)`
-[RAN]:
+| at the target | today | under A, without the pool on defence | **under A (the design)** |
+|---|---|---|---|
+| members present, no levy, pool > 0 | members fight at weight 1 each; "one present defender holds any settlement" (`MB_mass_battle.md:434`) [CHECKED] | **no troops → `Unopposed`.** Any levy takes any unraised town; `fort_level` and walls never engage | the pool fights as raw men under the members present; the module is called, so `fort_level` and `walls_dr` engage (`massbattle.py:273`, `:342-371`) [CHECKED] |
+| no members present, a levy or a pool | `Unopposed` (`mass_battle.py:235-248`) [CHECKED] | the levy fights; a pool alone: `Unopposed` | the levy and the pool fight with no general, at the builder's default Command |
+| nothing: no member, no levy, pool raised dry | `Unopposed` | `Unopposed` | **`Unopposed`.** ED-IN-0279 (a)'s branch is kept, widened from "no persons" to "no persons and no men". Raising a town dry is what leaves it open |
+| an unheld settlement (`subject` is `None`) | PARTY-GAP (`mass_battle.py:227-229`) [CHECKED] | same | same; an unheld town's pool defends nobody |
 
-```
-p_npc_041 1 -> off_restoration_leader seat faction Restoration Movement | obligee commits fac_restoration_movement
-p_npc_070 1 -> off_npc_020 seat faction Crown | obligee commits fac_löwenritter
-```
+**Why the pool defends (CLAUDE.md §0's ladder, step 5).** R-POOL calls the pool "available troops"
+of the settlement's own; reading it at the town's own defence composes on the one carrier and adds
+no act. The alternative inverts defence against today and against M-MB-1's own complaint (a town
+falls to anything, so the walls are dead data). It overwrites no ruling: ED-IN-0279 (a)'s
+`Unopposed` survives for a side with nobody in it. It is Jordan-vetoable and listed in §9.
+- **What raising then changes at home:** the same men move from pool to stock, so a town's home
+  defence is unchanged by a raise until the levy is moved away or eats itself down. A raise buys
+  mobility (only a stock can be moved or march) and costs food (only a stock eats separately).
+- **The pool takes casualties on defence** (§4.6): men killed at their own walls are gone, and the
+  pool regrows. The cohort is untouched.
 
-(`engine/season/offices.yaml:191`, `:591`; opened by `harness/populated.py:1339`) [CHECKED].
-- **NPC-070**, the Löwenritter Grand Master sworn to the Crown's seat (FA-04), holds a `commit` to
-  `fac_löwenritter`. So `service_faction` returns `None`, and she stands only with the Löwenritter.
-  Under the draft's unrestricted clause she would have stood for the Crown too, on both sides of a
-  Crown–Löwenritter field.
-- **NPC-041** holds a `commit` to the faction whose seat she serves. She is already a member, and the
-  clause adds nothing.
-- **So the clause adds nobody to any side at build.** TS-5's arm (a) asserts that `mustered`'s output
-  is unchanged at every settlement of the shipped world.
+**An attacker with no men** — a march whose origin holds no stock of the marching faction — is the
+existing PARTY-GAP refusal (`mass_battle.py:224-226`) [CHECKED], which the fold turns into
+`march.refused`. The attacker's pool never marches.
 
-**What the clause still sweeps in, named so nobody is surprised:**
-- **Any person in no faction who serves a seat**: IN-36's guard cohorts (`_part5.md:158-175`)
-  [CHECKED-draft as a citation], which is right, since guards defend.
-- **A bench's convicts under a `determine` disposal who hold no `commit`** (the H-173 hazard,
-  `hole_register.yaml:3765`) [CHECKED]. `determine` executes 0 times in the shipped worlds (H-163), so
-  this is latent today. It is a residual (§8).
+**Morale.** `_side_stance` is unchanged: it reads the named persons present
+(`seam/wrappers/mass_battle.py:126-148`) [CHECKED-1], and the morale and grudge rows `_eff_march`
+writes land on them (`effects_combat.py:256-261`) [CHECKED] and are read back at their next field. A
+side with men but no person present starts at base stance 0. The first critic's finding 3 (a company's
+row written and never read) has no object under A.
 
-**The morale reader, fixed with the same Query** (critic finding 3; CLAUDE.md §0.1 pt 1, read/write
-asymmetry):
-- **The defect:** `_side_stance` finds each person's faction through `faction_holding`, which reads
-  `commit` only (`seam/wrappers/mass_battle.py:126-148`; `world_q.py:1436-1438`) [CHECKED]. Yet
-  `_eff_march` writes `(loser_faction, -1.0, morale_w)` onto every loser (`effects_combat.py:260`)
-  [CHECKED]. So a company's morale row is written and never read. A side made mostly of companies
-  starts at base morale whatever its losses and loyalty.
-- **The fix:** `fac = world_q.faction_holding(w, pid) or world_q.service_faction(w, pid)`. Because
-  `service_faction` is `None` for anyone holding a `commit`, the `or` changes nothing for any person
-  the reader sees today. A person committed to two factions still reads 0, as now.
-- **The falsifier (TS-5):** a side of companies only loses a field. Its `_side_stance` at the next
-  field is below 0 by the morale row. **Control:** the same two fields with today's reader, which
-  reads 0 both times.
+**Two readings of "whose side", a residual:** the attacker's faction is read off the seat's label
+(`Office.faction` through `faction_prop_id`, `sides.py:80`) [CHECKED]; `fielded` reads the origin's
+holder. A defected holder marching through his old seat raises his old faction's side, and his own
+levy at the origin does not field for it. Two readings coexist in the tree today; the MB lane
+reconciles them (§8.3).
 
-**Two consequences of service the draft omitted** (critic finding 12):
-- **Upkeep is per person, not per man.** `_renewals` counts obligees, and `upkeep_of` is what a seat
-  pays "EACH PERSON OBLIGED TO IT, PER TERM" (`effects_economy.py:303-308`; `world_q.py:1537-1568`)
-  [CHECKED]. A 500-man company costs one man's upkeep. No computed act pays upkeep yet
-  (`effects_economy.py:283-290`) [CHECKED], so in computed play every company's term matures at
-  `oblige_term` (4 seasons), and it dissolves (part 1, §2.9). A computed army lasts one term. §8.2
-  carries the per-person cost.
-- **Every company is an informant.** `_ch_post_remit` credits every `establishment_of` member
-  standing in the seat's ground with `inferred` knowledge of every act done through the seat
-  (`epistemic.py:460-486`; H-173 (2)) [CHECKED]. Soldiers hear their lord's orders. That is plausible,
-  but it adds claims, and claims add chooser load. TS-4's falsifier (iii) measures it.
+### 4.2 What a side is: an order of battle
 
-**Kept unchanged:** the attacker's exclusion of a restrained person (`sides.py:86-92`) [CHECKED-draft].
-
-### 4.2 What a side is: an order of battle, one subunit per company
-
-`field_input` (`seam/wrappers/mass_battle.py:175-201`) [CHECKED-draft] stops passing `weights`. For
-each side it passes an **order of battle**, a frozen tuple the host derives from `World`.
-`MassBattleInput` (`queries/inputs.py:62-100`) [CHECKED-draft] trades `weights` for `sides`:
+`field_input` stops passing `weights`. `MassBattleInput` (`queries/inputs.py:62-100`) [CHECKED-draft]
+trades `weights` for `sides`:
 
 ```
 sides  = (OrderOfBattle_attacker, OrderOfBattle_defender)
-OrderOfBattle = ( general: (name, command),
-                  officers: ((name, command), …),                 -- sorted by name
-                  subunits: ((company_id, kit, grade_offsets, troops, role|shape, officer), …) )
-                                                                   -- sorted by company_id
+OrderOfBattle = ( general: (name, command) | None,
+                  officers: ((name, command), …),                       -- sorted by name
+                  stocks:   ((grade_id, count, grade_offsets), …),       -- sorted by grade, highest first
+                  kit:      ((matter_kind, units), …),                    -- the rung's kit stores, sorted
+                  order:    ((grade_id, kind|None, role|shape, count|None), …) )   -- from `march`'s `order`
 ```
 
-**How the host fills one side** (one function, `order_of_battle(w, pids, general)`, in the host
-wrapper):
-1. **Troop-bearing persons** are the side's cohort persons (part 1, §2.6). Named persons contribute
-   command, not troops.
-2. **One subunit per company** (critic finding 7):
-   - The draft grouped companies by kind, grade and commander. That merged a lord's two companies of
-     one kind into one subunit, so even a player could not field them as two wings in two formations.
-   - Now each company is its own subunit, and `order` (§4.3) names each one's role.
-   - **The cost:** more subunits press harder on the span check, so a commander of Command 4 fields at
-     most four companies directly (`engine.py:304-345`) [CHECKED-draft]. That is the commander axis
-     biting, and it is intended. A lord who wants one larger block raises one larger company.
-3. **Each subunit:**
-   - `troops = weight × men_per_weight`, an int;
-   - `kit` is the company's person-rung stores of equipment kinds;
-   - `grade_offsets` is its grade's `troop_grades` row;
-   - `role` or `shape` comes from the march's `order` when it names the company, else the module's
-     default for the derived kind (§4.3).
-4. **The commander** of a company is the holder of the seat its `oblige` names. A cohort with no such
-   seat (a member cohort, should one ever `commit`) reports to the general.
-5. **The general** is the marching actor on the attacking side. On the defending side it is the holder
-   of the seat holding the target, or the defending faction's leader present (`leaders`,
-   `world_q.py:1165`) [CHECKED], else no general (command at the builder's default).
-6. **Command, and what it does before R-C-1** (critic finding 8):
-   - `Officer` derives `command` from charisma and cognition only when both are given **and**
-     `COMMAND_SIGMA_ENABLED` is on (`hierarchy/units.py:2711-2716`) [CHECKED]. The flag defaults on,
-     from the environment (`config.py:530`) [CHECKED].
-   - The season supplies neither attribute until R-C-1/J-13 names a source
-     (`00_COMPARATIVE_ANALYSIS.md:584`; `_part5.md:433`) [CHECKED-draft; :433 CHECKED]. So **every
-     season commander's Command is the constant 4** (`units.py:2711`) [CHECKED].
-   - **What still varies is who commands,** and so how the span check divides a side's companies.
-     How well he commands does not vary yet.
-
-**A side whose order of battle holds no subunit has no troops:**
-- **An empty defending side** is `Unopposed`. That widens the existing "nobody mustered" branch
-  (`mass_battle.py:235-248`) [CHECKED-draft] from no persons to no troops, for the same reason: the
-  wrapper does not "launder" an empty side into a fabricated fight.
-- **An empty attacking side** is the existing PARTY-GAP refusal (`mass_battle.py:224-226`)
-  [CHECKED-draft], which the fold turns into `march.refused`.
+**How the host fills one side** (`order_of_battle(w, side)`, in the host wrapper):
+1. **The stocks** are `fielded`'s (§4.1), as `(grade, count)`; `troops = count × men_per_weight` is
+   applied by the module at build, once (part 1, §2.8).
+2. **The kit** is the field rung's stores of equipment kinds. The module splits each stock by kit with
+   `kind_for_kit` (part 1, §2.7), highest grade first.
+3. **Subunits:** one per `(grade, derived kind)` pair with men, unless the march's `order` splits one
+   by count (§4.3).
+4. **The general** is the marching actor on the attacking side. On the defending side it is the holder
+   of the seat holding the target if present, else the defending faction's leader present (`leaders`,
+   `world_q.py:1165`) [CHECKED-1], else `None` (the builder's default Command).
+5. **Officers** are the side's other named members present, sorted by id. Subunits, in the order of
+   step 3, go to officers in id order, each up to his Command, and the general takes the rest up to
+   his. **[ASSUMPTION; medium; MB to correct]**: no document assigns subunits to officers.
+6. **Command before R-C-1** (first critic, finding 8): every season commander's Command is the
+   constant 4, because the season supplies neither charisma nor cognition
+   (`hierarchy/units.py:2711-2716`; `config.py:530`) [CHECKED-1]. What varies is who commands and so
+   how the span check divides a side.
+7. **Span of control** has one owner, `trim_to_command` beside `build_army` (§4.4).
 
 ### 4.3 What `march` carries
 
-- **Unchanged:** `subject`, the Rung marched on. The row's `requires_typed`, `contests:`, eligibility
-  and degree-keyed `writes` keep their shape.
-- **Added: one act-declared payload key, `order`.** It maps company ids to roles.
-- **Is it a ninth operand? Yes** (critic finding 10). The draft cited `rosters.yaml:231-233` ("a key
-  naming none … may be absent"). That governs a minted document's `content:` keys
-  (`rosters.yaml:228-233`) [CHECKED], not an act's operands. A structured map on an act is
-  ninth-operand territory, which v9 sends back through the ladder (`_part5.md:192`) [CHECKED].
-- **The ladder, run:**
-  1. **Superseded?** No.
-  2. **Irrelevant?** No: demand (3) needs a per-subunit choice.
-  3. **Answered by a design document?** No.
-  4. **Answered by precedent? Yes.** `confer` reads an act-declared payload `term` that is in no
-     operand of the closed eight and is never read by the typed cell: "an act-declared payload
-     length, `create_record`'s `stages` precedent, since no operand of the closed eight … carries
-     one" (`verb_table.yaml:177`, `writes_note`) [CHECKED].
+- **Unchanged:** `subject`, the Rung marched on, and the row's typed cell, `contests:`, eligibility and
+  degree-keyed `writes`.
+- **Added: one act-declared payload key, `order`,** mapping `(grade, kind)` to a role or shape, with an
+  optional count that splits a stock into two subunits (demand 3's subformations).
+- **A ninth operand, admitted by precedent** (first critic, finding 10): `confer`'s act-declared
+  `term`, "in no operand of the closed eight" (`verb_table.yaml:177`) [CHECKED-1]. Read only by the host;
+  absent on every computed act. **[ASSUMPTION; medium; Jordan to correct]**.
+- **Demand (3) is met for the player and the hand-built act only.** An AI planner choosing roles is
+  MB-08's "AI generals", LEAVE (`_part7.md:26-31`) [CHECKED-draft].
+- **Gating:** `role_allowed(kind, role)` (`registry.py:22-24`) [CHECKED-draft]; a refused role becomes
+  the PARTY-GAP-shaped refusal, so the fold emits `march.refused` and never raises.
+- **Defaults** live in the module (`TROOP_TYPE_ROLES`, `ROLE_SPEC`, `config.py:582-616`)
+  [CHECKED-draft]. The `levy` kind falls back to `"any": ["Support", "Reserve"]` (`:592`), so an
+  unarmed subunit defaults to `shape: Line` with no role. Whether raw levies get a front-line menu is
+  MB data **[OPEN]**.
 
-  So `order` follows `term`'s route: declared by the act, read only by the host's `order_of_battle`,
-  absent on every computed act. It carries the same grade, **[ASSUMPTION; medium; Jordan to
-  correct]**.
-- **Who carries it:** a hand-built act, or a player's act. A computed act carries none, so every
-  company takes its kind's default.
-  - An AI planner choosing roles is MB-08's "AI generals", LEAVE (`_part7.md:26-31`) [CHECKED-draft].
-  - So **demand (3) is met for the player and the hand-built act only.** In computed play no faction
-    chooses a formation (critic finding 7, accepted).
-- **Gating:** a role is gated by `role_allowed(kind, role)` (`registry.py:22-24`) [CHECKED-draft]. An
-  `order` naming a role the derived kind may not take refuses at the builder. The host turns that
-  into the existing PARTY-GAP-shaped refusal, so the fold emits `march.refused` and never raises.
-- **The defaults live in the module.** Role → shape and instructions are `TROOP_TYPE_ROLES` and
-  `ROLE_SPEC` (`config.py:582-616`) [CHECKED-draft].
-  - ⚠ The `levy` kind has no menu of its own. It falls back to `"any": ["Support", "Reserve"]`
-    (`config.py:592`) [CHECKED-draft], and both are reserve postures.
-  - So the module's default for an unarmed company is `shape: Line` with no role, which `build_army`
-    accepts (`engine.py:373-377`) [CHECKED-draft].
-  - Whether raw levies get a front-line role menu is MB data **[OPEN]**.
+### 4.4 Where the army builder lives
 
-### 4.4 Where the army builder lives, and how the module uses it
-
-1. **Move the builder into the module.** Move `build_army`, `_centered_line_cols` and `SUBUNIT_CAP`
-   from `systems/mass_battle/sim/engine.py:99-173, :213-452` into a new `modules/mass_battle/army.py`.
-   - **Callers stay unchanged:** leave a re-export in `engine.py`, so every harness caller is
-     untouched: the workbench, `bat.py`, `tests/sim/gauge_mb.py`, and **22** source files under
-     `tests/valoria` (`grep -rl build_army tests/valoria --include='*.py' | wc -l` → 22) [RAN]. The
-     draft's 44 counted compiled `__pycache__` files (critic finding 18).
-   - **No second construction path:** this moves the one that exists to the side of the seam the
-     season can reach, per K-MB-2 (`MB_mass_battle.md:716`) [CHECKED-draft].
-   - **Out of lane:** `tests/sim/gauge_mb.make_mixed_unit`, the third constructor (T-MB-19), is a
-     harness object. Re-pointing it is the MB lane's.
-2. **The morale defect is TS-2, tracked on its own** (part 1, §0 item 9). It does not wait for this
-   move.
-3. **`resolve_field` builds each side with `build_army`.**
-   - **Specs:** `build_army(specs, name, faction='A'|'B', command=general.command,
-     officers=officers)`, with one spec per company. Each spec is `{troop_type: kind_for_kit(kit,
-     weight), troops, role|shape, officer, discipline, morale}`.
-   - **Discipline and morale:** the preset plus the grade offset, computed in the module from
-     `stats_for(kind)`. The module owns the presets and the kind; the host owns the offsets.
-   - **Unit morale-start:** `_morale_start(stance, loyalty, gain)` (`massbattle.py:119-157`),
-     unchanged except that its stance input now sees companies (§4.1).
-4. **Span of control has one owner.** The host cannot pre-check it without a second copy of
-   `build_army`'s check (`engine.py:304-345`). So the module gets one pure function beside it,
-   `trim_to_command(specs, officers, command)`:
-   - it drops the companies a commander cannot hold, smallest troops first, then by company id;
-   - `build_army` calls it first, so the check and the trim are one rule in one file;
-   - the dropped companies come back in the result as `unfielded`, a fact a witness can learn.
-   - P2 (drafting) showed it is needed: an over-spanned side raises `ValueError` inside the fold.
+1. **Move** `build_army`, `_centered_line_cols` and `SUBUNIT_CAP` from
+   `systems/mass_battle/sim/engine.py:99-173, :213-452` into `modules/mass_battle/army.py`, leaving a
+   re-export so the 22 `tests/valoria` callers are untouched [RAN at the first correction]. Per K-MB-2
+   (`MB_mass_battle.md:716`) [CHECKED-draft]. `tests/sim/gauge_mb.make_mixed_unit` is the MB lane's.
+2. **The morale defect is TS-2**, gated on nothing (part 1, §0 item 9).
+3. **`resolve_field` builds each side with `build_army`**, one spec per subunit: `{troop_type: kind,
+   troops, role|shape, officer, discipline, morale}`, discipline and morale being the kind's preset
+   (`stats_for`) plus the grade offset.
+4. **`trim_to_command(specs, officers, command)`**: drops the subunits a commander cannot hold,
+   smallest troops first, then by key, and returns them as `unfielded`. `build_army` calls it first, so
+   the check and the trim are one rule in one file. A drafting probe (P2) showed an over-spanned side
+   raising `ValueError` inside the fold.
 
 ### 4.5 What happens to the stub, to `Person.weight` as input, and to the 4/4 constants
 
 | object | fate |
 |---|---|
-| `_MVP_SUBUNIT_SHAPE` (`massbattle.py:170-178`) | **deleted.** Shape, troop type, stance and unit type come from the kind and the role |
-| `_MVP_UNIT_COMMAND` (`:182-186`) | **deleted.** Command comes from the general (`Officer` rule); discipline from preset plus grade |
-| `_SEASON_FORCE_POWER` (`:196`) | **deleted.** Power comes from the kind's preset through `of_type` |
-| `_MIN_TROOPS` (`:208`) | **deleted.** No side reaches the module without troops (§4.2) |
-| `_weighted_unit` (`:213-230`) | **deleted** at TS-9, after the flip |
-| the `[GAP …]` header line (`:32`) | **deleted.** The spec now exists, in code |
-| `Person.weight` as battle input | **survives, scaled and filtered:** `troops = weight × men_per_weight` over cohort persons only |
-| `_side_stance`'s weighting (`mass_battle.py:126-148`) | **kept, with its faction read widened** to `service_faction` (§4.1) |
-| `MassBattleInput.weights` | **replaced** by `sides` (§4.2) |
+| `_MVP_SUBUNIT_SHAPE`, `_MVP_UNIT_COMMAND`, `_SEASON_FORCE_POWER`, `_MIN_TROOPS` (`massbattle.py:170-208`) | **deleted** at TS-9 |
+| `_weighted_unit` (`:213-230`) | **deleted** at TS-9 |
+| the `[GAP …]` header line (`:32`) | **deleted** |
+| `Person.weight` as battle input | **cut.** No person fields men (part 1, §2.6) |
+| `_side_stance` (`mass_battle.py:126-148`) | **kept unchanged** |
+| `MassBattleInput.weights` | **replaced** by `sides` |
 
 ### 4.6 How a field writes back
 
-**Who lost** is read as today: `res.degree` and `res.result["parties"]`, with `Won` meaning the
-defenders lost and `Lost` meaning the attacker did (`effects_combat.py:184-190, :221-226`)
-[CHECKED-draft].
+**Who lost** is read as today (`effects_combat.py:225-227`) [CHECKED].
 
 **On the losing side:**
-- **Each company loses men:** `weight ← (weight × survivors_permille + 500) // 1000` (part 1, §2.8).
-  - The per-mille is the losing side's engine survivor ratio (`attacker_size_pct` /
-    `defender_size_pct`, read today at `:227`) [CHECKED-draft].
-  - If the result is 0, the company's kit `_shift`s to the target rung's stores, and then
-    `remove_person` runs, in the same `Change` (part 1, §2.8).
-  - The `field_casualty_model` roster (`rosters.yaml:861`) keeps its meaning: `total` → weight 0;
-    `none` → weight untouched.
-- **Each named person** gets today's body write, unchanged.
-- **Stance rows (morale and grudge)** as today, on every loser (`effects_combat.py:256-261`)
-  [CHECKED]. They are now read back (§4.1).
+- **Each fielded stock loses men:** `count ← (count × survivors_permille + 500) // 1000`, at the rung
+  it stood on (the origin for an attacker, the target for a defender). The per-mille is the losing
+  side's engine survivor ratio (`attacker_size_pct` / `defender_size_pct`, `:227`) [CHECKED].
+- **The defender's pool** loses the same per-mille when the defender lost. The cohort is not written.
+- **`field_casualty_model`** (`rosters.yaml:861`) keeps its meaning: `total` → every losing stock and
+  pool to 0; `none` → nothing written; `scaled_by_degree` → the per-mille rule.
+- **Each named person** gets today's body write and stance rows, unchanged (`:248-261`) [CHECKED].
+- **⚠ The early return must go.** `_eff_march` returns `NO_CHANGE` when no loser is a person
+  (`:228-230`) [CHECKED]. A defending side of a pool alone would then lose no men. The return becomes
+  "no loser person **and** no losing stock".
+- **The write is `(Rung, stores)` at ENC.** The row admits `[MAT, RES]` today [CHECKED-1], so ENC is
+  added (part 1, §3.5 #19). That `march` is folded at ENC is read from the matrix comment, **not
+  traced** in `loop/resolve.py` **[UNVERIFIED]**.
 
-**On the winning side: nothing**, per the ruled row ("nothing on the WINNING side",
-`verb_table.yaml:682`) [CHECKED-draft]. J-5 asks whether winners take their engine casualties, and
-whether either side gains experience.
-- **Until Jordan rules, experience has no producer in computed play** (part 1, §0 item 5). M-MB-16 is
-  narrowed, not closed.
-
-**Weight on a remnant.** A company left at `weight == 1` is not a cohort (S9). It stops eating
-(`world_q.py:860`) and stops fielding troops (part 1, §2.6). It keeps its `oblige`, kit and grade
-until its service ends, and then it dissolves (part 1, §2.9). At the shipped raise of 2, any loss
-between 25% and 75% leaves one. It is a residual (§8), not a branch.
+**On the winning side: nothing**, per the ruled row (`verb_table.yaml:682`) [CHECKED-draft]. J-5 asks
+whether winners take casualties and whether anyone gains experience.
 
 ### 4.7 Assembling from several settlements, and the commander drawn from persons
 
 A faction assembles an army in four steps:
 1. **Conscript** at each settlement in its seats' purviews, as far as each pool allows.
-2. **Equip** with `transfer` from treasuries that `requisition` filled (hand-built or player acts, until
-   a question source reaches a company's person-rung).
-3. **Dispatch** the companies to one settlement, where they `move` themselves.
+2. **Equip** with `transfer` of arms into those settlements (computed-reachable, part 1, §3.2).
+3. **Gather** with `transfer` of the troop kinds to one settlement its faction holds.
 4. **March** from there.
 
-Everything present at the origin under the marching seat's faction fights (§4.1), each company under
-the holder of the seat it serves.
+**NPC5's need** (`engine/season/cases/NPC5.yaml:172`) [CHECKED-1]: a council commander's break with
+his leader should have "a material consequence beyond a changed vote". Under A, a lord who defects and
+keeps the settlements he holds takes their levies and pools with him, because `fielded` reads the
+holder. If he loses a settlement, its levy serves the next holder. A levy he sent into another
+faction's town serves that town's holder: a risk of gathering in an ally's walls, named.
 
-**NPC5's need, and what the muster rule does to it** (critic finding 16). NPC5 needs a council
-commander's levies to give "his personal break with the faction's leader … a material consequence
-beyond a changed vote" (`engine/season/cases/NPC5.yaml:172`) [CHECKED].
-- **The draft fails it.** The draft mustered companies by the seat's faction, so a lord who defected
-  and kept his seat left his men fighting for the faction he left.
-- **`service_faction` meets it.** It reads the **holder's** faction (§4.1), so a lord who defects and
-  keeps his seat takes his companies with him to the next field.
-- **If he loses the seat,** his companies serve its next holder.
-- ⚠ **A residual it exposes, not fixed here:** the attacker's faction is still read off the seat's
-  label (`Office.faction`, `carriers.py:928`, through `faction_prop_id` at `sides.py:80`) [CHECKED].
-  The defender's is read off the holder (`holder_faction_of`, used at `effects_combat.py:240`)
-  [CHECKED]. A defected holder marching through his old seat raises his old faction's side, and his
-  own companies are not on it. Two readings of "whose side" coexist in the tree today. That is the
-  MB lane's to reconcile (§8.3).
+### 4.8 If Jordan takes P: the apparatus it needs
+
+Kept so J-1 can be decided against a complete alternative. None of it is built under A.
+- **The muster amendment:** `service_faction(w, pid)` (the faction of the holder of each seat a
+  person with no `commit` serves; `None` for none or many), and `mustered` = members present ∪
+  persons present whose `service_faction` is the faction. The first correction's probe stands
+  [RAN, first correction]: the two shipped `oblige` edges (NPC-070, NPC-041) are both from persons
+  holding a `commit`, so the clause adds nobody at build.
+- **The morale reader:** `faction_holding(w, pid) or service_faction(w, pid)` in `_side_stance`.
+- **The company:** minted by `_eff_conscript` at `weight = n ≥ 2`, with its person-rung and `contain`,
+  **without `reside`** (P′; RR-2), bound by an `oblige` under a new gate basis. It still eats at the
+  muster town, because the draw reads `contain` (`world_q.py:856`) [CHECKED]. Construct the `Person`
+  before adding its tenures, and correct the two `_rehome` comments (`matter.py:108-121`;
+  `world.py:792-805`) [CHECKED], which already misstate the tree since `census.py:105` [CHECKED].
+- **Ending service:** under J-16 [ASSUMPTION; medium], a rule reading state, not origin: "a cohort
+  person with no `reside` whose last `oblige` closes dissolves into the `recruits` of the rung it
+  stands on, up to the ceiling". The first correction's `is_company` read `Term.declared_by`, which
+  `_renewals` overwrites (`effects_economy.py:309`) [CHECKED], and is withdrawn.
+- **Upkeep, corrected** (second critic, finding 3): the first correction said "no computed act pays
+  upkeep yet … a computed army lasts one term". That holds only until TS-7: `_renewals`' docstring
+  says a computed `transfer` via `remit:issue` already meets clauses 1–2, and the missing piece was
+  that "no computed act forms an `oblige`" (`effects_economy.py:283-290`) [CHECKED]. Once a computed
+  `conscript` forms one, a computed shortfall `transfer` into the muster town renews every company
+  present there (clause 4, `home_of`, `:257-264`, `:302-305`) [CHECKED]. Under P a computed army can
+  therefore outlive its term, and upkeep is one person's per company of any size.
+- **The draw order:** the company would eat before the cohort (an `H(…)` id sorts before
+  `cohort_…` [RAN]), so P also needs "cohorts first" (part 1, §2.5).
+- **ED-WR-0011** narrowed by J-1 (part 1, §2.4).
 
 ---
 
@@ -280,486 +208,453 @@ beyond a changed vote" (`engine/season/cases/NPC5.yaml:172`) [CHECKED].
 
 | item | verdict | reason |
 |---|---|---|
-| **IN-52** "the levy-to-field feed" (`_part4.md:134-140`) | **withdraw** | Its premise was "`levy` moves stores, not troops … a season field is one troops-sized subunit (J-18)". Demand (4) and the rename remove the first half, and demand (2) rules the second a stub. Nothing was built (part 1, §1 item 18) |
-| **LF-1** "the feed bounds troops by the treasury, using the larder's ration" | **withdraw** | A company is a resident cohort, and the one larder already feeds it (`subsistence_draw`, `world_q.py:852-866`) [CHECKED]. A second ration from a treasury would feed the same mouths twice in a season: two ladders for one quantity (§8.3). MB's K-MB-6 keeps the bound with the stock as its input (`MB_mass_battle.md:732`) [CHECKED-draft]. Under P the stock is persons the larder feeds |
-| **LF-2** "the defender's treasury is the nearest held rung's stores" | **withdraw** | It falls with LF-1 and LF-3, its only readers |
-| **LF-3** "`_eff_march` debits the ration" | **withdraw** | The same double draw at the fold. A company that is not fed starves at MATTER like any cohort |
-| the `field_provisioning` fixture and `settlements.provision` | **withdraw** (never built) | part 1, §1 item 18 |
-| **the lanes' split, X-19** (`00_COMPARATIVE_ANALYSIS.md:152, :219`) | **resolved for SE's cut** | SE cut the bound; MB kept it. The comparative put SE's cut at rank (6) with "no statement reaches the ration bound" (`:219`) [CHECKED]. Under P the bound double-counts. **The draft's J-4 is folded into J-1:** if Jordan takes A (a stock nobody feeds), a ration rule returns as a feeding, not a surcharge |
-| **IN-49** (`_part5.md:211-218`) | **keep, re-framed** | It is the store act's question source, and its subject is `requisition`. Its EXIT still reads "`levy` row executes" (`:215`) [CHECKED], which is J-3's collision. The troop verb needs its **own** question source (TS-7) |
-| **H-49** `(Person, weight)` absent (`hole_register.yaml:558-568`) | **closed by TS-6** | casualties become its runtime writer, and `weight.changed` gains a producer |
-| **H-170** the cohort weight | **untouched** | R-POOL leaves the cohort unwritten, and the pool's ceiling reads it (part 1, §2.2). The draft's finding 1 does not arise |
-| **H-163**'s `levy` references (`hole_register.yaml:3543` and the row) | **re-named, not re-opened** | They name the store act. The rename's follow-through in `hole_register.yaml` (19 hits) and `requirements.yaml` (23 hits) is not done [RAN]. It is a separate IN edit, and it becomes a position here only if Jordan names the troop verb `levy` (TS-L) |
-| **MB-08**'s #445 U-1, "musters with inputs beyond headcount" (`_part7.md:28`) | **closed by TS-5/TS-8** | kind, grade and commander are those inputs. U-2 and U-6 **stay LEAVE** |
-| **IN-07/SE-02** (`_part4.md:120-133`) | **unaffected**, except that its design document's §5 is withdrawn | E1–E6 stand |
-| **IN-12 step 9 `train`** (`_part5.md:73`) | **not depended on as planned** | J-13's answer (iii) excludes case-less persons, so drill does not reach a company (part 1, §0 item 5) |
-| **FA-01** (`_part7.md:119-126`) | **depended on** | a faction head seated is a head who can conscript `via` his seat and march |
-| **K-MB-1** (rung stock), **K-SE-13** (both shapes), **K-FA-13** (whole-cohort commit), **K-IN-13**'s open form | **superseded as forms** | their direction is kept: troops come from settlements, are fielded, and are drawn down. K-MB-1's rung-held resource survives as the pool |
+| **IN-52** "the levy-to-field feed" (`_part4.md:134-140`) | **withdraw** | its premise was the store reading of `levy`, which demand (4) removes; nothing was built [RAN at drafting] |
+| **LF-1..LF-3** (a treasury ration bounding troops; its debit at the fold) | **withdraw as forms** | under A a levy eats, through `subsistence_draw`, at the larder where it stands (part 1, §2.5). A treasury ration beside it would be a second ladder for one quantity (§8.3). MB's K-MB-6 bound survives as the larder's |
+| `field_provisioning`, `settlements.provision` | **withdraw** (never built) | part 1, §1 |
+| **X-19** (`00_COMPARATIVE_ANALYSIS.md:219`) | **resolved** | SE cut the ration bound and MB kept it; under A the bound is the larder, kept, in the one draw |
+| **IN-49** (`_part5.md:211-218`) | **keep, re-framed** | the store act's question source; its EXIT still reads "`levy` row executes" (`:215`) [CHECKED-1], which is J-3's collision. The troop verb needs its own source (TS-7) |
+| **H-49** `(Person, weight)` has no runtime writer | **untouched under A** | casualties fall on stocks. Under P it would be closed |
+| **H-170** the cohort weight | **untouched** | the ceiling reads it; nothing writes it |
+| **H-156** (`hole_register.yaml:3540`, its `hole:` at `:3543`) [CHECKED] | **the crowding shape** | the first correction cited `:3543` as H-163; it is H-156's "mere eligibility crowds `release` out of every scene budget" (second critic, finding 11). TS-4 (iv) and TS-7 measure that shape |
+| **H-163** (`hole_register.yaml:3631`) [CHECKED] | **re-named, not re-opened** | its 16 `levy` hits (`sed -n 3631,3643p … | grep -o levy`, 16) [RAN] name the store act; the follow-through is TS-L's, only if `levy` is chosen |
+| **MB-08**'s #445 U-1 (`_part7.md:28`) | **closed by TS-5/TS-8** | kind, grade and commander are the inputs beyond headcount. U-2 and U-6 stay LEAVE |
+| **IN-07/SE-02**, **FA-01** | unaffected / depended on | FA-01's seating gives a seat that can conscript and march |
+| **K-MB-1** (rung stock) | **adopted as the form** | A is K-MB-1's rung-held stock, under the pool |
+| **K-SE-13**, **K-FA-13**, **K-IN-13**'s open form | **superseded as forms** | their direction is kept: troops come from settlements, are fielded and drawn down |
 
-**The research rows this design closes, or narrows, when built:**
-- **Closes:**
-  - **MB:** M-MB-2 (composition), M-MB-6 (the population's men as soldiers), M-MB-15 (the levied
-    stock: the pool), M-MB-17 (composition chosen, at the hand-built and player act).
-  - **SE:** M-SE-9. **FA:** M-FA-10. **IN:** M-IN-12 and M-IN-13.
-  - **PC:** M-PC-12's cohort half.
-  - **Composites:** C-ARM-2 and C-ARM-4, and C-ARM-3's naming half.
-- **Narrows:**
-  - M-MB-1 (the scale becomes one number, `men_per_weight`, Jordan's);
-  - M-MB-3, M-NPC-13 and M-IN-1's commander half (who commands is live; how well waits on R-C-1);
-  - M-MB-16 (no computed producer until J-5 or J-13).
-- **Collisions resolved:** **X-2**, by a rung-held pool raised into persons. **X-19**, by cutting the
-  bound under P.
+**Research rows, when built:**
+- **Closes:** M-MB-2, M-MB-6, M-MB-15, M-MB-17 (player and hand-built acts); M-SE-9; M-FA-10; M-IN-12,
+  M-IN-13; M-PC-12's cohort half; C-ARM-2, C-ARM-4 and C-ARM-3's naming half.
+- **Narrows:** M-MB-1 (the scale is one number, `men_per_weight`); M-MB-3, M-NPC-13 and M-IN-1's
+  commander half (who commands is live; how well waits on R-C-1); M-MB-16 (no computed grade
+  producer).
+- **Collisions:** **X-2** resolved by a rung-held pool and a rung-held stock; **X-19** above; **X-4**
+  left as it stands, since A grows no cohort and mints no person.
 
 ---
 
 ## 6. DATA
 
-Facts the engine reads go in registries code opens at runtime (CLAUDE.md §0.05 clause 1). None goes in
-this document. Every number below is a sourced fixture with a register row, or marked
-**[OPEN — Jordan tuning]**. The **falsifier value** is what §7's runs fix the fixture at. It is a
-control setting, not a proposal for the shipped value.
+Facts the engine reads go in registries code opens at runtime (CLAUDE.md §0.05 clause 1). Every
+number is a sourced fixture with a register row or marked **[OPEN — Jordan tuning]**. The **falsifier
+value** is a control setting for §7's runs, not a proposal for the shipped value.
 
 | fact | home | shape | value |
 |---|---|---|---|
-| the recruit pool | `rosters.yaml: matter_kinds`, a new row `recruits` (an open registry by design, `:1279-1290`) [CHECKED] | whole weight units in a settlement rung's `stores` | derived: filled to the ceiling at world-gen, then regrown (part 1, §2.3) |
-| kinds no store act may move | `rosters.yaml: immovable_kinds` (new) | list of `matter_kinds` ids; the loader refuses an id not in `matter_kinds` | `[recruits]` |
-| the ceiling's share | `data/fixtures.py`, `recruit_share`, with a hole-register row and a sweep | int, per-mille of the base | **[OPEN — Jordan tuning]**. Sweep 500 / 1000 / 2000. Falsifier value **1000** |
-| the regrowth rate | fixtures, `recruit_regrowth`, with a row and a sweep | int, per-mille of the ceiling per season | **[OPEN — Jordan tuning]**. Sweep **0 (the control)** / 250 / 1000. Falsifier value **250** (a ceiling of 2 regains 1 a season) |
-| men per weight | fixtures, `men_per_weight`, with a row and a sweep | int | **[OPEN — Jordan tuning]**. Sweep 1 (today's scale, the control) / 120 / 250. Falsifier value **250** (part 1, §2.8) |
-| the raise size | fixtures, `conscript_amount`, an H-94 operand default | int, weight units | **2**: the smallest company that is a cohort (S9), derived, not tuned. A larger default is Jordan tuning |
-| the service term | **reuses** `oblige_term` (`fixtures.py:818`, shipped 4) [CHECKED] | — | the draft's J-7, answered in §9. ⚠ The fixture now sets service, sentence (H-173) and the levy's term. H-173 already tracks that sharing |
-| the kind → stat mapping | **stays** `TROOP_TYPE_STATS` (`registry.py:39-57`) [CHECKED] | — | — |
-| the kind → kit mapping | **stays** `TROOP_LOADOUT` (`equipment/__init__.py:21-36`) [CHECKED], the one owner; `kind_for_kit` beside it; the unarmed kind `levy` a constant beside it | — | the draft's season `troop_kinds` table is **dropped** (critic finding 5). Its kit proposal contradicted the owner: it gave `levy` an empty kit where the owner says `light_cut`/`none`, and it excluded `knights_templar` as "cavalry's kit" where the owner says `heavy_blunt`/`heavy` |
-| equipment matter kinds | `rosters.yaml: matter_kinds` | new rows, one per weapon and armour class `TROOP_LOADOUT` names, `arms_<class>` and `armour_<class>` | names mirror `ARSENAL`/`ARMOURY` keys (`weapons.py:36-45`, `armour.py:37-40`) [CHECKED-draft]. **[OPEN]**: one kind per class or a coarser three. **No producer exists**: `site_yield` has no arms row (`rosters.yaml:2042-2075`) [CHECKED], so arms enter only as world-gen stores until an SE row adds one **[OPEN — SE content]** |
-| grades | `rosters.yaml: troop_grades` (new) | ordered rows `{discipline: +d, morale: +m}`, row 0 = `{0, 0}` | **[OPEN — Jordan tuning]**. Proposal: raw 0/0, drilled +1/+1, seasoned +1/+2, veteran +2/+2 |
-| the grade key | `verb_capability` | one key, reserved | name **[OPEN]**: `soldiering` proposed. It has no writer until J-5 or J-13 changes |
-| survivor conversion scale | **reuses** `condition_scale` (`fixtures.py:182`) [CHECKED] | — | 1000 |
-| `field_army` | fixtures, temporary arm roster `single_line \| order_of_battle` | — | shipped `single_line` until TS-8; deleted at TS-9 |
+| the recruit pool | `rosters.yaml: matter_kinds`, row `recruits` (`:1279-1290`) [CHECKED-1] | whole weight units in a settlement rung's `stores` | derived: filled to the ceiling at world-gen, then regrown |
+| rungs that hold a pool | `rosters.yaml: pool_rung_kinds` (new) | closed list of rung kinds | `[settlement]` |
+| kinds no store act may move | `rosters.yaml: immovable_kinds` (new); the loader refuses an id not in `matter_kinds` | list | `[recruits]` |
+| the ceiling's share | `data/fixtures.py`, `recruit_share`, hole row, sweep | int, per-mille | **[OPEN — Jordan tuning]**. Sweep 500 / 1000 / 2000. Falsifier value **1000** |
+| the regrowth rate | fixtures, `recruit_regrowth`, hole row, sweep | int, per-mille of the ceiling per season | **[OPEN — Jordan tuning]**. Sweep **0 (control)** / 250 / 1000. Falsifier value **250** |
+| men per weight | fixtures, `men_per_weight`, hole row, sweep | int | **[OPEN — Jordan tuning]**. Sweep 1 (today's scale, control) / 120 / 250. Falsifier value **250** (part 1, §2.8) |
+| the raise size | **no fixture.** The generic chain: a shortfall claim, else `default_transfer_amount` (`fixtures.py:495`, shipped 1, H-94) [CHECKED] | — | the first correction's `conscript_amount` is withdrawn (part 1, §3.1) |
+| grades | `rosters.yaml: troop_grades` (new) | ordered rows `{id, discipline: +d, morale: +m}`, row 0 `{raw, 0, 0}` | **[OPEN — Jordan tuning]**. Proposal: raw 0/0, drilled +1/+1, seasoned +1/+2, veteran +2/+2 |
+| troop stock kinds | derived by the loader from `troop_grades`, `troops_<id>` | one `matter_kinds` row per grade | — |
+| what is eaten | **reuses** `subsistence_weight` (`rosters.yaml:1371-1387`) [CHECKED] for cohorts, troop stocks **and** `SUBSIST` | — | grain 2, salt 1 (shipped; H-11) |
+| kind → stats / kind → kit | **stay** `TROOP_TYPE_STATS` (`registry.py:39-57`) and `TROOP_LOADOUT` (`equipment/__init__.py:21-36`) [CHECKED-1]; `kind_for_kit` and the unarmed constant `levy` beside the latter | — | the draft's season `troop_kinds` table stays dropped (first critic, finding 5) |
+| equipment matter kinds | `matter_kinds`, one row per weapon and armour class `TROOP_LOADOUT` names | — | **[OPEN]**: one kind per class or a coarser three. **No producer**: `site_yield` has no arms row (`rosters.yaml:2042-2075`) [CHECKED-1] |
+| survivor conversion scale | **reuses** `condition_scale` (`fixtures.py:182`) [CHECKED-1] | — | 1000 |
+| `field_army` | fixtures, temporary arm roster `single_line \| order_of_battle` | — | `single_line` until TS-8; deleted at TS-9 |
 
 ---
 
 ## 7. BUILD ORDER, EXITS AND FALSIFIERS
 
-Positions use v9's form. Every EXIT is an execution artifact, and every FALSIFIER names its control arm.
-**Golden re-records are declared at the position that causes them.** Unless a position says otherwise,
-its runs fix `recruit_share = 1000`, `recruit_regrowth = 250`, `men_per_weight = 250` and
-`conscript_amount = 2` (§6).
+Positions use v9's form. Every EXIT is an execution artifact; every FALSIFIER names its control arm.
+Golden re-records are declared at the position that causes them. Unless stated, runs fix
+`recruit_share = 1000`, `recruit_regrowth = 250` and `men_per_weight = 250`.
 
 ### TS-1 · move `build_army` into `modules/mass_battle/army.py`
 - STATE: unblocked      LANE: MB
-- EDITS: `modules/mass_battle/army.py` (new home), `systems/mass_battle/sim/engine.py` (re-export only)
-- EXIT: `python3 tools/ci_golden_modes_check.py` digests unchanged, and the 22 `tests/valoria` files
-  that import `build_army` are green.
-- FALSIFIER: any harness digest moves → not a pure move. Control: the same command on the parent commit.
+- EXIT: `python3 tools/ci_golden_modes_check.py` digests unchanged; the 22 `tests/valoria` files that
+  import `build_army` green.
+- FALSIFIER: any harness digest moves → not a pure move. Control: the same command on the parent.
 
-### TS-2 · `build_army` honours the troop type's morale preset — independent, gated on nothing here
-- STATE: **unblocked; lands before or without every other position**, in
-  `systems/mass_battle/sim/engine.py:427-428` where the code is today (or in `army.py` if TS-1 has
-  landed)      LANE: MB
-- WHAT: give a subunit its type's preset morale when the spec sets none and the type has a preset.
-  Fall back to the Unit's morale only for a type with no preset (DG-4's intent: no `None`).
+### TS-2 · `build_army` honours the troop type's morale preset — independent
+- STATE: unblocked; lands before or without every other position      LANE: MB
+- WHAT: a subunit takes its type's preset morale when the spec sets none; the Unit's morale only for a
+  type with no preset (DG-4's intent: no `None`).
 - EXIT: the drafting probe prints `levy … morale 2` and `heavy_infantry … morale 5`.
-- FALSIFIER: the probe still prints 6 → not fixed. Control: the same probe on the parent commit, which
-  prints 6 [RAN at drafting].
-- GOLDENS: **declared mover** for any harness battery building a typed troop through `build_army`. Which
-  batteries do is **[UNVERIFIED]**: read `bat.py`'s specs at the position.
-- TRACKING: no register row tracks this defect today [RAN, part 1, §0 item 9]. The position is its
-  tracking.
+- FALSIFIER: still 6 → not fixed. Control: the parent commit prints 6 [RAN at drafting].
+- GOLDENS: declared mover for any battery building a typed troop through `build_army` (which ones
+  **[UNVERIFIED]**: read `bat.py`'s specs at the position).
 
-### TS-3 · the recruit pool (R-POOL)
+### TS-3 · the recruit pool, and the subsistence formula (R-POOL)
 - STATE: unblocked      LANE: SE (IN)
-- EDITS: `rosters.yaml` (`recruits`, `immovable_kinds`), `queries/world_q.py` (`recruit_ceiling`,
-  `movable`), `loop/matter.py` (the capped credit, after yield), `loop/effects_governance.py` and
-  `loop/effects_economy.py` (the `movable` declines), `loop/effects_shared.py` (`_shift`'s
-  assertion), `data/fixtures.py` (`recruit_share`, `recruit_regrowth`), `harness/populated.py` (the
-  world-gen fill), `hole_register.yaml` (a row per fixture)
-- EXIT: `populated.build_realm(0)`: every settlement's `recruits` equals `recruit_ceiling`, which is 2
-  at the shipped data; four seasons run through the real driver.
+- EDITS: `rosters.yaml` (`recruits`, `immovable_kinds`, `pool_rung_kinds`), `queries/world_q.py`
+  (`recruit_ceiling`, `movable`), `loop/matter.py` (the regrowth pass after the yield loop),
+  `loop/effects_governance.py` and `loop/effects_economy.py` (the `movable` declines),
+  `loop/effects_shared.py` (`_shift`'s assertion), `data/fixtures.py`, `harness/populated.py` (the
+  fill), `harness/probes.py` (`SUBSIST`), `hole_register.yaml`
+- EXIT: `populated.build_realm(0)`: every settlement's `recruits` equals `recruit_ceiling` (2 at the
+  shipped data), no other rung holds any; four seasons run through the real driver.
 - FALSIFIERS, each with its control:
-  - **(i) It regrows at the stated rate.** Debit a settlement's pool to 0 by hand. At the next three
-    MATTERs it reads 1, 2, 2. **Control:** `recruit_regrowth = 0`, where it reads 0, 0, 0.
-  - **(ii) It never passes its ceiling.** Over 8 seasons at `recruit_regrowth = 1000`, assert `recruits
-    ≤ recruit_ceiling` at every MATTER, at every settlement, and assert that the check ran 37 × 8
-    times (CLAUDE.md §0.1 pt 2). **Control:** remove the `min`, and the same run fails at the first
-    MATTER.
-  - **(iii) Settlements with different cohorts differ.** Build the realm with two settlements' cohorts
-    at weights 2 and 4. The realm builds with every cohort at 4 (probe: 37 cohorts, total weight 148,
-    no row refused against capacities 4 to 9) [RAN]. Their ceilings are 2 and 4. **Control:** equal
-    weights give equal ceilings.
-  - **(iv) A man is not goods.** A hand-built `requisition` of `recruits` → `requisition.refused`, and
-    both rungs' stores are unchanged. **Control:** the same act on `grain` executes.
-  - **(v) The scene tax is measured, not assumed.** `python -m engine.season.harness.aperture 4 0`
-    before and after. A per-verb shift in `requisition`'s refusals is declared with its count.
-- GOLDENS: **declared mover.** The world-gen fill writes every settlement's `stores`, so every realm
-  `content_hash` moves at build. **The re-pin is intended.** A full pool writes nothing at MATTER, so
-  the per-season traces move only through the hash.
+  - **(i) It regrows at the stated rate.** A settlement's pool debited to 0 by hand reads 1, 2, 2 at
+    the next three MATTERs. **Control:** `recruit_regrowth = 0` reads 0, 0, 0.
+  - **(ii) It never passes its ceiling.** 8 seasons at `recruit_regrowth = 1000`: `recruits ≤
+    recruit_ceiling` at every MATTER and settlement, and the check ran 37 × 8 times. **Control:** remove
+    the `min`, and it fails at the first MATTER.
+  - **(iii) Only settlements hold a pool.** After 4 seasons no rung outside `pool_rung_kinds` carries
+    `recruits`. **Control:** an empty `pool_rung_kinds` filter puts a pool on territory and realm rungs.
+  - **(iv) Regrowth does not depend on yield.** A hand-built settlement with no producing Site regrows.
+    **Control:** the pass moved inside the yield loop after `if not produced: continue`
+    (`matter.py:521-523`) [CHECKED] leaves it at 0.
+  - **(v) Settlements with different cohorts differ.** Cohorts at weights 2 and 4 give ceilings 2 and
+    4 (the realm builds with every cohort at 4 [RAN, first correction]). **Control:** equal weights,
+    equal ceilings.
+  - **(vi) A man is not goods.** A hand-built `requisition` of `recruits` → `requisition.refused`,
+    stores unchanged. **Control:** the same act on `grain` executes.
+  - **(vii) A man is not food, at build and under scarcity.** On `build_realm(0)`, every cohort's
+    `SUBSIST` is identical with and without the pool fill, at build and with one rung's larder set to
+    `grain: 1`. **Control:** today's formula, which reads 0 → 1000 at build for all 37 and 500 → 1000
+    under the `grain: 1` dearth [RAN] (§10).
+  - **(viii) The scene tax is measured.** `python -m engine.season.harness.aperture 4 0` before and
+    after; a per-verb shift in `requisition`'s refusals is declared with its count.
+- GOLDENS: **declared mover.** The fill writes every settlement's `stores`, so every realm
+  `content_hash` moves at build, and `SUBSIST`'s edit moves any run in which a deliberating person's
+  containing rung held coin, timber or ore. **The re-pin is intended**; its scope is measured here.
 
-### TS-4 · `conscript` (row, effect, gate basis, `founding` clause)
-- STATE: after TS-3 (it needs a seat with `dispatch`; FA-01's seating is landed)      LANE: IN (SE)
-- EDITS: `verb_table.yaml`, `loop/effects_governance.py` (`_eff_conscript`), `state/gate.py` (basis
-  `conscription`; the `founding` clause), `data/fixtures.py` (`conscript_amount`),
-  `hole_register.yaml` (the fixture's row)
-- EXIT: `populated.build_realm(0)`, one season through the real driver, with one hand-built
-  `conscript` act injected at RESOLVE (as `tests/test_u7_remit.py` injects remit acts):
-  - `conscript.taken` is in `w.log`;
-  - a new `Person` exists at the settlement with `weight == 2` and a live `oblige` to the seat;
-  - the settlement's `recruits` fell by 2.
+### TS-4 · `conscript` (row, effect, event kinds)
+- STATE: after TS-3      LANE: IN (SE)
+- EXIT: `build_realm(0)`, one season through the real driver, one hand-built `conscript` (`kind:
+  recruits`, `amount: 1`) injected at RESOLVE (as `tests/test_u7_remit.py` injects remit acts):
+  `conscript.taken` in `w.log`; the settlement's `recruits` fell by 1 and its `troops_raw` rose by 1.
 - FALSIFIERS, on one tree and one seed:
-  - **(i) R-POOL holds, byte for byte.** The population cohort's `Person` (its `weight`, `stance`,
-    `tenures` and `body`) and its row of `subsistence_draw` are identical before and after the act,
-    compared by `repr`. The settlement's total `demanded` rises by exactly the company's `want`.
-    **Control:** the draft's split design would fail the first clause.
-  - **(ii) Men are conserved.** `recruits` plus Σ company weight at the settlement is unchanged across
-    the act.
-  - **(iii) Refusals keyed per clause:**
-    - `amount = 3` against a pool of 2 → `conscript.refused`, and nothing moves;
-    - `amount = 1` → `conscript.refused`, because a company of 1 is not a cohort;
-    - a seat without `dispatch` → `conscript.unauthorized`.
-  - **(iv) The world without the act.** No injected act → `World.content_hash()` equal to TS-3's,
-    **unless** the row is formable by the chooser. In that case the hash moves by formation (the
-    H-163 crowding shape), and the move is **declared** with the measured per-verb shifts and the
-    count of `inferred` claims the companies receive through `_ch_post_remit` (§4.1).
+  - **(i) R-POOL at the act, byte for byte.** The cohort's `Person` (weight, stance, tenures, body)
+    and its `subsistence_draw` row are `repr`-identical before and after. **Control:** P's mint at
+    weight 2 changes the settlement's `population`; A's must not.
+  - **(ii) Men are conserved.** `recruits + Σ troops_*` at the rung is unchanged across the act.
+  - **(iii) Refusals keyed per clause:** `amount = 3` against a pool of 2 → `conscript.refused`;
+    `kind = grain` → `conscript.refused` and nothing moves (**control:** the cell alone admits it,
+    because the town holds grain, which shows the effect's decline is needed); a seat without
+    `dispatch` → `conscript.unauthorized`.
+  - **(iv) The world without the act.** No injected act → `content_hash` equal to TS-3's, unless the
+    chooser forms the row; then the move is declared with per-verb shifts (H-156's crowding shape).
+
+### TS-11 · a levy eats where it stands, after the people
+- STATE: after TS-4; **lands before TS-7**, because a computed levy that does not eat is an
+  unbounded one      LANE: SE (IN)
+- EDITS: `queries/world_q.py` (`subsistence_draw`; `demanded`/`delivered` docstrings),
+  `loop/matter.py` (the stock debit on a short row)
+- EXIT: a settlement holding a levy: `demanded` rises by exactly `Σ subsistence_weight[k] × count`.
+- FALSIFIERS:
+  - **(i) R-POOL under dearth.** With a larder below the cohort's want plus the levy's, the cohort's
+    draw row is `repr`-identical to the same world with no levy; the levy's row is short and its stock
+    falls. **Control:** the levy drawn before persons → the cohort's row changes. (This is the
+    scarcity arm the second critic, finding 6, says TS-4 (i) lacked.)
+  - **(ii) Food bounds an army.** One settlement raised by hand every season for 12 seasons at the
+    shipped yield: the stock plateaus. **Control:** feeding off, and it grows every season.
+  - **(iii) Weigh the world:** stores per kind move by exactly regrowth, raises and hunger.
+- GOLDENS: moves only worlds holding a levy, i.e. none until TS-7.
 
 ### TS-5 · the order of battle at the seam, behind `field_army` (shipped `single_line`)
-- STATE: after TS-1, TS-2, TS-4      LANE: MB (IN)
-- EDITS: `queries/world_q.py` (`service_faction`; the `mustered` clause), `seam/wrappers/mass_battle.py`
-  (`order_of_battle`; `_side_stance`'s faction read), `queries/inputs.py` (`sides`),
+- STATE: after TS-1, TS-2, TS-11      LANE: MB (IN)
+- EDITS: `queries/world_q.py` (`fielded`), `seam/wrappers/mass_battle.py` (`order_of_battle`; the
+  defending pool; the widened `Unopposed` test), `queries/inputs.py` (`sides`),
   `modules/mass_battle/massbattle.py` (`resolve_field` → `build_army`), `modules/mass_battle/army.py`
-  (`trim_to_command`), `modules/mass_battle/equipment/` (`kind_for_kit`), `rosters.yaml`
-  (`troop_grades`, kit `matter_kinds`), `data/fixtures.py` (`men_per_weight`, `field_army`)
-- EXIT, in two arms on one tree:
-  - **(a) `field_army: single_line`:** the realm's `content_hash` after four seasons equals TS-4's,
-    and `mustered(w, s, f)` is unchanged at every settlement `s` and faction `f` of the shipped world,
-    the two shipped `oblige` edges included (§4.1).
-  - **(b) `field_army: order_of_battle`:** a seeded season in which a company is conscripted, equipped
-    by `transfer` with one kit, and marched → the field's order of battle shows `kind_for_kit`'s kind
-    with its `TROOP_TYPE_STATS` power and discipline.
+  (`trim_to_command`), `modules/mass_battle/equipment/` (`kind_for_kit`, the unarmed constant),
+  `rosters.yaml` (`troop_grades`, kit kinds), `data/fixtures.py` (`men_per_weight`, `field_army`)
+- EXIT: **(a) `single_line`:** the realm `content_hash` after four seasons equals TS-11's. **(b)
+  `order_of_battle`:** a seeded hand-built season with a levy raised, armed by `transfer` and marched →
+  the field's order of battle shows `kind_for_kit`'s kinds with their `TROOP_TYPE_STATS` presets.
 - FALSIFIERS:
-  - **Kit reaches the field.** Two arms identical to the tick of the `transfer`, by construction. Arm X
-    has the transfer; arm Y has none, so its company derives the unarmed kind. Over N ≥ 50 seeds, at
-    `men_per_weight = 250`, the band distributions of the two arms' fields must differ (an exact test,
-    declared at the position). **Control:** equal distributions → kit does not reach the field. At
-    today's scale (1) the test would be blind, because both arms rout every run (critic finding 15).
-  - **The vassal rule.** In a hand-built Crown-vs-Löwenritter field at NPC-070's place, she is on the
-    Löwenritter side only. **Control:** the draft's unrestricted clause puts her on both.
-  - **Morale is read back** (§4.1).
+  - **Kit reaches the field.** Two arms identical to the tick of the `transfer`; arm Y has none. Over
+    N ≥ 50 seeds at `men_per_weight = 250`, the band distributions differ (an exact test, declared at
+    the position). **Control:** equal distributions. At today's scale (1) both arms rout every run.
+  - **The walls engage.** A target with members present and a pool, no levy: `order_of_battle` calls
+    the module. Two arms differing only in `fort_level` give different band distributions over
+    N ≥ 50 seeds. **Control:** the same two arms at equal `fort_level`, whose distributions must
+    agree.
+  - **The defence extreme.** A target with no member, no levy and a pool of 0 → `Unopposed`; with a
+    pool of 2 → a fought field. **Control:** the pool clause removed → both `Unopposed`.
 
-### TS-6 · write-back, dissolution and salvage
+### TS-6 · write-back
 - STATE: after TS-5      LANE: MB (IN)
-- EDITS: `loop/effects_combat.py` (`_eff_march`), `write_matrix.yaml` (ENC on `(Person, weight)`),
-  `queries/world_q.py` (`is_company`), `loop/matter.py` and `loop/effects_*` `release` (dissolution)
-- EXIT:
-  - a seeded lost field lowers each losing company's weight by the integer rule;
-  - the kit of a destroyed company is on the target rung;
-  - a company whose term matures dissolves: its weight is back in `recruits` up to the ceiling, its kit
-    is on the settlement rung, and `company.dissolved` names what returned and what was absorbed;
-  - the world's weight, `recruits` and stores sums move by exactly the declared sources and sinks.
-- FALSIFIERS:
-  - `field_casualty_model: none` (the existing control arm, `rosters.yaml:861`) → no weight moves.
-  - Remove the salvage clause → the stores sum falls, because `remove_person` pops the person-rung
-    (`world.py:770-773`) [CHECKED]. So the clause is needed.
-  - `oblige_term: None` (H-159's control arm) → no term matures and no company dissolves.
-  - A population cohort that obliges itself and later releases → it is **not** dissolved, because
-    `is_company` is false.
+- EDITS: `loop/effects_combat.py` (`_eff_march`: stocks, the pool, the early return; per-mille
+  survivors for persons' `body` too), `write_matrix.yaml` (ENC on `(Rung, stores)`)
+- EXIT: a seeded lost field lowers each losing stock (and a losing defender's pool) by the integer
+  rule; the world's stores sums move by exactly the declared sinks.
+- FALSIFIERS: `field_casualty_model: none` (`rosters.yaml:861`) → nothing moves. A defending side of a
+  pool alone loses men. **Control:** today's early return (`effects_combat.py:228-230`) [CHECKED] → it
+  loses none.
 
 ### TS-7 · a question source that forms `conscript` in computed play
-- STATE: after TS-4      LANE: SE (IN)      R: R-04, R-05 (a verb that executes)
-- WHAT: IN-49's shape for men instead of goods: a referent that is a settlement in the seat's purview
-  with a full pool. The trigger is **[OPEN]**: a threat claim (`march.declared` or `field.lost` heard
-  of), or the seat's own need. Design first, as IN-49 does.
-- EXIT: `python -m engine.season.harness.aperture 4 0` shows `conscript` executed ≥ 1 with `via`.
-- FALSIFIER: a `conscript` formed over a settlement outside the seat's purview → fail. `conscript`
-  always refused → not built.
-- ⚠ If J-3 names the verb `levy`, this EXIT reads "`levy` executed", which is IN-49's EXIT word for
-  word (`_part5.md:215`) [CHECKED]. TS-L must land first.
+- STATE: after TS-4 and TS-11      LANE: SE (IN)      R: R-04, R-05
+- WHAT: IN-49's shape for men: a referent that is a **`stores:recruits` claim** about a settlement in
+  the seat's purview, so `store_kind_of` supplies `kind = recruits` through the generic chain (part 1,
+  §3.1). The trigger (a heard `march.declared` or `field.lost`, or the seat's own need) is **[OPEN]**.
+  Design first, as IN-49 does.
+- EXIT: `python -m engine.season.harness.aperture 4 0` shows `conscript` executed ≥ 1 with `via`, and
+  every executed one carries `kind = recruits`.
+- FALSIFIER: a `conscript` executed over a settlement outside the seat's purview → fail; `conscript`
+  always refused → not built. The `kind != recruits` refusals are counted and declared (the scene tax).
+- ⚠ If J-3 names the verb `levy`, this EXIT reads IN-49's word for word (`_part5.md:215`)
+  [CHECKED-1]. TS-L must land first.
 
 ### TS-8 · flip `field_army` to `order_of_battle`
-- STATE: after TS-5, TS-6, TS-7. Without TS-7 no company exists in computed play, and under part 1 §2.6
-  every attacker has no troops, so the realm stops fighting.      LANE: MB
-- EXIT: `aperture 4 0` shows `march` executed, with fields whose order of battle holds more than one
-  subunit, in at least one seeded world.
-- GOLDENS, **declared plainly**: every realm hash a `march` reaches moves. That covers
-  `engine/season/runs/` (TRACE, the run artifacts), the `test_season_shape.py` pins that count `march`
-  outcomes or `field.*` kinds, and the realm hashes pinned in `engine/season/tests`. **The re-pin is
-  intended.** The control is the same command at `single_line` on the same commit.
+- STATE: after TS-5, TS-6, TS-7. Without TS-7 no levy exists in computed play and every march is
+  refused, so the realm stops attacking (defence still musters the pool)      LANE: MB
+- EXIT: `aperture 4 0` shows `march` executed, with fields of more than one subunit, in at least one
+  seeded world.
+- GOLDENS, declared plainly: every realm hash a `march` reaches moves, including
+  `engine/season/runs/` artifacts, the `test_season_shape.py` pins that count `march` outcomes or
+  `field.*` kinds, and the realm hashes pinned in `engine/season/tests`. **The re-pin is intended.**
+  Control: the same command at `single_line` on the same commit.
 
 ### TS-9 · delete the stub
 - STATE: after TS-8 is accepted      LANE: MB
-- EDITS: delete `_weighted_unit`, `_MVP_*`, `_SEASON_FORCE_POWER`, `_MIN_TROOPS`, the `[GAP]` line and
-  the `field_army` fixture with its `single_line` arm.
-- EXIT: `grep -n "_weighted_unit\|_MVP_SUBUNIT_SHAPE\|field_army" -r engine modules` → 0, and the files
-  covering the seam are green.
+- EXIT: `grep -n "_weighted_unit\|_MVP_SUBUNIT_SHAPE\|field_army" -r engine modules` → 0; the seam's
+  files green.
 - FALSIFIER: the TS-8 realm hash moves → the deletion changed behaviour.
 
-### TS-10 · experience read at the builder — BLOCKED on J-5 or a change to J-13
-- STATE: blocked. No computed act writes a company's grade (part 1, §0 item 5)      LANE: MB (NPC)
-- EXIT, on hand-set grades: two companies of one kind and weight, one at grade 1, fight the same field
-  over N ≥ 50 seeds at `men_per_weight = 250`, with different band distributions. At grade 0 the field
-  reproduces the kind's preset exactly.
-- FALSIFIER: identical distributions → grade does not reach the field. Control: grade 0 on both.
-- What unblocks it: J-5 (c) (a fought field writes a grade step), or J-13 revisited so that `train`
-  writes a vocation `verb_capability` names on a person without a case.
+### TS-10 · experience read at the builder — BLOCKED on J-5 or a J-13 change
+- EXIT, on hand-set stocks: two stocks of one kind and size, one at grade 1, over N ≥ 50 seeds, give
+  different band distributions; at grade 0 the field reproduces the kind's preset exactly.
+- FALSIFIER: identical distributions. Control: grade 0 on both.
 
 ### TS-L · the `levy` follow-through — ONLY if J-3 names the troop verb `levy`
 - STATE: before TS-4, if at all      LANE: IN
-- EDITS:
-  - `engine/season/requirements.yaml`: R-04's acceptance "a `levy` executes with `Act.via` set"
-    (`:734-735`) and the historical refusal counts (`levy.refused 19 + levy.unauthorized 4`,
-    `:771-772`) [CHECKED] are re-keyed to `requisition`, the act they measured;
-  - `hole_register.yaml`'s 19 `levy` hits are re-keyed the same way;
-  - v9 IN-49's EXIT (`_part5.md:215`) [CHECKED] is re-keyed;
-  - the r2 ruling note at `world_q.py:910-914`, *"ruled `levy` deleted (§A.20)"* [CHECKED], is
-    annotated: it names the policy clause, not the troop verb.
-- EXIT: `grep -n "levy" requirements.yaml hole_register.yaml` returns only rows about the troop verb.
-- FALSIFIER: after TS-4 lands under the name `levy`, R-04's acceptance reads met while `requisition`
-  has never executed → the follow-through was skipped.
+- EDITS: R-04's acceptance text and its historical store-act refusal counts in `requirements.yaml`
+  (`:734-735`, `:771-772`) [CHECKED-1], `hole_register.yaml`'s 19 `levy` hits, v9 IN-49's EXIT
+  (`_part5.md:215`), and the r2 note at `world_q.py:910-914` [CHECKED-1], re-keyed to `requisition`.
+- EXIT: `grep -n levy requirements.yaml hole_register.yaml` returns only rows about the troop verb.
+- FALSIFIER: R-04 reads met while `requisition` has never executed.
 
 ---
 
 ## 8. NERS PASS ON THE DESIGN (`skills/ners/SKILL.md`, instrument A)
 
-`[SELF-AUTHORED — bias risk]`. An independent critic attacked the draft (18 findings; reconciliation at
-the end). R-POOL then changed the design's core. The re-based design has not been attacked by anyone
-but its author. An independent reviewer should start with §2.1 (the pool's home), §2.9 (dissolution)
-and §4.1 (`service_faction`).
+`[SELF-AUTHORED — bias risk]`. Two independent critics attacked earlier states (18 and 13 findings).
+The second correction changed the default body; that change has been attacked by nobody but its
+author. A reviewer should start with part 1 §2.4 (the constraint table), §2.5 (the feeding rule) and
+§4.1 here (the defending pool).
 
-**Grade: paper.** Probes run:
-- **At drafting:** P1 (the morale preset), P2 (the span check raises on an over-spanned side) and P3
-  (role gating).
-- **In the correction pass:** the shipped `oblige` edges (§4.1), and the realm built with every cohort
-  at weight 4 (TS-3 (iii)).
+**Grade: paper.** Nothing in the season was run against the design, because none of it exists.
 
-Nothing in the season was run against the design, because none of it exists.
-
-### 8.1 N — the N-line ledger, six directions, attacks run
+### 8.1 N — the N-line ledger
 
 | object | N-line | attack | verdict |
 |---|---|---|---|
-| **`recruits` (the pool)** | cut it, and R-POOL has no carrier: troops come from the cohort (forbidden) or from nothing | could an existing quantity carry it? `envelope` represents the population twice; a Site's `condition` is fabric and a fraction; a new field amends `04:255` (part 1, §2.1) | **HOLDS.** Bottom-up (settlement → field), vertical (rung → person → field) |
-| **`recruit_ceiling`** | cut it, and the pool regrows without bound, so a quiet town banks an army | is the ceiling a second copy of `population`? No: it reads unbound resident cohorts only, a narrower set, for a different purpose | **HOLDS.** Narrowed: equal everywhere at the shipped data (H-170) |
-| **`immovable_kinds` / `movable`** | cut it, and `requisition` carries men into a treasury as goods | does anything else stop it? No: `_shift` moves any kind | **HOLDS.** Narrow: one kind today |
-| **`conscript`** | cut it, and no act turns a settlement's pool into men who fight | is anything else a producer of fighting men? `requisition` moves goods; `commit` makes members and is belief; `oblige` is the person's own act | **HOLDS.** Bottom-up, vertical, diagonal (SE → MB) |
-| **the company as a `Person`** (P) | cut it for A, and the army cannot desert, defect, witness its defeat or eat | does A carry any of these? A stock has no `release`, no ledger and no body (AX-1) | **HOLDS, NARROWED:** desertion by `release` is reachable, not shown |
-| **`kind_for_kit`** | cut it for a stored kind, and two owners exist for one fact | does any reader need a stored kind? The builder needs one at field time, and a function over the kit answers then | **HOLDS.** It lives with its owner, `TROOP_LOADOUT` |
-| **the grade on `capability`** | cut it, and a host that survived three fields is the host it was when raised | is there a producer? **No, in computed play** (J-13 (iii); J-5) | **FAILS in computed play; HOLDS as a carrier.** Disqualifier 2, no producer, fires. Kept because J-5 (c) or a J-13 change gives it one with no further object |
-| **the commander** | cut it, and who leads changes nothing | does it change anything before R-C-1? Yes: the span check divides a side's companies by commander | **HOLDS, NARROWED:** identity now, capacity at R-C-1 |
-| **`service_faction` + the `mustered` clause** | cut them, and a conscripted company never stands on a side | could the conscription open a `commit` instead (D's route)? That imposes a belief, and D is ruled out by R-POOL. Could `sides_of` read it directly? Attacker only: two copies | **HOLDS.** Horizontal: one owner for both sides and for morale |
-| **the `_side_stance` edit** | cut it, and the morale row the fold writes on a company is never read | read/write asymmetry (CLAUDE.md §0.1 pt 1) | **HOLDS** |
-| **`is_company` + dissolution** | cut it, and every company persists forever, so persons grow without bound | is persistence acceptable? Only if the pool stopped refilling. Under R-POOL it refills | **HOLDS.** Narrow: the first reader of why an edge was opened |
-| **the gate basis `conscription`** | cut it, and the company's `oblige` (owned by the company, not the actor) is refused at F3 | `T-m` needs the actor to be the owner; `determination` needs a judging seat | **HOLDS** |
-| **`men_per_weight`** | cut it, and every field is fought at single digits against a floor of 80 | disqualifier 5, "a flat bonus"? No: a unit conversion applied to every side alike | **HOLDS** |
-| **`trim_to_command`** | cut it, and an over-spanned side raises inside the fold (P2) | could the host trim? Only with a second copy of the span rule | **HOLDS** |
-| **the salvage clause** | cut it, and a destroyed company's kit is destroyed with its person-rung (`world.py:770-773`) | is that acceptable? Then it needs a receipt, and the clause is the receipt | **HOLDS** |
-| **the `order` key** | cut it, and no act can choose a formation per company (demand 3) | is it a ninth operand? Yes; ladder step 4, `confer`'s `term` (§4.3) | **HOLDS, NARROWED** to player and hand-built acts |
-| **`field_army`** | cut it, and TS-5 cannot ship hash-neutral | scaffolding | **HOLDS, TEMPORARY.** Deleted at TS-9 |
+| **`recruits`** | cut it, and R-POOL has no carrier | `envelope` is the population, not its raisable men; a Site is fabric; a field amends `04:255` | **HOLDS** |
+| **`pool_rung_kinds`** | cut it, and territories hold pools that count the same men again | could the ceiling's subtree read alone stop it? No: the regrowth pass would still credit them | **HOLDS** |
+| **`recruit_ceiling`** | cut it, and the pool regrows without bound | a second copy of `population`? No: cohorts only, for a different quantity | **HOLDS, NARROWED:** equal everywhere at the shipped data |
+| **`immovable_kinds` / `movable`** | cut it, and `requisition` carries a town's pool into a treasury | does anything else stop it? No | **HOLDS** |
+| **`SUBSIST`'s edit** | cut it, and the pool fill flips every cohort's sensed subsistence at build [RAN] | is it this design's to fix? The defect predates it (coin is sensed as food), but this design is what makes it bite | **HOLDS** |
+| **`conscript`** | cut it, and no act turns a pool into a levy | `requisition` moves goods; `commit` is belief | **HOLDS** |
+| **the troop stock** (A) | cut it for P, and three ruled things break (part 1, §2.4) | does A lose what made P worth it? Choice, witness, grudge: yes, named | **HOLDS, NARROWED:** R-WORLD's person half is lost |
+| **the feeding rule** | cut it, and a levy is free and unbounded | is it a second eater rule? It is the one draw, with a second kind of mouth, after the first | **HOLDS** |
+| **the defending pool** | cut it, and an unraised town is `Unopposed` and the walls are dead | is it a special case? No entity is named; every held settlement gets it | **HOLDS** |
+| **`kind_for_kit`** | cut it, and two owners exist for kind | the builder needs a kind at field time; a function over the kit answers then | **HOLDS** |
+| **the grade kinds** | cut them, and a host that survived three fields is the host it was raised | producer? **None in computed play** | **FAILS in computed play; HOLDS as a carrier** (disqualifier 2) |
+| **the commander** | cut it, and who leads changes nothing | the span check divides a side by commander | **HOLDS, NARROWED** |
+| **`men_per_weight`** | cut it, and every field is single digits against a floor of 80 | a flat bonus? No, a unit conversion applied to every side | **HOLDS** |
+| **`trim_to_command`** | cut it, and an over-spanned side raises inside the fold (P2) | the host cannot trim without a second copy | **HOLDS** |
+| **the `order` key** | cut it, and no act chooses a formation (demand 3) | a ninth operand; ladder step 4, `confer`'s `term` | **HOLDS, NARROWED** to player and hand-built acts |
+| **`field_army`** | cut it, and TS-5 cannot ship hash-neutral | scaffolding | **HOLDS, TEMPORARY** |
 
-**False N-lines found in what this design withdraws:**
-- **LF-1 (the ration bound):** "a field unprovisioned fights" is false under P. The larder already feeds
-  a company. **Disqualifier 1 fires: the carrier already exists.**
-- **LF-3 (the ration debit):** same disqualifier.
-- **`_SEASON_FORCE_POWER`:** "headcount no longer feeds quality" is false. `TROOP_TYPE_STATS` is the
-  carrier of quality per kind.
-
-**False N-lines in my own additions:**
-- **The grade, in computed play** (above): disqualifier 2 fires. It is kept as a carrier with a named
-  unblocking condition, not as a working mechanism.
-- **`troop_grades`:** looked at hardest as a possible flat bonus (disqualifier 5). It is a second index
-  into the same two stats `TROOP_TYPE_STATS` sets, not a bonus beside them. If Jordan rules one offset
-  per grade, it collapses to one column.
+**False N-lines in what this design withdraws:** LF-1/LF-3 (a treasury ration): disqualifier 1, the
+carrier (the larder draw) exists. `_SEASON_FORCE_POWER`: `TROOP_TYPE_STATS` carries quality.
+**In P's apparatus, now not built:** `is_company` read a field renewal overwrites (finding 2).
 
 ### 8.2 R — both halves
 
-- **R-COMPLETE:**
-  - **The extremes walked, on paper:**
-    - an empty pool (`conscript.refused`);
-    - a pool at its ceiling (no write);
-    - a company at weight 1 (the remnant, §4.6);
-    - a side with no troops (Unopposed or PARTY-GAP);
-    - an over-spanned command (trimmed);
-    - a company whose term matures (dissolved);
-    - `recruit_regrowth = 0` (a pool that never refills: war exhausts a settlement, permanently).
-  - **The draft's open extreme closes under R-POOL.** War no longer drains the population.
-  - **The new residual:** at the shipped raise of 2, the remnant is common (§4.6).
-- **R-VARIETY:** a faction chooses where to raise, how many (up to each pool), how to equip, whom to put
-  in command, and, at the player or hand-built act, each company's role. **PASS on the shape; NOT
-  SCORABLE on the tree** until TS-8. In computed play only *where*, *how many* and *who commands*
-  vary.
-- **R-CHOICE:** the draft found the levy amount had no cost. **Under R-POOL it has three:**
-  - food (a company eats from the settlement's larder, part 1, §2.5);
-  - the pool (a settlement raised dry cannot answer the next threat for `ceiling / growth` seasons);
-  - crowding (`migrate` into the settlement is refused sooner).
-
-  ⚠ **The residual cost that is missing is upkeep per man** (§4.1). A seat pays one person's upkeep
-  for a company of any size. Scaling `_renewals`' count by weight is the one-owner fix. It changes
-  what an army costs a treasury, and it is listed under J-1's consequences, not built here.
-- **R-WORLD:**
-  - A raised company eats, witnesses its lord's orders, may desert by `release`, and goes home when its
-    term runs out.
-  - A defeated lord's companies shrink, their kit lies where they fell, and the place's holder may
-    `requisition` it.
-  - A settlement raised dry is a weakness its neighbours can learn of through `stores.changed`.
-
-  Each is an Event a witness can learn, with no player involved. **PASS on the shape**; reachable,
-  none observed.
+- **R-COMPLETE, the extremes walked:** an empty pool (`conscript.refused`); a full pool (no write); a
+  stock of 1 (valid, no remnant); a side with no men (§4.1's table: `Unopposed` or PARTY-GAP); a town
+  raised dry (open to any levy); an over-spanned command (trimmed); an unfed levy (it shrinks); a seat
+  that raises every season (bounded by food, TS-11 (ii)); `recruit_regrowth = 0` (war exhausts a
+  settlement permanently).
+- **R-VARIETY:** where to raise, how many, how to arm, where to gather, who commands, and (player or
+  hand-built) each subunit's role. In computed play: where, how many, arming and who commands. **PASS
+  on the shape; NOT SCORABLE** until TS-8.
+- **R-CHOICE:** a raise costs the pool and its regrowth seasons, and food every season the levy
+  stands. It buys mobility, not home defence (§4.1). The cost the first correction found missing
+  (upkeep per man) does not arise under A: the cost scales with men, through the larder.
+- **R-WORLD:** a settlement raised dry is a weakness neighbours learn through `stores.changed`; a
+  starving levy shrinks without anybody deciding it; a lord who defects with his towns takes their
+  men; a town nobody raised still fights at its walls. **Lost against P:** a levy that chooses to
+  desert, witnesses its lord's orders, or nurses a grudge. **PASS on the shape**, narrower than P's.
 
 ### 8.3 S — six directions, pause, methodology
 
 | direction | carried by | verdict |
 |---|---|---|
-| **S-UP** (a demand filtered by a person) | a threat reaches the seat as a claim; whether the holder conscripts is his choice (TS-7) | **PASS on the shape**, gated on TS-7 |
-| **S-DOWN** (an opportunity to a party with no post) | a company is a party with no post; its `release` and its answer to a `dispatch` are its own | **PASS on the shape** |
-| **vertical** (rung ↔ person ↔ field) | `recruits` → weight → `troops = weight × men_per_weight`, one conversion; write-back through `weight` and back to `recruits` on dissolution | **PASS** |
-| **diagonal** (SE matter → MB field) | `requisition` → `transfer` → `kind_for_kit` → `of_type` | **PASS on the shape**; no computed act reaches `transfer` to a company |
-| **lateral** (sibling verbs) | `conscript` and `requisition` share the authority conjunct, the stores threshold and the keyed-refusal split | **PASS** |
-| **horizontal** (both sides of one field) | one `mustered`, one `service_faction`, one `order_of_battle`, one `build_army` | **PASS**, with one residual: the attacker's faction is read off the seat's label and the defender's off the holder (§4.7) |
-| **pauses correctly** | the field is resolved inside the fold, as today. A played field is not designed here (M-MB-5) | **N-A** |
-| **methodology** | **Resolved:** the ration bound would have fed the same mouths twice. **One rounding rule:** half-up per-mille for the ceiling, the growth and the survivors. **Two replenishing clocks:** yield (no ceiling) and the pool (a ceiling); the same write, a different bound, stated. **Still open:** an individual's casualty is `int(body × float)` (`effects_combat.py:254`), a second conversion for one survivor ratio | **FINDINGS → TS-6** |
+| **S-UP** | a threat reaches the seat as a claim; whether the holder conscripts is his choice (TS-7) | **PASS on the shape**, gated on TS-7 |
+| **S-DOWN** | none under A: a stock is no party | **N-A under A** (P carried it) |
+| **vertical** | `recruits` → stock → `troops = count × men_per_weight` → survivors back to the stock; one conversion | **PASS** |
+| **diagonal** (SE matter → MB field) | `requisition` → `transfer` → `kind_for_kit` → `of_type`; computed-reachable | **PASS on the shape** |
+| **lateral** | `conscript` and `requisition` share the typed cell conjunct for conjunct and the keyed-refusal split | **PASS** |
+| **horizontal** | one `mustered`, one `fielded`, one `order_of_battle`, one `build_army` for both sides | **PASS, one residual:** the attacker's faction is read off the seat's label, `fielded` off the holder (§4.1) |
+| **pauses correctly** | the field resolves inside the fold, as today | **N-A** |
+| **methodology** | **One draw for every mouth** (cohorts, then stocks); **one rounding rule**; **two replenishing clocks**, yield (no ceiling) and the pool (a ceiling), the same write with a different bound, stated. **Fixed here:** `SUBSIST` and `subsistence_draw` disagreed about what is food. **Still open:** an individual's casualty is `int(body × float)` (`effects_combat.py:254`) [CHECKED], routed to per-mille at TS-6 | **FINDINGS → TS-3, TS-6** |
 
 ### 8.4 E — last, as a ratio
 
-- **N and R found** a pool and a verb that hold, a carrier that holds, several narrowed lines, and one
-  failure in computed play (the grade).
-- **The design adds about 22 objects and cuts 6 on disk** (part 1, §3.5).
-- **E-OVERHEAD: NARROWED, not passed.** Every addition carries a fact the engine reads or a reader of
-  one, and none is a parallel scheme. But additions outnumber cuts by more than three to one, so the
-  case for E rests on legibility, not on object count.
-- **E-LEGIBILITY: PASS on the shape.** A player sees men raised from a town's pool, the town's pool
-  empty and refilling, men armed from a treasury, led by a named holder, lost in a field, and sent home
-  when their term ends. Each outcome traces to one of those acts.
+- **N and R found** a pool, a stock, a verb, a feeding rule and a defence rule that hold; one failure
+  in computed play (the grade); one narrowed R-WORLD against P.
+- **Count:** 35 added against 5 cut on disk under A; about 38 under P (part 1, §3.5).
+- **E-OVERHEAD: NARROWED.** Every addition carries a fact the engine reads or a reader of one, and
+  none is a parallel scheme, but additions outnumber cuts seven to one.
+- **E-LEGIBILITY: PASS on the shape.** A player sees men raised from a town's pool, the pool refilling,
+  the levy armed from the town's stores, gathered, led, killed or starved, and a raised-dry town left
+  open. Each outcome traces to one act or one clock.
 
 ### 8.5 The design's own falsifier
 
-The design's discipline is that **no fighting man exists unless a conscription raised him from a pool,
-and none vanishes without a receipt.**
-- **Hits:** named persons fight without being raised. They are the general and his officers.
-- **Licensed narrowly** by part 1 §2.6: they command and are not troops.
-- **Borderline:** guard cohorts and convicts in service (§4.1) are troops not raised from a pool. They
-  pass by tracing (an `oblige` they or a bench opened), and they are named as residuals.
+**No fighting man exists unless he is in a pool, and none vanishes without a receipt.** Named persons
+fight without being in a pool: they command and are not men (part 1, §2.6). Guard cohorts and
+convicts in service field nothing under A (no person fields men), so the first correction's
+borderline cases close.
 
 ### 8.6 Self-audit
 
-- **9a, backward propagation.** Part 1 §0 now carries R-POOL, the Layer 1 amendment, the unreachable
-  axes, the morale defect and `service_faction`. §5 marks H-170 untouched and IN-12 step 9 not
-  depended on. §6 drops `troop_kinds`. §9 marks J-2 answered. The draft's "§0 says 'in part' for
-  M-MB-3 and M-MB-16" was checked: both now read "narrowed".
-- **9b, §3 on my own additions:** done in §8.1. One disqualifier fired (the grade in computed play).
-- **What an independent reviewer would add:** a measured check that companies do not crowd the chooser,
-  and of how many claims `_ch_post_remit` adds. Both are TS-4 (iv)'s, and neither was run.
+- **Backward propagation:** part 1 §0 carries the A default, the Layer 1 line, the defence walk and
+  the `SUBSIST` defect; §3.5 recounts; §5 marks H-49 untouched; §6 drops `conscript_amount`; §9 states
+  J-1 as an overwrite of ratified canon.
+- **What an independent reviewer would add:** a run of the feeding rule's plateau (TS-11 (ii)) and of
+  the defending pool's effect on how often a march succeeds. Neither was run.
 
 ---
 
 ## 9. DECISIONS FOR JORDAN
 
-**CLAUDE.md §0's ladder, run per item** (critic finding 9). Only what survives all five steps is
-escalated.
+**CLAUDE.md §0's ladder, per item.** Only what survives all five steps is escalated.
 
 | id | the decision | ladder | escalated? |
 |---|---|---|---|
-| **J-1** | the troop body under the pool | not superseded; not irrelevant; no document decides it; no precedent fits; architecture leans to P but A amends a different Layer 1 line and is cheaper in objects | **yes** |
-| **J-2** | does raising troops draw down the population | **step 1, superseded by R-POOL** (2026-10-16): the cohort is not reduced, and the pool replenishes | **no — ANSWERED** |
-| **J-3** | the two verbs' names | not superseded; a name is Jordan's (the brief reserves it) | **yes** |
-| **J-4** | do LF-1..LF-3 stand | step 5, architecture: under P the larder feeds the company, so a second ration double-counts; under A a feeding rule returns. Its answer follows J-1 (`00_COMPARATIVE_ANALYSIS.md:219`: "no statement reaches the ration bound") [CHECKED] | **no — folded into J-1** |
-| **J-5** | what a fought field writes beyond the losers' casualties, morale and grudge, and whether veterans outlive their service | not superseded; it overturns ED-IN-0279's ruled row if anything changes | **yes** |
-| **J-6** | who counts as troops | step 4, precedent `24f` (part 1, §2.6) | **no — answered: cohort persons only** |
-| **J-7** | the service term | step 5: one fixture for every service; H-173 already tracks that it also sets sentences. No materially different game | **no — answered: reuse `oblige_term`** |
-| — | the pool's ceiling base, the regrowth form, the return rule | step 5 (part 1, §2.2, §2.3, §2.9). The return rule's alternative (veterans persist) is an experience question, folded into J-5 | **no — answered in text** |
+| **J-1** | the troop body under the pool | not superseded; not irrelevant; no document decides it; no precedent fits; architecture favours A on the ruled-constraint count (part 1, §2.4), **but A overwrites ratified Layer 1 (`04:793`)** and P overturns or narrows a ruling (ED-WR-0011) | **yes** — every option overwrites ratified canon or a ruling |
+| **J-2** | does raising draw down the population | step 1, superseded by R-POOL | **no — ANSWERED** |
+| **J-3** | the two verbs' names | a name is Jordan's (the brief reserves it) | **yes** |
+| **J-4** | do LF-1..LF-3 stand | step 5: under A a levy eats through the one draw; a treasury ration would double it | **no — folded into J-1** |
+| **J-5** | what a fought field writes beyond casualties, morale and grudge | it overturns ED-IN-0279's ruled row if anything changes | **yes** |
+| **J-6** | who counts as troops | step 4, precedent `24f` | **no — answered: stocks and the defending pool; no person** |
+| **J-7** | the service term | under A there is none; under P, step 5: reuse `oblige_term` | **no — moot under A** |
+| — | the ceiling base, the regrowth form, the pool-holding rung kinds | step 5 (part 1, §2.2, §2.3) | **no — answered in text** |
+| — | the pool defends its own settlement | step 5 (§4.1); overwrites nothing: ED-IN-0279 (a)'s `Unopposed` survives for an empty side | **no — answered, Jordan-vetoable** |
+| — | the levy eats after the people | step 5 plus R-POOL under scarcity (part 1, §2.5) | **no — answered** |
 
 **The escalated decisions:**
 
 | id | the decision | options, and what each does to the game | default here | what waits on it |
 |---|---|---|---|---|
-| **J-1** | **what a troop is, once raised from the pool** | **(P) a company `Person`** minted from the pool: armies are people who eat at home, can desert, witness and die. Layer 1's unit sentence holds. **Its muster line (`04:792`, `:802`) is amended** so a person with no `commit` can stand for the faction his lord serves. · **(A) a troop stock** on the seat's rung, moved from the pool: no persons, no chooser load, no muster amendment. It **amends** §C.5.1's unit sentence and §C.5's `claimants : PersonId[]`. Nobody eats, so a ration rule (J-4's LF-1/LF-3) returns as a feeding. Troops can be counted in men, with no `men_per_weight`. · **(B) a typed troop row:** a unit class; amends §C.5.1 and T-l. **The contrary reading of statement 1 belongs here:** "their own resource" reads toward "a rung-held carrier" (`00_COMPARATIVE_ANALYSIS.md:202`) [CHECKED], and "the field's troop count should come from a levied stock, not from a conversion of summed weight" (`MB_mass_battle.md:434`) [CHECKED]. Under the pool, P meets the first and most of the second: the count comes from raised companies, not summed member weight, but through one conversion. A meets both in full. **Also under J-1:** whether upkeep scales by weight (§8.2) | **P** | everything in §7 from TS-4 on |
-| **J-3** | **the names** | **The store act:** `requisition` (provisional, in the tree; the ordinary word for goods taken for an army or a state) · `tax` (a regular, coin-shaped due, which this act is not) · `tithe` (a tenth, and Church-specific). **The troop verb:** `conscript` (working name; no hit in `engine`, `modules`, `systems`, `references` or `tools`, `git grep -i conscript`) [RAN] · **`levy`**, Jordan's own word, which collides with: R-04's acceptance text "a `levy` executes with `Act.via` set" and its historical store-act refusal counts (`requirements.yaml:734-735`, `:771-772`) [CHECKED]; IN-49's v9 EXIT "`levy` row executes … `levy.taken` in `w.log`" (`_part5.md:215`) [CHECKED], so the troop verb would mark the store act's requirement met; 19 `hole_register.yaml` hits [RAN]; the r2 note that "`levy`" was "ruled deleted (§A.20)" (`world_q.py:910-914`) [CHECKED]; and the module's `levy` troop type (`registry.py:41`; `equipment/__init__.py:22`) [CHECKED], one word with three meanings. **Choosing `levy` makes TS-L a position that lands before TS-4** | **`requisition`; `conscript`** | IN-49's text; TS-4's row; TS-L |
-| **J-5** | **what a fought field writes, and whether veterans persist** (ED-IN-0279's ruled row: losses only, nothing on the winner) | **(a) as ruled:** winners untouched; no computed experience; companies dissolve at term's end (part 1, §2.9). · **(b) winners take their engine casualties too.** · **(c) survivors of both sides gain one grade step** (war teaches): the only computed producer of experience while J-13 (iii) stands. · **(d) veterans persist:** a company whose service ends stays a resident cohort with its kit and grade, a reserve the seat can re-engage by the company's own `oblige`. Persons then grow with every raise, and the ceiling must exclude them | **(a)** until ruled. **Recommended: (b) + (c)**, since statement 1's "experience" most naturally includes war's; (d) only with (c), since without a grade there is nothing for a veteran to keep | TS-6's write set; TS-10; M-MB-16 |
+| **J-1** | **what a troop is, once raised from the pool** | **(A) a troop stock on the settlement rung** (default): armies are counts that eat where they stand, fight for whoever holds their walls, and are moved by `transfer`. **Amends `04:793`**, Layer 1's unit sentence, to admit a counted stock beside the persons who stand and command (part 1, §0 item 4); the muster lines and `claimants : PersonId[]` stand. Also amends the code rule "only a cohort eats" (`24f`) to "cohorts, then troop stocks", within ED-IN-0255's words. A levy cannot choose, witness or hold a grudge. · **(P) a company `Person`** minted from the pool: armies are people who deliberate, desert, witness and die. **Narrows or overturns ED-WR-0011** as the code applies it to cohorts (`world_q.py:824`; H-170), on X-4's contrary reading (`00_COMPARATIVE_ANALYSIS.md:204`) [CHECKED] and CENSUS's individuation precedent; **amends `04:792`/`:802`**; and needs P′'s no-`reside` form (RR-2), a dissolution rule J-16 can accept, and the draw-order rule (§4.8). · **(B) a typed troop row:** amends `04:793` and T-l (`04:123`). **Under A, three consequences ride with it:** no stand-down verb (a seat cannot send men home; add a `conscript` inverse only if asked); kit stays with the town (a lost field kills men, not swords); the pool defends its settlement (§4.1) | **A** | everything in §7 from TS-4 on |
+| **J-3** | **the names** | **The store act:** `requisition` (provisional, in the tree) · `tax` · `tithe`. **The troop verb:** `conscript` (working name). Its absence claim is corrected: `git grep -i conscript` over `engine modules systems references tools` returns nothing [RAN], but `git grep` skips an ignored file, and `systems/_architecture/_identifier_census.yaml:601` (ignored by `.gitignore:46`, untracked) [CHECKED] lists `conscription` as a purpose string of the retired key-type registry: no live collision, but not "no hit". · **`levy`**, Jordan's own word, collides with: R-04's acceptance text and store-act refusal counts (`requirements.yaml:734-735`, `:771-772`) [CHECKED-1]; IN-49's EXIT (`_part5.md:215`) [CHECKED-1]; 19 `hole_register.yaml` hits [RAN, first correction]; the r2 note "ruled deleted (§A.20)" (`world_q.py:910-914`) [CHECKED-1]; the module's `levy` troop type (`registry.py:41`; `equipment/__init__.py:22`) [CHECKED-1]; **and a roster the code reads already uses it in the military sense:** "Lions' Table: Military coordination, levy operations, Royal Guard." (`rosters.yaml:1582`) [CHECKED]. Choosing `levy` makes TS-L land before TS-4 | **`requisition`; `conscript`** | IN-49's text; TS-4's row; TS-L |
+| **J-5** | **what a fought field writes** (ED-IN-0279: losses only, nothing on the winner) | **(a) as ruled.** · **(b)** winners take their engine casualties too. · **(c)** survivors of both sides move one grade up: the only computed producer of experience while J-13 (iii) stands. · (d), veterans persisting, is moot under A: a grade stock persists until killed or starved | **(a)** until ruled. **Recommended: (b) + (c)** | TS-6's write set; TS-10; M-MB-16 |
 
-**Tuning values, not decisions:** `recruit_share`, `recruit_regrowth`, `men_per_weight`, a
-`conscript_amount` above 2, the equipment kinds, the `troop_grades` ladder, and the arms producer (§6).
-Each is **[OPEN — Jordan tuning]**, with a register row and a sweep at its position.
+**Tuning values, not decisions:** `recruit_share`, `recruit_regrowth`, `men_per_weight`, the equipment
+kinds, the `troop_grades` ladder, the arms producer, and which grade a shared kit equips first. Each
+is **[OPEN — Jordan tuning]** with a register row and a sweep at its position.
 
 ---
 
 ## 10. LIMITS
 
-**Re-opened in the correction pass (`[CHECKED]` above):**
-- **Season code:** `hole_register.yaml` (H-170, H-171, H-173); `cohorts.yaml`;
-  `state/carriers.py` (Person `:700-721`, Office `:885-928`, Rung `:1040-1068`, Term);
-  `queries/world_q.py` (`subsistence_draw` `:852-866`, the r2 note `:904-914`, `population`,
-  `capacity`, `leaders`, `mustered`, `faction_holding`, `holder_faction_of`, `upkeep_of`);
-  `queries/faction_q.py:95-110`; `seam/wrappers/mass_battle.py` (`:72-93`, `_side_stance`);
-  `loop/effects_combat.py:240-262`; `loop/effects_economy.py:280-308`; `loop/effects_shared.py:117-128`;
-  `loop/matter.py` (`:98-187`, `:480-636`); `loop/census.py:60-110`; `loop/sides.py:60-86`;
-  `epistemic.py:460-486`; `data/fixtures.py` (`:180-183`, `:816-818`); `offices.yaml:185-193`,
-  `:586-592`; `harness/populated.py` (`:436-442`, `:1325-1339`); `state/world.py:748-773`;
-  `verb_table.yaml` (`confer` `:174-177`, `oblige` `:746-751`, `transfer` `:1205-1212`, `release`
-  `:828-838`); `rosters.yaml` (`:228-233`, `:1258-1330`, `:2042-2075`); `write_matrix.yaml` (the Rung
-  rows); `requirements.yaml:730-736`, `:768-773`; `cases/NPC5.yaml:170-173`.
-- **Mass-battle code:** `equipment/__init__.py:18-37`; `troop_types/registry.py:39-57`;
-  `hierarchy/units.py:2706-2720`, `:726`; `config.py:530`; `systems/mass_battle/sim/engine.py:226-231`,
-  `:424-430`.
-- **Architecture:** `04_CODE_ARCHITECTURE.md:179`, `:255`, `:786-796`, `:802`, `:828-836`, `:1166`.
-- **Plan and research:** `_part5.md:73`, `:192`, `:215`, `:433`; `00_COMPARATIVE_ANALYSIS.md:202`,
-  `:219`; `MB_mass_battle.md:434`.
+**Re-opened in the second correction pass (`[CHECKED]`):**
+- **Season code:** `data/requires.py:205-220`, `:280-310`; `rosters.yaml:1371-1392`, `:1580-1584`,
+  `:1840-1852`; `decision/options.py:372-392`, `:630-651`, `:755-770`, `:840-880`;
+  `data/fixtures.py:485-495`; `state/carriers.py:40-75`, `:105-118`; `loop/effects_economy.py:250-312`;
+  `hole_register.yaml` (H-156 `:3540-3543`, H-163 `:3631-3643`, H-170 `:3722-3725`, H-173
+  `:3762-3775`, and the row index `:3540-3978`); `queries/world_q.py:818-830`, `:850-900`,
+  `:990-1002`, `:1044-1078`, `:1441-1450`; `harness/populated.py:398-434`, `:1515-1538`;
+  `harness/probes.py:125-152`; `loop/deliberate.py` (grep for `subsistence`); `loop/matter.py:104-123`,
+  `:478-540`; `loop/sides.py:60-100`, `:116`; `seam/wrappers/mass_battle.py:215-250`;
+  `loop/effects_combat.py:225-262`; `loop/census.py:60-112`; `state/world.py:788-806`;
+  `state/containment.py:33-37`; `verb_table.yaml:629-652`; `modules/mass_battle/massbattle.py`
+  (grep for `fort_level|walls_dr`: `:233-273`, `:342-371`).
+- **Ledgers and research:** `registers/editorial_ledger_wr_archive.jsonl:13-14`;
+  `research/by_lane/00_COMPARATIVE_ANALYSIS.md:200-206`; `research/by_lane/MB_mass_battle.md:434`.
+- **Architecture:** `04_CODE_ARCHITECTURE.md:118-126`, `:176-181`, `:772-805`.
+- **Other:** `systems/_architecture/_identifier_census.yaml:599-603`; `.gitignore:46` via
+  `git check-ignore -v`.
 
-**Ran in the correction pass:**
-- `git status --short` (empty);
-- `grep -c levy` on the two registers (23, 19);
-- the shipped `oblige` edges on `build_realm(0)`;
-- the realm built at cohort weight 2 and 4 (37 cohorts each; total weight 74 and 148; demand 222 and
-  444; capacities 4 to 9; build hashes `d3edd90ab3b7` and `754374f85236`);
-- the capacity distribution (4 ×16, 6 ×4, 7 ×15, 9 ×2);
-- `grep -rl build_army tests/valoria --include='*.py'` (22);
-- `grep "_shift("` (two callers);
-- `git grep -i conscript` (no hits);
-- the untracked-defect grep.
+**Ran in the second correction pass** (from `/home/user/ttrpg`):
+- `git status --short` at the start → three modified `proposals/2026-10-16-character-template*.md`
+  files, not this design's (committed during the pass as `74b557e`, as was an intermediate state of
+  part 1 as `54012ec`; neither commit was this pass's).
+- `python <scratchpad>/probe_subsist.py` on `build_realm(0)`: cohort `cohort_set_s_001`, stores `{}` at
+  build; `SUBSIST` shipped 0, with `recruits: 2` 1000; with the larder set to `grain: 1`, 500, and with
+  `recruits: 2` added, 1000; empty 0, with `recruits: 2` 1000. A minted id
+  `H(seed, tick, "p_npc_001", "conscript:set_s_001:a1")` = `3b5fbcbdce6ac4cc` sorts before
+  `cohort_set_s_001`: True.
+- `python <scratchpad>/probe_subsist2.py`: at build, 37 cohorts, `SUBSIST` min/max 0/0, with
+  `recruits: 2` at each cohort's rung 1000/1000, moved for 37; after one season through
+  `populated.run`, 1000/1000 both ways, moved for 0.
+- `sed -n 3631,3643p hole_register.yaml | grep -o levy | wc -l` → 16 (H-163); the same over H-156's
+  rows → 6.
+- `git grep -n -i conscript -- engine modules systems references tools` → no output;
+  `grep -rn -i conscript` over the same trees with `--include=*.yaml --include=*.py` → the one hit at
+  `_identifier_census.yaml:601`; `git check-ignore -v` → `.gitignore:46`.
 
 **Could not check:**
-- **Whether a computed chooser forms `conscript`,** and what companies do to scene crowding and to
-  `_ch_post_remit`'s claim count. The row does not exist (TS-4 (iv)).
-- **Whether a typed cell's `key:` may name a literal kind** (part 1, §3.1).
-- **Whether a company answers `dispatch` by moving** (part 1, §3.2).
+- **Whether a regrowth `stores.changed` deposits a `stores:recruits` claim** that TS-7's question can
+  be about (part 1, §3.1) — **[INFERRED]**.
+- **Which seats' `treasury_of` is a settlement**, so whether computed assembly by `transfer` can start
+  from a levy's rung (part 1, §3.2).
+- **Where MATTER's dearth step reads the draw** for the body write, which the stock debit would sit
+  beside (part 1, §2.5).
+- **The golden scope of the `SUBSIST` edit** (TS-3 measures it).
+- **That `march` is folded at ENC** (read from the matrix comment, not traced).
 - **Which harness batteries TS-2 moves** (`bat.py` not opened).
-- **That `march` is folded at ENC** (read from the matrix comment, not traced in `loop/resolve.py`).
-- **Whether IN-36's guard cohorts are built,** and so whether the `mustered` clause adds anyone today
-  beyond the two shipped edges, which it does not [RAN].
-- **The MB lane's scale probe** (≈120 troops; 0 of 20 at ≤ 80) is cited and not re-run, so the
-  falsifier value 250 rests on it.
-- **The drafting probes P1–P3** were not re-run in the correction pass.
-- **`CURRENT.md` and `HANDOFF_MB.md`** were not read; the mass-battle head is taken from the code.
-- **PP and ED provenance** (ED-IN-0279, ED-IN-0255, ED-MB-0067, ED-1090) was not verified against the
-  ledgers.
-- **R-POOL** is quoted as the coordinator relayed it. I have not seen it at its source.
+- **The MB lane's scale probe** (≈120 troops; 0 of 20 at ≤ 80), cited and not re-run.
+- **The drafting probes P1–P3** and the first correction's probes were not re-run.
+- **`CURRENT.md` and `HANDOFF_MB.md`** were not read.
+- **PP and ED provenance** other than ED-WR-0011 and H-173's J-16 note (ED-IN-0279, ED-IN-0255,
+  ED-SE-0051, ED-MB-0067, ED-1090) was not verified against the ledgers.
+- **R-POOL** is quoted as the coordinator relayed it.
 - **The `.audit/` and `.designs/` trees** were not read.
 
 ---
 
-## CRITIC RECONCILIATION
+## CRITIC RECONCILIATION (first critic, 18 findings, against the draft)
 
-The critic's report (18 findings) against the draft. Each locator was re-opened before any text
-changed. "Superseded" means R-POOL removed the object the finding was about.
+Kept as recorded at the first correction. Where the second correction's switch to A removed a
+finding's object, the last column says so.
+
+| # | finding | verdict at the first correction | status under A |
+|---|---|---|---|
+| 1 | weight-2 cohorts: a split of 1 yields two non-cohorts | applied, then superseded by R-POOL | moot: a stock of 1 is valid |
+| 2 | `mustered` pulls in vassals of other factions | applied (`service_faction` excludes `commit` holders) [RAN] | moot: the muster is unchanged; kept for P (§4.8) |
+| 3 | the morale reader cannot see companies | applied (`faction_holding or service_faction`) | moot: no company; the reader is unchanged |
+| 4 | experience via `train` excludes case-less persons | applied; TS-10 blocked | stands: no computed grade producer |
+| 5 | equipment unreachable; a second loadout table | applied (`kind_for_kit` beside `TROOP_LOADOUT`) | stands, and equipment becomes computed-reachable |
+| 6 | reusing `levy` collides with three registers | applied (`conscript`; J-3; TS-L) | stands; J-3 now also cites `rosters.yaml:1582` |
+| 7 | grouping merges a lord's companies; demand (3) overstated | applied (one subunit per company) | re-cast: one subunit per grade × kind, splittable by `order` |
+| 8 | Command constant 4; `COMMAND_SIGMA_ENABLED` | applied | stands |
+| 9 | the §0 ladder misapplied to J-4, J-6, J-7 | applied | stands |
+| 10 | `order` is a ninth operand | applied (`confer`'s `term`) | stands |
+| 11 | statement 1's contrary reading not cited | applied | stands; A meets it in full |
+| 12 | upkeep per person; the witness channel | applied (stated, not fixed) | moot under A; P's upkeep claim corrected (§4.8) |
+| 13 | `remove_person` pops the person-rung, so kit is destroyed | applied (salvage clause) | moot: kit is the town's |
+| 14 | the row's `writes` omits `Tenure.term` | applied | moot: no Tenure is written |
+| 15 | falsifiers blind at scale 1 | applied (`men_per_weight = 250`) | stands |
+| 16 | NPC5: a defecting lord leaves his men behind | applied (holder's faction) | stands, through `fielded`'s holder read |
+| 17 | the meta-rule net undercounted | applied (22 vs 6) | superseded by the second critic's finding 13 |
+| 18 | 22 files, not 44; `carriers.py:928` | applied | stands |
+| — | the morale-preset defect, untracked | applied (TS-2) | stands |
+
+---
+
+## SECOND CRITIC RECONCILIATION (13 findings + an observation, against the first correction)
+
+Each locator was re-opened before any text changed (§10). "Applied" means the finding reproduced and
+the text now says what the code does.
 
 | # | finding | verdict | where |
 |---|---|---|---|
-| 1 | weight-2 cohorts: a split of 1 yields two non-cohorts, so C fails at the shipped weight | **applied, then superseded.** Reproduced (`cohorts.yaml`, 37 × 2; `carriers.py:713-721`; `world_q.py:860`). The draft's split is gone under R-POOL. Its arithmetic survives in one place: a company must be minted at `n ≥ 2` (`conscript.refused` below), and casualties leave weight-1 remnants | part 1 §0 items 2–3, §2.4, §3.1; part 2 §4.6 |
-| 2 | `mustered` pulls in vassals of other factions (NPC-070, NPC-041); "complies without amending" overstated | **applied.** Probe [RAN]: both obligees hold a `commit`, so `service_faction` excludes both. Layer 1 amendment stated, not denied | part 1 §0 item 4; part 2 §4.1, TS-5 |
-| 3 | the morale reader cannot see companies | **applied.** `_side_stance` reads `faction_holding or service_faction`, with a falsifier | part 2 §4.1, TS-5 |
-| 4 | experience via `train` excludes case-less persons | **applied.** The axis is unreachable in computed play until J-5 or J-13; TS-10 is blocked; the N-line fails in computed play | part 1 §0 item 5, §3.2; part 2 §8.1, TS-10, J-5 |
-| 5 | equipment unreachable; a second loadout table that contradicts `TROOP_LOADOUT` | **applied.** `troop_kinds` dropped; `kind_for_kit` beside `TROOP_LOADOUT`; the levy and `knights_templar` errors named; the unreachability stated | part 1 §0 item 5, §2.7; part 2 §6 |
-| 6 | reusing `levy` collides with requirements, the hole register and v9's EXITs | **applied.** Working name `conscript`; the collision laid out in J-3; TS-L is a position if `levy` is chosen | part 1 head; part 2 J-3, TS-7, TS-L |
-| 7 | grouping merges a lord's companies; demand (3) overstated | **applied.** One subunit per company; demand (3) met for player and hand-built acts only | part 2 §4.2, §4.3 |
-| 8 | Command is constant 4 until R-C-1; `COMMAND_SIGMA_ENABLED` omitted | **applied** | part 1 §1 item 12; part 2 §4.2 step 6 |
-| 9 | the §0 ladder was misapplied to J-4, J-6 and J-7 | **applied.** J-6 by precedent; J-7 by architecture; J-4 folded into J-1; J-2 answered by R-POOL; J-1, J-3 and J-5 escalated | part 2 §9 |
-| 10 | `order` is a ninth operand, not a `content:` key | **applied.** The ladder run; step 4, `confer`'s `term` | part 2 §4.3 |
-| 11 | statement 1's contrary reading not cited | **applied,** inside J-1 and part 1 §2.4 | part 1 §2.4; part 2 J-1 |
-| 12 | upkeep per person, not per weight; the witness channel | **applied.** Both stated; upkeep-by-weight listed under J-1; claim count in TS-4 (iv) | part 2 §4.1, §8.2 |
-| 13 | `remove_person` pops the person-rung, so kit is destroyed, not orphaned | **applied** (`world.py:770-773`). The salvage clause is kept, with the corrected reason and the general observation | part 1 §2.8; part 2 TS-6 |
-| 14 | the illustrative row's `writes` omits `Tenure.term` | **applied** | part 1 §3.1 |
-| 15 | TS-5/TS-10 falsifiers blind at scale 1 | **applied.** `men_per_weight = 250` fixed for every run | part 1 §2.8; part 2 §6, §7 |
-| 16 | NPC5: a defecting lord who keeps his seat leaves his men behind | **applied.** `service_faction` reads the holder's faction (`holder_faction_of` precedent). Residual named: the attacker's side is still read off the seat's label | part 2 §4.1, §4.7 |
-| 17 | the meta-rule net undercounted | **applied.** About 22 added against 6 cut on disk; E-OVERHEAD downgraded to NARROWED | part 1 §3.5; part 2 §8.4 |
-| 18 | 22 files, not 44; `Office.faction` at `carriers.py:928`, not `:887` | **applied** (22 [RAN]; `:928` [CHECKED]) | part 2 §4.4, §4.7 |
-| — | the morale-preset defect is real and untracked | **applied** as its own position (TS-2), gated on nothing, with the docstring contradiction | part 1 §0 item 9; part 2 TS-2 |
+| 1 | the typed cell cannot name `recruits`; computed `kind` is `grain`; no "pool short" decline | **applied.** Reproduced (`requires.py:303-307`; `options.py:846-875`; `fixtures.py:491`). The effect declines `kind != recruits` and a short pool; TS-7's referent is a `stores:recruits` claim. Also found: the chain's `amount` is `default_transfer_amount` (1), so the first correction's `conscript_amount` was dead; withdrawn | part 1 §1.4 items 15–16, §3.1; part 2 §6, TS-4 (iii), TS-7 |
+| 2 | `is_company` reads `Term.declared_by`, which renewal overwrites; J-16 forbids a branch on origin | **applied.** Reproduced (`carriers.py:50-51`; `effects_economy.py:309`; `hole_register.yaml:3772`). Under A there is no company. Under P `is_company` is withdrawn for a state-keyed rule J-16 must accept | part 1 §1.5 item 23, §2.4; part 2 §4.8 |
+| 3 | a computed army does not "last one term": TS-7's obliges become renewable | **applied.** The docstring's missing piece is exactly "no computed act forms an `oblige`" (`effects_economy.py:283-290`); the claim is withdrawn and restated for P | part 2 §4.8 |
+| 4 | ED-WR-0011 never cited; it weighs toward a body that mints nobody | **applied, and decisive.** Reproduced (`wr_archive.jsonl:13-14`; `world_q.py:824`; H-170). **The default moved from P to A.** Narrowed in one respect: CENSUS already mints a weight-1 person at run time (`census.py:105-112`), so ED-WR-0011 is not absolute in the code; but the code applies it to cohorts by name, and X-4's contrary reading frees a weight, not a cohort `Person` | part 1 §0 item 2, §1.5 item 21, §2.4; part 2 J-1 |
+| 5 | capacity bypassed by fiat; eating reads `contain`, not `reside` | **applied.** Reproduced (`world_q.py:1050-1051`, `:856`; `populated.py:401-432`). Moot under A (no resident minted); P′ drops `reside` | part 1 §1.5 item 22, §2.4; part 2 §4.8 |
+| 6 | men are sensed as food; draw order puts a company first; R-POOL unshown under scarcity | **applied, and sharper than reported.** [RAN]: the pool fill flips every cohort's `SUBSIST` from 0 to 1000 **at build**, not only under dearth; saturated after one season. `SUBSIST` reads only weighted kinds; levies draw after persons; TS-3 (vii) and TS-11 (i) are the scarcity falsifiers | part 1 §0 item 10, §1.4 items 19–20, §2.5; part 2 TS-3, TS-11 |
+| 7 | which rungs hold a pool; regrowth skipped by `if not produced: continue` | **applied.** `pool_rung_kinds: [settlement]`; regrowth in its own pass after the yield loop; falsifiers (iii), (iv) | part 1 §0 item 1, §2.2, §2.3; part 2 §6, TS-3 |
+| 8 | defence inverted: no company → `Unopposed`; walls never engage | **applied.** The extreme is walked in a table; the default is that the pool defends its own settlement (ladder step 5, Jordan-vetoable); `Unopposed` survives for a side with nobody in it | part 1 §0 item 7; part 2 §4.1, TS-5, §9 |
+| 9 | the case against E applied equally to S | **applied.** E is now declined on `04:179`, its meaning and its shape, not on "twice" | part 1 §2.1 |
+| 10 | the cell was not `requisition`'s "conjunct for conjunct" | **applied by making it so:** the `existence` conjunct is dropped and the conjuncts carry `requisition`'s names; the eligibility difference (`remit:dispatch`, no `presence:<rung>`) is stated with its reason | part 1 §3.1 |
+| 11 | `hole_register.yaml:3543` is H-156, not H-163 | **applied.** The crowding shape is cited as H-156 (`:3540`, `:3543`); H-163 at `:3631` | part 2 §5, TS-4 (iv) |
+| 12 | the `conscript` absence claim is false; J-3 omits `rosters.yaml:1582` | **narrowed, then applied.** The `git grep` was true as run (no output [RAN]): the hit is in an ignored, untracked file (`.gitignore:46`), the retired key-type registry. The claim is restated with its scope; `rosters.yaml:1582` "levy operations" is cited in J-3 | part 2 J-3 |
+| 13 | the object count omitted event kinds, edits, constants, result keys, hole rows; "6 cut" padded | **applied.** Recounted for A (35 added, 5 cut) and for P (about 38) | part 1 §3.5; part 2 §8.4 |
+| obs. | `_rehome`'s safety rests on "nothing in `loop/` or an effect constructs a Person"; already stale (`census.py:105`) | **applied for P, moot for A.** Reproduced (`matter.py:108-121`; `world.py:792-805`; `census.py:105-112`). A constructs no `Person`. Under P: construct before tenures and correct both comments. The stale comments themselves are outside this design's lane and are not edited here | part 1 §2.4; part 2 §4.8 |
 
-**Rebutted:** none. **Narrowed:**
-- **Finding 1** is superseded rather than answered by the original design.
-- **Finding 9's** suggestion to keep J-2 escalated is overtaken by R-POOL.
-- **Finding 12's** upkeep cost is stated, not fixed.
+**Rebutted:** none outright. **Narrowed:** finding 4 (CENSUS's run-time individuation exists; ED-WR-0011
+still binds cohorts as the code reads it); finding 12 (true as a `git grep`, false as a tree-wide
+absence).

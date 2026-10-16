@@ -2,7 +2,7 @@
 
 ## Status: PROPOSED (2026-10-16). Corrected twice on the same day against two independent critics' reports, and re-based on Jordan's ruling of that day (below). The second correction **changed the default troop body** from a company `Person` (P) to a troop stock (A); §2.4 says why. Both reconciliation tables are at the end of `_part2`. Not ratified; merge ratifies nothing unless Jordan so rules.
 ## Lane: MB (the field and the army builder), SE (the recruit pool, the levy stock and its feeding), FA (assembly), IN (the verb row, the registries, the harness subsistence formula). IDs: none allocated.
-## Read at the working tree of 2026-10-16, after the `levy` → `requisition` rename. At the second correction `git status --short` lists three modified files, all `proposals/2026-10-16-character-template*.md`, none of them read or cited here [RAN].
+## Read at the working tree of 2026-10-16, after the `levy` → `requisition` rename. At the start of the second correction `git status --short` listed three modified files, all `proposals/2026-10-16-character-template*.md`, none of them read or cited here [RAN]; they were committed during the pass (`74b557e`), and so was an intermediate state of this file (`54012ec`), neither by this pass.
 ## Parts: this file (head, §0–§3) · [`_part2`](2026-10-16-troop-stock-design_part2.md) (§4–§10 and both critic reconciliations), read in that order.
 
 **Reference, not mechanism (CLAUDE.md §0.05).** Nothing here changes how the game behaves. Every
