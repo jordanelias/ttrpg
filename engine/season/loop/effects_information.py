@@ -20,7 +20,7 @@ from ..data.rosters import RECORD_CONTENT, RECORD_KIND_KEYS
 from ..queries import faction_q
 from ..queries.world_q import (
     BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_PETITION, docketed, docketed_under,
-    faction_holding, hold_force, place_of, works_for, works_target,
+    faction_holding, hold_force, holder_faction_of, place_of, works_for, works_target,
 )
 from ..state.carriers import Proposition, Record, Tenure
 from ..state.carriers import DETERMINED_BY
@@ -436,7 +436,12 @@ def _eff_survey(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     for a person (the one faction he is committed to; `None` for none or for two, where canon states
     no precedence). So the literal reading -- survey the Crown -- and the reachable one -- survey the
     faction of the man you were asked about -- are ONE read, and no referent-to-faction rule is
-    written here. REJECTED, each with its reason:
+    written here. ⚠ AND A RUNG, SINCE v9 IN-12 (`survey` + Rung, H-169 limit 6): *who holds this
+    valley* is `world_q.holder_faction_of`, the owner the march path and `uncontrolled` already ask,
+    so a survey of a place reads the faction that holds it as `loop/sides.py` reads its defender
+    (`_resolved_sheet` dispatches on `World.class_of`). The sheet is the same five-field view, so the
+    sheet consumer (`rosters.yaml: record_sourced_operands.faction_sheet`) reads it unchanged.
+    REJECTED, each with its reason:
       * THE SUBJECT IS THE FACTION AND NOTHING ELSE (`commit`'s cell, `existence` of `subject`, kind
         `Proposition`). No computed act's referent is ever a Proposition -- `questions_for`'s clause
         1 admits a claim only if its subject is in the asker's `reach`, and `place_of` of a
@@ -444,8 +449,9 @@ def _eff_survey(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
         season, `python -m engine.season.harness.aperture`) -- so a survey would be formed on every
         referent and refused on every one: a fourth instance of `H-156`'s scene tax, and a
         mechanism that runs in no shipped world.
-      * `holder_faction_of` FOR A RUNG (*who holds this valley*): a second derivation beside the
-        first, for a document the position does not name. A rung referent declines.
+      * (`20-iii`'s, LIFTED at v9 IN-12) `holder_faction_of` FOR A RUNG as *a second derivation
+        the position does not name*: the plan named it at IN-12, and it is a call to the owner, not a
+        derivation written here.
       * `create_record` DECLARING `kind: faction_sheet` (`works`' route at `24e`). Three reasons,
         any one sufficient. (a) A sheet's content is RESOLVED, and `create_record` stores what the
         act carries VERBATIM (r2 `02` §A.4, *verbatim or not at all*): a sheet whose maker supplies
@@ -468,8 +474,9 @@ def _eff_survey(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     standing nowhere, where there is no rung to name.
 
     DECLINES (`NO_CHANGE` -> `survey.refused`, the `write` clause): the subject coheres under no single
-    faction -- a person committed to none or to two, a rung, a site, a document, an unrostered
-    Proposition. The cell has already asked that the surveyor has heard of the subject (`own_ledger`).
+    faction -- a person committed to none or to two, a rung nobody up its chain holds (or whose holder
+    coheres under none), a site, an office, a document, an unrostered Proposition. The cell has already
+    asked that the surveyor has heard of the subject (`own_ledger`).
 
     ⚠ WHAT THIS DOES NOT BUILD, each registered (`H-169`): proposal 14.1's bound -- *what the sheet
     can contain is bounded by who you have* (the seats you have filled) -- so every survey is
@@ -486,10 +493,25 @@ def _eff_survey(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
 
 def _resolved_sheet(w: "World", a: "Act") -> Optional[dict]:
     """WHAT A SHEET ON THE ACT'S `subject` SAYS TODAY -- `faction_q.resolve`'s view of the one faction
-    the subject coheres under (`world_q.faction_holding`), as a fresh mapping (`asdict`), or `None`
-    when it coheres under none. `survey` mints it as it is; `forge` mints it with one key false.
-    Factored at v9 IN-45 so the two verbs read WHICH faction one way (`_eff_survey`'s docstring)."""
-    prop = faction_holding(w, _operand(a, "subject"))
+    the subject coheres under, as a fresh mapping (`asdict`), or `None` when it coheres under none.
+    `survey` mints it as it is; `forge` mints it with one key false. Factored at v9 IN-45 so the two
+    verbs read WHICH faction one way (`_eff_survey`'s docstring).
+
+    WHICH FACTION, BY THE SUBJECT'S CLASS (`World.class_of`, the one owner of *what kind of thing is
+    this id*), each answered by its own single owner and neither re-derived here:
+      * a RUNG -- `world_q.holder_faction_of`, *who holds this valley*: the faction of the holder of
+        the nearest held rung at or above it (`ancestry`), `None` where nobody up the chain holds or
+        the holder coheres under no single faction. v9 IN-12 `survey` + Rung (H-169 limit 6).
+      * anything else -- `world_q.faction_holding`: a faction's own Proposition answers for itself, a
+        person for the one faction he is committed to.
+    ⚠ `class_of` TRIES `Person` BEFORE `Rung`, AND THAT ORDER IS LOAD-BEARING HERE: every person also
+    has a `person`-kind rung of the same id (every builder mints the two together), so a test of
+    `subject in w.rungs` would answer a man committed to no faction with the faction that holds the
+    ground he stands on -- a second reading of a person this helper does not own. A dead man's rung
+    leaves with him (`World.remove_person`), so `class_of` answers `None` and the sheet declines."""
+    subject = _operand(a, "subject")
+    prop = (holder_faction_of(w, subject) if w.class_of(subject) == "Rung"
+            else faction_holding(w, subject))
     return None if prop is None else asdict(faction_q.resolve(w, prop))
 
 
@@ -527,7 +549,8 @@ def _eff_forge(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     correct; revert: restore the writer here (H-210's candidate value).]
 
     DECLINES (`NO_CHANGE` -> `forge.refused`, the `write` clause) exactly where `survey` does: the
-    subject coheres under no single faction. G3 -- THE FORGER'S OWN `hold`, `T-m`, `survey`'s. G4 --
+    subject coheres under no single faction. (So a forge on a RUNG mints since v9 IN-12, as a survey
+    does: the two read WHICH faction through one helper, `_resolved_sheet`, by design.) G3 -- THE FORGER'S OWN `hold`, `T-m`, `survey`'s. G4 --
     WHAT IT NAMES: THE RECORD, whole, earning `record.forged`; a new id always moves.
     ⚠ THE FORGER HOLDS IT, SO HE IS ITS FIRST HOLDER and the deposit hands him what it says, as it
     would any holder: the instrument does not know he wrote it (the deposit carries no attribution,
