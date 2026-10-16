@@ -326,13 +326,21 @@ verbs:
     stratum:     "uncontested_material"
     eligibility: ["own"]
     beneficiary: "actor"
-    requires:    "—"
-    writes:      ["Record.exists", "Record.forgery_quality"]
-    emits:       ["record.created"]
-    emits_on_refusal: []
+    beneficiary_note: "the forgery is minted into the FORGER's hand (`_mint_document`'s maker's `hold`), `survey`'s carrier: he holds it to plant it (`give`)."
+    requires:    "the forger has heard of what he forges a sheet on, and it coheres under one faction"
+    requires_typed:
+      form:      own_ledger
+      of:        subject
+    requires_typed_note: "v9 IN-45: `survey`'s cell, for `survey`'s reasons (its `requires_typed_note:`) -- #453's row for the verb, *'a faction the forger holds a claim on (`survey`'s cell)'*. `own_ledger` of `subject` carries `subject` onto a computed act, which is what makes the row TYPED: plan position `14` declined the effect because an untyped row carries nothing, so a computed `forge` had no faction to forge a sheet on. THE KIND IS THE VERB'S, NOT AN OPERAND: a forgery is a `faction_sheet` (`loop/effects_information.py::_eff_forge`), supplied by the verb that knows it as `issue`, `petition` and `survey` supply theirs -- `requires_operands`' `kind` is a MATTER kind and is not bound, and no ninth operand is coined. *It coheres under one faction* is the effect's decline, `survey`'s."
+    writes:      ["Record.exists"]
+    writes_note: "one mint, `survey`'s: `_mint_document` writes the Record whole -- the sheet `faction_q.resolve` gives, with the forger as its `head` -- with the forger's `hold` riding on its receipt (`T-m`). ⚠ `Record.forgery_quality` LEFT THIS COLUMN AT v9 IN-45 AND IS NOT WRITTEN (`H-210`): a pair declared and never written is the `Office.establishment` defect (`establish`'s `writes_note:`), and a field written and read by nothing is `ID-13`'s. It returns, writer with reader, at the examination SC-02 `22b` step 25 builds (B-P). [ASSUMPTION; medium; Jordan to correct; revert: restore the pair with the writer.]"
+    emits:       ["record.forged"]
+    emits_note: "v9 IN-45: `record.created` -> `record.forged`, the kind the matrix names for a forgery (`write_matrix.yaml`'s `(Record, forgery_quality)` row), so the row and the matrix agree; it joins `(Record, exists)`'s `emits:` in the same commit, the column this row writes, as `faction.surveyed` did for `survey`. Its own kind for `survey`'s reason (`faction.surveyed`'s `emits_note:`): a forgery is a private act, and neither broadcast channel reads it. Witnesses learn THAT a document was made; that it is false, nobody learns from the Event."
+    emits_on_refusal: ["forge.refused"]
+    refusal_note: "FLAT: one kind for every failable clause (`data/verbs.py`, invariant 4). Refusal conditions, `survey`'s: the forger holds no claim on the subject (the cell); the subject coheres under no single faction (the effect's decline, the `write` clause)."
     grade:       "assumption"
-    effect_decline_note: "PLAN POSITION `14` (U7-own) DECLINED THE EFFECT. The row is untyped, so a computed `forge` carries no record kind and no content (and the operand vocabulary's `kind` is a MATTER kind) -- it would mint a contentless `text` forgery on every referent and EXECUTE, a behaviour nothing chose. `forgery_quality`'s value is unruled and nothing reads it (r2 `02` §A.15, RULED there: the missing step is a CONSUMER), and this row's `emits: record.created` disagrees with the matrix row's `record.forged`. Registered at `H-169` (2)."
-    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+    grade_note:  "an argued addition: the matrix rows `(Record, exists)` and `(Record, forgery_quality)` are the tree's; the cell, the kind and the false key (`head`) are v9 IN-45's, on #453 `:515`. ⚠ `forgery_quality` IS NOT WRITTEN (`H-210`): the forged sheet's CONTENT is read -- the sheet consumer, `rosters.yaml: record_sourced_operands.faction_sheet` -- and the field waits, writer and reader together, for the examination the proceedings plan's step 25 names (SC-02 `22b`)."
+    source:      "ARCHITECTURE_V2.md §E3, transcribed; typed and effected at v9 IN-45 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) `:515` and `:557`"
   # ===========================================================================================
   # PLAN POSITION `24e` -- WORKS & FOUNDING. `ARCH` F.20 (`04_CODE_ARCHITECTURE.md`): *"the world
   # only decays -- nothing is ever founded or built"*. `(Rung, exists)` and `(Site, exists)` were

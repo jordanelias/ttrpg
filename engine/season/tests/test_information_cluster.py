@@ -26,9 +26,9 @@ THE FOUR PROPERTIES THE PLAN NAMES, each with the control that stops it passing 
     of the same `give` holds none (the control: it is holding, not presence, that reads).
   * FORGEABLE AND DESTRUCTIBLE -- the CARRIER admits both (a false sheet is a lawful Record and reads
     exactly like a true one in a holder's ledger; `destroy_record`'s effect ends a sheet and its
-    `hold` and leaves the belief standing). ⚠ NEITHER ACT EXECUTES FOR ANY KIND TODAY -- `forge` has
-    no effect body and `destroy_record` declines for every actor (`H-75`) -- and two tripwires below
-    assert exactly that, so they go red, and are re-read, the day either lands (`H-169`).
+    `hold` and leaves the belief standing). `forge` EXECUTES SINCE v9 IN-45 (section 5b: the sheet
+    consumer first, then `_eff_forge`; its tripwire below is re-pinned to forge through the fold);
+    `destroy_record` still declines for every actor (`H-75`), and its tripwire asserts exactly that.
 
 The fixture is `probes.tiny_world` with one rostered faction planted: `fac_crown`, committed to by
 `p_high` (who holds `off_duke`) and `p_mid` (who holds the hearth `Hh`). `p_low`, `p_mid` and
@@ -296,31 +296,32 @@ def test_20iii_read_free_the_holder_and_a_receiver_by_give_learn_it_and_spend_no
 
 def test_20iii_a_false_sheet_is_a_lawful_record_and_reads_exactly_like_a_true_one():
     """r2 `02` §A.15: *"a forged writ and a genuine writ are indistinguishable in every executor's
-    ledger -- by construction, not by a flag"*. A sheet naming the wrong members, with
-    `forgery_quality` set, passes ⊕L35 (its keys are the kind's) and, handed to `p_mid`, deposits a
-    claim of the same predicate and source as a true sheet's, carrying nothing of its forgery.
-    ⚠ THE TRIPWIRE: `forge` has NO effect body (r2 §A.15 measured it; `H-169`), so no act makes this
-    document -- it is planted. When `forge` gains one, this assertion goes red and the test should
-    forge through the fold instead."""
-    assert "forge" not in EFFECTS and "forge" not in resolvable_verbs(), (
-        "`forge` executes now -- forge the sheet through the fold and narrow `H-169`")
+    ledger -- by construction, not by a flag"*. A FORGED sheet, made through the real fold by
+    `p_other` and handed on to `p_mid`, deposits a claim of the same predicate and source as a true
+    sheet's, carrying nothing of its forgery. ⚠ RE-PINNED AT v9 IN-45, AS THIS TRIPWIRE ASKED: it
+    asserted `forge` had no effect body and the forgery here was PLANTED; `forge` is typed and
+    effected now (`_eff_forge`), so the sheet is forged through the fold and `H-169` (2) is narrowed.
+    `Record.forgery_quality` is not written (`H-210`), so the forgery is told apart here by its maker."""
+    assert "forge" in EFFECTS and "forge" in resolvable_verbs()
     w, _ = _world()
     _hear(w, "p_low", "p_high")
-    lie = {"proposition": FAC, "members": ["p_low"], "holdings": [], "seats": [], "head": None}
-    w.records["forged"] = Record("forged", "Hh", SHEET, forgery_quality=4, subject_matter=lie)
-    w.add_tenure(Tenure("t_hold_forged", "p_other", "forged", "hold", since=0))
+    _hear(w, "p_other", "p_high")
 
-    def choose(p, v, s, ask_budget):
+    def season_one(p, v, s, ask_budget):
         if p.id == "p_low":
             return [P.Act_(w, p, "survey", payload={"subject": "p_high"})]
         if p.id == "p_other":
-            return [P.Act_(w, p, "give", payload={"subject": "forged", "to": "p_mid"})]
+            return [P.Act_(w, p, "forge", payload={"subject": "p_high"})]
         return []
-    P._run_d(w, choose)
-    (true_sheet,) = [r for r in _sheets(w) if r.id != "forged"]
+    P._run_d(w, season_one)
+    (forged,) = [r for r in _sheets(w) if world_q.hold_force(w, r.id).subject == "p_other"]
+    (true_sheet,) = [r for r in _sheets(w) if world_q.hold_force(w, r.id).subject == "p_low"]
+    P._run_d(w, lambda p, v, s, b: ([P.Act_(w, p, "give", payload={"subject": forged.id,
+                                                                    "to": "p_mid"})]
+                                    if p.id == "p_other" else []))
     true_claim = _content_claims(w.persons["p_low"], true_sheet.id)[0]
-    (false_claim,) = _content_claims(w.persons["p_mid"], "forged")
-    assert dict(false_claim.value)["members"] == ("p_low",)
+    (false_claim,) = _content_claims(w.persons["p_mid"], forged.id)
+    assert dict(false_claim.value)["head"] == "p_other" != dict(true_claim.value)["head"]
     assert (false_claim.predicate, false_claim.source) == (true_claim.predicate, true_claim.source)
     assert "forgery" not in repr(false_claim), false_claim
 
@@ -360,6 +361,131 @@ def test_20iii_destroy_ends_a_sheet_and_its_hold_and_the_belief_survives_but_no_
 
 
 # ======================================================================================
+# 5b -- v9 IN-45: THE SHEET CONSUMER, THEN `forge`, THEN WHAT READS A FORGERY DIFFERENTLY
+# ======================================================================================
+# The consumer is `rosters.yaml: record_sourced_operands.faction_sheet` (`to: head`), read person-side
+# by `decision/options.py::_from_content_claim`: on a question about a sheet its holder holds, a
+# petition is addressed to the head the sheet names (H-169 limit 5). Hand-built worlds only (v9 §0.5,
+# RULED 2026-10-13): nothing here asserts a verb executed in the seed-0 realm.
+
+def _head(w, pid):
+    """Make `pid` the Crown's head: `faction_q.head` reads the live `commit` carrying a degree, and
+    no builder in the tree writes one, so a true sheet names a head only on a hand-built world."""
+    next(t for t in w.tenures if t.id == f"t_commit_{pid}").degree = "x"
+
+
+def _hold_sheet(w, holder, verb="survey"):
+    """`holder` commissions (or forges) a sheet on `p_high` through the real fold and, at WITNESS,
+    holds what it says. Returns the Record and the content claim."""
+    _hear(w, holder, "p_high")
+    before = set(w.records)
+    P._run_d(w, lambda p, v, s, b: ([P.Act_(w, p, verb, payload={"subject": "p_high"})]
+                                    if p.id == holder else []))
+    (rid,) = set(w.records) - before
+    (c,) = _content_claims(w.persons[holder], rid)
+    return w.records[rid], c
+
+
+def _petition_to(w, holder, rec, claim):
+    """The `to` of the petition `holder` forms on the question the sheet's content claim raises
+    (`questions_for`'s `claim_landed`: referent the Record, `about` the claim) -- person-side,
+    through `opening_set`, the real derivation."""
+    q = Question(f"q:claim:{claim.id}", "claim_landed", (rec.id,), claim.id)
+    p = w.persons[holder]
+    got = [c.operands for c in opening_set(p, View(holder, [], w.fixtures.get("view_k")), q,
+                                           w.fixtures) if c.verb == "petition"]
+    assert len(got) == 1, got
+    return got[0]["to"]
+
+
+def test_in45_the_sheet_consumer_addresses_a_petition_to_the_head_the_sheet_names(monkeypatch):
+    """H-169 limit 5, BUILT BEFORE `forge` IS READ: a TRUE sheet (a real `survey`) naming `p_high` as
+    the Crown's head, and its holder's petition on it is addressed to `p_high` -- off the sheet, not
+    off the question's referent. Then folded: the petition Record names him. CONTROLS, each the
+    reading with one cause removed: (a) the same world with no head -- the sheet names nobody and the
+    petition falls back to the referent, as before IN-45; (b) THE MUTATION, the consumer row dropped
+    from `record_sourced_operands` -- the same sheet, and the address no longer comes from it."""
+    w, d = _world()
+    _head(w, "p_high")
+    rec, claim = _hold_sheet(w, "p_low")
+    assert rec.subject_matter["head"] == "p_high", rec
+    to = _petition_to(w, "p_low", rec, claim)
+    assert to == "p_high", to
+    out = _fold(w, d, Act(id="pet1", actor="p_low", verb="petition",
+                          payload={"subject": rec.id, "to": to, "from": "Hh"}))
+    assert _kinds(out) == ["petition.filed"], _kinds(out)
+    assert w.records["rec:pet1"].subject_matter["to"] == ["p_high"]
+    # (a) no head on the sheet: nothing to read, the referent rule as before
+    w2, _ = _world()
+    rec2, claim2 = _hold_sheet(w2, "p_low")
+    assert rec2.subject_matter["head"] is None
+    assert _petition_to(w2, "p_low", rec2, claim2) == rec2.id
+    # (b) THE MUTATION: the consumer row gone, the same sheet with its head no longer read
+    from ..data.requires import RECORD_SOURCED_OPERANDS
+    monkeypatch.delitem(RECORD_SOURCED_OPERANDS, SHEET)
+    assert _petition_to(w, "p_low", rec, claim) == rec.id
+
+
+def test_in45_forge_mints_a_sheet_true_but_for_its_head_into_the_forgers_hand():
+    """`_eff_forge` through the real fold: `survey`'s document (`faction_q.resolve` of the faction the
+    subject coheres under, at the moment of writing) with the FORGER as its head, and the forger's
+    `hold`; the one kind is `record.forged`. `forgery_quality` stays a genuine Record's `0` -- the
+    field is deferred, writer with reader, to SC-02 `22b` (`H-210`), and asserted unwritten so a
+    writer landing without its reader goes red here. CONTROL: in the same world a forge on a subject
+    under no single faction is `forge.refused` and mints nothing -- so the mint is the subject's,
+    not a verb that always writes."""
+    w, d = _world()
+    _hear(w, "p_other", "p_low")
+    before = dict(w.records)
+    assert _kinds(_fold(w, d, Act(id="f0", actor="p_other", verb="forge",
+                                  payload={"subject": "p_low"}))) == ["forge.refused"]
+    assert w.records == before, "a refused forge left a document behind"
+    rec, _ = _hold_sheet(w, "p_other", verb="forge")
+    truth = dataclasses.asdict(faction_q.resolve(w, FAC))
+    assert rec.kind == SHEET and rec.subject_matter == {**truth, "head": "p_other"}, rec
+    assert truth["head"] != "p_other", "the fixture: the forger is not the true head"
+    assert rec.forgery_quality == 0, "a writer of `forgery_quality` landed without its reader (H-210)"
+    assert world_q.hold_force(w, rec.id).subject == "p_other"
+    assert "record.forged" in _kinds(w.log) and "record.created" not in _kinds(w.log)
+
+
+def test_in45_forges_emits_agree_with_the_matrix_row_of_the_field_it_forges():
+    """The row's falsifier: `emits:` disagreeing with the matrix row `(Record, forgery_quality)` ->
+    fail. Read from both owners, never restated: the row emits exactly the kind the matrix names
+    for a forgery, and the column it writes (`(Record, exists)`) carries that kind too. MUTATION:
+    `emits: ["record.created"]` (the row before IN-45) reddens the first assertion. The field
+    itself is not written (`H-210`): its matrix row declares `unproduced:` until SC-02 `22b`."""
+    from ..data.matrix import matrix_row
+    row = VERB_TABLE["forge"]
+    assert row.emits == matrix_row("Record", "forgery_quality").emits == ("record.forged",), (
+        row.emits, matrix_row("Record", "forgery_quality").emits)
+    assert row.writes == ("Record.exists",), row.writes
+    assert "record.forged" in matrix_row("Record", "exists").emits
+    assert matrix_row("Record", "forgery_quality").unproduced.startswith("H-210")
+
+
+def test_in45_a_forged_sheet_reads_differently_from_a_true_one_downstream():
+    """ID-13's half this position can build: the forgery's CONTENT is read. Two holders of a sheet on
+    the same faction -- `p_low` a true one, `p_mid` a forgery `p_other` made and gave him -- each form
+    the petition the consumer addresses, and the two go to different people: the true head
+    (`p_high`) and the forger. Both holders' claims are the same predicate and source (the test
+    above), so it is what the document SAYS, not a flag, that moves the decision. MUTATIONS that
+    redden it: `_eff_forge` not writing the forger into the sheet (both go to `p_high`); the consumer
+    row dropped (both go to the referent). `forgery_quality` is not written at all (`H-210`): it
+    returns with its reader at SC-02 `22b` step 25, so no field here has a writer and no reader."""
+    w, _ = _world()
+    _head(w, "p_high")
+    true_rec, true_claim = _hold_sheet(w, "p_low")
+    forged, _ = _hold_sheet(w, "p_other", verb="forge")
+    P._run_d(w, lambda p, v, s, b: ([P.Act_(w, p, "give", payload={"subject": forged.id,
+                                                                    "to": "p_mid"})]
+                                    if p.id == "p_other" else []))
+    (got,) = _content_claims(w.persons["p_mid"], forged.id)
+    assert _petition_to(w, "p_low", true_rec, true_claim) == "p_high"
+    assert _petition_to(w, "p_mid", forged, got) == "p_other"
+
+
+# ======================================================================================
 # 6 -- DONE MEANS IT RUNS: THE POPULATED REALM COMMISSIONS SHEETS ON ITS OWN
 # ======================================================================================
 
@@ -378,7 +504,12 @@ def test_20iii_the_populated_realm_commissions_sheets_with_no_hand_built_act():
              contest_max_depth=w.fixtures.get("contest_max_depth"))
     kinds = _kinds(w.log)
     assert kinds.count("faction.surveyed") >= 1, "no survey executed in the populated realm"
-    sheets = _sheets(w)
+    # v9 IN-45: A FORGED SHEET IS A SHEET TOO (`_eff_forge`, `record.forged`), so the surveys are
+    # counted against the GENUINE ones -- the Records a `record.forged` Event names are set aside
+    # (the field that would mark them is unwritten, `H-210`); how many forgeries the realm makes is
+    # not asserted (v9 §0.5).
+    forged = {c.subject for e in w.log if e.kind == "record.forged" for c in e.changes}
+    sheets = [r for r in _sheets(w) if r.id not in forged]
     assert len(sheets) == kinds.count("faction.surveyed"), (len(sheets), kinds.count(
         "faction.surveyed"))
     # v9 IN-57: A SHEET WHOSE MAKER DIED IN THE SAME SEASON HAS NO LIVE HOLD (a dead person's

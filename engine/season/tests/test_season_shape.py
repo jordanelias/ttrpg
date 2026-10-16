@@ -7831,8 +7831,11 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # set (the `ever` note above), still attempted and refused everywhere; and `dispatch` JOINS from
     # the never-attempted set (the assertion below): it is attempted once, in NPC-033, and refused.
     # A re-record, said so.
+    # ⚠⚠ v9 IN-45, TEN -> ELEVEN: `forge` JOINS, newly resolvable (`survey`'s cell, `_eff_forge`):
+    # attempted and refused everywhere, for `survey`'s reason -- no corpus person coheres under a
+    # faction. A re-record, said so.
     assert refused_only == {"build", "found", "migrate", "work", "survey", "commit", "dispatch",
-                            "examine", "levy", "restore"}, (
+                            "examine", "levy", "restore", "forge"}, (
         f"the always-refused set moved to {sorted(refused_only)}. `move` and `transfer` left it "
         "when `W-C` closed `H-94`'s structural half — the Candidate carries operands now — and "
         "`work` stays for a reason about the corpus's questions rather than about the channel")
@@ -8318,7 +8321,14 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
         # `commit`, `examine`, `levy`, `restore` leave the executed set. THE SAME-BREATH CHECK: the
         # universal set is empty on both sides and the status census is UNMOVED (103 RUNS-UNDECLARED ·
         # 40 SPAN-UNAUTHORED); R3 NPC 46 of 46, ARC 97 of 97, as at the base.
-    assert len(by_sig) == 106, (
+        # ⚠⚠ **106 -> 101, v9 IN-45 `forge` (typed with `survey`'s cell, `_eff_forge`), MEASURED BY
+        # `corpus_run`, seed 0, AGAINST A CONTROL: the same tree with `forge` withheld from the
+        # chooser's verbs reads 106, byte-for-byte the base's figures.** THE UNIT AND THE DIRECTION:
+        # variety FELL by five; `forge` is attempted and refused everywhere (no corpus person coheres
+        # under a faction) and its scenes re-rank the rest; the executed set (17 of 45) did not move.
+        # THE SAME-BREATH CHECK: the universal set is empty on both sides and the status census is
+        # UNMOVED (103 RUNS-UNDECLARED · 40 SPAN-UNAUTHORED); R3 NPC 46 of 46, ARC 97 of 97.
+    assert len(by_sig) == 101, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -9526,7 +9536,8 @@ def _wc_corpus_pass():
     ⚠ ATTRIBUTION IS BY EMISSION ID, NEVER BY KIND, and that is not caution -- it is a defect this
     corpus has already published once. `forge` and `create_record` BOTH emit `record.created`, so
     a scan over `{e.kind for e in w.log}` credited `forge` with every record `create_record` made,
-    while `forge` has no predicate and no effect and cannot execute at all. The fold derives every
+    while `forge` had no predicate and no effect and could not execute at all (v9 IN-45 typed and
+    effected it and moved it to `record.forged`, the matrix row's kind). The fold derives every
     emission id as `H(seed, tick, actor, f"{kind}:{act.id}")`, so re-deriving it names the act.
 
     One owner because two tests need the same run and a second copy would let them measure
@@ -9877,9 +9888,12 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # ⚠⚠ v9 IN-57: `commit`, `examine`, `levy` AND `restore` JOIN, out of the executed set (the note
     # at the executed-set assertion above), and `dispatch` from never-attempted (once, NPC-033):
     # attempted, refused everywhere. A re-record.
+    # ⚠⚠ v9 IN-45: `forge` JOINS, newly resolvable (typed with `survey`'s cell, `_eff_forge`), and for
+    # `survey`'s reason -- no corpus person coheres under a faction, so every attempt is the effect's
+    # decline. A re-record, said so.
     assert set(refused) - set(executed) == {"work", "found",
                                             "build", "migrate", "survey", "commit", "dispatch",
-                                            "examine", "levy", "restore"}, (
+                                            "examine", "levy", "restore", "forge"}, (
         f"the always-refused set is {sorted(set(refused) - set(executed))}. `work` refuses because "
         "its `site` operand binds either to a non-Site referent (UNKNOWN) or to a real site whose "
         "condition never clears the floor in this corpus; `dispatch` LEFT at `17-cast` (see above; it "
@@ -9889,7 +9903,7 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
         "Proposition -- do not widen Q4 to close this here); `levy` because no corpus seat has a "
         "rung, so none has purview anywhere (position `19`); `found`/`build` because no referent "
         "is a works, since no computed act declares one (position `24e`, `H-165`); `survey` "
-        "because no corpus person coheres under a faction; `restore` left this set again at `24f` "
+        "and `forge` because no corpus person coheres under a faction; `restore` left this set again at `24f` "
         "and `release` at `20-ii` (see above)")
     # ⚠ AND THE HONEST READING OF "IT EXECUTES", MEASURED RATHER THAN ASSUMED — and the first
     # writing of this arm ASSUMED, from one sampled case, that every corpus transfer was a

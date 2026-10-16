@@ -1,5 +1,5 @@
 """`season.loop.effects_information` -- records, propositions, matters: create_record, issue,
-open_case, determine, petition, survey, give, destroy_record, utter, commit.
+open_case, determine, petition, survey, forge, give, destroy_record, utter, commit.
 
 EXTRACTED from `effects.py` at the per-subsystem split (Phase 4). Holds the document/proposition/
 matter cluster: the one mint (`_mint_document`) that `create_record`, `issue`, `petition` and
@@ -15,7 +15,7 @@ from dataclasses import asdict
 from typing import Optional
 
 from ..data.arrangements import ARRANGEMENTS
-from ..data.requires import REQUIRES_OPERANDS
+from ..data.requires import RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS
 from ..data.rosters import RECORD_CONTENT, RECORD_KIND_KEYS
 from ..queries import faction_q
 from ..queries.world_q import (
@@ -118,10 +118,10 @@ def _makers_hold(w: "World", actor: str, obj: str) -> Tenure:
     here. The id is `H(seed, tick, actor, f"hold:{obj}")`, unsalted by the act (a maker makes one
     thing per id). ⚠ `"hold"` STAYS A STRING LITERAL IN THIS FILE: `data/verbs.py::OPENERS-DERIVE`
     walks a decorated effect into the same-file helpers it calls and reads the kind off the literal,
-    so the six minters reaching this call -- `create_record`, `issue`, `open_case`, `petition`, `survey`
-    (through `_mint_document`) and `utter` (through `_eff_utter`) -- remain `hold`'s openers.
+    so the seven minters reaching this call -- `create_record`, `issue`, `open_case`, `petition`, `survey`,
+    `forge` (through `_mint_document`) and `utter` (through `_eff_utter`) -- remain `hold`'s openers.
 
-    ⚠ NONE OF THE SIX DECLARES `Tenure.since` IN ITS `writes:`. The hold opens inside the declared
+    ⚠ NONE OF THE SEVEN DECLARES `Tenure.since` IN ITS `writes:`. The hold opens inside the declared
     `Proposition.exists` / `Record.exists` write, and only the authority check (`refuse_unauthored`)
     sees it. CONVENTION against `04` §C.2/§C.4 and PART D's rows on matrix and step: no scan sees it.
     Declaring it would add a gated write and move the hash, so it is not done."""
@@ -473,15 +473,70 @@ def _eff_survey(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
 
     ⚠ WHAT THIS DOES NOT BUILD, each registered (`H-169`): proposal 14.1's bound -- *what the sheet
     can contain is bounded by who you have* (the seats you have filled) -- so every survey is
-    complete and exact, and anyone may commission one; `forge` has no effect body, so no act makes a
-    false sheet; `destroy_record` declines for every actor (`H-75`), so no act burns one.
+    complete and exact, and anyone may commission one; `destroy_record` declines for every actor
+    (`H-75`), so no act burns one. (A false sheet is `_eff_forge`'s, below, since v9 IN-45.)
 
     G3 -- THE `hold` IS THE SURVEYOR'S OWN, `T-m`, exactly `create_record`'s. G4 -- WHAT IT NAMES: THE
     RECORD, whole, earning `faction.surveyed`; a new id always moves (absent -> present)."""
-    prop = faction_holding(w, _operand(a, "subject"))
-    if prop is None:
+    sheet = _resolved_sheet(w, a)
+    if sheet is None:
         return NO_CHANGE
-    sheet = asdict(faction_q.resolve(w, prop))
+    return _mint_document(w, a, faction_q.SHEET_KIND, sheet, place_of(w, a.actor) or a.actor)
+
+
+def _resolved_sheet(w: "World", a: "Act") -> Optional[dict]:
+    """WHAT A SHEET ON THE ACT'S `subject` SAYS TODAY -- `faction_q.resolve`'s view of the one faction
+    the subject coheres under (`world_q.faction_holding`), as a fresh mapping (`asdict`), or `None`
+    when it coheres under none. `survey` mints it as it is; `forge` mints it with one key false.
+    Factored at v9 IN-45 so the two verbs read WHICH faction one way (`_eff_survey`'s docstring)."""
+    prop = faction_holding(w, _operand(a, "subject"))
+    return None if prop is None else asdict(faction_q.resolve(w, prop))
+
+
+# THE KEY A FORGED SHEET FALSIFIES: the one its holders' decisions read their addressee from
+# (`rosters.yaml: record_sourced_operands`, the sheet consumer, H-169 limit 5). Read off that map,
+# never spelt here, so the forgery always lies about exactly what a reader acts on -- a perturbation
+# of a key nothing reads would be `ID-13`'s dead carrier -- and a map that drops the sheet fails here
+# at import instead of forging a lie nobody reads.
+_FORGED_SHEET_KEY = RECORD_SOURCED_OPERANDS[faction_q.SHEET_KIND][RECORD_CONTENT.get("addressee")]
+
+
+@effect_for("forge")
+def _eff_forge(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """v9 IN-45 -- A FORGED FACTION SHEET: `survey`'s document, minted through the same one mint (r2
+    `02` §A.15's *"the same one-line delegation `issue` gets"*), saying ONE THING FALSE -- that the
+    FORGER heads the faction. #453's row for the verb
+    (`proposals/2026-10-03-verb-coverage-and-gap-fill.md` `:515`): *"a faction the forger holds a
+    claim on (`survey`'s cell); `survey`'s mint with perturbed content"*.
+
+    WHAT IS FALSE, AND WHY THAT KEY: `_FORGED_SHEET_KEY`, the key the sheet consumer reads a holder's
+    addressee off (`head`). A petition its holder files on the strength of it is addressed to the
+    forger, who then holds the petition (`give` it, sit on it). The rest is TRUE AT THE MOMENT OF
+    WRITING: a forgery a reader could check against the world on every key but one is the
+    convincing kind, and one false key is the least the verb can say and still be a forgery.
+    [ASSUMPTION; medium; Jordan to correct; revert: another key, or the act declaring its lie --
+    which a computed act cannot carry (`H-94`).]
+
+    ⚠ `Record.forgery_quality` IS NOT WRITTEN, DELIBERATELY (`H-210`): nothing in the tree reads it,
+    and a field with a writer and no reader is `ID-13`'s dead carrier. Its reader is the examination
+    the proceedings plan's step 25 names (SC-02 `22b`, B-P), and the writer lands there WITH it, so
+    the field has one owner. A HOLDER can never read it, by construction -- *"a forged writ and a
+    genuine writ are indistinguishable in every executor's ledger -- by construction, not by a flag"*
+    (r2 §A.15) -- so the content deposit (`loop/witness.py`) hands a holder the same claim either
+    way; what this forgery does downstream is its false `head`. [ASSUMPTION; medium; Jordan to
+    correct; revert: restore the writer here (H-210's candidate value).]
+
+    DECLINES (`NO_CHANGE` -> `forge.refused`, the `write` clause) exactly where `survey` does: the
+    subject coheres under no single faction. G3 -- THE FORGER'S OWN `hold`, `T-m`, `survey`'s. G4 --
+    WHAT IT NAMES: THE RECORD, whole, earning `record.forged`; a new id always moves.
+    ⚠ THE FORGER HOLDS IT, SO HE IS ITS FIRST HOLDER and the deposit hands him what it says, as it
+    would any holder: the instrument does not know he wrote it (the deposit carries no attribution,
+    r2 §A.9). His own petition on it would be addressed to himself and is declined person-side
+    (`counterparty:`), so the lie misleads others, not him, on the one decision that reads it."""
+    sheet = _resolved_sheet(w, a)
+    if sheet is None:
+        return NO_CHANGE
+    sheet[_FORGED_SHEET_KEY] = a.actor
     return _mint_document(w, a, faction_q.SHEET_KIND, sheet, place_of(w, a.actor) or a.actor)
 
 
