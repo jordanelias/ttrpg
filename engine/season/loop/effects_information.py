@@ -16,7 +16,7 @@ from typing import Optional
 
 from ..data.arrangements import ARRANGEMENTS
 from ..data.requires import RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS
-from ..data.rosters import RECORD_CONTENT, RECORD_KIND_KEYS
+from ..data.rosters import RECORD_CONTENT, RECORD_KIND_KEYS, roster_map
 from ..queries import faction_q
 from ..queries.person_q import ABOUT_KEYS
 from ..queries.world_q import (
@@ -25,7 +25,9 @@ from ..queries.world_q import (
 )
 from ..state.carriers import Proposition, Record, Tenure
 from ..state.carriers import DETERMINED_BY
-from ..state.gate import DISPOSABLE_KINDS, NO_CHANGE, UNDECLARED_DISPOSAL, Change, Subject
+from ..state.gate import (
+    DISPOSABLE_KINDS, NO_CHANGE, UNDECLARED_DISPOSAL, Change, Subject, may_seize,
+)
 from ..state.ids import H
 
 from .effects_shared import _new_oblige_term, _operand, effect_for
@@ -685,6 +687,65 @@ def _eff_give(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     def perform() -> None:
         held.until = w.tick                # the giver's release, FIRST
         w.add_tenure(nt)                   # then the receiver's hold
+    return Change((Subject.edge(nt), Subject.edge(held)), perform)
+
+
+# WHICH RECORD KIND IS A WARRANT FOR `seize`, and WHICH OF ITS CONTENT KEYS NAMES WHAT IT AUTHORIZES:
+# both read off rosters (`warrant_sourced`, `record_sourced_operands`' `subject` entry), never spelt here.
+_SEIZE_WARRANT_KIND = roster_map("warrant_sourced", "values")["seize"]
+_SEIZE_WARRANT_KEY = RECORD_SOURCED_OPERANDS[_SEIZE_WARRANT_KIND]["subject"]
+
+
+def _held_warrant_names(w: "World", actor: str, rid: str) -> bool:
+    """DOES A WARRANT THE ACTOR HOLDS NAME RECORD `rid`? -- a live `hold` of his own on a Record of the
+    warrant kind (`rosters.yaml: warrant_sourced`) whose `_SEIZE_WARRANT_KEY` content says `rid`. World-side:
+    the effect owns the licence because the gate never reads a Record's content (K-52); the person-side
+    twin is `decision/options.py::opening_set`'s formation on the same reading, off his own ledger."""
+    for t in w.tenures:
+        if t.kind != "hold" or not t.live or t.subject != actor or t.object not in w.records:
+            continue
+        rec = w.records[t.object]
+        sm = rec.subject_matter
+        if rec.kind == _SEIZE_WARRANT_KIND and isinstance(sm, dict) and sm.get(_SEIZE_WARRANT_KEY) == rid:
+            return True
+    return False
+
+
+@effect_for("seize")
+def _eff_seize(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """v9 IN-12 step 6 (#453 §10.4, the `seize` row), THE RECORD HALF: the previous holder's `hold` on a
+    Record ENDS and the actor's OPENS, in ONE write, WITHOUT the holder's consent -- `give`'s body, the
+    one other verb that moves a Record, with the licence that `give` takes from the giver's own edge
+    replaced by a warrant and a seat.
+
+    WHAT LICENSES IT, IN THE ORDER IT IS ASKED, each one owner of its rule: (1) the Record exists and
+    one other person holds it (`hold_force`, the owner of *who holds this*); (2) the actor HOLDS A
+    WARRANT NAMING IT (`_held_warrant_names`) -- the effect's, because it is a Record's content;
+    (3) the exercised seat may seize from that holder (`may_seize`, the gate's own predicate, so an act
+    the precondition admitted is never killed at the gate by a disagreement about the holder's home).
+    Anything else declines (`NO_CHANGE` -> `seize.refused`). A Record the actor already holds, or that
+    nobody holds, moves nothing.
+
+    THE GATE: the close is `seizure` (`state/gate.py`), the open is `T-m` (the actor opening a non-seat
+    `hold` for himself). A SEAT IS NEVER SEIZED: the row's `existence` conjunct refuses an Office before
+    this runs, and the gate's `seizure` clause admits only a Record, so a hand-built act that skipped the
+    precondition is `NotYours`, not a taking.
+
+    G4 -- WHAT IT NAMES: the two edges, the opened one first as `_eff_give` and `_eff_confer` name
+    theirs; both earn the row's one kind, `record.seized`. The receipts name TENURES, not the Record.
+    THE NEW EDGE'S ID carries the act (`hold:<record>:<act>`), `_eff_give`'s salting, so a Record taken
+    and taken back inside one tick does not re-mint the first `hold` id."""
+    rid = _operand(a, "subject")
+    held = hold_force(w, rid) if rid in w.records else None
+    if held is None or held.subject == a.actor:
+        return NO_CHANGE
+    if not _held_warrant_names(w, a.actor, rid) or not may_seize(w, a.actor, a.via, held.subject):
+        return NO_CHANGE
+    nt = Tenure(H(w.world_seed, w.tick, a.actor, f"hold:{rid}:{a.id}"), a.actor, rid, "hold", since=w.tick)
+
+    def perform() -> None:
+        held.until = w.tick                # the dispossessed holder's hold, FIRST
+        w.add_tenure(nt)                   # then the seizer's
     return Change((Subject.edge(nt), Subject.edge(held)), perform)
 
 

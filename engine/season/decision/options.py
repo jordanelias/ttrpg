@@ -30,6 +30,7 @@ from ..data.requires import (
 )
 from ..data.rosters import (
     CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, WITNESS_CHANNELS, require_member,
+    roster_map,
 )
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
@@ -121,6 +122,19 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         refs = row.referents_of(q)
         if not refs:
             continue
+        # v9 IN-12 step 6 (`rosters.yaml: warrant_sourced`): A VERB WHOSE SUBJECT COMES FROM A WARRANT
+        # forms only on a referent a HELD record of the warrant kind names -- IN-10's held-Record
+        # channel (`held_record_claims`, answered through `record_sourced_operands`' `subject` key),
+        # the person's own Tenures and own ledger and no World. It NARROWS the referents the question
+        # carries and widens nothing (§F1 clause 3 stands), so `seize` is never formed for a seat that
+        # holds no warrant naming what it was asked about.
+        warrant_kind = WARRANT_SOURCED.get(verb)
+        warranted = None
+        if warrant_kind is not None:
+            if records is None:
+                records = held_record_claims(p)
+            warranted = {_content_answer(c, "subject") for c in records
+                         if content_kind(c) == warrant_kind}
         # `19`: the seat(s) this row's act would exercise -- the untraced walk `pack_scenes` names
         # `Act.via` by (`seat_of`) -- for the belief test's `basis` conjunct below.
         # `H-134`: WHERE THE ADMITTING `remit:` ALTERNATIVE IS GRANTED BY SEVERAL OF THE PERSON'S
@@ -150,6 +164,8 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         # cannot ask what kind of thing an id is (L2).
         for subject in refs:
             if told is not None and subject not in told:
+                continue
+            if warranted is not None and subject not in warranted:
                 continue
             # ⚠⚠ A CONTEST NEEDS TWO CLAIMANTS, AND A PERSON IS NOT THEIR OWN ADVERSARY.
             # `move`'s `contain_path` cell keeps the same shape of rule -- *"a node is not a path
@@ -714,6 +730,20 @@ def _content_answer(c: Optional["Claim"], name: str):
 # Every operand name SOME record kind answers -- derived from the roster, never listed (the
 # `test_jordan_no_definition_is_hardcoded_in_a_body` finding at `_derive_operand`'s document branch).
 _RECORD_ANSWERABLE = frozenset(n for m in RECORD_SOURCED_OPERANDS.values() for n in m)
+
+# v9 IN-12 step 6: `{verb: record kind}` -- the verbs whose `subject` a HELD record of that kind names
+# (`rosters.yaml: warrant_sourced`). REFUSED AT IMPORT, so a stale line cannot read as "no verb needs a
+# warrant" (`data/requires.py::_check_record_sourced`'s reason): a verb the table does not carry would
+# narrow nothing, and a kind `record_sourced_operands` gives no `subject` key would answer nothing, so
+# the verb would form for nobody.
+WARRANT_SOURCED = dict(roster_map("warrant_sourced", "values"))
+for _v, _k in WARRANT_SOURCED.items():
+    if _v not in VERB_TABLE or "subject" not in RECORD_SOURCED_OPERANDS.get(_k, {}):
+        raise Forbidden(
+            f"`rosters.yaml: warrant_sourced` names {_v!r}: {_k!r}, and either the verb table carries no "
+            f"such verb or `record_sourced_operands.{_k}` maps no `subject`", "rosters.yaml",
+            needs="a `verb_table.yaml` verb, and a record kind whose `subject` a held Record answers",
+            law="IN-12 step 6 -- a warrant-sourced verb forms only on what a held warrant names")
 
 
 def held_record_claims(p: Person) -> list:
