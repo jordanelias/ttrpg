@@ -123,7 +123,7 @@ where a game is *named*, not how deeply it was studied.
 | `modules/mass_battle/config.py` | Rout-onset and rout-cap fractions tagged `[canonical: Jordan historical research 2026-07-23]` (`:186-187`); Cannae-derived shock and rear-charge constants (`:230`, `:372`) |
 | `tests/sim/gauge_mb.py` | Gauge bands H1–H5… each tagged `[canonical: mass_battle_gauge_grounding.md §3 …]` (`:324-332`). ⚠ It cites `references/historical/mass_battle_gauge_grounding.md`, a path that does not exist; the file is `MBG` (§8) |
 | `engine/season/rosters.yaml:75`, `engine/season/hole_register.yaml` (`H-99`, `H-100`) | The tier-3 ruling and the one hole row that draws on `GOV` |
-| `engine/season/verb_table.yaml` | The 44 verbs — the executable roster §4 is keyed to. Its evidence is `VCD`, not `research/` |
+| `engine/season/verb_table.yaml` | **45 rows** at `462c68a`: `VCD`'s 44 plus `challenge` and `accept`, minus `repudiate` (cut at IN-11; `release` now emits `commitment.ended`). The executable roster §4 is keyed to. Its evidence is `VCD`, not `research/` |
 
 ### 2.E Pre-restructure refs (tags `v30-snapshot-2026-06-28` and `archive-2026-08-05`)
 
@@ -176,7 +176,7 @@ Precedent- or history-bearing files at the snapshot, with no current counterpart
 
 ---
 
-## 4. By verb — the 44, in the groups of `VCD` §3.2
+## 4. By verb — the groups of `VCD` §3.2 (written against its 44; the live table now has 45 rows, see §2.D)
 
 `VCD` is the verb-keyed interrogation that already exists: §3.4 gives each verb its REACH and NOT; §4 its hook; §6.3 and §6.7 each verb against the two surveys; App. A the full row; **App. B the 63 act families with their evidence**, citing game acts, repo documents and historical procedures by extraction id (`[G1-…]` detective games, `[G2-…]` CK3 and RoTK, `[H1-…]` governance history, `[R1-…]` `research/`, `[P1-…]`/`[P2-…]` proposals, `[C-…]` code demand). Its class tally at HEAD: COVERED 31 · WIDENED 6 · GAP 10 · DEFERRED 7 · OUTCOME 4 · SYSTEM 5 (of 63).
 
@@ -188,7 +188,7 @@ Precedent- or history-bearing files at the snapshot, with no current counterpart
 | G4 Proceedings | `carry`, `convene`, `determine`, `open_case` | 6–9 accuse, inquiry, summons, trial · 50 mediate/appeal | `RHET` §7; `GOV` (Venetian councils, church justice); `COMP-6` §13.1 | SC-03b (step 4, `determine` contested); SC-01; IN-45 (`carry`) |
 | G5 Writ answers | `comply`, `construe`, `dispatch`, `evade / defy` | 8 summons and writs | `GOV`; `PA` | IN-09 (`evade / defy`, `construe`) |
 | G6 Documents | `create_record`, `destroy_record`, `forge`, `give`, `issue`, `petition`, `survey`, `conceal` (suite) | 8 · 33 expose · 34 blackmail · 42 survey/census · 32 cover identity (GAP) | `GOV`; `FASE` T4 | IN-12 (step 10, `conceal`); IN-45 (`forge`) |
-| G7 Seats and bonds | `commit`, `confer`, `establish`, `oblige`, `release`, `repudiate`, `revoke`, `succeed`, `tie / knot` | 14 motion/vote · 15 elect · 16 appoint · 17 depose · 18 resign · 19 heir/regency · 20 homage · 36 marry · 51 recognize · 53 admit/expel · 57 regency | `RTP`; `GOV` hierarchy; `FASE` T9; `COMP-1` §2.5, §2.2 | IN-61 (`succeed`); IN-12 |
+| G7 Seats and bonds | `commit`, `confer`, `establish`, `oblige`, `release`, `repudiate` (cut at IN-11; kept here because `VCD` App. B still lists it), `revoke`, `succeed`, `tie / knot` | 14 motion/vote · 15 elect · 16 appoint · 17 depose · 18 resign · 19 heir/regency · 20 homage · 36 marry · 51 recognize · 53 admit/expel · 57 regency | `RTP`; `GOV` hierarchy; `FASE` T9; `COMP-1` §2.5, §2.2 | IN-61 (`succeed`); IN-12 |
 | G8 Matter | `exchange`, `levy`, `transfer` | 35 bribe · 39 trade · 40 borrow (deferred) | `FASE` T1–T3; `PW` §3; `COMP-6` §13.3 | IN-33 (`exchange`) |
 | G9 Ground and fabric | `build`, `found`, `restore`, `work`; `raze`, `sabotage` (suite) | 41 build · 52 damage/raze (GAP) | `PGS` §2A; `HCC` §2.3–2.5 | IN-12 (steps 9, 11: `sabotage`, `raze`); IN-45 (`work`) |
 | G10 Movement | `migrate`, `move` | — | `FASE` T8; `PGS` | IN-45 (`migrate`) |
@@ -215,7 +215,7 @@ Families with no verb by design: 60 events and 61 inner mechanics (SYSTEM), 47 t
 | **Formation vocabulary** — grand formation, unit formation, unit, strategy, tactic; per-formation entry (composition, geometry, equipment, role, context, vulnerabilities, engagements, throughline flags) | `PFF` `00_MANIFEST.md` | mass-battle primitives |
 | **Design hooks** — one `=> Valoria design hook` per historical pattern, plus consolidated tables | `GOV` (each theme file), `RTP` §3, `PGS` §3–4, `HCC` §4–5, `FASE` STEP 3 | historical pattern → proposed mechanic |
 | **Rhetorical primitives** — stasis × genre; Nyāya self-gating obstruction; ethos as a tracker | `RHET` §9 | persuasion, as ratified into the contest redesign (CR4, CR5, per `RHET` §0) |
-| **Executable roster** — 44 verbs, write matrix, rosters | `engine/season/verb_table.yaml`, `rosters.yaml` | what the code does; the only primitive list that is a mechanism |
+| **Executable roster** — 45 verb rows, write matrix, rosters | `engine/season/verb_table.yaml`, `rosters.yaml` | what the code does; the only primitive list that is a mechanism |
 
 ---
 
@@ -254,7 +254,7 @@ Stated so an "absence" in an interrogation is not mistaken for a finding about t
 - **Byzantium** is absent from `GOV` (agent interrupted) and present in `CGR` and `RHET` §2.
 - **Tactics Ogre** was surveyed and produced no finding that survived (`COMP-1` §1.1).
 - **The two surveys behind the 58 and 84 primitives are not in the repository** (`VCD` §1). Their points survive only as `VCD` carries them, and the "session documents" they cite (N1, N2, D1–D3, *The Third Strand*, *A Tells B About C*) are pinned by hash at `proposals/2026-09-12-emergent-narrative-primitives-v2/04_PROVENANCE.md`, not stored.
-- **The seven nulls** (`COMP-2` §3.4): no game models argument content; none solves personal leverage across mass sizes; none has a general expression channel for interior state; none certifies generated content is good rather than varied; none defends a cross-scale bridge whose default state equals its absence; none caps unit *quality* by a faction scalar (4/4 franchises cap quantity); every franchise resolves non-payment as permanent desertion, where both Valoria options are recoverable. `PREC-NULLS` adds the legibility-against-depth null, fog of war for social state, and the appointed governor.
+- **The seven nulls** (`COMP-2` §3.4): no game models argument content; none solves personal leverage across mass sizes; none has a general expression channel for interior state; none certifies generated content is good rather than varied; none defends a cross-scale bridge whose default state equals its absence; none caps unit *quality* by a faction scalar (4/4 franchises cap quantity); `COMP-2` says every franchise resolves non-payment as permanent desertion, where both Valoria options are recoverable — **but `PMM`'s own list shows culls, halted replenishment and manual disbanding, so the null contradicts its source** (reader's check K1 on `PMM`/`COMP`; treat the null as unestablished). `PREC-NULLS` adds the legibility-against-depth null, fog of war for social state, and the appointed governor.
 - **Numbers about games are leads** (§1 rule 2). `[UNVERIFIED]` marks persist at source: Dominions assassination meta, the *Duel of Wits* 21-versus-11 account, the Blades failure corpus, the State Inquisitors' watching of envoys.
 - **The two older refs add little research.** `ARCH:research/` is wholly contained in the current tree, and `SNAP:references/historical/` is the same three files. What exists only at `SNAP:` is the earlier precedent comparison of the engine and of attributes (§2.E), whose conclusions the companion and `THR` re-derived from different programs.
 - **Mention counts overstate games named in passing.** *Old World* is also a phrase in the pre-Columbian files; *Diplomacy* and *Civilization* are not counted because the word is ordinary.
