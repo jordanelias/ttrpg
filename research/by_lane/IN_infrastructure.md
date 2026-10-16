@@ -994,7 +994,7 @@ K-IN-4 left the five: `confer` already executes (IN-53), and what remains — a 
 
 | ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
 |---|---|---|---|---|---|
-| K-IN-7 | Rule whether persons lie: if not, close deception and intent-keeping and let a teller's credit rest on cell agreement alone; if so, let a lie be a deed claim a witness can hold False, so `record`'s one pairing step catches it. | M-IN-14, M-IN-8, T-IN-13 (narrowed) [CHECKED HR H-198, H-191; `person_q.py`:74-76, :681; `options.py`:1258-1300]; audit A9. (The first draft's competence half moved to K-IN-1; AX-7 layer 2, the performer's own fallible reading, stays Jordan's and is not recommended here) | **Jordan**: survives all five — H-198's own ladder reached step 5: "two defensible lie rules (alter a held cell value vs. assert an unheld deed) lead to different games", and a world without lies is a third | no: adds nothing; cuts G7, H-198, H-191 and the two `ABSENT:` markers (`person_q.py`:681, `options.py`:1295). Yes: adds one lie rule at `said_of`'s marker; cuts `record`'s cell-only restriction (`_is_cell` on both sides, `options.py`:1290-1292), so deeds pair through the one `_pair` rather than a second credibility path | yes: a teller who asserted an unheld deed, contradicted by a witness's False deed claim, weighs less than one who did not, and G7's falsifier is re-pointed so that mutating the lie rule reddens it (H-198: today's falsifier "cannot observe a lie rule's failure"); no: `grep "ABSENT: H-198\|ABSENT: H-191"` → 0 and v9 names no G7 |
+| K-IN-7 | Rule whether persons lie: if not, close deception and intent-keeping and let a teller's credit rest on cell agreement alone; if so, let a lie be a deed claim a witness can hold False, so `record`'s one pairing step catches it. | M-IN-14, M-IN-8, T-IN-13 (narrowed) [CHECKED HR H-198, H-191; `person_q.py`:74-76, :681; `options.py`:1258-1300]; audit A9. (The first draft's competence half moved to K-IN-1; AX-7 layer 2, the performer's own fallible reading, stays Jordan's and is not recommended here) | **Jordan**: survives all five — H-198's own ladder reached step 5: "two defensible lie rules (alter a held cell value vs. assert an unheld deed) lead to different games", and a world without lies is a third | no: adds nothing; cuts G7, H-198, H-191 and the two `ABSENT:` markers (`person_q.py`:681, `options.py`:1295). Yes: adds one lie rule at `said_of`'s marker; cuts `record`'s cell-only restriction (`_is_cell` on both sides, `options.py`:1292-1293), so deeds pair through the one `_pair` rather than a second credibility path | yes: a teller who asserted an unheld deed, contradicted by a witness's False deed claim, weighs less than one who did not, and G7's falsifier is re-pointed so that mutating the lie rule reddens it (H-198: today's falsifier "cannot observe a lie rule's failure"); no: `grep "ABSENT: H-198\|ABSENT: H-191"` → 0 and v9 names no G7 |
 | K-IN-8 | *Merged into K-IN-2* (delete the OUGHT `predicate` nothing reads, unless a reader is ruled). The ID is kept so earlier references resolve. | — | — | — | — |
 
 ### 10.5 SURFACE
@@ -1002,7 +1002,7 @@ K-IN-4 left the five: `confer` already executes (IN-53), and what remains — a 
 | ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
 |---|---|---|---|---|---|
 | K-IN-9 | Rule which Layer 1 sentence governs what the player is shown — AX-7's "No state is hidden from the player" or §C.11's "the ARITHMETIC of what the character already holds, and nothing else" — then build `explain(p, v)` to the survivor, showing odds only if the survivor admits them and only as the actor's estimate from held claims. | M-IN-3, T-IN-10, §7.2 item 2, §9.3 C2 [CHECKED `04_CODE_ARCHITECTURE.md`:849-860; `01_AXIOMS.md`:299-302; `grep "def explain"` → 0]; audit A2b, A3 | **Jordan, or a Layer 1 amendment**: survives all five — §C.11 owes "the derivation of a value the character already has" (`04`:855), and odds for an act not yet taken are no such value; AX-7's gloss reads wider; the two ratified sentences disagree and choosing overwrites one. The first draft logged the conflict and then decided it ("takeable, step 3") | adds one function Layer 1 already declares (no store: it reads `PersonInterior`); cuts the losing Layer 1 sentence, and under §C.11 cuts the odds band from the demand entirely (no display state is ever built) | `explain`'s signature has no `World` parameter (a type test); if odds are admitted, two actors holding different claims about one subject are shown different bands for the same act |
-| K-IN-10 | Put IN-46's grid suspension and IN-47's character spaces into a build batch. | M-IN-2 [CHECKED `_part2`:209; `_part4`:32-41]; audit A2a | takeable, step 3: the plan states M1 cannot be met without it, both designs landed and were re-read. **Whether creation is an act (a person shaped by the player) or a selection ("no act; a cast entry", `_part4`:41) is Jordan's**: pick-a-person and make-a-person are different games (H-IN-3) | adds one batch (IN-47's creation and chronicling emit no act, `_part4`:41); cuts `fight`'s separate RESOLVE-time resolution — the IN-46 build "gives `fight` `march`'s ENCOUNTER/Declared pair" (`_part4`:34 [CHECKED]), so both contested-body verbs resolve at one barrier — and the two "named residue" rows | R-04's two `scales:` rows read `in_loop` with an execution artifact named; IN-46's own falsifier: AUTOMATED and PLAYABLE-with-the-chooser's-choices end at one `content_hash`, and a differing scripted choice moves it (`_part4`:35) |
+| K-IN-10 | Put IN-46's grid suspension and IN-47's character spaces into a build batch. | M-IN-2 [CHECKED `_part2`:209; `_part4`:32-41]; audit A2a | takeable, step 3: the plan states M1 cannot be met without it, both designs landed and were re-read. **Whether creation is an act (a person shaped by the player) or a selection ("no act; a cast entry", `_part4`:41) is Jordan's**: pick-a-person and make-a-person are different games (H-IN-3) | adds one batch (IN-47's creation and chronicling emit no act, `_part4`:41); cuts `fight`'s separate RESOLVE-time resolution — the IN-46 build "gives `fight` `march`'s ENCOUNTER/Declared pair" (`_part4`:34 [CHECKED]), so both contested-body verbs resolve at one barrier — and the two "named residue" rows | R-04's two `scales:` rows read `in_loop` with an execution artifact named; IN-46's own falsifier: AUTOMATED and PLAYABLE-with-the-chooser's-choices end at one `content_hash`, and a differing scripted choice moves it (`_part4`:36) |
 
 ### 10.6 APPARATUS AND PROCESS (IN only)
 
@@ -1018,7 +1018,7 @@ K-IN-4 left the five: `confer` already executes (IN-53), and what remains — a 
 | A2 (a) callback player; (b) §C.11 vs AX-7 gloss; (c) dead CANONICAL path | survive | (a) `play_surface.py`:40-51, `_part4`:41; (b) `04`:845-863, `grep -c AX-7 04` → 0; (c) `ls`, `requirements.yaml`:34-35 [all CHECKED] |
 | A3 one ladder, several roads; non-monotone odds | survives, extended to c = 6 (sawtooth) | literals, substrates, vocabularies re-opened; §9.1 executed |
 | A4 (i) `urgency` inert; (ii) `benefits_me` no caller; (iii) OUGHT predicate; (iv) dark knobs; (v) no outcome term | (i)–(iv) survive; (v) not a missing area (§8.5) | `choose.py`:150-193; HR H-185; BASELINE B5 |
-| A5 (a) dedup contradicts 03 §C.3; S-UP petition; R-CHOICE `levy` | (a) and S-UP survive; `levy` table relied on | `deliberate.py`:225, :305, :355; `03`:136-140 |
+| A5 (a) dedup contradicts 03 §C.3; S-UP petition; R-CHOICE `levy` | (a) survives narrowed: the conflict is 03 §C.2 against §C.3, and the filter answers a measured monoculture; S-UP survives; `levy` table relied on, and it prices the misnamed stores act (M-IN-13) | `loop/deliberate.py`:225, :305, :314-318, :355; `03`:131-140 |
 | A9 AX-7 falsifier fires by its letter | survives; sites moved again: :532, :648, :671, :700, :850; actor skip :495 | `witness.py` grep, `_refract` :231-239 |
 | T3, T4, T5, T6 | SOUND (T-IN-2, T-IN-3, T-IN-4, T-IN-11); T6's run-output count is now 88,377 (was 87,678) | §7.1 |
 | G1 per-person source | survives (K-IN-1) | `_part7`:44; `_part5`:514 |
@@ -1026,9 +1026,9 @@ K-IN-4 left the five: `confer` already executes (IN-53), and what remains — a 
 | G2b delete mass battle's four-label degree | survives (MB lane) | `ladder.py`:195-203 "stays there for introspection" |
 | G2c mass battle returns a margin | survives, Jordan's (MB) | as audit |
 | G2d one substrate | survives (PC; K-IN-5) | `core.py`:60 |
-| G3 weight→troop conversion | survives (MB) | `massbattle.py`:198-207 |
-| G4 delete the dedup filter | survives (K-IN-3) | as above |
-| G5 delete `urgency`, `benefits_me` | survives, **and v9 now plans the opposite for `urgency`**: IN-62's `score_terms -> (pursuit, stance, urgency)` (`_part5`:255 [CHECKED]) — K-IN-2 | |
+| G3 weight→troop conversion | **superseded in form** by Jordan's 2026-10-16 statements: troops come from a levied stock graded by equipment, experience and commander, not from converted weight (K-IN-13; MB) | `massbattle.py`:198-207 refuses to invent a conversion [CHECKED] |
+| G4 delete the dedup filter | **does not survive as a free cut**: the filter's basis is 03 §C.2 plus a measured monoculture, so the conflict is inside Layer 1 and Jordan's (K-IN-3) | `loop/deliberate.py`:314-318; `03`:131-140 [CHECKED] |
+| G5 delete `urgency`, `benefits_me` | survives. IN-62's `score_terms -> (pursuit, stance, urgency)` keeps `urgency` as a term in a "refactor, hash EQUAL" (`_part5`:255 [CHECKED]): it preserves the term rather than investing in it, and its deciding-term attribution can never credit `urgency`; the conflict with deleting it is real but small — K-IN-2 drops one slot | `_part5`:255 [CHECKED] |
 | G6 AX-7 falsifier re-point; narrow the gloss | survives; its line targets have moved since `092fc45` | K-IN-12 |
 | G7 `operations.py`:246 `min(3, history+3)` | survives (WR lane) | `operations.py`:244-247 [CHECKED] |
 | G8 re-point quarantined head rows; dead path | survives | BASELINE B6 (15 of 24 head rows name quarantined documents); `requirements.yaml`:34-35 |
@@ -1073,10 +1073,36 @@ marked [READER]; UPLOAD_CHECKS for the SFP and VCD attribution verdicts I did no
 6. §3.2 RULINGS row: the "nine-game teardown" ED-SE-0051 cites is in hand in its audited revision and supports capacity-as-gate only partly.
 No correction changed a §0 ranking.
 
+**Critic corrections applied to sections 7–11 (2026-10-16, second pass; HEAD `6fca766`, whose code is `5445e34`'s — `git diff --stat
+5445e34 HEAD` touches only `research/` files).** Each finding was re-opened at source before editing.
+1. Levy/troop/composite-army demand missing — APPLIED: M-IN-12, H-IN-10, T-IN-14, K-IN-13; M-IN-1 re-worded (force quality from
+   equipment, experience, commander); §9.3 C5 showcase re-read as not expressible even planned-built; MB critic's `build_army` finding used.
+2. N-9 / T-IN-13 on held-false deed claims — APPLIED: H-198 confirmed; T-IN-13 and N-9 narrowed to channel drift on cell values; M-IN-14.
+3. M-IN-4 / K-IN-4 overstated — APPLIED and widened: IN-31 owns `revoke`'s outcome; Jordan's H-207 ruling (A) bars a special-cased
+   motive; `confer` executes since IN-53 (this pass's own find); H-203 cited (folded, 8.5). Re-graded to Jordan's (H-IN-11).
+4. K-IN-3 — APPLIED: the conflict is 03 §C.2 vs §C.3; the filter answers a measured monoculture; Jordan's, with a control.
+5. K-IN-9 — APPLIED: §C.11 owes a held value's derivation, not odds; Jordan's or a Layer 1 amendment; M-IN-3 split.
+6. G5 "opposite" — APPLIED: IN-62 preserves `urgency` in a hash-EQUAL refactor.
+7. H-IN-9 — APPLIED: removed from 8.3; IN-14 moved to 8.4 as an index-vs-entry conflict, unbuilt in code.
+8. §8.1 counts — APPLIED: 38 verbs, 13 audit findings; recounted from the tables.
+9. Completeness — APPLIED with two reclassifications: H-198 (M-IN-14), H-203 (M-IN-4), R-01 caveat (M-IN-10), `field_morale_loyalty_gain`
+   and `field_provisioning` (8.4) as the critic said; **H-111** is not missing (v9 answers it, FI-01 B-O; 8.4); **H-92** and **H-44** have
+   owners (IN-14, IN-09; 8.4); **R-04 conjunct (3)**'s three other `false` rows are owned (FA-01, IN-07, FI-01; 8.4), so M-IN-2 correctly
+   names only two; R-04 (2) is by design (AX-1; 8.4); R-08's inclination clause conflicts with the plan's reading (8.4, medium).
+10. Unrun attacks — APPLIED: §9.2 re-tallied (4 attacked holds, 4 unscored); the sawtooth marked latent (2 vs 2 today).
+11. Recommendations without a real cut — APPLIED: K-IN-7 (cuts `_is_cell`'s restriction or G7/H-198/H-191), K-IN-9 (a Layer 1
+    sentence), K-IN-10 (`fight`'s RESOLVE-time path), K-IN-11 (`_pool_arm`, `_ARMS_POOL`, the hard-coded `ARMS`).
+12. Locators — APPLIED: `_part2`:416 (×3); M-IN-6 absence test now names v9:309, :364.
+Also applied on the coordinator's instruction: Jordan statement 5 (`levy` misnamed) — §4.1 G8, §4.2 `levy`, §4.3 new row, §0 item 2, M-IN-13,
+K-IN-13. Found by this pass and corrected: M-IN-10 missed `soak.py` and `arms --seasons`; §4.2's `confer` row said only "IN-10 reverted".
+§0's ranking is unchanged: its items rank research grounding, which none of these corrections moves.
+
 **Could not check.** IN-66's full entry (whether `goals.yaml` supersedes the `ought:` predicate, M-IN-9); the IN-12 step 5a docket routing end to
 end (petition addressee, 8.4); `results.json`'s two test readers (X1); the act-economy equilibrium; anything beyond four seasons; the
 committed audit's own claims about squad-engagement Parts A–D and UI Parts 4–10, which it did not read either.
 
 **Confidence.** [CONFIDENCE: medium] on T-IN-4's magnitude and R-WORLD (one uncommitted seed); on M-IN-7's layer-2 half (permitted vs owed is
-unruled); on M-IN-9 (IN-66 unread). [CONFIDENCE: low] on H-206's remainder. Counts in 8.1 are the tables' own; the five walks' raw count (82)
-is reported, not a de-duplicated derivation. Spawned no sub-agents: the reading was one lane and the critic stage is the orchestrator's.
+unruled); on M-IN-9 (IN-66 unread); on R-08's inclination row (requirement text vs plan reading, not re-measured); on `confer`'s realm
+execution today (its assertion was deleted; `aperture` not run). [CONFIDENCE: low] on H-206's remainder. Counts in 8.1 are the tables' own
+(awk over 8.2–8.5: 14 · 10 · 30 · 21); the walks' raw count (116) is reported, not a de-duplicated derivation. Spawned no sub-agents, in
+either pass: the reading was one lane, and the critic stage is the orchestrator's.
