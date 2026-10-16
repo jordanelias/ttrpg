@@ -630,3 +630,86 @@ seat rather than the man) → 9.1.
 
 **GRADE: paper** for the v9-built shape. One execution artifact covers the shipped state: the scratch probe, two seeds,
 uncommitted.
+
+## 10. KEY RECOMMENDATIONS
+
+This is an audit-design pass over six months of repository work. Jordan, 2026-10-16: it "gets permission to be whatever
+it is". The recommendations below are this pass's output; none is entered in the plan or a ledger until Jordan so rules.
+Every K row's lane is IN unless it says otherwise; NPC has no ED lane.
+
+### 10.0 The top five, worst problem first
+
+1. **K-NPC-3** — deaths are the world's most frequent unwatched event (five of six heads in two seasons, probe), and
+   outside the throne nothing follows one.
+2. **K-NPC-4** — a faction's creed names its head as a man, so a regicide leaves every member answering to a corpse.
+3. **K-NPC-1** — persons differ in wants only, so every seat resolves by seed.
+4. **K-NPC-2** — nobody changes over a campaign; the mechanisms exist and ship off.
+5. **K-NPC-11** — none of this can be seen or chosen by a player.
+
+### 10.1 PRIMITIVES
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-NPC-1 | Give every person a capacity profile from one ruled source, read by the contest pool, the combat `Combatant` and the witness's competence. | M-NPC-1, M-NPC-2, T-NPC-4 (code, CHECKED); NERS A1/T1 [AUDIT] | **Jordan**: survives all five, since persons who differ in capacity and persons who differ only in wants are different games, and K-2 is "not ratified" (audit G1, the same item) | adds one field with three readers; cuts `pool_default`/`obstacle_default` as stand-ins, `competence = 1`, and the registry's unread `stats`/`ts` keys (sourced or deleted) | two persons differing only in authored capacity resolve one contested verb at different degree distributions over the same seeds; equal capacities reproduce `content_hash` |
+| K-NPC-6 | Rule whether kin is a kind of tie that a conferral basis can read, or whether the heir stays a title only. | T-NPC-7 (D6, two programmes); R-07 "relationships" (D1); RS-27 | **Jordan**: a dynastic game (kin locks loyalty, heirs by blood, GK2/CK2) and a title game (RS-27) are both lawful under AX-5 and materially different | adds at most one tie kind under IN-32; cuts nothing; the "title only" answer adds nothing | under a kin kind, a seeded heir's claim reads the kin tie and a non-kin claimant is refused; under "title only", no kin field exists anywhere |
+
+### 10.2 VERBS
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-NPC-5 | Give breaking a vow its own deed, so a witnessed change of sides reads as betrayal, not as a resignation. | M-NPC-5, H-205 (D4); Pax Pamir T0 via TD/13G (CHECKED) | **takeable**, step 3/4: the IN-11 entry said the pricing "becomes a `deed:commitment.ended` cell" (H-205 `cite:`), on the precedent of the two authored `deed:` cell pairs (RS-29). Values `[OPEN — Jordan tuning]` | adds one cell pair; cuts the mapping of `commitment.ended` onto `release` | a witness of a vow-break and a witness of a plain `release` judge different valences; with the cell set to `release`'s values the hash is unchanged |
+| K-NPC-8 | Let a seat-holder confer a deputy's seat over his domain, so a lord's reach exceeds his own scenes and a steward can betray a trust. | M-NPC-8, H-108 (D4); 13G C2-C3 (CHECKED) | **takeable**, step 3: B-JR names the route ("`establish` a second seat … `confer` it … a new `tenure_kinds` member is NOT licensed", p3:276) and needs only a batch. Lane FA/IN | adds no kind (uses `establish` + `confer`); cuts nothing | a deputy's act executes with `Act.via` set to the second seat; revoking the deputy ends his acts that season |
+
+### 10.3 MECHANICS
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-NPC-2 | Arm or delete each person-change mechanism (scar weight shift, religious strain, conscience refusal, age, illness): none ships dark without a position that will arm it. | M-NPC-3, T-NPC-5 (CHECKED); A4 (iv) [AUDIT] | **takeable for the form**, step 3: ED-IN-0261 rules the scar thresholds and the refusal, so arming is the answer and deletion would overwrite it; age and illness rates are H-208's. Values `[OPEN — Jordan tuning]` | adds nothing; cuts each knob that is not armed, with its hole row | a four-season realm run in which some person's pursuit weights differ from season 0, with the hash moved and declared |
+| K-NPC-3 | Make a seat-holder's death publish his vacancy at the seat, so every person who could claim or confer it receives a question naming it. | M-NPC-6, H-206 (D4); probe (MEASURED this pass); T-NPC-6 | **takeable**, step 4: IN-34 already places `person.died` where the man stood, and IN-61's FALSIFIER already demands the throne's version (`_part5:248`) | adds one emission at death; cuts IN-61's throne-only special case (scripting drift) by generalizing it | after a seeded kill of a seat-holder, at least one person at that seat's rung holds a claim naming the vacant office; no such claim exists while the holder lives |
+| K-NPC-4 | Decide whether a faction's creed binds to its head as a man or to the head's seat, so that a regicide is either a schism or a vacancy. | 9.1 faction_leaders row; `harness/populated.py:751-752` (CHECKED); probe | **Jordan**: Jordan ruled the creed an OUGHT (2026-09-13); the code subjects it on the leader because a faction name is no entity (`rosters.yaml` faction_leaders note, :1475-1483). Binding it to the seat turns personal loyalty into institutional loyalty, and the two give different games | adds nothing (one subject re-pointed); cuts the dead-referent state | after a head's death, no member's Q4 question names a dead id |
+| K-NPC-7 | Judge being revoked, passed over or bound as a deed done to oneself, at the same `deeds_judged` owner, so allegiance to a head moves with what he does to you. | T-NPC-1 (three sources); C2 finding in 9.2; H-NPC-4 | **takeable**, step 5: one owner, computed at read, nothing stored (IN-70's own T-a falsifier); the magnitudes are `[OPEN — Jordan tuning]` | adds kinds to `PAIRED_KINDS`; cuts the static seed row's role as the only allegiance input (the row stays as a seed) | a person whose seat his head revokes reads lower regard toward that head next season than a matched control; equal otherwise |
+| K-NPC-12 | Require co-location for `fight`, so killing a head costs access and removing a subordinate through his office can compete with killing him. | 9.4 R-CHOICE (shipped dominance); probe; H-207 | **takeable**, step 3: IN-59 and RS-26 rule the access gate; only its batch (B-Y) is pending | adds nothing beyond IN-59; cuts the free remote kill | the probe's two-season death count falls, and no kill occurs between persons in different places |
+
+### 10.4 TEXTURE
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-NPC-9 | Read an ambition's predicate, so ambitions are achieved, thwarted and envied rather than raised forever. | M-NPC-4, H-185 (D4); T-NPC-13 | **takeable**, step 5: a reader for a field that exists, and IN-66's goals mint OUGHTs of the same shape (`_part5:304`) | adds one reader at Q4; cuts the dead predicate if not read | a person whose OUGHT's predicate holds in his own claims stops receiving its `need` question; a control whose predicate fails keeps it |
+| K-NPC-10 | Let a hearer learn whether a told intent was kept, so persons earn a reputation for their word. | M-NPC-9, H-191 (D4); `intent_disclosure` dark | **takeable**, step 5, for the reader; the disclosure rate is H-190's, `[OPEN — Jordan tuning]` | adds one reconciliation at read; cuts the "ABSENT: H-191" marker (`options.py:1295`) | at a nonzero disclosure rate, two hearers of one intent, one of whom witnesses it broken, read different regard toward the teller |
+
+### 10.5 SURFACE
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-NPC-11 | Build the character sheet as a view of a person's pursuits, allegiances, ties, scars and witnessed deeds, read only from what he holds, with creation choosing a cast seat. | M-NPC-7; T-NPC-8 (three sources); R-04 conjunct 3 (D1) | **takeable**, step 3: IN-47's design landed and "PASSES WITH CORRECTIONS" (`_part4:41`); only a build batch is missing (p2:209) | adds a view, not state; cuts nothing | R-04's `scales:` row reads `in_loop: true` with an artifact; the view changes when the ledger changes and never shows a claim the person does not hold (AX-2) |
+
+## 11. METHOD NOTE (sections 7-10)
+
+**Opened myself.** `skills/ners/SKILL.md`; the three uploads 13G (`b42377f7`: L15-37, L80-150, L174-216, L252-278,
+L300-352, L462-479, L545-556), TD (`3cb2a6c8`: L59-72, L164-223, L351-356, L467-491, L529-547) and 20G (`6039edcc`:
+L134-146, L164-236, L241), N2 (`773bbfde`: L262-271, L311-321, L498-504, L613-625) and the NERS audit (report
+l.40-162, 205-262, 324-444). In the tree: `decision/choose.py:150-193, 400-412`, `loop/witness.py:488-495, 868-878`,
+`loop/effects_combat.py:203, 241-260`, `data/fixtures.py` knob lines, `data/cast.py:217-344`, `state/carriers.py:640-676`,
+`state/world.py:735-751`, `harness/populated.py:328-395, 732-760, 1313-1330`, `queries/world_q.py:1984-1992`,
+`decision/options.py:1205-1230, 1295`, `verb_table.yaml:886-916, 1186-1198`, `rosters.yaml:1100-1107, 1460-1475`,
+`requirements.yaml:60-82`, hole rows H-85, H-108, H-128, H-146, H-170, H-185, H-187, H-190, H-191, H-195, H-200,
+H-205-H-208, `01_AXIOMS.md:164-198`, `canon/02_canon_constraints.md` P-04, P-12, P-15, GD-1..3, plan entries IN-47,
+IN-58, IN-61, IN-69, IN-70, IN-12 step 9, J-13, B-JR, SFP `03:240-262` and `00_INDEX.md:3`, ENP v2 `04_PROVENANCE.md:155-175`,
+VCD Guild lines. Ran: the register (above); the scratch probe at seeds 0 and 1 (two seasons, and one season at seed
+0); greps and counts quoted in §8.
+
+**Taken, not re-opened.** Sections 1-6 of this file; extractions R4, R7, R8, A5a/A5b, UP03, UP04, UP05 for their T, G
+and H sections; the audit's A1, A5, A7 and T5 code claims, marked [AUDIT]; BASELINE B1-B5 for plan states and the
+dark-knob table.
+
+**Upload corrections applied (step 0).** (1) §4 changing-sides row: SFP *borrowed* Pax Pamir's switching and refused only
+the discard; the rule is T0-confirmed in TD and 13G; its carrier `repudiate` was cut, and H-205 prices a vow-break at
+`release`'s cells. (2) §2.1 VCD row: The Guild 3 burned the *player's* residence, was switched off on the publisher's
+account, and F77's "popularity threshold" is in neither upload. (3) §4 `forgive` row: The Guild 3 marked as a negative
+case. (4) §0 #8 extended to the VCD misstatement. (5) §5: the surveys still absent are named; the four pinned uploads are
+recorded as in hand. No §0 ranking changed.
+
+**Could not check.** Whether ED-IN-0201's gate silences a faction after its head dies; the corpus-level death rate
+(`corpus_run` not run); FASE T5/T9; the RTP and PMM bodies; the earlier drafts of TD and 13G; IN-65's 61 → 508 figure.
+**[CONFIDENCE: medium]** on T-NPC-10 and M-NPC-10/11 (D6-led), on H-NPC-5 (residence premise), and on the probe, which
+is scratch and uncommitted, with two seeds and no control arm beyond the scar field showing the instrument sees change.

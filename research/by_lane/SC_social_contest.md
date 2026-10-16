@@ -644,3 +644,100 @@ MAY BE CLAIMED, HAVING SURVIVED
 - a 200,000-draw sample of `roll_net(2) + net_boost(0, 2)` against Ob 2 → F .7398 / P .1899 / S .0703 / O 0.
 
 Not run: `corpus_run`, `aperture 4 0`, THE BAR, and any planned-built object (unbuildable by construction).
+
+## 10. KEY RECOMMENDATIONS
+
+This is an audit-design pass over six months of repository work. Jordan, 2026-10-16: it "gets permission to be whatever it is". The recommendations below are this pass's output; none is entered in the plan or a ledger until Jordan so rules.
+
+**Verdict: eleven recommendations.** The first makes the proceedings the lane already built reachable by ordinary play. The second asks Jordan the one question that decides whether persons differ in a contest. The rest close a ruled verb, repair a ladder, and either give unread data a reader or delete it.
+
+### 10.0 Top five, worst problem first
+
+1. **K-SC-1.** A computed case must be able to be a trial (M-SC-1).
+2. **K-SC-2.** Rule where a person's social capacity comes from (T-SC-2).
+3. **K-SC-3.** Build the petition's ruled second side (M-SC-2).
+4. **K-SC-6.** Let testimony be false (M-SC-7).
+5. **K-SC-5.** Give the graded determination a consequence, or stop writing the grade (T-SC-1, 8.3).
+
+### 10.1 PRIMITIVES
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-SC-2 | Give persons a ruled source of social capacity, or rule that social contests do not vary by person and stop claiming they do. | T-SC-2 (code [CHECKED], audit A1/T1 [AUDIT]); 8.3 per-person row; R-09 | **Jordan: survives all five steps.** J-13's remainder is §J.2 rank 1 (`_part5:514`). An authored, ruled scale and an identical-persons game are materially different games | Adds one ruled magnitude source. Cuts `pool_default` as the universal pool; on the "no" branch, cuts latitude (9.2) | `headless --seasons 2 --seed 0` shows two persons resolving the same contested verb at different pools. On the "no" branch, R-09's by-person conjunct is struck by ruling |
+| K-SC-4 | Make the rung a speech is apt at the stasis ladder (procedural, conjecture, definition, quality), and keep Aristotle's six concessions only as speech kinds. | M-SC-3; T-SC-15; C4 | **Takeable, step 3.** The ratified-as-intent `04_VERBS.md:249` reads Fig. 5 as the rung | Adds four roster members. Cuts the duplicate use of Fig. 27 as `ladder_rungs` | A hand-built hearing prices `refute` below its price at quality when the rung is conjecture; a loader test fails if `ladder_rungs` equals `speech_kinds` |
+| K-SC-10 | Delete the shipped controls and arrangement keys no planned position reads (D-6, D-7a, D-7b; `disposal_reach`, `appeal_basis`, `venue_min_rank`, `interposed`), and re-seed each with its reader. | T-SC-1; 9.2 false N-lines; audit T4 [AUDIT] | **Takeable, step 2** (no reader, in code or in any v9 EXIT). Precedent, step 4: the tree's deletion of `DECISIVE_OB` and `conferrer` (audit T4; `populated.py:796-798`) | Adds nothing. Cuts three fixtures and four keys | `World.content_hash()` is equal at seed 0 before and after (inert by construction); the loader still refuses an unknown key (`test_arrangements.py:93`) |
+
+### 10.2 VERBS
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-SC-3 | Give the petition its ruled second side: a receiver's `deny`, emitting at the venue. Address a computed petition to the holder of the seat above its subject. | M-SC-2; T-SC-16; 9.5 S-UP FAIL; 9.4 R-CHOICE (silence beats refusal) | **Takeable, step 3.** ED-IN-0210 ruling 2 already rules the two-sided pair (`verb_table.yaml:798`) | Adds one verb row. Cuts the single-referent address (`to` bound to `subject`) for petitions, and the receiver's eventless burial | In a seeded season, a petition about a person reaches a different person at the rung above, and a denied petition leaves `petition.denied` in `w.log`. Control: 0 of both today |
+| K-SC-11 | Give the negotiated game a trading act before its row is seeded, so that a concession can buy something. | M-SC-6; T-SC-13; R-05 | **Takeable, step 1.** IN-33's revert reason (0 realm executions) is superseded by the relaxed-exit ruling, which names it restorable (`valoria_master_workplan_v9.md:130-131`) | Restores one verb from its checkpoint. Cuts the unbatched "restorable" state | A hand-built `exchange` moves stores both ways, and a `negotiation` hearing disposes by mutual `oblige` after it |
+
+### 10.3 MECHANICS
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-SC-1 | Let the person who opens a case name the game it is heard under, read from a writ or remit they hold. Computed proceedings then become trials, tribunals and interrogations, and stop defaulting to one obligation. | M-SC-1; T-SC-9; 9.1 (arrangement N-line narrowed); 9.3 C3, C5 | **Takeable, step 5.** The carrier exists (`DOCKET_ARRANGEMENT`); the operand channel is IN-10's `record_sourced_operands`; C3's repair is an operand, not a store | Adds one operand binding on `open_case`. Cuts `UNDECLARED_DISPOSAL` as the computed path; it remains only as the fallback when nothing held names a game | A seeded `corpus_run` shows ≥ 1 computed `determine` opening `detain` or `ban`. Control: the operand disabled reads 0 |
+| K-SC-5 | Make a narrow win bind less than a crushing one by giving `Tenure.degree` one reader, or delete the write from SC-03b. | T-SC-1; T-SC-4; 8.3 (HOLLOW); 9.2 (false N-line) | **Takeable, step 4, for the deletion.** Precedent: a field "with no reader … does not exist, wearing a schema's clothes" (`state/carriers.py:48` via `populated.py:796-798`). Which reader to build is Jordan's: two defensible readers (term length or release price) give different games | Cuts the write, or adds one reader and cuts the "set, unread" state | A contested `determine` at `Partial` and at `Success` produce different later outcomes; otherwise `degree` is absent from `Tenure` |
+
+### 10.4 TEXTURE
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-SC-6 | Let a teller lie, and let a lie be caught when a hearer's firsthand claim contradicts it, so that testimony, interrogation and the mirror test have something to weigh. | M-SC-7; H-198; T-SC-8 (the study's concealment tests); 9.4 R-COMPLETE | **Jordan: survives all five.** H-198 is kind RULING. A world of sincere testimony and a world of deceiving testimony are materially different games | Adds one value rule in `said_of` (when, and what false value). Cuts the `ABSENT: H-198` marker | A seeded run in which a hearer holds a deed claim `False` for a deed that occurred, and a contradiction event follows a later firsthand deposit |
+| K-SC-7 | Let a hearer weigh a teller by rank and rivalry read from the hearer's own claims, using the same reception reading a proceedings bench uses, so that standing matters outside a convened room. | M-SC-4; H-180/H-181; T-SC-3; 9.5 (two readings of standing) | **Takeable, step 5.** One reading of standing for sibling contests is S's "consistent in methodology". "Stays absent" was a re-check (IN-17), not a ruling | Reuses reception and adds no store. Cuts `rank` (reads 0) and the dormant `rank_gain` (H-178) | Two hearers differing only in their claims about a teller's rank deposit the same telling at different confidence. Control: equal today |
+| K-SC-8 | Make a defeated or vetoed motion leave a Record authored by the bench, which later speakers can bring as proof. | M-SC-5; T-SC-14; SC-07 P-4 | **Takeable, step 5.** `record` is already a proof (`rosters.yaml:1922`); AX-6 names the author | Adds one write on `determine`'s defeat. Cuts `records_dissent` as a free-standing key | SC-07's own: "a carried-and-vetoed motion persists as a citable record" (`_part6:186`) |
+
+### 10.5 SURFACE
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-SC-9 | Show the player, when choosing a speech, the arrangement, the rung and their own sourced claims about the bench. Rule whether a band is also shown. | M-SC-9; T-SC-12; 9.6 E-LEGIBILITY; audit A3 [AUDIT] | **Jordan: survives all five.** "Never show a number" (PS 15, unratified) and "publish a band" (COMP S6) give materially different games | Adds one view, built on the existing callback. Cuts `eff_ob`'s display-only role (deleted if no band is shown) | A player-callback test receives the view, and it contains no obstacle number (and a band only if ruled) |
+
+## 11. METHOD NOTE (sections 7-10)
+
+**Opened myself:**
+- the brief, `SYNTH_BRIEF.md`, `BASELINE.md`, `NERS_DIGEST.md`, `UPLOAD_CHECKS.md` and `skills/ners/SKILL.md` in full;
+- the audit's sections 1–5, 8, 9 and 12;
+- the uploads `03fd5f85` (head and Part VII), `4df8c0c9` (verdict, §5, survives, repairs, audit trail), `13G` (CK2, Pax Pamir, Suzerain; A1–A5, B1–B5) and `20G` (the Pax Pamir and Bannerlord reconciliation; primitives);
+- in the repository, every locator marked [CHECKED] in §§7–10. That includes `sigma.py`, `roll.py`, `verb_table.yaml` (`tell`, `petition`), `rosters.yaml:1082-1110`, `requirements.yaml:96-112`, `effects_information.py:236-300`, `world_q.py:345-380`, `fixtures.py:660-690, 789, 849`, `populated.py:788-798`, `hole_register.yaml` (H-180, H-181, H-198, H-200), v9 `_part6` SC-01..08, `_part5` IN-10/IN-12/J rows, `_part2:410-425`, `_part4:58-84`, `PS/README.md:100-110`, `PS/04_VERBS.md:225-252`, `PS/15:136-152`, `PS/source/08-part-VII-apparatus.md:30-60, :120-130`, `PS/source/ARCHIVE_README.md:55-75` and the canon GD/P tables.
+
+**Ran, read-only:**
+- `pytest engine/season/tests/test_arrangements.py` (9 passed);
+- `register --requirements`;
+- an import probe;
+- a 200,000-draw roll sample;
+- greps, each cited at its claim.
+
+**Taken without re-opening:**
+- the `C1`, `E3`, `R4`, `R7`, `D2`, `UP04`, `UP05`, `UP07`, `UP08`, `UP11`, `UP13` and `UP15` extractions ([READER]);
+- the audit's S-DOWN datum, A2 and the kernel pool formula ([AUDIT]);
+- BASELINE's B3 class pins and B5 knob table.
+
+**Upload corrections applied (Step 0):**
+1. §1.1: a row for `03fd5f85`. It is the superseded survey `PS/source/ARCHIVE_README.md:62-67` describes, at an untracked path. Graded: careful and self-marked; not evidence of efficacy; three modern papers verified. Outside the admissible set.
+2. §1.1: a row for `4df8c0c9`. It is the anonymous "external critique" at `08-part-VII-apparatus.md:37`, the source of the study's `[UNVERIFIED]` modern layer. Its §5 has no repair row, though SPF's body absorbs it. Graded: best-sourced, unverified downstream.
+3. §3.2: the one chain by which both reach code: critique §3 → the H-154 fixtures, plus H-153, both unread.
+4. §0 #7: the study's modern layer is critique-adopted. This did not change the §0 ranking.
+
+**UP04, UP05 and 20G folded** into T-SC-7, T-SC-12 and T-SC-13 and into M-SC-9. UP11, UP13 and UP15 carry one SC line and add nothing (7.4).
+
+**Found, not applied (the brief bars rewriting §§0–6); for the orchestrator:**
+- (a) §0 #1, §3.1 and §4's `tell` row call 15% a "success" rate. It is `news.told` / (`news.told` + `news.untold`), and `news.untold` is also tell's refusal emission (`verb_table.yaml:1007-1010`). The roll's own rate at the default pair is 0.26 (this pass's sample).
+- (b) §1.2's "the study verifies ten papers directly": the study's list at `08-part-VII-apparatus.md:130` names eleven items.
+- (c) §3.1's handoff line on SC-08 is accurate as a quotation, but SC-08's EXIT is already met at HEAD (7.2 #7).
+
+**Could not check:**
+- whether `momentum` and the silence price survive `21`;
+- which SC-01 step builds latitude, the licence and genre derivation;
+- whose `pursuits` `argue` writes;
+- whether IN-26's `Record.ttl` expiry emits;
+- FASE, HCC and PMM/XSC cross-case sections (not in this lane's extractions);
+- `corpus_run` and `aperture` readings (not run, for cost).
+
+**[CONFIDENCE: medium]:**
+- M-SC-4, which may be partly covered by reception after SC-01 step 13 (9.8);
+- M-SC-9's demand, which is D5 + D6 with a contested answer;
+- T-SC-11, which rests on one unretrieved modern study;
+- the R-CHOICE tables, which are upper bounds with no equilibrium run.

@@ -454,4 +454,54 @@ REPAIRS (worst first; each a deletion or one object)
 GRADE: runs (partial) — `register --requirements`, two test files (40 passed) and a three-arm two-season probe on build_realm(0) executed; every v9-assumed claim is paper
 ```
 
+## 10. KEY RECOMMENDATIONS
+
+This is an audit-design pass over six months of repository work. Jordan, 2026-10-16: it "gets permission to be whatever it is". The recommendations below are this pass's output; none is entered in the plan or a ledger until Jordan so rules.
+
+### 10.0 Top five, worst problem first
+
+1. **K-SE-1**: a settlement's population cannot change, so capacity, founding, dearth and migration act on a constant (M-SE-1; T-SE-10; probe 74 → 74 in every arm).
+2. **K-SE-7**: neglecting a chronic dearth is silent, so at the governing seat it dominates every relief act (§9 R-CHOICE (b); C2).
+3. **K-SE-2**: nobody can know who holds a place, so no grudge, faction or ambition can aim at land (M-SE-3; GD-1).
+4. **K-SE-4 with K-SE-3**: settlements have no neighbour and nothing to exchange, so the economy has one shape everywhere (M-SE-2, M-SE-4; R-VARIETY).
+5. **K-SE-8**: output ignores how many people work, so losing people costs nothing but mouths (M-SE-5; T-SE-3).
+
+### 10.1 PRIMITIVES
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-SE-1 | Give each settlement's population one carrier, cohort `weight`, and either let a fed settlement's weight grow at CENSUS until `capacity` refuses it or rule the population fixed and delete `Rung.envelope`. | M-SE-1 (D3, D4, D5); T-SE-10; false N-line 3; probe [runs] | **Jordan**: survives all five. ED-SE-0054 left P2 out deliberately and ED-WR-0011's closed cast is "for now"; a growing and a fixed population are materially different games | adds one CENSUS write term (growth arm) or nothing (fixed arm); cuts `Rung.envelope` in both arms, so three population carriers become one | growth arm: over ten seasons in a fed realm some cohort's `weight` rises and stops at `capacity`; fixed arm: `grep envelope engine/season` finds no field and every hash moves once, declared |
+| K-SE-2 | Let a person hold a claim about who holds a place, deposited by the witness channel whenever a seat over a rung is conferred, revoked or vacated, and let `stance_term` read it. | M-SE-3 (D2, D4); C3 | takeable, step 5: H-195 names the carrier ("their own `held_by` claim") and the claim ledger exists; no new store | adds a claim content, not a carrier; cuts the `ABSENT: H-195 holder` marker (`choose.py:80`) | after a witnessed `confer`, the witness holds `held_by(rung, holder)`; a person hostile to the holder's faction scores `march` on that rung above zero; with the deposit removed it scores 0 |
+| K-SE-3 | Read territorial adjacency from the geography the code already parses, as one Query, and use it for contiguity, revolt spread and distance. | M-SE-4 (D2 GD-3, D4 H-186); T-SE-8 | takeable, steps 3 and 4: GD-3 requires contiguity, and the retired oracle grouped by `ADJACENCY` (`world_q.py:1484-1487`) | adds one Query over existing data; cuts the "smaller than the oracle" gap in `uncontrolled` | two uncontrolled territories that are not adjacent form no contiguous group; two adjacent ones do; the map's `adjacency` gains one reader |
+
+### 10.2 VERBS
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-SE-4 | Restore `exchange` and schedule it, so two settlements can trade one kind for another at a price both parties accept. | M-SE-2 (D1 R-05, D4 H-58); FA-01's unbuilt demand | takeable, step 1/3: restorable under the relaxed exit (`valoria_master_workplan_v9.md:130-131`), demanded by R-05 | adds back one reverted effect; cuts nothing | in a seeded season two rungs with complementary surpluses execute `exchange` and both stores move, conserved; R-05's no-predicate class loses `exchange` |
+| K-SE-5 | Keep `levy`'s price as the hunger it leaves at the levied rung, state that in IN-49's exit, and add no compliance gauge. | H-SE-1; T-SE-2; audit A5 [AUDIT] | takeable, step 5: IN-23 makes legitimacy a Query and the meta-rule refuses a gauge | adds nothing; cuts a compliance or Order term from any future design | in a scarce world with `body_step` > 0, a levied rung's cohort body falls and an unlevied control's does not |
+| K-SE-6 | Let a lord set a governor over a settlement by establishing a second seat over it and conferring it, on Layer 1's own route. | M-SE-6 (Jordan 2026-09-03, `_part5.md:204`); T-SE-6 | takeable, step 3: Jordan's statement plus the Layer 1 route IN-48 already names; the delegate kind stays cut | adds no kind; uses `establish` + `confer` + `Tenure.term`; cuts nothing | a governor acts `via` the second seat while the lord keeps his hold; when the term ends, the same act refuses |
+
+### 10.3 MECHANICS
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-SE-7 | Emit the dearth Event every season a settlement stays short, not only at the crossing, so letting it starve is witnessed each season. | §9 R-CHOICE (b), C2; R-WORLD probe | takeable, step 4: the docket's lapse already emits when nobody acts (`date.fired`, `loop/calendar.py`; audit A5), and NERS §6's repair for silence is this | adds nothing; cuts the crossing-only latch (`matter.py:380-384`) | in `harness/scarce.py`, a rung short for three seasons yields three deposits in each governing seat's ledger; with the latch, one |
+| K-SE-8 | Make a cohort's `work` stage a delta proportional to its weight, so how many people a place has decides what it makes. | M-SE-5 (WEAK); T-SE-3; S-methodology (eating already scales with weight) | takeable, step 5 on methodology: one quantity, people, must be read the same way by eating and working; the factor is `[OPEN — Jordan tuning]` | adds one term; cuts nothing | two cohorts of weight 2 and 4 working one site stage deltas in ratio 1:2; weight-1 persons' hashes are unchanged |
+| K-SE-9 | When `seize` lands, let the taker's terms be what he does with the place's existing seats — leave them (confirm), or revoke and confer (impose) — and add no terms object. | M-SE-7 (WEAK); T-SE-5 | takeable, step 5: composition of `revoke`/`confer`, which IN-12 and IN-31 build | adds nothing; cuts any "terms" or Accord-by-method table | after a seizure, a seated person left in place and one revoked hold different stance toward the taker in the next season |
+
+### 10.4 TEXTURE
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-SE-10 | Give each settlement only the producing sites its place in the map supports, so the peninsula has grain towns, mining towns and ports that need each other. | M-SE-8 under M-SE-2 (WEAK); T-SE-14; §9 E watchlist | **Jordan**: survives all five, because it authors production into the canon map (`valoria_geography_v30.yaml` has no Port or Mine type) and a uniform and a specialised economy are materially different games | adds a producing-site column to the map; cuts harbour+seam-everywhere (`populated.py:576-584`) and H-07's instrument assumption | `populated.build_realm(0)` gives no inland settlement a `harbour`; at least one kind is produced in fewer than half the settlements |
+| K-SE-11 | Give each cohort its territory's temperament, so two settlements under one lord want different things. | B-SE-1; SE-06; R-06 | **Jordan**: already an ask-then at B-X's close (ED-IN-0296) | adds `temperaments:` rows (content); cuts nothing | SE-06's own exit and falsifier (`_part6.md:224`) |
+
+### 10.5 SURFACE
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-SE-12 | Show the player, for any settlement, what it holds, what its people need and get, and who holds it, read from the Queries that already compute them. | §9 E-LEGIBILITY; probe (drought invisible in acts); K-SE-2 | takeable, step 5: reads `world_q.demanded`/`delivered` and stores, adds no state; it waits on a player surface, which has no build batch (IN-46/IN-47) | adds a view, no state; cuts nothing | for every rung in a seeded season, the view's numbers equal `demanded`, `delivered` and `Rung.stores` |
+
+
 
