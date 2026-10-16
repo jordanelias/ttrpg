@@ -435,7 +435,7 @@ rows:
       ZEROED `doctrine` there. The movement against B-W's close above is that zeroing, not the cast. FIXED at the close
       (`crisis_weights` reads `{}` as not held, unscaled: IN-63's distinction): the corpus pins IN-71 had re-recorded returned
       EXACTLY to their pre-IN-71 values (106 distinct behaviours, the NPC-088 fork pairs, the H9 rate rise), the falsifier that the
-      zeroing alone moved them. The B-X CLOSE RE-TAKE below is the one taken on the fixed tree.
+      zeroing alone moved them. The LAST re-take paragraph below (@ebba085e) is the one taken on the fixed tree; the first, second and close paragraphs before it are of the defective tree.
       **B-X SECOND RE-TAKE (v9 IN-69, IN-72; `11`, E15), 2026-10-15, `2x3` only, 143 cases, 0 failed, seed 0,
       PYTHONHASHSEED=0, reading @e6adbc65 (after IN-72, before FA-05; taken on a `git archive` copy of that commit; 12 chunks,
       two at a time, 56-72 s each):** none 1711/2000 = 85.55 % - actor 1151/1982 = 58.07 % - total 1179/1989 = 59.28 %, still BELOW
@@ -446,7 +446,7 @@ rows:
       9095b921 -> a74673b1, acts 593 -> 590) and not at IN-72, and the `11` cases fork on a window these reorderings
       rarely reach; one run per arm, noise unmeasured, as at the first re-take.
 
-      **B-X CLOSE RE-TAKE (v9 FA-05, FA-06; `11`, E15), 2026-10-15, `2x3` only, 143 cases, 0 failed, seed 0,
+      **B-X CLOSE RE-TAKE, FIRST ATTEMPT -- OF THE DEFECTIVE TREE (v9 FA-05, FA-06; `11`, E15), 2026-10-15, `2x3` only, 143 cases, 0 failed, seed 0,
       PYTHONHASHSEED=0, reading @15dcc59a (after FA-06; `git archive` copy, 12 chunks, three at a time):** none 1711/2000 = 85.55 % -
       actor 1151/1982 = 58.07 % - total 1179/1989 = 59.28 %, still BELOW the 96 % bar, `none >= actor` True; EQUAL to the second
       re-take's. Conjunct 1 (`corpus_run`, `EXIT 0`): R3 46 of 46 (NPC) and 97 of 97 (ARC), planted control `False -> True`.
@@ -455,6 +455,15 @@ rows:
       `goals` (grep, 2026-10-15), so no goal row, commit or stance row reaches a `11` case; the equality is the instrument's
       blindness to the mover, not a measurement that the goals leave reconvergence alone. What the goals do to decisions
       is read by `decision_spread` (R-06's B-X EXIT reading).
+      **B-X CLOSE RE-TAKE ON THE FIXED TREE (v9 FA-05, FA-06 and the IN-71 repair; `11`, E15), 2026-10-16, `2x3` only, 143 cases,
+      0 failed, seed 0, PYTHONHASHSEED=0, reading @ebba085e (the IN-71 absent-conviction fix; the Phase 2 refactors after it are
+      hash-neutral; `git archive` copy, 12 chunks, three at a time):** none 1712/2028 = 84.42 % - actor 1166/1996 = 58.42 % - total
+      1185/2016 = 58.78 %, still BELOW the 96 % bar, `none >= actor` True: EQUAL TO B-W's CLOSE (84.42 / 58.42 / 58.78 %) in every
+      figure. Conjunct 1 (`corpus_run`, same tree, `EXIT 0`): R3 46 of 46 (NPC) and 97 of 97 (ARC), planted control `False -> True`.
+      The status stays `met`. This is the E15 reading B-X owes: with IN-71's zeroing of doctrine gone, no B-X mover (the cast, the
+      goals, IN-69's salience, IN-72's scorer) reaches the `11` instrument at this resolution -- BY CONSTRUCTION for the cast and the
+      goals (its worlds come from `build_at`, which names neither `build_realm`, `seed_goals` nor `conviction`) and by measurement
+      for the two attention movers. B-M's comparison reads against these figures. One run per arm, noise unmeasured.
     measure: "python -m engine.season.harness.corpus_run  # check R3 rows + the planted control"
     blocks: [IN-10, IN-11, IN-13, FI-01, H-116, IN-50]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1: regard is computed at read; the cross-person half is IN-10's, IN-11's, IN-13's); H-111 is FI-01's deposit half
@@ -1119,7 +1128,7 @@ rows:
       Every arm-0 figure below is the repaired arm's. `--decisions`, seed 0 / 1 / 2 (six common referents, 18 common candidates each,
       ceiling 108 distinct tops; 83 persons): deciding term draw / pursuit shipped 420/78, 429/69, 425/73 against arm 0 463/35,
       450/48, 448/50 (`--null`, seed 0: draw 498 of 498, so attribution is not broken). Leg (2) HOLDS at all three seeds. Leg (1)
-      distinct tops shipped 107 / 106 / 103 against arm 0 107 / 104 / 104: at the ceiling, no separation (B: 108). Leg (3),
+      distinct tops shipped 107 / 106 / 103 against arm 0 107 / 104 / 104 (B: 108): NOT MET AS A RISE -- the base sits at the ceiling (6 referents x 18 = 108), so the leg cannot observe a rise, and seed 2 reads a fall. Leg (3),
       distinct tops among persons of one faction (`world_q.faction_holding`), summed over the factions, now an instrument output:
       shipped 184 / 191 / 192 against arm 0 192 / 197 / 198 (`--null` 204): the tree is BELOW arm 0 at all three seeds by 6-8 of
       ~190, small but not noise-signed. The leg rewards the draw (the all-draw `--null` arm scores highest), so it measures the
@@ -1131,9 +1140,11 @@ rows:
       (`goal_varfell_oastad_gate` 16, `goal_crown_peninsular_sovereignty` 8, `goal_church_suppress_restoration` 7,
       `goal_restoration_evade_capture` 1). Per the card, a fall against B with a rise against arm 0 is routed to the content; leg (3)
       is an arm-0 leg, so the claim is FALSE as stated and not reverted. One run per seed per arm; no variance estimate beyond the
-      three seeds. `--arms` (1 season per arm, seed 0; hash, acts, multisets): first/legacy 93608c22 602 79; first/declared
-      e521091d 571 78; all/legacy 60c345e7 533 80; all/declared 459c75c6 524 79 (taken before the arm-0 repair, which touches
-      `--control` only).
+      three seeds. `--arms` (1 season per arm, seed 0, taken at HEAD of the close; hash, acts, multisets): first/legacy bb08f4b2 602 79;
+      first/declared 1637b777 571 78; all/legacy 6e416119 533 80; all/declared 0063610a 524 79. RESIDUAL IN ARM 0: each creed
+      stance row's weight is `stance_from_loyalty` of the member's loyalty, computed from the registry's raw pursuits at build, and
+      `--control` leaves `Person.stance` alone; it is constant across candidates in `--decisions` (one referent) and live in
+      `--season --control`, which carries leg (4) and the attention counts.
     measure: "python -m engine.season.harness.corpus_run  # 'RANKING DISCRIMINATION' line"
     blocks: [IN-38, IN-08, IN-18, IN-12]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W27: `17` landed (build_at seats a `cast:`), IN-38 remains; H-62 re-scoped to IN-08, IN-18, IN-12 step 9

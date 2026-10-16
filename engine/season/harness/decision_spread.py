@@ -34,8 +34,11 @@ WHAT EACH MODE READS, AND WHETHER IT PLAYS A SEASON (each prints the answer in i
                `stance_polarity` {legacy, declared} (§J.2's ask-then row, H-54 / H-194). Each arm prints
                the `--season` reading and the `--decisions` attribution counts under that arm.
 
-  --control    ARM 0: every person's `pursuits` replaced by the realm-mean vector (the mean of the persons
-               who hold one) and goals unseeded (`build_realm(goals=False)`, IN-68). Cohort temperaments
+  --control    ARM 0: every holder of a pursuit vector gets the realm-mean vector AND the realm-mean
+               `conviction` (the score projects `crisis_weights`, which scales `doctrine` by conviction,
+               IN-71); the cohorts, who hold no vector, are left so; goals unseeded
+               (`build_realm(goals=False)`, IN-68) AND the goals file read as empty (`no_goals()`; salience
+               reads `data/goals.py::expected`). Creed stance rows keep their build-time weights. Cohort temperaments
                off is a further switch SE-06 adds; before it lands the arm prints that it is a no-op.
                Applies to --persons, --decisions and --season.
   --null       `data/verbs.py::alignment_at('uniform')` (H-66, `:1407-1414`: *"`uniform` IS THE CONTROL"*)
@@ -66,9 +69,9 @@ the commit that adds a mover quotes the base and the mover's reading side by sid
 `harness/arms.py` read no person's score and are not extended.
 
 SEAMS AND KNOWN LIMITS (the code is the mechanism; these are what the code does not do):
-  * `attribute_top` repeats the chooser's ORDERING (`sorted` on `(-score, verb, subject)`, then
-    `choose._sample_order`) because `make_chooser` holds it inside `choose`; the score FORMULA is not
-    repeated. `test_in62_decision_spread.py` pins the top it returns to the real chooser's.
+  * `attribute_top` calls the chooser's own ordering (`choose.score_order`, then `choose.sample_order`)
+    and its score terms (`choose.score_terms`); nothing is repeated. `test_in62_decision_spread.py` pins
+    the top it returns to the real chooser's.
   * The draw is `draw_factory(world_seed, tick)` at the build's tick: a `--decisions` top is the top at that
     tick, not a distribution over ticks.
   * Absent in `--season`: an executed act whose `(actor, verb, subject)` the watch did not see leave a
@@ -340,7 +343,7 @@ def read_decisions(w) -> dict:
         by_faction: dict = {}
         for pid, top in tops.items():
             fac = world_q.faction_holding(w, pid)
-            if fac is not None:
+            if fac is not None and top is not None:
                 by_faction.setdefault(fac, set()).add(top)
         rows.append({"referent": label, "handed": len(formed), "forming": len(keyed),
                      "common": len(common), "distinct_tops": len({t for t in tops.values() if t is not None}),

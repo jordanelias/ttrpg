@@ -14762,8 +14762,8 @@ def test_the_populated_world_is_not_everybody_in_one_room():
     # THAN EXEMPT FROM IT. Q4 raises a question from a live `commit` to an **OUGHT**, emitting the
     # referents `world_q.goal_referents` names (v9 IN-67: `(prop.subject,)` for every Proposition no goal
     # row mints; for a goal Proposition, whose `subject` is only a seeding record, the goal's own
-    # referents), so this rule binds every referent a person can be questioned about. THE ONE ROSTERED
-    # NON-PERSON REFERENT is a `rung` goal's (Varfell's southernmost dominion, FA-06): a rung, by plan. Until 2026-09-14 the faction Propositions were `HOLDS` and a second
+    # referents), so this rule binds every referent a person can be questioned about. THE ONLY ROSTERED
+    # NON-PERSON REFERENTS are a `rung` goal's (Varfell's two, FA-06): a rung, by plan. Until 2026-09-14 the faction Propositions were `HOLDS` and a second
     # assertion here pinned them that way; Jordan ruled the creed an OUGHT (*"Faction creed as an
     # ought: sure"*), so the pin is gone and the creeds are held to the SAME rule as the wants —
     # which is the stronger statement, not the weaker one. A creed subjected on a faction NAME
@@ -14781,9 +14781,10 @@ def test_the_populated_world_is_not_everybody_in_one_room():
             if ref not in w.persons and not (g is not None and g.object["kind"] == "rung" and ref in w.rungs):
                 bad.append((t.object, ref))
     assert asked >= n_cast and not bad, (
-        f"{len(bad)} question referent(s) are not a person: {bad[:4]}. Q4 emits the goal's referents, "
-        "so a rung-subject proposition is exactly how `build_at` produced a corpus in which no act "
-        "ever names anybody")
+        f"{len(bad)} question referent(s) are neither a person nor a rung goal's rung: {bad[:4]}. Q4 emits "
+        "the referents `goal_referents` names, so a creed or want subjected on a rung or a name is exactly "
+        "how `build_at` produced a corpus in which no act ever names anybody. (Covers the OUGHTs a person "
+        "holds a live `commit` to; an OUGHT nobody commits to raises no question.)")
 
     # THE CREED IS AN OUGHT ABOUT THE FACTION'S OWN LEADER, AND THE LOYALTY REACHES A READER.
     # ⚠ BOTH HALVES ARE LOAD-BEARING AND THE SECOND IS THE ONE THAT WOULD HAVE ROTTED SILENTLY.
