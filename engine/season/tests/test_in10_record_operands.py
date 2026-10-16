@@ -28,9 +28,13 @@ What each block proves, and the control that stops it passing vacuously:
 MUTATIONS, run at the build 2026-10-16 (each RED, then restored byte-exact and GREEN):
   * `operand_bags`' held-Record loop emptied (`for c in records:` -> `for c in ():`) -> block 4's
     two tests and block 5 RED (no `confer` on the commission's addressee).
-  * `_derive_operand`'s `held` branch disabled -> block 1's two tests RED, and block 4's first: with
-    no held answer the `!= subject` skip admits a commission about ANOTHER seat, so its control
-    (`off_duke2` adds nothing on `off_reeve`) reddens.
+  * `_derive_operand`'s `held` branch disabled -> block 1's two tests RED, and NOTHING ELSE (re-run
+    at the B-K close: 2 failed, 10 passed). Block 4 stays GREEN: `confer` is untyped, so `_operands`
+    returns `dict(given)` without calling `_derive_operand`, and in production `operand_bags` skips
+    any Record whose `_content_answer(c, 'subject') != subject`, so `held=` can answer only the
+    referent it was already handed. THE `held=` SUBJECT BRANCH IS THEREFORE EXERCISED ONLY BY DIRECT
+    CALLS (block 1); production `subject` delivery is via the classed stamps (`seats_named`,
+    `places_named`, `larders_in_purview`, `writs_held`). The hook is kept, not observed in play.
   * `decision/choose.py::pack_scenes` minting `via=None` -> block 3's fold test, block 4's second
     and block 5 RED: the entry's `Act.via` falsifier observes it.
   * `epistemic._hold_tenure_ends` returning `(subject,)` unexpanded -> block 5 RED (H-71's leak).

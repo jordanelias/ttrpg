@@ -69,7 +69,9 @@ def _check_record_sourced(by_kind, operands: frozenset, kind_keys: dict,
     `{content key: operand}`, how the MINT reads a key) is cross-checked against this map (how a
     holder's READER maps an operand back): for a kind carrying a `read_from` key and mapping that
     operand, the map must name the same key -- one fact, two directions, refused when they part.
-    Neither is derived from the other. A function, so a test can plant each mismatch
+    Neither is derived from the other. A kind that carries such a key but does not map its operand
+    at all is refused too (`petition` losing `subject: terms` would load and make every `carry` a
+    silent NO_CHANGE); a kind without the key (`faction_sheet`, no `terms`) is skipped. A function, so a test can plant each mismatch
     (`_check_operand_subset`'s reason, §0.1 pt 3)."""
     name = "record_sourced_operands"
     for kind, m in (by_kind or {}).items():
@@ -90,7 +92,15 @@ def _check_record_sourced(by_kind, operands: frozenset, kind_keys: dict,
                 needs="drop it", law="r2 `02` §A.13 -- a document naming `from` would let a writ "
                                      "reach into a larder the executor is not standing in")
         for key, operand in (read_from or {}).items():
-            if key in kind_keys[kind] and operand in m and m[operand] != key:
+            if key in kind_keys[kind] and operand not in m:
+                raise Unspecified(
+                    f"rosters.yaml: {name}.{kind} carries {key!r}, which "
+                    f"record_kinds.content.read_from mints from {operand!r}, but maps no {operand!r}",
+                    f"rosters.yaml -- {name}",
+                    needs=f"{operand!r} mapped to {key!r} (or the kind's key dropped)",
+                    law="a document whose key is minted from an operand but whose reader cannot "
+                        "answer it makes every act that reads it a silent NO_CHANGE")
+            if key in kind_keys[kind] and m[operand] != key:
                 raise Unspecified(
                     f"rosters.yaml: {name}.{kind} maps {operand!r} to {m[operand]!r}, but "
                     f"record_kinds.content.read_from mints {key!r} from {operand!r}",

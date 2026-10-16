@@ -947,6 +947,14 @@ rows:
       last by `world_q.attention_key`; `examine`, `levy` and `restore` are now refused only. The ROW STAYS `not_met` and this is
       a regression against B-I's 21, recorded here and in `test_season_shape.py`'s `ever` pin. `levy` leaving touches IN-49's
       baseline. Whether the own-act screen should spare a person's own-tenure claims (tier 1) is a design point for the user, not decided.
+      17 of 45 AS OF B-K CLOSE (2026-10-16, HEAD 662cc451, PYTHONHASHSEED=0); THE ROW STAYS `not_met`. `corpus_run`, seed 0:
+      `WHERE THE 45 GO: 6 have no predicate/effect · 12 foldable but never even attempted (comply, confer, convene,
+      destroy_record, determine, establish, levy, march, migrate, oblige, open_case, revoke) · 10 attempted and always refused ·
+      17 executed`. THE INSTRUMENT READS 45; the plan text says 46 (the count is `len(VERB_TABLE)`, and `repudiate` was cut at B-I).
+      Realm, `aperture 1 0` seed 0, control hash EQUAL, 612 acts, the R-05 verbs this batch touched (formed where printed; attempted /
+      executed): `forge` formed 83, 26 / 6; `survey` 29 / 6; `carry` 14 / 0; `work` 44 / 0; `migrate` formed 71, 31 / 1; `levy` formed 11,
+      0 / 0; `found` 15 / 0; `build` 11 / 0; `commit` 38 / 0 (`transfer` 32 / 0 and `issue` 6 / 3 are also read at this tree).
+      Read and not asserted; no row of this field is re-derived from them.
     measure: "python -m engine.season.harness.corpus_run  # the 'WHERE THE <n> GO' line, which prints len(VERB_TABLE) -- 44 today; it was '38' as of ED-IN-0261, '32' until ED-FI-0009 made the count honest and '37' until `release` landed"
     blocks: [H-65, IN-09, IN-10, IN-33, IN-45]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W10-core removed (it gates corpus_run's R2 check, not this row's WHERE THE <n> GO); H-94 is carried by its owners IN-10, IN-09, IN-45, IN-33

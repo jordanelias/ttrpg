@@ -179,9 +179,16 @@ def _load_works_cost() -> dict:
     refused). The checks are the ones a cost table can fail silently: a key no ladder or site roster
     carries (a price for nothing), an empty cell or a non-positive amount (a place that rises for
     free, which is the defect this table exists to close), a matter kind no registry row carries."""
-    costs = roster_map("works_cost", "costs")
-    plans = set(roster("rung_kinds")) | set(roster("site_kinds"))
-    mk = set(roster("matter_kinds"))
+    return _check_works_cost(roster_map("works_cost", "costs"),
+                             set(roster("rung_kinds")) | set(roster("site_kinds")),
+                             set(roster("matter_kinds")))
+
+
+def _check_works_cost(costs, plans: set, mk: set) -> dict:
+    """`_load_works_cost`'s refusals, with the rosters passed in so a test can plant each one
+    (`data/requires.py::_check_record_sourced`'s precedent, §0.1 pt 3): a plan key no roster carries
+    is FORBIDDEN; an empty or non-mapping cell, a matter kind no registry row carries, a non-int
+    (or bool) or non-positive amount is UNGRADED. Returns the validated copy."""
     if set(costs) - plans:
         raise Forbidden(
             f"works_cost prices plan kind(s) no roster carries: {sorted(set(costs) - plans)}",

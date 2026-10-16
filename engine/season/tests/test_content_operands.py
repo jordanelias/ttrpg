@@ -36,11 +36,12 @@ from __future__ import annotations
 
 import pytest
 
+from ..data.fixtures import WORKS_COST, _check_works_cost
 from ..data.requires import REQUIRES_OPERANDS, RECORD_SOURCED_OPERANDS, _check_record_sourced
-from ..data.rosters import QUESTION_SOURCES, RECORD_CONTENT, RECORD_KIND_KEYS
+from ..data.rosters import QUESTION_SOURCES, RECORD_CONTENT, RECORD_KIND_KEYS, roster
 from ..data.verbs import VERB_TABLE
 from ..decision.options import _derive_operand, _from_content_claim, opening_set
-from ..gaps import Forbidden, Unspecified
+from ..gaps import Forbidden, Ungraded, Unspecified
 from ..harness import populated
 from ..harness import probes as P
 from ..loop.witness import content_value
@@ -343,3 +344,40 @@ def test_record_sourced_operands_agrees_with_the_mints_read_from():
                               RECORD_KIND_KEYS, {"terms": "to"})
     assert "terms" not in RECORD_KIND_KEYS["faction_sheet"]
     _check_record_sourced(RECORD_SOURCED_OPERANDS, ops, RECORD_KIND_KEYS, shipped)
+
+
+def test_a_kind_carrying_a_read_from_key_must_map_its_operand():
+    """B-K close, F8. `record_kinds.content.read_from` mints `terms` from the act's `subject`; the
+    reader's map must answer `subject` off `terms` or every act reading a held document of that kind
+    declines silently. Planted: `petition` with `subject: terms` dropped is refused (before this
+    check it loaded). The shipped pair passes, and `faction_sheet` -- which carries no `terms` --
+    is skipped, mapping no `subject: terms` and needing none. Delete the new clause in
+    `_check_record_sourced` and the first assertion goes red."""
+    ops = frozenset(REQUIRES_OPERANDS)
+    shipped = RECORD_CONTENT["read_from"]
+    assert shipped == {"terms": "subject"} and "terms" in RECORD_KIND_KEYS["petition"]
+    with pytest.raises(Unspecified, match="maps no 'subject'"):
+        _check_record_sourced({"petition": {"to": "to"}}, ops, RECORD_KIND_KEYS, shipped)
+    _check_record_sourced(RECORD_SOURCED_OPERANDS, ops, RECORD_KIND_KEYS, shipped)
+    assert "terms" not in RECORD_KIND_KEYS["faction_sheet"] and \
+        "subject" in RECORD_SOURCED_OPERANDS["faction_sheet"]
+    _check_record_sourced({"faction_sheet": {"to": "head"}}, ops, RECORD_KIND_KEYS, shipped)
+
+
+def test_works_cost_refuses_each_planted_mismatch():
+    """B-K close, F6. `_load_works_cost` reads the shipped roster and so never meets a bad one; its
+    body is `_check_works_cost(costs, plans, mk)`, called here with each refusal planted (the
+    `_check_record_sourced` precedent): a plan kind no roster carries (Forbidden), an empty cell, a
+    non-mapping cell, a matter kind no registry row carries, a zero or negative amount, a float and
+    a bool amount (Ungraded). The control is the shipped table, read back through its own bindings."""
+    plans = set(roster("rung_kinds")) | set(roster("site_kinds"))
+    mk = set(roster("matter_kinds"))
+    assert "hearth" in plans and "grain" in mk
+    with pytest.raises(Forbidden, match="prices plan kind"):
+        _check_works_cost({"moat": {"grain": 1}}, plans, mk)
+    for bad in ({}, None, {"mithril": 1}, {"grain": 0}, {"grain": -3}, {"grain": 2.5},
+                {"grain": True}):
+        with pytest.raises(Ungraded, match="works_cost\\[hearth\\]"):
+            _check_works_cost({"hearth": bad}, plans, mk)
+    assert _check_works_cost({"hearth": {"grain": 10}}, plans, mk) == {"hearth": {"grain": 10}}
+    assert _check_works_cost(WORKS_COST, plans, mk) == WORKS_COST
