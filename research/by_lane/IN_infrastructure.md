@@ -778,7 +778,9 @@ mass battle's four-label degree is the MB lane's (audit G2b). Each was attacked 
   The signature constrains the shape of any band; it does not decide that a band is owed (M-IN-3; K-IN-9 is Jordan's).
 - **C3 epistemic feasibility.** The resolver's read of the subject's capability is resolver-side and lawful. A shown band must be computed from
   held claims (C2). H-207's second cause, question priority, is evaluated from the person's own questions, so it is feasible; its first cause
-  ("one actor, one season") is cast content, which R-05's rule forbids inventing.
+  ("one actor, one season") is cast content, which R-05's rule forbids inventing. Feasible is not open: Jordan ruled 2026-10-12 that the
+  aggregation rule stays `first` and no motive for `revoke` is special-cased (H-207 (A)); a troop stock read by the seam (M-IN-12) is
+  resolver-side and lawful, and a faction's choice of composition is its head's act `via` a seat (FA-01's mechanism), so feasible.
 - **C4 contradiction sweep.** Seven, in §7.2 items 1–8 (item 6 is drift): 03 §C.2 vs 03 §C.3 over the dedup filter; v9's stores `levy`
   vs Jordan's troop levy (item 7); IN-31's exit vs H-207 (A) (item 8); AX-7's gloss vs §C.11; the dead CANONICAL path; GD-2 vs AX-1/T-b; Jordan's "pool
   only" for the contest vs K-2's `Person.attributes` for combat. One introduced here and resolved: §8.4 lists σ-leverage as built-dark while
@@ -1095,7 +1097,8 @@ No correction changed a §0 ranking.
     sentence), K-IN-10 (`fight`'s RESOLVE-time path), K-IN-11 (`_pool_arm`, `_ARMS_POOL`, the hard-coded `ARMS`).
 12. Locators — APPLIED: `_part2`:416 (×3); M-IN-6 absence test now names v9:309, :364.
 Also applied on the coordinator's instruction: Jordan statement 5 (`levy` misnamed) — §4.1 G8, §4.2 `levy`, §4.3 new row, §0 item 2, M-IN-13,
-K-IN-13. Found by this pass and corrected: M-IN-10 missed `soak.py` and `arms --seasons`; §4.2's `confer` row said only "IN-10 reverted".
+K-IN-13. Sections 0–6 edited only where a corrected fact changed a claim there: §0 item 2 (the levy feed's verb), §2.2's Talk of the Town
+row (N-9 narrowed; held-false deed claims do not exist), §4.1 G8, §4.2 `confer` and `levy`, §4.3 (the missing troop-raising verb). Found by this pass and corrected: M-IN-10 missed `soak.py` and `arms --seasons`; §4.2's `confer` row said only "IN-10 reverted".
 §0's ranking is unchanged: its items rank research grounding, which none of these corrections moves.
 
 **Could not check.** IN-66's full entry (whether `goals.yaml` supersedes the `ought:` predicate, M-IN-9); the IN-12 step 5a docket routing end to
