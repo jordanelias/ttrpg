@@ -1,10 +1,10 @@
 """Plan position `19` -- U7-remit. `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md`,
 *"19 — INSTRUCTION. The five remit verbs; each gains a predicate reading `via.scope` and an effect on the
-G4 contract"* -- four built here (`levy`, `open_case`, `determine`, `issue`; `establish` is `13f`'s).
+G4 contract"* -- four built here (`requisition`, `open_case`, `determine`, `issue`; `establish` is `13f`'s).
 COMPLIANCE: `04:120` AX-1 (*"a seat enters through `Act.via`"*) and `04:330` (purview asked of the seat,
 never the actor). OBSERVABLE (`21_RECONCILIATION.md:575`, the antagonist-corrected one): *"a
 determination opens the disposal Tenure on its subject via the seat; below quorum, `determine.refused`"*,
-and *"a `levy` executes with `Act.via` set"*.
+and *"a `requisition` executes with `Act.via` set"*.
 
 What the position built, each asked of the real fold, the real loader and the real gate:
   * §F.24a form 7, `basis` -- *"a basis lookup on the exercised seat"* -- given its implementation
@@ -13,13 +13,13 @@ What the position built, each asked of the real fold, the real loader and the re
     load-time check (`data/verbs.py`) and the fold reading `row.refusal_for(clause)` (`04 §C.4`).
   * the `docket` reader branch (`exists:DocketItem`), and `open_case` putting a matter on the docket.
   * the write gate's EIGHTH basis, `determination` (`state/gate.py::may_determine`).
-  * `levy`'s effect (a conserved move into the seat's treasury), `open_case`'s, `determine`'s; `issue`'s
+  * `requisition`'s effect (a conserved move into the seat's treasury), `open_case`'s, `determine`'s; `issue`'s
     (`15`'s) precondition.
 
 THE FALSIFIERS, each with the control one clause away:
   * the plan's own: ANY OF THE FOUR EXECUTING WITH `via=None` -- run twice, through the fold as shipped
     (eligibility refuses) and with eligibility forced open (the `basis` conjunct refuses on its own).
-  * the plan's added one: TWO `levy`s ON ONE LARDER IN ONE FOLD -- the second refuses (§27.1).
+  * the plan's added one: TWO `requisition`s ON ONE LARDER IN ONE FOLD -- the second refuses (§27.1).
   * below quorum, `determine.refused` -- swept across the fixture's three points, the shipped one the
     control.
   * the gate: a bare opening of the disposal edge is refused (`NotYours`, store put back) whenever one
@@ -53,7 +53,7 @@ from ..state.gate import DETERMINATION, NotYours
 
 SEAT, DUKE, TREASURY = "off_duke", "p_high", "D"
 PARTY, OUTSIDER = "p_mid", "p_king"          # inside the duchy (Hh) / outside it (R)
-REMIT = ("levy", "open_case", "determine", "issue")
+REMIT = ("requisition", "open_case", "determine", "issue")
 
 
 def _world(**fx):
@@ -83,8 +83,8 @@ def _act(key, verb, via=SEAT, actor=DUKE, **payload):
     return Act(id=key, actor=actor, verb=verb, via=via, payload=payload)
 
 
-def _levy(key, subject="S", amount=5, **kw):
-    return _act(key, "levy", subject=subject, kind="grain", amount=amount, **kw)
+def _requisition(key, subject="S", amount=5, **kw):
+    return _act(key, "requisition", subject=subject, kind="grain", amount=amount, **kw)
 
 
 def _open(key, subject=PARTY, **kw):
@@ -101,7 +101,7 @@ def _issue(key, to=PARTY, **kw):
 
 # A well-formed act of each verb, on a world where it would EXECUTE through the seat -- the base the
 # via=None falsifier strips the seat from. `determine` needs its matter docketed first.
-_WELL_FORMED = {"levy": _levy, "open_case": _open, "determine": _determine, "issue": _issue}
+_WELL_FORMED = {"requisition": _requisition, "open_case": _open, "determine": _determine, "issue": _issue}
 
 
 def _ready(verb, **fx):
@@ -173,7 +173,7 @@ def test_19_none_of_the_four_executes_with_via_none(verb):
 @pytest.mark.parametrize("verb", REMIT)
 def test_19_the_basis_conjunct_refuses_via_none_even_past_eligibility(verb, monkeypatch):
     """THE STRUCTURAL HALF, WHICH IS WHAT MAKES THE FALSIFIER THE FORM'S AND NOT ONLY ELIGIBILITY'S.
-    Eligibility forced OPEN (`levy`'s `presence:<rung>` alternative is the live case: the day it
+    Eligibility forced OPEN (`requisition`'s `presence:<rung>` alternative is the live case: the day it
     admits, eligibility no longer implies a seat). The `basis` conjunct binds no `via`, reads UNKNOWN,
     and the fold refuses on it -- so the act still does not execute, and the refusal names the SEAT
     (`unauthorized`) through that conjunct's key."""
@@ -195,48 +195,48 @@ def test_19_the_basis_conjunct_refuses_via_none_even_past_eligibility(verb, monk
 
 
 # ======================================================================================
-# 2 -- LEVY: THROUGH THE SEAT, CONSERVED, SCARCE
+# 2 -- REQUISITION: THROUGH THE SEAT, CONSERVED, SCARCE
 # ======================================================================================
 
-def test_19_a_levy_executes_with_via_set_and_moves_matter_into_the_seats_treasury():
-    """THE OBSERVABLE, *"a `levy` executes with `Act.via` set"* -- and where the matter goes: out of
-    the levied rung and into the treasury of the seat exercised (`off_duke`'s rung, `D`), the same
+def test_19_a_requisition_executes_with_via_set_and_moves_matter_into_the_seats_treasury():
+    """THE OBSERVABLE, *"a `requisition` executes with `Act.via` set"* -- and where the matter goes: out of
+    the requisitioned rung and into the treasury of the seat exercised (`off_duke`'s rung, `D`), the same
     amount on both sides (the W3 audit's conservation), both rungs named on the success Event."""
     w, d = _world()
     before = {r: dict(w.rungs[r].stores or {}) for r in ("S", TREASURY)}
-    act = _levy("lv")
+    act = _requisition("rq")
     out = _fold(w, d, act)
-    assert _kinds(out) == ["levy.taken"] and act.via == SEAT
+    assert _kinds(out) == ["requisition.taken"] and act.via == SEAT
     after = {r: dict(w.rungs[r].stores or {}) for r in ("S", TREASURY)}
     assert after["S"]["grain"] == before["S"]["grain"] - 5
     assert after[TREASURY].get("grain", 0) == before[TREASURY].get("grain", 0) + 5
     assert sorted(c.subject for c in out[0].changes) == sorted(["S", TREASURY])
 
 
-def test_19_two_levies_on_one_larder_in_one_fold_the_second_refuses():
+def test_19_two_requisitions_on_one_larder_in_one_fold_the_second_refuses():
     """THE PLAN'S ADDED FALSIFIER (§27.1, `test_lb3a_two_eaters_cannot_spend_the_same_unit`'s shape):
-    a larder holding exactly one levy's worth, two levies in ONE fold -- the first takes it, the second
+    a larder holding exactly one requisition's worth, two requisitions in ONE fold -- the first takes it, the second
     reads the world the first left, finds it short, and gets a DIFFERENT Event, keyed to the `stores`
     conjunct, carrying the read that refused it."""
     w, d = _world()
     w.rungs["Hh"].stores = {"grain": 5}
-    out = _fold(w, d, _levy("lv1", subject="Hh"), _levy("lv2", subject="Hh"))
-    assert sorted(_kinds(out)) == ["levy.refused", "levy.taken"], _kinds(out)
-    refused = [e for e in out if e.kind == "levy.refused"][0]
-    assert list(VERB_TABLE["levy"].refusal_for("stores")) == ["levy.refused"]
+    out = _fold(w, d, _requisition("rq1", subject="Hh"), _requisition("rq2", subject="Hh"))
+    assert sorted(_kinds(out)) == ["requisition.refused", "requisition.taken"], _kinds(out)
+    refused = [e for e in out if e.kind == "requisition.refused"][0]
+    assert list(VERB_TABLE["requisition"].refusal_for("stores")) == ["requisition.refused"]
     assert ("stores:grain", 0) in [(o.predicate, o.value) for o in refused.observed], refused.observed
     assert w.rungs["Hh"].stores["grain"] == 0 and w.rungs[TREASURY].stores["grain"] == 5
 
 
-def test_19_a_levy_outside_the_seats_purview_is_unauthorized_and_says_whose():
+def test_19_a_requisition_outside_the_seats_purview_is_unauthorized_and_says_whose():
     """`04:330`: purview is asked of the SEAT. `R` is above the duchy -- a Duke has no purview upward --
-    so the levy refuses on the `authority` conjunct, and the read it carries names the seat."""
+    so the requisition refuses on the `authority` conjunct, and the read it carries names the seat."""
     w, d = _world()
     w.rungs["R"].stores = {"grain": 50}
-    out = _fold(w, d, _levy("lv", subject="R"))
-    assert _kinds(out) == ["levy.unauthorized"]
+    out = _fold(w, d, _requisition("rq", subject="R"))
+    assert _kinds(out) == ["requisition.unauthorized"]
     assert (f"purview:{SEAT}", False) in [(o.predicate, o.value) for o in out[0].observed]
-    assert w.rungs["R"].stores["grain"] == 50, "an unauthorized levy moved matter"
+    assert w.rungs["R"].stores["grain"] == 50, "an unauthorized requisition moved matter"
 
 
 # ======================================================================================
@@ -497,14 +497,14 @@ def test_19_a_writ_naming_several_executors_refuses_rather_than_ending_the_seaso
 
 def test_19_a_person_who_learned_the_seat_cannot_reach_stops_forming_it():
     """§F1 clause 4 asks the cell the fold asks, seat included (`exercised_seat` -> `via`). A Duke
-    holding `(R, purview:off_duke, False)` -- what a witnessed `levy.unauthorized` deposits -- finds
-    his levy of `R` KNOWN-FALSE through that seat; with no seat the conjunct is UNKNOWN and
+    holding `(R, purview:off_duke, False)` -- what a witnessed `requisition.unauthorized` deposits -- finds
+    his requisition of `R` KNOWN-FALSE through that seat; with no seat the conjunct is UNKNOWN and
     contradicts nothing (the control)."""
     w, _ = _world()
     p = w.persons[DUKE]
     p.ledger.append(Claim("c1", DUKE, "R", f"purview:{SEAT}", False, w.tick, "firsthand", 90,
                           "own"))
-    row = VERB_TABLE["levy"]
+    row = VERB_TABLE["requisition"]
     ops = {"subject": "R", "kind": "grain", "amount": 1}
     assert belief_contradicts(p, row, "R", ops, SEAT)
     assert not belief_contradicts(p, row, "R", ops, None)
@@ -539,19 +539,19 @@ def _plant(monkeypatch, verb, mutate):
 ])
 def test_19_the_loader_refuses_a_keyed_row_that_does_not_key_exactly_its_clauses(monkeypatch, defect,
                                                                                     match):
-    """Each defect planted on `levy`'s row, and the load fails naming it. The control is the table
+    """Each defect planted on `requisition`'s row, and the load fails naming it. The control is the table
     itself, which loaded to run this file."""
     def mutate(r):
         ref, cell = r["emits_on_refusal"], r["requires_typed"]["all"]
         if defect == "missing":
             ref.pop("stores")
         elif defect == "extra":
-            ref["bribe"] = ["levy.refused"]
+            ref["bribe"] = ["requisition.refused"]
         elif defect == "unnamed":
             cell[1].pop("conjunct")
             ref.pop("stores")
         elif defect == "flat named":
-            r["emits_on_refusal"] = ["levy.refused"]
+            r["emits_on_refusal"] = ["requisition.refused"]
         elif defect == "twice":
             cell[1]["conjunct"] = cell[0]["conjunct"]
         elif defect == "nested":
@@ -561,7 +561,7 @@ def test_19_the_loader_refuses_a_keyed_row_that_does_not_key_exactly_its_clauses
                        "conjunct": "authority"}
         else:
             ref["stores"] = []
-    _plant(monkeypatch, "levy", mutate)
+    _plant(monkeypatch, "requisition", mutate)
     with pytest.raises(SystemExit, match=match):
         _verbs._load_verb_table()
 
@@ -572,7 +572,7 @@ def test_19_the_fold_raises_rather_than_emit_an_undeclared_clauses_kind():
     instead would publish kinds for conjuncts that did not fail."""
     from ..gaps import InstrumentDefect
     with pytest.raises(InstrumentDefect):
-        VERB_TABLE["levy"].refusal_for("bribe")
+        VERB_TABLE["requisition"].refusal_for("bribe")
 
 
 # ======================================================================================

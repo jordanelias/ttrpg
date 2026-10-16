@@ -5,7 +5,7 @@ settled requirement that each subsystem be its own module -- per-subsystem files
 self-contained). Holds `EFFECTS` itself and its `effect_for` decorator, the one operand reader
 (`_operand`), the shared §10-ladder refusal (`_decline_ascent`, used by `move`/`migrate`/`found`),
 the oblige-term pair (`_oblige_term`/`_new_oblige_term`, used by `oblige`/`determine`/`_renewals`),
-and the treasury-move pair (`_shift`/`_exercised_office`, used by `transfer`/`levy`/`_renewals`).
+and the treasury-move pair (`_shift`/`_exercised_office`, used by `transfer`/`requisition`/`_renewals`).
 Every domain file imports what it needs from here rather than re-declaring its own copy (CLAUDE.md
 §8: the rule lives once) -- see `effects.py`'s own docstring for why THIS file, alone among the
 seven, is still eagerly imported whole by the aggregator rather than left to import on demand.
@@ -117,7 +117,7 @@ def _new_oblige_term(w: "World", a: "Act") -> Optional["Term"]:
 def _shift(src, dst, kind: str, amount) -> None:
     """MATTER MOVES FROM ONE RUNG'S STORES TO ANOTHER'S, CONSERVED: `src` down by `amount` of `kind`,
     `dst` up by the same. The one body of every act that moves stores between two rungs -- `transfer`
-    and, since plan position `19`, `levy` -- factored so the W3 audit's lesson is written once:
+    and, since plan position `19`, `requisition` -- factored so the W3 audit's lesson is written once:
     *"six grain left the world and arrived nowhere"* was a transfer that decremented one side and
     forgot the other. Each store is copied before it is written, as `_eff_transfer` always did, so
     no other holder of the old dict sees it change. Called only from inside a `Change.apply`: the
@@ -129,7 +129,7 @@ def _shift(src, dst, kind: str, amount) -> None:
 
 
 def _exercised_office(w: "World", a: "Act") -> Optional["Office"]:
-    """The Office an act's `via` names, or `None` -- the one-line resolution `_eff_levy` and
+    """The Office an act's `via` names, or `None` -- the one-line resolution `_eff_requisition` and
     `_renewals` both did inline (`/simplify`, BATCH-CLOSE Phase 2). NOT `_seat_rung`: that helper's
     fallback (a document's `payload.rung`, else the actor) is for a Record write, not for either of
     these two, which have their own reasons to want the bare Office or nothing."""

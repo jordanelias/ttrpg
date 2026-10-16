@@ -1652,7 +1652,7 @@ def f18():
         subject_matter={"terms": "mend the seam", "to": ["p_high"], "from": "Hh"})
     w.records["disp_order"] = Record(
         "disp_order", "D", "dispensation",
-        subject_matter={"terms": "levy the grain", "to": ["p_high"], "at": None})
+        subject_matter={"terms": "requisition the grain", "to": ["p_high"], "at": None})
     b = w.fixtures.get("scene_budget")
     return (f"PASS-STRUCTURALLY: a Petition rising from below and a Dispensation enumerating the "
             f"same executor coexist WITH NO ARBITRATION ANYWHERE IN THE SHAPE. The governor's {b} "

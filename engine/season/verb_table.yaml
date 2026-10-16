@@ -64,7 +64,7 @@
 # They are recorded here rather than fixed silently, because two of the three need a ruling.
 #
 # 1. `scale:` ON NINE ROWS FAILS INVARIANT 10 (unknown key; `scale:` refused BY NAME).
-#    Rows: confer, determine, dispatch, establish, exchange, issue, levy, revoke, succeed.
+#    Rows: confer, determine, dispatch, establish, exchange, issue, requisition, revoke, succeed.
 #    #358 §E.3 and Stage 2 §C.3: scale is a POSITION IN THE CONTAINMENT TREE, derived on demand,
 #    stored nowhere -- "a label cannot be walked", and indexing code by scale deletes the property
 #    that makes one type with many kinds worth having.
@@ -306,7 +306,7 @@ verbs:
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "exchange"
     scale:   "settlement"
-    scale_note: "as `levy` -- it writes `Rung.stores`"
+    scale_note: "as `requisition` -- it writes `Rung.stores`"
     stratum:     "uncontested_material"
     eligibility: ["own"]
     beneficiary: "none"
@@ -626,9 +626,9 @@ verbs:
     grade:       "assumption"
     grade_note: "the VERB and its `contests:` are ruled (ED-IN-0261); the composition as challenge-then-accept rests on a short reply, [medium]; the rest is `fight`'s row, carried."
     source:      "ED-IN-0261 (2026-09-20; as narrowed 2026-10-06); `fight`'s row for the writes, emits and cell"
-  - verb:        "levy"
+  - verb:        "requisition"
     scale:   "settlement"
-    scale_note: "a levy moves a Rung's stores -- the rung IS the subject"
+    scale_note: "a requisition moves a Rung's stores -- the rung IS the subject"
     stratum:     "uncontested_material"
     eligibility: ["remit:issue", "presence:<rung>"]
     beneficiary: "actor"
@@ -647,23 +647,23 @@ verbs:
           threshold: amount
           comparator: ">="
           conjunct:  stores
-    requires_typed_note: "PLAN POSITION `19`: *'`requires: stores(...) >= amount` is untyped: author it as `transfer`'s own form-2 `stores >= amount` cell'* -- and it is, field for field, with `of: subject` where `transfer` has `of: from`: the row's own `scale_note` makes the levied rung THE SUBJECT. So `operands_for` carries `subject`, `kind` and `amount` for a computed levy exactly as for a transfer (`kind`/`amount` from a held shortfall claim, else the fixtures, `H-94`). PLUS the conjunct the plan gives every remit verb, *'a predicate reading `via.scope`'*: `Basis` (§F.24a form 7, `data/requires.py`) with the `purview` rule, so the levying seat's purview must reach the levied rung (ruling (4), `04:330`) -- and a rungless seat, which reaches nothing, is refused before the effect could look for a treasury it lacks. ONE OWNER: the whole cell is typed, no predicate beside it (`test_wa_one_owner_...`)."
+    requires_typed_note: "PLAN POSITION `19`: *'`requires: stores(...) >= amount` is untyped: author it as `transfer`'s own form-2 `stores >= amount` cell'* -- and it is, field for field, with `of: subject` where `transfer` has `of: from`: the row's own `scale_note` makes the requisitioned rung THE SUBJECT. So `operands_for` carries `subject`, `kind` and `amount` for a computed requisition exactly as for a transfer (`kind`/`amount` from a held shortfall claim, else the fixtures, `H-94`). PLUS the conjunct the plan gives every remit verb, *'a predicate reading `via.scope`'*: `Basis` (§F.24a form 7, `data/requires.py`) with the `purview` rule, so the requisitioning seat's purview must reach the requisitioned rung (ruling (4), `04:330`) -- and a rungless seat, which reaches nothing, is refused before the effect could look for a treasury it lacks. ONE OWNER: the whole cell is typed, no predicate beside it (`test_wa_one_owner_...`)."
     writes:      ["Rung.stores", "Rung.stores"]
-    writes_note: "×2, ONE PER SIDE -- PLAN POSITION `19`, `transfer`'s shape and the W3 audit's reason (*'six grain left the world and arrived nowhere'*): the levied rung goes down and the seat's treasury, the rung of `Act.via`, goes up by the same, in one effect (`loop/effects.py::_eff_levy`, through `_shift`, the one body of every move between two rungs' stores). The second pair is check-only. It declared ×1 before `19` and no effect existed to perform even that."
-    emits:       ["levy.taken"]
+    writes_note: "×2, ONE PER SIDE -- PLAN POSITION `19`, `transfer`'s shape and the W3 audit's reason (*'six grain left the world and arrived nowhere'*): the requisitioned rung goes down and the seat's treasury, the rung of `Act.via`, goes up by the same, in one effect (`loop/effects.py::_eff_requisition`, through `_shift`, the one body of every move between two rungs' stores). The second pair is check-only. It declared ×1 before `19` and no effect existed to perform even that."
+    emits:       ["requisition.taken"]
     emits_on_refusal:
-      eligibility: ["levy.unauthorized"]
-      authority:   ["levy.unauthorized"]
-      stores:      ["levy.refused"]
-      write:       ["levy.refused"]
-    refusal_note: "PLAN POSITION `19`: KEYED PER CLAUSE (`04 §B.13` invariant 4's per-conjunct half). `levy.refused` is §27.1's SCARCITY channel -- *the second claimant on an emptied granary gets a DIFFERENT Event* -- and it is now the `stores` conjunct's alone: two levies on one larder in one fold, and the second finds it short (`tests/test_u7_remit.py`). `levy.unauthorized` is the SEAT refusing: none exercised grants `issue`, or its purview does not reach the rung. A seat that could not reach the larder and a larder that could not cover the levy were one Event before; a witness can now tell them apart."
+      eligibility: ["requisition.unauthorized"]
+      authority:   ["requisition.unauthorized"]
+      stores:      ["requisition.refused"]
+      write:       ["requisition.refused"]
+    refusal_note: "PLAN POSITION `19`: KEYED PER CLAUSE (`04 §B.13` invariant 4's per-conjunct half). `requisition.refused` is §27.1's SCARCITY channel -- *the second claimant on an emptied granary gets a DIFFERENT Event* -- and it is now the `stores` conjunct's alone: two requisitions on one larder in one fold, and the second finds it short (`tests/test_u7_remit.py`). `requisition.unauthorized` is the SEAT refusing: none exercised grants `issue`, or its purview does not reach the rung. A seat that could not reach the larder and a larder that could not cover the requisition were one Event before; a witness can now tell them apart."
     grade:       "assumption"
-    eligibility_note: "⚠ W3 AUDIT: §E3's eligibility cell carried a PRECONDITION as well as the remit act — `remit:levy + ...`. The fold split on the first `:` and tested the whole tail against the remit roster, so it NEVER MATCHED and a holder of the remit was silently refused. The act is the eligibility; the basis is a `requires`."
-    eligibility_substitution_note: "⚠ DECLARED 2026-09-03 rather than left silent. The source cell named `remit:levy`, and `levy` IS NOT IN `remit_acts` (issue · determine · confer · revoke · dispatch · convene, a CLOSED roster). W3 substituted `remit:issue` and wrote no note, which is an off-register fill under §42.2/G.4.8 — an instrument may fill exactly what the register declares. Either `levy` joins the roster (a ruling: it is a SEVENTH remit act) or `issue` is genuinely the remit a levy exercises (defensible — a levy is issued). Injected as `issue`, declared here, swept at the site. The same substitution is live on `establish`, which uses `remit:confer` and is likewise not a remit act. ⚠ PLAN POSITION `19` INHERITS IT AND DOES NOT DECIDE IT (the plan's own `19` entry: *'stays an open eligibility question this position inherits (a neighbour of `H-52`)'*). What `19` changes is that the substitution now EXECUTES -- a holder granted `issue` can levy -- so the open question has live consequences it did not have while no levy could run; `H-52`'s row carries the pair."
+    eligibility_note: "⚠ W3 AUDIT: §E3's eligibility cell carried a PRECONDITION as well as the remit act — `remit:requisition + ...`. The fold split on the first `:` and tested the whole tail against the remit roster, so it NEVER MATCHED and a holder of the remit was silently refused. The act is the eligibility; the basis is a `requires`."
+    eligibility_substitution_note: "⚠ DECLARED 2026-09-03 rather than left silent. The source cell named `remit:requisition`, and `requisition` IS NOT IN `remit_acts` (issue · determine · confer · revoke · dispatch · convene, a CLOSED roster). W3 substituted `remit:issue` and wrote no note, which is an off-register fill under §42.2/G.4.8 — an instrument may fill exactly what the register declares. Either `requisition` joins the roster (a ruling: it is a SEVENTH remit act) or `issue` is genuinely the remit a requisition exercises (defensible — a requisition is issued). Injected as `issue`, declared here, swept at the site. The same substitution is live on `establish`, which uses `remit:confer` and is likewise not a remit act. ⚠ PLAN POSITION `19` INHERITS IT AND DOES NOT DECIDE IT (the plan's own `19` entry: *'stays an open eligibility question this position inherits (a neighbour of `H-52`)'*). What `19` changes is that the substitution now EXECUTES -- a holder granted `issue` can requisition -- so the open question has live consequences it did not have while no requisition could run; `H-52`'s row carries the pair."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "march"
     scale:   "settlement"
-    scale_note: "a march targets a Rung -- the settlement marched on IS the subject, matching `levy`'s own scale/scale_note shape for the same reason: the write and the fight both land on a place, not on the actor."
+    scale_note: "a march targets a Rung -- the settlement marched on IS the subject, matching `requisition`'s own scale/scale_note shape for the same reason: the write and the fight both land on a place, not on the actor."
     stratum:     "contested_physical"
     eligibility: ["remit:dispatch"]
     beneficiary: "actor"
@@ -1198,7 +1198,7 @@ verbs:
   - verb:        "transfer"
     stratum:     "uncontested_material"
     eligibility: ["remit:issue", "own", "hold:<store>"]
-    eligibility_note: "`H-160` LIMIT 1, THROUGH `H-158`'s FIRST REMEDY -- *'an eligibility alternative that names a seat'* -- [ASSUMPTION; medium; Jordan to correct; revert: the other remedy, a ruling that an `own` verb may be exercised through a seat]. `remit:issue` is the existing grammar's way to name one (`decision/options.py::exercised_seat` returns the hold that grants it, `pack_scenes` puts it on `Act.via`, `loop/resolve.py::_eligible` admits through `seat_hold`), so no fifth eligibility kind and no new form. FIRST, because the first alternative that admits decides which one `via` reflects: a holder of a seat granting `issue` gives THROUGH it, and his `from` is the seat's rung, its treasury (`treasury_of`, off the grant's `seat_rung` snapshot); anyone else falls through to `own` exactly as before. The fold admits the same acts either way (`own` still follows), so WHO PAYS FROM WHERE moves, and with it what `Act.via` reaches: the seat's obligees at its rung witness the transfer (`epistemic._ch_post_remit`; `off_restoration_leader` grants `issue` and has one), `_renewals` clauses 1-2 become meetable, and the fold admits the withdrawal through `own` without re-asking the seat (a queued withdrawal survives a same-round revoke or re-stamp; `test_term_upkeep`'s `_ONE_CLAUSE_BROKEN` asserts such a transfer still executes, so no `_eff_transfer` guard); a rungless seat is passed over (`need_treasury`). ⚠ `issue` IS `levy`'s SUBSTITUTION CARRIED ONE VERB OVER, not a ruling -- `transfer` is not a remit act (`rosters.yaml: remit_acts` is closed), and a payment out of a treasury is read as issued, the converse of a levy into it (`H-52`'s neighbour; its `eligibility_substitution_note`). ⚠ AND A HOLDER OF SUCH A SEAT NO LONGER FORMS A TRANSFER AS HIMSELF: one alternative per row decides, so his gifts from his own home are not formed (on the realm they were refused every time -- `H-160`'s hearths hold nothing). A candidate per admitting alternative is where that choice would go if it ever matters."
+    eligibility_note: "`H-160` LIMIT 1, THROUGH `H-158`'s FIRST REMEDY -- *'an eligibility alternative that names a seat'* -- [ASSUMPTION; medium; Jordan to correct; revert: the other remedy, a ruling that an `own` verb may be exercised through a seat]. `remit:issue` is the existing grammar's way to name one (`decision/options.py::exercised_seat` returns the hold that grants it, `pack_scenes` puts it on `Act.via`, `loop/resolve.py::_eligible` admits through `seat_hold`), so no fifth eligibility kind and no new form. FIRST, because the first alternative that admits decides which one `via` reflects: a holder of a seat granting `issue` gives THROUGH it, and his `from` is the seat's rung, its treasury (`treasury_of`, off the grant's `seat_rung` snapshot); anyone else falls through to `own` exactly as before. The fold admits the same acts either way (`own` still follows), so WHO PAYS FROM WHERE moves, and with it what `Act.via` reaches: the seat's obligees at its rung witness the transfer (`epistemic._ch_post_remit`; `off_restoration_leader` grants `issue` and has one), `_renewals` clauses 1-2 become meetable, and the fold admits the withdrawal through `own` without re-asking the seat (a queued withdrawal survives a same-round revoke or re-stamp; `test_term_upkeep`'s `_ONE_CLAUSE_BROKEN` asserts such a transfer still executes, so no `_eff_transfer` guard); a rungless seat is passed over (`need_treasury`). ⚠ `issue` IS `requisition`'s SUBSTITUTION CARRIED ONE VERB OVER, not a ruling -- `transfer` is not a remit act (`rosters.yaml: remit_acts` is closed), and a payment out of a treasury is read as issued, the converse of a requisition into it (`H-52`'s neighbour; its `eligibility_substitution_note`). ⚠ AND A HOLDER OF SUCH A SEAT NO LONGER FORMS A TRANSFER AS HIMSELF: one alternative per row decides, so his gifts from his own home are not formed (on the realm they were refused every time -- `H-160`'s hearths hold nothing). A candidate per admitting alternative is where that choice would go if it ever matters."
     beneficiary: "to"
     requires:    "stores(hearth(giver), kind) >= amount (§54 it. 7)"
     requires_typed:

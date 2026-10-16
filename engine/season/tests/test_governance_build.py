@@ -787,20 +787,20 @@ def _load_with(table_text: str):
             importlib.reload(_verbs)
 
 
-_LEVY_ROW = (
-    '  - verb:        "levy"\n'
+_REQUISITION_ROW = (
+    '  - verb:        "requisition"\n'
     '    scale:   "settlement"\n'
-    '    scale_note: "a levy moves a Rung\'s stores -- the rung IS the subject"\n'
+    '    scale_note: "a requisition moves a Rung\'s stores -- the rung IS the subject"\n'
     '    stratum:     "uncontested_material"\n'
     '    eligibility: ["remit:issue", "presence:<rung>"]\n'
     '    beneficiary: "actor"\n'
 )
 
-# ⚠ PLAN POSITION `19` TYPED `levy` (`transfer`'s form-2 cell plus a `basis` conjunct), and a typed
-# cell's `needs:` ADMITS `to` -- so `beneficiary: to` on `levy` became CARRIABLE and stopped being the
+# ⚠ PLAN POSITION `19` TYPED `requisition` (`transfer`'s form-2 cell plus a `basis` conjunct), and a typed
+# cell's `needs:` ADMITS `to` -- so `beneficiary: to` on `requisition` became CARRIABLE and stopped being the
 # dead reference `test_lb6d_an_operand_beneficiary_the_row_cannot_carry_is_refused_at_load` plants.
 # That test needs an UNTYPED row, and `forge` is one (`requires: —`, no cell). The two tests above keep
-# `levy`: a missing or off-roster beneficiary is refused whatever the row's cell.
+# `requisition`: a missing or off-roster beneficiary is refused whatever the row's cell.
 _FORGE_ROW = (
     '  - verb:        "forge"\n'
     '    stratum:     "uncontested_material"\n'
@@ -851,7 +851,7 @@ def test_lb6d_a_row_without_the_column_is_refused_at_load():
     """The column is REQUIRED, so a new verb cannot arrive carrying no declaration. An absent
     column would read as `benefits nobody` for that verb -- the UNKNOWN/False collapse."""
     src = _verb_table_text()
-    dropped = src.replace(_LEVY_ROW, _LEVY_ROW.replace('    beneficiary: "actor"\n', ""), 1)
+    dropped = src.replace(_REQUISITION_ROW, _REQUISITION_ROW.replace('    beneficiary: "actor"\n', ""), 1)
     assert dropped != src, "the substitution did not apply -- this test is asserting nothing"
     with pytest.raises(SystemExit, match="declares no `beneficiary:`"):
         _load_with(dropped)
@@ -867,7 +867,7 @@ def test_lb6d_an_off_roster_beneficiary_is_refused_at_load():
     DESIGN-GAP. `H-115`'s split is that load-time refusals are fatal `SystemExit`; this row is
     load-time, so it raises that now and this assertion follows it."""
     src = _verb_table_text()
-    bogus = src.replace(_LEVY_ROW, _LEVY_ROW.replace('"actor"', '"treasury"'), 1)
+    bogus = src.replace(_REQUISITION_ROW, _REQUISITION_ROW.replace('"actor"', '"treasury"'), 1)
     assert bogus != src, "the substitution did not apply -- this test is asserting nothing"
     with pytest.raises(SystemExit, match="not in `beneficiary_kinds`"):
         _load_with(bogus)
@@ -925,7 +925,7 @@ def test_lb6d_none_and_an_unbound_carrier_are_different_answers():
     bound = Candidate(verb="transfer", subject="r1", operands={"to": "p3"})
     assert beneficiary_of(p, bound) == "p3"
     assert benefits_me(p, bound) == 0.0
-    assert benefits_me(p, Candidate(verb="levy", subject="r1")) == 1.0
+    assert benefits_me(p, Candidate(verb="requisition", subject="r1")) == 1.0
 
 
 def test_lb6d_the_column_resolves_on_candidates_the_engine_actually_forms():
@@ -1295,7 +1295,7 @@ def test_13f_an_existing_id_refuses_any_change_but_the_remit(change):
     (_founding(faction="Nowhere Brotherhood"), True),                  # an unknown faction
     (_founding(faction=None, body="Office of Nothing"), True),         # an unknown body
     (_founding(body="Imperial Court", faction="Church of Solmund"), True),   # a mismatch
-    (_founding(remit=["issue", "levy"]), True),                        # off `REMIT_ACTS`
+    (_founding(remit=["issue", "requisition"]), True),                        # off `REMIT_ACTS`
     (_founding(post="Duke", faction=None, body="Imperial Court"), True),     # a title in a body
     (_founding(rung="nowhere"), False),                                # a rung the world lacks
     (_founding(conferral=None), False),                                # no conferral basis
@@ -1973,8 +1973,8 @@ def test_8a_a_season_still_executes_end_to_end_with_the_overlay_wired():
 # is -- J-8, `offices.yaml: meta: remit_unruled`). FALSIFIERS: every row's anchor resolves to one
 # live rung of its own kind, checked against an INDEPENDENT derivation of each rung; the resolver
 # refuses what names no single rung and a broken form turns the build red; no seat but the one
-# declared exception is rungless; a season executes a `levy`/`issue` through a seat (`Act.via`
-# set) where the same seed refused 18 of 19 four-season levies on `authority` before (`aperture 4 0`,
+# declared exception is rungless; a season executes a `requisition`/`issue` through a seat (`Act.via`
+# set) where the same seed refused 18 of 19 four-season requisitions on `authority` before (`aperture 4 0`,
 # the parent tree `5519cf52`, as `H-163` limit 1 and the `13d-iii` commit record it).
 # =================================================================================================
 
@@ -2414,25 +2414,25 @@ def _season13():
     return w, attribute(w, d, 1)
 
 
-def test_13d_iii_a_season_executes_an_issue_or_levy_through_a_seat_with_a_rung(_season13):
-    """U9's own acceptance text, on the shipped realm at seed 0: a `levy` or `issue` EXECUTES with
+def test_13d_iii_a_season_executes_an_issue_or_requisition_through_a_seat_with_a_rung(_season13):
+    """U9's own acceptance text, on the shipped realm at seed 0: a `requisition` or `issue` EXECUTES with
     `Act.via` set, naming a seat whose rung gave it the purview. Before this position the same seed
-    refused 18 of 19 four-season levies on `authority` (`aperture 4 0` on the parent tree
+    refused 18 of 19 four-season requisitions on `authority` (`aperture 4 0` on the parent tree
     `5519cf52`; `H-163` limit 1) and executed none. The seat check is the
     point: an act whose `via` names a rungless seat would have refused, so this also shows `via`
-    and the rung are one fact. (`levy` itself still mostly refuses as `levy.refused` -- the `stores`/
+    and the rung are one fact. (`requisition` itself still mostly refuses as `requisition.refused` -- the `stores`/
     `write` conjuncts, `H-163` limit 3 -- which is not this position's to lift.)"""
     w, att = _season13
-    executed = [a for a, made, _ in att if a.verb in ("levy", "issue") and made]
-    assert executed, "no levy or issue executed in a season: the cap `13d-iii` lifts is still on"
+    executed = [a for a, made, _ in att if a.verb in ("requisition", "issue") and made]
+    assert executed, "no requisition or issue executed in a season: the cap `13d-iii` lifts is still on"
     for a in executed:
         assert a.via in w.offices, f"{a.verb} by {a.actor} executed with via={a.via!r}"
         assert w.offices[a.via].rung is not None, (a.verb, a.via)
-    levies = [(a, refused) for a, _, refused in att if a.verb == "levy"]
-    assert levies, "no levy was attempted -- the share below would be vacuous"
-    unauthorized = sum("levy.unauthorized" in refused for _, refused in levies)
-    assert unauthorized < len(levies), (
-        f"{unauthorized} of {len(levies)} levies refused on `authority`: every seat that levies is "
+    requisitions = [(a, refused) for a, _, refused in att if a.verb == "requisition"]
+    assert requisitions, "no requisition was attempted -- the share below would be vacuous"
+    unauthorized = sum("requisition.unauthorized" in refused for _, refused in requisitions)
+    assert unauthorized < len(requisitions), (
+        f"{unauthorized} of {len(requisitions)} requisitions refused on `authority`: every seat that requisitions is "
         "still outside its purview")
 
 

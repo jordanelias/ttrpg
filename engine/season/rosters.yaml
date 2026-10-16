@@ -328,7 +328,7 @@ rosters:
       that data, provisionally.
       ⚠ IT BUYS FOUR VERBS, NOT EIGHT, AND THE FIRST WRITING OF THIS NOTE SAID EIGHT WITHOUT
       MEASURING IT. Measured on `build_realm(0)`, both arms: BEFORE, five of the nine were already
-      formable off the three granted seats (`determine`, `dispatch`, `issue`, `levy`, `open_case`)
+      formable off the three granted seats (`determine`, `dispatch`, `issue`, `requisition`, `open_case`)
       and FOUR were unreachable (`confer`, `convene`, `establish`, `revoke`). The default closes
       those four. `H-71`'s own `cite:` says the never-attempted set went 5 -> 4 and is consistent;
       the "eight" was invented. `CLAUDE.md` §0.1 pt 3 — a number without its measurement.
@@ -2557,7 +2557,7 @@ tables:
         revoke:         -0.7    # carried: an officeholder unmaking a subordinate's standing; rank exercised
         issue:          -0.6    # carried: a dispensation is a remit reaching the executors named in scope
         comply:         -0.6    # carried: obeying a dispensation's terms is literal deference to the issuer
-        levy:           -0.6    # carried: taking a rung's stores under a remit is rank drawing on subjects
+        requisition:           -0.6    # carried: taking a rung's stores under a remit is rank drawing on subjects
         dispatch:       -0.5    # carried: an order sent down the office to a named person
         open_case:      -0.5    # carried: opening a case invokes the remit's institution over the matter
         petition:       -0.4    # carried: the channel a subordinate has; using it works the hierarchy
@@ -2627,7 +2627,7 @@ tables:
         forge:          null
         issue:          null
         fight:          null
-        levy:           null
+        requisition:           null
         move:           null
         petition:       null
         revoke:         null
@@ -2646,8 +2646,8 @@ tables:
         construe:       -0.6    # derived: calculated to serve the construer's aim, not to keep the bond
         forge:          -0.5    # derived: counterfeiting a record for advantage
         open_case:       0.3    # derived: the case runs by template regardless of who stands before it
-        levy:           -0.3    # derived: rank drawing on subjects -- one's own office's take
-        march:          -0.4    # reasoned: `sides_of` divides the claimants into sides and the loss lands on the other one -- war for one's own against another; `levy`'s reason, stronger
+        requisition:           -0.3    # derived: rank drawing on subjects -- one's own office's take
+        march:          -0.4    # reasoned: `sides_of` divides the claimants into sides and the loss lands on the other one -- war for one's own against another; `requisition`'s reason, stronger
         build:          null    # reasoned: beneficiary `none` -- who gains from the fabric is a world read (its `beneficiary_note`)
         found:          null    # reasoned: beneficiary `none`, for `build`'s reason
         give:           null    # reasoned: partial toward a person, but toward WHOM is the candidate's fact, not the verb's (§3.3's rule for `transfer` and `tell`)
@@ -2709,7 +2709,7 @@ tables:
         give:           null
         issue:          null
         fight:          null
-        levy:           null
+        requisition:           null
         march:          null
         migrate:        null
         move:           null
@@ -2763,7 +2763,7 @@ tables:
         forge:          null
         issue:          null
         fight:          null
-        levy:           null
+        requisition:           null
         move:           null
         open_case:      null
         petition:       null
@@ -2814,7 +2814,7 @@ tables:
         exchange:       null
         forge:          null
         issue:          null
-        levy:           null
+        requisition:           null
         move:           null
         oblige:         null
         open_case:      null
@@ -2873,7 +2873,7 @@ tables:
         dispatch:       null
         establish:      null
         issue:          null
-        levy:           null
+        requisition:           null
         open_case:      null
         petition:       null
         release:        null

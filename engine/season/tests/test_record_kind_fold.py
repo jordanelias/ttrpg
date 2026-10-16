@@ -103,7 +103,7 @@ def test_l35_refuses_a_missing_key_an_extra_key_an_unknown_kind_and_a_non_mappin
     with pytest.raises(Forbidden, match="not a member of `record_kinds`"):
         Record("r_writ", "S", "writ")
     with pytest.raises(Forbidden, match="subject_matter of type"):
-        Record("r_str", "S", "dispensation", subject_matter="levy the grain")
+        Record("r_str", "S", "dispensation", subject_matter="requisition the grain")
     # CONTROL: the exact key set constructs, and so does a keyless kind with no content.
     assert Record("r_ok", "S", "dispensation", subject_matter=exact).kind == "dispensation"
     assert Record("r_text", "S", "text").subject_matter is None

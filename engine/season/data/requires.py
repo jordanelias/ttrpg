@@ -415,12 +415,12 @@ class Basis(Requirement):
     added. What `19` adds to the vocabulary is two STEMS, below.
 
     WHY IT IS THE FORM `19` NEEDED. The plan's `19` gives four remit verbs *"a predicate reading
-    `via.scope`"*, and three of them (`levy`, `issue`, `determine`) also need OPERANDS a computed act
+    `via.scope`"*, and three of them (`requisition`, `issue`, `determine`) also need OPERANDS a computed act
     can carry -- `kind`/`amount`, the executor `to` -- which only a TYPED cell earns
     (`decision/options.py::operands_for` returns `{}` for an untyped row). A predicate beside a
     typed cell is two owners of one cell (`test_wa_one_owner_...`, `give`'s and `oblige`'s notes),
     so without this form the choice was *operands or the seat, never both* -- and `transfer`'s own
-    form-2 cell, which the plan names for `levy`, could not be written at all.
+    form-2 cell, which the plan names for `requisition`, could not be written at all.
 
     THE SEAT IS STRUCTURAL, NOT AN OPERAND -- the correction `04_VERBS.md`'s own determine row
     records (⑵: *"the conjunct binds `subject`; the actor is the acting person by construction and
@@ -446,7 +446,7 @@ class Basis(Requirement):
 
     ⚠ OCCUPANCY IS ELIGIBILITY'S, NOT THIS FORM'S -- except where the gate's own predicate asks it.
     `purview` reads the seat's authority only; that the actor SITS in `via` is `_eligible`'s `remit:`
-    branch (`seat_hold`), which every row using this form admits through. `levy`'s second
+    branch (`seat_hold`), which every row using this form admits through. `requisition`'s second
     alternative, `presence:<rung>`, declines unconditionally today (`H-75`); the day it admits, a
     `purview` read would have to ask `seat_hold` too, and this sentence is where that is written.
     `bench` does ask it, because `may_determine` is the gate's whole test and is taken whole.
@@ -454,7 +454,7 @@ class Basis(Requirement):
     ⚠ PERSON-SIDE the seat is the one `decision/options.py::seat_of` names (`exercised_seat` for a
     one-seat Candidate), passed to the same
     `binding_of` (`epistemic.belief_contradicts`), so §F1 clause 4 asks the cell the fold asks: a
-    person who has watched `off_duke`'s levy of `R` refused holds `(R, purview:off_duke, False)` and
+    person who has watched `off_duke`'s requisition of `R` refused holds `(R, purview:off_duke, False)` and
     stops forming it -- a belief, not a world read (`LedgerReader`)."""
     of: str
     basis: str
