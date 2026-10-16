@@ -567,7 +567,18 @@ def _ch_chronicle(w: "World", e, pid) -> bool:
     near the room. Since `15d` they hold those deposits `told_by`: 553 of that season's 4,294
     claims, where every one was `firsthand` before. ⚠ RE-MEASURED AT `17a`, which moved this
     channel AHEAD of `post_remit` (the ordinal: told before inferred) and re-based `post_remit` onto
-    obligees: this channel is now the strongest for 162 pairs there, `post_remit` for none."""
+    obligees: this channel is now the strongest for 162 pairs there, `post_remit` for none.
+
+    ⚠ KEPT AT v9 SC-01 STEP 13, WHICH WAS TO DELETE IT -- MEASURED, AND THE DELETION'S PREMISE IS STALE.
+    The proceedings design deletes `chronicle` on the ground that it *"matches nobody"*
+    (`21_RECONCILIATION.md` C-6) and pairs the deletion with the channel that replaces its reach (the
+    `<rung kind>` reach channel, the design's step 15); the v9 plan moved the deletion to step 13 and
+    scheduled no replacement. Arm: this predicate forced `False`, everything else shipped, `build_realm(0)`
+    at `29af7354`: 1 season `told_by` claims 879 -> 0, events 7,060 -> 5,986, acts 608 -> 586, hash
+    `27717c62` -> `8ae2dce6`; 2 seasons `told_by` 3,187 -> 0, events 23,220 -> 17,300. So in the realm it
+    is the ONLY channel minting `told_by` -- every hearsay deposit of a binding decision. Deleting it
+    before its replacement exists removes that reach outright; it goes in the change that builds the
+    `<rung kind>` channel (`19_PLAN.md` step 16's pairing), not before."""
     return any(r.stratum == "binding_decision" for r in VERB_TABLE.values()
                if e.kind in (r.emits or ()))
 

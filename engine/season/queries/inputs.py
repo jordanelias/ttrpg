@@ -14,9 +14,14 @@ imports a record type must pull in nothing else of the host
 (`engine/season/tests/test_social_contest_module.py` observes it in a fresh process); a record type
 placed beside a builder that reads `data/` would drag the registries into every module.
 
-THREE RECORDS (plan positions `31a`, `31b`, `31c`). No OUTPUT type is minted: the providers return a `dict`,
-and typing a `Margin` for one provider while the others return a dict would give the seam two
-return shapes (`seam/wrappers/sigma.py`'s docstring, the placement question).
+THREE INPUT RECORDS (plan positions `31a`, `31b`, `31c`) AND ONE OUTPUT RECORD, `Margin` (v9 SC-01 step
+15). `Margin` types the MODULE -> HOST boundary of the social contest container's provider: the module
+entry returns one and the host adapter (`seam/wrappers/sigma.py::resolve`) refuses anything else, so a
+winner cannot cross. The adapter still hands the seam the `dict` every provider returns -- the SEAM keeps
+one return shape (`combat` returns a scene and `mass_battle` a field, neither a margin); typing the seam
+itself is a `seam/` item of its own. It lives here, not in a sibling file, because a module imports it to
+construct it and this leaf is the one host file a module may import
+(`engine/season/tests/test_social_contest_module.py`).
 """
 from __future__ import annotations
 
@@ -52,6 +57,20 @@ class SocialContestInput:
     obstacle_ceiling: Optional[float]
     obstacle_refusal_multiple: float
     leverage: float
+
+
+@dataclass(frozen=True)
+class Margin:
+    """What the social contest module's entry returns for one matter's draw: the roll's `net` and the
+    `ob` it was thrown at, and nothing else (v9 SC-01 step 15; `08_SEAM.md`'s provider rule, intent
+    only: *a MARGIN, never a winner*).
+
+    ⚠ NO WINNER, NO BAND, NO SIDE. The band is the one ladder's reading of this pair
+    (`seam/ladder.py::degree_of` -> `degree_from_net`), and who it favours is the fold's reading of the
+    band; a field naming either would make the module a second resolver. The host adapter refuses a
+    return of any other type (`seam/wrappers/sigma.py::resolve`)."""
+    net: float
+    ob: float
 
 
 @dataclass(frozen=True)

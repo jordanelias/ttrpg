@@ -13735,7 +13735,8 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # QUESTIONS.** `module:` is WHOSE prize it is — what the seam names when it refuses, checked
     # against `references/module_contracts.yaml`. `provider:` is WHAT RUNS IT. They diverge the
     # moment an interim resolver stands in for an unbuilt subsystem, which is exactly `a standing`
-    # and `a proposition`: module `social_contest`, provider `sigma_leverage`, `interim: true`.
+    # and `a proposition` were: module `social_contest`, provider `sigma_leverage`, `interim: true`,
+    # until v9 SC-01 steps 13 + 15 repointed them (provider `social_contest`).
     prizes = roster_map("contest_subsystems", "prizes")
     # Plan position `30` (A-25): one identity per module, its directory name -- `module:` became
     # `combat`; `provider:` says what runs and keeps its name, so the two now differ here too.

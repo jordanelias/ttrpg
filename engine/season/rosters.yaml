@@ -1064,7 +1064,7 @@ rosters:
   # | mode of play        | attaches at        | in | out | state |
   # |---------------------|--------------------|----|-----|-------|
   # | personal combat     | RESOLVE (S39)      | claimants, prize, causes | a degree | BUILT — `modules/combat/fight.py`, called by `seam/wrappers/combat.py`. Jordan: "combat engine isn't done" |
-  # | social contest      | RESOLVE (S39)      | claimants, prize, causes | a degree | INTERIM — `a standing` is rolled by `modules/social_contest/roll.py`, called by `seam/wrappers/sigma.py` (`contest_subsystems`' `interim: true`) |
+  # | social contest      | RESOLVE (S39)      | claimants, prize, causes | a degree | BUILT, σ-LEVERAGE MODE — `a standing`/`a matter` are rolled by `modules/social_contest/roll.py` (a `Margin`), called by `seam/wrappers/sigma.py`, provider `social_contest` (v9 SC-01 steps 13 + 15); the proceedings nested run is unbuilt |
   # | mass battle         | ENCOUNTER (`a field`) | claimants, prize, causes | a degree | BUILT — `modules/mass_battle/massbattle.py`, called by `seam/wrappers/mass_battle.py` (the `contest_subsystems` row `a field`) |
   # | investigation       | UNRULED            | UNRULED | UNRULED | ITS OWN KIND — not a contest |
   # | settlement mgmt     | UNRULED (see below)| UNRULED | UNRULED | ⚠ NOT CALLED — done INLINE (see below) |
@@ -1160,9 +1160,9 @@ rosters:
     # resolver stands in for a subsystem that has not been built. Collapsing them, as the string
     # form did, makes *this prize belongs to social_contest* and *this prize is rolled by
     # sigma_leverage* the same sentence — and they are not.
-    # ⚠ `interim: true` IS WHAT CARRIES ED-SC-0033 CLAUSE (2), which rules that the two prizes mapping to `social_contest` REPOINT to the proceedings provider when it lands. With the two
-    # fields split, that repoint is ONE FIELD ON A ROW rather than a code change (`02 §D.4`), which
-    # is what a manifest is for.
+    # ⚠ `interim: true` CARRIED ED-SC-0033 CLAUSE (2), which rules that the prizes mapping to `social_contest` REPOINT to its own provider. With the two
+    # fields split, that repoint was ONE FIELD ON A ROW rather than a code change (`02 §D.4`), and v9 SC-01
+    # steps 13 + 15 made it in one change with the provider it names (`test_sc01_provider.py`).
     prizes:
       "the body":
         module:   "combat"
@@ -1192,9 +1192,9 @@ rosters:
           not a second code path.
       "a standing":
         module:   "social_contest"
-        provider: "sigma_leverage"
+        provider: "social_contest"   # v9 SC-01 steps 13 + 15 (ONE change): repointed from the interim `sigma_leverage`, ED-SC-0033 clause (2) -- a ROW change. `seam/wrappers/sigma.py` registers this string; refusal (c) refuses construction if nothing does
         module_entry: "social_contest.roll"   # `31a`: the composition role the provider calls through `MODULE_ENTRIES`; refused at construction (`manifest/registry.py::check_contest_prizes`) unless a composition row declares it, as a `verb_call` into this row's `module:`, bound to a verb whose prize names it. A-25: the prize row and the composition row are the two owners of which module is called.
-        interim:  true
+        # `interim: true` DELETED at steps 13 + 15. The entry stays the σ-leverage roll: SC-05's measurement kept it over the kernel (`modules/social_contest/roll.py`'s docstring), and it returns a `Margin` the provider holds it to.
         cite: >-
           JORDAN, 2026-09-09, VERBATIM: "we have the sigma leverage d10 resolver in engine to use." A third option neither
           of ED-SC-0037's two costed, and the row is `status: ruled`. ⚠ ED-SC-0033 (2026-09-06) rules that (2) the two
@@ -1205,19 +1205,19 @@ rosters:
           arg-order alias of it, and the tree's live composition has the CALLER supply `base_ob`.
           The host input builder's own site (`seam/wrappers/sigma.py::_obstacle_of`, `H-127`) was deleted at step 14; the social contest
           module composes the obstacle (`modules/social_contest/roll.py::obstacle`, under `H-213`'s ceiling). So
-          `interim: true` now CARRIES CLAUSE (2) ALONE: A ROW CHANGE when proceedings lands, not a code change (`02 §D.4`).
+          `interim: true` carried CLAUSE (2) ALONE, and steps 13 + 15 discharged it: the row names `social_contest` (`02 §D.4`).
       "a proposition":
         module:   "social_contest"
-        provider: "sigma_leverage"
+        provider: "social_contest"   # as `a standing`'s: repointed at steps 13 + 15
         module_entry: "social_contest.roll"   # as `a standing`'s
-        interim:  true
+        # `interim: true` deleted at steps 13 + 15, as `a standing`'s. ⚠ NO VERB CONTESTS THIS PRIZE YET (`verb_table.yaml`: `tell` -> `a standing`, `speak` -> `a matter`).
         cite:     "as `a standing`. Same ruling, clause (3) honoured by the module since step 14, same repoint."
       "a matter":
         module:   "social_contest"
-        provider: "sigma_leverage"
+        provider: "social_contest"   # as `a standing`'s: repointed at steps 13 + 15
         module_entry: "social_contest.roll"   # as `a standing`'s
-        interim:  true
-        cite:     "v9 SC-01 step 12 (B-N): `speak`'s prize (`proposals/2026-09-05-proceedings-subsystem/04_VERBS.md` §B.1, `08_SEAM.md`: `a matter` -> the proceedings provider). Routed to the interim provider until step 15 builds that one, as `a standing`; ED-SC-0033 clause (2)'s repoint (steps 13 + 15, ONE commit) reaches THIS row too, so it is three rows, not the two the plan names [ASSUMPTION; medium; revert: no row, and `speak` declares no `contests:`]."
+        # `interim: true` deleted at steps 13 + 15, as `a standing`'s.
+        cite:     "v9 SC-01 step 12 (B-N): `speak`'s prize (`proposals/2026-09-05-proceedings-subsystem/04_VERBS.md` §B.1, `08_SEAM.md`: `a matter` -> the proceedings provider). Routed to the interim provider at step 12; ED-SC-0033 clause (2)'s repoint (steps 13 + 15, ONE change) reached THIS row too, so it was three rows, not the two the plan names [ASSUMPTION; medium; revert: no row, and `speak` declares no `contests:`]."
     # NO `values:` — the members ARE the `prizes:` mapping above, read with `roster_map()`. A `values: []` stood here and was a declared-but-unread key (`04 §B.13` ID-12): `roster()` returned an EMPTY frozenset, which is the silent-false this file's own header forbids. Line-neutral edit — 209 citations index this file by line.
 
   # titles: DELETED (methodology close, 2026-09-29, /simplify ALTITUDE lens -- plan position

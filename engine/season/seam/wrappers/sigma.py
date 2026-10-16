@@ -1,5 +1,9 @@
-"""THE σ-LEVERAGE PROVIDER — the host adapter and the host INPUT BUILDER for the `social_contest`
-module's roll (plan position `31a`, A-25).
+"""THE SOCIAL CONTEST CONTAINER'S CONTEST PROVIDER — the host adapter and the host INPUT BUILDER for the
+`social_contest` module's σ-leverage roll (plan position `31a`, A-25; registered as
+`@provider("contest", "social_contest")` since v9 SC-01 steps 13 + 15, which repointed the prize rows
+`a standing`, `a proposition` and `a matter` from the interim name `sigma_leverage`, ED-SC-0033 clause
+(2)). The file keeps its name because its automated mode is still the σ-leverage roll: SC-05's
+measurement at step 15 kept it over the kernel (`modules/social_contest/roll.py`'s docstring).
 
 `04_CODE_ARCHITECTURE.md` §A.2:182 types `seam/wrappers/*` as writing *"nothing, ever"*, reading
 *"the projection"*, returning *"a `Margin`"*, holding token *"none"*. This module is that row. It
@@ -39,8 +43,7 @@ the dice engine owns no obstacle, and ED-SC-0037's cost 1 — *"the interim prov
 obstacle in-seam, which is an nth obstacle site"* — stood until step 14 deleted that site
 (`_obstacle_of`): the obstacle is now composed by the social contest module
 (`modules/social_contest/roll.py::obstacle`, ceiling included, `H-213`), ED-SC-0033 clause (3)'s
-single owner. `interim: true` on the prize rows now carries clause (2) alone (the repoint, steps 13
-+ 15).
+single owner. Clause (2), the repoint, landed at steps 13 + 15: no prize row is `interim:` any more.
 
 ⚠ **THE PLACEMENT QUESTION, ADJUDICATED AT THE SITE RATHER THAN ASSUMED.** `04 §A.2` read
 *"one wrapper per **deferred subsystem**"* (that line was since amended, ED-IN-0284 and ED-IN-0285; see 04:147-151), and `sigma_leverage` is not a deferred subsystem — it is
@@ -48,13 +51,15 @@ an in-engine resolver under `engine/dice_engine/`. Two readings were available: 
 BY ROLE — it writes nothing, returns a margin, holds no token, which is exactly the `04:182` row, and
 a module satisfying that contract IS that row whatever supplies the margin; **(ii)** §A.2's
 enumeration is short by one and the finding goes on the ledger. **This unit takes (i).**
-⚠ AND IT SATISFIES THREE OF THAT ROW'S FOUR COLUMNS, NOT FOUR. Column 3 is *"a `Margin`"* and this
-returns a **dict**; column 2 is *"the projection"* and the signature takes `w`, a World -- the
+⚠ COLUMN 3, *"a `Margin`"*, IS MET AT THE MODULE BOUNDARY SINCE STEP 15 AND NOT AT THE SEAM'S. The
+module entry returns `queries/inputs.py::Margin` and `resolve` refuses any other return, naming the
+entry -- so a winner (the kernel's `((band, reason), bout)`, or a dict carrying one) cannot cross. What
+`resolve` hands the SEAM is still the dict every provider returns: typing the seam's return across
+all three providers is a `seam/` item of its own, and `combat`/`mass_battle` return a scene and a
+field, not a margin. Column 2 is *"the projection"* and the signature takes `w`, a World -- the
 ADAPTER's does; since `31a` the MODULE reads only the typed record `contest_input` builds.
-`combat.resolve(w, …)` is the precedent for both — **and it is a precedent for the deviation, not
-for conformance.** Typing `Margin` across both providers is a `seam/` item of its own; minting the
-type for one provider while the other returns a dict would give the seam two return shapes, which
-is worse than either.
+`combat.resolve(w, …)` is the precedent — **and it is a precedent for the deviation, not for
+conformance.**
 
 ⚠ THE PRECEDENT IS `seam/wrappers/combat.py` AND IT IS FOLLOWED, NOT REINVENTED: derive exactly what
 the actor genuinely has, leave every other operand at its registered fixture, and return a typed gap
@@ -69,16 +74,21 @@ prize row names. NO entry is added to
 from __future__ import annotations
 
 import random
+from dataclasses import asdict
 from typing import Any, Optional
 
 from ...data.rosters import VERB_CAPABILITY
+from ...gaps import Unspecified
 # ⚠ THE LEAF, NOT THE PACKAGE'S RE-EXPORT. `manifest/providers.py` imports nothing, so no import
 # here closes a loop back into this package (`_entry.py` says the same of the entry lookup).
 from ...manifest.providers import provider
-from ...queries.inputs import SocialContestInput
+from ...queries.inputs import Margin, SocialContestInput
 from ._entry import entry_for
 
-_PROVIDER = "sigma_leverage"
+# The prize rows' `provider:` string (`rosters.yaml` `contest_subsystems`): the module's one identity
+# (A-25), so the row says the social contest module runs its own prizes. Reached by that string only.
+_PROVIDER = "social_contest"
+_RESOLVER = "d10_sigma"
 
 
 def _capability(entity: Any, verb: str):
@@ -152,11 +162,16 @@ def contest_input(w: Any, claimants: list, *, verb: str = "",
 def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
             verb: str = "", subject: Optional[str] = None,
             rng: Optional[random.Random] = None, rung: str = "") -> dict:
-    """Roll for one contested act: build the record, refuse S27.4, call the module entry. Returns a
-    net/ob pair, NEVER a band.
+    """Roll for one contested act: build the record, call the module entry, hold its return to a
+    `Margin`, refuse S27.4. Returns a net/ob pair, NEVER a band and never a winner.
 
-    RESOLVED -> dict(status, module, resolver, pool, ob, net, leverage)   # the entry's own return
+    RESOLVED -> dict(status, module, resolver, pool, ob, net, leverage)   # the entry's Margin + the record
     REFUSED  -> dict(status, why, pool, ob)   # S27.4: ob > obstacle_refusal_multiple x pool
+
+    ⚠ A RETURN THAT IS NOT A `Margin` RAISES, NAMING THE ENTRY (v9 SC-01 step 15, Lens B: *the provider
+    returns a Margin*). It is a software defect in the module -- a winner where a margin belongs is the
+    second resolver S27.2 refuses -- so it is loud, never a refusal the fold would read as a game
+    outcome. `engine/season/tests/test_sc01_provider.py` plants the kernel's own winner shape.
 
     ⚠ THE ENTRY IS LOOKED UP BY THE ROLE THE PRIZE ROW NAMES (`module_entry:`), IN `MODULE_ENTRIES`.
     The registrar fills that table at driver construction from the composition row, and
@@ -166,7 +181,9 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
 
     ⚠ `rung` IS ACCEPTED AND NOT USED HERE, THE SAME DELIBERATE NON-CHANGE AS IN `combat.py`
     (M4, `ED-IN-0279` clause (a)). A leverage roll derives its obstacle from the parties
-    themselves, not from presence at a place.
+    themselves, not from presence at a place. Since v9 SC-01 step 13 (C-8) the seam passes the
+    actor's place (`loop/sides.py`, `world_q.place_of`) rather than the placeholder `"R"`, so the
+    venue a proceeding will read is already the act's own.
 
     ⚠ THE RNG IS A PARAMETER AND IS NOT CONSTRUCTED HERE, WHICH IS `04 §C.12`'s REJECTION 4 BECOMING
     LOAD-BEARING FOR THE FIRST TIME: *"When R-09's producer is built … its generator must be
@@ -197,8 +214,18 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     entry, refusal = entry_for(prize, _PROVIDER)
     if entry is None:
         return refusal
-    out = entry.fn(inp, rng)
-    if out.get("status") == "RESOLVED" and out["ob"] > inp.obstacle_refusal_multiple * max(out["pool"], 0):
+    margin = entry.fn(inp, rng)
+    if not isinstance(margin, Margin):
+        raise Unspecified(
+            f"module entry {entry.role!r} ({entry.target}) returned {type(margin).__name__} "
+            f"{margin!r:.120}, which is not a `Margin`", "S39.4",
+            needs="the entry returning `queries.inputs.Margin(net, ob)`",
+            law="08_SEAM provider rule (intent) and S27.2 -- a contest provider returns a MARGIN, never "
+                "a winner; the band is the one ladder's reading of the margin, so a winner here is a "
+                "second resolver")
+    if margin.ob > inp.obstacle_refusal_multiple * max(inp.pool, 0):
         return dict(status="REFUSED", why="S27.4", module=_PROVIDER,
-                    resolver="d10_sigma", pool=out["pool"], ob=out["ob"])
-    return out
+                    resolver=_RESOLVER, pool=inp.pool, ob=margin.ob)
+    # The margin's own fields, copied whole: the host reads the pair, it never computes one.
+    return dict(status="RESOLVED", module=_PROVIDER, resolver=_RESOLVER, pool=inp.pool,
+                **asdict(margin), leverage=inp.leverage)

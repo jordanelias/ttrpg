@@ -71,7 +71,7 @@ class Resolution:
     result: dict
 
 
-def contest(w: World, rung: str, prize: Any, claimants: list[str],
+def contest(w: World, rung: Optional[str], prize: Any, claimants: list[str],
             depth: int, max_depth: int, causes: list[str],
             extension: Optional[Callable[[str], bool]] = None,
             *, verb: str = "", subject: Optional[str] = None,
@@ -147,10 +147,9 @@ def contest(w: World, rung: str, prize: Any, claimants: list[str],
         # the `if` as a shim; this is the shim coming out.
         from ..manifest import call as _provider_for
         # ⚠ THE `provider:` FIELD, NOT THE `module:`. A prize names WHOSE contest it is and,
-        # separately, WHAT RUNS IT — `a standing` belongs to `social_contest` and is rolled by
-        # `sigma_leverage` until the proceedings subsystem lands (ED-SC-0033 clause 2,
-        # `interim: true`). Looking the callable up by `module:` would make the interim resolver
-        # unreachable and the repoint a code change.
+        # separately, WHAT RUNS IT. The two differed while `a standing` was rolled by the interim
+        # `sigma_leverage` (ED-SC-0033 clause 2); v9 SC-01 steps 13 + 15 repointed it to
+        # `social_contest` as a ROW change, which is what reading `provider:` here made possible.
         _run = _provider_for("contest", _sub.get("provider"))
         if _run is not None:
             # M4 (`ED-IN-0279` clause (a)). `rung` -- ALREADY A PARAMETER OF THIS FUNCTION, ALREADY

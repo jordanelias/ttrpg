@@ -1309,7 +1309,7 @@ rows:
       **A ROLL EXISTS AND IT REACHES THE GAME. `U1` / ED-SC-0037, 2026-09-11.**
       `engine/season/seam/wrappers/sigma.py` is the σ-leverage provider Jordan named --
       *"we have the sigma leverage d10 resolver in engine to use"* -- registered against
-      `(contest, sigma_leverage)` and reached through `manifest.resolve`, never a literal in the
+      `(contest, social_contest)` (was `sigma_leverage` until SC-01 steps 13+15) and reached through `manifest.resolve`, never a literal in the
       seam. It composes the tree's own line, `systems/social_contest/sim/contest/resolver.py:302`:
       `net = roll_net(pool, rng=rng) + net_boost(lev, pool)`. BOTH names matter: `roll_net` alone
       is `roll_pool` minus the obstacle, i.e. the bare pool roll ED-SC-0037 costed wearing the

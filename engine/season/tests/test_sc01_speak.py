@@ -8,9 +8,9 @@ WHAT IS BUILT, each asked of the real loader, the real fold and the real seam on
   * THE CELL: `existence` of `subject`, kind `DocketItem` (`determine`'s `docket` conjunct, read through
     `world_q.docketed`). A `speak` on a matter no docket names is refused `speech.unheard` before any
     contest is drawn; the same act after an `open_case` dockets the matter reaches the seam.
-  * THE PRIZE: `a matter`, an interim row routed to the `sigma_leverage` provider (the one a contested
-    verb with a social prize resolves through TODAY -- step 15's provider is a later item), so a
-    resolved `speak` carries a degree off `degree_from_net`.
+  * THE PRIZE: `a matter`, an interim row routed to the `sigma_leverage` provider at step 12 and
+    repointed to `social_contest` at steps 13 + 15 (`test_sc01_provider.py`), so a resolved `speak`
+    carries a degree off `degree_from_net`.
   * THE FOUR BANDS: each band emits its own kind and only that kind (`emits_at`), the degree on the Event
     is the band, and all four occur over a sweep of act ids and speaker pools.
 
@@ -102,12 +102,12 @@ def test_sc01_s12_speak_is_a_typed_contested_cell_with_four_ladder_bands():
     assert row.writes == () and "speak" not in EFFECTS
     # A refusal is the cell's one kind; the party-gap refusal emits the same union.
     assert row.emits_on_refusal == ("speech.unheard",), row.emits_on_refusal
-    # The prize routes to a registered provider today (the interim one), so the verb is resolvable.
+    # The prize routes to a registered provider, so the verb is resolvable. Interim at step 12; steps 13
+    # + 15 repointed it to the container's provider (ED-SC-0033 clause (2); `test_sc01_provider.py`).
     prize = manifest_resolve("contest", "a matter")
-    assert prize is not None and prize["provider"] == "sigma_leverage", prize
+    assert prize is not None and prize["provider"] == "social_contest", prize
     assert prize["module_entry"] == "social_contest.roll", prize
-    # Interim, so step 13 + 15's repoint reaches it (ED-SC-0033 clause (2)).
-    assert roster_map("contest_subsystems", "prizes")["a matter"]["interim"] is True
+    assert "interim" not in roster_map("contest_subsystems", "prizes")["a matter"]
     assert "speak" in resolvable_verbs()
 
 
