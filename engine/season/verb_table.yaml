@@ -925,13 +925,30 @@ verbs:
     stratum:     "social"
     eligibility: ["own"]
     beneficiary: "none"
-    requires:    "—"
-    writes:      []
-    emits:       ["speech.made"]
-    emits_on_refusal: []
+    requires:    "a live occasion at the actor's venue whose docket names the subject"
+    requires_typed:
+      form:      existence
+      of:        subject
+      kind:      DocketItem
+    requires_typed_note: "v9 SC-01 step 12 (B-N). The proceedings design's own cell, one clause (`04_VERBS.md` §B.1: `form: existence, of: subject, kind: DocketItem`), and `determine`'s `docket` conjunct exactly: the matter is on a docket (`world_q.docketed`, the reader's `docket` branch). It is what stops `speak` being a way to chat: no docket item names the subject, no contest. THE VENUE HALF IS NOT TYPED, as `determine`'s date half is not: a docket item names no venue (`open_case` and `carry` append `{date: None, ...}`), so *at the actor's venue* has no operand to read. Unnamed and flat (`survey`'s precedent): one conjunct, one refusal kind. Was `—`, untyped, uncontested, `writes: []`, emitting `speech.made` -- the emptiest row in the table, formed and executed on any referent."
+    contests:    "a matter"
+    contests_note: "v9 SC-01 step 12: `04_VERBS.md` §B.1's prize, *the proceeding is ONE act at the season scale*. `rosters.yaml: contest_subsystems.prizes` carries an `a matter` row routed to the INTERIM `sigma_leverage` provider (the one `tell`'s `a standing` resolves through), so a docketed `speak` resolves today and step 15's provider re-points the row (ED-SC-0033 clause (2), steps 13 + 15 in ONE commit). The opponent is `subject` (the row names no `counterparty:`), so the docketed matter's party stands against the speaker when it is a person, and the provider's `obstacle_default` stands in when it is not (`seam/wrappers/sigma.py::_obstacle_of`). ⚠ LIMIT, `opening_set`'s contested-verb rule: a person never forms a `speak` whose subject is himself (*a person is not his own adversary*), so a docketed party does not speak to his own matter in computed play."
+    writes:
+      Overwhelming: []
+      Success:      []
+      Partial:      []
+      Failure:      []
+    writes_note: "⚠ EMPTY AT EVERY BAND, AND THE DESIGN'S ROW IS NOT, SO THIS IS A STOP, NOT A READING (v9 SC-01 step 12; the measurement is `hole_register.yaml` `H-63`'s step-12 clause). `04_VERBS.md` §B.1 writes `Person.stance` on `Overwhelming`/`Success`/`Failure` (the SPEAKER's own, (ix)) and `DocketItem.matter` on `Partial` (*the docket grows*, (vii)). NEITHER IS BUILT: (1) the stance write names no VALUE -- no referent, sign or weight (`H-63`: Part E names the cell, never the value; `march`'s `(faction, -1.0, w)` rows are a different act's); (2) `Partial`'s append has NO CARRIER the gate can receipt -- `World.docket` is a SEQUENCE with no `get()` (`state/gate.py`), and `Partial` writes nothing else to ride on, which is the exact ground `carry` was declined on before v9 IN-45 gave it the petition's `Record.stages` -- and no operand names WHAT is docketed (*the speaker's operand*, `21_RECONCILIATION.md:576`). Building three bands' writes and not the fourth would make `Partial` the empty middle band §B.1 (vii) rejects, so all four write nothing, `tell`'s precedent (a contest whose product is a deposit at WITNESS), and `_eff_speak` does not exist (the plan builds it only for a non-empty `writes:`). Each band still leaves the room in a different place: what it emits is witnessed, so hearers hold which way the matter went. Revert: the row before SC-01 step 12 (above)."
+    emits:
+      Overwhelming: ["matter.carried"]
+      Success:      ["matter.advanced"]
+      Partial:      ["matter.held"]
+      Failure:      ["matter.turned"]
+    emits_note: "v9 SC-01 step 12: §B.1's emissions, one per band, keyed on the ladder's own four names (`degree_from_net`'s labels; the design's coined `Carried · Advanced · Held · Turned` keys would raise at the first fold). `Partial`'s second kind, `docket.formed`, is NOT declared: it reports the docket write the row does not make (`writes_note`), and declaring it would publish a docket that did not form (`ID-9`)."
+    emits_on_refusal: ["speech.unheard"]
+    refusal_note: "v9 SC-01 step 12: §B.1's refusal kind. FLAT, one kind for the one clause, which is also what the party-gap refusal of a contested row emits (`data/verbs.py`, invariant 4's contested half). Refusal condition: no docket item names the subject."
     grade:       "assumption"
-    writes_note: "—"
-    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed; typed cell, prize, bands and refusal at v9 SC-01 step 12 (`workplans/valoria_master_workplan_v9_part6.md` §SC-01), on `proposals/2026-09-05-proceedings-subsystem/04_VERBS.md` §B.1 (design intent) and `21_RECONCILIATION.md:576`"
   - verb:        "succeed"
     scale:   "person"
     scale_note: "succession is one person taking another's tenure; the office's rung does not change"

@@ -125,9 +125,19 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # `RUNG_REMIT_ACTS` left in) reproduces both old values and both old `BASE_EVENTS` exactly.
 # `aperture 1 0` realm acts 612 -> 612; `levy` formed 16 -> 11, att 3 -> 0, ex 0, ref 3 -> 0 (read,
 # not asserted, v9 §0.5); `larders_in_purview` returned `()` in all 766 calls over two realm seasons.
+# RE-PINNED at v9 SC-01 step 12 `speak` (B-N, on ffd753f6), A BEHAVIOUR MOVE DECLARED: `speak` is a typed
+# contested cell (`existence` of `subject`, kind `DocketItem`; `contests: "a matter"`), so a `speak` on
+# a matter no docket names is refused `speech.unheard` and one on a docketed matter is drawn through
+# `sigma_leverage`. The build hash is equal; one and two seasons move. Was 3ff10d3c... / 15598353...
+# (one, two seasons). CONTROL, run: the same tree with `verb_table.yaml` and `rosters.yaml` at
+# ffd753f6 (the old `speak` row, no `a matter` prize row) reproduces both old values and both old
+# `BASE_EVENTS` exactly. Over the two seasons `speech.made` 30 -> 0, `speech.unheard` 0 -> 22, one
+# `matter.turned` (a docketed `speak` that executed); `aperture 1 0` realm acts 612 -> 608, `speak`
+# formed 83 -> 80, att 12 -> 1, ex 12 -> 1 -- its refusals are not counted as attempts there (a
+# contested refusal never enters `driver.resolved`) (read, not asserted, v9 §0.5).
 BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
-               1: "3ff10d3c30acd7d333ede21f08e58898",
-               2: "155983539541890da6561a30eade5e59"}
+               1: "27717c62f80d93c366cf3b9225e8f23b",
+               2: "ef1c9ad80fa430dfc3a1efecd9461262"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -153,8 +163,9 @@ BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
 # RE-RECORDED at v9 IN-45 `carry` with `BASE_HASHES` (7391 -> 7186, 22130 -> 21338).
 # RE-RECORDED at v9 IN-45 `migrate` with `BASE_HASHES` (7186 -> 7160, 21338 -> 23584).
 # RE-RECORDED at v9 IN-49 `levy` with `BASE_HASHES` (7160 -> 7157, 23584 -> 23361).
-BASE_EVENTS = {1: (7157, "7b6709af3d0f1fd4b8efdc345db5f9ce5511fbd99d2fba5e8e61f481e069feee"),
-               2: (23361, "946059cda52a1110689d7dbc652d26e7221934f6e488e78c4fab286521df417e")}
+# RE-RECORDED at v9 SC-01 step 12 `speak` with `BASE_HASHES` (7157 -> 7060, 23361 -> 23220).
+BASE_EVENTS = {1: (7060, "653eabae8398bcf9902916095624d23e71504f9a23e3d94a1dfb271a3911204a"),
+               2: (23220, "f8e3c23af280c36b75dfe641eda578d93f91fd38419e4f084238e47b71270824")}
 
 
 def _digest(w) -> tuple:
