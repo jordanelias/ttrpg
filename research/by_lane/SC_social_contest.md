@@ -263,7 +263,7 @@ Written from the reader extractions in `scratchpad/out/`, with the locators mark
 9. Speech kinds: design and code share `impugn` and `concede` (split into `concede_fact`/`concede_harm`), not `impugn` alone.
 10. §1.3 pt 6: `proofs` (Fig. 6), `records_dissent` (Fig. 14) and `interposed` (Fig. 24) added to what reached code.
 11. Old-kernel file count: 16 tracked under `sim/contest/`, 18 under `systems/social_contest/` (`git ls-files`, run for this correction).
-12. `tell` sharpened: capability is empty on every corpus person, so the contest varies by seed and default fixtures, not by person; 15% measured (`sigma.py:100-104`; `test_season_shape.py:9077`).
+12. `tell` sharpened: capability is empty on every corpus person, so the contest varies by seed and default fixtures, not by person; 15% measured (`sigma.py:100-104`; `test_season_shape.py:9077`), later identified as a share of attempts, refusals included, not a roll rate (§11).
 13. Arrangement-key count 15/14/13 dropped as an open contradiction (reconciled at `arrangements.yaml:8-14`, loader `data/arrangements.py:80-82`); M-7 reclassified as a measured failure; §3.3 renumbered (11 rows) and "without convergence" withdrawn from §3.4 pt 2.
 14. Minor: "programme" → "program"; RHET §9's own bias mitigation (line 331) added to §0 problem 7 and §1.1.
 
@@ -745,10 +745,36 @@ K-SC-5 left the top five: `Tenure.degree` has a reader on `commit` edges, so the
 
 **UP04, UP05 and 20G folded** into T-SC-7, T-SC-12 and T-SC-13 and into M-SC-9. UP11, UP13 and UP15 carry one SC line and add nothing (7.4).
 
-**Found, not applied (the brief bars rewriting §§0–6); for the orchestrator:**
-- (a) §0 #1, §3.1 and §4's `tell` row call 15% a "success" rate. It is `news.told` / (`news.told` + `news.untold`), and `news.untold` is also tell's refusal emission (`verb_table.yaml:1007-1010`). The roll's own rate at the default pair is 0.26 (this pass's sample).
-- (b) §1.2's "the study verifies ten papers directly": the study's list at `08-part-VII-apparatus.md:130` names eleven items.
-- (c) §3.1's handoff line on SC-08 is accurate as a quotation, but SC-08's EXIT is already met at HEAD (7.2 #7).
+**Found by the first pass, applied to §§0–6 by the correction pass:**
+- (a) §0 #1, §3.1 and §4's `tell` row now call the 15% a share of attempts: `news.untold` is also tell's refusal emission (`verb_table.yaml:1007-1010`) and `Partial` emits `news.told` (`:962`). The roll's own pass rate at the default pair, about 0.26, comes from an unsaved sample and is labelled unreproducible.
+- (b) §1.2 now reads "ten entries (eleven papers)". The study's list at `:130` has ten entries, one of which is "Elfenbein et al. 2008 and its follow-up"; "ten" was a defensible count, so this is a counting convention, not an error.
+- (c) §3.1 now adds that SC-08's EXIT grep half is already met at HEAD (7.2 #7).
+- (d) §0 #3, §2.2, §2.3 pt 4 and §4 now say `Tenure.degree` has one reader, `faction_q.head()`, on `commit` edges, and that no disposal-kind degree has a reader.
+- (e) §0 #7, §1.1, §1.2 and §1.3 pt 4 now quote `:130` in full ("from an external critique or from established familiarity"), and record that the latitude-floor anchor came from familiarity.
+
+**Correction pass (independent critic, 14 findings and 5 section-10 cut points).** HEAD moved from `5445e34` to `8278b4e` (18 commits); every locator the corrections rest on was re-opened at `8278b4e`. Each finding was checked at its source before it was applied:
+1. `Tenure.degree` has a reader (`faction_q.py:145-147`, `commit` only): **applied**. Narrowed everywhere to "no disposal-kind degree has a reader"; 9.1 FALSE → NARROWED; K-SC-5 rebuilt on `head()`'s shape, the `carriers.py:48` precedent withdrawn.
+2. M-SC-2/K-SC-3 against ED-IN-0210 Ruling 2 (archive `:2312-2319`), A-16 (`_part5:355`) and IN-12 step 5 vs `options.py:952-955`: **applied**. K-SC-3 now composes on `destroy_record` at step 4, blocked by A-13; the separate `deny` row goes to Jordan; new 8.3 row for IN-12 step 5.
+3. Step 10 DONE vs OPEN: **applied**. The conflict is withdrawn (step 10 is docketing, `21_RECONCILIATION.md:574`; `world_q.py:374-376`); D4 struck from M-SC-1; 7.2 #6 and C4 rewritten.
+4. K-SC-1's channel absent (`_part5:55`; 0 code hits) and IN-61's tribunal route hollow (`_part5:246`, `_part6:138`): **applied**. K-SC-1 is conditional on IN-10; new 8.3 row.
+5. K-SC-4: **applied**. Add `issue` beside `charge` and fix the label (`PS/03_PARAMETERS.md:234-235, :627`); Fig. 27 is kept.
+6. K-SC-10 `interposed` and dropped item 2: **applied in part**. `interposed` was withdrawn (`rosters.yaml:1903-1904`); dropped item 2 was re-reasoned (`effects_information.py:383`); 9.1 now accounts for all twelve keys. The critic's "contradicted" overstates one point: no v9 EXIT names latitude's build either, so the draft's "no v9 EXIT" was literally true and wrong only against its own 8.4.
+7. M-SC-7: **applied**. Narrowed to a spoken lie, with `forge`, `said_slant` and `Partial` drift weighed; K-SC-6's falsifier now observes the lie, not its catching.
+8. M-SC-6: **applied** (`test_season_shape.py:7834, :8668-8670`).
+9. H-56 and J-14: **applied**. A new 8.3 BLOCKED row; 9.5 pause and methodology; K-SC-12 added; J-14 is dropped item 15.
+10. `scale:`: **applied**. Moved to 8.3 BLOCKED on H-89 (`_part5:518`; `verb_table.yaml:217-218`).
+11. R-09's ROLL-not-CHAIN clause: **applied** to the 8.3 per-person row (`requirements.yaml:1244-1247`).
+12. The familiarity source: **applied** (0 hits for Quigley and Crossland in `4df8c0c9`).
+13. "ten" vs eleven: **applied** as a softening (above, (b)).
+14. Unreproducible figures: **applied**. The 0.26, the 200,000-draw shares and the import probe are each labelled. The probe was re-run once at `8278b4e` (`True`) and is still not a committed instrument.
+- **Section-10 cuts, applied:**
+  - K-SC-6 cuts the G7 test that cannot observe a lie.
+  - K-SC-7 cuts `22a`'s second standing reading and is honest that reception is unbuilt.
+  - K-SC-8 is conditional on SC-03b and cuts SC-07 P-4.
+  - K-SC-9 cuts the losing display rule unconditionally.
+  - K-SC-11 is recast as a cut: do not seed `negotiation` before `exchange`.
+- **Rejected:** none.
+- **Section 0 ranking:** unchanged. Item #3 is reworded, and the reader narrowing does not move it.
 
 **Could not check:**
 - whether `momentum` and the silence price survive `21`;
