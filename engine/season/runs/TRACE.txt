@@ -1491,10 +1491,10 @@
   1491  probe:P11            NOTE      `remit:confer` not granted on any live `hold` this person holds; 'establish' declines
   1492  probe:P11            NOTE      'give' needs ['to'] from a person p_low knows, and they know nobody; NO Candidate is formed (T4)  @§F1/H-94
   1493  probe:P11            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'issue' declines
-  1494  probe:P11            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'levy' declines
-  1495  probe:P11            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'levy' declines rather than admitting
-  1496  probe:P11            NOTE      `remit:dispatch` not granted on any live `hold` this person holds; 'march' declines
-  1497  probe:P11            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'open_case' declines
+  1494  probe:P11            NOTE      `remit:dispatch` not granted on any live `hold` this person holds; 'march' declines
+  1495  probe:P11            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'open_case' declines
+  1496  probe:P11            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'requisition' declines
+  1497  probe:P11            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'requisition' declines rather than admitting
   1498  probe:P11            NOTE      `remit:revoke` not granted on any live `hold` this person holds; 'revoke' declines
   1499  probe:P11            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'seize' declines
   1500  probe:P11            NOTE      'tell' needs ['to'] from a person p_low knows, and they know nobody; NO Candidate is formed (T4)  @§F1/H-94
@@ -1508,10 +1508,10 @@
   1508  probe:P11            NOTE      `remit:confer` not granted on any live `hold` this person holds; 'establish' declines
   1509  probe:P11            NOTE      'give' needs ['to'] from a person p_low knows, and they know nobody; NO Candidate is formed (T4)  @§F1/H-94
   1510  probe:P11            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'issue' declines
-  1511  probe:P11            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'levy' declines
-  1512  probe:P11            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'levy' declines rather than admitting
-  1513  probe:P11            NOTE      `remit:dispatch` not granted on any live `hold` this person holds; 'march' declines
-  1514  probe:P11            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'open_case' declines
+  1511  probe:P11            NOTE      `remit:dispatch` not granted on any live `hold` this person holds; 'march' declines
+  1512  probe:P11            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'open_case' declines
+  1513  probe:P11            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'requisition' declines
+  1514  probe:P11            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'requisition' declines rather than admitting
   1515  probe:P11            NOTE      `remit:revoke` not granted on any live `hold` this person holds; 'revoke' declines
   1516  probe:P11            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'seize' declines
   1517  probe:P11            NOTE      'tell' needs ['to'] from a person p_low knows, and they know nobody; NO Candidate is formed (T4)  @§F1/H-94
@@ -1526,10 +1526,10 @@
   1526  probe:P12            NOTE      'give' needs ['to'] from a person p_low knows, and they know nobody; NO Candidate is formed (T4)  @§F1/H-94
   1527  probe:P12            NOTE      'give' needs ['to'] from a person p_low knows, and they know nobody; NO Candidate is formed (T4)  @§F1/H-94
   1528  probe:P12            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'issue' declines
-  1529  probe:P12            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'levy' declines
-  1530  probe:P12            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'levy' declines rather than admitting
-  1531  probe:P12            NOTE      `remit:dispatch` not granted on any live `hold` this person holds; 'march' declines
-  1532  probe:P12            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'open_case' declines
+  1529  probe:P12            NOTE      `remit:dispatch` not granted on any live `hold` this person holds; 'march' declines
+  1530  probe:P12            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'open_case' declines
+  1531  probe:P12            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'requisition' declines
+  1532  probe:P12            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'requisition' declines rather than admitting
   1533  probe:P12            NOTE      `remit:revoke` not granted on any live `hold` this person holds; 'revoke' declines
   1534  probe:P12            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'seize' declines
   1535  probe:P12            NOTE      'tell' needs ['to'] from a person p_low knows, and they know nobody; NO Candidate is formed (T4)  @§F1/H-94
@@ -1544,10 +1544,10 @@
   1544  probe:P12            NOTE      `remit:confer` not granted on any live `hold` this person holds; 'establish' declines
   1545  probe:P12            NOTE      'give' needs ['to'] from a person p_low knows, and they know nobody; NO Candidate is formed (T4)  @§F1/H-94
   1546  probe:P12            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'issue' declines
-  1547  probe:P12            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'levy' declines
-  1548  probe:P12            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'levy' declines rather than admitting
-  1549  probe:P12            NOTE      `remit:dispatch` not granted on any live `hold` this person holds; 'march' declines
-  1550  probe:P12            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'open_case' declines
+  1547  probe:P12            NOTE      `remit:dispatch` not granted on any live `hold` this person holds; 'march' declines
+  1548  probe:P12            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'open_case' declines
+  1549  probe:P12            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'requisition' declines
+  1550  probe:P12            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'requisition' declines rather than admitting
   1551  probe:P12            NOTE      `remit:revoke` not granted on any live `hold` this person holds; 'revoke' declines
   1552  probe:P12            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'seize' declines
   1553  probe:P12            NOTE      'tell' needs ['to'] from a person p_low knows, and they know nobody; NO Candidate is formed (T4)  @§F1/H-94
@@ -2620,10 +2620,10 @@
   2620  probe:P31            NOTE      `remit:confer` not granted on any live `hold` this person holds; 'establish' declines
   2621  probe:P31            NOTE      'give' needs ['to'] from a person p_mid knows, and they know nobody; NO Candidate is formed (T4)  @§F1/H-94
   2622  probe:P31            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'issue' declines
-  2623  probe:P31            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'levy' declines
-  2624  probe:P31            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'levy' declines rather than admitting
-  2625  probe:P31            NOTE      `remit:dispatch` not granted on any live `hold` this person holds; 'march' declines
-  2626  probe:P31            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'open_case' declines
+  2623  probe:P31            NOTE      `remit:dispatch` not granted on any live `hold` this person holds; 'march' declines
+  2624  probe:P31            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'open_case' declines
+  2625  probe:P31            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'requisition' declines
+  2626  probe:P31            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'requisition' declines rather than admitting
   2627  probe:P31            NOTE      `remit:revoke` not granted on any live `hold` this person holds; 'revoke' declines
   2628  probe:P31            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'seize' declines
   2629  probe:P31            NOTE      'tell' needs ['to'] from a person p_mid knows, and they know nobody; NO Candidate is formed (T4)  @§F1/H-94
@@ -2637,10 +2637,10 @@
   2637  probe:P31            NOTE      `remit:confer` not granted on any live `hold` this person holds; 'establish' declines
   2638  probe:P31            NOTE      'give' needs ['to'] from a person p_mid knows, and they know nobody; NO Candidate is formed (T4)  @§F1/H-94
   2639  probe:P31            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'issue' declines
-  2640  probe:P31            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'levy' declines
-  2641  probe:P31            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'levy' declines rather than admitting
-  2642  probe:P31            NOTE      `remit:dispatch` not granted on any live `hold` this person holds; 'march' declines
-  2643  probe:P31            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'open_case' declines
+  2640  probe:P31            NOTE      `remit:dispatch` not granted on any live `hold` this person holds; 'march' declines
+  2641  probe:P31            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'open_case' declines
+  2642  probe:P31            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'requisition' declines
+  2643  probe:P31            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'requisition' declines rather than admitting
   2644  probe:P31            NOTE      `remit:revoke` not granted on any live `hold` this person holds; 'revoke' declines
   2645  probe:P31            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'seize' declines
   2646  probe:P31            NOTE      'tell' needs ['to'] from a person p_mid knows, and they know nobody; NO Candidate is formed (T4)  @§F1/H-94
@@ -2660,10 +2660,10 @@
   2660  probe:P36            NOTE      `remit:confer` not granted on any live `hold` this person holds; 'establish' declines
   2661  probe:P36            NOTE      'give' needs ['to'] from a person p_mid knows, and they know nobody; NO Candidate is formed (T4)  @§F1/H-94
   2662  probe:P36            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'issue' declines
-  2663  probe:P36            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'levy' declines
-  2664  probe:P36            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'levy' declines rather than admitting
-  2665  probe:P36            NOTE      `remit:dispatch` not granted on any live `hold` this person holds; 'march' declines
-  2666  probe:P36            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'open_case' declines
+  2663  probe:P36            NOTE      `remit:dispatch` not granted on any live `hold` this person holds; 'march' declines
+  2664  probe:P36            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'open_case' declines
+  2665  probe:P36            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'requisition' declines
+  2666  probe:P36            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'requisition' declines rather than admitting
   2667  probe:P36            NOTE      `remit:revoke` not granted on any live `hold` this person holds; 'revoke' declines
   2668  probe:P36            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'seize' declines
   2669  probe:P36            NOTE      'tell' needs ['to'] from a person p_mid knows, and they know nobody; NO Candidate is formed (T4)  @§F1/H-94
@@ -2715,10 +2715,10 @@
   2715  probe:P36            NOTE      `remit:confer` not granted on any live `hold` this person holds; 'establish' declines
   2716  probe:P36            NOTE      'give' needs ['to'] from a person p_mid knows, and they know nobody; NO Candidate is formed (T4)  @§F1/H-94
   2717  probe:P36            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'issue' declines
-  2718  probe:P36            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'levy' declines
-  2719  probe:P36            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'levy' declines rather than admitting
-  2720  probe:P36            NOTE      `remit:dispatch` not granted on any live `hold` this person holds; 'march' declines
-  2721  probe:P36            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'open_case' declines
+  2718  probe:P36            NOTE      `remit:dispatch` not granted on any live `hold` this person holds; 'march' declines
+  2719  probe:P36            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'open_case' declines
+  2720  probe:P36            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'requisition' declines
+  2721  probe:P36            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'requisition' declines rather than admitting
   2722  probe:P36            NOTE      `remit:revoke` not granted on any live `hold` this person holds; 'revoke' declines
   2723  probe:P36            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'seize' declines
   2724  probe:P36            NOTE      'tell' needs ['to'] from a person p_mid knows, and they know nobody; NO Candidate is formed (T4)  @§F1/H-94
@@ -2905,10 +2905,10 @@
   2905  probe:P36            NOTE      `remit:confer` not granted on any live `hold` this person holds; 'establish' declines
   2906  probe:P36            NOTE      'give' needs ['to'] from a person p_mid knows, and they know nobody; NO Candidate is formed (T4)  @§F1/H-94
   2907  probe:P36            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'issue' declines
-  2908  probe:P36            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'levy' declines
-  2909  probe:P36            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'levy' declines rather than admitting
-  2910  probe:P36            NOTE      `remit:dispatch` not granted on any live `hold` this person holds; 'march' declines
-  2911  probe:P36            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'open_case' declines
+  2908  probe:P36            NOTE      `remit:dispatch` not granted on any live `hold` this person holds; 'march' declines
+  2909  probe:P36            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'open_case' declines
+  2910  probe:P36            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'requisition' declines
+  2911  probe:P36            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'requisition' declines rather than admitting
   2912  probe:P36            NOTE      `remit:revoke` not granted on any live `hold` this person holds; 'revoke' declines
   2913  probe:P36            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'seize' declines
   2914  probe:P36            NOTE      'tell' needs ['to'] from a person p_mid knows, and they know nobody; NO Candidate is formed (T4)  @§F1/H-94
@@ -3073,10 +3073,10 @@
   3073  probe:P36            NOTE      `remit:confer` not granted on any live `hold` this person holds; 'establish' declines
   3074  probe:P36            NOTE      'give' needs ['to'] from a person p_mid knows, and they know nobody; NO Candidate is formed (T4)  @§F1/H-94
   3075  probe:P36            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'issue' declines
-  3076  probe:P36            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'levy' declines
-  3077  probe:P36            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'levy' declines rather than admitting
-  3078  probe:P36            NOTE      `remit:dispatch` not granted on any live `hold` this person holds; 'march' declines
-  3079  probe:P36            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'open_case' declines
+  3076  probe:P36            NOTE      `remit:dispatch` not granted on any live `hold` this person holds; 'march' declines
+  3077  probe:P36            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'open_case' declines
+  3078  probe:P36            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'requisition' declines
+  3079  probe:P36            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'requisition' declines rather than admitting
   3080  probe:P36            NOTE      `remit:revoke` not granted on any live `hold` this person holds; 'revoke' declines
   3081  probe:P36            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'seize' declines
   3082  probe:P36            NOTE      'tell' needs ['to'] from a person p_mid knows, and they know nobody; NO Candidate is formed (T4)  @§F1/H-94

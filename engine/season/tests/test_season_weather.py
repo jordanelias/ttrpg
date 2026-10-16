@@ -127,7 +127,7 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # not asserted, v9 §0.5); `larders_in_purview` returned `()` in all 766 calls over two realm seasons.
 BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
                1: "3ff10d3c30acd7d333ede21f08e58898",
-               2: "155983539541890da6561a30eade5e59"}
+               2: "18ffd2144db512c8d7626bb8d51a60db"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -153,8 +153,11 @@ BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
 # RE-RECORDED at v9 IN-45 `carry` with `BASE_HASHES` (7391 -> 7186, 22130 -> 21338).
 # RE-RECORDED at v9 IN-45 `migrate` with `BASE_HASHES` (7186 -> 7160, 21338 -> 23584).
 # RE-RECORDED at v9 IN-49 `requisition` with `BASE_HASHES` (7160 -> 7157, 23584 -> 23361).
+# RE-RECORDED 2026-10-16 (season 2 only) with `BASE_HASHES[2]` for the `levy` -> `requisition` verb rename: act ids and draw
+# streams hash the verb name (`ids.H`), so the same seed walks a different, equally valid trajectory from season 2 (23361 -> 23241
+# events); season 0 and season 1 are unchanged.
 BASE_EVENTS = {1: (7157, "7b6709af3d0f1fd4b8efdc345db5f9ce5511fbd99d2fba5e8e61f481e069feee"),
-               2: (23361, "946059cda52a1110689d7dbc652d26e7221934f6e488e78c4fab286521df417e")}
+               2: (23241, "914da53b4af530228aefca1c2f55f08b57a53ad24502008886066fd0b82f5256")}
 
 
 def _digest(w) -> tuple:
