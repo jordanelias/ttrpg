@@ -4,9 +4,9 @@
   1. END TO END THROUGH `contest()`, not just the provider function in isolation -- proves the
      manifest row, the `@provider` registration, and the dispatch in `seam/contest.py` all agree,
      which a unit test calling `resolve()` directly could not.
-  2. `PARTY-GAP` ON AN EMPTY CLAIMANT LIST, A MISSING `subject` AND A MISSING `rung`, mirroring
+  2. `PARTY-GAP` ON AN EMPTY CLAIMANT LIST AND A MISSING `rung`, mirroring
      `seam/wrappers/combat.py`'s own PARTY-GAP discipline -- the provider derives a gap rather
-     than fabricating a side.
+     than fabricating a side. A MISSING `subject` is `Unopposed` since v9 IN-13 (no opposing side).
   3. AN UNRESOLVABLE `subject` DOES NOT CRASH OR REFUSE. `faction_q.resolve` (read through
      `world_q.mustered`) returns an empty membership for an unknown proposition id (§B.6.1's own
      -- membership is `commit`, and there is none to find), which is INDISTINGUISHABLE from a real
@@ -116,9 +116,13 @@ def test_party_gap_on_empty_claimants_missing_subject_and_missing_rung():
     w = build_realm(0)
     empty = provider_resolve(w, [], ["c"], "a field", subject="fac_guilds", rung="r_valoria")
     assert empty["status"] == "PARTY-GAP"
+    # RE-PINNED AT v9 IN-13 (#453 §9.6 code edit (ii)): NO OPPOSING FACTION, with claimants and a
+    # rung given, is the existing `Unopposed` shape, not a party gap -- `subject = None` now means
+    # only "no opposing holder" (`sides_of`); H-149's refusal rides the empty `claimants` above.
     missing_subject = provider_resolve(w, ["p_npc_008"], ["c"], "a field", subject=None,
                                         rung="r_valoria")
-    assert missing_subject["status"] == "PARTY-GAP"
+    assert missing_subject["status"] == "RESOLVED" and missing_subject["unopposed"] is True
+    assert missing_subject["parties"] == {"claimants": ["p_npc_008"], "subject_members": []}
     missing_rung = provider_resolve(w, ["p_npc_008"], ["c"], "a field", subject="fac_guilds")
     assert missing_rung["status"] == "PARTY-GAP"
 

@@ -3184,7 +3184,12 @@ rows:
       the target, so neither a missing defender nor `_survives` is the cause. (Two more
       `march.refused` fire at RESOLVE, `requires_typed`'s `exists:Rung` read on a Site and a Record.)
       The referents come from the chooser (`H-175`); the restriction is ruled; widening either is
-      not this row's."
+      not this row's. ⚠ v9 IN-13 (#453 §9.6 code edit (iii), §14.8), 2026-10-16: THE REFUSAL MOVED,
+      THE RULE DID NOT. `sides_of` now refuses a non-settlement target by mustering an EMPTY army
+      (`claimants = []`), which the provider's existing empty-claimants PARTY-GAP refuses at the
+      same place (`_contest`'s catch, `march.refused`); `subject = None` now means only 'no
+      opposing holder' (own faction, or unheld), which resolves `Unopposed` and arrives. Still
+      enforced: `test_march.py::test_a_march_on_a_non_settlement_rung_refuses_h149_is_enforced`."
     source:    "M4 of the driver-retirement plan (`ED-IN-0279`), Jordan's ruling on the march
       target (M4 planning round 2)"
 
@@ -3285,8 +3290,8 @@ rows:
       `resolve_field` call between two groups of the same faction's people."
     kind:      "ABSENT_RULE"
     owner:     "`loop/sides.py::sides_of`'s mass_battle branch -- where `subject` is decided"
-    grade:     "assumption"
-    default:   "NOT REFUSED. Attempted a fix in the same pass that found this (forcing `subject`
+    grade:     "ruled"
+    default:   "CLOSED BY v9 IN-13 (2026-10-16): A SAME-FACTION TARGET IS NO OPPOSITION -- `sides_of` names `subject = None` when the target's holder is the marcher's own faction (and when nobody holds it), and the provider answers `Unopposed`; the army arrives (a relocation) and its own faction's people there are never written. The empty and the occupied same-faction case now resolve ALIKE, which is what the reverted fix below could not achieve while `Unopposed` wrote nothing. THE TEXT BELOW IS THE PRE-CLOSURE DEFAULT, LEFT AS TRANSCRIBED: NOT REFUSED. Attempted a fix in the same pass that found this (forcing `subject`
       `None` whenever it equals the actor's own faction) and REVERTED it: it broke
       `test_an_unopposed_march_writes_nothing_on_either_side`, which correctly relies on a
       same-faction EMPTY target resolving `Unopposed`, not refused. The two cases -- same faction,
@@ -3326,7 +3331,23 @@ rows:
       faction's people present as the only occupants; march there through the real chooser and
       show the real fight happens (or, once ruled, that it refuses) -- OR, more cheaply, read
       `build_realm(0)`'s naturally-offered march referents off from a re-run of `aperture.py`
-      instrumented to report holder-faction per attempt, which this pass did not build."
+      instrumented to report holder-faction per attempt, which this pass did not build.
+      ⚠⚠ CLOSED BY v9 IN-13 (#453 §10.4 step 8, §9.6 code edit (i): H-151's reverted fix restored,
+      2026-10-16), BY A PRODUCER, graded `ruled` on the register's precedent (H-02, H-42) -- the
+      reasoning is `ED-IN-0279` clause (a)'s own ruling text (*an army going out to meet an
+      OPPOSITION army*), the source this row already named, not a fresh ruling. WHY THE REVERT NO
+      LONGER APPLIES: the reverted fix broke the empty same-faction case because `Unopposed` then
+      wrote nothing and the test asserted the empty target resolved `Unopposed`; with the arrival,
+      `Unopposed` is the RELOCATION, so forcing `subject = None` on a same-faction target makes the
+      empty and the occupied case one outcome, and no second `mustered` call is needed. THE
+      FALSIFIER ABOVE, WRITTEN AND RUN (expected outcome `field.unopposed`, per `_part5` IN-13 exit
+      (ii)): `engine/season/tests/test_march.py::test_in13_exit_ii_h151_a_march_on_ones_own_occupied_settlement_is_unopposed`
+      -- a constructed `Question` naming `set_s_001` (Crown-held, five Crown present), the march
+      formed and packed by the REAL chooser, folds `field.unopposed` + `army.arrived` and writes none
+      of the five; `test_sides.py::test_mass_battle_branch_derives_a_real_army_and_a_real_defender`
+      re-pinned (`subject` None for `set_s_002`, the Church named for `set_s_036`). MUTATION, run:
+      `sides_of`'s `holder == faction` arm dropped -> both RED. `hole:`, `kind:`, `owner:`,
+      `unblocks:` and `source:` are LEFT AS TRANSCRIBED (the `H-109`/`H-33` precedent)."
     source:    "M4 review pass (`valoria-critic`), `ED-IN-0279` clause (a)'s own ruling text
       supplying the reasoning, not a fresh Jordan ruling"
 
@@ -4511,6 +4532,19 @@ rows:
     unblocks:  "r2's `MW-L+1` ration loop (fed -> body up -> band re-crossed upward -> penalty down -> budget up), the positive arm the body loop `MW-L-3` has none of today; and MW-11 green. Its own control, when (2) is built: the per-season count of DOWNWARD site crossings (`Counter(e.kind for e in w.log)`) must not change when the upward predicate is added"
     cite:      "MEASURED at v9 SE-03 (IN-28's close), 2026-10-16, by a one-off pytest probe (not kept in the tree: a red test may not be skipped, v9 §0.5) on a hand-built world: realm > territory > settlement, one cohort (weight 2) housed in the settlement, `body_step` 10 (`H-125`'s live arm). FED (grain and salt 1000 each) from body 450, below `limited` (500): six MATTER barriers, the body reads 450 every season and no `condition.band_crossed` is anchored on the cohort -- MW-11 RED. CONTROL A, the instrument can see a crossing: the same cohort STARVED from 520 falls to 460 at the first barrier and that crossing IS anchored on it. CONTROL B, MW-11's own, NOT RUNNABLE: it compares downward site crossings with and without an upward predicate that does not exist; the downward half read [0, 1, 0, 0, 0, 0] per season (a harbour at 810 crossing `bulk_shipping` 800 at the second barrier). CLAUDE.md §0's ladder: not superseded; not irrelevant (`MW-L+1` is r2's named positive loop); r2 §A.4 designs cause 1 and names cause 2's owner, both outside the position that measured them, so -- the `H-160`/`H-163` precedent -- registered, lifted by neither"
     source:    "v9 SE-03, riding IN-28 (`workplans/valoria_master_workplan_v9_part6.md`, `_part5`), batch B-K item 8, 2026-10-16"
+
+  - id:        H-212
+    tier:      1
+    hole:      "WHAT AN OCCUPYING ARMY DOES TO AN OCCUPIED SETTLEMENT'S LARDER (#453 §10.4's deferred row, `:2473`, and `:2109`, which recommend this row and do not write it; v9 IN-13 writes it because IN-13 creates occupation). Since v9 IN-13 a won or unopposed `march` relocates its army to the destination (`loop/effects_combat.py::_eff_march`, presence through `_relocate`), so OCCUPATION exists -- a Query, never a stored carrier: some faction other than the holder's `mustered` at a settlement it does not hold (`queries/world_q.py::mustered` against `holder_faction_of`). Nothing reads it on the MATTER side: the arrived army are weight-1 persons, and only cohorts eat (`world_q`'s subsistence reader over `nearest_store`'s walk; a person of weight 1 is fed by no larder pass), and a cohort holds no `commit`, so it never musters (`harness/populated.py`). An occupied town's stores are therefore untouched by the army standing in it, and a besieged one does not starve. No ruling states a magnitude -- H-148's shape."
+    kind:      "PRODUCER"
+    owner:     "the MATTER-side reader over the occupation Query -- its natural site is `queries/world_q.py::nearest_store`'s walk (the larder ladder MATTER feeds from); no v9 position builds it [GAP: it slots by `_part3` §B.0's R3, to B-T, when a position takes it]. Its writer half is the arrival (`_eff_march`), BUILT at v9 IN-13"
+    grade:     "absent"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "siege and blockade as a cost rather than a posture (#453 §5 family 24, WIDENED: *'`march` arriving at an enemy-held settlement; occupation, a Query; its larder effect deferred'*): an occupier drawing on, or denying, the occupied larder, so that holding a town costs the town and a long occupation reads in its bodies (`loop/matter.py`'s body pass, `H-211`'s neighbour)"
+    cite:      "WRITTEN BY v9 IN-13 (#453 §10.4 step 8), 2026-10-16, AS THE PLAN DIRECTS (`_part5` IN-13 WHAT (1)): the row names its MATTER reader as owner and builds nothing. CLAUDE.md §0's ladder, run: (1) not superseded -- no later ruling or commit gives occupation a larder effect; (2) not irrelevant -- occupation is built and executes (`engine/season/tests/test_march.py::test_in13_exit_vi_seize_on_an_occupied_settlement_flips_its_holder` reaches it through the real fold); (3) no design document states a magnitude or a direction (#453 defers it, its line 2109; r2 `04_MATTER_AND_WORKS.md` reads larders by cohort only); (4) precedent: `H-148` (a magnitude no ruling states is a swept fixture, `scaled_by_degree`'s read-not-chosen move where the engine has a number) -- but there is no engine number to read here and no reader to inject a fixture into, so the precedent gives the SHAPE of the eventual row, not a value; (5) architecture: a person of weight 1 is fed by no pass, so a value written now would be read by nothing (`ID-13`). Hence `absent`, `default: none`, no site. ⚠ MEASURED AT THE BUILD, AND IT WIDENS WHAT 'OCCUPATION' MEANS TODAY: by the Query as ruled, a RESIDENT counts -- `build_realm(0)` houses one Crown member (`p_npc_037`) in the Church's cathedral at `set_s_036`, so the Crown already 'occupies' the Church's seat at seed 0 with no field fought, and a Crown seat granted `issue` whose purview reaches it may `seize` it (`_eff_seize`'s Rung half). A larder reader keyed on the Query would read every such household as an occupying army; whether occupation should mean an ARRIVED army only is part of this row's question, not settled here."
+    source:    "v9 IN-13 (`workplans/valoria_master_workplan_v9_part5.md`), #453 `:2109`, `:2473`, batch B-M, 2026-10-16"
 
 discharges:
   D1:   "row:H-01"

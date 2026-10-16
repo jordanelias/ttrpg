@@ -209,7 +209,8 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
 
     `claimants`: one side's `PersonId[]`, expected already resolved (§C.5.1) by whoever called
     `contest()`: `loop/sides.py::sides_of` builds them for a `march`.
-    `subject`: the OTHER side's faction Proposition id.
+    `subject`: the OTHER side's faction Proposition id, or `None` for no opposing side (v9 IN-13:
+    a relocation or an arrival at unheld land), which resolves `Unopposed`.
     `rung`: where the defence is scoped (M4, `ED-IN-0279` clause (a)) -- `subject`'s faction is
     resolved to its `members` (`faction_q.resolve`, the same function M2 built) and THEN
     INTERSECTED with presence at `rung`'s subtree (`queries/world_q.mustered`), per `04 §C.5.1`'s
@@ -224,13 +225,15 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     if not claimants:
         return dict(status="PARTY-GAP", why="a field battle needs at least one claimant",
                     module=_PROVIDER)
-    if subject is None:
-        return dict(status="PARTY-GAP", why="a field battle needs a named opposing faction "
-                    "(subject); none given", module=_PROVIDER)
     if not rung:
         return dict(status="PARTY-GAP", why="a field battle needs a place to scope the "
                     "defending side to (rung); none given", module=_PROVIDER)
-    other = world_q.mustered(w, rung, subject)
+    # v9 IN-13 (#453 §9.6 code edit (ii)): NO OPPOSING FACTION IS `Unopposed`, NOT A PARTY GAP. Since
+    # the arrival, `loop/sides.py::sides_of` names `subject = None` for ONE case only -- the target's
+    # holder is the marcher's own faction, or nobody holds it -- and H-149's refusal rides an empty
+    # `claimants` instead (above). With claimants and a rung given, an absent opposing faction has
+    # nobody to muster, which is this function's existing empty-defence shape, read as such.
+    other = world_q.mustered(w, rung, subject) if subject is not None else []
     parties = {"claimants": claimants, "subject_members": other}
     if not other:
         # ⚠ AN EMPTY DEFENDING SIDE IS `Unopposed`, NOT A CALL TO `resolve_field` (M4,

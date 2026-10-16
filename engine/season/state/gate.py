@@ -49,7 +49,9 @@ from typing import Any, Callable, Optional
 # conformance B4, disposition 3: §C.2 is the later, more specific row, and is the one taken).
 from ..data.arrangements import ARRANGEMENTS
 from ..data.matrix import MATRIX, WriteClass
-from ..data.rosters import CONFERRAL_BASES, DETAIN_KIND, RESTRAINT_KINDS, REVOCATION_BASES, TENURE_KINDS
+from ..data.rosters import (
+    CONFERRAL_BASES, DETAIN_KIND, RESTRAINT_KINDS, REVOCATION_BASES, TENURE_KINDS, faction_prop_id,
+)
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 from .carriers import Office, Receipt, Tenure
 # ⚠ NO `World` IMPORT, NOT EVEN UNDER `TYPE_CHECKING`: `world` imports this module, and the tree's
@@ -282,6 +284,23 @@ SEIZURE = "seizure"
 # whose grant licenses a seizure. #453 §9.1 / the `seize` row: eligibility `remit:issue`, "its grant
 # carrying `issue`" -- the same remit act `levy` and `transfer` ride, `RUNG_REMIT_ACTS`' shape.
 SEIZURE_ACT = "issue"
+# THE TWELFTH BASIS (v9 IN-13, #453 §10.4 step 8, K-33 + K-52, the arrival): `muster` -- a `contain`
+# RE-HOME of ANOTHER person (one or more closures and exactly one opening of that person's `contain` in
+# ONE write, judged across the batch as `handover` is), by a seated holder whose grant carries
+# `MUSTER_ACT`, for a subject holding a live `commit` to the exercised seat's faction Proposition
+# (`may_muster`). Named in the ordinary word the query it moves already uses (`world_q.mustered`), as
+# K-33 chose it over `dispatch` (a remit act and a verb). AUTHORITY-BOUND ON `via` AND READING TENURES
+# ONLY (K-52: the faction conjunct is a live `commit`, a Tenure the gate observes, never
+# `faction_holding`, a query `state/` may not import). Nothing else: no `hold`, no other kind, no
+# eviction without a destination, no second presence. Its producer is `march`'s arrival
+# (`loop/effects_combat.py::_eff_march`, through `move`'s journey body `_relocate`); the marcher's
+# own legs are `T-m`.
+MUSTER = "muster"
+# The remit act whose grant licenses a muster: `march`'s own eligibility, `remit:dispatch`, and the
+# act `may_warrant` reads (`WARRANT_ACT`). ⚠ J-8 (whether `dispatch` is a remit act at all,
+# `engine/season/offices.yaml` `meta: remit_unruled`) gates this basis as it gates `warrant`; it moves
+# with the ruling. One owner of the string: it IS `WARRANT_ACT`'s value, re-named for its second reader.
+MUSTER_ACT = WARRANT_ACT
 
 
 def seat_hold(w: "World", actor: Optional[str], via: Optional[str]) -> Optional[Tenure]:
@@ -732,7 +751,7 @@ def may_warrant(w: "World", actor: Optional[str], via: Optional[str],
 
 
 def may_seize(w: "World", actor: Optional[str], via: Optional[str],
-              holder: Optional[str]) -> bool:
+              holder: Optional[str], place: Optional[str] = None) -> bool:
     """THE SEIZURE BASIS, AS ONE PREDICATE (v9 IN-12 step 6, #453 `seize` row): may `actor`, exercising
     `via`, take a Record out of `holder`'s hands -- close the `hold` he owns?
 
@@ -745,13 +764,49 @@ def may_seize(w: "World", actor: Optional[str], via: Optional[str],
     from himself; only a person owns a `hold` here).
     ⚠ WHAT IT DOES NOT DECIDE (K-52): whether a WARRANT names the Record. That is a Record's
     content, which the gate never reads; `_eff_seize` asks it (and asks this, so an act the
-    precondition admitted is never killed at the gate by a disagreement about the holder's place)."""
+    precondition admitted is never killed at the gate by a disagreement about the holder's place).
+
+    v9 IN-13 (#453 §10.4 step 8, the Rung half): `place` -- WHERE THE OBJECT IS, when it is not the
+    holder's home. A Record is where its holder is (`world_q.place_of`'s record limb), so the Record
+    half passes nothing and conjunct 3 reads the dispossessed's home exactly as before; a RUNG is its
+    own place (`place_of`'s rung limb), so the Rung half passes the rung. K-52: *"purview over the
+    object's place"* -- one rule, the object's place read the way the precondition's `purview` stem
+    reads it, never a second purview walk. Whether the seat's faction OCCUPIES the rung is the
+    effect's licence (`_eff_seize`), not this predicate's: the gate reads no query."""
     t = seat_hold(w, actor, via)
     if t is None or SEIZURE_ACT not in t.granted_acts:
         return False
     if holder is None or holder == actor or holder not in w.persons:
         return False
-    return purview_reaches(w, w.offices[via], home_of(w).get(holder))
+    return purview_reaches(w, w.offices[via], place if place is not None else home_of(w).get(holder))
+
+
+def may_muster(w: "World", actor: Optional[str], via: Optional[str],
+               subject: Optional[str]) -> bool:
+    """THE MUSTER BASIS, AS ONE PREDICATE (v9 IN-13, #453 §10.4 step 8, K-33 + K-52): may `actor`,
+    exercising `via`, re-home `subject`'s presence -- close and open `subject`'s own `contain`?
+
+    `may_warrant`'s shape, three conjuncts, each the ONE owner of its rule:
+      1. `via` is a seat the actor SITS in (`seat_hold`);
+      2. its GRANT carries `MUSTER_ACT` (the `13e` snapshot -- never the office's live field);
+      3. `subject` holds a LIVE `commit` to the seat's FACTION Proposition -- K-52's faction conjunct,
+         a Tenure the gate observes. The seat's display faction is turned into its Proposition id by
+         `data/rosters.py::faction_prop_id`, the one owner of that relation (`loop/sides.py` musters
+         the army through the same id).
+    PLUS ONE THE ROW DOES NOT LIST: `subject` is a PERSON other than the actor (the marcher's own legs
+    are `T-m`'s). ⚠ WHAT IT DOES NOT DECIDE: where the army goes and whether the field allowed it to
+    arrive -- the effect's (`_eff_march`); and whether a mustered person may refuse -- `sides_of`'s,
+    pre-existing and not opened here (K-33)."""
+    t = seat_hold(w, actor, via)
+    if t is None or MUSTER_ACT not in t.granted_acts:
+        return False
+    if subject is None or subject == actor or subject not in w.persons:
+        return False
+    office = w.offices[via]
+    if not office.faction:
+        return False
+    fac = faction_prop_id(office.faction)
+    return any(c.kind == "commit" and c.object == fac and c.live for c in w.persons[subject].tenures)
 
 
 def _moved(t: Tenure, was: Optional[Tenure]) -> Optional[set]:
@@ -792,7 +847,8 @@ def _closes(t: Tenure, was: Optional[Tenure], moved: Optional[set] = None) -> bo
 def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Optional[str],
                        via: Optional[str], gone: frozenset,
                        released: frozenset = frozenset(), *,
-                       born: frozenset = frozenset()) -> Optional[str]:
+                       born: frozenset = frozenset(),
+                       rehomed: frozenset = frozenset()) -> Optional[str]:
     """F3's JUDGMENT FOR ONE CHANGED TENURE: the name of the basis that admits it, or `None`.
 
     `t` is the Tenure as it stands after the write; `was` is a detached copy of it from before, or
@@ -808,7 +864,7 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
     SC-03a added `warrant`; eight since `24e` added `founding`; seven since `19` added
     `determination`; six since `17b` built `T-n` and added `renewal`; five before).
 
-    THE ELEVEN BASES (ten until v9 IN-12 step 6 added `seizure`), AND WHAT EACH MAY WRITE -- a basis admits a KIND of change, not any change:
+    THE TWELVE BASES (ten until v9 IN-12 step 6 added `seizure`, eleven until v9 IN-13 added `muster`), AND WHAT EACH MAY WRITE -- a basis admits a KIND of change, not any change:
 
       `T-m`       the actor IS the owner -- `was.subject` for an existing edge, `t.subject` for a
                   new one. Anything the owner does to their own edge EXCEPT open or re-grant a
@@ -887,7 +943,14 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
                   `may_seize` -- `via` a seat the actor sits in, granted `SEIZURE_ACT`, whose purview
                   reaches the dispossessed's home. v9 IN-12 step 6; AUTHORITY-BOUND on `via`,
                   reading Tenures and `state/` readers only. The warrant that licenses it is the
-                  effect's (`_eff_seize`); the taker's own opening is `T-m`.
+                  effect's (`_eff_seize`); the taker's own opening is `T-m`. WIDENED at v9 IN-13 to a
+                  `hold` on a RUNG, the purview asked over the rung itself (`may_seize`'s `place`);
+                  the occupation that licenses it is the effect's.
+      `muster`    a `contain` of ANOTHER person, opened or purely closed, in a write that RE-HOMES
+                  him (one or more closures and exactly one opening of his `contain`, counted over
+                  the batch), by `may_muster` -- `via` a seat the actor sits in, granted
+                  `MUSTER_ACT`, the person holding a live `commit` to the seat's faction. v9 IN-13
+                  (K-33, K-52); its producer is `march`'s arrival. The marcher's own legs are `T-m`.
       `founding`  an OPENING of a `contain` edge whose SUBJECT is in `born` -- a thing this same
                   write brought into existence -- and which is that subject's ONLY live `contain`
                   (*"`contain : Rung → Rung`, one parent"*, `rosters.yaml: rung_kinds`' source).
@@ -1050,9 +1113,24 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
     # object is in `w.records` (existence only; the gate reads no content) -- by a seat the actor sits in,
     # granted `SEIZURE_ACT`, whose purview reaches the dispossessed (`may_seize`). Closing only: the
     # seizer's own opening is `T-m`. The warrant that licenses the taking is the effect's to read.
-    if (closed and t.kind == "hold" and seat is None and t.object in w.records
-            and may_seize(w, actor, via, was.subject)):
+    # v9 IN-13 WIDENED IT TO A RUNG (#453 §10.4 step 8, the Rung half): the same pure closure of
+    # another person's `hold` on a RUNG, the seat's purview asked over the rung itself -- a Rung is its
+    # own place, a Record is where its holder is (`may_seize`'s `place`). Still never a seat (`seat is
+    # None`); whether the seat's faction occupies the rung is the effect's licence, never the gate's.
+    if (closed and t.kind == "hold" and seat is None
+            and (t.object in w.records or t.object in w.rungs)
+            and may_seize(w, actor, via, was.subject,
+                          t.object if t.object in w.rungs else None)):
         return SEIZURE
+    # v9 IN-13 (#453 §10.4 step 8, K-33 + K-52): THE MUSTER. A `contain` of ANOTHER person, opened or
+    # purely closed, where that person's presence is RE-HOMED in this write (`rehomed`: at least one
+    # closure and exactly one opening of his `contain`, counted across the batch by
+    # `refuse_unauthored`, `handover`'s two-pass shape) -- by a seat the actor sits in, granted
+    # `MUSTER_ACT`, for a person committed to the seat's faction (`may_muster`). An eviction with no
+    # destination, or a second presence opened beside a live one, is no re-home and is refused.
+    if (t.kind == "contain" and (opened or closed) and owner in rehomed
+            and may_muster(w, actor, via, owner)):
+        return MUSTER
     if seat is None:
         return None
     if closed and may_revoke(w, actor, via, seat):
@@ -1098,8 +1176,17 @@ def refuse_unauthored(w: "World", changes: list, actor: Optional[str], via: Opti
     gate's own judgment function not attempted here. What this list actually buys: `closed` is a
     named, reused value inside the `zip` loop below rather than re-spelled inline -- a readability
     change, not a performance one, and the docstring saying otherwise was the defect."""
-    bases = [tenure_write_basis(w, t, was, actor, via, gone, born=born) for t, was in changes]
     closes = [_closes(t, was) for t, was in changes]
+    # v9 IN-13: THE `muster` LICENCE, read off the batch BEFORE any judgment, because it is a
+    # property of the WRITE, never of one edge: whose presence this write re-homes -- a person with
+    # at least one `contain` purely closed and EXACTLY ONE `contain` opened in it. Read off the
+    # changes alone (no verdict), so unlike `handover`'s it needs no second pass.
+    c_open = Counter(t.subject for t, was in changes if was is None and t.kind == "contain")
+    c_shut = Counter(was.subject for (t, was), closed in zip(changes, closes)
+                     if closed and was.kind == "contain")
+    rehomed = frozenset(s for s, n in c_open.items() if n == 1 and c_shut[s] >= 1)
+    bases = [tenure_write_basis(w, t, was, actor, via, gone, born=born, rehomed=rehomed)
+             for t, was in changes]
     released = Counter(was.object for (t, was), basis, closed in zip(changes, bases, closes)
                        if closed and basis == T_M and was.kind == "hold")
     refused = []
@@ -1107,7 +1194,7 @@ def refuse_unauthored(w: "World", changes: list, actor: Optional[str], via: Opti
         # `+released` is the Counter with its spent (zero) entries dropped: what is left to hand on.
         if basis is None and +released:
             basis = tenure_write_basis(w, t, was, actor, via, gone, frozenset(+released),
-                                       born=born)
+                                       born=born, rehomed=rehomed)
             if basis == HANDOVER:
                 released[t.object] -= 1
         if basis is None:
@@ -1145,8 +1232,10 @@ def not_yours(refused: list, actor: Optional[str], via: Optional[str], record_ki
               f"judging seat exercised, for a person its bench's ground holds), {WARRANT} (a "
               f"`detain` opened on a seat, for a person the exercised seat's purview reaches, by "
               f"a holder granted `{WARRANT_ACT}`), {SEIZURE} (another person's `hold` on a "
-              f"Record closed, by a holder granted `{SEIZURE_ACT}` whose exercised seat's "
-              f"purview reaches the dispossessed), or "
+              f"Record or a Rung closed, by a holder granted `{SEIZURE_ACT}` whose exercised "
+              f"seat's purview reaches the object's place), {MUSTER} (another person's "
+              f"`contain` re-homed, by a holder granted `{MUSTER_ACT}`, for a member of the "
+              f"exercised seat's faction), or "
               f"{FOUNDING} (a `contain` opened for a thing this same write brought into "
               f"existence, its only parent)",
         law="04 §C.2 F3 / AX-4 clause 2 -- the owner is the value's ONLY writer, and a non-owner "
