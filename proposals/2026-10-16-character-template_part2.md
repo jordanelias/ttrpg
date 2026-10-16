@@ -11,8 +11,9 @@ and B. This part holds the evidence.
 **Words.** A **capacity kind** is a kind of personal quantity a resolver reads to set the odds, the
 cost, a gate or the size of an effect: one of the registry's nine attributes, practice, Thread
 Sensitivity, temperament, Recall, or kit. (The first draft said "axis". That word is taken: the
-engine's `AXES` in `engine/substrate/descriptors.py` is *"THE ONLY AXIS ROSTER"*, and IN-08 cells
-verbs *"on the seven axes"*.) A person-held QUANTITY that is not a capacity (a claim in his own
+engine's `AXES` in `engine/substrate/descriptors.py` is *"THE ONLY AXIS ROSTER IN THE ENGINE"*
+(`:110`, `:124`), and the verb table's rows are *"celled on the seven axes"* (`verb_table.yaml:578`)
+[CHECKED].) A person-held QUANTITY that is not a capacity (a claim in his own
 ledger, a Record he holds, his `weight`, a stance row) is named where a row reads it, and never
 counted as a capacity kind.
 
@@ -78,7 +79,10 @@ The thread operations' lane recommendation (K-WR-2, `research/by_lane/WR_world.m
 **SHIPPED is a row count, not an execution count** (`CLAUDE.md` §0.2). Of the 45 rows, 8 cannot be
 attempted at all. Of the 37 that can, the plan records 17 verbs executing in `corpus_run` after
 IN-57 (*"executed verbs went 21 → 17"*, `_part5.md:471`) [CHECKED: the line; the run not repeated].
-This pass ran the populated realm instead (§10 probe 6); its count is in §A.2.1's last column.
+This pass ran the populated realm instead (§10 probe 6): four seasons at seed 0, the measured arm's
+`World.content_hash()` equal to the untouched control's, 2432 acts. **25 verbs executed at least
+once and 35 were attempted.** Per-verb counts are §A.2.1's last column. The 25 are all shipped and
+resolvable; no unresolvable row executed, by construction.
 
 ---
 
@@ -134,7 +138,7 @@ not repeated per row.
 | 39 | `surveil` :1137 | FI | yes | none | ACU (`fieldwork_v30.md:304`) [CHECKED] (T4) | ODDS · MEMORY | K-FI-1 | 56 |
 | 40 | `thread_read` :1157 | FI/WR | no | none: untyped, and so not resolvable (the row says so itself, `:1163`) [CHECKED] | WIL, PRA, TS: pool *"(Spirit × 2) + History + TPS"*, with TPS = TS ÷ 10, and *"TS ≥ 30 required"* (`fieldwork_v30.md:305`, `:351`) [CHECKED] (T4). K-3 types the TS precondition (`09_the_character_sheet.md:130`) [CHECKED] (T4, ratified as intent, `_part8.md:207`) [CHECKED] | ODDS · GATE | K-3 | 0 |
 | 41 | `reconstruct` :1171 | FI | yes | none; *the actor's own ledger* (`own_ledger` of subject, `:1176-1178`) [CHECKED] | REC (`fieldwork_v30.md:306`) [CHECKED] (T4) | MEMORY | K-FI-1 | 111 |
-| 42 | `tie / knot` :1186 | IN | no | none (H-182: the row has no effect) | for `knot`, from `form_knot`: BON as a gate (`bonds ≥ 5`, `knots.py:185-187`) and as a cap (`bonds // 2 + 1` knots, `:200-203`); TS as a party gate (either party `ts ≥ 30`, `:195-198`, `KNOT_TS_MIN_PARTY` `:54`); WIL and PRA as the formation roll, `spirit × 2 + history_relationships`, TN 7 (`:211-216`) [CHECKED] (T2). The disposition gate (`:189-193`) reads a stance, not a capacity. For `tie`: none named | GATE · ODDS | M-NPC rows | 0 |
+| 42 | `tie / knot` :1186 | IN | no | none (H-182: the row has no effect) | for `knot`, from `form_knot`: BON as a gate (`bonds ≥ 5`, `knots.py:185-187`) and as a cap (`bonds // 2 + 1` knots, `:200-203`); TS as a party gate (either party `ts ≥ 30`, `:195-198`, `KNOT_TS_MIN_PARTY` `:54`); WIL and PRA as the formation roll, `spirit × 2 + history_relationships`, TN 7 (`:212-222`) [CHECKED] (T2). The disposition gate (`:189-193`) reads a stance, not a capacity. For `tie`: none named | GATE · ODDS | M-NPC rows | 0 |
 | 43 | `transfer` :1198 | SE | yes | none | none named | — | — | 3 |
 | 44 | `utter` :1218 | IN | yes | none | none named | — | K-FA-1 | 113 |
 | 45 | `work` :1229 | SE | yes | none | **open**: as `restore` (`effects_economy.py:113-121`; H-164) [CHECKED] | EFFECT | M-SE-5 | 0 |
@@ -205,10 +209,12 @@ to 65.
 | **3 or more** | `fight`, `accept`, `tie / knot`, `thread_read`, the 7 thread operations | **11** |
 | **2** | `march`, `examine` | **2** |
 | **1** | `tell`, `speak`, `interview`, `research`, `surveil`, `reconstruct` | **6** |
-| **0 named, or open** | 33 shipped (5 of them **open**? no: 3 open, `forge`, `restore`, `work`), all 12 planned (2 open, `argue`, `interrogate`), the 1 design-only verb | **46** |
+| **0 named, or open** | 33 shipped (3 of them **open**: `forge`, `restore`, `work`), all 12 planned (2 **open**: `argue`, `interrogate`), the 1 design-only verb | **46** |
 | total | | **65** |
 
-(46 = 33 + 12 + 1, of which 5 are **open** and 41 name nothing.)
+(46 = 33 + 12 + 1, of which 5 are **open** and 41 name nothing. The first draft's split, 9/5/14/55
+of 83, counted non-verbs and an invented Charisma reader, and missed the knot's and the inquiry
+verbs' sourced reads; it is withdrawn.)
 
 **How thin each capacity kind is.**
 
@@ -242,7 +248,7 @@ kinds, the role each plays and the combination as the source fixes it. Roles: **
 | verb | kinds → role | combination as the source fixes it | fixed or open |
 |---|---|---|---|
 | `fight` / `accept` | PRA → ODDS: the resolution pool `max(5, history + 6)`, *"Agility-INDEPENDENT … (ED-901)"* (`modules/combat/core.py:54-56`) [CHECKED]. ACU, ATT, PRA → reading: `(2·cog + att)/3 + K·(history − 3)` (`combat_systems.py:171`) [CHECKED-draft]. AGI, ATT → reflex (`:172`). AGI → tempo (`:113`). AGI, STR → balance (`:188`). END, WIL, STR → COST: `wound_interval(end, spirit)`, `health_full(end, spirit, strength)` (`combatant.py:30-40`). FOC → poise recovery, disruption resistance (`combat_systems.py:1436`, `:1452`). TMP → an aggression lean `(disp − 4)/3` (`:183`). AGI, PRA → initiative (`:1419-1421`). KIT → weapon and armour vectors [all CHECKED-draft] | **per-term weighted sums**, each term a separate channel of one bout. No single "fight score" exists | **fixed by the stub** (T2). Open on the season path: `fight.py:45` builds every field but `end` at the class default [CHECKED] |
-| `tie / knot` | BON → GATE (≥ 5) and GATE (cap `bonds // 2 + 1`); TS → GATE (either party ≥ 30); WIL, PRA → ODDS | **gates in sequence, then a sum**: `spirit × 2 + history_relationships`, TN 7 (`knots.py:185-216`) [CHECKED] | **fixed by the stub** (T2). The season row has no effect yet (H-182) |
+| `tie / knot` | BON → GATE (≥ 5) and GATE (cap `bonds // 2 + 1`); TS → GATE (either party ≥ 30); WIL, PRA → ODDS | **gates in sequence, then a sum**: `spirit × 2 + history_relationships`, TN 7 (`knots.py:185-222`) [CHECKED] | **fixed by the stub** (T2). The season row has no effect yet (H-182) |
 | the 7 thread operations | WIL, PRA, TS → ODDS; `resilience` → COST | **a sum**: `spirit × 2 + min(3, history + 3) + ts // 10` (`operations.py:235-247`) [CHECKED]. Resilience subtracts from the Coherence cost, floored at 0, at a shipped gain of 0 (`:249-274`, `:157`) [CHECKED] | **fixed by the stub** (T2). Whether `resilience` is WIL or a tenth attribute is **open**: *"'spirit' (resilience, R-14) is a candidate input only"* (`_part5.md:444`) [CHECKED] |
 | `thread_read` | WIL, PRA, TS → ODDS; TS → GATE (≥ 30) | **the Leap sum**: *"Thread-Read is a Leap; all Leaps use (Spirit × 2) + History + TPS"* (`fieldwork_v30.md:351`) [CHECKED] | **fixed in a design** (T4); typed nowhere |
 | `march` | CHA, ACU → Command (`derive_command`, weights 2 : 1, `config.py:532-533`) [CHECKED] → GATE, ODDS, COST | **one-then-other**: the attributes make Command once (`exchange.py:57-66`) [CHECKED]. At the defaults Command is **not** in the exchange pool (`exchange.py:103-126`; `config.py:556`) [CHECKED]. It reaches: the reform gate, Command ≥ 2 and ≥ Discipline + 1 (`orchestration.py:322-327`); the recall roll and the feint-recognition roll, each `roll_pool(command)` against Ob 2 (`:2589`, `:2598`); the morale-erosion divisor `dmg / (disc × command)` (`:2252`, `:2835`; `core/state.py:96`); yield eligibility (`core/state.py:105`); a unit's `h_per_size` (`units.py:2815`); rout at Command 0 (`:2893`) [all CHECKED]. `rally_check` is *"Empty hook — rally lands in a future cycle"* (`orchestration.py:288-290`) [CHECKED] and reads nothing | **fixed by the stub** (T2); the season wiring is the troop design's (T4) |
