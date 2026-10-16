@@ -1,7 +1,7 @@
 # The troop stock — part 2: the seam, the cuts, the data, the build, the NERS pass, the decisions
 
 ## Status: PROPOSED (2026-10-16). Not ratified; merge ratifies nothing unless Jordan so rules.
-## Part 2 of 2. Head, verdict and §1–§3: [`2026-10-16-troop-stock-design.md`](2026-10-16-troop-stock-design.md). Locator conventions as there (`[CHECKED]`, `[RAN]`, `[INFERRED]`, `[UNVERIFIED]`).
+## Part 2 of 2. Head, verdict and §1–§3: [`2026-10-16-troop-stock-design.md`](2026-10-16-troop-stock-design.md). Locator conventions as there (`[CHECKED-draft]`, `[RAN]`, `[INFERRED]`, `[UNVERIFIED]`).
 
 ---
 
@@ -10,39 +10,39 @@
 ### 4.1 Who stands on a side: the muster, extended by one clause
 
 **Today.** `mustered(w, rung, faction)` returns faction members (a live `commit`) present in the
-rung's subtree (`world_q.py:1256-1272`) [CHECKED]. A levied company has no `commit`: it serves, it does
+rung's subtree (`world_q.py:1256-1272`) [CHECKED-draft]. A levied company has no `commit`: it serves, it does
 not believe (§2.1).
 
 **The edit.** `mustered` returns members **∪ the establishment of the faction's seats**, both
 intersected with presence in the subtree. The establishment is `establishment_of(w, seat)` over the
 seats whose `faction` is this one (`world_q.py:1508-1533`; `Office.faction`, `carriers.py:887`)
-[CHECKED].
+[CHECKED-draft].
 - **It is written once, in `mustered`**, so the attacking side (`loop/sides.py:85`) and the defending
-  side (`seam/wrappers/mass_battle.py:233`) both get it from one owner [CHECKED].
+  side (`seam/wrappers/mass_battle.py:233`) both get it from one owner [CHECKED-draft].
 - **It does not touch membership.** `members` still says "THERE IS NO SECOND ROUTE"
-  (`world_q.py:1154`) [CHECKED]. A side in a field is not a membership: it is who stands there for
+  (`world_q.py:1154`) [CHECKED-draft]. A side in a field is not a membership: it is who stands there for
   the faction, and a seat's sworn men stand for it.
 
 **What the edit sweeps in besides companies, named so nobody is surprised:**
 - **Every person obliged to a faction's seat** now stands with it in a field at their place. That
   includes:
-  - IN-36's guard cohorts (`_part5.md:158-175`) [CHECKED as a citation]. That is right: guards
+  - IN-36's guard cohorts (`_part5.md:158-175`) [CHECKED-draft as a citation]. That is right: guards
     defend.
   - a bench's convicts under a `determine` disposal, which is the H-173 hazard
-    (`hole_register.yaml:3765`) [CHECKED]. That is defensible as penal service but unasked, and it is
+    (`hole_register.yaml:3765`) [CHECKED-draft]. That is defensible as penal service but unasked, and it is
     recorded as a residual (§8).
 - `determine` executes 0 times in the shipped worlds (H-163), so the convict case is latent today.
 
 **Kept unchanged:**
-- The attacker's exclusion of a restrained person (`sides.py:86-92`) [CHECKED]. The comment there
+- The attacker's exclusion of a restrained person (`sides.py:86-92`) [CHECKED-draft]. The comment there
   already names `mustered` as "the cleaner home" for it, for both sides. That move is offered to the
   MB lane and not made here.
 
 ### 4.2 What a side is: an order of battle, built by the host
 
-`field_input` (`seam/wrappers/mass_battle.py:175-201`) [CHECKED] stops passing `weights`. For each
+`field_input` (`seam/wrappers/mass_battle.py:175-201`) [CHECKED-draft] stops passing `weights`. For each
 side it passes an **order of battle**: a frozen tuple the host derives from `World`. The record
-`MassBattleInput` (`queries/inputs.py:62-100`) [CHECKED] trades `weights` for `sides`:
+`MassBattleInput` (`queries/inputs.py:62-100`) [CHECKED-draft] trades `weights` for `sides`:
 
 ```
 sides  = (OrderOfBattle_attacker, OrderOfBattle_defender)
@@ -71,18 +71,18 @@ wrapper, which already reads `World` for every other field):
 5. **Command.**
    - **The code:** each commander's `command` is `Officer`'s own derivation, `derive_command` from
      charisma and cognition (`hierarchy/units.py:2699-2722`;
-     `modules/mass_battle/core/exchange.py:57`) [CHECKED].
+     `modules/mass_battle/core/exchange.py:57`) [CHECKED-draft].
    - **The source:** it is read from the person's capability once R-C-1/J-13 names one
-     (`00_COMPARATIVE_ANALYSIS.md:584`, R-C-1; `_part5.md:433`, J-13) [CHECKED].
+     (`00_COMPARATIVE_ANALYSIS.md:584`, R-C-1; `_part5.md:433`, J-13) [CHECKED-draft].
    - **Until then:** `Officer`'s own default, 4 (`units.py:2711`). Even at the default, **who**
      commands matters at once, because the builder's span check bounds how many subunits each
      commander may field (`engine.py:304-345`).
 
 A side whose order of battle holds **no subunit** has no troops:
 - **An empty defending side** is `Unopposed`. That widens the existing "nobody mustered" branch
-  (`mass_battle.py:235-248`) [CHECKED] from no persons to no troops, under the same reason: the
+  (`mass_battle.py:235-248`) [CHECKED-draft] from no persons to no troops, under the same reason: the
   wrapper does not "launder" an empty side into a fabricated fight.
-- **An empty attacking side** is the existing PARTY-GAP refusal (`mass_battle.py:224-226`) [CHECKED],
+- **An empty attacking side** is the existing PARTY-GAP refusal (`mass_battle.py:224-226`) [CHECKED-draft],
   which the fold turns into `march.refused`.
 
 ### 4.3 What `march` carries
@@ -91,22 +91,22 @@ A side whose order of battle holds **no subunit** has no troops:
   and degree-keyed `writes` are untouched in shape.
 - **Added: one optional payload key, `order`.** It maps company ids to roles. It is **not** a
   `requires_operands` member: it is read "as declared and may be absent", on the precedent of `at`,
-  "a key naming none … is read as declared and may be absent" (`rosters.yaml:231-233`) [CHECKED].
+  "a key naming none … is read as declared and may be absent" (`rosters.yaml:231-233`) [CHECKED-draft].
   - **Who carries it:** a hand-built act, or a player's act, carries the faction's choice of
     subformation per subunit.
   - **Who does not:** a computed act carries none, so every subunit takes its kind's default role.
   - **What decides the default:** an AI planner choosing roles is MB-08's "AI generals", LEAVE
-    (`_part7.md:26-31`) [CHECKED]. This design does not schedule it.
-  - **Gating:** a role is gated by `role_allowed(kind, role)` (`registry.py:22-24`) [CHECKED]. An
+    (`_part7.md:26-31`) [CHECKED-draft]. This design does not schedule it.
+  - **Gating:** a role is gated by `role_allowed(kind, role)` (`registry.py:22-24`) [CHECKED-draft]. An
     `order` naming a role its kind may not take refuses at the builder, and the host turns that into
     the existing PARTY-GAP-shaped refusal, so the fold emits `march.refused` and never raises.
 - **The subformation demand (3)** is met by role → shape + instructions (`config.py:582-616`,
-  `TROOP_TYPE_ROLES` and `ROLE_SPEC`) [CHECKED].
+  `TROOP_TYPE_ROLES` and `ROLE_SPEC`) [CHECKED-draft].
   - Different companies field different subunits, each in its own formation.
   - ⚠ **The `levy` kind has no menu of its own.** It falls back to `"any": ["Support", "Reserve"]`
-    (`config.py:592`) [CHECKED], and both are reserve postures. So the `levy` row's default in
+    (`config.py:592`) [CHECKED-draft], and both are reserve postures. So the `levy` row's default in
     `troop_kinds` is `shape: Line` with no role. `build_army` accepts a shape without a role
-    (`engine.py:373-377`) [CHECKED]. Whether raw levies should get a front-line role menu is an MB
+    (`engine.py:373-377`) [CHECKED-draft]. Whether raw levies should get a front-line role menu is an MB
     data question [OPEN].
 
 ### 4.4 Where the army builder lives, and how the module uses it
@@ -117,7 +117,7 @@ A side whose order of battle holds **no subunit** has no troops:
    workbench, `bat.py`, `tests/sim/gauge_mb.py` and 44 `tests/valoria` files;
    `grep -rl build_army tests/valoria | wc -l` → 44) [RAN] is unchanged.
    - **This creates no second construction path.** It moves the one that exists to the side of the
-     seam the season can reach, per K-MB-2 (`MB_mass_battle.md:716`) [CHECKED].
+     seam the season can reach, per K-MB-2 (`MB_mass_battle.md:716`) [CHECKED-draft].
    - **Out of lane:** `tests/sim/gauge_mb.make_mixed_unit`, the third constructor (T-MB-19), is a
      harness object. Re-pointing it at `army.build_army` is the MB lane's.
 2. **Fix the morale defect in its own commit** (§0 item 5). Give each subunit its type's preset morale
@@ -155,7 +155,7 @@ A side whose order of battle holds **no subunit** has no troops:
 ### 4.6 How a field writes back
 
 **Who lost** is read as today: `res.degree` and `res.result["parties"]`, with `Won` meaning the
-defenders lost and `Lost` meaning the attacker did (`effects_combat.py:184-190, :221-226`) [CHECKED].
+defenders lost and `Lost` meaning the attacker did (`effects_combat.py:184-190, :221-226`) [CHECKED-draft].
 
 **On the losing side:**
 - **Each company** loses men:
@@ -170,7 +170,7 @@ defenders lost and `Lost` meaning the attacker did (`effects_combat.py:184-190, 
 - **Stance rows (morale and grudge)** as today, on every loser (`:256-261`).
 
 **On the winning side: nothing**, per the ruled row ("nothing on the WINNING side",
-`verb_table.yaml:682`) [CHECKED]. **J-5** asks whether winners take their engine casualties and
+`verb_table.yaml:682`) [CHECKED-draft]. **J-5** asks whether winners take their engine casualties and
 whether either side gains experience.
 - **Until Jordan rules, experience comes only from `train`.** M-MB-16 is therefore only half closed:
   drill without war.
@@ -190,7 +190,7 @@ A faction assembles an army in four steps:
 Everything present at the origin under the marching seat's faction fights (§4.1), each company under
 the holder of the seat it serves. A council seat's holder who levied his own men commands them "as
 distinct from the council's collective decision-making". That is NPC5's case
-(`engine/season/cases/NPC5.yaml:172`, as cited at `NPC_npc_cast.md:470`) [CHECKED as a citation].
+(`engine/season/cases/NPC5.yaml:172`, as cited at `NPC_npc_cast.md:470`) [CHECKED-draft as a citation].
 His defection takes his companies' commander off the field, and their `oblige` stays live to a seat
 someone else now holds.
 
@@ -201,7 +201,7 @@ someone else now holds.
 | item | verdict | reason |
 |---|---|---|
 | **IN-52** "the levy-to-field feed" (`_part4.md:134-140`) | **withdraw** | Its premise was "`levy` moves stores, not troops … a season field is one troops-sized subunit (J-18)". Demand (4) and the rename remove the first half, and demand (2) rules the second a stub. Nothing was built (§1, item 17) |
-| **LF-1** "the feed bounds troops by the treasury, using the larder's ration" | **withdraw** | Troops are persons who already eat at home through the one larder (`subsistence_draw`, `world_q.py:803-866`). Bounding a field by a second ration taken from the same treasury makes **two ladders for one quantity**: feeding the same mouths twice in a season, the S-methodology defect (§8). MB's K-MB-6 keeps the bound with the stock as its input (`MB_mass_battle.md:732`) [CHECKED]; under C the stock is persons the larder already feeds, so the bound's input has gone |
+| **LF-1** "the feed bounds troops by the treasury, using the larder's ration" | **withdraw** | Troops are persons who already eat at home through the one larder (`subsistence_draw`, `world_q.py:803-866`). Bounding a field by a second ration taken from the same treasury makes **two ladders for one quantity**: feeding the same mouths twice in a season, the S-methodology defect (§8). MB's K-MB-6 keeps the bound with the stock as its input (`MB_mass_battle.md:732`) [CHECKED-draft]; under C the stock is persons the larder already feeds, so the bound's input has gone |
 | **LF-2** "the defender's treasury is the nearest held rung's stores" | **withdraw** | It falls with LF-1 and LF-3, which are its only readers |
 | **LF-3** "`_eff_march` debits the ration" | **withdraw** | It is the same double draw at the fold. The design's own reason for it, "levy once and you are provisioned for every battle after" (`settlements-computation-modules.md:398-399`), does not arise: a company that is not fed starves at MATTER like any cohort, and a field cannot be fought by the dead |
 | the `field_provisioning` fixture and `settlements.provision` | **withdraw** (never built) | §1, item 17 |
@@ -241,9 +241,9 @@ this document.
 
 | fact | home | shape | value |
 |---|---|---|---|
-| troop kinds | `engine/season/rosters.yaml: troop_kinds` (new table) | ordered rows `{id, kit: {matter_kind: per_weight}, default: {role | shape}}`; the loader refuses a kit kind not in `matter_kinds` | ids ⊆ `TROOP_TYPE_STATS` keys, **excluding `knights_templar`**: its kit is cavalry's, and its higher discipline and morale are grade plus creed, not kit (`registry.py:49`) [CHECKED]. **[OPEN — Jordan tuning]**: the kit table. A proposal to argue from: `levy` {} → `light_infantry` {weapon_light_cut 1, armour_light 1} → `heavy_infantry` {weapon_heavy_cut 1, armour_medium 1} → `pike` {weapon_pike 1, armour_medium 1} → `archers` {weapon_bow 1, armour_light 1} → `crossbow` … → `cavalry` {weapon_heavy_cut 1, armour_heavy 1, horses 1}, ordered most-demanding first |
+| troop kinds | `engine/season/rosters.yaml: troop_kinds` (new table) | ordered rows `{id, kit: {matter_kind: per_weight}, default: {role | shape}}`; the loader refuses a kit kind not in `matter_kinds` | ids ⊆ `TROOP_TYPE_STATS` keys, **excluding `knights_templar`**: its kit is cavalry's, and its higher discipline and morale are grade plus creed, not kit (`registry.py:49`) [CHECKED-draft]. **[OPEN — Jordan tuning]**: the kit table. A proposal to argue from: `levy` {} → `light_infantry` {weapon_light_cut 1, armour_light 1} → `heavy_infantry` {weapon_heavy_cut 1, armour_medium 1} → `pike` {weapon_pike 1, armour_medium 1} → `archers` {weapon_bow 1, armour_light 1} → `crossbow` … → `cavalry` {weapon_heavy_cut 1, armour_heavy 1, horses 1}, ordered most-demanding first |
 | the kind → stat mapping | **stays** `modules/mass_battle/troop_types/registry.py: TROOP_TYPE_STATS` (a single Python owner, §0.05) | — | as canon §B.2 (`registry.py:39-57`) |
-| equipment classes | `rosters.yaml: matter_kinds` (an open registry by design, `:1281-1288`) [CHECKED] | new rows: one per weapon class and armour class the kit table names, plus `horses` | names mirror `ARSENAL`/`ARMOURY` keys (`weapons.py:36-45`, `armour.py:37-40`) [CHECKED]. **[OPEN]**: whether arms are one kind per class or a coarser three. **No producer exists**: `site_yield` has no arms row, so arms enter only as world-gen stores until an SE row adds one (a `smithy` site kind's yield) **[OPEN — SE content]** |
+| equipment classes | `rosters.yaml: matter_kinds` (an open registry by design, `:1281-1288`) [CHECKED-draft] | new rows: one per weapon class and armour class the kit table names, plus `horses` | names mirror `ARSENAL`/`ARMOURY` keys (`weapons.py:36-45`, `armour.py:37-40`) [CHECKED-draft]. **[OPEN]**: whether arms are one kind per class or a coarser three. **No producer exists**: `site_yield` has no arms row, so arms enter only as world-gen stores until an SE row adds one (a `smithy` site kind's yield) **[OPEN — SE content]** |
 | grades | `rosters.yaml: troop_grades` (new) | ordered rows `{discipline: +d, morale: +m}`, row 0 = `{0, 0}`; `train`'s cap = an index | **[OPEN — Jordan tuning]**: the ladder's length and offsets. Proposal: raw 0/0, drilled +1/+1 (`train`'s cap), seasoned +1/+2, veteran +2/+2 |
 | the grade key | `verb_capability` (IN-12 step 9's mapping) | one key | name **[OPEN]**: `soldiering` proposed |
 | men per weight | `data/fixtures.py`, `men_per_weight`, with a hole-register row and a sweep | int | **[OPEN — Jordan tuning]**. ≥ 120 clears the rout floor for one company (§2.4). Sweep: 1 (the control: today's scale), 120, 250 |
