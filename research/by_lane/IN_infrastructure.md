@@ -733,18 +733,19 @@ leverage 0 (as `sigma.py`:147 ships), Ob = c/2 (the score/2 ruling for a person 
 The audit's c = 1…4 figures reproduce exactly; extended to c = 6 the series is a **sawtooth**: every odd pool against a half-integer Ob does
 worse than the even pool below it, because a net in integers meets an Ob of k + ½ as k + 1. The shipped default pair (2 vs 2) gives Failure
 0.74, no Overwhelming. Parameters are [OPEN — Jordan tuning]; the **form** (equal skill, higher capability, worse odds at every odd step) is a
-structural finding.
+structural finding — but a **latent** one: capability is empty on 429 of 430 corpus persons (`requirements.yaml`:1246-1250), so shipped play
+is the 2-vs-2 row and the sawtooth describes no contest that runs today. It becomes live the day K-IN-1's per-person source lands.
 
 ### 9.2 N-line ledger (six directions; attack and result)
 
 | object | N-line (narrowed where needed) | attack run | result | direction |
 |---|---|---|---|---|
 | frozen world in DELIBERATE | cut it and deliberation order becomes an outcome | looked for a write path during DELIBERATE: `deliberate.py`:72-74 raises `Forbidden` on an unfrozen world [CHECKED] | HOLDS | horizontal |
-| scene budget | cut it and a king's scarcity equals a copyist's; nobody chooses what to leave undone | walked: no other object prices attention by office [AUDIT, `03`:131-134] | HOLDS | vertical |
+| scene budget | cut it and a king's scarcity equals a copyist's; nobody chooses what to leave undone | not attacked this pass; the audit walked it (no other object prices attention by office) [AUDIT, `03`:131-134] | HOLDS on the audit's walk only, **unscored here** | vertical |
 | one `resolve` over one verb table, refusal as an Event | cut it and verbs need private resolvers (the second-resolver failure, T-IN-5) and scarcity stops being witnessable | re-ran: 40 of 45 rows carry a non-empty `emits_on_refusal`; the five with `[]` (`create_record`, `forge`, `speak`, `tie / knot`, `utter`) have eligibility `own` and no `requires:`, so no refusal path [CHECKED YAML load] | HOLDS, **narrowed** to "every refusable row emits" | lateral, bottom-up |
 | `degree_from_net`, one ladder | cut it and each scale re-bands one quantity (the July census's 8 ladders) | combat routes through it under a guard (`core.py`:61-74 [CHECKED]); mass battle's own four labels and march's Won/Lost sit beside it | HOLDS for the margin; **narrowed**: three vocabularies remain beside it | lateral |
-| ENCOUNTER barrier | cut it and the grid's suspension and deferred contests lose their barrier | the audit's fold-into-RESOLVE attack [AUDIT] | HOLDS, MEDIUM; its first consumer (IN-46) is unbatched, so today it is held for a future reader | vertical |
-| contest seam at RESOLVE/ENCOUNTER | cut it and no person's act can be resolved by a subsystem | the only carried vertical seam (`seam/contest.py`) | HOLDS | vertical, diagonal (the one cross-family carrier) |
+| ENCOUNTER barrier | cut it and the grid's suspension and deferred contests lose their barrier | the audit's fold-into-RESOLVE attack [AUDIT], not re-run | HOLDS on the audit's attack only, MEDIUM, **unscored here**; its first consumer (IN-46) is unbatched, so today it is held for a future reader | vertical |
+| contest seam at RESOLVE/ENCOUNTER | cut it and no person's act can be resolved by a subsystem | **no attack run**: the row states a role (the only carried vertical seam, `seam/contest.py`), not a cut walked | **unscored** (a PASS needs a named failed attack) | vertical, diagonal |
 | witness `_refract` (confidence only) | cut it and every witness holds an act at the actor's own confidence; R-07's imperfect knowledge loses its graded half | re-opened `witness.py`:231-239, :495 [CHECKED]: value, source and chain are never refracted; the actor is never refracted | HOLDS, **narrowed** to confidence; value-level fallibility is a limit | bottom-up |
 | attention tiers (IN-57) | claimed: tractable choice at scale | its own measurement is a regression (21 → 17 executed, `requirements.yaml`:901-905) | **not an N-line as filed** ("makes X tractable" argues for a representation); unscored | — |
 | σ-leverage at the season seam | claimed: circumstance shifts μ | the possibility survives the cut because nothing produces leverage (`sigma.py`:139-147; "this plan schedules none", `_part2`:418-421) | **FALSE N-LINE** (disqualifier 2, no producer) at the season seam only; combat and mass battle keep their σ terms | — |

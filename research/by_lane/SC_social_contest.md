@@ -506,7 +506,7 @@ Six directions, as run: top-down (institution → person: arrangement, latitude,
   - "recorded defeat": `records_dissent` unread;
   - "standing decides the hearing": `tell`'s obstacle reads capability (§3.3 #9).
 - **C2, type signature.** "A petition rises to the hand that may deny it" contradicts the signature. `to` and `subject` bind the question's one referent (`verb_table.yaml:798`; `decision/options.py:952-955`), and the table has no deny row; the one Record closer, `destroy_record`, forms for nobody (A-13). IN-12 step 5's EXIT inherits the binding: its petition against a killer is addressed to the killer (8.3). `judging_set(w, venue, matter)` accepts a `matter` it cannot use (`world_q.py:363`).
-- **C3, epistemic feasibility.** Who decides which game a case is? No named party can, so the selection is either a hand-authored payload or nothing (M-SC-1). The carrier already exists (`DOCKET_ARRANGEMENT` on the `open_case` payload). The repair is to have it named from a claim a person holds at the venue, such as a held writ or the convener's remit. That is an operand, not a store.
+- **C3, epistemic feasibility.** Who decides which game a case is? No named party can, so the selection is either a hand-authored payload or nothing (M-SC-1). The carrier already exists (`DOCKET_ARRANGEMENT` on the `open_case` payload). The repair is to have it named from a claim a person holds at the venue, such as a held writ or the convener's remit. That is an operand, not a store, but the channel such an operand would come through (IN-10's enabler) is absent from the tree and was once falsified for 0 realm executions (`_part5:55` [CHECKED]), so the repair is one operand on top of an enabler that must first be rebuilt and shown to execute.
 - **C4, contradiction sweep.**
   - Fig. 27 is named "the forensic ISSUE LADDER" while 04 reads Fig. 5 as the rung (M-SC-3).
   - ED-IN-0210 Ruling 2 names a two-sided petition closer; v9 A-16 reads the pairs as a question and adds no closer rows (7.2 #6). (The earlier draft's step-10 DONE/OPEN conflict is withdrawn: step 10 is docketing, which landed at `19`, and the mapping is a separate, unclaimed item; 7.2 #6.)
@@ -528,13 +528,13 @@ Six directions, as run: top-down (institution → person: arrangement, latitude,
 ### 9.4 R — both halves, and completeness
 
 - **R-COMPLETE: FINDINGS.**
-  - At the shipped default pair (pool 2, Ob 2), Overwhelming cannot occur. The 200,000-draw sample this pass ran gives 0, because two dice net at most +4, a margin of +2. So the top band is dead for 429 of 430 persons.
+  - At the shipped default pair (pool 2, Ob 2), Overwhelming cannot occur: `degree_from_net` needs a margin of 3 or more (`dice_engine.py:236` [CHECKED]), and two dice net at most +4, a margin of +2. The unsaved 200,000-draw sample agrees (0) and is unreproducible from the tree. So the top band is dead for 429 of 430 persons.
   - At the 1D floor, the obstacle is unceilinged until SC-01 step 14 (M-7). Its falsifier admits p = 0.0006 (8.3).
   - Unwritten branches:
     - a `Record` or `none` disposal declines (`effects_information.py`, `_eff_determine` docstring);
     - petition deny/withdraw (M-SC-2);
-    - a lie (M-SC-7).
-  - The measured `tell` "success rate" (15%, 21%; `test_season_shape.py:9063, :9077`) counts `news.untold`, which tell also emits on **refusal** (`verb_table.yaml:1007-1010`). It is a share of attempts, not a roll rate. The roll rate at the default pair is 0.26 (sample above). Any claim built on the 15% inherits the conflation (§11).
+    - a spoken lie (M-SC-7).
+  - The measured `tell` "success rate" (15%, 21%; `test_season_shape.py:9063, :9077`) counts `news.untold`, which tell also emits on **refusal** (`verb_table.yaml:1007-1010` [CHECKED]), and counts `Partial` as told (`:962` [CHECKED]). It is a share of attempts, not a roll rate. The roll's pass rate at the default pair is about 0.26 (Partial + Success in the unsaved sample above; unreproducible from the tree). §0 #1, §3.1 and §4 now say so (§11).
 - **R-VARIETY: FINDINGS.** One pool (T-SC-2), one computed game (M-SC-1), one competence (M-SC-8). Strategies differ only by seat, stance and pursuits.
 - **R-WORLD: FINDINGS.** In computed play the courts are dead seats today: `convene`, `open_case` and `determine` are never attempted (BASELINE B3), and `detain`/`ban` never open unwatched. Under v9, determinations occur in one game. Whether they throw hooks (a grievance, a counter-petition) depends on IN-58/IN-70 [UNVERIFIED].
 - **R-CHOICE: FINDINGS, upper bound**, at seats an ordinary Person (and so the player) can occupy:
@@ -570,12 +570,12 @@ Six directions, as run: top-down (institution → person: arrangement, latitude,
   - Diagonal: a disposal reaching beyond the room has no carrier (`disposal_reach` unread).
   - Lateral: **two readings of standing**. A proceedings bench will read the speaker through reception (`22a`); an ordinary hearer cannot rank a teller (H-181). This is an S defect.
   - Horizontal: Records carry across seasons; recorded defeat does not (M-SC-5).
-- **Pauses correctly: FINDINGS** [READER]. The planned proceeding resolves inside one scene as a nested run with "no turn limit" and a depth cap (`C1-1` F). One-tick trials are listed as D-8, Jordan-vetoable (`C1-3` H). A trial that should adjourn and resume across seasons can do so only through a Record (`19` s26, adjourn/resume unspecified, `C1-2` V). It does not yield to the season.
+- **Pauses correctly: FINDINGS, and the core of it is unruled.** The planned proceeding resolves inside one scene as a nested run with "no turn limit" and a depth cap (`C1-1` F [READER]); 21 step 15 specifies "the nested run, in-run folds over its own acts" (`21_RECONCILIATION.md:579` [CHECKED]). Whether a seam may deliberate nested inside RESOLVE at all is H-56, kind RULING (`hole_register.yaml:642-646` [CHECKED]), put to Jordan at §J.2 row 6 with no recommendation and "nothing scheduled" (`_part5:519` [CHECKED]). Until it is ruled, whether the proceeding pauses the season or the season pauses the proceeding is not decided. One-tick trials are listed as D-8, Jordan-vetoable (`C1-3` H). A trial that should adjourn and resume across seasons can do so only through a Record (`19` s26, adjourn/resume unspecified, `C1-2` V).
 - **Methodology: FINDINGS.** Social contests run on two substrates until SC-01 step 13:
   - `tell`'s discrete `roll_net + net_boost` (`modules/social_contest/roll.py`);
   - the planned provider's `continuous_engine_sample` (`PS/06_RESOLUTION.md:86, :473` [CHECKED]).
 
-  After the repoint, social contests sit with combat on the continuous draw, and the season and mass battle stay discrete (audit A3 [AUDIT]). Within SC the pool formula has three lineages: `c or 2` (shipped), `max(5, faculty×2 + BASE)` (kernel, [AUDIT relayed]) and `brought + conduct × latitude` (planned). The obstacle base, `score/2`, is one ruling, applied consistently. The result vocabulary is the one four-band ladder.
+  After the repoint, social contests sit with combat on the continuous draw, and the season and mass battle stay discrete (audit A3 [AUDIT]). Within SC the pool formula has three lineages: `c or 2` (shipped), `max(5, faculty×2 + BASE)` (kernel, [AUDIT relayed]) and `brought + conduct × latitude` (planned). The obstacle base, `score/2`, is one ruling, applied consistently. The result vocabulary is the one four-band ladder; J-14, held and unranked, would re-band that ladder for every scale, contests included (`_part5:521` [CHECKED]), so the shared ladder is consistent today and its band shape is a Jordan question.
 
 ### 9.6 E, scored last against N and R
 
