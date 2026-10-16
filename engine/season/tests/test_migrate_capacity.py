@@ -145,6 +145,12 @@ def _build_dwelling(w, d, at, by, key="wd"):
                            payload={"record": key, "kind": "works",
                                     "subject_matter": {"plan": "dwelling", "at": at}, "rung": at,
                                     "stages": [(w.tick + 1, "term1", key)]}))
+    # PLANTED, v9 IN-28 (`H-166` limit 1): the dwelling's price, `rosters.yaml: works_cost`, at the
+    # works' rung, which `build` consumes -- so the store is where it was once the dwelling stands.
+    r = w.rungs[at]
+    r.stores = dict(r.stores or {})
+    for kind, n in w.fixtures.get("works_cost")["dwelling"].items():
+        r.stores[kind] = r.stores.get(kind, 0) + n
     built = _fold(w, d, Act(id=f"{key}:b", actor=by, verb="build", payload={"subject": key}))
     assert _kinds(made) == ["record.created"] and _kinds(built) == ["site.built"], (
         _kinds(made), _kinds(built))
