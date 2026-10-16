@@ -752,8 +752,14 @@ is the 2-vs-2 row and the sawtooth describes no contest that runs today. It beco
 | `urgency` | claimed: need reorders choice | constant across candidates, "INERT BY CONSTRUCTION" (`choose.py`:172-193) | **FALSE N-LINE** (disqualifier 5) — the audit's, confirmed | — |
 | `benefits_me` (the function) | claimed: self-interest weights choice | no production caller (grep [CHECKED]); the ruled weighting (ED-IN-0261) is consumed at world generation, not here [AUDIT] | **FALSE N-LINE for the function**; the ruling it was written for is not cut | — |
 | verb table `scale:` column | claimed: verbs are scoped by scale | H-89: read by nothing but the loader [CHECKED HR] | **FALSE N-LINE** (disqualifier 2) | — |
-| `_drop_what_was_already_done` | claimed: spares a person repeating an act already realized | Layer 1 forbids exactly this (`03`:138-140 [CHECKED]); its basis is a reference document | **N-line contradicted by Layer 1**: cutting it restores the ratified behaviour; R-03 is its falsifier (audit G4) | top-down |
-| relaxed exit (plan instrument) | cut it and positions stall on realm counts the chooser's data, not wiring, decides (m:126-128) | it leaves R-05's computed execution with no owner (H-IN-1) | HOLDS for plan velocity, **narrowed**; it moved the EU4 detector up a level and left it ownerless | bottom-up |
+| `_drop_what_was_already_done` | cut it and one person spends every scene on their top three acts, and seven verbs leave the world (the monoculture measured before it existed, `deliberate.py`:314-318 [CHECKED]) | the cut was walked by its author, not by this pass: the measurement is in its docstring; §C.3 (`03`:138-140) forbids it, §C.2 (`03`:131-134) supplies its reason [CHECKED] | **contested inside Layer 1**: the N-line rests on §C.2 and a measurement, and is forbidden by §C.3; unscored until the cut is re-measured with a control | top-down |
+| relaxed exit (plan instrument) | cut it and positions stall on realm counts the chooser's data, not wiring, decides (m:126-128) | an argument, not an attack: no cut walked | **unscored**; recorded as a finding instead — it leaves R-05's computed execution with no owner (H-IN-1), the EU4 detector moved up a level | bottom-up |
+
+| the season force as one `Line` at power 4, command 4 | claimed by nobody as a design: the module labels it "minimum-viable defaults … no canonical spec" (`massbattle.py`:158-166 [CHECKED]) | Jordan 2026-10-16: "this 4/4 one line formation … as coded is a stub" | **not an N-line: a placeholder by ruling** (M-IN-12) | — |
+
+**Tally (attacked this pass).** Of eight rows the first draft scored HOLDS, four survive an attack run in this pass (frozen world, one
+`resolve`, `degree_from_net`, witness `_refract`; three narrowed); two hold only on the audit's attack and are unscored here (scene
+budget, ENCOUNTER); two were never attacked and are unscored (contest seam, relaxed exit). The dedup filter is contested inside Layer 1.
 
 **False N-lines, null check:** four found (σ-leverage at the season seam, `urgency`, `benefits_me`, `scale:`), each with a disqualifier;
 mass battle's four-label degree is the MB lane's (audit G2b). Each was attacked for a hidden reader; none found.
@@ -763,20 +769,29 @@ mass battle's four-label degree is the MB lane's (audit G2b). Each was attacked 
 - **C1 claim → mechanism.** "Personal-scale resolution varies by person": no carrier in combat or mass battle; contest only where a vocation
   is named (M-IN-1, H-IN-2). "No state is hidden from the player" (`01`:301-302): no carrier — `explain` is unimplemented (M-IN-3). "R-05 is
   owned by the verb positions": no carrier (H-IN-1). "History improves a thread roll": no carrier (`operations.py`:246 [CHECKED]; WR).
+  "A faction levies troops and fields an army" (Jordan, statements 1, 4): no carrier — `levy` moves stores, the seam passes weights, the
+  force is one Line (M-IN-12). "A person may deceive": no carrier (H-198; M-IN-14).
 - **C2 type signature.** `explain(p : PersonInterior, v : Value)` takes no `World` (`04`:860 [CHECKED]), but a contested act's odds depend on
-  the subject's capability (`_obstacle_of` reads `w.persons[subject]`, `sigma.py`:125-128 [CHECKED]). **So the odds surface the player is owed cannot be
-  the true odds: it must be the actor's estimate from claims they hold about the subject.** The signature already decides the shape of M-IN-3.
+  the subject's capability (`_obstacle_of` reads `w.persons[subject]`, `sigma.py`:125-128 [CHECKED]). **So if the player is ever shown odds,
+  they cannot be the true odds: only the actor's estimate from claims they hold about the subject.** Whether §C.11 owes odds at all is a
+  separate question: it owes "the derivation of a value the character already has" (`04`:855), and an act not yet taken has no held value.
+  The signature constrains the shape of any band; it does not decide that a band is owed (M-IN-3; K-IN-9 is Jordan's).
 - **C3 epistemic feasibility.** The resolver's read of the subject's capability is resolver-side and lawful. A shown band must be computed from
   held claims (C2). H-207's second cause, question priority, is evaluated from the person's own questions, so it is feasible; its first cause
   ("one actor, one season") is cast content, which R-05's rule forbids inventing.
-- **C4 contradiction sweep.** Four, in §7.2 items 1–5: 03 §C.3 vs the dedup filter; AX-7's gloss vs §C.11; GD-2 vs AX-1/T-b; Jordan's "pool
+- **C4 contradiction sweep.** Seven, in §7.2 items 1–8 (item 6 is drift): 03 §C.2 vs 03 §C.3 over the dedup filter; v9's stores `levy`
+  vs Jordan's troop levy (item 7); IN-31's exit vs H-207 (A) (item 8); AX-7's gloss vs §C.11; the dead CANONICAL path; GD-2 vs AX-1/T-b; Jordan's "pool
   only" for the contest vs K-2's `Person.attributes` for combat. One introduced here and resolved: §8.4 lists σ-leverage as built-dark while
   §9.2 calls it a false N-line — both hold, because the kernel's σ term is live in combat and mass battle and dead only at the season seam.
 - **C5 path construction.** Showcase *a seated person is killed and the seat passes* (IN-61's regicide probe [READER W2 §H]): `fight`
   executes (E) → Felled writes `Tenure.until` (VT `fight` writes, BASELINE B3) → the office is vacant → `succeed` has no predicate/effect →
   `confer` never attempted → **asserted** after the death. Under planned-built, IN-61 supplies `succeed` (B-R), blocked on ED-IN-0292 (2)
-  (H-IN-5). Showcase *a levy feeds a field*: `levy` always refused today; IN-49 then IN-52 ships OFF → **expressible**, not implementable,
-  until the flip.
+  (H-IN-5). Showcase *a faction levies troops from its settlements and fields them* (Jordan, statement 1): `levy` is refused today and
+  moves grain when it executes (VT:629-652) → under planned-built, IN-49 makes the grain levy execute and IN-52 (OFF, then flipped) lets the
+  treasury **bound** a headcount that is still the persons' weight sum, fielded as one Line (`_part4`:137; `massbattle.py`:226-230)
+  → **not expressible even planned-built**: no step raises a troop, grades it by equipment, experience or commander, or lets the faction
+  compose subunits (M-IN-12, H-IN-10). The first draft read this showcase as "expressible, not implementable, until the flip"; that
+  reading assumed the levy produced troops.
 
 ### 9.4 R — both halves, and completeness
 
@@ -784,26 +799,33 @@ mass battle's four-label degree is the MB lane's (audit G2b). Each was attacked 
   [CHECKED]); every person seat is occupiable. R-CHOICE and R-VARIETY therefore bind at every person seat.
 - **R-COMPLETE: FINDINGS.** Extremes: S27.4 refuses when Ob exceeds `obstacle_refusal_multiple × pool` (`sigma.py`:190 [CHECKED]);
   pool 2 at Ob 2 can never be Overwhelming (executed, 9.1); the σ-boost floors below one die (`orchestration.py`:1284-1289 [CHECKED]).
-  Unwritten branches: `succeed`, `carry`, `forge` effects declined; H-207's four causes; H-91's eligibility conflict. The odds sawtooth (9.1) is
-  a completeness defect at every odd step.
-- **R-VARIETY: FINDINGS.** One build fights, marches and argues like every other (T-IN-1); variety lives in pursuits, stance and seat only.
+  Unwritten branches: `succeed`, `carry`, `forge` effects declined; H-207's unruled remainder (the motive; causes 5, 6); H-91's eligibility
+  conflict; a deed claim that is never False (H-198). The odds sawtooth (9.1) is a completeness defect at every odd step **of a lattice no
+  shipped contest reaches** (every contest is 2 vs 2 today): latent, live once capability varies.
+- **R-VARIETY: FINDINGS.** One build fights and argues like every other (T-IN-1); every field is one Line at 4/4 whose sides differ by
+  headcount only (T-IN-14); variety lives in pursuits, stance and seat only.
+- **R-CUSTOMIZATION (factions): FINDINGS.** A faction cannot raise, equip or compose an army: no troop stock, no troop-raising verb, the
+  `march` operand gives it nothing to choose, and `build_army`'s per-subunit composition is unreachable from the season (M-IN-12).
+  Jordan's statement 4 names this exact customization.
 - **R-WORLD: FINDINGS** [CONFIDENCE: medium]. Unwatched seats emit acts (R-01/R-02 met), but the act content is thin (T-IN-4), no field is
   fought in the realm (HR:3264-3265), hunger, age and illness ship at control (8.4), and `at_war` has no world-gen utterance [AUDIT]. Under
   planned-built, forcing (IN-35, IN-36), endings (IN-27) and the cast (IN-38) are scheduled; whether they emit hooks is unmeasured beyond four
   seasons (M-IN-10).
-- **R-CHOICE: FINDINGS, upper bound.** One table added to the audit's `levy` table [AUDIT A5]:
+- **R-CHOICE: FINDINGS, upper bound.** One table added to the audit's `levy` table [AUDIT A5] (that table prices the stores `levy`, the
+  misnamed act of M-IN-13):
 
   SEAT: any person · INTENT: remove a rival from an office
 
   | act | gain | cost |
   |---|---|---|
   | `fight` | executes today; Felled ends the rival's `Tenure` (VT `fight` writes) | body risk at identical pools (pool 9 vs Ob 1.5 for every season duel [AUDIT A1]); a grudge only if witnessed (**decaying cost**) |
-  | `revoke` | ends the Tenure without a death | never attempted today (H-207); under IN-31 an appointed holder is permanently banned [READER C4_2]; eligibility unruled (H-91) |
+  | `revoke` | ends the Tenure without a death | never chosen in computed play: no motive offers it and Jordan ruled none be special-cased (H-207 (A)); hand-forced it works; under IN-31 an appointed holder is permanently banned [READER C4_2]; eligibility now `rung_above_in_holdings` for the two duchy heads, and no duchy is a holding as built (H-207 (B)) [CHECKED HR] |
   | the charge (`petition` → `determine`) | a lawful disposal (`detain`/`ban`) | planned (IN-12 step 5a, SC-03b); multi-season through a docket |
 
   Shipped today the killing row is **strictly dominant** (the only one that executes). Planned-built it is a **decaying-cost** dominance: its
   price falls to the witnesses, and §6's "silence beats refusal" warning applies to an unwitnessed killing. Dependency: the act economy (IN-14,
-  ask-then) and the witness set; no equilibrium run.
+  shape ruled, unbuilt — §8.4) and the witness set; no equilibrium run. The `fight` row's "pool 9 vs Ob 1.5" is the audit's [AUDIT A1], not
+  re-derived here.
 
 ### 9.5 S — six directions, pause, methodology
 
@@ -811,7 +833,7 @@ mass battle's four-label degree is the MB lane's (audit G2b). Each was attacked 
 |---|---|---|
 | S-UP (a demand filtered by a person at a rung) | petition: `to` == `subject` (`deliberate.py`:355 [CHECKED]) — FAIL; docket: a lapse emits `date.fired` [AUDIT] — PARTIAL, completed by SC-01 (B-N) | FAIL (petition), PASS planned-built (docket) |
 | S-DOWN (published, distorting, picked up by the recipient's own perception) | telling through `refraction_gain` [CHECKED `fixtures.py`:800] | PASS in shape; the tree delivers thinly [AUDIT] |
-| vertical | the contest seam; ENCOUNTER | PASS for the bout; FAIL above it (M-IN-6) |
+| vertical | the contest seam; ENCOUNTER; settlement → army → field: the seam passes weights only (`seam/wrappers/mass_battle.py`:191-193 [CHECKED]), and no rung resource reaches a field as troops | PASS for the bout; FAIL above it (M-IN-6); FAIL settlement → field (M-IN-12) |
 | diagonal (cross-scale and cross-family) | thread → mass: an empty hook (`orchestration.py`:333-335 [CHECKED]) | FAIL |
 | lateral | one `resolve`, one verb table, one ladder | PASS, narrowed by three vocabularies |
 | horizontal | the frozen world, the draw key per `(world_seed, tick, pid, purpose)` [AUDIT] | PASS |
@@ -830,7 +852,9 @@ Two disciplines, walked by reading (not executed; `test_ax7_refraction.py` exist
    constructions (`witness.py`:532, :648, :671, :700, :850 [CHECKED]); all pass through `_refract`, which mediates confidence only. Cluster:
    **one family — value unmediated, confidence mediated**; plus one exemption, the actor's own deposit (:495). Whether confidence-only
    mediation satisfies "mediated" is unruled: the design's exception list is missing this family. Not a free one-liner.
-2. **"The person triages; the engine never truncates."** Hits: the dedup filter (clean); packing by rank or subject, never by place
+2. **"The person triages; the engine never truncates."** Hits: the dedup filter (a hit by §C.3's letter; §C.2 and its own measured
+   monoculture argue it is the triage, not a truncation — it bars only what the person already realised; contested, not clean);
+   packing by rank or subject, never by place
    (`choose.py`:613-621 [CHECKED]) against `03`:116 "one place" (clean); fixtures standing where an opener's declaration should be
    (`bench_quorum`, `oblige_term`, `record_stages_default`, `fixtures.py`:460, :818, :849 [CHECKED]) — one family; `budget_office_bonus`
    passes by tracing to S26.3 [AUDIT]. **HITS**, clustering as the audit found.
@@ -841,8 +865,9 @@ Two disciplines, walked by reading (not executed; `test_ax7_refraction.py` exist
   dark (BASELINE B5); 64 rosters + 7 tables; 198 hole-register rows read by no game code; 4 owners of the per-die pair; 3 result
   vocabularies + 1 unread. The plan's largest moves are **additions** (12 verbs, a goals carrier, two rosters, a successions registry); its
   deletions are `repudiate`, the TN 6/8 rows and `DECISIVE_OB`. The vocabulary grows. Four false N-lines (9.2) are free cuts not yet made.
-- **E-LEGIBILITY: FINDINGS.** The player cannot predict an outcome's shape: odds are a sawtooth in capability (9.1) and shown nowhere
-  (M-IN-3); a pursuit reaches an act through 15 pursuits × 7 axes × 45 verbs (`choose.py`:402-406 [CHECKED]).
+- **E-LEGIBILITY: FINDINGS.** The player cannot predict an outcome's shape: odds are shown nowhere (M-IN-3), and would be a sawtooth in
+  capability once capability varies (9.1, latent today); a pursuit reaches an act through 15 pursuits × 7 axes × 45 verbs (`choose.py`:402-406
+  [CHECKED]); and a verb's name says the opposite of its act (`levy` moves grain, M-IN-13).
 - **Ratio.** Against what N and R found — a resolver that varies by seed rather than by person, and a player surface that does not exist —
   the overhead is not buying robust choosing yet. E cannot improve by addition (meta-rule); its repairs are the four false-N cuts and one
   owner for the per-die pair.
@@ -851,7 +876,8 @@ Two disciplines, walked by reading (not executed; `test_ax7_refraction.py` exist
 
 | watched | the N it protects | verdict |
 |---|---|---|
-| a cohort as one Person at weight | one code path for crowds | kept, MEDIUM (cannot dissent, be mustered or die in part) [AUDIT] |
+| a cohort as one Person at weight | one code path for crowds | kept for crowds, MEDIUM (cannot dissent or die in part) [AUDIT]; **overruled as the source of troops** by Jordan's statement 1 — an army is a levied stock, and weight has no runtime writer (H-49) |
+| one subunit per side at the season seam | one season-force construction | **overruled** by Jordan's statement 3 ("a stub") and the module's own "minimum-viable defaults" label; `build_army` already builds composite armies on the harness side (M-IN-12) |
 | a faction as a view, never an actor | AX-1 | kept, MEDIUM; costs player readability (M-IN-3) |
 | `scale:` retired in favour of `Act.via` scope | one carrier of scope | cut — nothing reads `scale:` (H-89); kept HELD by Jordan, so the cut waits |
 | σ-leverage removed at the season seam only | circumstance as μ-shift | kept in the kernel, MEDIUM: combat and mass battle use it; the season's zero is Jordan's "pool only" as the plan reads it |
@@ -868,6 +894,11 @@ Two disciplines, walked by reading (not executed; `test_ax7_refraction.py` exist
   season-loop-only and one-mechanic (CLAUDE.md §7), so it is not the carrier; the recommendation in §10 is written to extend `aperture`/`arms`
   rather than add a tool. M-IN-11 asks for a bound on loops: `forgive` is the existing carrier for the one loop that runs; the recommendation
   is narrowed to that.
+- **9c the critic's pass (applied 2026-10-16).** An independent critic found the levy/troop demand missing, N-9/T-IN-13 resting on
+  held-false deed claims that do not exist (H-198), M-IN-4/K-IN-4, K-IN-3, K-IN-9, G5 and H-IN-9 over-stated, §8.1's verb and audit counts
+  wrong, four of six N "holds" unattacked in this pass, and four recommendations with no real cut. Each was re-opened at source; the
+  corrections are in place and listed in §11. This pass found two more on its own: `confer` executes since IN-53 (M-IN-4 had it "never
+  attempted"), and `arms --seasons` plus `soak.py` already run multiple seasons (M-IN-10 had "no instrument").
 - **An independent reviewer would add:** a seeded run beyond four seasons; the act-economy equilibrium; whether IN-66's goals carrier makes
   H-185 moot; the IN-12 step 5a docket routing traced end to end.
 
@@ -883,6 +914,9 @@ MUST BE STATED AS A LIMIT
   - Scales hand off and pause — above the bout they summarize, they do not pause   [S; M-IN-6]
   - A demand travels up a rung — the petition is addressed to its own subject   [S-UP]
   - Witnessing is mediated by channel, competence and prior belief — confidence only; competence has no carrier   [§8; M-IN-7]
+  - A faction raises troops from its settlements and fields an army it composed — `levy` moves grain; one 4/4 Line per side   [C1, C5; M-IN-12]
+  - A person can deceive — no teller lies; no deed claim is ever held False   [C1; M-IN-14]
+  - Offices are made and emptied by persons — `confer` executes; `revoke` and `establish` have no motive (H-207 (A))   [M-IN-4]
 MAY BE CLAIMED, HAVING SURVIVED
   - The world is frozen during deliberation — attacked for a write path; DELIBERATE raises on an unfrozen world
   - Every refusable act emits on refusal — 40/45 rows emit; the 5 that do not cannot be refused (eligibility `own`, no `requires:`)
@@ -891,29 +925,31 @@ MAY BE CLAIMED, HAVING SURVIVED
 
 | axis / test | verdict | what would overturn it |
 |---|---|---|
-| N (six directions) | FINDINGS: 6 hold (3 narrowed), 4 false N-lines, 1 contradicted by Layer 1 | a reader found for σ-leverage, `urgency`, `benefits_me` or `scale:` |
+| N (six directions) | FINDINGS: 4 hold under an attack run this pass (3 narrowed); 2 hold on the audit's attack only and 2 were never attacked (all 4 unscored); 4 false N-lines; 1 contested inside Layer 1 (the dedup filter); 1 placeholder by ruling (the 4/4 Line) | a reader found for σ-leverage, `urgency`, `benefits_me` or `scale:`; an attack that removes the scene budget, ENCOUNTER or the contest seam without loss |
 | E-OVERHEAD | FINDINGS | the 18 dark knobs each guarding a behaviour Jordan has ruled in |
 | E-LEGIBILITY | FINDINGS | a shown estimate band and a monotone pool/Ob rule |
-| R-COMPLETE | FINDINGS | a ruled per-odd-step Ob rule; written `succeed`/`carry` effects |
+| R-COMPLETE | FINDINGS (the sawtooth latent) | a ruled per-odd-step Ob rule; written `succeed`/`carry` effects |
 | R-VARIETY | FINDINGS | two persons with different authored capacities producing different Felled rates at fixed seeds |
+| R-CUSTOMIZATION (factions) | FINDINGS | two factions fielding different composite armies from different levied stocks at fixed seeds |
 | R-WORLD | FINDINGS [medium] | a seeded multi-season run in which an unwatched seat emits a war, succession or dearth that changes a later decision |
 | R-CHOICE | FINDINGS, upper bound | an equilibrium run over `fight` vs `revoke` vs the charge at a seated rival |
 | S-UP | FAIL (petition); PASS planned-built (docket) | a computed petition addressed to the holder of the rung above its subject |
 | S-DOWN | PASS (shape) | a telling routed to a named recipient by the engine |
 | S — coverage · pause · methodology | FINDINGS | a carrier for battle→duel and thread→mass; one substrate or a ruled reason for two |
 | the design's own falsifier | HITS: value-unmediated family (AX-7); fixtures-for-declarations family (triage) | a ruling that confidence-only refraction is AX-7's mediation |
-| self-audit | both sweeps run; 2 residues fixed, 1 reported | a play-length run; the act-economy equilibrium |
+| self-audit | both sweeps run; 2 residues fixed, 1 reported; a critic's 12 findings applied (§9.8 9c) | a play-length run; the act-economy equilibrium |
 
 REPAIRS (worst first; each a deletion or one object)
   per-person capacity has no source → Jordan rules one source (K-2 with its first reader, or "identical fighters are intended")
-  the player is owed a derivation → build `explain` as declared, showing an estimate band from held claims
-  R-05 has no owner → one position owns computed-play execution of the seat verbs (H-207's four causes)
+  troops are not a resource and `levy` moves grain → a troop stock raised by `levy`, a composite army on `build_army`; the stores act renamed (Jordan's name); cut the 4/4 stub and IN-52's stores bound
+  the player is owed a derivation → Jordan rules AX-7's gloss against §C.11, then `explain` is built to the survivor
+  `revoke`/`establish` have no motive → Jordan rules a general motive or a DONE-test reading of R-04 (1)/R-05 (H-207 (A) stands)
   four false N-lines → delete `urgency`, `benefits_me`, the season-seam leverage plumbing, `scale:` (the last when H-89's hold lifts)
-  Layer 1 contradiction → delete `_drop_what_was_already_done` (falsifier: R-03)
+  03 §C.2 vs §C.3 → Jordan amends one sentence; the filter stays or goes with a control on the measured monoculture (falsifier: R-03)
 
 GRADE: paper for the planned-built object; one execution artifact for the shipped kernel (9.1, the band arithmetic) and one for the loop
 (`python -m engine.season.harness.register --requirements`, run 2026-10-16 at `5445e34`: "met 3 · not_met 1 · partial 5", EXIT 0). Not run:
-`corpus_run`, `aperture 4 0`, any test file, any multi-season run.
+`corpus_run`, `aperture 4 0`, `arms`, `soak`, any test file, any multi-season run. The §9.6 disciplines were walked by reading, not executed.
 ```
 
 ## 10. KEY RECOMMENDATIONS
@@ -924,17 +960,20 @@ recommendations below are this pass's output; none is entered in the plan or a l
 ### 10.0 Top five, worst problem first
 
 1. **K-IN-1** — rule one source for per-person capacities that every resolver reads (T-IN-1; M-IN-1).
-2. **K-IN-9** — build the derivation the architecture already owes the player, with an estimated band of odds (M-IN-3; T-IN-10).
+2. **K-IN-13** — make `levy` raise troops into a settlement's own stock and build the season's army from those stocks as composite
+   subunits; rename the stores act (M-IN-12, M-IN-13; T-IN-14; Jordan's statements 1, 3, 4, 5).
 3. **K-IN-10** — put IN-46 and IN-47's builds in a batch (M-IN-2; without it M1 cannot be met under v9).
-4. **K-IN-4** — give computed-play execution of the seat verbs one owner (M-IN-4; H-IN-1).
-5. **K-IN-6** — let a battle pause for a person's act inside it (M-IN-6; T-IN-7).
+4. **K-IN-6** — let a battle pause for a person's act inside it (M-IN-6; T-IN-7).
+5. **K-IN-9** — rule what the player is shown (AX-7's gloss against §C.11), then build `explain` to the ruling (M-IN-3; T-IN-10).
+
+K-IN-4 left the five: `confer` already executes (IN-53), and what remains — a motive for `revoke` — sits under Jordan's own H-207 ruling.
 
 ### 10.1 PRIMITIVES
 
 | ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
 |---|---|---|---|---|---|
-| K-IN-1 | Rule one source for per-person capacities that the contest pool, the `Combatant` and the season force all read, or rule that identical capacities are intended and withdraw the claim that personal-scale resolution varies by person. | M-IN-1, H-IN-2, H-IN-4, T-IN-1 (code [CHECKED], 3 subsystems); NERS R-VARIETY | **Jordan**: survives all five — (1) nothing supersedes it; (2) combat and mass battle are retained scales (`requirements.yaml` `scales:`); (3) K-2 "not ratified", J-13's remainder is J.2 rank 1; (4) precedent conflicts — Jordan's "pool only … a derived score … not a character attribute" for the contest (`_part2`:416) against K-2's `Person.attributes` for combat; (5) both options are lawful and give materially different games | adds one per-person source (one field or one derivation from authored data); cuts `pool_default`/`obstacle_default` as person stand-ins, `party_end`'s single-field mapping, and the K-1/K-5/M-2…M-6 LEAVE rows it answers | two persons with different authored capacities give different `tell` degrees and Felled rates over the same seeds; identical capacities reproduce today's `content_hash` |
-| K-IN-2 | Delete the chooser's two inert terms, `urgency` and `benefits_me`, and drop `urgency` from IN-62's planned `score_terms` triple. | §9.2 false N-lines (disqualifiers 5 and 2) [CHECKED `choose.py`:150-193]; audit G5 | takeable, step 3: `urgency`'s own docstring calls it a §F2 defect; `benefits_me` has no caller. **Whether ED-IN-0261's self/other weighting is ever built stays Jordan's** (audit G5, unchanged at `5445e34`) | adds nothing; cuts ~50 lines, one test (`test_w5_…`), one slot in IN-62 | `World.content_hash()` equal at seed 0 before and after (inert by construction) |
+| K-IN-1 | Rule one source for per-person capacities that the contest pool, the `Combatant`, a commander's command and a witness's competence all read, or rule that identical capacities are intended and withdraw the claim that personal-scale resolution varies by person. | M-IN-1, M-IN-7 (competence, H-200), H-IN-2, H-IN-4, T-IN-1 (code [CHECKED], 3 subsystems); NERS R-VARIETY. (The force's size and quality are K-IN-13's: Jordan's statement 1 grades troops by equipment, experience and commander, not by the persons' own capacities) | **Jordan**: survives all five — (1) nothing supersedes it; (2) combat and mass battle are retained scales (`requirements.yaml` `scales:`); (3) K-2 "not ratified", J-13's remainder is J.2 rank 1; (4) precedent conflicts — Jordan's "pool only … a derived score … not a character attribute" for the contest (`_part2`:416) against K-2's `Person.attributes` for combat; (5) both options are lawful and give materially different games | adds one per-person source (one field or one derivation from authored data); cuts `pool_default`/`obstacle_default` as person stand-ins, `party_end`'s single-field mapping, the season's constant `command=4` (`massbattle.py`:183), refraction's constant `competence = 1` (`options.py`:1198-1210), and the K-1/K-5/M-2…M-6 LEAVE rows it answers | two persons with different authored capacities give different `tell` degrees and Felled rates over the same seeds; identical capacities reproduce today's `content_hash` |
+| K-IN-2 | Delete what the season carries and nothing reads — the chooser's `urgency` and `benefits_me`, and an authored OUGHT's `predicate` — unless a reader is ruled for it. (Absorbs the first draft's K-IN-8.) | §9.2 false N-lines (disqualifiers 5 and 2) [CHECKED `choose.py`:150-193]; M-IN-9, T-IN-4 [CHECKED HR H-185; `narration-mechanisms.md`:38-53]; audit G5, T5 | `urgency`, `benefits_me`: takeable, step 3 (`urgency`'s own docstring calls it a §F2 defect; `benefits_me` has no caller); IN-62's `score_terms` keeps `urgency` only as a hash-EQUAL refactor (`_part5`:255), so dropping the slot costs it nothing. The OUGHT `predicate`: takeable, step 5, if IN-66's `goals.yaml` supersedes the `ought:` cast field [CONFIDENCE: medium — IN-66 not read in full]; a reader for it is Jordan's (H-185 `unblocks:`). **Whether ED-IN-0261's self/other weighting is ever built stays Jordan's** | adds nothing; cuts ~50 lines, one test (`test_w5_…`), one slot in IN-62's triple, and H-185's dead field | `World.content_hash()` equal at seed 0 before and after the two chooser deletions (inert by construction); the predicate deletion moves the hash by schema alone (`content_hash` folds every dataclass's `repr`, `_part3`:33), so its falsifier is an unchanged sequence of chosen acts over the same seeds |
 
 ### 10.2 VERBS
 

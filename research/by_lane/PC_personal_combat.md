@@ -376,7 +376,7 @@ Walked: the 33 rows of §4; THE NINE clauses that touch combat (R-04 conjunct 3,
 
 `[SELF-AUTHORED — bias risk: this pass extends a lane file an earlier session of the same orchestration wrote, and §§7-8 above are mine]`
 
-**Target.** `modules/combat` through `seam/wrappers/combat.py`; `fight`, `challenge`, `accept`; `_eff_kill`. Assumed built: PC-10a/b, IN-59 (a), IN-12 steps 5 and 9, IN-72, K-3. As in the audit, LEAVE, unscheduled and "no build batch" count as design gaps, not as built: K-1/K-5, K-2, M-2…M-6, WS-7, Phase 4a/4b, and IN-46's build. **Shipped today** none of PC-10, IN-59, `tend` or IN-72 exists. **Instruments:** A plus one probe; B (`resolution-diagnostic`) was not run, and the draw arithmetic is the audit's A3 [AUDIT].
+**Target.** `modules/combat` through `seam/wrappers/combat.py`; `fight`, `challenge`, `accept`; `_eff_kill`. Assumed built: PC-10a/b, IN-59 (a), IN-12 steps 5 and 9, IN-72, K-3. As in the audit, LEAVE, unscheduled and "no build batch" count as design gaps, not as built: K-1/K-5, K-2, M-2…M-6, WS-7, Phase 4a/4b, and IN-46's build. **Shipped today** none of PC-10, IN-59, `tend` or IN-72 exists. **Instruments:** A plus two probes: the mirror-fight probe through the module entry, and a one-season realm probe for the cohort case. B (`resolution-diagnostic`) was not run, and the draw arithmetic is the audit's A3 [AUDIT]. No probe runs the seeded season through the combat seam for M-PC-2 (§9.7).
 
 ### 9.1 N-line ledger
 
@@ -419,7 +419,7 @@ Walked: the 33 rows of §4; THE NINE clauses that touch combat (R-04 conjunct 3,
 
 ### 9.4 R
 
-- **R-COMPLETE: FINDINGS.** Unwritten branch: the actor's band (M-PC-2, 205/400). `accept` without a challenge (repaired by PC-10b). The trace and `winner` have no reader. At the extremes the engine holds: the logistic clamp (`core.py:26-41`) and `party_end`'s floor of 1 (`seam/wrappers/combat.py:135-138`) [CHECKED].
+- **R-COMPLETE: FINDINGS.** Unwritten branch: the actor's band (M-PC-2; 205/400 in the mirror probe), and with it a false `contest.undecided` when the actor falls and the subject is unwounded (frequency unmeasured). `accept` without a challenge (repaired by PC-10b). The trace and `winner` have no reader. At the numeric extremes the engine holds: the logistic clamp (`core.py:26-41`) and `party_end`'s floor of 1 (`seam/wrappers/combat.py:135-138`) [CHECKED]. At the weight extreme it breaks: a cohort fights as one body and one `Felled` band deletes it (M-PC-12; reached once in five seeded seasons).
 - **R-VARIETY: FINDINGS.** One build (M-PC-1; the audit's A1, re-opened).
 - **R-WORLD: PASS in shape, thin in the tree** [CONFIDENCE: medium]. Violence emerges unwatched: ten season-0 kills, regicides among them (`_part5.md:232`, a session probe the plan quotes). Its hooks are thin: the vacancy is unnamed (M-PC-8), grievance is hash-equal at the shipped arm, and the killer takes no wound.
 - **R-CHOICE: FINDINGS, an upper bound.** Seat: any person; `fight` is `own`-eligible, and the player occupies a person through S-1's dispatch (`_part7.md:44`). Intent: *remove a rival by violence*.
@@ -427,18 +427,18 @@ Walked: the 33 rows of §4; THE NINE clauses that touch combat (R-04 conjunct 3,
   | act | gain | cost |
   |---|---|---|
   | `fight` | subject Felled in ~48.5% of mirror fights (probe control 194/400) | one scene; witnessed; **no body risk to the actor** (M-PC-2) |
-  | `challenge` → (rival) `accept` | the same contest | two acts and the rival's consent; **all body risk falls on the challenger**, who is `accept`'s subject |
+  | `challenge` → (rival) `accept` | **none on the body axis**: the rival is `accept`'s actor; "the writes land on the SUBJECT -- here the challenger" (`verb_table.yaml:604`), and `_eff_kill` reads only `payload["subject"]` (`effects_combat.py:103, :120`), so the duel cannot fell the rival | two acts and the rival's consent; **all body risk falls on the challenger** |
   | `petition`/charge → `determine` → `detain` + `fight` (IN-12 step 5) | a lawful death | proceedings across several scenes and persons |
 
-  **Strict dominance:** `fight` has a gain at least equal to the duel's and a strictly lower cost. To the man who wants a death the duel moves the risk from the target onto himself. This survives planned=built: IN-59 binds all three verbs alike, and PC-10 keeps subject-only writes. **Dependency:** the act economy (IN-14) and the dark `refusal_axis`; a moral refusal of assault would price `fight` alone.
+  **Dominance on the body axis only.** For the intent "remove a rival", `fight` strictly dominates the duel on the body: a positive chance of felling the target at no body cost, against a zero chance at the challenger's whole body risk. That survives planned=built: IN-59 binds all three verbs alike, and PC-10 keeps subject-only writes. **It is not a dominance any chooser can see.** The alignment cells price the acts differently: `grandiose_humble` gives `challenge` −0.6 and `fight` −0.3 (`rosters.yaml:2741, :2743`); `precedent_substantive` cells `challenge` −0.3 and leaves `fight` null (`:2567, :2585`); `deontological_instrumental` gives `fight` +0.3, `challenge` −0.3 and `accept` −0.4 (`:2808-2810`) [CHECKED]. §9.1 grants `challenge` an honour motive, and no chooser term reads odds or body cost (C3). A chooser drawn to honour will pick the duel that can only hurt him. **Dependency:** the act economy (IN-14) and the dark `refusal_axis`; a moral refusal of assault would price `fight` alone.
 
 ### 9.5 S
 
 - **S-UP: N-A** for the module (a resolver at a seam). For the verbs: the vacancy does not reach the seat (M-PC-8).
 - **S-DOWN: PASS in shape** for the news of a fight, which travels by telling [AUDIT]. A challenge's addressed delivery is a demand on its named party, not an opportunity routed by name, so it is no failure.
-- **Coverage.** Vertical (duel ↔ battle): **none** (M-PC-5). Diagonal (fight → proceedings): IN-12 step 5 and IN-72, planned. Lateral: `fight` ↔ `challenge`/`accept` share `_eff_kill` ✓, but `fight` ↔ `march` is **inconsistent**: `march` writes both sides and a grudge. Horizontal (more than two parties): **none** (M-PC-3).
+- **Coverage.** Vertical (duel ↔ battle): **none** (M-PC-5). Diagonal (fight → proceedings): IN-12 step 5 and IN-72, planned. Lateral: `fight` ↔ `challenge`/`accept` share `_eff_kill` ✓, but `fight` ↔ `march` is **inconsistent** on whom the outcome lands: `march` writes the side that lost, the attacker's own claimants included, plus a grudge, and declines to write the winner (`effects_combat.py:179-182, :225-228`); `fight` writes the subject whoever lost. Horizontal (more than two parties): **none** (M-PC-3); and a cohort enters as one body (M-PC-12).
 - **Pauses correctly: FAIL in the tree**, shape designed (IN-46, no build batch; `fight` is one call at RESOLVE).
-- **Methodology: FINDINGS.** (1) A continuous roll plus a logistic in the duel against discrete dice in the season (M-PC-7). (2) One-side writes against `march`'s and `transfer`'s two (`verb_table.yaml:1216`) [CHECKED]. (3) Wound-state bands against margins is lawful by ruling and is not scored.
+- **Methodology: FINDINGS.** (1) A continuous roll plus a logistic in the duel against discrete dice in the season (M-PC-7). (2) Two folds of a contest's consequence follow different parties: `march` the loser, either side; `_eff_kill` the act's subject [CHECKED]. Neither writes both fighters. `transfer`'s "×2, ONE PER SIDE" (`verb_table.yaml:1216`) is the giver and receiver of goods, not an outcome, and is no precedent here. (3) Wound-state bands against margins is lawful by ruling and is not scored.
 
 ### 9.6 The design's own falsifier (§8 of the skill)
 
@@ -448,31 +448,34 @@ Walked: the 33 rows of §4; THE NINE clauses that touch combat (R-04 conjunct 3,
 |---|---|
 | the actor's lifted `wound_state` is never read (`effects_combat.py:120`; seam `:230`) | **clean hit** against "accept the result" |
 | `surrender` lifted and read by nothing (`seam/wrappers/combat.py:116-127, :243`) | clean hit today; closed by PC-10b under planned=built |
-| `winner` returned beside the scene and contradicting it on ~5% of decided fights (H-119) | **borderline**: unread, so harmless, and still a second surface |
+| `winner` returned beside the scene and naming the felled fighter in 6.06% of 300 seeded fights (H-119) | **borderline**: unread, so harmless, and still a second surface |
 | the trace returned and folded nowhere (`:245-252`) | borderline: the band is accepted; the scene's detail is not "the result" |
 | `A.wt.__init__` re-initialises wounds per call (`wrapper.py:498`) | **passes by tracing**: prior wounds reach the scene through `body` → bands → `end` (H-97), designed |
 | `max(1, 4 − bands)` floor | passes by tracing: `party_end`'s ruled floor, the same as `decision.budget`'s |
 | one derived field only | holds: no fabricated party anywhere (`fight.py:45`) |
 
-**Family.** The clean hits cluster in one family: **what the scene computed for anyone but the act's subject.** The discipline's exception list is missing "the second party". The repair is not a free one-liner: it needs per-band writes declared on the actor (the `transfer` one-per-side precedent) and a second `Subject` in `_eff_kill`'s `Change`.
+**Family.** The clean hits cluster in one family: **what the scene computed for anyone but the act's subject.** The discipline's exception list is missing "the second party". The repair is not a free one-liner. It needs per-band writes declared on the actor and a second `Subject` in `_eff_kill`'s `Change`. Its precedent covers half of it. `march` writes the side that lost even when that is the attacker's own, which is precedent for writing a felled actor. It declines to write the winner, so writing a standing actor's wounds has no precedent. It also re-pins an executed test: `test_season_shape.py:13727-13733` fights `we0` (actor `p_low` felled) and asserts `[e.kind for e in evs] == ["body.changed"]`.
 
 ### 9.7 Self-audit
 
-- **9a.** (1) §0's "What is solid" sentence on the bands is narrowed by M-PC-2 to the subject. The brief bars rewriting §§0-6, so the narrowing is recorded here and in §11. (2) Recovery was first drafted as MISSING; `tend`'s EXIT moved it to 8.4, and 8.1 was re-counted. (3) The 48-cell figure assumes PC-10's three terms.
-- **9b.** The probe is a scratch file. M-PC-2's repair adds writes, not a store. M-PC-6's surface reads the engine and stores nothing; the grep shows no odds already shown on a game path. No disqualifier fires.
-- **An independent reviewer would add:** a seeded season arm with M-PC-2 repaired; `resolution-diagnostic` over the duel's roll; a re-measure of the July reach and tradition figures.
+- **9a.** (1) §0's "What is solid" sentence on the bands is narrowed by M-PC-2 to the subject. The critic's `contest.undecided` finding changed that §0 claim, so §0 now states the narrowing (§11). (2) Recovery was first drafted as MISSING; `tend`'s EXIT moved it to 8.4, and 8.1 was re-counted. (3) The 48-cell figure assumes PC-10's three terms. (4) The draft called `march` a both-sides precedent and the duel "the same contest" for the challenger; both were wrong (§7.2 item 9; §9.4), and the dominance is now bounded to the body axis.
+- **9b.** The probes are scratch files. M-PC-2's repair adds writes, not a store. M-PC-6's surface reads the engine and stores nothing; the grep shows no odds already shown on a game path. No disqualifier fires.
+- **Attacks not run, so every verdict that rests on them is paper.** (i) Instrument B (`resolution-diagnostic`) over the duel's roll. (ii) A seeded season arm for M-PC-2: the mirror probe bypasses `party_end`, the seam's seed derivation (`seam/wrappers/combat.py:222`), `combat_degree` and `_eff_kill`, so the season's actor-felled rate and the `contest.undecided` false-report rate are unmeasured. (iii) The realm kill counts IN-59 quotes ("0 of 10", "0 of 14"): plan text, not re-run. (iv) The July reach and tradition figures, the combat workbench and `corpus_run`. (v) C5's path construction is walked on paper. The mirror probe's 205/400 confirms only symmetry: about half is forced by a coin-flip first mover and a stop at the first felling (`wrapper.py:514, :516-520`), and the control adds no independent evidence.
 
 ### 9.8 Verdict
 
 ```
-NERS PASS: PC lane, code at 5445e34 + v9 assumed built          INSTRUMENTS: A (+ one probe)
+NERS PASS: PC lane, code at 5445e34 + v9 assumed built          INSTRUMENTS: A (+ two probes)
 
 MUST BE STATED AS A LIMIT
-  - "the code accepts the engine's result" — for the subject only (M-PC-2)  [C1; R-COMPLETE]
+  - "the code accepts the engine's result" — for the subject only; a felled actor
+    with an unwounded subject is reported `contest.undecided` (M-PC-2)  [C1; R-COMPLETE]
   - "resolution varies by person" — only `end` varies (M-PC-1)  [C1, C2]
-  - "a duel is a fight both agreed to" — only the challenger can be hurt; assault dominates  [R-CHOICE]
+  - "a duel is a fight both agreed to" — only the challenger can be hurt; on the
+    body axis assault dominates, and no chooser term sees it  [R-CHOICE]
   - "a duel reshapes standing" — expressible, not implementable  [C5]
   - "grid combat with units" / squads — no carrier; the input type admits two  [C1, C2]
+  - "a cohort is a person at weight > 1" — at the combat seam, weight is not read (M-PC-12)  [R-COMPLETE]
 MAY BE CLAIMED, HAVING SURVIVED
   - `fight` is necessary — the loss walked through `march`, MATTER, `detain`; narrowed
   - the band is read off the scene — searched for a winner→band mapping; none (T-PC-8)
@@ -484,22 +487,22 @@ MAY BE CLAIMED, HAVING SURVIVED
 | N (six directions) | FINDINGS: `fight` holds, narrowed; `challenge` holds, narrowed [medium]; false N-lines: the returned trace, `UPSET_FLOOR` at season scale, module depth at season scale | a reader of the trace in a built position; K-1 scheduled |
 | E-OVERHEAD | FINDINGS: 5,643 lines behind 16 (48) input cells | K-1 or K-2 scheduled with a first reader |
 | E-LEGIBILITY | FINDINGS: no odds shown; the depth reaches no choice | an odds or band surface on a game path |
-| R-COMPLETE | FINDINGS: the actor's band unwritten | a ruling that a fight harms only its subject |
+| R-COMPLETE | FINDINGS: the actor's band unwritten, with a false `contest.undecided`; a cohort fought as one body | a ruling that a fight harms only its subject; a ruling that a cohort fights as one person |
 | R-VARIETY | FINDINGS: one build | two persons with different authored inputs giving different Felled rates at fixed seeds |
 | R-WORLD | PASS in shape, thin in tree [medium] | a seeded multi-season run where a killing's vacancy and grievance change a later act |
-| R-CHOICE | FINDINGS (upper bound): `fight` strictly dominates `challenge`→`accept` for the intent "remove a rival" | symmetric writes, or an authored refusal pricing assault |
+| R-CHOICE | FINDINGS (upper bound): on the body axis `fight` strictly dominates `challenge`→`accept` for the intent "remove a rival" (the duel cannot fell the rival); the alignment cells price the two differently, so no chooser sees the dominance | writes that let the duel fell the rival, or an authored refusal pricing assault |
 | S-UP | N-A (module) / FINDINGS (vacancy unnamed) | H-206's office half built |
 | S-DOWN | PASS in shape [AUDIT] | a telling routed by name |
-| S coverage · pause · methodology | FINDINGS: no vertical or horizontal carrier; no pause; two substrates; one-side vs both-side writes | IN-46 built; M-6 scheduled; one substrate |
+| S coverage · pause · methodology | FINDINGS: no vertical or horizontal carrier; no pause; two substrates; `march` follows the loser, `fight` the subject | IN-46 built; M-6 scheduled; one substrate |
 | the design's own falsifier | HITS: one family, "the second party" | a hit traced to a ruling that the actor is exempt |
-| self-audit | 9a: one narrowing recorded, one reclassification re-counted; 9b: none fires | an independent seeded run of the repair |
+| self-audit | 9a: one narrowing now stated in §0, one reclassification re-counted, two precedent errors corrected; 9b: none fires | an independent seeded run of the repair |
 
 REPAIRS (worst first; each a deletion or one object):
-1. M-PC-2 → write both parties' bands through `_eff_kill` (declared per band on the actor; `transfer`'s one-per-side precedent).
+1. M-PC-2 → write a felled actor's band through `_eff_kill` (declared on the actor; `march`'s loser-following precedent), and re-pin `test_season_shape.py:13727-13733`. A standing actor's wounds have no precedent and are Jordan's.
 2. M-PC-1 → one field (`Person.attributes`) and one reader (`party_end`), or a ruling that identical fighters are intended. Jordan's.
 3. The false N-lines → drop `winner` from the seam's return. Either give the trace one reader (the chronicle, as one Event payload field) or stop returning it.
 
-**GRADE: paper** for the pass. The planned-built object cannot run. One claim carries an execution artifact: the probe for M-PC-2's frequency (400 seeded fights, figures above). `python -m engine.season.harness.register --requirements` was re-run read-only this pass (exit 0; met 3 · not_met 1 · partial 5; R-04 and R-09 partial). Not run: `corpus_run`, `aperture 4 0`, the combat workbench, `resolution-diagnostic`.
+**GRADE: paper** for the pass. The planned-built object cannot run. Two claims carry an execution artifact: the mirror probe (400 fights through the module entry; it shows symmetry, not the season's rate) and the cohort probe (five seeded one-season realm runs: 1 of 63 contested body acts named a cohort subject). `python -m engine.season.harness.register --requirements` was re-run read-only this pass (exit 0; met 3 · not_met 1 · partial 5; R-04 and R-09 partial). Not run: `corpus_run`, `aperture 4 0`, the combat workbench, `resolution-diagnostic`.
 
 ## 10. KEY RECOMMENDATIONS
 
@@ -507,18 +510,18 @@ This is an audit-design pass over six months of repository work. Jordan, 2026-10
 
 ### 10.0 Top five, worst problem first
 
-1. **K-PC-1:** let who a person is decide how he fights (M-PC-1). Without it the lane does not exist in play.
-2. **K-PC-2:** make a fight's outcome land on both fighters (M-PC-2). Without it violence is free for the man who starts it, and the duel is a trap for the challenger.
-3. **K-PC-4:** put the player inside the fight (M-PC-4). R-04, and therefore M1, cannot be met without it, and the engine is a spectator engine until then.
-4. **K-PC-5:** let fights hold more than two people (M-PC-3). Guards, seconds and rescues are the drama an assassination or a duel is made of.
-5. **K-PC-6:** let a duel happen inside a battle, and a battle pause for one (M-PC-5). The scales do not zoom without it.
+1. **K-PC-1:** let who a person is, and what he carries, decide how he fights (M-PC-1). Without it the lane does not exist in play.
+2. **K-PC-2:** when the scene fells the man who started the fight, write it (M-PC-2). Without it violence is free for its starter, a duel can only hurt the challenger, and a felled attacker is reported as an undecided fight.
+3. **K-PC-4:** put the player inside the fight, one engagement per act (M-PC-4). R-04, and therefore M1, cannot be met without it, and the engine is a spectator engine until then.
+4. **K-PC-12:** let no single fight fell a cohort (M-PC-12). Today one duel can delete "the people of" a place, and computed play has formed such an act.
+5. **K-PC-5:** let fights hold more than two people, and let a battle hold a duel, through one outer loop over `engagement()` (M-PC-3, M-PC-5). Guards, seconds, rescues and champions are the drama an assassination, a duel or a battle is made of.
 
 ### 10.1 PRIMITIVES
 
 | ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
 |---|---|---|---|---|---|
-| K-PC-1 | Give every person combat inputs (attributes, and kit held as holdings) that the fight reads, or rule that identical fighters are intended and stop presenting the duel as person-varying | M-PC-1; T-PC-9; T-PC-7; audit A1, G1 | **Jordan**: survives all five. Nothing supersedes it; combat is retained (`requirements.yaml:143`); K-2 is "not ratified" (`_part7.md:44`); J-13 (iii) covers the contest only. Both options give materially different games | adds one field and one reader (`party_end`); kit rides existing `hold` tenures. Cuts the seam's class defaults and the X4 park | two persons with different authored inputs give different Felled rates at the same seeds; identical inputs reproduce today's `World.content_hash()` |
-| K-PC-3 | Cut `winner` from the personal-combat seam's return, so the only outcome surface is the scene's own wound state | T-PC-10 (d); H-119 (measured 6.06%); §9.1 false N-line | **takeable, step 2 (irrelevant)**: nothing reads it (grep, 0 non-test hits) | cuts one key and the season-scale meaning of `UPSET_FLOOR`'s flip; adds nothing | grep finds no `winner` on the seam's return; every band and `content_hash` at seed 0 are unchanged |
+| K-PC-1 | Give every person combat inputs (attributes, experience, and kit held as holdings in one equipment model shared with mass battle) that the fight reads, or rule that identical fighters are intended and stop presenting the duel as person-varying | M-PC-1; T-PC-9; T-PC-7; Jordan statement 1 (D1); #445 U-2; audit A1, G1 | **Jordan**: survives all five. Nothing supersedes it; combat is retained (`requirements.yaml:143`); K-2 is "not ratified" (`_part7.md:44`); J-13 (iii) covers the contest only. Both options give materially different games | adds one field and one reader (`party_end`); kit rides existing `hold` tenures. **Cuts one of the two weapon-and-armour models**: `modules/combat/weapons.py` and the unwired `modules/mass_battle/equipment/` become one (U-2), so kit is not authored twice, once per scale | two persons with different authored inputs give different Felled rates at the same seeds; identical inputs reproduce today's `World.content_hash()`; one weapon id resolves in both scales from one table |
+| K-PC-3 | Cut `winner` from the personal-combat seam's return, so the only outcome surface is the scene's own wound state | T-PC-10 (d); H-119 (6.06% of 300 seeded fights); §9.1 false N-line | **takeable, step 2 (irrelevant)**: no game code reads it (grep, 0 non-test hits) | **cuts** one key and the season-scale meaning of `UPSET_FLOOR`'s flip, and re-pins the one test that reads it (`test_season_shape.py:8758-8764`, which counts `["winner"]` to show condition reaching the engine) onto `wound_state[...]["felled"]`; adds nothing | grep finds no `winner` on the seam's return; the re-pinned test still shows healthy beating dying; every band and `content_hash` at seed 0 are unchanged |
 
 ### 10.2 VERBS
 
