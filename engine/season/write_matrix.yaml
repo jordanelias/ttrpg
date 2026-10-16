@@ -264,7 +264,7 @@ rows:
     class:   "ACTS"
     social:  "true"
     by:      "D7 — `create` by an act (§13). ⚠ PLAN POSITION `15` FOLDED TWO ROWS INTO THIS ONE: `(Petition, exists)` and `(Dispensation, exists)` (W2/H-43, both `[RES]`, ACTS, `social: true` -- identical to this row) are deleted, because a petition and a dispensation are KINDS of `Record` (`04_CODE_ARCHITECTURE.md` §B.5, `rosters.yaml: record_kinds`). H-43's point survives the fold unchanged: creation goes THROUGH the gate, on this row. Their two kinds are carried here so the fold drops nothing either row declared"
-    emits:   "`record.created` · `record.destroyed` · `petition.filed` · `dispensation.issued` · `faction.surveyed`"
+    emits:   "`record.created` · `record.destroyed` · `petition.filed` · `dispensation.issued` · `faction.surveyed` · `record.forged`"
   - kind:    "Record"
     field:   "forgery_quality"
     steps:   [RES]
@@ -272,6 +272,7 @@ rows:
     social:  "true"
     by:      "DR-2"
     emits:   "`record.forged`"
+    unproduced: "H-210: v9 IN-45's `forge` mints a forged sheet and deliberately does not write this field -- nothing reads it; its writer lands with its reader, the examination SC-02 `22b` step 25 builds (B-P)"
   - kind:    "Record"
     field:   "matured"
     steps:   [MAT]

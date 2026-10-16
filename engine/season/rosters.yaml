@@ -1675,9 +1675,27 @@ rosters:
       formed on, on a row whose second side a known person fills (`known_person_operands`): the
       document's addressee is then a second side beside the persons the holder knows. No faction
       actor, no new form, no ninth operand, no coined name.
+      ⚠ `faction_sheet` IS THE SHEET CONSUMER (v9 IN-45 `forge`, H-169 limit 5: *"no operand, cell or
+      score reads `members`/`holdings`/`seats` off a `content:faction_sheet` claim"*), on H-169's own
+      design order -- *"a sheet-sourced operand, `15c`'s route"* -- and so a ROW HERE, not a branch.
+      A sheet answers `to` with the `head` it names: on a question about a sheet its holder holds,
+      a petition (`to` bound without `subject`, reader (1)) is ADDRESSED TO WHOEVER THE SHEET SAYS
+      HEADS THE FACTION -- the decision H-169's `unblocks:` names (*"a petition's addressee"*). A
+      stale or forged sheet addresses it wrongly, and nothing tells the petitioner. `head` and not
+      `members`/`seats`: it is the sheet's one single-person key, so it answers without
+      `_content_answer`'s singleton collapse; `seats` are offices and a petition's addressee is a
+      Person (`verb_table.yaml`'s `petition` row). `subject: proposition` keeps reader (2) on its
+      own rule -- a held sheet adds a fanned bag only on an act about the faction it describes --
+      where a sheet mapping no `subject` would pass that check vacuously on every referent.
+      [ASSUMPTION; medium; Jordan to correct; revert: drop this row and the sheet is read by nothing
+      again.] `head` is `None` on every true sheet this tree builds today (`queries/faction_q.py::
+      head`: no `commit` carries a degree), so a true sheet answers nothing and falls through to the
+      referent exactly as before; a forged one names its forger (`loop/effects_information.py::
+      _eff_forge`).
     values:
       dispensation: {to: to, subject: terms}
       petition:     {to: to, subject: terms}
+      faction_sheet: {to: head, subject: proposition}
 
   shortfall_sourced_operands:
     source: >-

@@ -88,9 +88,15 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # fanned row's bags gain a held Record's addressee (`record_sourced_operands`). The build hash is equal;
 # one and two seasons move. Was bb08f4b2... / cdeda7fd... (one, two seasons); `aperture 1 0` realm acts
 # 602 -> 598, `issue` attempted 3 -> 2 (executed 1 -> 1), `levy` attempted 3 -> 2.
+# RE-PINNED at v9 IN-45 `forge` (B-K), A BEHAVIOUR MOVE DECLARED: `forge` entered `resolvable_verbs()`
+# (typed with `survey`'s cell, `_eff_forge`), so the chooser offers it. The build hash is equal; one and
+# two seasons move. Was 5bbcba33... / 39bf9d83... (one, two seasons). CONTROL, run: the same tree with
+# `forge` withheld from the chooser's verbs reproduces both old values exactly, so the sheet consumer
+# (`record_sourced_operands.faction_sheet`) and the shared mint move nothing here. `forge` writes no
+# `forgery_quality` (`H-210`, deferred to SC-02 `22b`), so a forged sheet hashes at the field's `0`.
 BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
-               1: "5bbcba336a72636db1001ff3ca6342c4",
-               2: "39bf9d8321bbaf675d09b2c3d243d400"}
+               1: "002af95591e4715c762b000947ecdc4d",
+               2: "1282141c95aa75fee58d7b725dee4759"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -111,8 +117,9 @@ BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
 # RE-RECORDED at v9 FA-05 with `BASE_HASHES` (7187 -> 6542, 19798 -> 18583).
 # RE-RECORDED at v9 FA-06 with `BASE_HASHES` (6542 -> 7094, 18583 -> 19454).
 # RE-RECORDED at v9 IN-10 with `BASE_HASHES` (7094 -> 7056, 19454 -> 20148).
-BASE_EVENTS = {1: (7056, "9e0b8a436b74443748d7a15b7a5d82da797ddf2bdc30cebb041bdfb14d54c119"),
-               2: (20148, "90773aa66a7f5bdce05d833607dfcc6ae1994daf3f28ac9df8bd088e44eb6316")}
+# RE-RECORDED at v9 IN-45 `forge` with `BASE_HASHES` (7056 -> 7338, 20148 -> 21313).
+BASE_EVENTS = {1: (7338, "61badf23059900a75ea2f336def54cbcf5a5e9b56be31a769a1a39f99e0405e9"),
+               2: (21313, "67384221d8c506d6f32200636275a77bbff011f0cf53ad03f7ff599c8a718232")}
 
 
 def _digest(w) -> tuple:
