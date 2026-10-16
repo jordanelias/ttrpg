@@ -220,10 +220,10 @@ for, not which source wins a conflict. Where nothing decides, the item goes to C
 | `restore` executes? | (5) | refused | SE's run: 25 refused, 0 executed over two seasons [LANE SE §9]; `req:163-166` is stale | — |
 | `march` in the realm | (5), not run | unreconciled | `req:675` "16/16" against `req:1124` "all 11 refused"; needs `aperture 4 0`; p2:178 [UNVERIFIED] | — (C9) |
 | inquiry rows writing nothing | (5) | both | six rows (BASELINE B3); five if `thread_read` is threadwork | — |
-| IN-14's state | (3), entry over index | the entry (B, B-J, MORE ROUNDS) | [CHECKED p4:25-27]; FA and IN both flagged it | — |
+| IN-14's state | (4), entry over index | the entry (B, B-J, MORE ROUNDS) | [CHECKED p4:25-27]; FA and IN both flagged it | — |
 | delegation's class | definitional | — | IN-48 is STATE B in an "unscheduled" batch | J-C-10 |
-| parity contract | (2) over (5) | hash equality in the integer domain | [CHECKED L1-04:1119]; GO itself takes the hash [LANE GO §9.5] | J-C-11 (version) |
-| thread History term (audit G7) | (4); §0.05 | WR: a ruling | code reads `min(3, history + 3)` [CHECKED `systems/threadwork/sim/operations.py:246`]; the alternative rests on a comment and PP-624 has no `registers/` row [LANE WR §8.4] | J-C-23 |
+| parity contract | (2) over (6) | hash equality in the integer domain | [CHECKED L1-04:1119]; GO itself takes the hash [LANE GO §9.5] | J-C-11 (version) |
+| thread History term (audit G7) | (5); §0.05 | WR: a ruling | code reads `min(3, history + 3)` [CHECKED `systems/threadwork/sim/operations.py:246`]; the alternative rests on a comment and PP-624 has no `registers/` row [LANE WR §8.4] | J-C-23 |
 | one substrate (audit G2d) | (1) | PC: a ruling | combat is exempt from the ladder's bands by ruling (T-PC-13); the choice moves every combat balance figure | J-C-18 |
 
 ### C4.2 The lanes against the uploaded NERS audit
@@ -244,25 +244,26 @@ v9 built; an unbuilt-but-planned row does not contradict it.
 | A5 S-UP petition | holds | agree | SC M-SC-2 |
 | A5 R-CHOICE `levy` | holds, on the misnamed store act | **re-labelled** (statement 5) | IN M-IN-13; SE H-SE-1 |
 | A6 `doc: null`; governance verbs; no births | holds | agree, extend (labour, exchange, adjacency) | SE M-SE-1, -2, -4, -5 |
-| A7/T2 force unresolvable | holds | agree; **repair superseded** (stock, not conversion) | MB M-MB-15; IN §10.7 G3 |
+| A7/T2 force unresolvable | holds | agree; **repair relocated** (the conversion moves from `_weighted_unit` to the levy) | MB M-MB-15; IN §10.7 G3 |
 | A8 history term; post-crossing; free Mending; empty inquiries | holds; cost 0 at 16 cells, executed | agree, extend | WR M-WR-2, -4, -7; FI M-FI-1 |
 | A9 AX-7 falsifier by its letter | holds; sites moved | agree, extend (X-15) | IN §10.7 |
 | R-WORLD | holds | agree, extend (ages unauthored; drought stays in surplus) | WR M-WR-8; SE §9 |
 | T2, T4, T5, T6 | hold (T2 narrowed; T5 one seed; T6 now 88,377 lines) | agree | MB T-MB-2; IN T-IN-3, -4, §10.7 |
-| G1 capacity source | survives | agree; carrier contested | X-14 |
+| G1 capacity source | survives | agree; carrier decided toward attributes by ED-IN-0185 Q7 | X-14 |
 | G2a, G2b, G2c (Jordan) | survive | agree | K-IN-5; K-MB-7; K-MB-8 |
 | G2d one substrate, agent | Jordan | **diverge** | K-PC-8 |
-| G3 weight→troop conversion | superseded by statements 1, 3-5 | **overturned** | IN §10.7; K-MB-1 |
-| G4 delete dedup | not a free cut | **overturned** | K-IN-3 |
+| G3 weight→troop conversion | its site moves: K-MB-1 still needs "the men-per-weight scale `[OPEN — Jordan tuning]`" [CHECKED `MB_mass_battle.md:715`], applied at the levy instead of at `_weighted_unit` [CHECKED `references/ners_audit_2026-10-14.md:432`] | **relocated** | IN §10.7; K-MB-1 |
+| G4 delete dedup | not a free cut | **narrowed**: the audit already routed a red R-03 to Jordan [CHECKED `references/ners_audit_2026-10-14.md:433`]; the lanes add the §C.2 conflict and a measured monoculture | K-IN-3 |
 | G5 delete `urgency`, `benefits_me` | survives, after IN-62; ED-IN-0261 Jordan's | agree | K-IN-2; M-NPC-12 |
 | G6 AX-7 sites; gloss | sites survive; gloss Jordan's | partly diverge | K-IN-9; K-GO-6 |
 | G7 history term, agent | a ruling | **diverge** | K-WR-7 |
 | G8 head rows | survives; one head sits in `.audit/`, outside `CURRENT.md:13`'s caveat | agree, extend | WR §0 #1 |
 | G9; X1-X7; X8 | survive; X8 precondition unverified | agree | IN §10.7 |
 
-**Overturned by the lanes:** G3 (form), G4 (free cut), G7 and G2d (ladder results), A4 (v) (as a missing
-area), A5's `levy` finding (re-labelled). **Extended past the audit:** the troop chain, the DELIBERATE pause,
-labour, adjacency, authored ages, the actor's own reading.
+**Overturned by the lanes:** G7 and G2d (ladder results), A4 (v) (as a missing area). **Relocated or
+narrowed:** G3 (the conversion moves to the levy), G4 (the audit's own R-03 escalation, widened to a Layer 1
+conflict), A5's `levy` finding (re-labelled). **Extended past the audit:** the troop chain, the DELIBERATE
+pause (a specification, latent until step 12), labour, adjacency, authored ages, the actor's own reading.
 
 ---
 
@@ -274,7 +275,7 @@ labour, adjacency, authored ages, the actor's own reading.
 |---|---|---|
 | persons differ in wants, not capacities | IN T-IN-1, PC T-PC-9, MB T-MB-15, SC T-SC-2, NPC T-NPC-4, FI T-FI-7 | **no**: one measurement (req:1244-1247) relayed six times — redundancy, not corroboration (CLAUDE.md §10) |
 | built ahead of readers; controls shipped off | IN T-IN-3, NPC T-NPC-3/-5, SE T-SE-9, WR T-WR-8, FA T-FA-5, PC T-PC-7, GO T-GO-2 | **yes**: different knobs opened by each lane |
-| a levy takes people, and their labour and future | MB T-MB-5, SE T-SE-4, IN T-IN-14, FA T-FA-16 | **yes**: history (FASE), precedent (20G A3, Proposal F) and Jordan agree; the plan is the outlier |
+| a levy takes people, and their labour and future | MB T-MB-5, SE T-SE-4, IN T-IN-14, FA T-FA-16 | **yes**: history (FASE) and precedent (20G A3, Proposal F) agree; Jordan's statements agree that a levy raises troops, not goods, and leave its population cost open (J-C-2); the plan's premise is the outlier |
 | acts record that, not what | IN T-IN-4, FI T-FI-1, NPC T-NPC-13, WR T-WR-4 | partly: rows independent; the 52-of-52 datum is one seed |
 | one resolver, several fidelities | MB T-MB-3, PC T-PC-8, IN T-IN-5 | no: one precedent (Total War auto-resolve) |
 | **null:** no precedent for the hand-off above the bout | MB T-MB-4, PC T-PC-15, IN T-IN-7 | sound; the built `Command=0` rout breaks the borrowed fraction rule [LANE MB §0 #8] |
@@ -309,7 +310,7 @@ Frostpunk and Old World unexamined; every empty-cell and novelty claim inherits 
 | 2 named-agent cardinality | 46, closed "for now" | no |
 | 3 contested object | seats and allegiance; land (occupation planned, IN-13) | **labour and time empty** (SE M-SE-5; no ending) |
 | 4 player position | embedded: the player is one person's decision procedure [CHECKED L1-04:844-846] | no |
-| 5 control channel | rung 1 only; rung 3 (delegate) reverted; rung 4 (lobby a body) unbuilt; rung 2 (zone) absent | **2, 3, 4 empty today; 2 empty planned** |
+| 5 control channel | rung 1; rung 3 (delegate) reverted; rung 4 (lobby a body) partly built, a court, not a vote: computed `open_case` and `determine` execute and dispose `oblige` [CHECKED `SC_social_contest.md:370`], the vote over commitments is blocked on J-4 [CHECKED `SC_social_contest.md:388`]; rung 2 (zone) absent | **2 and 3 empty today, 4 partly; 2 empty planned** |
 | 6 coupling latency | belief carried by telling (4 of 1,270 claims [LANE NPC T-NPC-2]); scars accrue | **lagged cohort empty** |
 | 7 durability | persistent, no ending (H-176) | ending empty until IN-27 |
 | clock count; legibility | two clocks, auto-resolve only (T-MB-12); no legibility strategy | the second clock buys nothing a player touches (20G directive 6); **legibility empty** |
@@ -322,7 +323,7 @@ allegiance) crossed in shape, thin in delivery; cell 4 (zone and delegate togeth
 |---|---|---|
 | A1 allegiance with a delay | **crossed in shape** (telling, regard at read); loyalty seed static | NPC T-NPC-1, -2; IN T-IN-12 |
 | A2 zone plus delegate | **not crossed** | IN M-IN-5; NPC M-NPC-11; FA T-FA-15 |
-| A3 conscription removes a cohort | **not crossed, refused by v9** (LF-1); this is statements 1 and 5; Proposal F ("The Levy", B+) needs births for its lag | MB M-MB-15; SE M-SE-9; FA M-FA-10; IN M-IN-12 |
+| A3 conscription removes a cohort | **not crossed, refused by v9** (IN-52's premise; LF-1's "does not create troops" half); statements 1 and 5 withdraw that premise but leave A3's cell, a levy that removes a cohort, open (J-C-2); Proposal F ("The Levy", B+) needs births for its lag | MB M-MB-15; SE M-SE-9; FA M-FA-10; IN M-IN-12 |
 | A4 relational victory | **partly** (IN-27's Query over seats; GD-1 unresolved) | FA T-FA-4, K-FA-6 |
 | A5 graduated agent layer | **crossed in mechanism, not in data** | NPC T-NPC-3; IN T-IN-3 |
 | A6 ephemerality with carry-over | not applicable (persistent); unaddressed | — |
@@ -331,7 +332,8 @@ allegiance) crossed in shape, thin in delivery; cell 4 (zone and delegate togeth
 | A9 belief with provenance | **crossed**, ahead of the twenty; deceit and fabrication absent | IN T-IN-13; FI T-FI-4 |
 
 Valoria has crossed the epistemic asymmetries (A1, A9) the political corpus lacks and not the demographic ones
-(A3, lagged cohort, labour) the settlement corpus supplies. Jordan's statements point at A3.
+(A3, lagged cohort, labour) the settlement corpus supplies. Jordan's statements remove the plan's refusal of
+A3 without choosing it: whether a levy costs population is left open (J-C-2).
 
 ---
 
