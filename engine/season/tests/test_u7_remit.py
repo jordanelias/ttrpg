@@ -740,12 +740,24 @@ def test_sc03a_the_determination_basis_closes_a_restraint_and_nothing_else():
     assert checked == 2
     # The planted `hold` is ON THE JUDGING SEAT ITSELF -- the one object the clause's `t.object == via`
     # test lets through, so it is the closure only the KIND test can refuse (a hold elsewhere would be
-    # refused by the object test and observe nothing about the kind). A Record hold is planted too.
+    # refused by the object test and observe nothing about the kind).
+    # RE-RECORDED (v9 IN-12 step 6, `seize`): a closure of another person's `hold` on a RECORD is no longer
+    # refused by the gate -- it is admitted under the new `seizure` basis, by this same seat (granted
+    # `issue`, purview over the holder's home), and the warrant that licenses it is the effect's to read.
+    # So the planted Record hold leaves the `NotYours` loop and the test asserts the basis that admits it:
+    # `seizure`, never `determination` (a bench closes a restraint and nothing else), and not for a
+    # non-seated actor.
     _petition(w, "rec_held")
-    seated = Tenure("t_seated", PARTY, SEAT, "hold", since=w.tick)
     held = Tenure("t_held", PARTY, "rec_held", "hold", since=w.tick)
+    w.add_tenure(held)
+    was_held = Tenure("t_held", PARTY, "rec_held", "hold", since=w.tick)
+    held.until = w.tick
+    assert G.tenure_write_basis(w, held, was_held, DUKE, SEAT, frozenset()) == G.SEIZURE
+    assert G.tenure_write_basis(w, held, was_held, "p_other", SEAT, frozenset()) is None
+    held.until = None
+    seated = Tenure("t_seated", PARTY, SEAT, "hold", since=w.tick)
     owed = Tenure("t_owed", PARTY, SEAT, "oblige", since=w.tick)
-    for t in (seated, held, owed):
+    for t in (seated, owed):
         w.add_tenure(t)
         with pytest.raises(NotYours):
             w.write("Tenure", mint_token(w, WriteClass.ACTS),
