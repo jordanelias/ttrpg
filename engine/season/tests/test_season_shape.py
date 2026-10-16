@@ -7852,8 +7852,17 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # all on the question's single referent, 106 of them his own residence). It EXECUTES in computed
     # play in the realm (`aperture 1 0`: 1 of 31; read, not asserted, v9 §0.5). A re-record, said
     # so; the hand-built proof is `test_migrate_capacity.py` section 5.
+    # ⚠⚠ v9 IN-49 `levy`, ELEVEN -> TEN: `levy` LEAVES -- and NOT by executing, here or in the realm.
+    # It declares `referent_class: Rung` and forms only on a larder `world_q.larders_in_purview`
+    # stamps (a stocked rung the holder's own ledger names, inside his seat's purview, not the seat's
+    # own rung) or a place `places_named` stamps, and in no corpus world does a seat holder know of
+    # one: the only stocked rung any did know of was his seat's own (NPC-083, 4 attempts, refused on
+    # the `write` clause before the treasury clause). So it is attempted in no corpus world, as
+    # `migrate` above; before the class its attempts were on the question's single referent and all
+    # refused. A re-record, said so; it executes only from computed acts on a hand-built world
+    # (`test_u7_remit.py` section 9), and H-163 limit 3 names the residue (the knowledge source).
     assert refused_only == {"build", "found", "work", "survey", "commit", "dispatch",
-                            "examine", "levy", "restore", "forge", "carry"}, (
+                            "examine", "restore", "forge", "carry"}, (
         f"the always-refused set moved to {sorted(refused_only)}. `move` and `transfer` left it "
         "when `W-C` closed `H-94`'s structural half — the Candidate carries operands now — and "
         "`work` stays for a reason about the corpus's questions rather than about the channel")
@@ -8713,9 +8722,15 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # already live under), and in this corpus `places_named` is non-empty in no call, so it is foldable
     # and never attempted here; in `build_realm(0)` it executes (`aperture 1 0`: 1). `corpus_run`'s
     # `foldable but never even attempted`: 10 -> 11.
+    # ⚠ ELEVEN -> TWELVE, v9 IN-49 `levy` (2026-10-16): `levy` JOINS, from the always-refused set. It
+    # forms only on a `Rung`-classed referent -- a larder `world_q.larders_in_purview` stamps or a
+    # place `places_named` stamps -- and no corpus seat holder knows of a stocked rung his seat may
+    # levy other than the seat's own (`refused_only`'s note), so it is foldable and never attempted
+    # here. It executes in no world but a hand-built one (H-163 limit 3). `corpus_run`'s `foldable but
+    # never even attempted`: 11 -> 12.
     assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish",
                                               "destroy_record", "march", "oblige", "open_case",
-                                              "determine", "comply", "migrate"}, (    # IN-57: `dispatch` out, to `refused_only`
+                                              "determine", "comply", "migrate", "levy"}, (    # IN-57: `dispatch` out, to `refused_only`
         f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Five of "
         "the original six are the governance verbs no corpus overlay grants (`establish` is "
         "`remit:confer`-eligible); `march` is eligible in NPC-033/038 and WOULD form a real "
@@ -9939,9 +9954,13 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # ⚠⚠ v9 IN-45 `migrate`: `migrate` LEAVES, attempted in no corpus world -- it forms only on a
     # place `world_q.places_named` stamps and no corpus ledger names one (the note at
     # `test_the_corpus_runs_and_the_ranking_cannot_discriminate`'s `refused_only`). A re-record.
+    # ⚠⚠ v9 IN-49 `levy`: `levy` LEAVES, attempted in no corpus world and NOT executing -- it forms
+    # only on a `Rung`-classed referent and no corpus seat holder knows of a larder his seat may levy
+    # (the note at `test_the_corpus_runs_and_the_ranking_cannot_discriminate`'s `refused_only`). A
+    # re-record.
     assert set(refused) - set(executed) == {"work", "found",
                                             "build", "survey", "commit", "dispatch",
-                                            "examine", "levy", "restore", "forge", "carry"}, (
+                                            "examine", "restore", "forge", "carry"}, (
         f"the always-refused set is {sorted(set(refused) - set(executed))}. `work` refuses because "
         "its `site` operand binds either to a non-Site referent (UNKNOWN) or to a real site whose "
         "condition never clears the floor in this corpus; `dispatch` LEFT at `17-cast` (see above; it "

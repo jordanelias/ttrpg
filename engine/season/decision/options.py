@@ -906,7 +906,13 @@ def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"
     # question without being what it is about, so the document `q.about` names does not answer for
     # an act on it -- a `migrate` to a place he was told of is not addressed to a petition's
     # addressee. On a plain row `subject` is always one of `q.referents`, so nothing there moves.
-    if name in _RECORD_ANSWERABLE and (q is None or subject in q.referents):
+    # ⚠ v9 IN-49 `levy`: AND THE SAME FOR THE TWO OTHER READERS OF THE CLAIM `q.about` NAMES -- the
+    # shortfall claim below and `store_kind_of`. Each is a claim about the question's own referent, so
+    # it answers `kind`/`amount` for an act on THAT, never for an act on a classed referent riding
+    # the question: a levy of a larder his seat reaches carries the fixtures' matter and amount, not
+    # those of a dearth somewhere else -- the two values `world_q.larders_in_purview` stocked it by.
+    on_referent = q is None or subject in q.referents
+    if name in _RECORD_ANSWERABLE and on_referent:
         v = _from_content_claim(p, q, name)
         if v is not None:
             return v
@@ -916,7 +922,7 @@ def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"
     # never compete for one operand and their order does not matter. Both come before
     # `store_kind_of` and the fixtures: a claim that NAMES the matter and the quantity outranks
     # a default that names neither.
-    if name in SHORTFALL_SOURCED_OPERANDS:
+    if name in SHORTFALL_SOURCED_OPERANDS and on_referent:
         v = _from_shortfall_claim(p, q, name)
         if v is not None:
             return v
@@ -934,7 +940,7 @@ def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"
         return treasury_of(p, seat) if seat is not None else containing_rung_of(p)
     # Values the design states no number for. `H-94`, declared / defaulted / swept.
     if name == "kind":
-        return store_kind_of(p, q) or fx.get("default_store_kind")
+        return (store_kind_of(p, q) if on_referent else None) or fx.get("default_store_kind")
     if name == "amount":
         return fx.get("default_transfer_amount")
     return None
