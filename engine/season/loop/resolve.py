@@ -772,17 +772,20 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
     # `purpose` stays `roll:<prize>:<act id>`, provider-specific by design -- see `resolve()`'s
     # own history (`git log` on this file) for the fuller account of why.
     _rng = draw_factory(w.world_seed, lambda: w.tick)(a.actor, f"roll:{contests[0]}:{a.id}")
-    # ⚠ `subject IS None` REACHES HERE TOO, AND IT IS THE SAME SHAPE OF GAP AS EMPTY `_parties`
-    # (M4, found by `valoria-critic`'s adversarial pass, not anticipated in the build). `sides_of`
-    # returns `subject = holder_faction_of(w, target)`, `None` for any Rung with no HELD ancestor
-    # -- `H-149` permits an unheld settlement as a march target, and the corpus has several
-    # (`populated.py`'s `Uncontrolled` provinces). Every wrapper (`combat.py`, `sigma.py`,
-    # `mass_battle.py`) reports that shape as `status="PARTY-GAP"`, and `seam/contest.py` raises
-    # `Unspecified(needs="PARTY-GAP", ...)` for ANY non-RESOLVED status -- uncaught here before
-    # this fix, so a march on an unheld target crashed the whole season. Caught by `needs`, not by
-    # pre-checking `_subject` before the call, because PARTY-GAP is the WRAPPER's own vocabulary
-    # for every shape of missing party (empty claimants, wrong-typed claimant, no subject, no
-    # rung) and a pre-check here would have to re-enumerate all of them to stay in sync.
+    # ⚠ A WRAPPER'S PARTY-GAP REACHES HERE TOO, AND IT IS THE SAME SHAPE OF GAP AS EMPTY `_parties`
+    # (M4, found by `valoria-critic`'s adversarial pass, not anticipated in the build). It was first
+    # written for `subject = None` -- `sides_of`'s `holder_faction_of`, `None` for any Rung with no HELD
+    # ancestor (`H-149` permits an unheld settlement as a march target, and the corpus has several;
+    # `populated.py`'s `Uncontrolled` provinces) -- which every wrapper reported as `status="PARTY-GAP"`,
+    # and `seam/contest.py` raises `Unspecified(needs="PARTY-GAP", ...)` for ANY non-RESOLVED status:
+    # uncaught here before this fix, a march on an unheld target crashed the whole season. ⚠ SINCE v9
+    # IN-13 `subject = None` NO LONGER CRASHES THROUGH THIS CATCH: `mass_battle.py` answers it
+    # `Unopposed` (no opposing faction), and an empty army is refused above, at the `_parties` check.
+    # The catch stays for the other wrappers' shapes of missing party (`combat.py`, `sigma.py`, and
+    # `mass_battle.py`'s no-rung). Caught by `needs`, not by pre-checking `_subject` before the call,
+    # because PARTY-GAP is the WRAPPER's own vocabulary for every shape of missing party (empty
+    # claimants, wrong-typed claimant, no subject, no rung) and a pre-check here would have to
+    # re-enumerate all of them to stay in sync.
     try:
         r = contest(w, rung=_rung, prize=contests[0], claimants=_parties, depth=0,
                     max_depth=contest_max_depth, causes=[a.id], verb=a.verb, subject=_subject,

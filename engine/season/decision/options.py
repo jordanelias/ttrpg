@@ -33,7 +33,7 @@ from ..data.rosters import (
 )
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
-from ..data.verbs import ELIGIBILITY_KINDS, VERB_TABLE, align
+from ..data.verbs import ELIGIBILITY_KINDS, VERB_TABLE, WARRANT_SOURCED, align
 from ..epistemic import belief_contradicts
 from ..gaps import Forbidden
 from ..queries.person_q import (
@@ -121,6 +121,19 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         refs = row.referents_of(q)
         if not refs:
             continue
+        # v9 IN-12 step 6 (`rosters.yaml: warrant_sourced`): A VERB WHOSE SUBJECT COMES FROM A WARRANT
+        # forms only on a referent a HELD record of the warrant kind names -- IN-10's held-Record
+        # channel (`held_record_claims`, answered through `record_sourced_operands`' `subject` key),
+        # the person's own Tenures and own ledger and no World. It NARROWS the referents the question
+        # carries and widens nothing (§F1 clause 3 stands), so `seize` is never formed for a seat that
+        # holds no warrant naming what it was asked about.
+        warrant_kind = WARRANT_SOURCED.get(verb)
+        warranted = None
+        if warrant_kind is not None:
+            if records is None:
+                records = held_record_claims(p)
+            warranted = {_content_answer(c, "subject") for c in records
+                         if content_kind(c) == warrant_kind}
         # `19`: the seat(s) this row's act would exercise -- the untraced walk `pack_scenes` names
         # `Act.via` by (`seat_of`) -- for the belief test's `basis` conjunct below.
         # `H-134`: WHERE THE ADMITTING `remit:` ALTERNATIVE IS GRANTED BY SEVERAL OF THE PERSON'S
@@ -150,6 +163,8 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         # cannot ask what kind of thing an id is (L2).
         for subject in refs:
             if told is not None and subject not in told:
+                continue
+            if warranted is not None and subject not in warranted:
                 continue
             # ⚠⚠ A CONTEST NEEDS TWO CLAIMANTS, AND A PERSON IS NOT THEIR OWN ADVERSARY.
             # `move`'s `contain_path` cell keeps the same shape of rule -- *"a node is not a path
@@ -186,7 +201,8 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             # IN-10: and the Records the person holds, whose addressees a fanned row's bags add.
             if people is None and row.known_person_operands():
                 people = known_persons(p.ledger, p.id)
-                records = held_record_claims(p)
+                if records is None:
+                    records = held_record_claims(p)
             bagged = [(st, ops) for st in (seats or (None,))
                       for ops in operand_bags(p, row, q, subject, fx, seat=st, people=people,
                                               records=records)]

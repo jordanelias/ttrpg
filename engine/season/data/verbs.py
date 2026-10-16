@@ -48,7 +48,7 @@ from . import files
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 from .matrix import MATRIX, Step
 from .requires import (
-    KNOWN_PERSON_OPERANDS, REQUIRES_OPERANDS, VIA, AllOf, Existence, TypedRequires,
+    KNOWN_PERSON_OPERANDS, RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS, VIA, AllOf, Existence, TypedRequires,
     build_typed_requires,
 )
 from .rosters import (
@@ -456,45 +456,58 @@ def _derive_openers_from_effects() -> dict:
     opens is constructed there rather than in any decorated body -- so a walk confined to the
     decorated function would have DROPPED `create_record` from `hold`'s openers the day the mint
     was shared, a derived fact going quietly wrong in the direction nobody reads. A call to a
-    function defined at the top of the SAME FILE is walked as if inlined (transitively, each helper
-    once); anything imported -- including a cross-file helper in a SIBLING `effects_*.py` -- is not
-    this file's and is not walked. MEASURED after the change: `hold: [confer, create_record, issue,
+    function defined at the top of the SAME FILE, or imported from a SIBLING `effects_*.py` (below), is
+    walked as if inlined (transitively, each helper once). MEASURED after the change: `hold: [confer, create_record, issue,
     petition]`, every other kind unchanged. (LIVE since: `hold: [confer, create_record, give, issue,
     open_case, petition, survey, utter]`; run this function for the current set.)
 
     ⚠⚠ SEVEN FILES, NOT ONE, SINCE THE PHASE-4 PER-SUBSYSTEM SPLIT (2026-09-30). `effects.py` itself
     is now a thin aggregator -- no `@effect_for`, no `Tenure(...)` -- and every decorated function
     moved into one of its `effects_*.py` siblings (`files.effects_modules()`, discovered by name
-    rather than hand-listed, `loop_modules`'s own lesson one split down). Each sibling is walked on
-    its OWN parse tree, so `helpers` is per-file too: a decorated function's cross-file calls (to
-    `effects_shared.py`'s `_operand`, `_decline_ascent`, `_new_oblige_term`, `_shift`,
-    `_exercised_office`, `_oblige_term`) are not followed, because none of them construct a Tenure
-    -- checked by hand against every shared helper's body, not assumed. Had one, a split confined to
-    one file at a time would MISS it the same way a walk confined to `EFFECTS_PY` alone now misses
-    everything; the day a shared helper is given a `Tenure(...)` call, this docstring's claim goes
-    false and this function must walk `effects_shared.py` from every sibling that reaches it, not
-    only from its own file."""
+    rather than hand-listed, `loop_modules`'s own lesson one split down). Every sibling is parsed
+    first and a decorated function's helpers are resolved through its OWN file's namespace: the
+    top-level functions it defines plus the ones it imports from a sibling (`from .effects_x import
+    name`), so a shared helper that constructs a Tenure is walked from every sibling that reaches it
+    (SINCE v9 IN-13: `_relocate`, defined in `effects_migration.py`, opens `contain` for `march` in
+    `effects_combat.py`); the shared helpers in `effects_shared.py` construct none today. A call
+    through anything but a bare name, or a `Tenure` whose `kind` is not a literal, is not read.
+    """
     openers: dict = {k: set() for k in TENURE_KINDS}
 
-    for path in files.effects_modules():
-        tree = ast.parse(path.read_text(encoding="utf-8"))
-        helpers = {n.name: n for n in tree.body if isinstance(n, ast.FunctionDef)}
+    # Every sibling is parsed FIRST, so a helper one file imports from another is walked in ITS OWN
+    # file's namespace. `namespace[stem]` = the top-level functions of `stem` plus the ones it brings in
+    # with `from .<sibling> import name` (level 1, a sibling stem), the import binding the name the
+    # caller spells; `owner` maps a function node to its file's stem.
+    trees = {path.stem: ast.parse(path.read_text(encoding="utf-8")) for path in files.effects_modules()}
+    own = {stem: {n.name: n for n in tree.body if isinstance(n, ast.FunctionDef)}
+           for stem, tree in trees.items()}
+    namespace: dict = {}
+    for stem, tree in trees.items():
+        ns: dict = {}
+        for n in tree.body:
+            if isinstance(n, ast.ImportFrom) and n.level == 1 and n.module in own and n.module != stem:
+                ns.update({al.asname or al.name: own[n.module][al.name]
+                           for al in n.names if al.name in own[n.module]})
+        ns.update(own[stem])           # a file's own definition shadows an import of the same name
+        namespace[stem] = ns
+    owner = {id(fn): stem for stem, fns in own.items() for fn in fns.values()}
 
-        def _reached(fn, helpers=helpers) -> list:
-            """`fn` and every module-level helper IN THIS SAME FILE it calls, transitively, each
-            once. `helpers` is bound as a default argument so each closure keeps ITS OWN file's
-            map rather than the loop variable's final value (the late-binding trap `/simplify`
-            exists to catch)."""
+    for stem, tree in trees.items():
+        def _reached(fn) -> list:
+            """`fn` and every helper it calls -- module-level in its own file, or imported from a
+            sibling `effects_*.py` -- transitively, each once, each resolved in ITS OWN file's
+            namespace (`namespace[owner[...]]`)."""
             out, todo, seen = [], [fn], set()
             while todo:
                 f = todo.pop()
-                if f.name in seen:
+                if id(f) in seen:
                     continue
-                seen.add(f.name)
+                seen.add(id(f))
                 out.append(f)
-                todo.extend(helpers[c.func.id] for c in ast.walk(f)
+                ns = namespace[owner.get(id(f), stem)]
+                todo.extend(ns[c.func.id] for c in ast.walk(f)
                             if isinstance(c, ast.Call) and isinstance(c.func, ast.Name)
-                            and c.func.id in helpers)
+                            and c.func.id in ns)
             return out
 
         for node in ast.walk(tree):
@@ -1017,6 +1030,22 @@ def tenure_kinds_without_an_opener() -> list:
 VERB_TABLE: dict = {}          # filled after STRATA loads, at the bottom of the roster block
 
 VERB_TABLE = _load_verb_table()
+
+# v9 IN-12 step 6: `{verb: record kind}` -- the verbs whose `subject` a HELD record of that kind names
+# (`rosters.yaml: warrant_sourced`). REFUSED AT IMPORT, so a stale line cannot read as "no verb needs a
+# warrant" (`data/requires.py::_check_record_sourced`'s reason): a verb the table does not carry would
+# narrow nothing, and a kind `record_sourced_operands` gives no `subject` key would answer nothing, so
+# the verb would form for nobody. Read here, with the table it is checked against, so the person side
+# (`decision/options.py`) and the world side (`loop/effects_information.py`) import one cross-validated
+# map (Layer 1 §A.1, one loader per roster) and neither owns it.
+WARRANT_SOURCED = dict(roster_map("warrant_sourced", "values"))
+for _v, _k in WARRANT_SOURCED.items():
+    if _v not in VERB_TABLE or "subject" not in RECORD_SOURCED_OPERANDS.get(_k, {}):
+        raise Forbidden(
+            f"`rosters.yaml: warrant_sourced` names {_v!r}: {_k!r}, and either the verb table carries no "
+            f"such verb or `record_sourced_operands.{_k}` maps no `subject`", "rosters.yaml",
+            needs="a `verb_table.yaml` verb, and a record kind whose `subject` a held Record answers",
+            law="IN-12 step 6 -- a warrant-sourced verb forms only on what a held warrant names")
 
 
 def act_key(verb: str, subject, operands) -> str:

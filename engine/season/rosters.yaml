@@ -1754,6 +1754,39 @@ rosters:
       petition:     {to: to, subject: terms}
       faction_sheet: {to: head, subject: proposition}
 
+  warrant_sourced:
+    source: >-
+      #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.1, the `seize` row: *"the warrant
+      is the Candidate's source (a held dispensation whose `terms` names the Record)"*, and the
+      Warrant row of its documents table (*"`dispensation` whose `terms` is a Person or a Record"*);
+      plan position IN-12 step 6 (`workplans/valoria_master_workplan_v9_part5.md`).
+    note: >-
+      WHICH VERBS TAKE THEIR `subject` FROM A HELD WARRANT, AND WHICH RECORD KIND IS THE WARRANT --
+      `verb: record kind`. ONE LOADER, `data/verbs.py::WARRANT_SOURCED`, read once beside the verb table and
+      refused at import when a line names a verb the table lacks or a kind `record_sourced_operands`
+      gives no `subject` key; both readers below import it from there. A verb named here is formed person-side ONLY on a `subject` that a held
+      Record of that kind names (`decision/options.py::opening_set`: `held_record_claims`, answered
+      through `record_sourced_operands`' `subject` key, the one map of what a Record's content says),
+      and the effect's RECORD half licenses the act on the same reading read WORLD-side
+      (`loop/effects_information.py::_held_warrant_names`, called by `_eff_seize`). ⚠ WHY A ROSTER AND NOT A FAN: IN-10's held-Record
+      fan (`operand_bags`) is bound to a known-person operand (`known_person_operands`), and `seize`
+      names no second party (#453 K-04), so the fan never reaches it; this is the one place that says
+      a verb's referent comes from a warrant instead of from the question. Without the line a
+      `remit:issue` seat forms `seize` on every Record any question names and the fold refuses it
+      each time -- `levy`'s scene tax (H-163) for a licence nobody holds. A warrant naming a PERSON
+      (`arrest`, step 5) adds its own line here; a Person `subject` is declined by `seize`'s effect
+      (since v9 IN-13 the row's `existence` conjunct is gone: its object widened to a Rung, and the
+      effect, `_eff_seize`, declines anything that is neither a held Record nor an occupied
+      settlement). The Rung half forms person-side wherever a held dispensation's `terms` names the rung
+      (`test_season_shape.py` plants one on a hearth); at the effect it licenses on OCCUPATION, not on the
+      warrant, so the formation and execution licences differ for the Rung half; no computed source of
+      such a warrant has been measured. [ASSUMPTION; medium; Jordan to correct; revert: drop this roster, its
+      loader (`data/verbs.py::WARRANT_SOURCED`) and its readers (`decision/options.py::opening_set` and
+      `loop/effects_information.py::_held_warrant_names`),
+      and `seize` forms on any referent, refused in the fold.]
+    values:
+      seize: dispensation
+
   shortfall_sourced_operands:
     source: >-
       plan position `19d` (DEMAND · DELIVERY), `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md`
@@ -2652,6 +2685,7 @@ tables:
         issue:          -0.6    # carried: a dispensation is a remit reaching the executors named in scope
         comply:         -0.6    # carried: obeying a dispensation's terms is literal deference to the issuer
         levy:           -0.6    # carried: taking a rung's stores under a remit is rank drawing on subjects
+        seize:          -0.6    # reasoned (IN-12 step 6): `levy`'s reading for a held Record -- taking what a subject holds under a remit, a seat exercising rank over the holder; `remit:issue`-eligible as `levy` is
         dispatch:       -0.5    # carried: an order sent down the office to a named person
         open_case:      -0.5    # carried: opening a case invokes the remit's institution over the matter
         petition:       -0.4    # carried: the channel a subordinate has; using it works the hierarchy
@@ -2690,6 +2724,7 @@ tables:
 
       precedent_substantive:
         # negative = returns to previous ideas/actions · positive = forges new ones (draft §3.2)
+        seize:          null    # reasoned (IN-12 step 6): taking a document under a warrant follows a form without returning to or breaking one -- considered, no lean
         destroy_record:  1.0    # carried: unmaking the record is the anti-procedural act -- the record is what precedent is consulted in
         create_record:  -0.8    # carried: the record IS what precedent is made of
         research:       -0.7    # carried: archives, oral histories, institutional records -- looking to prior cases
@@ -2736,6 +2771,7 @@ tables:
 
       partisan_equitable:
         # negative = for one's own · positive = impartial treatment (draft §3.3)
+        seize:          null    # reasoned (IN-12 step 6): for whom the taking is done is the candidate's fact (the warrant's), not the verb's -- `give`'s and `levy`'s reading
         determine:       0.6    # derived: the act's own form is impartial adjudication; who it favours is the `judging_set`'s
         construe:       -0.6    # derived: calculated to serve the construer's aim, not to keep the bond
         forge:          -0.5    # derived: counterfeiting a record for advantage
@@ -2785,6 +2821,7 @@ tables:
         # the per-candidate "for whom" is `verb_table.yaml`'s `beneficiary:` column, single-owned
         # there; a cell here would be its second copy. Every verb, the six extension verbs included,
         # is `null` for that one reason.
+        seize:          null
         carry:          null
         commit:         null
         comply:         null
@@ -2830,6 +2867,7 @@ tables:
 
       rigid_flexible:
         # negative = unwilling to deviate in the face of difficulties · positive = will (draft §3.5)
+        seize:          null    # reasoned (IN-12 step 6): neither a course held nor one left -- considered, no lean
         construe:        0.7    # derived: bending the terms to fit
         comply:         -0.4    # derived: literal deference to the terms
         commit:         -0.4    # derived: binds regardless of what later calculation would recommend
@@ -2876,6 +2914,7 @@ tables:
 
       grandiose_humble:
         # negative = puts oneself forward before witnesses · positive = does not (draft §3.6)
+        seize:          null    # reasoned (IN-12 step 6): done between the seat and the holder, and broadcast to the seat's obligees only (`record.seized` rides `post_remit`) -- no lean as a display
         challenge:      -0.6    # derived: the public challenge -- putting oneself forward before witnesses
         speak:          -0.4    # derived: emits `speech.made`, no subject, no writes -- its whole content is being heard
         fight:          -0.3    # derived: as `challenge`, without the declaration
@@ -2929,6 +2968,7 @@ tables:
       deontological_instrumental:
         # negative = will not take a disagreeable act even for a good outcome · positive = the
         # outcome justifies the means (draft §3.7)
+        seize:          null    # reasoned (IN-12 step 6): the warrant is what licenses it, so it is neither a disagreeable act taken for an end nor one refused -- considered, no lean
         forge:           0.8    # carried: the purest means-to-ends act on the table
         commit:         -0.8    # carried: binds regardless of what later calculation would recommend
         utter:          -0.7    # carried: the uttered word binds the utterer whatever advantage later counsels

@@ -164,8 +164,8 @@ def _eff_found(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # `utter` already open (`effects_information.py::_makers_hold`, S13: *"the maker holds what
     # they made until they part with it"*), with that helper's id scheme. ⚠ CONSTRUCTED HERE, NOT
     # CALLED: `data/verbs.py::_derive_openers_from_effects` reads a `hold` opener off a `Tenure(...)`
-    # literal in the effect's OWN file and does not follow a cross-file call, so a call to the
-    # sibling's helper would drop `found` from `hold`'s derived openers.
+    # literal; since v9 B-M it also follows a helper imported from a sibling effects file, so a call
+    # would now keep `found` in `hold`'s openers. The literal stays: it costs nothing.
     held = Tenure(H(w.world_seed, w.tick, a.actor, f"hold:{rid}"), a.actor, rid, "hold",
                   since=w.tick)
 

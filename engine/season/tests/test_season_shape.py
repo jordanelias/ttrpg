@@ -2276,12 +2276,13 @@ def test_invariant_12_refuses_a_degree_keyed_emits_with_nothing_to_key_it_on():
     # 40 -> 42, `found` and `build` (plan position `24e`), 2026-09-29; 42 -> 43, `migrate` (plan
     # position `19c`), 2026-09-30; 43 -> 44, `survey` (plan position `20-iii`), 2026-09-30;
     # 44 -> 46, `challenge` and `accept` (IN-08's cells commit, the duel pair); 46 -> 45,
-    # `repudiate` CUT (v9 IN-11, #453 R-3 (b)), a re-record. This
+    # `repudiate` CUT (v9 IN-11, #453 R-3 (b)), a re-record; 45 -> 46, `seize` (v9 IN-12 step 6, the
+    # Record half), a re-record. This
     # is a CONTROL, not a claim about
     # the roster: its job is to fail if the loader started refusing everything, so it moves with
     # the table by construction and the number is read from the file rather than chosen.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen -- the control that stops both arms above passing on a loader that refuses everything]
-    assert len(VERBS._load_verb_table()) == 45
+    assert len(VERBS._load_verb_table()) == 46
 
 
 def test_w2_a_planted_write_to_an_unruled_field_raises_and_names_the_pair():
@@ -6236,9 +6237,11 @@ def test_the_generic_remit_seats_every_office_and_unblocks_the_nine():
     #  remit, not a new act. H-71's own nine is unmoved; this count is wider than H-71's set.
     #  `H-160` limit 1 (IN-22's paying half) added an eleventh: `transfer`'s FIRST alternative is
     #  `remit:issue` (`levy`'s substitution, one verb over), so a seated holder gives through his
-    #  seat; `own` still follows it. Re-recorded by outcome: 10 -> 11, the one row that moved.]
-    assert len(gov) == 11, (f"{len(gov)} verbs carry a `remit:` alternative; expected H-71's nine "
-                            "plus march plus transfer")
+    #  seat; `own` still follows it. Re-recorded by outcome: 10 -> 11, the one row that moved.
+    #  v9 IN-12 step 6 added a twelfth: `seize` is `remit:issue`-eligible (#453 §9.1, `levy`'s act).
+    #  Re-recorded by outcome: 11 -> 12, the one row that moved.]
+    assert len(gov) == 12, (f"{len(gov)} verbs carry a `remit:` alternative; expected H-71's nine "
+                            "plus march plus transfer plus seize")
     formable = set()
     for t in held:
         p = w.persons.get(t.subject)
@@ -8728,9 +8731,15 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # levy other than the seat's own (`refused_only`'s note), so it is foldable and never attempted
     # here. It executes in no world but a hand-built one (H-163 limit 3). `corpus_run`'s `foldable but
     # never even attempted`: 11 -> 12.
+    # ⚠ TWELVE -> THIRTEEN, v9 IN-12 step 6 `seize` (2026-10-16): `seize` JOINS. It forms only on a referent a
+    # warrant the person HOLDS names (`rosters.yaml: warrant_sourced`), and no corpus seat holder holds a
+    # dispensation whose `terms` names a Record, so it is foldable and never attempted here. It executes in
+    # no world but a hand-built one (`test_in12_seize.py`). `corpus_run`'s `foldable but never even
+    # attempted`: 12 -> 13.
     assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish",
                                               "destroy_record", "march", "oblige", "open_case",
-                                              "determine", "comply", "migrate", "levy"}, (    # IN-57: `dispatch` out, to `refused_only`
+                                              "determine", "comply", "migrate", "levy",
+                                              "seize"}, (    # IN-57: `dispatch` out, to `refused_only`
         f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Five of "
         "the original six are the governance verbs no corpus overlay grants (`establish` is "
         "`remit:confer`-eligible); `march` is eligible in NPC-033/038 and WOULD form a real "
@@ -10291,7 +10300,12 @@ def test_wc_the_fold_binds_what_the_person_bound():
     # names (`comply`: a writ he holds), and this question names none, so it is not in the walk.
     # DERIVED FROM THE ROW'S OWN COLUMN, never from a verb name.
     WALK_NAMED: frozenset = frozenset(vb for vb, r in VERB_TABLE.items() if r.referent_named)
-    WALK_EXCLUDES: frozenset = frozenset({"march"}) | WALK_REMIT | WALK_NAMED
+    # v9 IN-12 step 6: a row in `rosters.yaml: warrant_sourced` (`seize`) forms only on a referent a HELD
+    # warrant names, and `p_low` holds none -- so it is not in the first walk, and is walked below with the
+    # others through the seated `p_high`, once a warrant is placed in his hand. DERIVED FROM THE ROSTER.
+    from ..data.verbs import WARRANT_SOURCED
+    WALK_WARRANT: frozenset = frozenset(WARRANT_SOURCED)
+    WALK_EXCLUDES: frozenset = frozenset({"march"}) | WALK_REMIT | WALK_NAMED | WALK_WARRANT
     cands = [c for c in decision.opening_set(p, v, q, w.fixtures)
              if VERB_TABLE[c.verb].requires_typed is not None]
     assert {c.verb for c in cands} == all_typed - WALK_EXCLUDES, (
@@ -10331,9 +10345,14 @@ def test_wc_the_fold_binds_what_the_person_bound():
     # remit verb's clause 4 can move.
     duke.ledger.append(Claim("c_wc_seen_duke", duke.id, "Hh", SEEN_PREDICATE, Seen(who="p_mid"), 0,
                              "firsthand", 100, "own"))
+    # v9 IN-12 step 6: A WARRANT IN THE DUKE'S HAND naming `Hh` (a referent of `q`), so the warrant-sourced
+    # verb forms and is walked with the four -- the seat is present on both sides for `seize` too.
+    from .test_in10_record_operands import _hold_document
+    _hold_document(w, duke, "dispensation", {"terms": "Hh", "to": ["p_mid"], "at": None},
+                   rec_id="rec_wc_warrant")
     remit = [c for c in decision.opening_set(duke, View(duke.id, [], w.fixtures.get("view_k"), q),
-                                             q, w.fixtures) if c.verb in WALK_REMIT]
-    assert {c.verb for c in remit} == WALK_REMIT, sorted({c.verb for c in remit})
+                                             q, w.fixtures) if c.verb in WALK_REMIT | WALK_WARRANT]
+    assert {c.verb for c in remit} == WALK_REMIT | WALK_WARRANT, sorted({c.verb for c in remit})
     for c in remit:
         act = [a for sc in pack_scenes(duke, [c], 5, w.fixtures, mint, occasion=q)
                for a in sc.acts][0]
@@ -13655,9 +13674,9 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # CLUSTER), 2026-09-30, uncontested; 44 -> 46, `challenge` and `accept` (IN-08's cells commit,
     # the duel pair) -- `accept` IS contested (`contests: "the body"`), so the contested set
     # asserted above moves with it; `challenge` is not; 46 -> 45, `repudiate` CUT (v9 IN-11, #453
-    # R-3 (b)), uncontested, a re-record.
+    # R-3 (b)), uncontested, a re-record; 45 -> 46, `seize` (v9 IN-12 step 6), uncontested, a re-record.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen]
-    assert len(VERB_TABLE) == 45, len(VERB_TABLE)
+    assert len(VERB_TABLE) == 46, len(VERB_TABLE)
     # AND THE SIX ARE SIX, not a row that says six. This is the half of the pin that the old
     # count could not express: a table carrying the placeholder passed `== 32` while no act in it
     # could be formed, and `runs/CASELOG_NPC.md:64` reported the same case as a blocked one.
@@ -13681,7 +13700,8 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # resolves `subject` via `faction_q.resolve` -- the R-04/U9 gap this comment used to name).
     # Every prize row now carries a `provider:`, so this loop finds nothing left to refuse BY
     # THIS MECHANISM. That does not mean every call to every prize now succeeds -- `mass_battle`
-    # still refuses a call with no `subject` (PARTY-GAP, not "nothing connects the seam to it") --
+    # still refuses a call with no claimants or no rung (PARTY-GAP, not "nothing connects the seam to it";
+    # since v9 IN-13 a missing `subject` is `Unopposed`, no longer a gap) --
     # only that "unwired by the roster" is no longer how any of the four fails. See
     # `test_mass_battle_provider.py` for that provider's own coverage; this loop's job is narrower
     # than re-testing it -- keeping THIS set-equality honest as the roster changes under it.

@@ -232,7 +232,12 @@ rows:
     # `march`'s row was added, rather than trusting the plan's own note that this step was owed.
   - kind:    "Person"
     field:   "travel_leg"
-    steps:   [MAT, RES]
+    steps:   [MAT, RES, ENC]
+    # ⚠ `ENC` ADDED AT v9 IN-13 (#453 §10.4 step 8, THE ARRIVAL), ON M4's PRECEDENT for `(Person,
+    # body)`/`(Person, stance)` above: a won or unopposed `march` relocates its army at ENCOUNTER,
+    # where the field is decided, through `move`'s one journey body (`_relocate`), which appends the
+    # destination to every arriving claimant's leg. `class:` is unchanged (ENCOUNTER shares
+    # RESOLVE's write class).
     class:   "MATTER/ACTS"
     social:  "false"
     by:      "DR-1, D10 — see §D4. ⚠ THE `MAT` STEP GAINED ITS WRITER AT PLAN POSITION `19c` (2026-09-30): `loop/matter.py`'s travel pass ends every leg at the next MATTER, so `decision/budget.py`'s distance penalty is a cost of the season travelled in and not, as it was, of every season after. `travel.ended` is that write's emission (`H-12`: MATTER emits per write, and `travel.moved` would report a move that did not happen)"
@@ -361,7 +366,10 @@ rows:
     emits:   "`tenure.payload_set`"
   - kind:    "Tenure"
     field:   "since"
-    steps:   [RES]
+    steps:   [RES, ENC]
+    # ⚠ `ENC` ADDED AT v9 IN-13 (the arrival): a won or unopposed `march` opens each arriving
+    # claimant's `contain` on the destination at ENCOUNTER (`_relocate`, under the gate's `muster`
+    # basis). M4's precedent, as `(Person, travel_leg)` above; `class:` unchanged.
     class:   "ACTS"
     social:  "true"
     by:      "DR-2 — `confer`, `commit`, `oblige`, `tie`"
@@ -375,7 +383,10 @@ rows:
     emits:   "`term.renewed`"
   - kind:    "Tenure"
     field:   "until"
-    steps:   [MAT, RES]
+    steps:   [MAT, RES, ENC]
+    # ⚠ `ENC` ADDED AT v9 IN-13 (the arrival): the arriving claimant's old `contain` closes at
+    # ENCOUNTER in the same write that opens his new one. An ACT write (`driver: Act`), so §15.3's
+    # actorless causation bound (`World.write`) is not reached by it.
     class:   "MATTER/ACTS"
     social:  "false"
     by:      "stated in chain — §15.3, the one declared seam, bounded by causation. ⚠ AMENDED 2026-09-29 (plan position `17b`): the causation rule now admits the SECOND cause `04 §B.8`'s synthesis call licenses -- *'an actorless row may write `until` only where its cause is the existence change it also caused, OR the maturation of a term declared by the act that opened this Tenure'* -- so MATTER's MAT cell is reached by a death's cascade AND by a matured `Tenure.term` (`loop/matter.py`, gate basis `T-n`). One seam, two causes, both citing an author; `World.write`'s S15.3 pre-check takes `matured_term=` beside `caused_person_exists=`."

@@ -232,7 +232,7 @@ commit and the run stops for a cleared window (`methodology-execute`, `CLAUDE.md
 has read §K's still-held list and `_part5` §J. `main` was red from PR #456 on one test
 (`test_flow_skeletons.py::test_contract_names_resolve_in_the_generated_index[combat]`); the one-line fix (`personal_combat`
 joins `RETIRED_CONTRACTS`) is built and rides the adoption branch (`7b619328`), so it is not a position — read `All Gates
-Green` on `main` once the branch merges. B-C is closed. B-D is closed: D1 (`9054df80`), D2 (`b31d2c31`), D3 (`0a690b30`). B-G is closed (`0f998f64`). B-H is closed (`c13144b9`). B-E is closed (`ac9724fc`). B-F is closed (`53807be4`). B-L is closed (`fc4f3ba9`). B-I is closed (`9d93cfab`); what it left open is in the entries (§3: IN-09, IN-18, IN-33). B-J is closed (`42c5588c`: SC-03a, IN-40, FA-01's mechanism, IN-31's design; IN-48 left as B-JR). B-W is closed (`3bf936ee`: IN-54, IN-55, IN-56, IN-57, IN-58's stance-only half). B-X is closed (`2f0c0227`: IN-62 … IN-69, IN-71, IN-72, FA-04 … FA-06; what it left open is in `engine/season/hole_register.yaml` H-209, ED-IN-0296 and `_part3` §B's header). B-K is closed (`c8d1db3a`: IN-10, IN-45's `forge`, `carry`, `migrate`, `survey` + Rung, IN-49, IN-28 with SE-03; what it left open is in `_part5` IN-45 (`work`, ED-IN-0297) and `_part3` §B's header); then … the spine `_part3` §B names. Every batch runs
+Green` on `main` once the branch merges. B-C is closed. B-D is closed: D1 (`9054df80`), D2 (`b31d2c31`), D3 (`0a690b30`). B-G is closed (`0f998f64`). B-H is closed (`c13144b9`). B-E is closed (`ac9724fc`). B-F is closed (`53807be4`). B-L is closed (`fc4f3ba9`). B-I is closed (`9d93cfab`); what it left open is in the entries (§3: IN-09, IN-18, IN-33). B-J is closed (`42c5588c`: SC-03a, IN-40, FA-01's mechanism, IN-31's design; IN-48 left as B-JR). B-W is closed (`3bf936ee`: IN-54, IN-55, IN-56, IN-57, IN-58's stance-only half). B-X is closed (`2f0c0227`: IN-62 … IN-69, IN-71, IN-72, FA-04 … FA-06; what it left open is in `engine/season/hole_register.yaml` H-209, ED-IN-0296 and `_part3` §B's header). B-K is closed (`c8d1db3a`: IN-10, IN-45's `forge`, `carry`, `migrate`, `survey` + Rung, IN-49, IN-28 with SE-03; what it left open is in `_part5` IN-45 (`work`, ED-IN-0297) and `_part3` §B's header); B-M is closed (`be02666e`: IN-12 step 6, `5ea1bb47`, and IN-13, `2e19aee8`; the realm still fights 0 fields: `_part2` R-07 conjunct 3); then … the spine `_part3` §B names. Every batch runs
 through `methodology-execute` (`CLAUDE.md` §9), and a batch's READ-FIRST list names the sites to read (the pins file is far too
 large to read whole: grep the assertion).
 
@@ -250,8 +250,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | IN-06 | `33`; #457 D5; A-24's threadwork; H-47 | IN/WR/FI | B | build (design landed at B-C; re-reviewed after B-H, closed `c13144b9`) | — | B-S | `_part4` |
 | IN-07 | `36` | IN/SE | B | build (design landed at B-C) | — | B-T | `_part4` |
 | IN-09 | `19b`: `evade / defy`, `construe` (`comply` landed `128299db`) | IN | B | — (restorable under §0.5: `a1c83e62`, `60073e75`) | R-05 | none (B-I closed `9d93cfab`) | `_part5` |
-| IN-12 | #453 steps 5, 5a, 6, 7, 9, 10, 11, 13 | IN/SC/SE/MB | BLK | per step | R-04, R-05, R-09 | B-M · B-Q · B-R | `_part5` |
-| IN-13 | #453 step 8 | IN/MB | BLK | IN-12 step 6 | R-07, R-05, R-01 | B-M | `_part5` |
+| IN-12 | #453 steps 5, 5a, 7, 9, 10, 11, 13 (step 6 landed `5ea1bb47`) | IN/SC/SE/MB | BLK | per step | R-04, R-05, R-09 | B-Q · B-R | `_part5` |
 | IN-14 | #457 BOUND-ATTENTION; H-92, H-10 | IN | ask-then | — | — | B-Z | `_part4` |
 | IN-18 | telling G5, G8 (step 2a, G1–G3 landed `ac9724fc`; G6 landed `66bf51f9`) | IN | BLK | G5's trigger, M0e > 0 (`oblige` landed `905b7a21`) | — | none (B-I closed `9d93cfab`) | `_part4` |
 | IN-23 | #457 CARRY-STABILITY | IN | B | — | — | B-U | `_part5` |
@@ -262,7 +261,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | IN-32 | H-182 ties | IN/FI | BLK | IN-06 | R-05 | B-S | `_part5` |
 | IN-33 | H-58 `exchange` | IN | B | — (reverted `cdc03f67`; restorable under §0.5: `ad2f930f`..`b5c4685d`) | R-05 | none (B-I closed `9d93cfab`) | `_part5` |
 | IN-35 | #457 FORCE-HAZARD; SEAM-CLOCK | IN/WR/SE | BLK | IN-06 | — | B-S | `_part5` |
-| IN-36 | #457 FORCE-FOREIGN | IN/FA/MB | BLK | IN-13 | — | B-V | `_part5` |
+| IN-36 | #457 FORCE-FOREIGN | IN/FA/MB | BLK | IN-13 (landed `2e19aee8`; B-M closed `be02666e`) | — | B-V | `_part5` |
 | IN-37 | #457 STORY-READ | IN | BLK | SC-01 step 16 | — | B-U | `_part5` |
 | IN-38 | `13`-rest | IN | B | — | R-09, R-06 | B-V | `_part5` |
 | IN-44 | SM-10, SM-12; A-24's wording | IN | J | Layer 0/1: Jordan's files | — | — | `_part8` (table, not an entry) |
@@ -326,7 +325,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 
 | #453 — `proposals/2026-10-03-verb-coverage-and-gap-fill.md` | v9 |
 |---|---|
-| §10.4 step 1 · step 2 · steps 2b + 3 · step 4 · step 8 | IN-10 (sub-steps landed `905b7a21`; the enabler `fae9e623`) · IN-11 (landed `2a2ed152`) · SC-03a (landed `c2f855d2`) · SC-03b · IN-13 |
+| §10.4 step 1 · step 2 · steps 2b + 3 · step 4 · step 8 | IN-10 (sub-steps landed `905b7a21`; the enabler `fae9e623`) · IN-11 (landed `2a2ed152`) · SC-03a (landed `c2f855d2`) · SC-03b · IN-13 (landed `2e19aee8`) |
 | steps 5, 5a, 6, 7, 9, 10, 11, 13 | IN-12, one sub-entry per step |
 | step 2a (`known_persons` widening) | IN-18 (landed at B-E, `ac9724fc`, with its re-pin) |
 | "later" (R-5, `inheritance`) | IN-61 (B-R; RS-21 item 9, re-specified by RS-27: the heir's claim) |

@@ -16,16 +16,20 @@ from typing import Optional
 
 from ..data.arrangements import ARRANGEMENTS
 from ..data.requires import RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS
-from ..data.rosters import RECORD_CONTENT, RECORD_KIND_KEYS
+from ..data.rosters import MARCH_TARGET_KINDS, RECORD_CONTENT, RECORD_KIND_KEYS
+from ..data.verbs import VERB_TABLE, WARRANT_SOURCED
 from ..queries import faction_q
 from ..queries.person_q import ABOUT_KEYS
 from ..queries.world_q import (
     BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_PETITION, docketed, docketed_under,
-    faction_of, hold_force, place_of, works_for, works_target,
+    faction_holding, faction_of, hold_force, holder_faction_of, mustered, place_of, works_for,
+    works_target,
 )
 from ..state.carriers import Proposition, Record, Tenure
 from ..state.carriers import DETERMINED_BY
-from ..state.gate import DISPOSABLE_KINDS, NO_CHANGE, UNDECLARED_DISPOSAL, Change, Subject
+from ..state.gate import (
+    DISPOSABLE_KINDS, NO_CHANGE, UNDECLARED_DISPOSAL, Change, Subject, may_seize, seat_faction,
+)
 from ..state.ids import H
 
 from .effects_shared import _new_oblige_term, _operand, effect_for
@@ -686,6 +690,144 @@ def _eff_give(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         held.until = w.tick                # the giver's release, FIRST
         w.add_tenure(nt)                   # then the receiver's hold
     return Change((Subject.edge(nt), Subject.edge(held)), perform)
+
+
+# WHICH RECORD KIND IS A WARRANT FOR `seize`, and WHICH OF ITS CONTENT KEYS NAMES WHAT IT AUTHORIZES:
+# the kind is `data/verbs.py::WARRANT_SOURCED`'s (`rosters.yaml: warrant_sourced`, the one loader both the
+# person side and this one import), the key `person_q.ABOUT_KEYS`' (the one owner of "what a document is about"),
+# never spelt here.
+_SEIZE_WARRANT_KIND = WARRANT_SOURCED["seize"]
+_SEIZE_WARRANT_KEY = ABOUT_KEYS[_SEIZE_WARRANT_KIND]
+
+
+def _held_warrant_names(w: "World", actor: str, rid: str) -> bool:
+    """DOES A WARRANT THE ACTOR HOLDS NAME RECORD `rid`? -- a live `hold` of his own on a Record of the
+    warrant kind (`rosters.yaml: warrant_sourced`) whose `_SEIZE_WARRANT_KEY` content says `rid`. World-side:
+    the effect owns the licence because the gate never reads a Record's content (K-52); the person-side
+    twin is `decision/options.py::opening_set`'s formation on the same reading, off his own ledger."""
+    for t in w.tenures:
+        if t.kind != "hold" or not t.live or t.subject != actor or t.object not in w.records:
+            continue
+        rec = w.records[t.object]
+        sm = rec.subject_matter
+        if rec.kind == _SEIZE_WARRANT_KIND and isinstance(sm, dict) and sm.get(_SEIZE_WARRANT_KEY) == rid:
+            return True
+    return False
+
+
+# The kind each half earns: the `seize` row's `emits:` in its declared order (`verb_table.yaml`, Record
+# then Rung), read off the table so neither kind is spelt here.
+_SEIZED_RECORD, _SEIZED_RUNG = VERB_TABLE["seize"].emits
+
+
+def _take_hold(w: "World", a: "Act", obj: str, held: Optional[Tenure], earns: str) -> Change:
+    """THE TAIL BOTH HALVES OF `seize` SHARE: the actor OPENS a `hold` on `obj`, and the `hold` it
+    displaces (`held`, or `None` when nobody held it) CLOSES, in ONE write. THE NEW EDGE'S ID carries the
+    act (`hold:<obj>:<act>`), `_eff_give`'s salting. G4 -- WHAT IT NAMES: the two edges, the opened one
+    first, both earning `earns`. The close is written FIRST, then the open.
+    ⚠ THE `Tenure` KIND IS A STRING LITERAL HERE ON PURPOSE, NOT A PARAMETER: `data/verbs.py::
+    _derive_openers_from_effects` reads which verb opens which kind off that literal, walking same-file
+    helpers from the registered effect, so `seize` stays a `hold` opener through this helper (the
+    `_eff_commit` note below records what a parameterised kind did to the walk)."""
+    nt = Tenure(H(w.world_seed, w.tick, a.actor, f"hold:{obj}:{a.id}"), a.actor, obj, "hold", since=w.tick)
+
+    def perform() -> None:
+        if held is not None:
+            held.until = w.tick            # the dispossessed holder's hold, FIRST
+        w.add_tenure(nt)                   # then the seizer's
+    return Change(tuple(Subject.edge(e, earns=earns) for e in (nt, held) if e is not None), perform)
+
+
+@effect_for("seize")
+def _eff_seize(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """v9 IN-12 step 6 (#453 §10.4, the `seize` row), THE RECORD HALF: the previous holder's `hold` on a
+    Record ENDS and the actor's OPENS, in ONE write, WITHOUT the holder's consent -- `give`'s body, the
+    one other verb that moves a Record, with the licence that `give` takes from the giver's own edge
+    replaced by a warrant and a seat.
+
+    WHAT LICENSES IT, IN THE ORDER IT IS ASKED, each one owner of its rule: (1) the Record exists and
+    one other person holds it (`hold_force`, the owner of *who holds this*); (2) the actor HOLDS A
+    WARRANT NAMING IT (`_held_warrant_names`) -- the effect's, because it is a Record's content;
+    (3) the exercised seat may seize from that holder (`may_seize`, the gate's own predicate, so an act
+    the precondition admitted is never killed at the gate by a disagreement about the holder's home).
+    Anything else declines (`NO_CHANGE` -> `seize.refused`). A Record the actor already holds, or that
+    nobody holds, moves nothing.
+
+    THE GATE: the close is `seizure` (`state/gate.py`), the open is `T-m` (the actor opening a non-seat
+    `hold` for himself). A SEAT IS NEVER SEIZED: the gate's `seizure` clause admits only a Record or a
+    Rung, so a hand-built act that skipped the precondition is `NotYours`, not a taking. ⚠ SINCE v9
+    IN-13 the row's `existence` conjunct is gone (the object widened to a Rung, `verb_table.yaml`'s
+    `requires_typed_note`): an Office has no place, so the `authority` conjunct refuses it first
+    (`seize.unauthorized`); planted past it, a seat is no Record and no settlement and `_seize_rung`
+    declines it; and the gate still admits neither half on an Office. A subject that is no Record goes
+    to `_seize_rung`, the Rung half.
+
+    G4 -- WHAT IT NAMES: the two edges, the opened one first as `_eff_give` and `_eff_confer` name
+    theirs; both earn the Record half's kind, `record.seized` (the Rung half earns `rung.seized`). The receipts name TENURES, not the Record.
+    THE NEW EDGE'S ID carries the act (`hold:<record>:<act>`), `_eff_give`'s salting, so a Record taken
+    and taken back inside one tick does not re-mint the first `hold` id."""
+    rid = _operand(a, "subject")
+    if rid not in w.records:
+        return _seize_rung(w, a, rid)
+    held = hold_force(w, rid)
+    if held is None or held.subject == a.actor:
+        return NO_CHANGE
+    if not _held_warrant_names(w, a.actor, rid) or not may_seize(w, a.actor, a.via, held.subject):
+        return NO_CHANGE
+    return _take_hold(w, a, rid, held, _SEIZED_RECORD)
+
+
+def _seize_rung(w: "World", a: "Act", rid: str) -> Change:
+    """v9 IN-13 (#453 §10.4 step 8), `seize`'S RUNG HALF: the actor opens a `hold` on an OCCUPIED
+    SETTLEMENT, and whatever `hold` it already carries closes -- one town changing hands without its
+    territory (#453 §9.1: a hold on the settlement itself shadows a territory hold in
+    `holder_faction_of`'s walk). The ROW stays keyed as IN-12 step 6 built it; the halves split HERE, on
+    what the subject is (a Record, or not), and share the gate's `seizure` basis for the closure and
+    `T-m` for the opening.
+
+    WHO MAY SEIZE: with no hold on the town, the seat's authority comes only from the fold's precondition
+    (eligibility `remit:issue` via `seat_hold`, plus the `authority` purview conjunct); the Record half
+    calls `may_seize` in the effect, so the gate does not later refuse an act the precondition admitted.
+
+    THE LICENCE IS OCCUPATION, read at the effect as `raze`'s will be (#453 §10.4 steps 8 and 11): the
+    exercised seat's FACTION (`faction_prop_id` of its display faction) `mustered` at the settlement
+    (`world_q.mustered`, the one query of who stands there), the settlement held by ANOTHER faction
+    (`holder_faction_of`). It asks nothing of the defenders: an opposed `Won` that removed nobody still
+    leaves the attacker mustered there, so the seizure is admitted (#453 exit (vii)). DECLINES
+    (`NO_CHANGE` -> `seize.refused`, the `write` clause), each one change from an admitted seizure:
+      * the subject is not a Rung of a `march_target_kinds` kind (a seat, a person's own rung, a
+        territory, a hearth) [ASSUMPTION; medium; Jordan to correct: occupation is defined at the
+        places a march arrives at; revert: any Rung kind, the licence still occupation];
+      * the actor is not committed to the seat's faction (`faction_holding`; the title written is his own
+        hold) [ASSUMPTION; medium; Jordan to correct; revert: drop the decline];
+      * the seat's faction is not mustered there (no occupation);
+      * nobody holds the settlement (H-166: who holds an unheld place is unruled) or the seat's own
+        faction already does (nothing to take);
+      * the actor already holds it, or the closure's holder is one the seat may not seize from
+        (`may_seize` with the rung as the place, so an act the precondition admitted is never killed
+        at the gate).
+    ⚠ THE RUNG HALF'S FORMATION AND EXECUTION LICENCES DIFFER: it forms person-side wherever a held
+    dispensation's `terms` names the rung (`rosters.yaml: warrant_sourced`; `test_season_shape.py` plants
+    one on a hearth), but at the effect it licenses on OCCUPATION, not on the warrant. No computed source
+    of such a warrant has been measured -- a named residue, not a wiring gap in this effect."""
+    rung = w.rungs.get(rid)
+    mine = seat_faction(w, a.via)
+    if rung is None or rung.kind not in MARCH_TARGET_KINDS or mine is None:
+        return NO_CHANGE
+    # The title written is the ACTOR'S OWN hold, and a hold coheres under the faction its holder is
+    # committed to (`faction_holding`; `None` for no commit or two): an actor not committed to the seat's
+    # faction would take the town for a faction that is not his [ASSUMPTION; medium; Jordan to correct;
+    # revert: drop the decline].
+    if faction_holding(w, a.actor) != mine:
+        return NO_CHANGE
+    holder = holder_faction_of(w, rid)
+    if holder is None or holder == mine or not mustered(w, rid, mine):
+        return NO_CHANGE
+    held = hold_force(w, rid)
+    if held is not None and (held.subject == a.actor
+                             or not may_seize(w, a.actor, a.via, held.subject, rid)):
+        return NO_CHANGE
+    return _take_hold(w, a, rid, held, _SEIZED_RUNG)
 
 
 @effect_for("destroy_record")
