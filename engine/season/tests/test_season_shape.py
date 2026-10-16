@@ -2378,8 +2378,8 @@ def test_w2_the_class_column_is_derived_and_cross_checked():
 # designer's row is checked against and handed back as, on the same footing as `REQUIRES_FORMS`'s
 # own `needs:` table. One new loader, one schema, all for the identical reason, is the file earning
 # its own exemption block rather than the creep this ratchet exists to catch.
-# [JUSTIFIED: a RATCHET COUNT, not a magnitude -- it is the number of declared `roster-exempt:` sites in the model set, and the argument for each increment is the comment block directly above. Fitted to the tree by construction: run the guard and it reports the true count. 2026-09-19: 14 -> 15 for `rosters.py`'s `_ptrs`. 2026-09-29: 15 -> 26 for `data/arrangements.py`'s schema, field-name and return-shape sets.]
-EXEMPT_CEILING = 26
+# [JUSTIFIED: a RATCHET COUNT, not a magnitude -- it is the number of declared `roster-exempt:` sites in the model set, and the argument for each increment is the comment block directly above. Fitted to the tree by construction: run the guard and it reports the true count. 2026-09-19: 14 -> 15 for `rosters.py`'s `_ptrs`. 2026-09-29: 15 -> 26 for `data/arrangements.py`'s schema, field-name and return-shape sets. 2026-10-16: 26 -> 27 for `_eff_convene`'s Date literal (`id`, `venue`, `holder`: the carrier's own field names, the `Rung._DECLARED` class; B-N had split the literal in two to dodge the guard, an unratcheted exemption).]
+EXEMPT_CEILING = 27
 
 
 def test_jordan_no_definition_is_hardcoded_in_a_body():

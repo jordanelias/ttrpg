@@ -159,9 +159,9 @@ def contest(w: World, rung: Optional[str], prize: Any, claimants: list[str],
         # fails at boot naming the row"* exists to make impossible, surviving in the half that was
         # still a branch. `manifest.call` returns the provider a module registered with
         # `@provider(role, module)`, or `None`.
-        # ⚠ **`None` IS A REAL ANSWER AND IS WHY THIS IS BYTE-INVARIANT TODAY.** `mass_battle` and
-        # `social_contest` name modules nothing has registered, so they fall through to the refusal
-        # below exactly as they did under the literal — the seam names the subsystem and its
+        # ⚠ **`None` IS A REAL ANSWER AND IS WHY THIS IS BYTE-INVARIANT TODAY.** (HISTORY, before M3 and
+        # v9 SC-01 steps 13+15: `mass_battle` and `social_contest` named modules nothing had
+        # registered, so they fell through to the refusal below exactly as they did under the literal) — the seam names the subsystem and its
         # resolver rather than reporting one undifferentiated hole. `proposals/…/08_SEAM.md` PART B
         # is titled *THE MANIFEST ROW, AND WHY THIS DESIGN REFUSES THE `if`-BRANCH* and registers
         # the `if` as a shim; this is the shim coming out.

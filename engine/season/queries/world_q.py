@@ -181,8 +181,8 @@ def docketed(w: World, matter: Optional[str]) -> list[dict]:
 
     A docket item is a plain dict on `World.docket` (a `_STATE_SEQUENCES` member, so the content
     hash folds it): CALENDAR forms one per sitting with `matter: None` (`loop/calendar.py`, an empty
-    slot), and `open_case` fills the first such slot at its venue (v9 SC-01 fired-slot step,
-    `open_slots`) or, where none is open, appends `{"date": None, "matter": <subject>,
+    slot), and `open_case` fills the nearest open slot, by ancestry from the matter's place, when the
+    matter is a person (v9 SC-01 fired-slot step, `slot_for`) or, where none is open, appends `{"date": None, "matter": <subject>,
     DOCKET_ARRANGEMENT: <row id or None>, DOCKET_PETITION: <Record id or None>}` -- a filled slot has
     the same keys and keeps its `date` (v9 SC-03a, K-55: the item names the arrangement
     it is heard under and the petition it rose from; `docketed_under` reads the first). `matter is None` is never
@@ -216,8 +216,9 @@ def slot_venue(w: World, item: dict) -> Optional[str]:
     dateless item (`open_case`'s, where no sitting was convened) or a date the world no longer holds.
     v9 SC-01 fired-slot step: the name for *which room is this item before*, read by
     `open_slots`/`slot_for` (the act that fills a slot) and `sittings_before` (the bench that hears
-    it); a Date's venue is `place_of`'s date limb, which this asks."""
-    return place_of(w, item.get("date"))
+    it). Read straight off `w.dates`, not through `place_of`: that answers a person, site, record or
+    rung id as well, and a docket item whose `date` names one of those is no sitting."""
+    return (w.dates.get(item.get("date")) or {}).get("venue")
 
 
 def _is_person_id(w: World, x) -> bool:

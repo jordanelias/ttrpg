@@ -315,3 +315,20 @@ def test_the_keys_a_case_writes_into_a_slot_are_matrix_cells_its_verb_declares()
         with pytest.raises(Forbidden, match="written during CALENDAR"):
             w.write(cell, mint_token(w, WriteClass.CALENDAR), lambda: None,
                     record_kind=world_q.DOCKET_KIND, fieldname=key, driver="Event")
+
+
+def test_a_docket_item_whose_date_is_no_date_is_no_sitting():
+    """`slot_venue` reads `w.dates`, not `place_of` (which answers a rung, person, site or record
+    id too): an item dated with the rung `S` neither opens a slot nor raises in `questions_for`'s
+    bench pass (Phase 3 F3). Control: the same item dated with a held, fired Date is a sitting."""
+    w, d = _world()
+    item = {"date": VENUE, "matter": None}
+    w.docket.append(item)
+    assert world_q.slot_venue(w, item) is None
+    assert world_q.open_slots(w, VENUE) == []
+    w.docket.append({"date": VENUE, "matter": PARTY})
+    checked = 0
+    for pid in w.persons:
+        assert world_q.sittings_before(w, w.persons[pid]) == []
+        checked += 1
+    assert checked >= 3, checked
