@@ -160,7 +160,18 @@ def test_h134_two_seats_are_two_acts_ids_opportunities_and_the_store():
 # known-person fan for `to` (its `terms` conjunct binds `subject`), and `p_one` knows nobody and
 # holds nothing to say about the referent, so no writ forms -- where before both writs were
 # addressed to what they were about.
-_CONTROL = (64, 64, "c3cc3ff12bdc40e1507b67a36da955ff0ff2eab816135ef8d0f6132721eccb33")
+# RE-PINNED AT v9 IN-45 `carry` (B-K), DIGEST ONLY: 64 -> 64, `c3cc3ff1...` -> `4351ecd2...`. The pin
+# passed at fae9e623 (IN-10) and went red at c435a5ec. Attributed per verb by diffing the dumped
+# Candidate and act lists at each commit:
+#   * `forge` (c435a5ec, IN-45 `forge`) -- the WHOLE move. No Candidate or act id added or removed:
+#     its two Candidates (`off_duke`, `Hh`), formed untyped with no operands before, now carry
+#     `subject` (the row is typed with `survey`'s cell). The 64 act ids and payloads are unchanged.
+#     CONTROL: HEAD's lists with `forge`'s `subject` operand stripped re-hash to `c3cc3ff1...`.
+#   * `survey` + Rung (aa26c4fd) -- nothing: lists byte-identical to c435a5ec's.
+#   * `carry` (IN-45, on aa26c4fd) -- nothing: its two Candidates were already formed with
+#     `{subject, to}` at fae9e623 (formation reads the verb table, not `resolvable_verbs()`); the
+#     lists are byte-identical to aa26c4fd's.
+_CONTROL = (64, 64, "4351ecd2e816024d73a4fecb0ca155a93c5ba8bd637c6a706fc2574e613eacfa")
 
 
 def _control_reading():
