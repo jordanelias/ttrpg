@@ -116,9 +116,18 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # and both old `BASE_EVENTS` exactly, so the stamp and the gate move nothing on their own. `aperture 1 0`
 # realm acts 615 -> 612; `migrate` formed 83 -> 71, att 31 -> 31, ex 0 -> 1, ref 31 -> 30, every
 # refusal now `_eff_migrate`'s capacity decline (read, not asserted, v9 §0.5).
+# RE-PINNED at v9 IN-49 `levy` (B-K, on ccf16bc3), A BEHAVIOUR MOVE DECLARED: `levy` declares
+# `referent_class: Rung` and forms only on a `Rung`-classed referent (`world_q.larders_in_purview`'s
+# stocked larders in purview, and `places_named`' places, the class being shared), so the chooser's
+# sets change. The build hash is equal; one and two seasons move. Was bedb32d5... / 547d3e62... (one,
+# two seasons). CONTROL, run: the same tree with `levy`'s `referent_class` blanked in `VERB_TABLE` and
+# `larders_in_purview` stamping nothing (`_derive_operand`'s widened claim gate and
+# `RUNG_REMIT_ACTS` left in) reproduces both old values and both old `BASE_EVENTS` exactly.
+# `aperture 1 0` realm acts 612 -> 612; `levy` formed 16 -> 11, att 3 -> 0, ex 0, ref 3 -> 0 (read,
+# not asserted, v9 §0.5); `larders_in_purview` returned `()` in all 766 calls over two realm seasons.
 BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
-               1: "bedb32d5a557b447346f384247130aa1",
-               2: "547d3e62ebbb4716eed63cfc80c00f86"}
+               1: "3ff10d3c30acd7d333ede21f08e58898",
+               2: "155983539541890da6561a30eade5e59"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -143,8 +152,9 @@ BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
 # RE-RECORDED at v9 IN-12 `survey` + Rung with `BASE_HASHES` (7338 -> 7391, 21313 -> 22130).
 # RE-RECORDED at v9 IN-45 `carry` with `BASE_HASHES` (7391 -> 7186, 22130 -> 21338).
 # RE-RECORDED at v9 IN-45 `migrate` with `BASE_HASHES` (7186 -> 7160, 21338 -> 23584).
-BASE_EVENTS = {1: (7160, "448dd68361f089999ea524bd32fe13c3beafd1835b836ae5b11cf00be9fcb483"),
-               2: (23584, "317ce9b392e5281d9bbab04f940024e80babc1fcf6fd83ea5e9aae1b3b356fac")}
+# RE-RECORDED at v9 IN-49 `levy` with `BASE_HASHES` (7160 -> 7157, 23584 -> 23361).
+BASE_EVENTS = {1: (7157, "7b6709af3d0f1fd4b8efdc345db5f9ce5511fbd99d2fba5e8e61f481e069feee"),
+               2: (23361, "946059cda52a1110689d7dbc652d26e7221934f6e488e78c4fab286521df417e")}
 
 
 def _digest(w) -> tuple:

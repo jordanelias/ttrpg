@@ -2423,19 +2423,21 @@ def test_13d_iii_a_season_executes_an_issue_or_levy_through_a_seat_with_a_rung(_
     `5519cf52`; `H-163` limit 1) and executed none. The seat check is the
     point: an act whose `via` names a rungless seat would have refused, so this also shows `via`
     and the rung are one fact. (`levy` itself still mostly refuses as `levy.refused` -- the `stores`/
-    `write` conjuncts, `H-163` limit 3 -- which is not this position's to lift.)"""
+    `write` conjuncts, `H-163` limit 3 -- which is not this position's to lift.)
+    ⚠ v9 IN-49 `levy` (B-K, 2026-10-16), UNDER v9 §0.5 (2026-10-13: no test asserts a verb's count in
+    the seed-0 realm): the levy-share block that followed -- a `levy` ATTEMPTED in this season, and
+    not every one `levy.unauthorized` -- was DELETED, not skipped. It went red only because `levy`
+    now forms on a `Rung`-classed referent alone (`world_q.larders_in_purview`), and this season's
+    seat holders know of no larder their seats may levy (H-163 limit 3's measured residue), so none
+    is attempted. The purview half it watched is asserted on hand-built worlds:
+    `test_u7_remit.py::test_19_a_levy_outside_the_seats_purview_is_unauthorized_and_says_whose` and
+    section 9's computed levies."""
     w, att = _season13
     executed = [a for a, made, _ in att if a.verb in ("levy", "issue") and made]
     assert executed, "no levy or issue executed in a season: the cap `13d-iii` lifts is still on"
     for a in executed:
         assert a.via in w.offices, f"{a.verb} by {a.actor} executed with via={a.via!r}"
         assert w.offices[a.via].rung is not None, (a.verb, a.via)
-    levies = [(a, refused) for a, _, refused in att if a.verb == "levy"]
-    assert levies, "no levy was attempted -- the share below would be vacuous"
-    unauthorized = sum("levy.unauthorized" in refused for _, refused in levies)
-    assert unauthorized < len(levies), (
-        f"{unauthorized} of {len(levies)} levies refused on `authority`: every seat that levies is "
-        "still outside its purview")
 
 
 # =================================================================================================

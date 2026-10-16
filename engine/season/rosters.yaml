@@ -613,6 +613,15 @@ rosters:
       names, on IN-53 D1's partition and `seats_named`'s knowledge source: no operand is added
       (`to` still binds the referent, `decision/options.py::_derive_operand`) and no Record kind.
       REVERT: drop the value, `migrate`'s column and `places_named`'s splice.
+      v9 IN-49 `levy` (H-163 limit 3, [ASSUMPTION; medium; Jordan to correct]): AND the larders a
+      seat may levy (`queries/world_q.py::larders_in_purview` -- a Rung his own ledger names, holding
+      the fixtures' levy of their matter, inside the purview of a seat of his granting the remit act
+      of a row declaring this class, `data/verbs.py::RUNG_REMIT_ACTS`, and not that seat's own rung,
+      its treasury), stamped after the places and
+      never twice; `levy` declares it beside `migrate`, so its `subject` binds a stocked rung in
+      purview rather than whatever he was asked about. The class is shared, as `Office` is between
+      `confer` and `oblige`: each row forms on both sources and the fold disposes. REVERT: `levy`'s
+      column (which empties `RUNG_REMIT_ACTS`) and `larders_in_purview`'s splice.
     values: [Office, Record, Rung]
 
   person_predicates:

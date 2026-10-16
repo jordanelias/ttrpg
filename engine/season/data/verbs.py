@@ -1240,6 +1240,23 @@ def _derive_record_referent_kinds() -> frozenset:
 
 RECORD_REFERENT_KINDS = _derive_record_referent_kinds()
 
+
+def _derive_rung_remit_acts() -> frozenset:
+    """v9 IN-49 `levy` (H-163 limit 3, [ASSUMPTION; medium; Jordan to correct]): THE REMIT ACTS A
+    SEAT EXERCISES ON A `Rung`-CLASSED REFERENT -- the act of every `remit:` eligibility alternative
+    on a row declaring `referent_class: Rung` (`levy`: `issue`, `H-52`'s substitution, carried and not
+    decided here). Read off the rows, `RECORD_REFERENT_KINDS`' shape one class over, so the stamp
+    (`queries/world_q.py::larders_in_purview`, which offers a larder only to a holder of a seat
+    granting one of these) and the fold's eligibility cannot name different acts, and no act literal
+    lives at the stamp site. Empty when no `Rung` row is exercised through a seat (`migrate` is
+    `own`): then nothing is stamped, which is the revert."""
+    return frozenset(raw.strip() for row in VERB_TABLE.values() if row.referent_class == "Rung"
+                     for kind, _, raw in (alt.partition(":") for alt in row.eligibility)
+                     if kind.strip() == "remit" and raw.strip())
+
+
+RUNG_REMIT_ACTS = _derive_rung_remit_acts()
+
 # An authored alignment cell for an EVENT KIND rather than a verb is keyed `deed:<kind>` in the same
 # axis row. Admitted only where `<kind>` is in `EMITTED_KINDS` (`_load_alignment`): a deed key for a
 # kind no verb emits is a weight on an event nobody can see. None is authored today.
