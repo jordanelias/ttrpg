@@ -1017,7 +1017,7 @@ def test_t4_the_known_person_claim_roster_refuses_a_planted_collision():
     """`_check_known_person_claim` is the load-time cross-check of `rosters.yaml:
     known_person_operands.claim` against `REQUIRES_STEMS` and `observation_terms`; it never fires on
     the shipped data, so nothing observed that it could (the shape `test_demand_delivery.py`'s
-    `_check_shortfall_stem` and `test_content_operands.py`'s `_check_writ_sourced_subset` calls
+    `_check_shortfall_stem` and `test_content_operands.py`'s `_check_record_sourced` calls
     follow). Each planted collision must raise `Unspecified`, and the shipped claim must pass.
 
     MUTATION (run 2026-10-01): the `stem not in requires_stems` clause deleted -- the stem

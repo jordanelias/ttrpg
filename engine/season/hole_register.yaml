@@ -1181,8 +1181,12 @@ rows:
       swept on its OWN row `H-121`) and `default_transfer_amount` (1, swept here), the instrument's
       declared stand-in. A cell naming an operand nobody can derive forms NO Candidate. ⚠ AMENDED
       2026-09-29: two sources now come before the fixtures for `kind`/`amount`. A held writ
-      (`15c`, `_from_content_claim`) can name them, though neither live record kind yet carries
-      either key. A held SHORTFALL claim (`19d`, `_from_shortfall_claim`: `(rung,
+      (`15c`, `_from_content_claim`) could name them, though neither live record kind carries
+      either key -- ⚠ AMENDED AT v9 IN-10: they left the per-kind `record_sourced_operands` map for
+      that reason, so today a document answers `to` and, HELD, `subject` (`_derive_operand`'s
+      `held=`); and `issue` no longer binds `to` to the referent: it fans `to` over the persons the
+      issuer knows, so a writ's `terms` and its executor are two operands (the single-referent limit
+      stays on `petition`). A held SHORTFALL claim (`19d`, `_from_shortfall_claim`: `(rung,
       "shortfall:<kind>", units)`, recorded by MATTER on a drained larder's write) names both.
       The fixtures stand in where the question names neither.
     site:      >-

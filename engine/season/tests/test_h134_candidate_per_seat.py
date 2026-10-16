@@ -155,7 +155,12 @@ def test_h134_two_seats_are_two_acts_ids_opportunities_and_the_store():
 # RE-PINNED AT v9 IN-09: 68 -> 66. `comply` is typed and `referent_named`, so it no longer forms on
 # a referent the person's own ledger does not name; it was formed on arbitrary referents before and
 # then filtered out by `resolvable_verbs()`, so no behaviour moves (`aperture 4 0` other rows equal).
-_CONTROL = (66, 66, "891d3653ba8b5ff4b141165fcd4548904b307bd0be437a7e0f3f5275c7c4625d")
+# RE-PINNED AT v9 IN-10 (#453 §10.1): 66 -> 64, exactly the two `issue` Candidates leave and no
+# Candidate is added (per-verb count diffed: every other verb still 2). `issue` joined the
+# known-person fan for `to` (its `terms` conjunct binds `subject`), and `p_one` knows nobody and
+# holds nothing to say about the referent, so no writ forms -- where before both writs were
+# addressed to what they were about.
+_CONTROL = (64, 64, "c3cc3ff12bdc40e1507b67a36da955ff0ff2eab816135ef8d0f6132721eccb33")
 
 
 def _control_reading():
