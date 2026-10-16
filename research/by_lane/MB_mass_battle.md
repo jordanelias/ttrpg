@@ -667,3 +667,56 @@ REPAIRS (worst first; each one object or a deletion)
 
 GRADE: paper for the planned-built lane; runs at the resolver: probe (22 cells × 5 seeds, `scratchpad/mb_append/probe_field.py`), `test_march.py` 11 passed
 ```
+
+---
+
+## 10. KEY RECOMMENDATIONS
+
+This is an audit-design pass over six months of repository work. Jordan, 2026-10-16: it "gets permission to be whatever it is". The recommendations below are this pass's output. None is entered in the plan or a ledger until Jordan so rules.
+
+### 10.0 The top five, worst problem first
+
+1. **K-MB-1.** Give the season force a scale. Until it has one, every opposed field is Lost and every mechanism behind the seam is silent (M-MB-1, T-MB-1, T-MB-13).
+2. **K-MB-2.** Let the persons who march decide what kind of army they are: quality, discipline and command (M-MB-2, M-MB-3, T-MB-15).
+3. **K-MB-4.** Give the marching person one choice the engine already models (M-MB-5, T-MB-12).
+4. **K-MB-3.** Let the population be fielded, so that war costs people (M-MB-6, T-MB-5).
+5. **K-MB-9.** Let a field kill named persons, recorded as deaths (M-MB-14).
+
+### 10.1 PRIMITIVES
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-MB-1 | Convert each side's summed `Person.weight` into engine troops through one ruled constant owned at `massbattle._weighted_unit`, so that relative strength decides an opposed season field | M-MB-1 [CHECKED + runs: probe]; T-MB-1, T-MB-13; §9 R-CHOICE; audit A7, G3 [AUDIT] | **Form takeable, step 5.** Scaling the adapter's input keeps the engine's calibrated domain, its gauges and goldens; moving `SUBUNIT_ROUT_FLOOR` instead would re-pin every golden. The module names this site itself (`massbattle.py:198-207`). **Value:** `[OPEN — Jordan tuning]` | Adds one constant. Cuts `test_march.py:224-235`'s hand-built `Won`, IN-13's "constructed `Resolution`" exit clause, and the six disclosures of T-MB-1 | At constant 1, the seed-0 `World.content_hash()` equals today's. At the ruled constant, a 6-v-2 realm march gives `Won` on a majority of N seeds and 2-v-6 gives `Lost`, through a real fold |
+| K-MB-2 | Derive a side's power, discipline and command from its mustered persons, not from fixed 4, 5 and 4 | M-MB-2, M-MB-3; T-MB-15; audit A1, T1, G1 [AUDIT]; #445 U-1 (`08_mass_battle_units.md:125`) [CHECKED] | **Jordan:** survives all five steps. K-2 (`Person.attributes`) is unscheduled behind PC-06 (`_part7:51`). Persons with identical capacities, against persons whose capacities differ, are two materially different games (the audit's G1) | Adds reads of person fields (no new store once K-2 exists). Cuts `_MVP_UNIT_COMMAND` and `_SEASON_FORCE_POWER` (`massbattle.py:182-196`) | U-1's own: two musters of equal weight and different person qualities give different band distributions over N seeds; identical qualities reproduce the hash |
+| K-MB-3 | Let a rung's cohort be fielded by the seat that holds it, through the seat's existing `obligees:` edge, so that a levy takes people and a lost field takes them away | M-MB-6; T-MB-5; audit A7 and the E-watchlist row [AUDIT]; GD-2 [CHECKED]; 20G A3 [CHECKED upload] | **Jordan:** survives. It overwrites the plan's rule that "cohorts commit to nothing" (`_part6:222`) and the no-invented-creed refusal (`populated.py:394-395`). Elite war against mass levy are two games (13G throughline 5, "games about elites") | Adds no object: it reuses `oblige` and `obligees:`, which IN-36/IN-60 already plan for guard cohorts. Cuts the cohort's exclusion from `mustered` | A seat whose rung holds an obliged cohort fields more troops than an otherwise identical seat without one; with no oblige edge, the hash is unchanged |
+
+### 10.2 VERBS
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-MB-4 | Give `march` one operand chosen by the marching person: the side's posture (`aggressive` / `balanced` / `hold`), which the engine already reads through `STANCE_COMMITMENT` and `INTENT_OFFENSE_D` (`config.py:290, :296`) | M-MB-5; T-MB-12; R-04 (D1); 13G F4 and Axis VII [CHECKED upload] | **Jordan:** survives. A one-step strategy selection (EiA, 13G :298) and a played fidelity (the ruled three-fidelity doctrine; an IN-46-style suspension for `march`) give materially different games | Adds one operand. Cuts the fixed `stance='balanced'` in `_MVP_SUBUNIT_SHAPE` (`massbattle.py:176`) | At a converted scale (K-MB-1), two marches that differ only in the operand give different band distributions over N seeds; the default operand reproduces the hash |
+| K-MB-5 | Make war a state a field depends on: either `march` requires `at_war` with the target's holder, or a fought field makes the war Proposition true | M-MB-7; audit R-WORLD [AUDIT]; GD-1, GD-3 [CHECKED]; `faction_q.py:228-242` [CHECKED] | **Jordan:** survives. "Declare, then march" (CK2's casus belli, 13G :33) and "the field is the war" are two games, and `faction_q`'s own docstring leaves `at_war`-gating open (F.33) | Adds one `requires` clause or one effect. Cuts `at_war`'s status as a query with no production caller | (a) A march between factions not at war refuses with `march.refused`; (b) after a fought field, `at_war(a, b)` reads True |
+
+No verb is recommended for cutting. `march` keeps an N-line (§9.1).
+
+### 10.3 MECHANICS
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-MB-6 | Bound the **converted** force by the levied treasury in IN-52's feed, so that a levy can raise an army as well as starve one | HOLLOW IN-52 (8.3) [CHECKED design :378-405]; T-MB-5 | **Takeable after K-MB-1, step 3.** LF-1 already rules that "stores bound how many of them can be fielded" (design :378). Applying the bound to the converted count is the reading consistent with that ruling | Adds nothing: `min(weight, …)` becomes `min(converted, …)` | On the flip, a full treasury's side fields more troops than an empty one's, **and** above its raw weight. The second clause is false by construction today |
+| K-MB-7 | Delete the survivor-ratio four-label degree and its three thresholds from `_run_and_grade` | §9.1 false N-line [CHECKED]; audit G2b [AUDIT] | **Takeable, step 2:** nothing reads it (`ladder.py:198-206`) | Cuts about 15 lines and 3 constants (`massbattle.py:70-84, :289-296`) | `result['degree']` is gone; `march`'s bands and the seed-0 hash are unchanged |
+| K-MB-8 | Grade a field on the one margin ladder, through `degree_from_net`, instead of a third Won/Lost/Unopposed vocabulary | M-MB-11; §9.5 methodology; audit A3, G2c [AUDIT] | **Jordan:** survives. It rewrites `march`'s ruled Won/Lost writes (ED-IN-0279), so it overwrites ratified canon (the audit reached the same result) | Adds one margin formula. Cuts `field_degree`'s separate band set | Fields graded by `degree_from_net`; the mapped bands reproduce today's writes at the mapping's edges |
+| K-MB-11 | Delete the empty `rally_check` and `threadwork_check` hooks until a design gives each a reader | 8.4 stubs [CHECKED `orchestration.py:288-290, :333-335`]; T-MB-2 | **Takeable, step 2:** bodies are `pass`, and nothing depends on them | Cuts two functions and their call sites | Grep finds neither name; the field goldens are unchanged |
+
+### 10.4 TEXTURE
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-MB-9 | Let a lost field kill: a loser whose scaled body reaches 0 dies, and the death is emitted as `person.died`, on `_eff_kill`'s precedent | M-MB-14; H-152 [CHECKED]; T-MB-2 | **Jordan:** survives. "Casualties" (ED-IN-0279) admits both deaths and wounds, and the `wound_harm_model` precedent (a wound cannot kill) is the reading the shipped arm took. Wars with fallen and wars of wounds are two games | Adds one emission on an existing branch, closing H-152. Cuts the `max(1, …)` floor (`effects_combat.py:253`) | At a converted scale, a seeded field kills at least one named loser and the log carries `person.died`; with the floor kept, zero |
+| K-MB-10 | Let a field that carries a faction head yield that person's fate to a personal contest (`fight`) at ENCOUNTER, in place of the flat `Command=0 → instant rout` | M-MB-4; T-MB-4 (a null: no precedent solves it); audit A2 [AUDIT]; `orchestration.py:2221` [CHECKED] | **Jordan:** survives. No precedent decides it (D3/N-3). A commander's fate scaled by the side's fraction and a duel scene give materially different games | Adds one yield point at the existing ENCOUNTER barrier. Cuts the flat general-rout rule (the Dominions shape) | A field carrying the attacker's head produces one personal contest whose result changes that head's body independently of the side fraction |
+
+### 10.5 SURFACE
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-MB-12 | Before a march, show the marching person their own mustered weight, and their **own claims** about the target's defenders and walls, as the arithmetic of what they hold | M-MB-10; §9.4 E-LEGIBILITY; audit A3 [AUDIT]; R-07 (imperfect knowledge) | **Takeable, step 5:** §C.11 says the engine owes "the ARITHMETIC of what the character already holds" (`04_CODE_ARCHITECTURE.md:849-855`) [AUDIT]. It reads existing queries (`mustered`, `fortification_of`). Its client surface waits on IN-47, which has no build batch | Adds one View field. Cuts nothing; no new store | The shown values equal the person's held values, and a person holding a false claim about the defenders is shown the false value |

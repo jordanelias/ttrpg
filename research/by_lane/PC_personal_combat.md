@@ -395,9 +395,9 @@ Walked: the 33 rows of §4; THE NINE clauses that touch combat (R-04 conjunct 3,
 
 ### 9.3 E, scored last
 
-**E-OVERHEAD: FINDINGS.** Counts. The season surface is 3 verb rows, 1 effect registered twice, 1 seam adapter and 1 module entry. PC-10 adds 1 Record kind, 1 three-member roster, 1 event kind and 1 module stop rule. IN-59 adds 1 conjunct, and no vocabulary is cut. Beneath the seam sit 14 files and 5,643 lines (§3.1), whose season-visible output is a function of 16 input pairs (48 after PC-10). That ratio is the finding. The overhead is unearned at season scale while M-PC-1 holds. It is not "unnecessary" by the ratio rule, because what a cut would kill (the physics that K-1 would make live) is a possibility the plan names but does not schedule. The skill gives no N-line on that basis, and so the depth stands on X4's park, not on an N-line.
+**E-OVERHEAD: FINDINGS.** The season surface is 3 verb rows, 1 effect registered twice, 1 adapter and 1 entry. PC-10 adds 1 Record kind, 1 roster, 1 event kind and 1 stop rule; IN-59 adds 1 conjunct; nothing is cut. Beneath the seam sit 14 files and 5,643 lines (§3.1) whose season-visible output is a function of 16 input pairs (48 after PC-10). The overhead is unearned at season scale while M-PC-1 holds. It stands on X4's park, not on an N-line.
 
-**E-LEGIBILITY: FINDINGS.** A player cannot read a fight's odds anywhere (M-PC-6). Today a fight is, by construction, close to a coin flip modulated by body band. It is predictable only because it is trivial. The measure, reach and facing the lane presents as its depth cannot be intuited from any choice, because no choice reaches them.
+**E-LEGIBILITY: FINDINGS.** No surface shows a fight's odds (M-PC-6). Today a fight is close to a coin flip modulated by body band, predictable only because it is trivial. Measure, reach and facing reach no choice, so nothing can be intuited from them.
 
 **Watchlist (over-distillation).**
 
@@ -410,9 +410,9 @@ Walked: the 33 rows of §4; THE NINE clauses that touch combat (R-04 conjunct 3,
 
 ### 9.4 R
 
-- **R-COMPLETE: FINDINGS.** Unwritten branch: the actor's band (M-PC-2; probe: 205/400 actor felled with the subject standing, unwritten). `accept` without a challenge (repaired by PC-10b). The returned trace and `winner` are carriers with no reader. **At the extremes the engine holds:** the logistic clamp keeps out-of-contract inputs from crashing (`core.py:26-41`), and `party_end` floors at 1, "a dying person still fights" (`seam/wrappers/combat.py:135-138`) [CHECKED]. The input space has no extreme to break at, because nothing but `end` varies.
-- **R-VARIETY: FINDINGS.** One build fights like every other (M-PC-1). This is the audit's A1, re-opened here at `fight.py:45`, `combatant.py:93-94` and `wrapper.py:181, :210`.
-- **R-WORLD: PASS in shape, thin in the tree** [CONFIDENCE: medium]. Violence emerges with no player involved: IN-59's measured basis is ten season-0 kills, regicides among them (`_part5.md:232`, a session probe the plan quotes, not re-run). The hooks it throws are thin. The vacancy goes unnamed (M-PC-8). Grievance at read is hash-equal at the shipped `legacy` arm (`_part5.md:224`). The killer takes no wound (M-PC-2).
+- **R-COMPLETE: FINDINGS.** Unwritten branch: the actor's band (M-PC-2, 205/400). `accept` without a challenge (repaired by PC-10b). The trace and `winner` have no reader. At the extremes the engine holds: the logistic clamp (`core.py:26-41`) and `party_end`'s floor of 1 (`seam/wrappers/combat.py:135-138`) [CHECKED].
+- **R-VARIETY: FINDINGS.** One build (M-PC-1; the audit's A1, re-opened).
+- **R-WORLD: PASS in shape, thin in the tree** [CONFIDENCE: medium]. Violence emerges unwatched: ten season-0 kills, regicides among them (`_part5.md:232`, a session probe the plan quotes). Its hooks are thin: the vacancy is unnamed (M-PC-8), grievance is hash-equal at the shipped arm, and the killer takes no wound.
 - **R-CHOICE: FINDINGS, an upper bound.** Seat: any person; `fight` is `own`-eligible, and the player occupies a person through S-1's dispatch (`_part7.md:44`). Intent: *remove a rival by violence*.
 
   | act | gain | cost |
@@ -421,12 +421,12 @@ Walked: the 33 rows of §4; THE NINE clauses that touch combat (R-04 conjunct 3,
   | `challenge` → (rival) `accept` | the same contest | two acts and the rival's consent; **all body risk falls on the challenger**, who is `accept`'s subject |
   | `petition`/charge → `determine` → `detain` + `fight` (IN-12 step 5) | a lawful death | proceedings across several scenes and persons |
 
-  **Strict dominance:** `fight` has a gain at least equal to the duel's and a strictly lower cost. The duel is worse than useless to the man who wants a death: it transfers the risk from the target to himself. That survives planned=built, because IN-59 binds all three verbs alike and PC-10 leaves subject-only writes in place. **Dependency:** the act economy (IN-14, `[ASSUMPTION]`) and the deontological gate (`refusal_axis` dark). An authored moral refusal of assault would price `fight` and not `challenge`. R for this intent cannot be ruled until both are.
+  **Strict dominance:** `fight` has a gain at least equal to the duel's and a strictly lower cost. To the man who wants a death the duel moves the risk from the target onto himself. This survives planned=built: IN-59 binds all three verbs alike, and PC-10 keeps subject-only writes. **Dependency:** the act economy (IN-14) and the dark `refusal_axis`; a moral refusal of assault would price `fight` alone.
 
 ### 9.5 S
 
-- **S-UP: N-A** for the module (a dice resolver at a seam, no docket). For the season verbs: a killing's consequence does not reach the seat as a named vacancy (M-PC-8).
-- **S-DOWN: PASS in shape** for the news of a fight: it travels by telling, relied on from the audit's S-DOWN row [AUDIT]. A challenge is addressed by design (writ-like delivery to the challenged, PC-10b). That is the delivery of a demand on its named party, not an opportunity routed to a recipient, so it is not a S-DOWN failure.
+- **S-UP: N-A** for the module (a resolver at a seam). For the verbs: the vacancy does not reach the seat (M-PC-8).
+- **S-DOWN: PASS in shape** for the news of a fight, which travels by telling [AUDIT]. A challenge's addressed delivery is a demand on its named party, not an opportunity routed by name, so it is no failure.
 - **Coverage.**
 
 | direction | here | carried by |
