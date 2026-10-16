@@ -524,10 +524,16 @@ independent.
 
 ### 7.2 Conflicts inside the lane, and where code or plan contradicts a throughline
 
-1. **Layer 1 forbids the dedup filter the loop runs.** `03_VERBS_AND_LOOPS.md`:138-140 [CHECKED]: "No cap, no dedup, no per-venue limit, no
-   *already-before-this-body* rule — each of those would be the engine deciding a person's options"; `_drop_what_was_already_done` exists
-   [CHECKED `deliberate.py`:305] and is called on every queue [CHECKED :225], its docstring resting on `player_agency_v30` §6.3, a reference
-   document (§0.05). Audit A5a [AUDIT]: confirmed at `5445e34`.
+1. **Layer 1 contradicts itself over the dedup filter the loop runs.** `03_VERBS_AND_LOOPS.md` §C.3:138-140 [CHECKED]: "No cap, no dedup,
+   no per-venue limit, no *already-before-this-body* rule — each of those would be the engine deciding a person's options"; §C.2:131-134
+   [CHECKED]: "at one scene … nobody ever chooses what to leave undone … Triage is the mechanism the budget exists to create".
+   `_drop_what_was_already_done` [CHECKED `loop/deliberate.py`:305] is called on every queue [CHECKED :225]. Its own justification is §C.2
+   (S26.3) plus a **measured monoculture** before it existed — "`create_record` x10, `reconstruct` x9, `research` x7, `move` x2 — **all by
+   `p_carin`**", with seven verbs "gone from the world entirely" (`deliberate.py`:314-318 [CHECKED]); it cites `player_agency_v30.md` §6.3
+   only for its unit. Its key is `(verb, subject)`, or `(verb, subject, counterparty)` where the row names one (`:346-352` [CHECKED]), and
+   it bars only what was REALISED, not attempted. So the conflict is inside ratified Layer 1 (§C.2 against §C.3), not Layer 1 against a
+   reference document, and deleting the filter re-opens a measured failure. Audit A5a [AUDIT] (which read it as Layer 1 vs reference): the
+   contradiction survives at `5445e34`, its framing does not.
 2. **AX-7's falsifier names three sites that no longer exist and one gloss Layer 1 contradicts.** `01_AXIOMS.md`:314-317 names `witness.py`:191,
    :271, :361 [CHECKED]; the Claim constructions are now at :532, :648, :671, :700, :850 [CHECKED grep]. The gloss "No state is hidden from the
    player" (`01`:301-302) sits beside §C.11's "engine owes the ARITHMETIC of what the character already holds, and nothing else"
