@@ -258,7 +258,7 @@ Written from reader extractions, then attacked by an independent read-only criti
 
 ## 7. THROUGHLINES
 
-**Verdict.** Thirteen throughlines: 4 CONVERGENCE, 2 NULL, 3 FAILURE SHAPE, 4 REPOSITORY PATTERN. The lane's strongest pattern is not in its research but in its code: **threadwork, the Calamity and the world's exogenous motion are each built to the module or fixture and stop one step short of an act a person takes in the season loop** (T-WR-7, T-WR-8, T-WR-11). The research throughlines that bear on the lane are sound as shapes and almost all UNREACHED: the one that reached code (crisis as wear crossing a floor, T-WR-1) arrived without citing its source. Independence is overstated across the precedent corpus: the compendium and the mechanical specification are one author; the Third Strand integrates them; COMP collates THR's dossiers; HCC and PGS share one pipeline. Counted that way, no WR throughline rests on more than three independent sources.
+**Verdict.** Thirteen throughlines: 5 CONVERGENCE, 1 NULL, 3 FAILURE SHAPE, 4 REPOSITORY PATTERN. The lane's strongest pattern is not in its research but in its code: **threadwork, the Calamity and the world's exogenous motion are each built to the module or fixture and stop one step short of an act a person takes in the season loop** (T-WR-7, T-WR-8, T-WR-11). The research throughlines that bear on the lane are sound as shapes and almost all UNREACHED: the one that reached code (crisis as wear crossing a floor, T-WR-1) arrived without citing its source. Independence is overstated across the precedent corpus: the compendium and the mechanical specification are one author; the Third Strand integrates them; COMP collates THR's dossiers; HCC and PGS share one pipeline. Counted that way, no WR throughline rests on more than three independent sources.
 
 Evidence marks: `[CHECKED]` opened this pass; `[READER]` from an extraction; `[AUDIT]` from the uploaded NERS audit not re-opened. "Indep." = independent sources by this count.
 
@@ -308,7 +308,7 @@ Demand strength key: STRONG = D1-D3; MEDIUM = D4-D5 or D3 with an unruled magnit
 
 ### 8.1 Counts
 
-`examined 36 candidates; 17 entered (6 MISSING, 4 HOLLOW, 2 BLOCKED, 5 PLANNED-UNBUILT or BUILT-DARK rows grouping 9 areas); 19 dropped or merged (one-line reasons in 8.5)`. Walked: the 25 rows of §4; THE NINE clauses R-01, R-04 (scale set, chronicling), R-05 (`thread_read`), R-06 (Church and thread conviction cells), R-07 (sensitive/non-sensitive asymmetry); hole rows H-47, H-85, H-176, H-182, H-186; NERS digest A8 (three findings), A2 (two), R-WORLD, T5; Jordan's nine drivers as classed at #457 `:76-90` (drivers 1, 5, 6 bear on WR); throughlines T-WR-1..13.
+`examined 40 candidates; 21 entered (6 MISSING; 5 HOLLOW, two of them also BLOCKED; 1 BLOCKED only; 9 PLANNED-UNBUILT or BUILT-DARK); 19 dropped or merged (one-line reasons in 8.5)`. Walked: the 25 rows of §4; THE NINE clauses R-01, R-04 (scale set, chronicling), R-05 (`thread_read`), R-06 (Church and thread conviction cells), R-07 (sensitive/non-sensitive asymmetry); hole rows H-47, H-85, H-176, H-182, H-186; NERS digest A8 (three findings), A2 (two), R-WORLD, T5; Jordan's nine drivers as classed at #457 `:76-90` (drivers 1, 5, 6 bear on WR); throughlines T-WR-1..13.
 
 ### 8.2 MISSING
 
@@ -500,5 +500,66 @@ GRADE: paper for the design; runs for two module findings (pool constant at hist
        all 16 scale×degree cells), executed this pass with the repository's own functions.
        Not run: any season, any seed, resolution-diagnostic, aperture, corpus_run.
 ```
+
+## 10. KEY RECOMMENDATIONS
+
+This is an audit-design pass over six months of repository work. Jordan, 2026-10-16: it "gets permission to be whatever it is". The recommendations below are this pass's output; none is entered in the plan or a ledger until Jordan so rules.
+
+### 10.0 The top five, worst problem first
+
+1. **K-WR-2** — build thread operations as persons' acts (M-WR-1: the lane's physics never enters play).
+2. **K-WR-4** — drive the Calamity from what persons do with threads (IN-35 HOLLOW; D1's answer unreached).
+3. **K-WR-5** — give the crossing a consequence (M-WR-2; P-15).
+4. **K-WR-11** — show each person the chronicle of what he witnessed (M-WR-5; R-04's unowned chronicle clause).
+5. **K-WR-9** — turn the world's forcing on at Jordan's values (T-WR-8; R-WORLD fails in the tree today).
+
+### 10.1 PRIMITIVES
+
+| ID | recommendation | grounded in | CLAUDE.md §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-WR-1 | Seed each person's Thread Sensitivity from the registry's authored `ts:` values when K-3 lands, and land K-3's `coherence` field only together with the act that writes it. | §8.4 (32 of 46 rows, no reader) [CHECKED]; §9.1 false N-line (disqualifier 2) [CHECKED]; T-WR-7 | takeable, step 4: precedent, `build_at` seats a cast entry's own fields from its source (`requirements.yaml:79-80`); parsing ranges such as "75–80" is [medium] | adds one reader of existing data; cuts K-3's unseeded default and a store with no producer | in one seed, `thread_read` executes for a registry person whose `ts` ≥ 30 and is refused for one below; delete the reader and every person reads the default |
+
+### 10.2 VERBS
+
+| ID | recommendation | grounded in | CLAUDE.md §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-WR-2 | Make the thread operations (Weave, Pull, Knot, Loosen and Sever, Mend, the Leap) acts a person takes in the season, resolved by the existing `operations.py` and writing the actor's Coherence through the seam. | M-WR-1 (D3, STRONG) [CHECKED]; T-WR-7, T-WR-11; §9.2 C1, C5 | takeable, step 3: ED-WR-0010 rules threadwork in scope, and v9's D1 answer [medium] makes the Calamity "strain as an act's cost" (`_part5:450`). Disqualifier 3 named: VCD family 47 deferred it to positions 27/29f (`verb-coverage…md:4502`); 27 has since been built and 29f cancelled (`_part7:66-73`), and Jordan's drivers 5 and 6 (#457 `:29-30`) and D1's answer came after | adds verb rows on an existing resolver (one row with a type operand is the shorter form); cuts IN-35's reading of `restore` as Mending and the empty `threadwork_check` hook once Thread→Mass is carried by acts | one seed: a practitioner's working writes his `(Person, coherence)` and the write-matrix `unproduced:` line no longer holds; with the rows deleted, today's `content_hash` returns |
+| K-WR-3 | Let the thread Mend be the Mending, keep `restore` for fabric, and land the orthodox and restorationist cells on the act of working threads as well as on `thread_read`. | §3.3 row 1; §9.2 C4 (i), C5 (scar on the perceiving act) [CHECKED]; §9.3 watchlist | takeable, step 3: the roster's own revert, "a thread-operation verb or a restore kind exists, and the two cells land on it" (`rosters.yaml:2155-2156`) | adds two cells; cuts IN-35's `restore` arm as Mending | an orthodox witness of a Mend takes a scar on `solmund_orthodoxy`; a witness of a wall `restore` does not |
+
+### 10.3 MECHANICS
+
+| ID | recommendation | grounded in | CLAUDE.md §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-WR-4 | Feed IN-35's coupling from the strain thread acts leave in a territory, so the Calamity worsens from what persons do and is held back by Menders, and keep the ambient expansion only as the unmanaged baseline. | §8.3 IN-35 HOLLOW; T-WR-11; §9.6 falsifier hit [CHECKED] | takeable, step 3: D1 answered [medium], with its revert ("Jordan says the ongoing expansion is ambient matter motion") | adds one input to a planned coupling; cuts the managed arm on `restore` | three arms, one seed: no thread acts reproduces the coupling; acts on, lattice condition falls faster in order of distance; Menders on, it stabilizes; coupling 0 gives today's hash |
+| K-WR-5 | Give the crossing a consequence that changes the person's options, gated by Thread Sensitivity as P-15 requires. | M-WR-2 (D2, STRONG); A8 [AUDIT]; `coherence.py:63-69` [CHECKED] | **Jordan**: survives all five steps because P-15 says a consequence must exist and that reach gates it, but removal from play and continued play as an altered being with a different act set (the suite's "four playable modes", `18aca7ab:249`) are two defensible options that make materially different games | adds one rule on an existing quantity; cuts the report-only crossing | a hand-built person pushed past the band has a different option set the next round; one stopped at the band edge does not |
+| K-WR-6 | Put the difficulty of mending one's own configuration into that act's Ob, as RULINGS C-1 rules and the code already says it belongs. | M-WR-4 (D3); `operations.py:162-167` [CHECKED, executed price] | takeable, step 3 (C-1); magnitude `[OPEN — Jordan tuning]` | adds one Ob term; cuts the free walk of a permanent set to 0 | N repeated own-aim casts from one seed reduce the permanent set strictly less than today; other-aim Mending is unchanged |
+| K-WR-7 | Make history count in a thread roll by capping the history term, not the sum (`min(3, history) + 3`). | §8.3 landed HOLLOW (executed: pool 14 at history 0, 1, 3, 6); A8, G7 [AUDIT] | takeable, step 3: the function's own docstring (PP-624; verify PP-624 by hand first) | adds nothing | the pool at history 0 differs from the pool at history 3, in one test |
+| K-WR-8 | Rule how Coherence's elastic return enters the loop: a licensed clock on the being, like bodies, or the effect of a rest a person chooses. | §9.2 C4 (ii); §9.6 falsifier family [CHECKED] | **Jordan**: survives because the write matrix quotes Layer 1's three clocks as "exhaustive" (`write_matrix.yaml:176`), so a fourth overwrites ratified Layer 1 text, and passive recovery and recovery that costs a scene are materially different games | adds one licence line or nothing; cuts the conflict | plugged `recover()` with neither licence nor act is refused by the write guard |
+| K-WR-12 | Re-express GD-2's mandatory Muster/Govern as a duty on the person who holds the threatened territory, or retire it. | M-WR-6 (D2); VCD `:4654` [CHECKED] | **Jordan**: survives because GD-2 is CANONICAL and AX-1 forbids a faction that acts; either option overwrites one of them | adds nothing (a duty is a question on an existing seat); cuts a faction-level pass | under the duty reading, an ungarrisoned low-Accord holder's first question names the territory; under retirement, `grep GD-2 canon/04` finds a retired row |
+
+### 10.4 TEXTURE
+
+| ID | recommendation | grounded in | CLAUDE.md §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-WR-9 | Ship the realm with weather, ageing and illness on, at values Jordan sets, so that unwatched seasons carry dearth, illness and death. | T-WR-8; R-WORLD; §8.4 [CHECKED `fixtures.py:405, :542-543`] | **Jordan**: survives because the values are reserved to him by ruling ("ALL ARE JORDAN'S TO SET (#457 D2's gate)", `fixtures.py:537`), not because the form is open | adds nothing; cuts the control as the shipped default | an N-seed STORY-BAR run, forcing on against off, reports the cross-person antecedent share for both arms |
+| K-WR-10 | Express GD-1's ending through persons: read its stability term from a named seat-holder's own estimate, and give its Accord term a carrier or drop it. | §8.3 IN-27 HOLLOW; §9.2 C3 [CHECKED] | **Jordan**: survives because GD-1 is CANONICAL and either change rewrites its terms | adds nothing; cuts the Accord term or the omniscient read | IN-27's own: no ending fires with no person's act among its antecedents |
+
+### 10.5 SURFACE
+
+| ID | recommendation | grounded in | CLAUDE.md §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-WR-11 | Show each person the chronicle of what he witnessed by running IN-37's render over `witnessed(w, pid)` (L-1), and use that view as the character sheet's chronicle. | M-WR-5 (D1, STRONG); T-WR-4; §8.3 IN-37 [CHECKED `world_q.py:1979`] | takeable, step 5: it composes on a landed per-person primitive and keeps the render outside the simulation, as IN-37's falsifier requires | adds one view; cuts the need for any chronicle store | in one seed two persons read different chronicles, and no person's chronicle shows an event he did not witness |
+
+## 11. METHOD NOTE (sections 7-10)
+
+**Opened myself.** `systems/threadwork/sim/operations.py` (`:150-168`, `:232-252`, `:436-468`), `coherence.py` (`:1-40`, `:60-75`, `:110-118`, `:341-353`); `engine/season/rosters.yaml:1990-1997`, `:2145-2182`; `write_matrix.yaml:170-178`; `state/world.py:1001-1008`; `state/carriers.py:643-710` (Person fields); `loop/effects_economy.py:134-140`; `loop/matter.py:41-46`, `:586-601`; `queries/world_q.py:739`, `:1398`, `:1461`, `:1964-2038`; `queries/faction_q.py:219-240`; `data/fixtures.py:396-405`, `:535-545`; `verb_table.yaml:839-850`; `hole_register.yaml:1052-1062`; `requirements.yaml:52-80`, `:795-815`; `modules/mass_battle/orchestration.py:328-338`; `references/npc_registry.yaml` (`ts:` count); `canon/04:25-29`; `canon/philosophy/10_constraints.md:1-39`; plan `_part3:88-94`, `_part4:100-112`, `_part5:100-183`, `:450`, `_part7:40-86`, `_part8:258-262`; #457 `:27-40`, `:76-90`, `:123-143`, `:160-190`; `proposals/2026-10-13-narration-mechanisms.md:36-56`; `proposals/2026-09-30-character-and-play-surface/README.md:44-52`, `09_the_character_sheet.md:128-132`; `04_PROVENANCE.md:120-185`; `HANDOFF_WR.md`. Executed: `operations._actor_pool` at six history values and `price_mending` at 16 scale×degree cells; `python -m engine.season.harness.register --requirements` (met 3, partial 5, not_met 1); `sha256sum` of six uploads; greps for each absence test as written in §8.2.
+
+**Taken from elsewhere.** Throughline sources from extractions `R4 T`, `R6 T`, `R8 T`, `UP01`, `UP02`, `UP05`, `UP09`, `UP11`, `UP13`, `UP15` [READER]; the uploaded NERS audit's A2 (Domain Echo), A3, A5, T5 [AUDIT] where marked; BASELINE B1-B5 for plan states, dark knobs and hole rows. In the uploads I opened the Twenty Games' empty cells and asymmetry map (`6039edcc:134-146`, `:221-248`), the suite index (`67b3f41d:8-34`), and spot lines of parts 05 and 06.
+
+**Upload corrections applied (Step 0).** (1) §5's sources gap: five of the seven ENP v2 documents in hand and hash-matched; the two earlier drafts and both VCD surveys absent; Third Strand hash mismatch noted. (2) §5: Unreality Suite parts 00-07 in hand, 08-10 absent, ED-WR-0010 cites 09 and 10. (3) §5: compendium and specification do not bear on threadwork. (4) §2.1 ENP v2 row: "not stored, cannot be re-read" replaced by the provenance test results (TIER-FLOOR misattributed; "three of seven" not reproducible; "never mentions Valoria" confirmed; M5 quotation a paraphrase; Tropico's almanac in no hash-matched source). (5) §3.2 ENP v2 row: "seven unstored documents" corrected. (6) §1.1: a source row grading the suite. (7) §0 #4 and §1.3: the suite named and graded (perception literature, self-authored, priced on the superseded track). §0's ranking is unchanged.
+
+**Could not check.** Suite parts 08, 09, 10; the two VCD surveys; the earlier drafts; `proposals/2026-10-07-unplugged-systems-replug.md` body; whether K-3's write path reaches the seam-only write guard; any multi-season or multi-seed behaviour; `resolution-diagnostic` on the thread draw; PFF/16 (still unopened); PP-624's text.
+
+**Confidence.** [CONFIDENCE: medium] on §9.4 R-CHOICE (an upper bound conditional on M-WR-1 and the act economy) and §9.5 methodology (ii). [CONFIDENCE: medium] on the independence counts in §7.1, which rest on the extractions' provenance notes. Fan-out: none spawned; the reading was shared through existing extractions, and no second reader would have seen code this pass did not open.
 
 

@@ -403,7 +403,7 @@ Method: walked (a) the 26 rows of §4; (b) the THE NINE clauses touching MB (R-0
 
 ### 8.1 Counts
 
-`examined 40 candidates; 28 entered (13 MISSING, 5 HOLLOW or BLOCKED, 10 PLANNED-UNBUILT or BUILT-DARK); 12 dropped (one-line reasons in 8.5)`
+`examined 41 candidates; 29 entered (14 MISSING, 5 HOLLOW or BLOCKED, 10 PLANNED-UNBUILT or BUILT-DARK); 12 dropped (one-line reasons in 8.5)`
 
 ### 8.2 MISSING
 
@@ -424,6 +424,7 @@ Demand strength: **D1** THE NINE / Jordan in `requirements.yaml`; **D2** canon P
 | M-MB-11 | **The field's result on the one ladder** (a margin, not a separate three-band vocabulary) | **D5** A3, G2c [AUDIT]. **D3** Layer 1 says a subsystem returning no margin "has not met the contract" (`03_VERBS_AND_LOOPS.md:286-289`) [AUDIT] | **absent.** `field_degree` reads `attacker_wins`/`unopposed` (`ladder.py:185-206`) | **none** ("open MB-lane work", `ladder.py:198-203`) | Plan regex `field.{0,30}margin\|margin.{0,30}field\|survivor.ratio`: 0 | March outcomes cannot share calibration or display with other contests | S methodology |
 | M-MB-12 | **GD-2's threat response** (an unguarded owned territory under threat draws a muster) | **D2** GD-2 (`canon/04_game_design_constraints.md`; `gd_binding`, `references/canonical_sources.yaml:42`) [CHECKED] | **absent** (no muster act; no faction action selection, by AX-1) | **none** | `grep -rn GD-2` over the plan, `requirements.yaml` and `hole_register.yaml`: 0 | Canon promises that a threatened territory draws a garrison, and nothing carries the promise | R-WORLD; C1 (a claim with no carrier) |
 | M-MB-13 | **The authored cast never marches.** `corpus_run`'s 143 cases never give `march` a referent | **D4** "H-175 … its remainder unowned" (`valoria_master_workplan_v9.md:368`) [CHECKED]. **D1** R-05 (march in the never-attempted class, BASELINE B3) | **executes** in the realm (`aperture`); never attempted in the corpus | **none** | the plan's own sentence; `test_season_shape.py` pin (BASELINE B3) [READER] | The cast's war-minded persons have no war to attempt | R-WORLD (dead seat for authored generals) |
+| M-MB-14 | **Death in battle.** No person can die in a season field at the shipped casualty arm, and the arm that kills is not recorded as a death | **D3** Jordan's ruling that a loss writes "casualties only, decrease in morale, and a grudge token" (`verb_table.yaml`, the `march` `writes_grade_note`; ED-IN-0279) [CHECKED]. **D4** H-152: "A `total`-CASUALTY-MODEL MARCH LOSS KILLS WITH NO `person.died` EVENT … no owner exists yet" (`hole_register.yaml:3324-3340`) [CHECKED] | **absent at the shipped arm.** `scaled_by_degree` gives `p.body = max(1, …)` and "floors at 1 and never reaches" removal (`effects_combat.py:253-254, :267-270`); the `total` arm removes without `person.died` (H-152) [CHECKED] | **none** | `grep -n H-152` over the plan: 0 | A war kills nobody by name, so no heir, no widow and no fallen general enters the chronicle | R-WORLD; texture (C1: "casualties" has no death carrier) |
 
 ### 8.3 HOLLOW and BLOCKED
 
@@ -552,7 +553,7 @@ SEAT: the rival's head                          INTENT: keep S
 
 **R-VARIETY: FAILS.** There is one army build: `Line`/`infantry`, power 4, command 4, discipline 5 (`massbattle.py:170-196`) [CHECKED]. Neither creativity nor variety can enter a field (M-MB-2, M-MB-5).
 
-**R-WORLD: FINDINGS, upper bound.** With IN-13 and IN-36 built, unwatched seats emit marches, fields, `field.lost`, grudges and witnesses' regard (IN-13's re-homed falsifier). The world throws hooks. They all have one shape: the failed assault. It is a portrait that throws hooks, so it passes Rule 3's portrait test narrowly, but a war that never changes a border is a thin hook. **[today]** "the realm fights no field" (H-150); the realm's 11 declared marches are refused (R-07, `requirements.yaml:1124-1125`) [CHECKED]. That is a dead seat for war, and R-WORLD fails today.
+**R-WORLD: FINDINGS, upper bound.** With IN-13 and IN-36 built, unwatched seats emit marches, fields, `field.lost`, grudges and witnesses' regard (IN-13's re-homed falsifier). The world throws hooks. They all have one shape: the failed assault. It is a portrait that throws hooks, so it passes Rule 3's portrait test narrowly. But a war that never changes a border, and at the shipped casualty arm never kills anyone (M-MB-14), is a thin hook. **[today]** "the realm fights no field" (H-150); the realm's 11 declared marches are refused (R-07, `requirements.yaml:1124-1125`) [CHECKED]. That is a dead seat for war, and R-WORLD fails today.
 
 **R-COMPLETE: FINDINGS.** The mechanism breaks at its extreme, and the extreme is the shipped case: single-digit sides below the floor. Other unwritten branches:
 - an empty side fights at the crash floor `_MIN_TROOPS` (`massbattle.py:208`);

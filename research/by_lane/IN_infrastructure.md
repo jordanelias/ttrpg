@@ -717,7 +717,7 @@ mass battle's four-label degree is the MB lane's (audit G2b). Each was attacked 
   is named (M-IN-1, H-IN-2). "No state is hidden from the player" (`01`:301-302): no carrier — `explain` is unimplemented (M-IN-3). "R-05 is
   owned by the verb positions": no carrier (H-IN-1). "History improves a thread roll": no carrier (`operations.py`:246 [CHECKED]; WR).
 - **C2 type signature.** `explain(p : PersonInterior, v : Value)` takes no `World` (`04`:860 [CHECKED]), but a contested act's odds depend on
-  the subject's capability (`_obstacle_of` reads `w.persons[subject]`, `sigma.py`:121-125). **So the odds surface the player is owed cannot be
+  the subject's capability (`_obstacle_of` reads `w.persons[subject]`, `sigma.py`:125-128 [CHECKED]). **So the odds surface the player is owed cannot be
   the true odds: it must be the actor's estimate from claims they hold about the subject.** The signature already decides the shape of M-IN-3.
 - **C3 epistemic feasibility.** The resolver's read of the subject's capability is resolver-side and lawful. A shown band must be computed from
   held claims (C2). H-207's second cause, question priority, is evaluated from the person's own questions, so it is feasible; its first cause
@@ -735,7 +735,7 @@ mass battle's four-label degree is the MB lane's (audit G2b). Each was attacked 
 
 - **Seat question.** Answered by the design's laws: the player is an ordinary person, overridden per person id (`play_surface.py`:40-51
   [CHECKED]); every person seat is occupiable. R-CHOICE and R-VARIETY therefore bind at every person seat.
-- **R-COMPLETE: FINDINGS.** Extremes: S27.4 refuses when Ob exceeds `obstacle_refusal_multiple × pool` (`sigma.py`:187-189 [CHECKED]);
+- **R-COMPLETE: FINDINGS.** Extremes: S27.4 refuses when Ob exceeds `obstacle_refusal_multiple × pool` (`sigma.py`:190 [CHECKED]);
   pool 2 at Ob 2 can never be Overwhelming (executed, 9.1); the σ-boost floors below one die (`orchestration.py`:1284-1289 [CHECKED]).
   Unwritten branches: `succeed`, `carry`, `forge` effects declined; H-207's four causes; H-91's eligibility conflict. The odds sawtooth (9.1) is
   a completeness defect at every odd step.
