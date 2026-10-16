@@ -12,7 +12,7 @@ What each block proves, and the control that stops it passing vacuously:
      `text` Record with `None` content, both construct.
   3. REACHABILITY, MEASURED RATHER THAN CLAIMED. `petition` is resolvable; `issue` is NOT (its
      `requires:` is prose -- position `19`'s) even though it now has an effect; `carry`'s
-     precondition reaches a petition Record and the verb itself still has no effect (`H-63`).
+     precondition reaches a petition Record (since v9 IN-45 the verb has an effect too).
   4. THE DEPOSIT RULE, IN A SEEDED SEASON. A filed petition deposits `content:petition` in the
      petitioner's own ledger, verbatim and frozen (hashable, `epistemic.Seen`'s precedent). Control: a `create_record` of kind `text` deposits NO
      content claim. The `dispensation` artifact (r2 `05:1245`) runs through the fold with a
@@ -116,16 +116,20 @@ def test_l35_refuses_a_missing_key_an_extra_key_an_unknown_kind_and_a_non_mappin
 # 3 -- WHAT IS REACHABLE, MEASURED
 # ======================================================================================
 
-def test_petition_and_issue_are_resolvable_and_carry_is_not():
+def test_petition_issue_and_carry_are_resolvable():
     """⚠ RENAMED AT PLAN POSITION `19` from `..._and_issue_and_carry_are_not`: this position gave
     `issue`'s prose cell its evaluable form (`verb_table.yaml`, `executors` + `authority`), so the
-    effect `15` built is reachable through RESOLVE -- the flip `15`'s own assertion anticipated."""
+    effect `15` built is reachable through RESOLVE -- the flip `15`'s own assertion anticipated.
+    ⚠ RENAMED AGAIN AT v9 IN-45 from `..._and_carry_is_not`: `carry` has an effect (`_eff_carry`),
+    re-winding the petition's `Record.stages` and docketing its `terms` -- the flip #453's `carry`
+    row names (*`test_record_kind_fold.py:119` (`..._and_carry_is_not`) flips*)."""
     rv = resolvable_verbs()
     assert "petition" in rv, "petition has a typed precondition and an effect and is not resolvable"
     assert "issue" in EFFECTS, "issue lost its effect"
     assert "issue" in rv, "`issue` has a typed precondition (position `19`) and an effect (`15`)"
     assert VERB_TABLE["issue"].requires_typed is not None
-    assert "carry" not in rv, "`carry` writes `(DocketItem, matter)` and has no effect (`H-63`)"
+    assert "carry" in rv, "`carry` has a typed precondition and an effect (v9 IN-45)"
+    assert VERB_TABLE["carry"].writes == ("Record.stages", "DocketItem.matter")
     for verb in ("issue", "petition"):
         assert VERB_TABLE[verb].writes == ("Record.exists",), VERB_TABLE[verb].writes
     # The derived opener map still sees the mint through the shared helper.

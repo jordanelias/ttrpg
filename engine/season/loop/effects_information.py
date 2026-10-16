@@ -1,5 +1,5 @@
 """`season.loop.effects_information` -- records, propositions, matters: create_record, issue,
-open_case, determine, petition, survey, forge, give, destroy_record, utter, commit.
+open_case, carry, determine, petition, survey, forge, give, destroy_record, utter, commit.
 
 EXTRACTED from `effects.py` at the per-subsystem split (Phase 4). Holds the document/proposition/
 matter cluster: the one mint (`_mint_document`) that `create_record`, `issue`, `petition` and
@@ -128,6 +128,33 @@ def _makers_hold(w: "World", actor: str, obj: str) -> Tenure:
     return Tenure(H(w.world_seed, w.tick, actor, f"hold:{obj}"), actor, obj, "hold", since=w.tick)
 
 
+def _declared_stages(w: "World", a: "Act") -> list:
+    """THE STAGES AN ACT WINDS ON A DOCUMENT: the act's declared `stages`, else `H-80`'s default.
+    The one owner of that rule -- `_mint_document` winds them on a Record it mints, and `carry` on
+    the petition it puts before the room (IN-45). Factored out of `_mint_document` unchanged.
+
+    `H-80`, DECLARED AND SWEPT. The act SHOULD declare these (#353 §13.1) and a computed act cannot:
+    §F1's Candidate is `(verb, subject, why)` with no operand channel. Refusing instead would make
+    `(Record, stages)` -- a Part D row -- unreachable from any person's decision, so the honest form
+    is §G's declare-default-sweep rather than either an invention or a blocker. Each stage is
+    `(due_tick, label, the act that wound the clock)`."""
+    d = a.payload if isinstance(a.payload, dict) else {}
+    stages = list(d.get("stages") or [])
+    if not stages:
+        n = w.fixtures.get("record_stages_default")
+        term = w.fixtures.get("record_stage_term")
+        stages = [(w.tick + (i + 1) * term, f"stage{i + 1}", a.id) for i in range(n)]
+    return stages
+
+
+def _docket_item(matter, arrangement, petition) -> dict:
+    """ONE DOCKET ITEM AS AN ACT WRITES IT -- `World.docket`'s shape, the one owner for the two
+    acts that put a matter before a room (`open_case` by remit, `carry` by right). No date: no
+    sitting was convened for it (`_eff_open_case`'s docstring says why)."""
+    return {"date": None, "matter": matter,
+            DOCKET_ARRANGEMENT: arrangement, DOCKET_PETITION: petition}
+
+
 def _mint_document(w: "World", a: "Act", kind: str, content, rung: str) -> Change:
     """THE ONE MINT: a `Record` of `kind` saying `content`, drawn up at `rung`, and the maker's
     `hold` on it -- `create_record`, `issue` and `petition` are three readings of an act onto this
@@ -142,17 +169,7 @@ def _mint_document(w: "World", a: "Act", kind: str, content, rung: str) -> Chang
     d = a.payload if isinstance(a.payload, dict) else {}
     rid = d.get("record") or f"rec:{a.id}"
     content = _addressed(content)
-    stages = list(d.get("stages") or [])
-    if not stages:
-        # `H-80`, DECLARED AND SWEPT. The act SHOULD declare these (#353 §13.1) and a computed
-        # act cannot: §F1's Candidate is `(verb, subject, why)` with no operand channel. Refusing
-        # instead would make `(Record, stages)` -- a Part D row -- unreachable from any person's
-        # decision, so the honest form is §G's declare-default-sweep rather than either an
-        # invention or a blocker. Each stage is `(due_tick, label, the act that wound the clock)`.
-        n = w.fixtures.get("record_stages_default")
-        term = w.fixtures.get("record_stage_term")
-        stages = [(w.tick + (i + 1) * term, f"stage{i + 1}", a.id) for i in range(n)]
-    rec = Record(rid, rung, kind, subject_matter=content, stages=stages)
+    rec = Record(rid, rung, kind, subject_matter=content, stages=_declared_stages(w, a))
     held = _makers_hold(w, a.actor, rid)
 
     def perform() -> None:
@@ -266,13 +283,65 @@ def _eff_open_case(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     if docketed(w, matter) or d.get("record") in w.records:
         return NO_CHANGE
     made = _mint_document(w, a, "text", None, _seat_rung(w, a))
-    item = {"date": None, "matter": matter,
-            DOCKET_ARRANGEMENT: arrangement, DOCKET_PETITION: petition}
+    item = _docket_item(matter, arrangement, petition)
 
     def perform() -> None:
         made.apply()
         w.docket.append(item)
     return Change(made.subjects, perform)
+
+
+@effect_for("carry")
+def _eff_carry(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """v9 IN-45 -- A HELD PETITION IS PUT BEFORE THE ROOM: the one route by which someone without a
+    seat dockets a matter (`open_case` dockets by remit). Built on `_eff_open_case`'s body, on the
+    gate's EXISTING `entity` shape -- no fourth `Subject` shape, so `state/gate.py` is untouched.
+
+    WHAT IT WRITES, IN ONE `apply`:
+      * THE PETITION'S STAGES (`Record.stages`) -- re-wound by THIS act (`_declared_stages`: the
+        act's declared stages, else `H-80`'s default from this tick). The petition is its own case
+        file: where `open_case` mints a case file and winds its clock, a carried petition already is
+        the document, so the carriage winds the clock on it, and MATTER's maturation of those stages
+        cites the carriage (`loop/matter.py`'s `prior` is the last Event whose changes name the
+        petition, which is this act's). REPLACED, not appended: an appended list could repeat a
+        `(due, label)` the filing wound on the same tick. [ASSUMPTION; medium; Jordan to correct;
+        revert: append the carriage's stages to the filing's.]
+      * THE DOCKET ITEM -- `_docket_item(<terms>, None, <petition>)`: the matter is the petition's
+        `terms`, what it is ABOUT (`rosters.yaml: record_kinds.content`: `terms` is the filing act's
+        `subject`), and the item names the petition it rose from (v9 SC-03a, K-55). Precedent:
+        `open_case` dockets its subject, the party `determine` binds through `docketed`, and an
+        accusation petition's `terms` names the accused. No arrangement row: none is derivable for
+        a computed case (`queries/world_q.py::judging_set`'s gap, as `open_case`'s).
+        [ASSUMPTION; medium; Jordan to correct; revert: the matter is the petition's own id.]
+
+    G4 -- WHAT IT NAMES: THE PETITION, whole (`Subject.entity("records", ...)`, `create_record`'s
+    shape). The receipt names the petition id, and the docket item this write appends names that
+    same id under `DOCKET_PETITION`, so the receipt names the record the append is keyed by. The
+    append itself rides on that receipt, as `open_case`'s rides on its case file -- the docket is a
+    SEQUENCE the gate has no `get()` for, and a refused write would NOT put it back (the gate restores
+    Tenures only). So every decline comes FIRST, before anything is built: a subject that is not a
+    petition `Record`; a petition with no `terms` to docket; a matter ALREADY on the docket
+    (`docketed`, the one owner -- `open_case`'s decline); and stages that would read the same after
+    as before (the only way the named subject could fail to move).
+
+    Who may carry: the row's typed cell -- the petition exists, and the ACTOR HOLDS IT (`held_by`,
+    `found`'s cell): the petitioner, or whoever `give` handed it to."""
+    pid = _operand(a, "subject")
+    rec = w.records.get(pid) if isinstance(pid, str) else None
+    if rec is None or rec.kind != "petition":
+        return NO_CHANGE
+    matter = (rec.subject_matter or {}).get("terms")
+    if not isinstance(matter, str) or docketed(w, matter):
+        return NO_CHANGE
+    stages = _declared_stages(w, a)
+    if stages == list(rec.stages):
+        return NO_CHANGE
+    item = _docket_item(matter, None, pid)
+
+    def perform() -> None:
+        rec.stages = stages
+        w.docket.append(item)
+    return Change((Subject.entity("records", pid),), perform)
 
 
 @effect_for("determine")

@@ -42,7 +42,10 @@ from engine.season.state.carriers import Act, Candidate, Claim, Question, View
 # v9 IN-11 (#453 R-3 (b)): `repudiate` LEFT -- its row is cut, not built (`release` ends a `commit`).
 # v9 IN-45: `forge` LEFT -- typed (`survey`'s cell) and effected (`_eff_forge`), the reason answered:
 # its consumer first (`rosters.yaml: record_sourced_operands.faction_sheet`), `emits` the matrix row's.
-DECLINED = ("carry", "exchange", "succeed", "thread_read", "tie / knot")
+# v9 IN-45: `carry` LEFT -- effected (`_eff_carry`) on the gate's existing `entity` shape, the reason
+# answered: the petition's `Record.stages` is the moved subject the docket append rides on, and the
+# matter is the petition's `terms` (`engine/season/tests/test_in45_carry.py`).
+DECLINED = ("exchange", "succeed", "thread_read", "tie / knot")
 
 
 def _view(w, pid):
