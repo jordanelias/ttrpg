@@ -94,9 +94,16 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # `forge` withheld from the chooser's verbs reproduces both old values exactly, so the sheet consumer
 # (`record_sourced_operands.faction_sheet`) and the shared mint move nothing here. `forge` writes no
 # `forgery_quality` (`H-210`, deferred to SC-02 `22b`), so a forged sheet hashes at the field's `0`.
+# RE-PINNED at v9 IN-12 `survey` + Rung (B-K), A BEHAVIOUR MOVE DECLARED: a Rung subject is answered by
+# `world_q.holder_faction_of` (`loop/effects_information.py::_resolved_sheet`), so a survey -- and a
+# forge, which shares the helper -- of a held place mints instead of declining. The build hash is equal;
+# one and two seasons move. Was 002af955... / 1282141c... (one, two seasons). CONTROL, run: the same tree
+# with the rung branch answered by `faction_holding` (the pre-IN-12 reading) reproduces both old values
+# and both old `BASE_EVENTS` exactly. `aperture 1 0` realm acts 603 -> 613; `survey` att 30 -> 29, ex
+# 4 -> 6, ref 26 -> 23; `forge` att 28 -> 25, ex 3 -> 7, ref 25 -> 18 (read, not asserted, v9 §0.5).
 BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
-               1: "002af95591e4715c762b000947ecdc4d",
-               2: "1282141c95aa75fee58d7b725dee4759"}
+               1: "da764853021d52a825ddcfb0fff95674",
+               2: "0ae0dc8bda707fa8f452a7e0c722ee97"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -118,8 +125,9 @@ BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
 # RE-RECORDED at v9 FA-06 with `BASE_HASHES` (6542 -> 7094, 18583 -> 19454).
 # RE-RECORDED at v9 IN-10 with `BASE_HASHES` (7094 -> 7056, 19454 -> 20148).
 # RE-RECORDED at v9 IN-45 `forge` with `BASE_HASHES` (7056 -> 7338, 20148 -> 21313).
-BASE_EVENTS = {1: (7338, "61badf23059900a75ea2f336def54cbcf5a5e9b56be31a769a1a39f99e0405e9"),
-               2: (21313, "67384221d8c506d6f32200636275a77bbff011f0cf53ad03f7ff599c8a718232")}
+# RE-RECORDED at v9 IN-12 `survey` + Rung with `BASE_HASHES` (7338 -> 7391, 21313 -> 22130).
+BASE_EVENTS = {1: (7391, "6a33db46cbbce8852e3e5272db604e8dbf6eec72da53c2eb9a8deb5654000f40"),
+               2: (22130, "75ee88cb9582287c9e67ed29fbcaf63eab8e55cb207ae78fa914d0bd89b1f302")}
 
 
 def _digest(w) -> tuple:

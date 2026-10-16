@@ -9,7 +9,8 @@ What the position built, each asked of the real fold, the real WITNESS and the r
   * a `faction_sheet` is a `Record` kind (`rosters.yaml: record_kinds`) whose keys are
     `faction_q.Faction`'s fields -- checked at import, and the check has a falsifier here;
   * `survey` commissions one: `own_ledger` of `subject` (the surveyor has heard of it), then the
-    faction the subject coheres under (`world_q.faction_holding`, one read for a faction and a person),
+    faction the subject coheres under (`world_q.faction_holding`, one read for a faction and a person;
+    for a rung, since v9 IN-12, the faction that holds it, `world_q.holder_faction_of`, section 2b),
     resolved AT THE MOMENT OF WRITING and minted through the one mint with the surveyor's `hold`.
 
 THE FOUR PROPERTIES THE PLAN NAMES, each with the control that stops it passing vacuously:
@@ -172,18 +173,21 @@ def test_20iii_one_read_for_a_faction_and_for_a_person_who_coheres_under_it():
 
 
 def test_20iii_a_subject_under_no_single_faction_is_refused_and_mints_nothing():
-    """The effect's decline (`write` clause), one case per way `faction_holding` answers `None`: a
-    person committed to no faction, a person committed to two, a rung, and a Proposition the roster
-    does not carry as a faction. CONTROL: in the same world, after all four, a Crown member is
-    surveyed -- so the refusals are the subjects', not a verb that refuses everything."""
+    """The effect's decline (`write` clause), one case per way the sheet's faction answers `None`: a
+    person committed to no faction, a person committed to two, a rung nobody up its chain holds, and
+    a Proposition the roster does not carry as a faction. CONTROL: in the same world, after all four,
+    a Crown member is surveyed -- so the refusals are the subjects', not a verb that refuses
+    everything. ⚠ RE-RECORDED at v9 IN-12 (`survey` + Rung): the rung case was `Hh`, which `p_mid`
+    (Crown) holds, and a held rung is surveyed since then (section 2b); it is now `S`, held by nobody
+    up `S -> D -> R`, the case `holder_faction_of` answers `None` for."""
     w, d = _world()
     w.add_tenure(Tenure("t_c1", "p_other", FAC, "commit", since=0))
     w.add_tenure(Tenure("t_c2", "p_other", OTHER_FAC, "commit", since=0))
     w.propositions["prop_x"] = Proposition("prop_x", "OUGHT", "R", "the roads stay open", True, 0)
-    for subject in ("p_low", "p_other", "Hh", "prop_x"):
+    for subject in ("p_low", "p_other", "S", "prop_x"):
         _hear(w, "p_low", subject)
     before = dict(w.records)
-    for i, subject in enumerate(("p_low", "p_other", "Hh", "prop_x")):
+    for i, subject in enumerate(("p_low", "p_other", "S", "prop_x")):
         out = _fold(w, d, _survey(f"bad{i}", subject))
         assert _kinds(out) == ["survey.refused"], (subject, _kinds(out))
     assert w.records == before, "a refused survey left a document behind"
@@ -221,6 +225,114 @@ def test_20iii_a_person_forms_a_survey_carrying_its_subject_and_the_fold_holds_t
     assert surveys("p_high") == [("p_high", "p_high")]
     _hear(w, "p_low", "p_high")
     assert surveys("p_high") == [("p_high", "p_high")]
+
+
+# ======================================================================================
+# 2b -- v9 IN-12 `survey` + RUNG (H-169 limit 6): WHO HOLDS THIS VALLEY
+# ======================================================================================
+# A Rung subject is answered by `world_q.holder_faction_of` (the march path's owner of *which faction
+# holds this rung*), dispatched on `World.class_of` in `loop/effects_information.py::_resolved_sheet`.
+# Hand-built worlds only (v9 §0.5, RULED 2026-10-13): nothing here asserts a verb executed in the
+# seed-0 realm.
+
+def _hafenmark_holds_s(w):
+    """`p_other` is Hafenmark's and holds `S`, the settlement `p_high` (Crown) stands in, while
+    `p_mid` (Crown) holds `Hh` beneath it -- so THE HOLDER'S faction, THE FACTION OF WHO STANDS
+    THERE and THE FACTION OF THE RUNG BELOW are three different answers for `S`."""
+    w.add_tenure(Tenure("t_commit_p_other", "p_other", OTHER_FAC, "commit", since=0))
+    w.add_tenure(Tenure("t_hold_S", "p_other", "S", "hold", since=0))
+
+
+def test_in12_a_survey_of_a_rung_mints_the_sheet_of_the_faction_that_holds_it(monkeypatch):
+    """`:3391`, *a `faction_sheet` minted on a Rung subject*: a survey of `S` writes Hafenmark's
+    sheet (its holder's faction), not the Crown's (whose man stands there); a survey of `Hh` writes
+    the Crown's (its own holder's, the nearest held rung at or above it). The expectations are
+    written out from the planted edges, not read back through `resolve`. `forge` reads WHICH faction
+    through the same helper, so a forged sheet on `S` is Hafenmark's too, with the forger as head.
+    THE MUTATION, in place: the rung lookup swapped back to `faction_holding` (`20-iii`'s reading,
+    which takes a holder and not a held thing) -- the same survey of `S` is `survey.refused` and
+    mints nothing, so the sheet is the lookup's and not the verb's."""
+    w, d = _world()
+    _hafenmark_holds_s(w)
+    for subject in ("S", "Hh"):
+        _hear(w, "p_low", subject)
+    out = _fold(w, d, _survey("s_S", "S"), _survey("s_Hh", "Hh"))
+    assert _kinds(out) == ["faction.surveyed", "faction.surveyed"], _kinds(out)
+    assert w.records["rec:s_S"].subject_matter == {
+        "proposition": OTHER_FAC, "members": ["p_other"], "holdings": ["S"], "seats": [],
+        "head": None}, w.records["rec:s_S"]
+    assert w.records["rec:s_Hh"].subject_matter["proposition"] == FAC, w.records["rec:s_Hh"]
+    assert world_q.hold_force(w, "rec:s_S").subject == "p_low"
+    assert _kinds(_fold(w, d, Act(id="f_S", actor="p_low", verb="forge",
+                                  payload={"subject": "S"}))) == ["record.forged"]
+    assert w.records["rec:f_S"].subject_matter == {
+        **w.records["rec:s_S"].subject_matter, "head": "p_low"}, w.records["rec:f_S"]
+    # THE MUTATION: the pre-IN-12 lookup for a rung
+    from ..loop import effects_information as EI
+    monkeypatch.setattr(EI, "holder_faction_of", world_q.faction_holding)
+    before = dict(w.records)
+    assert _kinds(_fold(w, d, _survey("s_S2", "S"))) == ["survey.refused"]
+    assert w.records == before, "the mutated lookup still minted a sheet -- the cause is elsewhere"
+
+
+def test_in12_a_rung_with_no_holding_faction_is_refused_and_mints_nothing():
+    """THE CONTROL: the two ways `holder_faction_of` answers `None` -- nobody holds a rung at or
+    above `S` (`S -> D -> R`, all unheld), and then, once `p_low` (committed to no faction) holds
+    `D`, a held rung whose holder coheres under none -- each `survey.refused` (the `write` clause,
+    the row's one refusal kind) with no Record minted. In the same world a survey of `Hh`, which a
+    Crown man holds, is `faction.surveyed` -- so the refusals are the subjects'. AND THE REFUSAL IS
+    THE HOLDER'S, NOT THE SURVEYOR'S HEARING (`survey.refused` is flat: the cell and the decline emit
+    one kind): with nothing else changed, `p_low` commits to the Crown and the same survey of `S`,
+    by the same surveyor on the same claim, mints the Crown's sheet."""
+    w, d = _world()
+    for subject in ("S", "D", "Hh"):
+        _hear(w, "p_low", subject)
+    before = dict(w.records)
+    assert _kinds(_fold(w, d, _survey("r0", "S"))) == ["survey.refused"]
+    w.add_tenure(Tenure("t_hold_D", "p_low", "D", "hold", since=0))
+    assert _kinds(_fold(w, d, _survey("r1", "S"), _survey("r2", "D"))) == [
+        "survey.refused", "survey.refused"]
+    assert w.records == before, "a refused rung survey left a document behind"
+    assert _kinds(_fold(w, d, _survey("ok", "Hh"))) == ["faction.surveyed"]
+    w.add_tenure(Tenure("t_commit_p_low", "p_low", FAC, "commit", since=0))
+    assert _kinds(_fold(w, d, _survey("r3", "S"))) == ["faction.surveyed"]
+    assert w.records["rec:r3"].subject_matter["proposition"] == FAC
+    assert w.records["rec:r3"].subject_matter["holdings"] == ["D", "Hh"], w.records["rec:r3"]
+
+
+def test_in12_the_person_path_is_unchanged_a_man_is_not_read_through_the_ground_he_stands_on():
+    """THE CONTROL ON THE PERSON PATH: every person also has a `person`-kind rung of his id, so a
+    dispatch on `subject in w.rungs` would send `p_low` (committed to no faction, standing in `Hh`,
+    which the Crown holds) through `holder_faction_of` and write him a Crown sheet. `class_of` reads
+    him as a Person first: still `survey.refused`. A Crown member still writes the Crown's sheet,
+    the same document a survey of the faction itself writes (`20-iii`'s one read). MUTATION that
+    reddens the first assertion: `w.class_of(subject) == "Rung"` -> `subject in w.rungs`."""
+    w, d = _world()
+    assert w.rungs["p_low"].kind == "person", "the fixture: a person has a rung of his own id"
+    for subject in ("p_low", "p_mid", FAC):
+        _hear(w, "p_low", subject)
+    out = _fold(w, d, _survey("pl", "p_low"), _survey("pm", "p_mid"), _survey("pf", FAC))
+    assert _kinds(out) == ["survey.refused", "faction.surveyed", "faction.surveyed"], _kinds(out)
+    assert "rec:pl" not in w.records
+    assert w.records["rec:pm"].subject_matter == w.records["rec:pf"].subject_matter
+    assert w.records["rec:pm"].subject_matter["proposition"] == FAC
+
+
+def test_in12_the_sheet_consumer_reads_a_rung_subject_sheet_as_it_reads_any(monkeypatch):
+    """`c435a5ec`'s consumer (`record_sourced_operands.faction_sheet`, `to: head`) reads a sheet's
+    CONTENT and never its subject, so a sheet commissioned on a rung carries the same keys and
+    addresses its holder's petition the same way: to the head it names. Through the real fold and
+    WITNESS (`_hold_sheet`). CONTROL: the consumer row dropped, the address falls back to the
+    referent -- so the address is the sheet's."""
+    w, _ = _world()
+    _head(w, "p_high")
+    rec, claim = _hold_sheet(w, "p_low", subject="Hh")
+    assert rec.kind == SHEET and rec.subject_matter["proposition"] == FAC
+    assert tuple(rec.subject_matter) == tuple(RECORD_KIND_KEYS[SHEET]), rec.subject_matter
+    assert _petition_to(w, "p_low", rec, claim) == "p_high"
+    from ..data.requires import RECORD_SOURCED_OPERANDS
+    monkeypatch.delitem(RECORD_SOURCED_OPERANDS, SHEET)
+    assert _petition_to(w, "p_low", rec, claim) == rec.id
 
 
 # ======================================================================================
@@ -374,12 +486,12 @@ def _head(w, pid):
     next(t for t in w.tenures if t.id == f"t_commit_{pid}").degree = "x"
 
 
-def _hold_sheet(w, holder, verb="survey"):
-    """`holder` commissions (or forges) a sheet on `p_high` through the real fold and, at WITNESS,
-    holds what it says. Returns the Record and the content claim."""
-    _hear(w, holder, "p_high")
+def _hold_sheet(w, holder, verb="survey", subject="p_high"):
+    """`holder` commissions (or forges) a sheet on `subject` (`p_high` unless told) through the real
+    fold and, at WITNESS, holds what it says. Returns the Record and the content claim."""
+    _hear(w, holder, subject)
     before = set(w.records)
-    P._run_d(w, lambda p, v, s, b: ([P.Act_(w, p, verb, payload={"subject": "p_high"})]
+    P._run_d(w, lambda p, v, s, b: ([P.Act_(w, p, verb, payload={"subject": subject})]
                                     if p.id == holder else []))
     (rid,) = set(w.records) - before
     (c,) = _content_claims(w.persons[holder], rid)
