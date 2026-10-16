@@ -731,7 +731,8 @@ def held_record_claims(p: Person) -> list:
         return []
     # NEWEST BY `LedgerReader._best`'s comparator, the one owner of *most recent, then most
     # confident* (strict `>`, first found wins a tie) -- not a second ladder (B-K close, LOG 6).
-    reader = LedgerReader(p.ledger)
+    held_set = set(held)
+    reader = LedgerReader([c for c in p.ledger if c.subject in held_set])
     out = []
     for o in dict.fromkeys(held):
         c = reader._best(lambda c, o=o: c.subject == o and content_said(c) is not None
@@ -799,13 +800,14 @@ def _from_shortfall_claim(p: Person, q: "Question", name: str):
 
 def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures",
                     seat: Optional[str] = None, held: Optional["Claim"] = None,
-                    classed: bool = False):
+                    on_referent: bool = True):
     """ONE OPERAND, FROM THE PERSON'S OWN STATE. `None` means THIS PERSON CANNOT SUPPLY IT.
 
-    `classed` is whether the ROW forms on a classed referent (`VerbRow.referent_class`, passed by
-    `_operands`): such a row's subject rides the question without being what it is about, so the
-    three readers of the claim `q.about` names (the document, the shortfall, `store_kind_of`) answer
-    nothing for it -- even when the same id is ALSO one of `q.referents` (B-K close, COR 4).
+    `on_referent` is False when the ROW forms on a classed referent (`not VerbRow.referent_class`,
+    passed by `_operands`): such a row's subject rides the question without being what it is about,
+    so the three readers of the claim `q.about` names (the document, the shortfall,
+    `store_kind_of`) answer nothing for it -- even when the same id is ALSO one of `q.referents`
+    (B-K close, COR 4).
 
     `held` (plan position IN-10, #453 §10.1) is the content claim of a Record the person HOLDS
     (`held_record_claims`), or `None`. When given it answers FIRST, for every name its kind maps in
@@ -906,23 +908,10 @@ def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"
     # `rosters.yaml: record_sourced_operands` (`to`; `from`/`at` are on no kind -- this function's
     # docstring). A question naming no document, or one whose kind maps no such name, falls
     # straight through to the referent/fixture below -- `None` is silent by design.
-    # BATCH-CLOSE FINDING (methodology-close Phase 1, CODE ARCHITECTURE lens): this was a literal
-    # `("to", "kind", "amount")` tuple, caught by `test_jordan_no_definition_is_hardcoded_in_a_body`
-    # -- moved to the roster rather than exempted; IN-10 made the roster per kind.
-    # ⚠ v9 IN-45 `migrate`: ONLY FOR AN ACT FORMED ON THE QUESTION'S OWN REFERENT (the document). A
-    # CLASSED referent (`Question.classes`: a seat, a writ, a place `places_named` stamped) rides the
-    # question without being what it is about, so the document `q.about` names does not answer for
-    # an act on it -- a `migrate` to a place he was told of is not addressed to a petition's
-    # addressee. On a plain row `subject` is always one of `q.referents`, so nothing there moves.
-    # ⚠ v9 IN-49 `levy`: AND THE SAME FOR THE TWO OTHER READERS OF THE CLAIM `q.about` NAMES -- the
-    # shortfall claim below and `store_kind_of`. Each is a claim about the question's own referent, so
-    # it answers `kind`/`amount` for an act on THAT, never for an act on a classed referent riding
-    # the question: a levy of a larder his seat reaches carries the fixtures' matter and amount, not
-    # those of a dearth somewhere else -- the two values `world_q.larders_in_purview` stocked it by.
-    # B-K close (COR 4): decided by the ROW (`classed`), not by `subject in q.referents` -- a stamped
-    # rung that is also the question's plain referent is still a classed levy's subject, and the
-    # stamp checked the fixtures' kind/amount, not the claim's.
-    on_referent = not classed
+    # A CLASSED row (`on_referent` False) skips this reader and the shortfall and `store_kind_of`
+    # readers below: each reads the claim `q.about` names, a claim about the question's own referent,
+    # and a classed subject (a seat, a writ, a stamped place) rides the question without being what
+    # it is about -- even when the stamped id is also a plain referent (B-K close, COR 4).
     if name in _RECORD_ANSWERABLE and on_referent:
         v = _from_content_claim(p, q, name)
         if v is not None:
@@ -1083,11 +1072,12 @@ def operand_bags(p: Person, row: "VerbRow", q: "Question", subject,
         if _content_answer(c, "subject") != subject:
             continue
         given = {n: _content_answer(c, n) for n in fan}
-        if None in given.values() or tuple(given.values()) in formed:
+        key = tuple(given.values())
+        if None in key or key in formed:
             continue
         ops = _operands(p, row, q, subject, fx, given, seat, held=c)
         if ops is not None:
-            formed.add(tuple(given.values()))
+            formed.add(key)
             out.append(ops)
     if not out and not people:
         TRACE.note(f"{row.verb!r} needs {list(fan)} from a person {p.id} knows, and they know "
@@ -1128,7 +1118,7 @@ def _operands(p: Person, row: "VerbRow", q: "Question", subject, fx: "Fixtures",
         if name == "actor":
             continue
         v = given[name] if name in given else _derive_operand(
-            p, name, q, subject, fx, seat, held, classed=bool(row.referent_class))
+            p, name, q, subject, fx, seat, held, on_referent=not bool(row.referent_class))
         if v is None:
             if name not in bound:
                 # An operand the CELL does not read cannot make the act malformed -- it is simply
