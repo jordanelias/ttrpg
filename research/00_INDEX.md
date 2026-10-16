@@ -9,6 +9,9 @@ indexed three ways so a verb, a primitive or a function can be put to the eviden
 **verb** (§4) and by **primitive** (§5). §6 sets the live plan against it. It does not argue a design, rank
 a proposal or schedule work. If it were deleted the game would behave identically.
 
+**Critical evaluation by lane** (method, sourcing and verdict per lane, with the function, verb and primitive
+join): `research/by_lane/README.md`. This index locates; those files judge.
+
 **Every count here is a dated reading** of the command in §9, not a standing figure. A mention count measures
 where a game is *named*, not how deeply it was studied.
 
