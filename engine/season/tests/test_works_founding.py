@@ -508,3 +508,126 @@ def test_24e_a_works_whose_plan_or_at_is_no_plain_id_is_refused_not_a_crash(verb
         out = _fold(w, d, Act(id=key, actor=actor, verb=verb, payload={"subject": works}))
         assert _kinds(out) == [f"{verb}.refused"], (works, _kinds(out))
     assert (len(w.rungs), len(w.sites)) == n
+
+
+# ======================================================================================
+# 7 -- v9 IN-45 `work`: THE WORKS CHANNEL, ATTACKED THROUGH THE REAL FORMATION (H-165 (2), (3))
+# ======================================================================================
+# The plan's candidate for H-165 limit 2 was a `rosters.yaml: record_sourced_operands` entry for a
+# works, mapped onto the closed eight. These tests take the formation route the candidate would
+# use: the maker's own `create_record`, WITNESS's content deposit, `questions_for`, `opening_set`,
+# `pack_scenes` and the fold. No test here asserts anything about the seed-0 realm (v9 §0.5).
+# What they show:
+#   * `found` and `build` need NO operand channel. Once a works exists they form on it through
+#     the question its maker is asked about it, and they execute. H-165 limit 3 is lifted by a works
+#     EXISTING; what is missing in computed play is the PRODUCER, a computed `create_record` that
+#     declares one (limit 2).
+#   * `work` binds `site` to the question's referent. That referent is the Site when the question
+#     is about the Site, and the works Record when the question is about the works. The candidate
+#     entry cannot change this: a works' content keys are `{plan, at}`, a kind and a Rung id, and
+#     `_content_answer` returns a key's value unchanged, so no works answers `site` with a Site.
+# MUTATIONS, run at the build 2026-10-16. Each went RED, then was restored byte-exact and went GREEN:
+#   * `_eff_create_record` minting `kind = "text"` for every act (the producer making no works,
+#     which is computed play today) -> the first test's works arm and the second test went RED.
+#   * `_eff_work`'s works branch disabled (`and works_for(...)` -> `and False`) -> the second
+#     test's harbour arm went RED.
+
+from ..decision import assemble as _assemble
+from ..decision import options as _options
+from ..decision.choose import pack_scenes as _pack
+from ..state.ids import H as _H
+
+
+def _formed_on(w, pid, referent, verbs, q=None):
+    """The computed acts `pid` forms for `verbs` on a question naming `referent`. The question is
+    `q` when given, else a `claim_landed` Question about nothing in his ledger. The acts come from
+    the real `opening_set` and are packed by the real `pack_scenes`."""
+    from ..state.carriers import Question
+    p = w.persons[pid]
+    q = q or Question(f"q:{referent}", "claim_landed", (referent,), None)
+    cands = [c for c in _options.opening_set(p, _assemble(p, q, 12), q, w.fixtures) if c.verb in verbs]
+    mint = lambda who, verb, subj: _H(w.world_seed, w.tick, who, f"act:{verb}:{subj}")
+    return [a for s in _pack(p, cands, 99, w.fixtures, mint) for a in s.acts]
+
+
+@pytest.mark.parametrize("kind", [world_q.WORKS_KIND, "text"])
+def test_in45_found_and_build_form_on_a_works_its_maker_is_asked_about_and_execute(kind):
+    """THE MAKER IS ASKED ABOUT HIS WORKS AND `found`/`build` FORM ON IT. Two Records are declared
+    by the real `create_record`: a hearth at `S` and a dwelling at `Hh`. WITNESS deposits each
+    Record's content into the maker's own ledger, and the next season `questions_for` raises a
+    question whose referent is the Record. `found` and `build` form on it, carrying
+    `subject = the Record`, and the fold executes them: `rung.founded` for the hearth and
+    `site.built` for the dwelling. Each verb's other works is refused by that verb's own effect.
+    CONTROL, the same body with the Records declared `text`: the same questions form the same verbs,
+    and every one is refused. The kind of the Record is the only difference between the arms."""
+    w, d = _world()
+    for key, plan, at in (("wh", "hearth", SETTLEMENT), ("wd", "dwelling", HEARTH)):
+        d.witness(mint_token(w, WriteClass.INTERIOR), _declare(w, d, key, plan, at, kind=kind))
+    _season(w, d)
+    p = w.persons[ABSENT]
+    asked = {}
+    for q in world_q.questions_for(w, p):
+        for r in q.referents:
+            asked.setdefault(r, q)
+    assert {"wh", "wd"} <= set(asked), sorted(asked)          # the maker is asked about both
+    got = {}
+    for key in ("wh", "wd"):
+        acts = _formed_on(w, ABSENT, key, ("found", "build"), q=asked[key])
+        assert sorted(a.verb for a in acts) == ["build", "found"], (key, acts)
+        assert all(a.payload.get("subject") == key for a in acts), acts
+        for a in acts:
+            got[(key, a.verb)] = _kinds(_fold(w, d, a))
+    if kind == world_q.WORKS_KIND:
+        assert got == {("wh", "found"): ["rung.founded"], ("wh", "build"): ["build.refused"],
+                       ("wd", "found"): ["found.refused"], ("wd", "build"): ["site.built"]}, got
+        assert "hearth:wh" in w.rungs and w.sites["dwelling:wd"].condition == 0
+    else:
+        assert set(map(tuple, got.values())) == {("found.refused",), ("build.refused",)}, got
+
+
+def test_in45_work_forms_on_what_the_question_names_and_never_reaches_the_site_a_works_names(
+        monkeypatch):
+    """`work`'s `site` IS THE QUESTION'S REFERENT, AND A WORKS CANNOT RE-AIM IT. The works plans a
+    harbour at `S`, its term has ripened, and the harbour stands at 500.
+      * A question naming the harbour forms `work` with `site = the harbour`. It executes:
+        `site.worked`, 500 -> 1000.
+      * CONTROL: a question naming the seam, which no works names, forms the same `work`. It is
+        `work.unavailable` and the seam does not move.
+      * THE GAP: the question the maker is actually asked is about the works Record. On it `work`
+        binds `site` to the Record, which is no Site, and the act is `work.unavailable`.
+      * THE CANDIDATE, PLANTED: `record_sourced_operands.works: {site: at}` is the one `site`
+        mapping a works' keys allow, and the loader admits it. With it, `work` on that same question
+        binds `site` to the Rung `S`, and the act is still `work.unavailable`. No mapping of
+        `{plan, at}` onto the closed eight names a Site."""
+    w, d = _world()
+    d.witness(mint_token(w, WriteClass.INTERIOR), _declare(w, d, "wk", "harbour", SETTLEMENT, terms=1))
+    _ripen(w, d, 1)
+    harbour, seam = w.sites[HARBOUR], w.sites["site_seam"]
+    harbour.condition, seam.condition = 500, 500
+    (on_harbour,) = _formed_on(w, ABSENT, HARBOUR, ("work",))
+    assert on_harbour.payload["site"] == HARBOUR
+    assert _kinds(_fold(w, d, on_harbour)) == ["site.worked"] and harbour.condition == 1000
+    (on_seam,) = _formed_on(w, ABSENT, "site_seam", ("work",))
+    assert _kinds(_fold(w, d, on_seam)) == ["work.unavailable"] and seam.condition == 500
+    harbour.condition = 500
+    # The question about the works' CONTENT claim. That claim is what the candidate reads
+    # (`_from_content_claim`, by `q.about`).
+    content = {c.id for c in w.persons[ABSENT].ledger
+               if c.subject == "wk" and str(c.predicate).startswith("content:")}
+    q = next(q for q in world_q.questions_for(w, w.persons[ABSENT], since=(0, 0))
+             if q.referents == ("wk",) and q.about in content)
+    (on_works,) = _formed_on(w, ABSENT, "wk", ("work",), q=q)
+    assert on_works.payload["site"] == "wk"
+    assert _kinds(_fold(w, d, on_works)) == ["work.unavailable"] and harbour.condition == 500
+    from ..data.requires import REQUIRES_OPERANDS, RECORD_SOURCED_OPERANDS, _check_record_sourced
+    from ..data.rosters import RECORD_KIND_KEYS
+    planted = {**RECORD_SOURCED_OPERANDS, "works": {"site": "at"}}
+    _check_record_sourced(planted, frozenset(REQUIRES_OPERANDS), RECORD_KIND_KEYS)   # admitted
+    monkeypatch.setattr(_options, "RECORD_SOURCED_OPERANDS", planted)
+    monkeypatch.setattr(_options, "_RECORD_ANSWERABLE",
+                        frozenset(n for m in planted.values() for n in m))
+    (planted_act,) = _formed_on(w, ABSENT, "wk", ("work",), q=q)
+    assert planted_act.payload["site"] == SETTLEMENT and SETTLEMENT in w.rungs, planted_act
+    from dataclasses import replace
+    out = _fold(w, d, replace(planted_act, id=f"{planted_act.id}:planted"))   # one act per id (S27)
+    assert _kinds(out) == ["work.unavailable"] and harbour.condition == 500, _kinds(out)
