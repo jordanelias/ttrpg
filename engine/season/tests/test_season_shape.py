@@ -10303,7 +10303,7 @@ def test_wc_the_fold_binds_what_the_person_bound():
     # v9 IN-12 step 6: a row in `rosters.yaml: warrant_sourced` (`seize`) forms only on a referent a HELD
     # warrant names, and `p_low` holds none -- so it is not in the first walk, and is walked below with the
     # others through the seated `p_high`, once a warrant is placed in his hand. DERIVED FROM THE ROSTER.
-    from ..decision.options import WARRANT_SOURCED
+    from ..data.verbs import WARRANT_SOURCED
     WALK_WARRANT: frozenset = frozenset(WARRANT_SOURCED)
     WALK_EXCLUDES: frozenset = frozenset({"march"}) | WALK_REMIT | WALK_NAMED | WALK_WARRANT
     cands = [c for c in decision.opening_set(p, v, q, w.fixtures)

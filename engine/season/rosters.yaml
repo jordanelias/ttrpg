@@ -1762,7 +1762,9 @@ rosters:
       plan position IN-12 step 6 (`workplans/valoria_master_workplan_v9_part5.md`).
     note: >-
       WHICH VERBS TAKE THEIR `subject` FROM A HELD WARRANT, AND WHICH RECORD KIND IS THE WARRANT --
-      `verb: record kind`. A verb named here is formed person-side ONLY on a `subject` that a held
+      `verb: record kind`. ONE LOADER, `data/verbs.py::WARRANT_SOURCED`, read once beside the verb table and
+      refused at import when a line names a verb the table lacks or a kind `record_sourced_operands`
+      gives no `subject` key; both readers below import it from there. A verb named here is formed person-side ONLY on a `subject` that a held
       Record of that kind names (`decision/options.py::opening_set`: `held_record_claims`, answered
       through `record_sourced_operands`' `subject` key, the one map of what a Record's content says),
       and the effect's RECORD half licenses the act on the same reading read WORLD-side
@@ -1778,8 +1780,9 @@ rosters:
       settlement). The Rung half forms person-side wherever a held dispensation's `terms` names the rung
       (`test_season_shape.py` plants one on a hearth); at the effect it licenses on OCCUPATION, not on the
       warrant, so the formation and execution licences differ for the Rung half; no computed source of
-      such a warrant has been measured. [ASSUMPTION; medium; Jordan to correct; revert: drop this roster and its
-      readers (`decision/options.py::opening_set` and `loop/effects_information.py::_held_warrant_names`),
+      such a warrant has been measured. [ASSUMPTION; medium; Jordan to correct; revert: drop this roster, its
+      loader (`data/verbs.py::WARRANT_SOURCED`) and its readers (`decision/options.py::opening_set` and
+      `loop/effects_information.py::_held_warrant_names`),
       and `seize` forms on any referent, refused in the fold.]
     values:
       seize: dispensation

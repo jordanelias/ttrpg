@@ -20,7 +20,7 @@ from ..data.rosters import (
 from ..data.verbs import VERB_TABLE
 from ..gaps import Unspecified
 from ..queries.world_q import ancestry, holder_faction_of, home_of
-from ..state.gate import NO_CHANGE, Change, Subject, seat_faction
+from ..state.gate import NO_CHANGE, Change, Subject, may_muster, seat_faction
 
 from .effects_migration import _relocate
 from .effects_shared import _operand, effect_for
@@ -246,7 +246,12 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # β, occupation then `seize` (`_eff_seize`'s Rung half), not α (a won field transferring the
     # hold) [ASSUMPTION; medium; Jordan to correct; revert: Jordan states α, and title moves here].
     arrive = res.degree in (WON, UNOPPOSED)
-    movers = _not_yet_under(w, attackers, target) if arrive else []
+    # ⚠ THE MOVERS ARE THE CLAIMANTS THE GATE'S `muster` BASIS WILL ADMIT (`state/gate.py::may_muster`
+    # and `refuse_unauthored`'s `rehomed`), asked HERE so an act the precondition admitted is never
+    # killed at the gate -- `_eff_seize`'s precedent (`may_seize` inside the effect). A claimant the
+    # seat may not muster (its `hold` closed during RESOLVE, a person uncommitted to its faction) or
+    # that has no home to re-home from stays where he is; the actor's own legs are `T-m`'s.
+    movers = (_not_yet_under(w, attackers, target, a.actor, a.via) if arrive else [])
     attacker_lost = res.degree == LOST
     losers = [] if res.degree == UNOPPOSED else (attackers if attacker_lost else defenders)
     pct = engine_result.get("attacker_size_pct" if attacker_lost else "defender_size_pct")
@@ -322,12 +327,18 @@ def _band_kind(degree: str) -> str:
     return VERB_TABLE["march"].emits_at(degree)[0]
 
 
-def _not_yet_under(w: "World", pids: list, target: str) -> list:
-    """The claimants in `pids` (in order) who are persons and are NOT already present under `target`:
-    present = his live `contain` target and everything above it (`world_q.home_of` + `ancestry`, the
-    two owners), and a march on a rung in that chain is no journey. A claimant with no home is a
-    mover (`ancestry(w, None)` is `[]`). `home_of` is read ONCE for the whole band, and only if some
-    claimant is a person; the chain is walked once per distinct home."""
+def _not_yet_under(w: "World", pids: list, target: str, actor: "str | None" = None,
+                   via: "str | None" = None) -> list:
+    """The claimants in `pids` (in order) who are persons, are NOT already present under `target`, and
+    whose journey the gate will admit: present = his live `contain` target and everything above it
+    (`world_q.home_of` + `ancestry`, the two owners), and a march on a rung in that chain is no
+    journey. `home_of` is read ONCE for the whole band, and only if some claimant is a person; the
+    chain is walked once per distinct home.
+
+    ADMITTED = the actor (his own legs are `T-m`'s, home or none), or another person the seat may
+    muster (`may_muster`) who HAS a home: the gate's `muster` basis admits only a re-home, a `contain`
+    closed AND opened (`refuse_unauthored`'s `rehomed`), so a claimant with no live `contain` has
+    nothing to close and the gate would refuse his opening alone. He is left where he is."""
     live = [pid for pid in pids if pid in w.persons]
     if not live:
         return []
@@ -338,6 +349,9 @@ def _not_yet_under(w: "World", pids: list, target: str) -> list:
         here = homes.get(pid)
         if here not in chains:
             chains[here] = ancestry(w, here)
-        if target not in chains[here]:
-            out.append(pid)
+        if target in chains[here]:
+            continue
+        if pid != actor and not (here is not None and may_muster(w, actor, via, pid)):
+            continue
+        out.append(pid)
     return out

@@ -590,6 +590,58 @@ def test_in13_exit_i_a_won_whose_army_already_stands_there_fells_without_an_arri
     assert world_q.mustered(w, "set_s_036", CROWN) == claimants
 
 
+def _won_fold(w, claimants):
+    """A CONSTRUCTED `Won` over `claimants` folded through the real driver at ENCOUNTER -- the
+    effect, the fold and the gate real (`Won` is unreachable at fixture scale)."""
+    defenders = world_q.mustered(w, "set_s_036", CHURCH)
+    res = Resolution("Won", {"parties": {"claimants": claimants, "subject_members": defenders},
+                             "result": {"attacker_size_pct": 1.0, "defender_size_pct": 0.5}})
+    d = SeasonDriver(w)
+    w.step = Step.ENCOUNTER
+    w.frozen = False
+    return [(e.kind, e.degree) for e in d._fold(w, mint_token(w, WriteClass.ACTS),
+                                                _march_act("p_npc_033", "set_s_036", "off_npc_033"), res)]
+
+
+def test_in13_exit_i_a_won_never_moves_a_claimant_the_muster_basis_would_refuse():
+    """EXIT (i), the gate's own question asked INSIDE the effect (`_eff_seize`'s precedent: an act the
+    precondition admitted is never killed at the gate). Two arms, each through the real fold, each a
+    `NotYours` that escaped `_fold` and ended the season before `_eff_march` asked `may_muster`:
+      * a claimant the seat may NOT muster (committed to another faction): he stays where he is and
+        the rest of the army arrives. (A closed marcher `hold` is NOT this arm: `_admits` refuses the
+        ineligible marcher before the effect runs, `march.refused`, so no `NotYours` is reachable
+        there.)
+      * a claimant with NO HOME (no live `contain`): the gate admits only a re-home, a closure AND an
+        opening, so he has nothing to close and stays where he is.
+    CONTROL (no mutation of the world): the same two claimants, both housed and the hold live, BOTH
+    arrive (exit (i) above)."""
+    # a claimant the seat may not muster (someone uncommitted to the Crown, in its army)
+    w = _no_resident_crown(build_realm(0))
+    attackers = world_q.mustered(w, "set_s_014", CROWN)
+    assert attackers == ["p_npc_033", "p_npc_035"], "fixture moved: re-read it"
+    outsider = "p_npc_001"      # housed elsewhere (a claimant already under the target is no mover)
+    assert not G.may_muster(w, "p_npc_033", "off_npc_033", outsider)
+    assert "set_s_036" not in world_q.ancestry(w, world_q.home_of(w)[outsider]), "fixture moved"
+    kinds = _won_fold(w, attackers + [outsider])
+    assert ("field.won", "Won") in kinds and ("army.arrived", "Won") in kinds, kinds
+    assert world_q.mustered(w, "set_s_036", CROWN) == attackers
+    assert "set_s_036" not in world_q.ancestry(w, world_q.home_of(w)[outsider]), "he was moved"
+    # a claimant with no home
+    w = _no_resident_crown(build_realm(0))
+    for t in w.persons["p_npc_035"].tenures:
+        if t.kind == "contain" and t.live:
+            t.until = w.tick
+    assert world_q.mustered(w, "set_s_014", CROWN) == ["p_npc_033"]
+    kinds = _won_fold(w, attackers)
+    assert ("field.won", "Won") in kinds and ("army.arrived", "Won") in kinds, kinds
+    assert world_q.mustered(w, "set_s_036", CROWN) == ["p_npc_033"]
+    assert "set_s_036" not in world_q.ancestry(w, world_q.home_of(w).get("p_npc_035")), "he arrived"
+    # CONTROL: nothing planted, both arrive
+    w = _no_resident_crown(build_realm(0))
+    _won_fold(w, attackers)
+    assert world_q.mustered(w, "set_s_036", CROWN) == attackers
+
+
 def test_in13_exit_i_lost_leaves_the_claimants_at_their_origin_r7():
     """EXIT (i), the `Lost` arm, PINNING #453 R-7 [ASSUMPTION; medium; Jordan to correct; revert:
     Jordan states that a routed army arrives, and this arm is re-pinned]: a real `field.lost` at

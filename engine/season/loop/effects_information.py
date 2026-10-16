@@ -17,8 +17,7 @@ from typing import Optional
 from ..data.arrangements import ARRANGEMENTS
 from ..data.requires import RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS
 from ..data.rosters import MARCH_TARGET_KINDS, RECORD_CONTENT, RECORD_KIND_KEYS
-from ..data.verbs import VERB_TABLE
-from ..decision.options import WARRANT_SOURCED
+from ..data.verbs import VERB_TABLE, WARRANT_SOURCED
 from ..queries import faction_q
 from ..queries.person_q import ABOUT_KEYS
 from ..queries.world_q import (
@@ -694,8 +693,8 @@ def _eff_give(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
 
 
 # WHICH RECORD KIND IS A WARRANT FOR `seize`, and WHICH OF ITS CONTENT KEYS NAMES WHAT IT AUTHORIZES:
-# the kind is `decision/options.py::WARRANT_SOURCED`'s (`rosters.yaml: warrant_sourced`, the person-side
-# reader of the same line), the key `person_q.ABOUT_KEYS`' (the one owner of "what a document is about"),
+# the kind is `data/verbs.py::WARRANT_SOURCED`'s (`rosters.yaml: warrant_sourced`, the one loader both the
+# person side and this one import), the key `person_q.ABOUT_KEYS`' (the one owner of "what a document is about"),
 # never spelt here.
 _SEIZE_WARRANT_KIND = WARRANT_SOURCED["seize"]
 _SEIZE_WARRANT_KEY = ABOUT_KEYS[_SEIZE_WARRANT_KIND]
