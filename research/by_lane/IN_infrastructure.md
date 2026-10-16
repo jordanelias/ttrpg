@@ -127,7 +127,7 @@ endings, scale transitions, the plan) is borrowed from corpora filed for other l
 | `PREC-NULLS` `proposals/_session_provenance/2026-08-29-to-31/PRECEDENT.md` | Nine nulls N-1…N-9 | No header, status, author, date or method [READER R8 §FILES] | Its "survived the survey's own adversarial pass" cites none; N-9 (no game ships an NPC acting on false information) is contradicted by `S05` §1.3's Talk of the Town (DOCUMENTED) and by `02_against_precedent` §3 [READER R8 §K 12, 18] |
 | `EMG` `…/relay/G_EMERGENCE_PRECEDENT.md` | What stores story in CK, DF, RimWorld, Nemesis, Qud/URR, KoDP, Pentiment | REFERENCE 2026-09-06; Sonnet, web; Burning Wheel and Ars Magica "not freshly verified"; no verifier [READER R8 §FILES] | Its memory finding (memory works only when read at a decision point) is the one precedent claim that reached the season loop's design, but by convergence, not citation (regard-at-read, A-12) [READER W2 §V A-12]; not cited by any plan part [CHECKED index §6 item 2] |
 | `proposals/2026-09-30-character-and-play-surface/02_against_precedent.md` (`#445` 02) | Re-score of `COMP-3` §7 against `engine/season/` at `c8cc408`; recommendations P-1…P-5 [CHECKED `02_against_precedent.md`:80-84] | PROPOSED 2026-09-30; no verifier; README RATIFIED AS INTENT for P-1, P-2, P-3 mechanism (ED-IN-0290) [READER C7_2 §FILES; R8 §FILES] | **The plan's only channel to the companion.** Its own verdict: "Finishing the plan consolidates the engine; it does not change this verdict" (below the floor on factions that act, procedure, relationships, scarcity) [CHECKED `02_against_precedent.md`:73] |
-| `VCD` App. B game sets | Seven detective games (107 acts), CK3 + RoTK (107 acts) mapped to 63 act families | RATIFIED AS INTENT (ED-IN-0288); "Web facts about the games rest partly on search snippets"; many review sites 403; Paradox wiki pages would not load [CHECKED `VCD`:156-158] | Name-level evidence; several rows [UNVERIFIED] (Disco Elysium arrest, CK3 torture, Espiocracy) [READER C8_1 §G]; the two surveys behind P1–P58 and F01–F84 are not committed [CHECKED `VCD`:99-133 region via index §7] |
+| `VCD` App. B game sets | Seven detective games (107 acts), CK3 + RoTK (107 acts) mapped to 63 act families | RATIFIED AS INTENT (ED-IN-0288); "Web facts about the games rest partly on search snippets"; many review sites 403; Paradox wiki pages would not load [CHECKED `VCD`:156-158] | Name-level evidence; several rows [UNVERIFIED] (Disco Elysium arrest, CK3 torture, Espiocracy) [READER C8_1 §G]; the two surveys behind P1–P58 and F01–F84 are not committed and are in no upload [CHECKED `VCD`:99-133; UPLOAD_CHECKS "STILL ABSENT"]. **Upload test of `VCD`'s [SESSION] rows** (the churn survey's game claims, carried "at its word", `VCD`:127): *Guild 2* fabricated evidence with strength, believability and ~6-year decay, and slander spreading a fabricated crime (`VCD`:1120-1121, :1266, :3455) CONFIRMED by the teardown [CHECKED TD:191]; *Dwarf Fortress* values/facets, *RimWorld* moodlets and storyteller, *The Sims* argmax (`VCD`:1063-1072, :1125) CONFIRMED by the mechanical specifications [CHECKED N2:199, :245, :273, :369]; *Manor Lords* approval-gated immigration and *Tropico* die-hard diffusion (`VCD`:1074, :1124) CONFIRMED [CHECKED TD:148, :231]; *Prom Week*/*Versu* norm gating (`VCD`:1213) PARTLY (the compendium names both, nothing on norm gating) [READER UPLOAD_CHECKS]; *Shadows of Doubt* case submission (`VCD`:1093) is in no upload; *Guild 3* F77 (below, §2.2) NOT IN THE SOURCE. `VCD`'s [ASSUMPTION] that "the survey never expands the labels" (`VCD`:125-127) is superseded: *The Third Strand* expands them — D1 the nine-title settlement teardown, D2 the thirteen-title analysis, D3 the twenty-game consolidation, N1 the compendium, N2 the mechanical specifications (not a second compendium) [CHECKED 3S:5] |
 | `.designs/systems/_architecture/reference/auto_manual_resolution_duality_v1.md`, `player_agency_v30.md` | FM/Total War/CK/XCOM three fidelities; RoTK Officer Mode, CK3 Vassal Play as declared stance precedents | Quarantined ARCHIVED-NOT-CANON; duality "RULED 2026-07-08", fork C calibration open [READER A7_1 §FILES, §G] | Declared precedents never bound to a module (`COMP-7` §14.2) [READER R4 §C row "declared precedents"] |
 
 ### 2.2 Games and systems that bear on this lane
@@ -146,7 +146,7 @@ endings, scale transitions, the plan) is borrowed from corpora filed for other l
 | Seven detective games (*Pentiment, Disco Elysium, Esoteric Ebb, Lacuna, L.A. Noire, Tails Noir, Shadows of Doubt*) | Act families 1–5, 26–27: question, inspect, read, watch, board, arrest, interrogate | coverage map | snippets; Pentiment Acts II–III trial not fetched [CHECKED `VCD`:156-160] | Name-level. Supports the six investigation verbs that exist in VT but write `[]` and emit `finding.made` with no degree [READER B1_2 §F "Six investigation acts"]. The games' defining mechanic (graded inquiry, contradiction of testimony) is the part not built (FI-01 BLK) |
 | CK3, RoTK (107 acts) | War/truce, imprison/ransom/execute, schemes, sabotage, alliances | coverage map | Paradox wiki pages "would not load"; RoTK = Koei series [ASSUMPTION] [READER C8_1 §H] | Name-level; supports proposed verbs `arrest`, `seize`, `covenant`, `sabotage`, none in VT [CHECKED] |
 | Republic of Rome (agenda control) | `carry`, `convene` as procedural power | precedent | board game, named [READER C8_1 §G] | `carry` is in VT with effect DECLINED (always NoOpReceipt, H-63) [READER B1_2 §F]; the precedent names a power the row cannot exercise |
-| RimWorld, Guild 3, Bannerlord, Skyrim radiant (grudge loop/damping) | Feud spiral; need for a damper | failure | search snippets [READER C8_1 §G] | Informs `forgive` (IN-12 step 13, unbuilt) and K-45's recommended signed LOOP row, "not written" [READER C8_2 §H]. The grudge append per lost field has no bound today |
+| RimWorld, Guild 3, Bannerlord, Skyrim radiant (grudge loop/damping) | Feud spiral; need for a damper | failure | churn survey [SESSION] via `VCD`, except *Guild 3*: the teardown and the twenty-game consolidation give the publisher's own account (T1): with the citizen layer enabled, townsfolk "burned the **player's** residence down at roughly every second launch", and the publisher asked the studio to switch the inhabitants' AI off [CHECKED TD:195; 20G:241]. `VCD`:985 says "the producer's residence" (wrong owner) and `VCD`:183-184 a "producer's forum post that predates Early Access" (neither upload says forum post or dates it); `VCD`:1122's F77, "a mob burning a residence at a popularity threshold", comes from the absent churn survey: no threshold, popularity or mob is in either upload [CHECKED TD:195; 20G:241]. "Switched off rather than damped" (`VCD`:985, :995) is CONFIRMED (20G:241) | Informs `forgive` (IN-12 step 13, unbuilt) and K-45's recommended signed LOOP row, "not written" [READER C8_2 §H]. The grudge append per lost field has no bound today (`VCD`:985 cites `effects_combat.py:353-358`). The *Guild 3* case is a failure of an agent layer with no damping and no half-strength setting, which the uploads themselves draw as a directive (TD:543 per UPLOAD_CHECKS; 3S T6 [READER UP01 §T 6]) |
 
 ### 2.3 Critical evaluation of the game precedent for this lane
 
@@ -201,8 +201,8 @@ endings, scale transitions, the plan) is borrowed from corpora filed for other l
 | `proposals/2026-10-14-in31-revocation-cost-provenance.md` | PROPOSED, design only; conditional on IN-48's reverted carrier [READER C4_2 §FILES] | `REVOCATION_DISPOSAL {appointed: ban, …}`; appointed ⇒ permanent `ban` | H-100's `GOV` vocabulary, "tier 3: vocabulary, not authority" [CHECKED :176-177] | **The one plan design that reads research, through a hole row.** Keys cost on `conferral` basis, not on how the seat was won (H-100's variable) [READER NPC synth §0 item 8 → C4_2 §F]; FA lane finds it harsher than the research's graded demotion [FA synth §0 item 3] |
 | `proposals/2026-10-14-in48-delegation-carrier.md` | PROPOSED; built `40926a95`, REVERTED for contradicting ratified Layer 1 [READER C4_2] | `delegate : Person → Office` kind; `delegation` gate basis | Jordan 2026-09-03 "Regency and puppet rulers must be possible" [READER W2 §V IN-48] | Contradicted by Layer 1 (01_AXIOMS §E.2.4; 04:351); the holder ≠ controller precedent (X1) that bears on it is not cited |
 | `proposals/2026-09-17-governance-and-holdings-r2/` (01–05), `…-governance-and-holdings/03_THE_SURFACE.md` | RATIFIED AS INTENT (v9), "absorbed where built", and in the same files PROPOSED/HELD BACK [READER C3_1–C3_3 §H] | `reach`, `place_of`, record kinds, `give`, deposit rule, lossy `tell`, conferral/revocation as values, MATTER blocks, `found`, works, surface law | Layer 1 and Jordan rulings; **no game or historical case; refuses to cite unsurveyed Manor Lords/Banished/HoMM** [READER C3_2 §G] | Live where absorbed (`give`, record kinds, lossy `tell`, offices.yaml). The refusal to invent precedent is correct discipline |
-| `proposals/2026-09-17-governance-and-behaviour/` (RULINGS.yaml, 00, 01) | SPENT / ABSORBED; ratified AS INTENT (ED-IN-0243) [READER C4_1, C4_2] | beneficiary column; teller on Claim; stance stored; τ = 0.1; AX-7; RR-A FOLD of comply/evade-defy/refract/dispatch | rulings; one ED-SE-0051 citation of an uncommitted "nine-game teardown" [READER C4_2 §G] | **RR-A (fold the four response verbs, ruled 2026-09-17) is contradicted by the live table**, which keeps `comply`, `evade / defy`, `construe`, `dispatch` [CHECKED VT]; J-2 (2026-09-18) re-ruled ONE `evade/defy`, `comply`, `construe` [READER W2 §V A(v9) J-2]. The later ruling governs; RULINGS.yaml still reads "SPENT … 0 escalated" [READER C4_2 §H] |
-| `proposals/2026-09-12-emergent-narrative-primitives-v2/` | 00 RATIFIED AS INTENT for P1 (IN-37), P5 (IN-34); 01–04 HELD BACK [READER C7_1 §H] | chronicle render, patron pressures, declared terms, bodies clock, complication modal, counterparty, sheet-as-document | DF legends, Tropico, Banished; PbtA/Blades; seven outside documents pinned by SHA only [READER C7_1 §G] | Partly live (IN-34 built with rates shipped 0; IN-37 BLK) |
+| `proposals/2026-09-17-governance-and-behaviour/` (RULINGS.yaml, 00, 01) | SPENT / ABSORBED; ratified AS INTENT (ED-IN-0243) [READER C4_1, C4_2] | beneficiary column; teller on Claim; stance stored; τ = 0.1; AX-7; RR-A FOLD of comply/evade-defy/refract/dispatch | rulings; one ED-SE-0051 citation of the "nine-game teardown" [READER C4_2 §G], untracked but now in hand in its audited revision (upload 3cb2a6c8): it supports capacity as a growth gate only partly (Banished vacancy gates births, Manor Lords plot capacity gates immigration; "strongest entries" is not in it) [READER UPLOAD_CHECKS SFP 05:202-207] | **RR-A (fold the four response verbs, ruled 2026-09-17) is contradicted by the live table**, which keeps `comply`, `evade / defy`, `construe`, `dispatch` [CHECKED VT]; J-2 (2026-09-18) re-ruled ONE `evade/defy`, `comply`, `construe` [READER W2 §V A(v9) J-2]. The later ruling governs; RULINGS.yaml still reads "SPENT … 0 escalated" [READER C4_2 §H] |
+| `proposals/2026-09-12-emergent-narrative-primitives-v2/` | 00 RATIFIED AS INTENT for P1 (IN-37), P5 (IN-34); 01–04 HELD BACK [READER C7_1 §H] | chronicle render, patron pressures, declared terms, bodies clock, complication modal, counterparty, sheet-as-document | DF legends, Tropico, Banished; PbtA/Blades; seven outside documents pinned by SHA (`04_PROVENANCE.md`:130-138) [READER C7_1 §G], of which five are now in hand as uploads and hash-match (compendium, mechanical specifications, thirteen games, nine titles, twenty games); the two earlier drafts are not, and the uploaded *Third Strand* differs from its pin [READER UPLOAD_CHECKS §Identity] | Partly live (IN-34 built with rates shipped 0; IN-37 BLK) |
 | `proposals/2026-08-31-authoritative-architecture/`, `…-09-01-holonic-architecture/` | PROPOSED, HELD BACK IN FULL; holonic README says successor is `ARCHITECTURE_V2.md` [READER C7_1 §FILES] | `choose`/`resolve`/`witness` signatures; six-step loop; Tenure; id(x) by hash; fixed point | `research/` SIM, COMP, XSC (AA/05 §2) [READER C7_1 §G] | Superseded by Layer 1; **AA's central ruling builds Event on `keys.py`** (retired) [READER C7_1 §H] |
 | `proposals/2026-08-29-valoria-from-scratch/`, `2026-08-31-ideal*/`, `2026-08-28/29-greenfield-systems-suite*/` | PROPOSED, nothing executed; greenfield v1 ARCHIVED, v2 "content quarry" [READER C5_1, C6_1–C6_4] | the August lineage: `choose(person,view)`, Tenure, mint/efface, gauges, posts, Slate, derive_ob, herald | greenfield anonymizes every precedent ("surveyed franchise") [READER C5_1 §G]; cites SIM/COMP/PMM/XSC by path | **Ancestors, not live.** Their shapes survive in `engine/season/` (signatures, Tenure, Proposition, eight operands) by way of the admissible chain (#337→#357 per `01_AXIOMS.md`:1174; #337→#352 per `holonic_ARCHITECTURE.md`:13), but Layer 1 forbids citing pre-#337 work as authority [CHECKED `holonic_ARCHITECTURE.md`:12-15]. Both greenfield versions build on Keys (J-O) and cite the retired `balance_oracle.py` [READER C5_1 §H, C5_3 §H] |
 | `proposals/2026-09-03-governance-corpus-rebuild/` | PROPOSAL; held in `_part8` §K; "no repository file was read as a source" (a 33-doc upload) [READER C2_1] | margin resolver (ED-874), 12-phase tick, Title/Claim/Scheme/InterestGroup | CK3, Victoria 3, EU4, Democracy 4, Into the Breach, Shadow Empire, Frostpunk [READER C2_1 §G]; [SELF-AUTHORED] | **Dead on arrival for IN**: a second kernel (probability-margin for bare-stat checks) and a second tick, both against the one-resolver season loop. Its precedent reading is the richest in any IN-adjacent design and reaches nothing |
@@ -292,7 +292,7 @@ attempted or no predicate/effect) is the IN-57 pin [CHECKED `test_season_shape.p
 | G5 Writ answers | `comply`, `construe`, `dispatch`, `evade / defy` | `comply` landed then N; `construe` grade `absent`; `evade/defy`, `construe` rows reverted at B-I (IN-09); `dispatch` R in the corpus (since IN-57), 86/16 in the realm (`requirements.yaml`:731) | *diffidatio* etymology [UNVERIFIED]; writs, citation/contumacy [H1] | none specific | **UNGROUNDED**, and internally **CONTRADICTED** (RR-A fold vs J-2 retain; §3.3 item 6) | B1_2 §F; W2 §V IN-09; C4_2 §F |
 | G6 Documents | `create_record`, `destroy_record`, `forge`, `give`, `issue`, `petition`, `survey` (live); `conceal` (step 10) | E: `create_record`, `give`, `issue`, `petition`; R: `survey` (realm 165/10, `requirements.yaml`:734); N: `destroy_record` (H-75), `forge` (no effect body, H-169) | writ, charter, safe-conduct, warrant [H1]; Zhao Gao forged edict, petition-as-object (PRE, unsourced) | CK3 hooks/secrets (refused by D-5); Shadows of Doubt documents | **PARTLY**: document-as-carrier is the architecture's own design (r2/02) converging with petition-as-object; forgery has no producer; `GOV`/`CGR` UNREACHED | CHECKED `VCD`:4463; R8 §C; C3_1 §F |
 | G7 Seats and bonds | `commit`, `confer`, `establish`, `oblige`, `release`, `revoke`, `succeed`, `tie / knot` (live); `repudiate` cut | E: `release`; R: `commit`; N: `confer`, `establish`, `oblige`, `revoke` (IN-10 reverted), `succeed`, `tie/knot` (effects declined) | `RTP` (patronage, kinship, purges), `GOV` hierarchy/standing (H-100), `FASE` T9 interregna; homage, elect/lot, depose [H1] | Kremlin/CK contracts (X1); Old World goals; CK3 succession law | **UNREACHED** for `RTP`/`FASE`; **PARTLY** for `revoke` (H-100 → IN-31 vocabulary); succession (IN-61) rests on Jordan's "the heir still has to claim" | CHECKED HR H-100; W2 §V IN-61; CHECKED `VCD`:4470, :4472 |
-| G8 Matter | `exchange`, `levy`, `transfer` | E: `transfer`; R: `levy`; N: `exchange` (reverted, IN-33) | `FASE` T1–T3 (fiscal sociology, tax farming, moral economy); `PW` §3 mustering | X4 levy ≠ professional (CK, Shogun 2, JA2; "4/4"); Pax Pamir pricing | **UNREACHED**: IN-49/IN-52's levy feed (LF-1..3) cites the computation note, not the levy/professional convergence or `FASE` | W1 p4 IN-52; R4 §C X4; R6 |
+| G8 Matter | `exchange`, `levy`, `transfer` | E: `transfer`; R: `levy`; N: `exchange` (reverted, IN-33) | `FASE` T1–T3 (fiscal sociology, tax farming, moral economy); `PW` §3 mustering | X4 levy ≠ professional (CK, Shogun 2, JA2; "4/4"); Pax Pamir pricing (the companion cites its own dossiers and the rulebook; content CONFIRMED against the teardown's T0 rulebook reading [CHECKED TD:33, :49]) | **UNREACHED**: IN-49/IN-52's levy feed (LF-1..3) cites the computation note, not the levy/professional convergence or `FASE` | W1 p4 IN-52; R4 §C X4; R6 |
 | G9 Ground and fabric | `build`, `found`, `restore`, `work` (live); `raze`, `sabotage` (steps 9, 11) | all four R; `work` 0/183; `body_step` shipped 0 | `PGS` §2A, `HCC` §2.3–2.5; Malthus, tragedy of the commons (quoted in 04_MATTER) | Manor Lords, Banished, HoMM named and **refused as unsurveyed** | **UNGROUNDED** by choice (04_MATTER refuses to invent precedent); `PGS`/`HCC` UNREACHED | C3_2 §G; SE synth §0 item 2 |
 | G10 Movement | `migrate`, `move` | E: `move`; R: `migrate`; capacity throttle (RR-2) | `FASE` T8 frontier colonization; `PGS` | none | **UNREACHED** | C4_2 §F RR-2 |
 | G11 Findings | `examine`, `interview`, `reconstruct`, `research`, `surveil`, `thread_read` | E: `interview`, `reconstruct`, `research`, `surveil`; R: `examine`; N: `thread_read` (H-85); all write `[]`, no degree | coroner's view, Walsingham's cipher secretary [H1]; no `research/` corpus | seven detective games (snippets; one survey from memory per FI synth) | **PARTLY**: names covered; the graded inquiry the games define is unbuilt (FI-01 BLK) and FI-01 would route it through the contest roller Jordan ruled out | CHECKED `VCD`:4457-4458; FI synth §0 items 1-3 |
@@ -333,7 +333,7 @@ attempted or no predicate/effect) is the IN-57 pin [CHECKED `test_season_shape.p
 | `revoke` | G7 | ruled · — · N | IN-10, IN-31 | `GOV` via H-100 | — | PARTLY | the only research reach; computed revoke executes 0 (C4_2 §H) |
 | `succeed` | G7 | assumption · — · N | IN-61 | `RTP` G, `FASE` T9; tanistry [H1] | CK3 succession law | UNREACHED | effect declined; heir unbound |
 | `tie / knot` | G7 | ruled · — · N | IN-32 | marriage [H1] | — | UNGROUNDED | `_eff_tie` unbuilt (H-182) |
-| `exchange` | G8 | assumption · — · N | IN-33, FA-01 | `FASE` | Pax Pamir pricing | UNREACHED | reverted at B-I |
+| `exchange` | G8 | assumption · — · N | IN-33, FA-01 | `FASE` | Pax Pamir pricing (CONFIRMED, TD:49) | UNREACHED | reverted at B-I |
 | `levy` | G8 | assumption · — · R | IN-49, IN-52 | `FASE` T1–T3, `PW` §3 | X4 levy ≠ professional | UNREACHED | eligibility is a substitution (H-52) |
 | `transfer` | G8 | ruled · — · E | — | — | — | UNGROUNDED | — |
 | `build` | G9 | assumption · — · R | IN-28, SE-03 | `PGS` §2A | Manor Lords (refused) | UNGROUNDED | no works declared |
@@ -429,7 +429,7 @@ index [CHECKED v9:363; `_part5`:191].
 - [GAP: scale transitions beyond the bout — FM/TW/XCOM cover fidelity of one contest; nothing in the corpus covers personal ↔ faction ↔ settlement handoff in the season loop (null N-3/D3 stands)]
 - [GAP: endings and victory — no research for IN-27/IN-30 (FA synth §0 item 9)]
 - [GAP: threadwork and the Calamity coupling (IN-06, IN-35) — no game or historical source exists (index §7)]
-- [GAP: the two surveys behind `VCD`'s P1–P58 and F01–F84, the "A Tells B About C" dossier and the seven pinned outside documents are not committed; their points survive only as `VCD`/ENP v2 restate them]
+- [GAP: the two surveys behind `VCD`'s P1–P58 and F01–F84 and the "A Tells B About C" dossier are not committed and are in no upload; their points survive only as `VCD` restates them. Of the seven outside documents ENP v2 pins, five are in hand since this pass as uploads (not tracked files) and hash-match; the two earlier drafts are not (UPLOAD_CHECKS §Identity)]
 - [GAP: the `[H1-nn]` governance-history extraction table is not committed; only its ids survive in `VCD` App. B]
 - [SKIPPED: the other lanes' reader extractions (D1–D4, E1–E3, A1, A2, A5, R1–R3, R6, R7, R9) — read only through targeted greps (R3, R6, R7, A9 FILES and checks) and through the sibling synthesis files' verdict sections, cited as "<LANE> synth"; their findings used here are those lanes' [CHECKED] items]
 - [SKIPPED: `C5_greenfield_2`, `C5_greenfield_3`, `C6_from_scratch_ideal_2`…`_4`, `G2_godot` — read FILES, F–G and H sections; V and P sections skimmed, since this lane needed only their status and grounding]
@@ -469,3 +469,402 @@ or mis-located. Each correction below was checked against its source before it w
 11. Executed-set locators corrected to `test_season_shape.py`:7738-7740 (executed), :7834-7835 (refused), :8668-8670 (never attempted).
 12. Research tried against the season loop: two rosters (`governance_modes`, `power_bases`), not one instance (`rosters.yaml`:86-88).
 13. Spelling: anonymizes, finalized, realizes (×2), colonization, mobilization (not a quoted name).
+
+## 7. THROUGHLINES
+
+Sections 7–10 were read at HEAD `5445e34`. Code lines marked [CHECKED] were re-opened this pass; the uploaded NERS audit is a near-copy of the
+tracked file `references/ners_audit_2026-10-14.md` (Status REFERENCE, added by `4112b0e`; `diff` shows only its four-line header and two ED-id
+rewordings), written at `092fc45`. Between `092fc45` and `5445e34` the non-test code that moved is `witness.py`, `world_q.py`, `person_q.py`,
+`cache.py`, `carriers.py`, `log.py`, `world.py`, `epistemic.py`, `options.py`, `verbs.py` (`git diff --stat 092fc45 HEAD`); the dice, seam,
+chooser and `deliberate.py` lines the audit cites did not move. [AUDIT] marks a claim taken from it and not re-opened.
+
+**Verdict.** Thirteen throughlines hold in this lane: seven repository patterns, three failure shapes, two convergences and one null. The
+strongest is T-IN-1 (persons differ in what they want, not in what they can do), which reaches every resolver in the season loop and which no
+v9 position closes. Two document-stated throughlines are wrong as filed (PREC-NULLS N-9; COMP "six of eight, Valoria owns the primitive").
+
+### 7.1 Register
+
+| ID | pattern | kind | cases / sources (independent count) | counter-evidence or limits | REACH IN CODE | REACH IN PLAN | verdict |
+|---|---|---|---|---|---|---|---|
+| T-IN-1 | **Persons differ in wants, not capacities.** Every resolver the season reaches is fed a default, not the person | REPOSITORY PATTERN | contest `_pool_of` → `pool_default` 2, `_obstacle_of` → `obstacle_default` 2 [CHECKED `seam/wrappers/sigma.py`:95-129]; capability empty on 429/430 [CHECKED `requirements.yaml`:1244-1247]; combat derives `end` only [CHECKED `seam/wrappers/combat.py`:130-138; `modules/combat/combatant.py`:93-94; `fight.py`:45]; mass battle `_SEASON_FORCE_POWER = 4`, `command=4`, raw weight sum as troops [CHECKED `modules/mass_battle/massbattle.py`:180-207]; audit T1 [AUDIT :324-335]; THR thesis "one absent object (persistent named person)" [READER R8 §T 7]; XSC/INT "missing person is the highest fan-out blocker" [READER R5 §T 3]. Independent: 3 code subsystems; 3 documentary sources, of which THR and XSC share descent (R4 §K 11) → 2 | pursuits and stance do vary per person and move choice (`choose.py`:402-406 [CHECKED]); body band moves `end`. The August "missing person" was the absence of persons; that is fixed (430 built). What remains is the absence of per-person **magnitudes** | executes in the season loop (the defaults are what runs) | J-13 remainder = J.2 rank 1, Jordan's (`_part5`:514 [CHECKED]); `train` (IN-12 step 9, B-Q) writes capability only where a case names a vocation, key `copying` only (`_part5`:73 [CHECKED]); K-1/K-5 "NOT scheduled", K-2 "not ratified" (`_part7`:44 [CHECKED]) | **SOUND** |
+| T-IN-2 | **One ladder, many roads to it and beside it** | REPOSITORY PATTERN | per-die literals owned four times [CHECKED `dice_engine.py`:174-175; `sigma_leverage.py`:77-79, :105, :112-113]; combat main roll continuous Normal [CHECKED `modules/combat/core.py`:60] with a logistic side channel [CHECKED :36-41], season/contest discrete [CHECKED `modules/social_contest/roll.py`:35], mass battle discrete [CHECKED `orchestration.py`:1288-1292]; result vocabularies: four-band margin, Felled/Wounded/Untouched, Won/Lost/Unopposed, plus mass battle's own four labels read by nothing [CHECKED `seam/ladder.py`:195-206; `massbattle.py`:285-296]; pool formulas: `c` or 2 (season), `max(5, history+6)` (combat, `core.py`:54-56 [CHECKED]), `spirit×2 + min(3, history+3) + TS//10` (threadwork, `operations.py`:244-247 [CHECKED]); audit T3 [AUDIT]; pre-season-loop degree census "11 sites → 8 ladders → 7 classes" [READER E4_5 §F]; XSC "rival formulas persist because rulings are unexecuted" [READER R5 §T 6]. Independent: code (1) + the two audits (same lineage? no: E4_5 is July, the NERS audit October) → 3 | `degree_from_net` is single-owned and guarded; combat grades through it (`core.py`:61-74 [CHECKED]). The margin ladder is one; the multiplicity is in inputs, substrates and vocabularies | executes | no position unifies substrates or literals: `grep -n "roll_net_continuous\|discrete\|one substrate" workplans/valoria_master_workplan_v9*.md` → 0 relevant hits [CHECKED]; mass-battle margin "open MB-lane work" (`ladder.py`:198-203 [CHECKED]) | **SOUND** |
+| T-IN-3 | **Built ahead of its readers; armed controls shipped at off.** A carrier is kept as the record that a measurement happened | REPOSITORY PATTERN + FAILURE SHAPE A | 18 shipped-dark knobs (BASELINE B5, `fixtures.py`:405-849); `urgency` "INERT BY CONSTRUCTION … kept … because deleting it would hide the finding" [CHECKED `choose.py`:172-193]; `benefits_me` no production caller [CHECKED grep: only `choose.py`:150 and docstrings]; σ-leverage `leverage=0.0` [CHECKED `sigma.py`:147]; OUGHT predicate read by nothing (H-185 [CHECKED]); `scale:` reaches no resolver (H-89 [CHECKED]); audit T4 [AUDIT]; EU4/Imperator "a mechanism engineered not to fire is indistinguishable from one that does not exist" [READER R4 §T shape A; R8 §T 4]; XSC "characteristic failure = finished code with no caller" (August tree) [READER R5 §T 2]; twenty-game asymmetry A5: "an emergent agent layer built as a single switch will be switched off … the data behind it becomes decoration" [CHECKED 20G:245]. Independent: code + audit + COMP/THR (shared descent, 1) + 20G (different research line) → 4 | Valoria's knobs are swept **dials** (each has arms, e.g. `scar_weight_shift` 0/0.5/1), not 20G's single switch; the defect is the shipped value, which is Jordan's [OPEN — Jordan tuning]. The tree does delete dead carriers when a ruling or zero-caller sweep kills them (`DECISIVE_OB`, TN 6/8 rows [CHECKED `dice_engine.py`:164-173; `core.py`:47-49]) | built and inert | relaxed exit closes positions on DONE-test (m:121-135); no position flips `age_step`, `illness_rate`, `scar_excludes_actor`, `intent_disclosure`, `said_slant`, `telling_privacy` (BASELINE B5 "none") | **SOUND** |
+| T-IN-4 | **Acts record that something happened, not what** | REPOSITORY PATTERN + NULL (expression) | 52/52 act-minted Propositions predicate `''`; 112/120 Records `subject_matter` None; ~48/1,318 acts with an effect beyond an existence flag [CHECKED `proposals/2026-10-13-narration-mechanisms.md`:38-53; one seed, scratch instrument, outputs uncommitted]; five investigation rows `writes: []` [CHECKED via BASELINE B3]; H-185 [CHECKED]; audit T5 [AUDIT]; "tracking is not expressing" (D6 / N-2) [READER R4 §T; R8 §T 2]; "legibility caps state: record only what can be surfaced" [READER UP05 §T 6]; "corpus builds substrates and clocks, not attribution/discourse" [READER UP01 §T 1]; Tale-Spin and "10,000 bowls of oatmeal" [READER UP02 §T 8]. Independent: code datum + COMP/THR (1) + the uploaded research line (N1/N2/3S share an author line → 1) → 3 | tellings carry a `Said` with a predicate; 8 Records carry content (`narration-mechanisms.md`:50-53) | executes (the empty fields are what runs) | IN-26 sink (B-Q, BLK SC-01), IN-37 render (B-U, BLK SC-01 step 16), FI-01 degree producer (B-O); H-185: zero plan mentions (BASELINE B4) | **SOUND** in shape; magnitude [CONFIDENCE: low] (one seed) |
+| T-IN-5 | **One resolver, several fidelities** (FM/XCOM vs Total War's second resolver) | CONVERGENCE | COMP K7, D4, refuse #14 [READER R4 §T]; THR TL06 §5.3 and PRE (same descent) [READER R8 §T 5]; Jordan SM-5 ("fire emblem style", independent); the August suites applied it [READER C6_1 §G]. Independent: 2 (precedent line, owner) | the PLAYABLE fidelity is designed, not built; the bout's AUTOMATED path is the one that runs | executes for the duel (`fight` → one engine); grid absent ("Grid-based unit combat does not exist anywhere in the tree", `_part2`:181 [CHECKED]) | IN-46 "no build batch" (m:272; `_part4`:32-36 [CHECKED]) | **SOUND**, half UNREACHED |
+| T-IN-6 | **Hostility with no damper is switched off, not tuned** | FAILURE SHAPE | *Guild 3* publisher account, T1 [CHECKED TD:195; 20G:241]; RimWorld insult spiral, Skyrim kin revenge [SESSION, via `VCD`:985]; COMP T-04 "accrual beats bounded restoration", 11 instances, 7 verified [READER R8 §T 6]; uploads' "half-strength setting" directive [CHECKED 20G:245; READER UP03 §T 8, UP04 §T 9]. Repository: `_eff_march` appends a −1.0 grudge row toward the winner for every loser, no cap, decay or closer [CHECKED `loop/effects_combat.py`:246-261]; H-25 "a termination bound per self-feeding loop" absent; H-106 loop enumeration incomplete [CHECKED HR]. Independent: Guild 3 (T1) + COMP + repo → 3 | Valoria's root forbids appraisal-without-registration: a threshold never acts (T-b), scoring reads own state; "damped today only because the realm fights no field" (`VCD`:985 [CHECKED]) | built and inert (no field is fought in the realm, HR:3264-3265) | `forgive` IN-12 step 13 (B-Q); H-25 named by IN-10; K-45's signed LOOP row "not written" [READER C8_2 §H] | **SOUND** as a hazard; UNREACHED in play |
+| T-IN-7 | **No precedent solves the scale handoff above the bout** | NULL | COMP D3 (personal leverage N=1…1000+), D4 (auto-resolve calibration) [READER R4 §T]; PRE N-3, N-4 [READER R8 §T 1] (same descent → 1); "high scale loses attribution; fixes: personification, avatar, pops, scale-shift" [READER UP02 §T 3]; repository: battle is one 18-tick call with no yield [CHECKED `massbattle.py`:281-283], thread→mass hook "Empty hook — threadwork lands in a future cycle" [CHECKED `orchestration.py`:333-335]; audit S-coverage [AUDIT :61]. Independent: 2 | Valoria's one carried vertical seam (contest at RESOLVE/ENCOUNTER) is a real answer for the bout | absent above the bout | M-6 LEAVE (`_part7`:44 [CHECKED]); no position for thread→mass | **SOUND** |
+| T-IN-8 | **Research enters as vocabulary; magnitudes enter from nowhere** | REPOSITORY PATTERN | 0 of 45 VT rows cite research or a game; 2 of 198 HR rows cite `research/`; plan cites none; Layer 1 excludes by rule (§3.1, §4 [CHECKED]); `VCD` maps by name (§1.3 item 5); the two tier-3 rosters built and deleted unread (`rosters.yaml`:84-89 [CHECKED]). Independent: 1 (one tree), many sites | the refusal to invent a magnitude is a stated discipline (`massbattle.py`:198-207 "not the place to invent one" [CHECKED]); it is the discipline, not neglect, that leaves defaults standing | executes (defaults) | J-13 asks for a source (J.2 rank 1) | **SOUND** |
+| T-IN-9 | **The plan's accounting moved execution from the position to the requirement, and no position owns the requirement** | REPOSITORY PATTERN | relaxed exit: BUILT on DONE-test, realm count "not required" (m:121-128 via BASELINE B2.1); IN-12's exit "a row that reads 0 there is a named residue … R-05 stays unmet; no position is invented to fix it" [CHECKED `_part5`:65]; R-05 earliest `met` "conditional … only if every owner's EXIT above recorded ≥ 1 execution" [CHECKED `_part2`:262-266]; H-207: four causes stand between a seat question and an executed `revoke`/`confer` on `build_realm(0)`, zero plan mentions [CHECKED HR; BASELINE B4]; failure shape A (EU4) [READER R4 §T]. Independent: 1 tree + 1 precedent family → 2 | the executed-set pin fails when the set moves (`test_season_shape.py`:7738-7742) and 21 → 17 is recorded as a regression, so movement is observed; the requirement-level reading is itself [ASSUMPTION; medium] (m:134) | built (instrument) | no owner of computed-play execution for R-04 conjunct (1) (`confer`, `establish`, `revoke`) or R-05 | **SOUND** |
+| T-IN-10 | **Show the inputs and the band, not the trigger; randomness must read as fate** — and the player surface shows neither | CONVERGENCE (precedent) + REPOSITORY PATTERN | COMP S6 "Publish every input. Publish a band, not a number. Never publish the trigger point" and D2 legibility-vs-depth null [READER R4 §T]; "randomness must read as fate" [READER UP02 §T 4]; "randomness shaping inert without surfacing" [READER UP05 §T 8]; Layer 1 §C.11 `explain(p : PersonInterior, v : Value) -> Derivation` [CHECKED `04_CODE_ARCHITECTURE.md`:847-863]. Repository: `explain` has no definition (`grep -rn "def explain" engine modules` → 0 [CHECKED]); `p_success` has no game-path caller [AUDIT A3]; "odds" occurs 0 times in v9 [CHECKED grep]. Independent: COMP line + uploaded line + Layer 1 → 3 | the odds are non-monotone (§9 B-instrument run), so "show the band" would show a sawtooth | absent | IN-47 (character sheet) "no build batch"; nothing names `explain` (`grep -n "explain(" workplans/…v9*` → 0 [CHECKED]) | **SOUND**, UNREACHED |
+| T-IN-11 | **Apparatus grows where the game cannot read it, and moves when banned** | REPOSITORY PATTERN (process) | tracked run output 88,377 lines in 10 files under `engine/season/runs/` [CHECKED `git ls-files … \| xargs wc -l`]; `ci_checks_registry.yaml` `subject:` is `compliance` on 32 rows [CHECKED grep]; dated correction narrative in game-code docstrings (`sigma.py`:101-102 still says capability is "EMPTY ON EVERY CORPUS PERSON TODAY", which `requirements.yaml`:1284-1287 records as contradicted [CHECKED]); audit T6, §7 [AUDIT :265-306, :394-406]; "BUILT meant design finalized" (August) [READER R5 §T 5]. Independent: audit + my recount (same object) → 1 source, re-measured | the quarantine (`.designs/`), retirement of `balance_oracle`, deprecation of `mc_v18` show removal happens | n/a (process) | IN-44 Layer 0/1 edits (J); no position for `runs/` | **SOUND** |
+| T-IN-12 | **Allegiance is recomputed on the current tick; nothing in either corpus delays it** | NULL (precedent) + REPOSITORY PATTERN | "Lagged allegiance absent in all 13" [READER UP04 §T 2]; nine titles "allegiance never arrives late" (but self-contradicted by Bannerlord at L128) [READER UP03 §T 7, §K 4]; 20G A1 "Give allegiance a delay" [CHECKED 20G:227]; Pax Pamir punished switching [CHECKED TD:19]; repository: cast loyalty a cosine of authored values against a role template at world-gen [AUDIT A4 ii, `cast.py`:318-331]; regard at read moves by judged deeds and told valence (A-12) [READER W2 §V]. Independent: one research line (D1/D2/D3/3S, same author line) → 1 | Valoria's regard-at-read does lag (deeds must be witnessed or told, `told_by` chains), so allegiance-as-regard is delayed by carriage; the static part is the initial loyalty | executes (cosine at genesis; regard at read) | IN-69 salience by alignment, IN-70 opinion of a faction at read (B-X, B-R) | **SOUND** narrowed: static at seeding, lagged by carriage after |
+| T-IN-13 | **Belief with provenance is where Valoria is ahead of the genre** | CONVERGENCE | 20G A9 "Nothing in twenty titles models where a belief came from except The Guild 2 and Tropico" [CHECKED 20G:235]; Talk of the Town fallibility (DOCUMENTED) [READER R8 §K 12]; *Guild 2* evidence with strength, believability, decay [CHECKED TD:191]; repository: held-not-true claims, `told_by` chains, Partial-band lossy `tell`, `refraction_gain` 0.5 [CHECKED `witness.py`:231-239, :495; `fixtures.py`:800]. Independent: 2 research lines + code | carriage is thin: 4 of 1,270 `told_by` claims arrived by a telling (one seed) [AUDIT S-DOWN]; H-200 competence and H-191 intent reconciliation absent; actor's own deposit unrefracted | executes | IN-18 G5/G8 (BLK) | **SOUND**; contradicts PREC-NULLS N-9 |
+
+**Document-stated nulls and throughlines, disposition** (COMP-2 §3.4, PREC-NULLS N-1…N-9, PMM/XSC, FASE/HCC, `#445` 02 [READER R4 §T, R8 §T, R5 §T, R6]):
+N-1 argument content → SC lane (stands). N-2 expression → T-IN-4. N-3 leverage across N → T-IN-7. N-4 auto-resolve calibration → does not
+arise (one resolver; T-IN-5). N-5 certifying generated content → the story bar (IN-19, M2) is the tree's attempt; a cause-graph property, not a
+quality certificate [READER W1 §V]; stands. N-6 legibility vs depth → T-IN-10. N-7 appointed governor → SE/FA. N-8 unit quality cap → MB.
+**N-9 social-state fog of war: CONTRADICTED** by Talk of the Town (S05 §1.3) and by Valoria's own held-false claims (T-IN-13).
+COMP "six of eight, Valoria owns the primitive" is **CONTRADICTED** by its own table (X1 "Absent entirely") [READER R4 §K 8].
+XSC "opposition is almost never a true opposed roll; score/2 is the single highest-leverage unexecuted decision" [READER R5 §T 1]: **superseded
+in shape** — `_obstacle_of` executes score/2 for a person subject [CHECKED `sigma.py`:112-129]; the values feeding it are T-IN-1's defaults.
+PMM "people exist, zero loaders" [READER R4 §T]: **superseded** (430 built persons). FASE T10 legitimacy-derived: converges with IN-23's
+Query (§1.2), uncited. HCC ripple chains: rest on tier-4 stats and retired Keys (§1.3 item 3); not a throughline the season can carry.
+`#445` 02's "finishing the plan consolidates the engine; it does not change this verdict" [CHECKED `02_against_precedent.md`:73]: a
+verdict, not a throughline; the uploaded audit reaches the same verdict independently ("not yet a game of distinct persons") → SOUND, 2
+independent.
+
+### 7.2 Conflicts inside the lane, and where code or plan contradicts a throughline
+
+1. **Layer 1 forbids the dedup filter the loop runs.** `03_VERBS_AND_LOOPS.md`:138-140 [CHECKED]: "No cap, no dedup, no per-venue limit, no
+   *already-before-this-body* rule — each of those would be the engine deciding a person's options"; `_drop_what_was_already_done` exists
+   [CHECKED `deliberate.py`:305] and is called on every queue [CHECKED :225], its docstring resting on `player_agency_v30` §6.3, a reference
+   document (§0.05). Audit A5a [AUDIT]: confirmed at `5445e34`.
+2. **AX-7's falsifier names three sites that no longer exist and one gloss Layer 1 contradicts.** `01_AXIOMS.md`:314-317 names `witness.py`:191,
+   :271, :361 [CHECKED]; the Claim constructions are now at :532, :648, :671, :700, :850 [CHECKED grep]. The gloss "No state is hidden from the
+   player" (`01`:301-302) sits beside §C.11's "engine owes the ARITHMETIC of what the character already holds, and nothing else"
+   (`04`:849-850); `04` never names AX-7 (`grep -c "AX-7"` → 0) [CHECKED]. Audit A2b, A9 [AUDIT]: survive.
+3. **`requirements.yaml` calls a path that no longer exists "CANONICAL"** (`:34-35` → `systems/_architecture/reference/scale_transitions_v30.md`;
+   the file is under `.designs/`) [CHECKED `ls`; `git ls-files`]. Audit A2c survives.
+4. **GD-2 (mutable canon) has no carrier and contradicts Layer 1.** "Deterministic threat response precedes stochastic action selection",
+   a faction mandatory-actions pass [CHECKED `canon/04_game_design_constraints.md`:28]; the season loop has no faction actor (AX-1) and "a
+   threshold never acts" (T-b); ED-IN-0202 recorded that GD-2's violation test failed against the retired `mc_v18` [CHECKED
+   `registers/editorial_ledger_in*.jsonl`]; v9 never names GD-2 [CHECKED grep: only GD-1, GD-3 occur].
+5. **T-IN-1 against J-13's interim**: Jordan's constraints quoted in the plan — "pool only it is", "a derived score … not a character
+   attribute" [CHECKED `_part2`:414] — rule out a stored attribute for the contest, while K-1/K-2 for combat would add `Person.attributes`
+   (`_part7`:44). The two scales are heading for different per-person sources.
+6. **Plan internal drift** already recorded in §3.3 (contested verbs 3 vs 4; `len(VERB_TABLE)` 46 vs 45; IN-14 batch three ways; `march`
+   readings). Not re-listed.
+
+### 7.3 Shared with other lanes
+
+T-IN-1: PC, MB, SC, NPC. T-IN-2: PC, MB, SC, WR. T-IN-3: NPC, MB, SC, WR. T-IN-4: WR, FI, FA. T-IN-5: PC, GO. T-IN-6: NPC, FA. T-IN-7: MB,
+WR. T-IN-10: GO, SC. T-IN-12: NPC, FA. T-IN-13: NPC, FI. T-IN-8, T-IN-9, T-IN-11: IN only.
+
+### 7.4 What the throughlines do not establish
+
+- That any default is the **wrong value**: values are Jordan's [OPEN — Jordan tuning]; T-IN-1 establishes that no per-person source exists,
+  not that `pool_default` 2 is miscalibrated.
+- That T-IN-4's emptiness persists after IN-26, IN-37 and SC-01 land: the datum is one seed of a scratch run.
+- That the world fails R-WORLD over a campaign: nothing in this lane or the audit ran beyond four seasons (`m1_acceptance.py`'s invariant row is
+  24 seeds × 4 seasons, BASELINE B7).
+- That the research converges independently where it says so: the uploaded line (N1, N2, D1–D3, 3S) is one author line by its own statement
+  (3S:5 "All five appear to be prior output in this same research line"), so it counts once wherever it appears.
+
+## 8. MISSING AREAS
+
+**Verdict.** What the game lacks in this lane is not verbs: every one of the 45 rows and the 12 IN-12 additions has a position. It lacks
+**per-person magnitudes below the seams** (M-IN-1), **a player surface** — the grid fidelity, the character spaces and the derivation the
+architecture owes the player (M-IN-2, M-IN-3), **an owner for computed-play execution of the seat verbs** (M-IN-4, H-IN-1), and **the scale
+handoff above the bout** (M-IN-6). Each is either unscheduled in v9 or scheduled with an exit that does not deliver its demand.
+
+### 8.1 Counts
+
+`examined 63 candidates; 20 entered (11 MISSING, 9 HOLLOW or BLOCKED); 22 rows PLANNED-UNBUILT or BUILT-DARK (8.4); 21 dropped (8.5)`.
+The five walks raised 82 items before merging (19 verbs whose class or owner raised a question, table 8.0, the other 26 each covered by one
+position; 14 clauses of THE NINE; 24 hole-register rows, B4's IN-tagged rows and its unplanned absent rows; 12 audit findings A2a–c, A3, A4
+i–v, A5a–b, A9, T6; 13 throughlines); where two walks met one area it is counted once.
+
+### 8.0 The verb walk (BASELINE B3: 45 rows; E 17 · R 10 · N 18)
+
+| class | verbs | owner (batch) | disposition |
+|---|---|---|---|
+| E, no question | `create_record`, `give`, `issue`, `move`, `release`, `transfer`, `utter` | — / IN-12 give+Rung (B-R) | covered |
+| E, writes nothing | `speak`; `interview`, `research`, `surveil`, `reconstruct` | SC-01 step 12 (B-N); FI-01 grades three (B-O), `interview`/`reconstruct` named residue (`_part2`:184 [CHECKED]) | 8.4; `reconstruct`'s value space → FI lane |
+| E, by-person default | `tell`, `fight`, `accept`, `challenge`, `petition` | IN-12 step 9 (B-Q); PC-10 (B-Y); K-1/K-5 unscheduled | M-IN-1, H-IN-2; `petition`'s addressee 8.4 |
+| R | `build`, `found` (IN-28, B-K); `levy` (IN-49, B-K); `migrate`, `work` (IN-45, B-K); `survey` (IN-12, B-K); `examine` (FI-01, B-O); `restore` (SE-03 B-K; IN-35 B-S); `commit` (IN-68, B-X); `dispatch` (FA-01, B-V; posts J-8 ask-then) | as listed | 8.4; computed execution → H-IN-1 |
+| N, never attempted | `convene`, `determine`, `open_case` (SC-01, B-N); `destroy_record` (IN-26, B-Q); `march` (IN-13, B-M); `oblige` (IN-10/FA-04); `comply` (IN-09, slotted by `_part3` §B.0 R1 [CHECKED `_part5`:47-48]); **`confer`, `revoke`, `establish`** | `establish`: IN-48 only, in B-JR "unscheduled" (BASELINE B1.1); `confer`/`revoke`: H-207 unowned | **M-IN-4** |
+| N, no predicate/effect | `carry`, `forge` (IN-45); `evade / defy`, `construe` (IN-09); `exchange` (IN-33, restorable); `succeed` (IN-61, B-R); `thread_read` (PC-06 K-3, B-S); `tie / knot` (IN-32, B-S) | as listed | 8.4; `carry` may stop at a Layer 1 amendment (`_part2`:265-266 [CHECKED]) → H-IN-6 |
+
+### 8.2 MISSING
+
+| ID | the area | demand source(s) · strength | code state [CHECKED] | plan state | absence test (command → result) | what its absence does | NERS axis |
+|---|---|---|---|---|---|---|---|
+| M-IN-1 | **A per-person source of capacity for the body and the field**: a `Combatant` built from the person, and a season force whose quality and size come from its persons | D1 R-09 ("two persons with different `capability` resolving the same contested verb at different pools", `_part2`:423 via BASELINE B2; `fight`/`accept`/`march` are 3 of the 4 contested rows); D1 R-06; D5 A1/G1/T1 · **STRONG** | `party_end` is the one derived field (`seam/wrappers/combat.py`:130-138); `Combatant` defaults (`combatant.py`:93-94); `_SEASON_FORCE_POWER = 4`, `command=4`, raw weight as troops (`massbattle.py`:180-207) | K-1/K-5 "NOT scheduled", K-2 "not ratified" (`_part7`:44); M-2…M-6 LEAVE; PC-08 LEAVE | `grep -n "attributes" engine/season/state/carriers.py` → 2 hits, both comments on Python class attributes (:405, :439); no `Person.attributes` field [CHECKED]; `grep -n "K-1\|K-2" workplans/…v9_part3.md` → no batch member [CHECKED via BASELINE B1.1 member lists] | a duke and a copyist fight and march alike; 5,643 + 10,154 lines of module depth are reached through `end` and a weight sum | R-VARIETY (bottom-up), S (vertical: the seam drops what the person is) |
+| M-IN-2 | **The PLAYABLE fidelity and the character spaces**: grid suspension at ENCOUNTER (IN-46) and creation/development/chronicling (IN-47) as built mechanisms | D1 R-04 conjunct (3): "every `scales:` row reads `in_loop`" (`_part2`:214 [CHECKED]); D5 A2a · **STRONG** | `play_surface.py`:40-51: a callback per person id over `auto` and the same `View` [CHECKED]; "Grid-based unit combat does not exist anywhere in the tree" (`_part2`:181 [CHECKED]) | designs landed at B-C; "no build batch" (m:272-273; `_part4`:32-41 [CHECKED]); "R-04, hence M1, cannot read `met` under v9 until a build batch exists for both" (`_part2`:209 [CHECKED]) | BASELINE B1.1 batch member lists: neither IN-46 nor IN-47 in any batch [CHECKED by reading B-K…B-Z rows] | the player can only override a choice among the engine's candidates; M1 cannot be met under v9 by the plan's own reading | R-PLAYER (all seats), S-pause |
+| M-IN-3 | **The derivation the architecture owes the player**: `explain(p : PersonInterior, v : Value) -> Derivation`, and with it any shown band of odds | D3 Layer 1 §C.11 ("The engine owes the ARITHMETIC of what the character already holds", `04_CODE_ARCHITECTURE.md`:849-860 [CHECKED]); D5 A3 legibility; D6 T-IN-10 (3 sources) · **STRONG** | absent | absent | `grep -rn "def explain" engine modules` → 0 [CHECKED]; `grep -n "explain(\|odds" workplans/valoria_master_workplan_v9*.md` → 0 [CHECKED] | the player cannot intuit outcomes from choices, and the odds the kernel produces are non-monotone (§9, B-instrument) | E-LEGIBILITY, R-PLAYER |
+| M-IN-4 | **Computed-play execution of the seat verbs `confer`, `establish`, `revoke`** with `Act.via` set | D1 R-04 `met` (1) names them (`_part2`:211-213 [CHECKED]); D1 R-05; D4 H-207 absent, zero plan mentions · **STRONG** | `establish`, `revoke`, `confer` never attempted in the corpus (BASELINE B3); H-207: four causes, each with an owner outside any position [CHECKED HR] | `establish`: IN-48 only, B-JR "unscheduled" (p3:276 via BASELINE); H-207: 0 hits in v9 (BASELINE B4) | `grep -c "H-207" workplans/valoria_master_workplan_v9*.md` → 0 [CHECKED]; | R-04's strategic half cannot be met by computed play; offices are seated but never made, filled or emptied by persons | R-WORLD (no succession or patronage drama unwatched), S-UP |
+| M-IN-5 | **Delegation and regency**: a seat exercised by a non-holder | D3 Jordan 2026-09-03 "Regency and puppet rulers must be possible" [READER W2 §V IN-48]; D4 H-108 absent · **STRONG** | built `40926a95`, reverted for contradicting Layer 1 (01 §E.2.4) [READER C4_2] | B-JR "unscheduled; left B-J" (p3:213, :276 via BASELINE B1.3) | BASELINE B1.1 B-JR row: "unscheduled" [CHECKED] | a weak heir cannot be ruled through, so the holder ≠ controller drama (COMP X1) has no carrier | R-WORLD, R-CHOICE |
+| M-IN-6 | **The scale handoff above the bout**: a battle that yields to a general's duel; threadwork into the field; a pause the season loop honours | D1 Jordan in `requirements.yaml`:30-34: "the repository outlines all of this pretty explicitly at the different scales … needs to accommodate it all" [CHECKED]; D1 R-04; D5 A2 S-coverage · **MEDIUM-STRONG** | one 18-tick call (`massbattle.py`:281-283); "Empty hook — threadwork lands in a future cycle" (`orchestration.py`:333-335) | M-6 LEAVE (`_part7`:44); no position names `threadwork_check` | `grep -n "threadwork_check\|M-6" workplans/valoria_master_workplan_v9*.md` → only `_part7`:44/:51 LEAVE lines [CHECKED] | scales compose by summary, not by handoff: no person's act inside a battle changes it | S-vertical, S-pause |
+| M-IN-7 | **AX-7's two missing inputs**: a reader's competence (H-200) and the performer's own fallible reading of their act (layer 2) | D3 AX-7 names "the reader's competence" as an input to divergence and gives layer (2) "its OWN mechanism" (`01_AXIOMS.md`:278-281 [CHECKED]); D4 H-200 absent, zero plan mentions; D5 A9 · **MEDIUM** (layer 2: permitted or owed is unruled) | `refracted_confidence`'s competence factor is 1 (H-200 [CHECKED]); the actor's own deposit skips refraction (`witness.py`:495 [CHECKED]); AX-7's falsifier names stale sites (`01`:314-317) | none | `grep -c "H-200\|own understanding\|self-reading" workplans/…v9*.md` → 0 [CHECKED] | a practised observer and a careless one hold the same act at the same confidence; a person never misreads their own deed | R-COMPLETE, R-WORLD |
+| M-IN-8 | **A hearer's credibility inputs**: whether a declared intent was kept (H-191), the teller's stake (H-180), rank ordering of tellers (H-181) | D4 three absent rows; H-180/H-181 "stays absent" (m:369); D1 R-07 "imperfect knowledge" · **MEDIUM** | `options.py::record` pairs cell claims only; intents are never reconciled (H-191 [CHECKED]) | H-191: 0 mentions; H-180/181: re-checked IN-17, "stays absent" | `grep -c "H-191" workplans/…v9*.md` → 0 [CHECKED] | a liar by deeds is credited like an honest teller, so reputation for keeping one's word cannot form | R-WORLD (hooks), R-COMPLETE |
+| M-IN-9 | **Content in acts**: a reader for an authored OUGHT's predicate (H-185), or the field's deletion | D4 H-185 absent, zero plan mentions; D5 T5; D1 R-06 ("goals, ambitions") · **MEDIUM** | Q4 reads only `subject`; `Proposition.predicate` read by nothing for an OUGHT (H-185 [CHECKED]) | none; IN-66 `goals.yaml` may supersede the `ought:` cast field [CONFIDENCE: medium — IN-66's entry not opened in full] | `grep -c "H-185" workplans/…v9*.md` → 0 [CHECKED] | an ambition is a subject with no content, so what a person wants of it cannot steer what they do | N (false N-line candidate), R-WORLD |
+| M-IN-10 | **A campaign-length instrument** (process; IN only): a seeded, multi-season, two-arm run of the shipped loop | Layer 0: `balance_oracle.py` retired, "the campaign-level instrument has **no live successor** — an open gap" (CLAUDE.md §7); D5 audit GAP "nothing runs beyond four seasons" · **MEDIUM** (process) | `arms.py` is season-loop-only, one mechanic (CLAUDE.md §7); invariants row 24 seeds × 4 seasons (BASELINE B7) | TEST HORIZON confines `aperture 4 0` to propagation readings (m:141-151) | `grep -n "balance_oracle\|play-length\|campaign-level" workplans/…v9*.md` → one hit, `_part8`:420, "keep the gap statement" [CHECKED] | every R-WORLD and R-CHOICE verdict in every lane is an upper bound on four seasons | R (all verdicts' denominator) |
+| M-IN-11 | **A damping bound on self-feeding loops** beyond `forgive` | D4 H-25 absent ("a termination bound per self-feeding loop"); H-106 loop enumeration incomplete; D3 ID-16 "sign every loop" (`VCD`:985 citing `01_AXIOMS.md`:664-681); D6 T-IN-6 · **MEDIUM** | grudge rows appended per lost field, no cap/decay/closer (`effects_combat.py`:246-261 [CHECKED]) | `forgive` (IN-12 step 13, B-Q) is one person-side closer; H-25 is named by IN-10 only; K-45's signed LOOP row "not written" | `grep -n "H-25\b" workplans/…v9*.md` → IN-10 entry only (BASELINE B4) | the first season that fights fields compounds grudges with no brake but persons' choice to forgive | R-COMPLETE (extremes) |
+
+### 8.3 HOLLOW and BLOCKED
+
+| ID | position | its EXIT (quoted) | the demand (quoted) | gap |
+|---|---|---|---|---|
+| H-IN-1 HOLLOW | every verb position under the relaxed exit (m:121-135) | "a verb position is BUILT when it is wired and proven by a falsifier on a hand-built world"; "A row that reads 0 there is a named residue … R-05 stays unmet; no position is invented to fix it" (`_part5`:65 [CHECKED]) | R-05 `met`: "`corpus_run`'s `WHERE THE <n> GO` line reads 0 … or every verb … executing ≥ 1 in `aperture 4 0`" (`_part2`:274-276 [CHECKED]) | the plan's exits cannot deliver R-05; the requirement has observers but no owner |
+| H-IN-2 HOLLOW | IN-12 step 9 `train` (B-Q) | "`train` forms and writes `Person.capability` only where a case names a vocation, and `pool_default` holds everywhere else" (`_part5`:73 [CHECKED]) | R-09: "two persons with different `capability` resolving the same contested verb at different pools" | delivers by-person pools for the copyist's vocation only (`verb_capability` key `copying`) |
+| H-IN-3 HOLLOW | IN-47 creation space (when batched) | "**creation** — no act; a cast entry the world-gen builder seats" (`_part4`:41 [CHECKED]) | R-04 (3) "character creation … `in_loop`" | flips the field by selecting a pre-authored person; no creation act exists to customize (NERS R, §9) |
+| H-IN-4 BLOCKED | R-09 by-person conjunct | "none under v9 … waits on J-13's remainder" (p2:32 via BASELINE B2) | R-09 | J-13 remainder, J.2 rank 1 (`_part5`:514) |
+| H-IN-5 BLOCKED | IN-61 succession (B-R) | — | R-05 (`succeed`), R-04 | ED-IN-0292 (2) `vacancies` vs AX-7, needs_jordan [READER W2 §H] |
+| H-IN-6 BLOCKED | IN-45 `carry` | — | R-05 | `carry`'s fourth gate `Subject` shape "would amend ratified Layer 1 (then it is Jordan's)" (`_part2`:265-266 [CHECKED]) |
+| H-IN-7 BLOCKED | `revoke` eligibility | — | H-91: Part E's `remit:revoke` and Jordan's purview "cannot both be the eligibility rule" [CHECKED HR] | unruled; zero plan mentions (BASELINE B4) |
+| H-IN-8 BLOCKED (HELD) | `scale:` reader (H-89); nested DELIBERATE in RESOLVE (H-56); common-fact store (RS-24/29) | — | R-04 (H-89); S-pause (H-56) | HELD (J.2 rows 5-7; `_part5`:518-520; `_part8`:337-342 via BASELINE B1.3) |
+| H-IN-9 BLOCKED | IN-14 BOUND-ATTENTION | "one live `hold` moves releasable scenes by one" (`_part4`:29 [CHECKED]) | §26.3 "the budget varies by office" | ask-then; batch read three ways (§3.3 item 4) |
+
+### 8.4 PLANNED-UNBUILT and BUILT-DARK
+
+| area | state | what arms or builds it | locator |
+|---|---|---|---|
+| 12 IN-12 verbs (`seize`, `covenant`, `sabotage`, `tend`, `argue`, `train`, `conceal`, `forgive`, `arrest`, `pardon`, `interrogate`, `raze`) | planned | B-K, B-M, B-Q, B-R | `_part5`:61-80 |
+| `march` arrival, occupation | planned | IN-13, B-M | `_part5`:81 |
+| legitimacy/stability Queries | planned | IN-23, B-U | `_part5`:88 |
+| endings vocabulary (GD-1; H-176) | planned, BLK IN-37 | IN-27, B-U | `_part5`:102 |
+| insurgency, emerged faction (GD-3; H-186) | planned | IN-30, B-U | `_part5`:116 |
+| paper sink; chronicle render | planned | IN-26 (B-Q), IN-37 (B-U) | `_part5`:95, :176 |
+| forcing: Calamity coupling, foreign faction | planned | IN-35 (B-S), IN-36 (B-V) | `_part5`:144, :158 |
+| goals, salience, opinion, scar re-read, doctrine pull | planned, next batch | IN-62…IN-72, FA-04…FA-06 (B-X) | `_part3`:277 |
+| `found`/`build` cost, holder, closer; `work`, `migrate`, `forge`, `carry`; `levy` referent | planned | IN-28, IN-45, IN-49 (B-K) | `_part5`:109, :190, :211 |
+| levy → field | planned, ships OFF | IN-52 (B-T); flip "delegated-ruled" | `_part4`:134-141 |
+| `evade / defy`, `construe`; `exchange` | restorable from checkpoints | IN-09 (R1-slotted); IN-33 (before B-V) | `_part5`:47, :137 |
+| petition's addressee (S-UP) | docket path planned; `petition`/`issue` "always have `to` == `subject`" [CHECKED `deliberate.py`:355] | SC-03a (landed) → SC-01 (B-N); IN-12 step 5a reads the petition the docket names | `_part5`:77 [CHECKED] |
+| `age_step`, `illness_rate`, `age_at_build` | built-dark, 0 | no flip position; "JORDAN'S TO SET" | `fixtures.py`:537-544 |
+| `scar_weight_shift`, `confliction_weight`, `scar_excludes_actor` | built-dark | IN-65 (conditional); none | `fixtures.py`:631-651 |
+| `refusal_axis` | built-dark, None | "stays unarmed until a ruling" | `_part5`:466 |
+| `intent_disclosure`, `said_slant`, `telling_privacy`, `stance_polarity` | built-dark at control | none; `stance_polarity` ask-then (ED-IN-0296) | `fixtures.py`:736-789 |
+| `season_factor_draw`, `body_step` | built-dark | none; J-6 "control 0 kept for the corpus" | `fixtures.py`:405, :530 |
+| `bench_quorum` | loosest (1) | SC-01 step 11 builds a different term | `fixtures.py`:849 |
+| σ-leverage | built, contributes 0 | "this plan schedules none"; open input to SC-01 step 15 | `_part2`:418-421 [CHECKED]; `sigma.py`:147 |
+| `urgency`; `benefits_me` | built, inert / no caller | IN-62's `score_terms` keeps `urgency` as a term (`_part5`:255) | `choose.py`:150-193 [CHECKED] |
+| speech-kind ladder knobs (D-6, D-7a, D-7b) | built-dark, "nothing reads it" | none | `fixtures.py`:672-683 |
+| `MB_SUPPORT_RANK_CAP` | OFF | MB-07r (J) | `modules/mass_battle/config.py`:150 |
+
+### 8.5 Dropped
+
+| candidate | reason |
+|---|---|
+| GD-2 faction mandatory-actions pass | superseded (ladder 1): its subject, faction action selection, was retired with `mc_v18`; Layer 1 (ED-IN-0204, later) makes only persons act and no threshold act. The canon text still stands unstruck: a canon edit, Jordan's (GD is "mutable canon — updates require explicit Jordan ratification", `canon/04_game_design_constraints.md`:23 [CHECKED]); entered as a process item in §10 |
+| an outcome or odds term in NPC choice (A4 v) | no demand source: R-08 asks for non-optimal choice, which sampling delivers; the audit itself declines it as a fix that adds a system |
+| a producer for σ-leverage | answered by Jordan's constraint as the plan reads it ("pool only it is", `_part2`:414) and named as an open input to SC-01 step 15 (`:420`); moved to 8.4 |
+| births and growth | closed by ruling (ED-WR-0011, the cast only shrinks; `cohorts.yaml`:25-32 [AUDIT]); SE/NPC lanes |
+| lagged allegiance (T-IN-12) | WEAK DEMAND (one research line); regard at read already lags by carriage |
+| H-49 `(Person, weight)` | SE-04 cohort weight (B-T) |
+| H-105 the world only decays | IN-45 `work` (B-K), `restore` arm built |
+| H-195 the `holder` operand | IN-70 reads `regard` of F's head (B-R) [CHECKED `_part5`:325] |
+| H-205 vow-break priced at `release` cells | retired-handle note only (m:375); NPC/FA |
+| H-206 dead holder's office named by no claim | holder half landed with IN-34 (p3:213); remainder not traced [CONFIDENCE: low] |
+| Domain Echo, Sufficient Scope, zoom triggers | irrelevant (ladder 2): Key-based reference rows, replaced by claim landing (RR-3) [READER C4_2 §F] |
+| Scene Slate, Standing ladder | reference only (`CURRENT.md`:13; `fixtures.py`:423 per AUDIT A2) |
+| mass battle weight→troop conversion | MB lane (A7, G3) |
+| `kill`, `wound`, `execute`, `proclaim`, `steal`, `repudiate` | closed by rulings (direction 3, R-1, R-3, R-8; IN-11) |
+| the dedup filter, `_drop_what_was_already_done` | not a missing area but a contradiction (§7.2 item 1); a deletion in §10 |
+| non-monotone odds lattice | a methodology finding (§9 S), and its parameters are Jordan's |
+| tracked run output, `params_tables.yaml`, ledgers, process checks, `evacuation_plan.py` | apparatus deletions, not missing areas; §10 |
+| a faction readable by the player (AX-1 residual) | folded into M-IN-3 (the player's derivation surface) |
+| R-02 bar "passes anything not on rails" (audit §7.2) | an instrument critique, not a game area; §10 process |
+| H-128 actor scarred by own act | built-dark knob (`scar_excludes_actor`), 8.4 |
+| the two `march` readings (16/16 vs 11 refused) | a reading conflict between trees (§3.3 item 5), not an area |
+
+## 9. NERS PASS
+
+`[SELF-AUTHORED — bias risk]`: this pass extends this lane file's own sections 0–8 and re-tests an audit the same repository committed. Target:
+IN's mechanisms — the resolution kernel as the season reaches it, the season loop's barriers and budget, the verb table and its one `resolve`,
+the chooser, the witness/refraction path, the seams between scales, and the plan's instruments — with every v9 position ASSUMED BUILT, the
+shipped-today state stated where it differs. Head: `engine/season/` (`CURRENT.md`:17 per the audit; Layer 2), `architecture/` (Layer 1),
+v9 (the one plan). Instruments: **A + B** (B = the exact band arithmetic below, executed). On the uploaded audit: its attacks on A1, A3, A5a,
+A9 and the S-UP petition were **re-opened at `5445e34`** (lines in §7–8); its refusal-emits attack was **re-run** (a YAML count, narrowed
+below); its R-CHOICE `levy` table, the S-DOWN 4-of-1,270 figure and the pause finding at `deliberate.py`:116 are **relied on** [AUDIT].
+
+### 9.1 B-instrument: the season roll's band odds, executed
+
+Script `scratchpad/in_lane/odds.py`, importing `_die_result` and `degree_from_net` from `engine/dice_engine/dice_engine.py`, exact convolution,
+leverage 0 (as `sigma.py`:147 ships), Ob = c/2 (the score/2 ruling for a person subject, `sigma.py`:112-129):
+
+| pool c | Ob | P(≥ Partial) | P(≥ Success) | Overwhelming |
+|---|---|---|---|---|
+| 1 | 0.5 | 0.400 | 0.100 | 0 |
+| 2 | 1.0 | 0.580 | 0.260 | 0.010 |
+| 3 | 1.5 | 0.400 | 0.172 | 0.010 |
+| 4 | 2.0 | 0.512 | 0.279 | 0.038 |
+| 5 | 2.5 | 0.380 | 0.198 | 0.028 |
+| 6 | 3.0 | 0.470 | 0.281 | 0.059 |
+| 2 (default) | 2.0 (default) | 0.260 | 0.070 | 0 |
+
+The audit's c = 1…4 figures reproduce exactly; extended to c = 6 the series is a **sawtooth**: every odd pool against a half-integer Ob does
+worse than the even pool below it, because a net in integers meets an Ob of k + ½ as k + 1. The shipped default pair (2 vs 2) gives Failure
+0.74, no Overwhelming. Parameters are [OPEN — Jordan tuning]; the **form** (equal skill, higher capability, worse odds at every odd step) is a
+structural finding.
+
+### 9.2 N-line ledger (six directions; attack and result)
+
+| object | N-line (narrowed where needed) | attack run | result | direction |
+|---|---|---|---|---|
+| frozen world in DELIBERATE | cut it and deliberation order becomes an outcome | looked for a write path during DELIBERATE: `deliberate.py`:72-74 raises `Forbidden` on an unfrozen world [CHECKED] | HOLDS | horizontal |
+| scene budget | cut it and a king's scarcity equals a copyist's; nobody chooses what to leave undone | walked: no other object prices attention by office [AUDIT, `03`:131-134] | HOLDS | vertical |
+| one `resolve` over one verb table, refusal as an Event | cut it and verbs need private resolvers (the second-resolver failure, T-IN-5) and scarcity stops being witnessable | re-ran: 40 of 45 rows carry a non-empty `emits_on_refusal`; the five with `[]` (`create_record`, `forge`, `speak`, `tie / knot`, `utter`) have eligibility `own` and no `requires:`, so no refusal path [CHECKED YAML load] | HOLDS, **narrowed** to "every refusable row emits" | lateral, bottom-up |
+| `degree_from_net`, one ladder | cut it and each scale re-bands one quantity (the July census's 8 ladders) | combat routes through it under a guard (`core.py`:61-74 [CHECKED]); mass battle's own four labels and march's Won/Lost sit beside it | HOLDS for the margin; **narrowed**: three vocabularies remain beside it | lateral |
+| ENCOUNTER barrier | cut it and the grid's suspension and deferred contests lose their barrier | the audit's fold-into-RESOLVE attack [AUDIT] | HOLDS, MEDIUM; its first consumer (IN-46) is unbatched, so today it is held for a future reader | vertical |
+| contest seam at RESOLVE/ENCOUNTER | cut it and no person's act can be resolved by a subsystem | the only carried vertical seam (`seam/contest.py`) | HOLDS | vertical, diagonal (the one cross-family carrier) |
+| witness `_refract` (confidence only) | cut it and every witness holds an act at the actor's own confidence; R-07's imperfect knowledge loses its graded half | re-opened `witness.py`:231-239, :495 [CHECKED]: value, source and chain are never refracted; the actor is never refracted | HOLDS, **narrowed** to confidence; value-level fallibility is a limit | bottom-up |
+| attention tiers (IN-57) | claimed: tractable choice at scale | its own measurement is a regression (21 → 17 executed, `requirements.yaml`:901-905) | **not an N-line as filed** ("makes X tractable" argues for a representation); unscored | — |
+| σ-leverage at the season seam | claimed: circumstance shifts μ | the possibility survives the cut because nothing produces leverage (`sigma.py`:139-147; "this plan schedules none", `_part2`:418-421) | **FALSE N-LINE** (disqualifier 2, no producer) at the season seam only; combat and mass battle keep their σ terms | — |
+| `urgency` | claimed: need reorders choice | constant across candidates, "INERT BY CONSTRUCTION" (`choose.py`:172-193) | **FALSE N-LINE** (disqualifier 5) — the audit's, confirmed | — |
+| `benefits_me` (the function) | claimed: self-interest weights choice | no production caller (grep [CHECKED]); the ruled weighting (ED-IN-0261) is consumed at world generation, not here [AUDIT] | **FALSE N-LINE for the function**; the ruling it was written for is not cut | — |
+| verb table `scale:` column | claimed: verbs are scoped by scale | H-89: read by nothing but the loader [CHECKED HR] | **FALSE N-LINE** (disqualifier 2) | — |
+| `_drop_what_was_already_done` | claimed: spares a person repeating an act already realized | Layer 1 forbids exactly this (`03`:138-140 [CHECKED]); its basis is a reference document | **N-line contradicted by Layer 1**: cutting it restores the ratified behaviour; R-03 is its falsifier (audit G4) | top-down |
+| relaxed exit (plan instrument) | cut it and positions stall on realm counts the chooser's data, not wiring, decides (m:126-128) | it leaves R-05's computed execution with no owner (H-IN-1) | HOLDS for plan velocity, **narrowed**; it moved the EU4 detector up a level and left it ownerless | bottom-up |
+
+**False N-lines, null check:** four found (σ-leverage at the season seam, `urgency`, `benefits_me`, `scale:`), each with a disqualifier;
+mass battle's four-label degree is the MB lane's (audit G2b). Each was attacked for a hidden reader; none found.
+
+### 9.3 The five cross-cutting checks
+
+- **C1 claim → mechanism.** "Personal-scale resolution varies by person": no carrier in combat or mass battle; contest only where a vocation
+  is named (M-IN-1, H-IN-2). "No state is hidden from the player" (`01`:301-302): no carrier — `explain` is unimplemented (M-IN-3). "R-05 is
+  owned by the verb positions": no carrier (H-IN-1). "History improves a thread roll": no carrier (`operations.py`:246 [CHECKED]; WR).
+- **C2 type signature.** `explain(p : PersonInterior, v : Value)` takes no `World` (`04`:860 [CHECKED]), but a contested act's odds depend on
+  the subject's capability (`_obstacle_of` reads `w.persons[subject]`, `sigma.py`:121-125). **So the odds surface the player is owed cannot be
+  the true odds: it must be the actor's estimate from claims they hold about the subject.** The signature already decides the shape of M-IN-3.
+- **C3 epistemic feasibility.** The resolver's read of the subject's capability is resolver-side and lawful. A shown band must be computed from
+  held claims (C2). H-207's second cause, question priority, is evaluated from the person's own questions, so it is feasible; its first cause
+  ("one actor, one season") is cast content, which R-05's rule forbids inventing.
+- **C4 contradiction sweep.** Four, in §7.2 items 1–5: 03 §C.3 vs the dedup filter; AX-7's gloss vs §C.11; GD-2 vs AX-1/T-b; Jordan's "pool
+  only" for the contest vs K-2's `Person.attributes` for combat. One introduced here and resolved: §8.4 lists σ-leverage as built-dark while
+  §9.2 calls it a false N-line — both hold, because the kernel's σ term is live in combat and mass battle and dead only at the season seam.
+- **C5 path construction.** Showcase *a seated person is killed and the seat passes* (IN-61's regicide probe [READER W2 §H]): `fight`
+  executes (E) → Felled writes `Tenure.until` (VT `fight` writes, BASELINE B3) → the office is vacant → `succeed` has no predicate/effect →
+  `confer` never attempted → **asserted** after the death. Under planned-built, IN-61 supplies `succeed` (B-R), blocked on ED-IN-0292 (2)
+  (H-IN-5). Showcase *a levy feeds a field*: `levy` always refused today; IN-49 then IN-52 ships OFF → **expressible**, not implementable,
+  until the flip.
+
+### 9.4 R — both halves, and completeness
+
+- **Seat question.** Answered by the design's laws: the player is an ordinary person, overridden per person id (`play_surface.py`:40-51
+  [CHECKED]); every person seat is occupiable. R-CHOICE and R-VARIETY therefore bind at every person seat.
+- **R-COMPLETE: FINDINGS.** Extremes: S27.4 refuses when Ob exceeds `obstacle_refusal_multiple × pool` (`sigma.py`:187-189 [CHECKED]);
+  pool 2 at Ob 2 can never be Overwhelming (executed, 9.1); the σ-boost floors below one die (`orchestration.py`:1284-1289 [CHECKED]).
+  Unwritten branches: `succeed`, `carry`, `forge` effects declined; H-207's four causes; H-91's eligibility conflict. The odds sawtooth (9.1) is
+  a completeness defect at every odd step.
+- **R-VARIETY: FINDINGS.** One build fights, marches and argues like every other (T-IN-1); variety lives in pursuits, stance and seat only.
+- **R-WORLD: FINDINGS** [CONFIDENCE: medium]. Unwatched seats emit acts (R-01/R-02 met), but the act content is thin (T-IN-4), no field is
+  fought in the realm (HR:3264-3265), hunger, age and illness ship at control (8.4), and `at_war` has no world-gen utterance [AUDIT]. Under
+  planned-built, forcing (IN-35, IN-36), endings (IN-27) and the cast (IN-38) are scheduled; whether they emit hooks is unmeasured beyond four
+  seasons (M-IN-10).
+- **R-CHOICE: FINDINGS, upper bound.** One table added to the audit's `levy` table [AUDIT A5]:
+
+  SEAT: any person · INTENT: remove a rival from an office
+
+  | act | gain | cost |
+  |---|---|---|
+  | `fight` | executes today; Felled ends the rival's `Tenure` (VT `fight` writes) | body risk at identical pools (pool 9 vs Ob 1.5 for every season duel [AUDIT A1]); a grudge only if witnessed (**decaying cost**) |
+  | `revoke` | ends the Tenure without a death | never attempted today (H-207); under IN-31 an appointed holder is permanently banned [READER C4_2]; eligibility unruled (H-91) |
+  | the charge (`petition` → `determine`) | a lawful disposal (`detain`/`ban`) | planned (IN-12 step 5a, SC-03b); multi-season through a docket |
+
+  Shipped today the killing row is **strictly dominant** (the only one that executes). Planned-built it is a **decaying-cost** dominance: its
+  price falls to the witnesses, and §6's "silence beats refusal" warning applies to an unwitnessed killing. Dependency: the act economy (IN-14,
+  ask-then) and the witness set; no equilibrium run.
+
+### 9.5 S — six directions, pause, methodology
+
+| direction | carried by | verdict |
+|---|---|---|
+| S-UP (a demand filtered by a person at a rung) | petition: `to` == `subject` (`deliberate.py`:355 [CHECKED]) — FAIL; docket: a lapse emits `date.fired` [AUDIT] — PARTIAL, completed by SC-01 (B-N) | FAIL (petition), PASS planned-built (docket) |
+| S-DOWN (published, distorting, picked up by the recipient's own perception) | telling through `refraction_gain` [CHECKED `fixtures.py`:800] | PASS in shape; the tree delivers thinly [AUDIT] |
+| vertical | the contest seam; ENCOUNTER | PASS for the bout; FAIL above it (M-IN-6) |
+| diagonal (cross-scale and cross-family) | thread → mass: an empty hook (`orchestration.py`:333-335 [CHECKED]) | FAIL |
+| lateral | one `resolve`, one verb table, one ladder | PASS, narrowed by three vocabularies |
+| horizontal | the frozen world, the draw key per `(world_seed, tick, pid, purpose)` [AUDIT] | PASS |
+| **pauses correctly** | a battle is one 18-tick call with no yield (`massbattle.py`:281-283 [CHECKED]); a human callback runs inside a per-person map marked parallel [AUDIT `deliberate.py`:116]; H-56 (nested DELIBERATE) HELD | **FINDINGS** |
+| **calculations consistent in methodology** | T-IN-2: four owners of one per-die pair, a continuous and a discrete substrate, three result vocabularies, at least three pool formulas; the sawtooth (9.1) exists only on the discrete side | **FINDINGS** |
+
+Shape and tree scored separately: the **shape** passes lateral and horizontal; the **tree** fails vertical above the bout because no
+person's act reaches inside a battle.
+
+### 9.6 The design's own falsifier (§8 of the skill)
+
+Two disciplines, walked by reading (not executed; `test_ax7_refraction.py` exists and its tests assert the refraction rule, including
+`test_in15_the_actor_is_never_refracted` [CHECKED test names], which pins the very exemption the falsifier's letter flags):
+
+1. **AX-7's falsifier** — "any deposit … whose value is the engine's own resolution, unmediated" (`01`:314-317). Hits: five Claim
+   constructions (`witness.py`:532, :648, :671, :700, :850 [CHECKED]); all pass through `_refract`, which mediates confidence only. Cluster:
+   **one family — value unmediated, confidence mediated**; plus one exemption, the actor's own deposit (:495). Whether confidence-only
+   mediation satisfies "mediated" is unruled: the design's exception list is missing this family. Not a free one-liner.
+2. **"The person triages; the engine never truncates."** Hits: the dedup filter (clean); packing by rank or subject, never by place
+   (`choose.py`:613-621 [CHECKED]) against `03`:116 "one place" (clean); fixtures standing where an opener's declaration should be
+   (`bench_quorum`, `oblige_term`, `record_stages_default`, `fixtures.py`:460, :818, :849 [CHECKED]) — one family; `budget_office_bonus`
+   passes by tracing to S26.3 [AUDIT]. **HITS**, clustering as the audit found.
+
+### 9.7 E — scored last, as a ratio against N and R
+
+- **E-OVERHEAD: FINDINGS.** Counts: 45 verb rows now, 57 planned-built (45 + 12 IN-12, `repudiate` already cut); 66 fixture knobs, 18 shipped
+  dark (BASELINE B5); 64 rosters + 7 tables; 198 hole-register rows read by no game code; 4 owners of the per-die pair; 3 result
+  vocabularies + 1 unread. The plan's largest moves are **additions** (12 verbs, a goals carrier, two rosters, a successions registry); its
+  deletions are `repudiate`, the TN 6/8 rows and `DECISIVE_OB`. The vocabulary grows. Four false N-lines (9.2) are free cuts not yet made.
+- **E-LEGIBILITY: FINDINGS.** The player cannot predict an outcome's shape: odds are a sawtooth in capability (9.1) and shown nowhere
+  (M-IN-3); a pursuit reaches an act through 15 pursuits × 7 axes × 45 verbs (`choose.py`:402-406 [CHECKED]).
+- **Ratio.** Against what N and R found — a resolver that varies by seed rather than by person, and a player surface that does not exist —
+  the overhead is not buying robust choosing yet. E cannot improve by addition (meta-rule); its repairs are the four false-N cuts and one
+  owner for the per-die pair.
+
+**Over-distillation watchlist**
+
+| watched | the N it protects | verdict |
+|---|---|---|
+| a cohort as one Person at weight | one code path for crowds | kept, MEDIUM (cannot dissent, be mustered or die in part) [AUDIT] |
+| a faction as a view, never an actor | AX-1 | kept, MEDIUM; costs player readability (M-IN-3) |
+| `scale:` retired in favour of `Act.via` scope | one carrier of scope | cut — nothing reads `scale:` (H-89); kept HELD by Jordan, so the cut waits |
+| σ-leverage removed at the season seam only | circumstance as μ-shift | kept in the kernel, MEDIUM: combat and mass battle use it; the season's zero is Jordan's "pool only" as the plan reads it |
+| the relaxed exit | plan velocity | kept, LOW: it buys velocity at the price of R-05's ownership (H-IN-1) |
+
+### 9.8 Self-audit
+
+- **9a backward propagation.** Two residues found and fixed in this pass: §8.1's first count line used an invented subtraction ("minus 19
+  duplicates") and was rewritten to the counts the tables carry; §8.5's σ-leverage row was moved to 8.4 when §9.2 found the kernel term live in
+  combat. One residue reported, not fixed: §0 item 3 still says leverage "contributes 0 in the game loop" without the season-seam qualifier;
+  it is correct as written for the season loop.
+- **9b §3 turned on this pass's additions.** M-IN-3 proposes one function the architecture already declares (`explain`, `04`:860) — not a new
+  object (disqualifier 3 checked: it was never cut). M-IN-10 proposes an instrument: disqualifier 1 checked — `arms.py` exists but is
+  season-loop-only and one-mechanic (CLAUDE.md §7), so it is not the carrier; the recommendation in §10 is written to extend `aperture`/`arms`
+  rather than add a tool. M-IN-11 asks for a bound on loops: `forgive` is the existing carrier for the one loop that runs; the recommendation
+  is narrowed to that.
+- **An independent reviewer would add:** a seeded run beyond four seasons; the act-economy equilibrium; whether IN-66's goals carrier makes
+  H-185 moot; the IN-12 step 5a docket routing traced end to end.
+
+### 9.9 Verdict
+
+```
+NERS PASS: IN — kernel, season loop, verb table, chooser, witness, seams, plan instruments (v9 assumed built)   INSTRUMENTS: A+B
+
+MUST BE STATED AS A LIMIT
+  - Personal-scale resolution varies by person — no carrier in combat or mass battle; contest by vocation only   [C1; M-IN-1]
+  - The player can read why an outcome came out as it did — `explain` unbuilt, no odds anywhere   [C1, C2; M-IN-3]
+  - R-05 is owned by the verb positions — exits are DONE-test; computed execution has no owner   [C1; H-IN-1]
+  - Scales hand off and pause — above the bout they summarize, they do not pause   [S; M-IN-6]
+  - A demand travels up a rung — the petition is addressed to its own subject   [S-UP]
+  - Witnessing is mediated by channel, competence and prior belief — confidence only; competence has no carrier   [§8; M-IN-7]
+MAY BE CLAIMED, HAVING SURVIVED
+  - The world is frozen during deliberation — attacked for a write path; DELIBERATE raises on an unfrozen world
+  - Every refusable act emits on refusal — 40/45 rows emit; the 5 that do not cannot be refused (eligibility `own`, no `requires:`)
+  - One margin ladder — attacked for a second banding; combat routes through the owner under a guard
+  - One resolver, several fidelities — attacked for a second resolver; `fight` routes to one engine
+
+| axis / test | verdict | what would overturn it |
+|---|---|---|
+| N (six directions) | FINDINGS: 6 hold (3 narrowed), 4 false N-lines, 1 contradicted by Layer 1 | a reader found for σ-leverage, `urgency`, `benefits_me` or `scale:` |
+| E-OVERHEAD | FINDINGS | the 18 dark knobs each guarding a behaviour Jordan has ruled in |
+| E-LEGIBILITY | FINDINGS | a shown estimate band and a monotone pool/Ob rule |
+| R-COMPLETE | FINDINGS | a ruled per-odd-step Ob rule; written `succeed`/`carry` effects |
+| R-VARIETY | FINDINGS | two persons with different authored capacities producing different Felled rates at fixed seeds |
+| R-WORLD | FINDINGS [medium] | a seeded multi-season run in which an unwatched seat emits a war, succession or dearth that changes a later decision |
+| R-CHOICE | FINDINGS, upper bound | an equilibrium run over `fight` vs `revoke` vs the charge at a seated rival |
+| S-UP | FAIL (petition); PASS planned-built (docket) | a computed petition addressed to the holder of the rung above its subject |
+| S-DOWN | PASS (shape) | a telling routed to a named recipient by the engine |
+| S — coverage · pause · methodology | FINDINGS | a carrier for battle→duel and thread→mass; one substrate or a ruled reason for two |
+| the design's own falsifier | HITS: value-unmediated family (AX-7); fixtures-for-declarations family (triage) | a ruling that confidence-only refraction is AX-7's mediation |
+| self-audit | both sweeps run; 2 residues fixed, 1 reported | a play-length run; the act-economy equilibrium |
+
+REPAIRS (worst first; each a deletion or one object)
+  per-person capacity has no source → Jordan rules one source (K-2 with its first reader, or "identical fighters are intended")
+  the player is owed a derivation → build `explain` as declared, showing an estimate band from held claims
+  R-05 has no owner → one position owns computed-play execution of the seat verbs (H-207's four causes)
+  four false N-lines → delete `urgency`, `benefits_me`, the season-seam leverage plumbing, `scale:` (the last when H-89's hold lifts)
+  Layer 1 contradiction → delete `_drop_what_was_already_done` (falsifier: R-03)
+
+GRADE: paper for the planned-built object; one execution artifact for the shipped kernel (9.1, the band arithmetic) and one for the loop
+(`python -m engine.season.harness.register --requirements`, run 2026-10-16 at `5445e34`: "met 3 · not_met 1 · partial 5", EXIT 0). Not run:
+`corpus_run`, `aperture 4 0`, any test file, any multi-season run.
+```

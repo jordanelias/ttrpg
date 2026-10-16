@@ -322,3 +322,347 @@ This lane was written from reader extractions, then attacked by an independent r
 12. §0 item 3, §1.1, §1.3, §3.3: MBG's stated reason for the C5 raise is reported and judged.
 13. §0, §1.1, §1.2, §3.1, §3.3: PW bullet at MBG:32; 23 bracketed `CALIBRATED-DEBT` tags (27 lines); the 2/20 and 7/20 counts are dated, and later 8/20 and 7/20 figures are cited.
 14. §0, §3.1, §3.2, §3.3: `CURRENT.md` naming quarantined documents by bare filename is the sanctioned convention (`CURRENT.md:13`); no longer ranked or listed as a contradiction.
+
+---
+
+## 7. THROUGHLINES
+
+**Verdict.** Eighteen throughlines in this lane: seven repository patterns, nine convergences, one null, one failure shape. The one that governs the rest is T-MB-1. The season force's scale gap is disclosed at six sites in code, tests, the hole register and the plan, and no row owns it. Every historically grounded mechanism in the lane (T-MB-7, T-MB-8) sits behind it, and so does every precedent-derived structure (T-MB-3, T-MB-6, T-MB-12). Precedent and code agree on one point only: one engine is run headless (T-MB-3). Elsewhere the code either contradicts the precedent (T-MB-4) or never reaches it (T-MB-5, T-MB-12, T-MB-14).
+
+Marks: **[CHECKED]** = opened this pass at HEAD `5445e34` (`git rev-parse --short HEAD`); **[READER]** = from an extraction; **[AUDIT]** = the uploaded NERS audit (`9d5d80bf`, HEAD `092fc45`), not re-opened. Reach classes: *executes in the season loop* · *built and inert* · *hand-built tests only* · *absent*.
+
+**Probe run this pass** (`scratchpad/mb_append/probe_field.py`, `_weighted_unit` + `_run_and_grade`, 5 seeds each, WALLS and no terrain). Attacker wins out of 5:
+- 6v2, 11v1, 79v1 and 80v80: **0 of 5 under both terrains, and both sides routed in every run.**
+- 100v100: 1/5 (WALLS), 3/5 (open).
+- 120v60: 5/5 and 5/5.
+- 200v100: 3/5 (WALLS), 5/5 (open).
+- 200v1: 5/5, all Overwhelming.
+- 1000v500: 4/5 and 4/5.
+- 500v1000: 2/5 and 2/5.
+
+Above the rout floor, relative strength and walls move the result. At or below it, both sides break, and `attacker_wins = (not unit_a.routed) and (…)` (`massbattle.py:287`) [CHECKED] grades a mutual rout as the defender's win. Five seeds per cell is a small sample. It shows the shape, not rates.
+
+### 7.1 Register
+
+| ID | pattern | kind | cases / sources (independence) | counter-evidence / limits | REACH IN CODE | REACH IN PLAN | verdict |
+|---|---|---|---|---|---|---|---|
+| T-MB-1 | **The scale gap is disclosed and owned by nobody.** Every site that meets the season-force scale says it is unsolved and declines to solve it | REPOSITORY PATTERN | (1) `massbattle.py:198-207`: "no ratified person-weight -> troop-count conversion, and this module is not the place to invent one" [CHECKED]; (2) `resolve_field` docstring, "this function does not invent the missing conversion" (`massbattle.py:306-338`) [CHECKED]; (3) `test_march.py:229-230`: `Won` "may be UNREACHABLE … the 6-attacker/2-defender REVERSE … still resolved `Lost`" [CHECKED]; (4) H-150's note, "the fixture's 2-man attacker loses with or without walls … a `Won` band this scale does not reach (`_MIN_TROOPS`' scale gap)" (`hole_register.yaml:3261-3265`) [CHECKED]; (5) IN-13's EXIT: "`Won` is unreachable at fixture scale" (`_part5:85`) [CHECKED]; (6) IN-52's design: "Scaling troops by a function of stores … invents the conversion `massbattle.py` refuses" (`proposals/2026-10-07-settlements-computation-modules.md:401-403`) [CHECKED]. Six instances of one repository habit, not six independent sources | Absence tests, all run this pass: `grep -i troop` over `hole_register.yaml` finds only H-150's note and H-151's title; over `requirements.yaml`, 0 hits; over the plan for `weight…troop`, `troop…conversion`, `ROUT_FLOOR`, `_MIN_TROOPS`, `scale gap`, 0 hits; over `HANDOFF_MB.md` for `conversion` or `troop`, 0 hits. #445's U-1 asks for power and morale "beyond headcount", not for a troop scale (`08_mass_battle_units.md:125`) [CHECKED]. The audit names the gap (A7, G3) [AUDIT] | **executes in the season loop**: `resolve_field` feeds the raw weight sum into `Subunit.troops` (`massbattle.py:213-230`) [CHECKED] | **none.** IN-52 can only lower troops, `min(weight, …)` (design :391) [CHECKED] | **SOUND** |
+| T-MB-2 | **The seam keeps the band and drops the fight** (the audit's T2, MB instance). The engine computes much more than the season reads | REPOSITORY PATTERN | The four-label survivor-ratio degree is discarded (`ladder.py:198-206`) [CHECKED]. `Unit.officers` is "Bookkeeping only … nothing at resolution time reads it" (`hierarchy/units.py:2793-2797`) [CHECKED]. `unit_type_for` wires `equipment.loadout_for` and has **zero callers** (repo grep: `registry.py`, `equipment/__init__.py`, the `systems/…/engine.py` re-export, one test) [CHECKED]. Season fields build no Orders, go-codes or routes (`resolve_field` inputs, `massbattle.py:340-366`) [CHECKED]. Audit T2 [AUDIT]. One cause, several instances | The survivor fraction does cross: `scaled_by_degree` scales each loser's body by the side's fraction (`effects_combat.py:193-195`; `fixtures.py:582`) [CHECKED] | **built and inert** (officers, equipment, degree); executes for the fraction | none (U-1, U-2, U-6 LEAVE under MB-08, `_part7:28`) [CHECKED] | **SOUND**, narrowed: one magnitude crosses |
+| T-MB-3 | **One engine, run headless, for every fidelity.** Never build a second resolver | CONVERGENCE | Football Manager and XCOM (COMP K7/S3); the Total War auto-resolve failure (THR TL06 §5.3, TL08 §5; PREC N-4) (R4 C, R8 T5) [READER]. The doctrine was ruled 2026-07-08 (A7) [READER]. 13G F4: "auto-resolve exists to manage the load and removes the payoff in doing so" (`b42377f7`:248) [CHECKED upload]. COMP, THR and PREC descend from one un-audited ancestor (R4 K11) [READER], so they count as about two independent sources, three with 13G | The season calls the one `run_battle` (`massbattle.py:67, :283`) [CHECKED]. Its input domain, one subunit of at most 6 troops, is one that no harness or gauge visits: the gauges use hundreds (`config.py:117` floor 80). Same engine, different inputs: the precedent's "two answers to one question" returns as one answer to a question the engine was never asked | **executes in the season loop** | none needed for the structure | **SOUND** in structure; its protection is **OVER-CLAIMED** (see 7.2) |
+| T-MB-4 | **No game keeps personal leverage meaningful from N=1 to N=1000+**, and the Dominions failure (a lone commander's death routs the army) is the shape to avoid | NULL | COMP-2 D3; PREC N-3; THR TL06 §5.5, TL08 §8.1 (R4 T, R8 T1) [READER]. Shared ancestor (R4 K11): about one independent source. Dominions is `[UNVERIFIED — player-community consensus]`, a mark dropped downstream (R4 K7) [READER] | The engine's general rule is the warned shape: "Command=0 → instant rout (M1: general IS the army)" (`orchestration.py:2221`) [CHECKED] | **built and inert** on the season path, which fields no general (`_MVP_UNIT_COMMAND` command 4, `massbattle.py:182-186`) [CHECKED] | U-4/K-6 LEAVE behind K-2 (`_part7:51`) [CHECKED]; M-6 LEAVE | **SOUND as a null; CONTRADICTED** by the built rule; UNREACHED |
+| T-MB-5 | **Levy and professional are different economies.** Raising troops costs a population, not a number | CONVERGENCE | X4, "4/4", in fact three franchises: CK, Shogun 2, JA2 (R4 T, K6) [READER]. 13G: CK2 "Levies scale with vassal opinion … Retinues are bought with gold … and ignore opinion" (`b42377f7`:36); Imperator "levies raised temporarily from integrated pops" (:133); EiA "Money and manpower from home provinces and conquests fund corps" (:75) [CHECKED upload]. 20G asymmetry A3: "Conscription that removes a cohort, not a number" (`6039edcc`:229) [CHECKED upload]. 13G and COMP may share the ancestor (R4 K11), so about two independent | PMM's non-payment null contradicts its own list (R4 K1) [READER]. 20G Proposal F ("The Levy") is the document's own design, not precedent (:349-361) | **absent.** `levy` writes `Rung.stores` (`verb_table.yaml:629-651`) [CHECKED]. An army is `members ∩ present` (`world_q.py:1249-1265`) [CHECKED]. Cohorts carry no `commit` and so cannot be members (`populated.py:393-395`) [CHECKED] | IN-52 provisions a field from stores and "does not create troops" (design :378) [CHECKED] | **UNREACHED** |
+| T-MB-6 | **A garrison is an assignment, never a unit type** | CONVERGENCE | X5: JA2, Brigandine, Unicorn Overlord, Total War (Brigandine's cell is "—"; R4 K6) [READER]. 13G JA2: "Win the tactical battle, hold with trained militia" (`b42377f7`:20) [CHECKED upload] | At realm weights the assignment is absolute: one present defender beats any attacker the realm can field (probe: 79v1 → Lost 5/5) | **hand-built tests only.** Defenders are `mustered` at the target and walls come from `fortification_of` (`world_q.py:1249-1274`) [CHECKED]. The realm fights no field (H-150, `hole_register.yaml:3264-3265`) [CHECKED] | IN-13 (B-M), BLK:IN-12 step 6 (`_part5:81-87`) [CHECKED] | **SOUND** in shape; degenerate at the shipped scale |
+| T-MB-7 | **Cohesion breaks before the body.** Rout is local and spreads, and most killing happens in rout and pursuit | CONVERGENCE (historical) | du Picq, Cannae, Hastings (MBG §8; R3 T) [READER]; PFF T-29 "morale cascade a propagating field"; PFF 10 "most casualties arise in phases 6-7" (R2 T) [READER]. PFF and MBG are single-author and self-checked (§1.3), about one to two independent | The 15–30% band has no historical source and is credited to du Picq (§0 item 7). Pursuit is reached only by the multi-unit path (`massbattle.py:246-247`) [CHECKED] | **built and inert** for the season: one subunit means no per-subunit spread, and `SUBUNIT_ROUT_FLOOR` pre-empts the stochastic band from tick 1 (`config.py:117`; probe) [CHECKED] | none | **SOUND** in direction, numbers unsourced; **UNREACHED** |
+| T-MB-8 | **Ground, command and timing decide more than formation class** | CONVERGENCE (historical) | PFF 09: "reality: ground, command, and timing dominate matchup outcomes" (R2 G); PFF 10 Obs 6, terrain; T-9/M-4, the commit window; PFF 12 O-5, weather (R2 T); MBG "generalship dominates" (R3 T) [READER]. One research family | The commit-window figures disagree: 2–10, 5–30 and 1–6 turns (§1.2). Biddle is a modern, second-hand source (§0 item 3) | **absent** on the season path. In the realm terrain is constant (every field WALLS, H-150 `hole_register.yaml:3210-3213`) [CHECKED]; command is fixed at 4; no reserve or commit exists (`massbattle.py:182-186`) [CHECKED] | none | **OVER-CLAIMED** in its numbers; **UNREACHED** |
+| T-MB-9 | **Combined arms wins by matchup coverage; single-arm matchups model war poorly** | CONVERGENCE (historical) | PFF 09 Conclusions 2 and 6 (R2 T); PFF T-1, shock plus missile (R1 T) [READER]. One family | T-1 conflicts with T-14 (R2 K) [READER] | **absent.** Every season side is one `Line`/`infantry` subunit (`massbattle.py:170-178`) [CHECKED] | MB-08 LEAVE (U-1) | **UNREACHED** |
+| T-MB-10 | **Targets are set by the producer, after measurement, and gate nothing** | REPOSITORY PATTERN | MBG C5 90→98 and C7 90→100 after the emergent results (§0 item 3) [CHECKED]. R1 kept while failing (R3 K7) [READER]. The 15–30% band, Jordan's figure, credited to du Picq (§0 item 7) [CHECKED]. The gauge is xfail and not in CI (§0 item 4) [CHECKED]. `ROUT_CASCADE_FRAC` chosen by sweep (ED-MB-0071 title) [CHECKED] | The C1 rebaseline went against the engine (§0 "What is solid") | built: `tests/sim/gauge_mb.py`, report-only (**hand-built tests only**) | none | **SOUND** |
+| T-MB-11 | **Provenance points at paths that no longer exist** | REPOSITORY PATTERN | `config.py` tags cite forked design files (`:510`; `restructure_ledger.md:1326-1331`); `gauge_mb.py:10, 27, 322` cites `references/historical/…`; plan part 7 cites pre-`31c` paths (`_part7:170, 178`); MB-08 and the PC-08 note cite `massbattle.py:159-161`, which is now `_MVP_SUBUNIT_SHAPE` at :170-178 [CHECKED all] | Each resolves through `restructure_ledger.md` or a grep. The defect costs reading time, not behaviour | n/a (prose in code) | the plan carries stale locators | **SOUND** |
+| T-MB-12 | **Two clocks (strategic plus tactical) is the most consequential structural choice, and auto-resolve erases the tactical payoff** | CONVERGENCE | 13G F4 (`b42377f7`:248) and Axis VII: EiA, Pax Pamir and Suzerain are one-clock, with "battles resolve by strategy selection" (:298) [CHECKED upload]. The FM fidelity ladder (COMP K7) [READER]. The amd doctrine's three fidelities (A7) [READER]. About two independent | 13G's single-step proposals P4 and P6 (:429, :469) are self-authored and were never played (:584) [CHECKED upload] | **absent.** The season battle is one atomic 18-tick call inside ENCOUNTER (`massbattle.py:283`) [CHECKED]. Its inputs carry no choice from any person (`massbattle.py:340-366`) [CHECKED]. Valoria has built the tactical layer (orders, go-codes, ED-MB-0069) and neither a clock to run it in nor a one-step strategy selection | IN-46 suspends `fight` only (`_part4:32-37`) [CHECKED]; nothing for `march` | **UNREACHED.** The choice between the two forms is unmade |
+| T-MB-13 | **A mechanism tuned so it can never fire is absent** (the EU4/Imperator failure; COMP failure shape A) | FAILURE SHAPE | R8 T4 (TL05, TL08 rows 1–2, PRE); COMP-2 §3.3 shape A, "direction that cannot run / never fires" (R4 T) [READER]. One family. The code case is measured | `Unopposed` fires, and `Won` is reachable above about 120 troops (probe) | **executes in the season loop as never-fires.** `Won`'s writes (`verb_table.yaml:679`) are a dead branch for any opposed field the realm can field. The probe gives 0 of 20 at or below 80 troops [CHECKED by run] | IN-13 pins `Won` by a constructed `Resolution` (`_part5:85`) [CHECKED] | **SOUND** |
+| T-MB-14 | **Conquest is occupation, then title, priced in order and income** | CONVERGENCE | Rome II: "a province is only fully controlled when every region in it is held. Occupation choices — occupy, loot, raze — trade income against public order"; "Risk spikes on territorial loss" (`b42377f7`:85, :86) [CHECKED upload]. CK3 and RoTK in VCD (§3.2) [READER]. COMP disagrees with itself on whether "conquest is a negotiation" (R4 K5) [READER] | 13G is a folk-model catalogue, T1/T2 (`b42377f7`:582) [CHECKED upload] | **absent** today (no occupation, `seize` or `raze` on a rung) | IN-13 occupation and `seize` (B-M); IN-12 step 11 `raze` (B-R) (`_part5:61-87`) [CHECKED] | **UNVERIFIED** as precedent; PLANNED in code |
+| T-MB-15 | **Persons differ in what they want, not in what they can do** (the audit's T1, MB instance) | CONVERGENCE (cross-lane) | Every side is power 4, command 4, discipline 5 (`massbattle.py:182-196`) [CHECKED]. `derive_command` (Charisma weight 2, Cognition weight 1; `config.py:529-533`) runs only when a `Unit` is built with `charisma`/`cognition` (`hierarchy/units.py:2717, :2811`), which `_weighted_unit` never passes (`massbattle.py:225-230`) [CHECKED]. Audit A1, T1 [AUDIT] | Stance moves morale-start (`massbattle.py:119-150`) [CHECKED]: wants reach the field, capacities do not | **executes** (as uniformity) | K-2 unscheduled; U-4/K-6 LEAVE (`_part7:51`) [CHECKED] | **SOUND** |
+| T-MB-16 | **Unsourced self-authored history is cited as grounding, and each layer drops the marks of the one beneath** | REPOSITORY PATTERN | PFF from memory, self-checked against encyclopaedias (§1.1); MBG cites PW, which has no references (MBG:32); COMP drops Dominions' `[UNVERIFIED]` (R4 K7); squad engagement names nine games and surveys none (§2.3) [READER/CHECKED as in §1–2] | `.audit` files carry graded marks (E1b H) [READER] | n/a | none | **SOUND** |
+| T-MB-17 | **The rout floor pre-empts every finer rout model** | REPOSITORY PATTERN | The absolute floor of 80 (`config.py:117`) versus stochastic 15–30% (`config.py:185-187`), MBv30 Morale 0 (D2 F) and per-subunit cascade. The floor check runs every tick (`orchestration.py:2262-2269`) [CHECKED]. In the probe, both sides routed at every weight of 80 or below | The floor is right for the engine's calibrated scale, hundreds of troops (`config.py:117`, the step-1a constants) | **executes in the season loop** | none | **SOUND** |
+| T-MB-18 | **Mutual collapse is read as the defender holding** | REPOSITORY PATTERN (code) + weak historical echo | `attacker_wins = (not unit_a.routed) and (…)` (`massbattle.py:287`) [CHECKED]; probe: both routed at ≤80 every run → `Lost`. PW/PFF "sieges won by supply" (R3 T) is not about this | A defender-favouring tie-break is a lawful design reading, and nobody has written it down as one | **executes in the season loop** | none | **UNVERIFIED** as design (no ruling); SOUND as a code fact |
+
+Throughlines the lane's own research states and this register leaves out:
+- PFF M-1 (doctrine–substrate–opponent triangle), M-5 (perfect-system trap), M-6 (cultural filter) and M-7 (strategic-political dimension) (R2 T) [READER]. They have no carrier and no demand hook below the faction scale.
+- PFF T-19, T-20 and T-21 (the firearm window), dropped. The pre-firearms scope excludes them, and the threadwork-as-firearm analogy rests on a chat statement (R3 K20) [READER].
+- 13G throughlines 2–10 (lagged allegiance, populace, scarcity) belong to the FA, SC and SE lanes.
+
+### 7.2 Conflicts inside the lane, and code or plan against a throughline
+
+- **T-MB-3 against T-MB-1.** The repository cites the one-engine convergence as the protection against the Total War failure (§2.2). That failure is that the two paths give different answers to the same battle. The season path calls the same engine, but on inputs (≤6 troops, one subunit, power 4) that no harness army uses. In that domain the engine gives one answer whatever the battle (probe, 7.1). One engine is necessary for calibration, not sufficient, and the repository treats it as sufficient.
+- **`requirements.yaml:116-118` against `:1124-1125`.** The scales row reads mass battle as "reached … via natural computed play in `build_realm(0)`". R-07 reads "Declared 11 / no field fought" [CHECKED both]. "Reached" here means `march` formed and executed. It does not mean a field was fought. One file holds two readings of one scale.
+- **IN-13's exit against T-MB-13.** B-M's exit is "the realm fights ≥ 1 field (R-07 conjunct 3)" (`_part5:85`) [CHECKED]. A `Lost` field satisfies it. The position will pass with the outcome still invariant (8.3).
+- **IN-52 against T-MB-1 and T-MB-5.** The feed's output is `troops = min(weight, …)` (design :391) [CHECKED]. Provisioning can only shrink a side that is already below the floor. Its DEPS line says MB-07 supplies "how a season force scales" (`_part4:138`) [CHECKED]. The only scale MB-07 touches is the depth cap, which acts at weight 3000 (`_part7:23`) [CHECKED].
+- **T-MB-4 against the engine.** Covered in §0 item 8 and §2.2. The THR rule "a fraction, never flat" and `Command=0 → instant rout` are unreconciled.
+- **T-MB-6 against T-MB-18.** "Garrison is assignment" assumes that what is assigned matters in proportion. At realm scale, one assigned person is the whole defence.
+- **The audit's T4 claim "`equipment/` … unread" against the tree.** `registry.py:146-160` wires `loadout_for` into `unit_type_for`, so the module does call it. But `unit_type_for` has no caller [CHECKED by repo-wide grep], so the audit's claim stands, narrowed: wired one level down, unread at resolution.
+- **MB-08's own falsifier.** It says that if an R-row or a hole row cites U-1, U-2, U-6, the map or AI generals, the item is scheduled. Run this pass: `grep -nE "U-1\b|U-2\b|U-6\b|#445 U-|generated map|AI general"` over `requirements.yaml` and `hole_register.yaml` gives 0 hits [CHECKED]. The falsifier holds by its letter. It holds partly because no row names the cause behind R-07's unreachable `Won` either (T-MB-1).
+
+### 7.3 Throughlines shared with other lanes
+
+T-MB-1 (IN, SE) · T-MB-2 (PC) · T-MB-3 (PC, SC, IN) · T-MB-4 (PC, NPC) · T-MB-5 (SE, FA) · T-MB-6 (SE) · T-MB-12 (IN, PC, GO) · T-MB-13 (IN, FA) · T-MB-14 (FA, SE) · T-MB-15 (PC, SC, IN, NPC) · T-MB-16 (IN, all research lanes).
+
+### 7.4 What the throughlines do not establish
+
+- **No value for the conversion.** The probe locates the engine's working floor (about 100–120 troops per side in these runs). It does not say what one `Person.weight` is worth. That value is `[OPEN — Jordan tuning]`.
+- **No historical band is shown to hold.** T-MB-7 to T-MB-9 are directional. Every number in them is single-author and unsourced (§1.3).
+- **Game precedent is folk model.** 13G grades itself "the wrong thing to trust for any specific constant" (`b42377f7`:582) [CHECKED upload]. T-MB-3, T-MB-5, T-MB-12 and T-MB-14 rest on shapes, not measurements.
+- **No realm run with IN-13 built.** T-MB-6 and T-MB-13 are predicted for the post-B-M realm from the probe and the fold's own rule (`ladder.py:206`). Nothing has measured them in a season.
+- **Independence.** COMP, THR and PREC descend from one un-audited ancestor (R4 K11). PFF, PW and MBG are one research family. No throughline here has three independent sources.
+
+---
+
+## 8. MISSING AREAS
+
+**Verdict.** The mass-battle lane lacks almost nothing inside the tactical engine. What it lacks is everything between a season person and that engine. Planning or reasoning cannot make an opposed season field come out differently, because the field has no scale (M-MB-1), no composition (M-MB-2), no commander (M-MB-3) and no decision (M-MB-5). v9, with every position assumed built, makes the realm fight fields (IN-13). It schedules nothing that changes how those fields come out, and its one force-size position (IN-52) can only make sides smaller.
+
+Method: walked (a) the 26 rows of §4; (b) the THE NINE clauses touching MB (R-01, R-04 conjunct 3, R-05, R-06, R-07 conjunct 3, R-09); (c) the hole rows that bear on the lane (H-148..H-151, H-175, and the absent-row list in BASELINE B4, where no absent row is MB-specific); (d) NERS digest rows A7/T2, A1, A2, A3, T4, X4, G2b, G2c, G3; (e) the eighteen throughlines of §7. Overlaps were merged into distinct areas before counting.
+
+### 8.1 Counts
+
+`examined 40 candidates; 28 entered (13 MISSING, 5 HOLLOW or BLOCKED, 10 PLANNED-UNBUILT or BUILT-DARK); 12 dropped (one-line reasons in 8.5)`
+
+### 8.2 MISSING
+
+Demand strength: **D1** THE NINE / Jordan in `requirements.yaml`; **D2** canon P/GD; **D3** ruled ruling or axiom needing a carrier; **D4** hole register absent / plan "no position"; **D5** uploaded NERS audit; **D6** research and precedent (WEAK alone).
+
+| ID | the area | demand (strength) | code state [CHECKED] | plan state | absence test (run this pass) | what its absence does | NERS axis |
+|---|---|---|---|---|---|---|---|
+| M-MB-1 | **A season force scale.** A ruled conversion from `Person.weight` to engine troops, or an engine scale that resolves single-digit sides | **D1** R-04 conjunct 3, the "mass battles / strategy warfare" scale row (`requirements.yaml:113-118`), and Jordan's "needs to accommodate it all" (`:32-34`); R-07 conjunct 3, a fought field (`:1124-1125`). **D5** A7, G3 [AUDIT]. **D4** in substance: disclosed at six sites, owned by no row (T-MB-1) | **absent.** `troops=max(float(weight), _MIN_TROOPS)` (`massbattle.py:225`); the realm's largest side is 6 (§0 item 1); floor 80 (`config.py:117`) | **none.** IN-52 is `min(weight, …)` (design :391) | `grep -n -i troop` on `hole_register.yaml` gives 2 lines, neither a row about the conversion (H-150's note, H-151's title); on `requirements.yaml`, 0. Plan regex `weight.{0,20}troop\|troop.{0,20}conversion\|ROUT_FLOOR\|_MIN_TROOPS\|scale gap`: 0. Probe: 0 of 20 attacker wins at ≤80 troops, all mutual routs | An opposed march has one outcome, Lost, so one present defender holds any settlement against any army the realm can raise | R-COMPLETE (fails at its extreme, which is the shipped case); R-CHOICE (strict dominance, §9); S vertical (person → field) |
+| M-MB-2 | **Army composition beyond headcount.** Troop type, quality, discipline and kit drawn from the mustered persons | **D5** A1, T1 [AUDIT]. **D4** MB-08 LEAVE (#445 U-1, U-2, U-6; `_part7:26-30`). **D6** PFF Conclusions 2 and 6; X4 (T-MB-9, T-MB-5) | **absent.** `_MVP_SUBUNIT_SHAPE` fixes `Line`/`infantry`; `power` 4, `discipline` 5 (`massbattle.py:170-196`); `troop_type` occurs once in the file | MB-08 **LEAVE** | `grep -c troop_type massbattle.py` = 1 (the fixed shape). MB-08's own falsifier (7.2): 0 R-row or hole-row hits | Two armies differ only in headcount, so formations, cavalry and brace never enter a season field | R-VARIETY; N (the tactical engine's possibilities are unreachable) |
+| M-MB-3 | **A commander.** A person who leads the side and whose qualities reach the field; a general's fall | **D5** A1 [AUDIT]. **D1** R-09's by-person conjunct (`requirements.yaml:1244-1247`). **D6** MBG "generalship dominates" (weak, §1.2) | **absent.** `command` 4 is fixed (`massbattle.py:182-186`); `derive_command` runs only on a `charisma`/`cognition` input that the season never passes (`units.py:2717, :2811`); `Unit.officers` is unread (`units.py:2793-2797`) | U-4, K-6 **LEAVE** behind K-2 (`_part7:51`) | `grep -ci "charisma\|cognition"` on `massbattle.py` and `seam/wrappers/mass_battle.py`: 0 and 0 | Who marches has no bearing on the result, so a great captain and a clerk lose alike | R-PLAYER (impact); S lateral (PC ↔ MB methodology) |
+| M-MB-4 | **A mass → personal yield.** A duel, capture or champion inside a field, and a person's fate written by the field other than as a side fraction | **D5** A2, S coverage [AUDIT]. **D1** Jordan's scales roster ("accommodate it all", `requirements.yaml:32-34`), which `scale_transitions_v30` tables (`:34-35`). **D6** null D3/N-3 (T-MB-4) | **absent.** The battle is one atomic 18-tick call (`massbattle.py:283`); `grep -i "duel\|yield_to_personal\|champion"` on `modules/mass_battle/*.py`: 0 | M-6 **LEAVE** (it prototypes the grid as mass battle at weight 1; it is not a yield) | Plan regex `mass.{0,4}personal\|general's duel\|champion`: 0 | No personal act happens inside a battle, so a field cannot become a scene and a scene cannot change a field | S vertical / pauses correctly |
+| M-MB-5 | **A decision at the field.** Formation, stance, commit or strategy selection, by the marching person or a player (a one-step strategy selection, or a played fidelity) | **D1** R-04, "decisions at differing scales". **D3** the auto/manual duality doctrine, ruled 2026-07-08 (A7) [READER]. **D6** 13G F4, Axis VII (T-MB-12) | **absent.** `resolve_field` takes weights, place, fort, stances, walls, origin and loyalties; no choice (`massbattle.py:340-366`) | **none.** IN-46 suspends `fight` only (`_part4:32-37`) | Plan regex `playable.{0,40}march\|march.{0,40}playable\|battle strategy\|formation choice`: 0 | The only decision in mass battle is whether and where to march | R-CHOICE; E-LEGIBILITY; S pause |
+| M-MB-6 | **The population as soldiers.** An act that puts a cohort (the only persons with weight > 1) into a faction's field | **D5** A7: "cohorts … carry no `commit` … so cannot be mustered"; E watchlist [AUDIT]. **D2** GD-2's mandatory Muster (`canon/04_game_design_constraints.md` GD-2) [CHECKED]. **D6** 20G A3, "conscription that removes a cohort" (`6039edcc`:229); X4 | **absent.** `seat_cohorts`: "No `commit`, so it is no faction's member" (`populated.py:393-395`); `mustered` reads members only (`world_q.py:1249-1265`) | **none.** SE-06: "cohorts commit to nothing … Cohorts get no goals (no membership)" (`_part6:222`); IN-36's guard cohorts serve `guard_weight`, not a muster (`_part5:168`) | Plan regex for cohort and commit/muster: 2 hits (p5:255 instrument arms; p6:222 "commit to nothing"); neither is a muster | An army is the committed few, at weight 1 each, so the realm's population never fights and never dies at war | R-WORLD (war costs no population); S down (territory → field) |
+| M-MB-7 | **War as a state that a field requires or produces** | **D5** R-WORLD: "`at_war` False in every buildable world" [AUDIT]. **D2** GD-1, sovereignty by territorial control, and GD-3, insurgency that "can hold and invade" (`canon/04_game_design_constraints.md`) [CHECKED]. **D6** CK2 casus belli (13G :33), EiA's declarations-of-war step (:74) | **absent as a reader.** `at_war` exists (`faction_q.py:228-242`) with **0** production callers; `march` needs no war and writes none | FA-07 **LEAVE** (faction-vs-faction mechanisms, `_part7:157`); IN-36 seeds Altonia's goal, not a war | `grep -rn "at_war(" engine/season --include=*.py`, excluding the definition and tests: 0. Plan `grep at_war`: 0 | Marching is a private act with no state of war before or after it, so peace, truce and casus belli have nothing to bind | S lateral (FA ↔ MB); R-WORLD |
+| M-MB-8 | **The occupying army's consumption** (the MATTER reader over occupation) | **D4** IN-13: "no v9 position builds that reader [GAP]" (`_part5:83`) [CHECKED] | **absent** (occupation itself is unbuilt) | **none** ("slots … to B-T, when a position takes it") | the plan's own sentence | Occupation will cost the occupied larder nothing, so holding ground is free | R-COMPLETE; S down |
+| M-MB-9 | **Thread → mass.** Threadwork acting on a field | **D5** A2, S coverage [AUDIT] | **built and inert:** `threadwork_check` "Empty hook — threadwork lands in a future cycle (G-9)" (`orchestration.py:333-335`) | **none** | Plan regex `threadwork_check\|thread.{0,6}mass`: 0 | The setting's defining force never touches war | S diagonal (WR ↔ MB) |
+| M-MB-10 | **Odds shown before a march** | **D5** A3, E-LEGIBILITY: "No surface shows the odds" [AUDIT] | **absent.** `grep -ci "odds\|p_success\|eff_ob"` on the MB wrapper and `massbattle.py`: 0 and 0 | **none** | as stated | A marcher cannot see the shape of the outcome; today that shape is a certainty of loss | E-LEGIBILITY |
+| M-MB-11 | **The field's result on the one ladder** (a margin, not a separate three-band vocabulary) | **D5** A3, G2c [AUDIT]. **D3** Layer 1 says a subsystem returning no margin "has not met the contract" (`03_VERBS_AND_LOOPS.md:286-289`) [AUDIT] | **absent.** `field_degree` reads `attacker_wins`/`unopposed` (`ladder.py:185-206`) | **none** ("open MB-lane work", `ladder.py:198-203`) | Plan regex `field.{0,30}margin\|margin.{0,30}field\|survivor.ratio`: 0 | March outcomes cannot share calibration or display with other contests | S methodology |
+| M-MB-12 | **GD-2's threat response** (an unguarded owned territory under threat draws a muster) | **D2** GD-2 (`canon/04_game_design_constraints.md`; `gd_binding`, `references/canonical_sources.yaml:42`) [CHECKED] | **absent** (no muster act; no faction action selection, by AX-1) | **none** | `grep -rn GD-2` over the plan, `requirements.yaml` and `hole_register.yaml`: 0 | Canon promises that a threatened territory draws a garrison, and nothing carries the promise | R-WORLD; C1 (a claim with no carrier) |
+| M-MB-13 | **The authored cast never marches.** `corpus_run`'s 143 cases never give `march` a referent | **D4** "H-175 … its remainder unowned" (`valoria_master_workplan_v9.md:368`) [CHECKED]. **D1** R-05 (march in the never-attempted class, BASELINE B3) | **executes** in the realm (`aperture`); never attempted in the corpus | **none** | the plan's own sentence; `test_season_shape.py` pin (BASELINE B3) [READER] | The cast's war-minded persons have no war to attempt | R-WORLD (dead seat for authored generals) |
+
+### 8.3 HOLLOW and BLOCKED
+
+| position | class | its stated EXIT (quoted) | the demand it does not deliver |
+|---|---|---|---|
+| IN-13 (B-M) | **HOLLOW** | "B-M's exit: the realm fights ≥ 1 field (R-07 conjunct 3)"; "(i) `Won` (a constructed `Resolution`, since `Won` is unreachable at fixture scale…)" (`_part5:85`) [CHECKED] | R-04's mass-battle scale as a *decision*. A `Lost` field satisfies the exit, and the position pins its only win by hand. Once it is built the realm fights fields whose outcome cannot vary (T-MB-13) |
+| IN-52 (B-T) | **HOLLOW** | "in a seeded season, a side's fielded troops are bounded by its levied treasury" (`_part4:139`); design: `troops = min(weight, …)` (:391) [CHECKED] | "how a season force scales" (its own DEPS line, `_part4:138`). A bound can only lower troops that are already below the floor |
+| MB-07r (B-Z) | **HOLLOW for the season; BLOCKED** (BLK:J, the golden time budget) | "a `resolve_field` test at weight 3000 asserting the capped engaged troops (2000, not 2700)" (`_part7:23`) [CHECKED] | Weight 3000 is a scale no realm side reaches (largest 6). The flip delivers depth to the engine and nothing to the season |
+| IN-46 (none) | **BLOCKED** (no build batch) | "No build position exists, and R-04 conjunct (3) needs every `scales:` row `in_loop`" (`_part4:36`) [CHECKED] | The "grid-based map combat with units" scale. "Grid-based unit combat does not exist anywhere in the tree" (`_part2`, scales table) [CHECKED]. M-6 would prototype it on this lane's engine at weight 1 |
+| J-19 cavalry recoil | **BLOCKED** (ask-then; "asked when a season field can field cavalry") | rides MB-07r (`_part7:21, :170`) [CHECKED] | It waits on M-MB-2, which no position builds, so the ask never fires |
+
+### 8.4 PLANNED-UNBUILT and BUILT-DARK
+
+| area | state | what arms or builds it | locator |
+|---|---|---|---|
+| Arrival, occupation, `seize` of a rung, `army.arrived` | PLANNED-UNBUILT | IN-13 (B-M), after IN-12 step 6 | `_part5:81-87` [CHECKED] |
+| `raze` licensed by occupation | PLANNED-UNBUILT | IN-12 step 11 (B-R) | BASELINE B1.2 [READER] |
+| A foreign march (Altonia) through the real chooser | PLANNED-UNBUILT | IN-36 (B-V), after IN-13 | `_part5:158-175` [CHECKED] |
+| Depth support cap | BUILT-DARK (OFF) | MB-07r, J (time budget) | `config.py:150` [CHECKED] |
+| Loyalty → morale-start gain | BUILT-DARK (`0`, control shipped) | no position (MB-03 landed the knob) | `fixtures.py:608` [CHECKED] |
+| Survivor-ratio four-label degree | BUILT, discarded by the season | deletion (a false N-line, §9) | `massbattle.py:70-84, :289-296`; `ladder.py:198-206` [CHECKED] |
+| `Unit.officers`; `equipment/` via `unit_type_for` | BUILT, unread (0 callers) | U-2, then U-1 (LEAVE) | `units.py:2793-2797`; `registry.py:151-160` [CHECKED] |
+| `Command=0 → instant rout` | BUILT, unreachable from the season | a commander (M-MB-3) | `orchestration.py:2221` [CHECKED] |
+| Tactical depth: formations, envelopment, cavalry shock and brace, pursuit, feigned retreat, volley, orders, go-codes, routes, ammunition | BUILT, reachable only from harnesses | M-MB-2 and M-MB-5 | §3.1, §4 [CHECKED earlier sections] |
+| `rally_check`, `threadwork_check` empty hooks; `altonian_reinforcements` | STUB (`pass`; `NotImplementedError`) | none | `orchestration.py:288-290, :333-335`; `systems/mass_battle/sim/altonian_reinforcements.py:21` [CHECKED] |
+
+### 8.5 Dropped candidates
+
+1. **Mutual rout grades as the defender's win** (`massbattle.py:287`). No demand source: it is a lawful defender-favouring reading. Its harm is the scale's, M-MB-1. Recorded as T-MB-18.
+2. **A blocking calibration gate for the gauge.** Apparatus; the IN lane owns it.
+3. **A historical source for the 15–30% band.** A recorded Jordan value (ED-MB-0031); a parameter.
+4. **Steppe and non-Western formations; a `mounted_archers` preset (U-5).** D6 only (WEAK), and subsumed by M-MB-2.
+5. **Naval battle.** No demand source.
+6. **Writes on the winning side.** Closed by ruling: "nothing on the WINNING side" (`verb_table.yaml`, `march` `writes_grade_note`; ED-IN-0279) [CHECKED].
+7. **Siege as a separate process.** Folded into `march` as ratified intent (VCD, K-28) and carried by IN-13.
+8. **Where a routed army goes.** IN-13's R-7 assumption (`_part5:83`).
+9. **Casualty and garrison magnitudes (H-148, H-150).** Parameters, `[OPEN — Jordan tuning]`.
+10. **March target kinds (H-149).** Ruled.
+11. **Marching on one's own garrisoned settlement (H-151).** IN-13 builds `subject None → Unopposed`.
+12. **Rally (`rally_check`).** No D1–D5 source. A tactical-engine refinement unreachable from the season; listed in 8.4 as a stub.
+
+---
+
+## 9. NERS PASS
+
+`[SELF-AUTHORED — bias risk]`: this pass audits the lane file it extends.
+
+**Target.** The mass-battle lane as the game uses it: the `march` verb; its host (`seam/wrappers/mass_battle.py`, `loop/sides.py`, `_eff_march`); the module entry `resolve_field`; and the parts of `modules/mass_battle/` that entry reaches. **v9 assumed built** (IN-13 arrival, occupation and `seize`; IN-36 foreign march; IN-52 provisioning ON; MB-07r ON), as the uploaded audit assumes. Shipped-today differences are marked **[today]**.
+
+**Executed this pass:**
+- the field probe (7.1; 22 cells × 5 seeds through `_weighted_unit` and `_run_and_grade`, the season's own construction and grade);
+- `pytest engine/season/tests/test_march.py -q`: **11 passed in 7.09 s**;
+- MB-08's own falsifier grep (7.2): 0 hits.
+
+**Not run:** `aperture 4 0` (about 25 minutes), `corpus_run`, or any season with IN-13 built (it cannot be run; it is not built). The planned-built realm is therefore graded **paper**. The resolver-level claims are graded **runs**.
+
+**Prior attacks relied on.** The audit's A7 ("cannot resolve a season force"): its code lines re-opened, its test reference (`test_march.py:229-230`) re-opened, and its weight claim re-run (probe). The audit's false N-line on the survivor-ratio degree: re-opened at `ladder.py:198-206` and `massbattle.py:289-296` [CHECKED]. The audit's A2 (no mass → personal yield): re-opened `massbattle.py:283`; grep for a duel hook gives 0. Its T4 "`equipment/` unread": re-run as a repo-wide caller grep and narrowed (7.2).
+
+### 9.1 N-line ledger
+
+| object | N-line (narrowed where needed) | attack run | result | direction(s) |
+|---|---|---|---|---|
+| `march` | Cut it and a faction can no longer take a **defended** settlement by force. GD-1's territorial path loses its contested half | "`move` then `seize` reaches the same end": IN-13 licenses `seize` by "the seat's faction `mustered` at the settlement" (`_part5:83`) [CHECKED], so walking members in and seizing takes an **undefended** place without a march | **N HOLDS, NARROWED.** It holds only for contested places, and at every realm-reachable weight the contested half ends Lost (probe). Restated: *cut `march` and nothing contests a held settlement*. In the built game that possibility is already dead | top-down (faction goal → act); vertical (person → field). Bottom-up fails: a field's result never changes who holds a defended place |
+| The tactical engine on the season path (`run_battle` via `resolve_field`) | Claimed: cut it and a field's outcome no longer depends on strength, ground, walls or morale | Walk the cut at season scale. Replace the engine with the rule "an opposed march is Lost; an empty target is Unopposed". Every band the realm can produce is reproduced: probe 0 of 20 wins at ≤80 troops, both sides routed every run; the floor check ignores morale (`orchestration.py:2266-2267`) [CHECKED]. Only the losers' body fraction (`attacker_size_pct`, read by `scaled_by_degree`) would be lost | **FALSE N-LINE at the shipped scale (disqualifier 5: the residue is a flat rule)**, except for one magnitude, the casualty fraction. The N-line returns as soon as M-MB-1 lands: above about 120 troops, strength and walls move the result (probe) | vertical |
+| Garrison (`fortification_of` → WALLS +3 DR) | Claimed: cut it and walls stop mattering | Probe: walls change the band only above the floor (200v100: 3/5 WALLS against 5/5 open); at ≤80 the band is identical. H-150 records the same at realm weights: "the fixture's 2-man attacker loses with or without walls" (`hole_register.yaml:3261-3263`) [CHECKED] | **FALSE N-LINE at shipped scale** for the band; it moves only defender survivors | vertical |
+| Morale-start from stance (d.1, `20-iv`) and loyalty gain (MB-03) | Claimed: cut it and allegiance no longer steadies a side | The rout check `eff_morale <= 0 or troop_total() < SUBUNIT_ROUT_FLOOR` fires on troops alone below 80 (`orchestration.py:2266-2267`) [CHECKED] | **FALSE N-LINE at shipped scale.** Any morale value gives the same tick-1 rout. Loyalty gain also ships at 0 (`fixtures.py:608`) [CHECKED] | diagonal (FA stance → MB) |
+| Survivor-ratio four-label degree | none: nothing reads it | `field_degree` reads `attacker_wins`/`unopposed` only (`ladder.py:198-206`) [CHECKED] | **FALSE N-LINE** (disqualifier 2, no consumer); the audit's finding, re-opened | — |
+| `Unopposed` band | Cut it and an empty settlement cannot be entered without a fight | "An empty side could fight `_MIN_TROOPS`": the docstring refuses an invented auto-win, and the wrapper's branch carries it (`massbattle.py:331-338`; `seam/wrappers/mass_battle.py:236`) [CHECKED] | **N HOLDS**, and at shipped scale it is the only way a march ever succeeds | bottom-up (presence → outcome) |
+| Loss writes (body; morale and grudge as stance) | Cut them and a lost field leaves nothing on the persons who lost | Disqualifier 1: IN-13 rebuilds the falsifier as "a WITNESS who did not fight reads a changed regard toward the winning side at read" over the `field.lost` deed (`_part5:83`) [CHECKED]. The grudge's job (resentment of the winner) is partly carried at read for everyone, so the stored stance write duplicates it for participants | **N HOLDS, NARROWED** to the body write and to participants' stance. It is a ruled carrier (ED-IN-0279), so not a free cut. Watch it for double-counting (§9.4) | vertical (field → person) |
+| `SUBUNIT_ROUT_FLOOR` | Cut it and ground-down remnants fight on at full effect (the code comment at `orchestration.py:2256-2258`) [CHECKED] | none found inside the engine | **N HOLDS** in the engine. Its interaction with the season's scale is M-MB-1, not a defect in the floor | lateral (inside the engine) |
+
+**Six directions, for the lane as built to v9:**
+- **top-down:** carried. A goal (IN-66; Altonia's row in IN-36) leads to a chosen `march` and then the seam.
+- **bottom-up:** carried only for `Unopposed`. Nothing a field does changes who holds a defended place.
+- **vertical:** carried both ways, person → field (weights) and field → person (body, stance). The input is scale-broken.
+- **diagonal:** absent. Thread → mass is an empty hook (M-MB-9); mass → personal has no yield (M-MB-4).
+- **lateral:** carried. `march` and `fight` share `degree_of`, in different vocabularies.
+- **horizontal:** planned. `levy` → field is IN-52, which can only shrink a side.
+
+**False N-lines: four** (engine-at-season-scale, garrison, morale-start, survivor degree). Three of the four are false **only at the scale the game uses**, and all three revive the day M-MB-1 is ruled. That is not a reason to delete them. It shows where the defect is: one missing number upstream silences three ruled mechanisms.
+
+### 9.2 Cross-cutting checks
+
+- **C1, claim → mechanism.** Claims with no carrier on the season path:
+  - "formations, cavalry shock, envelopment" (the MB heads; §4);
+  - "generalship dominates" (MBG §2);
+  - "garrison strength matters" (Jordan's ruling, H-150) and "allegiance steadies a side" (ED-MB-0068, MB-03). These two have carriers that are mute below the floor.
+  - Every one of these has a built object. None reaches a season band.
+- **C2, type signature.** `MassBattleInput`, as `resolve_field` reads it, carries `weights`, `territory`, `fort_level`, `stances`, `walls_dr`, `origin`, `loyalties`, `loyalty_gain` and `geography` (`massbattle.py:340-366`) [CHECKED]. It admits no composition, commander, kit or choice. So any claim that a person's quality, equipment or decision affects a field **contradicts the signature**, not merely the data (M-MB-2, M-MB-3, M-MB-5).
+- **C3, epistemic feasibility.** Not run. Whether a marching person can read the defenders' presence before choosing was not checked. The chooser reads no odds or cost term (A4 (v)) [AUDIT].
+- **C4, contradiction sweep.** Four pairs, listed in 7.2:
+  - THR's "fraction, never flat" against `Command=0 → instant rout`;
+  - X5 "garrison is assignment" against one present defender being absolute;
+  - IN-52's `min(weight, …)` against "how a season force scales";
+  - R-07 conjunct 3, which a `Lost` field satisfies, against R-04's "decisions at differing scales".
+- **C5, path construction.** The showcase walked is IN-36's Altonia, which "generically wants to conquer valoria":
+  1. Altonia's goal row (IN-66);
+  2. its head's chooser offers `march` (`choose.py`);
+  3. `sides_of` builds the claimants as `members ∩ present` at the origin (`world_q.py:1249-1265`) [CHECKED];
+  4. `resolve_field`;
+  5. a realm settlement with one Crown member present gives a mutual rout, graded `Lost` (`massbattle.py:287`; probe);
+  6. `_eff_march` writes the attackers' bodies and stance;
+  7. a `field.lost` event.
+
+  Every step has a shipped or scheduled object, so the path **constructs**. What it constructs is an empire that can take only empty settlements. "Conquest" is **expressible** only as walking into undefended places. Downgraded: *Altonia conquers* → *Altonia occupies what nobody holds*.
+
+### 9.3 R (both halves, completeness)
+
+**Seat question (§6.1).** A faction head with `remit:dispatch` is a playable seat as far as the tree allows: the player is an ordinary person, and IN-47's creation seats a cast entry. The seat question is answered by the design's own laws.
+
+**R-CHOICE.**
+
+```
+SEAT: a faction head with remit:dispatch      INTENT: take settlement S, held by a rival faction
+| act                                             | gain                                         | cost                                              |
+| march on S while ≥ 1 rival member is present    | none: Lost at every realm weight (probe 0/20) | own side's body × survivor fraction; stance; field.lost |
+| wait for S to empty, then march (Unopposed)     | S occupied; seize (IN-13)                     | time; S may never empty                           |
+| move members into an empty S, then seize        | S occupied                                    | time; one act per mover                           |
+
+SEAT: the rival's head                          INTENT: keep S
+| keep one committed member present at S          | S cannot be taken by march                    | one person's presence                             |
+| post more members                               | the same                                      | more persons idle                                 |
+```
+
+**Strict dominance on both sides.** The attacker's contested row is dominated by every other row: no gain, a real cost. The defender's single sentry dominates any larger guard. **R-CHOICE FAILS.** This is measured at the resolver (probe) and predicted for the built season through `field_degree` (`ladder.py:206`). It is not an equilibrium run, so it is stated as a dominance *shape*, measured at its decisive step. **[today]** No field is fought, so the seat has no contested row at all.
+
+**R-VARIETY: FAILS.** There is one army build: `Line`/`infantry`, power 4, command 4, discipline 5 (`massbattle.py:170-196`) [CHECKED]. Neither creativity nor variety can enter a field (M-MB-2, M-MB-5).
+
+**R-WORLD: FINDINGS, upper bound.** With IN-13 and IN-36 built, unwatched seats emit marches, fields, `field.lost`, grudges and witnesses' regard (IN-13's re-homed falsifier). The world throws hooks. They all have one shape: the failed assault. It is a portrait that throws hooks, so it passes Rule 3's portrait test narrowly, but a war that never changes a border is a thin hook. **[today]** "the realm fights no field" (H-150); the realm's 11 declared marches are refused (R-07, `requirements.yaml:1124-1125`) [CHECKED]. That is a dead seat for war, and R-WORLD fails today.
+
+**R-COMPLETE: FINDINGS.** The mechanism breaks at its extreme, and the extreme is the shipped case: single-digit sides below the floor. Other unwritten branches:
+- an empty side fights at the crash floor `_MIN_TROOPS` (`massbattle.py:208`);
+- mutual rout has no ruled reading (T-MB-18);
+- pursuit and rally are unreachable or stubbed (8.4).
+
+**R-PLAYER.** At the field itself, no seat exists: no person chooses anything in a battle (M-MB-5). Impact is limited to the decision to march.
+
+### 9.4 E, scored last, as a ratio against N and R
+
+**E-OVERHEAD: FINDINGS.** Counts [CHECKED]:
+- `modules/mass_battle/config.py` exports 148 names (`__all__`);
+- the module's top two directory levels hold about 10,150 lines (`wc -l`);
+- `orchestration.py` defines 48 functions;
+- the season path supplies 9 input fields and reads back 3 values (`attacker_wins` and two survivor fractions).
+
+Against §9.1, at shipped scale the band would survive replacing all of it with a two-line rule. That is an amputation test, not a recommendation: the engine's N-lines revive under M-MB-1, and cutting it would trade a fixable scale defect for a permanent loss. The overhead finding is narrower. The lane carries three objects that are false N-lines at any scale: the survivor-ratio degree, `Unit.officers` (bookkeeping, no reader) and `unit_type_for` (no caller). It also carries one built-dark knob that its own control keeps at 0 (`field_morale_loyalty_gain`).
+
+**Watchlist:**
+
+| watched | the N it protects | verdict |
+|---|---|---|
+| one subunit per side (`_MVP_SUBUNIT_SHAPE`) | one code path from a weight to the engine (§C.5.1, "no unit class") | kept, LOW confidence. The unification is what discards composition (M-MB-2) |
+| cohort as one Person at weight | one path for crowds | kept, MEDIUM (the audit's row). Costs here: a cohort cannot be mustered (M-MB-6) |
+| Won / Lost / Unopposed in place of a margin | `march`'s ruled writes (ED-IN-0279) | kept, MEDIUM. It costs one ladder (M-MB-11) |
+| the stance write and regard-at-read over `field.lost` (IN-13) | participants' grudge versus witnesses' judgment | kept, MEDIUM. Two carriers can count one resentment twice for a participant who also judges the deed. Not measured |
+
+**E-LEGIBILITY: FAILS.** A player cannot intuit from the choice that 79 men against 1 loses. The outcome is predictable only to someone who has read `SUBUNIT_ROUT_FLOOR` and `massbattle.py:287`. No odds are shown (M-MB-10).
+
+### 9.5 S
+
+- **S-UP: FAIL (shape).** No demand object carries "this settlement needs defending" up a rung. GD-2's mandatory muster has no carrier (M-MB-12), and the generic `petition` path fails S-UP by the audit's finding (`to == subject`, A5) [AUDIT].
+- **S-DOWN: PASS in shape, zero in the tree.** `field.won/lost/unopposed` are events (`verb_table.yaml`, the `march` emits) [CHECKED], so they are published to witnesses and carried on by telling. **[today]** No field is fought, so nothing is delivered.
+- **Coverage:** see the six directions in 9.1. Diagonal is uncarried (M-MB-4, M-MB-9); horizontal is planned but shrink-only (IN-52).
+- **Pauses correctly: FINDINGS.** The battle is one atomic 18-tick call inside ENCOUNTER (`massbattle.py:283`). Nothing in it stops for a personal scene or a choice, so a general's capture or duel has no place to happen (M-MB-4). The audit says the same (A2) [AUDIT].
+- **Calculations consistent in methodology: FINDINGS.**
+  1. The field reports on its own three-band vocabulary, not the margin ladder (M-MB-11).
+  2. The module computes a second, survivor-ratio ladder and discards it. This is an E defect, not a live S defect (§0 item 10 stands).
+  3. The pool model's two conventions, `COMMAND_POOL_MULT` against `POOL_QUALITY_MODEL` (§3.3), are an S defect inside the engine, unreachable from the season.
+
+### 9.6 The design's own falsifier
+
+Two disciplines govern this path:
+- "derive what you can, decide nothing you were not asked to" (`resolve_field`'s docstring);
+- "this module is not the place to invent one" (`massbattle.py:198-207`).
+
+**Hits.** Values on the season path that are not derived from the world [CHECKED `massbattle.py:101, 170-196, 208, 283, 287`]:
+- **Clean (9):** shape `Line`, troop type `infantry`, tier 2, starting position (8, 12), concentration `CELL_CAP`, power 4, command 4, discipline 5, morale base 5.
+- **Borderline (3):**
+  - `max_turns=18` traces to a document (MBv30 §A.7), which §0.05 does not accept as a reason;
+  - `_MIN_TROOPS`, declared a crash floor and "not a claim";
+  - the mutual-rout tie-break.
+- **Pass by tracing (4):** WALLS +3 DR (A.9 via `terrain.py`; Jordan's garrison ruling, H-150); `fortification_of` (Jordan's ruling); stance → morale (ED-MB-0068); loyalty gain (ED-MB-0078).
+
+**Cluster.** The clean hits form one family: **pre-port adapter defaults standing where the mustered persons' qualities should be.** The discipline is real, and every hit is labelled `[canonical: inherited default — see GAP above]`. Its exception list is incomplete: it discloses the scale gap as a gap, but it treats the quality defaults as inherited facts rather than decisions. **License narrowly:** the crash floor (a settled member). **Trace to persons:** power, command and discipline, which need U-1/K-2's carriers. The repair is not a free one-liner (§10).
+
+### 9.7 Self-audit
+
+**9a, backward propagation.**
+- §0 item 10 says the discarded ladder is "not a live two-ladder S defect". §9.5 agrees and re-files it under E.
+- §7.1's kind counts were corrected in this pass (to seven repository patterns, nine convergences, one null, one failure shape).
+- §8.3 calls MB-07r hollow "for the season" and §8.4 lists it as built-dark. These are two different properties of one position, and both are stated.
+- §0's "On the populated realm no field is fought" is **[today]**. §8 and §9 describe the post-B-M realm, where fields are fought and lost. Neither section claims the other's state.
+- The probe's "about 100–120 troops" working floor appears in 7.4 and §9.1 as a location, not a value. No section turns it into a recommended number.
+
+**9b, §3 turned on this pass's own additions.**
+- The probe script lives in the scratchpad; it is not added to the repository.
+- The R-CHOICE table is a new object. Disqualifier 1, the carrier already exists: the audit's A7 states the inability ("cannot resolve a season force"). It does not state the dominance shape, so the table adds a finding rather than restating one.
+- No other additions.
+
+An independent reviewer would add:
+- an `aperture`-length realm run once IN-13 lands, to measure T-MB-13 in a season rather than predict it;
+- a check of C3 (what a marching person can know of the defenders);
+- a reading of `systems/mass_battle/sim/` harness armies' typical troop counts, to confirm the "no harness visits ≤6 troops" claim in T-MB-3. It is inferred here from the floor and gauge rows, not grepped over every harness.
+
+### 9.8 Verdict
+
+```
+NERS PASS: MB lane — march + resolve_field + modules/mass_battle as reached, v9 assumed built      INSTRUMENTS: A (no draw-level resolution-diagnostic run)
+
+MUST BE STATED AS A LIMIT
+  - "garrison strength / allegiance / terrain shape a season field": carried by built objects that are mute below SUBUNIT_ROUT_FLOOR  [C1; §3 dq5 at shipped scale]
+  - "a person's quality, kit or command reaches a field": excluded by resolve_field's input signature  [C2]
+  - "Altonia conquers Valoria" (IN-36): expressible only as occupying undefended settlements  [C5]
+  - "the realm fights a field" (IN-13 exit): met by a Lost field, outcome invariant  [C4; §6 R-CHOICE]
+MAY BE CLAIMED, HAVING SURVIVED
+  - one engine serves every caller (no second resolver) — attacked: searched for a second field resolver on the season path; field_degree reads the provider's own markers and manufactures no margin (ladder.py:185-206)
+  - Unopposed carries the only possibility of taking ground — attacked: "an empty side fights at the floor"; refused by the docstring and carried by the wrapper's branch
+  - the engine discriminates strength above ~100-120 troops — attacked by the probe; holds at 120v60, 200v100, 1000v500 (n=5 per cell)
+
+| axis / test | verdict | what would overturn it |
+|---|---|---|
+| N (six directions)  | FINDINGS: march narrowed; 4 false N-lines (3 scale-conditional) | a realm-weight field whose band changes with walls, morale or strength |
+| E-OVERHEAD          | FINDINGS: 3 reader-less objects; 148 config names against 9 inputs and 3 outputs | a reader for officers, unit_type_for or the survivor degree |
+| E-LEGIBILITY        | FINDINGS | a shown odds surface, or a monotone strength → outcome rule at realm scale |
+| R-COMPLETE          | FINDINGS: breaks at the shipped extreme | a ruled weight → troop conversion |
+| R-VARIETY           | FINDINGS: one army build | two musters of equal weight and different kit producing different fights (U-1's own falsifier) |
+| R-WORLD             | FINDINGS: dead today; one-shape hooks when built | a seeded realm in which an unwatched march takes a defended settlement |
+| R-CHOICE            | FINDINGS: strict dominance (attack never; one sentry suffices) | a defended settlement falling to a march at realm weights |
+| S-UP                | FAIL | a demand object carrying a settlement's need for defence to a seat that pays to drop it |
+| S-DOWN              | PASS (shape); zero delivered today | a field event routed to a named recipient by the engine |
+| S — coverage · pause · methodology | FINDINGS: diagonal uncarried; no pause; three-band result | a mass → personal yield point; a margin-returning field |
+| the design's own falsifier (§8) | HITS: 9 clean, one family (inherited adapter defaults for army quality) | each hit traced to a person's or ruling's value |
+| self-audit (§9) | 9a: count fix applied, today/built separation checked; 9b: R-CHOICE table checked against A7 | a season run after IN-13; C3; a harness troop-count sweep |
+
+REPAIRS (worst first; each one object or a deletion)
+  M-MB-1 scale gap → one ruled weight→troop conversion at _weighted_unit (value Jordan's)
+  survivor-ratio degree, Unit.officers, unit_type_for (no readers) → delete, or give each one reader
+  mutual-rout tie-break unruled → one ruling, written where attacker_wins is computed
+  M-MB-2/M-MB-3 composition and command → U-1's inputs from mustered persons, behind K-2
+
+GRADE: paper for the planned-built lane; runs at the resolver: probe (22 cells × 5 seeds, `scratchpad/mb_append/probe_field.py`), `test_march.py` 11 passed
+```
