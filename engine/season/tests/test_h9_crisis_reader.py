@@ -99,6 +99,11 @@ def _wd_total(shift):
     return len(real), sum(1 for f in real if not f["reconverged"])
 
 
+# v9 B-X CLOSE NOTE: IN-71 as first built read a conviction-less person (every world this slice builds) as
+# religious intensity 0 and ZEROED `doctrine`, which moved this slice's pair to 34/9 and its rate rise to
+# a fall; IN-71's re-pin of this file followed the fall. `crisis_weights` now reads `{}` as not held (IN-63),
+# unscaled, and this file is back to its pre-IN-71 text and values: the rise holds again, the evidence that
+# the zeroing alone had moved it.
 def test_h9_fork_divergence_at_total_rises_above_baseline_and_the_control_arm_is_unmoved():
     """THE PLAN'S FALSIFIER. [GROUNDED: measured on this tree (H9), NPC-088 slice, seed 0, 4 seasons
     at 2 slots, `total` deposit arm -- genuine/diverged `scar_weight_shift` 0 -> 29/6 (the baseline,

@@ -687,7 +687,7 @@ class Person:
     # IN-08 H10 -- `conviction` IS `{affiliation: intensity}` (ED-IN-0251 R1/R2): which religious
     # affiliations this person holds, each an int on `affiliation_roster.scale` (0-5; 5 is full
     # intensity), validated by `data/affiliations.py::conviction_map` -- not the pursuit `doctrine`,
-    # which is the magnitude of religious concern, not its side. Absent = not held, never 0. Filled at
+    # which is the magnitude of religious concern, not its side. A key's ABSENCE is not held; a stored 0 is a held rejection (v9 IN-63). Filled at
     # world build from the cast's authored `affiliations:` (`data/cast.py::conviction_of`); its
     # `write_matrix.yaml` row admits a RESOLVE/ENCOUNTER write, made only by the crisis at scar
     # threshold 3 (`loop/resolve.py::_conviction_crisis`, IN-08 H13). Confliction is DERIVED

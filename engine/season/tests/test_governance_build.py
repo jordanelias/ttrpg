@@ -1866,7 +1866,7 @@ def test_8a_title_domain_now_reads_offices_yaml_and_answers_identically():
 
 
 def test_8a_every_authored_seat_constructs_against_the_live_rosters():
-    """`offices.yaml`'s 29 seats are a REAL content file, not documentation -- every row must build
+    """`offices.yaml`'s 31 seats are a REAL content file, not documentation -- every row must build
     a lawful `Office` against today's `office_bodies`/`factions`/`remit_acts`/`conferral_bases`/
     `revocation_bases`, the same construction-time proof r2 `03` §A.13 ran against
     `offices_draft.yaml` (which found 15 of 25 draft rows COULD NOT construct). `rung` is passed as
@@ -1878,7 +1878,9 @@ def test_8a_every_authored_seat_constructs_against_the_live_rosters():
 
     doc = load_yaml(files.OFFICES_YAML.read_text(encoding="utf-8"))
     seats = doc["seats"]
-    assert len(seats) == 29, f"expected 29 authored seats, found {len(seats)}"
+    # 29 -> 31 at v9 IN-64: the two Riskbreakers rows (`off_riskbreaker_covert`, `_doctrine`),
+    # both `appointed` and revocation `null` (precedent `off_grand_master`).
+    assert len(seats) == 31, f"expected 31 authored seats, found {len(seats)}"
     ids = [s["id"] for s in seats]
     assert len(ids) == len(set(ids)), f"duplicate seat id(s): {sorted(i for i in ids if ids.count(i) > 1)}"
     for s in seats:
@@ -1890,9 +1892,9 @@ def test_8a_every_authored_seat_constructs_against_the_live_rosters():
     # names (a distribution that does not sum to the table's own row count).
     cnf = Counter(s["conferral"] for s in seats)
     rvk = Counter(s["revocation"] for s in seats)
-    assert sum(cnf.values()) == 29 and sum(rvk.values()) == 29
-    assert cnf == Counter({"appointed": 15, "elected": 8, None: 6}), cnf
-    assert rvk == Counter({"rung_above_same_faction": 13, "rung_above_in_holdings": 2, None: 14}), rvk
+    assert sum(cnf.values()) == 31 and sum(rvk.values()) == 31
+    assert cnf == Counter({"appointed": 17, "elected": 8, None: 6}), cnf
+    assert rvk == Counter({"rung_above_same_faction": 13, "rung_above_in_holdings": 2, None: 16}), rvk
 
 
 def test_8a_a_repeated_row_id_refuses_at_load_instead_of_being_collapsed(tmp_path, monkeypatch):
@@ -1909,7 +1911,7 @@ def test_8a_a_repeated_row_id_refuses_at_load_instead_of_being_collapsed(tmp_pat
     monkeypatch.setattr(rosters, "OFFICES_YAML", path)
 
     path.write_text(yaml.safe_dump(real), encoding="utf-8")
-    assert len(rosters._load_offices()["seats"]) == 29
+    assert len(rosters._load_offices()["seats"]) == 31
 
     first = real["seats"][0]
     for twin in (dict(first), dict(first, holder="NPC-999", post="Somebody Else")):
@@ -1949,7 +1951,7 @@ def test_8a_every_authored_seat_carries_its_authored_basis_after_the_overlay():
         checked += 1
         checked_a_real_conferral = checked_a_real_conferral or off.conferral is not None
         checked_a_real_revocation = checked_a_real_revocation or off.revocation is not None
-    assert checked == len(doc["seats"]) == 29, checked
+    assert checked == len(doc["seats"]) == 31, checked
     assert checked_a_real_conferral and checked_a_real_revocation, (
         "every seat checked had a None basis -- this test cannot tell the overlay ran")
 
@@ -2023,7 +2025,7 @@ def test_13d_iii_every_authored_anchor_resolves_to_one_live_rung_of_its_own_kind
             f"stands at {off.rung!r}")
         by_kind[kind] += 1
         new_resolved += row["note"].startswith("[NEW]")
-    assert sum(by_kind.values()) == len(_seat_rows()) == 29, by_kind
+    assert sum(by_kind.values()) == len(_seat_rows()) == 31, by_kind
     assert set(by_kind) == {"realm", "duchy", "territory"}, (
         f"{by_kind}: a form no row uses is not observed here -- the settlement form has its own test")
     assert new_resolved == 10, f"{new_resolved} `[NEW]`-marked rows resolved; r2 `03` marks ten"
@@ -2112,15 +2114,17 @@ def test_13d_iii_a_minted_row_may_not_reuse_a_standing_seat_id(_realm13, monkeyp
 
 
 def test_13d_iii_a_seat_may_not_list_its_own_holder_among_its_obligees(monkeypatch):
-    """`_req_oblige` clause 3's rule at world-gen: the occupant is not his own seat's obligee. The
-    one row that authors obligees is given its own holder as one; the realm must refuse, naming the
-    seat. (The real file's obligee is another person -- `_realm13` builds it.)"""
+    """`_req_oblige` clause 3's rule at world-gen: the occupant is not his own seat's obligee.
+    `off_restoration_leader` (one of the two rows that author obligees; the other is FA-04's
+    `off_king`, probed in `test_fa04_oblige_purview.py`) is given its own holder as one; the realm
+    must refuse, naming the seat. (The real file's obligee is another person -- `_realm13` builds
+    it.)"""
     from ..harness import populated
 
     real = populated.OFFICES_SEATS
     withs = [r for r in real if r.get("obligees")]
-    assert len(withs) == 1, [r["id"] for r in withs]
-    row = withs[0]
+    assert [r["id"] for r in withs] == ["off_king", "off_restoration_leader"], [r["id"] for r in withs]
+    row = next(r for r in withs if r["id"] == "off_restoration_leader")
     assert row["holder"] not in row["obligees"], "the real row already lists its holder"
     rows = [dict(r, obligees=list(r["obligees"]) + [r["holder"]]) if r is row else r for r in real]
     monkeypatch.setattr(populated, "OFFICES_SEATS", rows)
@@ -2209,14 +2213,14 @@ def test_13d_iii_a_cap_keeps_exactly_the_seats_whose_holders_it_kept():
     from ..data.rosters import OFFICES_SEATS
     from ..harness.run_cases import load_cases
 
-    row = next(r for r in OFFICES_SEATS if r.get("obligees"))
+    row = next(r for r in OFFICES_SEATS if r["id"] == "off_restoration_leader")
     (obligee,) = row["obligees"]
     ids = [c["id"] for c in load_cases("NPC")]
     cap = ids.index(row["holder"]) + 1
     assert ids.index(obligee) >= cap, "the obligee is inside the cap: this probe cannot drop it"
     w = build_realm(seed=0, cap=cap)
     kept = {r["id"] for r in OFFICES_SEATS if f"p_{r['holder'].lower().replace('-', '_')}" in w.persons}
-    assert 0 < len(kept) < len(OFFICES_SEATS) == 29, len(kept)
+    assert 0 < len(kept) < len(OFFICES_SEATS) == 31, len(kept)
     assert set(w._office_census["authored"]) == kept, sorted(set(w._office_census["authored"]) ^ kept)
     assert row["id"] in w._office_census["authored"]
     assert f"p_{obligee.lower().replace('-', '_')}" not in w.persons
@@ -2224,14 +2228,14 @@ def test_13d_iii_a_cap_keeps_exactly_the_seats_whose_holders_it_kept():
 
 
 def test_13d_iii_an_obligee_not_in_the_cast_refuses_and_a_cap_skips_it(_realm13, monkeypatch):
-    """`if opid not in w.persons: raise` (the obligee pass). The one row that authors obligees is
-    given one no case carries; the full cast refuses it, naming the obligee. (The capped arm, where
-    the same shape is a silent skip, is `test_13d_iii_a_cap_keeps_exactly_the_seats...` above.)
+    """`if opid not in w.persons: raise` (the obligee pass). `off_restoration_leader`'s row is
+    given an obligee no case carries; the full cast refuses it, naming the obligee. (The capped arm,
+    where the same shape is a silent skip, is `test_13d_iii_a_cap_keeps_exactly_the_seats...` above.)
     CONTROL: the real obligee builds in `_realm13`. Mutation: delete the raise."""
     from ..harness import populated
 
     real = populated.OFFICES_SEATS
-    row = next(r for r in real if r.get("obligees"))
+    row = next(r for r in real if r["id"] == "off_restoration_leader")
     assert world_q.establishment_of(_realm13, row["id"]) == ["p_npc_041"]
     _populated_rows(monkeypatch, [dict(r, obligees=["NPC-998"]) if r is row else r for r in real])
     with pytest.raises(Unspecified) as red:
@@ -2313,7 +2317,9 @@ def test_13d_iii_every_seat_the_realm_builds_has_a_rung_but_the_one_declared_exc
     w = _realm13
     cen = w._office_census
     assert cen["unauthored"] == ["off_npc_084"], cen["unauthored"]
-    assert len(w.offices) == cen["seated"] == 30
+    # 30 -> 32 seated, 29 -> 31 anchored at v9 IN-64: the cast's `Löwenritter (Riskbreakers)` cells
+    # (NPC-005, NPC-080) seat two Riskbreakers seats, each authored a row in `offices.yaml`.
+    assert len(w.offices) == cen["seated"] == 32
     anchored = 0
     for oid, off in w.offices.items():
         if oid in cen["unauthored"]:
@@ -2322,7 +2328,7 @@ def test_13d_iii_every_seat_the_realm_builds_has_a_rung_but_the_one_declared_exc
         assert off.rung is not None and off.scope_rung == off.rung, (
             f"{oid} ({off.post!r}): rung {off.rung!r}, scope {off.scope_rung!r}")
         anchored += 1
-    assert anchored == 29 == len(cen["authored"]), anchored
+    assert anchored == 31 == len(cen["authored"]), anchored
 
 
 def test_13d_iii_the_six_rows_no_loop_seat_stands_for_are_minted_from_the_row_alone(_realm13):
@@ -2351,15 +2357,18 @@ def test_13d_iii_the_six_rows_no_loop_seat_stands_for_are_minted_from_the_row_al
 
 
 def test_13d_iii_an_authored_obligee_serves_the_seat_with_no_term(_realm13):
-    """`offices.yaml`'s one non-empty `obligees` (`off_restoration_leader` -> NPC-041) is an `oblige`
-    Tenure, so `establishment_of` -- the Query that replaced the `establishment` field -- answers
-    it. No term: a seed has no opening act to declare one (`04 §B.8`'s `term?`, lawful null)."""
+    """`offices.yaml`'s two non-empty `obligees` (`off_king` -> NPC-070, FA-04; and
+    `off_restoration_leader` -> NPC-041) are each an `oblige` Tenure, so `establishment_of` -- the
+    Query that replaced the `establishment` field -- answers them. No term: a seed has no opening
+    act to declare one (`04 §B.8`'s `term?`, lawful null)."""
     w = _realm13
     withs = [r for r in _seat_rows() if r.get("obligees")]
-    assert [r["id"] for r in withs] == ["off_restoration_leader"], withs
-    assert world_q.establishment_of(w, "off_restoration_leader") == ["p_npc_041"]
-    t = next(t for t in w.tenures if t.kind == "oblige" and t.object == "off_restoration_leader")
-    assert t.term is None and t.live
+    assert [r["id"] for r in withs] == ["off_king", "off_restoration_leader"], withs
+    for row_id, sworn in (("off_king", "p_npc_070"), ("off_restoration_leader", "p_npc_041")):
+        seat = w._office_census["authored"][row_id]   # `off_king` is a row id; its loop-built seat is `off_npc_020`
+        assert world_q.establishment_of(w, seat) == [sworn]
+        t = next(t for t in w.tenures if t.kind == "oblige" and t.object == seat)
+        assert t.term is None and t.live
 
 
 def test_13d_iii_the_remit_overlay_replaces_the_default_and_leaves_only_the_unruled_act(_realm13):
@@ -2383,7 +2392,7 @@ def test_13d_iii_the_remit_overlay_replaces_the_default_and_leaves_only_the_unru
         if not authored:
             empty_rows += 1
         checked += 1
-    assert checked == 29 and empty_rows >= 1, (checked, empty_rows)
+    assert checked == 31 and empty_rows >= 1, (checked, empty_rows)
     assert set(w.offices["off_npc_084"].remit_acts) == set(REMIT_DEFAULT), (
         "the seat no row authors lost the testing default -- the fill path the overlay replaces "
         "only where a row exists")

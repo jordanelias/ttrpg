@@ -46,7 +46,14 @@ from ..gaps import Forbidden, InstrumentDefect, Unspecified
 # the asker-first module (which may not import this one; this edge runs the other way).
 from .person_q import content_said, intent_named, ledger_names
 # v9 IN-57: `attention_key`'s tier 2 scores a deed claim by `deed_valence`, one owner per factor.
-from .person_q import deed_valence, projected_axes
+from .person_q import (
+    _seen_index, crisis_weights, deed_valence, paired_deed_term, projected_axes)
+# v9 IN-69: the one cosine (`cast.loyalty` calls it too).
+from ..data.pursuits import pursuit_cosine_axes, to_axes
+# v9 IN-67: `goal_referents` reads a goal's `object:` off the ONE loader and a `deed_doers` goal's
+# doers off the person-side family.
+from ..data import goals as _goals
+from .person_q import deed_doers
 from ..state.attribution import anchor_of, causing_act
 from ..state.carriers import Person, Question, Site, Tenure
 # ⚠ `parent_of` AND `descendants` ARE RE-EXPORTED, NOT DEFINED HERE (G3, plan position 6). The
@@ -1614,6 +1621,69 @@ def ambitions(w: World, p: Person) -> list:
     return out
 
 
+def goal_referents(w: World, p: Person, prop) -> tuple:
+    """WHO OR WHAT AN AMBITION IS ABOUT, read when the question forms (v9 IN-67, A-31 / ED-IN-0293
+    (8)) -- THE ONE OWNER Q4 asks instead of `(prop.subject,)`, and `attention_key`'s tier 0 with it,
+    so a goal's tier-0 claims are about its referents and never about the id of a seat. `()` forms no
+    question (`harness/populated.py`'s rule, *an OUGHT about nobody is not a motive*, now at read).
+
+    The Proposition's id IS the goal's id (`data/goals.py`, the row mints it), so a Proposition no goal
+    names -- every creed, tie and want, and every Proposition a goal row does not mint -- reads
+    `(prop.subject,)` exactly as before. A goal reads by the kind of its `object:` (`_goal_referents`):
+
+      * `person`, `rung` -> `(prop.subject,)`: seeding (IN-68) minted the Proposition about them;
+      * `seat_holders` -> the persons now holding any listed seat (a live `hold`, `w.tenures` order),
+        so the referent FOLLOWS A SUCCESSION and a vacant throne names nobody;
+      * `deed_doers` -> `person_q.deed_doers` over `p`'s OWN ledger (its three forms; `against: <goal>`
+        takes that goal's referents, resolved by this same read);
+      * `orientation` -> `()`: a pure condition has no referent, and mints no Proposition.
+
+    ⚠ `seat_holders` IS A WORLD READ WITH NO CLAIM BEHIND IT, `vacancies`' shape: it hands `p` the
+    identity of whoever sits on a throne he may never have been told of. THAT PRECEDENT IS ON JORDAN'S
+    QUEUE (ED-IN-0292 (2), `needs_jordan`: the `vacancies` stamp against AX-7), and this read follows
+    that answer -- if it comes back a claim reaching persons through the channels, `seat_holders`
+    becomes a read of the holders `p`'s own ledger names. [ASSUMPTION; medium; Jordan to correct --
+    revert: the holders the person's own ledger names, `seats_named`-style, which reads nobody at
+    world-gen (H-203).] `deed_doers` is NOT that read: it takes nothing from the world.
+
+    No TRACE row is written (`ambitions`' reason): Q4 calls this once per ambition per person."""
+    goal = _goals.goal(prop.id)
+    if goal is None:
+        return (prop.subject,)
+    return _goal_referents(w, p, goal, prop, frozenset())
+
+
+def _goal_referents(w: World, p: Person, goal, prop, path: frozenset) -> tuple:
+    """`goal_referents` for a loaded `goal` whose Proposition is `prop` (None if the world minted none);
+    `path` the goal ids on the way down. ⚠ `against:` NAMES ANOTHER GOAL, whose referents are themselves
+    computed, and
+    the loader does not refuse a cycle among them (A against B, B against A): a goal met twice on the
+    path yields `()` -- the looping goal has no referent -- so the read terminates. A target goal with
+    no Proposition in the world has no subject: `person`/`rung` read `()` for it, the other kinds need
+    none."""
+    if goal.id in path:
+        return ()
+    obj, kind = goal.object, goal.object["kind"]
+    subject = prop.subject if prop is not None else None
+    if kind in ("person", "rung"):
+        return (subject,) if subject is not None else ()
+    if kind == "seat_holders":
+        # The Office ids seeding recorded (`Proposition.scope`: a loop-built seat is not named by its
+        # `offices.yaml` id); a world that minted no scope reads the listed ids as Office ids.
+        seats = set(prop.scope) if prop is not None and prop.scope else set(obj["seats"])
+        return tuple(dict.fromkeys(t.subject for t in w.tenures
+                                   if t.kind == "hold" and t.live and t.object in seats
+                                   and t.subject in w.persons))
+    if kind != "deed_doers":
+        return ()
+    against = ()
+    if "against" in obj:
+        target = _goals.goal(obj["against"])
+        if target is not None:
+            against = _goal_referents(w, p, target, w.propositions.get(target.id), path | {goal.id})
+    return deed_doers(p.ledger, obj, p.id, against)
+
+
 def vacancies(w: World, p: Person) -> tuple:
     """THE VACANT SEATS `p` MAY FILL (IN-53, H-207 'VACANCY AS NEED'), sorted by id: every Office
     with no live `hold` -- the test `_req_confer` runs before its `or` disjunct -- for which
@@ -1691,32 +1761,46 @@ def _stamped(q: Question, added: tuple, w: World) -> Question:
 _SOURCE_ORDER = {src: i for i, src in enumerate(QUESTION_SOURCES)}
 
 
-def attention_key(w: World, p: Person, ambs: Optional[list] = None) -> Callable[[Question], tuple]:
+def attention_key(w: World, p: Person, ambs: Optional[list] = None,
+                  refs_of: Optional[dict] = None) -> Callable[[Question], tuple]:
     """THE ORDER `p` ANSWERS HIS QUESTIONS IN (v9 IN-57, RS-22: *"sorted by saliency to
     ambition/needs then office/tenure then then convictions"*) -- a sort key over `questions_for`'s
     output, built once per call. Five tiers, the first that holds:
 
-      0. a question, not the `need` question, whose referent is the subject of one of `p`'s own
-         ambitions (`ambitions`, the one owner of the live-`commit`-to-an-OUGHT rule);
+      0. a question, not the `need` question, whose referent is a referent of one of `p`'s own
+         ambitions (`ambitions`, the one owner of the live-`commit`-to-an-OUGHT rule;
+         `goal_referents`, the one owner of what an ambition is about -- its subject, or v9 IN-67's
+         goal referents);
       1. a referent among `p`'s own live-tenure objects or inside a seat's purview (`own_purview`,
          `reach`'s limbs 2 and 4);
       2. a question whose `about` is a deed claim in `p`'s own ledger with nonzero valence under
-         `p`'s pursuits (`deed_valence(projected_axes(p, scar_weight_shift), c)`), ordered by
-         -|valence|. ⚠ Since IN-58 `person_q.deed_valence` returns 0 for `PAIRED_KINDS`: a death or
-         wound claim is judged for its doer only inside `deeds_judged` (through `deed_doer`, the
-         `seen.who` pairing), so it never reaches this tier and falls to tier 4 for a witness who
-         is not an ambition holder on, or in the purview of, the victim or the killer -- BELOW the
-         standing `need` question. Consequence: IN-12 step 5's RS-23 conjunct (a petition against a
-         killer) needs a hearer to answer a question whose referent is the killer, which under
-         `question_aggregation_rule: first` such a hearer almost never does. The design fix --
-         score a paired claim in tier 2 by `|_lean * _bond|` via `deed_doer`, one scorer in
-         `person_q` shared with `deeds_judged` -- is a declared hash mover, not taken here;
+         `p`'s pursuits, ordered by -|valence|: an unpaired kind by `deed_valence(projected_axes(p,
+         scar_weight_shift), c)`; a `PAIRED_KINDS` claim (a death or wound -- `deed_valence` is 0 for
+         it, IN-58) by `|lean * bond|` for the doer its `seen.who` pairing names
+         (`person_q.paired_deed_term`, the ONE scorer `deeds_judged` sums too; v9 IN-72, RS-23). A
+         paired claim whose pairing names no doer (no `seen`, `who` withheld, ambiguous) scores 0 and
+         stays in tier 4, so a hidden actor stays hidden [ASSUMPTION; medium; Jordan to correct -- v9
+         IN-72; revert: paired claims at tier 4]. LIMIT: a dead victim's `person.died` never reaches the
+         question set (`reach` admits a claim by its subject's place, and a dead man has none: H-209), so
+         in play this tier scores wound (`body.changed`) and `contest.undecided` claims;
       3. the `need` question -- the standing ambition question, PLAN `W5`'s quiet-season fallback;
       4. the rest -- AND every question whose claim records HIS OWN act (`Claim.doer == p.id`,
          stamped by WITNESS), whatever its referent: the echo of his own deed is not news.
 
+    SALIENCE ORDERS WITHIN TIERS 0 AND 3, DESCENDING, NEVER ACROSS TIERS (v9 IN-69, ED-IN-0293 (10)): the
+    key's second slot is `-salience`, the cosine (`data/pursuits.py::pursuit_cosine`, the owner `cast.loyalty`
+    calls) of `p`'s `crisis_weights` against what the ambition's organization expects of its members: an
+    org goal -> `expected(org) + goal.pursuits`, the faction creed -> `expected(faction)` (`data/goals.py::
+    expected`: the role template plus the org's goals' pursuits); `p`'s own want (every other ambition)
+    -> `0.0`, indifference. A `need` question takes its own ambition's salience, a tier-0 claim the
+    maximum over the ambitions whose `goal_referents` contain its referent. So a member whose pursuits
+    point with his faction answers the org goal that fits him best first, and one who points against it
+    answers his own want first. Tier 2 keeps -|valence|; tiers 1 and 4 carry 0. Salience is `p`'s own
+    state against the stores his edges name (AX-2). An org that expects nothing (no template, no goal)
+    reads `0.0`.
+
     `(order[source], q.id)` -- the key before IN-57 -- stays the final tiebreak, so within a tier
-    the old order holds; magnitudes inside tiers 0-1 are not ranked (LIMIT). A source added later
+    (and a salience) the old order holds; magnitudes inside tier 1 are not ranked (LIMIT). A source added later
     takes its tier from its referents, so `question_sources`' order is not edited. `ambs` is
     `ambitions(w, p)` where the caller already holds it (`questions_for`); `None` computes it.
 
@@ -1740,7 +1824,9 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None) -> Callable[
     entry's tier 0 literal (`need` in tier 0), or before IN-57 the `(source, id)` key.]"""
     if ambs is None:
         ambs = ambitions(w, p)
-    aims = {w.propositions[pid].subject for pid in ambs} - {None}
+    if refs_of is None:
+        refs_of = {pid: set(goal_referents(w, p, w.propositions[pid])) - {None} for pid in ambs}
+    aims = set().union(*refs_of.values())
     mine = own_purview(w, p)
     held_by_id = {c.id: c for c in p.ledger}
 
@@ -1748,18 +1834,47 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None) -> Callable[
     def axis_w() -> dict:
         return projected_axes(p, w.fixtures.get("scar_weight_shift"))
 
+    @functools.cache
+    def seen_of() -> tuple:
+        return _seen_index(p.ledger)
+
+    @functools.cache
+    def salience(pid: str) -> float:
+        """How far the ambition `pid` points where `p` does, `[-1, +1]` (v9 IN-69): an org goal against
+        `expected(org) + goal.pursuits`, a faction's creed against `expected(faction)`, `p`'s own want
+        (any other ambition) `0.0` -- indifference, the cosine's midpoint. `pursuit_cosine_axes` is `None` for an
+        organization expecting nothing (no template, no goal) and for a `p` with no pursuits: `0.0`."""
+        goal = _goals.goal(pid)
+        if goal is not None:
+            target = _goals.expected(goal.org_kind, goal.org)
+            for name, wt in goal.pursuits.items():
+                target[name] = target.get(name, 0.0) + float(wt)
+        elif pid in FACTION_BY_PROP:
+            target = _goals.expected("faction", FACTION_BY_PROP[pid])
+        else:
+            return 0.0
+        cosine = pursuit_cosine_axes(axis_w(), to_axes(target))
+        return 0.0 if cosine is None else cosine
+
     def key(q: Question) -> tuple:
         tie = (_SOURCE_ORDER[q.source], q.id)
+        # Salience orders WITHIN tiers 0 and 3, descending (second slot is ascending); across tiers the
+        # first slot decides, so no salience lifts a question over another tier's.
         if q.source == "need":
-            return (3, 0.0) + tie
+            return (3, -salience(q.about) if q.about in refs_of else 0.0) + tie
         held = held_by_id.get(q.about)
         if held is not None and held.doer == p.id:
             return (4, 0.0) + tie
         if any(r in aims for r in q.referents):
-            return (0, 0.0) + tie
+            return (0, -max(salience(pid) for pid, refs in refs_of.items()
+                            if any(r in refs for r in q.referents))) + tie
         if any(r in mine for r in q.referents):
             return (1, 0.0) + tie
-        v = deed_valence(axis_w(), held) if held is not None else 0.0
+        if held is None:
+            return (4, 0.0) + tie
+        # IN-72: a paired claim (death, wound) scores `|lean · bond|` for the doer its `seen.who`
+        # pairing names, `person_q.paired_deed_term` -- the scorer `deeds_judged` sums; unpaired: 0.
+        v = deed_valence(axis_w(), held) or paired_deed_term(p, axis_w(), held, seen_of)[1]
         return ((2, -abs(v)) if v else (4, 0.0)) + tie
     return key
 
@@ -1863,12 +1978,18 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # `17`: the live-`commit`-to-an-OUGHT rule is `ambitions`' alone (above; R-06's READ), so this
     # asks it rather than restating it; one Question per ambition, in edge order, as before.
     ambs = ambitions(w, p)
+    # v9 IN-67: what the ambition is ABOUT is `goal_referents`' (a goal's, else the subject as before);
+    # an ambition about nobody forms no question.
+    refs_of: dict = {}                     # handed to `attention_key`, which reads the same referents
     for pid in ambs:
-        out.append(Question(f"q:need:{pid}", "need", (w.propositions[pid].subject,), pid))
+        refs = goal_referents(w, p, w.propositions[pid])
+        refs_of[pid] = set(refs) - {None}
+        if refs:
+            out.append(Question(f"q:need:{pid}", "need", refs, pid))
 
     # v9 IN-57: the order is `attention_key`'s tiered read of the person's own state; the old
     # `(source, q.id)` key is its final tiebreak (history: hole_register H-54).
-    out.sort(key=attention_key(w, p, ambs))
+    out.sort(key=attention_key(w, p, ambs, refs_of))
     # IN-53 (H-207, DECISION 2026-10-13 D1): A VACANT SEAT THE PERSON MAY FILL IS A STANDING
     # OCCASION, AND IT RIDES ON WHATEVER QUESTION HE ANSWERS. After the sort, so it displaces
     # nothing: `out[0]` -- the question every aggregation rule delivers (`first` returns it; `all`/

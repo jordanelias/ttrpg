@@ -111,7 +111,7 @@ ENDINGS_CLASSIFIED_YAML = PACKAGE_DIR / "ENDINGS_CLASSIFIED.yaml"
 # above): this module owns every path to a registry the package loads.
 GOVERNANCE_SPINE_YAML = PACKAGE_DIR / "governance_spine.yaml"
 # `offices.yaml` -- the governance ladder's titles (folded from `rosters.yaml: titles`, plan
-# position `8a`, `13d-i` item 5) and the 29 authored seats. Anchored here for the same reason
+# position `8a`, `13d-i` item 5) and the 31 authored seats. Anchored here for the same reason
 # `GOVERNANCE_SPINE_YAML` is: one path owner, never a local `__file__` a house move rots.
 OFFICES_YAML = PACKAGE_DIR / "offices.yaml"
 # `arrangements.yaml` -- plan position `18` (PROC-A), `21_RECONCILIATION.md` PHASE 2 step 6 /
@@ -124,6 +124,11 @@ ARRANGEMENTS_YAML = PACKAGE_DIR / "arrangements.yaml"
 # `harness/populated.py::build_realm` beside the case-derived cast. Anchored here for the same
 # reason every sibling registry above is: one path owner, never a local `__file__`.
 COHORTS_YAML = PACKAGE_DIR / "cohorts.yaml"
+# `goals.yaml` -- v9 IN-66 (ED-IN-0293 (8)): the AUTHORED goals of the organizations (faction, body,
+# seat), each an OUGHT Proposition `harness/populated.py` mints at world-gen once IN-68 reads them.
+# Read through `data/goals.py`, the ONE loader. Anchored here for the same reason every sibling
+# registry above is: one path owner, never a local `__file__`.
+GOALS_YAML = PACKAGE_DIR / "goals.yaml"
 
 # The degree sweep's two arm modules (plus their shared `sweep_core`), imported by source in two
 # tests. Moved out of `proposals/2026-09-04-degree-sweep` to `engine/reference/degree-sweep/` so

@@ -64,9 +64,28 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # RE-PINNED at v9 IN-57 (B-W), A HASH MOVE DECLARED: the attention key re-orders each person's questions
 # and `Claim.doer` is a hashed field. Was 0f8e0144... / ccb33d62... after one and two seasons; the build
 # hash is unchanged. The base values reproduce on the pre-IN-57 commit 5b5e31ef; IN-58 moved nothing.
-BASE_HASHES = {0: "11989dcf5e1c25afab556bf3f234a200",
-               1: "8840d8f972cc8d165fab984de3b99a1c",
-               2: "2eedf7b05371d0b05bf1edf1ecebb2bb"}
+# RE-PINNED at v9 IN-64 (B-X), A DATA MOVE DECLARED: the cast's fifteen pursuits and three-concern
+# affiliations (ED-IN-0293, `4e942bac`), opponents at 0 (IN-63), and the two Riskbreakers seat rows
+# (anchored at T1). Every stored vector of the 46 cast persons moves, so the build hash moves too.
+# Was 11989dcf... / 8840d8f9... / 2eedf7b0... (build, one, two seasons) on IN-63's tree e6adc4bf.
+# RE-PINNED at v9 IN-71 (B-X), A MECHANISM MOVE DECLARED: `crisis_weights` scales `doctrine` by religious
+# conviction (H-188). The BUILD hash is equal (no stored vector moved); one and two seasons moved,
+# a0e82b82... -> cc650fcf... and dc561dd5... -> 8f4d2088...; `BASE_EVENTS` re-recorded with them.
+# RE-PINNED at v9 FA-05 (B-X), MECHANISM AND DATA MOVES DECLARED, taken once for the three movers since the
+# last pin: IN-69 (salience orders questions within tiers 0 and 3: one season 9095b921... -> a74673b1...,
+# the build hash equal), IN-72 (equal in seed 0) and FA-05 (nine goal rows seeded: the build hash moves, 25
+# commits and 29 stance rows, plus the `influences` seeding fix, 29 and 33). The pin sat red between IN-69's
+# commit and this one (no per-item run of this file). Was 33c20c4c... / 9095b921... / 10b1abab...
+# RE-PINNED at v9 FA-06 (B-X), A DATA MOVE DECLARED: 26 goal rows beside FA-05's nine (35; 12 mint a
+# Proposition, 23 are orientations; commits 29 -> 55, stance rows 33 -> 44), and the Inquisitors' row now
+# `establishes` over the Church's heresy goal. Was 41fdb685... / c7f7506f... / ec6b82f3... (build, one, two
+# seasons); one season 585 -> 602 acts, `fight` 4 -> 4 (Olafsson on Haelgrund gone, Jarnstal on Vossen new).
+# RE-PINNED at the v9 B-X BATCH-CLOSE (d84e98eb), A DATA MOVE DECLARED: `goals.yaml`'s two heresy goals'
+# `text:` changed and a Proposition's value is hashed, so all three hashes moved; the event counts and digests
+# below are unchanged. Was 545729e9... / 93608c22... / 61782df4... (build, one, two seasons).
+BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
+               1: "bb08f4b28a5009c0aa27c133ce6229ff",
+               2: "cdeda7fd8a29ace0896babdce1a86922"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -77,8 +96,17 @@ BASE_HASHES = {0: "11989dcf5e1c25afab556bf3f234a200",
 # (fingerprint, conferee, founding, occasion). Re-recorded together with `BASE_HASHES`, never alone.
 # RE-RECORDED at v9 IN-57 (B-W) with `BASE_HASHES`: the attention key re-orders each person's questions, so
 # fewer and different acts follow (7527 -> 6624, 21735 -> 17285); IN-58 moved nothing.
-BASE_EVENTS = {1: (6624, "9b0c88f4c4e33064b578df2af2b831de17198fdc96744c73ec0184dd556336d2"),
-               2: (17285, "b62b444dbc487578555dc7399f5f29464e7583ef7f2f170875c24cf6d591f208")}
+# RE-RECORDED at v9 IN-64 with `BASE_HASHES`: full pursuit vectors re-rank every cast person's
+# candidates (6624 -> 7309, 17285 -> 20220).
+# RE-RECORDED at v9 IN-71 with `BASE_HASHES`: the doctrine coupling re-ranks the devout and the lukewarm
+# apart (7309 -> 7186, 20220 -> 19797).
+# RE-PINNED at v9 FA-04 (B-X), A DATA MOVE DECLARED: the Grand Master's oath is one seeded `oblige` Tenure
+# (`off_king`'s `obligees: ["NPC-070"]`), so the build hash moves and the log gains its one build-time event.
+# Was 472050b8... / cc650fcf... / 8f4d2088... (build, one, two seasons); events 7186 -> 7187, 19797 -> 19798.
+# RE-RECORDED at v9 FA-05 with `BASE_HASHES` (7187 -> 6542, 19798 -> 18583).
+# RE-RECORDED at v9 FA-06 with `BASE_HASHES` (6542 -> 7094, 18583 -> 19454).
+BASE_EVENTS = {1: (7094, "6d6d31a0e6ca8c7c03984a786ec9f1ac9ca1fa86a85e2c21106433ff311b5c4d"),
+               2: (19454, "3c472f650b275b4edc43bb8715bc8d30c5e958ec66cdec365a68406acf2be725")}
 
 
 def _digest(w) -> tuple:

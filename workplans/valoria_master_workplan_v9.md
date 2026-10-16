@@ -232,7 +232,7 @@ commit and the run stops for a cleared window (`methodology-execute`, `CLAUDE.md
 has read §K's still-held list and `_part5` §J. `main` was red from PR #456 on one test
 (`test_flow_skeletons.py::test_contract_names_resolve_in_the_generated_index[combat]`); the one-line fix (`personal_combat`
 joins `RETIRED_CONTRACTS`) is built and rides the adoption branch (`7b619328`), so it is not a position — read `All Gates
-Green` on `main` once the branch merges. B-C is closed. B-D is closed: D1 (`9054df80`), D2 (`b31d2c31`), D3 (`0a690b30`). B-G is closed (`0f998f64`). B-H is closed (`c13144b9`). B-E is closed (`ac9724fc`). B-F is closed (`53807be4`). B-L is closed (`fc4f3ba9`). B-I is closed (`9d93cfab`); what it left open is in the entries (§3: IN-09, IN-10, IN-18, IN-33). B-J is closed (`42c5588c`: SC-03a, IN-40, FA-01's mechanism, IN-31's design; IN-48 left as B-JR). B-W is closed (`3bf936ee`: IN-54, IN-55, IN-56, IN-57, IN-58's stance-only half); then … the spine `_part3` §B names. Every batch runs
+Green` on `main` once the branch merges. B-C is closed. B-D is closed: D1 (`9054df80`), D2 (`b31d2c31`), D3 (`0a690b30`). B-G is closed (`0f998f64`). B-H is closed (`c13144b9`). B-E is closed (`ac9724fc`). B-F is closed (`53807be4`). B-L is closed (`fc4f3ba9`). B-I is closed (`9d93cfab`); what it left open is in the entries (§3: IN-09, IN-10, IN-18, IN-33). B-J is closed (`42c5588c`: SC-03a, IN-40, FA-01's mechanism, IN-31's design; IN-48 left as B-JR). B-W is closed (`3bf936ee`: IN-54, IN-55, IN-56, IN-57, IN-58's stance-only half). B-X is closed (`2f0c0227`: IN-62 … IN-69, IN-71, IN-72, FA-04 … FA-06; what it left open is in `engine/season/hole_register.yaml` H-209, ED-IN-0296 and `_part3` §B's header); then … the spine `_part3` §B names. Every batch runs
 through `methodology-execute` (`CLAUDE.md` §9), and a batch's READ-FIRST list names the sites to read (the pins file is far too
 large to read whole: grep the assertion).
 
@@ -278,17 +278,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | IN-59 | RS-26: the access gate | IN/SC/PC | BLK | IN-60; B-V's guard content and W2's arm for its audience half | R-04 (contributor), R-05 | B-Y | `_part5` |
 | IN-60 | RS-26: the security Query | IN/SE/FA | BLK | IN-36's guard content (D, B-V) | R-04 (contributor) | B-Y | `_part5` |
 | IN-61 | RS-27: succession (replaces IN-51, retired); #453 R-5 (b) re-specified | IN/FA/SE | BLK | SC-04 (D, B-P); ED-IN-0292 (2) (J); IN-12 (R: "after IN-12") | R-05, R-04 | B-R | `_part5` |
-| IN-62 | ED-IN-0293: the headline EXIT's instrument (`score_terms`, `decision_spread`) | IN | B | B-W closed `3bf936ee` (I: the base, met) | R-06, R-08 (contributor) | B-X | `_part5` |
-| IN-63 | ED-IN-0293 (2): a zero is a held position | IN | B | — | R-06 (contributor) | B-X | `_part5` |
-| IN-64 | ED-IN-0293 (1), (2), (4), (5): the cast's full vectors and convictions | IN | B | B-W closed `3bf936ee` (R, met); IN-63 (D) | R-06, R-08 (contributor) | B-X | `_part5` |
-| IN-65 | ED-IN-0261's scar re-read: measure; a floor only if read | IN | B | IN-64, IN-71 (D/I) | R-06 (contributor) | B-X | `_part5` |
-| IN-66 | ED-IN-0293 (8)-(10): the goals carrier | IN/FA | B | — | R-06 (contributor) | B-X | `_part5` |
-| IN-67 | ED-IN-0293 (8): goal referents at read | IN | B | IN-66 (D); IN-57 (F, landed `3bf936ee`); IN-58 as landed (D); ED-IN-0292 (2) (J) | R-06, R-08 (contributor) | B-X | `_part5` |
-| IN-68 | ED-IN-0293 (8), (10): goal seeding | IN/FA | B | IN-66, IN-67, IN-64 (D) | R-06 (contributor) | B-X | `_part5` |
-| IN-69 | ED-IN-0293 (10), RS-22: salience by alignment | IN | B | IN-57 (F, landed `3bf936ee`); IN-66, IN-64, IN-67 (D) | R-06, R-08 (contributor) | B-X | `_part5` |
-| IN-70 | RS-23, ED-IN-0293 (6): opinion of a faction (IN-58's residue) | IN/FA | BLK | B-X (D); IN-58's M-polarity (I, taken `3bf936ee`) | R-07, R-05 (contributor) | B-R | `_part5` |
-| IN-71 | H-188: the ruled doctrine coupling | IN | B | IN-64, IN-63 (D) | R-06, R-08 (contributor) | B-X | `_part5` |
-| IN-72 | RS-23, RS-22: paired death and wound claims scored in tier 2 | IN/FA | B | IN-58 (D, landed); IN-69 (F) | R-07, R-08 (contributor) | B-X | `_part5` |
+| IN-70 | RS-23, ED-IN-0293 (6): opinion of a faction (IN-58's residue) | IN/FA | BLK | design first; B-X closed `2f0c0227` (D, met); IN-58's M-polarity (I, taken `3bf936ee`) | R-07, R-05 (contributor) | B-R | `_part5` |
 | SC-01 | `22` steps 11–16 | SC | BLK | B-N's entry gate (SC-03a landed `c2f855d2`) | R-04, R-05, R-08, R-09, M2 | B-N | `_part6` |
 | SC-02 | `22a` → `23` → `22b` | SC | BLK | SC-01 | — | B-P | `_part6` |
 | SC-03b | #453 step 4; H-162 | SC | BLK | SC-01, SC-08 (SC-03a landed `c2f855d2`) | R-05, R-04 | B-O | `_part6` |
@@ -301,7 +291,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | SE-03 | ED-SE-0053 §A.6–A.8 | SE | BLK | IN-28 | — | B-K | `_part6` |
 | SE-04 | #457 CAST-POPULACE; H-170, H-171 | SE | BLK | IN-07 | — | B-T | `_part6` |
 | SE-05 | = IN-30 | — | — | — | — | B-U | `_part5` |
-| SE-06 | SE-04 (c)'s vector half; ED-IN-0293 reading (b) | SE/IN | J | §J.2 row 4; ask-then at B-X's close (ED-IN-0296) | R-06 (contributor) | B-Z | `_part6` |
+| SE-06 | SE-04 (c)'s vector half; ED-IN-0293 reading (b) | SE/IN | J | §J.2 row 4; ED-IN-0296 (written at B-X's close `2f0c0227`, `needs_jordan`) | R-06 (contributor) | B-Z | `_part6` |
 | MB-07r | J-18 (A): flip the depth support cap ON | MB | BLK | J (recalibration; the golden gate's time budget) | — | B-Z | `_part7` |
 | MB-08 | #445 U-1, U-2, U-6 | MB | LEAVE | named, unscheduled | — | B-Z | `_part7` |
 | PC-05 | ED-PC-0013 (1) | PC | BLK | GO-01, GO-05 | — | B-Z | `_part7` |
@@ -320,14 +310,11 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | FA-01 | #445 P-3; FORCE-FOREIGN's cast | FA | B | mechanism landed at B-J | R-04 | B-V | `_part7` |
 | FA-02 | = IN-30 | — | — | — | — | B-U | `_part5` |
 | FA-03 | #453 §10.2 faction map | FA | LEAVE | reference | — | B-Z | `_part7` |
-| FA-04 | ED-IN-0293 (7): the Löwenritter oath | FA/IN | B | — (IN-40 landed `3f320093`) | R-04 (contributor) | B-X | `_part7` |
-| FA-05 | ED-IN-0293 (8), (9): the user's goals, and the Crown goal | FA/IN | B | IN-68, IN-69 (D) | R-06 (contributor) | B-X | `_part7` |
-| FA-06 | ED-IN-0293 (8): every other organization's goals | FA/IN | B | FA-05 (D) | R-06, R-07 (contributor) | B-X | `_part7` |
 | FA-07 | the original design's faction-vs-faction mechanisms | FA | LEAVE | named, unscheduled | — | B-Z | `_part7` |
 
 ## 4. CROSSWALK — v8 and the proposals ↔ v9
 
-**Batches B-A … B-T, B-U, B-V, B-X, B-Y, B-Z** (B-Y placed by ruling, RS-28, B-W closed `3bf936ee`; B-X by RS-30; members, shared files, entry gates, exit instruments, re-records, lanes, handoff cards): `_part3` §B, the only copy.
+**Batches B-A … B-T, B-U, B-V, B-X, B-Y, B-Z** (B-Y placed by ruling, RS-28, B-W closed `3bf936ee`; B-X closed `2f0c0227`, placed by RS-30; members, shared files, entry gates, exit instruments, re-records, lanes, handoff cards): `_part3` §B, the only copy.
 
 | v8 position · telling · §SM | v9 |
 |---|---|

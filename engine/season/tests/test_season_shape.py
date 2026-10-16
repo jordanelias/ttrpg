@@ -14759,19 +14759,32 @@ def test_the_populated_world_is_not_everybody_in_one_room():
 
     # AND THE WANT CONCERNS A PERSON — `ED-IN-0210` Ruling 1, verbs are not fiats.
     # ⚠ QUANTIFIED OVER EVERY OUGHT, AND THE FACTION CREEDS ARE NOW INSIDE THE QUANTIFIER RATHER
-    # THAN EXEMPT FROM IT. Q4 raises a question from a live `commit` to an **OUGHT**, emitting
-    # `(prop.subject,)` as the referent, so this rule binds every Proposition a person can be
-    # questioned about. Until 2026-09-14 the faction Propositions were `HOLDS` and a second
+    # THAN EXEMPT FROM IT. Q4 raises a question from a live `commit` to an **OUGHT**, emitting the
+    # referents `world_q.goal_referents` names (v9 IN-67: `(prop.subject,)` for every Proposition no goal
+    # row mints; for a goal Proposition, whose `subject` is only a seeding record, the goal's own
+    # referents), so this rule binds every referent a person can be questioned about. THE ONLY ROSTERED
+    # NON-PERSON REFERENTS are a `rung` goal's (Varfell's two, FA-06): a rung, by plan. Until 2026-09-14 the faction Propositions were `HOLDS` and a second
     # assertion here pinned them that way; Jordan ruled the creed an OUGHT (*"Faction creed as an
     # ought: sure"*), so the pin is gone and the creeds are held to the SAME rule as the wants —
     # which is the stronger statement, not the weaker one. A creed subjected on a faction NAME
     # lands in this assertion and fails here.
+    from ..data import goals as _goals_data
+    from ..queries.world_q import goal_referents
     oughts = {k: p for k, p in w.propositions.items() if str(p.mood).upper() == "OUGHT"}
-    about_people = [p for p in oughts.values() if p.subject in w.persons]
-    assert len(about_people) == len(oughts), (
-        f"{len(oughts) - len(about_people)} OUGHT proposition(s) name something that is not a "
-        "person. Q4 emits `(prop.subject,)` as the referent, so a rung-subject proposition is "
-        "exactly how `build_at` produced a corpus in which no act ever names anybody")
+    bad, asked = [], 0
+    for t in w.tenures:
+        if t.kind != "commit" or not t.live or t.object not in oughts:
+            continue
+        g = _goals_data.goal(t.object)
+        for ref in goal_referents(w, w.persons[t.subject], oughts[t.object]):
+            asked += 1
+            if ref not in w.persons and not (g is not None and g.object["kind"] == "rung" and ref in w.rungs):
+                bad.append((t.object, ref))
+    assert asked >= n_cast and not bad, (
+        f"{len(bad)} question referent(s) are neither a person nor a rung goal's rung: {bad[:4]}. Q4 emits "
+        "the referents `goal_referents` names, so a creed or want subjected on a rung or a name is exactly "
+        "how `build_at` produced a corpus in which no act ever names anybody. (Covers the OUGHTs a person "
+        "holds a live `commit` to; an OUGHT nobody commits to raises no question.)")
 
     # THE CREED IS AN OUGHT ABOUT THE FACTION'S OWN LEADER, AND THE LOYALTY REACHES A READER.
     # ⚠ BOTH HALVES ARE LOAD-BEARING AND THE SECOND IS THE ONE THAT WOULD HAVE ROTTED SILENTLY.

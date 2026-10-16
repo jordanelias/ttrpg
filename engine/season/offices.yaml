@@ -132,7 +132,7 @@
 #     seat carries this file's `id`, `post`, `body` and `faction`.
 
 meta:
-  source: "engine/season/offices.yaml -- the governance ladder's titles, and 29 authored seats."
+  source: "engine/season/offices.yaml -- the governance ladder's titles, and 31 authored seats (29, then the two Riskbreakers rows at v9 IN-64)."
   derivation: "proposals/2026-09-16-term-ownership/offices_draft.yaml, per r2 03_SEATS_AND_CONTENT.md §A.13-§A.15, with conferral/revocation recomputed against ED-IN-0256 (see the header above)"
   rule: "one seat = one row. `rung` is an ANCHOR (never an id), resolved at load against the world being built -- `CLAUDE.md` §5's hand-transcription hazard, one layer earlier."
   # J-8, Jordan's open ruling: is `dispatch` a remit act at all? r2 `03`'s remit column assumed it
@@ -173,7 +173,7 @@ titles:
     "Family Head":      "hearth"
     Individual:         "person"
 
-# THE TWENTY-NINE SEATS -- id, post, rung anchor, body/faction, remit_acts, conferral, revocation,
+# THE THIRTY-ONE SEATS (29 until IN-64 added the Riskbreakers' two) -- id, post, rung anchor, body/faction, remit_acts, conferral, revocation,
 # holder (a case id in the 46-row cast), obligees, source. `[LIVE]` / `[NEW]` are r2 `03` §A.15's
 # marks, kept as written: `[LIVE]` = the per-case loop seated this holder when r2 was drafted;
 # `[NEW]` = r2 authored the seat. They are NOT the builder's partition -- four `[NEW]` holders are
@@ -188,7 +188,7 @@ seats:
     conferral:  null   # hereditary succession; see the header's translation note
     revocation: null   # no rung above the realm
     holder:     "NPC-020"
-    obligees:   []
+    obligees:   ["NPC-070"]   # FA-04 (ED-IN-0293 (7)): the Grand Master's oath makes the Löwenritter a subfaction of the Crown; her `release` of it is the Split
     source:     "systems/world/reference/worldbuilding_v30.md:24"
     note:       "[LIVE]. draft `titles:` row 1 (r2 03 §A.15 row 1)."
 
@@ -542,6 +542,42 @@ seats:
     obligees:   []
     source:     "systems/world/reference/worldbuilding_v30.md:109"
     note:       "[NEW]. The one draft seat that constructs against today's rosters unmodified (`Lions' Table` is live). Rung authored: the Löwenritter hold no territory of their own; T1 is the capital. The draft's own note flags the holder's first name (\"Lisbeth\") as untiered -- only the case id transfers, not `holder_name`."
+
+  # v9 IN-64 (ED-IN-0293 (7)): the cast's `faction: Löwenritter (Riskbreakers)` cells (NPC-005,
+  # NPC-080, authored at `4e942bac`) make the per-case loop seat two Riskbreakers seats no row named,
+  # so both stood rungless beside `off_npc_084`. ANCHOR: neither holder's registry row names a rung
+  # (`territory: null` / absent), so the plan's "the rung its holder's registry row names" has
+  # nothing to read; each takes `off_grand_master`'s anchor by precedent (the Löwenritter hold no
+  # territory of their own; T1 is the capital, where the royal family and monarch the office
+  # guards sit) [ASSUMPTION; medium; Jordan to correct]. `remit_acts: []` follows
+  # `off_guard_captain` (a subordinate guard seat; `dispatch` is kept through `remit_unruled`).
+  # `revocation: null` follows `off_grand_master`'s ruled null (Jordan 2026-10-11): a Löwenritter
+  # seat at T1 whose parent rung holds only Crown seats is strippable by nobody either way.
+  - id:         off_riskbreaker_covert
+    post:       "Riskbreaker"
+    rung:       {territory: "T1"}
+    body:       "Riskbreakers"
+    faction:    null
+    remit_acts: []
+    conferral:  appointed
+    revocation: null   # precedent: `off_grand_master` (Jordan 2026-10-11, "null")
+    holder:     "NPC-005"
+    obligees:   []
+    source:     "references/npc_registry.yaml NPC-005 `faction: Löwenritter (Riskbreakers)`; ED-IN-0293 (7)"
+    note:       "[LIVE]. v9 IN-64. Loop-built from the registry cell; this row overlays rung, remit and bases."
+
+  - id:         off_riskbreaker_doctrine
+    post:       "Riskbreaker"
+    rung:       {territory: "T1"}
+    body:       "Riskbreakers"
+    faction:    null
+    remit_acts: []
+    conferral:  appointed
+    revocation: null   # precedent: `off_grand_master` (Jordan 2026-10-11, "null")
+    holder:     "NPC-080"
+    obligees:   []
+    source:     "references/npc_registry.yaml NPC-080 `faction: Löwenritter (Riskbreakers)`; ED-IN-0293 (7)"
+    note:       "[LIVE]. v9 IN-64. Loop-built from the registry cell; this row overlays rung, remit and bases."
 
   - id:         off_restoration_leader
     post:       "Leader"

@@ -68,7 +68,8 @@ import sys
 from collections import Counter, defaultdict
 
 from ..data import cast, files
-from ..queries.world_q import RESIDE_KIND, capacity, home_of as home_of_q, uncontrolled
+from ..data import goals as goals_data
+from ..queries.world_q import RESIDE_KIND, capacity, home_of as home_of_q, members, uncontrolled
 from ..gaps import Forbidden, Unspecified
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
 from ..data.rosters import (BODY_FACTION, FACTIONS, OFFICES_BY_HOLDER, OFFICES_SEATS,
@@ -443,8 +444,200 @@ def seat_cohorts(w: World, rows: list, names: dict | None = None) -> list:
     return out
 
 
-def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True) -> World:
+def goals_missing(w: World, rows: tuple) -> list:
+    """THE ORGANIZATIONS THIS BUILT WORLD SEATS THAT NO GOAL ROW IS ABOUT (v9 FA-06): `["faction X", "body Y",
+    ...]`, in roster order. A faction is seated by an AUTHORED HEAD that stands in the cast (`cast.
+    faction_leader`, the same read `seed_goals` binds a faction goal's head by); a body by a live `hold` of
+    a seat whose `Office.body` it is. Either needs a row whose `org:` is that faction or body -- a goal of
+    any kind, an `orientation` included. A faction with no head and a body with no seated holder
+    (`Lions' Helm`, an unfilled seat) is asked for nothing: a goal there binds no one."""
+    have = {(g.org_kind, g.org) for g in rows}
+    held = {t.object for t in w.tenures if t.kind == "hold" and t.live and t.subject in w.persons}
+    seated = {o.body for oid, o in w.offices.items() if o.body and oid in held}
+    out = []
+    for fac in sorted(FACTIONS):
+        lead = cast.faction_leader(fac)
+        if lead and f"p_{_slug(lead)}" in w.persons and ("faction", fac) not in have:
+            out.append(f"faction {fac!r}")
+    out += [f"body {b!r}" for b in BODY_FACTION if b in seated and ("body", b) not in have]
+    return out
+
+
+def seed_goals(w: World, rows: tuple, authored: dict, cid_of: dict, partial: bool = False,
+               complete: bool = True) -> dict:
+    """SEED THE ORGANIZATIONS' GOALS IN A BUILT WORLD (v9 IN-68, A-32; ED-IN-0293 (8), (10)). `rows` are
+    `data/goals.py` `Goal`s, `authored` is `_office_census["authored"]` (an `offices.yaml` seat id -> the
+    Office id that stands for it: NOT the same string for a loop-built seat), `cid_of` the built cast's
+    person id -> case id, `partial` true when `cap` dropped part of the cast. Returns the counts
+    `census` reports (never read by the loop).
+
+    Per row, `orientation` mints NOTHING -- an OUGHT about nobody is not a motive (the rule at the tie
+    write above); it is counted, and its `pursuits:` are IN-69's. Every other kind mints
+    `Proposition(goal id, "OUGHT", subject, text, org, 0)` and its org's persons `commit` to it:
+
+      * a faction goal -> the faction's members (the creed's `commit` holders) and its authored head;
+      * a body goal    -> the live holders of the seats whose `Office.body` is the body;
+      * a seat goal    -> the live holder of the seat.
+
+    `derives` combines levels: `establishes` takes the PARENT goal off every person of the child's org
+    (they do not commit to it); `influences` keeps both -- the child's persons ALSO commit to the parent
+    goal (v9 FA-05: before, nothing read `influences` and the parent never reached a child org of another
+    faction), and its stance rows are written as the parent's own members get theirs, the loyalty being to
+    the faction of the org that reached them. [ASSUMPTION; medium; Jordan to correct -- revert: head and
+    seat-holders only.] THE CLIMB IS BY ORG, TRANSITIVE WHILE THE CHAIN STAYS `influences`
+    [ASSUMPTION; medium; Jordan to correct -- revert: the immediate parent only], and `establishes` takes
+    off the one parent only: a person taken off a parent still reaches that parent's `influences`
+    ancestors through any org he belongs to (the Riskbreakers' holders `establish` over
+    `goal_lowenritter_throne_security` yet commit to the Crown goal as Löwenritter members, which
+    `goal_lowenritter_military_security` gives them anyway).
+
+    The subject, per kind: `person` -> that person; `rung` -> the rung (REFUSED if this world built no such
+    rung -- a rung exists only once built, so the loader could not check it); `seat_holders` -> the first
+    listed seat's Office (`world_q.goal_referents` follows the throne and never reads it); `deed_doers` ->
+    the org's own name (read from the ledger at the question, never from the subject).
+
+    A row with `stance` takes a stance row toward each PERSON its referent resolves to at seeding
+    (`person`; `seat_holders`' holders now -- a succession moves the referent, never the row), for each
+    committed person: `(referent, stance * valence, weight)` from `cast.stance_from_loyalty` of that
+    person's loyalty to the org's faction -- the creed's own call, so a `stance: +1` goal reads exactly as
+    the creed does, and an opposed member's regard inverts with the sign. [ASSUMPTION; medium; Jordan to
+    correct -- revert: the row's sign is the goal's `stance` for every member and only the weight is the
+    loyalty's.]
+
+    `partial` drops, without a sound, a goal whose person or seats the cap removed (the per-case loops'
+    own rule); a complete cast refuses it. A goal id already a Proposition's refuses (a mint would
+    replace it).
+
+    `complete` (v9 FA-06, the SHIPPED DEFAULT) refuses a world that seats an organization no row is about:
+    a faction with an authored head, or a body with a seated member, and no goal -- `goals_missing` names
+    each. It is the law of the shipped file, so a test that plants a PARTIAL goals file passes `False`
+    (`build_realm(..., goals_complete=False)`); `build_realm(goals=False)`, the control arm, mints nothing and
+    asks for nothing. [ASSUMPTION; medium; Jordan to correct -- revert: no completeness refusal.]"""
+    if complete:
+        missing = goals_missing(w, rows)
+        if missing:
+            raise Unspecified(
+                "goals.yaml holds no goal for " + ", ".join(missing),
+                "goals.yaml -- completeness",
+                needs="a row whose `org:` is each named faction or body (an `orientation` row counts)",
+                law="v9 FA-06 -- every faction with an authored head and every body with a seated member holds "
+                    "at least one goal; none is guessed")
+
+    def refuse(cls, g, what: str, needs: str):
+        raise cls(f"goal {g.id!r}: {what}", f"goals.yaml -- {g.id}", needs=needs,
+                  law="v9 IN-68 (A-32) -- a goal is seeded onto what the built realm holds; none is guessed")
+
+    def holders(oids) -> list:
+        oids = set(oids)
+        return list(dict.fromkeys(t.subject for t in w.tenures
+                                  if t.kind == "hold" and t.live and t.object in oids
+                                  and t.subject in w.persons))
+
+    def org_persons(g) -> tuple:
+        """`(the org's faction name, its persons)` -- the persons a goal of this org binds."""
+        if g.org_kind == "faction":
+            lead = cast.faction_leader(g.org)
+            head = f"p_{_slug(lead)}" if lead else None
+            mem = members(w, faction_prop_id(g.org))
+            return g.org, mem + ([head] if head in w.persons and head not in mem else [])
+        if g.org_kind == "body":
+            return BODY_FACTION[g.org], holders(oid for oid, o in w.offices.items() if o.body == g.org)
+        oid = authored.get(g.org)
+        office = w.offices.get(oid)
+        return (office.faction if office else None), (holders([oid]) if office else [])
+
+    out = {"goals": 0, "orientation": 0, "commits": 0, "stance_rows": 0, "dropped": 0}
+    bound: dict = {}          # goal id -> (faction name, the org's persons)
+    minted: list = []         # (goal, referent persons)
+    for g in rows:
+        bound[g.id] = org_persons(g)
+        kind, obj = g.object["kind"], g.object
+        if kind == "orientation":
+            out["orientation"] += 1
+            continue
+        if g.id in w.propositions:
+            refuse(Forbidden, g, "its id is already a Proposition of this world",
+                   "an id no creed, tie or other goal mints")
+        referents = ()
+        if kind == "person":
+            subject = f"p_{_slug(obj['case'])}"
+            if subject not in w.persons:
+                if partial:
+                    out["dropped"] += 1
+                    continue
+                refuse(Unspecified, g, f"names {obj['case']!r}, who is not in the cast this realm built",
+                       "a case id of the built cast")
+            referents = (subject,)
+        elif kind == "rung":
+            subject = obj["rung"]
+            if subject not in w.rungs:
+                refuse(Unspecified, g, f"names the rung {subject!r}, which this realm did not build",
+                       "a rung id `build_realm` builds")
+        elif kind == "seat_holders":
+            built = [authored[s] for s in obj["seats"] if s in authored]
+            if not built:
+                if partial:
+                    out["dropped"] += 1
+                    continue
+                refuse(Unspecified, g, f"names the seats {obj['seats']!r}, none of which this realm seated",
+                       "a seat id of offices.yaml")
+            subject, referents = built[0], tuple(holders(built))
+        else:                                   # deed_doers: read from the holder's ledger at the question
+            subject = g.org
+        # A `seat_holders` goal carries the Office ids its listed seats BUILT as (`scope`): a loop-built seat
+        # keeps its `off_<holder>` id, so `queries/world_q.goal_referents` cannot match the authored ids
+        # `goals.yaml` lists (`_office_census` is the harness's, and the loop never reads it).
+        w.propositions[g.id] = Proposition(g.id, "OUGHT", subject, g.text, g.org, 0,
+                                           tuple(built) if kind == "seat_holders" else None)
+        minted.append((g, referents))
+        out["goals"] += 1
+    # `establishes`: the parent goal is off every person of the child's org (an orientation child too)
+    taken_off: dict = defaultdict(set)
+    for g in rows:
+        if g.derives_kind == "establishes":
+            taken_off[g.derives_from].update(bound[g.id][1])
+    # `influences`: the child's persons ALSO hold the parent goal, and the parent of a parent while the
+    # chain stays `influences` (an `establishes` link stops it: that link replaces). Each carries the FACTION
+    # OF THE ORG THAT REACHED HIM, so a stance row's loyalty is to his own organization, the parent's own
+    # members keeping theirs. [ASSUMPTION; medium; Jordan to correct -- revert: the parent org's faction.]
+    by_id = {g.id: g for g in rows}
+    reach: dict = {g.id: {pid: bound[g.id][0] for pid in bound[g.id][1]} for g in rows}
+    for g in rows:
+        cur = g
+        while cur.derives_kind == "influences":
+            for pid in bound[g.id][1]:
+                reach[cur.derives_from].setdefault(pid, bound[g.id][0])
+            cur = by_id[cur.derives_from]
+    for g, referents in minted:
+        for pid, fac in reach[g.id].items():
+            if pid in taken_off[g.id]:
+                continue
+            w.add_tenure(Tenure(f"t_{g.id}_{pid}_commit", pid, g.id, "commit", 0))
+            out["commits"] += 1
+            if g.stance is None or not referents:
+                continue
+            r = cast.row(cid_of[pid]) if pid in cid_of else None
+            st = cast.stance_from_loyalty(cast.loyalty(r, fac)) if r else None
+            if st is None:
+                continue                        # no template to be loyal to: no row (the creed's rule)
+            for ref in referents:
+                w.persons[pid].stance.append((ref, g.stance * st[0], st[1]))
+                out["stance_rows"] += 1
+    return out
+
+
+def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
+                goals: bool = True, goals_complete: bool = True) -> World:
     """The whole map, its buildings, and one person per season loop.
+
+    `goals` seeds `goals.yaml`'s organization goals (`seed_goals`, v9 IN-68). `False` is the CONTROL
+    ARM (`harness/decision_spread.py --control`): the same realm with no goal minted, committed to or
+    stanced. The shipped file carries rows (FA-05, FA-06), so the arms differ.
+
+    `goals_complete` (v9 FA-06) is the COMPLETENESS REFUSAL's switch, `True` by default: the world that
+    seats a faction head or a body member with no goal row refuses, naming it (`goals_missing`). A test
+    that plants a deliberately partial goals file passes `False`; nothing else does. Ignored when
+    `goals` is `False` (the control arm seeds nothing and asks for nothing).
 
     `cap` limits the cast for a fast run; `None` seats every case. The cap is a PARAMETER and never
     a hidden default -- a run that quietly seated twenty people while reporting on a hundred and
@@ -1253,6 +1446,18 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
     # loop never reads it; the exporter is why it is not a field nothing reads.
     w._tie_of = tie_of
 
+    # -- WHAT EACH ORGANIZATION IS FOR: THE GOALS (v9 IN-68, A-32) ---------------------------------
+    # AFTER the creed (its members are the faction goal's), the offices (a body's and a seat's holders)
+    # and the ties (so a goal Proposition cannot enter a tie's pools), and before the cohorts, which
+    # commit to nothing. World-gen only: a person committed here stays committed through a succession
+    # unless a `release` ends it, while a `seat_holders` referent follows the seat (IN-67). `goals=False`
+    # builds the control arm; the shipped `goals.yaml` carries rows (FA-05, FA-06), so the arms differ.
+    # v9 FA-06: the world that seats an organization no row is about REFUSES (`goals_complete`).
+    w._goal_census = seed_goals(
+        w, goals_data.goals() if goals else (), w._office_census["authored"],
+        {f"p_{_slug(str(c.get('id')))}": str(c.get("id")) for c in cases}, partial=cap is not None,
+        complete=goals and goals_complete)
+
     # -- THE POPULATION: ONE AUTHORED COHORT PER POPULATED RUNG (plan position `24f`) ------------
     #
     # ⭐ `ED-IN-0255` (Jordan, 2026-09-18): subsistence is *"a territorial issue"*, carried by *"NPC
@@ -1297,6 +1502,10 @@ def census(w: World) -> dict:
     return {"rungs": dict(kinds), "persons": len(w.persons), "sites": len(w.sites),
             "cohorts": len(cohorts), "cohort_weight": sum(p.weight for p in cohorts),
             "ties": getattr(w, "_tie_census", {}), "propositions": len(w.propositions),
+            # v9 IN-68: what `seed_goals` minted, a report and never read by the loop. `orientation`
+            # rows are loaded and counted and mint nothing; `dropped` is the cap's.
+            **{(k if k == "goals" else f"goal_{k}"): getattr(w, "_goal_census", {}).get(k, 0)
+               for k in ("goals", "orientation", "commits", "stance_rows", "dropped")},
             "distinct_buildings_inhabited": len(set(where.values())),
             "largest_building": max(Counter(where.values()).values()) if where else 0,
             "stores_by_rung_kind": dict(sorted(stores_by_kind.items())),

@@ -39,6 +39,10 @@ does: `choose` and `options` read `stance_toward` and `said_of` from here. The A
 
 from __future__ import annotations
 
+import functools
+
+from engine.substrate.descriptors import AFFILIATION_CONCERNS, PURSUITS
+
 from ..data import verbs as _verbs
 from ..data import affiliations as _aff
 from ..data.affiliations import AFFILIATION_CEILING, conviction_map, engagement
@@ -100,7 +104,7 @@ def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0) -> tuple:
     [ASSUMPTION, H-192: a deed's claim subject is read as its doer for every other kind; the sum is
     unnormalised.] Person-side, no World (AX-2)."""
     axis_w = None
-    seen = None
+    seen = functools.cache(lambda: _seen_index(p.ledger))
     judged = told = 0.0
     for c in p.ledger:
         if not is_deed(c):
@@ -113,14 +117,9 @@ def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0) -> tuple:
         if axis_w is None:
             axis_w = projected_axes(p, scar_shift)
         if paired:
-            lean = _lean(axis_w, c.predicate)
-            if not lean:
-                continue            # no authored lean on `p`'s axes: nothing to weigh, no pairing read
-            if seen is None:
-                seen = _seen_index(p.ledger)
-            if deed_doer(c, seen) != referent:
+            doer, v = paired_deed_term(p, axis_w, c, seen)
+            if doer != referent:
                 continue
-            v = lean * _bond(p, c.subject, lean)
         else:
             v = deed_valence(axis_w, c)
         # FIRSTHAND only is judged (`dissents`' and `record`'s precedent, `decision/options.py`):
@@ -196,6 +195,98 @@ def deed_doer(c, seen: tuple):
             continue
         whos.add(who)
     return next(iter(whos)) if len(whos) == 1 else None
+
+
+def _kind_engages(kind: str, affiliation: str) -> bool:
+    """A DEED KIND ENGAGES AN AFFILIATION when every verb row emitting it has a nonzero
+    `data/affiliations.py::engagement` cell for it -- for the one verb a kind names (`KIND_VERB`) that
+    is the verb's cell; for a `PAIRED_KINDS` kind (several rows emit it) ALL the emitters must engage,
+    because the claim does not say which row made it and the reading never guesses. The cell's SIGN is
+    not asked: an act the affiliation condemns and one it holds sacred both engage it (v9 IN-67
+    [ASSUMPTION; medium; Jordan to correct -- revert: the form takes a sign and matches that sign's cells
+    only]). ⚠ `engagement(verb, name)` falls back to the shared `sacred` column for an affiliation with no
+    column of its own (`einhir_restoration` has none), so `engaging: einhir_restoration` (FA-05, FA-06)
+    names the doers of any vow-shaped deed, KEEPING a vow included."""
+    verbs = [v for v, r in _verbs.VERB_TABLE.items() if kind in r.emits]
+    return bool(verbs) and all(engagement(v, affiliation) for v in verbs)
+
+
+def deed_doers(ledger, spec: dict, holder: str, against=()) -> tuple:
+    """WHO THE HOLDER'S OWN LEDGER NAMES AS THE DOER OF A DECLARED CLASS OF DEED (v9 IN-67, A-31's
+    `deed_doers` goal object: "threats", "heretical activity", "corruption"), in ledger order, each
+    once. `spec` is the goal's `object:` mapping and names EXACTLY ONE form of
+    `rosters.yaml: goal_object_kinds.forms.deed_doers` (a mapping that names none, or `against` with
+    nobody in `against`, names nobody):
+
+      * `kinds: [<deed kind>, ...]` -- a deed claim of one of those kinds;
+      * `engaging: <affiliation>` -- a deed claim of a kind that engages that affiliation
+        (`_kind_engages`);
+      * `against: <goal id>` -- a deed claim whose PATIENT is among `against`, the named goal's
+        referents, which the caller (`world_q.goal_referents`, a World read) resolves and passes in.
+        Only a `PAIRED_KINDS` claim has a patient (its subject); an unpaired kind's subject is its
+        doer (below), so no patient is named and it never matches this form.
+
+    `is_deed` is the one owner of what a deed claim is. ⚠ THE DOER IS NEVER READ OFF A PAIRED CLAIM'S
+    SUBJECT: a `PAIRED_KINDS` claim's subject may be the PATIENT (`person.died` of a victim), so in
+    EVERY form such a claim is routed through `deed_doer` (the `seen.who` pairing, IN-58) and a claim
+    the pairing cannot resolve names no doer -- `kinds: [person.died]` names the killer, never the
+    victim. Any other deed kind reads its subject as its doer ([ASSUMPTION; H-192], `deeds_judged`'s).
+    NEVER THE HOLDER HIMSELF: a claim recording his own act (`Claim.doer == holder`, ED-IN-0294, the
+    second reader of that field beside `world_q.attention_key`) is skipped whatever its subject -- else
+    the patient of his own deed would be named as the doer of it -- and `holder` is dropped from the
+    answer, so a told copy of his own deed does not make him a referent either.
+
+    Reads the holder's OWN ledger only: a deed he was not told of and did not see names nobody, however
+    plain it is in the world (AX-2; a `World` is never asked). Person-side."""
+    form = next((f for f in roster_map("goal_object_kinds", "forms")["deed_doers"] if f in spec), None)
+    if form is None or (form == "against" and not against):
+        return ()
+    kinds = frozenset(spec["kinds"]) if form == "kinds" else frozenset()
+    seen = None
+    engages: dict = {}                     # kind -> bool, per call: the tables are rebound by tests
+    out: list = []
+    for c in ledger:
+        if not is_deed(c) or c.doer == holder:
+            continue
+        if form == "kinds":
+            hit = c.predicate in kinds
+        elif form == "engaging":
+            if c.predicate not in engages:
+                engages[c.predicate] = _kind_engages(c.predicate, spec["engaging"])
+            hit = engages[c.predicate]
+        else:
+            hit = c.predicate in PAIRED_KINDS and c.subject in against
+        if not hit:
+            continue
+        if c.predicate in PAIRED_KINDS:
+            if seen is None:
+                seen = _seen_index(ledger)
+            doer = deed_doer(c, seen)
+        else:
+            doer = c.subject
+        if doer is not None and doer != holder and doer not in out:
+            out.append(doer)
+    return tuple(out)
+
+
+def paired_deed_term(p: Person, axis_w: dict, c, seen_of) -> tuple:
+    """`(doer, term)`: THE ONE SCORER OF A PAIRED DEED CLAIM (v9 IN-58, IN-72; `CLAUDE.md` §8, the rule
+    lives once). `c` is a deed claim `p` holds; `axis_w` is `p`'s projected pursuits; `seen_of` is a
+    zero-argument callable returning `_seen_index(p.ledger)` (called only when a pairing is read).
+    `doer` is the one `deed_doer` names and `term = lean · bond` (`_lean`, `_bond`) is what the deed
+    adds to `p`'s judgement of that doer; `deeds_judged` sums it and `world_q.attention_key`'s tier 2
+    ranks a claim by `|term|`. `(None, 0.0)` for every claim that is not a paired deed, that `p`'s
+    pursuits do not lean on, that is told (`chain`), or whose pairing names no doer (no `seen`, `who`
+    withheld, ambiguous): an unpaired claim scores 0, so a hidden actor stays hidden. Person-side (AX-2)."""
+    if c.predicate not in PAIRED_KINDS or c.chain:
+        return None, 0.0
+    lean = _lean(axis_w, c.predicate)
+    if not lean:
+        return None, 0.0            # no authored lean on `p`'s axes: nothing to weigh, no pairing read
+    doer = deed_doer(c, seen_of())
+    if doer is None:
+        return None, 0.0
+    return doer, lean * _bond(p, c.subject, lean)
 
 
 def _bond(p: Person, patient: str, lean: float) -> float:
@@ -378,7 +469,58 @@ SCAR_WEIGHT_SHIFT_AT = 2  # [JUSTIFIED: the ruled threshold, not a swept value -
 SCAR_CRISIS_AT = 3  # [JUSTIFIED: the ruled threshold, not a swept value -- `ED-IN-0261` rules 3+ as the terminal crisis; the draft's G-Q6 gives the mechanism]
 
 
+#: v9 IN-71 (H-188, Jordan 2026-09-27: *"faith as a pursuit is strongly modulated by religious
+#: conviction"*): THE PURSUIT THE CONVICTION SCALES (`faith` is `doctrine`, RS-2) and THE CONCERNS
+#: WHOSE MEMBERS ARE RELIGIOUS (`AFFILIATION_CONCERNS`, IN-64's key; `altonia` is civic, not a
+#: theology, ED-IN-0293). Names of a pursuit and of two concerns -- each checked against its roster
+#: below -- not figures: the intensity bound is the spine's own ceiling.
+#: [ASSUMPTION; medium; Jordan to correct -- v9 IN-71, builder and dismantler alike; revert: the Church's
+#: members only, or a swept gain rather than a straight scaling]. A person with NO `Person.conviction`
+#: (the corpus builder `build_at`'s worlds) is read unscaled by `crisis_weights`, not as intensity 0.
+DOCTRINE_PURSUIT = "doctrine"
+RELIGIOUS_CONCERNS = ("church", "einhir")
+if DOCTRINE_PURSUIT not in PURSUITS or not set(RELIGIOUS_CONCERNS) <= set(AFFILIATION_CONCERNS):
+    raise ValueError(f"IN-71 names pursuit {DOCTRINE_PURSUIT!r} and concerns {RELIGIOUS_CONCERNS}; "
+                     f"the rosters hold {sorted(PURSUITS)} and {sorted(AFFILIATION_CONCERNS)}")
+
+
+def religious_intensity(p: Person) -> float:
+    """`p`'s highest intensity on any member of a religious concern (`RELIGIOUS_CONCERNS`), as a
+    fraction of the spine's ceiling: 0.0 for a person at 0 on every such member (IN-63: a stored 0
+    is a rejection, not a gap) and 1.0 at full intensity. The builder and the dismantler alike --
+    the MAX over both sides, never a sum or a signed difference. Person-side (AX-2)."""
+    held = p.conviction or {}
+    top = max((held.get(m, 0) for c in RELIGIOUS_CONCERNS for m in AFFILIATION_CONCERNS[c]), default=0)
+    return top / AFFILIATION_CEILING
+
+
 def crisis_weights(p: Person, shift: float = 0.0) -> dict:
+    """`p`'s pursuit weights as the chooser should read them: the threshold-2 scar shift below, THEN
+    `doctrine` scaled by religious conviction (v9 IN-71, H-188; the one site every reader projects).
+    `choose`'s pursuit dot, `deeds_judged` and the telling weights all read this vector.
+
+    `doctrine` is multiplied by `religious_intensity(p)` -- `w_doctrine * intensity * row_doctrine`
+    once `to_axes` applies the row, MULTIPLICATIVELY and not as a second additive term. A weight of
+    0, a person at full intensity, no `doctrine` key, or NO `conviction` AT ALL returns the shift's
+    result itself; any other person reads a copy with that one weight scaled, `Person.pursuits`
+    untouched. A person whose `conviction` is `{}` has no religious content recorded -- ABSENT IS NOT
+    HELD, never 0 (IN-63) -- so his `doctrine` is read unscaled, as before IN-71 [ASSUMPTION; medium;
+    Jordan to correct -- found at the v9 B-X close: as first built, `{}` read intensity 0 and ZEROED
+    `doctrine` for every corpus (`build_at`) world, the very hazard H-188's `cite:` named; revert: scale
+    a conviction-less person by 0]. A STORED 0 on every religious member is a held rejection and does
+    zero it.
+    """
+    out = _scar_shifted(p, shift)
+    w = out.get(DOCTRINE_PURSUIT)
+    if not w or not p.conviction:
+        return out
+    k = religious_intensity(p)
+    if k == 1.0:
+        return out
+    return {**out, DOCTRINE_PURSUIT: w * k}
+
+
+def _scar_shifted(p: Person, shift: float) -> dict:
     """`p`'s pursuit weights as the chooser should read them once scars have reached threshold 2
     (IN-08 H9, `ED-IN-0261`: *"WEIGHT SHIFTS, others gain proportionally"*) -- A READER, it writes
     nothing and `Person.pursuits` is untouched.
@@ -449,8 +591,11 @@ def conviction_after_crisis(p: Person, among: frozenset | None = None) -> dict:
         by that fraction needs a rounding rule nobody has chosen.
       * DESTROYED -- nothing else is held: `x` drops, leaving the zero vector (no affiliation
         held, a real state).
-    "Held" is a present key: `conviction_map` drops a zero, so every key is held at 1 or more
-    [ASSUMPTION: the draft's "held above threshold" is read as held at all].
+    "Held" is an intensity ABOVE 0 (IN-63): `conviction_map` keeps an explicit 0, a considered
+    rejection, so a present key is not a held one. A rejected pole is never in crisis, never an heir
+    a fold lands on, and never counts as "something else is held" for the destroyed branch; a fold
+    or a destruction leaves the other rejected poles as they were. [ASSUMPTION: the draft's "held
+    above threshold" is read as held at all, i.e. above 0.]
 
     ⚠ UNDER THE SHARED COLUMN THE FOLD'S DIRECTION IS INTENSITY'S, NOT CONTENT'S. The draft gives
     the direction as *"which affiliation was scarred"*, but `affiliation_engagement`'s shared column
@@ -476,19 +621,21 @@ def conviction_after_crisis(p: Person, among: frozenset | None = None) -> dict:
         return p.conviction
     held = dict(p.conviction)
     scar = p.scar or {}
-    crisis = [x for x in sorted(held) if scar.get(x, 0) >= SCAR_CRISIS_AT
+    # "Held" is above 0 (IN-63): a stored 0 is a rejection, which no count can crisis.
+    crisis = [x for x in sorted(held) if held[x] > 0 and scar.get(x, 0) >= SCAR_CRISIS_AT
               and (among is None or x in among)]
     if not crisis:
         return p.conviction
     # `crisis` and `heirs` are in name order and `max` keeps the FIRST of equal keys, so a tie on
     # intensity goes to the lowest name.
     x = max(crisis, key=held.__getitem__)
-    heirs = [y for y in sorted(held) if y != x and frozenset((x, y)) in _aff.INCOMPATIBLE]
+    heirs = [y for y in sorted(held)
+             if y != x and held[y] > 0 and frozenset((x, y)) in _aff.INCOMPATIBLE]
     if heirs:
         y = max(heirs, key=held.__getitem__)
         held[y] = min(AFFILIATION_CEILING, held[y] + held[x])
         del held[x]
-    elif len(held) == 1:
+    elif not any(v > 0 for k, v in held.items() if k != x):
         del held[x]
     else:                            # RESTABILISE -- not built (above)
         return p.conviction

@@ -3,9 +3,9 @@ table"*; J-5's C4, the draft's rule R-C4) -- an observer takes one `Person.scar`
 AFFILIATION an act he saw violates, through the same writer as H3's pursuit counts
 (`loop/resolve.py::_scar_witnesses`), reading `rosters.yaml: tables.affiliation_engagement`.
 
-THE SHIPPED REALM CANNOT SHOW IT: no cast row carries affiliation content (H10), so every shipped
-`Person.conviction` is `{}`; and no verb with a negative cell lands through the fold today (the
-table's own note). So the end-to-end falsifier runs on a PLANTED world -- `probes.tiny_world` with
+THE SHIPPED REALM CANNOT SHOW IT: no verb with a negative cell lands through the fold today (the
+table's own note) -- and, until v9 IN-64 authored every cast row's affiliations, every shipped
+`Person.conviction` was `{}` as well. So the end-to-end falsifier runs on a PLANTED world -- `probes.tiny_world` with
 affiliations given and the loaded table rebound so `fight` (which lands there) carries a violating
 cell -- and every positive arm has a control that holds everything but the one thing it tests:
   * nobody holds an affiliation -> the same act scars nobody;

@@ -144,6 +144,9 @@ def test_in58_mutation_with_the_bond_off_the_two_witnesses_read_alike(monkeypatc
 def _judge(pursuit, stance=(), *claims):
     p = Person("p_judge", "a judge")
     p.pursuits = {pursuit: 1.0}
+    # IN-71: `doctrine` reads scaled by religious conviction, so a judge with none reads it at 0 and the
+    # pursuit loops below would observe nothing. Full conviction reads every pursuit unscaled.
+    p.conviction = {PQ.AFFILIATION_CONCERNS[PQ.RELIGIOUS_CONCERNS[0]][0]: PQ.AFFILIATION_CEILING}
     p.stance = list(stance)
     p.ledger = list(claims)
     return p

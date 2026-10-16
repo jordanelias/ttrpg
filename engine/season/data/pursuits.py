@@ -28,10 +28,13 @@ or a rename, and both should stop the run rather than seed a person with a pursu
 """
 from __future__ import annotations
 
+import math
+from typing import Optional
+
 from ..gaps import Unspecified
 from engine.substrate.descriptors import resolve_pursuit
 
-from .rosters import PURSUITS
+from .rosters import PURSUITS, PURSUIT_AXES
 
 
 def pursuit(name: str) -> str:
@@ -84,3 +87,41 @@ def to_axes(weights: dict) -> dict:
         for ax in PURSUIT_AXES:
             out[ax] += float(w) * float(row.get(ax, PROJECTION_DEFAULT_CELL))
     return out
+
+
+_AXES = tuple(sorted(PURSUIT_AXES))
+# SORTED: `PURSUIT_AXES` is a frozenset, so a sum in set order would give a float whose low bits move with
+# PYTHONHASHSEED, and the cosine is a sort key (`world_q.attention_key`); `person_q._lean` sorts its axes for
+# the same reason. `to_axes` always returns every axis, so this is the order of every sum below.
+
+
+def pursuit_cosine_axes(mine: dict, theirs: dict) -> Optional[float]:
+    """The cosine of two ALREADY PROJECTED vectors (`to_axes` output), `[-1, +1]`; `None` when either is the
+    zero vector. The arithmetic of `pursuit_cosine`, for a caller that holds the projection already."""
+    dot = sum(mine[a] * theirs[a] for a in _AXES)
+    na = math.sqrt(sum(mine[a] ** 2 for a in _AXES))
+    nb = math.sqrt(sum(theirs[a] ** 2 for a in _AXES))
+    if not na or not nb:
+        return None
+    return max(-1.0, min(1.0, dot / (na * nb)))
+
+
+def pursuit_cosine(weights_a: dict, weights_b: dict) -> Optional[float]:
+    """HOW FAR TWO WEIGHTED PURSUIT MAPS POINT THE SAME WAY, `[-1, +1]`: the cosine of their `to_axes`
+    projections. THE ONE OWNER (v9 IN-69, `CLAUDE.md` §8) -- `cast.loyalty` (a person against his
+    faction's role template, mapped onto `0..100`) and `world_q.attention_key` (a person against an
+    organization's expected vector, ordering the ambition he answers first) both call it: the FORMULA has
+    one owner. The INPUTS differ by design -- `loyalty` reads the registry row's raw pursuits at
+    world-gen, salience reads `person_q.crisis_weights` (scars, IN-71's doctrine scaling) at read time.
+
+    `+1` is the same direction, `0` is orthogonal (neither is about anything the other holds), `-1` is
+    opposed. `None` when either side projects to the zero vector: a map with no ethics has no direction
+    to compare, and `None` is the refusal rather than a default of `0`, which would be a claim of
+    indifference. Each caller decides what an absent reading means for it.
+
+    ⚠ IT PROJECTS FIRST (`data/cast.py::loyalty` records why): two maps can share no pursuit name and
+    still point the same way ethically, and the cosine over the fifteen names would score them `0`.
+    ⚠ IT LIVES HERE, NOT IN `person_q`, BECAUSE IT TAKES WEIGHTS: `data/` imports no `queries/`
+    module and `cast.loyalty` holds a registry row, not a Person. (Named for what it computes: `decision/`
+    has a verb-axis table called `alignment`, a different quantity.)"""
+    return pursuit_cosine_axes(to_axes(weights_a), to_axes(weights_b))

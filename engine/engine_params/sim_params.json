@@ -3,14 +3,14 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 116,
-    "total": 274,
-    "uncited": 158,
+    "total": 277,
+    "uncited": 161,
     "of_which_assumption_grade": 3
   },
-  "count": 274,
+  "count": 277,
   "by_module": {
     "engine.dice_engine": 6,
-    "engine.season": 13,
+    "engine.season": 16,
     "mass_battle": 151,
     "characters": 5,
     "combat": 12,
@@ -109,6 +109,20 @@
       "citation_grade": "source"
     },
     {
+      "key": "engine.season._STANCE_SIGNS",
+      "name": "_STANCE_SIGNS",
+      "value": [
+        -1,
+        1
+      ],
+      "kind": "vector",
+      "module": "engine.season",
+      "file": "engine/season/data/goals.py",
+      "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
       "key": "engine.season.Z_THRESHOLD",
       "name": "Z_THRESHOLD",
       "value": 1.96,
@@ -138,6 +152,28 @@
       "module": "engine.season",
       "file": "engine/season/harness/corpus_run.py",
       "note": "the corpus asks for up to 16; the flood (`W6`) makes that unaffordable",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.COSINE_HIGH",
+      "name": "COSINE_HIGH",
+      "value": 0.99,
+      "kind": "scalar",
+      "module": "engine.season",
+      "file": "engine/season/harness/decision_spread.py",
+      "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.EPS",
+      "name": "EPS",
+      "value": 1e-09,
+      "kind": "scalar",
+      "module": "engine.season",
+      "file": "engine/season/harness/decision_spread.py",
+      "note": "",
       "citation": null,
       "citation_grade": null
     },

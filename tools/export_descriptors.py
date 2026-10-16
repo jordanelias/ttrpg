@@ -32,6 +32,11 @@ so a silent addition fails as loudly as an unauthorised deletion. ⚠ AND THE EM
 EVIDENCE THE REGISTER IS COMPLETE — it was empty for three weeks while `fac.intel` was
 outstanding. The pin catches what enters this block; nothing catches what never reaches it.
 
+THE AFFILIATION ROSTER CARRIES ITS `concerns` (v9 IN-64, ED-IN-0293 (2)): the grouping of members
+under the Church, Einhir and Altonia that `engine/season/data/cast.py::conviction_of` refuses a cast
+row against. It was comments only in the registry until then; a set the loader typed for itself would
+have been a fact out of code's reach. Validated in `_affiliation_concerns`, emitted beside `names`.
+
 THE FACTION BLOCK IS GONE (29b, `ID-13`): this tool no longer cooks `faction_stats` or a field map, and
 `engine/substrate/descriptors.py` no longer exposes a faction roster check.
 
@@ -147,7 +152,36 @@ def _affiliation_roster(reg):
                          f'fixed-point int, and full intensity is the ceiling.')
     return {'source': block.get('source'), 'count': len(names),
             'scale': {'floor': lo, 'ceiling': hi},
-            'player_sees': block.get('player_sees'), 'names': names}
+            'player_sees': block.get('player_sees'), 'names': names,
+            'concerns': _affiliation_concerns(block, names)}
+
+
+def _affiliation_concerns(block, names):
+    """`affiliation_roster.concerns` -- `{concern: [member, ...]}` (v9 IN-64, ED-IN-0293 (2)): the
+    things every cast row must hold a conviction concerning, each filed with the members that speak
+    to it. Validated here, once: a non-empty mapping, each concern a non-empty list of ROSTERED
+    names, no member filed under two concerns (a holding cannot satisfy two at once by accident).
+    A member under no concern is legal (`thread_truth`)."""
+    raw = block.get('concerns')
+    if not isinstance(raw, dict) or not raw:
+        raise SystemExit('descriptor_registry.yaml: affiliation_roster.concerns is missing or not a '
+                         'mapping. It is the one statement of which members answer which concern; '
+                         'the cast loader refuses a row against it.')
+    out, filed = {}, {}
+    for concern, members in raw.items():
+        if not isinstance(members, list) or not members:
+            raise SystemExit(f'descriptor_registry.yaml: affiliation_roster.concerns.{concern} '
+                             f'is not a non-empty list of members.')
+        for m in members:
+            if m not in names:
+                raise SystemExit(f'descriptor_registry.yaml: affiliation_roster.concerns.{concern} '
+                                 f'names {m!r}, which is not on affiliation_roster.names.')
+            if m in filed:
+                raise SystemExit(f'descriptor_registry.yaml: affiliation_roster.concerns files '
+                                 f'{m!r} under both {filed[m]!r} and {concern!r}.')
+            filed[m] = concern
+        out[str(concern)] = list(members)
+    return out
 
 
 def build():

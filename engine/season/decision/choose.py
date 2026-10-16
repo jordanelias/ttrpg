@@ -106,6 +106,51 @@ def _stance_arm(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict]) -
     return -r if row is not None and subject_is_opponent(row) else r
 
 
+# IN-62: the keys under which `make_chooser` hoists a deliberation's candidate-independent factors
+# into the `memo` `score_terms` reads. TUPLES, because `_stance_arm` keys the same dict by subject id
+# (a string), so no subject can collide with one of these.
+_AXIS_W, _DAMP, _URGENCY = ("axis_w",), ("damp",), ("urgency",)
+
+
+def deliberation_memo(p: Person, subsistence: float, fx: "Fixtures") -> dict:
+    """The `memo` `score_terms` reads, built the way `make_chooser` builds it for one deliberation:
+    the projected axis weights (with the swept `scar_weight_shift`), the `confliction` damp (the
+    swept `confliction_weight`, H-188) and the urgency term, hoisted once because none depends on
+    the candidate. Exists so a reading that scores a person outside `choose` (`harness/
+    decision_spread.py`) takes the SAME three factors from the same arms rather than copying them."""
+    k = float(fx.get("confliction_weight"))
+    if not k >= 0:                   # `not >=`, so a NaN is refused too
+        raise ValueError(f"confliction_weight {k} is not >= 0: it would invert, divide by zero "
+                         f"or poison the score (H-188)")
+    return {_AXIS_W: project(p, fx.get("scar_weight_shift")),
+            _DAMP: 1.0 if k == 0 else 1.0 / (1.0 + k * confliction(p)),
+            _URGENCY: urgency(subsistence, fx)}
+
+
+def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict) -> tuple:
+    """§F2's score, term by term: `(pursuit, stance, urgency)`, and `score(c)` is their sum (IN-62).
+    The ONE owner of the formula (`CLAUDE.md` §8): `make_chooser`'s `score` calls this and adds, and
+    a reading that wants to know WHICH TERM decided a ranking calls this and never re-derives one.
+
+      * `pursuit` -- `damp * Σ_axis axis_w[axis] * align(c.verb, axis)`, `axis_w` the person's
+        projected pursuits and `damp` the `confliction_weight` arm's factor (exactly 1.0 at 0);
+      * `stance` -- `stance_term(p, c, fx, memo)`, by `Fixtures.stance_polarity`, at gain `1 + g`;
+      * `urgency` -- `urgency(subsistence, fx)`, identical for every candidate (`urgency`'s docstring).
+
+    `memo` is a `deliberation_memo(...)` (it also caches `regard` per subject for the call). A memo
+    without the three hoisted factors is refused, not defaulted: a missing factor read as 0 or 1
+    would score a different person than the one asked about."""
+    try:
+        axis_w, damp, u = memo[_AXIS_W], memo[_DAMP], memo[_URGENCY]
+    except KeyError:
+        raise ValueError("score_terms needs a memo from `deliberation_memo(p, subsistence, fx)` "
+                         "(or `make_chooser`'s): the pursuit weights, damp and urgency are "
+                         "hoisted per deliberation") from None
+    return (damp * sum(axis_w[ax] * align(c.verb, ax) for ax in PURSUIT_AXES),
+            stance_term(p, c, fx, memo),
+            u)
+
+
 def beneficiary_of(p: Person, c: Candidate) -> Optional[str]:
     """WHO THIS CANDIDATE IS TAKEN FOR THE GOOD OF -- the verb's declared `beneficiary:` column,
     resolved against the carriers THIS Candidate holds. `CAT-2`, phase-6 item `6d`.
@@ -345,6 +390,20 @@ def _sample_order(ranked: list, score, p: Person, fx: "Fixtures", draw) -> list:
     return [t[3] for t in keyed]
 
 
+def sample_order(ranked: list, score, p: Person, fx: "Fixtures", draw) -> list:
+    """`_sample_order` under a public name for `harness/decision_spread.attribute_top` (a call, not an
+    alias: tests rebind `_sample_order` to observe the chooser, and the rebind must reach both)."""
+    return _sample_order(ranked, score, p, fx, draw)
+
+
+def score_order(cands: list, scores: dict) -> list:
+    """`cands` ranked by score descending, ties by `(verb, subject)` -- THE ONE OWNER of the chooser's
+    deterministic ordering (`make_chooser` and `harness/decision_spread.attribute_top` both call it).
+    `scores` maps `id(c)` -> score; keyed on `id(c)` because a Candidate is not guaranteed hashable and
+    `(verb, subject)` is not guaranteed unique, safe because `cands` holds every Candidate alive."""
+    return sorted(cands, key=lambda c: (-scores[id(c)], c.verb, c.subject or ""))
+
+
 def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
                  verbs: Optional[frozenset] = None,
                  draw: Optional[Callable[[str, str], Any]] = None) -> Callable[..., list[Act]]:
@@ -378,32 +437,20 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
         cands = opening_set(p, v, q, fx)
         if verbs is not None:
             cands = [c for c in cands if c.verb in verbs]
-        u = urgency(s.subsistence, fx)
-        # `U3`: the person's convictions are weights over the THIRTEEN, so they are projected
-        # into the four-axis basis once per deliberation rather than looked up per candidate.
-        # Hoisted out of `score` deliberately: it does not depend on `c`, and computing it inside
-        # would run it once per candidate for an identical answer.
-        # IN-08 H9: a pursuit whose scar count has reached threshold 2 is read at a shifted weight
-        # (`person_q.crisis_weights`), by the swept `scar_weight_shift` arm; 0 is the control.
-        axis_w = project(p, fx.get("scar_weight_shift"))
-        # IN-08 6f: the derived `confliction` Query's caller (ID-13). A person whose religious
-        # affiliations strain against each other reads the pursuit dot at `1 / (1 + k * strain)`,
-        # `k` the swept `confliction_weight` arm (H-188) [ASSUMPTION: no source states how strain
-        # enters the score; damping the pursuit pull, never inverting it, is the narrowest form
-        # that names no entity]. At the shipped control `k = 0` the factor is exactly 1.0, so the
-        # dot is the unmodified one. Hoisted like `axis_w`: it does not depend on `c`.
-        k = float(fx.get("confliction_weight"))
-        if not k >= 0:               # `not >=`, so a NaN is refused too
-            raise ValueError(f"confliction_weight {k} is not >= 0: it would invert, divide by zero "
-                             f"or poison the score (H-188)")
-        damp = 1.0 if k == 0 else 1.0 / (1.0 + k * confliction(p))
+        # `U3`: the person's convictions are weights over the THIRTEEN, so they are projected into
+        # the four-axis basis once per deliberation; IN-08 H9's `scar_weight_shift` and IN-08 6f's
+        # `confliction` damp (`confliction_weight`, H-188; damping the pursuit pull, never
+        # inverting it [ASSUMPTION: no source states how strain enters the score]) and the urgency
+        # term are hoisted the same way. None depends on `c`; `deliberation_memo` is their owner.
         # v9 IN-18 `G2`: term 2 by the role the subject plays (`stance_term`; `legacy` is the
-        # pre-G2 `stance_toward(p, c.subject)`). `memo` holds one regard per subject per call.
-        memo: dict = {}
+        # pre-G2 `stance_toward(p, c.subject)`). `memo` holds one regard per subject per call, and
+        # the three hoisted per-deliberation factors under tuple keys (`score_terms`).
+        memo: dict = deliberation_memo(p, s.subsistence, fx)
         def score(c: Candidate) -> float:
-            return (damp * sum(axis_w[ax] * align(c.verb, ax) for ax in PURSUIT_AXES)
-                    + stance_term(p, c, fx, memo)
-                    + u)
+            # IN-62: the terms have ONE owner, `score_terms`; the score is their left-to-right sum,
+            # the exact float expression this closure held before (`(pursuit + stance) + u`).
+            pursuit, stance, urg = score_terms(p, c, fx, memo)
+            return pursuit + stance + urg
         # ⚠ SCORED ONCE, NOT TWICE. `score` was passed to `_sample_order` and re-invoked there for
         # every candidate it had just been invoked for in this sort key — measured by a `/simplify`
         # profile as `align()` running 637,324 times for 78,858 candidates across a 143-case corpus
@@ -411,7 +458,7 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
         # `c` given the closure), so this is the same ranking computed half as often, not a
         # different one.
         _scores = {id(c): score(c) for c in cands}
-        ranked = sorted(cands, key=lambda c: (-_scores[id(c)], c.verb, c.subject or ""))
+        ranked = score_order(cands, _scores)
         # ⚠ KEYED ON `id(c)` AND THAT IS SAFE HERE, NARROWLY: `cands` holds every Candidate alive
         # for the whole of this call, so no id can be recycled underneath the dict. A Candidate is
         # not guaranteed hashable and `(verb, subject)` is not guaranteed unique, so neither is a
