@@ -112,7 +112,8 @@ def test_in50_route_4_party_gap_refusal_cites_the_occasion():
     w, d, occ = _world_with_occasion()
     # RE-PINNED AT v9 IN-13: an unheld settlement (`set_s_037`) now ARRIVES (`Unopposed`), so the
     # party gap is reached by H-149's route instead -- a HEARTH target musters an empty army
-    # (`sides_of`: `claimants=[]`), the wrapper reports PARTY-GAP and `_party_gap_refusal` emits
+    # (`sides_of`: `claimants=[]`), `_contest`'s empty-`_parties` check (BEFORE the provider is
+    # reached) answers PARTY-GAP and `_party_gap_refusal` emits
     # (test_march.py, `test_a_march_on_a_non_settlement_rung_refuses_h149_is_enforced`).
     a = Act(id="a_march", actor=ACTOR, verb="march", payload={"subject": "b_s_014_barracks"},
             via="off_npc_033", scene=SCENE)

@@ -6,15 +6,17 @@ the control that stops it passing vacuously:
      RESOLVE (declares, writes nothing), then at ENCOUNTER (fights, writes on the LOSING side
      only) -- proven against `build_realm`'s own fixture, with both a cross-faction LOST
      scenario (the attacker's own army takes the casualties) and an UNOPPOSED one (nobody
-     mustered to defend; no casualties on either side).
+     mustered to defend; no casualties on either side; since v9 IN-13 the army ARRIVES).
   2. THE WINNING SIDE IS NEVER WRITTEN, on either band -- Jordan's ruling on clause (b) is silent
      on the winner, and this is the falsifying check that it stays silent in the code too, not
      merely in the docstring.
   3. THE STANCE ROWS' SIGN AND TARGET: a grudge against the WINNING faction, a morale hit against
      the LOSER'S OWN faction, both at the fixed valence `-1.0` (`stance_from_loyalty`'s own
      shape) and the swept weight (`field_morale_weight`/`field_grudge_weight`, `H-148`).
-  4. `Declared` AND `Unopposed` WRITE NOTHING -- `_eff_march` returns `NO_CHANGE` for both,
-     checked directly rather than inferred from the verb row's empty `writes:` cells.
+  4. `Declared` WRITES NOTHING, and `Unopposed` WRITES NO CASUALTY OR STANCE -- `_eff_march` returns
+     `NO_CHANGE` for `Declared` and for an `Unopposed` carrying no claimants, checked directly rather
+     than inferred from the verb row's `writes:` cells. (Before v9 IN-13 `Unopposed` wrote nothing at
+     all; it now writes the ARRIVAL, `test_declared_is_no_change_and_unopposed_changes_only_with_...`.)
   5. THE THREE `field_casualty_model` ARMS DIFFER, and `none`'s control isolates the write from
      the band exactly as `wound_harm_model`'s own `none` arm does.
   6. A CHOOSER-FORMED DECISION, NOT A HAND-BUILT `Act` -- plan position `28-ii` (M6, successor
@@ -163,6 +165,11 @@ def test_an_unopposed_march_arrives_and_writes_no_casualty_or_stance():
         assert list(w.persons[pid].stance or []) == before_stance[pid], (
             f"{pid} gained a stance row from an unopposed march")
         assert w.persons[pid].travel_leg[-1] == "set_s_003", "the journey's leg was not laid"
+    # ONE LEG PER MOVER: the leg id keys on the mover (`_relocate`), so two claimants moved by one act
+    # get two distinct edges, not one id minted twice.
+    legs = [t.id for t in w.tenures
+            if t.kind == "contain" and t.object == "set_s_003" and t.live and t.subject in attackers]
+    assert len(attackers) >= 2 and len(legs) == len(attackers) == len(set(legs)), legs
 
 
 def test_a_march_on_a_non_settlement_rung_refuses_h149_is_enforced():
@@ -214,8 +221,10 @@ def test_a_march_on_an_unheld_settlement_arrives_rather_than_crashing_the_season
     `sides_of`'s `subject=None` into `mass_battle.py::resolve()`, which reports that shape as
     `status="PARTY-GAP"` -- and `seam/contest.py` raised an uncaught `Unspecified` for ANY
     non-RESOLVED status, crashing `encounter()` and the whole season. `loop/resolve.py::_contest`
-    now catches `Unspecified(needs="PARTY-GAP")` around the `contest()` call and folds it as a
-    graceful refusal, the same shape the pre-existing empty-`_parties` check already produced.
+    then caught `Unspecified(needs="PARTY-GAP")` around the `contest()` call and folded it as a
+    graceful refusal, the same shape the empty-`_parties` check produces. ⚠ SINCE v9 IN-13 an unheld
+    target no longer reaches that catch at all (`mass_battle.py` answers `subject = None`
+    `Unopposed`); the catch stays for the other wrappers' missing parties.
 
     ⚠ `set_s_037`, NOT `r_valoria` (M4 review pass, second correctional finding). The first
     writing of this test used `r_valoria`, the campaign root -- kind `realm`, not `settlement`.
@@ -248,7 +257,8 @@ def test_a_won_field_writes_casualties_and_stance_on_the_defender_only():
     directly: the 6-attacker/2-defender REVERSE of the scenario below still resolved `Lost`.
     Rather than guess at a fixture combination the engine's own scale limitation may make
     impossible, this constructs the `Resolution` directly, the same technique
-    `test_declared_and_unopposed_are_no_change_directly` already uses for the other two bands --
+    `test_declared_is_no_change_and_unopposed_changes_only_with_claimants_in_the_resolution` uses for
+    the other two bands --
     `_eff_march`'s own logic does not care where a `Resolution` came from, only what `res.degree`
     and `res.result` say."""
     w = build_realm(0)
@@ -475,6 +485,7 @@ def test_a_real_fold_reads_the_targets_fortification_on_the_battle_path(monkeypa
 
 from types import SimpleNamespace
 
+from engine.season.data.rosters import faction_prop_id
 from engine.season.queries import person_q as PQ
 from engine.season.state import gate as G
 from engine.season.state.carriers import Person, Rung, Tenure
@@ -548,6 +559,30 @@ def test_in13_exit_i_won_through_the_gate_leaves_the_claimants_mustered_at_the_t
         "`scaled_by_degree` floors at 1: a won field removes no defender")
 
 
+def test_in13_exit_i_a_won_whose_army_already_stands_there_fells_without_an_arrival():
+    """EXIT (i), the `Won` arm with NOBODY TO MOVE: the claimants already stand under the target
+    (`p_npc_037`, the Crown member housed in the cathedral at `set_s_036`), so the band moves no one and
+    the losers (the defenders) are touched -- `field.won` is published and `army.arrived` is NOT (a band
+    that moved nobody earns its own kind alone, `_eff_march`'s `loser_earns`). A CONSTRUCTED `Resolution`
+    through the real fold (`Won` is unreachable at fixture scale), the gate real."""
+    w = build_realm(0)
+    claimants = ["p_npc_037"]
+    assert world_q.mustered(w, "set_s_036", CROWN) == claimants, "fixture moved: re-read it"
+    defenders = world_q.mustered(w, "set_s_036", CHURCH)
+    before = {pid: w.persons[pid].body for pid in defenders}
+    res = Resolution("Won", {"parties": {"claimants": claimants, "subject_members": defenders},
+                             "result": {"attacker_size_pct": 1.0, "defender_size_pct": 0.5}})
+    d = SeasonDriver(w)
+    w.step = Step.ENCOUNTER
+    w.frozen = False
+    kinds = [(e.kind, e.degree) for e in d._fold(w, mint_token(w, WriteClass.ACTS),
+                                                 _march_act("p_npc_033", "set_s_036", "off_npc_033"), res)]
+    assert ("field.won", "Won") in kinds, kinds
+    assert not any(k == "army.arrived" for k, _ in kinds), kinds
+    assert any(w.persons[pid].body < before[pid] for pid in defenders), "no defender was touched"
+    assert world_q.mustered(w, "set_s_036", CROWN) == claimants
+
+
 def test_in13_exit_i_lost_leaves_the_claimants_at_their_origin_r7():
     """EXIT (i), the `Lost` arm, PINNING #453 R-7 [ASSUMPTION; medium; Jordan to correct; revert:
     Jordan states that a routed army arrives, and this arm is re-pinned]: a real `field.lost` at
@@ -566,7 +601,7 @@ def test_in13_exit_i_lost_leaves_the_claimants_at_their_origin_r7():
 def test_in13_exit_ii_h151_a_march_on_ones_own_occupied_settlement_is_unopposed():
     """H-151's FALSIFIER (`hole_register.yaml`, its `cite:`), EXPECTED OUTCOME `field.unopposed`: a
     constructed `Question` naming `set_s_001`, held by the actor's OWN faction with that faction's people
-    present (five Crown) as its only defenders; the march is formed and packed by the REAL chooser and
+    present (at least two Crown) as its only defenders; the march is formed and packed by the REAL chooser and
     folded -- and it fights nobody: `field.unopposed`, the army arrives, and the Crown already there is
     untouched. Before IN-13 it fought the faction against itself."""
     w = build_realm(0)
@@ -635,6 +670,11 @@ def test_in13_the_muster_basis_admits_a_member_and_refuses_everyone_else():
     assert G.may_muster(w, "p_npc_033", "off_npc_033", "p_npc_035")
     _rehome(w, "p_npc_033", "off_npc_033", "p_npc_035", "set_s_003")
     assert world_q.mustered(w, "set_s_003", CROWN) == ["p_npc_035"]
+    # CONTROL for the "no `dispatch` grant" row below: `p_npc_036` is committed to the very faction
+    # `off_npc_008` belongs to, so the grant is the ONLY thing that row changes (actor, seat and subject
+    # move together, and would otherwise confound it with a faction mismatch).
+    assert (world_q.faction_holding(w, "p_npc_036")
+            == faction_prop_id(w.offices["off_npc_008"].faction) == CROWN)
     checked = 0
     for actor, via, pid, why in (("p_npc_033", "off_npc_033", "p_npc_013", "not a Crown member"),
                                  ("p_npc_008", "off_npc_008", "p_npc_036", "no `dispatch` grant"),
@@ -648,6 +688,45 @@ def test_in13_the_muster_basis_admits_a_member_and_refuses_everyone_else():
             raise AssertionError(f"re-homed {pid} with {why}")
         assert world_q.home_of(w).get(pid) == before, f"the store was not put back ({why})"
     assert checked == 3
+
+    # The basis admits a RE-HOME and no other shape of `contain` write by the same seat for the same
+    # member (`rehomed`: at least one closure and exactly one opening). Each is the muster-licensed
+    # actor, seat and subject of the admitting row above, one change: (a) a PURE CLOSURE (an eviction
+    # with no destination), (b) an OPENING with no closure beside it (a presence with nothing re-homed).
+    def _gate_contain(pid, perform):
+        w.step = Step.ENCOUNTER
+        w.frozen = False
+        return w.write("travel_leg", mint_token(w, WriteClass.ACTS), None, record_kind="Person",
+                       fieldname="travel_leg", driver="Act", actor="p_npc_033", via="off_npc_033",
+                       change=G.Change((G.Subject.entity("persons", pid),), perform))
+
+    def _close(pid):
+        for t in w.tenures:
+            if t.subject == pid and t.kind == "contain" and t.live:
+                t.until = w.tick
+
+    pid = "p_npc_035"
+    assert G.may_muster(w, "p_npc_033", "off_npc_033", pid)
+    before = [(t.id, t.until) for t in w.tenures if t.subject == pid and t.kind == "contain"]
+    try:
+        _gate_contain(pid, lambda: _close(pid))
+    except G.NotYours:
+        pass
+    else:
+        raise AssertionError("a pure closure of a member's `contain` was admitted as a muster")
+    assert [(t.id, t.until) for t in w.tenures if t.subject == pid and t.kind == "contain"] == before, (
+        "the refused closure was not put back")
+    _close(pid)                              # outside any write: the member now has NO live presence
+    live_before = [t.id for t in w.tenures if t.subject == pid and t.kind == "contain"]
+    try:
+        _gate_contain(pid, lambda: w.add_tenure(Tenure("t_in13_open_only", pid, "set_s_003", "contain",
+                                                       w.tick)))
+    except G.NotYours:
+        pass
+    else:
+        raise AssertionError("an opening with no closure was admitted as a muster")
+    assert [t.id for t in w.tenures if t.subject == pid and t.kind == "contain"] == live_before, (
+        "the refused opening was not put back")
 
 
 # ---- EXITS (vi), (vii) -- `seize` widened to a Rung, licensed by occupation ---------------------------
@@ -667,11 +746,67 @@ def test_in13_exit_vi_seize_on_an_occupied_settlement_flips_its_holder():
     kinds = [e.kind for e in _fold_one(w, _march_act("p_npc_033", "set_s_016", "off_npc_033"))]
     assert "army.arrived" in kinds, kinds
     assert world_q.holder_faction_of(w, "set_s_016") == "fac_hafenmark", "an arrival wrote a title (R-6)"
+    # CONTROLS, each one change from the admitted seizure below (the Crown stands at the same place,
+    # the same seat and actor), each pinning an arm of `_seize_rung`'s decline: the territory above the
+    # occupied town (the Crown is mustered under it too, and Hafenmark holds it -- only the KIND test
+    # refuses), and a Crown-held town of the seizer's own faction (nothing to take). Each is refused at
+    # the `write` clause and moves no title.
+    assert world_q.mustered(w, "terr_T7", CROWN), "fixture: the Crown stands under the territory"
+    assert w.rungs["terr_T7"].kind == "territory"
+    assert world_q.holder_faction_of(w, "set_s_002") == CROWN
+    for refused in ("terr_T7", "set_s_002"):
+        assert [e.kind for e in _resolve_one(w, _seize_act(refused, act_id=f"zc_{refused}"))] == [
+            "seize.refused"], refused
+    assert world_q.holder_faction_of(w, "terr_T7") == "fac_hafenmark", "the territory changed hands"
+    assert world_q.holder_faction_of(w, "set_s_002") == CROWN
     out = _resolve_one(w, _seize_act("set_s_016"))
     assert [e.kind for e in out] == ["rung.seized"], [e.kind for e in out]
     assert world_q.holder_faction_of(w, "set_s_016") == CROWN
     assert world_q.hold_force(w, "set_s_016").subject == "p_npc_020"
     assert world_q.holder_faction_of(w, "terr_T7") == "fac_hafenmark", "the territory changed hands"
+
+
+def test_in13_exit_vi_control_an_occupied_unheld_settlement_is_nobodys_to_seize():
+    """EXIT (vi)'s third decline (`holder is None`: H-166, who holds an unheld place is unruled), asked of
+    the EFFECT: at seed 0 no seat's purview reaches `set_s_037`, so the fold refuses the act earlier
+    (`seize.unauthorized`, the `authority` conjunct) and the arm is unobservable through it. The Crown
+    marches on and occupies it (`army.arrived`, `mustered` there), the effect declines (`NO_CHANGE`);
+    CONTROL, one change (the town is Hafenmark-held, `set_s_016`, occupied the same way): the same
+    effect, actor and seat returns a `Change`, so the decline is the unheld arm's and not the occupation's."""
+    unheld, held = build_realm(0), build_realm(0)
+    assert world_q.holder_faction_of(unheld, "set_s_037") is None
+    for w, town in ((unheld, "set_s_037"), (held, "set_s_016")):
+        kinds = [e.kind for e in _fold_one(w, _march_act("p_npc_033", town, "off_npc_033"))]
+        assert "army.arrived" in kinds, kinds
+        assert world_q.mustered(w, town, CROWN), "the Crown does not stand there"
+    assert EFFECTS["seize"](held, _seize_act("set_s_016")) is not NO_CHANGE
+    assert EFFECTS["seize"](unheld, _seize_act("set_s_037")) is NO_CHANGE
+
+
+def test_in13_exit_vi_control_a_seat_holder_committed_to_another_faction_takes_nothing():
+    """`_seize_rung`'s fourth decline [ASSUMPTION; medium]: the title it writes is the ACTOR'S OWN hold,
+    read back as `faction_holding(actor)`. `p_npc_020` sits in the Crown seat `off_npc_020` and the Crown
+    occupies `set_s_016` (exit (vi)'s path), but his `commit` is moved to Hafenmark: the effect declines
+    and the act is refused with the holder unmoved. CONTROL, one change (his commit left on the Crown):
+    the same act is `rung.seized`."""
+    def occupied(commit_to):
+        w = build_realm(0)
+        kinds = [e.kind for e in _fold_one(w, _march_act("p_npc_033", "set_s_016", "off_npc_033"))]
+        assert "army.arrived" in kinds, kinds
+        if commit_to != CROWN:
+            for t in w.persons["p_npc_020"].tenures:
+                if t.kind == "commit" and t.object == CROWN and t.live:
+                    t.until = w.tick
+            w.add_tenure(Tenure("t_in13_020_commit", "p_npc_020", commit_to, "commit", w.tick))
+        assert world_q.faction_holding(w, "p_npc_020") == commit_to
+        assert w.offices["off_npc_020"].faction == "Crown" and G.may_seize(
+            w, "p_npc_020", "off_npc_020", "p_npc_050", "set_s_016")
+        return w
+    w = occupied("fac_hafenmark")
+    assert [e.kind for e in _resolve_one(w, _seize_act("set_s_016"))] == ["seize.refused"]
+    assert world_q.holder_faction_of(w, "set_s_016") == "fac_hafenmark"
+    w = occupied(CROWN)
+    assert [e.kind for e in _resolve_one(w, _seize_act("set_s_016"))] == ["rung.seized"]
 
 
 def test_in13_a_retaking_closes_the_seizers_hold_under_the_seizure_basis(monkeypatch):
@@ -723,6 +858,21 @@ def test_in13_exit_vii_an_opposed_won_removes_no_defender_and_the_seizure_is_adm
              for e in _fold_one(w, _march_act("p_npc_033", "set_s_036", "off_npc_033"))]
     assert ("field.won", "Won") in kinds and ("army.arrived", "Won") in kinds, kinds
     assert world_q.mustered(w, "set_s_036", CHURCH) == defenders, "a won field removed a defender"
+    assert [e.kind for e in _resolve_one(w, _seize_act("set_s_036"))] == ["rung.seized"]
+    assert world_q.holder_faction_of(w, "set_s_036") == CROWN
+
+
+def test_in13_h212_a_resident_occupies_the_church_seat_at_seed_0_with_no_field_fought():
+    """H-212's cite, EXECUTED rather than inspected: on an UNMODIFIED `build_realm(0)` (no
+    `_no_resident_crown` edit) the Crown is already `mustered` at the Church's `set_s_036` through its
+    resident `p_npc_037`, so the Crown seat granted `issue` whose purview reaches the town (`off_npc_020`,
+    the realm) seizes it with no march and no field. CONTROL, one change (the resident re-housed away, the
+    fixture edit the exits above use): the same act is refused."""
+    w = build_realm(0)
+    assert world_q.mustered(w, "set_s_036", CROWN) == ["p_npc_037"]
+    assert world_q.holder_faction_of(w, "set_s_036") == CHURCH
+    ctrl = _no_resident_crown(build_realm(0))
+    assert [e.kind for e in _resolve_one(ctrl, _seize_act("set_s_036"))] == ["seize.refused"]
     assert [e.kind for e in _resolve_one(w, _seize_act("set_s_036"))] == ["rung.seized"]
     assert world_q.holder_faction_of(w, "set_s_036") == CROWN
 

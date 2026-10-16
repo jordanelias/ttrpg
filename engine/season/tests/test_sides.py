@@ -21,10 +21,12 @@ What each test proves, and the control that stops it passing vacuously:
      (`'Crown'`), not the proposition id `mustered`/`members` key on -- an untested version of
      this module would have shipped an always-empty army silently. `holder_faction_of` needed
      its own correction the same way: `faction_holding` takes a PERSON (the holder), not a rung,
-     and a settlement is never itself the object of a `hold` in this corpus.
-  4. AN UNHELD TARGET (`r_valoria`, the realm root -- nothing holds a realm) gives `subject=None`
-     for a REAL reason, not a bug indistinguishable from one: contrasted against test 3's real
-     holder at a real settlement.
+     and a settlement is the object of a `hold` only after a `seize` (v9 IN-13), never in the seeded corpus.
+  4. AN UNHELD TARGET gives `subject=None` for a REAL reason, not a bug indistinguishable from one:
+     contrasted against test 3's real holder at a real settlement. Since v9 IN-13 `None` means ONE
+     thing (no opposing holder) and the two unheld shapes part on the ARMY: an unheld SETTLEMENT
+     (`set_s_037`) musters a real army against no defender, while a NON-settlement rung (`r_valoria`,
+     the realm root, nothing holds a realm) musters `claimants == []` (H-149's refusal).
   5. AN ACTOR WITH NO SEAT MUSTERS AN EMPTY ARMY -- never raises. `contest()`'s own PARTY-GAP
      discipline is the caller's to apply downstream.
 """
@@ -97,8 +99,8 @@ def test_mass_battle_branch_derives_a_real_army_and_a_real_defender():
 
 
 def test_holder_faction_of_walks_to_the_nearest_held_ancestor():
-    """A settlement is never itself the object of a `hold` in this corpus -- `hold_force`
-    returns `None` for one directly -- so `holder_faction_of` must climb to `set_s_002`'s
+    """No settlement of the seeded corpus is itself the object of a `hold` (a seizure makes one,
+    v9 IN-13) -- `hold_force` returns `None` for one directly -- so `holder_faction_of` must climb to `set_s_002`'s
     containing territory (`terr_T1`) before it finds a holder. Asserted at both ends: the
     settlement's own `hold_force` is empty, and the walk still resolves."""
     w = build_realm(0)
@@ -109,7 +111,8 @@ def test_holder_faction_of_walks_to_the_nearest_held_ancestor():
 def test_an_unheld_target_gives_no_defending_faction():
     """`r_valoria`, the realm root: nothing holds a realm. Contrasted with the real holder in
     the test above, so `None` here is checked against a case that DOES resolve, not merely
-    asserted in isolation."""
+    asserted in isolation. A realm is no settlement, so this passes through the NON-settlement
+    branch (H-149's refusal: an empty army); the unheld SETTLEMENT is the next test."""
     w = build_realm(0)
     assert world_q.holder_faction_of(w, "r_valoria") is None
     a = Act(id="a1", actor="p_npc_033", verb="march", payload={"subject": "r_valoria"},
@@ -117,6 +120,23 @@ def test_an_unheld_target_gives_no_defending_faction():
     claimants, subject, rung = sides_of(w, a, "r_valoria", "a field")
     assert subject is None
     assert rung == "r_valoria"
+
+
+def test_an_unheld_settlement_gives_no_defender_but_a_real_army():
+    """THE CONTRACT v9 IN-13 PINS: `subject is None` with NON-EMPTY claimants means 'no opposing
+    holder' -- the army marches, unopposed. An unheld SETTLEMENT (`set_s_037`) musters the actor's
+    real army. CONTROL, one change (the target's kind): the unheld NON-settlement `r_valoria` musters
+    `claimants == []`, so `subject None` alone cannot tell the two cases apart."""
+    w = build_realm(0)
+    assert w.rungs["set_s_037"].kind == "settlement"
+    assert world_q.holder_faction_of(w, "set_s_037") is None
+    a = Act(id="a1", actor="p_npc_033", verb="march", payload={"subject": "set_s_037"},
+            via="off_npc_033")
+    claimants, subject, rung = sides_of(w, a, "set_s_037", "a field")
+    assert subject is None and rung == "set_s_037"
+    assert claimants and claimants == world_q.mustered(w, "set_s_014", "fac_crown")
+    ctrl, ctrl_subject, _ = sides_of(w, a, "r_valoria", "a field")
+    assert ctrl_subject is None and ctrl == []
 
 
 def test_an_actor_with_no_seat_musters_an_empty_army_not_a_raise():

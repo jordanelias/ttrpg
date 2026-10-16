@@ -56,7 +56,8 @@ def sides_of(w: World, a: Act, target: Optional[str],
       trusts the same value everywhere else it appears (`_eligible`'s `remit:` branch,
       `loop/resolve.py`). `subject` is the DEFENDING faction -- `world_q.holder_faction_of(w,
       target)`, which walks `target`'s own ancestry to the nearest HELD rung (a settlement is
-      never itself the object of a `hold` in this corpus) and reads that holder's faction.
+      the object of a `hold` only after a `seize`, v9 IN-13, so the walk usually climbs to its
+      territory) and reads that holder's faction.
       ⚠ SINCE v9 IN-13 (#453 §9.6): `subject` is `None` when the target's holder IS the actor's
       faction or nobody holds it -- no opposing side, which the provider answers `Unopposed` and
       the effect answers with the army's arrival -- and a target outside `MARCH_TARGET_KINDS`
@@ -101,7 +102,8 @@ def sides_of(w: World, a: Act, target: Optional[str],
         # form is the second resolver S27.2 refuses), so the kind check has to live where the
         # target's Rung object is already in scope. A non-settlement target musters an EMPTY army
         # (since v9 IN-13; it forced `subject` `None` until then, when `None` also meant an unheld
-        # target and both refused) -- `_contest`'s PARTY-GAP catch (M4) refuses it gracefully, and
+        # target and both refused) -- `_contest`'s own empty-`_parties` check (`loop/resolve.py`,
+        # before the provider is reached) refuses it gracefully as `march.refused`, and
         # an unheld settlement, which IS a legitimate destination, now arrives (`Unopposed`).
         # ⚠ THE KIND CHECK IS INLINE, MARCH-SPECIFIC BUSINESS LOGIC IN A FUNCTION WHOSE OWN
         # CONTRACT IS "DISPATCH BY THE PRIZE'S SUBSYSTEM, NEVER THE VERB" -- disclosed (M4 review
@@ -117,9 +119,10 @@ def sides_of(w: World, a: Act, target: Optional[str],
         # declared-but-unread defect this check exists to close, reintroduced one level down).
         target_kind = w.rungs[target].kind if target is not None and target in w.rungs else None
         # v9 IN-13 (#453 §9.6 code edit (iii), §14.8): H-149's REFUSAL NOW RIDES AN EMPTY ARMY, NOT
-        # `subject = None`. A non-settlement target musters nobody, so the wrapper's existing
-        # empty-`claimants` PARTY-GAP refuses it exactly where it always refused (`_contest`'s catch,
-        # `march.refused`), and `subject = None` comes to mean ONE thing only: no opposing holder.
+        # `subject = None`. A non-settlement target musters nobody, so `_contest`'s empty-`_parties`
+        # PARTY-GAP refusal (`loop/resolve.py`, BEFORE the provider and its `contest()` catch are
+        # reached) answers it as `march.refused`, and `subject = None` comes to mean ONE thing only:
+        # no opposing holder.
         if target is None or target_kind not in MARCH_TARGET_KINDS:
             return ([], None, target or "R")
         # THE STAKE IS DERIVED AT THE DESTINATION, NEVER DECLARED (#453 §9.6 code edit (i), H-151's

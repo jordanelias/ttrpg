@@ -10306,7 +10306,7 @@ def test_wc_the_fold_binds_what_the_person_bound():
     from ..decision.options import WARRANT_SOURCED
     WALK_WARRANT: frozenset = frozenset(WARRANT_SOURCED)
     WALK_EXCLUDES: frozenset = frozenset({"march"}) | WALK_REMIT | WALK_NAMED | WALK_WARRANT
-    cands =[c for c in decision.opening_set(p, v, q, w.fixtures)
+    cands = [c for c in decision.opening_set(p, v, q, w.fixtures)
              if VERB_TABLE[c.verb].requires_typed is not None]
     assert {c.verb for c in cands} == all_typed - WALK_EXCLUDES, (
         f"the walk reached {sorted({c.verb for c in cands})} and the grammar's typed verbs are "
@@ -13700,7 +13700,8 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # resolves `subject` via `faction_q.resolve` -- the R-04/U9 gap this comment used to name).
     # Every prize row now carries a `provider:`, so this loop finds nothing left to refuse BY
     # THIS MECHANISM. That does not mean every call to every prize now succeeds -- `mass_battle`
-    # still refuses a call with no `subject` (PARTY-GAP, not "nothing connects the seam to it") --
+    # still refuses a call with no claimants or no rung (PARTY-GAP, not "nothing connects the seam to it";
+    # since v9 IN-13 a missing `subject` is `Unopposed`, no longer a gap) --
     # only that "unwired by the roster" is no longer how any of the four fails. See
     # `test_mass_battle_provider.py` for that provider's own coverage; this loop's job is narrower
     # than re-testing it -- keeping THIS set-equality honest as the roster changes under it.

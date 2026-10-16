@@ -7,7 +7,8 @@ combat engine determines the result there. your code just has to accept the resu
 combat's `fight` and mass battle's `march`. `_scar` and `_SCAR_DP` (the moral-layer write on the
 wounded person) are RETIRED at IN-08 H3: the scar is now written by the fold on the act's OBSERVERS
 (`loop/resolve.py::_scar_witnesses`), not by an effect. See `effects_shared.py` for `effect_for`
-and `_operand`, the one cross-file helper `march` calls.
+and `_operand`, the helpers `march` takes from `effects_shared.py`; its arrival also calls
+`effects_migration.py::_relocate`, the journey `move` shares (v9 IN-13).
 """
 
 from __future__ import annotations

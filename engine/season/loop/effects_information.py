@@ -24,7 +24,8 @@ from ..queries import faction_q
 from ..queries.person_q import ABOUT_KEYS
 from ..queries.world_q import (
     BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_PETITION, docketed, docketed_under,
-    faction_of, hold_force, holder_faction_of, mustered, place_of, works_for, works_target,
+    faction_holding, faction_of, hold_force, holder_faction_of, mustered, place_of, works_for,
+    works_target,
 )
 from ..state.carriers import Proposition, Record, Tenure
 from ..state.carriers import DETERMINED_BY
@@ -730,13 +731,13 @@ def _eff_seize(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     nobody holds, moves nothing.
 
     THE GATE: the close is `seizure` (`state/gate.py`), the open is `T-m` (the actor opening a non-seat
-    `hold` for himself). A SEAT IS NEVER SEIZED: the row's `existence` conjunct refuses an Office before
-    this runs, and the gate's `seizure` clause admits only a Record, so a hand-built act that skipped the
-    precondition is `NotYours`, not a taking. ⚠ SINCE v9 IN-13 the row's `existence` conjunct is gone
-    (the object widened to a Rung, `verb_table.yaml`'s `requires_typed_note`): an Office has no place,
-    so the `authority` conjunct refuses it first (`seize.unauthorized`); planted past it, a seat is no
-    Record and no settlement and `_seize_rung` declines it; and the gate still admits neither half on
-    an Office. A subject that is no Record goes to `_seize_rung`, the Rung half.
+    `hold` for himself). A SEAT IS NEVER SEIZED: the gate's `seizure` clause admits only a Record or a
+    Rung, so a hand-built act that skipped the precondition is `NotYours`, not a taking. ⚠ SINCE v9
+    IN-13 the row's `existence` conjunct is gone (the object widened to a Rung, `verb_table.yaml`'s
+    `requires_typed_note`): an Office has no place, so the `authority` conjunct refuses it first
+    (`seize.unauthorized`); planted past it, a seat is no Record and no settlement and `_seize_rung`
+    declines it; and the gate still admits neither half on an Office. A subject that is no Record goes
+    to `_seize_rung`, the Rung half.
 
     G4 -- WHAT IT NAMES: the two edges, the opened one first as `_eff_give` and `_eff_confer` name
     theirs; both earn the Record half's kind, `record.seized` (the Rung half earns `rung.seized`). The receipts name TENURES, not the Record.
@@ -772,6 +773,10 @@ def _seize_rung(w: "World", a: "Act", rid: str) -> Change:
     what the subject is (a Record, or not), and share the gate's `seizure` basis for the closure and
     `T-m` for the opening.
 
+    WHO MAY SEIZE: with no hold on the town, the seat's authority comes only from the fold's precondition
+    (eligibility `remit:issue` via `seat_hold`, plus the `authority` purview conjunct); the Record half
+    calls `may_seize` in the effect, so the gate does not later refuse an act the precondition admitted.
+
     THE LICENCE IS OCCUPATION, read at the effect as `raze`'s will be (#453 §10.4 steps 8 and 11): the
     exercised seat's FACTION (`faction_prop_id` of its display faction) `mustered` at the settlement
     (`world_q.mustered`, the one query of who stands there), the settlement held by ANOTHER faction
@@ -781,21 +786,29 @@ def _seize_rung(w: "World", a: "Act", rid: str) -> Change:
       * the subject is not a Rung of a `march_target_kinds` kind (a seat, a person's own rung, a
         territory, a hearth) [ASSUMPTION; medium; Jordan to correct: occupation is defined at the
         places a march arrives at; revert: any Rung kind, the licence still occupation];
+      * the actor is not committed to the seat's faction (`faction_holding`; the title written is his own
+        hold) [ASSUMPTION; medium; Jordan to correct; revert: drop the decline];
       * the seat's faction is not mustered there (no occupation);
       * nobody holds the settlement (H-166: who holds an unheld place is unruled) or the seat's own
         faction already does (nothing to take);
       * the actor already holds it, or the closure's holder is one the seat may not seize from
         (`may_seize` with the rung as the place, so an act the precondition admitted is never killed
         at the gate).
-    ⚠ NOT FORMED PERSON-SIDE: no deposit names a settlement to a seat as occupied (#453 §9.1:
-    *"for a Rung, hand-built"*), and `rosters.yaml: warrant_sourced` narrows `seize` to warrant-named
-    subjects, so the Rung half executes only on a hand-built act today -- a named residue, not a
-    wiring gap in this effect."""
+    ⚠ THE RUNG HALF'S FORMATION AND EXECUTION LICENCES DIFFER: it forms person-side wherever a held
+    dispensation's `terms` names the rung (`rosters.yaml: warrant_sourced`; `test_season_shape.py` plants
+    one on a hearth), but at the effect it licenses on OCCUPATION, not on the warrant. No computed source
+    of such a warrant has been measured -- a named residue, not a wiring gap in this effect."""
     rung = w.rungs.get(rid)
     office = w.offices.get(a.via)
     if rung is None or rung.kind not in MARCH_TARGET_KINDS or office is None or not office.faction:
         return NO_CHANGE
     mine = faction_prop_id(office.faction)
+    # The title written is the ACTOR'S OWN hold, and a hold coheres under the faction its holder is
+    # committed to (`faction_holding`; `None` for no commit or two): an actor not committed to the seat's
+    # faction would take the town for a faction that is not his [ASSUMPTION; medium; Jordan to correct;
+    # revert: drop the decline].
+    if faction_holding(w, a.actor) != mine:
+        return NO_CHANGE
     holder = holder_faction_of(w, rid)
     if holder is None or holder == mine or not mustered(w, rid, mine):
         return NO_CHANGE

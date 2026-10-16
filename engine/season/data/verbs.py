@@ -473,7 +473,13 @@ def _derive_openers_from_effects() -> dict:
     one file at a time would MISS it the same way a walk confined to `EFFECTS_PY` alone now misses
     everything; the day a shared helper is given a `Tenure(...)` call, this docstring's claim goes
     false and this function must walk `effects_shared.py` from every sibling that reaches it, not
-    only from its own file."""
+    only from its own file.
+
+    ⚠ SINCE v9 IN-13, "NO CROSS-FILE HELPER CONSTRUCTS A TENURE" IS FALSE FOR ONE: `_relocate`
+    (`effects_migration.py`) opens a `contain` Tenure, and `_eff_march` (`effects_combat.py`) opens
+    `contain` through it, a sibling-file import this walk does not follow -- so `march` is absent from
+    `contain`'s opener set (`found`, `migrate`, `move`) though its arrival opens that kind. The walk is
+    UNCHANGED; noted so the claim above is not read as exhaustive."""
     openers: dict = {k: set() for k in TENURE_KINDS}
 
     for path in files.effects_modules():

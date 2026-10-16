@@ -1258,9 +1258,10 @@ def mustered(w: World, rung_id: str, faction: str) -> list[str]:
     """M4 (`ED-IN-0279` clause (a)). This faction's members present in `rung_id`'s subtree --
     settlement plus everything under it, Jordan's ruling on what "present at the target" means
     for a march (planning round 2). `density`'s own composition, one line above, minus the count:
-    person containment never terminates AT a settlement rung -- every person's `contain` targets a
-    `home` building beneath one (`harness/populated.py`) -- so a literal exact-rung read finds
-    nobody home, ever, and the subtree is the only reading that finds anyone at all.
+    person containment seldom terminates AT a settlement rung in the seeded corpus -- every person's
+    `contain` targets a `home` building beneath one (`harness/populated.py`) -- so a literal exact-rung
+    read finds nobody home, and the subtree is the only reading that finds anyone at all. (Since v9
+    IN-13 an ARRIVED army's `contain` DOES terminate at the settlement rung, `_eff_march`'s legs.)
 
     Who a march may draw on at its origin, and who a field battle's defending side draws from at
     its target -- both the same query, the faction and the rung simply swapped. `04 §C.5.1`'s own
@@ -1441,11 +1442,12 @@ def faction_holding(w: World, subject: str) -> "str | None":
 
 def holder_faction_of(w: World, rung_id: str) -> Optional[str]:
     """M4 (`ED-IN-0279` clause (a)). Which faction holds `rung_id` -- the faction Proposition id,
-    or `None` -- read up its own ancestry, since a SETTLEMENT is never itself the object of a
-    `hold` Tenure in this corpus (`hold_force` on one returns `None` always; every live `hold`
-    targets a `territory` or an `Office`). `nearest_store`'s own walk, applied to holding rather
-    than to a larder: the nearest rung AT OR ABOVE `rung_id` that IS held, then `faction_holding`
-    on ITS holder (a person) -- never on `rung_id` itself, which `faction_holding` cannot answer
+    or `None` -- read up its own ancestry, since a SETTLEMENT is the object of a `hold` Tenure only
+    after a `seize` (v9 IN-13; `hold_force` on a seeded one returns `None`: every seeded live `hold`
+    targets a `territory` or an `Office`), and the walk takes the nearest held rung either way.
+    `nearest_store`'s own walk, applied to holding rather than to a larder: the nearest rung AT OR
+    ABOVE `rung_id` that IS held, then `faction_holding` on ITS holder (a person) -- never on
+    `rung_id` itself, which `faction_holding` cannot answer
     for at all (`subject not in w.persons` returns `None` immediately; it takes the HOLDER, not
     the held object -- confirmed against the live fixture before this was written, not assumed
     from the name).

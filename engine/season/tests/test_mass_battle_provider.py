@@ -111,7 +111,7 @@ def test_resolves_end_to_end_through_contest():
     assert set(r["parties"]["subject_members"]) == set(world_q.mustered(w, "r_valoria", "fac_guilds"))
 
 
-def test_party_gap_on_empty_claimants_missing_subject_and_missing_rung():
+def test_party_gap_on_empty_claimants_and_missing_rung_while_a_missing_subject_is_unopposed():
     from engine.season.seam.wrappers.mass_battle import resolve as provider_resolve
     w = build_realm(0)
     empty = provider_resolve(w, [], ["c"], "a field", subject="fac_guilds", rung="r_valoria")

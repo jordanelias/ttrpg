@@ -30,7 +30,9 @@ commit message of the step that landed this file, and re-run by anyone who edits
     wrong-record controls RED.
   * `state/gate.py`'s `SEIZURE` clause deleted -> block 2's observable and block 3's gate control RED
     (the close is `NotYours`).
-  * the gate clause's `seat is None` conjunct dropped -> block 3's seat-at-the-gate test RED.
+  * the gate clause's `seat is None` conjunct is REDUNDANT with its object test (`t.object in w.records
+    or t.object in w.rungs` already excludes an Office), so dropping it is an EQUIVALENT mutant: block
+    3's seat-at-the-gate test stays GREEN (measured), and no RED is claimed for it.
   * `decision/options.py`'s `warranted` filter dropped -> block 5's two negative controls RED.
 """
 
@@ -211,7 +213,8 @@ def test_a_seat_cannot_be_seized_at_the_gate_either():
     Duke, exercising `off_duke`, closes the steward's `hold` on his seat. A seat passes by its conferral
     basis and by `T-o`, never by seizure: `NotYours`, store put back -- the CLOSURE ALONE, because the
     opening of a seat's `hold` is refused under every basis but `conferral` and would pass the test
-    for the wrong reason (mutation M3 below dropped the seat conjunct and only this half saw it).
+    for the wrong reason. (The clause's `seat is None` conjunct is redundant with its object test, so
+    no mutation of it turns this test RED -- see the module docstring.)
     CONTROL: the same write over a Record is admitted."""
     w, _d = _seated("off_steward")
     seat = hold_force(w, "off_steward")

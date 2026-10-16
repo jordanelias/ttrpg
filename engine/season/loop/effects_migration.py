@@ -3,7 +3,8 @@
 EXTRACTED from `effects.py` at the per-subsystem split (Phase 4). Holds the presence/residence pair:
 `move` re-homes `contain` alone, `migrate` re-homes `contain` AND `reside` in one write. `_relocate`,
 the journey the two share (the traveller's live `contain` legs close, a new one opens, and `dest` is
-appended to `Person.travel_leg`), stays local here -- only this pair calls it. See `effects_shared.py`
+appended to `Person.travel_leg`), stays in this file; `move` and `migrate` call it, and since v9 IN-13
+so does `loop/effects_combat.py::_eff_march`, once per claimant it moves. See `effects_shared.py`
 for `effect_for`, `_operand` and the shared §10-ladder refusal `_decline_ascent`.
 """
 
