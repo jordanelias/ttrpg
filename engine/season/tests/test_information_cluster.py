@@ -268,8 +268,7 @@ def test_in12_a_survey_of_a_rung_mints_the_sheet_of_the_faction_that_holds_it(mo
     assert w.records["rec:f_S"].subject_matter == {
         **w.records["rec:s_S"].subject_matter, "head": "p_low"}, w.records["rec:f_S"]
     # THE MUTATION: the pre-IN-12 lookup for a rung
-    from ..loop import effects_information as EI
-    monkeypatch.setattr(EI, "holder_faction_of", world_q.faction_holding)
+    monkeypatch.setattr(world_q, "holder_faction_of", world_q.faction_holding)
     before = dict(w.records)
     assert _kinds(_fold(w, d, _survey("s_S2", "S"))) == ["survey.refused"]
     assert w.records == before, "the mutated lookup still minted a sheet -- the cause is elsewhere"

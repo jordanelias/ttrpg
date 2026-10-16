@@ -326,3 +326,20 @@ def test_record_sourced_operands_refuses_each_planted_mismatch():
     # position exists to fix (`test_jordan_no_definition_is_hardcoded_in_a_body` caught the first
     # draft doing precisely this).
     _check_record_sourced(RECORD_SOURCED_OPERANDS, ops, RECORD_KIND_KEYS)
+
+
+def test_record_sourced_operands_agrees_with_the_mints_read_from():
+    """`record_kinds.content.read_from` (the mint: `terms` is read from the act's `subject`) and
+    `record_sourced_operands` (the reader: `subject` is answered off `terms`) are one fact in two
+    directions, and the loader refuses the pair when they part. A planted `read_from` that mints
+    `terms` from `to` against the shipped `subject: terms` map is refused; the shipped pair, and a
+    kind that does not carry the key (`faction_sheet` has no `terms`), are not. Delete the
+    cross-check in `_check_record_sourced` and the first assertion goes red."""
+    ops = frozenset(REQUIRES_OPERANDS)
+    shipped = RECORD_CONTENT["read_from"]
+    assert shipped, "the control needs a real read_from entry"
+    with pytest.raises(Unspecified, match="read_from mints 'terms' from 'to'"):
+        _check_record_sourced({"dispensation": {"to": "to", "subject": "terms"}}, ops,
+                              RECORD_KIND_KEYS, {"terms": "to"})
+    assert "terms" not in RECORD_KIND_KEYS["faction_sheet"]
+    _check_record_sourced(RECORD_SOURCED_OPERANDS, ops, RECORD_KIND_KEYS, shipped)

@@ -1466,6 +1466,21 @@ def holder_faction_of(w: World, rung_id: str) -> Optional[str]:
     return None
 
 
+def faction_of(w: World, subject: str) -> Optional[str]:
+    """WHICH FACTION `subject` COHERES UNDER, whatever it is -- the faction Proposition id, or `None`.
+    The one dispatch over the two owners below it, by `World.class_of` (which tries `Person` BEFORE
+    `Rung`: every person also has a `person`-kind rung of the same id, so a man committed to no
+    faction must not answer with the faction that holds the ground he stands on):
+      * a RUNG that is not a person -- `holder_faction_of`, *who holds this valley*;
+      * anything else -- `faction_holding`: a faction's own Proposition answers for itself, a person
+        for the one faction he is committed to.
+    The dispatch is HERE and not a Rung branch inside `faction_holding`, because `holder_faction_of`
+    calls `faction_holding` on a holder and would recurse."""
+    if w.class_of(subject) == "Rung":
+        return holder_faction_of(w, subject)
+    return faction_holding(w, subject)
+
+
 def uncontrolled(w: World, rung_id: str) -> list[str]:
     """THE REVOLT QUERY (plan position `24h` P5). The territories at or under `rung_id` that no
     faction holds -- GD-3's *Uncontrolled* status, what a revolt leaves behind -- sorted. A read:
@@ -1710,7 +1725,7 @@ def vacancies(w: World, p: Person) -> tuple:
                  if o.id not in held and any(may_fill(w, p.id, s, o) for s in seats))
 
 
-def seats_named(w: World, p: Person) -> tuple:
+def seats_named(w: World, p: Person, named: Optional[frozenset] = None) -> tuple:
     """THE SEATS `p` HAS BEEN TOLD OF (IN-10 (a), #453 K-25 / `:524`), sorted by id: the Offices
     among `person_q.ledger_names(p.ledger)` -- a claim about the seat (chiefly the `tenure.opened`
     claim a witness of a conferral holds, `epistemic.claim_subjects`' Tenure expansion) or a held
@@ -1721,8 +1736,11 @@ def seats_named(w: World, p: Person) -> tuple:
     holding it believes); the World is asked only which ids are seats (`w.offices`), the class
     `_stamped` stamps. Resolver-side and read-only, `vacancies`' shape: it supplies seat IDS, which
     `questions_for` adds to the question the person answers as CLASSED referents, and whether an act
-    on one passes is the fold's (`_req_oblige`, `_req_confer`)."""
-    return tuple(sorted(o for o in ledger_names(p.ledger) if o in w.offices))
+    on one passes is the fold's (`_req_oblige`, `_req_confer`). `named` is `ledger_names(p.ledger)`
+    when the caller already holds it (`questions_for` asks it once for the three readers)."""
+    if named is None:
+        named = ledger_names(p.ledger)
+    return tuple(sorted(o for o in named if o in w.offices))
 
 
 def writs_held(w: World, p: Person) -> tuple:
@@ -1750,7 +1768,7 @@ def writs_held(w: World, p: Person) -> tuple:
                          and p.id in _addressees_of(w.records[t.object])}))
 
 
-def places_named(w: World, p: Person) -> tuple:
+def places_named(w: World, p: Person, named: Optional[frozenset] = None) -> tuple:
     """THE PLACES `p` HAS BEEN TOLD OF AND COULD SETTLE IN (v9 IN-45 `migrate`, H-168 limit 1,
     [ASSUMPTION; medium; Jordan to correct]), sorted by id: the Rungs among
     `person_q.ledger_names(p.ledger)` -- a claim about the place (a `stores.changed` larder he saw
@@ -1771,18 +1789,23 @@ def places_named(w: World, p: Person) -> tuple:
     NOT WHAT HE LIVES UNDER: a settler who already lives under `dest` changes no population and
     settles nowhere new (`_eff_migrate`'s newcomer rule), and his own residence is the refusal H-168
     limit 1 measured. REVERT: exclude the residence alone, and a settler may re-seat himself at the
-    town above his hearth."""
-    named = ledger_names(p.ledger)
-    if not named:
+    town above his hearth. `named` is `ledger_names(p.ledger)` when the caller holds it already.
+    The cheap tests run first (class, ladder, his own hearth) and the ancestry walk only for a
+    survivor; `ancestry` includes its start, so a hearth is `under` itself."""
+    if named is None:
+        named = ledger_names(p.ledger)
+    cands = [r for r in named if w.class_of(r) == "Rung" and w.contain_ascends(p.id, r)]
+    if not cands:
         return ()
-    homes = [t.object for t in p.tenures if t.kind == RESIDE_KIND and t.live]
+    homes = {t.object for t in p.tenures if t.kind == RESIDE_KIND and t.live}
+    cands = [r for r in cands if r not in homes]
+    if not cands:
+        return ()
     under = {r for h in homes for r in ancestry(w, h)}
-    return tuple(sorted(r for r in named
-                        if r not in under and w.class_of(r) == "Rung"
-                        and w.contain_ascends(p.id, r)))
+    return tuple(sorted(r for r in cands if r not in under))
 
 
-def larders_in_purview(w: World, p: Person) -> tuple:
+def larders_in_purview(w: World, p: Person, named: Optional[frozenset] = None) -> tuple:
     """THE LARDERS `p`'S SEAT MAY LEVY (v9 IN-49 `levy`, H-163 limit 3, [ASSUMPTION; medium; Jordan
     to correct]), sorted by id: the Rungs among `person_q.ledger_names(p.ledger)` (he has been told of
     the place -- chiefly the deposit a witnessed `stores.changed` leaves) that hold a positive amount
@@ -1815,7 +1838,8 @@ def larders_in_purview(w: World, p: Person) -> tuple:
     named, stocked rung: `purview_reaches` walks `w.tenures` for its oblige clause when the seat's own
     ground does not reach (the gate's walk, not a new one here). `()` for a person granted no such
     act, which is nearly everyone, so nothing else is read for him. REVERT: drop the term in
-    `questions_for` (or `levy`'s `referent_class`, which empties `RUNG_REMIT_ACTS`)."""
+    `questions_for` (or `levy`'s `referent_class`, which empties `RUNG_REMIT_ACTS`). `named` is
+    `ledger_names(p.ledger)` when the caller holds it already."""
     if not RUNG_REMIT_ACTS:
         return ()
     seats = [w.offices[o] for o in dict.fromkeys(
@@ -1824,9 +1848,11 @@ def larders_in_purview(w: World, p: Person) -> tuple:
         and any(a in t.granted_acts for a in RUNG_REMIT_ACTS))]
     if not seats:
         return ()
+    if named is None:
+        named = ledger_names(p.ledger)
     kind, amount = w.fixtures.get("default_store_kind"), w.fixtures.get("default_transfer_amount")
     out = []
-    for r in sorted(ledger_names(p.ledger)):
+    for r in sorted(named):
         if w.class_of(r) != "Rung":
             continue
         held = (w.rungs[r].stores or {}).get(kind, 0)
@@ -2104,10 +2130,11 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # H-207; H-163 records what the cross-reading costs). No source is added, so no `question_sources`
     # order moves (IN-57: the occasion rides the question he answers). REVERT: drop the term.
     vacant = vacancies(w, p)
-    places = places_named(w, p)
-    added = (vacant + tuple(o for o in seats_named(w, p) if o not in vacant)
+    told = ledger_names(p.ledger)
+    places = places_named(w, p, told)
+    added = (vacant + tuple(o for o in seats_named(w, p, told) if o not in vacant)
              + writs_held(w, p) + places
-             + tuple(r for r in larders_in_purview(w, p) if r not in places))
+             + tuple(r for r in larders_in_purview(w, p, told) if r not in places))
     if added:
         head = out[0] if out else Question(f"q:need:{added[0]}", "need", (), added[0])
         out[:1] = [_stamped(head, added, w)]

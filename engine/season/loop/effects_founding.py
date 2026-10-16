@@ -19,7 +19,7 @@ from ..state.ids import H
 from ..state.world import rung_kind_ascends
 from ..trace_log import TRACE
 
-from .effects_shared import _decline_ascent, _operand, _shift, effect_for
+from .effects_shared import _debit, _decline_ascent, _operand, _shift, effect_for
 
 
 def _works_named(w: "World", a: "Act") -> tuple:
@@ -235,8 +235,7 @@ def _eff_build(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     def perform() -> None:
         w.sites[sid] = site
         # CONSUMED, ONE-SIDED: the cost goes into the fabric (a lawful sink, 04_EVALUATION §6 S).
-        payer.stores = dict(payer.stores or {})
         for kind, amount in sorted(price.items()):
-            payer.stores[kind] = payer.stores.get(kind, 0) - amount
+            _debit(payer, kind, amount)
     return Change((Subject.entity("sites", sid, "site.built"),
                    Subject.entity("rungs", payer.id, "site.built")), perform)

@@ -45,32 +45,32 @@ REQUIRES_FORMS = roster("requires_forms")
 REQUIRES_OPERANDS = roster("requires_operands")
 REQUIRES_FORM_NEEDS = roster_map("requires_forms", "needs")
 
-def _check_writ_sourced_subset(writ_sourced: frozenset, operands: frozenset, name: str) -> None:
-    """Plan position `15c`. `writ_sourced` is a SUBSET of `operands`, never a second vocabulary --
-    refused if it names anything the closed operand roster does not, the same discipline
-    `record_kinds` and `tenure_kinds` are cross-validated against each other by in
-    `data/rosters.py`. Factored into a function -- BATCH-CLOSE FINDING, methodology-close Phase 1
-    antagonist -- so a test can call it with a planted mismatch rather than only exercising the
-    branch that never fires on today's data (§0.1 pt 3: a refusal that nothing can observe fail).
-    `name` is the claim-sourced roster being checked: `writ_sourced_operands` from `15c` until IN-10
-    replaced it with the per-kind `record_sourced_operands` (checked per kind through here), and
-    `shortfall_sourced_operands` since `19d` uses the same rule rather than a second copy of it."""
-    if not writ_sourced <= operands:
+def _check_operand_subset(operand_set: frozenset, operands: frozenset, name: str) -> None:
+    """`operand_set` is a SUBSET of `operands`, never a second vocabulary -- refused if it names
+    anything the closed operand roster does not. A function, so a test can plant a mismatch
+    (§0.1 pt 3). Serves `record_sourced_operands` (per kind), `shortfall_sourced_operands` and
+    `known_person_operands`."""
+    if not operand_set <= operands:
         raise Unspecified(
-            f"rosters.yaml: {name} names {sorted(writ_sourced - operands)}, "
+            f"rosters.yaml: {name} names {sorted(operand_set - operands)}, "
             "not in requires_operands",
             f"rosters.yaml -- {name}",
             needs=f"every {name} member to also be a requires_operands member",
             law="a claim answers FOR an existing operand name; it does not coin a new one")
 
 
-def _check_record_sourced(by_kind, operands: frozenset, kind_keys: dict) -> None:
+def _check_record_sourced(by_kind, operands: frozenset, kind_keys: dict,
+                          read_from: Optional[dict] = None) -> None:
     """Plan position IN-10 (#453 §10.1). `record_sourced_operands` -- `{record kind: {operand:
     content key}}` -- refused at import unless every kind is a `record_kinds` member, every entry a
     non-empty map, every operand one of the closed eight, every content key one of THAT KIND's own
     keys, and no kind maps `from` (r2's ruling: *where the actor stands* stays off a document).
-    `15c`'s subset rule, tightened to the kind's keys. A function, so a test can plant each mismatch
-    (`_check_writ_sourced_subset`'s reason, §0.1 pt 3)."""
+    `15c`'s subset rule, tightened to the kind's keys. `read_from` (`record_kinds.content.read_from`,
+    `{content key: operand}`, how the MINT reads a key) is cross-checked against this map (how a
+    holder's READER maps an operand back): for a kind carrying a `read_from` key and mapping that
+    operand, the map must name the same key -- one fact, two directions, refused when they part.
+    Neither is derived from the other. A function, so a test can plant each mismatch
+    (`_check_operand_subset`'s reason, §0.1 pt 3)."""
     name = "record_sourced_operands"
     for kind, m in (by_kind or {}).items():
         if kind not in kind_keys:
@@ -83,12 +83,20 @@ def _check_record_sourced(by_kind, operands: frozenset, kind_keys: dict) -> None
                 f"rosters.yaml: {name}.{kind} is {m!r}, not a non-empty operand: content-key map",
                 f"rosters.yaml -- {name}", needs="`{operand: content key}`",
                 law="an empty entry is a kind that answers nothing: delete it instead")
-        _check_writ_sourced_subset(frozenset(m), operands, name)
+        _check_operand_subset(frozenset(m), operands, name)
         if "from" in m:
             raise Unspecified(
                 f"rosters.yaml: {name}.{kind} maps `from`", f"rosters.yaml -- {name}",
                 needs="drop it", law="r2 `02` §A.13 -- a document naming `from` would let a writ "
                                      "reach into a larder the executor is not standing in")
+        for key, operand in (read_from or {}).items():
+            if key in kind_keys[kind] and operand in m and m[operand] != key:
+                raise Unspecified(
+                    f"rosters.yaml: {name}.{kind} maps {operand!r} to {m[operand]!r}, but "
+                    f"record_kinds.content.read_from mints {key!r} from {operand!r}",
+                    f"rosters.yaml -- {name}",
+                    needs=f"{operand!r} mapped to {key!r} (or read_from changed with it)",
+                    law="the mint and the reader of one document must agree which key an operand is")
         bad = sorted(set(m.values()) - set(kind_keys[kind]))
         if bad:
             raise Unspecified(
@@ -103,14 +111,15 @@ def _check_record_sourced(by_kind, operands: frozenset, kind_keys: dict) -> None
 # two readings.
 RECORD_SOURCED_OPERANDS = {k: dict(v) for k, v in
                            roster_map("record_sourced_operands", "values").items()}
-_check_record_sourced(RECORD_SOURCED_OPERANDS, frozenset(REQUIRES_OPERANDS), RECORD_KIND_KEYS)
+_check_record_sourced(RECORD_SOURCED_OPERANDS, frozenset(REQUIRES_OPERANDS), RECORD_KIND_KEYS,
+                      RECORD_CONTENT.get("read_from"))
 # Plan position `19d`. The operand names a SHORTFALL claim answers (`kind`, `amount`), and the
 # predicate stem it is recorded under: `(rung, "<stem>:<kind>", units)`. MATTER writes the claim
 # (`loop/matter.py`) and `decision/options.py::_from_shortfall_claim` reads it, so the stem
 # lives here once and neither side spells it. The stem's collision checks (it may be neither a
 # `requires` stem nor the content stem) sit below `REQUIRES_STEMS`, which they need.
 SHORTFALL_SOURCED_OPERANDS = roster("shortfall_sourced_operands")
-_check_writ_sourced_subset(frozenset(SHORTFALL_SOURCED_OPERANDS), frozenset(REQUIRES_OPERANDS),
+_check_operand_subset(frozenset(SHORTFALL_SOURCED_OPERANDS), frozenset(REQUIRES_OPERANDS),
                            "shortfall_sourced_operands")
 SHORTFALL_PREDICATE = roster_map("shortfall_sourced_operands", "claim").get("predicate")
 # Telling workplan `T4` (`ED-IN-0282`). The operand names a person answers with SOMEBODY THEY KNOW,
@@ -118,7 +127,7 @@ SHORTFALL_PREDICATE = roster_map("shortfall_sourced_operands", "claim").get("pre
 # make a person known (`queries/person_q.py::known_persons`). The subset rule is the siblings' rule,
 # and the claim shape is checked below `REQUIRES_STEMS`, which it needs.
 KNOWN_PERSON_OPERANDS = roster("known_person_operands")
-_check_writ_sourced_subset(frozenset(KNOWN_PERSON_OPERANDS), frozenset(REQUIRES_OPERANDS),
+_check_operand_subset(frozenset(KNOWN_PERSON_OPERANDS), frozenset(REQUIRES_OPERANDS),
                            "known_person_operands")
 KNOWN_PERSON_CLAIM = roster_map("known_person_operands", "claim")
 
