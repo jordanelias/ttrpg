@@ -717,6 +717,8 @@ verbs:
     eligibility: ["own"]
     beneficiary: "actor"
     beneficiary_note: "`move`'s column and reason: the migrant goes where he chose to live. No operand beneficiary -- the destination is a Rung, which no Candidate carrier holds."
+    referent_class: Rung
+    referent_class_note: "v9 IN-45 `migrate` (H-168 limit 1, [ASSUMPTION; medium; Jordan to correct]): THE DESTINATION CHANNEL. FORMED ONLY ON A PLACE THE PERSON HAS BEEN TOLD OF AND DOES NOT ALREADY LIVE UNDER -- `queries/world_q.py::places_named` stamps those Rungs onto the question he answers as `Rung` (IN-53 D1's partition, `_stamped`), and `to` binds that referent through the unchanged referent rule (`decision/options.py::_derive_operand`; the document a question is about does not re-aim a classed referent). No ninth operand, no Record kind: the closed eight stand. ATTACKED FIRST AND REJECTED: the held-Record channel (`rosters.yaml: record_sourced_operands`) -- `to` is already mapped on `dispensation`, `petition` and `faction_sheet` to an addressee, and the one kind with a free place key, `works: {to: at}`, is declared by no computed act (H-165 limit 2, ED-IN-0297) and would re-aim every `to`-binding row on a question about a works; the shortfall channel answers `kind`/`amount` and leaves `to` the drained rung, a dearth and not a destination. MEASURED before the class (19c, H-168): formed wherever `move` is, on the question's single referent, and refused every time -- most into the actor's own residence; those formations stop. REVERT: delete this column (and `places_named`'s splice)."
     requires:    "a contain path exists, and the destination has room"
     requires_typed:
       form:      contain_path

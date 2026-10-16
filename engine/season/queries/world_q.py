@@ -1749,6 +1749,38 @@ def writs_held(w: World, p: Person) -> tuple:
                          and p.id in _addressees_of(w.records[t.object])}))
 
 
+def places_named(w: World, p: Person) -> tuple:
+    """THE PLACES `p` HAS BEEN TOLD OF AND COULD SETTLE IN (v9 IN-45 `migrate`, H-168 limit 1,
+    [ASSUMPTION; medium; Jordan to correct]), sorted by id: the Rungs among
+    `person_q.ledger_names(p.ledger)` -- a claim about the place (a `stores.changed` larder he saw
+    drawn, a `rung.founded` hearth, a seat's town a deposit names) or a held document whose
+    `terms` names it -- that the §10 ladder will seat him in (`World.contain_ascends`, the one
+    owner: never another person's rung) and that he does NOT ALREADY LIVE UNDER (his live `reside`
+    edge and every rung above it, `ancestry`). H-168's design order, *"a question whose referent is
+    ANOTHER place a person could live in"*: the destination channel `migrate`'s `to` binds, carried
+    on the question he answers as `Rung`-classed referents (`_stamped`), so `to` still binds a
+    referent and no operand is coined.
+
+    `seats_named`' shape, one class over: reads `p`'s OWN LEDGER and his OWN `reside` edge; the World
+    is asked only which ids are rungs (`World.class_of`, the class `_stamped` stamps, so a person's
+    own `person`-kind rung, classed `Person`, is never stamped as a place) and what the ladder and
+    the containment walk say. ⚠ ROOM IS NOT READ HERE: whether the place has room is the fold's
+    (`loop/effects_migration.py::_eff_migrate`'s capacity decline, `verb_table.yaml`'s `migrate`
+    note), so a person who wrongly hopes a full hearth has space still tries and is refused. ⚠ WHY
+    NOT WHAT HE LIVES UNDER: a settler who already lives under `dest` changes no population and
+    settles nowhere new (`_eff_migrate`'s newcomer rule), and his own residence is the refusal H-168
+    limit 1 measured. REVERT: exclude the residence alone, and a settler may re-seat himself at the
+    town above his hearth."""
+    named = ledger_names(p.ledger)
+    if not named:
+        return ()
+    homes = [t.object for t in p.tenures if t.kind == RESIDE_KIND and t.live]
+    under = {r for h in homes for r in ancestry(w, h)}
+    return tuple(sorted(r for r in named
+                        if r not in under and w.class_of(r) == "Rung"
+                        and w.contain_ascends(p.id, r)))
+
+
 def _stamped(q: Question, added: tuple, w: World) -> Question:
     """`q` carrying the ids in `added` as CLASSED referents (IN-53, DECISION 2026-10-13 D1) -- the
     one stamp site. Each id's class is the collection the World holds it in (`World.class_of`:
@@ -2006,9 +2038,12 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # IN-09 (H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to correct]): AND SO DO THE WRITS
     # HE HOLDS (`writs_held`), after the seats, as `Record` -- only `comply` declares that class, so
     # no other row's formations move. REVERT: drop the term.
+    # v9 IN-45 `migrate` (H-168 limit 1, [ASSUMPTION; medium; Jordan to correct]): AND SO DO THE
+    # PLACES HE HAS BEEN TOLD OF AND COULD SETTLE IN (`places_named`), last, as `Rung` -- only
+    # `migrate` declares that class, so no other row's formations move. REVERT: drop the term.
     vacant = vacancies(w, p)
     added = (vacant + tuple(o for o in seats_named(w, p) if o not in vacant)
-             + writs_held(w, p))
+             + writs_held(w, p) + places_named(w, p))
     if added:
         head = out[0] if out else Question(f"q:need:{added[0]}", "need", (), added[0])
         out[:1] = [_stamped(head, added, w)]

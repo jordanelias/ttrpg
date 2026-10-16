@@ -108,9 +108,17 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # old values and both old `BASE_EVENTS` exactly, so the shared `_declared_stages`/`_docket_item`
 # factoring moved nothing. `aperture 1 0` realm acts 613 -> 615; `carry` offered 0 -> 83, att 0 -> 15,
 # ex 0, ref 15 (every attempt on a referent that is not a petition; read, not asserted, v9 §0.5).
+# RE-PINNED at v9 IN-45 `migrate` (B-K, on 4cee0de5), A BEHAVIOUR MOVE DECLARED: `migrate` declares
+# `referent_class: Rung` and forms only on a place `world_q.places_named` stamps (H-168 limit 1), so
+# the chooser's sets change. The build hash is equal; one and two seasons move. Was b1d8ab94... /
+# ca8a89d6... (one, two seasons). CONTROL, run: the same tree with `migrate`'s `referent_class` blanked
+# in `VERB_TABLE` (the stamp and `_derive_operand`'s document gate left in) reproduces both old values
+# and both old `BASE_EVENTS` exactly, so the stamp and the gate move nothing on their own. `aperture 1 0`
+# realm acts 615 -> 612; `migrate` formed 83 -> 71, att 31 -> 31, ex 0 -> 1, ref 31 -> 30, every
+# refusal now `_eff_migrate`'s capacity decline (read, not asserted, v9 §0.5).
 BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
-               1: "b1d8ab9473a403ee1e75538751bcc85f",
-               2: "ca8a89d685e88a2ae73675b0ef544226"}
+               1: "bedb32d5a557b447346f384247130aa1",
+               2: "547d3e62ebbb4716eed63cfc80c00f86"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -134,8 +142,9 @@ BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
 # RE-RECORDED at v9 IN-45 `forge` with `BASE_HASHES` (7056 -> 7338, 20148 -> 21313).
 # RE-RECORDED at v9 IN-12 `survey` + Rung with `BASE_HASHES` (7338 -> 7391, 21313 -> 22130).
 # RE-RECORDED at v9 IN-45 `carry` with `BASE_HASHES` (7391 -> 7186, 22130 -> 21338).
-BASE_EVENTS = {1: (7186, "af55188f477edce43c1c24f51523bfa487ea6b41cc24e23df0f6a3a983a7bc02"),
-               2: (21338, "e91d81c5aa9010cf8193378bb55f25718a6fbc570094d6a519a5b4250d021ad4")}
+# RE-RECORDED at v9 IN-45 `migrate` with `BASE_HASHES` (7186 -> 7160, 21338 -> 23584).
+BASE_EVENTS = {1: (7160, "448dd68361f089999ea524bd32fe13c3beafd1835b836ae5b11cf00be9fcb483"),
+               2: (23584, "317ce9b392e5281d9bbab04f940024e80babc1fcf6fd83ea5e9aae1b3b356fac")}
 
 
 def _digest(w) -> tuple:

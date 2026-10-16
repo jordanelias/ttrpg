@@ -7845,7 +7845,14 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # actor, which the person side reads UNKNOWN, so it forms on every referent; in the realm
     # (`aperture 1 0`) all 15 attempts were on referents that are not petitions. Not isolated per
     # corpus world. A re-record, said so; the hand-built proof is `test_in45_carry.py`.
-    assert refused_only == {"build", "found", "migrate", "work", "survey", "commit", "dispatch",
+    # ⚠⚠ v9 IN-45 `migrate`, TWELVE -> ELEVEN: `migrate` LEAVES -- and NOT by executing here. It
+    # declares `referent_class: Rung` and forms only on a place `world_q.places_named` stamps (a Rung
+    # the person's own ledger names that he does not already live under), and no corpus person's
+    # ledger names one, so it is attempted in no corpus world (the 157 attempts H-168 measured were
+    # all on the question's single referent, 106 of them his own residence). It EXECUTES in computed
+    # play in the realm (`aperture 1 0`: 1 of 31; read, not asserted, v9 §0.5). A re-record, said
+    # so; the hand-built proof is `test_migrate_capacity.py` section 5.
+    assert refused_only == {"build", "found", "work", "survey", "commit", "dispatch",
                             "examine", "levy", "restore", "forge", "carry"}, (
         f"the always-refused set moved to {sorted(refused_only)}. `move` and `transfer` left it "
         "when `W-C` closed `H-94`'s structural half — the Candidate carries operands now — and "
@@ -9320,8 +9327,10 @@ def test_wa_an_empty_ledger_is_unknown_for_every_form_and_the_candidate_still_fo
     needs_held = {v for v, r in VERB_TABLE.items() if r.requires_typed is not None
                   and (r.requires_typed.known_person_operands()
                        or r.requires_typed.named_own_ledger_operands()
-                       or r.referent_named)}   # v9 IN-09: a row formed only on a referent the
+                       or r.referent_named     # v9 IN-09: a row formed only on a referent the
                                                # person's own ledger names (`comply`: a held writ)
+                       or r.referent_class)}   # v9 IN-45 `migrate`: a typed row formed only on a
+                                               # CLASSED referent, which this question carries none of
     typed_own = {v for v, r in VERB_TABLE.items()
                  if r.requires_typed is not None and person_side_eligible(p, r)} - needs_held
     assert typed_own <= offered, (
@@ -9913,8 +9922,11 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # ⚠⚠ v9 IN-45 `carry`: `carry` JOINS, newly resolvable (`_eff_carry`), attempted and refused
     # wherever attempted (the note at `test_the_corpus_runs_and_the_ranking_cannot_discriminate`'s
     # `refused_only`). A re-record, said so.
+    # ⚠⚠ v9 IN-45 `migrate`: `migrate` LEAVES, attempted in no corpus world -- it forms only on a
+    # place `world_q.places_named` stamps and no corpus ledger names one (the note at
+    # `test_the_corpus_runs_and_the_ranking_cannot_discriminate`'s `refused_only`). A re-record.
     assert set(refused) - set(executed) == {"work", "found",
-                                            "build", "migrate", "survey", "commit", "dispatch",
+                                            "build", "survey", "commit", "dispatch",
                                             "examine", "levy", "restore", "forge", "carry"}, (
         f"the always-refused set is {sorted(set(refused) - set(executed))}. `work` refuses because "
         "its `site` operand binds either to a non-Site referent (UNKNOWN) or to a real site whose "
@@ -10206,7 +10218,10 @@ def test_wc_the_fold_binds_what_the_person_bound():
     from ..epistemic import Seen
     p.ledger.append(Claim("c_wc_seen", p.id, "Hh", SEEN_PREDICATE, Seen(who="p_mid"), 0,
                           "firsthand", 100, "own"))
-    q = Question("q:wc_agree", "need", ("S", "Hh"))
+    # v9 IN-45 `migrate`: `D` rides the question as a `Rung`-classed referent (what
+    # `world_q.places_named` stamps), so `migrate` -- typed, formed only on that class -- stays in the
+    # walk, its `to` bound to the classed place; no plain-referent row forms on a class.
+    q = Question("q:wc_agree", "need", ("S", "Hh"), classes=(("D", "Rung"),))
     v = View(p.id, [], w.fixtures.get("view_k"), q)
     # ⚠ THE WALK IS OVER TYPED VERBS AND THE SCOPE IS DECLARED RATHER THAN HIDDEN. An UNTYPED
     # verb's two bindings DO differ -- the person's is `{actor}` and the fold's is
@@ -10833,7 +10848,12 @@ def test_wb_a_refusals_reads_land_as_a_claim_that_contradicts_and_the_candidate_
     # Candidate on `S` though it was not resolvable. (`evade / defy` and `construe` were typed beside
     # it and reverted, so they still form one each on `S`.) The drop is still exactly `transfer`.
     # [GROUNDED: measured at v9 IN-09 -- `opening_set` on `S` lists 31 verbs on a `git worktree` at `905b7a21` and 30 here, the one missing verb `comply`]
-    assert (len(before), len(after)) == (30, 29), (
+    # ⚠ 30 -> 29, v9 IN-45 `migrate` (H-168 limit 1): `migrate` declares `referent_class: Rung`, so it
+    # forms only on a place `world_q.places_named` stamps and never on a plain referent like `S`. The
+    # drop is still exactly `transfer`. RE-DERIVED, not adjusted: with `migrate`'s `referent_class`
+    # blanked in `VERB_TABLE` in-process, this test passes at (30, 29) unchanged.
+    # [GROUNDED: measured at v9 IN-45 `migrate` on 4cee0de5 -- (29, 28) as built, (30, 29) with the class blanked; the drop `['transfer']` in both]
+    assert (len(before), len(after)) == (29, 28), (
         f"the absolute counts moved to {(len(before), len(after))}. They are the denominator the "
         "delta above is read against, and the delta alone does not reproduce them — re-derive "
         "`H-122`'s reading rather than adjusting this line")
@@ -11074,6 +11094,11 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
     # TWO IN, nothing out, order otherwise unchanged -- `carry`, newly resolvable, is attempted on a
     # Record and on a rung and refused at its `existence` conjunct, and those reads deposit
     # (`("rec:6bf46a143f347c12", "exists:petition", 0)`, `("hearth_ostvik", "exists:petition", 0)`).
+    # v9 IN-45 `migrate`: 20 -> 21 entries, a re-record read off the failing assertion's own output:
+    # ONE IN, nothing out, order otherwise unchanged -- `("hearth_ostvik", "exists:Site", 0)` at index
+    # 14. `migrate` forms only on a place `world_q.places_named` stamps, so the scenes it spent on
+    # plain referents go to other acts and one more Site-cell read on the hearth deposits. CONTROL,
+    # run: with `migrate`'s `referent_class` blanked in `VERB_TABLE` in-process the old 20 pass.
     assert actor_end == [("einhir_texts", "exists:Record", 0),
                          ("hearth_ostvik", "stores:grain", 0),
                          ("einhir_texts", "exists:Person", 0),
@@ -11088,6 +11113,7 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
                          ("hearth_ostvik", "present_at:p_carin", True),
                          ("hearth_ostvik", "exists:Person", 0),
                          ("hearth_ostvik", "exists:petition", 0),
+                         ("hearth_ostvik", "exists:Site", 0),
                          ("hearth_ostvik", "exists:Person", 0),
                          ("hearth_ostvik", "exists:Record", 0),
                          ("hearth_ostvik", "exists:Site", 0),

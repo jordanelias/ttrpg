@@ -604,7 +604,16 @@ rosters:
       `questions_for` adds to the question he answers beside his seats; only `comply` declares it
       (`evade / defy` and `construe` were typed beside it and reverted, executing 0 times; H-203).
       REVERT: drop the value and the row's column.
-    values: [Office, Record]
+      `Rung` (v9 IN-45 `migrate`, H-168 limit 1, [ASSUMPTION; medium; Jordan to correct]): the
+      places a person has been told of and could settle in (`queries/world_q.py::places_named` --
+      a Rung his own ledger names, the §10 ladder seats him in, and he does not already live
+      under), which `questions_for` adds to the question he answers beside his seats and writs;
+      only `migrate` declares it, so its `to` binds ANOTHER place rather than the single referent
+      of whatever he was asked about (most often his own residence). The destination channel H-168
+      names, on IN-53 D1's partition and `seats_named`'s knowledge source: no operand is added
+      (`to` still binds the referent, `decision/options.py::_derive_operand`) and no Record kind.
+      REVERT: drop the value, `migrate`'s column and `places_named`'s splice.
+    values: [Office, Record, Rung]
 
   person_predicates:
     source: "#353 §14 `:331` — `marks[]` … \"heritage · grade · Church standing · office · residence\""
