@@ -480,6 +480,21 @@ rows:
       `engine/season/runs/*` byte-identical (the w15 artifact test, green). B-M's mover list for `11` is empty by this reading
       and by construction the arrival is reached by no corpus world (every `march` the corpus attempts declines at
       `remit:dispatch`, `runs/TRACE.txt`). One run per arm, noise unmeasured.
+
+      **B-N CLOSE RE-TAKE (v9 SC-01 steps 11, 12, 14, 13+15, the fired-slot step, 16; `11`, E15), 2026-10-16, `2x3` only, 143 cases, 0 failed,
+      0 fork rows failed, seed 0, PYTHONHASHSEED=0, reading @951d5153 (B-N's last code commit; `git archive` copy, 12 chunks per arm, three
+      at a time, each arm covering all 143 case slots once; the driver is `proposals/2026-09-04-degree-sweep/wd_chunk.py`, collected with
+      `wd_collect.collect`), CONTROL @0de8059b (the tree B-N opened on, code-identical to B-M's close) taken the same way:** B-N: none
+      1694/2014 = 84.11 % - actor 1048/1976 = 53.04 % - total 1032/1956 = 52.76 % (probed 7125 / 7113 / 7098); CONTROL: none 1694/2014 -
+      actor 1081/1970 = 54.87 % - total 1069/1950 = 54.82 % (probed 7125 / 7107 / 7089), which REPRODUCES B-M's close in every figure, so the
+      instrument is reproducible here and the move is B-N's. `none` did not move; `actor` moved -1.83 pp and `total` -2.06 pp, toward "flips
+      absorbed" less (the direction B-M's re-take also moved), still BELOW the 96 % bar, `none >= actor` True. Status stays `met`. ATTRIBUTION,
+      MEASURED: a third reading @947747e0 (step 12, `speak`) equals the B-N reading in every figure, so step 12 is the whole move and steps
+      14, 13+15, the fired-slot step and 16 (and every Phase 1-3 fix) moved no arm. The mechanism is not measured: the critique's candidate is
+      that `speech.made` (a deed) stopped being produced and `speech.unheard` is a refusal kind that `is_deed` drops (`person_q.py`), moving
+      `deed_valence` and `regard`, two reconvergence inputs E15 names; nothing here inspected what in 947747e0 moves the arms. Conjunct 1
+      (`corpus_run`) was not re-run for this reading; `engine/season/runs/*` was regenerated at 4008a395 (the w15 artifact test, green). One
+      run per arm, noise unmeasured.
     measure: "python -m engine.season.harness.corpus_run  # check R3 rows + the planted control"
     blocks: [IN-10, IN-11, IN-13, FI-01, H-116, IN-50]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1: regard is computed at read; the cross-person half is IN-10's, IN-11's, IN-13's); H-111 is FI-01's deposit half
