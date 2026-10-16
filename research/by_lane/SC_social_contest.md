@@ -425,3 +425,222 @@ T-SC-1 ↔ IN, MB, NPC · T-SC-2 ↔ PC, MB, NPC, IN · T-SC-3 ↔ NPC, IN · T-
   - audit A5 → M-SC-2;
   - audit T4 → the SC-08 row;
   - "`tell` obstacle reads capability, not standing" → M-SC-4 and the per-person row.
+
+## 9. NERS PASS
+
+`[SELF-AUTHORED — bias risk]`: this pass audits the lane file's own earlier findings.
+
+**Verdict: as a shape, the SC lane holds on four of its objects:**
+- the `tell` contest;
+- the disposal gate;
+- the composed obstacle;
+- the petition as a document.
+
+**As a game, it fails on these counts:**
+- **N bottom-up.** The arrangement table (the thing that makes proceedings different from one another) is reached by no computed act.
+- **R-VARIETY.** One pool serves 429 of 430 persons, and every computed case is heard as one game.
+- **S-UP.** A petition cannot rise, and its receiver cannot deny it.
+- **E-OVERHEAD.** The plan's moves are additions: of the roughly 33 typed SC objects shipped today, four change an outcome.
+- **False N-lines:** `Tenure.degree`, the D-6/D-7 knobs and, conditionally, latitude.
+
+**Grade: paper, with four execution artifacts** (listed at the end of this section).
+
+**Target, head and assumption.** The target is SC's mechanisms in `engine/season/` at HEAD `5445e34`, plus v9's SC-01..08 and the IN-12 rows that touch SC, with every v9 position assumed built (the audit's assumption). The head: `CURRENT.md:23` names the proceedings design ratified as intent. Code is audited where canon and code disagree (skill §1). Instruments: A, plus the B arithmetic by sampling. Where the audit already attacked this lane:
+- A1/T1: re-opened at HEAD (`sigma.py:97-147`); it holds.
+- A3: re-run by a 200,000-draw sample. It agrees on the shipped default pair: Failure .7398, Partial .1899, Success .0703, Overwhelming 0.
+- A5: re-opened (`verb_table.yaml:798`) and extended with the missing deny/withdraw.
+- T4: re-counted. It reads 12 of 13 here and 13 of 14 in the audit; the difference is `id` (T-SC-1).
+
+### 9.1 N-line ledger
+
+| object | N-line (restated narrowly where needed) | attack run | result · directions | shipped today vs planned-built |
+|---|---|---|---|---|
+| `tell` σ-contest | Cut it and a telling cannot fail to land, so a co-located hearer's ledger copies the teller's. | Is "fails to land" carried by something else? Refraction lowers confidence on every deposit (H-199, `hole_register.yaml:4345`) but never withholds one. Channel admission ("the person told is with the teller", `verb_table.yaml:940`) gates presence, not success. Nothing else can withhold a deposit from a co-located hearer. | **HOLDS, NARROWED**: lateral (witness) and bottom-up (told claims feed `regard`, R-07). It fails top-down: no institution changes the odds | Shipped. After SC-01 step 13 the prize row repoints to the proceedings provider (`_part6:67`) |
+| Arrangement table (game = parties/bench/floor + `disposal`) | Cut it and every proceeding has one shape: who judges, who watches and what may be disposed of no longer differ. | Walk the loss in computed play. A computed `open_case` names `None`, and `determine` opens `UNDECLARED_DISPOSAL` (M-SC-1). Every step is already carried by the one default, so the cut is **free in computed play**, today and under v9. | **HOLDS, NARROWED** to hand-built worlds: top-down only. Bottom-up fails: no person's act selects a game | Same in both states: no v9 source for the selection |
+| `determine` gate opening a disposal Tenure on its subject | Cut it and no bench can bind a third party: `detain`, `ban` or an imposed `oblige` cannot open from a hearing. | Could the parties' own `commit`/`oblige` carry it? Only for `disposal: mutual`. AX-4 makes an `oblige` the obligor's own act, so a restraint on an unwilling subject needs the seat. | **HOLDS**: lateral (seat → subject), top-down | Gate shipped (`verb_table.yaml:217-259`); contested at SC-03b |
+| Composed obstacle and provider (planned) | Cut it and a speech's chance no longer depends on the room (reception, rung, aptness, proofs). | With capability at the default for 429 of 430 and latitude a per-game factor, are the room terms carried elsewhere? No: `_obstacle_of` reads only `score/2` or the default (`sigma.py:112-129`) | **HOLDS** (planned): vertical (institution → person) and lateral | Absent today |
+| Latitude (planned pool multiplier) | *Claimed*: "the institution sets how much the person matters" | The person term is `pool_default` for 429 of 430 (`sigma.py:97-109`), so `brought + conduct × latitude` is a constant times a per-game factor, and the residue is a flat per-game shift. **Disqualifier 5.** | **FALSE N-LINE, PROVISIONAL**, conditional on J-13's remainder (withholding is symmetric: a ruled capability source would restore it) | Absent today |
+| `Tenure.degree` (planned writer, SC-03b) | *Claimed*: "the compromise scales to the margin" (relay A:163) | Walk the loss: who reads `degree`? "nothing reads it" (`populated.py:792-795`), and no v9 position names a reader (T-SC-1). The possibility does not exist with or without the field. | **FALSE N-LINE** (no consumer; "a store is not a possibility") | Declared, unwritten today; written and still unread under v9 |
+| `ladder_rungs` (Fig. 27, six concessions) | Cut it and a concession cannot be graded by what it gives up. | Does the four-band ladder carry it? It grades outcomes, not moves. Under v9 the rung term reads this roster where 04 reads Fig. 5's stasis rung (M-SC-3), so the object is carrying two jobs. | **HOLDS, NARROWED**, MEDIUM: holds for the concession ladder, fails as the issue ladder (C4) | Unread today |
+| D-6 / D-7 fixtures | *Claimed*: "the speech-kind ladder's treatment of fatal faults, denial and anger" | No consumer, and no v9 position names one (BASELINE B5) | **FALSE N-LINE** (disqualifier 2 read as no consumer) | Same |
+| 12 unread arrangement keys | *Claimed*: per-game procedure (order, dissent, reach, appeal, interposition) | Shipped: no reader (T-SC-1). Planned-built: `order` (provider), `proofs` (`22a`), `quorum` (step 11) gain one; `records_dissent`, `disposal_reach`, `appeal_basis`, `venue_min_rank`, `interposed` gain none in any EXIT (8.3) | **FALSE N-LINE** for the five; the others HOLD as planned | — |
+| `momentum` (19 s14c; survival into 21 [UNVERIFIED]) | *Claimed*: "the run's course weighs the next speech" | It rewards a descent or an advance that the rung term already prices: **disqualifier 4**, a second thumb on one scale | **Candidate false N-line**, [CONFIDENCE: low] | Absent |
+| `petition` | Cut it and a person cannot put a matter into a held document addressed to another. | Do `create_record` + `give` carry it? They make and pass a Record, but without `from` (the place it rises from) or the two-sided ruling | **HOLDS**, lateral. S-UP fails (9.5) | Shipped |
+
+Six directions, as run: top-down (institution → person: arrangement, latitude, gate), bottom-up (person → institution: `open_case` naming a game, petition rising), vertical (the contest at RESOLVE; the planned nested run), diagonal (a disposal reaching a faction: `disposal_reach` unread, `ban` → faction stance: no carrier found [UNVERIFIED]), lateral (telling ↔ witness ↔ regard; telling ↔ proceedings standing, two readings: 9.5), horizontal (across seasons: Records and the docket; recorded defeat missing).
+
+### 9.2 False N-lines (the trail)
+
+- `Tenure.degree`: no reader in either state.
+- D-6/D-7 knobs: no consumer.
+- Five arrangement keys with no reader in any EXIT.
+- Latitude: provisional, it falls with J-13.
+- `momentum`: candidate, low confidence.
+
+**NOT false:**
+- The arrangement table: narrowed, and the narrowing is the finding.
+- The `determine` gate: AX-4 blocks the substitute.
+- `bench_quorum` at 1: the conjunct "CANNOT REFUSE" at the shipped value. That value is a parameter, `[OPEN — Jordan tuning]`, not a structural defect.
+
+### 9.3 Cross-cutting checks
+
+- **C1, claim → mechanism.** Four claims have no carrier:
+  - "the contest varies by person" (R-09; the study's person-variance anchors): no carrier for 429 of 430;
+  - "compromise scaled to loss": no reader;
+  - "recorded defeat": `records_dissent` unread;
+  - "standing decides the hearing": `tell`'s obstacle reads capability (§3.3 #9).
+- **C2, type signature.** "A petition rises to the hand that may deny it" contradicts the signature. `to` and `subject` bind the question's one referent (`verb_table.yaml:798`), and the table has no deny row. `judging_set(w, venue, matter)` accepts a `matter` it cannot use (`world_q.py:363`).
+- **C3, epistemic feasibility.** Who decides which game a case is? No named party can, so the selection is either a hand-authored payload or nothing (M-SC-1). The carrier already exists (`DOCKET_ARRANGEMENT` on the `open_case` payload). The repair is to have it named from a claim a person holds at the venue, such as a held writ or the convener's remit. That is an operand, not a store.
+- **C4, contradiction sweep.**
+  - Fig. 27 is named "the forensic ISSUE LADDER" while 04 reads Fig. 5 as the rung (M-SC-3).
+  - The plan says step 10 is DONE; the code says it is OPEN (7.2 #6).
+  - SC-08's WHAT says no importer; HEAD has two (7.2 #7).
+  - PS 15's no-display rule against COMP S6 and the audit's E-LEGIBILITY reading (7.2 #1).
+  - One introduced here: T-SC-14 credits the ladder foot while `momentum` accumulates.
+- **C5, path construction** (THE BAR's showcase: convene → date fires → slot → `open_case` → contested `determine` → disposal → `causes[]` to the date). Step by step:
+  - `convene` is never attempted in the corpus (BASELINE B3).
+  - A vacant date "fire-and-lapse" (`loop/calendar.py:43-44`).
+  - The fired-slot step gives the date a holder, with a [GAP]: "no #453 step says who sets it" (`_part6:97`).
+  - `open_case` fills the slot and names no game.
+  - `determine` disposes the default `oblige`, through the provider (planned).
+  - `Tenure.degree` is written and read by nothing.
+
+  The path **constructs for one game (the default `oblige`)**. For the seven seeded games it is **asserted**: *implementable* → *expressible*.
+
+### 9.4 R — both halves, and completeness
+
+- **R-COMPLETE: FINDINGS.**
+  - At the shipped default pair (pool 2, Ob 2), Overwhelming cannot occur. The 200,000-draw sample this pass ran gives 0, because two dice net at most +4, a margin of +2. So the top band is dead for 429 of 430 persons.
+  - At the 1D floor, the obstacle is unceilinged until SC-01 step 14 (M-7). Its falsifier admits p = 0.0006 (8.3).
+  - Unwritten branches:
+    - a `Record` or `none` disposal declines (`effects_information.py`, `_eff_determine` docstring);
+    - petition deny/withdraw (M-SC-2);
+    - a lie (M-SC-7).
+  - The measured `tell` "success rate" (15%, 21%; `test_season_shape.py:9063, :9077`) counts `news.untold`, which tell also emits on **refusal** (`verb_table.yaml:1007-1010`). It is a share of attempts, not a roll rate. The roll rate at the default pair is 0.26 (sample above). Any claim built on the 15% inherits the conflation (§11).
+- **R-VARIETY: FINDINGS.** One pool (T-SC-2), one computed game (M-SC-1), one competence (M-SC-8). Strategies differ only by seat, stance and pursuits.
+- **R-WORLD: FINDINGS.** In computed play the courts are dead seats today: `convene`, `open_case` and `determine` are never attempted (BASELINE B3), and `detain`/`ban` never open unwatched. Under v9, determinations occur in one game. Whether they throw hooks (a grievance, a counter-petition) depends on IN-58/IN-70 [UNVERIFIED].
+- **R-CHOICE: FINDINGS, upper bound**, at seats an ordinary Person (and so the player) can occupy:
+
+  | SEAT: receiver of a petition · INTENT: the petition dies | gain | cost |
+  |---|---|---|
+  | deny (ruled by ED-IN-0210; **no verb**) | — | — |
+  | do nothing | the petition dies | no act, no event, no claim. IN-26's `Record.ttl` sink (B-Q) may expire it; whether expiry emits is [UNVERIFIED] |
+
+  **Silence beats refusal, and refusal does not exist.** This is a design failure under Rule 3. The repair is one object: the ruled `deny`, emitting at the venue.
+
+  | SEAT: convener · INTENT: a matter is not heard | gain | cost |
+  |---|---|---|
+  | do not convene | the matter is not heard | no event |
+  | convene, then leave the date vacant | the matter is not heard | `date.fired` emits even when vacant (`calendar.py:41-57`, audit A5 [AUDIT]) |
+
+  A decaying cost. Not convening is silent; the docket path is not.
+
+  | SEAT: party · INTENT: carry the matter | gain | cost |
+  |---|---|---|
+  | `speak` (planned, contested) | a band | a scene; the obstacle |
+  | stay silent when called | nothing | `PASS_STEP` on the next obstacle, if a lawful candidate existed (19 s14d, `C1-3` F; survival into 21 [UNVERIFIED]) |
+  | `release` / concede | the matter ends | own Tenure closed |
+
+  No dominance found at this seat (upper bound). **Dependency:** every R-CHOICE row here cannot be ruled until the act economy is (IN-14, [medium]; skill §6.3).
+
+### 9.5 S — six directions, pause, methodology
+
+- **S-UP: FAIL** for the petition path. `to` = `subject` (M-SC-2). The docket path is PARTIAL: a vacant date's lapse emits.
+- **S-DOWN: PASS in shape** (telling is published, distorts and is picked up through the hearer's own channel). The tree delivers thinly: 4 of 1,270 `told_by` claims arrived by a telling (audit S-DOWN, one seed [AUDIT]).
+- **Coverage.**
+  - Vertical: carried by the contest at RESOLVE; the nested proceeding is planned.
+  - Diagonal: a disposal reaching beyond the room has no carrier (`disposal_reach` unread).
+  - Lateral: **two readings of standing**. A proceedings bench will read the speaker through reception (`22a`); an ordinary hearer cannot rank a teller (H-181). This is an S defect.
+  - Horizontal: Records carry across seasons; recorded defeat does not (M-SC-5).
+- **Pauses correctly: FINDINGS** [READER]. The planned proceeding resolves inside one scene as a nested run with "no turn limit" and a depth cap (`C1-1` F). One-tick trials are listed as D-8, Jordan-vetoable (`C1-3` H). A trial that should adjourn and resume across seasons can do so only through a Record (`19` s26, adjourn/resume unspecified, `C1-2` V). It does not yield to the season.
+- **Methodology: FINDINGS.** Social contests run on two substrates until SC-01 step 13:
+  - `tell`'s discrete `roll_net + net_boost` (`modules/social_contest/roll.py`);
+  - the planned provider's `continuous_engine_sample` (`PS/06_RESOLUTION.md:86, :473` [CHECKED]).
+
+  After the repoint, social contests sit with combat on the continuous draw, and the season and mass battle stay discrete (audit A3 [AUDIT]). Within SC the pool formula has three lineages: `c or 2` (shipped), `max(5, faculty×2 + BASE)` (kernel, [AUDIT relayed]) and `brought + conduct × latitude` (planned). The obstacle base, `score/2`, is one ruling, applied consistently. The result vocabulary is the one four-band ladder.
+
+### 9.6 E, scored last against N and R
+
+- **E-OVERHEAD: FINDINGS.**
+  - **Shipped typed SC objects:** 7 rows × 13 keys, 6 speech kinds, 4 rosters, 4 fixtures (D-6, D-7a, D-7b, `bench_quorum`), 2 Tenure kinds, `judging_set`, 1 contest. Of these, about four change an outcome: `disposes`, `judging_set`, the `tell` roll, and `detain`/`ban` (hand-built only).
+  - **Planned additions:** the provider, five or more obstacle terms with about ten swept magnitudes (`C1-3` P), latitude, reception, the mirror test, the licence, `momentum`, the silence price and the quorum Query.
+  - **Planned deletions:** `_obstacle_of`, `chronicle`, possibly `Claim.visibility`, and the kernel (HELD).
+
+  The biggest moves are additions, and the vocabulary grows.
+- **Over-distillation watchlist:**
+
+  | watched | the N it protects | verdict |
+  |---|---|---|
+  | Speech kinds cut from 10 to 6; `refute` and `construe` lost | aptness by rung | **kept, at MEDIUM**: the cut removed two kinds the ratified 04 table uses as its examples |
+  | Proofs cut from 6 to 4 | ordeal, sign | kept, HIGH: the corpus uses four |
+  | `registers[]` cut while the Ob keeps a "register fit" term (`C1-3` P) | register misreading | **cut one step too far** [CONFIDENCE: medium]: a term with no key |
+
+- **E-LEGIBILITY: FINDINGS.** A speech's outcome depends on five or more injected terms and a latitude factor. Under PS 15 none is shown, and no surface exists (M-SC-9). The outcome is knowable only by running the engine. Against what N and R found (the room terms are N-holding, the person term is constant), the ratio is poor: the overhead buys variation by game that no computed case reaches.
+
+### 9.7 The design's own falsifier, run
+
+- **Closure** ("a planted `if arrangement.id == "tribunal"` must redden the closure test", `_part6:27`). Grep of `engine/season/**/*.py` outside tests for the seven seeded game ids as string literals, and for `== '<id>'`:
+  - 0 clean hits;
+  - 2 non-hits (a probe stage label at `harness/probes.py:1822`; a docstring at `data/arrangements.py:274`).
+
+  **HOLDS**, with a residual: it holds trivially, because no effect reads more of a row than `disposes`.
+- **M-7.** Run by the design itself and failed (`PS/21_RECONCILIATION.md:446-451`). I relied on that run and did not re-run it.
+- **THE BAR.** Not runnable: unbuilt.
+
+### 9.8 Self-audit
+
+- **9a, backward propagation.** The SC-08 finding (EXIT already met at HEAD) was carried back into T-SC-1, 7.2 #7 and 8.3. The refusal conflation in the 15% figure contradicts §0 #1, §3.1 and §4's `tell` row. It is not applied there (the brief bars rewriting sections 0–6) and is recorded in §11.
+- **9b, §3 turned on this pass's own additions.**
+  - M-SC-4 (rank in an ordinary telling) may fire **disqualifier 1** once SC-01 step 13 routes `tell` through the provider and `22a` builds reception. It is kept at MEDIUM because the plan itself says H-181 "stays absent" and reception is defined over a bench.
+  - M-SC-6 (`exchange`) is IN-owned and is entered here only for its SC effect.
+  - M-SC-9 (contest surface) adds a surface. Its recommendation must name what it cuts (§10).
+- **What an independent reviewer would add:** a `corpus_run` reading of how often `tell` refuses against how often it fails, to replace the conflated rate; a check of 21 for whether `momentum` and the silence price survive; and a play test of a single proceeding.
+
+### 9.9 Verdict
+
+```
+NERS PASS: SC lane (engine/season at 5445e34 + v9 SC-01..08, IN-12 SC rows, assumed built)   INSTRUMENTS: A + B (sampled)
+
+MUST BE STATED AS A LIMIT
+  - "Proceedings differ by game": computed cases have one game (C3, C5; M-SC-1)
+  - "The contest varies by person": 429 of 430 at the default (C1; T-SC-2; J-13)
+  - "A petition rises and may be denied": to = subject, no deny (C2; S-UP; M-SC-2)
+  - "Compromise scales with the margin": Tenure.degree has no reader (§3 false N-line)
+  - "Testimony is weighed": no testimony can be false (M-SC-7)
+MAY BE CLAIMED, HAVING SURVIVED
+  - A bench, and only a bench, binds a third party: the mutual-oblige substitute fails under AX-4
+  - A telling can fail to land: refraction and channel admission were attacked as substitutes and neither withholds a deposit
+  - No effect special-cases a game: the closure grep, 0 clean hits (residual: trivially, one key read)
+```
+
+| axis / test | verdict | what would overturn it |
+|---|---|---|
+| N (six directions) | FINDINGS | a computed act that names an arrangement row (bottom-up) |
+| E-OVERHEAD | FINDINGS | v9 deletions that outnumber its additions |
+| E-LEGIBILITY | FINDINGS | a built contest view from which a player predicts a band's shape |
+| R-COMPLETE | FINDINGS | Overwhelming reachable at the default pair; a written deny branch; a lie |
+| R-VARIETY | FINDINGS | two corpus persons with different pools on the same contested verb |
+| R-WORLD | FINDINGS | an unwatched seeded season in which a court disposes and the disposal changes a later choice |
+| R-CHOICE | FINDINGS (upper bound) | a petition receiver whose inaction emits a witnessable event |
+| S-UP | FAIL | a computed petition addressed to the seat above its subject |
+| S-DOWN | PASS (shape) | a telling routed to a named recipient by the engine |
+| S — coverage · pause · methodology | FINDINGS | one reading of standing for telling and proceedings; an adjournment across seasons; one substrate for social draws |
+| the design's own falsifier | HOLDS (closure, trivially); M-7 HITS (recorded by the design) | a game-name literal in an effect |
+| self-audit | both sweeps run: 9a found the refusal conflation; 9b downgraded M-SC-4 to MEDIUM | a `corpus_run` refusal/failure split |
+
+**Repairs, worst first** (each is a deletion or one object):
+1. M-SC-1 → `open_case` names its arrangement from a held Record or the convener's grant, through IN-10's `record_sourced_operands`. That is one operand.
+2. `Tenure.degree` → delete the SC-03b write, or name its single reader.
+3. M-SC-3 → re-key `ladder_rungs` to Fig. 5 and leave Fig. 27 as `speech_kinds`. This is a data edit that deletes the duplicate.
+4. M-SC-2 → the ruled `deny` row emitting at the venue.
+5. The D-6/D-7 knobs and the five unread keys → delete until a reader lands.
+6. Latitude → do not build it ahead of J-13's remainder.
+7. The M-7 falsifier → assert a floor on p(success), not "Ob < 4". The value is `[OPEN — Jordan tuning]`.
+
+**GRADE: paper.** Execution artifacts this pass:
+- `python -m pytest engine/season/tests/test_arrangements.py -q` → 9 passed (the loader, shipped state);
+- `python -m engine.season.harness.register --requirements` → R-09 `partial`;
+- an import probe: `engine.season.data.arrangements` is loaded by `import engine.season.loop.driver` (True);
+- a 200,000-draw sample of `roll_net(2) + net_boost(0, 2)` against Ob 2 → F .7398 / P .1899 / S .0703 / O 0.
+
+Not run: `corpus_run`, `aperture 4 0`, THE BAR, and any planned-built object (unbuildable by construction).
