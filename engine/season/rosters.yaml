@@ -1386,6 +1386,45 @@ rosters:
       dwelling: 1
       garrison: 0
 
+  works_cost:
+    source: "v9 IN-28 (`H-166` limit 1, its own design order: the cost first). r2 `proposals/2026-09-17-governance-and-holdings-r2/04_MATTER_AND_WORKS.md` §A.6.6 (intent): *\"the cost is paid by `transfer` into the works' rung\"*, and nothing debited that rung when the place rose. `proposals/2026-09-10-settlements-factions-populations/04_EVALUATION.md` §6 (intent): `found` costs *\"the stake\"*, `build` costs *\"timber\"*."
+    row: H-166
+    sweep: [declared, halved, doubled]
+    note: >-
+      WHAT A WORKS' PLAN COSTS: `{plan kind: {matter kind: amount}}`, paid out of the WORKS' RUNG
+      (`Record.rung`, where the works is kept and where `transfer` delivers to it) when the place
+      rises. `loop/effects_founding.py` is the one reader. `found` moves its stake TWO-SIDED into the
+      Rung it founds, so the grain stays in the world and provisions the new hearth (`_shift`, the one
+      body of a conserved store move). `build` CONSUMES its cost into the fabric, one-sided, a lawful
+      sink. 04_EVALUATION §6 S passes the pair in exactly that shape: *"`build` debits one side as a
+      lawful consumption sink; `found` is two-sided"*.
+      ⚠ A PLAN KIND WITH NO ROW HAS NO PRICE, SO NOBODY CAN PAY FOR IT, AND `found`/`build` REFUSE IT.
+      That is a refusal that emits, never a free place: a missing row is not a cost of zero. The
+      loader checks one way only -- every key a `rung_kinds` or `site_kinds` member, every cell
+      non-empty, every matter kind a `matter_kinds` member, every amount a positive int
+      (`data/fixtures.py::_load_works_cost`). It is NOT keyed on `site_kinds` in both directions as
+      `wear_per_season` is, because three members get no row by design:
+        * `body` IS NOT A SITE (`site_kinds`' own note). A works planning one is refused here, by the
+          roster, rather than by a kind literal in `_eff_build` (`H-166` limit 4, narrowed: `body`
+          stays in `site_kinds` for `band_floors`).
+        * `person` is CENSUS's to mint (F.30), never a works'.
+        * `settlement` and above are unpriced: founding a settlement collides with SE-9(a)'s held
+          question (*"never adding nodes"* to the fixed settlement registry), and 02_PROPOSALS P4
+          restricts founding to `hearth` and `community` for that reason.
+      [ASSUMPTION; medium; Jordan to correct; revert: delete this roster and its reader, and
+      `found`/`build` cost nothing again (`H-166` limit 1 reopens)]. THE KINDS are 04_EVALUATION's
+      (grain for the stake, timber for a fabric). THE AMOUNT IS INVENTED and it is ONE number, 10,
+      for every row: `site_yield.seam.timber` is 10, so a fabric costs one season of a full seam's
+      timber, and the stake reuses the same magnitude so the two verbs share one scale rather than
+      two. `H-166` sweeps it; `halved` and `doubled` scale every cell.
+    costs:
+      hearth:    {grain: 10}
+      community: {grain: 10}
+      harbour:   {timber: 10}
+      seam:      {timber: 10}
+      dwelling:  {timber: 10}
+      garrison:  {timber: 10}
+
   subsistence_weight:
     source: "`H-11` — *the subsistence formula over an OPEN MatterKind registry*. ARCHITECTURE_V2.md's default: *draw from the containing rung's stores, scaled by weight*."
     row: H-11

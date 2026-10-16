@@ -38,6 +38,7 @@ exercised by this run.**
 | `obstacle_refusal_multiple` | `2` | yes — §27.4 |
 | `band_floors` | `{'harbour': {'bulk_shipping': 800, 'fishing': 100}, 'seam': {'deep_mining': 700, 'surface_gleaning': 50}, 'body': {'full_operations': 800, 'limited': 500, 'withdrawal_only': 100}, 'dwelling': {}, 'garrison': {}}` | no — a harness fixture |
 | `capacity_floor` | `{'harbour': 0, 'seam': 0, 'body': 0, 'dwelling': 1, 'garrison': 0}` | no — a harness fixture |
+| `works_cost` | `{'hearth': {'grain': 10}, 'community': {'grain': 10}, 'harbour': {'timber': 10}, 'seam': {'timber': 10}, 'dwelling': {'timber': 10}, 'garrison': {'timber': 10}}` | no — a harness fixture |
 | `season_factor` | `1.0` | no — a harness fixture |
 | `season_factor_draw` | `()` | no — a harness fixture |
 | `subsistence_weight` | `{'grain': 2, 'salt': 1}` | no — a harness fixture |
