@@ -2,7 +2,7 @@
 enforces `max_depth`; returns Events + degree, or a typed refusal."*
 
 `contest()` itself, the manifest-shaped provider lookup `contest_subsystem()`, the typed
-`ContestError`, and `Resolution` -- what the seam returned as the fold sees it.
+`ContestError` and `ContestRefused`, and `Resolution` -- what the seam returned as the fold sees it.
 
 The degree side lives in `seam/ladder.py` and this module calls into it; the dependency is
 one-directional by construction, because §A.2 gives the ladder its own row (*"nothing.
@@ -34,6 +34,26 @@ class ContestError:
 
     def __repr__(self) -> str:
         return f"ContestError({self.reason!r}, depth={self.depth}, max_depth={self.max_depth})"
+
+
+# The provider statuses that are a GAME refusal -- the act is refused and the season spent, never
+# aborted: `PARTY-GAP` (every wrapper's word for a missing party) and `REFUSED` (`sigma.py`'s S27.4,
+# `Ob > 2 x Pool`). Any other non-`RESOLVED` status (`ENGINE-UNAVAILABLE`, an unknown one) is a
+# software defect and still raises.
+REFUSAL_STATUSES = frozenset({"PARTY-GAP", "REFUSED"})
+
+
+class ContestRefused:
+    """`04 §A.2`'s *"or a typed refusal"*: a provider declined to resolve the contest for a reason
+    the game refuses on (`REFUSAL_STATUSES`). Returned, never raised, as `ContestError` is, so the
+    caller branches on the TYPE (`loop/resolve.py::_contest` folds it as the verb's refusal) rather
+    than matching a status string carried on an exception."""
+
+    def __init__(self, status: str, why: Any):
+        self.status, self.why = status, why
+
+    def __repr__(self) -> str:
+        return f"ContestRefused({self.status!r}, {self.why!r})"
 
 
 
@@ -166,6 +186,8 @@ def contest(w: World, rung: Optional[str], prize: Any, claimants: list[str],
                                alternatives=["invent a degree ladder in the seam (S27.2: the "
                                              "second resolver)"])
                 return out
+            if out.get("status") in REFUSAL_STATUSES:
+                return ContestRefused(out["status"], out.get("why"))
             # A gap in the CALL is named as a gap in the call, never as a missing design.
             raise Unspecified(
                 f"a contest for {prize!r} routes to `{out['module']}` and the call did not "

@@ -4,7 +4,7 @@ the three its own row: `seam/contest` dispatches and returns Events + degree or 
 `seam/ladder` owns nothing and answers `degree(margin, veto?) -> Degree`, and `seam/wrappers/*`
 own *"nothing, ever"* and return a `Margin`.
 
-    contest.py            contest() · contest_subsystem() · ContestError · Resolution
+    contest.py            contest() · contest_subsystem() · ContestError · ContestRefused · Resolution
     ladder.py             degree_of() · combat_degree() · degree_ladder() · ladder_error()
     wrappers/combat.py    the IN-side of the personal-combat call
 
@@ -57,7 +57,7 @@ Filed as **ED-IN-0206**; this is unit **L2** of
 # `manifest.has` clause in `resolvable_verbs()` is deleted. The import is still what fills the table.
 # `tests/valoria/test_season_providers_are_registered.py` is the falsifier.
 from . import wrappers as _wrappers   # noqa: F401
-from .contest import ContestError, Resolution, contest, contest_subsystem
+from .contest import ContestError, ContestRefused, Resolution, contest, contest_subsystem
 from .ladder import combat_degree, degree_ladder, degree_of, ladder_error
 
 # ⚠ DERIVED, NOT LISTED -- Jordan 2026-09-02, definitions are not hardcoded, and

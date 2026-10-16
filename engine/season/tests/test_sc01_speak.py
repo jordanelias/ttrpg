@@ -189,3 +189,28 @@ def test_sc01_s12_a_speaker_under_one_die_is_refused_not_a_crash():
         assert bool(out) and (_kinds(out) == ["speech.unheard"]) is refused, (pool, _kinds(out))
         checked += 1
     assert checked == 3
+
+
+@pytest.mark.parametrize("status", ["PARTY-GAP", "REFUSED", "ENGINE-UNAVAILABLE", "NO-SUCH-STATUS"])
+def test_the_seam_returns_a_game_refusal_typed_and_raises_a_software_failure(monkeypatch, status):
+    """`04 §A.2`'s `seam/contest` row: *returns Events + degree, or a typed refusal*. A provider's
+    `PARTY-GAP` or `REFUSED` comes back as a `ContestRefused` naming the status (the fold folds it as
+    the verb's refusal kind, `test_sc01_s12_a_speaker_under_one_die_is_refused_not_a_crash`); any
+    other non-`RESOLVED` status still raises `Unspecified`, loud. Red before the type existed: every
+    status raised. The provider is planted so each status is reached by the same call."""
+    from .. import manifest
+    from ..gaps import Unspecified
+    from ..harness import probes as P
+    from ..loop.driver import SeasonDriver
+    from ..seam import ContestRefused, contest
+    w = P.tiny_world()
+    SeasonDriver(w)                  # registers the providers a direct `contest()` dispatches to
+    planted = dict(status=status, why="planted", module="combat", resolver="d_sigma")
+    monkeypatch.setattr(manifest, "call", lambda role, module: (lambda *a, **k: planted))
+    if status in ("PARTY-GAP", "REFUSED"):
+        r = contest(w, "S", "the body", ["p_low", "p_mid"], 0, 2, ["a1"])
+        assert isinstance(r, ContestRefused) and (r.status, r.why) == (status, "planted"), r
+    else:
+        with pytest.raises(Unspecified) as ei:
+            contest(w, "S", "the body", ["p_low", "p_mid"], 0, 2, ["a1"])
+        assert ei.value.needs == status, ei.value.needs

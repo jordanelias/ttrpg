@@ -36,7 +36,7 @@ from ..epistemic import observers_for
 from ..queries.person_q import (broken_by, confided_outside, conviction_after_crisis,
                                  elements_violated_by)
 from ..queries.world_q import WorldReader, ceiling, demanded_person, occasioned_by
-from ..seam import ContestError, Resolution, contest, degree_of
+from ..seam import ContestError, ContestRefused, Resolution, contest, degree_of
 from ..state.carriers import Act, Event, StateChange, subject_of
 from ..state.gate import Change, NoOpReceipt, Subject, Token, seat_hold
 from ..state.ids import draw_factory, H
@@ -776,38 +776,29 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
     # (M4, found by `valoria-critic`'s adversarial pass, not anticipated in the build). It was first
     # written for `subject = None` -- `sides_of`'s `holder_faction_of`, `None` for any Rung with no HELD
     # ancestor (`H-149` permits an unheld settlement as a march target, and the corpus has several;
-    # `populated.py`'s `Uncontrolled` provinces) -- which every wrapper reported as `status="PARTY-GAP"`,
-    # and `seam/contest.py` raises `Unspecified(needs="PARTY-GAP", ...)` for ANY non-RESOLVED status:
-    # uncaught here before this fix, a march on an unheld target crashed the whole season. ⚠ SINCE v9
-    # IN-13 `subject = None` NO LONGER CRASHES THROUGH THIS CATCH: `mass_battle.py` answers it
-    # `Unopposed` (no opposing faction), and an empty army is refused above, at the `_parties` check.
-    # The catch stays for the other wrappers' shapes of missing party (`combat.py`, `sigma.py`, and
-    # `mass_battle.py`'s no-rung). Caught by `needs`, not by pre-checking `_subject` before the call,
-    # because PARTY-GAP is the WRAPPER's own vocabulary for every shape of missing party (empty
-    # claimants, wrong-typed claimant, no subject, no rung) and a pre-check here would have to
-    # re-enumerate all of them to stay in sync.
-    try:
-        r = contest(w, rung=_rung, prize=contests[0], claimants=_parties, depth=0,
-                    max_depth=contest_max_depth, causes=[a.id], verb=a.verb, subject=_subject,
-                    rng=_rng)
-    except Unspecified as e:
-        # ⚠ ONLY THESE TWO REFUSALS ARE CAUGHT, DELIBERATELY: `PARTY-GAP` (a missing party) and
-        # `REFUSED` (`sigma.py`'s S27.4, `Ob > 2x Pool`). `speak` is contested, so a speaker whose
-        # pool is under 1D reached this raise whenever a matter was docketed (the ceiling caps the
-        # obstacle at 2); S27.4's rule is that the attempt is refused and the season spent, as the
-        # uncontested branch below does -- never that the season aborts -- so a wrapper's own
-        # `REFUSED` takes the verb's refusal kind, the shape `PARTY-GAP` takes. A normal game
-        # refusal, unlike `ENGINE-UNAVAILABLE` (a wrapper's subsystem failed to import/compose),
-        # which is a software defect and stays uncaught and loud on purpose: swallowing it into a
-        # graceful `march.refused` would hide a real infrastructure failure behind a
-        # plausible-looking game Event. `e.needs` is a free-text field elsewhere in this codebase
-        # (`manifest/registry.py`, `harness/probes.py`), matched by string rather than a typed
-        # exception subclass, because `seam/contest.py` forwards a wrapper's raw `status` value
-        # verbatim only at this one raise site -- a real but separate seam-contract gap, not
-        # widened here.
-        if e.needs in ("PARTY-GAP", "REFUSED"):
-            return _party_gap_refusal()
-        raise
+    # `populated.py`'s `Uncontrolled` provinces) -- which every wrapper reported as `status="PARTY-GAP"`;
+    # uncaught before M4, a march on an unheld target crashed the whole season. ⚠ SINCE v9 IN-13
+    # `subject = None` NO LONGER REACHES THIS BRANCH: `mass_battle.py` answers it `Unopposed` (no
+    # opposing faction), and an empty army is refused above, at the `_parties` check. The branch stays
+    # for the other wrappers' shapes of missing party (`combat.py`, `sigma.py`, and `mass_battle.py`'s
+    # no-rung). Read off the seam's result, not pre-checked on `_subject` before the call, because
+    # PARTY-GAP is the WRAPPER's own vocabulary for every shape of missing party (empty claimants,
+    # wrong-typed claimant, no subject, no rung) and a pre-check here would have to re-enumerate all of
+    # them to stay in sync.
+    r = contest(w, rung=_rung, prize=contests[0], claimants=_parties, depth=0,
+                max_depth=contest_max_depth, causes=[a.id], verb=a.verb, subject=_subject,
+                rng=_rng)
+    if isinstance(r, ContestRefused):
+        # `04 §A.2`'s typed refusal (`seam/contest.py::REFUSAL_STATUSES`): `PARTY-GAP` (a missing
+        # party) and `REFUSED` (`sigma.py`'s S27.4, `Ob > 2x Pool`). `speak` is contested, so a
+        # speaker whose pool is under 1D reaches this whenever a matter is docketed (the ceiling caps
+        # the obstacle at 2); S27.4's rule is that the attempt is refused and the season spent, as the
+        # uncontested branch below does -- never that the season aborts -- so it takes the verb's
+        # refusal kind, the shape `PARTY-GAP` takes. `ENGINE-UNAVAILABLE` (a wrapper's subsystem
+        # failed to import/compose) is NOT a refusal: the seam still raises it, loud on purpose, since
+        # folding it into a graceful `march.refused` would hide an infrastructure failure behind a
+        # plausible-looking game Event.
+        return _party_gap_refusal()
     if isinstance(r, ContestError):
         TRACE.note(f"contest returned {r}", "S39.3")
         return []

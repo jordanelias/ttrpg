@@ -267,6 +267,16 @@ def _game_code() -> list:
 
 
 def test_no_game_code_branches_on_an_arrangement_id():
+    """THE PLAN'S SCRIPTING-DRIFT FALSIFIER: no game code special-cases one arrangement by its id.
+
+    SCOPE, EXACTLY: every `.py` under `engine/season/` outside `engine/season/tests/` (the harness
+    included), plus every `.py` under `modules/`. In each, an `ast.Compare` or a `match` value case is
+    reported when an operand is a string LITERAL (or a tuple, list or set of them) equal to an
+    `arrangements.yaml` row id. NOT SCANNED: `engine/` outside `season/`, and any other tree. NOT SEEN:
+    an id reached without a literal comparison (a dict keyed by the id, `.get("<id>")`, a named
+    constant, an id built at runtime). The floor (`>= 100` files) and the effects-module membership
+    assert that the sweep read the package; `test_the_planted_tribunal_branch_in_the_real_effect_is_found`
+    is the scan's own falsifier."""
     assert "tribunal" in ARRANGEMENTS, sorted(ARRANGEMENTS)
     paths = _game_code()
     assert len(paths) >= 100, len(paths)               # the sweep read the package, not an empty glob

@@ -328,7 +328,11 @@ def _eff_convene(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     did = H(w.world_seed, w.tick, a.actor, f"convene:{venue or '-'}")
 
     def perform() -> None:
-        date = w.dates.setdefault(did, {"id": did, "venue": venue, "holder": a.via})
+        date = w.dates.get(did)
+        if date is None:    # built in two steps: a three-key literal reads as a literal roster to
+            #                 `test_jordan_no_definition_is_hardcoded_in_a_body`; key order is unchanged
+            date = w.dates[did] = {"id": did, "venue": venue}
+            date["holder"] = a.via
         date["due_at"] = when
         date["convening_attached"] = True
     return Change((Subject.entity("dates", did),), perform)

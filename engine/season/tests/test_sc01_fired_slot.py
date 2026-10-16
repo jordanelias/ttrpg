@@ -37,8 +37,12 @@ No test here asserts execution in the seed-0 realm (v9 §0.5's relaxed exit).
 
 from __future__ import annotations
 
-from ..data.matrix import WriteClass
+import pytest
+
+from ..data.matrix import Step, WriteClass
+from ..data.verbs import VERB_TABLE
 from ..decision import opening_set
+from ..gaps import Forbidden
 from ..decision.choose import pack_scenes
 from ..loop.driver import mint_token
 from ..queries import world_q
@@ -284,3 +288,30 @@ def _w26_run():
 def test_w26_a_convened_sitting_fires_takes_a_case_and_its_bench_determines_it():
     first = _w26_run()
     assert _w26_run() == first, "the same seeded run hashed differently"
+
+
+# ======================================================================================
+# THE KEYS A FILLED SLOT GAINS ARE MATRIX CELLS (04 PART D row 3; §C.2's write gate)
+# ======================================================================================
+
+def test_the_keys_a_case_writes_into_a_slot_are_matrix_cells_its_verb_declares():
+    """`_eff_open_case` fills a slot CALENDAR formed as `{date, matter}` with `_docket_item`'s
+    `arrangement` and `petition` keys, so it writes two keys into an item another step created.
+    `Record.subject_matter`'s exemption (a key set once, inside its own creating write, has no row)
+    does not cover that, so each key is a `(DocketItem, <key>)` matrix row at RES, and `open_case` and
+    `carry` (whose appended item carries the same keys) declare both as check-only pairs, as they
+    declare `DocketItem.matter`. The gate admits each at RESOLVE with an ACTS token and refuses it at
+    CALENDAR as a marked cell written at the wrong step. Red before the rows existed: the gate raised
+    `Unspecified` (an unmarked cell) at both steps, and neither verb declared either key."""
+    w, _ = _world()
+    for key in (world_q.DOCKET_ARRANGEMENT, world_q.DOCKET_PETITION):
+        cell = f"{world_q.DOCKET_KIND}.{key}"
+        for verb in ("open_case", "carry"):
+            assert cell in VERB_TABLE[verb].writes, (verb, VERB_TABLE[verb].writes)
+        w.step = Step.RESOLVE
+        w.write(cell, mint_token(w, WriteClass.ACTS), lambda: None,
+                record_kind=world_q.DOCKET_KIND, fieldname=key, driver="Act")
+        w.step = Step.CALENDAR
+        with pytest.raises(Forbidden, match="written during CALENDAR"):
+            w.write(cell, mint_token(w, WriteClass.CALENDAR), lambda: None,
+                    record_kind=world_q.DOCKET_KIND, fieldname=key, driver="Event")
