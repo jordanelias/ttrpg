@@ -102,10 +102,10 @@ from ..state.ids import H, draw_factory
 from . import probes as P
 from .populated import build_realm
 
-# [canonical: workplans/valoria_master_workplan_v9_part5.md §IN-62 — a float-tie tolerance, not a game number]
+# [JUSTIFIED: a float-tie tolerance for the attribution (two scores within it are a tie), an instrument constant and not a game number]
 EPS = 1e-9
 TERMS = ("pursuit", "stance", "urgency")
-# [canonical: workplans/valoria_master_workplan_v9_part5.md §IN-64 EXIT — "pairs above 0.99"]
+# [JUSTIFIED: the instrument's near-identical bar for a cosine between two persons' vectors (IN-64's EXIT 'pairs above 0.99'), a reading threshold and not a game number]
 COSINE_HIGH = 0.99
 
 
