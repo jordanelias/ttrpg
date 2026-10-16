@@ -45,10 +45,7 @@ from ..data.verbs import RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
 # the asker-first module (which may not import this one; this edge runs the other way).
-from .person_q import content_said, intent_named, ledger_names
-# v9 SC-01 fired-slot step: `sittings_before` picks the judge's newest `date.fired` claim by the one
-# comparator (`LedgerReader._best`), never a second ladder.
-from .person_q import LedgerReader
+from .person_q import LedgerReader, content_said, intent_named, ledger_names
 # v9 IN-57: `attention_key`'s tier 2 scores a deed claim by `deed_valence`, one owner per factor.
 from .person_q import (
     _seen_index, crisis_weights, deed_valence, paired_deed_term, projected_axes)
@@ -217,12 +214,15 @@ FIRED_KIND = "date.fired"
 def slot_venue(w: World, item: dict) -> Optional[str]:
     """THE VENUE OF THE SITTING A DOCKET ITEM WAS FORMED FOR -- its Date's `venue` -- or `None` for a
     dateless item (`open_case`'s, where no sitting was convened) or a date the world no longer holds.
-    v9 SC-01 fired-slot step: the one owner of *which room is this item before*, read by
+    v9 SC-01 fired-slot step: the name for *which room is this item before*, read by
     `open_slots`/`slot_for` (the act that fills a slot) and `sittings_before` (the bench that hears
-    it)."""
-    did = item.get("date")
-    date = w.dates.get(did) if did is not None else None
-    return date.get("venue") if date else None
+    it); a Date's venue is `place_of`'s date limb, which this asks."""
+    return place_of(w, item.get("date"))
+
+
+def _is_person_id(w: World, x) -> bool:
+    """`x` names a person the world holds (a matter that is a person; `slot_for`, `sittings_before`)."""
+    return isinstance(x, str) and x in w.persons
 
 
 def open_slots(w: World, venue: Optional[str]) -> list[dict]:
@@ -250,7 +250,7 @@ def slot_for(w: World, matter: Optional[str]) -> Optional[dict]:
     what stands within it -- so any judge `judging_set` seats over the venue also sits over the
     matter's place, and `determine`'s `bench` conjunct holds wherever the slot was found. A matter
     with no place (`None`) fills nothing. REVERT: return `None` (every case appends a dateless item)."""
-    if not isinstance(matter, str) or matter not in w.persons:
+    if not _is_person_id(w, matter):
         return None
     place = place_of(w, matter)
     if place is None:
@@ -267,10 +267,10 @@ def sittings_before(w: World, p: Person) -> list[tuple]:
     `[(date id, claim, (matter, ...)), ...]` in docket order. v9 SC-01 fired-slot step (H-163 limit 2,
     #453 pass-1 step 4): `questions_for`'s sitting question, *a judge is asked about a docketed
     matter*. A sitting is before `p` when:
-      * a docket item formed for its Date holds a matter that is a person (`slot_venue`; a dateless
-        item is no sitting, an empty slot names nothing, `docketed`'s rule, and a non-person matter
-        is one `determine` can never clear -- `slot_for` admits none, and a hand-planted one is
-        skipped here; a date left with no such matter is no sitting);
+      * a docket item formed for its Date holds a matter that is a person (`slot_venue`,
+        `_is_person_id`; a dateless item is no sitting, an empty slot names nothing, `docketed`'s
+        rule, and a non-person matter is one `determine` can never clear -- `slot_for` admits none,
+        and a hand-planted one is skipped here; a date left with no such matter is no sitting);
       * `p` is on the bench at its venue (`judging_set`, the one owner of who sits over a rung);
       * `p`'s OWN ledger holds a `date.fired` claim about that venue made ON THE FIRING'S TICK --
         CALENDAR's Event, deposited firsthand at WITNESS since IN-29, and CALENDAR fires a date only
@@ -283,25 +283,19 @@ def sittings_before(w: World, p: Person) -> list[tuple]:
     nothing rules when a sitting ends, so its bench is asked again whenever a new matter fills it.
     World-reading by construction, as `vacancies` and Q4 are (`questions_for`'s docstring): what is on
     the room's docket is the room's own business, and its bench is told."""
-    by_date: dict = {}
+    by_date: dict[str, list] = {}
     for item in w.docket:
         matter = item.get("matter")
-        venue = slot_venue(w, item)
-        if not isinstance(matter, str) or matter not in w.persons or venue is None:
-            continue
-        by_date.setdefault(item["date"], (venue, []))[1].append(matter)
+        if _is_person_id(w, matter) and slot_venue(w, item) is not None:
+            by_date.setdefault(item["date"], []).append(matter)
     out = []
-    for did, (venue, matters) in by_date.items():
-        if p.id not in judging_set(w, venue):
-            continue
-        due = w.dates[did].get("due_at")
+    for did, matters in by_date.items():
+        venue, due = w.dates[did]["venue"], w.dates[did].get("due_at")
         heard = [c for c in p.ledger if c.subject == venue and c.predicate == FIRED_KIND
                  and c.when == due]
-        c = LedgerReader(heard).belief_among() if heard else None
-        if c is not None:
-            out.append((did, c, tuple(dict.fromkeys(matters))))
+        if heard and p.id in judging_set(w, venue):
+            out.append((did, LedgerReader(heard).belief_among(), tuple(dict.fromkeys(matters))))
     return out
-
 
 
 def docketed_under(w: World, matter: Optional[str]) -> set:

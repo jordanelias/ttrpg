@@ -38,12 +38,10 @@ import random
 
 import pytest
 
-from ..data.fixtures import DEFAULT_FIXTURES
-from ..data.matrix import WriteClass
 from ..data.rosters import roster_map
 from ..gaps import Unspecified
 from ..harness import probes as P
-from ..loop.driver import SeasonDriver, mint_token
+from ..loop.driver import SeasonDriver
 from ..manifest import MODULE_ENTRIES, PROVIDERS
 from ..manifest.registrar import ModuleEntry
 from ..queries import world_q
@@ -53,6 +51,8 @@ from ..seam import ladder
 from ..seam.wrappers import sigma
 from ..state.carriers import Act, Claim
 from engine.substrate import composition
+from .test_sc01_speak import _docket
+from .test_u7_remit import _fold, _world
 
 PROVIDER = "social_contest"
 ENTRY = "social_contest.roll"
@@ -63,27 +63,6 @@ SPEAKER, PARTY = "p_low", "p_mid"
 def _social_rows() -> dict:
     return {k: r for k, r in roster_map("contest_subsystems", "prizes").items()
             if isinstance(r, dict) and r.get("module") == "social_contest"}
-
-
-def _world(fx=DEFAULT_FIXTURES):
-    w = P.tiny_world(fx)
-    w.persons[DUKE].ledger.append(Claim("c_knows_party", DUKE, PARTY, "exists:Person", 1, 0,
-                                        "firsthand", 100, "own"))
-    d = SeasonDriver(w)
-    d.matter(mint_token(w, WriteClass.MATTER), [])
-    return w, d
-
-
-def _fold(w, d, *acts):
-    out = d.resolve(mint_token(w, WriteClass.ACTS), list(acts),
-                    contest_max_depth=w.fixtures.get("contest_max_depth"))
-    w.log.extend(out)
-    return out
-
-
-def _docket(w, d):
-    out = _fold(w, d, Act(id="oc", actor=DUKE, verb="open_case", via=SEAT, payload={"subject": PARTY}))
-    assert [e.kind for e in out] == ["case.opened"], [e.kind for e in out]
 
 
 def _recording(monkeypatch) -> list:
@@ -98,11 +77,6 @@ def _recording(monkeypatch) -> list:
         return out
     monkeypatch.setitem(PROVIDERS, ("contest", PROVIDER), rec)
     return calls
-
-
-def _grade(out: dict) -> str:
-    degree_from_net, label = ladder.degree_ladder()
-    return label[degree_from_net(out["net"], out["ob"])]
 
 
 # ================================================================================================
@@ -207,7 +181,7 @@ def test_sc01_s15_a_docketed_speak_resolves_through_the_provider_at_the_speakers
         # C-8: the seam dispatched at the actor's place, never the `"R"` placeholder.
         assert call["rung"] == place, (actor, call["rung"])
         assert call["out"]["status"] == "RESOLVED" and call["out"]["module"] == PROVIDER, call["out"]
-        assert out[0].degree == _grade(call["out"]), (out[0].degree, call["out"])
+        assert out[0].degree == ladder.degree_of(call["out"]), (out[0].degree, call["out"])
         folded += 1
     assert folded == 2 and len(calls) == 2
 
@@ -226,5 +200,5 @@ def test_sc01_s15_a_tell_resolves_through_the_provider(monkeypatch):
     assert call["verb"] == "tell" and call["prize"] == "a standing" and call["rung"] == "Hh", call
     assert call["out"]["module"] == PROVIDER, call["out"]
     graded = [e for e in out if e.degree is not None]
-    assert graded and all(e.degree == _grade(call["out"]) for e in graded), (
+    assert graded and all(e.degree == ladder.degree_of(call["out"]) for e in graded), (
         [(e.kind, e.degree) for e in out], call["out"])

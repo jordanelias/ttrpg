@@ -791,24 +791,20 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
                     max_depth=contest_max_depth, causes=[a.id], verb=a.verb, subject=_subject,
                     rng=_rng)
     except Unspecified as e:
-        # ⚠ ONLY `PARTY-GAP` IS CAUGHT, DELIBERATELY (M4 review pass, `/simplify` altitude
-        # finding, corrected once more by a second correctional pass). `ENGINE-UNAVAILABLE`
-        # (a wrapper's subsystem failed to import/compose) is a software defect and stays
-        # uncaught and loud on purpose -- swallowing it into a graceful `march.refused` would
-        # hide a real infrastructure failure behind a plausible-looking game Event.
-        # ⚠⚠ `sigma.py`'s own `REFUSED` (S27.4, `Ob > 2x Pool`) is NOT a software defect -- it is
-        # a normal game refusal, and mischaracterizing it as one was this comment's own first
-        # writing. It WAS uncaught for `tell` (pre-existing, unrelated to march); SC-01
-        # Phase 2 widened the catch below to `REFUSED` once `speak` became contested. `e.needs` is a free-text field elsewhere in this codebase
+        # ⚠ ONLY THESE TWO REFUSALS ARE CAUGHT, DELIBERATELY: `PARTY-GAP` (a missing party) and
+        # `REFUSED` (`sigma.py`'s S27.4, `Ob > 2x Pool`). `speak` is contested, so a speaker whose
+        # pool is under 1D reached this raise whenever a matter was docketed (the ceiling caps the
+        # obstacle at 2); S27.4's rule is that the attempt is refused and the season spent, as the
+        # uncontested branch below does -- never that the season aborts -- so a wrapper's own
+        # `REFUSED` takes the verb's refusal kind, the shape `PARTY-GAP` takes. A normal game
+        # refusal, unlike `ENGINE-UNAVAILABLE` (a wrapper's subsystem failed to import/compose),
+        # which is a software defect and stays uncaught and loud on purpose: swallowing it into a
+        # graceful `march.refused` would hide a real infrastructure failure behind a
+        # plausible-looking game Event. `e.needs` is a free-text field elsewhere in this codebase
         # (`manifest/registry.py`, `harness/probes.py`), matched by string rather than a typed
         # exception subclass, because `seam/contest.py` forwards a wrapper's raw `status` value
         # verbatim only at this one raise site -- a real but separate seam-contract gap, not
         # widened here.
-        # SC-01 (B-N) Phase 2, /code-review: `speak` is contested now, so a speaker whose pool is
-        # under 1D reached this raise whenever a matter was docketed (the ceiling caps the obstacle
-        # at 2 and S27.4 refuses Ob > 2 x Pool). S27.4's rule is that the attempt is refused and the
-        # season spent, as the uncontested branch below does -- never that the season aborts -- so a
-        # wrapper's own `REFUSED` takes the verb's refusal kind, the shape `PARTY-GAP` takes.
         if e.needs in ("PARTY-GAP", "REFUSED"):
             return _party_gap_refusal()
         raise

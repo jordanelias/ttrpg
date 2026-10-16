@@ -11666,9 +11666,6 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # cells -- `give`'s arrival above, the same shape: formed on a referent that is not a petition,
     # refused there, the `exists:petition` 0 read deposited, the next Candidate dropped on it. No verb
     # left the set. A re-record, read off the failing assertion's own output.
-    # ⚠ v9 SC-01 step 12 `speak` (typed on an `existence` cell, `DocketItem`): UNCHANGED HERE, and run
-    # so -- this headless fixture forms no `speak` before a refused one's read is deposited; the corpus
-    # set above is where it joins.
     assert {v for v, _ in hl_live} == {"accept", "carry", "challenge", "commit", "examine", "fight",
                                        "give", "interview", "petition", "research", "restore",
                                        "transfer"}, (

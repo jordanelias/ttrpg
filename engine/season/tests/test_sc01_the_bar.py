@@ -68,14 +68,13 @@ import pytest
 from ..data import files
 from ..data.arrangements import ARRANGEMENTS
 from ..data.fixtures import DEFAULT_FIXTURES
-from ..decision import make_chooser
 from ..harness import probes as P
 from ..harness.corpus_run import attribute
 from ..loop import effects_information
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries import world_q
 from ..state.carriers import Act, Proposition, Tenure
-from ..state.ids import H, draw_factory
+from .test_sc01_fired_slot import _walks_to
 
 DUKE, SEAT, PARTY, WANT = "p_high", "off_duke", "p_mid", "prop_bar_duke_want"
 
@@ -104,9 +103,7 @@ def _run(conviction: str, seed: int, seasons: int, wrap=None):
     OUTSIDE the recorder, as an injection would be); THE BAR passes none."""
     w = _world(conviction, seed)
     d = SeasonDriver(w)
-    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    real = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
-                        draw=draw_factory(w.world_seed, lambda: w.tick))
+    real = P.chooser(w, verbs=resolvable_verbs())
     chosen: list = []
 
     def choose(p, v, s, ask_budget):
@@ -119,20 +116,6 @@ def _run(conviction: str, seed: int, seasons: int, wrap=None):
         d.season(choose, question=None, subsistence=P.SUBSIST,
                  contest_max_depth=w.fixtures.get("contest_max_depth"))
     return w, d, chosen
-
-
-def _walks_to(w, e, target: str) -> bool:
-    by_id = {x.id: x for x in w.log}
-    stack, seen = list(e.causes), set()
-    while stack:
-        c = stack.pop()
-        if c == target:
-            return True
-        if c in seen or c not in by_id:
-            continue
-        seen.add(c)
-        stack.extend(by_id[c].causes)
-    return False
 
 
 def _zero_authored(w, chosen: list) -> None:
@@ -151,11 +134,10 @@ def _executed(w, d, seasons: int, verb: str, subject: str) -> list:
             if a.verb == verb and (a.payload or {}).get("subject") == subject and made]
 
 
-def _proceeding(conviction: str, seed: int, seasons: int, wrap=None) -> str:
+def _proceeding(conviction: str, seed: int, seasons: int) -> str:
     """ONE SEEDED PROCEEDING, end to end, every link read off the log; returns the content hash."""
-    w, d, chosen = _run(conviction, seed, seasons, wrap)
+    w, d, chosen = _run(conviction, seed, seasons)
     _zero_authored(w, chosen)
-    by_id = {e.id: e for e in w.log}
     acts = {a.id: a for a in d.resolved}
     # THE DETERMINATION, and the firing its `causes[]` walk back to.
     done = [e for e in w.log if e.kind == "matter.determined"]
@@ -187,7 +169,7 @@ def _proceeding(conviction: str, seed: int, seasons: int, wrap=None) -> str:
     sched, = [x for x in w.log if x.kind == "date.scheduled" and any(ch.subject == did for ch in x.changes)]
     conv, = [acts[c] for c in sched.causes if c in acts]
     assert (conv.verb, conv.actor, conv.via, conv.payload.get("subject")) == ("convene", DUKE, SEAT, venue), conv
-    assert by_id[sched.id].emitted_at < f.emitted_at
+    assert sched.emitted_at < f.emitted_at
     return w.content_hash()
 
 

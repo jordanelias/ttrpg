@@ -62,11 +62,11 @@ def _next_season_calendar(w, d):
 
 
 def _sitting(w, d):
-    """A convened sitting at `VENUE` that has fired and been witnessed: `(date id, CALENDAR's Events)`."""
+    """A convened sitting at `VENUE` that has fired and been witnessed: its date id."""
     did = _convene(w, d)
     cal = _next_season_calendar(w, d)
     d.witness(mint_token(w, WriteClass.INTERIOR), cal)
-    return did, cal
+    return did
 
 
 def _walks_to(w, e, target) -> bool:
@@ -156,7 +156,7 @@ def test_a_bench_question_names_exactly_the_docketed_matters_of_a_sitting_its_ju
     once the determination takes the matter off the docket the question is gone."""
     w, d = _world()
     duke = w.persons[DUKE]
-    did, cal = _sitting(w, d)
+    did = _sitting(w, d)
     heard, = [c for c in duke.ledger if c.predicate == "date.fired" and c.subject == VENUE]
     assert world_q.sittings_before(w, duke) == [], "an empty slot named a matter"
     # A dateless item for another matter: docketed, but before no sitting.
@@ -195,7 +195,7 @@ def test_a_matter_that_is_no_person_fills_no_slot_and_raises_no_bench_question()
     case on a person at that venue fills it."""
     w, d = _world()
     duke = w.persons[DUKE]
-    did, _ = _sitting(w, d)
+    did = _sitting(w, d)
     assert _kinds(_fold(w, d, _open("oc_rung", subject="Hh"))) == ["case.opened"]
     assert world_q.open_slots(w, VENUE) == [{"date": did, "matter": None}], w.docket
     assert world_q.docketed(w, "Hh") == [{"date": None, "matter": "Hh", world_q.DOCKET_ARRANGEMENT: None,
@@ -213,9 +213,9 @@ def test_each_sitting_is_asked_on_its_own_firing_and_not_on_a_later_one():
     about the earlier sitting (a firsthand `date.fired` lands on the tick the date fired)."""
     w, d = _world()
     duke = w.persons[DUKE]
-    first, _ = _sitting(w, d)
+    first = _sitting(w, d)
     assert _kinds(_fold(w, d, _open("oc"))) == ["case.opened"]
-    second, _ = _sitting(w, d)
+    second = _sitting(w, d)
     assert _kinds(_fold(w, d, _open("oc2", subject="p_low"))) == ["case.opened"]
     c1, c2 = sorted((c for c in duke.ledger if c.predicate == "date.fired" and c.subject == VENUE),
                     key=lambda c: c.when)
@@ -233,7 +233,7 @@ def test_a_slot_refilled_in_one_resolve_is_asked_under_a_new_question_id():
     slot and refill it, so the judge's question changes id with what is before him."""
     w, d = _world()
     duke = w.persons[DUKE]
-    did, _ = _sitting(w, d)
+    did = _sitting(w, d)
     assert _kinds(_fold(w, d, _open("oc"))) == ["case.opened"]
     before = [q.id for q in world_q.questions_for(w, duke) if q.id.startswith("q:sitting:")]
     assert _kinds(_fold(w, d, _determine("dt"), _open("oc2", subject="p_low"))) == [

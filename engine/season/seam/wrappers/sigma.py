@@ -94,13 +94,12 @@ _RESOLVER = "d10_sigma"
 def _capability(entity: Any, verb: str):
     """What `entity` brings to `verb`'s capability key, or `None` if it brings nothing.
 
-    ⚠ ONE READ, TWO CALLERS, AND THEY HAD IT TWICE. `_pool_of` and the opposition read (then
-    `_obstacle_of`, deleted at v9 SC-01 step 14) each mapped the verb through `VERB_CAPABILITY`,
-    guarded a missing key, and guarded a missing entry — the same three steps, differing only in
-    WHOSE dict they read and what default they fall to. Those differences are the callers'; the read
-    is not. Returning `None` rather than a default is what keeps it that way: the pool falls to
-    `pool_default`, and the opposition's `None` reaches the module, which falls to
-    `obstacle_default`; neither is this function's to know."""
+    ⚠ ONE READ, TWO CALLERS. `_pool_of` and `_opposition_of` each map the verb through
+    `VERB_CAPABILITY`, guard a missing key, and guard a missing entry — the same three steps,
+    differing only in WHOSE dict they read and what default they fall to. Those differences are the
+    callers'; the read is not. Returning `None` rather than a default is what keeps it that way:
+    the pool falls to `pool_default`, and the opposition's `None` reaches the module, which falls
+    to `obstacle_default`; neither is this function's to know."""
     key = VERB_CAPABILITY.get(verb)
     if not key:
         return None

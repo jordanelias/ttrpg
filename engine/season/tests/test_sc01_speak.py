@@ -32,49 +32,25 @@ from __future__ import annotations
 import pytest
 
 from ..data import verbs as _verbs
-from ..data.fixtures import DEFAULT_FIXTURES
-from ..data.matrix import WriteClass
 from ..data.requires import Existence
 from ..data.rosters import roster_map
 from ..data.verbs import VERB_TABLE
-from ..harness import probes as P
-from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
+from ..loop.driver import resolvable_verbs
 from ..loop.effects import EFFECTS
 from ..manifest import resolve as manifest_resolve
 from ..queries import world_q
-from ..state.carriers import Act, Claim
+from ..state.carriers import Act
 from engine.dice_engine.dice_engine import DEGREE_LABEL
+from .test_u7_remit import _fold, _kinds, _open, _plant, _world
 
 SEAT, DUKE = "off_duke", "p_high"
 SPEAKER, PARTY = "p_low", "p_mid"
 BANDS = frozenset(DEGREE_LABEL.values())
 
 
-def _world(fx=DEFAULT_FIXTURES):
-    w = P.tiny_world(fx)
-    # `test_u7_remit.py::_world`'s: the Duke knows the party his bench would hear.
-    w.persons[DUKE].ledger.append(Claim("c_knows_party", DUKE, PARTY, "exists:Person", 1, 0,
-                                        "firsthand", 100, "own"))
-    d = SeasonDriver(w)
-    d.matter(mint_token(w, WriteClass.MATTER), [])
-    return w, d
-
-
-def _fold(w, d, *acts):
-    out = d.resolve(mint_token(w, WriteClass.ACTS), list(acts),
-                    contest_max_depth=w.fixtures.get("contest_max_depth"))
-    w.log.extend(out)
-    return out
-
-
-def _kinds(events):
-    return [e.kind for e in events]
-
-
 def _docket(w, d):
     """The matter goes before the room the one way an act puts it there: the Duke opens a case."""
-    out = _fold(w, d, Act(id="oc", actor=DUKE, verb="open_case", via=SEAT,
-                          payload={"subject": PARTY}))
+    out = _fold(w, d, _open("oc"))
     assert _kinds(out) == ["case.opened"], _kinds(out)
     assert len(world_q.docketed(w, PARTY)) == 1
 
@@ -183,19 +159,6 @@ def test_sc01_s12_each_band_emits_its_own_kind_and_all_four_occur():
 # THE LOADER
 # ================================================================================================
 
-def _planted(monkeypatch, key, value):
-    real = _verbs.load_yaml
-
-    def planted(text):
-        doc = real(text)
-        if isinstance(doc, dict) and "verbs" in doc:
-            for r in doc["verbs"]:
-                if r.get("verb") == "speak":
-                    r[key] = value
-        return doc
-    monkeypatch.setattr(_verbs, "load_yaml", planted)
-
-
 @pytest.mark.parametrize("key,value,match", [
     ("writes", [], "declares `contests: a matter` and a FLAT `writes:`"),
     ("emits", {"Overwhelming": ["matter.carried"], "Success": ["matter.advanced"],
@@ -203,7 +166,7 @@ def _planted(monkeypatch, key, value):
     ("contests", "a matterr", "which is not a `contest_subsystems.prizes` key"),
 ])
 def test_sc01_s12_the_loader_refuses_a_malformed_speak_cell(monkeypatch, key, value, match):
-    _planted(monkeypatch, key, value)
+    _plant(monkeypatch, "speak", lambda r: r.__setitem__(key, value))
     with pytest.raises(SystemExit, match=match):
         _verbs._load_verb_table()
 

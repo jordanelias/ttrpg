@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import dataclasses
 
+from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import WriteClass
 from ..data.requires import REQUIRES_STEMS
 from ..data.rosters import OBSERVATION_TERMS, PERSON_PREDICATES, STRATA, TERMS_SUPPLIED_BY
@@ -45,7 +46,7 @@ from ..state.carriers import Act, Claim, Tenure
 ACTOR, RUNG, ABOUT = "p_other", "Hh", "p_king"
 
 
-def _docketed_tiny_world(fixtures=None):
+def _docketed_tiny_world(fixtures=DEFAULT_FIXTURES):
     """`probes.tiny_world` with `ABOUT` on the docket. ⚠ RE-RECORDED AT v9 SC-01 step 12: `speak` is a
     typed, contested cell (`existence` of `subject`, kind `DocketItem`), so a speech about a matter no
     docket names is refused `speech.unheard` and never executes. The item is PLANTED, in
@@ -53,7 +54,7 @@ def _docketed_tiny_world(fixtures=None):
     fixture has purview over `p_king`, so no `open_case` could docket him, and how a matter reaches the
     docket is not what this file tests. `speak` still writes nothing at any band, so the rung route the
     file exercises is unchanged."""
-    w = P.tiny_world() if fixtures is None else P.tiny_world(fixtures)
+    w = P.tiny_world(fixtures)
     w.docket.append({"date": None, "matter": ABOUT, DOCKET_ARRANGEMENT: None, DOCKET_PETITION: None})
     return w
 
@@ -366,7 +367,6 @@ def test_r8_the_total_arm_shows_every_term_to_every_witness():
     `p_king`, whom NO channel admits to a speech at the hearth, still witnesses it and is shown
     `who`, `marks` and `stratum`. Under the shipped `all_five` arm the same person gets nothing,
     which is the control for this assertion."""
-    from ..data.fixtures import DEFAULT_FIXTURES
     for mode, expect in (("total", True), ("all_five", False)):
         w = _docketed_tiny_world(DEFAULT_FIXTURES.sweep("fan_out_mode", mode))
         d = SeasonDriver(w)
