@@ -83,9 +83,51 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # RE-PINNED at the v9 B-X BATCH-CLOSE (d84e98eb), A DATA MOVE DECLARED: `goals.yaml`'s two heresy goals'
 # `text:` changed and a Proposition's value is hashed, so all three hashes moved; the event counts and digests
 # below are unchanged. Was 545729e9... / 93608c22... / 61782df4... (build, one, two seasons).
+# RE-PINNED at v9 IN-10 (B-K), A BEHAVIOUR MOVE DECLARED: `issue` joined the known-person fan for `to`
+# (its `terms` conjunct binds `subject`; a writ with nothing to say about its terms is declined) and a
+# fanned row's bags gain a held Record's addressee (`record_sourced_operands`). The build hash is equal;
+# one and two seasons move. Was bb08f4b2... / cdeda7fd... (one, two seasons); `aperture 1 0` realm acts
+# 602 -> 598, `issue` attempted 3 -> 2 (executed 1 -> 1), `requisition` attempted 3 -> 2.
+# RE-PINNED at v9 IN-45 `forge` (B-K), A BEHAVIOUR MOVE DECLARED: `forge` entered `resolvable_verbs()`
+# (typed with `survey`'s cell, `_eff_forge`), so the chooser offers it. The build hash is equal; one and
+# two seasons move. Was 5bbcba33... / 39bf9d83... (one, two seasons). CONTROL, run: the same tree with
+# `forge` withheld from the chooser's verbs reproduces both old values exactly, so the sheet consumer
+# (`record_sourced_operands.faction_sheet`) and the shared mint move nothing here. `forge` writes no
+# `forgery_quality` (`H-210`, deferred to SC-02 `22b`), so a forged sheet hashes at the field's `0`.
+# RE-PINNED at v9 IN-12 `survey` + Rung (B-K), A BEHAVIOUR MOVE DECLARED: a Rung subject is answered by
+# `world_q.holder_faction_of` (`loop/effects_information.py::_resolved_sheet`), so a survey -- and a
+# forge, which shares the helper -- of a held place mints instead of declining. The build hash is equal;
+# one and two seasons move. Was 002af955... / 1282141c... (one, two seasons). CONTROL, run: the same tree
+# with the rung branch answered by `faction_holding` (the pre-IN-12 reading) reproduces both old values
+# and both old `BASE_EVENTS` exactly. `aperture 1 0` realm acts 603 -> 613; `survey` att 30 -> 29, ex
+# 4 -> 6, ref 26 -> 23; `forge` att 28 -> 25, ex 3 -> 7, ref 25 -> 18 (read, not asserted, v9 §0.5).
+# RE-PINNED at v9 IN-45 `carry` (B-K), A BEHAVIOUR MOVE DECLARED: `carry` gains an effect
+# (`_eff_carry`) and enters `resolvable_verbs()`, so it is offered and the chooser's sets change. The
+# build hash is equal; one and two seasons move. Was da764853... / 0ae0dc8b... (one, two seasons).
+# CONTROL, run: the same tree with `carry`'s effect withheld (`EFFECTS` entry deleted) reproduces both
+# old values and both old `BASE_EVENTS` exactly, so the shared `_declared_stages`/`_docket_item`
+# factoring moved nothing. `aperture 1 0` realm acts 613 -> 615; `carry` offered 0 -> 83, att 0 -> 15,
+# ex 0, ref 15 (every attempt on a referent that is not a petition; read, not asserted, v9 §0.5).
+# RE-PINNED at v9 IN-45 `migrate` (B-K, on 4cee0de5), A BEHAVIOUR MOVE DECLARED: `migrate` declares
+# `referent_class: Rung` and forms only on a place `world_q.places_named` stamps (H-168 limit 1), so
+# the chooser's sets change. The build hash is equal; one and two seasons move. Was b1d8ab94... /
+# ca8a89d6... (one, two seasons). CONTROL, run: the same tree with `migrate`'s `referent_class` blanked
+# in `VERB_TABLE` (the stamp and `_derive_operand`'s document gate left in) reproduces both old values
+# and both old `BASE_EVENTS` exactly, so the stamp and the gate move nothing on their own. `aperture 1 0`
+# realm acts 615 -> 612; `migrate` formed 83 -> 71, att 31 -> 31, ex 0 -> 1, ref 31 -> 30, every
+# refusal now `_eff_migrate`'s capacity decline (read, not asserted, v9 §0.5).
+# RE-PINNED at v9 IN-49 `requisition` (B-K, on ccf16bc3), A BEHAVIOUR MOVE DECLARED: `requisition` declares
+# `referent_class: Rung` and forms only on a `Rung`-classed referent (`world_q.larders_in_purview`'s
+# stocked larders in purview, and `places_named`' places, the class being shared), so the chooser's
+# sets change. The build hash is equal; one and two seasons move. Was bedb32d5... / 547d3e62... (one,
+# two seasons). CONTROL, run: the same tree with `requisition`'s `referent_class` blanked in `VERB_TABLE` and
+# `larders_in_purview` stamping nothing (`_derive_operand`'s widened claim gate and
+# `RUNG_REMIT_ACTS` left in) reproduces both old values and both old `BASE_EVENTS` exactly.
+# `aperture 1 0` realm acts 612 -> 612; `requisition` formed 16 -> 11, att 3 -> 0, ex 0, ref 3 -> 0 (read,
+# not asserted, v9 §0.5); `larders_in_purview` returned `()` in all 766 calls over two realm seasons.
 BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
-               1: "f1c84ee2ceb75f1f66dd005c7b9912ed",
-               2: "b0be871dd02047e342a794c89aeca417"}
+               1: "3ff10d3c30acd7d333ede21f08e58898",
+               2: "155983539541890da6561a30eade5e59"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -105,11 +147,14 @@ BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
 # Was 472050b8... / cc650fcf... / 8f4d2088... (build, one, two seasons); events 7186 -> 7187, 19797 -> 19798.
 # RE-RECORDED at v9 FA-05 with `BASE_HASHES` (7187 -> 6542, 19798 -> 18583).
 # RE-RECORDED at v9 FA-06 with `BASE_HASHES` (6542 -> 7094, 18583 -> 19454).
-# RE-RECORDED 2026-10-16 with `BASE_HASHES` for the `levy` -> `requisition` verb rename: act ids and draw
-# streams are hashed from the verb name (`ids.H`), so the same seed walks a different, equally valid trajectory.
-# Control: with the new name hashed as `levy` the old values reproduce exactly (7094 / 19454 events, season-0 hash).
-BASE_EVENTS = {1: (7092, "ecd9a363219637f82a407793f018bd78accc7146faf693239351c00b71421e86"),
-               2: (19545, "966b25587b62d37981e4a67190a897a791f8ac38a2c53261c919b73ecddae092")}
+# RE-RECORDED at v9 IN-10 with `BASE_HASHES` (7094 -> 7056, 19454 -> 20148).
+# RE-RECORDED at v9 IN-45 `forge` with `BASE_HASHES` (7056 -> 7338, 20148 -> 21313).
+# RE-RECORDED at v9 IN-12 `survey` + Rung with `BASE_HASHES` (7338 -> 7391, 21313 -> 22130).
+# RE-RECORDED at v9 IN-45 `carry` with `BASE_HASHES` (7391 -> 7186, 22130 -> 21338).
+# RE-RECORDED at v9 IN-45 `migrate` with `BASE_HASHES` (7186 -> 7160, 21338 -> 23584).
+# RE-RECORDED at v9 IN-49 `requisition` with `BASE_HASHES` (7160 -> 7157, 23584 -> 23361).
+BASE_EVENTS = {1: (7157, "7b6709af3d0f1fd4b8efdc345db5f9ce5511fbd99d2fba5e8e61f481e069feee"),
+               2: (23361, "946059cda52a1110689d7dbc652d26e7221934f6e488e78c4fab286521df417e")}
 
 
 def _digest(w) -> tuple:

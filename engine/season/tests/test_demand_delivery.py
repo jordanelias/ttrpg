@@ -47,7 +47,7 @@ from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import Step, WriteClass
 from ..data.requires import (
     REQUIRES_OPERANDS, REQUIRES_STEMS, SHORTFALL_PREDICATE, SHORTFALL_SOURCED_OPERANDS,
-    Observation, _check_shortfall_stem, _check_writ_sourced_subset,
+    Observation, _check_shortfall_stem, _check_operand_subset,
 )
 from ..data.rosters import RECORD_CONTENT
 from ..decision import make_chooser
@@ -326,8 +326,8 @@ def test_19d_a_claim_that_is_not_a_shortfall_reads_nothing(predicate):
 
 def test_19d_the_rosters_refuse_a_second_vocabulary():
     with pytest.raises(Unspecified, match="shortfall_sourced_operands"):
-        _check_writ_sourced_subset(frozenset({"kind", "at"}), frozenset(REQUIRES_OPERANDS),
-                                   "shortfall_sourced_operands")
+        _check_operand_subset(frozenset({"kind", "at"}), frozenset(REQUIRES_OPERANDS),
+                              "shortfall_sourced_operands")
     content = RECORD_CONTENT["predicate"]
     for stem in ("stores", content, None, "", "short:fall"):
         with pytest.raises(Unspecified):

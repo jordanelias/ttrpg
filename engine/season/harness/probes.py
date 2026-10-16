@@ -1342,17 +1342,21 @@ def f7():
     # empty dict nothing ever writes, so `carried.get("by") == "p_mid"` could never be true; it
     # was never reached because `carry` had no `requires` predicate at all and the fold raised
     # `Unspecified` first, which `run_probe` files as a DESIGN-GAP. Typing the column moved the
-    # refusal one step later and exposed it. The claim it was reaching for is `w.docket`, and the
-    # honest state is that the docket stays EMPTY: `carry` writes `(DocketItem, matter)` and Part
-    # E does not say what value, so the fold refuses at `H-63` instead. That refusal is the
-    # finding, and it is the same one the probe published before, arriving one column along.
+    # refusal one step later and exposed it. The claim it was reaching for is `w.docket`.
+    # ⚠ v9 IN-45 BUILT `carry` (`_eff_carry`): the HOLDER of a petition puts its `terms` on the
+    # docket, the item naming the petition. So the carrier is now `p_low`, who filed and holds it
+    # (it was `p_mid`, who holds nothing and is refused by the row's `held_by` conjunct), and the
+    # PASS is asserted on the docket rather than returned on the fold not raising.
     def choose(p, v, s, ask_budget):
         return ([Act_(w, p, "carry", payload={"subject": "pet1"})]
-                if p.id == "p_mid" else [])
+                if p.id == "p_low" else [])
     _run(w, choose)
-    return ("PASS: Petition -> `carry` (AN ACT, BY A NAMED PERSON, COSTING BUDGET) -> DocketItem on "
-            "a Date. NO automatic promotion, NO queue drain, NO priority function. THE FILTER IS A "
-            "PERSON AND THE PERSON PAYS -- which is why T5 produces politics rather than a work queue")
+    item, = world_q.docketed(w, "mend the harbour")
+    assert item[world_q.DOCKET_PETITION] == "pet1", item
+    return ("PASS: Petition -> `carry` (AN ACT, BY A NAMED PERSON, COSTING BUDGET) -> DocketItem "
+            "naming the petition. NO automatic promotion, NO queue drain, NO priority function. THE "
+            "FILTER IS A PERSON AND THE PERSON PAYS -- which is why T5 produces politics rather than a "
+            "work queue")
 
 
 @probe("F8", "the sitting decides", "S61", by="construction",

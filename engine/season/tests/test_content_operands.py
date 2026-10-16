@@ -36,11 +36,12 @@ from __future__ import annotations
 
 import pytest
 
-from ..data.requires import REQUIRES_OPERANDS, WRIT_SOURCED_OPERANDS, _check_writ_sourced_subset
-from ..data.rosters import QUESTION_SOURCES, RECORD_CONTENT, RECORD_KIND_KEYS
+from ..data.fixtures import WORKS_COST, _check_works_cost
+from ..data.requires import REQUIRES_OPERANDS, RECORD_SOURCED_OPERANDS, _check_record_sourced
+from ..data.rosters import QUESTION_SOURCES, RECORD_CONTENT, RECORD_KIND_KEYS, roster
 from ..data.verbs import VERB_TABLE
 from ..decision.options import _derive_operand, _from_content_claim, opening_set
-from ..gaps import Forbidden, Unspecified
+from ..gaps import Forbidden, Ungraded, Unspecified
 from ..harness import populated
 from ..harness import probes as P
 from ..loop.witness import content_value
@@ -177,11 +178,16 @@ def test_from_is_never_read_off_the_writ_even_though_petition_declares_one():
     p = w.persons["p_mid"]
     sm = {"terms": "prop_x", "to": ["p_low"], "from": "D"}   # a rung the actor is NOT standing in
     rec, q = _held_writ_question(w, p, "petition", sm)
-    # The writ's own `from` key resolves fine through the generic reader...
-    assert _from_content_claim(p, q, "from") == "D"
-    # ...but `_derive_operand` never reaches it for that name: the actor's OWN containing rung
-    # answers instead, which for `p_mid` in `tiny_world` is `Hh`, not the writ's `D`.
+    # RE-RECORDED AT PLAN POSITION IN-10: the reader is per kind now (`record_sourced_operands`),
+    # and no kind maps `from` -- refused at import (`_check_record_sourced`) -- so the petition's own
+    # `from` key is unreadable as an operand even through the generic reader (it read `"D"` here
+    # under `15c`'s generic reader, and `_derive_operand` skipped it by name)...
+    assert _from_content_claim(p, q, "from") is None
+    # ...and `_derive_operand` answers with the actor's OWN containing rung, which for `p_mid` in
+    # `tiny_world` is `Hh`, not the writ's `D` -- the held-Record channel (`held=`) included.
     assert _derive_operand(p, "from", q, rec.id, w.fixtures) == "Hh"
+    held = next(c for c in p.ledger if c.subject == rec.id)
+    assert _derive_operand(p, "from", q, rec.id, w.fixtures, held=held) == "Hh"
 
 
 def test_at_is_not_a_requires_operands_member_and_derive_operand_is_never_asked_for_it():
@@ -296,17 +302,82 @@ def test_a_bad_source_still_raises_named_did_not_smuggle_one_in():
         Question("q:bad", "named", ("p_x",), "c1")
 
 
-def test_writ_sourced_operands_refuses_a_member_outside_requires_operands():
-    """BATCH-CLOSE FINDING (methodology-close Phase 1, antagonist). The load-time cross-
-    validation between `writ_sourced_operands` and `requires_operands` shipped with no falsifier
-    -- it never fires on today's data, so nothing observed whether it could actually raise. It
-    could not: it named `Unspecified` without importing it, so a real mismatch died with
-    `NameError` instead. Call the check directly with a planted mismatch, the way `data/rosters.py`
-    has no equivalent test for its own sibling cross-validations either, but this one is new."""
-    with pytest.raises(Unspecified, match="writ_sourced_operands"):
-        _check_writ_sourced_subset(frozenset({"to", "at"}), frozenset(REQUIRES_OPERANDS))
+def test_record_sourced_operands_refuses_each_planted_mismatch():
+    """BATCH-CLOSE FINDING (methodology-close Phase 1, antagonist), carried from `15c`'s flat
+    `writ_sourced_operands` to plan position IN-10's per-kind `record_sourced_operands`. The
+    load-time check never fires on today's data, so nothing observed whether it could raise; it once
+    could not (it named `Unspecified` without importing it). Each planted mismatch is called
+    directly: an operand outside the closed eight, a content key the kind does not carry, a kind
+    that is no `record_kinds` member, an empty entry, and `from` (r2's ruling) on a kind that does
+    carry a `from` key."""
+    ops = frozenset(REQUIRES_OPERANDS)
+    with pytest.raises(Unspecified, match="record_sourced_operands"):
+        _check_record_sourced({"dispensation": {"at": "at"}}, ops, RECORD_KIND_KEYS)
+    with pytest.raises(Unspecified, match="not keys of"):
+        _check_record_sourced({"dispensation": {"kind": "kind"}}, ops, RECORD_KIND_KEYS)
+    with pytest.raises(Unspecified, match="not a record_kinds member"):
+        _check_record_sourced({"debt": {"to": "to"}}, ops, RECORD_KIND_KEYS)
+    with pytest.raises(Unspecified, match="non-empty"):
+        _check_record_sourced({"dispensation": {}}, ops, RECORD_KIND_KEYS)
+    assert "from" in RECORD_KIND_KEYS["petition"], "the planted `from` must be a real petition key"
+    with pytest.raises(Unspecified, match="maps `from`"):
+        _check_record_sourced({"petition": {"from": "from"}}, ops, RECORD_KIND_KEYS)
     # THE CONTROL -- the real roster, read back through its own binding, never re-typed: a second
     # literal here would be exactly the "roster duplicated from the data file" defect this whole
     # position exists to fix (`test_jordan_no_definition_is_hardcoded_in_a_body` caught the first
     # draft doing precisely this).
-    _check_writ_sourced_subset(frozenset(WRIT_SOURCED_OPERANDS), frozenset(REQUIRES_OPERANDS))
+    _check_record_sourced(RECORD_SOURCED_OPERANDS, ops, RECORD_KIND_KEYS)
+
+
+def test_record_sourced_operands_agrees_with_the_mints_read_from():
+    """`record_kinds.content.read_from` (the mint: `terms` is read from the act's `subject`) and
+    `record_sourced_operands` (the reader: `subject` is answered off `terms`) are one fact in two
+    directions, and the loader refuses the pair when they part. A planted `read_from` that mints
+    `terms` from `to` against the shipped `subject: terms` map is refused; the shipped pair, and a
+    kind that does not carry the key (`faction_sheet` has no `terms`), are not. Delete the
+    cross-check in `_check_record_sourced` and the first assertion goes red."""
+    ops = frozenset(REQUIRES_OPERANDS)
+    shipped = RECORD_CONTENT["read_from"]
+    assert shipped, "the control needs a real read_from entry"
+    with pytest.raises(Unspecified, match="read_from mints 'terms' from 'to'"):
+        _check_record_sourced({"dispensation": {"to": "to", "subject": "terms"}}, ops,
+                              RECORD_KIND_KEYS, {"terms": "to"})
+    assert "terms" not in RECORD_KIND_KEYS["faction_sheet"]
+    _check_record_sourced(RECORD_SOURCED_OPERANDS, ops, RECORD_KIND_KEYS, shipped)
+
+
+def test_a_kind_carrying_a_read_from_key_must_map_its_operand():
+    """B-K close, F8. `record_kinds.content.read_from` mints `terms` from the act's `subject`; the
+    reader's map must answer `subject` off `terms` or every act reading a held document of that kind
+    declines silently. Planted: `petition` with `subject: terms` dropped is refused (before this
+    check it loaded). The shipped pair passes, and `faction_sheet` -- which carries no `terms` --
+    is skipped, mapping no `subject: terms` and needing none. Delete the new clause in
+    `_check_record_sourced` and the first assertion goes red."""
+    ops = frozenset(REQUIRES_OPERANDS)
+    shipped = RECORD_CONTENT["read_from"]
+    assert shipped == {"terms": "subject"} and "terms" in RECORD_KIND_KEYS["petition"]
+    with pytest.raises(Unspecified, match="maps no 'subject'"):
+        _check_record_sourced({"petition": {"to": "to"}}, ops, RECORD_KIND_KEYS, shipped)
+    _check_record_sourced(RECORD_SOURCED_OPERANDS, ops, RECORD_KIND_KEYS, shipped)
+    assert "terms" not in RECORD_KIND_KEYS["faction_sheet"] and \
+        "subject" in RECORD_SOURCED_OPERANDS["faction_sheet"]
+    _check_record_sourced({"faction_sheet": {"to": "head"}}, ops, RECORD_KIND_KEYS, shipped)
+
+
+def test_works_cost_refuses_each_planted_mismatch():
+    """B-K close, F6. `_load_works_cost` reads the shipped roster and so never meets a bad one; its
+    body is `_check_works_cost(costs, plans, mk)`, called here with each refusal planted (the
+    `_check_record_sourced` precedent): a plan kind no roster carries (Forbidden), an empty cell, a
+    non-mapping cell, a matter kind no registry row carries, a zero or negative amount, a float and
+    a bool amount (Ungraded). The control is the shipped table, read back through its own bindings."""
+    plans = set(roster("rung_kinds")) | set(roster("site_kinds"))
+    mk = set(roster("matter_kinds"))
+    assert "hearth" in plans and "grain" in mk
+    with pytest.raises(Forbidden, match="prices plan kind"):
+        _check_works_cost({"moat": {"grain": 1}}, plans, mk)
+    for bad in ({}, None, {"mithril": 1}, {"grain": 0}, {"grain": -3}, {"grain": 2.5},
+                {"grain": True}):
+        with pytest.raises(Ungraded, match="works_cost\\[hearth\\]"):
+            _check_works_cost({"hearth": bad}, plans, mk)
+    assert _check_works_cost({"hearth": {"grain": 10}}, plans, mk) == {"hearth": {"grain": 10}}
+    assert _check_works_cost(WORKS_COST, plans, mk) == WORKS_COST

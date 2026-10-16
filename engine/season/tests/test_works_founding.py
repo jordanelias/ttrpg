@@ -80,6 +80,16 @@ def _declare(w, d, key, plan, at, actor=ABSENT, terms=3, kind=world_q.WORKS_KIND
                                     "rung": at, "stages": stages}))
 
 
+def _stock(w, rung, plan):
+    """PLANTED: exactly the price of a `plan` (v9 IN-28, `rosters.yaml: works_cost`, read through the
+    fixture), added to `rung`'s stores. `tiny_world` stocks grain only, so a works that BUILDS needs
+    its timber planted, and each test says so where it does."""
+    r = w.rungs[rung]
+    r.stores = dict(r.stores or {})
+    for kind, n in w.fixtures.get("works_cost")[plan].items():
+        r.stores[kind] = r.stores.get(kind, 0) + n
+
+
 def _ripen(w, d, n):
     """`n` MATTER barriers -- one declared term ripens at each, through the gate."""
     for _ in range(n):
@@ -338,7 +348,11 @@ def test_24e_found_mints_one_rung_of_the_plan_under_its_at_and_census_shows_exac
     assert world_q.ancestry(w, new)[-1] == "R"
     assert new in world_q.descendants(w, "D")
     assert ("contain", new, FOUNDING) in seen, seen
-    assert not w.rungs[new].stores and world_q.hold_force(w, new) is None   # founded empty, held by none
+    # v9 IN-28 (`H-166`): founded PAID FOR -- the hearth's stake moved out of the works' rung `S`
+    # into it -- and HELD BY ITS FOUNDER. (It read *"founded empty, held by none"* before IN-28.)
+    price = w.fixtures.get("works_cost")["hearth"]
+    assert w.rungs[new].stores == price, w.rungs[new].stores
+    assert world_q.hold_force(w, new).subject == ABSENT
 
 
 @pytest.mark.parametrize("case", ["not_the_master", "a_text_record", "does_not_ascend",
@@ -410,6 +424,7 @@ def test_24e_build_stands_a_site_of_the_plan_at_condition_zero_and_once():
     `build` refuses it; a person who does not hold the works is refused."""
     w, d = _world()
     _declare(w, d, "wk", "harbour", HEARTH)
+    _stock(w, HEARTH, "harbour")
     assert _kinds(_fold(w, d, _build("b0", "wk", actor="p_mid"))) == ["build.refused"]
     n = len(w.sites)
     out = _fold(w, d, _build("b1", "wk"))
@@ -461,6 +476,7 @@ def test_24e_a_found_then_a_build_at_a_full_rung_succeeds_and_every_ancestors_dw
     assert _kinds(_fold(w, d, _found("f1", "wf"))) == ["rung.founded"]
     hearth = next(r for r in world_q.descendants(w, SETTLEMENT) if r.endswith(":wf"))
     _declare(w, d, "wb", "dwelling", hearth)
+    _stock(w, hearth, "dwelling")
     assert _kinds(_fold(w, d, _build("b1", "wb"))) == ["site.built"]
     monkeypatch.undo()
     after = {r: world_q.capacity(w, r) for r in chain}
@@ -480,6 +496,7 @@ def test_24e_the_whole_lifecycle_runs_declare_ripen_found_build_move_in_and_rais
     assert _kinds(_fold(w, d, _found("f1", "wf"))) == ["rung.founded"]
     hearth = next(r for r in world_q.descendants(w, SETTLEMENT) if r.endswith(":wf"))
     _declare(w, d, "wb", "dwelling", hearth, terms=3)
+    _stock(w, hearth, "dwelling")
     assert _kinds(_fold(w, d, _build("b1", "wb"))) == ["site.built"]
     dwelling = next(s for s in w.sites.values() if s.rung == hearth)
     moved = _fold(w, d, Act(id="mv", actor=ABSENT, verb="move", payload={"to": hearth}))
@@ -508,3 +525,260 @@ def test_24e_a_works_whose_plan_or_at_is_no_plain_id_is_refused_not_a_crash(verb
         out = _fold(w, d, Act(id=key, actor=actor, verb=verb, payload={"subject": works}))
         assert _kinds(out) == [f"{verb}.refused"], (works, _kinds(out))
     assert (len(w.rungs), len(w.sites)) == n
+
+
+# ======================================================================================
+# 7 -- v9 IN-45 `work`: THE WORKS CHANNEL, ATTACKED THROUGH THE REAL FORMATION (H-165 (2), (3))
+# ======================================================================================
+# The plan's candidate for H-165 limit 2 was a `rosters.yaml: record_sourced_operands` entry for a
+# works, mapped onto the closed eight. These tests take the formation route the candidate would
+# use: the maker's own `create_record`, WITNESS's content deposit, `questions_for`, `opening_set`,
+# `pack_scenes` and the fold. No test here asserts anything about the seed-0 realm (v9 §0.5).
+# What they show:
+#   * `found` and `build` need NO operand channel. Once a works exists they form on it through
+#     the question its maker is asked about it, and they execute. H-165 limit 3 is lifted by a works
+#     EXISTING; what is missing in computed play is the PRODUCER, a computed `create_record` that
+#     declares one (limit 2).
+#   * `work` binds `site` to the question's referent. That referent is the Site when the question
+#     is about the Site, and the works Record when the question is about the works. The candidate
+#     entry cannot change this: a works' content keys are `{plan, at}`, a kind and a Rung id, and
+#     `_content_answer` returns a key's value unchanged, so no works answers `site` with a Site.
+# MUTATIONS, run at the build 2026-10-16. Each went RED, then was restored byte-exact and went GREEN:
+#   * `_eff_create_record` minting `kind = "text"` for every act (the producer making no works,
+#     which is computed play today) -> the first test's works arm and the second test went RED.
+#   * `_eff_work`'s works branch disabled (`and works_for(...)` -> `and False`) -> the second
+#     test's harbour arm went RED.
+
+from ..decision import assemble as _assemble
+from ..decision import options as _options
+from ..decision.choose import pack_scenes as _pack
+from ..state.ids import H as _H
+
+
+def _formed_on(w, pid, referent, verbs, q=None):
+    """The computed acts `pid` forms for `verbs` on a question naming `referent`. The question is
+    `q` when given, else a `claim_landed` Question about nothing in his ledger. The acts come from
+    the real `opening_set` and are packed by the real `pack_scenes`."""
+    from ..state.carriers import Question
+    p = w.persons[pid]
+    q = q or Question(f"q:{referent}", "claim_landed", (referent,), None)
+    cands = [c for c in _options.opening_set(p, _assemble(p, q, 12), q, w.fixtures) if c.verb in verbs]
+    mint = lambda who, verb, subj: _H(w.world_seed, w.tick, who, f"act:{verb}:{subj}")
+    return [a for s in _pack(p, cands, 99, w.fixtures, mint) for a in s.acts]
+
+
+@pytest.mark.parametrize("kind", [world_q.WORKS_KIND, "text"])
+def test_in45_found_and_build_form_on_a_works_its_maker_is_asked_about_and_execute(kind):
+    """THE MAKER IS ASKED ABOUT HIS WORKS AND `found`/`build` FORM ON IT. Two Records are declared
+    by the real `create_record`: a hearth at `S` and a dwelling at `Hh`. WITNESS deposits each
+    Record's content into the maker's own ledger, and the next season `questions_for` raises a
+    question whose referent is the Record. `found` and `build` form on it, carrying
+    `subject = the Record`, and the fold executes them: `rung.founded` for the hearth and
+    `site.built` for the dwelling. Each verb's other works is refused by that verb's own effect.
+    CONTROL, the same body with the Records declared `text`: the same questions form the same verbs,
+    and every one is refused. The kind of the Record is the only difference between the arms."""
+    w, d = _world()
+    for key, plan, at in (("wh", "hearth", SETTLEMENT), ("wd", "dwelling", HEARTH)):
+        d.witness(mint_token(w, WriteClass.INTERIOR), _declare(w, d, key, plan, at, kind=kind))
+    _stock(w, HEARTH, "dwelling")            # the dwelling's timber (v9 IN-28); `S` stocks the stake
+    _season(w, d)
+    p = w.persons[ABSENT]
+    asked = {}
+    for q in world_q.questions_for(w, p):
+        for r in q.referents:
+            asked.setdefault(r, q)
+    assert {"wh", "wd"} <= set(asked), sorted(asked)          # the maker is asked about both
+    got = {}
+    for key in ("wh", "wd"):
+        acts = _formed_on(w, ABSENT, key, ("found", "build"), q=asked[key])
+        assert sorted(a.verb for a in acts) == ["build", "found"], (key, acts)
+        assert all(a.payload.get("subject") == key for a in acts), acts
+        for a in acts:
+            got[(key, a.verb)] = _kinds(_fold(w, d, a))
+    if kind == world_q.WORKS_KIND:
+        assert got == {("wh", "found"): ["rung.founded"], ("wh", "build"): ["build.refused"],
+                       ("wd", "found"): ["found.refused"], ("wd", "build"): ["site.built"]}, got
+        assert "hearth:wh" in w.rungs and w.sites["dwelling:wd"].condition == 0
+    else:
+        assert set(map(tuple, got.values())) == {("found.refused",), ("build.refused",)}, got
+
+
+def test_in45_work_forms_on_what_the_question_names_and_never_reaches_the_site_a_works_names(
+        monkeypatch):
+    """`work`'s `site` IS THE QUESTION'S REFERENT, AND A WORKS CANNOT RE-AIM IT. The works plans a
+    harbour at `S`, its term has ripened, and the harbour stands at 500.
+      * A question naming the harbour forms `work` with `site = the harbour`. It executes:
+        `site.worked`, 500 -> 1000.
+      * CONTROL: a question naming the seam, which no works names, forms the same `work`. It is
+        `work.unavailable` and the seam does not move.
+      * THE GAP: the question the maker is actually asked is about the works Record. On it `work`
+        binds `site` to the Record, which is no Site, and the act is `work.unavailable`.
+      * THE CANDIDATE, PLANTED: `record_sourced_operands.works: {site: at}` is the one `site`
+        mapping a works' keys allow, and the loader admits it. With it, `work` on that same question
+        binds `site` to the Rung `S`, and the act is still `work.unavailable`. No mapping of
+        `{plan, at}` onto the closed eight names a Site."""
+    w, d = _world()
+    d.witness(mint_token(w, WriteClass.INTERIOR), _declare(w, d, "wk", "harbour", SETTLEMENT, terms=1))
+    _ripen(w, d, 1)
+    harbour, seam = w.sites[HARBOUR], w.sites["site_seam"]
+    harbour.condition, seam.condition = 500, 500
+    (on_harbour,) = _formed_on(w, ABSENT, HARBOUR, ("work",))
+    assert on_harbour.payload["site"] == HARBOUR
+    assert _kinds(_fold(w, d, on_harbour)) == ["site.worked"] and harbour.condition == 1000
+    (on_seam,) = _formed_on(w, ABSENT, "site_seam", ("work",))
+    assert _kinds(_fold(w, d, on_seam)) == ["work.unavailable"] and seam.condition == 500
+    harbour.condition = 500
+    # The question about the works' CONTENT claim. That claim is what the candidate reads
+    # (`_from_content_claim`, by `q.about`).
+    content = {c.id for c in w.persons[ABSENT].ledger
+               if c.subject == "wk" and str(c.predicate).startswith("content:")}
+    q = next(q for q in world_q.questions_for(w, w.persons[ABSENT], since=(0, 0))
+             if q.referents == ("wk",) and q.about in content)
+    (on_works,) = _formed_on(w, ABSENT, "wk", ("work",), q=q)
+    assert on_works.payload["site"] == "wk"
+    assert _kinds(_fold(w, d, on_works)) == ["work.unavailable"] and harbour.condition == 500
+    from ..data.requires import REQUIRES_OPERANDS, RECORD_SOURCED_OPERANDS, _check_record_sourced
+    from ..data.rosters import RECORD_KIND_KEYS
+    planted = {**RECORD_SOURCED_OPERANDS, "works": {"site": "at"}}
+    _check_record_sourced(planted, frozenset(REQUIRES_OPERANDS), RECORD_KIND_KEYS)   # admitted
+    monkeypatch.setattr(_options, "RECORD_SOURCED_OPERANDS", planted)
+    monkeypatch.setattr(_options, "_RECORD_ANSWERABLE",
+                        frozenset(n for m in planted.values() for n in m))
+    (planted_act,) = _formed_on(w, ABSENT, "wk", ("work",), q=q)
+    assert planted_act.payload["site"] == SETTLEMENT and SETTLEMENT in w.rungs, planted_act
+    from dataclasses import replace
+    out = _fold(w, d, replace(planted_act, id=f"{planted_act.id}:planted"))   # one act per id (S27)
+    assert _kinds(out) == ["work.unavailable"] and harbour.condition == 500, _kinds(out)
+
+
+# ======================================================================================
+# 8 -- v9 IN-28 (`H-166`): WHAT `found` AND `build` MAKE IS PAID FOR AND HELD
+# ======================================================================================
+# H-166's own design order: (1) a COST, (2) a HOLDER, (3) a CLOSER. (1) and (2) are built here. (3)
+# is raze's (IN-12 step 11, B-R), not built here (`H-166`). The works exists by a hand-built `create_record`
+# (where a works comes from in computed play is ED-IN-0297's open question, not this position's).
+# Each test drives the real fold, the real MATTER barrier and the real gate.
+# MUTATIONS, run at the build 2026-10-16. Each went RED, then was restored byte-exact and went GREEN:
+#   * `_eff_found`'s `_shift` loop deleted (a founding that charges nothing) -> the first test RED.
+#   * `_eff_build`'s debit loop deleted (a fabric built for free) -> the first test RED.
+#   * `w.add_tenure(held)` deleted from `_eff_found` (a founded place nobody holds) -> the first
+#     test RED.
+#   * `_cost`'s shortfall clause emptied (`short = {}`) -> the second test RED on both verbs.
+
+
+def _store(w, rung, kind):
+    return (w.rungs[rung].stores or {}).get(kind, 0)
+
+
+def test_in28_one_season_a_founded_place_is_paid_for_and_held_and_what_is_built_in_it_is_paid_for():
+    """ONE SEEDED HAND-BUILT SEASON, EACH HALF OBSERVED ON THE WORLD, NOT ON THE SUCCESS EVENT.
+    A works plans a hearth at `S` and is kept at `S`; its maker founds it. PAID: the stake
+    (`works_cost` for a hearth) LEFT `S` and IS IN the new hearth, and the world's grain is unchanged
+    (two-sided); the founding Event carries `S`'s receipt, so the cost was written THROUGH THE GATE.
+    HELD: the founder holds the new hearth (`hold_force`, `in_holdings`). Then a works plans a
+    dwelling in that hearth, its timber planted there: BUILT, the timber is CONSUMED (one-sided) and
+    the stake is untouched, and the dwelling is held through its rung -- by the same founder, since a
+    `hold` never reaches a Site. The season's MATTER barrier then runs, and the hold stands."""
+    from ..state.gate import in_holdings
+    w, d = _world()
+    (kind, amount), = w.fixtures.get("works_cost")["hearth"].items()
+    grain_before = sum((r.stores or {}).get(kind, 0) for r in w.rungs.values())
+    s_before = _store(w, SETTLEMENT, kind)
+    _declare(w, d, "wf", "hearth", SETTLEMENT)
+    out = _fold(w, d, _found("f1", "wf"))
+    assert _kinds(out) == ["rung.founded"], _kinds(out)
+    hearth = next(r for r in world_q.descendants(w, SETTLEMENT) if r.endswith(":wf"))
+    assert _store(w, SETTLEMENT, kind) == s_before - amount
+    assert _store(w, hearth, kind) == amount
+    assert sum((r.stores or {}).get(kind, 0) for r in w.rungs.values()) == grain_before
+    assert {c.subject for c in out[0].changes} >= {hearth, SETTLEMENT}, out[0].changes
+    assert world_q.hold_force(w, hearth).subject == ABSENT
+    assert in_holdings(w, ABSENT, hearth)
+    price = w.fixtures.get("works_cost")["dwelling"]
+    _declare(w, d, "wb", "dwelling", hearth)
+    _stock(w, hearth, "dwelling")
+    held_before = dict(w.rungs[hearth].stores)
+    assert _kinds(_fold(w, d, _build("b1", "wb"))) == ["site.built"]
+    dwelling = w.sites["dwelling:wb"]
+    assert {k: held_before[k] - _store(w, hearth, k) for k in price} == price
+    assert _store(w, hearth, kind) == amount                  # the stake is not what a fabric costs
+    assert world_q.hold_force(w, dwelling.rung).subject == ABSENT
+    _season(w, d)
+    assert world_q.hold_force(w, hearth).subject == ABSENT
+
+
+def test_in28_a_founders_hold_stops_holder_faction_of_at_his_hearth_pinned_as_it_reads():
+    """H-166 limit 2's CONSEQUENCE (B-K close, COR 5), PINNED AS IT READS TODAY -- not blessed and
+    not changed. `world_q.holder_faction_of` returns at the FIRST held rung up the ancestry, so once
+    `p_low` (committed to no faction) founds a hearth under `S`, which a Crown man holds, the hearth
+    reads `None`: his hold is the nearest, and it coheres under nothing. (So a `survey`/`forge` of
+    that hearth is refused, and `loop/sides.py`/`loop/effects_combat.py` read no side for it.)
+    CONTROL, one change: the same founder committed to the Crown -> the hearth reads the Crown."""
+    from ..data.rosters import faction_prop_id
+    from ..state.carriers import Proposition, Tenure
+    fac = faction_prop_id("Crown")
+    for committed in (False, True):
+        w, d = _world()
+        w.propositions[fac] = Proposition(fac, "HOLDS", "Crown", "is a faction of this world",
+                                          True, 0)
+        w.add_tenure(Tenure("t_commit_p_mid", "p_mid", fac, "commit", since=0))
+        w.add_tenure(Tenure("t_hold_S", "p_mid", SETTLEMENT, "hold", since=0))
+        if committed:
+            w.add_tenure(Tenure("t_commit_founder", ABSENT, fac, "commit", since=0))
+        _declare(w, d, "wf", "hearth", SETTLEMENT)
+        out = _fold(w, d, _found("f1", "wf"))
+        assert "rung.founded" in _kinds(out), _kinds(out)
+        hearth = next(r for r in world_q.descendants(w, SETTLEMENT) if r.endswith(":wf"))
+        assert world_q.hold_force(w, hearth).subject == ABSENT
+        assert world_q.holder_faction_of(w, SETTLEMENT) == fac          # the parent still answers
+        assert world_q.holder_faction_of(w, hearth) == (fac if committed else None), committed
+
+
+@pytest.mark.parametrize("verb", ["found", "build"])
+def test_in28_a_works_whose_rung_cannot_pay_is_refused_and_nothing_is_made_or_spent(verb):
+    """THE CAUSE CONTROLLED: the SAME world and the SAME act, and the price is the only thing that
+    differs. At the shipped price the act executes; with the price swept one unit past what the
+    works' rung holds, it is refused (`<verb>.refused`), nothing is made, and no store moves -- r2
+    §A.6.6's MATTER-STALL, refused at the act rather than raising the place on credit."""
+    plan = "hearth" if verb == "found" else "dwelling"
+    made = (lambda w: w.rungs) if verb == "found" else (lambda w: w.sites)
+    ran = 0
+    for over in (False, True):
+        w, d = _world()
+        if verb == "build":
+            _stock(w, SETTLEMENT, plan)
+        cost = dict(w.fixtures.get("works_cost"))
+        (kind, _amount), = cost[plan].items()
+        if over:
+            cost[plan] = {kind: _store(w, SETTLEMENT, kind) + 1}
+            w.fixtures = w.fixtures.sweep("works_cost", cost)
+        _declare(w, d, "wk", plan, SETTLEMENT)
+        stores, n = {r: dict(x.stores or {}) for r, x in w.rungs.items()}, len(made(w))
+        out = _fold(w, d, Act(id="x", actor=ABSENT, verb=verb, payload={"subject": "wk"}))
+        if not over:
+            assert _kinds(out) == [{"found": "rung.founded", "build": "site.built"}[verb]], _kinds(out)
+        else:
+            assert _kinds(out) == [f"{verb}.refused"], _kinds(out)
+            assert len(made(w)) == n
+            assert {r: dict(x.stores or {}) for r, x in w.rungs.items()} == stores
+        ran += 1
+    assert ran == 2
+
+
+def test_in28_a_plan_with_no_price_is_refused_and_body_is_among_them():
+    """A PLAN KIND WITH NO `works_cost` ROW CANNOT BE PAID FOR, so it is refused rather than raised
+    free: `body` (in `site_kinds`, whose own note says it *"IS NOT A SITE"* -- `H-166` limit 4,
+    refused by the roster and not by a kind literal) and `settlement` (a rung kind the ladder admits
+    under a duchy; unpriced, SE-9(a)'s held question). CONTROL: a priced plan at the same rung, by
+    the same maker, executes."""
+    from ..data.rosters import SITE_KINDS
+    w, d = _world()
+    _stock(w, "D", "dwelling")
+    cost = w.fixtures.get("works_cost")
+    assert "body" in SITE_KINDS and "body" not in cost and "settlement" not in cost
+    for key, plan, verb, want in (("wb", "body", "build", "build.refused"),
+                                  ("ws", "settlement", "found", "found.refused"),
+                                  ("wd", "dwelling", "build", "site.built")):
+        _declare(w, d, key, plan, "D")
+        out = _fold(w, d, Act(id=f"a:{key}", actor=ABSENT, verb=verb, payload={"subject": key}))
+        assert _kinds(out) == [want], (plan, _kinds(out))

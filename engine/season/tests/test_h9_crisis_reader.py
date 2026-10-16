@@ -49,7 +49,11 @@ from .test_season_shape import _wd_arm9
 # in `reach`, or the `budget_office_bonus` scene a live hold buys) is a candidate mechanism, unmeasured.
 # 26/6 -> 36/10, v9 IN-57 (B-W): the attention key re-orders each person's questions, and the fork
 # population grows; the same move `test_season_shape.py`'s `wd_a_fork` records for `total` (36, 10).
-_BASELINE_TOTAL = (36, 10)
+# 36/10 -> 36/11, v9 B-K `carry` (5f4becfb): the divergence count rises by one with the population
+# unchanged. Bisected: green at aa26c4fd, red at 5f4becfb, and `carry` is the only item between them.
+# Measured at B-K's migrate commit: control (36, 11), 0.5 -> (36, 10), 1 -> (35, 12); the shifted arm
+# still rises above the control as a rate (12/35 > 11/36). Which carry consequence moves it is unmeasured.
+_BASELINE_TOTAL = (36, 11)
 
 
 def _person(pursuits: dict, scar: dict) -> Person:

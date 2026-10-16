@@ -231,7 +231,10 @@ def test_in53v_b_no_office_referent_outside_reach():
 
 def test_in53v_c_the_classes_survive_the_fold_and_are_closed():
     # RE-RECORDED AT v9 IN-09: `Record` joins (was `{"Office"}`), the held writs `writs_held` stamps.
-    assert REFERENT_CLASSES == {"Office", "Record"}
+    # RE-RECORDED AT v9 IN-45 `migrate`: `Rung` joins, the places `places_named` stamps (H-168).
+    # Spelled as a size and two memberships: `test_jordan_no_definition_is_hardcoded_in_a_body` flags a
+    # three-string literal here as a roster duplicated from rosters.yaml.
+    assert len(REFERENT_CLASSES) == 3 and {"Office", "Record"} <= REFERENT_CLASSES and "Rung" in REFERENT_CLASSES
     a = Question("q:claim:x", "claim_landed", ("S",), "x")
     b = Question("q:need:off_reeve", "need", (), "off_reeve", (("off_reeve", "Office"),))
     for rule in ("all", "one_per_source"):
@@ -240,7 +243,7 @@ def test_in53v_c_the_classes_survive_the_fold_and_are_closed():
         assert f.referents_for(None) == ("S",), f
     assert aggregate_questions([a, b], "first") is a
     with pytest.raises(Forbidden, match="no declared class"):
-        Question("q:bad", "need", ("off_duke",), "", (("off_duke", "Rung"),))
+        Question("q:bad", "need", ("off_duke",), "", (("off_duke", "Site"),))   # `Rung` is declared since IN-45
     with pytest.raises(Forbidden, match="twice"):
         Question("q:bad", "need", (), "", (("off_duke", "Office"), ("off_duke", "Office")))
 
@@ -260,8 +263,12 @@ def _planted(monkeypatch, verb, key, value):
 
 def test_in53v_c_the_declarations_as_built():
     # RE-RECORDED AT v9 IN-10 (a): `oblige` declares the class (was `{"confer"}`); AT v9 IN-09 the
-    # `comply` declares `Record` (was `{"confer", "oblige"}`).
-    assert {v for v, r in VERB_TABLE.items() if r.referent_class} == {"confer", "oblige", "comply"}
+    # `comply` declares `Record` (was `{"confer", "oblige"}`); AT v9 IN-45 `migrate` declares `Rung`;
+    # AT v9 IN-49 `requisition` declares `Rung` beside it.
+    assert {v for v, r in VERB_TABLE.items() if r.referent_class} == {"confer", "oblige", "comply",
+                                                                      "migrate", "requisition"}
+    assert VERB_TABLE["migrate"].referent_class == "Rung" and not VERB_TABLE["migrate"].referent_named
+    assert VERB_TABLE["requisition"].referent_class == "Rung" and not VERB_TABLE["requisition"].referent_named
     assert VERB_TABLE["confer"].referent_class == VERB_TABLE["oblige"].referent_class == "Office"
     assert {v for v, r in VERB_TABLE.items() if r.counterparty_may_be_self} == {"confer"}
     assert VERB_TABLE["confer"].known_person_operands() == ("to",)

@@ -1,5 +1,5 @@
 """`season.loop.effects_information` -- records, propositions, matters: create_record, issue,
-open_case, determine, petition, survey, give, destroy_record, utter, commit.
+open_case, carry, determine, petition, survey, forge, give, destroy_record, utter, commit.
 
 EXTRACTED from `effects.py` at the per-subsystem split (Phase 4). Holds the document/proposition/
 matter cluster: the one mint (`_mint_document`) that `create_record`, `issue`, `petition` and
@@ -15,16 +15,21 @@ from dataclasses import asdict
 from typing import Optional
 
 from ..data.arrangements import ARRANGEMENTS
-from ..data.requires import REQUIRES_OPERANDS
-from ..data.rosters import RECORD_CONTENT, RECORD_KIND_KEYS
+from ..data.requires import RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS
+from ..data.rosters import MARCH_TARGET_KINDS, RECORD_CONTENT, RECORD_KIND_KEYS
+from ..data.verbs import VERB_TABLE, WARRANT_SOURCED
 from ..queries import faction_q
+from ..queries.person_q import ABOUT_KEYS
 from ..queries.world_q import (
     BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_PETITION, docketed, docketed_under,
-    faction_holding, hold_force, place_of, works_for, works_target,
+    faction_holding, faction_of, hold_force, holder_faction_of, mustered, place_of, works_for,
+    works_target,
 )
 from ..state.carriers import Proposition, Record, Tenure
 from ..state.carriers import DETERMINED_BY
-from ..state.gate import DISPOSABLE_KINDS, NO_CHANGE, UNDECLARED_DISPOSAL, Change, Subject
+from ..state.gate import (
+    DISPOSABLE_KINDS, NO_CHANGE, UNDECLARED_DISPOSAL, Change, Subject, may_seize, seat_faction,
+)
 from ..state.ids import H
 
 from .effects_shared import _new_oblige_term, _operand, effect_for
@@ -118,14 +123,41 @@ def _makers_hold(w: "World", actor: str, obj: str) -> Tenure:
     here. The id is `H(seed, tick, actor, f"hold:{obj}")`, unsalted by the act (a maker makes one
     thing per id). ⚠ `"hold"` STAYS A STRING LITERAL IN THIS FILE: `data/verbs.py::OPENERS-DERIVE`
     walks a decorated effect into the same-file helpers it calls and reads the kind off the literal,
-    so the six minters reaching this call -- `create_record`, `issue`, `open_case`, `petition`, `survey`
-    (through `_mint_document`) and `utter` (through `_eff_utter`) -- remain `hold`'s openers.
+    so the seven minters reaching this call -- `create_record`, `issue`, `open_case`, `petition`, `survey`,
+    `forge` (through `_mint_document`) and `utter` (through `_eff_utter`) -- remain `hold`'s openers.
 
-    ⚠ NONE OF THE SIX DECLARES `Tenure.since` IN ITS `writes:`. The hold opens inside the declared
+    ⚠ NONE OF THE SEVEN DECLARES `Tenure.since` IN ITS `writes:`. The hold opens inside the declared
     `Proposition.exists` / `Record.exists` write, and only the authority check (`refuse_unauthored`)
     sees it. CONVENTION against `04` §C.2/§C.4 and PART D's rows on matrix and step: no scan sees it.
     Declaring it would add a gated write and move the hash, so it is not done."""
     return Tenure(H(w.world_seed, w.tick, actor, f"hold:{obj}"), actor, obj, "hold", since=w.tick)
+
+
+def _declared_stages(w: "World", a: "Act") -> list:
+    """THE STAGES AN ACT WINDS ON A DOCUMENT: the act's declared `stages`, else `H-80`'s default.
+    The one owner of that rule -- `_mint_document` winds them on a Record it mints, and `carry` on
+    the petition it puts before the room (IN-45). Factored out of `_mint_document` unchanged.
+
+    `H-80`, DECLARED AND SWEPT. The act SHOULD declare these (#353 §13.1) and a computed act cannot:
+    §F1's Candidate is `(verb, subject, why)` with no operand channel. Refusing instead would make
+    `(Record, stages)` -- a Part D row -- unreachable from any person's decision, so the honest form
+    is §G's declare-default-sweep rather than either an invention or a blocker. Each stage is
+    `(due_tick, label, the act that wound the clock)`."""
+    d = a.payload if isinstance(a.payload, dict) else {}
+    stages = list(d.get("stages") or [])
+    if not stages:
+        n = w.fixtures.get("record_stages_default")
+        term = w.fixtures.get("record_stage_term")
+        stages = [(w.tick + (i + 1) * term, f"stage{i + 1}", a.id) for i in range(n)]
+    return stages
+
+
+def _docket_item(matter, arrangement, petition) -> dict:
+    """ONE DOCKET ITEM AS AN ACT WRITES IT -- `World.docket`'s shape, the one owner for the two
+    acts that put a matter before a room (`open_case` by remit, `carry` by right). No date: no
+    sitting was convened for it (`_eff_open_case`'s docstring says why)."""
+    return {"date": None, "matter": matter,
+            DOCKET_ARRANGEMENT: arrangement, DOCKET_PETITION: petition}
 
 
 def _mint_document(w: "World", a: "Act", kind: str, content, rung: str) -> Change:
@@ -142,17 +174,7 @@ def _mint_document(w: "World", a: "Act", kind: str, content, rung: str) -> Chang
     d = a.payload if isinstance(a.payload, dict) else {}
     rid = d.get("record") or f"rec:{a.id}"
     content = _addressed(content)
-    stages = list(d.get("stages") or [])
-    if not stages:
-        # `H-80`, DECLARED AND SWEPT. The act SHOULD declare these (#353 §13.1) and a computed
-        # act cannot: §F1's Candidate is `(verb, subject, why)` with no operand channel. Refusing
-        # instead would make `(Record, stages)` -- a Part D row -- unreachable from any person's
-        # decision, so the honest form is §G's declare-default-sweep rather than either an
-        # invention or a blocker. Each stage is `(due_tick, label, the act that wound the clock)`.
-        n = w.fixtures.get("record_stages_default")
-        term = w.fixtures.get("record_stage_term")
-        stages = [(w.tick + (i + 1) * term, f"stage{i + 1}", a.id) for i in range(n)]
-    rec = Record(rid, rung, kind, subject_matter=content, stages=stages)
+    rec = Record(rid, rung, kind, subject_matter=content, stages=_declared_stages(w, a))
     held = _makers_hold(w, a.actor, rid)
 
     def perform() -> None:
@@ -194,10 +216,11 @@ def _eff_issue(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     This body is UNCHANGED by `19` but for the rung, factored into `_seat_rung` (`_eff_open_case`
     draws up the same way): the thing `15` built it to mint is what the precondition now admits.
 
-    ⚠ A COMPUTED `issue` IS ADDRESSED TO WHAT IT IS ABOUT -- `terms` and `to` both bind the
-    question's one referent (`H-94`'s single-referent limit), so its `terms` names the executor
-    himself: a writ to a man about that man. `petition`'s row records the identical limit for the
-    identical reason, and `15c`'s held-writ `to` is what separates the two when a person holds one."""
+    ⚠ A COMPUTED `issue` WAS ADDRESSED TO WHAT IT IS ABOUT -- `terms` and `to` both bound the
+    question's one referent (`H-94`'s single-referent limit), so its `terms` named the executor
+    himself. Since plan position IN-10 `to` fans over the persons the issuer knows (the row's
+    `terms` conjunct binds `subject`, #453 §10.1), so `terms` is the referent and `to` an executor.
+    `petition`'s row keeps the single-referent limit. This body is unchanged by it."""
     return _mint_document(w, a, "dispensation", _content_of(a, "dispensation"), _seat_rung(w, a))
 
 
@@ -265,13 +288,75 @@ def _eff_open_case(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     if docketed(w, matter) or d.get("record") in w.records:
         return NO_CHANGE
     made = _mint_document(w, a, "text", None, _seat_rung(w, a))
-    item = {"date": None, "matter": matter,
-            DOCKET_ARRANGEMENT: arrangement, DOCKET_PETITION: petition}
+    item = _docket_item(matter, arrangement, petition)
 
     def perform() -> None:
         made.apply()
         w.docket.append(item)
     return Change(made.subjects, perform)
+
+
+@effect_for("carry")
+def _eff_carry(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """v9 IN-45 -- A HELD PETITION IS PUT BEFORE THE ROOM: the one route by which someone without a
+    seat dockets a matter (`open_case` dockets by remit). Built on `_eff_open_case`'s body, on the
+    gate's EXISTING `entity` shape -- no fourth `Subject` shape, so `state/gate.py` is untouched.
+
+    WHAT IT WRITES, IN ONE `apply`:
+      * THE PETITION'S STAGES (`Record.stages`) -- re-wound by THIS act (`_declared_stages`: the
+        act's declared stages, else `H-80`'s default from this tick). The petition is its own case
+        file: where `open_case` mints a case file and winds its clock, a carried petition already is
+        the document, so the carriage winds the clock on it, and MATTER's maturation of those stages
+        cites the carriage (`loop/matter.py`'s `prior` is the last Event whose changes name the
+        petition, which is this act's). REPLACED, not appended: an appended list could repeat a
+        `(due, label)` the filing wound on the same tick. [ASSUMPTION; medium; Jordan to correct;
+        revert: append the carriage's stages to the filing's.]
+      * THE DOCKET ITEM -- `_docket_item(<terms>, None, <petition>)`: the matter is the petition's
+        `terms`, what it is ABOUT (`rosters.yaml: record_kinds.content`: `terms` is the filing act's
+        `subject`), and the item names the petition it rose from (v9 SC-03a, K-55). Precedent:
+        `open_case` dockets its subject, the party `determine` binds through `docketed`, and an
+        accusation petition's `terms` names the accused. No arrangement row: none is derivable for
+        a computed case (`queries/world_q.py::judging_set`'s gap, as `open_case`'s).
+        [ASSUMPTION; medium; Jordan to correct; revert: the matter is the petition's own id.]
+
+    G4 -- WHAT IT NAMES: THE PETITION, whole (`Subject.entity("records", ...)`, `create_record`'s
+    shape). The receipt names the petition id, and the docket item this write appends names that
+    same id under `DOCKET_PETITION`, so the receipt names the record the append is keyed by. The
+    append itself rides on that receipt, as `open_case`'s rides on its case file -- the docket is a
+    SEQUENCE the gate has no `get()` for, and a refused write would NOT put it back (the gate restores
+    Tenures only). So every decline comes FIRST, before anything is built: a subject that is not a
+    petition `Record`; a petition with no `terms` to docket; a matter ALREADY on the docket
+    (`docketed`, the one owner -- `open_case`'s decline); and stages that would read the same after
+    as before (the only way the named subject could fail to move).
+
+    ⚠ THE STAGES DECLINE, MEASURED BY ARM (B-K close, COR 2 / LOG 8). At `record_stages_default` >= 1
+    it never fires for a computed carry: every wound stage names THIS act's id, so the list differs
+    from the filing's; only a declared `stages` equal to the petition's trips it. At
+    `record_stages_default` = 0 -- arm 0 of `H-80`'s declared sweep -- filing and carriage both wind
+    `[]`, so it REFUSES EVERY CARRY and nothing a petition says reaches the docket. Registered at
+    `H-80` and pinned by `test_in45_carry.py`; latent (the shipped arm is 3) and NOT wound to
+    `max(n, 1)`. [ASSUMPTION; medium; Jordan to correct.]
+
+    Who may carry: the row's typed cell -- the petition exists, and the ACTOR HOLDS IT (`held_by`,
+    `found`'s cell): the petitioner, or whoever `give` handed it to."""
+    pid = _operand(a, "subject")
+    rec = w.records.get(pid) if isinstance(pid, str) else None
+    if rec is None or rec.kind != "petition":
+        return NO_CHANGE
+    # What the petition is ABOUT, by `person_q.ABOUT_KEYS`' key for its kind (B-K close, ARC 1).
+    about = ABOUT_KEYS.get(rec.kind)
+    matter = (rec.subject_matter or {}).get(about) if about else None
+    if not isinstance(matter, str) or docketed(w, matter):
+        return NO_CHANGE
+    stages = _declared_stages(w, a)
+    if stages == list(rec.stages):
+        return NO_CHANGE
+    item = _docket_item(matter, None, pid)
+
+    def perform() -> None:
+        rec.stages = stages
+        w.docket.append(item)
+    return Change((Subject.entity("records", pid),), perform)
 
 
 @effect_for("determine")
@@ -430,12 +515,17 @@ def _eff_survey(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     survived, which is why an act is spent here and nowhere else: *"The cost belongs to COMMISSIONING
     ... Free to read, costly to obtain, stale by construction."*
 
-    WHICH FACTION -- `world_q.faction_holding(w, subject)`, THE ONE OWNER OF *which faction does this
-    cohere under*. It answers for a faction's own Proposition (itself, if the roster carries it) and
-    for a person (the one faction he is committed to; `None` for none or for two, where canon states
-    no precedence). So the literal reading -- survey the Crown -- and the reachable one -- survey the
-    faction of the man you were asked about -- are ONE read, and no referent-to-faction rule is
-    written here. REJECTED, each with its reason:
+    WHICH FACTION -- `world_q.faction_of(w, subject)` (through `_resolved_sheet`), THE ONE DISPATCH OVER
+    THE OWNERS OF *which faction does this cohere under*. `faction_holding` answers for a faction's own
+    Proposition (itself, if the roster carries it) and for a person (the one faction he is committed
+    to; `None` for none or for two, where canon states no precedence). So the literal reading --
+    survey the Crown -- and the reachable one -- survey the faction of the man you were asked about --
+    are ONE read, and no referent-to-faction rule is written here. ⚠ AND A RUNG, SINCE v9 IN-12
+    (`survey` + Rung, H-169 limit 6): *who holds this valley* is `world_q.holder_faction_of`, the
+    owner the march path and `uncontrolled` already ask, so a survey of a place reads the faction that holds it as `loop/sides.py` reads its defender
+    (`_resolved_sheet` dispatches on `World.class_of`). The sheet is the same five-field view, so the
+    sheet consumer (`rosters.yaml: record_sourced_operands.faction_sheet`) reads it unchanged.
+    REJECTED, each with its reason:
       * THE SUBJECT IS THE FACTION AND NOTHING ELSE (`commit`'s cell, `existence` of `subject`, kind
         `Proposition`). No computed act's referent is ever a Proposition -- `questions_for`'s clause
         1 admits a claim only if its subject is in the asker's `reach`, and `place_of` of a
@@ -443,8 +533,9 @@ def _eff_survey(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
         season, `python -m engine.season.harness.aperture`) -- so a survey would be formed on every
         referent and refused on every one: a fourth instance of `H-156`'s scene tax, and a
         mechanism that runs in no shipped world.
-      * `holder_faction_of` FOR A RUNG (*who holds this valley*): a second derivation beside the
-        first, for a document the position does not name. A rung referent declines.
+      * (`20-iii`'s, LIFTED at v9 IN-12) `holder_faction_of` FOR A RUNG as *a second derivation
+        the position does not name*: the plan named it at IN-12, and it is a call to the owner, not a
+        derivation written here.
       * `create_record` DECLARING `kind: faction_sheet` (`works`' route at `24e`). Three reasons,
         any one sufficient. (a) A sheet's content is RESOLVED, and `create_record` stores what the
         act carries VERBATIM (r2 `02` §A.4, *verbatim or not at all*): a sheet whose maker supplies
@@ -467,21 +558,96 @@ def _eff_survey(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     standing nowhere, where there is no rung to name.
 
     DECLINES (`NO_CHANGE` -> `survey.refused`, the `write` clause): the subject coheres under no single
-    faction -- a person committed to none or to two, a rung, a site, a document, an unrostered
-    Proposition. The cell has already asked that the surveyor has heard of the subject (`own_ledger`).
+    faction -- a person committed to none or to two, a rung nobody up its chain holds (or whose holder
+    coheres under none), a site, an office, a document, an unrostered Proposition. The cell has already
+    asked that the surveyor has heard of the subject (`own_ledger`).
 
     ⚠ WHAT THIS DOES NOT BUILD, each registered (`H-169`): proposal 14.1's bound -- *what the sheet
     can contain is bounded by who you have* (the seats you have filled) -- so every survey is
-    complete and exact, and anyone may commission one; `forge` has no effect body, so no act makes a
-    false sheet; `destroy_record` declines for every actor (`H-75`), so no act burns one.
+    complete and exact, and anyone may commission one; `destroy_record` declines for every actor
+    (`H-75`), so no act burns one. (A false sheet is `_eff_forge`'s, below, since v9 IN-45.)
 
     G3 -- THE `hold` IS THE SURVEYOR'S OWN, `T-m`, exactly `create_record`'s. G4 -- WHAT IT NAMES: THE
     RECORD, whole, earning `faction.surveyed`; a new id always moves (absent -> present)."""
-    prop = faction_holding(w, _operand(a, "subject"))
-    if prop is None:
+    return _mint_sheet(w, a)
+
+
+def _mint_sheet(w: "World", a: "Act", forged: bool = False) -> Change:
+    """THE BODY `survey` AND `forge` SHARE: the resolved sheet (`NO_CHANGE` where the subject coheres
+    under no faction), with one key falsified if `forged`, minted through `_mint_document` where the
+    maker stands. `"hold"` still opens inside `_mint_document`, so the opener derivation reaches it."""
+    sheet = _resolved_sheet(w, a)
+    if sheet is None:
         return NO_CHANGE
-    sheet = asdict(faction_q.resolve(w, prop))
+    if forged:
+        sheet[_FORGED_SHEET_KEY] = a.actor
     return _mint_document(w, a, faction_q.SHEET_KIND, sheet, place_of(w, a.actor) or a.actor)
+
+
+def _resolved_sheet(w: "World", a: "Act") -> Optional[dict]:
+    """WHAT A SHEET ON THE ACT'S `subject` SAYS TODAY -- `faction_q.resolve`'s view of the one faction
+    the subject coheres under, as a fresh mapping (`asdict`), or `None` when it coheres under none.
+    `survey` mints it as it is; `forge` mints it with one key false. Factored at v9 IN-45 so the two
+    verbs read WHICH faction one way (`_eff_survey`'s docstring).
+
+    WHICH FACTION: `world_q.faction_of`, the one dispatch by the subject's class (`World.class_of`):
+      * a RUNG -- `holder_faction_of`, *who holds this valley*: the faction of the holder of the
+        nearest held rung at or above it (`ancestry`), `None` where nobody up the chain holds or the
+        holder coheres under no single faction. v9 IN-12 `survey` + Rung (H-169 limit 6).
+      * anything else -- `faction_holding`: a faction's own Proposition answers for itself, a person
+        for the one faction he is committed to.
+    A dead man's rung leaves with him (`World.remove_person`), so `class_of` answers `None` and the
+    sheet declines."""
+    subject = _operand(a, "subject")
+    prop = faction_of(w, subject)
+    return None if prop is None else asdict(faction_q.resolve(w, prop))
+
+
+# THE KEY A FORGED SHEET FALSIFIES: the one its holders' decisions read their addressee from
+# (`rosters.yaml: record_sourced_operands`, the sheet consumer, H-169 limit 5). Read off that map,
+# never spelt here, so the forgery always lies about exactly what a reader acts on -- a perturbation
+# of a key nothing reads would be `ID-13`'s dead carrier -- and a map that drops the sheet fails here
+# at import instead of forging a lie nobody reads.
+_ADDRESSEE_KEY = RECORD_CONTENT.get("addressee")
+_FORGED_SHEET_KEY = RECORD_SOURCED_OPERANDS[faction_q.SHEET_KIND][
+    (RECORD_CONTENT.get("read_from") or {}).get(_ADDRESSEE_KEY, _ADDRESSEE_KEY)]
+
+
+@effect_for("forge")
+def _eff_forge(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """v9 IN-45 -- A FORGED FACTION SHEET: `survey`'s document, minted through the same one mint (r2
+    `02` §A.15's *"the same one-line delegation `issue` gets"*), saying ONE THING FALSE -- that the
+    FORGER heads the faction. #453's row for the verb
+    (`proposals/2026-10-03-verb-coverage-and-gap-fill.md` `:515`): *"a faction the forger holds a
+    claim on (`survey`'s cell); `survey`'s mint with perturbed content"*.
+
+    WHAT IS FALSE, AND WHY THAT KEY: `_FORGED_SHEET_KEY`, the key the sheet consumer reads a holder's
+    addressee off (`head`). A petition its holder files on the strength of it is addressed to the
+    forger, who then holds the petition (`give` it, sit on it). The rest is TRUE AT THE MOMENT OF
+    WRITING: a forgery a reader could check against the world on every key but one is the
+    convincing kind, and one false key is the least the verb can say and still be a forgery.
+    [ASSUMPTION; medium; Jordan to correct; revert: another key, or the act declaring its lie --
+    which a computed act cannot carry (`H-94`).]
+
+    ⚠ `Record.forgery_quality` IS NOT WRITTEN, DELIBERATELY (`H-210`): nothing in the tree reads it,
+    and a field with a writer and no reader is `ID-13`'s dead carrier. Its reader is the examination
+    the proceedings plan's step 25 names (SC-02 `22b`, B-P), and the writer lands there WITH it, so
+    the field has one owner. A HOLDER can never read it, by construction -- *"a forged writ and a
+    genuine writ are indistinguishable in every executor's ledger -- by construction, not by a flag"*
+    (r2 §A.15) -- so the content deposit (`loop/witness.py`) hands a holder the same claim either
+    way; what this forgery does downstream is its false `head`. [ASSUMPTION; medium; Jordan to
+    correct; revert: restore the writer here (H-210's candidate value).]
+
+    DECLINES (`NO_CHANGE` -> `forge.refused`, the `write` clause) exactly where `survey` does: the
+    subject coheres under no single faction. (So a forge on a RUNG mints since v9 IN-12, as a survey
+    does: the two read WHICH faction through one helper, `_resolved_sheet`, by design.)
+    G3 -- THE FORGER'S OWN `hold`, `T-m`, `survey`'s. G4 -- WHAT IT NAMES: THE RECORD, whole,
+    earning `record.forged`; a new id always moves.
+    ⚠ THE FORGER HOLDS IT, SO HE IS ITS FIRST HOLDER and the deposit hands him what it says, as it
+    would any holder: the instrument does not know he wrote it (the deposit carries no attribution,
+    r2 §A.9). His own petition on it would be addressed to himself and is declined person-side
+    (`counterparty:`), so the lie misleads others, not him, on the one decision that reads it."""
+    return _mint_sheet(w, a, forged=True)
 
 
 @effect_for("give")
@@ -524,6 +690,144 @@ def _eff_give(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         held.until = w.tick                # the giver's release, FIRST
         w.add_tenure(nt)                   # then the receiver's hold
     return Change((Subject.edge(nt), Subject.edge(held)), perform)
+
+
+# WHICH RECORD KIND IS A WARRANT FOR `seize`, and WHICH OF ITS CONTENT KEYS NAMES WHAT IT AUTHORIZES:
+# the kind is `data/verbs.py::WARRANT_SOURCED`'s (`rosters.yaml: warrant_sourced`, the one loader both the
+# person side and this one import), the key `person_q.ABOUT_KEYS`' (the one owner of "what a document is about"),
+# never spelt here.
+_SEIZE_WARRANT_KIND = WARRANT_SOURCED["seize"]
+_SEIZE_WARRANT_KEY = ABOUT_KEYS[_SEIZE_WARRANT_KIND]
+
+
+def _held_warrant_names(w: "World", actor: str, rid: str) -> bool:
+    """DOES A WARRANT THE ACTOR HOLDS NAME RECORD `rid`? -- a live `hold` of his own on a Record of the
+    warrant kind (`rosters.yaml: warrant_sourced`) whose `_SEIZE_WARRANT_KEY` content says `rid`. World-side:
+    the effect owns the licence because the gate never reads a Record's content (K-52); the person-side
+    twin is `decision/options.py::opening_set`'s formation on the same reading, off his own ledger."""
+    for t in w.tenures:
+        if t.kind != "hold" or not t.live or t.subject != actor or t.object not in w.records:
+            continue
+        rec = w.records[t.object]
+        sm = rec.subject_matter
+        if rec.kind == _SEIZE_WARRANT_KIND and isinstance(sm, dict) and sm.get(_SEIZE_WARRANT_KEY) == rid:
+            return True
+    return False
+
+
+# The kind each half earns: the `seize` row's `emits:` in its declared order (`verb_table.yaml`, Record
+# then Rung), read off the table so neither kind is spelt here.
+_SEIZED_RECORD, _SEIZED_RUNG = VERB_TABLE["seize"].emits
+
+
+def _take_hold(w: "World", a: "Act", obj: str, held: Optional[Tenure], earns: str) -> Change:
+    """THE TAIL BOTH HALVES OF `seize` SHARE: the actor OPENS a `hold` on `obj`, and the `hold` it
+    displaces (`held`, or `None` when nobody held it) CLOSES, in ONE write. THE NEW EDGE'S ID carries the
+    act (`hold:<obj>:<act>`), `_eff_give`'s salting. G4 -- WHAT IT NAMES: the two edges, the opened one
+    first, both earning `earns`. The close is written FIRST, then the open.
+    ⚠ THE `Tenure` KIND IS A STRING LITERAL HERE ON PURPOSE, NOT A PARAMETER: `data/verbs.py::
+    _derive_openers_from_effects` reads which verb opens which kind off that literal, walking same-file
+    helpers from the registered effect, so `seize` stays a `hold` opener through this helper (the
+    `_eff_commit` note below records what a parameterised kind did to the walk)."""
+    nt = Tenure(H(w.world_seed, w.tick, a.actor, f"hold:{obj}:{a.id}"), a.actor, obj, "hold", since=w.tick)
+
+    def perform() -> None:
+        if held is not None:
+            held.until = w.tick            # the dispossessed holder's hold, FIRST
+        w.add_tenure(nt)                   # then the seizer's
+    return Change(tuple(Subject.edge(e, earns=earns) for e in (nt, held) if e is not None), perform)
+
+
+@effect_for("seize")
+def _eff_seize(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """v9 IN-12 step 6 (#453 §10.4, the `seize` row), THE RECORD HALF: the previous holder's `hold` on a
+    Record ENDS and the actor's OPENS, in ONE write, WITHOUT the holder's consent -- `give`'s body, the
+    one other verb that moves a Record, with the licence that `give` takes from the giver's own edge
+    replaced by a warrant and a seat.
+
+    WHAT LICENSES IT, IN THE ORDER IT IS ASKED, each one owner of its rule: (1) the Record exists and
+    one other person holds it (`hold_force`, the owner of *who holds this*); (2) the actor HOLDS A
+    WARRANT NAMING IT (`_held_warrant_names`) -- the effect's, because it is a Record's content;
+    (3) the exercised seat may seize from that holder (`may_seize`, the gate's own predicate, so an act
+    the precondition admitted is never killed at the gate by a disagreement about the holder's home).
+    Anything else declines (`NO_CHANGE` -> `seize.refused`). A Record the actor already holds, or that
+    nobody holds, moves nothing.
+
+    THE GATE: the close is `seizure` (`state/gate.py`), the open is `T-m` (the actor opening a non-seat
+    `hold` for himself). A SEAT IS NEVER SEIZED: the gate's `seizure` clause admits only a Record or a
+    Rung, so a hand-built act that skipped the precondition is `NotYours`, not a taking. ⚠ SINCE v9
+    IN-13 the row's `existence` conjunct is gone (the object widened to a Rung, `verb_table.yaml`'s
+    `requires_typed_note`): an Office has no place, so the `authority` conjunct refuses it first
+    (`seize.unauthorized`); planted past it, a seat is no Record and no settlement and `_seize_rung`
+    declines it; and the gate still admits neither half on an Office. A subject that is no Record goes
+    to `_seize_rung`, the Rung half.
+
+    G4 -- WHAT IT NAMES: the two edges, the opened one first as `_eff_give` and `_eff_confer` name
+    theirs; both earn the Record half's kind, `record.seized` (the Rung half earns `rung.seized`). The receipts name TENURES, not the Record.
+    THE NEW EDGE'S ID carries the act (`hold:<record>:<act>`), `_eff_give`'s salting, so a Record taken
+    and taken back inside one tick does not re-mint the first `hold` id."""
+    rid = _operand(a, "subject")
+    if rid not in w.records:
+        return _seize_rung(w, a, rid)
+    held = hold_force(w, rid)
+    if held is None or held.subject == a.actor:
+        return NO_CHANGE
+    if not _held_warrant_names(w, a.actor, rid) or not may_seize(w, a.actor, a.via, held.subject):
+        return NO_CHANGE
+    return _take_hold(w, a, rid, held, _SEIZED_RECORD)
+
+
+def _seize_rung(w: "World", a: "Act", rid: str) -> Change:
+    """v9 IN-13 (#453 §10.4 step 8), `seize`'S RUNG HALF: the actor opens a `hold` on an OCCUPIED
+    SETTLEMENT, and whatever `hold` it already carries closes -- one town changing hands without its
+    territory (#453 §9.1: a hold on the settlement itself shadows a territory hold in
+    `holder_faction_of`'s walk). The ROW stays keyed as IN-12 step 6 built it; the halves split HERE, on
+    what the subject is (a Record, or not), and share the gate's `seizure` basis for the closure and
+    `T-m` for the opening.
+
+    WHO MAY SEIZE: with no hold on the town, the seat's authority comes only from the fold's precondition
+    (eligibility `remit:issue` via `seat_hold`, plus the `authority` purview conjunct); the Record half
+    calls `may_seize` in the effect, so the gate does not later refuse an act the precondition admitted.
+
+    THE LICENCE IS OCCUPATION, read at the effect as `raze`'s will be (#453 §10.4 steps 8 and 11): the
+    exercised seat's FACTION (`faction_prop_id` of its display faction) `mustered` at the settlement
+    (`world_q.mustered`, the one query of who stands there), the settlement held by ANOTHER faction
+    (`holder_faction_of`). It asks nothing of the defenders: an opposed `Won` that removed nobody still
+    leaves the attacker mustered there, so the seizure is admitted (#453 exit (vii)). DECLINES
+    (`NO_CHANGE` -> `seize.refused`, the `write` clause), each one change from an admitted seizure:
+      * the subject is not a Rung of a `march_target_kinds` kind (a seat, a person's own rung, a
+        territory, a hearth) [ASSUMPTION; medium; Jordan to correct: occupation is defined at the
+        places a march arrives at; revert: any Rung kind, the licence still occupation];
+      * the actor is not committed to the seat's faction (`faction_holding`; the title written is his own
+        hold) [ASSUMPTION; medium; Jordan to correct; revert: drop the decline];
+      * the seat's faction is not mustered there (no occupation);
+      * nobody holds the settlement (H-166: who holds an unheld place is unruled) or the seat's own
+        faction already does (nothing to take);
+      * the actor already holds it, or the closure's holder is one the seat may not seize from
+        (`may_seize` with the rung as the place, so an act the precondition admitted is never killed
+        at the gate).
+    ⚠ THE RUNG HALF'S FORMATION AND EXECUTION LICENCES DIFFER: it forms person-side wherever a held
+    dispensation's `terms` names the rung (`rosters.yaml: warrant_sourced`; `test_season_shape.py` plants
+    one on a hearth), but at the effect it licenses on OCCUPATION, not on the warrant. No computed source
+    of such a warrant has been measured -- a named residue, not a wiring gap in this effect."""
+    rung = w.rungs.get(rid)
+    mine = seat_faction(w, a.via)
+    if rung is None or rung.kind not in MARCH_TARGET_KINDS or mine is None:
+        return NO_CHANGE
+    # The title written is the ACTOR'S OWN hold, and a hold coheres under the faction its holder is
+    # committed to (`faction_holding`; `None` for no commit or two): an actor not committed to the seat's
+    # faction would take the town for a faction that is not his [ASSUMPTION; medium; Jordan to correct;
+    # revert: drop the decline].
+    if faction_holding(w, a.actor) != mine:
+        return NO_CHANGE
+    holder = holder_faction_of(w, rid)
+    if holder is None or holder == mine or not mustered(w, rid, mine):
+        return NO_CHANGE
+    held = hold_force(w, rid)
+    if held is not None and (held.subject == a.actor
+                             or not may_seize(w, a.actor, a.via, held.subject, rid)):
+        return NO_CHANGE
+    return _take_hold(w, a, rid, held, _SEIZED_RUNG)
 
 
 @effect_for("destroy_record")

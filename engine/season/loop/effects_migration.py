@@ -3,7 +3,8 @@
 EXTRACTED from `effects.py` at the per-subsystem split (Phase 4). Holds the presence/residence pair:
 `move` re-homes `contain` alone, `migrate` re-homes `contain` AND `reside` in one write. `_relocate`,
 the journey the two share (the traveller's live `contain` legs close, a new one opens, and `dest` is
-appended to `Person.travel_leg`), stays local here -- only this pair calls it. See `effects_shared.py`
+appended to `Person.travel_leg`), stays in this file; `move` and `migrate` call it, and since v9 IN-13
+so does `loop/effects_combat.py::_eff_march`, once per claimant it moves. See `effects_shared.py`
 for `effect_for`, `_operand` and the shared §10-ladder refusal `_decline_ascent`.
 """
 
@@ -87,7 +88,7 @@ def _decline_custody(w: "World", a: "Act", dest: str) -> Change:
     return NO_CHANGE
 
 
-def _relocate(w: "World", a: "Act", dest: str) -> None:
+def _relocate(w: "World", a: "Act", dest: str, mover: "str | None" = None) -> None:
     """THE JOURNEY, `move`'s and `migrate`'s one body: the actor's live `contain` legs close, a new
     one opens to `dest`, and `dest` is appended to `Person.travel_leg` -- the movement in progress
     (`ARCHITECTURE_V2.md` §D4) that `loop/matter.py`'s travel pass ends at the next MATTER. Called
@@ -95,20 +96,27 @@ def _relocate(w: "World", a: "Act", dest: str) -> None:
     `_eff_move` at plan position `19c` because `migrate` is a journey too (a settler travels to his new
     home and pays the same distance penalty the season he goes), and a second copy of *what a journey
     writes* would let the two verbs disagree about it (§8). The leg's id is `move`'s, byte for byte,
-    so every run that only moves is unmoved by the extraction."""
+    so every run that only moves is unmoved by the extraction.
+
+    v9 IN-13 (#453 §9.6, the arrival): `mover` -- WHO makes the journey, the actor when omitted. A won
+    or unopposed `march` relocates EVERY claimant of its army through this one body (`_eff_march`), so
+    the leg id keys on the MOVER (`H(seed, tick, mover, "leg:<act>")`), never the actor: two claimants
+    moved by one act get two legs, and a `move`/`migrate` (mover == actor) mints the id it always did.
+    Whose edges a seat may re-home is the gate's `muster` basis, not this function's."""
+    who = a.actor if mover is None else mover
     for t in w.tenures:
-        if t.subject == a.actor and t.kind == "contain" and t.until is None:
+        if t.subject == who and t.kind == "contain" and t.until is None:
             t.until = w.tick
-    w.add_tenure(Tenure(H(w.world_seed, w.tick, a.actor, f"leg:{a.id}"),
-                        a.actor, dest, "contain", since=w.tick))
+    w.add_tenure(Tenure(H(w.world_seed, w.tick, who, f"leg:{a.id}"),
+                        who, dest, "contain", since=w.tick))
     # ⚠ THE DECLARED WRITE, NOW ACTUALLY WRITTEN. `verb_table.yaml`'s `move` row names
     # `(Person, travel_leg)` as its FIRST write and rev 1 never touched the field, so
     # `Query.budget`'s distance penalty read `len(p.travel_leg)` == 0 in every run and the only
     # test of it set the field by hand. A declared write that no effect performs is a lie the
     # write matrix cannot catch, because the matrix gates writes that HAPPEN.
-    mover = w.persons.get(a.actor)
-    if mover is not None:
-        mover.travel_leg = list(mover.travel_leg) + [dest]
+    traveller = w.persons.get(who)
+    if traveller is not None:
+        traveller.travel_leg = list(traveller.travel_leg) + [dest]
 
 
 @effect_for("migrate")
@@ -148,7 +156,7 @@ def _eff_migrate(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
 
     G3 -- EVERY EDGE IS THE ACTOR'S OWN (`T-m`): the `contain` legs and the `reside` edges are the
     migrant's, as subject, so the gate admits all four writes with no seat and NO NEW BASIS -- checked
-    against `tenure_write_basis`'s ten rather than assumed: the closures are the owner's discretion,
+    against `tenure_write_basis`'s bases rather than assumed: the closures are the owner's discretion,
     and an opening whose subject is the actor is `T-m`'s own case (it excludes a SEAT-hold, a term rewrite and, since SC-03a, a `detain`/`ban` -- none of them a `contain` or `reside`).
 
     G4 -- WHAT IT NAMES: THE MIGRANT, WHOLE, `move`'s reason: both edges are stored on the Person, so
