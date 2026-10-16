@@ -456,3 +456,63 @@ GRADE: paper — executed: the pin test above (1 passed) and `register --require
 (met 3 · partial 5 · not_met 1, R-04 partial, R-05 not_met, R-09 partial). Not run: corpus_run,
 aperture 4 0, resolution-diagnostic, any seeded trace of an inquiry through WITNESS.
 ```
+
+## 10. KEY RECOMMENDATIONS
+
+This is an audit-design pass over six months of repository work. Jordan, 2026-10-16: it "gets permission to be whatever it is". The recommendations below are this pass's output; none is entered in the plan or a ledger until Jordan so rules.
+
+### 10.0 The top five, worst problem first
+
+1. **K-FI-6**: give an inquiry a yield (M-FI-1). Without it every other recommendation here decides something about nothing.
+2. **K-FI-7**: let a low-band inquiry be confidently wrong (M-FI-2). It is the act the axioms, the archived design and the outside precedent converge on, and the plan defers it last.
+3. **K-FI-1**: give a person a competence at reading (M-FI-3). Without it who you send to look is not a choice.
+4. **K-FI-5**: let a concealer set what the seeker faces (M-FI-4). Without it the counter-espionage loop FI-03 designs has one side.
+5. **K-FI-11**: show the player what his person holds about a matter (M-FI-5). Without it Q5's "only through consequence" cannot be read as feedback.
+
+### 10.1 PRIMITIVES
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-FI-1 | Give each person a competence at reading, and let it set how far his inquiries' and witnessings' readings diverge from what happened. | M-FI-3; T-FI-7; H-200 (HR:4355-4366) [CHECKED]; AX-7 (`01_AXIOMS.md:288-289`) [CHECKED]; P-03, P-13 [CHECKED]; audit A1/T1 [AUDIT] | Jordan: survives all five steps because H-200's own ladder run found the architecture "cannot choose between a new person field and a capability key without a ruling on what the competence is a competence AT" (HR:4365), and the two give materially different games (one reading skill for all inquiry versus a per-verb skill) | adds one person attribute or one `verb_capability` key per inquiry; cuts `refracted_confidence`'s fixed competence factor of 1 and FI-01's swept inquiry pool fixture | two persons differing only in competence witness one act and examine one Site: their deposited confidences differ; control, equal competence: identical |
+| K-FI-2 | Strike Exposure, Cover, the Evidence Track and the Depth gates from the investigation vocabulary: being seen inquiring is the witness record, and a case's progress is what the investigator holds. | 9.1 false N-lines; 8.5 items 1-3; `rosters.yaml:511`; VT:1100; P6:256 | takeable (step 1, superseded): the plan builds no Depth ("build none"), VT rules the Track a count, and `rosters.yaml:511` forbids the bare Exposure name | adds nothing; cuts four archived objects from FI-03's design input | FI-03's design names none of the four, and its own falsifier (a covert act with its trail suppressed forms no response; with it, one) still passes |
+
+### 10.2 VERBS
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-FI-3 | Make `interview` yield testimony: the questioned person's answer is his own `tell` to the asker about the matter asked, true, mistaken or withheld as he chooses. | M-FI-6; T-FI-3 (pre-modern inquiry was testimonial); FW Q4 (FW:1015); K-36 (P6:236); VT:1115 note [CHECKED] | takeable (step 4, precedent): a `tell` with a named own-ledger conjunct already carries what the actor would say (`data/requires.py:562-572`) [CHECKED], and a claim landing about a person already raises his question (Q2, `witness.py:657-662`) | adds the matter asked as the interview Event's subject; cuts the Dialogue Lattice and five-filter Response Matrix as a build target (ED-FI-0004 REFINE) | hand-built world: A interviews B about C while B holds a claim about C; next round B's opening set holds a `tell` to A about C; control, no interview: no such candidate |
+| K-FI-4 | Let `examine` take as its subject the place a witnessed deed names, so a person who hears of a deed can go and examine where it happened. | 8.3 (`examine` row); R-05 (`requirements.yaml:784-786`, "no question these worlds raise refers to a Site"); VT:1074-1081 (the `Site` binding "is what makes `examine` always-refused") [CHECKED] | takeable (step 5): the binding is graded `assumption` and named by VT as the refusal's cause; the `seen` claim already names the place (its subject "else the RUNG", `witness.py:657-662`) | adds nothing; cuts the `Site`-only binding | a deed at rung R deposits a `seen` claim on R; a witness forms and executes `examine` on R; control with the `Site` binding: refused |
+| K-FI-5 | Let a concealer's own score set what an inquiry into what he concealed faces, so hiding and seeking are one opposed exchange. | M-FI-4; T-FI-8; Jordan's Q1, oppositional obstacles "are score/2" (FW:980-982, :987) [CHECKED] | takeable (step 3, answered by a ruled design call) once `conceal` exists (IN-12 step 10, B-Q); the score it reads waits on K-FI-1 or J-13 | adds a concealer branch to the one `_obstacle_of`; cuts the non-person default for concealed subjects | the same inquiry into a concealed and an unconcealed Record: the obstacles differ by the concealer's score/2; control, unconcealed: the default |
+
+### 10.3 MECHANICS
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-FI-6 | Give every inquiry a yield: what the investigator reads of the place, record or person he inquires into lands in his own ledger as a claim, through the loop's existing observation deposit, and the degree decides how much of it lands. | M-FI-1; T-FI-1; T-FI-6; 9.1 (FI-01's degree a false N-line until this exists); audit A8, T5 [AUDIT; VT re-opened]; `Event.observed` (`resolve.py:392-407`), deposit (`witness.py:605-656`) [CHECKED] | takeable (step 4, precedent: `W-B`'s precondition reads and `19d`'s shortfall observation already travel this path), with each row's predicates graded `assumption` as the six cells are now; if a read needs a requires form the closed seven lack, that one is Jordan's (`rosters.yaml: requires_forms`, "a design change, not a table edit") | adds per-row reads (data); cuts FI-01's deposit-or-silence and the need for a separate finding value space (K-37) | hand-built world: `research` on a Record with stages S at Success leaves `(Record, stages, S)` in the actor's ledger; mutate the read out: absent; a later decision that reads it differs between the arms |
+| K-FI-7 | Let a low-band inquiry be confidently wrong: the read lands with a false value at the confidence a true one would carry, and nothing tells the investigator which he holds. | M-FI-2; T-FI-2 (four independent); AX-2 (`01_AXIOMS.md:104-111`) [CHECKED]; `fieldwork_v30.md:286`; `04_VERBS.md:570-571`; H-198 | Jordan: survives because the plan carries "Failure emits `finding.none` and deposits nothing" as closed at ladder step 3 (P6:245) while `04_VERBS` puts wrongness in the success bands (`:570`), and the two give materially different games (failure as ignorance versus failure as error) | adds one rule on the existing deposit (`told_drift_band` is the in-tree precedent for a drifted value); cuts the SKIP arm's Failure branch | seeded hand-built case: a low-band `research` deposits a stages value ≠ S at the confidence a Success deposit carries; control, Success: S |
+| K-FI-8 | Leave a refused inquiry witnessable as an attempt rather than silencing it, so trying and failing to reach a place or record is something others can learn. | T-FI-5; H-111 (HR:1608-1618); S-6 (`03_play_surface.md:80`); SILENCE BEATS REFUSAL (`skills/ners/SKILL.md` §6) | Jordan: survives because H-111 records both readings as defensible and "one is already running" (HR:1618), and they give different worlds (refusal seeds deliberation, or does not) | adds nothing; cuts the SKIP arm (a deletion) | a refused inquiry at a rung with one other person present: that person holds a claim of the attempt; control with the SKIP arm: none |
+| K-FI-9 | Resolve investigation inside the season loop's own acts and add no second composition role for it. | 9.1 (FI-02 a false N-line); C4 (`registry.py:26-30` against P6:244-245) [CHECKED]; `rosters.yaml:1051` | takeable (step 5): the game is the same either way; Jordan's quoted words (P6:266) ask that "whatever declaration" be adjusted, which `rosters.yaml:1051` already did | adds nothing; cuts FI-02 and its composition row | `check_rows()` still returns one role and the pin test still passes; FI-03, when designed, names no provider it needs a role for |
+
+### 10.4 TEXTURE
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-FI-10 | Let one person's finding become another's rumour, carried by tellings with its teller chain, so a wrong finding spreads exactly as a true one does. | T-FI-4 (origin support built, `person_q.py:540-575`); 9.4 S-DOWN (delivers blind); audit T5 [AUDIT]; Twenty A9 (`6039edcc`:235) | takeable (step 4, precedent): `said_of` already passes on a holder's claims and `chain` already records tellers; it follows from K-FI-6 with no new object | adds nothing; cuts nothing | after K-FI-6, a third person who never inquired holds A's finding with `chain` starting at A; two independent findings of one value raise its support above one alone |
+
+### 10.5 SURFACE
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-FI-11 | Show the player, per matter, what his person holds: each claim's value, source, teller chain and age, as the record against which consequence is read. | M-FI-5; T-FI-9 (three independent); Jordan's Q5 (FW:1017); audit A2 [AUDIT] | takeable (step 5): a read-only view over `Claim` fields adds no state; where it sits (IN-47's sheet space or a view of its own) is IN/GO's placement | adds one derived view; cuts the archived Case Board's stored structure and FW's KeyLog view | the view's rows equal the person's ledger claims about the matter one-to-one, and a decayed claim leaves the view in the same tick |
+
+## 11. METHOD NOTE (sections 7-10)
+
+**Opened this pass.** `engine/season/verb_table.yaml:1020-1186` (the six rows); `loop/witness.py:155-175, :231-239, :600-665`; `loop/resolve.py:380-408, :975-995, :1080-1107`; `data/requires.py:555-640, :735, :809`; `queries/person_q.py:515-580`; `state/carriers.py:290-345`; `data/fixtures.py` (`observation_deposit_mode`, `telling_privacy`); `manifest/registry.py:22-30`; `rosters.yaml:1051, :1074, :1082-1090`; `requirements.yaml:1-40, :169-186, :780-790`; HR H-111, H-198, H-200; `canon/02_canon_constraints.md:40-62`; `canon/04_game_design_constraints.md`; `architecture/meta/01_AXIOMS.md:104-123, :263-300`; P6:231-280; p2:180-216, :250-258; FW:978-992, :1012-1020; VCD:95-127, :910-918, :1090-1095, :1262-1266; the uploaded audit's lines 52-62, 183-192, 381-392, 494-508; the six uploaded precedent documents by grep and at the cited lines. Executed: `register --requirements` and the one pin test (§9.6). Absence tests are the commands in 8.2.
+
+**Taken, not re-opened.** From the lane file: §0-§6's locators. From extractions [READER]: B1-1 (`verb_capability`), BASELINE B2/B3 (capability 429/430, executed pins), R4, R5, R8, A9-1, C1-2, C8-1/C8-2. From the audit [AUDIT]: T5's cross-lane counts, A1/T1, A2.
+
+**Upload corrections applied.** (1) §0 item 8, §2.1 VCD row, §2.3 and §5: the two surveys are absent from the repository and from the uploads; VCD's Shadows of Doubt judgment row is from *Mechanics of Inquiry* and uncheckable. (2) §2.1: a row added recording that none of the six uploaded precedent documents (N1, N2, *Third Strand*, Nine Titles, Thirteen, Twenty) names any detective game of §2.2, and what they do carry for inquiry (Guild 2 evidence, the record condition, stale reports, the writ). (3) No §0 ranking changed.
+
+**Could not check.** Whether an inquiry's Event carries its observed reads in a live run (code path read, no seeded trace); whether the questioned person's chooser answers an `interview` (M-FI-6); the stem `reconstruct`'s `own_ledger` form reads; the plan's claim that `research`'s "content builder and drift exist" (`[UNVERIFIED]` in P6:236; no non-test module names the verb). `corpus_run` and `aperture 4 0` were not run, so executed-set membership is BASELINE's pin, not a reading.
+
+**[CONFIDENCE: medium]** on T-FI-1's limit and M-FI-1's carrier claim (code path, not execution); on M-FI-6; on 8.5 item 8 (solvability carried by the trail). The independence counts in 7.1 are upper bounds (§7.4).
