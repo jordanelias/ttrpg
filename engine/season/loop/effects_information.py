@@ -550,8 +550,9 @@ def _eff_forge(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
 
     DECLINES (`NO_CHANGE` -> `forge.refused`, the `write` clause) exactly where `survey` does: the
     subject coheres under no single faction. (So a forge on a RUNG mints since v9 IN-12, as a survey
-    does: the two read WHICH faction through one helper, `_resolved_sheet`, by design.) G3 -- THE FORGER'S OWN `hold`, `T-m`, `survey`'s. G4 --
-    WHAT IT NAMES: THE RECORD, whole, earning `record.forged`; a new id always moves.
+    does: the two read WHICH faction through one helper, `_resolved_sheet`, by design.)
+    G3 -- THE FORGER'S OWN `hold`, `T-m`, `survey`'s. G4 -- WHAT IT NAMES: THE RECORD, whole,
+    earning `record.forged`; a new id always moves.
     ⚠ THE FORGER HOLDS IT, SO HE IS ITS FIRST HOLDER and the deposit hands him what it says, as it
     would any holder: the instrument does not know he wrote it (the deposit carries no attribution,
     r2 §A.9). His own petition on it would be addressed to himself and is declined person-side

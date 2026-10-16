@@ -7834,6 +7834,12 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # ⚠⚠ v9 IN-45, TEN -> ELEVEN: `forge` JOINS, newly resolvable (`survey`'s cell, `_eff_forge`):
     # attempted and refused everywhere, for `survey`'s reason -- no corpus person coheres under a
     # faction. A re-record, said so.
+    # ⚠⚠ v9 IN-12 `survey` + Rung (B-K), UNCHANGED AT ELEVEN, AND RE-RUN SO: a Rung subject is now
+    # answered by its holder's faction (`world_q.holder_faction_of`), and `survey` and `forge` STAY.
+    # The plan's EXIT read *"`survey` leaves the always-refused pin"*; measured, it cannot here: a
+    # held rung coheres under its HOLDER's one faction, and no person in any corpus world commits to
+    # a rostered faction (0 of 86 `build_at` worlds at seed 0 carry a faction `commit`), so every
+    # rung's answer is `None` exactly as every person's is. A named residue, not a widening.
     assert refused_only == {"build", "found", "migrate", "work", "survey", "commit", "dispatch",
                             "examine", "levy", "restore", "forge"}, (
         f"the always-refused set moved to {sorted(refused_only)}. `move` and `transfer` left it "
@@ -9891,6 +9897,8 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # ⚠⚠ v9 IN-45: `forge` JOINS, newly resolvable (typed with `survey`'s cell, `_eff_forge`), and for
     # `survey`'s reason -- no corpus person coheres under a faction, so every attempt is the effect's
     # decline. A re-record, said so.
+    # ⚠⚠ v9 IN-12 `survey` + Rung: UNCHANGED, re-run -- a rung's answer is its holder's faction, and
+    # no corpus holder coheres under one (the same note at the executed-set assertion above).
     assert set(refused) - set(executed) == {"work", "found",
                                             "build", "migrate", "survey", "commit", "dispatch",
                                             "examine", "levy", "restore", "forge"}, (
@@ -9903,7 +9911,7 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
         "Proposition -- do not widen Q4 to close this here); `levy` because no corpus seat has a "
         "rung, so none has purview anywhere (position `19`); `found`/`build` because no referent "
         "is a works, since no computed act declares one (position `24e`, `H-165`); `survey` "
-        "and `forge` because no corpus person coheres under a faction; `restore` left this set again at `24f` "
+        "and `forge` because no corpus person -- so no rung's holder -- coheres under a faction; `restore` left this set again at `24f` "
         "and `release` at `20-ii` (see above)")
     # ⚠ AND THE HONEST READING OF "IT EXECUTES", MEASURED RATHER THAN ASSUMED — and the first
     # writing of this arm ASSUMED, from one sampled case, that every corpus transfer was a

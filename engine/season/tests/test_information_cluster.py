@@ -9,7 +9,8 @@ What the position built, each asked of the real fold, the real WITNESS and the r
   * a `faction_sheet` is a `Record` kind (`rosters.yaml: record_kinds`) whose keys are
     `faction_q.Faction`'s fields -- checked at import, and the check has a falsifier here;
   * `survey` commissions one: `own_ledger` of `subject` (the surveyor has heard of it), then the
-    faction the subject coheres under (`world_q.faction_holding`, one read for a faction and a person),
+    faction the subject coheres under (`world_q.faction_holding`, one read for a faction and a person;
+    for a rung, since v9 IN-12, the faction that holds it, `world_q.holder_faction_of`, section 2b),
     resolved AT THE MOMENT OF WRITING and minted through the one mint with the surveyor's `hold`.
 
 THE FOUR PROPERTIES THE PLAN NAMES, each with the control that stops it passing vacuously:
@@ -279,7 +280,10 @@ def test_in12_a_rung_with_no_holding_faction_is_refused_and_mints_nothing():
     above `S` (`S -> D -> R`, all unheld), and then, once `p_low` (committed to no faction) holds
     `D`, a held rung whose holder coheres under none -- each `survey.refused` (the `write` clause,
     the row's one refusal kind) with no Record minted. In the same world a survey of `Hh`, which a
-    Crown man holds, is `faction.surveyed` -- so the refusals are the subjects'."""
+    Crown man holds, is `faction.surveyed` -- so the refusals are the subjects'. AND THE REFUSAL IS
+    THE HOLDER'S, NOT THE SURVEYOR'S HEARING (`survey.refused` is flat: the cell and the decline emit
+    one kind): with nothing else changed, `p_low` commits to the Crown and the same survey of `S`,
+    by the same surveyor on the same claim, mints the Crown's sheet."""
     w, d = _world()
     for subject in ("S", "D", "Hh"):
         _hear(w, "p_low", subject)
@@ -290,6 +294,10 @@ def test_in12_a_rung_with_no_holding_faction_is_refused_and_mints_nothing():
         "survey.refused", "survey.refused"]
     assert w.records == before, "a refused rung survey left a document behind"
     assert _kinds(_fold(w, d, _survey("ok", "Hh"))) == ["faction.surveyed"]
+    w.add_tenure(Tenure("t_commit_p_low", "p_low", FAC, "commit", since=0))
+    assert _kinds(_fold(w, d, _survey("r3", "S"))) == ["faction.surveyed"]
+    assert w.records["rec:r3"].subject_matter["proposition"] == FAC
+    assert w.records["rec:r3"].subject_matter["holdings"] == ["D", "Hh"], w.records["rec:r3"]
 
 
 def test_in12_the_person_path_is_unchanged_a_man_is_not_read_through_the_ground_he_stands_on():
