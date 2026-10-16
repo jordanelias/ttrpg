@@ -776,7 +776,13 @@ K-SC-5 left the top five: `Tenure.degree` has a reader on `commit` edges, so the
 - **Rejected:** none.
 - **Section 0 ranking:** unchanged. Item #3 is reworded, and the reader narrowing does not move it.
 
+**Re-opened by the correction pass, at `8278b4e`:** `faction_q.py:116-147`; `populated.py:785-800`; `effects_information.py:310-325, :376-390`; `world_q.py:340-380`; `options.py:945-960`; `verb_table.yaml:194-220, :323-335, :790-802, :958-1012`; `rosters.yaml:1898-1946`; `arrangements.py:80-82, :285`; `fixtures.py:776-784`; `hole_register.yaml` H-56, H-178, H-181, H-198; `requirements.yaml:1236-1252`; `test_season_shape.py:7826-7840, :8660-8674, :9058-9080`; `dice_engine.py:227-236`; the archive ledger `:2308-2322`; v9 `_part5:55, :74-78, :246, :332, :350-358, :512-522`, `_part6:52-56, :65-70, :136-140, :190-195`, `v9.md:164, :369`; `21_RECONCILIATION.md:572-579`; `PS/03_PARAMETERS.md:232-236, :625-629`; `PS/04_VERBS.md:247-250`; `08-part-VII-apparatus.md:128-132`; the `4df8c0c9` upload (grep). Ran: the import probe once, and greps cited at their claims.
+
 **Could not check:**
+- `22a`'s reception definition (K-SC-7's composition half);
+- the route from a held petition to a docket (the IN-12 step 5 HOLLOW row);
+- probe A14 at `harness/probes.py:2160-2168` (K-SC-12's falsifier, cited from `_part5:519`);
+- whether `term_required` or `floor` gain a reader at IN-12 step 5 or the provider under another name;
 - whether `momentum` and the silence price survive `21`;
 - which SC-01 step builds latitude, the licence and genre derivation;
 - whose `pursuits` `argue` writes;
@@ -788,4 +794,5 @@ K-SC-5 left the top five: `Tenure.degree` has a reader on `commit` edges, so the
 - M-SC-4, which may be partly covered by reception after SC-01 step 13 (9.8);
 - M-SC-9's demand, which is D5 + D6 with a contested answer;
 - T-SC-11, which rests on one unretrieved modern study;
-- the R-CHOICE tables, which are upper bounds with no equilibrium run.
+- the R-CHOICE tables, which are upper bounds with no equilibrium run;
+- the IN-12 step 5 and R-09 chain rows in 8.3, and K-SC-7's cut, for the unchecked items above.

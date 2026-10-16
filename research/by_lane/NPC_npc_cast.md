@@ -562,7 +562,8 @@ person holding a live `hold` at build killed by an act whose actor shared a buil
   type does not admit the input T-NPC-1 needs. **C3.** Opinion of a faction is evaluated at read from the reader's own
   claims (IN-70, "nothing stored") — PASS. **C4.** `effects_combat.py:203` says the defeat rows follow the loyalty
   shape while writing a different referent (§7.2 item 1). **C5.** Showcase "the King dies and the heir claims": shipped
-  objects exist for the death (fight), the holder half of the vacancy (H-206) and `off_heir`; the claim (`succeed`),
+  objects exist for the death (`fight`, `accept`), the holder half of the vacancy's claim (H-206), the vacancy in
+  conferrers' questions (`vacancies`) and `off_heir`; the claim (`succeed`),
   the throne's `inheritance` basis and the heir's question are planned (IN-61) → **expressible, not implementable**
   until B-R.
 
@@ -570,7 +571,8 @@ person holding a live `hold` at build killed by an act whose actor shared a buil
 
 - **E-OVERHEAD: FINDINGS.** `Person` has 12 fields (`state/carriers.py:645-676`); in shipped play 2 differ between
   persons beyond identity and place (`pursuits`, `stance`), `capability` is empty, and `scar` accrues without a reader.
-  Nine person-level knobs ship dark (§8.4, M-NPC-3); four person carriers are inert (`benefits_me`, `urgency`, the OUGHT
+  Nine person-level knobs ship dark (§8.4, M-NPC-3) while the regard and belief gains ship live (T-NPC-5); four person
+  carriers are inert (`benefits_me`, `urgency`, the OUGHT
   predicate, `competence = 1`). v9 adds goals.yaml with two rosters, a `successions` registry and an opinion query, and
   deletes nothing in this lane. The vocabulary is larger than the behaviour (T4). The shape is small because capacity
   and change were amputated, not because it was distilled.
