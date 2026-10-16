@@ -1772,8 +1772,11 @@ rosters:
       a verb's referent comes from a warrant instead of from the question. Without the line a
       `remit:issue` seat forms `seize` on every Record any question names and the fold refuses it
       each time -- `levy`'s scene tax (H-163) for a licence nobody holds. A warrant naming a PERSON
-      (`arrest`, step 5) adds its own line here; a Person `subject` is refused at `seize`'s
-      `existence` conjunct. [ASSUMPTION; medium; Jordan to correct; revert: drop this roster and its
+      (`arrest`, step 5) adds its own line here; a Person `subject` is declined by `seize`'s effect
+      (since v9 IN-13 the row's `existence` conjunct is gone: its object widened to a Rung, and the
+      effect, `_eff_seize`, declines anything that is neither a held Record nor an occupied
+      settlement). The Rung half is NOT formed through this roster -- no held Record names an
+      occupied town, so it executes on a hand-built act only (#453 §9.1). [ASSUMPTION; medium; Jordan to correct; revert: drop this roster and its
       reader in `opening_set`, and `seize` forms on any referent, refused in the fold.]
     values:
       seize: dispensation

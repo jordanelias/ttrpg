@@ -14,7 +14,9 @@ What each block proves, and the control that stops it passing vacuously:
      seat-holder's opens in one write, one live holder after. CONTROLS, each ONE change: no warrant
      held; the warrant names another Record; the Record is already the actor's.
   3. A SEAT CANNOT BE SEIZED (the entry's falsifier, `test_give.py`'s style): a warrant naming a SEAT is
-     refused by the fold's `existence` conjunct; and PLANTED AROUND THE PRECONDITION at the gate, closing
+     refused by the fold (since v9 IN-13 at the `authority` conjunct -- an Office has no place -- and by
+     the effect past it; the `existence` conjunct went with the Rung half); and PLANTED AROUND THE
+     PRECONDITION at the gate, closing
      a seat's `hold` through the exercised seat is `NotYours` where the same write on a Record is
      admitted under `seizure` (control).
   4. THE SEAT'S AUTHORITY, at the fold and at the gate: no seat exercised, a seat granting no `issue`,
@@ -97,8 +99,11 @@ def _gate_write(w, actor, via, apply, subjects=()):
 def test_seize_is_a_resolvable_celled_verb_that_opens_hold():
     row = VERB_TABLE["seize"]
     assert row.eligibility == ("remit:issue",) and row.beneficiary == "none" and not row.counterparty
-    assert row.writes == ("Tenure.until", "Tenure.since") and row.emits == ("record.seized",)
-    assert set(row.refusals_by_clause) == {"eligibility", "object", "authority", "write"}
+    # RE-PINNED AT v9 IN-13: the Rung half adds `rung.seized` and drops the `object` conjunct (a
+    # Record-typed existence the Rung half cannot pass; 'Record or Rung' is no grammar form).
+    assert row.writes == ("Tenure.until", "Tenure.since")
+    assert row.emits == ("record.seized", "rung.seized")
+    assert set(row.refusals_by_clause) == {"eligibility", "authority", "write"}
     assert "seize" in resolvable_verbs()
     assert "seize" in _OPENERS_FROM_EFFECTS["hold"], _OPENERS_FROM_EFFECTS["hold"]
     # IN-08: celled on EVERY axis (a number or an explicit null), not declared `uncelled:`
@@ -191,9 +196,14 @@ def test_a_warrant_naming_a_seat_does_not_seize_it():
     w, d = _seated("off_steward")
     assert hold_force(w, "off_steward").subject == HOLDER
     out = _resolve(w, d, _seize(subject="off_steward"))
-    assert _kinds(out) == ["seize.refused"], _kinds(out)
+    # RE-PINNED AT v9 IN-13: the `object` conjunct went with the Rung half, and a seat now refuses at
+    # `authority` -- an Office has no place, so no seat's purview reaches it. Still refused, earlier.
+    assert _kinds(out) == ["seize.unauthorized"], _kinds(out)
     assert hold_force(w, "off_steward").subject == HOLDER, "a seat was taken"
-    assert not [e for e in w.log if e.kind == "record.seized"]
+    assert not [e for e in w.log if e.kind in ("record.seized", "rung.seized")]
+    # AND PAST THE PRECONDITION: the effect itself declines a seat (neither a Record nor a settlement).
+    from ..loop.effects import EFFECTS
+    assert EFFECTS["seize"](w, _seize(subject="off_steward")) is G.NO_CHANGE
 
 
 def test_a_seat_cannot_be_seized_at_the_gate_either():

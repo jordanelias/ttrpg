@@ -85,8 +85,15 @@ def test_mass_battle_branch_derives_a_real_army_and_a_real_defender():
     a = Act(id="a1", actor=actor, verb="march", payload={"subject": "set_s_002"}, via="off_npc_033")
     claimants, subject, rung = sides_of(w, a, "set_s_002", "a field")
     assert set(claimants) == set(origin_army)
-    assert subject == "fac_crown"
+    # RE-PINNED AT v9 IN-13 (H-151 closed, #453 §9.6 code edit (i)): `set_s_002` is held by the
+    # marcher's OWN faction, so there is no opposing side -- `subject` is `None` (a relocation), where
+    # it was `fac_crown`, the defect H-151 named (the faction mustered as its own defender).
+    assert world_q.holder_faction_of(w, "set_s_002") == "fac_crown"
+    assert subject is None
     assert rung == "set_s_002"
+    # CONTROL, one change (the target's holder): a settlement ANOTHER faction holds names it.
+    a2 = Act(id="a2", actor=actor, verb="march", payload={"subject": "set_s_036"}, via="off_npc_033")
+    assert sides_of(w, a2, "set_s_036", "a field")[1] == "fac_church_of_solmund"
 
 
 def test_holder_faction_of_walks_to_the_nearest_held_ancestor():

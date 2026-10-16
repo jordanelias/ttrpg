@@ -16,12 +16,15 @@ from typing import Optional
 
 from ..data.arrangements import ARRANGEMENTS
 from ..data.requires import RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS
-from ..data.rosters import RECORD_CONTENT, RECORD_KIND_KEYS, roster_map
+from ..data.rosters import (
+    MARCH_TARGET_KINDS, RECORD_CONTENT, RECORD_KIND_KEYS, faction_prop_id, roster_map,
+)
+from ..data.verbs import VERB_TABLE
 from ..queries import faction_q
 from ..queries.person_q import ABOUT_KEYS
 from ..queries.world_q import (
     BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_PETITION, docketed, docketed_under,
-    faction_of, hold_force, place_of, works_for, works_target,
+    faction_of, hold_force, holder_faction_of, mustered, place_of, works_for, works_target,
 )
 from ..state.carriers import Proposition, Record, Tenure
 from ..state.carriers import DETERMINED_BY
@@ -729,14 +732,20 @@ def _eff_seize(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     THE GATE: the close is `seizure` (`state/gate.py`), the open is `T-m` (the actor opening a non-seat
     `hold` for himself). A SEAT IS NEVER SEIZED: the row's `existence` conjunct refuses an Office before
     this runs, and the gate's `seizure` clause admits only a Record, so a hand-built act that skipped the
-    precondition is `NotYours`, not a taking.
+    precondition is `NotYours`, not a taking. ⚠ SINCE v9 IN-13 the row's `existence` conjunct is gone
+    (the object widened to a Rung, `verb_table.yaml`'s `requires_typed_note`): an Office has no place,
+    so the `authority` conjunct refuses it first (`seize.unauthorized`); planted past it, a seat is no
+    Record and no settlement and `_seize_rung` declines it; and the gate still admits neither half on
+    an Office. A subject that is no Record goes to `_seize_rung`, the Rung half.
 
     G4 -- WHAT IT NAMES: the two edges, the opened one first as `_eff_give` and `_eff_confer` name
-    theirs; both earn the row's one kind, `record.seized`. The receipts name TENURES, not the Record.
+    theirs; both earn the Record half's kind, `record.seized` (the Rung half earns `rung.seized`). The receipts name TENURES, not the Record.
     THE NEW EDGE'S ID carries the act (`hold:<record>:<act>`), `_eff_give`'s salting, so a Record taken
     and taken back inside one tick does not re-mint the first `hold` id."""
     rid = _operand(a, "subject")
-    held = hold_force(w, rid) if rid in w.records else None
+    if rid not in w.records:
+        return _seize_rung(w, a, rid)
+    held = hold_force(w, rid)
     if held is None or held.subject == a.actor:
         return NO_CHANGE
     if not _held_warrant_names(w, a.actor, rid) or not may_seize(w, a.actor, a.via, held.subject):
@@ -746,7 +755,64 @@ def _eff_seize(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     def perform() -> None:
         held.until = w.tick                # the dispossessed holder's hold, FIRST
         w.add_tenure(nt)                   # then the seizer's
-    return Change((Subject.edge(nt), Subject.edge(held)), perform)
+    return Change((Subject.edge(nt, earns=_SEIZED_RECORD), Subject.edge(held, earns=_SEIZED_RECORD)),
+                  perform)
+
+
+# The kind each half earns: the `seize` row's `emits:` in its declared order (`verb_table.yaml`, Record
+# then Rung), read off the table so neither kind is spelt here.
+_SEIZED_RECORD, _SEIZED_RUNG = VERB_TABLE["seize"].emits
+
+
+def _seize_rung(w: "World", a: "Act", rid: str) -> Change:
+    """v9 IN-13 (#453 §10.4 step 8), `seize`'S RUNG HALF: the actor opens a `hold` on an OCCUPIED
+    SETTLEMENT, and whatever `hold` it already carries closes -- one town changing hands without its
+    territory (#453 §9.1: a hold on the settlement itself shadows a territory hold in
+    `holder_faction_of`'s walk). The ROW stays keyed as IN-12 step 6 built it; the halves split HERE, on
+    what the subject is (a Record, or not), and share the gate's `seizure` basis for the closure and
+    `T-m` for the opening.
+
+    THE LICENCE IS OCCUPATION, read at the effect as `raze`'s will be (#453 §10.4 steps 8 and 11): the
+    exercised seat's FACTION (`faction_prop_id` of its display faction) `mustered` at the settlement
+    (`world_q.mustered`, the one query of who stands there), the settlement held by ANOTHER faction
+    (`holder_faction_of`). It asks nothing of the defenders: an opposed `Won` that removed nobody still
+    leaves the attacker mustered there, so the seizure is admitted (#453 exit (vii)). DECLINES
+    (`NO_CHANGE` -> `seize.refused`, the `write` clause), each one change from an admitted seizure:
+      * the subject is not a Rung of a `march_target_kinds` kind (a seat, a person's own rung, a
+        territory, a hearth) [ASSUMPTION; medium; Jordan to correct: occupation is defined at the
+        places a march arrives at; revert: any Rung kind, the licence still occupation];
+      * the seat's faction is not mustered there (no occupation);
+      * nobody holds the settlement (H-166: who holds an unheld place is unruled) or the seat's own
+        faction already does (nothing to take);
+      * the actor already holds it, or the closure's holder is one the seat may not seize from
+        (`may_seize` with the rung as the place, so an act the precondition admitted is never killed
+        at the gate).
+    ⚠ NOT FORMED PERSON-SIDE: no deposit names a settlement to a seat as occupied (#453 §9.1:
+    *"for a Rung, hand-built"*), and `rosters.yaml: warrant_sourced` narrows `seize` to warrant-named
+    subjects, so the Rung half executes only on a hand-built act today -- a named residue, not a
+    wiring gap in this effect."""
+    rung = w.rungs.get(rid)
+    office = w.offices.get(a.via)
+    if rung is None or rung.kind not in MARCH_TARGET_KINDS or office is None or not office.faction:
+        return NO_CHANGE
+    mine = faction_prop_id(office.faction)
+    holder = holder_faction_of(w, rid)
+    if holder is None or holder == mine or not mustered(w, rid, mine):
+        return NO_CHANGE
+    held = hold_force(w, rid)
+    if held is not None and (held.subject == a.actor
+                             or not may_seize(w, a.actor, a.via, held.subject, rid)):
+        return NO_CHANGE
+    nt = Tenure(H(w.world_seed, w.tick, a.actor, f"hold:{rid}:{a.id}"), a.actor, rid, "hold", since=w.tick)
+
+    def perform() -> None:
+        if held is not None:
+            held.until = w.tick            # the dispossessed holder's hold, FIRST
+        w.add_tenure(nt)
+    subjects = (Subject.edge(nt, earns=_SEIZED_RUNG),)
+    if held is not None:
+        subjects += (Subject.edge(held, earns=_SEIZED_RUNG),)
+    return Change(subjects, perform)
 
 
 @effect_for("destroy_record")

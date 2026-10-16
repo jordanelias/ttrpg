@@ -13,13 +13,15 @@ and `_operand`, the one cross-file helper `march` calls.
 from __future__ import annotations
 
 from ..data.rosters import (
-    DECLARED, FELLED, FIELD_CASUALTY_MODELS, LOST, UNOPPOSED, WOUND_HARM_MODELS,
+    DECLARED, FELLED, FIELD_CASUALTY_MODELS, LOST, UNOPPOSED, WON, WOUND_HARM_MODELS,
     faction_prop_id, require_member,
 )
+from ..data.verbs import VERB_TABLE
 from ..gaps import Unspecified
-from ..queries.world_q import holder_faction_of
+from ..queries.world_q import ancestry, holder_faction_of, home_of
 from ..state.gate import NO_CHANGE, Change, Subject
 
+from .effects_migration import _relocate
 from .effects_shared import _operand, effect_for
 
 
@@ -181,6 +183,14 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     only, decrease in morale, and a grudge token"* and nothing else -- the ruling is silent on the
     winner because it was never asked, and this does not invent an answer for it.
 
+    ⚠ v9 IN-13 (#453 §10.4 step 8, THE ARRIVAL): ONE WRITE IS ADDED, AND IT IS PRESENCE, NOT TITLE. On
+    `Won` and `Unopposed` every claimant is relocated to the destination (`_relocate`'s pair, keyed on
+    the mover: his live `contain` closes, one opens to the target, the target is appended to his
+    `travel_leg`), emitting `army.arrived` beside the band's kind; the gate admits another person's
+    legs under its `muster` basis (`state/gate.py::may_muster`). The winner's BODY and STANCE are
+    still never written, and no `hold` moves (R-6, β: title moves by `seize`, `give`, `release` or
+    death). `Lost` is unchanged: a routed army stays at its origin (R-7).
+
     ⚠ `Won`/`Lost` NAME THE ATTACKER'S OWN OUTCOME (`seam/ladder.py::field_degree`), NOT WHICH
     SIDE THIS WRITE LANDS ON. `Won` means the DEFENDERS lost; `Lost` means the ATTACKER'S OWN
     claimants lost. Reading both sides off `res.result["parties"]` and picking the loser by
@@ -216,24 +226,38 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
             needs="a Resolution from `resolve()`'s seam branch -- the mass_battle provider",
             law="M4 (`ED-IN-0279` clause (a)) -- the magnitude is READ from the engine's own "
                 "survivor ratio, never invented here")
-    if res.degree in (DECLARED, UNOPPOSED):
+    if res.degree == DECLARED:
         return NO_CHANGE
     parties = res.result.get("parties") or {}
     attackers = list(parties.get("claimants") or [])
     defenders = list(parties.get("subject_members") or [])
     engine_result = res.result.get("result") or {}
+    target = _operand(a, "subject")
+    # v9 IN-13 (#453 §9.6, THE ARRIVAL): on `Won` and `Unopposed` every claimant is relocated to the
+    # destination through `move`'s one journey body (`_relocate`, keyed on the mover), and the band
+    # emits `army.arrived` beside its own kind. A claimant ALREADY PRESENT under the destination (an
+    # army marching on the settlement it stands in) makes no journey [ASSUMPTION; medium; Jordan to
+    # correct; revert: relocate him onto the settlement rung anyway]; a band whose army moves nobody
+    # and fells nobody declines (`march.refused`), never a fabricated `army.arrived`.
+    # ⚠ `Lost` IS UNCHANGED -- #453 R-7 [ASSUMPTION; medium; Jordan to correct; revert: Jordan
+    # states that a routed army arrives, and `test_march.py`'s exit (i) Lost arm is re-pinned]: A
+    # ROUTED ARMY STAYS AT ITS ORIGIN. And R-6, carried: a won field writes PRESENCE, never title --
+    # β, occupation then `seize` (`_eff_seize`'s Rung half), not α (a won field transferring the
+    # hold) [ASSUMPTION; medium; Jordan to correct; revert: Jordan states α, and title moves here].
+    arrive = res.degree in (WON, UNOPPOSED)
+    movers = [pid for pid in attackers
+              if arrive and pid in w.persons and target not in _present_under(w, pid)]
     attacker_lost = res.degree == LOST
-    losers = attackers if attacker_lost else defenders
+    losers = [] if res.degree == UNOPPOSED else (attackers if attacker_lost else defenders)
     pct = engine_result.get("attacker_size_pct" if attacker_lost else "defender_size_pct")
     touched = [pid for pid in losers if pid in w.persons]
-    if not touched:
+    if not touched and not movers:
         return NO_CHANGE
     model = w.fixtures.get("field_casualty_model")
     require_member(
         model, FIELD_CASUALTY_MODELS, f"field-casualty model {model!r} is not in the roster",
         "H-148", law="`wound_harm_model`'s own precedent -- an unrecognised mode silently "
         "falling back would make every measurement of this sweep read the control")
-    target = _operand(a, "subject")
     office = w.offices.get(a.via)
     attacker_faction = (faction_prop_id(office.faction)
                         if office is not None and office.faction else None)
@@ -241,11 +265,26 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     winner_faction = defender_faction if attacker_lost else attacker_faction
     loser_faction = attacker_faction if attacker_lost else defender_faction
     if model == "none" and winner_faction is None and loser_faction is None:
-        return NO_CHANGE
+        touched = []
+        if not movers:
+            return NO_CHANGE
     morale_w = w.fixtures.get("field_morale_weight")
     grudge_w = w.fixtures.get("field_grudge_weight")
+    # The fold emits the kinds its subjects EARN, and a subject earning `None` earns nothing on its
+    # own (`loop/resolve.py`: an empty `earned` set means *every* declared kind, a non-empty one means
+    # *only* those). So the kinds are earned as a whole: with an army that moves, every subject earns
+    # `None` and the band publishes both its kind and the arrival; with nobody moving (`Lost`, or a
+    # `Won` whose army already stood there), the losers earn the band's own kind alone and no arrival
+    # is published.
+    loser_earns = None if movers else _band_kind(res.degree)
 
     def perform() -> None:
+        _casualties()
+        # THE ARRIVAL, AFTER THE CASUALTIES: on `Won` the losers are the defenders, never a mover.
+        for pid in movers:
+            _relocate(w, a, target, mover=pid)
+
+    def _casualties() -> None:
         for pid in touched:
             p = w.persons[pid]
             if model == "total":
@@ -270,4 +309,23 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
             if p.body <= 0:
                 w.remove_person(pid)
     fields = ("stance",) if model == "none" else ("body", "stance")
-    return Change(tuple(Subject.entity("persons", pid, fields=fields) for pid in touched), perform)
+    # G4 -- WHAT IT NAMES: the losers by the fields the casualty writes (earning as above); the movers
+    # WHOLE, `move`'s reason (a `contain` leg is stored on its Person, so his digest carries the legs
+    # and `travel_leg`).
+    return Change(tuple(Subject.entity("persons", pid, earns=loser_earns, fields=fields)
+                        for pid in touched)
+                  + tuple(Subject.entity("persons", pid) for pid in movers), perform)
+
+
+def _band_kind(degree: str) -> str:
+    """The kind a band names for its OWN outcome: the FIRST of `march`'s `emits[degree]`, by the
+    row's declared order (`verb_table.yaml`, `march`'s `emits_note`: the band's kind first, then the
+    arrival). Read off the table, so no kind is spelt here."""
+    return VERB_TABLE["march"].emits_at(degree)[0]
+
+
+def _present_under(w: "World", pid: str) -> list:
+    """The rungs `pid` is present under: his live `contain` target and everything above it
+    (`world_q.home_of` + `ancestry`, the two owners). A march on a rung in this list is no journey."""
+    here = home_of(w).get(pid)
+    return ancestry(w, here) if here is not None else []
