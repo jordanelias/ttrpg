@@ -3,10 +3,10 @@
 ## Status: PROPOSED (2026-10-16). A distillation of the same day's v1 proposals and their critics' reports. No new probe, run or trace was made for it. Merging it ratifies nothing unless Jordan so rules.
 ## Lane: IN (cross-cutting), with PC, MB, SC, FI, WR, NPC, GO as sources. IDs: none allocated.
 ## Scope: persons (the character template), attributes and verbs only. The troop-stock design is out of scope and is not distilled here (Sources). The filename keeps the path the orchestrator named.
-## Parts, in reading order: this file (§0 Thesis and Map, Part I Persons) · [`_part2`](2026-10-16-v2-person-troop-attribute-synthesis_part2.md) (Part II Attributes) · [`_part3`](2026-10-16-v2-person-troop-attribute-synthesis_part3.md) (Part III Verbs, the Roadmap, the Reliability ledger, Sources).
+## Parts, in reading order: this file (§0 Thesis and Map, Part I Persons) · [`_part2`](2026-10-16-v2-person-troop-attribute-synthesis_part2.md) (Part II Attributes) · [`_part3`](2026-10-16-v2-person-troop-attribute-synthesis_part3.md) and [`_part4`](2026-10-16-v2-person-troop-attribute-synthesis_part4.md) (Part III Verbs: triage, the subsystems, the pessimistic NERS distillation) · [`_part5`](2026-10-16-v2-person-troop-attribute-synthesis_part5.md) and [`_part6`](2026-10-16-v2-person-troop-attribute-synthesis_part6.md) (Part IV What verbs do to the world: the chooser, context modulation, outcome signatures, the assessment framework) · [`_part7`](2026-10-16-v2-person-troop-attribute-synthesis_part7.md) (§5 Roadmap, §6 Reliability ledger, §7 Sources, the Trial registry).
 
 **How to read a citation.** A locator tagged **[CHECKED]** was re-opened in this pass. Every other
-locator is carried from a v1 document, keeps the v1 tag listed in `_part3` §7, and is cited by v1
+locator is carried from a v1 document, keeps the v1 tag listed in `_part7` §7.3, and is cited by v1
 document and section where its line may have moved. **One class of v1 locator is known stale:** the
 merge of `origin/main` (#483, #484) rewrote `workplans/valoria_master_workplan_v9_part5.md` from 475 to
 442 lines, so the v1 pointers `_part5.md:433` (J-13) and `:444` (the tenth attribute) now read
@@ -32,15 +32,19 @@ proposal recorded RATIFIED AS INTENT; **T4** design intent only.
    ruling (J-T1). The evidence favours stored attributes (Option B) on the plan's own narrow reading of J-13.
 3. **The evidence supports a stored set of ten: the registry's nine plus Thread Sensitivity.** Attunement
    and Charisma stand on design intent only. Recall is not a candidate until something reads it.
-4. **The game is short of readers, not of verbs.** Of 86 verbs designed from scratch, 2 survive triage.
-5. **The from-scratch fourteen does not count yet.** Its brief seeded its result. It must be rerun blind.
+4. **The game is short of readers, not of verbs.** Of 86 verbs designed from scratch, 2 survive
+   triage. A pessimistic NERS pass distils the 66 live verbs to 37.
+5. **The chooser ranks acts by verb name and by its stance toward the subject.** The world modulates
+   outcomes by about a dozen contextual nodes; the chooser sees 3 of 16 node types fully. That
+   mismatch, not the attribute roster, is the next design lever (Part IV §IV.11).
+6. **The from-scratch fourteen does not count yet.** Its brief seeded its result. It must be rerun blind.
 
-**The five decisions that unlock the rest** (Roadmap, `_part3` §5): **J-T1**, the source of personal
+**The five decisions that unlock the rest** (Roadmap, `_part7` §5): **J-T1**, the source of personal
 inputs; **J-T2**, the tenth attribute (and with it whether the ruled count is reopened); **J-T4**,
 whether attributes change after tick 0; **V-2a**, the amendment that lets an attribute reach a gate,
 a cap or a row without `contests:`; and **R-0**, rerunning the from-scratch derivation under a neutral
 brief rather than correcting it. J-T3 (kin) is not among them: v1 answered it for the template
-(kin is not carried, §I.5), and it unlocks no build.
+(kin is not carried, §I.6), and it unlocks no build.
 
 ### 0.1 The map
 
@@ -67,6 +71,10 @@ flowchart TD
     JT4 --> B5
     V2A --> B7["Build: contests rows for knots and thread operations"]
     VT --> B8["Build: thread operations as verb rows"]
+    VT --> CTX["Part IV: what each act does, and what context modulates it"]
+    CTX --> CHS["Finding: the chooser sees 3 of 16 node types"]
+    CHS --> B5["Build: alignment cells and contents-aware value terms"]
+    VT --> TR["Trial registry: the new verbs, tried by advocate, prosecutor, judge"]
 ```
 
 ---
@@ -178,7 +186,7 @@ at build → authored. So each lands in exactly one class (Template §2). The fi
 | F21 | weight | `Person.weight` | larder draw, `population`, field size | defaulted (1; the cohort template's field) |
 
 Sources: Template §2, with probe artifacts named there (§10 probes 1–3). Readers marked
-*[CHECKED-draft]* in v1 were opened only in the drafting pass (`_part3` §7). **One v1 correction carried:**
+*[CHECKED-draft]* in v1 were opened only in the drafting pass (`_part7` §7.3). **One v1 correction carried:**
 regard moves live (`judged_gain`, `told_valence_gain` ship 0.5); over four realm seasons body moved
 on 4 persons, and stored stance, pursuits, conviction and capability on none (Template §2, probe 2).
 So what ships static is values, practice and age.
@@ -286,10 +294,10 @@ with J-T6, the one-ladder question (§I.6).
 ```mermaid
 flowchart TD
     VR["a verb row"] --> C{"declares contests?"}
-    C -- no --> G{"a gate or cap on a bare attribute?"}
-    G -- "yes, and V-2a ruled" --> RG["the gate reads the attribute"]
-    G -- "no, or V-2a not ruled" --> NONE["no attribute reaches it: practice, office or holdings only"]
-    C -- yes --> F["faculty of the domain, owned once in the resolver's module"]
+    C -->|"no"| G{"a gate or cap on a bare attribute?"}
+    G -->|"yes, and V-2a ruled"| RG["the gate reads the attribute"]
+    G -->|"no, or V-2a not ruled"| NONE["no attribute reaches it: practice, office or holdings only"]
+    C -->|"yes"| F["faculty of the domain, owned once in the resolver's module"]
     F --> AT["the domain's attributes"]
     F --> PR["practice in that domain"]
     AT --> OUT["odds, cost, gate or effect"]
@@ -316,7 +324,7 @@ J-T3 is answered for the template. The other five ride on these or are already s
 | id | question | options | v2 position | blocks | owner |
 |---|---|---|---|---|---|
 | **J-T1** | the source of personal inputs | A derived · B stored · A-1 eight · J-13 (ii) scale (orthogonal) | **B**, on the narrow reading of J-13 (§I.5) | R-09 by-person; K-1; K-6; K-GO-8 fields; the `attributes:` block | Jordan |
-| **J-T2** | the tenth attribute (B only) | TS · TMP · RES · Recall · reopen the count | **TS** (Part II §II.6) | B's roster closes; Godot fields bind (`CLAUDE.md` §5) | Jordan (ED-IN-0193; `_part5.md:411` [CHECKED]) |
+| **J-T2** | the tenth attribute (B only) | TS · TMP · RES · Recall · reopen the count | **TS** (Part II §II.5) | B's roster closes; Godot fields bind (`CLAUDE.md` §5) | Jordan (ED-IN-0193; `_part5.md:411` [CHECKED]) |
 | **J-T3** | kin in the template | (i) not carried · (ii) a carried relation with a reader | **answered: (i)** for the template. No reader exists at any tier; ID-13 bars the field; `goals:` (F9) is the precedent; the live half belongs to `tie / knot` (K-NPC-6, Comparative J-C-26) | nothing in this template | v1 answered at ladder step 5 [medium]; Jordan may revert |
 | **J-T4** | do attributes change after tick 0 (B only) | none · age · wounds | **interim: none**, the code's state. Age and wounds already have carriers (`born`, `body`), and a second channel for one effect would be an S defect | B's write rule | Jordan: the options make materially different games |
 

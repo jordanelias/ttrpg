@@ -1,7 +1,7 @@
 # Persons, attributes and verbs: the v2 synthesis — part 2: Attributes
 
 ## Status: PROPOSED (2026-10-16). Not ratified; merging ratifies nothing unless Jordan so rules.
-## Parts, in reading order: [head](2026-10-16-v2-person-troop-attribute-synthesis.md) (§0, Part I Persons) · **this file** (Part II Attributes) · [`_part3`](2026-10-16-v2-person-troop-attribute-synthesis_part3.md) (Part III Verbs) · [`_part4`](2026-10-16-v2-person-troop-attribute-synthesis_part4.md) (Part IV What verbs do to the world) · [`_part5`](2026-10-16-v2-person-troop-attribute-synthesis_part5.md) (Roadmap, Reliability ledger, Sources).
+## Parts, in reading order: [head](2026-10-16-v2-person-troop-attribute-synthesis.md) (§0, Part I Persons) · **this file** (Part II Attributes) · [`_part3`](2026-10-16-v2-person-troop-attribute-synthesis_part3.md) and [`_part4`](2026-10-16-v2-person-troop-attribute-synthesis_part4.md) (Part III Verbs) · [`_part5`](2026-10-16-v2-person-troop-attribute-synthesis_part5.md) and [`_part6`](2026-10-16-v2-person-troop-attribute-synthesis_part6.md) (Part IV What verbs do to the world) · [`_part7`](2026-10-16-v2-person-troop-attribute-synthesis_part7.md) (Roadmap, Reliability ledger, Sources, Trial registry).
 
 Codes: STR AGI END FOC ACU WIL ATT CHA BON are the registry's nine
 (`references/descriptor_registry.yaml:36-48`) [CHECKED]; TS Thread Sensitivity; REC Recall; RES
@@ -33,7 +33,7 @@ departs from v1's recommended eleven by dropping Recall.
   producer's inference; 16 are T1–T3** (2 + 13 + 1).
   - So coverage of a demand is mostly coverage of a design document's vocabulary.
   - The Derivation says so itself: its coverage test *"favours a set built from today's ingredient
-    vocabulary"* (`_part3` §6).
+    vocabulary"* (Derivation `_part3` §6).
 - **Judged from scratch (weakest, and currently void).** The from-scratch fourteen was built from 179
   verbs, 86 of them the author's own additions. Its critic found it contaminated by its brief (§II.6).
 
@@ -55,7 +55,7 @@ flowchart TD
     K --> C["Coverage test: which demands and formulas each set leaves uncovered"]
     C --> X["Divergence test: does a resolver tell each pair apart, executed"]
     X --> V["Verdict per attribute: strong, medium, weak, none"]
-    FS["From-scratch: 179 verbs, 536 demand statements, 27 clusters"] -. "void until rerun blind" .-> V
+    FS["From-scratch: 179 verbs, 536 demand statements, 27 clusters"] -.->|"void until rerun blind"| V
 ```
 
 **Read the arrows as the order of trust.** Coverage (`C`) says only that some document names a demand
@@ -160,7 +160,7 @@ watchfulness).
 **Confidence, with its size and source.**
 
 - **High** that Recall should not be the tenth now. It has no reader in any code, and the Derivation
-  itself calls its N-line *"FALSE … today"* (`_part3` §7.4).
+  itself calls its N-line *"FALSE … today"* (Derivation `_part3` §7.4).
 - **Medium** for the seven strong members. Each rests on one matchup per resolver, in stub code the
   loop does not run (`_divergence` §8).
 - **Low** that ATT and CHA earn separate slots on evidence. They stand on the ruling and on design
@@ -195,7 +195,7 @@ Every one of these is either a design-only progression formula (HIST) or a dark 
 exposure (`derived_stats_v30:578`, carried); the registry files it apart from attributes; making it
 "the tenth attribute" mixes two scales on one sheet and relabels a Track.* This stands in part.
 
-- **It costs legibility.** The Derivation's E score names the second scale as a cost (`_part3` §10).
+- **It costs legibility.** The Derivation's E score names the second scale as a cost (Derivation `_part3` §10).
 - **It does not reverse the choice.** The alternatives each fail a test TS passes: Recall fails ID-13,
   RES fails ID-13, TMP fails monotonicity by design.
 - **If Jordan wants the tenth to be a 1–7 capacity**, TMP is next. Its admission waits on one run:
@@ -225,11 +225,11 @@ independence broken at the source:
   brief seeded them.
 - **On the code, plan and lane verbs alone, its own P1** ("≥ 10 verbs and ≥ 4 subsystems") **admits
   only five attributes:** presence (12–15 verbs), forethought (12), toughness (11), nerve (11) and
-  reasoning-with-memory (13). Its fourteen rest on the 86 verbs the author added (`_part3` §5.6: force
+  reasoning-with-memory (13). Its fourteen rest on the 86 verbs the author added (From-scratch `_part3` §5.6: force
   ranks 18th, quickness 24th, self-command 27th on code rows).
 - **By its own definitions:**
   - Thread perception serves 2 verbs, not 12. The atomic demand "perceiving the threads" lands on
-    `thread_read` and `trace` only (`_part3` §5.3).
+    `thread_read` and `trace` only (From-scratch `_part3` §5.3).
   - Warmth serves 6.
   - Fluency passes P1, yet it is excluded.
   - Nerve moves access (16 of 20 draws), so by the author's own P7 it belongs with values.
@@ -273,17 +273,17 @@ that reads it, which is the only route by which any of them could earn a code re
 ```mermaid
 flowchart TD
     Q0{"J-T1: stored attributes?"}
-    Q0 -- "No: Option A" --> A0["No roster. Practice, kit and TS field only. The ruled ten is overwritten."]
-    Q0 -- "Yes: Option B" --> Q1{"Keep the ruled count of ten?"}
-    Q1 -- "Yes, default" --> Q2{"Name the tenth"}
-    Q2 -- "TS, recommended" --> T1["Ten: the nine plus TS. TS keeps its own scale."]
-    Q2 -- "TMP" --> T2["Ten: the nine plus temperament. First run TMP against an aggressive opponent."]
-    Q2 -- "Recall" --> T3["Only with a reader: a progression resolver must read it first. ID-13."]
-    Q2 -- "RES" --> T4["Not advised: inert, and canon defines it by Will."]
-    Q1 -- "No, reopen it" --> Q3{"Count on executed evidence alone?"}
-    Q3 -- "Yes" --> E8["Eight: STR AGI END FOC ACU WIL BON TS. ATT into ACU, CHA into Command."]
-    Q3 -- "No, keep design intent" --> E10["Ten as above"]
-    R0["R-0 blind rerun"] -. "may add a case for forethought, nerve or composure" .-> Q3
+    Q0 -->|"No: Option A"| A0["No roster. Practice, kit and TS field only. The ruled ten is overwritten."]
+    Q0 -->|"Yes: Option B"| Q1{"Keep the ruled count of ten?"}
+    Q1 -->|"Yes, default"| Q2{"Name the tenth"}
+    Q2 -->|"TS, recommended"| T1["Ten: the nine plus TS. TS keeps its own scale."]
+    Q2 -->|"TMP"| T2["Ten: the nine plus temperament. First run TMP against an aggressive opponent."]
+    Q2 -->|"Recall"| T3["Only with a reader: a progression resolver must read it first. ID-13."]
+    Q2 -->|"RES"| T4["Not advised: inert, and canon defines it by Will."]
+    Q1 -->|"No, reopen it"| Q3{"Count on executed evidence alone?"}
+    Q3 -->|"Yes"| E8["Eight: STR AGI END FOC ACU WIL BON TS. ATT into ACU, CHA into Command."]
+    Q3 -->|"No, keep design intent"| E10["Ten as above"]
+    R0["R-0 blind rerun"] -.->|"may add a case for forethought, nerve or composure"| Q3
 ```
 
 **What each branch builds.**
