@@ -156,7 +156,7 @@ def _eff_migrate(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
 
     G3 -- EVERY EDGE IS THE ACTOR'S OWN (`T-m`): the `contain` legs and the `reside` edges are the
     migrant's, as subject, so the gate admits all four writes with no seat and NO NEW BASIS -- checked
-    against `tenure_write_basis`'s ten rather than assumed: the closures are the owner's discretion,
+    against `tenure_write_basis`'s bases rather than assumed: the closures are the owner's discretion,
     and an opening whose subject is the actor is `T-m`'s own case (it excludes a SEAT-hold, a term rewrite and, since SC-03a, a `detain`/`ban` -- none of them a `contain` or `reside`).
 
     G4 -- WHAT IT NAMES: THE MIGRANT, WHOLE, `move`'s reason: both edges are stored on the Person, so

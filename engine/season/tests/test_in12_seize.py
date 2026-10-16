@@ -43,9 +43,9 @@ import pytest
 from ..data.matrix import Step, WriteClass
 from ..data.rosters import PURSUIT_AXES, table_meta, table
 from ..data.verbs import _OPENERS_FROM_EFFECTS, VERB_TABLE
-from ..decision.options import opening_set
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
+from ..loop.effects import EFFECTS
 from ..queries.world_q import hold_force
 from ..state import gate as G
 from ..state.carriers import Act, Office, Question, Tenure
@@ -57,17 +57,17 @@ HOLDER, FAR = "p_low", "p_king"            # in the duchy (Hh) / outside it (R)
 _PET = {"terms": "p_mid", "to": ["p_mid"], "from": "Hh"}
 
 
-def _warrant(rid, terms):
+def _warrant(terms):
     return {"terms": terms, "to": ["p_mid"], "at": None}
 
 
-def _world(warrant_names="rec_pet", seats=True):
+def _world(warrant_names="rec_pet"):
     """`tiny_world` at a MATTER barrier: `p_low` holds a petition `rec_pet`; the Duke (`off_duke`, grant
     `issue`, purview `D` over `Hh`) holds a warrant `rec_w` naming `warrant_names` (None = no warrant)."""
     w = P.tiny_world()
     _hold_document(w, w.persons[HOLDER], "petition", _PET, rec_id="rec_pet")
     if warrant_names is not None:
-        _hold_document(w, w.persons[DUKE], "dispensation", _warrant("rec_w", warrant_names),
+        _hold_document(w, w.persons[DUKE], "dispensation", _warrant(warrant_names),
                        rec_id="rec_w")
     d = SeasonDriver(w)
     d.matter(mint_token(w, WriteClass.MATTER), [])
@@ -86,7 +86,7 @@ def _holds_on(w, rid):
     return [t for t in w.tenures if t.kind == "hold" and t.object == rid]
 
 
-def _gate_write(w, actor, via, apply, subjects=()):
+def _gate_write(w, actor, via, apply, subjects):
     """A bare gate write carrying a hand-built `Change` -- nothing but the gate is asked."""
     w.step = Step.RESOLVE
     return w.write("Tenure", mint_token(w, WriteClass.ACTS), None, record_kind="Tenure",
@@ -166,7 +166,7 @@ def test_control_a_warrant_the_actor_does_not_hold_licenses_nothing():
     """The warrant exists and names the Record, but a THIRD person holds it: the licence is the
     seizer's own held warrant, not any warrant in the world."""
     w, d = _world(warrant_names=None)
-    _hold_document(w, w.persons["p_other"], "dispensation", _warrant("rec_w", "rec_pet"), rec_id="rec_w")
+    _hold_document(w, w.persons["p_other"], "dispensation", _warrant("rec_pet"), rec_id="rec_w")
     out = _resolve(w, d, _seize())
     assert _kinds(out) == ["seize.refused"], _kinds(out)
     assert hold_force(w, "rec_pet").subject == HOLDER
@@ -188,7 +188,7 @@ def _seated(warrant_names):
     w, d = _world(warrant_names=None)
     w.offices["off_steward"] = Office("off_steward", "Steward", "Hh", ["issue"], faction="Crown")
     w.add_tenure(Tenure("t_steward", HOLDER, "off_steward", "hold", since=0))
-    _hold_document(w, w.persons[DUKE], "dispensation", _warrant("rec_w", warrant_names), rec_id="rec_w")
+    _hold_document(w, w.persons[DUKE], "dispensation", _warrant(warrant_names), rec_id="rec_w")
     return w, d
 
 
@@ -204,7 +204,6 @@ def test_a_warrant_naming_a_seat_does_not_seize_it():
     assert hold_force(w, "off_steward").subject == HOLDER, "a seat was taken"
     assert not [e for e in w.log if e.kind in ("record.seized", "rung.seized")]
     # AND PAST THE PRECONDITION: the effect itself declines a seat (neither a Record nor a settlement).
-    from ..loop.effects import EFFECTS
     assert EFFECTS["seize"](w, _seize(subject="off_steward")) is G.NO_CHANGE
 
 
@@ -248,7 +247,7 @@ def test_a_seat_cannot_be_seized_at_the_gate_either():
 def _plant_far_record(w):
     _hold_document(w, w.persons[FAR], "petition", {"terms": "p_mid", "to": ["p_mid"], "from": "R"},
                    rec_id="rec_far")
-    _hold_document(w, w.persons[DUKE], "dispensation", _warrant("rec_w2", "rec_far"), rec_id="rec_w2")
+    _hold_document(w, w.persons[DUKE], "dispensation", _warrant("rec_far"), rec_id="rec_w2")
 
 
 def test_a_seat_whose_purview_does_not_reach_the_holder_is_unauthorized():

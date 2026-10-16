@@ -28,11 +28,12 @@ from __future__ import annotations
 from typing import Optional
 
 from .. import manifest
-from ..data.rosters import MARCH_TARGET_KINDS, faction_prop_id
+from ..data.rosters import MARCH_TARGET_KINDS
 from ..queries.world_q import (
     DETAIN_KIND, ancestry, holder_faction_of, home_of, mustered, restrained,
 )
 from ..state.carriers import Act
+from ..state.gate import seat_faction
 from ..state.world import World
 
 
@@ -81,8 +82,33 @@ def sides_of(w: World, a: Act, target: Optional[str],
     copy of a rule `seam/wrappers/*` already owns (§8)."""
     prize_row = manifest.resolve("contest", prize)
     if prize_row is not None and prize_row.get("module") == "mass_battle":
-        office = w.offices.get(a.via)
-        faction = faction_prop_id(office.faction) if office is not None and office.faction else None
+        # ⚠ `H-149` (`march_target_kinds`, closed at `[settlement]`) IS ENFORCED HERE, NOT LEFT
+        # DECLARED-AND-UNREAD (found by `valoria-critic`: `_eff_march`'s own comment claimed this
+        # check and it did not exist). `requires_typed` only answers *does a Rung of this id
+        # exist*, never a sub-kind filter (`march`'s own `requires_typed_note` -- a sixth typed
+        # form is the second resolver S27.2 refuses), so the kind check has to live where the
+        # target's Rung object is already in scope.
+        # ⚠ THE KIND CHECK IS INLINE, MARCH-SPECIFIC BUSINESS LOGIC IN A FUNCTION WHOSE OWN
+        # CONTRACT IS "DISPATCH BY THE PRIZE'S SUBSYSTEM, NEVER THE VERB" -- disclosed (M4 review
+        # pass, `/simplify` altitude finding), not fixed. `sides_of` takes `prize`, not `verb`,
+        # specifically so it stays verb-agnostic; a second `mass_battle`-routed verb with a
+        # different target-kind rule would have nowhere generic to read one from. The deeper fix
+        # is a target-kind constraint carried as DATA (a manifest or verb-row field, read the way
+        # `manifest.resolve(...)["module"]` already is), not this `target_rung.kind` check --
+        # left for a future session, since `march` is still the only `mass_battle`-routed verb.
+        # ⚠ AGAINST THE ROSTER, NOT A HARDCODED `"settlement"` STRING (M4 review pass, a second
+        # correctional finding: the first writing checked the literal string, so extending
+        # `march_target_kinds` later would still change nothing here -- exactly the
+        # declared-but-unread defect this check exists to close, reintroduced one level down).
+        # v9 IN-13 (#453 §9.6 code edit (iii), §14.8): H-149's REFUSAL NOW RIDES AN EMPTY ARMY, NOT
+        # `subject = None`. A non-settlement target musters nobody, so `_contest`'s empty-`_parties`
+        # PARTY-GAP refusal (`loop/resolve.py`, BEFORE the provider and its `contest()` catch are
+        # reached) answers it as `march.refused`, and `subject = None` comes to mean ONE thing only:
+        # no opposing holder.
+        target_rung = w.rungs.get(target)
+        if target_rung is None or target_rung.kind not in MARCH_TARGET_KINDS:
+            return ([], None, target or "R")
+        faction = seat_faction(w, a.via)
         home = home_of(w).get(a.actor)
         chain = ancestry(w, home) if home is not None else []
         origin = next((r for r in chain if w.rungs.get(r) is not None
@@ -95,36 +121,6 @@ def sides_of(w: World, a: Act, target: Optional[str],
         # name as a reader; moving the exclusion into `mustered` itself would cover both sides from
         # one owner and is the cleaner home, left to the lane that owns that wrapper.
         claimants = [p for p in claimants if not restrained(w, p, DETAIN_KIND)]
-        # ⚠ `H-149` (`march_target_kinds`, closed at `[settlement]`) IS ENFORCED HERE, NOT LEFT
-        # DECLARED-AND-UNREAD (found by `valoria-critic`: `_eff_march`'s own comment claimed this
-        # check and it did not exist). `requires_typed` only answers *does a Rung of this id
-        # exist*, never a sub-kind filter (`march`'s own `requires_typed_note` -- a sixth typed
-        # form is the second resolver S27.2 refuses), so the kind check has to live where the
-        # target's Rung object is already in scope. A non-settlement target musters an EMPTY army
-        # (since v9 IN-13; it forced `subject` `None` until then, when `None` also meant an unheld
-        # target and both refused) -- `_contest`'s own empty-`_parties` check (`loop/resolve.py`,
-        # before the provider is reached) refuses it gracefully as `march.refused`, and
-        # an unheld settlement, which IS a legitimate destination, now arrives (`Unopposed`).
-        # ⚠ THE KIND CHECK IS INLINE, MARCH-SPECIFIC BUSINESS LOGIC IN A FUNCTION WHOSE OWN
-        # CONTRACT IS "DISPATCH BY THE PRIZE'S SUBSYSTEM, NEVER THE VERB" -- disclosed (M4 review
-        # pass, `/simplify` altitude finding), not fixed. `sides_of` takes `prize`, not `verb`,
-        # specifically so it stays verb-agnostic; a second `mass_battle`-routed verb with a
-        # different target-kind rule would have nowhere generic to read one from. The deeper fix
-        # is a target-kind constraint carried as DATA (a manifest or verb-row field, read the way
-        # `manifest.resolve(...)["module"]` already is), not this `w.rungs[target].kind` check --
-        # left for a future session, since `march` is still the only `mass_battle`-routed verb.
-        # ⚠ AGAINST THE ROSTER, NOT A HARDCODED `"settlement"` STRING (M4 review pass, a second
-        # correctional finding: the first writing checked the literal string, so extending
-        # `march_target_kinds` later would still change nothing here -- exactly the
-        # declared-but-unread defect this check exists to close, reintroduced one level down).
-        target_kind = w.rungs[target].kind if target is not None and target in w.rungs else None
-        # v9 IN-13 (#453 §9.6 code edit (iii), §14.8): H-149's REFUSAL NOW RIDES AN EMPTY ARMY, NOT
-        # `subject = None`. A non-settlement target musters nobody, so `_contest`'s empty-`_parties`
-        # PARTY-GAP refusal (`loop/resolve.py`, BEFORE the provider and its `contest()` catch are
-        # reached) answers it as `march.refused`, and `subject = None` comes to mean ONE thing only:
-        # no opposing holder.
-        if target is None or target_kind not in MARCH_TARGET_KINDS:
-            return ([], None, target or "R")
         # THE STAKE IS DERIVED AT THE DESTINATION, NEVER DECLARED (#453 §9.6 code edit (i), H-151's
         # reverted fix restored): `holder == mine` -- a relocation (or, if an enemy march follows, a
         # defence) -- and `holder is None` -- arrival at unheld land, no title write (H-166) -- both

@@ -16,10 +16,9 @@ from typing import Optional
 
 from ..data.arrangements import ARRANGEMENTS
 from ..data.requires import RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS
-from ..data.rosters import (
-    MARCH_TARGET_KINDS, RECORD_CONTENT, RECORD_KIND_KEYS, faction_prop_id, roster_map,
-)
+from ..data.rosters import MARCH_TARGET_KINDS, RECORD_CONTENT, RECORD_KIND_KEYS
 from ..data.verbs import VERB_TABLE
+from ..decision.options import WARRANT_SOURCED
 from ..queries import faction_q
 from ..queries.person_q import ABOUT_KEYS
 from ..queries.world_q import (
@@ -30,7 +29,7 @@ from ..queries.world_q import (
 from ..state.carriers import Proposition, Record, Tenure
 from ..state.carriers import DETERMINED_BY
 from ..state.gate import (
-    DISPOSABLE_KINDS, NO_CHANGE, UNDECLARED_DISPOSAL, Change, Subject, may_seize,
+    DISPOSABLE_KINDS, NO_CHANGE, UNDECLARED_DISPOSAL, Change, Subject, may_seize, seat_faction,
 )
 from ..state.ids import H
 
@@ -695,9 +694,11 @@ def _eff_give(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
 
 
 # WHICH RECORD KIND IS A WARRANT FOR `seize`, and WHICH OF ITS CONTENT KEYS NAMES WHAT IT AUTHORIZES:
-# both read off rosters (`warrant_sourced`, `record_sourced_operands`' `subject` entry), never spelt here.
-_SEIZE_WARRANT_KIND = roster_map("warrant_sourced", "values")["seize"]
-_SEIZE_WARRANT_KEY = RECORD_SOURCED_OPERANDS[_SEIZE_WARRANT_KIND]["subject"]
+# the kind is `decision/options.py::WARRANT_SOURCED`'s (`rosters.yaml: warrant_sourced`, the person-side
+# reader of the same line), the key `person_q.ABOUT_KEYS`' (the one owner of "what a document is about"),
+# never spelt here.
+_SEIZE_WARRANT_KIND = WARRANT_SOURCED["seize"]
+_SEIZE_WARRANT_KEY = ABOUT_KEYS[_SEIZE_WARRANT_KIND]
 
 
 def _held_warrant_names(w: "World", actor: str, rid: str) -> bool:
@@ -713,6 +714,29 @@ def _held_warrant_names(w: "World", actor: str, rid: str) -> bool:
         if rec.kind == _SEIZE_WARRANT_KIND and isinstance(sm, dict) and sm.get(_SEIZE_WARRANT_KEY) == rid:
             return True
     return False
+
+
+# The kind each half earns: the `seize` row's `emits:` in its declared order (`verb_table.yaml`, Record
+# then Rung), read off the table so neither kind is spelt here.
+_SEIZED_RECORD, _SEIZED_RUNG = VERB_TABLE["seize"].emits
+
+
+def _take_hold(w: "World", a: "Act", obj: str, held: Optional[Tenure], earns: str) -> Change:
+    """THE TAIL BOTH HALVES OF `seize` SHARE: the actor OPENS a `hold` on `obj`, and the `hold` it
+    displaces (`held`, or `None` when nobody held it) CLOSES, in ONE write. THE NEW EDGE'S ID carries the
+    act (`hold:<obj>:<act>`), `_eff_give`'s salting. G4 -- WHAT IT NAMES: the two edges, the opened one
+    first, both earning `earns`. The close is written FIRST, then the open.
+    ⚠ THE `Tenure` KIND IS A STRING LITERAL HERE ON PURPOSE, NOT A PARAMETER: `data/verbs.py::
+    _derive_openers_from_effects` reads which verb opens which kind off that literal, walking same-file
+    helpers from the registered effect, so `seize` stays a `hold` opener through this helper (the
+    `_eff_commit` note below records what a parameterised kind did to the walk)."""
+    nt = Tenure(H(w.world_seed, w.tick, a.actor, f"hold:{obj}:{a.id}"), a.actor, obj, "hold", since=w.tick)
+
+    def perform() -> None:
+        if held is not None:
+            held.until = w.tick            # the dispossessed holder's hold, FIRST
+        w.add_tenure(nt)                   # then the seizer's
+    return Change(tuple(Subject.edge(e, earns=earns) for e in (nt, held) if e is not None), perform)
 
 
 @effect_for("seize")
@@ -751,18 +775,7 @@ def _eff_seize(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         return NO_CHANGE
     if not _held_warrant_names(w, a.actor, rid) or not may_seize(w, a.actor, a.via, held.subject):
         return NO_CHANGE
-    nt = Tenure(H(w.world_seed, w.tick, a.actor, f"hold:{rid}:{a.id}"), a.actor, rid, "hold", since=w.tick)
-
-    def perform() -> None:
-        held.until = w.tick                # the dispossessed holder's hold, FIRST
-        w.add_tenure(nt)                   # then the seizer's
-    return Change((Subject.edge(nt, earns=_SEIZED_RECORD), Subject.edge(held, earns=_SEIZED_RECORD)),
-                  perform)
-
-
-# The kind each half earns: the `seize` row's `emits:` in its declared order (`verb_table.yaml`, Record
-# then Rung), read off the table so neither kind is spelt here.
-_SEIZED_RECORD, _SEIZED_RUNG = VERB_TABLE["seize"].emits
+    return _take_hold(w, a, rid, held, _SEIZED_RECORD)
 
 
 def _seize_rung(w: "World", a: "Act", rid: str) -> Change:
@@ -799,10 +812,9 @@ def _seize_rung(w: "World", a: "Act", rid: str) -> Change:
     one on a hearth), but at the effect it licenses on OCCUPATION, not on the warrant. No computed source
     of such a warrant has been measured -- a named residue, not a wiring gap in this effect."""
     rung = w.rungs.get(rid)
-    office = w.offices.get(a.via)
-    if rung is None or rung.kind not in MARCH_TARGET_KINDS or office is None or not office.faction:
+    mine = seat_faction(w, a.via)
+    if rung is None or rung.kind not in MARCH_TARGET_KINDS or mine is None:
         return NO_CHANGE
-    mine = faction_prop_id(office.faction)
     # The title written is the ACTOR'S OWN hold, and a hold coheres under the faction its holder is
     # committed to (`faction_holding`; `None` for no commit or two): an actor not committed to the seat's
     # faction would take the town for a faction that is not his [ASSUMPTION; medium; Jordan to correct;
@@ -816,16 +828,7 @@ def _seize_rung(w: "World", a: "Act", rid: str) -> Change:
     if held is not None and (held.subject == a.actor
                              or not may_seize(w, a.actor, a.via, held.subject, rid)):
         return NO_CHANGE
-    nt = Tenure(H(w.world_seed, w.tick, a.actor, f"hold:{rid}:{a.id}"), a.actor, rid, "hold", since=w.tick)
-
-    def perform() -> None:
-        if held is not None:
-            held.until = w.tick            # the dispossessed holder's hold, FIRST
-        w.add_tenure(nt)
-    subjects = (Subject.edge(nt, earns=_SEIZED_RUNG),)
-    if held is not None:
-        subjects += (Subject.edge(held, earns=_SEIZED_RUNG),)
-    return Change(subjects, perform)
+    return _take_hold(w, a, rid, held, _SEIZED_RUNG)
 
 
 @effect_for("destroy_record")

@@ -15,12 +15,12 @@ from __future__ import annotations
 
 from ..data.rosters import (
     DECLARED, FELLED, FIELD_CASUALTY_MODELS, LOST, UNOPPOSED, WON, WOUND_HARM_MODELS,
-    faction_prop_id, require_member,
+    require_member,
 )
 from ..data.verbs import VERB_TABLE
 from ..gaps import Unspecified
 from ..queries.world_q import ancestry, holder_faction_of, home_of
-from ..state.gate import NO_CHANGE, Change, Subject
+from ..state.gate import NO_CHANGE, Change, Subject, seat_faction
 
 from .effects_migration import _relocate
 from .effects_shared import _operand, effect_for
@@ -246,8 +246,7 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # β, occupation then `seize` (`_eff_seize`'s Rung half), not α (a won field transferring the
     # hold) [ASSUMPTION; medium; Jordan to correct; revert: Jordan states α, and title moves here].
     arrive = res.degree in (WON, UNOPPOSED)
-    movers = [pid for pid in attackers
-              if arrive and pid in w.persons and target not in _present_under(w, pid)]
+    movers = _not_yet_under(w, attackers, target) if arrive else []
     attacker_lost = res.degree == LOST
     losers = [] if res.degree == UNOPPOSED else (attackers if attacker_lost else defenders)
     pct = engine_result.get("attacker_size_pct" if attacker_lost else "defender_size_pct")
@@ -259,9 +258,7 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         model, FIELD_CASUALTY_MODELS, f"field-casualty model {model!r} is not in the roster",
         "H-148", law="`wound_harm_model`'s own precedent -- an unrecognised mode silently "
         "falling back would make every measurement of this sweep read the control")
-    office = w.offices.get(a.via)
-    attacker_faction = (faction_prop_id(office.faction)
-                        if office is not None and office.faction else None)
+    attacker_faction = seat_faction(w, a.via)
     defender_faction = holder_faction_of(w, target)
     winner_faction = defender_faction if attacker_lost else attacker_faction
     loser_faction = attacker_faction if attacker_lost else defender_faction
@@ -325,8 +322,22 @@ def _band_kind(degree: str) -> str:
     return VERB_TABLE["march"].emits_at(degree)[0]
 
 
-def _present_under(w: "World", pid: str) -> list:
-    """The rungs `pid` is present under: his live `contain` target and everything above it
-    (`world_q.home_of` + `ancestry`, the two owners). A march on a rung in this list is no journey."""
-    here = home_of(w).get(pid)
-    return ancestry(w, here) if here is not None else []
+def _not_yet_under(w: "World", pids: list, target: str) -> list:
+    """The claimants in `pids` (in order) who are persons and are NOT already present under `target`:
+    present = his live `contain` target and everything above it (`world_q.home_of` + `ancestry`, the
+    two owners), and a march on a rung in that chain is no journey. A claimant with no home is a
+    mover (`ancestry(w, None)` is `[]`). `home_of` is read ONCE for the whole band, and only if some
+    claimant is a person; the chain is walked once per distinct home."""
+    live = [pid for pid in pids if pid in w.persons]
+    if not live:
+        return []
+    homes = home_of(w)
+    chains: dict = {}
+    out = []
+    for pid in live:
+        here = homes.get(pid)
+        if here not in chains:
+            chains[here] = ancestry(w, here)
+        if target not in chains[here]:
+            out.append(pid)
+    return out

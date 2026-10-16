@@ -46,17 +46,20 @@ the control that stops it passing vacuously:
 """
 
 import random
+from types import SimpleNamespace
 
 from engine.season.data.matrix import Step, WriteClass
+from engine.season.data.rosters import faction_prop_id
 from engine.season.decision.choose import make_chooser
 from engine.season.decision.options import opening_set
 from engine.season.harness.populated import build_realm
 from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.loop.effects import EFFECTS
+from engine.season.queries import person_q as PQ
 from engine.season.queries import world_q
 from engine.season.seam.contest import Resolution
-from engine.season.state.carriers import Act, Question, Sensation, View
-from engine.season.state.gate import NO_CHANGE
+from engine.season.state import gate as G
+from engine.season.state.carriers import Act, Person, Question, Rung, Sensation, Tenure, View
 from engine.season.state.ids import H, draw_factory
 
 
@@ -302,18 +305,18 @@ def test_declared_is_no_change_and_unopposed_changes_only_with_claimants_in_the_
     w = build_realm(0)
     act = _march_act("p_npc_033", "set_s_003", "off_npc_033")
     attackers = world_q.mustered(w, "set_s_014", "fac_crown")
-    assert eff(w, act, Resolution("Declared", {})) is NO_CHANGE
-    assert eff(w, act, Resolution("Unopposed", {})) is NO_CHANGE
+    assert eff(w, act, Resolution("Declared", {})) is G.NO_CHANGE
+    assert eff(w, act, Resolution("Unopposed", {})) is G.NO_CHANGE
     with_claimants = Resolution("Unopposed", {"parties": {"claimants": attackers, "subject_members": []},
                                               "result": {"attacker_size_pct": 1.0}})
     change = eff(w, act, with_claimants)
-    assert change is not NO_CHANGE
+    assert change is not G.NO_CHANGE
     assert [s.id for s in change.subjects] == attackers
     assert all(s.ref[3] is None and s.earns is None for s in change.subjects), (
         "a mover is named whole and earns every kind the band declares")
     # CONTROL, one change (the destination is where the army already stands): no journey, no change.
     home = _march_act("p_npc_033", "set_s_014", "off_npc_033")
-    assert eff(w, home, with_claimants) is NO_CHANGE
+    assert eff(w, home, with_claimants) is G.NO_CHANGE
 
 
 def test_the_total_casualty_model_zeroes_the_losing_side():
@@ -483,13 +486,6 @@ def test_a_real_fold_reads_the_targets_fortification_on_the_battle_path(monkeypa
 # MUTATIONS, run at the build 2026-10-16 (each RED, then restored GREEN): recorded in the commit.
 # =====================================================================================================
 
-from types import SimpleNamespace
-
-from engine.season.data.rosters import faction_prop_id
-from engine.season.queries import person_q as PQ
-from engine.season.state import gate as G
-from engine.season.state.carriers import Person, Rung, Tenure
-
 CROWN, CHURCH = "fac_crown", "fac_church_of_solmund"
 
 
@@ -515,6 +511,17 @@ def _resolve_one(w, act):
 
 def _seize_act(target, actor="p_npc_020", via="off_npc_020", act_id="z1"):
     return Act(id=act_id, actor=actor, verb="seize", payload={"subject": target}, via=via)
+
+
+def _seize_kinds(w, target, **kw):
+    """The kinds one `seize` on `target` folds to (`_seize_act`'s keywords pass through)."""
+    return [e.kind for e in _resolve_one(w, _seize_act(target, **kw))]
+
+
+def _occupy(w, town, actor, via, **kw):
+    """March `actor`'s army (exercising `via`) onto `town` through the real fold, and assert it ARRIVED."""
+    kinds = [e.kind for e in _fold_one(w, _march_act(actor, town, via, **kw))]
+    assert "army.arrived" in kinds, kinds
 
 
 def _no_resident_crown(w):
@@ -739,12 +746,11 @@ def test_in13_exit_vi_seize_on_an_occupied_settlement_flips_its_holder():
     same seizure is refused and the holder stays."""
     ctrl = build_realm(0)
     assert world_q.holder_faction_of(ctrl, "set_s_016") == "fac_hafenmark"
-    assert [e.kind for e in _resolve_one(ctrl, _seize_act("set_s_016"))] == ["seize.refused"]
+    assert _seize_kinds(ctrl, "set_s_016") == ["seize.refused"]
     assert world_q.holder_faction_of(ctrl, "set_s_016") == "fac_hafenmark"
 
     w = build_realm(0)
-    kinds = [e.kind for e in _fold_one(w, _march_act("p_npc_033", "set_s_016", "off_npc_033"))]
-    assert "army.arrived" in kinds, kinds
+    _occupy(w, "set_s_016", "p_npc_033", "off_npc_033")
     assert world_q.holder_faction_of(w, "set_s_016") == "fac_hafenmark", "an arrival wrote a title (R-6)"
     # CONTROLS, each one change from the admitted seizure below (the Crown stands at the same place,
     # the same seat and actor), each pinning an arm of `_seize_rung`'s decline: the territory above the
@@ -755,8 +761,7 @@ def test_in13_exit_vi_seize_on_an_occupied_settlement_flips_its_holder():
     assert w.rungs["terr_T7"].kind == "territory"
     assert world_q.holder_faction_of(w, "set_s_002") == CROWN
     for refused in ("terr_T7", "set_s_002"):
-        assert [e.kind for e in _resolve_one(w, _seize_act(refused, act_id=f"zc_{refused}"))] == [
-            "seize.refused"], refused
+        assert _seize_kinds(w, refused, act_id=f"zc_{refused}") == ["seize.refused"], refused
     assert world_q.holder_faction_of(w, "terr_T7") == "fac_hafenmark", "the territory changed hands"
     assert world_q.holder_faction_of(w, "set_s_002") == CROWN
     out = _resolve_one(w, _seize_act("set_s_016"))
@@ -776,11 +781,10 @@ def test_in13_exit_vi_control_an_occupied_unheld_settlement_is_nobodys_to_seize(
     unheld, held = build_realm(0), build_realm(0)
     assert world_q.holder_faction_of(unheld, "set_s_037") is None
     for w, town in ((unheld, "set_s_037"), (held, "set_s_016")):
-        kinds = [e.kind for e in _fold_one(w, _march_act("p_npc_033", town, "off_npc_033"))]
-        assert "army.arrived" in kinds, kinds
+        _occupy(w, town, "p_npc_033", "off_npc_033")
         assert world_q.mustered(w, town, CROWN), "the Crown does not stand there"
-    assert EFFECTS["seize"](held, _seize_act("set_s_016")) is not NO_CHANGE
-    assert EFFECTS["seize"](unheld, _seize_act("set_s_037")) is NO_CHANGE
+    assert EFFECTS["seize"](held, _seize_act("set_s_016")) is not G.NO_CHANGE
+    assert EFFECTS["seize"](unheld, _seize_act("set_s_037")) is G.NO_CHANGE
 
 
 def test_in13_exit_vi_control_a_seat_holder_committed_to_another_faction_takes_nothing():
@@ -791,8 +795,7 @@ def test_in13_exit_vi_control_a_seat_holder_committed_to_another_faction_takes_n
     the same act is `rung.seized`."""
     def occupied(commit_to):
         w = build_realm(0)
-        kinds = [e.kind for e in _fold_one(w, _march_act("p_npc_033", "set_s_016", "off_npc_033"))]
-        assert "army.arrived" in kinds, kinds
+        _occupy(w, "set_s_016", "p_npc_033", "off_npc_033")
         if commit_to != CROWN:
             for t in w.persons["p_npc_020"].tenures:
                 if t.kind == "commit" and t.object == CROWN and t.live:
@@ -803,10 +806,10 @@ def test_in13_exit_vi_control_a_seat_holder_committed_to_another_faction_takes_n
             w, "p_npc_020", "off_npc_020", "p_npc_050", "set_s_016")
         return w
     w = occupied("fac_hafenmark")
-    assert [e.kind for e in _resolve_one(w, _seize_act("set_s_016"))] == ["seize.refused"]
+    assert _seize_kinds(w, "set_s_016") == ["seize.refused"]
     assert world_q.holder_faction_of(w, "set_s_016") == "fac_hafenmark"
     w = occupied(CROWN)
-    assert [e.kind for e in _resolve_one(w, _seize_act("set_s_016"))] == ["rung.seized"]
+    assert _seize_kinds(w, "set_s_016") == ["rung.seized"]
 
 
 def test_in13_a_retaking_closes_the_seizers_hold_under_the_seizure_basis(monkeypatch):
@@ -818,12 +821,10 @@ def test_in13_a_retaking_closes_the_seizers_hold_under_the_seizure_basis(monkeyp
     opens. One live `hold` on the settlement after."""
     w = build_realm(0)
     _fold_one(w, _march_act("p_npc_033", "set_s_016", "off_npc_033"))
-    assert [e.kind for e in _resolve_one(w, _seize_act("set_s_016"))] == ["rung.seized"]
+    assert _seize_kinds(w, "set_s_016") == ["rung.seized"]
     first = world_q.hold_force(w, "set_s_016")
     _patch_won(monkeypatch)
-    kinds = [e.kind for e in _fold_one(w, _march_act("p_npc_050", "set_s_016", "off_npc_050",
-                                                     act_id="m_back"))]
-    assert "army.arrived" in kinds, kinds
+    _occupy(w, "set_s_016", "p_npc_050", "off_npc_050", act_id="m_back")
     bases = []
     real = G.tenure_write_basis
 
@@ -849,7 +850,7 @@ def test_in13_exit_vii_an_opposed_won_removes_no_defender_and_the_seizure_is_adm
     ctrl = _no_resident_crown(build_realm(0))
     lost = [e.kind for e in _fold_one(ctrl, _march_act("p_npc_033", "set_s_036", "off_npc_033"))]
     assert "field.lost" in lost, lost
-    assert [e.kind for e in _resolve_one(ctrl, _seize_act("set_s_036"))] == ["seize.refused"]
+    assert _seize_kinds(ctrl, "set_s_036") == ["seize.refused"]
 
     _patch_won(monkeypatch)
     w = _no_resident_crown(build_realm(0))
@@ -858,7 +859,7 @@ def test_in13_exit_vii_an_opposed_won_removes_no_defender_and_the_seizure_is_adm
              for e in _fold_one(w, _march_act("p_npc_033", "set_s_036", "off_npc_033"))]
     assert ("field.won", "Won") in kinds and ("army.arrived", "Won") in kinds, kinds
     assert world_q.mustered(w, "set_s_036", CHURCH) == defenders, "a won field removed a defender"
-    assert [e.kind for e in _resolve_one(w, _seize_act("set_s_036"))] == ["rung.seized"]
+    assert _seize_kinds(w, "set_s_036") == ["rung.seized"]
     assert world_q.holder_faction_of(w, "set_s_036") == CROWN
 
 
@@ -872,8 +873,8 @@ def test_in13_h212_a_resident_occupies_the_church_seat_at_seed_0_with_no_field_f
     assert world_q.mustered(w, "set_s_036", CROWN) == ["p_npc_037"]
     assert world_q.holder_faction_of(w, "set_s_036") == CHURCH
     ctrl = _no_resident_crown(build_realm(0))
-    assert [e.kind for e in _resolve_one(ctrl, _seize_act("set_s_036"))] == ["seize.refused"]
-    assert [e.kind for e in _resolve_one(w, _seize_act("set_s_036"))] == ["rung.seized"]
+    assert _seize_kinds(ctrl, "set_s_036") == ["seize.refused"]
+    assert _seize_kinds(w, "set_s_036") == ["rung.seized"]
     assert world_q.holder_faction_of(w, "set_s_036") == CROWN
 
 

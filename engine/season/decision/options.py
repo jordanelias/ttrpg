@@ -202,7 +202,8 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             # IN-10: and the Records the person holds, whose addressees a fanned row's bags add.
             if people is None and row.known_person_operands():
                 people = known_persons(p.ledger, p.id)
-                records = held_record_claims(p)
+                if records is None:
+                    records = held_record_claims(p)
             bagged = [(st, ops) for st in (seats or (None,))
                       for ops in operand_bags(p, row, q, subject, fx, seat=st, people=people,
                                               records=records)]

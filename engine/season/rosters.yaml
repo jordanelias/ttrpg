@@ -1766,7 +1766,7 @@ rosters:
       Record of that kind names (`decision/options.py::opening_set`: `held_record_claims`, answered
       through `record_sourced_operands`' `subject` key, the one map of what a Record's content says),
       and the effect's RECORD half licenses the act on the same reading read WORLD-side
-      (`loop/effects_information.py::_eff_seize`). ⚠ WHY A ROSTER AND NOT A FAN: IN-10's held-Record
+      (`loop/effects_information.py::_held_warrant_names`, called by `_eff_seize`). ⚠ WHY A ROSTER AND NOT A FAN: IN-10's held-Record
       fan (`operand_bags`) is bound to a known-person operand (`known_person_operands`), and `seize`
       names no second party (#453 K-04), so the fan never reaches it; this is the one place that says
       a verb's referent comes from a warrant instead of from the question. Without the line a
@@ -1779,7 +1779,8 @@ rosters:
       (`test_season_shape.py` plants one on a hearth); at the effect it licenses on OCCUPATION, not on the
       warrant, so the formation and execution licences differ for the Rung half; no computed source of
       such a warrant has been measured. [ASSUMPTION; medium; Jordan to correct; revert: drop this roster and its
-      reader in `opening_set`, and `seize` forms on any referent, refused in the fold.]
+      readers (`decision/options.py::opening_set` and `loop/effects_information.py::_held_warrant_names`),
+      and `seize` forms on any referent, refused in the fold.]
     values:
       seize: dispensation
 
