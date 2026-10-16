@@ -174,3 +174,235 @@ held a non-empty scar. Stored `stance`, `pursuits`, `conviction` and `capability
 What ships static, then, is VALUES (pursuits and convictions: the scar counts, but the threshold-2
 shift is at 0 and no crisis fired in four seasons), CAPACITY (no writer) and AGE (dark). Body moves.
 Regard moves at read, and the ledger moves at every deposit.
+
+---
+
+## 3. THE CAPACITY BLOCK, WRITTEN BOTH WAYS
+
+Jordan: *"I don't know how to reconcile attributes against the subsystems and office training and
+histories"*; *"I don't know what attributes should even exist or what each subsystem best needs"*.
+So the capacity block starts from DEMAND: what each resolver would read from a person if its system
+were complete (§3.1). It clusters that demand into axes (§3.2), states one reconciliation rule
+(§3.3), reads the two rulings against each other (§3.4), and only then drafts the two options
+(§3.5, §3.6). The full evidence, verb by verb, is §3A in
+[`_part2`](2026-10-16-character-template_part2.md).
+
+### 3.1 The demand table: what each resolver reads from a person
+
+Code-stub rows (T1/T2) and prose-only rows (T3/T4) are kept in separate tables. Column (a) is what
+the season loop reads TODAY (T1). Column (b) is what the resolver reads WHEN COMPLETE, with its
+source and tier. The axis codes are §3A's (STR AGI END FOC ACU WIL ATT CHA BON are the registry's
+nine; PRA practice per domain; TS Thread Sensitivity; TMP temperament; KIT what a person carries).
+
+**Code rows.**
+
+| # | resolver | (a) reads TODAY (T1) | (b) reads WHEN COMPLETE (source, tier) | axes (from b) | lane ref |
+|---|---|---|---|---|---|
+| D1 | the contested social roll (`tell`, `speak`) | one `capability` key, `copying`, as pool; the hearer's same key ÷ 2 as Ob (`sigma.py:97-129`; `rosters.yaml:1105-1107`) [CHECKED] | the contest kernel's `Contestant(faculty, standing_start, reserve_max, dossier, evidence, charisma)` (`systems/social_contest/sim/contest/resolver.py:184-195`): `faculty` → pool and leverage (`:300-301`); `charisma` → the Face ceiling, `charisma × 3` (`systems/social_contest/sim/contest/primitives.py:138-142`) [CHECKED] — **T2** | PRA (the social faculty), CHA | K-SC-2, M-NPC-1, K-IN-1 |
+| D2 | personal combat (`fight`, `accept`) | `end` only, from the body band (`seam/wrappers/combat.py:130-138`); every other field the class default (`modules/combat/fight.py:45`) [CHECKED] | every `Combatant` field: `strength, agi, end, cog, att, spirit, focus, history, disp, weapon, armor, skills, equipped, tradition` (`combatant.py:93-94`), read through the bout's terms (§3A.4) [CHECKED] — **T2** | STR AGI END FOC ACU WIL ATT, PRA (`history`), TMP (`disp`), KIT | M-PC-1, K-PC-1, PC-06 K-1 |
+| D3 | a field's commander (`march`; rally, recall) | the side's members' `weight`, stance and loyalty; no commander (`mass_battle.py:175-200`) [CHECKED] | `Officer(name, command=4, charisma, cognition)`, which derives `command` from the two (`units.py:2700-2722`; `exchange.py:57-66`) [CHECKED] — **T2**; the season's general is the marching actor or the defending seat-holder (`troop-stock-design_part2.md:68-79`) [CHECKED] — **T4** | CHA, ACU | M-MB-3, M-NPC-13, K-MB-2 |
+| D4 | a field's troop quality | none: a side is one Line at fixed quality (JORDAN_STATEMENTS 3: *"a stub"*) | per-subunit `power, discipline, morale, dr` (`units.py:553-557`) [CHECKED] — **T2**; a company's grade in ITS OWN `capability` (`troop-stock-design.md:328`) [CHECKED] — **T4** | **none on a character**: a company's PRA, held by a cohort | M-MB-2, M-MB-16 |
+| D5 | threadwork (the 7 operations; `thread_read`) | none: no TS carrier, `thread_read` untyped | `spirit × 2 + min(3, history + 3) + ts // 10` (`operations.py:235-247`); `resilience` resists the cost (`:269-274`, gain 0 at `:157`) [CHECKED] — **T2**; K-3 types `thread_read` on TS (`09_the_character_sheet.md:130`) [CHECKED] — **T4** | WIL, PRA (`history`), TS | M-WR-1, K-WR-2, K-3 |
+| D6 | knots (`tie / knot`) | none: the row has no effect (H-182) | `bonds ≥ KNOT_BONDS_MIN` and disposition ≥ its minimum (`knots.py:185-192`) [CHECKED] — **T2** | BON | — |
+| D7 | the scene budget (every verb) | body bands, live `hold` count, travel legs (`budget.py:57-61`) [CHECKED] | the same: the directions are #353's, *"not open"* (`budget.py:46-47`) [CHECKED] — **T1** | **none**: BODY and OFF | — |
+| D8 | the chooser (every verb) | pursuits through `crisis_weights`, the confliction damp, the stance term (`engine/season/decision/choose.py:115-127`) [CHECKED] | the same, plus the refusal axis (H-146, unarmed) and a self-interest weight (M-NPC-12) — **T3** | **none**: values, not capacity | M-NPC-3, M-NPC-12 |
+| D9 | the bodies pass (age, illness) | `born`, rates at 0 (`world_q.py:771-790`) [CHECKED] | the same with rates set (H-208) — **T1 dark** | **none**: age | M-NPC-3 |
+
+**Prose-only rows (no code reads these yet).**
+
+| # | demand | (b) WHEN COMPLETE (source, tier) | axes | lane ref |
+|---|---|---|---|---|
+| P1 | witness and inquiry competence (`examine`, `interview`, `research`, `surveil`, `reconstruct`) | AX-7: divergence turns on *"the channel …, the reader's competence, and their prior beliefs … all three together"* (`01_AXIOMS.md:288-289`) [CHECKED] — **T3**. The factor is 1, unbuilt (`options.py:1205-1209`; H-200) [CHECKED]. No stub reads it | competence: **which axis is open**. Candidates: ACU and ATT, the pair the 2026-08-15 proposal groups as *"Perception {Cognition, Attunement}"* (`proposals/2026-08-15-character-and-faction-stats-and-progression.md:112`) [CHECKED] — **T4** | M-FI-3, K-FI-1 |
+| P2 | governance and administration (a governor, a settlement's seat) | the 2026-08-15 proposal's role table: *"Governor — position — AP × compliance + Ledger — and a settlement"*, pool *"administrative practice"* (`:147`, `:170`) [CHECKED] — **T4**; no `systems/settlements/sim/` exists (`ls` printed nothing) | PRA (administration), OFF | [lane ref UNVERIFIED] |
+| P3 | the persuasion actor and standing | the session's upload extracts (scratch `out/UP24_standing_persuasion_actor.md:41-42, :76, :106`; `out/UP07_critique_standing_persuasion.md:20`) — **T4, scratch, the uploads themselves not opened**: standing in four regimes (*"A1 ascribed, A2 accumulated, A3 performed, A4 staged"*); *"trainability belongs to the environment"*; political skill measured as *"networking, influence, apparent sincerity"*, while *"social astuteness did not"* predict; charisma tactics trained (UP24 `:53`) | PRA (per proceeding), CHA; standing derived from office and record, **not** an attribute | K-SC-2 |
+| P4 | inquiry as access | the upload extract `out/UP17_mechanics_of_inquiry.md:93` — *"P29 Background flag … P30 Attribute voice"* — **T4, scratch** | PRA (a background as an access flag) | M-FI-3 |
+| P5 | breadth of what a person may hold | the 2026-08-15 proposal's *"Recall — how many Histories you may hold active and how fast you learn"* (`:202`) [CHECKED] — **T4**; read by no verb row (§3A.3) | none with a reader | — |
+
+**(a) is a strict subset of (b).** Today the loop reads, of any person:
+
+- one PRA key (`copying`, for two verbs);
+- BODY;
+- `weight`;
+- stance and values.
+
+It reads none of the nine attributes, no TS, no TMP and no KIT. Every axis below is a column (b)
+demand.
+
+### 3.2 The axes the demand implies
+
+**The glance table** (resolver | when-complete reads | axes | tier):
+
+| resolver | when complete it reads | axes | tier |
+|---|---|---|---|
+| social contest roll | faculty, charisma | PRA, CHA | T2 |
+| personal combat | 9 attributes' aliases, history, disp, kit | STR AGI END FOC ACU WIL ATT, PRA, TMP, KIT | T2 |
+| commander | charisma, cognition | CHA, ACU | T2 (+T4 wiring) |
+| troop quality | power, discipline, morale; a company's grade | (a company's PRA, not a character's) | T2 / T4 |
+| threadwork | spirit, history, ts, resilience | WIL, PRA, TS | T2 |
+| knots | bonds, disposition | BON | T2 |
+| competence | competence | ACU or ATT (open) | T3 |
+| administration | administrative practice | PRA, OFF | T4 |
+| persuasion actor | practice, charisma, standing | PRA, CHA | T4 |
+
+**Clustered.** Read from column (b), the demand falls into four kinds of axis:
+
+1. **Nine attributes, every one with a T2 reader.** These are exactly the registry's nine
+   (`references/descriptor_registry.yaml:36-48`) [CHECKED], under the aliases the stubs spell:
+   - **Body**: STR (combat impact, health, balance), AGI (tempo, reflex, balance, initiative),
+     END (wounds, stamina).
+   - **Mind**: ACU = `cog` (combat reading; Command), FOC (poise recovery, disruption resistance),
+     WIL = `spirit` (wounds, stamina; the thread pool).
+   - **Social**: ATT = `att` (combat reading, reflex), CHA (Command; the Face ceiling), BON (the
+     knot gate).
+
+   **No axis in the nine is left without a reader** (ID-13 holds at T2). **None of the nine has a
+   T1 reader**, so ID-13 does not yet hold in the game.
+2. **PRA, one key per domain.** Contest faculty, combat `history`, thread `history`, `copying`,
+   administration, command practice. It is read by D1, D2, D5, P2 and P3. It is what training
+   writes. **It is a family of keys, not one axis**, so it cannot fill one roster slot (§3A.4.1).
+3. **Three single-subsystem axes:**
+   - **TS**: threadwork, a practitioner stat on its own 0–100 scale
+     (`descriptor_registry.yaml:61-65`) [CHECKED].
+   - **TMP**: combat's `disp`, a 1–7 lean.
+   - **`resilience`**: threadwork's R-14 input. The registry folds Spirit into Will, and the plan
+     names *"'spirit' (resilience, R-14)"* as *"a candidate input only"* for the tenth
+     (`_part5.md:444`) [CHECKED].
+4. **Not capacity: KIT, OFF, BODY, age, values.** Each already has, or should have, its own carrier.
+   KIT has none (F18). The troop design's precedent puts a cohort's kit in its own person-rung's
+   `Rung.stores` (`troop-stock-design.md:326`) [CHECKED], and the character-sheet proposal's K-5
+   proposes `hold` Tenures on equipment objects (`09_the_character_sheet.md:132`) [CHECKED]. That
+   choice is J-T5 (§8).
+
+**How many genuinely distinct axes.** **Nine stored-able attributes**, plus **one family of practice
+keys**, plus **three single-subsystem capacities** (TS, TMP, resilience). The verb × axis matrix
+(§3A.3) confirms the nine: every one is read by at least one verb row. Recall is read by none.
+
+**The ten.** Jordan ruled the COUNT: *"it will be 10 attributes"* (ED-IN-0185 Q7, 2026-08-14,
+`registers/editorial_ledger_in_archive.jsonl:137`) [CHECKED]. **No source records him naming them.**
+
+- The registry ships nine, and says *"The TENTH IS UNNAMED … Do not infer the tenth from the
+  aliases"* (`descriptor_registry.yaml:27-31`) [CHECKED].
+- ED-IN-0193 recorded the count and the nine (`editorial_ledger_in_archive.jsonl:145`) [CHECKED].
+- The plan asks him for the name: *"you have given no name"* (`_part5.md:444`) [CHECKED].
+- The 2026-08-15 proposal's option A-2, *"Ratify the 10 unchanged"* (`:192`) [CHECKED], is an
+  earlier ten that includes Recall. The registry later dropped Recall (*"A-4 The registry's 9 (drop
+  Recall)"*, `:194`) [CHECKED].
+
+**By ID-13, the tenth must have a reader.** The demand offers three candidates with a T2 reader that
+are not already among the nine: **TMP, TS, `resilience`**. It offers none for Recall. Naming the
+tenth is **J-T2**, Jordan's. This proposal does not pick.
+
+⚠ **Locator correction carried from the research suite.** `00_COMPARATIVE_ANALYSIS.md:78`
+(RC-1), `:214` (X-14) and `:528` (J-C-3) cite the ten-attribute ruling as *"[CHECKED p5:515]"*.
+The scratch critics (`critics/NPC.md:21`, `critics/COMPARATIVE.md:41`) and the SC lane's K-SC-2 row
+cite J-13 at `_part5:504` and `:514`. `wc -l workplans/valoria_master_workplan_v9_part5.md`
+→ `475`, so those lines do not exist in this tree. In the tree read here, J-13 is at `_part5.md:433`
+(and the §J.2 remainder at `:443`), and the ten-attribute evidence at `:444`.
+
+### 3.3 The reconciliation rule
+
+Jordan's question was how attributes, subsystems, office, training and histories fit together. One
+rule, with the ruled-on cell marked:
+
+```
+WHAT IS STORED        Option B: the ten attributes (1-7, closed roster), slow-moving.
+                      Option A: nothing attribute-shaped.
+                      BOTH:     practice, one key per domain (Person.capability), authored and trained.
+
+WHAT TRAINING DOES    `train` (IN-12 step 9) raises PRACTICE: one domain key per act.
+                      It never raises an attribute under A (there are none).
+                      Under B, whether anything raises an attribute (age, a wound, nothing) is J-T4.
+
+WHAT OFFICE GRANTS    OPTIONS (the remit, carried on the hold Tenure's payload: `granted_acts`),
+                      SCENES (`budget_office_bonus` per live hold),
+                      a TREASURY (`seat_rung`). Under the troop design, a company to command.
+                      Never an attribute, never practice. A proceeding MAY rule that an office
+                      changes an obstacle; no code does today (the obstacle's owner is the
+                      proceedings subsystem, ED-SC-0033 (3), per `sigma.py:122-124`) [CHECKED].
+
+WHAT STAYS DERIVED    Every subsystem figure, at read, never stored:
+                      the contest pool, every Combatant term, Command, competence,
+                      loyalty, regard, age, confliction, standing.
+                      (J-13's "a derived score ... not a character attribute" is THIS line.)
+```
+
+Shown per subsystem, under each option:
+
+| subsystem figure | Option B: derived from | Option A: derived from |
+|---|---|---|
+| contest pool (D1) | PRA[proceeding faculty] (+ CHA for the Face ceiling) | PRA[proceeding faculty] |
+| `Combatant` (D2) | STR AGI END FOC ACU WIL ATT + PRA[`combat`] + TMP + KIT + BODY | PRA[`combat`] → `history`; BODY → `end`; KIT; **every other field the class default** |
+| Command (D3) | `derive_command(CHA, ACU)` | PRA[`command`] → `Officer.command` directly (the class accepts a given `command`, `units.py:2711`) [CHECKED] |
+| competence (P1) | ACU or ATT (open) + PRA[`inquiry`] | PRA[`inquiry`] |
+| thread pool (D5) | WIL + PRA[`thread`] + TS | PRA[`thread`] + TS; `spirit` the module default 4 (`operations.py:241`) [CHECKED] |
+| knot gate (D6) | BON | **no input**: the gate reads `bonds`, and under A it would sit at its `getattr` default 0, below the minimum, so no knot forms. A must rule a replacement. Open |
+
+### 3.4 The two rulings, read against each other
+
+- **"It will be 10 attributes"** (ED-IN-0185 Q7, 2026-08-14) [CHECKED]: a count, ruled, with no
+  names.
+- **J-13's constraints** (2026-09-06, RS-16, `workplans/valoria_master_workplan_v9_part8.md:329`)
+  [CHECKED]:
+  - *"pool only it is, but ensure you don't go so far as to deprive player of a chance at winning"*;
+  - *"It's a derived score that is used for the subsystem for a character, but it is not a character
+    attribute in and of itself"*.
+  - The plan adopted (iii), `pool_default` everywhere a case names no vocation, as the interim
+    (`_part5.md:433`) [CHECKED].
+
+**They pull apart only on the broad reading.**
+
+- **BROAD:** "a capacity is never stored; everything is derived". Then Option A, and the ruled ten
+  is overwritten.
+- **NARROW:** "the subsystem's figure (the social pool he was discussing) is derived, not an
+  attribute". Then Option B satisfies both. The ten are stored, and every pool is derived from them
+  at read.
+
+The NPC critic flagged that K-NPC-1 cited neither reading (scratch `critics/NPC.md`, item 9). The
+comparative critic flagged that J-C-3 would overwrite the ten (`critics/COMPARATIVE.md`, item 4).
+**J-T1 is, in substance, the question: which reading did Jordan mean?**
+
+*"Pool only"* binds the contest roll under either option. Capacity enters the sigma roll as dice,
+and never as an Ob shift on the actor's own act. (The subject's capacity enters as Ob, per Jordan's
+2026-08-14 *"score/2 plus modifiers"*, `sigma.py:115-120`.) [CHECKED]
+
+### 3.5 OPTION A — derived capacity
+
+| part | content |
+|---|---|
+| **carrier** | the existing `Person.capability` (`carriers.py:651`), re-keyed from verb keys to PRACTICE keys on a closed roster (`rosters.yaml: practice_roster`, which would absorb `verb_capability`'s values; `verb_capability` becomes verb → practice key). No new `Person` field |
+| **readers** | each subsystem's host input builder derives its figure (§3.3's column A): `sigma._pool_of` unchanged; `seam/wrappers/combat.py` sets `history` from PRA[`combat`] beside `end`; the order of battle sets `Officer.command` from PRA[`command`]; `refracted_confidence`'s competence from PRA[`inquiry`]; a typed `thread_read` and the thread operations from PRA[`thread`] and TS. **TS needs a carrier under A too**: a practitioner stat, on `capability` under a `ts` key or its own field. That sub-choice is J-T1a |
+| **write rule** | world-gen seats the template's `practice:` (04 F.6: *"world-gen writes it once; nothing else does"*, and its repair *"is a `practice` verb, not a field"*, `architecture/meta/04_CODE_ARCHITECTURE.md:1153`) [CHECKED]; `train` (IN-12 step 9) is the one runtime writer. The write-matrix row comes off `retired:` (`write_matrix.yaml:394-395`) [CHECKED], as step 9 already plans |
+| **defaults** | an absent key is "not practised". The reader falls to its declared default (`pool_default`, H-126; the module's class default). The template never fills a guess |
+| **tests** | (1) an all-null template reproduces today's `World.content_hash()` exactly, at build and after N seasons, because no field is added; (2) NPC-088's `copying: 3` survives the move from the overlay; (3) two persons differing in one practice key diverge in that verb's pool (the probe in F15) and, over N seeds, in its success rate, against the equal-key control |
+| **what it does to the game** | persons differ by what they have PRACTISED, their BODY and their KIT, and by nothing innate. Two untrained persons are identical in every roll. Physical difference enters only through body condition and kit. Combat's measured attribute spreads (the 2026-08-15 proposal reports +6.0 to +20.4 pp per attribute, `:122-123`, **T4, not re-run**) are not reachable, because every `Combatant` attribute stays at its default. Training is the only route to being better, which makes `train` very strong in the chooser. **It overwrites ED-IN-0185 Q7**: only Jordan may |
+
+### 3.6 OPTION B — stored attributes
+
+| part | content |
+|---|---|
+| **carrier** | a new `Person.attributes: dict`, keyed by registry keys (`attr.body.strength` …), **seeded with nothing**: K-2's shape (`09_the_character_sheet.md:129`) [CHECKED]. Plus `Person.capability` as the practice store, exactly as in A. A `write_matrix.yaml` row `(Person, attributes)`, world-gen class |
+| **roster** | the leaf `ATTRIBUTES` (`engine/substrate/descriptors.py:50`) and its scale (`:52-53`, floor 1, ceiling 7) [CHECKED], the single owner. The tenth slot stays PENDING (`ATTRIBUTES_PENDING_TENTH`, `:51`) until J-T2. The loader refuses a value for an unnamed slot |
+| **readers** | each lands WITH ITS FIRST READER, as PC-06 already rules for K-2 (*"builds only with its first reader"*, `_part7.md:44`) [CHECKED]: (1) the combat host builder fills every `Combatant` attribute from the person, keeping `end`'s body derivation (K-1); (2) the order of battle builds `Officer(charisma, cognition)` from the commander (K-6, U-4); (3) the thread pool reads WIL as `spirit`; (4) competence reads its axis once P1's open choice is ruled. The contest roll does not read an attribute until the proceedings subsystem lands CHA's Face ceiling |
+| **write rule** | world-gen only (04 F.6, as A). Whether anything later moves an attribute is J-T4: none (attributes are innate), age (through `born`), or a wound (through the bodies pass) |
+| **defaults** | an absent key is "not authored". The reader falls to the MODULE's own default (`Combatant`'s 4/3, `combatant.py:93-94`; `Officer`'s 4), never to a template-side fill. Registry `default: 1` (`descriptor_registry.yaml:35`) [CHECKED] is **not** used as a seat-time fill: it would make every unauthored person a 1, below every module's default |
+| **tests** | (1) loader refusals (§4); (2) all-null attributes: the act log and every event are identical to the pre-change tree at a fixed seed. **The content hash moves structurally**, because `Person`'s `repr` gains a field and `_entity_digest` hashes the `repr` (`engine/season/state/world.py:167-177`) [CHECKED]: a declared re-pin, the `Tenure.term` precedent (`carriers.py:103-105`) [CHECKED]; (3) two persons differing in one attribute build different `Combatant` fields and, over N seeds, different fight outcomes, against the equal-attribute control |
+| **what it does to the game** | persons differ innately and by practice. Who wins a fight, who holds a line and who reads a lie vary by person **before** anyone trains. Multi-axis verbs keep their stub combinations (§3A.4). The cost is authoring: 46 × 9 values. **Today one cast row carries any attribute-like values**: NPC-001's `cognition 5, focus 5, endurance 4` map to ACU, FOC and END, the first through an alias the registry marks *"[ASSUMPTION] … Jordan veto"* (`descriptor_registry.yaml:42`) [CHECKED]; `social: '3–4'` is refused (a prose range, and not a registry name). So under B the shipped template is all-null for 45 rows and changes no outcome until values are supplied (§5) |
+
+### 3.7 DECISION J-T1 — the capacity source (Jordan's)
+
+- **(A)** derived: practice, body, kit and office only. Overwrites the ruled ten.
+- **(B)** stored: the ten (nine plus J-T2's tenth) and practice. Reads J-13 narrowly.
+
+**What waits on it:**
+
+- R-09's by-person conjunct;
+- K-1 and K-6 (U-4);
+- the troop design's commander source (`troop-stock-design_part2.md:75-76`) [CHECKED];
+- K-GO-8's creation screen fields;
+- the template's `attributes:` block (§4).
+
+**What does not wait:**
+
+- every other template field;
+- the practice block, which is the same under both;
+- the loader and its refusals.
