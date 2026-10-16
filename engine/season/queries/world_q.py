@@ -1912,10 +1912,11 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None,
 
 
 def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Question]:
-    """§F1's `q` producer -- TWO sources, resolver-side, at the DELIBERATE barrier, plus THREE
+    """§F1's `q` producer -- TWO sources, resolver-side, at the DELIBERATE barrier, plus FOUR
     STANDING OCCASIONS stamped onto the first question as classed referents (`_stamped`, below the
     sort): the vacant seats the person may fill (`vacancies`, IN-53), the seats he has been told of
-    (`seats_named`, v9 IN-10 (a)) and the writs he holds (`writs_held`, v9 IN-09). They are not
+    (`seats_named`, v9 IN-10 (a)), the writs he holds (`writs_held`, v9 IN-09) and the places he has
+    been told of and could settle in (`places_named`, v9 IN-45 `migrate`). They are not
     sources: no id or source changes; a person with one of them and no question gets one `need`
     question carrying them.
 

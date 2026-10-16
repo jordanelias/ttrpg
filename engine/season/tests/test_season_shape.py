@@ -8352,7 +8352,16 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
         # REFUSED` 11 -> 12) and its scenes re-rank the rest; the executed set (17 of 45) did not move. THE
         # SAME-BREATH CHECK: the universal set is empty on both sides and the status census is UNMOVED (103
         # RUNS-UNDECLARED · 40 SPAN-UNAUTHORED); R3 NPC 46 of 46, ARC 97 of 97.
-    assert len(by_sig) == 103, (
+        # ⚠⚠ **103 -> 105, v9 IN-45 `migrate` (`referent_class: Rung`, `world_q.places_named`), MEASURED BY
+        # `corpus_run`, seed 0, AGAINST A CONTROL: the same tree with `migrate`'s `referent_class` blanked in
+        # `VERB_TABLE` reads byte-for-byte what a clean copy of the base `4cee0de5` reads (103).** THE UNIT AND
+        # THE DIRECTION: variety ROSE by two; `migrate` forms only on a place `places_named` stamps and no
+        # corpus ledger names one, so it moves from attempted-and-always-refused to never attempted (`VERBS
+        # ONLY REFUSED` 12 -> 11, `never even attempted` 10 -> 11) and the scenes it took re-rank the rest;
+        # the executed set (17 of 45) did not move. THE SAME-BREATH CHECK: the universal set is empty (asserted
+        # below) and the status census is UNMOVED (103 RUNS-UNDECLARED · 40 SPAN-UNAUTHORED); R3 NPC 46 of
+        # 46, ARC 97 of 97.
+    assert len(by_sig) == 105, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -8699,9 +8708,14 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # the person holds and his ledger names (`referent_named`); none of the 143 cases seats a person
     # who holds one, so it is foldable and never attempted here, as it is in `build_realm(0)`, where
     # `aperture 4 0` shows it executing once (a different corpus, as `march`'s note says).
+    # ⚠ TEN -> ELEVEN, v9 IN-45 `migrate` (2026-10-16): `migrate` JOINS, from the always-refused set. It
+    # forms only on a place `world_q.places_named` stamps (a Rung his own ledger names that he does not
+    # already live under), and in this corpus `places_named` is non-empty in no call, so it is foldable
+    # and never attempted here; in `build_realm(0)` it executes (`aperture 1 0`: 1). `corpus_run`'s
+    # `foldable but never even attempted`: 10 -> 11.
     assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish",
                                               "destroy_record", "march", "oblige", "open_case",
-                                              "determine", "comply"}, (    # IN-57: `dispatch` out, to `refused_only`
+                                              "determine", "comply", "migrate"}, (    # IN-57: `dispatch` out, to `refused_only`
         f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Five of "
         "the original six are the governance verbs no corpus overlay grants (`establish` is "
         "`remit:confer`-eligible); `march` is eligible in NPC-033/038 and WOULD form a real "
