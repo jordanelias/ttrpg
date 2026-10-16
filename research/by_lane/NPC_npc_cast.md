@@ -675,11 +675,13 @@ Every K row's lane is IN unless it says otherwise; NPC has no ED lane.
 
 ### 10.0 The top five, worst problem first
 
-1. **K-NPC-3** — deaths are the world's most frequent unwatched event (five of six heads in two seasons, probe), and
-   outside the throne nothing follows one.
-2. **K-NPC-4** — a faction's creed names its head as a man, so a regicide leaves every member answering to a corpse.
-3. **K-NPC-1** — persons differ in wants only, so every seat resolves by seed.
-4. **K-NPC-2** — nobody changes over a campaign; the mechanisms exist and ship off.
+1. **K-NPC-1** — persons differ in wants only, so every contest, duel, witness reading and field army resolves alike by
+   person; two D1 sources demand otherwise (R-09; Jordan's troop-quality and 4/4-stub statements).
+2. **K-NPC-4** — a faction's creed names its head as a man, and four of six heads die in one season at seed 0 (probe), so
+   a regicide leaves members answering to a corpse.
+3. **K-NPC-3** — a vacancy reaches only conferrers' questions, whose `confer` does not yet execute; nobody else learns of
+   it by claim, and IN-61's heir path rests on the same missing claim.
+4. **K-NPC-2** — nobody's values or body change over a campaign; the mechanisms exist and ship off.
 5. **K-NPC-11** — none of this can be seen or chosen by a player.
 
 ### 10.1 PRIMITIVES
