@@ -36,46 +36,87 @@ reuse it by default (J-3).
 
 ## 0. VERDICT
 
-1. **A troop is a person. The troop stock is a set of levied companies.** A company is a cohort
-   `Person` at `weight > 1`, split off a settlement's population cohort by `levy` and bound to the
-   levying seat by an `oblige` edge. Layer 1 already says what an army is:
+1. **A troop is a person. The troop stock is a set of conscripted companies.** A company is a cohort
+   `Person` (`weight ≥ 2`), taken from a settlement's population cohort by `conscript` and bound to
+   the conscripting seat by an `oblige` edge. Layer 1 says what an army is:
    `units = PersonId[] at weight -- one type. There is NO unit class, at any scale`
-   (`architecture/meta/04_CODE_ARCHITECTURE.md:793`) [CHECKED-draft]. It also says a cohort is a `Person`
-   and no subclass exists (`04:123`, `:245`) [CHECKED-draft]. A stock of troops kept on a `Rung`, or a typed
-   troop row, is a unit class. Either one would mean amending ratified Layer 1. A company does not. It
-   also gets the person's existing machinery for free: it eats, is housed, witnesses, can desert by
-   `release`, and dies through the one death cascade. The representation is still a decision for
-   Jordan (**J-1**, §9), because he has not ruled on it. §2.1 weighs it against four alternatives.
-2. **Quality has three axes, and each lives on an existing carrier:**
-   - **Equipment** is matter held in the company's own person-rung `stores`.
-   - **Experience** is a grade in the company's `Person.capability`.
-   - **The commander** is the person who holds the seat the company is obliged to.
-   The troop kind is never stored. It is a Query over the company's kit, so it cannot disagree with
-   the kit (§2.3).
-3. **The verbs:**
-   - **One new verb:** `levy`.
-   - **Reused companion acts:** `transfer` equips a company, `train` drills it (IN-12 step 9),
-     `dispatch` and `move` assemble companies from several settlements, `march` fields them, and
-     `release` plus the oblige term's maturity dismiss them.
+   (`architecture/meta/04_CODE_ARCHITECTURE.md:793`) [CHECKED], and that a cohort is a `Person` with
+   no subclass (`04:123`, `:245`) [CHECKED-draft]. A company keeps that sentence. A stock on a `Rung`
+   or a typed troop row does not.
+2. **⚠ At the shipped data the split does not exist, and that changes the comparison (§2.1a).**
+   - **The data:** every one of the 37 settlement cohorts ships at weight 2 (H-170,
+     `engine/season/hole_register.yaml:3722-3732`; `engine/season/cohorts.yaml`, 37 rows, all
+     `weight: 2`) [CHECKED].
+   - **The rule it meets:** S9 calls a person a cohort only at `weight > 1`
+     (`state/carriers.py:713-721`), and only a cohort eats (`queries/world_q.py:860`) [CHECKED]. A
+     split of a weight-2 cohort leaves two weight-1 persons. Neither eats, and neither counts as
+     troops. The settlement's demand falls from `2 × wt` to 0.
+   - **So `conscript` refuses any split that would leave a part below weight 2** (§3.1). At weight 2
+     the only admissible act takes the whole cohort. Candidate C then fields exactly the men candidate
+     D fields: the whole town.
+   - **The recommended default is C, conditional on TS-0.** TS-0 is a data change: H-170's weight
+     goes from 2 to 4 at every row, the smallest uniform weight at which a split leaves two cohorts
+     (§7, with its falsifier). **If Jordan refuses TS-0, the default flips to D.** At weight 2, D
+     fields the same men with two fewer objects and leaves Layer 1's muster line untouched (§2.1a).
+3. **⚠ C amends one line of ratified Layer 1.** A company has no `commit`, so it is not in
+   `members`. Fielding it widens `mustered` beyond §C.5.1's *"the squad is `members ∩
+   present-at-rung`"* (`04:802`) and its `sides = (faction_q.resolve(proj, A), …)` (`04:792`), which
+   resolves to `members` (`queries/faction_q.py:107`) [CHECKED]. The draft's claim that C "complies
+   without amending" is withdrawn. C amends the muster line; A1, A2 and B amend the unit-class line;
+   D amends nothing. That amendment is part of J-1.
+4. **Quality has three axes, each on an existing carrier, and in computed play none is exercised
+   yet:**
+   - **Equipment** is matter held in the company's own person-rung `stores`. The troop kind is
+     derived by the module from `TROOP_LOADOUT` (`modules/mass_battle/equipment/__init__.py:21-36`)
+     [CHECKED], the one owner of kind → kit. No second table (§2.3). ⚠ Computed play cannot equip a
+     company today: no question names a company's person-rung as a `transfer`'s `to`
+     (`verb_table.yaml:1211`) [CHECKED], and arms have no producer (§6).
+   - **Experience** is a grade in `Person.capability`. ⚠ `train` writes capability only where a case
+     names a vocation (J-13 answered (iii), `workplans/valoria_master_workplan_v9_part5.md:73`,
+     `:433`) [CHECKED]. A company has no case, so drill does not reach it. Battle experience waits on
+     J-5. **The axis is unreachable in computed play** until J-5 or J-13 changes.
+   - **The commander** is the person who holds the seat the company serves. His Command is 4 for
+     every season commander until R-C-1 names a source for charisma and cognition (§4.2 step 5).
+   - **What this means:** in computed play, every company fields as the unarmed kind, at grade 0,
+     under Command 4. Who commands, and how many men, do vary. Hand-built and player acts reach all
+     three axes.
+5. **The verbs:**
+   - **One new verb, `conscript`** (a working name; J-3).
+   - **Reused companion acts:** `transfer` equips a company, `dispatch` and `move` assemble companies
+     from several settlements, `march` fields them, and `release` plus the oblige term's maturity
+     dismiss them. `train` would drill them only after J-13 changes (item 4).
    - **`requisition`** stays what the rename made it: the store act that fills the treasury the kit
      comes from (§3).
-4. **The army builder moves across the seam.** `build_army` moves out of
+6. **Who stands, and whose morale counts, have one owner.** A new Query, `service_faction`, names
+   the one faction a person with no `commit` stands for: the faction his seat's holder coheres under,
+   on `holder_faction_of`'s precedent (`world_q.py:1441-1466`) [CHECKED]. `mustered` adds those
+   persons, and `_side_stance` reads the same Query. Then the morale row the fold already writes onto
+   a losing company is read back at its next field (§4.1). Persons who hold a `commit` stand only
+   where their `commit` puts them. So the two shipped `oblige` edges to a seat of another faction or
+   the same faction (NPC-070 and NPC-041) add nobody to any side [RAN, §4.1].
+7. **The army builder moves across the seam.** `build_army` moves out of
    `systems/mass_battle/sim/engine.py:213-452` into `modules/mass_battle/` [CHECKED-draft]. The season's
    one-Line construction is deleted: `_weighted_unit`, `_MVP_SUBUNIT_SHAPE`, `_MVP_UNIT_COMMAND`,
    `_SEASON_FORCE_POWER` and `_MIN_TROOPS` (`modules/mass_battle/massbattle.py:170-230`) [CHECKED-draft].
-   The host builds each side's order of battle from the companies present. The module builds the
+   The host builds each side's order of battle, **one subunit per company**. The module builds the
    Unit through the one constructor (§4).
-5. **A finding the design must fix on the way:** `build_army` throws away the morale preset of every
-   troop type it builds.
-   - **Probe [RAN]:** a `build_army` spec for a `levy` subunit printed `levy power 1 disc 1 morale 6`.
+8. **A defect tracked on its own, gated on nothing here (TS-2, §7):** `build_army` throws away the
+   morale preset of every troop type it builds.
+   - **Probe [RAN at drafting]:** a `build_army` spec for a `levy` subunit printed `levy power 1 disc
+     1 morale 6`.
    - **Expected:** the preset row is morale 2 (`modules/mass_battle/troop_types/registry.py:41`)
-     [CHECKED-draft].
-   - **Cause:** `build_army` sets `kw['morale']` to the Unit's default (`engine.py:427`) before
-     `Subunit.of_type`'s `kw.setdefault('morale', preset['morale'])` (`hierarchy/units.py:726`) can
-     run [CHECKED-draft].
+     [CHECKED].
+   - **Cause:** `build_army` sets `kw['morale']` to the Unit's default when the spec sets none
+     (`systems/mass_battle/sim/engine.py:427-428`) before `Subunit.of_type`'s
+     `kw.setdefault('morale', preset['morale'])` (`modules/mass_battle/hierarchy/units.py:726`) can
+     run [CHECKED]. That contradicts `build_army`'s own docstring: a canonical type "draws its §B.2
+     Power/Discipline/Morale presets via Subunit.of_type unless the spec overrides them"
+     (`engine.py:228-230`) [CHECKED].
    - **Consequence:** on the harness path, troop-type morale is dead. Every harness-built army fights
      at Unit morale 6.
-6. **What this cuts:**
+   - **Not tracked anywhere:** a grep for the pattern over `engine`, `registers`, `workplans` and
+     `references` finds no row [RAN].
+9. **What this cuts:**
    - **IN-52's feed and LF-1..LF-3 are withdrawn.** Troops are no longer bounded by a treasury. LF-1
      and LF-3 would also feed the same persons twice, because the larder already feeds them (§5).
    - **IN-49 is re-framed** as the store act's question source.
@@ -85,8 +126,9 @@ reuse it by default (J-3).
    - **Research rows it narrows:** M-MB-1, M-MB-3, M-MB-16 and M-NPC-13 (§5 says how far).
    - **Collisions it resolves:** X-2 (by choosing persons) and X-19 (by cutting the bound, against
      MB's keep).
-7. **Grade: paper.** Nothing in §2–§4 is built. One probe was run (item 5 above). §7 gives the order
-   in which to build it, and each step's exit is an execution artifact.
+10. **Grade: paper.** Nothing in §2–§4 is built. Probes run: the morale preset at drafting (item 8);
+    in the correction pass, the realm built at cohort weight 4 and the shipped `oblige` edges' factions
+    (§2.1a, §4.1). §7 gives the build order, and each step's exit is an execution artifact.
 
 ---
 
