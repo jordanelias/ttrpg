@@ -241,7 +241,7 @@ obstacle column, attribute gate and depth derivation were overturned by a critic
 re-introduced.
 **INSTRUCTION.** Compose on the single owners: the actor's pool and the obstacle from the host input builder
 `seam/wrappers/sigma.py::contest_input` (IN-03, `31a`) — its `_pool_of` (capability via
-`rosters.yaml: verb_capability`, else `pool_default`) and its `_obstacle_of`'s existing
+`rosters.yaml: verb_capability`, else `pool_default`) and `modules/social_contest/roll.py::obstacle`'s existing
 default for a non-person subject — and the degree from `dice_engine.degree_from_net` — the one ladder.
 **Stop condition:** R-09's producer scan pins the roll to one owner, the `social_contest` module's entry, with the host producing none (S27.2). If producing an
 inquiry degree cannot route through that owner without a `contests:` shape, stop and register — that is

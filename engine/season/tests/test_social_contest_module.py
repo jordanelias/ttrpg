@@ -43,7 +43,8 @@ from engine.season.queries.inputs import SocialContestInput
 from engine.dice_engine.sigma_leverage import net_boost, roll_net
 out = []
 for lev in (0.0, 1.5):
-    inp = SocialContestInput(pool=4, ob=2.0, obstacle_refusal_multiple=3.0, leverage=lev)
+    inp = SocialContestInput(pool=4, opposition=None, obstacle_default=2.0, obstacle_ceiling=3.0,
+                             obstacle_refusal_multiple=3.0, leverage=lev)
     got = entry(inp, random.Random(7))
     again = entry(inp, random.Random(7))
     want = roll_net(4, rng=random.Random(7)) + net_boost(lev, 4)
@@ -85,14 +86,25 @@ def test_the_social_contest_entry_resolves_a_hand_built_record_importing_only_th
 def test_s27_4_refuses_on_the_derived_pair_strictly_above_the_multiple():
     """S27.4 at the host adapter (`seam/wrappers/sigma.py::resolve`): a derived obstacle EQUAL to the
     multiple times the pool is not refused; one strictly above it is, with the refusal's whole return.
-    The boundary call names no prize row, so it stops at the entry lookup (`ENGINE-UNAVAILABLE`) --
-    past the refusal, which is what it observes. A `>=` in the rule fails the first assertion."""
+    ⚠ SINCE v9 SC-01 STEP 14 THE PAIR IS THE ENTRY'S (the module composes the obstacle), so the call
+    names a real prize and a driver registers the entry first; the ceiling is the uncapped control
+    (`None`), since the shipped ceiling (2) keeps every obstacle at or under 2 x a 1D pool. A `>=` in
+    the rule fails the first assertion; with the ceiling at 2 the second call is NOT refused (third)."""
+    import random
     from types import SimpleNamespace
+    from engine.season.data.fixtures import DEFAULT_FIXTURES
+    from engine.season.harness import probes as P
+    from engine.season.loop.driver import SeasonDriver
     from engine.season.seam.wrappers import sigma
-    fx = {"pool_default": 2, "obstacle_default": 4, "obstacle_refusal_multiple": 2}
+    SeasonDriver(P.tiny_world(DEFAULT_FIXTURES))      # the registrar fills MODULE_ENTRIES
+    fx = {"pool_default": 2, "obstacle_default": 4, "obstacle_ceiling": None,
+          "obstacle_refusal_multiple": 2}
     w = SimpleNamespace(persons={"p": SimpleNamespace(capability={})}, fixtures=fx)
-    at = sigma.resolve(w, ["p"], ["c"], "no_such_prize")
-    assert at["status"] != "REFUSED", f"ob 4 == 2 x pool 2 was refused: {at}"
+    at = sigma.resolve(w, ["p"], ["c"], "a standing", rng=random.Random(0))
+    assert at["status"] == "RESOLVED", f"ob 4 == 2 x pool 2 was refused: {at}"
     fx["obstacle_default"] = 4.5
-    assert sigma.resolve(w, ["p"], ["c"], "no_such_prize") == dict(
+    assert sigma.resolve(w, ["p"], ["c"], "a standing", rng=random.Random(0)) == dict(
         status="REFUSED", why="S27.4", module="sigma_leverage", resolver="d10_sigma", pool=2, ob=4.5)
+    fx["obstacle_ceiling"] = 2
+    capped = sigma.resolve(w, ["p"], ["c"], "a standing", rng=random.Random(0))
+    assert capped["status"] == "RESOLVED" and capped["ob"] == 2.0, capped

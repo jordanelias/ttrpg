@@ -30,13 +30,26 @@ class SocialContestInput:
 
     Built by `seam/wrappers/sigma.py::contest_input` (the host input builder) from `World`:
       * `pool`      -- dice, from what the actor genuinely has (`sigma.py::_pool_of`);
-      * `ob`        -- what stands against it (`sigma.py::_obstacle_of`);
-      * `obstacle_refusal_multiple` -- S27.4's multiple, the fixture the host adapter refuses on
-                       before the entry is called (the module never sees a refused pair);
+      * `opposition` -- the subject's score on the verb's capability key when the subject is a person
+                       carrying one, else `None`. A RAW OPERAND, not an obstacle;
+      * `obstacle_default` -- the `H-127` stand-in for a subject with no score to halve;
+      * `obstacle_ceiling` -- the `H-213` bound on how hard one matter can get; `None` is the
+                       uncapped control arm;
+      * `obstacle_refusal_multiple` -- S27.4's multiple, the fixture the host adapter refuses on,
+                       on the pair the entry returns;
       * `leverage`  -- the σ-layer μ-shift. Zero until something supplies leverage: an `assumption`
-                       reading with no producer, stated as zero rather than fabricated."""
+                       reading with no producer, stated as zero rather than fabricated.
+
+    ⚠ NO `ob` FIELD, ON PURPOSE (v9 SC-01 step 14; ED-SC-0033 clause (3), *the obstacle has a single
+    owner*). The obstacle is COMPOSED by the module (`modules/social_contest/roll.py::obstacle`) from
+    the three operands above; the host carries them and composes nothing, so a host-side obstacle has
+    no field to travel in. `engine/season/tests/test_sc01_obstacle_ceiling.py` fails if one returns.
+    ONE RECORD IS ONE MATTER'S DRAW: the ceiling bounds each matter's obstacle on its own and nothing
+    aggregates obstacles across a bundle (ED-SC-0038's per-matter pick, `H-213`)."""
     pool: int
-    ob: float
+    opposition: Optional[float]
+    obstacle_default: float
+    obstacle_ceiling: Optional[float]
     obstacle_refusal_multiple: float
     leverage: float
 

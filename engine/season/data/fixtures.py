@@ -409,14 +409,14 @@ DEFAULT_FIXTURES = Fixtures(
     # specific modifiers exist for them in that instance"*, which reads off a PERSON; a record, a
     # rung or a proposition has no such score, and this stands in there. **NO "Base Ob by scale"**
     # (Jordan, 2026-09-05) — the scale of the thing is not the obstacle.
-    # ⚠ AND IT IS REGISTERED AS AN nth SITE IN A FAMILY THE TREE RECORDS AS DISAGREEING, not as a
-    # single owner arriving: ED-SC-0033 clause (3) names the PROCEEDINGS SUBSYSTEM as the
-    # obstacle's owner, and `interim: true` on the prize row is what carries that tension.
+    # ⚠ SINCE v9 SC-01 step 14 IT IS AN OPERAND, NOT A SITE: `modules/social_contest/roll.py::obstacle` composes it with the ceiling below (ED-SC-0033 cl. 3, one owner).
     # [JUSTIFIED: engine/season/hole_register.yaml H-126 -- `site: Fixtures pool_default`, graded `assumption`; `capability` is the declared source and is empty on every corpus person, so the magnitude is injected and swept]
     pool_default=2,
     # [JUSTIFIED: engine/season/hole_register.yaml H-127 -- `site: Fixtures obstacle_default`, graded `assumption`; the ruled derivation is `score/2` and reads off a PERSON, so a non-person subject takes this injected and swept stand-in]
     obstacle_default=2,
     obstacle_refusal_multiple=2,
+    # [JUSTIFIED: engine/season/hole_register.yaml H-213 -- `site: Fixtures obstacle_ceiling`, graded `assumption`; M-7 fails at the 1D floor above 2 (p_success 0.0006 at Ob 3), and 2 = obstacle_refusal_multiple x the 1D floor; swept 1 / 2 / 3, `None` the uncapped control]
+    obstacle_ceiling=2,
     # S12.1 gates verbs on `condition` against per-kind band FLOORS. S22 assigns "band
     # coefficients" and "the obstacle floor" to params; the params document proposes NO
     # VALUES, so these are harness fixtures and A31c sweeps them. S42.2.1 names "three band

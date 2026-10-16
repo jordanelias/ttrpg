@@ -47,8 +47,9 @@ that, and this file's own DOMAIN (the `(net, ob)` pairs every ladder is swept ov
 where `ob` came from -- it does not itself compute Ob for anyone. STATUS, corrected 2026-09-29
 (ED-PC-0058) rather than left to re-drift: `combat_engine_v1/core.py::ob_from_defender` now derives
 it (defender.history/2, no per-instance modifier yet) and every `resolve()` call site passes it;
-`engine/season/seam/wrappers/sigma.py::_obstacle_of` derives it for a person subject on the season
-side (H-127 covers the non-person fallback only). Neither of those is this file's ladder-migration
+`modules/social_contest/roll.py::obstacle` derives it for a person subject on the season side, under
+an injected ceiling (H-213; H-127 covers the no-score fallback; the seam's own site was deleted at v9
+SC-01 step 14). Neither of those is this file's ladder-migration
 concern below, and this paragraph makes no claim about any OTHER subsystem's call sites, which this
 file has not swept. An earlier draft asserted "implemented NOWHERE" as an unqualified fact, which
 is the failure mode this module exists to guard against, committed in the guard's own docstring --

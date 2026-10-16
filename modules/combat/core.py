@@ -101,7 +101,7 @@ def ob_from_defender(defender):
     """RULED Ob-derivation (Jordan, 2026-08-15, verbatim: "DECISIVE_OB for combat is stupid as hell and is dead
     because Ob should be determined by your opponent more than anything" — tests/valoria/test_degree_ladder_
     single_owner.py's RULINGS dict, entry "2026-08-15 — combat, and the sequence"). Score/2 plus that instance's
-    modifiers, the SAME reading engine/season/seam/wrappers/sigma.py::_obstacle_of applies for a person subject
+    modifiers, the SAME reading modules/social_contest/roll.py::obstacle applies (under its H-213 ceiling) for a person subject
     on the season side. This resolver's own score is `history` — the SAME score resolution_pool() derives dice
     from (ED-901); combat_engine_v1 has no separate 'capability' surface, so History (a person's combat
     aptitude) is the natural single reading, not a second one invented for this call site.

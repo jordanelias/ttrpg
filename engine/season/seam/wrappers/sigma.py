@@ -3,12 +3,12 @@ module's roll (plan position `31a`, A-25).
 
 `04_CODE_ARCHITECTURE.md` §A.2:182 types `seam/wrappers/*` as writing *"nothing, ever"*, reading
 *"the projection"*, returning *"a `Margin`"*, holding token *"none"*. This module is that row. It
-DECIDES NOTHING: `contest_input` (the host input builder) derives a pool and an obstacle from what
-the actor and the subject genuinely have and freezes them into `queries/inputs.py::SocialContestInput`;
-`resolve` (the adapter) keeps S27.4's refusal, then calls the module entry the prize row names
-(`module_entry:`, registered in `manifest.MODULE_ENTRIES` from its composition row) and returns what
-it returned -- the net/ob pair as a dict, the shape `combat_seam` already returns and `degree_of`
-already grades. It NEVER returns a band; `seam/ladder.py` reads one by calling `degree_from_net`,
+DECIDES NOTHING: `contest_input` (the host input builder) derives a pool and reads the obstacle's raw
+operands from what the actor and the subject genuinely have and freezes them into
+`queries/inputs.py::SocialContestInput`; `resolve` (the adapter) calls the module entry the prize row
+names (`module_entry:`, registered in `manifest.MODULE_ENTRIES` from its composition row), keeps
+S27.4's refusal on the pair it returns, and otherwise returns what it returned -- the net/ob pair as a
+dict, the shape `combat_seam` already returns and `degree_of` already grades. It NEVER returns a band; `seam/ladder.py` reads one by calling `degree_from_net`,
 which is the single owner. The roll itself is `modules/social_contest/roll.py`, reached by string.
 
 ⚠ THIS DOCSTRING NAMES NO BAND, ON PURPOSE AND UNDER A MEASURED CONSTRAINT.
@@ -32,13 +32,15 @@ own, at `systems/social_contest/sim/contest/resolver.py:302`:
 
     net = roll_net(pool) + net_boost(lev, pool)
 
-⚠ **THE HOST STILL DERIVES AN OBSTACLE (`contest_input`), AND AN EARLIER READING OF ED-SC-0037 CLAIMED IT DID NOT.**
-`sigma_leverage.eff_ob` CONSUMES `base_ob` and is *"DISPLAY ONLY (not the resolution value)"* by its
-own docstring; `effective_ob` is a pure arg-order alias of it; `sigma_space_ob_shift` takes no
-`base_ob` at all and returns a shift. The live composition has the CALLER supply `base_ob`. So
-ED-SC-0037's cost 1 — *"the interim provider derives its own obstacle in-seam, which is an nth
-obstacle site"* — is UNCHANGED, not answered, and `interim: true` on the prize row is what carries
-it. ED-SC-0033 clause (3)'s single owner is the PROCEEDINGS SUBSYSTEM, not this module.
+⚠ **THE HOST NO LONGER DERIVES AN OBSTACLE (v9 SC-01 step 14).** `sigma_leverage.eff_ob` CONSUMES
+`base_ob` and is *"DISPLAY ONLY (not the resolution value)"* by its own docstring; `effective_ob` is a
+pure arg-order alias of it; `sigma_space_ob_shift` takes no `base_ob` at all and returns a shift. So
+the dice engine owns no obstacle, and ED-SC-0037's cost 1 — *"the interim provider derives its own
+obstacle in-seam, which is an nth obstacle site"* — stood until step 14 deleted that site
+(`_obstacle_of`): the obstacle is now composed by the social contest module
+(`modules/social_contest/roll.py::obstacle`, ceiling included, `H-213`), ED-SC-0033 clause (3)'s
+single owner. `interim: true` on the prize rows now carries clause (2) alone (the repoint, steps 13
++ 15).
 
 ⚠ **THE PLACEMENT QUESTION, ADJUDICATED AT THE SITE RATHER THAN ASSUMED.** `04 §A.2` read
 *"one wrapper per **deferred subsystem**"* (that line was since amended, ED-IN-0284 and ED-IN-0285; see 04:147-151), and `sigma_leverage` is not a deferred subsystem — it is
@@ -82,12 +84,13 @@ _PROVIDER = "sigma_leverage"
 def _capability(entity: Any, verb: str):
     """What `entity` brings to `verb`'s capability key, or `None` if it brings nothing.
 
-    ⚠ ONE READ, TWO CALLERS, AND THEY HAD IT TWICE. `_pool_of` and `_obstacle_of` each mapped the
-    verb through `VERB_CAPABILITY`, guarded a missing key, and guarded a missing entry — the same
-    three steps, differing only in WHOSE dict they read and what default they fall to. Those
-    differences are the callers'; the read is not. Returning `None` rather than a default is what
-    keeps it that way: the pool falls to `pool_default` and the obstacle to `obstacle_default`, and
-    neither is this function's to know."""
+    ⚠ ONE READ, TWO CALLERS, AND THEY HAD IT TWICE. `_pool_of` and the opposition read (then
+    `_obstacle_of`, deleted at v9 SC-01 step 14) each mapped the verb through `VERB_CAPABILITY`,
+    guarded a missing key, and guarded a missing entry — the same three steps, differing only in
+    WHOSE dict they read and what default they fall to. Those differences are the callers'; the read
+    is not. Returning `None` rather than a default is what keeps it that way: the pool falls to
+    `pool_default`, and the opposition's `None` reaches the module, which falls to
+    `obstacle_default`; neither is this function's to know."""
     key = VERB_CAPABILITY.get(verb)
     if not key:
         return None
@@ -109,24 +112,19 @@ def _pool_of(person: Any, verb: str, fx: Any) -> int:
     return int(have if have is not None else fx.get("pool_default"))
 
 
-def _obstacle_of(w: Any, subject: Optional[str], verb: str, fx: Any) -> float:
-    """What stands against it.
+def _opposition_of(w: Any, subject: Optional[str], verb: str) -> Optional[float]:
+    """The subject's score on the verb's capability key, or `None` -- a READ, not an obstacle.
 
-    ⚠ THE RULING IS `score/2 PLUS MODIFIERS` AND IT APPLIES TO A PERSON, which is the only subject
-    this can read a score off. Jordan, 2026-08-14, carried live in `dice_engine.py`: an opposed
-    obstacle is *"their corresponding score/2 plus whatever specific modifiers exist for them in
-    that instance"*. So when the subject IS a person, the obstacle is half the capability they bring
-    to the same key; when it is a record, a rung or a proposition, no score exists and the registered
-    fixture stands in.
-    ⚠ **NO "BASE Ob BY SCALE"** (Jordan, 2026-09-05). The scale of the thing is not the obstacle.
-    ⚠ AND THIS IS REGISTERED AS AN nth SITE IN A FAMILY THE TREE RECORDS AS DISAGREEING, not as a
-    single owner arriving: `H-127` carries that, and ED-SC-0033 clause (3) names the proceedings
-    subsystem as the owner this defers to."""
+    ⚠ v9 SC-01 step 14 DELETED THIS MODULE'S OBSTACLE SITE (`_obstacle_of`; ED-SC-0033 clause (3),
+    *the obstacle has a single owner*). What it composed -- `score/2`, the `obstacle_default`
+    stand-in, and now the ceiling -- is `modules/social_contest/roll.py::obstacle`'s. What stays
+    here is the half only the host can do: reading `World` for the score a PERSON subject brings
+    (`None` for a record, a rung or a proposition, or a person with no entry)."""
     if subject and subject in w.persons:
         have = _capability(w.persons[subject], verb)
         if have is not None:
-            return float(have) / 2.0
-    return float(fx.get("obstacle_default"))
+            return float(have)
+    return None
 
 
 def contest_input(w: Any, claimants: list, *, verb: str = "",
@@ -138,11 +136,14 @@ def contest_input(w: Any, claimants: list, *, verb: str = "",
     PARTY-GAP checks (`resolve`, below): at least one claimant, and the first a person.
     `leverage` is zero until something supplies leverage -- an `assumption` reading with no
     producer, and stating it as zero is the honest form: a fabricated leverage would be a number
-    nobody chose."""
+    nobody chose. The obstacle's operands are carried RAW (`opposition`, `obstacle_default`,
+    `obstacle_ceiling`); the module composes them (step 14)."""
     fx = w.fixtures
     return SocialContestInput(
         pool=_pool_of(w.persons[claimants[0]], verb, fx),
-        ob=_obstacle_of(w, subject, verb, fx),
+        opposition=_opposition_of(w, subject, verb),
+        obstacle_default=fx.get("obstacle_default"),
+        obstacle_ceiling=fx.get("obstacle_ceiling"),
         obstacle_refusal_multiple=fx.get("obstacle_refusal_multiple"),
         leverage=0.0)
 
@@ -179,7 +180,13 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     ⚠ S27.4 IS EVALUATED HERE, ON THE DERIVED PAIR, AND THE DRIVER'S OWN BRANCH KEEPS ITS JOB. The
     fold already refuses an act whose HAND-DECLARED `obstacle` exceeds the multiple; this refuses on
     the pair the provider derived. One rule, two inputs, and neither site re-evaluates the other's —
-    which is §8's *the rule lives once* stated for a rule with two legitimate operands."""
+    which is §8's *the rule lives once* stated for a rule with two legitimate operands.
+    ⚠ SINCE v9 SC-01 STEP 14 IT IS EVALUATED AFTER THE ENTRY, on the pair the entry RETURNS: the
+    obstacle is the module's (`roll.py::obstacle`, ED-SC-0033 clause (3)), so the host has no pair
+    until the entry has run. A refused act's roll is discarded; its generator is the act's own
+    (`H(seed, tick, subject, purpose)` above), so no other act's draw moves. Under the shipped
+    ceiling (`H-213`, 2 = the multiple x the 1D floor) a derived pair with a pool of 1 or more is
+    never refused here; only a pool below the floor is."""
     if not claimants:
         return dict(status="PARTY-GAP", why="a contest needs at least one claimant",
                     module=_PROVIDER)
@@ -187,10 +194,11 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
         return dict(status="PARTY-GAP", why=f"claimant is not a person: {claimants[0]!r}",
                     module=_PROVIDER)
     inp = contest_input(w, claimants, verb=verb, subject=subject)
-    if inp.ob > inp.obstacle_refusal_multiple * max(inp.pool, 0):
-        return dict(status="REFUSED", why="S27.4", module=_PROVIDER,
-                    resolver="d10_sigma", pool=inp.pool, ob=inp.ob)
     entry, refusal = entry_for(prize, _PROVIDER)
     if entry is None:
         return refusal
-    return entry.fn(inp, rng)
+    out = entry.fn(inp, rng)
+    if out.get("status") == "RESOLVED" and out["ob"] > inp.obstacle_refusal_multiple * max(out["pool"], 0):
+        return dict(status="REFUSED", why="S27.4", module=_PROVIDER,
+                    resolver="d10_sigma", pool=out["pool"], ob=out["ob"])
+    return out
