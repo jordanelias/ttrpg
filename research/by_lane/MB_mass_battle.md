@@ -720,3 +720,46 @@ No verb is recommended for cutting. `march` keeps an N-line (§9.1).
 | ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
 |---|---|---|---|---|---|
 | K-MB-12 | Before a march, show the marching person their own mustered weight, and their **own claims** about the target's defenders and walls, as the arithmetic of what they hold | M-MB-10; §9.4 E-LEGIBILITY; audit A3 [AUDIT]; R-07 (imperfect knowledge) | **Takeable, step 5:** §C.11 says the engine owes "the ARITHMETIC of what the character already holds" (`04_CODE_ARCHITECTURE.md:849-855`) [AUDIT]. It reads existing queries (`mustered`, `fortification_of`). Its client surface waits on IN-47, which has no build batch | Adds one View field. Cuts nothing; no new store | The shown values equal the person's held values, and a person holding a false claim about the defenders is shown the false value |
+
+Group counts: PRIMITIVES 3, VERBS 2, MECHANICS 4, TEXTURE 2, SURFACE 1 (12). Takeable: K-MB-1 (form), K-MB-6, K-MB-7, K-MB-11, K-MB-12. Jordan: K-MB-2, K-MB-3, K-MB-4, K-MB-5, K-MB-8, K-MB-9, K-MB-10.
+
+---
+
+## 11. METHOD NOTE (sections 7–10)
+
+**Opened myself, at HEAD `5445e34`:**
+- **Code and season data.** `modules/mass_battle/massbattle.py` (the module docstring, :60-90, :101, :165-375); `config.py` (:40-41, :117, :143-150, :279-296, :529-533, `__all__`); `orchestration.py` (:288-290, :333-335, :1815-1850, :2221, :2256-2270); `hierarchy/units.py:2703-2811`; `troop_types/registry.py:140-160`; `equipment/weapons.py:12-22`; `engine/season/seam/ladder.py:183-226`; `seam/wrappers/mass_battle.py:1-75, :236`; `loop/effects_combat.py:179-275`; `queries/world_q.py:1144-1155, :1249-1274`; `queries/faction_q.py:228-242`; `harness/populated.py:393-441`; `verb_table.yaml:664-697`; `requirements.yaml:24-46, :101-142, :1124-1125`; `hole_register.yaml` H-148..H-152 heads, :3255-3268, :3324-3340, H-175 head; `data/fixtures.py` field knobs.
+- **Plan.** `_part4:30-38, :120-141`; `_part5:81-87, :158-175`; `_part6:222` (by grep); `_part7:15-34, :49-52, :160-185`; `valoria_master_workplan_v9.md:366-369`; `_part2:170-181`; `proposals/2026-10-07-settlements-computation-modules.md` (troop lines); `proposals/2026-09-30-character-and-play-surface/README.md:60-72` and `08_mass_battle_units.md:125-130`.
+- **Canon and records.** `canon/04_game_design_constraints.md` GD-1..GD-3; `registers/editorial_ledger_mb.jsonl` and `HANDOFF_MB.md` (by grep).
+- **Uploads.** The audit (`9d5d80bf`) at :50-63, :65-229 and :320-509; 13G (`b42377f7`) at :20, :33, :36, :68-90, :133, :145, :246-249, :296-299, :424-438; 20G (`6039edcc`) at :120-130, :221-229, :349-361.
+- **Ran:** the field probe (7.1); `pytest engine/season/tests/test_march.py -q` (11 passed); every absence grep quoted in §8.2 and 7.2; MB-08's own falsifier.
+
+**Taken without re-opening:**
+- From this file's §0–§6: the measured realm figures (largest side 6, total weight 120), the MBG and PFF evaluations, and the `config.py` provenance tags.
+- From the extractions: R1/R2/R3 T and G; R4 T, K and G; R8 T, K and G; D2 G and H; UP04 in full. A7's doctrine status [READER].
+- From the audit: A1, A2, A3, A5, the E-watchlist, G1/G2b/G2c/G3 and the §C.11 quotation [AUDIT].
+
+R9 (HEMA fact files) holds no mass-battle content and is not cited. E1a and E1b were used only as §1–§4 already cite them.
+
+**Upload corrections applied to §0–§6: none.** None was assigned, and none was found to be needed. A grep of `/root/.claude/uploads/3f6de207-…/` for `battle`, `formation`, `rout(s|ed|ing)`, `levy|levies`, `Total War`, `Empires in Arms` and `mass battle` returns hits in about 30 of the 58 files. Most are April-era Valoria design documents that describe the retired board-game mass battle (`2ebe4363`, `fe976a0d`, `a777df75`, `1550cd79`'s GM-era "Investigation → Mass Battle" transition), or the audit itself. **The uploads contain little new mass-battle material.** What bears on the lane is game precedent, folded into §7 (T-MB-3, T-MB-5, T-MB-6, T-MB-12, T-MB-14) and §8 (M-MB-5, M-MB-6, M-MB-7):
+- 13G's Empires in Arms row: "troop classes are distinguished mainly by morale. Leaders are fixed-value counters with ratings that bear on battle"; one clock, battles by strategy selection (:75, :298).
+- 13G's Total War: Rome II row: fill-to-own provinces; occupy, loot or raze traded against public order; secession risk on territorial loss; statesmen holding office until an army needs a leader (:82-89).
+- 13G's F4 "two clocks" (:248), and its CK2, Imperator, KoH II, GK2 and JA2 battle and levy lines.
+- 20G's asymmetry A3 and Proposal F (:229, :349-361).
+
+13G's Part 4 proposals and 20G's Proposal F are the documents' own unplayed designs (`b42377f7`:584), not precedent, and are cited as such. No §0–§6 statement depended on the uploads being absent, so no repetition needed fixing.
+
+**Could not check:**
+- `aperture 4 0` and `corpus_run` were not run (cost). T-MB-13 and the §9 R-CHOICE dominance are measured at the resolver and **predicted** for the built season.
+- C3 (what a marching person can know of the defenders) was not evaluated.
+- Whether any `systems/mass_battle/sim/` harness army runs at single-digit troops was inferred from the floor and the gauge rows, not swept (T-MB-3).
+- The ruled auto/manual doctrine was read through A7 only; it is quarantined.
+- `03_VERBS_AND_LOOPS.md:286-289` and `04_CODE_ARCHITECTURE.md:849-855` were taken from the audit [AUDIT].
+
+**[CONFIDENCE: medium]**
+- **The probe's working floor ("about 100–120 troops").** n = 5 per cell, one shape (one Line subunit). It locates a threshold; it does not measure one.
+- **T-MB-3's "no harness visits this domain".** Inferred, as above.
+- **M-MB-13's weight as a demand.** R-05's alternative clause (`aperture`) may already count `march` as executed. The D4 "remainder unowned" line is the whole of its demand.
+
+**[CONFIDENCE: low]**
+- **The independence counts in 7.1.** They rest on R4 K11's shared-ancestor finding and on 13G's identity as the ENP v2 "D2" document (UPLOAD_CHECKS). Whether COMP's dossiers drew on 13G was not traced.

@@ -478,7 +478,8 @@ rewordings), written at `092fc45`. Between `092fc45` and `5445e34` the non-test 
 `cache.py`, `carriers.py`, `log.py`, `world.py`, `epistemic.py`, `options.py`, `verbs.py` (`git diff --stat 092fc45 HEAD`); the dice, seam,
 chooser and `deliberate.py` lines the audit cites did not move. [AUDIT] marks a claim taken from it and not re-opened.
 
-**Verdict.** Thirteen throughlines hold in this lane: seven repository patterns, three failure shapes, two convergences and one null. The
+**Verdict.** Thirteen throughlines hold in this lane, by primary kind: seven repository patterns (T-IN-1, -2, -3, -4, -8, -9, -11), one
+failure shape (T-IN-6; T-IN-3 also carries failure shape A), three convergences (T-IN-5, -10, -13) and two nulls (T-IN-7, -12). The
 strongest is T-IN-1 (persons differ in what they want, not in what they can do), which reaches every resolver in the season loop and which no
 v9 position closes. Two document-stated throughlines are wrong as filed (PREC-NULLS N-9; COMP "six of eight, Valoria owns the primitive").
 
@@ -868,3 +869,128 @@ GRADE: paper for the planned-built object; one execution artifact for the shippe
 (`python -m engine.season.harness.register --requirements`, run 2026-10-16 at `5445e34`: "met 3 · not_met 1 · partial 5", EXIT 0). Not run:
 `corpus_run`, `aperture 4 0`, any test file, any multi-season run.
 ```
+
+## 10. KEY RECOMMENDATIONS
+
+This is an audit-design pass over six months of repository work. Jordan, 2026-10-16: it "gets permission to be whatever it is". The
+recommendations below are this pass's output; none is entered in the plan or a ledger until Jordan so rules.
+
+### 10.0 Top five, worst problem first
+
+1. **K-IN-1** — rule one source for per-person capacities that every resolver reads (T-IN-1; M-IN-1).
+2. **K-IN-9** — build the derivation the architecture already owes the player, with an estimated band of odds (M-IN-3; T-IN-10).
+3. **K-IN-10** — put IN-46 and IN-47's builds in a batch (M-IN-2; without it M1 cannot be met under v9).
+4. **K-IN-4** — give computed-play execution of the seat verbs one owner (M-IN-4; H-IN-1).
+5. **K-IN-6** — let a battle pause for a person's act inside it (M-IN-6; T-IN-7).
+
+### 10.1 PRIMITIVES
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-IN-1 | Rule one source for per-person capacities that the contest pool, the `Combatant` and the season force all read, or rule that identical capacities are intended and withdraw the claim that personal-scale resolution varies by person. | M-IN-1, H-IN-2, H-IN-4, T-IN-1 (code [CHECKED], 3 subsystems); NERS R-VARIETY | **Jordan**: survives all five — (1) nothing supersedes it; (2) combat and mass battle are retained scales (`requirements.yaml` `scales:`); (3) K-2 "not ratified", J-13's remainder is J.2 rank 1; (4) precedent conflicts — Jordan's "pool only … a derived score … not a character attribute" for the contest (`_part2`:414) against K-2's `Person.attributes` for combat; (5) both options are lawful and give materially different games | adds one per-person source (one field or one derivation from authored data); cuts `pool_default`/`obstacle_default` as person stand-ins, `party_end`'s single-field mapping, and the K-1/K-5/M-2…M-6 LEAVE rows it answers | two persons with different authored capacities give different `tell` degrees and Felled rates over the same seeds; identical capacities reproduce today's `content_hash` |
+| K-IN-2 | Delete the chooser's two inert terms, `urgency` and `benefits_me`, and drop `urgency` from IN-62's planned `score_terms` triple. | §9.2 false N-lines (disqualifiers 5 and 2) [CHECKED `choose.py`:150-193]; audit G5 | takeable, step 3: `urgency`'s own docstring calls it a §F2 defect; `benefits_me` has no caller. **Whether ED-IN-0261's self/other weighting is ever built stays Jordan's** (audit G5, unchanged at `5445e34`) | adds nothing; cuts ~50 lines, one test (`test_w5_…`), one slot in IN-62 | `World.content_hash()` equal at seed 0 before and after (inert by construction) |
+
+### 10.2 VERBS
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-IN-3 | Delete `_drop_what_was_already_done`, so a person may spend a season repeating an act as Layer 1 says they may. | §7.2 item 1; §9.6 clean hit [CHECKED `deliberate.py`:225, :305; `03`:138-140]; audit A5a/G4 | takeable, step 3 (Layer 1 forbids it verbatim; its basis is a reference document). If R-03 goes red, the filter is load-bearing on a Jordan requirement and amending 03 §C.3 becomes his | adds nothing; cuts one function and its call | `pytest engine/season/tests -k test_u2_` (R-03's `measure:`) stays green |
+| K-IN-4 | Give one position the job of making `confer`, `establish` and `revoke` execute in computed play with `Act.via` set, owning H-207's four causes, instead of leaving R-04 (1) and R-05 to "no position is invented to fix it". | M-IN-4, H-IN-1, T-IN-9 [CHECKED `_part5`:65; `_part2`:211-213, :270-276; HR H-207] | takeable, step 4: the plan itself answered "built out" as computed play on U7's precedent (`_part2`:270-273 [CHECKED]); a requirement read in computed play needs an owner in computed play. The named revert (m:134, `met` read DONE-test) is the other option and is Jordan's | adds one position (no code object); cuts the "named residue" path for these three verbs and B-JR's orphaning of `establish` | `aperture 4 0` shows each of the three executing ≥ 1 with `Act.via`; R-04's `measure:` reads it |
+
+### 10.3 MECHANICS
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-IN-5 | Grade every scale's roll on one die substrate whose per-die figures live in one place, with an obstacle rule under which a more capable equal pair never has worse odds. | T-IN-2 [CHECKED 4 owners; `core.py`:60 vs `roll.py`:35]; §9.1 sawtooth (executed); audit G2a, G2d | split: **one owner of the per-die pair is takeable, step 4** (CLAUDE.md §8; `degree_from_net`'s guarded single owner). **The substrate and the half-integer rule are Jordan's**: they re-read his score/2 ruling and move combat balance (two lawful readings, different odds shapes) | adds nothing; cuts three literal owners and either the continuous main roll or the season's ceiling lattice | a grep finds 0.40/0.80 defined once; the export `--check` round-trips stay green; the 9.1 table is monotone in c |
+| K-IN-6 | Let a battle stop at its phase boundaries for a present person's act — a general's duel, a thread act — and resume with the result, using ENCOUNTER's barrier as the grid design already does. | M-IN-6, T-IN-7 [CHECKED `massbattle.py`:281-283; `orchestration.py`:333-335]; §9.5 pause FINDINGS; audit A2 | takeable, step 4 for the form: IN-46's suspension at ENCOUNTER (`proposals/2026-10-07-grid-mode-suspension.md`, re-read at B-L) is the tree's precedent for pausing inside ENCOUNTER; which acts may interrupt is MB/WR lane design | adds one yield point in the 18-tick call (3 phases × 6); cuts the empty `threadwork_check` hook and M-6's LEAVE row | a seeded field in which a duel between the two commanders, resolved through `fight`, changes the field's result against a control where it is forbidden |
+
+### 10.4 TEXTURE
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-IN-7 | Let what a person is believed to have done depend on who saw it and whether their word has held: give refraction its competence input from K-IN-1's source, and reconcile declared intents against later deeds. | M-IN-7, M-IN-8, T-IN-13 [CHECKED HR H-200, H-191; `witness.py`:495]; audit A9 | competence: takeable, step 3 (AX-7 names it as an input, `01`:278-281) once K-IN-1 is ruled; intent reconciliation: takeable, step 5 (the pairing step and its `ABSENT: H-191` marker exist in `options.py::record`); **the performer's own fallible reading (AX-7 layer 2) is Jordan's**: "may be wrong" read as permitted or owed gives different games | adds no store (competence reads K-IN-1's source; reconciliation reads intent claims and deed claims the ledger already holds); cuts H-200's constant 1 and two absent rows | two observers of one act with different competence hold it at different confidence; a teller whose declared intent went unkept is credited less than one who kept it |
+| K-IN-8 | Make every act-minted Proposition and Record say what it is about, or delete the fields that are always empty. | M-IN-9, T-IN-4 [CHECKED `narration-mechanisms.md`:38-53; HR H-185] | takeable, step 5 for deletion of the OUGHT `predicate` read by nothing if IN-66's goals carrier supersedes the `ought:` cast field; a reader for it is Jordan's (a verb × predicate magnitude nobody has ruled, H-185 `unblocks:`) | adds nothing, or one reader; cuts H-185's dead field | the narration measure, re-run on its committed form: act-minted Propositions with an empty predicate fall to 0, or the field no longer exists |
+
+### 10.5 SURFACE
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-IN-9 | Build `explain(p, v)` as Layer 1 declares it and use it to show the player an estimated band of odds computed from the claims the actor holds about the subject, never from the subject's true capability. | M-IN-3, T-IN-10, §9.3 C2 [CHECKED `04_CODE_ARCHITECTURE.md`:847-863; `grep "def explain"` → 0]; audit A3 legibility | takeable, step 3: Layer 1 §C.11 declares the signature and its no-`World` rule; the band-not-trigger shape is COMP S6 (research, tier 3, vocabulary only) | adds one declared function (no new store: it reads `PersonInterior`); cuts the need for any separate odds display state | `explain`'s signature has no `World` parameter (a type test); two actors holding different claims about one subject are shown different bands for the same act |
+| K-IN-10 | Put IN-46's grid suspension and IN-47's character spaces into a build batch. | M-IN-2 [CHECKED `_part2`:209; `_part4`:32-41]; audit A2a | takeable, step 3: the plan states M1 cannot be met without it, both designs landed and were re-read. **Whether creation is an act (a person shaped by the player) or a selection ("no act; a cast entry", `_part4`:41) is Jordan's**: pick-a-person and make-a-person are different games (H-IN-3) | adds one batch; cuts two "named residue" rows in the R-04 scale table | R-04's two `scales:` rows read `in_loop` with an execution artifact named; `register --requirements` reports it |
+
+### 10.6 APPARATUS AND PROCESS (IN only)
+
+| ID | recommendation | grounded in | §0 ladder | adds / cuts | falsifier |
+|---|---|---|---|---|---|
+| K-IN-11 | Extend the existing `arms`/`aperture` harness to a seeded multi-season two-arm run of the shipped loop, rather than add a tool, so R-WORLD and R-CHOICE verdicts stop being four-season upper bounds. | M-IN-10 [CHECKED `_part8`:420 "keep the gap statement"]; CLAUDE.md §7 "no live successor — an open gap"; audit §10 GAP | takeable, step 5 (the gap is stated in Layer 0; extending an existing instrument adds no tool); loads on the game because every R verdict's denominator is it (§0.1 pt 5) | adds arguments to an existing harness; cuts nothing | a planted mechanic difference is detected over N seasons against a control arm that is identical by construction |
+| K-IN-12 | Delete what the game cannot read and re-point what lies: untrack `engine/season/runs/` output except `results.json`, fork-delete `params_tables.yaml`, re-point `requirements.yaml`:34-35's dead CANONICAL path, AX-7's stale falsifier sites, and mark GD-2's faction mandatory pass as superseded. | T-IN-11 [CHECKED 88,377 tracked lines; `ls` of `params_tables.yaml`; `requirements.yaml`:34-35; `01`:314-317 vs `witness.py`:532-850]; §7.2 items 2–4; audit X1, X3, G6(i), G8 | `runs/` and `params_tables.yaml`: takeable, steps 4 and 2 (ED-IN-0125 "generated artifacts evacuate"; no game reader). The two path fixes: takeable, step 1 (the files moved). AX-7's text lands by PR review (Layer 1). **GD-2: Jordan** — GD is mutable canon whose updates "require explicit Jordan ratification" (`canon/04`:23) | adds nothing; cuts ~87,000 tracked lines of output and 10,821 lines of a frozen capture | `report && delta` on a clean checkout gives the same deltas; `freshness_gate.py` and `currency_consistency_check.py` pass; a grep finds no runtime load of `params_tables.yaml` |
+
+### 10.7 The uploaded audit at `5445e34`: which findings and recommendations survive
+
+| item | at `5445e34` | how tested |
+|---|---|---|
+| A2 (a) callback player; (b) §C.11 vs AX-7 gloss; (c) dead CANONICAL path | survive | (a) `play_surface.py`:40-51, `_part4`:41; (b) `04`:845-863, `grep -c AX-7 04` → 0; (c) `ls`, `requirements.yaml`:34-35 [all CHECKED] |
+| A3 one ladder, several roads; non-monotone odds | survives, extended to c = 6 (sawtooth) | literals, substrates, vocabularies re-opened; §9.1 executed |
+| A4 (i) `urgency` inert; (ii) `benefits_me` no caller; (iii) OUGHT predicate; (iv) dark knobs; (v) no outcome term | (i)–(iv) survive; (v) not a missing area (§8.5) | `choose.py`:150-193; HR H-185; BASELINE B5 |
+| A5 (a) dedup contradicts 03 §C.3; S-UP petition; R-CHOICE `levy` | (a) and S-UP survive; `levy` table relied on | `deliberate.py`:225, :305, :355; `03`:136-140 |
+| A9 AX-7 falsifier fires by its letter | survives; sites moved again: :532, :648, :671, :700, :850; actor skip :495 | `witness.py` grep, `_refract` :231-239 |
+| T3, T4, T5, T6 | SOUND (T-IN-2, T-IN-3, T-IN-4, T-IN-11); T6's run-output count is now 88,377 (was 87,678) | §7.1 |
+| G1 per-person source | survives (K-IN-1) | `_part7`:44; `_part5`:514 |
+| G2a one owner of literals | survives (K-IN-5) | 4 owners re-opened |
+| G2b delete mass battle's four-label degree | survives (MB lane) | `ladder.py`:195-203 "stays there for introspection" |
+| G2c mass battle returns a margin | survives, Jordan's (MB) | as audit |
+| G2d one substrate | survives (PC; K-IN-5) | `core.py`:60 |
+| G3 weight→troop conversion | survives (MB) | `massbattle.py`:198-207 |
+| G4 delete the dedup filter | survives (K-IN-3) | as above |
+| G5 delete `urgency`, `benefits_me` | survives, **and v9 now plans the opposite for `urgency`**: IN-62's `score_terms -> (pursuit, stance, urgency)` (`_part5`:255 [CHECKED]) — K-IN-2 | |
+| G6 AX-7 falsifier re-point; narrow the gloss | survives; its line targets have moved since `092fc45` | K-IN-12 |
+| G7 `operations.py`:246 `min(3, history+3)` | survives (WR lane) | `operations.py`:244-247 [CHECKED] |
+| G8 re-point quarantined head rows; dead path | survives | BASELINE B6 (15 of 24 head rows name quarantined documents); `requirements.yaml`:34-35 |
+| G9 re-read candidate formation over several seeds | survives; not run here | — |
+| X1 untrack `runs/` | survives (K-IN-12) | 10 tracked files, 88,377 lines |
+| X2 move R-01/R-02 narrative out of `requirements.yaml` | survives [AUDIT]; the file grew 17 lines since `092fc45` | `git diff --stat` |
+| X3 delete `params_tables.yaml` | survives (K-IN-12) | `ls` |
+| X4 park module depth | survives | — |
+| X5 move `build_realm` into game code | survives | `harness/populated.py` still under `harness/` [CHECKED `git ls-files`] |
+| X6 archive resolved ED rows | survives [AUDIT] | not re-counted |
+| X7 apply §0.1 pt 5 to the process checks | survives | `ci_checks_registry.yaml`: `subject: compliance` on 32 rows [CHECKED] |
+| X8 delete `tools/evacuation_plan.py` | precondition still [UNVERIFIED] | file exists [CHECKED `ls`] |
+
+## 11. METHOD NOTE (sections 7–10)
+
+**Opened myself at `5445e34`.** The dice engine, `sigma_leverage.py`, the season σ wrapper, the contest roll, the combat core and wrapper and
+config, the combat seam, `combatant.py`, `massbattle.py` and `orchestration.py` at the cited lines, `seam/ladder.py`, `play_surface.py`,
+`choose.py` (inert terms, score, packing), `deliberate.py` (frozen world, dedup filter, petition note), `witness.py` (refraction, Claim
+sites), `effects_combat.py` (grudge rows), `fixtures.py` lines, `faction_q.at_war`'s docstring, `operations.py`:244-247, H-rows by YAML load,
+`verb_table.yaml` by YAML load (refusal emission), `01_AXIOMS.md`, `03_VERBS_AND_LOOPS.md` and `04_CODE_ARCHITECTURE.md` at the cited lines,
+`canon/04_game_design_constraints.md`, plan lines in v9 main, `_part2`, `_part4`, `_part5`, `_part7`, the narration-mechanisms table, the
+uploads at TD:19, :33, :49, :148, :191, :195, :231; 20G:221-245; N2:199, :245, :273, :369; 3S:1-8; and `git diff --stat 092fc45 HEAD`. Ran
+`python -m engine.season.harness.register --requirements` (EXIT 0) and the band-arithmetic script `scratchpad/in_lane/odds.py` (python -I,
+importing the repo's own die rule and ladder).
+
+**Taken from elsewhere.** Sections 0–6 of this file; BASELINE B1–B7 (plan index, verb classes, hole-register selection, dark knobs, heads);
+the uploaded audit (marked [AUDIT] where not re-opened: the `levy` R-CHOICE table, S-DOWN 4/1,270, the pause at `deliberate.py`:116, the draw
+key, cohort costs, `cast.py` loyalty, X2/X6 counts); reader extractions R4, R5, R8, W1–W3, C4_2, C8_2, E4_5, UP01–UP05 (T, K, G sections),
+marked [READER]; UPLOAD_CHECKS for the SFP and VCD attribution verdicts I did not re-open myself.
+
+**Upload corrections applied to sections 0–6 (Step 0).**
+1. §2.1 `VCD` App. B row: the [SESSION] rows tested against the uploads — Guild 2, DF/RimWorld/Sims, Manor Lords/Tropico CONFIRMED; Prom
+   Week/Versu PARTLY; Shadows of Doubt in no upload; Guild 3 F77 NOT IN THE SOURCE.
+2. §2.1 same row: `VCD`:125-127's [ASSUMPTION] that the labels are never expanded is superseded by 3S:5; N2 is the mechanical
+   specifications, not a compendium.
+3. §2.2 Guild 3 row: the case is the publisher's T1 account — townsfolk burned the **player's** residence at roughly every second launch, the
+   AI was switched off (TD:195; 20G:241); `VCD`:985's "producer's residence", `VCD`:183-184's "forum post that predates Early Access" and
+   F77's "popularity threshold" are not in either upload.
+4. §2.2 / §4.1 / §4.2 Pax Pamir pricing: content CONFIRMED against the teardown's T0 rulebook reading (TD:33, :49).
+5. §3.2 ENP v2 row and §5 GAP line: five of the seven pinned documents are now in hand (uploads, not tracked files) and hash-match; the two
+   earlier drafts are not; the surveys behind P1–P58/F01–F84 and *A Tells B About C* remain absent.
+6. §3.2 RULINGS row: the "nine-game teardown" ED-SE-0051 cites is in hand in its audited revision and supports capacity-as-gate only partly.
+No correction changed a §0 ranking.
+
+**Could not check.** IN-66's full entry (whether `goals.yaml` supersedes the `ought:` predicate, M-IN-9); the IN-12 step 5a docket routing end to
+end (petition addressee, 8.4); `results.json`'s two test readers (X1); the act-economy equilibrium; anything beyond four seasons; the
+committed audit's own claims about squad-engagement Parts A–D and UI Parts 4–10, which it did not read either.
+
+**Confidence.** [CONFIDENCE: medium] on T-IN-4's magnitude and R-WORLD (one uncommitted seed); on M-IN-7's layer-2 half (permitted vs owed is
+unruled); on M-IN-9 (IN-66 unread). [CONFIDENCE: low] on H-206's remainder. Counts in 8.1 are the tables' own; the five walks' raw count (82)
+is reported, not a de-duplicated derivation. Spawned no sub-agents: the reading was one lane and the critic stage is the orchestrator's.
