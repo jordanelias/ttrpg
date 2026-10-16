@@ -1190,8 +1190,10 @@ rows:
       "shortfall:<kind>", units)`, recorded by MATTER on a drained larder's write) names both.
       The fixtures stand in where the question names neither. IN-10 delivers the fanned ADDRESSEE
       (`to`) and, for Office/Rung/Record terms, `subject` through the classed stamps; Person terms
-      (a warrant, `arrest`/`seize`) and Proposition terms (a covenant, `commit`) have no route --
-      IN-12 steps 5, 5a, 6, 7 name this as their design edge [ASSUMPTION; medium; Jordan to correct].
+      (a warrant, `arrest`) and Proposition terms (a covenant, `commit`) have no route --
+      IN-12 steps 5, 5a, 7 name this as their design edge [ASSUMPTION; medium; Jordan to correct].
+      `seize`'s Record-term warrant (IN-12 step 6, B-M) reaches the verb through the `warrant_sourced`
+      roster (`decision/options.py`), a held-Record read, not through this channel.
     site:      >-
       `decision.operands_for` / `decision._derive_operand` / `decision.containing_rung_of` — the derivation;
       fixture `default_transfer_amount` in `DEFAULT_FIXTURES` — the value the design does not supply,

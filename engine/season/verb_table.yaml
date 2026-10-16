@@ -893,6 +893,38 @@ verbs:
     grade:       "ruled"
     eligibility_note: "⚠ W3 AUDIT: §E3's eligibility cell carried a PRECONDITION as well as the remit act — `remit:revoke + ...`. The fold split on the first `:` and tested the whole tail against the remit roster, so it NEVER MATCHED and a holder of the remit was silently refused. The act is the eligibility; the basis is a `requires`."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "seize"
+    scale:       "settlement"
+    scale_note:  "a seizure reaches the place its object is at, as `levy`'s reaches a rung: the exercised seat's purview over where the dispossessed holder lives"
+    stratum:     "uncontested_material"
+    eligibility: ["remit:issue"]
+    beneficiary: "none"
+    beneficiary_note: "v9 IN-12 step 6 (#453 `seize` row): `none`, `revoke`'s and `destroy_record`'s precedent for a non-consensual act on another's edge -- the taking is for the seat's warrant, and the Record's new holder is the actor, who is no operand's beneficiary here (no operand carries him)."
+    requires:    "the subject is a Record, and the exercised seat's purview reaches where it is"
+    requires_typed:
+      all:
+        - form:      existence
+          of:        subject
+          kind:      Record
+          conjunct:  object
+        - form:      basis
+          of:        subject
+          basis:     purview
+          conjunct:  authority
+    requires_typed_note: "v9 IN-12 step 6 (#453 §9.1, the `seize` row): `existence` of `subject` kind `Record` (conjunct `object`, as the row says), so a SEAT is refused here before any write -- an Office is no Record, and a `hold` on a seat is `conferral`'s and `T-o`'s alone (`state/gate.py`). PLUS `levy`'s `purview` conjunct (`authority`), the seat half of the gate's `seizure` basis asked of the precondition, so the seat refusing is `seize.unauthorized` and not a refusal for the world. [ASSUMPTION; medium; Jordan to correct; revert: drop the `authority` conjunct and the key -- the effect then declines the same act as `seize.refused` through `may_seize`.] ⚠ THE WARRANT IS NOT A CONJUNCT, AND THAT IS THE ROW'S OWN TEXT (*'the licence is the effect's: a held warrant naming the Record'*): it is a Record's content, which no form of the grammar reads and no gate basis may (K-52). Person-side it is `rosters.yaml: warrant_sourced` -- `seize` forms only on a `subject` a held dispensation's `terms` names (`decision/options.py::opening_set`) -- and world-side the effect (`loop/effects_information.py::_eff_seize`) reads the same held dispensation. ⚠ THE RUNG HALF IS NOT HERE: `seize` on a settlement under occupation is IN-13's (step 8), and `Record or Rung` is a disjunction the grammar lacks, so IN-13 takes `pardon`'s flat route and replaces this cell."
+    writes:      ["Tenure.until", "Tenure.since"]
+    writes_note: "ONE PER SIDE, `give`'s pair and for the same reason: the dispossessed holder's `hold` closes (`Tenure.until`) and the seizer's opens (`Tenure.since`), in ONE effect (`loop/effects_information.py::_eff_seize`), so the fold never sees two live holders. The gate admits the close under `seizure` (`state/gate.py`: `may_seize`) and the open as `T-m`, the actor opening a non-seat `hold` for himself. No `write_matrix.yaml` row is added: both pairs exist."
+    emits:       ["record.seized"]
+    emits_note:  "⚠ A NEW KIND, NOT `record.given` OR `tenure.closed`: `give` is consensual and `seize` is not, and a reader that asks whether a Record changed hands by consent must not read a taking. It is an act exercised through a seat (`Act.via`), so `_ch_post_remit` hands it to the obligees standing at that seat (`epistemic.py`: the seat is read off the causing act, never a broadcast by kind); `chronicle` keys on `binding_decision` rows and this row is `uncontested_material`."
+    emits_on_refusal:
+      eligibility: ["seize.unauthorized"]
+      object:      ["seize.refused"]
+      authority:   ["seize.unauthorized"]
+      write:       ["seize.refused"]
+    refusal_note: "KEYED PER CLAUSE (`04 §B.13` invariant 4's per-conjunct half), `levy`'s shape. `seize.unauthorized` -- the SEAT: none exercised grants `issue`, or its purview does not reach the Record. `seize.refused` -- the WORLD: the subject is no Record (a seat, a person, a rung), or the effect declined (no held warrant names the Record, the actor already holds it, or nobody else does). No counterparty clause: the row names no second party (K-04)."
+    grade:       "assumption"
+    grade_note:  "an argued addition (#453 §10.4 step 6): the matrix rows `(Tenure, until)` and `(Tenure, since)` are the tree's; the row, its `remit:issue` eligibility, the `seizure` basis and the warrant reading are v9 IN-12's, on #453 `:1412` and `:1662`."
+    source:      "v9 IN-12 step 6 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.1 `:1662-1698`"
   - verb:        "speak"
     stratum:     "social"
     eligibility: ["own"]
