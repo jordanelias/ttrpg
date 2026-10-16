@@ -502,3 +502,131 @@ H-207 and H-208; (d) NERS A1/T1, A4 (i)-(v) and its datum, A7, A9, T4, T5; (e) T
 11. **H-180, H-181, H-195** (a teller's stake, rank ordering, the `holder` operand): telling-lane rows, SC/SE.
 12. **Key-substrate designs** (RTP §3.4, compendium Part 40, ripple substrate): retired (ED-IN-0232).
 13. **A spawner on a clock**: refused by AX-5 and honoured (`generate_npc` has no production caller, A5b H).
+
+## 9. NERS PASS
+
+`[SELF-AUTHORED — bias risk: this pass audits a lane file written earlier in this session.]` Target: the person as code
+plus v9 with every position assumed built (the uploaded audit's assumption); the shipped state is recorded where it
+differs. **Instruments: A.** The chooser's Gumbel draw is the lane's only draw; `resolution-diagnostic` was not run.
+**Executed:** `python -m engine.season.harness.register --requirements` (met 3 · not_met 1 · partial 5; R-06, R-07,
+R-08, R-09 partial) and a scratch probe, `scratchpad/work/npc_change_probe.py` (shipped fixtures, `populated.run`, seeds
+0 and 1, two seasons), which observes change, since scar counts moved on 34 persons, and found: 0 persons with
+`capability`, no change to any `pursuits` or `conviction`, the 32 stance rows toward faction heads unchanged, **no
+stance row appended at all**, 11-12 deaths including five of six heads, and nobody individuated. Not run: `corpus_run`,
+`aperture 4 0`, any pytest file, the audit's own probes.
+
+### 9.1 N-line ledger
+
+| object | N-line (restated narrowly where narrowed) | attack run | result · direction |
+|---|---|---|---|
+| Claim ledger with `seen.who`, source and chain | Cut it and a person can neither be wrong about a deed nor learn it second-hand, so grievance by witness and belief in transit die (R-07) | Could stance rows carry it? A stance row `('p_npc_003', 1, 4)` [probe] has no date, source or truth value; it cannot be told, refuted or stale | **HOLDS** · bottom-up, lateral, horizontal. Vertical narrowed: a death reaches seat questions only for the holder half (H-206) |
+| Pursuit term of the score (`choose.py:403-406`) | Cut it and two persons in one seat choose alike, since stance is constant over candidates on plain referents at `legacy` [AUDIT A4] and capacities are equal (T-NPC-4) | Does stance or seat differentiate without it? Only through classed referents and remit | **HOLDS** · bottom-up; top-down once IN-69 orders goals by alignment |
+| `cast.loyalty` seed row | Narrowed: cut it and a witness of a head's death judges the killer with no allegiance to the dead man, because `deeds_judged`'s `_bond` reads the stored stance (`_part5:226`) | Is the cosine carried elsewhere? IN-69 moves it to `alignment`, so the **ordering** survives the cut (false in that direction); the stored row's grievance role does not | **HOLDS, NARROWED** · bottom-up only; in shipped play it reaches no choice (hash EQUAL at `legacy`, `_part5:225`) |
+| Scar count | Armed: cut it and a person who keeps seeing his values violated never bends | Shipped: the probe moved scar on 34 persons and nothing else; `scar_weight_shift` is 0 | **NOT SCORABLE** until H-187's value: a store with a producer and no live consumer is paper |
+| Convictions and doctrine pull (IN-64, IN-71) | Cut them and faith stops pulling persons, so a schism cannot run through a household | `confliction_weight` (damping) is dark with no arming position; IN-71's pull is a different term | **HOLDS** for IN-71 (assumed built) · lateral; confliction NOT SCORABLE |
+| `faction_leaders` + ED-IN-0201 gate | Cut it and a faction acts as a gauge, against AX-1 | Probe: five of six heads die in two seasons; the creed OUGHT is subject-ed on the head (`harness/populated.py:751-752`) and immutable | **HOLDS**, and breaks at its extreme (R-COMPLETE): a dead head leaves the creed naming a dead man until IN-61 |
+| `succeed` / heir title (IN-61, assumed built) | Cut it and the throne cannot be filled after the King dies: its own FALSIFIER refuses a regent's `confer` (`_part5:248`) | Can `confer` fill it? Not under IN-61's own falsifier | **HOLDS, NARROWED** · vertical; throne only (M-NPC-6) |
+| `tie / knot` (IN-32, assumed built) | Cut it and P-12's knot-borne drift has no path between persons | Stance rows are one-way and carry no partner operand (H-182) | **HOLDS** · lateral, diagonal (person → threadwork) |
+| Goals (IN-66…IN-69) | Cut them and every faction's members answer one shared OUGHT ("one shared OUGHT per world", `requirements.yaml` R-06 `measured:`, BASELINE B2) | Pursuits differ, but questions come from OUGHT commits | **HOLDS** · top-down |
+| `forgive` (IN-12 step 13) | Narrowed: cut it and a grudge ends only by **eviction** (`ledger_cap`, confidence × recency), which "nobody can witness" (`loop/witness.py:868-878`; `queries/world_q.py:1988-1990`) [CHECKED] | The possibility "a grudge ends" survives the cut via eviction; what dies is a **witnessed, chosen** ending | **HOLDS, NARROWED** · lateral (R-CHOICE: see 9.4) |
+| `urgency`; `benefits_me` | — | the audit's attack (report §5): `urgency` constant over candidates; `benefits_me` no caller [AUDIT, `choose.py:150-193` CHECKED] | **FALSE N-LINE** (`urgency`, disqualifier 5); `benefits_me` unscheduled, not free |
+
+### 9.2 False N-lines and the five checks
+
+- **False:** `urgency` (re-opened, `choose.py:185`); `cast.loyalty` as an **ordering** input once IN-69's `alignment`
+  exists (disqualifier 1: the carrier exists). Not false: the stored seed row (grievance).
+- **C1 (claim → mechanism).** "Characters … with goals, ambitions" (R-06): an ambition's content has no carrier (H-185,
+  M-NPC-4). "Loyalty 0-100": carried at build only. **C2.** `deeds_judged` judges only `PAIRED_KINDS` (death, wound,
+  undecided contest; `_part5:226`), so being revoked or passed over cannot be judged as a wrong done to oneself; the
+  type does not admit the input T-NPC-1 needs. **C3.** Opinion of a faction is evaluated at read from the reader's own
+  claims (IN-70, "nothing stored") — PASS. **C4.** `effects_combat.py:203` says the defeat rows follow the loyalty
+  shape while writing a different referent (§7.2 item 1). **C5.** Showcase "the King dies and the heir claims": shipped
+  objects exist for the death (fight), the holder half of the vacancy (H-206) and `off_heir`; the claim (`succeed`),
+  the throne's `inheritance` basis and the heir's question are planned (IN-61) → **expressible, not implementable**
+  until B-R.
+
+### 9.3 E (scored last, against N and R)
+
+- **E-OVERHEAD: FINDINGS.** `Person` has 12 fields (`state/carriers.py:645-676`); in shipped play 2 differ between
+  persons beyond identity and place (`pursuits`, `stance`), `capability` is empty, and `scar` accrues without a reader.
+  Nine person-level knobs ship dark (§8.4, M-NPC-3); four person carriers are inert (`benefits_me`, `urgency`, the OUGHT
+  predicate, `competence = 1`). v9 adds goals.yaml with two rosters, a `successions` registry and an opinion query, and
+  deletes nothing in this lane. The vocabulary is larger than the behaviour (T4). The shape is small because capacity
+  and change were amputated, not because it was distilled.
+- **E-LEGIBILITY: FINDINGS.** The pursuit → act path runs through 15 pursuits × 7 axes onto 45 verbs [AUDIT]; no surface
+  shows any of it (M-NPC-7). A player cannot predict who will betray whom.
+- **Watchlist.** Cohort as one Person at weight: kept, MEDIUM (it cannot dissent, be mustered or die in part [AUDIT]).
+  Loyalty as a cosine of authored vectors: kept, LOW (the only allegiance seed; its cost is that it cannot move).
+  Conviction as religious affiliation only (STR-6): kept, MEDIUM (the thirteen-value moral roster's depth is folded into
+  pursuits, ED-IN-0261).
+
+### 9.4 R
+
+- **Seats.** The player is an ordinary Person (IN-47: development is "the player's own `View`/`Question`/`Candidate`,
+  acting into the chooser slot", `_part4:41`); which seats a campaign offers at start is not ruled. Favourable R-CHOICE
+  findings are PROVISIONAL.
+- **R-CHOICE.** `SEAT: a faction head` · `INTENT: be rid of a subordinate`:
+
+  | act | gain | cost |
+  |---|---|---|
+  | `revoke` | the seat | never executes in the realm (H-207); IN-31 assumed built: `ban` for an appointed seat |
+  | `fight` | the man and his seat | a deed judged at read by witnesses, reaching choice only under `declared` (hash EQUAL at `legacy`) |
+
+  Shipped: **`fight` dominates strictly** (the probe's deaths are its trace). Assumed built: IN-59 adds an access gate
+  and IN-70 turns grievance into faction-level referents; dominance is then an act-economy question (IN-14 ask-then).
+  `SEAT: any member` · `INTENT: end a grudge`: let it be evicted (silent, no event) vs `forgive` (witnessed). **Silence
+  beats refusal**: eviction dominates unless `forgive` buys something eviction does not. Upper bounds only.
+- **R-VARIETY: FINDINGS** — one capacity profile for all (T-NPC-4). **R-WORLD: FINDINGS** — the world emits deaths
+  unwatched (probe), but nothing follows them except the throne's planned claim: no vacancy (M-NPC-6), no birth, no
+  promotion. **R-COMPLETE: FINDINGS** — the leader object breaks at its extreme (dead heads, immutable creed);
+  ambitions have no completion (M-NPC-4).
+
+### 9.5 S
+
+- **S-UP: FAIL** — a member's want reaches his head through no accountable carrier; the petition path is addressed to
+  its own subject [AUDIT A5]. **S-DOWN: FAIL for vacancies** (unpublished, H-206); PASS in shape for tellings [AUDIT].
+- **Coverage.** Vertical: person → office (holder half only), person → combat and mass battle (no capacity crosses,
+  T-NPC-4; cohorts cannot muster [AUDIT A7]). Diagonal: person → threadwork (TS has no carrier, H-85; PC-06 K-3 planned).
+  Lateral: telling (built), ties (planned). Horizontal: frozen deliberation (the audit's N-line holds).
+- **Pauses correctly: FINDINGS** — a headless faction does not yield: its creed keeps a dead referent and the season
+  ticks on. **Methodology: FINDINGS (shipped) → planned PASS** — allegiance has three scales: loyalty 0-100, a stance
+  row of ±25 (`STANCE_MAX`), opinion in [−1, 1]; IN-70 normalises "one ladder per quantity" (`_part5:325`).
+
+### 9.6 The design's own falsifier
+
+Discipline: *a person-level value nobody authored is not invented* (`harness/populated.py:394-395`; `massbattle.py`
+"not the place to invent one" [AUDIT]). Hits: loyalty against a role template — **settled, licensed by ruling**
+(`cast.py:256`); cohort weight 2, "a number nobody chose" (H-170) — clean, fixture family; `age_at_build = 0` for all
+(`fixtures.py:544`) — clean, fixture; `pool_default` / `obstacle_default` 2 — clean, fixture; residence derived by
+first-hit parse, "reordering MOVES PEOPLE" (B1a F) [READER] — clean, a second family; full `body` at build —
+borderline. **HITS, two families:** fixture constants standing where an authored person value should be (the audit's
+family), and **person facts derived by parsing prose** (residence), which the exception list does not name.
+
+### 9.7 Self-audit and verdict
+
+9a: the Pax Pamir correction reached §0 #8, §2.1, §4, §5 and §7.2; the probe's deaths were carried into M-NPC-6,
+B-NPC-1 and 9.4. §0 #6 (leaders mis-housed) stands, but the probe shows the housing matters less than the deaths.
+9b: this pass adds no object; the probe is scratch. An independent reviewer would add a corpus-level death count, a
+check of whether ED-IN-0201's gate silences a headless faction, and squad-engagement Parts A-D.
+
+| axis / test | verdict | what would overturn it |
+|---|---|---|
+| N (six directions) | FINDINGS: narrowed (loyalty, scar, forgive, succession); false: `urgency`, loyalty-as-ordering | a cut whose loss survives, e.g. eviction carrying a chosen, witnessed ending |
+| E-OVERHEAD | FINDINGS | nine dark knobs each guarding a ruled-in behaviour |
+| E-LEGIBILITY | FINDINGS | a surface showing a person's pursuits and allegiances |
+| R-COMPLETE | FINDINGS | a successor for every dead head; an ambition's predicate read |
+| R-VARIETY | FINDINGS | two persons in one seat with different capacity resolving one verb differently |
+| R-WORLD | FINDINGS | an unwatched death followed by a vacancy contest |
+| R-CHOICE | FINDINGS (shipped, upper bound); NOT SCORABLE assumed built (act economy, IN-14) | `revoke` executing with a cost below `fight`'s |
+| S-UP / S-DOWN | FAIL / FAIL (vacancy) | a member's demand carried to his head; a vacancy published |
+| S — coverage · pause · methodology | FINDINGS | a capacity crossing the combat seam; a headless faction yielding |
+| own falsifier | HITS (fixtures; parsed facts) | an authored source for each fixture value |
+| self-audit | both sweeps run | — |
+
+REPAIRS (worst first, each a deletion or one object): rule a source for capacities (one field, one reader) → M-NPC-1;
+publish a vacancy as a claim at the seat (one emission) → M-NPC-6; arm or delete each dark person knob → M-NPC-3; give
+a vow-break its own deed cell (one cell) → M-NPC-5; re-subject the creed when its head dies (IN-61's claim, or the
+seat rather than the man) → 9.1.
+
+**GRADE: paper** for the v9-built shape. One execution artifact covers the shipped state: the scratch probe, two seeds,
+uncommitted.
