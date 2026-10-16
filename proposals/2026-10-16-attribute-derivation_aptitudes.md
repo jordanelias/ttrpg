@@ -1,62 +1,86 @@
-# The flattened aptitude list (from `2026-10-16-attribute-derivation.md` §1)
+# The flattened list, re-issued: the recommended primaries, what hangs off each, and the 46 demands mapped into them (from `2026-10-16-attribute-derivation.md` §1 and `_part3` §7)
 
-## Status: PROPOSED (2026-10-16). An extract of the head's §1, for showing on its own. The evidence is in that proposal's §3–§5; the clusters and the attribute recommendation are in its `_part3`.
+## Status: PROPOSED (2026-10-16). An extract, for showing on its own. The evidence is the head's §1 and `_part2`; the principles, the selection and the coverage test are `_part3` §6–§7. The choice is Jordan's.
 
 **Key.**
 
-1. An **aptitude** is a capacity underlying learning and doing (not a learned skill, and not the attribute term V-3 calls the *"aptitude slot"*). A **draw** is one item requiring it. 19 practice domains, 65 verbs (34 graded) and 10 subsystems were interrogated: **46 aptitudes, 297 draws** (166 named, 30 overridden, 101 inferred).
-2. ⚠ **Order: by source-stated draws** (named plus overridden), then named, then total. Not by total, because a total re-counts one inference at the domain, verb and subsystem levels. *Rank by total* gives the other order.
-3. Columns 3–5 count the practice domains (P), verbs (#, with distinct resolvers in brackets: the seven thread operations share one pool, and `fight` and `accept` one bout) and subsystems (S) that draw it. In parentheses are up to three ids, NAMED and highest tier first.
-4. **Distinct reasons** counts the source statements and inferences behind the draws, each once. Far below the total means the total is repetition.
-5. **named Tn** means a source states it (T1 loop code, T2 stub code, T3 ratified intent, T4 design only). **overridden** means named at T4 but overridden for dice, by one of three causes: the **kernel** (the T2 contest kernel supersedes the v30 contest design), the **gloss** (the proceedings author's reading of the 2026-09-05 ruling over the fieldwork inquiry acts, which is contestable), or the **T3 row** (`conceal` has no roll). **inferred** means this proposal's reading.
-6. **Flags**: **ALL INFERRED** (no source names it); *one reason, re-counted*; *practice-named* (a source uses the word for a learned skill); *temperament* (a lean, not a capacity); and the merges and additions of the critic reconciliation.
-7. The last column maps to the registry's nine only where a name, an alias or a source's use says so; the list was NOT bent toward the nine.
+1. **Demand**: one of the 46 words for what an act or a subsystem asks of a person (the first pass
+   called them *aptitudes*; that word has three other senses in the tree, head Words). Each is marked
+   by **kind**, independent of any roster: CAPACITY 19, COMPUTED QUANTITY 14, PRACTICE 9, LIMIT 2,
+   TEMPERAMENT 2.
+2. **Primary**: a quantity selected to be carried as an attribute. Per Jordan (2026-10-16), *"ANY of
+   these can be an attribute. ignore all prior rulings for this exercise"* and *"there are no derived
+   scores when we don't even know our primaries"*: every demand, formula, ingredient and learned
+   skill was a candidate, and a formula is called **derived** only relative to the chosen set.
+3. **The selection principles** (`_part3` §6): a reader (P1, ID-13 as quality), independence (P2),
+   absorption (P3), stable to carry (P4), monotone (P5), domain-general (P6), legible (P7), and
+   **coverage**, the main test: the set must express every demand and every source formula.
+4. Evidence counts each source statement once. *Formulas* are those the sources write (head §1.2),
+   derived relative to this set by the formula the source already writes; *skills* are the learned
+   skills that enter on the primary (head §1.3); *uses* are the sourced rolls of it alone (head §1.4);
+   *statements* are the distinct statements of the demands grouped under it (named / overridden /
+   inferred). Totals: 46 demands; 355 draw entries over 19 domains, 34 graded verbs and 16 subsystems;
+   171 demand-statements (79 named, 12 overridden, 80 inferred).
 
-| # | aptitude: what it is | PRA domains | verbs [distinct resolvers] | subsystems | total draws | distinct reasons | named / overridden / inferred | rank by total | flags | maps to the nine today |
-|---|---|---|---|---|---|---|---|---|---|---|
-| 1 | **Thread sensitivity** (`thread-sensitivity`, perceptual): perceiving the substrate | 3 (P05, P06, P07) | 10 [4] (#42, #58, #59) | 3 (S05, S04, S09) | 16 | 5 | named T2 11·T3 1·T4 4 | 2 | — | none of the nine (TS, a practitioner stat, registry :64) |
-| 2 | **Concentration (steadiness)** (`concentration`, cognitive): sustaining mental effort over time and holding it against strain, shock and disruption | 8 (P03, P05, P02) | 12 [5] (#18, #20, #58) | 4 (S01, S05, S03) | 24 | 8 | named T2 4·T4 9; overridden kernel 3; inferred 8 | 1 | merged: absorbs *composure* (head §1, Merges) | FOC (+WIL): the one tracker 3·Focus + 2·Spirit in combat code (combatant.py:147) and the contest (SCV:267); Focus defence against strain (SCV:199); operations per contact = Focus − 1 (threadwork_v30:199) |
-| 3 | **Will** (`will`, volitional): persistence of intent against resistance; the force a practitioner brings to the thread | 2 (P05, P06) | 10 [4] (#42, #58, #59) | 2 (S05, S04) | 14 | 4 | named T2 11·T4 3 | 3 | — | WIL (registry name, alias Spirit) |
-| 4 | **Reasoning** (`reasoning`, cognitive): logical and structural analysis | 6 (P07, P08, P09) | 5 [5] (#37, #52, #50) | 3 (S04, S06, S03) | 14 | 8 | named T4 8; overridden kernel 3; inferred 3 | 4 | — | ACU (registry alias Reasoning, :42) |
-| 5 | **Presence** (`presence`, social): bearing that draws attention and carries authority | 4 (P08, P09, P16) | 4 [4] (#32, #50, #52) | 4 (S04, S06, S03) | 12 | 6 | named T4 5; overridden kernel 4·T3 row 1; inferred 2 | 7 | — | CHA (registry alias Presence, :47; SCV:134; FW:98); the Charisma × 3 buffer once called Composure is Face (SCV:242-247) |
-| 6 | **Reading people** (`reading-people`, perceptual): perceiving another's state, intent or lies | 5 (P09, P10, P16) | 4 [4] (#37, #50, #12) | 5 (S06, S03, S04) | 14 | 6 | named T4 4; overridden kernel 3·gloss 3; inferred 4 | 5 | — | ATT (FW:94 "reading people, sensing deception"; SCV:135, :147 "empathetic perception") |
-| 7 | **Contact endurance** (`contact-endurance`, volitional): how long one can hold contact with the thread before it breaks, and how fast that fatigue clears | 1 (P05) | 7 [1] (#58, #59, #60) | 1 (S05) | 9 | 1 | named T4 9 | 10 | one reason, re-counted; merged: absorbs *recovery* (head §1, Merges) | WIL (threadwork_v30:195, threshold = Spirit × 5; :203, meditation clears it by Spirit) |
-| 8 | **Self-coherence** (`self-coherence`, volitional): resisting the erosion of one's own self under thread strain | 1 (P05) | 6 [1] (#58, #59, #60) | 2 (S05, S09) | 9 | 2 | named T2 8·T4 1 | 11 | — | none (RES, `resilience`; plan names "spirit (resilience, R-14)" a candidate input, _part5.md:444) |
-| 9 | **Stamina** (`stamina`, physical): sustained exertion before fatigue | 3 (P03, P15, P17) | 6 [5] (#18, #20, #39) | 5 (S01, S04, S09) | 14 | 7 | named T2 4·T4 4; inferred 6 | 6 | — | END (+WIL): `stamina_max = 3·end + 2·spirit` (combatant.py:45-47); FW:92 |
-| 10 | **Anticipation** (`anticipation`, perceptual): reading an opponent's next move | 2 (P03, P04) | 3 [2] (#18, #20, #22) | 2 (S01, S02) | 7 | 2 | named T2 7 | 16 | — | none directly: a blend, ACU + ATT (reading `(2·Cog + Att)/3`, AUG:84); in a field, Command (CHA, ACU) |
-| 11 | **Relational depth** (`relational-depth`, social): capacity to form and hold deep bonds | 2 (P06, P16) | 2 [2] (#42, #37) | 2 (S04, S05) | 6 | 3 | named T2 2·T4 4 | 18 | — | BON (FW:479 "deep relational capacity that Bonds represents"; knots.py:185); registry alias Affability (:48) |
-| 12 | **Observation** (`observation`, perceptual): noticing physical detail | 5 (P04, P07, P08) | 3 [3] (#36, #39, #49) | 2 (S02, S04) | 10 | 7 | named T4 2; overridden gloss 4; inferred 4 | 8 | — | ACU (FW:93 Cognition; HIST:177 Cognition to detect ambush; MB:926) |
-| 13 | **Memory** (`memory`, cognitive): retaining and retrieving what one learned or saw | 5 (P13, P02, P07) | 1 [1] (#38) | 2 (S03, S04) | 8 | 4 | named T4 1; overridden kernel 2·gloss 3; inferred 2 | 13 | — | none of the nine (Recall, which the registry does not list) |
-| 14 | **Toughness** (`toughness`, physical): absorbing wounds and pain before failing | 1 (P03) | 2 [1] (#18, #20) | 3 (S01, S05, S09) | 6 | 3 | named T2 4·T4 1; inferred 1 | 19 | — | END (+WIL, STR at low weight): `wound_interval`, `health_full` (combatant.py:30-42) |
-| 15 | **Persuasiveness** (`persuasiveness`, social): moving another by appeal or argument | 3 (P16, P07, P10) | 4 [4] (#37, #27, #35) | 3 (S02, S04, S07) | 10 | 8 | named T4 4; overridden gloss 1; inferred 5 | 9 | — | CHA (FW:409, Converse rolls Charisma; MB:927) |
-| 16 | **Strength** (`strength`, physical): raw force: lifting, striking, grappling, carrying | 3 (P03, P11, P17) | 3 [2] (#18, #20, #45) | 2 (S01, S08) | 8 | 3 | named T2 4; inferred 4 | 14 | — | STR (registry name; Impact = Strength + heft, AUG:88) |
-| 17 | **Balance** (`balance`, physical): footing and whole-body control | 2 (P03, P18) | 2 [1] (#18, #20) | 1 (S01) | 5 | 2 | named T2 4; inferred 1 | 21 | — | AGI + STR (AUG:86) |
-| 18 | **Boldness** (`boldness`, volitional): a disposition to press and attack rather than wait | 1 (P03) | 2 [1] (#18, #20) | 2 (S01, S10) | 5 | 2 | named T2 4; inferred 1 | 22 | temperament: a lean, not a capacity (_part3 §7.3) | none (TMP, combat `disp`) |
-| 19 | **Quickness** (`quickness`, physical): speed of movement and of a body's working tempo | 2 (P03, P18) | 2 [1] (#18, #20) | 1 (S01) | 5 | 2 | named T2 4; inferred 1 | 23 | — | AGI (tempo `BASE + K·(Agi−4)`, AUG:87) |
-| 20 | **Spatial sense** (`spatial-sense`, cognitive): pathfinding, maps, positions and ground | 3 (P04, P15, P11) | 0 [0] (—) | 2 (S04, S09) | 5 | 3 | named T4 4; inferred 1 | 24 | — | ACU (FW:90 Cognition, "pathfinding, cartography") |
-| 21 | **Reflexes** (`reflexes`, physical): speed of reaction to what was not foreseen | 1 (P03) | 2 [1] (#18, #20) | 1 (S01) | 4 | 1 | named T2 4 | 27 | one reason, re-counted | AGI + ATT (reflex blend, AUG:85); FW:106 rolls initiative on ATT |
-| 22 | **Leadership** (`leadership`, social): getting others to follow, hold and rally | 1 (P04) | 1 [1] (#22) | 3 (S02, S06, S07) | 5 | 3 | named T2 3; inferred 2 | 25 | — | CHA (Command, Charisma primary 2:1, "inspire/hold the line", exchange.py:57-66; MB:306) |
-| 23 | **Hardiness** (`hardiness`, physical): resisting cold, hunger, exposure and sickness | 1 (P15) | 1 [1] (#24) | 2 (S04, S09) | 4 | 1 | named T4 3; inferred 1 | 28 | one reason, re-counted | END (FW:92 "exposure, harsh terrain"; FW:239) |
-| 24 | **Sincerity** (`sincerity`, social): genuineness that others can feel | 2 (P06, P16) | 1 [1] (#35) | 1 (S04) | 4 | 2 | named T4 3; inferred 1 | 29 | — | BON by alias (registry :48 Sincerity); but FW:430 rolls Spirit (WIL) for the Sincerity Check |
-| 25 | **Situational awareness** (`situational-awareness`, perceptual): tracking many moving parts at once | 1 (P04) | 1 [1] (#22) | 2 (S02, S01) | 4 | 2 | named T2 3; inferred 1 | 30 | — | none directly: CHA + ACU through Command as span of control (engine.py:93) |
-| 26 | **Empathy** (`empathy`, social): feeling with another | 1 (P07) | 1 [1] (#37) | 1 (S04) | 3 | 1 | named T4 3 | 33 | one reason, re-counted | ATT (investigation_systems_v30:255, Attunement ≥ 4 for emotional approaches) |
-| 27 | **Land sense** (`land-sense`, perceptual): reading weather, terrain and soil | 2 (P15, P17) | 0 [0] (—) | 1 (S09) | 3 | 1 | named T4 3 | 35 | one reason, re-counted | ACU (HIST:314, Seasons Reader rolls Cognition) |
-| 28 | **Steadfastness** (`steadfastness`, volitional): holding one's beliefs and framework against shock and contradiction | 0 (—) | 0 [0] (—) | 3 (S07, S09, S10) | 3 | 3 | named T4 3 | 36 | added by the critic reconciliation (_part3 §11, finding 4) | WIL (Spirit pool or check: npc_behavior_v30:1054; faction_politics_v30:752; southernmost_v30:105; FW:822 groups these as "metaphysical grounding") |
-| 29 | **Tactical read** (`tactical-read`, cognitive): reading a field to choose and carry out a tactic | 1 (P04) | 1 [1] (#22) | 1 (S02) | 3 | 1 | named T2 3 | 37 | one reason, re-counted; added by the critic reconciliation (_part3 §11, finding 3) | ACU, as Command's secondary term (exchange.py:59-60: "Cognition secondary (tactical read)") |
-| 30 | **Inference** (`inference`, cognitive): assembling partial evidence into a coherent picture | 1 (P07) | 1 [1] (#41) | 1 (S04) | 3 | 1 | overridden gloss 3 | 34 | one reason, re-counted | none of the nine (FW:306 rolls it on Recall; overridden for dice) |
-| 31 | **Judgment** (`judgment`, cognitive): choosing well under uncertainty and pressure | 2 (P09, P04) | 1 [1] (#22) | 4 (S06, S02, S07) | 7 | 4 | named T4 2; inferred 5 | 17 | — | none |
-| 32 | **Discernment** (`discernment`, perceptual): judging how far to credit what one is told or reads | 0 (—) | 2 [2] (#8, #35) | 2 (S10, S03) | 4 | 2 | named T3 1; inferred 3 | 31 | — | ATT (FW:94 "calibrating trust"; SCV:135 "calibrate"); AX-7's reader input is open (J-T9) |
-| 33 | **Learning** (`learning`, cognitive): speed of acquiring and deepening a practice | 1 (P14) | 1 [1] (#51) | 1 (S07) | 3 | 3 | named T4 1; inferred 2 | 38 | — | none of the nine (Recall, HIST:35) |
-| 34 | **Breadth** (`breadth`, cognitive): how many practices one can keep in use at once | 0 (—) | 1 [1] (#51) | 0 (—) | 1 | 1 | named T4 1 | 43 | — | none of the nine (Recall as equip slots, HIST:34, :521) |
-| 35 | **Devotion** (`devotion`, volitional): depth of investment in a person, place or ideal | 0 (—) | 0 [0] (—) | 1 (S04) | 1 | 1 | named T4 1 | 44 | added by the critic reconciliation (_part3 §11, finding 4) | WIL ("Resolve / Inspiration cap" = Spirit × 1, derived_stats_v30:557, :178) |
-| 36 | **Practice ceiling** (`practice-ceiling`, cognitive): how far one can deepen any one practice | 0 (—) | 1 [1] (#51) | 0 (—) | 1 | 1 | named T4 1 | 45 | added by the critic reconciliation (_part3 §11, finding 11) | none of the nine (Recall as the "skill depth ceiling", HIST:517, :522) |
-| 37 | **Patience** (`patience`, volitional): sustaining slow, unrewarded effort | 5 (P07, P09, P11) | 1 [1] (#38) | 3 (S04, S06, S08) | 9 | 4 | inferred 9 | 12 | **ALL INFERRED** | none |
-| 38 | **Dexterity** (`dexterity`, physical): fine control of the hands | 3 (P01, P11, P12) | 4 [4] (#13, #30, #48) | 1 (S08) | 8 | 5 | inferred 8 | 15 | **ALL INFERRED** | AGI by alias only (registry :39 lists Dexterity as an alias); no code reads `agi` for hand work |
-| 39 | **Numeracy** (`numeracy`, cognitive): reckoning numbers, accounts and value | 3 (P09, P10, P19) | 1 [1] (#12) | 2 (S06, S08) | 6 | 2 | inferred 6 | 20 | **ALL INFERRED** | none |
-| 40 | **Verbal fluency** (`verbal-fluency`, cognitive): command of words, spoken and written | 1 (P02) | 3 [3] (#27, #32, #35) | 1 (S03) | 5 | 3 | inferred 5 | 26 | **ALL INFERRED** | none |
-| 41 | **Precision** (`precision`, physical): exactness in execution: fine work, copying, forgery | 2 (P01, P11) | 1 [1] (#13) | 1 (S08) | 4 | 3 | inferred 4 | 32 | **ALL INFERRED**; practice-named: HIST:350 *Precision Hands* | none |
-| 42 | **Deception** (`deception`, social): misleading convincingly | 1 (P08) | 1 [1] (#28) | 1 (S04) | 3 | 3 | inferred 3 | 39 | **ALL INFERRED**; practice-named: HIST:339 *Smooth Liar* | none (FW rolls CHA for a cover identity, :620, and ACU for Cover, :575) |
-| 43 | **Planning** (`planning`, cognitive): foresight and sequencing toward a goal | 2 (P09, P19) | 0 [0] (—) | 1 (S06) | 3 | 1 | inferred 3 | 40 | **ALL INFERRED**; one reason, re-counted | none |
-| 44 | **Intimidation** (`intimidation`, social): compelling by threat | 0 (—) | 2 [2] (#54, #56) | 0 (—) | 2 | 1 | inferred 2 | 41 | **ALL INFERRED**; one reason, re-counted; practice-named: HIST:349 *Intimidation* | none |
-| 45 | **Quick thinking** (`quick-thinking`, cognitive): finding an apt answer under time pressure | 1 (P02) | 0 [0] (—) | 1 (S03) | 2 | 1 | inferred 2 | 42 | **ALL INFERRED**; one reason, re-counted | none |
-| 46 | **Discipline** (`discipline`, volitional): self-control: holding to drill, method or practice | 0 (—) | 1 [1] (#51) | 0 (—) | 1 | 1 | inferred 1 | 46 | **ALL INFERRED** | none (HIST:293 pairs Focus with "discipline" only in flavour text) |
+## The recommended set: eleven primaries
+
+**STR · AGI · END · FOC · ACU · WIL · ATT · CHA · BON · REC (Recall) · TS (Thread Sensitivity).**
+Coverage: 34 of the 36 non-practice demands with a source ingredient and 36 of the 38 formulas with a
+person ingredient are expressed; uncovered: `self-coherence` (F34) and `boldness` (F17).
+
+| primary | formulas hanging off it | skills | uses | demands that hang off it | statements n / o / i | moves | cut test |
+|---|---|---|---|---|---|---|---|
+| **STR** Strength | 5: Balance F03 (half), Impact F07, Handling F08, Bind and wind F09, Durability F10 (a noise term) | 1 | 0 | strength | 1 / 0 / 2 | odds, cost, effect size | holds, narrowed to combat |
+| **AGI** Agility | 5: Tempo F01, Reflex F02, Balance F03, Initiative F04, Counter F05 | 6 | 3 | quickness, reflexes, balance, dexterity | 3 / 0 / 9 | odds, effect size | holds |
+| **END** Endurance | 4: Durability F10, Stamina reserve F11, Take a Breath F12, Dissolution Ob F35 | 2 | 4 | stamina, toughness, hardiness | 6 / 0 / 8 | cost | holds |
+| **FOC** Focus | 5: Concentration F14, Disruption F15, Poise F16, Focus defence F20, Operations cap F31 | 3 (2 retired) | 0 | concentration | 3 / 1 / 5 | cost, eligibility, odds | holds, through formulas alone |
+| **ACU** Acuity (Cognition) | 5: Initiative F04, Reading F06, Command F18 (with CHA), Impress Ob F27, Cover F28 | 13 | 15 | reasoning, observation, spatial-sense, land-sense, anticipation | 15 / 3 / 8 | odds, eligibility, resists another | holds, conditional on the Cognition alias |
+| **WIL** Will (Spirit) | 8: F10, F11, F14 (minor terms), Resolve cap F29, Thread Fatigue F30, Thread pool F32, F35, Spark check F38 | 6 | 12 | will, steadfastness, sincerity, devotion, contact-endurance | 16 / 0 / 1 | odds, eligibility, cost | holds |
+| **ATT** Attunement | 5: F02, F04, F05, F06 (minor terms), Appraise pool F25 | 15 | 9 | reading-people, empathy, discernment | 4 / 2 / 6 | odds, eligibility | holds |
+| **CHA** Charisma | 5: Command F18, Strain modifier F21, Face F22, Composure F24, Appraise Ob F26 | 4 | 11 | presence, persuasiveness, judgment, leadership, situational-awareness, tactical-read | 7 / 3 / 17 | odds, eligibility | narrowed at T2 (Command runs on ACU alone; Face moves nothing), holds at T4 |
+| **BON** Bonds | 1: Knot cap F36 | 0 | 3 | relational-depth | 3 / 0 / 0 | eligibility, odds | narrowed: the knot gate also needs Disposition |
+| **REC** Recall | 5: Appraise pool F25, Effective Recall F37, Spark F38, Equip slots F39, Depth ceiling F40 | 10 (6 overridden) | 3 (2 overridden) | memory, inference, learning, breadth, practice-ceiling | 7 / 3 / 3 | odds, eligibility, the learning rate | **false today**: no code reads it |
+| **TS** Thread Sensitivity | 2: Thread pool F32 (with WIL), Thread Pool Score F33 | 2 | 5 | thread-sensitivity | 9 / 0 / 1 | odds, eligibility (gates) | holds |
+
+**Not primaries, and where the remaining demands go.**
+
+| demands | why | where they sit |
+|---|---|---|
+| self-coherence | its ingredient, `resilience`, is a dark stub slot (gain 0) that canon defines as *"how resilient their spirit is"* (operations.py:144) | **uncovered**; the canon-suggested re-expression on Will is a new choice, Jordan's |
+| boldness, patience | leans, not capacities (P5); `patience` has no source at all | temperament: `disp` carried beside the attributes, not among them |
+| numeracy, verbal-fluency, precision, deception, planning, intimidation, quick-thinking, discipline | they grow by use within a domain (P6); every draw is inferred | practice, sitting on primaries through History and the learned skills |
+
+## The two alternatives
+
+| | primaries | coverage (uncovered demands / formulas) | trade-off |
+|---|---|---|---|
+| **smaller: eight** | STR · AGI · END · ACU · WIL · ATT · CHA · TS | 9 / 13 | fewer numbers, each broad; needs three rewrites, each against a source: Focus onto Will (against `derived_stats_v30.md:267`), Bonds onto Charisma or Attunement, Recall onto Acuity (against HIST:129) |
+| **larger: thirteen** | the eleven + RES · TMP | 0 / 0 | every demand and formula has a home; RES has no live reader and canon defines it by Spirit; TMP is a lean, so *more* stops meaning *better*. Variant: Command carried as its own primary (`Officer.command` already accepts a value) |
+| *today's nine, for comparison* | STR · AGI · END · FOC · ACU · WIL · ATT · CHA · BON | 8 / 9 | the thread family and the Recall family have no home |
+
+## The 46 demands, mapped
+
+Kind is the head's §1.5; the group is the recommended primary that expresses the demand.
+
+| demand | kind | group | | demand | kind | group |
+|---|---|---|---|---|---|---|
+| reasoning | CAPACITY | ACU | | strength | CAPACITY | STR |
+| thread-sensitivity | CAPACITY | TS | | boldness | TEMPERAMENT | temperament |
+| steadfastness | CAPACITY | WIL | | contact-endurance | COMPUTED QUANTITY | WIL |
+| will | CAPACITY | WIL | | empathy | CAPACITY | ATT |
+| presence | CAPACITY | CHA | | hardiness | CAPACITY | END |
+| concentration | COMPUTED QUANTITY | FOC | | judgment | CAPACITY | CHA |
+| memory | CAPACITY | REC | | land-sense | PRACTICE | ACU |
+| reading-people | CAPACITY | ATT | | learning | COMPUTED QUANTITY | REC |
+| relational-depth | CAPACITY | BON | | practice-ceiling | LIMIT | REC |
+| self-coherence | COMPUTED QUANTITY | uncovered | | quickness | COMPUTED QUANTITY | AGI |
+| stamina | COMPUTED QUANTITY | END | | reflexes | COMPUTED QUANTITY | AGI |
+| breadth | LIMIT | REC | | sincerity | CAPACITY | WIL |
+| devotion | COMPUTED QUANTITY | WIL | | dexterity | CAPACITY | AGI |
+| observation | CAPACITY | ACU | | discernment | CAPACITY | ATT |
+| persuasiveness | CAPACITY | CHA | | inference | CAPACITY | REC |
+| spatial-sense | CAPACITY | ACU | | leadership | COMPUTED QUANTITY | CHA |
+| toughness | COMPUTED QUANTITY | END | | situational-awareness | COMPUTED QUANTITY | CHA |
+| anticipation | COMPUTED QUANTITY | ACU | | tactical-read | COMPUTED QUANTITY | CHA |
+| balance | COMPUTED QUANTITY | AGI | | patience | TEMPERAMENT | temperament |
+| numeracy, verbal-fluency, precision, deception, planning, intimidation, quick-thinking, discipline | PRACTICE | practice | | | | |
