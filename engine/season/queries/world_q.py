@@ -1443,8 +1443,8 @@ def faction_holding(w: World, subject: str) -> "str | None":
 def holder_faction_of(w: World, rung_id: str) -> Optional[str]:
     """M4 (`ED-IN-0279` clause (a)). Which faction holds `rung_id` -- the faction Proposition id,
     or `None` -- read up its own ancestry, since a SETTLEMENT is the object of a `hold` Tenure only
-    after a `seize` (v9 IN-13; `hold_force` on a seeded one returns `None`: every seeded live `hold`
-    targets a `territory` or an `Office`), and the walk takes the nearest held rung either way.
+    after a `seize` (v9 IN-13) or a `found` (v9 IN-28); `hold_force` on a seeded one returns `None`:
+    every seeded live `hold` targets a `territory` or an `Office`, and the walk takes the nearest held rung either way.
     `nearest_store`'s own walk, applied to holding rather than to a larder: the nearest rung AT OR
     ABOVE `rung_id` that IS held, then `faction_holding` on ITS holder (a person) -- never on
     `rung_id` itself, which `faction_holding` cannot answer

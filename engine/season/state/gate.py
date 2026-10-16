@@ -301,6 +301,10 @@ MUSTER = "muster"
 # act `may_warrant` reads (`WARRANT_ACT`). ⚠ J-8 (whether `dispatch` is a remit act at all,
 # `engine/season/offices.yaml` `meta: remit_unruled`) gates this basis as it gates `warrant`; it moves
 # with the ruling. One owner of the string: it IS `WARRANT_ACT`'s value, re-named for its second reader.
+# ⚠ THE VALUE IT MUST EQUAL IS `verb_table.yaml`'s `march` eligibility (`remit:dispatch`), which the
+# fold admits the act on. Re-pointing `WARRANT_ACT` without re-pointing this line leaves `_fold`
+# admitting the march while `_not_yet_under`'s `may_muster` filter drops every non-actor claimant:
+# the field is graded on the whole army and only the commander arrives.
 MUSTER_ACT = WARRANT_ACT
 
 

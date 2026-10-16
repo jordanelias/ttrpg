@@ -21,7 +21,7 @@ What each test proves, and the control that stops it passing vacuously:
      (`'Crown'`), not the proposition id `mustered`/`members` key on -- an untested version of
      this module would have shipped an always-empty army silently. `holder_faction_of` needed
      its own correction the same way: `faction_holding` takes a PERSON (the holder), not a rung,
-     and a settlement is the object of a `hold` only after a `seize` (v9 IN-13), never in the seeded corpus.
+     and a settlement is the object of a `hold` only after a `seize` (v9 IN-13) or a `found` (v9 IN-28), never in the seeded corpus.
   4. AN UNHELD TARGET gives `subject=None` for a REAL reason, not a bug indistinguishable from one:
      contrasted against test 3's real holder at a real settlement. Since v9 IN-13 `None` means ONE
      thing (no opposing holder) and the two unheld shapes part on the ARMY: an unheld SETTLEMENT

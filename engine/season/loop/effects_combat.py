@@ -248,9 +248,10 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     arrive = res.degree in (WON, UNOPPOSED)
     # ⚠ THE MOVERS ARE THE CLAIMANTS THE GATE'S `muster` BASIS WILL ADMIT (`state/gate.py::may_muster`
     # and `refuse_unauthored`'s `rehomed`), asked HERE so an act the precondition admitted is never
-    # killed at the gate -- `_eff_seize`'s precedent (`may_seize` inside the effect). A claimant the
-    # seat may not muster (its `hold` closed during RESOLVE, a person uncommitted to its faction) or
-    # that has no home to re-home from stays where he is; the actor's own legs are `T-m`'s.
+    # killed at the gate -- `_eff_seize`'s precedent (`may_seize` inside the effect). DEFENSIVE: in the
+    # fold `_admits` re-runs at ENCOUNTER and `mustered` is live commit ∩ live contain, so a claimant
+    # the seat may not muster, or one with no home to re-home from, is reachable only through a
+    # hand-built `Resolution`; he stays where he is. The actor's own legs are `T-m`'s.
     movers = (_not_yet_under(w, attackers, target, a.actor, a.via) if arrive else [])
     attacker_lost = res.degree == LOST
     losers = [] if res.degree == UNOPPOSED else (attackers if attacker_lost else defenders)

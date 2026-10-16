@@ -57,7 +57,7 @@ def sides_of(w: World, a: Act, target: Optional[str],
       trusts the same value everywhere else it appears (`_eligible`'s `remit:` branch,
       `loop/resolve.py`). `subject` is the DEFENDING faction -- `world_q.holder_faction_of(w,
       target)`, which walks `target`'s own ancestry to the nearest HELD rung (a settlement is
-      the object of a `hold` only after a `seize`, v9 IN-13, so the walk usually climbs to its
+      the object of a `hold` only after a `seize` (v9 IN-13) or a `found` (v9 IN-28), so the walk usually climbs to its
       territory) and reads that holder's faction.
       ⚠ SINCE v9 IN-13 (#453 §9.6): `subject` is `None` when the target's holder IS the actor's
       faction or nobody holds it -- no opposing side, which the provider answers `Unopposed` and
