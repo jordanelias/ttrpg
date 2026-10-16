@@ -84,8 +84,8 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # `text:` changed and a Proposition's value is hashed, so all three hashes moved; the event counts and digests
 # below are unchanged. Was 545729e9... / 93608c22... / 61782df4... (build, one, two seasons).
 BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
-               1: "bb08f4b28a5009c0aa27c133ce6229ff",
-               2: "cdeda7fd8a29ace0896babdce1a86922"}
+               1: "f1c84ee2ceb75f1f66dd005c7b9912ed",
+               2: "b0be871dd02047e342a794c89aeca417"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -105,8 +105,11 @@ BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
 # Was 472050b8... / cc650fcf... / 8f4d2088... (build, one, two seasons); events 7186 -> 7187, 19797 -> 19798.
 # RE-RECORDED at v9 FA-05 with `BASE_HASHES` (7187 -> 6542, 19798 -> 18583).
 # RE-RECORDED at v9 FA-06 with `BASE_HASHES` (6542 -> 7094, 18583 -> 19454).
-BASE_EVENTS = {1: (7094, "6d6d31a0e6ca8c7c03984a786ec9f1ac9ca1fa86a85e2c21106433ff311b5c4d"),
-               2: (19454, "3c472f650b275b4edc43bb8715bc8d30c5e958ec66cdec365a68406acf2be725")}
+# RE-RECORDED 2026-10-16 with `BASE_HASHES` for the `levy` -> `requisition` verb rename: act ids and draw
+# streams are hashed from the verb name (`ids.H`), so the same seed walks a different, equally valid trajectory.
+# Control: with the new name hashed as `levy` the old values reproduce exactly (7094 / 19454 events, season-0 hash).
+BASE_EVENTS = {1: (7092, "ecd9a363219637f82a407793f018bd78accc7146faf693239351c00b71421e86"),
+               2: (19545, "966b25587b62d37981e4a67190a897a791f8ac38a2c53261c919b73ecddae092")}
 
 
 def _digest(w) -> tuple:

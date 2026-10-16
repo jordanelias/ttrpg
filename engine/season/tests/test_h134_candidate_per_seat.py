@@ -155,7 +155,9 @@ def test_h134_two_seats_are_two_acts_ids_opportunities_and_the_store():
 # RE-PINNED AT v9 IN-09: 68 -> 66. `comply` is typed and `referent_named`, so it no longer forms on
 # a referent the person's own ledger does not name; it was formed on arbitrary referents before and
 # then filtered out by `resolvable_verbs()`, so no behaviour moves (`aperture 4 0` other rows equal).
-_CONTROL = (66, 66, "891d3653ba8b5ff4b141165fcd4548904b307bd0be437a7e0f3f5275c7c4625d")
+# RE-PINNED 2026-10-16, `levy` -> `requisition`: same 66 + 66 rows (set-equal to main once the name is mapped back);
+# only their ORDER moves, because the table is sorted by verb name and `requisition` sorts elsewhere.
+_CONTROL = (66, 66, "d40faf0a66e1de6c23edca09369d236f5527ad6f2f016fbfb369f94a4c7fe38f")
 
 
 def _control_reading():
