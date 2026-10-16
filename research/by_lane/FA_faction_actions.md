@@ -386,3 +386,122 @@ Walk: (a) the 25 rows of §4; (b) R-04, R-05, R-06, R-07 and R-08 where they tou
 16. Per-faction alternate victories: struck by GD-1.
 
 ## 9. NERS PASS
+
+`[SELF-AUTHORED — bias risk]`: this pass judges a lane file written earlier in this session; an independent reviewer would add an `aperture 4 0` reading and an act-economy equilibrium run, neither run here.
+
+**Target:** the FA lane's mechanisms as code at `5445e34` plus v9 with every position ASSUMED BUILT, the uploaded audit's assumption. **Instruments:** A only. FA has no draw of its own; its acts resolve through the generic fold, and `resolution-diagnostic` was not run. **Executed:** `pytest engine/season/tests/test_fa01_head_seats.py engine/season/tests/test_faction_q.py` → 16 passed. **Not run:** `aperture 4 0`, `corpus_run`, any campaign or equilibrium instrument (none exists for a campaign, `CLAUDE.md` §7).
+
+**Seat precondition (R-PLAYER).** The design's laws answer most of it. The player is an ordinary Person whose act set is the engine's candidate set (AX-1; `9d5d80bf:105-119` [AUDIT]), and every rung is occupiable. Which seats a campaign offers at start is unanswered: creation is "no act; a cast entry the world-gen builder seats", and IN-47 has no batch. R-CHOICE and R-VARIETY findings below are therefore PROVISIONAL.
+
+### 9.1 N-line ledger (six directions)
+
+| object | N-line | attack run | result |
+|---|---|---|---|
+| seat + `Act.via` (FA-01 mechanism) | Cut it and no act can be told apart as an office's act; purview gating and "a faction's act" vanish | Assumed gone; walked a head's order. Purview reads `via.scope` (`verb_table.yaml:640-650` typed `basis: purview`), and no other object carries authority. Directions: top-down (goal `seat_holders` → head), vertical (seat → rung), diagonal (sides for `mass_battle` via `faction_q.resolve`), horizontal (the council arrangement). Bottom-up fails (S-UP, below) | **HOLDS** in five of six directions; bottom-up narrowed |
+| `faction_q.resolve` (the view) | Cut it and a battle has no sides and a person cannot read a faction | Walked `seam/wrappers/mass_battle.py:28` ("sides = (faction_q.resolve(…))") and `survey`'s sheet; nothing else computes membership | **HOLDS, NARROWED**: diagonal (battle) and surface (sheet); the sheet has no decision reader |
+| `faction_q.head()` | "the faction's leader" | Assumed gone; walked "who leads". FA-01 seats heads from `cast.faction_leader` (`test_fa01_head_seats.py:67-68`, `populated.py:744`), and goals address `seat_holders`. No producer writes `Tenure.degree` on a `commit` (`faction_q.py:116-133`) | **FALSE N-LINE** (disqualifiers 1 and 2: the seat already carries headship; no producer) |
+| `at_war` | "war is a state persons can act on" | No computed producer (M-FA-1) and no reader | **FALSE AS SHIPPED** (disqualifier 2). The possibility is demanded (M-FA-1), so the repair is a producer and a reader, not a cut |
+| `dispatch` | "a head's computed act through his seat" | Assumed gone; `confer` executes `via` its seat (IN-53) and `issue` executes in the corpus (`requirements.yaml` R-04 text). What dies is an order to a named person, which binds nothing (`writes: []`) but is a deed others judge (`data/verbs.py:1223`) | **HOLDS, NARROWED** to "a witnessed order that colours regard" |
+| goals carrier (IN-66, FA-05/06) | Cut it and a faction's purpose cannot reach its members | FA-05: "the oath (FA-04) is person-level … so nothing else carries it down" (`_part7:143`); a creed `commit` carries membership, not purpose | **HOLDS** (vertical and top-down) |
+| `oblige`/`release` oath (IN-40, FA-04) | Cut it and nothing is under anything (H-101), so no Split | Containment covers rungs, not persons' fealty | **HOLDS** |
+| IN-31 ban | Cut it and revocation costs nothing durable | `revoke` is a deed, so witnesses' regard moves (a decaying cost); the ban adds the durable half | **HOLDS, NARROWED** to the durable cost |
+| `covenant` (planned) | "two polities bind their people" | "readers deferred" (`_part5:72`): nothing a treaty forbids is refused | **FALSE AS PLANNED** (no consumer); the possibility is demanded (8.3) |
+| IN-70 opinion at read | Cut it and attitudes cannot differ by allegiance (R-07) | Regard of the head alone carries part of it; the affiliation term carries the rest, and its falsifier tests that half | **HOLDS, NARROWED** |
+| IN-27 ending | Cut it and a realm only runs out of seasons (H-176) | Nothing else ends a game | **HOLDS** (its exit is hollow, 8.3) |
+
+**False N-lines (§3):** `head()` is a clean one. `at_war` and `covenant` are false as built or planned but demanded, so their repair is wiring, not deletion.
+
+### 9.2 Cross-cutting checks
+
+- **C1 (claim → mechanism).** Carried: "a faction's act is a person's act `via` a seat" (FA-01 test). **Unmechanized:** GD-1's "treaties counting"; FA-01's clause "perceived weakness … read at the head's decision from an existing Query … which Query is the builder's" (`_part7:122`, an assumption with no named carrier); Jordan's Church "ratcheting" (M-FA-7).
+- **C2 (type signature).** IN-23's legitimacy and stability are read through "a person's own windowed estimate (§C.11)" (`_part5:92`). GD-1's "Political Stability ≤ 6, sustained 2 consecutive seasons" is a world value. A per-person estimate cannot supply a world threshold without choosing whose estimate counts, so IN-27 cannot carry GD-1's clause as written.
+- **C3 (epistemic feasibility).** IN-27's ending is "a Query over holds and seats that the season reports". That is an omniscient evaluator, acceptable only as presentation that gates no act. Stated as a limit: if any act reads the ending, it is a forbidden stored world condition.
+- **C4 (contradiction sweep).** (i) GD-2 against Layer 1 row 1 (7.2 item 2). (ii) IN-31's ban against IN-12 step 5's `pardon` (7.2 item 1). (iii) IN-48's own note: "a revoked `appointed` regent would carry IN-31's ban" (`_part5:204`). An early-dismissed regent is barred from his principal's seat for life, so the regency design and the ban collide. (iv) **Headship has three owners**: `cast.faction_leader` (world-gen and FA-01), `faction_q.head()` (`Tenure.degree`, always `None`), and goals' `seat_holders`.
+- **C5 (path construction).** *"Altonia invades"*: cast (IN-36) → goal row (stance −1 to the Crown seat) → `need` question → `march` (IN-13) → mass-battle seam → `seize` (IN-12 step 6) → hold → ending Query (IN-27). A planned object stands at every step; "responds to weakness" is asserted. **Constructs** under planned=built; no war state is needed on the path. *"Löwenritter Split"*: oath (FA-04) → regard of the King with IN-58's grievance → `release` (executes today) → `superiors` → [], all constructed. The members following her is **asserted** (M-FA-8). *"Church ratchet to theocracy"*: Church goal (FA-06) → `seize` (B-M) → hold. The ratchet is asserted (M-FA-7), so the path is **expressible**, not implementable.
+
+### 9.3 R
+
+- **R-COMPLETE: FINDINGS.** At the top extreme, the realm's seat cannot be stripped (M-FA-3). Factions with no authored head (`LEADERLESS = {"Guilds", "Schoenland", "faction x"}`, `test_fa01_head_seats.py:54`) have no act until B-V. A treaty has no reader, a war no producer, and IN-30's emergence branch is unwritten (8.3).
+- **R-VARIETY: PASS, upper bound, provisional.** Under v9 a head's means are many: `dispatch`, `confer`, `revoke`, `establish`, `issue`, `levy`, `convene`, `determine`, `open_case`, `seize`, `covenant`, arrest and `pardon`, `succeed`, `fight`, `tell`. Goals differ per faction (FA-05/06). **Would overturn it:** a run in which every head's executed set is the same one act. Today it is: `dispatch` (`EXECUTES_AT_FIRST_FOLD`, `:59`).
+- **R-WORLD: FINDINGS (shipped); PROVISIONAL PASS in shape (planned).** Shipped: an unwatched head emits an order that 14 of 15 times names a non-person and refuses (`world_q.py:541-542`), and `at_war` is `False` everywhere. That is a portrait at best, and a dead seat where the order refuses. Planned: an invasion (IN-36), succession (IN-61), insurgency (IN-30) and goal-driven `seize` throw hooks unwatched. A war, a deposition or a bloc defection never does. The audit's falsifier (a planned-built multi-season run in which an unwatched seat emits a war; `9d5d80bf:57` [AUDIT]) cannot be run on unbuilt positions; I relied on it, not re-ran it.
+- **R-CHOICE: FINDINGS, upper bound, no run.**
+
+  SEAT: a faction head · INTENT: weaken a rival faction (v9 built)
+
+  | act | gain | cost |
+  |---|---|---|
+  | `fight` a rival seat-holder | a vacancy and a wound to the rival | one scene, own body at risk, a deed witnesses judge; FA-05 records that "`fight` forms on them" every season under a stance −1 goal (`_part7:145`) |
+  | `seize` a rival rung | a hold | one scene plus a field if contested |
+  | `covenant` with a third faction | **nothing read** (readers deferred) | scenes, plus a `give` |
+  | `tell` against the rival head | regard moves in hearers | one scene; no lie is possible (H-198 absent) |
+
+  Diplomacy is **strictly dominated**: zero gain at a positive cost. Violence and seizure are the live lines. Its dependency is the act economy (IN-14, ask-then): the skill's §6.3 bars ruling R here until the act budget is ruled.
+
+  SEAT: lord with `remit:issue` · INTENT: fill the treasury. This is the audit's table (`9d5d80bf:164-181` [AUDIT], code lines re-opened: `verb_table.yaml:629-662`). `levy` is immediate, its cost decaying (witness-dependent); `restore`/`work` is slow. It is a **shape mismatch**. The levied cannot answer (M-FA-5), which removes the counter-act that would price `levy`.
+
+### 9.4 S
+
+- **S-UP: FAIL.** A member's demand on his faction has no carrier up the ladder. A computed `petition` "always ha[s] `to` == `subject`" (`loop/deliberate.py:355`) [CHECKED], so it is addressed to the person it is about, not to the seat above. The docket path (`convene`, a fired date) is better but seat-internal.
+- **S-DOWN: PASS in shape.** An order's `order.given` deposits as `told_by` claims to persons nowhere near the room (`epistemic.py:563-567`) [CHECKED]: published, distorted in transit, picked up through the hearer's own channel. The tree carries it thinly (`9d5d80bf` S-DOWN row [AUDIT]: 4 of 1,270 `told_by` claims arrived by a telling).
+- **Coverage.** Vertical (faction ↔ person, by view and `via`): carried. Diagonal (faction × battle by `resolve` sides): carried. Diagonal (faction × economy by `levy`, `seize`): planned. Diagonal (faction × proceedings): parliament as an arrangement row with no seated members, a gap. **Lateral (faction ↔ faction): no carrier**; war has no producer, a treaty no reader, and opinion (IN-70) is planned. Horizontal (heads at one rung): the `council_of_state` arrangement exists (`arrangements.yaml:133`).
+- **Pauses correctly: PASS.** The faction scale has no clock of its own ("no second driver", `requirements.yaml:90-91`), so nothing ticks through a yielded scale. This matches `13G`/`20G`'s "run one clock" directive (`20G` L422).
+- **Methodology: FINDINGS.** Three answers to "who leads a faction" (C4 iv). GD-1's threshold ending against IN-27's choice-only ending: two answers to "what ends the realm".
+
+### 9.5 The design's own falsifier
+
+Discipline: *only a person acts; a faction has no verbs; no stored aggregate* (Layer 1 PART D rows 1, 8, 14).
+
+1. **Hits enumerated.** (i) GD-2's faction mandatory-actions pass: a **clean hit**, in canon only. (ii) GD-1's Accord and Stability thresholds: a **clean hit**, in canon only. (iii) GD-3's insurgency promotion on `L ≥ 3` and `Accord`: a **clean hit**, in canon; IN-30 does not say who founds the emerged faction, so it is **borderline**. (iv) IN-27's ending "the season reports": **borderline**, as presentation. (v) Membership `commit`s minted by world-gen (`populated.py:692`): **passes by tracing**, to authored cast. (vi) `faction_q.resolve` at a barrier: passes, as a view.
+2. **Cluster.** Every clean hit sits in one family: **the GD rows' aggregate terminal and trigger conditions**. The code holds the discipline; canon does not. The design's exception list (presentation may report) is missing this family.
+3. **Narrow licence.** License the ending *report* only. Make emergence trace to persons (an `utter` of a creed plus `commit`s) and the ending to holds that acts produced. The repair is not a free one-liner: GD-1/GD-3 are mutable canon (`canon/04…:23`) and need Jordan's ratification to restate.
+
+### 9.6 E (scored last)
+
+- **E-OVERHEAD.** Code objects: one view, seven Queries, one roster pin (`SHEET_KIND`), and 29 office rows. v9 adds the goals carrier with two rosters, goal referents, seeding, salience, opinion, an ending vocabulary, `covenant`, `seize`, `raze`, the `succeed` claim, a `successions` registry and an `inheritance` basis, roughly 13 objects. v9 refuses or cuts six stored clocks, the Domain-Action resolver, priority trees, tension and event cards and the assassination fuse (A-37), roughly 11. The biggest moves are refusals, and the vocabulary is shorter than the archived corpus's. Two objects buy nothing: `head()` (false N-line) and `at_war` with no reader.
+- **Watchlist (§5.2).** (a) Faction stat bundle → view: **kept, HIGH**; persons act, and nothing executing was lost. (b) Church Influence, Piety and Attention clocks → Queries left LEAVE: **cut one step too far, MEDIUM**; Jordan's ratchet lost its carrier (M-FA-7). (c) War as a Proposition, not a flag: **kept, MEDIUM**; right shape, but unproduced. (d) Treaty as `covenant` with no truce kind: **kept, MEDIUM**; peace is a `release`, coherent, but readerless. (e) `head()` → seat: **cut**; nothing produces it.
+- **E-LEGIBILITY: FINDINGS.** No surface shows a faction (M-FA-4). IN-70's opinion sums three normalized terms that no view displays, so a player cannot predict why a faction's members turn on him.
+
+### 9.7 Self-audit
+
+- **9a, backward propagation.** Run. It turned up one item: the `pardon` finding narrowed T-FA-3 and 7.2 item 1, and both were edited. §0 item 7 and the §4 War row stay true. "Nothing computed declares war" is now sharpened, not contradicted, by the missing `mood` source. The audit's A6 (ii) locator failed this pass, and the claim's substance (no verb row) survives (8.5 item 7).
+- **9b, turn §3 on this pass's additions.** Each K row below was checked against the five disqualifiers. K-FA-1's "a goal row carries the utterance's mood" is the one addition at risk of disqualifier 1 (a carrier already exists): the goal's `stance −1` toward a rival seat already exists, and K-FA-1 reads it rather than adding a field. No K row re-adds a cut object. Church Influence returns only as the Query FA-07 already names (disqualifier 3 checked: the cut was of the *store*).
+
+### 9.8 Verdict
+
+```
+NERS PASS: FA lane (code @5445e34 + v9 assumed built)     INSTRUMENTS: A
+
+MUST BE STATED AS A LIMIT
+  - "factions go to war"           — no computed WAR utterance, at_war read by nothing   [C1, §3]
+  - "treaties bind"                — covenant's readers deferred                          [C1, §3]
+  - "a ruler can be deposed"       — no revocation basis reaches the top rung             [R-COMPLETE]
+  - "the Church ratchets"          — named Query, LEAVE                                   [C1, C5]
+  - "an order is obeyed"           — dispatch writes nothing; order.given has no reader   [§2 narrowed]
+  - "GD-1 is the ending"           — IN-27's exit omits GD-1's terms; C2/C3 block them    [C2, C3]
+MAY BE CLAIMED, HAVING SURVIVED
+  - "a faction acts only as its persons, through seats" — attacked as a false N-line; no
+    other object carries authority over a rung (9.1 row 1); executes (FA-01 test, run)
+  - "a defection is an act" — FA-04's Split is `release`, which executes today
+  - "the faction scale pauses correctly" — attacked for a second clock; none exists
+```
+
+| axis / test | verdict | what would overturn it |
+|---|---|---|
+| N (six directions) | FINDINGS: seat + `via` holds (bottom-up narrowed); `head()` false | an object other than the seat shown to carry purview |
+| E-OVERHEAD | PASS with two removable objects (`head()`, readerless `at_war`) | a reader of `head()` that the seat cannot replace |
+| E-LEGIBILITY | FINDINGS | a faction view that shows members, seats, goals and opinion |
+| R-COMPLETE | FINDINGS | a written top-rung removal basis; a treaty reader; IN-30's emergence branch |
+| R-VARIETY | PASS (upper bound, provisional) | one executed act across all heads in a planned-built run |
+| R-WORLD | FINDINGS shipped; provisional pass in shape planned | the audit's multi-season unwatched-war run |
+| R-CHOICE | FINDINGS (diplomacy strictly dominated; `levy` shape mismatch), upper bound | a `covenant` that some act reads |
+| S-UP | FAIL | a computed petition addressed to the seat above its subject |
+| S-DOWN | PASS (shape) | an engine-routed, named-recipient opportunity |
+| S — coverage · pause · methodology | FINDINGS (lateral uncarried; three headship owners) · PASS · FINDINGS | a war producer and reader; one headship owner |
+| design's own falsifier | HITS, one family: the GD rows' aggregate conditions | a GD condition traced to a person's act |
+| self-audit | 9a: one propagation fixed; 9b: K-FA-1 checked against disqualifier 1 | an `aperture 4 0` reading and an equilibrium run |
+
+REPAIRS (worst first; each a deletion or one object): no war producer → a goal's stance −1 toward a rival seat supplies `mood: WAR` to the `utter` it raises, and one verb `requires` reads `at_war` (K-FA-1) · readerless treaty → one reader (K-FA-2) · unremovable throne → one revocation basis (K-FA-3) · three headship owners → delete `head()` (K-FA-4).
+
+GRADE: **paper**, with one execution: 16 FA tests pass. Nothing at season, realm or campaign scale was run.
+
+## 10. KEY RECOMMENDATIONS
