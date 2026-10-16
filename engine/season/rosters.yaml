@@ -608,7 +608,7 @@ rosters:
       places a person has been told of and could settle in (`queries/world_q.py::places_named` --
       a Rung his own ledger names, the §10 ladder seats him in, and he does not already live
       under), which `questions_for` adds to the question he answers beside his seats and writs;
-      only `migrate` declares it, so its `to` binds ANOTHER place rather than the single referent
+      `migrate` declares it (and `levy`, below), so its `to` binds ANOTHER place rather than the single referent
       of whatever he was asked about (most often his own residence). The destination channel H-168
       names, on IN-53 D1's partition and `seats_named`'s knowledge source: no operand is added
       (`to` still binds the referent, `decision/options.py::_derive_operand`) and no Record kind.
@@ -1403,7 +1403,7 @@ rosters:
       loader checks one way only -- every key a `rung_kinds` or `site_kinds` member, every cell
       non-empty, every matter kind a `matter_kinds` member, every amount a positive int
       (`data/fixtures.py::_load_works_cost`). It is NOT keyed on `site_kinds` in both directions as
-      `wear_per_season` is, because three members get no row by design:
+      `wear_per_season` is, because three groups of members get no row by design:
         * `body` IS NOT A SITE (`site_kinds`' own note). A works planning one is refused here, by the
           roster, rather than by a kind literal in `_eff_build` (`H-166` limit 4, narrowed: `body`
           stays in `site_kinds` for `band_floors`).

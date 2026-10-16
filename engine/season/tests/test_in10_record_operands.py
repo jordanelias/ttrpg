@@ -150,6 +150,44 @@ def test_in10_held_record_claims_reads_only_live_holds_of_mapped_kinds():
     assert held_record_claims(p) == []
 
 
+def test_in10_what_a_document_is_about_has_one_owner_per_kind():
+    """B-K close (ARC 5): `person_q.ABOUT_KEYS` is DERIVED from `rosters.yaml:
+    record_sourced_operands`' `subject:` per kind, so `ledger_names` reads a writ's `terms` and a
+    sheet's `proposition` -- never an addressee (`to`, a sheet's `head`). MUTATION (seen red,
+    2026-10-16): every kind mapped to `terms` -- the old `record_kinds.content.read_from`
+    derivation's effect, which had no `faction_sheet` row -> RED (the sheet's `proposition` unnamed)."""
+    from ..data.requires import RECORD_SOURCED_OPERANDS
+    from ..queries.person_q import ABOUT_KEYS, ledger_names
+    assert ABOUT_KEYS == {k: m["subject"] for k, m in RECORD_SOURCED_OPERANDS.items()
+                          if "subject" in m}
+    w = P.tiny_world()
+    p = w.persons[DUKE]
+    writ = _content_claim("c_w", p.id, "rec_w", "dispensation",
+                          {"terms": "off_reeve", "to": ["p_low"], "at": None})
+    sheet = _content_claim("c_s", p.id, "rec_s", "faction_sheet",
+                           {"proposition": "prop_crown", "members": ["p_mid"], "holdings": [],
+                            "seats": [], "head": "p_other"})
+    names = ledger_names([writ, sheet])
+    assert {"off_reeve", "prop_crown"} <= names, names
+    assert not {"p_low", "p_other"} & names, names
+
+
+def test_in10_held_record_claims_picks_by_the_ledger_readers_comparator():
+    """B-K close (LOG 6): the newest content claim per held Record is `LedgerReader._best`'s pick --
+    most recent, then most confident, strict `>` -- not a second ladder. Two claims on one Record at
+    the SAME tick: the more confident wins although it was deposited first. MUTATION (seen red,
+    2026-10-16): the old `c.when >= best.when` pick restored -> the later, less confident claim."""
+    w = P.tiny_world()
+    p = w.persons[DUKE]
+    sm = {"terms": "p_mid", "to": ["p_low"], "at": None}
+    sure = _hold_document(w, p, "dispensation", sm, rec_id="rec_two")
+    unsure = _content_claim("c_rec_two_b", p.id, "rec_two", "dispensation", sm)
+    unsure.confidence = 50
+    p.ledger.append(unsure)
+    assert sure.when == unsure.when and sure.confidence > unsure.confidence   # anti-vacuity
+    assert held_record_claims(p) == [sure]
+
+
 # ======================================================================================
 # 3 -- `issue` JOINS THE KNOWN-PERSON FAN
 # ======================================================================================
@@ -190,13 +228,16 @@ def test_in10_a_fanned_issue_folds_through_its_seat_to_a_writ_whose_terms_is_not
     q = Question("q:s", "claim_landed", ("S",), None)
     (a,) = [a for a in _acts(w, DUKE, _formed(w, DUKE, q)) if a.verb == "issue"]
     assert a.via == SEAT, a                                       # the falsifier's `Act.via`
+    # CONTROL, FIRST and one change (B-K close, LOG 9): the same act with no seat, folded before the
+    # treatment so it shares nothing with it, is refused on the eligibility clause -- the seat is
+    # load-bearing. Exact, as block 4's `confer.refused` control is.
+    bare = Act(id="is_bare", actor=DUKE, verb="issue", via=None, payload=dict(a.payload))
+    assert [e.kind for e in _resolve(w, d, bare)] == ["issue.unauthorized"]
+    assert not [r for r in w.records.values() if r.kind == "dispensation"]
     kinds = [e.kind for e in _resolve(w, d, a)]
     assert kinds == ["dispensation.issued"], kinds
     (rec,) = [r for r in w.records.values() if r.kind == "dispensation"]
     assert rec.subject_matter["terms"] == "S" and rec.subject_matter["to"] == ["p_mid"], rec
-    # CONTROL: the same act with no seat is refused -- the seat is load-bearing.
-    bare = Act(id="is_bare", actor=DUKE, verb="issue", via=None, payload=dict(a.payload))
-    assert [e.kind for e in _resolve(w, d, bare)] != ["dispensation.issued"]
 
 
 def test_in10_the_terms_conjunct_refuses_a_writ_whose_issuer_holds_nothing_on_it():
@@ -249,6 +290,21 @@ def test_in10_a_held_commission_forms_a_confer_of_its_seat_on_its_addressee():
     # the addressee and the seat -- the held bag keys as a known-person bag for `p_low` would.
     assert {act_key("confer", c.subject, c.operands) for c in got if c.operands["to"] == "p_low"} \
         == {"off_reeve>p_low@off_crown", "off_reeve>p_low@off_mayor"}, got
+
+
+def test_in10_a_held_commission_saying_nothing_of_the_referent_forms_no_bag():
+    """B-K close (COR 1 / LOG 2): a held dispensation whose `terms` is absent (`None`: the kind's
+    keys are closed, ⊕L35, so the key is present and empty) is about nothing, so it adds no bag on
+    `off_reeve` -- `operand_bags` compares the Record's own answer for `subject` with the referent,
+    and `None` skips. MUTATION (seen red, 2026-10-16): the old
+    `_derive_operand(..., held=c) != subject` check restored -> the missing `terms` falls through to
+    the referent and a `confer` onto `p_low` forms. CONTROL: `test_in10_a_held_commission_forms_a_
+    confer_of_its_seat_on_its_addressee`, the same commission WITH `terms`."""
+    w, _ = _gov_world()
+    _hold_document(w, w.persons["p_king"], "dispensation",
+                   {"terms": None, "to": ["p_low"], "at": None}, rec_id="rec_cm")
+    _, got = _confers_on(w, "p_king", "off_reeve")
+    assert {c.operands.get("to") for c in got} == {"p_king"}, got
 
 
 def test_in10_the_channels_confer_carries_its_seat_and_executes():

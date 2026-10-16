@@ -19,8 +19,8 @@ preference."* So it is a test OVER THE ARMS, and both outcomes are asserted, eac
     `band_floors`.
 MEASURED at the build (2026-10-16): at `body_step = 10` the cohort loses 60 a season and occupies all
 four bands before it dies; at `body_step = 67` it loses 402 a season, falls from `withdrawal_only`
-straight to death, and the bottom band (penalty 3) is never occupied -- MW-5 RED at that arm, exactly
-r2's reading of its own `declared` arm. So a live `body_step` that keeps the lowest band in play is one
+straight to death, and the bottom band (penalty 3) is never occupied -- MW-5 RED at that arm, the same
+shape as r2's declared arm (r2's arm is `body_step = 100`; H-125's are 0/10/67). So a live `body_step` that keeps the lowest band in play is one
 whose loss per season stays under the narrowest band (`band_floors.body.withdrawal_only`, 100 wide).
 MUTATIONS, run at the build 2026-10-16 (`loop/matter.py`'s body pass), each restored byte-exact after:
   * the body write's `max(0, ...)` widened to `max(150, ...)` (a body that stops falling short of
@@ -107,7 +107,9 @@ def test_every_body_band_is_occupied_before_death(arm):
     if _loss_per_season(w) < _narrowest_band(w):
         assert occupied == set(range(bands)), (arm, seen)
     else:
-        assert occupied != set(range(bands)) and max(occupied) < bands - 1, (arm, seen)
+        # Only that SOME band is stepped over -- which one is not implied by the arithmetic (B-K
+        # close, COR 7: `max(occupied) < bands - 1` over-asserted it was the bottom one).
+        assert occupied != set(range(bands)), (arm, seen)
 
 
 def test_mw5_both_outcomes_are_reached_by_the_shipped_sweep():

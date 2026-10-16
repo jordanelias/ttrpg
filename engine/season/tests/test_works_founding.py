@@ -655,7 +655,7 @@ def test_in45_work_forms_on_what_the_question_names_and_never_reaches_the_site_a
 # 8 -- v9 IN-28 (`H-166`): WHAT `found` AND `build` MAKE IS PAID FOR AND HELD
 # ======================================================================================
 # H-166's own design order: (1) a COST, (2) a HOLDER, (3) a CLOSER. (1) and (2) are built here. (3)
-# is NOT: it needs a ruling, recorded on `H-166`. The works exists by a hand-built `create_record`
+# is raze's (IN-12 step 11, B-R), not built here (`H-166`). The works exists by a hand-built `create_record`
 # (where a works comes from in computed play is ED-IN-0297's open question, not this position's).
 # Each test drives the real fold, the real MATTER barrier and the real gate.
 # MUTATIONS, run at the build 2026-10-16. Each went RED, then was restored byte-exact and went GREEN:
@@ -705,6 +705,33 @@ def test_in28_one_season_a_founded_place_is_paid_for_and_held_and_what_is_built_
     assert world_q.hold_force(w, dwelling.rung).subject == ABSENT
     _season(w, d)
     assert world_q.hold_force(w, hearth).subject == ABSENT
+
+
+def test_in28_a_founders_hold_stops_holder_faction_of_at_his_hearth_pinned_as_it_reads():
+    """H-166 limit 2's CONSEQUENCE (B-K close, COR 5), PINNED AS IT READS TODAY -- not blessed and
+    not changed. `world_q.holder_faction_of` returns at the FIRST held rung up the ancestry, so once
+    `p_low` (committed to no faction) founds a hearth under `S`, which a Crown man holds, the hearth
+    reads `None`: his hold is the nearest, and it coheres under nothing. (So a `survey`/`forge` of
+    that hearth is refused, and `loop/sides.py`/`loop/effects_combat.py` read no side for it.)
+    CONTROL, one change: the same founder committed to the Crown -> the hearth reads the Crown."""
+    from ..data.rosters import faction_prop_id
+    from ..state.carriers import Proposition, Tenure
+    fac = faction_prop_id("Crown")
+    for committed in (False, True):
+        w, d = _world()
+        w.propositions[fac] = Proposition(fac, "HOLDS", "Crown", "is a faction of this world",
+                                          True, 0)
+        w.add_tenure(Tenure("t_commit_p_mid", "p_mid", fac, "commit", since=0))
+        w.add_tenure(Tenure("t_hold_S", "p_mid", SETTLEMENT, "hold", since=0))
+        if committed:
+            w.add_tenure(Tenure("t_commit_founder", ABSENT, fac, "commit", since=0))
+        _declare(w, d, "wf", "hearth", SETTLEMENT)
+        out = _fold(w, d, _found("f1", "wf"))
+        assert "rung.founded" in _kinds(out), _kinds(out)
+        hearth = next(r for r in world_q.descendants(w, SETTLEMENT) if r.endswith(":wf"))
+        assert world_q.hold_force(w, hearth).subject == ABSENT
+        assert world_q.holder_faction_of(w, SETTLEMENT) == fac          # the parent still answers
+        assert world_q.holder_faction_of(w, hearth) == (fac if committed else None), committed
 
 
 @pytest.mark.parametrize("verb", ["found", "build"])

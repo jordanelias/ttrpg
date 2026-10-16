@@ -37,7 +37,7 @@ from ..data.verbs import ELIGIBILITY_KINDS, VERB_TABLE, align
 from ..epistemic import belief_contradicts
 from ..gaps import Forbidden
 from ..queries.person_q import (
-    LedgerReader, content_said, known_persons, ledger_names, projected_axes, regard, said_of,
+    LedgerReader, content_kind, content_said, known_persons, ledger_names, projected_axes, regard, said_of,
 )
 from ..state.carriers import Candidate, Claim, Person, Question, View
 from ..trace_log import TRACE
@@ -702,7 +702,7 @@ def _content_answer(c: Optional["Claim"], name: str):
     said = None if c is None else content_said(c)   # `person_q`'s one reader of the claim's shape
     if said is None:
         return None
-    key = RECORD_SOURCED_OPERANDS.get(str(c.predicate).partition(":")[2], {}).get(name)
+    key = RECORD_SOURCED_OPERANDS.get(content_kind(c), {}).get(name)
     if key is None:
         return None
     v = said.get(key)
@@ -729,14 +729,16 @@ def held_record_claims(p: Person) -> list:
     held = [t.object for t in p.tenures if t.kind == "hold" and t.live]
     if not held:
         return []
-    wanted = set(held)
-    best: dict = {}
-    for c in p.ledger:
-        if (c.subject in wanted and content_said(c) is not None
-                and str(c.predicate).partition(":")[2] in RECORD_SOURCED_OPERANDS
-                and (c.subject not in best or c.when >= best[c.subject].when)):
-            best[c.subject] = c
-    return [best[o] for o in dict.fromkeys(held) if o in best]
+    # NEWEST BY `LedgerReader._best`'s comparator, the one owner of *most recent, then most
+    # confident* (strict `>`, first found wins a tie) -- not a second ladder (B-K close, LOG 6).
+    reader = LedgerReader(p.ledger)
+    out = []
+    for o in dict.fromkeys(held):
+        c = reader._best(lambda c, o=o: c.subject == o and content_said(c) is not None
+                         and content_kind(c) in RECORD_SOURCED_OPERANDS)
+        if c is not None:
+            out.append(c)
+    return out
 
 
 def _from_shortfall_claim(p: Person, q: "Question", name: str):
@@ -796,8 +798,14 @@ def _from_shortfall_claim(p: Person, q: "Question", name: str):
 
 
 def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures",
-                    seat: Optional[str] = None, held: Optional["Claim"] = None):
+                    seat: Optional[str] = None, held: Optional["Claim"] = None,
+                    classed: bool = False):
     """ONE OPERAND, FROM THE PERSON'S OWN STATE. `None` means THIS PERSON CANNOT SUPPLY IT.
+
+    `classed` is whether the ROW forms on a classed referent (`VerbRow.referent_class`, passed by
+    `_operands`): such a row's subject rides the question without being what it is about, so the
+    three readers of the claim `q.about` names (the document, the shortfall, `store_kind_of`) answer
+    nothing for it -- even when the same id is ALSO one of `q.referents` (B-K close, COR 4).
 
     `held` (plan position IN-10, #453 §10.1) is the content claim of a Record the person HOLDS
     (`held_record_claims`), or `None`. When given it answers FIRST, for every name its kind maps in
@@ -911,7 +919,10 @@ def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"
     # it answers `kind`/`amount` for an act on THAT, never for an act on a classed referent riding
     # the question: a levy of a larder his seat reaches carries the fixtures' matter and amount, not
     # those of a dearth somewhere else -- the two values `world_q.larders_in_purview` stocked it by.
-    on_referent = q is None or subject in q.referents
+    # B-K close (COR 4): decided by the ROW (`classed`), not by `subject in q.referents` -- a stamped
+    # rung that is also the question's plain referent is still a classed levy's subject, and the
+    # stamp checked the fixtures' kind/amount, not the claim's.
+    on_referent = not classed
     if name in _RECORD_ANSWERABLE and on_referent:
         v = _from_content_claim(p, q, name)
         if v is not None:
@@ -1067,7 +1078,9 @@ def operand_bags(p: Person, row: "VerbRow", q: "Question", subject,
         records = held_record_claims(p)
     formed = {tuple(b.get(n) for n in fan) for b in out}
     for c in records:
-        if _derive_operand(p, "subject", q, subject, fx, seat, held=c) != subject:
+        # The Record's own `terms` must BE the referent; a Record saying nothing about it (no
+        # `terms`, several) answers `None` and forms no bag (B-K close, COR 1).
+        if _content_answer(c, "subject") != subject:
             continue
         given = {n: _content_answer(c, n) for n in fan}
         if None in given.values() or tuple(given.values()) in formed:
@@ -1114,7 +1127,8 @@ def _operands(p: Person, row: "VerbRow", q: "Question", subject, fx: "Fixtures",
         # `actor` is structural on both sides and is never carried; see `binding_of`.
         if name == "actor":
             continue
-        v = given[name] if name in given else _derive_operand(p, name, q, subject, fx, seat, held)
+        v = given[name] if name in given else _derive_operand(
+            p, name, q, subject, fx, seat, held, classed=bool(row.referent_class))
         if v is None:
             if name not in bound:
                 # An operand the CELL does not read cannot make the act malformed -- it is simply

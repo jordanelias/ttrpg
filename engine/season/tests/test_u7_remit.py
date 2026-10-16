@@ -882,9 +882,9 @@ def test_sc03a_a_mustered_army_excludes_a_person_held_in_custody(monkeypatch):
 # answers as `Rung`; `levy` declares `referent_class: Rung`. Every act below is COMPUTED --
 # `questions_for`, the real `opening_set`, the real `pack_scenes` -- and folded by the real RESOLVE.
 # Hand-built worlds only; nothing here asserts anything about the seed-0 realm (v9 §0.5).
-# The common setup stocks `R` (the realm, outside the Duke's purview) as well as `S`, so the two
-# controls each differ from the executing world by ONE change: the rung he was told of (`R` for
-# `S`), or `S`'s grain (emptied).
+# The common setup stocks `R` (the realm, outside the Duke's purview) as well as `S`, so the three
+# controls differ from the executing world by the rung he was told of (`R` for `S`; `D` for `S`,
+# which control 3 also stocks -- two changes), or by `S`'s grain (emptied).
 # MUTATIONS, run at the build 2026-10-16. Each went RED, then was restored byte-exact and went GREEN:
 #   * `larders_in_purview`'s `held > 0 and held >= amount and` deleted (the stores condition) -> the
 #     empty-larder control RED (a computed levy forms on the empty larder);
@@ -962,7 +962,6 @@ def test_in49_a_rung_outside_the_seats_purview_raises_no_levy():
     assert world_q.larders_in_purview(w, w.persons[DUKE]) == ()
     acts = _computed_levies(w)
     assert [a.payload.get("subject") for a in acts] == [], acts
-    assert all(_kinds(_fold(w, d, a)) != ["levy.taken"] for a in acts)
 
 
 def test_in49_the_seats_own_treasury_raises_no_levy():
@@ -975,7 +974,6 @@ def test_in49_the_seats_own_treasury_raises_no_levy():
     assert G.purview_reaches(w, w.offices[SEAT], TREASURY)   # anti-vacuity: inside the purview
     acts = _computed_levies(w)
     assert [a.payload.get("subject") for a in acts] == [], acts
-    assert all(_kinds(_fold(w, d, a)) != ["levy.taken"] for a in acts)
     assert world_q.larders_in_purview(w, w.persons[DUKE]) == ()
 
 
@@ -985,7 +983,6 @@ def test_in49_an_empty_larder_raises_no_levy():
     w, d = _larder_world(grain_at_s=0)
     acts = _computed_levies(w)
     assert [a.payload.get("subject") for a in acts] == [], acts
-    assert all(_kinds(_fold(w, d, a)) != ["levy.taken"] for a in acts)
     assert world_q.larders_in_purview(w, w.persons[DUKE]) == ()
 
 
@@ -1005,8 +1002,10 @@ def test_in49_a_claim_the_question_is_about_does_not_set_a_classed_levys_matter(
     """THE OPERAND RULE, ONE PARTITION OVER (IN-45's document gate, extended to the shortfall and
     stores readers). The question he answers is about a `shortfall:salt` claim of 5 on `R`, and `S`
     rides it as a `Rung`: the levy of `S` carries the fixtures' grain and amount -- what
-    `larders_in_purview` stocked it by -- not the realm's salt dearth. CONTROL: a question about `S`
-    itself, carrying the same shortfall reading on `S`, does set them."""
+    `larders_in_purview` stocked it by -- not the realm's salt dearth. AND ON THE OVERLAP (B-K close,
+    COR 4 / LOG 1): a question about `S` itself, `S` riding it as a `Rung` too, still gives the levy
+    the fixtures' values -- the row is classed, so the claim does not re-aim it (this assertion read
+    `("salt", 5)` before, pinning the mismatch)."""
     w, _ = _world()
     p = w.persons[DUKE]
     p.ledger.append(Claim("c_short_R", DUKE, "R", "shortfall:salt", 5, w.tick, "firsthand", 100,
@@ -1021,4 +1020,46 @@ def test_in49_a_claim_the_question_is_about_does_not_set_a_classed_levys_matter(
     own = _Question("q:claim:c_short_S", "claim_landed", ("S",), "c_short_S",
                     classes=(("S", "Rung"),))
     assert [(a.payload.get("kind"), a.payload.get("amount"))
-            for a in _computed_levies(w, q=own)] == [("salt", 5)]
+            for a in _computed_levies(w, q=own)] == [
+        (w.fixtures.get("default_store_kind"), w.fixtures.get("default_transfer_amount"))]
+
+
+def _formed(w, verb, q):
+    """The operands of the `verb` Candidates the Duke forms on `q` (the real `opening_set`)."""
+    p = w.persons[DUKE]
+    return [c.operands for c in _options.opening_set(p, _assemble(p, q, 12), q, w.fixtures)
+            if c.verb == verb]
+
+
+def test_in49_a_claim_about_the_stamped_rung_itself_does_not_set_the_levys_matter():
+    """THE OVERLAP (B-K close, COR 4 / LOG 1): the head question is about a `shortfall:salt` claim of
+    5 on `S`, and `S` is ALSO stamped `Rung` -- the common case, since the claim about the larder
+    ranks first. The classed `levy` of `S` carries the fixtures' grain and amount, what the stamp
+    checked. CONTROL, one change of ROW: the plain-row `transfer` on the same question and the same
+    rung still reads the claim (19d's `salt`, 5) -- so the rule is the row's class, not the id's.
+    MUTATION (seen red, 2026-10-16): `on_referent = q is None or subject in q.referents` restored in
+    `_derive_operand` -> the levy reads `("salt", 5)`."""
+    w, _ = _world()
+    w.persons[DUKE].ledger.append(Claim("c_short_S", DUKE, "S", "shortfall:salt", 5, w.tick,
+                                        "firsthand", 100, "own"))
+    q = _Question("q:claim:c_short_S", "claim_landed", ("S",), "c_short_S",
+                  classes=(("S", "Rung"),))
+    fx = (w.fixtures.get("default_store_kind"), w.fixtures.get("default_transfer_amount"))
+    assert fx != ("salt", 5)                                     # anti-vacuity
+    assert [(o.get("kind"), o.get("amount")) for o in _formed(w, "levy", q)] == [fx]
+    assert ("salt", 5) in [(o.get("kind"), o.get("amount")) for o in _formed(w, "transfer", q)
+                           if o.get("to") == "S"]
+
+
+def test_in49_a_stores_claim_about_the_stamped_rung_does_not_set_the_levys_kind():
+    """`store_kind_of`'s guard made falsifiable: the head question is about a `stores:salt` level on
+    `S`, `S` stamped `Rung`. The classed `levy` carries the fixtures' kind; CONTROL, one change of
+    row: the plain `transfer` on the same question reads `salt`. MUTATION (seen red, 2026-10-16):
+    `if on_referent` dropped from `_derive_operand`'s `kind` branch -> the levy carries `salt`."""
+    w, _ = _world()
+    w.persons[DUKE].ledger.append(Claim("c_st_S", DUKE, "S", "stores:salt", 30, w.tick,
+                                        "firsthand", 100, "own"))
+    q = _Question("q:claim:c_st_S", "claim_landed", ("S",), "c_st_S", classes=(("S", "Rung"),))
+    assert w.fixtures.get("default_store_kind") != "salt"        # anti-vacuity
+    assert [o.get("kind") for o in _formed(w, "levy", q)] == [w.fixtures.get("default_store_kind")]
+    assert "salt" in [o.get("kind") for o in _formed(w, "transfer", q) if o.get("to") == "S"]

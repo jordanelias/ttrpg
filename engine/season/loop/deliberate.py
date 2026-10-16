@@ -351,9 +351,10 @@ def _drop_what_was_already_done(scenes: list, taken: set) -> list:
     present hearer, and the two-part key then dropped a telling of topic C to D for the rest of the
     season because C had been told to B -- though a person can tell several hearers, and a telling
     to a different hearer is a DISTINCT opportunity, which is all this filter promises to spare.
-    The key is the general rule for any row that names a counterparty, and `tell` is the row where it
-    changes anything today (`petition` and `issue` always have `to` == `subject`, and `give` forms no
-    Candidate). A row that names no counterparty keys exactly as before. The writer in `loop/driver.py` calls the same function.
+    The key is the general rule for any row that names a counterparty, and `tell` and `issue` (which
+    fans `to` over known persons since IN-10) are the rows where it changes anything today (a
+    `petition`'s `to` may now differ from its subject -- a held sheet's `head`, IN-45 -- and `give`
+    forms no Candidate). A row that names no counterparty keys exactly as before. The writer in `loop/driver.py` calls the same function.
 
     ⚠⚠ **AN ACT THAT NAMES NOTHING IS NEVER FILTERED, AND THE PROBES ARE WHY.** A subject-less act
     has no opportunity to be the same as — `(verb, "")` is an absence, not an identity, and two

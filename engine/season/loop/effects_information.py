@@ -324,13 +324,22 @@ def _eff_carry(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     (`docketed`, the one owner -- `open_case`'s decline); and stages that would read the same after
     as before (the only way the named subject could fail to move).
 
+    ⚠ THE STAGES DECLINE, MEASURED BY ARM (B-K close, COR 2 / LOG 8). At `record_stages_default` >= 1
+    it never fires for a computed carry: every wound stage names THIS act's id, so the list differs
+    from the filing's; only a declared `stages` equal to the petition's trips it. At
+    `record_stages_default` = 0 -- arm 0 of `H-80`'s declared sweep -- filing and carriage both wind
+    `[]`, so it REFUSES EVERY CARRY and nothing a petition says reaches the docket. Registered at
+    `H-80` and pinned by `test_in45_carry.py`; latent (the shipped arm is 3) and NOT wound to
+    `max(n, 1)`. [ASSUMPTION; medium; Jordan to correct.]
+
     Who may carry: the row's typed cell -- the petition exists, and the ACTOR HOLDS IT (`held_by`,
     `found`'s cell): the petitioner, or whoever `give` handed it to."""
     pid = _operand(a, "subject")
     rec = w.records.get(pid) if isinstance(pid, str) else None
     if rec is None or rec.kind != "petition":
         return NO_CHANGE
-    matter = (rec.subject_matter or {}).get("terms")
+    # What the petition is ABOUT, by the roster's key for its kind (B-K close, ARC 1), not a literal.
+    matter = (rec.subject_matter or {}).get(RECORD_SOURCED_OPERANDS[rec.kind]["subject"])
     if not isinstance(matter, str) or docketed(w, matter):
         return NO_CHANGE
     stages = _declared_stages(w, a)

@@ -598,15 +598,18 @@ def test_in45_a_forged_sheet_reads_differently_from_a_true_one_downstream():
 
 
 # ======================================================================================
-# 6 -- DONE MEANS IT RUNS: THE POPULATED REALM COMMISSIONS SHEETS ON ITS OWN
+# 6 -- THE POPULATED REALM'S SHEETS SAY WHAT THEIR HOLDERS HOLD (no execution count, v9 §0.5)
 # ======================================================================================
 
-def test_20iii_the_populated_realm_commissions_sheets_with_no_hand_built_act():
-    """`CLAUDE.md` §0.2: one season of `populated.build_realm(0)` under the shipped chooser --
-    `populated.run`'s own construction -- and the survey EXECUTES: at least one `faction.surveyed`,
-    every sheet names a rostered faction and at least one member, and every sheet's holder holds a
-    content claim equal to what it says. Refusals happen too (a referent under no single faction)
-    and are counted, not asserted away. The rates are the aperture's to report, never pinned here."""
+def test_20iii_every_sheet_the_populated_realm_makes_says_what_its_holder_holds():
+    """One season of `populated.build_realm(0)` under the shipped chooser -- `populated.run`'s own
+    construction: every genuine sheet is one `faction.surveyed`, names a rostered faction and at
+    least one member, and its holder holds a content claim equal to what it says. Refusals happen too
+    (a referent under no single faction) and are counted, not asserted away.
+    ⚠ B-K close (ACC 7 / FID 4), v9 §0.5 (2026-10-13: no test asserts a verb executed in the seed-0
+    realm): its two execution counts -- `faction.surveyed >= 1` and `checked >= 4` -- were DELETED,
+    not skipped. What stays is an invariant over whatever sheets the season makes; that a survey
+    executes and its sheet is held is asserted on hand-built worlds (sections 1-5 above)."""
     w = populated.build_realm(0)
     d = SeasonDriver(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
@@ -615,7 +618,6 @@ def test_20iii_the_populated_realm_commissions_sheets_with_no_hand_built_act():
     d.season(ch, question=None, subsistence=P.SUBSIST,
              contest_max_depth=w.fixtures.get("contest_max_depth"))
     kinds = _kinds(w.log)
-    assert kinds.count("faction.surveyed") >= 1, "no survey executed in the populated realm"
     # v9 IN-45: A FORGED SHEET IS A SHEET TOO (`_eff_forge`, `record.forged`), so the surveys are
     # counted against the GENUINE ones -- the Records a `record.forged` Event names are set aside
     # (the field that would mark them is unwritten, `H-210`); how many forgeries the realm makes is
@@ -646,4 +648,4 @@ def test_20iii_the_populated_realm_commissions_sheets_with_no_hand_built_act():
         holder = held.subject
         assert [c.value for c in _content_claims(w.persons[holder], rec.id)] == [
             content_value(rec.subject_matter)], (holder, rec.id)
-    assert checked >= 4, (checked, skipped)
+    assert checked + skipped == len(sheets), (checked, skipped, len(sheets))
