@@ -27,20 +27,17 @@ THE FALSIFIERS (each run red before the build, 2026-10-16, base `29af7354`):
     one ladder's reading of the provider's own pair -- RED at base (no `social_contest` provider).
   * C-8: a contested `speak` by the Duke dispatches at his settlement `S`, the copyist's at the hearth
     `Hh` -- RED at base (both `"R"`).
-  * SCRIPTING DRIFT, first form (step 16 owns the closure test): no game code compares against an
-    arrangement id; a planted `if arrangement.id == "tribunal"` is found by the same scan.
+  * SCRIPTING DRIFT: the arrangement-id scan first written here MOVED at step 16, which owns the
+    closure test (`tests/test_sc01_the_bar.py`, its one home).
 No test here asserts execution in the seed-0 realm (v9 §0.5's relaxed exit).
 """
 
 from __future__ import annotations
 
-import ast
 import random
 
 import pytest
 
-from ..data import files
-from ..data.arrangements import ARRANGEMENTS
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import WriteClass
 from ..data.rosters import roster_map
@@ -233,50 +230,3 @@ def test_sc01_s15_a_tell_resolves_through_the_provider(monkeypatch):
     graded = [e for e in out if e.degree is not None]
     assert graded and all(e.degree == _grade(call["out"]) for e in graded), (
         [(e.kind, e.degree) for e in out], call["out"])
-
-
-# ================================================================================================
-# SCRIPTING DRIFT, FIRST FORM: NOTHING IN THE GAME BRANCHES ON AN ARRANGEMENT'S ID
-# ================================================================================================
-
-def _branches_on_an_arrangement_id(tree: ast.AST) -> list:
-    """`(line, id)` for every comparison or `match` case whose operand is an arrangement id."""
-    ids, hits = set(ARRANGEMENTS), []
-
-    def consts(node):
-        if isinstance(node, ast.Constant):
-            return [node.value]
-        if isinstance(node, (ast.Tuple, ast.List, ast.Set)):
-            return [e.value for e in node.elts if isinstance(e, ast.Constant)]
-        return []
-    for node in ast.walk(tree):
-        if isinstance(node, ast.Compare):
-            vals = consts(node.left) + [v for c in node.comparators for v in consts(c)]
-        elif isinstance(node, ast.MatchValue):
-            vals = consts(node.value)
-        else:
-            continue
-        hits += [(node.lineno, v) for v in vals if v in ids]
-    return hits
-
-
-def _game_code() -> list:
-    paths = [f for f in files.package_modules() if files.TESTS_DIR not in f.parents]
-    return paths + sorted((files.REPO_ROOT / "modules").rglob("*.py"))
-
-
-def test_sc01_no_game_code_branches_on_an_arrangement_id():
-    assert "tribunal" in ARRANGEMENTS, sorted(ARRANGEMENTS)
-    paths = _game_code()
-    assert len(paths) >= 100, len(paths)               # the sweep read the package, not an empty glob
-    found = {str(f.relative_to(files.REPO_ROOT)): h for f in paths
-             if (h := _branches_on_an_arrangement_id(ast.parse(f.read_text(encoding="utf-8"))))}
-    assert not found, f"game code branches on an arrangement id (scripting drift): {found}"
-
-
-def test_sc01_the_planted_tribunal_branch_is_found():
-    """The scan's own falsifier: the plan's planted line, in an effect, is reported."""
-    planted = ("def _eff_determine(w, a, arrangement):\n"
-               "    if arrangement.id == \"tribunal\":\n"
-               "        return []\n")
-    assert _branches_on_an_arrangement_id(ast.parse(planted)) == [(2, "tribunal")]
