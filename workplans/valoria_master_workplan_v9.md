@@ -232,7 +232,7 @@ commit and the run stops for a cleared window (`methodology-execute`, `CLAUDE.md
 has read §K's still-held list and `_part5` §J. `main` was red from PR #456 on one test
 (`test_flow_skeletons.py::test_contract_names_resolve_in_the_generated_index[combat]`); the one-line fix (`personal_combat`
 joins `RETIRED_CONTRACTS`) is built and rides the adoption branch (`7b619328`), so it is not a position — read `All Gates
-Green` on `main` once the branch merges. B-C is closed. B-D is closed: D1 (`9054df80`), D2 (`b31d2c31`), D3 (`0a690b30`). B-G is closed (`0f998f64`). B-H is closed (`c13144b9`). B-E is closed (`ac9724fc`). B-F is closed (`53807be4`). B-L is closed (`fc4f3ba9`). B-I is closed (`9d93cfab`); what it left open is in the entries (§3: IN-09, IN-10, IN-18, IN-33). B-J is closed (`42c5588c`: SC-03a, IN-40, FA-01's mechanism, IN-31's design; IN-48 left as B-JR). B-W is closed (`3bf936ee`: IN-54, IN-55, IN-56, IN-57, IN-58's stance-only half). B-X is closed (`2f0c0227`: IN-62 … IN-69, IN-71, IN-72, FA-04 … FA-06; what it left open is in `engine/season/hole_register.yaml` H-209, ED-IN-0296 and `_part3` §B's header); then … the spine `_part3` §B names. Every batch runs
+Green` on `main` once the branch merges. B-C is closed. B-D is closed: D1 (`9054df80`), D2 (`b31d2c31`), D3 (`0a690b30`). B-G is closed (`0f998f64`). B-H is closed (`c13144b9`). B-E is closed (`ac9724fc`). B-F is closed (`53807be4`). B-L is closed (`fc4f3ba9`). B-I is closed (`9d93cfab`); what it left open is in the entries (§3: IN-09, IN-18, IN-33). B-J is closed (`42c5588c`: SC-03a, IN-40, FA-01's mechanism, IN-31's design; IN-48 left as B-JR). B-W is closed (`3bf936ee`: IN-54, IN-55, IN-56, IN-57, IN-58's stance-only half). B-X is closed (`2f0c0227`: IN-62 … IN-69, IN-71, IN-72, FA-04 … FA-06; what it left open is in `engine/season/hole_register.yaml` H-209, ED-IN-0296 and `_part3` §B's header). B-K is closed (`c8d1db3a`: IN-10, IN-45's `forge`, `carry`, `migrate`, `survey` + Rung, IN-49, IN-28 with SE-03; what it left open is in `_part5` IN-45 (`work`, ED-IN-0297) and `_part3` §B's header); then … the spine `_part3` §B names. Every batch runs
 through `methodology-execute` (`CLAUDE.md` §9), and a batch's READ-FIRST list names the sites to read (the pins file is far too
 large to read whole: grep the assertion).
 
@@ -250,15 +250,13 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | IN-06 | `33`; #457 D5; A-24's threadwork; H-47 | IN/WR/FI | B | build (design landed at B-C; re-reviewed after B-H, closed `c13144b9`) | — | B-S | `_part4` |
 | IN-07 | `36` | IN/SE | B | build (design landed at B-C) | — | B-T | `_part4` |
 | IN-09 | `19b`: `evade / defy`, `construe` (`comply` landed `128299db`) | IN | B | — (restorable under §0.5: `a1c83e62`, `60073e75`) | R-05 | none (B-I closed `9d93cfab`) | `_part5` |
-| IN-10 | #453 step 1's enabler (sub-steps (a), (b), (c) landed `905b7a21`) | IN/SC | B | — (built and reverted at B-I: `65b96572`, `7d6e3bc2`) | R-04, R-05 | none (B-I closed `9d93cfab`) | `_part5` |
-| IN-12 | #453 steps 5, 5a, 6, 7, 9, 10, 11, 13 | IN/SC/SE/MB | BLK | per step | R-04, R-05, R-09 | B-K · B-M · B-Q · B-R | `_part5` |
+| IN-12 | #453 steps 5, 5a, 6, 7, 9, 10, 11, 13 | IN/SC/SE/MB | BLK | per step | R-04, R-05, R-09 | B-M · B-Q · B-R | `_part5` |
 | IN-13 | #453 step 8 | IN/MB | BLK | IN-12 step 6 | R-07, R-05, R-01 | B-M | `_part5` |
 | IN-14 | #457 BOUND-ATTENTION; H-92, H-10 | IN | ask-then | — | — | B-Z | `_part4` |
 | IN-18 | telling G5, G8 (step 2a, G1–G3 landed `ac9724fc`; G6 landed `66bf51f9`) | IN | BLK | G5's trigger, M0e > 0 (`oblige` landed `905b7a21`) | — | none (B-I closed `9d93cfab`) | `_part4` |
 | IN-23 | #457 CARRY-STABILITY | IN | B | — | — | B-U | `_part5` |
 | IN-26 | #457 BOUND-PAPER; H-156 (a)/(b); `Record.ttl` | IN/SC | BLK | SC-01, FI-01 | R-05 | B-Q | `_part5` |
 | IN-27 | #457 END-VICTORY; H-176 (GD-1) | IN/FA | BLK | IN-37 | — | B-U | `_part5` |
-| IN-28 | H-166 | IN/SE | BLK | IN-45 `work` | R-05 | B-K | `_part5` |
 | IN-30 | `24h` P5 remainder; H-186 | IN/FA/SE | BLK | IN-27 | — | B-U | `_part5` |
 | IN-31 | H-100 | IN/SE | B | — (SC-03a landed `c2f855d2`; design landed at B-J) | — | B-Q | `_part5` |
 | IN-32 | H-182 ties | IN/FI | BLK | IN-06 | R-05 | B-S | `_part5` |
@@ -268,12 +266,11 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | IN-37 | #457 STORY-READ | IN | BLK | SC-01 step 16 | — | B-U | `_part5` |
 | IN-38 | `13`-rest | IN | B | — | R-09, R-06 | B-V | `_part5` |
 | IN-44 | SM-10, SM-12; A-24's wording | IN | J | Layer 0/1: Jordan's files | — | — | `_part8` (table, not an entry) |
-| IN-45 | `forge` `carry` `work` `migrate` | IN/SC/SE | BLK | IN-10 (SC-03a landed `c2f855d2`) | R-05 | B-K | `_part5` |
+| IN-45 | `work` (`forge`, `carry`, `migrate` landed at B-K) | IN/SE | J | ED-IN-0297 (`needs_jordan`) | R-05 | none (B-K closed `c8d1db3a`) | `_part5` |
 | IN-46 | = SM-6 | IN/PC | B | build (design landed at B-C); no build batch | R-04 | none (re-read at B-L, `e77794a2`) | `_part4` |
 | IN-47 | #445 (character sheet) | IN/PC/WR | B | review (design landed at B-C); no build batch | R-04 | none (reviewed at B-H, `c13144b9`) | `_part4` |
 | IN-48 | H-108 (delegation half) | IN/FA/SE | B | — (IN-40 landed `3f320093`; IN-10 (a), (b) and IN-11 landed `905b7a21`, `2a2ed152`) | R-04 | B-JR | `_part5` |
-| IN-49 | H-163 limit 3 | SE/IN | BLK | IN-10 | R-04, R-05 | B-K | `_part5` |
-| IN-52 | the levy-to-field feed (from IN-07's design); LF-1..LF-3 | IN/SE/MB | BLK | IN-49, IN-07's extractions | — | B-T | `_part4` |
+| IN-52 | the levy-to-field feed (from IN-07's design); LF-1..LF-3 | IN/SE/MB | BLK | IN-49's `levy` executing (built `be828e15`), IN-07's extractions | — | B-T | `_part4` |
 | IN-58 | RS-23, RS-24: grievance at read — its sworn-to half (the stance-only half landed `3bf936ee`) | IN/FA | BLK | IN-40's `oblige` edge readable person-side (D) | R-07 (contributor) | none (B-W closed `3bf936ee`) | `_part5` |
 | IN-59 | RS-26: the access gate | IN/SC/PC | BLK | IN-60; B-V's guard content and W2's arm for its audience half | R-04 (contributor), R-05 | B-Y | `_part5` |
 | IN-60 | RS-26: the security Query | IN/SE/FA | BLK | IN-36's guard content (D, B-V) | R-04 (contributor) | B-Y | `_part5` |
@@ -288,7 +285,6 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | SC-07 | #445 P-4, V-4, V-5 | SC | BLK | SC-01 | — | B-N | `_part6` |
 | SC-08 | — | SC | BLK | SC-01 | — | B-O | `_part6` |
 | SE-02 | = IN-07 | — | — | — | — | B-T | `_part4` |
-| SE-03 | ED-SE-0053 §A.6–A.8 | SE | BLK | IN-28 | — | B-K | `_part6` |
 | SE-04 | #457 CAST-POPULACE; H-170, H-171 | SE | BLK | IN-07 | — | B-T | `_part6` |
 | SE-05 | = IN-30 | — | — | — | — | B-U | `_part5` |
 | SE-06 | SE-04 (c)'s vector half; ED-IN-0293 reading (b) | SE/IN | J | §J.2 row 4; ED-IN-0296 (written at B-X's close `2f0c0227`, `needs_jordan`) | R-06 (contributor) | B-Z | `_part6` |
@@ -330,7 +326,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 
 | #453 — `proposals/2026-10-03-verb-coverage-and-gap-fill.md` | v9 |
 |---|---|
-| §10.4 step 1 · step 2 · steps 2b + 3 · step 4 · step 8 | IN-10 (sub-steps landed `905b7a21`; the enabler open) · IN-11 (landed `2a2ed152`) · SC-03a (landed `c2f855d2`) · SC-03b · IN-13 |
+| §10.4 step 1 · step 2 · steps 2b + 3 · step 4 · step 8 | IN-10 (sub-steps landed `905b7a21`; the enabler `fae9e623`) · IN-11 (landed `2a2ed152`) · SC-03a (landed `c2f855d2`) · SC-03b · IN-13 |
 | steps 5, 5a, 6, 7, 9, 10, 11, 13 | IN-12, one sub-entry per step |
 | step 2a (`known_persons` widening) | IN-18 (landed at B-E, `ac9724fc`, with its re-pin) |
 | "later" (R-5, `inheritance`) | IN-61 (B-R; RS-21 item 9, re-specified by RS-27: the heir's claim) |
@@ -341,7 +337,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | STORY-BAR · STORY-SOAK · STORY-READ | landed at B-C (IN-19, `harness/storybar.py`) · landed at B-C (IN-20, `harness/soak.py`'s grades) · IN-37 |
 | FORCE-WEATHER · FORCE-BODIES · FORCE-HAZARD (+ SEAM-CLOCK) · FORCE-FOREIGN | landed, `3544d568` · IN-34 (landed `44fdb4df`) · IN-35 · IN-36 (+ FA-01's cast) |
 | CARRY-INTERIOR · CARRY-SHORTFALL · CARRY-STABILITY | merged into IN-08 · IN-22 · IN-23 |
-| BOUND-LOOPS · BOUND-STAKES · BOUND-ATTENTION · BOUND-PAPER | instrument landed at B-C (IN-24, `harness/loops.py`; the church ratchet's bound is read at IN-10) · IN-25 (landed `ac9724fc`) · IN-14 · IN-26 |
+| BOUND-LOOPS · BOUND-STAKES · BOUND-ATTENTION · BOUND-PAPER | instrument landed at B-C (IN-24, `harness/loops.py`; the church ratchet's bound waits on IN-12: IN-10 landed `fae9e623` without its loop half) · IN-25 (landed `ac9724fc`) · IN-14 · IN-26 |
 | CAST-POPULACE · CAST-DISPOSITION | SE-04 · merged into IN-08 + IN-12 step 9 (J-13 (iii) the adopted interim; `tell` stays uncelled, G-1) |
 | SEAM-LADDER · END-VICTORY | merged into IN-04 · IN-27 |
 | §7 D1 · D2 · D3 · D4 · D5 · D6 | IN-35 · IN-34 (landed `44fdb4df`) · answered: no dated pins (T-c) · IN-36, FA-01 · A-24 → IN-06 · IN-27 (D2, D4, D6 answered as the plan's recommendation, RS-21) |
@@ -350,9 +346,9 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 · U-1/U-2/U-6 → MB-08 · P-1 → IN-08 · P-2 → IN-22 · P-3 → FA-01 · P-4, V-4, V-5 → SC-07 · S-6 → FI-01 · V-1 → J-2
 (answered) · K-2 only with its first reader · M-2..M-6, K-4/V-3 → PC-08.
 
-**Hole-register rows a position now owns:** H-25, H-106 → IN-10 (their instrument landed at B-C: `engine/season/harness/loops.py`; IN-10's EXIT reads it) · H-26 (IN-21 landed `3544d568`) · H-44 (re-scoped at IN-09, `128299db`) · H-47 → IN-06 · H-48 →
+**Hole-register rows a position now owns:** H-25, H-106 → IN-10's loop half, not built when IN-10 landed (`fae9e623`): the church ratchet waits on IN-12 (their instrument landed at B-C: `engine/season/harness/loops.py`) · H-26 (IN-21 landed `3544d568`) · H-44 (re-scoped at IN-09, `128299db`) · H-47 → IN-06 · H-48 →
 IN-18 G6 (landed `66bf51f9`) · H-51 (SE-01 landed `d12c8db9`) · H-58 → IN-33 · H-59 → IN-12 (`forgive`) · H-92, H-10 → IN-14 · H-100 → IN-31 · H-101 → IN-40 (landed `3f320093`) ·
-H-110 → IN-29 · H-160 → IN-22 · H-162 → SC-03b · H-166 → IN-28 · H-170, H-171 → SE-04 · H-175 → read at B-C (IN-39, landed; the reading is its `cite:`), its remainder unowned · H-176 → IN-27 ·
+H-110 → IN-29 · H-160 → IN-22 · H-162 → SC-03b · H-166 → IN-12 step 11 (`raze`, limit 3's closer; IN-28 landed `32024e27`) · H-170, H-171 → SE-04 · H-175 → read at B-C (IN-39, landed; the reading is its `cite:`), its remainder unowned · H-176 → IN-27 ·
 H-180, H-181 → re-checked at IN-17 (landed `ac9724fc`; both stay absent) · H-182 → IN-32 (re-checked at IN-17) · H-186 → IN-30.
 
 **Retired, never reused:**
