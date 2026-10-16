@@ -37,8 +37,8 @@ PETITIONER, PARTY, OTHER = "p_low", "p_mid", "p_other"
 PETITION = "pet_in45"
 
 
-def _world():
-    w = P.tiny_world(DEFAULT_FIXTURES)
+def _world(fx=DEFAULT_FIXTURES):
+    w = P.tiny_world(fx)
     # `issue`'s precedent in `test_u7_remit.py::_world`: the Duke knows the party a bench would bind.
     w.persons[DUKE].ledger.append(Claim("c_knows_party", DUKE, PARTY, "exists:Person", 1, 0,
                                         "firsthand", 100, "own"))
@@ -58,9 +58,9 @@ def _kinds(events):
     return [e.kind for e in events]
 
 
-def _filed():
+def _filed(fx=DEFAULT_FIXTURES):
     """A world where `p_low` has filed a petition about `p_mid`, through the real `petition` fold."""
-    w, d = _world()
+    w, d = _world(fx)
     out = _fold(w, d, Act(id="file", actor=PETITIONER, verb="petition",
                           payload={"record": PETITION, "subject": PARTY, "to": DUKE, "from": "Hh"}))
     assert _kinds(out) == ["petition.filed"], _kinds(out)
@@ -160,3 +160,17 @@ def test_in45_a_bench_determines_a_carried_matter():
     det = Act(id="dt1", actor=DUKE, verb="determine", via=SEAT, payload={"subject": PARTY})
     assert _kinds(_fold(w, d, det)) == ["matter.determined"]
     assert world_q.docketed(w, PARTY) == []
+
+
+def test_in45_carry_at_stages_arm_0_is_refused():
+    """H-80's declared sweep, ARM 0 (B-K close, COR 2 / LOG 8): at `record_stages_default` = 0 the
+    filing and the carriage both wind `[]`, so `_eff_carry`'s same-stages decline REFUSES the holder's
+    carry and nothing reaches the docket. This PINS the latent refusal registered at `H-80`; it does
+    not bless it. CONTROL, one change: the shipped arm (3) carries the same petition."""
+    w, d = _filed(DEFAULT_FIXTURES.sweep("record_stages_default", 0))
+    assert w.records[PETITION].stages == [], w.records[PETITION].stages   # anti-vacuity: arm 0
+    assert _kinds(_fold(w, d, _carry("c0"))) == ["carry.refused"]
+    assert world_q.docketed(w, PARTY) == []
+    w, d = _filed()
+    assert DEFAULT_FIXTURES.get("record_stages_default") >= 1
+    assert _kinds(_fold(w, d, _carry("c3"))) == ["petition.carried"]

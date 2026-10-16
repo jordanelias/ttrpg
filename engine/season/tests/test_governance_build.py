@@ -801,12 +801,13 @@ _LEVY_ROW = (
 # ⚠ PLAN POSITION `19` TYPED `levy` (`transfer`'s form-2 cell plus a `basis` conjunct), and a typed
 # cell's `needs:` ADMITS `to` -- so `beneficiary: to` on `levy` became CARRIABLE and stopped being the
 # dead reference `test_lb6d_an_operand_beneficiary_the_row_cannot_carry_is_refused_at_load` plants.
-# That test needs an UNTYPED row, and `forge` is one (`requires: —`, no cell). The two tests above keep
-# `levy`: a missing or off-roster beneficiary is refused whatever the row's cell.
-_FORGE_ROW = (
-    '  - verb:        "forge"\n'
+# That test needs an UNTYPED row. It planted `forge` until v9 IN-45 typed it (an `own_ledger` cell);
+# B-K close (ACC 8/13) re-points it to `destroy_record`, still untyped (`requires: —`, no cell). The
+# two tests above keep `levy`: a missing or off-roster beneficiary is refused whatever the row's cell.
+_UNTYPED_ROW = (
+    '  - verb:        "destroy_record"\n'
     '    stratum:     "uncontested_material"\n'
-    '    eligibility: ["own"]\n'
+    '    eligibility: ["hold:<record>", "presence"]\n'
     '    beneficiary: "actor"\n'
 )
 
@@ -885,8 +886,10 @@ def test_lb6d_an_operand_beneficiary_the_row_cannot_carry_is_refused_at_load():
     formed, silently, forever."""
     src = _verb_table_text()
     unbindable = src.replace(
-        _FORGE_ROW, _FORGE_ROW.replace('beneficiary: "actor"', 'beneficiary: "to"'), 1)
+        _UNTYPED_ROW, _UNTYPED_ROW.replace('beneficiary: "actor"', 'beneficiary: "to"'), 1)
     assert unbindable != src, "the substitution did not apply -- this test is asserting nothing"
+    from ..data.verbs import VERB_TABLE
+    assert VERB_TABLE["destroy_record"].requires_typed is None, "the planted row is typed now"
     with pytest.raises(SystemExit, match="neither binds nor admits"):
         _load_with(unbindable)
 
@@ -2400,44 +2403,13 @@ def test_13d_iii_the_remit_overlay_replaces_the_default_and_leaves_only_the_unru
         "only where a row exists")
 
 
-@pytest.fixture(scope="module")
-def _season13():
-    from ..decision import make_chooser
-    from ..harness.corpus_run import attribute
-    from ..state.ids import H, draw_factory
-
-    w = build_realm(seed=0)
-    d = SeasonDriver(w)
-    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
-                      draw=draw_factory(w.world_seed, lambda: w.tick))
-    d.season(ch, question=None, subsistence=P.SUBSIST,
-             contest_max_depth=w.fixtures.get("contest_max_depth"))
-    return w, attribute(w, d, 1)
-
-
-def test_13d_iii_a_season_executes_an_issue_or_levy_through_a_seat_with_a_rung(_season13):
-    """U9's own acceptance text, on the shipped realm at seed 0: a `levy` or `issue` EXECUTES with
-    `Act.via` set, naming a seat whose rung gave it the purview. Before this position the same seed
-    refused 18 of 19 four-season levies on `authority` (`aperture 4 0` on the parent tree
-    `5519cf52`; `H-163` limit 1) and executed none. The seat check is the
-    point: an act whose `via` names a rungless seat would have refused, so this also shows `via`
-    and the rung are one fact. (`levy` itself still mostly refuses as `levy.refused` -- the `stores`/
-    `write` conjuncts, `H-163` limit 3 -- which is not this position's to lift.)
-    ⚠ v9 IN-49 `levy` (B-K, 2026-10-16), UNDER v9 §0.5 (2026-10-13: no test asserts a verb's count in
-    the seed-0 realm): the levy-share block that followed -- a `levy` ATTEMPTED in this season, and
-    not every one `levy.unauthorized` -- was DELETED, not skipped. It went red only because `levy`
-    now forms on a `Rung`-classed referent alone (`world_q.larders_in_purview`), and this season's
-    seat holders know of no larder their seats may levy (H-163 limit 3's measured residue), so none
-    is attempted. The purview half it watched is asserted on hand-built worlds:
-    `test_u7_remit.py::test_19_a_levy_outside_the_seats_purview_is_unauthorized_and_says_whose` and
-    section 9's computed levies."""
-    w, att = _season13
-    executed = [a for a, made, _ in att if a.verb in ("levy", "issue") and made]
-    assert executed, "no levy or issue executed in a season: the cap `13d-iii` lifts is still on"
-    for a in executed:
-        assert a.via in w.offices, f"{a.verb} by {a.actor} executed with via={a.via!r}"
-        assert w.offices[a.via].rung is not None, (a.verb, a.via)
+# ⚠ RETIRED (B-K close, ACC 7 / FID 4; v9 §0.5, 2026-10-13: no test asserts a verb executed in the
+# seed-0 realm): `test_13d_iii_a_season_executes_an_issue_or_levy_through_a_seat_with_a_rung` and its
+# `_season13` fixture asserted that a `levy` or `issue` EXECUTED in one `build_realm(0)` season --
+# DELETED, not skipped, as its levy-share block was at IN-49. Whether the authored realm hands a seat
+# holder the occasion is authored data, not the wiring. The wiring is asserted on hand-built worlds:
+# `test_u7_remit.py` (a computed `levy` executing with `Act.via` set, its purview controls) and
+# `test_in10_record_operands.py` (a fanned `issue` folding through its seat; seatless, refused).
 
 
 # =================================================================================================

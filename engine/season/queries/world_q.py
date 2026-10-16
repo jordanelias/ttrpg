@@ -1808,9 +1808,10 @@ def larders_in_purview(w: World, p: Person) -> tuple:
     The person still learns nothing he did not hold; a scarcity between this read and the fold (two
     levies on one larder) is the fold's (`levy.refused`, §27.1).
     ⚠ THE AMOUNT AND KIND are the fixtures' (`default_store_kind`, `default_transfer_amount`, H-94 /
-    H-121), because that is what `decision/options.py::_derive_operand` carries for a CLASSED subject:
-    a claim the question is about (a stores level, a shortfall) does not re-aim an act on a classed
-    referent, so the stamp and the act read the same two values. ⚠ PURVIEW IS ASKED LAST, only of a
+    H-121), because that is what `decision/options.py::_derive_operand` carries on a CLASSED ROW
+    (`levy`'s `referent_class: Rung`): a claim the question is about (a stores level, a shortfall)
+    does not re-aim it, even when the stamped rung is also the question's plain referent (B-K close,
+    COR 4), so the stamp and the act read the same two values. ⚠ PURVIEW IS ASKED LAST, only of a
     named, stocked rung: `purview_reaches` walks `w.tenures` for its oblige clause when the seat's own
     ground does not reach (the gate's walk, not a new one here). `()` for a person granted no such
     act, which is nearly everyone, so nothing else is read for him. REVERT: drop the term in
