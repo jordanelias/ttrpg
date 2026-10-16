@@ -179,7 +179,7 @@ def _wound_state(lifted: Optional[dict]) -> dict:
 @provider("contest", _PROVIDER)
 def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
             verb: str = "", subject: Optional[str] = None,
-            rng: Optional[random.Random] = None, rung: str = "") -> dict:
+            rng: Optional[random.Random] = None, rung: Optional[str] = None) -> dict:
     """CALL the personal-combat engine. Returns what it said; decides nothing itself.
 
     ⚠ `rung` IS ACCEPTED AND NOT USED HERE, THE SAME DELIBERATE NON-CHANGE AS `rng` BELOW (M4,

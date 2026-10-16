@@ -204,7 +204,7 @@ def field_input(w: Any, claimants: list, other: list, rung: str) -> MassBattleIn
 @provider("contest", _PROVIDER)
 def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
             verb: str = "", subject: Optional[str] = None,
-            rng: Optional[random.Random] = None, rung: str = "") -> dict:
+            rng: Optional[random.Random] = None, rung: Optional[str] = None) -> dict:
     """CALL the mass-battle engine. Returns what it said; decides nothing itself.
 
     `claimants`: one side's `PersonId[]`, expected already resolved (§C.5.1) by whoever called

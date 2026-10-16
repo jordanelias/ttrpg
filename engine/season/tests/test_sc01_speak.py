@@ -174,6 +174,9 @@ def test_sc01_s12_each_band_emits_its_own_kind_and_all_four_occur():
         assert kinds == set(row.emits_at(band)), (band, sorted(kinds), row.emits_at(band))
     # Distinct: no kind is reported for two bands.
     assert len({k for ks in seen.values() for k in ks}) == 4, seen
+    # The four pairs, literal: the row read back against itself cannot see a swapped pair.
+    assert seen == {"Overwhelming": {"matter.carried"}, "Success": {"matter.advanced"},
+                    "Partial": {"matter.held"}, "Failure": {"matter.turned"}}, seen
 
 
 # ================================================================================================

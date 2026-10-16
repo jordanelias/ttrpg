@@ -311,7 +311,7 @@ def _eff_convene(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     `corpus_run.py`'s hand-built dates still set it directly.
 
     v9 SC-01 FIRED-SLOT STEP (#453 pass-1 step 4; H-163 limit 2): THE DATE IS BORN WITH A HOLDER,
-    THE SEAT THE CONVENER EXERCISED (`Act.via`). CALENDAR forms a docket slot only for a date with a
+    THE SEAT THE CONVENER EXERCISED (`Act.via`) -- the `holder` key holds that SEAT ID, not a person. CALENDAR forms a docket slot only for a date with a
     holder (`loop/calendar.py`: a vacant date fires and lapses), and until this step nothing set one,
     so every convened date in every computed world lapsed and no slot ever formed for `open_case` to
     fill. [ASSUMPTION; medium; Jordan to correct -- Jordan names another holder rule] No #453 step

@@ -984,8 +984,8 @@ def resolve(self, token: Token, acts: list[Act],
             # `_admits` carries the measurement and is the single owner (§8).
             #
             # ⚠ A REFUSAL HERE IS AN EVENT, NOT A RAISE. The act happened and was witnessed; what
-            # did not happen is the contest. `emits_on_refusal` -- `kill.refused` on the one row
-            # that reaches this today -- is the kind, and `[a.id]` plus the occasion ids (`_act_events`) keeps the chain
+            # did not happen is the contest. The row's `emits_on_refusal` -- `kill.refused`,
+            # `speech.unheard`, every contested row's own -- is the kind, and `[a.id]` plus the occasion ids (`_act_events`) keeps the chain
             # resolvable exactly as the two refusal branches in `_fold` do.
             _ok, _refusal_kinds, _verdict = self._admits(w, a, _row) if _row else (True, (), None)
             if not _ok:

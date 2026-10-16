@@ -2196,8 +2196,9 @@ def a14():
         def choose(p, v, s, ask_budget):
             if p.id == "p_mid":
                 seen[d.round] = len(p.ledger)
+            # `utter` since v9 SC-01 step 12 (`P1`'s note): a bare `speak` is refused `speech.unheard`.
             if p_low_acts and p.id == "p_low" and d.round == 0:
-                return [Act_(w, p, "speak")]
+                return [Act_(w, p, "utter")]
             return []
 
         d.season(choose, question=None, subsistence=SUBSIST)
@@ -2211,7 +2212,7 @@ def a14():
     assert acted[1] > control[1], (f"p_low's round-0 act changed nothing p_mid holds in round 1: "
                                    f"acted {acted}, control {control}")
     return (f"PASS: within ONE season, p_mid's ledger reads {acted[0]} claims in round 0 and "
-            f"{acted[1]} in round 1 after p_low's round-0 `speak`, against {control[1]} in the "
+            f"{acted[1]} in round 1 after p_low's round-0 `utter`, against {control[1]} in the "
             "control arm where p_low does nothing. R-03's channel: a deposit at one round's WITNESS "
             "is read by the next round's DELIBERATE. NOT SHOWN: a DELIBERATE nested inside RESOLVE "
             "(`H-56`'s other half)")
@@ -2399,18 +2400,19 @@ def a28():
     # assertion and the probe published `verb 'do' is on no row` instead of checking anything.
     # It is the ONE probe that observes the invariant `W9` changed, and it was dark for it.
     # Found by the `W9` adversarial pass.
-    # ⚠ `utter`, NOT `speak`, SINCE v9 SC-01 step 12: a bare `speak` is refused at admission on its
-    # contested branch, and that branch does not enter `SeasonDriver.resolved` (only `_fold` does),
-    # so its refusal's cause dangles against `log UNION resolved` though `w.acts` holds the act.
+    # The act set is `w.acts`, THE STORE THE LOG'S OWN CAUSE CHECK READS (`World.log`'s `acts.ids()`;
+    # `loop/resolve.py::_fold`'s G1a), not `SeasonDriver.resolved`: since v9 SC-01 step 12 a bare
+    # `speak` is refused at admission on its contested branch, which never enters `resolved`, and
+    # its `speech.unheard` names the act -- which `w.acts` holds.
     def choose(p, v, s, ask_budget):
-        return [Act_(w, p, "utter")] if p.id == "p_low" else []
+        return [Act_(w, p, "speak")] if p.id == "p_low" else []
     for _ in range(4):
         d.season(choose, None, SUBSIST)
     ids = {e.id for e in w.log}
-    acts = {a.id for a in d.resolved}
+    acts = {a.id for a in w.acts}
     assert len(ids) == len(w.log)
     assert [e.emitted_at for e in w.log] == sorted(e.emitted_at for e in w.log)
-    # REFERENTIAL INTEGRITY, AGAINST `log UNION resolved`. #353 CONTRADICTS ITSELF HERE and the
+    # REFERENTIAL INTEGRITY, AGAINST `log UNION w.acts`. #353 CONTRADICTS ITSELF HERE and the
     # contradiction is `H-82`: `:658` says causes are "ids already in the log, or [ROOT]" while
     # `:1377` says "Events, into the same log, WITH causes[] NAMING THE ACTS" -- and an Act is
     # never appended to the log, so the two cannot both hold as written. Under `:658` alone every
@@ -2423,7 +2425,7 @@ def a28():
     from_ev = sum(1 for e in w.log for c in e.causes if c in ids)
     return (f"PASS over {len(w.log)} events from a real run: id uniqueness, a NON-DECREASING "
             f"season index, a stable content hash, and referential integrity on causes[] against "
-            f"log UNION resolved -- {from_act} causes name an ACT and {from_ev} name an EVENT, "
+            f"log UNION w.acts -- {from_act} causes name an ACT and {from_ev} name an EVENT, "
             "zero dangle. ⚠ THE UNION IS `H-82` AND IT IS A READING, NOT A GIVEN: #353 `:658` "
             "and `:1377` cannot both hold as written, and this probe asserts the reading `W9` "
             "took rather than leaving it in a code comment")

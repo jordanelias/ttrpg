@@ -203,7 +203,8 @@ grades nothing) and `harness/soak.py`'s cost and act-mix grades (IN-20). `corpus
 `NOT-COMPUTABLE — closed by W23 + W26 + W30` [v8's reading, 2026-10-01; not re-run here]. Candidate gates, none built:
 (i) SC-01 step 16 (`22`) — THE BAR for proceedings (two seeded proceedings run end to end twice byte-identical, `causes[]`
 walking to the raising date); (ii) `corpus_run`'s ARC ENDS becoming computable; (iii) a chronicle render, IN-37 (the
-`chronicle` witness channel dies at SC-01 step 13). Path: SC-01 step 16 → IN-37 → IN-27 (#457 D6, the ending vocabulary:
+`chronicle` witness channel's deletion at SC-01 step 13 is held, `hole_register.yaml` H-214: it waits on the `<rung kind>`
+reach channel). Path: SC-01 step 16 → IN-37 → IN-27 (#457 D6, the ending vocabulary:
 answered as the plan's recommendation, RS-21 item 3) (`_part3` §A(2)).
 
 ### M3 — GODOT VERTICAL SLICE

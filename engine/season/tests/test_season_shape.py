@@ -13647,11 +13647,12 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
 
     ⚠⚠ **THIS DOCSTRING READ *ONE of thirty-seven* AND LISTED `tell` AMONG THE UNGRADEABLE, AND
     `U1` MADE BOTH FALSE.** `tell` declares `contests: "a standing"` (ED-SC-0037), which routes to
-    the `sigma_leverage` provider, so it is the second gradeable verb. `speak`, `utter`,
-    `petition` and the six investigation acts remain in the 36 -- and `speak` is the case that
-    shows the rule still bites rather than having been relaxed: `U1` could not give it a
-    `contests:` because it is untyped and its `requires:` is `--`, which is why R-05's contested
-    count moves 1 -> 2 and not the 1 -> 3 the plan projected.
+    the `sigma_leverage` provider (the `social_contest` provider since v9 SC-01 steps 13+15), so it
+    was the second gradeable verb. At `U1`, `speak`, `utter`, `petition` and the six investigation
+    acts remained in the 36, and `speak` showed the rule biting rather than relaxed: `U1` could not
+    give it a `contests:` because it was untyped and its `requires:` was `--`, which is why R-05's
+    contested count moved 1 -> 2 and not the 1 -> 3 the plan projected. v9 SC-01 step 12 TYPED it
+    and gave it `contests: "a matter"` -- the fifth entry, below.
 
     ⚠ 32 -> 37 AND THE CLAIM IS UNCHANGED IN KIND, WHICH IS WHY THIS IS A REWRITE AND NOT A
     RELAXATION. The row spelled `"the six investigation acts"` was ONE row standing for SIX acts
@@ -13681,9 +13682,10 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # person-to-person verbs *all in that 36* were both true when written and are both false now,
     # and they are rewritten above rather than left to be discovered here.
     # ⚠ **THE PROPERTY THIS PIN GUARDS IS UNCHANGED: a degree is askable only where something
-    # resolves a contest.** What moved is the SIZE of that set, not the rule. `speak` is the case
-    # that shows the rule still bites — `U1` could not give it a `contests:` because it is untyped
-    # and its `requires:` is `—`, so R-05's contested count moves 1 -> 2 and not the plan's 1 -> 3.
+    # resolves a contest.** What moved is the SIZE of that set, not the rule. At `U1`, `speak` was
+    # the case that showed the rule biting — `U1` could not give it a `contests:` because it was
+    # untyped and its `requires:` was `—`, so R-05's contested count moved 1 -> 2 and not the plan's
+    # 1 -> 3; v9 SC-01 step 12 typed it (the fifth entry, below).
     contested = {v: r.contests for v, r in VERB_TABLE.items() if r.contests}
     # ⚠⚠ THE THIRD ENTRY, AND IT IS THE REAL WIDENING THE ASSERTION ABOVE WARNED ABOUT (M4,
     # `ED-IN-0279` clause (a), 2026-09-28). `march.contests == "a field"` is gradable, not merely
@@ -13703,13 +13705,14 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # pin guards is the one the docstring says bit `speak` -- *untyped, so it cannot contest* -- and
     # SC-01 step 12 answered it rather than relaxed it: the row is TYPED now (`existence` of `subject`,
     # kind `DocketItem`, the proceedings design's own cell), so a computed `speak` carries its
-    # `subject` to the seam. Its prize `a matter` is an interim row on `sigma_leverage`, `tell`'s
-    # provider; graded on the same ladder (`tests/test_sc01_speak.py` reads all four bands).
+    # `subject` to the seam. Its prize `a matter` names the social contest container's provider, as
+    # `tell`'s `a standing` does (it was an interim row on `sigma_leverage` until steps 13+15); graded
+    # on the same ladder (`tests/test_sc01_speak.py` reads all four bands).
     assert contested == {"fight": "the body", "tell": "a standing", "march": "a field",
                          "accept": "the body", "speak": "a matter"}, (
         f"the set of contesting verbs moved: {contested}. Every claim `W-E` published about what "
-        "can be graded today is scoped to this set. A FOURTH entry is a real widening and wants "
-        "its own measurement; losing one of these three means its prize row or its verb row has "
+        "can be graded today is scoped to this set. A SIXTH entry is a real widening and wants "
+        "its own measurement; losing one of these five means its prize row or its verb row has "
         "gone.")
     # Pins the roster against silent growth.
     # ⚠ 37 -> 38, `release` (`04 §A.3` row 14), 2026-09-11; 38 -> 39, `march` (M4,

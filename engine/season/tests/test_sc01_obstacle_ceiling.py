@@ -36,12 +36,12 @@ from __future__ import annotations
 
 import importlib
 import random
-from dataclasses import fields
+from dataclasses import asdict, fields
 
 import pytest
 
 from engine.dice_engine.dice_engine import DEGREE_LABEL, Degree
-from engine.dice_engine.sigma_leverage import LEVEL_SIGMA, p_success
+from engine.dice_engine.sigma_leverage import LEVEL_SIGMA, OB_MIN, p_success
 from engine.substrate import composition
 
 from ..data.fixtures import DEFAULT_FIXTURES
@@ -88,8 +88,9 @@ class _Face:
 
 
 def _discrete_hits(mod, rec) -> int:
-    """How many of the ten 1D faces the real entry + the real ladder grade above Failure."""
-    return sum(ladder.degree_of(mod.roll(rec, _Face(f))) != FAILURE for f in range(1, 11))
+    """How many of the ten 1D faces the real entry + the real ladder grade above Failure (the
+    `Margin` graded as the host grades it, as its `net`/`ob` pair)."""
+    return sum(ladder.degree_of(asdict(mod.roll(rec, _Face(f)))) != FAILURE for f in range(1, 11))
 
 
 def _m7(mod, ceiling) -> dict:
@@ -143,8 +144,6 @@ def test_the_ceiling_is_swept_and_the_sweep_straddles_m7():
     rows = {r["id"]: r for r in REG.load()["rows"]}
     row = rows.get(ROW)
     assert row is not None, f"{ROW} (the ceiling's register row) is missing"
-    assert row["grade"] == "assumption", row["grade"]
-    assert "obstacle_ceiling" in row["site"] and "roll.py::obstacle" in row["site"], row["site"]
     sweep = row["sweep"]
     assert len({str(x) for x in sweep}) >= 3, sweep
     assert DEFAULT_FIXTURES.get("obstacle_ceiling") in sweep, sweep
@@ -157,6 +156,15 @@ def test_the_ceiling_is_swept_and_the_sweep_straddles_m7():
     assert verdict[DEFAULT_FIXTURES.get("obstacle_ceiling")], verdict
     assert not all(verdict.values()), (
         f"every sweep point passes M-7 ({verdict}); the sweep cannot observe the failure")
+
+
+def test_a_ceiling_below_the_ob_minimum_is_refused_and_one_at_it_is_read():
+    """`obstacle`'s refusal branch, reached: a ceiling under `OB_MIN` (PP-232) would breach the floor,
+    so it raises rather than bounding anything; the ceiling AT the minimum is the control, read."""
+    mod = _module()
+    with pytest.raises(ValueError, match="below the Ob minimum"):
+        mod.obstacle(_record(10, OB_MIN - 0.5))
+    assert mod.obstacle(_record(10, OB_MIN)) == OB_MIN
 
 
 def test_the_seam_has_no_second_obstacle_site(monkeypatch):

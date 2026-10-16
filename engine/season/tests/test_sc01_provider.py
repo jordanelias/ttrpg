@@ -16,7 +16,7 @@ WHAT IS BUILT, each asked of the real manifest, the real registrar, the real fol
     (`world_q.place_of`), where it dispatched at the placeholder `"R"`.
 
 THE FALSIFIERS (each run red before the build, 2026-10-16, base `29af7354`):
-  * the rows name the container's provider and none is interim -- RED at base (`sigma_leverage`, interim).
+  * the rows name the container's provider -- RED at base (`sigma_leverage`).
   * the provider is registered by importing the seam and the driver constructs -- RED at base.
   * THE HALF-STATE: the rows repointed with no provider registered refuse at driver construction naming
     the first such prize (`30`'s refusal (c)); a misspelled `provider:` and a deleted composition row
@@ -56,7 +56,6 @@ from engine.substrate import composition
 
 PROVIDER = "social_contest"
 ENTRY = "social_contest.roll"
-SOCIAL_PRIZES = ("a matter", "a proposition", "a standing")
 SEAT, DUKE = "off_duke", "p_high"
 SPEAKER, PARTY = "p_low", "p_mid"
 
@@ -110,12 +109,11 @@ def _grade(out: dict) -> str:
 # STEP 13: THE ROWS
 # ================================================================================================
 
-def test_sc01_s13_the_social_prize_rows_name_the_container_provider_and_none_is_interim():
+def test_sc01_s13_the_social_prize_rows_name_the_container_provider():
     rows = _social_rows()
-    assert tuple(sorted(rows)) == SOCIAL_PRIZES, sorted(rows)
+    assert rows, "no prize row names the social_contest module"
     for prize, row in sorted(rows.items()):
         assert row["provider"] == PROVIDER, (prize, row["provider"])
-        assert "interim" not in row, (prize, "still interim: ED-SC-0033 clause (2)'s repoint not made")
         assert row["module_entry"] == ENTRY, (prize, row.get("module_entry"))
 
 

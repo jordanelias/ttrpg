@@ -208,8 +208,9 @@ DOCKET_ARRANGEMENT = "arrangement"
 DOCKET_PETITION = "petition"
 
 
-# CALENDAR's Event kind for a date that came due (`loop/calendar.py`'s `emits=`), named once for
-# `sittings_before`; WITNESS deposits it as the claim's predicate (`Claim.predicate` is `e.kind`).
+# CALENDAR's Event kind for a date that came due, named once: `loop/calendar.py` emits and chains
+# on it, and `sittings_before` reads it; WITNESS deposits it as the claim's predicate
+# (`Claim.predicate` is `e.kind`).
 FIRED_KIND = "date.fired"
 
 
@@ -240,12 +241,17 @@ def slot_for(w: World, matter: Optional[str]) -> Optional[dict]:
     """THE SLOT A NEWLY OPENED MATTER FILLS, or `None` -- v9 SC-01 fired-slot step. The first open slot
     (`open_slots`) of the NEAREST sitting whose venue holds the matter: walking up from where the
     matter is (`place_of`) through `ancestry` (the start rung included), so a sitting at the matter's
-    own settlement is filled before one at its duchy. [ASSUMPTION; medium; Jordan to correct --
+    own settlement is filled before one at its duchy. ONLY A PERSON FILLS A SLOT: the one writer that
+    empties a slot is `_eff_determine`, whose party cell binds a person, so any other matter (a rung,
+    a Record -- `open_case` accepts any id) would hold its slot for ever and be asked about every
+    season; it appends the dateless item instead. [ASSUMPTION; medium; Jordan to correct --
     Jordan names another key] THE VENUE IS THE MATCH KEY, matched by the containment walk the bench
     itself is found by (`sits_over`): `_eff_convene` keys its Date on `venue`, and a sitting hears
     what stands within it -- so any judge `judging_set` seats over the venue also sits over the
     matter's place, and `determine`'s `bench` conjunct holds wherever the slot was found. A matter
     with no place (`None`) fills nothing. REVERT: return `None` (every case appends a dateless item)."""
+    if not isinstance(matter, str) or matter not in w.persons:
+        return None
     place = place_of(w, matter)
     if place is None:
         return None
@@ -261,21 +267,27 @@ def sittings_before(w: World, p: Person) -> list[tuple]:
     `[(date id, claim, (matter, ...)), ...]` in docket order. v9 SC-01 fired-slot step (H-163 limit 2,
     #453 pass-1 step 4): `questions_for`'s sitting question, *a judge is asked about a docketed
     matter*. A sitting is before `p` when:
-      * a docket item formed for its Date holds a matter (`slot_venue`; a dateless item is no
-        sitting, and an empty slot names nothing, `docketed`'s rule);
+      * a docket item formed for its Date holds a matter that is a person (`slot_venue`; a dateless
+        item is no sitting, an empty slot names nothing, `docketed`'s rule, and a non-person matter
+        is one `determine` can never clear -- `slot_for` admits none, and a hand-planted one is
+        skipped here; a date left with no such matter is no sitting);
       * `p` is on the bench at its venue (`judging_set`, the one owner of who sits over a rung);
-      * `p`'s OWN ledger holds a `date.fired` claim about that venue no older than the firing --
-        CALENDAR's Event, deposited at WITNESS since IN-29. A judge who never heard the sitting fired
-        is not asked; the claim is also what the question cites, so an act formed from it walks back
-        to the firing (`occasioned_by`'s `claim_landed` route). Newest such claim, by
-        `LedgerReader`'s comparator.
+      * `p`'s OWN ledger holds a `date.fired` claim about that venue made ON THE FIRING'S TICK --
+        CALENDAR's Event, deposited firsthand at WITNESS since IN-29, and CALENDAR fires a date only
+        at its `due_at`. A judge who never heard the sitting fired is not asked; HEARSAY OF A FIRING
+        (a claim landing on a later tick) IS NOT ADMITTED, and a later firing at the same venue does
+        not stand for an earlier one. The claim is also what the question cites, so an act formed
+        from it walks back to the firing (`occasioned_by`'s `claim_landed` route). Newest such
+        claim, by `LedgerReader`'s comparator.
+    ⚠ ONE CONVENE IS A STANDING COURT: `open_slots` re-opens a slot a determination emptied, and
+    nothing rules when a sitting ends, so its bench is asked again whenever a new matter fills it.
     World-reading by construction, as `vacancies` and Q4 are (`questions_for`'s docstring): what is on
     the room's docket is the room's own business, and its bench is told."""
     by_date: dict = {}
     for item in w.docket:
         matter = item.get("matter")
         venue = slot_venue(w, item)
-        if matter is None or venue is None:
+        if not isinstance(matter, str) or matter not in w.persons or venue is None:
             continue
         by_date.setdefault(item["date"], (venue, []))[1].append(matter)
     out = []
@@ -284,7 +296,7 @@ def sittings_before(w: World, p: Person) -> list[tuple]:
             continue
         due = w.dates[did].get("due_at")
         heard = [c for c in p.ledger if c.subject == venue and c.predicate == FIRED_KIND
-                 and (due is None or c.when >= due)]
+                 and c.when == due]
         c = LedgerReader(heard).belief_among() if heard else None
         if c is not None:
             out.append((did, c, tuple(dict.fromkeys(matters))))
@@ -2210,8 +2222,9 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # referent widened for this source only; `H-54`'s `first` rule delivers it only when it sorts
     # first, `attention_key` deciding). REVERT: drop this loop -- no question names a docketed
     # matter, and a determination needs a referent coincidence again (H-163 limit 2).
+    # THE ID NAMES THE MATTERS: a slot emptied and refilled (even in one RESOLVE) is a new question.
     for did, c, matters in sittings_before(w, p):
-        out.append(Question(f"q:sitting:{did}", "claim_landed", matters, c.id))
+        out.append(Question(f"q:sitting:{did}:{'|'.join(matters)}", "claim_landed", matters, c.id))
 
     # v9 IN-57: the order is `attention_key`'s tiered read of the person's own state; the old
     # `(source, q.id)` key is its final tiebreak (history: hole_register H-54).

@@ -65,7 +65,8 @@ degree-keyed effects, not a routine addition.
 - **Step 12:** `speak` — a typed cell, `contests: "a matter"`, four bands (the `speak` spec in
   `proposals/2026-09-05-proceedings-subsystem/04_VERBS.md` — design intent, never the reason it is right); `_eff_speak` in `loop/effects_information.py` only if `writes:` is non-empty.
 - **Step 13:** the two prize rows drop `interim: true` and repoint from `sigma_leverage` — **a row
-  change, not a code change** (ED-SC-0033 cl. 2), landing in step 15's commit; `chronicle` deleted (`rosters.yaml`, `epistemic.py`); the
+  change, not a code change** (ED-SC-0033 cl. 2), landing in step 15's commit; `chronicle`'s deletion (`rosters.yaml`, `epistemic.py`) is HELD (`hole_register.yaml`
+  H-214: it waits on the `<rung kind>` reach channel, scheduled by no position); the
   `rung=` fix (C-8) reads `world_q.place_of`, not a `Scene.place` field (there is none).
 - **Step 14:** the obstacle. **Contradiction 3, resolved (carried):** take the obstacle **CEILING**, its
   value injected and swept (`sigma_leverage`), never a pool floor — a ceiling caps how hard a matter can
@@ -239,10 +240,10 @@ emits `finding.none` and deposits nothing"* (closed at ladder step 3 on 2026-09-
 What is missing is a degree producer. `ED-FI-0009` is `open`, `needs_jordan: true` (J-22, 2026-10-01: its stop condition hit, see its last ledger row); its earlier carve's
 obstacle column, attribute gate and depth derivation were overturned by a critic and are **not** to be
 re-introduced.
-**INSTRUCTION.** Compose on the single owners: the actor's pool and the obstacle from the host input builder
+**INSTRUCTION.** Compose on the single owners: the actor's pool from the host input builder
 `seam/wrappers/sigma.py::contest_input` (IN-03, `31a`) — its `_pool_of` (capability via
-`rosters.yaml: verb_capability`, else `pool_default`) and `modules/social_contest/roll.py::obstacle`'s existing
-default for a non-person subject — and the degree from `dice_engine.degree_from_net` — the one ladder.
+`rosters.yaml: verb_capability`, else `pool_default`); the obstacle composed by the module entry,
+`social_contest.roll` (reached by its composition row, not imported), since SC-01 step 14 — and the degree from `dice_engine.degree_from_net` — the one ladder.
 **Stop condition:** R-09's producer scan pins the roll to one owner, the `social_contest` module's entry, with the host producing none (S27.2). If producing an
 inquiry degree cannot route through that owner without a `contests:` shape, stop and register — that is
 the design question, not a reason to add a second resolver. Depth has no carrier; build none. Effect

@@ -132,7 +132,7 @@ is the record; a row not marked DONE is still on disk.
 | the 143-case count has no single owner | unchanged — positions use the harness loader's count (`len(wd_acceptance.CASES)` for `11`) |
 | `2026-08-15-character-and-faction-stats-and-progression.md`, ownership unresolved | unchanged; its live question is D2 (J-9) |
 | the birth-side consumer of `capacity` | unchanged — no position builds one |
-| D1-b #1, the chronicle render | the `chronicle` channel dies at `22` step 13 — a candidate M2 gate (`valoria_master_workplan_v9.md` §1); a chronicle render outside the simulation is IN-37 (STORY-READ, ENP v2 proposal 1, B-U) [UNVERIFIED: that D1-b #1 is the same render was not re-opened] |
+| D1-b #1, the chronicle render | the `chronicle` channel's deletion at `22` step 13 is held (`hole_register.yaml` H-214: it waits on the `<rung kind>` reach channel) — a candidate M2 gate (`valoria_master_workplan_v9.md` §1); a chronicle render outside the simulation is IN-37 (STORY-READ, ENP v2 proposal 1, B-U) [UNVERIFIED: that D1-b #1 is the same render was not re-opened] |
 
 ---
 

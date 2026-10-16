@@ -24,6 +24,14 @@ green after, 2026-10-16:
     nothing once the matter leaves the docket (red before: no such question);
   * THE STEP EXIT, W26's proof (`architecture/PLAN.md` W26, intent only), in one seeded run, twice,
     with an equal `World.content_hash()`.
+ADDED AT THE B-N PHASE-1 REVIEW, each red on the step's tree and green after the fix in `world_q`:
+  * a case on a matter that is no person (a rung) fills no slot and raises no sitting question, and a
+    later case on a person fills the slot it left open (red before: the rung held the slot);
+  * each sitting cites its OWN firing's claim; a later firing at the venue does not stand for an
+    earlier one (red before: both cited the newer claim);
+  * a slot emptied and refilled in one RESOLVE is asked under a new question id (red before: same id);
+  * the off-bench control holds the firing's claim, so only `judging_set` keeps him off (mutation:
+    the `judging_set` conjunct deleted -- red).
 No test here asserts execution in the seed-0 realm (v9 §0.5's relaxed exit).
 """
 
@@ -34,7 +42,7 @@ from ..decision import opening_set
 from ..decision.choose import pack_scenes
 from ..loop.driver import mint_token
 from ..queries import world_q
-from ..state.carriers import Rung, Tenure, View
+from ..state.carriers import Claim, Rung, Tenure, View
 from .test_u7_remit import DUKE, PARTY, SEAT, _act, _determine, _fold, _kinds, _open, _world
 
 VENUE = "S"                     # where the Duke stands, inside his seat's scope `D`
@@ -158,11 +166,17 @@ def test_a_bench_question_names_exactly_the_docketed_matters_of_a_sitting_its_ju
     assert _kinds(_fold(w, d, _open("oc"))) == ["case.opened"]
     got = world_q.sittings_before(w, duke)
     assert [(g[0], g[1].id, g[2]) for g in got] == [(did, heard.id, (PARTY,))], got
-    q, = [q for q in world_q.questions_for(w, duke) if q.id == f"q:sitting:{did}"]
+    q, = [q for q in world_q.questions_for(w, duke) if q.id == f"q:sitting:{did}:{PARTY}"]
     assert (q.source, q.referents, q.about) == ("claim_landed", (PARTY,), heard.id), q
     assert set(q.referents) <= {i["matter"] for i in w.docket if i["date"] is not None}
     # Off the bench: the King stands outside the duchy and holds no judging seat.
     assert world_q.sittings_before(w, w.persons["p_king"]) == []
+    # Off the bench WITH the firing heard: the copyist lives inside the venue (`Hh` < `S`), holds no
+    # seat, and is handed the very claim the Duke holds -- only `judging_set` keeps him off.
+    low = w.persons["p_low"]
+    low.ledger.append(Claim("c_heard", "p_low", VENUE, "date.fired", True, w.tick, "firsthand", 100,
+                            "own"))
+    assert world_q.sittings_before(w, low) == [], "a person holding no seat was asked to judge"
     # A judge who never heard the sitting fire is not asked.
     kept = list(duke.ledger)
     duke.ledger[:] = [c for c in kept if c.predicate != "date.fired"]
@@ -172,6 +186,61 @@ def test_a_bench_question_names_exactly_the_docketed_matters_of_a_sitting_its_ju
     assert _kinds(_fold(w, d, _determine("dt"))) == ["matter.determined"]
     assert world_q.sittings_before(w, duke) == []
     assert not [q for q in world_q.questions_for(w, duke) if q.id.startswith("q:sitting:")]
+
+
+def test_a_matter_that_is_no_person_fills_no_slot_and_raises_no_bench_question():
+    """Only a matter `determine`'s party cell can clear may fill a slot: the one writer that empties a
+    slot is `_eff_determine`, which binds a person. A case opened on a rung under the venue (`Hh` <
+    `S`) is appended dateless; the slot stays open, no sitting question names the rung, and a later
+    case on a person at that venue fills it."""
+    w, d = _world()
+    duke = w.persons[DUKE]
+    did, _ = _sitting(w, d)
+    assert _kinds(_fold(w, d, _open("oc_rung", subject="Hh"))) == ["case.opened"]
+    assert world_q.open_slots(w, VENUE) == [{"date": did, "matter": None}], w.docket
+    assert world_q.docketed(w, "Hh") == [{"date": None, "matter": "Hh", world_q.DOCKET_ARRANGEMENT: None,
+                                          world_q.DOCKET_PETITION: None}], w.docket
+    assert world_q.sittings_before(w, duke) == []
+    assert not [q for q in world_q.questions_for(w, duke)
+                if q.id.startswith("q:sitting:") and "Hh" in q.referents]
+    assert _kinds(_fold(w, d, _open("oc"))) == ["case.opened"]
+    assert world_q.docketed(w, PARTY)[0]["date"] == did and world_q.open_slots(w, VENUE) == [], w.docket
+
+
+def test_each_sitting_is_asked_on_its_own_firing_and_not_on_a_later_one():
+    """Two dates at one venue, fired a season apart, each slot holding a matter. The question for the
+    FIRST sitting cites the FIRST firing's claim; a judge holding only the later claim is not asked
+    about the earlier sitting (a firsthand `date.fired` lands on the tick the date fired)."""
+    w, d = _world()
+    duke = w.persons[DUKE]
+    first, _ = _sitting(w, d)
+    assert _kinds(_fold(w, d, _open("oc"))) == ["case.opened"]
+    second, _ = _sitting(w, d)
+    assert _kinds(_fold(w, d, _open("oc2", subject="p_low"))) == ["case.opened"]
+    c1, c2 = sorted((c for c in duke.ledger if c.predicate == "date.fired" and c.subject == VENUE),
+                    key=lambda c: c.when)
+    assert c1.when == w.dates[first]["due_at"] and c2.when == w.dates[second]["due_at"] > c1.when
+    got = {g[0]: (g[1].id, g[2]) for g in world_q.sittings_before(w, duke)}
+    assert got == {first: (c1.id, (PARTY,)), second: (c2.id, ("p_low",))}, got
+    q, = [q for q in world_q.questions_for(w, duke) if q.id == f"q:sitting:{first}:{PARTY}"]
+    assert q.about == c1.id, (q.about, c1.id, c2.id)
+    duke.ledger[:] = [c for c in duke.ledger if c.id != c1.id]
+    assert [g[0] for g in world_q.sittings_before(w, duke)] == [second], "asked on a later firing"
+
+
+def test_a_slot_refilled_in_one_resolve_is_asked_under_a_new_question_id():
+    """The question's id names its matters: a determination and a new case in ONE RESOLVE empty the
+    slot and refill it, so the judge's question changes id with what is before him."""
+    w, d = _world()
+    duke = w.persons[DUKE]
+    did, _ = _sitting(w, d)
+    assert _kinds(_fold(w, d, _open("oc"))) == ["case.opened"]
+    before = [q.id for q in world_q.questions_for(w, duke) if q.id.startswith("q:sitting:")]
+    assert _kinds(_fold(w, d, _determine("dt"), _open("oc2", subject="p_low"))) == [
+        "matter.determined", "case.opened"]
+    assert world_q.docketed(w, "p_low")[0]["date"] == did, w.docket
+    after = [q.id for q in world_q.questions_for(w, duke) if q.id.startswith("q:sitting:")]
+    assert len(before) == len(after) == 1 and before != after, (before, after)
 
 
 # ======================================================================================

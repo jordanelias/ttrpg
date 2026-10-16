@@ -971,6 +971,12 @@ rows:
       executed): `forge` formed 83, 26 / 6; `survey` 29 / 6; `carry` 14 / 0; `work` 44 / 0; `migrate` formed 71, 31 / 1; `levy` formed 11,
       0 / 0; `found` 15 / 0; `build` 11 / 0; `commit` 38 / 0 (`transfer` 32 / 0 and `issue` 6 / 3 are also read at this tree).
       Read and not asserted; no row of this field is re-derived from them.
+      16 of 45 AS OF B-N (v9 SC-01 step 12, `corpus_run`, seed 0); THE ROW STAYS `not_met`. `speak` leaves the executed set: it is
+      a typed contested cell on a docketed matter now, and every corpus `speak` act is `speech.unheard` (no corpus `speak` names
+      a docketed matter; `test_season_shape.py`'s `ever` pin). ⚠ AN INSTRUMENT LIMIT, NAMED: `aperture` and
+      `corpus_run.attribute` count "attempted" only over `SeasonDriver.resolved`, which a contested act refused at admission
+      (`loop/resolve.py`'s contest branch, e.g. `speech.unheard`) never enters -- so such an act is not counted as attempted and
+      `speak` reads as never attempted, though `w.acts` holds every one.
     measure: "python -m engine.season.harness.corpus_run  # the 'WHERE THE <n> GO' line, which prints len(VERB_TABLE) -- 44 today; it was '38' as of ED-IN-0261, '32' until ED-FI-0009 made the count honest and '37' until `release` landed"
     blocks: [H-65, IN-09, IN-10, IN-33, IN-45]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W10-core removed (it gates corpus_run's R2 check, not this row's WHERE THE <n> GO); H-94 is carried by its owners IN-10, IN-09, IN-45, IN-33
@@ -1374,8 +1380,9 @@ rows:
       `WAITS_ON_PLAYER` and never seated, and exactly ONE entry has a `capability` key -- NPC-088's
       Carin Vedel, `{copying: 3}`. The built worlds hold 430 persons at build (`corpus_run`'s own 418
       is `len(w.persons)` at the END of a run, `corpus_run.py:898`) and one carries a non-empty
-      `Person.capability`, NPC-088's `p_a`. `tell` and `speak` are the two verbs that draw on `copying`
-      (`rosters.yaml: verb_capability`). **THE ROW'S OWN SENTENCE "`Person.capability` is empty on every
+      `Person.capability`, NPC-088's `p_a`. `tell` and `speak` are the two verbs `rosters.yaml:
+      verb_capability` maps to `copying`; on the corpus only `tell` draws on it since v9 SC-01 step 12
+      (B-N), because every corpus `speak` is refused `speech.unheard` before any roll. **THE ROW'S OWN SENTENCE "`Person.capability` is empty on every
       corpus person -- one writer, and it zeroes it" (2026-09-11) IS CONTRADICTED BY THE TREE** and is
       rewritten above to 429 of 430; `probes.py:579` still zeroes it, on `tiny_world`'s probe fixture
       and not on a corpus person, and `rosters.yaml: verb_capability`'s `note:` still carries the old

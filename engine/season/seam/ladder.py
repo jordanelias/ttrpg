@@ -35,7 +35,6 @@ from ..data.rosters import (
     COMBAT_BANDS, COMBAT_EDGES, LOST, UNOPPOSED, WON, WOUND_QUANTITIES, WOUNDED,
     check_edge_above)
 from ..gaps import Unspecified
-from ..queries.inputs import Margin
 
 
 # ---------------------------------------------------------------------------
@@ -207,21 +206,6 @@ def field_degree(result: dict) -> str:
     return WON if result.get("attacker_wins") else LOST
 
 
-def _grade_margin(net: float, ob: float) -> str:
-    """The one ladder's band for a margin: `degree_from_net`, imported from its owner, never copied."""
-    lad = degree_ladder()
-    if lad is None:
-        raise Unspecified(
-            f"a contest returned a margin and the tree's degree ladder is unavailable: "
-            f"{ladder_error()}", "S39.4",
-            needs="engine/dice_engine/dice_engine.py",
-            law="S27.2 -- the ladder is imported from its single owner. A band table copied "
-                "into this file would be the second resolver, and would keep answering "
-                "after the owner changed its mind")
-    degree_from_net, label = lad
-    return label[degree_from_net(net, ob)]
-
-
 def degree_of(result: Any, subject: Optional[str] = None, fixtures: Any = None) -> str:
     """THE ONE PLACE A SUBSYSTEM'S RESULT BECOMES THE TOKEN `writes_at` / `emits_at` KEY ON.
 
@@ -239,10 +223,6 @@ def degree_of(result: Any, subject: Optional[str] = None, fixtures: Any = None) 
     lifts for exactly this purpose, onto the three bands `march` actually writes on
     (Won/Lost/Unopposed). Reconciling the engine's own finer four-way split with the canonical
     ladder stays open MB-lane work, unrelated to this."""
-    # v9 SC-01 step 15: the social contest module's entry returns a `Margin` -- `04 §A.2`'s
-    # `degree(margin)` input exactly -- and the margin branch below grades it alike.
-    if isinstance(result, Margin):
-        return _grade_margin(result.net, result.ob)
     if not isinstance(result, dict):
         raise Unspecified(
             f"a contest returned {type(result).__name__}, which carries no outcome to grade",
@@ -258,7 +238,17 @@ def degree_of(result: Any, subject: Optional[str] = None, fixtures: Any = None) 
     if "attacker_wins" in result:
         return field_degree(result)
     if "net" in result and "ob" in result:
-        return _grade_margin(result["net"], result["ob"])
+        lad = degree_ladder()
+        if lad is None:
+            raise Unspecified(
+                f"a contest returned a margin and the tree's degree ladder is unavailable: "
+                f"{ladder_error()}", "S39.4",
+                needs="engine/dice_engine/dice_engine.py",
+                law="S27.2 -- the ladder is imported from its single owner. A band table copied "
+                    "into this file would be the second resolver, and would keep answering "
+                    "after the owner changed its mind")
+        degree_from_net, label = lad
+        return label[degree_from_net(result["net"], result["ob"])]
     raise Unspecified(
         f"a contest for {result.get('prize', result.get('module'))!r} resolved and returned "
         f"neither a scene to read nor a margin to grade (keys: {sorted(result)})",

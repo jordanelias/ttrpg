@@ -10,7 +10,7 @@ calls no `resolve`, and only builds the world and turns the seasons:
   convene (the Duke, via his seat, at a place) -> `date.scheduled` -> next season CALENDAR fires it
   (`date.fired`, `docket.formed`: an empty slot, the date being held) -> WITNESS deposits the firing in
   the Duke's ledger -> `open_case` on the clerk fills the slot -> the sitting question
-  (`world_q.questions_for`'s `q:sitting:<date>`) -> `determine` -> `matter.determined`, whose
+  (`world_q.questions_for`'s `q:sitting:<date>:<matters>`) -> `determine` -> `matter.determined`, whose
   `causes[]` reach the `date.fired` Event of the Date whose slot held the matter.
 
 THE WORLD IS HAND-BUILT STATE ONLY (v9 §0.5): `probes.tiny_world` (`R` > `D` > `S` > `Hh`; the Duke
@@ -39,7 +39,8 @@ on `party`.
 
 THE FALSIFIERS, each seen red before it was trusted (2026-10-16, mutations run and reverted):
   * AN INJECTED ACT REDDENS THE BAR: a chooser wrapper replacing the first act of the Duke's first
-    scene with a hand-written `open_case` Act -- `_zero_authored` fails naming `authored_oc`.
+    scene with a hand-written `open_case` Act -- `_zero_authored` fails naming `authored_oc` (kept
+    as `test_an_injected_act_reddens_the_bar`).
   * A DIFFERENT RNG ON THE SECOND RUN REDDENS THE BAR: the chooser's draw stream seeded one higher
     on run two of family/13 (world and world seed unchanged) -- hashes f0aa1e93 vs e4cc794a.
   * A BROKEN CAUSE LINK REDDENS THE BAR: the sitting question built with `about=None` in
@@ -62,6 +63,8 @@ import inspect
 import textwrap
 from pathlib import Path
 
+import pytest
+
 from ..data import files
 from ..data.arrangements import ARRANGEMENTS
 from ..data.fixtures import DEFAULT_FIXTURES
@@ -71,7 +74,7 @@ from ..harness.corpus_run import attribute
 from ..loop import effects_information
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries import world_q
-from ..state.carriers import Proposition, Tenure
+from ..state.carriers import Act, Proposition, Tenure
 from ..state.ids import H, draw_factory
 
 DUKE, SEAT, PARTY, WANT = "p_high", "off_duke", "p_mid", "prop_bar_duke_want"
@@ -132,11 +135,13 @@ def _walks_to(w, e, target: str) -> bool:
     return False
 
 
-def _zero_authored(d, chosen: list) -> None:
-    """Every act the seasons resolved is an object the chooser returned: none was injected."""
-    assert d.resolved, "the run resolved no act at all"
+def _zero_authored(w, chosen: list) -> None:
+    """Every act that reached RESOLVE is an object the chooser returned: none was injected. Read off
+    `w.acts`, the store every act entering RESOLVE is recorded in -- not `SeasonDriver.resolved`,
+    which a contested act refused at admission (e.g. `speech.unheard`) never enters."""
+    assert len(w.acts), "the run resolved no act at all"
     ours = {id(a) for a in chosen}          # `chosen` keeps every object alive, so no id is reused
-    authored = [(a.id, a.actor, a.verb) for a in d.resolved if id(a) not in ours]
+    authored = [(a.id, a.actor, a.verb) for a in w.acts if id(a) not in ours]
     assert not authored, f"acts the chooser did not return reached RESOLVE (authored): {authored}"
 
 
@@ -149,7 +154,7 @@ def _executed(w, d, seasons: int, verb: str, subject: str) -> list:
 def _proceeding(conviction: str, seed: int, seasons: int, wrap=None) -> str:
     """ONE SEEDED PROCEEDING, end to end, every link read off the log; returns the content hash."""
     w, d, chosen = _run(conviction, seed, seasons, wrap)
-    _zero_authored(d, chosen)
+    _zero_authored(w, chosen)
     by_id = {e.id: e for e in w.log}
     acts = {a.id: a for a in d.resolved}
     # THE DETERMINATION, and the firing its `causes[]` walk back to.
@@ -177,7 +182,7 @@ def _proceeding(conviction: str, seed: int, seasons: int, wrap=None) -> str:
                       == ("open_case", SEAT, PARTY) for c in x.causes)]
     assert opened, "no open_case put the clerk before the sitting after it fired"
     occ = d.scenes[det.scene].occasion
-    assert occ.id == f"q:sitting:{did}" and PARTY in occ.referents, occ
+    assert occ.id.startswith(f"q:sitting:{did}:") and PARTY in occ.referents, occ
     # ... AND THE CONVENE THAT SCHEDULED IT WAS CHOSEN, NOT INJECTED.
     sched, = [x for x in w.log if x.kind == "date.scheduled" and any(ch.subject == did for ch in x.changes)]
     conv, = [acts[c] for c in sched.causes if c in acts]
@@ -200,6 +205,30 @@ def test_the_bar_two_seeded_proceedings_with_zero_authored_acts_run_twice_byte_i
     assert len(set(hashes)) == len(PROCEEDINGS), "the two proceedings are one world, not two"
 
 
+@pytest.mark.parametrize("verb", ["open_case", "speak"])
+def test_an_injected_act_reddens_the_bar(verb):
+    """THE BAR's first falsifier, kept: a wrapper OUTSIDE the recorder replaces the first act of the
+    Duke's first scene with a hand-written act, and `_zero_authored` names it. `speak` is the act a
+    `SeasonDriver.resolved` reading missed: refused `speech.unheard` at admission (no docketed
+    matter yet), it never enters `resolved`, but it is in `w.acts`."""
+    injected = []
+
+    def wrap(choose):
+        def inject(p, v, s, ask_budget):
+            scenes = choose(p, v, s, ask_budget)
+            if p.id == DUKE and not injected and scenes and scenes[0].acts:
+                a = Act("authored_oc", DUKE, verb, via=SEAT, payload={"subject": PARTY})
+                scenes[0].acts[0] = a
+                injected.append(a)
+            return scenes
+        return inject
+    conviction, seed, seasons = PROCEEDINGS[0]
+    w, _, chosen = _run(conviction, seed, seasons, wrap=wrap)
+    assert injected and injected[0].id in w.acts, "the injection never reached RESOLVE"
+    with pytest.raises(AssertionError, match="authored_oc"):
+        _zero_authored(w, chosen)
+
+
 def test_the_walk_is_false_for_a_determination_the_ambition_raised_beside_a_fired_date():
     """THE CONTROL. Same world, community at seed 13 (traced at build): the Duke convenes at `S` AND
     opens the clerk's case in the same season, so the case is docketed dateless before the sitting
@@ -208,7 +237,7 @@ def test_the_walk_is_false_for_a_determination_the_ambition_raised_beside_a_fire
     firing -- so THE BAR's walk is not satisfied by a firing merely preceding a determination."""
     conviction, seed, seasons = CONTROL
     w, d, chosen = _run(conviction, seed, seasons)
-    _zero_authored(d, chosen)
+    _zero_authored(w, chosen)
     f, = [e for e in w.log if e.kind == "date.fired"]
     done = [e for e in w.log if e.kind == "matter.determined"]
     assert done and all(e.emitted_at > f.emitted_at for e in done), (f.emitted_at, [e.emitted_at for e in done])
@@ -219,7 +248,7 @@ def test_the_walk_is_false_for_a_determination_the_ambition_raised_beside_a_fire
 
 
 # ======================================================================================
-# THE CLOSURE TEST -- NOTHING IN THE GAME BRANCHES ON AN ARRANGEMENT'S ID (scripting drift)
+# THE CLOSURE TEST -- NO GAME CODE COMPARES AGAINST A LITERAL ARRANGEMENT ID (scripting drift)
 # ======================================================================================
 # Moved here from `test_sc01_provider.py` (steps 13+15 wrote it as a first form and named step 16
 # its owner). A STATIC scan, and that is the narrowest instrument that can see the plant: a computed
