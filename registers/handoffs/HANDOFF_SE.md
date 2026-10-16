@@ -5,9 +5,9 @@
 ## Open
 | item | where it lives | next step |
 |---|---|---|
-| Matter/works proposal (`nearest_store`, body gate, `works`/`found`) — RATIFIED AS INTENT (`ED-SE-0053`); the residue is v9 SE-03 and IN-28 | `ED-SE-0053`; `workplans/valoria_master_workplan_v9_part6.md` SE-03; `workplans/valoria_master_workplan_v9_part5.md` IN-28 | build IN-28 (`found`/`build`: a cost, a holder, a closer); nothing in the proposal exists until it is built with its test |
-| Built-world ontology proposal (Site/Rung fabric-address, fortification bands) — superseded in part by `ED-SE-0053` and absorbed (fortification is `Site.condition`) | `ED-SE-0052`; `ED-SE-0053` | nothing to rule; SE-03 carries the residue |
-| MW-11 / MW-5 falsifiers RED (crossing predicate downward-only; `withdrawal_only`/death same-season collision) | `ED-SE-0053` | resolve if/when the proposal is authored into canon (v9 SE-03, `workplans/valoria_master_workplan_v9_part6.md`: re-run at IN-28; the red is [UNVERIFIED]) |
+| Matter/works proposal (`nearest_store`, body gate, `works`/`found`) — RATIFIED AS INTENT (`ED-SE-0053`); IN-28's cost and holder and SE-03's MW-5 landed at B-K (`c8d1db3a`); the residue is the closer (`raze`, IN-12 step 11) and the works' producer | `ED-SE-0053`; `engine/season/hole_register.yaml` H-166 (limit 3), H-165; `registers/editorial_ledger_in.jsonl` ED-IN-0297 (needs_jordan, where a works comes from) | the closer is `raze` at B-R; the producer waits on ED-IN-0297; nothing else in the proposal exists until built with its test |
+| Built-world ontology proposal (Site/Rung fabric-address, fortification bands) — superseded in part by `ED-SE-0053` and absorbed (fortification is `Site.condition`) | `ED-SE-0052`; `ED-SE-0053` | nothing to rule; H-166 limit 3 and H-211 carry the residue |
+| MW-11 RED (crossing predicate downward-only; nothing raises a body); MW-5 is a test over H-125's arms | `ED-SE-0053`; `engine/season/hole_register.yaml` H-211 (MW-11), H-125; `engine/season/tests/test_se03_body_bands.py` (MW-5) | MW-11 is measured, not in the tree (a red test may not be skipped); r2 section A.4's signed body step and an upward check in `_crossings` are its fix, a position of their own |
 
 ## Standing orders — do not re-raise, do not do
 | order | source |

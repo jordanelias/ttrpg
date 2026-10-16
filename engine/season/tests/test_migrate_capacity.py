@@ -145,6 +145,12 @@ def _build_dwelling(w, d, at, by, key="wd"):
                            payload={"record": key, "kind": "works",
                                     "subject_matter": {"plan": "dwelling", "at": at}, "rung": at,
                                     "stages": [(w.tick + 1, "term1", key)]}))
+    # PLANTED, v9 IN-28 (`H-166` limit 1): the dwelling's price, `rosters.yaml: works_cost`, at the
+    # works' rung, which `build` consumes -- so the store is where it was once the dwelling stands.
+    r = w.rungs[at]
+    r.stores = dict(r.stores or {})
+    for kind, n in w.fixtures.get("works_cost")["dwelling"].items():
+        r.stores[kind] = r.stores.get(kind, 0) + n
     built = _fold(w, d, Act(id=f"{key}:b", actor=by, verb="build", payload={"subject": key}))
     assert _kinds(made) == ["record.created"] and _kinds(built) == ["site.built"], (
         _kinds(made), _kinds(built))
@@ -366,3 +372,138 @@ def test_24d_ii_capacity_has_a_caller_outside_the_tests():
     assert "effects_migration.py" in seen, sorted(seen)
     assert "effects_migration.py" in callers, (
         f"`capacity` is called from nowhere outside the tests: {callers}")
+
+
+# ======================================================================================
+# 5 -- v9 IN-45 `migrate`: THE DESTINATION CHANNEL (H-168 limit 1), THROUGH THE REAL FORMATION
+# ======================================================================================
+# `to` binds the question's referent, so before this a computed `migrate` aimed wherever the person
+# was asked about -- most often his own residence, refused every time (H-168 limit 1). The channel is
+# `queries/world_q.py::places_named`: the Rungs his OWN ledger names, the ladder seats him in, and he
+# does not already live under, stamped on the question he answers as `Rung` (IN-53 D1's partition);
+# `migrate` declares `referent_class: Rung`. Every act below is COMPUTED -- `questions_for`, the real
+# `opening_set`, the real `pack_scenes` -- and folded by the real RESOLVE. Hand-built worlds only;
+# no test here asserts anything about the seed-0 realm (v9 §0.5).
+# MUTATIONS, run at the build 2026-10-16. Each went RED, then was restored byte-exact and went GREEN:
+#   * `places_named` returning `()` (the channel's source disabled) -> the first test RED (no
+#     `migrate` forms on the place he was told of);
+#   * `migrate`'s `referent_class: Rung` deleted from `verb_table.yaml` -> the second test RED (a
+#     computed `migrate` forms on his own residence again);
+#   * `_eff_migrate`'s capacity decline disabled (`newcomer and` -> `False and`) -> the first test
+#     RED (the computed act into the full hearth executes);
+#   * `_derive_operand`'s document gate removed (`and (q is None or subject in q.referents)`) -> the
+#     third test RED (`to` re-aimed at the petition's addressee).
+
+from ..decision import assemble as _assemble
+from ..decision import options as _options
+from ..decision.choose import pack_scenes as _pack
+from ..state.carriers import Claim as _Claim
+from ..state.ids import H as _H
+
+WHO, HOME, TOWN, THERE = "lp_hearth_a", "lr_hearth_a", "lr_settlement_a", "lr_hearth_b"
+
+
+def _told_of(w, pid, *rungs):
+    """`pid` holds a firsthand claim about each of `rungs` -- a larder he saw (`stores:grain`), the
+    ledger state a witnessed `stores.changed` leaves -- planted, so the cause is controlled."""
+    p = w.persons[pid]
+    for i, r in enumerate(rungs):
+        p.ledger.append(_Claim(f"told:{pid}:{i}:{w.tick}", pid, r, "stores:grain", 8, w.tick,
+                               "firsthand", 100, "own"))
+
+
+def _asked(w, pid):
+    from ..queries import world_q
+    return world_q.questions_for(w, w.persons[pid], since=(w.tick, 0))
+
+
+def _computed_migrations(w, pid, q=None):
+    """The `migrate` acts `pid` forms on `q` -- by default the question he answers first, which the
+    classed referents ride (`questions_for`'s `_stamped`) -- through the real `opening_set`, packed
+    by the real `pack_scenes`."""
+    p = w.persons[pid]
+    if q is None:
+        qs = _asked(w, pid)
+        if not qs:
+            return []
+        q = qs[0]
+    cands = [c for c in _options.opening_set(p, _assemble(p, q, 12), q, w.fixtures)
+             if c.verb == "migrate"]
+    mint = lambda who, verb, subj: _H(w.world_seed, w.tick, who, f"act:{verb}:{subj}")
+    return [a for s in _pack(p, cands, 99, w.fixtures, mint) for a in s.acts]
+
+
+def test_in45_a_computed_migrate_reaches_a_place_he_was_told_of_and_its_capacity_refusal():
+    """THE CHANNEL, CAUSE CONTROLLED. `lp_hearth_a` is told of `lr_hearth_b` (the other chain's
+    hearth), of his own hearth, of the town above it, and of another person. `places_named` offers
+    exactly `lr_hearth_b`: his residence and what he lives under are not ANOTHER place, and a
+    person's rung is no place to live. The computed `migrate` carries `to = lr_hearth_b`.
+      * `lr_hearth_b` is FULL (one dwelling, one resident), so the computed act is refused by
+        `_eff_migrate`'s CAPACITY decline -- the throttle reached by a computed act, not only by
+        section 3's hand-built ones -- and nothing moves.
+      * RR-2's lever: its holder BUILDS a second dwelling, and next season the same person's computed
+        `migrate` executes there: `residence.changed`, and he lives at `lr_hearth_b`.
+    CONTROL: a person told of nothing forms no `migrate` at all."""
+    from ..harness import governance_spine as G
+    from ..queries import world_q
+    w, d = _world(lambda: G.build(0))
+    _told_of(w, WHO, THERE, HOME, TOWN, "lp_hearth_b")
+    assert world_q.places_named(w, w.persons[WHO]) == (THERE,)
+    assert world_q.places_named(w, w.persons["lp_community_b"]) == ()
+    assert _computed_migrations(w, "lp_community_b") == []
+
+    (full,) = _computed_migrations(w, WHO)
+    assert full.payload.get("to") == THERE == full.payload.get("subject"), full.payload
+    assert world_q.population(w, THERE) + w.persons[WHO].weight > world_q.capacity(w, THERE)
+    assert _kinds(_fold(w, d, full)) == ["migrate.refused"]
+    assert world_q.residence_of(w)[WHO] == HOME and w.persons[WHO].travel_leg == []
+
+    _build_dwelling(w, d, THERE, by="lp_hearth_b")
+    _season(w, d)
+    _told_of(w, WHO, THERE)
+    (room,) = _computed_migrations(w, WHO)
+    assert room.payload.get("to") == THERE and room.id != full.id, (room, full)
+    assert _kinds(_fold(w, d, room)) == ["residence.changed"]
+    assert world_q.residence_of(w)[WHO] == THERE
+    # ... and once he lives there it is no longer ANOTHER place: nothing forms on it again.
+    assert THERE not in world_q.places_named(w, w.persons[WHO])
+
+
+def test_in45_a_computed_migrate_never_forms_on_the_residence_it_would_change_nothing_at():
+    """THE CONTROL H-168 limit 1 measured: a question whose referent IS his own residence (a claim
+    about his hearth landing) forms no `migrate` -- the row forms only on `Rung`-classed referents,
+    and what he lives under is never one. Asserted on the formed acts AND by folding whatever forms,
+    so a `migrate` into his own residence that formed and executed fails twice."""
+    from ..harness import governance_spine as G
+    from ..queries import world_q
+    w, d = _world(lambda: G.build(0))
+    _told_of(w, WHO, HOME, TOWN)
+    qs = _asked(w, WHO)
+    assert any(HOME in q.referents for q in qs), [q.referents for q in qs]   # anti-vacuity
+    acts = [a for q in qs for a in _computed_migrations(w, WHO, q=q)]
+    assert [a.payload.get("to") for a in acts if a.payload.get("to") in (HOME, TOWN)] == [], acts
+    executed = [a for a in acts if "residence.changed" in _kinds(_fold(w, d, a))]
+    assert executed == [] and world_q.residence_of(w)[WHO] == HOME
+
+
+def test_in45_a_document_the_question_is_about_does_not_re_aim_a_classed_destination():
+    """THE REFERENT RULE, ONE PARTITION OVER. The question he answers is about a PETITION he holds,
+    addressed to `lp_hearth_b` (`record_sourced_operands.petition: {to: to}` answers `to` on it), and
+    `lr_hearth_b` rides it as a `Rung`. The `migrate` formed on the place carries `to = lr_hearth_b`,
+    not the petition's addressee: a document answers acts ON it, never an act on a classed referent.
+    CONTROL: a `petition` formed on the same question is still addressed by the document."""
+    from ..harness import governance_spine as G
+    from ..loop.witness import content_value
+    from ..state.carriers import Question, Record
+    w, d = _world(lambda: G.build(0))
+    p = w.persons[WHO]
+    sm = {"terms": HOME, "to": ["lp_hearth_b"], "from": HOME}
+    w.records["rec_p"] = Record("rec_p", HOME, "petition", subject_matter=sm)
+    p.ledger.append(_Claim("c_pet", WHO, "rec_p", "content:petition", content_value(sm), 0,
+                           "firsthand", 100, "own"))
+    q = Question("q:claim:c_pet", "claim_landed", ("rec_p",), "c_pet", classes=((THERE, "Rung"),))
+    (mg,) = _computed_migrations(w, WHO, q=q)
+    assert mg.payload.get("to") == THERE, mg.payload
+    pet = [c for c in _options.opening_set(p, _assemble(p, q, 12), q, w.fixtures)
+           if c.verb == "petition"]
+    assert pet and all(c.operands.get("to") == "lp_hearth_b" for c in pet), pet

@@ -172,8 +172,43 @@ def _load_capacity_floor() -> dict:
     return floors
 
 
+def _load_works_cost() -> dict:
+    """v9 IN-28 (`H-166` limit 1): `rosters.yaml: works_cost.costs`, `{plan kind: {matter kind:
+    amount}}` -- what `found`/`build` charge the works' rung (the row says why, and why it is keyed
+    ONE way, not on `site_kinds` in both directions: a plan kind with no row has no price and is
+    refused). The checks are the ones a cost table can fail silently: a key no ladder or site roster
+    carries (a price for nothing), an empty cell or a non-positive amount (a place that rises for
+    free, which is the defect this table exists to close), a matter kind no registry row carries."""
+    return _check_works_cost(roster_map("works_cost", "costs"),
+                             set(roster("rung_kinds")) | set(roster("site_kinds")),
+                             set(roster("matter_kinds")))
+
+
+def _check_works_cost(costs, plans: set, mk: set) -> dict:
+    """`_load_works_cost`'s refusals, with the rosters passed in so a test can plant each one
+    (`data/requires.py::_check_record_sourced`'s precedent, §0.1 pt 3): a plan key no roster carries
+    is FORBIDDEN; an empty or non-mapping cell, a matter kind no registry row carries, a non-int
+    (or bool) or non-positive amount is UNGRADED. Returns the validated copy."""
+    if set(costs) - plans:
+        raise Forbidden(
+            f"works_cost prices plan kind(s) no roster carries: {sorted(set(costs) - plans)}",
+            "rosters.yaml", needs="a `rung_kinds` or `site_kinds` member, or drop the row",
+            law="S42.2.1 -- a table keyed past its own roster answers for a kind nobody declared")
+    for plan, cell in costs.items():
+        if not isinstance(cell, dict) or not cell or set(cell) - mk or any(
+                not isinstance(n, int) or isinstance(n, bool) or n <= 0 for n in cell.values()):
+            raise Ungraded(
+                f"works_cost[{plan}] is {cell!r}: a cost is a non-empty mapping of registered "
+                "matter kinds to positive ints", "rosters.yaml",
+                needs="a positive amount of a `matter_kinds` member, or drop the row (unpriced: refused)",
+                law="H-166 -- a place that rises at no cost is the defect the table closes; a zero "
+                    "cell would ship it again looking like a price")
+    return {plan: dict(cell) for plan, cell in costs.items()}
+
+
 WEAR_RATES, BAND_FLOORS, SUBSISTENCE_WEIGHTS, SITE_YIELD = _load_matter_tables()
 CAPACITY_FLOORS = _load_capacity_floor()
+WORKS_COST = _load_works_cost()
 
 DEFAULT_FIXTURES = Fixtures(
     # S48: condition is an int on an EXPORTED scale. S22 assigns the scale to `params`, and the
@@ -392,6 +427,8 @@ DEFAULT_FIXTURES = Fixtures(
     # `24d-ii`, landed with its caller at plan position `19c`: the lower bound on
     # `world_q.capacity`, per site kind, read off `rosters.yaml: capacity_floor` (`H-167`, swept).
     capacity_floor=CAPACITY_FLOORS,
+    # v9 IN-28: what a works' plan costs its rung, read off `rosters.yaml: works_cost` (`H-166`, swept).
+    works_cost=WORKS_COST,
     # ⚠ `W8` / `H-26`. #353 §22.3 names *"`season_factor`'s distribution"* as a value with NO
     # OWNER, and §25 says `yield` is *"blocked on"* it -- so the SHAPE ruled is a DISTRIBUTION and
     # what is injected here is a degenerate one. The sweep is on its value, which is the only axis

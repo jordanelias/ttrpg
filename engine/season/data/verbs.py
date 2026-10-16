@@ -1022,8 +1022,11 @@ VERB_TABLE = _load_verb_table()
 def act_key(verb: str, subject, operands) -> str:
     """WHAT AN ACT'S ID IS OF, AFTER ITS VERB: `H(seed, tick, actor, f"act:{verb}:{act_key}")`.
     The subject, and -- for a row whose cell binds a known-person operand beside `subject`
-    (`VerbRow.known_person_operands`: `tell`'s `to`, since plan position `14` `give`'s, and since IN-53
-    the untyped `confer`'s) -- that operand too, as `subject>to`.
+    (`VerbRow.known_person_operands`: `tell`'s `to`, since plan position `14` `give`'s, since IN-53
+    the untyped `confer`'s, and since plan position IN-10 `issue`'s, whose `terms` conjunct binds
+    `subject` beside its executor) -- that operand too, as `subject>to`. A bag a HELD Record forms
+    (`decision/options.py::operand_bags`, IN-10) names its addressee there the same way, so it keys
+    exactly as the known-person bag for that person would and the fan drops it as a duplicate.
 
     ⚠ TELLING WORKPLAN `T4`, AND IT IS MEASURED NECESSITY: one topic now forms one `tell` per person
     the teller knows, so two acts in one deliberation shared `(actor, verb, subject)` and therefore
@@ -1063,8 +1066,9 @@ def opportunity_key(verb: str, subject, operands) -> Optional[tuple]:
     rule for a row that names a `counterparty:`, read off the ROW'S COLUMN and never a verb name; `tell`
     and, since plan position `14`, `give` are the rows where it changes anything TODAY (`give` is typed
     and formable, its subject the Record and its counterparty `to` the receiver, one Candidate per
-    person the giver knows: `decision/options.py::operand_bags`). `petition` and `issue` always have
-    `to` == `subject` (a computed Candidate's one referent), so their key is unchanged. Where the
+    person the giver knows: `decision/options.py::operand_bags`), and since plan position IN-10
+    `issue` (one writ about a referent per executor the issuer knows). `petition` always has
+    `to` == `subject` (a computed Candidate's one referent), so its key is unchanged. Where the
     counterparty IS the subject (`determine`, `oblige`) it adds nothing and is left out, so those
     keys are byte-identical to before.
 
@@ -1235,6 +1239,23 @@ def _derive_record_referent_kinds() -> frozenset:
 
 
 RECORD_REFERENT_KINDS = _derive_record_referent_kinds()
+
+
+def _derive_rung_remit_acts() -> frozenset:
+    """v9 IN-49 `levy` (H-163 limit 3, [ASSUMPTION; medium; Jordan to correct]): THE REMIT ACTS A
+    SEAT EXERCISES ON A `Rung`-CLASSED REFERENT -- the act of every `remit:` eligibility alternative
+    on a row declaring `referent_class: Rung` (`levy`: `issue`, `H-52`'s substitution, carried and not
+    decided here). Read off the rows, `RECORD_REFERENT_KINDS`' shape one class over, so the stamp
+    (`queries/world_q.py::larders_in_purview`, which offers a larder only to a holder of a seat
+    granting one of these) and the fold's eligibility cannot name different acts, and no act literal
+    lives at the stamp site. Empty when no `Rung` row is exercised through a seat (`migrate` is
+    `own`): then nothing is stamped, which is the revert."""
+    return frozenset(raw.strip() for row in VERB_TABLE.values() if row.referent_class == "Rung"
+                     for kind, _, raw in (alt.partition(":") for alt in row.eligibility)
+                     if kind.strip() == "remit" and raw.strip())
+
+
+RUNG_REMIT_ACTS = _derive_rung_remit_acts()
 
 # An authored alignment cell for an EVENT KIND rather than a verb is keyed `deed:<kind>` in the same
 # axis row. Admitted only where `<kind>` is in `EMITTED_KINDS` (`_load_alignment`): a deed key for a

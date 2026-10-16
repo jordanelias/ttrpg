@@ -604,7 +604,25 @@ rosters:
       `questions_for` adds to the question he answers beside his seats; only `comply` declares it
       (`evade / defy` and `construe` were typed beside it and reverted, executing 0 times; H-203).
       REVERT: drop the value and the row's column.
-    values: [Office, Record]
+      `Rung` (v9 IN-45 `migrate`, H-168 limit 1, [ASSUMPTION; medium; Jordan to correct]): the
+      places a person has been told of and could settle in (`queries/world_q.py::places_named` --
+      a Rung his own ledger names, the §10 ladder seats him in, and he does not already live
+      under), which `questions_for` adds to the question he answers beside his seats and writs;
+      `migrate` declares it (and `levy`, below), so its `to` binds ANOTHER place rather than the single referent
+      of whatever he was asked about (most often his own residence). The destination channel H-168
+      names, on IN-53 D1's partition and `seats_named`'s knowledge source: no operand is added
+      (`to` still binds the referent, `decision/options.py::_derive_operand`) and no Record kind.
+      REVERT: drop the value, `migrate`'s column and `places_named`'s splice.
+      v9 IN-49 `levy` (H-163 limit 3, [ASSUMPTION; medium; Jordan to correct]): AND the larders a
+      seat may levy (`queries/world_q.py::larders_in_purview` -- a Rung his own ledger names, holding
+      the fixtures' levy of their matter, inside the purview of a seat of his granting the remit act
+      of a row declaring this class, `data/verbs.py::RUNG_REMIT_ACTS`, and not that seat's own rung,
+      its treasury), stamped after the places and
+      never twice; `levy` declares it beside `migrate`, so its `subject` binds a stocked rung in
+      purview rather than whatever he was asked about. The class is shared, as `Office` is between
+      `confer` and `oblige`: each row forms on both sources and the fold disposes. REVERT: `levy`'s
+      column (which empties `RUNG_REMIT_ACTS`) and `larders_in_purview`'s splice.
+    values: [Office, Record, Rung]
 
   person_predicates:
     source: "#353 §14 `:331` — `marks[]` … \"heritage · grade · Church standing · office · residence\""
@@ -1368,6 +1386,45 @@ rosters:
       dwelling: 1
       garrison: 0
 
+  works_cost:
+    source: "v9 IN-28 (`H-166` limit 1, its own design order: the cost first). r2 `proposals/2026-09-17-governance-and-holdings-r2/04_MATTER_AND_WORKS.md` §A.6.6 (intent): *\"the cost is paid by `transfer` into the works' rung\"*, and nothing debited that rung when the place rose. `proposals/2026-09-10-settlements-factions-populations/04_EVALUATION.md` §6 (intent): `found` costs *\"the stake\"*, `build` costs *\"timber\"*."
+    row: H-166
+    sweep: [declared, halved, doubled]
+    note: >-
+      WHAT A WORKS' PLAN COSTS: `{plan kind: {matter kind: amount}}`, paid out of the WORKS' RUNG
+      (`Record.rung`, where the works is kept and where `transfer` delivers to it) when the place
+      rises. `loop/effects_founding.py` is the one reader. `found` moves its stake TWO-SIDED into the
+      Rung it founds, so the grain stays in the world and provisions the new hearth (`_shift`, the one
+      body of a conserved store move). `build` CONSUMES its cost into the fabric, one-sided, a lawful
+      sink. 04_EVALUATION §6 S passes the pair in exactly that shape: *"`build` debits one side as a
+      lawful consumption sink; `found` is two-sided"*.
+      ⚠ A PLAN KIND WITH NO ROW HAS NO PRICE, SO NOBODY CAN PAY FOR IT, AND `found`/`build` REFUSE IT.
+      That is a refusal that emits, never a free place: a missing row is not a cost of zero. The
+      loader checks one way only -- every key a `rung_kinds` or `site_kinds` member, every cell
+      non-empty, every matter kind a `matter_kinds` member, every amount a positive int
+      (`data/fixtures.py::_load_works_cost`). It is NOT keyed on `site_kinds` in both directions as
+      `wear_per_season` is, because three groups of members get no row by design:
+        * `body` IS NOT A SITE (`site_kinds`' own note). A works planning one is refused here, by the
+          roster, rather than by a kind literal in `_eff_build` (`H-166` limit 4, narrowed: `body`
+          stays in `site_kinds` for `band_floors`).
+        * `person` is CENSUS's to mint (F.30), never a works'.
+        * `settlement` and above are unpriced: founding a settlement collides with SE-9(a)'s held
+          question (*"never adding nodes"* to the fixed settlement registry), and 02_PROPOSALS P4
+          restricts founding to `hearth` and `community` for that reason.
+      [ASSUMPTION; medium; Jordan to correct; revert: delete this roster and its reader, and
+      `found`/`build` cost nothing again (`H-166` limit 1 reopens)]. THE KINDS are 04_EVALUATION's
+      (grain for the stake, timber for a fabric). THE AMOUNT IS INVENTED and it is ONE number, 10,
+      for every row: `site_yield.seam.timber` is 10, so a fabric costs one season of a full seam's
+      timber, and the stake reuses the same magnitude so the two verbs share one scale rather than
+      two. `H-166` sweeps it; `halved` and `doubled` scale every cell.
+    costs:
+      hearth:    {grain: 10}
+      community: {grain: 10}
+      harbour:   {timber: 10}
+      seam:      {timber: 10}
+      dwelling:  {timber: 10}
+      garrison:  {timber: 10}
+
   subsistence_weight:
     source: "`H-11` — *the subsistence formula over an OPEN MatterKind registry*. ARCHITECTURE_V2.md's default: *draw from the containing rung's stores, scaled by weight*."
     row: H-11
@@ -1648,20 +1705,54 @@ rosters:
       predicates did.
     values: [actor, subject, from, to, site, kind, amount, floor]
 
-  writ_sourced_operands:
+  record_sourced_operands:
     source: >-
-      r2 `02_THE_WRIT_AND_THE_WORD.md` §A.13 -- *"the executor's act is `transfer`, whose operands --
-      `from`, `to`, `kind`, `amount` -- are all in the closed eight"*; plan position `15c`.
+      #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §10.1, *the shared enabler*, plan
+      position IN-10 (`workplans/valoria_master_workplan_v9_part5.md`); it replaces plan position
+      `15c`'s flat `writ_sourced_operands` (`to, kind, amount`), whose source was r2
+      `02_THE_WRIT_AND_THE_WORD.md` §A.13.
     note: >-
-      ⚠ A SUBSET OF `requires_operands`, NEVER A SECOND VOCABULARY -- `data/requires.py` refuses at
-      import if a member here is not also a `requires_operands` member. THE THREE NAMES A HELD WRIT
-      MAY ANSWER FOR, before `decision/options.py::_derive_operand` falls through to the referent or
-      the fixture. `from` IS DELIBERATELY EXCLUDED: r2's own ruling keeps *where the actor stands* off
-      the writ -- a document naming `from` would let a Duke's writ reach into a larder the executor is
-      not standing in. `at` stays off this roster too, but for a different reason: it is not (and per
-      r2 must not become, *"I do not coin a ninth operand"*) a `requires_operands` member at all, so
-      no typed cell can ever pass `name == "at"` to `_derive_operand` in the first place.
-    values: [to, kind, amount]
+      PER RECORD KIND, WHICH OF THE CLOSED EIGHT OPERANDS (`requires_operands`) A RECORD OF THAT KIND
+      ANSWERS, AND FROM WHICH OF ITS OWN CONTENT KEYS -- `operand: content key`. `data/requires.py`
+      refuses at import a kind that is not a `record_kinds` member, an empty entry, an operand that is
+      not one of the eight, a content key that is not one of THAT KIND's keys (`record_kinds.values`),
+      and `from` on any kind. ⚠ `from` IS ON NO KIND, r2's own ruling: a document naming *where the
+      actor stands* would let a Duke's writ reach into a larder the executor is not standing in. `at`
+      is no operand (r2: *"I do not coin a ninth operand"*), so no kind maps it. ⚠ `kind` AND `amount`
+      LEFT WITH THE FLAT LIST: no live kind carries either key, so they declined every time and
+      dropping them moves nothing; a later kind that carries them (the deferred `debt`) adds them here.
+      ⚠ TWO READERS, `decision/options.py`, ONE MAP. (1) A QUESTION ABOUT A DOCUMENT (`q.about` names a
+      `content:<kind>` claim in the asker's own ledger, `_from_content_claim`): the document answers
+      every name it maps BUT `subject`, which stays the question's referent -- the act is about the
+      document itself (`give` it, answer it). `15c`'s channel; it moves nothing. (2) A HELD RECORD
+      (`held_record_claims`: the asker's own live `hold` on a Record whose content claim he holds):
+      the document answers every name it maps, `subject` included -- the act is about what the
+      document SAYS, so a held dispensation's `terms` answers `subject` (`_derive_operand`'s `held=`).
+      `operand_bags` forms one bag per held Record whose `terms` is the referent the Candidate is
+      formed on, on a row whose second side a known person fills (`known_person_operands`): the
+      document's addressee is then a second side beside the persons the holder knows. No faction
+      actor, no new form, no ninth operand, no coined name.
+      ⚠ `faction_sheet` IS THE SHEET CONSUMER (v9 IN-45 `forge`, H-169 limit 5: *"no operand, cell or
+      score reads `members`/`holdings`/`seats` off a `content:faction_sheet` claim"*), on H-169's own
+      design order -- *"a sheet-sourced operand, `15c`'s route"* -- and so a ROW HERE, not a branch.
+      A sheet answers `to` with the `head` it names: on a question about a sheet its holder holds,
+      a petition (`to` bound without `subject`, reader (1)) is ADDRESSED TO WHOEVER THE SHEET SAYS
+      HEADS THE FACTION -- the decision H-169's `unblocks:` names (*"a petition's addressee"*). A
+      stale or forged sheet addresses it wrongly, and nothing tells the petitioner. `head` and not
+      `members`/`seats`: it is the sheet's one single-person key, so it answers without
+      `_content_answer`'s singleton collapse; `seats` are offices and a petition's addressee is a
+      Person (`verb_table.yaml`'s `petition` row). `subject: proposition` keeps reader (2) on its
+      own rule -- a held sheet adds a fanned bag only on an act about the faction it describes --
+      where a sheet mapping no `subject` would pass that check vacuously on every referent.
+      [ASSUMPTION; medium; Jordan to correct; revert: drop this row and the sheet is read by nothing
+      again.] `head` is `None` on every true sheet this tree builds today (`queries/faction_q.py::
+      head`: no `commit` carries a degree), so a true sheet answers nothing and falls through to the
+      referent exactly as before; a forged one names its forger (`loop/effects_information.py::
+      _eff_forge`).
+    values:
+      dispensation: {to: to, subject: terms}
+      petition:     {to: to, subject: terms}
+      faction_sheet: {to: head, subject: proposition}
 
   shortfall_sourced_operands:
     source: >-
@@ -1669,7 +1760,7 @@ rosters:
       §3.2 row 11, and the driver-retirement plan's G3: *"wiring the existing `transfer` verb's
       operands from a shortfall claim"*.
     note: >-
-      ⚠ `writ_sourced_operands`' SHAPE, ONE ROW DOWN, FOR A SECOND KIND OF CLAIM: the operand names a
+      ⚠ `record_sourced_operands`' CLAIM-SOURCED SHAPE, ONE ROW DOWN, FOR A SECOND KIND OF CLAIM: the operand names a
       SHORTFALL CLAIM may answer, before `decision/options.py::_derive_operand` falls through to the
       referent or the fixture. A subset of `requires_operands`, refused at import otherwise
       (`data/requires.py`). The claim is `(rung, "<predicate>:<kind>", units)`: MATTER records it
@@ -1680,7 +1771,7 @@ rosters:
       referent IS the claim's subject (`questions_for` builds `(c.subject,)`), so `to` already binds
       the drained rung through the referent rule. A claim branch for it would always return the same
       value as the fallback beneath it, and a branch that can never change an outcome is `ID-13`.
-      The writ lists `to` because a writ's addressee is NOT its subject (the Record). `from` stays
+      A document maps `to` because a writ's addressee is NOT its subject (the Record). `from` stays
       the actor's own rung for r2 §A.13's reason: a claim about somewhere else must not reach into a
       larder the actor is not standing in.
       ⚠ THE PREDICATE STEM IS DATA, AND IT MAY NOT BE A WORD THE `requires` GRAMMAR READS: a claim
@@ -1700,10 +1791,13 @@ rosters:
       SOMEBODY THEY KNOW rather than with the question's referent. A subset of `requires_operands`,
       refused at import otherwise (`data/requires.py`). `decision/options.py::operand_bags` forms one
       operand bag per known person, and only for a row whose typed cell binds `subject` SEPARATELY
-      from the name -- `tell`, whose topic is `subject` and whose hearer is `to`, and since plan
-      position `14` `give`, whose Record is `subject` and whose receiver is `to`. A row binding `to`
-      without `subject` (`petition`, `issue`) keeps the referent rule: what it is addressed to IS what
-      it is about there, `H-94`'s single referent.
+      from the name -- `tell`, whose topic is `subject` and whose hearer is `to`, since plan
+      position `14` `give`, whose Record is `subject` and whose receiver is `to`, and since plan
+      position IN-10 (#453 §10.1) `issue`, whose `terms` is `subject` and whose executor is `to`, so a
+      writ is no longer addressed to what it is about. A row binding `to` without `subject`
+      (`petition`) keeps the referent rule: what it is addressed to IS what it is about there,
+      `H-94`'s single referent. Since IN-10 a held Record's addressee is a second side too
+      (`record_sourced_operands`, reader (2)).
       ⚠ `claim` IS WHERE A PERSON BECOMES KNOWN, and `queries/person_q.py::known_persons` reads it:
       `predicate` -- a truthy existence reading of a person (deposited by the `existence` form's
       fold); `seen_term` -- the `seen` claim's term naming who was seen doing something. The third

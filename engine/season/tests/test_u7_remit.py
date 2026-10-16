@@ -62,6 +62,12 @@ def _world(**fx):
     for name, value in fx.items():
         fixtures = fixtures.sweep(name, value)
     w = P.tiny_world(fixtures)
+    # ⚠ RE-RECORDED AT PLAN POSITION IN-10: `issue`'s cell gained a `terms` conjunct -- the issuer
+    # holds a claim on what the writ is about (`own_ledger` of `subject`, `verb_table.yaml`) -- so the
+    # Duke knows the two parties these writs name. Nothing else here reads an `exists:Person` claim.
+    for who in (PARTY, OUTSIDER):
+        w.persons[DUKE].ledger.append(Claim(f"c_knows_{who}", DUKE, who, "exists:Person", 1, 0,
+                                            "firsthand", 100, "own"))
     d = SeasonDriver(w)
     d.matter(mint_token(w, WriteClass.MATTER), [])
     return w, d
@@ -863,3 +869,197 @@ def test_sc03a_a_mustered_army_excludes_a_person_held_in_custody(monkeypatch):
     w.add_tenure(Tenure("t_det", PARTY, "off_dicastery", DETAIN_KIND, since=w.tick))
     claimants, _, _ = _sides.sides_of(w, march, "S", "a field")
     assert claimants == [DUKE, "p_low"], claimants
+
+
+# ======================================================================================
+# 9 -- v9 IN-49 `levy`: THE LEVIED RUNG (H-163 limit 3), THROUGH THE REAL FORMATION
+# ======================================================================================
+# `subject` bound the question's single referent, so a computed `levy` aimed at whatever the seat
+# holder was asked about -- a person, a Record, a rung his seat does not reach, an empty larder --
+# and was refused there (H-163 limit 3). The channel is `queries/world_q.py::larders_in_purview`:
+# the Rungs his OWN ledger names, holding the fixtures' levy of their matter, inside the purview of a
+# seat of his granting the remit act (`data/verbs.py::RUNG_REMIT_ACTS`), stamped on the question he
+# answers as `Rung`; `levy` declares `referent_class: Rung`. Every act below is COMPUTED --
+# `questions_for`, the real `opening_set`, the real `pack_scenes` -- and folded by the real RESOLVE.
+# Hand-built worlds only; nothing here asserts anything about the seed-0 realm (v9 §0.5).
+# The common setup stocks `R` (the realm, outside the Duke's purview) as well as `S`, so the three
+# controls differ from the executing world by the rung he was told of (`R` for `S`; `D` for `S`,
+# which control 3 also stocks -- two changes), or by `S`'s grain (emptied).
+# MUTATIONS, run at the build 2026-10-16. Each went RED, then was restored byte-exact and went GREEN:
+#   * `larders_in_purview`'s `held > 0 and held >= amount and` deleted (the stores condition) -> the
+#     empty-larder control RED (a computed levy forms on the empty larder);
+#   * `larders_in_purview`'s `any(purview_reaches(...))` replaced by `True` -> the outside-purview
+#     control RED (the realm is stamped as a larder he may levy);
+#   * `larders_in_purview`'s `r != s.rung and` deleted (the treasury clause) -> the own-treasury
+#     control RED (a computed levy forms on `D`, the seat's own rung);
+#   * `levy`'s `referent_class: Rung` deleted from `verb_table.yaml` -> the plain-referent test RED
+#     (a levy forms on the clerk he was asked about) and the executing test RED (no `Rung` row is
+#     exercised through a seat, so nothing is stamped);
+#   * `_derive_operand`'s `and on_referent` dropped from the shortfall branch -> the operand test RED
+#     (the levy of `S` carries the realm's salt dearth).
+
+from ..decision import assemble as _assemble
+from ..decision import options as _options
+from ..decision.choose import pack_scenes as _pack
+from ..state.carriers import Question as _Question
+from ..state.ids import H as _H
+
+STOCK = 40
+
+
+def _larder_world(told_of="S", grain_at_s=STOCK):
+    """`tiny_world` with the realm `R` stocked too (outside `off_duke`'s purview, which is `D`'s
+    subtree), `S`'s grain set to `grain_at_s`, and the Duke told of `told_of` by the deposit a
+    witnessed `stores.changed` leaves (planted, so the cause is controlled)."""
+    w, d = _world()
+    w.rungs["R"].stores = {"grain": STOCK}
+    w.rungs["S"].stores["grain"] = grain_at_s
+    w.persons[DUKE].ledger.append(Claim(f"c_told_{told_of}", DUKE, told_of, "stores.changed",
+                                        True, w.tick, "firsthand", 100, "own"))
+    return w, d
+
+
+def _computed_levies(w, q=None):
+    """The `levy` acts the Duke forms -- on `q`, by default the question he answers first, which
+    the classed referents ride -- through the real `opening_set`, packed by the real `pack_scenes`."""
+    p = w.persons[DUKE]
+    if q is None:
+        qs = world_q.questions_for(w, p, since=(w.tick, 0))
+        if not qs:
+            return []
+        q = qs[0]
+    cands = [c for c in _options.opening_set(p, _assemble(p, q, 12), q, w.fixtures)
+             if c.verb == "levy"]
+    mint = lambda who, verb, subj: _H(w.world_seed, w.tick, who, f"act:{verb}:{subj}")
+    return [a for s in _pack(p, cands, 99, w.fixtures, mint) for a in s.acts]
+
+
+def test_in49_a_computed_levy_of_a_larder_his_seat_reaches_executes_with_via_set():
+    """THE OBSERVABLE U9 NAMED, *"a `levy` executes with `Act.via` set"*, FROM A COMPUTED ACT. The
+    Duke is told of `S` (his own town, inside `D`): `larders_in_purview` offers exactly `S`, the
+    computed `levy` carries `subject = S` and `via = off_duke`, and the real fold executes it --
+    `levy.taken` in `w.log`, the fixtures' amount out of `S` and into the seat's treasury `D`."""
+    w, d = _larder_world()
+    assert world_q.larders_in_purview(w, w.persons[DUKE]) == ("S",)
+    (lv,) = _computed_levies(w)
+    assert lv.payload.get("subject") == "S" and lv.via == SEAT, (lv.payload, lv.via)
+    amount = w.fixtures.get("default_transfer_amount")
+    assert lv.payload.get("kind") == w.fixtures.get("default_store_kind") == "grain"
+    assert lv.payload.get("amount") == amount and amount > 0
+    before_s, before_d = w.rungs["S"].stores["grain"], (w.rungs["D"].stores or {}).get("grain", 0)
+    assert _kinds(_fold(w, d, lv)) == ["levy.taken"]
+    assert [e for e in w.log if e.kind == "levy.taken"], "levy.taken never reached w.log"
+    assert w.rungs["S"].stores["grain"] == before_s - amount
+    assert w.rungs["D"].stores["grain"] == before_d + amount
+
+
+def test_in49_a_rung_outside_the_seats_purview_raises_no_levy():
+    """CONTROL 1, ONE CHANGE: told of the stocked realm `R` instead of `S`. No seat of his reaches
+    `R` (a Duke has no purview over the realm above him), so it is no larder he may levy, nothing
+    is stamped, and no `levy` forms -- asserted on the formed acts AND by folding whatever forms."""
+    w, d = _larder_world(told_of="R")
+    assert w.rungs["R"].stores["grain"] == STOCK          # anti-vacuity: the larder is full
+    assert world_q.larders_in_purview(w, w.persons[DUKE]) == ()
+    acts = _computed_levies(w)
+    assert [a.payload.get("subject") for a in acts] == [], acts
+
+
+def test_in49_the_seats_own_treasury_raises_no_levy():
+    """CONTROL 3, ONE CHANGE: told of `D`, the seat's own rung, stocked. Purview is reflexive, but
+    `D` is the treasury a levy pays INTO, and a levy of it into itself moves nothing (`_eff_levy`'s
+    G4 `NoOpReceipt`, `levy.refused` on the `write` clause -- every computed corpus levy before the
+    clause). So it is no larder he may levy and no `levy` forms on it."""
+    w, d = _larder_world(told_of=TREASURY)
+    w.rungs[TREASURY].stores = {"grain": STOCK}
+    assert G.purview_reaches(w, w.offices[SEAT], TREASURY)   # anti-vacuity: inside the purview
+    acts = _computed_levies(w)
+    assert [a.payload.get("subject") for a in acts] == [], acts
+    assert world_q.larders_in_purview(w, w.persons[DUKE]) == ()
+
+
+def test_in49_an_empty_larder_raises_no_levy():
+    """CONTROL 2, ONE CHANGE: `S` holds no grain. An empty larder is an occasion for nothing --
+    the `levy.refused` H-163 limit 3 measured -- so nothing is stamped and no `levy` forms."""
+    w, d = _larder_world(grain_at_s=0)
+    acts = _computed_levies(w)
+    assert [a.payload.get("subject") for a in acts] == [], acts
+    assert world_q.larders_in_purview(w, w.persons[DUKE]) == ()
+
+
+def test_in49_a_levy_never_forms_on_a_plain_referent():
+    """THE PARTITION: a question whose plain referent is the clerk (`p_mid`), with nothing stamped,
+    forms no `levy` -- before the class it formed one on him and the fold refused it. CONTROL: the
+    same question with `S` riding it as a `Rung` forms the levy on `S` and nowhere else."""
+    w, _ = _world()
+    plain = _Question("q:claim:c_knows_p_mid", "claim_landed", (PARTY,), f"c_knows_{PARTY}")
+    assert _computed_levies(w, q=plain) == []
+    classed = _Question(plain.id, plain.source, plain.referents, plain.about,
+                        classes=(("S", "Rung"),))
+    assert [a.payload.get("subject") for a in _computed_levies(w, q=classed)] == ["S"]
+
+
+def test_in49_a_claim_the_question_is_about_does_not_set_a_classed_levys_matter():
+    """THE OPERAND RULE, ONE PARTITION OVER (IN-45's document gate, extended to the shortfall and
+    stores readers). The question he answers is about a `shortfall:salt` claim of 5 on `R`, and `S`
+    rides it as a `Rung`: the levy of `S` carries the fixtures' grain and amount -- what
+    `larders_in_purview` stocked it by -- not the realm's salt dearth. AND ON THE OVERLAP (B-K close,
+    COR 4 / LOG 1): a question about `S` itself, `S` riding it as a `Rung` too, still gives the levy
+    the fixtures' values -- the row is classed, so the claim does not re-aim it (this assertion read
+    `("salt", 5)` before, pinning the mismatch)."""
+    w, _ = _world()
+    p = w.persons[DUKE]
+    p.ledger.append(Claim("c_short_R", DUKE, "R", "shortfall:salt", 5, w.tick, "firsthand", 100,
+                          "own"))
+    p.ledger.append(Claim("c_short_S", DUKE, "S", "shortfall:salt", 5, w.tick, "firsthand", 100,
+                          "own"))
+    q = _Question("q:claim:c_short_R", "claim_landed", ("R",), "c_short_R",
+                  classes=(("S", "Rung"),))
+    (lv,) = _computed_levies(w, q=q)
+    assert (lv.payload.get("kind"), lv.payload.get("amount")) == (
+        w.fixtures.get("default_store_kind"), w.fixtures.get("default_transfer_amount")), lv.payload
+    own = _Question("q:claim:c_short_S", "claim_landed", ("S",), "c_short_S",
+                    classes=(("S", "Rung"),))
+    assert [(a.payload.get("kind"), a.payload.get("amount"))
+            for a in _computed_levies(w, q=own)] == [
+        (w.fixtures.get("default_store_kind"), w.fixtures.get("default_transfer_amount"))]
+
+
+def _formed(w, verb, q):
+    """The operands of the `verb` Candidates the Duke forms on `q` (the real `opening_set`)."""
+    p = w.persons[DUKE]
+    return [c.operands for c in _options.opening_set(p, _assemble(p, q, 12), q, w.fixtures)
+            if c.verb == verb]
+
+
+def test_in49_a_claim_about_the_stamped_rung_itself_does_not_set_the_levys_matter():
+    """THE OVERLAP (B-K close, COR 4 / LOG 1): the head question is about a `shortfall:salt` claim of
+    5 on `S`, and `S` is ALSO stamped `Rung` -- the common case, since the claim about the larder
+    ranks first. The classed `levy` of `S` carries the fixtures' grain and amount, what the stamp
+    checked. CONTROL, one change of ROW: the plain-row `transfer` on the same question and the same
+    rung still reads the claim (19d's `salt`, 5) -- so the rule is the row's class, not the id's.
+    MUTATION (seen red, 2026-10-16): `on_referent = q is None or subject in q.referents` restored in
+    `_derive_operand` -> the levy reads `("salt", 5)`."""
+    w, _ = _world()
+    w.persons[DUKE].ledger.append(Claim("c_short_S", DUKE, "S", "shortfall:salt", 5, w.tick,
+                                        "firsthand", 100, "own"))
+    q = _Question("q:claim:c_short_S", "claim_landed", ("S",), "c_short_S",
+                  classes=(("S", "Rung"),))
+    fx = (w.fixtures.get("default_store_kind"), w.fixtures.get("default_transfer_amount"))
+    assert fx != ("salt", 5)                                     # anti-vacuity
+    assert [(o.get("kind"), o.get("amount")) for o in _formed(w, "levy", q)] == [fx]
+    assert ("salt", 5) in [(o.get("kind"), o.get("amount")) for o in _formed(w, "transfer", q)
+                           if o.get("to") == "S"]
+
+
+def test_in49_a_stores_claim_about_the_stamped_rung_does_not_set_the_levys_kind():
+    """`store_kind_of`'s guard made falsifiable: the head question is about a `stores:salt` level on
+    `S`, `S` stamped `Rung`. The classed `levy` carries the fixtures' kind; CONTROL, one change of
+    row: the plain `transfer` on the same question reads `salt`. MUTATION (seen red, 2026-10-16):
+    `if on_referent` dropped from `_derive_operand`'s `kind` branch -> the levy carries `salt`."""
+    w, _ = _world()
+    w.persons[DUKE].ledger.append(Claim("c_st_S", DUKE, "S", "stores:salt", 30, w.tick,
+                                        "firsthand", 100, "own"))
+    q = _Question("q:claim:c_st_S", "claim_landed", ("S",), "c_st_S", classes=(("S", "Rung"),))
+    assert w.fixtures.get("default_store_kind") != "salt"        # anti-vacuity
+    assert [o.get("kind") for o in _formed(w, "levy", q)] == [w.fixtures.get("default_store_kind")]
+    assert "salt" in [o.get("kind") for o in _formed(w, "transfer", q) if o.get("to") == "S"]

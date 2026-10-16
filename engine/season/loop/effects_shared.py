@@ -5,7 +5,8 @@ settled requirement that each subsystem be its own module -- per-subsystem files
 self-contained). Holds `EFFECTS` itself and its `effect_for` decorator, the one operand reader
 (`_operand`), the shared §10-ladder refusal (`_decline_ascent`, used by `move`/`migrate`/`found`),
 the oblige-term pair (`_oblige_term`/`_new_oblige_term`, used by `oblige`/`determine`/`_renewals`),
-and the treasury-move pair (`_shift`/`_exercised_office`, used by `transfer`/`levy`/`_renewals`).
+and the treasury-move trio (`_shift`/`_debit`/`_exercised_office`: `_shift` is used by `transfer`/`levy`/`found`,
+`_debit` by `_shift` and `build`, `_exercised_office` by `levy`/`_renewals`).
 Every domain file imports what it needs from here rather than re-declaring its own copy (CLAUDE.md
 §8: the rule lives once) -- see `effects.py`'s own docstring for why THIS file, alone among the
 seven, is still eagerly imported whole by the aggregator rather than left to import on demand.
@@ -114,6 +115,14 @@ def _new_oblige_term(w: "World", a: "Act") -> Optional["Term"]:
     return None if n is None else Term(w.tick + n, a.id)
 
 
+def _debit(rung, kind: str, amount) -> None:
+    """`rung`'s stores down by `amount` of `kind`: copied before it is written, as `_eff_transfer`
+    always did, so no other holder of the old dict sees it change. The one body of the debit side of
+    `_shift` and of `build`'s one-sided consumption (the cost goes into the fabric)."""
+    rung.stores = dict(rung.stores or {})
+    rung.stores[kind] = rung.stores.get(kind, 0) - amount
+
+
 def _shift(src, dst, kind: str, amount) -> None:
     """MATTER MOVES FROM ONE RUNG'S STORES TO ANOTHER'S, CONSERVED: `src` down by `amount` of `kind`,
     `dst` up by the same. The one body of every act that moves stores between two rungs -- `transfer`
@@ -122,8 +131,7 @@ def _shift(src, dst, kind: str, amount) -> None:
     forgot the other. Each store is copied before it is written, as `_eff_transfer` always did, so
     no other holder of the old dict sees it change. Called only from inside a `Change.apply`: the
     gate reads both rungs either side of it (G4)."""
-    src.stores = dict(src.stores or {})
-    src.stores[kind] = src.stores.get(kind, 0) - amount
+    _debit(src, kind, amount)
     dst.stores = dict(dst.stores or {})
     dst.stores[kind] = dst.stores.get(kind, 0) + amount
 

@@ -4,7 +4,8 @@ EXTRACTED from `effects.py` at the per-subsystem split (Phase 4). Holds the pair
 world rather than only wearing it down (`ARCH` F.20): `found` mints a Rung of whatever kind a works
 plans, `build` mints a Site at condition 0. `_works_named` (what a works names, plans and is placed
 at) and `_made_by` (the one id scheme so one works makes one thing) are this pair's own reading of
-their operand and stay local -- nothing outside `found`/`build` calls either. See `effects_shared.py`
+their operand and stay local -- nothing outside `found`/`build` calls either; so does `_cost` (v9
+IN-28, `H-166`: what a plan costs the works' rung, `rosters.yaml: works_cost`). See `effects_shared.py`
 for `effect_for`, `_operand` and the shared §10-ladder refusal `_decline_ascent`.
 """
 
@@ -16,8 +17,9 @@ from ..state.carriers import Rung, Site, Tenure
 from ..state.gate import NO_CHANGE, Change, Subject
 from ..state.ids import H
 from ..state.world import rung_kind_ascends
+from ..trace_log import TRACE
 
-from .effects_shared import _decline_ascent, _operand, effect_for
+from .effects_shared import _debit, _decline_ascent, _operand, _shift, effect_for
 
 
 def _works_named(w: "World", a: "Act") -> tuple:
@@ -45,6 +47,47 @@ def _made_by(rec, plan: str) -> str:
     return f"{plan}:{rec.id}"
 
 
+def _cost(w: "World", rec, plan: str):
+    """v9 IN-28 (`H-166` limit 1) -- `(the rung that pays, {matter kind: amount})` for a works of
+    `plan`, or `None` with the reason TRACEd when it cannot be paid. `found`'s and `build`'s one
+    reading of the price, so the two verbs cannot come to disagree about what a plan costs.
+
+    THE PAYER IS THE WORKS' RUNG, `Record.rung` -- where the works is kept, and where a `transfer`
+    delivers matter to it (r2 `04` §A.6.6, intent: *"the cost is paid by `transfer` into the works'
+    rung"*). Not the actor's own hearth: whoever gathers matter at the works pays for it, which is
+    what lets several hands stock one works. THE PRICE is `rosters.yaml: works_cost`, read through
+    the fixture so `H-166`'s sweep reaches it.
+
+    DECLINES, each a refusal that emits (`found.refused` / `build.refused`), never a free place:
+      * the plan has NO PRICE (no `works_cost` row -- `body`, `person`, `settlement` and above:
+        the roster's note says why each); a missing row is not a cost of zero;
+      * the works' rung is no rung;
+      * the rung cannot meet every kind of the price -- r2 §A.6.6's MATTER-STALL, *"a scaffolding
+        standing empty"*, refused at the act that would have raised it.
+    ⚠ NOT A TYPED CELL: the threshold is `works_cost[plan]` read off the works' CONTENT and the
+    store is the works' RUNG, neither of which a `requires_forms` stem reaches from `subject`; so it
+    is the effect's decline, as strict ascent is (`_eff_move`'s precedent)."""
+    price = (w.fixtures.get("works_cost") or {}).get(plan)
+    payer = w.rungs.get(rec.rung)
+    why = None
+    if not price:
+        why = f"no `works_cost` row prices a {plan!r}, so nobody can pay for one"
+    elif payer is None:
+        why = f"the works' rung {rec.rung!r} is no rung, so nothing can pay its price"
+    else:
+        short = {k: n for k, n in sorted(price.items()) if (payer.stores or {}).get(k, 0) < n}
+        if short:
+            why = (f"{payer.id!r} holds {dict(sorted((payer.stores or {}).items()))} and the "
+                   f"{plan} costs {dict(sorted(price.items()))}: short of {short}")
+    if why is not None:
+        TRACE.decision(f"{rec.id} cannot pay: {why}", "H-166",
+                       chose="change nothing, so the fold emits the refusal",
+                       alternatives=["raise the place for free (H-166: paid for by nobody)",
+                                     "raise it and leave the store negative (matter from nowhere)"])
+        return None
+    return payer, dict(price)
+
+
 @effect_for("found")
 def _eff_found(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """PLAN POSITION `24e` -- A WORKS IS FOUNDED: a Rung of the works' `plan` kind is minted and
@@ -63,10 +106,18 @@ def _eff_found(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         `subject` (the works) -- a person-side act can name no second rung (`H-94`), and `at` is
         not and must not become a `requires_operands` member (r2 `02`: *"I do not coin a ninth
         operand"*); `15c`'s reader left `found` exactly this place to read it from.
-      * EMPTY: no stores, no sites, no holder. A founded hearth has no dwelling until one is BUILT
-        (`build`, plan `24e`: *"A founded hearth has no dwelling until one is BUILT"*), and no
-        `hold` is minted on it -- who holds a founded place is not this position's, and a `hold`
-        written here would be a claim of ownership nobody made (`H-166`).
+      * NO SITES: a founded hearth has no dwelling until one is BUILT (`build`, plan `24e`: *"A
+        founded hearth has no dwelling until one is BUILT"*).
+      * PAID FOR (v9 IN-28, `H-166` limit 1): the plan's `works_cost` STAKE moves two-sided out of
+        the works' rung INTO the new Rung (`_cost`, `_shift`), so the place starts with what was
+        staked on it and no matter leaves the world. A works whose rung cannot pay is refused.
+      * HELD BY ITS FOUNDER (v9 IN-28, `H-166` limit 2): the actor's `hold` on the new Rung, opened
+        in the same write. ⚠ This read *"no `hold` is minted on it -- a `hold` written here would be
+        a claim of ownership nobody made"*. The founding IS the claim: CLAUDE.md §0's ladder step 4,
+        the maker's-hold precedent `create_record` and `utter` both carry. The holder is the person
+        who acted, never a seat: a seat whose rung contains `at` already reaches the new Rung through
+        purview, and minting a seat's `hold` would be a grant (`conferral`) nobody conferred.
+        [ASSUMPTION; medium; Jordan to correct; revert: delete `held`, and `H-166` limit 2 reopens].
       * NO CAPACITY REFUSAL (the plan's CORRECTION of 2026-09-25, verbatim in substance): `found`
         and `build` are how capacity GROWS, and refusing a `found` at a rung at capacity would
         deadlock -- a full rung could never add the housing that raises its own ceiling. `found`
@@ -102,14 +153,32 @@ def _eff_found(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         return _decline_ascent(
             f"a founding does not ascend the §10 ladder -> a {plan} under the "
             f"{parent.kind} {parent.id!r}")
+    paid = _cost(w, rec, plan)
+    if paid is None:
+        return NO_CHANGE
+    payer, price = paid
     rung = Rung(rid, plan)
     placed = Tenure(H(w.world_seed, w.tick, rid, f"contain:{parent.id}:{a.id}"), rid, parent.id,
                     "contain", since=w.tick)
+    # THE FOUNDER'S `hold` (v9 IN-28, `H-166` limit 2): the maker's-hold shape `create_record` and
+    # `utter` already open (`effects_information.py::_makers_hold`, S13: *"the maker holds what
+    # they made until they part with it"*), with that helper's id scheme. ⚠ CONSTRUCTED HERE, NOT
+    # CALLED: `data/verbs.py::_derive_openers_from_effects` reads a `hold` opener off a `Tenure(...)`
+    # literal in the effect's OWN file and does not follow a cross-file call, so a call to the
+    # sibling's helper would drop `found` from `hold`'s derived openers.
+    held = Tenure(H(w.world_seed, w.tick, a.actor, f"hold:{rid}"), a.actor, rid, "hold",
+                  since=w.tick)
 
     def perform() -> None:
         w.rungs[rid] = rung
         w.add_tenure(placed)
-    return Change((Subject.entity("rungs", rid, "rung.founded"),), perform)
+        w.add_tenure(held)
+        for kind, amount in sorted(price.items()):
+            _shift(payer, rung, kind, amount)
+    # The PAYER is named so the gate reads its store either side (G4): a stake that did not leave it
+    # is a write that did not happen. It earns the row's one kind, as both sides of a `transfer` do.
+    return Change((Subject.entity("rungs", rid, "rung.founded"),
+                   Subject.entity("rungs", payer.id, "rung.founded")), perform)
 
 
 @effect_for("build")
@@ -133,12 +202,22 @@ def _eff_build(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     Site (S12), written in the same construction -- there is no Tenure to judge, so no gate basis is
     asked beyond the matrix row's own.
 
+    PAID FOR (v9 IN-28, `H-166` limit 1): the plan's `works_cost` is CONSUMED out of the works'
+    rung, one-sided -- the timber goes into the fabric (`_cost`, `found`'s one reading of the price).
+
+    HELD THROUGH ITS RUNG, NOT BY A `hold` OF ITS OWN: a `hold` never reaches a Site
+    (`rosters.yaml: hold_object_kinds` is `[Office, Rung, Record, Proposition]`; r2 §A.10.1, intent:
+    *"`hold` must not reach a `Site`"*, the commons), so a built fabric belongs to whoever holds the
+    rung it stands at (`queries/world_q.py::hold_force(w, site.rung)`) -- a dwelling built in a
+    founded hearth is its founder's. Nothing is minted here for it.
+
     DECLINES (`NO_CHANGE` -> `build.refused`): the subject is no works or its `at` is no rung
     (`_works_named`, `found`'s one reading); the plan is not a `site_kinds` member (a works to found
-    a Rung is `found`'s); the works has already built (`_made_by`'s id is taken). ⚠ `site_kinds`
-    CARRIES `body`, WHICH ITS OWN NOTE SAYS *"IS NOT A SITE"*: a works planning a `body` would build
-    one. Refusing it here would be a kind literal in a body standing in for a roster defect; it is
-    `H-166`'s, and no computed act can declare a works to reach it.
+    a Rung is `found`'s); the works has already built (`_made_by`'s id is taken); the plan has no
+    price or its rung cannot pay it (`_cost`). ⚠ `site_kinds` CARRIES `body`, WHICH ITS OWN NOTE SAYS
+    *"IS NOT A SITE"*: since v9 IN-28 a works planning a `body` is refused because `works_cost`
+    prices none -- the ROSTER refusing it, not a kind literal here (`H-166` limit 4, narrowed; the
+    `body` row stays in `site_kinds` for `band_floors`).
 
     G4 -- WHAT IT NAMES: THE SITE, whole, earning `site.built`; it always moves (absent -> present)."""
     rec, plan, rung = _works_named(w, a)
@@ -147,6 +226,17 @@ def _eff_build(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     sid = _made_by(rec, plan)
     if sid in w.sites:
         return NO_CHANGE
+    paid = _cost(w, rec, plan)
+    if paid is None:
+        return NO_CHANGE
+    payer, price = paid
     site = Site(sid, rung.id, plan, condition=0)
-    return Change((Subject.entity("sites", sid, "site.built"),),
-                  lambda: w.sites.__setitem__(sid, site))
+
+    def perform() -> None:
+        w.sites[sid] = site
+        # CONSUMED, ONE-SIDED: the cost goes into the fabric and is not credited anywhere
+        # ([ASSUMPTION; medium; Jordan to correct], rosters.yaml `works_cost`).
+        for kind, amount in sorted(price.items()):
+            _debit(payer, kind, amount)
+    return Change((Subject.entity("sites", sid, "site.built"),
+                   Subject.entity("rungs", payer.id, "site.built")), perform)

@@ -9230,7 +9230,7 @@
   "P11": {
    "id": "P11",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION, and it is a stronger pass than rev 2's: the option set is now COMPUTED from the verb table, so this observes that zeroing capability removes none of the 30 verbs it computes. Rev 2 compared a caller's authored roster with itself, which no capability gate could have changed either. `capability` appears in no clause of \u00a7F1 and the eligibility roster FORBIDS it as a fifth kind",
+   "detail": "PASS BY CONSTRUCTION, and it is a stronger pass than rev 2's: the option set is now COMPUTED from the verb table, so this observes that zeroing capability removes none of the 29 verbs it computes. Rev 2 compared a caller's authored roster with itself, which no capability gate could have changed either. `capability` appears in no clause of \u00a7F1 and the eligibility roster FORBIDS it as a fifth kind",
    "kind": null,
    "section": "S9.2",
    "title": "capability gates no verb",
@@ -9240,7 +9240,7 @@
   "P12": {
    "id": "P12",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION. `opening_set('p', 'v', 'q', 'fx')` -- THE ROSTER PARAMETER IS GONE, which is `D2` entire. Rev 2 was PARTIAL and said why: the type was right and the property the type protects was not, because S61 left `q` with no producer so there was nothing to compute from. `questions_for()` is that producer. 60 candidates over 30 verbs, every one a verb-table row",
+   "detail": "PASS BY CONSTRUCTION. `opening_set('p', 'v', 'q', 'fx')` -- THE ROSTER PARAMETER IS GONE, which is `D2` entire. Rev 2 was PARTIAL and said why: the type was right and the property the type protects was not, because S61 left `q` with no producer so there was nothing to compute from. `questions_for()` is that producer. 58 candidates over 29 verbs, every one a verb-table row",
    "kind": null,
    "section": "S17",
    "title": "opening_set returns Candidate[], not Act[]",
@@ -9496,7 +9496,7 @@
   "P36": {
    "id": "P36",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 30 candidates were OFFERED from the computed option set and only 37 of 45 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['challenge', 'migrate', 'move', 'petition', 'surveil'] -- 5 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
+   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 29 candidates were OFFERED from the computed option set and only 39 of 45 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['challenge', 'forge', 'move', 'petition', 'surveil'] -- 5 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
    "kind": null,
    "section": "S17",
    "title": "a choice branches three ways",
@@ -9571,13 +9571,11 @@
   },
   "F7": {
    "id": "F7",
-   "verdict": "GAP",
-   "detail": "'carry' writes ['DocketItem.matter'] and Part E does not say WHAT VALUE",
-   "kind": "UNSPECIFIED",
-   "section": "E2/E3",
+   "verdict": "PASS",
+   "detail": "PASS: Petition -> `carry` (AN ACT, BY A NAMED PERSON, COSTING BUDGET) -> DocketItem naming the petition. NO automatic promotion, NO queue drain, NO priority function. THE FILTER IS A PERSON AND THE PERSON PAYS -- which is why T5 produces politics rather than a work queue",
+   "kind": null,
+   "section": "S36.1",
    "title": "a demand rises from a hearth to a duchy",
-   "needs": "an entry in EFFECTS, or a `writes:` column that carries the value",
-   "law": "\u00a7E3's `writes:` names the CELL and never the VALUE. A fold that writes the cell without the value changes nothing, so a precondition on a quantity the act never spends cannot bind twice -- and \u00a727.1's scarcity stops happening. Register row H-63",
    "by": "probe-model",
    "tests": "someone with no power must be able to get a matter in front of someone who has it"
   },
@@ -10769,6 +10767,24 @@
   },
   {
    "kind": "FORBIDDEN",
+   "what": "a (Record, exists) write by p_mid changed nothing: it named no subject",
+   "where": "F9",
+   "needs": "a write that moves at least one subject it names",
+   "law": "04 \u00a7C.2 / PART D row 5 (F9) -- `before == after` is refused AT THE WRITE, so the receipt is never minted: a success Event for a write that did not happen is ID-9, and a receipt minted by the gate for it passes every append-side check",
+   "case": "probe:P36",
+   "expected": false
+  },
+  {
+   "kind": "FORBIDDEN",
+   "what": "a (Record, exists) write by p_mid changed nothing: it named no subject",
+   "where": "F9",
+   "needs": "a write that moves at least one subject it names",
+   "law": "04 \u00a7C.2 / PART D row 5 (F9) -- `before == after` is refused AT THE WRITE, so the receipt is never minted: a success Event for a write that did not happen is ID-9, and a receipt minted by the gate for it passes every append-side check",
+   "case": "probe:P36",
+   "expected": false
+  },
+  {
+   "kind": "FORBIDDEN",
    "what": "a (Tenure, until) write by p_high exercising no seat wrote Tenures it has no basis for: th_dead (hold owned by p_low on S, changed)",
    "where": "F3",
    "needs": "T-m (the actor owns the edge), T-o (via present, the actor seated in it, the seat's revocation basis reaching it), conferral (via's purview over a seat that declares a conferral basis), cascade (the edge names something this same write removed), handover (a `hold` on something that is not a seat, opened in the same write that ended the actor's own live `hold` on it -- one opening per ending), T-n (an actorless closure of an edge whose own declared term has matured), renewal (a live `oblige` edge's term pushed later, by its seat's own seated holder exercising it), determination (an edge of a kind some arrangement disposes opened -- or a `detain`/`ban` closed -- on the judging seat exercised, for a person its bench's ground holds), warrant (a `detain` opened on a seat, for a person the exercised seat's purview reaches, by a holder granted `dispatch`), or founding (a `contain` opened for a thing this same write brought into existence, its only parent)",
@@ -10792,15 +10808,6 @@
    "needs": "a distortion model, and a ruling on emitter- vs receiver-side refraction",
    "law": "T6 says it distorts; NOTHING SPECIFIES BY HOW MUCH (S62). The structural half works -- publishing is a `tell`, delivery is not assumed, and an executor who never received it is DISTINCT from one who received it and refused -- but the distortion itself has no model, and S37.4 records that the chain uses `refraction` TWO WAYS",
    "case": "probe:F6",
-   "expected": false
-  },
-  {
-   "kind": "UNSPECIFIED",
-   "what": "'carry' writes ['DocketItem.matter'] and Part E does not say WHAT VALUE",
-   "where": "E2/E3",
-   "needs": "an entry in EFFECTS, or a `writes:` column that carries the value",
-   "law": "\u00a7E3's `writes:` names the CELL and never the VALUE. A fold that writes the cell without the value changes nothing, so a precondition on a quantity the act never spends cannot bind twice -- and \u00a727.1's scarcity stops happening. Register row H-63",
-   "case": "probe:F7",
    "expected": false
   },
   {
@@ -11192,15 +11199,15 @@
   }
  ],
  "_trace_counts": {
-  "STEP": 7192,
-  "BARRIER": 1895,
-  "DECISION": 1915,
-  "QUERY": 29405,
-  "WRITE": 15448,
-  "EVENT": 15246,
+  "STEP": 7231,
+  "BARRIER": 1904,
+  "DECISION": 1925,
+  "QUERY": 30321,
+  "WRITE": 15472,
+  "EVENT": 15267,
   "ACT": 97,
-  "CLAIM": 1697,
-  "GAP": 85,
+  "CLAIM": 1717,
+  "GAP": 86,
   "NOTE": 153
  },
  "_corpus_defects": [

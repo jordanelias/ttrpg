@@ -155,7 +155,34 @@ def test_h134_two_seats_are_two_acts_ids_opportunities_and_the_store():
 # RE-PINNED AT v9 IN-09: 68 -> 66. `comply` is typed and `referent_named`, so it no longer forms on
 # a referent the person's own ledger does not name; it was formed on arbitrary referents before and
 # then filtered out by `resolvable_verbs()`, so no behaviour moves (`aperture 4 0` other rows equal).
-_CONTROL = (66, 66, "891d3653ba8b5ff4b141165fcd4548904b307bd0be437a7e0f3f5275c7c4625d")
+# RE-PINNED AT v9 IN-10 (#453 §10.1): 66 -> 64, exactly the two `issue` Candidates leave and no
+# Candidate is added (per-verb count diffed: every other verb still 2). `issue` joined the
+# known-person fan for `to` (its `terms` conjunct binds `subject`), and `p_one` knows nobody and
+# holds nothing to say about the referent, so no writ forms -- where before both writs were
+# addressed to what they were about.
+# RE-PINNED AT v9 IN-45 `carry` (B-K), DIGEST ONLY: 64 -> 64, `c3cc3ff1...` -> `4351ecd2...`. The pin
+# passed at fae9e623 (IN-10) and went red at c435a5ec. Attributed per verb by diffing the dumped
+# Candidate and act lists at each commit:
+#   * `forge` (c435a5ec, IN-45 `forge`) -- the WHOLE move. No Candidate or act id added or removed:
+#     its two Candidates (`off_duke`, `Hh`), formed untyped with no operands before, now carry
+#     `subject` (the row is typed with `survey`'s cell). The 64 act ids and payloads are unchanged.
+#     CONTROL: HEAD's lists with `forge`'s `subject` operand stripped re-hash to `c3cc3ff1...`.
+#   * `survey` + Rung (aa26c4fd) -- nothing: lists byte-identical to c435a5ec's.
+#   * `carry` (IN-45, on aa26c4fd) -- nothing: its two Candidates were already formed with
+#     `{subject, to}` at fae9e623 (formation reads the verb table, not `resolvable_verbs()`); the
+#     lists are byte-identical to aa26c4fd's.
+# RE-PINNED AT v9 IN-45 `migrate` (B-K, on 4cee0de5): 64 -> 62, `4351ecd2...` -> `b8163ec4...`.
+# Exactly the two `migrate` Candidates leave (on `off_duke` and `Hh`, the question's plain
+# referents) and none is added: `migrate` declares `referent_class: Rung` and forms only on a place
+# `places_named` stamps, and `p_one`'s ledger names none. CONTROL: the same reading with `migrate`'s
+# `referent_class` blanked in `VERB_TABLE` re-hashes to `(64, 64, "4351ecd2...")` exactly.
+# RE-PINNED AT v9 IN-49 `levy` (B-K, on ccf16bc3): 62 -> 60, `b8163ec4...` -> `5abeea9b...`.
+# Exactly the two `levy` Candidates leave (on `off_duke` and `Hh`, the question's plain referents)
+# and none is added: `levy` declares `referent_class: Rung` and forms only on a `Rung`-classed
+# referent, and this reading's question carries none. CONTROL: the same reading with `levy`'s
+# `referent_class` blanked in `VERB_TABLE` and `world_q.larders_in_purview` stamping nothing
+# re-hashes to `(62, 62, "b8163ec4...")` exactly.
+_CONTROL = (60, 60, "5abeea9baac7c6ef4c194f2c0918ffaecd0a15a895f4c78fefd9cbbdeb5dc0f7")
 
 
 def _control_reading():

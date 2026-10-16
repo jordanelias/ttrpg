@@ -39,8 +39,9 @@ from ..data.rosters import (
     BAN_KIND, DETAIN_KIND, FACTION_BY_PROP, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, TENURE_KINDS,
 )
-# IN-09: the Record kinds a held document is an occasion for, derived off the verb table's rows.
-from ..data.verbs import RECORD_REFERENT_KINDS
+# IN-09: the Record kinds a held document is an occasion for, derived off the verb table's rows;
+# v9 IN-49: the remit acts a seat exercises on a `Rung`-classed referent, the same way.
+from ..data.verbs import RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
 # the asker-first module (which may not import this one; this edge runs the other way).
@@ -1465,6 +1466,21 @@ def holder_faction_of(w: World, rung_id: str) -> Optional[str]:
     return None
 
 
+def faction_of(w: World, subject: str) -> Optional[str]:
+    """WHICH FACTION `subject` COHERES UNDER, whatever it is -- the faction Proposition id, or `None`.
+    The one dispatch over the two owners below it, by `World.class_of` (which tries `Person` BEFORE
+    `Rung`: every person also has a `person`-kind rung of the same id, so a man committed to no
+    faction must not answer with the faction that holds the ground he stands on):
+      * a RUNG that is not a person -- `holder_faction_of`, *who holds this valley*;
+      * anything else -- `faction_holding`: a faction's own Proposition answers for itself, a person
+        for the one faction he is committed to.
+    The dispatch is HERE and not a Rung branch inside `faction_holding`, because `holder_faction_of`
+    calls `faction_holding` on a holder and would recurse."""
+    if w.class_of(subject) == "Rung":
+        return holder_faction_of(w, subject)
+    return faction_holding(w, subject)
+
+
 def uncontrolled(w: World, rung_id: str) -> list[str]:
     """THE REVOLT QUERY (plan position `24h` P5). The territories at or under `rung_id` that no
     faction holds -- GD-3's *Uncontrolled* status, what a revolt leaves behind -- sorted. A read:
@@ -1709,7 +1725,7 @@ def vacancies(w: World, p: Person) -> tuple:
                  if o.id not in held and any(may_fill(w, p.id, s, o) for s in seats))
 
 
-def seats_named(w: World, p: Person) -> tuple:
+def seats_named(w: World, p: Person, named: Optional[frozenset] = None) -> tuple:
     """THE SEATS `p` HAS BEEN TOLD OF (IN-10 (a), #453 K-25 / `:524`), sorted by id: the Offices
     among `person_q.ledger_names(p.ledger)` -- a claim about the seat (chiefly the `tenure.opened`
     claim a witness of a conferral holds, `epistemic.claim_subjects`' Tenure expansion) or a held
@@ -1720,8 +1736,11 @@ def seats_named(w: World, p: Person) -> tuple:
     holding it believes); the World is asked only which ids are seats (`w.offices`), the class
     `_stamped` stamps. Resolver-side and read-only, `vacancies`' shape: it supplies seat IDS, which
     `questions_for` adds to the question the person answers as CLASSED referents, and whether an act
-    on one passes is the fold's (`_req_oblige`, `_req_confer`)."""
-    return tuple(sorted(o for o in ledger_names(p.ledger) if o in w.offices))
+    on one passes is the fold's (`_req_oblige`, `_req_confer`). `named` is `ledger_names(p.ledger)`
+    when the caller already holds it (`questions_for` asks it once for the three readers)."""
+    if named is None:
+        named = ledger_names(p.ledger)
+    return tuple(sorted(o for o in named if o in w.offices))
 
 
 def writs_held(w: World, p: Person) -> tuple:
@@ -1747,6 +1766,100 @@ def writs_held(w: World, p: Person) -> tuple:
                          if t.kind == "hold" and t.live and t.object in w.records
                          and w.records[t.object].kind in RECORD_REFERENT_KINDS
                          and p.id in _addressees_of(w.records[t.object])}))
+
+
+def places_named(w: World, p: Person, named: Optional[frozenset] = None) -> tuple:
+    """THE PLACES `p` HAS BEEN TOLD OF AND COULD SETTLE IN (v9 IN-45 `migrate`, H-168 limit 1,
+    [ASSUMPTION; medium; Jordan to correct]), sorted by id: the Rungs among
+    `person_q.ledger_names(p.ledger)` -- a claim about the place (a `stores.changed` larder he saw
+    drawn, a `rung.founded` hearth, a seat's town a deposit names) or a held document whose
+    `terms` names it -- that the §10 ladder will seat him in (`World.contain_ascends`, the one
+    owner: never another person's rung) and that he does NOT ALREADY LIVE UNDER (his live `reside`
+    edge and every rung above it, `ancestry`). H-168's design order, *"a question whose referent is
+    ANOTHER place a person could live in"*: the destination channel `migrate`'s `to` binds, carried
+    on the question he answers as `Rung`-classed referents (`_stamped`), so `to` still binds a
+    referent and no operand is coined.
+
+    `seats_named`' shape, one class over: reads `p`'s OWN LEDGER and his OWN `reside` edge; the World
+    is asked only which ids are rungs (`World.class_of`, the class `_stamped` stamps, so a person's
+    own `person`-kind rung, classed `Person`, is never stamped as a place) and what the ladder and
+    the containment walk say. ⚠ ROOM IS NOT READ HERE: whether the place has room is the fold's
+    (`loop/effects_migration.py::_eff_migrate`'s capacity decline, `verb_table.yaml`'s `migrate`
+    note), so a person who wrongly hopes a full hearth has space still tries and is refused. ⚠ WHY
+    NOT WHAT HE LIVES UNDER: a settler who already lives under `dest` changes no population and
+    settles nowhere new (`_eff_migrate`'s newcomer rule), and his own residence is the refusal H-168
+    limit 1 measured. REVERT: exclude the residence alone, and a settler may re-seat himself at the
+    town above his hearth. `named` is `ledger_names(p.ledger)` when the caller holds it already.
+    The cheap tests run first (class, ladder, his own hearth) and the ancestry walk only for a
+    survivor; `ancestry` includes its start, so a hearth is `under` itself."""
+    if named is None:
+        named = ledger_names(p.ledger)
+    cands = [r for r in named if w.class_of(r) == "Rung" and w.contain_ascends(p.id, r)]
+    if not cands:
+        return ()
+    homes = {t.object for t in p.tenures if t.kind == RESIDE_KIND and t.live}
+    cands = [r for r in cands if r not in homes]
+    if not cands:
+        return ()
+    under = {r for h in homes for r in ancestry(w, h)}
+    return tuple(sorted(r for r in cands if r not in under))
+
+
+def larders_in_purview(w: World, p: Person, named: Optional[frozenset] = None) -> tuple:
+    """THE LARDERS `p`'S SEAT MAY LEVY (v9 IN-49 `levy`, H-163 limit 3, [ASSUMPTION; medium; Jordan
+    to correct]), sorted by id: the Rungs among `person_q.ledger_names(p.ledger)` (he has been told of
+    the place -- chiefly the deposit a witnessed `stores.changed` leaves) that hold a positive amount
+    of the matter a computed levy carries, at least that amount, and that the purview of some seat of
+    his own live `hold`s granting a `Rung` row's remit act reaches (`data/verbs.py::RUNG_REMIT_ACTS`;
+    `state/gate.py::purview_reaches`, the one owner `levy`'s `authority` conjunct asks) WITHOUT BEING
+    THAT SEAT'S OWN RUNG: the seat's rung is its treasury, and a levy of the treasury into itself
+    moves nothing (`loop/effects_governance.py::_eff_levy`, G4's `NoOpReceipt` -> `levy.refused`).
+    MEASURED before that clause (`corpus_run`, seed 0): every computed corpus levy (4, all NPC-083)
+    was its seat's own rung, refused on the `write` clause -- `places_named`' residence rule, one
+    effect over (a settler who lives under the place changes nothing there). H-163 limit
+    3's design order, #453's *"a question whose referent is a full larder in purview (a positive
+    `stores.changed`)"*: the subject `levy` binds, carried on the question he answers as
+    `Rung`-classed referents (`_stamped`), so `subject` still binds a referent and no operand is
+    coined.
+
+    `places_named`' shape, one occasion over: `p`'s OWN LEDGER says which places he knows of and his
+    OWN `hold` edges which seats he sits in; the World is asked which ids are rungs (`World.class_of`),
+    what a rung holds (`Rung.stores`) and whether the seat reaches it. ⚠ THE STORES ARE READ HERE,
+    UNLIKE `places_named`' ROOM, and that is `vacancies`' precedent (it asks the write gate's own
+    `may_fill`), not an oversight: an empty larder is an occasion for nothing, and a levy question
+    raised over one is the refusal H-163 limit 3 measured (`levy.refused` on the `stores` conjunct).
+    The person still learns nothing he did not hold; a scarcity between this read and the fold (two
+    levies on one larder) is the fold's (`levy.refused`, §27.1).
+    ⚠ THE AMOUNT AND KIND are the fixtures' (`default_store_kind`, `default_transfer_amount`, H-94 /
+    H-121), because that is what `decision/options.py::_derive_operand` carries on a CLASSED ROW
+    (`levy`'s `referent_class: Rung`): a claim the question is about (a stores level, a shortfall)
+    does not re-aim it, even when the stamped rung is also the question's plain referent (B-K close,
+    COR 4), so the stamp and the act read the same two values. ⚠ PURVIEW IS ASKED LAST, only of a
+    named, stocked rung: `purview_reaches` walks `w.tenures` for its oblige clause when the seat's own
+    ground does not reach (the gate's walk, not a new one here). `()` for a person granted no such
+    act, which is nearly everyone, so nothing else is read for him. REVERT: drop the term in
+    `questions_for` (or `levy`'s `referent_class`, which empties `RUNG_REMIT_ACTS`). `named` is
+    `ledger_names(p.ledger)` when the caller holds it already."""
+    if not RUNG_REMIT_ACTS:
+        return ()
+    seats = [w.offices[o] for o in dict.fromkeys(
+        t.object for t in p.tenures
+        if t.kind == "hold" and t.live and t.object in w.offices
+        and any(a in t.granted_acts for a in RUNG_REMIT_ACTS))]
+    if not seats:
+        return ()
+    if named is None:
+        named = ledger_names(p.ledger)
+    kind, amount = w.fixtures.get("default_store_kind"), w.fixtures.get("default_transfer_amount")
+    out = []
+    for r in sorted(named):
+        if w.class_of(r) != "Rung":
+            continue
+        held = (w.rungs[r].stores or {}).get(kind, 0)
+        if held > 0 and held >= amount and any(r != s.rung and purview_reaches(w, s, r)
+                                               for s in seats):
+            out.append(r)
+    return tuple(out)
 
 
 def _stamped(q: Question, added: tuple, w: World) -> Question:
@@ -1880,10 +1993,12 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None,
 
 
 def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Question]:
-    """§F1's `q` producer -- TWO sources, resolver-side, at the DELIBERATE barrier, plus THREE
+    """§F1's `q` producer -- TWO sources, resolver-side, at the DELIBERATE barrier, plus FIVE
     STANDING OCCASIONS stamped onto the first question as classed referents (`_stamped`, below the
     sort): the vacant seats the person may fill (`vacancies`, IN-53), the seats he has been told of
-    (`seats_named`, v9 IN-10 (a)) and the writs he holds (`writs_held`, v9 IN-09). They are not
+    (`seats_named`, v9 IN-10 (a)), the writs he holds (`writs_held`, v9 IN-09), the places he has
+    been told of and could settle in (`places_named`, v9 IN-45 `migrate`) and the larders his seat
+    may levy (`larders_in_purview`, v9 IN-49 `levy`). They are not
     sources: no id or source changes; a person with one of them and no question gets one `need`
     question carrying them.
 
@@ -2006,9 +2121,20 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # IN-09 (H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to correct]): AND SO DO THE WRITS
     # HE HOLDS (`writs_held`), after the seats, as `Record` -- only `comply` declares that class, so
     # no other row's formations move. REVERT: drop the term.
+    # v9 IN-45 `migrate` (H-168 limit 1, [ASSUMPTION; medium; Jordan to correct]): AND SO DO THE
+    # PLACES HE HAS BEEN TOLD OF AND COULD SETTLE IN (`places_named`), as `Rung`. REVERT: drop the term.
+    # v9 IN-49 `levy` (H-163 limit 3, [ASSUMPTION; medium; Jordan to correct]): AND SO DO THE
+    # LARDERS HIS SEAT MAY LEVY (`larders_in_purview`), last, as `Rung`, never twice. The class is
+    # `Rung` either way, so both rows declaring it (`migrate`, `levy`) form on both: whether a place
+    # has room, or a seat reaches it, is then the fold's (`vacancies`/`seats_named`' Office precedent,
+    # H-207; H-163 records what the cross-reading costs). No source is added, so no `question_sources`
+    # order moves (IN-57: the occasion rides the question he answers). REVERT: drop the term.
     vacant = vacancies(w, p)
-    added = (vacant + tuple(o for o in seats_named(w, p) if o not in vacant)
-             + writs_held(w, p))
+    told = ledger_names(p.ledger)
+    places = places_named(w, p, told)
+    added = (vacant + tuple(o for o in seats_named(w, p, told) if o not in vacant)
+             + writs_held(w, p) + places
+             + tuple(r for r in larders_in_purview(w, p, told) if r not in places))
     if added:
         head = out[0] if out else Question(f"q:need:{added[0]}", "need", (), added[0])
         out[:1] = [_stamped(head, added, w)]

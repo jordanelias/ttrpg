@@ -152,7 +152,9 @@ def test_lb1_bo10_gate_closed_by_in11_the_utterers_hold_report_not_repair():
     referent IS the Proposition -- `subject` still binds to the referent, unchanged. MEASURED, this
     season: `commitment.made` 2 where it was 0, `commitment.refused` 38 where it was 35 (the old
     person-id referents still form and refuse; `H-156`'s (a)/(b) stays registered). The full
-    falsifier is `test_in11_utter_hold_commit.py`."""
+    falsifier is `test_in11_utter_hold_commit.py`. ⚠ SINCE v9 IN-45 `migrate` THIS TEST NO LONGER
+    ASSERTS THE CLOSURE IN THE REALM: its two seed-0 execution assertions were retired under v9 §0.5
+    (the note at the assertion); what stays is that `commit` is resolvable, formed and attempted."""
     from collections import Counter
     from ..decision import make_chooser
     from ..state.ids import H, draw_factory
@@ -169,13 +171,13 @@ def test_lb1_bo10_gate_closed_by_in11_the_utterers_hold_report_not_repair():
         "`commit` dropped back out of `resolvable_verbs()` -- the effect registration regressed")
     commit_acts = [a for a in d.resolved if a.verb == "commit"]
     assert commit_acts, "no `commit` act formed at all on this corpus -- the gate moved further"
-    referents_seen = {(a.payload or {}).get("subject") for a in commit_acts}
-    assert referents_seen & set(w.propositions), (
-        f"no `commit` act named a real Proposition as its subject -- IN-11's utterer's hold no "
-        f"longer reaches a question: {referents_seen}")
-    assert kinds.get("commitment.made", 0) >= 1, (
-        f"commitment.made is {kinds.get('commitment.made', 0)} -- BO-10's gate re-opened; IN-11's "
-        "closure regressed")
+    # ⚠ RETIRED AT v9 IN-45 `migrate` (B-K, 2026-10-16) UNDER v9 §0.5's 2026-10-13 RULING (*"No test
+    # asserts that a verb executed in the seed-0 realm"*), which these two survived by oversight:
+    # `commitment.made >= 1` and a `commit` act naming a real Proposition, both in this one seed-0
+    # season. They went red when `migrate`'s destination channel moved the realm's act mix
+    # (`aperture 1 0`: `commit` att 38, ex 2 -> 0) -- the chooser's selection, not IN-11's wiring.
+    # Deleted, never skipped; the closure is proven on hand-built worlds by
+    # `test_in11_utter_hold_commit.py` block 1.
     assert kinds.get("commitment.refused", 0) > 0, (
         "no `commit` refusals at all -- the verb stopped being attempted, which is a different "
         "regression from the one this test documents")
@@ -799,12 +801,13 @@ _LEVY_ROW = (
 # ⚠ PLAN POSITION `19` TYPED `levy` (`transfer`'s form-2 cell plus a `basis` conjunct), and a typed
 # cell's `needs:` ADMITS `to` -- so `beneficiary: to` on `levy` became CARRIABLE and stopped being the
 # dead reference `test_lb6d_an_operand_beneficiary_the_row_cannot_carry_is_refused_at_load` plants.
-# That test needs an UNTYPED row, and `forge` is one (`requires: —`, no cell). The two tests above keep
-# `levy`: a missing or off-roster beneficiary is refused whatever the row's cell.
-_FORGE_ROW = (
-    '  - verb:        "forge"\n'
+# That test needs an UNTYPED row. It planted `forge` until v9 IN-45 typed it (an `own_ledger` cell);
+# B-K close (ACC 8/13) re-points it to `destroy_record`, still untyped (`requires: —`, no cell). The
+# two tests above keep `levy`: a missing or off-roster beneficiary is refused whatever the row's cell.
+_UNTYPED_ROW = (
+    '  - verb:        "destroy_record"\n'
     '    stratum:     "uncontested_material"\n'
-    '    eligibility: ["own"]\n'
+    '    eligibility: ["hold:<record>", "presence"]\n'
     '    beneficiary: "actor"\n'
 )
 
@@ -883,8 +886,10 @@ def test_lb6d_an_operand_beneficiary_the_row_cannot_carry_is_refused_at_load():
     formed, silently, forever."""
     src = _verb_table_text()
     unbindable = src.replace(
-        _FORGE_ROW, _FORGE_ROW.replace('beneficiary: "actor"', 'beneficiary: "to"'), 1)
+        _UNTYPED_ROW, _UNTYPED_ROW.replace('beneficiary: "actor"', 'beneficiary: "to"'), 1)
     assert unbindable != src, "the substitution did not apply -- this test is asserting nothing"
+    from ..data.verbs import VERB_TABLE
+    assert VERB_TABLE["destroy_record"].requires_typed is None, "the planted row is typed now"
     with pytest.raises(SystemExit, match="neither binds nor admits"):
         _load_with(unbindable)
 
@@ -2398,42 +2403,13 @@ def test_13d_iii_the_remit_overlay_replaces_the_default_and_leaves_only_the_unru
         "only where a row exists")
 
 
-@pytest.fixture(scope="module")
-def _season13():
-    from ..decision import make_chooser
-    from ..harness.corpus_run import attribute
-    from ..state.ids import H, draw_factory
-
-    w = build_realm(seed=0)
-    d = SeasonDriver(w)
-    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
-                      draw=draw_factory(w.world_seed, lambda: w.tick))
-    d.season(ch, question=None, subsistence=P.SUBSIST,
-             contest_max_depth=w.fixtures.get("contest_max_depth"))
-    return w, attribute(w, d, 1)
-
-
-def test_13d_iii_a_season_executes_an_issue_or_levy_through_a_seat_with_a_rung(_season13):
-    """U9's own acceptance text, on the shipped realm at seed 0: a `levy` or `issue` EXECUTES with
-    `Act.via` set, naming a seat whose rung gave it the purview. Before this position the same seed
-    refused 18 of 19 four-season levies on `authority` (`aperture 4 0` on the parent tree
-    `5519cf52`; `H-163` limit 1) and executed none. The seat check is the
-    point: an act whose `via` names a rungless seat would have refused, so this also shows `via`
-    and the rung are one fact. (`levy` itself still mostly refuses as `levy.refused` -- the `stores`/
-    `write` conjuncts, `H-163` limit 3 -- which is not this position's to lift.)"""
-    w, att = _season13
-    executed = [a for a, made, _ in att if a.verb in ("levy", "issue") and made]
-    assert executed, "no levy or issue executed in a season: the cap `13d-iii` lifts is still on"
-    for a in executed:
-        assert a.via in w.offices, f"{a.verb} by {a.actor} executed with via={a.via!r}"
-        assert w.offices[a.via].rung is not None, (a.verb, a.via)
-    levies = [(a, refused) for a, _, refused in att if a.verb == "levy"]
-    assert levies, "no levy was attempted -- the share below would be vacuous"
-    unauthorized = sum("levy.unauthorized" in refused for _, refused in levies)
-    assert unauthorized < len(levies), (
-        f"{unauthorized} of {len(levies)} levies refused on `authority`: every seat that levies is "
-        "still outside its purview")
+# ⚠ RETIRED (B-K close, ACC 7 / FID 4; v9 §0.5, 2026-10-13: no test asserts a verb executed in the
+# seed-0 realm): `test_13d_iii_a_season_executes_an_issue_or_levy_through_a_seat_with_a_rung` and its
+# `_season13` fixture asserted that a `levy` or `issue` EXECUTED in one `build_realm(0)` season --
+# DELETED, not skipped, as its levy-share block was at IN-49. Whether the authored realm hands a seat
+# holder the occasion is authored data, not the wiring. The wiring is asserted on hand-built worlds:
+# `test_u7_remit.py` (a computed `levy` executing with `Act.via` set, its purview controls) and
+# `test_in10_record_operands.py` (a fanned `issue` folding through its seat; seatless, refused).
 
 
 # =================================================================================================
@@ -2617,6 +2593,10 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
         return w, dw, qs, out
 
     w, dw, qs, out = season(strip=False)
+    # v9 IN-45 `migrate`: WHERE EACH PERSON STOOD WHEN HE WAS ASKED, not only where the season left
+    # him -- a computed `migrate` now executes in this season (`aperture 1 0`: 1), and a person asked
+    # about his hearth's dwelling before he settled elsewhere stands somewhere else at the end.
+    home_at_build = world_q.home_of(build_realm(0))
     scale = w.fixtures.get("condition_scale")
     assert len(dw) >= 1, "no dwelling was built; the zeros below would describe nothing"
     assert qs, "the questions_for spy saw no deliberation; the zero below would be unobserved"
@@ -2653,7 +2633,8 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
             if q.id not in {f"q:claim:{c.id}" for c in p.ledger}:
                 continue
             c = by_id.get(q.about)
-            assert c is not None and c.subject == at.get(home.get(p.id)), (
+            assert c is not None and c.subject in {at.get(home.get(p.id)),
+                                                   at.get(home_at_build.get(p.id))}, (
                 f"{q.id} for {p.id} does not resolve to that person's own hearth's dwelling: {c}")
 
     # ⚠ `24d-i`'s TREATMENT == CONTROL IDENTITY DOES NOT SURVIVE `11a`, AND IS NOT RE-ASSERTED.

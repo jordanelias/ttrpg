@@ -43,6 +43,7 @@ import functools
 
 from engine.substrate.descriptors import AFFILIATION_CONCERNS, PURSUITS
 
+from ..data import requires as _requires
 from ..data import verbs as _verbs
 from ..data import affiliations as _aff
 from ..data.affiliations import AFFILIATION_CEILING, conviction_map, engagement
@@ -912,17 +913,30 @@ def content_said(c) -> "dict | None":
     return dict(c.value)
 
 
-#: THE CONTENT KEYS THAT SAY WHAT A DOCUMENT IS ABOUT -- every key `rosters.yaml: record_kinds.
-#: content.read_from` reads off the minting act's `subject` (`terms`, today). Derived from the roster
-#: that types the schema, never from a value's strings (`world_q.named`'s ruling, one key over).
-ABOUT_KEYS = tuple(k for k, src in (RECORD_CONTENT.get("read_from") or {}).items() if src == "subject")
+def content_kind(c) -> "str | None":
+    """THE `<kind>` OF A `content:<kind>` CLAIM (`rosters.yaml: record_kinds.content.predicate`),
+    `None` for any other predicate. `content_said`'s sibling: the one reader of the stem's argument
+    (B-K close, ARC 2: `decision/options.py` had parsed it twice)."""
+    stem, sep, kind = str(c.predicate).partition(":")
+    if not sep or stem != RECORD_CONTENT.get("predicate"):
+        return None
+    return kind or None
+
+
+#: THE CONTENT KEY THAT SAYS WHAT A DOCUMENT IS ABOUT, PER RECORD KIND -- the key `rosters.yaml:
+#: record_sourced_operands` maps `subject` to for that kind (`terms` for a dispensation or petition,
+#: `proposition` for a faction sheet). B-K close (ARC 5): the ONE owner of "what a document is
+#: about", which `decision/options.py::_content_answer` reads for `subject` too; it was derived from
+#: `record_kinds.content.read_from` and disagreed with it for `faction_sheet` (no `read_from` row).
+ABOUT_KEYS = {kind: m["subject"] for kind, m in _requires.RECORD_SOURCED_OPERANDS.items()
+              if "subject" in m}
 
 
 def ledger_names(claims) -> frozenset:
     """EVERY ID THIS HOLDER HAS BEEN TOLD OF, from their OWN claims only (IN-10 (a), AX-2): the
     subject of every claim they hold -- a deposit, chiefly a witness's `tenure.opened` claim about a
-    seat (#453 K-25) -- and what every document they hold is ABOUT (`ABOUT_KEYS` in a
-    `content:<kind>` claim's value: a held Record's `terms`). An addressee is not what a document is
+    seat (#453 K-25) -- and what every document they hold is ABOUT (`ABOUT_KEYS[<kind>]` in a
+    `content:<kind>` claim's value: a held writ's `terms`, a sheet's `proposition`). An addressee is not what a document is
     about, so a writ's `to` is not read. The ONE owner of "named by a held Record or a deposit":
     `world_q.seats_named` keeps the seats among it, and `decision/options.py::opening_set` asks it of
     a row declaring `referent_named` -- one rule for the source and the formation."""
@@ -931,10 +945,9 @@ def ledger_names(claims) -> frozenset:
         out.add(c.subject)
         said = content_said(c)
         if said is not None:
-            for k in ABOUT_KEYS:
-                v = said.get(k)
-                if isinstance(v, str):
-                    out.add(v)
+            v = said.get(ABOUT_KEYS.get(content_kind(c)))
+            if isinstance(v, str):
+                out.add(v)
     return frozenset(out)
 
 
