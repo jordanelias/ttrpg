@@ -61,6 +61,8 @@ where a game is *named*, not how deeply it was studied.
 | `VCD` | `proposals/2026-10-03-verb-coverage-and-gap-fill.md` |
 | `CGR` | `.audit/2026-07-09-comparative-governance-research/comparative_governance_research_v1.md` |
 | `SC-SRC` | `.audit/2026-08-06-social-contest-three-lens-audit/sources/` (`01`–`05`) |
+| `SNAP:<path>` | `<path>` at git tag `v30-snapshot-2026-06-28` (read with `git show v30-snapshot-2026-06-28:<path>` after `git fetch --depth=1 origin tag v30-snapshot-2026-06-28`) |
+| `ARCH:<path>` | `<path>` at git tag `archive-2026-08-05` (same method) |
 
 ---
 
@@ -123,6 +125,30 @@ where a game is *named*, not how deeply it was studied.
 | `engine/season/rosters.yaml:75`, `engine/season/hole_register.yaml` (`H-99`, `H-100`) | The tier-3 ruling and the one hole row that draws on `GOV` |
 | `engine/season/verb_table.yaml` | The 44 verbs — the executable roster §4 is keyed to. Its evidence is `VCD`, not `research/` |
 
+### 2.E Pre-restructure refs (tags `v30-snapshot-2026-06-28` and `archive-2026-08-05`)
+
+Compared against the current tree by path, blob and basename. The tags are not named in `CLAUDE.md`, `CURRENT.md` or `references/*.md`.
+
+| tree at the ref | files | against the current tree | precedent or history in it |
+|---|---|---|---|
+| `ARCH:research/` | 38 | **Every path and every blob is identical to current `research/`; nothing is archive-only.** The current tree adds 40 files besides this index (the companion, the two masters, `XSC`, `PMM`, the harvest provenance) | none beyond §2.A–2.C |
+| `SNAP:references/historical/` | 3 | The three files are `PA`, `PW`, `MBG` under `research/historical/`; `PA` is identical, the other two differ by one line each | those three; the ref holds the original of the path `tests/sim/gauge_mb.py` still cites (§2.D) |
+| `SNAP:designs/provincial/` (42), `SNAP:designs/territory/` (15) | 57 | **Design documents for subsystems, not research.** All but three share a basename with a file in the current tree (the documents moved under `.designs/`). The three absent are `strategic_layer_v30` (+ index, infill): the board-game layer, retired to `deprecated/archives/audit/` (`references/restructure_ledger.md:1010-1011`) | Light: `mass_battle_v30.md` names Cannae, Hastings, Leuctra, du Picq, Lanchester and Mount & Blade; `faction_politics_v30.md` names Skyrim (16×, the guild ladder) and Byzantium; `settlement_layer_v30.md` names Crusader Kings, CK3 and EU4 |
+| `SNAP:archives/audit/` | 114 | **107 have no basename in the current tree**; the current `.audit/` holds a later, different set. These are the April–June 2026 audits | see below |
+| `SNAP:tests/sim/` | 481 | **395 have no basename in the current tree.** Mass-battle and weapon-system sim code, specs and audit reports predating `modules/` and `.audit/` | see below |
+
+Precedent- or history-bearing files at the snapshot, with no current counterpart located (heads read; bodies counted, not read):
+
+| file | what it holds |
+|---|---|
+| `SNAP:archives/audit/2026-05-28-engine-replacement/engine_replacement_audit.md` (+ `_reconciled`, `_reconciled_AUDIT`) | Whether the d10/TN/Ob engine should be replaced, **each system compared with acclaimed precedent games** researched per system: Crusader Kings, CK3, Total War, Mount & Blade and others (57 mentions across 13 of the games counted). Jordan specifies; the audit informs. The nearest committed counterpart is `COMP-3` §7.9 and `THR` ch. 3 |
+| `SNAP:archives/audit/2026-06-04-attributes-derived-ners/02_COMPARATIVE.md` (+ `04_RECONCILED_MASTER.md`, `03_ADVERSARIAL.md`) | Attributes and derived stats against acclaimed games (CK3, Burning Wheel, Mount & Blade, Disco Elysium, Battle Brothers, SaGa); records the games Valoria's canon names as its own referents |
+| `SNAP:archives/audit/2026-06-22-massbattle-wiring-historical/wiring_historical_validation.md`; `…/2026-06-20-massbattle-loose-ends/massbattle_loose_ends_resolution.md` | Wiring stress test plus top-down comparison with cited historical analyses (Cannae, Napoleon, du Picq, Lanchester) |
+| `SNAP:tests/sim/sim_mb_06_v9_historical_spec.md`; `SNAP:tests/sim/audit_sim_mb_06_v14.md` | Historical accuracy specification for formation-matchup bands (Cannae, Crécy, Agincourt, Hastings); a tick-by-tick audit against pre-firearms precedent **and** strategy-game precedent (Total War, Mount & Blade, Battle Brothers) |
+| `SNAP:tests/sim/weapon_system_v2/weapon_v2_audit_2026-05-14.md`, `weapon_v2_complete_audit.md` | Weapon-system audit against historical precedent (HEMA, Liechtenauer, Fiore) — the earlier layer of the `.audit` weapon-morphology files in §2.B |
+| `SNAP:tests/sim/mass_battle/{orchestration,config,validators}.py` | The mass-battle simulator with its historical constants and validators (48, 9 and 17 historical-term mentions); current counterparts under `modules/mass_battle/` |
+| `SNAP:archives/audit/2026-04-29-topographic-analysis/`, `…/2026-04-30-terminology-vector-audit/`, `…/2026-06-22-faction-action-audit/`, `…/2026-06-09-*-comprehensive/` | Corpus-structure audits and per-subsystem analyses. Not precedent research; listed so they are not mistaken for it |
+
 ---
 
 ## 3. By function — what each function has, and where
@@ -135,15 +161,15 @@ where a game is *named*, not how deeply it was studied.
 | **Deliberation and law** (SC) | `COMP-1` §2.2, `COMP-5` §12.2, `COMP-6` §13.1 (Victoria 3 law enactment) and §13.2 (*Duel of Wits*), `COMP-3` §7.2; `VCD` App. B families 6–15 | `RHET` §7–§8; `GOV` (HRE Diet, Venice, Roman Republic); `PA` | SC-01 (the contest-resolution core of the proceedings subsystem), SC-03b (`determine` contested, `VCD` §10.4 step 4); the SC lane is SC-01…SC-08 |
 | **Settlement governance** (SE) | `COMP-1` §2.3, `COMP-5` §12.3, `COMP-3` §7.3 (the appointed governor, null N-7) | `FASE` T4/T5/T8, `PGS` §2A–2B, `HCC` §2, `GOV` | SE-03…SE-06, IN-07, IN-28, IN-31, IN-49 |
 | **Territory and conquest** (SE/FA/MB) | `COMP-1` §2.4, `COMP-5` §12.4, `COMP-3` §7.4 | `PW` §4–§5, `PA` §2/§4, `FASE` T6, `PGS` §2C | IN-13 (`VCD` §10.4 step 8, the `march` arrival); IN-12 (steps 6, 7, 11: `seize`, `covenant`, `raze`) |
-| **People: roster, loyalty, succession** (FA/IN) | `COMP-1` §2.5, `COMP-5` §12.5, `COMP-7`, `COMP-8`, `PMM`, `COMP-3` §7.5 | `RTP` A–J, `GOV` hierarchy and standing, `FASE` T5/T9 | IN-58, IN-61, IN-62…IN-72, SE-04 |
+| **People: roster, loyalty, succession** (FA/IN) | `SNAP:…/2026-06-04-attributes-derived-ners/02_COMPARATIVE.md` (attributes); `COMP-1` §2.5, `COMP-5` §12.5, `COMP-7`, `COMP-8`, `PMM`, `COMP-3` §7.5 | `RTP` A–J, `GOV` hierarchy and standing, `FASE` T5/T9 | IN-58, IN-61, IN-62…IN-72, SE-04 |
 | **Economy, levy, muster** (SE/MB) | `COMP-1` §2.6, `COMP-5` §12.6, `COMP-6` §13.3 (CK3 levies), `PMM`, `COMP-3` §7.6 | `PW` §3, `FASE` T1–T3, `HCC` §2.9–2.10 | IN-33, IN-45, IN-52 |
-| **Mass battle** (MB) | `COMP-1` §2.7, `COMP-5` §12.7, `COMP-3` §7.7; squad-engagement concept v5 (Football Manager, Total War) | `PFF` (all), `PW` §1–§2, `MBG`, `research/diagrams/…`, the `.audit` fidelity and Cannae audits | MB-07r, MB-08, IN-13, IN-36, IN-52 |
-| **Personal combat** (PC) | `COMP-1` §2.7 (the seam only); `proposals/2026-09-30-character-and-play-surface/04_the_bout.md`, `05_two_modes_of_one_bout.md` | **Not under `research/`.** `.audit` HEMA fact files, morphology and weapon-physics (§2.B) | PC-05, PC-06, PC-08, PC-10, GO-05 |
+| **Mass battle** (MB) | `COMP-1` §2.7, `COMP-5` §12.7, `COMP-3` §7.7; squad-engagement concept v5 (Football Manager, Total War) | `PFF` (all), `PW` §1–§2, `MBG`, `research/diagrams/…`, the `.audit` fidelity and Cannae audits; `SNAP:tests/sim/sim_mb_06_v9_historical_spec.md`, `audit_sim_mb_06_v14.md`, `SNAP:…/2026-06-22-massbattle-wiring-historical/` | MB-07r, MB-08, IN-13, IN-36, IN-52 |
+| **Personal combat** (PC) | `COMP-1` §2.7 (the seam only); `proposals/2026-09-30-character-and-play-surface/04_the_bout.md`, `05_two_modes_of_one_bout.md` | **Not under `research/`.** `.audit` HEMA fact files, morphology and weapon-physics (§2.B); `SNAP:tests/sim/weapon_system_v2/` audits | PC-05, PC-06, PC-08, PC-10, GO-05 |
 | **Cross-scale and auto-resolve** | `COMP-1` §2.8, `COMP-2` S3, `COMP-6` §13.6 (Total War autoresolve), `COMP-3` §7.8; `THR` ch. 3; `auto_manual_resolution_duality_v1.md` (`.designs/`) | `XSC` §8 (internal) | |
 | **Social contest, persuasion, negotiation** (SC) | `COMP-1` §2.10–2.11, `COMP-6` §13.2, `COMP-3` §7.10; `SC-SRC` 01/04/05 | `RHET` (whole) | IN-12 (step 9, `argue`), SC-01 |
 | **Investigation and fieldwork** (FI) | `VCD` App. B families 1–5 and 11 (seven detective games); the fieldwork architecture proposal | Incidental only: the coroner's view, Walsingham's cipher secretary, the State Inquisitors, the *ordo iudiciarius* appear as `VCD` evidence rows (`[H1-…]`). **No file under `research/` is dedicated to it** | FI-01…FI-05 |
 | **Emergence, events, narration** (WR/IN) | `COMP-1` §2.9, `COMP-5` §12.10, `COMP-2` §3.3 failure shapes; `EMG`; `THR` ch. 1/4/5; `PREC-NULLS` N-2, N-5; `proposals/2026-09-12-emergent-narrative-primitives-v2/`; `proposals/2026-10-04-forcing-churn-and-the-story-bar.md`; `proposals/2026-10-13-narration-mechanisms.md` | `HCC` (event-deck source, §3 ripple chains) | IN-35, IN-37, WR-01 |
-| **Resolution kernel** | `COMP-3` §7.9, `THR` ch. 3, `COMP-6` §13.2/§13.6 | `MBG` §1 (decisiveness and draw rate near parity, from the combat-modelling literature) | |
+| **Resolution kernel** | `SNAP:…/2026-05-28-engine-replacement/engine_replacement_audit.md` (the d10 engine against acclaimed games, per system); `COMP-3` §7.9, `THR` ch. 3, `COMP-6` §13.2/§13.6 | `MBG` §1 (decisiveness and draw rate near parity, from the combat-modelling literature) | |
 | **Threadwork** (WR/FI) | None. Named in `PA` and `PFF/16` as a system tested against history, not surveyed | | IN-06, WR-01 |
 | **Godot port** (GO) | None located | | GO-01, GO-05, GO-06 |
 | **Presentation / UI** | the three `valoria_ui_ux_v4*` documents (`.designs/`); `COMP-5` §12.10 | | no lane |
@@ -230,6 +256,7 @@ Stated so an "absence" in an interrogation is not mistaken for a finding about t
 - **The two surveys behind the 58 and 84 primitives are not in the repository** (`VCD` §1). Their points survive only as `VCD` carries them, and the "session documents" they cite (N1, N2, D1–D3, *The Third Strand*, *A Tells B About C*) are pinned by hash at `proposals/2026-09-12-emergent-narrative-primitives-v2/04_PROVENANCE.md`, not stored.
 - **The seven nulls** (`COMP-2` §3.4): no game models argument content; none solves personal leverage across mass sizes; none has a general expression channel for interior state; none certifies generated content is good rather than varied; none defends a cross-scale bridge whose default state equals its absence; none caps unit *quality* by a faction scalar (4/4 franchises cap quantity); every franchise resolves non-payment as permanent desertion, where both Valoria options are recoverable. `PREC-NULLS` adds the legibility-against-depth null, fog of war for social state, and the appointed governor.
 - **Numbers about games are leads** (§1 rule 2). `[UNVERIFIED]` marks persist at source: Dominions assassination meta, the *Duel of Wits* 21-versus-11 account, the Blades failure corpus, the State Inquisitors' watching of envoys.
+- **The two older refs add little research.** `ARCH:research/` is wholly contained in the current tree, and `SNAP:references/historical/` is the same three files. What exists only at `SNAP:` is the earlier precedent comparison of the engine and of attributes (§2.E), whose conclusions the companion and `THR` re-derived from different programs.
 - **Mention counts overstate games named in passing.** *Old World* is also a phrase in the pre-Columbian files; *Diplomacy* and *Civilization* are not counted because the word is ordinary.
 
 ---
