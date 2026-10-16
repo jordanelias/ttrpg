@@ -346,4 +346,112 @@ examined 57 candidates (25 rows of §4, 4 THE NINE clauses, 7 hole rows, 6 NERS-
 - **No demand source beyond one program, and covered by name:** cadastral `survey` (D6 only); a settlement-type roster (folded into M-SE-8); money as a stocked kind (H-121; folded into M-SE-2); a settlement governor's audit and rotation (follows M-SE-6, not before it).
 - **Values, not structure:** every dark knob's number, cohort weight 2, capacity floor, wear and yield constants — `[OPEN — Jordan tuning]`.
 
+## 9. NERS PASS
+
+```
+NERS PASS: SE — settlement matter, works, population and territory, as code at 5445e34 plus every v9 position assumed built
+INSTRUMENTS: A   (the one draw in the lane, `season_factor_draw`, ships dark; resolution-diagnostic not run)
+```
+
+**What was executed.** (1) `python -m engine.season.harness.register --requirements` (met 3, not_met 1, partial 5; exit 0). (2) `pytest -p no:cacheprovider engine/season/tests/test_territorial_subsistence.py engine/season/tests/test_migrate_capacity.py` → 40 passed. (3) A read-only three-arm probe on `populated.build_realm(0)` over two seasons through `populated.run` (`scratchpad/work/se_probe2.py`), one seed, HEAD `5445e34`:
+
+| arm | cohort weight before → after | cohort body min | stores after 2 seasons (grain / salt / ore / timber) | acts | SE outcomes in `w.log` |
+|---|---|---|---|---|---|
+| shipped | 74 → 74 (37 cohorts) | 1000 | 2775 / 2109 / 3663 / 703 | 1154 | `levy.refused` 2, `levy.unauthorized` 1, `work.unavailable` 94, `restore.refused` 25, `found.refused` 25, `build.refused` 25, `migrate.refused` 73, `transfer.made` 3, `transfer.refused` 72, `condition.worn` 644, `yield.taken` 74; 0 executions of `levy`, `work`, `restore`, `found`, `build`, `migrate` |
+| `body_step` 10 | 74 → 74 | 940 | identical | 1154 | `body.changed` 40 (vs 3); `migrate.refused` 71, `transfer.refused` 74; all else identical |
+| drought draw `((0.5,),)*4` | 74 → 74 | 1000 | 1295 / 999 / 1813 / 333 | 1154 | identical to shipped |
+
+The control is the shipped arm. Halving every harvest changes no act count and no SE outcome; a live hunger arm moves cohort bodies and two refusals in 1,154 acts. No cohort weight moves in any arm. This is one seed and two seasons, not a campaign reading; no equilibrium run was made.
+
+**N-line ledger** (six directions: TD top-down, BU bottom-up, V vertical, D diagonal, LA lateral, H horizontal)
+
+| object | N-line (narrowed where the attack narrowed it) | directions | attack run | result |
+|---|---|---|---|---|
+| larder at every rung + the up-ladder draw (`world_q.py:796`) | cut it and dearth can be neither local nor relieved by someone's choice to move food | BU, V, LA, D (`levy`) | sought another carrier of where food is: none; the probe shows stores accumulate per rung and 3 `transfer.made` relieve | HOLDS |
+| `Site.condition`, wear, `restore` | cut it and production never decays, so tending a place is pointless | BU, V | probe: 644 `condition.worn`, 25 `restore.refused`, 0 executed — the decay runs and the counter-act does not, today | HOLDS, NARROWED: today a clock with no hand on it; IN-45/IN-28 bring the hand |
+| cohort, a weight > 1 Person, the only eater | cut it and dearth has no subject | BU | an individual eater was the pre-`24f` carrier; Jordan ruled synecdoches (ED-IN-0255, quoted at ledger `:53`) | HOLDS, NARROWED: a cohort decides as one person and its weight never moves (probe 74 → 74) |
+| `capacity(w, rung)` | cut it and a newcomer can crowd any place, so building a dwelling buys nothing | LA (migration), BU | sought another bound on immigration: none; on births: no producer exists | HOLDS for immigration only; the ruled N-line "`found` is the throttle" on births is FALSE (below) |
+| `levy` | cut it and a seat cannot take matter against a holder's will | D (seat → matter), TD | `transfer` needs the giver's choice | HOLDS |
+| `transfer` | cut it and no relief, gift or upkeep moves between rungs | LA, V | `levy` moves only into a seat's rung | HOLDS |
+| `found` / `build` | cut them and the world only decays (F.20) | BU, H | ruled in by ED-SE-0054; no other producer of `(Rung, exists)`, `(Site, exists)` | HOLDS (planned to execute, IN-28) |
+| `body_step`'s live arm | cut it and dearth reaches nobody | BU, V | probe: at 10 cohort bodies fall 1000 → 940 and two refusals move | HOLDS as a possibility; inert at the shipped value |
+| VESSEL bound (planned) | cut it and storing food is free, so a granary is never a decision | BU | probe: 2775 grain against cohort weight 74 after two seasons — with no scarcity a bound binds nothing | HOLDS, NARROWED: its N depends on scarcity existing (T-SE-11) |
+| territory rung + `uncontrolled` | cut it and GD-3 has no first condition | V, TD | its one caller is a report (`world_q.py:1489-1492`) | HOLDS, NARROWED: IN-30 adds a caller; contiguity is absent (M-SE-4) |
+
+**False N-lines** (§3):
+1. **"`found` is the throttle" on births** (RR-2 `consequences:`, `RULINGS.yaml:1860-1862`): disqualifier 2, no producer. Births are never written (M-SE-1); the throttle that runs is on immigration.
+2. **A granary institution, or an Open Granary verb** (FASE SE-2, HCC #5, PGS S10): disqualifier 1, the carrier exists — a rung's own `stores` is the buffer and `transfer` is the opening; the probe's 3 `transfer.made` are that act.
+3. **`Rung.envelope`**: disqualifier 2, no writer outside a by-construction probe (`probes.py:1836-1848`); SE-04 (b)'s falsifier already allows deleting it (`_part6.md:217`). It becomes a true N-line only if M-SE-1 is built.
+4. The design already cut one: SFP refused a "Dearth state" field because the crossing Event carries it (`02_PROPOSALS_SUBSTRATE.md:121` [CHECKED]); that cut holds.
+
+**Cross-cutting checks**
+
+- **C1 claim → mechanism.** "A settlement holds a level of discontent": probe W10 returns `UNREACHABLE` (`harness/probes.py:1851-1856` [CHECKED]); IN-23 is to carry it as a Query. "`found` is the throttle": carried for immigration only. "Dearth reaches the body": carried, dark.
+- **C2 type signature.** The dearth emission is the CROSSING, not the state: "once a place has run dry and been reported, its next empty season is silent", and a larder never stocked emits nothing (`loop/matter.py:380-384` [CHECKED]). A chronic dearth is an omission, and an omission emits no event. See R-CHOICE.
+- **C3 epistemic feasibility.** Who holds a rung is not knowable person-side (H-195; M-SE-3), so a territorial motive cannot be evaluated by anyone. GD-1's ending is evaluated by the season, not by a person (IN-27, a Query the season reports), which is lawful for an ending.
+- **C4 contradiction sweep.** RR-2's births vs the built immigration throttle; GD-1's 15 territories vs 17 in the map; GD-2's mandatory faction actions vs Layer 1; SFP P1's Banished borrowing vs TD (§7.2 items 1-4).
+- **C5 path construction.** Showcase: *a famine drives people from X to Y; Y is full; its lord builds dwellings and levies grain to feed them; the town grows back.* Dearth crossing (built) → deposit into governing seats (built, `matter.py:385-386`) → a person's `transfer` (built, executes) → `migrate` toward a larder elsewhere (built; destination channel absent, H-168; IN-45 planned) → capacity refusal (built) → `found`/`build` (refused; IN-28 planned) → the town grows back (ABSENT, M-SE-1) → its output recovers with its people (ABSENT, M-SE-5). With v9 built the path constructs to the dwelling and is asserted after it: the recovery arc is *expressible*, not *implementable*.
+
+**R** (seats: a seated lord or governor is a person the player can be, the player being an ordinary Person per Layer 1; cohorts are not occupiable)
+
+- **R-COMPLETE: FINDINGS.** At the extreme of hunger a cohort dies and its settlement's population is gone for good, with no birth or migration to refill it (NERS A6(iii) [AUDIT]; M-SE-1). Chronic dearth goes silent after its first crossing (C2). `found`/`build` have no closer (H-166; IN-28 plans one). The empty-larder first season is a build-order artifact the tests rely on (`test_territorial_subsistence.py:254-256`).
+- **R-VARIETY: FINDINGS.** Every settlement holds the same producing sites (`populated.py:576-584`), with no exchange (M-SE-2) and no neighbour (M-SE-4): one economy, everywhere, with one line of play.
+- **R-WORLD: FINDINGS (runs).** Two seasons with halved harvests produce the same acts and outcomes as the shipped arm (probe). Unwatched settlements resolve identically under scarcity and emit nothing new, so the economy is a dead seat for scarcity at shipped magnitudes. Under v9 built, IN-35 (Calamity), IN-30 (insurgency) and IN-52 (provisioning) add hooks; demographic hooks stay absent. The uploaded audit's R-WORLD (hunger, ageing, illness at control) was re-opened at `fixtures.py:530, :542-543` and re-measured by the `body_step` arm.
+- **R-CHOICE: FINDINGS, upper bound.** (a) At the lord's seat, intent *fill the treasury*: the audit's table (A5) — `levy` immediate and unpriced vs `restore`/`work` slow and costless — relied on, not re-run; its `matter.py:515-536` line re-opened (yield = base × condition × factor). With IN-49 built, `levy` gains execution, not a price (H-SE-1). (b) At a governing seat, intent *let a dearth pass*: 
+
+  | act | gain | cost |
+  |---|---|---|
+  | `transfer` relief from the seat's stores | the dearth ends | stores leave; an act, witnessed |
+  | `levy` grain from a neighbour rung to relieve | the dearth ends | a `levy.taken` witnessed at two rungs |
+  | **do nothing** | the dearth persists, **silently after its first season** | **no act, no event** after the crossing (`matter.py:380-384`) |
+
+  Silence beats refusal: neglect of a chronic dearth is the dominant act at the governing seat once the first crossing is past. Dependency: the act economy (IN-14, [medium]).
+- R-CHOICE and R-VARIETY verdicts are upper bounds (§6.2).
+
+**S**
+
+- **S-UP: PARTIAL.** A settlement's dearth reaches every seat whose purview contains it as a deposited claim (`matter.py:385-386`). A named person carries it, but dropping it costs nothing (R-CHOICE (b)). The petition path fails (audit A5 [AUDIT]).
+- **S-DOWN: FAIL today, PASS in shape under v9.** A larder elsewhere cannot reach a person with no post: `migrate`'s destination channel is absent (H-168). IN-45 designs it as a question raised from the person's own claims, which is published, not addressed [UNVERIFIED until designed].
+- **Coverage.** Vertical: the larder walk and `levy` carry; population → territory has no carrier (M-SE-1). Diagonal: faction stance → territorial act has none (M-SE-3); matter → mass battle is planned (IN-52). Lateral: settlement ↔ settlement carries only `transfer` (M-SE-2, M-SE-4).
+- **Pauses correctly.** Not tested. With IN-52 built, a field's ration (LF-3, written in `_eff_march` at the fold) and MATTER's draw consume one larder at two steps; ordering by step is deterministic, and no finding was sought beyond reading the design.
+- **Methodology: FINDING.** "How many people live here" is held three ways: cohort `weight` (a fixture, H-170), `capacity` (a count of dwelling Sites) and `Rung.envelope` (bands, never written). Distance is priced by `travel_leg` while the map's adjacency is unread. `levy` and `transfer` share one mover, `_shift` (`effects_governance.py:374-420`): consistent, PASS.
+
+**E (last, as a ratio).** E-OVERHEAD: the lane's built objects are few: stores per rung, site condition, cohorts, one capacity Query and nine verbs. In shipped play six of the nine verbs executed 0 times over two seasons (probe), and four controls ship dark. That overhead is a reach problem, not a vocabulary one: each N-line above holds under v9. Biggest available cuts: `Rung.envelope` (false N-line 3) and harbour+seam everywhere. E-LEGIBILITY: FINDINGS. A settlement's type says what venues it has (`populated.py:558-566` [CHECKED]), not what it produces. A halved harvest changes nothing a player could see in acts (probe). `levy`'s outcome is legible.
+
+| watched | the N it protects | verdict |
+|---|---|---|
+| one larder per rung for household, settlement and territory | nested relief without a granary object | kept, HIGH |
+| a cohort as one Person | cheap populace; dearth has a subject | kept at MEDIUM: costs internal spread (SE-04 (c) HELD) and makes its death final |
+| capacity as a count of dwellings, no fixture table | building is the lever | kept, HIGH (RR-2) |
+| harbour and seam at every settlement | none named beyond avoiding co-location (`populated.py:577-578`) | cut candidate, MEDIUM: protects no N and costs legibility |
+
+**The design's own falsifier.** The discipline is "every arrow is a person's act" (S36.1, quoted at `matter.py:376-378`). Enumerated non-act effects: yield, wear, the subsistence draw, the body write, the season-factor draw and the dearth-crossing Event. All six cluster in one family, AX-5's self-motions (matter and bodies), which Layer 1 licenses. Capacity refusals and CENSUS individuation pass by tracing (to the migrant's and the dispatcher's acts). **HOLDS** (walked, not executed). The one clean hit would be GD-2's mandatory faction actions, which are canon but unbuilt.
+
+**Self-audit.** [Not self-authored as to the code; sections 0-6 of this file are a prior pass's work and carry that bias.] 9a: the probe contradicts this file's §3.1 and §4, which say `restore` "executes" [READER B1_2; `requirements.yaml:163-166` says the same]. At HEAD over two seasons `restore` was refused 25 times and executed 0 times, matching R-05's B-W pin ("`restore` leave[s] the executed set", BASELINE B2). An annotation is added at §4 and §3.1 rather than a rewrite (brief: Step 0 only). 9b: M-SE-8 fails §2's "needed if Z were built" test on its own; it is demanded only through M-SE-2 and is folded under it in §10. M-SE-1 re-adds P2, which ED-SE-0054 left out; this pass names that cut (disqualifier 3 answered). M-SE-5's carrier already exists (`work`'s staged delta), so its repair is a term, not an object. An independent reviewer would add: a longer run (wear without `restore` should erode yield over seasons; not measured), more seeds, and the earlier teardown draft.
+
+| axis / test | verdict | what would overturn it |
+|---|---|---|
+| N (six directions) | FINDINGS: ten N-lines hold, five narrowed; three false N-lines | a carrier of births or of immigration bounds other than `capacity` |
+| E-OVERHEAD | FINDINGS (reach, not vocabulary); two cut candidates | `Rung.envelope` gaining a writer (M-SE-1) |
+| E-LEGIBILITY | FINDINGS | settlement type tied to production, or scarcity visible in acts |
+| R-COMPLETE | FINDINGS | a refill path for a dead cohort; a per-season dearth event |
+| R-VARIETY | FINDINGS | two settlements with different economies and a reason to exchange |
+| R-WORLD | FINDINGS (probe: drought arm = shipped arm) | a seeded multi-season run where a harvest change alters an unwatched decision |
+| R-CHOICE | FINDINGS, upper bound: neglect dominates at the governing seat; `levy` unpriced at the lord's seat | a per-season dearth event; an equilibrium run of `levy` against `restore`/`work` |
+| S-UP | PARTIAL | dropping a deposited dearth claim costing its holder something |
+| S-DOWN | FAIL today; PASS in shape under v9 [UNVERIFIED] | IN-45's destination channel routed to a named recipient |
+| S — coverage · pause · methodology | FINDINGS: lateral and diagonal gaps; three carriers of population | an adjacency reader; a single population carrier |
+| the design's own falsifier | HOLDS (AX-5 family) | an SE effect with no act and outside matter or bodies |
+| self-audit | 9a: `restore` corrected; 9b: M-SE-8 folded, M-SE-1 names its prior cut | a longer, multi-seed run |
+
+```
+REPAIRS (worst first; each a deletion or one object)
+  chronic dearth goes silent → emit the dearth Event every season the state persists (delete the crossing-only latch at `matter.py:380-384`)
+  births never written → one writer of cohort weight at CENSUS bounded by `capacity` (RR-2's own bound), or delete `Rung.envelope` and record that the population is fixed
+  output ignores population → `work`'s staged delta scales with the actor's `weight` (one term)
+  levy unpriced → `levy` witnessed as a deed at the levied rung so stance can move (the existing deed path; no new store)
+
+GRADE: runs (partial) — `register --requirements`, two test files (40 passed) and a three-arm two-season probe on build_realm(0) executed; every v9-assumed claim is paper
+```
+
 
