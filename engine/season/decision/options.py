@@ -901,7 +901,12 @@ def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"
     # BATCH-CLOSE FINDING (methodology-close Phase 1, CODE ARCHITECTURE lens): this was a literal
     # `("to", "kind", "amount")` tuple, caught by `test_jordan_no_definition_is_hardcoded_in_a_body`
     # -- moved to the roster rather than exempted; IN-10 made the roster per kind.
-    if name in _RECORD_ANSWERABLE:
+    # ⚠ v9 IN-45 `migrate`: ONLY FOR AN ACT FORMED ON THE QUESTION'S OWN REFERENT (the document). A
+    # CLASSED referent (`Question.classes`: a seat, a writ, a place `places_named` stamped) rides the
+    # question without being what it is about, so the document `q.about` names does not answer for
+    # an act on it -- a `migrate` to a place he was told of is not addressed to a petition's
+    # addressee. On a plain row `subject` is always one of `q.referents`, so nothing there moves.
+    if name in _RECORD_ANSWERABLE and (q is None or subject in q.referents):
         v = _from_content_claim(p, q, name)
         if v is not None:
             return v

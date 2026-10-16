@@ -152,7 +152,9 @@ def test_lb1_bo10_gate_closed_by_in11_the_utterers_hold_report_not_repair():
     referent IS the Proposition -- `subject` still binds to the referent, unchanged. MEASURED, this
     season: `commitment.made` 2 where it was 0, `commitment.refused` 38 where it was 35 (the old
     person-id referents still form and refuse; `H-156`'s (a)/(b) stays registered). The full
-    falsifier is `test_in11_utter_hold_commit.py`."""
+    falsifier is `test_in11_utter_hold_commit.py`. ⚠ SINCE v9 IN-45 `migrate` THIS TEST NO LONGER
+    ASSERTS THE CLOSURE IN THE REALM: its two seed-0 execution assertions were retired under v9 §0.5
+    (the note at the assertion); what stays is that `commit` is resolvable, formed and attempted."""
     from collections import Counter
     from ..decision import make_chooser
     from ..state.ids import H, draw_factory
@@ -169,13 +171,13 @@ def test_lb1_bo10_gate_closed_by_in11_the_utterers_hold_report_not_repair():
         "`commit` dropped back out of `resolvable_verbs()` -- the effect registration regressed")
     commit_acts = [a for a in d.resolved if a.verb == "commit"]
     assert commit_acts, "no `commit` act formed at all on this corpus -- the gate moved further"
-    referents_seen = {(a.payload or {}).get("subject") for a in commit_acts}
-    assert referents_seen & set(w.propositions), (
-        f"no `commit` act named a real Proposition as its subject -- IN-11's utterer's hold no "
-        f"longer reaches a question: {referents_seen}")
-    assert kinds.get("commitment.made", 0) >= 1, (
-        f"commitment.made is {kinds.get('commitment.made', 0)} -- BO-10's gate re-opened; IN-11's "
-        "closure regressed")
+    # ⚠ RETIRED AT v9 IN-45 `migrate` (B-K, 2026-10-16) UNDER v9 §0.5's 2026-10-13 RULING (*"No test
+    # asserts that a verb executed in the seed-0 realm"*), which these two survived by oversight:
+    # `commitment.made >= 1` and a `commit` act naming a real Proposition, both in this one seed-0
+    # season. They went red when `migrate`'s destination channel moved the realm's act mix
+    # (`aperture 1 0`: `commit` att 38, ex 2 -> 0) -- the chooser's selection, not IN-11's wiring.
+    # Deleted, never skipped; the closure is proven on hand-built worlds by
+    # `test_in11_utter_hold_commit.py` block 1.
     assert kinds.get("commitment.refused", 0) > 0, (
         "no `commit` refusals at all -- the verb stopped being attempted, which is a different "
         "regression from the one this test documents")
@@ -2617,6 +2619,10 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
         return w, dw, qs, out
 
     w, dw, qs, out = season(strip=False)
+    # v9 IN-45 `migrate`: WHERE EACH PERSON STOOD WHEN HE WAS ASKED, not only where the season left
+    # him -- a computed `migrate` now executes in this season (`aperture 1 0`: 1), and a person asked
+    # about his hearth's dwelling before he settled elsewhere stands somewhere else at the end.
+    home_at_build = world_q.home_of(build_realm(0))
     scale = w.fixtures.get("condition_scale")
     assert len(dw) >= 1, "no dwelling was built; the zeros below would describe nothing"
     assert qs, "the questions_for spy saw no deliberation; the zero below would be unobserved"
@@ -2653,7 +2659,8 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
             if q.id not in {f"q:claim:{c.id}" for c in p.ledger}:
                 continue
             c = by_id.get(q.about)
-            assert c is not None and c.subject == at.get(home.get(p.id)), (
+            assert c is not None and c.subject in {at.get(home.get(p.id)),
+                                                   at.get(home_at_build.get(p.id))}, (
                 f"{q.id} for {p.id} does not resolve to that person's own hearth's dwelling: {c}")
 
     # ⚠ `24d-i`'s TREATMENT == CONTROL IDENTITY DOES NOT SURVIVE `11a`, AND IS NOT RE-ASSERTED.

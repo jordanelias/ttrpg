@@ -171,7 +171,12 @@ def test_h134_two_seats_are_two_acts_ids_opportunities_and_the_store():
 #   * `carry` (IN-45, on aa26c4fd) -- nothing: its two Candidates were already formed with
 #     `{subject, to}` at fae9e623 (formation reads the verb table, not `resolvable_verbs()`); the
 #     lists are byte-identical to aa26c4fd's.
-_CONTROL = (64, 64, "4351ecd2e816024d73a4fecb0ca155a93c5ba8bd637c6a706fc2574e613eacfa")
+# RE-PINNED AT v9 IN-45 `migrate` (B-K, on 4cee0de5): 64 -> 62, `4351ecd2...` -> `b8163ec4...`.
+# Exactly the two `migrate` Candidates leave (on `off_duke` and `Hh`, the question's plain
+# referents) and none is added: `migrate` declares `referent_class: Rung` and forms only on a place
+# `places_named` stamps, and `p_one`'s ledger names none. CONTROL: the same reading with `migrate`'s
+# `referent_class` blanked in `VERB_TABLE` re-hashes to `(64, 64, "4351ecd2...")` exactly.
+_CONTROL = (62, 62, "b8163ec4ccf61fc4e01f3428a05c4dc2dcf8ef6e6744cd5fc521f149ca744818")
 
 
 def _control_reading():

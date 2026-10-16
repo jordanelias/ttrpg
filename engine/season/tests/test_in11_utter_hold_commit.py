@@ -12,18 +12,13 @@ What each block proves, and the control that stops it passing vacuously:
      Control: a `release` that closes only the maker's `hold` earns `tenure.closed` alone. A
      commit-only release (no `hold`, the faction-member shape) earns the vow-break too; and a
      witnessed mixed release names the Proposition to non-actor witnesses (A2, accepted as inert).
-  3. COMPUTED PLAY: one seeded `build_realm(0)` season through the real chooser executes `commit`
-     at least once, and every Proposition an executed `commit` names was uttered by an act this
-     season and was held by its committer at some point up to the commit's tick (tick-granular; see
-     the comment at the assertion for what that does not show). Before IN-11 the same
-     season attempted `commit` and refused every attempt (`aperture 1 0`: 35 of 35).
+  3. COMPUTED PLAY: RETIRED at v9 IN-45 `migrate` -- it asserted `commit` executing in the seed-0
+     realm, which v9 §0.5's 2026-10-13 ruling retires (the note at block 3).
   4. THE CUT IS COMPLETE AND THE LOADER POLICES IT: `repudiate` is not a verb, and a planted
      `repudiate` cell in the alignment table or in `affiliation_engagement`'s shared column is
      refused at load (`data/verbs.py::_check_sparse_table`, the one owner of that check). Control:
      the shipped tables load.
 """
-import collections
-
 import pytest
 
 from engine.season.data import affiliations as AF
@@ -32,8 +27,7 @@ from engine.season.data.matrix import WriteClass
 from engine.season.data.rosters import table, table_meta
 from engine.season.gaps import Forbidden
 from engine.season.harness import probes as P
-from engine.season.harness.populated import build_realm
-from engine.season.loop.driver import SeasonDriver, mint_token, resolvable_verbs
+from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.queries.world_q import reach
 from engine.season.state.carriers import Act, Proposition, Tenure
 from engine.season.state.ids import H
@@ -135,43 +129,14 @@ def test_in11_a_witnessed_mixed_release_names_the_proposition_to_every_witness()
 # 3 -- COMPUTED PLAY
 # ======================================================================================
 
-def test_in11_commit_executes_in_a_computed_realm_season_on_a_proposition_its_committer_holds():
-    from engine.season.decision import make_chooser
-    from engine.season.state.ids import draw_factory
-    w = build_realm(seed=0)
-    d = SeasonDriver(w)
-    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
-                      draw=draw_factory(w.world_seed, lambda: w.tick))
-    d.season(ch, question=None, subsistence=P.SUBSIST,
-             contest_max_depth=w.fixtures.get("contest_max_depth"))
-    kinds = collections.Counter(e.kind for e in w.log)
-    assert kinds["commitment.made"] >= 1, (
-        f"`commit` executed {kinds['commitment.made']} times in a computed realm season "
-        f"(refused {kinds['commitment.refused']}) -- IN-11 is not built")
-    # The acts behind each `commitment.made`: computed (the chooser's), on a Proposition uttered by
-    # an act this season, and the committer held it up to this tick (caveat at the assertion below).
-    uttered = {f"prop:{a.id}" for a in w.acts if a.verb == "utter"}
-    checked = 0
-    for e in (e for e in w.log if e.kind == "commitment.made"):
-        a = w.acts.get(e.causes[0])
-        assert a is not None and a.verb == "commit", (e.causes, a)
-        prop = (a.payload or {}).get("subject")
-        assert prop in uttered, f"{a.actor} committed to {prop!r}, which no act uttered this season"
-        # LIVE AT THE COMMIT TICK: opened no later than it, not closed before it. ⚠ TICK-GRANULAR,
-        # AND THAT IS ALL A ONE-TICK SEASON CAN SAY: measured on this season (seed 0), one of the
-        # two committers (`cohort_set_s_012`) RELEASED his hold in an earlier round of the same
-        # tick, before the `commit` resolved (log order: `tenure.closed` then `commitment.made`),
-        # so `until == at`. `commit`'s precondition is only that the Proposition exists; the hold
-        # is the ROUTE to the question (reach, limb 2), not a condition of the act.
-        at = e.emitted_at
-        assert any(h.kind == "hold" and h.object == prop and h.since <= at
-                   and (h.until is None or h.until >= at)
-                   for h in w.persons[a.actor].tenures), (
-            f"{a.actor} committed to {prop} at tick {at} without a hold live at that tick -- "
-            "-- the hold the test expects to exist is absent")
-        checked += 1
-    assert checked == kinds["commitment.made"] >= 1
+# ⚠ RETIRED AT v9 IN-45 `migrate` (B-K, 2026-10-16) UNDER v9 §0.5's RULING OF 2026-10-13 (*"Relax exit
+# rules"*: *"No test asserts that a verb executed in the seed-0 realm"*), WHICH THIS TEST SURVIVED
+# BY OVERSIGHT: `test_in11_commit_executes_in_a_computed_realm_season_on_a_proposition_its_committer_
+# holds` asserted `commitment.made >= 1` in one seeded `build_realm(0)` season. It went red when
+# `migrate`'s destination channel moved the realm's act mix (`aperture 1 0`: `commit` att 38, ex 2
+# -> 0) -- the chooser's selection, not the wiring, which the ruling says a realm count does not
+# judge. Deleted, never skipped. The hook is proven on hand-built worlds by block 1 (an `utter`'s
+# hold, then a `commit` on the Proposition executing through the real fold, with its control).
 
 
 # ======================================================================================
