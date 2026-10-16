@@ -308,14 +308,27 @@ def _eff_convene(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     ⚠ THE VENUE RIDES `subject` NOW, NOT `venue` (plan position `18`/PROC-A, 2026-09-29; C-11,
     `21_RECONCILIATION.md:379`: *"subject already binds the rung"*). `w.dates[...]["venue"]` is
     the DATE'S own field name, unrelated to and unchanged by the act's payload key, and
-    `corpus_run.py`'s hand-built dates still set it directly."""
+    `corpus_run.py`'s hand-built dates still set it directly.
+
+    v9 SC-01 FIRED-SLOT STEP (#453 pass-1 step 4; H-163 limit 2): THE DATE IS BORN WITH A HOLDER,
+    THE SEAT THE CONVENER EXERCISED (`Act.via`). CALENDAR forms a docket slot only for a date with a
+    holder (`loop/calendar.py`: a vacant date fires and lapses), and until this step nothing set one,
+    so every convened date in every computed world lapsed and no slot ever formed for `open_case` to
+    fill. [ASSUMPTION; medium; Jordan to correct -- Jordan names another holder rule] No #453 step
+    says who holds a convened date; W26's proof (`architecture/PLAN.md` W26, intent only) names the
+    holder as what separates a sitting from a lapse, and the convener's seat is the one seat the act
+    already carries. A convening with no seat (`via` None: a hand-built act; a computed `convene` is
+    `remit:`-eligible and always carries one) gives a vacant date that lapses, as before. Set at
+    construction beside `venue` (neither is a Part D row; `due_at` and `fired` are), so a second
+    identical convening still moves nothing. REVERT: drop the `holder` key -- every convened date
+    fires vacant again and no computed slot forms."""
     d = (a.payload or {}) if isinstance(a.payload, dict) else {}
     when = int(d.get("when", w.tick + 1))
     venue = d.get("subject")
     did = H(w.world_seed, w.tick, a.actor, f"convene:{venue or '-'}")
 
     def perform() -> None:
-        date = w.dates.setdefault(did, {"id": did, "venue": venue})
+        date = w.dates.setdefault(did, {"id": did, "venue": venue, "holder": a.via})
         date["due_at"] = when
         date["convening_attached"] = True
     return Change((Subject.entity("dates", did),), perform)

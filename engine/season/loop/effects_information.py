@@ -22,8 +22,8 @@ from ..queries import faction_q
 from ..queries.person_q import ABOUT_KEYS
 from ..queries.world_q import (
     BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_PETITION, docketed, docketed_under,
-    faction_holding, faction_of, hold_force, holder_faction_of, mustered, place_of, works_for,
-    works_target,
+    faction_holding, faction_of, hold_force, holder_faction_of, mustered, place_of, slot_for,
+    works_for, works_target,
 )
 from ..state.carriers import Proposition, Record, Tenure
 from ..state.carriers import DETERMINED_BY
@@ -152,11 +152,12 @@ def _declared_stages(w: "World", a: "Act") -> list:
     return stages
 
 
-def _docket_item(matter, arrangement, petition) -> dict:
+def _docket_item(matter, arrangement, petition, date=None) -> dict:
     """ONE DOCKET ITEM AS AN ACT WRITES IT -- `World.docket`'s shape, the one owner for the two
-    acts that put a matter before a room (`open_case` by remit, `carry` by right). No date: no
-    sitting was convened for it (`_eff_open_case`'s docstring says why)."""
-    return {"date": None, "matter": matter,
+    acts that put a matter before a room (`open_case` by remit, `carry` by right). `date` is the
+    sitting's Date when the matter fills a slot CALENDAR formed (`_eff_open_case`, v9 SC-01
+    fired-slot step), else `None`: no sitting was convened for it."""
+    return {"date": date, "matter": matter,
             DOCKET_ARRANGEMENT: arrangement, DOCKET_PETITION: petition}
 
 
@@ -230,8 +231,8 @@ def _eff_open_case(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     drawn up at the opening seat's rung. The plan's `19`: *"`open_case` gains `writes:
     DocketItem.matter` and the world reader a `docket` branch: a proceeding with zero authored acts
     needs somebody to have put the matter before the room, and no step did that."* CALENDAR forms
-    docket SLOTS (`matter: None`, `loop/calendar.py`) and nothing ever filled one; this is the act
-    that puts a matter before a bench, and `determine`'s docket conjunct is the act that needs it.
+    docket SLOTS (`matter: None`, `loop/calendar.py`) and until v9 SC-01's fired-slot step nothing
+    filled one (below); this is the act that puts a matter before a bench, and `determine`'s docket conjunct is the act that needs it.
 
     WHAT IT WRITES, IN ONE `apply`:
       * THE CASE FILE -- `_mint_document`, the one mint (`create_record`/`issue`/`petition`'s), so
@@ -240,10 +241,17 @@ def _eff_open_case(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
         `create_record`'s does"*). Kind `text`, with no content: a `case` kind with its own keys is
         a `record_kinds` member with no reader yet (that roster's own note: a kind lands WITH the
         reader that needs it), and the matter is carried where it is read -- on the docket.
-      * THE DOCKET ITEM -- `{"date": None, "matter": <subject>, DOCKET_ARRANGEMENT: ...,
-        DOCKET_PETITION: ...}`, `World.docket`'s own shape, with no date because no sitting was
-        convened for it (`convene`'s dates fire VACANT in every computed world: nothing sets a date's
-        holder, so CALENDAR never forms a slot to fill).
+      * THE DOCKET ITEM -- `{"date": ..., "matter": <subject>, DOCKET_ARRANGEMENT: ...,
+        DOCKET_PETITION: ...}`, `World.docket`'s own shape. v9 SC-01 FIRED-SLOT STEP (#453 pass-1
+        step 4): WHERE A SITTING WHOSE VENUE HOLDS THE MATTER HAS AN EMPTY SLOT (`world_q.slot_for`:
+        a Date that fired with a holder -- `_eff_convene` now gives it the convener's seat -- and
+        CALENDAR formed `{"date": <id>, "matter": None}` for it), THE NEAREST SUCH SLOT IS FILLED in
+        place, keeping its `date`; only where none exists is a dateless item appended, as before.
+        [ASSUMPTION; medium; Jordan to correct -- Jordan names another key] THE VENUE IS THE MATCH
+        KEY, walked up from the matter's place (`slot_for`'s docstring has the reading and its
+        REVERT: append the dateless item always, the pre-step shape, and every slot stays empty).
+        The case file is still drawn up at the opening seat's rung; which sitting hears the matter
+        is the matter's place, not the opener's.
 
     G4 -- WHAT IT NAMES: THE CASE FILE, whole, as `create_record` names its Record; it always moves
     (a new id). ⚠ THE DOCKET APPEND IS NOT A NAMED SUBJECT AND CANNOT BE ONE: `Subject`'s three shapes
@@ -288,11 +296,14 @@ def _eff_open_case(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     if docketed(w, matter) or d.get("record") in w.records:
         return NO_CHANGE
     made = _mint_document(w, a, "text", None, _seat_rung(w, a))
-    item = _docket_item(matter, arrangement, petition)
 
     def perform() -> None:
         made.apply()
-        w.docket.append(item)
+        slot = slot_for(w, matter)        # read at the write, so two cases never share one slot
+        if slot is not None:              # the sitting's slot, filled where it stands (`date` kept)
+            slot.update(_docket_item(matter, arrangement, petition, slot.get("date")))
+        else:
+            w.docket.append(_docket_item(matter, arrangement, petition))
     return Change(made.subjects, perform)
 
 
