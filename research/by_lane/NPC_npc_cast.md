@@ -593,23 +593,33 @@ person holding a live `hold` at build killed by an act whose actor shared a buil
   | act | gain | cost |
   |---|---|---|
   | `revoke` | the seat | never executes in the realm (H-207); IN-31 assumed built: `ban` for an appointed seat |
-  | `fight` | the man and his seat | a deed judged at read by witnesses, reaching choice only under `declared` (hash EQUAL at `legacy`) |
+  | `fight`, or `challenge` → `accept` | the man and his seat | a deed judged at read by witnesses, reaching choice only under `declared` (hash EQUAL at `legacy`) |
 
-  Shipped: **`fight` dominates strictly** (the probe's deaths are its trace). Assumed built: IN-59 adds an access gate
-  and IN-70 turns grievance into faction-level referents; dominance is then an act-economy question (IN-14 ask-then).
+  Shipped: `revoke` never executes (H-207), and removal executes only through lethal contests. What the probes show is
+  narrower than dominance: the first probe records only removal from `w.persons` (`npc_change_probe.py:29-31, 76-78`),
+  with no killer, cause or principal–subordinate relation; removal does equal death (its only callers are `_eff_kill`,
+  `effects_combat.py:173`; `_eff_march`, `:271`; `matter._die`, `matter.py:92`) [CHECKED]. The second probe (§9 head)
+  finds deaths caused mostly by `accept` (8 of 12, 7 of 11), not `fight` (4, 4), and 7 of each seed's deaths are a
+  seat-holder killed by a person sharing his build-time commit. It records no intent and does not test whether the
+  actor held the victim's superior seat, so it cannot show anyone chose a killing **to be rid of a subordinate**. The
+  table is an upper bound: the lethal act is the only one that executes, which is `revoke`'s defect, not a measured
+  preference. Assumed built: IN-59 gates `fight`, `accept` and `challenge` by co-location (`_part5` IN-59 EDITS) and
+  IN-70 turns grievance into faction-level referents; dominance is then an act-economy question (IN-14 ask-then).
   `SEAT: any member` · `INTENT: end a grudge`: let it be evicted (silent, no event) vs `forgive` (witnessed). **Silence
   beats refusal**: eviction dominates unless `forgive` buys something eviction does not. Upper bounds only.
-- **R-VARIETY: FINDINGS** — one capacity profile for all (T-NPC-4). **R-WORLD: FINDINGS** — the world emits deaths
-  unwatched (probe), but nothing follows them except the throne's planned claim: no vacancy (M-NPC-6), no birth, no
-  promotion. **R-COMPLETE: FINDINGS** — the leader object breaks at its extreme (dead heads, immutable creed);
+- **R-VARIETY: FINDINGS** — one capacity profile for all (T-NPC-4), including every field army's commander (M-NPC-13).
+  **R-WORLD: FINDINGS** — the world emits deaths unwatched (probe); what follows is the vacant seat in conferrers'
+  questions (`vacancies`), whose `confer` does not yet execute (H-207), and the throne's planned claim; no claim tells
+  anyone else of the vacancy (M-NPC-6), no birth, no promotion. **R-COMPLETE: FINDINGS** — the leader object breaks at its extreme (dead heads, immutable creed);
   ambitions have no completion (M-NPC-4).
 
 ### 9.5 S
 
 - **S-UP: FAIL** — a member's want reaches his head through no accountable carrier; the petition path is addressed to
-  its own subject [AUDIT A5]. **S-DOWN: FAIL for vacancies** (unpublished, H-206); PASS in shape for tellings [AUDIT].
-- **Coverage.** Vertical: person → office (holder half only), person → combat and mass battle (no capacity crosses,
-  T-NPC-4; cohorts cannot muster [AUDIT A7]). Diagonal: person → threadwork (TS has no carrier, H-85; PC-06 K-3 planned).
+  its own subject [AUDIT A5]. **S-DOWN: PARTIAL for vacancies** — published to conferrers from the store (`vacancies`,
+  `world_q.py:1617-1639`), never by claim (H-206's office half); PASS in shape for tellings [AUDIT].
+- **Coverage.** Vertical: person → office (conferrers by store; holder half only by claim), person → combat and mass
+  battle (no capacity crosses, T-NPC-4; no commander reaches `Officer`, M-NPC-13; cohorts cannot muster [AUDIT A7]). Diagonal: person → threadwork (TS has no carrier, H-85; PC-06 K-3 planned).
   Lateral: telling (built), ties (planned). Horizontal: frozen deliberation (the audit's N-line holds).
 - **Pauses correctly: FINDINGS** — a headless faction does not yield: its creed keeps a dead referent and the season
   ticks on. **Methodology: FINDINGS (shipped) → planned PASS** — allegiance has three scales: loyalty 0-100, a stance
@@ -629,8 +639,10 @@ family), and **person facts derived by parsing prose** (residence), which the ex
 
 9a: the Pax Pamir correction reached §0 #8, §2.1, §4, §5 and §7.2; the probe's deaths were carried into M-NPC-6,
 B-NPC-1 and 9.4. §0 #6 (leaders mis-housed) stands, but the probe shows the housing matters less than the deaths.
-9b: this pass adds no object; the probe is scratch. An independent reviewer would add a corpus-level death count, a
-check of whether ED-IN-0201's gate silences a headless faction, and squad-engagement Parts A-D.
+9b: this pass adds no object; the probes are scratch. An independent reviewer would add a corpus-level death count, a
+check of whether ED-IN-0201's gate silences a headless faction, and squad-engagement Parts A-D. An independent critic
+did review sections 7-11 (14 findings, all upheld at source; §11); its corrections narrowed T-NPC-5, M-NPC-3, M-NPC-6,
+S-DOWN and R-CHOICE, and moved delegation from MISSING to BLOCKED.
 
 | axis / test | verdict | what would overturn it |
 |---|---|---|
@@ -638,21 +650,22 @@ check of whether ED-IN-0201's gate silences a headless faction, and squad-engage
 | E-OVERHEAD | FINDINGS | nine dark knobs each guarding a ruled-in behaviour |
 | E-LEGIBILITY | FINDINGS | a surface showing a person's pursuits and allegiances |
 | R-COMPLETE | FINDINGS | a successor for every dead head; an ambition's predicate read |
-| R-VARIETY | FINDINGS | two persons in one seat with different capacity resolving one verb differently |
-| R-WORLD | FINDINGS | an unwatched death followed by a vacancy contest |
-| R-CHOICE | FINDINGS (shipped, upper bound); NOT SCORABLE assumed built (act economy, IN-14) | `revoke` executing with a cost below `fight`'s |
-| S-UP / S-DOWN | FAIL / FAIL (vacancy) | a member's demand carried to his head; a vacancy published |
+| R-VARIETY | FINDINGS | two persons in one seat, or two field commanders, with different capacity resolving one verb differently |
+| R-WORLD | FINDINGS | an unwatched death followed by a vacancy contest among persons who learned of it by claim |
+| R-CHOICE | FINDINGS (shipped, upper bound: `revoke` never executes; preference not measured); NOT SCORABLE assumed built (act economy, IN-14) | `revoke` executing with a cost below a lethal contest's |
+| S-UP / S-DOWN | FAIL / PARTIAL (vacancy: conferrers only) | a member's demand carried to his head; a vacancy named in a claim a non-conferrer holds |
 | S — coverage · pause · methodology | FINDINGS | a capacity crossing the combat seam; a headless faction yielding |
 | own falsifier | HITS (fixtures; parsed facts) | an authored source for each fixture value |
 | self-audit | both sweeps run | — |
 
-REPAIRS (worst first, each a deletion or one object): rule a source for capacities (one field, one reader) → M-NPC-1;
-publish a vacancy as a claim at the seat (one emission) → M-NPC-6; arm or delete each dark person knob → M-NPC-3; give
-a vow-break its own deed cell (one cell) → M-NPC-5; re-subject the creed when its head dies (IN-61's claim, or the
+REPAIRS (worst first, each a deletion or one object): rule a source for the inputs capacities derive from (the existing
+`Person.capability`, with readers) → M-NPC-1, M-NPC-13; retain the dead man's ended edges so WITNESS names his office
+(deleting `World._departed`; moves RESOLVE deaths' hashes) → M-NPC-6; arm or delete each dark person knob → M-NPC-3;
+give a vow-break its own deed cell (one cell) → M-NPC-5; re-subject the creed when its head dies (IN-61's claim, or the
 seat rather than the man) → 9.1.
 
-**GRADE: paper** for the v9-built shape. One execution artifact covers the shipped state: the scratch probe, two seeds,
-uncommitted.
+**GRADE: paper** for the v9-built shape. Two scratch probes cover the shipped state (person fields; causes of death),
+two seeds each, uncommitted, no control arm on deaths.
 
 ## 10. KEY RECOMMENDATIONS
 
