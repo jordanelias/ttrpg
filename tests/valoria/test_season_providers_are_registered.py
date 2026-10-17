@@ -24,6 +24,7 @@ pass for the wrong reason the day some other module happens to pull the wrappers
 """
 from __future__ import annotations
 
+import functools
 import subprocess
 import sys
 
@@ -182,6 +183,7 @@ def test_fi02_deleting_the_inquiry_composition_row_refuses_construction_naming_i
 entries = sorted({row["module_entry"] for row in ROWS.values() if isinstance(row, dict)})
 out = []
 for role in entries:
+    MODULE_ENTRIES.clear()                    # each pass fresh: an earlier pass must not fill it
     in_rows = role in composition.ROLES
     saved = composition.ROLES.pop(role, None)
     out.append((role, in_rows, sorted(MODULE_ENTRIES), construct()))
@@ -223,3 +225,91 @@ print(repr((ROSTER, key, bad["module"], refusal)))
     for name in (roster, repr(key), repr(misspelt)):
         assert name in text, f"the refusal does not name {name}: {refusal}"
     assert kind == "Unspecified", refusal
+
+
+# ---------------------------------------------------------------------------
+# `check_inquiry_modules`' REFUSALS, EACH PLANTED (B1, B2 (c)-(e)). ONE fresh process runs all four
+# plants, each restoring what it changed before the next, and each test reads its own: the empty-table
+# test above cannot reach these, because `check_contest_prizes` refuses first when every provider is
+# gone. The row's key, provider and entry are read off the data; the planted kind is a covert kind
+# (`rosters.yaml: covert_kinds`), a deed no graded inquiry emits. RED WHEN PLANTED (run 2026-10-17,
+# then restored): the four refusals' conditions set to `False` -- each of the four tests below RED.
+# ---------------------------------------------------------------------------
+
+_PLANTS = """
+from engine.season.manifest import PROVIDERS
+from engine.season.data.rosters import COVERT_KINDS
+KEY = sorted(ROWS)[0]
+NAME = ROWS[KEY]["provider"]
+
+def with_rows(rows):
+    real = R.roster_map
+    R.roster_map = lambda roster, column: (rows if (roster, column) == (ROSTER, COLUMN)
+                                           else real(roster, column))
+    try:
+        return construct()
+    finally:
+        R.roster_map = real
+
+def with_provider(fn):
+    real = PROVIDERS.pop((ROLE, NAME))
+    if fn is not None:
+        PROVIDERS[(ROLE, NAME)] = fn
+    try:
+        return construct()
+    finally:
+        PROVIDERS[(ROLE, NAME)] = real
+
+out = dict(
+    control=construct(),
+    no_entry=with_rows(dict(ROWS, **{KEY: {k: v for k, v in ROWS[KEY].items() if k != "module_entry"}})),
+    unregistered=with_provider(None),
+    no_keyword=with_provider(lambda w, a, e: None),
+    ungraded_kind=with_rows(dict(ROWS, **{sorted(COVERT_KINDS)[0]: ROWS[KEY]})),
+)
+print(repr((ROSTER, KEY, NAME, sorted(COVERT_KINDS)[0], out)))
+"""
+
+
+@functools.lru_cache(maxsize=None)
+def _plants():
+    return _fresh(_PLANTS)
+
+
+def _refused(case: str, *names: str) -> None:
+    roster, key, name, kind, out = _plants()
+    assert out["control"] is None, f"the shipped rows do not construct: {out['control']}"
+    refusal = out[case]
+    assert refusal is not None, f"plant {case!r} did NOT refuse construction"
+    got, text = refusal
+    assert got == "Unspecified", refusal
+    for n in names:
+        assert n in text, f"plant {case!r}'s refusal does not name {n}: {refusal}"
+
+
+def test_fi02_an_inquiry_row_with_no_module_entry_refuses_naming_it():
+    """B1: the role's row with its `module_entry:` popped -> construction refuses naming the roster, the
+    row and the missing field (it passed `_check_module_entry` unchecked, and failed at the first find)."""
+    roster, key, _, _, _ = _plants()
+    _refused("no_entry", roster, repr(key), "module_entry")
+
+
+def test_fi02_an_unregistered_inquiry_provider_refuses_naming_it():
+    """B2 (c), step 1: ONLY the inquiry row's provider popped from the table (every contest provider
+    stays, so `check_contest_prizes` passes) -> refused naming the roster, the row and the provider."""
+    roster, key, name, _, _ = _plants()
+    _refused("unregistered", roster, repr(key), repr(name), "nobody registered")
+
+
+def test_fi02_an_inquiry_provider_without_the_module_entry_keyword_refuses_naming_it():
+    """B2 (d), step 3: the provider replaced by one taking no `module_entry` keyword -> refused naming
+    the row and the keyword, at construction rather than as a `TypeError` at the first find."""
+    roster, key, name, _, _ = _plants()
+    _refused("no_keyword", roster, repr(key), repr(name), "no `module_entry` keyword")
+
+
+def test_fi02_an_inquiry_row_keyed_on_a_kind_no_graded_verb_emits_refuses_naming_it():
+    """B2 (e), `_graded_verb_emits_it`: a second row, keyed on a covert deed kind, same entry -> refused
+    naming that key: no graded inquiry emits it, so it would reach the entry carrying no degree."""
+    _, _, _, kind, _ = _plants()
+    _refused("ungraded_kind", repr(kind), "no graded inquiry emits")
