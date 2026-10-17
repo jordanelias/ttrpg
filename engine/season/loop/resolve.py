@@ -997,7 +997,7 @@ def resolve(self, token: Token, acts: list[Act],
         _contests = _contests_of(a, _row)
         # v9 FI-01: an inquiry's `graded_inquiries` route -- the second source of a degree, which the
         # loader refuses beside a `contests:` on the VERB ROW (one degree, one source); an act carrying its own
-    # `contests` (`_contests_of`, hand-built acts only) takes the contest branch below and the route is unread.
+        # `contests` (`_contests_of`, hand-built acts only) takes the contest branch below and the route is unread.
         _route = GRADED_INQUIRIES.get(a.verb) if _row is not None else None
         if _contests or _route:
             # ⚠⚠ §E2's ORDER, RESTORED: ELIGIBILITY AND `requires` BEFORE THE SEAM, NOT AFTER IT.
