@@ -53,7 +53,11 @@ from .test_season_shape import _wd_arm9
 # unchanged. Bisected: green at aa26c4fd, red at 5f4becfb, and `carry` is the only item between them.
 # Measured at B-K's migrate commit: control (36, 11), 0.5 -> (36, 10), 1 -> (35, 12); the shifted arm
 # still rises above the control as a rate (12/35 > 11/36). Which carry consequence moves it is unmeasured.
-_BASELINE_TOTAL = (36, 11)
+# 36/11 -> 36/8, v9 FI-01 (`ED-FI-0009`): the same move `test_season_shape.py`'s `wd_a_fork` records for
+# `total` (36, 8) -- the graded inquiries and the skip arm (a refused inquiry deposits nothing). A
+# re-record of the control, read off this test's own failing assertion. Re-read: control (36, 8), 0.5 ->
+# (36, 9), 1 -> (35, 11); the shifted arm still rises above the control as a rate (11/35 > 8/36).
+_BASELINE_TOTAL = (36, 8)
 
 
 def _person(pursuits: dict, scar: dict) -> Person:

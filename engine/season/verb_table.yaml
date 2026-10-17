@@ -1111,6 +1111,11 @@ verbs:
   # (`rosters.yaml: requires_forms`), an existing operand (`requires_operands`) and an existing
   # predicate stem (`data/requires.py: REQUIRES_STEMS`). No new form, no new operand, no new stem.
   #
+  # ⚠ SUPERSEDED IN PART BY v9 FI-01 (`ED-FI-0009`, J-22 option (A)): `research`, `examine` and
+  # `surveil` key `emits:` by degree, graded by the `graded_inquiries` route in `rosters.yaml` -- a
+  # routing row, not a prize, so still no `contests:` here -- and `Failure` emits `finding.none`, which
+  # WITNESS deposits nothing for (`undeposited_kinds`). `interview` (a prompt, K-36), `reconstruct`
+  # (K-37) and `thread_read` (K-37, H-85) stay flat: not graded. What follows is the original record.
   # ⚠ AND `emits:` IS FLAT, NOT DEGREE-KEYED, WHICH IS THE HALF THIS COMMIT DOES NOT BUILD.
   # `fieldwork_v30.md:302-309` grades every one of these acts on four bands (Failure's false
   # lead, Partial's incomplete detail, Success's reliable one, Overwhelming's bonus revelation)
@@ -1175,7 +1180,12 @@ verbs:
     requires_typed_note: "`fieldwork_v30.md:293` -- *Examine · Cognition · Study physical evidence, architecture, documents, objects*. The two clauses are `restore`'s, and for its reason: a physical trace is somewhere, and you have to be there to study it. `Site` rather than `Record` per the block comment's reading of `:315-322`."
     writes:      []
     writes_note: "— (a finding is a Claim, minted at WITNESS from the Event; `04:237` forbids a social aggregate on a Rung, and `fieldwork_v30.md:256`'s Evidence Track is a COUNT over what the investigator holds, not a meter anybody writes)"
-    emits:       ["finding.made"]
+    emits:
+      Overwhelming: ["finding.made"]
+      Success:      ["finding.made"]
+      Partial:      ["finding.made"]
+      Failure:      ["finding.none"]
+    emits_note: "v9 FI-01 (`ED-FI-0009`, J-22 (A)): degree-keyed, graded by the `graded_inquiries` route (`rosters.yaml`), not a prize. `Failure` emits `finding.none`, which WITNESS deposits nothing for (`undeposited_kinds`, RS-21 item 1); the three finding bands differ only in `Event.degree` -- depth has no carrier and none is built."
     emits_on_refusal: ["finding.none"]
     grade:       "assumption"
     source:      "systems/fieldwork/reference/investigation_systems_v30.md:217 names the six; systems/fieldwork/reference/fieldwork_v30.md:293 (§4.2) and :317 (§4.3) carry this row's content"
@@ -1207,7 +1217,12 @@ verbs:
     requires_typed_note: "`fieldwork_v30.md:295` -- *Research · Recall · Consult archives, oral histories, institutional records, Einhir documents*, tagged `Documentary` at :319. `Record` is the documentary carrier per the block comment. Presence is on the eligibility disjunction rather than in the cell: canon gates Buried research on *institutional access* (:295), which is a `remit`/`hold` question this table has no operand for, and `own` alone already admits."
     writes:      []
     writes_note: "— (as `examine`)"
-    emits:       ["finding.made"]
+    emits:
+      Overwhelming: ["finding.made"]
+      Success:      ["finding.made"]
+      Partial:      ["finding.made"]
+      Failure:      ["finding.none"]
+    emits_note: "v9 FI-01 (`ED-FI-0009`, J-22 (A)): degree-keyed, graded by the `graded_inquiries` route (`rosters.yaml`), not a prize. `Failure` emits `finding.none`, which WITNESS deposits nothing for (`undeposited_kinds`, RS-21 item 1); the three finding bands differ only in `Event.degree` -- depth has no carrier and none is built."
     emits_on_refusal: ["finding.none"]
     grade:       "assumption"
     source:      "investigation_systems_v30.md:217; fieldwork_v30.md:295 (§4.2), :319 (§4.3)"
@@ -1227,7 +1242,12 @@ verbs:
     requires_typed_note: "`fieldwork_v30.md:296` -- *Surveil · Cognition · Observe a location, person, or faction operation over extended time*. `Rung` is the loop's carrier for a place and for what happens in it, so one clause covers the location and the operation. ⚠ THE PERSON CASE HAS NO HOME AND THE FIRST WRITING OF THIS NOTE SENT IT SOMEWHERE IT DOES NOT GO -- it said *the person case is `interview`'s and `examine`'s*, and it is neither: `interview` QUESTIONS a witness (`:294`) and `examine` STUDIES physical evidence (`:293`), while this is COVERT OBSERVATION of a person, which is a third thing. The grammar cannot express it -- there is no disjunction, and one cell binds one kind -- so it is named as absent rather than reassigned. Same `H-94` shape as everything else in this file. `present_at` answers over a Rung directly (`world_q.py:448`), so no second stem is needed. ⚠ CANON'S OTHER HALF OF THIS ROW HAS NO HOME: *+2 Exposure (conspicuous activity)*. Exposure is tracked per territory (`fieldwork_v30.md:270`) and `04:237` forbids ANY social aggregate on a `Rung` -- *no norms, unrest, legitimacy, reputation, discipline*. It is not written here and not invented elsewhere; ED-FI-0009 carries it."
     writes:      []
     writes_note: "— (as `examine`; and see the Exposure note above, which is the one canon effect of this act that has no carrier at all)"
-    emits:       ["finding.made"]
+    emits:
+      Overwhelming: ["finding.made"]
+      Success:      ["finding.made"]
+      Partial:      ["finding.made"]
+      Failure:      ["finding.none"]
+    emits_note: "v9 FI-01 (`ED-FI-0009`, J-22 (A)): degree-keyed, graded by the `graded_inquiries` route (`rosters.yaml`), not a prize. `Failure` emits `finding.none`, which WITNESS deposits nothing for (`undeposited_kinds`, RS-21 item 1); the three finding bands differ only in `Event.degree` -- depth has no carrier and none is built."
     emits_on_refusal: ["finding.none"]
     grade:       "assumption"
     source:      "investigation_systems_v30.md:217; fieldwork_v30.md:296 (§4.2), :320 (§4.3)"
