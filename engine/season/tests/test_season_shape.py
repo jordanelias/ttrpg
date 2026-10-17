@@ -3488,7 +3488,7 @@ def test_t2_align_kind_reads_the_one_emitter_and_a_deed_key_needs_an_emitted_kin
     """`align_kind(kind, axis)` = an authored `deed:<kind>` cell, else `align` of the ONE verb that
     emits the kind, else 0. Its contract, on a throwaway table; a shared kind reads its authored
     `deed:` cell where one exists (v9 IN-58 authors `deed:person.died` and `deed:body.changed`) and 0
-    otherwise."""
+    otherwise; a single-emitter kind reads its authored cell too (v9 SC-03b: `deed:matter.undetermined`)."""
     from ..data.verbs import DEED_PREFIX, EMITTED_KINDS, KIND_VERB, _load_alignment, align_kind
 
     # The rule recomputed from the table independently of `_derive_kind_verb`.
@@ -3501,12 +3501,15 @@ def test_t2_align_kind_reads_the_one_emitter_and_a_deed_key_needs_an_emitted_kin
     shared = sorted(k for k, vs in emitters.items() if len(vs) > 1)
     assert not any(k in KIND_VERB for k in shared), "a kind several rows emit maps to a verb"
 
+    def authored(kind, axis):
+        return data_verbs.ALIGNMENT.get(axis, {}).get(DEED_PREFIX + kind)
+
     checked = 0
     for kind, verb in sorted(KIND_VERB.items()):
         for axis in PURSUIT_AXES:
             # an authored `deed:<kind>` cell wins where one exists (v9 SC-03b authors
             # `deed:matter.undetermined` = 0.0: a Failed `determine` is no deed of the party's)
-            cell = data_verbs.ALIGNMENT.get(axis, {}).get(DEED_PREFIX + kind)
+            cell = authored(kind, axis)
             want = align(verb, axis) if cell is None else cell
             assert align_kind(kind, axis) == want, (kind, verb, axis)
             checked += bool(want)
@@ -3514,7 +3517,7 @@ def test_t2_align_kind_reads_the_one_emitter_and_a_deed_key_needs_an_emitted_kin
     unauthored = 0
     for kind in shared:
         for axis in PURSUIT_AXES:
-            cell = data_verbs.ALIGNMENT.get(axis, {}).get(DEED_PREFIX + kind)
+            cell = authored(kind, axis)
             assert align_kind(kind, axis) == (0.0 if cell is None else cell), (kind, axis)
             unauthored += cell is None
     assert unauthored >= 1, "every shared kind is celled on every axis: the 0 branch went unobserved"

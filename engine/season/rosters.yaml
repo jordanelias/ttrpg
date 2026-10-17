@@ -2780,7 +2780,7 @@ tables:
         # negative = for one's own · positive = impartial treatment (draft §3.3)
         seize:          null    # reasoned (IN-12 step 6): for whom the taking is done is the candidate's fact (the warrant's), not the verb's -- `give`'s and `requisition`'s reading
         determine:       0.6    # derived: the act's own form is impartial adjudication; who it favours is the `judging_set`'s
-        "deed:matter.undetermined": 0.0   # [ASSUMPTION; medium; Jordan to correct; revert: delete this cell and its twin] a Failed `determine` writes nothing, so WITNESS's empty-changes rule (`epistemic.py:297-298`) lands the claim on the PARTY, and a null cell would fall back to `determine`'s own (`data/verbs.py:1378`, `:1419-1425`): the hearing that changed nothing is judged as no deed at all. Numeric, not null, for that reason. (`speak`'s four `matter.*` kinds share the shape: H-192 (a).)
+        "deed:matter.undetermined": 0.0   # as `hierarchical_equal`'s cell above: same reason, revert together
         construe:       -0.6    # derived: calculated to serve the construer's aim, not to keep the bond
         forge:          -0.5    # derived: counterfeiting a record for advantage
         open_case:       0.3    # derived: the case runs by template regardless of who stands before it

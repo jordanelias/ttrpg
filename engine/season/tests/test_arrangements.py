@@ -278,20 +278,20 @@ def test_the_headless_run_loads_the_arrangements_loader_and_the_probe_can_tell()
 
 def test_a_planted_unknown_key_in_a_scratch_copy_makes_the_headless_run_refuse_naming_the_row(
         tmp_path):
-    """SC-08 FALSIFIER. The tracked YAML is read, never written: a scratch copy carries a thirteenth
+    """SC-08 FALSIFIER. The tracked YAML is read, never written: a scratch copy carries a fifteenth
     key on the `arbitration` row, and the same headless run must exit non-zero naming the row and
     the key. The unplanted run beside it is the control that the refusal is the plant's and not the
-    harness's -- and the asserted counts show both runs ran."""
+    harness's -- and its `CONTENT HASH:` line shows it ran a season."""
     text = files.ARRANGEMENTS_YAML.read_text(encoding="utf-8")
     anchor = "  - id:               arbitration\n"
     assert text.count(anchor) == 1, "the plant has nowhere to go; the seeded row moved"
     scratch = tmp_path / "arrangements.yaml"
     scratch.write_text(text.replace(anchor, anchor + "    scale:             settlement\n"),
                        encoding="utf-8")
-    assert scratch.read_text(encoding="utf-8") != text
     control = _headless(str(files.ARRANGEMENTS_YAML))
     planted = _headless(str(scratch))
     assert control.returncode == 0, control.stderr[-2000:]
+    assert "CONTENT HASH:" in control.stdout
     assert planted.returncode != 0
     assert "CONTENT HASH:" not in planted.stdout          # it refused before the season ran
     assert "arbitration" in planted.stderr and "unknown key" in planted.stderr \

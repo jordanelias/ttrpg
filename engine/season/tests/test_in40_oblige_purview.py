@@ -39,6 +39,7 @@ from ..queries import world_q
 from ..state import gate as G
 from ..state.carriers import Act, Office, Rung, Tenure
 from ..state.gate import may_fill, purview_reaches
+from .test_u7_remit import JUDGE, OPENS
 
 CROWN, DUKE = "off_duke", "p_high"
 LION, MASTER = "off_lion", "p_other"
@@ -261,7 +262,7 @@ def _convicted(w, d, key="sent"):
     out = _fold(w, d, Act(id=f"{key}_dt", actor=DUKE, verb="determine", via=CROWN,
                           payload={"subject": MASTER}))
     assert _kinds(out) == ["matter.determined"], ("fixture: not determined", _kinds(out))
-    assert out[0].degree in ("Overwhelming", "Success"), out[0].degree
+    assert out[0].degree in OPENS, out[0].degree
 
 
 def test_in40_a_determination_imposed_oblige_is_not_an_oath_and_extends_no_purview():
@@ -271,7 +272,7 @@ def test_in40_a_determination_imposed_oblige_is_not_an_oath_and_extends_no_purvi
     Mutation: drop the `determined_by` skip in `purview_reaches` (red at the reach assertion).
     v9 SC-03b: `determine` is contested, so the judge is a STRONG one (`pool_default` 30) and the fixture
     asserts the band it opened at."""
-    w, d = _world(pool_default=30)
+    w, d = _world(**JUDGE)
     assert not _reaches(w, CROWN, "D2"), "fixture: the Crown seat reaches D2 with nobody bound"
     _convicted(w, d)
     assert MASTER in world_q.establishment_of(w, CROWN), "the sentence did not bind him to the bench"

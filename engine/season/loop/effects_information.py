@@ -484,7 +484,8 @@ def _disposal(w: "World", a: "Act", party: str, seat: str, kind: str,
     [ASSUMPTION; medium; SC-03a; revert: pass `term=_new_oblige_term(w, a)` to both]: #453 §8.1
     writes both as lasting *"until pardon"* / *"until released"*, `oblige_term` is the length of a
     SERVICE (`H-159`), not of a sentence, and a restraint lapsing at MATTER would make the bench's
-    custody a timer nobody declared; the arrangement's `term_required` key has no reader yet."""
+    custody a timer nobody declared; the arrangement's `term_required` key has no reader yet.
+    `degree` is the band the contest decided (`_eff_determine`), `None` for a hand-built call."""
     tid = H(w.world_seed, w.tick, party, f"{kind}:{seat}:{a.id}")
     if kind == UNDECLARED_DISPOSAL:
         # `payload={"determined_by": a.id}` marks the edge as IMPOSED, not sworn: `state/gate.py::

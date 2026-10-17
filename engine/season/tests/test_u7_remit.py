@@ -640,7 +640,8 @@ def _sentenced(kind):
     w, d = _world(**JUDGE)
     row = _row_disposing(kind)
     assert _kinds(_fold(w, d, _open("oc", arrangement=row, petition=_petition(w)))) == ["case.opened"]
-    assert _kinds(_fold(w, d, _determine("dt"))) == ["matter.determined"]
+    out = _fold(w, d, _determine("dt"))
+    assert _kinds(out) == ["matter.determined"] and out[0].degree in OPENS, out   # the judge is still strong
     return w, d
 
 
@@ -1108,11 +1109,9 @@ def test_in49_a_stores_claim_about_the_stamped_rung_does_not_set_the_levys_kind(
 # contest decided, and at `Failure` opens nothing.
 
 import dataclasses                                                # noqa: E402
-from engine.dice_engine.dice_engine import DEGREE_LABEL           # noqa: E402
+from ..data.arrangements import DEGREE_BANDS as BANDS             # noqa: E402
 from ..data.matrix import matrix_row                              # noqa: E402
 from ..manifest import resolve as _manifest_resolve               # noqa: E402
-
-BANDS = frozenset(DEGREE_LABEL.values())
 
 
 def test_sc03b_determine_is_a_contested_row_keyed_on_the_four_ladder_bands():
@@ -1157,11 +1156,11 @@ def test_sc03b_static_the_matrix_cell_has_no_unproduced_declaration_and_the_load
         _verbs._load_verb_table()
 
 
-def _determined(w, d, key, party=PARTY):
+def _determined(w, d, key):
     """One `determine` act folded; the Event it made and the party's disposal edges after it."""
-    out = _fold(w, d, _determine(key, subject=party))
+    out = _fold(w, d, _determine(key, subject=PARTY))
     assert len(out) == 1, _kinds(out)
-    return out[0], [t for t in w.tenures if t.kind == "oblige" and t.subject == party and t.object == SEAT]
+    return out[0], _obliges(w)
 
 
 def test_sc03b_runtime_a_seeded_contested_determination_leaves_the_degree_on_the_opened_edge():
@@ -1174,7 +1173,6 @@ def test_sc03b_runtime_a_seeded_contested_determination_leaves_the_degree_on_the
       * Failure -- `matter.undetermined`, NO edge, the matter still docketed, no change on the Event.
     CONTROL (assert-that-asserted): all four bands were seen, and the counts add up to the folds made."""
     seen: dict = {}
-    folded = 0
     for pool in (2, 12):
         for i in range(40):
             w, d = _ready("determine", pool_default=pool)
@@ -1182,7 +1180,6 @@ def test_sc03b_runtime_a_seeded_contested_determination_leaves_the_degree_on_the
             band = ev.degree
             assert band in BANDS, band
             seen[band] = seen.get(band, 0) + 1
-            folded += 1
             if band == "Failure":
                 assert ev.kind == "matter.undetermined" and not edges and not ev.changes, (ev.kind, edges)
                 assert len(world_q.docketed(w, PARTY)) == 1
@@ -1192,7 +1189,7 @@ def test_sc03b_runtime_a_seeded_contested_determination_leaves_the_degree_on_the
                 edge, = edges
                 assert edge.degree == band and edge.live, (band, edge)
                 assert world_q.docketed(w, PARTY) == []
-    assert folded == 80 and sum(seen.values()) == 80, seen
+    assert sum(seen.values()) == 80, seen
     assert set(seen) == BANDS, seen          # all four occurred, so no band's branch went unobserved
 
 
@@ -1223,7 +1220,6 @@ def test_sc03b_a_judge_under_one_die_is_refused_not_a_crash_and_opens_nothing():
     """S27.4 (`Ob > 2 x Pool`) reached by a contested `determine`: a judge whose pool is under 1D comes
     back as the row's one refusal kind with NO degree -- never an aborted season -- exactly as `speak`'s
     does (`test_sc01_speak.py`), and the matter stays docketed. CONTROL: pool 1 resolves to a band."""
-    checked = 0
     for pool, refused in ((0, True), (0.5, True), (1, False)):
         w, d = _ready("determine", pool_default=pool)
         out = _fold(w, d, _determine(f"zpool{pool}"))
@@ -1232,5 +1228,3 @@ def test_sc03b_a_judge_under_one_die_is_refused_not_a_crash_and_opens_nothing():
             assert out[0].degree is None and not _obliges(w) and len(world_q.docketed(w, PARTY)) == 1
         else:
             assert out[0].degree in BANDS
-        checked += 1
-    assert checked == 3
