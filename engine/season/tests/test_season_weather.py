@@ -92,8 +92,8 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # (typed with `survey`'s cell, `_eff_forge`), so the chooser offers it. The build hash is equal; one and
 # two seasons move. Was 5bbcba33... / 39bf9d83... (one, two seasons). CONTROL, run: the same tree with
 # `forge` withheld from the chooser's verbs reproduces both old values exactly, so the sheet consumer
-# (`record_sourced_operands.faction_sheet`) and the shared mint move nothing here. `forge` writes no
-# `forgery_quality` (`H-210`, deferred to SC-02 `22b`), so a forged sheet hashes at the field's `0`.
+# (`record_sourced_operands.faction_sheet`) and the shared mint move nothing here. `forge` wrote no
+# `forgery_quality` then (`H-210`, deferred to SC-02 `22b`, which writes it -- re-pinned below).
 # RE-PINNED at v9 IN-12 `survey` + Rung (B-K), A BEHAVIOUR MOVE DECLARED: a Rung subject is answered by
 # `world_q.holder_faction_of` (`loop/effects_information.py::_resolved_sheet`), so a survey -- and a
 # forge, which shares the helper -- of a held place mints instead of declining. The build hash is equal;
@@ -155,9 +155,17 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # with both on, 0. Over the two seasons with both on: 32 `finding.none` at `Failure`, 6 `finding.made` at
 # `Partial`, 3 at `Success` (read, not asserted, v9 §0.5). CONTROL: the base commit reproduces the old
 # values (this file green there before the change).
+# RE-PINNED at v9 SC-02 `22b` steps 24 + 25 (B-P, on 2c8cdcec), A DATA MOVE DECLARED, the event sequence
+# UNMOVED: `forge` now writes `Record.forgery_quality` (the shipped `default_forgery_quality` 1, `H-210`),
+# so each forged sheet's digest moves -- `record.forged` 7 (one season) / 13 (two). The build hash is
+# equal; one and two seasons move. Was 508ac85a... / 89bc9c0a... (one, two seasons). CONTROL, run: the
+# same tree at `default_forgery_quality` 0 reproduces both old values and both `BASE_EVENTS` exactly; at
+# `pursuit_shift` 0 (step 24's control) it reads the new values unchanged -- `determine` reaches its
+# contest 0 times in the realm's two seasons (`determine.refused` 1, no `matter.determined`/
+# `.undetermined`), so step 24 moves no realm hash (read, not asserted, v9 §0.5).
 BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
-               1: "508ac85a63433c8768369deb323e0aa8",
-               2: "89bc9c0ac2a0437f7ea7a1f726794e46"}
+               1: "e5611ae0bd495a46c4832af281723eca",
+               2: "6cee9b6690444095cee45e70b3721373"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base

@@ -88,13 +88,22 @@ def obstacle(inp: SocialContestInput) -> float:
     takes the obstacle below `OB_MIN` (or below a base already under it): it moves the obstacle, it
     does not abolish it. The ceiling still bounds the result, so under the shipped `H-213` ceiling (2,
     the same as `obstacle_default`) a hostile room cannot raise a defaulted obstacle -- stated, not
-    hidden. With no room (both terms 0) this is the obstacle as it was."""
+    hidden. With no room (both terms 0) this is the obstacle as it was.
+
+    ⚠ AND AN EXAMINED DOCUMENT'S FORGERY QUALITY IS ONE MORE (v9 SC-02 `22b` step 25; `19_PLAN.md` step
+    25, *"examination contests the record's forgery quality"*): `forgery_quality`, read raw off the
+    Record an inquiry examines, is ADDED -- a better forgery is harder to find -- before the ceiling,
+    which bounds it as it bounds a hostile room. `0` (a genuine document, or the `H-210` control arm)
+    adds nothing. Under the shipped `H-213` ceiling (2 = `obstacle_default`) a forgery cannot raise a
+    defaulted inquiry's obstacle: the quality reaches the roll only where the ceiling sits above the
+    default (the uncapped `None` arm, or `3`) -- stated, not hidden."""
     ob = float(inp.opposition) / 2.0 if inp.opposition is not None else float(inp.obstacle_default)
     room = float(inp.reception_gain) * float(inp.reception) + float(inp.proof_step) * float(inp.proofs)
     if room > 0:
         ob = max(ob - room, min(ob, float(OB_MIN)))
     elif room < 0:
         ob = ob - room
+    ob += float(inp.forgery_quality)
     ceiling = inp.obstacle_ceiling
     if ceiling is None:
         return ob

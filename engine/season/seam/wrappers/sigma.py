@@ -141,7 +141,8 @@ def _opposition_of(w: Any, subject: Optional[str], verb: str) -> Optional[float]
 
 
 def contest_input(w: Any, claimants: list, *, verb: str = "",
-                  subject: Optional[str] = None, room: Optional[str] = None) -> SocialContestInput:
+                  subject: Optional[str] = None, room: Optional[str] = None,
+                  examined: Optional[str] = None) -> SocialContestInput:
     """THE HOST INPUT BUILDER (plan position `31a`, A-25): `World` -> the frozen record the roll reads.
 
     Reads `w.persons` (the actor, `claimants[0]`, and a person subject) and `w.fixtures`, and nothing
@@ -157,7 +158,13 @@ def contest_input(w: Any, claimants: list, *, verb: str = "",
     With a room, the record carries the bench's `reception` of the actor and the actor's unmirrored
     `proofs` against the subject (`queries/world_q.py`, both read raw) and their two gains; without
     one they stay at the record's no-room defaults, so a `tell`, a `determine` or an inquiry rolls
-    exactly as before."""
+    exactly as before.
+
+    `examined` (v9 SC-02 `22b` step 25) is the subject an INQUIRY examines, or `None`: the adapter passes
+    the act's subject when there is no prize (an inquiry, `graded_inquiries`' route), and nothing
+    otherwise. Where it names a Record, the record carries that Record's `forgery_quality` (read from
+    `w.records`, the one read this builder adds), which the module adds to the obstacle; a site, a
+    person, or a contest a prize names carries `0`."""
     fx = w.fixtures
     room_terms = {}
     if room is not None:
@@ -165,13 +172,14 @@ def contest_input(w: Any, claimants: list, *, verb: str = "",
                           reception_gain=fx.get("reception_gain"),
                           proofs=proofs(w, claimants[0], subject),
                           proof_step=fx.get("proof_step"))
+    doc = w.records.get(examined) if examined is not None else None
     return SocialContestInput(
         pool=_pool_of(w.persons[claimants[0]], verb, fx),
         opposition=_opposition_of(w, subject, verb),
         obstacle_default=fx.get("obstacle_default"),
         obstacle_ceiling=fx.get("obstacle_ceiling"),
         obstacle_refusal_multiple=fx.get("obstacle_refusal_multiple"),
-        leverage=0.0, **room_terms)
+        leverage=0.0, forgery_quality=doc.forgery_quality if doc is not None else 0.0, **room_terms)
 
 
 @provider("contest", _PROVIDER)
@@ -237,7 +245,10 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     # and so no room. `rung` is the act's place (`loop/sides.py`), which the bench sits over.
     row = _prize_row("contest", prize) if prize is not None else None
     heard = rung if row is not None and row.get("heard_by") == "bench" else None
-    inp = contest_input(w, claimants, verb=verb, subject=subject, room=heard)
+    # v9 SC-02 `22b` step 25: an inquiry (no prize) examines its subject; a Record's forgery quality
+    # enters the obstacle (`contest_input`'s `examined`). A prize names a contest, which examines nothing.
+    inp = contest_input(w, claimants, verb=verb, subject=subject, room=heard,
+                        examined=subject if prize is None else None)
     entry, refusal = entry_for(prize, _PROVIDER, module_entry)
     if entry is None:
         return refusal

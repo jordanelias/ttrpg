@@ -45,6 +45,7 @@ from ..epistemic import belief_contradicts
 from ..harness import probes as P
 from ..loop import resolve as _resolve
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
+from ..loop.effects_information import PURSUIT_MOVED
 from ..queries import world_q
 from ..queries.world_q import WorldReader
 from ..state import gate as G
@@ -181,8 +182,13 @@ def test_19_none_of_the_four_executes_with_via_none(verb):
     seated = _fold(w, d, _WELL_FORMED[verb]("seated"))
     row = VERB_TABLE[verb]
     # A contested row's success kinds are its BAND's (`emits_at`): the strong judge lands on a band that
-    # opens, and the control asserts which, so it cannot pass on a `Failure`.
+    # opens, and the control asserts which, so it cannot pass on a `Failure`. v9 SC-02 `22b` step 24: the
+    # band also declares `pursuit.moved`, EARNED only when the judge's own pursuits move -- `tiny_world`'s
+    # Duke holds none, so it is not published (asserted, so the subtraction cannot hide a move).
     want = list(row.emits_at(seated[0].degree)) if row.contests else list(row.emits)
+    if verb == "determine":
+        assert not w.persons[DUKE].pursuits, w.persons[DUKE].pursuits
+        want = [k for k in want if k != PURSUIT_MOVED]
     assert _kinds(seated) == want, (verb, _kinds(seated))
     assert not row.contests or seated[0].degree in OPENS, (verb, seated[0].degree)
     w, d = _ready(verb)
@@ -1124,11 +1130,16 @@ def test_sc03b_determine_is_a_contested_row_keyed_on_the_four_ladder_bands():
     # THE FALSIFIER'S DECLARED HALVES, literal: Failure writes nothing; Partial declares what the effect does,
     # the opening graded `Partial` -- the same three pairs as Success (`writes_note`; the gate admits a degree
     # only on an edge the write opens, so `Tenure.degree` alone at Partial was unbuildable).
-    assert row.writes_at("Failure") == () and row.writes_at("Partial") == row.writes_at("Success")
+    # v9 SC-02 `22b` step 24: the two MOVING bands add the determiner's own `Person.pursuits` (and its
+    # `pursuit.moved`) after the three disposal pairs; `Partial`, the held matter, moves nothing.
+    assert row.writes_at("Failure") == () and row.writes_at("Partial") == tuple(
+        p for p in row.writes_at("Success") if p != "Person.pursuits")
+    assert row.writes_at("Success")[-1] == row.writes_at("Overwhelming")[-1] == "Person.pursuits"
     assert "Tenure.degree" in row.writes_at("Success") and "Tenure.degree" in row.writes_at("Overwhelming")
     assert row.writes_at("Success")[0] == "Tenure.since"        # the opening is the first pair, the effect's
     assert row.emits_at("Failure") == ("matter.undetermined",)
-    assert all(row.emits_at(b) == ("matter.determined",) for b in ("Overwhelming", "Success", "Partial"))
+    assert row.emits_at("Partial") == ("matter.determined",)
+    assert all(row.emits_at(b) == ("matter.determined", PURSUIT_MOVED) for b in ("Overwhelming", "Success"))
     # ONE refusal kind, because a contested row may key only one (the party-gap refusal emits the union).
     assert row.emits_on_refusal == ("determine.refused",), row.emits_on_refusal
     assert {k for v in row.refusals_by_clause.values() for k in v} == {"determine.refused"}

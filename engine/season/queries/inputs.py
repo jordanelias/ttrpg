@@ -63,7 +63,12 @@ class SocialContestInput:
                        (`queries/world_q.py::proofs`); `0.0` where no room hears the prize;
       * `proof_step` -- the `H-216` fixture: how far one firsthand proof moves the obstacle.
     The module composes them (`roll.py::obstacle`); the host composes nothing. They default to the
-    no-room reading so a record built for a prize no room hears reads exactly as before."""
+    no-room reading so a record built for a prize no room hears reads exactly as before.
+
+    THE EXAMINED DOCUMENT'S OPERAND (v9 SC-02 `22b` step 25), RAW AS THE OTHERS:
+      * `forgery_quality` -- `Record.forgery_quality` of the Record an INQUIRY examines (`sigma.py::
+                       contest_input`'s `examined`); `0` for a genuine document, for any subject that
+                       is not a Record, and for every contest a prize names. Composed by the module."""
     pool: int
     opposition: Optional[float]
     obstacle_default: float
@@ -74,6 +79,7 @@ class SocialContestInput:
     reception_gain: float = 0.0
     proofs: float = 0.0
     proof_step: float = 0.0
+    forgery_quality: float = 0.0
 
 
 @dataclass(frozen=True)

@@ -425,6 +425,18 @@ DEFAULT_FIXTURES = Fixtures(
     reception_gain=1.0,                # `H-215`, swept 0 (control) / 1 (SHIPPED) / 2
     # [JUSTIFIED: engine/season/hole_register.yaml H-216 -- `site: Fixtures proof_step`, graded `assumption`; no document gives how far one unmirrored proof moves an obstacle, so it is injected and swept 0 / 0.25 / 0.5]
     proof_step=0.25,                   # `H-216`, swept 0 (control) / 0.25 (SHIPPED) / 0.5
+    # v9 SC-02 `22b` step 24 (proceedings `19_PLAN.md` step 24): HOW FAR A DETERMINATION MOVES ITS MAKER'S
+    # OWN PURSUITS, per unit of `queries/person_q.py::pursuit_lean` and per band step (`data/rosters.py::
+    # DEGREE_STEP`), read by `person_q.consequence_pursuits` from `loop/effects_information.py::
+    # _eff_determine`. `0` is the CONTROL: no consequence write, every determination as before.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-221 -- `site: Fixtures pursuit_shift`, graded `assumption`; no document gives how far a consequence moves a conviction, so it is injected and swept 0 / 0.1 / 0.25]
+    pursuit_shift=0.1,                 # `H-221`, swept 0 (control) / 0.1 (SHIPPED) / 0.25
+    # v9 SC-02 `22b` step 25 (`19_PLAN.md` step 25): THE FORGERY QUALITY A `forge` WRITES on the Record it
+    # mints (`loop/effects_information.py::_eff_forge`), read by the examination's obstacle (`seam/wrappers/
+    # sigma.py::contest_input` -> `modules/social_contest/roll.py::obstacle`). `0` is the CONTROL: a forgery
+    # the examiner's roll reads as it reads a genuine document -- the obstacle as before this step.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-210 -- `site: Fixtures default_forgery_quality`, graded `assumption`; no document gives a forgery's quality, so `default_transfer_amount`'s shape: an injected integer, swept 0 / 1 / 3]
+    default_forgery_quality=1,         # `H-210`, swept 0 (control) / 1 (SHIPPED) / 3
     # S12.1 gates verbs on `condition` against per-kind band FLOORS. S22 assigns "band
     # coefficients" and "the obstacle floor" to params; the params document proposes NO
     # VALUES, so these are harness fixtures and A31c sweeps them. S42.2.1 names "three band

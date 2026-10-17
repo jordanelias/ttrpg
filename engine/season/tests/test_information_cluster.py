@@ -412,7 +412,8 @@ def test_20iii_a_false_sheet_is_a_lawful_record_and_reads_exactly_like_a_true_on
     sheet's, carrying nothing of its forgery. ⚠ RE-PINNED AT v9 IN-45, AS THIS TRIPWIRE ASKED: it
     asserted `forge` had no effect body and the forgery here was PLANTED; `forge` is typed and
     effected now (`_eff_forge`), so the sheet is forged through the fold and `H-169` (2) is narrowed.
-    `Record.forgery_quality` is not written (`H-210`), so the forgery is told apart here by its maker."""
+    The forgery is told apart here by its maker: `Record.forgery_quality` (written since SC-02 `22b`
+    step 25, `H-210`) reaches an examiner's roll, never a holder's ledger."""
     assert "forge" in EFFECTS and "forge" in resolvable_verbs()
     w, _ = _world()
     _hear(w, "p_low", "p_high")
@@ -540,9 +541,9 @@ def test_in45_the_sheet_consumer_addresses_a_petition_to_the_head_the_sheet_name
 def test_in45_forge_mints_a_sheet_true_but_for_its_head_into_the_forgers_hand():
     """`_eff_forge` through the real fold: `survey`'s document (`faction_q.resolve` of the faction the
     subject coheres under, at the moment of writing) with the FORGER as its head, and the forger's
-    `hold`; the one kind is `record.forged`. `forgery_quality` stays a genuine Record's `0` -- the
-    field is deferred, writer with reader, to SC-02 `22b` (`H-210`), and asserted unwritten so a
-    writer landing without its reader goes red here. CONTROL: in the same world a forge on a subject
+    `hold`; the one kind is `record.forged`. Since v9 SC-02 `22b` step 25 the sheet carries the shipped
+    `default_forgery_quality` (`H-210`; its reader, the examination's obstacle, landed with it --
+    `test_sc02_22b_consequence_and_forgery.py`). CONTROL: in the same world a forge on a subject
     under no single faction is `forge.refused` and mints nothing -- so the mint is the subject's,
     not a verb that always writes."""
     w, d = _world()
@@ -555,7 +556,7 @@ def test_in45_forge_mints_a_sheet_true_but_for_its_head_into_the_forgers_hand():
     truth = dataclasses.asdict(faction_q.resolve(w, FAC))
     assert rec.kind == SHEET and rec.subject_matter == {**truth, "head": "p_other"}, rec
     assert truth["head"] != "p_other", "the fixture: the forger is not the true head"
-    assert rec.forgery_quality == 0, "a writer of `forgery_quality` landed without its reader (H-210)"
+    assert rec.forgery_quality == w.fixtures.get("default_forgery_quality") != 0, rec.forgery_quality
     assert world_q.hold_force(w, rec.id).subject == "p_other"
     assert "record.forged" in _kinds(w.log) and "record.created" not in _kinds(w.log)
 
@@ -565,14 +566,15 @@ def test_in45_forges_emits_agree_with_the_matrix_row_of_the_field_it_forges():
     fail. Read from both owners, never restated: the row emits exactly the kind the matrix names
     for a forgery, and the column it writes (`(Record, exists)`) carries that kind too. MUTATION:
     `emits: ["record.created"]` (the row before IN-45) reddens the first assertion. The field
-    itself is not written (`H-210`): its matrix row declares `unproduced:` until SC-02 `22b`."""
+    itself is written since v9 SC-02 `22b` step 25 (`H-210`), so the row declares it and its matrix
+    row no longer declares `unproduced:` (the loader's invariant 2 refuses a stale one)."""
     from ..data.matrix import matrix_row
     row = VERB_TABLE["forge"]
     assert row.emits == matrix_row("Record", "forgery_quality").emits == ("record.forged",), (
         row.emits, matrix_row("Record", "forgery_quality").emits)
-    assert row.writes == ("Record.exists",), row.writes
+    assert row.writes == ("Record.exists", "Record.forgery_quality"), row.writes
     assert "record.forged" in matrix_row("Record", "exists").emits
-    assert matrix_row("Record", "forgery_quality").unproduced.startswith("H-210")
+    assert matrix_row("Record", "forgery_quality").unproduced == ""
 
 
 def test_in45_a_forged_sheet_reads_differently_from_a_true_one_downstream():
@@ -582,8 +584,8 @@ def test_in45_a_forged_sheet_reads_differently_from_a_true_one_downstream():
     (`p_high`) and the forger. Both holders' claims are the same predicate and source (the test
     above), so it is what the document SAYS, not a flag, that moves the decision. MUTATIONS that
     redden it: `_eff_forge` not writing the forger into the sheet (both go to `p_high`); the consumer
-    row dropped (both go to the referent). `forgery_quality` is not written at all (`H-210`): it
-    returns with its reader at SC-02 `22b` step 25, so no field here has a writer and no reader."""
+    row dropped (both go to the referent). `forgery_quality` (written since SC-02 `22b` step 25,
+    `H-210`) is read by an examination's roll, not by a holder, so it moves nothing here."""
     w, _ = _world()
     _head(w, "p_high")
     true_rec, true_claim = _hold_sheet(w, "p_low")
@@ -619,7 +621,7 @@ def test_20iii_every_sheet_the_populated_realm_makes_says_what_its_holder_holds(
     kinds = _kinds(w.log)
     # v9 IN-45: A FORGED SHEET IS A SHEET TOO (`_eff_forge`, `record.forged`), so the surveys are
     # counted against the GENUINE ones -- the Records a `record.forged` Event names are set aside
-    # (the field that would mark them is unwritten, `H-210`); how many forgeries the realm makes is
+    # (by their Event, not by `forgery_quality`, which a sweep may set to 0, `H-210`); how many forgeries the realm makes is
     # not asserted (v9 §0.5).
     forged = {c.subject for e in w.log if e.kind == "record.forged" for c in e.changes}
     sheets = [r for r in _sheets(w) if r.id not in forged]

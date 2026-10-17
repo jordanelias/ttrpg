@@ -197,7 +197,12 @@ rows:
     social:  "true"
     by:      "DR-2; §9.3 — moved by argument and consequence, never by evidence"
     emits:   "`pursuit.moved`"
-    unproduced: "H-62: #353 §9.3 mandates the row (moved by argument and consequence) and Part E carries no argument verb"
+    # ⚠ PRODUCED SINCE v9 SC-02 `22b` STEP 24 (B-P): `determine`'s `Overwhelming`/`Success` bands write the
+    # DETERMINER'S OWN pursuits by consequence (`loop/effects_information.py::_eff_determine`, through
+    # `queries/person_q.py::consequence_pursuits`; magnitude `H-221`), so the loader's invariant 2 struck
+    # the `unproduced:` line that read *"H-62: #353 §9.3 mandates the row (moved by argument and
+    # consequence) and Part E carries no argument verb"*. The CONSEQUENCE half has a producer; the
+    # ARGUMENT half is still none (`H-62`), and IN-12 step 9 (B-Q, `argue`/`train`) amends this note next.
     # ⚠ RENAMED 2026-09-24 (`ED-IN-0261` item 1, rename half only): this row was
     # `field: "convictions"` / `emits: "\`conviction.moved\`"`. No producer exists for either
     # name (grep-confirmed), so this is a pure rename, not a behaviour change.
@@ -291,7 +296,10 @@ rows:
     social:  "true"
     by:      "DR-2"
     emits:   "`record.forged`"
-    unproduced: "H-210: v9 IN-45's `forge` mints a forged sheet and deliberately does not write this field -- nothing reads it; its writer lands with its reader, the examination SC-02 `22b` step 25 builds (B-P)"
+    # ⚠ PRODUCED SINCE v9 SC-02 `22b` STEP 25 (B-P), WRITER WITH READER (`H-210`): `forge` writes it
+    # (`loop/effects_information.py::_eff_forge`, `Fixtures.default_forgery_quality`) and an inquiry examining
+    # the Record reads it into its obstacle (`seam/wrappers/sigma.py::contest_input` ->
+    # `modules/social_contest/roll.py::obstacle`), so the `unproduced: "H-210: ..."` line is struck.
   - kind:    "Record"
     field:   "matured"
     steps:   [MAT]

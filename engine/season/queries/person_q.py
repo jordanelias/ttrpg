@@ -53,7 +53,7 @@ from ..data.requires import (
     KNOWN_PERSON_CLAIM, REQUIRES_OPERANDS, REQUIRES_STEMS, UNKNOWN, WORLD_ONLY_STEMS,
 )
 from ..data.rosters import (
-    AFFILIATIONS, PURSUIT_AXES, RECORD_CONTENT, SEEN_PREDICATE, roster, roster_map,
+    AFFILIATIONS, DEGREE_STEP, PURSUIT_AXES, RECORD_CONTENT, SEEN_PREDICATE, roster, roster_map,
 )
 from ..state.carriers import Person, Said
 from ..trace_log import TRACE
@@ -436,15 +436,42 @@ def _pursuits_violated_by(verb: str) -> frozenset:
     which reads only `(verb, element)`. The candidates are `data/verbs.py::PURSUIT_PROJECTION`'s
     keys, read through the module at call time so a rebound projection is what is asked; a pursuit
     the projection does not list projects to the zero vector and violates nothing."""
-    lean = {ax: _verbs.align(verb, ax) for ax in PURSUIT_AXES}
-    if not any(lean.values()):
+    if not any(_verbs.align(verb, ax) for ax in PURSUIT_AXES):
         return frozenset()
-    out = set()
-    for e in _verbs.PURSUIT_PROJECTION:
-        proj = to_axes({e: 1.0})
-        if sum(proj[ax] * lean[ax] for ax in PURSUIT_AXES) < 0:
-            out.add(e)
-    return frozenset(out)
+    return frozenset(e for e in _verbs.PURSUIT_PROJECTION if pursuit_lean(verb, e) < 0)
+
+
+def pursuit_lean(verb: str, e: str) -> float:
+    """HOW FAR AN ACT OF `verb` POINTS THE WAY PURSUIT `e` DOES: `Σ_axis to_axes({e: 1})[axis] *
+    align(verb, axis)` -- the pursuit's unit projection dotted with the verb's alignment row. THE ONE
+    OWNER of that dot (`_pursuits_violated_by` is its sign test; `consequence_pursuits` its magnitude).
+    It is also the derivative of `decision/choose.py::score_terms`' pursuit term with respect to the
+    weight on `e`, so moving `e` by `+lean` makes the verb score higher for its holder. Reads `ALIGNMENT`
+    and `PURSUIT_PROJECTION` at call time, through the modules a sweep rebinds."""
+    proj = to_axes({e: 1.0})
+    return sum(proj[ax] * _verbs.align(verb, ax) for ax in PURSUIT_AXES)
+
+
+def consequence_pursuits(p: Person, verb: str, degree, gain: float):
+    """v9 SC-02 `22b` step 24 -- `p`'s pursuits after HIS OWN act of `verb` resolved at `degree`, or
+    `None` when nothing moves. A READER: it computes the new map and writes nothing; the act's effect
+    writes it at RESOLVE (`loop/effects_information.py::_eff_determine`), so the write is the actor's own
+    act and never a witness's (#353 §9.3: *moved by argument and consequence, never by evidence*).
+
+    Each pursuit `p` already holds moves by `gain * DEGREE_STEP[degree] * pursuit_lean(verb, e)`:
+    the ladder's own ordinal measured from the held band (`data/rosters.py::DEGREE_STEP`), so the top
+    band moves twice as far as a success, a held matter (`Partial`) not at all, and a failure moves him
+    AGAINST the way the act points. `gain` is the swept `Fixtures.pursuit_shift` (`H-221`; `0` the
+    control). ONLY HELD KEYS MOVE: a pursuit he does not hold is not minted by a consequence (the scar's
+    precedent, `_held`), so a man with no pursuits is unmoved. No clamp: a weight may cross zero, as an
+    authored one may (`harness/probes.py` P31) [ASSUMPTION; medium; Jordan to correct; revert: floor at
+    0]. Keys keep `p.pursuits`' order, which `to_axes` sums in. Person-side, no World (AX-2)."""
+    step = DEGREE_STEP.get(degree, 0) if degree is not None else 0
+    held = p.pursuits or {}
+    if not gain or not step or not held:
+        return None
+    moved = {e: float(w) + float(gain) * step * pursuit_lean(verb, e) for e, w in held.items()}
+    return None if moved == {e: float(w) for e, w in held.items()} else moved
 
 
 def _affiliations_violated_by(verb: str) -> frozenset:

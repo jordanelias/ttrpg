@@ -785,7 +785,18 @@ def _load_finding_terms(mapping: dict, bands, terms) -> dict:
 # which `test_jordan_no_definition_is_hardcoded_in_a_body` correctly read as two owners of one fact the
 # moment a second one was written down -- so a second spelling of the four labels is a second owner.
 from engine.dice_engine.dice_engine import DEGREE_LABEL as _DEGREE_LABEL   # noqa: E402
+from engine.dice_engine.dice_engine import DEGREE_ORDINAL as _DEGREE_ORDINAL   # noqa: E402
+from engine.dice_engine.dice_engine import Degree as _Degree   # noqa: E402
 DEGREE_BANDS = frozenset(_DEGREE_LABEL.values())
+# v9 SC-02 `22b` step 24: THE LADDER'S OWN ORDINAL (`DEGREE_ORDINAL`, 0-3, the social contest kernel's
+# numeric degree), keyed by the band's label, measured FROM THE HELD BAND (`Partial`): a determination's
+# consequence on its maker's pursuits is `-1 / 0 / +1 / +2` at Failure / Partial / Success /
+# Overwhelming -- *"the top band hardens, success moves a little, a held matter moves nothing, and a
+# failure moves the determiner AGAINST their own axis"* (`proposals/2026-09-05-proceedings-subsystem/
+# 19_PLAN.md` step 24, intent). Read off the owner, so no band table is written here.
+# [ASSUMPTION; medium; Jordan to correct; revert: the ordinal unshifted, Failure 0]
+DEGREE_STEP = {_DEGREE_LABEL[d]: _DEGREE_ORDINAL[d] - _DEGREE_ORDINAL[_Degree.PARTIAL]
+               for d in _DEGREE_LABEL}
 FINDING_TERMS = _load_finding_terms(roster_map("finding_terms", "bands"), DEGREE_BANDS, OBSERVATION_TERMS)
 # v9 FI-03: the deed kinds whose Events an inquiry can uncover (`epistemic.trail_of`). Checked against
 # the verb table's deed kinds at import, in `data/verbs.py::_check_covert_kinds` (the table loads there).
