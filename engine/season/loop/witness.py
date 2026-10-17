@@ -23,8 +23,8 @@ from ..data.matrix import Step
 from ..state.gate import Token
 from ..data.requires import LEDGER_DERIVED_STEMS, UNKNOWN, WORLD_ONLY_STEMS, binding_from_act
 from ..data.rosters import (
-    CHANNEL_CLAIM_SOURCE, OBSERVATION_DEPOSIT_MODES, RECORD_CONTENT, UNDEPOSITED_KINDS,
-    WITNESS_CHANNELS, require_member,
+    CHANNEL_CLAIM_SOURCE, OBSERVATION_DEPOSIT_MODES, OBSERVATION_TERMS, RECORD_CONTENT,
+    UNDEPOSITED_KINDS, WITNESS_CHANNELS, require_member,
 )
 from ..data.verbs import VERB_TABLE
 # ⚠ `04:178` lists WITNESS's reads as the log, the presence cache, the channel predicates and the act
@@ -39,11 +39,11 @@ from ..data.verbs import VERB_TABLE
 # writes no ledger, and is a CONVENTION exceedance justified by IN-55's measured saving.
 from ..decision.options import ledger_weigh, refracted_confidence
 from ..epistemic import (SEEN_PREDICATE, _hold_tenure_ends, act_refs, changes_only_held_claims,
-                         claim_subjects, held_claim_ids, live_channels, observers_for, seen_of,
-                         seen_subject)
+                         claim_subjects, held_claim_ids, holds_trail, live_channels, observers_for,
+                         seen_of, seen_subject)
 from ..queries import cache, world_q
 from ..queries.world_q import hold_force
-from ..state.attribution import actor_of
+from ..state.attribution import _event_by_id, actor_of, anchor_of
 from ..state.carriers import Claim, Event
 from ..state import ledgers
 from ..state.ids import H, draw_factory
@@ -254,6 +254,69 @@ def _happened(act, e: Event):
     return act
 
 
+# v9 FI-03 (`ED-FI-0002`): THE FOUND DEPOSIT'S CHANNEL AND ITS HAND TERM, named once and refused at import
+# if the rosters stop carrying them (`SEAT_CHANNEL`'s shape). A finding is not a witness channel; it
+# borrows the SEAT channel's slot for its claim source -- `inferred`, *known from the business, not seen*
+# (`CHANNEL_CLAIM_SOURCE`; no source is coined) -- and for refraction's `remove` weight. It does NOT borrow
+# the channel's live/off switch: a finding is the finder's own act, whatever the fan-out mode.
+# [ASSUMPTION; medium; Jordan to correct; revert: the `co_located` slot (`firsthand`)]
+FOUND_CHANNEL = SEAT_CHANNEL
+# The observation term that names the actor -- the HAND a partial finding withholds (`rosters.yaml:
+# finding_terms`): masked off the `seen` claim, and off the event-kind claim anchored on the actor.
+HAND_TERM = "who"
+require_member(HAND_TERM, OBSERVATION_TERMS,
+               f"hand term {HAND_TERM!r} is not an `observation_terms` member",
+               "rosters.yaml -- observation_terms",
+               law="v9 FI-03 -- the found deposit masks the term that names the actor; a name the roster "
+                   "does not carry would mask nothing and show every finder the hand")
+
+
+def _found_claims(self, w, e: Event, claim_rule: str, conf, mode: str, gain):
+    """v9 FI-03 (`ED-FI-0002`): THE CLAIMS A FINDING DEPOSITS -- `(finder, trail Event, Claim)` per claim,
+    yielded per uncovered trail Event so each re-check below sees the deposits already written.
+
+    The finder is the finding Event's actor (`actor_of`); what he found is `self.findings[e.id]`, popped
+    (`((trail id, terms shown), ...)`, put there at RESOLVE). For each trail Event `f`, unless he ALREADY
+    HOLDS IT (`epistemic.holds_trail`, re-checked here because a find runs at RESOLVE and two finds of one
+    Event can reach one WITNESS -- a second `research` of the same Record deposits nothing):
+      * the EVENT-KIND claims a witness would hold: one per `claim_subjects(f)` -- the one owner of *what a
+        deposit is about*, with the act's refs, as the fan reads them -- minus the subject `f` is ANCHORED
+        on (the actor) when the band does not show `HAND_TERM`. `doer=None`: he is not the doer;
+      * the `seen` claim: `seen_subject` / `seen_of` under `total` (every term), then every term the band
+        does not show set to `None` -- the mask is the only new logic.
+    Source `FOUND_CHANNEL`'s, `inferred`; refracted under the fan's own rule (`gain` live and the finder
+    not the act's actor, which `trail_of` already guarantees), with the act-level prior for both."""
+    found = self.findings.pop(e.id, ())
+    pid = actor_of(w, e) if found else None
+    p = w.persons.get(pid) if pid is not None else None
+    if p is None:
+        return
+    src = CHANNEL_CLAIM_SOURCE[FOUND_CHANNEL]
+    for fid, terms in found:
+        f = _event_by_id(w, fid)
+        if f is None or holds_trail(w, p, f, claim_rule):
+            continue
+        act_f = self.act_of.get(fid)
+        refracting = bool(gain) and actor_of(w, f) != pid
+        prior_act = _happened(act_f, f) if refracting else None
+        prior_weigh = ledger_weigh(p, w.fixtures) if prior_act is not None else None
+        hand = anchor_of(w, f)
+        subjects = [s for s in claim_subjects(w, f, claim_rule, act_refs(act_f))
+                    if HAND_TERM in terms or s != hand]
+        out = [Claim(H(w.world_seed, w.tick, pid, f"found:{e.id}:{fid}:{n}"), pid, subj, f.kind,
+                     True, w.tick, src, conf, "own", self.round, doer=None)
+               for n, subj in enumerate(subjects)]
+        subj = seen_subject(w, f, pid, mode)
+        if subj is not None:
+            shown = seen_of(w, f, act_f, pid, "total")
+            masked = replace(shown, **{t: None for t in OBSERVATION_TERMS if t not in terms})
+            out.append(Claim(H(w.world_seed, w.tick, pid, f"found_seen:{e.id}:{fid}"), pid, subj,
+                             SEEN_PREDICATE, masked, w.tick, src, conf, "own", self.round, doer=None))
+        for c in out:
+            yield p, f, (_refract(c, p, FOUND_CHANNEL, gain, prior_act, prior_weigh)
+                         if refracting else c)
+
+
 # -- WITNESS -- barrier 4 -- THE JOIN (S28) -----------------------------
 def witness(self, token: Token, events: list[Event]) -> int:
     w = self.w
@@ -462,6 +525,49 @@ def witness(self, token: Token, events: list[Event]) -> int:
                         reported.setdefault((pid, e.id), set()).add(o.subject)
         by_id = {e.id: e for e in events}
         fan = fan + [(pid, by_id[eid], SEAT_CHANNEL) for pid, eid in sorted(reported)]
+    # THE CAP, ONE BODY FOR EVERY DEPOSIT THAT CAN FILL A LEDGER: the fan's, and since v9 FI-03 the found
+    # deposit after it (one rule, two callers -- the loop below called it inline until then).
+    def _cap(p) -> None:
+        # ⚠ `while`, NOT `if`. THE CAP WAS NOT A CAP. One deposit can mint SEVERAL claims --
+        # `claim_subjects` returns one per `StateChange` under the `per_change` rule -- and a
+        # single `if` pops exactly one, so the ledger settled at 203 against `L = 200`. A cap
+        # that is exceeded by however many subjects the last Event carried is not the bound
+        # `H-09` declares, and every eviction measurement reads off it.
+        while len(p.ledger) > cap:
+            # S20/S34: EVICTION RANKS ON `confidence_live x recency` ONLY, NEVER SALIENCE.
+            # Rev 1 sorted lexicographically on (confidence, when), which is a different
+            # comparator and degenerated to insertion order under a constant confidence.
+            # ⚠ THROUGH THE GATE. This sorted and popped `p.ledger` DIRECTLY — no `write()`
+            # call, on the row `W4` had just made an emitting row. #353 `:1061-1064` is
+            # explicit: *"either the gate applies the write, or direct assignment is made
+            # impossible"*, and eviction was the second half of that sentence going
+            # unenforced. The gate requires an emission only at MATTER, so an INTERIOR
+            # eviction passes without one — which is correct here and is also a finding worth
+            # naming rather than papering over: **a claim leaving a ledger is a real state
+            # change that Part D gives no kind, so nobody can witness a forgetting.** That is
+            # `(Person, claim_ledger)`'s version of `H-86` and is recorded on that row.
+            # Found by the `W4` adversarial pass.
+            # The comparator's owner is `state/ledgers.py` (04 §A.2:149); this closure is the
+            # gated write that applies it. ⚠ ONE CLAIM PER WRITE, MATCHING THE PRE-EXTRACTION
+            # SEMANTICS -- an earlier wording of this closure called `evict_over_cap(p.ledger, cap)`
+            # once, draining every excess claim in a single `w.write`. State-wise that is identical
+            # (the sort key never changes between evictions within one call, so popping k off a
+            # once-sorted list matches k separate sort-then-pop-one passes) but INSTRUMENTATION
+            # is not: `World.write` mints one gate receipt, one `TRACE.write` row and one
+            # `self.writes` entry per call, and `harness/report.py`'s "N writes through the gate"
+            # plus `_trace_counts` (compared by `harness/delta.py` between two runs) both count
+            # those -- so batching silently changed those counts whenever one deposit minted enough
+            # claims to evict more than one at a time, which is exactly the case the `while` above
+            # this loop exists for (one deposit can mint several claims; see the comment above).
+            # Found by a read-only critic, layer-conformance pass, 2026-09-25.
+            # ⚠ G2 (merge, 2026-09-27): the second positional argument to `w.write` is the driver's
+            # own `Token` for this step, not a bare `WriteClass` -- this closure predates G2's
+            # token discipline and is updated to it here rather than at G2's own close, since the
+            # two landed on independent branches. `token` is this function's own parameter.
+            def _evict(p=p):
+                ledgers.evict_over_cap(p.ledger, len(p.ledger) - 1)
+            w.write("claim_ledger", token, _evict,
+                    record_kind="Person", fieldname="claim_ledger", driver="Event")
     w._in_parallel_map = True
     for pid, e, channel in fan:
         p = w.persons.get(pid)
@@ -867,46 +973,26 @@ def witness(self, token: Token, events: list[Event]) -> int:
                             emits="claim.deposited", subject=tc.id, causes=[e.id])
                     TRACE.claim(pid, e.id, "told_by")
                     deposits += 1
-        # ⚠ `while`, NOT `if`. THE CAP WAS NOT A CAP. One deposit can mint SEVERAL claims --
-        # `claim_subjects` returns one per `StateChange` under the `per_change` rule -- and a
-        # single `if` pops exactly one, so the ledger settled at 203 against `L = 200`. A cap
-        # that is exceeded by however many subjects the last Event carried is not the bound
-        # `H-09` declares, and every eviction measurement reads off it.
-        while len(p.ledger) > cap:
-            # S20/S34: EVICTION RANKS ON `confidence_live x recency` ONLY, NEVER SALIENCE.
-            # Rev 1 sorted lexicographically on (confidence, when), which is a different
-            # comparator and degenerated to insertion order under a constant confidence.
-            # ⚠ THROUGH THE GATE. This sorted and popped `p.ledger` DIRECTLY — no `write()`
-            # call, on the row `W4` had just made an emitting row. #353 `:1061-1064` is
-            # explicit: *"either the gate applies the write, or direct assignment is made
-            # impossible"*, and eviction was the second half of that sentence going
-            # unenforced. The gate requires an emission only at MATTER, so an INTERIOR
-            # eviction passes without one — which is correct here and is also a finding worth
-            # naming rather than papering over: **a claim leaving a ledger is a real state
-            # change that Part D gives no kind, so nobody can witness a forgetting.** That is
-            # `(Person, claim_ledger)`'s version of `H-86` and is recorded on that row.
-            # Found by the `W4` adversarial pass.
-            # The comparator's owner is `state/ledgers.py` (04 §A.2:149); this closure is the
-            # gated write that applies it. ⚠ ONE CLAIM PER WRITE, MATCHING THE PRE-EXTRACTION
-            # SEMANTICS -- an earlier wording of this closure called `evict_over_cap(p.ledger, cap)`
-            # once, draining every excess claim in a single `w.write`. State-wise that is identical
-            # (the sort key never changes between evictions within one call, so popping k off a
-            # once-sorted list matches k separate sort-then-pop-one passes) but INSTRUMENTATION
-            # is not: `World.write` mints one gate receipt, one `TRACE.write` row and one
-            # `self.writes` entry per call, and `harness/report.py`'s "N writes through the gate"
-            # plus `_trace_counts` (compared by `harness/delta.py` between two runs) both count
-            # those -- so batching silently changed those counts whenever one deposit minted enough
-            # claims to evict more than one at a time, which is exactly the case the `while` above
-            # this loop exists for (one deposit can mint several claims; see the comment above).
-            # Found by a read-only critic, layer-conformance pass, 2026-09-25.
-            # ⚠ G2 (merge, 2026-09-27): the second positional argument to `w.write` is the driver's
-            # own `Token` for this step, not a bare `WriteClass` -- this closure predates G2's
-            # token discipline and is updated to it here rather than at G2's own close, since the
-            # two landed on independent branches. `token` is this function's own parameter.
-            def _evict(p=p):
-                ledgers.evict_over_cap(p.ledger, len(p.ledger) - 1)
-            w.write("claim_ledger", token, _evict,
-                    record_kind="Person", fieldname="claim_ledger", driver="Event")
+        _cap(p)
+    # v9 FI-03 (`ED-FI-0002`): THE FIFTH DEPOSIT -- WHAT A FINDING UNCOVERED, INTO THE FINDER'S OWN LEDGER.
+    # RESOLVE's per-act bookkeeping asked the `inquiry` role what each Event uncovered and kept the answer
+    # on the driver (`self.findings`, `seam.find_trail`); here the finder comes to hold what a WITNESS of
+    # each uncovered act would have held, through the same deposit shapes, masked to the terms the band
+    # shows (`_found_claims`). After the fan, IN-22's purview append's precedent for a deposit outside the
+    # channel fan, so every fan deposit lands in the order it did. `causes=[finding, trail]`: the causal
+    # walk runs response -> claim -> finding -> the covert act, the arc ED-FI-0002 asks for.
+    # ⚠ LAYER 1 (`04` §A.2): WITNESS's may-read column lists no driver-held store of finds; this reads one
+    # (`seam/wrappers/fieldwork.py`'s docstring adjudicates the deviation). An empty `self.findings` --
+    # every round with no graded finding of a covert trail -- deposits nothing, so this block is inert.
+    for e in events:
+        for p, f, c in _found_claims(self, w, e, claim_rule, conf, mode, gain):
+            w.write("claim_ledger", token,
+                    lambda p=p, c=c: p.ledger.append(c),
+                    record_kind="Person", fieldname="claim_ledger", driver="Event",
+                    emits="claim.deposited", subject=c.id, causes=[e.id, f.id])
+            TRACE.claim(p.id, e.id, c.source)
+            deposits += 1
+            _cap(p)
     w._in_parallel_map = False
     # S9.3/S28: WITNESS NEVER TOUCHES A BELIEF. Nothing above writes `pursuits` -- its row
     # admits RES only, so a WITNESS attempt would raise rather than be caught by inspection --

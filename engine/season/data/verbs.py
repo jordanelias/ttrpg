@@ -52,7 +52,7 @@ from .requires import (
     build_typed_requires,
 )
 from .rosters import (
-    GRADED_INQUIRIES, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
+    COVERT_KINDS, GRADED_INQUIRIES, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
     RUNG_KINDS, STRATA, TENURE_KINDS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
     roster_map,
     table,
@@ -1292,6 +1292,24 @@ REFUSAL_KINDS = frozenset(k for r in VERB_TABLE.values() for k in r.emits_on_ref
 
 # Every kind a DEED claim can carry: emitted, and by no row on refusal (`is_deed`'s set).
 DEED_KINDS = EMITTED_KINDS - REFUSAL_KINDS
+
+
+def _check_covert_kinds(kinds, deed_kinds) -> frozenset:
+    """v9 FI-03 (`ED-FI-0002`): every `rosters.yaml: covert_kinds` member is a DEED kind the verb table
+    emits, or import refuses naming it -- a misspelled or refusal kind would be a trail nothing leaves,
+    and the trail would read as built. A function, so a test can plant a bad member and watch it
+    refuse. Returns the members."""
+    bad = sorted(k for k in kinds if k not in deed_kinds)
+    if bad:
+        raise Unspecified(
+            f"`covert_kinds` {bad} are not deed kinds the verb table emits", "rosters.yaml -- covert_kinds",
+            needs="name kinds in `data/verbs.py::DEED_KINDS` (emitted by some row, on no row's refusal)",
+            law="ED-FI-0002 -- a trail is an Event some act leaves; a kind no row emits, or a refusal "
+                "kind, leaves none, and the trail would read as built")
+    return frozenset(kinds)
+
+
+_check_covert_kinds(COVERT_KINDS, DEED_KINDS)
 
 
 def _derive_record_referent_kinds() -> frozenset:

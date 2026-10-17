@@ -35,8 +35,12 @@ sys.path.insert(0, {root!r})
 import engine.season.seam            # the ONLY import under test
 from engine.season.manifest import PROVIDERS
 from engine.season.data.rosters import roster_map   # reads data; registers nothing
-named = sorted({{"contest/%s" % (r.get("provider") if isinstance(r, dict) else None)
-                for r in roster_map("contest_subsystems", "prizes").values()}})
+# v9 FI-02: EVERY ROLE'S ROWS, read off the role map (`_ROLE_ROSTERS`, data, registers nothing), so the
+# `inquiry` role's provider is covered as each prize row's is -- and a third role would be too.
+from engine.season.manifest.registry import _ROLE_ROSTERS
+named = sorted({{"%s/%s" % (role, r.get("provider") if isinstance(r, dict) else None)
+                for role, (roster, column) in _ROLE_ROSTERS.items()
+                for r in roster_map(roster, column).values()}})
 print(repr((sorted("%s/%s" % k for k in PROVIDERS), named)))
 """
 
@@ -58,6 +62,9 @@ def test_importing_the_seam_registers_every_wrapper_provider():
     assert named and "contest/mass_battle" in named, (
         f"the prize rows name {named}; this arm exists to cover every one of them, `mass_battle` "
         "included, and an empty list makes it vacuous (§0.1 pt 2)")
+    assert any(n.startswith("inquiry/") for n in named), (
+        f"no `inquiry` row names a provider ({named}); v9 FI-02's role is covered by this arm, and its "
+        "absence would make the arm vacuous for it (§0.1 pt 2)")
     missing = sorted(set(named) - set(got))
     assert not missing, (
         f"prize row provider(s) {missing} are not registered by importing `engine.season.seam` "
@@ -110,3 +117,109 @@ def test_emptying_the_provider_table_refuses_driver_construction():
     assert after == before, (
         f"clearing the provider table moved `resolvable_verbs()` ({before} -> {after}): the deleted "
         "`manifest.has` clause, or a second copy of it, is consulting the table again")
+
+
+# ---------------------------------------------------------------------------
+# v9 FI-02 (`SM-3`), built with FI-03 (`ED-FI-0002`): THE SECOND ROLE, `inquiry`. Its EXIT and its two
+# falsifiers, each in a FRESH SUBPROCESS -- the within-process form passes by order of construction
+# (`MODULE_ENTRIES` and `composition.ROLES` are process globals another test's drivers fill), the hazard
+# `test_module_registrar.py` documents. The role's name is the subject under test, so it is spelt; its
+# rows, keys and entries are read off the data, never named.
+# ---------------------------------------------------------------------------
+
+_ROLE = "inquiry"
+
+_FRESH = """
+import sys
+sys.path.insert(0, {root!r})
+from engine.substrate import composition
+import engine.season.manifest.registry as R
+from engine.season.loop.driver import SeasonDriver
+from engine.season.manifest import MODULE_ENTRIES
+from engine.season.state.world import World
+ROLE = {role!r}
+ROSTER, COLUMN = R._ROLE_ROSTERS[ROLE]
+ROWS = R.roster_map(ROSTER, COLUMN)
+
+def construct():
+    try:
+        SeasonDriver(World(0))
+        return None
+    except Exception as exc:                  # the type is asserted by the test
+        return (type(exc).__name__, str(exc))
+"""
+
+
+def _fresh(body: str):
+    out = subprocess.run([sys.executable, "-c", _FRESH.format(root=ROOT, role=_ROLE) + body],
+                         capture_output=True, text=True, timeout=600)
+    assert out.returncode == 0, out.stderr[-3000:]
+    return eval(out.stdout.strip().splitlines()[-1])     # our own probe's repr
+
+
+def test_fi02_exit_check_rows_returns_a_pair_for_the_inquiry_role():
+    """FI-02's EXIT: `check_rows()` -- `04 PART E step 10`'s boot sweep, which iterates the role map --
+    returns at least one `(inquiry, key)` pair, and exactly one per row the role's roster carries. The
+    count is asserted before the membership, so a sweep that resolved nothing cannot pass (`CLAUDE.md`
+    §0.1 pt 2); and the driver constructs on the shipped rows (the control for the two refusals below)."""
+    keys, pairs, control = _fresh("""
+pairs = R.check_rows()
+print(repr((sorted(ROWS), sorted(k for r, k in pairs if r == ROLE), construct())))
+""")
+    assert len(pairs) >= 1, f"`check_rows()` returned no `{_ROLE}` pair -- the sweep did not reach the role"
+    assert pairs == keys, f"`check_rows()` checked {pairs} of the role's rows {keys}"
+    assert control is None, control
+
+
+def test_fi02_deleting_the_inquiry_composition_row_refuses_construction_naming_it():
+    """FI-02 FALSIFIER 1: delete the role's composition row in a fresh process -> `SeasonDriver`
+    construction refuses, naming the row. `before == []` makes it the fresh-process form: the registrar
+    holds nothing to miss, so the refusal is `check_inquiry_modules`' -- the declaration that the row must
+    exist (the row's `module_entry:`). RED WHEN PLANTED (run 2026-10-17): with the
+    `check_inquiry_modules(VERB_TABLE)` call deleted from `loop/driver.py`, construction succeeds
+    (`refusal` is `None`) and this test fails."""
+    got = _fresh("""
+entries = sorted({row["module_entry"] for row in ROWS.values() if isinstance(row, dict)})
+out = []
+for role in entries:
+    in_rows = role in composition.ROLES
+    saved = composition.ROLES.pop(role, None)
+    out.append((role, in_rows, sorted(MODULE_ENTRIES), construct()))
+    composition.ROLES[role] = saved
+print(repr(out))
+""")
+    assert got, f"the `{_ROLE}` rows name no module entry -- this falsifier observes nothing"
+    for role, in_rows, before, refusal in got:
+        assert in_rows, f"the `{_ROLE}` rows name {role!r}, which no composition row declares"
+        assert before == [], f"MODULE_ENTRIES was filled before construction: {before}"
+        assert refusal is not None, f"deleting composition row {role!r} did NOT refuse construction"
+        kind, text = refusal
+        assert kind == "Unspecified" and repr(role) in text and "no composition row declares" in text, (
+            refusal)
+
+
+def test_fi02_a_misspelled_inquiry_row_fails_check_rows_naming_it():
+    """FI-02 FALSIFIER 2: misspell the module a role row names, in a fresh process -> `check_rows()` raises
+    `Unspecified` naming the roster, the row's key and the misspelling (`04 PART E step 10`: *"a misspelled
+    manifest row fails at boot naming the row"*). The key is read off the roster, not named. RED WHEN
+    PLANTED (run 2026-10-17): with `check_rows()`'s `resolve(role, key)` line deleted, it returns cleanly
+    and this test fails."""
+    got = _fresh("""
+key = sorted(ROWS)[0]
+bad = dict(ROWS[key], module=str(ROWS[key]["module"])[:-1])
+real = R.roster_map
+R.roster_map = lambda roster, column: (dict(real(roster, column), **{key: bad})
+                                       if (roster, column) == (ROSTER, COLUMN) else real(roster, column))
+try:
+    R.check_rows()
+    refusal = None
+except Exception as exc:
+    refusal = (type(exc).__name__, str(exc))
+print(repr((ROSTER, key, bad["module"], refusal)))
+""")
+    roster, key, misspelt, refusal = got
+    assert refusal is not None, f"`check_rows()` accepted `{roster}` row {key!r} naming {misspelt!r}"
+    kind, text = refusal
+    for name in (roster, repr(key), repr(misspelt)):
+        assert name in text, f"the refusal does not name {name}: {refusal}"
+    assert kind == "Unspecified", refusal

@@ -56,11 +56,11 @@ from typing import Optional
 
 from .data.requires import binding_of, evaluate
 from .data.rosters import (
-    CLAIM_SUBJECT_RULES, FAN_OUT_MODES, OBSERVATION_TERMS, SEEN_PREDICATE, TERMS_SUPPLIED_BY,
-    WITNESS_CHANNELS, require_member)
+    CLAIM_SUBJECT_RULES, COVERT_KINDS, FAN_OUT_MODES, OBSERVATION_TERMS, SEEN_PREDICATE,
+    TERMS_SUPPLIED_BY, WITNESS_CHANNELS, require_member)
 from .data.verbs import NO_PRECONDITION, VERB_TABLE, VerbRow
 from .gaps import Unspecified
-from .state.attribution import anchor_of, causing_act
+from .state.attribution import _event_by_id, actor_of, anchor_of, causing_act
 from .state.gate import purview_reaches
 from .queries import cache, world_q
 from .queries.person_q import LedgerReader
@@ -305,6 +305,62 @@ def claim_subjects(w: "World", e: "Event", rule: str, refs: Optional[list] = Non
     # would become a belief. No production emitter reaches this (every logged Event in the probe
     # corpus, headless and the populated realm anchors); `test_g1b_attribution.py` plants one.
     return [s for s in (out or [anchor]) if s is not None]
+
+
+# ---------------------------------------------------------------------------
+# v9 FI-03 (`ED-FI-0002`): THE TRAIL A COVERT ACT LEAVES, AND WHO ALREADY HOLDS IT.
+#
+# ⚠ HERE AND NOT IN `queries/world_q.py`, WHERE THE DESIGN PUT IT, BECAUSE OF AN IMPORT EDGE: what
+# "already known" means is `claim_subjects` above -- the one owner of *what a deposit about this Event
+# is about* -- and this module imports `world_q`, so `world_q` cannot import it back. Beside its owner,
+# the query composes on it instead of re-deriving it.
+# ---------------------------------------------------------------------------
+
+def holds_trail(w: World, p: Person, e: Event, rule: str) -> bool:
+    """Does `p` already hold this deed as a witness would -- an event-kind claim `(s, e.kind, True)`
+    for ANY `s` the deposit rule makes a claim about `e` (`claim_subjects`), whatever its `when`?
+
+    One test for both readers: `trail_of` (an Event he holds is not news, so it is not trail) and
+    `loop/witness.py`'s found deposit (re-checked there, because a find runs at RESOLVE and two finds of
+    one Event can reach the same WITNESS). Reads `p`'s OWN ledger only (AX-2). ⚠ ANY subject, so a
+    partial finding -- which lands the claim on the written thing and withholds the hand -- also closes
+    the trail to a later, better finding of the same Event: one Event is found once."""
+    subjects = set(claim_subjects(w, e, rule, act_refs(causing_act(w, e))))
+    return any(c.predicate == e.kind and c.value is True and c.subject in subjects for c in p.ledger)
+
+
+def trail_of(w: World, subject: Optional[str], pid: str) -> list:
+    """THE TRAIL AN INQUIRY ABOUT `subject` CAN UNCOVER FOR `pid` -- the host's projection for the
+    fieldwork container (`seam/wrappers/fieldwork.py::fieldwork_input`), oldest first.
+
+    For each `rosters.yaml: covert_kinds` member -- DATA, never a walk of every deed kind -- the most
+    recent Event of that kind that WROTE `subject` (deeds done TO it: `World.last_emission_of(...,
+    written=True)`) and the most recent one ANCHORED on it (deeds BY it: the anchor is the actor). The
+    bound is the index's own -- one per kind per side -- and introduces no number. An Event is kept only
+    if a PERSON did it (`actor_of`; a MATTER write is no one's hand), the person is not `pid` (a man
+    knows his own act), and `pid` does not already hold it (`holds_trail`).
+
+    ⚠ REACHABLE ONLY THROUGH A PLANT, AND THAT IS THE DATA, NOT A GAP HIDDEN HERE: the one covert kind
+    today is `record.forged`, a forged Record is minted into the forger's own hand, and an inquiry about
+    it (`research`) is formed by someone else only once a `give` hands it on. The seed-0 realm gives
+    none (`record.given` 0), so it reaches no trail by `research`; a `surveil` of the forger's own rung
+    reads the anchor side."""
+    if subject is None:
+        return []
+    p = w.persons.get(pid)
+    rule = w.fixtures.get("claim_subject_rule")
+    found: dict = {}
+    for kind in sorted(COVERT_KINDS):
+        for written in (True, False):
+            eid = w.last_emission_of(kind, subject, written=written)
+            if eid is None or eid in found:
+                continue
+            e = _event_by_id(w, eid)
+            actor = actor_of(w, e) if e is not None else None
+            if actor is None or actor == pid or (p is not None and holds_trail(w, p, e, rule)):
+                continue
+            found[eid] = e
+    return sorted(found.values(), key=lambda e: (e.emitted_at, e.id))
 
 
 # ---------------------------------------------------------------------------

@@ -698,6 +698,37 @@ if not isinstance(SEEN_PREDICATE, str) or not SEEN_PREDICATE:
         law="Jordan 2026-09-02 -- a definition is data. A deposit with no declared predicate "
             "would have to spell one in a body")
 TERMS_SUPPLIED_BY = roster_map("observation_terms", "supplied_by")
+
+
+def _load_finding_terms(mapping: dict, bands, terms) -> dict:
+    """v9 FI-03 (`ED-FI-0002`): `rosters.yaml: finding_terms` -- degree band -> the observation terms
+    a finding at that band shows of a trail -- refused at import naming the row when a key is no band
+    of the one ladder or a value names a term `observation_terms` does not carry. A function, not an
+    inline check, so a test can plant a bad row and watch it refuse (`_check_scale_of_rung`'s reason).
+    Values come back as tuples, in the row's own order."""
+    bad = sorted([f"band {b!r}: not on the degree ladder {sorted(bands)}" for b in mapping
+                  if b not in bands]
+                 + [f"band {b!r}: {v!r} is not a list of {list(terms)}" for b, v in mapping.items()
+                    if not isinstance(v, list) or not set(v) <= set(terms)])
+    if bad:
+        raise Unspecified(
+            f"`finding_terms` rows {bad}", "rosters.yaml -- finding_terms",
+            needs="key each row by a band `engine/dice_engine/dice_engine.py::DEGREE_LABEL` names, "
+                  "and list only `observation_terms` members",
+            law="ED-FI-0002 -- what a finding shows is a mask over the `seen` struct, keyed by the "
+                "degree the one ladder decides; a band off the ladder is never reached and a term "
+                "off the struct is a field nothing has")
+    return {b: tuple(v) for b, v in mapping.items()}
+
+
+# THE BANDS, FROM THE LADDER'S OWNER -- `data/arrangements.py::DEGREE_BANDS`' import, for its reason (a
+# second spelling of the four labels is a second owner of one fact).
+from engine.dice_engine.dice_engine import DEGREE_LABEL as _DEGREE_LABEL   # noqa: E402
+FINDING_TERMS = _load_finding_terms(roster_map("finding_terms", "bands"),
+                                    frozenset(_DEGREE_LABEL.values()), OBSERVATION_TERMS)
+# v9 FI-03: the deed kinds whose Events an inquiry can uncover (`epistemic.trail_of`). Checked against
+# the verb table's deed kinds at import, in `data/verbs.py::_check_covert_kinds` (the table loads there).
+COVERT_KINDS = roster("covert_kinds")
 # `W-E`. THE THREE BANDS PERSONAL COMBAT CAN DISTINGUISH, and HOW MUCH BODY A WOUND COSTS. Bound
 # here with every other roster rather than beside their reader in the S39 block below, because
 # that is where an absent roster's refusal is guaranteed to fire (`TITLE_DOMAINS`' lesson, above).

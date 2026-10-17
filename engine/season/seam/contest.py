@@ -143,6 +143,42 @@ def grade(w: World, claimants: list[str], causes: list[str], route: dict, *,
     return _returned(out, f"the inquiry {verb!r}", f"inquiry {verb!r}")
 
 
+def find_trail(w: World, a: Any, e: Any) -> tuple:
+    """v9 FI-02 + FI-03 (`SM-3`, `ED-FI-0002`): WHAT AN EVENT AN ACT PRODUCED UNCOVERS, through the
+    `inquiry` role -- `((trail event id, terms shown), ...)`, or `()`.
+
+    `grade()`'s sibling, one role over: the role's row is keyed by the Event's KIND
+    (`rosters.yaml: inquiry_modules`), so `manifest.resolve("inquiry", e.kind)` is the whole dispatch --
+    `None` for every kind no row claims (a real answer: nothing is found), and the row's provider
+    otherwise (`seam/wrappers/fieldwork.py::find`, `manifest.call`, never a path literal: ED-SC-0033
+    clause (1), S43). NOTHING HERE BRANCHES ON A KIND, A BAND OR A VERB: a failing inquiry emits a kind no
+    row claims, and an ungraded finding carries no degree, for which `finding_terms` keys nothing -- the
+    data decides at both points. Called by `loop/resolve.py`'s per-act bookkeeping for every Event an act
+    produced; `manifest/registry.py::check_inquiry_modules` refuses construction unless every row's
+    provider is registered and its entry agrees with its composition row."""
+    row = manifest_resolve("inquiry", e.kind)
+    if row is None:
+        return ()
+    from ..manifest import call as _provider_for
+    _run = _provider_for("inquiry", row.get("provider"))
+    if _run is None:
+        raise Unspecified(
+            f"the finding {e.kind!r} routes to provider {row.get('provider')!r}, which nobody registered",
+            "S43", needs="the `inquiry_modules` row's `provider:` naming a registered provider",
+            law="S43 -- a missing provider is a STARTUP FAILURE WITH A NAME IN IT; "
+                "`check_inquiry_modules` refuses it at driver construction")
+    out = _run(w, a, e, module_entry=row.get("module_entry"))
+    if isinstance(out, dict):
+        # The provider's typed refusal (`ENGINE-UNAVAILABLE`): a gap in the call, raised and named by
+        # the one reading of a provider's status. No finding status is a game refusal, so a status
+        # `_returned` would hand back is refused below rather than read as nothing found.
+        _returned(out, f"the finding {e.kind!r}", f"finding {e.kind!r}")
+        raise Unspecified(f"the finding {e.kind!r}'s provider returned status {out.get('status')!r}",
+                          "S39", needs="`Findings`, or the typed `ENGINE-UNAVAILABLE` refusal",
+                          law="a finding is found or not; it is never refused as a contest is")
+    return tuple(out.found)
+
+
 def contest(w: World, rung: Optional[str], prize: Any, claimants: list[str],
             depth: int, max_depth: int, causes: list[str],
             extension: Optional[Callable[[str], bool]] = None,
