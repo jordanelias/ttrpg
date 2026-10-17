@@ -29,15 +29,14 @@ from ..gaps import NoProducer, Unspecified
 # providers, and the map exists so `resolve` does not branch on a role's name. Adding a role is a
 # data edit, one row in this map, AND its own construction-refusal function (`check_contest_prizes`,
 # `check_inquiry_modules`) with a call to it from `loop/driver.py`'s construction -- the refusals are
-# per role, so `check_rows()` alone does not cover a new role's providers or entries.
+# per role, so `check_rows()` alone does not cover a new role's providers or entries; `check_rows()`
+# and `World.boot` iterate this map and so cover a new row's resolution unedited. `inquiry` is v9
+# FI-02's (`SM-3`; Jordan, 2026-09-05: *"investigation is not a contest seam. it is its own
+# thing."*): it maps the KIND a graded finding emits to the fieldwork container
+# (`rosters.yaml: inquiry_modules`), built in one landing with its caller, FI-03 (`ED-FI-0002`),
+# because ID-13 forbids a role no caller requires.
 _ROLE_ROSTERS = {"contest": ("contest_subsystems", "prizes"),
                  "inquiry": ("inquiry_modules", "findings")}
-# ⚠ TWO ENTRIES SINCE v9 FI-02 (`SM-3`; Jordan, 2026-09-05: *"investigation is not a contest seam. it is
-# its own thing."*). `inquiry` maps the KIND a graded finding emits to the fieldwork container
-# (`rosters.yaml: inquiry_modules`), built in one landing with its caller, FI-03 (`ED-FI-0002`), because
-# ID-13 forbids a role no caller requires. `check_rows()` and `World.boot` iterate this map and so cover
-# the new rows unedited; the construction refusals are per role (`check_contest_prizes`,
-# `check_inquiry_modules`), each reading its own row of this map.
 
 
 # ---------------------------------------------------------------------------
@@ -360,6 +359,12 @@ def check_contest_prizes(verb_table: dict) -> list:
     return checked
 
 
+def _takes_module_entry(role: str, name: str) -> bool:
+    """Does the `@provider(role, name)` callable accept the `module_entry` keyword the seam always
+    passes it (`seam/contest.py::find_trail`, `grade`)?"""
+    return "module_entry" in inspect.signature(call(role, name)).parameters
+
+
 def check_inquiry_modules(verb_table: dict) -> list:
     """v9 FI-02 + FI-03 (`SM-3`, `ED-FI-0002`): **the `inquiry` role's rows, at driver construction** --
     refusal (c)'s shape, one role over, each refused naming the row:
@@ -397,7 +402,7 @@ def check_inquiry_modules(verb_table: dict) -> list:
                     "names; a row naming none reaches `ENGINE-UNAVAILABLE` at the first find rather "
                     "than refusing construction")
         _check_module_entry(role, key, row, verb_table, _STEP_CALL, _graded_verb_emits_it)
-        if "module_entry" not in inspect.signature(call(role, name)).parameters:
+        if not _takes_module_entry(role, name):
             raise Unspecified(
                 f"`{roster}` row {key!r} names provider {name!r}, which takes no `module_entry` keyword",
                 "S43", needs="a provider accepting the row's module entry, or the row's `provider:` fixed",
@@ -444,7 +449,7 @@ def check_graded_inquiries(verb_table: dict) -> list:
                 f"(bound: {sorted(bound, key=str)})", "S27.2",
                 needs="the route naming a provider and module entry a prize row already binds",
                 law=law)
-        if "module_entry" not in inspect.signature(call("contest", provider_name)).parameters:
+        if not _takes_module_entry("contest", provider_name):
             raise Unspecified(
                 f"the graded inquiry {verb!r} routes to provider {provider_name!r}, which takes no "
                 f"`module_entry` keyword", "S27.2",
@@ -484,9 +489,9 @@ def _graded_verb_emits_it(role: str, key: Any, entry_role: str, comp: dict, verb
     `graded_inquiries` route) emits the key at some band (`VerbRow.emits_by_degree`). Otherwise the
     entry is reached by ungraded findings alone, and `finding_terms` keys nothing for them."""
     from ..data.rosters import GRADED_INQUIRIES
-    emitters = sorted(v for v in GRADED_INQUIRIES if v in verb_table and any(
-        str(key) in kinds for kinds in (verb_table[v].emits_by_degree or {}).values()))
-    if not emitters:
+    # `VerbRow.emits` is the flat union of the degree bands, and a graded route's `emits:` is
+    # degree-keyed (`data/verbs.py` refuses a flat one), so membership there is "some band emits it".
+    if not any(str(key) in verb_table[v].emits for v in sorted(GRADED_INQUIRIES) if v in verb_table):
         raise Unspecified(
             f"`{role}` row {key!r} (`module_entry: {entry_role!r}`) is a kind no graded inquiry emits at "
             f"any band (graded: {sorted(GRADED_INQUIRIES)})", "04 PART E step 10",

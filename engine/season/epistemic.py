@@ -60,7 +60,7 @@ from .data.rosters import (
     TERMS_SUPPLIED_BY, WITNESS_CHANNELS, require_member)
 from .data.verbs import NO_PRECONDITION, VERB_TABLE, VerbRow
 from .gaps import Unspecified
-from .state.attribution import _event_by_id, actor_of, anchor_of, causing_act
+from .state.attribution import event_by_id, actor_of, anchor_of, causing_act
 from .state.gate import purview_reaches
 from .queries import cache, world_q
 from .queries.person_q import LedgerReader
@@ -150,7 +150,7 @@ def act_refs(a) -> list:
 
 def _tenure_by_id(w: "World", tid: str):
     """The Tenure with this id, or `None`. Linear, and deliberately not indexed -- the same
-    precedent `state/attribution.py::_event_by_id` states for the log: a lookup that is not hot
+    precedent `state/attribution.py::event_by_id` states for the log: a lookup that is not hot
     does not earn a second structure to keep in step with `w.tenures`. Not called on a hot path
     -- measured over a 44.6s / 143-case corpus run, this lookup is reached 52 times against
     39,932 `claim_subjects` calls total, 0.111s of the run (`ED-IN-0267`'s own measurement).
@@ -316,6 +316,13 @@ def claim_subjects(w: "World", e: "Event", rule: str, refs: Optional[list] = Non
 # the query composes on it instead of re-deriving it.
 # ---------------------------------------------------------------------------
 
+def non_anchor_subjects(subj, anchor) -> list:
+    """`subj` (a `claim_subjects` answer) minus the Event's anchor (`anchor_of`), order kept -- the
+    subjects SPECIFIC to one Event; the one place that subtraction is written (`holds_trail`,
+    `loop/witness.py::_found_claims`)."""
+    return [s for s in subj if s != anchor]
+
+
 def holds_trail(w: World, p: Person, e: Event, rule: str) -> bool:
     """Does `p` already hold this deed as a witness would -- an event-kind claim `(s, e.kind, True)`
     for an `s` SPECIFIC TO `e`, whatever its `when`?
@@ -336,8 +343,7 @@ def holds_trail(w: World, p: Person, e: Event, rule: str) -> bool:
     claim on the actor ALONE does not close it. Under the `actor` rule the anchor is the only subject,
     so there one forging found still closes the forger's others."""
     subj = claim_subjects(w, e, rule, act_refs(causing_act(w, e)))
-    anchor = anchor_of(w, e)
-    specific = {s for s in subj if s != anchor} or set(subj)
+    specific = set(non_anchor_subjects(subj, anchor_of(w, e))) or set(subj)
     return any(c.predicate == e.kind and c.value is True and c.subject in specific for c in p.ledger)
 
 
@@ -372,7 +378,7 @@ def trail_of(w: World, subject: Optional[str], pid: str) -> list:
             eid = w.last_emission_of(kind, subject, written=written)
             if eid is None or eid in found:
                 continue
-            e = _event_by_id(w, eid)
+            e = event_by_id(w, eid)
             actor = actor_of(w, e) if e is not None else None
             if actor is None or actor == pid or (p is not None and holds_trail(w, p, e, rule)):
                 continue
@@ -1035,5 +1041,12 @@ def seen_of(w: "World", e: "Event", act, pid: str, mode: str) -> Seen:
     else:
         admitted = [c for c in live_channels(mode) if CHANNEL_PREDICATES[c](w, e, pid)]
         shown = {t for c in admitted for t in TERMS_SUPPLIED_BY[c]}
+    return seen_showing(w, e, act, shown)
+
+
+def seen_showing(w: "World", e: "Event", act, shown) -> Seen:
+    """The `Seen` struct of `e` with exactly the terms in `shown` read and every other term `None`.
+    The readers are pure, so the mask is the whole of what differs between callers (`seen_of`, and
+    `loop/witness.py::_found_claims`, which shows a finder the terms its band shows)."""
     return Seen(**{t: (TERM_READERS[t](w, e, act) if t in shown else None)
                    for t in OBSERVATION_TERMS})

@@ -2291,11 +2291,8 @@ rosters:
       naming it, `data/verbs.py::_check_covert_kinds`), so a misspelling cannot find nothing and
       report the trail built. One member today: `forge` is the one covert act that executes
       (`record.forged`, v9 IN-45). `conceal`, `arrest`, a covert `destroy_record` (H-75) and a
-      costed `surveil` (ED-FI-0009) are unbuilt and belong to their own positions. A trail is
-      reachable by a `research` only through a PLANT: the forged Record is minted into the forger's
-      own hand, so someone else consults it only after a `give` hands it on (`record.given`). The
-      seed-0 realm gives none and reaches no find: pinned by `engine/season/tests/test_fi03_trail.py::
-      test_the_realm_seed_twice_in_one_process_gives_one_hash_and_reaches_no_find`, not counted here.
+      costed `surveil` (ED-FI-0009) are unbuilt and belong to their own positions.
+      Why a trail is reachable only through a plant: see `epistemic.trail_of`.
     values: ["record.forged"]
 
 tables:

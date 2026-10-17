@@ -1056,14 +1056,8 @@ def resolve(self, token: Token, acts: list[Act],
             # degree and `finding_terms` keys nothing for it -- the data decides. At RESOLVE, after the
             # act's fold, so the find reads the log as PREVIOUS rounds left it (the log gains a round's
             # Events only after RESOLVE returns, `loop/driver.py`). WITNESS deposits it.
-            # ⚠ REACHABLE BY A `research` ONLY THROUGH A PLANT: the one covert kind (`record.forged`) is
-            # minted into the forger's own hand, so another person consults the Record only after a
-            # `give` hands it on. The seed-0 realm gives none, so its `research` findings reach no
-            # trail -- pinned by `engine/season/tests/test_fi03_trail.py::test_the_realm_seed_twice_
-            # in_one_process_gives_one_hash_and_reaches_no_find`; a stated residue
-            # (`epistemic.trail_of`), not a hidden gap.
-            # ⚠ LAYER 1 (`04` §A.2): `loop/witness`'s may-read column lists no driver-held store of
-            # finds; `self.findings` is one (`seam/wrappers/fieldwork.py`'s docstring adjudicates).
+            # ⚠ Reachable by a `research` only through a plant -- see `epistemic.trail_of`.
+            # ⚠ LAYER 1 (`04` §A.2): see `seam/wrappers/fieldwork.py` (`self.findings` is a driver-held store).
             _found = find_trail(w, a, _e)
             if _found:
                 self.findings[_e.id] = _found
