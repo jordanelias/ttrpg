@@ -325,6 +325,12 @@ def goals() -> tuple:
     return _CACHE
 
 
+def load() -> tuple:
+    """`data.load_all`'s handle on this loader: read the file now, so a malformed goal refuses at the one
+    entry instead of at the first world that seeds goals. The same cache `goals()` fills."""
+    return goals()
+
+
 @contextlib.contextmanager
 def rows_replaced(rows: tuple = ()):
     """The goals the reader sees, swapped for `rows` for the block and restored after: the one place that

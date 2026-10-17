@@ -1154,6 +1154,42 @@ rosters:
       arm -- skip only the `finding.none` event-kind claim -- is the alternative Jordan would name.
     values: ["finding.none"]
 
+  earned_refusal_kinds:
+    source: >-
+      `04_CODE_ARCHITECTURE.md` §B.13 loader invariant 4 (F7), the FLAT half; v9 SC-02 `23`. The one
+      kind it holds, `person.demanded`, is v9 SE-01 (`24g`) / `H-51` P3.
+    note: >-
+      ⚠ THE REFUSAL KINDS A ROW DECLARES AND THE FOLD KEEPS ONLY WHEN THE ACT EARNS THEM
+      (`loop/resolve.py::_demand_earned`: `person.demanded` only from the precondition refusal, only when
+      the act's subject names nobody the world holds). A FLAT row (`emits_on_refusal:` a list, not a
+      clause-keyed mapping) emits its whole list at every refusal, so a flat row with two or more
+      failable clauses and two or more kinds publishes a kind for a clause that did not fail (`ID-9`);
+      the loader refuses it (`data/verbs.py`, naming the row) unless the extra kinds are members here,
+      which the fold already filters. A member must be a refusal kind some verb row declares.
+    values: ["person.demanded"]
+
+  fold_kinds:
+    source: >-
+      `04_CODE_ARCHITECTURE.md` §B.13 loader invariant 7 and `F.20b` (F13): *"the Event-kind roster is
+      derived from every emission column, and the log accepts no other kind"*. v9 SC-02 `23`.
+    note: >-
+      ⚠ THE KINDS THE FOLD EMITS WHEN NO VERB ROW DECLARES ONE -- the three that were body literals in
+      `loop/resolve.py` (`F.20b`: *"a definition living as a literal in a body is what ID-12 refuses"*).
+      `ineligible` is the kind of an act whose actor is gone (S27.1) or whose eligibility declined on a
+      row that declares no kind for that clause; `refused` is the fallback of every other refusal
+      point; `attempt_refused` is S27.4's refusal of an attempt past the obstacle ceiling (it
+      declares no verb row). The CLOSED SET OF KEYS is what `loop/resolve.py` reads and the loader
+      checks (`data/rosters.py::check_fold_kinds`): a key the fold reads and this roster lacks, or a
+      key nothing reads, refuses the load naming this row. The derived Event-kind roster
+      (`data/verbs.py::EVENT_KINDS`) is the union of every emission column and these three.
+      `F.20b` also names `contest.resolved` as a third literal; the live fold emits none of that
+      name (a contest's outcome is the verb row's degree-keyed `emits:`), and `attempt.refused` is the
+      body literal it actually emits, so the roster declares what the code emits.
+    values:
+      ineligible: "act.ineligible"
+      refused: "act.refused"
+      attempt_refused: "attempt.refused"
+
   verb_capability:
     source: >-
       `03 §A.2` -- *"Rank supplies dice and gates nothing"* -- and `#353 §9.2`, quoted live in the

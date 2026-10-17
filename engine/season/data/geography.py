@@ -29,3 +29,8 @@ def geography() -> dict:
     if _CACHE is None:
         _CACHE = load_yaml(GEOGRAPHY_YAML.read_text(encoding="utf-8")) or {}
     return _CACHE
+
+
+def load() -> dict:
+    """`data.load_all`'s handle on this loader: read the file now. The same cache `geography()` fills."""
+    return geography()

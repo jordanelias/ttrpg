@@ -86,8 +86,11 @@
 #    `kill / wound` gained `kill.refused` (a seam can return a typed Refusal at the depth cap).
 #    ⚠ STILL OPEN: eligibility itself can decline -- `destroy_record` declines on BOTH its
 #    alternatives (H-75) and can never fire -- and no row declares an eligibility-refusal kind.
-#    The live fold emits `act.ineligible` and `act.refused` as BODY LITERALS, which invariant 7's
-#    derived kind roster refuses at `append` and which ID-12 refuses outright. Owner: this table.
+#    The live fold emitted `act.ineligible`, `act.refused` and `attempt.refused` as BODY LITERALS; since
+#    v9 SC-02 `23` they are the declared column `rosters.yaml: fold_kinds` and members of the derived
+#    roster (`data/verbs.py::EVENT_KINDS`), which `loop/resolve.py::_act_events` holds the fold to. The
+#    flat half of invariant 4 is the loader's too: a flat row with two or more failable clauses may
+#    declare ONE refusal kind (or extras listed in `rosters.yaml: earned_refusal_kinds`).
 #
 # WHAT #358 rev.2 DOES NOT CHANGE HERE, checked rather than assumed: all 32 `writes:` entries
 # resolve to `write_matrix.yaml` rows; all eligibility kinds are in the four-member roster and none

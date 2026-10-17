@@ -36,6 +36,7 @@ from ..data.rosters import (
     title_domain,
 )
 from ..gaps import Forbidden, Unowned, Unspecified
+from .ids import SeatId
 
 
 @dataclass(frozen=True)
@@ -637,6 +638,15 @@ class Act:
     # `person_side_eligible` admitted on; the gate refuses a `via` the actor does not occupy.
     via: Optional[str] = None
 
+    def __post_init__(self) -> None:
+        # `04` §B.9 `via : SeatId?`, §B.1: the seat exercised is a TYPED seat id -- the same string,
+        # tagged (`state/ids.py::SeatId`), so `content_hash` folds what it always folded. `None` (the
+        # person acting as themselves) stays `None`. The converse -- a `SeatId` as `actor` -- is refused
+        # in the fold (`loop/resolve.py::_survives`), not here: AX-1's refusal belongs where the act is
+        # folded, and a hand-built Act carrying one must reach that refusal to be observed.
+        if self.via is not None:
+            self.via = SeatId(self.via)
+
 
 # S27: FIVE STRATA. movement / binding decisions / contested physical / uncontested material / social
 
@@ -931,6 +941,9 @@ class Office:
     body_function: Optional[str] = None
 
     def __post_init__(self):
+        # `04` §B.1: A SEAT'S ID IS A `SeatId` -- the same string, tagged (`state/ids.py`), so the fold
+        # can refuse it as an `Act.actor`. Tagged HERE because this is where a seat id enters the tree.
+        self.id = SeatId(self.id)
         # The remit is a fixture choice; its MEMBERS are not. A typo here would mint a remit act
         # and every `remit:<that act>` eligibility would silently never match -- a verb quietly
         # unavailable to everyone, which is the worst shape a failure can take.

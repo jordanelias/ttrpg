@@ -874,14 +874,20 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     rosters (a route on no verb row, a route with fields other than `{provider, module_entry}`, an
     `undeposited_kinds` member no row declares). All fire while `verb_table.yaml` is read. Falsifier:
     `test_fi01_graded_inquiries.py::test_the_route_is_not_readable_as_a_prize` plants each of the
-    first three cases and the load raises naming it."""
+    first three cases and the load raises naming it.
+
+    ⚠ 74 -> 79, v9 SC-02 `23`, FIVE NEW LOAD-TIME REFUSALS, all `SystemExit`s naming their row: `rosters.py`
+    1 (`check_fold_kinds`, loader invariant 7's fold half), `verbs.py` 4 (`derive_event_kinds`' two,
+    invariant 7's derivation; the flat-row refusal, invariant 4's flat half; an `earned_refusal_kinds`
+    member no row declares). Falsifier: `test_sc02_typed_ids_and_loader.py` plants each and the load raises
+    naming it."""
     mods = _model_modules()
     # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- see the sibling assertion above]
     assert len(mods) >= 8, f"model set collapsed to {len(mods)} — this guard would pass vacuously"
     total = sum(_code_only(m.read_text()).count("raise SystemExit") for m in mods)
     # [JUSTIFIED: a MEASURED PROPERTY OF THIS PACKAGE, not a game value -- the load-time refusals counted across the model set, and the point of pinning it is that a move must not drop one]
-    assert total == 74, (
-        f"{total} load-time exits across the model set, expected 74. Per file: "
+    assert total == 79, (
+        f"{total} load-time exits across the model set, expected 79. Per file: "
         + ", ".join(f"{m.name}={_code_only(m.read_text()).count('raise SystemExit')}"
                     for m in mods if _code_only(m.read_text()).count("raise SystemExit")))
 
@@ -908,7 +914,11 @@ def test_d10c_the_obstacle_refusal_gate_exists():
         "the Ob>2xPool gate no longer READS its multiple from the fixtures")
     assert "obstacle_refusal_multiple" in FIXTURES_CODE, (
         "the multiple is no longer registered as a fixture default")
-    assert "attempt.refused" in inspect.getsource(SeasonDriver.resolve)
+    # SC-02 `23`: THE KIND IS THE DECLARED COLUMN, NOT A BODY LITERAL (`rosters.yaml: fold_kinds`), so the
+    # gate names the constant and the roster supplies the string the refusal has always carried.
+    from engine.season.data.rosters import FOLD_ATTEMPT_REFUSED
+    assert "FOLD_ATTEMPT_REFUSED" in inspect.getsource(SeasonDriver.resolve)
+    assert FOLD_ATTEMPT_REFUSED == "attempt.refused"
 
 
 # ===========================================================================

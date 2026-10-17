@@ -52,7 +52,7 @@ from .requires import (
     build_typed_requires,
 )
 from .rosters import (
-    COVERT_KINDS, GRADED_INQUIRIES, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
+    COVERT_KINDS, EARNED_REFUSAL_KINDS, FOLD_KINDS, GRADED_INQUIRIES, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
     RUNG_KINDS, STRATA, TENURE_KINDS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
     roster_map,
     table,
@@ -944,6 +944,29 @@ def _load_verb_table() -> dict:
                     f"verb_table.yaml: {name!r} " + "; ".join(_defects) + ". 04 §B.13 #4 (F7), "
                     "the per-conjunct half -- every failable clause has a refusal kind, and a key "
                     f"is a failable clause. Its failable clauses: {sorted(_expected)}.")
+        # LOADER INVARIANT 4, THE FLAT HALF (SC-02 `23`; S-8's residue: *"whatever row still uses the flat
+        # form where a conjunct is failable"*). A FLAT row's `emits_on_refusal:` is emitted WHOLE at every
+        # refusal (`VerbRow.refusal_for`), so a flat row with two or more failable clauses -- eligibility,
+        # each top-level conjunct of its cell (named or not: a flat row cannot name them), the write, the
+        # counterparty -- and two or more refusal kinds publishes a kind for a clause that did not fail,
+        # which is `ID-9` in the scarcity channel. The same holds of a contested or graded flat row at the
+        # party gap (`loop/resolve.py::_refuse_party_gap`), a refusal point no clause names. The kinds the
+        # fold FILTERS (`rosters.yaml: earned_refusal_kinds`) do not count: the act earns them or they are
+        # dropped. Such a row keys its refusals by clause (the keyed form above) or declares one kind.
+        if not by_clause and not _names:
+            _n_clauses = (int(any(k != "own" for k in row.eligibility_kinds()))
+                          + (len(row.requires_typed.names) if row.requires_typed is not None
+                             else int(row.has_precondition))
+                          + int(bool(row.writes)) + int(bool(row.counterparty)))
+            _unearned = [k for k in row.emits_on_refusal if k not in EARNED_REFUSAL_KINDS]
+            if len(_unearned) > 1 and (_n_clauses >= 2 or row.contests or _graded):
+                raise SystemExit(
+                    f"verb_table.yaml: {name!r} is a FLAT row with {_n_clauses} failable clause(s)"
+                    f"{' and a contest/graded party gap' if row.contests or _graded else ''} and "
+                    f"declares {len(_unearned)} refusal kinds {_unearned}: a flat list is emitted "
+                    "whole at every refusal, so a kind would be published for a clause that did not "
+                    "fail. 04 §B.13 #4 (F7), the flat half -- key `emits_on_refusal:` by clause, "
+                    "declare ONE kind, or list the extras in `rosters.yaml: earned_refusal_kinds`.")
         out[name] = row
     # -----------------------------------------------------------------------
     # LOADER INVARIANT 6 (`04_CODE_ARCHITECTURE.md` PART D row 15, MECHANICAL at load):
@@ -1015,6 +1038,12 @@ def _load_verb_table() -> dict:
     # prize row), or a skipped kind no row declares is refused naming it: a misspelled skip would
     # skip nothing and report the deposit half built.
     _declared_kinds = {k for v in out.values() for k in (*v.emits, *v.emits_on_refusal)}
+    _stray_earned = sorted(k for k in EARNED_REFUSAL_KINDS
+                           if k not in {x for v in out.values() for x in v.emits_on_refusal})
+    if _stray_earned:
+        raise SystemExit(f"rosters.yaml: `earned_refusal_kinds` names {_stray_earned}, which no verb "
+                         "row declares in `emits_on_refusal:`. 04 §B.13 #4 -- an earned kind is one a "
+                         "row declares and the fold keeps only when the act earns it.")
     _bad = sorted(
         [f"route {v!r}: no verb row" for v in GRADED_INQUIRIES if v not in out]
         + [f"route {v!r}: fields {sorted(r) if isinstance(r, dict) else r!r}"
@@ -1084,6 +1113,50 @@ for _v, _k in WARRANT_SOURCED.items():
             f"such verb or `record_sourced_operands.{_k}` maps no `subject`", "rosters.yaml",
             needs="a `verb_table.yaml` verb, and a record kind whose `subject` a held Record answers",
             law="IN-12 step 6 -- a warrant-sourced verb forms only on what a held warrant names")
+
+
+def derive_event_kinds(table: dict, matrix: dict, fold_kinds: dict) -> frozenset:
+    """LOADER INVARIANT 7 (`04 §B.13 #7`, `F.20b`): THE EVENT-KIND ROSTER IS DERIVED FROM EVERY EMISSION
+    COLUMN. The columns are: each verb row's `emits` (every Degree branch), its `emits_on_refusal`
+    (every clause) and `write_matrix.yaml`'s `emits:` (the kinds a gate write may emit), plus the
+    fold's own `fold_kinds` (`rosters.yaml`; the three that were body literals). Nothing else adds a
+    member, and the derivation is a function of its arguments so a test can plant a malformed column.
+
+    ⚠ A KIND IS `<noun>.<verb>`: two non-empty dotted parts. A column holding anything else (a typo
+    that lost the dot, an empty string from a stray comma) is refused at load NAMING ITS ROW, because
+    an Event of that kind would be emitted, fanned and read by a predicate spelled the same wrong way
+    and nothing would ever say the roster never held it. `loop/resolve.py::_act_events` refuses a kind
+    outside this roster when the fold builds the Event (the F.20b defect, observed at execution)."""
+    def _kind_ok(k) -> bool:
+        return isinstance(k, str) and len(k.split(".")) == 2 and all(k.split("."))
+
+    out: set = set()
+    for name, row in table.items():
+        cols = {"emits": row.emits, "emits_on_refusal": row.emits_on_refusal,
+                **{f"emits[{d}]": ks for d, ks in row.emits_by_degree.items()},
+                **{f"emits_on_refusal[{c}]": ks for c, ks in row.refusals_by_clause.items()}}
+        for col, kinds in cols.items():
+            for k in kinds:
+                if not _kind_ok(k):
+                    raise SystemExit(
+                        f"verb_table.yaml: {name!r} declares Event kind {k!r} in `{col}:`, which is "
+                        "not `<noun>.<verb>`. 04 §B.13 #7 -- the Event-kind roster is derived from "
+                        "every emission column, so a column holding a malformed kind admits a kind "
+                        "no reader spells the same.")
+                out.add(k)
+    for (kind, fld), mrow in matrix.items():
+        for k in mrow.emits:
+            if not _kind_ok(k):
+                raise SystemExit(
+                    f"write_matrix.yaml ({kind}, {fld}) declares Event kind {k!r} in `emits:`, which "
+                    "is not `<noun>.<verb>`. 04 §B.13 #7 -- the Event-kind roster is derived from "
+                    "every emission column.")
+            out.add(k)
+    out.update(fold_kinds.values())
+    return frozenset(out)
+
+
+EVENT_KINDS = derive_event_kinds(VERB_TABLE, MATRIX, FOLD_KINDS)
 
 
 def act_key(verb: str, subject, operands) -> str:

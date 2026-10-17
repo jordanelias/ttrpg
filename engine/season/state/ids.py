@@ -24,6 +24,26 @@ def H(world_seed: int, tick: int, subject_id: str, purpose: str) -> str:
 ROOT = "ROOT"
 
 
+class SeatId(str):
+    """A SEAT'S ID (`04_CODE_ARCHITECTURE.md` §B.1: `PersonId · … · SeatId · … := DISTINCT TYPES`) --
+    the SAME STRING `H` or the loader produced, carrying a tag the fold can read.
+
+    ⚠ IT IS A `str` SUBCLASS ON PURPOSE, AND THE REASON IS THE HASH. `World.content_hash` folds the
+    string; `str.__hash__`, `__eq__`, `__repr__`, `__format__` and `encode` are all inherited, so a
+    `SeatId` and the bare string it wraps are the same dict key, the same sorted position, the same
+    f-string and the same bytes in every `H(...)` purpose. The wrapper adds an `isinstance` question
+    and nothing else; `test_sc02_typed_ids_and_loader.py` holds `build_realm(0)` to its pinned hash.
+
+    ⚠ THE GRADE IS RUNTIME, AND CI RUNS NO TYPE-CHECKER. `Act.actor` cannot hold a `SeatId` because
+    `loop/resolve.py::_survives` refuses one (`04:222`: *"MECHANICAL -- tag assertion in the fold"*),
+    not because a checker would; nothing here is STRUCTURAL.
+
+    Minted at the two places a seat id enters the tree: `Office.__post_init__` (the seat itself) and
+    `Act.__post_init__` (`Act.via : SeatId?`). Its siblings in `04` §B.1 (`PersonId`, `RungId`, ...) are
+    NOT built: a type nothing refuses on is a declared row read by nothing (`ID-13`)."""
+    __slots__ = ()
+
+
 def draw_factory(world_seed: int, tick_of):
     """A per-person, per-purpose RNG, seeded from the SAME clock the mint uses (`U4`, `H-96`).
 
