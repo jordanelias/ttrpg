@@ -128,8 +128,22 @@ rows:
     steps:   [CAL, RES]
     class:   "CALENDAR/ACTS"
     social:  "false"
-    by:      "DR-3 · §24 *\"dockets form\"*, no actor. ⚠ PLAN POSITION `19`: the RES cell has its first two producers -- `open_case` puts a matter ON the docket (`{date: None, matter: <subject>}`) and `determine` takes it OFF (the item's `matter` written back to `None`), both through their own effects (`loop/effects.py`). CALENDAR still forms the actorless empty slot."
+    by:      "DR-3 · §24 *\"dockets form\"*, no actor. ⚠ PLAN POSITION `19`: the RES cell has its first two producers -- `open_case` puts a matter ON the docket and `determine` takes it OFF (the item's `matter` written back to `None`), both through their own effects (`loop/effects_information.py`). CALENDAR still forms the actorless empty slot (`{date, matter: None}`); since v9 SC-01's fired-slot step `open_case` FILLS such a slot where one holds the matter (`world_q.slot_for`, the slot keeps its `date`) and appends a dateless item only where none is open."
     emits:   "`docket.formed`"
+  - kind:    "DocketItem"
+    field:   "arrangement"
+    steps:   [RES]
+    class:   "ACTS"
+    social:  "false"
+    by:      "v9 SC-03a (K-55): the `arrangements.yaml` row a docketed matter is heard under (`world_q.DOCKET_ARRANGEMENT`; read by `world_q.docketed_under` for `determine`'s disposal kind). Written by `open_case` and `carry` in the effect that writes `(DocketItem, matter)` (`_docket_item`, the one shape owner). A ROW, NOT `Record.subject_matter`'s exemption (a key set once inside its own creating write): `open_case` writes this key into a slot CALENDAR created, so it is a write to an existing item and `04` PART D row 3 needs a marked cell. Social as its sibling `matter` is."
+    emits:   "—"
+  - kind:    "DocketItem"
+    field:   "petition"
+    steps:   [RES]
+    class:   "ACTS"
+    social:  "false"
+    by:      "v9 SC-03a (K-55): the petition `Record` a docketed matter rose from (`world_q.DOCKET_PETITION`). Written by `open_case` (a hand-built act's payload; `None` on a computed one) and `carry` (the carried petition), in the effect that writes `(DocketItem, matter)`. A ROW for the reason `(DocketItem, arrangement)` gives."
+    emits:   "—"
   - kind:    "Office"
     field:   "exists"
     steps:   [RES]

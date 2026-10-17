@@ -16,6 +16,7 @@ it. This module constructs none and calls no minter -- `tests/test_g2_token.py` 
 from __future__ import annotations
 
 from ..data.matrix import Step
+from ..queries.world_q import FIRED_KIND
 from ..state.carriers import Event
 from ..state.gate import Token
 from ..state.ids import ROOT
@@ -50,16 +51,16 @@ def calendar(self, token: Token) -> list[Event]:
         # places; chaining on `did` here would look for a prior Event whose subject is `did`,
         # which no `date.fired` Event ever carries (its subject is always the venue) -- so the
         # chain would silently never leave `[ROOT]`, on every date, forever.
-        prior = w.last_emission_of("date.fired", d.get("venue"))
+        prior = w.last_emission_of(FIRED_KIND, d.get("venue"))
         w.write("Date", token, lambda d=d: d.__setitem__("fired", True),
                 record_kind="Date", fieldname="fired", driver="Event",
-                emits="date.fired", subject=d.get("venue"),
+                emits=FIRED_KIND, subject=d.get("venue"),
                 causes=[prior] if prior else [ROOT])
         if not vacant:
             # `04 §A.2` and `write_matrix.yaml`'s (DocketItem, matter) row give CALENDAR `docket.formed`; the write
             # emitted nothing, the same defect `11b` closed for `date.fired`. Chained on the `date.fired` just emitted
             # at this venue, under the same subject, so the antecedent is the firing that put the matter on the docket.
-            fired = w.last_emission_of("date.fired", d.get("venue"))
+            fired = w.last_emission_of(FIRED_KIND, d.get("venue"))
             w.write("DocketItem", token,
                     lambda did=did: w.docket.append({"date": did, "matter": None}),
                     record_kind="DocketItem", fieldname="matter", driver="Event",

@@ -9,7 +9,7 @@ description: >
   the plan's own independent parts, never a fixed count. PHASE 2: the native `/code-review --fix`,
   then `/simplify`, then the `layer-conformance` skill, run in that order on one shared tree, each
   one's fixes applied before the next reads it. PHASE 3: one terminal critique — Opus, always at
-  effort max — auditing code correctness, interdependencies,
+  effort xhigh — auditing code correctness, interdependencies,
   and forward/backward sweeps, run as a top-down holistic pass that HANDSHAKES a bottom-up granular
   one (every altitude-level finding traced to the site that causes it, and back). Reuses
   `valoria-critic` for every critic dispatch in all three phases; mints no new roster entry. Use
@@ -25,7 +25,7 @@ description: >
 
 # METHODOLOGY-CLOSE — the agonist/antagonist verification pipeline
 
-## Created 2026-09-28 (ED-IN-0280) as `methodology`, per Jordan's directive to add this pipeline as a skill. Split 2026-09-29 into `methodology-close` (this file, unchanged in content) and `methodology-execute` (adds a build phase ahead of it), when Jordan asked for the pipeline to also orchestrate the build. Invocable as a project skill through the symlink `.claude/skills/methodology-close`.
+## Created 2026-09-28 (ED-IN-0280) as `methodology`, per Jordan's directive to add this pipeline as a skill. Split 2026-09-29 into `methodology-close` (this file, unchanged in content) and `methodology-execute` (adds a build phase ahead of it), when Jordan asked for the pipeline to also orchestrate the build. Invocable as a project skill through the symlink `.claude/skills/methodology-close`. Revised 2026-10-16 at the user's direction: Phase 3 runs at `xhigh` (was `max`); the antagonist stays at `high`; the Phase 1 fan stays at `max`.
 
 ## What this skill owns, and what it copies
 
@@ -94,11 +94,11 @@ mechanical classes they already exist to catch. **Opus sits at two places, not o
 independent (and possibly disagreeing) lenses into one verdict is itself the
 competing-considerations judgment CLAUDE.md §10 names for Opus — not a defect a Sonnet pass would
 already have caught, but the act of deciding which of several Sonnet findings survives; and the
-Phase 3 terminal critique, run unconditionally at max effort rather than escalated on a trigger,
-because it is this pipeline's final gate. ⚠ **This departs from CLAUDE.md §10's general default
-("reserve Opus for judgment," "defaulting straight to max is the tiering mistake §10 exists to
-prevent") as a deliberate, named exception for this skill's two judgment nodes — not a general
-licence to skip the trigger discipline elsewhere.** Running the phases out of order, or skipping
+Phase 3 terminal critique, run unconditionally at xhigh effort rather than escalated on a trigger,
+because it is this pipeline's final gate. ⚠ **The antagonist at `high` is CLAUDE.md §10's own
+default; Phase 3 at `xhigh` is one step above it, a deliberate, named exception for this skill's
+final gate (§10: "defaulting straight to max is the tiering mistake §10 exists to prevent") — not a
+general licence to skip the trigger discipline elsewhere.** Running the phases out of order, or skipping
 one because an earlier one found nothing, is not a shortcut: each phase checks a different axis,
 and a clean pass on one is not evidence about the others (see GUARDRAILS).
 
@@ -146,7 +146,7 @@ them at once pays full price on every one.
 
 One dispatch, same `valoria-critic` agent, `model: "opus"`, `Effort: high` stated in the prompt —
 Opus because reconciling five lenses into one verdict is a competing-considerations judgment, not
-another lens-pass; `high` rather than `max` because Phase 3 is where this pipeline spends its
+another lens-pass; `high` rather than `max` because Phase 3 (`xhigh`) is where this pipeline spends its
 top effort. Hand it every agonist's output — not their reasoning — plus the plan and the tree. Its
 job is `valoria-critic`'s own contract, run once across all five lenses: re-verify every claim
 against disk; rule `uphold`/`overturn`/`soften`/`sharpen` per claim; and additionally cross-check
@@ -200,15 +200,15 @@ The point of the top tier is a single judgment pass. A chorus of Opus critics is
 CLAUDE.md §10 warns against, not corroboration. If you can name what a second Opus critic would
 catch that the first missed, that is Phase-1-shaped work — run it there, at Sonnet, first.
 
-### 3.2 Tier — always max, no trigger needed
+### 3.2 Tier — always xhigh, no trigger needed
 
-`model: "opus"`, `Effort: max` in the prompt, every time (Jordan's 2026-09-29 ruling for this
-phase specifically). No escalation logic to apply and no trigger to name: this is the pipeline's
+`model: "opus"`, `Effort: xhigh` in the prompt, every time (set at max by Jordan's 2026-09-29
+ruling for this phase; lowered to xhigh 2026-10-16 at the user's direction — the third pass over a
+diff two cheaper phases have already worked is breadth work, and max bought no measured gain). No escalation logic to apply and no trigger to name: this is the pipeline's
 one unconditional top-tier dispatch, run after two cheaper phases have already narrowed what it
-needs to check. ⚠ This is the named exception CLAUDE.md §10's "defaulting straight to `max` is the
-tiering mistake §10 exists to prevent" warns against elsewhere — it applies here because this
-phase *is* the judgment-node use case §10 reserves Opus for, not because the warning stopped
-applying in general.
+needs to check. ⚠ This is a named exception to CLAUDE.md §10's default of `high` — one step above it, not the
+`max` that §10 warns against — and it applies here because this phase *is* the judgment-node use
+case §10 reserves Opus for, not because the warning stopped applying in general.
 
 ### 3.3 What it is handed
 
@@ -294,7 +294,7 @@ Same as 1.5 — the orchestrator applies or rejects with a measurement, in this 
 | "the terminal critique handshook" | a top-down finding with no cited `file:line`, or a granular finding with no stated holistic disposition |
 | "the fan ran at max" | any agonist dispatch's stated effort was below `max` |
 | "the antagonist ran Opus at high" | the antagonist dispatch was `sonnet`, or its stated effort was anything other than `high` |
-| "Phase 3 ran at max" | the terminal critique's stated effort was anything other than `max` |
+| "Phase 3 ran at xhigh" | the terminal critique's stated effort was anything other than `xhigh` |
 | "Phase 3 found nothing" | no named failed attack — only an absent finding |
 
 **If this skill's guidance conflicts with `CLAUDE.md` or `architecture/`, they win.** This file is a

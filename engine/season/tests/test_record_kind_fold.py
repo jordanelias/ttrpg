@@ -129,7 +129,8 @@ def test_petition_issue_and_carry_are_resolvable():
     assert "issue" in rv, "`issue` has a typed precondition (position `19`) and an effect (`15`)"
     assert VERB_TABLE["issue"].requires_typed is not None
     assert "carry" in rv, "`carry` has a typed precondition and an effect (v9 IN-45)"
-    assert VERB_TABLE["carry"].writes == ("Record.stages", "DocketItem.matter")
+    assert VERB_TABLE["carry"].writes == ("Record.stages", "DocketItem.matter",
+                                          "DocketItem.arrangement", "DocketItem.petition")
     for verb in ("issue", "petition"):
         assert VERB_TABLE[verb].writes == ("Record.exists",), VERB_TABLE[verb].writes
     # The derived opener map still sees the mint through the shared helper.

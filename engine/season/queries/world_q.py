@@ -45,7 +45,7 @@ from ..data.verbs import RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
 # the asker-first module (which may not import this one; this edge runs the other way).
-from .person_q import content_said, intent_named, ledger_names
+from .person_q import LedgerReader, content_said, intent_named, ledger_names
 # v9 IN-57: `attention_key`'s tier 2 scores a deed claim by `deed_valence`, one owner per factor.
 from .person_q import (
     _seen_index, crisis_weights, deed_valence, paired_deed_term, projected_axes)
@@ -181,8 +181,10 @@ def docketed(w: World, matter: Optional[str]) -> list[dict]:
 
     A docket item is a plain dict on `World.docket` (a `_STATE_SEQUENCES` member, so the content
     hash folds it): CALENDAR forms one per sitting with `matter: None` (`loop/calendar.py`, an empty
-    slot), and `open_case` appends `{"date": None, "matter": <subject>, DOCKET_ARRANGEMENT: <row id
-    or None>, DOCKET_PETITION: <Record id or None>}` (v9 SC-03a, K-55: the item names the arrangement
+    slot), and `open_case` fills the nearest open slot, by ancestry from the matter's place, when the
+    matter is a person (v9 SC-01 fired-slot step, `slot_for`) or, where none is open, appends `{"date": None, "matter": <subject>,
+    DOCKET_ARRANGEMENT: <row id or None>, DOCKET_PETITION: <Record id or None>}` -- a filled slot has
+    the same keys and keeps its `date` (v9 SC-03a, K-55: the item names the arrangement
     it is heard under and the petition it rose from; `docketed_under` reads the first). `matter is None` is never
     docketed -- an empty slot names nothing, and a `None` subject asks about nothing -- so a
     determination that CLEARS an item's matter (writes it back to `None`) takes the matter off the
@@ -201,6 +203,100 @@ def docketed(w: World, matter: Optional[str]) -> list[dict]:
 # carries neither -- no operand channel names them (`H-80`/§F1) -- and writes both as `None`.
 DOCKET_ARRANGEMENT = "arrangement"
 DOCKET_PETITION = "petition"
+
+
+# CALENDAR's Event kind for a date that came due, named once: `loop/calendar.py` emits and chains
+# on it, and `sittings_before` reads it; WITNESS deposits it as the claim's predicate
+# (`Claim.predicate` is `e.kind`).
+FIRED_KIND = "date.fired"
+
+
+def slot_venue(w: World, item: dict) -> Optional[str]:
+    """THE VENUE OF THE SITTING A DOCKET ITEM WAS FORMED FOR -- its Date's `venue` -- or `None` for a
+    dateless item (`open_case`'s, where no sitting was convened) or a date the world no longer holds.
+    v9 SC-01 fired-slot step: the name for *which room is this item before*, read by
+    `open_slots`/`slot_for` (the act that fills a slot) and `sittings_before` (the bench that hears
+    it). Read straight off `w.dates`, not through `place_of`: that answers a person, site, record or
+    rung id as well, and a docket item whose `date` names one of those is no sitting."""
+    return (w.dates.get(item.get("date")) or {}).get("venue")
+
+
+def _is_person_id(w: World, x) -> bool:
+    """`x` names a person the world holds (a matter that is a person; `slot_for`, `sittings_before`)."""
+    return isinstance(x, str) and x in w.persons
+
+
+def open_slots(w: World, venue: Optional[str]) -> list[dict]:
+    """THE EMPTY SLOTS A SITTING AT `venue` HAS ON THE DOCKET, oldest first -- the items CALENDAR formed
+    (`{"date": <id>, "matter": None}`, `loop/calendar.py`, for a date that fired WITH a holder) whose
+    Date sits at `venue` and whose `matter` is `None`. v9 SC-01 fired-slot step: `_eff_open_case`
+    fills the first (through `slot_for`), where it used to append a dateless item beside it. A slot a determination emptied
+    (`_eff_determine` writes the matter back to `None` and keeps the slot) is open again: a sitting
+    hears matters one after another, and nothing rules when a sitting ends. `None` venue: none."""
+    if venue is None:
+        return []
+    return [d for d in w.docket if d.get("matter") is None and slot_venue(w, d) == venue]
+
+
+def slot_for(w: World, matter: Optional[str]) -> Optional[dict]:
+    """THE SLOT A NEWLY OPENED MATTER FILLS, or `None` -- v9 SC-01 fired-slot step. The first open slot
+    (`open_slots`) of the NEAREST sitting whose venue holds the matter: walking up from where the
+    matter is (`place_of`) through `ancestry` (the start rung included), so a sitting at the matter's
+    own settlement is filled before one at its duchy. ONLY A PERSON FILLS A SLOT: the one writer that
+    empties a slot is `_eff_determine`, whose party cell binds a person, so any other matter (a rung,
+    a Record -- `open_case` accepts any id) would hold its slot for ever and be asked about every
+    season; it appends the dateless item instead. [ASSUMPTION; medium; Jordan to correct --
+    Jordan names another key] THE VENUE IS THE MATCH KEY, matched by the containment walk the bench
+    itself is found by (`sits_over`): `_eff_convene` keys its Date on `venue`, and a sitting hears
+    what stands within it -- so any judge `judging_set` seats over the venue also sits over the
+    matter's place, and `determine`'s `bench` conjunct holds wherever the slot was found. A matter
+    with no place (`None`) fills nothing. REVERT: return `None` (every case appends a dateless item)."""
+    if not _is_person_id(w, matter):
+        return None
+    place = place_of(w, matter)
+    if place is None:
+        return None
+    for r in ancestry(w, place):
+        slots = open_slots(w, r)
+        if slots:
+            return slots[0]
+    return None
+
+
+def sittings_before(w: World, p: Person) -> list[tuple]:
+    """THE FIRED SITTINGS WITH A MATTER BEFORE `p`'s BENCH, AND THE CLAIM BY WHICH HE KNOWS EACH FIRED --
+    `[(date id, claim, (matter, ...)), ...]` in docket order. v9 SC-01 fired-slot step (H-163 limit 2,
+    #453 pass-1 step 4): `questions_for`'s sitting question, *a judge is asked about a docketed
+    matter*. A sitting is before `p` when:
+      * a docket item formed for its Date holds a matter that is a person (`slot_venue`,
+        `_is_person_id`; a dateless item is no sitting, an empty slot names nothing, `docketed`'s
+        rule, and a non-person matter is one `determine` can never clear -- `slot_for` admits none,
+        and a hand-planted one is skipped here; a date left with no such matter is no sitting);
+      * `p` is on the bench at its venue (`judging_set`, the one owner of who sits over a rung);
+      * `p`'s OWN ledger holds a `date.fired` claim about that venue made ON THE FIRING'S TICK --
+        CALENDAR's Event, deposited firsthand at WITNESS since IN-29, and CALENDAR fires a date only
+        at its `due_at`. A judge who never heard the sitting fired is not asked; HEARSAY OF A FIRING
+        (a claim landing on a later tick) IS NOT ADMITTED, and a later firing at the same venue does
+        not stand for an earlier one. The claim is also what the question cites, so an act formed
+        from it walks back to the firing (`occasioned_by`'s `claim_landed` route). Newest such
+        claim, by `LedgerReader`'s comparator.
+    ⚠ ONE CONVENE IS A STANDING COURT: `open_slots` re-opens a slot a determination emptied, and
+    nothing rules when a sitting ends, so its bench is asked again whenever a new matter fills it.
+    World-reading by construction, as `vacancies` and Q4 are (`questions_for`'s docstring): what is on
+    the room's docket is the room's own business, and its bench is told."""
+    by_date: dict[str, list] = {}
+    for item in w.docket:
+        matter = item.get("matter")
+        if _is_person_id(w, matter) and slot_venue(w, item) is not None:
+            by_date.setdefault(item["date"], []).append(matter)
+    out = []
+    for did, matters in by_date.items():
+        venue, due = w.dates[did]["venue"], w.dates[did].get("due_at")
+        heard = [c for c in p.ledger if c.subject == venue and c.predicate == FIRED_KIND
+                 and c.when == due]
+        if heard and p.id in judging_set(w, venue):
+            out.append((did, LedgerReader(heard).belief_among(), tuple(dict.fromkeys(matters))))
+    return out
 
 
 def docketed_under(w: World, matter: Optional[str]) -> set:
@@ -2002,7 +2098,9 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     been told of and could settle in (`places_named`, v9 IN-45 `migrate`) and the larders his seat
     may requisition (`larders_in_purview`, v9 IN-49 `requisition`). They are not
     sources: no id or source changes; a person with one of them and no question gets one `need`
-    question carrying them.
+    question carrying them. And, since v9 SC-01's fired-slot step, one `claim_landed` question per
+    fired sitting whose docket holds a matter and whose bench he sits on (`sittings_before`; the loop
+    after Q4 says why it is no third source).
 
     ⚠ THIS CLOSES `H-04` AND §61's `NoProducer`, which between them blocked every NPC case: with
     no producer for `q`, `assemble(person, question)` was UNSATISFIABLE and DELIBERATE had no
@@ -2103,6 +2201,25 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
         refs_of[pid] = set(refs) - {None}
         if refs:
             out.append(Question(f"q:need:{pid}", "need", refs, pid))
+
+    # v9 SC-01 FIRED-SLOT STEP (H-163 limit 2, #453 pass-1 step 4): A JUDGE IS ASKED ABOUT THE
+    # MATTERS BEFORE A SITTING HE SITS ON. One question per fired sitting (`sittings_before`: a docket
+    # slot its Date formed holds a matter, he is on the bench at its venue, and he holds the
+    # `date.fired` claim), whose REFERENTS ARE THE DOCKETED MATTERS and whose `about` is that claim --
+    # so `determine`'s `subject` binds the party by the unchanged referent rule
+    # (`decision/options.py::_derive_operand`, which is person-side and World-free and so cannot read
+    # a docket itself), and an act formed from it cites the firing (`occasioned_by`'s `claim_landed`
+    # route: the deposit's cause is CALENDAR's Event). NOT A THIRD SOURCE: `11a` folded `date_due`
+    # into `claim_landed` (`rosters.yaml: question_sources`), and this is that fold's sitting half.
+    # STANDING, not "new since he last deliberated": the matter waits on the docket until a
+    # determination clears it (`docketed`), as an ambition waits (Q4), so a slot filled after the
+    # firing's claim landed is still asked. Several matters ride one question (`H-94`'s single
+    # referent widened for this source only; `H-54`'s `first` rule delivers it only when it sorts
+    # first, `attention_key` deciding). REVERT: drop this loop -- no question names a docketed
+    # matter, and a determination needs a referent coincidence again (H-163 limit 2).
+    # THE ID NAMES THE MATTERS: a slot emptied and refilled (even in one RESOLVE) is a new question.
+    for did, c, matters in sittings_before(w, p):
+        out.append(Question(f"q:sitting:{did}:{'|'.join(matters)}", "claim_landed", matters, c.id))
 
     # v9 IN-57: the order is `attention_key`'s tiered read of the person's own state; the old
     # `(source, q.id)` key is its final tiebreak (history: hole_register H-54).

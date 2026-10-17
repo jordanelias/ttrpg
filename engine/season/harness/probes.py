@@ -241,7 +241,10 @@ def p1():
     def choose(p, v, s, ask_budget):
         if p.id != "p_low":
             return []
-        a = Act_(w, p, "speak")
+        # ⚠ `utter`, NOT `speak`, SINCE v9 SC-01 step 12: `speak` is a typed contested cell (a
+        # docketed matter), so a bare one is refused `speech.unheard` -- an Event naming her act, but
+        # a refusal, not the act this probe says she can take. `utter` has no precondition.
+        a = Act_(w, p, "utter")
         made.append(a)
         return [a]
     r = _run(w, choose)
@@ -405,8 +408,10 @@ def p2y():
         b = counted["b"] = ask_budget()
         # b scenes, each carrying the full swept bound of interactions. Under the ruling this is
         # LAWFUL; before it, the same return was refused as "8 acts against a budget of 5".
+        # ⚠ `utter` since v9 SC-01 step 12 (`P1`'s note): a contested act refused at admission
+        # never reaches `SeasonDriver.resolved`, which this count reads, and a bare `speak` now is.
         return [Scene(f"s{i}", p.id,
-                      [Act_(w, p, "speak", key=f"{i}.{j}") for j in range(cap)])
+                      [Act_(w, p, "utter", key=f"{i}.{j}") for j in range(cap)])
                 for i in range(b)]
     # `U2`: one submitted set. The claim is what a SCENE may carry, not how often the tick asks.
     d = _run_d(w, once(choose))
@@ -836,8 +841,9 @@ def p21():
     # What this probe is ABOUT is that a cohort goes through the same `choose` and the same
     # resolver as anyone else, which is observable on `driver.resolved` without a resolver of
     # its own.
+    # `utter` since v9 SC-01 step 12 (`P2y`'s note): a bare `speak` is refused before `resolved`.
     d = _run_d(w, lambda p, v, s, ask_budget:
-               [Act_(w, p, "speak")] if p.weight > 1 else [])
+               [Act_(w, p, "utter")] if p.weight > 1 else [])
     acted = [a.actor for a in d.resolved]
     # ⚠ A SET, NOT A LIST, AND `U2` IS WHY THE DISTINCTION BECAME VISIBLE. This probe's claim is
     # that a cohort goes through the SAME `choose` and the SAME resolver as anyone else -- a claim
@@ -2190,8 +2196,9 @@ def a14():
         def choose(p, v, s, ask_budget):
             if p.id == "p_mid":
                 seen[d.round] = len(p.ledger)
+            # `utter` since v9 SC-01 step 12 (`P1`'s note): a bare `speak` is refused `speech.unheard`.
             if p_low_acts and p.id == "p_low" and d.round == 0:
-                return [Act_(w, p, "speak")]
+                return [Act_(w, p, "utter")]
             return []
 
         d.season(choose, question=None, subsistence=SUBSIST)
@@ -2205,7 +2212,7 @@ def a14():
     assert acted[1] > control[1], (f"p_low's round-0 act changed nothing p_mid holds in round 1: "
                                    f"acted {acted}, control {control}")
     return (f"PASS: within ONE season, p_mid's ledger reads {acted[0]} claims in round 0 and "
-            f"{acted[1]} in round 1 after p_low's round-0 `speak`, against {control[1]} in the "
+            f"{acted[1]} in round 1 after p_low's round-0 `utter`, against {control[1]} in the "
             "control arm where p_low does nothing. R-03's channel: a deposit at one round's WITNESS "
             "is read by the next round's DELIBERATE. NOT SHOWN: a DELIBERATE nested inside RESOLVE "
             "(`H-56`'s other half)")
@@ -2393,15 +2400,19 @@ def a28():
     # assertion and the probe published `verb 'do' is on no row` instead of checking anything.
     # It is the ONE probe that observes the invariant `W9` changed, and it was dark for it.
     # Found by the `W9` adversarial pass.
+    # The act set is `w.acts`, THE STORE THE LOG'S OWN CAUSE CHECK READS (`World.log`'s `acts.ids()`;
+    # `loop/resolve.py::_fold`'s G1a), not `SeasonDriver.resolved`: since v9 SC-01 step 12 a bare
+    # `speak` is refused at admission on its contested branch, which never enters `resolved`, and
+    # its `speech.unheard` names the act -- which `w.acts` holds.
     def choose(p, v, s, ask_budget):
         return [Act_(w, p, "speak")] if p.id == "p_low" else []
     for _ in range(4):
         d.season(choose, None, SUBSIST)
     ids = {e.id for e in w.log}
-    acts = {a.id for a in d.resolved}
+    acts = {a.id for a in w.acts}
     assert len(ids) == len(w.log)
     assert [e.emitted_at for e in w.log] == sorted(e.emitted_at for e in w.log)
-    # REFERENTIAL INTEGRITY, AGAINST `log UNION resolved`. #353 CONTRADICTS ITSELF HERE and the
+    # REFERENTIAL INTEGRITY, AGAINST `log UNION w.acts`. #353 CONTRADICTS ITSELF HERE and the
     # contradiction is `H-82`: `:658` says causes are "ids already in the log, or [ROOT]" while
     # `:1377` says "Events, into the same log, WITH causes[] NAMING THE ACTS" -- and an Act is
     # never appended to the log, so the two cannot both hold as written. Under `:658` alone every
@@ -2414,7 +2425,7 @@ def a28():
     from_ev = sum(1 for e in w.log for c in e.causes if c in ids)
     return (f"PASS over {len(w.log)} events from a real run: id uniqueness, a NON-DECREASING "
             f"season index, a stable content hash, and referential integrity on causes[] against "
-            f"log UNION resolved -- {from_act} causes name an ACT and {from_ev} name an EVENT, "
+            f"log UNION w.acts -- {from_act} causes name an ACT and {from_ev} name an EVENT, "
             "zero dangle. ⚠ THE UNION IS `H-82` AND IT IS A READING, NOT A GIVEN: #353 `:658` "
             "and `:1377` cannot both hold as written, and this probe asserts the reading `W9` "
             "took rather than leaving it in a code comment")
@@ -2750,9 +2761,11 @@ def a37():
         # that ACTS sort by `Act.stratum`, which the probe sets EXPLICITLY — so the verb's own
         # stratum is not the subject, and one table verb at three declared strata tests the
         # property more cleanly than three verbs did.
-        return [Act_(w, p, "speak", key="s4", stratum=4),
-                Act_(w, p, "speak", key="s1", stratum=1),
-                Act_(w, p, "speak", key="s0", stratum=0)]
+        # `utter` since v9 SC-01 step 12 (`A28`'s note): a bare `speak` never reaches `resolved`.
+        # [JUSTIFIED: stratum 4 is the last of S27's five strata (`STRATA`, 0..4), submitted first so the probe's order is the reverse of the fold's]
+        return [Act_(w, p, "utter", key="s4", stratum=4),
+                Act_(w, p, "utter", key="s1", stratum=1),
+                Act_(w, p, "utter", key="s0", stratum=0)]
     # `U2`: the subject is the fold's stratum ORDERING over one submitted set. See `once`.
     seen.extend((a.stratum, a.verb) for a in _run_d(w, once(choose)).resolved)
     assert [x[0] for x in seen] == sorted(x[0] for x in seen), seen
@@ -2777,14 +2790,16 @@ def a38():
         # W3: `hopeless`/`hard` were invented verbs. This probe's subject is §27.4's Ob > 2xPool
         # gate, which `resolve` applies BEFORE the fold, so the verb is incidental — one table
         # verb with two keys tests it and invents nothing.
-        return [Act_(w, p, "speak", key="hopeless", obstacle=mult * 5 + 1, pool=5),
-                Act_(w, p, "speak", key="hard", obstacle=mult * 5, pool=5)]
+        # `utter` since v9 SC-01 step 12: a bare `speak` is refused by its own cell (no docket).
+        # [JUSTIFIED: pool 5 is an arbitrary test pool; the two obstacles sit one above and exactly at S27.4's threshold mult x pool, so only the first is refused]
+        return [Act_(w, p, "utter", key="hopeless", obstacle=mult * 5 + 1, pool=5),
+                Act_(w, p, "utter", key="hard", obstacle=mult * 5, pool=5)]  # [JUSTIFIED: exactly at S27.4's threshold mult x pool, so admitted; the pair above is one over]
     _run(w, once(choose))   # `U2`: one submitted pair; the subject is §27.4's gate. See `once`.
     kinds = [e.kind for e in w.log]
     # W3: the old `effect` lambda emitted `did.{verb}`; the fold emits the TABLE's `emits`, so
-    # the surviving act produces `speech.made`. The property is unchanged: ONE refusal, ONE
-    # resolution, and the refused act never reached the fold.
-    assert kinds.count("attempt.refused") == 1 and kinds.count("speech.made") == 1, kinds
+    # the surviving act produces `proposition.uttered` (`speech.made` until SC-01 step 12). The
+    # property is unchanged: ONE refusal, ONE resolution, and the refused act never reached the fold.
+    assert kinds.count("attempt.refused") == 1 and kinds.count("proposition.uttered") == 1, kinds
     return (f"PASS: at Ob = {mult}xPool+1 the attempt was REFUSED and the act was spent; at exactly "
             f"{mult}xPool it resolved. An uncontested attempt routes to A GATE, never to an Ob=0 "
             "roll. Rev 2 had the branch and no probe ever set `obstacle` or `pool`, so both "

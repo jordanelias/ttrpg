@@ -125,9 +125,19 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # `RUNG_REMIT_ACTS` left in) reproduces both old values and both old `BASE_EVENTS` exactly.
 # `aperture 1 0` realm acts 612 -> 612; `requisition` formed 16 -> 11, att 3 -> 0, ex 0, ref 3 -> 0 (read,
 # not asserted, v9 §0.5); `larders_in_purview` returned `()` in all 766 calls over two realm seasons.
+# RE-PINNED at v9 SC-01 step 12 `speak` (B-N, on ffd753f6), A BEHAVIOUR MOVE DECLARED: `speak` is a typed
+# contested cell (`existence` of `subject`, kind `DocketItem`; `contests: "a matter"`), so a `speak` on
+# a matter no docket names is refused `speech.unheard` and one on a docketed matter is drawn through
+# `sigma_leverage`. The build hash is equal; one and two seasons move. Was 3ff10d3c... / 15598353...
+# (one, two seasons). CONTROL, run: the same tree with `verb_table.yaml` and `rosters.yaml` at
+# ffd753f6 (the old `speak` row, no `a matter` prize row) reproduces both old values and both old
+# `BASE_EVENTS` exactly. Over the two seasons `speech.made` 30 -> 0, `speech.unheard` 0 -> 22, one
+# `matter.turned` (a docketed `speak` that executed); `aperture 1 0` realm acts 612 -> 608, `speak`
+# formed 83 -> 80, att 12 -> 1, ex 12 -> 1 -- its refusals are not counted as attempts there (a
+# contested refusal never enters `driver.resolved`) (read, not asserted, v9 §0.5).
 BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
-               1: "3ff10d3c30acd7d333ede21f08e58898",
-               2: "18ffd2144db512c8d7626bb8d51a60db"}
+               1: "27717c62f80d93c366cf3b9225e8f23b",
+               2: "f6972f5bd79b7ea8d430cb2921b1a7ca"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -152,12 +162,14 @@ BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
 # RE-RECORDED at v9 IN-12 `survey` + Rung with `BASE_HASHES` (7338 -> 7391, 21313 -> 22130).
 # RE-RECORDED at v9 IN-45 `carry` with `BASE_HASHES` (7391 -> 7186, 22130 -> 21338).
 # RE-RECORDED at v9 IN-45 `migrate` with `BASE_HASHES` (7186 -> 7160, 21338 -> 23584).
-# RE-RECORDED at v9 IN-49 `requisition` with `BASE_HASHES` (7160 -> 7157, 23584 -> 23361).
-# RE-RECORDED 2026-10-16 (season 2 only) with `BASE_HASHES[2]` for the `levy` -> `requisition` verb rename: act ids and draw
-# streams hash the verb name (`ids.H`), so the same seed walks a different, equally valid trajectory from season 2 (23361 -> 23241
-# events); season 0 and season 1 are unchanged.
-BASE_EVENTS = {1: (7157, "7b6709af3d0f1fd4b8efdc345db5f9ce5511fbd99d2fba5e8e61f481e069feee"),
-               2: (23241, "914da53b4af530228aefca1c2f55f08b57a53ad24502008886066fd0b82f5256")}
+# RE-RECORDED at v9 IN-49 `levy` with `BASE_HASHES` (7160 -> 7157, 23584 -> 23361).
+# RE-RECORDED at v9 SC-01 step 12 `speak` with `BASE_HASHES` (7157 -> 7060, 23361 -> 23220).
+# RE-RECORDED at the merge of main's `levy` -> `requisition` rename (#482, #485) into batch B-N (season 2 only, with
+# `BASE_HASHES[2]`): act ids and draw streams hash the verb name, so the same seed walks another trajectory from season 2.
+# Main alone read 18ffd214... / 23241 events; B-N alone read ef1c9ad8... / 23220; the merged tree reads f6972f5b... / 23288.
+# Season 0 and season 1 are unchanged by the merge (d3edd90a / 27717c62, 7060 events).
+BASE_EVENTS = {1: (7060, "653eabae8398bcf9902916095624d23e71504f9a23e3d94a1dfb271a3911204a"),
+               2: (23288, "00bd3227e4fdaf6bd48271eedb9c6a40109bf34339789e1fdcf1d902350f642e")}
 
 
 def _digest(w) -> tuple:

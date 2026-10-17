@@ -51,7 +51,7 @@ def test_importing_the_seam_registers_every_wrapper_provider():
                          capture_output=True, text=True, timeout=300)
     assert out.returncode == 0, out.stderr[-2000:]
     got, named = eval(out.stdout.strip())             # two lists, from our own probe
-    assert "contest/personal_combat" in got and "contest/sigma_leverage" in got, (
+    assert "contest/personal_combat" in got and "contest/social_contest" in got, (
         f"importing `engine.season.seam` registered {got or '[]'}. Both wrappers must register on "
         "that import alone — `seam/__init__.py` imports `. wrappers`, and `wrappers/__init__.py` "
         "imports each module. If this is empty, every `SeasonDriver` construction refuses.")

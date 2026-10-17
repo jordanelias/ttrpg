@@ -2378,8 +2378,8 @@ def test_w2_the_class_column_is_derived_and_cross_checked():
 # designer's row is checked against and handed back as, on the same footing as `REQUIRES_FORMS`'s
 # own `needs:` table. One new loader, one schema, all for the identical reason, is the file earning
 # its own exemption block rather than the creep this ratchet exists to catch.
-# [JUSTIFIED: a RATCHET COUNT, not a magnitude -- it is the number of declared `roster-exempt:` sites in the model set, and the argument for each increment is the comment block directly above. Fitted to the tree by construction: run the guard and it reports the true count. 2026-09-19: 14 -> 15 for `rosters.py`'s `_ptrs`. 2026-09-29: 15 -> 26 for `data/arrangements.py`'s schema, field-name and return-shape sets.]
-EXEMPT_CEILING = 26
+# [JUSTIFIED: a RATCHET COUNT, not a magnitude -- it is the number of declared `roster-exempt:` sites in the model set, and the argument for each increment is the comment block directly above. Fitted to the tree by construction: run the guard and it reports the true count. 2026-09-19: 14 -> 15 for `rosters.py`'s `_ptrs`. 2026-09-29: 15 -> 26 for `data/arrangements.py`'s schema, field-name and return-shape sets. 2026-10-16: 26 -> 27 for `_eff_convene`'s Date literal (`id`, `venue`, `holder`: the carrier's own field names, the `Rung._DECLARED` class; B-N had split the literal in two to dodge the guard, an unratcheted exemption).]
+EXEMPT_CEILING = 27
 
 
 def test_jordan_no_definition_is_hardcoded_in_a_body():
@@ -7738,9 +7738,21 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # -m engine.season.harness.corpus_run`, seed 0 (21 at the base `5b5e31ef`; 18 with the tiers and
     # no screen); `H-96` is re-measured by this run -- its behaviour count below is asserted on the
     # same `live`.
+    # ⚠⚠ v9 SC-01 step 12, 17 -> 16: `speak` LEAVES (it executed in 79 worlds). A RE-RECORD WITH ITS
+    # REASON: its row is a typed contested cell now (`existence` of `subject`, kind `DocketItem`;
+    # `contests: "a matter"`), and no corpus `speak` names a docketed matter -- `open_case` and
+    # `carry` execute in no corpus world, and the 38 forced-deadline worlds' one docket item names a
+    # Proposition (`corpus_run.build_at`'s `d_forced`) that no `speak` is formed on. MEASURED by
+    # `corpus_run.run_case` over the 143 live worlds, seed 0, against the base tree (`ffd753f6`) as
+    # control: `speak` acts 290 -> 230, `speech.made` 288 -> 0, `speech.unheard` 0 -> 230, no band
+    # kind emitted. It lands in the NEVER-ATTEMPTED set (asserted below), not in `refused_only`, and
+    # that is the instrument, not the world: a contested act refused at admission is emitted from
+    # `loop/resolve.py::resolve`'s contest branch, which never enters `driver.resolved` (only `_fold`
+    # does), so `corpus_run.attribute` sees no attempt. Its hand-built proof is
+    # `tests/test_sc01_speak.py`.
     assert ever == {"accept", "challenge", "create_record", "interview", "fight",
                     "give", "issue", "move", "petition", "reconstruct", "release", "research",
-                    "speak", "surveil", "tell", "transfer", "utter"}, (
+                    "surveil", "tell", "transfer", "utter"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
         "must be re-measured rather than reused")
     # ⚠ `move` JOINED `transfer` HERE, AND IT IS THE SAME HOLE. Both are refused for want of an
@@ -8373,7 +8385,15 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
         # the executed set (17 of 45) did not move. THE SAME-BREATH CHECK: the universal set is empty (asserted
         # below) and the status census is UNMOVED (103 RUNS-UNDECLARED · 40 SPAN-UNAUTHORED); R3 NPC 46 of
         # 46, ARC 97 of 97.
-    assert len(by_sig) == 105, (
+        # ⚠⚠ **105 -> 99, v9 SC-01 step 12 (`speak` a typed contested cell, `contests: "a matter"`),
+        # MEASURED BY `corpus_run.run_case`, seed 0, AGAINST A CONTROL: the base tree `ffd753f6` reads
+        # 105.** THE UNIT AND THE DIRECTION: variety FELL by six; `speak` executed in 79 worlds and now
+        # in none (every attempt is `speech.unheard`, the `ever` note above), and its scenes re-rank the
+        # rest -- executed-world counts `tell` 114 -> 112, `give` 5 -> 3, `release` 5 -> 4, `transfer`
+        # 43 -> 44, `fight` 3 -> 4, `challenge` 88 -> 89, `surveil` 72 -> 73, `interview` 13 -> 15. THE
+        # SAME-BREATH CHECK: the universal set is empty on both sides, `refused_only` and `hi`/`lo` are
+        # unmoved, and the status census is UNMOVED (103 RUNS-UNDECLARED · 40 SPAN-UNAUTHORED).
+    assert len(by_sig) == 99, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -8559,9 +8579,10 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # worlds of 143). Every executed verb still varies; `universal` is empty on both sides.
     # ⚠⚠ v9 IN-57: `commit`, `examine`, `requisition` AND `restore` LEAVE -- the `ever` and `by_sig` notes
     # above. Every executed verb still varies; `universal` is empty on both sides.
+    # ⚠⚠ v9 SC-01 step 12: `speak` LEAVES -- the `ever` and `by_sig` notes above (79 worlds -> 0).
     assert varying == {"accept", "challenge", "create_record", "fight", "give",
                        "interview", "issue", "move",
-                       "petition", "reconstruct", "release", "research", "speak",
+                       "petition", "reconstruct", "release", "research",
                        "surveil", "tell", "transfer", "utter"}, (
         sorted(varying))
     # ⚠ THE `tell` SEASON THRESHOLD SURVIVES ONLY IN ITS ONE-DIRECTIONAL HALF, AND THE HALF THAT
@@ -8736,10 +8757,15 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # dispensation whose `terms` names a Record, so it is foldable and never attempted here. It executes in
     # no world but a hand-built one (`test_in12_seize.py`). `corpus_run`'s `foldable but never even
     # attempted`: 12 -> 13.
+    # ⚠ THIRTEEN -> FOURTEEN, v9 SC-01 step 12 `speak` (2026-10-16): `speak` JOINS, from `ever`. It IS
+    # attempted (230 acts, every one `speech.unheard`: no corpus `speak` names a docketed matter), but a
+    # contested act refused at admission never enters `driver.resolved` (the `ever` note above), so
+    # the attribution this set is computed from cannot see it. An instrument limit, named, not a fact
+    # about the world.
     assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish",
                                               "destroy_record", "march", "oblige", "open_case",
                                               "determine", "comply", "migrate", "requisition",
-                                              "seize"}, (    # IN-57: `dispatch` out, to `refused_only`
+                                              "seize", "speak"}, (    # IN-57: `dispatch` out, to `refused_only`
         f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Five of "
         "the original six are the governance verbs no corpus overlay grants (`establish` is "
         "`remit:confer`-eligible); `march` is eligible in NPC-033/038 and WOULD form a real "
@@ -9878,10 +9904,13 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # the attention-tier key answers a claim about an ambition's subject, then the person's own
     # tenures and purview, before the claims these acts formed on, and sorts the echo of his own act
     # last (`commit`'s Proposition referent was that echo). `corpus_run`, seed 0; 21 at the base.
+    # ⚠⚠ v9 SC-01 step 12: `speak` LEAVES (17 -> 16) -- a typed contested cell on a docketed matter,
+    # and no corpus `speak` names one. The measurement, against the base tree as control, is at
+    # `test_the_corpus_runs_and_the_ranking_cannot_discriminate`'s `ever` and `by_sig` notes.
     assert set(executed) == {"accept", "challenge", "create_record", "interview",
                              "fight", "give", "issue",
                              "move", "petition", "reconstruct", "release", "research",
-                             "speak", "surveil", "tell", "transfer", "utter"}, (
+                             "surveil", "tell", "transfer", "utter"}, (
         f"the executed set is {sorted(executed)} -- 4 -> 6 was `W-C`'s measurement, 6 -> 10 is "
         "ED-FI-0009's, 10 -> 11 is `release`'s, 11 -> 12 is `H-71`'s, 12 -> 13 is the admission "
         "of `kill / wound`, 13 -> 12 is `R8.1`'s (`dispatch`, see above), 12 -> 13 again is "
@@ -9894,8 +9923,8 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
         "is `20-ii`'s (`release` back in one of 54 newly-representable worlds, see above), 16 -> 17 "
         "is `14`'s (`give` in, see above), 17 -> 20 is IN-08's cells commit's (`challenge`, "
         "`accept`, `requisition` in, see above), 20 -> 21 is v9 IN-11's (`commit` in, see above), 21 -> 17 "
-        "is v9 IN-57's (`commit`, `examine`, `requisition`, `restore` out, see above), and any further "
-        "movement is a fresh one")
+        "is v9 IN-57's (`commit`, `examine`, `requisition`, `restore` out, see above), 17 -> 16 is v9 "
+        "SC-01 step 12's (`speak` out, see above), and any further movement is a fresh one")
     # ⚠ `dispatch` JOINED `work` UNDER `R8.1` FOR A DIFFERENT REASON, stated above the executed-set
     # assertion: its precondition needs a PERSON referent, and the question that used to supply
     # one in NPC-033 is now outranked (hash order, `H-54`) by a `seen` claim about a rung. It is
@@ -12056,9 +12085,14 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # referent that is not a petition, its `exists:petition` read deposited and the next Candidate
     # dropped on it (`give`'s shape at plan position `14`). Nothing left. `tell` and `surveil` are
     # absent. A re-record, read off the failing assertion's own output.
+    # ⚠ {13 verbs} -> {14 verbs}, v9 SC-01 step 12 `speak`: `speak` JOINS, typed now on an `existence`
+    # cell (`subject`, kind `DocketItem`) -- `carry`'s arrival above, the same shape: formed on a
+    # referent no docket names, refused there (`speech.unheard`), its `exists:DocketItem` 0 read
+    # deposited and the next Candidate dropped on it. Nothing left. `tell` and `surveil` are absent.
+    # A re-record, read off the failing assertion's own output: 240 drops, `speak` 16 of them.
     assert {v for v, _ in live} == {"accept", "build", "carry", "challenge", "commit", "examine",
                                     "fight", "found", "give", "interview", "petition",
-                                    "research", "restore"}, (
+                                    "research", "restore", "speak"}, (
         f"the drops are on {sorted({v for v, _ in live})}. `tell` here means a "
         "`claim.held` claim is reaching a ledger again, which is the self-refuting belief "
         "`LEDGER_DERIVED_STEMS` excludes. `surveil` RETURNING means `tell`'s degree has stopped "
@@ -13509,10 +13543,14 @@ def test_we_event_degree_is_assigned_and_stays_none_where_nothing_graded_it():
     seen = _we_bands()
     for band, got in seen.items():
         assert band in COMBAT_BANDS and got["degrees"] == {band}, (band, got)
-    # THE UNCONTESTED PATH. `speak` declares no `contests:`, so nothing graded it.
+    # THE UNCONTESTED PATH. `utter` declares no `contests:`, so nothing graded it. ⚠ It was `speak`
+    # until v9 SC-01 step 12 made `speak` contested (`contests: "a matter"`); `utter` executes here
+    # (asserted), so the `None` is read off an act that RAN, not off a refusal.
     w = _w(); w.step = Step.RESOLVE
     d = SeasonDriver(w)
-    evs = d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="we_sp", actor="p_low", verb="speak")], 2)
+    assert not VERB_TABLE["utter"].contests
+    evs = d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="we_sp", actor="p_low", verb="utter")], 2)
+    assert [e.kind for e in evs] == ["proposition.uttered"], [e.kind for e in evs]
     assert evs and all(e.degree is None for e in evs), [(e.kind, e.degree) for e in evs]
 
 
@@ -13606,11 +13644,12 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
 
     ⚠⚠ **THIS DOCSTRING READ *ONE of thirty-seven* AND LISTED `tell` AMONG THE UNGRADEABLE, AND
     `U1` MADE BOTH FALSE.** `tell` declares `contests: "a standing"` (ED-SC-0037), which routes to
-    the `sigma_leverage` provider, so it is the second gradeable verb. `speak`, `utter`,
-    `petition` and the six investigation acts remain in the 36 -- and `speak` is the case that
-    shows the rule still bites rather than having been relaxed: `U1` could not give it a
-    `contests:` because it is untyped and its `requires:` is `--`, which is why R-05's contested
-    count moves 1 -> 2 and not the 1 -> 3 the plan projected.
+    the `sigma_leverage` provider (the `social_contest` provider since v9 SC-01 steps 13+15), so it
+    was the second gradeable verb. At `U1`, `speak`, `utter`, `petition` and the six investigation
+    acts remained in the 36, and `speak` showed the rule biting rather than relaxed: `U1` could not
+    give it a `contests:` because it was untyped and its `requires:` was `--`, which is why R-05's
+    contested count moved 1 -> 2 and not the 1 -> 3 the plan projected. v9 SC-01 step 12 TYPED it
+    and gave it `contests: "a matter"` -- the fifth entry, below.
 
     ⚠ 32 -> 37 AND THE CLAIM IS UNCHANGED IN KIND, WHICH IS WHY THIS IS A REWRITE AND NOT A
     RELAXATION. The row spelled `"the six investigation acts"` was ONE row standing for SIX acts
@@ -13640,9 +13679,10 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # person-to-person verbs *all in that 36* were both true when written and are both false now,
     # and they are rewritten above rather than left to be discovered here.
     # ⚠ **THE PROPERTY THIS PIN GUARDS IS UNCHANGED: a degree is askable only where something
-    # resolves a contest.** What moved is the SIZE of that set, not the rule. `speak` is the case
-    # that shows the rule still bites — `U1` could not give it a `contests:` because it is untyped
-    # and its `requires:` is `—`, so R-05's contested count moves 1 -> 2 and not the plan's 1 -> 3.
+    # resolves a contest.** What moved is the SIZE of that set, not the rule. At `U1`, `speak` was
+    # the case that showed the rule biting — `U1` could not give it a `contests:` because it was
+    # untyped and its `requires:` was `—`, so R-05's contested count moved 1 -> 2 and not the plan's
+    # 1 -> 3; v9 SC-01 step 12 typed it (the fifth entry, below).
     contested = {v: r.contests for v, r in VERB_TABLE.items() if r.contests}
     # ⚠⚠ THE THIRD ENTRY, AND IT IS THE REAL WIDENING THE ASSERTION ABOVE WARNED ABOUT (M4,
     # `ED-IN-0279` clause (a), 2026-09-28). `march.contests == "a field"` is gradable, not merely
@@ -13658,11 +13698,18 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # (`loop/effects_combat.py::_eff_kill`, registered for both). The registrar test derives its
     # contested rows from the table, so refusal 4 and the contested-reach test observe `accept`;
     # `challenge` is uncontested and writes nothing, so neither refusal applies to it.
+    # ⚠ THE FIFTH ENTRY, `speak` (v9 SC-01 step 12), re-recorded here with its reason: the rule this
+    # pin guards is the one the docstring says bit `speak` -- *untyped, so it cannot contest* -- and
+    # SC-01 step 12 answered it rather than relaxed it: the row is TYPED now (`existence` of `subject`,
+    # kind `DocketItem`, the proceedings design's own cell), so a computed `speak` carries its
+    # `subject` to the seam. Its prize `a matter` names the social contest container's provider, as
+    # `tell`'s `a standing` does (it was an interim row on `sigma_leverage` until steps 13+15); graded
+    # on the same ladder (`tests/test_sc01_speak.py` reads all four bands).
     assert contested == {"fight": "the body", "tell": "a standing", "march": "a field",
-                         "accept": "the body"}, (
+                         "accept": "the body", "speak": "a matter"}, (
         f"the set of contesting verbs moved: {contested}. Every claim `W-E` published about what "
-        "can be graded today is scoped to this set. A FOURTH entry is a real widening and wants "
-        "its own measurement; losing one of these three means its prize row or its verb row has "
+        "can be graded today is scoped to this set. A SIXTH entry is a real widening and wants "
+        "its own measurement; losing one of these five means its prize row or its verb row has "
         "gone.")
     # Pins the roster against silent growth.
     # ⚠ 37 -> 38, `release` (`04 §A.3` row 14), 2026-09-11; 38 -> 39, `march` (M4,
@@ -13688,7 +13735,8 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # QUESTIONS.** `module:` is WHOSE prize it is — what the seam names when it refuses, checked
     # against `references/module_contracts.yaml`. `provider:` is WHAT RUNS IT. They diverge the
     # moment an interim resolver stands in for an unbuilt subsystem, which is exactly `a standing`
-    # and `a proposition`: module `social_contest`, provider `sigma_leverage`, `interim: true`.
+    # and `a proposition` were: module `social_contest`, provider `sigma_leverage`, `interim: true`,
+    # until v9 SC-01 steps 13 + 15 repointed them (provider `social_contest`).
     prizes = roster_map("contest_subsystems", "prizes")
     # Plan position `30` (A-25): one identity per module, its directory name -- `module:` became
     # `combat`; `provider:` says what runs and keeps its name, so the two now differ here too.

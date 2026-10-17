@@ -9100,7 +9100,7 @@
   "P1": {
    "id": "P1",
    "verdict": "PASS",
-   "detail": "PASS: a postless person produced an Act that reached RESOLVE and emitted an Event (speech.made), whose `causes[]` names the act. The season emitted 9 Events in total -- the rest are the world's licensed clocks (`W4`), and none of them is hers",
+   "detail": "PASS: a postless person produced an Act that reached RESOLVE and emitted an Event (proposition.uttered), whose `causes[]` names the act. The season emitted 9 Events in total -- the rest are the world's licensed clocks (`W4`), and none of them is hers",
    "kind": null,
    "section": "S3-L1",
    "title": "a person holding no office acts",
@@ -10010,7 +10010,7 @@
   "A14": {
    "id": "A14",
    "verdict": "PASS",
-   "detail": "PASS: within ONE season, p_mid's ledger reads 0 claims in round 0 and 2 in round 1 after p_low's round-0 `speak`, against 0 in the control arm where p_low does nothing. R-03's channel: a deposit at one round's WITNESS is read by the next round's DELIBERATE. NOT SHOWN: a DELIBERATE nested inside RESOLVE (`H-56`'s other half)",
+   "detail": "PASS: within ONE season, p_mid's ledger reads 0 claims in round 0 and 3 in round 1 after p_low's round-0 `utter`, against 0 in the control arm where p_low does nothing. R-03's channel: a deposit at one round's WITNESS is read by the next round's DELIBERATE. NOT SHOWN: a DELIBERATE nested inside RESOLVE (`H-56`'s other half)",
    "kind": null,
    "section": "S40.2",
    "title": "a person reacts within the season to what another just did",
@@ -10170,7 +10170,7 @@
   "A28": {
    "id": "A28",
    "verdict": "PASS",
-   "detail": "PASS over 416 events from a real run: id uniqueness, a NON-DECREASING season index, a stable content hash, and referential integrity on causes[] against log UNION resolved -- 20 causes name an ACT and 392 name an EVENT, zero dangle. \u26a0 THE UNION IS `H-82` AND IT IS A READING, NOT A GIVEN: #353 `:658` and `:1377` cannot both hold as written, and this probe asserts the reading `W9` took rather than leaving it in a code comment",
+   "detail": "PASS over 416 events from a real run: id uniqueness, a NON-DECREASING season index, a stable content hash, and referential integrity on causes[] against log UNION w.acts -- 20 causes name an ACT and 392 name an EVENT, zero dangle. \u26a0 THE UNION IS `H-82` AND IT IS A READING, NOT A GIVEN: #353 `:658` and `:1377` cannot both hold as written, and this probe asserts the reading `W9` took rather than leaving it in a code comment",
    "kind": null,
    "section": "S19.1",
    "title": "the log's invariants hold",
@@ -10362,7 +10362,7 @@
   "A37": {
    "id": "A37",
    "verdict": "PASS",
-   "detail": "PASS: submitted reversed, resolved [(0, 'speak'), (1, 'speak'), (4, 'speak')]. S27's FIVE STRATA -- ['movement', 'binding_decision', 'contested_physical', 'uncontested_material', 'social'] -- order the fold BEFORE the content-derived key breaks ties within a stratum. Rev 2 declared STRATA and never referenced it, and no probe ever set `Act.stratum`, so the sort key's first component was constant and the rule was dead code reported as landed",
+   "detail": "PASS: submitted reversed, resolved [(0, 'utter'), (1, 'utter'), (4, 'utter')]. S27's FIVE STRATA -- ['movement', 'binding_decision', 'contested_physical', 'uncontested_material', 'social'] -- order the fold BEFORE the content-derived key breaks ties within a stratum. Rev 2 declared STRATA and never referenced it, and no probe ever set `Act.stratum`, so the sort key's first component was constant and the rule was dead code reported as landed",
    "kind": null,
    "section": "S27",
    "title": "the five strata order the fold before the content hash does",
@@ -11201,12 +11201,12 @@
  "_trace_counts": {
   "STEP": 7231,
   "BARRIER": 1904,
-  "DECISION": 1925,
-  "QUERY": 30321,
-  "WRITE": 15472,
-  "EVENT": 15267,
+  "DECISION": 1945,
+  "QUERY": 30277,
+  "WRITE": 15559,
+  "EVENT": 15322,
   "ACT": 97,
-  "CLAIM": 1717,
+  "CLAIM": 1772,
   "GAP": 86,
   "NOTE": 163
  },

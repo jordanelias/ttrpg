@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import dataclasses
 
+from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import WriteClass
 from ..data.requires import REQUIRES_STEMS
 from ..data.rosters import OBSERVATION_TERMS, PERSON_PREDICATES, STRATA, TERMS_SUPPLIED_BY
@@ -28,7 +29,8 @@ from ..harness import probes as P
 from ..loop import witness as WITNESS_MODULE
 from ..loop.driver import SeasonDriver, mint_token
 from ..queries.person_q import LedgerReader, said_of
-from ..queries.world_q import questions_for
+from ..data.verbs import VERB_TABLE
+from ..queries.world_q import DOCKET_ARRANGEMENT, DOCKET_PETITION, questions_for
 from ..state.attribution import anchor_of
 from ..state.carriers import Act, Claim, Tenure
 
@@ -44,20 +46,34 @@ from ..state.carriers import Act, Claim, Tenure
 ACTOR, RUNG, ABOUT = "p_other", "Hh", "p_king"
 
 
+def _docketed_tiny_world(fixtures=DEFAULT_FIXTURES):
+    """`probes.tiny_world` with `ABOUT` on the docket. ⚠ RE-RECORDED AT v9 SC-01 step 12: `speak` is a
+    typed, contested cell (`existence` of `subject`, kind `DocketItem`), so a speech about a matter no
+    docket names is refused `speech.unheard` and never executes. The item is PLANTED, in
+    `World.docket`'s own shape (`test_u7_remit.py`'s empty-slot test plants one too): no seat in the
+    fixture has purview over `p_king`, so no `open_case` could docket him, and how a matter reaches the
+    docket is not what this file tests. `speak` still writes nothing at any band, so the rung route the
+    file exercises is unchanged."""
+    w = P.tiny_world(fixtures)
+    w.docket.append({"date": None, "matter": ABOUT, DOCKET_ARRANGEMENT: None, DOCKET_PETITION: None})
+    return w
+
+
 def _speak_and_witness(extra_tenures=()):
-    w = P.tiny_world()
+    w = _docketed_tiny_world()
     for t in extra_tenures:
         w.add_tenure(t)
     d = SeasonDriver(w)
     d.matter(mint_token(w, WriteClass.MATTER), [])
     out = d.resolve(mint_token(w, WriteClass.ACTS), [Act(id="r8_speak", actor=ACTOR, verb="speak", payload={"subject": ABOUT})],
                     contest_max_depth=w.fixtures.get("contest_max_depth"))
-    e = next((x for x in out if x.kind == "speech.made"), None)
-    assert e is not None, (
-        f"the fold emitted {[x.kind for x in out]}, not `speech.made` -- nothing below is about "
+    # The speech's own Event, whichever band it drew (`emits_at`; a refusal is `emits_on_refusal`).
+    e = next((x for x in out if x.kind in VERB_TABLE["speak"].emits), None)
+    assert e is not None and e.degree is not None, (
+        f"the fold emitted {[x.kind for x in out]}, not a band of `speak` -- nothing below is about "
         "the `seen` deposit until the act itself executes")
     assert not [c for c in e.changes if c.subject], (
-        f"`speech.made` now writes {[c.subject for c in e.changes]}; then the `seen` subject is "
+        f"`{e.kind}` now writes {[c.subject for c in e.changes]}; then the `seen` subject is "
         "the changed thing, not the rung, and this fixture no longer exercises the rung route")
     # ⚠ FIXED post-port: the real `season()` loop logs every resolved Event (`w.log.append(e)`,
     # driver.py "S19.5 -- ONE LOG, NOT TWO") BEFORE calling `witness()`, so later `causes=[e.id]`
@@ -351,9 +367,8 @@ def test_r8_the_total_arm_shows_every_term_to_every_witness():
     `p_king`, whom NO channel admits to a speech at the hearth, still witnesses it and is shown
     `who`, `marks` and `stratum`. Under the shipped `all_five` arm the same person gets nothing,
     which is the control for this assertion."""
-    from ..data.fixtures import DEFAULT_FIXTURES
     for mode, expect in (("total", True), ("all_five", False)):
-        w = P.tiny_world(DEFAULT_FIXTURES.sweep("fan_out_mode", mode))
+        w = _docketed_tiny_world(DEFAULT_FIXTURES.sweep("fan_out_mode", mode))
         d = SeasonDriver(w)
         d.matter(mint_token(w, WriteClass.MATTER), [])
         out = d.resolve(mint_token(w, WriteClass.ACTS), [Act(id="r8_tot", actor=ACTOR, verb="speak", payload={"subject": ABOUT})],

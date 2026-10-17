@@ -179,9 +179,9 @@ def resolvable_verbs() -> frozenset:
         # `kill / wound` still fails the second clause — its `requires` is `—` — which is what
         # keeps Jordan's *"you can't just kill or wound imo."* true. Admitting it is `H-80`'s item.
         #
-        # ⚠ FALSIFIER, RE-POINTED AT `30`: delete the `@provider("contest", "sigma_leverage")`
+        # ⚠ FALSIFIER, RE-POINTED AT `30`: delete the `@provider("contest", "social_contest")`
         # registration from `seam/wrappers/sigma.py` and `SeasonDriver` construction refuses naming
-        # the first prize `sigma_leverage` runs -- where this set used to shrink by every verb contesting
+        # the first prize `social_contest` runs -- where this set used to shrink by every verb contesting
         # them, with the data unchanged and nothing said.
         contested = bool(row.contests)
         resolvable_contest = False

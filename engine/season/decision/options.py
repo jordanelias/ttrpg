@@ -1010,8 +1010,8 @@ def operands_for(p: Person, row: "VerbRow", q: "Question", subject,
         here and a RECORD kind in `_eff_create_record` -- from arriving on a `create_record` and
         silently making every record a record of grain.
 
-    ⚠ AN UNTYPED VERB IS NOT DECLINED. `{}` is the right answer for `speak`, `utter` and
-    `create_record`: the grammar states no precondition for them, so there is nothing to bind, and
+    ⚠ AN UNTYPED VERB IS NOT DECLINED. `{}` is the right answer for `utter` and `create_record`
+    (`speak` too until v9 SC-01 step 12 typed it): the grammar states no precondition, nothing to bind, and
     refusing them would be reading "no cell" as "an unmet cell" -- the UNKNOWN/False collapse the
     whole of this block exists to refuse. Their effects want operands of their own (`stages` is
     `H-80`, `harm` is `W-E`); those are not in `requires_operands` and are not this item.

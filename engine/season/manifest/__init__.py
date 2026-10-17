@@ -20,8 +20,9 @@ this package loads lazily. `boot()` is the boot. `check_rows()` is called from t
 `SeasonDriver.__init__`, the one place every run passes (plan position `30`: the registrar and the
 driver-construction refusals run there too).
 
-**NO PROVIDER ROW IS LANDED HERE.** The row for a social contest is U1's, and `ED-SC-0037` rules its
-value: `engine/dice_engine/sigma_leverage.py`, interim, repointed when the proceedings subsystem lands.
+**NO PROVIDER ROW IS LANDED HERE.** The row for a social contest is U1's; its provider is the social
+contest container's provider (`social_contest`; was interim `sigma_leverage`, `ED-SC-0037`, until v9
+SC-01 steps 13+15).
 This unit lands the signature, the crossing and the boot-time failure only.
 """
 

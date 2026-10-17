@@ -480,6 +480,21 @@ rows:
       `engine/season/runs/*` byte-identical (the w15 artifact test, green). B-M's mover list for `11` is empty by this reading
       and by construction the arrival is reached by no corpus world (every `march` the corpus attempts declines at
       `remit:dispatch`, `runs/TRACE.txt`). One run per arm, noise unmeasured.
+
+      **B-N CLOSE RE-TAKE (v9 SC-01 steps 11, 12, 14, 13+15, the fired-slot step, 16; `11`, E15), 2026-10-16, `2x3` only, 143 cases, 0 failed,
+      0 fork rows failed, seed 0, PYTHONHASHSEED=0, reading @951d5153 (B-N's last code commit; `git archive` copy, 12 chunks per arm, three
+      at a time, each arm covering all 143 case slots once; the driver is `proposals/2026-09-04-degree-sweep/wd_chunk.py`, collected with
+      `wd_collect.collect`), CONTROL @0de8059b (the tree B-N opened on, code-identical to B-M's close) taken the same way:** B-N: none
+      1694/2014 = 84.11 % - actor 1048/1976 = 53.04 % - total 1032/1956 = 52.76 % (probed 7125 / 7113 / 7098); CONTROL: none 1694/2014 -
+      actor 1081/1970 = 54.87 % - total 1069/1950 = 54.82 % (probed 7125 / 7107 / 7089), which REPRODUCES B-M's close in every figure, so the
+      instrument is reproducible here and the move is B-N's. `none` did not move; `actor` moved -1.83 pp and `total` -2.06 pp, toward "flips
+      absorbed" less (the direction B-M's re-take also moved), still BELOW the 96 % bar, `none >= actor` True. Status stays `met`. ATTRIBUTION,
+      MEASURED: a third reading @947747e0 (step 12, `speak`) equals the B-N reading in every figure, so step 12 is the whole move and steps
+      14, 13+15, the fired-slot step and 16 (and every Phase 1-3 fix) moved no arm. The mechanism is not measured: the critique's candidate is
+      that `speech.made` (a deed) stopped being produced and `speech.unheard` is a refusal kind that `is_deed` drops (`person_q.py`), moving
+      `deed_valence` and `regard`, two reconvergence inputs E15 names; nothing here inspected what in 947747e0 moves the arms. Conjunct 1
+      (`corpus_run`) was not re-run for this reading; `engine/season/runs/*` was regenerated at 4008a395 (the w15 artifact test, green). One
+      run per arm, noise unmeasured.
     measure: "python -m engine.season.harness.corpus_run  # check R3 rows + the planted control"
     blocks: [IN-10, IN-11, IN-13, FI-01, H-116, IN-50]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1: regard is computed at read; the cross-person half is IN-10's, IN-11's, IN-13's); H-111 is FI-01's deposit half
@@ -971,6 +986,12 @@ rows:
       executed): `forge` formed 83, 26 / 6; `survey` 29 / 6; `carry` 14 / 0; `work` 44 / 0; `migrate` formed 71, 31 / 1; `levy` formed 11,
       0 / 0; `found` 15 / 0; `build` 11 / 0; `commit` 38 / 0 (`transfer` 32 / 0 and `issue` 6 / 3 are also read at this tree).
       Read and not asserted; no row of this field is re-derived from them.
+      16 of 45 AS OF B-N (v9 SC-01 step 12, `corpus_run`, seed 0); THE ROW STAYS `not_met`. `speak` leaves the executed set: it is
+      a typed contested cell on a docketed matter now, and every corpus `speak` act is `speech.unheard` (no corpus `speak` names
+      a docketed matter; `test_season_shape.py`'s `ever` pin). ⚠ AN INSTRUMENT LIMIT, NAMED: `aperture` and
+      `corpus_run.attribute` count "attempted" only over `SeasonDriver.resolved`, which a contested act refused at admission
+      (`loop/resolve.py`'s contest branch, e.g. `speech.unheard`) never enters -- so such an act is not counted as attempted and
+      `speak` reads as never attempted, though `w.acts` holds every one.
     measure: "python -m engine.season.harness.corpus_run  # the 'WHERE THE <n> GO' line, which prints len(VERB_TABLE) -- 44 today; it was '38' as of ED-IN-0261, '32' until ED-FI-0009 made the count honest and '37' until `release` landed"
     blocks: [H-65, IN-09, IN-10, IN-33, IN-45]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W10-core removed (it gates corpus_run's R2 check, not this row's WHERE THE <n> GO); H-94 is carried by its owners IN-10, IN-09, IN-45, IN-33
@@ -1309,7 +1330,7 @@ rows:
       **A ROLL EXISTS AND IT REACHES THE GAME. `U1` / ED-SC-0037, 2026-09-11.**
       `engine/season/seam/wrappers/sigma.py` is the σ-leverage provider Jordan named --
       *"we have the sigma leverage d10 resolver in engine to use"* -- registered against
-      `(contest, sigma_leverage)` and reached through `manifest.resolve`, never a literal in the
+      `(contest, social_contest)` (was `sigma_leverage` until SC-01 steps 13+15) and reached through `manifest.resolve`, never a literal in the
       seam. It composes the tree's own line, `systems/social_contest/sim/contest/resolver.py:302`:
       `net = roll_net(pool, rng=rng) + net_boost(lev, pool)`. BOTH names matter: `roll_net` alone
       is `roll_pool` minus the obstacle, i.e. the bare pool roll ED-SC-0037 costed wearing the
@@ -1342,7 +1363,7 @@ rows:
       `build_at`; the last paragraph of this row carries the run) and holds `{copying: 3}` on one,
       NPC-088's `p_a`. Its one corpus writer is `build_at`'s seating of a cast entry's own authored
       `capability` (`corpus_run.py:537-540`), so `_pool_of` returns `pool_default` for those 429 and
-      `_obstacle_of` returns `obstacle_default` for every non-person subject. `lev` is 0.0 with no
+      `modules/social_contest/roll.py::obstacle` reads `obstacle_default` for every non-person subject. `lev` is 0.0 with no
       producer, stated as zero because a fabricated leverage would be a number nobody chose. It
       varies by person only where capability is written, which is character development and out of
       this arc (`W27`'s cast: 13 of 143 cases carry a `cast:` overlay, one carries a `capability`).
@@ -1374,8 +1395,9 @@ rows:
       `WAITS_ON_PLAYER` and never seated, and exactly ONE entry has a `capability` key -- NPC-088's
       Carin Vedel, `{copying: 3}`. The built worlds hold 430 persons at build (`corpus_run`'s own 418
       is `len(w.persons)` at the END of a run, `corpus_run.py:898`) and one carries a non-empty
-      `Person.capability`, NPC-088's `p_a`. `tell` and `speak` are the two verbs that draw on `copying`
-      (`rosters.yaml: verb_capability`). **THE ROW'S OWN SENTENCE "`Person.capability` is empty on every
+      `Person.capability`, NPC-088's `p_a`. `tell` and `speak` are the two verbs `rosters.yaml:
+      verb_capability` maps to `copying`; on the corpus only `tell` draws on it since v9 SC-01 step 12
+      (B-N), because every corpus `speak` is refused `speech.unheard` before any roll. **THE ROW'S OWN SENTENCE "`Person.capability` is empty on every
       corpus person -- one writer, and it zeroes it" (2026-09-11) IS CONTRADICTED BY THE TREE** and is
       rewritten above to 429 of 430; `probes.py:579` still zeroes it, on `tiny_world`'s probe fixture
       and not on a corpus person, and `rosters.yaml: verb_capability`'s `note:` still carries the old

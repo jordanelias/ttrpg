@@ -30,7 +30,7 @@ from typing import Optional
 from .. import manifest
 from ..data.rosters import MARCH_TARGET_KINDS
 from ..queries.world_q import (
-    DETAIN_KIND, ancestry, holder_faction_of, home_of, mustered, restrained,
+    DETAIN_KIND, ancestry, holder_faction_of, home_of, mustered, place_of, restrained,
 )
 from ..state.carriers import Act
 from ..state.gate import seat_faction
@@ -38,17 +38,16 @@ from ..state.world import World
 
 
 def sides_of(w: World, a: Act, target: Optional[str],
-             prize: str) -> tuple[list[str], Optional[str], str]:
+             prize: str) -> tuple[list[str], Optional[str], Optional[str]]:
     """`(claimants, subject, rung)` for `contest()`, given `target` -- the act's
     `payload[row.counterparty or "subject"]`, its opponent -- and the PRIZE its verb row contests.
 
     TWO SHAPES, dispatched on `manifest.resolve("contest", prize)["module"]`:
 
-    - NOT `mass_battle` (`the body`, `a standing`, `a proposition` -- every prize before M4):
-      UNCHANGED from the pre-M4 fold. `claimants = [a.actor, target]` (or `[a.actor]` alone when
-      `target` is absent or IS the actor), `subject = target`, `rung` = the pre-M4 placeholder
-      (`a.payload` if it happens to be a bare string, else `"R"`) -- nothing reads it for this
-      shape and nothing should start relying on it here.
+    - NOT `mass_battle` (`the body`, `a standing`, `a proposition`, `a matter`): the pre-M4 fold's
+      `claimants = [a.actor, target]` (or `[a.actor]` alone when `target` is absent or IS the
+      actor) and `subject = target`; `rung` = the ACTOR'S PLACE, `world_q.place_of(w, a.actor)`
+      (v9 SC-01 step 13, C-8; it was the placeholder `"R"`), `None` for a placeless actor.
 
     - `mass_battle` (`a field`, `march`'s prize): `claimants` is the MUSTERED ARMY at the actor's
       own nearest settlement, under the FACTION OF THE OFFICE THE ACT WAS EXERCISED THROUGH --
@@ -132,6 +131,11 @@ def sides_of(w: World, a: Act, target: Optional[str],
         holder = holder_faction_of(w, target)
         subject = None if holder is None or holder == faction else holder
         return (claimants, subject, target)
-    # EVERY OTHER PRIZE: the pre-M4 fold's own construction, byte-for-byte.
-    rung = a.payload if isinstance(a.payload, str) else None
-    return ([a.actor] + ([target] if target and target != a.actor else []), target, rung or "R")
+    # EVERY OTHER PRIZE: the pre-M4 fold's claimants and subject. The RUNG is the place the act is
+    # made -- the actor's (v9 SC-01 step 13, C-8: *a contested `speak` at a settlement dispatches at
+    # the settlement*), read through `world_q.place_of`, the one owner of "where is this thing"; there
+    # is no `Scene.place` field. It replaced the placeholder `"R"` (or a bare-string payload), which
+    # named the realm root for every act. A placeless actor gives `None`: absence, never a guess
+    # (`place_of`'s own floor). The `combat` and `social_contest` providers accept it and read it not.
+    return ([a.actor] + ([target] if target and target != a.actor else []), target,
+            place_of(w, a.actor))

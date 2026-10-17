@@ -3,10 +3,10 @@
 
 What each test proves, and the control that stops it passing vacuously:
 
-  1. THE NON-`mass_battle` BRANCH IS BYTE-IDENTICAL TO THE PRE-M4 FOLD. `loop/resolve.py`'s own
+  1. THE NON-`mass_battle` BRANCH'S SIDES ARE THE PRE-M4 FOLD'S. `loop/resolve.py`'s own
      `_target`/`_parties` construction, before this module existed, built exactly
-     `[a.actor] + ([_target] if _target and _target != a.actor else [])` with `subject=_target`
-     and `rung` from the bare-string placeholder. Extracting the rule must move no golden.
+     `[a.actor] + ([_target] if _target and _target != a.actor else [])` with `subject=_target`.
+     Its `rung` was a bare-string placeholder until v9 SC-01 step 13 (C-8), and is the actor's place.
   2. DISPATCH IS ON THE PRIZE'S OWN MANIFEST MODULE, NEVER ON WHAT `target` LOOKS LIKE. This
      module's first writing dispatched on whether `target` resolved to a person or a rung, and
      the corpus suite (`ARC-40`, a `tell` whose Candidate subject binds to `r_realm`, the
@@ -43,7 +43,8 @@ def test_non_mass_battle_branch_matches_the_pre_m4_fold_exactly():
     claimants, subject, rung = sides_of(w, a, "p_npc_009", "the body")
     assert claimants == ["p_npc_008", "p_npc_009"]
     assert subject == "p_npc_009"
-    assert rung == "R"          # the pre-M4 placeholder: a.payload is a dict, not a bare string
+    # v9 SC-01 step 13 (C-8): the actor's place, not the pre-M4 placeholder `"R"`.
+    assert rung == world_q.place_of(w, "p_npc_008") and rung not in (None, "R"), rung
 
 
 def test_non_mass_battle_branch_does_not_duplicate_the_actor_as_their_own_target():
@@ -155,7 +156,7 @@ def test_no_target_falls_through_to_the_non_mass_battle_default():
     claimants, subject, rung = sides_of(w, a, None, "the body")
     assert claimants == ["p_npc_008"]
     assert subject is None
-    assert rung == "R"
+    assert rung == world_q.place_of(w, "p_npc_008"), rung     # C-8: the actor's place, not `"R"`
 
 
 def test_t4_a_tell_contests_against_its_hearer_not_its_topic(monkeypatch):

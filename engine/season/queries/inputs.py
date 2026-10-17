@@ -14,9 +14,14 @@ imports a record type must pull in nothing else of the host
 (`engine/season/tests/test_social_contest_module.py` observes it in a fresh process); a record type
 placed beside a builder that reads `data/` would drag the registries into every module.
 
-THREE RECORDS (plan positions `31a`, `31b`, `31c`). No OUTPUT type is minted: the providers return a `dict`,
-and typing a `Margin` for one provider while the others return a dict would give the seam two
-return shapes (`seam/wrappers/sigma.py`'s docstring, the placement question).
+THREE INPUT RECORDS (plan positions `31a`, `31b`, `31c`) AND ONE OUTPUT RECORD, `Margin` (v9 SC-01 step
+15). `Margin` types the MODULE -> HOST boundary of the social contest container's provider: the module
+entry returns one and the host adapter (`seam/wrappers/sigma.py::resolve`) refuses anything else, so a
+winner cannot cross. The adapter still hands the seam the `dict` every provider returns -- the SEAM keeps
+one return shape (`combat` returns a scene and `mass_battle` a field, neither a margin); typing the seam
+itself is a `seam/` item of its own. It lives here, not in a sibling file, because a module imports it to
+construct it and this leaf is the one host file a module may import
+(`engine/season/tests/test_social_contest_module.py`).
 """
 from __future__ import annotations
 
@@ -30,15 +35,42 @@ class SocialContestInput:
 
     Built by `seam/wrappers/sigma.py::contest_input` (the host input builder) from `World`:
       * `pool`      -- dice, from what the actor genuinely has (`sigma.py::_pool_of`);
-      * `ob`        -- what stands against it (`sigma.py::_obstacle_of`);
-      * `obstacle_refusal_multiple` -- S27.4's multiple, the fixture the host adapter refuses on
-                       before the entry is called (the module never sees a refused pair);
+      * `opposition` -- the subject's score on the verb's capability key when the subject is a person
+                       carrying one, else `None`. A RAW OPERAND, not an obstacle;
+      * `obstacle_default` -- the `H-127` stand-in for a subject with no score to halve;
+      * `obstacle_ceiling` -- the `H-213` bound on how hard one matter can get; `None` is the
+                       uncapped control arm;
+      * `obstacle_refusal_multiple` -- S27.4's multiple, the fixture the host adapter refuses on,
+                       on the pair the entry returns;
       * `leverage`  -- the σ-layer μ-shift. Zero until something supplies leverage: an `assumption`
-                       reading with no producer, stated as zero rather than fabricated."""
+                       reading with no producer, stated as zero rather than fabricated.
+
+    ⚠ NO `ob` FIELD, ON PURPOSE (v9 SC-01 step 14; ED-SC-0033 clause (3), *the obstacle has a single
+    owner*). The obstacle is COMPOSED by the module (`modules/social_contest/roll.py::obstacle`) from
+    the three operands above; the host carries them and composes nothing, so a host-side obstacle has
+    no field to travel in. `engine/season/tests/test_sc01_obstacle_ceiling.py` fails if one returns.
+    ONE RECORD IS ONE MATTER'S DRAW: the ceiling bounds each matter's obstacle on its own and nothing
+    aggregates obstacles across a bundle (ED-SC-0038's per-matter pick, `H-213`)."""
     pool: int
-    ob: float
+    opposition: Optional[float]
+    obstacle_default: float
+    obstacle_ceiling: Optional[float]
     obstacle_refusal_multiple: float
     leverage: float
+
+
+@dataclass(frozen=True)
+class Margin:
+    """What the social contest module's entry returns for one matter's draw: the roll's `net` and the
+    `ob` it was thrown at, and nothing else (v9 SC-01 step 15; `08_SEAM.md`'s provider rule, intent
+    only: *a MARGIN, never a winner*).
+
+    ⚠ NO WINNER, NO BAND, NO SIDE. The band is the one ladder's reading of this pair
+    (`seam/ladder.py::degree_of` -> `degree_from_net`), and who it favours is the fold's reading of the
+    band; a field naming either would make the module a second resolver. The host adapter refuses a
+    return of any other type (`seam/wrappers/sigma.py::resolve`)."""
+    net: float
+    ob: float
 
 
 @dataclass(frozen=True)

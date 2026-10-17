@@ -182,7 +182,14 @@ def test_h134_two_seats_are_two_acts_ids_opportunities_and_the_store():
 # referent, and this reading's question carries none. CONTROL: the same reading with `requisition`'s
 # `referent_class` blanked in `VERB_TABLE` and `world_q.larders_in_purview` stamping nothing
 # re-hashes to `(62, 62, "b8163ec4...")` exactly.
-_CONTROL = (60, 60, "5abeea9baac7c6ef4c194f2c0918ffaecd0a15a895f4c78fefd9cbbdeb5dc0f7")
+# RE-PINNED AT v9 SC-01 step 12 (`speak`, B-N), DIGEST ONLY: 60 -> 60, `5abeea9b...` -> `4b486ad7...`.
+# The pin passed at ffd753f6 and went red at 947747e0 (step 12). The dumped Candidate and act lists
+# at ffd753f6 and at 801f733e differ in `speak` alone: its two Candidates (`Hh`, `off_duke`), formed
+# with no operands before, now carry `{subject, to}` (the row is a typed cell over a `DocketItem`
+# subject), and their two acts' payloads gain `to`. No Candidate or act id is added or removed.
+# CONTROL: every other line of the two dumps is identical, and ffd753f6's reading re-hashes to
+# `5abeea9b...` exactly.
+_CONTROL = (60, 60, "4b486ad73f3c039d4761e22dfae85eaaa5db51011aaa6c2205016c9de60f0cc6")
 
 
 def _control_reading():

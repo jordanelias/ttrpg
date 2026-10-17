@@ -77,7 +77,8 @@ def test_in45_carry_is_resolvable_on_a_typed_cell_and_an_effect():
     assert "carry" in resolvable_verbs()
     assert EFFECTS["carry"] is EI._eff_carry
     row = VERB_TABLE["carry"]
-    assert row.writes == ("Record.stages", "DocketItem.matter"), row.writes
+    assert row.writes == ("Record.stages", "DocketItem.matter",
+                          "DocketItem.arrangement", "DocketItem.petition"), row.writes
     assert not row.effect_decline_note, "a row with an effect keeps no decline note"
 
 

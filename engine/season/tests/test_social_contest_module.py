@@ -3,8 +3,8 @@ falsifier (2).
 
 A-25: a module takes the host's typed input record and a seeded `rng`, imports the dice engine and the
 record types and nothing else, and never reads `World`. This test builds a `SocialContestInput` by hand
--- no `World`, no driver, no registrar -- calls the entry and asserts the result dict (`status`
-`RESOLVED`, with `net` and `ob`; no `Margin` type exists).
+-- no `World`, no driver, no registrar -- calls the entry and asserts the result: a `Margin` with `net`
+and `ob` (v9 SC-01 step 15 typed the module -> host boundary; it was a `status: RESOLVED` dict).
 
 IN A FRESH SUBPROCESS, because what is asserted includes WHICH repository files the import loaded,
 and inside a pytest process another test's imports have loaded the whole host already.
@@ -39,15 +39,16 @@ entry = getattr(importlib.import_module(mod_name), attr)
 loaded = sorted(os.path.relpath(m.__file__, {root!r}) for n, m in list(sys.modules.items())
                 if n not in before and getattr(m, "__file__", None)
                 and os.path.abspath(m.__file__).startswith({root!r} + os.sep))
-from engine.season.queries.inputs import SocialContestInput
+from engine.season.queries.inputs import Margin, SocialContestInput
 from engine.dice_engine.sigma_leverage import net_boost, roll_net
 out = []
 for lev in (0.0, 1.5):
-    inp = SocialContestInput(pool=4, ob=2.0, obstacle_refusal_multiple=3.0, leverage=lev)
+    inp = SocialContestInput(pool=4, opposition=None, obstacle_default=2.0, obstacle_ceiling=3.0,
+                             obstacle_refusal_multiple=3.0, leverage=lev)
     got = entry(inp, random.Random(7))
     again = entry(inp, random.Random(7))
     want = roll_net(4, rng=random.Random(7)) + net_boost(lev, 4)
-    out.append((got, again == got, want))
+    out.append((type(got) is Margin, dict(net=got.net, ob=got.ob), again == got, want))
 print(repr((loaded, out)))
 """
 
@@ -71,9 +72,9 @@ def test_the_social_contest_entry_resolves_a_hand_built_record_importing_only_th
             f"{stray}. A-25: a module imports the dice engine and the record types, nothing else")
         assert any(f.startswith("engine/dice_engine/") for f in loaded), loaded
         assert "engine/season/queries/inputs.py" in loaded, loaded
-        for got, deterministic, want in out:
-            assert got["status"] == "RESOLVED", got
-            assert got["ob"] == 2.0 and got["pool"] == 4, got
+        for is_margin, got, deterministic, want in out:
+            assert is_margin, f"{role} returned something other than a `Margin`: {got}"
+            assert got["ob"] == 2.0, got
             assert got["net"] == want, (
                 f"{role}: net {got['net']} is not the tree's composition roll_net(pool) + "
                 f"net_boost(lev, pool) = {want} (ED-SC-0037)")
@@ -85,14 +86,25 @@ def test_the_social_contest_entry_resolves_a_hand_built_record_importing_only_th
 def test_s27_4_refuses_on_the_derived_pair_strictly_above_the_multiple():
     """S27.4 at the host adapter (`seam/wrappers/sigma.py::resolve`): a derived obstacle EQUAL to the
     multiple times the pool is not refused; one strictly above it is, with the refusal's whole return.
-    The boundary call names no prize row, so it stops at the entry lookup (`ENGINE-UNAVAILABLE`) --
-    past the refusal, which is what it observes. A `>=` in the rule fails the first assertion."""
+    ⚠ SINCE v9 SC-01 STEP 14 THE PAIR IS THE ENTRY'S (the module composes the obstacle), so the call
+    names a real prize and a driver registers the entry first; the ceiling is the uncapped control
+    (`None`), since the shipped ceiling (2) keeps every obstacle at or under 2 x a 1D pool. A `>=` in
+    the rule fails the first assertion; with the ceiling at 2 the second call is NOT refused (third)."""
+    import random
     from types import SimpleNamespace
+    from engine.season.data.fixtures import DEFAULT_FIXTURES
+    from engine.season.harness import probes as P
+    from engine.season.loop.driver import SeasonDriver
     from engine.season.seam.wrappers import sigma
-    fx = {"pool_default": 2, "obstacle_default": 4, "obstacle_refusal_multiple": 2}
+    SeasonDriver(P.tiny_world(DEFAULT_FIXTURES))      # the registrar fills MODULE_ENTRIES
+    fx = {"pool_default": 2, "obstacle_default": 4, "obstacle_ceiling": None,
+          "obstacle_refusal_multiple": 2}
     w = SimpleNamespace(persons={"p": SimpleNamespace(capability={})}, fixtures=fx)
-    at = sigma.resolve(w, ["p"], ["c"], "no_such_prize")
-    assert at["status"] != "REFUSED", f"ob 4 == 2 x pool 2 was refused: {at}"
+    at = sigma.resolve(w, ["p"], ["c"], "a standing", rng=random.Random(0))
+    assert at["status"] == "RESOLVED", f"ob 4 == 2 x pool 2 was refused: {at}"
     fx["obstacle_default"] = 4.5
-    assert sigma.resolve(w, ["p"], ["c"], "no_such_prize") == dict(
-        status="REFUSED", why="S27.4", module="sigma_leverage", resolver="d10_sigma", pool=2, ob=4.5)
+    assert sigma.resolve(w, ["p"], ["c"], "a standing", rng=random.Random(0)) == dict(
+        status="REFUSED", why="S27.4", module="social_contest", resolver="d10_sigma", pool=2, ob=4.5)
+    fx["obstacle_ceiling"] = 2
+    capped = sigma.resolve(w, ["p"], ["c"], "a standing", rng=random.Random(0))
+    assert capped["status"] == "RESOLVED" and capped["ob"] == 2.0, capped

@@ -2,7 +2,7 @@
 enforces `max_depth`; returns Events + degree, or a typed refusal."*
 
 `contest()` itself, the manifest-shaped provider lookup `contest_subsystem()`, the typed
-`ContestError`, and `Resolution` -- what the seam returned as the fold sees it.
+`ContestError` and `ContestRefused`, and `Resolution` -- what the seam returned as the fold sees it.
 
 The degree side lives in `seam/ladder.py` and this module calls into it; the dependency is
 one-directional by construction, because §A.2 gives the ladder its own row (*"nothing.
@@ -34,6 +34,26 @@ class ContestError:
 
     def __repr__(self) -> str:
         return f"ContestError({self.reason!r}, depth={self.depth}, max_depth={self.max_depth})"
+
+
+# The provider statuses that are a GAME refusal -- the act is refused and the season spent, never
+# aborted: `PARTY-GAP` (every wrapper's word for a missing party) and `REFUSED` (`sigma.py`'s S27.4,
+# `Ob > 2 x Pool`). Any other non-`RESOLVED` status (`ENGINE-UNAVAILABLE`, an unknown one) is a
+# software defect and still raises.
+REFUSAL_STATUSES = frozenset({"PARTY-GAP", "REFUSED"})
+
+
+class ContestRefused:
+    """`04 §A.2`'s *"or a typed refusal"*: a provider declined to resolve the contest for a reason
+    the game refuses on (`REFUSAL_STATUSES`). Returned, never raised, as `ContestError` is, so the
+    caller branches on the TYPE (`loop/resolve.py::_contest` folds it as the verb's refusal) rather
+    than matching a status string carried on an exception."""
+
+    def __init__(self, status: str, why: Any):
+        self.status, self.why = status, why
+
+    def __repr__(self) -> str:
+        return f"ContestRefused({self.status!r}, {self.why!r})"
 
 
 
@@ -71,7 +91,7 @@ class Resolution:
     result: dict
 
 
-def contest(w: World, rung: str, prize: Any, claimants: list[str],
+def contest(w: World, rung: Optional[str], prize: Any, claimants: list[str],
             depth: int, max_depth: int, causes: list[str],
             extension: Optional[Callable[[str], bool]] = None,
             *, verb: str = "", subject: Optional[str] = None,
@@ -139,18 +159,17 @@ def contest(w: World, rung: str, prize: Any, claimants: list[str],
         # fails at boot naming the row"* exists to make impossible, surviving in the half that was
         # still a branch. `manifest.call` returns the provider a module registered with
         # `@provider(role, module)`, or `None`.
-        # ⚠ **`None` IS A REAL ANSWER AND IS WHY THIS IS BYTE-INVARIANT TODAY.** `mass_battle` and
-        # `social_contest` name modules nothing has registered, so they fall through to the refusal
-        # below exactly as they did under the literal — the seam names the subsystem and its
+        # ⚠ **`None` IS A REAL ANSWER AND IS WHY THIS IS BYTE-INVARIANT TODAY.** (HISTORY, before M3 and
+        # v9 SC-01 steps 13+15: `mass_battle` and `social_contest` named modules nothing had
+        # registered, so they fell through to the refusal below exactly as they did under the literal) — the seam names the subsystem and its
         # resolver rather than reporting one undifferentiated hole. `proposals/…/08_SEAM.md` PART B
         # is titled *THE MANIFEST ROW, AND WHY THIS DESIGN REFUSES THE `if`-BRANCH* and registers
         # the `if` as a shim; this is the shim coming out.
         from ..manifest import call as _provider_for
         # ⚠ THE `provider:` FIELD, NOT THE `module:`. A prize names WHOSE contest it is and,
-        # separately, WHAT RUNS IT — `a standing` belongs to `social_contest` and is rolled by
-        # `sigma_leverage` until the proceedings subsystem lands (ED-SC-0033 clause 2,
-        # `interim: true`). Looking the callable up by `module:` would make the interim resolver
-        # unreachable and the repoint a code change.
+        # separately, WHAT RUNS IT. The two differed while `a standing` was rolled by the interim
+        # `sigma_leverage` (ED-SC-0033 clause 2); v9 SC-01 steps 13 + 15 repointed it to
+        # `social_contest` as a ROW change, which is what reading `provider:` here made possible.
         _run = _provider_for("contest", _sub.get("provider"))
         if _run is not None:
             # M4 (`ED-IN-0279` clause (a)). `rung` -- ALREADY A PARAMETER OF THIS FUNCTION, ALREADY
@@ -167,6 +186,8 @@ def contest(w: World, rung: str, prize: Any, claimants: list[str],
                                alternatives=["invent a degree ladder in the seam (S27.2: the "
                                              "second resolver)"])
                 return out
+            if out.get("status") in REFUSAL_STATUSES:
+                return ContestRefused(out["status"], out.get("why"))
             # A gap in the CALL is named as a gap in the call, never as a missing design.
             raise Unspecified(
                 f"a contest for {prize!r} routes to `{out['module']}` and the call did not "
