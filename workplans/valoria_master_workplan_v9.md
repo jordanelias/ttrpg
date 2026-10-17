@@ -296,8 +296,6 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | PC-06 | #445 K-1/K-5, K-3 (S-1 landed at B-E, `ac9724fc`; M-1/S-4, S-2/L-1 at B-L, `9ad86e87`) | PC | BLK | IN-06 (K-3) | R-05 | B-S | `_part7` |
 | PC-08 | Phase 4a/4b/5, WS-7; #445 M-2..M-6, K-4/V-3 | PC | LEAVE | named, unscheduled | — | B-Z | `_part7` |
 | PC-10 | RS-25: duel terms and the yield (PC-10a module, PC-10b season) | PC/IN | B (PC-10a) · BLK (PC-10b) | PC-10b: PC-10a (D) | R-05 | B-Y | `_part7` |
-| FI-02 | SM-3 | FI | STOPPED | no fieldwork provider yet (FI-01 landed `6d94d9d3`); `_part6` | — | B-O | `_part6` |
-| FI-03 | ED-FI-0002 | FI | BLK | IN-06 | — | B-S | `_part6` |
 | FI-05 | = IN-32 | — | — | — | — | B-S | `_part5` |
 | WR-01 | `27` remainder: the R-14 term, the `engine/season/` reach | WR | BLK | IN-06 | — | B-S | `_part7` |
 | WR-05 | = IN-35 | — | — | — | — | B-S | `_part5` |

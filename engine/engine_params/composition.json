@@ -10,6 +10,13 @@
       "verb": "fight",
       "needed_by": "engine/season/seam/wrappers/combat.py \u2014 the host adapter `@provider(\"contest\", \"personal_combat\")` builds the typed input record (`combat_input`) and calls this entry through `manifest.MODULE_ENTRIES` (plan position `31b`, A-25). The prize row `the body` (`engine/season/rosters.yaml` `contest_subsystems`) names it in `module_entry:`, and `manifest/registry.py::check_contest_prizes` refuses at driver construction a prize row whose `module_entry:` no composition row declares, or one that disagrees with it. `verb: fight` is the registrar's one verb per row; `accept`, which contests the same prize, reaches this entry through the prize row, not through a second row (the registrar refuses one target under two roles)."
     },
+    "fieldwork.find": {
+      "target": "modules.fieldwork.find:find",
+      "kind": "callable",
+      "entry": "step_call",
+      "verb": null,
+      "needed_by": "engine/season/seam/wrappers/fieldwork.py \u2014 the host adapter `@provider(\"inquiry\", \"fieldwork\")` (v9 FI-02 + FI-03, `SM-3`, `ED-FI-0002`) builds the typed input record (`fieldwork_input`) and calls this entry through `manifest.MODULE_ENTRIES`, holding its return to `queries/inputs.py::Findings`. Its caller is `engine/season/seam/contest.py::find_trail`, called from `loop/resolve.py`'s per-act bookkeeping for every Event an act produced, and dispatched by the Event's KIND through the `inquiry` role, so `entry: step_call` (a loop step calls it), not `verb_call`: no verb's adapter calls it, and binding it to one inquiry verb would make that verb call two module entries (its roll and this), against the registrar's one-module-per-verb reading (`SM-5`). The row `finding.made` (`engine/season/rosters.yaml` `inquiry_modules`) names it in `module_entry:`, and `manifest/registry.py::check_inquiry_modules` refuses at driver construction a row whose `module_entry:` no composition row declares, or one that disagrees with it."
+    },
     "mass_battle.resolve_field": {
       "target": "modules.mass_battle.massbattle:resolve_field",
       "kind": "callable",

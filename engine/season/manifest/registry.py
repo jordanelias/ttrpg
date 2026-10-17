@@ -2,7 +2,8 @@
 (plan position `30`) the driver-construction refusals `check_contest_prizes()` and `check_effects()`,
 and (plan position IN-41) `check_preconditions()`, refusal (a)'s precondition twin. Plan position
 `31a` adds `check_contest_prizes()`'s third half: a prize row's `module_entry:` agrees with its
-composition row.
+composition row. v9 FI-02 (`SM-3`) adds the second role, `inquiry`, and its refusal,
+`check_inquiry_modules()`.
 
 A REGISTRY, in this repo, is a register (see `harness/register.py`) that code reads at load to look
 a key up; these rows are one.
@@ -25,12 +26,17 @@ from ..data.rosters import load_yaml, roster_map
 from ..gaps import NoProducer, Unspecified
 
 # ⚠ THE ROLE NAMES ARE DATA, NOT A LITERAL HERE. A role maps to the roster that declares its
-# providers; adding a role is a data edit plus one row in this map, and the map exists so
-# `resolve` does not branch on a role's name. Two entries today because there is one seam.
-_ROLE_ROSTERS = {"contest": ("contest_subsystems", "prizes")}
-# ⚠ ONE ENTRY TODAY, because there is one seam. (A first writing of the line above said
-# "two entries today" beside a dict of one -- a count written from memory next to the thing
-# it counts.)
+# providers, and the map exists so `resolve` does not branch on a role's name. Adding a role is a
+# data edit, one row in this map, AND its own construction-refusal function (`check_contest_prizes`,
+# `check_inquiry_modules`) with a call to it from `loop/driver.py`'s construction -- the refusals are
+# per role, so `check_rows()` alone does not cover a new role's providers or entries; `check_rows()`
+# and `World.boot` iterate this map and so cover a new row's resolution unedited. `inquiry` is v9
+# FI-02's (`SM-3`; Jordan, 2026-09-05: *"investigation is not a contest seam. it is its own
+# thing."*): it maps the KIND a graded finding emits to the fieldwork container
+# (`rosters.yaml: inquiry_modules`), built in one landing with its caller, FI-03 (`ED-FI-0002`),
+# because ID-13 forbids a role no caller requires.
+_ROLE_ROSTERS = {"contest": ("contest_subsystems", "prizes"),
+                 "inquiry": ("inquiry_modules", "findings")}
 
 
 # ---------------------------------------------------------------------------
@@ -330,20 +336,86 @@ def check_contest_prizes(verb_table: dict) -> list:
             law="04 §B.13 #9 -- contest prizes are a SUBSET of the subsystem roster; an unclaimed "
                 "prize reaches the seam's generic refusal at first call, naming no row")
     checked = []
-    for role, (roster, column) in _ROLE_ROSTERS.items():
-        for key in roster_map(roster, column):
-            row = resolve(role, key) or {}
-            name = row.get("provider")
-            if not name or not has(role, name):
-                raise Unspecified(
-                    f"`{roster}` prize {key!r} names provider {name!r}, which nobody registered", "S43",
-                    needs=f"`@provider({role!r}, {name!r})` on the callable that runs it, imported "
-                          "by `seam/`, or the prize row's `provider:` fixed",
-                    law="S43 -- a missing provider is a STARTUP FAILURE WITH A NAME IN IT; before "
-                        "plan position `30` it silently removed every verb contesting the prize "
-                        "from the game")
-            _check_module_entry(role, key, row, verb_table)
-            checked.append((role, key))
+    # ⚠ THE CONTEST ROLE ALONE (v9 FI-02, `SM-3`'s fact 4). This looped over EVERY role in
+    # `_ROLE_ROSTERS`, which was the contest role while it was the only one; with `inquiry` beside it,
+    # half 3 asked whether an inquiry entry's composition row `contests:` a prize -- it contests none,
+    # by ruling -- and no driver constructed. `unclaimed_contest_prizes` and `check_graded_inquiries`
+    # already read this one row of the map; the inquiry role's rows are `check_inquiry_modules`'.
+    role = "contest"
+    roster, column = _ROLE_ROSTERS[role]
+    for key in roster_map(roster, column):
+        row = resolve(role, key) or {}
+        name = row.get("provider")
+        if not name or not has(role, name):
+            raise Unspecified(
+                f"`{roster}` prize {key!r} names provider {name!r}, which nobody registered", "S43",
+                needs=f"`@provider({role!r}, {name!r})` on the callable that runs it, imported "
+                      "by `seam/`, or the prize row's `provider:` fixed",
+                law="S43 -- a missing provider is a STARTUP FAILURE WITH A NAME IN IT; before "
+                    "plan position `30` it silently removed every verb contesting the prize "
+                    "from the game")
+        _check_module_entry(role, key, row, verb_table, _VERB_CALL, _bound_verb_contests_it)
+        checked.append((role, key))
+    return checked
+
+
+def _takes_module_entry(role: str, name: str) -> bool:
+    """Does the `@provider(role, name)` callable accept the `module_entry` keyword the seam always
+    passes it (`seam/contest.py::find_trail`, `grade`)?"""
+    return "module_entry" in inspect.signature(call(role, name)).parameters
+
+
+def check_inquiry_modules(verb_table: dict) -> list:
+    """v9 FI-02 + FI-03 (`SM-3`, `ED-FI-0002`): **the `inquiry` role's rows, at driver construction** --
+    refusal (c)'s shape, one role over, each refused naming the row:
+      1. the row's `provider:` is registered under `@provider("inquiry", …)` (`has`, the code);
+      2. it names a `module_entry:` (a prize row may name none; an inquiry row may not, since its
+         provider always calls one), and that entry agrees with its composition row
+         (`_check_module_entry`): a row declares it as a `step_call` entry -- RESOLVE's per-act bookkeeping calls it, keyed by the Event's kind, so no
+         verb's adapter does -- whose target lies in the row's `module:`; and, half 3's analogue, a verb
+         the loop GRADES (a `graded_inquiries` route) emits the row's key at some band, so the key can
+         reach the entry carrying a degree (`_graded_verb_emits_it`);
+      3. the provider takes the `module_entry` keyword `seam/contest.py::find_trail` always passes
+         (`check_graded_inquiries`' refusal 3, for its reason: a `TypeError` at the first find).
+    THIS IS THE DECLARATION THAT THE COMPOSITION ROW MUST EXIST: in a fresh process the registrar holds
+    nothing to miss, so a deleted `fieldwork.find` row is refused here, naming it. Returns the
+    `(role, key)` rows checked, so a caller can see the sweep was not empty (`CLAUDE.md` §0.1 pt 2)."""
+    from ..data.rosters import UNDEPOSITED_KINDS
+    role = "inquiry"
+    roster, column = _ROLE_ROSTERS[role]
+    checked = []
+    for key in roster_map(roster, column):
+        row = resolve(role, key) or {}
+        name = row.get("provider")
+        if not name or not has(role, name):
+            raise Unspecified(
+                f"`{roster}` row {key!r} names provider {name!r}, which nobody registered", "S43",
+                needs=f"`@provider({role!r}, {name!r})` on the callable that runs it, imported by "
+                      "`seam/`, or the row's `provider:` fixed",
+                law="S43 -- a missing provider is a STARTUP FAILURE WITH A NAME IN IT")
+        # A row with no `module_entry:` would pass `_check_module_entry` unchecked (a prize row may
+        # call no module entry) and fail at the first find instead: the provider always calls one.
+        if not row.get("module_entry"):
+            raise Unspecified(
+                f"`{roster}` row {key!r} has no `module_entry:`", "04 PART E step 10",
+                needs="the row's `module_entry:` naming the composition row its provider calls",
+                law="A-25 -- the inquiry role's provider calls its module through the entry the row "
+                    "names; a row naming none reaches `ENGINE-UNAVAILABLE` at the first find rather "
+                    "than refusing construction")
+        if key in UNDEPOSITED_KINDS:
+            raise Unspecified(
+                f"`{roster}` row {key!r} is keyed on a kind `undeposited_kinds` drops at WITNESS", "S43",
+                needs="a key that reaches WITNESS, or the kind removed from `undeposited_kinds`",
+                law="WITNESS drops an `undeposited_kinds` Event before the found deposit pops its find, "
+                    "so the find would be lost and `SeasonDriver.findings` would grow every round")
+        _check_module_entry(role, key, row, verb_table, _STEP_CALL, _graded_verb_emits_it)
+        if not _takes_module_entry(role, name):
+            raise Unspecified(
+                f"`{roster}` row {key!r} names provider {name!r}, which takes no `module_entry` keyword",
+                "S43", needs="a provider accepting the row's module entry, or the row's `provider:` fixed",
+                law="`seam/contest.py::find_trail` always passes `module_entry=`; a provider without it "
+                    "fails at the first find rather than at construction")
+        checked.append((role, key))
     return checked
 
 
@@ -384,7 +456,7 @@ def check_graded_inquiries(verb_table: dict) -> list:
                 f"(bound: {sorted(bound, key=str)})", "S27.2",
                 needs="the route naming a provider and module entry a prize row already binds",
                 law=law)
-        if "module_entry" not in inspect.signature(call("contest", provider_name)).parameters:
+        if not _takes_module_entry("contest", provider_name):
             raise Unspecified(
                 f"the graded inquiry {verb!r} routes to provider {provider_name!r}, which takes no "
                 f"`module_entry` keyword", "S27.2",
@@ -395,46 +467,16 @@ def check_graded_inquiries(verb_table: dict) -> list:
     return checked
 
 
-def _check_module_entry(role: str, key: Any, row: dict, verb_table: dict) -> None:
-    """Refusal (c), half 3 -- plan position `31a`: **a prize row's `module_entry:` and its composition
-    row agree** (A-25: *"two owners say which module is called -- the prize row and the composition
-    row"*). A prize row with no `module_entry:` calls no module entry and is not checked.
+# The two entry kinds a role's rows are held to. The closed set's owner is
+# `tools/export_composition.py::_ENTRIES` (validated at export); these are two of its members, named once
+# here so the two callers below pass a kind rather than this function branching on a role's name.
+_VERB_CALL, _STEP_CALL = "verb_call", "step_call"
 
-    THIS IS THE DECLARATION THAT A ROW MUST EXIST. The registrar refuses only a role it already holds
-    (`manifest/registrar.py`), so in a fresh process a deleted composition row left nothing to refuse
-    on (plan position `30`'s falsifier 2, observed only within one process). The prize row names the
-    role, so the row's absence is refused here, at driver construction, naming it. The composition
-    rows are read through `engine/substrate/composition.py` (data loaded at import), never through
-    `MODULE_ENTRIES`, so this refusal does not depend on a driver having been constructed earlier in
-    the process. Agreement is three facts, each refused naming the role:
-      1. a composition row declares the role and carries `entry:`;
-      2. it is a `verb_call` whose target lies in the prize row's `module:` -- the module's one
-         identity is its directory name, the target's first package under its root (A-25);
-      3. its `verb:` contests a prize whose row names the same role, so the verb the entry is bound
-         to reaches it through the seam."""
-    entry_role = row.get("module_entry")
-    if entry_role is None:
-        return
-    from engine.substrate import composition
 
-    law = ("A-25 -- two owners say which module is called, the prize row (`contest_subsystems`) and "
-           "the composition row; they agree or the driver does not construct")
-    comp = composition.ROLES.get(entry_role)
-    if comp is None or not comp.get("entry"):
-        raise Unspecified(
-            f"{role}:{key!r} names `module_entry: {entry_role!r}`, which no composition row declares "
-            f"as an entry", "04 PART E step 10",
-            needs="the composition row back in references/module_contracts.yaml `composition_roles:` "
-                  "(re-run tools/export_composition.py), or the prize row's `module_entry:` fixed",
-            law=law)
-    parts = str(comp["target"]).split(":", 1)[0].split(".")
-    if comp.get("entry") != "verb_call" or len(parts) < 2 or parts[1] != row.get("module"):
-        raise Unspecified(
-            f"{role}:{key!r} names `module_entry: {entry_role!r}`, whose composition row "
-            f"(`entry: {comp.get('entry')}`, target {comp['target']!r}) is not a `verb_call` into "
-            f"module {row.get('module')!r}", "04 PART E step 10",
-            needs="the prize row and the composition row naming the same module, by its directory",
-            law=law)
+def _bound_verb_contests_it(role: str, key: Any, entry_role: str, comp: dict, verb_table: dict,
+                            law: str) -> None:
+    """Half 3 for the CONTEST role (plan position `31a`): the composition row's `verb:` contests a prize
+    whose row names the same entry, so the verb the entry is bound to reaches it through the seam."""
     verb = comp.get("verb")
     contests = getattr(verb_table.get(verb), "contests", None) or []
     prizes = _as_list(contests)
@@ -445,6 +487,73 @@ def _check_module_entry(role: str, key: Any, row: dict, verb_table: dict) -> Non
             "04 PART E step 10",
             needs="the composition row's `verb:` naming a verb whose prize calls this entry",
             law=law)
+
+
+def _graded_verb_emits_it(role: str, key: Any, entry_role: str, comp: dict, verb_table: dict,
+                          law: str) -> None:
+    """Half 3's analogue for the INQUIRY role (v9 FI-02): a `step_call` entry names no verb, so what must
+    hold is that the row's KEY can reach it carrying a degree -- some verb the loop grades (a
+    `graded_inquiries` route) emits the key at some band (`VerbRow.emits_by_degree`). Otherwise the
+    entry is reached by ungraded findings alone, and `finding_terms` keys nothing for them."""
+    from ..data.rosters import GRADED_INQUIRIES
+    # `VerbRow.emits` is the flat union of the degree bands, and a graded route's `emits:` is
+    # degree-keyed (`data/verbs.py` refuses a flat one), so membership there is "some band emits it".
+    if not any(str(key) in verb_table[v].emits for v in sorted(GRADED_INQUIRIES) if v in verb_table):
+        raise Unspecified(
+            f"`{role}` row {key!r} (`module_entry: {entry_role!r}`) is a kind no graded inquiry emits at "
+            f"any band (graded: {sorted(GRADED_INQUIRIES)})", "04 PART E step 10",
+            needs="the row keyed by a kind a `graded_inquiries` verb's degree-keyed `emits:` declares",
+            law=law)
+
+
+def _check_module_entry(role: str, key: Any, row: dict, verb_table: dict,
+                        entry_kind: str, reached) -> None:
+    """Refusal (c), half 3 -- plan position `31a`, generalised at v9 FI-02 (`SM-3`): **a role's row's
+    `module_entry:` and its composition row agree** (A-25: *"two owners say which module is called"* --
+    the role's row and the composition row). A row with no `module_entry:` calls no module entry and is
+    not checked here; a role whose rows must name one refuses its absence before calling this
+    (`check_inquiry_modules`).
+
+    The caller passes the ENTRY KIND its role's rows are called through and the half-3 test
+    (`reached`) -- `_VERB_CALL` and `_bound_verb_contests_it` from `check_contest_prizes`, `_STEP_CALL`
+    and `_graded_verb_emits_it` from `check_inquiry_modules` -- so nothing here branches on a role's
+    name, and neither has a default.
+
+    THIS IS THE DECLARATION THAT A ROW MUST EXIST. The registrar refuses only a role it already holds
+    (`manifest/registrar.py`), so in a fresh process a deleted composition row left nothing to refuse
+    on (plan position `30`'s falsifier 2, observed only within one process). The role's row names the
+    entry, so the row's absence is refused here, at driver construction, naming it. The composition
+    rows are read through `engine/substrate/composition.py` (data loaded at import), never through
+    `MODULE_ENTRIES`, so this refusal does not depend on a driver having been constructed earlier in
+    the process. Agreement is three facts, each refused naming the role:
+      1. a composition row declares the entry and carries `entry:`;
+      2. it is an `entry_kind` entry whose target lies in the row's `module:` -- the module's one
+         identity is its directory name, the target's first package under its root (A-25);
+      3. `reached` holds: the role's own test that the entry is reachable from the verb table."""
+    entry_role = row.get("module_entry")
+    if entry_role is None:
+        return
+    from engine.substrate import composition
+
+    law = (f"A-25 -- two owners say which module is called, the `{_ROLE_ROSTERS[role][0]}` row and "
+           "the composition row; they agree or the driver does not construct")
+    comp = composition.ROLES.get(entry_role)
+    if comp is None or not comp.get("entry"):
+        raise Unspecified(
+            f"{role}:{key!r} names `module_entry: {entry_role!r}`, which no composition row declares "
+            f"as an entry", "04 PART E step 10",
+            needs="the composition row back in references/module_contracts.yaml `composition_roles:` "
+                  "(re-run tools/export_composition.py), or the role row's `module_entry:` fixed",
+            law=law)
+    parts = str(comp["target"]).split(":", 1)[0].split(".")
+    if comp.get("entry") != entry_kind or len(parts) < 2 or parts[1] != row.get("module"):
+        raise Unspecified(
+            f"{role}:{key!r} names `module_entry: {entry_role!r}`, whose composition row "
+            f"(`entry: {comp.get('entry')}`, target {comp['target']!r}) is not a `{entry_kind}` into "
+            f"module {row.get('module')!r}", "04 PART E step 10",
+            needs="the role row and the composition row naming the same module, by its directory",
+            law=law)
+    reached(role, key, entry_role, comp, verb_table, law)
 
 
 # ---------------------------------------------------------------------------

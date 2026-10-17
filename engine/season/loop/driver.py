@@ -265,13 +265,16 @@ class SeasonDriver:
         # (a)'s precondition twin: a precondition nothing evaluates and no `requires_decline_note:`
         # (and its converse). `manifest/registrar.py` and `manifest/registry.py` hold the rules.
         from ..manifest import (
-            check_contest_prizes, check_effects, check_graded_inquiries, check_preconditions,
-            check_rows, register_module_entries,
+            check_contest_prizes, check_effects, check_graded_inquiries, check_inquiry_modules,
+            check_preconditions, check_rows, register_module_entries,
         )
         register_module_entries(VERB_TABLE)
         check_rows()
         check_contest_prizes(VERB_TABLE)
         check_graded_inquiries(VERB_TABLE)
+        # v9 FI-02 + FI-03 (`SM-3`, `ED-FI-0002`): the `inquiry` role's rows -- provider registered, entry
+        # agreeing with its composition row; the declaration that `fieldwork.find`'s row must exist.
+        check_inquiry_modules(VERB_TABLE)
         check_effects(VERB_TABLE, EFFECTS)
         check_preconditions(VERB_TABLE, REQUIRES_PREDICATES)
         # OBSERVATION ONLY, and the distinction matters. Six probes used the removed `effect` hook
@@ -296,6 +299,12 @@ class SeasonDriver:
         self.scenes: dict = {}
         # Event id -> the Act that emitted it. See the note at the `_fold` call site.
         self.act_of: dict = {}
+        # v9 FI-03 (`ED-FI-0002`): finding Event id -> `((trail event id, terms shown), ...)`, what the
+        # `inquiry` role uncovered at RESOLVE (`loop/resolve.py`'s per-act bookkeeping, `seam.find_trail`);
+        # WITNESS pops each entry when it deposits the find (`loop/witness.py`). `act_of`'s shape:
+        # event-keyed, driver-owned, resolver-side, and read by no person-side Query. Unlike `act_of` it
+        # does not accumulate: an entry lives from its round's RESOLVE to that round's WITNESS.
+        self.findings: dict = {}
         # ---------------------------------------------------------------------
         # `U2` / `R-03` — THE SCENE TICK'S OWN STATE, AND ALL OF IT LIVES HERE.
         #

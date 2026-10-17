@@ -1,4 +1,4 @@
-"""`seam/wrappers/_entry.py` -- the module-entry lookup the three providers share.
+"""`seam/wrappers/_entry.py` -- the module-entry lookup the four providers share.
 
 A provider calls the module entry its prize row names (`module_entry:`), found in
 `manifest.MODULE_ENTRIES`, which the registrar fills at `SeasonDriver` construction. A call reaching

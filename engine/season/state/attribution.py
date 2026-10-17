@@ -131,7 +131,7 @@ def anchor_of(w, e: "Event") -> Optional[str]:
     # concerns the site whose condition moved -- and it reproduces the field exactly on that
     # population rather than approximating it.
     for c in e.causes:
-        prior = _event_by_id(w, c)
+        prior = event_by_id(w, c)
         if prior is not None and prior is not e:
             got = anchor_of(w, prior)
             if got is not None:
@@ -143,10 +143,13 @@ def anchor_of(w, e: "Event") -> Optional[str]:
     return None
 
 
-def _event_by_id(w, eid: str):
+def event_by_id(w, eid: str):
     """The logged Event with this id, or `None`. Linear, and deliberately not indexed: the log
-    is small, this runs only on the tier-3 path, and an index would be a second structure to
-    keep in step with `EventLog` for a lookup that is not hot."""
+    is small, and an index would be a second structure to keep in step with `EventLog` for a lookup
+    that is not hot. Three callers: `anchor_of`'s tier-3 path, and since v9 FI-03
+    `epistemic.trail_of` (once per covert kind per side of an inquiry's subject) and
+    `loop/witness.py::_found_claims` (once per uncovered trail Event) -- both bounded by the
+    findings, which are few."""
     for prior in getattr(w, "log", ()) or ():
         if prior.id == eid:
             return prior

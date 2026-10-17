@@ -2227,6 +2227,74 @@ rosters:
       ui:              {kind: stub,             home: "game/"}
       victory:         {kind: stub,             home: "engine/season/"}
 
+  # ── v9 FI-02 + FI-03 (`SM-3`, `ED-FI-0002`): THE INQUIRY ROLE AND WHAT A FINDING UNCOVERS ─────────
+  # Appended after `modules:` rather than beside `graded_inquiries`, so no line-cited row above moves.
+  inquiry_modules:
+    source: >-
+      v9 FI-02 (`SM-3`, Jordan 2026-09-05: *"investigation is not a contest seam. it is its own
+      thing."*), built in one landing with FI-03 (`ED-FI-0002`, the counter-espionage loop with
+      fieldwork as host): the second role in `manifest/registry.py::_ROLE_ROSTERS`, `inquiry`.
+    cite: "SM-3; ED-FI-0002"
+    note: >-
+      ⚠ KEYED BY THE KIND A FINDING EMITS, NEVER BY THE VERB. `graded_inquiries` is already the
+      verb-keyed table, and FI-01 rules it a ROUTE that may carry nothing but `{provider,
+      module_entry}` (`data/verbs.py`), so a second verb-keyed table would be two tables on one key.
+      A prize is what is contested; the inquiry analogue is what is FOUND, so the key is the Event
+      kind -- `undeposited_kinds`' keying, for its reason. A `Failure` inquiry emits `finding.none`,
+      which no row claims, so `manifest.resolve("inquiry", ...)` answers `None` and nothing is found,
+      with no branch on a band anywhere in the host. An ungraded `finding.made` (`interview`,
+      `reconstruct`, `thread_read`) reaches the row and finds nothing: it carries no degree, and
+      `finding_terms` keys on the degree. Each row names `module:` (the module's one identity, its
+      directory, A-25), `provider:` (`@provider("inquiry", ...)`, `seam/wrappers/fieldwork.py`) and
+      `module_entry:` (the composition row the provider calls through `MODULE_ENTRIES`). Refused at
+      driver construction by `manifest/registry.py::check_inquiry_modules`, and at boot by
+      `check_rows()` naming the row.
+    findings:
+      "finding.made": {module: "fieldwork", provider: "fieldwork", module_entry: "fieldwork.find"}
+
+  finding_terms:
+    source: >-
+      v9 FI-03 (`ED-FI-0002`): what a graded finding learns of a trail, by its degree. The terms are
+      `observation_terms`' (`epistemic.Seen`'s fields): the finder holds what a witness of the act
+      would have held, through the same deposit shapes, masked to these terms.
+    cite: "ED-FI-0002"
+    note: >-
+      [ASSUMPTION; medium; Jordan to correct; revert: every finding band shows the hand (the partial
+      band gains `who`)]. KEYED BY DEGREE BAND (`engine/dice_engine/dice_engine.py::DEGREE_LABEL`,
+      the one owner; a key off the ladder is refused at load, `data/rosters.py::_load_finding_terms`)
+      and valued in `observation_terms` members (a term outside them is refused). A band with no row
+      uncovers nothing: the failing band has none, and an ungraded finding has no band. In words: a
+      partial finding learns THAT the deed was done to the thing, and a better one also learns WHOSE
+      HAND did it. ⚠ A PARTIAL FINDING WITHHOLDS `who` FROM THE FINDER (an inference is less than a
+      sight) -- both the `seen` claim's `who` term and the event-kind claim anchored on the actor. A
+      WITNESS'S anchor claim is NOT masked: a witness admitted by any channel holds `(actor, kind,
+      True)` under `claim_subject_rule: both` whatever its channel shows of `who`. So the two
+      quantities differ BY DESIGN -- a finder's knowledge of a hand is graded, a witness's event-kind
+      claim is not. `why` is never shown: no reader supplies it (`epistemic._term_why`, R8.4). The
+      better bands are identical: depth has no carrier (FI-01's own note on the finding bands).
+      ⚠ `bands:`, NOT `values:`: the mapping's keys are the ladder's labels, which this file does not
+      own, and a `values:` row is read as a roster of its keys (`test_season_shape.py`'s duplicate-roster
+      scan), so the ladder would have read as declared twice.
+    bands:
+      Overwhelming: [stratum, marks, who]
+      Success:      [stratum, marks, who]
+      Partial:      [stratum, marks]
+
+  covert_kinds:
+    source: >-
+      v9 FI-03 (`ED-FI-0002`): the deed kinds that leave a FINDABLE trail -- an Event an inquiry can
+      uncover for someone no witness channel admitted (`epistemic.trail_of`).
+    cite: "ED-FI-0002"
+    note: >-
+      DATA, NOT A WALK OF EVERY DEED KIND: a kind joins the trail by a line here, and each member
+      must be a deed kind the verb table emits (`data/verbs.py::DEED_KINDS`; refused at import,
+      naming it, `data/verbs.py::_check_covert_kinds`), so a misspelling cannot find nothing and
+      report the trail built. One member today: `forge` is the one covert act that executes
+      (`record.forged`, v9 IN-45). `conceal`, `arrest`, a covert `destroy_record` (H-75) and a
+      costed `surveil` (ED-FI-0009) are unbuilt and belong to their own positions.
+      Why a trail is reachable only through a plant: see `epistemic.trail_of`.
+    values: ["record.forged"]
+
 tables:
 
   site_yield:

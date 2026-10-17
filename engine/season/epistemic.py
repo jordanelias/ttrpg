@@ -56,11 +56,11 @@ from typing import Optional
 
 from .data.requires import binding_of, evaluate
 from .data.rosters import (
-    CLAIM_SUBJECT_RULES, FAN_OUT_MODES, OBSERVATION_TERMS, SEEN_PREDICATE, TERMS_SUPPLIED_BY,
-    WITNESS_CHANNELS, require_member)
+    CLAIM_SUBJECT_RULES, COVERT_KINDS, FAN_OUT_MODES, OBSERVATION_TERMS, SEEN_PREDICATE,
+    TERMS_SUPPLIED_BY, WITNESS_CHANNELS, require_member)
 from .data.verbs import NO_PRECONDITION, VERB_TABLE, VerbRow
 from .gaps import Unspecified
-from .state.attribution import anchor_of, causing_act
+from .state.attribution import event_by_id, actor_of, anchor_of, causing_act
 from .state.gate import purview_reaches
 from .queries import cache, world_q
 from .queries.person_q import LedgerReader
@@ -150,7 +150,7 @@ def act_refs(a) -> list:
 
 def _tenure_by_id(w: "World", tid: str):
     """The Tenure with this id, or `None`. Linear, and deliberately not indexed -- the same
-    precedent `state/attribution.py::_event_by_id` states for the log: a lookup that is not hot
+    precedent `state/attribution.py::event_by_id` states for the log: a lookup that is not hot
     does not earn a second structure to keep in step with `w.tenures`. Not called on a hot path
     -- measured over a 44.6s / 143-case corpus run, this lookup is reached 52 times against
     39,932 `claim_subjects` calls total, 0.111s of the run (`ED-IN-0267`'s own measurement).
@@ -305,6 +305,93 @@ def claim_subjects(w: "World", e: "Event", rule: str, refs: Optional[list] = Non
     # would become a belief. No production emitter reaches this (every logged Event in the probe
     # corpus, headless and the populated realm anchors); `test_g1b_attribution.py` plants one.
     return [s for s in (out or [anchor]) if s is not None]
+
+
+# ---------------------------------------------------------------------------
+# v9 FI-03 (`ED-FI-0002`): THE TRAIL A COVERT ACT LEAVES, AND WHO ALREADY HOLDS IT.
+#
+# ⚠ HERE AND NOT IN `queries/world_q.py`, WHERE THE DESIGN PUT IT, BECAUSE OF AN IMPORT EDGE: what
+# "already known" means is `claim_subjects` above -- the one owner of *what a deposit about this Event
+# is about* -- and this module imports `world_q`, so `world_q` cannot import it back. Beside its owner,
+# the query composes on it instead of re-deriving it.
+# ---------------------------------------------------------------------------
+
+def non_anchor_subjects(subj, anchor) -> list:
+    """`subj` (a `claim_subjects` answer) minus the Event's anchor (`anchor_of`), order kept -- the
+    subjects SPECIFIC to one Event; the one place that subtraction is written (`holds_trail`,
+    `loop/witness.py::_found_claims`)."""
+    return [s for s in subj if s != anchor]
+
+
+def holds_trail(w: World, p: Person, e: Event, rule: str) -> bool:
+    """Does `p` already hold this deed as a witness would -- an event-kind claim `(s, e.kind, True)`
+    for an `s` SPECIFIC TO `e`, whatever its `when`?
+
+    THE SPECIFIC SUBJECTS are what the deposit rule makes a claim about `e` (`claim_subjects`) MINUS
+    the Event's anchor (`anchor_of`, the actor for an act-caused Event) -- or, where nothing else is
+    left (the `actor` rule, or an Event that names only its anchor), the anchor alone, as before. The
+    anchor is excluded because it is not specific to ONE Event: `(forger, record.forged, True)` is the
+    same claim for every forging by that forger, so keying on it would close every LATER forging by him
+    to an investigator who had found (or witnessed) ANY one of them.
+
+    ⚠ A SUBJECT IS SPECIFIC TO ONE EVENT ONLY WHEN THE EVENT MINTED IT: each forging mints a fresh Record
+    id, so `(rid, record.forged, True)` is about that forging alone. A repeatable covert deed on one
+    patient (an arrest of the same man twice) would not be, so a held claim also has to be no OLDER
+    than the Event (`c.when >= e.emitted_at`): a claim made before the Event existed cannot be
+    knowledge of it. Nothing changes for `record.forged` (a witness's and a finder's claims are made
+    at or after the forging).
+
+    One test for both readers: `trail_of` (an Event he holds is not news, so it is not trail) and
+    `loop/witness.py`'s found deposit (re-checked there, because a find runs at RESOLVE and two finds of
+    one Event can reach the same WITNESS). Reads `p`'s OWN ledger only (AX-2). ⚠ WHAT HOLDS: a held
+    claim on any specific subject closes the Event, so a partial finding -- which lands the claim on
+    the written thing and withholds the hand -- also closes it to a later, better finding of the same
+    Event, and a second finding of the same Event deposits nothing; under the shipped `both` rule a
+    claim on the actor ALONE does not close it. Under the `actor` rule the anchor is the only subject,
+    so there one forging found still closes the forger's others."""
+    subj = claim_subjects(w, e, rule, act_refs(causing_act(w, e)))
+    specific = set(non_anchor_subjects(subj, anchor_of(w, e))) or set(subj)
+    return any(c.predicate == e.kind and c.value is True and c.subject in specific
+               and c.when >= e.emitted_at for c in p.ledger)
+
+
+def trail_of(w: World, subject: Optional[str], pid: str) -> list:
+    """THE TRAIL AN INQUIRY ABOUT `subject` CAN UNCOVER FOR `pid` -- the host's projection for the
+    fieldwork container (`seam/wrappers/fieldwork.py::fieldwork_input`), oldest first.
+
+    For each `rosters.yaml: covert_kinds` member -- DATA, never a walk of every deed kind -- the most
+    recent Event of that kind that WROTE `subject` (deeds done TO it: `World.last_emission_of(...,
+    written=True)`) and the most recent one ANCHORED on it (deeds BY it: the anchor is the actor). The
+    bound is the index's own -- one per kind per side -- and introduces no number. An Event is kept only
+    if a PERSON did it (`actor_of`; a MATTER write is no one's hand), the person is not `pid` (a man
+    knows his own act), and `pid` does not already hold it (`holds_trail`).
+
+    ⚠ REACHABLE ONLY THROUGH A PLANT, AND THAT IS THE DATA, NOT A GAP HIDDEN HERE: the one covert kind
+    today is `record.forged`, a forged Record is minted into the forger's own hand, and an inquiry about
+    it (`research`) is formed by someone else only once a `give` hands it on. The seed-0 realm reaches
+    no trail by `research` (pinned by `engine/season/tests/test_fi03_trail.py::
+    test_the_realm_seed_twice_in_one_process_gives_one_hash_and_reaches_no_find`). The anchor side
+    (`written=False`, deeds BY `subject`) is reachable only by a graded inquiry whose subject is a
+    PERSON, and no graded inquiry takes one today (`surveil`'s Person case is named absent in
+    `verb_table.yaml`; a `surveil` aimed at a person's same-id `person` Rung is refused by its
+    `present_at` clause, since nobody stands inside a person's Rung -- observed on `trail_world`,
+    2026-10-17); the walk is kept so such an inquiry needs no second projection."""
+    if subject is None:
+        return []
+    p = w.persons.get(pid)
+    rule = w.fixtures.get("claim_subject_rule")
+    found: dict = {}
+    for kind in sorted(COVERT_KINDS):
+        for written in (True, False):
+            eid = w.last_emission_of(kind, subject, written=written)
+            if eid is None or eid in found:
+                continue
+            e = event_by_id(w, eid)
+            actor = actor_of(w, e) if e is not None else None
+            if actor is None or actor == pid or (p is not None and holds_trail(w, p, e, rule)):
+                continue
+            found[eid] = e
+    return sorted(found.values(), key=lambda e: (e.emitted_at, e.id))
 
 
 # ---------------------------------------------------------------------------
@@ -962,5 +1049,12 @@ def seen_of(w: "World", e: "Event", act, pid: str, mode: str) -> Seen:
     else:
         admitted = [c for c in live_channels(mode) if CHANNEL_PREDICATES[c](w, e, pid)]
         shown = {t for c in admitted for t in TERMS_SUPPLIED_BY[c]}
+    return seen_showing(w, e, act, shown)
+
+
+def seen_showing(w: "World", e: "Event", act, shown) -> Seen:
+    """The `Seen` struct of `e` with exactly the terms in `shown` read and every other term `None`.
+    The readers are pure, so the mask is the whole of what differs between callers (`seen_of`, and
+    `loop/witness.py::_found_claims`, which shows a finder the terms its band shows)."""
     return Seen(**{t: (TERM_READERS[t](w, e, act) if t in shown else None)
                    for t in OBSERVATION_TERMS})

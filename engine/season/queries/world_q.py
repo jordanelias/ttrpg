@@ -2345,11 +2345,16 @@ def witnessed(w: World, pid: str) -> list:
     """L-1: THE EVENTS IN `w.log` THIS PERSON WITNESSED, IN LOG ORDER -- `w.log` filtered by witness.
 
     A witness is a deposit (S28 stage 2: *"DEPOSIT IS PER-PERSON, into that person's OWN ledger and no
-    other"*): every claim WITNESS puts in a ledger is written with `emits="claim.deposited"` and
-    `causes=[e.id]`, the Event it is about (`loop/witness.py`, all five deposit sites). So the
-    Events `pid` witnessed are the causes of the `claim.deposited` Events naming a claim `pid` holds.
-    The ORIGINATING Event is returned, not the deposit -- `occasioned_by`'s rule, for its reason (the
-    deposit is the transport). Each once, in the order the log holds them.
+    other"*): every claim WITNESS puts in a ledger is written with `emits="claim.deposited"`
+    (`loop/witness.py`, six deposit sites). Five write `causes=[e.id]`, the Event the claim is
+    about; the sixth, v9 FI-03's found deposit, writes `causes=[e.id, f.id]` -- the finding AND the
+    covert trail Event it uncovered. So the Events `pid` witnessed are the causes of the
+    `claim.deposited` Events naming a claim `pid` holds, and that set therefore ALSO lists a trail
+    Event the person INFERRED from a finding and never saw. ⚠ OBSERVATION, NOT A RULING: whether
+    `witnessed` should exclude inferred Events is the PC-06 / S-2 owner's contract question; the code
+    below is unchanged by FI-03. The ORIGINATING Event is returned, not the deposit --
+    `occasioned_by`'s rule, for its reason (the deposit is the transport). Each once, in the order
+    the log holds them.
 
     ⚠ A FORGOTTEN WITNESSING IS NOT HERE. A claim the `ledger_cap` eviction removed leaves no trace
     on the person: eviction emits nothing (`loop/witness.py`, *"nobody can witness a forgetting"*),

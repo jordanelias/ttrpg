@@ -178,8 +178,9 @@ scales:
       `thread_read` · `reconstruct`. The second clause is unchanged and is a RULING, not an
       omission — see `rosters.yaml`'s `THE SEAMS` comment block (*"INVESTIGATION MUST NOT BE MADE A
       CONTEST TO BECOME GRADEABLE"*; this note cited it by line, `:505-508`, and the lines moved).
-      No composition role targets this subsystem: the one composition role there is
-      `mass_battle.resolve_field` (`references/module_contracts.yaml`'s `composition_roles:` block).
+      One composition role targets this subsystem since v9 FI-02/FI-03: `fieldwork.find`
+      (`references/module_contracts.yaml`'s `composition_roles:` block), the `inquiry` role's entry,
+      `step_call`, gated (it runs for a graded finding band whose Event kind a row claims).
       `fieldwork` is a `rosters.yaml` `modules:` entry, so it is not in the computed
       `R04_PENDING_SUBSYSTEMS` (`tests/valoria/test_engine_does_not_import_systems.py`);
       `R04_PENDING_ROLES` is empty.

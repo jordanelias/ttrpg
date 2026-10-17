@@ -648,10 +648,15 @@ _CONTRACTS_HEADER_RE = re.compile(r'^\*\*Subsystem:\*\*.*?\*\*Contracts:\*\*(.*)
 _YAML_MODULE_RE = re.compile(r'^  - module: ([a-z_]+)\s*$', re.M)
 
 #: Module contract names no longer in the registry: retired by ruling (`articulation_layer`) or
-#: renamed at `30` (`personal_combat` -> `combat`; the archived skeleton is frozen). Listed one per
+#: renamed at `30` (`personal_combat` -> `combat`) and at v9 FI-02 + FI-03 (`fieldwork_knots` ->
+#: `fieldwork`, the module's directory, A-25); the archived skeletons are frozen. Listed one per
 #: line for the same reason `RETIRED_SYMBOLS` is: a pattern would also swallow a row someone
 #: deleted by accident.
-RETIRED_CONTRACTS = frozenset({'articulation_layer', 'personal_combat'})
+RETIRED_CONTRACTS = frozenset({
+    'articulation_layer',
+    'personal_combat',
+    'fieldwork_knots',
+})
 
 
 @pytest.mark.parametrize('subsystem,lane,relpath', ROSTER, ids=SUBSYSTEM_IDS)

@@ -36,7 +36,7 @@ from ..epistemic import observers_for
 from ..queries.person_q import (broken_by, confided_outside, conviction_after_crisis,
                                  elements_violated_by)
 from ..queries.world_q import WorldReader, ceiling, demanded_person, occasioned_by
-from ..seam import ContestError, ContestRefused, Resolution, contest, degree_of, grade
+from ..seam import ContestError, ContestRefused, Resolution, contest, degree_of, find_trail, grade
 from ..state.carriers import Act, Event, StateChange, subject_of
 from ..state.gate import Change, NoOpReceipt, Subject, Token, seat_hold
 from ..state.ids import draw_factory, H
@@ -1049,6 +1049,19 @@ def resolve(self, token: Token, acts: list[Act],
         # pass, on zero.
         for _e in produced:
             self.act_of[_e.id] = a
+            # v9 FI-02 + FI-03 (`SM-3`, `ED-FI-0002`): WHAT THIS EVENT UNCOVERS, through the `inquiry`
+            # role, dispatched by the Event's KIND (`seam.find_trail`; `rosters.yaml: inquiry_modules`)
+            # for every Event THIS LOOP SEES (the fold's and `_contest`/`_grade`'s outputs; not an admit
+            # refusal, not an after-the-fact replacement, not ENCOUNTER's) -- not from `_grade`, so no branch here names a verb, a
+            # band or a kind: an unclaimed kind finds nothing, and an ungraded `finding.made` carries no
+            # degree and `finding_terms` keys nothing for it -- the data decides. At RESOLVE, after the
+            # act's fold, so the find reads the log as PREVIOUS rounds left it (the log gains a round's
+            # Events only after RESOLVE returns, `loop/driver.py`). WITNESS deposits it.
+            # ⚠ Reachable by a `research` only through a plant -- see `epistemic.trail_of`.
+            # ⚠ LAYER 1 (`04` §A.2): see `seam/wrappers/fieldwork.py` (`self.findings` is a driver-held store).
+            _found = find_trail(w, a, _e)
+            if _found:
+                self.findings[_e.id] = _found
         # ⚠ G4: THE `for ch in e.changes: if isinstance(ch.delta, int): pending[...]` LOOP THAT
         # STOOD HERE IS GONE. It fed §27.3's accumulator off the success EVENTS, so any verb whose
         # act rode an integer delta on its `changes[]` moved a site whose `Site.condition` its
@@ -1163,6 +1176,9 @@ def _refuse_after_the_fact(self, w: "World", out: list, act_ids: list) -> None:
                               degree=first.degree, observed=first.observed)
         for i in at:
             self.act_of.pop(out[i].id, None)
+            # v9 FI-03: a find keyed on a replaced Event would outlive it (WITNESS pops by the ids it
+            # is handed, and this one never enters the log), so it goes with the Event.
+            self.findings.pop(out[i].id, None)
         out[at[0]:at[-1] + 1] = refusal
         for e in refusal:
             self.act_of[e.id] = a
