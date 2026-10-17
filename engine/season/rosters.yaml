@@ -1066,7 +1066,7 @@ rosters:
   # | personal combat     | RESOLVE (S39)      | claimants, prize, causes | a degree | BUILT — `modules/combat/fight.py`, called by `seam/wrappers/combat.py`. Jordan: "combat engine isn't done" |
   # | social contest      | RESOLVE (S39)      | claimants, prize, causes | a degree | BUILT, σ-LEVERAGE MODE — `a standing`/`a matter` are rolled by `modules/social_contest/roll.py` (a `Margin`), called by `seam/wrappers/sigma.py`, provider `social_contest` (v9 SC-01 steps 13 + 15); the proceedings nested run is unbuilt |
   # | mass battle         | ENCOUNTER (`a field`) | claimants, prize, causes | a degree | BUILT — `modules/mass_battle/massbattle.py`, called by `seam/wrappers/mass_battle.py` (the `contest_subsystems` row `a field`) |
-  # | investigation       | UNRULED            | UNRULED | UNRULED | ITS OWN KIND — not a contest |
+  # | investigation       | RESOLVE (FI-01)    | actor, subject | a degree | ITS OWN KIND — not a contest: GRADED, by the roll the `graded_inquiries` row names (below), with no prize |
   # | settlement mgmt     | UNRULED (see below)| UNRULED | UNRULED | ⚠ NOT CALLED — done INLINE (see below) |
   # | faction mgmt        | UNRULED            | UNRULED | UNRULED | absent from the loop entirely |
   # | character dev       | UNRULED            | UNRULED | UNRULED | no creation, no progression, no chronicle |
@@ -1093,9 +1093,60 @@ rosters:
   # `contests:` cell and that is CORRECT — they are not ungraded contests but a different kind of
   # resolution whose seam is unbuilt. Giving them a prize so the existing machinery can grade them
   # is scripting drift: forcing one mechanism's shape onto another because it is the one that exists.
+  # ⚠ v9 FI-01 (`ED-FI-0009`, J-22 option (A)) GRADES THEM WITHOUT A PRIZE: `graded_inquiries`, below,
+  # is a ROUTING row -- verb -> the provider and module entry that roll it -- read by the loop
+  # (`loop/resolve.py::_grade`), never by `contest()` and never by `manifest.resolve("contest", …)`.
+  # It carries no `module:` and no prize key, so no `contest_subsystems` reader can see it.
   #
   # Nothing below declares a seam that does not exist. Declaring one would be the dead-carrier
   # defect this file names elsewhere — a carrier built before its reader.
+
+  graded_inquiries:
+    source: >-
+      v9 FI-01 (`ED-FI-0009`; J-22 answered option (A)): the inquiries are graded by degree, as
+      ladder step 3 answered (RESOLVE -> WITNESS, "Claims graded by degree; Failure emits
+      `finding.none` and deposits nothing"), through a declared routing column that is NOT a prize
+      and NOT a `contests:` shape. A-21: one roll owner (S27.2) -- the `social_contest` module's
+      entry, with the obstacle at the host input builder's non-person default.
+    row: H-111
+    note: >-
+      ⚠ A ROUTE, NOT A PRIZE. Each row names the provider registered under `@provider("contest", …)`
+      and the composition role that provider calls; the pool is `seam/wrappers/sigma.py::_pool_of`
+      (`verb_capability`, else the swept `pool_default`) and the obstacle the module's own
+      (`modules/social_contest/roll.py::obstacle`: an inquiry's subject is never a person, so
+      `obstacle_default`, swept). The pair must be one a `contest_subsystems` prize row already
+      binds (`manifest/registry.py::check_graded_inquiries`), so this row adds no roll and no
+      resolver. No `verb_capability` row is added for the inquiries: which capability an inquiry
+      draws on is stated nowhere, so every inquirer rolls `pool_default` -- the declared finding
+      cut, re-read by `corpus_run`, not quoted here.
+      ⚠ THREE ROWS, AND THE OTHER THREE ARE NOT GRADED: `interview` is a PROMPT (#453 K-36: the
+      questioned person answers by their own `tell`, so there is no degree on the asker);
+      `reconstruct` waits on a value space nothing supplies (K-37: no invented number); `thread_read`
+      waits on that and on H-85 (no Thread Sensitivity carrier). `surveil`'s Person case is absent
+      from its row (one cell binds one kind) and waits on ED-FI-0009. A verb that waits keeps its
+      flat `emits:` and is not counted as graded.
+    keys: [verb_table]
+    values:
+      research: {provider: "social_contest", module_entry: "social_contest.roll"}
+      examine:  {provider: "social_contest", module_entry: "social_contest.roll"}
+      surveil:  {provider: "social_contest", module_entry: "social_contest.roll"}
+
+  undeposited_kinds:
+    source: >-
+      RS-21 item 1 (H-111 ANSWERED [medium; Jordan to correct]): SKIP at WITNESS, except keyed kinds a
+      verb declares (`news.untold` stays, T4) -- a refused inquiry deposits nothing, and no
+      `finding.none` is deposited. Built by v9 FI-01 as the deposit half of `ED-FI-0009`.
+    row: H-111
+    note: >-
+      ⚠ THE EVENT KINDS WITNESS FANS TO NOBODY (`loop/witness.py::witness`): an Event of one of these
+      kinds stays in the log and in its act's causes, and no ledger receives any claim from it.
+      Keyed on the KIND, never on a band or on an empty `changes[]`: those would also swallow
+      `matter.undetermined` and `news.untold`, which keep depositing. [ASSUMPTION; medium; Jordan to
+      correct] the six inquiry rows' `finding.none` only, not every refusal kind -- a widening would
+      move every refusal-bearing row's deposits, which nothing here measured. Revert: Jordan rules
+      deposit at WITNESS, and this roster is deleted. Each member must be a kind some verb row
+      declares (`data/verbs.py` refuses one that is not, so a misspelling cannot skip nothing).
+    values: ["finding.none"]
 
   verb_capability:
     source: >-

@@ -91,6 +91,64 @@ class Resolution:
     result: dict
 
 
+def _returned(out: dict, what: str, called: str):
+    """WHAT A PROVIDER RETURNED, AS THE SEAM HANDS IT BACK -- the one reading of a provider's status,
+    shared by `contest()` and `grade()` (v9 FI-01) so the two cannot disagree on what is a refusal.
+    `what` names the call in a raise, `called` in the trace (both kept byte-identical for a contest).
+    `RESOLVED` returns the result whole; a `REFUSAL_STATUSES` member is a `ContestRefused`; anything
+    else is a gap in the call, raised and named, never a missing design."""
+    if out.get("status") == "RESOLVED":
+        TRACE.decision(f"{called} dispatched", "S39",
+                       chose=f"called {out['module']} (resolver {out['resolver']})",
+                       alternatives=["invent a degree ladder in the seam (S27.2: the "
+                                     "second resolver)"])
+        return out
+    if out.get("status") in REFUSAL_STATUSES:
+        return ContestRefused(out["status"], out.get("why"))
+    # A gap in the CALL is named as a gap in the call, never as a missing design.
+    raise Unspecified(
+        f"{what} routes to `{out['module']}` and the call did not "
+        f"complete: {out.get('why')}", "S39",
+        needs=out.get("status"),
+        law="the seam DISPATCHES (Jordan 2026-09-02). A party the seam cannot derive is "
+            "a gap in the derivation, not a hole in the subsystem, and `combat_bridge` "
+            "sets the rule: return the gap, never fabricate a side")
+
+
+def grade(w: World, claimants: list[str], causes: list[str], route: dict, *,
+          verb: str, subject: Optional[str] = None, rng: Optional[Any] = None):
+    """v9 FI-01 (`ED-FI-0009`, J-22 option (A)): AN INQUIRY'S ROLL, ROUTED WITHOUT A PRIZE.
+
+    `route` is the verb's `graded_inquiries` row (`rosters.yaml`): the provider registered under
+    `@provider("contest", …)` and the module entry it calls. Not `contest()`: an inquiry is not a
+    contest (`rosters.yaml`'s ruling -- a prize here is scripting drift), so no prize is resolved, no
+    depth is spent and no sides are derived; the actor is the one claimant and the inquiry's object
+    the subject. What it shares with `contest()` is everything that makes the roll one owner's: the
+    provider (`seam/wrappers/sigma.py::resolve`, the host input builder and adapter), the module entry
+    (`modules/social_contest/roll.py`, reached by its composition row) and the status reading
+    (`_returned`). The degree is `seam/ladder.py::degree_of`'s, read by the caller as for a contest.
+    `manifest/registry.py::check_graded_inquiries` refuses construction unless the route's pair is one
+    a prize row already binds, so a route cannot name a roll no contest makes."""
+    if not claimants:
+        raise Forbidden("an inquiry graded with no actor", "S39.1",
+                        law="S39.1 -- claimant[] is PERSONS, ALWAYS")
+    if not causes:
+        raise Forbidden("an inquiry graded with causes=[]", "S39.2",
+                        law="S39.2 line 2 -- Events, into the same log, WITH causes[] NAMING THE ACTS")
+    from ..manifest import call as _provider_for
+    _run = _provider_for("contest", route.get("provider"))
+    if _run is None:
+        raise Unspecified(
+            f"the inquiry {verb!r} routes to provider {route.get('provider')!r}, which nobody "
+            f"registered", "S43",
+            needs="the `graded_inquiries` row's `provider:` naming a registered provider",
+            law="S43 -- a missing provider is a STARTUP FAILURE WITH A NAME IN IT; "
+                "`check_graded_inquiries` refuses it at driver construction")
+    out = _run(w, claimants, causes, None, verb=verb, subject=subject, rng=rng,
+               module_entry=route.get("module_entry"))
+    return _returned(out, f"the inquiry {verb!r}", f"inquiry {verb!r}")
+
+
 def contest(w: World, rung: Optional[str], prize: Any, claimants: list[str],
             depth: int, max_depth: int, causes: list[str],
             extension: Optional[Callable[[str], bool]] = None,
@@ -180,22 +238,7 @@ def contest(w: World, rung: Optional[str], prize: Any, claimants: list[str],
             # other provider accepts and ignores it, a deliberate non-change (`combat.py`'s own
             # note on `rng` is the precedent for what that comment looks like).
             out = _run(w, claimants, causes, prize, verb=verb, subject=subject, rng=rng, rung=rung)
-            if out.get("status") == "RESOLVED":
-                TRACE.decision(f"contest for {prize!r} dispatched", "S39",
-                               chose=f"called {out['module']} (resolver {out['resolver']})",
-                               alternatives=["invent a degree ladder in the seam (S27.2: the "
-                                             "second resolver)"])
-                return out
-            if out.get("status") in REFUSAL_STATUSES:
-                return ContestRefused(out["status"], out.get("why"))
-            # A gap in the CALL is named as a gap in the call, never as a missing design.
-            raise Unspecified(
-                f"a contest for {prize!r} routes to `{out['module']}` and the call did not "
-                f"complete: {out.get('why')}", "S39",
-                needs=out.get("status"),
-                law="the seam DISPATCHES (Jordan 2026-09-02). A party the seam cannot derive is "
-                    "a gap in the derivation, not a hole in the subsystem, and `combat_bridge` "
-                    "sets the rule: return the gap, never fabricate a side")
+            return _returned(out, f"a contest for {prize!r}", f"contest for {prize!r}")
         raise Unspecified(
             f"a contest for {prize!r} belongs to the `{_sub['module']}` subsystem "
             f"(resolver: {_sub['resolver']}), and nothing connects the seam to it", "S39",

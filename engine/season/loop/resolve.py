@@ -20,7 +20,7 @@ from __future__ import annotations
 import random
 from ..data import files
 from ..gaps import InstrumentDefect
-from ..data.rosters import STRATA
+from ..data.rosters import GRADED_INQUIRIES, STRATA
 
 from typing import Optional
 from ..data.matrix import Step, matrix_row
@@ -36,7 +36,7 @@ from ..epistemic import observers_for
 from ..queries.person_q import (broken_by, confided_outside, conviction_after_crisis,
                                  elements_violated_by)
 from ..queries.world_q import WorldReader, ceiling, demanded_person, occasioned_by
-from ..seam import ContestError, ContestRefused, Resolution, contest, degree_of
+from ..seam import ContestError, ContestRefused, Resolution, contest, degree_of, grade
 from ..state.carriers import Act, Event, StateChange, subject_of
 from ..state.gate import Change, NoOpReceipt, Subject, Token, seat_hold
 from ..state.ids import draw_factory, H
@@ -815,6 +815,34 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
     return produced
 
 
+def _grade(self, w: "World", token: Token, a: Act, route: dict) -> list:
+    """v9 FI-01 (`ED-FI-0009`, J-22 option (A)): AN INQUIRY, ROLLED AND FOLDED AT ITS DEGREE.
+
+    `route` is the verb's `graded_inquiries` row. ASSUMES `_admits` HAS PASSED, as `_contest` does
+    (`resolve()` checks it once, before either). The roll is `seam.grade`'s -- the `social_contest`
+    provider and module entry the route names, the host input builder's pool (`pool_default` unless
+    `verb_capability` names a key) and the module's obstacle at its non-person default (A-21) -- and
+    the band is `degree_of`'s, the one ladder; the fold then reports the band's `emits:` exactly as
+    for a contested act. A `ContestRefused` (S27.4, or a missing party) folds as the row's refusal
+    kind, `_contest`'s `_party_gap_refusal` shape.
+
+    ⚠ THE SUBJECT IS THE ACT'S `subject` OPERAND, AND IT IS NEVER A PERSON FOR A GRADED ROW: `research`
+    binds a Record, `surveil` a Rung and `examine` a `site` operand (so `subject` is `None`). The
+    provider reads opposition off a PERSON subject only, so the obstacle is `obstacle_default` here by
+    construction, not by a branch on the verb.
+    ⚠ THE GENERATOR IS THE ACT'S OWN, `H(seed, tick, actor, "roll:<verb>:<act id>")` -- `_contest`'s
+    shape with the verb where a prize would be (there is none), so adding a graded inquiry moves no
+    other act's draw (`04 PART D row 35`)."""
+    _subject = (a.payload or {}).get("subject") if isinstance(a.payload, dict) else None
+    _rng = draw_factory(w.world_seed, lambda: w.tick)(a.actor, f"roll:{a.verb}:{a.id}")
+    r = grade(w, [a.actor], [a.id], route, verb=a.verb, subject=_subject, rng=_rng)
+    if isinstance(r, ContestRefused):
+        row = VERB_TABLE.get(a.verb)
+        return _act_events(self, w, a, (row.emits_on_refusal if row is not None else ())
+                           or ("act.refused",))
+    return self._fold(w, token, a, Resolution(degree_of(r, _subject, w.fixtures), r))
+
+
 def _apply_write(self, w: "World", token: Token, a: Act, kind: str, fld: str, eff=None,
                  earned: Optional[set] = None,
                  resolution: "Resolution | None" = None) -> list:
@@ -965,7 +993,10 @@ def resolve(self, token: Token, acts: list[Act],
         # kill or wound imo."* The design said so at `:434` and the instrument did not read it.
         _row = VERB_TABLE.get(a.verb)
         _contests = _contests_of(a, _row)
-        if _contests:
+        # v9 FI-01: an inquiry's `graded_inquiries` route -- the second source of a degree, which the
+        # loader refuses beside a `contests:` (one degree, one source), so at most one is set.
+        _route = GRADED_INQUIRIES.get(a.verb) if _row is not None else None
+        if _contests or _route:
             # ⚠⚠ §E2's ORDER, RESTORED: ELIGIBILITY AND `requires` BEFORE THE SEAM, NOT AFTER IT.
             # This branch used to route straight into personal combat, so a contested act's
             # precondition was never read -- `_fold`, which owns that check, is the branch this
@@ -992,7 +1023,8 @@ def resolve(self, token: Token, acts: list[Act],
             # confirmed above. `_contest` always returns a list -- a depth-capped
             # `ContestError` is converted to `[]` inside it, once, so this loop and
             # `loop/encounter.py`'s own do not each carry a second copy of that check.
-            produced = self._contest(w, token, a, _contests, contest_max_depth)
+            produced = (self._contest(w, token, a, _contests, contest_max_depth) if _contests
+                        else self._grade(w, token, a, _route))
         else:
             # S27.1: CONTENTION IS AN ORDERED FOLD. Each act sees the world its predecessors
             # left. SEQUENCE, NOT SIMULTANEITY -- and NO ACT NEEDS TO KNOW ANOTHER EXISTED.

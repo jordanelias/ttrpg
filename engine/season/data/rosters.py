@@ -502,6 +502,13 @@ if RECORD_KINDS & TENURE_KINDS:
 # polarity that function exists to hold. A verb with no row falls through to `pool_default` inside
 # the wrapper, which is the `assumption` grade's own reading (`08 §3`) and not a refusal.
 VERB_CAPABILITY = roster_map("verb_capability", "values")
+# v9 FI-01 (`ED-FI-0009`, J-22 (A)): inquiry verb -> `{provider, module_entry}`, the roll that grades
+# it with no prize. Validated against the verb table at load (`data/verbs.py`) and against the prize
+# rows at driver construction (`manifest/registry.py::check_graded_inquiries`); read by
+# `loop/resolve.py::_grade`.
+GRADED_INQUIRIES = roster_map("graded_inquiries", "values")
+# RS-21 item 1 (H-111): the Event kinds WITNESS deposits nothing for (`loop/witness.py::witness`).
+UNDEPOSITED_KINDS = roster("undeposited_kinds")
 RUNG_KINDS = roster("rung_kinds", ordered=True)
 
 
