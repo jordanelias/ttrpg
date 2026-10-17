@@ -5,7 +5,7 @@
 ## Open
 | item | where it lives | next step |
 |---|---|---|
-| Batch B-O — IN FLIGHT (sub-batch: SC-08, SC-03b; FI-01 and FI-02 follow at the clear point after SC-03b) | `workplans/valoria_master_workplan_v9_part3.md` §B.2 (row B-O); `open e67e14df` | built SC-08, SC-03b · close 1 · BATCH-CLOSE over `e67e14df..HEAD` (the clear point after SC-03b), then FI-01 and FI-02 |
+| Batch B-O — IN FLIGHT (sub-batch: SC-08, SC-03b; FI-01 and FI-02 follow at the clear point after SC-03b) | `workplans/valoria_master_workplan_v9_part3.md` §B.2 (row B-O); `open e67e14df` | built SC-08, SC-03b · close 2 · BATCH-CLOSE over `e67e14df..HEAD` (the clear point after SC-03b), then FI-01 and FI-02 |
 | investigation degree producer (work item 4.5) | `registers/editorial_ledger_fi.jsonl` (`ED-FI-0009`) | J-22 answered, option (A) (`workplans/valoria_master_workplan_v9_part5.md` §A (v9)); H-111 answered as the plan's recommendation (RS-21 item 1, [medium; Jordan to correct]: skip at WITNESS); build v9 FI-01 (B-O, `workplans/valoria_master_workplan_v9_part6.md`), the deposit half as the skip arm |
 | counter-espionage detection/response loop | `registers/editorial_ledger_fi.jsonl` (`ED-FI-0002`) | Design the loop with fieldwork as host (Exposure is the symmetric mechanic) (v9 FI-03, `workplans/valoria_master_workplan_v9_part6.md`: after IN-06 and FI-02) |
 
