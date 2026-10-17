@@ -1113,8 +1113,8 @@ rosters:
       ⚠ A ROUTE, NOT A PRIZE. Each row names the provider registered under `@provider("contest", …)`
       and the composition role that provider calls; the pool is `seam/wrappers/sigma.py::_pool_of`
       (`verb_capability`, else the swept `pool_default`) and the obstacle the module's own
-      (`modules/social_contest/roll.py::obstacle`: an inquiry's subject is never a person, so
-      `obstacle_default`, swept). The pair must be one a `contest_subsystems` prize row already
+      (`modules/social_contest/roll.py::obstacle`: `obstacle_default`, swept, while no
+      `verb_capability` row names an inquiry -- an inquiry's subject can be a person-kind Rung). The pair must be one a `contest_subsystems` prize row already
       binds (`manifest/registry.py::check_graded_inquiries`), so this row adds no roll and no
       resolver. No `verb_capability` row is added for the inquiries: which capability an inquiry
       draws on is stated nowhere, so every inquirer rolls `pool_default` -- the declared finding
@@ -1149,8 +1149,8 @@ rosters:
       THE SKIP IS STRICT, AND ITS CONSEQUENCE IS THE THING TO CORRECT: the plan's words ("a refused
       inquiry deposits nothing") drop the actor's own observation reads and `seen` claims as well as the
       event-kind claim, so a refused or failed inquiry teaches its actor nothing and the same person
-      re-forms it (measured at v9 FI-01: refused `research` 347 -> 930 over the corpus, 3 -> 12 headless,
-      clause-4 drops 240 -> 104 on `ARC-01`; the W-B and W-D notes in `test_season_shape.py`). The narrower
+      re-forms it (measured at v9 FI-01: refused `research` 3 -> 12 headless, clause-4 drops 240 -> 104 on
+      `ARC-01`; the W-B and W-D notes in `test_season_shape.py`). The narrower
       arm -- skip only the `finding.none` event-kind claim -- is the alternative Jordan would name.
     values: ["finding.none"]
 

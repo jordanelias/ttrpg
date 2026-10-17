@@ -211,6 +211,13 @@ def test_the_route_is_not_readable_as_a_prize():
             SeasonDriver(P.tiny_world())
     assert "research" in str(e.value) and "combat.fight" in str(e.value), str(e.value)
     assert "research" in str(e2.value), str(e2.value)
+    # A PAIR A PRIZE ROW BINDS, on a provider that cannot take a route: bound, so refusal 2 passes, and
+    # refused for the signature instead of raising `TypeError` at the first act.
+    bound_elsewhere = dict(GRADED_INQUIRIES, research={"provider": "personal_combat", "module_entry": "combat.fight"})
+    with mock.patch.object(_rosters, "GRADED_INQUIRIES", bound_elsewhere):
+        with pytest.raises(Unspecified) as e3:
+            check_graded_inquiries(VERB_TABLE)
+    assert "research" in str(e3.value) and "module_entry" in str(e3.value), str(e3.value)
 
 
 def test_examine_at_a_present_site_is_graded():

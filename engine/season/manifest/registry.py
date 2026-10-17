@@ -17,6 +17,7 @@ build step 10 states its done-condition: *"a misspelled manifest row fails at bo
 
 from __future__ import annotations
 
+import inspect
 from typing import Any, Optional
 
 from ..data import files
@@ -351,12 +352,14 @@ def check_graded_inquiries(verb_table: dict) -> list:
     binds, and is not itself a prize** -- at driver construction, naming the verb.
 
     `rosters.yaml: graded_inquiries` maps an inquiry verb to `{provider, module_entry}`, which
-    `seam/contest.py::grade` calls with no prize. Two refusals, each a way the route could become a
+    `seam/contest.py::grade` calls with no prize. Three refusals, each a way the route could become a
     second resolver (a route that is also a contest is the loader's refusal, `data/verbs.py`):
       1. the provider is not registered (`has`, the code, as `check_contest_prizes` half 2 asks);
       2. no prize row binds the SAME `(provider, module_entry)` pair -- so the route reaches only a
          module entry the contest roster already holds to its composition row (`_check_module_entry`),
-         and adds no roll of its own (S27.2).
+         and adds no roll of its own (S27.2);
+      3. the provider takes no `module_entry` keyword (`grade()` always passes one, and only the
+         `social_contest` adapter accepts it), which would be a `TypeError` at the first act.
     Returns the verbs checked, so a caller can see the sweep was not empty (`CLAUDE.md` §0.1 pt 2)."""
     from ..data.rosters import GRADED_INQUIRIES
     roster, column = _ROLE_ROSTERS["contest"]
@@ -380,6 +383,13 @@ def check_graded_inquiries(verb_table: dict) -> list:
                 f"{route.get('module_entry')!r}), which no `{roster}` prize row binds "
                 f"(bound: {sorted(bound, key=str)})", "S27.2",
                 needs="the route naming a provider and module entry a prize row already binds",
+                law=law)
+        if "module_entry" not in inspect.signature(call("contest", provider_name)).parameters:
+            raise Unspecified(
+                f"the graded inquiry {verb!r} routes to provider {provider_name!r}, which takes no "
+                f"`module_entry` keyword", "S27.2",
+                needs="a provider whose adapter accepts a route's module entry (`social_contest`), "
+                      "or the route's `provider:` fixed",
                 law=law)
         checked.append(verb)
     return checked

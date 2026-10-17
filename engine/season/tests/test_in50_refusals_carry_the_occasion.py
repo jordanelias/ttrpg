@@ -11,7 +11,7 @@ count is in the commit and in `engine/season/requirements.yaml` R-01's `measured
 What each test observes, and the control that stops it passing vacuously:
 
   1-4. THE FOUR REFUSAL ROUTES that did not append: `_survives`' `act.ineligible`; the S27.4
-       `attempt.refused`; the contest branch's `_admits` refusal; `_party_gap_refusal`.
+       `attempt.refused`; the contest branch's `_admits` refusal; `_refuse_party_gap`.
   5.   THE FOLD'S OWN REFUSAL (`_fold`'s `ev` through `_admits`) -- the route that already went
        through `_act_events` and so already named the occasion only on success.
   6.   THE NO-SCENE CONTROL: an act with no scene has no occasion and keeps `[a.id]` alone on every
@@ -113,7 +113,7 @@ def test_in50_route_4_party_gap_refusal_cites_the_occasion():
     # RE-PINNED AT v9 IN-13: an unheld settlement (`set_s_037`) now ARRIVES (`Unopposed`), so the
     # party gap is reached by H-149's route instead -- a HEARTH target musters an empty army
     # (`sides_of`: `claimants=[]`), `_contest`'s empty-`_parties` check (BEFORE the provider is
-    # reached) answers PARTY-GAP and `_party_gap_refusal` emits
+    # reached) answers PARTY-GAP and `_refuse_party_gap` emits
     # (test_march.py, `test_a_march_on_a_non_settlement_rung_refuses_h149_is_enforced`).
     a = Act(id="a_march", actor=ACTOR, verb="march", payload={"subject": "b_s_014_barracks"},
             via="off_npc_033", scene=SCENE)

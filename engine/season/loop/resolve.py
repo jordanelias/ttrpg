@@ -827,12 +827,11 @@ def _grade(self, w: "World", token: Token, a: Act, route: dict) -> list:
     roll is `seam.grade`'s, the band `degree_of`'s (the one ladder), and the fold reports the band's
     `emits:` as for a contested act. A `ContestRefused` folds through `_refuse_party_gap`.
 
-    ⚠ THE SUBJECT IS THE ACT'S `subject` OPERAND, AND IT IS NOT A PERSON FOR A GRADED ROW TODAY:
-    `research` binds a Record, `surveil` a Rung and `examine` a `site` operand (so `subject` is `None`).
-    The provider reads opposition off a PERSON subject only, so the obstacle is `obstacle_default` here.
-    That holds by what the rows bind and by `verb_capability` naming no inquiry (a person-kind Rung
-    shares its person's id, `sigma.py::_opposition_of`), not by construction: adding a `verb_capability`
-    row for an inquiry is the edit that must re-read this.
+    ⚠ THE SUBJECT IS THE ACT'S `payload["subject"]`, WHICH A CHOOSER-FORMED ACT CARRIES AS THE QUESTION'S
+    REFERENT (`research`: a Record, `surveil`: a Rung, a person-kind Rung shares its person's id). The
+    provider reads opposition off a PERSON subject only (`sigma.py::_opposition_of`) and only where
+    `verb_capability` names the verb, so the obstacle is `obstacle_default` HOLDS ONLY WHILE
+    `verb_capability` names no inquiry: adding a row for one is the edit that must re-read this.
     ⚠ THE GENERATOR IS THE ACT'S OWN, `H(seed, tick, actor, "roll:<verb>:<act id>")` -- `_contest`'s
     shape with the verb where a prize would be (there is none), so adding a graded inquiry moves no
     other act's draw (`04 PART D row 35`)."""

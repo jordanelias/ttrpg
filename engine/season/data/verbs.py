@@ -806,19 +806,20 @@ def _load_verb_table() -> dict:
         # as the table defect it is. They ship with a FLAT `emits:` because nothing grades an
         # investigation act yet; this check is what makes that a decision rather than a habit.
         # ⚠ v9 FI-01 (J-22 option (A)): THE ARM ACCEPTS A SECOND SOURCE OF A DEGREE, a `graded_inquiries`
-        # ROUTE (`rosters.yaml`; `loop/resolve.py::_grade` rolls it). Only `emits` is held for a route in
-        # both directions (a flat `emits:` beside a route is refused below); a flat `writes:` on a routed
-        # row is not refused (all three graded rows write `[]`).
+        # ROUTE (`rosters.yaml`; `loop/resolve.py::_grade` rolls it). A routed row keys `emits:` by degree
+        # and writes nothing (both refused below), so its roll has no band-blind write to apply.
         if emits_by_degree and not (row.contests or _graded):
             raise SystemExit(
                 f"verb_table.yaml: {name!r} has a degree-keyed `emits:` and no `contests:` or "
                 "`graded_inquiries` route. Nothing resolves a degree for it, so no branch could "
                 "ever be reported -- and unlike the `writes:` case this used to load clean and "
                 "raise at the first fold.")
-        if _graded and not emits_by_degree:
+        if _graded and (not emits_by_degree or row.writes):
             raise SystemExit(
-                f"verb_table.yaml: {name!r} has a `graded_inquiries` route and a FLAT `emits:`. "
-                "A graded verb keys its emissions by Degree, or the roll decides nothing it reports.")
+                f"verb_table.yaml: {name!r} has a `graded_inquiries` route and a FLAT `emits:` or a "
+                "non-empty `writes:`. A graded verb keys its emissions by Degree and writes nothing "
+                "(a flat write applies on every band), or the roll decides nothing it reports.")
+
         if row.contests and not emits_by_degree:
             raise SystemExit(
                 f"verb_table.yaml: {name!r} declares `contests: {row.contests}` and a FLAT "
@@ -898,7 +899,7 @@ def _load_verb_table() -> dict:
         # MISSING is a failable clause with no kind -- the fold would reach `refusal_for` and raise;
         # EXTRA is a kind for a clause that cannot fail, read by nothing (`ID-13`). A name on a FLAT
         # row is refused for the same reason: nothing keys it. A CONTESTED row may key its refusals
-        # only to ONE kind: the seam's party gap (`loop/resolve.py::_party_gap_refusal`) is a refusal
+        # only to ONE kind: the seam's party gap (`loop/resolve.py::_refuse_party_gap`) is a refusal
         # point this schema has no clause for, and it emits the union. ONE refusal names every
         # defect found, so a table edit that breaks three things is told all three.
         _names = row.requires_typed.conjuncts() if row.requires_typed is not None else ()
@@ -921,8 +922,9 @@ def _load_verb_table() -> dict:
             # `ID-9` only if the union holds more than one kind -- a kind published for a conjunct
             # that did not fail. A contested row whose every key emits ONE kind (`tell`:
             # `news.untold` for `holds` and `hearer`) emits exactly that kind at the party gap too.
-            if row.contests and len(row.emits_on_refusal) > 1:
-                _defects.append("declares `contests:`, whose party-gap refusal no clause names, "
+            if (row.contests or _graded) and len(row.emits_on_refusal) > 1:
+                _defects.append("declares `contests:` or a `graded_inquiries` route, whose "
+                                "party-gap refusal no clause names, "
                                 "and keys more than one refusal kind, so that refusal would emit "
                                 "kinds for conjuncts that did not fail")
             _after_fold = set(_names) & {ELIGIBILITY_CLAUSE, WRITE_CLAUSE, COUNTERPARTY_CLAUSE}
