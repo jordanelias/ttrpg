@@ -40,6 +40,14 @@
 # (`proposals/2026-10-03-verb-coverage-and-gap-fill.md:1466`) reads excommunication as a `ban`, opened
 # by `determine` under a Church arrangement with `disposes: ban` -- an OPENING, which `disposes:`
 # can name. It is not seeded here; it is SC-04's, with the remaining rows.
+# ⚠ v9 SC-04 SEEDED IT (`excommunication_deliberation`, `disposes: ban`, the last block of
+# `arrangements:`) -- EIGHT rows, all five `<tenure>` rows of §E.2 carried. Four of §E.2's twelve games
+# stay unseeded for the ambiguity reasons stated above, not because the loader cannot carry them:
+# `negotiation` (+ its envoys variant), `audience / embassy`, `appeal to a higher authority` and
+# `public debate`. NO `succession` ROW (`disposes: hold`) YET: `loop/effects_information.py::_disposal`
+# has no `hold` site, so `determine` opens nothing under it and C-1's report would name the row --
+# `test_arrangements.py::test_a_hold_disposing_row_is_reported_by_c1_until_determine_can_open_a_hold`
+# goes red the day a `determine` site opens a `hold`, which is the signal the row can be seeded.
 
 speech_kinds:
   # `19_PLAN.md` step 7: "the roster the design promised and never wrote... Ten members; the two
@@ -232,3 +240,34 @@ arrangements:
     proofs:             [testimony, confession, record]
     disposes:           ban
     disposal_reach:      body
+
+  # ════════════════════════════════════════════════════════════════════════════════════════════════
+  # v9 SC-04: THE FIFTH `<tenure>` ROW, AND THE SUCCESSION ROW. See the header's last paragraph.
+  # ════════════════════════════════════════════════════════════════════════════════════════════════
+
+  # ── excommunication deliberation — a body disposing of a person who is not there ──────────────
+  # §E.2 (`03_PARAMETERS.md:648-661`), transcribed in full but `disposes:`. The source writes
+  # `disposes: <tenure>` and prose that the disposal *"severs a `commit`"*; #453 §8.1 (`proposals/
+  # 2026-10-03-verb-coverage-and-gap-fill.md:1466`) reads excommunication as Tenure `ban` opened by
+  # `determine` under a Church arrangement with `disposes: ban` -- an OPENING, which `disposes:` can name
+  # and a severed `commit` it cannot -- so `ban`, the kind `inquisition_hearing` (the Church's bench) disposes.
+  # ⚠ THE ONE ROW WHERE THE OLD PAIR DISAGREES: the source states `records_dissent: false` AND
+  # `verdict_reasons: given`, and the thirteen-key collapse (header) keeps ONE key. [ASSUMPTION; medium;
+  # SC-04's; revert: `records_dissent: true` -- a data edit, no code reads a row by name]: the surviving
+  # key is the one the source WRITES, `false` (the deliberation is sealed, as the council's is), and the
+  # dropped `verdict_reasons: given` is not carried. Reading it the other way would contradict a value the
+  # source states outright; the same reading would seed `negotiation` (false + given), which this row does
+  # not decide -- that row's other disagreements (header) stay.
+  - id:               excommunication_deliberation
+    disposal:          bench
+    bench_basis:        determine
+    floor:              closed
+    records_dissent:    false
+    venue_min_rank:     settlement
+    term_required:      true
+    appeal_basis:       determine
+    interposed:         [procedure, ceremony]
+    order:              rank
+    proofs:             [record, testimony]
+    disposes:           ban
+    disposal_reach:      realm

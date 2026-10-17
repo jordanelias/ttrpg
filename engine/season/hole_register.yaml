@@ -4611,6 +4611,19 @@ rows:
     cite:      "MEASURED at v9 SC-02 `22a` (B-P, 2026-10-17, base `cf10ec05`): `build_realm(0)`, one season, every (person, docketed person matter) pair -- 154 pairs, 4 docket items: 49 deed claims about the matter exist BEFORE the mirror and ALL 49 ARE MIRRORED (the party holds his own deed: WITNESS deposits the actor's own act to him), so the proofs term is 0 on every pair (seeds 1 and 2: 76 and 78 pairs, 0 non-zero). In computed play the mirror is total today; the term moves an obstacle only for a party who did not witness his own act or whose ledger evicted it. NAMED LIMIT: one `speak` spends every proof the speaker holds -- the design spends them one at a time in a nested run, unbuilt -- so the hoard-or-spend choice the plan stars does not exist yet. Revert: `proof_step = 0` (the control)."
     source:    "v9 SC-02 `22a` (`workplans/valoria_master_workplan_v9_part6.md` §SC-02; `19_PLAN.md` step 18), batch B-P, 2026-10-17"
 
+  - id:        H-217
+    tier:      1
+    hole:      "THE `succession` ARRANGEMENT ROW IS NOT SEEDED: SC-04 was to seed `succession` (`disposes: hold`) so a rival's petition could be docketed and `determine`d over a vacant throne (RS-23, RS-27; IN-61's tribunal route, B-R). `determine` has no site that opens a `hold`: `loop/effects_information.py::_disposal` opens `detain` and `ban` only, so C-1 reports a `hold`-disposing row, and the gate's determination clause requires the edge's object to equal `via`, the seat the judge sits in, which a judge cannot do over a vacant throne"
+    kind:      "WIRING"
+    owner:     "`loop/effects_information.py::_disposal` (the `determine` opener) and `state/gate.py`'s determination clause, both IN-61's edit set (B-R)"
+    grade:     "measured"
+    default:   "no `succession` row; a vacant throne goes to the first valid claim (IN-61), the plan's stated revert"
+    site:      "arrangements.yaml (the row), loop/effects_information.py::_disposal, state/gate.py (determination clause)"
+    sweep:     []
+    unblocks:  "IN-61's tribunal route over a vacant throne (`_part5` IN-61; `_part6` SC-04's `succession` row, whose limit was already stated: it can only AWARD a VACANT seat)"
+    cite:      "MEASURED at v9 SC-04 (B-P, 2026-10-17, base `07510eae`): the row was seeded and four tests went red, two outside SC-04's EDITS (`test_u7_remit.py::test_19_the_disposal_opener_closes_c1s_report`, `::test_sc03a_the_determination_basis_opens_each_disposed_kind_and_no_other`), because adding `hold` to the disposable kinds lets the gate admit a bench opening a `hold` on its own seat and lets `open_case` dock a matter `determine` declines forever. Making them green needs a `_disposal` site for `hold` and a gate clause for an object other than `via`, plus an operand naming the throne: IN-61's code, not a data row. THE PLAN'S OWN REVERT TAKEN (SC-04 WHAT: *Revert: no `succession` row*). `test_arrangements.py::test_a_hold_disposing_row_is_reported_by_c1_until_determine_can_open_a_hold` goes red the day a `determine` site opens a `hold`, which is the signal the row can be seeded."
+    source:    "v9 SC-04 (`workplans/valoria_master_workplan_v9_part6.md` §SC-04), batch B-P, 2026-10-17"
+
   - id:        H-218
     tier:      1
     hole:      "WHAT AN INVESTIGATION ACT DEPOSITS, BY DEGREE, AND WHETHER ITS SUBJECT LEARNS HE WAS ASKED (proceedings `19_PLAN.md` step 19, intent: each of `interview`, `examine`, `research`, `reconstruct`, `surveil` gains a `product` column -- a stance, a retention, a record, an inference, a presence -- deposited at WITNESS at a confidence keyed on the degree, a misread at the SAME confidence with the WRONG value, and the subject's ledger recording that he was asked). STOPPED at v9 SC-02 `22a`, not built: the step's two load-bearing halves are decided the other way by the later design, and its remaining content is already built in that design's form."
