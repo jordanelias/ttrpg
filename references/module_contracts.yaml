@@ -67,6 +67,11 @@ composition_roles:
     verb: march
     needed_by: "engine/season/seam/wrappers/mass_battle.py — the host adapter `@provider(\"contest\", \"mass_battle\")` builds the typed input record (`field_input`) and calls this entry through `manifest.MODULE_ENTRIES` (plan position `31c`, A-25; the `a field` prize's provider since ED-IN-0279, M3). The prize row `a field` (`engine/season/rosters.yaml` `contest_subsystems`) names it in `module_entry:`, and `manifest/registry.py::check_contest_prizes` refuses at driver construction a prize row whose `module_entry:` no composition row declares, or one that disagrees with it. The target moved from `systems/mass_battle/sim/` with the import closure of `massbattle.py` at `31c` (a package: its imports are dotted, so no `PATH_SEAM_ALLOWED` entry)."
 
+  fieldwork.find:
+    target: "modules.fieldwork.find:find"
+    entry: step_call
+    needed_by: "engine/season/seam/wrappers/fieldwork.py — the host adapter `@provider(\"inquiry\", \"fieldwork\")` (v9 FI-02 + FI-03, `SM-3`, `ED-FI-0002`) builds the typed input record (`fieldwork_input`) and calls this entry through `manifest.MODULE_ENTRIES`, holding its return to `queries/inputs.py::Findings`. Its caller is `engine/season/seam/contest.py::find_trail`, called from `loop/resolve.py`'s per-act bookkeeping for every Event an act produced, and dispatched by the Event's KIND through the `inquiry` role, so `entry: step_call` (a loop step calls it), not `verb_call`: no verb's adapter calls it, and binding it to one inquiry verb would make that verb call two module entries (its roll and this), against the registrar's one-module-per-verb reading (`SM-5`). The row `finding.made` (`engine/season/rosters.yaml` `inquiry_modules`) names it in `module_entry:`, and `manifest/registry.py::check_inquiry_modules` refuses at driver construction a row whose `module_entry:` no composition row declares, or one that disagrees with it."
+
 modules:
 
   - module: faction_state
@@ -271,11 +276,11 @@ modules:
       parity: key-log
       note: 13 operations built, zero live callers; rendering is STRUCK (no entry point; plan position 27).
 
-  - module: fieldwork_knots
-    aliases: ["Knots"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
+  - module: fieldwork   # one identity per module, its directory name (A-25; the `combat` row's precedent). RE-KEYED from `fieldwork_knots` at v9 FI-02 + FI-03 (`SM-3`, `ED-FI-0002`): the `inquiry_modules` row `finding.made` (`engine/season/rosters.yaml`) names it by this key, and `manifest.resolve` refuses a `module:` no contract declares. The re-key IN-06 §6 left to B-S, in IN-06's own naming (`fieldwork.*`)
+    aliases: ["Knots", "Fieldwork"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "fieldwork"   # Key Type Registry vocabulary
     doc: .designs/systems/fieldwork/reference/knots_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the census).
-    sim_module: systems/fieldwork/sim/knots.py   # primary: knots.py; the Evidence/Disposition Track rows are implemented in the sibling systems/fieldwork/sim/fieldwork.py
+    sim_module: modules/fieldwork/   # v9 FI-03: the module's one entry is `find` (composition row `fieldwork.find`); the knots carriers below are `systems/fieldwork/sim/knots.py`'s, unplugged (IN-06/IN-32), and not reachable from `find`
     scales: [personal, scene]
     resolver: dice_pool   # Fieldwork Pool (fieldwork_v30 §2); knot formation procedure (knots_v30 §3.2)
     state:
@@ -304,6 +309,7 @@ modules:
         source: "key_substrate_v30 §8.4"
     accounting_phase: [settlement_accounting]
     gap_notes:
+      - "v9 FI-03 (`ED-FI-0002`): the knots state and gates below describe `systems/fieldwork/sim/knots.py`, UNPLUGGED (IN-06/IN-32); the module's one entry today is `find` (`modules/fieldwork/find.py`, what a graded finding uncovers of a covert trail). IN-32 plugs `fieldwork.form_knot` under this same row."
       - "registry attributes scene.gift emission to fieldwork (gift-giving as fieldwork social action) — cross-check vs scene_slate emitting same type"
       - "knots_v30 §6.1/§6.2/§11 carried the pre-ED-912 tier-capacity model + −4 betrayal-rupture value after TIER-DRIFT-001/COMPOSURE-DRIFT-001 were RESOLVED by Jordan (ED-912, 2026-06-28); propagation gap closed 2026-07-07 (ED-FI-0003) — §11 now records the resolution instead of forward-flagging it. Residual: §6.2 Coherence-loss rule [UNVERIFIED post-ED-912]; systems/fieldwork/sim/knots.py rebuild = Stratum B (C-TW-12)"
     status: extracted
@@ -313,11 +319,11 @@ modules:
       - "key_substrate_v30 §8.4, §8.7 [READ: 2026-06-10]"
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
     wiring:
-      build: stub
+      build: gated
       godot: no-oracle
       port_rank: 8
       parity: key-log
-      note: fieldwork/investigation raise; knots built but the scene runner is a stub.
+      note: "BUILD `gated` since v9 FI-03 (was `stub`): `find` runs only when an inquiry's `finding.made` carries a band `finding_terms` keys (`engine/season/rosters.yaml`) -- the condition -- and uncovers only a covert trail the finder did not witness; knots built but unplugged (IN-06/IN-32)."
 
   - module: scene_slate
     registry_system: "scene_slate"   # Key Type Registry vocabulary

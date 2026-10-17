@@ -36,7 +36,7 @@ from ..epistemic import observers_for
 from ..queries.person_q import (broken_by, confided_outside, conviction_after_crisis,
                                  elements_violated_by)
 from ..queries.world_q import WorldReader, ceiling, demanded_person, occasioned_by
-from ..seam import ContestError, ContestRefused, Resolution, contest, degree_of, grade
+from ..seam import ContestError, ContestRefused, Resolution, contest, degree_of, find_trail, grade
 from ..state.carriers import Act, Event, StateChange, subject_of
 from ..state.gate import Change, NoOpReceipt, Subject, Token, seat_hold
 from ..state.ids import draw_factory, H
@@ -1049,6 +1049,22 @@ def resolve(self, token: Token, acts: list[Act],
         # pass, on zero.
         for _e in produced:
             self.act_of[_e.id] = a
+            # v9 FI-02 + FI-03 (`SM-3`, `ED-FI-0002`): WHAT THIS EVENT UNCOVERS, through the `inquiry`
+            # role, dispatched by the Event's KIND (`seam.find_trail`; `rosters.yaml: inquiry_modules`)
+            # for every Event an act produced -- not from `_grade`, so no branch here names a verb, a
+            # band or a kind: an unclaimed kind finds nothing, and an ungraded `finding.made` carries no
+            # degree and `finding_terms` keys nothing for it -- the data decides. At RESOLVE, after the
+            # act's fold, so the find reads the log as the round's predecessors left it (this round's
+            # own Events reach `w.log` after RESOLVE, `loop/driver.py`). WITNESS deposits it.
+            # ⚠ REACHABLE BY A `research` ONLY THROUGH A PLANT: the one covert kind (`record.forged`) is
+            # minted into the forger's own hand, so another person consults the Record only after a
+            # `give` hands it on. The seed-0 realm plants none (`record.given` 0), so its `research`
+            # findings reach no trail -- a stated residue (`epistemic.trail_of`), not a hidden gap.
+            # ⚠ LAYER 1 (`04` §A.2): `loop/witness`'s may-read column lists no driver-held store of
+            # finds; `self.findings` is one (`seam/wrappers/fieldwork.py`'s docstring adjudicates).
+            _found = find_trail(w, a, _e)
+            if _found:
+                self.findings[_e.id] = _found
         # ⚠ G4: THE `for ch in e.changes: if isinstance(ch.delta, int): pending[...]` LOOP THAT
         # STOOD HERE IS GONE. It fed §27.3's accumulator off the success EVENTS, so any verb whose
         # act rode an integer delta on its `changes[]` moved a site whose `Site.condition` its

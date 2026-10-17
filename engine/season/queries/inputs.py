@@ -22,6 +22,9 @@ one return shape (`combat` returns a scene and `mass_battle` a field, neither a 
 itself is a `seam/` item of its own. It lives here, not in a sibling file, because a module imports it to
 construct it and this leaf is the one host file a module may import
 (`engine/season/tests/test_social_contest_module.py`).
+
+v9 FI-02 + FI-03 (`SM-3`, `ED-FI-0002`) add the fieldwork container's pair, at the foot of the file:
+`TrailItem` and `FieldworkInput` in, `Findings` out -- the `inquiry` role's records, for the same reason.
 """
 from __future__ import annotations
 
@@ -129,3 +132,41 @@ class MassBattleInput:
     loyalties: tuple
     loyalty_gain: float
     geography: Mapping = field(repr=False)
+
+
+# ---------------------------------------------------------------------------
+# v9 FI-02 + FI-03 (`SM-3`, `ED-FI-0002`): THE FIELDWORK CONTAINER'S RECORDS -- the `inquiry` role's
+# input and output, built and held by `seam/wrappers/fieldwork.py`, read by `modules/fieldwork/find.py`.
+# ---------------------------------------------------------------------------
+
+@dataclass(frozen=True)
+class TrailItem:
+    """One Event an inquiry COULD uncover: a covert deed the investigator did not witness
+    (`epistemic.trail_of`, the host's projection). Its id, its kind and when it was emitted -- what
+    the module orders by; the Event itself stays with the host."""
+    event_id: str
+    kind: str
+    emitted_at: int
+
+
+@dataclass(frozen=True)
+class FieldworkInput:
+    """What the fieldwork module's `find` reads, and nothing else.
+
+    Built by `seam/wrappers/fieldwork.py::fieldwork_input` (the host input builder) from `World`:
+      * `band`  -- the finding Event's degree (`Event.degree`), the one ladder's reading of the
+                   inquiry's roll; `None` for an ungraded finding;
+      * `items` -- the trail the host projected for the inquiry's subject (`TrailItem`s);
+      * `terms` -- `rosters.yaml: finding_terms`, band -> the observation terms a finding at that band
+                   shows. Handed in because a module holds no data (A-25), on `MassBattleInput.geography`'s
+                   precedent."""
+    band: Optional[str]
+    items: tuple
+    terms: Mapping
+
+
+@dataclass(frozen=True)
+class Findings:
+    """What the fieldwork module's `find` returns, and the host adapter refuses anything else: per
+    uncovered trail item, `(event id, the terms shown)`. Empty is a real answer -- nothing found."""
+    found: tuple

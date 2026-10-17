@@ -6,7 +6,9 @@ Three wrappers: `combat.py`, the IN-side of the personal-combat call `seam/conte
 to; `sigma.py`, the social contest container's provider (`social_contest`; was interim `sigma_leverage`,
 `ED-SC-0037`, until v9 SC-01 steps 13+15);
 and `mass_battle.py`, wired M3 of the driver-retirement plan (`ED-IN-0279`) -- `rosters.yaml`'s
-"a field" row now has a `provider:`, closing the gap this docstring used to describe.
+"a field" row now has a `provider:`, closing the gap this docstring used to describe. A fourth, under a
+second role: `fieldwork.py`, `@provider("inquiry", "fieldwork")` (v9 FI-02 + FI-03, `SM-3`) -- not a
+contest provider; its own docstring adjudicates the §A.2 row it deviates from.
 ⚠⚠ **THIS PACKAGE IMPORTS ITS OWN WRAPPERS, AND THAT IS WHAT REGISTERS THEM.
 `manifest/registry.py` USED TO, AND IT WAS AN IMPORT CYCLE.** `U1` had
 `registry._load_providers()` import `seam/wrappers/*` so `@provider` would run; the wrappers import
@@ -41,3 +43,5 @@ declared `sys.path` seam invisible to the scan that bounds it.
 from . import combat as _combat            # noqa: F401,E402
 from . import sigma as _sigma              # noqa: F401,E402
 from . import mass_battle as _mass_battle  # noqa: F401,E402
+# v9 FI-02 + FI-03 (`SM-3`): the `inquiry` role's provider, the fieldwork container's adapter.
+from . import fieldwork as _fieldwork      # noqa: F401,E402
