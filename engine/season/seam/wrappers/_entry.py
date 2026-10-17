@@ -26,7 +26,8 @@ def entry_for(prize: Any, module: str, module_entry: Any = None) -> tuple:
     entry = MODULE_ENTRIES.get(role)
     if entry is not None:
         return entry, None
+    who = "route" if module_entry else f"prize {prize!r}"
     return None, dict(status="ENGINE-UNAVAILABLE", module=module,
-                      why=f"{'route' if module_entry else f'prize {prize!r}'} names module entry "
+                      why=f"{who} names module entry "
                           f"{role!r}, which MODULE_ENTRIES does not hold -- the registrar fills it "
                           f"at SeasonDriver construction")

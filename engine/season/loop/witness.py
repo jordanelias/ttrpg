@@ -296,15 +296,11 @@ def witness(self, token: Token, events: list[Event]) -> int:
     # IN-55: an Event that changes only held claims, with no act, fans to nobody
     # (epistemic.changes_only_held_claims); the ledgers are read here once, before any deposit.
     held = held_claim_ids(w) if mode != "total" else frozenset()
-    # v9 FI-01, THE SKIP ARM (`ED-FI-0009`'s deposit half; RS-21 item 1, H-111 ANSWERED [medium; Jordan
-    # to correct]): an Event whose KIND is in `rosters.yaml: undeposited_kinds` (`finding.none`) fans to
-    # nobody, so a refused or failed inquiry deposits nothing -- no event-kind claim, no read, no `seen`,
-    # no content. It leaves the barrier's `events` below (the log and its act's causes are RESOLVE's, not
-    # this barrier's, and still hold it).
-    # Keyed on the kind, not on a band or an empty `changes[]`: `news.untold` and `matter.undetermined`
-    # keep depositing. Rebinding `events` here covers every pass below that reads it (the fan, the
-    # newly-held scan, IN-22's purview route), so the rule is one line, not three. The trace below
-    # still counts every Event the barrier was handed.
+    # v9 FI-01, THE SKIP ARM (RS-21 item 1, H-111 [medium; Jordan to correct]): an Event whose KIND is in
+    # `rosters.yaml: undeposited_kinds` (`finding.none`) fans to nobody -- no event-kind claim, no read,
+    # no `seen`, no content -- and stays in the log and its act's causes. Keyed on the kind, not on a band
+    # or an empty `changes[]`: `news.untold` and `matter.undetermined` keep depositing. Rebinding `events`
+    # covers every pass below that reads it; the trace still counts every Event handed in.
     n_handed = len(events)
     events = [e for e in events if e.kind not in UNDEPOSITED_KINDS]
     fan: list[tuple[str, Event, str]] = [

@@ -356,9 +356,10 @@ class VerbRow:
         if not self.emits_by_degree:
             return self.emits
         if degree is None:
+            src = f"`contests: {self.contests}`" if self.contests else "a `graded_inquiries` route"
             raise Unspecified(
                 f"{self.verb!r} keys `emits:` by degree "
-                f"({'`contests: ' + self.contests + '`' if self.contests else 'a `graded_inquiries` route'}) "
+                f"({src}) "
                 "and was folded with no degree, so there is no way to say WHICH outcome to report.",
                 "S39/H-98",
                 needs="a degree from the seam (contest()) before `emits_at` reads an outcome",
@@ -804,14 +805,10 @@ def _load_verb_table() -> dict:
         # accepted at load and would have failed per-act, mid-corpus, as a design gap rather than
         # as the table defect it is. They ship with a FLAT `emits:` because nothing grades an
         # investigation act yet; this check is what makes that a decision rather than a habit.
-        # ⚠ v9 FI-01 (`ED-FI-0009`, J-22 option (A)): THE ARM ACCEPTS A SECOND SOURCE OF A DEGREE, A
-        # `graded_inquiries` ROUTE (`rosters.yaml`) -- a declared routing row that is not a prize and
-        # not a `contests:` shape, which `loop/resolve.py::_grade` rolls through the provider and
-        # module entry it names. The check's point is unchanged: a degree-keyed `emits:` loads only
-        # where something resolves a degree for it. Only `emits` is held for the route in both
-        # directions (a flat `emits:` beside a route is refused below); a flat `writes:` on a routed row is
-        # not refused (all three graded rows write `[]`), and a row may not carry both a route and
-        # `contests:` (a route that is also a prize is a contest).
+        # ⚠ v9 FI-01 (J-22 option (A)): THE ARM ACCEPTS A SECOND SOURCE OF A DEGREE, a `graded_inquiries`
+        # ROUTE (`rosters.yaml`; `loop/resolve.py::_grade` rolls it). Only `emits` is held for a route in
+        # both directions (a flat `emits:` beside a route is refused below); a flat `writes:` on a routed
+        # row is not refused (all three graded rows write `[]`).
         if emits_by_degree and not (row.contests or _graded):
             raise SystemExit(
                 f"verb_table.yaml: {name!r} has a degree-keyed `emits:` and no `contests:` or "

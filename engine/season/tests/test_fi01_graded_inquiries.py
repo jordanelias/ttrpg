@@ -1,20 +1,10 @@
 """v9 FI-01 (`ED-FI-0009`; J-22 answered option (A)) -- a degree producer for the inquiries, and the
 deposit half built as the SKIP arm (RS-21 item 1, H-111 ANSWERED [medium; Jordan to correct]).
 
-WHAT WAS BUILT, each asked of the real loader, the real driver and the real WITNESS barrier:
-  * `rosters.yaml: graded_inquiries` -- a ROUTING row, verb -> `{provider, module_entry}`, not a prize and
-    not a `contests:` shape: `research`, `examine`, `surveil` (the place case). `interview` is a prompt
-    (K-36) and is not graded; `reconstruct` (K-37) and `thread_read` (K-37, H-85) wait and keep a flat
-    `emits:`.
-  * the `emits` arm of the loader check accepts a degree-keyed `emits:` on a routed row, and refuses a
-    routed row that is also contested, a routed row with a flat `emits:`, and a route carrying any field
-    but its two (`data/verbs.py`).
-  * `loop/resolve.py::_grade` -> `seam/contest.py::grade` -> the `social_contest` provider with the
-    route's module entry -> `seam/ladder.py::degree_of`: the host input builder's pool (`pool_default`),
-    the module's obstacle at its non-person default (A-21), the one ladder.
-  * `manifest/registry.py::check_graded_inquiries` at driver construction: a route reaches only a
-    `(provider, module_entry)` pair a prize row already binds.
-  * the SKIP arm: `rosters.yaml: undeposited_kinds` (`finding.none`) fans to nobody at WITNESS.
+Built: the `graded_inquiries` routing roster (`research`, `examine`, `surveil`'s place case; `interview` is
+a prompt, K-36, and `reconstruct`/`thread_read` wait, K-37/H-85), its loader and construction checks, the
+roll through `seam/contest.py::grade` and the `social_contest` entry, and the SKIP arm
+(`undeposited_kinds`: `finding.none` fans to nobody at WITNESS). The design is in `rosters.yaml`.
 
 THE FALSIFIERS (the position's, `workplans/valoria_master_workplan_v9_part6.md` FI-01):
   * a `Failure` inquiry, seeded at the shipped fixtures, deposits no claim -- no `claim.deposited` caused
@@ -48,6 +38,7 @@ from ..harness import probes as P
 from ..loop.driver import SeasonDriver, mint_token
 from ..manifest import MODULE_ENTRIES, check_graded_inquiries, resolve as manifest_resolve
 from ..queries.inputs import Margin
+from ..queries.person_q import said_of
 from ..queries.world_q import WorldReader
 from ..state.carriers import Act, Claim, Record, Site
 
@@ -94,17 +85,13 @@ def test_the_rosters_name_three_graded_and_the_skip_names_finding_none():
     skip arm is keyed on the one kind. A row that waits keeps a flat `emits:`, so it cannot be graded."""
     assert set(GRADED_INQUIRIES) == set(GRADED), sorted(GRADED_INQUIRIES)
     assert UNDEPOSITED_KINDS == frozenset({"finding.none"}), UNDEPOSITED_KINDS
-    checked = 0
     for verb in GRADED:
         row = VERB_TABLE[verb]
         assert set(row.emits_by_degree) == {"Overwhelming", "Success", "Partial", "Failure"}, verb
         assert row.emits_at("Failure") == ("finding.none",) and "finding.none" in row.emits_on_refusal
-        checked += 1
     for verb in (PROMPT, *WAITING):
         assert verb not in GRADED_INQUIRIES and not VERB_TABLE[verb].emits_by_degree, (
             f"{verb!r} is graded, and it is a prompt or waits ({WAITING.get(verb, 'K-36')})")
-        checked += 1
-    assert checked == 6
 
 
 def test_a_failed_inquiry_deposits_no_claim_and_news_untold_still_does():
@@ -159,7 +146,6 @@ def test_a_failed_inquiry_deposits_no_claim_and_news_untold_still_does():
     d = SeasonDriver(w)
     w.persons[ACTOR].ledger.append(
         Claim("c_held", ACTOR, "Hh", "stores:grain", 8, 0, "firsthand", 37, "own"))
-    from ..queries.person_q import said_of
     told = Act(id="a_fi01_tell_absent", actor=ACTOR, verb="tell",
                payload={"subject": "Hh", "to": "p_king",
                         "said": said_of(w.persons[ACTOR].ledger, "Hh", w.fixtures)})
@@ -189,11 +175,12 @@ def test_the_route_is_not_readable_as_a_prize():
 
     src = yaml.safe_load(VERBS.VERB_TABLE_YAML.read_text())
 
-    def loads(mutate, routes=None):
+    def loads(mutate, routes=None, kinds=None):
         doc = copy.deepcopy(src)
         mutate(doc)
         with mock.patch.object(VERBS, "VERB_TABLE_YAML") as fake, \
-                mock.patch.object(VERBS, "GRADED_INQUIRIES", routes or GRADED_INQUIRIES):
+                mock.patch.object(VERBS, "GRADED_INQUIRIES", routes or GRADED_INQUIRIES), \
+                mock.patch.object(VERBS, "UNDEPOSITED_KINDS", kinds or UNDEPOSITED_KINDS):
             fake.exists.return_value = True
             fake.read_text.return_value = yaml.safe_dump(doc)
             with pytest.raises(SystemExit) as e:
@@ -211,13 +198,8 @@ def test_the_route_is_not_readable_as_a_prize():
     msg = loads(lambda doc: None, routes=with_module)
     assert "examine" in msg and "fields" in msg, msg
     # A MISSPELLED skip kind would skip nothing and report the deposit half built: the loader names it.
-    with mock.patch.object(VERBS, "UNDEPOSITED_KINDS", frozenset({"finding.nnoe"})), \
-            mock.patch.object(VERBS, "VERB_TABLE_YAML") as fake:
-        fake.exists.return_value = True
-        fake.read_text.return_value = yaml.safe_dump(src)
-        with pytest.raises(SystemExit) as e:
-            VERBS._load_verb_table()
-    assert "finding.nnoe" in str(e.value), str(e.value)
+    msg = loads(lambda doc: None, kinds=frozenset({"finding.nnoe"}))
+    assert "finding.nnoe" in msg, msg
 
     stray = dict(GRADED_INQUIRIES, research={"provider": "social_contest", "module_entry": "combat.fight"})
     with mock.patch.object(_rosters, "GRADED_INQUIRIES", stray):
@@ -260,7 +242,6 @@ def test_the_inquiry_degree_is_the_one_owners(monkeypatch):
     w, d = _world()                         # a driver is constructed first: the registrar fills the table
     real = MODULE_ENTRIES["social_contest.roll"]
     seen: list = []
-    checked = 0
     for net, ob, band in ((5, 2, "Overwhelming"), (3, 2, "Success"), (2, 2, "Partial"), (0, 2, "Failure")):
         def fn(inp, rng, net=net, ob=ob):
             seen.append(inp)
@@ -269,8 +250,7 @@ def test_the_inquiry_degree_is_the_one_owners(monkeypatch):
         a = Act(id=f"a_fi01_owner_{band}", actor=ACTOR, verb="research", payload={"subject": REC})
         (ev,) = _resolve(w, d, a)
         assert ev.degree == band, (net, ob, ev.degree)
-        checked += 1
-    assert checked == 4 and len(seen) == 4
+    assert len(seen) == 4
     assert all(i.opposition is None for i in seen), [i.opposition for i in seen]
     assert all(i.pool == w.fixtures.get("pool_default") for i in seen), [i.pool for i in seen]
 

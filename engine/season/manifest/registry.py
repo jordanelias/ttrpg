@@ -351,28 +351,22 @@ def check_graded_inquiries(verb_table: dict) -> list:
     binds, and is not itself a prize** -- at driver construction, naming the verb.
 
     `rosters.yaml: graded_inquiries` maps an inquiry verb to `{provider, module_entry}`, which
-    `seam/contest.py::grade` calls with no prize. Three refusals, each a way the route could become a
-    second resolver or a disguised contest:
-      1. the verb is a `contest_subsystems` prize key, or declares `contests:` (the loader refuses the
-         second too; this sees a table changed after load);
-      2. the provider is not registered (`has`, the code, as `check_contest_prizes` half 2 asks);
-      3. no prize row binds the SAME `(provider, module_entry)` pair -- so the route reaches only a
+    `seam/contest.py::grade` calls with no prize. Two refusals, each a way the route could become a
+    second resolver (a route that is also a contest is the loader's refusal, `data/verbs.py`):
+      1. the provider is not registered (`has`, the code, as `check_contest_prizes` half 2 asks);
+      2. no prize row binds the SAME `(provider, module_entry)` pair -- so the route reaches only a
          module entry the contest roster already holds to its composition row (`_check_module_entry`),
          and adds no roll of its own (S27.2).
     Returns the verbs checked, so a caller can see the sweep was not empty (`CLAUDE.md` §0.1 pt 2)."""
     from ..data.rosters import GRADED_INQUIRIES
     roster, column = _ROLE_ROSTERS["contest"]
     prizes = roster_map(roster, column)
-    bound = {(r.get("provider"), r.get("module_entry")) for r in prizes.values() if isinstance(r, dict)}
+    bound = {(r["provider"], r["module_entry"]) for k in prizes if (r := resolve("contest", k))}
     law = ("rosters.yaml -- investigation must not be made a contest to become gradeable; S27.2 -- one "
            "roll owner. A route is a pointer at a roll the tree already makes, never a prize and never "
            "a roll of its own")
     checked = []
     for verb, route in sorted(GRADED_INQUIRIES.items()):
-        if verb in prizes or getattr(verb_table.get(verb), "contests", None):
-            raise Unspecified(
-                f"the graded inquiry {verb!r} is also a prize or declares `contests:`", "ED-FI-0009",
-                needs="the route alone -- an inquiry has no prize", law=law)
         provider_name = route.get("provider")
         if not provider_name or not has("contest", provider_name):
             raise Unspecified(

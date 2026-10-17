@@ -698,6 +698,23 @@ def _conviction_crisis(w: "World", token: Token, a: Act, broken_of: dict) -> Non
                                 for pid, _a in moved), perform))
 
 
+def _refuse_party_gap(self, w: "World", a: Act) -> list:
+    """A contested or graded act refused AFTER admission (a party the seam cannot derive, or a roll the
+    provider refused): the row's `emits_on_refusal`, `_contest`'s and `_grade`'s one body.
+
+    ⚠ `or ("act.refused",)`, MATCHING EVERY SIBLING FALLBACK (`_admits`, `_fold`,
+    `_refuse_after_the_fact`) -- found missing in the M4 review pass's own correctional
+    round: a verb with an empty `emits_on_refusal:` (or a hand-built Act naming no real
+    verb row at all) produced ZERO Events here, a silent drop, where every other refusal
+    path in this module already falls back."""
+    row = VERB_TABLE.get(a.verb)
+    kinds = (row.emits_on_refusal if row is not None else ()) or ("act.refused",)
+    produced = _act_events(self, w, a, kinds)  # `_act_events` owns the id scheme (§8)
+    for _e in produced:
+        self.act_of[_e.id] = a
+    return produced
+
+
 def _contest(self, w: "World", token: Token, a: Act, contests: list,
              contest_max_depth: Optional[int]) -> list:
     """S39.2, and M4's deferral fork (`ED-IN-0279` clause (a)). Extracted from `resolve()`'s own
@@ -754,20 +771,8 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
     # ineligibility already does, rather than letting `contest()`'s hard raise escape a caller
     # that does not expect one, is what `_ten_seasons`-style tests (no `corpus_run.run_case`
     # exception wrapper around them) found the hard way.
-    def _party_gap_refusal() -> list:
-        # ⚠ `or ("act.refused",)`, MATCHING EVERY SIBLING FALLBACK (`_admits`, `_fold`,
-        # `_refuse_after_the_fact`) -- found missing in the M4 review pass's own correctional
-        # round: a verb with an empty `emits_on_refusal:` (or a hand-built Act naming no real
-        # verb row at all) produced ZERO Events here, a silent drop, where every other refusal
-        # path in this module already falls back.
-        row = VERB_TABLE.get(a.verb)
-        kinds = (row.emits_on_refusal if row is not None else ()) or ("act.refused",)
-        produced = _act_events(self, w, a, kinds)  # `_act_events` owns the id scheme (§8)
-        for _e in produced:
-            self.act_of[_e.id] = a
-        return produced
     if not _parties:
-        return _party_gap_refusal()
+        return _refuse_party_gap(self, w, a)
     # ⚠⚠ `U1`: THE DRIVER CONSTRUCTS THE GENERATOR, AND `04 §C.12`'s REJECTION 4 IS LOAD-BEARING.
     # `purpose` stays `roll:<prize>:<act id>`, provider-specific by design -- see `resolve()`'s
     # own history (`git log` on this file) for the fuller account of why.
@@ -798,7 +803,7 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
         # failed to import/compose) is NOT a refusal: the seam still raises it, loud on purpose, since
         # folding it into a graceful `march.refused` would hide an infrastructure failure behind a
         # plausible-looking game Event.
-        return _party_gap_refusal()
+        return _refuse_party_gap(self, w, a)
     if isinstance(r, ContestError):
         TRACE.note(f"contest returned {r}", "S39.3")
         return []
@@ -818,13 +823,9 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
 def _grade(self, w: "World", token: Token, a: Act, route: dict) -> list:
     """v9 FI-01 (`ED-FI-0009`, J-22 option (A)): AN INQUIRY, ROLLED AND FOLDED AT ITS DEGREE.
 
-    `route` is the verb's `graded_inquiries` row. ASSUMES `_admits` HAS PASSED, as `_contest` does
-    (`resolve()` checks it once, before either). The roll is `seam.grade`'s -- the `social_contest`
-    provider and module entry the route names, the host input builder's pool (`pool_default` unless
-    `verb_capability` names a key) and the module's obstacle at its non-person default (A-21) -- and
-    the band is `degree_of`'s, the one ladder; the fold then reports the band's `emits:` exactly as
-    for a contested act. A `ContestRefused` (S27.4, or a missing party) folds as the row's refusal
-    kind, `_contest`'s `_party_gap_refusal` shape.
+    `route` is the verb's `graded_inquiries` row; ASSUMES `_admits` HAS PASSED, as `_contest` does. The
+    roll is `seam.grade`'s, the band `degree_of`'s (the one ladder), and the fold reports the band's
+    `emits:` as for a contested act. A `ContestRefused` folds through `_refuse_party_gap`.
 
     ⚠ THE SUBJECT IS THE ACT'S `subject` OPERAND, AND IT IS NOT A PERSON FOR A GRADED ROW TODAY:
     `research` binds a Record, `surveil` a Rung and `examine` a `site` operand (so `subject` is `None`).
@@ -835,13 +836,11 @@ def _grade(self, w: "World", token: Token, a: Act, route: dict) -> list:
     ⚠ THE GENERATOR IS THE ACT'S OWN, `H(seed, tick, actor, "roll:<verb>:<act id>")` -- `_contest`'s
     shape with the verb where a prize would be (there is none), so adding a graded inquiry moves no
     other act's draw (`04 PART D row 35`)."""
-    _subject = (a.payload or {}).get("subject") if isinstance(a.payload, dict) else None
+    _subject = a.payload.get("subject") if isinstance(a.payload, dict) else None
     _rng = draw_factory(w.world_seed, lambda: w.tick)(a.actor, f"roll:{a.verb}:{a.id}")
     r = grade(w, [a.actor], [a.id], route, verb=a.verb, subject=_subject, rng=_rng)
     if isinstance(r, ContestRefused):
-        row = VERB_TABLE.get(a.verb)
-        return _act_events(self, w, a, (row.emits_on_refusal if row is not None else ())
-                           or ("act.refused",))
+        return _refuse_party_gap(self, w, a)
     return self._fold(w, token, a, Resolution(degree_of(r, _subject, w.fixtures), r))
 
 
@@ -998,7 +997,7 @@ def resolve(self, token: Token, acts: list[Act],
         # v9 FI-01: an inquiry's `graded_inquiries` route -- the second source of a degree, which the
         # loader refuses beside a `contests:` on the VERB ROW (one degree, one source); an act carrying its own
         # `contests` (`_contests_of`, hand-built acts only) takes the contest branch below and the route is unread.
-        _route = GRADED_INQUIRIES.get(a.verb) if _row is not None else None
+        _route = GRADED_INQUIRIES.get(a.verb)
         if _contests or _route:
             # ⚠⚠ §E2's ORDER, RESTORED: ELIGIBILITY AND `requires` BEFORE THE SEAM, NOT AFTER IT.
             # This branch used to route straight into personal combat, so a contested act's

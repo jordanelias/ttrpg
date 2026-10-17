@@ -129,12 +129,6 @@ def grade(w: World, claimants: list[str], causes: list[str], route: dict, *,
     (`_returned`). The degree is `seam/ladder.py::degree_of`'s, read by the caller as for a contest.
     `manifest/registry.py::check_graded_inquiries` refuses construction unless the route's pair is one
     a prize row already binds, so a route cannot name a roll no contest makes."""
-    if not claimants:
-        raise Forbidden("an inquiry graded with no actor", "S39.1",
-                        law="S39.1 -- claimant[] is PERSONS, ALWAYS")
-    if not causes:
-        raise Forbidden("an inquiry graded with causes=[]", "S39.2",
-                        law="S39.2 line 2 -- Events, into the same log, WITH causes[] NAMING THE ACTS")
     from ..manifest import call as _provider_for
     _run = _provider_for("contest", route.get("provider"))
     if _run is None:
