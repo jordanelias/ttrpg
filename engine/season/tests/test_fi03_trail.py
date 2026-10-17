@@ -32,27 +32,51 @@ RED WHEN PLANTED (each run 2026-10-17 on the build tree, then restored): the han
 `holds_trail`'s re-check in `_found_claims` dropped -- `test_two_finds_of_one_trail_in_one_round_...`
 goes RED; `holds_trail` made to compare `when` with `emitted_at` (the design's first exclusion) --
 `test_a_second_research_of_the_same_record_deposits_nothing` and the one-round test go RED.
+
+STEP 3, THE EXIT TESTS (sections 5-7): the position's falsifier over the tree's existing response surface
+(Q2 -> `opening_set`; no goal edit, no decision code), the entity-id closure in SC-01 step 16's form
+(`_closure_scan.py`, the one walk), and one seed run twice in one process giving one hash.
+RED WHEN PLANTED (2026-10-17, each run then restored; the test-side plants on a scratch copy of this file,
+deleted): `fieldwork_input` projecting no trail item -- the found-trail half and both twice-hash tests go
+RED; the control arm left unsuppressed (precondition dropped) -- `trail_qs == []` goes RED;
+`trail_of` walking `faction.surveyed` beside `covert_kinds` -- the survey control goes RED at its
+`trail_of` precondition; the survey's positive arm without the listing -- RED ("the control is vacuous");
+`npcs.yaml` dropped from the union -- the plant's `npcs.yaml` case goes RED; the main twice-hash test
+under the drop-after-1 counter -- RED (`[1, 0]`); the control without the counter -- RED (one hash);
+the realm with the chooser's draw seeded one higher per call -- RED (two hashes); the realm with the
+provider forced to uncover any other hand's forging -- RED ("the realm now reaches a find").
 """
 from __future__ import annotations
 
+import ast
 import dataclasses
+import functools
+import inspect
+from pathlib import Path
 
 import pytest
 
+from .. import epistemic
+from ..data import files
+from ..data.goals import goals
 from ..data.matrix import Step, WriteClass
-from ..data.rosters import FINDING_TERMS, faction_prop_id
+from ..data.rosters import COVERT_KINDS, FINDING_TERMS, faction_prop_id
 from ..decision.choose import _payload_of
 from ..decision.options import opening_set
 from ..epistemic import SEEN_PREDICATE, trail_of
 from ..gaps import Unspecified
+from ..harness import populated as POP
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver, mint_token
 from ..loop.witness import HAND_TERM
 from ..manifest import MODULE_ENTRIES, resolve as manifest_resolve
+from ..manifest.providers import PROVIDERS
 from ..queries import world_q
 from ..queries.inputs import Findings
 from ..seam import find_trail
+from ..state.attribution import actor_of
 from ..state.carriers import Act, Claim, Event, Proposition, Tenure, View
+from ._closure_scan import branches_on_ids, game_code
 
 FAC = faction_prop_id("Crown")
 FORGER, INVESTIGATOR, ABOUT = "p_other", "p_high", "p_mid"
@@ -75,9 +99,11 @@ def step(w, d, *acts):
     return out
 
 
-def trail_world():
+def trail_world(verb="forge", kind="record.forged"):
     """THE WORLD, built through the fold to the moment the investigator holds the forged Record (tick 2).
-    Returns `(w, d, rid)`."""
+    Returns `(w, d, rid)`. `verb`/`kind`: the tick-0 act that mints the Record and the one Event it must
+    emit -- `forge` by default; step 3's structural control passes `survey` (`faction.surveyed`), which
+    mints the same Record id (the id is the act's) into the same hand by the same body (`_mint_sheet`)."""
     w = P.tiny_world()
     w.propositions[FAC] = Proposition(FAC, "HOLDS", "Crown", "is a faction of this world", True, 0)
     for pid in (INVESTIGATOR, ABOUT):
@@ -86,8 +112,8 @@ def trail_world():
     forger = w.persons[FORGER]
     forger.ledger.append(Claim(f"c_{FORGER}_{ABOUT}", FORGER, ABOUT, "exists:Person", 1, w.tick,
                                "firsthand", 1, "own"))
-    out = step(w, d, Act(id=FORGE_ID, actor=FORGER, verb="forge", payload={"subject": ABOUT}))
-    assert [e.kind for e in out] == ["record.forged"], [e.kind for e in out]
+    out = step(w, d, Act(id=FORGE_ID, actor=FORGER, verb=verb, payload={"subject": ABOUT}))
+    assert [e.kind for e in out] == [kind], [e.kind for e in out]
     (rid,) = [c.subject for c in out[0].changes]
     w.tick += 1
     assert [e.kind for e in step(w, d, Act(id="fi03_move", actor=FORGER, verb="move",
@@ -345,3 +371,246 @@ def test_the_module_is_pure_and_orders_by_emission():
     assert got.found == tuple((i, FINDING_TERMS[band]) for i in ("c", "a", "b")), got
     assert find(FieldworkInput(None, items, dict(FINDING_TERMS))) == Findings(())
     assert find(FieldworkInput(band, items, {})) == Findings(())
+
+
+# ======================================================================================
+# 5 -- STEP 3, THE POSITION'S FALSIFIER: a response forms only from a found trail
+# ======================================================================================
+# THE RESPONSE SURFACE IS THE TREE'S EXISTING Q2 ROUTE, nothing added for FI-03: a deposited claim the
+# investigator's `reach` covers is a `claim_landed` question (`world_q.questions_for`), and
+# `decision/options.py::opening_set` forms candidates on its referent. "His next deliberation" is the
+# next tick: `questions_for`'s default `since` is `(tick - 1, 0)`, so at the find's own tick the
+# `give`'s and the `move`'s claims about the forger (tick 1) are still new and would raise questions on
+# him in EVERY arm; one tick on, only what the find deposited is new.
+
+def after_research(n, cand, verb="forge", kind="record.forged"):
+    """`trail_world(verb, kind)`, the investigator's `research(n, cand)` resolved and witnessed, then the
+    tick advanced to his next deliberation. Returns `(w, rid, finding)`."""
+    w, d, rid = trail_world(verb, kind)
+    (finding,) = step(w, d, research(n, cand))
+    w.tick += 1
+    return w, rid, finding
+
+
+def responses(w, kind="record.forged"):
+    """What the investigator's next deliberation forms on the FORGER, through the real chooser path.
+    Returns `(trail_qs, from_trail, on_him)`: the questions whose `about` claim is `(FORGER, kind)` --
+    not merely a question naming him -- the candidates `opening_set` forms on him from those, and every
+    candidate it forms on him from ANY question."""
+    p = w.persons[INVESTIGATOR]
+    by_id = {c.id: c for c in p.ledger}
+    view = View(INVESTIGATOR, [], w.fixtures.get("view_k"))
+    trail_qs, from_trail, on_him = [], [], []
+    for q in world_q.questions_for(w, p):
+        c = by_id.get(q.about)
+        is_trail = c is not None and (c.subject, c.predicate) == (FORGER, kind)
+        if is_trail:
+            trail_qs.append((q, c))
+        for cand in opening_set(p, view, q, w.fixtures):
+            if cand.subject == FORGER:
+                on_him.append(cand)
+                if is_trail:
+                    from_trail.append(cand)
+    return trail_qs, from_trail, on_him
+
+
+def test_a_found_trail_forms_a_response_on_the_forger_and_a_suppressed_one_forms_none(monkeypatch):
+    """THE POSITION'S FALSIFIER (`_part6` FI-03): same seed, same forge, same research act, same roll.
+    TRAIL FOUND: at his next deliberation `questions_for` holds a question whose `about` claim is the
+    inferred `(forger, record.forged)` the find deposited, and `opening_set` forms >= 1 candidate on the
+    forger FROM IT. TRAIL SUPPRESSED (`finding_terms` emptied, step 2's control): the band is drawn
+    identically and deposits nothing, and no question is about the forger's deed, none names him, and no
+    candidate forms on him from any question."""
+    n, cand = find_band(HAND_BANDS)
+    w, rid, finding = after_research(n, cand)
+    assert finding.kind == "finding.made" and finding.degree in HAND_BANDS, (finding.kind, finding.degree)
+    trail_qs, from_trail, on_him = responses(w)
+    assert trail_qs, "the found trail raised no question about the forger's deed"
+    assert all(c.source == "inferred" and c.doer is None for _, c in trail_qs), trail_qs
+    assert from_trail, "the question about the forger's deed formed no candidate on him"
+
+    for band in list(FINDING_TERMS):
+        monkeypatch.delitem(FINDING_TERMS, band)
+    w, rid, finding2 = after_research(n, cand)
+    assert (finding2.kind, finding2.degree, finding2.id) == (finding.kind, finding.degree, finding.id)
+    assert forged_claims(w, INVESTIGATOR) == [] and found_deposits(w, finding2.id) == [], (
+        "the control deposited the trail: it is not suppressed")
+    trail_qs, _, on_him = responses(w)
+    assert trail_qs == [], trail_qs
+    assert not [q.id for q in world_q.questions_for(w, w.persons[INVESTIGATOR]) if FORGER in q.referents]
+    assert on_him == [], sorted({c.verb for c in on_him})
+
+
+def test_a_research_on_a_surveyed_record_forms_no_response_on_its_maker(monkeypatch):
+    """THE STRUCTURAL CONTROL: the same world with the Record minted by `survey` (`faction.surveyed`, a
+    deed of the same man, not a `covert_kinds` member), handed over the same way, and the same `research`
+    act drawing the same hand band: nothing is trail, nothing is deposited, and no candidate forms on the
+    maker. In the realm every act executes and emits its Event (S19.4), so a trail is suppressed only at
+    the container -- this control is the other half: an act whose kind the data does not list.
+    ITS OWN POSITIVE ARM, so the negative cannot pass for a reason other than the list: `covert_kinds`
+    widened to the survey's kind (monkeypatched on `epistemic`, the one reader), the same world, the same
+    act -- a response on him forms."""
+    n, cand = find_band(HAND_BANDS)
+    survey = ("survey", "faction.surveyed")
+    assert survey[1] not in COVERT_KINDS, sorted(COVERT_KINDS)
+    w, d, rid = trail_world(*survey)
+    made = next(e for e in w.log if e.kind == survey[1])
+    assert actor_of(w, made) == FORGER, "the survey is not the maker's deed"
+    assert not [c for c in w.persons[INVESTIGATOR].ledger if c.when == made.emitted_at], (
+        "the investigator witnessed the survey")
+    # The chooser forms a `research` on this Record here too (its `to` operand is derived from a different
+    # question, so its payload differs); the act resolved below is the forge world's, verbatim.
+    mine = chooser_research(w, rid)
+    assert mine is not None and mine.subject == rid, "the chooser forms no research on the surveyed Record"
+    assert trail_of(w, rid, INVESTIGATOR) == []
+
+    w, rid, finding = after_research(n, cand, *survey)
+    assert finding.kind == "finding.made" and finding.degree in HAND_BANDS, (finding.kind, finding.degree)
+    assert found_deposits(w, finding.id) == []
+    trail_qs, _, on_him = responses(w, survey[1])
+    assert trail_qs == [] and on_him == [], (trail_qs, sorted({c.verb for c in on_him}))
+
+    monkeypatch.setattr(epistemic, "COVERT_KINDS", COVERT_KINDS | {survey[1]})
+    w, rid, finding = after_research(n, cand, *survey)
+    assert finding.degree in HAND_BANDS, finding.degree
+    trail_qs, from_trail, _ = responses(w, survey[1])
+    assert trail_qs and from_trail, "listing the survey's kind formed no response: the control is vacuous"
+
+
+# ======================================================================================
+# 6 -- STEP 3, CLOSURE: no game code branches on an entity id (SC-01 step 16's form)
+# ======================================================================================
+# The walk and the scope are `_closure_scan.py`'s, shared with `test_sc01_the_bar.py` (arrangement
+# ids). A STATIC scan for the reason SC-01 gives: a seeded run reaches a planted branch only if that
+# entity happens to act, so a behavioural test passes over a branch it never executes.
+
+@functools.lru_cache(maxsize=None)
+def entity_ids() -> dict:
+    """The ids a scripted branch would name, from their loaders, never spelt: `goals.yaml` (its reader),
+    the persons `build_realm(0)` seats, and `npcs.yaml`'s cases (the harness's own reader of its own
+    roster file, `populated._load(ROSTER)`)."""
+    return {"goals.yaml": frozenset(g.id for g in goals()),
+            "build_realm(0).persons": frozenset(POP.build_realm(0).persons),
+            "npcs.yaml": frozenset(r["case"] for r in POP._load(POP.ROSTER).get("npcs") or ())}
+
+
+def _union() -> frozenset:
+    return frozenset().union(*entity_ids().values())
+
+
+def _provider_and_entry_files() -> tuple:
+    """The fieldwork container's two files, read off what is REGISTERED (the provider the `inquiry` row
+    names, the entry its composition row resolved), not spelt as paths."""
+    trail_world()                                   # constructs a driver: the registrar has run
+    row = manifest_resolve("inquiry", "finding.made")
+    prov = PROVIDERS[("inquiry", row["provider"])]
+    entry = MODULE_ENTRIES[row["module_entry"]].fn
+    return tuple(Path(inspect.getsourcefile(fn)).resolve() for fn in (prov, entry))
+
+
+def test_no_game_code_branches_on_an_entity_id():
+    """FI-03's SCRIPTING-DRIFT FALSIFIER: no game code special-cases a goal, a person or an NPC case by
+    its id. SCOPE AND WHAT IS NOT SEEN: `_closure_scan.py`'s docstring. The floor (`>= 100` files) and the
+    two fieldwork files' membership assert the sweep read the package and the container;
+    `test_a_planted_branch_on_an_entity_id_in_the_real_provider_is_found` is the scan's own falsifier."""
+    ids = entity_ids()
+    assert all(ids.values()), {k: len(v) for k, v in ids.items()}
+    paths = game_code()
+    assert len(paths) >= 100, len(paths)
+    scanned = {f.resolve() for f in paths}
+    for must in _provider_and_entry_files():
+        assert must in scanned, f"{must} is not scanned"
+    union = _union()
+    found = {str(f.relative_to(files.REPO_ROOT)): h
+             for f in paths if (h := branches_on_ids(ast.parse(f.read_text(encoding="utf-8")), union))}
+    assert not found, f"game code branches on an entity id (scripting drift): {found}"
+
+
+@pytest.mark.parametrize("source", ["goals.yaml", "build_realm(0).persons", "npcs.yaml"])
+def test_a_planted_branch_on_an_entity_id_in_the_real_provider_is_found(source):
+    """The scan's own falsifier, on the real provider's source PARSED IN MEMORY (never written: other
+    `-n auto` workers scan the tree): `seam/wrappers/fieldwork.py` scans clean, then with
+    `if act.actor == "<id>": return Findings(())` as `find`'s first statement after its docstring, it is
+    reported. One id from each source of the union, so dropping a source from it reddens its case."""
+    eid = min(entity_ids()[source])
+    path = _provider_and_entry_files()[0]
+    tree = ast.parse(path.read_text(encoding="utf-8"))
+    assert branches_on_ids(tree, _union()) == []
+    (fn,) = [n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == "find"]
+    fn.body.insert(1, ast.parse(f"if act.actor == {eid!r}:\n    return Findings(())\n").body[0])
+    assert [v for _, v in branches_on_ids(tree, _union())] == [eid]
+
+
+# ======================================================================================
+# 7 -- STEP 3, ONE SEED, TWICE, ONE HASH
+# ======================================================================================
+# THE SUBJECT IS PINNED BY MEASUREMENT, NOT SWAPPED AT RUN TIME: `build_realm(0)` reaches no find in two
+# seasons (no `record.given`, so no forged Record reaches another hand -- `trail_of`'s docstring), so the
+# twice-identical test of the FIND runs `trail_world`; the realm's twice-identical run is a separate,
+# separately named test of the LOOP, which asserts the absence it relies on.
+
+def count_finds(monkeypatch, drop_after=None) -> list:
+    """Wrap the registered `inquiry` provider (the entry every finding reaches, `seam.find_trail`) to
+    record how many items each call's `Findings` held. `drop_after=N` is the CONTROL'S PLANT: a counter
+    kept across calls (as module state would be) that returns `Findings(())` from call N + 1 on."""
+    trail_world()                                   # the provider table is filled
+    key = ("inquiry", manifest_resolve("inquiry", "finding.made")["provider"])
+    real, seen = PROVIDERS[key], []
+
+    def wrapped(w, a, e, *, module_entry=None):
+        out = real(w, a, e, module_entry=module_entry)
+        if drop_after is not None and len(seen) >= drop_after:
+            out = Findings(())
+        seen.append(len(out.found))
+        return out
+    monkeypatch.setitem(PROVIDERS, key, wrapped)
+    return seen
+
+
+def one_run(n, cand):
+    """`trail_world` and the investigator's hand-band research; the world's content hash."""
+    w, d, rid = trail_world()
+    step(w, d, research(n, cand))
+    return w.content_hash()
+
+
+def test_one_seed_twice_in_one_process_gives_one_hash_and_each_run_finds(monkeypatch):
+    """The EXIT's *one seed run twice in one process giving one hash*, over the find: the same world, the
+    same act, twice -- equal `content_hash()`, and each run's provider handed back a non-empty `Findings`
+    (so the equality is not two runs that never reached the entry)."""
+    n, cand = find_band(HAND_BANDS)                 # before the counter: the sweep calls the provider too
+    seen = count_finds(monkeypatch)
+    first = one_run(n, cand)
+    k = len(seen)
+    second = one_run(n, cand)
+    assert seen[:k] and any(seen[:k]) and any(seen[k:]), seen
+    assert first == second, "the same seed and act hashed differently in one process"
+
+
+def test_a_find_that_keeps_state_across_runs_splits_the_hash(monkeypatch):
+    """THE CONTROL: the twice-identical check can see a find that is not a function of its input -- with
+    a counter that drops items after the first call, the first run finds and the second does not, and
+    the two hashes differ."""
+    n, cand = find_band(HAND_BANDS)
+    seen = count_finds(monkeypatch, drop_after=1)
+    first, second = one_run(n, cand), one_run(n, cand)
+    assert len(seen) == 2 and seen[0] > 0 and seen[1] == 0, seen
+    assert first != second, "a find that drops items on its second run left the hash unmoved"
+
+
+def test_the_realm_seed_twice_in_one_process_gives_one_hash_and_reaches_no_find():
+    """THE LOOP'S DETERMINISM, NOT THE FIND'S: `build_realm(0)` for two seasons (`populated.run` one
+    season at a time on one world, `test_season_weather`'s BASE_HASHES shape), twice in one process --
+    equal `content_hash()`. IT REACHES NO FIND, asserted rather than assumed: its inquiries do draw finding
+    bands (so the entry is called), and no finding deposits anything. If that ever stops holding, the
+    realm reaches the trail and is a candidate subject for the find's twice-identical test above."""
+    def realm():
+        w = POP.build_realm(0)
+        for _ in range(2):
+            POP.run(seasons=1, seed=0, w=w)
+        return w
+    a, b = realm(), realm()
+    assert a.content_hash() == b.content_hash(), "build_realm(0) twice in one process gave two hashes"
+    finds = [e for e in a.log if e.kind == "finding.made" and FINDING_TERMS.get(e.degree)]
+    assert finds, "the realm drew no finding band: the entry was never called"
+    assert not [e.id for e in finds if found_deposits(a, e.id)], "the realm now reaches a find"

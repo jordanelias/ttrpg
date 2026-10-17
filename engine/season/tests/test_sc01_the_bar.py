@@ -100,6 +100,7 @@ from ..loop import effects_information
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries import world_q
 from ..state.carriers import Act, Proposition, Tenure
+from ._closure_scan import branches_on_ids, game_code
 from .test_sc01_fired_slot import _walks_to
 
 DUKE, SEAT, PARTY, WANT = "p_high", "off_duke", "p_mid", "prop_bar_duke_want"
@@ -267,30 +268,11 @@ def test_the_walk_is_false_for_a_determination_the_ambition_raised_beside_a_fire
 # `arrangements.yaml` id; a lookup keyed by one (`ARRANGEMENTS["tribunal"]`) is not a branch and is not
 # read.
 
+# v9 FI-03: the walk and the scope live once, in `_closure_scan.py`; FI-03's entity-id closure calls them.
+
 def _branches_on_an_arrangement_id(tree: ast.AST) -> list:
     """`(line, id)` for every comparison or `match` case whose operand is an arrangement id."""
-    ids, hits = set(ARRANGEMENTS), []
-
-    def consts(node):
-        if isinstance(node, ast.Constant):
-            return [node.value]
-        if isinstance(node, (ast.Tuple, ast.List, ast.Set)):
-            return [e.value for e in node.elts if isinstance(e, ast.Constant)]
-        return []
-    for node in ast.walk(tree):
-        if isinstance(node, ast.Compare):
-            vals = consts(node.left) + [v for c in node.comparators for v in consts(c)]
-        elif isinstance(node, ast.MatchValue):
-            vals = consts(node.value)
-        else:
-            continue
-        hits += [(node.lineno, v) for v in vals if isinstance(v, str) and v in ids]
-    return hits
-
-
-def _game_code() -> list:
-    paths = [f for f in files.package_modules() if files.TESTS_DIR not in f.parents]
-    return paths + sorted((files.REPO_ROOT / "modules").rglob("*.py"))
+    return branches_on_ids(tree, ARRANGEMENTS)
 
 
 def test_no_game_code_branches_on_an_arrangement_id():
@@ -305,7 +287,7 @@ def test_no_game_code_branches_on_an_arrangement_id():
     assert that the sweep read the package; `test_the_planted_tribunal_branch_in_the_real_effect_is_found`
     is the scan's own falsifier."""
     assert "tribunal" in ARRANGEMENTS, sorted(ARRANGEMENTS)
-    paths = _game_code()
+    paths = game_code()
     assert len(paths) >= 100, len(paths)               # the sweep read the package, not an empty glob
     assert Path(effects_information.__file__).resolve() in {f.resolve() for f in paths}, (
         "the effects module the plant goes in is not scanned")
