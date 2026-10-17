@@ -119,6 +119,12 @@ class EventLog:
     def __contains__(self, item: object) -> bool:
         return item in self._events
 
+    def has_id(self, eid: str) -> bool:
+        """Whether an Event with this id is logged: the id set `append` already keeps to resolve
+        causes, read once more. v9 SC-02 `22b` step 23 -- `world_q.standing_crossed` asks it per
+        person per round, where `in` (a scan of Events) would cost the whole log each time."""
+        return eid in self._ids
+
     def extend(self, events) -> None:
         """⚠ ROUTES THROUGH `append`, ONE AT A TIME, AND THAT IS THE WHOLE REASON IT EXISTS.
         `harness/corpus_run.py:565` does `w.log.extend([e1, e2])` where `e2` names `e1` as its

@@ -437,6 +437,13 @@ DEFAULT_FIXTURES = Fixtures(
     # the examiner's roll reads as it reads a genuine document -- the obstacle as before this step.
     # [JUSTIFIED: engine/season/hole_register.yaml H-210 -- `site: Fixtures default_forgery_quality`, graded `assumption`; no document gives a forgery's quality, so `default_transfer_amount`'s shape: an injected integer, swept 0 / 1 / 3]
     default_forgery_quality=1,         # `H-210`, swept 0 (control) / 1 (SHIPPED) / 3
+    # v9 SC-02 `22b` step 23 (`19_PLAN.md` step 23): THE STANDING BANDS -- floors on `decision/options.py::
+    # standing_of`'s gap (on `condition_scale`), read by `loop/matter.py::_standing_crossings`. A band is
+    # `budget.body_band_penalty`'s reading (the floors a value is below), and the crossing is the band of
+    # the gap over the claims landed before last season differing from the band over all of them. `()` is
+    # the CONTROL: one band, so nothing crosses and no person-keyed question is ever raised.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-223 -- `site: Fixtures standing_band_floors`, graded `assumption`; no document gives where the standing gap's bands fall, so it is injected and swept () / (500,) / (250, 500, 750)]
+    standing_band_floors=(500,),       # `H-223`, swept () (control) / (500,) (SHIPPED) / (250, 500, 750)
     # S12.1 gates verbs on `condition` against per-kind band FLOORS. S22 assigns "band
     # coefficients" and "the obstacle floor" to params; the params document proposes NO
     # VALUES, so these are harness fixtures and A31c sweeps them. S42.2.1 names "three band

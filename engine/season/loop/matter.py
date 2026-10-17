@@ -19,11 +19,14 @@ nowhere else. See the call below and `_rehome`'s own docstring for why here and 
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import NamedTuple, Optional
 from ..data.fixtures import SITE_YIELD
 from ..data.matrix import Step
 from ..data.requires import SHORTFALL_PREDICATE, Observation
+from ..decision import agreement, standing_of
 from ..queries import world_q
+from ..queries.person_q import LedgerReader
+from ..queries.world_q import STANDING_CROSSED
 from ..state.carriers import Event
 from ..state.gate import Token
 from ..state.ids import H, ROOT, draw_factory
@@ -79,6 +82,73 @@ def _crossings(w: "World", subject_id: str, floors: dict, before, after,
                            chose="EMIT a witnessable Event; write no social row; produce no outcome",
                            alternatives=["write the consequence directly (L5 forbids: a crossing MAY NEVER PRODUCE AN OUTCOME)",
                                          "silently drop the verb from the set (then nobody can witness it)"])
+    return out
+
+
+class _HeldBefore(NamedTuple):
+    """A person's ledger CUT AT A FLOOR, in the one shape `standing_of` reads (`p.id`, `p.ledger`) --
+    so the gap over the past claims is `standing_of`'s own formula, never a second copy of it."""
+    id: str
+    ledger: list
+
+
+def _standing_band(gap: int, floors: tuple) -> int:
+    """`budget.body_band_penalty`'s reading of a band -- the floors a value is below -- over the
+    standing floors (`H-223`). One reading for both person-side bands."""
+    return sum(1 for f in floors if gap < f)
+
+
+def _standing_crossings(w: "World") -> list:
+    """v9 SC-02 `22b` STEP 23 (`19_PLAN.md`): PRESSURE IS A PERSON-KEYED BAND CROSSING OF THE STANDING GAP.
+
+    For each person: the gap (`decision/options.py::standing_of`, D-4: *pressure is the gap*) over the
+    claims that had landed BEFORE last season's WITNESS (`world_q.landing_floor`, the boundary
+    `questions_for` reads as *new*) against the gap over all of them. Where the two fall in different
+    bands (`H-223`'s floors), one Event records the crossing, its causes THE DEPOSITS THAT COMPOSED
+    THE GAP: the `claim.deposited` of every told claim about him that pairs (`agreement`, the owner of
+    *pairs*) and of the claim of his own each was paired against (`LedgerReader.belief_among`, `_pair`'s
+    mate). A claim with no deposit in the log (planted at build) contributes no cause.
+
+    ⚠ IT EMITS AND WRITES NOTHING (L5, and the step's falsifier: *"a crossing produces a write rather
+    than a question"*). No `changes`, no gate write; the consequence is the person's own later choice,
+    through the question `world_q.questions_for` raises from this record, whose referents are the
+    people whose claims made the gap. ⚠ AND IT IS NOT FANNED OUT AT WITNESS: it is returned to nobody.
+    A standing is person-side (computed at sensing, stored nowhere); the person reads his own crossing
+    from the record, and no channel would admit anyone else to it.
+
+    ⚠ EITHER DIRECTION, UNLIKE `_crossings`. A site's band gates verbs and only a fall closes one; the
+    step says *"if the band differs"*, and from `H-29`'s maximum-gap default a first pairing can only
+    NARROW the gap, so a downward-only rule could never fire on the step's own artifact. Not composed
+    on `_crossings` for that reason, and because these floors key no verb."""
+    floors = tuple(w.fixtures.get("standing_band_floors"))
+    out: list = []
+    if not floors:
+        return out                        # the control arm: one band, nothing can cross
+    floor = world_q.landing_floor(w)
+    for pid in sorted(w.persons):
+        p = w.persons[pid]
+        past = [c for c in p.ledger if (c.when, c.round) < floor]
+        if len(past) == len(p.ledger):
+            continue                      # nothing landed since: the same claims, the same gap
+        before = standing_of(_HeldBefore(pid, past), w.fixtures)
+        after = standing_of(p, w.fixtures)
+        if _standing_band(before, floors) == _standing_band(after, floors):
+            continue
+        own = [c for c in p.ledger if c.subject == pid and c.source == "firsthand"]
+        made: list = []
+        for c in p.ledger:
+            if c.subject == pid and c.source == "told_by" and agreement([c], own)[2]:
+                mate = LedgerReader([o for o in own if o.predicate == c.predicate]).belief_among()
+                made.extend(x for x in (c, mate) if x not in made)
+        causes = [d for d in (w.last_emission_of("claim.deposited", c.id) for c in made) if d]
+        ev = Event(id=world_q.standing_crossing_id(w, pid), kind=STANDING_CROSSED, changes=[],
+                   causes=causes or [ROOT], emitted_at=w.tick)
+        w.log.append(ev)
+        out.append(ev)
+        TRACE.event(ev.id, ev.kind, ev.causes)
+        TRACE.decision(f"{pid}'s standing gap crossed a band ({before} -> {after})", "19_PLAN step 23/S3-L5",
+                       chose="RECORD the crossing; raise a question about the tellers; write nothing",
+                       alternatives=["write a stress or a consequence (L5: a crossing MAY NEVER PRODUCE AN OUTCOME)"])
     return out
 
 
@@ -278,6 +348,10 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
                     lambda c=c, after=after: setattr(c, "confidence", after),
                     record_kind="Claim", fieldname="confidence", driver="Event",
                     emits="claim.decayed", subject=c.id, causes=[prior])
+
+    # -- PRESSURE: A PERSON'S STANDING CROSSES A BAND (v9 SC-02 `22b` step 23) ----
+    # Logged and kept out of `emitted` (nobody witnesses another's standing): see the docstring.
+    _standing_crossings(w)
 
     # -- LARDERS, THEN YIELD (`W8`) -------------------------------------
     # #353 §25 fixes the ORDER and this code follows it rather than choosing one: *"Events

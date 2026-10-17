@@ -58,7 +58,7 @@ from ..data.pursuits import pursuit_cosine_axes, to_axes
 # doers off the person-side family.
 from ..data import goals as _goals
 from .person_q import deed_doers
-from ..state.attribution import anchor_of, causing_act
+from ..state.attribution import anchor_of, causing_act, event_by_id
 from ..state.carriers import Person, Question, Site, Tenure
 # ⚠ `parent_of` AND `descendants` ARE RE-EXPORTED, NOT DEFINED HERE (G3, plan position 6). The
 # write gate's F3 clause needs both -- ruling (3)'s parent rung and ruling (4)'s purview subtree --
@@ -78,7 +78,7 @@ from ..state.gate import BENCH_BASIS, may_determine, may_fill, purview_reaches, 
 # its one body lives in `state/gate.py`; `world_q.sworn_to is gate.sworn_to`. `establishment_of`
 # (below) composes on it.
 from ..state.gate import sworn_to
-from ..state.ids import ROOT, draw_factory
+from ..state.ids import H, ROOT, draw_factory
 from ..state.world import World
 from ..trace_log import TRACE
 
@@ -2203,6 +2203,49 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None,
     return key
 
 
+def landing_floor(w: World, since: Optional[tuple] = None) -> tuple:
+    """THE `(tick, round)` A CLAIM MUST HAVE LANDED AT OR AFTER TO BE NEW: `since` (the person's last
+    deliberation, `U2`), else `(w.tick - 1, 0)` -- last season's WITNESS. `questions_for` reads it as
+    Q2's boundary and `loop/matter.py::_standing_crossings` as the cut between the past claims and all
+    of them (v9 SC-02 `22b` step 23), so the two agree on what *new* means."""
+    return since if since is not None else (w.tick - 1, 0)
+
+
+# v9 SC-02 `22b` step 23: the kind of the one record a person-keyed standing crossing leaves.
+STANDING_CROSSED = "standing.band_crossed"
+
+
+def standing_crossing_id(w: World, pid: str) -> str:
+    """The id of `pid`'s standing crossing at this tick -- one per person per MATTER barrier, minted by
+    `loop/matter.py::_standing_crossings` and looked up by `questions_for` through the log's id set."""
+    return H(w.world_seed, w.tick, pid, "crossing:standing")
+
+
+def standing_crossed(w: World, p: Person, since: Optional[tuple] = None) -> Optional[Question]:
+    """v9 SC-02 `22b` STEP 23: THE QUESTION A STANDING CROSSING RAISES, ABOUT THE PEOPLE WHOSE CLAIMS MADE IT.
+
+    `p`'s crossing this season (MATTER's record, `standing_crossing_id`), when it is new to him -- it
+    precedes round 0, so it is new unless he has deliberated this season (`landing_floor`). Its
+    REFERENTS are every person on the `chain` of a told claim among the crossing's causes (the claims
+    whose `claim.deposited` it cites), origin first, `p` himself excepted: the people who TOLD, by
+    the claim (`Claim.chain`, `T3b`), including an origin who never spoke to `p` -- *"who may have said
+    nothing"*. Its `about` is the crossing, which `occasioned_by` returns, so an act formed from it
+    cites the crossing. A `claim_landed` question (`11a`'s fold: no third source), as the bench
+    question is (`sittings_before`, below). `None` when there is no crossing or no teller.
+
+    ⚠ IT READS AND WRITES NOTHING ELSE: `p`'s own ledger, the log's id set, and the one record."""
+    xid = standing_crossing_id(w, p.id)
+    if not w.log.has_id(xid) or not landing_floor(w, since) < (w.tick, 0):
+        return None
+    ev = event_by_id(w, xid)
+    causes = set(ev.causes) if ev is not None else set()
+    tellers: list = []
+    for c in p.ledger:
+        if c.chain and w.last_emission_of("claim.deposited", c.id) in causes:
+            tellers.extend(t for t in c.chain if t != p.id and t not in tellers)
+    return Question(f"q:claim:{xid}", "claim_landed", tuple(tellers), xid) if tellers else None
+
+
 def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Question]:
     """§F1's `q` producer -- TWO sources, resolver-side, at the DELIBERATE barrier, plus FIVE
     STANDING OCCASIONS stamped onto the first question as classed referents (`_stamped`, below the
@@ -2213,7 +2256,8 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     sources: no id or source changes; a person with one of them and no question gets one `need`
     question carrying them. And, since v9 SC-01's fired-slot step, one `claim_landed` question per
     fired sitting whose docket holds a matter and whose bench he sits on (`sittings_before`; the loop
-    after Q4 says why it is no third source).
+    after Q4 says why it is no third source). And, since v9 SC-02 `22b` step 23, one `claim_landed`
+    question on his own standing crossing this season, about the people who told (`standing_crossed`).
 
     ⚠ THIS CLOSES `H-04` AND §61's `NoProducer`, which between them blocked every NPC case: with
     no producer for `q`, `assemble(person, question)` was UNSATISFIABLE and DELIBERATE had no
@@ -2291,7 +2335,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # `(c.subject,)` -- clause 3 only ADMITS the claim into `out`; it does not change what the
     # Question is ABOUT. `requires_operands` is untouched by this clause for exactly that reason.
     R = reach(w, p)
-    floor = since if since is not None else (w.tick - 1, 0)
+    floor = landing_floor(w, since)
     for c in p.ledger:
         if (c.when, c.round) < floor:
             continue
@@ -2299,6 +2343,13 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
                 or ((pl := place_of(w, c.subject)) is not None and pl in R)   # clause 2 -- where it is
                 or any(x in R for x in named(c))):                # clause 3 -- whom the CONTENT names
             out.append(Question(f"q:claim:{c.id}", "claim_landed", (c.subject,), c.id))
+
+    # v9 SC-02 `22b` STEP 23: A STANDING CROSSING IS A QUESTION ABOUT THE PEOPLE WHO TOLD (`standing_crossed`,
+    # above). The crossing question read only SITE crossings before (through WITNESS and Q2); this is the
+    # person-keyed one, which no witness carries. Still `claim_landed`, no source added: the claims that
+    # landed are what crossed. REVERT: drop these two lines; MATTER's record then raises nothing.
+    if (sq := standing_crossed(w, p, since)) is not None:
+        out.append(sq)
 
     # Q4 -- `need`. A live `commit` Tenure whose object is an OUGHT Proposition is a STANDING
     # question: it recurs every season until the commitment ends, which is what makes an NPC with
@@ -2425,6 +2476,13 @@ def occasioned_by(w: "World", q: Optional["Question"]) -> list:
         for e in reversed(w.log):
             if e.kind == "claim.deposited" and any(c.subject == about for c in e.changes):
                 return [x for x in (e.causes or []) if x != ROOT]
+        # v9 SC-02 `22b` step 23: a standing crossing's question is about the crossing itself, which no
+        # deposit names (nobody witnesses it), so the occasion IS that record -- whose own causes are the
+        # deposits. Reached only after the deposit search finds nothing, so no earlier route moves.
+        if w.log.has_id(about):
+            ev = event_by_id(w, about)
+            if ev is not None and ev.kind == STANDING_CROSSED:
+                return [about]
         return []
     # ⚠ NOT A BARE `else`, AND STILL DEFENCE IN DEPTH RATHER THAN THE FIRST GATE. An undeclared
     # source reaching here would otherwise need a branch nobody wrote, which the polarity `ID-5`
