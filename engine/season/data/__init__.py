@@ -40,7 +40,8 @@ from . import files  # noqa: F401  -- the anchor, and its import-time self-check
 def load_all() -> tuple:
     """THE ONE ENTRY TO THE `data/` LOADERS: import every module of this package, force each lazy file,
     and return the names loaded, in import order. Idempotent -- a module imports once and a lazy loader
-    keeps its cache -- so calling it from every driver construction costs a dict lookup per module.
+    keeps its cache -- so calling it from every driver construction costs one directory listing
+    (`pkgutil.iter_modules`) and a dict lookup per module; no measurement is claimed beyond that.
 
     A loader that fails raises ITS OWN refusal naming its row (`SystemExit` at import for the table
     loaders, `Unspecified` for a missing lazy file); nothing here catches, wraps or reorders it.

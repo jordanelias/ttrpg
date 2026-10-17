@@ -539,15 +539,6 @@ def judging_set(w: World, venue: str, matter: Optional[str] = None) -> list[str]
 # the social contest module alone (`modules/social_contest/roll.py::obstacle`, ED-SC-0033 clause (3)).
 # ===========================================================================
 
-if not DOMINANCE_KINDS <= DEED_KINDS:
-    raise Unspecified(
-        f"`standing_routes.kinds.dominance` names {sorted(DOMINANCE_KINDS - DEED_KINDS)}, which are "
-        "not deed kinds", "rosters.yaml -- standing_routes",
-        needs="a member of `data/verbs.py::DEED_KINDS` (a kind some verb row emits, not on refusal)",
-        law="19_PLAN.md step 20 -- the partition is of the KINDS OF ACT a hearer's claims record; a "
-            "kind no act emits partitions nothing, and erodes nothing, forever")
-
-
 def remove_weight(source: str) -> float:
     """HOW MUCH A CLAIM HELD UNDER `source` COUNTS, by the ordinal of remove (`data/rosters.py::
     REMOVE_ORDINAL`, `19_PLAN.md`'s *firsthand > knot-sourced > told > inferred*):
@@ -574,18 +565,23 @@ def reception(w: World, speaker: str, venue: Optional[str]) -> float:
         (R8.1's struct, `21_RECONCILIATION.md` PHASE 3's correction), never a bare subject;
       * `v_h(c)` is `person_q.deed_term` -- `h`'s own projected pursuits against the alignment of the
         act's kind (`data/verbs.py::align_kind`), the valence `regard` already reads. ⚠ THE VALENCE
-        SOURCE WAS THE SWEPT CHOICE (step 17) AND THIS IS ARM 1, the existing alignment table; arm 2,
-        a table keyed on event kind alone (the authored `deed:<kind>` cells and nothing behind them),
-        LOST the sweep and is not kept: three kinds carry such a cell, so over three seeded realms it
-        read non-zero on 19 (bench, speaker) pairs where arm 1 read 3,434 (`hole_register.yaml`
-        H-215 carries the numbers). The conflation it names -- what a hearer prefers to DO standing
-        in for how he REGARDS a doer -- is recorded there, not resolved;
+        SOURCE WAS THE SWEPT CHOICE (step 17): THIS IS ARM 1, the existing alignment table, and it
+        SHIPS BY DEFAULT, NOT BY WINNING. Arm 2, the dedicated regard table the plan names, was never
+        authored: the arm run in its place read only the authored `deed:<kind>` cells (three kinds),
+        so it was zero almost everywhere by construction and did not test the question (over three
+        seeded realms it read non-zero on 19 (bench, speaker) pairs where arm 1 read 3,434;
+        `hole_register.yaml` H-215 carries the numbers and says the sweep is open). The conflation
+        arm 1 names -- what a hearer prefers to DO standing in for how he REGARDS a doer -- is
+        recorded there, not resolved;
       * `full` is `confidence_default`, so a claim decayed to half counts half.
 
     STEP 20, ROUTE EROSION, INSIDE THE SUM: a hearer who holds, UNTOLD, a `dominance`-route deed done
     TO the speaker by somebody else (`person_q.suffered_deeds`; `rosters.yaml: standing_routes`) has
     called his bluff: every `dominance`-route deed of the speaker's that hearer holds no newer
-    (`(when, round)`) than the latest such sighting counts zero. One success against him is enough,
+    (`(when, round)`) than the latest such sighting counts zero. ⚠ `(when, round)` IS THE CLAIM'S
+    DEPOSIT TIME, NOT THE DEED'S: a told or found copy is stamped with the tick it was deposited
+    (`loop/witness.py`), so a hearer told after the bluff of a deed from before it keeps that copy
+    at full weight; no field carries the deed's own tick on a copy (`H-215`'s named limit). One success against him is enough,
     and only the witnesses who saw it are moved; a challenger who fails suffers the deed himself, so
     the speaker's weight stands. A later coercive deed counts again.
 
@@ -612,14 +608,19 @@ def reception(w: World, speaker: str, venue: Optional[str]) -> float:
     return total
 
 
-def proofs(w: World, speaker: str, opponent: Optional[str]) -> float:
+def proofs(w: World, speaker: str, opponent: Optional[str], venue: Optional[str]) -> float:
     """THE PROOFS `speaker` CAN SPEND AGAINST `opponent`, weighed by remove and discounted by the mirror
     -- `19_PLAN.md` step 18, a Query over two ledgers. Each deed claim in the speaker's OWN ledger
     recording an act of the opponent's (`person_q.attributed_deeds`) counts `remove_weight(c.source)`,
     UNLESS THE OPPONENT CAN MIRROR IT: he holds a claim with the same subject and predicate
     (`18_FINDINGS.md`'s mirror test, *does the opponent hold a claim with the same subject and
     predicate?*), and then it counts exactly zero. A non-person opponent holds no ledger and mirrors
-    nothing.
+    nothing. `venue` is the room that hears the speaker: with nobody on its bench (or no venue) there
+    is no one to spend a proof on, and the answer is 0.0, the rule `reception` states.
+
+    ⚠ NAMED LIMITS (`H-216`): every attributed deed counts, creditable or not and whatever the matter
+    docketed (the plan's text asks for neither); the mirror keys on (subject, predicate) alone; and
+    the arrangement's admitted `proofs` column is not read here.
 
     ⚠ WHAT IS TOLD IS EVERY SUCH CLAIM THE SPEAKER HOLDS, AND THAT IS A NAMED LIMIT, NOT THE DESIGN: the
     design spends proofs one at a time inside a nested run (`21_RECONCILIATION.md` step 15, unbuilt),
@@ -627,7 +628,9 @@ def proofs(w: World, speaker: str, opponent: Optional[str]) -> float:
     inventory. The mirror is still hidden from him -- nothing person-side reads it."""
     TRACE.query("proofs", "resolver")
     who = w.persons.get(speaker)
-    if who is None or opponent is None or opponent == speaker:
+    if who is None or opponent is None or opponent == speaker or venue is None:
+        return 0.0
+    if not any(hid != speaker for hid in judging_set(w, venue)):
         return 0.0
     opp = w.persons.get(opponent)
     mirror = {(c.subject, c.predicate) for c in opp.ledger} if opp is not None else set()

@@ -42,9 +42,13 @@
 # can name. It is not seeded here; it is SC-04's, with the remaining rows.
 # ⚠ v9 SC-04 SEEDED IT (`excommunication_deliberation`, `disposes: ban`, the last block of
 # `arrangements:`) -- EIGHT rows, all five `<tenure>` rows of §E.2 carried. Four of §E.2's twelve games
-# stay unseeded for the ambiguity reasons stated above, not because the loader cannot carry them:
-# `negotiation` (+ its envoys variant), `audience / embassy`, `appeal to a higher authority` and
-# `public debate`. NO `succession` ROW (`disposes: hold`) YET: `loop/effects_information.py::_disposal`
+# stay unseeded, not because the loader cannot carry them: `audience / embassy` and `appeal to a
+# higher authority` carry placeholders and `public debate`'s `disposes: standing` is outside the enum
+# (the reasons stated above); `negotiation` (+ its envoys variant) was held for its old pair's
+# disagreement (false+given), which the `excommunication_deliberation` reading below ANSWERS for that
+# row -- keep the key the source writes -- and so stays unseeded only because SC-04 did not take the
+# decision, not for a blocker: it is a data row (`disposal: mutual`, `disposes: oblige`, whose opener
+# `_eff_oblige` exists since plan position `17a`), the residue of this position. NO `succession` ROW (`disposes: hold`) YET: `loop/effects_information.py::_disposal`
 # has no `hold` site, so `determine` opens nothing under it and C-1's report would name the row --
 # `test_arrangements.py::test_a_hold_disposing_row_is_reported_by_c1_until_determine_can_open_a_hold`
 # goes red the day a `determine` site opens a `hold`, which is the signal the row can be seeded.
@@ -257,7 +261,7 @@ arrangements:
   # key is the one the source WRITES, `false` (the deliberation is sealed, as the council's is), and the
   # dropped `verdict_reasons: given` is not carried. Reading it the other way would contradict a value the
   # source states outright; the same reading would seed `negotiation` (false + given), which this row does
-  # not decide -- that row's other disagreements (header) stay.
+  # not decide (header: a data row left, no other blocker).
   - id:               excommunication_deliberation
     disposal:          bench
     bench_basis:        determine

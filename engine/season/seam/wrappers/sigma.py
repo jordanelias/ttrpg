@@ -8,7 +8,11 @@ measurement at step 15 kept it over the kernel (`modules/social_contest/roll.py`
 `04_CODE_ARCHITECTURE.md` §A.2:182 types `seam/wrappers/*` as writing *"nothing, ever"*, reading
 *"the projection"*, returning *"a `Margin`"*, holding token *"none"*. This module is that row. It
 DECIDES NOTHING: `contest_input` (the host input builder) derives a pool and reads the obstacle's raw
-operands from what the actor and the subject genuinely have and freezes them into
+operands from what the actor and the subject genuinely have -- since v9 SC-02 `22a` that includes, for a
+prize a room hears (`heard_by:`), the bench's and the opponent's LEDGERS through `queries/world_q.py`'s
+`reception` and `proofs`, a read `04_CODE_ARCHITECTURE.md` §B.2:250 (F8) words for the fold's own
+ledger query and §A.2:168 permits `world_q` ("any store, via World"): the tension is recorded in
+`hole_register.yaml` H-215/H-216, not resolved here -- and freezes them into
 `queries/inputs.py::SocialContestInput`; `resolve` (the adapter) calls the module entry the prize row
 names (`module_entry:`, registered in `manifest.MODULE_ENTRIES` from its composition row), keeps
 S27.4's refusal on the pair it returns, and otherwise returns what it returned -- the net/ob pair as a
@@ -82,7 +86,7 @@ from ...gaps import Unspecified
 # ⚠ THE LEAF, NOT THE PACKAGE'S RE-EXPORT. `manifest/providers.py` imports nothing, so no import
 # here closes a loop back into this package (`_entry.py` says the same of the entry lookup).
 from ...manifest.providers import provider
-from ...manifest.registry import resolve as _prize_row
+from ...manifest.registry import BENCH, resolve as _prize_row
 from ...queries.inputs import Margin, SocialContestInput
 # v9 SC-02 `22a`: the room's two resolver-side reads, the precedent `seam/wrappers/mass_battle.py`'s
 # `world_q.mustered` set. The host READS them; the module composes the obstacle they move.
@@ -170,7 +174,7 @@ def contest_input(w: Any, claimants: list, *, verb: str = "",
     if room is not None:
         room_terms = dict(reception=reception(w, claimants[0], room),
                           reception_gain=fx.get("reception_gain"),
-                          proofs=proofs(w, claimants[0], subject),
+                          proofs=proofs(w, claimants[0], subject, room),
                           proof_step=fx.get("proof_step"))
     doc = w.records.get(examined) if examined is not None else None
     return SocialContestInput(
@@ -244,7 +248,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     # v9 SC-02 `22a`: the room that hears this prize, off its row (`heard_by:`); an inquiry has no prize
     # and so no room. `rung` is the act's place (`loop/sides.py`), which the bench sits over.
     row = _prize_row("contest", prize) if prize is not None else None
-    heard = rung if row is not None and row.get("heard_by") == "bench" else None
+    heard = rung if row is not None and row.get("heard_by") == BENCH else None
     # v9 SC-02 `22b` step 25: an inquiry (no prize) examines its subject; a Record's forgery quality
     # enters the obstacle (`contest_input`'s `examined`). A prize names a contest, which examines nothing.
     inp = contest_input(w, claimants, verb=verb, subject=subject, room=heard,

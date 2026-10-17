@@ -20,7 +20,7 @@ from __future__ import annotations
 import random
 from ..data import files
 from ..gaps import InstrumentDefect
-from ..data.rosters import (FOLD_ATTEMPT_REFUSED, FOLD_INELIGIBLE, FOLD_REFUSED, GRADED_INQUIRIES,
+from ..data.rosters import (EARNED_REFUSAL_KINDS, FOLD_ATTEMPT_REFUSED, FOLD_INELIGIBLE, FOLD_REFUSED, GRADED_INQUIRIES,
                             STRATA)
 
 from typing import Optional
@@ -328,6 +328,26 @@ CONFIDENCE_BROKEN = "confidence.broken"
 # v9 SE-01 (`24g`) / `H-51`: declared on `dispatch`'s refusal; kept only when `_demand_earned` says so.
 PERSON_DEMANDED = "person.demanded"
 
+# The roster of kinds a row declares and the fold keeps only when the act earns them
+# (`rosters.yaml: earned_refusal_kinds`; the loader exempts exactly its members from the flat-row
+# two-kind refusal, `data/verbs.py`). `_demand_earned` is the one earning predicate this module has, so
+# the roster may hold exactly its kind: a member the fold would emit whole is refused here, at import,
+# naming it -- the loader's exemption and the fold's filter are one fact, not two.
+def _check_earned_kinds(kinds) -> frozenset:
+    """Every `earned_refusal_kinds` member has an earning predicate in this module, or import refuses
+    naming the roster. A function, so a test can plant a widened roster and watch it refuse."""
+    if frozenset(kinds) != frozenset({PERSON_DEMANDED}):
+        raise Unspecified(
+            f"`earned_refusal_kinds` {sorted(kinds)} has a member the fold does not filter",
+            "rosters.yaml -- earned_refusal_kinds",
+            needs=f"only {PERSON_DEMANDED!r}, or an earning predicate beside `_demand_earned` for the new kind",
+            law="04_CODE_ARCHITECTURE.md invariant 4 (F7), the flat half -- the loader exempts a kind from "
+                "the flat-row refusal only because the fold publishes it solely when the act earns it")
+    return frozenset(kinds)
+
+
+_check_earned_kinds(EARNED_REFUSAL_KINDS)
+
 
 def _demand_earned(w: "World", a: Act, kinds: tuple, at_precondition: bool) -> tuple:
     """P3 -- `person.demanded` IS EARNED BY THE ACT, NOT BY THE ROW: `CONFIDENCE_BROKEN`'s shape,
@@ -504,7 +524,7 @@ def _fold(self, w: "World", token: Token, a: Act,
                            chose="emit the refusal, not the success",
                            alternatives=["emit `emits:` anyway (publishes an event for a "
                                          "state change that did not happen)"])
-            return ev(row.refusal_for(WRITE_CLAUSE) or (FOLD_REFUSED,))
+            return ev(_demand_earned(w, a, row.refusal_for(WRITE_CLAUSE), False) or (FOLD_REFUSED,))
     # The act's proposed changes ride on the success Events -- §27.3's accumulator sums
     # them across the fold and clamps ONCE, which is order-independent as a fact.
     # ⚠ `[a.id]`, NOT `[ROOT]`, AND THIS WAS THE SUBSTRATE OF THE WHOLE NARRATIVE CLAIM.
@@ -721,7 +741,7 @@ def _refuse_party_gap(self, w: "World", a: Act) -> list:
     verb row at all) produced ZERO Events here, a silent drop, where every other refusal
     path in this module already falls back."""
     row = VERB_TABLE.get(a.verb)
-    kinds = (row.emits_on_refusal if row is not None else ()) or (FOLD_REFUSED,)
+    kinds = _demand_earned(w, a, row.emits_on_refusal if row is not None else (), False) or (FOLD_REFUSED,)
     produced = _act_events(self, w, a, kinds)  # `_act_events` owns the id scheme (§8)
     for _e in produced:
         self.act_of[_e.id] = a
@@ -1199,7 +1219,8 @@ def _refuse_after_the_fact(self, w: "World", out: list, act_ids: list) -> None:
         first = out[at[0]]
         # `WRITE_CLAUSE` (plan position `19`): the accumulator's write moved nothing, which is F9's
         # refusal one step later -- the same clause a declining effect refuses at.
-        refusal = _act_events(self, w, a, row.refusal_for(WRITE_CLAUSE) or (FOLD_REFUSED,),
+        refusal = _act_events(self, w,
+                              a, _demand_earned(w, a, row.refusal_for(WRITE_CLAUSE), False) or (FOLD_REFUSED,),
                               degree=first.degree, observed=first.observed)
         for i in at:
             self.act_of.pop(out[i].id, None)

@@ -702,9 +702,9 @@ if set(REMOVE_ORDINAL) != set(CLAIM_SOURCES):
         needs="a witness channel minting each `claim_sources` member",
         law="19_PLAN.md step 17 -- every claim is weighted by an ordinal of remove; a source the "
             "ordinal does not rank has no weight")
-STANDING_ROUTES = roster("standing_routes")
 # The coercive deed kinds (`standing_routes.kinds.dominance`); `prestige` is the complement and carries
-# no list. Checked against the deed kinds where they are bound (`queries/world_q.py`).
+# no list. Checked against the deed kinds beside `covert_kinds`' own check (`data/verbs.py::
+# _check_dominance_kinds`).
 DOMINANCE_KINDS = frozenset(roster_map("standing_routes", "kinds")["dominance"])
 STRATA = roster("strata", ordered=True)
 # The leaf import: the fifteen pursuits are owned one layer out (`references/descriptor_registry.yaml:

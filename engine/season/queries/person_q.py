@@ -149,7 +149,7 @@ def deed_term(p: Person, axis_w: dict, c) -> float:
     `world_q.reception` both read it here. Person-side (AX-2)."""
     if c.predicate in PAIRED_KINDS:
         lean = _lean(axis_w, c.predicate)
-        return lean * _bond(p, c.subject, lean) if lean else 0.0
+        return _paired_weight(p, c, lean) if lean else 0.0
     return deed_valence(axis_w, c)
 
 
@@ -322,7 +322,13 @@ def paired_deed_term(p: Person, axis_w: dict, c, seen_of) -> tuple:
     doer = deed_doer(c, seen_of())
     if doer is None:
         return None, 0.0
-    return doer, lean * _bond(p, c.subject, lean)
+    return doer, _paired_weight(p, c, lean)
+
+
+def _paired_weight(p: Person, c, lean: float) -> float:
+    """A paired deed's term, `lean · bond` on the claim's patient: the one formula `deed_term` and
+    `paired_deed_term` share (`CLAUDE.md` §8, the rule lives once)."""
+    return lean * _bond(p, c.subject, lean)
 
 
 def _bond(p: Person, patient: str, lean: float) -> float:
@@ -462,15 +468,17 @@ def consequence_pursuits(p: Person, verb: str, degree, gain: float):
     the ladder's own ordinal measured from the held band (`data/rosters.py::DEGREE_STEP`), so the top
     band moves twice as far as a success, a held matter (`Partial`) not at all, and a failure moves him
     AGAINST the way the act points. `gain` is the swept `Fixtures.pursuit_shift` (`H-221`; `0` the
-    control). ONLY HELD KEYS MOVE: a pursuit he does not hold is not minted by a consequence (the scar's
-    precedent, `_held`), so a man with no pursuits is unmoved. No clamp: a weight may cross zero, as an
+    control). ONLY HELD KEYS MOVE: "held" is `_held`'s sense, a weight above zero (the scar's precedent),
+    so a pursuit he does not hold -- absent, or at zero or below -- is neither minted nor moved by a
+    consequence, and a man with no pursuits is unmoved. No clamp: a weight may cross zero, as an
     authored one may (`harness/probes.py` P31) [ASSUMPTION; medium; Jordan to correct; revert: floor at
     0]. Keys keep `p.pursuits`' order, which `to_axes` sums in. Person-side, no World (AX-2)."""
     step = DEGREE_STEP.get(degree, 0) if degree is not None else 0
     held = p.pursuits or {}
     if not gain or not step or not held:
         return None
-    moved = {e: float(w) + float(gain) * step * pursuit_lean(verb, e) for e, w in held.items()}
+    moved = {e: float(w) + float(gain) * step * pursuit_lean(verb, e) if float(w) > 0 else float(w)
+             for e, w in held.items()}
     return None if moved == {e: float(w) for e, w in held.items()} else moved
 
 

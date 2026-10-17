@@ -2867,6 +2867,7 @@ tables:
         # negative = rank-bearing, status-asserting · positive = equal, peer-levelling (draft §3.1)
         determine:      -1.0    # carried: the licensed judgement made by the holder licensed to make it
         "deed:matter.undetermined": 0.0   # [ASSUMPTION; medium; Jordan to correct; revert: delete this cell and its twin] a Failed `determine` writes nothing, so WITNESS's empty-changes rule (`epistemic.py`'s empty-changes rule) lands the claim on the PARTY, and a null cell would fall back to `determine`'s own (`data/verbs.py`: `_load_alignment` drops a null, `align_kind` falls back to the verb): the hearing that changed nothing is judged as no deed at all. Numeric, not null, for that reason. (`speak`'s four `matter.*` kinds share the shape: H-192 (a).)
+        "deed:pursuit.moved": 0.0   # [ASSUMPTION; medium; Jordan to correct; revert: delete this cell and its twin] `determine`'s own consequence write (v9 SC-02 `22b` step 24) is the only row that emits `pursuit.moved`, so `KIND_VERB` maps it to `determine` and a null cell would judge the judge's interior shift by `determine`'s alignment, a second time beside `matter.determined`; and `_ch_chronicle` publishes it to everyone (`determine` is a `binding_decision`). A pursuit moving is no one's deed; numeric, not null, for the same reason as `deed:matter.undetermined`. Held at 0.0 it also survives a second emitter (B-Q's `argue`/`train`), which would make it a paired kind.
         confer:         -0.8    # carried: conferral seats an office; the paradigm top-down act
         evade / defy:    0.9    # carried: refusing a demand outright is the direct negation of command
         establish:      -0.7    # carried: founding an office adds a rung to the ladder that was not there
@@ -2963,6 +2964,7 @@ tables:
         seize:          null    # reasoned (IN-12 step 6): for whom the taking is done is the candidate's fact (the warrant's), not the verb's -- `give`'s and `requisition`'s reading
         determine:       0.6    # derived: the act's own form is impartial adjudication; who it favours is the `judging_set`'s
         "deed:matter.undetermined": 0.0   # as `hierarchical_equal`'s cell above: same reason, revert together
+        "deed:pursuit.moved": 0.0   # as `hierarchical_equal`'s cell above: same reason, revert together
         construe:       -0.6    # derived: calculated to serve the construer's aim, not to keep the bond
         forge:          -0.5    # derived: counterfeiting a record for advantage
         open_case:       0.3    # derived: the case runs by template regardless of who stands before it

@@ -10,7 +10,7 @@ and his party `p_mid` live in `Hh`; `p_other` lives there and sits on no bench):
     weighted by `remove_weight(source)` x decayed confidence x the member's valence (arm 1, the alignment
     table; arm 2 lost the sweep, `hole_register.yaml` H-215), summed; `reception_gain` scales it into
     the obstacle (`H-215`);
-  * `world_q.proofs(w, speaker, opponent)` -- the speaker's deed claims about the opponent weighed by
+  * `world_q.proofs(w, speaker, opponent, venue)` -- the speaker's deed claims about the opponent weighed by
     remove, zero for any the opponent mirrors (same subject and predicate); `proof_step` (`H-216`);
   * route erosion -- `rosters.yaml: standing_routes`: a hearer who saw a dominance-route deed done TO the
     speaker zeroes every dominance-route deed of his no newer than it.
@@ -29,6 +29,7 @@ import math
 import random
 from pathlib import Path
 
+from ..data import files
 from ..data.rosters import DOMINANCE_KINDS, REMOVE_ORDINAL, SEEN_PREDICATE
 from ..data import verbs as _verbs
 from ..epistemic import Seen
@@ -187,7 +188,7 @@ def test_sc02_17_reception_and_proofs_take_the_world_first_and_no_decision_modul
             found[node.name] = (first.arg, ast.unparse(first.annotation) if first.annotation else None)
     assert found == {"reception": ("w", "World"), "proofs": ("w", "World")}, found
     scanned = 0
-    for path in sorted((SEASON_DIR / "decision").rglob("*.py")):
+    for path in files.decision_modules():          # the corpus owner (data/files.py), never a re-derived walk
         mod = ast.parse(path.read_text())
         scanned += 1
         for node in ast.walk(mod):
@@ -261,9 +262,15 @@ def test_sc02_18_a_mirrored_proof_moves_the_obstacle_by_exactly_zero_and_an_unmi
         w.persons[SPEAKER].ledger.append(_claim("pf", SPEAKER, PARTY, kind, source=source, chain=chain))
         assert world_q.reception(w, SPEAKER, "Hh") == 0.0
         assert _ob(w) == base - step * world_q.remove_weight(source), (source, _ob(w), base)
+        # NEAR-MISSES DO NOT MIRROR: the same predicate about another subject, and the same subject
+        # under another predicate, leave the proof standing (the mirror keys on BOTH).
+        other_kind = next(k for k in sorted(_verbs.DEED_KINDS - person_q.PAIRED_KINDS) if k != kind)
+        w.persons[PARTY].ledger += [_claim("near_a", PARTY, NOBODY, kind),
+                                    _claim("near_b", PARTY, PARTY, other_kind)]
+        assert _ob(w) == base - step * world_q.remove_weight(source), "a near-miss mirrored a proof"
         # THE MIRROR: the opponent holds a claim of the same subject and predicate -> exactly zero.
         w.persons[PARTY].ledger.append(_claim("mirror", PARTY, PARTY, kind))
-        assert world_q.proofs(w, SPEAKER, PARTY) == 0.0
+        assert world_q.proofs(w, SPEAKER, PARTY, "Hh") == 0.0
         assert _ob(w) == base, (source, _ob(w), base)
         checked += 1
     assert checked == len(REMOVE_ORDINAL)
@@ -275,8 +282,39 @@ def test_sc02_18_proofs_never_take_the_obstacle_below_the_floor_and_a_non_person
     for i in range(40):
         w.persons[SPEAKER].ledger.append(_claim(f"pf{i}", SPEAKER, PARTY, kind))
     assert _ob(w) == 1.0                                 # OB_MIN, never below
-    assert world_q.proofs(w, SPEAKER, "Hh") == 0.0       # a rung: no deed claims about it here
-    assert world_q.proofs(w, SPEAKER, None) == 0.0
+    assert world_q.proofs(w, SPEAKER, None, "Hh") == 0.0
+    # A NON-PERSON OPPONENT holds no ledger, so nothing of his mirrors a proof: a deed claim the speaker
+    # holds about the rung `Hh` itself is counted whole (observable: it is not zero).
+    w2, _d2 = _judging_world()
+    assert "Hh" not in w2.persons
+    w2.persons[SPEAKER].ledger.append(_claim("pr", SPEAKER, "Hh", kind))
+    assert world_q.proofs(w2, SPEAKER, "Hh", "Hh") == world_q.remove_weight("firsthand") > 0.0
+
+
+def test_sc02_18_proofs_are_spent_on_a_bench_and_never_on_an_empty_room():
+    """With nobody on the bench there is no one to spend a proof on (`reception`'s own rule): the same
+    held proof counts on `Hh` and counts zero with no venue (a placeless speaker) -- the control."""
+    w, _d = _judging_world()
+    kind = sorted(_verbs.DEED_KINDS - person_q.PAIRED_KINDS)[0]
+    w.persons[SPEAKER].ledger.append(_claim("pf", SPEAKER, PARTY, kind))
+    assert world_q.proofs(w, SPEAKER, PARTY, "Hh") == world_q.remove_weight("firsthand") > 0.0
+    assert world_q.proofs(w, SPEAKER, PARTY, None) == 0.0
+    assert world_q.judging_set(w, "Hh") == [HEARER]
+    # the only seated person IS the speaker: nobody else is in the room
+    w.persons[HEARER].ledger.append(_claim("pf2", HEARER, PARTY, kind))
+    assert world_q.proofs(w, HEARER, PARTY, "Hh") == 0.0
+
+
+def test_sc02_17_a_man_does_not_receive_himself():
+    """The speaker is excluded from his own bench: a seated person's reception of HIMSELF is 0 though his
+    ledger holds deed claims of his own that lean (CONTROL: the same claims read non-zero when the
+    speaker is someone else and the holder is on the bench)."""
+    w, _d = _judging_world()
+    kind = _kind_with_lean(w, +1)
+    w.persons[HEARER].ledger.append(_claim("mine", HEARER, HEARER, kind))
+    assert world_q.reception(w, HEARER, "Hh") == 0.0
+    w.persons[HEARER].ledger.append(_claim("his", HEARER, SPEAKER, kind))
+    assert world_q.reception(w, SPEAKER, "Hh") != 0.0
 
 
 # ================================================================================================
@@ -314,6 +352,10 @@ def test_sc02_20_the_nobodys_one_success_collapses_the_lord_and_his_failure_leav
                                    _seen("saw", HEARER, SPEAKER, NOBODY, when=1)]
     assert [c.id for c in person_q.suffered_deeds(won.persons[HEARER].ledger, SPEAKER)] == ["hit"]
     assert world_q.reception(won, SPEAKER, "Hh") == 0.0, "a called bluff left the dominance weight"
+    # "NO NEWER THAN" is inclusive: a dominance deed deposited at exactly the bluff's tick is eroded too.
+    kind_eq = _feared_lord(_judging_world()[0])
+    won.persons[HEARER].ledger.append(_claim("eq", HEARER, SPEAKER, kind_eq, when=1))
+    assert world_q.reception(won, SPEAKER, "Hh") == 0.0, "a deed at the bluff's own tick escaped erosion"
 
     lost, _ = _judging_world()
     _feared_lord(lost)
@@ -323,6 +365,7 @@ def test_sc02_20_the_nobodys_one_success_collapses_the_lord_and_his_failure_leav
     only_new, _ = _judging_world()
     only_new.persons[HEARER].ledger += [_claim("hit", HEARER, NOBODY, wound, when=1),
                                         _seen("saw", HEARER, NOBODY, SPEAKER, when=1)]
+    assert world_q.reception(only_new, SPEAKER, "Hh") != 0.0, "the wound is not one more deed of his"
     # Additive: the lord keeps his whole prior weight plus the new deed's (float sum order differs).
     assert math.isclose(world_q.reception(lost, SPEAKER, "Hh"),
                         before + world_q.reception(only_new, SPEAKER, "Hh"), rel_tol=1e-12)

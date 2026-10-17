@@ -23,7 +23,7 @@ import re
 import pytest
 
 from ..data.matrix import WriteClass
-from ..gaps import InstrumentDefect
+from ..gaps import InstrumentDefect, Unspecified
 from ..loop.driver import mint_token
 from ..state.carriers import Act, Office
 from ..state.ids import SeatId
@@ -250,6 +250,28 @@ def test_inv4_the_earned_kind_is_the_only_exemption_and_it_is_a_roster_not_a_row
         _verbs._load_verb_table()
     monkeypatch.undo()
     assert "dispatch" in _verbs._load_verb_table(), "control: the shipped roster loads the row"
+
+
+def test_inv4_the_fold_earns_the_demanded_kind_at_every_refusal_site_not_only_three():
+    """The loader exempts `person.demanded` from the flat-row refusal because the fold publishes it only
+    when the act earns it: from the PRECONDITION refusal of an act naming nobody the world holds
+    (`_demand_earned`). That has to hold at EVERY refusal site, or the exemption is a lie at the ones
+    left whole. Observed at the party-gap and after-the-fact sites, which carry `dispatch`'s whole
+    declared list: an act naming nobody, refused there, emits `dispatch.refused` ALONE (CONTROL: the
+    precondition refusal of the same act still emits `person.demanded`)."""
+    w, d = _world()
+    row = VERB_TABLE["dispatch"]
+    assert "person.demanded" in row.emits_on_refusal, "fixture: dispatch declares the kind"
+    nobody = {"subject": "nobody_the_world_holds"}
+    gap = _resolve._refuse_party_gap(d, w, Act(id="pg", actor=DUKE, verb="dispatch", payload=dict(nobody)))
+    assert [e.kind for e in gap] == ["dispatch.refused"], [e.kind for e in gap]
+    earned = _fold(w, d, Act(id="pc", actor=DUKE, verb="dispatch", payload=dict(nobody), via=SEAT))
+    assert "person.demanded" in [e.kind for e in earned], "control: the precondition refusal earns it"
+    # the roster and the fold's filter are one fact: a roster member the fold does not filter refuses
+    # at import, naming it (the check is a function, so a widened roster is planted and watched refusing)
+    with pytest.raises(Unspecified, match=r"earned_refusal_kinds.*ghost\.kind"):
+        _resolve._check_earned_kinds(frozenset({"person.demanded", "ghost.kind"}))
+    assert _resolve._check_earned_kinds(_rosters.EARNED_REFUSAL_KINDS) == frozenset({"person.demanded"})
 
 
 # ======================================================================================

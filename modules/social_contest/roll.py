@@ -66,8 +66,8 @@ def obstacle(inp: SocialContestInput) -> float:
 
     ⚠ THE RULING IS `score/2 PLUS MODIFIERS` AND IT APPLIES TO A PERSON. Jordan, 2026-08-14, carried
     live in `dice_engine.degree_from_net`'s docstring: an opposed obstacle is *"their corresponding
-    score/2 plus whatever specific modifiers exist for them in that instance"*. No instance modifier
-    has a producer yet, so none is added. A record, a rung or a proposition has no score and takes
+    score/2 plus whatever specific modifiers exist for them in that instance"*. The instance
+    modifiers are the room's terms and an examined document's forgery quality, below. A record, a rung or a proposition has no score and takes
     `obstacle_default`. **NO "BASE Ob BY SCALE"** (Jordan, 2026-09-05).
 
     ⚠ THE CEILING (`H-213`, swept; Contradiction 3 of the proceedings reconciliation, resolved): a
@@ -88,7 +88,10 @@ def obstacle(inp: SocialContestInput) -> float:
     takes the obstacle below `OB_MIN` (or below a base already under it): it moves the obstacle, it
     does not abolish it. The ceiling still bounds the result, so under the shipped `H-213` ceiling (2,
     the same as `obstacle_default`) a hostile room cannot raise a defaulted obstacle -- stated, not
-    hidden. With no room (both terms 0) this is the obstacle as it was.
+    hidden. THE FAVOURABLE HALF IS CLIPPED THE SAME WAY: the ceiling is applied after the room, so
+    against a strong opposition (base above the ceiling) a favourable room bites only where it takes
+    the obstacle below the ceiling (`room > base - ceiling`); a room of +1.5 against a base of 4 under
+    a ceiling of 2 changes nothing. With no room (both terms 0) this is the obstacle as it was.
 
     ⚠ AND AN EXAMINED DOCUMENT'S FORGERY QUALITY IS ONE MORE (v9 SC-02 `22b` step 25; `19_PLAN.md` step
     25, *"examination contests the record's forgery quality"*): `forgery_quality`, read raw off the

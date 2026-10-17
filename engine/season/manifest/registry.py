@@ -284,7 +284,9 @@ def _check_step_declares(role: str, key: Any, row: Any) -> None:
 
 # v9 SC-02 `22a`: the rooms a prize row's `heard_by:` may name. One: the bench (`world_q.judging_set`
 # at the act's rung). A second room is a new reader in `seam/wrappers/sigma.py`, added with it.
-HEARD_BY_ROOMS = frozenset({"bench"})
+# `BENCH` is the name the reader (`seam/wrappers/sigma.py`) and the set share.
+BENCH = "bench"
+HEARD_BY_ROOMS = frozenset({BENCH})
 
 
 def _check_heard_by(role: str, key: Any, row: Any) -> None:

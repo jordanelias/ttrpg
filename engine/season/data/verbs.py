@@ -52,7 +52,7 @@ from .requires import (
     build_typed_requires,
 )
 from .rosters import (
-    COVERT_KINDS, EARNED_REFUSAL_KINDS, FOLD_KINDS, GRADED_INQUIRIES, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
+    COVERT_KINDS, DOMINANCE_KINDS, EARNED_REFUSAL_KINDS, FOLD_KINDS, GRADED_INQUIRIES, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
     RUNG_KINDS, STRATA, TENURE_KINDS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
     roster_map,
     table,
@@ -944,8 +944,9 @@ def _load_verb_table() -> dict:
                     f"verb_table.yaml: {name!r} " + "; ".join(_defects) + ". 04 §B.13 #4 (F7), "
                     "the per-conjunct half -- every failable clause has a refusal kind, and a key "
                     f"is a failable clause. Its failable clauses: {sorted(_expected)}.")
-        # LOADER INVARIANT 4, THE FLAT HALF (SC-02 `23`; S-8's residue: *"whatever row still uses the flat
-        # form where a conjunct is failable"*). A FLAT row's `emits_on_refusal:` is emitted WHOLE at every
+        # LOADER INVARIANT 4, THE FLAT HALF (SC-02 `23`; S-8's residue, as v8 `_part3` at git 59004d86 words
+        # it -- retired, at its FORK ref, not in the live tree: a row that still uses the flat form where
+        # a conjunct is failable). A FLAT row's `emits_on_refusal:` is emitted WHOLE at every
         # refusal (`VerbRow.refusal_for`), so a flat row with two or more failable clauses -- eligibility,
         # each top-level conjunct of its cell (named or not: a flat row cannot name them), the write, the
         # counterparty -- and two or more refusal kinds publishes a kind for a clause that did not fail,
@@ -1383,6 +1384,25 @@ def _check_covert_kinds(kinds, deed_kinds) -> frozenset:
 
 
 _check_covert_kinds(COVERT_KINDS, DEED_KINDS)
+
+
+def _check_dominance_kinds(kinds, deed_kinds) -> frozenset:
+    """v9 SC-02 `22a` (step 20, route erosion): every `rosters.yaml: standing_routes` `dominance` member
+    is a DEED kind the verb table emits, or import refuses naming it -- the partition is of the kinds of
+    act a hearer's claims record, and a kind no act emits partitions nothing and erodes nothing, forever.
+    A function, so a test can plant a bad member and watch it refuse. Returns the members."""
+    bad = sorted(k for k in kinds if k not in deed_kinds)
+    if bad:
+        raise Unspecified(
+            f"`standing_routes.kinds.dominance` names {bad}, which are not deed kinds",
+            "rosters.yaml -- standing_routes",
+            needs="a member of `data/verbs.py::DEED_KINDS` (a kind some verb row emits, not on refusal)",
+            law="19_PLAN.md step 20 -- the partition is of the KINDS OF ACT a hearer's claims record; a "
+                "kind no act emits partitions nothing, and erodes nothing, forever")
+    return frozenset(kinds)
+
+
+_check_dominance_kinds(DOMINANCE_KINDS, DEED_KINDS)
 
 
 def _derive_record_referent_kinds() -> frozenset:

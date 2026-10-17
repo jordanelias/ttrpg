@@ -1235,7 +1235,6 @@ def standing_of(p: Person, fx: "Fixtures") -> int:
 
 # The ordinal is `data/rosters.py::REMOVE_ORDINAL`'s, built once there (v9 SC-02 `22a` moved it out of
 # this module so the resolver-side `reception` reads the same ranks without importing decision code).
-_REMOVE_ORDINAL = REMOVE_ORDINAL
 
 
 def channel_remove(channel: str) -> float:
@@ -1253,7 +1252,7 @@ def channel_remove(channel: str) -> float:
     *"the order decides only which channel is reported, never the source"* true of this term too.
     EQUAL SPACING between the ranks is the [ASSUMPTION] (`H-199`): the ordinal is ruled, the
     distances are not."""
-    return _REMOVE_ORDINAL.index(CHANNEL_CLAIM_SOURCE[channel]) / (len(_REMOVE_ORDINAL) - 1)
+    return REMOVE_ORDINAL.index(CHANNEL_CLAIM_SOURCE[channel]) / (len(REMOVE_ORDINAL) - 1)
 
 
 def ledger_weigh(p: Person, fx: "Fixtures"):

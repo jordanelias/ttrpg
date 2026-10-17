@@ -30,9 +30,11 @@ not a measurement):
   * NOT AN ENGINE EXECUTION (`by="document"`): `ST-06` (design prose against the old tracer's source
     text), `ST-13`, `ST-16`, `ST-17`, `ST-27` -- a re-host would compare two documents, or one document
     to a file that no longer exists, and call it a pass.
-  * A STAND-ALONE PROBE, NOT THE WORLD (`by="probe-model"`): `ST-22`, `ST-24`, `ST-28`, `ST-29`, `ST-34`.
+  * A STAND-ALONE PROBE, NOT THE WORLD (`by="probe-model"`): `ST-22`, `ST-24`, `ST-28`, `ST-29`, `ST-34`
+    (the case this batch's composed obstacle touches most: a floored pool against it; classified, not attempted).
   * A DOCUMENT-COUNT / REGISTRY CHECK: `ST-37`, `ST-38`.
-  * THE SEASON DRIVER END TO END, a worked narrative, replay or permutation: `ST-31`..`ST-36`, and `ST-05`
+  * THE SEASON DRIVER END TO END, a worked narrative, replay or permutation: `ST-31`..`ST-33`, `ST-35`,
+    `ST-36`, and `ST-05`
     (a fired Date docketing across two seasons).
   * NOT ATTEMPTED (a construction case whose machinery SC-04 did not examine, so no reason is claimed
     beyond that): `ST-01`, `ST-02` (the old seam's `contest` signature), `ST-07`, `ST-11`, `ST-12`,

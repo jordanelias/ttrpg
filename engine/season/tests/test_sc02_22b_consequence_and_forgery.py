@@ -176,6 +176,28 @@ def test_step24_falsifier_witness_never_moves_a_pursuit_and_the_emission_cites_t
     assert DUKE in [c.subject for c in moved.changes], moved.changes
 
 
+def test_step24_the_interior_shift_is_no_deed_and_is_judged_as_none():
+    """`pursuit.moved` is emitted by `determine` alone, so `KIND_VERB` maps it there and it is a DEED kind
+    (the premise the authored cells answer); with no `deed:pursuit.moved` cell a claim of it would be
+    valued by `determine`'s own alignment -- the judge's private shift judged a second time beside
+    `matter.determined`, and chronicled to everyone (`_ch_chronicle`). The authored `0.0` cell on every
+    axis makes a claim of it worth nothing, observed through `person_q.deed_valence` on a holder with
+    pursuits (CONTROL: `determine` itself is non-zero on some axis, so the zero is the cell's doing)."""
+    from ..data.verbs import ALIGNMENT, DEED_KINDS, KIND_VERB, align_kind
+    assert KIND_VERB["pursuit.moved"] == "determine" and "pursuit.moved" in DEED_KINDS
+    axes = sorted(ALIGNMENT)
+    assert len(axes) >= 2 and any(align("determine", ax) != 0.0 for ax in axes), axes
+    for ax in axes:
+        assert align_kind("pursuit.moved", ax) == 0.0, ax
+    w, _d = _world()
+    w.persons[PARTY].pursuits = dict(HELD)
+    axis_w = person_q.projected_axes(w.persons[PARTY])
+    deed = C.Claim("moved", PARTY, DUKE, "pursuit.moved", True, 0, "firsthand", 100, "own", 0)
+    control = C.Claim("decided", PARTY, DUKE, "matter.determined", True, 0, "firsthand", 100, "own", 0)
+    assert person_q.deed_valence(axis_w, deed) == 0.0
+    assert person_q.deed_valence(axis_w, control) != 0.0, "the control kind reads zero: the fixture is inert"
+
+
 def test_step24_three_findings_move_one_judges_lean_toward_judging_by_a_printed_amount():
     """`19_PLAN.md` step 24's artifact, its first half: three determinations by one judge, each over a
     different party, each drawing a moving band, move his weight by the printed amount -- and the move
@@ -244,7 +266,8 @@ def test_step25_falsifier_the_examination_reads_the_quality_into_its_obstacle():
     """THE READER, through the real adapter and module entry: an inquiry (no prize) on the forged Record
     rolls against `obstacle_default + quality` where the ceiling allows it (the uncapped `None` arm),
     and against the default at quality `0`. A CONTEST naming a prize on the same Record reads no quality
-    (only an examination contests it). At the SHIPPED ceiling (2, `= obstacle_default`) the forgery is
+    (only an examination contests it; the gate is observed by
+    `test_step25_a_prize_contest_examines_nothing...`). At the SHIPPED ceiling (2, `= obstacle_default`) the forgery is
     bounded to the default -- the stated limit, pinned so a ceiling change shows here."""
     obs = {}
     for q in (0, 1, 3):
@@ -261,6 +284,26 @@ def test_step25_falsifier_the_examination_reads_the_quality_into_its_obstacle():
     shipped = DEFAULT_FIXTURES.get("obstacle_ceiling")
     assert [obs[(q, None)] for q in (0, 1, 3)] == [base, base + 1, base + 3], obs
     assert [obs[(q, shipped)] for q in (0, 1, 3)] == [min(base, shipped)] * 3, obs
+
+
+def test_step25_a_prize_contest_examines_nothing_and_an_inquiry_examines_its_subject(monkeypatch):
+    """The adapter's gate, `examined = subject if prize is None else None`: an inquiry (no prize) hands the
+    Record to the input builder, a contest a prize names hands it nothing, so a `speak` on the same
+    Record reads no forgery quality. Observed through a spy on `contest_input`'s `examined` (the
+    gate is a branch in `resolve`, and the builder's own default is not it)."""
+    w, _d, rid = trail_world(fixtures=_fx(obstacle_ceiling=None))
+    seen = []
+    real = sigma.contest_input
+
+    def spy(*args, **kw):
+        seen.append(kw.get("examined"))
+        return real(*args, **kw)
+    monkeypatch.setattr(sigma, "contest_input", spy)
+    sigma.resolve(w, [INVESTIGATOR], ["root"], "a matter", verb="speak", subject=rid,
+                  rng=random.Random(0), rung=None)
+    sigma.resolve(w, [INVESTIGATOR], ["root"], None, verb="research", subject=rid,
+                  rng=random.Random(0))
+    assert seen == [None, rid], seen
 
 
 def test_step25_a_better_forgery_is_found_less_and_finding_it_deposits_the_forgery():
