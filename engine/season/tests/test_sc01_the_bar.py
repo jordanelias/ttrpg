@@ -59,9 +59,16 @@ v9 SC-03b (RE-RECORDED): `determine` is a CONTESTED act now, rolled by the Duke'
 clerk's obstacle, so at the shipped judge (pool 2, obstacle 2) most determinations are `Failure`
 (`matter.undetermined`, nothing opens). MEASURED 2026-10-17, this world at each of the 15 convictions x
 seeds 0..23, ten seasons, shipped fixtures: 360 runs, ONE proceeding walks (scholastics/6) -- family/13
-drew `Failure` in its fifth season. So the bar runs a STRONG JUDGE (`BAR_FIXTURES`: `pool_default` 30, a
-fixture and not a plant, the sweep `H-126` declares), at which the same 15 x seeds 0..15 sweep gives three
-(family/13, reputation/13, scholastics/6), and the two seeds and season counts of this file are unchanged.
+drew `Failure` in its fifth season (counts from a one-off sweep, not kept). So the bar runs a STRONG JUDGE
+(`BAR_FIXTURES`: `pool_default` 30), at which the same 15 x seeds 0..15 sweep gives three (family/13,
+reputation/13, scholastics/6), and the two seeds and season counts of this file are unchanged. ⚠ 30 IS OFF
+THE SWEEP: `H-126` declares `[1, 2, 4]` and `Fixtures.sweep` does not check the value, so this is a fixture
+chosen to make the finding open, not a declared arm; at the declared top arm (4) family/13 draws `Failure`
+(read 2026-10-17). It is GLOBAL: every contested verb without a `verb_capability` row falls to
+`pool_default`, so `speak` and `tell` roll at 30 here too, and a saturated roll hides the contest's draw
+stream from the twice-identical-hash check. The bar's claim is an EXISTENCE claim (the chain can close
+from a conviction by choices alone), which the strong judge removes the lottery from; the three falsifiers
+above were seen at SC-01's shipped fixtures and are not re-run at 30.
 The `Failure` band and the shipped judge are observed in `test_u7_remit.py` (section 10), not here.
 """
 
@@ -224,7 +231,7 @@ def test_an_injected_act_reddens_the_bar(verb):
 def test_the_walk_is_false_for_a_determination_the_ambition_raised_beside_a_fired_date():
     """THE CONTROL. Same world, doctrine at seed 8 (traced at SC-03b; community at seed 13 before it): the Duke convenes at `S` AND
     opens the clerk's case in the same season, so the case is docketed dateless before the sitting
-    fires; the sitting's slot forms empty, and two seasons AFTER the firing the Duke determines the
+    fires; the sitting's slot forms empty, and after the firing the Duke determines the
     clerk out of his ambition (`need`, occasion `[ROOT]`). That determination's `causes[]` reach no
     firing -- so THE BAR's walk is not satisfied by a firing merely preceding a determination."""
     conviction, seed, seasons = CONTROL

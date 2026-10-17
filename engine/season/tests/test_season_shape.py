@@ -3504,8 +3504,12 @@ def test_t2_align_kind_reads_the_one_emitter_and_a_deed_key_needs_an_emitted_kin
     checked = 0
     for kind, verb in sorted(KIND_VERB.items()):
         for axis in PURSUIT_AXES:
-            assert align_kind(kind, axis) == align(verb, axis), (kind, verb, axis)
-            checked += bool(align(verb, axis))
+            # an authored `deed:<kind>` cell wins where one exists (v9 SC-03b authors
+            # `deed:matter.undetermined` = 0.0: a Failed `determine` is no deed of the party's)
+            cell = data_verbs.ALIGNMENT.get(axis, {}).get(DEED_PREFIX + kind)
+            want = align(verb, axis) if cell is None else cell
+            assert align_kind(kind, axis) == want, (kind, verb, axis)
+            checked += bool(want)
     assert checked >= 1, "no single-emitter kind has a non-zero cell, so equality proved nothing"
     unauthored = 0
     for kind in shared:

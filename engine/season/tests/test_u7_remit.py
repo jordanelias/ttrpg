@@ -58,8 +58,8 @@ REMIT = ("requisition", "open_case", "determine", "issue")
 # band the judge's roll decides. At the shipped `pool_default` (2) against the shipped obstacle (2) most
 # rolls are `Failure` (`matter.undetermined`, nothing opens), and WHICH act id lands where is the seed's
 # business. The tests below that need the disposal to OPEN take a STRONG JUDGE -- `pool_default` 30 against
-# the same obstacle -- and `_executes` ASSERTS the band it landed on, so a fixture that stopped being strong
-# fails here and does not quietly turn an executes-test into a refusal-test.
+# the same obstacle -- and each such test ASSERTS the band it landed on (`_sentenced`, the `OPENS` checks), so a
+# fixture that stopped being strong fails here and does not quietly turn an executes-test into a refusal-test.
 JUDGE = {"pool_default": 30}
 OPENS = ("Overwhelming", "Success")
 
@@ -462,7 +462,7 @@ def test_19_determination_opens_only_a_disposed_kind_and_closes_only_a_restraint
     # A JUDGE DOES NOT BIND HIMSELF -- `may_determine` refuses it, and an `oblige` a man opens on his
     # own behalf is his own act (`T-m`), whatever seat he names: never `determination`. That the
     # occupant does not serve his own seat is `_req_oblige`'s refusal and, for `determine`, the
-    # `bench` conjunct's (`may_determine`, `determine.unauthorized`) -- the fold's `counterparty`
+    # `bench` conjunct's (`may_determine`, `determine.refused`) -- the fold's `counterparty`
     # clause names the same case but is never reached on that row, and `_eff_determine`'s own
     # self-check was already dead -- not the gate's (the gate admits any owner's opening of his own
     # non-seat edge).
@@ -696,6 +696,7 @@ def test_sc03a_a_determination_under_disposes_ban_opens_a_ban_and_release_is_ref
     w, d = _sentenced(BAN_KIND)
     ban, = _edges(w, BAN_KIND)
     assert ban.live and not _edges(w, "oblige"), w.tenures
+    assert ban.degree in OPENS, ban     # the grade rides the `ban` literal (`_disposal`)
     out = _fold(w, d, Act(id="rl", actor=PARTY, verb="release", payload={"subject": SEAT}))
     assert _kinds(out) == ["release.refused"], _kinds(out)
     assert ban.live
@@ -714,7 +715,7 @@ def test_sc03a_move_is_refused_while_a_detain_is_live():
                                   payload={"to": "S"}))) == ["travel.moved"]
     w, d = _sentenced(DETAIN_KIND)
     detain, = _edges(w, DETAIN_KIND)
-    assert detain.live
+    assert detain.live and detain.degree in OPENS, detain   # the grade rides the `detain` literal
     legs = [t for t in w.tenures if t.subject == PARTY and t.kind == "contain" and t.live]
     assert _kinds(_fold(w, d, Act(id="mv", actor=PARTY, verb="move",
                                   payload={"to": "S"}))) == ["travel.blocked"]
@@ -1121,8 +1122,10 @@ def test_sc03b_determine_is_a_contested_row_keyed_on_the_four_ladder_bands():
     assert prize is not None and prize["provider"] == "social_contest", prize
     assert prize["module_entry"] == "social_contest.roll", prize
     assert set(row.writes_by_degree) == set(row.emits_by_degree) == BANDS
-    # THE FALSIFIER'S TWO DECLARED HALVES, literal: Failure writes nothing, Partial only the degree.
-    assert row.writes_at("Failure") == () and row.writes_at("Partial") == ("Tenure.degree",)
+    # THE FALSIFIER'S DECLARED HALVES, literal: Failure writes nothing; Partial declares what the effect does,
+    # the opening graded `Partial` -- the same three pairs as Success (`writes_note`; the gate admits a degree
+    # only on an edge the write opens, so `Tenure.degree` alone at Partial was unbuildable).
+    assert row.writes_at("Failure") == () and row.writes_at("Partial") == row.writes_at("Success")
     assert "Tenure.degree" in row.writes_at("Success") and "Tenure.degree" in row.writes_at("Overwhelming")
     assert row.writes_at("Success")[0] == "Tenure.since"        # the opening is the first pair, the effect's
     assert row.emits_at("Failure") == ("matter.undetermined",)
@@ -1166,8 +1169,8 @@ def test_sc03b_runtime_a_seeded_contested_determination_leaves_the_degree_on_the
     every band of the ladder occurs, and each is observed against what the row declares for it:
       * Overwhelming / Success -- the edge is opened, owned by the party on the seat, and carries
         `degree == the band == the Event's degree`; the matter leaves the docket; `matter.determined`.
-      * Partial -- `matter.determined` and the edge carries `degree == Partial` (the row declares the degree
-        alone, `writes_note`: the gate admits a degree only on an edge the write opens).
+      * Partial -- `matter.determined` and the edge carries `degree == Partial` (the row declares the same
+        three pairs as Success, `writes_note`: the gate admits a degree only on an edge the write opens).
       * Failure -- `matter.undetermined`, NO edge, the matter still docketed, no change on the Event.
     CONTROL (assert-that-asserted): all four bands were seen, and the counts add up to the folds made."""
     seen: dict = {}

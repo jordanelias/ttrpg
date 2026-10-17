@@ -421,8 +421,8 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
         (`determination` asks `opened` first: authority to bind is not authority to re-grade), which is
         why the degree is set on the edge being OPENED, not written to one already live. `res` is `None`
         only for a hand-built call of this body with no contest, and the edge then carries no degree, as it
-        did before SC-03b. The reading of `Partial` (the row declares `Tenure.degree` alone; this body is
-        one, so it also opens the edge and takes the matter off the docket) is the row's `writes_note`.
+        did before SC-03b. `Partial` declares the same three pairs as `Success` (the row's `writes_note`), and
+        opens the disposal graded `Partial`.
 
     AND IT TAKES THE MATTER OFF THE DOCKET: every item naming the party is written back to
     `matter: None` -- the row's `DocketItem.matter` -- so the slot a sitting formed survives and the
