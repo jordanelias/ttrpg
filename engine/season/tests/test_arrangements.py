@@ -10,6 +10,7 @@ twelve) and the SIX seeded speech kinds (same file, why not all ten).
 
 from __future__ import annotations
 
+import ast
 import subprocess
 import sys
 import textwrap
@@ -269,7 +270,7 @@ def test_the_headless_run_loads_the_arrangements_loader_and_the_probe_can_tell()
     the absence the assertion below would otherwise miss (CLAUDE.md §0.1 pt 2)."""
     proc = _headless()
     assert proc.returncode == 0, proc.stderr[-3000:]
-    before, after, rc = eval(proc.stdout.strip().splitlines()[-1])    # our own probe's repr
+    before, after, rc = ast.literal_eval(proc.stdout.strip().splitlines()[-1])    # our own probe's repr
     assert before is False, "the control is blind: `data.files` alone already loaded the arrangements"
     assert after is True and rc == 0
     assert "CONTENT HASH:" in proc.stdout       # a season was constructed, not an import alone
