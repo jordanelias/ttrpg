@@ -4581,7 +4581,7 @@ rows:
     default:   "kept, unchanged: `_ch_chronicle` admits a witness to an Event whose kind a `binding_decision` row emits"
     site:      "engine/season/epistemic.py::_ch_chronicle, looked up through `CHANNEL_PREDICATES` from `rosters.yaml`'s witness channels"
     sweep:     []
-    unblocks:  "SC-01 step 13's deletion of `chronicle` (`workplans/valoria_master_workplan_v9_part6.md` §SC-01), once the `<rung kind>` reach channel exists to carry the hearsay of a binding decision"
+    unblocks:  "the deletion of `chronicle` that v9 SC-01 step 13 held (scheduled by no position; SC-01 left the plan at B-N's close, `cf69ceed`, where its entry is read), once the `<rung kind>` reach channel exists to carry the hearsay of a binding decision"
     cite:      "MEASURED at v9 SC-01 step 13 (B-N, 2026-10-16, tree `29af7354`), an arm not kept in-tree: `_ch_chronicle` forced `False`, everything else shipped, `build_realm(0)`: 1 season `told_by` claims 879 -> 0, events 7,060 -> 5,986, hash `27717c62` -> `8ae2dce6`; 2 seasons `told_by` 3,187 -> 0, events 23,220 -> 17,300. The reasoning is `_ch_chronicle`'s docstring. CLAUDE.md §0's ladder: not superseded (no later ruling deletes it without the pairing); not irrelevant (it mints every `told_by` in the realm); the design document itself pairs the deletion with the replacement channel (`19_PLAN.md` step 16; `21_RECONCILIATION.md` C-6), so the deletion is held rather than escalated"
     source:    "v9 SC-01 step 13, batch B-N, phase-1 review (2026-10-16)"
 

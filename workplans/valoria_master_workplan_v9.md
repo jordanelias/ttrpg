@@ -200,11 +200,12 @@ v7: *N seeds each yield a chronicle that is connected, continuous, rooted, live 
 generalized. **Its precondition is met** (M1 row 4, read above). **Its instrument landed at B-C:** `harness/storybar.py`
 (IN-19, #457 STORY-BAR — cross-person antecedent share and chain depth per season over N seeds, forcing arms compared; it
 grades nothing) and `harness/soak.py`'s cost and act-mix grades (IN-20). `corpus_run`'s `ARC ENDS` count prints
-`NOT-COMPUTABLE — closed by W23 + W26 + W30` [v8's reading, 2026-10-01; not re-run here]. Candidate gates, none built:
-(i) SC-01 step 16 (`22`) — THE BAR for proceedings (two seeded proceedings run end to end twice byte-identical, `causes[]`
-walking to the raising date); (ii) `corpus_run`'s ARC ENDS becoming computable; (iii) a chronicle render, IN-37 (the
+`NOT-COMPUTABLE — closed by W23 + W26 + W30` [v8's reading, 2026-10-01; not re-run here]. Candidate gates:
+(i) THE BAR for proceedings, built at SC-01 step 16 (`22`; `801f733e`, B-N closed `cf69ceed`) as a test on seeds picked from a
+sweep (`engine/season/tests/test_sc01_the_bar.py`: the chain can close with zero authored acts, not that it usually does);
+(ii) `corpus_run`'s ARC ENDS becoming computable and (iii) a chronicle render, IN-37, neither built (the
 `chronicle` witness channel's deletion at SC-01 step 13 is held, `hole_register.yaml` H-214: it waits on the `<rung kind>`
-reach channel). Path: SC-01 step 16 → IN-37 → IN-27 (#457 D6, the ending vocabulary:
+reach channel). Path: SC-01 step 16 (landed `801f733e`) → IN-37 → IN-27 (#457 D6, the ending vocabulary:
 answered as the plan's recommendation, RS-21 item 3) (`_part3` §A(2)).
 
 ### M3 — GODOT VERTICAL SLICE
@@ -233,7 +234,7 @@ commit and the run stops for a cleared window (`methodology-execute`, `CLAUDE.md
 has read §K's still-held list and `_part5` §J. `main` was red from PR #456 on one test
 (`test_flow_skeletons.py::test_contract_names_resolve_in_the_generated_index[combat]`); the one-line fix (`personal_combat`
 joins `RETIRED_CONTRACTS`) is built and rides the adoption branch (`7b619328`), so it is not a position — read `All Gates
-Green` on `main` once the branch merges. B-C is closed. B-D is closed: D1 (`9054df80`), D2 (`b31d2c31`), D3 (`0a690b30`). B-G is closed (`0f998f64`). B-H is closed (`c13144b9`). B-E is closed (`ac9724fc`). B-F is closed (`53807be4`). B-L is closed (`fc4f3ba9`). B-I is closed (`9d93cfab`); what it left open is in the entries (§3: IN-09, IN-18, IN-33). B-J is closed (`42c5588c`: SC-03a, IN-40, FA-01's mechanism, IN-31's design; IN-48 left as B-JR). B-W is closed (`3bf936ee`: IN-54, IN-55, IN-56, IN-57, IN-58's stance-only half). B-X is closed (`2f0c0227`: IN-62 … IN-69, IN-71, IN-72, FA-04 … FA-06; what it left open is in `engine/season/hole_register.yaml` H-209, ED-IN-0296 and `_part3` §B's header). B-K is closed (`c8d1db3a`: IN-10, IN-45's `forge`, `carry`, `migrate`, `survey` + Rung, IN-49, IN-28 with SE-03; what it left open is in `_part5` IN-45 (`work`, ED-IN-0297) and `_part3` §B's header); B-M is closed (`be02666e`: IN-12 step 6, `5ea1bb47`, and IN-13, `2e19aee8`; the realm still fights 0 fields: `_part2` R-07 conjunct 3); then … the spine `_part3` §B names. Every batch runs
+Green` on `main` once the branch merges. B-C is closed. B-D is closed: D1 (`9054df80`), D2 (`b31d2c31`), D3 (`0a690b30`). B-G is closed (`0f998f64`). B-H is closed (`c13144b9`). B-E is closed (`ac9724fc`). B-F is closed (`53807be4`). B-L is closed (`fc4f3ba9`). B-I is closed (`9d93cfab`); what it left open is in the entries (§3: IN-09, IN-18, IN-33). B-J is closed (`42c5588c`: SC-03a, IN-40, FA-01's mechanism, IN-31's design; IN-48 left as B-JR). B-W is closed (`3bf936ee`: IN-54, IN-55, IN-56, IN-57, IN-58's stance-only half). B-X is closed (`2f0c0227`: IN-62 … IN-69, IN-71, IN-72, FA-04 … FA-06; what it left open is in `engine/season/hole_register.yaml` H-209, ED-IN-0296 and `_part3` §B's header). B-K is closed (`c8d1db3a`: IN-10, IN-45's `forge`, `carry`, `migrate`, `survey` + Rung, IN-49, IN-28 with SE-03; what it left open is in `_part5` IN-45 (`work`, ED-IN-0297) and `_part3` §B's header); B-M is closed (`be02666e`: IN-12 step 6, `5ea1bb47`, and IN-13, `2e19aee8`; the realm still fights 0 fields: `_part2` R-07 conjunct 3); B-N is closed (`cf69ceed`: SC-01 steps 11–16 and the fired-slot step; what it left open is in `engine/season/hole_register.yaml` H-161, H-163, H-214 and `_part3` §B's header); then … the spine `_part3` §B names. Every batch runs
 through `methodology-execute` (`CLAUDE.md` §9), and a batch's READ-FIRST list names the sites to read (the pins file is far too
 large to read whole: grep the assertion).
 
@@ -255,7 +256,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | IN-14 | #457 BOUND-ATTENTION; H-92, H-10 | IN | ask-then | — | — | B-Z | `_part4` |
 | IN-18 | telling G5, G8 (step 2a, G1–G3 landed `ac9724fc`; G6 landed `66bf51f9`) | IN | BLK | G5's trigger, M0e > 0 (`oblige` landed `905b7a21`) | — | none (B-I closed `9d93cfab`) | `_part4` |
 | IN-23 | #457 CARRY-STABILITY | IN | B | — | — | B-U | `_part5` |
-| IN-26 | #457 BOUND-PAPER; H-156 (a)/(b); `Record.ttl` | IN/SC | BLK | SC-01, FI-01 | R-05 | B-Q | `_part5` |
+| IN-26 | #457 BOUND-PAPER; H-156 (a)/(b); `Record.ttl` | IN/SC | BLK | FI-01 (SC-01 landed; B-N closed `cf69ceed`) | R-05 | B-Q | `_part5` |
 | IN-27 | #457 END-VICTORY; H-176 (GD-1) | IN/FA | BLK | IN-37 | — | B-U | `_part5` |
 | IN-30 | `24h` P5 remainder; H-186 | IN/FA/SE | BLK | IN-27 | — | B-U | `_part5` |
 | IN-31 | H-100 | IN/SE | B | — (SC-03a landed `c2f855d2`; design landed at B-J) | — | B-Q | `_part5` |
@@ -263,7 +264,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | IN-33 | H-58 `exchange` | IN | B | — (reverted `cdc03f67`; restorable under §0.5: `ad2f930f`..`b5c4685d`) | R-05 | none (B-I closed `9d93cfab`) | `_part5` |
 | IN-35 | #457 FORCE-HAZARD; SEAM-CLOCK | IN/WR/SE | BLK | IN-06 | — | B-S | `_part5` |
 | IN-36 | #457 FORCE-FOREIGN | IN/FA/MB | BLK | IN-13 (landed `2e19aee8`; B-M closed `be02666e`) | — | B-V | `_part5` |
-| IN-37 | #457 STORY-READ | IN | BLK | SC-01 step 16 | — | B-U | `_part5` |
+| IN-37 | #457 STORY-READ | IN | B | — (SC-01 step 16 landed `801f733e`; B-N closed `cf69ceed`) | — | B-U | `_part5` |
 | IN-38 | `13`-rest | IN | B | — | R-09, R-06 | B-V | `_part5` |
 | IN-44 | SM-10, SM-12; A-24's wording | IN | J | Layer 0/1: Jordan's files | — | — | `_part8` (table, not an entry) |
 | IN-45 | `work` (`forge`, `carry`, `migrate` landed at B-K) | IN/SE | J | ED-IN-0297 (`needs_jordan`) | R-05 | none (B-K closed `c8d1db3a`) | `_part5` |
@@ -276,14 +277,13 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | IN-60 | RS-26: the security Query | IN/SE/FA | BLK | IN-36's guard content (D, B-V) | R-04 (contributor) | B-Y | `_part5` |
 | IN-61 | RS-27: succession (replaces IN-51, retired); #453 R-5 (b) re-specified | IN/FA/SE | BLK | SC-04 (D, B-P); ED-IN-0292 (2) (J); IN-12 (R: "after IN-12") | R-05, R-04 | B-R | `_part5` |
 | IN-70 | RS-23, ED-IN-0293 (6): opinion of a faction (IN-58's residue) | IN/FA | BLK | design first; B-X closed `2f0c0227` (D, met); IN-58's M-polarity (I, taken `3bf936ee`) | R-07, R-05 (contributor) | B-R | `_part5` |
-| SC-01 | `22` steps 11–16 | SC | BLK | B-N's entry gate (SC-03a landed `c2f855d2`) | R-04, R-05, R-08, R-09, M2 | B-N | `_part6` |
-| SC-02 | `22a` → `23` → `22b` | SC | BLK | SC-01 | — | B-P | `_part6` |
-| SC-03b | #453 step 4; H-162 | SC | BLK | SC-01, SC-08 (SC-03a landed `c2f855d2`) | R-05, R-04 | B-O | `_part6` |
-| SC-04 | `18` tails | SC | BLK | SC-01 (SC-03a landed `c2f855d2`) | — | B-P | `_part6` |
+| SC-02 | `22a` → `23` → `22b` | SC | BLK | SC-03b (SC-01 landed; B-N closed `cf69ceed`) | — | B-P | `_part6` |
+| SC-03b | #453 step 4; H-162 | SC | BLK | SC-08 (SC-01 landed, B-N closed `cf69ceed`; SC-03a landed `c2f855d2`) | R-05, R-04 | B-O | `_part6` |
+| SC-04 | `18` tails | SC | B | — (SC-01 landed, B-N closed `cf69ceed`; SC-03a landed `c2f855d2`) | — | B-P | `_part6` |
 | SC-05 | `2-ii`; SM-2, SM-15 | SC | ask-then | SM-15 | — | B-Z | `_part6` |
 | SC-06 | SM-1 | SC | ask-then | SM-1 | — | B-Z | `_part6` |
-| SC-07 | #445 P-4, V-4, V-5 | SC | BLK | SC-01 | — | B-N | `_part6` |
-| SC-08 | — | SC | BLK | SC-01 | — | B-O | `_part6` |
+| SC-07 | #445 P-4, V-4, V-5 | SC | BLK | a carrier per item (SC-01 landed, B-N closed `cf69ceed`) | — | B-Z | `_part6` |
+| SC-08 | — | SC | B | — (SC-01 landed; B-N closed `cf69ceed`) | — | B-O | `_part6` |
 | SE-02 | = IN-07 | — | — | — | — | B-T | `_part4` |
 | SE-04 | #457 CAST-POPULACE; H-170, H-171 | SE | BLK | IN-07 | — | B-T | `_part6` |
 | SE-05 | = IN-30 | — | — | — | — | B-U | `_part5` |
@@ -294,7 +294,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | PC-06 | #445 K-1/K-5, K-3 (S-1 landed at B-E, `ac9724fc`; M-1/S-4, S-2/L-1 at B-L, `9ad86e87`) | PC | BLK | IN-06 (K-3) | R-05 | B-S | `_part7` |
 | PC-08 | Phase 4a/4b/5, WS-7; #445 M-2..M-6, K-4/V-3 | PC | LEAVE | named, unscheduled | — | B-Z | `_part7` |
 | PC-10 | RS-25: duel terms and the yield (PC-10a module, PC-10b season) | PC/IN | B (PC-10a) · BLK (PC-10b) | PC-10b: PC-10a (D) | R-05 | B-Y | `_part7` |
-| FI-01 | `ED-FI-0009`; J-22 (A); #445 S-6 | FI | BLK | SC-01, SC-03b | R-05, R-09 | B-O | `_part6` |
+| FI-01 | `ED-FI-0009`; J-22 (A); #445 S-6 | FI | BLK | SC-03b (SC-01 landed; B-N closed `cf69ceed`) | R-05, R-09 | B-O | `_part6` |
 | FI-02 | SM-3 | FI | BLK | FI-01 | — | B-O | `_part6` |
 | FI-03 | ED-FI-0002 | FI | BLK | IN-06 | — | B-S | `_part6` |
 | FI-05 | = IN-32 | — | — | — | — | B-S | `_part5` |
@@ -317,10 +317,10 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | `B0-CI` · `30` · `31a` · `31b` · `31c` · `33` · `36` | built (`7b619328`; not a position) · IN-02 · IN-03 · IN-04 (= PC-09) · IN-05 (= MB-09) · IN-06 · IN-07 (= SE-02; its levy feed split to IN-52 at B-C) |
 | cells commit, `12b`/`12c`/`12d`, H6–H11, `12`, `12e`, Phase 6f | IN-08 (landed: the cells commit `0f998f64`, the chain `c13144b9`) |
 | `19b` · `13`-rest · pre-flight P-4, P-6 | IN-09 · IN-38 · read at B-C (IN-39, landed; `_part3` §P) |
-| `22` · `22a` → `23` → `22b` · `2-ii` | SC-01 · SC-02 · SC-05 |
+| `22` · `22a` → `23` → `22b` · `2-ii` | SC-01 (landed; B-N closed `cf69ceed`) · SC-02 · SC-05 |
 | `24g` · `24h` P5 · `24` (umbrella) | landed, `d12c8db9` · IN-30 (= SE-05, FA-02) · not carried — its letters are the rows |
 | `9` · `26` · `27` remainder · `ED-FI-0009` | PC-01 (landed, `9054df80`) · GO-01 · WR-01 (the reach; WR-02 and WR-03 landed, `0a690b30`) · FI-01 |
-| `11` | no handle: re-taken at B-G (control, `0f998f64`), B-I and B-M (E15); P-4 passed before it, at B-C |
+| `11` | no handle: re-taken at B-G (control, `0f998f64`), B-I, B-M and B-N (`cf69ceed`) (E15); P-4 passed before it, at B-C |
 | SM-1 · SM-2, SM-15 · SM-3 · SM-7 · SM-9, SM-11 · SM-10, SM-12 · SM-13 · SM-5, SM-6 | SC-06 · SC-05 · FI-02 · IN-05 · IN-41 · IN-44 · GO-05 · SM-5 confirmed (RS-6), SM-6 = IN-46 |
 | telling T7 · its measurement + H-180/181/182 re-check · G1–G8 | IN-16 · IN-17 (both landed: `ac9724fc`) · IN-18 (step 2a, G1–G3 landed `ac9724fc`; G6 landed `66bf51f9`; G5, G8 open) |
 
