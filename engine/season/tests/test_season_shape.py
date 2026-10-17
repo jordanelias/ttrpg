@@ -3538,7 +3538,9 @@ def test_t2_align_kind_reads_the_one_emitter_and_a_deed_key_needs_an_emitted_kin
             assert align_kind(kind, axis) == want, (kind, verb, axis)
             checked += bool(want)
     assert {k for k in KIND_VERB if any(authored(k, ax) is not None for ax in PURSUIT_AXES)} == {
-        "matter.undetermined"}, "a single-emitter kind carries an authored `deed:` cell nobody reviewed here"
+        "matter.undetermined", "pursuit.moved"}, (
+        "a single-emitter kind carries an authored `deed:` cell nobody reviewed here "
+        "(`pursuit.moved`, v9 SC-02 `22b` step 24: `determine`'s consequence write, held at 0.0)")
     assert checked >= 1, "no single-emitter kind has a non-zero cell, so equality proved nothing"
     unauthored = 0
     for kind in shared:

@@ -514,6 +514,12 @@ UNDEPOSITED_KINDS = roster("undeposited_kinds")
 EARNED_REFUSAL_KINDS = roster("earned_refusal_kinds")
 
 
+def is_event_kind(k) -> bool:
+    """THE ONE SPELLING OF AN EVENT KIND: `<noun>.<verb>`, two non-empty dotted parts. `check_fold_kinds` and
+    `data/verbs.py::derive_event_kinds` both ask it, so the shape lives once (`CLAUDE.md` §8)."""
+    return isinstance(k, str) and len(k.split(".")) == 2 and all(k.split("."))
+
+
 _FOLD_KEY_INELIGIBLE = "ineligible"
 _FOLD_KEY_REFUSED = "refused"
 _FOLD_KEY_ATTEMPT_REFUSED = "attempt_refused"
@@ -531,8 +537,7 @@ def check_fold_kinds(mapping: dict) -> dict:
     # below read exactly these), named once as constants so no literal collection stands here.
     wanted = frozenset((_FOLD_KEY_INELIGIBLE, _FOLD_KEY_REFUSED, _FOLD_KEY_ATTEMPT_REFUSED))
     missing, extra = sorted(wanted - set(mapping)), sorted(set(mapping) - wanted)
-    bad = sorted(k for k, v in mapping.items()
-                 if not isinstance(v, str) or len(v.split(".")) != 2 or not all(v.split(".")))
+    bad = sorted(k for k, v in mapping.items() if not is_event_kind(v))
     if missing or extra or bad:
         raise SystemExit(
             f"rosters.yaml: `fold_kinds` {'misses ' + str(missing) + '; ' if missing else ''}"

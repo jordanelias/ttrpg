@@ -53,6 +53,7 @@ from .requires import (
 )
 from .rosters import (
     COVERT_KINDS, DOMINANCE_KINDS, EARNED_REFUSAL_KINDS, FOLD_KINDS, GRADED_INQUIRIES, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
+    is_event_kind,
     RUNG_KINDS, STRATA, TENURE_KINDS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
     roster_map,
     table,
@@ -1039,8 +1040,8 @@ def _load_verb_table() -> dict:
     # prize row), or a skipped kind no row declares is refused naming it: a misspelled skip would
     # skip nothing and report the deposit half built.
     _declared_kinds = {k for v in out.values() for k in (*v.emits, *v.emits_on_refusal)}
-    _stray_earned = sorted(k for k in EARNED_REFUSAL_KINDS
-                           if k not in {x for v in out.values() for x in v.emits_on_refusal})
+    _refusal_kinds = {x for v in out.values() for x in v.emits_on_refusal}
+    _stray_earned = sorted(k for k in EARNED_REFUSAL_KINDS if k not in _refusal_kinds)
     if _stray_earned:
         raise SystemExit(f"rosters.yaml: `earned_refusal_kinds` names {_stray_earned}, which no verb "
                          "row declares in `emits_on_refusal:`. 04 §B.13 #4 -- an earned kind is one a "
@@ -1128,9 +1129,6 @@ def derive_event_kinds(table: dict, matrix: dict, fold_kinds: dict) -> frozenset
     an Event of that kind would be emitted, fanned and read by a predicate spelled the same wrong way
     and nothing would ever say the roster never held it. `loop/resolve.py::_act_events` refuses a kind
     outside this roster when the fold builds the Event (the F.20b defect, observed at execution)."""
-    def _kind_ok(k) -> bool:
-        return isinstance(k, str) and len(k.split(".")) == 2 and all(k.split("."))
-
     out: set = set()
     for name, row in table.items():
         cols = {"emits": row.emits, "emits_on_refusal": row.emits_on_refusal,
@@ -1138,7 +1136,7 @@ def derive_event_kinds(table: dict, matrix: dict, fold_kinds: dict) -> frozenset
                 **{f"emits_on_refusal[{c}]": ks for c, ks in row.refusals_by_clause.items()}}
         for col, kinds in cols.items():
             for k in kinds:
-                if not _kind_ok(k):
+                if not is_event_kind(k):
                     raise SystemExit(
                         f"verb_table.yaml: {name!r} declares Event kind {k!r} in `{col}:`, which is "
                         "not `<noun>.<verb>`. 04 §B.13 #7 -- the Event-kind roster is derived from "
@@ -1147,7 +1145,7 @@ def derive_event_kinds(table: dict, matrix: dict, fold_kinds: dict) -> frozenset
                 out.add(k)
     for (kind, fld), mrow in matrix.items():
         for k in mrow.emits:
-            if not _kind_ok(k):
+            if not is_event_kind(k):
                 raise SystemExit(
                     f"write_matrix.yaml ({kind}, {fld}) declares Event kind {k!r} in `emits:`, which "
                     "is not `<noun>.<verb>`. 04 §B.13 #7 -- the Event-kind roster is derived from "
