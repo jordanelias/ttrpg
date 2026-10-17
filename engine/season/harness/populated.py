@@ -1210,7 +1210,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         # separate unit -- `rosters.yaml: remit_default`'s note). Before `13d-iii` this overlaid
         # the two bases only: 21 of the 24 seats it builds carried NO rung (`H-163` limit 1, a
         # titled holder's `governs` was the one rule that gave one), so a holder's purview was
-        # empty and `levy`/`issue`/`open_case` refused on `authority`.
+        # empty and `requisition`/`issue`/`open_case` refused on `authority`.
         # A case may name MORE than one row (NPC-020 holds two): match on `post` first, the one
         # field both this loop and `offices.yaml` author independently. `offices.yaml`'s `post` is
         # a NORMALISED spelling for three rows (`03` §A.15 rows 5, 14, 17 -- a live registry post

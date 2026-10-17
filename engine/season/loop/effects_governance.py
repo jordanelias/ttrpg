@@ -1,8 +1,8 @@
 """`season.loop.effects_governance` -- office/seat lifecycle: confer, establish, release, revoke,
-convene, oblige, levy.
+convene, oblige, requisition.
 
 EXTRACTED from `effects.py` at the per-subsystem split (Phase 4). Holds every effect that opens or
-closes a `hold`/`oblige` Tenure on an Office or Seat, schedules a sitting, or moves a levy into a
+closes a `hold`/`oblige` Tenure on an Office or Seat, schedules a sitting, or moves a requisition into a
 seat's own treasury -- the governance slice of the verb table. `_closing` (`release`/`revoke`'s one
 shared write) stays local here rather than in `effects_shared.py`: nothing outside this file's own
 pair of openers calls it. See `effects_shared.py` for `effect_for`, `_operand` and the other
@@ -385,36 +385,36 @@ def _eff_oblige(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     return Change((Subject.edge(nt),), lambda: w.add_tenure(nt))
 
 
-@effect_for("levy")
-def _eff_levy(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
-    """PLAN POSITION `19` -- A LEVY MOVES A RUNG'S STORES INTO THE LEVYING SEAT'S TREASURY. The row's
-    `scale_note`, *"a levy moves a Rung's stores -- the rung IS the subject"*; the retirement plan's
+@effect_for("requisition")
+def _eff_requisition(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """PLAN POSITION `19` -- A REQUISITION MOVES A RUNG'S STORES INTO THE REQUISITIONING SEAT'S TREASURY. The row's
+    `scale_note`, *"a requisition moves a Rung's stores -- the rung IS the subject"*; the retirement plan's
     G2 names where it goes, *"treasury = `Rung.stores` at the office's own rung"* -- the rung of the
-    seat the act exercises (`Act.via`), the same treasury `_renewals` pays upkeep OUT of. So a levy is
+    seat the act exercises (`Act.via`), the same treasury `_renewals` pays upkeep OUT of. So a requisition is
     `transfer`'s shape with both sides fixed by the act's seat and subject rather than by the actor's
-    home: `_shift` moves `amount` of `kind` from the levied rung to the seat's rung, conserved.
+    home: `_shift` moves `amount` of `kind` from the requisitioned rung to the seat's rung, conserved.
 
     ⚠ `writes: [Rung.stores, Rung.stores]`, ONE PER SIDE, AND THAT IS A CHANGE TO THE ROW. It declared
     ONE, as `transfer` once did, and the W3 audit's lesson is that a one-sided write annihilates
     matter. The second pair is check-only (class, step, partition), like `transfer`'s.
 
     WHAT THE ROW'S PRECONDITION HAS ALREADY ASKED, SO THIS DOES NOT: the seat's purview reaches the
-    levied rung (`Basis`, `purview` -- which also refuses a rungless seat, so a seat that gets here
+    requisitioned rung (`Basis`, `purview` -- which also refuses a rungless seat, so a seat that gets here
     has a treasury), and the rung holds `stores(subject, kind) >= amount` (`transfer`'s own form-2
     cell). §27.1's scarcity is that second conjunct read against the world THIS fold has left: two
-    levies on one larder, and the second finds it short and emits `levy.refused`.
+    requisitions on one larder, and the second finds it short and emits `requisition.refused`.
 
-    DECLINES (`NO_CHANGE` -> the row's `write` clause, `levy.refused`): a side that is no rung --
+    DECLINES (`NO_CHANGE` -> the row's `write` clause, `requisition.refused`): a side that is no rung --
     the hand-built act that skipped the precondition, `_eff_transfer`'s branch -- and, through G4
-    rather than a line here, a levy of a seat's own rung into itself (both sides one store: nothing
+    rather than a line here, a requisition of a seat's own rung into itself (both sides one store: nothing
     moves, `NoOpReceipt`), or of `0`.
 
-    G4 -- WHAT IT NAMES: BOTH RUNGS, levied first, each whole and each earning `levy.taken`, as
+    G4 -- WHAT IT NAMES: BOTH RUNGS, requisitioned first, each whole and each earning `requisition.taken`, as
     `_eff_transfer` names its two. NOT a Tenure write, so F3 asks nothing of it: the seat's authority
     over the rung is the precondition's `purview` conjunct, and the gate never observes stores
     (`may_renew`'s docstring states the same split)."""
     # THE TREASURY IS THE SEAT'S RUNG AND NOTHING ELSE -- deliberately NOT `_seat_rung`, whose
-    # fallback (`payload.rung`, else the actor) is where a DOCUMENT may be drawn up; matter levied
+    # fallback (`payload.rung`, else the actor) is where a DOCUMENT may be drawn up; matter requisitioned
     # through no seat, or a rungless one, has no treasury to go to, and the actor's own person-rung
     # is not one.
     seat = _exercised_office(w, a)

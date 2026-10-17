@@ -283,7 +283,7 @@ WARRANT_ACT = "dispatch"
 SEIZURE = "seizure"
 # [ASSUMPTION; medium; Jordan to correct; revert: name another remit act here]: `issue` is the act
 # whose grant licenses a seizure. #453 §9.1 / the `seize` row: eligibility `remit:issue`, "its grant
-# carrying `issue`" -- the same remit act `levy` and `transfer` ride, `RUNG_REMIT_ACTS`' shape.
+# carrying `issue`" -- the same remit act `requisition` and `transfer` ride, `RUNG_REMIT_ACTS`' shape.
 SEIZURE_ACT = "issue"
 # THE TWELFTH BASIS (v9 IN-13, #453 §10.4 step 8, K-33 + K-52, the arrival): `muster` -- a `contain`
 # RE-HOME of ANOTHER person (one or more closures and exactly one opening of that person's `contain` in

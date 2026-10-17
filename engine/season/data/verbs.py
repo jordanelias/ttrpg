@@ -854,7 +854,7 @@ def _load_verb_table() -> dict:
         # `emits_on_refusal` would refuse by emitting a kind nobody declared.
         # ⚠ THE PER-CONJUNCT HALF OF F7 IS ENFORCED BELOW SINCE PLAN POSITION `19`, FOR A KEYED ROW.
         # It said *"NOT ENFORCED HERE ... that schema does not exist"* until `19` built the schema
-        # for its first consumers (`levy`, `open_case`, `determine`, `issue`). A FLAT row is still
+        # for its first consumers (`requisition`, `open_case`, `determine`, `issue`). A FLAT row is still
         # checked at row grain only (the block directly below): `restore`, `examine` and `surveil`
         # carry an `AllOf` of two and one flat kind, which is lawful -- a flat row DECLARES that all
         # its conjuncts refuse alike -- and moving them is not `19`'s.
@@ -1271,9 +1271,9 @@ RECORD_REFERENT_KINDS = _derive_record_referent_kinds()
 
 
 def _derive_rung_remit_acts() -> frozenset:
-    """v9 IN-49 `levy` (H-163 limit 3, [ASSUMPTION; medium; Jordan to correct]): THE REMIT ACTS A
+    """v9 IN-49 `requisition` (H-163 limit 3, [ASSUMPTION; medium; Jordan to correct]): THE REMIT ACTS A
     SEAT EXERCISES ON A `Rung`-CLASSED REFERENT -- the act of every `remit:` eligibility alternative
-    on a row declaring `referent_class: Rung` (`levy`: `issue`, `H-52`'s substitution, carried and not
+    on a row declaring `referent_class: Rung` (`requisition`: `issue`, `H-52`'s substitution, carried and not
     decided here). Read off the rows, `RECORD_REFERENT_KINDS`' shape one class over, so the stamp
     (`queries/world_q.py::larders_in_purview`, which offers a larder only to a holder of a seat
     granting one of these) and the fold's eligibility cannot name different acts, and no act literal

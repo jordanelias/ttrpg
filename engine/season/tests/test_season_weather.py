@@ -87,7 +87,7 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # (its `terms` conjunct binds `subject`; a writ with nothing to say about its terms is declined) and a
 # fanned row's bags gain a held Record's addressee (`record_sourced_operands`). The build hash is equal;
 # one and two seasons move. Was bb08f4b2... / cdeda7fd... (one, two seasons); `aperture 1 0` realm acts
-# 602 -> 598, `issue` attempted 3 -> 2 (executed 1 -> 1), `levy` attempted 3 -> 2.
+# 602 -> 598, `issue` attempted 3 -> 2 (executed 1 -> 1), `requisition` attempted 3 -> 2.
 # RE-PINNED at v9 IN-45 `forge` (B-K), A BEHAVIOUR MOVE DECLARED: `forge` entered `resolvable_verbs()`
 # (typed with `survey`'s cell, `_eff_forge`), so the chooser offers it. The build hash is equal; one and
 # two seasons move. Was 5bbcba33... / 39bf9d83... (one, two seasons). CONTROL, run: the same tree with
@@ -116,14 +116,14 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # and both old `BASE_EVENTS` exactly, so the stamp and the gate move nothing on their own. `aperture 1 0`
 # realm acts 615 -> 612; `migrate` formed 83 -> 71, att 31 -> 31, ex 0 -> 1, ref 31 -> 30, every
 # refusal now `_eff_migrate`'s capacity decline (read, not asserted, v9 §0.5).
-# RE-PINNED at v9 IN-49 `levy` (B-K, on ccf16bc3), A BEHAVIOUR MOVE DECLARED: `levy` declares
+# RE-PINNED at v9 IN-49 `requisition` (B-K, on ccf16bc3), A BEHAVIOUR MOVE DECLARED: `requisition` declares
 # `referent_class: Rung` and forms only on a `Rung`-classed referent (`world_q.larders_in_purview`'s
 # stocked larders in purview, and `places_named`' places, the class being shared), so the chooser's
 # sets change. The build hash is equal; one and two seasons move. Was bedb32d5... / 547d3e62... (one,
-# two seasons). CONTROL, run: the same tree with `levy`'s `referent_class` blanked in `VERB_TABLE` and
+# two seasons). CONTROL, run: the same tree with `requisition`'s `referent_class` blanked in `VERB_TABLE` and
 # `larders_in_purview` stamping nothing (`_derive_operand`'s widened claim gate and
 # `RUNG_REMIT_ACTS` left in) reproduces both old values and both old `BASE_EVENTS` exactly.
-# `aperture 1 0` realm acts 612 -> 612; `levy` formed 16 -> 11, att 3 -> 0, ex 0, ref 3 -> 0 (read,
+# `aperture 1 0` realm acts 612 -> 612; `requisition` formed 16 -> 11, att 3 -> 0, ex 0, ref 3 -> 0 (read,
 # not asserted, v9 §0.5); `larders_in_purview` returned `()` in all 766 calls over two realm seasons.
 # RE-PINNED at v9 SC-01 step 12 `speak` (B-N, on ffd753f6), A BEHAVIOUR MOVE DECLARED: `speak` is a typed
 # contested cell (`existence` of `subject`, kind `DocketItem`; `contests: "a matter"`), so a `speak` on
@@ -137,7 +137,7 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # contested refusal never enters `driver.resolved`) (read, not asserted, v9 §0.5).
 BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
                1: "27717c62f80d93c366cf3b9225e8f23b",
-               2: "ef1c9ad80fa430dfc3a1efecd9461262"}
+               2: "f6972f5bd79b7ea8d430cb2921b1a7ca"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -164,8 +164,12 @@ BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
 # RE-RECORDED at v9 IN-45 `migrate` with `BASE_HASHES` (7186 -> 7160, 21338 -> 23584).
 # RE-RECORDED at v9 IN-49 `levy` with `BASE_HASHES` (7160 -> 7157, 23584 -> 23361).
 # RE-RECORDED at v9 SC-01 step 12 `speak` with `BASE_HASHES` (7157 -> 7060, 23361 -> 23220).
+# RE-RECORDED at the merge of main's `levy` -> `requisition` rename (#482, #485) into batch B-N (season 2 only, with
+# `BASE_HASHES[2]`): act ids and draw streams hash the verb name, so the same seed walks another trajectory from season 2.
+# Main alone read 18ffd214... / 23241 events; B-N alone read ef1c9ad8... / 23220; the merged tree reads f6972f5b... / 23288.
+# Season 0 and season 1 are unchanged by the merge (d3edd90a / 27717c62, 7060 events).
 BASE_EVENTS = {1: (7060, "653eabae8398bcf9902916095624d23e71504f9a23e3d94a1dfb271a3911204a"),
-               2: (23220, "f8e3c23af280c36b75dfe641eda578d93f91fd38419e4f084238e47b71270824")}
+               2: (23288, "00bd3227e4fdaf6bd48271eedb9c6a40109bf34339789e1fdcf1d902350f642e")}
 
 
 def _digest(w) -> tuple:

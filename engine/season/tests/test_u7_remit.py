@@ -1,10 +1,10 @@
 """Plan position `19` -- U7-remit. `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md`,
 *"19 — INSTRUCTION. The five remit verbs; each gains a predicate reading `via.scope` and an effect on the
-G4 contract"* -- four built here (`levy`, `open_case`, `determine`, `issue`; `establish` is `13f`'s).
+G4 contract"* -- four built here (`requisition`, `open_case`, `determine`, `issue`; `establish` is `13f`'s).
 COMPLIANCE: `04:120` AX-1 (*"a seat enters through `Act.via`"*) and `04:330` (purview asked of the seat,
 never the actor). OBSERVABLE (`21_RECONCILIATION.md:575`, the antagonist-corrected one): *"a
 determination opens the disposal Tenure on its subject via the seat; below quorum, `determine.refused`"*,
-and *"a `levy` executes with `Act.via` set"*.
+and *"a `requisition` executes with `Act.via` set"*.
 
 What the position built, each asked of the real fold, the real loader and the real gate:
   * §F.24a form 7, `basis` -- *"a basis lookup on the exercised seat"* -- given its implementation
@@ -13,13 +13,13 @@ What the position built, each asked of the real fold, the real loader and the re
     load-time check (`data/verbs.py`) and the fold reading `row.refusal_for(clause)` (`04 §C.4`).
   * the `docket` reader branch (`exists:DocketItem`), and `open_case` putting a matter on the docket.
   * the write gate's EIGHTH basis, `determination` (`state/gate.py::may_determine`).
-  * `levy`'s effect (a conserved move into the seat's treasury), `open_case`'s, `determine`'s; `issue`'s
+  * `requisition`'s effect (a conserved move into the seat's treasury), `open_case`'s, `determine`'s; `issue`'s
     (`15`'s) precondition.
 
 THE FALSIFIERS, each with the control one clause away:
   * the plan's own: ANY OF THE FOUR EXECUTING WITH `via=None` -- run twice, through the fold as shipped
     (eligibility refuses) and with eligibility forced open (the `basis` conjunct refuses on its own).
-  * the plan's added one: TWO `levy`s ON ONE LARDER IN ONE FOLD -- the second refuses (§27.1).
+  * the plan's added one: TWO `requisition`s ON ONE LARDER IN ONE FOLD -- the second refuses (§27.1).
   * below quorum, `determine.refused` -- swept across the fixture's three points, the shipped one the
     control.
   * the gate: a bare opening of the disposal edge is refused (`NotYours`, store put back) whenever one
@@ -53,7 +53,7 @@ from ..state.gate import DETERMINATION, NotYours
 
 SEAT, DUKE, TREASURY = "off_duke", "p_high", "D"
 PARTY, OUTSIDER = "p_mid", "p_king"          # inside the duchy (Hh) / outside it (R)
-REMIT = ("levy", "open_case", "determine", "issue")
+REMIT = ("requisition", "open_case", "determine", "issue")
 
 
 def _world(**fx):
@@ -89,8 +89,8 @@ def _act(key, verb, via=SEAT, actor=DUKE, **payload):
     return Act(id=key, actor=actor, verb=verb, via=via, payload=payload)
 
 
-def _levy(key, subject="S", amount=5, **kw):
-    return _act(key, "levy", subject=subject, kind="grain", amount=amount, **kw)
+def _requisition(key, subject="S", amount=5, **kw):
+    return _act(key, "requisition", subject=subject, kind="grain", amount=amount, **kw)
 
 
 def _open(key, subject=PARTY, **kw):
@@ -107,7 +107,7 @@ def _issue(key, to=PARTY, **kw):
 
 # A well-formed act of each verb, on a world where it would EXECUTE through the seat -- the base the
 # via=None falsifier strips the seat from. `determine` needs its matter docketed first.
-_WELL_FORMED = {"levy": _levy, "open_case": _open, "determine": _determine, "issue": _issue}
+_WELL_FORMED = {"requisition": _requisition, "open_case": _open, "determine": _determine, "issue": _issue}
 
 
 def _ready(verb, **fx):
@@ -179,7 +179,7 @@ def test_19_none_of_the_four_executes_with_via_none(verb):
 @pytest.mark.parametrize("verb", REMIT)
 def test_19_the_basis_conjunct_refuses_via_none_even_past_eligibility(verb, monkeypatch):
     """THE STRUCTURAL HALF, WHICH IS WHAT MAKES THE FALSIFIER THE FORM'S AND NOT ONLY ELIGIBILITY'S.
-    Eligibility forced OPEN (`levy`'s `presence:<rung>` alternative is the live case: the day it
+    Eligibility forced OPEN (`requisition`'s `presence:<rung>` alternative is the live case: the day it
     admits, eligibility no longer implies a seat). The `basis` conjunct binds no `via`, reads UNKNOWN,
     and the fold refuses on it -- so the act still does not execute, and the refusal names the SEAT
     (`unauthorized`) through that conjunct's key."""
@@ -201,48 +201,48 @@ def test_19_the_basis_conjunct_refuses_via_none_even_past_eligibility(verb, monk
 
 
 # ======================================================================================
-# 2 -- LEVY: THROUGH THE SEAT, CONSERVED, SCARCE
+# 2 -- REQUISITION: THROUGH THE SEAT, CONSERVED, SCARCE
 # ======================================================================================
 
-def test_19_a_levy_executes_with_via_set_and_moves_matter_into_the_seats_treasury():
-    """THE OBSERVABLE, *"a `levy` executes with `Act.via` set"* -- and where the matter goes: out of
-    the levied rung and into the treasury of the seat exercised (`off_duke`'s rung, `D`), the same
+def test_19_a_requisition_executes_with_via_set_and_moves_matter_into_the_seats_treasury():
+    """THE OBSERVABLE, *"a `requisition` executes with `Act.via` set"* -- and where the matter goes: out of
+    the requisitioned rung and into the treasury of the seat exercised (`off_duke`'s rung, `D`), the same
     amount on both sides (the W3 audit's conservation), both rungs named on the success Event."""
     w, d = _world()
     before = {r: dict(w.rungs[r].stores or {}) for r in ("S", TREASURY)}
-    act = _levy("lv")
+    act = _requisition("rq")
     out = _fold(w, d, act)
-    assert _kinds(out) == ["levy.taken"] and act.via == SEAT
+    assert _kinds(out) == ["requisition.taken"] and act.via == SEAT
     after = {r: dict(w.rungs[r].stores or {}) for r in ("S", TREASURY)}
     assert after["S"]["grain"] == before["S"]["grain"] - 5
     assert after[TREASURY].get("grain", 0) == before[TREASURY].get("grain", 0) + 5
     assert sorted(c.subject for c in out[0].changes) == sorted(["S", TREASURY])
 
 
-def test_19_two_levies_on_one_larder_in_one_fold_the_second_refuses():
+def test_19_two_requisitions_on_one_larder_in_one_fold_the_second_refuses():
     """THE PLAN'S ADDED FALSIFIER (§27.1, `test_lb3a_two_eaters_cannot_spend_the_same_unit`'s shape):
-    a larder holding exactly one levy's worth, two levies in ONE fold -- the first takes it, the second
+    a larder holding exactly one requisition's worth, two requisitions in ONE fold -- the first takes it, the second
     reads the world the first left, finds it short, and gets a DIFFERENT Event, keyed to the `stores`
     conjunct, carrying the read that refused it."""
     w, d = _world()
     w.rungs["Hh"].stores = {"grain": 5}
-    out = _fold(w, d, _levy("lv1", subject="Hh"), _levy("lv2", subject="Hh"))
-    assert sorted(_kinds(out)) == ["levy.refused", "levy.taken"], _kinds(out)
-    refused = [e for e in out if e.kind == "levy.refused"][0]
-    assert list(VERB_TABLE["levy"].refusal_for("stores")) == ["levy.refused"]
+    out = _fold(w, d, _requisition("rq1", subject="Hh"), _requisition("rq2", subject="Hh"))
+    assert sorted(_kinds(out)) == ["requisition.refused", "requisition.taken"], _kinds(out)
+    refused = [e for e in out if e.kind == "requisition.refused"][0]
+    assert list(VERB_TABLE["requisition"].refusal_for("stores")) == ["requisition.refused"]
     assert ("stores:grain", 0) in [(o.predicate, o.value) for o in refused.observed], refused.observed
     assert w.rungs["Hh"].stores["grain"] == 0 and w.rungs[TREASURY].stores["grain"] == 5
 
 
-def test_19_a_levy_outside_the_seats_purview_is_unauthorized_and_says_whose():
+def test_19_a_requisition_outside_the_seats_purview_is_unauthorized_and_says_whose():
     """`04:330`: purview is asked of the SEAT. `R` is above the duchy -- a Duke has no purview upward --
-    so the levy refuses on the `authority` conjunct, and the read it carries names the seat."""
+    so the requisition refuses on the `authority` conjunct, and the read it carries names the seat."""
     w, d = _world()
     w.rungs["R"].stores = {"grain": 50}
-    out = _fold(w, d, _levy("lv", subject="R"))
-    assert _kinds(out) == ["levy.unauthorized"]
+    out = _fold(w, d, _requisition("rq", subject="R"))
+    assert _kinds(out) == ["requisition.unauthorized"]
     assert (f"purview:{SEAT}", False) in [(o.predicate, o.value) for o in out[0].observed]
-    assert w.rungs["R"].stores["grain"] == 50, "an unauthorized levy moved matter"
+    assert w.rungs["R"].stores["grain"] == 50, "an unauthorized requisition moved matter"
 
 
 # ======================================================================================
@@ -503,14 +503,14 @@ def test_19_a_writ_naming_several_executors_refuses_rather_than_ending_the_seaso
 
 def test_19_a_person_who_learned_the_seat_cannot_reach_stops_forming_it():
     """§F1 clause 4 asks the cell the fold asks, seat included (`exercised_seat` -> `via`). A Duke
-    holding `(R, purview:off_duke, False)` -- what a witnessed `levy.unauthorized` deposits -- finds
-    his levy of `R` KNOWN-FALSE through that seat; with no seat the conjunct is UNKNOWN and
+    holding `(R, purview:off_duke, False)` -- what a witnessed `requisition.unauthorized` deposits -- finds
+    his requisition of `R` KNOWN-FALSE through that seat; with no seat the conjunct is UNKNOWN and
     contradicts nothing (the control)."""
     w, _ = _world()
     p = w.persons[DUKE]
     p.ledger.append(Claim("c1", DUKE, "R", f"purview:{SEAT}", False, w.tick, "firsthand", 90,
                           "own"))
-    row = VERB_TABLE["levy"]
+    row = VERB_TABLE["requisition"]
     ops = {"subject": "R", "kind": "grain", "amount": 1}
     assert belief_contradicts(p, row, "R", ops, SEAT)
     assert not belief_contradicts(p, row, "R", ops, None)
@@ -545,19 +545,19 @@ def _plant(monkeypatch, verb, mutate):
 ])
 def test_19_the_loader_refuses_a_keyed_row_that_does_not_key_exactly_its_clauses(monkeypatch, defect,
                                                                                     match):
-    """Each defect planted on `levy`'s row, and the load fails naming it. The control is the table
+    """Each defect planted on `requisition`'s row, and the load fails naming it. The control is the table
     itself, which loaded to run this file."""
     def mutate(r):
         ref, cell = r["emits_on_refusal"], r["requires_typed"]["all"]
         if defect == "missing":
             ref.pop("stores")
         elif defect == "extra":
-            ref["bribe"] = ["levy.refused"]
+            ref["bribe"] = ["requisition.refused"]
         elif defect == "unnamed":
             cell[1].pop("conjunct")
             ref.pop("stores")
         elif defect == "flat named":
-            r["emits_on_refusal"] = ["levy.refused"]
+            r["emits_on_refusal"] = ["requisition.refused"]
         elif defect == "twice":
             cell[1]["conjunct"] = cell[0]["conjunct"]
         elif defect == "nested":
@@ -567,7 +567,7 @@ def test_19_the_loader_refuses_a_keyed_row_that_does_not_key_exactly_its_clauses
                        "conjunct": "authority"}
         else:
             ref["stores"] = []
-    _plant(monkeypatch, "levy", mutate)
+    _plant(monkeypatch, "requisition", mutate)
     with pytest.raises(SystemExit, match=match):
         _verbs._load_verb_table()
 
@@ -578,7 +578,7 @@ def test_19_the_fold_raises_rather_than_emit_an_undeclared_clauses_kind():
     instead would publish kinds for conjuncts that did not fail."""
     from ..gaps import InstrumentDefect
     with pytest.raises(InstrumentDefect):
-        VERB_TABLE["levy"].refusal_for("bribe")
+        VERB_TABLE["requisition"].refusal_for("bribe")
 
 
 # ======================================================================================
@@ -884,14 +884,14 @@ def test_sc03a_a_mustered_army_excludes_a_person_held_in_custody(monkeypatch):
 
 
 # ======================================================================================
-# 9 -- v9 IN-49 `levy`: THE LEVIED RUNG (H-163 limit 3), THROUGH THE REAL FORMATION
+# 9 -- v9 IN-49 `requisition`: THE REQUISITIONED RUNG (H-163 limit 3), THROUGH THE REAL FORMATION
 # ======================================================================================
-# `subject` bound the question's single referent, so a computed `levy` aimed at whatever the seat
+# `subject` bound the question's single referent, so a computed `requisition` aimed at whatever the seat
 # holder was asked about -- a person, a Record, a rung his seat does not reach, an empty larder --
 # and was refused there (H-163 limit 3). The channel is `queries/world_q.py::larders_in_purview`:
-# the Rungs his OWN ledger names, holding the fixtures' levy of their matter, inside the purview of a
+# the Rungs his OWN ledger names, holding the fixtures' requisition of their matter, inside the purview of a
 # seat of his granting the remit act (`data/verbs.py::RUNG_REMIT_ACTS`), stamped on the question he
-# answers as `Rung`; `levy` declares `referent_class: Rung`. Every act below is COMPUTED --
+# answers as `Rung`; `requisition` declares `referent_class: Rung`. Every act below is COMPUTED --
 # `questions_for`, the real `opening_set`, the real `pack_scenes` -- and folded by the real RESOLVE.
 # Hand-built worlds only; nothing here asserts anything about the seed-0 realm (v9 §0.5).
 # The common setup stocks `R` (the realm, outside the Duke's purview) as well as `S`, so the three
@@ -899,16 +899,16 @@ def test_sc03a_a_mustered_army_excludes_a_person_held_in_custody(monkeypatch):
 # which control 3 also stocks -- two changes), or by `S`'s grain (emptied).
 # MUTATIONS, run at the build 2026-10-16. Each went RED, then was restored byte-exact and went GREEN:
 #   * `larders_in_purview`'s `held > 0 and held >= amount and` deleted (the stores condition) -> the
-#     empty-larder control RED (a computed levy forms on the empty larder);
+#     empty-larder control RED (a computed requisition forms on the empty larder);
 #   * `larders_in_purview`'s `any(purview_reaches(...))` replaced by `True` -> the outside-purview
-#     control RED (the realm is stamped as a larder he may levy);
+#     control RED (the realm is stamped as a larder he may requisition);
 #   * `larders_in_purview`'s `r != s.rung and` deleted (the treasury clause) -> the own-treasury
-#     control RED (a computed levy forms on `D`, the seat's own rung);
-#   * `levy`'s `referent_class: Rung` deleted from `verb_table.yaml` -> the plain-referent test RED
-#     (a levy forms on the clerk he was asked about) and the executing test RED (no `Rung` row is
+#     control RED (a computed requisition forms on `D`, the seat's own rung);
+#   * `requisition`'s `referent_class: Rung` deleted from `verb_table.yaml` -> the plain-referent test RED
+#     (a requisition forms on the clerk he was asked about) and the executing test RED (no `Rung` row is
 #     exercised through a seat, so nothing is stamped);
 #   * `_derive_operand`'s `and on_referent` dropped from the shortfall branch -> the operand test RED
-#     (the levy of `S` carries the realm's salt dearth).
+#     (the requisition of `S` carries the realm's salt dearth).
 
 from ..decision import assemble as _assemble
 from ..decision import options as _options
@@ -931,8 +931,8 @@ def _larder_world(told_of="S", grain_at_s=STOCK):
     return w, d
 
 
-def _computed_levies(w, q=None):
-    """The `levy` acts the Duke forms -- on `q`, by default the question he answers first, which
+def _computed_requisitions(w, q=None):
+    """The `requisition` acts the Duke forms -- on `q`, by default the question he answers first, which
     the classed referents ride -- through the real `opening_set`, packed by the real `pack_scenes`."""
     p = w.persons[DUKE]
     if q is None:
@@ -941,81 +941,81 @@ def _computed_levies(w, q=None):
             return []
         q = qs[0]
     cands = [c for c in _options.opening_set(p, _assemble(p, q, 12), q, w.fixtures)
-             if c.verb == "levy"]
+             if c.verb == "requisition"]
     mint = lambda who, verb, subj: _H(w.world_seed, w.tick, who, f"act:{verb}:{subj}")
     return [a for s in _pack(p, cands, 99, w.fixtures, mint) for a in s.acts]
 
 
-def test_in49_a_computed_levy_of_a_larder_his_seat_reaches_executes_with_via_set():
-    """THE OBSERVABLE U9 NAMED, *"a `levy` executes with `Act.via` set"*, FROM A COMPUTED ACT. The
+def test_in49_a_computed_requisition_of_a_larder_his_seat_reaches_executes_with_via_set():
+    """THE OBSERVABLE U9 NAMED, *"a `requisition` executes with `Act.via` set"*, FROM A COMPUTED ACT. The
     Duke is told of `S` (his own town, inside `D`): `larders_in_purview` offers exactly `S`, the
-    computed `levy` carries `subject = S` and `via = off_duke`, and the real fold executes it --
-    `levy.taken` in `w.log`, the fixtures' amount out of `S` and into the seat's treasury `D`."""
+    computed `requisition` carries `subject = S` and `via = off_duke`, and the real fold executes it --
+    `requisition.taken` in `w.log`, the fixtures' amount out of `S` and into the seat's treasury `D`."""
     w, d = _larder_world()
     assert world_q.larders_in_purview(w, w.persons[DUKE]) == ("S",)
-    (lv,) = _computed_levies(w)
+    (lv,) = _computed_requisitions(w)
     assert lv.payload.get("subject") == "S" and lv.via == SEAT, (lv.payload, lv.via)
     amount = w.fixtures.get("default_transfer_amount")
     assert lv.payload.get("kind") == w.fixtures.get("default_store_kind") == "grain"
     assert lv.payload.get("amount") == amount and amount > 0
     before_s, before_d = w.rungs["S"].stores["grain"], (w.rungs["D"].stores or {}).get("grain", 0)
-    assert _kinds(_fold(w, d, lv)) == ["levy.taken"]
-    assert [e for e in w.log if e.kind == "levy.taken"], "levy.taken never reached w.log"
+    assert _kinds(_fold(w, d, lv)) == ["requisition.taken"]
+    assert [e for e in w.log if e.kind == "requisition.taken"], "requisition.taken never reached w.log"
     assert w.rungs["S"].stores["grain"] == before_s - amount
     assert w.rungs["D"].stores["grain"] == before_d + amount
 
 
-def test_in49_a_rung_outside_the_seats_purview_raises_no_levy():
+def test_in49_a_rung_outside_the_seats_purview_raises_no_requisition():
     """CONTROL 1, ONE CHANGE: told of the stocked realm `R` instead of `S`. No seat of his reaches
-    `R` (a Duke has no purview over the realm above him), so it is no larder he may levy, nothing
-    is stamped, and no `levy` forms -- asserted on the formed acts AND by folding whatever forms."""
+    `R` (a Duke has no purview over the realm above him), so it is no larder he may requisition, nothing
+    is stamped, and no `requisition` forms -- asserted on the formed acts AND by folding whatever forms."""
     w, d = _larder_world(told_of="R")
     assert w.rungs["R"].stores["grain"] == STOCK          # anti-vacuity: the larder is full
     assert world_q.larders_in_purview(w, w.persons[DUKE]) == ()
-    acts = _computed_levies(w)
+    acts = _computed_requisitions(w)
     assert [a.payload.get("subject") for a in acts] == [], acts
 
 
-def test_in49_the_seats_own_treasury_raises_no_levy():
+def test_in49_the_seats_own_treasury_raises_no_requisition():
     """CONTROL 3, ONE CHANGE: told of `D`, the seat's own rung, stocked. Purview is reflexive, but
-    `D` is the treasury a levy pays INTO, and a levy of it into itself moves nothing (`_eff_levy`'s
-    G4 `NoOpReceipt`, `levy.refused` on the `write` clause -- every computed corpus levy before the
-    clause). So it is no larder he may levy and no `levy` forms on it."""
+    `D` is the treasury a requisition pays INTO, and a requisition of it into itself moves nothing (`_eff_requisition`'s
+    G4 `NoOpReceipt`, `requisition.refused` on the `write` clause -- every computed corpus requisition before the
+    clause). So it is no larder he may requisition and no `requisition` forms on it."""
     w, d = _larder_world(told_of=TREASURY)
     w.rungs[TREASURY].stores = {"grain": STOCK}
     assert G.purview_reaches(w, w.offices[SEAT], TREASURY)   # anti-vacuity: inside the purview
-    acts = _computed_levies(w)
+    acts = _computed_requisitions(w)
     assert [a.payload.get("subject") for a in acts] == [], acts
     assert world_q.larders_in_purview(w, w.persons[DUKE]) == ()
 
 
-def test_in49_an_empty_larder_raises_no_levy():
+def test_in49_an_empty_larder_raises_no_requisition():
     """CONTROL 2, ONE CHANGE: `S` holds no grain. An empty larder is an occasion for nothing --
-    the `levy.refused` H-163 limit 3 measured -- so nothing is stamped and no `levy` forms."""
+    the `requisition.refused` H-163 limit 3 measured -- so nothing is stamped and no `requisition` forms."""
     w, d = _larder_world(grain_at_s=0)
-    acts = _computed_levies(w)
+    acts = _computed_requisitions(w)
     assert [a.payload.get("subject") for a in acts] == [], acts
     assert world_q.larders_in_purview(w, w.persons[DUKE]) == ()
 
 
-def test_in49_a_levy_never_forms_on_a_plain_referent():
+def test_in49_a_requisition_never_forms_on_a_plain_referent():
     """THE PARTITION: a question whose plain referent is the clerk (`p_mid`), with nothing stamped,
-    forms no `levy` -- before the class it formed one on him and the fold refused it. CONTROL: the
-    same question with `S` riding it as a `Rung` forms the levy on `S` and nowhere else."""
+    forms no `requisition` -- before the class it formed one on him and the fold refused it. CONTROL: the
+    same question with `S` riding it as a `Rung` forms the requisition on `S` and nowhere else."""
     w, _ = _world()
     plain = _Question("q:claim:c_knows_p_mid", "claim_landed", (PARTY,), f"c_knows_{PARTY}")
-    assert _computed_levies(w, q=plain) == []
+    assert _computed_requisitions(w, q=plain) == []
     classed = _Question(plain.id, plain.source, plain.referents, plain.about,
                         classes=(("S", "Rung"),))
-    assert [a.payload.get("subject") for a in _computed_levies(w, q=classed)] == ["S"]
+    assert [a.payload.get("subject") for a in _computed_requisitions(w, q=classed)] == ["S"]
 
 
 def test_in49_a_claim_the_question_is_about_does_not_set_a_classed_levys_matter():
     """THE OPERAND RULE, ONE PARTITION OVER (IN-45's document gate, extended to the shortfall and
     stores readers). The question he answers is about a `shortfall:salt` claim of 5 on `R`, and `S`
-    rides it as a `Rung`: the levy of `S` carries the fixtures' grain and amount -- what
+    rides it as a `Rung`: the requisition of `S` carries the fixtures' grain and amount -- what
     `larders_in_purview` stocked it by -- not the realm's salt dearth. AND ON THE OVERLAP (B-K close,
-    COR 4 / LOG 1): a question about `S` itself, `S` riding it as a `Rung` too, still gives the levy
+    COR 4 / LOG 1): a question about `S` itself, `S` riding it as a `Rung` too, still gives the requisition
     the fixtures' values -- the row is classed, so the claim does not re-aim it (this assertion read
     `("salt", 5)` before, pinning the mismatch)."""
     w, _ = _world()
@@ -1026,13 +1026,13 @@ def test_in49_a_claim_the_question_is_about_does_not_set_a_classed_levys_matter(
                           "own"))
     q = _Question("q:claim:c_short_R", "claim_landed", ("R",), "c_short_R",
                   classes=(("S", "Rung"),))
-    (lv,) = _computed_levies(w, q=q)
+    (lv,) = _computed_requisitions(w, q=q)
     assert (lv.payload.get("kind"), lv.payload.get("amount")) == (
         w.fixtures.get("default_store_kind"), w.fixtures.get("default_transfer_amount")), lv.payload
     own = _Question("q:claim:c_short_S", "claim_landed", ("S",), "c_short_S",
                     classes=(("S", "Rung"),))
     assert [(a.payload.get("kind"), a.payload.get("amount"))
-            for a in _computed_levies(w, q=own)] == [
+            for a in _computed_requisitions(w, q=own)] == [
         (w.fixtures.get("default_store_kind"), w.fixtures.get("default_transfer_amount"))]
 
 
@@ -1046,11 +1046,11 @@ def _formed(w, verb, q):
 def test_in49_a_claim_about_the_stamped_rung_itself_does_not_set_the_levys_matter():
     """THE OVERLAP (B-K close, COR 4 / LOG 1): the head question is about a `shortfall:salt` claim of
     5 on `S`, and `S` is ALSO stamped `Rung` -- the common case, since the claim about the larder
-    ranks first. The classed `levy` of `S` carries the fixtures' grain and amount, what the stamp
+    ranks first. The classed `requisition` of `S` carries the fixtures' grain and amount, what the stamp
     checked. CONTROL, one change of ROW: the plain-row `transfer` on the same question and the same
     rung still reads the claim (19d's `salt`, 5) -- so the rule is the row's class, not the id's.
     MUTATION (seen red, 2026-10-16): `on_referent = q is None or subject in q.referents` restored in
-    `_derive_operand` -> the levy reads `("salt", 5)`."""
+    `_derive_operand` -> the requisition reads `("salt", 5)`."""
     w, _ = _world()
     w.persons[DUKE].ledger.append(Claim("c_short_S", DUKE, "S", "shortfall:salt", 5, w.tick,
                                         "firsthand", 100, "own"))
@@ -1058,20 +1058,20 @@ def test_in49_a_claim_about_the_stamped_rung_itself_does_not_set_the_levys_matte
                   classes=(("S", "Rung"),))
     fx = (w.fixtures.get("default_store_kind"), w.fixtures.get("default_transfer_amount"))
     assert fx != ("salt", 5)                                     # anti-vacuity
-    assert [(o.get("kind"), o.get("amount")) for o in _formed(w, "levy", q)] == [fx]
+    assert [(o.get("kind"), o.get("amount")) for o in _formed(w, "requisition", q)] == [fx]
     assert ("salt", 5) in [(o.get("kind"), o.get("amount")) for o in _formed(w, "transfer", q)
                            if o.get("to") == "S"]
 
 
 def test_in49_a_stores_claim_about_the_stamped_rung_does_not_set_the_levys_kind():
     """`store_kind_of`'s guard made falsifiable: the head question is about a `stores:salt` level on
-    `S`, `S` stamped `Rung`. The classed `levy` carries the fixtures' kind; CONTROL, one change of
+    `S`, `S` stamped `Rung`. The classed `requisition` carries the fixtures' kind; CONTROL, one change of
     row: the plain `transfer` on the same question reads `salt`. MUTATION (seen red, 2026-10-16):
-    `if on_referent` dropped from `_derive_operand`'s `kind` branch -> the levy carries `salt`."""
+    `if on_referent` dropped from `_derive_operand`'s `kind` branch -> the requisition carries `salt`."""
     w, _ = _world()
     w.persons[DUKE].ledger.append(Claim("c_st_S", DUKE, "S", "stores:salt", 30, w.tick,
                                         "firsthand", 100, "own"))
     q = _Question("q:claim:c_st_S", "claim_landed", ("S",), "c_st_S", classes=(("S", "Rung"),))
     assert w.fixtures.get("default_store_kind") != "salt"        # anti-vacuity
-    assert [o.get("kind") for o in _formed(w, "levy", q)] == [w.fixtures.get("default_store_kind")]
+    assert [o.get("kind") for o in _formed(w, "requisition", q)] == [w.fixtures.get("default_store_kind")]
     assert "salt" in [o.get("kind") for o in _formed(w, "transfer", q) if o.get("to") == "S"]

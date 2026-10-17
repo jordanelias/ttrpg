@@ -420,7 +420,7 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     AND IT TAKES THE MATTER OFF THE DOCKET: every item naming the party is written back to
     `matter: None` -- the row's `DocketItem.matter` -- so the slot a sitting formed survives and the
     matter leaves it. That is what makes a second determination of one matter in one fold REFUSE
-    (the docket conjunct reads 0), §27.1's scarcity on a docket as `levy`'s is on a larder.
+    (the docket conjunct reads 0), §27.1's scarcity on a docket as `requisition`'s is on a larder.
 
     ONE DECLINE (`NO_CHANGE` -> `determine.refused` on the `write` clause), a NEGATION the grammar
     cannot spell: the party already owes this seat a live `oblige` (one edge per person and seat --

@@ -1039,7 +1039,7 @@ may be written in two steps.
 |---|---|---|---|---|---|---|
 | `Date`, `DocketItem` | **yes** | no | no | **yes** (`carry`, `convene`) | no | no |
 | `ConveningCondition` | **yes** (firing, clearing) | no | no | **yes** (`convene` attaches one) | no | no |
-| larders, `stores` | no | **yes** | no | **yes** (`transfer`, `levy`) | no | no |
+| larders, `stores` | no | **yes** | no | **yes** (`transfer`, `requisition`) | no | no |
 | bodies, ageing, death | no | **yes** | no | **yes** (killing, wounding — **an act**) | no | no |
 | travel legs | no | **yes** | no | **yes** (movement) | no | no |
 | `yield` | no | **yes, only here** | no | no | no | no |
