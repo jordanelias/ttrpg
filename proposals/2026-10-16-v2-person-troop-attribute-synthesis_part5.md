@@ -1,7 +1,7 @@
 # Persons, attributes and verbs: the v2 synthesis — part 5: what verbs do to the world (I): the chooser, the world, and how context modulates an act
 
 ## Status: PROPOSED (2026-10-16). Not ratified; merging ratifies nothing unless Jordan so rules. Static reading only: no run was made for this Part. Every line marked [CHECKED] was opened in this pass; a claim only a run could settle is marked NOT CHECKED with the run named.
-## Parts, in reading order: [head](2026-10-16-v2-person-troop-attribute-synthesis.md) · [`_part2`](2026-10-16-v2-person-troop-attribute-synthesis_part2.md) · [`_part3`](2026-10-16-v2-person-troop-attribute-synthesis_part3.md) · [`_part4`](2026-10-16-v2-person-troop-attribute-synthesis_part4.md) · **this file** (Part IV §IV.0–§IV.5) · [`_part6`](2026-10-16-v2-person-troop-attribute-synthesis_part6.md) (Part IV §IV.6–§IV.13) · [`_part7`](2026-10-16-v2-person-troop-attribute-synthesis_part7.md) · [`_part8`](2026-10-16-v2-person-troop-attribute-synthesis_part8.md) (Part V: the trial).
+## Parts, in reading order: [head](2026-10-16-v2-person-troop-attribute-synthesis.md) (§0, Part I Persons) · [`_part2`](2026-10-16-v2-person-troop-attribute-synthesis_part2.md) (Part II Attributes) · [`_part3`](2026-10-16-v2-person-troop-attribute-synthesis_part3.md) and [`_part4`](2026-10-16-v2-person-troop-attribute-synthesis_part4.md) (Part III Verbs: standards, roster, reconciliation; critics, etymology audit, gap coverage, named mechanics, decisions) · **this file** and [`_part6`](2026-10-16-v2-person-troop-attribute-synthesis_part6.md) (Part IV What verbs do to the world) · [`_part7`](2026-10-16-v2-person-troop-attribute-synthesis_part7.md) (§5 Roadmap, §6 Reliability ledger, §7 Sources) · [`_part8`](2026-10-16-v2-person-troop-attribute-synthesis_part8.md) (Part V: engine findings carried from the first-pass trial) · Part VI, the lexicon by subsystem: [`_part9`](2026-10-16-v2-person-troop-attribute-synthesis_part9.md) PC · [`_part10`](2026-10-16-v2-person-troop-attribute-synthesis_part10.md) MB · [`_part11`](2026-10-16-v2-person-troop-attribute-synthesis_part11.md) SC · [`_part12`](2026-10-16-v2-person-troop-attribute-synthesis_part12.md) FI · [`_part13`](2026-10-16-v2-person-troop-attribute-synthesis_part13.md) TW · [`_part14`](2026-10-16-v2-person-troop-attribute-synthesis_part14.md) GV · [`_part15`](2026-10-16-v2-person-troop-attribute-synthesis_part15.md) FA · [`_part16`](2026-10-16-v2-person-troop-attribute-synthesis_part16.md) EC · [`_part17`](2026-10-16-v2-person-troop-attribute-synthesis_part17.md) WT · [`_part18`](2026-10-16-v2-person-troop-attribute-synthesis_part18.md) NP · Part VII, the verb gap register (the evidence behind Part VI's coverage tables): [`_part19`](2026-10-16-v2-person-troop-attribute-synthesis_part19.md) PC+NP · [`_part20`](2026-10-16-v2-person-troop-attribute-synthesis_part20.md) MB+FA · [`_part21`](2026-10-16-v2-person-troop-attribute-synthesis_part21.md) SC+GV · [`_part22`](2026-10-16-v2-person-troop-attribute-synthesis_part22.md) FI+TW · [`_part23`](2026-10-16-v2-person-troop-attribute-synthesis_part23.md) EC+WT.
 
 Paths are under `engine/season/` unless written in full.
 
@@ -228,61 +228,49 @@ flowchart LR
     LED --> CH["the chooser: veto by known-false, questions, attention"]
 ```
 
-### IV.4 Meaning against code: the etymology-and-role lever
+### IV.4 Meaning against code: the ordinary-sense lever
 
-**Claim.** For most shipped verbs, the contexts the verb's meaning calls for are not what the code
+**Claim.** For most shipped verbs, the contexts the verb's ordinary meaning calls for are not what the code
 reads. The gaps cluster in three places:
 
 - the opponent's will (only four rows are contested);
 - the resource context (one row, `requisition`, reads stores, and `transfer` its `from`);
 - the belief context of the acted-on party (only `tell` reaches it).
 
-Intended nodes are read from the verb's root sense in From-scratch head §2.3. Its etymologies are
-from memory, so this column is [INFERRED] at the confidence stated there. Actual nodes are read from
-each row's eligibility, `requires_typed`, `counterparty` and `contests` by script [CHECKED].
+**Method, as corrected.** The first pass read the intended nodes from each verb's *root* sense, from memory. Two critics showed that this is the etymological fallacy and that several roots were misstated (L-01, V-12, V-13; `_part4` §III.7). The intended node is now read from the verb's **ordinary current sense** (`CLAUDE.md` §4, ED-IN-0179), and no gap rests on a root alone. Etymology is the linguistic record, kept with each verb in Part VI. Actual nodes are read from each row's eligibility, `requires_typed`, `counterparty` and `contests` (the script check of the first pass, at `716c253`; not re-run). Roles are Part IV §IV.7's; they are not repeated here (V-14).
 
-| verb (role) | intended by meaning | actual (code) | gap |
+| verb | ordinary sense | actual (code) | gap |
 |---|---|---|---|
-| `tell` (informer) | "count out an account": the teller's memory; the hearer's belief | own_ledger(subject), hearer with; contested by the hearer's `capability`; reception refracted by the hearer's beliefs | **none**: the best-modulated verb |
-| `oblige` (binder) | "bind to": the binder's leverage; the bound party's standing | a seat as subject; one edge per (person, seat) (`predicates.py:396`); actor-side `own` | the seat's standing and the joiner's reason are not read |
-| `commit` (binder) | "entrust oneself": steadfastness | existence(subject) | nothing about the actor's prior commitments |
-| `confer` (ranker) | "bear together": the conferrer holds what he bestows | remit:confer; purview (`gate.py:352`) | the recipient's standing is not read |
-| `revoke` / `release` (closers) | "call back" / "loosen" | remit:revoke / own | the holder's resistance is not read |
-| `issue` (ranker / producer) | "send out": a voice obeyed | remit:issue; existence(to), basis(to), own_ledger(subject) | the addressee's compliance is not modelled at issue; it is `comply` / `evade / defy` |
-| `requisition` (mover) | "seek again": authority and knowing what is there | remit:issue + presence; basis; stores ≥ amount | the subject's hunger is not read (R-C-10's price is unbuilt) |
-| `transfer` (mover) | "carry across" | from-stores ≥ amount; seat or own or hold | — |
-| `march` (harmer, mover) | "tread": terrain, ration, the opposing side | remit:dispatch; existence; contested by "a field" (sides, weights, stance, loyalty) | **ration and terrain are not read**: no provisioning term in the season loop (TROOP critic, grep 0, carried) |
-| `fight` / `accept` (harmer) | "close struggle": force, handling | existence(subject); contested by the body (`end` from BODY) | the opponent's will to refuse is not read; `accept` duplicates `fight` |
-| `challenge` (informer) | "accuse publicly and stand by it": nerve, standing | existence(subject) | nothing is written; refusal is not an event |
-| `survey` (inquirer → producer) | "look over from above": vantage, purview | own_ledger(subject) | **the place and the surveyor's purview are not read** |
-| `examine` (inquirer) | "weigh": fine discrimination | presence at a site | **a concealer's Ob is not read** (R-C-15 open) |
-| `interview` (inquirer) | "mutual sight": read while being read | existence(subject) | **the interviewee's resistance is not read** |
-| `surveil` (inquirer) | "keep awake over": vigilance, staying unseen | existence + present_at | **being seen is not modelled**: no covert witness rule |
-| `reconstruct` / `research` (inquirers) | "build again" / "seek closely" | own_ledger / existence; presence | yields nothing beyond `finding.made` (R-C-23) |
-| `construe` (deceiver) | "pile together": what is already believed | nothing | **everything**: grade `absent` |
-| `determine` (closer of a case) | "set bounds": authority, judgement | remit:determine; existence, basis, threshold; seven refusal conjuncts | the parties' evidence is not read (proofs roster unread) |
-| `open_case`, `petition`, `carry`, `convene` (proceduralists) | standing to open; knowing whom to ask | remit or own; basis or existence | the addressee's disposition is not read |
-| `give` (mover of Records) | "hand over": must hold | the Record held_by the actor; the recipient with | — |
-| `found`, `build` (assemblers) | "lay a foundation", "make a dwelling": means and labour | existence + held_by; stores spent | labour (cohort weight) is not read |
-| `work`, `restore` (producers) | "labour", "rebuild": skill | presence at a site; threshold | `× f(degree)` is unbuilt (H-164) |
-| `move`, `migrate` (movers) | "set in motion", "move one's abode" | contain_path | dearth as a motive is not read at the act |
-| `utter`, `speak` (informers) | "put outward", "voice" | nothing | the audience is not read |
-| `create_record`, `destroy_record`, `forge` (producers, closers) | "set down", "unbuild", "fashion" | own or hold + presence; own_ledger (forge) | **forge's quality is not read by any inquiry** (H-210) |
-| `dispatch`, `establish`, `succeed`, `seize`, `comply`, `evade / defy`, `exchange`, `tie / knot`, `thread_read` | as their roots | as their rows | effects declined or nothing written for `dispatch`, `succeed`, `exchange`, `tie / knot`, `comply`, `evade / defy` |
+| `tell` | relate or recount; inform | own_ledger(subject), hearer with; contested by the hearer's `capability`; reception refracted by the hearer's beliefs | **none**: the best-modulated verb |
+| `oblige` | (the row binds the actor to a seat; Part III renames it `pledge`.) Ordinary *oblige* means compel, or do a favour, which runs the other way | a seat as subject; one edge per (person, seat) (`predicates.py:396`); actor-side `own` | the seat's standing and the joiner's reason are not read |
+| `commit` | bind oneself to a course or cause | existence(subject) | nothing about the actor's prior commitments |
+| `confer` | bestow (a title, a grant) | remit:confer; purview (`gate.py:352`) | the recipient's standing is not read |
+| `revoke` / `release` | annul or withdraw a grant; *release*: let go, set free | remit:revoke / own | the holder's resistance is not read |
+| `issue` | put out, promulgate (an order, a writ) | remit:issue; existence(to), basis(to), own_ledger(subject) | the addressee's compliance is not modelled at issue; it is `comply` / `evade / defy` |
+| `requisition` | demand and take for official use (supplies) | remit:issue + presence; basis; stores ≥ amount | the subject's hunger is not read (R-C-10's price is unbuilt) |
+| `transfer` | move from one holder or place to another | from-stores ≥ amount; seat or own or hold | — |
+| `march` | advance in a body; move an army | remit:dispatch; existence; contested by "a field" (sides, weights, stance, loyalty) | **ration and terrain are not read**: no provisioning term in the season loop (TROOP critic, grep 0, carried) |
+| `fight` / `accept` | contend in combat; *accept*: take up (a challenge) | existence(subject); contested by the body (`end` from BODY) | the opponent's will to refuse is not read; `accept` duplicates `fight` |
+| `challenge` | call to a contest, especially a duel; dispute | existence(subject) | nothing is written; refusal is not an event |
+| `survey` | examine the extent or condition of; take a general view | own_ledger(subject) | **the place and the surveyor's purview are not read** |
+| `examine` | inspect closely | presence at a site | **a concealer's Ob is not read** (R-C-15 open) |
+| `interview` | question a person to obtain information | existence(subject) | **the interviewee's resistance is not read** |
+| `surveil` | keep under observation (Part III renames it `watch`) | existence + present_at | **being seen is not modelled**: no covert witness rule |
+| `reconstruct` / `research` | rebuild from evidence; *research*: investigate systematically | own_ledger / existence; presence | yields nothing beyond `finding.made` (R-C-23) |
+| `construe` | interpret (a text or an act) | nothing | **everything**: grade `absent` |
+| `determine` | settle authoritatively; decide | remit:determine; existence, basis, threshold; seven refusal conjuncts | the parties' evidence is not read (proofs roster unread) |
+| `open_case`, `petition`, `carry`, `convene` | begin proceedings; *petition*: ask formally; *carry* (a petition; Part III renames it `lodge`); *convene*: call together | remit or own; basis or existence | the addressee's disposition is not read |
+| `give` | hand over freely | the Record held_by the actor; the recipient with | — |
+| `found`, `build` | establish (a town, an institution); *build*: construct | existence + held_by; stores spent | labour (cohort weight) is not read |
+| `work`, `restore` | labour on, or exploit, a site; *restore*: return to a former condition | presence at a site; threshold | `× f(degree)` is unbuilt (H-164) |
+| `move`, `migrate` | change place; *migrate*: relocate one's home | contain_path | dearth as a motive is not read at the act |
+| `utter`, `speak` | say aloud, put into words; *speak*: say words, address | nothing | the audience is not read |
+| `create_record`, `destroy_record`, `forge` | make a document; *destroy_record*: destroy one; *forge*: counterfeit | own or hold + presence; own_ledger (forge) | **forge's quality is not read by any inquiry** (H-210) |
+| `dispatch`, `establish`, `succeed`, `seize`, `comply`, `evade / defy`, `exchange`, `tie / knot`, `thread_read` | (ordinary senses; see Part VI for each) | as their rows | effects declined or nothing written for `dispatch`, `succeed`, `exchange`, `tie / knot`, `comply`, `evade / defy` |
 
-**Designed and planned verbs [DESIGN].** Each should be built to read the node its meaning names:
+**Verbs the roster adds.** Part III's 92-verb roster adds acts that should read the node their ordinary sense names; each Part VI section states the node and the mechanic that supplies it. Examples: `interrogate` reads the interrogated person's resistance and the witnesses present; `conceal` reads the witness set, by a cover read at witnessing; `sabotage` reads concealment and the Site's condition; `tend` the patient's body; `persuade` the hearer's pursuits and prior beliefs; `forgive` the forgiver's stance and scar; `recruit` the target's regard and the seat's standing; `levy` the settlement's pool and the cohort's stance.
 
-- `interrogate`: the interrogated person's resistance and the witnesses present;
-- `conceal`: the WITNESS set, by writing a cover read at witnessing;
-- `sabotage`: concealment and the Site's condition;
-- `tend`: the patient's body;
-- `argue`: the hearer's pursuits and prior beliefs;
-- `forgive`: the forgiver's stance and scar.
-
-**Reading the table.** The context the code reads best is the ACTOR's seat and the SUBJECT's
-existence, which are gates. The context the meanings call for most is the OTHER person's will and
-beliefs. That is reached only by `tell` (reception) and by the four contested rows (difficulty).
-**The world is gate-rich and response-poor.**
+**Reading the table.** The context the code reads best is the ACTOR's seat and the SUBJECT's existence, which are gates. The context the meanings call for most is the OTHER person's will and beliefs. That is reached only by `tell` (reception) and by the four contested rows (difficulty). **The world is gate-rich and response-poor.** This finding rests on the checked actual-code column, and survives without any etymology (V-12).
 
 ### IV.5 How context modulates: four worked examples
 

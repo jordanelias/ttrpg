@@ -1,574 +1,178 @@
-# Persons, attributes and verbs: the v2 synthesis — part 4: Verbs (TW to NP, roll-up, verb × attribute)
+# Persons, attributes and verbs: the v2 synthesis — part 4: Part III, Verbs (critics, etymology audit, gap coverage, named mechanics, decisions)
 
-## Status: PROPOSED (2026-10-16). Not ratified; merging ratifies nothing unless Jordan so rules.
-## Parts, in reading order: [head](2026-10-16-v2-person-troop-attribute-synthesis.md) · [`_part2`](2026-10-16-v2-person-troop-attribute-synthesis_part2.md) · [`_part3`](2026-10-16-v2-person-troop-attribute-synthesis_part3.md) (Part III: triage, PC–FI) · **this file** (Part III: TW–NP, roll-up, verb × attribute) · [`_part5`](2026-10-16-v2-person-troop-attribute-synthesis_part5.md) · [`_part6`](2026-10-16-v2-person-troop-attribute-synthesis_part6.md) · [`_part7`](2026-10-16-v2-person-troop-attribute-synthesis_part7.md) · [`_part8`](2026-10-16-v2-person-troop-attribute-synthesis_part8.md) (Part V: the trial).
-
-Conventions as in `_part3` §III.2. *fore, nerve, comp* are From-scratch demands with no home among the
-ten.
+## Status: PROPOSED (2026-10-17). Not ratified; merging ratifies nothing unless Jordan so rules. Static reading and static lookup only; no run.
+## Parts, in reading order: [head](2026-10-16-v2-person-troop-attribute-synthesis.md) (§0, Part I Persons) · [`_part2`](2026-10-16-v2-person-troop-attribute-synthesis_part2.md) (Part II Attributes) · [`_part3`](2026-10-16-v2-person-troop-attribute-synthesis_part3.md) and **this file** (Part III Verbs: standards, roster, reconciliation; critics, etymology audit, gap coverage, named mechanics, decisions) · [`_part5`](2026-10-16-v2-person-troop-attribute-synthesis_part5.md) and [`_part6`](2026-10-16-v2-person-troop-attribute-synthesis_part6.md) (Part IV What verbs do to the world) · [`_part7`](2026-10-16-v2-person-troop-attribute-synthesis_part7.md) (§5 Roadmap, §6 Reliability ledger, §7 Sources) · [`_part8`](2026-10-16-v2-person-troop-attribute-synthesis_part8.md) (Part V: engine findings carried from the first-pass trial) · Part VI, the lexicon by subsystem: [`_part9`](2026-10-16-v2-person-troop-attribute-synthesis_part9.md) PC · [`_part10`](2026-10-16-v2-person-troop-attribute-synthesis_part10.md) MB · [`_part11`](2026-10-16-v2-person-troop-attribute-synthesis_part11.md) SC · [`_part12`](2026-10-16-v2-person-troop-attribute-synthesis_part12.md) FI · [`_part13`](2026-10-16-v2-person-troop-attribute-synthesis_part13.md) TW · [`_part14`](2026-10-16-v2-person-troop-attribute-synthesis_part14.md) GV · [`_part15`](2026-10-16-v2-person-troop-attribute-synthesis_part15.md) FA · [`_part16`](2026-10-16-v2-person-troop-attribute-synthesis_part16.md) EC · [`_part17`](2026-10-16-v2-person-troop-attribute-synthesis_part17.md) WT · [`_part18`](2026-10-16-v2-person-troop-attribute-synthesis_part18.md) NP · Part VII, the verb gap register (the evidence behind Part VI's coverage tables): [`_part19`](2026-10-16-v2-person-troop-attribute-synthesis_part19.md) PC+NP · [`_part20`](2026-10-16-v2-person-troop-attribute-synthesis_part20.md) MB+FA · [`_part21`](2026-10-16-v2-person-troop-attribute-synthesis_part21.md) SC+GV · [`_part22`](2026-10-16-v2-person-troop-attribute-synthesis_part22.md) FI+TW · [`_part23`](2026-10-16-v2-person-troop-attribute-synthesis_part23.md) EC+WT.
 
 ---
 
-### TW — threadwork
+### III.7 The critics' findings, and what each lane did with them
 
-**Inspirations.** The repo holds almost no precedent for threadwork itself. The rows below bear on it
-by shape.
+Two Opus critics attacked the first pass before the lanes began. The **lexicon critic** read the 46 shipped rows, the 2026-10-03 name-fit pass, the registries and the equivalences (19 findings, L-01 to L-19). The **v2-claims critic** read v2's own verb claims, merges and counts (21 findings, V-01 to V-21). Their Latin and PIE chains were from memory and were not adopted unchecked; their design findings were checked against `engine/season/verb_table.yaml` and put to each lane. The table gives each finding in one line and each lane's answer in its own words (APPLIED, ANSWERED, REJECTED, NOTED); lane references are to the Part VI section of that subsystem. **Every one of the 40 findings is answered by at least one lane.** The two findings the critics made with highest confidence were verified directly: `oblige` runs against ordinary English (`eligibility: ["own"]`, emits `duty.taken`: the actor binds themself), and `dispatch` is the documentless order (`writes: []`, emits `order.given`) while a "dispatch" in ordinary use is a written message.
 
-| source | kind | contributes | bears on |
+| id | finding | per-lane disposition | lanes disagree? |
 |---|---|---|---|
-| Lisbon 1755, Laki 1783, Tambora 1815 (`research/by_lane/WR_world.md:51`) | HISTORICAL RESEARCH, tier 3, sound; unreached | a catalogue of catastrophe shapes for the Calamity | **for** Mending as the one restorative act (R-C-26) |
-| Scheffer, Holling regime shifts (`WR_world.md:59`) | HISTORICAL RESEARCH, tier 3, unverified | thresholds and hysteresis in a world-state | a warning: the world's thread-state needs inverses (weave against sever) |
-| HCC thesis: *"a Crisis card is a retroactive audit of an earlier Fortif[ication]"* (`WR_world.md:56`) | internal research, tier 3 | the payoff of a protective act shows later | **for** a defensive thread act (`ward`) only once a threat exists to audit |
-| Dwarf Fortress: a grudge as an eligibility flag (`WR_world.md:95`) | PRECEDENT GAME, tier 3 | state that gates later acts | **for** thread ops writing `Person.coherence` that later gates them |
-| Disco Elysium's *Shivers* and *Inland Empire* as uncanny perception | PRECEDENT GAME [PUBLIC KNOWLEDGE, UNVERIFIED] (named in From-scratch `_part5` §9 from memory) | perception of the uncanny as a capacity | **for** TS as a perception primary; **against** a separate `trace` verb |
+| L-01 | Root sense used as design intent (etymological fallacy); bad glosses | PC APPLIED "no design claim here rests on a root"; NP APPLIED "Every fit verdict ... by usage"; MB APPLIED "every design claim ... ordinary usage"; FA APPLIED "no merge, gap or node rests on a root"; SC APPLIED, partly answered on *persuade* ("make sweet" is a reconstructed causative); GV APPLIED; FI APPLIED, partly answered (*surveil*, *survey* chain); TW APPLIED "Latin notes are remarks only"; EC APPLIED; WT APPLIED | no |
+| L-02 | `oblige` reverses direction; rename (`pledge`/`swear`) | NP APPLIED renamed `pledge`, v2 folds of recruit/suborn/bribe struck; SC ANSWERED prefer `pledge` (`swear` is SC's oath, SC); FA APPLIED no FA act folds into `oblige`, rename "flagged to GV/NP"; FI ANSWERED `infiltrate` unaffected by rename; EC APPLIED to `hire`, "rename itself is NP/FA's"; PC cross-lane note | no (all converge on `pledge`; each defers the rename to NP) |
+| L-03 | `levy` FITS overturned; stale `levy` citations now name a different act | MB APPLIED `levy` names troop act, TS-L re-key must land first; FA ANSWERED troop sense ordinary, re-key first; GV APPLIED store act is `requisition`, re-key is TS-L's; EC APPLIED with caution, "re-key by sense, not by string" | no |
+| L-04 | `carry` event `petition.carried` reads as adopted; rename `lodge` | SC APPLIED `lodge`, `petition.lodged`; EC ANSWERED not EC's row, EC uses `lodge` | no |
+| L-05 | `dispatch` is a documentless order, but a dispatch is a written message | FA ANSWERED, FA REBUILD name kept ("objection rests on the noun"); GV APPLIED "renamed `order`"; MB ANSWERED "dispatch troops fits", verb row is FA's | **yes** |
+| L-06 | `work` holds two senses (exploit a site vs build) | EC APPLIED (EC, S1/S3 rebuilt); MB APPLIED fortify goes to `restore`, not `work` | no (but see V-21 on fortify) |
+| L-07 | `establish` covers two acts; `found`/`establish`/`build` near-synonyms | GV APPLIED `amend` named, discriminator stated ; FA FLAGGED GV's; EC ANSWERED `found`/`build` kept apart, `establish` GV's | no |
+| L-08 | `release` of own vow/oblige reads wrong; use `renounce` | NP ANSWERED, FLAGGED, `renounce` fits (NP-ish); GV ANSWERED GV uses fit, flags `commit`/`oblige` to NP/SC; SC ANSWERED `deny`/`withdraw` keep names; FA FLAGGED, `renounce` "supports it"; TW ANSWERED, rename "would read worse" for held shapes | **yes** (mild) |
+| L-09 | `survey`/`surveil` one letter apart, both take a Rung | FI APPLIED "rename to `watch`" ; GV ANSWERED `survey` stays FI's, `assess` parked | no |
+| L-10 | `give`/`transfer` near-synonyms split by object | NP ANSWERED discriminator is the carrier, no rename; FA CONSISTENT; EC ANSWERED kept by object, no rename; NP | no |
+| L-11 | `forge` event kind `record.forged` leaks; proposal stale; verb etymology | FI APPLIED emit twin kind `faction.surveyed`, verb path via *fabricō*; SC APPLIED to `lie`'s revival, "forge leak itself is FI/EC's"; EC NOTED | no |
+| L-12 | Proposal lexicon stale vs verb table; `accept`, `challenge`, `seize`, `requisition` unjudged | PC APPLIED `accept` STRAINED, row rebuilt to require a challenge; NP APPLIED NP-G23 STALE; MB PARTLY; SC APPLIED; FA APPLIED `seize` judged FITS; FI APPLIED; WT APPLIED `march` current | no |
+| L-13 | `speak`/`utter` synonyms; `utter` legal false friend | SC APPLIED renames `utter` to `declare` ; FI ANSWERED forgery planted by `give`, no FI change | **yes** (indirect: FA has a NEW `declare` row, FA, and does not cite L-13) |
+| L-14 | `comply` gloss contradicts row (writes nothing) | GV APPLIED "the row writes nothing (VT:161)" | no |
+| L-15 | `create_record`/`destroy_record` CRUD names | FI ANSWERED noted not applied (no retrofit, §4), FI; EC-no | no |
+| L-16 | Loose derivations (*reconstruct*, *open_case* etc.) | SC APPLIED *open_case* = *cāsus* 'a fall; event'; FI APPLIED *reconstruct* not a Latin compound  | no |
+| L-17 | `challenge` vs "Recognition Challenge" silo collision | PC ANSWERED roster provisional, "flagged to SC rather than renaming"; SC ANSWERED "not an SC verb; flagged to PC"; PC says SC should use `dispute` | **yes** (each lane hands it to the other; nobody decides) |
+| L-18 | `remit:issue` gates `requisition`/`seize`/`transfer` | FA NOTED rename is GV/IN's; GV ANSWERED "Flagged, not decided"; EC ANSWERED substitution is tree precedent, GV to confirm | **yes** (mild: EC keeps, GV leaves open) |
+| L-19 | `synonym_registry.yaml` lacks verb renames; lists retired Key | NP FLAGGED each rename "would need an entry there. Not edited here"; TW observation, `sever`->`dissolve` one more unrecorded rename | no |
+| V-01 | `mend`/`restore` both cover Mending | TW APPLIED `mend` = Mending, `restore` fabric only (TW ruling, IN-35 arm re-pointed); EC APPLIED `restore` fabric only ; NP cross-ref "V-01's `mend` ... is TW's, not `tend`" | no (critic's "fold into `mend`" reading is applied to the opposite verb: TW keeps both verbs, splits by object) |
+| V-02 | REJECT->MERGE classed three ways; counts wrong | PC APPLIED AND WIDENED "never merges ... nine items that are not verbs" ; MB ANSWERED `endure` battle sense is a named content of `withstand`; WT APPLIED `endure` CULLED in season, battle sense moved to MB | no |
+| V-03 | "each keeps a name" vs tally (withdraw, loosen, peace) | SC ANSWERED `deny`/`withdraw` keep names, "count is the orchestrator's"; GV ANSWERED `abdicate`/`resign` named folds; TW APPLIED `loosen` counted as named folded content | no |
+| V-04 | `mediate` is not `arbitrate` | SC APPLIED (`arbitrate` folds into `determine`, `mediate` PARKED, SC); FA APPLIED "S1 not folded", FA | no |
+| V-05 | `bribe` is not `suborn` | NP APPLIED "briber's act is `bribe`, SC/FA's own row"; FA APPLIED `suborn` culled, "turn into `recruit`" ; FI APPLIED `suborn` a parked content of `bribe` ; SC ANSWERED FA's, SC supplies `lie` | **yes** (FA: `turn` is a content of `recruit`; FI: `suborn` is a content of `bribe`) |
+| V-06 | `hire` -> `oblige` contradicts `recruit` -> `tell` (voice) | NP APPLIED `hire` own row in hirer's voice, but REJECTS V-06's `tell`+`oblige`+`transfer` fix; EC APPLIED one employer's row ; FA APPLIED "hire folds into `recruit`" ; MB APPLIED MB's `recruit` in recruiter's voice, "`hire` is NP/EC's" ; FI CHECKED `infiltrate`/`bribe` already in actor's voice | **yes** (NP/EC: `hire` is a new row; FA: `hire` folds into `recruit`) |
+| V-07 | `lock` merged into `weave` though twin is Dissolution | TW APPLIED `lock` own row in Locking/Dissolution suite  | no |
+| V-08 | `sever` coined where `dissolve` exists | TW APPLIED renamed `dissolve` ; corrects critic's VL chain | no |
+| V-09 | `betray` merged into `release` is really repudiation | NP APPLIED `betray` culled as a verb, judgement across acts (M10), name passed to `release` owner; FA APPLIED "betrayal is a witness judgement"  | no |
+| V-10 | `command` counted as a choice but is a stat; name `tactic` | MB APPLIED, DIFFERENTLY: `command` culled as a verb; `tactic` "not adopted, a noun"  | no |
+| V-11 | `invest` reads as money | MB APPLIED posture names `besiege`/`storm` ; EC SUPPORTED | no |
+| V-12 | §IV.4 lever (root sense) asserted, not defended | SC APPLIED (with V-14, Suite 7); FI APPLIED (§3.4 attested senses); WT APPLIED no WT node from *march* root | no |
+| V-13 | §IV.4 glosses misstate roots (*issue*, *challenge*, *fight*, *march*...) | PC APPLIED *fight*; PC APPLIED *challenge*; SC APPLIED *challenge* ('false accusation'); GV APPLIED *issue* 'go out', *confer*; FI APPLIED *research*/*surveil*; MB *march* root disputed; WT | no |
+| V-14 | Role names in §IV.4 differ from §IV.7 roster; "deceiver" vs construe | SC APPLIED (cited with V-12, "`construe` called deceiver ... Suite 7") | no |
+| V-15 | `tax` depends on retired `evade / defy` | FA ANSWERED, FLAGGED, `evade / defy` retirement "must be reversed before either lands" ; GV APPLIED "`tax` no longer depends"; "slash row is split, not retired into `comply`"; EC ANSWERED `tax` no longer an issued writ, EC-G04 PARKED ; MB ANSWERED draft evasion PARKED until FA rebuilds `evade / defy` | **yes** (FA: reverse retirement; GV: split the row) |
+| V-16 | ransom -> `pardon` + `transfer` wrong (pardon is mercy) | FA APPLIED captor's act is discharge of a `detain`, ransom is a `covenant` content ; PC ANSWERED agrees, PC supplies producer `capture` ; GV APPLIED `pardon` is grace, flagged to FA ; EC NOTED FA's, payment half is `pay` | **yes** (mild: FA: payer's `transfer`; EC: payment is `pay`; PC: `capture` is the producer) |
+| V-17 | `bless` really consecration | NP APPLIED renamed `consecrate`, PARKED, owner GV  | no |
+| V-18 | "Sixteen merges filed against wrong row" miscounted; leap, withdraw | TW AGREED, "leap is a stage, not a merge"; WT APPLIED `hunt` does not go into `work` | no |
+| V-19 | Same-root collisions (`due`/`debt`, `guard`/`ward`, `convene`/`covenant`, *struō*) | PC ANSWERED `guard`/`ward` kept apart by object ; MB NOTED; FA APPLIED `tribute` not `due`, `covenant`/`convene` kept; SC ANSWERED kept; GV APPLIED content named `tax`, no `due` writ; FI ANSWERED no change ; TW ANSWERED real doublet, flagged to PC; EC APPLIED no `due` | no |
+| V-20 | `yield` homonym with `Rung.yield` and inquiry yield | PC APPLIED `yield` kept, kinds prefixed `fight.yielded`; FI APPLIED product called a "finding", no `yield` kind; EC NOTED "a duel term `yield` ... is PC's to rename"  | **yes** (PC keeps the term; EC expects PC to rename it) |
+| V-21 | Names kept without engaging in-tree STRAINED verdicts (`dispatch`, `speak`, `work`, `tie/knot`); `Fortify`/`Trade` unnamed | NP APPLIED `tie`/`knot` split; SC ANSWERED `speak` STRAINED today, FITS once rebuilt, `utter` renamed instead; EC APPLIED Trade -> `exchange`, Fortify -> `build` ; PC cites V-21 for provisional roster | **yes** (EC: Fortify -> `build`; MB: fortify -> `restore` for condition, `build` for new walls) |
 
-**Triaged candidates.**
+**Where lanes disagreed, and the ruling** (all in `_part3` §III.5):
 
-| verb | origin | status | sourced read (tier) | demand → the ten | note |
+| finding | disagreement | ruling |
+|---|---|---|
+| L-05 `dispatch` | FA keeps the name and rebuilds the row; GV renames it `order`; MB defers | R-05: two acts, `order` and `assign`; the shipped name stands until Jordan rules (D-V7) |
+| L-08 `release` / `renounce` | NP, FA, GV say `renounce` fits an own-vow close; TW says it reads worse for held shapes | R-16: `release` stays; open at medium confidence |
+| L-13 `utter` → `declare` | SC renames `utter`; FA adds a seat-level `declare` | R-06: FA's `declare` stands; SC's rename withdrawn; `propound` is the candidate |
+| L-17 `challenge` | PC and SC each hand the word to the other | R-24: `challenge` is the duel (PC); a claim is `dispute` (SC) |
+| L-18 `remit:issue` | EC keeps it as tree precedent; GV leaves it undecided | open: H-52's eligibility question; not decided here |
+| V-05 `suborn` | FA files `turn` under `recruit`; FI files `suborn` under `bribe` | R-21: two different acts |
+| V-06 `hire` | NP and EC make it a new row; FA folds it into `recruit` | R-01: EC's row; FA's fold reversed |
+| V-15 `evade / defy` | FA wants the retirement reversed; GV splits the row | GV's split: `evade` and `defy` are two rows |
+| V-16 ransom payment | FA says `transfer`; EC says `pay`; PC names `capture` as the producer | R-17: payment is a `transfer` (`pay` is its fold); the producer is `capture`; the name `pardon` is open |
+| V-20 `yield` | PC keeps the term with prefixed kinds; EC expects PC to rename it | R-19: PC keeps it; event kinds are `fight.yielded` |
+| V-21 / L-06 `fortify` | EC routes it to `build`; MB routes the condition arm to `restore` | R-03: new works are `build`, upkeep is `restore` |
+
+
+### III.8 The etymology audit
+
+**The standard** is S-5: every verb carries a chain English ← Middle English ← French or other intermediate ← Latin lemma with principal parts and the attested sense (Lewis & Short) ← PIE root where attested, or says plainly that the word is Germanic, Frankish, Celtic, Arabic or of unknown origin. Each lane built its chains with the lookup tool (Wiktionary raw wikitext, and Lewis & Short through Perseus). Two independent Opus auditors then re-opened every source for every chain, without trusting the lanes, and the corrections below were applied to the lane sections before they were filed as Part VI.
+
+| auditor | lanes | chains checked | confirmed | corrected | `[UNVERIFIED]` tags resolved |
 |---|---|---|---|---|---|
-| `thread_read` | code | BUILD | WIL TS · PRA (T4; TS gate T3) | ACU TS | shipped row, not resolvable |
-| `weave` | lane | BUILD | WIL TS · PRA RES (T2) | AGI TS | stub `attempt_weaving`; a verb row per R-C-18 |
-| `pull` | lane | BUILD | WIL TS · PRA RES (T2) | TS | stub `attempt_pulling`; K-WR-2 defers it |
-| `lock` | lane | BUILD | WIL TS · PRA RES (T2) | TS WIL | stub `attempt_locking` |
-| `loosen` | lane | MERGE → `sever` | none | AGI TS | name match to Dissolution [UNVERIFIED] |
-| `sever` | lane | BUILD | WIL TS · PRA RES (T2) | TS | stub `attempt_dissolution`, by name [UNVERIFIED] |
-| `mend` | lane | BUILD | WIL TS · PRA (T2; no RES) | ACU BON TS | stub `attempt_mending` |
-| `leap` | lane | BUILD | WIL TS · PRA RES (T2) | AGI TS · nerve | stub `attempt_leap` |
-| Past-pulling | stub only | BUILD | WIL TS · PRA RES (T2) | — | `attempt_past_pulling` (Template row 61); not in the 179 |
-
-**Designed here: 3** (DESIGN 1 · MERGE 2 · REJECT 0).
-
-| verb | also | domain | status | reads (the ten) | reason |
-|---|---|---|---|---|---|
-| ward | PC | protection | DESIGN | ACU TS | defence against another's threadwork; no stub or row covers it [INFERRED] |
-| anchor | NP | stability | MERGE → `mend` | TS WIL | resisting loss of self = Mending oneself (R-C-26) [INFERRED] |
-| trace | FI | perception | MERGE → `thread_read` | TS | reading a strand to its source |
-
-**Pessimistic NERS.** Every thread operation rolls one pool, `2·WIL + min(3, History + 3) + ⌊TS/10⌋`
-(`operations.py:235-247`, v1 CHECKED-3), and pays one cost (Coherence). The operations differ in their
-target and in the direction of their effect.
-
-| verb | first-pass verdict | letter | the named loss, or its absence |
-|---|---|---|---|
-| `thread_read` | **KEEP** (absorbs `leap` as its access step: *"Thread-Read is a Leap"*, `fieldwork_v30.md:351`, v1 CHECKED) | N | the only route to perceiving the thread; carries K-3's TS ≥ 30 gate |
-| `weave` | **KEEP** (absorbs `lock` as a permanence parameter) | N | the only creator of a thread binding |
-| `sever` | **KEEP** (absorbs `loosen`) | N (closure) | the inverse of `weave` |
-| `mend` | **KEEP** | N, R-WORLD | the only act that lowers the Calamity (R-C-26) |
-| `leap` | **MERGE into `thread_read`** (the Leap is the access step) | E | one pool, one gate; a separate row would add a second name for the same roll |
-| `lock` | **MERGE into `weave`** (permanence) | E | its target and pool are `weave`'s |
-| `pull`, Past-pulling | **CUT** | N false (no producer) | K-WR-2: *"Pull only once P-09's detectable orphan has a carrier"* (`WR_world.md:538`, v1 CHECKED). Recommend retiring the two stubs from the verb plan until that carrier exists |
-| `ward` | **CUT** | N false (needs Z built) | no opposed threadwork exists for it to resist. Loss accepted until one does |
-
-**Distilled set: `thread_read`, `weave`, `sever`, `mend` (9 → 4).** **Honest cost:**
-
-- no defence against hostile threadwork;
-- no pulling, past or present;
-- a lock is a parameter, not a choice the chooser can value separately.
-
-**Closest calls:**
-
-1. `ward`: the only DESIGN survivor in TW.
-2. `pull`.
-3. `lock`.
-4. `leap`.
-
-**After the trial (Part V §V.2.6).** Three rows over the one resolver: `weave`, `mend` (one batch, after
-IN-06) and `sever` (built third, only if it writes something Locking does not). `mend`'s N-line above
-is wrong: it is the only raiser of coherence; the Calamity's fabric arm is `restore`'s (IN-35), so
-`restore` is kept. `ward` and `pull` are parked, not cut (opposed threadwork exists, unplugged), and
-the pull stubs are not retired. `leap` is the precondition of every operation, not of `thread_read`
-alone; `loosen` goes to `release` (one's own) or `mend` (another's), not `sever`; `anchor` is cut.
-
----
-
-### GV — settlements and governance
-
-**Inspirations.**
-
-| source | kind | contributes | bears on |
-|---|---|---|---|
-| Tilly's extraction loop; Levi's quasi-voluntary compliance (`research/by_lane/SE_settlements_territory_economy.md:45`) | HISTORICAL RESEARCH, tier 3, sound as mechanism | extraction meets compliance or evasion | **for** `requisition` with `comply` and `evade / defy` as the answer |
-| Moral economy of subsistence: Thompson, Scott, Sen (`SE_settlements_territory_economy.md:47`) | HISTORICAL RESEARCH, tier 3, *"the strongest convergence in the lane"* | dearth turns extraction into unrest | **for** `requisition`'s price in hunger (R-C-10); **for** relieve as a `transfer` |
-| Castilian *residencia* and *visita*; Ming–Qing avoidance (`SE_settlements_territory_economy.md:49`) | HISTORICAL RESEARCH, tier 3 | agents are audited by authority | **for** audit as `examine` of a steward's Records, and dismissal by `revoke` |
-| Total War's appointed governor, added, removed, re-added (`SE_settlements_territory_economy.md:96`) | PRECEDENT GAME, tier 3; a null | no solved design for an appointed governor | **against** a `steward` verb; for steward as a seat filled by `confer` |
-| RS-27: *"designated heir is not a verb but a status or title"* (`workplans/valoria_master_workplan_v9_part8.md:340`, v1 CHECKED-3) | Jordan's ruling | heirship is a title | **against** `succeed` and `designate` as verbs |
-
-**Triaged candidates.**
-
-| verb | origin | status | sourced read (tier) | demand → the ten | note |
-|---|---|---|---|---|---|
-| `comply` | code | BUILD | none | END | shipped row |
-| `confer` | code | BUILD | none | ATT | shipped row |
-| `convene` | code | BUILD | none | fore | shipped row |
-| `determine` | code | BUILD | PRA (T3) | ACU | shipped row |
-| `establish` | code | BUILD | none | fore | shipped row |
-| `evade / defy` | code | BUILD | none | comp nerve | shipped row, not resolvable |
-| `found` | code | BUILD | none | fore | shipped row |
-| `issue` | code | BUILD | none | — | shipped row |
-| `requisition` | code | BUILD | none | CHA · fore | shipped row (the store act) |
-| `release` | code | BUILD | none | — | shipped row |
-| `revoke` | code | BUILD | none | — | shipped row |
-| `succeed` | code | BUILD | none | — | shipped row, not resolvable |
-| `arrest` | plan | BUILD | PRA (T3) | AGI CHA STR | IN-12 step 5 |
-| `pardon` | plan | BUILD | none | — | IN-12 step 5 |
-| `interrogate` | plan | BUILD | PRA (T3) | ACU ATT CHA WIL · comp | IN-12 step 5 |
-| `detain` | plan | MERGE → `arrest` | none | — | a Tenure kind already landed |
-| `ban` | plan | MERGE → `determine` | none | CHA | a Tenure kind already landed; opened by a proceeding |
-| `abolish` | plan | REJECT | none | — | a revert in the plan, not an act |
-| `proclaim` | plan | MERGE → `issue` | none | CHA | deleted in the plan; publish as an issued Record (R-C-21) |
-| `execute`, `designate`, `waive` | plan cut | REJECT | none | — | cut by the plan; `designate` by RS-27 |
-| `abdicate` | lane | MERGE → `release` | none | fore | release of one's own hold (K-FA-3) |
-| `depose` | lane | MERGE → `revoke` | none | — | by authority; by force it is `seize` |
-
-**Designed here: 5** (DESIGN 0 · MERGE 5 · REJECT 0).
-
-| verb | also | domain | status | reads (the ten) | reason |
-|---|---|---|---|---|---|
-| tax | EC | rule, number | MERGE → `requisition` | fore | critic: tax = requisition |
-| patrol | MB | perception, rule | MERGE → `surveil` | ACU END | watching a rung |
-| steward | EC | care, rule | MERGE → `confer` | WIL · fore | a held seat (delegation, R-C-19), not an act |
-| ration | MB EC | number, care | MERGE → `transfer` | fore | allocating stores |
-| relieve | NP | care | MERGE → `transfer` | BON | critic: relieve = transfer/give |
-
-**Pessimistic NERS.**
-
-| verb | first-pass verdict | letter | the named loss, or its absence |
-|---|---|---|---|
-| `confer` | **KEEP** | N | the only act that fills a seat (opens a `hold`) |
-| `revoke` | **KEEP** (absorbs `pardon` as kind `detain` / `ban`) | N (closure) | the closer by authority of another's tenure |
-| `release` | **KEEP** | N (closure) | the closer by the holder: the generic over Tenure kinds |
-| `establish` | **KEEP** | N | the only creator of an office and its remit |
-| `issue` | **KEEP** | N | the authoritative Record: dispensations, edicts, warrants |
-| `determine` | **KEEP** | N | the only proceeding outcome |
-| `convene` | **KEEP, narrowed** | N | the only writer of `Date.due_at` (`write_matrix.yaml`, row `Date.due_at`) [CHECKED] |
-| `requisition` | **KEEP** | N | the coercive mover of matter (the store act) |
-| `comply` | **KEEP** (absorbs `evade / defy` as its answer: comply, evade, defy) | N, R | the subject's answer to a demand: the one place a ruled person chooses resistance |
-| `interrogate` | **KEEP** | S | it is contested (*"a proposition"*), and the roster forbids making inquiry a contest (`rosters.yaml:1074-1077`, v1 CHECKED), so it cannot ride `examine` |
-| `evade / defy` | **MERGE into `comply`** (the answer) | E | recommend retiring `evade / defy` (shipped, not resolvable) |
-| `found` | **MERGE into `build`** (object: a new rung) | E | recommend retiring `found` (shipped, resolvable; 0 executions) |
-| `succeed` | **CUT** | N false (RS-27) | an heir is a title. Recommend retiring `succeed` (shipped, not resolvable; effect declined) |
-| `arrest` | **MERGE into `seize`** (object: a person → `detain`) | E | recommend retiring `arrest` (IN-12 step 5, planned) |
-| `pardon` | **MERGE into `revoke`** (kind `detain` / `ban`) | E | recommend retiring `pardon` (IN-12 step 5, planned) |
-
-**Distilled set: `confer`, `revoke`, `release`, `establish`, `issue`, `determine`, `convene`,
-`requisition`, `comply`, `interrogate` (15 → 10).** **Honest cost:**
-
-- mercy (pardon) is no longer a verb a person can value apart from dismissal;
-- an arrest is no longer contested by standing (`arrest`'s §9 row is sigma-routed, `seize` is not);
-- founding a settlement and raising a building become one act.
-
-**Closest calls (reverse these first):**
-
-1. `evade / defy`: its `hierarchical_equal` cell (+0.9) is opposite in sign to `comply`'s (−0.6), so
-   the merge folds resistance and obedience into one value.
-2. `arrest`: it loses its contest edge.
-3. `pardon`: mercy would want its own alignment cells, which the planned row does not yet have.
-4. `found`: scale differs, and so do its cells.
-5. `convene`.
-
-**After the trial (Part V §V.3).** The 10 stand (the incumbent retirements were not tried). Of 7 new
-verbs, no row: `tax` survives as a `due` writ on `issue` (not `requisition`), `relieve` as
-`relief.given` on `transfer`, `abdicate` as a seat-resignation kind on `release`; `ration` is parked,
-`depose` is parked on Jordan (ARC-40's replaced arm), `patrol` is cut. The `depose` note above is
-wrong: `seize` never takes a seat (`verb_table.yaml:911`).
-
----
-
-### FA — faction actions
-
-**Inspirations.**
-
-| source | kind | contributes | bears on |
-|---|---|---|---|
-| Conquest terms: Grotius, Magdeburg 1631, Joyeuse Entrée 1356 (`research/by_lane/FA_faction_actions.md:58`) | HISTORICAL RESEARCH, tier 3, sound shape | terms against storm | **for** `seize` with terms content; **for** surrender as `covenant` |
-| Kautilya (dūta, upāya, ṣāḍguṇya, maṇḍala); Callières 1716 (`FA_faction_actions.md:68`) | HISTORICAL RESEARCH, tier 3; sound but unreached | diplomacy as a staged practice | **for** negotiate as `covenant` contents; a warning that no FA code consumes it |
-| Victoria 3 law enactment (`FA_faction_actions.md:107`) | PRECEDENT GAME, tier 3 | multi-stage enactment with opposition | **for** proceedings over time (`open_case` → `determine`), not new FA verbs |
-| CK2 casus belli and truce (`FA_faction_actions.md:121`) | PRECEDENT GAME, tier 3 | *"the one game case in hand for a priced breach of a peace"* | **for** war as `utter` + `commit`, and a breach as a deed on `release` |
-| Diplomacy; Pax Pamir (`FA_faction_actions.md:114`) | PRECEDENT GAME, tier 3; unreached | cheap talk by default, binding instruments expensive | **for** `covenant` as the expensive binding; `tell` as the cheap talk |
-| RoTK VIII schemes that lower a rival's order (`FA_faction_actions.md:116`) | PRECEDENT GAME, tier 3; thin | sabotage to deny a rival | weak support **for** `sabotage` |
-
-**Triaged candidates.**
-
-| verb | origin | status | sourced read (tier) | demand → the ten | note |
-|---|---|---|---|---|---|
-| `dispatch` | code | BUILD | none | fore | shipped row |
-| `seize` | plan → shipped | BUILD | none | CHA | IN-12 step 6; shipped at #484 (`verb_table.yaml:898`) [CHECKED] |
-| `covenant` | plan | BUILD | none | WIL | IN-12 step 7 |
-| `sabotage` | plan | BUILD | none | AGI | IN-12 step 9 |
-| `recruit` | lane | MERGE → `oblige` | none | ATT BON CHA | a service oblige binds a person |
-| `declare (war)` | lane | MERGE → `utter` | none | CHA | utter WAR + commit (R-C-12) |
-
-**Designed here: 4** (DESIGN 0 · MERGE 4 · REJECT 0).
-
-| verb | also | domain | status | reads (the ten) | reason |
-|---|---|---|---|---|---|
-| conspire | — | binding, concealment | MERGE → `covenant` | — | a covenant kept concealed |
-| suborn | FI | corruption | MERGE → `oblige` | ATT WIL | critic: bribe = suborn; an oblige paid by give |
-| ransom | MB | exchange | MERGE → `exchange` | fore | a captive for stores, closing a detain |
-| negotiate | SC EC | exchange, speech | MERGE → `covenant` | ATT WIL · fore | a treaty is a covenant |
-
-**Pessimistic NERS.**
-
-| verb | first-pass verdict | letter | the named loss, or its absence |
-|---|---|---|---|
-| `seize` | **KEEP** (absorbs `arrest` and `sack`) | N | the warranted, coercive taking of a hold. Its alignment cell, `hierarchical_equal −0.6`, is identical to `issue`'s, so the chooser cannot tell the two apart on values (Part IV §IV.7, DOMINANCE) |
-| `covenant` | **KEEP** | N | the only mutual binding between parties, which absorbs treaty, surrender and conspiracy |
-| `sabotage` | **KEEP, narrowed** | N (coverage) | the only act that LOWERS `Site.condition`; otherwise only wear lowers it |
-| `dispatch` | **MERGE into `issue`** (kind: an order to an obligee) | E | writes nothing; emits `order.given`. Recommend retiring `dispatch` (shipped, resolvable; 13 executions) |
-
-**Distilled set: `seize`, `covenant`, `sabotage` (4 → 3).** **Honest cost:** an order is a Record,
-not a distinct command act. The `person.demanded` refusal kind must move to `issue`.
-
-**Closest calls:**
-
-1. `dispatch`: it is the eligibility root (`remit:dispatch`) that `march` uses.
-2. `sabotage`.
-
-**After the trial (Part V §V.3).** `dispatch` is kept (FA-01's test pins it), so the set is four.
-`covenant` loses conspiracy (`utter` + `commit` + `conceal`) and surrender (a preset of `give`). Of 6
-new verbs, no row: `declare (war)` survives as a named preset of `utter` with a seat clause at
-`at_war`; `suborn` is parked as the same act as FI's `bribe`; recruit goes to `tell`, ransom to
-`pardon` + `transfer`.
-
----
-
-### EC — economy, trade and craft
-
-**Inspirations.**
-
-| source | kind | contributes | bears on |
-|---|---|---|---|
-| Book of the Eparch; Arte della Lana (`research/by_lane/FA_faction_actions.md:64`) | HISTORICAL RESEARCH, tier 3, sound; ratified prose only | regulated craft guilds | **for** `work` with a craft content, not a craft verb |
-| Wealth-0 handling across Rome II, Shogun 2, CK, KOEI, JA2 (`research/by_lane/SE_settlements_territory_economy.md:100`) | PRECEDENT GAME, tier 3 | recoverable insolvency | **for** `transfer` refusals as the insolvency signal; **against** lend as a separate verb |
-| Banished: delayed cohort; housing vacancy as the birth lever (`SE_settlements_territory_economy.md:105`) | PRECEDENT GAME, tier 3; unsurveyed beyond one teardown | population responds to built room | **for** `build` as the capacity lever (RR-2) |
-| Manor Lords: family as the atom; capacity *"the lever"* (`SE_settlements_territory_economy.md:107`) | PRECEDENT GAME, tier 3 | an economy of households | **for** `work` scaled by cohort weight (R-C-9) |
-| HoMM: accrual as a property of a built structure (`SE_settlements_territory_economy.md:110`) | PRECEDENT GAME, tier 3 | yield lives in buildings | **for** Site yield (MATTER), not a production verb |
-
-**Triaged candidates.**
-
-| verb | origin | status | sourced read (tier) | demand → the ten | note |
-|---|---|---|---|---|---|
-| `create_record` | code | BUILD | none | ACU AGI | shipped row |
-| `exchange` | code | BUILD | none | ATT · fore | shipped row, not resolvable |
-| `build` | code | BUILD | none | END | shipped row |
-| `restore` | code | BUILD | open | END | shipped row |
-| `transfer` | code | BUILD | none | fore | shipped row |
-| `work` | code | BUILD | open | END STR | shipped row |
-| `steal` | plan cut | REJECT | none | ACU AGI · nerve | refused by the plan |
-
-**Designed here: 9** (DESIGN 0 · MERGE 8 · REJECT 1).
-
-| verb | also | domain | status | reads (the ten) | reason |
-|---|---|---|---|---|---|
-| bargain | SC | exchange | MERGE → `exchange` | ATT WIL · fore | a price made between two |
-| craft | — | making | MERGE → `work` | AGI STR | making goods |
-| cultivate | — | making, care | MERGE → `work` | END WIL | farming is yield from work |
-| appraise | FI | judgement | MERGE → `examine` | ACU · fore | a judgement of value, no new state |
-| lend | NP | exchange, binding | MERGE → `transfer` | ATT | transfer + an oblige to repay |
-| hire | MB | exchange | MERGE → `oblige` | ATT | a paid service oblige (upkeep) |
-| haul | MB WT | motion, force | MERGE → `transfer` | END STR | moving stores |
-| hoard | — | concealment, keeping | REJECT | — | declining to transfer is inaction (a value) |
-| smuggle | FI | concealment, exchange | MERGE → `transfer` | ACU · comp | transfer past a ban, unseen |
-
-**Pessimistic NERS.**
-
-| verb | first-pass verdict | letter | the named loss, or its absence |
-|---|---|---|---|
-| `transfer` | **KEEP** (absorbs `exchange`, `give`, haul, ration, relieve, lend, smuggle) | N | the conserving mover of matter between rungs (two `Rung.stores` writes) |
-| `create_record` | **KEEP** (absorbs `petition`, `forge`, `conceal`) | N | the generic creator of Records |
-| `build` | **KEEP** (absorbs `found`, fortify) | N | the only creator of places (Site; Rung once `found` folds in) |
-| `work` | **KEEP** (absorbs `restore`, craft, cultivate, hunt) | N | the only person act that raises `Site.condition`. Its `× f(degree)` term is open (H-164) |
-| `exchange` | **MERGE into `transfer`** (a paired, conditioned transfer) | N false | not resolvable; effect declined. Recommend retiring `exchange` (shipped, not resolvable) |
-| `restore` | **MERGE into `work`** (purpose: repair) | E | same carrier, same direction (`Site.condition`); uncelled. Recommend retiring `restore` (shipped, resolvable; 0 executions) |
-
-**Distilled set: `transfer`, `create_record`, `build`, `work` (6 → 4).** **Honest cost:**
-
-- a trade is two transfers on one term, so a refused half must undo the other;
-- repair and labour are one act with a purpose parameter.
-
-**Closest calls:**
-
-1. `exchange`: trade between two seats is the core of R-C-22.
-2. `restore`.
-
-**After the trial (Part V §V.2.2, §V.2.7).** `restore` is kept (the TW court: IN-35's fabric arm), so
-the set is five. `exchange` is retired only in the commit that gives `covenant`'s terms both sides'
-goods (`kind`, `amount` through `record_sourced_operands`). Of 9 new verbs, no row: `lend` survives as
-the `debt` Record kind (the `oblige` half is struck); `appraise` and `hoard` are cut.
-
----
-
-### WT — world, travel and survival
-
-**Inspirations.**
-
-| source | kind | contributes | bears on |
-|---|---|---|---|
-| Great Famine 1315–17; *cura annonae*; Bengal 1770 (`research/by_lane/WR_world.md:53`) | HISTORICAL RESEARCH, tier 3, sound | dearth moves people | **for** `migrate` as the response to dearth |
-| Kamikaze 1274/1281; Armada 1588 (`WR_world.md:55`) | HISTORICAL RESEARCH, tier 3 | weather decides passages | a context node (the clock or season) on `move`, not a sail verb |
-| Dawn of Man: a seasonal forage limit (`research/by_lane/SE_settlements_territory_economy.md:106`) | PRECEDENT GAME, tier 3 | the land's carrying capacity bounds a band | **for** the forage-as-`work` reading |
-| CK2 / CK3: *"generate on demand, not on a clock"* (`WR_world.md:98`) | PRECEDENT GAME, tier 3 | events from state, not timers | **against** endure and survive as scheduled verbs |
-
-**Triaged candidates.**
-
-| verb | origin | status | sourced read (tier) | demand → the ten | note |
-|---|---|---|---|---|---|
-| `migrate` | code | BUILD | none | END | shipped row |
-| `move` | code | BUILD | none | END | shipped row |
-
-**Designed here: 7** (DESIGN 0 · MERGE 4 · REJECT 3).
-
-| verb | also | domain | status | reads (the ten) | reason |
-|---|---|---|---|---|---|
-| navigate | — | travel, knowing | MERGE → `move` | — | travel |
-| ride | MB PC | motion | MERGE → `move` | AGI | travel; the horse is KIT |
-| sail | EC | travel | MERGE → `move` | END | travel |
-| climb | PC | motion | REJECT | AGI STR · nerve | scene-scale only (template A.1, class 6) |
-| swim | — | motion | REJECT | END | scene-scale only (template A.1, class 6) |
-| hunt | EC NP | gathering, force | MERGE → `work` | AGI WIL | food production |
-| endure | MB | will, body | REJECT | END WIL | critic: endure = withstand, which nobody chooses |
-
-**Pessimistic NERS.**
-
-| verb | first-pass verdict | letter | the named loss, or its absence |
-|---|---|---|---|
-| `move` | **KEEP** (absorbs `migrate` as a change-of-residence parameter) | N | the only voluntary relocation of a person |
-| `migrate` | **MERGE into `move`** (content: change `reside`) | E | the same writes (`Person.travel_leg`, `Tenure.until` and `since`); it differs in which Tenure kind is moved, a context node. Recommend retiring `migrate` (shipped, resolvable; 0 executions) |
-
-**Distilled set: `move` (2 → 1).** **Honest cost:** the chooser cannot value emigration apart from a
-journey. `migrate`'s alignment cells (`precedent_substantive` +0.3, `rigid_flexible` +0.3,
-`deontological_instrumental` +0.4) differ from `move`'s (`deontological_instrumental` +0.5 only), so
-the merge erases a values distinction that exists.
-
-**Closest call:** `migrate`, since its cells already say leaving home is a different choice.
-
-**After the trial (Part V §V.2.7).** `migrate` is kept: RR-2 ruled migration a verb persons take, and
-its per-row columns differ from `move`'s. The set is `move`, `migrate` (2). Of 7 new verbs, no row:
-sail becomes a season-and-water reader on `move`, endure's battle sense goes to MB's `withstand`;
-navigate, ride, climb, swim and hunt are cut (`hunt` does not merge into `work`, which mints no food).
-
----
-
-### NP — NPC life and persons
-
-**Inspirations.**
-
-| source | kind | contributes | bears on |
-|---|---|---|---|
-| Patronage both ways: Roman *clientela*, *cursus* (`research/by_lane/NPC_npc_cast.md:70`) | HISTORICAL RESEARCH, tier 3, sound | bonds between patron and client | **for** `oblige` and `commit` as the bond verbs |
-| Woodville affinity cascade 1464–83 (`NPC_npc_cast.md:73`) | HISTORICAL RESEARCH, tier 3 | marriage alliances propagate defection | **for** `marry`, if kin is carried |
-| Old World: ambitions from attitudes × families, expiring on death (`NPC_npc_cast.md:138`) | PRECEDENT GAME, tier 3; applied, reached the plan | goals from a person crossed with houses | **for** `commit` to an OUGHT as the ambition carrier |
-| CK3 population: *"generate on demand, not on a clock"* (`NPC_npc_cast.md:144`) | PRECEDENT GAME, tier 3; honoured | a closed cast | **against** `rear` (births) under ED-WR-0011 |
-| RimWorld: mood as a sum of decaying thoughts (`NPC_npc_cast.md:151`) | PRECEDENT GAME, tier 3 | memory works only where read at a decision | **against** `mourn` as a verb; for grief as stance and scar read at choice |
-| KOEI RoTK officer bonds; oath and defection (`NPC_npc_cast.md:152`) | PRECEDENT GAME, tier 3 | relational edges | **for** `tie / knot` as the person-to-person bond |
-
-**Triaged candidates.**
-
-| verb | origin | status | sourced read (tier) | demand → the ten | note |
-|---|---|---|---|---|---|
-| `commit` | code | BUILD | none | WIL | shipped row |
-| `give` | code | BUILD | none | BON | shipped row |
-| `tie / knot` | code | BUILD | BON WIL TS · PRA (T2) | BON TS WIL | shipped row, not resolvable |
-| `tend` | plan | BUILD | none | ACU BON | IN-12 step 9 |
-| `train` | plan | BUILD | writes PRA | CHA WIL | IN-12 step 9 |
-| `forgive` | plan | BUILD | none | — | IN-12 step 13 |
-| `repudiate` | plan cut | REJECT | none | nerve | cut by the plan; composes on `release` |
-| `betray` | lane | MERGE → `release` | none | ATT · comp | a deed cell on `release` (R-C-20) |
-
-**Designed here: 11** (DESIGN 1 · MERGE 6 · REJECT 4).
-
-| verb | also | domain | status | reads (the ten) | reason |
-|---|---|---|---|---|---|
-| heal | WT MB | care | MERGE → `tend` | AGI BON | critic: heal = tend |
-| court | SC | bonds, speech | MERGE → `tie / knot` | ATT BON | a tie formed (kin as a tie kind is K-NPC-6) |
-| marry | FA | binding | DESIGN | WIL | the one act that makes kin; exists only if kin gets a carrier and a reader (J-T3, J-C-26) |
-| rear | — | care | REJECT | BON WIL | no carrier for children; the cast is closed (ED-WR-0011) |
-| mourn | — | care, ritual | REJECT | BON WIL | an affect written by witnessing a death, not chosen |
-| pray | TW | ritual | REJECT | — | moves no state any reader reads |
-| avenge | FA PC | justice, force | REJECT | ACU WIL | a motive (stance) that drives fight or challenge, not an act |
-| confess | SC | speech, ritual | MERGE → `tell` | nerve | a tell whose subject is oneself |
-| study | FI | knowing | MERGE → `train` | ACU WIL | training oneself |
-| recover | WT | body | MERGE → `tend` | END | critic: recover = tend; the bodies pass otherwise |
-| bless | TW GV | ritual | MERGE → `confer` | — | conferring a sacred standing |
-
-**Pessimistic NERS.**
-
-| verb | first-pass verdict | letter | the named loss, or its absence |
-|---|---|---|---|
-| `commit` | **KEEP** | N | the only binding of a person to a Proposition: creeds and ambitions (Q4) |
-| `tend` | **KEEP** | N (coverage) | the only planned act that RAISES `Person.body`; no shipped verb does |
-| `train` | **KEEP** | N | the only writer of practice (`Person.capability`; IN-12 step 9) |
-| `forgive` | **KEEP** | N (closure) | the only planned act that raises a stored stance; `march` only lowers it |
-| `tie / knot` | **KEEP, narrowed** | N | the only person-to-person bond (R-07). Its effect is declined (H-182), so it ships with its first reader or not at all |
-| `give` | **MERGE into `transfer`** (object: a held Record) | E | recommend retiring `give` (shipped, resolvable; 1 execution) |
-| `marry` | **CUT** | N false (no carrier) | J-T3 answered: kin not carried (Part I §I.6). Loss accepted: no marriage alliance until kin has a reader |
-
-**Distilled set: `commit`, `tend`, `train`, `forgive`, `tie / knot` (7 → 5).** **Honest cost:**
-
-- a Record changes hands by the same act as grain;
-- no dynastic marriage.
-
-**Closest calls:**
-
-1. `marry`: the strongest R-WORLD generator among the designed verbs (Woodville).
-2. `give`: Records are held by Tenure, stores by the rung, so two carriers sit under one verb, and
-   `give`'s values cell (−0.2) is opposite in sign to `transfer`'s (+0.6).
-3. `tie / knot`, if the trial finds no reader coming.
-
-**After the trial (Part V §V.3).** `give` is kept (the MB and SC courts build `surrender` and `deny`
-on it), so the set is six. `marry` is parked on K-NPC-6, not cut: J-T3 answers the template only.
-`court` and `bless` are parked; `betray` is a `deed:commitment.ended` cell on `release`, not done
-until the cell exists.
-
----
-
-### III.4 Roll-up
-
-| subsystem | live before | distilled | merged or cut (status) | after the trial (Part V) |
+| E1 | PC 26, NP 35, MB 28, FA 42, SC 47 | 178 | 142 | 36 | 47 (13 remain) |
+| E2 | GV 46, FI 29, TW 19, EC 35, WT 15 | 144 | 113 (11 more sound apart from one sub-claim) | 18 | 35 |
+| **both** | ten lanes | **322** | **255** | **54** | **82** |
+
+**What the audit found, worst first.**
+
+- **A Latin ancestor that was not one.** MB `recruit`: the path through L *recrēscō* was forced; the compound formed in French (*recruter* ← *recrue* ← OF *recreü*, from *recreistre* = *re-* + *creistre* ← *crēscō*). GV `repeal`: OF *rapeler* is *re-* + *apeler* ← L *appellō*, not L *repellō*; Wiktionary's English page contradicts the Old French pages it rests on. GV/TW `release`: OF *relaissier* is its own compound on *laissier* ← L *laxō*; L *relaxō* is a parallel compound, not the ancestor.
+- **A gloss given to the wrong Latin verb.** GV `abolish`: 'decay, vanish' is the sense of *abolēscō*; *aboleō* means 'to destroy, efface' (L&S), and the two Wiktionary pages disagree on the root.
+- **A root given as certain that is disputed.** GV `succeed` (*cēdō*, PItal \**kezdō*, root disputed), `trahō`, `arguō`, MB `march` (the Late Latin \**marcare* origin is in no source that could be reached; Frankish \**markōn* is the sourced path).
+- **A direction reversed.** WT `travel`: the OF noun *travail* is deverbal from *travailler* (← VL \**tripāliāre* ← LL *tripālium*), not the reverse.
+- **A wrong fact about ordinary use.** PC `disengage` quoted the fencing sense, which is the noun; the verb covers forces breaking off combat. GV `charter` claimed a frequency Wiktionary does not give.
+- **About thirty loose links:** dropped stages (FA `treaty`, `tribute`, `league`, `plot`, `war`; NP `crown` omits its Greek source), alternatives not stated (FI `scout`: *ḱlew-* or *ḱel-*), and PIE roots given without their uncertainty (FI `search`, `suborn`, `blackmail`).
+
+**The pattern.** Three of the four worst findings came from trusting the English Wiktionary page where the Old French entry it rests on says otherwise. **No lane forced a Latin path onto a Germanic, Frankish or unknown word**, and every such label the auditors checked is correct.
+
+**Latin and Germanic in the roster.** By a keyword classification of the lexicon cells (approximate, to be read as ±3), about 59 of the 92 verbs reach Latin, directly or through French; about 33 do not. Those are Germanic (`fight`, `give`, `build`, `tell`, `speak`, `work`, `weave`, `lock`, `ward`, `knot`, `tie`, `hire`, `lend`, `borrow`, `forgive`, `utter`, `watch`, `drill`…), Frankish or Germanic through French or Medieval Latin (`march`, `seize`, `guard`, `marshal`, `forage`, `disband`), or of unknown origin (`bribe`, `craft`), or of Arabic origin (`assassinate`, a Medieval Latin carrier only). For these, Part VI says "Germanic, no Latin path" and names the Latin cognate through PIE where Wiktionary gives one, labelled *cognate, not ancestor* (`fight` ~ L *pectō*; `hoard` ~ L *custōs*; `lend` ~ L *linquō*; `read` ~ L *reor*; `thread` ~ L *terō*).
+
+**What remains `[UNVERIFIED]`.** About twenty-five sub-claims, nearly all of them the century of a sense shift or the intermediate French form, which need the OED, the Middle English Dictionary or TLFi. None was reachable (Etymonline returned 403; TLFi and the MED refused the fetch). They are tagged where they stand. No design claim rests on one (S-5).
+
+**How to read a chain in Part VI.** `←` reads "derives from". A Latin lemma is given with its principal parts as Lewis & Short has them (*revocō, -āre, -āvī, -ātum*) and in quotation marks the sense L&S attests, never a paraphrase of its parts. `Wikt` is the English Wiktionary (which cites De Vaan's *Etymological Dictionary of Latin* for Latin roots), `L&S` Lewis & Short, `Wikt-OF` and `Wikt-la` the Old French and Latin entries. A PIE root is the one Wiktionary gives; "disputed" means its Latin entry says so.
+
+### III.9 The gap register, disposed of
+
+Part VII holds 488 verb gaps, shortfalls, name defects, collisions and deferrals, each with its source, the verbs the source names, its precedent documents and the first pass's disposition. **The first pass left 189 of them (39%) with no disposition at all** (`NONE` in the register's last column). Every one of the 488 now has exactly one disposition in its subsystem's coverage table (Part VI, §3.6 of each section), checked by script.
+
+| sub | gaps | closed by a verb or suite | parked on a named trigger | out of scope (with owner) | stale (cite the tree) | disputed | first pass: no disposition |
+|---|---|---|---|---|---|---|---|
+| PC | 40 | 27 (23 once a named mechanic exists) | 1 | 11 | 0 | 1 | 14 |
+| MB | 57 | 41 | 7 | 7 | 2 | 0 | 19 |
+| SC | 59 | 36 (26 once a named mechanic exists) | 9 | 10 | 2 | 2 | 34 |
+| FI | 58 | 45 (27 once a named mechanic or J-T1 exists) | 5 | 5 | 0 | 3 | 26 |
+| TW | 42 | 29 | 6 | 5 | 2 | 0 | 13 |
+| GV | 45 | 27 (16 once a named mechanic exists) | 6 | 9 | 3 | 0 | 12 |
+| FA | 50 | 25 | 6 | 18 (mostly handed to GV) | 1 | 0 | 18 |
+| EC | 53 | 33 | 9 | 9 | 1 | 1 | 23 |
+| WT | 43 | 20 | 6 | 15 | 1 | 1 | 19 |
+| NP | 41 | 29 | 3 | 8 | 1 | 0 | 11 |
+| **total** | **488** | **312** | **58** | **97** | **13** | **8** | **189** |
+
+*Closed* means a roster verb or suite answers the gap **once its named mechanic exists**; it does not mean the engine does it today. Where a lane counted how many of its closures wait on a mechanic, the count is in parentheses; the other lanes did not count. *Out of scope* is never silent: each row names the subsystem or document that owns it. *Stale* rows are gaps the tree has since closed or renamed. *Disputed* rows are the eight where the lane could not say which reading the sources support; each says why. By the register's own kind column the rows are: missing verb 125, missing reader 118, missing carrier 66, shortfall 61, other 58, collision 36, name defect 24.
+
+### III.10 The named mechanics the roster waits on
+
+The lanes name **127 mechanics** (PC 15, NP 15, MB 12, FA 10, SC 15, GV 14, FI 10, TW 12, EC 16, WT 8): the carriers, readers and rules a verb needs before its world effect exists. Each is numbered in its lane (`M1`, `M-1`, `M-WT-1`, `M-EDICT`) with what it must write and the verbs that wait on it. The first-pass reading, that the game is short of readers, holds. Fourteen of them are named by more than one lane. They are the shared carriers; building one unblocks several subsystems, and building it twice would be two owners of one fact (`CLAUDE.md` §8).
+
+| shared mechanic | named by | verbs waiting |
+|---|---|---|
+| **troop stock, recruit pool, field force, order of battle** (J-1 and a Layer 1 amendment) | MB M-1 to M-3, M-8; FA M4; WT M-WT-8; EC M2 (arms) | `levy`, `muster`, `drill`, `disband`, `marshal`, `supply`, `forage`, `march`, `recruit` (for a force) |
+| **the `edict` Record and its MATTER readers** (tax, draw, ban term, price cap) | GV M-EDICT, M-TAX, M-DRAW; EC M7, M10 | `tax`, `ration`, `proclaim`, `exchange`, `transfer`, `embargo` (parked) |
+| **the finding producer; failure is not refusal; the honest misreading** | FI M1 to M3; TW (`thread_read`) | all six inquiries, `thread_read` |
+| **the concealment grade and the cover read** | FI M4; PC M6; FA M7 | `conceal`, `forge`, `assassinate`, `ambush`, `conspire`, `infiltrate` |
+| **the proofs reader, including `forgery_quality`** | SC M9; FI M4, M9 | `determine`, `tell` at a venue, `interrogate`, `forge` |
+| **a count of `commit`s** (one count) | SC M12; GV M-COUNT | `commit` (vote), `confer` (elect) |
+| **the custody opener** (`detain` from a fight or a writ) | PC M5; GV (`arrest`) | `capture`, `arrest`, `pardon`, `rescue`, `interrogate` |
+| **the `debt` Record and the wage edge** | EC M9, M11; FA (tribute); GV (distraint) | `borrow`, `lend`, `hire`, `pay`, `tribute` |
+| **a public channel that survives SC-01 step 13** (D-V3) | SC M4; FA M6 | `declare`, `deny` (a content of `release`), `proclaim` |
+| **a mood-keyed alignment cell** (D-V6) and the reader of `at_war` | SC M13; FA M1 | `utter`, `declare`, the charge, `threaten` |
+| **the route Query and the calendar** | WT M-WT-1, M-WT-2; EC M3; MB M-6 | `travel`, `explore`, `haul`, `march`, `besiege` |
+| **a labour input to yield** | EC M1; GV M-LABOUR | `work`, `build`, `assign` |
+| **the end of a Site or a Rung** (H-166) | GV M-RAZE; EC M13; MB M-9 | `raze` (one effect, one owner) |
+| **capability and attribute readers** | NP M3, M4; PC M13; MB M-10 | `train`, `fight`, `march`, `marshal` |
+
+### III.11 Items for Jordan
+
+Each lane applied the five answer-it-first tests (superseded · irrelevant · design document · precedent · architecture) to every open item. **Twenty-one survived**, because two defensible options lead to materially different games or an answer would overwrite ratified canon. The first six carry the first pass's numbers (D-V1 to D-V6); D-V7 onward are new. The default is the lane's recommendation, not a ruling.
+
+| id | question | options | default (lane) | lane |
 |---|---|---|---|---|
-| PC | 3 | 1 | `challenge`, `accept` (shipped) | 3: both kept |
-| MB | 2 | 2 | — | 2 |
-| SC | 9 | 5 | `petition`, `carry`, `speak`, `construe` (shipped) | 6: `speak` kept; `construe` held on J-C-6 |
-| FI | 9 | 2 | `interview`, `research`, `surveil`, `reconstruct`, `survey`, `forge` (shipped); `conceal` (planned) | 8: the five inquiries and `conceal` kept |
-| TW | 9 | 4 | `leap`, `lock`, `pull`, Past-pulling (stubs); `ward` (design) | 4 (`sever` conditional); `pull`, Past-pulling, `ward` parked, stubs not retired |
-| GV | 15 | 10 | `evade / defy`, `found`, `succeed` (shipped); `arrest`, `pardon` (planned) | 10 (not tried) |
-| FA | 4 | 3 | `dispatch` (shipped) | 4: `dispatch` kept |
-| EC | 6 | 4 | `exchange`, `restore` (shipped) | 5: `restore` kept; `exchange` retired only with `covenant`'s goods keys |
-| WT | 2 | 1 | `migrate` (shipped) | 2: `migrate` kept (RR-2) |
-| NP | 7 | 5 | `give` (shipped); `marry` (design) | 6: `give` kept; `marry` parked |
-| **total** | **66** | **37** | **20 shipped rows, 3 planned positions, 4 stubs, 2 designs** | **50** |
+| **D-V1** | May a living top-seat holder be removed against their will (ARC-40's replaced arm)? | (a) no: `depose` cut, ARC-40 narrows to "act or abdicate"; (b) yes: a removal basis on `revoke` | `depose` parked | GV |
+| **D-V2** | Do births exist (ED-WR-0011)? The first pass's D-V2 (kin as a tie kind) is answered: `marry` stands by the convention floor | closed title game · game of generations | `rear` parked | NP |
+| **D-V3** | What public channel survives SC-01 step 13's deletion of `chronicle`? | keep · a named surviving channel · co-located only | a named surviving channel | SC, FA |
+| **D-V4** | J-C-6: may persons lie? | yes · no | **yes**, built after the proofs reader (SC M9), then `lie` as a row sharing `tell`'s cell | SC |
+| **D-V5** | R-7: does a withdrawn army differ from a routed one? | no · yes | yes | MB |
+| **D-V6** | A contents-aware value term, or a mood-keyed alignment cell? | build · refuse | the mood-keyed cell first | SC, FA |
+| **D-V7** | The shipped `dispatch` (a documentless order): keep the name, or `order` for it and `assign` for the posting act (R-05)? Overwrites ED-IN-0210 | keep `dispatch` for the order, add `assign` · rename | `assign` added; `dispatch` kept until ruled | FA, GV |
+| **D-V8** | The field force: troops that travel with a march and keep their own side. Amends ratified Layer 1 (with J-1) | adopt · keep stocks at the rung | adopt (MB M-1) | MB |
+| **D-V9** | Does a march between factions require war? | war gates violence (CK3 [MEMORY]) · war is a state values and witnesses read (Total War [MEMORY]) | none | MB, FA |
+| **D-V10** | Does a treaty bind the signer or the seat? | lapses when a head dies (edges are persons') · an edge on the seat survives the holder | none | FA |
+| **D-V11** | Who may declare war? | any holder of a seat with `remit:dispatch` · the faction's head seat only | none | FA |
+| **D-V12** | May a won contest open an edge the counterparty owns (`recruit`, `conspire`)? | yes (as `confer` and `determine` already do) · no (the counterparty's own act) | yes, since Jordan's rule forbids the reply-act workaround for a floor verb; may overwrite an autonomy axiom, `[UNVERIFIED: whether one is ratified]` | FA |
+| **D-V13** | The draw policy under scarcity: who eats, in what order, how much? | the shipped sorted-id walk · a ruled policy | blocks `ration` | GV |
+| **D-V14** | Does the road cost a named person anything but time? | only Calamity territory · weather also | only Calamity | WT |
+| **D-V15** | Can a person or force be *between* places? Amends ratified Layer 1 (`contain : Rung → Rung`) | no · yes | no | WT |
+| **D-V16** | How does a questioned person answer an `interview`? | (a) a Layer 1 carve-out reading their ledger · (b) the reply as their own act next season | (b) | FI |
+| **D-V17** | Does `guard` get its own edge (an eleventh Tenure kind)? Can a seatless captor hold a prisoner (widens `detain`)? | own edge / a query over `oblige` and presence · seatless custody / seat-holders only | none | PC |
+| **D-V18** | Unpaid upkeep: does the term lapse, or become a debt the seat owes? | lapse (shipped) · arrears | none | EC |
+| **D-V19** | Threadwork: how does Coherence's elastic return enter the season loop? Are knots permanent? What follows the crossing? | a licensed clock · a chosen rest · permanent · releasable | none | TW |
+| **D-V20** | Is `sack` kept, given its tone (FASE FA-6 marks it `needs_jordan`)? | keep as a content of `forage` · drop | keep (precedent) | MB |
+| **D-V21** | Does a levied stock go home after a term, and does a recruited stock need upkeep? | no term, no upkeep (the base) · a service term and upkeep | no term | MB |
 
-**The cut touches 20 of the 46 shipped rows and 3 of the 12 plan positions.** Each is a
-recommendation to retire, never a silent deletion. **After the trial:** 12 shipped retirements and
-`conceal`'s are reversed; `exchange`'s is conditional; `construe` waits on J-C-6; and 8 stand
-untried as filed: `petition`, `carry`, `forge`, `evade / defy`, `found`, `succeed` (shipped),
-`arrest`, `pardon` (planned) (Part V §V.2.7, §V.5.3). New rows from the trial: `weave`, `mend`
-(counted above), `sever` (conditional) and `bribe` (conditional, FI).
+Persons and attributes keep their decisions (`_part7` §5: J-T1, J-T2, J-T4, V-2a, R-0). The rename batch (R-10) and the held name `dispatch` (D-V7) touch goldens; each needs the plain statement that a golden was re-recorded.
 
-**The distilled 37:** `fight`, `march`, `raze`, `tell`, `utter`, `argue`, `oblige`, `open_case`,
-`examine`, `destroy_record`, `thread_read`, `weave`, `sever`, `mend`, `confer`, `revoke`, `release`,
-`establish`, `issue`, `determine`, `convene`, `requisition`, `comply`, `interrogate`, `seize`,
-`covenant`, `sabotage`, `transfer`, `create_record`, `build`, `work`, `move`, `commit`, `tend`,
-`train`, `forgive`, `tie / knot`. **After the trial, 50:** these 37 plus `challenge`, `accept`,
-`speak`, `interview`, `research`, `surveil`, `reconstruct`, `survey`, `conceal`, `dispatch`,
-`restore`, `migrate`, `give`. The trial's one new row outside TW, `bribe`, is conditional and not
-counted until its gate holds.
+### III.12 Limits
 
-**What the cut buys, and what it risks.**
-
-- **It buys** (E-OVERHEAD): 29 fewer rows, event kinds and alignment rows.
-- **It risks** (NERS §5.2, over-distillation): values distinctions the alignment table already
-  draws. Read from `rosters.yaml: tables.alignment.cells` by script [CHECKED]:
-  - `evade / defy` (`hierarchical_equal` +0.9) against `comply` (−0.6): opposite signs;
-  - `give` (`deontological_instrumental` −0.2) against `transfer` (+0.6): opposite signs;
-  - `migrate` (three cells) against `move` (one);
-  - `found` against `build`;
-  - `petition` (`hierarchical_equal` −0.4, `grandiose_humble` +0.3) against `create_record`
-    (`precedent_substantive` −0.8);
-  - `speak` against `utter`;
-  - `research`, `surveil` and `reconstruct` (each celled) against `examine` (uncelled).
-
-  A merge forces each of these onto contents the pursuit term cannot see, because that term reads the
-  verb alone (Part IV §IV.1).
-  The trial kept six of these verbs on other grounds (`give`, `migrate`, `speak`, `research`,
-  `surveil`, `reconstruct`); the `evade / defy`, `found` and `petition` merges stand as listed.
-- **So every merge is conditional on the chooser learning to read contents.** Absent that, the merged
-  verbs lose their values signal, and in two cases merge opposite signs into one cell. **This is the
-  cut Jordan should weigh first.** If the chooser stays verb-only, reverse the merges whose cells
-  differ, starting with the two sign reversals (`evade / defy`, `give`).
-
-### III.5 Verb × attribute, under the recommended ten
-
-**Claim.** Under the recommended ten, attributes reach eleven live verbs by a sourced reader. The
-other 54 live verbs read none. Every live reader is combat, command, thread or knot.
-
-| verb (rows) | STR | AGI | END | FOC | ACU | WIL | ATT | CHA | BON | TS | PRA | TMP | RES | KIT | tier |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| `fight`, `accept` | ● | ● | ● | ● | ● | ● | ● | | | | ● | ● | | ● | T2 |
-| `tie / knot` | | | | | | ● | | | ● | ● | ● | | | | T2 |
-| `weave`, `sever`, `leap`, `lock`, `pull`, Past-pulling | | | | | | ● | | | | ● | ● | | ● | | T2 |
-| `mend` | | | | | | ● | | | | ● | ● | | | | T2 |
-| `thread_read` | | | | | | ◆ | | | | ■◆ | ◆ | | | | T4 (gate T3) |
-| `march` | | | | | ● | | | ● | | | | | | | T2 |
-| `examine` | | | | | | | | | | ◆ | ■ | | | | T3*/T4 |
-| `tell` | | | | | | | | | | | ○ | | | | **T1** |
-| `determine`, `argue`, `arrest`, `interrogate` | | | | | | | | | | | ■ | | | | T3 |
-| `interview`, `research`, `surveil`, `reconstruct` | | | | | | | | | | | ■ | | | | T3* |
-
-○ T1 · ● T2 · ■ T3 · ◆ T4. Source: Template §3A.3, with REC's empty column dropped. Under V-2, B
-admits an attribute only on rows declaring `contests:` (`fight`, `accept`, `march`, `tell`), so
-**only `fight`, `accept` and `march` would read attributes in the first build**. The knot and the
-thread rows need `contests:` and, for BON's gate, V-2a.
-
-```mermaid
-flowchart LR
-    subgraph PC
-    fight["fight"]
-    end
-    subgraph MB
-    march["march"]
-    raze["raze"]
-    end
-    subgraph SC
-    tell["tell"]
-    utter["utter"]
-    argue["argue"]
-    oblige["oblige"]
-    open_case["open_case"]
-    end
-    subgraph FI
-    examine["examine"]
-    destroy_record["destroy_record"]
-    end
-    subgraph TW
-    thread_read["thread_read"]
-    weave["weave"]
-    sever["sever"]
-    mend["mend"]
-    end
-    subgraph GV
-    confer["confer"]
-    revoke["revoke"]
-    release["release"]
-    establish["establish"]
-    issue["issue"]
-    determine["determine"]
-    convene["convene"]
-    requisition["requisition"]
-    comply["comply"]
-    interrogate["interrogate"]
-    end
-    subgraph FA
-    seize["seize"]
-    covenant["covenant"]
-    sabotage["sabotage"]
-    end
-    subgraph EC
-    transfer["transfer"]
-    create_record["create_record"]
-    build["build"]
-    work["work"]
-    end
-    subgraph WT
-    move["move"]
-    end
-    subgraph NP
-    commit["commit"]
-    tend["tend"]
-    train["train"]
-    forgive["forgive"]
-    tie["tie / knot"]
-    end
-    ATTR["attributes: STR AGI END FOC ACU WIL ATT CHA BON TS"] --> fight
-    ATTR --> march
-    ATTR -.->|"needs contests and V-2a"| tie
-    ATTR -.->|"needs contests rows"| weave
-    PRAC["practice"] --> tell
-    PRAC --> argue
-    PRAC --> determine
-    PRAC --> interrogate
-    PRAC --> examine
-    train --> PRAC
-```
-
-The diagram is the distilled 37 by subsystem, before the trial; Part V §V.6 maps the new verbs onto
-the post-trial set. Solid arrows are readers that exist in stub code; dotted arrows wait on a ruling.
+- **Nothing here ran.** The coverage tables, the mechanic lists and every statement of what the code reads are static reading, carried from the lanes; where a lane did not open a call site it says so.
+- **Precedent games are from memory.** Every game named in a lane and tagged `[MEMORY]` is unchecked; in-tree precedent documents are cited by path and were opened by the lane that cites them. Several research documents the register cites were read only through a lane file; the rows say so.
+- **The gap register was extracted by readers** (five Sonnet lanes) and not independently sampled. The lanes checked their own subsystem's rows; one found stale rows and corrected them.
+- **The reconciliation (§III.5) has no critic.** It is one author's ruling over ten lanes. The rulings are marked contestable where a lane argued the other way.
+- **The attribute work is not re-derived** against the 92-verb roster (`_part2` note).
+- **Renames touch goldens.** R-10 changes act ids that hash the verb name; the batch must declare its hash move and re-record the pins plainly.
+- **The count of 92 is a proposal.** It predicts nothing about play until the mechanics of §III.10 exist and a falsifier has run (`CLAUDE.md` §0.2: done means it executes).

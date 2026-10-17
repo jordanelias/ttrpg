@@ -1,9 +1,9 @@
 # Persons, attributes and verbs: the v2 synthesis
 
-## Status: PROPOSED (2026-10-16). A distillation of the same day's v1 proposals and their critics' reports. No new probe, run or trace was made for it. Merging it ratifies nothing unless Jordan so rules.
+## Status: PROPOSED (2026-10-16; the verb Parts III, V, VI and VII rewritten 2026-10-17). A distillation of the same day's v1 proposals and their critics' reports, and, for verbs, a rebuild by subsystem and suite against 488 gaps traced to the repository's precedent and research documents. No new probe, run or trace was made for it. Merging it ratifies nothing unless Jordan so rules.
 ## Lane: IN (cross-cutting), with PC, MB, SC, FI, WR, NPC, GO as sources. IDs: none allocated.
-## Scope: persons (the character template), attributes and verbs only. The troop-stock design is out of scope and is not distilled here (Sources). The filename keeps the path the orchestrator named.
-## Parts, in reading order: this file (§0 Thesis and Map, Part I Persons) · [`_part2`](2026-10-16-v2-person-troop-attribute-synthesis_part2.md) (Part II Attributes) · [`_part3`](2026-10-16-v2-person-troop-attribute-synthesis_part3.md) and [`_part4`](2026-10-16-v2-person-troop-attribute-synthesis_part4.md) (Part III Verbs: triage, the subsystems, the pessimistic NERS distillation) · [`_part5`](2026-10-16-v2-person-troop-attribute-synthesis_part5.md) and [`_part6`](2026-10-16-v2-person-troop-attribute-synthesis_part6.md) (Part IV What verbs do to the world: the chooser, context modulation, outcome signatures, the assessment framework) · [`_part7`](2026-10-16-v2-person-troop-attribute-synthesis_part7.md) (§5 Roadmap, §6 Reliability ledger, §7 Sources, the Trial registry) · [`_part8`](2026-10-16-v2-person-troop-attribute-synthesis_part8.md) (Part V: the trial of the new verbs).
+## Scope: persons (the character template), attributes and verbs only. The troop-stock design (`proposals/2026-10-16-troop-stock-design*.md`) is not distilled here (Sources), but the verbs of raising and keeping a force (`levy`, `muster`, `drill`, `disband`, `marshal`, `supply`, `forage`) are in scope as MB's. The filename keeps the path the orchestrator named.
+## Parts, in reading order: **this file** (§0 Thesis and Map, Part I Persons) · [`_part2`](2026-10-16-v2-person-troop-attribute-synthesis_part2.md) (Part II Attributes) · [`_part3`](2026-10-16-v2-person-troop-attribute-synthesis_part3.md) and [`_part4`](2026-10-16-v2-person-troop-attribute-synthesis_part4.md) (Part III Verbs: standards, roster, reconciliation; critics, etymology audit, gap coverage, named mechanics, decisions) · [`_part5`](2026-10-16-v2-person-troop-attribute-synthesis_part5.md) and [`_part6`](2026-10-16-v2-person-troop-attribute-synthesis_part6.md) (Part IV What verbs do to the world) · [`_part7`](2026-10-16-v2-person-troop-attribute-synthesis_part7.md) (§5 Roadmap, §6 Reliability ledger, §7 Sources) · [`_part8`](2026-10-16-v2-person-troop-attribute-synthesis_part8.md) (Part V: engine findings carried from the first-pass trial) · Part VI, the lexicon by subsystem: [`_part9`](2026-10-16-v2-person-troop-attribute-synthesis_part9.md) PC · [`_part10`](2026-10-16-v2-person-troop-attribute-synthesis_part10.md) MB · [`_part11`](2026-10-16-v2-person-troop-attribute-synthesis_part11.md) SC · [`_part12`](2026-10-16-v2-person-troop-attribute-synthesis_part12.md) FI · [`_part13`](2026-10-16-v2-person-troop-attribute-synthesis_part13.md) TW · [`_part14`](2026-10-16-v2-person-troop-attribute-synthesis_part14.md) GV · [`_part15`](2026-10-16-v2-person-troop-attribute-synthesis_part15.md) FA · [`_part16`](2026-10-16-v2-person-troop-attribute-synthesis_part16.md) EC · [`_part17`](2026-10-16-v2-person-troop-attribute-synthesis_part17.md) WT · [`_part18`](2026-10-16-v2-person-troop-attribute-synthesis_part18.md) NP · Part VII, the verb gap register (the evidence behind Part VI's coverage tables): [`_part19`](2026-10-16-v2-person-troop-attribute-synthesis_part19.md) PC+NP · [`_part20`](2026-10-16-v2-person-troop-attribute-synthesis_part20.md) MB+FA · [`_part21`](2026-10-16-v2-person-troop-attribute-synthesis_part21.md) SC+GV · [`_part22`](2026-10-16-v2-person-troop-attribute-synthesis_part22.md) FI+TW · [`_part23`](2026-10-16-v2-person-troop-attribute-synthesis_part23.md) EC+WT.
 
 **How to read a citation.** A locator tagged **[CHECKED]** was re-opened in this pass. Every other
 locator is carried from a v1 document, keeps the v1 tag listed in `_part7` §7.3, and is cited by v1
@@ -32,11 +32,15 @@ proposal recorded RATIFIED AS INTENT; **T4** design intent only.
    ruling (J-T1). The evidence favours stored attributes (Option B) on the plan's own narrow reading of J-13.
 3. **The evidence supports a stored set of ten: the registry's nine plus Thread Sensitivity.** Attunement
    and Charisma stand on design intent only. Recall is not a candidate until something reads it.
-4. **The game is short of readers, not of verbs.** Of 86 verbs designed from scratch, 2 survive
-   triage. A pessimistic NERS pass distils the 66 live verbs to 37. **The trial (Part V) then tried
-   108 new-verb items and gives 4 new rows (`weave`, `mend`; `sever` and `bribe` conditional), 16
-   named survivals inside incumbents, 57 merges, 14 parks and 17 cuts, and it reverses 13 of the
-   distillation's retirements: the post-trial set is 50, not 37.**
+4. **The roster is 92 verbs in ten subsystems.** Jordan's directions for the rewrite (Part III §III.0): verbs are grouped by
+   subsystem and then by suite of related concepts; the genre's convention floor is kept (settlements build and
+   affect the economy; factions recruit, set assignments and hold territory); a fold into a host is lawful only for
+   a true equivalent (same actor, same mechanic, a parameter), so `recruit`, `hire`, `declare` and `tax` are verbs
+   of their own; and every verb names the world effect it writes in its subsystem. Each name has an academic
+   etymology traced into Latin, or says plainly that it is Germanic. All 488 gaps in the repository's precedent,
+   research and gap documents are disposed of (Part VII; the Part VI coverage tables). 48 of the 92 descend from the
+   46 shipped rows, 11 are planned positions and 33 are new. The shortage that remains is of readers and
+   mechanics: most rows wait on the named mechanics of §III.10. The first pass's 37 and 50 are withdrawn.
 5. **The chooser ranks acts by verb name and by its stance toward the subject.** The world modulates
    outcomes by about a dozen contextual nodes; the chooser sees 3 of 16 node types fully. That
    mismatch, not the attribute roster, is the next design lever (Part IV §IV.11).
@@ -49,10 +53,11 @@ a cap or a row without `contests:`; and **R-0**, rerunning the from-scratch deri
 brief rather than correcting it. J-T3 (kin) is not among them: v1 answered it for the template
 (kin is not carried, §I.6), and it unlocks no build.
 
-**The trial adds decisions for the verbs** (Part V §V.5.1): ARC-40's replaced arm (`depose`) and
-K-NPC-6 (`marry`, kin as a tie kind) choose between lawful games; the public route that replaces
-`chronicle` at SC-01 step 13, R-7 (a withdrawn army against a routed one), J-C-6 (lies) and a
-contents-aware value term decide the form of six named acts.
+**The verb rewrite adds decisions** (Part III §III.11 lists 21 that survived the five answer-it-first tests; among them are
+ARC-40's replaced arm (`depose`), may persons lie (J-C-6), whether the road wears a named person beyond time, the
+field force (troops that travel with a march) and what it amends in Layer 1, whether a treaty binds the signer or
+the seat, who may declare war, whether a won contest may open an edge the other person owns, and the draw policy
+under scarcity). Part III §III.5 lists the 29 collisions between subsystems and the ruling on each.
 
 ### 0.1 The map
 
@@ -65,7 +70,7 @@ flowchart TD
     P --> T["Character template: 21 fields, 8 authored today"]
     A --> E["Evidence: 46 demands, 41 formulas, 37 tested pairs"]
     A --> FS["From-scratch fourteen: not independent"]
-    V --> VT["179 proposed verbs: 65 live after triage"]
+    V --> VT["Verbs: 92 in ten subsystems (Part III); 488 gaps disposed of (Part VII)"]
     T --> JT1{"J-T1: derived or stored inputs"}
     E --> JT2{"J-T2: the tenth, and the count"}
     FS --> R0{"R-0: rerun blind"}
@@ -82,7 +87,7 @@ flowchart TD
     VT --> CTX["Part IV: what each act does, and what context modulates it"]
     CTX --> CHS["Finding: the chooser sees 3 of 16 node types"]
     CHS --> B5["Build: alignment cells and contents-aware value terms"]
-    VT --> TR["Part V, the trial: 108 new-verb items, 4 rows, 16 named, 14 parked; 37 becomes 50"]
+    VT --> TR["Part VI: the lexicon by subsystem and suite, with etymology"]
 ```
 
 ---
