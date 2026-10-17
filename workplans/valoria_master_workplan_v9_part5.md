@@ -77,7 +77,7 @@ position's own base commit.
 - SOURCE: #457 `:163`, `:183-184`
 
 ### IN-26 · BOUND-PAPER · a sink or reader for Records and Propositions
-- STATE: BLK:FI-01 (F: `loop/effects_information.py`; SC-01's half satisfied, B-N closed `cf69ceed`)      LANE: IN (SC)      BATCH: B-Q (after IN-12's steps 7, 9, 10, 13)      R: R-05 (`destroy_record`)
+- STATE: FI-01 landed `6d94d9d3` (F, satisfied; SC-01's half satisfied, B-N closed `cf69ceed`)      LANE: IN (SC)      BATCH: B-Q (after IN-12's steps 7, 9, 10, 13)      R: R-05 (`destroy_record`)
 - WHAT (#457 `:167`, verbatim): a sink or reader for Records and Propositions (`Record.ttl` has none; `destroy_record` was never attempted). Decides `destroy_record`'s held shape (H-156 (a)/(b), #453 `:3286-3287`; A-13's record-holding referent) and takes H-75's re-scoped half.
 - DEPS: ID-14 (open implies close); `loop/effects_information.py` shared with the SC/FI chain (F)      EDITS: `loop/effects_information.py`, `loop/matter.py`
 - EXIT (#457, verbatim): records per season flatten under the sink arm. And `destroy_record` executes ≥ 1 in computed play (`aperture 4 0` or `corpus_run`), leaving the never-attempted class; `engine/season/tests/test_u7_own.py:153` (`test_14_destroy_record_is_formed_by_nobody_while_a_13_is_held`) is re-recorded as it flips (#453 `:507`)      FALSIFIER: `told_redeposits` (`engine/season/harness/corpus_run.py:875`) moves → the sink reached tellings; the sink arm off ≠ today's hash → fail; `destroy_record` executing 0 times → not built

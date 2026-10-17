@@ -258,7 +258,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | IN-14 | #457 BOUND-ATTENTION; H-92, H-10 | IN | ask-then | — | — | B-Z | `_part4` |
 | IN-18 | telling G5, G8 (step 2a, G1–G3 landed `ac9724fc`; G6 landed `66bf51f9`) | IN | BLK | G5's trigger, M0e > 0 (`oblige` landed `905b7a21`) | — | none (B-I closed `9d93cfab`) | `_part4` |
 | IN-23 | #457 CARRY-STABILITY | IN | B | — | — | B-U | `_part5` |
-| IN-26 | #457 BOUND-PAPER; H-156 (a)/(b); `Record.ttl` | IN/SC | BLK | FI-01 (SC-01 landed; B-N closed `cf69ceed`) | R-05 | B-Q | `_part5` |
+| IN-26 | #457 BOUND-PAPER; H-156 (a)/(b); `Record.ttl` | IN/SC | BLK | B-Q's chain (FI-01 landed `6d94d9d3`; SC-01 landed; B-N closed `cf69ceed`) | R-05 | B-Q | `_part5` |
 | IN-27 | #457 END-VICTORY; H-176 (GD-1) | IN/FA | BLK | IN-37 | — | B-U | `_part5` |
 | IN-30 | `24h` P5 remainder; H-186 | IN/FA/SE | BLK | IN-27 | — | B-U | `_part5` |
 | IN-31 | H-100 | IN/SE | B | — (SC-03a landed `c2f855d2`; design landed at B-J) | — | B-Q | `_part5` |
@@ -296,8 +296,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | PC-06 | #445 K-1/K-5, K-3 (S-1 landed at B-E, `ac9724fc`; M-1/S-4, S-2/L-1 at B-L, `9ad86e87`) | PC | BLK | IN-06 (K-3) | R-05 | B-S | `_part7` |
 | PC-08 | Phase 4a/4b/5, WS-7; #445 M-2..M-6, K-4/V-3 | PC | LEAVE | named, unscheduled | — | B-Z | `_part7` |
 | PC-10 | RS-25: duel terms and the yield (PC-10a module, PC-10b season) | PC/IN | B (PC-10a) · BLK (PC-10b) | PC-10b: PC-10a (D) | R-05 | B-Y | `_part7` |
-| FI-01 | `ED-FI-0009`; J-22 (A); #445 S-6 | FI | BLK | SC-03b (SC-01 landed; B-N closed `cf69ceed`) | R-05, R-09 | B-O | `_part6` |
-| FI-02 | SM-3 | FI | BLK | FI-01 | — | B-O | `_part6` |
+| FI-02 | SM-3 | FI | STOPPED | no fieldwork provider yet (FI-01 landed `6d94d9d3`); `_part6` | — | B-O | `_part6` |
 | FI-03 | ED-FI-0002 | FI | BLK | IN-06 | — | B-S | `_part6` |
 | FI-05 | = IN-32 | — | — | — | — | B-S | `_part5` |
 | WR-01 | `27` remainder: the R-14 term, the `engine/season/` reach | WR | BLK | IN-06 | — | B-S | `_part7` |
