@@ -2762,6 +2762,7 @@ def a37():
         # stratum is not the subject, and one table verb at three declared strata tests the
         # property more cleanly than three verbs did.
         # `utter` since v9 SC-01 step 12 (`A28`'s note): a bare `speak` never reaches `resolved`.
+        # [JUSTIFIED: stratum 4 is the last of S27's five strata (`STRATA`, 0..4), submitted first so the probe's order is the reverse of the fold's]
         return [Act_(w, p, "utter", key="s4", stratum=4),
                 Act_(w, p, "utter", key="s1", stratum=1),
                 Act_(w, p, "utter", key="s0", stratum=0)]
@@ -2790,8 +2791,9 @@ def a38():
         # gate, which `resolve` applies BEFORE the fold, so the verb is incidental — one table
         # verb with two keys tests it and invents nothing.
         # `utter` since v9 SC-01 step 12: a bare `speak` is refused by its own cell (no docket).
+        # [JUSTIFIED: pool 5 is an arbitrary test pool; the two obstacles sit one above and exactly at S27.4's threshold mult x pool, so only the first is refused]
         return [Act_(w, p, "utter", key="hopeless", obstacle=mult * 5 + 1, pool=5),
-                Act_(w, p, "utter", key="hard", obstacle=mult * 5, pool=5)]
+                Act_(w, p, "utter", key="hard", obstacle=mult * 5, pool=5)]  # [JUSTIFIED: exactly at S27.4's threshold mult x pool, so admitted; the pair above is one over]
     _run(w, once(choose))   # `U2`: one submitted pair; the subject is §27.4's gate. See `once`.
     kinds = [e.kind for e in w.log]
     # W3: the old `effect` lambda emitted `did.{verb}`; the fold emits the TABLE's `emits`, so
