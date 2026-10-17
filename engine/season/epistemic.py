@@ -318,15 +318,27 @@ def claim_subjects(w: "World", e: "Event", rule: str, refs: Optional[list] = Non
 
 def holds_trail(w: World, p: Person, e: Event, rule: str) -> bool:
     """Does `p` already hold this deed as a witness would -- an event-kind claim `(s, e.kind, True)`
-    for ANY `s` the deposit rule makes a claim about `e` (`claim_subjects`), whatever its `when`?
+    for an `s` SPECIFIC TO `e`, whatever its `when`?
+
+    THE SPECIFIC SUBJECTS are what the deposit rule makes a claim about `e` (`claim_subjects`) MINUS
+    the Event's anchor (`anchor_of`, the actor for an act-caused Event) -- or, where nothing else is
+    left (the `actor` rule, or an Event that names only its anchor), the anchor alone, as before. The
+    anchor is excluded because it is not specific to ONE Event: `(forger, record.forged, True)` is the
+    same claim for every forging by that forger, so keying on it would close every LATER forging by him
+    to an investigator who had found (or witnessed) ANY one of them.
 
     One test for both readers: `trail_of` (an Event he holds is not news, so it is not trail) and
     `loop/witness.py`'s found deposit (re-checked there, because a find runs at RESOLVE and two finds of
-    one Event can reach the same WITNESS). Reads `p`'s OWN ledger only (AX-2). ⚠ ANY subject, so a
-    partial finding -- which lands the claim on the written thing and withholds the hand -- also closes
-    the trail to a later, better finding of the same Event: one Event is found once."""
-    subjects = set(claim_subjects(w, e, rule, act_refs(causing_act(w, e))))
-    return any(c.predicate == e.kind and c.value is True and c.subject in subjects for c in p.ledger)
+    one Event can reach the same WITNESS). Reads `p`'s OWN ledger only (AX-2). ⚠ WHAT HOLDS: a held
+    claim on any specific subject closes the Event, so a partial finding -- which lands the claim on
+    the written thing and withholds the hand -- also closes it to a later, better finding of the same
+    Event, and a second finding of the same Event deposits nothing; under the shipped `both` rule a
+    claim on the actor ALONE does not close it. Under the `actor` rule the anchor is the only subject,
+    so there one forging found still closes the forger's others."""
+    subj = claim_subjects(w, e, rule, act_refs(causing_act(w, e)))
+    anchor = anchor_of(w, e)
+    specific = {s for s in subj if s != anchor} or set(subj)
+    return any(c.predicate == e.kind and c.value is True and c.subject in specific for c in p.ledger)
 
 
 def trail_of(w: World, subject: Optional[str], pid: str) -> list:
@@ -342,9 +354,14 @@ def trail_of(w: World, subject: Optional[str], pid: str) -> list:
 
     ⚠ REACHABLE ONLY THROUGH A PLANT, AND THAT IS THE DATA, NOT A GAP HIDDEN HERE: the one covert kind
     today is `record.forged`, a forged Record is minted into the forger's own hand, and an inquiry about
-    it (`research`) is formed by someone else only once a `give` hands it on. The seed-0 realm gives
-    none (`record.given` 0), so it reaches no trail by `research`; a `surveil` of the forger's own rung
-    reads the anchor side."""
+    it (`research`) is formed by someone else only once a `give` hands it on. The seed-0 realm reaches
+    no trail by `research` (pinned by `engine/season/tests/test_fi03_trail.py::
+    test_the_realm_seed_twice_in_one_process_gives_one_hash_and_reaches_no_find`). The anchor side
+    (`written=False`, deeds BY `subject`) is reachable only by a graded inquiry whose subject is a
+    PERSON, and no graded inquiry takes one today (`surveil`'s Person case is named absent in
+    `verb_table.yaml`; a `surveil` aimed at a person's same-id `person` Rung is refused by its
+    `present_at` clause, since nobody stands inside a person's Rung -- observed on `trail_world`,
+    2026-10-17); the walk is kept so such an inquiry needs no second projection."""
     if subject is None:
         return []
     p = w.persons.get(pid)

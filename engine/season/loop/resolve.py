@@ -1054,12 +1054,14 @@ def resolve(self, token: Token, acts: list[Act],
             # for every Event an act produced -- not from `_grade`, so no branch here names a verb, a
             # band or a kind: an unclaimed kind finds nothing, and an ungraded `finding.made` carries no
             # degree and `finding_terms` keys nothing for it -- the data decides. At RESOLVE, after the
-            # act's fold, so the find reads the log as the round's predecessors left it (this round's
-            # own Events reach `w.log` after RESOLVE, `loop/driver.py`). WITNESS deposits it.
+            # act's fold, so the find reads the log as PREVIOUS rounds left it (the log gains a round's
+            # Events only after RESOLVE returns, `loop/driver.py`). WITNESS deposits it.
             # ⚠ REACHABLE BY A `research` ONLY THROUGH A PLANT: the one covert kind (`record.forged`) is
             # minted into the forger's own hand, so another person consults the Record only after a
-            # `give` hands it on. The seed-0 realm plants none (`record.given` 0), so its `research`
-            # findings reach no trail -- a stated residue (`epistemic.trail_of`), not a hidden gap.
+            # `give` hands it on. The seed-0 realm gives none, so its `research` findings reach no
+            # trail -- pinned by `engine/season/tests/test_fi03_trail.py::test_the_realm_seed_twice_
+            # in_one_process_gives_one_hash_and_reaches_no_find`; a stated residue
+            # (`epistemic.trail_of`), not a hidden gap.
             # ⚠ LAYER 1 (`04` §A.2): `loop/witness`'s may-read column lists no driver-held store of
             # finds; `self.findings` is one (`seam/wrappers/fieldwork.py`'s docstring adjudicates).
             _found = find_trail(w, a, _e)
@@ -1179,6 +1181,9 @@ def _refuse_after_the_fact(self, w: "World", out: list, act_ids: list) -> None:
                               degree=first.degree, observed=first.observed)
         for i in at:
             self.act_of.pop(out[i].id, None)
+            # v9 FI-03: a find keyed on a replaced Event would outlive it (WITNESS pops by the ids it
+            # is handed, and this one never enters the log), so it goes with the Event.
+            self.findings.pop(out[i].id, None)
         out[at[0]:at[-1] + 1] = refusal
         for e in refusal:
             self.act_of[e.id] = a

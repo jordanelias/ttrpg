@@ -2293,7 +2293,9 @@ rosters:
       (`record.forged`, v9 IN-45). `conceal`, `arrest`, a covert `destroy_record` (H-75) and a
       costed `surveil` (ED-FI-0009) are unbuilt and belong to their own positions. A trail is
       reachable by a `research` only through a PLANT: the forged Record is minted into the forger's
-      own hand, so someone else consults it only after a `give` hands it on (`record.given`).
+      own hand, so someone else consults it only after a `give` hands it on (`record.given`). The
+      seed-0 realm gives none and reaches no find: pinned by `engine/season/tests/test_fi03_trail.py::
+      test_the_realm_seed_twice_in_one_process_gives_one_hash_and_reaches_no_find`, not counted here.
     values: ["record.forged"]
 
 tables:

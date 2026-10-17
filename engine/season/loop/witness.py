@@ -37,13 +37,15 @@ from ..data.verbs import VERB_TABLE
 # IN-55's `held_claim_ids(w)` exceeds `04:178` a second time, beside the refraction reads: it reads every
 # holder's ledger id set (to decide whether an Event changes only held claims, and so skip its fan),
 # writes no ledger, and is a CONVENTION exceedance justified by IN-55's measured saving.
+# v9 FI-03 exceeds `04:178` twice more, in `_found_claims`: it reads a driver-held store of finds
+# (`self.findings`), and it reads OLDER ticks' Events by id (`_event_by_id`), beyond "this tick's log".
 from ..decision.options import ledger_weigh, refracted_confidence
 from ..epistemic import (SEEN_PREDICATE, _hold_tenure_ends, act_refs, changes_only_held_claims,
                          claim_subjects, held_claim_ids, holds_trail, live_channels, observers_for,
                          seen_of, seen_subject)
 from ..queries import cache, world_q
 from ..queries.world_q import hold_force
-from ..state.attribution import _event_by_id, actor_of, anchor_of
+from ..state.attribution import _event_by_id, actor_of, anchor_of, causing_act
 from ..state.carriers import Claim, Event
 from ..state import ledgers
 from ..state.ids import H, draw_factory
@@ -296,7 +298,10 @@ def _found_claims(self, w, e: Event, claim_rule: str, conf, mode: str, gain):
         f = _event_by_id(w, fid)
         if f is None or holds_trail(w, p, f, claim_rule):
             continue
-        act_f = self.act_of.get(fid)
+        # `act_of` holds only the acts THIS driver folded; a trail Event older than the driver (or
+        # folded by another) is read back through the log's own attribution rule, so `who`, `stratum`
+        # and `marks` still have an act to read.
+        act_f = self.act_of.get(fid) or causing_act(w, f)
         refracting = bool(gain) and actor_of(w, f) != pid
         prior_act = _happened(act_f, f) if refracting else None
         prior_weigh = ledger_weigh(p, w.fixtures) if prior_act is not None else None

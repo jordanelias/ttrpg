@@ -6,7 +6,9 @@ own floor, membership assert and planted falsifier. Nothing here asserts anythin
 
 WHAT IT READS: an `ast.Compare` or a `match` value case is reported when an operand is a string LITERAL
 (or a tuple, list or set of them) in `ids`. NOT SEEN: an id reached without a literal comparison (a dict
-keyed by the id, `.get("<id>")`, a named constant, an id built at runtime) -- a lookup is not a branch.
+keyed by the id -- an `ast.Dict` literal is not walked as an operand --, `.get("<id>")` or any other
+`ast.Call` argument, a named constant, an id built at runtime or inside an f-string's `ast.JoinedStr`)
+-- a lookup is not a branch.
 """
 from __future__ import annotations
 
