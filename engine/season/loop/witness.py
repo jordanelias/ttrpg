@@ -234,7 +234,7 @@ def _told_value(w, pid: str, e: Event, held, told_hash: str = None, stem: str = 
 def _refract(c: Claim, p, channel: str, gain: float, act=None, weigh=None) -> Claim:
     """`c` AS THIS WITNESS RECEIVES IT: `c` with `decision/options.py::refracted_confidence`'s
     confidence (v9 IN-15, `AX-7`'s divergence formula; `H-199`). The one place every deposit below
-    passes through, so the five `Claim` constructions share one rule rather than five. The caller
+    passes through, so the six `Claim` constructions share one rule rather than six. The caller
     decides WHETHER to refract (the gain is live and the witness is not the act's own actor); this
     decides HOW MUCH, and only the confidence moves -- id, value, source and chain are `c`'s.
     `act`/`weigh` reach `dissents`' act-level term (`H-201`): passed by the two deposits that report

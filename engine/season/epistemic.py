@@ -334,6 +334,13 @@ def holds_trail(w: World, p: Person, e: Event, rule: str) -> bool:
     same claim for every forging by that forger, so keying on it would close every LATER forging by him
     to an investigator who had found (or witnessed) ANY one of them.
 
+    ⚠ A SUBJECT IS SPECIFIC TO ONE EVENT ONLY WHEN THE EVENT MINTED IT: each forging mints a fresh Record
+    id, so `(rid, record.forged, True)` is about that forging alone. A repeatable covert deed on one
+    patient (an arrest of the same man twice) would not be, so a held claim also has to be no OLDER
+    than the Event (`c.when >= e.emitted_at`): a claim made before the Event existed cannot be
+    knowledge of it. Nothing changes for `record.forged` (a witness's and a finder's claims are made
+    at or after the forging).
+
     One test for both readers: `trail_of` (an Event he holds is not news, so it is not trail) and
     `loop/witness.py`'s found deposit (re-checked there, because a find runs at RESOLVE and two finds of
     one Event can reach the same WITNESS). Reads `p`'s OWN ledger only (AX-2). ⚠ WHAT HOLDS: a held
@@ -344,7 +351,8 @@ def holds_trail(w: World, p: Person, e: Event, rule: str) -> bool:
     so there one forging found still closes the forger's others."""
     subj = claim_subjects(w, e, rule, act_refs(causing_act(w, e)))
     specific = set(non_anchor_subjects(subj, anchor_of(w, e))) or set(subj)
-    return any(c.predicate == e.kind and c.value is True and c.subject in specific for c in p.ledger)
+    return any(c.predicate == e.kind and c.value is True and c.subject in specific
+               and c.when >= e.emitted_at for c in p.ledger)
 
 
 def trail_of(w: World, subject: Optional[str], pid: str) -> list:

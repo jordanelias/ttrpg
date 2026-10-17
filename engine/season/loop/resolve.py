@@ -1051,7 +1051,8 @@ def resolve(self, token: Token, acts: list[Act],
             self.act_of[_e.id] = a
             # v9 FI-02 + FI-03 (`SM-3`, `ED-FI-0002`): WHAT THIS EVENT UNCOVERS, through the `inquiry`
             # role, dispatched by the Event's KIND (`seam.find_trail`; `rosters.yaml: inquiry_modules`)
-            # for every Event an act produced -- not from `_grade`, so no branch here names a verb, a
+            # for every Event THIS LOOP SEES (the fold's and `_contest`/`_grade`'s outputs; not an admit
+            # refusal, not an after-the-fact replacement, not ENCOUNTER's) -- not from `_grade`, so no branch here names a verb, a
             # band or a kind: an unclaimed kind finds nothing, and an ungraded `finding.made` carries no
             # degree and `finding_terms` keys nothing for it -- the data decides. At RESOLVE, after the
             # act's fold, so the find reads the log as PREVIOUS rounds left it (the log gains a round's

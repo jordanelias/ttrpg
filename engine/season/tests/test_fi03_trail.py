@@ -65,7 +65,7 @@ from ..queries import world_q
 from ..queries.inputs import Findings
 from ..seam import find_trail
 from ..state.attribution import actor_of
-from ..state.carriers import Act, Event, Proposition, Tenure, View
+from ..state.carriers import Act, Claim, Event, Proposition, Tenure, View
 from ._closure_scan import branches_on_ids, game_code
 from ._fresh_process import probe
 from .test_information_cluster import _hear
@@ -280,6 +280,22 @@ def test_a_blind_band_lands_the_claim_on_the_record_and_withholds_the_hand():
 # ======================================================================================
 # 3 -- WHAT HE ALREADY HOLDS IS NOT NEWS (R5: any subject, whatever its `when`)
 # ======================================================================================
+
+def test_a_claim_older_than_the_event_does_not_close_the_trail():
+    """`holds_trail` also requires the held claim to be no OLDER than the Event (a claim made before the
+    deed existed cannot be knowledge of it). Same world, same Record, same subject, same predicate: a
+    claim stamped before the forging leaves the trail open to the investigator; the same claim stamped at
+    the forging closes it. The repeatable-deed case (an arrest of one man twice) rests on this; for
+    `record.forged` the other tests already show nothing else moves."""
+    w, d, rid = trail_world()
+    e = forged_event(w)
+    assert trail_of(w, rid, INVESTIGATOR) != [], "the world offers the investigator no trail to close"
+    held = Claim("c_older", INVESTIGATOR, rid, "record.forged", True, e.emitted_at - 1, "inferred", 50, "own")
+    w.persons[INVESTIGATOR].ledger.append(held)
+    assert trail_of(w, rid, INVESTIGATOR) != [], "a claim older than the forging closed its trail"
+    w.persons[INVESTIGATOR].ledger[-1] = dataclasses.replace(held, id="c_at", when=e.emitted_at)
+    assert trail_of(w, rid, INVESTIGATOR) == [], "a claim made at the forging did not close its trail"
+
 
 def test_a_second_research_of_the_same_record_deposits_nothing():
     """After a hand-band find, a second `research` of the same Record, a tick later, at a finding band:

@@ -228,7 +228,7 @@ print(repr((ROSTER, key, bad["module"], refusal)))
 
 _PLANTS = """
 from engine.season.manifest import PROVIDERS
-from engine.season.data.rosters import COVERT_KINDS
+from engine.season.data.rosters import COVERT_KINDS, UNDEPOSITED_KINDS
 KEY = sorted(ROWS)[0]
 NAME = ROWS[KEY]["provider"]
 
@@ -256,15 +256,16 @@ out = dict(
     unregistered=with_provider(None),
     no_keyword=with_provider(lambda w, a, e: None),
     ungraded_kind=with_rows(dict(ROWS, **{sorted(COVERT_KINDS)[0]: ROWS[KEY]})),
+    undeposited_key=with_rows(dict(ROWS, **{sorted(UNDEPOSITED_KINDS)[0]: ROWS[KEY]})),
 )
-print(repr((ROSTER, KEY, NAME, sorted(COVERT_KINDS)[0], out)))
+print(repr((ROSTER, KEY, NAME, sorted(COVERT_KINDS)[0], sorted(UNDEPOSITED_KINDS)[0], out)))
 """
 
 
 @functools.lru_cache(maxsize=None)
 def _plants():
-    roster, key, name, kind, out = _fresh(_PLANTS)
-    return SimpleNamespace(roster=roster, key=key, name=name, kind=kind, out=out)
+    roster, key, name, kind, dropped, out = _fresh(_PLANTS)
+    return SimpleNamespace(roster=roster, key=key, name=name, kind=kind, dropped=dropped, out=out)
 
 
 def _refused(case: str, *names: str) -> None:
@@ -304,3 +305,11 @@ def test_fi02_an_inquiry_row_keyed_on_a_kind_no_graded_verb_emits_refuses_naming
     """B2 (e), `_graded_verb_emits_it`: a second row, keyed on a covert deed kind, same entry -> refused
     naming that key: no graded inquiry emits it, so it would reach the entry carrying no degree."""
     _refused("ungraded_kind", repr(_plants().kind), "no graded inquiry emits")
+
+
+def test_fi02_an_inquiry_row_keyed_on_an_undeposited_kind_refuses_naming_it():
+    """Phase 3: WITNESS drops an `undeposited_kinds` Event before the found deposit pops its find, so a
+    row keyed on one would lose every find and grow `SeasonDriver.findings` each round -> refused naming
+    the key at construction. RED WHEN PLANTED (2026-10-17): the refusal's condition set to `False`."""
+    plants = _plants()
+    _refused("undeposited_key", plants.roster, repr(plants.dropped), "undeposited_kinds")

@@ -5,7 +5,7 @@
 ## Open
 | item | where it lives | next step |
 |---|---|---|
-| Batch B-O (third sub-batch: FI-03 with FI-02) — IN FLIGHT | `workplans/valoria_master_workplan_v9_part6.md` FI-03 and FI-02; open b82b96e6 | built FI-02 FI-03 · close 2 · Phase 3 next |
+| Batch B-O (third sub-batch: FI-03 with FI-02) — IN FLIGHT | `workplans/valoria_master_workplan_v9_part6.md` FI-03 and FI-02; open b82b96e6 | built FI-02 FI-03 · close 3 · suite, expunge next |
 | investigation degree producer (work item 4.5) | `registers/editorial_ledger_fi.jsonl` (`ED-FI-0009`) | FI-01 BUILT `6d94d9d3` (three inquiries graded; the skip arm; the strict skip's consequence is named in `engine/season/rosters.yaml` `undeposited_kinds`, H-111 `grade: assumption`); NOT DONE: the ED-FI-0009 ledger row, `engine/season/requirements.yaml` R-05/R-09 readings and the `11` re-take at `2x3` (R-01/R-02 predate the skip arm), `surveil`'s Person case, `verb_capability` rows for the inquiries (`obstacle_default` holds only while none exists); then FI-02, STOPPED (no fieldwork provider; `workplans/valoria_master_workplan_v9_part6.md` FI-02 carries the five measured facts and the recommendation to build it with FI-03) |
 | counter-espionage detection/response loop | `registers/editorial_ledger_fi.jsonl` (`ED-FI-0002`) | Design the loop with fieldwork as host (Exposure is the symmetric mechanic) (v9 FI-03, `workplans/valoria_master_workplan_v9_part6.md`: after IN-06 and FI-02) |
 

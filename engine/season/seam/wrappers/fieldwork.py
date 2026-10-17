@@ -22,7 +22,9 @@ unit takes (i)** and states the deviation for amendment: column 3, *"a `Margin`"
 (`Findings`, held at the module boundary as `sigma.py` holds `Margin`), and nothing else in the row moves.
 A second deviation lives with the caller: `loop/witness`'s may-read column (`04` §A.2) does not list a
 driver-held `findings` store, and the found deposit reads one (`SeasonDriver.findings`, `act_of`'s shape:
-event-keyed, driver-owned, resolver-side). Both are Layer 1 amendments, recorded and NOT made here.
+event-keyed, driver-owned, resolver-side). A third: `seam/contest.py::find_trail` (the `seam/contest` row, `04:180`, "returns Events + degree, or a typed
+refusal") returns the module's `((event id, terms), ...)` pairs, as `grade()` returns a Margin. All three are
+Layer 1 amendments, recorded and NOT made here.
 
 ⚠ THIS MODULE IMPORTS NOTHING FROM `systems/` OR `modules/` AND INSERTS NO `sys.path`. The entry is
 reached by STRING, through `MODULE_ENTRIES`, as `sigma.py`'s is. A call reaching here before any driver

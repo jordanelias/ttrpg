@@ -380,6 +380,7 @@ def check_inquiry_modules(verb_table: dict) -> list:
     THIS IS THE DECLARATION THAT THE COMPOSITION ROW MUST EXIST: in a fresh process the registrar holds
     nothing to miss, so a deleted `fieldwork.find` row is refused here, naming it. Returns the
     `(role, key)` rows checked, so a caller can see the sweep was not empty (`CLAUDE.md` §0.1 pt 2)."""
+    from ..data.rosters import UNDEPOSITED_KINDS
     role = "inquiry"
     roster, column = _ROLE_ROSTERS[role]
     checked = []
@@ -401,6 +402,12 @@ def check_inquiry_modules(verb_table: dict) -> list:
                 law="A-25 -- the inquiry role's provider calls its module through the entry the row "
                     "names; a row naming none reaches `ENGINE-UNAVAILABLE` at the first find rather "
                     "than refusing construction")
+        if key in UNDEPOSITED_KINDS:
+            raise Unspecified(
+                f"`{roster}` row {key!r} is keyed on a kind `undeposited_kinds` drops at WITNESS", "S43",
+                needs="a key that reaches WITNESS, or the kind removed from `undeposited_kinds`",
+                law="WITNESS drops an `undeposited_kinds` Event before the found deposit pops its find, "
+                    "so the find would be lost and `SeasonDriver.findings` would grow every round")
         _check_module_entry(role, key, row, verb_table, _STEP_CALL, _graded_verb_emits_it)
         if not _takes_module_entry(role, name):
             raise Unspecified(
