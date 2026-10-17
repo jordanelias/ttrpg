@@ -27,34 +27,10 @@ The ticks are advanced by hand between the stages so each stage's claims are tol
 THE BANDS ARE READ OFF THE DATA, NEVER SPELT: a band whose `finding_terms` row shows `HAND_TERM` is a
 "hand" band, one whose row shows terms but not it a "blind" band.
 
-RED WHEN PLANTED (each run 2026-10-17 on the build tree, then restored): the hand mask in
-`_found_claims` dropped (`HAND_TERM in terms or s != hand` -> `True`) -- `test_a_blind_band_...` goes RED;
-`holds_trail`'s re-check in `_found_claims` dropped -- `test_two_finds_of_one_trail_in_one_round_...`
-goes RED; `holds_trail` made to compare `when` with `emitted_at` (the design's first exclusion) --
-`test_a_second_research_of_the_same_record_deposits_nothing` and the one-round test go RED.
-
 STEP 3, THE EXIT TESTS (sections 5-7): the position's falsifier over the tree's existing response surface
 (Q2 -> `opening_set`; no goal edit, no decision code), the entity-id closure in SC-01 step 16's form
 (`_closure_scan.py`, the one walk), and one seed run twice in one process giving one hash.
-RED WHEN PLANTED (2026-10-17, each run then restored; the test-side plants on a scratch copy of this file,
-deleted): `fieldwork_input` projecting no trail item -- the found-trail half and both twice-hash tests go
-RED; the control arm left unsuppressed (precondition dropped) -- `trail_qs == []` goes RED;
-`trail_of` walking `faction.surveyed` beside `covert_kinds` -- the survey control goes RED at its
-`trail_of` precondition; the survey's positive arm without the listing -- RED ("the control is vacuous");
-`npcs.yaml` dropped from the union -- the plant's `npcs.yaml` case goes RED; the main twice-hash test
-under the drop-after-1 counter -- RED (`[1, 0]`); the control without the counter -- RED (one hash);
-the realm with the chooser's draw seeded one higher per call -- RED (two hashes); the realm with the
-provider forced to uncover any other hand's forging -- RED ("the realm now reaches a find").
-BATCH-CLOSE ADDITIONS (2026-10-17, each run then restored): `holds_trail` keyed on every claim subject
-(the anchor included) -- `test_a_found_forger_s_other_forging_is_still_trail` RED; keyed on the anchor
-alone -- `test_a_partial_find_closes_...` RED; `_found_claims` reading `act_of` alone -- `test_a_trail_
-older_than_the_driver_...` RED (`who` None); the found claims stamped round 0 -- the season-loop test
-RED; `modules/fieldwork/find.py` importing `data/rosters.py` -- the fresh-process import probe RED; the
-two loaders' `if bad:` set False -- both pure refusal tests RED; the module returning a fabricated item
-id for every graded finding -- the realm test RED on its empty-`Findings` assertion (a fabricated id
-reads back as `None` in `_found_claims` and deposits nothing, so the deposit assertion alone cannot see
-it). Without `scanned_game_code`'s exclusion the closure
-scan reports `harness/probes.py`'s scripted choosers on `tiny_world` ids (`p_high`, `p_mid`).
+Without `scanned_game_code`'s exclusion the closure scan reports `harness/probes.py`'s scripted choosers on `tiny_world` ids (`p_high`, `p_mid`).
 """
 from __future__ import annotations
 
@@ -62,6 +38,7 @@ import ast
 import dataclasses
 import functools
 import inspect
+import itertools
 import re
 from pathlib import Path
 
@@ -88,9 +65,10 @@ from ..queries import world_q
 from ..queries.inputs import Findings
 from ..seam import find_trail
 from ..state.attribution import actor_of
-from ..state.carriers import Act, Claim, Event, Proposition, Tenure, View
+from ..state.carriers import Act, Event, Proposition, Tenure, View
 from ._closure_scan import branches_on_ids, game_code
 from ._fresh_process import probe
+from .test_information_cluster import _hear
 
 FAC = faction_prop_id("Crown")
 FORGER, INVESTIGATOR, ABOUT = "p_other", "p_high", "p_mid"
@@ -125,9 +103,7 @@ def trail_world(verb="forge", kind="record.forged", second=None):
     for pid in (INVESTIGATOR, ABOUT):
         w.add_tenure(Tenure(f"t_commit_{pid}", pid, FAC, "commit", since=0))
     d = SeasonDriver(w)
-    forger = w.persons[FORGER]
-    forger.ledger.append(Claim(f"c_{FORGER}_{ABOUT}", FORGER, ABOUT, "exists:Person", 1, w.tick,
-                               "firsthand", 1, "own"))
+    _hear(w, FORGER, ABOUT)
     out = step(w, d, Act(id=FORGE_ID, actor=FORGER, verb=verb, payload={"subject": ABOUT}))
     assert [e.kind for e in out] == [kind], [e.kind for e in out]
     (rid,) = [c.subject for c in out[0].changes]
@@ -168,19 +144,43 @@ def research(n, cand):
     return Act(id=f"fi03_research_{n}", actor=INVESTIGATOR, verb=cand.verb, payload=_payload_of(cand))
 
 
-def find_band(bands, *, skip=()):
-    """`(n, w, d, rid, events)` for the first act id in `SWEEP` whose research draws a band in `bands`."""
+def drawn_ids(bands):
+    """Yield `(n, cand)` for each act id `n` in `SWEEP`, in order, whose research (a fresh `trail_world`,
+    resolved alone) draws a band in `bands`; `cand` is the chooser's Candidate in that world."""
     for n in range(SWEEP):
-        if n in skip:
-            continue
         w, d, rid = trail_world()
         cand = chooser_research(w, rid)
         w.step = Step.RESOLVE
         out = d.resolve(mint_token(w, WriteClass.ACTS), [research(n, cand)],
                         contest_max_depth=w.fixtures.get("contest_max_depth"))
         if out and out[0].degree in bands:
-            return n, cand
+            yield n, cand
+
+
+@functools.lru_cache(maxsize=None)
+def find_band(bands):
+    """`(n, cand)` for the first act id in `SWEEP` whose research draws a band in `bands` (a frozenset).
+    Memoised: the draw depends on the world's seed and the act id, not on `FINDING_TERMS`, so the result
+    is a function of `bands` alone (callers only read the returned Candidate)."""
+    for found in drawn_ids(bands):
+        return found
     raise AssertionError(f"{SWEEP} act ids drew no band in {sorted(bands)}")
+
+
+def step_until(w, d, cand, prefix, ok):
+    """Step the investigator's `research` as `<prefix>_<m>` for `m` in `SWEEP` until `ok(degree)` holds
+    of its finding's degree; returns that round's Events. Raises when no id reached it."""
+    for m in range(SWEEP):
+        out = step(w, d, research(f"{prefix}_{m}", cand))
+        if ok(out[0].degree):
+            return out
+    raise AssertionError(f"{SWEEP} act ids `{prefix}_*` drew no band the test needs")
+
+
+def suppress_finding_terms(monkeypatch):
+    """The CONTROL ARM: `finding_terms` emptied. The band is drawn identically; nothing of the trail lands."""
+    for band in list(FINDING_TERMS):
+        monkeypatch.delitem(FINDING_TERMS, band)
 
 
 def found_deposits(w, finding_id):
@@ -248,8 +248,7 @@ def test_a_hand_band_deposits_the_forgers_deed_and_the_control_deposits_nothing(
     assert len(deposits) == 3 and all(e.causes == [finding.id, f.id] for e in deposits), deposits
     assert d.findings == {}, "WITNESS left a find on the driver"
 
-    for band in list(FINDING_TERMS):
-        monkeypatch.delitem(FINDING_TERMS, band)
+    suppress_finding_terms(monkeypatch)
     w, d, rid = trail_world()
     (finding2,) = step(w, d, research(n, cand))
     assert (finding2.kind, finding2.degree, finding2.id) == (finding.kind, finding.degree, finding.id)
@@ -294,12 +293,7 @@ def test_a_second_research_of_the_same_record_deposits_nothing():
     assert before == 2, before
     assert trail_of(w, rid, INVESTIGATOR) == [], "the trail is still news after it was found"
     w.tick += 1
-    for m in range(SWEEP):
-        out = step(w, d, research(f"again_{m}", cand))
-        if out[0].degree in FINDING_TERMS:
-            break
-    else:
-        raise AssertionError("no second research drew a finding band")
+    out = step_until(w, d, cand, "again", lambda degree: degree in FINDING_TERMS)
     assert found_deposits(w, out[0].id) == [], found_deposits(w, out[0].id)
     assert len(forged_claims(w, INVESTIGATOR)) == before
 
@@ -308,17 +302,7 @@ def test_two_finds_of_one_trail_in_one_round_deposit_it_once():
     """Two `research` acts of the same Record in ONE round both find the trail at RESOLVE (the log does
     not yet hold the first one's deposits), so the re-check at WITNESS (`_found_claims`' `holds_trail`) is
     what keeps one Event found once: the second finding deposits nothing."""
-    picks = []
-    for n in range(SWEEP):
-        w, d, rid = trail_world()
-        cand = chooser_research(w, rid)
-        w.step = Step.RESOLVE
-        out = d.resolve(mint_token(w, WriteClass.ACTS), [research(n, cand)],
-                        contest_max_depth=w.fixtures.get("contest_max_depth"))
-        if out[0].degree in HAND_BANDS:
-            picks.append(n)
-        if len(picks) == 2:
-            break
+    picks = [n for n, _ in itertools.islice(drawn_ids(HAND_BANDS), 2)]
     assert len(picks) == 2, f"{SWEEP} act ids drew fewer than two hand bands: {picks}"
     w, d, rid = trail_world()
     cand = chooser_research(w, rid)
@@ -349,12 +333,7 @@ def test_a_partial_find_closes_the_same_trail_to_a_later_better_one():
     step(w, d, research(n, cand))
     assert {c.subject for c in forged_claims(w, INVESTIGATOR)} == {rid}
     w.tick += 1
-    for m in range(SWEEP):
-        out = step(w, d, research(f"better_{m}", cand))
-        if out[0].degree in HAND_BANDS:
-            break
-    else:
-        raise AssertionError("no later research drew a hand band")
+    out = step_until(w, d, cand, "better", HAND_BANDS.__contains__)
     assert found_deposits(w, out[0].id) == [], found_deposits(w, out[0].id)
     assert {c.subject for c in forged_claims(w, INVESTIGATOR)} == {rid}
 
@@ -394,12 +373,7 @@ def test_a_found_forger_s_other_forging_is_still_trail():
     assert [e.id for e in trail_of(w, rid_b, INVESTIGATOR)] == [fb.id], "the second forging is not trail"
     cand_b = chooser_research(w, rid_b)
     assert cand_b is not None, "the chooser forms no `research` on the second Record"
-    for m in range(SWEEP):
-        out = step(w, d, research(f"b_{m}", cand_b))
-        if FINDING_TERMS.get(out[0].degree):
-            break
-    else:
-        raise AssertionError("no research of the second Record drew a finding band")
+    out = step_until(w, d, cand_b, "b", FINDING_TERMS.get)
     deposits = found_deposits(w, out[0].id)
     assert deposits and all(e.causes == [out[0].id, fb.id] for e in deposits), deposits
     assert rid_b in {c.subject for c in forged_claims(w, INVESTIGATOR)}
@@ -461,7 +435,7 @@ def test_the_module_is_pure_and_orders_by_emission():
     Reached by STRING, as the host reaches it -- the entry the registrar resolved from its composition
     row at driver construction -- so this file names no module code by import."""
     from ..queries.inputs import FieldworkInput, TrailItem
-    trail_world()                                   # constructs a driver: the registrar has run
+    _registered()
     find = MODULE_ENTRIES[manifest_resolve("inquiry", "finding.made")["module_entry"]].fn
     items = (TrailItem("b", "record.forged", 3), TrailItem("a", "record.forged", 3),
              TrailItem("c", "record.forged", 1))
@@ -511,7 +485,7 @@ def test_a_finding_terms_row_off_the_ladder_or_off_the_terms_refuses_naming_it()
     """B2 (a): `data/rosters.py::_load_finding_terms`, called on planted rows. The shipped rows load (the
     control); a band no ladder label names, and a term `observation_terms` does not carry, each refuse
     naming it."""
-    bands, terms = frozenset(rosters._DEGREE_LABEL.values()), rosters.OBSERVATION_TERMS
+    bands, terms = rosters.DEGREE_BANDS, rosters.OBSERVATION_TERMS
     shipped = rosters.roster_map("finding_terms", "bands")
     assert rosters._load_finding_terms(shipped, bands, terms) == {b: tuple(v) for b, v in shipped.items()}
     with pytest.raises(Unspecified, match="'Middling'"):
@@ -586,8 +560,7 @@ def test_a_found_trail_forms_a_response_on_the_forger_and_a_suppressed_one_forms
     assert all(c.source == "inferred" and c.doer is None for _, c in trail_qs), trail_qs
     assert from_trail, "the question about the forger's deed formed no candidate on him"
 
-    for band in list(FINDING_TERMS):
-        monkeypatch.delitem(FINDING_TERMS, band)
+    suppress_finding_terms(monkeypatch)
     w, rid, finding2 = after_research(n, cand)
     assert (finding2.kind, finding2.degree, finding2.id) == (finding.kind, finding.degree, finding.id)
     assert forged_claims(w, INVESTIGATOR) == [] and found_deposits(w, finding2.id) == [], (
@@ -665,10 +638,17 @@ def scanned_game_code() -> list:
     return [f for f in game_code() if f.resolve() != probes]
 
 
+@functools.lru_cache(maxsize=None)
+def _registered():
+    """Construct a driver once per process: the registrar runs on construction and fills the provider and
+    entry tables, which is all the callers below need of a world."""
+    SeasonDriver(P.tiny_world())
+
+
 def _provider_and_entry_files() -> tuple:
     """The fieldwork container's two files, read off what is REGISTERED (the provider the `inquiry` row
     names, the entry its composition row resolved), not spelt as paths."""
-    trail_world()                                   # constructs a driver: the registrar has run
+    _registered()
     row = manifest_resolve("inquiry", "finding.made")
     prov = PROVIDERS[("inquiry", row["provider"])]
     entry = MODULE_ENTRIES[row["module_entry"]].fn
@@ -723,7 +703,7 @@ def count_finds(monkeypatch, drop_after=None) -> list:
     """Wrap the registered `inquiry` provider (the entry every finding reaches, `seam.find_trail`) to
     record how many items each call's `Findings` held. `drop_after=N` is the CONTROL'S PLANT: a counter
     kept across calls (as module state would be) that returns `Findings(())` from call N + 1 on."""
-    trail_world()                                   # the provider table is filled
+    _registered()
     key = ("inquiry", manifest_resolve("inquiry", "finding.made")["provider"])
     real, seen = PROVIDERS[key], []
 

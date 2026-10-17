@@ -27,6 +27,9 @@ from __future__ import annotations
 import functools
 import subprocess
 import sys
+from types import SimpleNamespace
+
+from .test_module_registrar import _run
 
 ROOT = __file__.rsplit("/tests/", 1)[0]
 
@@ -130,32 +133,19 @@ def test_emptying_the_provider_table_refuses_driver_construction():
 
 _ROLE = "inquiry"
 
-_FRESH = """
-import sys
-sys.path.insert(0, {root!r})
-from engine.substrate import composition
+# The shared fresh-process harness is `test_module_registrar.py`'s (`_run` formats only `root` into
+# `_HEAD`: the driver, `World`, `MODULE_ENTRIES`, `composition` and `construct()`); this adds the role's
+# own rows. Built with `repr`, so the preamble carries no `{}` placeholder.
+_ROLE_PREAMBLE = f"""
 import engine.season.manifest.registry as R
-from engine.season.loop.driver import SeasonDriver
-from engine.season.manifest import MODULE_ENTRIES
-from engine.season.state.world import World
-ROLE = {role!r}
+ROLE = {_ROLE!r}
 ROSTER, COLUMN = R._ROLE_ROSTERS[ROLE]
 ROWS = R.roster_map(ROSTER, COLUMN)
-
-def construct():
-    try:
-        SeasonDriver(World(0))
-        return None
-    except Exception as exc:                  # the type is asserted by the test
-        return (type(exc).__name__, str(exc))
 """
 
 
 def _fresh(body: str):
-    out = subprocess.run([sys.executable, "-c", _FRESH.format(root=ROOT, role=_ROLE) + body],
-                         capture_output=True, text=True, timeout=600)
-    assert out.returncode == 0, out.stderr[-3000:]
-    return eval(out.stdout.strip().splitlines()[-1])     # our own probe's repr
+    return _run(_ROLE_PREAMBLE + body)
 
 
 def test_fi02_exit_check_rows_returns_a_pair_for_the_inquiry_role():
@@ -273,11 +263,12 @@ print(repr((ROSTER, KEY, NAME, sorted(COVERT_KINDS)[0], out)))
 
 @functools.lru_cache(maxsize=None)
 def _plants():
-    return _fresh(_PLANTS)
+    roster, key, name, kind, out = _fresh(_PLANTS)
+    return SimpleNamespace(roster=roster, key=key, name=name, kind=kind, out=out)
 
 
 def _refused(case: str, *names: str) -> None:
-    roster, key, name, kind, out = _plants()
+    out = _plants().out
     assert out["control"] is None, f"the shipped rows do not construct: {out['control']}"
     refusal = out[case]
     assert refusal is not None, f"plant {case!r} did NOT refuse construction"
@@ -290,26 +281,26 @@ def _refused(case: str, *names: str) -> None:
 def test_fi02_an_inquiry_row_with_no_module_entry_refuses_naming_it():
     """B1: the role's row with its `module_entry:` popped -> construction refuses naming the roster, the
     row and the missing field (it passed `_check_module_entry` unchecked, and failed at the first find)."""
-    roster, key, _, _, _ = _plants()
-    _refused("no_entry", roster, repr(key), "module_entry")
+    plants = _plants()
+    _refused("no_entry", plants.roster, repr(plants.key), "module_entry")
 
 
 def test_fi02_an_unregistered_inquiry_provider_refuses_naming_it():
     """B2 (c), step 1: ONLY the inquiry row's provider popped from the table (every contest provider
     stays, so `check_contest_prizes` passes) -> refused naming the roster, the row and the provider."""
-    roster, key, name, _, _ = _plants()
-    _refused("unregistered", roster, repr(key), repr(name), "nobody registered")
+    plants = _plants()
+    _refused("unregistered", plants.roster, repr(plants.key), repr(plants.name), "nobody registered")
 
 
 def test_fi02_an_inquiry_provider_without_the_module_entry_keyword_refuses_naming_it():
     """B2 (d), step 3: the provider replaced by one taking no `module_entry` keyword -> refused naming
     the row and the keyword, at construction rather than as a `TypeError` at the first find."""
-    roster, key, name, _, _ = _plants()
-    _refused("no_keyword", roster, repr(key), repr(name), "no `module_entry` keyword")
+    plants = _plants()
+    _refused("no_keyword", plants.roster, repr(plants.key), repr(plants.name),
+             "no `module_entry` keyword")
 
 
 def test_fi02_an_inquiry_row_keyed_on_a_kind_no_graded_verb_emits_refuses_naming_it():
     """B2 (e), `_graded_verb_emits_it`: a second row, keyed on a covert deed kind, same entry -> refused
     naming that key: no graded inquiry emits it, so it would reach the entry carrying no degree."""
-    _, _, _, kind, _ = _plants()
-    _refused("ungraded_kind", repr(kind), "no graded inquiry emits")
+    _refused("ungraded_kind", repr(_plants().kind), "no graded inquiry emits")

@@ -38,14 +38,14 @@ from ..data.verbs import VERB_TABLE
 # holder's ledger id set (to decide whether an Event changes only held claims, and so skip its fan),
 # writes no ledger, and is a CONVENTION exceedance justified by IN-55's measured saving.
 # v9 FI-03 exceeds `04:178` twice more, in `_found_claims`: it reads a driver-held store of finds
-# (`self.findings`), and it reads OLDER ticks' Events by id (`_event_by_id`), beyond "this tick's log".
+# (`self.findings`), and it reads OLDER ticks' Events by id (`event_by_id`), beyond "this tick's log".
 from ..decision.options import ledger_weigh, refracted_confidence
 from ..epistemic import (SEEN_PREDICATE, _hold_tenure_ends, act_refs, changes_only_held_claims,
-                         claim_subjects, held_claim_ids, holds_trail, live_channels, observers_for,
-                         seen_of, seen_subject)
+                         claim_subjects, held_claim_ids, holds_trail, live_channels,
+                         non_anchor_subjects, observers_for, seen_of, seen_showing, seen_subject)
 from ..queries import cache, world_q
 from ..queries.world_q import hold_force
-from ..state.attribution import _event_by_id, actor_of, anchor_of, causing_act
+from ..state.attribution import event_by_id, actor_of, anchor_of, causing_act
 from ..state.carriers import Claim, Event
 from ..state import ledgers
 from ..state.ids import H, draw_factory
@@ -275,27 +275,20 @@ require_member(HAND_TERM, OBSERVATION_TERMS,
 
 def _found_claims(self, w, e: Event, claim_rule: str, conf, mode: str, gain):
     """v9 FI-03 (`ED-FI-0002`): THE CLAIMS A FINDING DEPOSITS -- `(finder, trail Event, Claim)` per claim,
-    yielded per uncovered trail Event so each re-check below sees the deposits already written.
+    yielded per uncovered trail Event so each re-check sees the deposits already written.
 
-    The finder is the finding Event's actor (`actor_of`); what he found is `self.findings[e.id]`, popped
-    (`((trail id, terms shown), ...)`, put there at RESOLVE). For each trail Event `f`, unless he ALREADY
-    HOLDS IT (`epistemic.holds_trail`, re-checked here because a find runs at RESOLVE and two finds of one
-    Event can reach one WITNESS -- a second `research` of the same Record deposits nothing):
-      * the EVENT-KIND claims a witness would hold: one per `claim_subjects(f)` -- the one owner of *what a
-        deposit is about*, with the act's refs, as the fan reads them -- minus the subject `f` is ANCHORED
-        on (the actor) when the band does not show `HAND_TERM`. `doer=None`: he is not the doer;
-      * the `seen` claim: `seen_subject` / `seen_of` under `total` (every term), then every term the band
-        does not show set to `None` -- the mask is the only new logic.
-    Source `FOUND_CHANNEL`'s, `inferred`; refracted under the fan's own rule (`gain` live and the finder
-    not the act's actor, which `trail_of` already guarantees), with the act-level prior for both."""
+    `self.findings` is POPPED here (`((trail id, terms shown), ...)`, put there at RESOLVE). The
+    `holds_trail` re-check exists because two finds of one Event can reach one WITNESS -- a second
+    `research` of the same Record deposits nothing. The claims are the fan's own shapes
+    (`claim_subjects`, `seen_subject`), masked to the terms the band shows (`seen_showing`)."""
     found = self.findings.pop(e.id, ())
     pid = actor_of(w, e) if found else None
-    p = w.persons.get(pid) if pid is not None else None
+    p = w.persons.get(pid)
     if p is None:
         return
     src = CHANNEL_CLAIM_SOURCE[FOUND_CHANNEL]
     for fid, terms in found:
-        f = _event_by_id(w, fid)
+        f = event_by_id(w, fid)
         if f is None or holds_trail(w, p, f, claim_rule):
             continue
         # `act_of` holds only the acts THIS driver folded; a trail Event older than the driver (or
@@ -305,16 +298,15 @@ def _found_claims(self, w, e: Event, claim_rule: str, conf, mode: str, gain):
         refracting = bool(gain) and actor_of(w, f) != pid
         prior_act = _happened(act_f, f) if refracting else None
         prior_weigh = ledger_weigh(p, w.fixtures) if prior_act is not None else None
-        hand = anchor_of(w, f)
-        subjects = [s for s in claim_subjects(w, f, claim_rule, act_refs(act_f))
-                    if HAND_TERM in terms or s != hand]
+        subjects = claim_subjects(w, f, claim_rule, act_refs(act_f))
+        if HAND_TERM not in terms:
+            subjects = non_anchor_subjects(subjects, anchor_of(w, f))
         out = [Claim(H(w.world_seed, w.tick, pid, f"found:{e.id}:{fid}:{n}"), pid, subj, f.kind,
                      True, w.tick, src, conf, "own", self.round, doer=None)
                for n, subj in enumerate(subjects)]
         subj = seen_subject(w, f, pid, mode)
         if subj is not None:
-            shown = seen_of(w, f, act_f, pid, "total")
-            masked = replace(shown, **{t: None for t in OBSERVATION_TERMS if t not in terms})
+            masked = seen_showing(w, f, act_f, terms)
             out.append(Claim(H(w.world_seed, w.tick, pid, f"found_seen:{e.id}:{fid}"), pid, subj,
                              SEEN_PREDICATE, masked, w.tick, src, conf, "own", self.round, doer=None))
         for c in out:
@@ -532,7 +524,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
         fan = fan + [(pid, by_id[eid], SEAT_CHANNEL) for pid, eid in sorted(reported)]
     # THE CAP, ONE BODY FOR EVERY DEPOSIT THAT CAN FILL A LEDGER: the fan's, and since v9 FI-03 the found
     # deposit after it (one rule, two callers -- the loop below called it inline until then).
-    def _cap(p) -> None:
+    def _cap(p, w=w, token=token, cap=cap) -> None:
         # ⚠ `while`, NOT `if`. THE CAP WAS NOT A CAP. One deposit can mint SEVERAL claims --
         # `claim_subjects` returns one per `StateChange` under the `per_change` rule -- and a
         # single `if` pops exactly one, so the ledger settled at 203 against `L = 200`. A cap
@@ -978,26 +970,27 @@ def witness(self, token: Token, events: list[Event]) -> int:
                             emits="claim.deposited", subject=tc.id, causes=[e.id])
                     TRACE.claim(pid, e.id, "told_by")
                     deposits += 1
-        _cap(p)
-    # v9 FI-03 (`ED-FI-0002`): THE FIFTH DEPOSIT -- WHAT A FINDING UNCOVERED, INTO THE FINDER'S OWN LEDGER.
+        if len(p.ledger) > cap:
+            _cap(p)
+    # v9 FI-03 (`ED-FI-0002`): THE SIXTH DEPOSIT -- WHAT A FINDING UNCOVERED, INTO THE FINDER'S OWN LEDGER.
     # RESOLVE's per-act bookkeeping asked the `inquiry` role what each Event uncovered and kept the answer
     # on the driver (`self.findings`, `seam.find_trail`); here the finder comes to hold what a WITNESS of
     # each uncovered act would have held, through the same deposit shapes, masked to the terms the band
     # shows (`_found_claims`). After the fan, IN-22's purview append's precedent for a deposit outside the
     # channel fan, so every fan deposit lands in the order it did. `causes=[finding, trail]`: the causal
     # walk runs response -> claim -> finding -> the covert act, the arc ED-FI-0002 asks for.
-    # ⚠ LAYER 1 (`04` §A.2): WITNESS's may-read column lists no driver-held store of finds; this reads one
-    # (`seam/wrappers/fieldwork.py`'s docstring adjudicates the deviation). An empty `self.findings` --
-    # every round with no graded finding of a covert trail -- deposits nothing, so this block is inert.
-    for e in events:
-        for p, f, c in _found_claims(self, w, e, claim_rule, conf, mode, gain):
-            w.write("claim_ledger", token,
-                    lambda p=p, c=c: p.ledger.append(c),
-                    record_kind="Person", fieldname="claim_ledger", driver="Event",
-                    emits="claim.deposited", subject=c.id, causes=[e.id, f.id])
-            TRACE.claim(p.id, e.id, c.source)
-            deposits += 1
-            _cap(p)
+    # ⚠ LAYER 1 (`04` §A.2): see `seam/wrappers/fieldwork.py`. An empty `self.findings` -- every round
+    # with no graded finding of a covert trail -- deposits nothing, so this block is inert.
+    if self.findings:
+        for e in events:
+            for p, f, c in _found_claims(self, w, e, claim_rule, conf, mode, gain):
+                w.write("claim_ledger", token,
+                        lambda p=p, c=c: p.ledger.append(c),
+                        record_kind="Person", fieldname="claim_ledger", driver="Event",
+                        emits="claim.deposited", subject=c.id, causes=[e.id, f.id])
+                TRACE.claim(p.id, e.id, c.source)
+                deposits += 1
+                _cap(p)
     w._in_parallel_map = False
     # S9.3/S28: WITNESS NEVER TOUCHES A BELIEF. Nothing above writes `pursuits` -- its row
     # admits RES only, so a WITNESS attempt would raise rather than be caught by inspection --

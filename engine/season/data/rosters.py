@@ -721,11 +721,15 @@ def _load_finding_terms(mapping: dict, bands, terms) -> dict:
     return {b: tuple(v) for b, v in mapping.items()}
 
 
-# THE BANDS, FROM THE LADDER'S OWNER -- `data/arrangements.py::DEGREE_BANDS`' import, for its reason (a
-# second spelling of the four labels is a second owner of one fact).
+# THE DEGREE BANDS, FROM THE LADDER'S OWNER, BOUND ONCE HERE. `engine/dice_engine/dice_engine.py::DEGREE_LABEL`
+# is the single owner of the ladder (Jordan ruling, 2026-08-14: "THE degree ladder... for every scale of
+# the game"); `data/arrangements.py` imports `DEGREE_BANDS` from this module. A fresh `degree_bands`
+# roster of the same four names collided with a PRE-EXISTING literal in `tests/test_mass_battle_provider.py`,
+# which `test_jordan_no_definition_is_hardcoded_in_a_body` correctly read as two owners of one fact the
+# moment a second one was written down -- so a second spelling of the four labels is a second owner.
 from engine.dice_engine.dice_engine import DEGREE_LABEL as _DEGREE_LABEL   # noqa: E402
-FINDING_TERMS = _load_finding_terms(roster_map("finding_terms", "bands"),
-                                    frozenset(_DEGREE_LABEL.values()), OBSERVATION_TERMS)
+DEGREE_BANDS = frozenset(_DEGREE_LABEL.values())
+FINDING_TERMS = _load_finding_terms(roster_map("finding_terms", "bands"), DEGREE_BANDS, OBSERVATION_TERMS)
 # v9 FI-03: the deed kinds whose Events an inquiry can uncover (`epistemic.trail_of`). Checked against
 # the verb table's deed kinds at import, in `data/verbs.py::_check_covert_kinds` (the table loads there).
 COVERT_KINDS = roster("covert_kinds")
