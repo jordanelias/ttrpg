@@ -261,14 +261,17 @@ def _convicted(w, d, key="sent"):
     out = _fold(w, d, Act(id=f"{key}_dt", actor=DUKE, verb="determine", via=CROWN,
                           payload={"subject": MASTER}))
     assert _kinds(out) == ["matter.determined"], ("fixture: not determined", _kinds(out))
+    assert out[0].degree in ("Overwhelming", "Success"), out[0].degree
 
 
 def test_in40_a_determination_imposed_oblige_is_not_an_oath_and_extends_no_purview():
     """A judge's finding binds the convict to the bench (he joins `establishment_of`, C-1) and must not
     hand the bench the convict's own seat ground: the clause reads an OATH, and a sentence is not one.
     CONTROL, one clause away: the same man voluntarily sworn to the same seat DOES extend it.
-    Mutation: drop the `determined_by` skip in `purview_reaches` (red at the reach assertion)."""
-    w, d = _world()
+    Mutation: drop the `determined_by` skip in `purview_reaches` (red at the reach assertion).
+    v9 SC-03b: `determine` is contested, so the judge is a STRONG one (`pool_default` 30) and the fixture
+    asserts the band it opened at."""
+    w, d = _world(pool_default=30)
     assert not _reaches(w, CROWN, "D2"), "fixture: the Crown seat reaches D2 with nobody bound"
     _convicted(w, d)
     assert MASTER in world_q.establishment_of(w, CROWN), "the sentence did not bind him to the bench"

@@ -13705,11 +13705,17 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # `subject` to the seam. Its prize `a matter` names the social contest container's provider, as
     # `tell`'s `a standing` does (it was an interim row on `sigma_leverage` until steps 13+15); graded
     # on the same ladder (`tests/test_sc01_speak.py` reads all four bands).
+    # ⚠ THE SIXTH ENTRY, `determine` (v9 SC-03b, #453 §10.4 step 4), RE-RECORDED with its reason: the row
+    # is contested through the social contest container's provider (`contests: "a proposition"`, a prize
+    # row no verb claimed until now), graded on the one ladder, and its `Tenure.degree` write has a
+    # producer (`_eff_determine` sets the degree on the edge it opens; `test_u7_remit.py` section 10
+    # reads all four bands).
     assert contested == {"fight": "the body", "tell": "a standing", "march": "a field",
-                         "accept": "the body", "speak": "a matter"}, (
+                         "accept": "the body", "speak": "a matter",
+                         "determine": "a proposition"}, (
         f"the set of contesting verbs moved: {contested}. Every claim `W-E` published about what "
-        "can be graded today is scoped to this set. A SIXTH entry is a real widening and wants "
-        "its own measurement; losing one of these five means its prize row or its verb row has "
+        "can be graded today is scoped to this set. A SEVENTH entry is a real widening and wants "
+        "its own measurement; losing one of these six means its prize row or its verb row has "
         "gone.")
     # Pins the roster against silent growth.
     # ⚠ 37 -> 38, `release` (`04 §A.3` row 14), 2026-09-11; 38 -> 39, `march` (M4,
@@ -15577,4 +15583,6 @@ def test_t4_petition_and_issue_bind_to_and_contest_exactly_as_before():
     assert VERB_TABLE["issue"].counterparty == "to" and not VERB_TABLE["issue"].contests
     checked += 1
     assert checked == 2
-    assert {v for v, r in VERB_TABLE.items() if r.contests and r.counterparty} == {"tell"}
+    # v9 SC-03b: `determine` joins -- it names its party as `counterparty: subject` (v9 plan position `19`)
+    # and is contested now, so the judge rolls against the party exactly as `tell` rolls against the hearer.
+    assert {v for v, r in VERB_TABLE.items() if r.contests and r.counterparty} == {"tell", "determine"}

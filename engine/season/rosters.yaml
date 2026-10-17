@@ -1210,7 +1210,7 @@ rosters:
         module:   "social_contest"
         provider: "social_contest"   # as `a standing`'s: repointed at steps 13 + 15
         module_entry: "social_contest.roll"   # as `a standing`'s
-        # `interim: true` deleted at steps 13 + 15, as `a standing`'s. ⚠ NO VERB CONTESTS THIS PRIZE YET (`verb_table.yaml`: `tell` -> `a standing`, `speak` -> `a matter`).
+        # `interim: true` deleted at steps 13 + 15, as `a standing`'s. `determine` contests it since v9 SC-03b (`speak` -> `a matter`, `tell` -> `a standing`).
         cite:     "as `a standing`. Same ruling, clause (3) honoured by the module since step 14, same repoint."
       "a matter":
         module:   "social_contest"

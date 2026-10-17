@@ -153,13 +153,15 @@ def test_in45_the_petitioner_forms_a_carry_on_a_question_naming_his_petition():
 def test_in45_a_bench_determines_a_carried_matter():
     """The carried item is the docket `open_case` writes: the Duke's bench `determine`s the party
     and takes the matter off it. CONTROL: with no carry the same determination is refused (nothing
-    on the docket)."""
-    w, d = _filed()
+    on the docket). v9 SC-03b: `determine` is contested, so the bench is a STRONG JUDGE (`pool_default`
+    30, as `test_u7_remit.JUDGE`) and the control asserts the band it opened at."""
+    w, d = _filed(DEFAULT_FIXTURES.sweep("pool_default", 30))
     det = Act(id="dt0", actor=DUKE, verb="determine", via=SEAT, payload={"subject": PARTY})
     assert _kinds(_fold(w, d, det)) == ["determine.refused"]
     assert _kinds(_fold(w, d, _carry("c1"))) == ["petition.carried"]
     det = Act(id="dt1", actor=DUKE, verb="determine", via=SEAT, payload={"subject": PARTY})
-    assert _kinds(_fold(w, d, det)) == ["matter.determined"]
+    out = _fold(w, d, det)
+    assert _kinds(out) == ["matter.determined"] and out[0].degree in ("Overwhelming", "Success"), out
     assert world_q.docketed(w, PARTY) == []
 
 

@@ -46,7 +46,7 @@ THE FALSIFIERS, each seen red before it was trusted (2026-10-16, mutations run a
   * A BROKEN CAUSE LINK REDDENS THE BAR: the sitting question built with `about=None` in
     `world_q.questions_for` -- scholastics/6 *no determination's causes reach a date.fired (1
     determined, 1 fired)*.
-  * THE CONTROL beside them, kept as a test (community, seed 13): a held date fires and, after it,
+  * THE CONTROL beside them, kept as a test (doctrine, seed 8; community/13 until SC-03b): a held date fires and, after it,
     the Duke determines the clerk out of his ambition -- the walk is False there, so THE BAR's walk is
     not satisfied by a firing merely preceding a determination.
   * THE CLOSURE TEST: the planted `if arrangement.id == "tribunal":` written into the real
@@ -54,6 +54,15 @@ THE FALSIFIERS, each seen red before it was trusted (2026-10-16, mutations run a
     reports the line; the real effect no longer scans clean); the same plant is kept as a test over
     the real effect's own source.
 No test here asserts execution in the seed-0 realm (v9 §0.5's relaxed exit).
+
+v9 SC-03b (RE-RECORDED): `determine` is a CONTESTED act now, rolled by the Duke's `pool_default` against the
+clerk's obstacle, so at the shipped judge (pool 2, obstacle 2) most determinations are `Failure`
+(`matter.undetermined`, nothing opens). MEASURED 2026-10-17, this world at each of the 15 convictions x
+seeds 0..23, ten seasons, shipped fixtures: 360 runs, ONE proceeding walks (scholastics/6) -- family/13
+drew `Failure` in its fifth season. So the bar runs a STRONG JUDGE (`BAR_FIXTURES`: `pool_default` 30, a
+fixture and not a plant, the sweep `H-126` declares), at which the same 15 x seeds 0..15 sweep gives three
+(family/13, reputation/13, scholastics/6), and the two seeds and season counts of this file are unchanged.
+The `Failure` band and the shipped judge are observed in `test_u7_remit.py` (section 10), not here.
 """
 
 from __future__ import annotations
@@ -82,12 +91,13 @@ DUKE, SEAT, PARTY, WANT = "p_high", "off_duke", "p_mid", "prop_bar_duke_want"
 # is the first season after which the determination stands (traced at build), so each run is no longer
 # than its proceeding.
 PROCEEDINGS = (("scholastics", 6, 6), ("family", 13, 5))
-CONTROL = ("community", 13, 5)
+BAR_FIXTURES = DEFAULT_FIXTURES.sweep("pool_default", 30)       # v9 SC-03b: a judge whose finding opens
+CONTROL = ("doctrine", 8, 5)       # v9 SC-03b: was ("community", 13, 5), which no longer determines at all
 
 
 def _world(conviction: str, seed: int):
     """`tiny_world` at `seed`, the Duke given one conviction and one ambition about the clerk."""
-    w = P.tiny_world(DEFAULT_FIXTURES)
+    w = P.tiny_world(BAR_FIXTURES)
     w.world_seed = seed
     w.persons[DUKE].pursuits = {conviction: 1.0}
     w.propositions[WANT] = Proposition(WANT, "OUGHT", PARTY, "the clerk should answer", True, 0)
@@ -212,7 +222,7 @@ def test_an_injected_act_reddens_the_bar(verb):
 
 
 def test_the_walk_is_false_for_a_determination_the_ambition_raised_beside_a_fired_date():
-    """THE CONTROL. Same world, community at seed 13 (traced at build): the Duke convenes at `S` AND
+    """THE CONTROL. Same world, doctrine at seed 8 (traced at SC-03b; community at seed 13 before it): the Duke convenes at `S` AND
     opens the clerk's case in the same season, so the case is docketed dateless before the sitting
     fires; the sitting's slot forms empty, and two seasons AFTER the firing the Duke determines the
     clerk out of his ambition (`need`, occasion `[ROOT]`). That determination's `causes[]` reach no
