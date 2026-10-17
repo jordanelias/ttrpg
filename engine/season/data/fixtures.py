@@ -417,6 +417,14 @@ DEFAULT_FIXTURES = Fixtures(
     obstacle_refusal_multiple=2,
     # [JUSTIFIED: engine/season/hole_register.yaml H-213 -- `site: Fixtures obstacle_ceiling`, graded `assumption`; M-7 fails at the 1D floor above 2 (p_success 0.0006 at Ob 3), and 2 = obstacle_refusal_multiple x the 1D floor; swept 1 / 2 / 3, `None` the uncapped control]
     obstacle_ceiling=2,
+    # v9 SC-02 `22a` (proceedings `19_PLAN.md` steps 17 and 18): THE ROOM'S TWO MAGNITUDES, carried raw by
+    # `seam/wrappers/sigma.py::contest_input` and composed by `modules/social_contest/roll.py::obstacle`
+    # (`room = reception_gain x reception + proof_step x proofs`, subtracted, floored at `OB_MIN`, under
+    # the ceiling above). `0` is each one's CONTROL: the obstacle as it was before the room existed.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-215 -- `site: Fixtures reception_gain`, graded `assumption`; no document gives how far a bench's regard moves an obstacle, so it is injected and swept 0 / 1 / 2]
+    reception_gain=1.0,                # `H-215`, swept 0 (control) / 1 (SHIPPED) / 2
+    # [JUSTIFIED: engine/season/hole_register.yaml H-216 -- `site: Fixtures proof_step`, graded `assumption`; no document gives how far one unmirrored proof moves an obstacle, so it is injected and swept 0 / 0.25 / 0.5]
+    proof_step=0.25,                   # `H-216`, swept 0 (control) / 0.25 (SHIPPED) / 0.5
     # S12.1 gates verbs on `condition` against per-kind band FLOORS. S22 assigns "band
     # coefficients" and "the obstacle floor" to params; the params document proposes NO
     # VALUES, so these are harness fixtures and A31c sweeps them. S42.2.1 names "three band

@@ -79,8 +79,22 @@ def obstacle(inp: SocialContestInput) -> float:
     PER MATTER (ED-SC-0038's pick): this bounds ONE record's obstacle -- one matter's draw -- and
     nothing composes obstacles across a bundle. `None` is the uncapped control arm. A ceiling below
     the Ob minimum (`OB_MIN`, PP-232) is refused rather than read: it would breach the floor. Nothing floors the composed obstacle itself: a score under 2 composes
-    below `OB_MIN` (score 1 gives 0.5), as the deleted `_obstacle_of` did."""
+    below `OB_MIN` (score 1 gives 0.5), as the deleted `_obstacle_of` did.
+
+    ⚠ THE ROOM'S TERMS ARE THE INSTANCE MODIFIERS THE RULING NAMES (v9 SC-02 `22a`; proceedings
+    `19_PLAN.md` steps 17, 18, 20): `room = reception_gain · reception + proof_step · proofs`, both read
+    raw off the record, is SUBTRACTED -- a bench disposed toward the speaker, and proofs his opponent
+    cannot mirror, make the matter easier; a bench against him makes it harder. A room's favour never
+    takes the obstacle below `OB_MIN` (or below a base already under it): it moves the obstacle, it
+    does not abolish it. The ceiling still bounds the result, so under the shipped `H-213` ceiling (2,
+    the same as `obstacle_default`) a hostile room cannot raise a defaulted obstacle -- stated, not
+    hidden. With no room (both terms 0) this is the obstacle as it was."""
     ob = float(inp.opposition) / 2.0 if inp.opposition is not None else float(inp.obstacle_default)
+    room = float(inp.reception_gain) * float(inp.reception) + float(inp.proof_step) * float(inp.proofs)
+    if room > 0:
+        ob = max(ob - room, min(ob, float(OB_MIN)))
+    elif room < 0:
+        ob = ob - room
     ceiling = inp.obstacle_ceiling
     if ceiling is None:
         return ob

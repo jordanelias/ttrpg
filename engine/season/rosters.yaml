@@ -1273,7 +1273,7 @@ rosters:
         module:   "social_contest"
         provider: "social_contest"   # as `a standing`'s: repointed at steps 13 + 15
         module_entry: "social_contest.roll"   # as `a standing`'s
-        # `interim: true` deleted at steps 13 + 15, as `a standing`'s.
+        heard_by: "bench"   # v9 SC-02 `22a`: the bench at the act's rung hears this prize (`world_q.reception`, `world_q.proofs`; `manifest/registry.py::_check_heard_by`). Line-neutral: it replaced the comment that `interim: true` was deleted at steps 13 + 15, as `a standing`'s.
         cite:     "v9 SC-01 step 12 (B-N): `speak`'s prize (`proposals/2026-09-05-proceedings-subsystem/04_VERBS.md` §B.1, `08_SEAM.md`: `a matter` -> the proceedings provider). Routed to the interim provider at step 12; ED-SC-0033 clause (2)'s repoint (steps 13 + 15, ONE change) reached THIS row too, so it was three rows, not the two the plan names [ASSUMPTION; medium; revert: no row, and `speak` declares no `contests:`]."
     # NO `values:` — the members ARE the `prizes:` mapping above, read with `roster_map()`. A `values: []` stood here and was a declared-but-unread key (`04 §B.13` ID-12): `roster()` returned an EMPTY frozenset, which is the silent-false this file's own header forbids. Line-neutral edit — 209 citations index this file by line.
 
@@ -2226,6 +2226,27 @@ rosters:
       articulation:    {kind: stub,             home: "game/"}
       ui:              {kind: stub,             home: "game/"}
       victory:         {kind: stub,             home: "engine/season/"}
+
+  standing_routes:
+    source: "proceedings `19_PLAN.md` PHASE 3 step 20 (route erosion) and `03_PARAMETERS.md` row 25 (`route ∈ {prestige, dominance}`, *it sets the EROSION PROFILE*), read as INTENT; built at v9 SC-02 `22a` (B-P)"
+    open: true
+    note: >-
+      THE PARTITION OF THE DEED KINDS BY THE ROUTE TO STANDING THE ACT TAKES, read by
+      `queries/world_q.py::reception` and nothing else. `dominance` lists the COERCIVE kinds -- an act
+      that takes from, or forces, another (a death, a wound, a field won, a seizure, a requisition);
+      `prestige` is EVERY OTHER deed kind, the complement, so it carries no list: the one behaviour
+      step 20 rules (*a failure against a dominance-standing speaker zeroes that hearer's
+      dominance-sourced weight: the single called bluff*) reads the coercive half only, and a second
+      list nothing read would be a declared-but-unread carrier. A hearer who holds, untold, a
+      dominance-kind deed done TO the speaker by somebody else (`person_q.suffered_deeds`, the
+      `seen.who` pairing) stops counting every dominance-kind deed of the speaker's no newer than it.
+      Every member must be a deed kind (`data/verbs.py::DEED_KINDS`); `queries/world_q.py` refuses at
+      import otherwise. [ASSUMPTION; medium; Jordan to correct -- the membership: which acts are
+      coercive is stated nowhere in the corpus; revert: an empty `dominance` list, and no hearer's
+      weight is ever eroded.]
+    values: [dominance, prestige]
+    kinds:
+      dominance: [person.died, body.changed, field.won, rung.seized, record.seized, requisition.taken]
 
   # ── v9 FI-02 + FI-03 (`SM-3`, `ED-FI-0002`): THE INQUIRY ROLE AND WHAT A FINDING UNCOVERS ─────────
   # Appended after `modules:` rather than beside `graded_inquiries`, so no line-cited row above moves.

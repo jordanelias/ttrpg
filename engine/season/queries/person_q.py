@@ -103,26 +103,16 @@ def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0) -> tuple:
     ⚠ THE SWORN-TO HALF SHIPS OFF (IN-58): `oblige` is a `World` Tenure read by a `world_q` reader and
     this module reads a `PersonInterior` only. FACTION-LEVEL grievance is a named residue.
     [ASSUMPTION, H-192: a deed's claim subject is read as its doer for every other kind; the sum is
-    unnormalised.] Person-side, no World (AX-2)."""
+    unnormalised.] Person-side, no World (AX-2).
+    ⚠ v9 SC-02 `22a`: WHICH claims are `referent`'s deeds is `attributed_deeds`' and WHAT each is worth
+    is `deed_term`'s; this function sums them by `firsthand`, and `world_q.reception` sums the same two
+    by remove and confidence, so the two readers cannot disagree on either."""
     axis_w = None
-    seen = functools.cache(lambda: _seen_index(p.ledger))
     judged = told = 0.0
-    for c in p.ledger:
-        if not is_deed(c):
-            continue
-        # IN-58: a paired kind is judged for the DOER the pairing names, never for its subject; a
-        # told copy carries no `seen`, so it is never paired.
-        paired = c.predicate in PAIRED_KINDS
-        if (c.chain if paired else c.subject != referent):
-            continue
+    for c in attributed_deeds(p.ledger, referent):
         if axis_w is None:
             axis_w = projected_axes(p, scar_shift)
-        if paired:
-            doer, v = paired_deed_term(p, axis_w, c, seen)
-            if doer != referent:
-                continue
-        else:
-            v = deed_valence(axis_w, c)
+        v = deed_term(p, axis_w, c)
         # FIRSTHAND only is judged (`dissents`' and `record`'s precedent, `decision/options.py`):
         # a `told_by` claim whose chain is empty is still hearsay, and lands in `told`.
         if c.firsthand:
@@ -130,6 +120,51 @@ def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0) -> tuple:
         else:
             told += v
     return judged, told
+
+
+def attributed_deeds(ledger, referent: str):
+    """THE DEED CLAIMS IN `ledger` THAT RECORD AN ACT OF `referent`'s, in ledger order -- the one owner
+    of *which of a holder's claims are about what this person did* (v9 SC-02 `22a`, split out of
+    `deeds_judged` unchanged). An unpaired kind's claim is `referent`'s when its subject is
+    ([ASSUMPTION, H-192]), told or not; a `PAIRED_KINDS` claim is `referent`'s when it is untold and its
+    `seen.who` pairing names him (`deed_doer`, IN-58) -- the paired kinds are the ones whose subject
+    may be the PATIENT, so the doer is read off the sighting's `who`, never the subject. A told copy
+    carries no `seen`, so a paired claim heard second-hand names nobody. Person-side (AX-2)."""
+    seen = functools.cache(lambda: _seen_index(ledger))
+    for c in ledger:
+        if not is_deed(c):
+            continue
+        if c.predicate in PAIRED_KINDS:
+            if c.chain or deed_doer(c, seen()) != referent:
+                continue
+        elif c.subject != referent:
+            continue
+        yield c
+
+
+def deed_term(p: Person, axis_w: dict, c) -> float:
+    """WHAT ONE OF `attributed_deeds`' CLAIMS IS WORTH TO `p`, whose projected pursuits are `axis_w`:
+    a paired deed `lean · bond` (`_lean`, `_bond` on the claim's patient, IN-58), any other
+    `deed_valence`. The same numbers `paired_deed_term` and `deed_valence` give; `deeds_judged` and
+    `world_q.reception` both read it here. Person-side (AX-2)."""
+    if c.predicate in PAIRED_KINDS:
+        lean = _lean(axis_w, c.predicate)
+        return lean * _bond(p, c.subject, lean) if lean else 0.0
+    return deed_valence(axis_w, c)
+
+
+def suffered_deeds(ledger, patient: str):
+    """THE DEEDS `ledger` RECORDS AS DONE TO `patient` BY SOMEBODY ELSE, in ledger order (v9 SC-02 `22a`,
+    step 20's called bluff): the untold `PAIRED_KINDS` claims whose subject is `patient` and whose
+    `seen.who` pairing names a doer (`deed_doer`, which never names the subject himself). Only a paired
+    kind has a patient on its claim; an unpaired kind's subject is its doer (H-192), so it is never a
+    deed suffered. A told copy has no sighting and so names no doer: what a holder was only told of
+    does not count. Person-side (AX-2)."""
+    seen = functools.cache(lambda: _seen_index(ledger))
+    for c in ledger:
+        if (c.subject == patient and not c.chain and is_deed(c) and c.predicate in PAIRED_KINDS
+                and deed_doer(c, seen()) is not None):
+            yield c
 
 
 # v9 IN-58: THE DEED KINDS JUDGED ONLY THROUGH THE `seen.who` PAIRING -- every DEED kind no single

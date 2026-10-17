@@ -178,11 +178,16 @@ def resolve(role: str, key: Any) -> Optional[dict]:
     # Absent means the provider calls no module entry (yet). Read here for `step:`'s reason: one
     # reader of the row, not two; `check_contest_prizes()` holds it to its composition row.
     module_entry = row.get("module_entry") if isinstance(row, dict) else None
+    # v9 SC-02 `22a`. `heard_by:` names the ROOM that hears this prize's contest -- `bench`, the
+    # `judging_set` at the act's rung, whose ledgers `world_q.reception` reads -- or is absent: no room,
+    # and the provider carries no room operand. Read here for `step:`'s reason (one reader of the row);
+    # `_check_heard_by` refuses any other value at boot.
+    heard_by = row.get("heard_by") if isinstance(row, dict) else None
     contracts = files.MODULE_CONTRACTS_YAML
     if not contracts.exists():
         return dict(module=name, provider=provider_name, resolver="unknown",
                     doc="module_contracts.yaml not found", step=step, declares=declares,
-                    module_entry=module_entry)
+                    module_entry=module_entry, heard_by=heard_by)
     for m in _contracts():
         if m.get("module") == name:
             # ⚠ THE PYTHON, NOT THE MARKDOWN. Jordan, 2026-09-02: *"we aren't using the .md or
@@ -198,7 +203,8 @@ def resolve(role: str, key: Any) -> Optional[dict]:
                               f"`doc:` is {m.get('doc')!r} and is out of date)")
             return dict(module=name, provider=provider_name,
                         resolver=m.get("resolver") or "undeclared", doc=where,
-                        step=step, declares=declares, module_entry=module_entry)
+                        step=step, declares=declares, module_entry=module_entry,
+                        heard_by=heard_by)
     raise Unspecified(
         f"`{roster}` maps {key!r} to {name!r}, which is in no module contract", "S39",
         needs="a module named in references/module_contracts.yaml",
@@ -237,6 +243,7 @@ def check_rows() -> list:
         for key, row in roster_map(roster, column).items():
             resolve(role, key)
             _check_step_declares(role, key, row)
+            _check_heard_by(role, key, row)
             checked.append((role, key))
     return checked
 
@@ -273,6 +280,27 @@ def _check_step_declares(role: str, key: Any, row: Any) -> None:
             f"`field_degree_bands`", "04 PART E step 10",
             needs=f"one of {sorted(FIELD_BANDS)}",
             law="04 PART E step 10 -- a misspelled manifest row fails at boot naming the row")
+
+
+# v9 SC-02 `22a`: the rooms a prize row's `heard_by:` may name. One: the bench (`world_q.judging_set`
+# at the act's rung). A second room is a new reader in `seam/wrappers/sigma.py`, added with it.
+HEARD_BY_ROOMS = frozenset({"bench"})
+
+
+def _check_heard_by(role: str, key: Any, row: Any) -> None:
+    """v9 SC-02 `22a`: a prize row's `heard_by:`, if present, names a room the host knows how to read
+    (`HEARD_BY_ROOMS`). A misspelled room would otherwise hear nothing, silently. The one provider that
+    reads it is `seam/wrappers/sigma.py`; a row whose provider is misspelled is refused by that
+    provider check, not this one (`test_sc01_provider.py` plants it), so this checks the room alone."""
+    heard_by = row.get("heard_by") if isinstance(row, dict) else None
+    if heard_by is None:
+        return
+    if heard_by not in HEARD_BY_ROOMS:
+        raise Unspecified(
+            f"{role}:{key!r} declares `heard_by: {heard_by!r}`", "04 PART E step 10",
+            needs=f"one of {sorted(HEARD_BY_ROOMS)}",
+            law="04 PART E step 10 -- a misspelled manifest row fails at boot naming the row; a room "
+                "no provider reads would be a declared-but-unread column")
 
 
 def unclaimed_contest_prizes(verb_table: dict) -> list:

@@ -649,6 +649,24 @@ if (set(CHANNEL_CLAIM_SOURCE) != set(WITNESS_CHANNELS)
         needs="give every channel exactly one source from `claim_sources`",
         law="19_PLAN.md step 4 (b) -- the claim's source is set FROM A CHANNEL->SOURCE MAP, so "
             "the map is total over the channels and closed over the sources")
+# THE ORDINAL OF REMOVE, ONE OWNER (`19_PLAN.md`'s *firsthand > knot-sourced > told > inferred*): the
+# distinct `claim_source:` values in `WITNESS_CHANNELS`' order, strongest first -- that roster's note
+# says its order IS this ordinal. Read by `decision/options.py::channel_remove` (refraction, v9 IN-15)
+# and `queries/world_q.py::remove_weight` (reception and proofs, v9 SC-02 `22a`); it lives here, in
+# the data layer both sides may import, so neither copies it. Refused at import unless it ranks every
+# `claim_sources` member: a claim held under a source with no rank would raise mid-season.
+REMOVE_ORDINAL = tuple(dict.fromkeys(CHANNEL_CLAIM_SOURCE[ch] for ch in WITNESS_CHANNELS))
+if set(REMOVE_ORDINAL) != set(CLAIM_SOURCES):
+    raise Unspecified(
+        f"the ordinal of remove {REMOVE_ORDINAL!r} (read off `witness_channels.claim_source`) does "
+        f"not rank every claim source {sorted(CLAIM_SOURCES)}", "rosters.yaml",
+        needs="a witness channel minting each `claim_sources` member",
+        law="19_PLAN.md step 17 -- every claim is weighted by an ordinal of remove; a source the "
+            "ordinal does not rank has no weight")
+STANDING_ROUTES = roster("standing_routes")
+# The coercive deed kinds (`standing_routes.kinds.dominance`); `prestige` is the complement and carries
+# no list. Checked against the deed kinds where they are bound (`queries/world_q.py`).
+DOMINANCE_KINDS = frozenset(roster_map("standing_routes", "kinds")["dominance"])
 STRATA = roster("strata", ordered=True)
 # The leaf import: the fifteen pursuits are owned one layer out (`references/descriptor_registry.yaml:
 # pursuit_roster`, exported behind a blocking `--check`). `roster("pursuits")` resolves to the same

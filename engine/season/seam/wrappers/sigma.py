@@ -82,7 +82,11 @@ from ...gaps import Unspecified
 # ⚠ THE LEAF, NOT THE PACKAGE'S RE-EXPORT. `manifest/providers.py` imports nothing, so no import
 # here closes a loop back into this package (`_entry.py` says the same of the entry lookup).
 from ...manifest.providers import provider
+from ...manifest.registry import resolve as _prize_row
 from ...queries.inputs import Margin, SocialContestInput
+# v9 SC-02 `22a`: the room's two resolver-side reads, the precedent `seam/wrappers/mass_battle.py`'s
+# `world_q.mustered` set. The host READS them; the module composes the obstacle they move.
+from ...queries.world_q import proofs, reception
 from ._entry import entry_for
 
 # The prize rows' `provider:` string (`rosters.yaml` `contest_subsystems`): the module's one identity
@@ -137,7 +141,7 @@ def _opposition_of(w: Any, subject: Optional[str], verb: str) -> Optional[float]
 
 
 def contest_input(w: Any, claimants: list, *, verb: str = "",
-                  subject: Optional[str] = None) -> SocialContestInput:
+                  subject: Optional[str] = None, room: Optional[str] = None) -> SocialContestInput:
     """THE HOST INPUT BUILDER (plan position `31a`, A-25): `World` -> the frozen record the roll reads.
 
     Reads `w.persons` (the actor, `claimants[0]`, and a person subject) and `w.fixtures`, and nothing
@@ -146,15 +150,28 @@ def contest_input(w: Any, claimants: list, *, verb: str = "",
     `leverage` is zero until something supplies leverage -- an `assumption` reading with no
     producer, and stating it as zero is the honest form: a fabricated leverage would be a number
     nobody chose. The obstacle's operands are carried RAW (`opposition`, `obstacle_default`,
-    `obstacle_ceiling`); the module composes them (step 14)."""
+    `obstacle_ceiling`); the module composes them (step 14).
+
+    `room` (v9 SC-02 `22a`) is the rung whose bench hears the contest, or `None`: the adapter passes the
+    act's rung when the prize row says `heard_by: bench` (`manifest.resolve`), and nothing otherwise.
+    With a room, the record carries the bench's `reception` of the actor and the actor's unmirrored
+    `proofs` against the subject (`queries/world_q.py`, both read raw) and their two gains; without
+    one they stay at the record's no-room defaults, so a `tell`, a `determine` or an inquiry rolls
+    exactly as before."""
     fx = w.fixtures
+    room_terms = {}
+    if room is not None:
+        room_terms = dict(reception=reception(w, claimants[0], room),
+                          reception_gain=fx.get("reception_gain"),
+                          proofs=proofs(w, claimants[0], subject),
+                          proof_step=fx.get("proof_step"))
     return SocialContestInput(
         pool=_pool_of(w.persons[claimants[0]], verb, fx),
         opposition=_opposition_of(w, subject, verb),
         obstacle_default=fx.get("obstacle_default"),
         obstacle_ceiling=fx.get("obstacle_ceiling"),
         obstacle_refusal_multiple=fx.get("obstacle_refusal_multiple"),
-        leverage=0.0)
+        leverage=0.0, **room_terms)
 
 
 @provider("contest", _PROVIDER)
@@ -179,11 +196,12 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     here with the role unregistered (no driver constructed in the process) is `ENGINE-UNAVAILABLE`,
     `combat.py`'s typed refusal, never a direct import of the module.
 
-    ⚠ `rung` IS ACCEPTED AND NOT USED HERE, THE SAME DELIBERATE NON-CHANGE AS IN `combat.py`
-    (M4, `ED-IN-0279` clause (a)). A leverage roll derives its obstacle from the parties
-    themselves, not from presence at a place. Since v9 SC-01 step 13 (C-8) the seam passes the
-    actor's place (`loop/sides.py`, `world_q.place_of`) rather than the placeholder `"R"`, so the
-    venue a proceeding will read is already the act's own.
+    ⚠ `rung` IS READ FOR A PRIZE A ROOM HEARS, AND ONLY THERE (v9 SC-02 `22a`). It was accepted and
+    unused (M4, `ED-IN-0279` clause (a), `combat.py`'s deliberate non-change) until the proceedings'
+    room existed. Since v9 SC-01 step 13 (C-8) the seam passes the actor's place (`loop/sides.py`,
+    `world_q.place_of`) rather than the placeholder `"R"`, so the venue is the act's own; a prize row
+    declaring `heard_by: bench` (`a matter`, `speak`'s) has the bench sitting over it read the speaker
+    (`contest_input`'s `room`). Every other prize still derives its obstacle from the parties alone.
 
     ⚠ THE RNG IS A PARAMETER AND IS NOT CONSTRUCTED HERE, WHICH IS `04 §C.12`'s REJECTION 4 BECOMING
     LOAD-BEARING FOR THE FIRST TIME: *"When R-09's producer is built … its generator must be
@@ -215,7 +233,11 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     if w.persons.get(claimants[0]) is None:
         return dict(status="PARTY-GAP", why=f"claimant is not a person: {claimants[0]!r}",
                     module=_PROVIDER)
-    inp = contest_input(w, claimants, verb=verb, subject=subject)
+    # v9 SC-02 `22a`: the room that hears this prize, off its row (`heard_by:`); an inquiry has no prize
+    # and so no room. `rung` is the act's place (`loop/sides.py`), which the bench sits over.
+    row = _prize_row("contest", prize) if prize is not None else None
+    heard = rung if row is not None and row.get("heard_by") == "bench" else None
+    inp = contest_input(w, claimants, verb=verb, subject=subject, room=heard)
     entry, refusal = entry_for(prize, _PROVIDER, module_entry)
     if entry is None:
         return refusal

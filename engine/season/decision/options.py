@@ -29,7 +29,7 @@ from ..data.requires import (
     CELL_STEMS, RECORD_SOURCED_OPERANDS, SHORTFALL_PREDICATE, SHORTFALL_SOURCED_OPERANDS, VIA,
 )
 from ..data.rosters import (
-    CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, WITNESS_CHANNELS, require_member,
+    CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, REMOVE_ORDINAL, require_member,
 )
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
@@ -1233,8 +1233,9 @@ def standing_of(p: Person, fx: "Fixtures") -> int:
     return scale if paired == 0 else (dis * scale) // paired
 
 
-# Built once: `channel_remove` runs per deposit, and the roster it reads does not change at runtime.
-_REMOVE_ORDINAL = tuple(dict.fromkeys(CHANNEL_CLAIM_SOURCE[ch] for ch in WITNESS_CHANNELS))
+# The ordinal is `data/rosters.py::REMOVE_ORDINAL`'s, built once there (v9 SC-02 `22a` moved it out of
+# this module so the resolver-side `reception` reads the same ranks without importing decision code).
+_REMOVE_ORDINAL = REMOVE_ORDINAL
 
 
 def channel_remove(channel: str) -> float:

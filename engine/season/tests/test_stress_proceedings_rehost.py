@@ -115,9 +115,11 @@ def test_st30_five_of_the_designs_six_rosters_now_exist_two_named_absences():
     `arrangements.yaml`, this position's own reasoned split -- see that file's own header) now
     load. `registers` is correctly ABSENT: `19_PLAN.md` step 11 deletes it from the design itself
     ("the roster never existed, ... the idea folds into aptness"), so its absence is not a gap.
-    `standing_routes` is a REAL, NAMED absence -- no concrete membership was found grounded in the
-    cited corpus within this position's scope (`19_PLAN.md` PHASE 3 step 20, "route erosion",
-    not this position's five parts)."""
+    `standing_routes` WAS a real, named absence here (no membership grounded in the cited corpus within
+    this position's scope); it LANDED at v9 SC-02 `22a` with `19_PLAN.md` PHASE 3 step 20 ("route
+    erosion"), the step this note named, so the assertion is re-written in that commit rather than
+    deleted: the roster now observes `route ∈ {dominance, prestige}`, `dominance` listing deed kinds
+    and `prestige` the complement (no list of its own)."""
     from ..data.rosters import _ROSTERS
     # Exact membership is `test_arrangements.py`'s job (and, for `ladder_rungs`, its own); this
     # re-hosts ST-30's EXISTENCE claim, not a fourth re-typing of four rosters' own values.
@@ -127,5 +129,12 @@ def test_st30_five_of_the_designs_six_rosters_now_exist_two_named_absences():
     assert len(PROOFS) == 4
     assert A.SPEECH_KINDS, "speech_kinds carries no rows"
     assert "registers" not in _ROSTERS, "a DELETED roster (19_PLAN.md step 11) reappeared"
-    assert "standing_routes" not in _ROSTERS, (
-        "standing_routes now exists -- this test and PROC-A's own record are stale")
+    # Was `"standing_routes" not in _ROSTERS` ("standing_routes now exists -- this test and PROC-A's
+    # own record are stale"); the roster landed at SC-02 `22a` (step 20), so the claim is now its shape.
+    from ..data.verbs import DEED_KINDS
+    routes = _ROSTERS["standing_routes"]
+    assert set(routes["values"]) == {"dominance", "prestige"}, routes["values"]
+    assert set(routes["kinds"]) == {"dominance"}, (
+        "`prestige` is the complement of `dominance` and carries no list of its own")
+    assert routes["kinds"]["dominance"] and set(routes["kinds"]["dominance"]) <= DEED_KINDS, (
+        sorted(set(routes["kinds"]["dominance"]) - DEED_KINDS))
