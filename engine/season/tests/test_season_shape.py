@@ -3513,6 +3513,8 @@ def test_t2_align_kind_reads_the_one_emitter_and_a_deed_key_needs_an_emitted_kin
             want = align(verb, axis) if cell is None else cell
             assert align_kind(kind, axis) == want, (kind, verb, axis)
             checked += bool(want)
+    assert {k for k in KIND_VERB if any(authored(k, ax) is not None for ax in PURSUIT_AXES)} == {
+        "matter.undetermined"}, "a single-emitter kind carries an authored `deed:` cell nobody reviewed here"
     assert checked >= 1, "no single-emitter kind has a non-zero cell, so equality proved nothing"
     unauthored = 0
     for kind in shared:
@@ -8769,6 +8771,9 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # contested act refused at admission never enters `driver.resolved` (the `ever` note above), so
     # the attribution this set is computed from cannot see it. An instrument limit, named, not a fact
     # about the world.
+    # ⚠ `determine` (v9 SC-03b) is contested too, so the same blindness applies to it: a corpus `determine`
+    # refused at admission never enters `driver.resolved`, and its place in this set is the same instrument
+    # limit (no docket the corpus builds names a Person; `harness/corpus_run.py`'s docket item is a date and a Proposition).
     assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish",
                                               "destroy_record", "march", "oblige", "open_case",
                                               "determine", "comply", "migrate", "requisition",

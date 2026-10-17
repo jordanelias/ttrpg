@@ -1193,7 +1193,7 @@ def test_sc03b_runtime_a_seeded_contested_determination_leaves_the_degree_on_the
     assert set(seen) == BANDS, seen          # all four occurred, so no band's branch went unobserved
 
 
-def test_sc03b_runtime_the_degree_is_the_only_new_content_and_an_undetermined_matter_can_be_heard_again():
+def test_sc03b_runtime_an_undetermined_matter_can_be_heard_again():
     """The Failure band opens nothing, so the matter is not lost: the same bench determines it again on a
     later act (a different draw) and the disposal opens then. Control: an act id that lands on `Failure`
     at the shipped judge is found first, so the second fold is a real re-hearing, not a first one."""
@@ -1220,7 +1220,7 @@ def test_sc03b_a_judge_under_one_die_is_refused_not_a_crash_and_opens_nothing():
     """S27.4 (`Ob > 2 x Pool`) reached by a contested `determine`: a judge whose pool is under 1D comes
     back as the row's one refusal kind with NO degree -- never an aborted season -- exactly as `speak`'s
     does (`test_sc01_speak.py`), and the matter stays docketed. CONTROL: pool 1 resolves to a band."""
-    for pool, refused in ((0, True), (0.5, True), (1, False)):
+    for pool, refused in ((0, True), (1, False)):  # `_pool_of` int()s the pool, so 0.5 would be the 0 arm
         w, d = _ready("determine", pool_default=pool)
         out = _fold(w, d, _determine(f"zpool{pool}"))
         assert bool(out) and (_kinds(out) == ["determine.refused"]) is refused, (pool, _kinds(out))
