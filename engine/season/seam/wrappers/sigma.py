@@ -160,7 +160,8 @@ def contest_input(w: Any, claimants: list, *, verb: str = "",
 @provider("contest", _PROVIDER)
 def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
             verb: str = "", subject: Optional[str] = None,
-            rng: Optional[random.Random] = None, rung: Optional[str] = None) -> dict:
+            rng: Optional[random.Random] = None, rung: Optional[str] = None,
+            module_entry: Optional[str] = None) -> dict:
     """Roll for one contested act: build the record, call the module entry, hold its return to a
     `Margin`, refuse S27.4. Returns a net/ob pair, NEVER a band and never a winner.
 
@@ -202,7 +203,12 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     until the entry has run. A refused act's roll is discarded; its generator is the act's own
     (`H(seed, tick, subject, purpose)` above), so no other act's draw moves. Under the shipped
     ceiling (`H-213`, 2 = the multiple x the 1D floor) a derived pair with a pool of 1 or more is
-    never refused here; only a pool below the floor is."""
+    never refused here; only a pool below the floor is.
+
+    ⚠ `module_entry` IS THE INQUIRIES' ROUTE (v9 FI-01, `ED-FI-0009`, J-22 (A)): `seam/contest.py::grade`
+    passes the role a `graded_inquiries` row names, with `prize=None`, and everything else here is the
+    same body -- the same input builder, the same entry table, the same `Margin` hold and the same
+    S27.4 -- so an inquiry is rolled by the one owner and graded on the one ladder, with no prize."""
     if not claimants:
         return dict(status="PARTY-GAP", why="a contest needs at least one claimant",
                     module=_PROVIDER)
@@ -210,7 +216,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
         return dict(status="PARTY-GAP", why=f"claimant is not a person: {claimants[0]!r}",
                     module=_PROVIDER)
     inp = contest_input(w, claimants, verb=verb, subject=subject)
-    entry, refusal = entry_for(prize, _PROVIDER)
+    entry, refusal = entry_for(prize, _PROVIDER, module_entry)
     if entry is None:
         return refusal
     margin = entry.fn(inp, rng)

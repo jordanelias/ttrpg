@@ -23,8 +23,8 @@ from ..data.matrix import Step
 from ..state.gate import Token
 from ..data.requires import LEDGER_DERIVED_STEMS, UNKNOWN, WORLD_ONLY_STEMS, binding_from_act
 from ..data.rosters import (
-    CHANNEL_CLAIM_SOURCE, OBSERVATION_DEPOSIT_MODES, RECORD_CONTENT, WITNESS_CHANNELS,
-    require_member,
+    CHANNEL_CLAIM_SOURCE, OBSERVATION_DEPOSIT_MODES, RECORD_CONTENT, UNDEPOSITED_KINDS,
+    WITNESS_CHANNELS, require_member,
 )
 from ..data.verbs import VERB_TABLE
 # ⚠ `04:178` lists WITNESS's reads as the log, the presence cache, the channel predicates and the act
@@ -169,7 +169,8 @@ def _told_value(w, pid: str, e: Event, held, told_hash: str = None, stem: str = 
     can act on and is deposited VERBATIM. MEASURED: the one told-channel candidate the live
     89-world corpus reaches at `Partial` (`ARC-13`, seed 0, a `finding.none` claim carrying `True`)
     is exactly this shape, so the honest default for the corpus AS IT STANDS TODAY is unchanged --
-    a finding about what the corpus currently exercises, not a defect in the branch.
+    a finding about what the corpus currently exercises, not a defect in the branch. (Since v9 FI-01's
+    skip arm, `undeposited_kinds`, no `finding.none` claim is deposited, so that candidate is gone.)
 
     ⚠ THE SELECTION IS DETERMINISTIC AND SPENDS NO DRAW (§A.10.4). `sel` reuses the SAME hash the
     deposit's own claim id mints from (`H(w.world_seed, w.tick, pid, f"told:{e.id}")`, below and
@@ -295,11 +296,18 @@ def witness(self, token: Token, events: list[Event]) -> int:
     # IN-55: an Event that changes only held claims, with no act, fans to nobody
     # (epistemic.changes_only_held_claims); the ledgers are read here once, before any deposit.
     held = held_claim_ids(w) if mode != "total" else frozenset()
+    # v9 FI-01, THE SKIP ARM (RS-21 item 1, H-111 [medium; Jordan to correct]): an Event whose KIND is in
+    # `rosters.yaml: undeposited_kinds` (`finding.none`) fans to nobody -- no event-kind claim, no read,
+    # no `seen`, no content -- and stays in the log and its act's causes. Keyed on the kind, not on a band
+    # or an empty `changes[]`: `news.untold` and `matter.undetermined` keep depositing. Rebinding `events`
+    # covers every pass below that reads it; the trace still counts every Event handed in.
+    n_handed = len(events)
+    events = [e for e in events if e.kind not in UNDEPOSITED_KINDS]
     fan: list[tuple[str, Event, str]] = [
         (pid, e, ch) for e in events if not changes_only_held_claims(w, e, held, mode)
         for pid, ch in observers_for(w, e, mode, everyone)]
     # (this count is the FAN alone: IN-22's purview extension below appends after it)
-    TRACE.decision(f"fan-out over {len(events)} events -> {len(fan)} deposits", "S28/S61",
+    TRACE.decision(f"fan-out over {n_handed} events -> {len(fan)} deposits", "S28/S61",
                    chose=f"mode={mode} over {len(everyone)} persons "
                          f"({'#353 S61 as specified, and H-33 control' if mode == 'total' else 'H-33 arm; `all_five` is the ruled default since 2026-09-07, R7'})",
                    alternatives=[

@@ -412,10 +412,17 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
         `_eff_oblige`'s TERM (`oblige_term`, `H-159`), declared by THIS act (T-n: *"the
         opening act declares the terms"*), so a disposal lapses at MATTER like any unpaid service,
         citing the determination that wound it (AX-5). `None` (the control) opens it with none.
-      * NO `degree`. The row wrote `Tenure.degree` and nothing ever did; an UNCONTESTED act carries
-        no degree -- `loop/resolve.py::_fold`'s own rule, *"`None` on every uncontested act, which is
-        honest: no contest graded it"*. A graded disposal is the CONTESTED determination
-        (`04_VERBS.md` §B.2's degree-keyed row, PHASE 2 steps 13-15), `H-162`'s.
+      * THE EDGE'S `degree` IS THE BAND THE CONTEST DECIDED (v9 SC-03b, H-162's producer). `determine`
+        is a CONTESTED act now (`contests: a proposition`, the `social_contest` provider), so the fold
+        arrives here with a `Resolution` whose `degree` is the ladder's reading of the judge's margin
+        (`seam/ladder.py::degree_of`), and the disposal is opened WITH it (`Overwhelming`, `Success` or
+        `Partial`: the row's keyed `writes:`). At `Failure` the row writes `[]`, the fold never calls this
+        body, and nothing opens. ⚠ THE GATE ADMITS A `degree` ON AN EDGE ONLY WHEN THE SAME WRITE OPENS IT
+        (`determination` asks `opened` first: authority to bind is not authority to re-grade), which is
+        why the degree is set on the edge being OPENED, not written to one already live. `res` is `None`
+        only for a hand-built call of this body with no contest, and the edge then carries no degree, as it
+        did before SC-03b. `Partial` declares the same three pairs as `Success` (the row's `writes_note`), and
+        opens the disposal graded `Partial`.
 
     AND IT TAKES THE MATTER OFF THE DOCKET: every item naming the party is written back to
     `matter: None` -- the row's `DocketItem.matter` -- so the slot a sitting formed survives and the
@@ -428,7 +435,7 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     SC-03a, a live edge OF THE DISPOSED KIND on this seat (a man already banned by this bench is not
     banned twice), beside the two arrangement declines above. The second
     this body carried -- the party is the actor, a judge binding himself -- was already DEAD: the
-    `bench` conjunct's `may_determine` refuses it first (`determine.unauthorized`), and an act
+    `bench` conjunct's `may_determine` refuses it first (`determine.refused`, flattened at v9 SC-03b), and an act
     naming no subject dies at `party`, so the fold's `counterparty` clause (`loop/resolve.py::
     _admits`, plan position `14`, on this row's `counterparty: subject`) is asked of neither and
     cannot fire for this row.
@@ -452,7 +459,7 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     if any(t.kind == kind and t.subject == party and t.object == seat and t.live
            for t in w.tenures):
         return NO_CHANGE
-    nt = _disposal(w, a, party, seat, kind)
+    nt = _disposal(w, a, party, seat, kind, res.degree if res is not None else None)
     if nt is None:
         return NO_CHANGE
     items = docketed(w, party)
@@ -464,7 +471,8 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     return Change((Subject.edge(nt),), perform)
 
 
-def _disposal(w: "World", a: "Act", party: str, seat: str, kind: str) -> Optional[Tenure]:
+def _disposal(w: "World", a: "Act", party: str, seat: str, kind: str,
+              degree: Optional[str] = None) -> Optional[Tenure]:
     """THE DISPOSAL EDGE OF `kind`, owned by `party` on `seat` -- one LITERAL `Tenure(...)` per
     disposable kind, because `data/verbs.py::_derive_openers_from_effects` reads an opener's kind off
     the literal (and walks this same-file helper as if inlined). `None` for any other kind -- a
@@ -476,18 +484,19 @@ def _disposal(w: "World", a: "Act", party: str, seat: str, kind: str) -> Optiona
     [ASSUMPTION; medium; SC-03a; revert: pass `term=_new_oblige_term(w, a)` to both]: #453 §8.1
     writes both as lasting *"until pardon"* / *"until released"*, `oblige_term` is the length of a
     SERVICE (`H-159`), not of a sentence, and a restraint lapsing at MATTER would make the bench's
-    custody a timer nobody declared; the arrangement's `term_required` key has no reader yet."""
+    custody a timer nobody declared; the arrangement's `term_required` key has no reader yet.
+    `degree` is the band the contest decided (`_eff_determine`), `None` for a hand-built call."""
     tid = H(w.world_seed, w.tick, party, f"{kind}:{seat}:{a.id}")
     if kind == UNDECLARED_DISPOSAL:
         # `payload={"determined_by": a.id}` marks the edge as IMPOSED, not sworn: `state/gate.py::
         # purview_reaches`' oblige clause reads an OATH and skips an edge carrying this key (a sentence
         # must not hand the bench the convict's own seat ground). `establishment_of` still lists him.
         return Tenure(tid, party, seat, "oblige", since=w.tick, term=_new_oblige_term(w, a),
-                      payload={DETERMINED_BY: a.id})
+                      payload={DETERMINED_BY: a.id}, degree=degree)
     if kind == DETAIN_KIND:
-        return Tenure(tid, party, seat, "detain", since=w.tick)
+        return Tenure(tid, party, seat, "detain", since=w.tick, degree=degree)
     if kind == BAN_KIND:
-        return Tenure(tid, party, seat, "ban", since=w.tick)
+        return Tenure(tid, party, seat, "ban", since=w.tick, degree=degree)
     return None
 
 

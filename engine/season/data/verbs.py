@@ -52,8 +52,9 @@ from .requires import (
     build_typed_requires,
 )
 from .rosters import (
-    PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS, RUNG_KINDS, STRATA,
-    TENURE_KINDS, load_yaml, require_member, roster, roster_map,
+    GRADED_INQUIRIES, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
+    RUNG_KINDS, STRATA, TENURE_KINDS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
+    roster_map,
     table,
     table_meta,
 )
@@ -355,9 +356,11 @@ class VerbRow:
         if not self.emits_by_degree:
             return self.emits
         if degree is None:
+            src = f"`contests: {self.contests}`" if self.contests else "a `graded_inquiries` route"
             raise Unspecified(
-                f"{self.verb!r} declares `contests: {self.contests}` and was folded with no "
-                "degree, so there is no way to say WHICH outcome to report.",
+                f"{self.verb!r} keys `emits:` by degree "
+                f"({src}) "
+                "and was folded with no degree, so there is no way to say WHICH outcome to report.",
                 "S39/H-98",
                 needs="a degree from the seam (contest()) before `emits_at` reads an outcome",
                 law="#358 rev.2 §C.4 -- a contested verb's `emits` is degree-keyed; folding one "
@@ -769,6 +772,14 @@ def _load_verb_table() -> dict:
                 f"verb_table.yaml: {name!r} keys `writes` on {sorted(by_degree)} and `emits` on "
                 f"{sorted(emits_by_degree)}. A band in one and not the other is an outcome that "
                 "either changes the world silently or reports a change it did not make.")
+        # v9 FI-01: a `graded_inquiries` route beside a `contests:` is refused FIRST, before the
+        # shape checks below would refuse it for a reason that is not the defect (see the emits arm).
+        _graded = name in GRADED_INQUIRIES
+        if _graded and row.contests:
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} declares `contests: {row.contests}` and has a "
+                "`graded_inquiries` route. The route is NOT a prize (`rosters.yaml`: giving an "
+                "inquiry a prize is scripting drift); one degree has one source.")
         # LOADER INVARIANT 12 (#358 rev.2 §B.13). The two shapes are NOT interchangeable, and
         # both directions are checked: a contested verb with a flat list is the `kill / wound`
         # defect, and an uncontested verb with a degree map is a verb claiming an outcome it
@@ -794,11 +805,21 @@ def _load_verb_table() -> dict:
         # accepted at load and would have failed per-act, mid-corpus, as a design gap rather than
         # as the table defect it is. They ship with a FLAT `emits:` because nothing grades an
         # investigation act yet; this check is what makes that a decision rather than a habit.
-        if emits_by_degree and not row.contests:
+        # ⚠ v9 FI-01 (J-22 option (A)): THE ARM ACCEPTS A SECOND SOURCE OF A DEGREE, a `graded_inquiries`
+        # ROUTE (`rosters.yaml`; `loop/resolve.py::_grade` rolls it). A routed row keys `emits:` by degree
+        # and writes nothing (both refused below), so its roll has no band-blind write to apply.
+        if emits_by_degree and not (row.contests or _graded):
             raise SystemExit(
-                f"verb_table.yaml: {name!r} has a degree-keyed `emits:` and no `contests:`. "
-                "Nothing resolves a degree for it, so no branch could ever be reported -- and "
-                "unlike the `writes:` case this used to load clean and raise at the first fold.")
+                f"verb_table.yaml: {name!r} has a degree-keyed `emits:` and no `contests:` or "
+                "`graded_inquiries` route. Nothing resolves a degree for it, so no branch could "
+                "ever be reported -- and unlike the `writes:` case this used to load clean and "
+                "raise at the first fold.")
+        if _graded and (not emits_by_degree or row.writes):
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} has a `graded_inquiries` route and a FLAT `emits:` or a "
+                "non-empty `writes:`. A graded verb keys its emissions by Degree and writes nothing "
+                "(a flat write applies on every band), or the roll decides nothing it reports.")
+
         if row.contests and not emits_by_degree:
             raise SystemExit(
                 f"verb_table.yaml: {name!r} declares `contests: {row.contests}` and a FLAT "
@@ -878,7 +899,7 @@ def _load_verb_table() -> dict:
         # MISSING is a failable clause with no kind -- the fold would reach `refusal_for` and raise;
         # EXTRA is a kind for a clause that cannot fail, read by nothing (`ID-13`). A name on a FLAT
         # row is refused for the same reason: nothing keys it. A CONTESTED row may key its refusals
-        # only to ONE kind: the seam's party gap (`loop/resolve.py::_party_gap_refusal`) is a refusal
+        # only to ONE kind: the seam's party gap (`loop/resolve.py::_refuse_party_gap`) is a refusal
         # point this schema has no clause for, and it emits the union. ONE refusal names every
         # defect found, so a table edit that breaks three things is told all three.
         _names = row.requires_typed.conjuncts() if row.requires_typed is not None else ()
@@ -901,8 +922,9 @@ def _load_verb_table() -> dict:
             # `ID-9` only if the union holds more than one kind -- a kind published for a conjunct
             # that did not fail. A contested row whose every key emits ONE kind (`tell`:
             # `news.untold` for `holds` and `hearer`) emits exactly that kind at the party gap too.
-            if row.contests and len(row.emits_on_refusal) > 1:
-                _defects.append("declares `contests:`, whose party-gap refusal no clause names, "
+            if (row.contests or _graded) and len(row.emits_on_refusal) > 1:
+                _defects.append("declares `contests:` or a `graded_inquiries` route, whose "
+                                "party-gap refusal no clause names, "
                                 "and keys more than one refusal kind, so that refusal would emit "
                                 "kinds for conjuncts that did not fail")
             _after_fold = set(_names) & {ELIGIBILITY_CLAUSE, WRITE_CLAUSE, COUNTERPARTY_CLAUSE}
@@ -988,6 +1010,22 @@ def _load_verb_table() -> dict:
         raise SystemExit(
             f"loop/effects.py: a `Tenure(...)` construction names opener(s) that are no verb: "
             f"{_stray}. 04 §B.13 #6 -- an opener is a row of verb_table.yaml.")
+    # v9 FI-01 (`ED-FI-0009`): THE TWO INQUIRY ROSTERS, AGAINST THE TABLE THEY KEY ON. A route on no
+    # verb row, a route carrying anything but its two fields (a `module:` would make it read as a
+    # prize row), or a skipped kind no row declares is refused naming it: a misspelled skip would
+    # skip nothing and report the deposit half built.
+    _declared_kinds = {k for v in out.values() for k in (*v.emits, *v.emits_on_refusal)}
+    _bad = sorted(
+        [f"route {v!r}: no verb row" for v in GRADED_INQUIRIES if v not in out]
+        + [f"route {v!r}: fields {sorted(r) if isinstance(r, dict) else r!r}"
+           for v, r in GRADED_INQUIRIES.items()
+           if not isinstance(r, dict) or set(r) != {"provider", "module_entry"}]
+        + [f"undeposited kind {k!r}: no verb row declares it"
+           for k in UNDEPOSITED_KINDS if k not in _declared_kinds])
+    if _bad:
+        raise SystemExit(f"rosters.yaml: `graded_inquiries` / `undeposited_kinds`: {_bad}. A route is "
+                         "a verb row's `{provider, module_entry}` and nothing else; a skipped kind is "
+                         "one some row emits.")
     # LOADER INVARIANT 2 (`04 §B.13 #2`, `04:459`): EVERY MATRIX ROW WITH `RES` HAS A PRODUCING
     # VERB -- or DECLARES that it has none, and why, in its `unproduced:` column. `04:1025` (PART
     # E step 2) records the literal invariant as unsatisfiable today; the column is what lets the

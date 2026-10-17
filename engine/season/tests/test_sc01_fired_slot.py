@@ -47,7 +47,8 @@ from ..decision.choose import pack_scenes
 from ..loop.driver import mint_token
 from ..queries import world_q
 from ..state.carriers import Claim, Rung, Tenure, View
-from .test_u7_remit import DUKE, PARTY, SEAT, _act, _determine, _fold, _kinds, _open, _world
+from .test_u7_remit import (DUKE, JUDGE, OPENS, PARTY, SEAT, _act, _determine, _fold, _kinds, _open,
+                            _world)
 
 VENUE = "S"                     # where the Duke stands, inside his seat's scope `D`
 
@@ -157,8 +158,9 @@ def test_open_case_fills_the_nearest_fired_slot_holding_the_matter_and_appends_n
 def test_a_bench_question_names_exactly_the_docketed_matters_of_a_sitting_its_judge_heard_fire():
     """The plan's third falsifier clause. Controls: an empty slot names nothing; a dateless docket item
     is no sitting; a person off the bench, or a judge who never heard the date fire, is not asked; and
-    once the determination takes the matter off the docket the question is gone."""
-    w, d = _world()
+    once the determination takes the matter off the docket the question is gone. (v9 SC-03b: `determine`
+    is contested, so the bench is a strong judge -- `JUDGE` -- and the determination below opens.)"""
+    w, d = _world(**JUDGE)
     duke = w.persons[DUKE]
     did = _sitting(w, d)
     heard, = [c for c in duke.ledger if c.predicate == "date.fired" and c.subject == VENUE]
@@ -187,7 +189,8 @@ def test_a_bench_question_names_exactly_the_docketed_matters_of_a_sitting_its_ju
     assert world_q.sittings_before(w, duke) == []
     duke.ledger[:] = kept
     # Determined: off the docket, and the question with it.
-    assert _kinds(_fold(w, d, _determine("dt"))) == ["matter.determined"]
+    out = _fold(w, d, _determine("dt"))
+    assert _kinds(out) == ["matter.determined"] and out[0].degree in OPENS, out
     assert world_q.sittings_before(w, duke) == []
     assert not [q for q in world_q.questions_for(w, duke) if q.id.startswith("q:sitting:")]
 
@@ -234,8 +237,9 @@ def test_each_sitting_is_asked_on_its_own_firing_and_not_on_a_later_one():
 
 def test_a_slot_refilled_in_one_resolve_is_asked_under_a_new_question_id():
     """The question's id names its matters: a determination and a new case in ONE RESOLVE empty the
-    slot and refill it, so the judge's question changes id with what is before him."""
-    w, d = _world()
+    slot and refill it, so the judge's question changes id with what is before him. (Strong judge, as
+    above: the determination must open for the slot to empty.)"""
+    w, d = _world(**JUDGE)
     duke = w.persons[DUKE]
     did = _sitting(w, d)
     assert _kinds(_fold(w, d, _open("oc"))) == ["case.opened"]
@@ -252,7 +256,7 @@ def test_a_slot_refilled_in_one_resolve_is_asked_under_a_new_question_id():
 # ======================================================================================
 
 def _w26_run():
-    w, d = _world()
+    w, d = _world(**JUDGE)
     duke = w.persons[DUKE]
     did = _convene(w, d)                                           # a convene by a seated holder
     cal = _next_season_calendar(w, d)                              # next season: it fires
@@ -279,6 +283,7 @@ def _w26_run():
             acts.append(a)
     out = _fold(w, d, *acts)
     done, = [e for e in out if e.kind == "matter.determined"]
+    assert done.degree in OPENS, done.degree
     # ... and the determination's `causes[]` walk back to the date that raised it.
     assert _walks_to(w, done, fired.id), (done.causes, fired.id)
     assert world_q.docketed(w, PARTY) == []

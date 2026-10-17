@@ -496,7 +496,7 @@ rows:
       (`corpus_run`) was not re-run for this reading; `engine/season/runs/*` was regenerated at 4008a395 (the w15 artifact test, green). One
       run per arm, noise unmeasured.
     measure: "python -m engine.season.harness.corpus_run  # check R3 rows + the planted control"
-    blocks: [IN-10, IN-11, IN-13, FI-01, H-116, IN-50]
+    blocks: [IN-10, IN-11, IN-13, H-116, IN-50]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1: regard is computed at read; the cross-person half is IN-10's, IN-11's, IN-13's); H-111 is FI-01's deposit half
 
   - id: R-02
@@ -634,7 +634,7 @@ rows:
       reads none 74.94 / actor 42.64 / total 41.56 % at `2x3` against THESE figures: +0.04 / -1.30 / -0.84 pp, still far below 96%, status stays `met`.
       **M-mem (RS-29, the B-W close, squashed into 3bf936ee; context, not this row's status):** `build_realm(0)`, pickle bytes of every ledger claim — one season 5,238 claims / 1,569,290 bytes (300 per claim) / 1,542 distinct facts / 3,976 (fact, holder) pairs; two seasons 7,493 claims / 2,244,769 bytes / 2,145 distinct facts / 4,627 pairs (2.16 holders per fact); 63.7 % of pairs in facts held by two or more, 50.6 % by five or more; largest ledger 200 claims (a cap at work) — so memory is small and bounded, RS-29's condition for fact interning (memory shown to cost something) is not met, and none is planned; the measuring script is NOT in the tree (a session probe, recorded only in that commit's body), so re-take it before relying on a figure.
     measure: "python proposals/2026-09-04-degree-sweep/wd_collect.py  # after wd_chunk.py x4 per arm per cell over the 143-case corpus (slices 0 36/36 72/72 108/108 143) -- U6's command, workplans/valoria_master_workplan_v9_part2.md §`11`"
-    blocks: [FI-01]
+    blocks: []
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1); H-111 is FI-01's deposit half
 
   - id: R-03

@@ -135,9 +135,29 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # `matter.turned` (a docketed `speak` that executed); `aperture 1 0` realm acts 612 -> 608, `speak`
 # formed 83 -> 80, att 12 -> 1, ex 12 -> 1 -- its refusals are not counted as attempts there (a
 # contested refusal never enters `driver.resolved`) (read, not asserted, v9 §0.5).
+# RE-PINNED at v9 SC-03b `determine` contested (B-O), A BEHAVIOUR MOVE DECLARED: `determine` rolls through
+# the `social_contest` provider (`contests: "a proposition"`) and writes `Tenure.degree` on the edge it
+# opens. The build hash and the ONE-season hash are equal; the TWO-season hash moves, because the realm's
+# one executed `determine` (season 2) now draws `Failure` -- `matter.undetermined`, nothing opens, the
+# matter stays docketed -- where it used to open the disposal. Was f6972f5b... (two seasons), 23288 events,
+# 00bd3227... (digest). CONTROL, run: the same tree with `determine`'s row planted back to its pre-SC-03b
+# shape (flat `writes:`/`emits:`, no `contests:`, the two-kind refusals; `(Tenure, degree)`'s `unproduced:`
+# restored for the load) reproduces the old hash, event count and digest exactly, and over the two seasons
+# `matter.determined` 1 -> 0, `matter.undetermined` 0 -> 1 (read, not asserted, v9 §0.5). No Tenure carries
+# a degree in the realm's two seasons (the one draw was `Failure`).
+# RE-PINNED at v9 FI-01 (B-O, on bc860c6a, 2026-10-17), TWO BEHAVIOUR MOVES DECLARED: (1) `research`,
+# `examine` and `surveil` are GRADED through their `graded_inquiries` route (the `social_contest` provider
+# and module entry, no prize), so a Failure draw emits `finding.none` carrying a degree; (2) THE SKIP ARM
+# (`undeposited_kinds`, RS-21 item 1): WITNESS deposits nothing for a `finding.none`. The build hash is
+# equal; one and two seasons move. Was 27717c62... / c8561121... (one, two seasons). ARM, run: the same
+# tree with the skip arm off (`loop/witness.py`'s `UNDEPOSITED_KINDS` emptied, grading on) reads
+# e642d1e8... / 43c45874..., 7086 / 23298 events, and holds 251 `finding.none` claims after two seasons;
+# with both on, 0. Over the two seasons with both on: 32 `finding.none` at `Failure`, 6 `finding.made` at
+# `Partial`, 3 at `Success` (read, not asserted, v9 §0.5). CONTROL: the base commit reproduces the old
+# values (this file green there before the change).
 BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
-               1: "27717c62f80d93c366cf3b9225e8f23b",
-               2: "f6972f5bd79b7ea8d430cb2921b1a7ca"}
+               1: "508ac85a63433c8768369deb323e0aa8",
+               2: "89bc9c0ac2a0437f7ea7a1f726794e46"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -168,8 +188,11 @@ BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
 # `BASE_HASHES[2]`): act ids and draw streams hash the verb name, so the same seed walks another trajectory from season 2.
 # Main alone read 18ffd214... / 23241 events; B-N alone read ef1c9ad8... / 23220; the merged tree reads f6972f5b... / 23288.
 # Season 0 and season 1 are unchanged by the merge (d3edd90a / 27717c62, 7060 events).
-BASE_EVENTS = {1: (7060, "653eabae8398bcf9902916095624d23e71504f9a23e3d94a1dfb271a3911204a"),
-               2: (23288, "00bd3227e4fdaf6bd48271eedb9c6a40109bf34339789e1fdcf1d902350f642e")}
+# RE-RECORDED at v9 SC-03b with `BASE_HASHES` (season 2 only: 23288 -> 23215; season 1 unchanged, 7060).
+# RE-RECORDED at v9 FI-01 with `BASE_HASHES` (7060 -> 6111, 23215 -> 18920: the skip arm's absent
+# `claim.deposited` Events, and the trajectory the graded inquiries and the missing claims move).
+BASE_EVENTS = {1: (6111, "811ccc1329e9f361904b1b33a9611bd1f6470cf96bbb2470308035977bf95199"),
+               2: (18920, "9ed69d804869f7e132c6d0e34409e6e18468a5febf1d5ab49f7893330cfb1dae")}
 
 
 def _digest(w) -> tuple:

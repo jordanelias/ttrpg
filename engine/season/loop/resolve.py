@@ -20,7 +20,7 @@ from __future__ import annotations
 import random
 from ..data import files
 from ..gaps import InstrumentDefect
-from ..data.rosters import STRATA
+from ..data.rosters import GRADED_INQUIRIES, STRATA
 
 from typing import Optional
 from ..data.matrix import Step, matrix_row
@@ -36,7 +36,7 @@ from ..epistemic import observers_for
 from ..queries.person_q import (broken_by, confided_outside, conviction_after_crisis,
                                  elements_violated_by)
 from ..queries.world_q import WorldReader, ceiling, demanded_person, occasioned_by
-from ..seam import ContestError, ContestRefused, Resolution, contest, degree_of
+from ..seam import ContestError, ContestRefused, Resolution, contest, degree_of, grade
 from ..state.carriers import Act, Event, StateChange, subject_of
 from ..state.gate import Change, NoOpReceipt, Subject, Token, seat_hold
 from ..state.ids import draw_factory, H
@@ -698,6 +698,23 @@ def _conviction_crisis(w: "World", token: Token, a: Act, broken_of: dict) -> Non
                                 for pid, _a in moved), perform))
 
 
+def _refuse_party_gap(self, w: "World", a: Act) -> list:
+    """A contested or graded act refused AFTER admission (a party the seam cannot derive, or a roll the
+    provider refused): the row's `emits_on_refusal`, `_contest`'s and `_grade`'s one body.
+
+    ⚠ `or ("act.refused",)`, MATCHING EVERY SIBLING FALLBACK (`_admits`, `_fold`,
+    `_refuse_after_the_fact`) -- found missing in the M4 review pass's own correctional
+    round: a verb with an empty `emits_on_refusal:` (or a hand-built Act naming no real
+    verb row at all) produced ZERO Events here, a silent drop, where every other refusal
+    path in this module already falls back."""
+    row = VERB_TABLE.get(a.verb)
+    kinds = (row.emits_on_refusal if row is not None else ()) or ("act.refused",)
+    produced = _act_events(self, w, a, kinds)  # `_act_events` owns the id scheme (§8)
+    for _e in produced:
+        self.act_of[_e.id] = a
+    return produced
+
+
 def _contest(self, w: "World", token: Token, a: Act, contests: list,
              contest_max_depth: Optional[int]) -> list:
     """S39.2, and M4's deferral fork (`ED-IN-0279` clause (a)). Extracted from `resolve()`'s own
@@ -754,20 +771,8 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
     # ineligibility already does, rather than letting `contest()`'s hard raise escape a caller
     # that does not expect one, is what `_ten_seasons`-style tests (no `corpus_run.run_case`
     # exception wrapper around them) found the hard way.
-    def _party_gap_refusal() -> list:
-        # ⚠ `or ("act.refused",)`, MATCHING EVERY SIBLING FALLBACK (`_admits`, `_fold`,
-        # `_refuse_after_the_fact`) -- found missing in the M4 review pass's own correctional
-        # round: a verb with an empty `emits_on_refusal:` (or a hand-built Act naming no real
-        # verb row at all) produced ZERO Events here, a silent drop, where every other refusal
-        # path in this module already falls back.
-        row = VERB_TABLE.get(a.verb)
-        kinds = (row.emits_on_refusal if row is not None else ()) or ("act.refused",)
-        produced = _act_events(self, w, a, kinds)  # `_act_events` owns the id scheme (§8)
-        for _e in produced:
-            self.act_of[_e.id] = a
-        return produced
     if not _parties:
-        return _party_gap_refusal()
+        return _refuse_party_gap(self, w, a)
     # ⚠⚠ `U1`: THE DRIVER CONSTRUCTS THE GENERATOR, AND `04 §C.12`'s REJECTION 4 IS LOAD-BEARING.
     # `purpose` stays `roll:<prize>:<act id>`, provider-specific by design -- see `resolve()`'s
     # own history (`git log` on this file) for the fuller account of why.
@@ -798,7 +803,7 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
         # failed to import/compose) is NOT a refusal: the seam still raises it, loud on purpose, since
         # folding it into a graceful `march.refused` would hide an infrastructure failure behind a
         # plausible-looking game Event.
-        return _party_gap_refusal()
+        return _refuse_party_gap(self, w, a)
     if isinstance(r, ContestError):
         TRACE.note(f"contest returned {r}", "S39.3")
         return []
@@ -813,6 +818,29 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
                       "record that it ran and write nothing (the pre-`W-E` behaviour: "
                       "a lost fight wrote exactly what a won one did)"])
     return produced
+
+
+def _grade(self, w: "World", token: Token, a: Act, route: dict) -> list:
+    """v9 FI-01 (`ED-FI-0009`, J-22 option (A)): AN INQUIRY, ROLLED AND FOLDED AT ITS DEGREE.
+
+    `route` is the verb's `graded_inquiries` row; ASSUMES `_admits` HAS PASSED, as `_contest` does. The
+    roll is `seam.grade`'s, the band `degree_of`'s (the one ladder), and the fold reports the band's
+    `emits:` as for a contested act. A `ContestRefused` folds through `_refuse_party_gap`.
+
+    ⚠ THE SUBJECT IS THE ACT'S `payload["subject"]`, WHICH A CHOOSER-FORMED ACT CARRIES AS THE QUESTION'S
+    REFERENT (`research`: a Record, `surveil`: a Rung, a person-kind Rung shares its person's id). The
+    provider reads opposition off a PERSON subject only (`sigma.py::_opposition_of`) and only where
+    `verb_capability` names the verb, so the obstacle is `obstacle_default` HOLDS ONLY WHILE
+    `verb_capability` names no inquiry: adding a row for one is the edit that must re-read this.
+    ⚠ THE GENERATOR IS THE ACT'S OWN, `H(seed, tick, actor, "roll:<verb>:<act id>")` -- `_contest`'s
+    shape with the verb where a prize would be (there is none), so adding a graded inquiry moves no
+    other act's draw (`04 PART D row 35`)."""
+    _subject = a.payload.get("subject") if isinstance(a.payload, dict) else None
+    _rng = draw_factory(w.world_seed, lambda: w.tick)(a.actor, f"roll:{a.verb}:{a.id}")
+    r = grade(w, [a.actor], [a.id], route, verb=a.verb, subject=_subject, rng=_rng)
+    if isinstance(r, ContestRefused):
+        return _refuse_party_gap(self, w, a)
+    return self._fold(w, token, a, Resolution(degree_of(r, _subject, w.fixtures), r))
 
 
 def _apply_write(self, w: "World", token: Token, a: Act, kind: str, fld: str, eff=None,
@@ -965,7 +993,11 @@ def resolve(self, token: Token, acts: list[Act],
         # kill or wound imo."* The design said so at `:434` and the instrument did not read it.
         _row = VERB_TABLE.get(a.verb)
         _contests = _contests_of(a, _row)
-        if _contests:
+        # v9 FI-01: an inquiry's `graded_inquiries` route -- the second source of a degree, which the
+        # loader refuses beside a `contests:` on the VERB ROW (one degree, one source); an act carrying its own
+        # `contests` (`_contests_of`, hand-built acts only) takes the contest branch below and the route is unread.
+        _route = GRADED_INQUIRIES.get(a.verb)
+        if _contests or _route:
             # ⚠⚠ §E2's ORDER, RESTORED: ELIGIBILITY AND `requires` BEFORE THE SEAM, NOT AFTER IT.
             # This branch used to route straight into personal combat, so a contested act's
             # precondition was never read -- `_fold`, which owns that check, is the branch this
@@ -992,7 +1024,8 @@ def resolve(self, token: Token, acts: list[Act],
             # confirmed above. `_contest` always returns a list -- a depth-capped
             # `ContestError` is converted to `[]` inside it, once, so this loop and
             # `loop/encounter.py`'s own do not each carry a second copy of that check.
-            produced = self._contest(w, token, a, _contests, contest_max_depth)
+            produced = (self._contest(w, token, a, _contests, contest_max_depth) if _contests
+                        else self._grade(w, token, a, _route))
         else:
             # S27.1: CONTENTION IS AN ORDERED FOLD. Each act sees the world its predecessors
             # left. SEQUENCE, NOT SIMULTANEITY -- and NO ACT NEEDS TO KNOW ANOTHER EXISTED.

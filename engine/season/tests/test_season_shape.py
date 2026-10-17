@@ -865,14 +865,23 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     `subject` held by `rosters.yaml: record_kinds` (`RECORD_REFERENT_KINDS` would lack it and
     `writs_held` would stamp nothing for the row -- a declared row read by nothing, `04` §A.1 ID-13).
     Falsifier: `test_in09_dispensation_answer.py::test_in09_the_loader_refuses_a_record_row_naming_
-    no_record_kind`, three planted cells, red on all three with the refusal disabled."""
+    no_record_kind`, three planted cells, red on all three with the refusal disabled.
+
+    ⚠ 71 -> 74, v9 FI-01 (`ED-FI-0009`, J-22 (A)), THREE NEW LOAD-TIME REFUSALS, `verbs.py` 32 -> 35, all
+    for the `graded_inquiries` route the `emits` arm now accepts: a routed row that also declares
+    `contests:` (a route is not a prize); a routed row with a flat `emits:` (the roll would decide
+    nothing it reports); and, after the row loop, ONE raise naming every defect in the two inquiry
+    rosters (a route on no verb row, a route with fields other than `{provider, module_entry}`, an
+    `undeposited_kinds` member no row declares). All fire while `verb_table.yaml` is read. Falsifier:
+    `test_fi01_graded_inquiries.py::test_the_route_is_not_readable_as_a_prize` plants each of the
+    first three cases and the load raises naming it."""
     mods = _model_modules()
     # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- see the sibling assertion above]
     assert len(mods) >= 8, f"model set collapsed to {len(mods)} — this guard would pass vacuously"
     total = sum(_code_only(m.read_text()).count("raise SystemExit") for m in mods)
     # [JUSTIFIED: a MEASURED PROPERTY OF THIS PACKAGE, not a game value -- the load-time refusals counted across the model set, and the point of pinning it is that a move must not drop one]
-    assert total == 71, (
-        f"{total} load-time exits across the model set, expected 71. Per file: "
+    assert total == 74, (
+        f"{total} load-time exits across the model set, expected 74. Per file: "
         + ", ".join(f"{m.name}={_code_only(m.read_text()).count('raise SystemExit')}"
                     for m in mods if _code_only(m.read_text()).count("raise SystemExit")))
 
@@ -2253,13 +2262,18 @@ def test_invariant_12_refuses_a_degree_keyed_emits_with_nothing_to_key_it_on():
                 VERBS._load_verb_table()
         return str(e.value)
 
-    # ARM 1 — a degree-keyed `emits:` on a verb nothing grades. `examine` is the live shape:
-    # flat `writes: []`, no `contests:`.
+    # ARM 1 — a degree-keyed `emits:` on a verb nothing grades. `interview` is the live shape:
+    # flat `writes: []`, no `contests:`, and no `graded_inquiries` route.
+    # ⚠ RE-PINNED AT v9 FI-01 (`ED-FI-0009`, J-22 (A)): this arm planted on `examine`, which is now
+    # GRADED by its `graded_inquiries` route (`rosters.yaml`), so a degree-keyed `emits:` there is the
+    # shipped shape and loads. `interview` is the prompt (K-36) and is graded by nothing, which is the
+    # shape this arm exists to refuse. The routed rows' own two refusals (a route beside `contests:`,
+    # a route with a flat `emits:`) are `test_fi01_graded_inquiries.py`'s.
     def key_the_emits(doc):
-        row = next(r for r in doc["verbs"] if r["verb"] == "examine")
+        row = next(r for r in doc["verbs"] if r["verb"] == "interview")
         row["emits"] = {"Success": ["finding.made"], "Failure": ["finding.none"]}
     msg = loads(key_the_emits)
-    assert "degree-keyed `emits:`" in msg and "examine" in msg, msg
+    assert "degree-keyed `emits:`" in msg and "interview" in msg, msg
 
     # ARM 2 — the converse, which the `writes:` half has always refused: a contested verb whose
     # emissions are flat reports the same outcome whichever way the contest went (`ID-9`).
@@ -3488,7 +3502,7 @@ def test_t2_align_kind_reads_the_one_emitter_and_a_deed_key_needs_an_emitted_kin
     """`align_kind(kind, axis)` = an authored `deed:<kind>` cell, else `align` of the ONE verb that
     emits the kind, else 0. Its contract, on a throwaway table; a shared kind reads its authored
     `deed:` cell where one exists (v9 IN-58 authors `deed:person.died` and `deed:body.changed`) and 0
-    otherwise."""
+    otherwise; a single-emitter kind reads its authored cell too (v9 SC-03b: `deed:matter.undetermined`)."""
     from ..data.verbs import DEED_PREFIX, EMITTED_KINDS, KIND_VERB, _load_alignment, align_kind
 
     # The rule recomputed from the table independently of `_derive_kind_verb`.
@@ -3501,16 +3515,25 @@ def test_t2_align_kind_reads_the_one_emitter_and_a_deed_key_needs_an_emitted_kin
     shared = sorted(k for k, vs in emitters.items() if len(vs) > 1)
     assert not any(k in KIND_VERB for k in shared), "a kind several rows emit maps to a verb"
 
+    def authored(kind, axis):
+        return data_verbs.ALIGNMENT.get(axis, {}).get(DEED_PREFIX + kind)
+
     checked = 0
     for kind, verb in sorted(KIND_VERB.items()):
         for axis in PURSUIT_AXES:
-            assert align_kind(kind, axis) == align(verb, axis), (kind, verb, axis)
-            checked += bool(align(verb, axis))
+            # an authored `deed:<kind>` cell wins where one exists (v9 SC-03b authors
+            # `deed:matter.undetermined` = 0.0: a Failed `determine` is no deed of the party's)
+            cell = authored(kind, axis)
+            want = align(verb, axis) if cell is None else cell
+            assert align_kind(kind, axis) == want, (kind, verb, axis)
+            checked += bool(want)
+    assert {k for k in KIND_VERB if any(authored(k, ax) is not None for ax in PURSUIT_AXES)} == {
+        "matter.undetermined"}, "a single-emitter kind carries an authored `deed:` cell nobody reviewed here"
     assert checked >= 1, "no single-emitter kind has a non-zero cell, so equality proved nothing"
     unauthored = 0
     for kind in shared:
         for axis in PURSUIT_AXES:
-            cell = data_verbs.ALIGNMENT.get(axis, {}).get(DEED_PREFIX + kind)
+            cell = authored(kind, axis)
             assert align_kind(kind, axis) == (0.0 if cell is None else cell), (kind, axis)
             unauthored += cell is None
     assert unauthored >= 1, "every shared kind is celled on every axis: the 0 branch went unobserved"
@@ -5705,9 +5728,20 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
     # ten seasons, computed chooser -- `Hh` grain 8 x 10, `S` monotone up]
     assert world_q.subsistence_draw(w) == {}, (
         "`tiny_world` has an eater again; re-measure the hearth rather than reading this note")
-    assert hearth == [hearth[0]] * len(hearth), (
-        f"the hearth moved with nobody drawing on it: {hearth}. Something other than the draw now "
-        "writes `Hh`'s larder -- re-attribute it before re-pinning")
+    # ⚠ RE-ATTRIBUTED AT v9 FI-01 (2026-10-17), AS THIS MESSAGE ASKED, BEFORE RE-PINNING. The hearth read
+    # 8 x 7, then 7 x 3: ONE granted `transfer` out of `Hh` (`p_low` -> `p_high`, 1 grain, season 7) --
+    # an ACT, not a draw. FI-01 moved the act mix (the graded inquiries roll, and a `finding.none` no
+    # longer lands in a ledger to answer a question, so persons ask again), and the new mix reaches a
+    # transfer that drains the hearth. Still no eater: the assertion is now that every unit that left
+    # `Hh` left by a granted transfer out of it, so a larder write from anything else is still red.
+    _hh_out = sum(int((a.payload or {}).get("amount", 0)) for a in d.resolved
+                  if a.verb == "transfer" and (a.payload or {}).get("from") == "Hh"
+                  and (a.payload or {}).get("to") != "Hh"
+                  and any(e.kind == "transfer.made" and d.act_of.get(e.id) is a for e in w.log))
+    assert hearth == sorted(hearth, reverse=True) and hearth[0] - hearth[-1] == _hh_out, (
+        f"the hearth moved by {hearth[0] - hearth[-1]} with {_hh_out} granted out by transfer and "
+        f"nobody drawing on it: {hearth}. Something other than the draw or a transfer now writes "
+        "`Hh`'s larder -- re-attribute it before re-pinning")
     assert settle == sorted(settle) and settle[-1] > settle[0], (
         f"the settlement no longer overflows: {settle}")
     assert minted, "the chooser minted nothing; this test cannot observe H-94"
@@ -6748,7 +6782,11 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     # act-mixed (actors `p_carin`, `p_bailiff`), and n=6 carries FEWER `term.matured` links (3)
     # than n=3 (4): the extra link is an act, not a stage, so the depth clause is not
     # discriminating again. (12, 13) at the base; (13, 13) with the tiers and no screen.
-    assert (depths[3], depths[6]) == (13, 14), (
+    # v9 FI-01 (`ED-FI-0009`): (13, 14) -> (11, 11), a re-record with the unit that moved it: the graded
+    # inquiries and the skip arm (no claim is deposited from a `finding.none`, and the n=3 chain above
+    # ran through two of them) moved the act mix. The two arms are EQUAL, so the depth clause is not
+    # discriminating -- the case the message below does not ask to be walked.
+    assert (depths[3], depths[6]) == (11, 11), (
         f"the maturation depth ceiling moved: {depths}. This is a MEASUREMENT of a mixed chain "
         "whose length the act mix sets, not a discriminator — `H-80`'s discriminator is the COUNT, "
         "asserted below and still live. Re-pin these two numbers with the unit that moved them. "
@@ -6806,7 +6844,8 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     # [GROUNDED: re-measured at plan position `19c`, 2026-09-30 -- the five-season chain reads 10 against the seven-season arm's 12, moved by the same unit as the pin above (`migrate` formed and refused, spending scenes); the RELATION still holds, and with `migrate` unresolvable the pin reads 11 again]
     # [GROUNDED: re-measured at IN-08's cells commit (B-G) -- the five-season chain reads 8 against the seven-season arm's 9 (`depths[3]`, re-pinned above), moved by the same unit as that pin (the chooser re-scored on the 15x7 basis, the three persons' pursuits migrated, `challenge`/`accept` forming); the RELATION still holds]
     # [GROUNDED: re-measured at IN-50 -- the five-season chain reads 11 against the seven-season arm's 12 (`depths[3]`, re-pinned above), 8 and 9 at its base `2a2ed152`; refusals now cite their occasion (`_act_events`), so both chains lengthen, and the RELATION still holds. WALKED at the B-I close: the five-season chain is the seven-season 3-stage chain above less its last `term.matured` (`record.created, restore.refused, kill.refused, record.created, term.matured, record.created, finding.none, record.created, record.created, term.matured, term.matured`), through `record.created` and the two IN-50 refusal links]
-    assert max(depth5(e) for e in mats5) == 11 < depths[3], (
+    # [GROUNDED: re-measured at v9 FI-01 -- the five-season chain reads 9 against the seven-season arm's 11 (`depths[3]`, re-pinned above), moved by the same unit (the graded inquiries and the skip arm: the B-I walk above ran through a `finding.none`); the RELATION still holds]
+    assert max(depth5(e) for e in mats5) == 9 < depths[3], (
         f"the longest maturation chain over FIVE seasons is {max(depth5(e) for e in mats5)}, not "
         "the 9 measured under `U2`, or it is not below the seven-season figure above. The ceiling "
         "MOVING with the season count is what makes the 3-stage and 6-stage arms saturated there "
@@ -7876,8 +7915,17 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # `migrate` above; before the class its attempts were on the question's single referent and all
     # refused. A re-record, said so; it executes only from computed acts on a hand-built world
     # (`test_u7_remit.py` section 9), and H-163 limit 3 names the residue (the knowledge source).
-    assert refused_only == {"build", "found", "work", "survey", "commit", "dispatch",
-                            "examine", "restore", "forge", "carry"}, (
+    # ⚠⚠ v9 FI-01 (`ED-FI-0009`), TEN -> NINE, MEASURED THROUGH `run_case` AT SEED 0 WITH EACH HALF OF THE
+    # POSITION SEPARATED (scratch, not kept): `examine` LEAVES, INTO THE NEVER-ATTEMPTED SET, by the ROUTING,
+    # not the skip arm -- it is GRADED now, so like a contested verb it is admitted in `resolve()` before the
+    # roll and an act refused there never enters `driver.resolved` (the `speak` note at the never-attempted
+    # assertion); `examine` never passes admission in this corpus (its `Site` cell), so the attribution
+    # cannot see its attempts. An instrument limit, named. `dispatch` LEAVES (attempted in NPC-033 before,
+    # nowhere now) and `seize` JOINS (attempted once, in NPC-083, and refused) -- both by the SKIP ARM's act
+    # mix: with the skip arm off on the same tree, `dispatch` is refused in NPC-033 and `seize` attempted
+    # nowhere, exactly as before. A re-record, said so.
+    assert refused_only == {"build", "found", "work", "survey", "commit",
+                            "restore", "forge", "carry", "seize"}, (
         f"the always-refused set moved to {sorted(refused_only)}. `move` and `transfer` left it "
         "when `W-C` closed `H-94`'s structural half — the Candidate carries operands now — and "
         "`work` stays for a reason about the corpus's questions rather than about the channel")
@@ -8393,7 +8441,16 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
         # 43 -> 44, `fight` 3 -> 4, `challenge` 88 -> 89, `surveil` 72 -> 73, `interview` 13 -> 15. THE
         # SAME-BREATH CHECK: the universal set is empty on both sides, `refused_only` and `hi`/`lo` are
         # unmoved, and the status census is UNMOVED (103 RUNS-UNDECLARED · 40 SPAN-UNAUTHORED).
-    assert len(by_sig) == 99, (
+        # ⚠⚠ **99 -> 98, v9 FI-01 (`ED-FI-0009`), MEASURED BY `corpus_run.run_case`, seed 0, AGAINST AN
+        # ARM: the same tree with the skip arm off (grading on) reads 99, so the grading alone moves no
+        # set and the SKIP ARM is the unit.** THE DIRECTION: variety FELL by one; with a refused or failed
+        # inquiry depositing nothing, executed-world counts fall across the board -- `tell` 111 -> 95,
+        # `move` 53 -> 44, `interview` 15 -> 7, `surveil` 73 -> 65, `research` 16 -> 14, `accept` 116 ->
+        # 112, `challenge` 89 -> 86, `petition` 83 -> 80, `utter` 122 -> 117, `fight`/`give` 4 -> 2. THE
+        # SAME-BREATH CHECK: the universal set is empty on both sides, the executed set (16 verbs) is
+        # unmoved, and the status census is UNMOVED (103 RUNS-UNDECLARED · 40 SPAN-UNAUTHORED);
+        # `refused_only` moved for its own reasons (its note).
+    assert len(by_sig) == 98, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -8762,10 +8819,17 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # contested act refused at admission never enters `driver.resolved` (the `ever` note above), so
     # the attribution this set is computed from cannot see it. An instrument limit, named, not a fact
     # about the world.
+    # ⚠ `determine` (v9 SC-03b) is contested too, so the same blindness applies to it: a corpus `determine`
+    # refused at admission never enters `driver.resolved`, and its place in this set is the same instrument
+    # limit (no docket the corpus builds names a Person; `harness/corpus_run.py`'s docket item is a date and a Proposition).
+    # ⚠ v9 FI-01 (`ED-FI-0009`): `examine` and `dispatch` JOIN, `seize` LEAVES (the `refused_only` note
+    # above): `examine` by the instrument limit `speak` and `determine` already carry (a GRADED inquiry is
+    # admitted before its roll, so an admission refusal never enters `driver.resolved`), `dispatch` and
+    # `seize` by the skip arm's act mix. `corpus_run`'s `foldable but never even attempted`: 14 -> 15.
     assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish",
                                               "destroy_record", "march", "oblige", "open_case",
                                               "determine", "comply", "migrate", "requisition",
-                                              "seize", "speak"}, (    # IN-57: `dispatch` out, to `refused_only`
+                                              "speak", "examine", "dispatch"}, (    # IN-57: `dispatch` out, to `refused_only`; FI-01: back
         f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Five of "
         "the original six are the governance verbs no corpus overlay grants (`establish` is "
         "`remit:confer`-eligible); `march` is eligible in NPC-033/038 and WOULD form a real "
@@ -9996,9 +10060,12 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # only on a `Rung`-classed referent and no corpus seat holder knows of a larder his seat may requisition
     # (the note at `test_the_corpus_runs_and_the_ranking_cannot_discriminate`'s `refused_only`). A
     # re-record.
+    # ⚠⚠ v9 FI-01 (`ED-FI-0009`): `examine` and `dispatch` LEAVE, `seize` JOINS -- measured and attributed
+    # at `test_the_corpus_runs_and_the_ranking_cannot_discriminate`'s `refused_only` note (`examine` by the
+    # routing's instrument limit, the other two by the skip arm's act mix). A re-record, said so.
     assert set(refused) - set(executed) == {"work", "found",
-                                            "build", "survey", "commit", "dispatch",
-                                            "examine", "restore", "forge", "carry"}, (
+                                            "build", "survey", "commit",
+                                            "restore", "forge", "carry", "seize"}, (
         f"the always-refused set is {sorted(set(refused) - set(executed))}. `work` refuses because "
         "its `site` operand binds either to a non-Site referent (UNKNOWN) or to a real site whose "
         "condition never clears the floor in this corpus; `dispatch` LEFT at `17-cast` (see above; it "
@@ -11180,27 +11247,27 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
     # 14. `migrate` forms only on a place `world_q.places_named` stamps, so the scenes it spent on
     # plain referents go to other acts and one more Site-cell read on the hearth deposits. CONTROL,
     # run: with `migrate`'s `referent_class` blanked in `VERB_TABLE` in-process the old 20 pass.
-    assert actor_end == [("einhir_texts", "exists:Record", 0),
-                         ("hearth_ostvik", "stores:grain", 0),
+    # v9 FI-01 (`ED-FI-0009`): 21 -> 13 entries, ever 13 (none evicted), a re-record read off the failing
+    # assertion's own output and RE-READ, not assumed. THE SKIP ARM IS THE PROXIMATE CAUSE: a refused
+    # inquiry's `finding.none` now fans to nobody, so the precondition reads its fold made (`exists:Record
+    # 0` on `einhir_texts`, and the like) no longer reach its actor's ledger -- RS-21 item 1's *"a refused
+    # inquiry deposits nothing"* read strictly. ARM, run (scratch, not kept): the same tree with the skip
+    # arm off holds 23 ever / 23 at end; on, 13 / 13. Consequence, measured in this world: with nothing
+    # learned from a refused `research`, the actor forms it again -- 3 refused `research` with the arm
+    # off, 12 with it on, over the three seasons.
+    assert actor_end == [("hearth_ostvik", "stores:grain", 0),
                          ("einhir_texts", "exists:Person", 0),
-                         ("hearth_ostvik", "exists:Record", 0),
-                         ("rec:6bf46a143f347c12", "exists:Record", 1),
                          ("rec:6bf46a143f347c12", "exists:Person", 0),
                          ("rec:6bf46a143f347c12", "exists:Record", 1),
                          ("rec:6bf46a143f347c12", "exists:petition", 0),
-                         ("rec:0a9f85a0f7f67871", "exists:Record", 1),
                          ("rec:0a9f85a0f7f67871", "exists:Proposition", 0),
-                         ("hearth_ostvik", "exists:Rung", 1),
-                         ("hearth_ostvik", "present_at:p_carin", True),
                          ("hearth_ostvik", "exists:Person", 0),
-                         ("hearth_ostvik", "exists:petition", 0),
                          ("hearth_ostvik", "exists:Site", 0),
-                         ("hearth_ostvik", "exists:Person", 0),
                          ("hearth_ostvik", "exists:Record", 0),
-                         ("hearth_ostvik", "exists:Site", 0),
                          ("hearth_ostvik", "exists:Proposition", 0),
                          ("rec:6095547f999b4ff8", "exists:Person", 0),
-                         ("rec:6095547f999b4ff8", "exists:Record", 1)], (
+                         ("p_carin", "exists:Proposition", 0),
+                         ("hearth_ostvik", "stores:grain", 0)], (
         f"the `actor` arm's end-of-run grammar claims are {actor_end}, not the single surviving "
         "`stores:grain` read. Empty would mean the cap is evicting again — i.e. the fan-out "
         "default moved back toward `total`, or a new deposit channel opened — and every `H-40` / "
@@ -11666,7 +11733,14 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # cells -- `give`'s arrival above, the same shape: formed on a referent that is not a petition,
     # refused there, the `exists:petition` 0 read deposited, the next Candidate dropped on it. No verb
     # left the set. A re-record, read off the failing assertion's own output.
-    assert {v for v, _ in hl_live} == {"accept", "carry", "challenge", "commit", "examine", "fight",
+    # ⚠⚠ TWELVE -> ELEVEN, v9 FI-01 (`ED-FI-0009`), `carry` LEAVES, MEASURED BEFORE RE-PINNING AS THE
+    # MESSAGE ASKS, BY THE ACT MIX AND NOT ITS CELL. ARM, run (scratch, not kept): the same tree with the
+    # skip arm off (`loop/witness.py`'s `UNDEPOSITED_KINDS` emptied) drops on the twelve above; on, eleven.
+    # Resolved acts over the three seasons, arm off -> on: `carry` 2 -> 1, `surveil` 2 -> 0, `tell` 1 -> 0,
+    # `give` 0 -> 1, `work` 5 -> 3, `survey` 5 -> 3. With one `carry` attempt there is no second `carry`
+    # Candidate to drop on the first's deposited `exists:petition` read. A refused inquiry's reads no
+    # longer deposit (RS-21 item 1's *"deposits nothing"*), which moves this fixture's act sequence.
+    assert {v for v, _ in hl_live} == {"accept", "challenge", "commit", "examine", "fight",
                                        "give", "interview", "petition", "research", "restore",
                                        "transfer"}, (
         f"the headless drops are on {sorted({v for v, _ in hl_live})}. `examine`/`restore`/"
@@ -11873,8 +11947,14 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # v9 IN-45 `carry`: 20 -> 21, UP BY ONE, read off the failing assertion's own set: IN
     # `('carry', 'hearth_ostvik')` -- `carry`, newly resolvable, refused on a rung at `exists:petition`,
     # the read deposited and the next Candidate dropped on it (the `hl_live` note above). A re-record.
-    assert len(dropped) == 21, (
-        f"{len(dropped)} executable clause-4 drops, not 21. The drops are the channel itself; if "
+    # v9 FI-01 (`ED-FI-0009`): 21 -> 19, DOWN BY TWO, NONE IN, measured against the same tree with the
+    # skip arm off (scratch, not kept): OUT `('research', 'einhir_texts')` -- THE SKIP ARM ITSELF: the
+    # refused `research` on `einhir_texts` no longer deposits its `exists:Record` 0 read, so no belief
+    # drops the next `research` Candidate there and the act is formed again (the retry the W-B control
+    # note above measures) -- and `('carry', 'hearth_ostvik')`, by the act mix (the `hl_live` note
+    # above). The clause still fires; what fell is a refused inquiry teaching its actor anything.
+    assert len(dropped) == 19, (
+        f"{len(dropped)} executable clause-4 drops, not 19. The drops are the channel itself; if "
         "this falls toward zero the clause has stopped firing, which is a different and worse "
         "failure than the loss of outcome-relevance recorded above.")
     # ⚠⚠⚠ **THE BITE CAME BACK UNDER G1a, THE GUARD ABOVE DEMANDED A REASON, AND THE REASON IS
@@ -11928,7 +12008,14 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # screen) moved the act mix, and neither is taken in the control now. Without the screen the bite
     # was three pairs, two of them not groundable by this rule.
     # [GROUNDED: measured at IN-57 by wrapping `belief_contradicts` as `hl_drops` does, with the driver's `round`; the replica reproduces the base pin at `5b5e31ef`]
-    assert bit == {("give", "hearth_ostvik")}, (
+    # ⚠⚠ **v9 FI-01 (`ED-FI-0009`): THE BITE IS EMPTY AGAIN, REPORTED AS A LOSS OF OUTCOME-RELEVANCE AS
+    # `U3`'s AND `R8.1`'s WERE -- THE DROP DEFERS RATHER THAN DENIES.** `('give', 'hearth_ostvik')` is
+    # still dropped, but 6 times over the three seasons where it was 21, and the shipped arm now takes it
+    # ONCE (the control still five times), so it is not control-only. ARM, run with the replica above
+    # (scratch, not kept): the same tree with the skip arm off reproduces the base bite and its 21 drops
+    # exactly, so the cause is the skip arm's act-mix move (a refused inquiry's reads no longer land),
+    # not the maturation, which still writes at MATTER (unchanged code).
+    assert bit == set(), (
         f"the clause-4 bite is {sorted(bit)}. A non-empty bite here would be a NEW acceptance-chain "
         "pair and should be named and grounded as one, not silently accepted; check whether the "
         "shift is a real recovered denial or another fold-order artifact of `seen`'s deposit volume "
@@ -12090,9 +12177,16 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # referent no docket names, refused there (`speech.unheard`), its `exists:DocketItem` 0 read
     # deposited and the next Candidate dropped on it. Nothing left. `tell` and `surveil` are absent.
     # A re-record, read off the failing assertion's own output: 240 drops, `speak` 16 of them.
+    # ⚠ {14 verbs} -> {12 verbs}, v9 FI-01 (`ED-FI-0009`): `research` AND `give` LEAVE, nothing joins,
+    # 240 -> 104 drops. MEASURED with the skip arm off on the same tree (scratch, not kept): 240 drops,
+    # the 14 verbs above exactly (give 38, research 19, ...), so the skip arm is the cause. `research`
+    # leaves BY THE SKIP ARM ITSELF -- a refused `research` deposits no `exists:Record` 0 read now, so
+    # nothing drops the next `research` Candidate (19 -> 0); `give` by the act mix it moves (38 -> 0).
+    # On: speak 16, accept/challenge/fight/interview/petition 11 each, commit 9, build/found/carry 6,
+    # examine/restore 3. `tell` and `surveil` are absent.
     assert {v for v, _ in live} == {"accept", "build", "carry", "challenge", "commit", "examine",
-                                    "fight", "found", "give", "interview", "petition",
-                                    "research", "restore", "speak"}, (
+                                    "fight", "found", "interview", "petition",
+                                    "restore", "speak"}, (
         f"the drops are on {sorted({v for v, _ in live})}. `tell` here means a "
         "`claim.held` claim is reaching a ledger again, which is the self-refuting belief "
         "`LEDGER_DERIVED_STEMS` excludes. `surveil` RETURNING means `tell`'s degree has stopped "
@@ -12862,7 +12956,12 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # v9 IN-45 `carry`: 36/11 -> 36/12, a re-record read off the failing assertion's own `got` (`none`
     # 40/4 UNMOVED; `total` 36/10 -> 36/11): `carry`, newly resolvable, is one more Candidate a fork
     # can diverge into. Mechanism not isolated past that; 12 > 4 still holds.
-    assert (got["actor"]["genuine"], got["actor"]["diverged"]) == (36, 12), (
+    # v9 FI-01 (`ED-FI-0009`): 36/12 -> 36/9, a re-record read off the failing assertion's own `got`
+    # (`none` 40/4 UNMOVED; `total` 36/11 -> 36/8): the fork population is unmoved and fewer forks reach
+    # a later decision, consistent with a refused inquiry no longer depositing the reads a later
+    # deliberation would read (the clause-4 producers the six inquiries opened, `test_wb_clause_four_…`:
+    # 240 -> 104 drops on ARC-01). Mechanism not isolated past FI-01's two halves; 9 > 4 still holds.
+    assert (got["actor"]["genuine"], got["actor"]["diverged"]) == (36, 9), (
         f"the shipped default diverged {got['actor']['diverged']} times of "
         f"{got['actor']['genuine']}: {got}. `W-D`'s acceptance was lost at `all_five` on "
         "2026-09-07 and recovered on 2026-09-10 when §F1 clause 4 got producers other than "
@@ -12904,7 +13003,7 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # [GROUNDED: measured 2026-09-30 at plan position `19c`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- `total` arm genuine 32, diverged 11; 32/10 with `migrate` unresolvable]
     # [GROUNDED: 32/11 -> 30/11 at plan position `24f`, 2026-09-30 -- divergence unmoved; mechanism in the `none`-arm `24f` block above]
     # [GROUNDED: 30/11 -> 29/6 at IN-08's cells commit (B-G) -- the re-scored ranking and the duel pair; mechanism and both trees' figures in the `none`-arm IN-08 block above]
-    assert (got["total"]["genuine"], got["total"]["diverged"]) == (36, 11), got    # IN-11: 29/6 -> 26/6 (the actor-arm note); IN-57: -> 36/10 (the attention-tier key); IN-45 `carry`: -> 36/11 (the actor-arm note)
+    assert (got["total"]["genuine"], got["total"]["diverged"]) == (36, 8), got    # IN-11: 29/6 -> 26/6 (the actor-arm note); IN-57: -> 36/10 (the attention-tier key); IN-45 `carry`: -> 36/11 (the actor-arm note); FI-01: -> 36/8 (the actor-arm note)
     # AND THE TWO LAYERS ARE SEPARATED. The finding is the DECISION count above; this is the layer
     # beneath it — whether the fork moved the act stream at all.
     #
@@ -13288,7 +13387,11 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # its own-act screen); still equal to `wide` (11 both), not 0.
     # v9 IN-45 `carry`: 11 -> 12, a re-record: the sibling test's population move (`carry` newly
     # resolvable, the `(36, 12)` note there); still equal to `wide` (12 both), not 0.
-    assert got["actor"]["verbonly"] == 12, (
+    # v9 FI-01 (`ED-FI-0009`): 12 -> 9, a re-record: the sibling test's population move (the `(36, 9)`
+    # note there, read off this test's own `got`: `none` 4/4, `actor` 9/9, `total` 8/8); still equal to
+    # `wide` (9 both), not 0 -- the clause-4 producers are not gone, fewer of them land (a refused
+    # inquiry's reads no longer deposit).
+    assert got["actor"]["verbonly"] == 9, (
         f"the shipped default adds {got['actor']['verbonly']} VERB-SET divergences: {got}. A 0 "
         "means the clause-4 producers the six investigation acts opened are gone again and the "
         "2026-09-07 loss is back; any other number means the population moved and must be "
@@ -13383,7 +13486,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # ⚠⚠ **33/10 -> 31/7, PLAN POSITION `7a`, 2026-09-29 -- SAME MECHANISM AS THE `none`-ARM BLOCK
     # ABOVE, AND `wide` STILL EQUALS `verbonly` (7 both).**
     # [GROUNDED: measured 2026-09-29 on this tree after position `7a`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- shipped arm genuine 31, wide 7]
-    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (36, 12), got     # `24f`: 31/7 -> 32/7; IN-08: -> 35/9; IN-11: -> 32/9 (the hold, see `test_wd_a_fork_changes_…`); IN-57: -> 36/11; IN-45 `carry`: -> 36/12 (the `verbonly` note)
+    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (36, 9), got     # `24f`: 31/7 -> 32/7; IN-08: -> 35/9; IN-11: -> 32/9 (the hold, see `test_wd_a_fork_changes_…`); IN-57: -> 36/11; IN-45 `carry`: -> 36/12 (the `verbonly` note); FI-01: -> 36/9 (the `verbonly` note)
     # [GROUNDED: re-measured 2026-09-10 after ED-FI-0009 -- `total` 5 of 18 under the widened (verb, subject) fingerprint]
     # [GROUNDED: re-measured 2026-09-10 under `U4` -- `total` 5 of 19 under the widened (verb, subject) fingerprint]
     # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (28, 3) at the `total` arm]
@@ -13414,7 +13517,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # formed wherever `move` is. `wide` still equals `verbonly` (11 both); 32/10 with `migrate`
     # unresolvable.
     # [GROUNDED: measured 2026-09-30 at plan position `19c`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- `total` genuine 32, wide 11 (= verbonly 11); 32/10 with `migrate`'s `@effect_for` removed]
-    assert (got["total"]["genuine"], got["total"]["wide"]) == (36, 11), got    # `24f`: 32/11 -> 30/11; IN-08: -> 29/6; IN-11: -> 26/6; IN-57: -> 36/10; IN-45 `carry`: -> 36/11
+    assert (got["total"]["genuine"], got["total"]["wide"]) == (36, 8), got    # `24f`: 32/11 -> 30/11; IN-08: -> 29/6; IN-11: -> 26/6; IN-57: -> 36/10; IN-45 `carry`: -> 36/11; FI-01: -> 36/8
 
 
 # ===========================================================================
@@ -13705,11 +13808,17 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # `subject` to the seam. Its prize `a matter` names the social contest container's provider, as
     # `tell`'s `a standing` does (it was an interim row on `sigma_leverage` until steps 13+15); graded
     # on the same ladder (`tests/test_sc01_speak.py` reads all four bands).
+    # ⚠ THE SIXTH ENTRY, `determine` (v9 SC-03b, #453 §10.4 step 4), RE-RECORDED with its reason: the row
+    # is contested through the social contest container's provider (`contests: "a proposition"`, a prize
+    # row no verb claimed until now), graded on the one ladder, and its `Tenure.degree` write has a
+    # producer (`_eff_determine` sets the degree on the edge it opens; `test_u7_remit.py` section 10
+    # reads all four bands).
     assert contested == {"fight": "the body", "tell": "a standing", "march": "a field",
-                         "accept": "the body", "speak": "a matter"}, (
+                         "accept": "the body", "speak": "a matter",
+                         "determine": "a proposition"}, (
         f"the set of contesting verbs moved: {contested}. Every claim `W-E` published about what "
-        "can be graded today is scoped to this set. A SIXTH entry is a real widening and wants "
-        "its own measurement; losing one of these five means its prize row or its verb row has "
+        "can be graded today is scoped to this set. A SEVENTH entry is a real widening and wants "
+        "its own measurement; losing one of these six means its prize row or its verb row has "
         "gone.")
     # Pins the roster against silent growth.
     # ⚠ 37 -> 38, `release` (`04 §A.3` row 14), 2026-09-11; 38 -> 39, `march` (M4,
@@ -13730,6 +13839,18 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     assert {"examine", "interview", "research", "surveil", "thread_read",
             "reconstruct"} <= set(VERB_TABLE), sorted(VERB_TABLE)
     assert "the six investigation acts" not in VERB_TABLE
+    # ⚠ RE-PINNED AT v9 FI-01 (`ED-FI-0009`, J-22 option (A)): THE CONTESTED SET ABOVE IS UNCHANGED, AND A
+    # SECOND, DISJOINT SET IS GRADED WITHOUT A PRIZE. `rosters.yaml: graded_inquiries` routes `research`,
+    # `examine` and `surveil` (the place case) to the `social_contest` provider and module entry -- a
+    # routing row, not a prize, so `contests:` stays empty on all six inquiries and the ruling that
+    # investigation must not be made a contest stands. `interview` (a prompt, K-36), `reconstruct` (K-37)
+    # and `thread_read` (K-37, H-85) wait and are not graded. So the title's *only a verb that declares
+    # contests* is now *only a verb that declares contests, or a route*; the name is kept because the
+    # plan and `seam/ladder.py` cite the test by it.
+    from ..data.rosters import GRADED_INQUIRIES
+    graded = {v for v in VERB_TABLE if v in GRADED_INQUIRIES}
+    assert graded == {"research", "examine", "surveil"}, sorted(graded)
+    assert not graded & set(contested), "a graded inquiry declares `contests:` -- it was made a prize"
 
     # ⚠⚠ **A PRIZE IS A ROW SINCE `U1`, NOT A MODULE STRING, AND THE TWO FIELDS ARE DIFFERENT
     # QUESTIONS.** `module:` is WHOSE prize it is — what the seam names when it refuses, checked
@@ -13822,21 +13943,43 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # move more resolvers into `modules/`; the one-owner property this guarded is now "the host rolls
     # nothing", and a margin is a module's to produce.
     pattern = re.compile(r"\bnet\b\s*=|roll_pool|\broll_net\b|\bnet_boost\b|\bsuccesses\b")
-    producers = set()
-    for f in files.package_modules():
-        # The HOST's code, not its tests: `test_social_contest_module.py` calls the dice engine on
-        # purpose, as the independent oracle for the module's roll (this file was the only test
-        # excluded while no other test named a producer).
-        if files.TESTS_DIR in f.parents:
-            continue
-        rel = f.relative_to(files.PACKAGE_DIR).as_posix()
-        for i, line in enumerate(_code_only_lines(f), 1):
-            if pattern.search(line):
-                producers.add(rel)
+
+    def _producers(paths, base):
+        out = set()
+        for f in paths:
+            # The HOST's code, not its tests: `test_social_contest_module.py` calls the dice engine on
+            # purpose, as the independent oracle for the module's roll (this file was the only test
+            # excluded while no other test named a producer).
+            if files.TESTS_DIR in f.parents:
+                continue
+            rel = f.relative_to(base).as_posix()
+            for i, line in enumerate(_code_only_lines(f), 1):
+                if pattern.search(line):
+                    out.add(rel)
+        return out
+
+    producers = _producers(files.package_modules(), files.PACKAGE_DIR)
     assert producers == set(), (
         f"the season package produces a margin in {sorted(producers)}. Since `31a` the host builds "
         "the typed input record and calls the module entry; the roll is the module's. `S27.2` names "
         "a second resolver as this architecture's highest-value refusal -- adjudicate before it lands")
+    # v9 FI-01: THE SCAN SEES A PLANTED SECOND RESOLVER FOR AN INQUIRY. The graded inquiries roll through
+    # the module entry (`seam/contest.py::grade`), so a host-side inquiry roll is exactly what this pin
+    # exists to refuse; the plant is the shape such a roll would take (a pool counted against an
+    # obstacle, a `net` assigned). It goes through the SAME `_producers` helper the assertion above runs
+    # over the real package, so the helper that returned the empty set is seen to return the plant when
+    # one exists. The plant lives in a temp dir, never in the package: under `-n auto` another worker's
+    # scan would read it mid-run.
+    with tempfile.TemporaryDirectory() as tmp:
+        planted = Path(tmp) / "inquiry_resolver.py"
+        planted.write_text(
+            "def grade_inquiry(pool, ob, rng):\n"
+            "    # a second resolver for `research`: rolls the pool itself instead of the module entry\n"
+            "    net = sum(1 for _ in range(pool) if rng.random() > 0.6)\n"
+            "    return net - ob\n")
+        seen = _producers([planted], Path(tmp))
+    assert seen == {"inquiry_resolver.py"}, (
+        "the host scan did not see a planted inquiry resolver -- it cannot refuse one")
     sys.path.insert(0, str(files.REPO_ROOT / "tools"))
     import ci_common
     scanned, module_producers = set(), set()
@@ -14380,7 +14523,12 @@ def test_u2_the_one_round_arm_reproduces_the_pre_tick_loop():
     # made (its echo now sorts last), onto `einhir_texts`: `research` and `reconstruct` there,
     # `finding.none` x2 where `finding.made` and `petition.refused` were. The old `(source, id)`
     # key reproduces the prior dict on this tree.
-    assert kinds == {"claim.decayed": 10, "claim.deposited": 39, "condition.worn": 2,
+    # v9 FI-01 (`ED-FI-0009`), A RE-RECORD OF ONE CLAIM KIND: `claim.deposited` 39 -> 30, every other kind
+    # unchanged, the two `finding.none` included. THE SKIP ARM, exactly: the 9 deposits WITNESS made from
+    # those two Events (the event-kind claims, the `seen` claims and the reads, across their witnesses)
+    # are not made. Upstream of both loops, as the moves above were; the one-round arm still reproduces
+    # the one-pass loop's behaviour in every non-claim kind.
+    assert kinds == {"claim.decayed": 10, "claim.deposited": 30, "condition.worn": 2,
                      "finding.none": 2, "record.created": 3, "term.matured": 1}, kinds
     assert d.resolved, "the one-round arm resolved nothing — the control has no behaviour in it"
 
@@ -15577,4 +15725,6 @@ def test_t4_petition_and_issue_bind_to_and_contest_exactly_as_before():
     assert VERB_TABLE["issue"].counterparty == "to" and not VERB_TABLE["issue"].contests
     checked += 1
     assert checked == 2
-    assert {v for v, r in VERB_TABLE.items() if r.contests and r.counterparty} == {"tell"}
+    # v9 SC-03b: `determine` joins -- it names its party as `counterparty: subject` (v9 plan position `19`)
+    # and is contested now, so the judge rolls against the party exactly as `tell` rolls against the hearer.
+    assert {v for v, r in VERB_TABLE.items() if r.contests and r.counterparty} == {"tell", "determine"}

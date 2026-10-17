@@ -54,6 +54,14 @@ from ..state.gate import DETERMINATION, NotYours
 SEAT, DUKE, TREASURY = "off_duke", "p_high", "D"
 PARTY, OUTSIDER = "p_mid", "p_king"          # inside the duchy (Hh) / outside it (R)
 REMIT = ("requisition", "open_case", "determine", "issue")
+# v9 SC-03b: `determine` is a CONTESTED act (`contests: a proposition`), so a determination executes at the
+# band the judge's roll decides. At the shipped `pool_default` (2) against the shipped obstacle (2) most
+# rolls are `Failure` (`matter.undetermined`, nothing opens), and WHICH act id lands where is the seed's
+# business. The tests below that need the disposal to OPEN take a STRONG JUDGE -- `pool_default` 30 against
+# the same obstacle -- and each such test ASSERTS the band it landed on (`_sentenced`, the `OPENS` checks), so a
+# fixture that stopped being strong fails here and does not quietly turn an executes-test into a refusal-test.
+JUDGE = {"pool_default": 30}
+OPENS = ("Overwhelming", "Success")
 
 
 def _world(**fx):
@@ -111,6 +119,8 @@ _WELL_FORMED = {"requisition": _requisition, "open_case": _open, "determine": _d
 
 
 def _ready(verb, **fx):
+    if verb == "determine":
+        fx = {**JUDGE, **fx}
     w, d = _world(**fx)
     if verb == "determine":
         assert _kinds(_fold(w, d, _open("setup"))) == ["case.opened"]
@@ -169,7 +179,12 @@ def test_19_none_of_the_four_executes_with_via_none(verb):
     eligibility clause."""
     w, d = _ready(verb)
     seated = _fold(w, d, _WELL_FORMED[verb]("seated"))
-    assert _kinds(seated) == list(VERB_TABLE[verb].emits), (verb, _kinds(seated))
+    row = VERB_TABLE[verb]
+    # A contested row's success kinds are its BAND's (`emits_at`): the strong judge lands on a band that
+    # opens, and the control asserts which, so it cannot pass on a `Failure`.
+    want = list(row.emits_at(seated[0].degree)) if row.contests else list(row.emits)
+    assert _kinds(seated) == want, (verb, _kinds(seated))
+    assert not row.contests or seated[0].degree in OPENS, (verb, seated[0].degree)
     w, d = _ready(verb)
     bare = _fold(w, d, _WELL_FORMED[verb]("bare", via=None))
     assert _kinds(bare) == list(VERB_TABLE[verb].refusal_for(ELIGIBILITY_CLAUSE)), _kinds(bare)
@@ -298,13 +313,15 @@ def test_19_a_determination_opens_the_disposal_tenure_on_its_subject_via_the_sea
         seen.append(b)
         return b
     monkeypatch.setattr(G, "tenure_write_basis", spy)
-    w, d = _world()
+    w, d = _world(**JUDGE)
     _fold(w, d, _open("oc"))
     seen.clear()
     out = _fold(w, d, _determine("dt"))
     assert _kinds(out) == ["matter.determined"], _kinds(out)
     edge, = _obliges(w)
     assert (edge.subject, edge.object, edge.live) == (PARTY, SEAT, True)
+    # v9 SC-03b: the edge carries the band the contest decided (H-162's producer), the Event's own.
+    assert edge.degree == out[0].degree and edge.degree in OPENS, (edge.degree, out[0].degree)
     assert edge.term == Term(w.tick + w.fixtures.get("oblige_term"), "dt"), edge.term
     assert DETERMINATION in seen, seen
     assert PARTY in world_q.establishment_of(w, SEAT)
@@ -316,7 +333,7 @@ def test_19_a_determination_opens_the_disposal_tenure_on_its_subject_via_the_sea
 def test_19_two_determinations_of_one_matter_in_one_fold_the_second_refuses():
     """The docket's scarcity: the first determination takes the matter off it, so the second reads 0
     on the `docket` conjunct -- one edge, not two."""
-    w, d = _world()
+    w, d = _world(**JUDGE)
     _fold(w, d, _open("oc"))
     out = _fold(w, d, _determine("dt1"), _determine("dt2"))
     assert sorted(_kinds(out)) == ["determine.refused", "matter.determined"], _kinds(out)
@@ -348,11 +365,15 @@ def test_19_below_quorum_the_determination_is_refused(quorum):
 def test_19_a_determination_needs_a_docketed_person_inside_the_benchs_ground():
     """The other three conjuncts, each against its own refusal. Nothing docketed: `docket` refuses.
     A party outside the duchy (docketed by hand, since no Duke could open that case): the `bench`
-    conjunct refuses as the SEAT (`unauthorized`). A matter that is no person: `party` refuses."""
+    conjunct refuses as the SEAT (`determine.refused` since SC-03b flattened the kind). A matter that is no person: `party` refuses."""
     w, d = _world()
     assert _kinds(_fold(w, d, _determine("dt0"))) == ["determine.refused"]
     w.docket.append({"date": None, "matter": OUTSIDER})
-    assert _kinds(_fold(w, d, _determine("dt1", subject=OUTSIDER))) == ["determine.unauthorized"]
+    # v9 SC-03b: the seat's refusal answers in the row's one kind now; the READ that refused it is the
+    # `bench` conjunct's, which is what tells it from the docket's (observed, not the kind).
+    out = _fold(w, d, _determine("dt1", subject=OUTSIDER))
+    assert _kinds(out) == ["determine.refused"]
+    assert (out[0].observed[-1].predicate, out[0].observed[-1].value) == (f"bench:{SEAT}", False), out[0].observed
     w.docket.append({"date": None, "matter": "S"})
     assert _kinds(_fold(w, d, _determine("dt2", subject="S"))) == ["determine.refused"]
     assert not [t for t in w.tenures if t.kind == "oblige"]
@@ -362,7 +383,7 @@ def test_19_the_disposal_declines_a_party_already_bound_to_the_seat():
     """One `oblige` per person and seat (`_req_oblige`'s clause 4, one step over): a party who already
     serves the seat is not bound twice. The precondition cannot spell the negation, so the effect
     declines, keyed to the `write` clause."""
-    w, d = _world()
+    w, d = _world(**JUDGE)
     assert _kinds(_fold(w, d, Act(id="ob", actor=PARTY, verb="oblige",
                                   payload={"subject": SEAT}))) == ["duty.taken"]
     _fold(w, d, _open("oc"))
@@ -441,7 +462,7 @@ def test_19_determination_opens_only_a_disposed_kind_and_closes_only_a_restraint
     # A JUDGE DOES NOT BIND HIMSELF -- `may_determine` refuses it, and an `oblige` a man opens on his
     # own behalf is his own act (`T-m`), whatever seat he names: never `determination`. That the
     # occupant does not serve his own seat is `_req_oblige`'s refusal and, for `determine`, the
-    # `bench` conjunct's (`may_determine`, `determine.unauthorized`) -- the fold's `counterparty`
+    # `bench` conjunct's (`may_determine`, `determine.refused`) -- the fold's `counterparty`
     # clause names the same case but is never reached on that row, and `_eff_determine`'s own
     # self-check was already dead -- not the gate's (the gate admits any owner's opening of his own
     # non-seat edge).
@@ -616,10 +637,11 @@ def _edges(w, kind, who=PARTY, seat=SEAT):
 
 def _sentenced(kind):
     """A world where `PARTY` is docketed under the row that disposes `kind` and then determined."""
-    w, d = _world()
+    w, d = _world(**JUDGE)
     row = _row_disposing(kind)
     assert _kinds(_fold(w, d, _open("oc", arrangement=row, petition=_petition(w)))) == ["case.opened"]
-    assert _kinds(_fold(w, d, _determine("dt"))) == ["matter.determined"]
+    out = _fold(w, d, _determine("dt"))
+    assert _kinds(out) == ["matter.determined"] and out[0].degree in OPENS, out   # the judge is still strong
     return w, d
 
 
@@ -675,6 +697,7 @@ def test_sc03a_a_determination_under_disposes_ban_opens_a_ban_and_release_is_ref
     w, d = _sentenced(BAN_KIND)
     ban, = _edges(w, BAN_KIND)
     assert ban.live and not _edges(w, "oblige"), w.tenures
+    assert ban.degree in OPENS, ban     # the grade rides the `ban` literal (`_disposal`)
     out = _fold(w, d, Act(id="rl", actor=PARTY, verb="release", payload={"subject": SEAT}))
     assert _kinds(out) == ["release.refused"], _kinds(out)
     assert ban.live
@@ -693,7 +716,7 @@ def test_sc03a_move_is_refused_while_a_detain_is_live():
                                   payload={"to": "S"}))) == ["travel.moved"]
     w, d = _sentenced(DETAIN_KIND)
     detain, = _edges(w, DETAIN_KIND)
-    assert detain.live
+    assert detain.live and detain.degree in OPENS, detain   # the grade rides the `detain` literal
     legs = [t for t in w.tenures if t.subject == PARTY and t.kind == "contain" and t.live]
     assert _kinds(_fold(w, d, Act(id="mv", actor=PARTY, verb="move",
                                   payload={"to": "S"}))) == ["travel.blocked"]
@@ -1075,3 +1098,133 @@ def test_in49_a_stores_claim_about_the_stamped_rung_does_not_set_the_levys_kind(
     assert w.fixtures.get("default_store_kind") != "salt"        # anti-vacuity
     assert [o.get("kind") for o in _formed(w, "requisition", q)] == [w.fixtures.get("default_store_kind")]
     assert "salt" in [o.get("kind") for o in _formed(w, "transfer", q) if o.get("to") == "S"]
+
+
+# ======================================================================================
+# 10 -- v9 SC-03b (#453 §10.4 step 4): `determine` IS A CONTESTED ACT; `Tenure.degree` GAINS ITS WRITER
+# ======================================================================================
+# Two observations, kept apart (CLAUDE.md §0.1 pt 3). STATIC: what the loader reads of the DECLARED
+# `writes:` (the row, the matrix cell, invariant 2 in both directions) -- it shows no producer. RUNTIME:
+# a seeded contested determination actually leaves `Tenure.degree` on the opened edge, at the band the
+# contest decided, and at `Failure` opens nothing.
+
+import dataclasses                                                # noqa: E402
+from ..data.arrangements import DEGREE_BANDS as BANDS             # noqa: E402
+from ..data.matrix import matrix_row                              # noqa: E402
+from ..manifest import resolve as _manifest_resolve               # noqa: E402
+
+
+def test_sc03b_determine_is_a_contested_row_keyed_on_the_four_ladder_bands():
+    row = VERB_TABLE["determine"]
+    assert row.contests == "a proposition", row.contests
+    prize = _manifest_resolve("contest", "a proposition")
+    assert prize is not None and prize["provider"] == "social_contest", prize
+    assert prize["module_entry"] == "social_contest.roll", prize
+    assert set(row.writes_by_degree) == set(row.emits_by_degree) == BANDS
+    # THE FALSIFIER'S DECLARED HALVES, literal: Failure writes nothing; Partial declares what the effect does,
+    # the opening graded `Partial` -- the same three pairs as Success (`writes_note`; the gate admits a degree
+    # only on an edge the write opens, so `Tenure.degree` alone at Partial was unbuildable).
+    assert row.writes_at("Failure") == () and row.writes_at("Partial") == row.writes_at("Success")
+    assert "Tenure.degree" in row.writes_at("Success") and "Tenure.degree" in row.writes_at("Overwhelming")
+    assert row.writes_at("Success")[0] == "Tenure.since"        # the opening is the first pair, the effect's
+    assert row.emits_at("Failure") == ("matter.undetermined",)
+    assert all(row.emits_at(b) == ("matter.determined",) for b in ("Overwhelming", "Success", "Partial"))
+    # ONE refusal kind, because a contested row may key only one (the party-gap refusal emits the union).
+    assert row.emits_on_refusal == ("determine.refused",), row.emits_on_refusal
+    assert {k for v in row.refusals_by_clause.values() for k in v} == {"determine.refused"}
+    assert "determine" in resolvable_verbs()
+
+
+def test_sc03b_static_the_matrix_cell_has_no_unproduced_declaration_and_the_loader_enforces_both_ways(
+        monkeypatch):
+    """STATIC. The shipped cell carries no `unproduced:` (the verb declares the write). Each direction of
+    invariant 2 is then PLANTED and the load refuses: the stale declaration kept after a verb writes the
+    cell, and the orphan -- the verb stops declaring the write and the cell has no declaration. That the
+    load is green shows the DECLARED writes agree; it does not show a producer (the runtime test does)."""
+    cell = matrix_row("Tenure", "degree")
+    assert not cell.unproduced, cell.unproduced
+    monkeypatch.setitem(_verbs.MATRIX, ("Tenure", "degree"),
+                        dataclasses.replace(cell, unproduced="H-162: kept after the verb declares it"))
+    with pytest.raises(SystemExit, match=r"declares `unproduced:` and a verb writes it"):
+        _verbs._load_verb_table()
+    monkeypatch.undo()
+
+    def drop(r):
+        r["writes"] = {b: [p for p in ps if p != "Tenure.degree"] for b, ps in r["writes"].items()}
+    _plant(monkeypatch, "determine", drop)
+    with pytest.raises(SystemExit, match=r"\(Tenure, degree\) is written at RES and no verb writes it"):
+        _verbs._load_verb_table()
+
+
+def _determined(w, d, key):
+    """One `determine` act folded; the Event it made and the party's disposal edges after it."""
+    out = _fold(w, d, _determine(key, subject=PARTY))
+    assert len(out) == 1, _kinds(out)
+    return out[0], _obliges(w)
+
+
+def test_sc03b_runtime_a_seeded_contested_determination_leaves_the_degree_on_the_opened_edge():
+    """RUNTIME. Swept over two judges (the shipped `pool_default` and a strong one) and forty act ids each,
+    every band of the ladder occurs, and each is observed against what the row declares for it:
+      * Overwhelming / Success -- the edge is opened, owned by the party on the seat, and carries
+        `degree == the band == the Event's degree`; the matter leaves the docket; `matter.determined`.
+      * Partial -- `matter.determined` and the edge carries `degree == Partial` (the row declares the same
+        three pairs as Success, `writes_note`: the gate admits a degree only on an edge the write opens).
+      * Failure -- `matter.undetermined`, NO edge, the matter still docketed, no change on the Event.
+    CONTROL (assert-that-asserted): all four bands were seen, and the counts add up to the folds made."""
+    seen: dict = {}
+    for pool in (2, 12):
+        for i in range(40):
+            w, d = _ready("determine", pool_default=pool)
+            ev, edges = _determined(w, d, f"sc03b_{pool}_{i}")
+            band = ev.degree
+            assert band in BANDS, band
+            seen[band] = seen.get(band, 0) + 1
+            if band == "Failure":
+                assert ev.kind == "matter.undetermined" and not edges and not ev.changes, (ev.kind, edges)
+                assert len(world_q.docketed(w, PARTY)) == 1
+                assert not [t for t in w.tenures if t.degree is not None]
+            else:
+                assert ev.kind == "matter.determined", (band, ev.kind)
+                edge, = edges
+                assert edge.degree == band and edge.live, (band, edge)
+                assert world_q.docketed(w, PARTY) == []
+    assert sum(seen.values()) == 80, seen
+    assert set(seen) == BANDS, seen          # all four occurred, so no band's branch went unobserved
+
+
+def test_sc03b_runtime_an_undetermined_matter_can_be_heard_again():
+    """The Failure band opens nothing, so the matter is not lost: the same bench determines it again on a
+    later act (a different draw) and the disposal opens then. Control: an act id that lands on `Failure`
+    at the shipped judge is found first, so the second fold is a real re-hearing, not a first one."""
+    for i in range(200):
+        w, d = _ready("determine", pool_default=2)
+        ev, edges = _determined(w, d, f"sc03b_again_{i}")
+        if ev.degree == "Failure":
+            break
+    else:
+        pytest.fail("fixture: no Failure draw in 200 act ids")
+    assert not edges and len(world_q.docketed(w, PARTY)) == 1
+    reheard = 0
+    for j in range(200):
+        ev2, edges2 = _determined(w, d, f"sc03b_again_{i}_retry{j}")
+        if ev2.degree != "Failure":
+            edge, = edges2
+            assert edge.degree == ev2.degree and world_q.docketed(w, PARTY) == []
+            reheard += 1
+            break
+    assert reheard == 1, "the matter was never disposed of on a re-hearing"
+
+
+def test_sc03b_a_judge_under_one_die_is_refused_not_a_crash_and_opens_nothing():
+    """S27.4 (`Ob > 2 x Pool`) reached by a contested `determine`: a judge whose pool is under 1D comes
+    back as the row's one refusal kind with NO degree -- never an aborted season -- exactly as `speak`'s
+    does (`test_sc01_speak.py`), and the matter stays docketed. CONTROL: pool 1 resolves to a band."""
+    for pool, refused in ((0, True), (1, False)):  # `_pool_of` int()s the pool, so 0.5 would be the 0 arm
+        w, d = _ready("determine", pool_default=pool)
+        out = _fold(w, d, _determine(f"zpool{pool}"))
+        assert bool(out) and (_kinds(out) == ["determine.refused"]) is refused, (pool, _kinds(out))
+        if refused:
+            assert out[0].degree is None and not _obliges(w) and len(world_q.docketed(w, PARTY)) == 1
+        else:
+            assert out[0].degree in BANDS

@@ -368,9 +368,8 @@ rows:
     steps:   [RES]
     class:   "ACTS"
     social:  "true"
-    by:      "DR-2"
+    by:      "DR-2. ⚠ PRODUCED SINCE v9 SC-03b (H-162): the CONTESTED `determine` (`verb_table.yaml`, `loop/effects_information.py::_eff_determine`) opens the disposal edge graded at the band its contest decided; the `unproduced:` cell is deleted in the same commit, as loader invariant 2 requires"
     emits:   "`tenure.graded`"
-    unproduced: "H-162: plan position `19` took `Tenure.degree` off `determine`, its only declared writer, which never wrote it -- an UNCONTESTED determination grades nothing (`loop/resolve.py::_fold`: an uncontested act carries no degree). The graded disposal is the CONTESTED determination (`04_VERBS.md` §B.2's degree-keyed row, proceedings PHASE 2 steps 13-15)"
   - kind:    "Tenure"
     field:   "payload"
     steps:   [RES]

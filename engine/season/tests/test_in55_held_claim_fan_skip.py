@@ -37,6 +37,7 @@ import pytest
 
 from .. import epistemic as EP
 from ..data.matrix import Step, WriteClass
+from ..data.rosters import UNDEPOSITED_KINDS
 from ..harness import populated as POP
 from ..harness import probes as P
 from ..loop import witness as WIT
@@ -62,7 +63,7 @@ def season_run():
     predicate is put to every Event; each selected one is put to the real `observers_for`; and while
     the real barrier runs, `witness`'s own `observers_for` is spied on to see which Events it is asked."""
     out = {"selected": 0, "barrier_events": 0, "observers": [], "kinds": {}, "mode": None,
-           "asked_selected": 0, "asked_other": 0}
+           "asked_selected": 0, "asked_other": 0, "undeposited": 0}
     w = POP.build_realm(0)
     real_obs, orig = WIT.observers_for, SeasonDriver.witness
 
@@ -74,6 +75,11 @@ def season_run():
         chosen = set()
         for e in events:
             out["barrier_events"] += 1
+            # v9 FI-01's skip arm: an `undeposited_kinds` Event (`finding.none`) is dropped before the
+            # fan, so WITNESS asks `observers_for` about it neither way; counted apart, not selected.
+            if e.kind in UNDEPOSITED_KINDS:
+                out["undeposited"] += 1
+                continue
             if EP.changes_only_held_claims(w_, e, held, mode):
                 chosen.add(e.id)
                 out["selected"] += 1
@@ -146,7 +152,8 @@ def test_the_wired_skip_is_taken_for_the_selected_events(season_run):
     """(b). `witness` asks `observers_for` about no selected Event, and about every other one."""
     m = season_run
     assert m["asked_selected"] == 0, "WITNESS asked `observers_for` about a selected Event"
-    assert m["asked_other"] == m["barrier_events"] - m["selected"] >= 1, (
+    assert m["undeposited"] >= 1, "no `finding.none` reached WITNESS -- the FI-01 arm below is untested"
+    assert m["asked_other"] == m["barrier_events"] - m["selected"] - m["undeposited"] >= 1, (
         "WITNESS did not ask about exactly the Events the predicate did not select")
 
 

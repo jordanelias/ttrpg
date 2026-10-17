@@ -33,6 +33,8 @@ same observation (CLAUDE.md §0.4: the cheapest instrument that can see it).
 
 from __future__ import annotations
 
+from types import SimpleNamespace
+
 from ..data import cast
 from ..data.matrix import Step, WriteClass
 from ..data.rosters import FACTIONS
@@ -87,8 +89,13 @@ def _fold(w, d, a: Act) -> tuple:
     w.step = Step.RESOLVE
     w.log.extend(d.resolve(mint_token(w, WriteClass.ACTS), [a],
                            contest_max_depth=w.fixtures.get("contest_max_depth")))
-    rows = [(made, no) for b, made, no in attribute(w, d, w.tick + 1) if b.id == a.id]
-    assert len(rows) == 1, (a.id, rows)
+    # v9 FI-01: a CONTESTED or GRADED act refused at admission never enters `driver.resolved` (the
+    # instrument limit `test_season_shape.py`'s never-attempted note names), so `attribute` -- still the one
+    # owner -- is asked about THIS act directly; reached once FI-01's graded `research` drew `Failure`
+    # (made and refused at once) and the loop below went on to a head's contested `determine`.
+    # The assertion keeps its teeth: the act must have left an Event of one of its row's two columns.
+    rows = [(made, no) for b, made, no in attribute(w, SimpleNamespace(resolved=[a]), w.tick + 1)]
+    assert len(rows) == 1 and (rows[0][0] or rows[0][1]), (a.id, rows)
     return rows[0]
 
 

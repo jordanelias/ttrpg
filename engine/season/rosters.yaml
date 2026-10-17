@@ -1066,12 +1066,12 @@ rosters:
   # | personal combat     | RESOLVE (S39)      | claimants, prize, causes | a degree | BUILT — `modules/combat/fight.py`, called by `seam/wrappers/combat.py`. Jordan: "combat engine isn't done" |
   # | social contest      | RESOLVE (S39)      | claimants, prize, causes | a degree | BUILT, σ-LEVERAGE MODE — `a standing`/`a matter` are rolled by `modules/social_contest/roll.py` (a `Margin`), called by `seam/wrappers/sigma.py`, provider `social_contest` (v9 SC-01 steps 13 + 15); the proceedings nested run is unbuilt |
   # | mass battle         | ENCOUNTER (`a field`) | claimants, prize, causes | a degree | BUILT — `modules/mass_battle/massbattle.py`, called by `seam/wrappers/mass_battle.py` (the `contest_subsystems` row `a field`) |
-  # | investigation       | UNRULED            | UNRULED | UNRULED | ITS OWN KIND — not a contest |
+  # | investigation       | RESOLVE (FI-01)    | actor, subject (`examine`: site) | a degree | ITS OWN KIND — not a contest: GRADED, by the roll the `graded_inquiries` row names (below), with no prize |
   # | settlement mgmt     | UNRULED (see below)| UNRULED | UNRULED | ⚠ NOT CALLED — done INLINE (see below) |
   # | faction mgmt        | UNRULED            | UNRULED | UNRULED | absent from the loop entirely |
   # | character dev       | UNRULED            | UNRULED | UNRULED | no creation, no progression, no chronicle |
   #
-  # ⚠ THE CONTEST ROWS' CONTRACT IS RULED AND FOUR ARE HONEST BLANKS. S39 fixes the contest attach point at
+  # ⚠ THE CONTEST ROWS' CONTRACT IS RULED AND THE UNRULED ROWS ARE HONEST BLANKS. S39 fixes the contest attach point at
   # RESOLVE — "exactly one place" — and its return at a degree. The blanks are Jordan questions, not
   # session guesses: writing a plausible IN/OUT for a mode nobody has ruled would be inventing the
   # architecture rather than recording it, and the seam is precisely the thing that must not be
@@ -1093,9 +1093,66 @@ rosters:
   # `contests:` cell and that is CORRECT — they are not ungraded contests but a different kind of
   # resolution whose seam is unbuilt. Giving them a prize so the existing machinery can grade them
   # is scripting drift: forcing one mechanism's shape onto another because it is the one that exists.
+  # ⚠ v9 FI-01 (`ED-FI-0009`, J-22 option (A)) GRADES THEM WITHOUT A PRIZE: `graded_inquiries`, below,
+  # is a ROUTING row -- verb -> the provider and module entry that roll it -- read by the loop
+  # (`loop/resolve.py::_grade`), never by `contest()` and never by `manifest.resolve("contest", …)`.
+  # It carries no `module:` and no prize key, so no `contest_subsystems` reader can see it.
   #
   # Nothing below declares a seam that does not exist. Declaring one would be the dead-carrier
   # defect this file names elsewhere — a carrier built before its reader.
+
+  graded_inquiries:
+    source: >-
+      v9 FI-01 (`ED-FI-0009`; J-22 answered option (A)): the inquiries are graded by degree, as
+      ladder step 3 answered (RESOLVE -> WITNESS, "Claims graded by degree; Failure emits
+      `finding.none` and deposits nothing"), through a declared routing column that is NOT a prize
+      and NOT a `contests:` shape. A-21: one roll owner (S27.2) -- the `social_contest` module's
+      entry, with the obstacle at the host input builder's non-person default.
+    row: H-111
+    note: >-
+      ⚠ A ROUTE, NOT A PRIZE. Each row names the provider registered under `@provider("contest", …)`
+      and the composition role that provider calls; the pool is `seam/wrappers/sigma.py::_pool_of`
+      (`verb_capability`, else the swept `pool_default`) and the obstacle the module's own
+      (`modules/social_contest/roll.py::obstacle`: `obstacle_default`, swept, while no
+      `verb_capability` row names an inquiry -- an inquiry's subject can be a person-kind Rung). The pair must be one a `contest_subsystems` prize row already
+      binds (`manifest/registry.py::check_graded_inquiries`), so this row adds no roll and no
+      resolver. No `verb_capability` row is added for the inquiries: which capability an inquiry
+      draws on is stated nowhere, so every inquirer rolls `pool_default` -- the declared finding
+      cut, re-read by `corpus_run`, not quoted here.
+      ⚠ THREE ROWS, AND THE OTHER THREE ARE NOT GRADED: `interview` is a PROMPT (#453 K-36: the
+      questioned person answers by their own `tell`, so there is no degree on the asker);
+      `reconstruct` waits on a value space nothing supplies (K-37: no invented number); `thread_read`
+      waits on that and on H-85 (no Thread Sensitivity carrier). `surveil`'s Person case is absent
+      from its row (one cell binds one kind) and waits on ED-FI-0009. A verb that waits keeps its
+      flat `emits:` and is not counted as graded.
+    keys: [verb_table]
+    values:
+      research: {provider: "social_contest", module_entry: "social_contest.roll"}
+      examine:  {provider: "social_contest", module_entry: "social_contest.roll"}
+      surveil:  {provider: "social_contest", module_entry: "social_contest.roll"}
+
+  undeposited_kinds:
+    source: >-
+      RS-21 item 1 (H-111 ANSWERED [medium; Jordan to correct]): SKIP at WITNESS, except keyed kinds a
+      verb declares (`news.untold` stays, T4) -- a refused inquiry deposits nothing, and no
+      `finding.none` is deposited. Built by v9 FI-01 as the deposit half of `ED-FI-0009`.
+    row: H-111
+    note: >-
+      ⚠ THE EVENT KINDS WITNESS FANS TO NOBODY (`loop/witness.py::witness`): an Event of one of these
+      kinds stays in the log and in its act's causes, and no ledger receives any claim from it.
+      Keyed on the KIND, never on a band or on an empty `changes[]`: those would also swallow
+      `matter.undetermined` and `news.untold`, which keep depositing. [ASSUMPTION; medium; Jordan to
+      correct] the six inquiry rows' `finding.none` only, not every refusal kind -- a widening would
+      move every refusal-bearing row's deposits, which nothing here measured. Revert: Jordan rules
+      deposit at WITNESS, and this roster is deleted. Each member must be a kind some verb row
+      declares (`data/verbs.py` refuses one that is not, so a misspelling cannot skip nothing).
+      THE SKIP IS STRICT, AND ITS CONSEQUENCE IS THE THING TO CORRECT: the plan's words ("a refused
+      inquiry deposits nothing") drop the actor's own observation reads and `seen` claims as well as the
+      event-kind claim, so a refused or failed inquiry teaches its actor nothing and the same person
+      re-forms it (measured at v9 FI-01: refused `research` 3 -> 12 headless, clause-4 drops 240 -> 104 on
+      `ARC-01`; the W-B and W-D notes in `test_season_shape.py`). The narrower
+      arm -- skip only the `finding.none` event-kind claim -- is the alternative Jordan would name.
+    values: ["finding.none"]
 
   verb_capability:
     source: >-
@@ -1210,7 +1267,7 @@ rosters:
         module:   "social_contest"
         provider: "social_contest"   # as `a standing`'s: repointed at steps 13 + 15
         module_entry: "social_contest.roll"   # as `a standing`'s
-        # `interim: true` deleted at steps 13 + 15, as `a standing`'s. ⚠ NO VERB CONTESTS THIS PRIZE YET (`verb_table.yaml`: `tell` -> `a standing`, `speak` -> `a matter`).
+        # `interim: true` deleted at steps 13 + 15, as `a standing`'s. `determine` contests it since v9 SC-03b (`speak` -> `a matter`, `tell` -> `a standing`).
         cite:     "as `a standing`. Same ruling, clause (3) honoured by the module since step 14, same repoint."
       "a matter":
         module:   "social_contest"
@@ -2684,6 +2741,7 @@ tables:
       hierarchical_equal:
         # negative = rank-bearing, status-asserting · positive = equal, peer-levelling (draft §3.1)
         determine:      -1.0    # carried: the licensed judgement made by the holder licensed to make it
+        "deed:matter.undetermined": 0.0   # [ASSUMPTION; medium; Jordan to correct; revert: delete this cell and its twin] a Failed `determine` writes nothing, so WITNESS's empty-changes rule (`epistemic.py`'s empty-changes rule) lands the claim on the PARTY, and a null cell would fall back to `determine`'s own (`data/verbs.py`: `_load_alignment` drops a null, `align_kind` falls back to the verb): the hearing that changed nothing is judged as no deed at all. Numeric, not null, for that reason. (`speak`'s four `matter.*` kinds share the shape: H-192 (a).)
         confer:         -0.8    # carried: conferral seats an office; the paradigm top-down act
         evade / defy:    0.9    # carried: refusing a demand outright is the direct negation of command
         establish:      -0.7    # carried: founding an office adds a rung to the ladder that was not there
@@ -2779,6 +2837,7 @@ tables:
         # negative = for one's own · positive = impartial treatment (draft §3.3)
         seize:          null    # reasoned (IN-12 step 6): for whom the taking is done is the candidate's fact (the warrant's), not the verb's -- `give`'s and `requisition`'s reading
         determine:       0.6    # derived: the act's own form is impartial adjudication; who it favours is the `judging_set`'s
+        "deed:matter.undetermined": 0.0   # as `hierarchical_equal`'s cell above: same reason, revert together
         construe:       -0.6    # derived: calculated to serve the construer's aim, not to keep the bond
         forge:          -0.5    # derived: counterfeiting a record for advantage
         open_case:       0.3    # derived: the case runs by template regardless of who stands before it

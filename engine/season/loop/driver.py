@@ -265,12 +265,13 @@ class SeasonDriver:
         # (a)'s precondition twin: a precondition nothing evaluates and no `requires_decline_note:`
         # (and its converse). `manifest/registrar.py` and `manifest/registry.py` hold the rules.
         from ..manifest import (
-            check_contest_prizes, check_effects, check_preconditions, check_rows,
-            register_module_entries,
+            check_contest_prizes, check_effects, check_graded_inquiries, check_preconditions,
+            check_rows, register_module_entries,
         )
         register_module_entries(VERB_TABLE)
         check_rows()
         check_contest_prizes(VERB_TABLE)
+        check_graded_inquiries(VERB_TABLE)
         check_effects(VERB_TABLE, EFFECTS)
         check_preconditions(VERB_TABLE, REQUIRES_PREDICATES)
         # OBSERVATION ONLY, and the distinction matters. Six probes used the removed `effect` hook
@@ -541,7 +542,7 @@ from .deliberate import deliberate                                        # noqa
 from .encounter import encounter                                         # noqa: E402
 from .matter import matter                                               # noqa: E402
 from .resolve import (_admits, _apply_write, _contest, _eligible, _fold,  # noqa: E402
-                       _occasion_ids, _survives, resolve)
+                       _grade, _occasion_ids, _survives, resolve)
 from .witness import witness                                              # noqa: E402
 
 SeasonDriver.calendar = calendar
@@ -566,3 +567,5 @@ SeasonDriver._apply_write = _apply_write
 # re-check.
 SeasonDriver._survives = _survives
 SeasonDriver._contest = _contest
+# v9 FI-01 (`ED-FI-0009`): an inquiry's routed roll, the branch beside `_contest` in `resolve()`.
+SeasonDriver._grade = _grade

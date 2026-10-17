@@ -16,13 +16,18 @@ from ...manifest.registrar import MODULE_ENTRIES
 from ...manifest.registry import resolve as prize_row
 
 
-def entry_for(prize: Any, module: str) -> tuple:
+def entry_for(prize: Any, module: str, module_entry: Any = None) -> tuple:
     """`(entry, None)` when the prize row's `module_entry:` role is registered, else
-    `(None, refusal)` with `refusal` the `ENGINE-UNAVAILABLE` dict naming `module`."""
-    role = (prize_row("contest", prize) or {}).get("module_entry")
+    `(None, refusal)` with `refusal` the `ENGINE-UNAVAILABLE` dict naming `module`.
+
+    `module_entry` is a role named by a `graded_inquiries` route (v9 FI-01): an inquiry has no prize,
+    so its route names the role directly, and it is looked up in the same table the same way."""
+    role = module_entry or (prize_row("contest", prize) or {}).get("module_entry")
     entry = MODULE_ENTRIES.get(role)
     if entry is not None:
         return entry, None
+    who = "route" if module_entry else f"prize {prize!r}"
     return None, dict(status="ENGINE-UNAVAILABLE", module=module,
-                      why=f"prize {prize!r} names module entry {role!r}, which MODULE_ENTRIES does not "
-                          f"hold -- the registrar fills it at SeasonDriver construction")
+                      why=f"{who} names module entry "
+                          f"{role!r}, which MODULE_ENTRIES does not hold -- the registrar fills it "
+                          f"at SeasonDriver construction")
