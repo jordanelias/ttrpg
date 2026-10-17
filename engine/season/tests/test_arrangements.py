@@ -10,11 +10,14 @@ twelve) and the SIX seeded speech kinds (same file, why not all ten).
 
 from __future__ import annotations
 
+import subprocess
+import sys
 import textwrap
 
 import pytest
 
 from ..data import arrangements as A
+from ..data import files
 from ..data.rosters import LADDER_RUNGS, load_yaml
 
 
@@ -228,3 +231,67 @@ def test_c1_is_a_report_not_a_refusal_and_is_honest_about_todays_state():
     assert reported == [], reported
     assert "parliamentary_debate" not in reported and "council_of_state" not in reported, (
         "a `Record`-disposing row is not asked of the tenure-kind opener map")
+
+
+# ---------------------------------------------------------------------------------------------
+# v9 SC-08: the loader's cross-validation fires in PRODUCTION, not only under pytest. Observed in
+# a fresh interpreter -- `sys.modules` of THIS process is polluted by the import at the top of this
+# file, so only a subprocess can say what the headless run itself loads.
+# ---------------------------------------------------------------------------------------------
+_HEADLESS_PROBE = """
+import sys
+sys.path.insert(0, {root!r})
+from engine.season.data import files
+before = 'engine.season.data.arrangements' in sys.modules      # the control: files alone loads none
+override = {override!r}
+if override:
+    # the loaders' patch point: `data/arrangements.py` binds `files.ARRANGEMENTS_YAML` at import
+    from pathlib import Path
+    files.ARRANGEMENTS_YAML = Path(override)
+from engine.season.harness import headless
+sys.argv = ['headless', '--case', 'NPC-088', '--seasons', '1', '--seed', '0']
+rc = headless.main()
+print(repr((before, 'engine.season.data.arrangements' in sys.modules, rc)))
+"""
+
+
+def _headless(override: str = ""):
+    return subprocess.run([sys.executable, "-c", _HEADLESS_PROBE.format(
+        root=str(files.REPO_ROOT), override=override)],
+        capture_output=True, text=True, timeout=300, cwd=str(files.REPO_ROOT))
+
+
+def test_the_headless_run_loads_the_arrangements_loader_and_the_probe_can_tell():
+    """SC-08 EXIT. `requirements.yaml`'s headless command constructs a season with
+    `data.arrangements` loaded (by `state/gate.py` and `loop/effects_information.py`, the two
+    non-test importers). The probe also reads the module set BEFORE importing the harness, from a
+    process that has imported only `data.files` -- the control showing `sys.modules` can observe
+    the absence the assertion below would otherwise miss (CLAUDE.md §0.1 pt 2)."""
+    proc = _headless()
+    assert proc.returncode == 0, proc.stderr[-3000:]
+    before, after, rc = eval(proc.stdout.strip().splitlines()[-1])    # our own probe's repr
+    assert before is False, "the control is blind: `data.files` alone already loaded the arrangements"
+    assert after is True and rc == 0
+    assert "CONTENT HASH:" in proc.stdout       # a season was constructed, not an import alone
+
+
+def test_a_planted_unknown_key_in_a_scratch_copy_makes_the_headless_run_refuse_naming_the_row(
+        tmp_path):
+    """SC-08 FALSIFIER. The tracked YAML is read, never written: a scratch copy carries a thirteenth
+    key on the `arbitration` row, and the same headless run must exit non-zero naming the row and
+    the key. The unplanted run beside it is the control that the refusal is the plant's and not the
+    harness's -- and the asserted counts show both runs ran."""
+    text = files.ARRANGEMENTS_YAML.read_text(encoding="utf-8")
+    anchor = "  - id:               arbitration\n"
+    assert text.count(anchor) == 1, "the plant has nowhere to go; the seeded row moved"
+    scratch = tmp_path / "arrangements.yaml"
+    scratch.write_text(text.replace(anchor, anchor + "    scale:             settlement\n"),
+                       encoding="utf-8")
+    assert scratch.read_text(encoding="utf-8") != text
+    control = _headless(str(files.ARRANGEMENTS_YAML))
+    planted = _headless(str(scratch))
+    assert control.returncode == 0, control.stderr[-2000:]
+    assert planted.returncode != 0
+    assert "CONTENT HASH:" not in planted.stdout          # it refused before the season ran
+    assert "arbitration" in planted.stderr and "unknown key" in planted.stderr \
+        and "scale" in planted.stderr, planted.stderr[-2000:]
