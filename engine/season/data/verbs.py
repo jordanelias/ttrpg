@@ -808,8 +808,10 @@ def _load_verb_table() -> dict:
         # `graded_inquiries` ROUTE (`rosters.yaml`) -- a declared routing row that is not a prize and
         # not a `contests:` shape, which `loop/resolve.py::_grade` rolls through the provider and
         # module entry it names. The check's point is unchanged: a degree-keyed `emits:` loads only
-        # where something resolves a degree for it. Both directions are held for the route as for
-        # `contests:`, and a row may not carry both (a route that is also a prize is a contest).
+        # where something resolves a degree for it. Only `emits` is held for the route in both
+        # directions (a flat `emits:` beside a route is refused below); a flat `writes:` on a routed row is
+        # not refused (all three graded rows write `[]`), and a row may not carry both a route and
+        # `contests:` (a route that is also a prize is a contest).
         if emits_by_degree and not (row.contests or _graded):
             raise SystemExit(
                 f"verb_table.yaml: {name!r} has a degree-keyed `emits:` and no `contests:` or "

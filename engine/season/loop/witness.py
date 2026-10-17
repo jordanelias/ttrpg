@@ -299,7 +299,8 @@ def witness(self, token: Token, events: list[Event]) -> int:
     # v9 FI-01, THE SKIP ARM (`ED-FI-0009`'s deposit half; RS-21 item 1, H-111 ANSWERED [medium; Jordan
     # to correct]): an Event whose KIND is in `rosters.yaml: undeposited_kinds` (`finding.none`) fans to
     # nobody, so a refused or failed inquiry deposits nothing -- no event-kind claim, no read, no `seen`,
-    # no content. It stays in `events` (the log and its act's causes are RESOLVE's, not this barrier's).
+    # no content. It leaves the barrier's `events` below (the log and its act's causes are RESOLVE's, not
+    # this barrier's, and still hold it).
     # Keyed on the kind, not on a band or an empty `changes[]`: `news.untold` and `matter.undetermined`
     # keep depositing. Rebinding `events` here covers every pass below that reads it (the fan, the
     # newly-held scan, IN-22's purview route), so the rule is one line, not three. The trace below

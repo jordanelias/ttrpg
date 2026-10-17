@@ -13943,17 +13943,22 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # move more resolvers into `modules/`; the one-owner property this guarded is now "the host rolls
     # nothing", and a margin is a module's to produce.
     pattern = re.compile(r"\bnet\b\s*=|roll_pool|\broll_net\b|\bnet_boost\b|\bsuccesses\b")
-    producers = set()
-    for f in files.package_modules():
-        # The HOST's code, not its tests: `test_social_contest_module.py` calls the dice engine on
-        # purpose, as the independent oracle for the module's roll (this file was the only test
-        # excluded while no other test named a producer).
-        if files.TESTS_DIR in f.parents:
-            continue
-        rel = f.relative_to(files.PACKAGE_DIR).as_posix()
-        for i, line in enumerate(_code_only_lines(f), 1):
-            if pattern.search(line):
-                producers.add(rel)
+
+    def _producers(paths, base):
+        out = set()
+        for f in paths:
+            # The HOST's code, not its tests: `test_social_contest_module.py` calls the dice engine on
+            # purpose, as the independent oracle for the module's roll (this file was the only test
+            # excluded while no other test named a producer).
+            if files.TESTS_DIR in f.parents:
+                continue
+            rel = f.relative_to(base).as_posix()
+            for i, line in enumerate(_code_only_lines(f), 1):
+                if pattern.search(line):
+                    out.add(rel)
+        return out
+
+    producers = _producers(files.package_modules(), files.PACKAGE_DIR)
     assert producers == set(), (
         f"the season package produces a margin in {sorted(producers)}. Since `31a` the host builds "
         "the typed input record and calls the module entry; the roll is the module's. `S27.2` names "
@@ -13961,8 +13966,10 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # v9 FI-01: THE SCAN SEES A PLANTED SECOND RESOLVER FOR AN INQUIRY. The graded inquiries roll through
     # the module entry (`seam/contest.py::grade`), so a host-side inquiry roll is exactly what this pin
     # exists to refuse; the plant is the shape such a roll would take (a pool counted against an
-    # obstacle, a `net` assigned), read by the same pattern over the same code-only lines. The control
-    # is the empty set just asserted over the real package.
+    # obstacle, a `net` assigned). It goes through the SAME `_producers` helper the assertion above runs
+    # over the real package, so the helper that returned the empty set is seen to return the plant when
+    # one exists. The plant lives in a temp dir, never in the package: under `-n auto` another worker's
+    # scan would read it mid-run.
     with tempfile.TemporaryDirectory() as tmp:
         planted = Path(tmp) / "inquiry_resolver.py"
         planted.write_text(
@@ -13970,8 +13977,9 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
             "    # a second resolver for `research`: rolls the pool itself instead of the module entry\n"
             "    net = sum(1 for _ in range(pool) if rng.random() > 0.6)\n"
             "    return net - ob\n")
-        seen = [i for i, line in enumerate(_code_only_lines(planted), 1) if pattern.search(line)]
-    assert seen, "the host scan did not see a planted inquiry resolver -- it cannot refuse one"
+        seen = _producers([planted], Path(tmp))
+    assert seen == {"inquiry_resolver.py"}, (
+        "the host scan did not see a planted inquiry resolver -- it cannot refuse one")
     sys.path.insert(0, str(files.REPO_ROOT / "tools"))
     import ci_common
     scanned, module_producers = set(), set()

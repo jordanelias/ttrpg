@@ -826,10 +826,12 @@ def _grade(self, w: "World", token: Token, a: Act, route: dict) -> list:
     for a contested act. A `ContestRefused` (S27.4, or a missing party) folds as the row's refusal
     kind, `_contest`'s `_party_gap_refusal` shape.
 
-    ⚠ THE SUBJECT IS THE ACT'S `subject` OPERAND, AND IT IS NEVER A PERSON FOR A GRADED ROW: `research`
-    binds a Record, `surveil` a Rung and `examine` a `site` operand (so `subject` is `None`). The
-    provider reads opposition off a PERSON subject only, so the obstacle is `obstacle_default` here by
-    construction, not by a branch on the verb.
+    ⚠ THE SUBJECT IS THE ACT'S `subject` OPERAND, AND IT IS NOT A PERSON FOR A GRADED ROW TODAY:
+    `research` binds a Record, `surveil` a Rung and `examine` a `site` operand (so `subject` is `None`).
+    The provider reads opposition off a PERSON subject only, so the obstacle is `obstacle_default` here.
+    That holds by what the rows bind and by `verb_capability` naming no inquiry (a person-kind Rung
+    shares its person's id, `sigma.py::_opposition_of`), not by construction: adding a `verb_capability`
+    row for an inquiry is the edit that must re-read this.
     ⚠ THE GENERATOR IS THE ACT'S OWN, `H(seed, tick, actor, "roll:<verb>:<act id>")` -- `_contest`'s
     shape with the verb where a prize would be (there is none), so adding a graded inquiry moves no
     other act's draw (`04 PART D row 35`)."""
@@ -994,7 +996,8 @@ def resolve(self, token: Token, acts: list[Act],
         _row = VERB_TABLE.get(a.verb)
         _contests = _contests_of(a, _row)
         # v9 FI-01: an inquiry's `graded_inquiries` route -- the second source of a degree, which the
-        # loader refuses beside a `contests:` (one degree, one source), so at most one is set.
+        # loader refuses beside a `contests:` on the VERB ROW (one degree, one source); an act carrying its own
+    # `contests` (`_contests_of`, hand-built acts only) takes the contest branch below and the route is unread.
         _route = GRADED_INQUIRIES.get(a.verb) if _row is not None else None
         if _contests or _route:
             # ⚠⚠ §E2's ORDER, RESTORED: ELIGIBILITY AND `requires` BEFORE THE SEAM, NOT AFTER IT.

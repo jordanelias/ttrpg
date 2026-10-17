@@ -1066,12 +1066,12 @@ rosters:
   # | personal combat     | RESOLVE (S39)      | claimants, prize, causes | a degree | BUILT — `modules/combat/fight.py`, called by `seam/wrappers/combat.py`. Jordan: "combat engine isn't done" |
   # | social contest      | RESOLVE (S39)      | claimants, prize, causes | a degree | BUILT, σ-LEVERAGE MODE — `a standing`/`a matter` are rolled by `modules/social_contest/roll.py` (a `Margin`), called by `seam/wrappers/sigma.py`, provider `social_contest` (v9 SC-01 steps 13 + 15); the proceedings nested run is unbuilt |
   # | mass battle         | ENCOUNTER (`a field`) | claimants, prize, causes | a degree | BUILT — `modules/mass_battle/massbattle.py`, called by `seam/wrappers/mass_battle.py` (the `contest_subsystems` row `a field`) |
-  # | investigation       | RESOLVE (FI-01)    | actor, subject | a degree | ITS OWN KIND — not a contest: GRADED, by the roll the `graded_inquiries` row names (below), with no prize |
+  # | investigation       | RESOLVE (FI-01)    | actor, subject (`examine`: site) | a degree | ITS OWN KIND — not a contest: GRADED, by the roll the `graded_inquiries` row names (below), with no prize |
   # | settlement mgmt     | UNRULED (see below)| UNRULED | UNRULED | ⚠ NOT CALLED — done INLINE (see below) |
   # | faction mgmt        | UNRULED            | UNRULED | UNRULED | absent from the loop entirely |
   # | character dev       | UNRULED            | UNRULED | UNRULED | no creation, no progression, no chronicle |
   #
-  # ⚠ THE CONTEST ROWS' CONTRACT IS RULED AND FOUR ARE HONEST BLANKS. S39 fixes the contest attach point at
+  # ⚠ THE CONTEST ROWS' CONTRACT IS RULED AND THE UNRULED ROWS ARE HONEST BLANKS. S39 fixes the contest attach point at
   # RESOLVE — "exactly one place" — and its return at a degree. The blanks are Jordan questions, not
   # session guesses: writing a plausible IN/OUT for a mode nobody has ruled would be inventing the
   # architecture rather than recording it, and the seam is precisely the thing that must not be
@@ -1146,6 +1146,12 @@ rosters:
       move every refusal-bearing row's deposits, which nothing here measured. Revert: Jordan rules
       deposit at WITNESS, and this roster is deleted. Each member must be a kind some verb row
       declares (`data/verbs.py` refuses one that is not, so a misspelling cannot skip nothing).
+      THE SKIP IS STRICT, AND ITS CONSEQUENCE IS THE THING TO CORRECT: the plan's words ("a refused
+      inquiry deposits nothing") drop the actor's own observation reads and `seen` claims as well as the
+      event-kind claim, so a refused or failed inquiry teaches its actor nothing and the same person
+      re-forms it (measured at v9 FI-01: refused `research` 347 -> 930 over the corpus, 3 -> 12 headless,
+      clause-4 drops 240 -> 104 on `ARC-01`; the W-B and W-D notes in `test_season_shape.py`). The narrower
+      arm -- skip only the `finding.none` event-kind claim -- is the alternative Jordan would name.
     values: ["finding.none"]
 
   verb_capability:

@@ -22,8 +22,9 @@ THE FALSIFIERS (the position's, `workplans/valoria_master_workplan_v9_part6.md` 
     `news.untold` still deposits, and a graded `finding.made` deposits (the arm is keyed on the KIND);
   * the route is not readable as a prize (`test_the_route_is_not_readable_as_a_prize`);
   * the degree follows the one owner: the module entry replaced, the inquiry's band moves with it; and
-    the host producer scan sees a planted inquiry resolver
-    (`test_season_shape.py::test_we_only_a_verb_that_declares_contests_can_be_graded_today`).
+    the host producer scan returns a planted inquiry resolver
+    (`test_season_shape.py::test_we_only_a_verb_that_declares_contests_can_be_graded_today`, where the
+    scan's own helper is run over the plant).
 """
 
 from __future__ import annotations
@@ -42,12 +43,13 @@ from ..data.rosters import GRADED_INQUIRIES, UNDEPOSITED_KINDS, roster_map
 from ..data.verbs import VERB_TABLE
 from ..data.requires import binding_from_act, evaluate
 from ..gaps import Unspecified
+from ..harness import populated as POP
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver, mint_token
 from ..manifest import MODULE_ENTRIES, check_graded_inquiries, resolve as manifest_resolve
 from ..queries.inputs import Margin
 from ..queries.world_q import WorldReader
-from ..state.carriers import Act, Claim, Record
+from ..state.carriers import Act, Claim, Record, Site
 
 # The six acts canon names (`verb_table.yaml`'s block comment), and the position's partition of them:
 # one prompt, two waiting, and the rest graded -- derived, so the graded set is not a second copy of
@@ -207,13 +209,45 @@ def test_the_route_is_not_readable_as_a_prize():
     assert "FLAT `emits:`" in msg and "surveil" in msg, msg
     with_module = dict(GRADED_INQUIRIES, examine=dict(GRADED_INQUIRIES["examine"], module="social_contest"))
     msg = loads(lambda doc: None, routes=with_module)
-    assert "examine" in msg and "module" in msg, msg
+    assert "examine" in msg and "fields" in msg, msg
+    # A MISSPELLED skip kind would skip nothing and report the deposit half built: the loader names it.
+    with mock.patch.object(VERBS, "UNDEPOSITED_KINDS", frozenset({"finding.nnoe"})), \
+            mock.patch.object(VERBS, "VERB_TABLE_YAML") as fake:
+        fake.exists.return_value = True
+        fake.read_text.return_value = yaml.safe_dump(src)
+        with pytest.raises(SystemExit) as e:
+            VERBS._load_verb_table()
+    assert "finding.nnoe" in str(e.value), str(e.value)
 
     stray = dict(GRADED_INQUIRIES, research={"provider": "social_contest", "module_entry": "combat.fight"})
     with mock.patch.object(_rosters, "GRADED_INQUIRIES", stray):
         with pytest.raises(Unspecified) as e:
             check_graded_inquiries(VERB_TABLE)
+        # ...and the same refusal at DRIVER CONSTRUCTION, where the check is wired (`loop/driver.py`):
+        # delete that call and this goes red, which the direct call above cannot show.
+        with pytest.raises(Unspecified) as e2:
+            SeasonDriver(P.tiny_world())
     assert "research" in str(e.value) and "combat.fight" in str(e.value), str(e.value)
+    assert "research" in str(e2.value), str(e2.value)
+
+
+def test_examine_at_a_present_site_is_graded():
+    """`examine` binds a `Site` (not a Record), and no corpus act is admitted there, so the sweep over
+    `research` above says nothing about it. A Site in the actor's own rung admits it; the act ids are
+    swept until one draws each of `Failure` and a finding band, so the graded `examine` is SEEN to roll
+    (an `Event.degree` set, the kinds the row's degree-keyed `emits:` names) and not only declared."""
+    seen: dict = {}
+    for n in range(60):
+        w = P.tiny_world()
+        w.sites["site_fi01"] = Site("site_fi01", "Hh", "ruin", condition=500)
+        d = SeasonDriver(w)
+        a = Act(id=f"a_fi01_examine_{n}", actor=ACTOR, verb="examine", payload={"site": "site_fi01"})
+        (ev,) = _resolve(w, d, a)
+        assert ev.degree is not None, (ev.kind, ev.degree)
+        seen.setdefault(ev.degree, ev.kind)
+    assert "Failure" in seen and set(seen) - {"Failure"}, f"60 act ids drew only {sorted(seen)}"
+    assert seen["Failure"] == "finding.none" and all(
+        k == "finding.made" for deg, k in seen.items() if deg != "Failure"), seen
 
 
 def test_the_inquiry_degree_is_the_one_owners(monkeypatch):
@@ -254,3 +288,17 @@ def test_an_inquiry_admits_before_it_rolls():
             real, fn=lambda inp, rng: called.append(inp) or Margin(net=0, ob=2))}):
         out = _resolve(w, d, a)
     assert not called and [e.kind for e in out] == ["finding.none"], (called, [e.kind for e in out])
+
+
+def test_the_realm_grades_inquiries_in_one_season():
+    """THE EXIT'S EXECUTION ARTIFACT, in the realm and not in a unit world. `corpus_run`'s `DEGREES RESOLVED`
+    is one histogram over every verb and was non-empty before this position, so it cannot show an
+    inquiry graded; here the realm's own first season (`build_realm(0)`, seed 0) is run and the log is
+    read: a `finding.*` Event carries a degree. A `finding.made` with no degree is a flat-`emits:` inquiry
+    (`interview`, `reconstruct`, `thread_read`) and is not counted."""
+    w = POP.build_realm(0)
+    POP.run(seasons=1, seed=0, w=w)
+    graded = [(e.kind, e.degree) for e in w.log if e.kind.startswith("finding.") and e.degree is not None]
+    assert graded, "no inquiry in the realm's first season drew a degree"
+    assert {k for k, _ in graded} <= {"finding.made", "finding.none"}
+    assert all((k == "finding.none") == (deg == "Failure") for k, deg in graded), graded
