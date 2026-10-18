@@ -170,9 +170,12 @@ def test_sc02_17_decayed_confidence_counts_less_and_a_hostile_bench_reads_negati
     assert obstacle(replace(inp, obstacle_ceiling=3.0)) > 2.0
 
 
-def test_sc02_17_reception_and_proofs_take_the_world_first_and_no_decision_module_imports_them():
-    """The AST half of step 17's artifact: both Queries take `w: World` first, and no module under
-    `decision/` names them or the module they live in. FALSIFIER: the Query reachable from a decision."""
+def test_sc02_17_reception_and_proofs_take_the_world_first():
+    """The AST half of step 17's artifact: both Queries take `w: World` first, which is what puts them
+    under the AX-2 scan (`test_season_shape.py::test_decision_package_never_names_world_anywhere_under_it`
+    forbids `decision/` any `queries.*` but `person_q` and any imported name whose signature takes a
+    `World`; this file does not re-walk `decision/`). FALSIFIER: a Query whose first parameter is not the
+    world would leave that scan's second half blind."""
     tree = ast.parse((SEASON_DIR / "queries" / "world_q.py").read_text())
     found = {}
     for node in tree.body:
@@ -180,21 +183,6 @@ def test_sc02_17_reception_and_proofs_take_the_world_first_and_no_decision_modul
             first = node.args.args[0]
             found[node.name] = (first.arg, ast.unparse(first.annotation) if first.annotation else None)
     assert found == {"reception": ("w", "World"), "proofs": ("w", "World")}, found
-    scanned = 0
-    for path in files.decision_modules():          # the corpus owner (data/files.py), never a re-derived walk
-        mod = ast.parse(path.read_text())
-        scanned += 1
-        for node in ast.walk(mod):
-            if isinstance(node, ast.ImportFrom):
-                names = {a.name for a in node.names}
-                assert "world_q" not in (node.module or "") and "world_q" not in names, path
-                assert not names & {"reception", "proofs"}, path
-            elif isinstance(node, ast.Import):
-                assert not any("world_q" in a.name for a in node.names), path
-            elif isinstance(node, ast.Attribute):
-                assert node.attr not in ("reception", "proofs") or not (
-                    isinstance(node.value, ast.Name) and node.value.id == "world_q"), path
-    assert scanned >= 5, scanned
 
 
 def test_sc02_17_only_a_prize_a_room_hears_reads_the_room(monkeypatch):

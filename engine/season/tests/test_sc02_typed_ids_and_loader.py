@@ -117,7 +117,7 @@ import dataclasses  # noqa: E402
 from ..data import rosters as _rosters  # noqa: E402
 from ..data import verbs as _verbs      # noqa: E402
 from ..data.matrix import MATRIX         # noqa: E402
-from ..data.rosters import FOLD_KINDS    # noqa: E402
+from ..data.rosters import FOLD_KINDS, LOGGED_KINDS    # noqa: E402
 from ..data.verbs import EVENT_KINDS, VERB_TABLE, derive_event_kinds  # noqa: E402
 from ..loop import resolve as _resolve   # noqa: E402
 from .test_u7_remit import _plant        # noqa: E402
@@ -158,6 +158,21 @@ def test_inv7_a_fold_kind_nothing_reads_and_a_malformed_kind_refuse_the_load():
     assert _rosters.check_fold_kinds(dict(FOLD_KINDS)) == FOLD_KINDS, "control: the shipped roster"
 
 
+def test_inv7_the_kinds_matter_logs_directly_are_a_declared_column_in_the_derived_roster():
+    """`loop/matter.py` logs `standing.band_crossed` with no write behind it, so no matrix or verb row can
+    declare it; it is the `logged_kinds` column (`rosters.yaml`), and the derived roster holds it. A
+    drifted or malformed column refuses the load naming the row (PLANTED); dropping the column from the
+    derivation leaves the kind outside `EVENT_KINDS` (the defect the B-P layer pass found)."""
+    assert set(LOGGED_KINDS.values()) == {"standing.band_crossed"} and set(LOGGED_KINDS.values()) <= EVENT_KINDS
+    with pytest.raises(SystemExit, match=r"`logged_kinds` keys \['standing_crossed', 'x'\]"):
+        _rosters.check_logged_kinds({**LOGGED_KINDS, "x": "a.b"})
+    with pytest.raises(SystemExit, match=r"malformed kind\(s\) for \['standing_crossed'\]"):
+        _rosters.check_logged_kinds({"standing_crossed": "standingcrossed"})
+    assert _rosters.check_logged_kinds(dict(LOGGED_KINDS)) == LOGGED_KINDS, "control: the shipped column"
+    assert not set(LOGGED_KINDS.values()) <= derive_event_kinds(VERB_TABLE, MATRIX, FOLD_KINDS, {}), (
+        "the kind is declared by another column; this test observes nothing")
+
+
 def test_inv7_a_malformed_kind_in_an_emission_column_refuses_the_derivation_naming_the_row():
     for col, plant in (("emits", dict(emits=("tellmade",))),
                        ("emits_on_refusal", dict(emits_on_refusal=("",))),
@@ -165,12 +180,12 @@ def test_inv7_a_malformed_kind_in_an_emission_column_refuses_the_derivation_nami
         table = dict(VERB_TABLE, tell=dataclasses.replace(VERB_TABLE["tell"], **plant))
         with pytest.raises(SystemExit,
                            match=rf"verb_table\.yaml: 'tell' declares Event kind .* in `{re.escape(col)}:`"):
-            derive_event_kinds(table, MATRIX, FOLD_KINDS)
+            derive_event_kinds(table, MATRIX, FOLD_KINDS, LOGGED_KINDS)
     row = next(iter(MATRIX.values()))
     bad = {k: (dataclasses.replace(r, emits=("nodot",)) if r is row else r) for k, r in MATRIX.items()}
     with pytest.raises(SystemExit, match=r"write_matrix\.yaml \(.*\) declares Event kind 'nodot'"):
-        derive_event_kinds(VERB_TABLE, bad, FOLD_KINDS)
-    assert derive_event_kinds(VERB_TABLE, MATRIX, FOLD_KINDS) == EVENT_KINDS, "control"
+        derive_event_kinds(VERB_TABLE, bad, FOLD_KINDS, LOGGED_KINDS)
+    assert derive_event_kinds(VERB_TABLE, MATRIX, FOLD_KINDS, LOGGED_KINDS) == EVENT_KINDS, "control"
 
 
 def test_inv7_the_fold_mints_no_kind_a_column_does_not_declare():

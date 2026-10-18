@@ -149,8 +149,11 @@ def contest_input(w: Any, claimants: list, *, verb: str = "",
                   examined: Optional[str] = None) -> SocialContestInput:
     """THE HOST INPUT BUILDER (plan position `31a`, A-25): `World` -> the frozen record the roll reads.
 
-    Reads `w.persons` (the actor, `claimants[0]`, and a person subject) and `w.fixtures`, and nothing
-    else; the module that consumes the record never sees `World`. Its precondition is the adapter's
+    Reads `w.persons` (the actor, `claimants[0]`, and a person subject), `w.fixtures`, `w.records` (the
+    Record an inquiry examines) and, for a prize a room hears, the bench's and the opponent's ledgers
+    through `queries/world_q.py::reception` and `proofs`; the module that consumes the record never sees
+    `World`. §A.2's wrapper row types the column *"the projection"*: this builder reads `World`, the
+    deviation named above (`combat.resolve` is its precedent), CONVENTION. Its precondition is the adapter's
     PARTY-GAP checks (`resolve`, below): at least one claimant, and the first a person.
     `leverage` is zero until something supplies leverage -- an `assumption` reading with no
     producer, and stating it as zero is the honest form: a fabricated leverage would be a number

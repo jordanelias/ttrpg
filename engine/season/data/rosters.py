@@ -557,6 +557,26 @@ FOLD_KINDS = check_fold_kinds(roster_map("fold_kinds", "values"))
 FOLD_INELIGIBLE = FOLD_KINDS[_FOLD_KEY_INELIGIBLE]
 FOLD_REFUSED = FOLD_KINDS[_FOLD_KEY_REFUSED]
 FOLD_ATTEMPT_REFUSED = FOLD_KINDS[_FOLD_KEY_ATTEMPT_REFUSED]
+
+
+def check_logged_kinds(mapping: dict) -> dict:
+    """LOADER INVARIANT 7 for the kinds MATTER logs with no write behind them (`rosters.yaml:
+    logged_kinds`): the keys are a closed set (`standing_crossed`, the one `loop/matter.py` reads) and
+    each value a `<noun>.<verb>` kind, or the load refuses naming the row. A function, so a test can plant
+    a drifted mapping."""
+    wanted = frozenset(("standing_crossed",))
+    bad = sorted(k for k, v in mapping.items() if not is_event_kind(v))
+    if set(mapping) != wanted or bad:
+        raise SystemExit(
+            f"rosters.yaml: `logged_kinds` keys {sorted(mapping)} (expected {sorted(wanted)})"
+            f"{'; malformed kind(s) for ' + str(bad) if bad else ''}. 04 §B.13 #7 / F.20b -- a kind "
+            "MATTER logs directly is a declared column, each a `<noun>.<verb>` kind, or the derived "
+            "Event-kind roster is not derived.")
+    return dict(mapping)
+
+
+LOGGED_KINDS = check_logged_kinds(roster_map("logged_kinds", "values"))
+STANDING_CROSSED = LOGGED_KINDS["standing_crossed"]
 RUNG_KINDS = roster("rung_kinds", ordered=True)
 
 

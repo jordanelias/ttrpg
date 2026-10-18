@@ -1176,6 +1176,22 @@ rosters:
       refused: "act.refused"
       attempt_refused: "attempt.refused"
 
+  logged_kinds:
+    source: >-
+      `04_CODE_ARCHITECTURE.md` §B.13 loader invariant 7 and `F.20b`: *"the Event-kind roster is derived
+      from every emission column, and the log accepts no other kind"*. v9 SC-02 `22b` step 23, found by
+      the B-P `layer-conformance` pass.
+    note: >-
+      ⚠ THE KINDS `loop/matter.py` LOGS DIRECTLY WITH NO WRITE BEHIND THEM -- an Event with `changes=[]`
+      caused by deposits, which no `write_matrix.yaml` row and no verb row can declare (`§A.2`: MATTER
+      emits *"per matrix row"*; its sibling `condition.band_crossed` is a matrix row's). `standing_crossed`
+      is step 23's person-keyed band crossing: a record that a person's standing gap changed band, read
+      only as a QUESTION about its tellers (`queries/world_q.py::standing_crossed`), never a write. The
+      derived Event-kind roster (`data/verbs.py::EVENT_KINDS`) is the union of every emission column,
+      `fold_kinds` and these.
+    values:
+      standing_crossed: "standing.band_crossed"
+
   verb_capability:
     source: >-
       `03 §A.2` -- *"Rank supplies dice and gates nothing"* -- and `#353 §9.2`, quoted live in the

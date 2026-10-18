@@ -876,8 +876,9 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     `test_fi01_graded_inquiries.py::test_the_route_is_not_readable_as_a_prize` plants each of the
     first three cases and the load raises naming it.
 
-    ⚠ 74 -> 78, v9 SC-02 `23`, FOUR NEW LOAD-TIME REFUSALS, all `SystemExit`s naming their row: `rosters.py`
-    1 (`check_fold_kinds`, loader invariant 7's fold half), `verbs.py` 3 (`derive_event_kinds`' two,
+    ⚠ 74 -> 79, v9 SC-02 `23` and `22b` step 23, FIVE NEW LOAD-TIME REFUSALS, all `SystemExit`s naming
+    their row: `rosters.py` 2 (`check_fold_kinds`, loader invariant 7's fold half; `check_logged_kinds`,
+    the kinds MATTER logs with no write behind them), `verbs.py` 3 (`derive_event_kinds`' two,
     invariant 7's derivation; the flat-row refusal, invariant 4's flat half). Falsifier: `test_sc02_typed_ids_and_loader.py` plants each and the load raises
     naming it."""
     mods = _model_modules()
@@ -885,8 +886,8 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     assert len(mods) >= 8, f"model set collapsed to {len(mods)} — this guard would pass vacuously"
     total = sum(_code_only(m.read_text()).count("raise SystemExit") for m in mods)
     # [JUSTIFIED: a MEASURED PROPERTY OF THIS PACKAGE, not a game value -- the load-time refusals counted across the model set, and the point of pinning it is that a move must not drop one]
-    assert total == 78, (
-        f"{total} load-time exits across the model set, expected 78. Per file: "
+    assert total == 79, (
+        f"{total} load-time exits across the model set, expected 79. Per file: "
         + ", ".join(f"{m.name}={_code_only(m.read_text()).count('raise SystemExit')}"
                     for m in mods if _code_only(m.read_text()).count("raise SystemExit")))
 

@@ -28,13 +28,14 @@ import yaml
 
 from ..data import files
 from ..data.fixtures import DEFAULT_FIXTURES
+from ..data.rosters import STANDING_CROSSED
+from ..data.verbs import EVENT_KINDS
 from ..data.matrix import WriteClass
 from ..decision import aggregate_questions, opening_set, standing_of
 from ..decision.choose import pack_scenes
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver, mint_token
 from ..queries import world_q
-from ..queries.world_q import STANDING_CROSSED
 from ..state.carriers import Act, Claim, Event, Said, View
 from ..state.ids import H
 
@@ -139,6 +140,7 @@ def test_step23_the_bailiff_told_three_things_crosses_and_his_question_names_the
     xs = _crossings(w)
     assert len(xs) == 1, f"{len(xs)} standing crossings for one band change"
     x = xs[0]
+    assert x.kind in EVENT_KINDS, "MATTER logged a kind the derived roster (invariant 7) does not hold"
     assert x.id == world_q.standing_crossing_id(w, BAILIFF) and x.emitted_at == w.tick
     deposits = {w.last_emission_of("claim.deposited", c.id) for c in told}
     assert None not in deposits and set(x.causes) == deposits, (

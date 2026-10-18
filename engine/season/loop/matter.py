@@ -23,11 +23,11 @@ from typing import NamedTuple, Optional
 from ..data.fixtures import SITE_YIELD
 from ..data.matrix import Step
 from ..data.requires import SHORTFALL_PREDICATE, Observation
+from ..data.rosters import STANDING_CROSSED
 from ..decision import agreement, standing_of
 from ..decision.budget import bands_below
 from ..queries import world_q
 from ..queries.person_q import LedgerReader
-from ..queries.world_q import STANDING_CROSSED
 from ..state.carriers import Event
 from ..state.gate import Token
 from ..state.ids import H, ROOT, draw_factory

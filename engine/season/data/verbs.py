@@ -52,7 +52,7 @@ from .requires import (
     build_typed_requires,
 )
 from .rosters import (
-    COVERT_KINDS, DOMINANCE_KINDS, FOLD_KINDS, GRADED_INQUIRIES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
+    COVERT_KINDS, DOMINANCE_KINDS, FOLD_KINDS, LOGGED_KINDS, GRADED_INQUIRIES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
     is_event_kind,
     RUNG_KINDS, STRATA, TENURE_KINDS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
     roster_map,
@@ -1111,11 +1111,12 @@ for _v, _k in WARRANT_SOURCED.items():
             law="IN-12 step 6 -- a warrant-sourced verb forms only on what a held warrant names")
 
 
-def derive_event_kinds(table: dict, matrix: dict, fold_kinds: dict) -> frozenset:
+def derive_event_kinds(table: dict, matrix: dict, fold_kinds: dict, logged_kinds: dict) -> frozenset:
     """LOADER INVARIANT 7 (`04 §B.13 #7`, `F.20b`): THE EVENT-KIND ROSTER IS DERIVED FROM EVERY EMISSION
     COLUMN. The columns are: each verb row's `emits` (every Degree branch), its `emits_on_refusal`
     (every clause) and `write_matrix.yaml`'s `emits:` (the kinds a gate write may emit), plus the
-    fold's own `fold_kinds` (`rosters.yaml`; the three that were body literals). Nothing else adds a
+    fold's own `fold_kinds` (`rosters.yaml`; the three that were body literals) and `logged_kinds` (the
+    kinds `loop/matter.py` logs with no write behind them). Nothing else adds a
     member, and the derivation is a function of its arguments so a test can plant a malformed column.
 
     ⚠ A KIND IS `<noun>.<verb>`: two non-empty dotted parts. A column holding anything else (a typo
@@ -1146,10 +1147,11 @@ def derive_event_kinds(table: dict, matrix: dict, fold_kinds: dict) -> frozenset
                     "every emission column.")
             out.add(k)
     out.update(fold_kinds.values())
+    out.update(logged_kinds.values())
     return frozenset(out)
 
 
-EVENT_KINDS = derive_event_kinds(VERB_TABLE, MATRIX, FOLD_KINDS)
+EVENT_KINDS = derive_event_kinds(VERB_TABLE, MATRIX, FOLD_KINDS, LOGGED_KINDS)
 
 
 def act_key(verb: str, subject, operands) -> str:

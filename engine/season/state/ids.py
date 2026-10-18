@@ -35,8 +35,9 @@ class SeatId(str):
     and nothing else; `test_sc02_typed_ids_and_loader.py` holds `build_realm(0)` to its pinned hash.
 
     ⚠ THE GRADE IS RUNTIME, AND CI RUNS NO TYPE-CHECKER. `Act.actor` cannot hold a `SeatId` because
-    `loop/resolve.py::_survives` refuses one (`04:222`: *"MECHANICAL -- tag assertion in the fold"*),
-    not because a checker would; nothing here is STRUCTURAL.
+    `loop/resolve.py::_survives` refuses one (`04:222`, the Python column: *"STRUCTURAL under a checker;
+    MECHANICAL at runtime"*), not because a checker would; nothing here is STRUCTURAL. An untagged
+    string seat id (a `Tenure.object`) passes and falls to `act.ineligible`.
 
     Minted at the two places a seat id enters the tree: `Office.__post_init__` (the seat itself) and
     `Act.__post_init__` (`Act.via : SeatId?`). Its siblings in `04` §B.1 (`PersonId`, `RungId`, ...) are

@@ -37,7 +37,7 @@ from typing import Callable, Optional
 from ..data.requires import UNKNOWN, binding_from_act
 from ..data.rosters import (
     BAN_KIND, DETAIN_KIND, DOMINANCE_KINDS, FACTION_BY_PROP, QUESTION_SOURCES, RECORD_CONTENT,
-    RECORD_KINDS, REMOVE_ORDINAL, RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, TENURE_KINDS,
+    RECORD_KINDS, REMOVE_ORDINAL, RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STANDING_CROSSED, TENURE_KINDS,
 )
 # IN-09: the Record kinds a held document is an occasion for, derived off the verb table's rows;
 # v9 IN-49: the remit acts a seat exercises on a `Rung`-classed referent, the same way.
@@ -2216,10 +2216,6 @@ def landing_floor(w: World, since: Optional[tuple] = None) -> tuple:
     Q2's boundary and `loop/matter.py::_standing_crossings` as the cut between the past claims and all
     of them (v9 SC-02 `22b` step 23), so the two agree on what *new* means."""
     return since if since is not None else (w.tick - 1, 0)
-
-
-# v9 SC-02 `22b` step 23: the kind of the one record a person-keyed standing crossing leaves.
-STANDING_CROSSED = "standing.band_crossed"
 
 
 def standing_crossing_id(w: World, pid: str) -> str:

@@ -69,8 +69,8 @@ def _survives(self, w: "World", a: Act) -> list:
     (see the inline comment this replaced, still true of both callers).
 
     ⚠ SC-02 `23`: THE TAG ASSERTION IS HERE, BECAUSE THIS IS THE ONE CHECK BOTH FOLD ENTRIES SHARE
-    (`resolve` and `encounter` call it before anything else reads the actor). `04:222`: *"`Act.actor`
-    cannot hold a `SeatId` -- MECHANICAL, tag assertion in the fold"* and `04:120` (AX-1), *"only a
+    (`resolve` and `encounter` call it before anything else reads the actor). `04:222`, the Python
+    column: *"STRUCTURAL under a checker; MECHANICAL at runtime"*, and `04:120` (AX-1), *"only a
     person acts; a seat enters through `Act.via`"*. It RAISES `InstrumentDefect` and does not emit
     `act.ineligible`: a seat that is not in `w.persons` would otherwise be indistinguishable from a
     person a predecessor removed, so the typed refusal is the only way to tell 'a seat tried to act' from
