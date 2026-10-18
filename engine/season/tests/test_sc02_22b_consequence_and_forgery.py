@@ -21,16 +21,13 @@ Worlds: `test_u7_remit.py`'s `tiny_world` bench (step 24) and `test_fi03_trail.p
 from __future__ import annotations
 
 import dataclasses
-import importlib
 import inspect
 import random
 import re
-from pathlib import Path
 
 import yaml
 
-from engine.substrate import composition
-
+from ..data import files
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import Step, WriteClass, matrix_row
 from ..data.pursuits import pursuit, to_axes
@@ -44,9 +41,9 @@ from ..state import carriers as C
 from .test_fi03_trail import (
     INVESTIGATOR, chooser_research, forged_claims, research, step, trail_world,
 )
+from .test_sc01_obstacle_ceiling import _module
 from .test_u7_remit import DUKE, JUDGE, PARTY, _determine, _fold, _kinds, _open, _world
 
-SEASON_DIR = Path(__file__).resolve().parents[1]
 # [JUSTIFIED: authored test character, not a game value -- three pursuits whose leans on `determine` differ in sign, so a move is visible in both directions]
 HELD = {pursuit("honour"): 0.5, pursuit("liberty"): 0.3, pursuit("stability"): 0.2}
 # [JUSTIFIED: a test-fixture search bound, not a game value -- the act ids tried for a band; asserted reached]
@@ -56,7 +53,7 @@ SWEEP = 40
 def _sweep_of(hid):
     """A register row's declared points and the fixture its `site:` names (`test_sc02_reception.py`'s
     reading): the arms come from the register, never from this file."""
-    rows = yaml.safe_load((SEASON_DIR / "hole_register.yaml").read_text())["rows"]
+    rows = yaml.safe_load(files.HOLE_REGISTER_YAML.read_text())["rows"]
     (row,) = [r for r in rows if r["id"] == hid]
     return row["sweep"], row["site"].split(",")[0].split()[-1]
 
@@ -127,7 +124,6 @@ def test_step24_each_band_moves_the_judges_held_pursuits_by_its_step_and_no_othe
             assert "pursuit.moved" not in _kinds(out), (band, _kinds(out))
         assert {pid: dict(p.pursuits) for pid, p in w.persons.items() if pid != DUKE} == others
         checked += 1
-        print(f"  {band:>12}: {dict(before)} -> {dict(after)}")
     assert checked == len(DEGREE_BANDS)
     # The two moving bands differ in REACH, not only in sign: Overwhelming moves twice Success's step.
     assert DEGREE_STEP["Overwhelming"] == 2 * DEGREE_STEP["Success"] > 0 == DEGREE_STEP["Partial"]
@@ -212,7 +208,6 @@ def test_step24_three_findings_move_one_judges_lean_toward_judging_by_a_printed_
         out = _fold(w, d, _determine(f"dtt{i}", subject=party))
         assert out[0].degree in ("Overwhelming", "Success"), out[0].degree
         readings.append(term())
-    print(f"  the judge's determine term: {[round(r, 6) for r in readings]}")
     assert readings[0] < readings[1] < readings[2] < readings[3], readings
 
 
@@ -312,18 +307,16 @@ def test_step25_a_better_forgery_is_found_less_and_finding_it_deposits_the_forge
     than at `0` (the obstacle rose; the net is the same draw), and for AT LEAST ONE the quality-0 forgery
     is FOUND -- FI-03's deposit lands `record.forged` on the investigator -- while the quality-1 forgery
     finds nothing and leaves him holding no such claim: *finding nothing leaves it standing*."""
-    rank = {b: s for b, s in DEGREE_STEP.items()}
     flipped = compared = 0
     for n in range(SWEEP):
         w0, _r0, f0 = _research_out(n, default_forgery_quality=0, obstacle_ceiling=None)
         w1, _r1, f1 = _research_out(n, default_forgery_quality=1, obstacle_ceiling=None)
-        assert rank[f1.degree] <= rank[f0.degree], (n, f0.degree, f1.degree)
+        assert DEGREE_STEP[f1.degree] <= DEGREE_STEP[f0.degree], (n, f0.degree, f1.degree)
         compared += 1
         if f0.kind == "finding.made" and forged_claims(w0, INVESTIGATOR) and f1.kind == "finding.none":
             assert forged_claims(w1, INVESTIGATOR) == [], n
             flipped += 1
     assert compared == SWEEP and flipped >= 1, (compared, flipped)
-    print(f"  {flipped} of {compared} act ids found the quality-0 forgery and not the quality-1 one")
 
 
 # ======================================================================================
@@ -353,7 +346,7 @@ def test_step26_no_momentum_value_survives_a_barrier_outside_a_record():
     w, d = _world(**JUDGE)
     names += [("World", k) for k in vars(w)]
     assert not [n for n in names if re.search(r"momentum|debate", n[1], re.I)], names
-    roll_mod = importlib.import_module(composition.ROLES["social_contest.roll"]["target"].split(":")[0])
+    roll_mod = _module()
     before_attrs, before_mod = set(vars(w)), _module_state(roll_mod)
     assert _kinds(_fold(w, d, _open("oc26"))) == ["case.opened"]
     out = _fold(w, d, _determine("dt26"))

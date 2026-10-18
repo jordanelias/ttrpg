@@ -52,7 +52,7 @@ from .requires import (
     build_typed_requires,
 )
 from .rosters import (
-    COVERT_KINDS, DOMINANCE_KINDS, EARNED_REFUSAL_KINDS, FOLD_KINDS, GRADED_INQUIRIES, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
+    COVERT_KINDS, DOMINANCE_KINDS, FOLD_KINDS, GRADED_INQUIRIES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
     is_event_kind,
     RUNG_KINDS, STRATA, TENURE_KINDS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
     roster_map,
@@ -953,14 +953,14 @@ def _load_verb_table() -> dict:
         # counterparty -- and two or more refusal kinds publishes a kind for a clause that did not fail,
         # which is `ID-9` in the scarcity channel. The same holds of a contested or graded flat row at the
         # party gap (`loop/resolve.py::_refuse_party_gap`), a refusal point no clause names. The kinds the
-        # fold FILTERS (`rosters.yaml: earned_refusal_kinds`) do not count: the act earns them or they are
+        # fold FILTERS (`data/rosters.py::PERSON_DEMANDED`) do not count: the act earns them or they are
         # dropped. Such a row keys its refusals by clause (the keyed form above) or declares one kind.
         if not by_clause and not _names:
             _n_clauses = (int(any(k != "own" for k in row.eligibility_kinds()))
                           + (len(row.requires_typed.names) if row.requires_typed is not None
                              else int(row.has_precondition))
                           + int(bool(row.writes)) + int(bool(row.counterparty)))
-            _unearned = [k for k in row.emits_on_refusal if k not in EARNED_REFUSAL_KINDS]
+            _unearned = [k for k in row.emits_on_refusal if k != PERSON_DEMANDED]
             if len(_unearned) > 1 and (_n_clauses >= 2 or row.contests or _graded):
                 raise SystemExit(
                     f"verb_table.yaml: {name!r} is a FLAT row with {_n_clauses} failable clause(s)"
@@ -968,7 +968,7 @@ def _load_verb_table() -> dict:
                     f"declares {len(_unearned)} refusal kinds {_unearned}: a flat list is emitted "
                     "whole at every refusal, so a kind would be published for a clause that did not "
                     "fail. 04 §B.13 #4 (F7), the flat half -- key `emits_on_refusal:` by clause, "
-                    "declare ONE kind, or list the extras in `rosters.yaml: earned_refusal_kinds`.")
+                    "declare ONE kind (`data/rosters.py::PERSON_DEMANDED` is the one the fold keeps only when earned).")
         out[name] = row
     # -----------------------------------------------------------------------
     # LOADER INVARIANT 6 (`04_CODE_ARCHITECTURE.md` PART D row 15, MECHANICAL at load):
@@ -1040,12 +1040,6 @@ def _load_verb_table() -> dict:
     # prize row), or a skipped kind no row declares is refused naming it: a misspelled skip would
     # skip nothing and report the deposit half built.
     _declared_kinds = {k for v in out.values() for k in (*v.emits, *v.emits_on_refusal)}
-    _refusal_kinds = {x for v in out.values() for x in v.emits_on_refusal}
-    _stray_earned = sorted(k for k in EARNED_REFUSAL_KINDS if k not in _refusal_kinds)
-    if _stray_earned:
-        raise SystemExit(f"rosters.yaml: `earned_refusal_kinds` names {_stray_earned}, which no verb "
-                         "row declares in `emits_on_refusal:`. 04 §B.13 #4 -- an earned kind is one a "
-                         "row declares and the fold keeps only when the act earns it.")
     _bad = sorted(
         [f"route {v!r}: no verb row" for v in GRADED_INQUIRIES if v not in out]
         + [f"route {v!r}: fields {sorted(r) if isinstance(r, dict) else r!r}"
@@ -1366,40 +1360,41 @@ REFUSAL_KINDS = frozenset(k for r in VERB_TABLE.values() for k in r.emits_on_ref
 DEED_KINDS = EMITTED_KINDS - REFUSAL_KINDS
 
 
-def _check_covert_kinds(kinds, deed_kinds) -> frozenset:
-    """v9 FI-03 (`ED-FI-0002`): every `rosters.yaml: covert_kinds` member is a DEED kind the verb table
-    emits, or import refuses naming it -- a misspelled or refusal kind would be a trail nothing leaves,
-    and the trail would read as built. A function, so a test can plant a bad member and watch it
-    refuse. Returns the members."""
+def _check_deed_kinds(kinds, deed_kinds, message, where, law) -> frozenset:
+    """A roster of event kinds a closed set may name is held to `DEED_KINDS` (a kind some verb row emits,
+    on no row's refusal), or import refuses naming the members: a kind no act emits partitions nothing
+    and leaves nothing, and what it feeds would read as built. A function, so a test can plant a bad
+    member and watch it refuse. `message` takes `{bad}`. Returns the members."""
     bad = sorted(k for k in kinds if k not in deed_kinds)
     if bad:
         raise Unspecified(
-            f"`covert_kinds` {bad} are not deed kinds the verb table emits", "rosters.yaml -- covert_kinds",
+            message.format(bad=bad), where,
             needs="name kinds in `data/verbs.py::DEED_KINDS` (emitted by some row, on no row's refusal)",
-            law="ED-FI-0002 -- a trail is an Event some act leaves; a kind no row emits, or a refusal "
-                "kind, leaves none, and the trail would read as built")
+            law=law)
     return frozenset(kinds)
 
 
-_check_covert_kinds(COVERT_KINDS, DEED_KINDS)
+def _check_covert_kinds(kinds, deed_kinds) -> frozenset:
+    """v9 FI-03 (`ED-FI-0002`): every `rosters.yaml: covert_kinds` member is a DEED kind the verb table
+    emits -- a misspelled or refusal kind would be a trail nothing leaves."""
+    return _check_deed_kinds(
+        kinds, deed_kinds, "`covert_kinds` {bad} are not deed kinds the verb table emits",
+        "rosters.yaml -- covert_kinds",
+        "ED-FI-0002 -- a trail is an Event some act leaves; a kind no row emits, or a refusal "
+        "kind, leaves none, and the trail would read as built")
 
 
 def _check_dominance_kinds(kinds, deed_kinds) -> frozenset:
     """v9 SC-02 `22a` (step 20, route erosion): every `rosters.yaml: standing_routes` `dominance` member
-    is a DEED kind the verb table emits, or import refuses naming it -- the partition is of the kinds of
-    act a hearer's claims record, and a kind no act emits partitions nothing and erodes nothing, forever.
-    A function, so a test can plant a bad member and watch it refuse. Returns the members."""
-    bad = sorted(k for k in kinds if k not in deed_kinds)
-    if bad:
-        raise Unspecified(
-            f"`standing_routes.kinds.dominance` names {bad}, which are not deed kinds",
-            "rosters.yaml -- standing_routes",
-            needs="a member of `data/verbs.py::DEED_KINDS` (a kind some verb row emits, not on refusal)",
-            law="19_PLAN.md step 20 -- the partition is of the KINDS OF ACT a hearer's claims record; a "
-                "kind no act emits partitions nothing, and erodes nothing, forever")
-    return frozenset(kinds)
+    is a DEED kind -- the partition is of the kinds of act a hearer's claims record."""
+    return _check_deed_kinds(
+        kinds, deed_kinds, "`standing_routes.kinds.dominance` names {bad}, which are not deed kinds",
+        "rosters.yaml -- standing_routes",
+        "19_PLAN.md step 20 -- the partition is of the KINDS OF ACT a hearer's claims record; a "
+        "kind no act emits partitions nothing, and erodes nothing, forever")
 
 
+_check_covert_kinds(COVERT_KINDS, DEED_KINDS)
 _check_dominance_kinds(DOMINANCE_KINDS, DEED_KINDS)
 
 

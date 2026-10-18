@@ -24,6 +24,7 @@ from ..data.fixtures import SITE_YIELD
 from ..data.matrix import Step
 from ..data.requires import SHORTFALL_PREDICATE, Observation
 from ..decision import agreement, standing_of
+from ..decision.budget import bands_below
 from ..queries import world_q
 from ..queries.person_q import LedgerReader
 from ..queries.world_q import STANDING_CROSSED
@@ -92,12 +93,6 @@ class _HeldBefore(NamedTuple):
     ledger: list
 
 
-def _standing_band(gap: int, floors: tuple) -> int:
-    """`budget.body_band_penalty`'s reading of a band -- the floors a value is below -- over the
-    standing floors (`H-223`). One reading for both person-side bands."""
-    return sum(1 for f in floors if gap < f)
-
-
 def _standing_crossings(w: "World") -> list:
     """v9 SC-02 `22b` STEP 23 (`19_PLAN.md`): PRESSURE IS A PERSON-KEYED BAND CROSSING OF THE STANDING GAP.
 
@@ -127,12 +122,14 @@ def _standing_crossings(w: "World") -> list:
     floor = world_q.landing_floor(w)
     for pid in sorted(w.persons):
         p = w.persons[pid]
+        if not any(c.subject == pid for c in p.ledger):
+            continue                      # `standing_of` reads only claims about himself: no gap to move
         past = [c for c in p.ledger if (c.when, c.round) < floor]
         if len(past) == len(p.ledger):
             continue                      # nothing landed since: the same claims, the same gap
         before = standing_of(_HeldBefore(pid, past), w.fixtures)
         after = standing_of(p, w.fixtures)
-        if _standing_band(before, floors) == _standing_band(after, floors):
+        if bands_below(before, floors) == bands_below(after, floors):
             continue
         own = [c for c in p.ledger if c.subject == pid and c.source == "firsthand"]
         made: list = []

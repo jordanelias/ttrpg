@@ -146,10 +146,11 @@ def anchor_of(w, e: "Event") -> Optional[str]:
 def event_by_id(w, eid: str):
     """The logged Event with this id, or `None`. Linear, and deliberately not indexed: the log
     is small, and an index would be a second structure to keep in step with `EventLog` for a lookup
-    that is not hot. Three callers: `anchor_of`'s tier-3 path, and since v9 FI-03
+    that is not hot. Callers: `anchor_of`'s tier-3 path, and since v9 FI-03
     `epistemic.trail_of` (once per covert kind per side of an inquiry's subject) and
     `loop/witness.py::_found_claims` (once per uncovered trail Event) -- both bounded by the
-    findings, which are few."""
+    findings, which are few -- and, since v9 SC-02 `22b` step 23, `world_q.standing_crossed` and
+    `occasioned_by`, each behind `EventLog.has_id`'s O(1) guard."""
     for prior in getattr(w, "log", ()) or ():
         if prior.id == eid:
             return prior

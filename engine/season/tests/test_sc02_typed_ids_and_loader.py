@@ -22,15 +22,10 @@ import re
 
 import pytest
 
-from ..data.matrix import WriteClass
-from ..gaps import InstrumentDefect, Unspecified
-from ..loop.driver import mint_token
+from ..gaps import InstrumentDefect
 from ..state.carriers import Act, Office
 from ..state.ids import SeatId
-from .test_u7_remit import _fold, _kinds, _world
-
-DUKE = "p_high"
-SEAT = "off_duke"
+from .test_u7_remit import DUKE, SEAT, _fold, _kinds, _world
 
 
 # ======================================================================================
@@ -234,22 +229,19 @@ def test_inv4_a_contested_flat_row_with_two_refusal_kinds_refuses_at_the_party_g
         _verbs._load_verb_table()
 
 
-def test_inv4_the_earned_kind_is_the_only_exemption_and_it_is_a_roster_not_a_row_name(monkeypatch):
-    """`dispatch` is flat with two clauses and two kinds and LOADS, because `person.demanded` is in
-    `rosters.yaml: earned_refusal_kinds` (the fold filters it, `_demand_earned`). Empty the roster and the
-    same row refuses -- so the exemption is the roster's, observed, and no verb is named in the code. A
-    roster member no row declares refuses too."""
+def test_inv4_the_earned_kind_is_the_only_exemption_and_it_is_one_constant_not_a_row_name(monkeypatch):
+    """`dispatch` is flat with two clauses and two kinds and LOADS, because `person.demanded`
+    (`data/rosters.py::PERSON_DEMANDED`, the kind the fold filters in `_demand_earned`) is exempt. Point
+    the loader at another kind and the same row refuses -- so the exemption is that one constant,
+    observed, and no verb is named in the code."""
     row = VERB_TABLE["dispatch"]
     assert not row.refusals_by_clause and len(row.emits_on_refusal) == 2, "fixture: dispatch is the case"
-    monkeypatch.setattr(_verbs, "EARNED_REFUSAL_KINDS", frozenset())
+    monkeypatch.setattr(_verbs, "PERSON_DEMANDED", "ghost.kind")
     with pytest.raises(SystemExit,
                        match=r"'dispatch' is a FLAT row .*\['dispatch\.refused', 'person\.demanded'\]"):
         _verbs._load_verb_table()
-    monkeypatch.setattr(_verbs, "EARNED_REFUSAL_KINDS", frozenset({"person.demanded", "ghost.kind"}))
-    with pytest.raises(SystemExit, match=r"`earned_refusal_kinds` names \['ghost\.kind'\]"):
-        _verbs._load_verb_table()
     monkeypatch.undo()
-    assert "dispatch" in _verbs._load_verb_table(), "control: the shipped roster loads the row"
+    assert "dispatch" in _verbs._load_verb_table(), "control: the shipped constant loads the row"
 
 
 def test_inv4_the_fold_earns_the_demanded_kind_at_every_refusal_site_not_only_three():
@@ -267,11 +259,8 @@ def test_inv4_the_fold_earns_the_demanded_kind_at_every_refusal_site_not_only_th
     assert [e.kind for e in gap] == ["dispatch.refused"], [e.kind for e in gap]
     earned = _fold(w, d, Act(id="pc", actor=DUKE, verb="dispatch", payload=dict(nobody), via=SEAT))
     assert "person.demanded" in [e.kind for e in earned], "control: the precondition refusal earns it"
-    # the roster and the fold's filter are one fact: a roster member the fold does not filter refuses
-    # at import, naming it (the check is a function, so a widened roster is planted and watched refusing)
-    with pytest.raises(Unspecified, match=r"earned_refusal_kinds.*ghost\.kind"):
-        _resolve._check_earned_kinds(frozenset({"person.demanded", "ghost.kind"}))
-    assert _resolve._check_earned_kinds(_rosters.EARNED_REFUSAL_KINDS) == frozenset({"person.demanded"})
+    # the loader's exemption and the fold's filter are one constant, read from one place
+    assert _resolve.PERSON_DEMANDED is _rosters.PERSON_DEMANDED is _verbs.PERSON_DEMANDED
 
 
 # ======================================================================================

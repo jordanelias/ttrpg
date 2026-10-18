@@ -4693,7 +4693,7 @@ rows:
     tier:      1
     hole:      "WHERE THE STANDING GAP'S BANDS FALL (proceedings `19_PLAN.md` step 23: *if the band differs, record a crossing*). No document gives a band table for standing: `band_floors` keys site kinds and `body` (a key outside `site_kinds` is refused at load), so the floors are an injected tuple on the gap's own scale (`condition_scale`)"
     kind:      "NUMBER"
-    owner:     "`loop/matter.py::_standing_crossings` (`_standing_band`: `budget.body_band_penalty`'s reading -- the floors a value is below -- over these floors)"
+    owner:     "`loop/matter.py::_standing_crossings` (`decision/budget.py::bands_below`, the body's reading -- the floors a value is below -- over these floors)"
     grade:     "assumption"
     default:   "(500,): two bands, split at the scale's midpoint; a person crosses when the gap over his claims moves across 500 in either direction"
     site:      "Fixtures standing_band_floors, read by loop/matter.py::_standing_crossings"

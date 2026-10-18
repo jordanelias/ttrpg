@@ -509,9 +509,13 @@ VERB_CAPABILITY = roster_map("verb_capability", "values")
 GRADED_INQUIRIES = roster_map("graded_inquiries", "values")
 # RS-21 item 1 (H-111): the Event kinds WITNESS deposits nothing for (`loop/witness.py::witness`).
 UNDEPOSITED_KINDS = roster("undeposited_kinds")
-# v9 SC-02 `23` (loader invariant 4, the flat half): the refusal kinds a row declares and the fold keeps
-# only when the act earns them (`loop/resolve.py::_demand_earned`). Read by `data/verbs.py`.
-EARNED_REFUSAL_KINDS = roster("earned_refusal_kinds")
+# v9 SE-01 (`24g`) / `H-51`: the refusal kind a row (`dispatch`) declares and the fold keeps ONLY when
+# the act earns it (`loop/resolve.py::_demand_earned`: from the precondition refusal of an act naming
+# nobody the world holds). ONE OWNER, read by the fold and by the loader's flat-row rule (`data/verbs.py`,
+# loader invariant 4's flat half, v9 SC-02 `23`), which exempts exactly this kind from the two-kind
+# refusal because the fold publishes it solely when earned. A second such kind is an earning predicate
+# beside `_demand_earned` and a member here, in one edit.
+PERSON_DEMANDED = "person.demanded"
 
 
 def is_event_kind(k) -> bool:

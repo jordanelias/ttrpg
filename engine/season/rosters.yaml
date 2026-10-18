@@ -1154,20 +1154,6 @@ rosters:
       arm -- skip only the `finding.none` event-kind claim -- is the alternative Jordan would name.
     values: ["finding.none"]
 
-  earned_refusal_kinds:
-    source: >-
-      `04_CODE_ARCHITECTURE.md` §B.13 loader invariant 4 (F7), the FLAT half; v9 SC-02 `23`. The one
-      kind it holds, `person.demanded`, is v9 SE-01 (`24g`) / `H-51` P3.
-    note: >-
-      ⚠ THE REFUSAL KINDS A ROW DECLARES AND THE FOLD KEEPS ONLY WHEN THE ACT EARNS THEM
-      (`loop/resolve.py::_demand_earned`: `person.demanded` only from the precondition refusal, only when
-      the act's subject names nobody the world holds). A FLAT row (`emits_on_refusal:` a list, not a
-      clause-keyed mapping) emits its whole list at every refusal, so a flat row with two or more
-      failable clauses and two or more kinds publishes a kind for a clause that did not fail (`ID-9`);
-      the loader refuses it (`data/verbs.py`, naming the row) unless the extra kinds are members here,
-      which the fold already filters. A member must be a refusal kind some verb row declares.
-    values: ["person.demanded"]
-
   fold_kinds:
     source: >-
       `04_CODE_ARCHITECTURE.md` §B.13 loader invariant 7 and `F.20b` (F13): *"the Event-kind roster is
@@ -2276,7 +2262,7 @@ rosters:
       list nothing read would be a declared-but-unread carrier. A hearer who holds, untold, a
       dominance-kind deed done TO the speaker by somebody else (`person_q.suffered_deeds`, the
       `seen.who` pairing) stops counting every dominance-kind deed of the speaker's no newer than it.
-      Every member must be a deed kind (`data/verbs.py::DEED_KINDS`); `queries/world_q.py` refuses at
+      Every member must be a deed kind (`data/verbs.py::DEED_KINDS`); `data/verbs.py::_check_dominance_kinds` refuses at
       import otherwise. [ASSUMPTION; medium; Jordan to correct -- the membership: which acts are
       coercive is stated nowhere in the corpus; revert: an empty `dominance` list, and no hearer's
       weight is ever eroded.]

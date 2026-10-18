@@ -26,6 +26,7 @@ from __future__ import annotations
 
 import yaml
 
+from ..data import files
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import WriteClass
 from ..decision import aggregate_questions, opening_set, standing_of
@@ -36,9 +37,8 @@ from ..queries import world_q
 from ..queries.world_q import STANDING_CROSSED
 from ..state.carriers import Act, Claim, Event, Said, View
 from ..state.ids import H
-from pathlib import Path
 
-BAILIFF, SEAT = "p_high", "off_duke"
+BAILIFF = "p_high"
 ORIGIN = "p_low"                    # told p_mid; never spoke to the bailiff
 TELLERS = (ORIGIN, "p_mid", "p_other")
 # What the bailiff holds true of himself BEFORE he is told anything (planted: step 19's writer, H-218).
@@ -234,7 +234,7 @@ def test_step23_a_crossing_is_new_once_neither_after_he_deliberates_nor_next_sea
 
 
 def _h223_sweep():
-    rows = yaml.safe_load((Path(__file__).resolve().parents[1] / "hole_register.yaml").read_text())
+    rows = yaml.safe_load(files.HOLE_REGISTER_YAML.read_text())
     row, = [r for r in rows["rows"] if r["id"] == "H-223"]
     return [tuple(arm) for arm in row["sweep"]]
 

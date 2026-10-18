@@ -41,7 +41,7 @@ from ..data.rosters import (
 )
 # IN-09: the Record kinds a held document is an occasion for, derived off the verb table's rows;
 # v9 IN-49: the remit acts a seat exercises on a `Rung`-classed referent, the same way.
-from ..data.verbs import DEED_KINDS, RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS
+from ..data.verbs import RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
 # the asker-first module (which may not import this one; this edge runs the other way).
@@ -552,6 +552,9 @@ def remove_weight(source: str) -> float:
     return (len(REMOVE_ORDINAL) - REMOVE_ORDINAL.index(source)) / len(REMOVE_ORDINAL)
 
 
+_UNREAD = object()      # `reception`'s "not read yet" marker (None is a legitimate reading: no bluff called)
+
+
 def reception(w: World, speaker: str, venue: Optional[str]) -> float:
     """HOW THE BENCH AT `venue` RECEIVES `speaker` -- `19_PLAN.md` step 17, the room reading the person
     who rises in it. Signed: above zero the bench is disposed toward him, below it against him.
@@ -581,9 +584,10 @@ def reception(w: World, speaker: str, venue: Optional[str]) -> float:
     (`(when, round)`) than the latest such sighting counts zero. ⚠ `(when, round)` IS THE CLAIM'S
     DEPOSIT TIME, NOT THE DEED'S: a told or found copy is stamped with the tick it was deposited
     (`loop/witness.py`), so a hearer told after the bluff of a deed from before it keeps that copy
-    at full weight; no field carries the deed's own tick on a copy (`H-215`'s named limit). One success against him is enough,
-    and only the witnesses who saw it are moved; a challenger who fails suffers the deed himself, so
-    the speaker's weight stands. A later coercive deed counts again.
+    at full weight; no field carries the deed's own tick on a copy (`H-215`'s named limit). One
+    success against him is enough, and only the witnesses who saw it are moved; a challenger who
+    fails suffers the deed himself, so the speaker's weight stands. A later coercive deed counts
+    again.
 
     `venue` `None` (a placeless speaker) or an empty bench -> 0.0: nobody is in the room."""
     TRACE.query("reception", "resolver")
@@ -596,12 +600,15 @@ def reception(w: World, speaker: str, venue: Optional[str]) -> float:
         h = w.persons.get(hid)
         if h is None or hid == speaker:
             continue
-        called = max(((c.when, c.round) for c in suffered_deeds(h.ledger, speaker)
-                      if c.predicate in DOMINANCE_KINDS), default=None)
+        called = _UNREAD            # the latest bluff called, read on the first dominance-route deed
         axis_w = None
         for c in attributed_deeds(h.ledger, speaker):
-            if called is not None and c.predicate in DOMINANCE_KINDS and (c.when, c.round) <= called:
-                continue
+            if c.predicate in DOMINANCE_KINDS:
+                if called is _UNREAD:
+                    called = max(((s.when, s.round) for s in suffered_deeds(h.ledger, speaker)
+                                  if s.predicate in DOMINANCE_KINDS), default=None)
+                if called is not None and (c.when, c.round) <= called:
+                    continue
             if axis_w is None:
                 axis_w = projected_axes(h, shift)
             total += remove_weight(c.source) * (c.confidence / full) * deed_term(h, axis_w, c)
@@ -630,12 +637,12 @@ def proofs(w: World, speaker: str, opponent: Optional[str], venue: Optional[str]
     who = w.persons.get(speaker)
     if who is None or opponent is None or opponent == speaker or venue is None:
         return 0.0
-    if not any(hid != speaker for hid in judging_set(w, venue)):
+    held = list(attributed_deeds(who.ledger, opponent))
+    if not held or not any(hid != speaker for hid in judging_set(w, venue)):
         return 0.0
     opp = w.persons.get(opponent)
     mirror = {(c.subject, c.predicate) for c in opp.ledger} if opp is not None else set()
-    return sum(remove_weight(c.source) for c in attributed_deeds(who.ledger, opponent)
-               if (c.subject, c.predicate) not in mirror)
+    return sum(remove_weight(c.source) for c in held if (c.subject, c.predicate) not in mirror)
 
 # ⚠ `home_of(w)` WAS HERE; IT MOVED DOWN TO `state/containment.py` AT PLAN POSITION `19`, body and
 # `TRACE` line unchanged, and is re-exported by this module's import block (`world_q.home_of is

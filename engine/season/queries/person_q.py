@@ -40,6 +40,7 @@ does: `choose` and `options` read `stance_toward` and `said_of` from here. The A
 from __future__ import annotations
 
 import functools
+from typing import Optional
 
 from engine.substrate.descriptors import AFFILIATION_CONCERNS, PURSUITS
 
@@ -310,8 +311,8 @@ def paired_deed_term(p: Person, axis_w: dict, c, seen_of) -> tuple:
     lives once). `c` is a deed claim `p` holds; `axis_w` is `p`'s projected pursuits; `seen_of` is a
     zero-argument callable returning `_seen_index(p.ledger)` (called only when a pairing is read).
     `doer` is the one `deed_doer` names and `term = lean · bond` (`_lean`, `_bond`) is what the deed
-    adds to `p`'s judgement of that doer; `deeds_judged` sums it and `world_q.attention_key`'s tier 2
-    ranks a claim by `|term|`. `(None, 0.0)` for every claim that is not a paired deed, that `p`'s
+    adds to `p`'s judgement of that doer; `world_q.attention_key`'s tier 2 ranks a claim by `|term|`
+    (`deed_term` is the same number for `deeds_judged` and `world_q.reception`). `(None, 0.0)` for every claim that is not a paired deed, that `p`'s
     pursuits do not lean on, that is told (`chain`), or whose pairing names no doer (no `seen`, `who`
     withheld, ambiguous): an unpaired claim scores 0, so a hidden actor stays hidden. Person-side (AX-2)."""
     if c.predicate not in PAIRED_KINDS or c.chain:
@@ -442,20 +443,26 @@ def _pursuits_violated_by(verb: str) -> frozenset:
     which reads only `(verb, element)`. The candidates are `data/verbs.py::PURSUIT_PROJECTION`'s
     keys, read through the module at call time so a rebound projection is what is asked; a pursuit
     the projection does not list projects to the zero vector and violates nothing."""
-    if not any(_verbs.align(verb, ax) for ax in PURSUIT_AXES):
+    row = {ax: _verbs.align(verb, ax) for ax in PURSUIT_AXES}
+    if not any(row.values()):
         return frozenset()
-    return frozenset(e for e in _verbs.PURSUIT_PROJECTION if pursuit_lean(verb, e) < 0)
+    return frozenset(e for e in _verbs.PURSUIT_PROJECTION if pursuit_lean(verb, e, row) < 0)
 
 
-def pursuit_lean(verb: str, e: str) -> float:
+def pursuit_lean(verb: str, e: str, row: Optional[dict] = None) -> float:
     """HOW FAR AN ACT OF `verb` POINTS THE WAY PURSUIT `e` DOES: `Σ_axis to_axes({e: 1})[axis] *
-    align(verb, axis)` -- the pursuit's unit projection dotted with the verb's alignment row. THE ONE
-    OWNER of that dot (`_pursuits_violated_by` is its sign test; `consequence_pursuits` its magnitude).
-    It is also the derivative of `decision/choose.py::score_terms`' pursuit term with respect to the
-    weight on `e`, so moving `e` by `+lean` makes the verb score higher for its holder. Reads `ALIGNMENT`
-    and `PURSUIT_PROJECTION` at call time, through the modules a sweep rebinds."""
+    align(verb, axis)` -- the pursuit's unit projection dotted with the verb's alignment row (`row`,
+    when the caller holds it already: `{axis: align(verb, axis)}`). THE OWNER of that dot for the sign
+    test (`_pursuits_violated_by`) and the consequence (`consequence_pursuits`). It is also the
+    derivative of `decision/choose.py::score_terms`' pursuit term with respect to the weight on `e`,
+    so moving `e` by `+lean` makes the verb score higher for its holder; that term computes the same
+    dot at the holder's weights itself (its hot loop's `align` volume is profiled there), so the dot
+    has a second copy by design. Reads `ALIGNMENT` and `PURSUIT_PROJECTION` at call time, through the
+    modules a sweep rebinds."""
     proj = to_axes({e: 1.0})
-    return sum(proj[ax] * _verbs.align(verb, ax) for ax in PURSUIT_AXES)
+    if row is None:
+        return sum(proj[ax] * _verbs.align(verb, ax) for ax in PURSUIT_AXES)
+    return sum(proj[ax] * row[ax] for ax in PURSUIT_AXES)
 
 
 def consequence_pursuits(p: Person, verb: str, degree, gain: float):
@@ -473,13 +480,12 @@ def consequence_pursuits(p: Person, verb: str, degree, gain: float):
     consequence, and a man with no pursuits is unmoved. No clamp: a weight may cross zero, as an
     authored one may (`harness/probes.py` P31) [ASSUMPTION; medium; Jordan to correct; revert: floor at
     0]. Keys keep `p.pursuits`' order, which `to_axes` sums in. Person-side, no World (AX-2)."""
-    step = DEGREE_STEP.get(degree, 0) if degree is not None else 0
-    held = p.pursuits or {}
+    step = DEGREE_STEP.get(degree, 0)
+    held = {e: float(w) for e, w in (p.pursuits or {}).items()}
     if not gain or not step or not held:
         return None
-    moved = {e: float(w) + float(gain) * step * pursuit_lean(verb, e) if float(w) > 0 else float(w)
-             for e, w in held.items()}
-    return None if moved == {e: float(w) for e, w in held.items()} else moved
+    moved = {e: w + float(gain) * step * pursuit_lean(verb, e) if w > 0 else w for e, w in held.items()}
+    return None if moved == held else moved
 
 
 def _affiliations_violated_by(verb: str) -> frozenset:

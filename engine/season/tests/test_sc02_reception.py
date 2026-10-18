@@ -8,7 +8,7 @@ through `test_u7_remit._world`: `p_high` holds `off_duke`, whose bench sits over
 and his party `p_mid` live in `Hh`; `p_other` lives there and sits on no bench):
   * `world_q.reception(w, speaker, venue)` -- each bench member's own deed claims about the speaker,
     weighted by `remove_weight(source)` x decayed confidence x the member's valence (arm 1, the alignment
-    table; arm 2 lost the sweep, `hole_register.yaml` H-215), summed; `reception_gain` scales it into
+    table; arm 2 was never authored and the sweep is open, `hole_register.yaml` H-215), summed; `reception_gain` scales it into
     the obstacle (`H-215`);
   * `world_q.proofs(w, speaker, opponent, venue)` -- the speaker's deed claims about the opponent weighed by
     remove, zero for any the opponent mirrors (same subject and predicate); `proof_step` (`H-216`);
@@ -36,8 +36,8 @@ from ..epistemic import Seen
 from ..queries import person_q, world_q
 from ..seam.wrappers import sigma
 from ..state.carriers import Act, Claim
+from .test_sc01_obstacle_ceiling import _module
 from .test_u7_remit import _fold, _kinds, _open, _world
-from engine.substrate import composition
 
 SPEAKER, PARTY, HEARER, NOBODY = "p_low", "p_mid", "p_high", "p_other"
 PRIZE = "a matter"
@@ -56,13 +56,6 @@ def _seen(cid, holder, subject, who, *, when=0, rnd=0):
     stratum = _verbs.VERB_TABLE["fight"].stratum
     return Claim(cid, holder, subject, SEEN_PREDICATE, Seen(stratum=stratum, marks=(), who=who),
                  when, "firsthand", 100, "own", rnd)
-
-
-def _roll_module():
-    """The `social_contest` module, found the way the host finds it: by the composition row's target
-    string (`engine/` never imports module code by name; `test_sc01_obstacle_ceiling.py`'s precedent)."""
-    import importlib
-    return importlib.import_module(composition.ROLES["social_contest.roll"]["target"].split(":", 1)[0])
 
 
 def _judging_world():
@@ -171,7 +164,7 @@ def test_sc02_17_decayed_confidence_counts_less_and_a_hostile_bench_reads_negati
     # Under the shipped ceiling (`H-213`, 2 = `obstacle_default`) a hostile room cannot raise the
     # obstacle; one notch up it does. Stated in `roll.obstacle`'s docstring and in H-215.
     inp = _input(w)
-    obstacle = _roll_module().obstacle
+    obstacle = _module().obstacle
     assert obstacle(inp) == inp.obstacle_ceiling
     from dataclasses import replace
     assert obstacle(replace(inp, obstacle_ceiling=3.0)) > 2.0
@@ -204,7 +197,7 @@ def test_sc02_17_reception_and_proofs_take_the_world_first_and_no_decision_modul
     assert scanned >= 5, scanned
 
 
-def test_sc02_17_only_a_prize_a_room_hears_reads_the_room():
+def test_sc02_17_only_a_prize_a_room_hears_reads_the_room(monkeypatch):
     """`heard_by: bench` is on `a matter` alone: a `tell` (`a standing`) or an inquiry by the same actor
     at the same rung carries the record's no-room defaults, so every other social roll is as it was."""
     w, _d = _judging_world()
@@ -217,13 +210,10 @@ def test_sc02_17_only_a_prize_a_room_hears_reads_the_room():
         inp = real(*a, **kw)
         seen[kw.get("verb")] = inp
         return inp
-    sigma.contest_input = spy
-    try:
-        for prize, verb in ((PRIZE, "speak"), ("a standing", "tell")):
-            sigma.resolve(w, [SPEAKER, PARTY], ["root"], prize, verb=verb, subject=PARTY,
-                          rng=random.Random(0), rung="Hh")
-    finally:
-        sigma.contest_input = real
+    monkeypatch.setattr(sigma, "contest_input", spy)
+    for prize, verb in ((PRIZE, "speak"), ("a standing", "tell")):
+        sigma.resolve(w, [SPEAKER, PARTY], ["root"], prize, verb=verb, subject=PARTY,
+                      rng=random.Random(0), rung="Hh")
     assert seen["speak"].reception > 0.0
     assert seen["tell"].reception == 0.0 and seen["tell"].reception_gain == 0.0, seen["tell"]
 
@@ -404,7 +394,7 @@ def test_sc02_20_only_a_witness_is_moved_and_a_later_coercive_deed_counts_again(
 
 def _sweep_of(hid):
     import yaml
-    rows = yaml.safe_load((SEASON_DIR / "hole_register.yaml").read_text())["rows"]
+    rows = yaml.safe_load(files.HOLE_REGISTER_YAML.read_text())["rows"]
     (row,) = [r for r in rows if r["id"] == hid]
     return row["sweep"], row["site"].split(",")[0].split()[-1]
 

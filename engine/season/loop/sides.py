@@ -136,9 +136,9 @@ def sides_of(w: World, a: Act, target: Optional[str],
     # the settlement*), read through `world_q.place_of`, the one owner of "where is this thing"; there
     # is no `Scene.place` field. It replaced the placeholder `"R"` (or a bare-string payload), which
     # named the realm root for every act. A placeless actor gives `None`: absence, never a guess
-    # (`place_of`'s own floor). The `combat` provider accepts it and reads it not; the `social_contest` provider reads it as the room whose
-    # bench hears the speaker, when the prize row says `heard_by: bench` (v9 SC-02 `22a`): the SPEAKER'S
-    # place, where `determine`'s quorum reads the PARTY's (`world_q`'s `bench.size` stem) -- a recorded
-    # difference (`hole_register.yaml` H-215), not a ruling.
+    # (`place_of`'s own floor). The `combat` provider accepts it and reads it not; the `social_contest`
+    # provider reads it as the room whose bench hears the speaker, when the prize row says `heard_by:
+    # bench` (v9 SC-02 `22a`): the SPEAKER'S place, where `determine`'s quorum reads the PARTY's
+    # (`world_q`'s `bench.size` stem) -- a recorded difference (`hole_register.yaml` H-215), not a ruling.
     return ([a.actor] + ([target] if target and target != a.actor else []), target,
             place_of(w, a.actor))

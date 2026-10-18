@@ -61,6 +61,13 @@ def budget(p: Person, v: View, k: int, fx: "Fixtures") -> int:
     return max(1, b)
 
 
+def bands_below(value, floors) -> int:
+    """HOW MANY OF `floors` `value` IS BELOW: the one reading of a person-side band, order-free. Read by
+    `body_band_penalty` (the body's operations) and `loop/matter.py::_standing_crossings` (the standing
+    gap's bands, `H-223`)."""
+    return sum(1 for f in floors if value < f)
+
+
 def body_band_penalty(p: Person, fx: "Fixtures") -> int:
     """How many bands `p`'s body has fallen below the top, on `band_floors["body"]`.
 
@@ -73,4 +80,4 @@ def body_band_penalty(p: Person, fx: "Fixtures") -> int:
     the narrowing is monotone -- which is the property `P32` names."""
     floors = fx.get("band_floors")["body"]
     # Descending, so "the top band" is unambiguous and the count is the number of floors passed.
-    return sum(1 for f in sorted(floors.values(), reverse=True) if p.body < f)
+    return bands_below(p.body, floors.values())

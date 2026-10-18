@@ -102,10 +102,7 @@ def obstacle(inp: SocialContestInput) -> float:
     default (the uncapped `None` arm, or `3`) -- stated, not hidden."""
     ob = float(inp.opposition) / 2.0 if inp.opposition is not None else float(inp.obstacle_default)
     room = float(inp.reception_gain) * float(inp.reception) + float(inp.proof_step) * float(inp.proofs)
-    if room > 0:
-        ob = max(ob - room, min(ob, float(OB_MIN)))
-    elif room < 0:
-        ob = ob - room
+    ob = max(ob - room, min(ob, float(OB_MIN))) if room > 0 else ob - room
     ob += float(inp.forgery_quality)
     ceiling = inp.obstacle_ceiling
     if ceiling is None:

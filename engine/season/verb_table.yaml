@@ -90,7 +90,7 @@
 #    v9 SC-02 `23` they are the declared column `rosters.yaml: fold_kinds` and members of the derived
 #    roster (`data/verbs.py::EVENT_KINDS`), which `loop/resolve.py::_act_events` holds the fold to. The
 #    flat half of invariant 4 is the loader's too: a flat row with two or more failable clauses may
-#    declare ONE refusal kind (or extras listed in `rosters.yaml: earned_refusal_kinds`).
+#    declare ONE refusal kind (`data/rosters.py::PERSON_DEMANDED`, the kind the fold keeps only when earned, is exempt).
 #
 # WHAT #358 rev.2 DOES NOT CHANGE HERE, checked rather than assumed: all 32 `writes:` entries
 # resolve to `write_matrix.yaml` rows; all eligibility kinds are in the four-member roster and none

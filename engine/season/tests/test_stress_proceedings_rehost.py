@@ -162,15 +162,13 @@ def test_st30_five_of_the_designs_six_rosters_now_exist_two_named_absences():
 # ---------------------------------------------------------------------------------------------
 import dataclasses                                                       # noqa: E402
 
-from engine.dice_engine.dice_engine import DEGREE_LABEL                  # noqa: E402
-
+from ..data.rosters import DEGREE_BANDS                                 # noqa: E402
 from ..state.carriers import Act as _Act                                 # noqa: E402
 from .test_sc01_speak import _docket, _speak                             # noqa: E402
 from .test_u7_remit import (                                             # noqa: E402
     JUDGE, OPENS, PARTY, SEAT, _determine, _edges, _fold, _kinds, _open, _petition, _world,
 )
 
-_BANDS = frozenset(DEGREE_LABEL.values())
 
 
 def test_st09_a_speak_reaches_resolve_and_emits_and_a_seatless_person_speaks():
@@ -192,7 +190,7 @@ def test_st09_a_speak_reaches_resolve_and_emits_and_a_seatless_person_speaks():
     out = _fold(w, d, _speak("st09"))
     assert len(out) == 1, _kinds(out)
     e = out[0]
-    assert e.degree in _BANDS and e.kind in row.emits_at(e.degree), (e.kind, e.degree)
+    assert e.degree in DEGREE_BANDS and e.kind in row.emits_at(e.degree), (e.kind, e.degree)
     assert "st09" in e.causes, e.causes           # the Event names the act that caused it
 
 
@@ -215,7 +213,7 @@ def test_st10_a_contested_speak_reaches_a_provider_and_comes_back_graded():
         _docket(w, d)
         for i in range(10):
             out = _fold(w, d, _speak(f"st10_{pool}_{i}"))
-            assert len(out) == 1 and out[0].degree in _BANDS, [(e.kind, e.degree) for e in out]
+            assert len(out) == 1 and out[0].degree in DEGREE_BANDS, [(e.kind, e.degree) for e in out]
             seen.add(out[0].degree)
             folded += 1
     assert folded == 40 and len(seen) >= 2, (folded, sorted(seen))

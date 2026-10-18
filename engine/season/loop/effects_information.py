@@ -493,11 +493,11 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
         return NO_CHANGE
     items = docketed(w, party)
     judge = w.persons.get(a.actor)
-    moved = (consequence_pursuits(judge, a.verb, res.degree, w.fixtures.get("pursuit_shift"))
-             if res is not None and judge is not None else None)
-    if res is None:                       # a hand-built call with no contest: the edge, as before
-        subjects = (Subject.edge(nt),)
-    else:
+    moved = None
+    subjects = (Subject.edge(nt),)        # a hand-built call with no contest: the edge, as before
+    if res is not None:
+        if judge is not None:
+            moved = consequence_pursuits(judge, a.verb, res.degree, w.fixtures.get("pursuit_shift"))
         # THE EDGE EARNS THE BAND'S OWN KIND BY NAME, ALWAYS: an edge earning `None` earns every kind
         # the band declares (`loop/resolve.py`), and `pursuit.moved` is declared on the moving bands
         # -- so a judge whose pursuits did not move (the `0` control arm, measured) would publish a
@@ -646,10 +646,9 @@ def _mint_sheet(w: "World", a: "Act", forged: bool = False) -> Change:
     sheet = _resolved_sheet(w, a)
     if sheet is None:
         return NO_CHANGE
-    quality = 0
     if forged:
         sheet[_FORGED_SHEET_KEY] = a.actor
-        quality = w.fixtures.get("default_forgery_quality")
+    quality = w.fixtures.get("default_forgery_quality") if forged else 0
     return _mint_document(w, a, faction_q.SHEET_KIND, sheet, place_of(w, a.actor) or a.actor,
                           forgery_quality=quality)
 

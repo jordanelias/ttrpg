@@ -20,7 +20,7 @@ from __future__ import annotations
 import random
 from ..data import files
 from ..gaps import InstrumentDefect
-from ..data.rosters import (EARNED_REFUSAL_KINDS, FOLD_ATTEMPT_REFUSED, FOLD_INELIGIBLE, FOLD_REFUSED, GRADED_INQUIRIES,
+from ..data.rosters import (FOLD_ATTEMPT_REFUSED, PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, GRADED_INQUIRIES,
                             STRATA)
 
 from typing import Optional
@@ -325,28 +325,8 @@ def _admits(self, w: "World", a: Act, row: "VerbRow") -> tuple:
 # `G6` (`H-197`): declared on `tell`'s told bands; kept only when `_confidence_broken` says so.
 CONFIDENCE_BROKEN = "confidence.broken"
 
-# v9 SE-01 (`24g`) / `H-51`: declared on `dispatch`'s refusal; kept only when `_demand_earned` says so.
-PERSON_DEMANDED = "person.demanded"
-
-# The roster of kinds a row declares and the fold keeps only when the act earns them
-# (`rosters.yaml: earned_refusal_kinds`; the loader exempts exactly its members from the flat-row
-# two-kind refusal, `data/verbs.py`). `_demand_earned` is the one earning predicate this module has, so
-# the roster may hold exactly its kind: a member the fold would emit whole is refused here, at import,
-# naming it -- the loader's exemption and the fold's filter are one fact, not two.
-def _check_earned_kinds(kinds) -> frozenset:
-    """Every `earned_refusal_kinds` member has an earning predicate in this module, or import refuses
-    naming the roster. A function, so a test can plant a widened roster and watch it refuse."""
-    if frozenset(kinds) != frozenset({PERSON_DEMANDED}):
-        raise Unspecified(
-            f"`earned_refusal_kinds` {sorted(kinds)} has a member the fold does not filter",
-            "rosters.yaml -- earned_refusal_kinds",
-            needs=f"only {PERSON_DEMANDED!r}, or an earning predicate beside `_demand_earned` for the new kind",
-            law="04_CODE_ARCHITECTURE.md invariant 4 (F7), the flat half -- the loader exempts a kind from "
-                "the flat-row refusal only because the fold publishes it solely when the act earns it")
-    return frozenset(kinds)
-
-
-_check_earned_kinds(EARNED_REFUSAL_KINDS)
+# v9 SE-01 (`24g`) / `H-51`: `PERSON_DEMANDED` (`data/rosters.py`) is declared on `dispatch`'s refusal; kept
+# only when `_demand_earned` says so, and the loader's flat-row rule exempts exactly that kind.
 
 
 def _demand_earned(w: "World", a: Act, kinds: tuple, at_precondition: bool) -> tuple:
@@ -1179,8 +1159,8 @@ def _act_events(self, w: "World", a: Act, kinds, changes=None, degree=None,
     body literals here are that last column now. A kind outside it is a body literal come back, and
     it raises before the Event exists rather than reaching a log that would carry it. Scoped to the
     FOLD'S Events: a probe's hand-built Event is appended by the probe (`H-220`)."""
-    undeclared = sorted(k for k in kinds if k not in EVENT_KINDS)
-    if undeclared:
+    if not EVENT_KINDS.issuperset(kinds):
+        undeclared = sorted(k for k in kinds if k not in EVENT_KINDS)
         raise InstrumentDefect(
             f"act {a.id!r} ({a.verb}) would emit Event kind(s) {undeclared}, which no emission column "
             "declares. 04 §B.13 #7 / F.20b -- the Event-kind roster is derived from every emission "
