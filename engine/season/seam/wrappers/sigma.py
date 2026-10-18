@@ -84,7 +84,9 @@ from typing import Any, Optional
 from ...data.rosters import VERB_CAPABILITY
 from ...gaps import Unspecified
 # ⚠ THE LEAF, NOT THE PACKAGE'S RE-EXPORT. `manifest/providers.py` imports nothing, so no import
-# here closes a loop back into this package (`_entry.py` says the same of the entry lookup).
+# here closes a loop back into this package (`_entry.py` says the same of the entry lookup);
+# `manifest/registry.py` imports only `data/` and `gaps` and `queries/` is below `seam/`, so the
+# two imports below close none either (measured, v9 SC-02 `22a`).
 from ...manifest.providers import provider
 from ...manifest.registry import BENCH, resolve as _prize_row
 from ...queries.inputs import Margin, SocialContestInput

@@ -541,7 +541,7 @@ def _fold(self, w: "World", token: Token, a: Act,
     # Outcome-specific earning in the generic fold is the FORCED choice: the data-driven alternative is a
     # conditional-emission column, and `04 §A.3` says of one more column "A seventh column has no such
     # argument available"; `tell` writes nothing, so no effect runs to earn the kind through `earned`.
-    # Kind literals already live in `loop/` (this module's `act.refused`, `attempt.refused`).
+    # The fold's own kinds are the declared column `rosters.yaml: fold_kinds` (`act.refused`, `attempt.refused`).
     kinds = tuple(k for k in kinds if k != CONFIDENCE_BROKEN or _confidence_broken(w, a, row))
     # Causes: the act and its occasion, both stamped by `_act_events` (IN-50).
     out = ev(kinds, list(a.changes) + changed)

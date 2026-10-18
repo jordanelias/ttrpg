@@ -1577,8 +1577,9 @@ def rows_without_a_producer() -> dict:
     REQUIRES ("moved by argument and consequence"). So a producerless row is one of two different
     things and the report cannot tell them apart:
 
-      * A HOLE — the verb is missing. `(Person, pursuits)` has no verb because Part E carries
-        no argument verb, which is a gap in Part E, not a reason to delete a row #353 mandates.
+      * A HOLE — the verb is missing. `(Person, pursuits)` had no verb because Part E carries
+        no argument verb (since v9 SC-02 `22b` step 24 `determine` writes it; `argue`/`train` are IN-12
+        step 9), which is a gap in Part E, not a reason to delete a row #353 mandates.
       * DEAD — nothing in the design produces it. That was the six.
 
     Distinguishing them is a judgement, so this reports and a human decides. What it MUST NOT do
