@@ -277,11 +277,11 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | IN-58 | RS-23, RS-24: grievance at read — its sworn-to half (the stance-only half landed `3bf936ee`) | IN/FA | BLK | IN-40's `oblige` edge readable person-side (D) | R-07 (contributor) | none (B-W closed `3bf936ee`) | `_part5` |
 | IN-59 | RS-26: the access gate | IN/SC/PC | BLK | IN-60; B-V's guard content and W2's arm for its audience half | R-04 (contributor), R-05 | B-Y | `_part5` |
 | IN-60 | RS-26: the security Query | IN/SE/FA | BLK | IN-36's guard content (D, B-V) | R-04 (contributor) | B-Y | `_part5` |
-| IN-61 | RS-27: succession (replaces IN-51, retired); #453 R-5 (b) re-specified | IN/FA/SE | BLK | SC-04 (D, B-P); ED-IN-0292 (2) (J); IN-12 (R: "after IN-12") | R-05, R-04 | B-R | `_part5` |
+| IN-61 | RS-27: succession (replaces IN-51, retired); #453 R-5 (b) re-specified | IN/FA/SE | BLK | SC-04's `succession` row NOT delivered (H-217: IN-61 owns it); ED-IN-0292 (2) (J); IN-12 (R: "after IN-12") | R-05, R-04 | B-R | `_part5` |
 | IN-70 | RS-23, ED-IN-0293 (6): opinion of a faction (IN-58's residue) | IN/FA | BLK | design first; B-X closed `2f0c0227` (D, met); IN-58's M-polarity (I, taken `3bf936ee`) | R-07, R-05 (contributor) | B-R | `_part5` |
-| SC-02 | `22a` → `23` → `22b` | SC | BLK | SC-03b (SC-01 landed; B-N closed `cf69ceed`) | — | B-P | `_part6` |
+| SC-02 | `22a` → `23` → `22b` (RESIDUE after B-P, `eba20137`) | SC | BLK | H-218, H-219, H-221, H-222; ED-SC-0040 (J) | — | B-Z | `_part6` |
 | SC-03b | #453 step 4; H-162 | SC | BLK | SC-08 (SC-01 landed, B-N closed `cf69ceed`; SC-03a landed `c2f855d2`) | R-05, R-04 | B-O | `_part6` |
-| SC-04 | `18` tails | SC | B | — (SC-01 landed, B-N closed `cf69ceed`; SC-03a landed `c2f855d2`) | — | B-P | `_part6` |
+| SC-04 | `18` tails (RESIDUE after B-P, `eba20137`) | SC | B | H-217 (IN-61's) | — | B-Z | `_part6` |
 | SC-05 | `2-ii`; SM-2, SM-15 | SC | ask-then | SM-15 | — | B-Z | `_part6` |
 | SC-06 | SM-1 | SC | ask-then | SM-1 | — | B-Z | `_part6` |
 | SC-07 | #445 P-4, V-4, V-5 | SC | BLK | a carrier per item (SC-01 landed, B-N closed `cf69ceed`) | — | B-Z | `_part6` |
