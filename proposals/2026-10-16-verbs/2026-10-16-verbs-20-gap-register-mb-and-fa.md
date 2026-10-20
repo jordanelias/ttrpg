@@ -260,7 +260,7 @@ Proposals, registers and code
 - `proposals/2026-10-16-troop-stock-design.md` (TS1) — §1.4, §3 (230-285, 690-830).
 - `proposals/2026-10-16-troop-stock-design_part2.md` (TS2) — §4.3, §4.6, §4.7, §9, §10 (158-264, 691-790).
 - `proposals/2026-10-16-attributes-from-scratch.md` (AFS) — verb registry lines 265-346 and 364.
-- `proposals/2026-10-16-verbs-01-thesis-and-persons.md` (head), `verbs-02` (grep), `verbs-03` (MB, 208-271), `verbs-04` (FA, 176-233; grep elsewhere), `verbs-05` and `verbs-06` (grep), `verbs-07` (14-93, 150-285), `verbs-08` (21-87, 111-206, 229-376, 377-560, 541-720, 905-940).
+- `proposals/2026-10-16-verbs/2026-10-16-verbs-01-thesis-and-persons.md` (head), `verbs-02` (grep), `verbs-03` (MB, 208-271), `verbs-04` (FA, 176-233; grep elsewhere), `verbs-05` and `verbs-06` (grep), `verbs-07` (14-93, 150-285), `verbs-08` (21-87, 111-206, 229-376, 377-560, 541-720, 905-940).
 - `engine/season/hole_register.yaml` (HR) — rows H-25, H-49, H-91, H-100, H-101, H-108, H-148, H-149, H-163, H-166, H-175, H-176, H-186, H-205, H-206, H-212 by script; line numbers by grep.
 - `engine/season/verb_table.yaml` (VT) — head (1-103), rows `requisition`, `march`, `dispatch`, `succeed`, `seize` (lines 268-282, 618-722, 898-965), `give` by grep.
 - `engine/season/rosters.yaml` — grep of `detain`/`ban` lines 115-124 only.

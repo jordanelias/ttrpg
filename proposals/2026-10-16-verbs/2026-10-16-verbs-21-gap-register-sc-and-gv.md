@@ -213,9 +213,9 @@ Gap and lane documents
 - engine/season/verb_table.yaml — header and the rows carry, comply, convene, determine, evade / defy, requisition, open_case, petition, construe, release, revoke, seize, speak, succeed (line ranges in the legend).
 
 v2 (the document being rewritten)
-- proposals/2026-10-16-verbs-03-standards-roster-and-reconciliation.md — lines 1-140, 271-356 (§III.0-III.3, SC section).
-- proposals/2026-10-16-verbs-04-critics-etymology-gaps-and-decisions.md — lines 83-177 (GV section), plus grep hits for forgive/pardon.
-- proposals/2026-10-16-verbs-08-engine-findings-from-the-first-trial.md — lines 86-376 (§V.2), 377-720 (§V.3 final sets, §V.4 error ledger, §V.5 decisions).
+- proposals/2026-10-16-verbs/2026-10-16-verbs-03-standards-roster-and-reconciliation.md — lines 1-140, 271-356 (§III.0-III.3, SC section).
+- proposals/2026-10-16-verbs/2026-10-16-verbs-04-critics-etymology-gaps-and-decisions.md — lines 83-177 (GV section), plus grep hits for forgive/pardon.
+- proposals/2026-10-16-verbs/2026-10-16-verbs-08-engine-findings-from-the-first-trial.md — lines 86-376 (§V.2), 377-720 (§V.3 final sets, §V.4 error ledger, §V.5 decisions).
 - v2 head, _part2, _part5, _part6, _part7 — grep hits only (lines cited in the rows).
 
 Precedent documents

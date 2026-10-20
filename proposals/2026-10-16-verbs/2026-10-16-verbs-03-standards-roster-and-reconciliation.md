@@ -199,8 +199,9 @@ A **suite** is a host verb with the related-but-distinct acts folded into it. Ea
 |---|---|---|---|---|
 | PC | `fight` | keys `accept`, `assassinate`, `capture`; contents `ambush`, `shoot` | — | scene moves under IN-46, not verbs: `feint`, `lunge`, `parry`, `dodge`, `grapple`, `flee`, `yield`, `interpose`; culled names `strike`, `rush`, `disengage`, `withdraw`; outcomes `kill`, `wound`, `disarm` |
 | PC | `challenge` | content `champion` (a `for` naming the principal) | — | — |
-| MB | `march` | postures `besiege`, `storm` (default); in-battle choices `rally`, `pursue`, `retreat`, `withstand` | `reconnoitre`, the MB half of `ambush` | names `invest` (reads as money), `assault` (PC's ground); `command` (a stat, not a verb); `fortify` moves to GV `build` |
+| MB | `march` | postures `besiege`, `storm` (default) | `reconnoitre`, the MB half of `ambush` | names `invest` (reads as money), `assault` (PC's ground); `command` (a stat, not a verb); `fortify` moves to GV `build` |
 | MB | `levy` | conscript and recruit-for-coin as a terms parameter (R-01) | — | — |
+| MB | `marshal` | in-battle choices `rally`, `pursue`, `retreat` (the feigned retreat is a parameter), `withstand`; the reserve and its release; formation, stance and role per subunit | — | — |
 | MB | `muster` · `supply` · `forage` | `garrison` · `provision`, `equip` · `sack` | — | — |
 | SC | `tell` | `testify`, `confess`, `confide`, `warn`, `confront`, `praise`, `flatter`, `insult`, `counsel` | `lie` (J-C-6) | — |
 | SC | `utter` | `propose`, `allege`, `threaten` (moods of one Proposition mint) | — | rename open (R-06) |

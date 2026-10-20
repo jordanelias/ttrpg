@@ -16,7 +16,7 @@
 
 # PC — personal combat
 
-Lane deliverable for the v2 rewrite (`proposals/2026-10-16-verbs-*.md`, Part III and Part V). Subsystem: PC. Gap register rows PC-G01..PC-G40 (Part VII (`verbs-19`)). Built 2026-10-16 from the working tree; no file in the repository was edited, nothing was run but greps and the etymology tool.
+Lane deliverable for the v2 rewrite (`proposals/2026-10-16-verbs/*.md`, Part III and Part V). Subsystem: PC. Gap register rows PC-G01..PC-G40 (Part VII (`verbs-19`)). Built 2026-10-16 from the working tree; no file in the repository was edited, nothing was run but greps and the etymology tool.
 
 **Sources abbreviated.** `VT` = `engine/season/verb_table.yaml`. `EC` = `engine/season/loop/effects_combat.py`. `SW` = `engine/season/seam/wrappers/combat.py`. `WR` = `modules/combat/wrapper.py`. `PCL` = `research/by_lane/PC_personal_combat.md`. `VCD` = `proposals/2026-10-03-verb-coverage-and-gap-fill.md`. `v2-p3`/`v2-p8` = the v2 `_part3`/`_part8` files (first-pass). `XSC` = `research/cross_scale_action_catalogue_v1.md`. `ROS` = `engine/season/rosters.yaml`. Etymology: **Wikt** = en.wiktionary via `etym_tool.py en|la`; **L&S** = Lewis & Short via `etym_tool.py ls`. Every file:line below was opened this pass unless tagged `via PCL` (taken from the lane file's own table).
 

@@ -7,7 +7,7 @@
 
 # VERB GAP REGISTER — PC (personal combat) and NP (NPC life and persons)
 
-Lane L1. Evidence base for the v2 verb synthesis rewrite (`proposals/2026-10-16-verbs-*.md`). Extraction and cross-reference only: no NERS judgment, no invented verbs. Built 2026-10-16 from the working tree (main).
+Lane L1. Evidence base for the v2 verb synthesis rewrite (`proposals/2026-10-16-verbs/*.md`). Extraction and cross-reference only: no NERS judgment, no invented verbs. Built 2026-10-16 from the working tree (main).
 
 Rows: PC 40 (PC-G01..G40), NP 41 (NP-G01..G41). Kind counts are in the tables; two lists and a precedent list follow the tables.
 
@@ -199,7 +199,7 @@ Directories searched by grep for a topic and found to hold nothing relevant (no 
 
 ## METHOD AND LIMITS
 
-- **v2 disposition = NONE** means: no hit in the eight v2 files (`proposals/2026-10-16-verbs-*.md`) for the source id (`grep -n -E` on K-PC-n, K-NPC-n, M-PC-, H-nn, K-23, R-9, IN-61, ED-IN-0292, `contest.undecided`, `deeds_judged`, `PAIRED_KINDS`, P-08, ...) and none for the verb in the relevant sense. Where v2 only describes the situation (for example v2-head:179, :198) the row says "descriptive".
+- **v2 disposition = NONE** means: no hit in the eight v2 files (`proposals/2026-10-16-verbs/*.md`) for the source id (`grep -n -E` on K-PC-n, K-NPC-n, M-PC-, H-nn, K-23, R-9, IN-61, ED-IN-0292, `contest.undecided`, `deeds_judged`, `PAIRED_KINDS`, P-08, ...) and none for the verb in the relevant sense. Where v2 only describes the situation (for example v2-head:179, :198) the row says "descriptive".
 - **v2 Part II (attributes), `_part2.md`, and the head's other sections were not read here**; attribute-side dispositions of PC-G14/NP-G13 may exist there. Parts 5 and 6 were read by selected ranges and grep.
 - **Not opened:** the `.audit/` HEMA JSON files, `modules/` and `engine/` code that the lane files cite (their line numbers are taken from the lane files and marked), `workplans/` parts, `proposals/2026-07-26-personal-combat-player-agency-and-tradition-curriculum.md`, `canon/02_canon_constraints.md` (P-08, taken from VCD), `architecture/meta/*.md` (Layer 1 citations taken from VCD/PCL), the uploaded survey documents (*Mechanics of Inquiry*, *Narrative Churn*, the teardown, *Thirteen Strategy Games*, *Twenty Games*; none is in the repository).
 - **Line drift.** The lane files and VCD cite `hole_register.yaml` and `verb_table.yaml` lines from earlier heads; I give current lines for rows I opened. A lane-file line number (PCL:n, NPL:n, CMP:n) is the line in the file as read today.

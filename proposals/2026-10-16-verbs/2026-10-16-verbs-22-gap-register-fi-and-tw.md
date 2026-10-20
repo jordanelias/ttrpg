@@ -7,7 +7,7 @@
 
 # VERB GAP REGISTER — FI (fieldwork and inquiry) and TW (threadwork)
 
-Evidence base for the v2 verb-synthesis rewrite (`proposals/2026-10-16-verbs-*.md`). Extraction and cross-reference only: no NERS judgment, no new verbs. Tree = main at read time (2026-10-16). Every `file:line` below was opened this session; where a lane file's own line pointer has drifted from the tree, the tree line is given and the drift said.
+Evidence base for the v2 verb-synthesis rewrite (`proposals/2026-10-16-verbs/*.md`). Extraction and cross-reference only: no NERS judgment, no new verbs. Tree = main at read time (2026-10-16). Every `file:line` below was opened this session; where a lane file's own line pointer has drifted from the tree, the tree line is given and the drift said.
 
 ## Legend (short names → paths; every path here was opened)
 

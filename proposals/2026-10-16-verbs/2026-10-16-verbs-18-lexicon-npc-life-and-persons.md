@@ -18,7 +18,7 @@
 
 # NP — NPC life and persons
 
-Lane file for the v2 rewrite (`proposals/2026-10-16-verbs-*.md`, Part III and
+Lane file for the v2 rewrite (`proposals/2026-10-16-verbs/*.md`, Part III and
 Part V). Subject: persons as actors on other persons and on themselves. Gap rows NP-G01…NP-G41 of
 Part VII (`verbs-19`). Built 2026-10-16 from the working tree. Nothing in the repo was edited.
 
