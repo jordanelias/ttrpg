@@ -1,5 +1,5 @@
 Coded = a row exists in engine/season/verb_table.yaml today. It does not mean every effect is built. Proposed (planned) = a workplan position with no row yet; Proposed (new) = the v2 synthesis adds it.
-Source: proposals/2026-10-16-v2-person-troop-attribute-synthesis (_part3 section III.3 roster, III.4 suites, III.5 rulings; justifications from each lane's sections 3.2 to 3.4). The roster governs where a lane differs.
+Source: proposals/2026-10-16-verbs-03-standards-roster-and-reconciliation.md (section III.3 roster, III.4 suites, III.5 rulings) and the lane sections 2026-10-16-verbs-09 to -18 (justifications from each lane's sections 3.2 to 3.4). The roster governs where a lane differs.
 "Folded in" names have no row of their own. "Parked" names wait on a trigger the lane names.
 
 ## PC — personal combat
