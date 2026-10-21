@@ -2486,6 +2486,57 @@ rosters:
       Why a trail is reachable only through a plant: see `epistemic.trail_of`.
     values: ["record.forged"]
 
+  # ── v9 IN-27 (END-VICTORY; H-176, GD-1): THE ENDING VOCABULARY ────────────────────────────────────
+  # Appended last, `inquiry_modules`' reason: no line-cited row above moves. Here and not a file of its
+  # own: a closed set of definitions the loop reads is a roster (this file's header), and `modules:` is
+  # the sibling row shape (`members:` keyed by identity, each row refused by name at load).
+  endings:
+    source: >-
+      v9 IN-27 (END-VICTORY), on #457 D6's adopted answer (`workplans/valoria_master_workplan_v9_part5.md`
+      RS-21 row 3): *"the ending vocabulary is a Query over holds and seats that the season reports --
+      never an actor"*. Read by `queries/world_q.py::endings_reached`, reported by
+      `loop/driver.py::SeasonDriver.season` as `endings`.
+    cite: "H-176; GD-1; #457 D6; T-b"
+    note: >-
+      WHAT ENDS A PLAYED REALM, as opposed to its running out of seasons. Terms, defined where the
+      loader reads them (`CLAUDE.md` §4): an ENDING is a row here; it is REACHED when every hold its
+      `holds:` selects is live and every holder coheres under `under:`, AND a person's act stands among
+      the antecedents of the edges that make it so (`T-b`: a crossing may change options, never act --
+      the realm as built reaches nothing). A `holds:` selects by a world field, EXACTLY ONE of
+      `{post: <an offices.yaml seat post>}` (every Office with that post; a loop-built seat keeps its
+      `off_<holder>` id, so an `offices.yaml` id names nothing the loop holds) or `{rung_kind: <a
+      rung_kinds member>}` (every rung of that kind, held at or above it, `holder_faction_of`'s walk).
+      `under:` is a `factions` member, or `one_faction` (every selected holder under the same faction,
+      whichever). `victory:` marks GD-1's win path; GD-1 permits exactly one, and the load refuses a
+      second. A row stores nothing and is not an actor: reaching one emits no Event, halts nothing and
+      writes nothing (`SeasonDriver.season` reports it). ⚠ NOT CARRIED, BY THE CUTS: no stored
+      stability or legitimacy value, no threshold counter, no clock (#457 §5; `T-a`, `T-b`, `T-c`).
+    members:
+      peninsular_sovereignty:
+        victory: true
+        holds: {rung_kind: territory}
+        under: one_faction
+        source: >-
+          GD-1 (`canon/04_game_design_constraints.md`): *"Peninsular Sovereignty is the sole victory
+          condition ... control all 15 territories"*.
+        assumption_note: >-
+          [ASSUMPTION; medium; Jordan to correct] GD-1's other clauses are not carried: `Accord >= 2`
+          and `Political Stability <= 6` read stored scalars #457 §5 cuts, `sustained 2 consecutive
+          seasons` is a clock, and `treaties counting` has no carrier. Every territory the realm built
+          counts, not a fixed 15. Revert: Jordan names a carrier for any of them.
+      theocracy:
+        victory: false
+        holds: {post: King}
+        under: "Church of Solmund"
+        source: >-
+          #457 D6's context (RS-21 row 3), Jordan 2026-10-04: *"ratcheting of Church as faction until it
+          attempts to seize lands and become a theocracy"* -- an endpoint. NOT a victory: GD-1 strikes
+          `Altonian Theocracy` as an alternate win path.
+        assumption_note: >-
+          [ASSUMPTION; medium; Jordan to correct] "become a theocracy" is read as the King's seat held by
+          a person who coheres under the Church of Solmund (a Church man crowned, or a king converted).
+          The land half ("seize lands") is not a condition. Revert: Jordan names the Church's endpoint.
+
 tables:
 
   site_yield:

@@ -512,6 +512,10 @@ class SeasonDriver:
             n_acts += len(acts)
             n_events += len(events)
         self.census(mint_token(w, WriteClass.MATTER))
+        # v9 IN-27 (H-176; #457 D6): THE ENDING STEP IS A READ THE SEASON REPORTS -- never an actor. No
+        # token, no Event, no write, and the run does not halt on it; `world_q.endings_reached` says
+        # what an ending is and why the realm as built reaches none.
+        endings = world_q.endings_reached(w)
         w.tick += 1
         # ⚠ `rounds` IS REPORTED BECAUSE THE TICK IS OTHERWISE INVISIBLE IN EVERY ARTIFACT `U2`
         # PRODUCES. The unit reshaped a season into R rounds and no observable said so: the
@@ -525,7 +529,7 @@ class SeasonDriver:
         # Stamping Events too would be a second carrier for a fact nothing reads — the dead-carrier
         # defect — so the artifact reports the COUNT of rounds the season ran and stops there.
         return dict(acts=n_acts, events=n_events, rounds=rounds,
-                    deposits=deposits, hash=w.content_hash())
+                    deposits=deposits, hash=w.content_hash(), endings=endings)
 
 # ---------------------------------------------------------------------------
 # THE SEVEN STEPS, BOUND BACK ONTO THE CLASS (unit L5, ED-IN-0206; the seventh, `encounter`,
