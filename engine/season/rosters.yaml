@@ -2372,7 +2372,7 @@ rosters:
       its two `systems/` rules from here instead of spelling directories. ⚠ [ASSUMPTION, position
       `30`] the four stubs' homes follow `ED-IN-0284`'s own reasons -- `articulation` and `ui` are
       presentation (holonic §45's `game/`), `victory` is a set of conditions the host would
-      evaluate (`H-176`, unbuilt), `_architecture` is not a system and its subject is Layer 1's --
+      evaluate (`H-176`; built since as `world_q.endings_reached`, v9 IN-27), `_architecture` is not a system and its subject is Layer 1's --
       so none is a `systems/` home, and a `systems/<stub>/` directory, where one exists, stays in
       `R04_PENDING_SUBSYSTEMS` as `ED-IN-0284` rules (with `npcs`). `factions` keeps `systems/factions/` (`ED-IN-0283`: the folders are the
       homes of their systems); its automated play is `decision/` (A-25).
@@ -2402,7 +2402,7 @@ rosters:
     open: true
     note: >-
       THE PARTITION OF THE DEED KINDS BY THE ROUTE TO STANDING THE ACT TAKES, read by
-      `queries/world_q.py::reception` and nothing else. `dominance` lists the COERCIVE kinds -- an act
+      `queries/world_q.py::reception` and, since v9 IN-23, `queries/person_q.py::UNREST_KINDS`. `dominance` lists the COERCIVE kinds -- an act
       that takes from, or forces, another (a death, a wound, a field won, a seizure, a requisition);
       `prestige` is EVERY OTHER deed kind, the complement, so it carries no list: the one behaviour
       step 20 rules (*a failure against a dominance-standing speaker zeroes that hearer's

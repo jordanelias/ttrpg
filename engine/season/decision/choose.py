@@ -41,7 +41,9 @@ from ..gaps import Unspecified
 # `stance_toward` is the asker-first reader `queries/person_q.py` owns (`04 §C.3`: `decision/`
 # imports `person_q` and `data/`); `_stance_arm` calls it, and `confliction` (IN-08 6f,
 # the derived Query's caller, ID-13).
-from ..queries.person_q import confliction, intent_named, intent_said, regard, stance_toward
+from ..queries.person_q import (
+    confliction, intent_named, intent_said, regard, stability, stance_toward,
+)
 from ..state.carriers import Act, Candidate, Person, Question, Scene, Sensation, View
 # `project` is DEFINED in `options.py` (see this module's docstring) and imported here because
 # `make_chooser`'s score calls it; `options` never imports this module.
@@ -108,23 +110,47 @@ def _stance_arm(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict]) -
 
 # IN-62: the keys under which `make_chooser` hoists a deliberation's candidate-independent factors
 # into the `memo` `score_terms` reads. TUPLES, because `_stance_arm` keys the same dict by subject id
-# (a string), so no subject can collide with one of these.
-_AXIS_W, _DAMP, _URGENCY = ("axis_w",), ("damp",), ("urgency",)
+# (a string), so no subject can collide with one of these. `_UNREST` (v9 IN-23) also prefixes the
+# per-subject `unrest_pull` entries, `(_UNREST, subject)`.
+_AXIS_W, _DAMP, _URGENCY, _UNREST = ("axis_w",), ("damp",), ("urgency",), ("unrest",)
 
 
 def deliberation_memo(p: Person, subsistence: float, fx: "Fixtures") -> dict:
     """The `memo` `score_terms` reads, built the way `make_chooser` builds it for one deliberation:
     the projected axis weights (with the swept `scar_weight_shift`), the `confliction` damp (the
-    swept `confliction_weight`, H-188) and the urgency term, hoisted once because none depends on
-    the candidate. Exists so a reading that scores a person outside `choose` (`harness/
-    decision_spread.py`) takes the SAME three factors from the same arms rather than copying them."""
+    swept `confliction_weight`, H-188), the urgency term and the `stability_gain` arm (H-224),
+    hoisted once because none depends on the candidate. Exists so a reading that scores a person
+    outside `choose` (`harness/decision_spread.py`) takes the SAME factors from the same arms rather
+    than copying them."""
     k = float(fx.get("confliction_weight"))
     if not k >= 0:                   # `not >=`, so a NaN is refused too
         raise ValueError(f"confliction_weight {k} is not >= 0: it would invert, divide by zero "
                          f"or poison the score (H-188)")
+    s = float(fx.get("stability_gain"))
+    if not s >= 0:
+        raise ValueError(f"stability_gain {s} is not >= 0: a negative gain would make known unrest "
+                         f"repel an act against its subject, which is another rule (H-224)")
     return {_AXIS_W: project(p, fx.get("scar_weight_shift")),
             _DAMP: 1.0 if k == 0 else 1.0 / (1.0 + k * confliction(p)),
-            _URGENCY: urgency(subsistence, fx)}
+            _URGENCY: urgency(subsistence, fx),
+            _UNREST: s}
+
+
+def unrest_pull(p: Person, c: Candidate, fx: "Fixtures", memo: dict) -> float:
+    """v9 IN-23 (CARRY-STABILITY): HOW MUCH UNREST `p` KNOWS OF AT THE SUBJECT OF AN ACT CONTESTED
+    AGAINST IT -- `-stability(p, c.subject, window)` (`queries/person_q.py`, `p`'s own windowed
+    estimate) where the row is contested against its subject (`options.subject_is_opponent`: `march`
+    on a rung, `fight` on a person), else 0. `score_terms` adds it to term 2 at the swept
+    `stability_gain` (H-224), so a subject a person believes in turmoil invites an act against it,
+    by his belief and not by the world's state [ASSUMPTION; medium; Jordan to correct -- the form;
+    revert: no term]. Read off the row's columns, no verb named; cached per subject in `memo`."""
+    row = VERB_TABLE.get(c.verb)
+    if row is None or not c.subject or not subject_is_opponent(row):
+        return 0.0
+    key = (_UNREST, c.subject)
+    if key not in memo:
+        memo[key] = float(-stability(p, c.subject, fx.get("estimate_window_seasons")))
+    return memo[key]
 
 
 def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict) -> tuple:
@@ -134,20 +160,26 @@ def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict) -> tuple:
 
       * `pursuit` -- `damp * Σ_axis axis_w[axis] * align(c.verb, axis)`, `axis_w` the person's
         projected pursuits and `damp` the `confliction_weight` arm's factor (exactly 1.0 at 0);
-      * `stance` -- `stance_term(p, c, fx, memo)`, by `Fixtures.stance_polarity`, at gain `1 + g`;
+      * `stance` -- `stance_term(p, c, fx, memo)`, by `Fixtures.stance_polarity`, at gain `1 + g`,
+        plus `stability_gain * unrest_pull(...)` (v9 IN-23, H-224) -- both are what `p` makes of the
+        SUBJECT, so they share term 2 rather than widen the tuple; at the shipped gain 0 nothing is
+        added and the term is `stance_term`'s float exactly;
       * `urgency` -- `urgency(subsistence, fx)`, identical for every candidate (`urgency`'s docstring).
 
     `memo` is a `deliberation_memo(...)` (it also caches `regard` per subject for the call). A memo
-    without the three hoisted factors is refused, not defaulted: a missing factor read as 0 or 1
+    without the hoisted factors is refused, not defaulted: a missing factor read as 0 or 1
     would score a different person than the one asked about."""
     try:
-        axis_w, damp, u = memo[_AXIS_W], memo[_DAMP], memo[_URGENCY]
+        axis_w, damp, u, s = memo[_AXIS_W], memo[_DAMP], memo[_URGENCY], memo[_UNREST]
     except KeyError:
         raise ValueError("score_terms needs a memo from `deliberation_memo(p, subsistence, fx)` "
-                         "(or `make_chooser`'s): the pursuit weights, damp and urgency are "
-                         "hoisted per deliberation") from None
+                         "(or `make_chooser`'s): the pursuit weights, damp, urgency and the "
+                         "stability gain are hoisted per deliberation") from None
+    stance = stance_term(p, c, fx, memo)
+    if s:                            # skipped at 0, so the shipped term is not even `+ 0.0`
+        stance += s * unrest_pull(p, c, fx, memo)
     return (damp * sum(axis_w[ax] * align(c.verb, ax) for ax in PURSUIT_AXES),
-            stance_term(p, c, fx, memo),
+            stance,
             u)
 
 
