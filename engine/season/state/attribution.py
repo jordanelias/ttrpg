@@ -119,8 +119,8 @@ def anchor_of(w, e: "Event") -> Optional[str]:
         # which reads the act) still names him to those present; what moves is what the Event is ABOUT
         # for every reader of the anchor -- the deposits' subject (`epistemic.claim_subjects`), the
         # knot-partner channel (`epistemic._ch_witness_key`, `pid == anchor`), `World._last_by_anchor`
-        # and `trail_of`'s deeds-BY side. `place_of` reads a held Record at its holder's place, so where
-        # the Event happened (`world_q.event_place`) does not move.
+        # and `trail_of`'s deeds-BY side. `world_q.event_place` places an act-caused Event by its
+        # actor and not by this anchor, so where the Event happened does not move.
         return _cover_for(w, e, who) or who
     for c in e.changes:
         # `changes[0].subject` in 1,058 of 1,058 measured, and no event spans two subjects --

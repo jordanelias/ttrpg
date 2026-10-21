@@ -685,7 +685,8 @@ def place_of(w: World, x: Optional[str]) -> Optional[str]:
 
 
 def event_place(w: World, e) -> Optional[str]:
-    """WHERE AN EVENT HAPPENED -- `place_of(w, anchor_of(w, e))`, the one expression the tree used for
+    """WHERE AN EVENT HAPPENED -- `place_of` of the causing act's actor for an act-caused Event, else of
+    `anchor_of(w, e)` (v9 IN-12 step 10: a cover's anchor is not where anyone stood), the one expression the tree used for
     it at WITNESS (`epistemic._ch_co_located` and `epistemic.seen_subject`), now owned once, plus one
     limb `place_of` cannot carry: A DEATH HAS A PLACE (H-206).
 

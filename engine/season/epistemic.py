@@ -10,7 +10,8 @@ halves that belong together because they are the two ends of one channel:
     table built from the roster, `live_channels` and `observers_for`. ⚠ **`_event_place` MOVED OUT
     AT POSITION `11a`**, promoted to `queries.world_q.place_of` (`ARCH §F.14`'s own name, taking
     any id rather than only an Event); its two callers here, `_ch_co_located` and `seen_subject`,
-    now read `world_q.event_place(w, e)`, which is `place_of(w, anchor_of(w, e))` plus H-206's limb.
+    now read `world_q.event_place(w, e)`, which was `place_of(w, anchor_of(w, e))` plus H-206's limb (an act-caused
+    Event is now placed by its causing act's actor: a cover's anchor is no place).
   * **what they saw** — `R8.1`'s `Seen` struct, its `_term_*` readers and `seen_of` /
     `seen_subject`, which `loop/witness.py` deposits as the `seen` claim.
 

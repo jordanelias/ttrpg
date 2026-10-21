@@ -227,9 +227,11 @@ class World:
         # v9 IN-12 step 10: `{event id: cover id}` for every logged Event whose actor held a live cover
         # WHEN IT WAS LOGGED (`state/attribution.py::cover_at_logging`, written in `_on_logged` below),
         # which `anchor_of` reads for a logged Event -- so a logged Event's anchor cannot change after
-        # it is logged (`_on_logged`'s own invariant), whatever later becomes of the cover. Underscore,
-        # derived from the log and the world as it stood, not folded into `content_hash`: the
-        # `_last_by_*` maps' standing, and their lifetime.
+        # it is logged (`_on_logged`'s own invariant), whatever later becomes of the cover. Underscore and NOT folded into
+        # `content_hash`, which makes it unlike the `_last_by_*` maps: those are indexes of the log, this is
+        # read off the world AS IT STOOD at the append (a dead man's edges, a destroyed Record), so the
+        # hashed state alone cannot rebuild it. No path restores a World without it (`deepcopy` carries it;
+        # nothing pickles or replays one), which is the whole of its standing.
         self._covers_logged: dict[str, str] = {}
         self.log = EventLog(self.gate, lambda: self.acts.ids(), self._on_logged)
         self.dates: dict[str, dict] = {}

@@ -309,9 +309,10 @@ def test_a_held_document_declines_line_naming_no_verb_or_no_record_kind_is_refus
 
 # (7) THE ALIAS READS THAT BATCH-CLOSE FOUND ------------------------------------------------------------
 
-def test_census_places_a_dead_covered_actors_demand_where_he_acted_and_raises_nothing():
+def test_census_raises_nothing_for_a_dead_covered_actors_demand():
     """The Duke conceals, then a `dispatch` naming an un-individuated person emits `person.demanded`; he then
-    dies. CENSUS must read the demand's place from the ACTOR (the cover's holder-place is gone with him)."""
+    dies. CENSUS asks the demand's place of the ACTOR, who has none now, so it individuates nobody and RAISES
+    NOTHING (it indexed `w.rungs` by the dead man's id when the place was the cover's `Record.rung`)."""
     from ..data.matrix import Step
     from ..state.ids import ROOT
     w, d = _world()

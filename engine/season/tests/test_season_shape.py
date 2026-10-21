@@ -2969,7 +2969,8 @@ def test_decision_package_never_names_world_anywhere_under_it():
     THREE CHECKS, MATCHING WHAT AX-2 ACTUALLY FORBIDS. Each runs over every scanned file:
       (a) no import resolves to `state.world`, `queries` (EXCEPT `queries.person_q`, the one
           module 04 §C.3 admits), `loop`, `seam`, `combat_seam` or `shape`; the `state.carriers`
-          TYPES (`Person`, `View`, `Question`) are admitted, because §A.2 :166 grants the
+          TYPES (`Person`, `View`, `Question`, and `Record` for its class-name string, v9 IN-12 step 7: the scan
+          admits any `state.carriers` name, carrying no store handle) are admitted, because §A.2 :166 grants the
           `PersonInterior`/`View`/`Question` reads and those types live under `state/`. ⚠ RESOLVED TO AN ABSOLUTE MODULE NAME FIRST, from the
           scanned file's own package and the import's `level`, because `decision/` sits one
           directory deeper than the old flat module: `from ..data.verbs import X` carries

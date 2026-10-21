@@ -2011,8 +2011,8 @@ rosters:
       WHICH VERBS A PERSON FORMS ONLY ON A REFERENT HE HIMSELF HOLDS -- a list of verbs. Read in
       `decision/options.py::opening_set`, person-side and World-free (AX-2): the objects of his OWN live
       `hold` Tenures; a referent he does not hold forms no Candidate, so no scene is spent on a refusal of
-      the row's `held_by` conjunct he could have known. It is the person-side reading of that conjunct and
-      nothing wider: ONE LOADER, `data/verbs.py::OWN_HOLD_DECLINES`, refused at import when a member names a
+      the row's `held_by` conjunct he could have known. It is the person-side reading of that conjunct for the verbs LISTED (six rows carry the conjunct;
+      this roster names the ones whose formation it narrows): ONE LOADER, `data/verbs.py::OWN_HOLD_DECLINES`, refused at import when a member names a
       verb the table lacks or one whose typed cell asks no `relation` of `subject` `held_by`. What he holds
       that is no Record (a seat, a Proposition he uttered) still forms and is refused at the row's
       `existence` conjunct, whose read clause 4 then learns (H-156's decaying shape).
