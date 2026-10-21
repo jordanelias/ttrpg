@@ -547,8 +547,8 @@ def _ch_witness_key(w: "World", e, pid) -> bool:
     # An act by a person holding a live cover anchors on the cover's id (`attribution.live_cover`), a
     # Record id no person is and no `knot` names, so neither clause below admits anyone by key: his
     # knot-partners stop witnessing his covered acts through this channel. He himself, and anyone else
-    # present, still witness through `co_located` (`event_place` reads a held Record at its holder's
-    # place), which precedes this channel.
+    # present, still witness through `co_located` (`event_place` places an act-caused Event by its
+    # actor), which precedes this channel.
     anchor = anchor_of(w, e)
     if anchor is None:
         return False

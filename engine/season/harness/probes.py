@@ -896,8 +896,8 @@ def p22():
         "Part E no longer gives `destroy_record` a `hold:` eligibility -- if that is deliberate "
         "this probe's PASS is void and the row is a real gap again")
     return ("PASS: the `hold` is recorded as `(Tenure, since)` -- Part D's row, the holder's own "
-            "Tenure per H-22 -- and Part E gates `destroy_record` on `eligibility: hold:<record>` "
-            "(§E3, §E4). ⚠ THE FOLD THAT EVALUATES IT IS W3's REMAINING HALF: this asserts the "
+            "Tenure per H-22 -- and Part E gates `destroy_record` through its typed cell's `held_by` conjunct "
+            "(v9 IN-26; `eligibility: hold:<record>` stays as a placeholder that still declines; §E3, §E4). ⚠ THE FOLD THAT EVALUATES IT IS W3's REMAINING HALF: this asserts the "
             "TABLE carries the gate, not that a resolver has run it")
 
 
