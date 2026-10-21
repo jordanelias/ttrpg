@@ -46,6 +46,13 @@ repeated here rather than called because `populated.run` exposes no per-season b
 
 ARCS ARE OUT OF SCOPE BY DECISION (`ED-IN-0225`): this reads the cause graph the loop already writes
 and mints no carrier, field, Event kind or register row for an arc, story or thread.
+
+THE ESTIMATES (`estimates`, v9 IN-23 CARRY-STABILITY), read after each season beside the reading above
+and changing none of it: every person's own `queries/person_q.py::legitimacy` of every live seat-holder
+(himself included -- a ruler can be wrong about his own standing, R7) and `stability` of every rung a
+seat sits on, at the realm's own `estimate_window_seasons` and `scar_weight_shift`. Each row is the
+pairs read, their mean (the cross-person mean estimate), min, max and distinct values. Who holds which
+seat is read off the World here, OUTSIDE the simulation: the observer may, and the person may not.
 """
 
 from __future__ import annotations
@@ -57,6 +64,7 @@ from collections import Counter
 
 from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
+from ..queries.person_q import legitimacy, stability
 from ..state.ids import H, ROOT, draw_factory
 from . import probes as P
 from .populated import build_realm
@@ -156,6 +164,26 @@ def per_season(acts, seasons: int) -> list:
              summarise(r for r in rows if r["season"] <= s)) for s in range(seasons)]
 
 
+def _spread(values) -> dict:
+    vals = list(values)
+    n = len(vals)
+    return {"pairs": n, "mean": (sum(vals) / n) if n else 0.0,
+            "min": min(vals, default=0), "max": max(vals, default=0), "distinct": len(set(vals))}
+
+
+def estimates(w) -> dict:
+    """`{"legitimacy": spread, "stability": spread}` over every (person, live seat-holder) and every
+    (person, seat rung) pair of `w` as it stands -- each value one person's own estimate. Reads only."""
+    window = w.fixtures.get("estimate_window_seasons")
+    shift = w.fixtures.get("scar_weight_shift")
+    holders = sorted({pid for pid, p in w.persons.items() for t in p.tenures
+                      if t.kind == "hold" and t.live and t.object in w.offices})
+    rungs = sorted({o.rung for o in w.offices.values() if o.rung is not None})
+    people = [w.persons[pid] for pid in sorted(w.persons)]
+    return {"legitimacy": _spread(legitimacy(p, h, window, shift) for p in people for h in holders),
+            "stability": _spread(stability(p, r, window) for p in people for r in rungs)}
+
+
 # ---------------------------------------------------------------------------------------------
 # ONE SEEDED REALM, ONE ARM.
 # ---------------------------------------------------------------------------------------------
@@ -183,10 +211,13 @@ def drive(seed: int, seasons: int, arm: str, cap=None, on_season=None) -> tuple:
 
 
 def run_seed(seed: int, seasons: int, arm: str, cap=None) -> dict:
-    """`drive`, then `read`; the result carries the resolved-act count too."""
-    w, d, bounds = drive(seed, seasons, arm, cap)
+    """`drive`, then `read`; the result carries the resolved-act count and each season's
+    `estimates` too."""
+    per = []
+    w, d, bounds = drive(seed, seasons, arm, cap, on_season=lambda w, _s, _n: per.append(estimates(w)))
     out = read(w.log, d.act_of, bounds)
     out["resolved"] = len(d.resolved)
+    out["estimates"] = per
     return out
 
 
@@ -199,7 +230,8 @@ def compare(arms, seeds, seasons: int, cap=None) -> list:
             r = run_seed(seed, seasons, arm, cap)
             by_seed[seed] = {"per_season": per_season(r["acts"].values(), seasons),
                              "unread": r["unread"],
-                             "resolved": r["resolved"]}
+                             "resolved": r["resolved"],
+                             "estimates": r["estimates"]}
             pooled_rows.extend(r["acts"].values())
         out.append({"arm": arm, "seeds": by_seed, "pooled": per_season(pooled_rows, seasons)})
     return out
@@ -214,6 +246,11 @@ def _fmt(r: dict) -> str:
     return (f"acts={r['acts']} cross={c['cross']} own={c['own']} world={c['world']} "
             f"none={c['none']} cross_share={100 * r['cross_share']:.1f}% "
             f"depth={r['depth']} max_depth={r['max_depth']}")
+
+
+def _fmt_est(e: dict) -> str:
+    return "  ".join(f"{name} pairs={s['pairs']} mean={s['mean']:.3f} min={s['min']:.3f} "
+                     f"max={s['max']:.3f} distinct={s['distinct']}" for name, s in e.items())
 
 
 def main(argv=None) -> int:
@@ -238,6 +275,7 @@ def main(argv=None) -> int:
             for s, (this, cum) in enumerate(sr["per_season"]):
                 print(f"  season {s}: {_fmt(this)}")
                 print(f"  through {s}: {_fmt(cum)}")
+                print(f"  estimates {s}: {_fmt_est(sr['estimates'][s])}")
         for s, (this, cum) in enumerate(arm_res["pooled"] if len(seeds) > 1 else ()):
             print(f"[arm {i}:{arm}] pooled season {s}: {_fmt(this)}")
             print(f"[arm {i}:{arm}] pooled through {s}: {_fmt(cum)}")
