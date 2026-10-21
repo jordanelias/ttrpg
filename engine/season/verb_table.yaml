@@ -440,6 +440,22 @@ verbs:
     grade:       "assumption"
     grade_note:  "an argued addition: the matrix rows `(Record, exists)` and `(Record, forgery_quality)` are the tree's; the cell, the kind and the false key (`head`) are v9 IN-45's, on #453 `:515`. The forged sheet's CONTENT is read -- the sheet consumer, `rosters.yaml: record_sourced_operands.faction_sheet` -- and since v9 SC-02 `22b` step 25 its `forgery_quality` too, by the examination's obstacle (`H-210`)."
     source:      "ARCHITECTURE_V2.md §E3, transcribed; typed and effected at v9 IN-45 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) `:515` and `:557`"
+  - verb:        "forgive"
+    stratum:     "social"
+    eligibility: ["own"]
+    beneficiary: "subject"
+    beneficiary_note: "v9 IN-12 step 13 (#453 §9.4: *'beneficiary `subject`'*): THE ONE FORGIVEN -- the referent the forgiver stops holding his rows against. Structural only: a faction's Proposition or a person, whoever the rows named."
+    requires:    "—"
+    requires_note: "#453 §9.4: *'requires: — (no precondition)'*. Untyped: a computed `forgive` forms on its question's referents and carries `subject`. ⚠ ONE PERSON-SIDE DECLINE, NOT A PRECONDITION (#453: *'that a negative row naming `subject` exists is a read of the actor's own state (`p.stance`), so it is a person-side decline in `opening_set`, not a stem'*): a person forms `forgive` only on a referent he holds a row against (`rosters.yaml: own_stance_declines`, read in `decision/options.py::opening_set` through `queries/person_q.py::held_against`). A hand-built act is not declined by the formation; the effect refuses one with nothing to end (`forgive.refused`)."
+    writes:      ["Person.stance"]
+    writes_note: "v9 IN-12 step 13 (#453 §9.4; K-41, K-49): `loop/effects_combat.py::_eff_forgive` REMOVES THE ACTOR'S OWN `Person.stance` ROWS NAMING `subject` WITH A VALENCE BELOW ZERO (`queries/person_q.py::held_against`, the one reader) and nothing else -- his positive rows toward the same referent and every row toward any other referent stay. A stance row carries no kind, so the write ends EVERY negative row toward the referent: a field's grudge (`_eff_march`'s `(winner faction, -1.0, field_grudge_weight)`), the morale row `_eff_march` writes toward the loser's own faction, a seeded disloyalty (K-49: *'to forgive is to stop holding a thing against someone, whatever it was'*). The matrix row admits RES and already has a producer (`march`), so no `unproduced:` declaration is touched. No fade (#453 R-9 (a), adopted by the plan): a grudge ends by its holder's act, never by MATTER."
+    emits:       ["stance.moved"]
+    emits_note: "#453 §9.4: the matrix row's declared kind (`write_matrix.yaml` `(Person, stance)`), emitted by this row alone (`march` emits its field kinds), so `data/verbs.py::KIND_VERB` maps it here and a witnessed forgiveness is judged at this row's alignment cells -- none authored (`rosters.yaml: alignment`, `uncelled:`), so 0.0 on every axis."
+    emits_on_refusal: ["forgive.refused"]
+    refusal_note: "#453 §9.4: *'refusal flat, `forgive.refused` (no negative row -> `NO_CHANGE`)'*: the actor holds no row against the referent, or is no person. One flat kind; no precondition, so the refusal is the effect's decline."
+    grade:       "assumption"
+    grade_note:  "an argued addition (#453 §10.4 step 13): the matrix row `(Person, stance)` is the tree's; the row, its reach (K-49) and the own-state decline are v9 IN-12's, on #453 §9.4 `:1970-2047`, K-41 `:2942-2949`, K-49 `:2998-3009`, R-9 (a) `:3348-3353`."
+    source:      "v9 IN-12 step 13 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.4 `:1970-2047`"
   # ===========================================================================================
   # PLAN POSITION `24e` -- WORKS & FOUNDING. `ARCH` F.20 (`04_CODE_ARCHITECTURE.md`): *"the world
   # only decays -- nothing is ever founded or built"*. `(Rung, exists)` and `(Site, exists)` were

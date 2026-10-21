@@ -1,5 +1,6 @@
 """`season.loop.effects_combat` -- casualties and morale: fight (renamed from "kill / wound") and
-the duel's `accept`, march; and the person raised (v9 IN-12 step 9, G15): tend, train.
+the duel's `accept`, march; and the person raised (v9 IN-12 step 9, G15): tend, train; and the
+grudge's closer (v9 IN-12 step 13, G15): forgive.
 
 EXTRACTED from `effects.py` at the per-subsystem split (Phase 4). Holds the two effects that read a
 severity off a scene the seam already resolved rather than choosing one (Jordan, 2026-09-04: *"the
@@ -19,6 +20,7 @@ from ..data.rosters import (
 )
 from ..data.verbs import VERB_TABLE, VOCATION_SOURCED, VOCATIONS
 from ..gaps import Unspecified
+from ..queries.person_q import held_against
 from ..queries.world_q import ancestry, holder_faction_of, home_of
 from ..state.gate import NO_CHANGE, Change, Subject, may_muster, seat_faction
 
@@ -417,3 +419,32 @@ def _eff_train(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     def perform() -> None:
         p.capability = raised
     return Change((Subject.entity("persons", who, fields=("capability",)),), perform)
+
+
+# =================================================================================================
+# v9 IN-12 step 13 (#453 §9.4, G15 *the person*): `forgive`, THE CLOSER OF WHAT `march` WRITES -- here,
+# beside `_eff_march`, the only other runtime writer of `Person.stance`. It shares `march`'s write row and nothing
+# else (#453 §9.5): an `own` social act on the actor's own rows, not a contested act on the losers'.
+# =================================================================================================
+
+@effect_for("forgive")
+def _eff_forgive(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """v9 IN-12 step 13 (#453 §9.4; K-41, K-49) -- `forgive` REMOVES THE ACTOR'S OWN ROWS AGAINST `subject`.
+
+    The rows are `queries/person_q.py::held_against`'s (his own stance rows naming the referent with a
+    valence below zero); every other row he holds stays, in order, so `stance_toward(actor, subject)` reads
+    0.0 afterwards wherever no positive row names the referent. He writes only his own field (`T-m`'s
+    sense: the owner ending what he holds), never another's.
+
+    DECLINES (`NO_CHANGE` -> `forgive.refused`): an actor who is no person; nothing held against the
+    referent (#453: *'no negative row -> `NO_CHANGE`'*)."""
+    p = w.persons.get(a.actor)
+    who = _operand(a, "subject")
+    against = held_against(p, who) if p is not None else ()
+    if not against:
+        return NO_CHANGE
+    kept = [row for row in p.stance if row not in against]
+
+    def perform() -> None:
+        p.stance = kept
+    return Change((Subject.entity("persons", a.actor, fields=("stance",)),), perform)

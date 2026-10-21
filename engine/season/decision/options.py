@@ -34,13 +34,14 @@ from ..data.rosters import (
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
 from ..data.verbs import (
-    ELIGIBILITY_KINDS, HELD_DOCUMENT_DECLINES, TERMS_SOURCED, VERB_TABLE, VOCATION_SOURCED, VOCATIONS,
-    WARRANT_SOURCED, align,
+    ELIGIBILITY_KINDS, HELD_DOCUMENT_DECLINES, OWN_STANCE_DECLINES, TERMS_SOURCED, VERB_TABLE,
+    VOCATION_SOURCED, VOCATIONS, WARRANT_SOURCED, align,
 )
 from ..epistemic import belief_contradicts
 from ..gaps import Forbidden
 from ..queries.person_q import (
-    LedgerReader, content_kind, content_said, known_persons, ledger_names, projected_axes, regard, said_of,
+    LedgerReader, content_kind, content_said, held_against, known_persons, ledger_names, projected_axes,
+    regard, said_of,
 )
 from ..state.carriers import Candidate, Claim, Person, Question, Record, View
 from ..trace_log import TRACE
@@ -149,6 +150,12 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                         if c.subject in writs and content_kind(c) in terms_kinds)
                 refs = tuple(refs) + tuple(t for t in dict.fromkeys(said)
                                            if t is not None and t not in refs)
+        # v9 IN-12 step 13 (`rosters.yaml: own_stance_declines`): A VERB A PERSON FORMS ONLY ON A REFERENT HE
+        # HOLDS A ROW AGAINST -- `forgive` (#453 §9.4's person-side own-state decline). His own stance rows
+        # (`person_q.held_against`, the reader the effect reads too), no World. It NARROWS the referents the
+        # question carries and widens nothing (§F1 clause 3 stands).
+        if verb in OWN_STANCE_DECLINES:
+            refs = tuple(r for r in refs if held_against(p, r))
         if not refs:
             continue
         # v9 IN-12 step 9 (`rosters.yaml: vocation_sourced`): A VERB THAT CARRIES A VOCATION forms one

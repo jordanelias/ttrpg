@@ -1488,6 +1488,31 @@ def _load_held_document_declines(values: dict) -> dict:
 HELD_DOCUMENT_DECLINES = _load_held_document_declines(roster_map("held_document_declines", "values"))
 
 
+# v9 IN-12 step 13: the verbs a person forms only on a referent he holds a row against -- his own
+# `Person.stance` rows naming it with a valence below zero (`rosters.yaml: own_stance_declines`, read in
+# `opening_set`; `forgive`). Keyed on the row's `writes:`: REFUSED AT IMPORT when a member names a verb the
+# table lacks or one whose row writes no `Person.stance` -- a decline on a field the act does not end would
+# narrow its formation by a fact its effect never reads.
+_STANCE_PAIR = "Person.stance"
+
+
+def _load_own_stance_declines(values) -> frozenset:
+    """`rosters.yaml: own_stance_declines`' `values`, checked and frozen -- refused per member (above)."""
+    out = frozenset(str(v or "") for v in (values or ()))
+    for v in sorted(out):
+        row = VERB_TABLE.get(v)
+        if row is None or _STANCE_PAIR not in _produced_pairs({v: row}):
+            raise Forbidden(
+                f"`rosters.yaml: own_stance_declines` names {v!r}, and the verb table carries no such verb "
+                f"or its row writes no `{_STANCE_PAIR}`", "rosters.yaml",
+                needs="a `verb_table.yaml` verb whose row writes `Person.stance`",
+                law="IN-12 step 13 -- an own-state decline reads the field the act ends")
+    return out
+
+
+OWN_STANCE_DECLINES = _load_own_stance_declines(roster("own_stance_declines"))
+
+
 def _derive_rung_remit_acts() -> frozenset:
     """v9 IN-49 `requisition` (H-163 limit 3, [ASSUMPTION; medium; Jordan to correct]): THE REMIT ACTS A
     SEAT EXERCISES ON A `Rung`-CLASSED REFERENT -- the act of every `remit:` eligibility alternative

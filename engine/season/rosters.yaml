@@ -1979,6 +1979,27 @@ rosters:
     values:
       conceal: cover
 
+  own_stance_declines:
+    source: >-
+      #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.4, the `forgive` row's requires
+      line, *"that a negative row naming `subject` exists is a read of the actor's own state
+      (`p.stance`), so it is a person-side decline in `opening_set`, not a stem: one own-state decline,
+      beside the one pass 1 proposed for `release`"*; §10.4 step 13 (*"with its own person-side own-state
+      decline"*); plan position IN-12 step 13 (`workplans/valoria_master_workplan_v9_part5.md`).
+    note: >-
+      WHICH VERBS A PERSON FORMS ONLY ON A REFERENT HE HOLDS A ROW AGAINST -- a list of verbs. Read in
+      `decision/options.py::opening_set`, person-side and World-free (AX-2): his OWN `Person.stance`
+      rows naming the referent with a valence below zero (`queries/person_q.py::held_against`, the one
+      reader the verb's effect reads too); a referent he holds nothing against forms no Candidate, so no
+      scene is spent on a `forgive.refused` he could have known. Keyed on the row's `writes:`, never on
+      a verb name in code: ONE LOADER, `data/verbs.py::OWN_STANCE_DECLINES`, refused at import when a
+      member names a verb the table lacks or one whose row writes no `Person.stance`. ⚠ `release`'s
+      hook (#453 Appendix A, pass 1's §4: declined when the actor holds no releasable edge to the
+      referent) is NOT built here: it reads `p.tenures`, not `p.stance`, and plan row 13 builds
+      `forgive`'s decline beside it, not the hook itself. [ASSUMPTION; medium; Jordan to correct;
+      revert: build `release`'s hook in the same position.]
+    values: [forgive]
+
   shortfall_sourced_operands:
     source: >-
       plan position `19d` (DEMAND · DELIVERY), `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md`
@@ -2920,6 +2941,11 @@ tables:
         row no lean on any axis. It scores 0.0 on every axis until a cell is authored, so no witness
         is scarred by a cover taken, and what a covered act's witnesses are scarred by is that act's
         own cell. Revert: the seven cells, IN-08's method.
+      forgive: >-
+        v9 IN-12 step 13: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above); #453 §9.4 gives the
+        row no lean on any axis (*"the row takes the default alignment cell, 0.0"*). It scores 0.0 on
+        every axis until a cell is authored, so no witness is scarred by a forgiveness and its one
+        emission, `stance.moved`, judges as no deed. Revert: the seven cells, IN-08's method.
       tell: >-
         No cell on any axis BY DESIGN: testimony's moral weight is in WHAT is told (a claim), which
         no verb x axis cell can carry, and telling is driven by regard (the telling workplan's G1),

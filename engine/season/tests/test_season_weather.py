@@ -185,9 +185,16 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # equal; one and two seasons move. Was e28a0d36... / b7367802... (one, two seasons). ARM, run on this tree:
 # `conceal` withheld from every `opening_set` reproduces the old hashes and event counts and digests exactly
 # (6321 / 17559) -- with no cover held, the `anchor_of` cover read moves nothing.
+# RE-PINNED at v9 IN-12 step 13 (`forgive`), A BEHAVIOUR MOVE DECLARED: a new `own` row with no precondition,
+# formed only on a referent the person holds a negative stance row against (`rosters.yaml:
+# own_stance_declines`). The realm fights no field (H-149/H-175), so every row it can end is a SEEDED one
+# (`stance_from_loyalty`): formed 24 times by two seasons, attempted once, executed once (`stance.moved`,
+# `p_npc_013` forgiving `p_npc_003`), refused 0; field-planted forgivenesses 0. The build hash is equal; one and
+# two seasons move. Was 38cc3da0... / e1fbb610... (one, two seasons). ARM, run on this tree: `forgive` withheld
+# from every `opening_set` reproduces the old hashes and event counts and digests exactly (6642 / 19553).
 BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
-               1: "38cc3da0c56ecf9db4ff6bf9472e074c",
-               2: "e1fbb61025e83d21b410792573ecbafe"}
+               1: "ed761c5999303ac3ea12f1aa6590770e",
+               2: "ee8e55007db3019fc5034466f3fd1866"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -224,8 +231,9 @@ BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
 # RE-RECORDED at v9 IN-12 step 7 `covenant` with `BASE_HASHES` (6111 -> 6178, 18920 -> 17855).
 # RE-RECORDED at v9 IN-12 step 9 with `BASE_HASHES` (6178 -> 6321, 17855 -> 17559).
 # RE-RECORDED at v9 IN-12 step 10 `conceal` with `BASE_HASHES` (6321 -> 6642, 17559 -> 19553).
-BASE_EVENTS = {1: (6642, "7741b93f3ec54b2b0514b50473b45d45fafc55f11e02d407ef8f1c70fb51d518"),
-               2: (19553, "ac05efb795c876f4ed61ef66d8ff0b67a1590bbf8bebab1927f06dfc6455328c")}
+# RE-RECORDED at v9 IN-12 step 13 `forgive` with `BASE_HASHES` (6642 -> 6633, 19553 -> 19538).
+BASE_EVENTS = {1: (6633, "6309463792a9d873e9a58c8598e1a648b8305a817c0f0bee243e267b1859e571"),
+               2: (19538, "b92d07e349284d0c1904d28618996a7038d66db34e8bce793235f9bd7c8f15f3")}
 
 
 def _digest(w) -> tuple:

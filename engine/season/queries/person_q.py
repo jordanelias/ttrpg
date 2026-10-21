@@ -77,6 +77,18 @@ def stance_toward(p: Person, referent: str) -> float:
     return total
 
 
+def held_against(p: Person, referent: str) -> tuple:
+    """THE ROWS `p` HOLDS AGAINST `referent`: his OWN stance rows naming it with a valence below zero,
+    in order (v9 IN-12 step 13, #453 §9.4 `forgive`). A stance row is `(referent, valence, weight)` and
+    carries no kind (K-49), so a field's grudge, a lost field's morale row toward one's own faction and a
+    seeded disloyalty are alike here. One owner for two readers: `forgive`'s effect
+    (`loop/effects_combat.py::_eff_forgive`, which removes exactly these rows) and its person-side
+    decline (`decision/options.py::opening_set`, `rosters.yaml: own_stance_declines`, which forms the verb
+    only where this is non-empty)."""
+    return tuple(row for row in p.stance
+                 if len(row) >= 3 and row[0] == referent and float(row[1]) < 0)
+
+
 def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0) -> tuple:
     """`(judged, told)`: WHAT `p` MAKES OF THE DEEDS THEY HOLD ABOUT `referent`, by `p`'s OWN
     pursuits (v9 IN-18 `G1`, telling workplan §3's `regard` row). A deed claim is an event-kind

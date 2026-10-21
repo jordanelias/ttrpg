@@ -2303,12 +2303,12 @@ def test_invariant_12_refuses_a_degree_keyed_emits_with_nothing_to_key_it_on():
     # `repudiate` CUT (v9 IN-11, #453 R-3 (b)), a re-record; 45 -> 46, `seize` (v9 IN-12 step 6, the
     # Record half), a re-record; 46 -> 47, `covenant` (v9 IN-12 step 7), a re-record; 47 -> 51, `argue`,
     # `sabotage`, `tend`, `train` (v9 IN-12 step 9), a re-record; 51 -> 52, `conceal` (v9 IN-12 step 10), a
-    # re-record. This
+    # re-record; 52 -> 53, `forgive` (v9 IN-12 step 13), a re-record. This
     # is a CONTROL, not a claim about
     # the roster: its job is to fail if the loader started refusing everything, so it moves with
     # the table by construction and the number is read from the file rather than chosen.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen -- the control that stops both arms above passing on a loader that refuses everything]
-    assert len(VERBS._load_verb_table()) == 52
+    assert len(VERBS._load_verb_table()) == 53
 
 
 def test_w2_a_planted_write_to_an_unruled_field_raises_and_names_the_pair():
@@ -8910,10 +8910,15 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # contested (`a proposition`), and every corpus `argue` is refused at admission (its `subject` is a
     # person, a rung or a record, never a Proposition: MEASURED through `run_case` at seed 0 with
     # `SeasonDriver._admits` read per act), so none enters `driver.resolved`. 15 -> 16.
+    # ⚠ v9 IN-12 step 13: `forgive` JOINS. It forms only on a referent the person holds a negative
+    # `Person.stance` row against (`rosters.yaml: own_stance_declines`), and no corpus person ever holds
+    # one: MEASURED through `build_at` and `run_case` at seed 0 (scratch, not kept) -- 0 negative rows at
+    # build in the 86 worlds that build, and 0 `forgive` Candidates out of 280198 formed across the whole
+    # run (`march`, the one runtime writer, is never attempted here, H-175). 16 -> 17.
     assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish",
                                               "destroy_record", "march", "oblige", "open_case",
                                               "determine", "comply", "migrate", "requisition",
-                                              "speak", "examine", "dispatch", "argue"}, (    # IN-57: `dispatch` out, to `refused_only`; FI-01: back
+                                              "speak", "examine", "dispatch", "argue", "forgive"}, (    # IN-57: `dispatch` out, to `refused_only`; FI-01: back
         f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Five of "
         "the original six are the governance verbs no corpus overlay grants (`establish` is "
         "`remit:confer`-eligible); `march` is eligible in NPC-033/038 and WOULD form a real "
@@ -13984,9 +13989,9 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # 46 -> 47, `covenant` (v9 IN-12 step 7), uncontested, a re-record; 47 -> 51, `argue`, `sabotage`,
     # `tend`, `train` (v9 IN-12 step 9) -- `argue` IS contested, so the contested set above moves with it
     # (the seventh entry); the other three are not. A re-record. 51 -> 52, `conceal` (v9 IN-12 step 10),
-    # uncontested, a re-record.
+    # uncontested, a re-record. 52 -> 53, `forgive` (v9 IN-12 step 13), uncontested, a re-record.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen]
-    assert len(VERB_TABLE) == 52, len(VERB_TABLE)
+    assert len(VERB_TABLE) == 53, len(VERB_TABLE)
     # AND THE SIX ARE SIX, not a row that says six. This is the half of the pin that the old
     # count could not express: a table carrying the placeholder passed `== 32` while no act in it
     # could be formed, and `runs/CASELOG_NPC.md:64` reported the same case as a blocked one.
