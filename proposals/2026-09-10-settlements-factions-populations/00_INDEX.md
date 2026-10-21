@@ -1,6 +1,6 @@
 # Settlements · Factions · Populations · Management — a proposal set
 
-## Status: **RATIFIED AS INTENT (v9) — P2/P3 → SE-01; P5 → IN-30 (B-U), ratified as the plan's recommendation (#457 D6, RS-21 item 3) [medium; Jordan to correct]; P1/P4/P6/P7 absorbed or superseded; the rest reference.**
+## Status: **RATIFIED AS INTENT (v9) — P2/P3 → SE-01; P5 → IN-30, stopped at B-U, see H-186, ratified as the plan's recommendation (#457 D6, RS-21 item 3) [medium; Jordan to correct]; P1/P4/P6/P7 absorbed or superseded; the rest reference.**
 
 ⚠ **ED-1094 does NOT apply to this set, and the exception is stated here rather than assumed.**
 Merging a PR normally ratifies its `PROPOSED` contents by default. **Nothing in these six files
