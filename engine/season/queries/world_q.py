@@ -36,16 +36,15 @@ from typing import Callable, Optional
 
 from ..data.requires import UNKNOWN, binding_from_act
 from ..data.rosters import (
-    BAN_KIND, DETAIN_KIND, DOMINANCE_KINDS, FACTION_BY_PROP, QUESTION_SOURCES, RECORD_CONTENT,
-    RECORD_KINDS, REMOVE_ORDINAL, RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STANDING_CROSSED, TENURE_KINDS,
+    BAN_KIND, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP,
+    QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, REMOVE_ORDINAL, RESTRAINT_KINDS, RUNG_KINDS,
+    SITE_KINDS, STANDING_CROSSED, TENURE_KINDS, faction_prop_id,
 )
 # IN-09: the Record kinds a held document is an occasion for, derived off the verb table's rows;
 # v9 IN-49: the remit acts a seat exercises on a `Rung`-classed referent, the same way.
-from ..data.verbs import RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS
-# v9 IN-27: which verbs open which Tenure kind, derived off the effects (`OPENERS-DERIVE`), and the
-# ending vocabulary `endings_reached` evaluates.
-from ..data.verbs import _OPENERS_FROM_EFFECTS
-from ..data.rosters import ENDING_ANY_ONE, ENDINGS, faction_prop_id
+# v9 IN-27: `_OPENERS_FROM_EFFECTS` is which verbs open which Tenure kind, derived off the effects
+# (`OPENERS-DERIVE`); `endings_reached` evaluates the `ENDINGS` vocabulary imported above.
+from ..data.verbs import RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS, _OPENERS_FROM_EFFECTS
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
 # the asker-first module (which may not import this one; this edge runs the other way).

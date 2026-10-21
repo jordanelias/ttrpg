@@ -139,8 +139,8 @@ def deliberation_memo(p: Person, subsistence: float, fx: "Fixtures") -> dict:
 def unrest_pull(p: Person, c: Candidate, fx: "Fixtures", memo: dict) -> float:
     """v9 IN-23 (CARRY-STABILITY): HOW MUCH UNREST `p` KNOWS OF AT THE SUBJECT OF AN ACT CONTESTED
     AGAINST IT -- `-stability(p, c.subject, window)` (`queries/person_q.py`, `p`'s own windowed
-    estimate) where the row is contested against its subject (`options.subject_is_opponent`: today
-    `fight`, `accept`, `march` and `speak` -- every row with a prize and no counterparty), else 0. `score_terms` adds it to term 2 at the swept
+    estimate) where the row is contested against its subject (`options.subject_is_opponent`: every row
+    with a prize and no counterparty; H-224 dates the verbs that is), else 0. `score_terms` adds it to term 2 at the swept
     `stability_gain` (H-224), so a subject a person believes in turmoil invites an act against it,
     by his belief and not by the world's state [ASSUMPTION; medium; Jordan to correct -- the form;
     revert: no term]. Read off the row's columns, no verb named; cached per subject in `memo`."""
