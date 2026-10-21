@@ -830,9 +830,11 @@ def test_lb6d_every_verb_declares_a_rostered_beneficiary():
     # `beneficiary: actor`, `fight`'s (a re-record, said so here); 46 -> 45, `repudiate` CUT
     # (v9 IN-11, #453 R-3 (b)) -- `beneficiary: actor`, so `kinds["actor"]` shrinks by one; 45 -> 46,
     # `seize` (v9 IN-12 step 6) -- `beneficiary: none`, `revoke`'s and `destroy_record`'s precedent for a
-    # non-consensual act on another's edge, so `kinds["none"]` grows by one (a re-record).
+    # non-consensual act on another's edge, so `kinds["none"]` grows by one (a re-record); 46 -> 47,
+    # `covenant` (v9 IN-12 step 7) -- `beneficiary: to`, `give`'s and `petition`'s reading of a document
+    # handed to its addressee, so `kinds["to"]` grows by one (a re-record).
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen -- the control that stops this census passing over a loader that returned a subset]
-    assert len(VERB_TABLE) == 46, "the verb count moved; this row's census is stale"
+    assert len(VERB_TABLE) == 47, "the verb count moved; this row's census is stale"
     undeclared = [v for v, r in VERB_TABLE.items() if not r.beneficiary]
     assert not undeclared, f"verbs with no `beneficiary:`: {undeclared}"
     off_roster = [(v, r.beneficiary) for v, r in VERB_TABLE.items()

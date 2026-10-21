@@ -1,5 +1,5 @@
 """`season.loop.effects_information` -- records, propositions, matters: create_record, issue,
-open_case, carry, determine, petition, survey, forge, give, destroy_record, utter, commit.
+covenant, open_case, carry, determine, petition, survey, forge, give, destroy_record, utter, commit.
 
 EXTRACTED from `effects.py` at the per-subsystem split (Phase 4). Holds the document/proposition/
 matter cluster: the one mint (`_mint_document`) that `create_record`, `issue`, `petition` and
@@ -233,6 +233,23 @@ def _eff_issue(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     himself. Since plan position IN-10 `to` fans over the persons the issuer knows (the row's
     `terms` conjunct binds `subject`, #453 §10.1), so `terms` is the referent and `to` an executor.
     `petition`'s row keeps the single-referent limit. This body is unchanged by it."""
+    return _mint_document(w, a, "dispensation", _content_of(a, "dispensation"), _seat_rung(w, a))
+
+
+@effect_for("covenant")
+def _eff_covenant(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """v9 IN-12 step 7 (#453 §9.2, the `covenant` row; K-54): A COVENANT'S INSTRUMENT IS A `Record` OF
+    KIND `dispensation` -- `issue`'s body exactly: `terms` the Proposition the act names (`subject`),
+    `to` the counterparty, drawn up at the exercised seat's rung, minted with the maker's `hold`. No
+    new kind (K-11): what makes it a covenant rather than a writ is what its `terms` names, and what
+    the row asks (a Proposition, a counterparty across purview), not the document.
+
+    THE MINT HOLDS ONLY THE MAKER (`_mint_document`), and this body hands it to nobody: the
+    counterparty learns the terms only when he holds the Record (#453 K-54), which is `give`'s. His
+    acceptance is his own `commit` to the Proposition, formed from the held dispensation
+    (`rosters.yaml: terms_sourced`, `decision/options.py::opening_set`). The instrument is in force
+    when both holders are committed -- a reading nothing performs yet: its readers (tribute through
+    `_renewals`, allied sides through `mustered`) are deferred (#453 §10.4 step 7)."""
     return _mint_document(w, a, "dispensation", _content_of(a, "dispensation"), _seat_rung(w, a))
 
 

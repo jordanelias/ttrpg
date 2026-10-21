@@ -2301,12 +2301,12 @@ def test_invariant_12_refuses_a_degree_keyed_emits_with_nothing_to_key_it_on():
     # position `19c`), 2026-09-30; 43 -> 44, `survey` (plan position `20-iii`), 2026-09-30;
     # 44 -> 46, `challenge` and `accept` (IN-08's cells commit, the duel pair); 46 -> 45,
     # `repudiate` CUT (v9 IN-11, #453 R-3 (b)), a re-record; 45 -> 46, `seize` (v9 IN-12 step 6, the
-    # Record half), a re-record. This
+    # Record half), a re-record; 46 -> 47, `covenant` (v9 IN-12 step 7), a re-record. This
     # is a CONTROL, not a claim about
     # the roster: its job is to fail if the loader started refusing everything, so it moves with
     # the table by construction and the number is read from the file rather than chosen.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen -- the control that stops both arms above passing on a loader that refuses everything]
-    assert len(VERBS._load_verb_table()) == 46
+    assert len(VERBS._load_verb_table()) == 47
 
 
 def test_w2_a_planted_write_to_an_unruled_field_raises_and_names_the_pair():
@@ -6285,9 +6285,11 @@ def test_the_generic_remit_seats_every_office_and_unblocks_the_nine():
     #  `remit:issue` (`requisition`'s substitution, one verb over), so a seated holder gives through his
     #  seat; `own` still follows it. Re-recorded by outcome: 10 -> 11, the one row that moved.
     #  v9 IN-12 step 6 added a twelfth: `seize` is `remit:issue`-eligible (#453 §9.1, `requisition`'s act).
-    #  Re-recorded by outcome: 11 -> 12, the one row that moved.]
-    assert len(gov) == 12, (f"{len(gov)} verbs carry a `remit:` alternative; expected H-71's nine "
-                            "plus march plus transfer plus seize")
+    #  Re-recorded by outcome: 11 -> 12, the one row that moved.
+    #  v9 IN-12 step 7 added a thirteenth: `covenant` is `remit:issue`-eligible only (#453 §9.2, K-14).
+    #  Re-recorded by outcome: 12 -> 13, the one row that moved.]
+    assert len(gov) == 13, (f"{len(gov)} verbs carry a `remit:` alternative; expected H-71's nine "
+                            "plus march plus transfer plus seize plus covenant")
     formable = set()
     for t in held:
         p = w.persons.get(t.subject)
@@ -7936,8 +7938,14 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # nowhere now) and `seize` JOINS (attempted once, in NPC-083, and refused) -- both by the SKIP ARM's act
     # mix: with the skip arm off on the same tree, `dispatch` is refused in NPC-033 and `seize` attempted
     # nowhere, exactly as before. A re-record, said so.
+    # ⚠⚠ v9 IN-12 step 7 `covenant`, NINE -> TEN: `covenant` JOINS, newly resolvable (`_eff_covenant`) --
+    # attempted in ONE corpus world, NPC-008 (an `issue`-granting seat, `apply_rescale`'s overlay), and
+    # refused there; it executes in no corpus world (MEASURED, `run_case` over every case at seed 0). Its
+    # cell binds `subject` to the question's referent and asks it be a PROPOSITION (the utterer's own,
+    # in his reach since IN-11's maker's hold); which clause refused NPC-008's attempt is not measured
+    # here. It executes only from a hand-built world (`test_in12_covenant.py`). A re-record, said so.
     assert refused_only == {"build", "found", "work", "survey", "commit",
-                            "restore", "forge", "carry", "seize"}, (
+                            "restore", "forge", "carry", "seize", "covenant"}, (
         f"the always-refused set moved to {sorted(refused_only)}. `move` and `transfer` left it "
         "when `W-C` closed `H-94`'s structural half — the Candidate carries operands now — and "
         "`work` stays for a reason about the corpus's questions rather than about the channel")
@@ -10075,9 +10083,11 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # ⚠⚠ v9 FI-01 (`ED-FI-0009`): `examine` and `dispatch` LEAVE, `seize` JOINS -- measured and attributed
     # at `test_the_corpus_runs_and_the_ranking_cannot_discriminate`'s `refused_only` note (`examine` by the
     # routing's instrument limit, the other two by the skip arm's act mix). A re-record, said so.
+    # ⚠⚠ v9 IN-12 step 7: `covenant` JOINS -- attempted in NPC-008 alone and refused (the note at
+    # `test_the_corpus_runs_and_the_ranking_cannot_discriminate`'s `refused_only`). A re-record, said so.
     assert set(refused) - set(executed) == {"work", "found",
                                             "build", "survey", "commit",
-                                            "restore", "forge", "carry", "seize"}, (
+                                            "restore", "forge", "carry", "seize", "covenant"}, (
         f"the always-refused set is {sorted(set(refused) - set(executed))}. `work` refuses because "
         "its `site` operand binds either to a non-Site referent (UNKNOWN) or to a real site whose "
         "condition never clears the floor in this corpus; `dispatch` LEFT at `17-cast` (see above; it "
@@ -10403,7 +10413,9 @@ def test_wc_the_fold_binds_what_the_person_bound():
     # `p_low` holds none of. They are NOT dropped from the walk: they are walked below through the
     # one seated person in the fixture, `p_high` (`off_duke`), which is the only way the binding's
     # new structural member -- the seat, `via` -- can be observed at all.
-    WALK_REMIT: frozenset = frozenset({"requisition", "open_case", "determine", "issue"})
+    # v9 IN-12 step 7 ADDED `covenant`, FOR THE SAME LICENSED REASON: `remit:issue` is its only
+    # alternative (#453 K-14), so it is walked below through `p_high` with the others.
+    WALK_REMIT: frozenset = frozenset({"requisition", "open_case", "determine", "issue", "covenant"})
     # v9 IN-09: a row declaring `referent_named` forms only on a referent the person's own ledger
     # names (`comply`: a writ he holds), and this question names none, so it is not in the walk.
     # DERIVED FROM THE ROW'S OWN COLUMN, never from a verb name.
@@ -13842,9 +13854,10 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # CLUSTER), 2026-09-30, uncontested; 44 -> 46, `challenge` and `accept` (IN-08's cells commit,
     # the duel pair) -- `accept` IS contested (`contests: "the body"`), so the contested set
     # asserted above moves with it; `challenge` is not; 46 -> 45, `repudiate` CUT (v9 IN-11, #453
-    # R-3 (b)), uncontested, a re-record; 45 -> 46, `seize` (v9 IN-12 step 6), uncontested, a re-record.
+    # R-3 (b)), uncontested, a re-record; 45 -> 46, `seize` (v9 IN-12 step 6), uncontested, a re-record;
+    # 46 -> 47, `covenant` (v9 IN-12 step 7), uncontested, a re-record.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen]
-    assert len(VERB_TABLE) == 46, len(VERB_TABLE)
+    assert len(VERB_TABLE) == 47, len(VERB_TABLE)
     # AND THE SIX ARE SIX, not a row that says six. This is the half of the pin that the old
     # count could not express: a table carrying the placeholder passed `== 32` while no act in it
     # could be formed, and `runs/CASELOG_NPC.md:64` reported the same case as a blocked one.
@@ -15718,7 +15731,10 @@ def test_t4_petition_and_issue_bind_to_and_contest_exactly_as_before():
     # ⚠ RE-RECORDED AT PLAN POSITION IN-10 (#453 §10.1, *`issue` joins the known-person fan for
     # `to`*): `issue`'s cell binds `subject` beside `to` (its `terms` conjunct), so it JOINS -- one
     # writ per executor the issuer knows, `terms` the referent; `petition` alone keeps the control.
-    assert fanned == {"give", "issue", "tell"}, sorted(fanned)
+    # ⚠ RE-RECORDED AT v9 IN-12 step 7: `covenant` JOINS -- a new row whose cell binds `subject` (the
+    # Proposition) beside `to` (the counterparty), `issue`'s shape (#453 §9.2's producer line); the
+    # rows this control covers are unchanged.
+    assert fanned == {"covenant", "give", "issue", "tell"}, sorted(fanned)
     w, p = _t4_person(knows=("p_mid", "p_high", "p_king"))
     q = Question("q:t4c", "need", ("p_mid",))
     checked = 0

@@ -33,14 +33,19 @@ from ..data.rosters import (
 )
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
-from ..data.verbs import ELIGIBILITY_KINDS, VERB_TABLE, WARRANT_SOURCED, align
+from ..data.verbs import ELIGIBILITY_KINDS, TERMS_SOURCED, VERB_TABLE, WARRANT_SOURCED, align
 from ..epistemic import belief_contradicts
 from ..gaps import Forbidden
 from ..queries.person_q import (
     LedgerReader, content_kind, content_said, known_persons, ledger_names, projected_axes, regard, said_of,
 )
-from ..state.carriers import Candidate, Claim, Person, Question, View
+from ..state.carriers import Candidate, Claim, Person, Question, Record, View
 from ..trace_log import TRACE
+
+# v9 IN-12 step 7: THE CLASS A HELD WRIT RIDES THE QUESTION AS -- the carrier's own type name, which is
+# what `queries/world_q.py::_stamped` stamps for a document (`World.class_of`) and what
+# `rosters.yaml: referent_classes` declares; read off the type, never spelt.
+_HELD_WRIT_CLASS = Record.__name__
 
 
 def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candidate]:
@@ -119,6 +124,22 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                        f"projected weight {tolerance:+.3f} (ED-IN-0261)", "H-146")
             continue
         refs = row.referents_of(q)
+        # v9 IN-12 step 7 (`rosters.yaml: terms_sourced`): A VERB THAT MAY FORM ON WHAT A HELD WRIT SAYS
+        # forms, beside its own referents, on the `terms` of each writ this question carries as a held
+        # `Record` (`writs_held`'s stamp) whose kind the roster names -- read off the person's OWN content
+        # claim (`held_record_claims`, `record_sourced_operands`' `subject` key), so a covenant's addressee
+        # forms `commit` on its Proposition once he holds it. The writ is the referent; a question that
+        # carries none adds nothing, and `refs` is unchanged.
+        terms_kinds = TERMS_SOURCED.get(verb)
+        if terms_kinds:
+            writs = q.referents_for(_HELD_WRIT_CLASS)
+            if writs:
+                if records is None:
+                    records = held_record_claims(p)
+                said = (_content_answer(c, "subject") for c in records
+                        if c.subject in writs and content_kind(c) in terms_kinds)
+                refs = tuple(refs) + tuple(t for t in dict.fromkeys(said)
+                                           if t is not None and t not in refs)
         if not refs:
             continue
         # v9 IN-12 step 6 (`rosters.yaml: warrant_sourced`): A VERB WHOSE SUBJECT COMES FROM A WARRANT

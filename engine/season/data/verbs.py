@@ -1413,6 +1413,30 @@ def _derive_record_referent_kinds() -> frozenset:
 
 RECORD_REFERENT_KINDS = _derive_record_referent_kinds()
 
+# v9 IN-12 step 7: `{verb: (record kinds)}` -- the verbs that may ALSO form on what a held writ of one of
+# those kinds says (`rosters.yaml: terms_sourced`; `commit` on a covenant dispensation's Proposition).
+# REFUSED AT IMPORT, `WARRANT_SOURCED`'s reason: a verb the table lacks, a kind `writs_held` never stamps
+# (not in `RECORD_REFERENT_KINDS`), or a kind whose `subject` no held Record answers would each form for
+# nobody, and a stale line must not read as a live route. Read here, beside the set it is checked against.
+def _load_terms_sourced(values: dict) -> dict:
+    """`rosters.yaml: terms_sourced`'s `values`, checked and frozen -- refused per line (above)."""
+    out = {v: tuple(ks or ()) for v, ks in values.items()}
+    for v, ks in out.items():
+        dead = [k for k in ks if k not in RECORD_REFERENT_KINDS
+                or "subject" not in RECORD_SOURCED_OPERANDS.get(k, {})]
+        if v not in VERB_TABLE or not ks or dead:
+            raise Forbidden(
+                f"`rosters.yaml: terms_sourced` names {v!r}: {list(ks)}, and the verb table carries no "
+                f"such verb, the line names no kind, or {dead} is no held-writ occasion "
+                f"(`RECORD_REFERENT_KINDS`) whose `subject` a held Record answers", "rosters.yaml",
+                needs="a `verb_table.yaml` verb, and record kinds `writs_held` stamps and "
+                      "`record_sourced_operands` maps `subject` for",
+                law="IN-12 step 7 -- a terms-sourced verb forms on what a held writ says, or on nothing new")
+    return out
+
+
+TERMS_SOURCED = _load_terms_sourced(roster_map("terms_sourced", "values"))
+
 
 def _derive_rung_remit_acts() -> frozenset:
     """v9 IN-49 `requisition` (H-163 limit 3, [ASSUMPTION; medium; Jordan to correct]): THE REMIT ACTS A

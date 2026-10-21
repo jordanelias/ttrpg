@@ -199,6 +199,33 @@ verbs:
     emits_on_refusal: ["convene.refused"]
     grade:       "ruled"
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "covenant"
+    stratum:     "social"
+    eligibility: ["remit:issue"]
+    eligibility_note: "v9 IN-12 step 7 (#453 §9.2, the `covenant` row): `remit:issue` THROUGH A SEAT ONLY -- an `own` alternative would let anyone mint a treaty (#453 K-14). `issue`'s act, because the instrument IS a dispensation (K-54): a covenant is the seat's writ addressed ACROSS purview rather than down it, so the issuing grant licenses it and no new remit act is coined (`rosters.yaml: remit_acts` is closed). [ASSUMPTION; medium; Jordan to correct; revert: a `remit:` act of its own, which the closed roster would have to admit.]"
+    beneficiary: "to"
+    beneficiary_note: "THE COUNTERPARTY, who the instrument is FOR -- the `to` operand the typed cell binds (`give`'s and `petition`'s reading of a document handed to its addressee). `subject` is the Proposition, which acts for nobody."
+    requires:    "the counterparty is a person, and the terms are an uttered Proposition"
+    requires_typed:
+      all:
+        - form:      existence
+          of:        to
+          kind:      Person
+        - form:      existence
+          of:        subject
+          kind:      Proposition
+    requires_typed_note: "v9 IN-12 step 7 -- #453 §9.2's cell, verbatim in shape: *`existence` of `to` kind Person ∧ `existence` of `subject` kind Proposition (the terms are uttered first)*. TWO CONJUNCTS, each on an existing form: the counterparty EXISTS AND IS A PERSON (`issue`'s `executors` conjunct, unnamed here -- only a person acts, and accepts by his own `commit`, AX-1), and the terms EXIST AND ARE A PROPOSITION (`commit`'s own cell, so the instrument names exactly what its acceptance commits to; K-54: a treaty or alliance is an uttered Proposition both holders commit to, never a Record kind of its own). ⚠ NO PURVIEW CONJUNCT, AND THAT IS THE ROW'S AXIS (#453's CONFLICTS line, *'a writ reaches down; a covenant reaches across, so the authority conjunct is dropped'*): a covenant is addressed to ANOTHER seat's holder, whose home the issuing seat's purview need not reach. ⚠ THE CELL BINDS `to` BESIDE `subject`, so `TypedRequires.known_person_operands` names `to` and `decision/options.py::operand_bags` forms one Candidate per person the maker KNOWS (#453's producer line, *'the known-person fan over seat-holders the actor knows'*; the fan does not narrow to seat-holders -- no stem reads *holds a seat*, and the grammar has no negation to exclude the rest) -- `issue`'s IN-10 shape. A computed covenant forms on a Proposition referent (the utterer's own, since v9 IN-11's maker's hold put it in his reach); on any other referent the `subject` conjunct refuses it in the fold (`covenant.refused`), as `commit`'s does."
+    counterparty: to
+    counterparty_note: "THE OTHER SEAT'S HOLDER IS THE SECOND SIDE (#453 §9.2, *'counterparty `to` (the other seat's holder)'*), and a covenant with oneself is the `Tenure(X,X)` fiat `ED-IN-0210` ruling 1 names: declined person-side (`opening_set`) and refused by the fold's `counterparty` clause for a hand-built act (`loop/resolve.py::_admits`), `issue`'s and `petition`'s precedent."
+    writes:      ["Record.exists", "Record.stages"]
+    writes_note: "v9 IN-12 step 7: `loop/effects_information.py::_eff_covenant` MINTS A `dispensation` through `_mint_document`, the one mint `issue` shares -- `terms` the act's `subject` (the Proposition), `to` the counterparty (`rosters.yaml: record_kinds`' `read_from`), drawn up at the exercised seat's rung (`_seat_rung`), with the maker's `hold`. NO NEW RECORD KIND (#453 K-11, K-54): a covenant is a dispensation distinguished by what its `terms` names. `Record.stages` is the TERM (#453: *'`Record.stages` as the term (matures at MAT)'*), wound by the mint (`_declared_stages`, `H-80`'s default for a computed act); the pair is check-only, as on `open_case`, whose case file is minted the same way. THE COUNTERPARTY LEARNS THE TERMS ONLY BY HOLDING THE RECORD (#453 K-54): the mint holds only the maker and no channel carries a `social` mint, so the instrument is handed on by `give`, and the addressee's acceptance is his own `commit`, formed from the held dispensation (`rosters.yaml: terms_sourced`). ITS READERS ARE DEFERRED (#453 §10.4 step 7): `loop/effects_economy.py::_renewals` reads `oblige` edges only and `queries/world_q.py::mustered` faction members only, so neither tribute nor allied sides read a covenant. No `war` kind (war is a Proposition, K-29); no `truce` (K-32); `proclaim` deferred (K-50); no `debt` kind (deferred with its `seize` reader, K-14)."
+    emits:       ["covenant.offered"]
+    emits_note:  "⚠ A NEW KIND, NOT `dispensation.issued`: `issue`'s kind is a `binding_decision` row's, which `epistemic.py::_ch_chronicle` broadcasts by kind, and a covenant must not be read as a public writ -- #453 K-54: no channel carries a `social` mint, so the counterparty learns the terms only by holding the Record. Emitted by this row alone; `_ch_post_remit` hands it to the obligees standing at the exercised seat (the seat read off the causing act, `seize`'s note), and the content of the instrument reaches nobody but its holder."
+    emits_on_refusal: ["covenant.refused"]
+    refusal_note: "v9 IN-12 step 7, #453 §9.2: *'refusal `covenant.refused`'* -- one flat kind, `transfer`'s shape for a `remit:`-eligible row: the counterparty is no person, the subject is no Proposition, the counterparty is the maker (the fold's `counterparty` clause), or the mint moved nothing."
+    grade:       "assumption"
+    grade_note:  "an argued addition (#453 §10.4 step 7): the matrix rows `(Record, exists)` and `(Record, stages)` and the `dispensation` kind are the tree's; the row, its `remit:issue` eligibility and the dropped purview conjunct are v9 IN-12's, on #453 `:1418-1420` and `:1755-1791`."
+    source:      "v9 IN-12 step 7 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.2 `:1755-1791`, K-54 `:3104-3119`"
   - verb:        "create_record"
     stratum:     "uncontested_material"
     eligibility: ["own"]
