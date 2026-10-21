@@ -644,7 +644,10 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
         traveller = w.persons[pid]
         if not traveller.travel_leg:
             continue
-        prior_leg = w.last_emission_of("travel.moved", pid)
+        # `written=True`: `travel.moved` is act-caused, so its anchor is its actor -- or, for a covered
+        # mover (v9 IN-12 step 10), the cover's id -- and the lookup by anchor missed it; the Event's
+        # own receipt names the mover either way.
+        prior_leg = w.last_emission_of("travel.moved", pid, written=True)
         w.write("travel_leg", token,
                 lambda traveller=traveller: setattr(traveller, "travel_leg", []),
                 record_kind="Person", fieldname="travel_leg", driver="Event",

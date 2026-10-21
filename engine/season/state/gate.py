@@ -612,12 +612,13 @@ def check_revocation_disposal() -> None:
                   "`state/gate.py::REVOCATION_DISPOSAL`, and no other key",
             law="`04 §B.13` ID-12 -- a declared row that reaches no code is the defect the loader's "
                 "cross-validation exists to catch; v9 IN-31 (H-100)")
-    bad = {k: v for k, v in REVOCATION_DISPOSAL.items() if v is not None and v not in RESTRAINT_KINDS}
+    bad = {k: v for k, v in REVOCATION_DISPOSAL.items() if v is not None and v != BAN_KIND}
     if bad:
         raise Unspecified(
-            f"revocation disposals {bad!r} name no restraint kind ({sorted(RESTRAINT_KINDS)})",
+            f"revocation disposals {bad!r} name no restraint `_eff_revoke` opens (only {BAN_KIND!r})",
             "state/gate.py -- REVOCATION_DISPOSAL",
-            needs="a revocation disposes a restraint (`RESTRAINT_KINDS`) or nothing (`None`)",
+            needs=f"a revocation disposes {BAN_KIND!r} (the one restraint `_eff_revoke` and the `revoked` "
+                  "licence implement) or nothing (`None`); `detain` would load and do nothing",
             law="v9 IN-31 (H-100) -- what a revocation opens on the man revoked is a restraint he "
                 "cannot release himself, or nothing")
 

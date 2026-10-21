@@ -120,7 +120,7 @@ def _pool_of(person: Any, verb: str, fx: Any) -> int:
     """Dice, from what the actor genuinely has. `03 §A.2` — *"Rank supplies dice and gates nothing"*.
 
     `VERB_CAPABILITY` maps a verb to the capability key it draws on; `Person.capability` is the
-    person's own dict. ⚠ IT IS EMPTY ON EVERY CORPUS PERSON TODAY — one writer, and it zeroes it —
+    person's own dict. ⚠ IT IS EMPTY ON EVERY CORPUS PERSON TODAY — its writers are a `cast:` overlay and (v9 IN-12 step 9) `train`, which raises a key only a person already holds —
     so in practice this returns `pool_default` for everybody, which is why R-09 reads `partial`
     after this unit and not `met`: the roll varies by SEED and by FIXTURE, not by PERSON. It varies
     by person the day capability is written, and that is character development, out of this arc.

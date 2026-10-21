@@ -192,9 +192,14 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # `p_npc_013` forgiving `p_npc_003`), refused 0; field-planted forgivenesses 0. The build hash is equal; one and
 # two seasons move. Was 38cc3da0... / e1fbb610... (one, two seasons). ARM, run on this tree: `forgive` withheld
 # from every `opening_set` reproduces the old hashes and event counts and digests exactly (6642 / 19553).
+# RE-PINNED at B-Q's BATCH-CLOSE (Phase 1 findings, reproduced red first), A DATA MOVE DECLARED: a covered
+# actor's deposit names the alias and not himself (`epistemic.claim_subjects`: three covered `travel.moved`
+# in the realm's two seasons), `world_q.event_place` places an act-caused Event by its actor, and a covered
+# mover's `travel.ended` chains to his move (`loop/matter.py`). Was ed761c59... / ee8e5500... (one, two
+# seasons); the build hash and the season-1 event sequence are unmoved.
 BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
-               1: "ed761c5999303ac3ea12f1aa6590770e",
-               2: "ee8e55007db3019fc5034466f3fd1866"}
+               1: "8bfd47a909a52aef79cec4d40e968580",
+               2: "8abd76f3a5337791188861a38ecbaa4d"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -232,8 +237,9 @@ BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
 # RE-RECORDED at v9 IN-12 step 9 with `BASE_HASHES` (6178 -> 6321, 17855 -> 17559).
 # RE-RECORDED at v9 IN-12 step 10 `conceal` with `BASE_HASHES` (6321 -> 6642, 17559 -> 19553).
 # RE-RECORDED at v9 IN-12 step 13 `forgive` with `BASE_HASHES` (6642 -> 6633, 19553 -> 19538).
+# RE-RECORDED at B-Q's BATCH-CLOSE with `BASE_HASHES` (season 1 events unmoved, 6633; season 2 19538 -> 19535).
 BASE_EVENTS = {1: (6633, "6309463792a9d873e9a58c8598e1a648b8305a817c0f0bee243e267b1859e571"),
-               2: (19538, "b92d07e349284d0c1904d28618996a7038d66db34e8bce793235f9bd7c8f15f3")}
+               2: (19535, "f2a7b22ad32e9b14fefbe06f228ca41a159722562011f5b9cd939d62529b5d1b")}
 
 
 def _digest(w) -> tuple:

@@ -8,8 +8,9 @@ No fade (#453 R-9 (a), adopted by the plan): nothing else ends a stance row.
 `.encounter`) and the real formation (`opening_set`); NO TEST HERE ASSERTS THAT `forgive` EXECUTED IN THE
 SEED-0 REALM (v9 §0.5, RULED 2026-10-13 *"Relax exit rules"*). The realm count the plan keys to
 field-planted rows is `field_planted_forgivenesses`, below: proven non-vacuous here on a hand-built world
-(it reads 1 for the field's grudge and 0 for a seeded row), and READ, not asserted, on the realm (the
-realm fights no field, H-149 / H-175, so it is expected 0).
+(it reads 1 for the field's grudge and 0 for a seeded row), and READ at B-Q's close on the realm (2
+seasons, seed 0, 21 negative stance rows at build): 1 `forgive` executed, on a LOYALTY-SEEDED row and no field's;
+field-planted 0 (the realm fights no field, H-149 / H-175). That reading is a hand measurement, not asserted here.
 
 What each block proves, and the control that stops it passing vacuously:
 

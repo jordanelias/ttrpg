@@ -188,9 +188,11 @@ def live_cover(w, actor: Optional[str]) -> Optional[str]:
     (S15: an edge is owned by its subject, so this reads his `Person.tenures`, never an index over every
     edge); (2) it is a `cover` (`COVER_KIND`) whose one key (`COVER_KEY`, `terms`) names HIM -- #453's
     *"where `terms == actor`"*: a cover handed to another hides nobody but the man it names, and only
-    while that man holds it; (3) A STAGE IS UNMATURED (`_a_stage_unmatured`). Several at once (only a
-    hand-built world, since `opening_set` declines a second, `held_document_declines`) answer the first
-    by Record id, so the read is deterministic.
+    while that man holds it; (3) A STAGE IS UNMATURED (`_a_stage_unmatured`). Several at once answer the first by
+    Record id, so the read is deterministic. A second cover is REACHABLE in computed play: `opening_set`
+    declines it only through the holder's `content:cover` LEDGER claim (`held_document_declines`), which the
+    ledger cap can evict and which two `conceal`s packed into one scene precede (MEASURED at B-Q's close:
+    `build_realm(0)`, 2 seasons, one person holds two live covers).
 
     ⚠ A LIVE READ -- THE WORLD AS IT STANDS NOW. `anchor_of` asks it once per Event, as the Event is
     logged (`cover_at_logging`, kept in `World._covers_logged`), and never again for a logged Event:

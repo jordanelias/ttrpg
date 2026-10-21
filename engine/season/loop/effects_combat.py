@@ -433,8 +433,8 @@ def _eff_forgive(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
 
     The rows are `queries/person_q.py::held_against`'s (his own stance rows naming the referent with a
     valence below zero); every other row he holds stays, in order, so `stance_toward(actor, subject)` reads
-    0.0 afterwards wherever no positive row names the referent. He writes only his own field (`T-m`'s
-    sense: the owner ending what he holds), never another's.
+    0.0 afterwards wherever no positive row names the referent. He writes only his own field (`Person.stance`, by `Subject.entity`; no Tenure is touched, so
+    `T-m` is not in play), never another's.
 
     DECLINES (`NO_CHANGE` -> `forgive.refused`): an actor who is no person; nothing held against the
     referent (#453: *'no negative row -> `NO_CHANGE`'*)."""

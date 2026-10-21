@@ -33,6 +33,13 @@ What each block proves, and the control that stops it passing vacuously:
      `conceal`; once he holds it (and WITNESS has deposited its content to him) he forms none. The
      loader refuses a line naming no verb or no record kind.
 
+  7. THE ALIAS READS THAT BATCH-CLOSE FOUND (B-Q Phase 1, reproduced red first): (a) CENSUS individuates
+     a person demanded by a dead covered actor's `dispatch` at the actor's place and raises no `KeyError`
+     (`world_q.event_place` places an act-caused Event by its ACTOR, not by its cover); (b) a covered
+     `move`'s deposit names the alias alone, not the mover (`epistemic.claim_subjects`); (c) a covered
+     mover's `travel.ended` chains to his `travel.moved` (`loop/matter.py`, `written=True`). Each has its
+     uncovered control.
+
 MUTATIONS, run at the build 2026-10-21 (each RED, then restored and GREEN):
   * `state/attribution.py::anchor_of`'s tier-1 line returning `who` (the cover read deleted) -> block 3's
     falsifier, block 4 and block 5's logged-alias test RED (block 3 also runs it in-test, through
@@ -298,3 +305,41 @@ def test_a_held_document_declines_line_naming_no_verb_or_no_record_kind_is_refus
     for planted in ({"conceal": "no_such_kind"}, {"no_such_verb": "cover"}, {"conceal": ""}):
         with pytest.raises(Forbidden, match="held_document_declines"):
             VERBS._load_held_document_declines(planted)
+
+
+# (7) THE ALIAS READS THAT BATCH-CLOSE FOUND ------------------------------------------------------------
+
+def test_census_places_a_dead_covered_actors_demand_where_he_acted_and_raises_nothing():
+    """The Duke conceals, then a `dispatch` naming an un-individuated person emits `person.demanded`; he then
+    dies. CENSUS must read the demand's place from the ACTOR (the cover's holder-place is gone with him)."""
+    from ..data.matrix import Step
+    from ..state.ids import ROOT
+    w, d = _world()
+    _resolve(w, d, Act(id="cc", actor=DUKE, verb="conceal", payload={"subject": DUKE}))
+    out = _resolve(w, d, Act(id="dd", actor=DUKE, verb="dispatch", via=SEAT, payload={"subject": "p_clerk"}))
+    demanded = [e for e in out if e.kind == "person.demanded"]
+    assert demanded and anchor_of(w, demanded[0]) == COVER, "precondition: a covered act-caused demand"
+    w.step = Step.MATTER
+    w.write("exists", mint_token(w, WriteClass.MATTER), lambda: w.remove_person(DUKE), record_kind="Person",
+            fieldname="exists", driver="Event", emits="person.died", subject=DUKE, causes=[ROOT])
+    d.census(mint_token(w, WriteClass.MATTER))           # raised KeyError at census.py:91 before the fix
+
+
+def test_a_covered_moves_deposit_names_the_alias_and_not_the_mover_and_his_travel_ends_on_his_move():
+    from ..epistemic import claim_subjects
+    for cover in (True, False):
+        w, d = _world()
+        if cover:
+            _resolve(w, d, Act(id="cc", actor=WATCHER, verb="conceal", payload={"subject": WATCHER}))
+        mv = _resolve(w, d, Act(id="mv", actor=WATCHER, verb="move", payload={"to": "S"}))
+        (moved,) = [e for e in mv if e.kind == "travel.moved"]
+        subjects = claim_subjects(w, moved, "both")
+        if cover:
+            assert subjects == [COVER], subjects            # the mover's id left the deposit
+        else:
+            assert subjects == [WATCHER], subjects          # control: uncovered, he is the subject
+        w.tick += 1
+        w.discard_caches()
+        d.matter(mint_token(w, WriteClass.MATTER), [])
+        ended = [e for e in w.log if e.kind == "travel.ended"]
+        assert ended and all(e.causes == [moved.id] for e in ended), [e.causes for e in ended]

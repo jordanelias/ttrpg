@@ -17,9 +17,10 @@ here asserts a verb executed in the seed-0 realm):
      stays.
   2. ONLY WHAT HE HOLDS: at the sink arm nobody forms it on a referent he does not hold, and the fold
      refuses a stranger's hand-built burn at the `held_by` conjunct.
-  3. THE SINK DOES NOT REACH TELLINGS (the position's falsifier, `harness/corpus_run.py`'s
-     `told_redeposits`): a burn leaves every ledger's claims about the burnt Record -- told and firsthand
-     -- as they were, so the redeposit reading over them cannot move. CONTROL: the planted told claim is
+  3. THE SINK DOES NOT REACH TELLINGS (the position's falsifier names `harness/corpus_run.py`'s
+     `told_redeposits`, which is inline code and not a callable, and reads 0 on both arms by hand): a burn
+     leaves every ledger's claims about the burnt Record as they were (here a PROXY: the claims are
+     compared, `told_redeposits` is not computed), so the redeposit reading over them cannot move. CONTROL: the planted told claim is
      really about the Record that burns.
   4. THE TWO READS REFUSE WHAT THEY CANNOT MEAN: a `withheld_verbs` member the table lacks, and an
      `own_hold_declines` member whose cell asks no holding.

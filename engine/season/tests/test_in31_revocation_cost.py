@@ -121,10 +121,11 @@ def test_in31_the_disposal_mapping_is_total_and_names_restraints(monkeypatch):
         m.setitem(G.REVOCATION_DISPOSAL, "purchased", None)
         with pytest.raises(Unspecified, match="disagree"):
             G.check_revocation_disposal()
-    with monkeypatch.context() as m:
-        m.setitem(G.REVOCATION_DISPOSAL, "elected", "oblige")
-        with pytest.raises(Unspecified, match="no restraint kind"):
-            G.check_revocation_disposal()
+    for kind in ("oblige", "detain"):       # `detain` is a restraint, but `_eff_revoke` opens only a ban
+        with monkeypatch.context() as m:
+            m.setitem(G.REVOCATION_DISPOSAL, "elected", kind)
+            with pytest.raises(Unspecified, match="no restraint"):
+                G.check_revocation_disposal()
 
 
 # 4 -- THE WRITE GATE ------------------------------------------------------------------------------------

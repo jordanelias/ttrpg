@@ -304,7 +304,15 @@ def claim_subjects(w: "World", e: "Event", rule: str, refs: Optional[list] = Non
     # read the instrument cannot answer (`UNKNOWN`) is NOT deposited, because the instrument's gap
     # would become a belief. No production emitter reaches this (every logged Event in the probe
     # corpus, headless and the populated realm anchors); `test_g1b_attribution.py` plants one.
-    return [s for s in (out or [anchor]) if s is not None]
+    # v9 IN-12 step 10: A COVERED ACT'S DEPOSIT NAMES THE ALIAS AND NOT THE ACTOR. The anchor is the
+    # cover's id, but a receipt that names the actor (`move`'s and `migrate`'s mover, `determine`'s
+    # judge, `forgive`'s and a self-`tend`'s own person) re-added him through `changes[]`, so the
+    # chronicle published the very name the cover hides. `seen.who` is not this function: it reads the
+    # act (`_term_who`), and the people present still learn who acted.
+    hidden = actor_of(w, e)
+    hidden = hidden if hidden != anchor else None
+    return [s for s in (out or [anchor]) if s is not None and s != hidden] or \
+        ([anchor] if anchor is not None else [])
 
 
 # ---------------------------------------------------------------------------

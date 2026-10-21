@@ -6115,8 +6115,10 @@ def test_w8_work_emits_a_success_only_when_the_site_moves():
       4. A REAL DELTA ON A SITE AT ITS CEILING -> refused. The act staged a non-zero delta, so its
          own write moved; the SITE did not, because the clamp ate it. Judged at the accumulator's
          write, where the change actually lands -- a gate that judged only per act passes this.
-      5. TWO DELTAS THAT CANCEL -> both refused, the site unmoved: the site did not change, so no
-         act changed it (sum-then-clamp-once has no per-act share to credit).
+      5. A +3 AND A -3 -> the -3 is DECLINED (v9 IN-12 step 9, K-09: `work`'s declared delta is
+         restricted to >= 0) and the +3 lands, `after == before + 3`. The CANCELLING pair this arm
+         used to hold (both refused, the site unmoved) now lives in
+         `test_in12_step9.py::test_a_sabotage_a_restore_cancels_is_refused_after_the_fact`.
       6. A REAL DELTA BESIDE A ZERO ONE on the same site -> the zero is refused and the real one
          succeeds. A gate that judged only per SITE passes this -- it would credit the zero.
 
@@ -6124,7 +6126,7 @@ def test_w8_work_emits_a_success_only_when_the_site_moves():
     against this tree (G4, 2026-09-26), each arm run on its own: (a) EVERY read -- the gate
     compares nothing, which is the pre-G4 contract: arms 1, 2, 4, 5 and 6 go red, arm 3 (the
     control) stays green; (b) only the SITE reads -- the
-    accumulator's write unjudged: arms 4 and 5 go red, 1 and 2 stay green; (c) only the STAGED
+    accumulator's write unjudged: arm 4 goes red (arm 5 no longer cancels, above), 1 and 2 stay green; (c) only the STAGED
     reads -- the per-act write unjudged: arms 1, 2 and 6 go red, 4 and 5 stay green. So each of
     the two judgments is observed failing on its own, by the arms that name it."""
     # 1. no delta

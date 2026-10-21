@@ -61,8 +61,8 @@ def census(self, token: Token) -> None:
             continue
         # WHERE THE DEMAND WAS MADE -- `world_q.event_place`, the one owner of *where an Event
         # happened* (`epistemic._ch_co_located`). Census reads only act-caused Events, for which
-        # `event_place` is `place_of(w, anchor_of(w, e))`; a refusal's anchor is its actor, so the
-        # person is individuated where the order was given.
+        # `event_place` is `place_of` of the causing act's actor (a covered act's anchor is its cover,
+        # not its actor: `world_q.event_place`), so the person is individuated where the order was given.
         at = world_q.event_place(w, e)
         if at is None:
             TRACE.note(f"{e.id} demanded {pid!r} at no place; individuated nobody "

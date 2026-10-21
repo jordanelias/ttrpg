@@ -2000,6 +2000,10 @@ def a5():
             # order-independence having folded nothing (§0.1 point 2: an assertion must be able to
             # observe the failure it excludes). Measured when it happened: the fixed point moved
             # 893 -> 890, which is the five deltas' sum of 3 not being applied.
+            # v9 IN-12 step 9 (K-09): `work` now DECLINES a declared delta below 0, so the -5 and the -1
+            # are `work.unavailable` in BOTH arms and the fold applies +3, +4, +2. The order-independence
+            # and id-collision assertions below still observe what they claim; the mixed-sign
+            # sum-then-clamp-once case lives in `test_in12_step9.py` (a sabotage and a restore).
             return [Act_(w, p, "work", key=str(d), payload={"site": site.id},
                          changes=[StateChange(site.id, "alter", "Act", "condition", d)])
                     for d in order][:ask_budget()]

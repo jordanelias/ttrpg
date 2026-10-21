@@ -714,11 +714,18 @@ def event_place(w: World, e) -> Optional[str]:
     person killed at RESOLVE later in the same tick, e.g. `travel.ended` (`loop/matter.py`'s travel
     pass), which is reachable at shipped defaults and unmeasured (H-206)."""
     who = anchor_of(w, e)
-    here = place_of(w, who)
+    # v9 IN-12 step 10: AN ACT-CAUSED EVENT IS PLACED WHERE ITS ACTOR STOOD, NOT WHERE ITS ANCHOR IS.
+    # A cover's anchor is the cover's id, and `place_of` of a Record is its LIVE holder's place
+    # (or, once the holder's hold closed, `Record.rung` -- the actor's own id for a computed
+    # `conceal`, which `remove_person` pops): CENSUS then indexed `w.rungs` by a dead person and
+    # raised, and a cover `give`n away moved an earlier round's Event. Uncovered, the anchor IS the
+    # actor (tier 1), so this is the old answer.
+    a = causing_act(w, e)
+    here = place_of(w, a.actor if a is not None else who)
     if here is not None:
         return here
     at = w.departed_from(who, e.emitted_at)       # `departed_from(None, t)` is None
-    return at if at is not None and causing_act(w, e) is None else None
+    return at if at is not None and a is None else None
 
 
 # ⚠ v9 SE-01 (`24g`), P1's OTHER HALF -- THE PERSON-KEYED CROSSING REPAIR IS THE PERSON LIMB ABOVE,

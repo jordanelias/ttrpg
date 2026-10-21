@@ -296,11 +296,14 @@ def test_mutation_argue_with_no_pursuit_move_is_refused(monkeypatch):
     eff = importlib.import_module("engine.season.loop.effects_information")
     monkeypatch.setattr(eff, "argued_pursuits", lambda *a, **k: None)
     seen = _bands(n=24)
+    refused = 0
     for band, rows in seen.items():
         for kinds, before, after, _ in rows:
             assert after == before
             if band in ("Success", "Overwhelming"):
                 assert kinds == ["argument.refused"], (band, kinds)
+                refused += 1
+    assert refused >= 1, f"no won band among the 24 acts, so the mutation was not observed: {sorted(seen, key=str)}"
 
 
 def test_control_a_subject_that_is_no_proposition_is_refused():

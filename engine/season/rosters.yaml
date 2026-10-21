@@ -1219,8 +1219,8 @@ rosters:
       is not one. The table is therefore OPEN in the sense that matters -- adding a contested verb
       does not require adding a row before the seam will run it.
       ⚠ AND IT IS NEARLY INERT ON THE CORPUS TODAY, WHICH IS SAID HERE SO NOBODY READS THE ROWS AS
-      DOING WORK: the only writer of `Person.capability` is a `cast:` overlay's `capability:`
-      (`harness/corpus_run.py`, `build_at`), and one entry carries one (NPC-088's Carin Vedel,
+      DOING WORK: the writers of `Person.capability` are a `cast:` overlay's `capability:`
+      (`harness/corpus_run.py`, `build_at`) and, in play, `train` (v9 IN-12 step 9: +1 on a key the subject already holds), and one entry carries one (NPC-088's Carin Vedel,
       `{copying: 3}`; counted 2026-10-02 with `cast_overlay()`: 1 of 430 built persons), so every
       other derivation lands on `pool_default` and the roll varies by SEED and FIXTURE rather than by
       PERSON. That is why R-09 reads `partial` after `U1` and not `met`.
@@ -1994,8 +1994,7 @@ rosters:
       `decision/options.py::opening_set`, person-side and World-free (AX-2): his OWN `Person.stance`
       rows naming the referent with a valence below zero (`queries/person_q.py::held_against`, the one
       reader the verb's effect reads too); a referent he holds nothing against forms no Candidate, so no
-      scene is spent on a `forgive.refused` he could have known. Keyed on the row's `writes:`, never on
-      a verb name in code: ONE LOADER, `data/verbs.py::OWN_STANCE_DECLINES`, refused at import when a
+      scene is spent on a `forgive.refused` he could have known. The roster names the verb and the loader VALIDATES it against the row's `writes:`; no verb name is spelt in code: ONE LOADER, `data/verbs.py::OWN_STANCE_DECLINES`, refused at import when a
       member names a verb the table lacks or one whose row writes no `Person.stance`. ⚠ `release`'s
       hook (#453 Appendix A, pass 1's §4: declined when the actor holds no releasable edge to the
       referent) is NOT built here: it reads `p.tenures`, not `p.stance`, and plan row 13 builds
@@ -2245,7 +2244,7 @@ rosters:
       `remit_acts` refusal's shape, so a typo is loud rather than a seat nobody can ever fill), and
       `state/gate.py::has_conferral_basis` (moved from `loop/predicates.py` by G3, since the gate
       asks it and may not import the loop; `predicates.py` re-imports the name), the ONE basis test
-      `_req_confer` and `_req_establish` share -- CORRECTED (antagonist pass, 2026-09-27), this
+      `_req_confer` and `_req_establish` share, and `state/gate.py::REVOCATION_DISPOSAL` (v9 IN-31: what a revocation costs, by this basis) -- CORRECTED (antagonist pass, 2026-09-27), this
       said `loop/predicates.py::has_conferral_basis`. ⚠ NOTHING DISCRIMINATES BETWEEN THE THREE YET: `confer` admits a seat
       declaring any of them. Which act fills an `elected` or an `annex` seat is not ruled, and no
       election or annexation verb exists; narrowing `confer` to `appointed` would leave the other
@@ -3036,7 +3035,7 @@ tables:
         # negative = rank-bearing, status-asserting · positive = equal, peer-levelling (draft §3.1)
         determine:      -1.0    # carried: the licensed judgement made by the holder licensed to make it
         "deed:matter.undetermined": 0.0   # [ASSUMPTION; medium; Jordan to correct; revert: delete this cell and its twin] a Failed `determine` writes nothing, so WITNESS's empty-changes rule (`epistemic.py`'s empty-changes rule) lands the claim on the PARTY, and a null cell would fall back to `determine`'s own (`data/verbs.py`: `_load_alignment` drops a null, `align_kind` falls back to the verb): the hearing that changed nothing is judged as no deed at all. Numeric, not null, for that reason. (`speak`'s four `matter.*` kinds share the shape: H-192 (a).)
-        "deed:pursuit.moved": 0.0   # [ASSUMPTION; medium; Jordan to correct; revert: delete this cell and its twin] `determine`'s own consequence write (v9 SC-02 `22b` step 24) is the only row that emits `pursuit.moved`, so `KIND_VERB` maps it to `determine` and a null cell would judge the judge's interior shift by `determine`'s alignment, a second time beside `matter.determined`; and `_ch_chronicle` publishes it to everyone (`determine` is a `binding_decision`). A pursuit moving is no one's deed; numeric, not null, for the same reason as `deed:matter.undetermined`. Held at 0.0 it also survives a second emitter (B-Q's `argue`/`train`), which would make it a paired kind.
+        "deed:pursuit.moved": 0.0   # [ASSUMPTION; medium; Jordan to correct; revert: delete this cell and its twin] `determine`'s consequence write (v9 SC-02 `22b` step 24) and `argue` (v9 IN-12 step 9) both emit `pursuit.moved`, so the kind is SHARED and absent from `KIND_VERB`; before `argue` it mapped to `determine`, and a null cell would judge the judge's interior shift by `determine`'s alignment, a second time beside `matter.determined`; and `_ch_chronicle` publishes it to everyone (`determine` is a `binding_decision`). A pursuit moving is no one's deed; numeric, not null, for the same reason as `deed:matter.undetermined`. Held at 0.0 it survives the second emitter (`argue`); `train` emits `capability.raised`, not this kind.
         confer:         -0.8    # carried: conferral seats an office; the paradigm top-down act
         evade / defy:    0.9    # carried: refusing a demand outright is the direct negation of command
         establish:      -0.7    # carried: founding an office adds a rung to the ladder that was not there
