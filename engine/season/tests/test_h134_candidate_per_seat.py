@@ -189,7 +189,13 @@ def test_h134_two_seats_are_two_acts_ids_opportunities_and_the_store():
 # subject), and their two acts' payloads gain `to`. No Candidate or act id is added or removed.
 # CONTROL: every other line of the two dumps is identical, and ffd753f6's reading re-hashes to
 # `5abeea9b...` exactly.
-_CONTROL = (60, 60, "4b486ad73f3c039d4761e22dfae85eaaa5db51011aaa6c2205016c9de60f0cc6")
+# RE-PINNED AT v9 IN-12 step 9 (`argue`, `sabotage`, `tend`, `train`, B-Q): 60 -> 66, `4b486ad7...` ->
+# `e4d7ccf8...`. Exactly six Candidates (and their six acts) are added and none removed: `sabotage`,
+# `tend` and `train` each form once on `off_duke` and once on `Hh` (the question's plain referents;
+# their cells bind only the referent, `train`'s carrying `kind: copying`), and `argue` forms none
+# (`p_one` knows nobody, so its `to` fan is empty). CONTROL: the same reading with those four verbs'
+# Candidates filtered out before `_acts` re-hashes to `(60, 60, "4b486ad7...")` exactly (scratch, not kept).
+_CONTROL = (66, 66, "e4d7ccf85bcee2fe9a7ab523cc4190637682f76e85832ce55fde6b1ccaecbf61")
 
 
 def _control_reading():

@@ -1,5 +1,6 @@
 """`season.loop.effects_information` -- records, propositions, matters: create_record, issue,
-covenant, open_case, carry, determine, petition, survey, forge, give, destroy_record, utter, commit.
+covenant, open_case, carry, determine, argue, petition, survey, forge, give, destroy_record, utter,
+commit.
 
 EXTRACTED from `effects.py` at the per-subsystem split (Phase 4). Holds the document/proposition/
 matter cluster: the one mint (`_mint_document`) that `create_record`, `issue`, `petition` and
@@ -20,7 +21,7 @@ from ..data.requires import RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS
 from ..data.rosters import MARCH_TARGET_KINDS, RECORD_CONTENT, RECORD_KIND_KEYS
 from ..data.verbs import VERB_TABLE, WARRANT_SOURCED
 from ..queries import faction_q
-from ..queries.person_q import ABOUT_KEYS, consequence_pursuits
+from ..queries.person_q import ABOUT_KEYS, argued_pursuits, consequence_pursuits
 from ..queries.world_q import (
     BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_PETITION, docketed, docketed_under,
     faction_holding, faction_of, hold_force, holder_faction_of, mustered, place_of, slot_for,
@@ -532,6 +533,36 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
         if moved is not None:
             judge.pursuits = moved
     return Change(subjects, perform)
+
+
+@effect_for("argue")
+def _eff_argue(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """v9 IN-12 step 9 (#453 §9.4; K-21) -- A WON ARGUMENT MOVES THE HEARER'S `Person.pursuits`.
+
+    The row is contested (`contests: a proposition`, the social contest module's roll), so this body runs
+    only on a band whose `writes:` names `Person.pursuits` (`Overwhelming`, `Success`); `Partial` and
+    `Failure` write `[]` and the fold never calls it there. The hearer is the row's counterparty (`to`);
+    his held pursuits move toward the ARGUER's own by `queries/person_q.py::argued_pursuits` -- the
+    ARGUMENT half of the row's *'moved by argument and consequence'*, `determine`'s consequence write one
+    verb over, and like it the write is the actor's act at RESOLVE, never a witness's.
+
+    G4 -- WHAT IT NAMES: THE HEARER, read as his `pursuits` alone; it earns every kind the band declares
+    (`argument.won`, `pursuit.moved`), because the only change the band makes IS the moved pursuit. A won
+    argument that moves nothing (the hearer already where the arguer stands, no pursuit held, or
+    `pursuit_shift` 0, the control) is `NO_CHANGE` -> `argument.refused` at its write (F9): a success
+    Event over an unmoved mind would be a deed that did not happen.
+
+    DECLINES: no resolution (a hand-built call with no contest), no hearer, no arguer, or nothing moves."""
+    hearer, arguer = w.persons.get(_operand(a, "to")), w.persons.get(a.actor)
+    if res is None or hearer is None or arguer is None:
+        return NO_CHANGE
+    moved = argued_pursuits(hearer, arguer, res.degree, w.fixtures.get("pursuit_shift"))
+    if moved is None:
+        return NO_CHANGE
+
+    def perform() -> None:
+        hearer.pursuits = moved
+    return Change((Subject.entity("persons", hearer.id, fields=("pursuits",)),), perform)
 
 
 def _disposal(w: "World", a: "Act", party: str, seat: str, kind: str,

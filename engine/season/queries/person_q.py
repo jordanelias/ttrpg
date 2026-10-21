@@ -488,6 +488,29 @@ def consequence_pursuits(p: Person, verb: str, degree, gain: float):
     return None if moved == held else moved
 
 
+def argued_pursuits(hearer: Person, arguer: Person, degree, gain: float):
+    """v9 IN-12 step 9 (#453 §9.4, `argue`) -- `hearer`'s pursuits after `arguer` WON an argument with him
+    at `degree`, or `None` when nothing moves. A READER, `consequence_pursuits`' sibling: it computes the
+    new map and writes nothing; `loop/effects_information.py::_eff_argue` writes it at RESOLVE, the arguer's
+    act (#353 §9.3: *moved by argument and consequence, never by evidence*; AX-3).
+
+    #453 leaves the direction a [GAP] (*'which weight moves, and toward what'*). The narrowest reading on the
+    tree's own primitives [ASSUMPTION; medium; Jordan to correct; revert: Jordan names the direction]: each
+    pursuit the hearer HOLDS moves TOWARD THE ARGUER'S OWN WEIGHT on it by `gain * DEGREE_STEP[degree]` of
+    the gap -- the swept `Fixtures.pursuit_shift` (`H-221`) and the one degree ladder `consequence_pursuits`
+    reads, so the field's two movers share one methodology. ONLY HELD KEYS MOVE (`consequence_pursuits`'
+    rule: a weight above zero), so an argument mints no pursuit the hearer did not hold; a pursuit the
+    arguer does not hold pulls toward 0. `Partial` (step 0) and below move nothing (the row writes `[]`
+    there). Person-side, no World (AX-2)."""
+    step = DEGREE_STEP.get(degree, 0)
+    held = {e: float(w) for e, w in (hearer.pursuits or {}).items()}
+    if not gain or step <= 0 or not held:
+        return None
+    pull = {e: float(w) for e, w in (arguer.pursuits or {}).items()}
+    moved = {e: w + float(gain) * step * (pull.get(e, 0.0) - w) if w > 0 else w for e, w in held.items()}
+    return None if moved == held else moved
+
+
 def _affiliations_violated_by(verb: str) -> frozenset:
     """The rostered affiliations an act of `verb` violates, whoever holds them:
     `violated_affiliations`' sign test, `engagement(verb, a) < 0`. The candidates are

@@ -128,6 +128,42 @@ verbs:
     grade:       "ruled"
     writes_note: "v9 IN-45 BUILT THE EFFECT (`loop/effects_information.py::_eff_carry`) ON AN EXISTING GATE SHAPE -- NO FOURTH `Subject`. Plan position `14` (U7-own) declined it because the one write, `(DocketItem, matter)`, is an append to `World.docket`, a SEQUENCE the gate has no `get()` for, and `carry` minted nothing for the append to ride on, so every carry would name nothing that moved and refuse as `NoOpReceipt`. #453's `carry` row is the answer, and it needs no new shape: *build on `open_case`'s body, writing the petition's `Record.stages`*. `Record.stages` is ADDED as the FIRST pair -- the act re-winds the petition's clock (`_declared_stages`, `H-80`'s default for a computed act), so the petition RECORD moves, the gate's `entity` shape observes it, and its receipt names the petition, which the appended docket item names under `DOCKET_PETITION` (v9 SC-03a). The append rides on that receipt, as `open_case`'s rides on its case file; every decline comes before the write, because the gate does not restore a docket. The MATTER (`H-63`'s value for this row) is the petition's `terms`, `open_case`'s precedent (it dockets its subject, the party `determine` binds). [ASSUMPTION; medium; Jordan to correct; revert: the matter is the petition's own id; the stages appended rather than replaced.] The later pairs, `(DocketItem, matter)` and the item's `arrangement` (`None`) and `petition` keys, are check-only (each admits RES in the ACTS class), as on `open_case`, which declares the same three cells for the same `_docket_item` shape."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "argue"
+    stratum:     "social"
+    eligibility: ["own"]
+    beneficiary: "actor"
+    beneficiary_note: "v9 IN-12 step 9 (#453 §9.4: *'beneficiary `actor`'*): THE ARGUER -- he argues for what he holds right; the hearer is the counterparty, not the party served."
+    requires:    "the argued thing is an uttered Proposition, and the hearer is with the arguer"
+    requires_typed:
+      all:
+        - form:      existence
+          of:        subject
+          kind:      Proposition
+        - form:      relation
+          of:        to
+          relation:  with
+    requires_typed_note: "v9 IN-12 step 9 -- #453 §9.4's cell, verbatim in shape: *`existence` of `subject` kind Proposition ∧ `relation` of `to`, `with`*. `commit`'s `subject` conjunct (the thing argued is an uttered Proposition, in the arguer's reach since IN-11's maker's hold) and `tell`'s `hearer` conjunct (world-only, `ED-IN-0282`). ⚠ THE CELL BINDS `to` BESIDE `subject`, so `TypedRequires.known_person_operands` names `to` and `decision/options.py::operand_bags` forms one Candidate per person the arguer KNOWS (#453: *'the hearer, by the known-person fan'*) -- `tell`'s and `covenant`'s shape. A computed `argue` on any referent that is no Proposition is refused in the fold (`argument.refused`), as `commit`'s and `covenant`'s are."
+    counterparty: to
+    counterparty_note: "THE HEARER IS THE SECOND SIDE (#453 §9.4: *'counterparty `to` (the hearer, by the known-person fan)'*): the contest's opponent (`loop/resolve.py::_contest` reads `row.counterparty`), and the person whose pursuits a won argument moves. An argument with oneself is declined person-side and refused by the fold's `counterparty` clause, `tell`'s precedent."
+    contests:    "a proposition"
+    contests_note: "v9 IN-12 step 9 (#453 §9.4: *'contests: `a proposition` (social_contest, interim `sigma_leverage`)'*): the prize `determine` already claims (`rosters.yaml: contest_subsystems.prizes`), rolled by the social contest module (`social_contest.roll`, steps 13 + 15 repointed the interim). No new prize, no new provider."
+    writes:
+      Overwhelming: ["Person.pursuits"]
+      Success:      ["Person.pursuits"]
+      Partial:      []
+      Failure:      []
+    writes_note: "v9 IN-12 step 9 (#453 §9.4; K-21): `loop/effects_information.py::_eff_argue` MOVES THE HEARER'S `Person.pursuits` -- the ARGUMENT half of `(Person, pursuits)`'s *'moved by argument and consequence, never by evidence'* (#353 §9.3; AX-3), whose CONSEQUENCE half `determine` has produced since SC-02 `22b` step 24. HOW FAR AND TOWARD WHAT is #453's own [GAP] (*'which weight moves, and toward what'*), answered here by the narrowest reading the tree composes on [ASSUMPTION; medium; Jordan to correct; revert: Jordan names the direction]: each pursuit the hearer HOLDS (a weight above zero, `consequence_pursuits`' sense) moves TOWARD THE ARGUER'S OWN WEIGHT on it by `pursuit_shift x DEGREE_STEP[band]` of the gap (`queries/person_q.py::argued_pursuits`) -- the swept `Fixtures.pursuit_shift` (`H-221`) and the one degree ladder `determine` reads, so two moves of one field share one methodology (§0.06 S). ⚠ `Partial` WRITES `[]`: #453 writes it *'at the Partial magnitude [ASSUMPTION]'*, and on `DEGREE_STEP` that magnitude is 0 (*'a held matter moves nothing'*), so declaring the write would turn every Partial into `argument.refused` (`NoOpReceipt`). `Failure` writes nothing (#453: *'Failure → `[]`'*). A won argument that leaves the hearer where he stood (the same weights, none held, or `pursuit_shift` 0, the control) moved nothing and is `argument.refused` at its write (F9)."
+    emits:
+      Overwhelming: ["argument.won", "pursuit.moved"]
+      Success:      ["argument.won", "pursuit.moved"]
+      Partial:      ["argument.won"]
+      Failure:      ["argument.lost"]
+    emits_note: "#453 §9.4's kinds (*'Overwhelming, Success, Partial → `argument.won`; Failure → `argument.lost`'*), plus `pursuit.moved` -- the matrix row's own kind (`write_matrix.yaml` `(Person, pursuits)`), `determine`'s precedent -- on the two bands that write it. ⚠ `argue` IS THE SECOND EMITTER OF `pursuit.moved`, so the kind is SHARED (`data/verbs.py::KIND_VERB` no longer maps it) and `align_kind` reads its authored `deed:pursuit.moved` cells, held at `0.0` on every axis (`rosters.yaml: alignment`): a moved pursuit is no deed of the person moved. `test_season_shape.py::test_t2_align_kind_reads_the_one_emitter_and_a_deed_key_needs_an_emitted_kind` is the designed tripwire for this second emitter."
+    emits_on_refusal: ["argument.refused"]
+    refusal_note: "v9 IN-12 step 9, #453 §9.4: *'Refusal: `argument.refused` (one kind)'* -- the loader's contested-row rule too (the seam's party-gap refusal emits the row's union): the argued thing is no Proposition, the hearer is not with the arguer, the hearer is the arguer (the fold's `counterparty` clause), or a won argument moved nothing."
+    grade:       "assumption"
+    grade_note:  "an argued addition (#453 §10.4 step 9): the row, the pursuit direction and the Partial reading are v9 IN-12's, on #453 §9.4 `:1896-1923`, K-21 `:2737-2742`."
+    source:      "v9 IN-12 step 9 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.4 `:1896-1923`"
   - verb:        "commit"
     stratum:     "social"
     eligibility: ["own"]
@@ -937,6 +973,29 @@ verbs:
     grade:       "ruled"
     eligibility_note: "⚠ W3 AUDIT: §E3's eligibility cell carried a PRECONDITION as well as the remit act — `remit:revoke + ...`. The fold split on the first `:` and tested the whole tail against the remit roster, so it NEVER MATCHED and a holder of the remit was silently refused. The act is the eligibility; the basis is a `requires`."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "sabotage"
+    stratum:     "uncontested_material"
+    eligibility: ["own", "presence:<site>"]
+    beneficiary: "actor"
+    beneficiary_note: "v9 IN-12 step 9 (#453 §9.3; K-04, K-09): THE SABOTEUR -- a damaged fabric benefits whoever wanted it damaged, and a Site cannot be held at all (`rosters.yaml: hold_object_kinds`), so *the fabric's holder* is nobody and the row names NO counterparty (K-04). Its sign and beneficiary are what separate it from `restore`/`work` (K-09)."
+    requires:    "the site exists and the actor is present at it"
+    requires_typed:
+      all:
+        - form:      existence
+          of:        site
+          kind:      Site
+        - form:      relation
+          of:        site
+          relation:  present_at
+    requires_typed_note: "v9 IN-12 step 9 -- #453 §9.3: *'requires: `restore`'s cell'*, copied whole: the site exists and the actor stands at it."
+    writes:      ["Site.condition"]
+    writes_note: "v9 IN-12 step 9 (#453 §9.3, K-09): `loop/effects_economy.py::_eff_sabotage` LOWERS THE SITE BY `_rise`'s MIRROR THROUGH THE SAME ACCUMULATOR (`_fall`): the footroom to the scale's floor (the condition itself) shared among those standing at the fabric (`queries/world_q.py::share`), staged NEGATIVE on `(Site, condition)` and clamped ONCE at 0 by `resolve()` (S27.3). A fabric already at 0 stages nothing and is `sabotage.refused` (`NoOpReceipt`); one that a `restore` in the same fold cancels is refused after the fact, `work`'s G4 shape. LOWERS, NEVER ENDS: ending a Site is `raze`'s (IN-12 step 11). `work`'s declared delta is restricted to >= 0 in the same commit, so each verb owns one sign (K-09)."
+    emits:       ["site.damaged"]
+    emits_on_refusal: ["sabotage.refused"]
+    refusal_note: "v9 IN-12 step 9, #453 §9.3: *'refusal `sabotage.refused`'* -- one flat kind, `restore`'s shape: the site is not a Site, the saboteur is not at it, or the write moved nothing."
+    grade:       "assumption"
+    grade_note:  "an argued addition (#453 §10.4 step 9): the row and the mirror are v9 IN-12's, on #453 §9.3 `:1865-1890`, K-04 `:2600-2605`, K-09 `:2640-2646`."
+    source:      "v9 IN-12 step 9 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.3 `:1865-1890`"
   - verb:        "seize"
     scale:       "settlement"
     scale_note:  "a seizure reaches the place its object is at, as `requisition`'s reaches a rung: the exercised seat's purview over where the dispossessed holder lives"
@@ -1041,6 +1100,29 @@ verbs:
     grade:       "assumption"
     grade_note:  "an argued addition, graded as `found`, `build` and `forge` are: the matrix row `(Record, exists)` is the tree's; the verb, its cell and its reading of WHICH faction are plan position `20-iii`'s, on proposal 14's reconciliation. The operand reading is `faction_holding`'s, not a new rule."
     source:      "plan `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md` position `20-iii` (*'narrative #14 §F (D1-a) and the chain half of #7 (intelligence before action)'*); `proposals/2026-09-27-mc-v18-retirement-plan/PROPOSAL.md` D1-a; `proposals/2026-09-12-emergent-narrative-primitives-v2/01_THE_TEN.md` §F, proposal 14 (Jordan's) and 14.1 (Jordan's extension, NOT built -- `H-169`)"
+  - verb:        "tend"
+    stratum:     "uncontested_material"
+    eligibility: ["own"]
+    beneficiary: "subject"
+    beneficiary_note: "THE PERSON TENDED (#453 §9.4: *'beneficiary `subject`'*), whose body the act raises; self or another."
+    requires:    "the person tended exists and is with the actor"
+    requires_typed:
+      all:
+        - form:      existence
+          of:        subject
+          kind:      Person
+        - form:      relation
+          of:        subject
+          relation:  with
+    requires_typed_note: "v9 IN-12 step 9 -- #453 §9.4's cell, verbatim in shape: *`existence` of `subject` kind Person ∧ `relation` of `subject`, `with`*. Two existing forms on existing stems; `with` is world-only (`ED-IN-0282`), so the tender forms the Candidate on whom he is asked about and the fold refuses an absent patient (`tend.refused`). A person stands with himself, so tending oneself (rest) is admitted by the same cell."
+    writes:      ["Person.body"]
+    writes_note: "v9 IN-12 step 9 (#453 §9.4): `loop/effects_combat.py::_eff_tend` (beside the body's other writers) RAISES THE SUBJECT'S `Person.body` -- the first code path that raises it (`fight`, `march` and MATTER's subsistence only lower it). THE MAGNITUDE IS `restore`'s FORMULA ON THE BODY'S OWN SCALE: the headroom to `condition_scale` (a person is built at full body, `state/carriers.py::Person.body`), taken whole, the `_rise` precedent (*'one hand alone at a fabric raises it to its ceiling in one act'*); the `share` term is the identity because a body has no commons [ASSUMPTION; medium; Jordan to correct; revert: a swept fixture fraction of the headroom, #453's *'fast partial and slow full form'* (C-48)]. A body already full moves nothing and is `tend.refused` at its write (`NoOpReceipt`). The row admits RES (`write_matrix.yaml`'s `(Person, body)`, `[MAT, RES, ENC]`)."
+    emits:       ["body.tended"]
+    emits_on_refusal: ["tend.refused"]
+    refusal_note: "v9 IN-12 step 9, #453 §9.4: *'refusal `tend.refused`'* -- one flat kind: the subject is no person, is not with the tender, or is already whole (the write moved nothing)."
+    grade:       "assumption"
+    grade_note:  "an argued addition (#453 §10.4 step 9): the row and its magnitude are v9 IN-12's, on #453 §9.4 `:1925-1941`."
+    source:      "v9 IN-12 step 9 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.4 `:1925-1941`"
   - verb:        "tell"
     stratum:     "social"
     eligibility: ["own"]
@@ -1323,6 +1405,30 @@ verbs:
     grade:       "ruled"
     effect_decline_note: "PLAN POSITION `14` (U7-own) STOPPED ON IT (`H-182`). ⚠ THE GROUND IS NOT `ID-13` FOR BOTH KINDS (CORRECTED AT THE BATCH C CLOSE): `ID-13`, A CARRIER NOBODY READS, HOLDS FOR `tie` ONLY, because `knot` HAS A READER (below). WHAT STOPS `tie / knot` IS THE PARTNER OPERAND THE ROW DOES NOT BIND (BOTH KINDS) AND, FOR `knot`, THAT IT BELONGS TO `29f`'S KNOTS WORK; `tie`'s own ground is `ID-13` AND that operand. ⚠ AN EARLIER READING OF THIS NOTE WAS FALSE AND IS CORRECTED HERE: it rested on `holonic §15.1` (a tie stored ONCE on the lower id), so a tie by the higher-id party *writes an edge he does not own* and `release` *cannot end it from his side*. 04 §A.3 row 9 (`:191`) overrides it -- two directed edges -- so each party owns his own, `state/gate.py`'s `T-m` (`:707-710`) admits the owner opening it, and `release`'s `domain:` includes `tie` and `knot`, so nobody writes an edge he does not own and the owner can end it. WHAT STOPS IT, PER KIND: `tie` has NO production reader -- the only code naming the kind is `release`'s domain and `harness/probes.py` -- so an executed `tie` would write an edge nothing reads; the reader that would make it live is `decision/options.py::teller_weight`'s `relation` term (`~:1032-1079`, the hearer's relation to the teller), which today reads `rank` and `regard` and no tie. `knot` HAS a reader, `epistemic.py::_ch_witness_key`, and it reads the edge UNDIRECTED (either endpoint, either role), against 04 `:388` (*`tie`/`knot` are directed*) -- recorded as an observation for the `29f` lane, which owns the `firsthand_via_knot` channel, and not decided here. BOTH kinds also lack the operand: the row's cells bind the actor and no partner, so a computed act names nobody to bond with. The row still names two kinds for one opener. The decline stands."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "train"
+    stratum:     "uncontested_material"
+    eligibility: ["own"]
+    eligibility_note: "v9 IN-12 step 9 (#453 §9.4, the `train` row): `own` -- a person practises or teaches as himself; no office makes it eligible and capability GATES NOTHING here (#353 §9.2): the actor's own capability is read neither at formation nor at the fold."
+    beneficiary: "subject"
+    beneficiary_note: "THE PERSON TRAINED, self or a present pupil (#453 §9.4: *'beneficiary `subject` (self or pupil)'*) -- the subject whose `capability` the act raises."
+    requires:    "the person trained exists and is with the actor"
+    requires_typed:
+      all:
+        - form:      existence
+          of:        subject
+          kind:      Person
+        - form:      relation
+          of:        subject
+          relation:  with
+    requires_typed_note: "v9 IN-12 step 9 -- #453 §9.4's cell, verbatim in shape and `tend`'s: *`existence` of `subject` kind Person ∧ `relation` of `subject`, `with` (the pupil present, as `tend`'s cell)*. Two existing forms on existing stems (`with` is `ED-IN-0282`'s, world-only, so the person forms the Candidate and the fold refuses an absent pupil). A person stands with himself (`world_q.place_of` answers one place for both sides), so self-practice is admitted by the same cell."
+    writes:      ["Person.capability"]
+    writes_note: "v9 IN-12 step 9 (#453 §9.4; K-20, K-21): `loop/effects_combat.py::_eff_train` (beside `tend`, the person's other raiser, G15) RAISES ONE CAPABILITY OF THE SUBJECT BY ONE WHOLE POINT -- the vocation the act carries as `kind` (`rosters.yaml: vocation_sourced`, read in `decision/options.py::opening_set`: one Candidate per vocation in `verb_capability`'s values). ⚠ J-13 ANSWERED (iii) AS THE INTERIM (`workplans/valoria_master_workplan_v9_part5.md` §J.1, RS-21 item 10) [medium; Jordan to correct]: `train` WRITES `Person.capability` ONLY WHERE A CASE NAMES A VOCATION -- the subject must ALREADY hold the key to be raised in it (a pupil holding none is declined at the effect, `train.refused`), so no key is ever minted below `pool_default` (a minted `{copying: 1}` would replace the default 2 and LOWER the pupil's pool) and `pool_default` holds everywhere a case names none. ⚠ THE PLAN'S *'forms ... only where'* HALF IS NOT BUILT: a formation read of the actor's capability is a capability gate, which #353 §9.2 and probe P11 (`harness/probes.py`) refuse [ASSUMPTION; medium; Jordan to correct; revert: the formation decline, once P11 is re-ruled for `train`]. ONE point: `capability` is a whole-number dice count (`harness/corpus_run.py::_check_capability`), and one is its unit [ASSUMPTION; medium; Jordan to correct; revert: a swept fixture step]. THE RANGE IS `verb_capability`'s VALUES (K-20; today `copying` only): Thread Sensitivity has no carrier (H-85) and so is structurally outside it -- P-08 forbids non-sensitives gaining Thread-level capability by study (`canon/02_canon_constraints.md:50`). `(Person, capability)` is UN-RETIRED in the same commit, with this producer (K-21; `write_matrix.yaml`'s own rule, *'a row exists because a producer produces it'*)."
+    emits:       ["capability.raised"]
+    emits_on_refusal: ["train.refused"]
+    refusal_note: "v9 IN-12 step 9, #453 §9.4: *'refusal `train.refused`'* -- one flat kind: the subject is no person, is not with the actor, or holds no capability in the vocation the act carries (the effect's decline, J-13 (iii)'s write clause)."
+    grade:       "assumption"
+    grade_note:  "an argued addition (#453 §10.4 step 9): the row, its magnitude and the J-13 (iii) interim are v9 IN-12's, on #453 §9.4 `:1943-1968`, K-20 `:2729-2735`, K-21 `:2737-2742`."
+    source:      "v9 IN-12 step 9 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.4 `:1943-1968`"
   - verb:        "transfer"
     stratum:     "uncontested_material"
     eligibility: ["remit:issue", "own", "hold:<store>"]

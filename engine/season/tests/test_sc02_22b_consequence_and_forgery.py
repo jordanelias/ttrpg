@@ -180,7 +180,13 @@ def test_step24_the_interior_shift_is_no_deed_and_is_judged_as_none():
     axis makes a claim of it worth nothing, observed through `person_q.deed_valence` on a holder with
     pursuits (CONTROL: `determine` itself is non-zero on some axis, so the zero is the cell's doing)."""
     from ..data.verbs import ALIGNMENT, DEED_KINDS, KIND_VERB, align_kind
-    assert KIND_VERB["pursuit.moved"] == "determine" and "pursuit.moved" in DEED_KINDS
+    # ⚠ RE-RECORDED AT v9 IN-12 step 9 -- THE SECOND EMITTER THE CELL'S OWN NOTE FORESAW (`rosters.yaml`, the
+    # `deed:pursuit.moved` cell: *"Held at 0.0 it also survives a second emitter"*): `argue`'s won bands emit
+    # it too, so the kind is SHARED and leaves `KIND_VERB`; it is still a deed kind, and `align_kind` now reads
+    # the authored 0.0 cell through the shared-kind branch. The assertions below are unchanged.
+    emitters = sorted(v for v, r in VERB_TABLE.items() if "pursuit.moved" in set(r.emits))
+    assert emitters == ["argue", "determine"] and "pursuit.moved" not in KIND_VERB, emitters
+    assert "pursuit.moved" in DEED_KINDS
     axes = sorted(ALIGNMENT)
     assert len(axes) >= 2 and any(align("determine", ax) != 0.0 for ax in axes), axes
     for ax in axes:

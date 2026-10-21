@@ -1437,6 +1437,35 @@ def _load_terms_sourced(values: dict) -> dict:
 
 TERMS_SOURCED = _load_terms_sourced(roster_map("terms_sourced", "values"))
 
+# v9 IN-12 step 9: `{verb: operand}` -- the verbs that carry a VOCATION (a `verb_capability` value the
+# actor holds) on the named operand, one Candidate per vocation (`rosters.yaml: vocation_sourced`, read
+# in `opening_set`; `train`'s `kind`). REFUSED AT IMPORT, `TERMS_SOURCED`'s reason: a verb the table
+# lacks, a verb whose row writes no `Person.capability` (it would carry a vocation nothing raises), or
+# an operand outside the closed `requires_operands` would each form a Candidate nobody reads right.
+_CAPABILITY_PAIR = "Person.capability"
+
+
+def _load_vocation_sourced(values: dict) -> dict:
+    """`rosters.yaml: vocation_sourced`'s `values`, checked and frozen -- refused per line (above)."""
+    out = {v: str(op or "") for v, op in values.items()}
+    for v, op in out.items():
+        row = VERB_TABLE.get(v)
+        if row is None or _CAPABILITY_PAIR not in _produced_pairs({v: row}) or op not in REQUIRES_OPERANDS:
+            raise Forbidden(
+                f"`rosters.yaml: vocation_sourced` names {v!r}: {op!r}, and the verb table carries no "
+                f"such verb, its row writes no `{_CAPABILITY_PAIR}`, or {op!r} is no `requires_operands` "
+                "member", "rosters.yaml",
+                needs="a `verb_table.yaml` verb that writes `Person.capability`, and a closed operand",
+                law="IN-12 step 9 -- a vocation rides an act that raises it, on an operand the grammar names")
+    return out
+
+
+VOCATION_SOURCED = _load_vocation_sourced(roster_map("vocation_sourced", "values"))
+# THE VOCATIONS: the capability keys some verb draws dice from -- `rosters.yaml: verb_capability`'s
+# VALUES (its keys are verbs), derived here and never spelt, so a key `train` may raise is exactly a key
+# `_pool_of` reads (#453 K-20: the range is `verb_capability`'s names; Thread Sensitivity is outside it).
+VOCATIONS = frozenset(roster_map("verb_capability", "values").values())
+
 
 def _derive_rung_remit_acts() -> frozenset:
     """v9 IN-49 `requisition` (H-163 limit 3, [ASSUMPTION; medium; Jordan to correct]): THE REMIT ACTS A

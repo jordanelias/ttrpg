@@ -3,7 +3,7 @@
 Every branch the shape took that could have gone another way, with the alternatives
 it did not take. A decision nobody records is a decision nobody can audit.
 
-**1945 decisions taken, 72 distinct.**
+**1949 decisions taken, 73 distinct.**
 
 ### ordering 0 acts  ·  `S27/S32`  ·  taken 730x
 - **chose:** five strata, then a content-derived hash key over one global array  (730x)
@@ -124,6 +124,10 @@ it did not take. A decision nobody records is a decision nobody can audit.
 - *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'chronicle', 'post_remit'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
 
+### work wrote nothing  ·  `E3`  ·  taken 4x
+- **chose:** emit the refusal, not the success  (4x)
+- *not taken:* emit `emits:` anyway (publishes an event for a state change that did not happen)
+
 ### fan-out over 45 events  ·  `S28/S61`  ·  taken 4x
 - **chose:** mode=presence_only over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (4x)
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
@@ -243,7 +247,7 @@ it did not take. A decision nobody records is a decision nobody can audit.
 - *not taken:* rank
 
 ### clamping site_harbour.condition  ·  `S27.3`  ·  taken 2x
-- **chose:** sum [2, 4, -5, -1, 3] = 3, then clamp ONCE  (2x)
+- **chose:** sum [2, 4, 3] = 9, then clamp ONCE  (2x)
 - *not taken:* clamp per delta (arrival-order dependent)
 
 ### fan-out over 9 events  ·  `S28/S61`  ·  taken 2x

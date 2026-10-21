@@ -170,9 +170,17 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # e5611ae0... / 6cee9b66... (one, two seasons). ARMS, run on this tree: `covenant` withheld from every
 # `opening_set` reproduces the old hashes and event counts exactly (6111 / 18920); `terms_sourced` emptied
 # (the `commit` route, `decision/options.py`) moves nothing -- no realm person holds a writ naming a Proposition.
+# RE-PINNED at v9 IN-12 step 9 (`argue`, `sabotage`, `tend`, `train`), A BEHAVIOUR MOVE DECLARED: four new `own`
+# rows the realm's persons FORM on their questions' referents and the chooser ATTEMPTS -- every attempt refused
+# by two seasons (`sabotage.refused` 35: no realm referent is a Site; `tend.refused` 35: a non-person referent or
+# a whole body; `train.refused` 41: a non-person referent, or a subject holding no vocation -- nobody in the
+# realm holds a `capability`; `argument.refused` 5: no subject is a Proposition; plus one `sabotage`
+# `act.ineligible`; none executed), so the act mix moves. The build hash is equal; one and two seasons move.
+# Was b3e7784f... / da8e0167... (one, two seasons). ARM, run on this tree: the four withheld from every
+# `opening_set` reproduces the old hashes and event counts exactly (6178 / 17855).
 BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
-               1: "b3e7784f7ad82188223617169dbe40b1",
-               2: "da8e0167fa49ea1cf2ab68b71ee19f66"}
+               1: "e28a0d368ac98f0c0064fa17be3a31ef",
+               2: "b736780230014a5e2bf73e5d8c2fa4cc"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -207,8 +215,9 @@ BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
 # RE-RECORDED at v9 FI-01 with `BASE_HASHES` (7060 -> 6111, 23215 -> 18920: the skip arm's absent
 # `claim.deposited` Events, and the trajectory the graded inquiries and the missing claims move).
 # RE-RECORDED at v9 IN-12 step 7 `covenant` with `BASE_HASHES` (6111 -> 6178, 18920 -> 17855).
-BASE_EVENTS = {1: (6178, "8f3b6b2b61d9cd99339123e889c356455a6db4ed01f777fd72ec309f667e959e"),
-               2: (17855, "e7cfeb55e261acd3dc5011a1a3c13f7326fa6483a7b62b821a037e11eacf37f3")}
+# RE-RECORDED at v9 IN-12 step 9 with `BASE_HASHES` (6178 -> 6321, 17855 -> 17559).
+BASE_EVENTS = {1: (6321, "3dd12bdb774f349e92782ef58bd8a81a3ad0b09a49a733660c3ad7422a814310"),
+               2: (17559, "2402719d7e80807ee9da4d40cb4a0a8ebdf5a6815467d0e579a756cfc6a2af46")}
 
 
 def _digest(w) -> tuple:

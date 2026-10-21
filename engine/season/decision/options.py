@@ -33,7 +33,9 @@ from ..data.rosters import (
 )
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
-from ..data.verbs import ELIGIBILITY_KINDS, TERMS_SOURCED, VERB_TABLE, WARRANT_SOURCED, align
+from ..data.verbs import (
+    ELIGIBILITY_KINDS, TERMS_SOURCED, VERB_TABLE, VOCATION_SOURCED, VOCATIONS, WARRANT_SOURCED, align,
+)
 from ..epistemic import belief_contradicts
 from ..gaps import Forbidden
 from ..queries.person_q import (
@@ -142,6 +144,18 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                                            if t is not None and t not in refs)
         if not refs:
             continue
+        # v9 IN-12 step 9 (`rosters.yaml: vocation_sourced`): A VERB THAT CARRIES A VOCATION forms one
+        # Candidate per vocation in the RANGE -- `verb_capability`'s values (`data/verbs.py::VOCATIONS`,
+        # #453 K-20) -- the key riding on the roster's operand. ⚠ NEVER THE ACTOR'S OWN `capability`:
+        # capability GATES NOTHING (#353 §9.2, probe P11, which zeroes it and asks that the option set not
+        # move), so whether a training lands is the effect's (the subject must already hold the key, J-13
+        # (iii)), not a formation the actor's dice decide. A row the roster does not name is untouched.
+        voc_operand = VOCATION_SOURCED.get(verb)
+        vocations = ()
+        if voc_operand is not None:
+            vocations = tuple(sorted(VOCATIONS))
+            if not vocations:
+                continue
         # v9 IN-12 step 6 (`rosters.yaml: warrant_sourced`): A VERB WHOSE SUBJECT COMES FROM A WARRANT
         # forms only on a referent a HELD record of the warrant kind names -- IN-10's held-Record
         # channel (`held_record_claims`, answered through `record_sourced_operands`' `subject` key),
@@ -227,6 +241,8 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             bagged = [(st, ops) for st in (seats or (None,))
                       for ops in operand_bags(p, row, q, subject, fx, seat=st, people=people,
                                               records=records)]
+            if vocations:                   # IN-12 step 9: one bag per vocation carried (above)
+                bagged = [(st, {**ops, voc_operand: k}) for st, ops in bagged for k in vocations]
             for st, ops in bagged:
                 # ⚠ AND A TWO-SIDED ACT NEEDS A SECOND SIDE (plan position `15`, `ED-IN-0210` ruling
                 # 2). The rule above, one column over: a row naming its `counterparty:` operand forms

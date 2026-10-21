@@ -1922,6 +1922,32 @@ rosters:
     values:
       commit: [dispensation]
 
+  vocation_sourced:
+    source: >-
+      #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.4, the `train` row: *"The
+      capability raised ranges over the capability names `verb_capability` maps verbs to"*, and its
+      blocker, *"a capability-key operand -- the `kind` operand ... [ASSUMPTION]"*; J-13 answered (iii)
+      as the interim (`workplans/valoria_master_workplan_v9_part5.md` §J.1, RS-21 item 10, [medium;
+      Jordan to correct]): *"`train` forms and writes `Person.capability` only where a case names a
+      vocation, and `pool_default` holds everywhere else"*.
+    note: >-
+      WHICH VERBS CARRY A VOCATION, AND ON WHICH OPERAND -- `verb: operand`. A VOCATION is a
+      capability key `verb_capability` maps some verb to (its VALUES, `data/verbs.py::VOCATIONS`;
+      today `copying` only, #453 K-20's range). A verb named here forms ONE Candidate per vocation in
+      that range, the key riding on the named operand (`decision/options.py::opening_set`) -- the
+      `kind` operand #453 §9.4's blocker names, which `_derive_operand` would otherwise answer with a
+      store kind. ⚠ THE ACTOR'S OWN CAPABILITY IS NOT READ, AND THAT IS THE POINT: capability GATES
+      NOTHING (#353 §9.2; `harness/probes.py` P11 zeroes it and asks that the option set not move), so
+      J-13 (iii)'s *"`train` forms ... only where a case names a vocation"* is built as its WRITE half
+      only -- the effect (`loop/effects_combat.py::_eff_train`) raises the key only where the SUBJECT
+      already holds it, and is refused everywhere else. ONE LOADER, `data/verbs.py::VOCATION_SOURCED`,
+      refused at import when a line names a verb the table lacks, a verb that writes no
+      `Person.capability`, or an operand outside `requires_operands`. [ASSUMPTION; medium; Jordan to
+      correct; revert: a formation decline on the actor's own vocations (the plan's *"forms"* half),
+      which first needs P11 / #353 §9.2 re-ruled for `train`.]
+    values:
+      train: kind
+
   shortfall_sourced_operands:
     source: >-
       plan position `19d` (DEMAND · DELIVERY), `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md`
@@ -2839,6 +2865,24 @@ tables:
         build position does not own (the plan's CLAUDE.md §0 note on IN-08's cells), and #453 §9.2
         gives the row no lean on any axis. It scores 0.0 on every axis until a cell is authored, so
         `corpus_run`'s RANKING counts no covenant Candidate as a tie or a discrimination. Revert: the
+        seven cells, IN-08's method.
+      argue: >-
+        v9 IN-12 step 9: NOT CELLED BY THE PRODUCER -- authoring an alignment cell is a judgment the
+        build position does not own (`covenant`'s reason, above), and #453 §9.4 gives the row no lean
+        on any axis. It scores 0.0 on every axis until a cell is authored. Its second emission,
+        `pursuit.moved`, reads the authored `deed:pursuit.moved` cells (held at 0.0), not these.
+        Revert: the seven cells, IN-08's method.
+      sabotage: >-
+        v9 IN-12 step 9: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above); #453 §9.3 gives the
+        row no lean on any axis. It scores 0.0 on every axis until a cell is authored, so no witness
+        is scarred by a sabotage. Revert: the seven cells, IN-08's method.
+      tend: >-
+        v9 IN-12 step 9: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above); #453 §9.4 gives the
+        row no lean on any axis. It scores 0.0 on every axis until a cell is authored. Revert: the
+        seven cells, IN-08's method.
+      train: >-
+        v9 IN-12 step 9: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above); #453 §9.4 gives the
+        row no lean on any axis. It scores 0.0 on every axis until a cell is authored. Revert: the
         seven cells, IN-08's method.
       tell: >-
         No cell on any axis BY DESIGN: testimony's moral weight is in WHAT is told (a claim), which

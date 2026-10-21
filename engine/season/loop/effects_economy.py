@@ -1,8 +1,10 @@
-"""`season.loop.effects_economy` -- labour, repair, material transfer: work, restore, transfer.
+"""`season.loop.effects_economy` -- labour, repair, damage, material transfer: work, restore,
+sabotage, transfer.
 
 EXTRACTED from `effects.py` at the per-subsystem split (Phase 4). Holds the fabric-raising pair
 (`work`/`restore`, both routed through the shared `_rise` formula, which stays local -- nothing
-outside this pair calls it) and `transfer`, the two-sided store move, whose own private tail helper
+outside this pair calls it), its mirror `sabotage` (v9 IN-12 step 9, `_fall`, the same formula with
+the sign turned, local beside it) and `transfer`, the two-sided store move, whose own private tail helper
 `_renewals` (which winds `oblige` terms a payment covers) also stays local here rather than in
 `effects_shared.py`: only `transfer` calls it. See `effects_shared.py` for `effect_for`, `_operand`
 and the cross-file helpers this file's effects call (`_exercised_office`, `_oblige_term`, `_shift`).
@@ -86,6 +88,12 @@ def _eff_work(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     site = _operand(a, "site")
     site_deltas = tuple(c.delta for c in (a.changes or ())
                         if c.subject == site and c.field == "condition" and isinstance(c.delta, int))
+    # v9 IN-12 step 9 (#453 K-09): `work`'s DECLARED DELTA IS RESTRICTED TO >= 0, so each verb owns one
+    # sign -- `work`/`restore` raise a fabric, `sabotage` lowers it (`_eff_sabotage`, below). A hand-built
+    # `work` declaring a negative delta on its site is declined (`NO_CHANGE` -> `work.unavailable`)
+    # rather than staged: before this line it was a sabotage under `work`'s name and beneficiary.
+    if any(d < 0 for d in site_deltas):
+        return NO_CHANGE
     delta = sum(site_deltas)
     fabric = w.sites.get(site)
     # `not site_deltas`, NOT `not delta`: the fallback is for an act that declares NO delta on this
@@ -128,6 +136,48 @@ def _rise(w: "World", site) -> int:
         return 0
     num, den = share(w, site)
     return (headroom * num) // den
+
+
+def _fall(w: "World", site) -> int:
+    """HOW FAR ONE ACT LOWERS A FABRIC -- `_rise`'s MIRROR (v9 IN-12 step 9, #453 §9.3: *"`Site.condition`,
+    negative, by `_rise`'s mirror through the same accumulator"*), returned as the NON-NEGATIVE size of
+    the fall (`_eff_sabotage` stages its negation):
+
+      * THE FOOTROOM TO THE FLOOR, mirroring the headroom to the ceiling: the scale's floor is 0 (the
+        accumulator's own lower clamp, `loop/resolve.py`), so the footroom is the condition itself.
+      * `× share`, the SAME commons `_rise` reads (`queries/world_q.py::share`): at a harbour forty stand
+        at, one saboteur takes a fortieth of it. Multiply first, divide last, as `_rise` does.
+      * `× f(degree)` IS THE IDENTITY, for `_rise`'s reason: the row is uncontested (`H-164`).
+
+    So one saboteur alone at a fabric brings it to 0 in one act, exactly as one hand alone raises it to
+    its ceiling -- one formula, two signs (§0.06 S) [ASSUMPTION; medium; Jordan to correct; revert: a
+    swept fraction of the footroom on both `_rise` and `_fall`]. A fabric at 0 falls by 0, which stages
+    nothing and is `sabotage.refused` at its own write."""
+    footroom = max(0, site.condition)
+    if not footroom:
+        return 0
+    num, den = share(w, site)
+    return (footroom * num) // den
+
+
+@effect_for("sabotage")
+def _eff_sabotage(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """v9 IN-12 step 9 (#453 §9.3, K-09) -- `sabotage` LOWERS A PRESENT SITE'S CONDITION. `restore`'s body
+    with the sign turned: the act STAGES `-_fall` on `(Site, condition)` through `World.stage`, named as a
+    `staged` subject, and `resolve()` sums every act's delta on the site and clamps ONCE (S27.3) -- so a
+    `restore` and a `sabotage` at one fabric in one fold commute, and a sum the clamp eats refuses every
+    act that staged on it (`_refuse_after_the_fact`), `work`'s G4 shape. LOWERS, NEVER ENDS: a fabric at 0
+    still stands (ending it is `raze`'s, IN-12 step 11).
+
+    DECLINES: a site that does not exist (a hand-built act that skipped the precondition) is `NO_CHANGE`
+    -> `sabotage.refused`; a fabric already at 0 stages 0 and is refused at its write (`NoOpReceipt`)."""
+    sid = _operand(a, "site")
+    site = w.sites.get(sid)
+    if site is None:
+        return NO_CHANGE
+    delta = -_fall(w, site)
+    cell = Subject.staged("Site", sid, "condition")
+    return Change((cell,), lambda: w.stage(cell.ref[1], a.id, delta))
 
 
 @effect_for("restore")
