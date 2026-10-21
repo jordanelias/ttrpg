@@ -10,7 +10,9 @@ Citations: `U:n` is line *n* of Jordan's upload (`verb_list.md`, the copy carryi
 `engine/season/verb_table.yaml`; `RO:n` is `engine/season/rosters.yaml`; `WM:n` is
 `engine/season/write_matrix.yaml`; `DV:n` is `engine/season/data/verbs.py`; `OP:n` is
 `engine/season/decision/options.py`; `WI:n` is `engine/season/loop/witness.py`; `PQ:n` is
-`engine/season/queries/person_q.py`; `_partN:n` is `proposals/2026-10-16-v2-person-troop-attribute-synthesis_partN.md`
+`engine/season/queries/person_q.py`; `_partN:n` is part N of the v2 verb suite, now
+`proposals/2026-10-16-verbs/2026-10-16-verbs-NN-*.md` with NN zero-padded (`_part10` is
+`2026-10-16-verbs-10-lexicon-mass-battle.md`; renamed by #491, citations keep the old numbering)
 (reference only). Every `file:line` here was opened by the producer. Design documents are cited for
 intent and vocabulary only (CLAUDE.md §0.05); what the code does is cited to the code.
 
