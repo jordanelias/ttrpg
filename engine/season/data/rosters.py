@@ -1094,10 +1094,11 @@ def _load_endings(members: dict, factions, rung_kinds, posts) -> dict:
             bad(name, f"has holds {holds!r}", f"exactly one of {list(ENDING_SELECTORS)}")
         (sel, val), = holds.items()
         # a list or mapping here is unhashable against `posts` and would raise a bare TypeError
-        if not isinstance(val, str) or val not in (posts if sel == "post" else rung_kinds):
-            bad(name, f"selects {sel} {val!r}, which "
-                      f"{'no offices.yaml seat carries' if sel == 'post' else 'is not a rung_kinds member'}",
-                f"a {'post of offices.yaml: seats' if sel == 'post' else 'rung_kinds member'}")
+        domain, why, wants = ((posts, "no offices.yaml seat carries", "a post of offices.yaml: seats")
+                              if sel == "post" else
+                              (rung_kinds, "is not a rung_kinds member", "a rung_kinds member"))
+        if not isinstance(val, str) or val not in domain:
+            bad(name, f"selects {sel} {val!r}, which {why}", wants)
         under = row.get("under")
         if not isinstance(under, str) or (under != ENDING_ANY_ONE and under not in factions):
             bad(name, f"has under {under!r}", f"a `factions` member, or {ENDING_ANY_ONE!r}")
@@ -1113,8 +1114,9 @@ def _load_endings(members: dict, factions, rung_kinds, posts) -> dict:
     return out
 
 
-ENDINGS = _load_endings(roster_map("endings", "members"), FACTIONS, RUNG_KINDS,
-                        frozenset(s.get("post") for s in OFFICES_SEATS))
+#: The `post`s an `offices.yaml` seat carries -- what an `endings` row's `post:` selector may name.
+OFFICE_POSTS = frozenset(s.get("post") for s in OFFICES_SEATS)
+ENDINGS = _load_endings(roster_map("endings", "members"), FACTIONS, RUNG_KINDS, OFFICE_POSTS)
 
 
 def office_faction(body: str | None, declared: str | None) -> str:

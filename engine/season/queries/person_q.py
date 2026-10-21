@@ -444,9 +444,7 @@ def recent_claims(ledger, window) -> list:
     >= 1 (`Fixtures.estimate_window_seasons`, H-224); anything else raises."""
     if isinstance(window, bool) or not isinstance(window, int) or window < 1:
         raise ValueError(f"estimate window {window!r} is not a whole number of seasons >= 1 (H-224)")
-    newest = max((c.when for c in ledger), default=None)
-    if newest is None:
-        return []
+    newest = max((c.when for c in ledger), default=0)
     return [c for c in ledger if newest - c.when < window]
 
 
@@ -467,10 +465,11 @@ def legitimacy(p: Person, holder: str, window, scar_shift: float = 0.0) -> float
     `holder` is passed. Person-side, no World (AX-2)."""
     TRACE.query("legitimacy", "person")
     total = stance_toward(p, holder)
-    axis_w = None
-    for c in attributed_deeds(recent_claims(p.ledger, window), holder):
-        if axis_w is None:
-            axis_w = projected_axes(p, scar_shift)
+    deeds = attributed_deeds(recent_claims(p.ledger, window), holder)
+    if not deeds:
+        return total
+    axis_w = projected_axes(p, scar_shift)
+    for c in deeds:
         total += deed_term(p, axis_w, c)
     return total
 

@@ -1821,9 +1821,11 @@ def _ending_edges(w: World, row) -> tuple:
     sel, val = row.holds
     if sel == "post":
         holds = [hold_force(w, o) for o in sorted(w.offices) if w.offices[o].post == val]
-    else:
+    elif sel == "rung_kind":
         holds = [governing_hold(w, r) for r in sorted(w.rungs) if w.rungs[r].kind == val
                  and any(a in w.rungs and w.rungs[a].kind == "realm" for a in ancestry(w, r))]
+    else:       # the loader admits `ENDING_SELECTORS` only; a third must be given a branch here
+        raise Forbidden(f"ending selector {sel!r} has no enumerator in world_q._ending_edges")
     if not holds or any(t is None for t in holds):
         return ()
     facs = [faction_holding(w, t.subject) for t in holds]

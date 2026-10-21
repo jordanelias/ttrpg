@@ -320,8 +320,7 @@ _GOOD = {"victory": False, "holds": {"post": "King"}, "under": "Church of Solmun
 
 
 def _load(members):
-    return R._load_endings(members, R.FACTIONS, R.RUNG_KINDS,
-                           frozenset(s.get("post") for s in R.OFFICES_SEATS))
+    return R._load_endings(members, R.FACTIONS, R.RUNG_KINDS, R.OFFICE_POSTS)
 
 
 @pytest.mark.parametrize("row, says", [
@@ -382,3 +381,14 @@ def test_in27_two_seasons_of_the_built_realm_run_the_step_and_report_no_ending(m
         assert out["hash"] == BASE_HASHES[s], f"the ending step moved the pinned {s}-season hash"
         checked += 1
     assert checked == 2
+
+
+def test_in27_a_selector_the_query_cannot_enumerate_is_refused_not_read_as_a_rung_kind():
+    """`ENDING_SELECTORS` has two members and `_ending_edges` a branch for each; a third that passed the loader
+    would once have fallen into the `rung_kind` branch silently. The trip-wire names it."""
+    from types import SimpleNamespace
+    from engine.season.gaps import Forbidden
+    from engine.season.queries import world_q
+    w = POP.build_realm(0, 5)
+    with pytest.raises(Forbidden, match="no enumerator"):
+        world_q._ending_edges(w, SimpleNamespace(holds=("bogus", "x"), under=R.ENDING_ANY_ONE))

@@ -67,6 +67,7 @@ from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries.person_q import legitimacy, stability
 from ..state.ids import H, ROOT, draw_factory
 from . import probes as P
+from .aperture import seats
 from .populated import build_realm
 
 #: Every forcing setting this tree can run. `off` is the shipped loop; no `on` is built (see the
@@ -176,8 +177,7 @@ def estimates(w) -> dict:
     (person, seat rung) pair of `w` as it stands -- each value one person's own estimate. Reads only."""
     window = w.fixtures.get("estimate_window_seasons")
     shift = w.fixtures.get("scar_weight_shift")
-    holders = sorted({pid for pid, p in w.persons.items() for t in p.tenures
-                      if t.kind == "hold" and t.live and t.object in w.offices})
+    holders = sorted(seats(w))
     rungs = sorted({o.rung for o in w.offices.values() if o.rung is not None})
     people = [w.persons[pid] for pid in sorted(w.persons)]
     return {"legitimacy": _spread(legitimacy(p, h, window, shift) for p in people for h in holders),

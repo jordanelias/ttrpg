@@ -73,8 +73,7 @@ def deepest_chain(rows: dict) -> list:
 # ---------------------------------------------------------------------------------------------
 
 def _name(persons, actor: str) -> str:
-    p = persons.get(actor)
-    return (getattr(p, "name", "") or actor) if p is not None else actor
+    return getattr(persons.get(actor), "name", "") or actor
 
 
 def _kinds(log, act_of: dict) -> dict:
@@ -98,14 +97,13 @@ def lines(log, act_of: dict, rows: dict, persons) -> list:
     verb = {}
     for a in act_of.values():
         verb.setdefault(a.id, a.verb)
-    n_of = {aid: i + 1 for i, aid in enumerate(chain)}
     out = []
     for i, aid in enumerate(chain):
         r = rows[aid]
         out.append({"n": i + 1, "act": aid, "season": r["season"],
                     "actor": _name(persons, r["actor"]), "verb": verb.get(aid, "?"),
                     "kinds": kinds.get(aid, []),
-                    "answers": n_of[chain[i - 1]] if i else None})
+                    "answers": i if i else None})
     return out
 
 
@@ -114,7 +112,6 @@ def render(log, act_of: dict, rows: dict, persons) -> str:
     ls = lines(log, act_of, rows, persons)
     if not ls:
         return "no acts in the log; nothing to chronicle"
-    by_n = {l["n"]: l for l in ls}
     out = []
     if len(ls) == 1:
         out.append("no act answered another person's act; the first-logged act alone:")
@@ -122,7 +119,7 @@ def render(log, act_of: dict, rows: dict, persons) -> str:
         if l["answers"] is None:
             tail = "opens the chain"
         else:
-            a = by_n[l["answers"]]
+            a = ls[l["answers"] - 1]
             tail = f"answers {a['n']}. {a['actor']} {a['verb']}"
         out.append(f"{l['n']}. season {l['season']} | {l['actor']} {l['verb']} | "
                    f"emitted {', '.join(l['kinds']) or '(nothing)'} | {tail}")
