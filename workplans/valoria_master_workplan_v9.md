@@ -254,14 +254,12 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | IN-06 | `33`; #457 D5; A-24's threadwork; H-47 | IN/WR/FI | B | build (design landed at B-C; re-reviewed after B-H, closed `c13144b9`) | — | B-S | `_part4` |
 | IN-07 | `36` | IN/SE | B | build (design landed at B-C) | — | B-T | `_part4` |
 | IN-09 | `19b`: `evade / defy`, `construe` (`comply` landed `128299db`) | IN | B | — (restorable under §0.5: `a1c83e62`, `60073e75`) | R-05 | none (B-I closed `9d93cfab`) | `_part5` |
-| IN-12 | #453 steps 5, 5a, 7, 9, 10, 11, 13 (step 6 landed `5ea1bb47`) | IN/SC/SE/MB | BLK | per step | R-04, R-05, R-09 | B-Q · B-R | `_part5` |
+| IN-12 | #453 steps 5, 5a, 11 and `give` + Rung (steps 6, 7, 9, 10, 13 landed: `5ea1bb47`, `664986ee`, `996c16dc`, `67686661`, `5da7c44e`) | IN/SC/SE/MB | BLK | per step | R-04, R-05 | B-R | `_part5` |
 | IN-14 | #457 BOUND-ATTENTION; H-92, H-10 | IN | ask-then | — | — | B-Z | `_part4` |
 | IN-18 | telling G5, G8 (step 2a, G1–G3 landed `ac9724fc`; G6 landed `66bf51f9`) | IN | BLK | G5's trigger, M0e > 0 (`oblige` landed `905b7a21`) | — | none (B-I closed `9d93cfab`) | `_part4` |
 | IN-23 | #457 CARRY-STABILITY | IN | B | — | — | B-U | `_part5` |
-| IN-26 | #457 BOUND-PAPER; H-156 (a)/(b); `Record.ttl` | IN/SC | BLK | B-Q's chain (FI-01 landed `6d94d9d3`; SC-01 landed; B-N closed `cf69ceed`) | R-05 | B-Q | `_part5` |
 | IN-27 | #457 END-VICTORY; H-176 (GD-1) | IN/FA | BLK | IN-37 | — | B-U | `_part5` |
 | IN-30 | `24h` P5 remainder; H-186 | IN/FA/SE | BLK | IN-27 | — | B-U | `_part5` |
-| IN-31 | H-100 | IN/SE | B | — (SC-03a landed `c2f855d2`; design landed at B-J) | — | B-Q | `_part5` |
 | IN-32 | H-182 ties | IN/FI | BLK | IN-06 | R-05 | B-S | `_part5` |
 | IN-33 | H-58 `exchange` | IN | B | — (reverted `cdc03f67`; restorable under §0.5: `ad2f930f`..`b5c4685d`) | R-05 | none (B-I closed `9d93cfab`) | `_part5` |
 | IN-35 | #457 FORCE-HAZARD; SEAM-CLOCK | IN/WR/SE | BLK | IN-06 | — | B-S | `_part5` |
@@ -336,8 +334,8 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | STORY-BAR · STORY-SOAK · STORY-READ | landed at B-C (IN-19, `harness/storybar.py`) · landed at B-C (IN-20, `harness/soak.py`'s grades) · IN-37 |
 | FORCE-WEATHER · FORCE-BODIES · FORCE-HAZARD (+ SEAM-CLOCK) · FORCE-FOREIGN | landed, `3544d568` · IN-34 (landed `44fdb4df`) · IN-35 · IN-36 (+ FA-01's cast) |
 | CARRY-INTERIOR · CARRY-SHORTFALL · CARRY-STABILITY | merged into IN-08 · IN-22 · IN-23 |
-| BOUND-LOOPS · BOUND-STAKES · BOUND-ATTENTION · BOUND-PAPER | instrument landed at B-C (IN-24, `harness/loops.py`; the church ratchet's bound waits on IN-12: IN-10 landed `fae9e623` without its loop half) · IN-25 (landed `ac9724fc`) · IN-14 · IN-26 |
-| CAST-POPULACE · CAST-DISPOSITION | SE-04 · merged into IN-08 + IN-12 step 9 (J-13 (iii) the adopted interim; `tell` stays uncelled, G-1) |
+| BOUND-LOOPS · BOUND-STAKES · BOUND-ATTENTION · BOUND-PAPER | instrument landed at B-C (IN-24, `harness/loops.py`; the church ratchet's bound waits on IN-12: IN-10 landed `fae9e623` without its loop half) · IN-25 (landed `ac9724fc`) · IN-14 · IN-26 (landed `ceadc2a7`) |
+| CAST-POPULACE · CAST-DISPOSITION | SE-04 · merged into IN-08 + IN-12 step 9 (landed `996c16dc`; J-13 (iii) the adopted interim; `tell` stays uncelled, G-1) |
 | SEAM-LADDER · END-VICTORY | merged into IN-04 · IN-27 |
 | §7 D1 · D2 · D3 · D4 · D5 · D6 | IN-35 · IN-34 (landed `44fdb4df`) · answered: no dated pins (T-c) · IN-36, FA-01 · A-24 → IN-06 · IN-27 (D2, D4, D6 answered as the plan's recommendation, RS-21) |
 
@@ -346,7 +344,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 (answered) · K-2 only with its first reader · M-2..M-6, K-4/V-3 → PC-08.
 
 **Hole-register rows a position now owns:** H-25, H-106 → IN-10's loop half, not built when IN-10 landed (`fae9e623`): the church ratchet waits on IN-12 (their instrument landed at B-C: `engine/season/harness/loops.py`) · H-26 (IN-21 landed `3544d568`) · H-44 (re-scoped at IN-09, `128299db`) · H-47 → IN-06 · H-48 →
-IN-18 G6 (landed `66bf51f9`) · H-51 (SE-01 landed `d12c8db9`) · H-58 → IN-33 · H-59 → IN-12 (`forgive`) · H-92, H-10 → IN-14 · H-100 → IN-31 · H-101 → IN-40 (landed `3f320093`) ·
+IN-18 G6 (landed `66bf51f9`) · H-51 (SE-01 landed `d12c8db9`) · H-58 → IN-33 · H-59 → IN-12 (`forgive`, landed `5da7c44e`) · H-92, H-10 → IN-14 · H-100 → IN-31 (landed `d16bd895`) · H-101 → IN-40 (landed `3f320093`) ·
 H-110 → IN-29 · H-160 → IN-22 · H-162 → SC-03b · H-166 → IN-12 step 11 (`raze`, limit 3's closer; IN-28 landed `32024e27`) · H-170, H-171 → SE-04 · H-175 → read at B-C (IN-39, landed; the reading is its `cite:`), its remainder unowned · H-176 → IN-27 ·
 H-180, H-181 → re-checked at IN-17 (landed `ac9724fc`; both stay absent) · H-182 → IN-32 (re-checked at IN-17) · H-186 → IN-30.
 

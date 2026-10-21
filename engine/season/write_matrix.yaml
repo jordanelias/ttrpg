@@ -202,7 +202,7 @@ rows:
     # `queries/person_q.py::consequence_pursuits`; magnitude `H-221`), so the loader's invariant 2 struck
     # the `unproduced:` line that read *"H-62: #353 §9.3 mandates the row (moved by argument and
     # consequence) and Part E carries no argument verb"*. The CONSEQUENCE half has a producer; the
-    # ARGUMENT half is still none (`H-62`), and IN-12 step 9 (B-Q, `argue`/`train`) amends this note next.
+    # ARGUMENT half WAS none (`H-62`) until IN-12 step 9 (B-Q).
     # ⚠ AMENDED AT v9 IN-12 STEP 9 (B-Q): THE ARGUMENT HALF HAS ITS PRODUCER -- `argue`'s `Overwhelming`/
     # `Success` bands move the HEARER'S pursuits toward the arguer's (`loop/effects_information.py::
     # _eff_argue`, through `queries/person_q.py::argued_pursuits`). #453 step 9's *"`Person.pursuits`'
