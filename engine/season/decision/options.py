@@ -175,7 +175,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         # is reached. It NARROWS the referents the question carries and widens nothing.
         if verb in OWN_HOLD_DECLINES:
             if held is None:
-                held = frozenset(t.object for t in p.tenures if t.kind == "hold" and t.live)
+                held = _held_objects(p)
             refs = tuple(r for r in refs if r in held)
         if not refs:
             continue
@@ -804,6 +804,12 @@ def _content_answer(c: Optional["Claim"], name: str):
 _RECORD_ANSWERABLE = frozenset(n for m in RECORD_SOURCED_OPERANDS.values() for n in m)
 
 
+def _held_objects(p: Person) -> frozenset:
+    """The ids of what `p` holds: the objects of his own live `hold` Tenures (an edge is owned by its
+    subject, so this reads his `tenures`, never an index over every edge)."""
+    return frozenset(t.object for t in p.tenures if t.kind == "hold" and t.live)
+
+
 def held_record_claims(p: Person) -> list:
     """THE CONTENT CLAIMS OF THE RECORDS `p` HOLDS -- plan position IN-10, #453 §10.1's *"held
     Records"*: for each of `p`'s OWN live `hold` Tenures, the newest `content:<kind>` claim on its
@@ -814,7 +820,7 @@ def held_record_claims(p: Person) -> list:
     WHAT IT IS FOR: `_derive_operand(..., held=c)` answers an operand off one of these, `subject`
     included -- the act is about what the document SAYS (a dispensation's `terms`) -- and
     `operand_bags` forms one bag per such claim whose `terms` is the referent (its docstring)."""
-    held = [t.object for t in p.tenures if t.kind == "hold" and t.live]
+    held = [t.object for t in p.tenures if t.kind == "hold" and t.live]       # TENURE ORDER (below)
     if not held:
         return []
     # NEWEST BY `LedgerReader._best`'s comparator, the one owner of *most recent, then most
@@ -838,7 +844,7 @@ def holds_own_document(p: Person, kind: str) -> bool:
     a new holder), read through `person_q.content_kind` / `content_said`. A Record held and never read
     answers nothing. "Names him" is any content value equal to his id: the kind's keys are the roster's,
     and none is spelt here."""
-    held = {t.object for t in p.tenures if t.kind == "hold" and t.live}
+    held = _held_objects(p)
     if not held:
         return False
     for c in p.ledger:

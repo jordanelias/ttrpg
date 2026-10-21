@@ -153,11 +153,8 @@ def _fall(w: "World", site) -> int:
     its ceiling -- one formula, two signs (§0.06 S) [ASSUMPTION; medium; Jordan to correct; revert: a
     swept fraction of the footroom on both `_rise` and `_fall`]. A fabric at 0 falls by 0, which stages
     nothing and is `sabotage.refused` at its own write."""
-    footroom = max(0, site.condition)
-    if not footroom:
-        return 0
     num, den = share(w, site)
-    return (footroom * num) // den
+    return (max(0, site.condition) * num) // den
 
 
 @effect_for("sabotage")

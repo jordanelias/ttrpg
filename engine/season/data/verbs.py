@@ -53,6 +53,7 @@ from .requires import (
 )
 from .rosters import (
     COVERT_KINDS, DOMINANCE_KINDS, FOLD_KINDS, LOGGED_KINDS, GRADED_INQUIRIES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
+    VERB_CAPABILITY,
     is_event_kind,
     RUNG_KINDS, STRATA, TENURE_KINDS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
     roster_map,
@@ -1450,7 +1451,7 @@ def _load_vocation_sourced(values: dict) -> dict:
     out = {v: str(op or "") for v, op in values.items()}
     for v, op in out.items():
         row = VERB_TABLE.get(v)
-        if row is None or _CAPABILITY_PAIR not in _produced_pairs({v: row}) or op not in REQUIRES_OPERANDS:
+        if row is None or _CAPABILITY_PAIR not in row.writes or op not in REQUIRES_OPERANDS:
             raise Forbidden(
                 f"`rosters.yaml: vocation_sourced` names {v!r}: {op!r}, and the verb table carries no "
                 f"such verb, its row writes no `{_CAPABILITY_PAIR}`, or {op!r} is no `requires_operands` "
@@ -1464,7 +1465,7 @@ VOCATION_SOURCED = _load_vocation_sourced(roster_map("vocation_sourced", "values
 # THE VOCATIONS: the capability keys some verb draws dice from -- `rosters.yaml: verb_capability`'s
 # VALUES (its keys are verbs), derived here and never spelt, so a key `train` may raise is exactly a key
 # `_pool_of` reads (#453 K-20: the range is `verb_capability`'s names; Thread Sensitivity is outside it).
-VOCATIONS = frozenset(roster_map("verb_capability", "values").values())
+VOCATIONS = frozenset(VERB_CAPABILITY.values())
 
 
 # v9 IN-12 step 10: `{verb: record kind}` -- the verbs a person does not form while he holds a document
@@ -1501,7 +1502,7 @@ def _load_own_stance_declines(values) -> frozenset:
     out = frozenset(str(v or "") for v in (values or ()))
     for v in sorted(out):
         row = VERB_TABLE.get(v)
-        if row is None or _STANCE_PAIR not in _produced_pairs({v: row}):
+        if row is None or _STANCE_PAIR not in row.writes:
             raise Forbidden(
                 f"`rosters.yaml: own_stance_declines` names {v!r}, and the verb table carries no such verb "
                 f"or its row writes no `{_STANCE_PAIR}`", "rosters.yaml",

@@ -43,6 +43,7 @@ from ..gaps import Forbidden
 from ..harness import probes as P
 from ..queries.world_q import hold_force
 from ..state.carriers import Claim, Question, View
+from .test_u7_own import _formed as _u7_formed, _petition_held_by
 
 SINK = DEFAULT_FIXTURES.sweep("withheld_verbs", ())
 VERB = "destroy_record"
@@ -50,17 +51,11 @@ VERB = "destroy_record"
 
 def _held_petition(w, pid="p_low"):
     """`pid` files a petition through the real fold and holds it (`test_u7_own.py`'s fixture)."""
-    P._run_d(w, lambda p, v, s, b: ([P.Act_(w, p, "petition", payload={
-        "subject": "p_mid", "to": "p_mid", "from": "Hh"})] if p.id == pid else []))
-    (rid,) = [r for r, rec in w.records.items() if rec.kind == "petition"]
-    assert hold_force(w, rid).subject == pid, "fixture: the petitioner does not hold his petition"
-    return rid
+    return _petition_held_by(w, pid)
 
 
 def _formed(w, pid, referents):
-    q = Question("q:in26", "need", tuple(referents))
-    return [c for c in opening_set(w.persons[pid], View(pid, [], w.fixtures.get("view_k")), q, w.fixtures)
-            if c.verb == VERB]
+    return _u7_formed(w, pid, VERB, referents)
 
 
 def _burn_what_is_formed(w, rid, pid="p_low"):

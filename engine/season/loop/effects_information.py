@@ -251,7 +251,7 @@ def _eff_covenant(w: "World", a: "Act", res: "Resolution | None" = None) -> Chan
     (`rosters.yaml: terms_sourced`, `decision/options.py::opening_set`). The instrument is in force
     when both holders are committed -- a reading nothing performs yet: its readers (tribute through
     `_renewals`, allied sides through `mustered`) are deferred (#453 §10.4 step 7)."""
-    return _mint_document(w, a, "dispensation", _content_of(a, "dispensation"), _seat_rung(w, a))
+    return _eff_issue(w, a, res)
 
 
 @effect_for("conceal")

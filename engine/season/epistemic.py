@@ -310,9 +310,10 @@ def claim_subjects(w: "World", e: "Event", rule: str, refs: Optional[list] = Non
     # chronicle published the very name the cover hides. `seen.who` is not this function: it reads the
     # act (`_term_who`), and the people present still learn who acted.
     hidden = actor_of(w, e)
-    hidden = hidden if hidden != anchor else None
-    return [s for s in (out or [anchor]) if s is not None and s != hidden] or \
-        ([anchor] if anchor is not None else [])
+    if hidden == anchor:
+        hidden = None
+    kept = [s for s in out if s is not None and s != hidden]
+    return kept or ([anchor] if anchor is not None else [])
 
 
 # ---------------------------------------------------------------------------

@@ -169,15 +169,15 @@ def _cover_for(w, e: "Event", who: str) -> Optional[str]:
     log = getattr(w, "log", None)
     has_id = getattr(log, "has_id", None)
     if has_id is not None and has_id(e.id):
-        return (getattr(w, "_covers_logged", None) or {}).get(e.id)
+        covers = getattr(w, "_covers_logged", None)
+        return covers.get(e.id) if covers else None
     return live_cover(w, who)
 
 
 def cover_at_logging(w, e: "Event") -> Optional[str]:
     """The live cover of the act's actor as the Event is logged -- `World._on_logged`'s one question
     of this module before it indexes the anchor; `None` for an Event no act caused."""
-    who = actor_of(w, e)
-    return live_cover(w, who) if who is not None else None
+    return live_cover(w, actor_of(w, e))
 
 
 def live_cover(w, actor: Optional[str]) -> Optional[str]:
@@ -232,10 +232,10 @@ def _a_stage_unmatured(w, rec) -> bool:
         return True
     if any(isinstance(st, tuple) and len(st) >= 3 and st[0] > w.tick for st in stages):
         return True
-    return matured_terms(w, rec.id) < len(stages)
+    return matured_terms(w, rec.id, stop=len(stages)) < len(stages)
 
 
-def matured_terms(w, rid: str) -> int:
+def matured_terms(w, rid: str, stop: Optional[int] = None) -> int:
     """HOW MANY OF A RECORD'S DECLARED TERMS HAVE RIPENED -- counted off the log, r2 §A.6.3 DECIDED:
     *"the carrier for 'how many stages have ripened' is `w.log`"*. `Record.matured` is ONE bool for
     the whole Record (Jordan, 2026-09-10), so it cannot say how many.
@@ -252,8 +252,15 @@ def matured_terms(w, rid: str) -> int:
     ⚠ MOVED HERE FROM `queries/world_q.py` AT v9 IN-12 step 10, UNCHANGED, which re-exports it for
     `ceiling`: `live_cover` (above) asks it from `anchor_of`, and `state/` imports nothing from
     `queries/` (`world_q` imports this module), so the one owner moved down rather than gaining a copy."""
-    return sum(1 for e in w.log
-               if e.kind == "term.matured" and any(c.subject == rid for c in e.changes))
+    # `stop`: a caller that asks only whether the count REACHES a number (`_a_stage_unmatured`: every
+    # declared stage) ends the scan there; the answer is `min(count, stop)`, which is all it reads.
+    n = 0
+    for e in w.log:
+        if e.kind == "term.matured" and any(c.subject == rid for c in e.changes):
+            n += 1
+            if stop is not None and n >= stop:
+                break
+    return n
 
 
 def event_by_id(w, eid: str):

@@ -1298,7 +1298,7 @@ def refuse_unauthored(w: "World", changes: list, actor: Optional[str], via: Opti
     # appointed incumbent earns one too and never spends it: `_eff_confer` opens no ban (A1's answer).
     revoked = Counter(was.subject for (t, was), basis, closed in zip(changes, bases, closes)
                       if closed and basis == T_O and was.kind == "hold" and was.object in w.offices
-                      and REVOCATION_DISPOSAL.get(w.offices[was.object].conferral) == BAN_KIND)
+                      and revocation_disposal(w.offices[was.object]) == BAN_KIND)
     refused = []
     for (t, was), basis in zip(changes, bases):
         # `+released` is the Counter with its spent (zero) entries dropped: what is left to hand on.
