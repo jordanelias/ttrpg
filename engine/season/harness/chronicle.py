@@ -14,8 +14,8 @@ length and write list are unchanged by a render, and the module's AST names no w
 THE PICK (`deepest_chain`, pure over `storybar.read`'s rows). The END of the chain is the act of
 greatest `depth`; ties go to the act logged FIRST (`read` returns acts in first-logged order, and the
 scan keeps the first act that reaches a new maximum). The chain is then walked BACK: from an act of
-depth d, its antecedent is the act among its `cross` antecedents whose depth is d - 1, ties again to
-the one logged first. Because depth is `1 + max(depth of cross antecedents)`, such an antecedent
+depth d, its antecedent is the act among its `cross` antecedents whose depth is d - 1, ties to the
+SMALLEST ACT ID (`storybar.read` sorts `cross` lexicographically), not the one logged first. Because depth is `1 + max(depth of cross antecedents)`, such an antecedent
 always exists. The chain is returned root-first, so the render reads in causal order. A run whose
 deepest chain is depth 1 (no act answered another person's) renders its first-logged act alone,
 and says so.
@@ -27,15 +27,17 @@ where `<actor>` is the Person's `name` when it has one and the id otherwise, `<k
 distinct Event kinds the act emitted in log order, and the first line reads `opens the chain`. `<m>`
 is the line number of the antecedent act, always an earlier line.
 
-Entry point: `python -m engine.season.harness.chronicle --seed S --seasons K [--cap C]`. Every numeric
-argument is required and none has a default (this file is inside `tools/ci_sim_fabrication_check.py`'s
-blocking scope, the reason `harness/storybar.py` and `harness/soak.py` give); `--cap` is
-`build_realm`'s own parameter and defaults to its own `None`, the full realm.
+Entry point: `python -m engine.season.harness.chronicle --seed S --seasons K [--cap C]`. `--seed` and
+`--seasons` are required and have no default (this file is inside `tools/ci_sim_fabrication_check.py`'s
+blocking scope, the reason `harness/storybar.py` and `harness/soak.py` give); `--cap` is optional and
+is `build_realm`'s own parameter, defaulting to its own `None`, the full realm. The header line
+prints `PYTHONHASHSEED`, as `storybar`'s does.
 """
 
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 
 from . import storybar as SB
@@ -48,8 +50,8 @@ from . import storybar as SB
 def deepest_chain(rows: dict) -> list:
     """Act ids of the deepest cross-person chain, root first. `rows` is `read(...)["acts"]`.
 
-    The end act is the first-logged act of maximal depth; each step back takes the first-logged
-    cross antecedent one level shallower. Empty when there are no acts."""
+    The end act is the first-logged act of maximal depth; each step back takes the cross antecedent
+    one level shallower, the smallest act id on a tie (`cross` is sorted). Empty when there are no acts."""
     if not rows:
         return []
     end, best = None, 0
@@ -145,7 +147,7 @@ def main(argv=None) -> int:
     res = SB.read(w.log, d.act_of, bounds)
     chain = deepest_chain(res["acts"])
     print(f"chronicle seed={args.seed} seasons={args.seasons} arm={args.arm} cap={args.cap} "
-          f"acts={len(res['acts'])} depth={len(chain)}")
+          f"acts={len(res['acts'])} depth={len(chain)} PYTHONHASHSEED={os.environ.get('PYTHONHASHSEED')}")
     print(render(w.log, d.act_of, res["acts"], w.persons))
     return 0
 

@@ -90,6 +90,8 @@ def test_a_real_render_names_distinct_actors_and_every_answer_is_a_real_earlier_
     assert len(out) == len(ls)
     assert len({l["actor"] for l in ls}) >= 2
 
+    chain = CH.deepest_chain(rows)
+    assert [rows[a]["depth"] for a in chain] == list(range(1, len(chain) + 1)), "a step skipped a depth"
     checked = 0
     for i, (l, line) in enumerate(zip(ls, out)):
         m = _LINE.match(line)
@@ -134,6 +136,25 @@ def test_the_render_picks_the_deepest_chain_and_orders_it():
         "2. season 0 | Bo answer | emitted k.two, k.two_b | answers 1. Ada speak",
         "3. season 0 | p3 accept | emitted k.three | answers 2. Bo answer",    # no name -> the id
     ]
+
+
+def test_the_walk_back_takes_the_antecedent_one_level_shallower_not_the_first_sorted():
+    """An end act with TWO cross antecedents: `b0` (depth 1) sorts before `c2` (depth 2). The walk back
+    must take `c2`, the one at depth d - 1, so the chain is three acts long and not two."""
+    acts = {i: NS(id=i, actor=p, verb="speak") for i, p in
+            (("c1", "p1"), ("c2", "p2"), ("b0", "p3"), ("x", "p4"))}
+    ev = lambda i, causes: NS(id=i, kind=f"k.{i}", causes=causes)
+    log = [ev("eb0", ["b0"]), ev("ec1", ["c1"]), ev("ec2", ["c2", "ec1"]), ev("ex", ["x", "eb0", "ec2"])]
+    act_of = {e.id: acts[e.causes[0]] for e in log}
+    rows = SB.read(log, act_of, [0])["acts"]
+    assert rows["x"]["cross"] == ["b0", "c2"] and rows["x"]["depth"] == 3, rows["x"]   # the shallower sorts first
+    assert CH.deepest_chain(rows) == ["c1", "c2", "x"]
+
+
+def test_the_cli_runs_and_prints_its_header(capsys):
+    assert CH.main(["--seed", "0", "--seasons", "1", "--cap", "5"]) == 0
+    head = capsys.readouterr().out.splitlines()[0]
+    assert head.startswith("chronicle seed=0 seasons=1 arm=off cap=5 ") and "PYTHONHASHSEED=" in head, head
 
 
 def test_with_no_cross_person_answer_the_first_logged_act_is_rendered_alone():

@@ -11,7 +11,9 @@ able to fail:
   (b) the window: a claim one season inside it counts, one at its edge does not, both Queries;
   (c) asking writes nothing (hash, log, writes) and neither `World` nor any carrier has such a field;
   (d) the readers execute: the instrument and the chooser call the Queries in a seeded season, the
-      shipped gain 0 reads neither and moves no hash, and a non-zero gain reverses a planted ranking.
+      shipped gain 0 reads neither (its identity with the pre-IN-23 chooser is evidenced by the pins,
+      `test_season_weather.py`'s `BASE_HASHES`, unmoved -- not by a hash this file compares), and a
+      non-zero gain reverses a planted ranking.
 MUTATION (run at IN-23): `legitimacy` and `stability` stubbed to a constant redden (a).
 """
 from __future__ import annotations
@@ -135,17 +137,40 @@ def driven():
     return SB.drive(SEED, 1, "off", CAP)
 
 
+def _snapshot(w):
+    return w.content_hash(), len(w.log), len(w.writes), {k: len(p.ledger) for k, p in w.persons.items()}
+
+
 def test_in23_asking_writes_nothing(driven):
     w, _d, _b = driven
-    before = (w.content_hash(), len(w.log), len(w.writes), {k: len(p.ledger) for k, p in w.persons.items()})
+    before = _snapshot(w)
     est = SB.estimates(w)
     for p in w.persons.values():
         for r in w.rungs:
             PQ.stability(p, r, 1)
         PQ.legitimacy(p, p.id, 1)
-    after = (w.content_hash(), len(w.log), len(w.writes), {k: len(p.ledger) for k, p in w.persons.items()})
+    after = _snapshot(w)
     assert est["legitimacy"]["pairs"] > 0 and est["stability"]["pairs"] > 0, est
     assert after == before
+
+
+def test_in23_the_writes_nothing_snapshot_sees_a_write_planted_in_the_read_path(monkeypatch):
+    """THE PLANTED CONTROL (`test_revolt_query.py`'s precedent): `storybar.stability`, bound by name, is
+    replaced by a reader that also appends a claim to the asking person's ledger. The snapshot the
+    writes-nothing test takes must MOVE, or that test could not have observed a write."""
+    from ..harness import populated as POP
+    w = POP.build_realm(SEED, CAP)
+    fired = []
+
+    def writing(p, rung, window):
+        fired.append(rung)
+        p.ledger.append(_claim(f"planted_{len(fired)}", rung, sorted(PQ.UNREST_KINDS)[0], 0))
+        return PQ.stability(p, rung, window)
+    monkeypatch.setattr(SB, "stability", writing)
+    before = _snapshot(w)
+    SB.estimates(w)
+    assert fired, "the plant never ran: `estimates` does not read through `storybar.stability`"
+    assert _snapshot(w) != before, "a planted ledger write left the writes-nothing snapshot unmoved"
 
 
 def test_in23_no_carrier_and_no_world_attribute_holds_such_a_value(driven):
@@ -198,7 +223,7 @@ def _season_hash(gain, monkeypatch):
 
 def test_in23_the_chooser_reads_it_armed_and_not_at_the_shipped_zero(monkeypatch):
     h0, n0 = _season_hash(0, monkeypatch)
-    h1, n1 = _season_hash(1, monkeypatch)
+    _, n1 = _season_hash(1, monkeypatch)
     assert n0 == 0, "the shipped control read the Query: its 0 is not the pre-IN-23 chooser"
     assert n1 > 0, "the armed chooser never asked the Query: it has no reader on the decision path"
     h0b, _ = _season_hash(0, monkeypatch)

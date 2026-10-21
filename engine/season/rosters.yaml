@@ -2413,7 +2413,8 @@ rosters:
       Every member must be a deed kind (`data/verbs.py::DEED_KINDS`); `data/verbs.py::_check_dominance_kinds` refuses at
       import otherwise. [ASSUMPTION; medium; Jordan to correct -- the membership: which acts are
       coercive is stated nowhere in the corpus; revert: an empty `dominance` list, and no hearer's
-      weight is ever eroded.]
+      weight is ever eroded -- and, since v9 IN-23, `person_q.UNREST_KINDS` is empty too, so
+      `person_q.stability`'s deed half counts nothing.]
     values: [dominance, prestige]
     kinds:
       dominance: [person.died, body.changed, field.won, rung.seized, record.seized, requisition.taken]
@@ -2500,12 +2501,20 @@ rosters:
     note: >-
       WHAT ENDS A PLAYED REALM, as opposed to its running out of seasons. Terms, defined where the
       loader reads them (`CLAUDE.md` §4): an ENDING is a row here; it is REACHED when every hold its
-      `holds:` selects is live and every holder coheres under `under:`, AND a person's act stands among
-      the antecedents of the edges that make it so (`T-b`: a crossing may change options, never act --
-      the realm as built reaches nothing). A `holds:` selects by a world field, EXACTLY ONE of
-      `{post: <an offices.yaml seat post>}` (every Office with that post; a loop-built seat keeps its
-      `off_<holder>` id, so an `offices.yaml` id names nothing the loop holds) or `{rung_kind: <a
-      rung_kinds member>}` (every rung of that kind, held at or above it, `holder_faction_of`'s walk).
+      `holds:` selects is live and every holder coheres under `under:`, AND an act opened at least one
+      edge the condition stands on (`T-b`: the realm as built reaches nothing; a holder's `commit` is
+      such an edge only when it is his sole live commit to that faction, so a redundant `commit` act is
+      not credited). ⚠ THE CROSSING ITSELF MAY BE AUTHORLESS: an old `commit` act is credited while a
+      MATTER death (no act) completes the condition, and no pure read can locate the crossing, because
+      the moment the condition was last false is not stored (`T-a`) [ASSUMPTION; medium; Jordan to
+      correct]. Revert: every edge the condition reads opened by an act -- which makes
+      `peninsular_sovereignty` unreachable by construction (every seeded territory hold re-opened by an
+      act, and `terr_T15`'s, unheld at build, by a verb that does not exist, `H-186`). A `holds:`
+      selects by a world field, EXACTLY ONE of `{post: <an offices.yaml seat post>}` (every Office with
+      that post; a loop-built seat keeps its `off_<holder>` id, so an `offices.yaml` id names nothing
+      the loop holds) or `{rung_kind: <a rung_kinds member>}` (every rung of that kind UNDER A `realm`
+      RUNG, held at or above it, `holder_faction_of`'s walk; `terr_T16`, Schoenland's foreign root, is
+      outside the realm and not selected).
       `under:` is a `factions` member, or `one_faction` (every selected holder under the same faction,
       whichever). `victory:` marks GD-1's win path; GD-1 permits exactly one, and the load refuses a
       second. A row stores nothing and is not an actor: reaching one emits no Event, halts nothing and
@@ -2522,8 +2531,11 @@ rosters:
         assumption_note: >-
           [ASSUMPTION; medium; Jordan to correct] GD-1's other clauses are not carried: `Accord >= 2`
           and `Political Stability <= 6` read stored scalars #457 §5 cuts, `sustained 2 consecutive
-          seasons` is a clock, and `treaties counting` has no carrier. Every territory the realm built
-          counts, not a fixed 15. Revert: Jordan names a carrier for any of them.
+          seasons` is a clock, and `treaties counting` has no carrier. Every territory under a `realm`
+          rung counts, not a fixed 15; the foreign root (`terr_T16`, Schoenland's, kept out of the realm
+          by `build_realm`) is excluded. UNREACHABLE IN COMPUTED PLAY until `H-186`'s land-taking
+          question is decided: `terr_T15` is Uncontrolled at build and no verb takes unheld land.
+          Revert: Jordan names a carrier for any of them.
       theocracy:
         victory: false
         holds: {post: King}

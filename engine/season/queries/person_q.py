@@ -487,8 +487,10 @@ def stability(p: Person, rung: str, window) -> int:
       * a shortfall claim, `(rung, "shortfall:<kind>", units)` (`SHORTFALL_PREDICATE`, deposited by
         WITNESS from MATTER's larder write).
     Firsthand and told count alike, one each [ASSUMPTION; medium; Jordan to correct -- unweighted by
-    confidence or by teller, and a told copy of a deed already held counts again; revert: grade each
-    sign by `Claim.confidence`]. NOT read, though they exist: `tenure.closed` (it also closes a
+    confidence or by teller; one deed can count twice, but only where `loop/witness.py`'s `T5` guard
+    lets a second copy in -- told first and seen after, or told from two different origins (a told
+    copy of a deed already held firsthand, or of the same origin, is skipped at deposit); revert:
+    grade each sign by `Claim.confidence`]. NOT read, though they exist: `tenure.closed` (it also closes a
     `contain`, so a person moving house would read as a fallen seat), `march.declared` (an intent, not
     yet coercion), and the `seen` claims (they carry a stratum, not a kind). Only claims whose subject
     IS the rung count: a person does not know what a rung contains (containment is the world's).

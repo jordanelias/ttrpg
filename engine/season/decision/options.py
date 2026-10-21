@@ -344,9 +344,10 @@ def subject_is_opponent(row: "VerbRow") -> bool:
     """WHETHER AN ACT OF `row` IS CONTESTED AGAINST ITS `subject` -- the row declares a prize
     (`contests:`) and names no `counterparty:`, so its second side IS its subject (`loop/sides.py`
     contests against `payload[row.counterparty or "subject"]`). Read off the row's own columns,
-    never a verb name. One owner for two readers: `opening_set`'s self-subject decline (a person is
-    not their own adversary) and `decision/choose.py`'s score term 2 under `stance_polarity:
-    declared` (v9 IN-18 `G2`: an act against a disliked opponent scores higher, not lower)."""
+    never a verb name. One owner for three readers: `opening_set`'s self-subject decline (a person is
+    not their own adversary), `decision/choose.py`'s score term 2 under `stance_polarity:
+    declared` (v9 IN-18 `G2`: an act against a disliked opponent scores higher, not lower), and
+    `decision/choose.py::unrest_pull` (v9 IN-23, H-224: the unrest a person knows of at the subject)."""
     return bool(row.contests) and not row.counterparty
 
 

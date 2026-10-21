@@ -1093,12 +1093,13 @@ def _load_endings(members: dict, factions, rung_kinds, posts) -> dict:
         if not isinstance(holds, dict) or len(holds) != 1 or next(iter(holds)) not in ENDING_SELECTORS:
             bad(name, f"has holds {holds!r}", f"exactly one of {list(ENDING_SELECTORS)}")
         (sel, val), = holds.items()
-        if val not in (posts if sel == "post" else rung_kinds):
+        # a list or mapping here is unhashable against `posts` and would raise a bare TypeError
+        if not isinstance(val, str) or val not in (posts if sel == "post" else rung_kinds):
             bad(name, f"selects {sel} {val!r}, which "
                       f"{'no offices.yaml seat carries' if sel == 'post' else 'is not a rung_kinds member'}",
                 f"a {'post of offices.yaml: seats' if sel == 'post' else 'rung_kinds member'}")
         under = row.get("under")
-        if under != ENDING_ANY_ONE and under not in factions:
+        if not isinstance(under, str) or (under != ENDING_ANY_ONE and under not in factions):
             bad(name, f"has under {under!r}", f"a `factions` member, or {ENDING_ANY_ONE!r}")
         if not isinstance(row.get("source"), str) or not row["source"].strip():
             bad(name, "names no `source:`", "the GD-1 clause or ruling the row rests on")
