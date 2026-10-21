@@ -802,12 +802,14 @@ _LEVY_ROW = (
 # cell's `needs:` ADMITS `to` -- so `beneficiary: to` on `requisition` became CARRIABLE and stopped being the
 # dead reference `test_lb6d_an_operand_beneficiary_the_row_cannot_carry_is_refused_at_load` plants.
 # That test needs an UNTYPED row. It planted `forge` until v9 IN-45 typed it (an `own_ledger` cell);
-# B-K close (ACC 8/13) re-points it to `destroy_record`, still untyped (`requires: —`, no cell). The
-# two tests above keep `requisition`: a missing or off-roster beneficiary is refused whatever the row's cell.
+# B-K close (ACC 8/13) re-pointed it to `destroy_record`, and v9 IN-26 typed that row (`A-13`'s cell), so
+# it is re-pointed again, to `thread_read` -- untyped, and a row `14` DECLINED (`test_u7_own.py`), so it
+# stays untyped until its own position. The two tests above keep `requisition`: a missing or off-roster
+# beneficiary is refused whatever the row's cell.
 _UNTYPED_ROW = (
-    '  - verb:        "destroy_record"\n'
-    '    stratum:     "uncontested_material"\n'
-    '    eligibility: ["hold:<record>", "presence"]\n'
+    '  - verb:        "thread_read"\n'
+    '    stratum:     "contested_physical"\n'
+    '    eligibility: ["own", "presence:<site>"]\n'
     '    beneficiary: "actor"\n'
 )
 
@@ -898,7 +900,7 @@ def test_lb6d_an_operand_beneficiary_the_row_cannot_carry_is_refused_at_load():
         _UNTYPED_ROW, _UNTYPED_ROW.replace('beneficiary: "actor"', 'beneficiary: "to"'), 1)
     assert unbindable != src, "the substitution did not apply -- this test is asserting nothing"
     from ..data.verbs import VERB_TABLE
-    assert VERB_TABLE["destroy_record"].requires_typed is None, "the planted row is typed now"
+    assert VERB_TABLE["thread_read"].requires_typed is None, "the planted row is typed now"
     with pytest.raises(SystemExit, match="neither binds nor admits"):
         _load_with(unbindable)
 

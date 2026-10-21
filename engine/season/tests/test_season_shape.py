@@ -9548,6 +9548,11 @@ def test_wa_an_empty_ledger_is_unknown_for_every_form_and_the_candidate_still_fo
                                                # person's own ledger names (`comply`: a held writ)
                        or r.referent_class)}   # v9 IN-45 `migrate`: a typed row formed only on a
                                                # CLASSED referent, which this question carries none of
+    # v9 IN-26: a verb held out of formation by the shipped arm (`Fixtures withheld_verbs`), and a row
+    # formed only on a referent the person himself holds (`rosters.yaml: own_hold_declines`; `p_low`
+    # holds nothing here) -- neither is clause 4. DERIVED FROM THE FIXTURE AND THE ROSTER.
+    from ..data.verbs import OWN_HOLD_DECLINES
+    needs_held |= set(OWN_HOLD_DECLINES) | set(w.fixtures.get("withheld_verbs"))
     typed_own = {v for v, r in VERB_TABLE.items()
                  if r.requires_typed is not None and person_side_eligible(p, r)} - needs_held
     assert typed_own <= offered, (
@@ -10502,7 +10507,14 @@ def test_wc_the_fold_binds_what_the_person_bound():
     # others through the seated `p_high`, once a warrant is placed in his hand. DERIVED FROM THE ROSTER.
     from ..data.verbs import WARRANT_SOURCED
     WALK_WARRANT: frozenset = frozenset(WARRANT_SOURCED)
-    WALK_EXCLUDES: frozenset = frozenset({"march"}) | WALK_REMIT | WALK_NAMED | WALK_WARRANT
+    # v9 IN-26: a verb `Fixtures withheld_verbs` holds out of formation forms for nobody at the shipped
+    # arm, and a row in `rosters.yaml: own_hold_declines` forms only on a referent the person himself
+    # holds, which `q` carries none of for `p_low` -- so `destroy_record` is walked below, at the sink
+    # arm, once a document is in his hand. DERIVED FROM THE FIXTURE AND THE ROSTER.
+    from ..data.verbs import OWN_HOLD_DECLINES
+    WALK_HELD: frozenset = frozenset(OWN_HOLD_DECLINES) | frozenset(w.fixtures.get("withheld_verbs"))
+    WALK_EXCLUDES: frozenset = (frozenset({"march"}) | WALK_REMIT | WALK_NAMED | WALK_WARRANT
+                                | WALK_HELD)
     cands = [c for c in decision.opening_set(p, v, q, w.fixtures)
              if VERB_TABLE[c.verb].requires_typed is not None]
     assert {c.verb for c in cands} == all_typed - WALK_EXCLUDES, (
@@ -10559,6 +10571,22 @@ def test_wc_the_fold_binds_what_the_person_bound():
         assert binding_of(duke.id, c.operands, seat) == fold and fold.get("via") == seat, (
             f"{c.verb} x {c.subject}: the person bound {binding_of(duke.id, c.operands, seat)} and "
             f"the fold binds {fold}")
+
+    # v9 IN-26: THE HELD WALK, at the sink arm (`withheld_verbs` empty) with a document in `p_low`'s hand,
+    # so every `own_hold_declines` row forms on it and its two bindings are compared, not vacuously.
+    _hold_document(w, p, "petition", {"terms": "p_mid", "to": "p_mid", "from": "Hh"}, rec_id="rec_wc_held")
+    sink = w.fixtures.sweep("withheld_verbs", ())
+    qh = Question("q:wc_held", "need", ("rec_wc_held",))
+    held_walk = [c for c in decision.opening_set(p, View(p.id, [], sink.get("view_k"), qh), qh, sink)
+                 if c.verb in WALK_HELD]
+    assert {c.verb for c in held_walk} == WALK_HELD, sorted({c.verb for c in held_walk})
+    for c in held_walk:
+        act = [a for sc in pack_scenes(p, [c], 5, sink, mint, occasion=qh) for a in sc.acts][0]
+        fold = binding_from_act(act)
+        assert binding_of(p.id, c.operands) == fold and all(
+            fold.get(o) is not None for o in VERB_TABLE[c.verb].requires_typed.operands()), (
+            f"{c.verb} x {c.subject}: the person bound {binding_of(p.id, c.operands)} and the fold "
+            f"binds {fold}")
 
     # ⚠ AND THE UNTYPED HALF OF THE SCOPE NOTE, ASSERTED AGAINST THE RESOLVER'S OWN SOURCE. The
     # claim is that the fold builds NO BINDING for an untyped verb, and what makes it true is that

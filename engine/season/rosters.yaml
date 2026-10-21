@@ -2000,6 +2000,24 @@ rosters:
       revert: build `release`'s hook in the same position.]
     values: [forgive]
 
+  own_hold_declines:
+    source: >-
+      plan position IN-26 (BOUND-PAPER, `workplans/valoria_master_workplan_v9_part5.md`), `A-13`'s
+      *"record-holding referent"* (`_part5`'s A table: `destroy_record` *"needs a record-holding question
+      referent -- `give`'s shape"*); `own_stance_declines`' shape (above), one field over.
+    note: >-
+      WHICH VERBS A PERSON FORMS ONLY ON A REFERENT HE HIMSELF HOLDS -- a list of verbs. Read in
+      `decision/options.py::opening_set`, person-side and World-free (AX-2): the objects of his OWN live
+      `hold` Tenures; a referent he does not hold forms no Candidate, so no scene is spent on a refusal of
+      the row's `held_by` conjunct he could have known. It is the person-side reading of that conjunct and
+      nothing wider: ONE LOADER, `data/verbs.py::OWN_HOLD_DECLINES`, refused at import when a member names a
+      verb the table lacks or one whose typed cell asks no `relation` of `subject` `held_by`. What he holds
+      that is no Record (a seat, a Proposition he uttered) still forms and is refused at the row's
+      `existence` conjunct, whose read clause 4 then learns (H-156's decaying shape).
+      [ASSUMPTION; medium; Jordan to correct; revert: drop the member, and `destroy_record` forms on every
+      referent, plan position `14`'s measured shape.]
+    values: [destroy_record]
+
   shortfall_sourced_operands:
     source: >-
       plan position `19d` (DEMAND · DELIVERY), `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md`

@@ -34,8 +34,8 @@ from ..data.rosters import (
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
 from ..data.verbs import (
-    ELIGIBILITY_KINDS, HELD_DOCUMENT_DECLINES, OWN_STANCE_DECLINES, TERMS_SOURCED, VERB_TABLE,
-    VOCATION_SOURCED, VOCATIONS, WARRANT_SOURCED, align,
+    ELIGIBILITY_KINDS, HELD_DOCUMENT_DECLINES, OWN_HOLD_DECLINES, OWN_STANCE_DECLINES, TERMS_SOURCED,
+    VERB_TABLE, VOCATION_SOURCED, VOCATIONS, WARRANT_SOURCED, align,
 )
 from ..epistemic import belief_contradicts
 from ..gaps import Forbidden
@@ -120,7 +120,20 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
     named: Optional[frozenset] = None
     people: Optional[tuple] = None
     records: Optional[list] = None
+    held: Optional[frozenset] = None
+    # v9 IN-26 (`H-156` option (a) as a switch, `Fixtures withheld_verbs`): A VERB HELD OUT OF FORMATION
+    # forms no Candidate for anybody, before any other read -- so a withheld row costs the season nothing
+    # and the hand-built fold, which never asks this, is untouched. A member the table lacks is refused,
+    # not ignored: a misspelt hold would release the verb it meant to withhold.
+    withheld = frozenset(fx.get("withheld_verbs") or ())
+    if not withheld <= VERB_TABLE.keys():
+        raise Forbidden(
+            f"`Fixtures withheld_verbs` names {sorted(withheld - VERB_TABLE.keys())}, which the verb table "
+            "lacks", "H-156", needs="`verb_table.yaml` verbs only",
+            law="IN-26 -- a withheld verb is one the table forms; a name it lacks withholds nothing")
     for verb, row in sorted(VERB_TABLE.items()):
+        if verb in withheld:
+            continue
         if not person_side_eligible(p, row):
             continue
         if tolerance is not None and refuses(verb, axis, tolerance):
@@ -156,6 +169,14 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         # question carries and widens nothing (§F1 clause 3 stands).
         if verb in OWN_STANCE_DECLINES:
             refs = tuple(r for r in refs if held_against(p, r))
+        # v9 IN-26 (`rosters.yaml: own_hold_declines`, `A-13`): A VERB A PERSON FORMS ONLY ON A REFERENT HE
+        # HIMSELF HOLDS -- `destroy_record`, the person-side reading of its own `held_by` conjunct. The
+        # objects of his OWN live `hold` Tenures, no World; computed once per call, only if such a row
+        # is reached. It NARROWS the referents the question carries and widens nothing.
+        if verb in OWN_HOLD_DECLINES:
+            if held is None:
+                held = frozenset(t.object for t in p.tenures if t.kind == "hold" and t.live)
+            refs = tuple(r for r in refs if r in held)
         if not refs:
             continue
         # v9 IN-12 step 9 (`rosters.yaml: vocation_sourced`): A VERB THAT CARRIES A VOCATION forms one

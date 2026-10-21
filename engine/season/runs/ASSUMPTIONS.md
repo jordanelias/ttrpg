@@ -95,3 +95,4 @@ exercised by this run.**
 | `oblige_term` | `4` | no — a harness fixture |
 | `default_upkeep` | `1` | no — a harness fixture |
 | `bench_quorum` | `1` | no — a harness fixture |
+| `withheld_verbs` | `('destroy_record',)` | no — a harness fixture |

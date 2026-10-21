@@ -29,7 +29,8 @@ THE FOUR PROPERTIES THE PLAN NAMES, each with the control that stops it passing 
     exactly like a true one in a holder's ledger; `destroy_record`'s effect ends a sheet and its
     `hold` and leaves the belief standing). `forge` EXECUTES SINCE v9 IN-45 (section 5b: the sheet
     consumer first, then `_eff_forge`; its tripwire below is re-pinned to forge through the fold);
-    `destroy_record` still declines for every actor (`H-75`), and its tripwire asserts exactly that.
+    `destroy_record` EXECUTES THROUGH THE FOLD SINCE v9 IN-26 (`A-13`'s typed, `own`-eligible row),
+    and its tripwire below is re-pinned, as it asked, to burn through the fold.
 
 The fixture is `probes.tiny_world` with one rostered faction planted: `fac_crown`, committed to by
 `p_high` (who holds `off_duke`) and `p_mid` (who holds the hearth `Hh`). `p_low`, `p_mid` and
@@ -43,7 +44,7 @@ import dataclasses
 
 import pytest
 
-from ..data.matrix import Step, WriteClass
+from ..data.matrix import WriteClass
 from ..data.rosters import FACTION_BY_PROP, RECORD_CONTENT, RECORD_KIND_KEYS, faction_prop_id
 from ..data.verbs import _OPENERS_FROM_EFFECTS, VERB_TABLE
 from ..decision import make_chooser
@@ -439,13 +440,13 @@ def test_20iii_a_false_sheet_is_a_lawful_record_and_reads_exactly_like_a_true_on
 
 
 def test_20iii_destroy_ends_a_sheet_and_its_hold_and_the_belief_survives_but_no_act_can_yet():
-    """Through the gate at a synthetic RESOLVE barrier (`test_record_kind_fold._mint`'s shape, for a
-    verb the fold will not admit): `_eff_destroy_record` removes the sheet and closes its `hold`
-    (S15.3's cascade), and the surveyor's belief STANDS -- r2 §A.16, *"he still believes what it said
-    and can no longer prove it"*. ⚠ THE TRIPWIRE: through the real fold the holder's own
-    `destroy_record` is refused and the sheet survives, because its eligibility declines for every
-    actor (`H-75`). When that changes, this assertion goes red and the test should burn through the
-    fold instead."""
+    """Through the REAL FOLD since v9 IN-26 (the tripwire's own instruction: *"when that changes ...
+    burn through the fold instead"*; until then this wrote through the gate at a synthetic RESOLVE
+    barrier, the fold refusing every actor on `H-75`'s placeholders). The name is kept for the plan's
+    citations. The holder's own `destroy_record` removes the sheet and closes its `hold` (S15.3's
+    cascade), and the surveyor's belief STANDS -- r2 §A.16, *"he still believes what it said and can
+    no longer prove it"*. CONTROL: a person who does NOT hold the sheet is refused at the row's
+    `held_by` conjunct and the sheet survives him."""
     w, _ = _world()
     _hear(w, "p_low", "p_high")
     P._run_d(w, lambda p, v, s, b: ([P.Act_(w, p, "survey", payload={"subject": "p_high"})]
@@ -454,20 +455,14 @@ def test_20iii_destroy_ends_a_sheet_and_its_hold_and_the_belief_survives_but_no_
     belief = _content_claims(w.persons["p_low"], rec.id)
     assert belief, "the survey deposited nothing, so the survival below would be vacuous"
     d = SeasonDriver(w)
-    burn = Act(id="burn1", actor="p_low", verb="destroy_record", payload={"record": rec.id})
-    out = _fold(w, d, burn)
-    assert "record.destroyed" not in _kinds(out) and rec.id in w.records, (
-        f"`destroy_record` executed through the fold ({_kinds(out)}) -- `H-75` moved; burn "
-        "through the fold and narrow `H-169`")
-    assert set(_kinds(out)) <= set(VERB_TABLE["destroy_record"].emits_on_refusal) | {
-        "act.ineligible"}, _kinds(out)
+    stranger = _fold(w, d, Act(id="burn0", actor="p_mid", verb="destroy_record",
+                               payload={"subject": rec.id}))
+    assert "record.destroyed" not in _kinds(stranger) and rec.id in w.records, _kinds(stranger)
+    assert set(_kinds(stranger)) <= set(VERB_TABLE["destroy_record"].emits_on_refusal), _kinds(stranger)
     hold = world_q.hold_force(w, rec.id)
-    w.step = Step.RESOLVE
-    w.write("exists", mint_token(w, WriteClass.ACTS), None, record_kind="Record",
-            fieldname="exists", driver="Act", actor="p_low", via=None,
-            change=EFFECTS["destroy_record"](w, Act(id="burn2", actor="p_low",
-                                                     verb="destroy_record",
-                                                     payload={"record": rec.id})))
+    out = _fold(w, SeasonDriver(w), Act(id="burn1", actor="p_low", verb="destroy_record",
+                                        payload={"subject": rec.id}))
+    assert "record.destroyed" in _kinds(out), _kinds(out)
     assert rec.id not in w.records and hold.until == w.tick and not hold.live
     assert _content_claims(w.persons["p_low"], rec.id) == belief, "the belief burned with the page"
 

@@ -974,9 +974,18 @@ def _eff_destroy_record(w: "World", a: "Act", res: "Resolution | None" = None) -
     moves (present -> absent), so a destruction that finds its record is never a no-op and one that
     does not declines (`NO_CHANGE` -> `destroy.refused`, as the old `None` did). The closed holds
     are the cascade -- F3 admits each as `destroy's cascade` because this same write removed the
-    id -- and are not named, as they were never reported."""
+    id -- and are not named, as they were never reported.
+
+    v9 IN-26 (BOUND-PAPER, `A-13`): THE RECORD IS THE BOUND `subject` -- the row's typed cell binds it
+    (`existence` kind `Record`, `held_by` the actor) and a computed Candidate carries it; the `record`
+    payload key this read before no Candidate carried, so it is gone rather than kept as a second
+    spelling. It is the SINK for paper the verb-coverage survey found none for (`Record.ttl` has no
+    reader): a holder burns what he holds. Whether anybody FORMS it is `opening_set`'s
+    (`Fixtures withheld_verbs`, `rosters.yaml: own_hold_declines`), never this body's. A Proposition
+    is never a subject here: §14 makes it undestroyable, and the cell's `existence` conjunct refuses
+    one before this runs."""
     d = a.payload if isinstance(a.payload, dict) else {}
-    rid = d.get("record")
+    rid = d.get("subject")
     if rid is None or rid not in w.records:
         return NO_CHANGE
 
