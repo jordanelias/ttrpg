@@ -1825,7 +1825,8 @@ def _ending_edges(w: World, row) -> tuple:
         holds = [governing_hold(w, r) for r in sorted(w.rungs) if w.rungs[r].kind == val
                  and any(a in w.rungs and w.rungs[a].kind == "realm" for a in ancestry(w, r))]
     else:       # the loader admits `ENDING_SELECTORS` only; a third must be given a branch here
-        raise Forbidden(f"ending selector {sel!r} has no enumerator in world_q._ending_edges")
+        raise Forbidden(f"ending selector {sel!r} has no enumerator", "queries/world_q.py::_ending_edges",
+                        f"a branch for it, beside `ENDING_SELECTORS`' two")
     if not holds or any(t is None for t in holds):
         return ()
     facs = [faction_holding(w, t.subject) for t in holds]
