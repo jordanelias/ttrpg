@@ -3965,16 +3965,16 @@ rows:
 
   - id:        H-176
     tier:      1
-    kind:      "ABSENT_RULE"
-    hole:      "GD-1: NO SEASON-SIDE ENDING / VICTORY CONDITION. `ENDINGS_CLASSIFIED.yaml` + `forced_by_threshold` are the ending vocabulary; `20-ii`'s observable '>=1 faction-scale ARC ends' is its precondition. The only code that ever implemented GD-1 -- `engine/autoload/victory.py`, a reader of the old prototype's clocks -- was deleted at plan position `28-iii`, and nothing in `engine/season/` replaces it."
-    owner:     "none -- no module owns an ending. `loop/driver.py::SeasonDriver.season` has no ending step; `ENDINGS_CLASSIFIED.yaml` is a classification of the authored arcs' `ends_when` prose (its own header: an agent classification, not an execution), read by `harness/corpus_run.py` for a measurement, not by the loop"
-    grade:     "absent"
+    kind:      "PRODUCER"
+    hole:      "GD-1: NO ENDING IS REACHED IN COMPUTED PLAY. The vocabulary is built (v9 IN-27): `rosters.yaml: endings` (`peninsular_sovereignty`, GD-1's one victory row; `theocracy`), read by `queries/world_q.py::endings_reached`, reported by `SeasonDriver.season` as `endings`, and reached only with a person's act among its antecedents (T-b). Whether the realm's own choices ever reach one is measured zero; GD-1's Accord, Stability, two-season and treaty clauses have no carrier."
+    owner:     "`queries/world_q.py::endings_reached` (the Query) and `loop/driver.py::SeasonDriver.season` (the report); the rows are `rosters.yaml: endings`, each [ASSUMPTION; medium; Jordan to correct]"
+    grade:     "measured"
     default:   "none"
-    site:      ""
+    site:      "`SeasonDriver.season`'s returned `endings`"
     sweep:     []
-    unblocks:  "any statement that a played realm ENDS, as opposed to running out of seasons; its precondition is `20-ii`'s observable '>=1 faction-scale ARC ends'"
-    cite:      "ABSENCE PROBE, RUN 2026-10-01 at plan position `28-iii` (an absence is the cheapest claim to make, so the thing that would show presence was run): `git grep -niE 'victory|GD-1' -- engine/season ':!engine/season/cases' ':!engine/season/runs' ':!engine/season/hole_register.yaml'` returned NO hits before this row was written -- the loop, its registries, its harnesses and its tests name neither. The only occurrences under `engine/season/` are authored case prose and a run log, one of which (`cases/chain/ARC3.yaml:42`) says the campaign's ending 'is defined not by a single victory condition'. NOT SUPERSEDED (no later ruling decided it) and NOT IRRELEVANT (GD-1 is a live canon constraint, `canon/04_game_design_constraints.md`; only its code died). Registered, not built, and not a question for Jordan."
-    source:    "plan position `28-iii` (SPINE-DELETE), master workplan v8 `_part3` item 11; `_part6` §D.1 disposition (c) for `engine/autoload/victory.py`"
+    unblocks:  "any statement that a played realm ENDS, as opposed to running out of seasons"
+    cite:      "MEASURED at IN-27 (B-U), 2026-10-21: `build_realm(0)`, 2 seasons through `populated.run`'s chooser, `endings == []` both seasons (hashes 8bfd47a9 / 8abd76f3, the pins, unmoved). Reached by hand-built acts only: `engine/season/tests/test_in27_endings.py` (the King's own `release` + `commit` reaches `theocracy`; one holder's `commit` reaches `peninsular_sovereignty`), and the same conditions planted with no act report nothing (the T-b control)."
+    source:    "plan position `28-iii` (SPINE-DELETE), master workplan v8 `_part3` item 11; narrowed at v9 IN-27 (`workplans/valoria_master_workplan_v9_part5.md`)"
 
   - id:        H-177
     tier:      1
