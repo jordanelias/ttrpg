@@ -1785,7 +1785,8 @@ def endings_reached(w: World) -> list:
     credited -- `_eff_commit` mints a fresh edge every time). Each selected hold is the one live hold on
     its object, so it needs no such rule. An edge's antecedent is the first logged Event naming it whose
     causing act (`causing_act`) is of a verb that opens its kind (`data/verbs.py`'s derived opener
-    table) -- so a re-grant or a closure naming the edge is not its opening. The realm AS BUILT
+    table) -- so a re-grant or a closure naming the edge is not its opening (a proxy on the causing
+    verb; `_opened_by_acts` says why it holds). The realm AS BUILT
     therefore reaches nothing, even where a row's condition already holds at build: a seeded edge has
     no opening Event, and nor does an edge planted by hand. One such act suffices, and THE CROSSING
     ITSELF MAY BE AUTHORLESS: an old `commit` act is credited while a MATTER death (no act) is what
@@ -1843,7 +1844,11 @@ def _ending_edges(w: World, row) -> tuple:
 
 
 def _opened_by_acts(w: World, edges: tuple) -> dict:
-    """`{edge id: (opening Event, its Act)}` for each edge an act opened (`endings_reached` says how)."""
+    """`{edge id: (opening Event, its Act)}` for each edge an act opened (`endings_reached` says how).
+    ⚠ A PROXY: an Event "opens" an edge it names when the verb that CAUSED it opens that edge's kind,
+    not by anything the Event records, which is true only because `establish`, `release` and `revoke`
+    -- which name a hold edge they re-stamp or close -- are not `hold` openers (`loop/effects_governance.py`
+    constructs a `Tenure(` only at its three opener sites: `confer`'s hold, `revoke`'s ban, `oblige`)."""
     kind_of = {t.id: t.kind for t in edges}
     out: dict = {}
     for e in w.log:

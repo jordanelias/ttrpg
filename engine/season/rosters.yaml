@@ -2533,8 +2533,11 @@ rosters:
           and `Political Stability <= 6` read stored scalars #457 §5 cuts, `sustained 2 consecutive
           seasons` is a clock, and `treaties counting` has no carrier. Every territory under a `realm`
           rung counts, not a fixed 15; the foreign root (`terr_T16`, Schoenland's, kept out of the realm
-          by `build_realm`) is excluded. UNREACHABLE IN COMPUTED PLAY until `H-186`'s land-taking
-          question is decided: `terr_T15` is Uncontrolled at build and no verb takes unheld land.
+          by `build_realm`) is excluded. UNREACHABLE IN COMPUTED PLAY whoever holds what: `terr_T15`
+          is Uncontrolled at build (`H-186`) and no verb opens a `hold` on any territory (`H-176`).
+          A consumer that treats `victory: true` as the game's end must carry this caveat itself --
+          the row is GD-1 minus its sustain, Accord and Stability clauses, and nothing in the loop
+          halts on it (`SeasonDriver.season` only reports `endings`).
           Revert: Jordan names a carrier for any of them.
       theocracy:
         victory: false

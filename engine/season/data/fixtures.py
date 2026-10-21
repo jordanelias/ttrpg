@@ -719,15 +719,10 @@ DEFAULT_FIXTURES = Fixtures(
     # (H-09, H-40): the seasons an unrefreshed claim takes to decay to confidence 0, so the window
     # holds every claim the decay clock still credits and drops none it does [ASSUMPTION; medium;
     # Jordan to correct]. A whole number >= 1; `recent_claims` raises on anything else.
-    # [JUSTIFIED: engine/season/hole_register.yaml H-224 -- R7 rules the estimate a windowed read over the person's own ledger and gives no window; 20 is derived from the H-09 / H-40 constants, swept 1 / 4 / 20]
+    # Injection site: this line, read by `harness/storybar.py::estimates` (the STORY-BAR instrument,
+    # the Queries' only reader; no chooser reads it).
+    # [JUSTIFIED: engine/season/hole_register.yaml H-224 -- R7 rules the estimate a windowed read over the person's own ledger and gives no window; 20 is derived from the H-09 / H-40 constants, swept 1 / 4 / 20; read by the STORY-BAR instrument only]
     estimate_window_seasons=20,        # `H-224`, swept 1 / 4 / 20 (SHIPPED)
-    # v9 IN-23: HOW HARD THE UNREST A PERSON KNOWS OF AT A SUBJECT PULLS AN ACT CONTESTED AGAINST IT
-    # (`decision/choose.py::unrest_pull`, added to score term 2). Injection site: this line, read by
-    # `decision/choose.py`'s `deliberation_memo`. `0` is the CONTROL and is SHIPPED [ASSUMPTION], on
-    # `confliction_weight`'s precedent: at `0` nothing is added and the score is the pre-IN-23 float.
-    # Must be >= 0 (`deliberation_memo` raises).
-    # [JUSTIFIED: engine/season/hole_register.yaml H-224 -- the estimate's reader; R7 rules legitimacy and stability Queries over interiors and states no effect on the score]
-    stability_gain=0,                  # `H-224`, swept 0 (control, SHIPPED) / 1 / 3
     # `H-146` / `ED-IN-0261`. WHICH `pursuit_axes` MEMBER GATES `opening_set` -- deontology as a
     # REFUSAL, read by `decision/options.py::opening_set`. The axis NAME is ruled (`deontological`, the
     # NEG pole of `deontological/instrumental`) and the THRESHOLD is the person's own projected

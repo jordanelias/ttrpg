@@ -457,8 +457,11 @@ def legitimacy(p: Person, holder: str, window, scar_shift: float = 0.0) -> float
 
     `p`'s own stance rows toward the holder (a stance row has no `when`, so the window does not cut
     it) plus what `p`'s own pursuits make of the holder's deeds `p` holds claims of from the window
-    -- firsthand and told alike, because R7's channel is the news: legitimacy falls where the news of
-    a deed has reached. Each deed is scored by its one owner (`deed_term`; `attributed_deeds` decides
+    -- firsthand and told alike FOR THE UNPAIRED KINDS ONLY, because R7's channel is the news:
+    legitimacy falls where the news of a deed has reached. ⚠ The PAIRED kinds (`person.died`,
+    `body.changed`) count firsthand only: `attributed_deeds` drops a told copy of one (it carries no
+    `seen`, so it names no doer), so second-hand news of a killing or a wound never moves legitimacy.
+    Each deed is scored by its one owner (`deed_term`; `attributed_deeds` decides
     which claims are the holder's, the paired kinds through `seen.who`), so this is `regard`'s two
     halves read over the window at unit weight, not a second scoring of a deed. Which seat the holder
     holds is the CALLER's: `p` holds no claim of who sits where (`H-195`: no `held_by` claim), so

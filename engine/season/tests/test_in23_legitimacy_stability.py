@@ -1,8 +1,8 @@
 """v9 IN-23 (CARRY-STABILITY, `workplans/valoria_master_workplan_v9_part5.md`) -- legitimacy and
 stability as Queries over ONE person's own stance and claims, no stored value (ruling R7):
-`queries/person_q.py::legitimacy`, `stability`, `recent_claims`; read by `decision/choose.py::
-unrest_pull` at the swept `stability_gain` (H-224, control 0 shipped) and by the STORY-BAR instrument
-(`harness/storybar.py::estimates`).
+`queries/person_q.py::legitimacy`, `stability`, `recent_claims`; read by the STORY-BAR instrument
+(`harness/storybar.py::estimates`) only (H-224: a chooser consumer was built and reverted at B-U's
+close, as wider than the plan's EDITS).
 
 THE FALSIFIER (the plan's: *the Query read by nothing, or a value stored on `World` -> fail*), each arm
 able to fail:
@@ -10,29 +10,23 @@ able to fail:
       the control -- identical ledgers -- reads identical ones;
   (b) the window: a claim one season inside it counts, one at its edge does not, both Queries;
   (c) asking writes nothing (hash, log, writes) and neither `World` nor any carrier has such a field;
-  (d) the readers execute: the instrument and the chooser call the Queries in a seeded season, the
-      shipped gain 0 reads neither (its identity with the pre-IN-23 chooser is evidenced by the pins,
-      `test_season_weather.py`'s `BASE_HASHES`, unmoved -- not by a hash this file compares), and a
-      non-zero gain reverses a planted ranking.
+  (d) the reader executes: the instrument calls both Queries in a seeded season.
 MUTATION (run at IN-23): `legitimacy` and `stability` stubbed to a constant redden (a).
 """
 from __future__ import annotations
 
 import ast
 import dataclasses
-from types import SimpleNamespace
 
 import pytest
 
 from ..data import files
 from ..data.fixtures import DEFAULT_FIXTURES
-from ..data.verbs import DEED_KINDS, VERB_TABLE
-from ..decision import choose as CH
-from ..decision.options import subject_is_opponent
+from ..data.verbs import DEED_KINDS
 from ..harness import storybar as SB
 from ..queries import person_q as PQ
 from ..state import carriers
-from ..state.carriers import Candidate, Claim, Person
+from ..state.carriers import Claim, Person
 
 RUNG, HOLDER = "r_in23", "p_in23_holder"
 SEED, CAP = 0, 10
@@ -62,7 +56,6 @@ def test_in23_shipped_window_is_the_decay_life_of_a_claim():
     fx = DEFAULT_FIXTURES
     assert fx.get("estimate_window_seasons") == (
         fx.get("confidence_default") // fx.get("claim_decay_per_season"))
-    assert fx.get("stability_gain") == 0
 
 
 # (a) ---------------------------------------------------------------------------------------------
@@ -204,64 +197,3 @@ def test_in23_the_instrument_reads_both_queries_in_a_seeded_season(monkeypatch):
     r = SB.run_seed(SEED, 1, "off", CAP)
     assert calls["legitimacy"] > 0 and calls["stability"] > 0, calls
     assert len(r["estimates"]) == 1 and r["estimates"][0]["legitimacy"]["pairs"] == calls["legitimacy"]
-
-
-def _season_hash(gain, monkeypatch):
-    calls = {"n": 0}
-    real = CH.stability
-
-    def spy(*a, **k):
-        calls["n"] += 1
-        return real(*a, **k)
-    monkeypatch.setattr(CH, "stability", spy)
-    from ..harness import populated as POP
-    w = POP.build_realm(SEED, CAP)
-    w.fixtures = w.fixtures.sweep("stability_gain", gain)
-    POP.run(1, SEED, w=w)
-    return w.content_hash(), calls["n"]
-
-
-def test_in23_the_chooser_reads_it_armed_and_not_at_the_shipped_zero(monkeypatch):
-    h0, n0 = _season_hash(0, monkeypatch)
-    _, n1 = _season_hash(1, monkeypatch)
-    assert n0 == 0, "the shipped control read the Query: its 0 is not the pre-IN-23 chooser"
-    assert n1 > 0, "the armed chooser never asked the Query: it has no reader on the decision path"
-    h0b, _ = _season_hash(0, monkeypatch)
-    assert h0 == h0b
-
-
-def _ranking(gain, monkeypatch, verb="march") -> list:
-    """`make_chooser`'s real ranking at temperature 0 over two candidates of one verb, on rungs
-    `r_a` and `r_b`, for a person holding one unrest claim about `r_b` (IN-25's idiom)."""
-    p = _person("p_in23", [_claim("u", "r_b", sorted(PQ.UNREST_KINDS)[0], 0)])
-    cands = [Candidate(verb, "r_a"), Candidate(verb, "r_b")]
-    seen = {}
-    monkeypatch.setattr(CH, "opening_set", lambda person, view, q, fx: list(cands))
-
-    def spy(person, ranked, budget, fx, mint, occasion=None):
-        seen["ranked"] = [c.subject for c in ranked]
-        return []
-    monkeypatch.setattr(CH, "pack_scenes", spy)
-    fx = DEFAULT_FIXTURES.sweep("choice_temperature", 0).sweep("stability_gain", gain)
-    CH.make_chooser(fx, lambda *a: "act")(p, SimpleNamespace(question=object()),
-                                         SimpleNamespace(subsistence=0), lambda: 1)
-    assert "ranked" in seen, "the chooser never ranked: the falsifier did not run"
-    return seen["ranked"]
-
-
-def test_in23_known_unrest_reverses_a_ranking_the_control_keeps(monkeypatch):
-    assert subject_is_opponent(VERB_TABLE["march"]) and not subject_is_opponent(VERB_TABLE["tell"])
-    assert _ranking(0, monkeypatch) == ["r_a", "r_b"], "the control is not the name tie-break"
-    checked = 0
-    for g in (1, 3):
-        assert _ranking(g, monkeypatch) == ["r_b", "r_a"], g
-        checked += 1
-    # a row NOT contested against its subject is unmoved at the largest arm
-    assert _ranking(3, monkeypatch, verb="tell") == ["r_a", "r_b"]
-    assert checked == 2
-
-
-@pytest.mark.parametrize("g", [-1.0, float("nan")])
-def test_in23_a_negative_or_nan_gain_is_refused(g):
-    with pytest.raises(ValueError, match="stability_gain"):
-        CH.deliberation_memo(_person("p"), 0, DEFAULT_FIXTURES.sweep("stability_gain", g))

@@ -49,8 +49,8 @@ and mints no carrier, field, Event kind or register row for an arc, story or thr
 
 THE ESTIMATES (`estimates`, v9 IN-23 CARRY-STABILITY), read after each season beside the reading above
 and changing none of it: every person's own `queries/person_q.py::legitimacy` of every live seat-holder
-(himself included -- a ruler can be wrong about his own standing, R7) and `stability` of every rung a
-seat sits on, at the realm's own `estimate_window_seasons` and `scar_weight_shift`. Each row is the
+(himself included -- a ruler can be wrong about his own standing, R7) and `stability` of every rung an
+office sits on, vacant offices' included, at the realm's own `estimate_window_seasons` and `scar_weight_shift`. Each row is the
 pairs read, their mean (the cross-person mean estimate), min, max and distinct values. Who holds which
 seat is read off the World here, OUTSIDE the simulation: the observer may, and the person may not.
 """
@@ -174,7 +174,9 @@ def _spread(values) -> dict:
 
 def estimates(w) -> dict:
     """`{"legitimacy": spread, "stability": spread}` over every (person, live seat-holder) and every
-    (person, seat rung) pair of `w` as it stands -- each value one person's own estimate. Reads only."""
+    (person, office rung) pair of `w` as it stands -- an office rung being any rung an Office sits on,
+    vacant offices' included (`w.offices`, whether or not anyone holds the seat) -- each value one
+    person's own estimate. Reads only."""
     window = w.fixtures.get("estimate_window_seasons")
     shift = w.fixtures.get("scar_weight_shift")
     holders = sorted(seats(w))
