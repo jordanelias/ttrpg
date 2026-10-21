@@ -1008,11 +1008,12 @@ verbs:
     eligibility: ["remit:revoke"]
     beneficiary: "none"
     beneficiary_note: "revocation is taken AGAINST the holder and FOR the revoking remit -- an Office, which no Candidate carries. Same shape as `dispatch`."
-    requires:    "the office's revocation basis, and a live hold exists"
-    writes:      ["Tenure.until"]
+    requires:    "the office's revocation basis, and a live hold exists, and the seat's conferral basis has a revocation disposal"
+    writes:      ["Tenure.until", "Tenure.since"]
     emits:       ["tenure.closed"]
     emits_on_refusal: ["revoke.refused"]
     grade:       "ruled"
+    disposal_note: "v9 IN-31 (H-100): WHAT A REVOCATION COSTS THE MAN REVOKED, read off the SEAT'S conferral basis (`Office.conferral`, ED-IN-0256 (2)). The one owner is `state/gate.py::REVOCATION_DISPOSAL` (JORDAN, 2026-10-21, answering the IN-31 design's A1: `appointed` -> a PERMANENT `ban : him -> Act.via`, SC-03a's restraint, which `confer`, `oblige` and the fold's readers already refuse; `elected`, `annex`, `None` -> nothing). `Tenure.since` is the ban's opening (`determine`'s precedent). `emits` STAYS `tenure.closed`: the ban earns no event of its own (`determine`'s disposal earns only `matter.determined`), and `tenure.opened` here would make it a second emitter of a kind `data/verbs.py::KIND_VERB` maps to `confer`, unpricing every `confer` deed. The ban carries no term and no effect closes one, so only death ends it. NOT REVOCATIONS, and so costing nothing: a termed hold maturing at MATTER (`T-n`), a `release` or a self-revocation of one's own seat (`T-m`; no self-ban), a `confer` displacing an incumbent (A1), a death (`cascade`). ⚠ It is the seat's basis, not the route by which the man came to sit: `confer` fills all three bases. A computed `revoke` executes 0 times on `build_realm(0)` (H-207 ruling (A)), so the outcome is observed by hand-built acts (`tests/test_in31_revocation_cost.py`)."
     eligibility_note: "⚠ W3 AUDIT: §E3's eligibility cell carried a PRECONDITION as well as the remit act — `remit:revoke + ...`. The fold split on the first `:` and tested the whole tail against the remit roster, so it NEVER MATCHED and a holder of the remit was silently refused. The act is the eligibility; the basis is a `requires`."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "sabotage"

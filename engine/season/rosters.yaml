@@ -120,7 +120,10 @@ rosters:
       outlaw his own ban, would walk out of the sentence, which is why they are kinds and not an
       `oblige` (#453 §8.3). Their readers: `move`/`migrate` decline a person holding a live `detain`,
       a mustered army excludes him (`loop/sides.py`), `oblige` refuses a `ban` holder service and
-      `confer` declines to seat one.
+      `confer` declines to seat one. v9 IN-31 (H-100): `revoke` opens a `ban` too, on the man whose
+      `appointed` seat it strips, objected on the revoking seat (`state/gate.py::
+      REVOCATION_DISPOSAL`), so `ban`'s derived openers are `determine` and `revoke`; a revocation's
+      ban has no term and no closer but his death.
     values: [hold, contain, commit, oblige, succeed, tie, knot, reside, detain, ban]
     # ⚠ LOADER INVARIANT 6's SECOND HALF (`04 §B.13 #6`, `04:466-467`, `ID-14`): every kind's OPENER
     # set is declared. THIS ROW USED TO CARRY THE MAPPING BY HAND -- `openers: {hold: [confer,
