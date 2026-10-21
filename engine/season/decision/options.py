@@ -34,7 +34,8 @@ from ..data.rosters import (
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
 from ..data.verbs import (
-    ELIGIBILITY_KINDS, TERMS_SOURCED, VERB_TABLE, VOCATION_SOURCED, VOCATIONS, WARRANT_SOURCED, align,
+    ELIGIBILITY_KINDS, HELD_DOCUMENT_DECLINES, TERMS_SOURCED, VERB_TABLE, VOCATION_SOURCED, VOCATIONS,
+    WARRANT_SOURCED, align,
 )
 from ..epistemic import belief_contradicts
 from ..gaps import Forbidden
@@ -124,6 +125,12 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         if tolerance is not None and refuses(verb, axis, tolerance):
             TRACE.note(f"{p.id} refuses {verb!r}: its `{axis}` alignment exceeds their own "
                        f"projected weight {tolerance:+.3f} (ED-IN-0261)", "H-146")
+            continue
+        # v9 IN-12 step 10 (`rosters.yaml: held_document_declines`): A VERB A PERSON DOES NOT FORM WHILE HE
+        # HOLDS A DOCUMENT OF A NAMED KIND ABOUT HIMSELF -- `conceal` while he holds a cover (#453 §9.3's
+        # person-side decline). His own Tenures and own ledger, no World (`holds_own_document`).
+        held_kind = HELD_DOCUMENT_DECLINES.get(verb)
+        if held_kind is not None and holds_own_document(p, held_kind):
             continue
         refs = row.referents_of(q)
         # v9 IN-12 step 7 (`rosters.yaml: terms_sourced`): A VERB THAT MAY FORM ON WHAT A HELD WRIT SAYS
@@ -793,6 +800,26 @@ def held_record_claims(p: Person) -> list:
         if c is not None:
             out.append(c)
     return out
+
+
+def holds_own_document(p: Person, kind: str) -> bool:
+    """DOES `p` HOLD A DOCUMENT OF `kind` WHOSE CONTENT NAMES HIM? -- v9 IN-12 step 10, the read
+    `rosters.yaml: held_document_declines` declines a verb on (`conceal` while a cover is held). Person-side
+    and World-free (`AX-2`), `held_record_claims`' sources: his OWN live `hold` Tenures and the
+    `content:<kind>` claims his OWN ledger holds on their objects (`loop/witness.py`'s content deposit to
+    a new holder), read through `person_q.content_kind` / `content_said`. A Record held and never read
+    answers nothing. "Names him" is any content value equal to his id: the kind's keys are the roster's,
+    and none is spelt here."""
+    held = {t.object for t in p.tenures if t.kind == "hold" and t.live}
+    if not held:
+        return False
+    for c in p.ledger:
+        if c.subject not in held or content_kind(c) != kind:
+            continue
+        said = content_said(c)
+        if said and any(v == p.id or (isinstance(v, tuple) and p.id in v) for v in said.values()):
+            return True
+    return False
 
 
 def _from_shortfall_claim(p: Person, q: "Question", name: str):

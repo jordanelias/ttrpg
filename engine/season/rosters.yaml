@@ -222,6 +222,14 @@ rosters:
       petition:     [terms, to, from]
       works:        [plan, at]
       faction_sheet: [proposition, members, holdings, seats, head]
+      # v9 IN-12 step 10 (#453 §8.2, §9.3; K-19): A CONCEALED IDENTITY. ONE key, `terms`, and it names
+      # the ACTOR, written by `conceal`'s effect whatever the act's `subject` (the one kind whose
+      # `terms` does not follow `content.read_from` below); the Record's own id is the alias. Its
+      # stages are the mint's (`_declared_stages`). Its reader is `state/attribution.py::anchor_of`:
+      # an act by a person holding a cover whose `terms` is himself, while a stage is unmatured,
+      # anchors on the cover's id. Not a `record_sourced_operands` kind: a cover answers no operand,
+      # and `ledger_names` reads nobody out of it (`ABOUT_KEYS`).
+      cover:        [terms]
     # HOW A MINTED DOCUMENT'S CONTENT IS READ OFF THE ACT, AND WHAT A HOLDER LEARNS FROM IT. One
     # owner for three facts the mint (`loop/effects.py::_mint_document`) and the deposit rule
     # (`loop/witness.py`) both read, so neither spells them.
@@ -1948,6 +1956,29 @@ rosters:
     values:
       train: kind
 
+  held_document_declines:
+    source: >-
+      #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.3, the `conceal` row's producer
+      line, *"a person-side decline while the actor holds a live cover"*, and §10.4 step 10 (the same
+      words); its open-questions table, *"`decision/options.py::opening_set` | person-side own-state
+      declines: ... plus `conceal`'s (a live cover)"*; plan position IN-12 step 10
+      (`workplans/valoria_master_workplan_v9_part5.md`).
+    note: >-
+      WHICH VERBS A PERSON DOES NOT FORM WHILE HE HOLDS A DOCUMENT OF A NAMED KIND ABOUT HIMSELF --
+      `verb: record kind`. Read in `decision/options.py::opening_set`, person-side and World-free
+      (AX-2): the person's OWN live `hold` Tenures and the `content:<kind>` claims his OWN ledger holds
+      on their objects (`loop/witness.py`'s content deposit to a new holder), declining the verb when
+      one such claim's content names him. ⚠ "LIVE" IS READ AS "HELD", AND THAT IS THE NARROWEST
+      PERSON-SIDE READING: whether a cover's stages have matured is world state (`Record.stages`, the
+      log's `term.matured`, `state/attribution.py::live_cover`) that no ledger carries, so a person
+      holding a cover whose stages have all matured still declines a new one until it leaves his hand
+      (`destroy_record`, `give`). [ASSUMPTION; medium; Jordan to correct; revert: decline only while a
+      stage is unmatured, which first needs a person-side carrier for maturity.] ONE LOADER,
+      `data/verbs.py::HELD_DOCUMENT_DECLINES`, refused at import when a line names a verb the table
+      lacks or a kind `record_kinds` does not carry.
+    values:
+      conceal: cover
+
   shortfall_sourced_operands:
     source: >-
       plan position `19d` (DEMAND · DELIVERY), `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md`
@@ -2884,6 +2915,11 @@ tables:
         v9 IN-12 step 9: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above); #453 §9.4 gives the
         row no lean on any axis. It scores 0.0 on every axis until a cell is authored. Revert: the
         seven cells, IN-08's method.
+      conceal: >-
+        v9 IN-12 step 10: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above); #453 §9.3 gives the
+        row no lean on any axis. It scores 0.0 on every axis until a cell is authored, so no witness
+        is scarred by a cover taken, and what a covered act's witnesses are scarred by is that act's
+        own cell. Revert: the seven cells, IN-08's method.
       tell: >-
         No cell on any axis BY DESIGN: testimony's moral weight is in WHAT is told (a claim), which
         no verb x axis cell can carry, and telling is driven by regard (the telling workplan's G1),

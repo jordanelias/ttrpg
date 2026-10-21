@@ -58,7 +58,7 @@ from ..data.pursuits import pursuit_cosine_axes, to_axes
 # doers off the person-side family.
 from ..data import goals as _goals
 from .person_q import deed_doers
-from ..state.attribution import anchor_of, causing_act, event_by_id
+from ..state.attribution import anchor_of, causing_act, event_by_id, matured_terms  # noqa: F401 -- re-exported
 from ..state.carriers import Person, Question, Site, Tenure
 # ⚠ `parent_of` AND `descendants` ARE RE-EXPORTED, NOT DEFINED HERE (G3, plan position 6). The
 # write gate's F3 clause needs both -- ruling (3)'s parent rung and ruling (4)'s purview subtree --
@@ -374,21 +374,9 @@ def works_for(w: World, at: Optional[str], plan: Optional[str]) -> list:
             and hold_force(w, r.id) is not None]
 
 
-def matured_terms(w: World, rid: str) -> int:
-    """HOW MANY OF A RECORD'S DECLARED TERMS HAVE RIPENED -- counted off the log, r2 §A.6.3 DECIDED:
-    *"the carrier for 'how many stages have ripened' is `w.log`"*. `Record.matured` is ONE bool for
-    the whole Record (Jordan, 2026-09-10), so it cannot say how many.
-
-    MATTER emits `term.matured` once PER RIPENING STAGE (`loop/matter.py`'s per-stage loop, through
-    the gate on the `(Record, matured)` row, which declares exactly that kind), and the gate gives
-    each emission a distinct id (`World.new_draw`), so N stages ripening in one tick are N Events.
-    Matched on the MINTED RECEIPT's subject -- the Record the write named -- and NOT through
-    `anchor_of`: tier 1 wins for an Event whose cause resolves to an act (a hand-built Record whose
-    creating Event is not in the log falls back to the act that wound the clock), and that tier
-    would answer the MAKER, not the Record (`H-129`'s shape). `matter.py`'s own `prior` lookup reads
-    the receipt the same way."""
-    return sum(1 for e in w.log
-               if e.kind == "term.matured" and any(c.subject == rid for c in e.changes))
+# `matured_terms` -- HOW MANY OF A RECORD'S DECLARED TERMS HAVE RIPENED, counted off the log -- is owned by
+# `state/attribution.py` since v9 IN-12 step 10 (the `anchor_of` cover read asks it, and `state/` imports
+# nothing from `queries/`); imported above and read here by `ceiling`, unchanged.
 
 
 def ceiling(w: World, site: Site) -> int:

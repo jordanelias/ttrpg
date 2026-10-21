@@ -485,6 +485,20 @@ HOLD_SUBJECT_KINDS = roster("hold_subject_kinds")
 RECORD_KINDS = roster("record_kinds")
 RECORD_KIND_KEYS = {k: tuple(v or ()) for k, v in roster_map("record_kinds", "values").items()}
 RECORD_CONTENT = roster_map("record_kinds", "content")
+# v9 IN-12 step 10 (#453 §8.2, §9.3; K-19): THE `record_kinds` MEMBER A CONCEALED IDENTITY IS, and its
+# ONE content key, which names the person the cover hides (`terms`, read off the roster, never spelt).
+# Named once here, `WORKS_KIND`'s shape, for its three readers: `conceal`'s effect (the mint),
+# `state/attribution.py::live_cover` (the `anchor_of` cover read) and `decision/options.py` (the
+# person-side decline, through `held_document_declines`). Refused at import if the roster stops carrying
+# the kind or gives it other than one key: the cover read would otherwise match nothing forever.
+COVER_KIND = "cover"
+if len(RECORD_KIND_KEYS.get(COVER_KIND, ())) != 1:
+    raise Unspecified(
+        f"record kind {COVER_KIND!r} is not a one-key `record_kinds` member "
+        f"({RECORD_KIND_KEYS.get(COVER_KIND)!r})", "rosters.yaml -- record_kinds",
+        needs=f"a `{COVER_KIND}: [terms]` row, or every cover reader retired with it",
+        law="#453 §8.2 -- a cover is a Record whose one key names the actor it conceals")
+(COVER_KEY,) = RECORD_KIND_KEYS[COVER_KIND]
 # ⚠ ONE STEM READS BOTH VOCABULARIES, SO THEY MAY NOT SHARE A WORD. `exists:<kind>`
 # (`queries/world_q.py::WorldReader.read`) answers a `tenure_kinds` member as a live EDGE and a
 # `record_kinds` member as a Record OF THAT KIND; a word in both rosters would be answered by

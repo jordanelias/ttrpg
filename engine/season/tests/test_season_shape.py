@@ -2302,12 +2302,13 @@ def test_invariant_12_refuses_a_degree_keyed_emits_with_nothing_to_key_it_on():
     # 44 -> 46, `challenge` and `accept` (IN-08's cells commit, the duel pair); 46 -> 45,
     # `repudiate` CUT (v9 IN-11, #453 R-3 (b)), a re-record; 45 -> 46, `seize` (v9 IN-12 step 6, the
     # Record half), a re-record; 46 -> 47, `covenant` (v9 IN-12 step 7), a re-record; 47 -> 51, `argue`,
-    # `sabotage`, `tend`, `train` (v9 IN-12 step 9), a re-record. This
+    # `sabotage`, `tend`, `train` (v9 IN-12 step 9), a re-record; 51 -> 52, `conceal` (v9 IN-12 step 10), a
+    # re-record. This
     # is a CONTROL, not a claim about
     # the roster: its job is to fail if the loader started refusing everything, so it moves with
     # the table by construction and the number is read from the file rather than chosen.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen -- the control that stops both arms above passing on a loader that refuses everything]
-    assert len(VERBS._load_verb_table()) == 51
+    assert len(VERBS._load_verb_table()) == 52
 
 
 def test_w2_a_planted_write_to_an_unruled_field_raises_and_names_the_pair():
@@ -6813,7 +6814,10 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     # inquiries and the skip arm (no claim is deposited from a `finding.none`, and the n=3 chain above
     # ran through two of them) moved the act mix. The two arms are EQUAL, so the depth clause is not
     # discriminating -- the case the message below does not ask to be walked.
-    assert (depths[3], depths[6]) == (11, 11), (
+    # v9 IN-12 step 10: (11, 11) -> (13, 13), a re-record with the unit that moved it: `conceal` mints a
+    # `cover` Record with the mint's stages, a new act and new `term.matured` links in the act mix. The
+    # two arms are still EQUAL, so the depth clause is still not discriminating (not walked, as above).
+    assert (depths[3], depths[6]) == (13, 13), (
         f"the maturation depth ceiling moved: {depths}. This is a MEASUREMENT of a mixed chain "
         "whose length the act mix sets, not a discriminator — `H-80`'s discriminator is the COUNT, "
         "asserted below and still live. Re-pin these two numbers with the unit that moved them. "
@@ -6872,7 +6876,8 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     # [GROUNDED: re-measured at IN-08's cells commit (B-G) -- the five-season chain reads 8 against the seven-season arm's 9 (`depths[3]`, re-pinned above), moved by the same unit as that pin (the chooser re-scored on the 15x7 basis, the three persons' pursuits migrated, `challenge`/`accept` forming); the RELATION still holds]
     # [GROUNDED: re-measured at IN-50 -- the five-season chain reads 11 against the seven-season arm's 12 (`depths[3]`, re-pinned above), 8 and 9 at its base `2a2ed152`; refusals now cite their occasion (`_act_events`), so both chains lengthen, and the RELATION still holds. WALKED at the B-I close: the five-season chain is the seven-season 3-stage chain above less its last `term.matured` (`record.created, restore.refused, kill.refused, record.created, term.matured, record.created, finding.none, record.created, record.created, term.matured, term.matured`), through `record.created` and the two IN-50 refusal links]
     # [GROUNDED: re-measured at v9 FI-01 -- the five-season chain reads 9 against the seven-season arm's 11 (`depths[3]`, re-pinned above), moved by the same unit (the graded inquiries and the skip arm: the B-I walk above ran through a `finding.none`); the RELATION still holds]
-    assert max(depth5(e) for e in mats5) == 9 < depths[3], (
+    # [GROUNDED: re-measured at v9 IN-12 step 10 -- the five-season chain reads 11 against the seven-season arm's 13 (`depths[3]`, re-pinned above), moved by the same unit (`conceal`'s `cover` Records and their stages in the act mix); the RELATION still holds]
+    assert max(depth5(e) for e in mats5) == 11 < depths[3], (
         f"the longest maturation chain over FIVE seasons is {max(depth5(e) for e in mats5)}, not "
         "the 9 measured under `U2`, or it is not below the seven-season figure above. The ceiling "
         "MOVING with the season count is what makes the 3-stage and 6-stage arms saturated there "
@@ -7824,7 +7829,14 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # (115) are refused everywhere (the `refused_only` note below); `argue` is attempted where a corpus
     # person forms it and, being contested, its admission refusals never enter `driver.resolved` -- the
     # `speak` limit above -- so it lands in the never-attempted set.
-    assert ever == {"accept", "challenge", "create_record", "interview", "fight",
+    # ⚠⚠ v9 IN-12 step 10, 17 -> 18: `conceal` JOINS, nothing leaves. A RE-RECORD WITH ITS REASON: an
+    # untyped `own` row with no precondition (#453 §9.3, `create_record`'s shape), formed on its question's
+    # referents and minting a `cover` whatever the referent. MEASURED by `corpus_run.run_case` over the 143
+    # live worlds, seed 0, against the base tree (`996c16dc`) as control: `conceal` executes in 91 worlds and
+    # is refused in none; every verb executing at the base still executes (per-world counts move by a few:
+    # accept 107 -> 108, challenge 81 -> 80, give 1 -> 4, interview 5 -> 4, release 1 -> 2, research
+    # 13 -> 16, transfer 41 -> 40).
+    assert ever == {"accept", "challenge", "conceal", "create_record", "interview", "fight",
                     "give", "issue", "move", "petition", "reconstruct", "release", "research",
                     "surveil", "tell", "tend", "transfer", "utter"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
@@ -8509,7 +8521,14 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
         # 14 -> 13, `reconstruct` 130 -> 129, `utter` 117 -> 116, `transfer` 42 -> 41, `move` 44 -> 45. THE
         # SAME-BREATH CHECK: the universal set is empty on both sides and the status census is UNMOVED
         # (103 RUNS-UNDECLARED · 40 SPAN-UNAUTHORED).
-    assert len(by_sig) == 104, (
+        # ⚠⚠ **104 -> 120, v9 IN-12 step 10 (`conceal`), MEASURED BY `corpus_run.run_case`, seed 0, AGAINST
+        # THE BASE TREE (`996c16dc`, no `conceal` row) AS CONTROL, which reads 104.** THE UNIT AND THE
+        # DIRECTION: variety ROSE by sixteen; `conceal` executes in 91 of the 143 worlds (the `ever` note),
+        # so it splits executed sets that were one, and its scenes re-rank the rest by a world or a few
+        # (the `ever` note's counts). THE SAME-BREATH CHECK: `conceal` is not universal (91 < 143), the
+        # universal set stays empty, and the status census is UNMOVED (103 RUNS-UNDECLARED · 40
+        # SPAN-UNAUTHORED, `python -m engine.season.harness.corpus_run`).
+    assert len(by_sig) == 120, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -8697,7 +8716,8 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # above. Every executed verb still varies; `universal` is empty on both sides.
     # ⚠⚠ v9 SC-01 step 12: `speak` LEAVES -- the `ever` and `by_sig` notes above (79 worlds -> 0).
     # ⚠⚠ v9 IN-12 step 9: `tend` JOINS -- the `ever` note above (it executes in some worlds, not all).
-    assert varying == {"accept", "challenge", "create_record", "fight", "give",
+    # ⚠⚠ v9 IN-12 step 10: `conceal` JOINS -- the `ever` note above (91 worlds of 143, not all).
+    assert varying == {"accept", "challenge", "conceal", "create_record", "fight", "give",
                        "interview", "issue", "move",
                        "petition", "reconstruct", "release", "research",
                        "surveil", "tell", "tend", "transfer", "utter"}, (
@@ -10037,7 +10057,9 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # `test_the_corpus_runs_and_the_ranking_cannot_discriminate`'s `ever` and `by_sig` notes.
     # ⚠⚠ v9 IN-12 step 9: `tend` JOINS (16 -> 17) -- 35 worlds, a co-located person below the body's scale
     # restored (`body.tended`); the measurement is at the same test's `ever` note. Nothing leaves.
-    assert set(executed) == {"accept", "challenge", "create_record", "interview",
+    # ⚠⚠ v9 IN-12 step 10: `conceal` JOINS (17 -> 18) -- 91 worlds, a `cover` minted on any referent; the
+    # measurement is at the same test's `ever` note. Nothing leaves.
+    assert set(executed) == {"accept", "challenge", "conceal", "create_record", "interview",
                              "fight", "give", "issue",
                              "move", "petition", "reconstruct", "release", "research",
                              "surveil", "tell", "tend", "transfer", "utter"}, (
@@ -11080,7 +11102,12 @@ def test_wb_a_refusals_reads_land_as_a_claim_that_contradicts_and_the_candidate_
     # each forms one Candidate on `S` -- person-side each conjunct is UNKNOWN, not known-false. `argue` forms
     # none: its `to` fans over known persons and `p_low` knows nobody. The drop is still exactly `transfer`.
     # [GROUNDED: measured at v9 IN-12 step 9 on 664986ee + this change -- (32, 31), the three added Candidates `sabotage`/`tend`/`train`, the drop `['transfer']`]
-    assert (len(before), len(after)) == (32, 31), (
+    # ⚠ 32 -> 33, v9 IN-12 step 10: `conceal` is an untyped `own` row with no precondition (#453 §9.3), so it
+    # forms one Candidate on `S`; nothing can be known-false of it. The drop is still exactly `transfer`.
+    # RE-DERIVED, not adjusted: with `conceal` removed from `decision/options.py`'s `VERB_TABLE` in-process,
+    # this test passes at (32, 31) unchanged.
+    # [GROUNDED: measured at v9 IN-12 step 10 on 996c16dc + this change -- (33, 32) as built, (32, 31) with `conceal` removed; the drop `['transfer']` in both]
+    assert (len(before), len(after)) == (33, 32), (
         f"the absolute counts moved to {(len(before), len(after))}. They are the denominator the "
         "delta above is read against, and the delta alone does not reproduce them — re-derive "
         "`H-122`'s reading rather than adjusting this line")
@@ -13023,7 +13050,12 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # new rows (`argue`, `sabotage`, `tend`, `train`) are members of NPC-088's option sets, so a fork's
     # alternative can be one of them and whether a forced act reaches a later decision shifts. Mechanism not
     # isolated past that; the separation this test is for widens (10 > 1).
-    assert (got["none"]["genuine"], got["none"]["diverged"]) == (40, 1), got
+    # v9 IN-12 step 10: 40/1 -> 40/2, a re-record read off the failing assertion's own `got` (the `none`
+    # population 40 UNMOVED; `actor` 36/10 and `total` 36/8 UNMOVED, per the sibling fingerprint test's
+    # `got`): `conceal` is a new member of NPC-088's option sets, so a fork's alternative can be a cover
+    # and one more forced act at the control arm reaches a later decision. Mechanism not isolated past
+    # that; the separation this test is for holds (10 > 2).
+    assert (got["none"]["genuine"], got["none"]["diverged"]) == (40, 2), got
     # Reproduce with the `fork_case` loop above, run at each `fan_out_mode`.
     # [GROUNDED: measured 2026-09-07 — 16 genuine forks, 0 divergences at the shipped arm]
     # ⚠ 14 of 18 -> 17 of 19 under `U4`: the sampled tie-break moved the act a fork's person takes,
@@ -13581,7 +13613,8 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # [GROUNDED: measured at IN-08's cells commit (B-G) -- fingerprint genuine/wide: `none` 37/4, `actor` 35/9, `total` 29/6 (from 32/5, 32/7, 30/11); the sibling test's IN-08 move, same `fork_case` instrument, same cause]
     # IN-57: 37/4 -> 40/4, the sibling test's move (the attention-tier key).
     # v9 IN-12 step 9: 40/4 -> 40/1, the sibling test's move (the four new rows; its `(40, 1)` note).
-    assert (got["none"]["genuine"], got["none"]["wide"]) == (40, 1), got
+    # v9 IN-12 step 10: 40/1 -> 40/2, the sibling test's move (`conceal`; its `(40, 2)` note).
+    assert (got["none"]["genuine"], got["none"]["wide"]) == (40, 2), got
     # [GROUNDED: re-measured 2026-09-10 under `U4` — `actor` wide 17 of 19 under the widened fingerprint]
     # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (29, 9) at the shipped arm]
     # [GROUNDED: re-measured 2026-09-13 after `build_at` gave each person a person-subject
@@ -13950,9 +13983,10 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # R-3 (b)), uncontested, a re-record; 45 -> 46, `seize` (v9 IN-12 step 6), uncontested, a re-record;
     # 46 -> 47, `covenant` (v9 IN-12 step 7), uncontested, a re-record; 47 -> 51, `argue`, `sabotage`,
     # `tend`, `train` (v9 IN-12 step 9) -- `argue` IS contested, so the contested set above moves with it
-    # (the seventh entry); the other three are not. A re-record.
+    # (the seventh entry); the other three are not. A re-record. 51 -> 52, `conceal` (v9 IN-12 step 10),
+    # uncontested, a re-record.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen]
-    assert len(VERB_TABLE) == 51, len(VERB_TABLE)
+    assert len(VERB_TABLE) == 52, len(VERB_TABLE)
     # AND THE SIX ARE SIX, not a row that says six. This is the half of the pin that the old
     # count could not express: a table carrying the placeholder passed `== 32` while no act in it
     # could be formed, and `runs/CASELOG_NPC.md:64` reported the same case as a blocked one.

@@ -178,9 +178,16 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # `act.ineligible`; none executed), so the act mix moves. The build hash is equal; one and two seasons move.
 # Was b3e7784f... / da8e0167... (one, two seasons). ARM, run on this tree: the four withheld from every
 # `opening_set` reproduces the old hashes and event counts exactly (6178 / 17855).
+# RE-PINNED at v9 IN-12 step 10 (`conceal`), A BEHAVIOUR MOVE DECLARED: a new `own` row with no precondition the
+# realm's persons FORM on their questions' referents and the chooser ATTEMPTS, and it EXECUTES (`cover.assumed`
+# 19 by two seasons, 19 covers minted); a covered person's later acts anchor on the alias
+# (`state/attribution.py::anchor_of`), which moves what the deposits about them are about. The build hash is
+# equal; one and two seasons move. Was e28a0d36... / b7367802... (one, two seasons). ARM, run on this tree:
+# `conceal` withheld from every `opening_set` reproduces the old hashes and event counts and digests exactly
+# (6321 / 17559) -- with no cover held, the `anchor_of` cover read moves nothing.
 BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
-               1: "e28a0d368ac98f0c0064fa17be3a31ef",
-               2: "b736780230014a5e2bf73e5d8c2fa4cc"}
+               1: "38cc3da0c56ecf9db4ff6bf9472e074c",
+               2: "e1fbb61025e83d21b410792573ecbafe"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -216,8 +223,9 @@ BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
 # `claim.deposited` Events, and the trajectory the graded inquiries and the missing claims move).
 # RE-RECORDED at v9 IN-12 step 7 `covenant` with `BASE_HASHES` (6111 -> 6178, 18920 -> 17855).
 # RE-RECORDED at v9 IN-12 step 9 with `BASE_HASHES` (6178 -> 6321, 17855 -> 17559).
-BASE_EVENTS = {1: (6321, "3dd12bdb774f349e92782ef58bd8a81a3ad0b09a49a733660c3ad7422a814310"),
-               2: (17559, "2402719d7e80807ee9da4d40cb4a0a8ebdf5a6815467d0e579a756cfc6a2af46")}
+# RE-RECORDED at v9 IN-12 step 10 `conceal` with `BASE_HASHES` (6321 -> 6642, 17559 -> 19553).
+BASE_EVENTS = {1: (6642, "7741b93f3ec54b2b0514b50473b45d45fafc55f11e02d407ef8f1c70fb51d518"),
+               2: (19553, "ac05efb795c876f4ed61ef66d8ff0b67a1590bbf8bebab1927f06dfc6455328c")}
 
 
 def _digest(w) -> tuple:

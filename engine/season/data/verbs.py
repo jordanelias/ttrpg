@@ -1467,6 +1467,27 @@ VOCATION_SOURCED = _load_vocation_sourced(roster_map("vocation_sourced", "values
 VOCATIONS = frozenset(roster_map("verb_capability", "values").values())
 
 
+# v9 IN-12 step 10: `{verb: record kind}` -- the verbs a person does not form while he holds a document
+# of that kind whose content names him (`rosters.yaml: held_document_declines`, read in `opening_set`;
+# `conceal` while a cover is held). REFUSED AT IMPORT, `TERMS_SOURCED`'s reason: a verb the table lacks
+# or a kind `record_kinds` does not carry would decline for nobody, and a stale line must not read as a
+# live decline.
+def _load_held_document_declines(values: dict) -> dict:
+    """`rosters.yaml: held_document_declines`' `values`, checked and frozen -- refused per line (above)."""
+    out = {v: str(k or "") for v, k in values.items()}
+    for v, k in out.items():
+        if v not in VERB_TABLE or k not in RECORD_KINDS:
+            raise Forbidden(
+                f"`rosters.yaml: held_document_declines` names {v!r}: {k!r}, and the verb table carries no "
+                f"such verb, or {k!r} is no `record_kinds` member ({sorted(RECORD_KINDS)})", "rosters.yaml",
+                needs="a `verb_table.yaml` verb, and a record kind a held document can be",
+                law="IN-12 step 10 -- a person-side decline reads a document he holds, of a kind that exists")
+    return out
+
+
+HELD_DOCUMENT_DECLINES = _load_held_document_declines(roster_map("held_document_declines", "values"))
+
+
 def _derive_rung_remit_acts() -> frozenset:
     """v9 IN-49 `requisition` (H-163 limit 3, [ASSUMPTION; medium; Jordan to correct]): THE REMIT ACTS A
     SEAT EXERCISES ON A `Rung`-CLASSED REFERENT -- the act of every `remit:` eligibility alternative

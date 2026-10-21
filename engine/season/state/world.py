@@ -41,7 +41,7 @@ from ..data.rosters import (
     HOLD_OBJECT_KINDS, HOLD_SUBJECT_KINDS, RUNG_KINDS, TENURE_KINDS, roster)
 from ..gaps import Forbidden, InstrumentDefect, NoProducer, Unowned, Unspecified
 from ..trace_log import TRACE
-from .attribution import anchor_of
+from .attribution import anchor_of, cover_at_logging
 from .carriers import (
     Event, Office, Person, Proposition, Receipt, Record, Rung, Site, StateChange, Tenure,
 )
@@ -224,6 +224,13 @@ class World:
         # commits) and by `test_in56`'s oracle against a log scan. Grade: CONVENTION.
         self._last_by_anchor: dict[tuple, str] = {}
         self._last_by_subject: dict[tuple, str] = {}
+        # v9 IN-12 step 10: `{event id: cover id}` for every logged Event whose actor held a live cover
+        # WHEN IT WAS LOGGED (`state/attribution.py::cover_at_logging`, written in `_on_logged` below),
+        # which `anchor_of` reads for a logged Event -- so a logged Event's anchor cannot change after
+        # it is logged (`_on_logged`'s own invariant), whatever later becomes of the cover. Underscore,
+        # derived from the log and the world as it stood, not folded into `content_hash`: the
+        # `_last_by_*` maps' standing, and their lifetime.
+        self._covers_logged: dict[str, str] = {}
         self.log = EventLog(self.gate, lambda: self.acts.ids(), self._on_logged)
         self.dates: dict[str, dict] = {}
         self.docket: list[dict] = []
@@ -1290,7 +1297,15 @@ class World:
         in the store before any Event naming it is admitted, the store never removes one, and an
         appended Event is not edited, so the value cannot change between this call and a query.
         An Event with several changes registers each DISTINCT subject; a later Event of the same
-        key overwrites, as the reverse scan stopped at the latest."""
+        key overwrites, as the reverse scan stopped at the latest.
+
+        v9 IN-12 step 10: THE ONE `anchor_of` INPUT THAT A LATER WORLD COULD MOVE -- whether the actor
+        held a live cover (`attribution.live_cover`: his own `hold`, the cover's stages, both of which
+        change) -- is read ONCE, here, and kept (`_covers_logged`), BEFORE the anchor is indexed, so
+        the invariant above holds for a covered Event too."""
+        cover = cover_at_logging(self, e)
+        if cover is not None:
+            self._covers_logged[e.id] = cover
         self._last_by_anchor[(e.kind, anchor_of(self, e))] = e.id
         for subj in {c.subject for c in e.changes}:
             self._last_by_subject[(e.kind, subj)] = e.id

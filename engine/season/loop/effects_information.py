@@ -1,5 +1,5 @@
 """`season.loop.effects_information` -- records, propositions, matters: create_record, issue,
-covenant, open_case, carry, determine, argue, petition, survey, forge, give, destroy_record, utter,
+covenant, conceal, open_case, carry, determine, argue, petition, survey, forge, give, destroy_record, utter,
 commit.
 
 EXTRACTED from `effects.py` at the per-subsystem split (Phase 4). Holds the document/proposition/
@@ -18,7 +18,7 @@ from typing import Optional
 from ..data.arrangements import ARRANGEMENTS
 from ..data.matrix import matrix_row
 from ..data.requires import RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS
-from ..data.rosters import MARCH_TARGET_KINDS, RECORD_CONTENT, RECORD_KIND_KEYS
+from ..data.rosters import COVER_KEY, COVER_KIND, MARCH_TARGET_KINDS, RECORD_CONTENT, RECORD_KIND_KEYS
 from ..data.verbs import VERB_TABLE, WARRANT_SOURCED
 from ..queries import faction_q
 from ..queries.person_q import ABOUT_KEYS, argued_pursuits, consequence_pursuits
@@ -252,6 +252,21 @@ def _eff_covenant(w: "World", a: "Act", res: "Resolution | None" = None) -> Chan
     when both holders are committed -- a reading nothing performs yet: its readers (tribute through
     `_renewals`, allied sides through `mustered`) are deferred (#453 §10.4 step 7)."""
     return _mint_document(w, a, "dispensation", _content_of(a, "dispensation"), _seat_rung(w, a))
+
+
+@effect_for("conceal")
+def _eff_conceal(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """v9 IN-12 step 10 (#453 §9.3; K-19): A COVER IS A `Record` OF KIND `cover` WHOSE ONE KEY NAMES THE
+    ACTOR -- written HERE, whatever the act's `subject` (a computed act's `subject` is its question's
+    referent, which a cover is not about), so `_content_of`'s `read_from` (`terms` <- `subject`) is not
+    asked. The Record's own id is the alias. Minted through `_mint_document`, the one mint: the maker's
+    `hold` opens with it and the stages it winds are the mint's (`_declared_stages`), which MATTER
+    matures. Drawn up where `create_record` draws a document an act names no seat for (the act's
+    declared `rung`, else the actor's id); `place_of` reads a held Record at its holder's place either way.
+
+    What the cover DOES is not here: `state/attribution.py::anchor_of` reads it (`live_cover`)."""
+    d = a.payload if isinstance(a.payload, dict) else {}
+    return _mint_document(w, a, COVER_KIND, {COVER_KEY: a.actor}, d.get("rung") or a.actor)
 
 
 @effect_for("open_case")
