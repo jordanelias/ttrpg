@@ -1741,7 +1741,10 @@ def uncontrolled(w: World, rung_id: str) -> list[str]:
     meets the letter of r2 `05` §A.1.5 RULED (d), as `establishment_of` below records (*a Query
     with no consumer is a false N-line*), and no more: nothing in the loop or the chooser asks it,
     so the content hash cannot move by it and, under `CLAUDE.md` §0.2, it is a tested read that a
-    harness reports. `engine/season/tests/test_revolt_query.py` is its falsifier."""
+    harness reports. `engine/season/tests/test_revolt_query.py` is its falsifier.
+    ⚠ v9 IN-30 TRIED TO GIVE IT A CALLER AND STOPPED: no existing verb takes or governs unheld land
+    (`seize` declines it, `march` moves presence only), and the `Rung` stamp reaches only `migrate`
+    and `requisition`, which read no holding -- so any caller needs a ruling first (`H-186`)."""
     TRACE.query("uncontrolled", "resolver")
     return sorted(r for r in _subtree(w, rung_id)
                   if r in w.rungs and w.rungs[r].kind == "territory"
