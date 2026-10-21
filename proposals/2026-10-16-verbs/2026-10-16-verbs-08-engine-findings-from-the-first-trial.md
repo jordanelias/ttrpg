@@ -1,7 +1,7 @@
-# Persons, attributes and verbs: the v2 synthesis — part 8: Part V, engine findings carried from the first-pass trial
+# Verbs, v2 — part 08: Part V, engine findings carried from the first-pass trial
 
 ## Status: PROPOSED (2026-10-17). Not ratified; merging ratifies nothing unless Jordan so rules. Static reading only: no run was made for this Part. It was Part V, "the trial of the new verbs" (a trial of 108 items, filed 2026-10-16 at `716c253`); its verdict tables, counts and diagrams are withdrawn with the first-pass Part III. What remains are the cross-cutting engine rulings the trial established, each marked below as retained or superseded.
-## Parts, in reading order: [head](2026-10-16-v2-person-troop-attribute-synthesis.md) (§0, Part I Persons) · [`_part2`](2026-10-16-v2-person-troop-attribute-synthesis_part2.md) (Part II Attributes) · [`_part3`](2026-10-16-v2-person-troop-attribute-synthesis_part3.md) and [`_part4`](2026-10-16-v2-person-troop-attribute-synthesis_part4.md) (Part III Verbs: standards, roster, reconciliation; critics, etymology audit, gap coverage, named mechanics, decisions) · [`_part5`](2026-10-16-v2-person-troop-attribute-synthesis_part5.md) and [`_part6`](2026-10-16-v2-person-troop-attribute-synthesis_part6.md) (Part IV What verbs do to the world) · [`_part7`](2026-10-16-v2-person-troop-attribute-synthesis_part7.md) (§5 Roadmap, §6 Reliability ledger, §7 Sources) · **this file** (Part V: engine findings carried from the first-pass trial) · Part VI, the lexicon by subsystem: [`_part9`](2026-10-16-v2-person-troop-attribute-synthesis_part9.md) PC · [`_part10`](2026-10-16-v2-person-troop-attribute-synthesis_part10.md) MB · [`_part11`](2026-10-16-v2-person-troop-attribute-synthesis_part11.md) SC · [`_part12`](2026-10-16-v2-person-troop-attribute-synthesis_part12.md) FI · [`_part13`](2026-10-16-v2-person-troop-attribute-synthesis_part13.md) TW · [`_part14`](2026-10-16-v2-person-troop-attribute-synthesis_part14.md) GV · [`_part15`](2026-10-16-v2-person-troop-attribute-synthesis_part15.md) FA · [`_part16`](2026-10-16-v2-person-troop-attribute-synthesis_part16.md) EC · [`_part17`](2026-10-16-v2-person-troop-attribute-synthesis_part17.md) WT · [`_part18`](2026-10-16-v2-person-troop-attribute-synthesis_part18.md) NP · Part VII, the verb gap register (the evidence behind Part VI's coverage tables): [`_part19`](2026-10-16-v2-person-troop-attribute-synthesis_part19.md) PC+NP · [`_part20`](2026-10-16-v2-person-troop-attribute-synthesis_part20.md) MB+FA · [`_part21`](2026-10-16-v2-person-troop-attribute-synthesis_part21.md) SC+GV · [`_part22`](2026-10-16-v2-person-troop-attribute-synthesis_part22.md) FI+TW · [`_part23`](2026-10-16-v2-person-troop-attribute-synthesis_part23.md) EC+WT.
+## Parts, in reading order: [head](2026-10-16-verbs-01-thesis-and-persons.md) (§0, Part I Persons) · [`verbs-02`](2026-10-16-verbs-02-attributes.md) (Part II Attributes) · [`verbs-03`](2026-10-16-verbs-03-standards-roster-and-reconciliation.md) and [`verbs-04`](2026-10-16-verbs-04-critics-etymology-gaps-and-decisions.md) (Part III Verbs: standards, roster, reconciliation; critics, etymology audit, gap coverage, named mechanics, decisions) · [`verbs-05`](2026-10-16-verbs-05-what-verbs-do-to-the-world-1.md) and [`verbs-06`](2026-10-16-verbs-06-what-verbs-do-to-the-world-2.md) (Part IV What verbs do to the world) · [`verbs-07`](2026-10-16-verbs-07-roadmap-reliability-and-sources.md) (§5 Roadmap, §6 Reliability ledger, §7 Sources) · **this file** (Part V: engine findings carried from the first-pass trial) · Part VI, the lexicon by subsystem: [`verbs-09`](2026-10-16-verbs-09-lexicon-personal-combat.md) PC · [`verbs-10`](2026-10-16-verbs-10-lexicon-mass-battle.md) MB · [`verbs-11`](2026-10-16-verbs-11-lexicon-social-contest.md) SC · [`verbs-12`](2026-10-16-verbs-12-lexicon-fieldwork-and-inquiry.md) FI · [`verbs-13`](2026-10-16-verbs-13-lexicon-threadwork.md) TW · [`verbs-14`](2026-10-16-verbs-14-lexicon-settlements-and-governance.md) GV · [`verbs-15`](2026-10-16-verbs-15-lexicon-faction-actions.md) FA · [`verbs-16`](2026-10-16-verbs-16-lexicon-economy-trade-and-craft.md) EC · [`verbs-17`](2026-10-16-verbs-17-lexicon-world-travel-and-survival.md) WT · [`verbs-18`](2026-10-16-verbs-18-lexicon-npc-life-and-persons.md) NP · Part VII, the verb gap register (the evidence behind Part VI's coverage tables): [`verbs-19`](2026-10-16-verbs-19-gap-register-pc-and-np.md) PC+NP · [`verbs-20`](2026-10-16-verbs-20-gap-register-mb-and-fa.md) MB+FA · [`verbs-21`](2026-10-16-verbs-21-gap-register-sc-and-gv.md) SC+GV · [`verbs-22`](2026-10-16-verbs-22-gap-register-fi-and-tw.md) FI+TW · [`verbs-23`](2026-10-16-verbs-23-gap-register-ec-and-wt.md) EC+WT.
 
 **Citations in the lane sections.** Part VI cites this Part's first-pass text as `v2-p8` with its old line numbers. Recover that text with `git show 716c253:proposals/2026-10-16-v2-person-troop-attribute-synthesis_part8.md`.
 
@@ -31,7 +31,7 @@
 | V.2.12 War is a Proposition plus seat-holders' commits, and nothing reads it | PARTLY SUPERSEDED | `declare` is now an own row that writes the declarer's edge (Part III R-06); the reader of `at_war` stays a named mechanic (FA-M1) |
 | V.2.13 Sixteen merges were filed against the wrong row | SUPERSEDED | a ledger of the first pass's mistakes; the lanes re-opened every absorber |
 | V.2.14 The inquiry yield is the shared dependency of seven verdicts | RETAINED | stands as the finding producer, FI-M1 |
-| V.2.15 Execution before additions | RETAINED | stands as the build order (Part III §III.10; `_part7` §5) |
+| V.2.15 Execution before additions | RETAINED | stands as the build order (Part III §III.10; `verbs-07` §5) |
 
 ### V.2 The rulings
 
@@ -77,7 +77,7 @@ name a matter kind and an amount, supplied to a person's act through the existin
 
 **The strongest counter-argument.** *Four different matters on one channel is a grab-bag.* The S test
 answers it: one method for one quantity ("a document says what moves"); a second mechanism for any of
-the four would fail SMOOTH. **The consequence:** one roadmap node (`_part7` §5, T2) precedes four
+the four would fail SMOOTH. **The consequence:** one roadmap node (`verbs-07` §5, T2) precedes four
 named contents. `exchange` is retired only in the commit that gives `covenant` both sides' goods
 (§V.2.7).
 
@@ -315,7 +315,7 @@ several merges were cuts in disguise.
 
 **Claim.** `search`, `track`, `shadow`, `audit`, `reconnoitre`, `trace` and a future route content on
 an inquiry all wait on R-C-23, the content yield no inquiry has. A seventh inquiry would inherit the
-defect, not fix it, so none is added. R-C-23 is the existing B9 node (`_part7` §5).
+defect, not fix it, so none is added. R-C-23 is the existing B9 node (`verbs-07` §5).
 
 #### V.2.15 Execution before additions  `[RETAINED]`
 
