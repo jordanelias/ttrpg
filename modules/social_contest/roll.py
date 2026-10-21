@@ -66,8 +66,8 @@ def obstacle(inp: SocialContestInput) -> float:
 
     ⚠ THE RULING IS `score/2 PLUS MODIFIERS` AND IT APPLIES TO A PERSON. Jordan, 2026-08-14, carried
     live in `dice_engine.degree_from_net`'s docstring: an opposed obstacle is *"their corresponding
-    score/2 plus whatever specific modifiers exist for them in that instance"*. No instance modifier
-    has a producer yet, so none is added. A record, a rung or a proposition has no score and takes
+    score/2 plus whatever specific modifiers exist for them in that instance"*. The instance
+    modifiers are the room's terms and an examined document's forgery quality, below. A record, a rung or a proposition has no score and takes
     `obstacle_default`. **NO "BASE Ob BY SCALE"** (Jordan, 2026-09-05).
 
     ⚠ THE CEILING (`H-213`, swept; Contradiction 3 of the proceedings reconciliation, resolved): a
@@ -79,8 +79,31 @@ def obstacle(inp: SocialContestInput) -> float:
     PER MATTER (ED-SC-0038's pick): this bounds ONE record's obstacle -- one matter's draw -- and
     nothing composes obstacles across a bundle. `None` is the uncapped control arm. A ceiling below
     the Ob minimum (`OB_MIN`, PP-232) is refused rather than read: it would breach the floor. Nothing floors the composed obstacle itself: a score under 2 composes
-    below `OB_MIN` (score 1 gives 0.5), as the deleted `_obstacle_of` did."""
+    below `OB_MIN` (score 1 gives 0.5), as the deleted `_obstacle_of` did.
+
+    ⚠ THE ROOM'S TERMS ARE THE INSTANCE MODIFIERS THE RULING NAMES (v9 SC-02 `22a`; proceedings
+    `19_PLAN.md` steps 17, 18, 20): `room = reception_gain · reception + proof_step · proofs`, both read
+    raw off the record, is SUBTRACTED -- a bench disposed toward the speaker, and proofs his opponent
+    cannot mirror, make the matter easier; a bench against him makes it harder. A room's favour never
+    takes the obstacle below `OB_MIN` (or below a base already under it): it moves the obstacle, it
+    does not abolish it. The ceiling still bounds the result, so under the shipped `H-213` ceiling (2,
+    the same as `obstacle_default`) a hostile room cannot raise a defaulted obstacle -- stated, not
+    hidden. THE FAVOURABLE HALF IS CLIPPED THE SAME WAY: the ceiling is applied after the room, so
+    against a strong opposition (base above the ceiling) a favourable room bites only where it takes
+    the obstacle below the ceiling (`room > base - ceiling`); a room of +1.5 against a base of 4 under
+    a ceiling of 2 changes nothing. With no room (both terms 0) this is the obstacle as it was.
+
+    ⚠ AND AN EXAMINED DOCUMENT'S FORGERY QUALITY IS ONE MORE (v9 SC-02 `22b` step 25; `19_PLAN.md` step
+    25, *"examination contests the record's forgery quality"*): `forgery_quality`, read raw off the
+    Record an inquiry examines, is ADDED -- a better forgery is harder to find -- before the ceiling,
+    which bounds it as it bounds a hostile room. `0` (a genuine document, or the `H-210` control arm)
+    adds nothing. Under the shipped `H-213` ceiling (2 = `obstacle_default`) a forgery cannot raise a
+    defaulted inquiry's obstacle: the quality reaches the roll only where the ceiling sits above the
+    default (the uncapped `None` arm, or `3`) -- stated, not hidden."""
     ob = float(inp.opposition) / 2.0 if inp.opposition is not None else float(inp.obstacle_default)
+    room = float(inp.reception_gain) * float(inp.reception) + float(inp.proof_step) * float(inp.proofs)
+    ob = max(ob - room, min(ob, float(OB_MIN))) if room > 0 else ob - room
+    ob += float(inp.forgery_quality)
     ceiling = inp.obstacle_ceiling
     if ceiling is None:
         return ob

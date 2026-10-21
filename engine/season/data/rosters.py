@@ -485,6 +485,20 @@ HOLD_SUBJECT_KINDS = roster("hold_subject_kinds")
 RECORD_KINDS = roster("record_kinds")
 RECORD_KIND_KEYS = {k: tuple(v or ()) for k, v in roster_map("record_kinds", "values").items()}
 RECORD_CONTENT = roster_map("record_kinds", "content")
+# v9 IN-12 step 10 (#453 §8.2, §9.3; K-19): THE `record_kinds` MEMBER A CONCEALED IDENTITY IS, and its
+# ONE content key, which names the person the cover hides (`terms`, read off the roster, never spelt).
+# Named once here, `WORKS_KIND`'s shape, for its three readers: `conceal`'s effect (the mint),
+# `state/attribution.py::live_cover` (the `anchor_of` cover read) and `decision/options.py` (the
+# person-side decline, through `held_document_declines`). Refused at import if the roster stops carrying
+# the kind or gives it other than one key: the cover read would otherwise match nothing forever.
+COVER_KIND = "cover"
+if len(RECORD_KIND_KEYS.get(COVER_KIND, ())) != 1:
+    raise Unspecified(
+        f"record kind {COVER_KIND!r} is not a one-key `record_kinds` member "
+        f"({RECORD_KIND_KEYS.get(COVER_KIND)!r})", "rosters.yaml -- record_kinds",
+        needs=f"a `{COVER_KIND}: [terms]` row, or every cover reader retired with it",
+        law="#453 §8.2 -- a cover is a Record whose one key names the actor it conceals")
+(COVER_KEY,) = RECORD_KIND_KEYS[COVER_KIND]
 # ⚠ ONE STEM READS BOTH VOCABULARIES, SO THEY MAY NOT SHARE A WORD. `exists:<kind>`
 # (`queries/world_q.py::WorldReader.read`) answers a `tenure_kinds` member as a live EDGE and a
 # `record_kinds` member as a Record OF THAT KIND; a word in both rosters would be answered by
@@ -509,6 +523,74 @@ VERB_CAPABILITY = roster_map("verb_capability", "values")
 GRADED_INQUIRIES = roster_map("graded_inquiries", "values")
 # RS-21 item 1 (H-111): the Event kinds WITNESS deposits nothing for (`loop/witness.py::witness`).
 UNDEPOSITED_KINDS = roster("undeposited_kinds")
+# v9 SE-01 (`24g`) / `H-51`: the refusal kind a row (`dispatch`) declares and the fold keeps ONLY when
+# the act earns it (`loop/resolve.py::_demand_earned`: from the precondition refusal of an act naming
+# nobody the world holds). ONE OWNER, read by the fold and by the loader's flat-row rule (`data/verbs.py`,
+# loader invariant 4's flat half, v9 SC-02 `23`), which exempts exactly this kind from the two-kind
+# refusal because the fold publishes it solely when earned. A second such kind is an earning predicate
+# beside `_demand_earned` and a member here, in one edit.
+PERSON_DEMANDED = "person.demanded"
+
+
+def is_event_kind(k) -> bool:
+    """THE ONE SPELLING OF AN EVENT KIND: `<noun>.<verb>`, two non-empty dotted parts. `check_fold_kinds` and
+    `data/verbs.py::derive_event_kinds` both ask it, so the shape lives once (`CLAUDE.md` §8)."""
+    return isinstance(k, str) and len(k.split(".")) == 2 and all(k.split("."))
+
+
+_FOLD_KEY_INELIGIBLE = "ineligible"
+_FOLD_KEY_REFUSED = "refused"
+_FOLD_KEY_ATTEMPT_REFUSED = "attempt_refused"
+
+
+def check_fold_kinds(mapping: dict) -> dict:
+    """LOADER INVARIANT 7, THE FOLD'S HALF (`04 §B.13 #7`, `F.20b`): THE KINDS THE FOLD EMITS WITH NO
+    VERB ROW BEHIND THEM ARE A DECLARED COLUMN, NOT A BODY LITERAL. The keys are a closed set (the
+    three `loop/resolve.py` reads, below) and every value is a non-empty `<noun>.<verb>` kind; a key
+    missing is a body literal waiting to come back, and a key nothing reads is `ID-13`. A function and
+    not an inline `if`, so a test can plant a drifted mapping and watch the load refuse
+    (`CLAUDE.md` §0.1 pt 3). Raises `SystemExit`, as every load-time refusal in this package does
+    (`verbs.py`, `H-115`), naming the row."""
+    # The KEYS are the fold's own call sites (`FOLD_INELIGIBLE`, `FOLD_REFUSED`, `FOLD_ATTEMPT_REFUSED`
+    # below read exactly these), named once as constants so no literal collection stands here.
+    wanted = frozenset((_FOLD_KEY_INELIGIBLE, _FOLD_KEY_REFUSED, _FOLD_KEY_ATTEMPT_REFUSED))
+    missing, extra = sorted(wanted - set(mapping)), sorted(set(mapping) - wanted)
+    bad = sorted(k for k, v in mapping.items() if not is_event_kind(v))
+    if missing or extra or bad:
+        raise SystemExit(
+            f"rosters.yaml: `fold_kinds` {'misses ' + str(missing) + '; ' if missing else ''}"
+            f"{'carries ' + str(extra) + ' that nothing reads; ' if extra else ''}"
+            f"{'has malformed kind(s) for ' + str(bad) + '; ' if bad else ''}"
+            f"04 §B.13 #7 / F.20b -- the fold's three body-literal Event kinds are declared columns "
+            f"{sorted(wanted)}, each a `<noun>.<verb>` kind, or the derived Event-kind roster is "
+            "not derived.")
+    return dict(mapping)
+
+
+FOLD_KINDS = check_fold_kinds(roster_map("fold_kinds", "values"))
+FOLD_INELIGIBLE = FOLD_KINDS[_FOLD_KEY_INELIGIBLE]
+FOLD_REFUSED = FOLD_KINDS[_FOLD_KEY_REFUSED]
+FOLD_ATTEMPT_REFUSED = FOLD_KINDS[_FOLD_KEY_ATTEMPT_REFUSED]
+
+
+def check_logged_kinds(mapping: dict) -> dict:
+    """LOADER INVARIANT 7 for the kinds MATTER logs with no write behind them (`rosters.yaml:
+    logged_kinds`): the keys are a closed set (`standing_crossed`, the one `loop/matter.py` reads) and
+    each value a `<noun>.<verb>` kind, or the load refuses naming the row. A function, so a test can plant
+    a drifted mapping."""
+    wanted = frozenset(("standing_crossed",))
+    bad = sorted(k for k, v in mapping.items() if not is_event_kind(v))
+    if set(mapping) != wanted or bad:
+        raise SystemExit(
+            f"rosters.yaml: `logged_kinds` keys {sorted(mapping)} (expected {sorted(wanted)})"
+            f"{'; malformed kind(s) for ' + str(bad) if bad else ''}. 04 §B.13 #7 / F.20b -- a kind "
+            "MATTER logs directly is a declared column, each a `<noun>.<verb>` kind, or the derived "
+            "Event-kind roster is not derived.")
+    return dict(mapping)
+
+
+LOGGED_KINDS = check_logged_kinds(roster_map("logged_kinds", "values"))
+STANDING_CROSSED = LOGGED_KINDS["standing_crossed"]
 RUNG_KINDS = roster("rung_kinds", ordered=True)
 
 
@@ -649,6 +731,24 @@ if (set(CHANNEL_CLAIM_SOURCE) != set(WITNESS_CHANNELS)
         needs="give every channel exactly one source from `claim_sources`",
         law="19_PLAN.md step 4 (b) -- the claim's source is set FROM A CHANNEL->SOURCE MAP, so "
             "the map is total over the channels and closed over the sources")
+# THE ORDINAL OF REMOVE, ONE OWNER (`19_PLAN.md`'s *firsthand > knot-sourced > told > inferred*): the
+# distinct `claim_source:` values in `WITNESS_CHANNELS`' order, strongest first -- that roster's note
+# says its order IS this ordinal. Read by `decision/options.py::channel_remove` (refraction, v9 IN-15)
+# and `queries/world_q.py::remove_weight` (reception and proofs, v9 SC-02 `22a`); it lives here, in
+# the data layer both sides may import, so neither copies it. Refused at import unless it ranks every
+# `claim_sources` member: a claim held under a source with no rank would raise mid-season.
+REMOVE_ORDINAL = tuple(dict.fromkeys(CHANNEL_CLAIM_SOURCE[ch] for ch in WITNESS_CHANNELS))
+if set(REMOVE_ORDINAL) != set(CLAIM_SOURCES):
+    raise Unspecified(
+        f"the ordinal of remove {REMOVE_ORDINAL!r} (read off `witness_channels.claim_source`) does "
+        f"not rank every claim source {sorted(CLAIM_SOURCES)}", "rosters.yaml",
+        needs="a witness channel minting each `claim_sources` member",
+        law="19_PLAN.md step 17 -- every claim is weighted by an ordinal of remove; a source the "
+            "ordinal does not rank has no weight")
+# The coercive deed kinds (`standing_routes.kinds.dominance`); `prestige` is the complement and carries
+# no list. Checked against the deed kinds beside `covert_kinds`' own check (`data/verbs.py::
+# _check_dominance_kinds`).
+DOMINANCE_KINDS = frozenset(roster_map("standing_routes", "kinds")["dominance"])
 STRATA = roster("strata", ordered=True)
 # The leaf import: the fifteen pursuits are owned one layer out (`references/descriptor_registry.yaml:
 # pursuit_roster`, exported behind a blocking `--check`). `roster("pursuits")` resolves to the same
@@ -728,7 +828,18 @@ def _load_finding_terms(mapping: dict, bands, terms) -> dict:
 # which `test_jordan_no_definition_is_hardcoded_in_a_body` correctly read as two owners of one fact the
 # moment a second one was written down -- so a second spelling of the four labels is a second owner.
 from engine.dice_engine.dice_engine import DEGREE_LABEL as _DEGREE_LABEL   # noqa: E402
+from engine.dice_engine.dice_engine import DEGREE_ORDINAL as _DEGREE_ORDINAL   # noqa: E402
+from engine.dice_engine.dice_engine import Degree as _Degree   # noqa: E402
 DEGREE_BANDS = frozenset(_DEGREE_LABEL.values())
+# v9 SC-02 `22b` step 24: THE LADDER'S OWN ORDINAL (`DEGREE_ORDINAL`, 0-3, the social contest kernel's
+# numeric degree), keyed by the band's label, measured FROM THE HELD BAND (`Partial`): a determination's
+# consequence on its maker's pursuits is `-1 / 0 / +1 / +2` at Failure / Partial / Success /
+# Overwhelming -- *"the top band hardens, success moves a little, a held matter moves nothing, and a
+# failure moves the determiner AGAINST their own axis"* (`proposals/2026-09-05-proceedings-subsystem/
+# 19_PLAN.md` step 24, intent). Read off the owner, so no band table is written here.
+# [ASSUMPTION; medium; Jordan to correct; revert: the ordinal unshifted, Failure 0]
+DEGREE_STEP = {_DEGREE_LABEL[d]: _DEGREE_ORDINAL[d] - _DEGREE_ORDINAL[_Degree.PARTIAL]
+               for d in _DEGREE_LABEL}
 FINDING_TERMS = _load_finding_terms(roster_map("finding_terms", "bands"), DEGREE_BANDS, OBSERVATION_TERMS)
 # v9 FI-03: the deed kinds whose Events an inquiry can uncover (`epistemic.trail_of`). Checked against
 # the verb table's deed kinds at import, in `data/verbs.py::_check_covert_kinds` (the table loads there).

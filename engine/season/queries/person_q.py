@@ -40,6 +40,7 @@ does: `choose` and `options` read `stance_toward` and `said_of` from here. The A
 from __future__ import annotations
 
 import functools
+from typing import Optional
 
 from engine.substrate.descriptors import AFFILIATION_CONCERNS, PURSUITS
 
@@ -53,7 +54,7 @@ from ..data.requires import (
     KNOWN_PERSON_CLAIM, REQUIRES_OPERANDS, REQUIRES_STEMS, UNKNOWN, WORLD_ONLY_STEMS,
 )
 from ..data.rosters import (
-    AFFILIATIONS, PURSUIT_AXES, RECORD_CONTENT, SEEN_PREDICATE, roster, roster_map,
+    AFFILIATIONS, DEGREE_STEP, PURSUIT_AXES, RECORD_CONTENT, SEEN_PREDICATE, roster, roster_map,
 )
 from ..state.carriers import Person, Said
 from ..trace_log import TRACE
@@ -74,6 +75,18 @@ def stance_toward(p: Person, referent: str) -> float:
         if len(row) >= 3 and row[0] == referent:
             total += float(row[1]) * float(row[2])
     return total
+
+
+def held_against(p: Person, referent: str) -> tuple:
+    """THE ROWS `p` HOLDS AGAINST `referent`: his OWN stance rows naming it with a valence below zero,
+    in order (v9 IN-12 step 13, #453 §9.4 `forgive`). A stance row is `(referent, valence, weight)` and
+    carries no kind (K-49), so a field's grudge, a lost field's morale row toward one's own faction and a
+    seeded disloyalty are alike here. One owner for two readers: `forgive`'s effect
+    (`loop/effects_combat.py::_eff_forgive`, which removes exactly these rows) and its person-side
+    decline (`decision/options.py::opening_set`, `rosters.yaml: own_stance_declines`, which forms the verb
+    only where this is non-empty)."""
+    return tuple(row for row in p.stance
+                 if len(row) >= 3 and row[0] == referent and float(row[1]) < 0)
 
 
 def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0) -> tuple:
@@ -103,26 +116,16 @@ def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0) -> tuple:
     ⚠ THE SWORN-TO HALF SHIPS OFF (IN-58): `oblige` is a `World` Tenure read by a `world_q` reader and
     this module reads a `PersonInterior` only. FACTION-LEVEL grievance is a named residue.
     [ASSUMPTION, H-192: a deed's claim subject is read as its doer for every other kind; the sum is
-    unnormalised.] Person-side, no World (AX-2)."""
+    unnormalised.] Person-side, no World (AX-2).
+    ⚠ v9 SC-02 `22a`: WHICH claims are `referent`'s deeds is `attributed_deeds`' and WHAT each is worth
+    is `deed_term`'s; this function sums them by `firsthand`, and `world_q.reception` sums the same two
+    by remove and confidence, so the two readers cannot disagree on either."""
     axis_w = None
-    seen = functools.cache(lambda: _seen_index(p.ledger))
     judged = told = 0.0
-    for c in p.ledger:
-        if not is_deed(c):
-            continue
-        # IN-58: a paired kind is judged for the DOER the pairing names, never for its subject; a
-        # told copy carries no `seen`, so it is never paired.
-        paired = c.predicate in PAIRED_KINDS
-        if (c.chain if paired else c.subject != referent):
-            continue
+    for c in attributed_deeds(p.ledger, referent):
         if axis_w is None:
             axis_w = projected_axes(p, scar_shift)
-        if paired:
-            doer, v = paired_deed_term(p, axis_w, c, seen)
-            if doer != referent:
-                continue
-        else:
-            v = deed_valence(axis_w, c)
+        v = deed_term(p, axis_w, c)
         # FIRSTHAND only is judged (`dissents`' and `record`'s precedent, `decision/options.py`):
         # a `told_by` claim whose chain is empty is still hearsay, and lands in `told`.
         if c.firsthand:
@@ -130,6 +133,51 @@ def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0) -> tuple:
         else:
             told += v
     return judged, told
+
+
+def attributed_deeds(ledger, referent: str):
+    """THE DEED CLAIMS IN `ledger` THAT RECORD AN ACT OF `referent`'s, in ledger order -- the one owner
+    of *which of a holder's claims are about what this person did* (v9 SC-02 `22a`, split out of
+    `deeds_judged` unchanged). An unpaired kind's claim is `referent`'s when its subject is
+    ([ASSUMPTION, H-192]), told or not; a `PAIRED_KINDS` claim is `referent`'s when it is untold and its
+    `seen.who` pairing names him (`deed_doer`, IN-58) -- the paired kinds are the ones whose subject
+    may be the PATIENT, so the doer is read off the sighting's `who`, never the subject. A told copy
+    carries no `seen`, so a paired claim heard second-hand names nobody. Person-side (AX-2)."""
+    seen = functools.cache(lambda: _seen_index(ledger))
+    for c in ledger:
+        if not is_deed(c):
+            continue
+        if c.predicate in PAIRED_KINDS:
+            if c.chain or deed_doer(c, seen()) != referent:
+                continue
+        elif c.subject != referent:
+            continue
+        yield c
+
+
+def deed_term(p: Person, axis_w: dict, c) -> float:
+    """WHAT ONE OF `attributed_deeds`' CLAIMS IS WORTH TO `p`, whose projected pursuits are `axis_w`:
+    a paired deed `lean · bond` (`_lean`, `_bond` on the claim's patient, IN-58), any other
+    `deed_valence`. The same numbers `paired_deed_term` and `deed_valence` give; `deeds_judged` and
+    `world_q.reception` both read it here. Person-side (AX-2)."""
+    if c.predicate in PAIRED_KINDS:
+        lean = _lean(axis_w, c.predicate)
+        return _paired_weight(p, c, lean) if lean else 0.0
+    return deed_valence(axis_w, c)
+
+
+def suffered_deeds(ledger, patient: str):
+    """THE DEEDS `ledger` RECORDS AS DONE TO `patient` BY SOMEBODY ELSE, in ledger order (v9 SC-02 `22a`,
+    step 20's called bluff): the untold `PAIRED_KINDS` claims whose subject is `patient` and whose
+    `seen.who` pairing names a doer (`deed_doer`, which never names the subject himself). Only a paired
+    kind has a patient on its claim; an unpaired kind's subject is its doer (H-192), so it is never a
+    deed suffered. A told copy has no sighting and so names no doer: what a holder was only told of
+    does not count. Person-side (AX-2)."""
+    seen = functools.cache(lambda: _seen_index(ledger))
+    for c in ledger:
+        if (c.subject == patient and not c.chain and is_deed(c) and c.predicate in PAIRED_KINDS
+                and deed_doer(c, seen()) is not None):
+            yield c
 
 
 # v9 IN-58: THE DEED KINDS JUDGED ONLY THROUGH THE `seen.who` PAIRING -- every DEED kind no single
@@ -275,8 +323,8 @@ def paired_deed_term(p: Person, axis_w: dict, c, seen_of) -> tuple:
     lives once). `c` is a deed claim `p` holds; `axis_w` is `p`'s projected pursuits; `seen_of` is a
     zero-argument callable returning `_seen_index(p.ledger)` (called only when a pairing is read).
     `doer` is the one `deed_doer` names and `term = lean · bond` (`_lean`, `_bond`) is what the deed
-    adds to `p`'s judgement of that doer; `deeds_judged` sums it and `world_q.attention_key`'s tier 2
-    ranks a claim by `|term|`. `(None, 0.0)` for every claim that is not a paired deed, that `p`'s
+    adds to `p`'s judgement of that doer; `world_q.attention_key`'s tier 2 ranks a claim by `|term|`
+    (`deed_term` is the same number for `deeds_judged` and `world_q.reception`). `(None, 0.0)` for every claim that is not a paired deed, that `p`'s
     pursuits do not lean on, that is told (`chain`), or whose pairing names no doer (no `seen`, `who`
     withheld, ambiguous): an unpaired claim scores 0, so a hidden actor stays hidden. Person-side (AX-2)."""
     if c.predicate not in PAIRED_KINDS or c.chain:
@@ -287,7 +335,13 @@ def paired_deed_term(p: Person, axis_w: dict, c, seen_of) -> tuple:
     doer = deed_doer(c, seen_of())
     if doer is None:
         return None, 0.0
-    return doer, lean * _bond(p, c.subject, lean)
+    return doer, _paired_weight(p, c, lean)
+
+
+def _paired_weight(p: Person, c, lean: float) -> float:
+    """A paired deed's term, `lean · bond` on the claim's patient: the one formula `deed_term` and
+    `paired_deed_term` share (`CLAUDE.md` §8, the rule lives once)."""
+    return lean * _bond(p, c.subject, lean)
 
 
 def _bond(p: Person, patient: str, lean: float) -> float:
@@ -401,15 +455,72 @@ def _pursuits_violated_by(verb: str) -> frozenset:
     which reads only `(verb, element)`. The candidates are `data/verbs.py::PURSUIT_PROJECTION`'s
     keys, read through the module at call time so a rebound projection is what is asked; a pursuit
     the projection does not list projects to the zero vector and violates nothing."""
-    lean = {ax: _verbs.align(verb, ax) for ax in PURSUIT_AXES}
-    if not any(lean.values()):
+    row = {ax: _verbs.align(verb, ax) for ax in PURSUIT_AXES}
+    if not any(row.values()):
         return frozenset()
-    out = set()
-    for e in _verbs.PURSUIT_PROJECTION:
-        proj = to_axes({e: 1.0})
-        if sum(proj[ax] * lean[ax] for ax in PURSUIT_AXES) < 0:
-            out.add(e)
-    return frozenset(out)
+    return frozenset(e for e in _verbs.PURSUIT_PROJECTION if pursuit_lean(verb, e, row) < 0)
+
+
+def pursuit_lean(verb: str, e: str, row: Optional[dict] = None) -> float:
+    """HOW FAR AN ACT OF `verb` POINTS THE WAY PURSUIT `e` DOES: `Σ_axis to_axes({e: 1})[axis] *
+    align(verb, axis)` -- the pursuit's unit projection dotted with the verb's alignment row (`row`,
+    when the caller holds it already: `{axis: align(verb, axis)}`). THE OWNER of that dot for the sign
+    test (`_pursuits_violated_by`) and the consequence (`consequence_pursuits`). It is also the
+    derivative of `decision/choose.py::score_terms`' pursuit term with respect to the weight on `e`,
+    so moving `e` by `+lean` makes the verb score higher for its holder; that term computes the same
+    dot at the holder's weights itself (its hot loop's `align` volume is profiled there), so the dot
+    has a second copy by design. Reads `ALIGNMENT` and `PURSUIT_PROJECTION` at call time, through the
+    modules a sweep rebinds."""
+    proj = to_axes({e: 1.0})
+    if row is None:
+        return sum(proj[ax] * _verbs.align(verb, ax) for ax in PURSUIT_AXES)
+    return sum(proj[ax] * row[ax] for ax in PURSUIT_AXES)
+
+
+def consequence_pursuits(p: Person, verb: str, degree, gain: float):
+    """v9 SC-02 `22b` step 24 -- `p`'s pursuits after HIS OWN act of `verb` resolved at `degree`, or
+    `None` when nothing moves. A READER: it computes the new map and writes nothing; the act's effect
+    writes it at RESOLVE (`loop/effects_information.py::_eff_determine`), so the write is the actor's own
+    act and never a witness's (#353 §9.3: *moved by argument and consequence, never by evidence*).
+
+    Each pursuit `p` already holds moves by `gain * DEGREE_STEP[degree] * pursuit_lean(verb, e)`:
+    the ladder's own ordinal measured from the held band (`data/rosters.py::DEGREE_STEP`), so the top
+    band moves twice as far as a success, a held matter (`Partial`) not at all, and a failure moves him
+    AGAINST the way the act points. `gain` is the swept `Fixtures.pursuit_shift` (`H-221`; `0` the
+    control). ONLY HELD KEYS MOVE: "held" is `_held`'s sense, a weight above zero (the scar's precedent),
+    so a pursuit he does not hold -- absent, or at zero or below -- is neither minted nor moved by a
+    consequence, and a man with no pursuits is unmoved. No clamp: a weight may cross zero, as an
+    authored one may (`harness/probes.py` P31) [ASSUMPTION; medium; Jordan to correct; revert: floor at
+    0]. Keys keep `p.pursuits`' order, which `to_axes` sums in. Person-side, no World (AX-2)."""
+    step = DEGREE_STEP.get(degree, 0)
+    held = {e: float(w) for e, w in (p.pursuits or {}).items()}
+    if not gain or not step or not held:
+        return None
+    moved = {e: w + float(gain) * step * pursuit_lean(verb, e) if w > 0 else w for e, w in held.items()}
+    return None if moved == held else moved
+
+
+def argued_pursuits(hearer: Person, arguer: Person, degree, gain: float):
+    """v9 IN-12 step 9 (#453 §9.4, `argue`) -- `hearer`'s pursuits after `arguer` WON an argument with him
+    at `degree`, or `None` when nothing moves. A READER, `consequence_pursuits`' sibling: it computes the
+    new map and writes nothing; `loop/effects_information.py::_eff_argue` writes it at RESOLVE, the arguer's
+    act (#353 §9.3: *moved by argument and consequence, never by evidence*; AX-3).
+
+    #453 leaves the direction a [GAP] (*'which weight moves, and toward what'*). The narrowest reading on the
+    tree's own primitives [ASSUMPTION; medium; Jordan to correct; revert: Jordan names the direction]: each
+    pursuit the hearer HOLDS moves TOWARD THE ARGUER'S OWN WEIGHT on it by `gain * DEGREE_STEP[degree]` of
+    the gap -- the swept `Fixtures.pursuit_shift` (`H-221`) and the one degree ladder `consequence_pursuits`
+    reads, so the field's two movers share one methodology. ONLY HELD KEYS MOVE (`consequence_pursuits`'
+    rule: a weight above zero), so an argument mints no pursuit the hearer did not hold; a pursuit the
+    arguer does not hold pulls toward 0. `Partial` (step 0) and below move nothing (the row writes `[]`
+    there). Person-side, no World (AX-2)."""
+    step = DEGREE_STEP.get(degree, 0)
+    held = {e: float(w) for e, w in (hearer.pursuits or {}).items()}
+    if not gain or step <= 0 or not held:
+        return None
+    pull = {e: float(w) for e, w in (arguer.pursuits or {}).items()}
+    moved = {e: w + float(gain) * step * (pull.get(e, 0.0) - w) if w > 0 else w for e, w in held.items()}
+    return None if moved == held else moved
 
 
 def _affiliations_violated_by(verb: str) -> frozenset:

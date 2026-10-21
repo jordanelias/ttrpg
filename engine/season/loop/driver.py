@@ -37,7 +37,7 @@ import random
 import re
 from typing import Any, Callable, Optional
 
-from ..data import files
+from ..data import files, load_all
 from ..data.fixtures import Fixtures, SITE_YIELD
 from ..data.matrix import Step, WriteClass, matrix_row
 from ..data.rosters import OBSERVATION_DEPOSIT_MODES, STRATA, WITNESS_CHANNELS
@@ -241,6 +241,11 @@ class SeasonDriver:
 
     def __init__(self, w: World):
         self.w = w
+        # ⚠ SC-02 `23`: THE `data/` LOADERS BEHIND ONE ENTRY (`04:131`, *"the ONE loader"*). Every run
+        # constructs a driver, so a loader's refusal (a `SystemExit` naming its row, or `Unspecified` for
+        # a lazy file that is gone) fires here, first, rather than at the first world to read that file.
+        # Idempotent; `data/__init__.py::load_all` has the rest.
+        load_all()
         # ⚠ **THE MANIFEST'S ROWS ARE VALIDATED HERE, BECAUSE THIS IS THE ONE PLACE EVERY RUN
         # PASSES.** `04 PART E step 10`'s done-condition is *"a misspelled manifest row fails at boot naming
         # the row"*, and unit L4 built `manifest.check_rows()` for it and wired it into

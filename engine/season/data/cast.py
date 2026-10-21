@@ -108,6 +108,11 @@ def _rows() -> dict:
     return _CACHE
 
 
+def load() -> dict:
+    """`data.load_all`'s handle on this loader: read the registry now. The same cache `row()` fills."""
+    return _rows()
+
+
 def row(case_id: str) -> Optional[dict]:
     """The registry row for a case, or `None` where the registry does not carry one."""
     return _rows().get(str(case_id))

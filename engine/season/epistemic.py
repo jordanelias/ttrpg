@@ -10,7 +10,8 @@ halves that belong together because they are the two ends of one channel:
     table built from the roster, `live_channels` and `observers_for`. ⚠ **`_event_place` MOVED OUT
     AT POSITION `11a`**, promoted to `queries.world_q.place_of` (`ARCH §F.14`'s own name, taking
     any id rather than only an Event); its two callers here, `_ch_co_located` and `seen_subject`,
-    now read `world_q.event_place(w, e)`, which is `place_of(w, anchor_of(w, e))` plus H-206's limb.
+    now read `world_q.event_place(w, e)`, which was `place_of(w, anchor_of(w, e))` plus H-206's limb (an act-caused
+    Event is now placed by its causing act's actor: a cover's anchor is no place).
   * **what they saw** — `R8.1`'s `Seen` struct, its `_term_*` readers and `seen_of` /
     `seen_subject`, which `loop/witness.py` deposits as the `seen` claim.
 
@@ -304,7 +305,16 @@ def claim_subjects(w: "World", e: "Event", rule: str, refs: Optional[list] = Non
     # read the instrument cannot answer (`UNKNOWN`) is NOT deposited, because the instrument's gap
     # would become a belief. No production emitter reaches this (every logged Event in the probe
     # corpus, headless and the populated realm anchors); `test_g1b_attribution.py` plants one.
-    return [s for s in (out or [anchor]) if s is not None]
+    # v9 IN-12 step 10: A COVERED ACT'S DEPOSIT NAMES THE ALIAS AND NOT THE ACTOR. The anchor is the
+    # cover's id, but a receipt that names the actor (`move`'s and `migrate`'s mover, `determine`'s
+    # judge, `forgive`'s and a self-`tend`'s own person) re-added him through `changes[]`, so the
+    # chronicle published the very name the cover hides. `seen.who` is not this function: it reads the
+    # act (`_term_who`), and the people present still learn who acted.
+    hidden = actor_of(w, e)
+    if hidden == anchor:
+        hidden = None
+    kept = [s for s in out if s is not None and s != hidden]
+    return kept or ([anchor] if anchor is not None else [])
 
 
 # ---------------------------------------------------------------------------
@@ -533,6 +543,12 @@ def _ch_document_key(w: "World", e, pid) -> bool:
 def _ch_witness_key(w: "World", e, pid) -> bool:
     # G1b. The witness key is the Event's anchor -- the actor where one acted, the written thing
     # otherwise. Same value as the field it replaces; see `state/attribution.py` for the control.
+    # v9 IN-12 step 10 (#453 §9.3; K-19): IT CHANGES WITH `anchor_of`, AND NOTHING HERE WAS EDITED FOR IT.
+    # An act by a person holding a live cover anchors on the cover's id (`attribution.live_cover`), a
+    # Record id no person is and no `knot` names, so neither clause below admits anyone by key: his
+    # knot-partners stop witnessing his covered acts through this channel. He himself, and anyone else
+    # present, still witness through `co_located` (`event_place` places an act-caused Event by its
+    # actor), which precedes this channel.
     anchor = anchor_of(w, e)
     if anchor is None:
         return False

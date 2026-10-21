@@ -4,7 +4,7 @@ Falsifiers named by the source docs this position builds from (`21_RECONCILIATIO
 6, `19_PLAN.md` step 11, `03_PARAMETERS.md` PART D): a fourteenth key fails naming the row; a
 declared-disposal row with no quorum fails the load; a thirteenth (here: another, beyond the
 seeded rows) arrangement loads with no code change; a speech-kind whose reachable bands name a band outside the ladder fails
-to load. Scoped to the SEVEN seeded games (three until v9 SC-03a; `arrangements.yaml`'s own header states why not all
+to load. Scoped to the EIGHT seeded games (three until v9 SC-03a, seven until v9 SC-04; `arrangements.yaml`'s own header states why not all
 twelve) and the SIX seeded speech kinds (same file, why not all ten).
 """
 
@@ -22,14 +22,16 @@ from ..data import files
 from ..data.rosters import LADDER_RUNGS, load_yaml
 
 
-def test_the_seven_seeded_arrangements_load():
-    """THREE until v9 SC-03a, which seeded the four `<tenure>` rows (`arrangements.yaml`'s header)
-    once `detain` and `ban` became `tenure_kinds` members. The four dispose those two kinds and
+def test_the_eight_seeded_arrangements_load():
+    """THREE until v9 SC-03a, which seeded four `<tenure>` rows (`arrangements.yaml`'s header)
+    once `detain` and `ban` became `tenure_kinds` members; EIGHT since v9 SC-04 seeded the fifth,
+    `excommunication_deliberation`. The four dispose those two kinds and
     nothing else, each a `bench` disposal -- the loader stays green on them (the position's own
     falsifier clause)."""
     assert set(A.ARRANGEMENTS) == {"arbitration", "parliamentary_debate", "council_of_state",
                                    "legal_trial", "tribunal", "interrogation",
-                                   "inquisition_hearing"}
+                                   "inquisition_hearing", "excommunication_deliberation"}
+    assert len(A.ARRANGEMENTS) == 8
     sc03a = ("legal_trial", "tribunal", "interrogation", "inquisition_hearing")
     assert {A.ARRANGEMENTS[r]["disposes"] for r in sc03a} == {"detain", "ban"}
     assert all(A.ARRANGEMENTS[r]["disposal"] == "bench" for r in sc03a)
@@ -41,6 +43,15 @@ def test_the_seven_seeded_arrangements_load():
         A.ARRANGEMENTS["inquisition_hearing"]["appeal_basis"]
     assert (A.ARRANGEMENTS["tribunal"]["floor"], A.ARRANGEMENTS["legal_trial"]["floor"]) == \
         ("admitted", "open")
+    # v9 SC-04: the fifth `<tenure>` row. #453 §8.1 reads excommunication as a `ban` (an opening), and it
+    # shares the Church bench's kind with `inquisition_hearing`; its other keys are §E.2's own block
+    # (03_PARAMETERS.md:648-654), each locatable: a closed, sealed (`records_dissent: false`) rank-ordered
+    # deliberation with a ceremony interposed, appealable, reaching the realm.
+    exc = A.ARRANGEMENTS["excommunication_deliberation"]
+    assert exc["disposes"] == A.ARRANGEMENTS["inquisition_hearing"]["disposes"] == "ban"
+    assert (exc["disposal"], exc["floor"], exc["records_dissent"], exc["order"], exc["appeal_basis"],
+            exc["disposal_reach"]) == ("bench", "closed", False, "rank", "determine", "realm")
+    assert exc["interposed"] == ("procedure", "ceremony") and exc["term_required"] is True
     arb = A.ARRANGEMENTS["arbitration"]
     assert arb["disposal"] == "bench" and arb["appeal_basis"] == "none"
     parl = A.ARRANGEMENTS["parliamentary_debate"]
@@ -232,6 +243,46 @@ def test_c1_is_a_report_not_a_refusal_and_is_honest_about_todays_state():
     assert reported == [], reported
     assert "parliamentary_debate" not in reported and "council_of_state" not in reported, (
         "a `Record`-disposing row is not asked of the tenure-kind opener map")
+
+
+def test_a_hold_disposing_row_is_reported_by_c1_until_determine_can_open_a_hold(monkeypatch):
+    """v9 SC-04's `succession` row (`disposes: hold`, so a rival's petition over a VACANT throne can be
+    docketed and `determine`d) is NOT SEEDED, and this is why, executed: the row is well-formed and loads
+    through the unmodified loader, but `determine` has no site that opens a `hold` -- `_disposal` constructs
+    `oblige`, `detain` and `ban` only -- so C-1's report names it. Seeding it today would also put `hold` in
+    `state/gate.py::DISPOSABLE_KINDS`, admitting a bench's opening of a `hold` on its own seat that no
+    effect produces, and let `open_case` dock a matter `determine` declines forever (the wedge
+    `_eff_open_case` guards).
+
+    CONTROL: the shipped rows report nothing (`[]`), so the report below is the planted row's.
+    FALSIFIER: this goes red the day a `determine` site opens a `hold` -- the opener map then reads
+    `determine` beside `hold`'s other openers and the report is empty again. That is the signal to seed
+    the row (IN-61 builds the tribunal route; `state/gate.py`'s determination clause also asks the
+    edge's object to be the judging seat, which a vacant throne is not -- a judge cannot sit one)."""
+    from ..data.verbs import _OPENERS_FROM_EFFECTS
+    extra = textwrap.dedent("""
+        arrangements:
+          - id:               succession
+            disposal:          bench
+            bench_basis:        determine
+            floor:              admitted
+            records_dissent:    true
+            venue_min_rank:     duchy
+            term_required:      false
+            appeal_basis:       none
+            interposed:         [procedure]
+            order:              rank
+            proofs:             [record, testimony]
+            disposes:           hold
+            disposal_reach:     realm
+    """)
+    arrangements, _ = _reload_with(extra)
+    row = arrangements["succession"]
+    assert row["disposes"] == "hold" and row["disposal"] == "bench"      # it loads
+    assert A.arrangements_without_a_disposal_opener() == []              # the control
+    monkeypatch.setitem(A.ARRANGEMENTS, "succession", row)
+    assert A.arrangements_without_a_disposal_opener() == ["succession"]
+    assert "determine" not in (_OPENERS_FROM_EFFECTS.get("hold") or ()), _OPENERS_FROM_EFFECTS.get("hold")
 
 
 # ---------------------------------------------------------------------------------------------

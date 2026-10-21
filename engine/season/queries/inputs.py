@@ -53,13 +53,33 @@ class SocialContestInput:
     the three operands above; the host carries them and composes nothing, so a host-side obstacle has
     no field to travel in. `engine/season/tests/test_sc01_obstacle_ceiling.py` fails if one returns.
     ONE RECORD IS ONE MATTER'S DRAW: the ceiling bounds each matter's obstacle on its own and nothing
-    aggregates obstacles across a bundle (ED-SC-0038's per-matter pick, `H-213`)."""
+    aggregates obstacles across a bundle (ED-SC-0038's per-matter pick, `H-213`).
+
+    THE ROOM'S OPERANDS (v9 SC-02 `22a`; proceedings `19_PLAN.md` steps 17, 18, 20), RAW AS THE OTHERS:
+      * `reception` -- the bench's signed regard for the actor (`queries/world_q.py::reception`,
+                       route erosion inside it); `0.0` where the prize is heard by no room;
+      * `reception_gain` -- the `H-215` fixture scaling it into the obstacle;
+      * `proofs`    -- the actor's unmirrored proofs against the opponent, each weighed by remove
+                       (`queries/world_q.py::proofs`); `0.0` where no room hears the prize;
+      * `proof_step` -- the `H-216` fixture: how far one firsthand proof moves the obstacle.
+    The module composes them (`roll.py::obstacle`); the host composes nothing. They default to the
+    no-room reading so a record built for a prize no room hears reads exactly as before.
+
+    THE EXAMINED DOCUMENT'S OPERAND (v9 SC-02 `22b` step 25), RAW AS THE OTHERS:
+      * `forgery_quality` -- `Record.forgery_quality` of the Record an INQUIRY examines (`sigma.py::
+                       contest_input`'s `examined`); `0` for a genuine document, for any subject that
+                       is not a Record, and for every contest a prize names. Composed by the module."""
     pool: int
     opposition: Optional[float]
     obstacle_default: float
     obstacle_ceiling: Optional[float]
     obstacle_refusal_multiple: float
     leverage: float
+    reception: float = 0.0
+    reception_gain: float = 0.0
+    proofs: float = 0.0
+    proof_step: float = 0.0
+    forgery_quality: float = 0.0
 
 
 @dataclass(frozen=True)

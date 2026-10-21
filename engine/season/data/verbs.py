@@ -48,11 +48,13 @@ from . import files
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 from .matrix import MATRIX, Step
 from .requires import (
-    KNOWN_PERSON_OPERANDS, RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS, VIA, AllOf, Existence, TypedRequires,
-    build_typed_requires,
+    KNOWN_PERSON_OPERANDS, RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS, VIA, AllOf, Existence, Relation,
+    TypedRequires, build_typed_requires,
 )
 from .rosters import (
-    COVERT_KINDS, GRADED_INQUIRIES, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
+    COVERT_KINDS, DOMINANCE_KINDS, FOLD_KINDS, LOGGED_KINDS, GRADED_INQUIRIES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
+    VERB_CAPABILITY,
+    is_event_kind,
     RUNG_KINDS, STRATA, TENURE_KINDS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
     roster_map,
     table,
@@ -944,6 +946,30 @@ def _load_verb_table() -> dict:
                     f"verb_table.yaml: {name!r} " + "; ".join(_defects) + ". 04 §B.13 #4 (F7), "
                     "the per-conjunct half -- every failable clause has a refusal kind, and a key "
                     f"is a failable clause. Its failable clauses: {sorted(_expected)}.")
+        # LOADER INVARIANT 4, THE FLAT HALF (SC-02 `23`; S-8's residue, as v8 `_part3` at git 59004d86 words
+        # it -- retired, at its FORK ref, not in the live tree: a row that still uses the flat form where
+        # a conjunct is failable). A FLAT row's `emits_on_refusal:` is emitted WHOLE at every
+        # refusal (`VerbRow.refusal_for`), so a flat row with two or more failable clauses -- eligibility,
+        # each top-level conjunct of its cell (named or not: a flat row cannot name them), the write, the
+        # counterparty -- and two or more refusal kinds publishes a kind for a clause that did not fail,
+        # which is `ID-9` in the scarcity channel. The same holds of a contested or graded flat row at the
+        # party gap (`loop/resolve.py::_refuse_party_gap`), a refusal point no clause names. The kinds the
+        # fold FILTERS (`data/rosters.py::PERSON_DEMANDED`) do not count: the act earns them or they are
+        # dropped. Such a row keys its refusals by clause (the keyed form above) or declares one kind.
+        if not by_clause and not _names:
+            _n_clauses = (int(any(k != "own" for k in row.eligibility_kinds()))
+                          + (len(row.requires_typed.names) if row.requires_typed is not None
+                             else int(row.has_precondition))
+                          + int(bool(row.writes)) + int(bool(row.counterparty)))
+            _unearned = [k for k in row.emits_on_refusal if k != PERSON_DEMANDED]
+            if len(_unearned) > 1 and (_n_clauses >= 2 or row.contests or _graded):
+                raise SystemExit(
+                    f"verb_table.yaml: {name!r} is a FLAT row with {_n_clauses} failable clause(s)"
+                    f"{' and a contest/graded party gap' if row.contests or _graded else ''} and "
+                    f"declares {len(_unearned)} refusal kinds {_unearned}: a flat list is emitted "
+                    "whole at every refusal, so a kind would be published for a clause that did not "
+                    "fail. 04 §B.13 #4 (F7), the flat half -- key `emits_on_refusal:` by clause, "
+                    "declare ONE kind (`data/rosters.py::PERSON_DEMANDED` is the one the fold keeps only when earned).")
         out[name] = row
     # -----------------------------------------------------------------------
     # LOADER INVARIANT 6 (`04_CODE_ARCHITECTURE.md` PART D row 15, MECHANICAL at load):
@@ -1084,6 +1110,49 @@ for _v, _k in WARRANT_SOURCED.items():
             f"such verb or `record_sourced_operands.{_k}` maps no `subject`", "rosters.yaml",
             needs="a `verb_table.yaml` verb, and a record kind whose `subject` a held Record answers",
             law="IN-12 step 6 -- a warrant-sourced verb forms only on what a held warrant names")
+
+
+def derive_event_kinds(table: dict, matrix: dict, fold_kinds: dict, logged_kinds: dict) -> frozenset:
+    """LOADER INVARIANT 7 (`04 §B.13 #7`, `F.20b`): THE EVENT-KIND ROSTER IS DERIVED FROM EVERY EMISSION
+    COLUMN. The columns are: each verb row's `emits` (every Degree branch), its `emits_on_refusal`
+    (every clause) and `write_matrix.yaml`'s `emits:` (the kinds a gate write may emit), plus the
+    fold's own `fold_kinds` (`rosters.yaml`; the three that were body literals) and `logged_kinds` (the
+    kinds `loop/matter.py` logs with no write behind them). Nothing else adds a
+    member, and the derivation is a function of its arguments so a test can plant a malformed column.
+
+    ⚠ A KIND IS `<noun>.<verb>`: two non-empty dotted parts. A column holding anything else (a typo
+    that lost the dot, an empty string from a stray comma) is refused at load NAMING ITS ROW, because
+    an Event of that kind would be emitted, fanned and read by a predicate spelled the same wrong way
+    and nothing would ever say the roster never held it. `loop/resolve.py::_act_events` refuses a kind
+    outside this roster when the fold builds the Event (the F.20b defect, observed at execution)."""
+    out: set = set()
+    for name, row in table.items():
+        cols = {"emits": row.emits, "emits_on_refusal": row.emits_on_refusal,
+                **{f"emits[{d}]": ks for d, ks in row.emits_by_degree.items()},
+                **{f"emits_on_refusal[{c}]": ks for c, ks in row.refusals_by_clause.items()}}
+        for col, kinds in cols.items():
+            for k in kinds:
+                if not is_event_kind(k):
+                    raise SystemExit(
+                        f"verb_table.yaml: {name!r} declares Event kind {k!r} in `{col}:`, which is "
+                        "not `<noun>.<verb>`. 04 §B.13 #7 -- the Event-kind roster is derived from "
+                        "every emission column, so a column holding a malformed kind admits a kind "
+                        "no reader spells the same.")
+                out.add(k)
+    for (kind, fld), mrow in matrix.items():
+        for k in mrow.emits:
+            if not is_event_kind(k):
+                raise SystemExit(
+                    f"write_matrix.yaml ({kind}, {fld}) declares Event kind {k!r} in `emits:`, which "
+                    "is not `<noun>.<verb>`. 04 §B.13 #7 -- the Event-kind roster is derived from "
+                    "every emission column.")
+            out.add(k)
+    out.update(fold_kinds.values())
+    out.update(logged_kinds.values())
+    return frozenset(out)
+
+
+EVENT_KINDS = derive_event_kinds(VERB_TABLE, MATRIX, FOLD_KINDS, LOGGED_KINDS)
 
 
 def act_key(verb: str, subject, operands) -> str:
@@ -1294,22 +1363,42 @@ REFUSAL_KINDS = frozenset(k for r in VERB_TABLE.values() for k in r.emits_on_ref
 DEED_KINDS = EMITTED_KINDS - REFUSAL_KINDS
 
 
-def _check_covert_kinds(kinds, deed_kinds) -> frozenset:
-    """v9 FI-03 (`ED-FI-0002`): every `rosters.yaml: covert_kinds` member is a DEED kind the verb table
-    emits, or import refuses naming it -- a misspelled or refusal kind would be a trail nothing leaves,
-    and the trail would read as built. A function, so a test can plant a bad member and watch it
-    refuse. Returns the members."""
+def _check_deed_kinds(kinds, deed_kinds, message, where, law) -> frozenset:
+    """A roster of event kinds a closed set may name is held to `DEED_KINDS` (a kind some verb row emits,
+    on no row's refusal), or import refuses naming the members: a kind no act emits partitions nothing
+    and leaves nothing, and what it feeds would read as built. A function, so a test can plant a bad
+    member and watch it refuse. `message` takes `{bad}`. Returns the members."""
     bad = sorted(k for k in kinds if k not in deed_kinds)
     if bad:
         raise Unspecified(
-            f"`covert_kinds` {bad} are not deed kinds the verb table emits", "rosters.yaml -- covert_kinds",
+            message.format(bad=bad), where,
             needs="name kinds in `data/verbs.py::DEED_KINDS` (emitted by some row, on no row's refusal)",
-            law="ED-FI-0002 -- a trail is an Event some act leaves; a kind no row emits, or a refusal "
-                "kind, leaves none, and the trail would read as built")
+            law=law)
     return frozenset(kinds)
 
 
+def _check_covert_kinds(kinds, deed_kinds) -> frozenset:
+    """v9 FI-03 (`ED-FI-0002`): every `rosters.yaml: covert_kinds` member is a DEED kind the verb table
+    emits -- a misspelled or refusal kind would be a trail nothing leaves."""
+    return _check_deed_kinds(
+        kinds, deed_kinds, "`covert_kinds` {bad} are not deed kinds the verb table emits",
+        "rosters.yaml -- covert_kinds",
+        "ED-FI-0002 -- a trail is an Event some act leaves; a kind no row emits, or a refusal "
+        "kind, leaves none, and the trail would read as built")
+
+
+def _check_dominance_kinds(kinds, deed_kinds) -> frozenset:
+    """v9 SC-02 `22a` (step 20, route erosion): every `rosters.yaml: standing_routes` `dominance` member
+    is a DEED kind -- the partition is of the kinds of act a hearer's claims record."""
+    return _check_deed_kinds(
+        kinds, deed_kinds, "`standing_routes.kinds.dominance` names {bad}, which are not deed kinds",
+        "rosters.yaml -- standing_routes",
+        "19_PLAN.md step 20 -- the partition is of the KINDS OF ACT a hearer's claims record; a "
+        "kind no act emits partitions nothing, and erodes nothing, forever")
+
+
 _check_covert_kinds(COVERT_KINDS, DEED_KINDS)
+_check_dominance_kinds(DOMINANCE_KINDS, DEED_KINDS)
 
 
 def _derive_record_referent_kinds() -> frozenset:
@@ -1324,6 +1413,136 @@ def _derive_record_referent_kinds() -> frozenset:
 
 
 RECORD_REFERENT_KINDS = _derive_record_referent_kinds()
+
+# v9 IN-12 step 7: `{verb: (record kinds)}` -- the verbs that may ALSO form on what a held writ of one of
+# those kinds says (`rosters.yaml: terms_sourced`; `commit` on a covenant dispensation's Proposition).
+# REFUSED AT IMPORT, `WARRANT_SOURCED`'s reason: a verb the table lacks, a kind `writs_held` never stamps
+# (not in `RECORD_REFERENT_KINDS`), or a kind whose `subject` no held Record answers would each form for
+# nobody, and a stale line must not read as a live route. Read here, beside the set it is checked against.
+def _load_terms_sourced(values: dict) -> dict:
+    """`rosters.yaml: terms_sourced`'s `values`, checked and frozen -- refused per line (above)."""
+    out = {v: tuple(ks or ()) for v, ks in values.items()}
+    for v, ks in out.items():
+        dead = [k for k in ks if k not in RECORD_REFERENT_KINDS
+                or "subject" not in RECORD_SOURCED_OPERANDS.get(k, {})]
+        if v not in VERB_TABLE or not ks or dead:
+            raise Forbidden(
+                f"`rosters.yaml: terms_sourced` names {v!r}: {list(ks)}, and the verb table carries no "
+                f"such verb, the line names no kind, or {dead} is no held-writ occasion "
+                f"(`RECORD_REFERENT_KINDS`) whose `subject` a held Record answers", "rosters.yaml",
+                needs="a `verb_table.yaml` verb, and record kinds `writs_held` stamps and "
+                      "`record_sourced_operands` maps `subject` for",
+                law="IN-12 step 7 -- a terms-sourced verb forms on what a held writ says, or on nothing new")
+    return out
+
+
+TERMS_SOURCED = _load_terms_sourced(roster_map("terms_sourced", "values"))
+
+# v9 IN-12 step 9: `{verb: operand}` -- the verbs that carry a VOCATION (a `verb_capability` value the
+# actor holds) on the named operand, one Candidate per vocation (`rosters.yaml: vocation_sourced`, read
+# in `opening_set`; `train`'s `kind`). REFUSED AT IMPORT, `TERMS_SOURCED`'s reason: a verb the table
+# lacks, a verb whose row writes no `Person.capability` (it would carry a vocation nothing raises), or
+# an operand outside the closed `requires_operands` would each form a Candidate nobody reads right.
+_CAPABILITY_PAIR = "Person.capability"
+
+
+def _load_vocation_sourced(values: dict) -> dict:
+    """`rosters.yaml: vocation_sourced`'s `values`, checked and frozen -- refused per line (above)."""
+    out = {v: str(op or "") for v, op in values.items()}
+    for v, op in out.items():
+        row = VERB_TABLE.get(v)
+        if row is None or _CAPABILITY_PAIR not in row.writes or op not in REQUIRES_OPERANDS:
+            raise Forbidden(
+                f"`rosters.yaml: vocation_sourced` names {v!r}: {op!r}, and the verb table carries no "
+                f"such verb, its row writes no `{_CAPABILITY_PAIR}`, or {op!r} is no `requires_operands` "
+                "member", "rosters.yaml",
+                needs="a `verb_table.yaml` verb that writes `Person.capability`, and a closed operand",
+                law="IN-12 step 9 -- a vocation rides an act that raises it, on an operand the grammar names")
+    return out
+
+
+VOCATION_SOURCED = _load_vocation_sourced(roster_map("vocation_sourced", "values"))
+# THE VOCATIONS: the capability keys some verb draws dice from -- `rosters.yaml: verb_capability`'s
+# VALUES (its keys are verbs), derived here and never spelt, so a key `train` may raise is exactly a key
+# `_pool_of` reads (#453 K-20: the range is `verb_capability`'s names; Thread Sensitivity is outside it).
+VOCATIONS = frozenset(VERB_CAPABILITY.values())
+
+
+# v9 IN-12 step 10: `{verb: record kind}` -- the verbs a person does not form while he holds a document
+# of that kind whose content names him (`rosters.yaml: held_document_declines`, read in `opening_set`;
+# `conceal` while a cover is held). REFUSED AT IMPORT, `TERMS_SOURCED`'s reason: a verb the table lacks
+# or a kind `record_kinds` does not carry would decline for nobody, and a stale line must not read as a
+# live decline.
+def _load_held_document_declines(values: dict) -> dict:
+    """`rosters.yaml: held_document_declines`' `values`, checked and frozen -- refused per line (above)."""
+    out = {v: str(k or "") for v, k in values.items()}
+    for v, k in out.items():
+        if v not in VERB_TABLE or k not in RECORD_KINDS:
+            raise Forbidden(
+                f"`rosters.yaml: held_document_declines` names {v!r}: {k!r}, and the verb table carries no "
+                f"such verb, or {k!r} is no `record_kinds` member ({sorted(RECORD_KINDS)})", "rosters.yaml",
+                needs="a `verb_table.yaml` verb, and a record kind a held document can be",
+                law="IN-12 step 10 -- a person-side decline reads a document he holds, of a kind that exists")
+    return out
+
+
+HELD_DOCUMENT_DECLINES = _load_held_document_declines(roster_map("held_document_declines", "values"))
+
+
+# v9 IN-12 step 13: the verbs a person forms only on a referent he holds a row against -- his own
+# `Person.stance` rows naming it with a valence below zero (`rosters.yaml: own_stance_declines`, read in
+# `opening_set`; `forgive`). Keyed on the row's `writes:`: REFUSED AT IMPORT when a member names a verb the
+# table lacks or one whose row writes no `Person.stance` -- a decline on a field the act does not end would
+# narrow its formation by a fact its effect never reads.
+_STANCE_PAIR = "Person.stance"
+
+
+def _load_own_stance_declines(values) -> frozenset:
+    """`rosters.yaml: own_stance_declines`' `values`, checked and frozen -- refused per member (above)."""
+    out = frozenset(str(v or "") for v in (values or ()))
+    for v in sorted(out):
+        row = VERB_TABLE.get(v)
+        if row is None or _STANCE_PAIR not in row.writes:
+            raise Forbidden(
+                f"`rosters.yaml: own_stance_declines` names {v!r}, and the verb table carries no such verb "
+                f"or its row writes no `{_STANCE_PAIR}`", "rosters.yaml",
+                needs="a `verb_table.yaml` verb whose row writes `Person.stance`",
+                law="IN-12 step 13 -- an own-state decline reads the field the act ends")
+    return out
+
+
+OWN_STANCE_DECLINES = _load_own_stance_declines(roster("own_stance_declines"))
+
+
+# v9 IN-26 (BOUND-PAPER, `A-13`): the verbs a person forms only on a referent he himself holds -- the
+# object of one of his OWN live `hold` Tenures (`rosters.yaml: own_hold_declines`, read in `opening_set`;
+# `destroy_record`). `own_stance_declines`' shape one field over: the decline is the person-side reading of
+# the row's own `held_by` conjunct, so it is REFUSED AT IMPORT when a member names a verb the table lacks or
+# one whose typed cell asks no `relation` of `subject` `held_by` -- a decline on a holding the fold never
+# checks would narrow formation by a fact the act does not require.
+def _asks_subject_held(row: "VerbRow") -> bool:
+    if row.requires_typed is None:
+        return False
+    req = row.requires_typed.requirement
+    return any(isinstance(c, Relation) and c.of == "subject" and c.relation == "held_by"
+               for c in (req.clauses if isinstance(req, AllOf) else (req,)))
+
+
+def _load_own_hold_declines(values) -> frozenset:
+    """`rosters.yaml: own_hold_declines`' `values`, checked and frozen -- refused per member (above)."""
+    out = frozenset(str(v or "") for v in (values or ()))
+    for v in sorted(out):
+        row = VERB_TABLE.get(v)
+        if row is None or not _asks_subject_held(row):
+            raise Forbidden(
+                f"`rosters.yaml: own_hold_declines` names {v!r}, and the verb table carries no such verb "
+                "or its typed cell asks no `relation` of `subject` `held_by`", "rosters.yaml",
+                needs="a `verb_table.yaml` verb whose cell requires the actor to hold its subject",
+                law="IN-26 -- an own-hold decline reads the holding the act requires")
+    return out
+
+
+OWN_HOLD_DECLINES = _load_own_hold_declines(roster("own_hold_declines"))
 
 
 def _derive_rung_remit_acts() -> frozenset:
@@ -1489,8 +1708,9 @@ def rows_without_a_producer() -> dict:
     REQUIRES ("moved by argument and consequence"). So a producerless row is one of two different
     things and the report cannot tell them apart:
 
-      * A HOLE — the verb is missing. `(Person, pursuits)` has no verb because Part E carries
-        no argument verb, which is a gap in Part E, not a reason to delete a row #353 mandates.
+      * A HOLE — the verb is missing. `(Person, pursuits)` had no verb because Part E carries
+        no argument verb (since v9 SC-02 `22b` step 24 `determine` writes it; `argue`/`train` are IN-12
+        step 9), which is a gap in Part E, not a reason to delete a row #353 mandates.
       * DEAD — nothing in the design produces it. That was the six.
 
     Distinguishing them is a judgement, so this reports and a human decides. What it MUST NOT do

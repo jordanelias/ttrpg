@@ -802,12 +802,14 @@ _LEVY_ROW = (
 # cell's `needs:` ADMITS `to` -- so `beneficiary: to` on `requisition` became CARRIABLE and stopped being the
 # dead reference `test_lb6d_an_operand_beneficiary_the_row_cannot_carry_is_refused_at_load` plants.
 # That test needs an UNTYPED row. It planted `forge` until v9 IN-45 typed it (an `own_ledger` cell);
-# B-K close (ACC 8/13) re-points it to `destroy_record`, still untyped (`requires: —`, no cell). The
-# two tests above keep `requisition`: a missing or off-roster beneficiary is refused whatever the row's cell.
+# B-K close (ACC 8/13) re-pointed it to `destroy_record`, and v9 IN-26 typed that row (`A-13`'s cell), so
+# it is re-pointed again, to `thread_read` -- untyped, and a row `14` DECLINED (`test_u7_own.py`), so it
+# stays untyped until its own position. The two tests above keep `requisition`: a missing or off-roster
+# beneficiary is refused whatever the row's cell.
 _UNTYPED_ROW = (
-    '  - verb:        "destroy_record"\n'
-    '    stratum:     "uncontested_material"\n'
-    '    eligibility: ["hold:<record>", "presence"]\n'
+    '  - verb:        "thread_read"\n'
+    '    stratum:     "contested_physical"\n'
+    '    eligibility: ["own", "presence:<site>"]\n'
     '    beneficiary: "actor"\n'
 )
 
@@ -830,9 +832,16 @@ def test_lb6d_every_verb_declares_a_rostered_beneficiary():
     # `beneficiary: actor`, `fight`'s (a re-record, said so here); 46 -> 45, `repudiate` CUT
     # (v9 IN-11, #453 R-3 (b)) -- `beneficiary: actor`, so `kinds["actor"]` shrinks by one; 45 -> 46,
     # `seize` (v9 IN-12 step 6) -- `beneficiary: none`, `revoke`'s and `destroy_record`'s precedent for a
-    # non-consensual act on another's edge, so `kinds["none"]` grows by one (a re-record).
+    # non-consensual act on another's edge, so `kinds["none"]` grows by one (a re-record); 46 -> 47,
+    # `covenant` (v9 IN-12 step 7) -- `beneficiary: to`, `give`'s and `petition`'s reading of a document
+    # handed to its addressee, so `kinds["to"]` grows by one (a re-record); 47 -> 51, `argue`,
+    # `sabotage`, `tend`, `train` (v9 IN-12 step 9) -- `argue`/`sabotage` `beneficiary: actor` (#453 §9.3,
+    # §9.4), `tend`/`train` `beneficiary: subject`, so `kinds["actor"]` and `kinds["subject"]` each grow by
+    # two (a re-record); 51 -> 52, `conceal` (v9 IN-12 step 10) -- `beneficiary: actor` (#453 §9.3), so
+    # `kinds["actor"]` grows by one (a re-record); 52 -> 53, `forgive` (v9 IN-12 step 13) -- `beneficiary:
+    # subject` (#453 §9.4), so `kinds["subject"]` grows by one (a re-record).
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen -- the control that stops this census passing over a loader that returned a subset]
-    assert len(VERB_TABLE) == 46, "the verb count moved; this row's census is stale"
+    assert len(VERB_TABLE) == 53, "the verb count moved; this row's census is stale"
     undeclared = [v for v, r in VERB_TABLE.items() if not r.beneficiary]
     assert not undeclared, f"verbs with no `beneficiary:`: {undeclared}"
     off_roster = [(v, r.beneficiary) for v, r in VERB_TABLE.items()
@@ -891,7 +900,7 @@ def test_lb6d_an_operand_beneficiary_the_row_cannot_carry_is_refused_at_load():
         _UNTYPED_ROW, _UNTYPED_ROW.replace('beneficiary: "actor"', 'beneficiary: "to"'), 1)
     assert unbindable != src, "the substitution did not apply -- this test is asserting nothing"
     from ..data.verbs import VERB_TABLE
-    assert VERB_TABLE["destroy_record"].requires_typed is None, "the planted row is typed now"
+    assert VERB_TABLE["thread_read"].requires_typed is None, "the planted row is typed now"
     with pytest.raises(SystemExit, match="neither binds nor admits"):
         _load_with(unbindable)
 

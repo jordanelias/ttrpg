@@ -18,7 +18,8 @@ names.
   (5) FORMATION: `writs_held`/`questions_for` stamp a held writ and nothing else; `comply` forms on it
       only once his ledger names it; with no writ held the questions are unchanged (the control);
   (6) THE CROWD-OUT CONTROL AT FORMATION (`test_in53v_a_the_partition_moves_no_other_rows_formations`'
-      form): every row declaring no `referent_class:` forms exactly what the question forms stripped;
+      form): every row declaring no `referent_class:` forms exactly what the question forms stripped
+      (a `terms_sourced` verb, IN-12 step 7, forms that and may add the held writ's terms);
   (7) RETIRED 2026-10-13 (the session user's "Relax exit rules"; plan §0.5): the realm falsifier
       and exit on `build_realm(0)` at 4 seasons, each non-vacuous only when seed 0's trajectory held
       an attempt; (2) and (5) prove the held-writ and own-ledger conditions on built worlds.
@@ -33,7 +34,7 @@ import pytest
 
 from engine.season.data.matrix import Step, WriteClass
 from engine.season.data.rosters import RECORD_CONTENT
-from engine.season.data.verbs import RECORD_REFERENT_KINDS, VERB_TABLE
+from engine.season.data.verbs import RECORD_REFERENT_KINDS, TERMS_SOURCED, VERB_TABLE
 from engine.season.harness import probes as P
 from engine.season.loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from engine.season.loop.effects import EFFECTS
@@ -219,7 +220,13 @@ def test_in09_the_partition_moves_no_other_rows_formations():
         for q in world_q.questions_for(w, w.persons[pid]):
             got = _formed(w, pid, q)
             bare = _formed(w, pid, dataclasses.replace(q, classes=()))
-            assert _sig(c for c in got if c.verb not in classed_rows) == _sig(bare), (pid, q.id)
+            # v9 IN-12 step 7: a `terms_sourced` verb (`commit`) forms ALSO on a held writ's terms, by
+            # design; nothing it formed stripped may be lost, and every other row is exactly as stripped.
+            unclassed = [c for c in got if c.verb not in classed_rows]
+            assert _sig(c for c in unclassed if c.verb not in TERMS_SOURCED) == \
+                _sig(c for c in bare if c.verb not in TERMS_SOURCED), (pid, q.id)
+            assert set(_sig(c for c in bare if c.verb in TERMS_SOURCED)) <= \
+                set(_sig(c for c in unclassed if c.verb in TERMS_SOURCED)), (pid, q.id)
             assert not [c for c in bare if c.verb == VERB], (pid, q.id)
             checked += sum(c.verb == VERB for c in got)
     assert checked >= len(w.persons), checked

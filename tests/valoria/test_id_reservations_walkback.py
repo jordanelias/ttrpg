@@ -282,7 +282,10 @@ def test_the_2026_07_30_walkback_actually_moved_something():
     # cohort temperaments, only if its ask-then is answered), so the bump lands before anything
     # cites the numbers (CLAUDE.md §4). The ledger rows are written at those positions' builds;
     # `test_next_free_never_re_issues_a_live_id`'s safe direction holds with the rows absent.
-    released = {'SC': 40, 'FA': 40, 'WR': 13, 'SE': 57}
+    # PIN UPDATED 2026-10-18: SC 40 -> 41. ED-SC-0040 allocated at v9 batch B-P's close (needs_jordan:
+    # reception/proofs read other persons' ledgers at RESOLVE against 04:250). Lane ledger:
+    # registers/editorial_ledger_sc.jsonl.
+    released = {'SC': 41, 'FA': 40, 'WR': 13, 'SE': 57}
     checked = 0
     for lane, expected in released.items():
         assert nf[lane] == expected, (

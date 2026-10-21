@@ -29,18 +29,27 @@ from ..data.requires import (
     CELL_STEMS, RECORD_SOURCED_OPERANDS, SHORTFALL_PREDICATE, SHORTFALL_SOURCED_OPERANDS, VIA,
 )
 from ..data.rosters import (
-    CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, WITNESS_CHANNELS, require_member,
+    CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, REMOVE_ORDINAL, require_member,
 )
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
-from ..data.verbs import ELIGIBILITY_KINDS, VERB_TABLE, WARRANT_SOURCED, align
+from ..data.verbs import (
+    ELIGIBILITY_KINDS, HELD_DOCUMENT_DECLINES, OWN_HOLD_DECLINES, OWN_STANCE_DECLINES, TERMS_SOURCED,
+    VERB_TABLE, VOCATION_SOURCED, VOCATIONS, WARRANT_SOURCED, align,
+)
 from ..epistemic import belief_contradicts
 from ..gaps import Forbidden
 from ..queries.person_q import (
-    LedgerReader, content_kind, content_said, known_persons, ledger_names, projected_axes, regard, said_of,
+    LedgerReader, content_kind, content_said, held_against, known_persons, ledger_names, projected_axes,
+    regard, said_of,
 )
-from ..state.carriers import Candidate, Claim, Person, Question, View
+from ..state.carriers import Candidate, Claim, Person, Question, Record, View
 from ..trace_log import TRACE
+
+# v9 IN-12 step 7: THE CLASS A HELD WRIT RIDES THE QUESTION AS -- the carrier's own type name, which is
+# what `queries/world_q.py::_stamped` stamps for a document (`World.class_of`) and what
+# `rosters.yaml: referent_classes` declares; read off the type, never spelt.
+_HELD_WRIT_CLASS = Record.__name__
 
 
 def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candidate]:
@@ -111,16 +120,77 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
     named: Optional[frozenset] = None
     people: Optional[tuple] = None
     records: Optional[list] = None
+    held: Optional[frozenset] = None
+    # v9 IN-26 (`H-156` option (a) as a switch, `Fixtures withheld_verbs`): A VERB HELD OUT OF FORMATION
+    # forms no Candidate for anybody, before any other read -- so a withheld row costs the season nothing
+    # and the hand-built fold, which never asks this, is untouched. A member the table lacks is refused,
+    # not ignored: a misspelt hold would release the verb it meant to withhold.
+    withheld = frozenset(fx.get("withheld_verbs") or ())
+    if not withheld <= VERB_TABLE.keys():
+        raise Forbidden(
+            f"`Fixtures withheld_verbs` names {sorted(withheld - VERB_TABLE.keys())}, which the verb table "
+            "lacks", "H-156", needs="`verb_table.yaml` verbs only",
+            law="IN-26 -- a withheld verb is one the table forms; a name it lacks withholds nothing")
     for verb, row in sorted(VERB_TABLE.items()):
+        if verb in withheld:
+            continue
         if not person_side_eligible(p, row):
             continue
         if tolerance is not None and refuses(verb, axis, tolerance):
             TRACE.note(f"{p.id} refuses {verb!r}: its `{axis}` alignment exceeds their own "
                        f"projected weight {tolerance:+.3f} (ED-IN-0261)", "H-146")
             continue
+        # v9 IN-12 step 10 (`rosters.yaml: held_document_declines`): A VERB A PERSON DOES NOT FORM WHILE HE
+        # HOLDS A DOCUMENT OF A NAMED KIND ABOUT HIMSELF -- `conceal` while he holds a cover (#453 §9.3's
+        # person-side decline). His own Tenures and own ledger, no World (`holds_own_document`).
+        held_kind = HELD_DOCUMENT_DECLINES.get(verb)
+        if held_kind is not None and holds_own_document(p, held_kind):
+            continue
         refs = row.referents_of(q)
+        # v9 IN-12 step 7 (`rosters.yaml: terms_sourced`): A VERB THAT MAY FORM ON WHAT A HELD WRIT SAYS
+        # forms, beside its own referents, on the `terms` of each writ this question carries as a held
+        # `Record` (`writs_held`'s stamp) whose kind the roster names -- read off the person's OWN content
+        # claim (`held_record_claims`, `record_sourced_operands`' `subject` key), so a covenant's addressee
+        # forms `commit` on its Proposition once he holds it. The writ is the referent; a question that
+        # carries none adds nothing, and `refs` is unchanged.
+        terms_kinds = TERMS_SOURCED.get(verb)
+        if terms_kinds:
+            writs = q.referents_for(_HELD_WRIT_CLASS)
+            if writs:
+                if records is None:
+                    records = held_record_claims(p)
+                said = (_content_answer(c, "subject") for c in records
+                        if c.subject in writs and content_kind(c) in terms_kinds)
+                refs = tuple(refs) + tuple(t for t in dict.fromkeys(said)
+                                           if t is not None and t not in refs)
+        # v9 IN-12 step 13 (`rosters.yaml: own_stance_declines`): A VERB A PERSON FORMS ONLY ON A REFERENT HE
+        # HOLDS A ROW AGAINST -- `forgive` (#453 §9.4's person-side own-state decline). His own stance rows
+        # (`person_q.held_against`, the reader the effect reads too), no World. It NARROWS the referents the
+        # question carries and widens nothing (§F1 clause 3 stands).
+        if verb in OWN_STANCE_DECLINES:
+            refs = tuple(r for r in refs if held_against(p, r))
+        # v9 IN-26 (`rosters.yaml: own_hold_declines`, `A-13`): A VERB A PERSON FORMS ONLY ON A REFERENT HE
+        # HIMSELF HOLDS -- `destroy_record`, the person-side reading of its own `held_by` conjunct. The
+        # objects of his OWN live `hold` Tenures, no World; computed once per call, only if such a row
+        # is reached. It NARROWS the referents the question carries and widens nothing.
+        if verb in OWN_HOLD_DECLINES:
+            if held is None:
+                held = _held_objects(p)
+            refs = tuple(r for r in refs if r in held)
         if not refs:
             continue
+        # v9 IN-12 step 9 (`rosters.yaml: vocation_sourced`): A VERB THAT CARRIES A VOCATION forms one
+        # Candidate per vocation in the RANGE -- `verb_capability`'s values (`data/verbs.py::VOCATIONS`,
+        # #453 K-20) -- the key riding on the roster's operand. ⚠ NEVER THE ACTOR'S OWN `capability`:
+        # capability GATES NOTHING (#353 §9.2, probe P11, which zeroes it and asks that the option set not
+        # move), so whether a training lands is the effect's (the subject must already hold the key, J-13
+        # (iii)), not a formation the actor's dice decide. A row the roster does not name is untouched.
+        voc_operand = VOCATION_SOURCED.get(verb)
+        vocations = ()
+        if voc_operand is not None:
+            vocations = tuple(sorted(VOCATIONS))
+            if not vocations:
+                continue
         # v9 IN-12 step 6 (`rosters.yaml: warrant_sourced`): A VERB WHOSE SUBJECT COMES FROM A WARRANT
         # forms only on a referent a HELD record of the warrant kind names -- IN-10's held-Record
         # channel (`held_record_claims`, answered through `record_sourced_operands`' `subject` key),
@@ -206,6 +276,8 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             bagged = [(st, ops) for st in (seats or (None,))
                       for ops in operand_bags(p, row, q, subject, fx, seat=st, people=people,
                                               records=records)]
+            if vocations:                   # IN-12 step 9: one bag per vocation carried (above)
+                bagged = [(st, {**ops, voc_operand: k}) for st, ops in bagged for k in vocations]
             for st, ops in bagged:
                 # ⚠ AND A TWO-SIDED ACT NEEDS A SECOND SIDE (plan position `15`, `ED-IN-0210` ruling
                 # 2). The rule above, one column over: a row naming its `counterparty:` operand forms
@@ -732,6 +804,12 @@ def _content_answer(c: Optional["Claim"], name: str):
 _RECORD_ANSWERABLE = frozenset(n for m in RECORD_SOURCED_OPERANDS.values() for n in m)
 
 
+def _held_objects(p: Person) -> frozenset:
+    """The ids of what `p` holds: the objects of his own live `hold` Tenures (an edge is owned by its
+    subject, so this reads his `tenures`, never an index over every edge)."""
+    return frozenset(t.object for t in p.tenures if t.kind == "hold" and t.live)
+
+
 def held_record_claims(p: Person) -> list:
     """THE CONTENT CLAIMS OF THE RECORDS `p` HOLDS -- plan position IN-10, #453 §10.1's *"held
     Records"*: for each of `p`'s OWN live `hold` Tenures, the newest `content:<kind>` claim on its
@@ -742,7 +820,7 @@ def held_record_claims(p: Person) -> list:
     WHAT IT IS FOR: `_derive_operand(..., held=c)` answers an operand off one of these, `subject`
     included -- the act is about what the document SAYS (a dispensation's `terms`) -- and
     `operand_bags` forms one bag per such claim whose `terms` is the referent (its docstring)."""
-    held = [t.object for t in p.tenures if t.kind == "hold" and t.live]
+    held = [t.object for t in p.tenures if t.kind == "hold" and t.live]       # TENURE ORDER (below)
     if not held:
         return []
     # NEWEST BY `LedgerReader._best`'s comparator, the one owner of *most recent, then most
@@ -756,6 +834,26 @@ def held_record_claims(p: Person) -> list:
         if c is not None:
             out.append(c)
     return out
+
+
+def holds_own_document(p: Person, kind: str) -> bool:
+    """DOES `p` HOLD A DOCUMENT OF `kind` WHOSE CONTENT NAMES HIM? -- v9 IN-12 step 10, the read
+    `rosters.yaml: held_document_declines` declines a verb on (`conceal` while a cover is held). Person-side
+    and World-free (`AX-2`), `held_record_claims`' sources: his OWN live `hold` Tenures and the
+    `content:<kind>` claims his OWN ledger holds on their objects (`loop/witness.py`'s content deposit to
+    a new holder), read through `person_q.content_kind` / `content_said`. A Record held and never read
+    answers nothing. "Names him" is any content value equal to his id: the kind's keys are the roster's,
+    and none is spelt here."""
+    held = _held_objects(p)
+    if not held:
+        return False
+    for c in p.ledger:
+        if c.subject not in held or content_kind(c) != kind:
+            continue
+        said = content_said(c)
+        if said and any(v == p.id or (isinstance(v, tuple) and p.id in v) for v in said.values()):
+            return True
+    return False
 
 
 def _from_shortfall_claim(p: Person, q: "Question", name: str):
@@ -1233,8 +1331,8 @@ def standing_of(p: Person, fx: "Fixtures") -> int:
     return scale if paired == 0 else (dis * scale) // paired
 
 
-# Built once: `channel_remove` runs per deposit, and the roster it reads does not change at runtime.
-_REMOVE_ORDINAL = tuple(dict.fromkeys(CHANNEL_CLAIM_SOURCE[ch] for ch in WITNESS_CHANNELS))
+# The ordinal is `data/rosters.py::REMOVE_ORDINAL`'s, built once there (v9 SC-02 `22a` moved it out of
+# this module so the resolver-side `reception` reads the same ranks without importing decision code).
 
 
 def channel_remove(channel: str) -> float:
@@ -1252,7 +1350,7 @@ def channel_remove(channel: str) -> float:
     *"the order decides only which channel is reported, never the source"* true of this term too.
     EQUAL SPACING between the ranks is the [ASSUMPTION] (`H-199`): the ordinal is ruled, the
     distances are not."""
-    return _REMOVE_ORDINAL.index(CHANNEL_CLAIM_SOURCE[channel]) / (len(_REMOVE_ORDINAL) - 1)
+    return REMOVE_ORDINAL.index(CHANNEL_CLAIM_SOURCE[channel]) / (len(REMOVE_ORDINAL) - 1)
 
 
 def ledger_weigh(p: Person, fx: "Fixtures"):

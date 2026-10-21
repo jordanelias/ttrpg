@@ -37,6 +37,11 @@ exercised by this run.**
 | `obstacle_default` | `2` | no — a harness fixture |
 | `obstacle_refusal_multiple` | `2` | yes — §27.4 |
 | `obstacle_ceiling` | `2` | no — a harness fixture |
+| `reception_gain` | `1.0` | no — a harness fixture |
+| `proof_step` | `0.25` | no — a harness fixture |
+| `pursuit_shift` | `0.1` | no — a harness fixture |
+| `default_forgery_quality` | `1` | no — a harness fixture |
+| `standing_band_floors` | `(500,)` | no — a harness fixture |
 | `band_floors` | `{'harbour': {'bulk_shipping': 800, 'fishing': 100}, 'seam': {'deep_mining': 700, 'surface_gleaning': 50}, 'body': {'full_operations': 800, 'limited': 500, 'withdrawal_only': 100}, 'dwelling': {}, 'garrison': {}}` | no — a harness fixture |
 | `capacity_floor` | `{'harbour': 0, 'seam': 0, 'body': 0, 'dwelling': 1, 'garrison': 0}` | no — a harness fixture |
 | `works_cost` | `{'hearth': {'grain': 10}, 'community': {'grain': 10}, 'harbour': {'timber': 10}, 'seam': {'timber': 10}, 'dwelling': {'timber': 10}, 'garrison': {'timber': 10}}` | no — a harness fixture |
@@ -90,3 +95,4 @@ exercised by this run.**
 | `oblige_term` | `4` | no — a harness fixture |
 | `default_upkeep` | `1` | no — a harness fixture |
 | `bench_quorum` | `1` | no — a harness fixture |
+| `withheld_verbs` | `('destroy_record',)` | no — a harness fixture |

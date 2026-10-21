@@ -18,7 +18,8 @@ from ..gaps import InstrumentDefect
 from ..loop.predicates import office_described_by, office_named_by
 from ..queries.world_q import BAN_KIND, restrained
 from ..state.carriers import Tenure, Term
-from ..state.gate import NO_CHANGE, Change, Subject
+from ..state.gate import (NO_CHANGE, Change, Subject, has_revocation_disposal,
+                          revocation_disposal)
 from ..state.ids import H
 
 from .effects_shared import _exercised_office, _new_oblige_term, _operand, _shift, effect_for
@@ -268,10 +269,46 @@ def _eff_revoke(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     in, and the target seat's revocation basis (ruling (3), `rung_above_same_faction`) admits THAT
     seat -- or `T-m` if the incumbent is the actor. A revocation with no seat is refused at the gate
     and the hold put back; `_req_revoke` asks the same `may_revoke` first. ⚠ F3 IS ASKED BEFORE F9,
-    so a seatless revocation is `NotYours` -- never excused as a no-op."""
+    so a seatless revocation is `NotYours` -- never excused as a no-op.
+
+    v9 IN-31 (H-100): WHAT THE REVOCATION COSTS THE MAN REVOKED, BY THE SEAT'S PROVENANCE. The seat's
+    conferral basis selects it through `state/gate.py::REVOCATION_DISPOSAL`, the one owner (Jordan,
+    2026-10-21: `appointed` -> a permanent `ban`; `elected`, `annex`, `None` -> nothing). A seat whose
+    basis has no disposal (only a hand-mutated office reaches one; `_req_revoke` refuses first)
+    is `NO_CHANGE` -- unreadable provenance never defaults to a cost. Where it is a `ban`, each man
+    whose `hold` closes gets `ban : him -> Act.via` (*"person -> the excluding seat"*,
+    `rosters.yaml: tenure_kinds`), except: the actor himself (his own closure is `T-m`, and `T-m`
+    never admits an owner opening his own restraint, so a self-ban would refuse the resignation with
+    it), a man already banned (one restraint is enough; his hold still closes), and a man no longer
+    in the world. The kind is spelled LITERALLY so `data/verbs.py::_derive_openers_from_effects` reads
+    `revoke` as a `ban` opener (`_disposal`'s precedent); any other disposal kind has no site here and
+    opens nothing. The ban carries no term and nothing in `loop/` closes one, so it lasts until his
+    death (the cascade). Both edges earn `None` -- the row's one kind, `tenure.closed` -- so an
+    appointed and an elected revocation emit the same Event, and the ban is no event of its own
+    (`determine`'s precedent: its disposal edge earns only `matter.determined`). The write gate admits
+    the ban under `T-o`, licensed by the closure in the same write (`refuse_unauthored`'s `revoked`)."""
     d = (a.payload or {}) if isinstance(a.payload, dict) else {}
     obj = d.get("office")
-    return _closing(w, [t for t in w.tenures if t.kind == "hold" and t.object == obj and t.live])
+    off = w.offices.get(obj)
+    if off is not None and not has_revocation_disposal(off):
+        return NO_CHANGE
+    closed = [t for t in w.tenures if t.kind == "hold" and t.object == obj and t.live]
+    bans: list = []
+    if off is not None and a.via in w.offices and revocation_disposal(off) == BAN_KIND:
+        for h in dict.fromkeys(t.subject for t in closed):
+            if h != a.actor and h in w.persons and not restrained(w, h, BAN_KIND):
+                bans.append(Tenure(H(w.world_seed, w.tick, h, f"ban:{a.via}:{a.id}"), h, a.via,
+                                   "ban", w.tick))
+    if not bans:
+        return _closing(w, closed)
+
+    def perform() -> None:
+        for t in closed:
+            t.until = w.tick
+        for b in bans:
+            w.add_tenure(b)
+    return Change(tuple(Subject.edge(t) for t in closed) + tuple(Subject.edge(b) for b in bans),
+                  perform)
 
 
 def _closing(w: "World", edges: list, earns: "str | None" = None) -> Change:

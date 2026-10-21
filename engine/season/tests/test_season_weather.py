@@ -92,8 +92,8 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # (typed with `survey`'s cell, `_eff_forge`), so the chooser offers it. The build hash is equal; one and
 # two seasons move. Was 5bbcba33... / 39bf9d83... (one, two seasons). CONTROL, run: the same tree with
 # `forge` withheld from the chooser's verbs reproduces both old values exactly, so the sheet consumer
-# (`record_sourced_operands.faction_sheet`) and the shared mint move nothing here. `forge` writes no
-# `forgery_quality` (`H-210`, deferred to SC-02 `22b`), so a forged sheet hashes at the field's `0`.
+# (`record_sourced_operands.faction_sheet`) and the shared mint move nothing here. `forge` wrote no
+# `forgery_quality` then (`H-210`, deferred to SC-02 `22b`, which writes it -- re-pinned below).
 # RE-PINNED at v9 IN-12 `survey` + Rung (B-K), A BEHAVIOUR MOVE DECLARED: a Rung subject is answered by
 # `world_q.holder_faction_of` (`loop/effects_information.py::_resolved_sheet`), so a survey -- and a
 # forge, which shares the helper -- of a held place mints instead of declining. The build hash is equal;
@@ -155,9 +155,51 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # with both on, 0. Over the two seasons with both on: 32 `finding.none` at `Failure`, 6 `finding.made` at
 # `Partial`, 3 at `Success` (read, not asserted, v9 §0.5). CONTROL: the base commit reproduces the old
 # values (this file green there before the change).
+# RE-PINNED at v9 SC-02 `22b` steps 24 + 25 (B-P, on 2c8cdcec), A DATA MOVE DECLARED, the event sequence
+# UNMOVED: `forge` now writes `Record.forgery_quality` (the shipped `default_forgery_quality` 1, `H-210`),
+# so each forged sheet's digest moves -- `record.forged` 7 (one season) / 13 (two). The build hash is
+# equal; one and two seasons move. Was 508ac85a... / 89bc9c0a... (one, two seasons). CONTROL, run: the
+# same tree at `default_forgery_quality` 0 reproduces both old values and both `BASE_EVENTS` exactly; at
+# `pursuit_shift` 0 (step 24's control) it reads the new values unchanged -- `determine` reaches its
+# contest 0 times in the realm's two seasons (`determine.refused` 1, no `matter.determined`/
+# `.undetermined`), so step 24 moves no realm hash (read, not asserted, v9 §0.5).
+# RE-PINNED at v9 IN-12 step 7 `covenant`, A BEHAVIOUR MOVE DECLARED: the new row is `remit:issue`-eligible,
+# so the realm's `issue`-granted seat holders FORM it (its cell binds `to` beside `subject`, the known-person
+# fan) and the chooser ATTEMPTS it -- every attempt refused (`covenant.refused`: 8 in season 1, 12 by season
+# 2; none executed), so the act mix moves. The build hash is equal; one and two seasons move. Was
+# e5611ae0... / 6cee9b66... (one, two seasons). ARMS, run on this tree: `covenant` withheld from every
+# `opening_set` reproduces the old hashes and event counts exactly (6111 / 18920); `terms_sourced` emptied
+# (the `commit` route, `decision/options.py`) moves nothing -- no realm person holds a writ naming a Proposition.
+# RE-PINNED at v9 IN-12 step 9 (`argue`, `sabotage`, `tend`, `train`), A BEHAVIOUR MOVE DECLARED: four new `own`
+# rows the realm's persons FORM on their questions' referents and the chooser ATTEMPTS -- every attempt refused
+# by two seasons (`sabotage.refused` 35: no realm referent is a Site; `tend.refused` 35: a non-person referent or
+# a whole body; `train.refused` 41: a non-person referent, or a subject holding no vocation -- nobody in the
+# realm holds a `capability`; `argument.refused` 5: no subject is a Proposition; plus one `sabotage`
+# `act.ineligible`; none executed), so the act mix moves. The build hash is equal; one and two seasons move.
+# Was b3e7784f... / da8e0167... (one, two seasons). ARM, run on this tree: the four withheld from every
+# `opening_set` reproduces the old hashes and event counts exactly (6178 / 17855).
+# RE-PINNED at v9 IN-12 step 10 (`conceal`), A BEHAVIOUR MOVE DECLARED: a new `own` row with no precondition the
+# realm's persons FORM on their questions' referents and the chooser ATTEMPTS, and it EXECUTES (`cover.assumed`
+# 19 by two seasons, 19 covers minted); a covered person's later acts anchor on the alias
+# (`state/attribution.py::anchor_of`), which moves what the deposits about them are about. The build hash is
+# equal; one and two seasons move. Was e28a0d36... / b7367802... (one, two seasons). ARM, run on this tree:
+# `conceal` withheld from every `opening_set` reproduces the old hashes and event counts and digests exactly
+# (6321 / 17559) -- with no cover held, the `anchor_of` cover read moves nothing.
+# RE-PINNED at v9 IN-12 step 13 (`forgive`), A BEHAVIOUR MOVE DECLARED: a new `own` row with no precondition,
+# formed only on a referent the person holds a negative stance row against (`rosters.yaml:
+# own_stance_declines`). The realm fights no field (H-149/H-175), so every row it can end is a SEEDED one
+# (`stance_from_loyalty`): formed 24 times by two seasons, attempted once, executed once (`stance.moved`,
+# `p_npc_013` forgiving `p_npc_003`), refused 0; field-planted forgivenesses 0. The build hash is equal; one and
+# two seasons move. Was 38cc3da0... / e1fbb610... (one, two seasons). ARM, run on this tree: `forgive` withheld
+# from every `opening_set` reproduces the old hashes and event counts and digests exactly (6642 / 19553).
+# RE-PINNED at B-Q's BATCH-CLOSE (Phase 1 findings, reproduced red first), A DATA MOVE DECLARED: a covered
+# actor's deposit names the alias and not himself (`epistemic.claim_subjects`: three covered `travel.moved`
+# in the realm's two seasons), `world_q.event_place` places an act-caused Event by its actor, and a covered
+# mover's `travel.ended` chains to his move (`loop/matter.py`). Was ed761c59... / ee8e5500... (one, two
+# seasons); the build hash and the season-1 event sequence are unmoved.
 BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
-               1: "508ac85a63433c8768369deb323e0aa8",
-               2: "89bc9c0ac2a0437f7ea7a1f726794e46"}
+               1: "8bfd47a909a52aef79cec4d40e968580",
+               2: "8abd76f3a5337791188861a38ecbaa4d"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -191,8 +233,13 @@ BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
 # RE-RECORDED at v9 SC-03b with `BASE_HASHES` (season 2 only: 23288 -> 23215; season 1 unchanged, 7060).
 # RE-RECORDED at v9 FI-01 with `BASE_HASHES` (7060 -> 6111, 23215 -> 18920: the skip arm's absent
 # `claim.deposited` Events, and the trajectory the graded inquiries and the missing claims move).
-BASE_EVENTS = {1: (6111, "811ccc1329e9f361904b1b33a9611bd1f6470cf96bbb2470308035977bf95199"),
-               2: (18920, "9ed69d804869f7e132c6d0e34409e6e18468a5febf1d5ab49f7893330cfb1dae")}
+# RE-RECORDED at v9 IN-12 step 7 `covenant` with `BASE_HASHES` (6111 -> 6178, 18920 -> 17855).
+# RE-RECORDED at v9 IN-12 step 9 with `BASE_HASHES` (6178 -> 6321, 17855 -> 17559).
+# RE-RECORDED at v9 IN-12 step 10 `conceal` with `BASE_HASHES` (6321 -> 6642, 17559 -> 19553).
+# RE-RECORDED at v9 IN-12 step 13 `forgive` with `BASE_HASHES` (6642 -> 6633, 19553 -> 19538).
+# RE-RECORDED at B-Q's BATCH-CLOSE with `BASE_HASHES` (season 1 events unmoved, 6633; season 2 19538 -> 19535).
+BASE_EVENTS = {1: (6633, "6309463792a9d873e9a58c8598e1a648b8305a817c0f0bee243e267b1859e571"),
+               2: (19535, "f2a7b22ad32e9b14fefbe06f228ca41a159722562011f5b9cd939d62529b5d1b")}
 
 
 def _digest(w) -> tuple:

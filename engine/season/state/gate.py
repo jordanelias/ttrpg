@@ -50,7 +50,8 @@ from typing import Any, Callable, Optional
 from ..data.arrangements import ARRANGEMENTS
 from ..data.matrix import MATRIX, WriteClass
 from ..data.rosters import (
-    CONFERRAL_BASES, DETAIN_KIND, RESTRAINT_KINDS, REVOCATION_BASES, TENURE_KINDS, faction_prop_id,
+    BAN_KIND, CONFERRAL_BASES, DETAIN_KIND, RESTRAINT_KINDS, REVOCATION_BASES, TENURE_KINDS,
+    faction_prop_id,
 )
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 from .carriers import Office, Receipt, Tenure
@@ -579,6 +580,66 @@ if set(REVOCATION_RULES) != set(REVOCATION_BASES):
             "cross-validation exists to catch; ED-IN-0256 (3) is the one rule ruled")
 
 
+# v9 IN-31 (H-100): WHAT A REVOCATION COSTS THE MAN REVOKED, BY THE SEAT'S PROVENANCE -- the one owner.
+# A `hold`'s provenance is its SEAT's declared conferral basis (`Office.conferral`, `rosters.yaml:
+# conferral_bases`, ED-IN-0256 (2)), read at revoke time: no act changes it on a live seat
+# (`_req_establish` refuses a re-founding that does), so the read equals a stamp taken at seating.
+# ⚠ IT IS THE SEAT'S BASIS, NOT THE ROUTE BY WHICH THIS MAN CAME TO SIT (`confer` fills all three).
+# The value is the restraint kind `revoke` opens on him, owned by him and objected on the revoking
+# seat (`Act.via`), or `None` for nothing. JORDAN, 2026-10-21 (B-Q, answering the IN-31 design's A1
+# box, *"Design's answer"*): an `appointed` seat revoked -> a PERMANENT `ban` (SC-03a's restraint; it
+# carries no term and no effect closes one, so only his death ends it); `elected`, `annex` and `None`
+# -> nothing; and a `confer` that displaces an incumbent costs nothing (`_eff_confer` reads no row
+# here). Python and not a YAML column, `REVOCATION_RULES`' precedent: the roster names the basis, the
+# rule is behaviour. READERS ASK IT IN PLACE (`revocation_disposal`, `has_revocation_disposal`, or
+# this module's attribute), never through a `from`-import of the dict, so an in-place mutation reaches
+# every reader. `None` IS A VALUE (a seat declaring no ruled way of being filled -- Hafenmark's is
+# strippable, Jordan 2026-10-12), not "unreadable" [ASSUMPTION; medium; Jordan to correct; revert:
+# drop the `None` key, so a `None` revocation refuses -- which overwrites the Hafenmark ruling].
+REVOCATION_DISPOSAL = {"appointed": BAN_KIND, "elected": None, "annex": None, None: None}
+
+
+def check_revocation_disposal() -> None:
+    """REFUSED AT IMPORT, `REVOCATION_RULES`' shape: the mapping must be TOTAL over `CONFERRAL_BASES`
+    plus `None` (a fourth basis cannot land without an outcome; `conferral_bases` is `open: false`),
+    and every value a restraint kind or `None`. Callable again so a test can observe it refuse."""
+    want = set(CONFERRAL_BASES) | {None}
+    if set(REVOCATION_DISPOSAL) != want:
+        raise Unspecified(
+            f"revocation disposals {sorted(map(str, REVOCATION_DISPOSAL))} and conferral bases "
+            f"{sorted(map(str, want))} disagree", "rosters.yaml -- conferral_bases",
+            needs="give every rostered conferral basis, and `None`, its revocation disposal in "
+                  "`state/gate.py::REVOCATION_DISPOSAL`, and no other key",
+            law="`04 §B.13` ID-12 -- a declared row that reaches no code is the defect the loader's "
+                "cross-validation exists to catch; v9 IN-31 (H-100)")
+    bad = {k: v for k, v in REVOCATION_DISPOSAL.items() if v is not None and v != BAN_KIND}
+    if bad:
+        raise Unspecified(
+            f"revocation disposals {bad!r} name no restraint `_eff_revoke` opens (only {BAN_KIND!r})",
+            "state/gate.py -- REVOCATION_DISPOSAL",
+            needs=f"a revocation disposes {BAN_KIND!r} (the one restraint `_eff_revoke` and the `revoked` "
+                  "licence implement) or nothing (`None`); `detain` would load and do nothing",
+            law="v9 IN-31 (H-100) -- what a revocation opens on the man revoked is a restraint he "
+                "cannot release himself, or nothing")
+
+
+check_revocation_disposal()
+
+
+def has_revocation_disposal(off: Office) -> bool:
+    """Does `off`'s conferral basis have a revocation disposal? False only for a value off the roster,
+    which `Office.__post_init__` refuses to construct -- reached by a hand-mutated office alone.
+    `_req_revoke` refuses on it and `_eff_revoke` declines on it: unreadable provenance never
+    defaults to a cost."""
+    return off.conferral in REVOCATION_DISPOSAL
+
+
+def revocation_disposal(off: Office) -> Optional[str]:
+    """The restraint kind a revocation of `off` opens on the man revoked, or `None` -- for nothing, or
+    for a basis with no disposal (`has_revocation_disposal` tells the two apart)."""
+    return REVOCATION_DISPOSAL.get(off.conferral)
+
+
 def has_conferral_basis(off: Office) -> bool:
     """THE BASIS TEST, ONCE: does this office declare HOW IT IS FILLED, from the ruled set?
 
@@ -865,7 +926,8 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
                        via: Optional[str], gone: frozenset,
                        released: frozenset = frozenset(), *,
                        born: frozenset = frozenset(),
-                       rehomed: frozenset = frozenset()) -> Optional[str]:
+                       rehomed: frozenset = frozenset(),
+                       revoked: frozenset = frozenset()) -> Optional[str]:
     """F3's JUDGMENT FOR ONE CHANGED TENURE: the name of the basis that admits it, or `None`.
 
     `t` is the Tenure as it stands after the write; `was` is a detached copy of it from before, or
@@ -882,6 +944,10 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
     closed and exactly one opened, counted across the batch) -- likewise computed by
     `refuse_unauthored`, which holds the batch; empty by default, so a lone-Tenure caller cannot get
     `muster` either (it admits only a `contain` of a person in `rehomed`).
+    `revoked` (v9 IN-31) is the PERSONS whose `hold` on a seat this same write closed under `T-o`,
+    where that seat's revocation disposal is a `ban` (`REVOCATION_DISPOSAL`), and who have not yet
+    been banned for it -- computed by `refuse_unauthored` likewise; empty by default, so a lone-Tenure
+    caller cannot get a revocation's `ban` under `T-o` (below).
 
     THE BASES, AND WHAT EACH MAY WRITE -- a basis admits a KIND of change, not any change:
 
@@ -916,7 +982,18 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
                   The one basis an ACTORLESS write can meet (S15.3's causation rule), which is how
                   MATTER's death reaches it.
       `T-o`       a CLOSURE of a `hold` on a SEAT, by `may_revoke` -- `via` present, the actor
-                  seated in it, and the seat's revocation basis admitting it.
+                  seated in it, and the seat's revocation basis admitting it. AND (v9 IN-31,
+                  H-100) the revocation's COST: an OPENING of a `ban` whose OBJECT is `via` and
+                  whose owner is in `revoked` -- the same write closed his `hold` under `T-o` on a
+                  seat whose `REVOCATION_DISPOSAL` is `ban`. One ban per such closure, spent by
+                  `refuse_unauthored`. The authority is the one `T-o` judged on the closure, so it
+                  is not a thirteenth basis [ASSUMPTION; medium; Jordan to correct; revert: a named
+                  basis `revocation`, with its line in `not_yours`' `needs=` text]. ⚠ THE GATE
+                  ENFORCES THE MAPPING ONLY FOR A NON-JUDGING `via`: `determination` is asked
+                  first and admits any `ban` on a judging `via` for a person its bench holds, so
+                  there the mapping is `_eff_revoke`'s alone to keep -- accepted, because that
+                  seat could write the same ban by a `determine`, and a conjunct keyed on the
+                  act's verb would widen this function's interface for one caller.
       `conferral` an OPENING of a `hold` on a SEAT, or a change to that `hold`'s grant (`payload`)
                   alone, by `may_fill`. The re-grant is `establish`'s re-stamp (`13f`): the grant a
                   seat confers on its holder, written by the authority that may fill the seat.
@@ -1150,6 +1227,11 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
     if (t.kind == "contain" and (opened or closed) and owner in rehomed
             and may_muster(w, actor, via, owner)):
         return MUSTER
+    # v9 IN-31 (H-100): A REVOCATION'S BAN, licensed by the `T-o` closure of the same man's seat-`hold`
+    # in this write (`revoked`, computed by `refuse_unauthored`, `handover`'s two-pass shape). Before
+    # `if seat is None`: a `ban` is not a seat-`hold`, so `seat` is `None` here.
+    if opened and t.kind == BAN_KIND and via is not None and t.object == via and owner in revoked:
+        return T_O
     if seat is None:
         return None
     if closed and may_revoke(w, actor, via, seat):
@@ -1177,6 +1259,10 @@ def refuse_unauthored(w: "World", changes: list, actor: Optional[str], via: Opti
     now with the licence, and spends one unit of it per `handover` it admits. The two passes are
     exact rather than approximate: `handover` admits only an OPENED edge, which `T-m` never admits
     for anyone but the actor, and the licence is read off `T-m` closures, which never depend on it.
+    v9 IN-31 (H-100) READS A SECOND LICENCE OFF THE SAME FIRST PASS: `revoked`, the owner of every
+    seat-`hold` closed under `T-o` whose seat's `REVOCATION_DISPOSAL` is `ban`, counted; the second
+    pass passes it too, and spends one unit per `ban` it admits under `T-o`. Exact for the same
+    reason: the ban arm admits only an OPENED `ban`, and the licence is read off closures of `hold`s.
     ⚠ THE LICENCE IS COMPUTED HERE AND NOT IN `World.write`, which is why `World.write`'s call did
     not change: *which change was a `T-m` closure* is a judgment, and the store observes changes
     and never judges them -- the split this module's G3 header states.
@@ -1206,14 +1292,23 @@ def refuse_unauthored(w: "World", changes: list, actor: Optional[str], via: Opti
              for t, was in changes]
     released = Counter(was.object for (t, was), basis, closed in zip(changes, bases, closes)
                        if closed and basis == T_M and was.kind == "hold")
+    # v9 IN-31 (H-100): THE REVOCATION LICENCE, `released`'s shape -- the OWNER of every seat-`hold`
+    # this write closed under `T-o` on a seat whose disposal is a `ban`. `.get`, so a hand-mutated
+    # conferral off the mapping grants nothing and does not raise here. A `confer` displacing an
+    # appointed incumbent earns one too and never spends it: `_eff_confer` opens no ban (A1's answer).
+    revoked = Counter(was.subject for (t, was), basis, closed in zip(changes, bases, closes)
+                      if closed and basis == T_O and was.kind == "hold" and was.object in w.offices
+                      and revocation_disposal(w.offices[was.object]) == BAN_KIND)
     refused = []
     for (t, was), basis in zip(changes, bases):
         # `+released` is the Counter with its spent (zero) entries dropped: what is left to hand on.
-        if basis is None and +released:
+        if basis is None and (+released or +revoked):
             basis = tenure_write_basis(w, t, was, actor, via, gone, frozenset(+released),
-                                       born=born, rehomed=rehomed)
+                                       born=born, rehomed=rehomed, revoked=frozenset(+revoked))
             if basis == HANDOVER:
                 released[t.object] -= 1
+            elif basis == T_O:          # only the ban arm can answer `T-o` on a second pass
+                revoked[t.subject] -= 1
         if basis is None:
             refused.append((t, was))
     return refused
@@ -1238,7 +1333,9 @@ def not_yours(refused: list, actor: Optional[str], via: Optional[str], record_ki
         f"{('exercising ' + via) if via else 'exercising no seat'} wrote Tenures it has no basis "
         f"for: {shown}{more}", "F3",
         needs=f"{T_M} (the actor owns the edge), {T_O} (via present, the actor seated in it, the "
-              f"seat's revocation basis reaching it), {CONFERRAL} (via's purview over a seat "
+              f"seat's revocation basis reaching it; or a `ban` on via opened in the same write "
+              f"that so closed the man's `hold` on a seat whose revocation disposal is a ban -- "
+              f"one ban per closure), {CONFERRAL} (via's purview over a seat "
               f"that declares a conferral basis), {CASCADE} (the edge names something this "
               f"same write removed), {HANDOVER} (a `hold` on something that is not a seat, "
               f"opened in the same write that ended the actor's own live `hold` on it -- one "

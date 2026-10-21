@@ -417,6 +417,33 @@ DEFAULT_FIXTURES = Fixtures(
     obstacle_refusal_multiple=2,
     # [JUSTIFIED: engine/season/hole_register.yaml H-213 -- `site: Fixtures obstacle_ceiling`, graded `assumption`; M-7 fails at the 1D floor above 2 (p_success 0.0006 at Ob 3), and 2 = obstacle_refusal_multiple x the 1D floor; swept 1 / 2 / 3, `None` the uncapped control]
     obstacle_ceiling=2,
+    # v9 SC-02 `22a` (proceedings `19_PLAN.md` steps 17 and 18): THE ROOM'S TWO MAGNITUDES, carried raw by
+    # `seam/wrappers/sigma.py::contest_input` and composed by `modules/social_contest/roll.py::obstacle`
+    # (`room = reception_gain x reception + proof_step x proofs`, subtracted, floored at `OB_MIN`, under
+    # the ceiling above). `0` is each one's CONTROL: the obstacle as it was before the room existed.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-215 -- `site: Fixtures reception_gain`, graded `assumption`; no document gives how far a bench's regard moves an obstacle, so it is injected and swept 0 / 1 / 2]
+    reception_gain=1.0,                # `H-215`, swept 0 (control) / 1 (SHIPPED) / 2
+    # [JUSTIFIED: engine/season/hole_register.yaml H-216 -- `site: Fixtures proof_step`, graded `assumption`; no document gives how far one unmirrored proof moves an obstacle, so it is injected and swept 0 / 0.25 / 0.5]
+    proof_step=0.25,                   # `H-216`, swept 0 (control) / 0.25 (SHIPPED) / 0.5
+    # v9 SC-02 `22b` step 24 (proceedings `19_PLAN.md` step 24): HOW FAR A DETERMINATION MOVES ITS MAKER'S
+    # OWN PURSUITS, per unit of `queries/person_q.py::pursuit_lean` and per band step (`data/rosters.py::
+    # DEGREE_STEP`), read by `person_q.consequence_pursuits` from `loop/effects_information.py::
+    # _eff_determine`. `0` is the CONTROL: no consequence write, every determination as before.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-221 -- `site: Fixtures pursuit_shift`, graded `assumption`; no document gives how far a consequence moves a conviction, so it is injected and swept 0 / 0.1 / 0.25]
+    pursuit_shift=0.1,                 # `H-221`, swept 0 (control) / 0.1 (SHIPPED) / 0.25
+    # v9 SC-02 `22b` step 25 (`19_PLAN.md` step 25): THE FORGERY QUALITY A `forge` WRITES on the Record it
+    # mints (`loop/effects_information.py::_eff_forge`), read by the examination's obstacle (`seam/wrappers/
+    # sigma.py::contest_input` -> `modules/social_contest/roll.py::obstacle`). `0` is the CONTROL: a forgery
+    # the examiner's roll reads as it reads a genuine document -- the obstacle as before this step.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-210 -- `site: Fixtures default_forgery_quality`, graded `assumption`; no document gives a forgery's quality, so `default_transfer_amount`'s shape: an injected integer, swept 0 / 1 / 3]
+    default_forgery_quality=1,         # `H-210`, swept 0 (control) / 1 (SHIPPED) / 3
+    # v9 SC-02 `22b` step 23 (`19_PLAN.md` step 23): THE STANDING BANDS -- floors on `decision/options.py::
+    # standing_of`'s gap (on `condition_scale`), read by `loop/matter.py::_standing_crossings`. A band is
+    # `budget.body_band_penalty`'s reading (the floors a value is below), and the crossing is the band of
+    # the gap over the claims landed before last season differing from the band over all of them. `()` is
+    # the CONTROL: one band, so nothing crosses and no person-keyed question is ever raised.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-223 -- `site: Fixtures standing_band_floors`, graded `assumption`; no document gives where the standing gap's bands fall, so it is injected and swept () / (500,) / (250, 500, 750)]
+    standing_band_floors=(500,),       # `H-223`, swept () (control) / (500,) (SHIPPED) / (250, 500, 750)
     # S12.1 gates verbs on `condition` against per-kind band FLOORS. S22 assigns "band
     # coefficients" and "the obstacle floor" to params; the params document proposes NO
     # VALUES, so these are harness fixtures and A31c sweeps them. S42.2.1 names "three band
@@ -884,4 +911,14 @@ DEFAULT_FIXTURES = Fixtures(
     # which is stated, not hidden: it is observable at `2` and `3`, where a lone judge is refused.
     # [JUSTIFIED: engine/season/hole_register.yaml H-161 -- the bench quorum; the observable rules THAT a determination below quorum refuses, and no document gives the number for a bench-disposal arrangement, so it is injected and swept 1 / 2 / 3]
     bench_quorum=1,                    # `H-161`, swept 1 (SHIPPED, loosest) / 2 / 3
+    # `H-156` (v9 IN-26, BOUND-PAPER). THE VERBS `decision/options.py::opening_set` FORMS NO CANDIDATE FOR
+    # -- `H-156`'s option (a), *hold it out of formation*, as a switch rather than a row edit, so the hold
+    # and its release are one value and the hand-built fold is untouched (a withheld verb still executes
+    # from an act that names it). Each member must be a `verb_table.yaml` verb (`opening_set` refuses
+    # another). SHIPPED naming `destroy_record` -- THE SINK ARM OFF: since IN-26 its row is formable
+    # (`A-13`'s shape), and withheld it forms for nobody, as before, so every hash is today's. `()` is THE
+    # SINK ARM ON (`H-156` option (b) for that row): a holder may burn what he holds. [ASSUMPTION; medium;
+    # Jordan to correct; the flip ON is a separate, declared hash-moving commit, IN-52's precedent.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-156 -- the formation-policy row; (a) and (b) are both defensible and lead to different corpora, so the arm ships at (a), today's state, and (b) is the declared second point]
+    withheld_verbs=("destroy_record",),   # `H-156`, swept ("destroy_record",) (control, SHIPPED) / ()
 )

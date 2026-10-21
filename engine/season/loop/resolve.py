@@ -20,12 +20,13 @@ from __future__ import annotations
 import random
 from ..data import files
 from ..gaps import InstrumentDefect
-from ..data.rosters import GRADED_INQUIRIES, STRATA
+from ..data.rosters import (FOLD_ATTEMPT_REFUSED, PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, GRADED_INQUIRIES,
+                            STRATA)
 
 from typing import Optional
 from ..data.matrix import Step, matrix_row
 from ..data.requires import UNKNOWN, Verdict, binding_from_act, evaluate
-from ..data.verbs import (COUNTERPARTY_CLAUSE, ELIGIBILITY_CLAUSE, VERB_TABLE,
+from ..data.verbs import (COUNTERPARTY_CLAUSE, ELIGIBILITY_CLAUSE, EVENT_KINDS, VERB_TABLE,
                           WRITE_CLAUSE, VerbRow)
 from ..gaps import Forbidden, Unspecified
 from ..loop.effects import EFFECTS
@@ -39,7 +40,7 @@ from ..queries.world_q import WorldReader, ceiling, demanded_person, occasioned_
 from ..seam import ContestError, ContestRefused, Resolution, contest, degree_of, find_trail, grade
 from ..state.carriers import Act, Event, StateChange, subject_of
 from ..state.gate import Change, NoOpReceipt, Subject, Token, seat_hold
-from ..state.ids import draw_factory, H
+from ..state.ids import SeatId, draw_factory, H
 from ..state.world import World
 from ..trace_log import TRACE
 
@@ -65,14 +66,26 @@ def _survives(self, w: "World", a: Act) -> list:
     Extracted from `resolve()`'s own loop (M4) so `loop/encounter.py` shares the one check: a
     predecessor's act can remove a person just as easily inside RESOLVE as inside an earlier act
     of the SAME round's ENCOUNTER pass, and the reading is the fold's own rather than borrowed
-    (see the inline comment this replaced, still true of both callers)."""
+    (see the inline comment this replaced, still true of both callers).
+
+    ⚠ SC-02 `23`: THE TAG ASSERTION IS HERE, BECAUSE THIS IS THE ONE CHECK BOTH FOLD ENTRIES SHARE
+    (`resolve` and `encounter` call it before anything else reads the actor). `04:222`, the Python
+    column: *"STRUCTURAL under a checker; MECHANICAL at runtime"*, and `04:120` (AX-1), *"only a
+    person acts; a seat enters through `Act.via`"*. It RAISES `InstrumentDefect` and does not emit
+    `act.ineligible`: a seat that is not in `w.persons` would otherwise be indistinguishable from a
+    person a predecessor removed, so the typed refusal is the only way to tell 'a seat tried to act' from
+    'nobody is there'. The grade is RUNTIME -- CI runs no type-checker."""
+    if isinstance(a.actor, SeatId):
+        raise InstrumentDefect(
+            f"act {a.id!r} ({a.verb}) names a SeatId as its actor: {str(a.actor)!r}. 04 §B.1 / AX-1 -- "
+            "only a person acts; a seat enters through `Act.via`, and `Act.actor` is a PersonId.")
     if a.actor in w.persons:
         return []
     TRACE.decision(f"{a.actor} does not survive to act", "S27.1",
                    chose="emit `act.ineligible`; a predecessor removed the actor",
                    alternatives=["fold it anyway (the seam then sees a dead claimant)",
                                  "drop it silently (its act id never resolves)"])
-    gone = _act_events(self, w, a, ("act.ineligible",))
+    gone = _act_events(self, w, a, (FOLD_INELIGIBLE,))
     for _e in gone:
         self.act_of[_e.id] = a
     return gone
@@ -213,7 +226,7 @@ def _admits(self, w: "World", a: Act, row: "VerbRow") -> tuple:
         TRACE.decision(f"{a.actor} is not eligible for {a.verb}", "E4",
                        chose="emit the refusal", alternatives=["raise", "silently drop"])
         return (False, _demand_earned(w, a, row.refusal_for(ELIGIBILITY_CLAUSE), False)
-                or ("act.ineligible",), Verdict(UNKNOWN, ()))
+                or (FOLD_INELIGIBLE,), Verdict(UNKNOWN, ()))
     verdict = Verdict(UNKNOWN, ())
     if row.has_precondition:
         if row.requires_typed is not None:
@@ -286,7 +299,7 @@ def _admits(self, w: "World", a: Act, row: "VerbRow") -> tuple:
             # `verdict.failed` is the conjunct that decided it (`data/requires.py::evaluate`); a
             # predicate row and an unnamed cell carry `None`, which only a flat row reaches.
             return (False, _demand_earned(w, a, row.refusal_for(verdict.failed), True)
-                    or ("act.refused",), verdict)
+                    or (FOLD_REFUSED,), verdict)
     # ⚠ PLAN POSITION `14` (U7-own): THE SECOND PARTY, ASKED HERE AND NOWHERE ELSE. `ED-IN-0210`
     # ruling 1 -- *a real interaction has a COUNTERPARTY*; a row naming its `counterparty:` operand
     # is refused when the act names nobody there, or names the actor (the `Tenure(X, X)` fiat). The
@@ -305,15 +318,15 @@ def _admits(self, w: "World", a: Act, row: "VerbRow") -> tuple:
                            "ED-IN-0210", chose="emit the refusal",
                            alternatives=["admit a self-relation (a fiat)"])
             return (False, _demand_earned(w, a, row.refusal_for(COUNTERPARTY_CLAUSE), False)
-                    or ("act.refused",), verdict)
+                    or (FOLD_REFUSED,), verdict)
     return (True, (), verdict)
 
 
 # `G6` (`H-197`): declared on `tell`'s told bands; kept only when `_confidence_broken` says so.
 CONFIDENCE_BROKEN = "confidence.broken"
 
-# v9 SE-01 (`24g`) / `H-51`: declared on `dispatch`'s refusal; kept only when `_demand_earned` says so.
-PERSON_DEMANDED = "person.demanded"
+# v9 SE-01 (`24g`) / `H-51`: `PERSON_DEMANDED` (`data/rosters.py`) is declared on `dispatch`'s refusal; kept
+# only when `_demand_earned` says so, and the loader's flat-row rule exempts exactly that kind.
 
 
 def _demand_earned(w: "World", a: Act, kinds: tuple, at_precondition: bool) -> tuple:
@@ -491,7 +504,7 @@ def _fold(self, w: "World", token: Token, a: Act,
                            chose="emit the refusal, not the success",
                            alternatives=["emit `emits:` anyway (publishes an event for a "
                                          "state change that did not happen)"])
-            return ev(row.refusal_for(WRITE_CLAUSE) or ("act.refused",))
+            return ev(_demand_earned(w, a, row.refusal_for(WRITE_CLAUSE), False) or (FOLD_REFUSED,))
     # The act's proposed changes ride on the success Events -- §27.3's accumulator sums
     # them across the fold and clamps ONCE, which is order-independent as a fact.
     # ⚠ `[a.id]`, NOT `[ROOT]`, AND THIS WAS THE SUBSTRATE OF THE WHOLE NARRATIVE CLAIM.
@@ -528,7 +541,7 @@ def _fold(self, w: "World", token: Token, a: Act,
     # Outcome-specific earning in the generic fold is the FORCED choice: the data-driven alternative is a
     # conditional-emission column, and `04 §A.3` says of one more column "A seventh column has no such
     # argument available"; `tell` writes nothing, so no effect runs to earn the kind through `earned`.
-    # Kind literals already live in `loop/` (this module's `act.refused`, `attempt.refused`).
+    # The fold's own kinds are the declared column `rosters.yaml: fold_kinds` (`act.refused`, `attempt.refused`).
     kinds = tuple(k for k in kinds if k != CONFIDENCE_BROKEN or _confidence_broken(w, a, row))
     # Causes: the act and its occasion, both stamped by `_act_events` (IN-50).
     out = ev(kinds, list(a.changes) + changed)
@@ -702,13 +715,13 @@ def _refuse_party_gap(self, w: "World", a: Act) -> list:
     """A contested or graded act refused AFTER admission (a party the seam cannot derive, or a roll the
     provider refused): the row's `emits_on_refusal`, `_contest`'s and `_grade`'s one body.
 
-    ⚠ `or ("act.refused",)`, MATCHING EVERY SIBLING FALLBACK (`_admits`, `_fold`,
+    ⚠ `or (FOLD_REFUSED,)` (`rosters.yaml: fold_kinds`), MATCHING EVERY SIBLING FALLBACK (`_admits`, `_fold`,
     `_refuse_after_the_fact`) -- found missing in the M4 review pass's own correctional
     round: a verb with an empty `emits_on_refusal:` (or a hand-built Act naming no real
     verb row at all) produced ZERO Events here, a silent drop, where every other refusal
     path in this module already falls back."""
     row = VERB_TABLE.get(a.verb)
-    kinds = (row.emits_on_refusal if row is not None else ()) or ("act.refused",)
+    kinds = _demand_earned(w, a, row.emits_on_refusal if row is not None else (), False) or (FOLD_REFUSED,)
     produced = _act_events(self, w, a, kinds)  # `_act_events` owns the id scheme (§8)
     for _e in produced:
         self.act_of[_e.id] = a
@@ -975,7 +988,7 @@ def resolve(self, token: Token, acts: list[Act],
             # clock's genuine first emission"* — FALSE OF THE DESIGN while true of the fixture,
             # because `Act.obstacle` defaults to `None` and the computed chooser never sets
             # one, so no test could reach it. Found by the `W4` adversarial pass.
-            refused = _act_events(self, w, a, ("attempt.refused",))
+            refused = _act_events(self, w, a, (FOLD_ATTEMPT_REFUSED,))
             for _e in refused:
                 self.act_of[_e.id] = a
             out.extend(refused)
@@ -1138,7 +1151,21 @@ def _act_events(self, w: "World", a: Act, kinds, changes=None, degree=None,
     Only `_fold`'s success return added the occasion, so a REFUSED act chosen from a scene another
     person's act-Event occasioned dropped the edge to that person, on every one of the refusal
     returns that built an Event on its own. `self` is the driver, for `scenes`; an act with no scene
-    has no occasion and cites its own id alone."""
+    has no occasion and cites its own id alone.
+
+    ⚠ SC-02 `23`, LOADER INVARIANT 7 AT EXECUTION (`04 §B.13 #7`, `F.20b`): *"the log accepts no other
+    kind"* -- the fold may mint only a kind the DERIVED roster (`data/verbs.py::EVENT_KINDS`, the
+    union of every emission column and `rosters.yaml: fold_kinds`) holds. The three kinds that were
+    body literals here are that last column now. A kind outside it is a body literal come back, and
+    it raises before the Event exists rather than reaching a log that would carry it. Scoped to the
+    FOLD'S Events: a probe's hand-built Event is appended by the probe (`H-220`)."""
+    if not EVENT_KINDS.issuperset(kinds):
+        undeclared = sorted(k for k in kinds if k not in EVENT_KINDS)
+        raise InstrumentDefect(
+            f"act {a.id!r} ({a.verb}) would emit Event kind(s) {undeclared}, which no emission column "
+            "declares. 04 §B.13 #7 / F.20b -- the Event-kind roster is derived from every emission "
+            "column (verb rows' `emits`/`emits_on_refusal`, `write_matrix.yaml`, `rosters.yaml: "
+            "fold_kinds`); a definition living as a literal in a body is what ID-12 refuses.")
     cited = list(dict.fromkeys([a.id, *self._occasion_ids(w, a)]))
     return [Event(H(w.world_seed, w.tick, a.actor, f"{k}:{a.id}"),
                   k, list(changes or []), list(cited), w.tick,
@@ -1172,7 +1199,8 @@ def _refuse_after_the_fact(self, w: "World", out: list, act_ids: list) -> None:
         first = out[at[0]]
         # `WRITE_CLAUSE` (plan position `19`): the accumulator's write moved nothing, which is F9's
         # refusal one step later -- the same clause a declining effect refuses at.
-        refusal = _act_events(self, w, a, row.refusal_for(WRITE_CLAUSE) or ("act.refused",),
+        refusal = _act_events(self, w,
+                              a, _demand_earned(w, a, row.refusal_for(WRITE_CLAUSE), False) or (FOLD_REFUSED,),
                               degree=first.degree, observed=first.observed)
         for i in at:
             self.act_of.pop(out[i].id, None)

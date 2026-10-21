@@ -91,14 +91,15 @@ def step(w, d, *acts):
     return out
 
 
-def trail_world(verb="forge", kind="record.forged", second=None):
+def trail_world(verb="forge", kind="record.forged", second=None, fixtures=None):
     """THE WORLD, built through the fold to the moment the investigator holds the forged Record (tick 2).
     Returns `(w, d, rid)`. `verb`/`kind`: the tick-0 act that mints the Record and the one Event it must
     emit -- `forge` by default; step 3's structural control passes `survey` (`faction.surveyed`), which
     mints the same Record id (the id is the act's) into the same hand by the same body (`_mint_sheet`).
     `second`: an act id for a SECOND such act by the same man at tick 0 (its own Record, which stays in
-    his hand; `second_record` reads it back) -- the C1 test's second forging."""
-    w = P.tiny_world()
+    his hand; `second_record` reads it back) -- the C1 test's second forging. `fixtures`: the arm the
+    world is built at (v9 SC-02 `22b` step 25's sweeps), else `tiny_world`'s default."""
+    w = P.tiny_world() if fixtures is None else P.tiny_world(fixtures)
     w.propositions[FAC] = Proposition(FAC, "HOLDS", "Crown", "is a faction of this world", True, 0)
     for pid in (INVESTIGATOR, ABOUT):
         w.add_tenure(Tenure(f"t_commit_{pid}", pid, FAC, "commit", since=0))

@@ -1,5 +1,6 @@
 """`season.loop.effects_information` -- records, propositions, matters: create_record, issue,
-open_case, carry, determine, petition, survey, forge, give, destroy_record, utter, commit.
+covenant, conceal, open_case, carry, determine, argue, petition, survey, forge, give, destroy_record, utter,
+commit.
 
 EXTRACTED from `effects.py` at the per-subsystem split (Phase 4). Holds the document/proposition/
 matter cluster: the one mint (`_mint_document`) that `create_record`, `issue`, `petition` and
@@ -15,11 +16,12 @@ from dataclasses import asdict
 from typing import Optional
 
 from ..data.arrangements import ARRANGEMENTS
+from ..data.matrix import matrix_row
 from ..data.requires import RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS
-from ..data.rosters import MARCH_TARGET_KINDS, RECORD_CONTENT, RECORD_KIND_KEYS
+from ..data.rosters import COVER_KEY, COVER_KIND, MARCH_TARGET_KINDS, RECORD_CONTENT, RECORD_KIND_KEYS
 from ..data.verbs import VERB_TABLE, WARRANT_SOURCED
 from ..queries import faction_q
-from ..queries.person_q import ABOUT_KEYS
+from ..queries.person_q import ABOUT_KEYS, argued_pursuits, consequence_pursuits
 from ..queries.world_q import (
     BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_PETITION, docketed, docketed_under,
     faction_holding, faction_of, hold_force, holder_faction_of, mustered, place_of, slot_for,
@@ -33,6 +35,10 @@ from ..state.gate import (
 from ..state.ids import H
 
 from .effects_shared import _new_oblige_term, _operand, effect_for
+
+# v9 SC-02 `22b` step 24: the kind a pursuit write earns, read off its matrix row (`write_matrix.yaml`
+# `(Person, pursuits)`, `emits:`), never spelt here; a row emitting other than one kind fails at import.
+PURSUIT_MOVED, = matrix_row("Person", "pursuits").emits
 
 
 @effect_for("create_record")
@@ -161,7 +167,8 @@ def _docket_item(matter, arrangement, petition, date=None) -> dict:
             DOCKET_ARRANGEMENT: arrangement, DOCKET_PETITION: petition}
 
 
-def _mint_document(w: "World", a: "Act", kind: str, content, rung: str) -> Change:
+def _mint_document(w: "World", a: "Act", kind: str, content, rung: str,
+                   forgery_quality: int = 0) -> Change:
     """THE ONE MINT: a `Record` of `kind` saying `content`, drawn up at `rung`, and the maker's
     `hold` on it -- `create_record`, `issue` and `petition` are three readings of an act onto this
     body, which is r2 `02` §A.6's *one function, three registrations* with the kind supplied by the
@@ -171,11 +178,16 @@ def _mint_document(w: "World", a: "Act", kind: str, content, rung: str) -> Chang
     ⚠ THE ADDRESSEE KEY IS STORED AS AN ID LIST, whatever the act carried (`record_kinds.content.
     addressee`, r2 §A.9.1), so a petition to one person and a writ to five executors spell the
     same key one way. The kind's KEY SET is not checked here: `Record.__post_init__` refuses a wrong one
-    (⊕L35), before anything is written, and a refusal written twice is two rules."""
+    (⊕L35), before anything is written, and a refusal written twice is two rules.
+
+    `forgery_quality` (v9 SC-02 `22b` step 25, `H-210`): `0` for every document but a forgery, whose
+    quality `_eff_forge` passes -- the one writer of `Record.forgery_quality`, so the field is written
+    where the Record is made and nowhere else."""
     d = a.payload if isinstance(a.payload, dict) else {}
     rid = d.get("record") or f"rec:{a.id}"
     content = _addressed(content)
-    rec = Record(rid, rung, kind, subject_matter=content, stages=_declared_stages(w, a))
+    rec = Record(rid, rung, kind, subject_matter=content, stages=_declared_stages(w, a),
+                 forgery_quality=forgery_quality)
     held = _makers_hold(w, a.actor, rid)
 
     def perform() -> None:
@@ -223,6 +235,38 @@ def _eff_issue(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     `terms` conjunct binds `subject`, #453 §10.1), so `terms` is the referent and `to` an executor.
     `petition`'s row keeps the single-referent limit. This body is unchanged by it."""
     return _mint_document(w, a, "dispensation", _content_of(a, "dispensation"), _seat_rung(w, a))
+
+
+@effect_for("covenant")
+def _eff_covenant(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """v9 IN-12 step 7 (#453 §9.2, the `covenant` row; K-54): A COVENANT'S INSTRUMENT IS A `Record` OF
+    KIND `dispensation` -- `issue`'s body exactly: `terms` the Proposition the act names (`subject`),
+    `to` the counterparty, drawn up at the exercised seat's rung, minted with the maker's `hold`. No
+    new kind (K-11): what makes it a covenant rather than a writ is what its `terms` names, and what
+    the row asks (a Proposition, a counterparty across purview), not the document.
+
+    THE MINT HOLDS ONLY THE MAKER (`_mint_document`), and this body hands it to nobody: the
+    counterparty learns the terms only when he holds the Record (#453 K-54), which is `give`'s. His
+    acceptance is his own `commit` to the Proposition, formed from the held dispensation
+    (`rosters.yaml: terms_sourced`, `decision/options.py::opening_set`). The instrument is in force
+    when both holders are committed -- a reading nothing performs yet: its readers (tribute through
+    `_renewals`, allied sides through `mustered`) are deferred (#453 §10.4 step 7)."""
+    return _eff_issue(w, a, res)
+
+
+@effect_for("conceal")
+def _eff_conceal(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """v9 IN-12 step 10 (#453 §9.3; K-19): A COVER IS A `Record` OF KIND `cover` WHOSE ONE KEY NAMES THE
+    ACTOR -- written HERE, whatever the act's `subject` (a computed act's `subject` is its question's
+    referent, which a cover is not about), so `_content_of`'s `read_from` (`terms` <- `subject`) is not
+    asked. The Record's own id is the alias. Minted through `_mint_document`, the one mint: the maker's
+    `hold` opens with it and the stages it winds are the mint's (`_declared_stages`), which MATTER
+    matures. Drawn up where `create_record` draws a document an act names no seat for (the act's
+    declared `rung`, else the actor's id); `place_of` reads a held Record at its holder's place either way.
+
+    What the cover DOES is not here: `state/attribution.py::anchor_of` reads it (`live_cover`)."""
+    d = a.payload if isinstance(a.payload, dict) else {}
+    return _mint_document(w, a, COVER_KIND, {COVER_KEY: a.actor}, d.get("rung") or a.actor)
 
 
 @effect_for("open_case")
@@ -447,7 +491,25 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     and the gate does not restore it: were the gate ever to refuse this write, the matter would be
     off the docket with no edge opened. The shared predicate is what keeps that unreachable.
 
-    G4 -- WHAT IT NAMES: THE EDGE, which always moves (absent -> present)."""
+    G4 -- WHAT IT NAMES: THE EDGE, which always moves (absent -> present).
+
+    ⚠ v9 SC-02 `22b` STEP 24 -- AND THE DETERMINER'S OWN PURSUITS, BY CONSEQUENCE (`19_PLAN.md` step 24,
+    *"Conviction moves by consequence"*; the plan's `convictions` is `(Person, pursuits)` since
+    `ED-IN-0261` item 1 -- `Person.conviction`, IN-08's affiliations, is another field). The same write
+    moves the ACTOR'S `pursuits` by `person_q.consequence_pursuits` -- each held pursuit by
+    `pursuit_shift x DEGREE_STEP[band] x pursuit_lean(determine, e)`: `Overwhelming` twice as far as
+    `Success`, `Partial` (the held matter) not at all -- and the band's `writes:` names `Person.pursuits`
+    beside the edge. It is the actor's own act at RESOLVE, owner-clean (the writer is the actor), never a
+    witness's: WITNESS does not write the field. The pursuit subject earns `pursuit.moved` (the matrix
+    row's kind) and the edge the band's own kind BY NAME, so a judge whose pursuits do not move (none
+    held, none leaning, or `pursuit_shift` 0, the control) publishes exactly what he did before -- the
+    edge earning `None` would earn the band's whole `emits:`, `pursuit.moved` included, a move that did
+    not happen (found by this step's control test). ⚠ NOT AT `Failure`, WHERE THE PLAN MOVES HIM
+    AGAINST HIS AXIS (`H-221`): the row writes `[]` there and the fold never calls this body; making it
+    write would give a failed hearing's Event a change, so WITNESS's empty-changes rule (`epistemic.
+    claim_subjects`) would land its claim on the JUDGE instead of the party (`deed:matter.undetermined`'s
+    cell reads the party), the scar would run on an act that did nothing, and a judge who holds no leaning
+    pursuit would turn `matter.undetermined` into `determine.refused` (`NoOpReceipt`). Named, not built."""
     party, seat = _operand(a, "subject"), a.via
     rows = docketed_under(w, party)
     if seat is None or len(rows) > 1:
@@ -463,12 +525,59 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     if nt is None:
         return NO_CHANGE
     items = docketed(w, party)
+    judge = w.persons.get(a.actor)
+    moved = None
+    subjects = (Subject.edge(nt),)        # a hand-built call with no contest: the edge, as before
+    if res is not None:
+        if judge is not None:
+            moved = consequence_pursuits(judge, a.verb, res.degree, w.fixtures.get("pursuit_shift"))
+        # THE EDGE EARNS THE BAND'S OWN KIND BY NAME, ALWAYS: an edge earning `None` earns every kind
+        # the band declares (`loop/resolve.py`), and `pursuit.moved` is declared on the moving bands
+        # -- so a judge whose pursuits did not move (the `0` control arm, measured) would publish a
+        # move that did not happen. The pursuit subject alone earns `pursuit.moved`.
+        band_kind, = (k for k in VERB_TABLE[a.verb].emits_at(res.degree) if k != PURSUIT_MOVED)
+        subjects = (Subject.edge(nt, earns=band_kind),)
+        if moved is not None:
+            subjects += (Subject.entity("persons", a.actor, earns=PURSUIT_MOVED,
+                                        fields=("pursuits",)),)
 
     def perform() -> None:
         w.add_tenure(nt)
         for item in items:
             item["matter"] = None
-    return Change((Subject.edge(nt),), perform)
+        if moved is not None:
+            judge.pursuits = moved
+    return Change(subjects, perform)
+
+
+@effect_for("argue")
+def _eff_argue(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """v9 IN-12 step 9 (#453 §9.4; K-21) -- A WON ARGUMENT MOVES THE HEARER'S `Person.pursuits`.
+
+    The row is contested (`contests: a proposition`, the social contest module's roll), so this body runs
+    only on a band whose `writes:` names `Person.pursuits` (`Overwhelming`, `Success`); `Partial` and
+    `Failure` write `[]` and the fold never calls it there. The hearer is the row's counterparty (`to`);
+    his held pursuits move toward the ARGUER's own by `queries/person_q.py::argued_pursuits` -- the
+    ARGUMENT half of the row's *'moved by argument and consequence'*, `determine`'s consequence write one
+    verb over, and like it the write is the actor's act at RESOLVE, never a witness's.
+
+    G4 -- WHAT IT NAMES: THE HEARER, read as his `pursuits` alone; it earns every kind the band declares
+    (`argument.won`, `pursuit.moved`), because the only change the band makes IS the moved pursuit. A won
+    argument that moves nothing (the hearer already where the arguer stands, no pursuit held, or
+    `pursuit_shift` 0, the control) is `NO_CHANGE` -> `argument.refused` at its write (F9): a success
+    Event over an unmoved mind would be a deed that did not happen.
+
+    DECLINES: no resolution (a hand-built call with no contest), no hearer, no arguer, or nothing moves."""
+    hearer, arguer = w.persons.get(_operand(a, "to")), w.persons.get(a.actor)
+    if res is None or hearer is None or arguer is None:
+        return NO_CHANGE
+    moved = argued_pursuits(hearer, arguer, res.degree, w.fixtures.get("pursuit_shift"))
+    if moved is None:
+        return NO_CHANGE
+
+    def perform() -> None:
+        hearer.pursuits = moved
+    return Change((Subject.entity("persons", hearer.id, fields=("pursuits",)),), perform)
 
 
 def _disposal(w: "World", a: "Act", party: str, seat: str, kind: str,
@@ -594,14 +703,17 @@ def _eff_survey(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
 
 def _mint_sheet(w: "World", a: "Act", forged: bool = False) -> Change:
     """THE BODY `survey` AND `forge` SHARE: the resolved sheet (`NO_CHANGE` where the subject coheres
-    under no faction), with one key falsified if `forged`, minted through `_mint_document` where the
+    under no faction), with one key falsified and `default_forgery_quality` written if `forged` (v9
+    SC-02 `22b` step 25; a survey's sheet carries `0`), minted through `_mint_document` where the
     maker stands. `"hold"` still opens inside `_mint_document`, so the opener derivation reaches it."""
     sheet = _resolved_sheet(w, a)
     if sheet is None:
         return NO_CHANGE
     if forged:
         sheet[_FORGED_SHEET_KEY] = a.actor
-    return _mint_document(w, a, faction_q.SHEET_KIND, sheet, place_of(w, a.actor) or a.actor)
+    quality = w.fixtures.get("default_forgery_quality") if forged else 0
+    return _mint_document(w, a, faction_q.SHEET_KIND, sheet, place_of(w, a.actor) or a.actor,
+                          forgery_quality=quality)
 
 
 def _resolved_sheet(w: "World", a: "Act") -> Optional[dict]:
@@ -649,14 +761,17 @@ def _eff_forge(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     [ASSUMPTION; medium; Jordan to correct; revert: another key, or the act declaring its lie --
     which a computed act cannot carry (`H-94`).]
 
-    ⚠ `Record.forgery_quality` IS NOT WRITTEN, DELIBERATELY (`H-210`): nothing in the tree reads it,
-    and a field with a writer and no reader is `ID-13`'s dead carrier. Its reader is the examination
-    the proceedings plan's step 25 names (SC-02 `22b`, B-P), and the writer lands there WITH it, so
-    the field has one owner. A HOLDER can never read it, by construction -- *"a forged writ and a
-    genuine writ are indistinguishable in every executor's ledger -- by construction, not by a flag"*
-    (r2 §A.15) -- so the content deposit (`loop/witness.py`) hands a holder the same claim either
-    way; what this forgery does downstream is its false `head`. [ASSUMPTION; medium; Jordan to
-    correct; revert: restore the writer here (H-210's candidate value).]
+    ⚠ v9 SC-02 `22b` STEP 25: `Record.forgery_quality` IS WRITTEN HERE, WITH ITS READER IN THE SAME
+    CHANGE (`H-210`): the minted sheet carries `Fixtures.default_forgery_quality` (`_mint_sheet`, through
+    `_mint_document`), and an EXAMINATION contests it -- an inquiry's roll on the Record (`research`,
+    rolled through `graded_inquiries`' route) carries the quality into its obstacle
+    (`seam/wrappers/sigma.py::contest_input` -> `modules/social_contest/roll.py::obstacle`), so a better
+    forgery is harder to find, and what a finding then deposits stays FI-03's (`_found_claims`). A
+    HOLDER still cannot read it -- *"a forged writ and a genuine writ are indistinguishable in every
+    executor's ledger -- by construction, not by a flag"* (r2 §A.15) -- so the content deposit
+    (`loop/witness.py`) hands a holder the same claim either way; what this forgery does downstream is
+    its false `head`, and how hard it is to find out. [ASSUMPTION; medium; Jordan to correct; revert:
+    `default_forgery_quality = 0`, the control, and the examination reads every Record alike.]
 
     DECLINES (`NO_CHANGE` -> `forge.refused`, the `write` clause) exactly where `survey` does: the
     subject coheres under no single faction. (So a forge on a RUNG mints since v9 IN-12, as a survey
@@ -859,9 +974,18 @@ def _eff_destroy_record(w: "World", a: "Act", res: "Resolution | None" = None) -
     moves (present -> absent), so a destruction that finds its record is never a no-op and one that
     does not declines (`NO_CHANGE` -> `destroy.refused`, as the old `None` did). The closed holds
     are the cascade -- F3 admits each as `destroy's cascade` because this same write removed the
-    id -- and are not named, as they were never reported."""
+    id -- and are not named, as they were never reported.
+
+    v9 IN-26 (BOUND-PAPER, `A-13`): THE RECORD IS THE BOUND `subject` -- the row's typed cell binds it
+    (`existence` kind `Record`, `held_by` the actor) and a computed Candidate carries it; the `record`
+    payload key this read before no Candidate carried, so it is gone rather than kept as a second
+    spelling. It is the SINK for paper the verb-coverage survey found none for (`Record.ttl` has no
+    reader): a holder burns what he holds. Whether anybody FORMS it is `opening_set`'s
+    (`Fixtures withheld_verbs`, `rosters.yaml: own_hold_declines`), never this body's. A Proposition
+    is never a subject here: §14 makes it undestroyable, and the cell's `existence` conjunct refuses
+    one before this runs."""
     d = a.payload if isinstance(a.payload, dict) else {}
-    rid = d.get("record")
+    rid = d.get("subject")
     if rid is None or rid not in w.records:
         return NO_CHANGE
 

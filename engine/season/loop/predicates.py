@@ -40,8 +40,8 @@ from ..state.carriers import Office, subject_of
 # here and the gate there cannot disagree (`CLAUDE.md` §8) -- and a `monkeypatch` of this module's
 # `has_conferral_basis` still reaches both preconditions that call it by that name.
 from ..state.gate import (  # noqa: F401 -- `REVOCATION_RULES`, `in_holdings`, `seated_on_the_rung_above` re-exported
-    REVOCATION_RULES, has_conferral_basis, in_holdings, may_fill, may_revoke,
-    seated_on_the_rung_above)
+    REVOCATION_RULES, has_conferral_basis, has_revocation_disposal, in_holdings, may_fill,
+    may_revoke, seated_on_the_rung_above)
 
 
 # A `requires:` predicate. The table states preconditions in PROSE, which the fold cannot read --
@@ -417,7 +417,8 @@ def _req_revoke(w: "World", a: "Act") -> bool:
 
     THREE CLAUSES: the office's basis is on `rosters.yaml: revocation_bases` (`None` or off-roster
     refuses -- a seat declaring no basis is strippable by nobody); the actor satisfies the rule
-    that basis names; and a live `hold` exists to close.
+    that basis names; and a live `hold` exists to close. v9 IN-31 adds a backstop BEFORE them: the
+    seat's conferral basis has a revocation disposal (`has_revocation_disposal`), else refuse.
 
     ⚠ `remit:revoke` IS STILL NECESSARY, at eligibility. `H-91` registered that Jordan's 2026-09-02
     *"so long as"* made PURVIEW sufficient while Part E kept the remit necessary. Ruling (3) is
@@ -428,6 +429,12 @@ def _req_revoke(w: "World", a: "Act") -> bool:
     if not obj or obj not in w.offices:
         return False
     off = w.offices[obj]
+    # v9 IN-31 (H-100): PROVENANCE UNREADABLE MEANS REFUSE. What the revocation costs is read off the
+    # seat's conferral basis (`state/gate.py::REVOCATION_DISPOSAL`, total over the roster and `None`),
+    # so a basis with no disposal -- reached only by a hand-mutated office, `Office.__post_init__`
+    # refuses one -- refuses here (`revoke.refused`) rather than default to some cost.
+    if not has_revocation_disposal(off):
+        return False
     # ⚠ G3: THE WRITE GATE'S T-o PREDICATE, ASKED EARLY -- `may_revoke` is `seat_hold` (`via`
     # present, the actor seated in it) + the basis on the roster (`None` or off-roster: the seat
     # cannot be stripped) + the rule that basis names, asked of `via`'s seat. Before G3 the rule

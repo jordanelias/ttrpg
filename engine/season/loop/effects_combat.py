@@ -1,5 +1,6 @@
 """`season.loop.effects_combat` -- casualties and morale: fight (renamed from "kill / wound") and
-the duel's `accept`, march.
+the duel's `accept`, march; and the person raised (v9 IN-12 step 9, G15): tend, train; and the
+grudge's closer (v9 IN-12 step 13, G15): forgive.
 
 EXTRACTED from `effects.py` at the per-subsystem split (Phase 4). Holds the two effects that read a
 severity off a scene the seam already resolved rather than choosing one (Jordan, 2026-09-04: *"the
@@ -17,8 +18,9 @@ from ..data.rosters import (
     DECLARED, FELLED, FIELD_CASUALTY_MODELS, LOST, UNOPPOSED, WON, WOUND_HARM_MODELS,
     require_member,
 )
-from ..data.verbs import VERB_TABLE
+from ..data.verbs import VERB_TABLE, VOCATION_SOURCED, VOCATIONS
 from ..gaps import Unspecified
+from ..queries.person_q import held_against
 from ..queries.world_q import ancestry, holder_faction_of, home_of
 from ..state.gate import NO_CHANGE, Change, Subject, may_muster, seat_faction
 
@@ -356,3 +358,93 @@ def _not_yet_under(w: "World", pids: list, target: str, actor: "str | None" = No
             continue
         out.append(pid)
     return out
+
+
+# =================================================================================================
+# v9 IN-12 step 9 (#453 §9.4, G15 *the person*): THE TWO ACTS THAT RAISE A PERSON'S OWN STATE --
+# `tend` (the body) and `train` (a capability). Here, beside the body's other writers, because `tend`
+# is the first path that raises what `fight`, `march` and MATTER only lower, and `train` is its sibling
+# on the same G15 row (#453: *'`train` -- axis: field (body vs capability)'*).
+# =================================================================================================
+
+@effect_for("tend")
+def _eff_tend(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """v9 IN-12 step 9 (#453 §9.4) -- `tend` RAISES THE SUBJECT'S `Person.body` TO THE BODY'S SCALE.
+
+    THE MAGNITUDE IS `restore`'s FORMULA READ ON A BODY (`loop/effects_economy.py::_rise`): the headroom
+    to the ceiling -- here `condition_scale`, the scale a person is built at (`Person.body`'s default) --
+    taken whole, because the `share` term is the commons of a fabric and a body has none, and `f(degree)`
+    is the identity on an uncontested row (`H-164`). So one tender restores a person whole in one act, as
+    one hand raises a fabric to its ceiling [ASSUMPTION; medium; Jordan to correct; revert: a swept
+    fixture fraction of the headroom -- #453's *'fast partial and slow full form'*, C-48].
+
+    DECLINES: a subject that is no person (dead, or never one) is `NO_CHANGE` -> `tend.refused`; a body
+    already whole is written to itself, which the gate reads as no change (`NoOpReceipt`) -> `tend.refused`.
+    Two tenders on one person in one fold: the first restores him, the second moves nothing and is refused
+    -- the outcome is the same whichever arrives first."""
+    who = _operand(a, "subject")
+    p = w.persons.get(who)
+    if p is None:
+        return NO_CHANGE
+    whole = max(p.body, int(w.fixtures.get("condition_scale")))
+
+    def perform() -> None:
+        p.body = whole
+    return Change((Subject.entity("persons", who, fields=("body",)),), perform)
+
+
+@effect_for("train")
+def _eff_train(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """v9 IN-12 step 9 (#453 §9.4; K-20, K-21) -- `train` RAISES ONE CAPABILITY OF THE SUBJECT BY ONE.
+
+    THE CAPABILITY IS THE VOCATION THE ACT CARRIES on the operand `rosters.yaml: vocation_sourced` names
+    for its verb (`kind` for `train`), one Candidate per vocation in `verb_capability`'s range
+    (`decision/options.py::opening_set`). ⚠ J-13 ANSWERED (iii) AS THE INTERIM [medium; Jordan to
+    correct]: it writes `Person.capability` ONLY WHERE A CASE NAMES A VOCATION -- so the key must be a
+    `verb_capability` value (K-20's range: Thread Sensitivity has no carrier, H-85, P-08) and the SUBJECT
+    must ALREADY hold it: a key is never minted, because a minted `{copying: 1}` would replace
+    `pool_default` and LOWER his pool (`seam/wrappers/sigma.py::_pool_of`). The ACTOR's own capability is
+    NOT read: capability gates nothing (#353 §9.2), here as at formation. ONE whole point, the unit of a
+    dice count [ASSUMPTION; medium; Jordan to correct; revert: a swept fixture step].
+
+    DECLINES (`NO_CHANGE` -> `train.refused`): no such subject; a key that is no vocation; a subject who
+    holds none in it (a pupil whose case names no vocation)."""
+    who = _operand(a, "subject")
+    key = _operand(a, VOCATION_SOURCED[a.verb])
+    p = w.persons.get(who)
+    if p is None or key not in VOCATIONS or key not in (p.capability or {}):
+        return NO_CHANGE
+    raised = {**p.capability, key: int(p.capability[key]) + 1}
+
+    def perform() -> None:
+        p.capability = raised
+    return Change((Subject.entity("persons", who, fields=("capability",)),), perform)
+
+
+# =================================================================================================
+# v9 IN-12 step 13 (#453 §9.4, G15 *the person*): `forgive`, THE CLOSER OF WHAT `march` WRITES -- here,
+# beside `_eff_march`, the only other runtime writer of `Person.stance`. It shares `march`'s write row and nothing
+# else (#453 §9.5): an `own` social act on the actor's own rows, not a contested act on the losers'.
+# =================================================================================================
+
+@effect_for("forgive")
+def _eff_forgive(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """v9 IN-12 step 13 (#453 §9.4; K-41, K-49) -- `forgive` REMOVES THE ACTOR'S OWN ROWS AGAINST `subject`.
+
+    The rows are `queries/person_q.py::held_against`'s (his own stance rows naming the referent with a
+    valence below zero); every other row he holds stays, in order, so `stance_toward(actor, subject)` reads
+    0.0 afterwards wherever no positive row names the referent. He writes only his own field (`Person.stance`, by `Subject.entity`; no Tenure is touched, so
+    `T-m` is not in play), never another's.
+
+    DECLINES (`NO_CHANGE` -> `forgive.refused`): an actor who is no person; nothing held against the
+    referent (#453: *'no negative row -> `NO_CHANGE`'*)."""
+    p = w.persons.get(a.actor)
+    who = _operand(a, "subject")
+    against = held_against(p, who) if p is not None else ()
+    if not against:
+        return NO_CHANGE
+    kept = [row for row in p.stance if row not in against]
+
+    def perform() -> None:
+        p.stance = kept
+    return Change((Subject.entity("persons", a.actor, fields=("stance",)),), perform)

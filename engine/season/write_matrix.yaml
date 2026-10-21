@@ -197,10 +197,28 @@ rows:
     social:  "true"
     by:      "DR-2; §9.3 — moved by argument and consequence, never by evidence"
     emits:   "`pursuit.moved`"
-    unproduced: "H-62: #353 §9.3 mandates the row (moved by argument and consequence) and Part E carries no argument verb"
+    # ⚠ PRODUCED SINCE v9 SC-02 `22b` STEP 24 (B-P): `determine`'s `Overwhelming`/`Success` bands write the
+    # DETERMINER'S OWN pursuits by consequence (`loop/effects_information.py::_eff_determine`, through
+    # `queries/person_q.py::consequence_pursuits`; magnitude `H-221`), so the loader's invariant 2 struck
+    # the `unproduced:` line that read *"H-62: #353 §9.3 mandates the row (moved by argument and
+    # consequence) and Part E carries no argument verb"*. The CONSEQUENCE half has a producer; the
+    # ARGUMENT half WAS none (`H-62`) until IN-12 step 9 (B-Q).
+    # ⚠ AMENDED AT v9 IN-12 STEP 9 (B-Q): THE ARGUMENT HALF HAS ITS PRODUCER -- `argue`'s `Overwhelming`/
+    # `Success` bands move the HEARER'S pursuits toward the arguer's (`loop/effects_information.py::
+    # _eff_argue`, through `queries/person_q.py::argued_pursuits`). #453 step 9's *"`Person.pursuits`'
+    # declaration deleted"* (K-21) is READ AS THIS ROW'S `unproduced:` LINE, and there is NOTHING LEFT TO
+    # DELETE: step 24 struck it (loader invariant 2 refuses the cell on a produced pair), and the field
+    # IN-08 keeps live is untouched. `argue` is the row's SECOND writer, so `pursuit.moved` is a shared kind.
     # ⚠ RENAMED 2026-09-24 (`ED-IN-0261` item 1, rename half only): this row was
     # `field: "convictions"` / `emits: "\`conviction.moved\`"`. No producer exists for either
     # name (grep-confirmed), so this is a pure rename, not a behaviour change.
+  - kind:    "Person"
+    field:   "capability"
+    steps:   [RES]
+    class:   "ACTS"
+    social:  "true"
+    by:      "v9 IN-12 step 9 (#453 §9.4, K-21): RETURNED FROM `retired:` WITH ITS PRODUCER, `train` (`loop/effects_combat.py::_eff_train`), in the same commit -- this file's own rule, *a row exists because a producer produces it*. `{capability key: whole number}` (`state/carriers.py::Person.capability`), the dice a contested act draws (`seam/wrappers/sigma.py::_pool_of`, through `rosters.yaml: verb_capability`); capability GATES NOTHING (#353 §9.2). Written at world build by a `cast:` overlay (`harness/corpus_run.py::build_at`, never through this gate) and in play only by `train`, under J-13 (iii)'s interim [medium; Jordan to correct]: only where a case names a vocation. `social: true` -- only a person's act raises it; the world does not train anybody"
+    emits:   "`capability.raised`"
   - kind:    "Person"
     field:   "conviction"
     steps:   [RES, ENC]
@@ -291,7 +309,10 @@ rows:
     social:  "true"
     by:      "DR-2"
     emits:   "`record.forged`"
-    unproduced: "H-210: v9 IN-45's `forge` mints a forged sheet and deliberately does not write this field -- nothing reads it; its writer lands with its reader, the examination SC-02 `22b` step 25 builds (B-P)"
+    # ⚠ PRODUCED SINCE v9 SC-02 `22b` STEP 25 (B-P), WRITER WITH READER (`H-210`): `forge` writes it
+    # (`loop/effects_information.py::_eff_forge`, `Fixtures.default_forgery_quality`) and an inquiry examining
+    # the Record reads it into its obstacle (`seam/wrappers/sigma.py::contest_input` ->
+    # `modules/social_contest/roll.py::obstacle`), so the `unproduced: "H-210: ..."` line is struck.
   - kind:    "Record"
     field:   "matured"
     steps:   [MAT]
@@ -417,7 +438,7 @@ rows:
 # the row returns in the same commit -- which is the whole discipline the rule encodes:
 # a row exists because a producer produces it.
 retired:
-  - "Person.capability"
+  # `Person.capability` CAME BACK AT v9 IN-12 STEP 9 WITH ITS PRODUCER, `train` (K-21) -- the row is above.
   - "Person.marks"
   - name: "Person.axis_count"
     reason: >-

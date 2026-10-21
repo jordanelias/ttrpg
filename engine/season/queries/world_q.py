@@ -36,8 +36,8 @@ from typing import Callable, Optional
 
 from ..data.requires import UNKNOWN, binding_from_act
 from ..data.rosters import (
-    BAN_KIND, DETAIN_KIND, FACTION_BY_PROP, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
-    RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, TENURE_KINDS,
+    BAN_KIND, DETAIN_KIND, DOMINANCE_KINDS, FACTION_BY_PROP, QUESTION_SOURCES, RECORD_CONTENT,
+    RECORD_KINDS, REMOVE_ORDINAL, RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STANDING_CROSSED, TENURE_KINDS,
 )
 # IN-09: the Record kinds a held document is an occasion for, derived off the verb table's rows;
 # v9 IN-49: the remit acts a seat exercises on a `Rung`-classed referent, the same way.
@@ -49,13 +49,16 @@ from .person_q import LedgerReader, content_said, intent_named, ledger_names
 # v9 IN-57: `attention_key`'s tier 2 scores a deed claim by `deed_valence`, one owner per factor.
 from .person_q import (
     _seen_index, crisis_weights, deed_valence, paired_deed_term, projected_axes)
+# v9 SC-02 `22a`: `reception` and `proofs` read which claims record a person's deeds, what each is worth
+# to its holder, and which deeds were done TO him, off the same person-side owners `regard` reads.
+from .person_q import attributed_deeds, deed_term, suffered_deeds
 # v9 IN-69: the one cosine (`cast.loyalty` calls it too).
 from ..data.pursuits import pursuit_cosine_axes, to_axes
 # v9 IN-67: `goal_referents` reads a goal's `object:` off the ONE loader and a `deed_doers` goal's
 # doers off the person-side family.
 from ..data import goals as _goals
 from .person_q import deed_doers
-from ..state.attribution import anchor_of, causing_act
+from ..state.attribution import anchor_of, causing_act, event_by_id, matured_terms  # noqa: F401 -- re-exported
 from ..state.carriers import Person, Question, Site, Tenure
 # ⚠ `parent_of` AND `descendants` ARE RE-EXPORTED, NOT DEFINED HERE (G3, plan position 6). The
 # write gate's F3 clause needs both -- ruling (3)'s parent rung and ruling (4)'s purview subtree --
@@ -75,7 +78,7 @@ from ..state.gate import BENCH_BASIS, may_determine, may_fill, purview_reaches, 
 # its one body lives in `state/gate.py`; `world_q.sworn_to is gate.sworn_to`. `establishment_of`
 # (below) composes on it.
 from ..state.gate import sworn_to
-from ..state.ids import ROOT, draw_factory
+from ..state.ids import H, ROOT, draw_factory
 from ..state.world import World
 from ..trace_log import TRACE
 
@@ -371,21 +374,9 @@ def works_for(w: World, at: Optional[str], plan: Optional[str]) -> list:
             and hold_force(w, r.id) is not None]
 
 
-def matured_terms(w: World, rid: str) -> int:
-    """HOW MANY OF A RECORD'S DECLARED TERMS HAVE RIPENED -- counted off the log, r2 §A.6.3 DECIDED:
-    *"the carrier for 'how many stages have ripened' is `w.log`"*. `Record.matured` is ONE bool for
-    the whole Record (Jordan, 2026-09-10), so it cannot say how many.
-
-    MATTER emits `term.matured` once PER RIPENING STAGE (`loop/matter.py`'s per-stage loop, through
-    the gate on the `(Record, matured)` row, which declares exactly that kind), and the gate gives
-    each emission a distinct id (`World.new_draw`), so N stages ripening in one tick are N Events.
-    Matched on the MINTED RECEIPT's subject -- the Record the write named -- and NOT through
-    `anchor_of`: tier 1 wins for an Event whose cause resolves to an act (a hand-built Record whose
-    creating Event is not in the log falls back to the act that wound the clock), and that tier
-    would answer the MAKER, not the Record (`H-129`'s shape). `matter.py`'s own `prior` lookup reads
-    the receipt the same way."""
-    return sum(1 for e in w.log
-               if e.kind == "term.matured" and any(c.subject == rid for c in e.changes))
+# `matured_terms` -- HOW MANY OF A RECORD'S DECLARED TERMS HAVE RIPENED, counted off the log -- is owned by
+# `state/attribution.py` since v9 IN-12 step 10 (the `anchor_of` cover read asks it, and `state/` imports
+# nothing from `queries/`); imported above and read here by `ceiling`, unchanged.
 
 
 def ceiling(w: World, site: Site) -> int:
@@ -524,6 +515,123 @@ def judging_set(w: World, venue: str, matter: Optional[str] = None) -> list[str]
         seats.append(t.subject)
     return seats
 
+
+# ===========================================================================
+# THE ROOM READS YOU -- v9 SC-02 `22a`, proceedings `19_PLAN.md` PHASE 3 steps 17, 18 and 20 (intent).
+# RESOLVER-SIDE Queries, World first, storing nothing. ⚠ NEVER IMPORTABLE FROM DECISION CODE: a person
+# deciding whether to speak may not read the bench's ledgers or his opponent's -- he GUESSES them, and
+# that guess is the game (`19_PLAN.md` step 18). `decision/` cannot name this module at all
+# (`test_decision_package_never_names_world_anywhere_under_it`), and
+# `engine/season/tests/test_sc02_reception.py` holds these two by name as well. The host input builder
+# (`seam/wrappers/sigma.py::contest_input`) is their one caller; the obstacle they move is composed by
+# the social contest module alone (`modules/social_contest/roll.py::obstacle`, ED-SC-0033 clause (3)).
+# ===========================================================================
+
+def remove_weight(source: str) -> float:
+    """HOW MUCH A CLAIM HELD UNDER `source` COUNTS, by the ordinal of remove (`data/rosters.py::
+    REMOVE_ORDINAL`, `19_PLAN.md`'s *firsthand > knot-sourced > told > inferred*):
+
+        remove_weight = (K - k) / K,   k = the source's rank (0 strongest), K = the ranks
+
+    1 firsthand, falling by `1/K` a rank, so every rank counts and a farther one strictly less.
+    EQUAL SPACING is the [ASSUMPTION] `H-199` already makes for refraction's `channel_remove`, read off
+    the same ranks; the form differs from `channel_remove`'s `k/(K-1)` only so the most removed rank
+    still counts (an `inferred` claim is evidence, weaker; `1 - channel_remove` would weigh it zero)."""
+    return (len(REMOVE_ORDINAL) - REMOVE_ORDINAL.index(source)) / len(REMOVE_ORDINAL)
+
+
+_UNREAD = object()      # `reception`'s "not read yet" marker (None is a legitimate reading: no bluff called)
+
+
+def reception(w: World, speaker: str, venue: Optional[str]) -> float:
+    """HOW THE BENCH AT `venue` RECEIVES `speaker` -- `19_PLAN.md` step 17, the room reading the person
+    who rises in it. Signed: above zero the bench is disposed toward him, below it against him.
+
+        reception = Σ_h∈bench Σ_c∈deeds_h(speaker)  remove_weight(c.source) · c.confidence/full · v_h(c)
+
+      * the BENCH is `judging_set(w, venue)` -- the one owner of who sits over a rung -- each seated
+        person once, never the speaker himself (a man does not receive himself);
+      * `deeds_h(speaker)` is `person_q.attributed_deeds` over `h`'s OWN ledger: the deed claims that
+        record an act of the speaker's, a paired kind's doer read off its sighting's `seen.who`
+        (R8.1's struct, `21_RECONCILIATION.md` PHASE 3's correction), never a bare subject;
+      * `v_h(c)` is `person_q.deed_term` -- `h`'s own projected pursuits against the alignment of the
+        act's kind (`data/verbs.py::align_kind`), the valence `regard` already reads. ⚠ THE VALENCE
+        SOURCE WAS THE SWEPT CHOICE (step 17): THIS IS ARM 1, the existing alignment table, and it
+        SHIPS BY DEFAULT, NOT BY WINNING. Arm 2, the dedicated regard table the plan names, was never
+        authored: the arm run in its place read only the authored `deed:<kind>` cells (three kinds),
+        so it was zero almost everywhere by construction and did not test the question (over three
+        seeded realms it read non-zero on 19 (bench, speaker) pairs where arm 1 read 3,434;
+        `hole_register.yaml` H-215 carries the numbers and says the sweep is open). The conflation
+        arm 1 names -- what a hearer prefers to DO standing in for how he REGARDS a doer -- is
+        recorded there, not resolved;
+      * `full` is `confidence_default`, so a claim decayed to half counts half.
+
+    STEP 20, ROUTE EROSION, INSIDE THE SUM: a hearer who holds, UNTOLD, a `dominance`-route deed done
+    TO the speaker by somebody else (`person_q.suffered_deeds`; `rosters.yaml: standing_routes`) has
+    called his bluff: every `dominance`-route deed of the speaker's that hearer holds no newer
+    (`(when, round)`) than the latest such sighting counts zero. ⚠ `(when, round)` IS THE CLAIM'S
+    DEPOSIT TIME, NOT THE DEED'S: a told or found copy is stamped with the tick it was deposited
+    (`loop/witness.py`), so a hearer told after the bluff of a deed from before it keeps that copy
+    at full weight; no field carries the deed's own tick on a copy (`H-215`'s named limit). One
+    success against him is enough, and only the witnesses who saw it are moved; a challenger who
+    fails suffers the deed himself, so the speaker's weight stands. A later coercive deed counts
+    again.
+
+    `venue` `None` (a placeless speaker) or an empty bench -> 0.0: nobody is in the room."""
+    TRACE.query("reception", "resolver")
+    if venue is None or speaker not in w.persons:
+        return 0.0
+    full = float(w.fixtures.get("confidence_default"))
+    shift = w.fixtures.get("scar_weight_shift")
+    total = 0.0
+    for hid in dict.fromkeys(judging_set(w, venue)):
+        h = w.persons.get(hid)
+        if h is None or hid == speaker:
+            continue
+        called = _UNREAD            # the latest bluff called, read on the first dominance-route deed
+        axis_w = None
+        for c in attributed_deeds(h.ledger, speaker):
+            if c.predicate in DOMINANCE_KINDS:
+                if called is _UNREAD:
+                    called = max(((s.when, s.round) for s in suffered_deeds(h.ledger, speaker)
+                                  if s.predicate in DOMINANCE_KINDS), default=None)
+                if called is not None and (c.when, c.round) <= called:
+                    continue
+            if axis_w is None:
+                axis_w = projected_axes(h, shift)
+            total += remove_weight(c.source) * (c.confidence / full) * deed_term(h, axis_w, c)
+    return total
+
+
+def proofs(w: World, speaker: str, opponent: Optional[str], venue: Optional[str]) -> float:
+    """THE PROOFS `speaker` CAN SPEND AGAINST `opponent`, weighed by remove and discounted by the mirror
+    -- `19_PLAN.md` step 18, a Query over two ledgers. Each deed claim in the speaker's OWN ledger
+    recording an act of the opponent's (`person_q.attributed_deeds`) counts `remove_weight(c.source)`,
+    UNLESS THE OPPONENT CAN MIRROR IT: he holds a claim with the same subject and predicate
+    (`18_FINDINGS.md`'s mirror test, *does the opponent hold a claim with the same subject and
+    predicate?*), and then it counts exactly zero. A non-person opponent holds no ledger and mirrors
+    nothing. `venue` is the room that hears the speaker: with nobody on its bench (or no venue) there
+    is no one to spend a proof on, and the answer is 0.0, the rule `reception` states.
+
+    ⚠ NAMED LIMITS (`H-216`): every attributed deed counts, creditable or not and whatever the matter
+    docketed (the plan's text asks for neither); the mirror keys on (subject, predicate) alone; and
+    the arrangement's admitted `proofs` column is not read here.
+
+    ⚠ WHAT IS TOLD IS EVERY SUCH CLAIM THE SPEAKER HOLDS, AND THAT IS A NAMED LIMIT, NOT THE DESIGN: the
+    design spends proofs one at a time inside a nested run (`21_RECONCILIATION.md` step 15, unbuilt),
+    which is where hoarding one becomes a choice; one `speak` is one act, so it spends its whole
+    inventory. The mirror is still hidden from him -- nothing person-side reads it."""
+    TRACE.query("proofs", "resolver")
+    who = w.persons.get(speaker)
+    if who is None or opponent is None or opponent == speaker or venue is None:
+        return 0.0
+    held = list(attributed_deeds(who.ledger, opponent))
+    if not held or not any(hid != speaker for hid in judging_set(w, venue)):
+        return 0.0
+    opp = w.persons.get(opponent)
+    mirror = {(c.subject, c.predicate) for c in opp.ledger} if opp is not None else set()
+    return sum(remove_weight(c.source) for c in held if (c.subject, c.predicate) not in mirror)
+
 # ⚠ `home_of(w)` WAS HERE; IT MOVED DOWN TO `state/containment.py` AT PLAN POSITION `19`, body and
 # `TRACE` line unchanged, and is re-exported by this module's import block (`world_q.home_of is
 # containment.home_of`). The write gate's `determination` basis asks where the PARTY a determination
@@ -577,7 +685,8 @@ def place_of(w: World, x: Optional[str]) -> Optional[str]:
 
 
 def event_place(w: World, e) -> Optional[str]:
-    """WHERE AN EVENT HAPPENED -- `place_of(w, anchor_of(w, e))`, the one expression the tree used for
+    """WHERE AN EVENT HAPPENED -- `place_of` of the causing act's actor for an act-caused Event, else of
+    `anchor_of(w, e)` (v9 IN-12 step 10: a cover's anchor is not where anyone stood), the one expression the tree used for
     it at WITNESS (`epistemic._ch_co_located` and `epistemic.seen_subject`), now owned once, plus one
     limb `place_of` cannot carry: A DEATH HAS A PLACE (H-206).
 
@@ -605,12 +714,20 @@ def event_place(w: World, e) -> Optional[str]:
     (reachable only at `body_step > 0`, unmeasured; H-206), and an actorless MATTER Event about a
     person killed at RESOLVE later in the same tick, e.g. `travel.ended` (`loop/matter.py`'s travel
     pass), which is reachable at shipped defaults and unmeasured (H-206)."""
+    # v9 IN-12 step 10: AN ACT-CAUSED EVENT IS PLACED WHERE ITS ACTOR STOOD, NOT WHERE ITS ANCHOR IS.
+    # A cover's anchor is the cover's id, and `place_of` of a Record is its LIVE holder's place
+    # (or, once the holder's hold closed, `Record.rung` -- the actor's own id for a computed
+    # `conceal`, which `remove_person` pops): CENSUS then indexed `w.rungs` by a dead person and
+    # raised, and a cover `give`n away moved an earlier round's Event. Uncovered, the anchor IS the
+    # actor (tier 1), so this is the old answer.
+    a = causing_act(w, e)
+    if a is not None:
+        return place_of(w, a.actor)
     who = anchor_of(w, e)
     here = place_of(w, who)
     if here is not None:
         return here
-    at = w.departed_from(who, e.emitted_at)       # `departed_from(None, t)` is None
-    return at if at is not None and causing_act(w, e) is None else None
+    return w.departed_from(who, e.emitted_at)     # `departed_from(None, t)` is None
 
 
 # ⚠ v9 SE-01 (`24g`), P1's OTHER HALF -- THE PERSON-KEYED CROSSING REPAIR IS THE PERSON LIMB ABOVE,
@@ -2090,6 +2207,45 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None,
     return key
 
 
+def landing_floor(w: World, since: Optional[tuple] = None) -> tuple:
+    """THE `(tick, round)` A CLAIM MUST HAVE LANDED AT OR AFTER TO BE NEW: `since` (the person's last
+    deliberation, `U2`), else `(w.tick - 1, 0)` -- last season's WITNESS. `questions_for` reads it as
+    Q2's boundary and `loop/matter.py::_standing_crossings` as the cut between the past claims and all
+    of them (v9 SC-02 `22b` step 23), so the two agree on what *new* means."""
+    return since if since is not None else (w.tick - 1, 0)
+
+
+def standing_crossing_id(w: World, pid: str) -> str:
+    """The id of `pid`'s standing crossing at this tick -- one per person per MATTER barrier, minted by
+    `loop/matter.py::_standing_crossings` and looked up by `questions_for` through the log's id set."""
+    return H(w.world_seed, w.tick, pid, "crossing:standing")
+
+
+def standing_crossed(w: World, p: Person, since: Optional[tuple] = None) -> Optional[Question]:
+    """v9 SC-02 `22b` STEP 23: THE QUESTION A STANDING CROSSING RAISES, ABOUT THE PEOPLE WHOSE CLAIMS MADE IT.
+
+    `p`'s crossing this season (MATTER's record, `standing_crossing_id`), when it is new to him -- it
+    precedes round 0, so it is new unless he has deliberated this season (`landing_floor`). Its
+    REFERENTS are every person on the `chain` of a told claim among the crossing's causes (the claims
+    whose `claim.deposited` it cites), origin first, `p` himself excepted: the people who TOLD, by
+    the claim (`Claim.chain`, `T3b`), including an origin who never spoke to `p` -- *"who may have said
+    nothing"*. Its `about` is the crossing, which `occasioned_by` returns, so an act formed from it
+    cites the crossing. A `claim_landed` question (`11a`'s fold: no third source), as the bench
+    question is (`sittings_before`, below). `None` when there is no crossing or no teller.
+
+    ⚠ IT READS AND WRITES NOTHING ELSE: `p`'s own ledger, the log's id set, and the one record."""
+    xid = standing_crossing_id(w, p.id)
+    if not w.log.has_id(xid) or not landing_floor(w, since) < (w.tick, 0):
+        return None
+    ev = event_by_id(w, xid)
+    causes = set(ev.causes) if ev is not None else set()
+    tellers: list = []
+    for c in p.ledger:
+        if c.chain and w.last_emission_of("claim.deposited", c.id) in causes:
+            tellers.extend(t for t in c.chain if t != p.id and t not in tellers)
+    return Question(f"q:claim:{xid}", "claim_landed", tuple(tellers), xid) if tellers else None
+
+
 def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Question]:
     """§F1's `q` producer -- TWO sources, resolver-side, at the DELIBERATE barrier, plus FIVE
     STANDING OCCASIONS stamped onto the first question as classed referents (`_stamped`, below the
@@ -2100,7 +2256,8 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     sources: no id or source changes; a person with one of them and no question gets one `need`
     question carrying them. And, since v9 SC-01's fired-slot step, one `claim_landed` question per
     fired sitting whose docket holds a matter and whose bench he sits on (`sittings_before`; the loop
-    after Q4 says why it is no third source).
+    after Q4 says why it is no third source). And, since v9 SC-02 `22b` step 23, one `claim_landed`
+    question on his own standing crossing this season, about the people who told (`standing_crossed`).
 
     ⚠ THIS CLOSES `H-04` AND §61's `NoProducer`, which between them blocked every NPC case: with
     no producer for `q`, `assemble(person, question)` was UNSATISFIABLE and DELIBERATE had no
@@ -2178,7 +2335,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # `(c.subject,)` -- clause 3 only ADMITS the claim into `out`; it does not change what the
     # Question is ABOUT. `requires_operands` is untouched by this clause for exactly that reason.
     R = reach(w, p)
-    floor = since if since is not None else (w.tick - 1, 0)
+    floor = landing_floor(w, since)
     for c in p.ledger:
         if (c.when, c.round) < floor:
             continue
@@ -2186,6 +2343,13 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
                 or ((pl := place_of(w, c.subject)) is not None and pl in R)   # clause 2 -- where it is
                 or any(x in R for x in named(c))):                # clause 3 -- whom the CONTENT names
             out.append(Question(f"q:claim:{c.id}", "claim_landed", (c.subject,), c.id))
+
+    # v9 SC-02 `22b` STEP 23: A STANDING CROSSING IS A QUESTION ABOUT THE PEOPLE WHO TOLD (`standing_crossed`,
+    # above). The crossing question read only SITE crossings before (through WITNESS and Q2); this is the
+    # person-keyed one, which no witness carries. Still `claim_landed`, no source added: the claims that
+    # landed are what crossed. REVERT: drop these two lines; MATTER's record then raises nothing.
+    if (sq := standing_crossed(w, p, since)) is not None:
+        out.append(sq)
 
     # Q4 -- `need`. A live `commit` Tenure whose object is an OUGHT Proposition is a STANDING
     # question: it recurs every season until the commitment ends, which is what makes an NPC with
@@ -2312,6 +2476,13 @@ def occasioned_by(w: "World", q: Optional["Question"]) -> list:
         for e in reversed(w.log):
             if e.kind == "claim.deposited" and any(c.subject == about for c in e.changes):
                 return [x for x in (e.causes or []) if x != ROOT]
+        # v9 SC-02 `22b` step 23: a standing crossing's question is about the crossing itself, which no
+        # deposit names (nobody witnesses it), so the occasion IS that record -- whose own causes are the
+        # deposits. Reached only after the deposit search finds nothing, so no earlier route moves.
+        if w.log.has_id(about):
+            ev = event_by_id(w, about)
+            if ev is not None and ev.kind == STANDING_CROSSED:
+                return [about]
         return []
     # ⚠ NOT A BARE `else`, AND STILL DEFENCE IN DEPTH RATHER THAN THE FIRST GATE. An undeclared
     # source reaching here would otherwise need a branch nobody wrote, which the polarity `ID-5`

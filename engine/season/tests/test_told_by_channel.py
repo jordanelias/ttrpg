@@ -287,7 +287,13 @@ def test_15d_falsifier_the_realm_holds_hearsay_no_telling_minted(monkeypatch):
     # seeds 0-39, on the tree after (the tiers with the own-act screen): chained > 0 at seeds 20 (3),
     # 21 (7), 25 (13), 28 (3), 32 (7), 33 (7); before, 18 (9), 20 (3), 25 (7), 28 (3). Seed 20 is the
     # lowest with more than one. The assertions below are unmoved.
-    SEED = 20
+    # ⚠ RE-PINNED SEED 20 -> 28 AT v9 IN-12 step 9 (`argue`, `sabotage`, `tend`, `train`), BY THE SAME RULE:
+    # four new rows join the realm's option sets and are attempted (every attempt refused in the first two
+    # seasons; `test_season_weather.py`'s `BASE_HASHES` note), so the act mix moved and seed 20's first
+    # season minted no chained told claim (it passes at 664986ee). The same quantity over seeds 0-39, on
+    # the tree after: chained > 0 at seeds 28 (3) and 38 (4) only. Seed 28 is the lowest with more than
+    # one; the mechanism per seed is NOT isolated. The assertions below are unmoved.
+    SEED = 28
 
     def told_by_count() -> tuple:
         w = populated.build_realm(SEED)

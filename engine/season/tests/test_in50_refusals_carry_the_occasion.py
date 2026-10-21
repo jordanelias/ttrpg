@@ -164,11 +164,14 @@ def test_in50_control_an_act_with_no_scene_keeps_its_own_id_alone():
 def test_in50_act_events_cites_the_act_then_the_occasion_one_list_per_event():
     w, d, occ = _world_with_occasion()
     a = Act(id="a_direct", actor=ACTOR, verb="work", scene=SCENE)
-    out = _act_events(d, w, a, ("k.one", "k.two"))
-    assert [e.kind for e in out] == ["k.one", "k.two"]
+    # TWO DECLARED KINDS (`rosters.yaml: fold_kinds`): since SC-02 `23` the fold refuses a kind no
+    # emission column declares (loader invariant 7), so the made-up `k.one`/`k.two` this used to pass
+    # are refused -- `test_sc02_typed_ids_and_loader.py` plants exactly that.
+    out = _act_events(d, w, a, ("act.refused", "act.ineligible"))
+    assert [e.kind for e in out] == ["act.refused", "act.ineligible"]
     assert [e.causes for e in out] == [[a.id, occ]] * 2, [e.causes for e in out]
     assert out[0].causes is not out[1].causes, "two Events share one causes list"
-    assert out[0].id == H(w.world_seed, w.tick, a.actor, f"k.one:{a.id}"), "the id scheme moved"
+    assert out[0].id == H(w.world_seed, w.tick, a.actor, f"act.refused:{a.id}"), "the id scheme moved"
 
 
 # -- 8 ---------------------------------------------------------------------------------------------

@@ -110,7 +110,15 @@ DUKE, SEAT, PARTY, WANT = "p_high", "off_duke", "p_mid", "prop_bar_duke_want"
 # than its proceeding.
 PROCEEDINGS = (("scholastics", 6, 6), ("family", 13, 5))
 BAR_FIXTURES = DEFAULT_FIXTURES.sweep("pool_default", 30)       # v9 SC-03b: a judge whose finding opens
-CONTROL = ("doctrine", 8, 5)       # v9 SC-03b: was ("community", 13, 5), which no longer determines at all
+# v9 IN-12 step 9: RE-TRACED, the conviction and season count unchanged -- `argue`/`sabotage`/`tend`/`train`
+# are new members of the Duke's and the clerk's option sets, so doctrine/8's trajectory moved (it now fires
+# TWO dates). A sweep of the 15 convictions x seeds 0..23 at 5 seasons for a run meeting every assertion of
+# the control test below finds doctrine/22 first (scratch, not kept); the two PROCEEDINGS are unmoved.
+# v9 IN-12 step 10: RE-TRACED AGAIN, the conviction and season count unchanged -- `conceal` is a new member
+# of every option set (untyped, one Candidate per referent), and doctrine/22 now fires no date. A sweep of
+# doctrine x seeds 0..399 at 5 seasons for a run meeting every assertion of the control test below finds
+# doctrine/83 first (scratch, not kept; seeds 0..82 each fail one assertion); the PROCEEDINGS are unmoved.
+CONTROL = ("doctrine", 83, 5)      # v9 SC-03b: was ("community", 13, 5); IN-12 step 9: ("doctrine", 8, 5); step 10: ("doctrine", 22, 5)
 
 
 def _world(conviction: str, seed: int):
@@ -240,7 +248,8 @@ def test_an_injected_act_reddens_the_bar(verb):
 
 
 def test_the_walk_is_false_for_a_determination_the_ambition_raised_beside_a_fired_date():
-    """THE CONTROL. Same world, doctrine at seed 8 (traced at SC-03b; community at seed 13 before it): the Duke convenes at `S` AND
+    """THE CONTROL. Same world, doctrine at seed 83 (re-traced at IN-12 step 10, and at step 9 to seed 22,
+    against the assertions below only; the narrative that follows was traced at seed 8, SC-03b; community at seed 13 before it): the Duke convenes at `S` AND
     opens the clerk's case in the same season, so the case is docketed dateless before the sitting
     fires; the sitting's slot forms empty, and after the firing the Duke determines the
     clerk out of his ambition (`need`, occasion `[ROOT]`). That determination's `causes[]` reach no
