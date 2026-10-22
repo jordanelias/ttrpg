@@ -629,7 +629,7 @@ Round 3 revised this file against `51d7b05` and the precedent suite (`research/g
 Each line is old claim -> new claim, with the evidence opened at `51d7b05` (read-only runs, `python -I -B`).
 
 - **Header.** Written at `a4ca9a5` only -> also revised against `51d7b05`. PR #494 did not touch `modules/mass_battle/` or `EC`; it moved lines in
-  `rosters.yaml` (+66 after line 2490), `world_q.py` (+3 from the top, +14 after 1680) and nothing else this file cites. The §9 "Opened" ranges are
+  `rosters.yaml` (+1 after line 2416, +66 after 2490) and `world_q.py` (+3 at the top, +8 more at 1680) and nothing else this file cites. The §9 "Opened" ranges are
   at `a4ca9a5` and are left as the record of what was opened then.
 - **§0 Status, ctl bullet.** "no field is fought at any seed" -> "no field is fought in the control run at any seed" (natural play). Evidence:
   `ctl/realm_seed*_2seasons.txt` (field.* and army.arrived 0); §3.3.
@@ -654,7 +654,7 @@ Each line is old claim -> new claim, with the evidence opened at `51d7b05` (read
   Field of Glory II §8, T17 Dominions §2, T16 FM §8 (tags carried).
 - **§3.3.** "No act at any measured seed targeted a settlement. Had one done so ..." -> natural play (seeds 0, 1, 2 itemised; seed 2: 4 declared, 3
   at territories, 1 unresolved) separated from callback play (opposed field run, Unopposed run, chooser-formed act under a `Question`, Won not
-  fought). Evidence: `t04_probe_march.py`-equivalent re-run for seeds 0-2 (25 / 11 formed, 21 / 10 / 4 declared); `test_march.py:254, 368-456`.
+  fought). Evidence: `t04_probe_march.py`-equivalent re-run for seeds 0-2 (25 / 11 / 4 formed, 21 / 10 / 4 declared); `test_march.py:254, 368-456`.
 - **§5 (a), (b), (c).** Plays 1 and 2 were stated as the rules' behaviour without saying none had run -> each carries its natural and callback
   status; a paragraph says what natural play does instead; the blocks bullet "in the realm, the chooser never forms ..." -> "in natural play at seeds
   0-2 ...". "Certain loss" for pairs other than `set_s_036` is marked as inference from §3.1.

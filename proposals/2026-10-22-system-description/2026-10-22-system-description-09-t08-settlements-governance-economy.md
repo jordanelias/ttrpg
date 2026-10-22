@@ -516,7 +516,7 @@ your `tenure.opened`, `order.given`, `dispensation.issued`, and also every MATTE
   so no assignment is an opportunity cost. [precedent: `T01_realm.md`, CK3 §3 (the domain limit); `T18_repo_strategy_b.md`, Stellaris
   §3 (Empire Size)]
 - **Governance does not touch output.** Yield reads a Site's condition only (`loop/matter.py:589-591`), so a vacant seat, or the
-  vacant throne, costs no yield. [precedent: `T13_koei.md`, Knights of Honor II §2-3, where a governor is the output multiplier]
+  vacant throne, costs no yield. [precedent: `T13_koei.md`, Knights of Honor II §3 and §7, where a governor is the output multiplier]
 - **Upkeep must be paid to where men stand.** Men scattered across hearths need one transfer per hearth.
 - **Unseating has one gate, two exits.** Both `revoke` and a displacing `confer` need revocation authority over the
   seat; `confer` also needs a holder with no live `commit`, and in exchange seats your man in the same act and bans
