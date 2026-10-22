@@ -486,8 +486,8 @@ def guard_rows(text: str | None = None) -> list:
     return rows
 
 
-def seat_guards(w: World, rows: list, authored: dict, partial: bool = False) -> list:
-    """SEAT THE GUARD COHORTS IN A BUILT WORLD and return their person ids in row order. Each row becomes a
+def seat_guards(w: World, rows: list, authored: dict, partial: bool = False) -> None:
+    """SEAT THE GUARD COHORTS IN A BUILT WORLD. Each row becomes a
     Person at the row's weight, its `person` rung, a `contain` edge (where it IS) at the exact rung its seat's
     HOLDER is present at, a `reside` edge at the nearest settlement above that rung (a guard is posted at a
     door and lives in the town, so the capacity ceiling is checked against the town's, as for any cohort),
@@ -498,7 +498,6 @@ def seat_guards(w: World, rows: list, authored: dict, partial: bool = False) -> 
     A seat this world did not seat, or one nobody holds, REFUSES -- unless `partial` (a `cap` dropped the
     cast), where the row is skipped as the per-case loops skip their absent. The holder of a seat held by two
     persons posts the guard at the FIRST (`w.tenures` order)."""
-    out: list = []
     where = home_of_q(w)
     for row in rows:
         oid = authored.get(row["seat"])
@@ -534,8 +533,6 @@ def seat_guards(w: World, rows: list, authored: dict, partial: bool = False) -> 
         w.add_tenure(Tenure(f"t_{pid}_in", pid, post, "contain", 0))
         w.add_tenure(Tenure(f"t_{pid}_home", pid, town, RESIDE_KIND, 0))
         w.add_tenure(Tenure(f"t_{pid}_oblige", pid, oid, "oblige", 0))
-        out.append(pid)
-    return out
 
 
 def goals_missing(w: World, rows: tuple) -> list:
@@ -1000,10 +997,9 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         # barracks and the two others in Feldmark's commons -- the empire's persons are not in the realm).
         # `foreign_home` is empty unless `foreign=True`, so the control arm reads no faction here.
         if foreign_home:
-            _row_here = cast.row(cid)
-            _fac_here = cast.faction_of(_row_here)[0] if _row_here else None
-            if _fac_here in foreign_home:
-                home = foreign_home[_fac_here][1]
+            fac_here = cast.faction_of(cast.row(cid) or {})[0]
+            if fac_here in foreign_home:
+                home = foreign_home[fac_here][1]
         w.persons[pid] = Person(pid, str(case.get("name") or cid))
         w.rungs[pid] = Rung(pid, "person")
         w.add_tenure(Tenure(f"t_{pid}_in", pid, home, "contain", 0))

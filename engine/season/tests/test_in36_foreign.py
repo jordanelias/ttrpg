@@ -27,16 +27,17 @@ from __future__ import annotations
 import pytest
 
 from engine.season.data import cast
-from engine.season.data.matrix import Step, WriteClass
-from engine.season.data.rosters import FACTION_BY_PROP, FACTIONS, FOREIGN_CAST, FOREIGN_SEATS, faction_prop_id
+from engine.season.data.rosters import ENDINGS, FACTION_BY_PROP, FACTIONS, FOREIGN_CAST, FOREIGN_SEATS, faction_prop_id
 from engine.season.decision.choose import make_chooser
 from engine.season.decision.options import opening_set
 from engine.season.harness import populated as POP
-from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.queries import world_q
 from engine.season.seam.wrappers import mass_battle as wrapper
-from engine.season.state.carriers import Question, Sensation, View
+from engine.season.state.carriers import Question, Sensation, Tenure, View
 from engine.season.state.ids import H, draw_factory
+
+from .test_in27_endings import _all_but_one_under_the_crown, _realm_territories
+from .test_march import _fold_one
 
 EMPIRE = "Altonia"
 FID = faction_prop_id(EMPIRE)
@@ -140,11 +141,15 @@ def test_the_foreign_root_is_outside_the_realm_for_endings_and_the_uncontrolled_
     assert world_q.holder_faction_of(foreign, root) is None
     assert world_q.uncontrolled(foreign, root) == [root], "the test world is not testing the unheld root"
     assert POP.census(foreign)["uncontrolled_in_realm"] == POP.census(control)["uncontrolled_in_realm"]
-    # and the predicate `world_q._ending_edges` selects territories by (`world_q.py:1830-1831`), RE-SPELLED here and
-    # not called, reaches no foreign territory
-    chosen = [r for r in sorted(foreign.rungs) if foreign.rungs[r].kind == "territory"
-              and any(a in foreign.rungs and foreign.rungs[a].kind == "realm" for a in POP.ancestry(foreign, r))]
-    assert root not in chosen and len(chosen) >= 15
+    # and the victory selector, CALLED (`world_q._ending_edges`, as `test_in27_endings` calls it): with every realm
+    # territory a Crown man's, the empire's HELD root is not among the rungs it selects. Were it, Altonia's hold
+    # would make the one-faction condition fail and `selected` would come back empty.
+    sel = POP.build_realm(0, foreign=True)
+    last = _all_but_one_under_the_crown(sel)
+    sel.add_tenure(Tenure("t_in36_last_crown", last, faction_prop_id("Crown"), "commit", 0))
+    assert world_q.governing_hold(sel, root) is not None, "the empire's root must be HELD for this to bite"
+    selected = {t.object for t in world_q._ending_edges(sel, ENDINGS["peninsular_sovereignty"]) if t.kind == "hold"}
+    assert root not in selected and selected == set(_realm_territories(sel)) and len(selected) >= 15, selected
 
 
 # ---------------------------------------------------------------------------------------------- (d)
@@ -191,11 +196,7 @@ def test_a_march_formed_by_a_chooser_restricted_to_march_folds_to_the_mass_battl
     real = wrapper.field_input
     wrapper.field_input = lambda *a, **k: records.append(real(*a, **k)) or records[-1]
     try:
-        d = SeasonDriver(w)
-        w.step = Step.RESOLVE
-        w.frozen = False
-        events = d.resolve(mint_token(w, WriteClass.ACTS), [act], 2)
-        events = events + d.encounter(mint_token(w, WriteClass.ACTS), events, 2)
+        events = _fold_one(w, act)
     finally:
         wrapper.field_input = real
     kinds = [e.kind for e in events]
@@ -207,21 +208,17 @@ def test_a_march_formed_by_a_chooser_restricted_to_march_folds_to_the_mass_battl
     assert len(rec.weights[0]) == 3 and len(rec.weights[1]) >= 1, rec.weights    # the three Altonians vs the Crown's
 
 
-def test_the_same_march_with_no_defender_arrives_unopposed_at_the_chokepoint(foreign):
+def test_the_same_march_with_no_defender_arrives_unopposed_at_the_chokepoint():
     """Lowenskyst has no Crown member present as built (its barracks held only the Altonian Doux, who now lives
     at the empire's own settlement), so the goal's own objective is walked into, not fought for. Recorded as a
     FINDING, not a design (H-233): the realm's defence of its chokepoint is garrison Site and nobody."""
     w = POP.build_realm(0, foreign=True)
     assert world_q.mustered(w, "set_s_007", "fac_crown") == []
-    p, v, cands = _march_candidate(w, "set_s_007")
+    p, v, _ = _march_candidate(w, "set_s_007")
     act = make_chooser(w.fixtures, lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}"),
                        verbs=frozenset({"march"}), draw=draw_factory(w.world_seed, lambda: w.tick))(
         p, v, Sensation(0), lambda: 1)[0].acts[0]
-    d = SeasonDriver(w)
-    w.step = Step.RESOLVE
-    w.frozen = False
-    events = d.resolve(mint_token(w, WriteClass.ACTS), [act], 2)
-    events = events + d.encounter(mint_token(w, WriteClass.ACTS), events, 2)
+    events = _fold_one(w, act)
     assert "field.unopposed" in [e.kind for e in events]
     assert world_q.home_of(w)["p_npc_089"] == "set_s_007", "the army did not arrive"
 
@@ -268,7 +265,7 @@ def test_ending_the_guards_oblige_drops_the_reading_with_no_other_write():
     holder = next(t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == w._office_census["authored"]["off_king"])
     rung = world_q.home_of(w)[holder]
     before = _guard_weight(w, rung)
-    assert before == 4
+    assert before == {r["seat"]: r["weight"] for r in POP.guard_rows()}["off_king"]
     for t in w.tenures:
         if t.kind == "oblige" and t.subject == f"{POP.COHORT_PREFIX}guard_off_king":
             t.until = w.tick
