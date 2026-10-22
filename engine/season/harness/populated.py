@@ -999,7 +999,8 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         # `npcs.yaml`'s home (the roster's home is the realm's derivation, which seats NPC-011 at Lowenskyst's
         # barracks and the two others in Feldmark's commons -- the empire's persons are not in the realm).
         # `foreign_home` is empty unless `foreign=True`, so the control arm reads no faction here.
-        _fac_here = cast.faction_of(cast.row(cid))[0] if cast.row(cid) else None
+        _row_here = cast.row(cid)
+        _fac_here = cast.faction_of(_row_here)[0] if _row_here else None
         if _fac_here in foreign_home:
             home = foreign_home[_fac_here][1]
         w.persons[pid] = Person(pid, str(case.get("name") or cid))
@@ -1103,6 +1104,9 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
             # makes the branch below RIGHT rather than tolerated. Six of the 46 name an
             # affiliation on no roster — `Altonia` (3), `Independent (Southernmost Wardens)` (2),
             # the dissolved Virke syndicate (1) — and they stay unaffiliated.
+            # (v9 IN-36: `Altonia` has since joined the roster as a FOREIGN faction, so in a
+            # `foreign=True` world its three are placed; in the shipped control arm they are
+            # unplaced exactly as above, via `absent`. The other three stay off the roster.)
             #
             # ⚠ SO DO NOT "FIX" THIS BY GROWING THE ROSTER. The earlier reading pointed the other
             # way, on Jordan's precedent at `state/carriers.py`'s Office check (*"Wouldn't it just
