@@ -261,7 +261,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | IN-32 | H-182 ties | IN/FI | BLK | IN-06 | R-05 | B-S | `_part5` |
 | IN-33 | H-58 `exchange` | IN | B | — (reverted `cdc03f67`; restorable under §0.5: `ad2f930f`..`b5c4685d`) | R-05 | none (B-I closed `9d93cfab`) | `_part5` |
 | IN-35 | #457 FORCE-HAZARD; SEAM-CLOCK | IN/WR/SE | BLK | IN-06 | — | B-S | `_part5` |
-| IN-36 | #457 FORCE-FOREIGN | IN/FA/MB | B (landed `7c59d74c`, narrowed) | IN-13 (landed `2e19aee8`; B-M closed `be02666e`) | — | B-V | `_part5` |
+| IN-36 | #457 FORCE-FOREIGN | IN/FA/MB | B (landed `7c59d74c` at B-V, closed `b1eabf5d`; narrowed) | IN-13 (landed `2e19aee8`; B-M closed `be02666e`) | — | B-V | `_part5` |
 | IN-38 | `13`-rest | IN | B (landed `1dcfce10`, narrowed) | — | R-09, R-06 | B-V | `_part5` |
 | IN-44 | SM-10, SM-12; A-24's wording | IN | J | Layer 0/1: Jordan's files | — | — | `_part8` (table, not an entry) |
 | IN-45 | `work` (`forge`, `carry`, `migrate` landed at B-K) | IN/SE | J | ED-IN-0297 (`needs_jordan`) | R-05 | none (B-K closed `c8d1db3a`) | `_part5` |
@@ -296,7 +296,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | GO-01 | `26`; D2 tenth attribute | GO | J | J-9 | — | B-Z | `_part7` |
 | GO-05 | SM-13; ED-PC-0013 (1) | GO | BLK | GO-01 | — | B-Z | `_part7` |
 | GO-06 | `valoria-game` parity | GO | BLK | `valoria-game` checkout | — | B-Z | `_part7` |
-| FA-01 | #445 P-3; FORCE-FOREIGN's cast | FA | B | mechanism landed at B-J | R-04 | B-V | `_part7` |
+| FA-01 | #445 P-3; FORCE-FOREIGN's cast | FA | mechanism landed at B-J; content landed at B-V; the trade-demand clause BLK:J (`ED-IN-0298`) | mechanism landed at B-J | R-04 | B-Z (the clause) | `_part7` |
 | FA-02 | = IN-30 | — | — | — | — | none (= IN-30, stopped) | `_part5` |
 | FA-03 | #453 §10.2 faction map | FA | LEAVE | reference | — | B-Z | `_part7` |
 | FA-07 | the original design's faction-vs-faction mechanisms | FA | LEAVE | named, unscheduled | — | B-Z | `_part7` |

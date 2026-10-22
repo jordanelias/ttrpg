@@ -262,9 +262,10 @@ def test_the_unrestricted_chooser_picks_the_march_at_a_witness_seed_and_the_fold
     once, with no `field.unopposed`.
 
     SCOPE, STATED: this is an existence witness, NOT a rate. The march scores far below `create_record` on that
-    question and is picked in about one goal-question deliberation in ten (Gumbel order, `choice_temperature`
-    0.1, over ~30 candidates); the frequency is H-233's remaining half and is the convictions' or IN-08's march
-    cells', not this test's. THE DRAWS ARE KEYED ON (verb, subject), so the witness RE-ROLLS whenever any upstream
+    question; a scan of seeds 0-79 finds it in the first scene at 7 (a first-scene rate of about 0.09; Gumbel
+    order, `choice_temperature` 0.1, over ~30 candidates), and only 2 of the 5 full one-season runs checked reach
+    the seam (the rest arrive unopposed, H-233): the combined rate is NOT measured. The frequency is H-233's
+    remaining half and is the convictions' or IN-08's march cells', not this test's. THE DRAWS ARE KEYED ON (verb, subject), so the witness RE-ROLLS whenever any upstream
     input moves (a candidate, a score, a seed's cast): the seeds below are then stale, not the mechanism broken.
     FAILURE MESSAGE NAMES THE SCAN, rather than skipping: re-scan seeds 0-79 (`foreign=True`; per seed
     `questions_for` -> `aggregate_questions` -> `assemble` -> `make_chooser(... verbs=resolvable_verbs())`, scene 0
@@ -287,6 +288,27 @@ def test_the_unrestricted_chooser_picks_the_march_at_a_witness_seed_and_the_fold
     assert "march.declared" in kinds and "field.unopposed" not in kinds, kinds
     assert len(records) == 1, f"the mass-battle entry was reached {len(records)} times, not once: {kinds}"
     assert records[0].territory == "T1" and records[0].origin == FOREIGN_CAST[EMPIRE]["territory"]["code"], records[0]
+
+
+@pytest.mark.parametrize("seed", WITNESS_SEEDS)
+def test_the_witness_seed_reaches_the_seam_in_a_full_one_season_run_too(seed):
+    """The fold above takes the chosen act in isolation. H-233 records seeds (16, 38, 44) whose same march folds to
+    the seam alone and arrives `field.unopposed` in the full run, so the witness is not honest until the whole season
+    is run: `aperture.instrumented_season` (the realm section's own instrument, the unrestricted chooser throughout)
+    on the witness seed reaches `mass_battle.field_input` at least once, from the empire's root. If this reddens
+    where the test above stays green, the seed has become one of those; re-scan (see above)."""
+    from engine.season.harness import aperture
+    w = POP.build_realm(seed, foreign=True)
+    records = []
+    real = wrapper.field_input
+    wrapper.field_input = lambda *a, **k: records.append(real(*a, **k)) or records[-1]
+    try:
+        run = aperture.instrumented_season(w, 1)
+    finally:
+        wrapper.field_input = real
+    assert run["attempted"]["p_npc_089"].get("march", 0) >= 1, run["attempted"]["p_npc_089"]
+    assert records and records[0].origin == FOREIGN_CAST[EMPIRE]["territory"]["code"], (
+        f"seed {seed} no longer reaches the seam in a full season ({len(records)} entries): re-scan the witnesses")
 
 
 # ---------------------------------------------------------------------------------------------- (e)
