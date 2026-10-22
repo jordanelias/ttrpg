@@ -140,8 +140,10 @@ differs from them, they govern.
 | `give` | one act of a scene | moves a held Record and its content to a person with him | a question naming a Record he holds (formed mostly on persons and buildings) | TESTS-ONLY at seeds 0-1 (16/0, 21/0); executes at seed 2 (19/1, a cover) |
 | `tell` | one act of a scene | contested; the hearer copies his best claim with him in the chain | a held claim; the hearer with him | RUNS-IN-LOOP 23/4 · 25/7 · 19/6 |
 
-**First season, step by step** (seed 0, tick 0; a read-only probe of one season on the ctl recipe).
-1. Every ledger starts empty (83 persons, 0 claims). p_npc_037, the season's busiest investigator, holds 0.
+**First season, step by step** (seed 0, tick 0; a read-only probe of one season on the ctl recipe; uncommitted
+round-3 probe, figures listed in §9).
+1. Every ledger starts empty (83 persons, 0 claims). p_npc_037, the season's busiest fieldwork actor (nine
+   acts; the next two have seven), holds 0.
 2. He takes nine fieldwork acts. Five are `research`: on the King (p_npc_020), on p_npc_030 and three times
    on the cathedral building. None names a Record, so all five are refused at admission; each spent budget
    and left nothing in any ledger, his own included (`rosters.yaml:1145`). Three are `create_record`: each
@@ -149,12 +151,13 @@ differs from them, they govern.
    `reconstruct` on the cathedral: `finding.made` with no degree; it uncovers nothing, and everyone in the
    room now holds a claim that he asked.
 3. Meanwhile WITNESS fills his ledger from where he stood: 0 to 187 claims, 177 firsthand and 10 `told_by`
-   at 67 (`order.given`, `tenure.closed` and the `seen` claims about them; the realm mean is 68.3). Everything
+   at 67 (`order.given`, `tenure.closed` and the `seen` claims about them; the realm mean is 68.3 claims per
+   ledger: 5,329 claims over the 78 persons alive after the season). Everything
    he learned came from presence and those 67-grade copies; his inquiries uncovered nothing.
-4. Realm-wide that season: `research` formed 59 and reached the roll twice (both Partial, both cohorts on a
-   Record); `surveil` formed 28 and reached the roll 14 times (1 Partial, 13 Failures); `examine` formed 30,
-   refused 30; `forge` minted 4 sheets; `give` formed 8, refused 8, so no forged sheet changed hands; `tell`
-   landed 2 of 3. Nothing uncovered a trail (0 found deposits); the only route that does is the hand-built
+4. Realm-wide that season: `research` formed 59 and reached the roll twice (both Partial, both by cohorts,
+   on a Record); `surveil` formed 28 and reached the roll 14 times (1 Partial, 13 Failures); `examine` formed 30,
+   refused 30; `forge` formed 21 and minted 4 sheets; `give` formed 8, refused 8, so no forged sheet changed
+   hands; `tell` formed 3 and landed 2. Nothing uncovered a trail (0 found deposits); the only route that does is the hand-built
    forge, give, research chain of §3, which the realm does not take.
 
 **What changes later.** Ledgers fill: 13 of 74 at the cap after two seasons in seed 0, mean 199 of 200 after
@@ -167,7 +170,7 @@ in any ledger. A Partial finding closes that trail to its finder for as long as 
 `queries/world_q.py:1764`); at seed 0 both seasons report `[]` (probe), and `rosters.yaml: endings` calls its
 sovereignty row unreachable in computed play. `[precedent: T06 precedent, Obra Dinn §6: it cannot be failed
 either, a wrong entry costs nothing beyond staying out of the lock, and it ends on a count of fates solved;
-here a Partial is terminal for that trail. Shadows of Doubt §6: a wrong name costs 100 and the killer keeps
+here a Partial closes that trail until its claim is evicted from his ledger (`epistemic.py:356-365`; `state/ledgers.py:24-32`). Shadows of Doubt §6: a wrong name costs 100 and the killer keeps
 killing]`.
 
 **Consequential vs cosmetic choices.**

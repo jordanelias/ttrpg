@@ -75,7 +75,8 @@ score/τ plus Gumbel noise (`:388`), which is all `pack_scenes` receives (`:481`
 | `give` | one act | a held Record changes hands | he holds a Record, the receiver is with him | RUNS-IN-LOOP at seed 2 (1 of 19); TESTS-ONLY at seeds 0, 1 (`engine/season/tests/test_give.py`) |
 | `commit`, `oblige`, `release` | one act each | open a commitment or a duty; close an own edge | a Proposition or seat in reach; any own live edge | `commit` RUNS-IN-LOOP at seeds 1, 2 (1 each), TESTS-ONLY at seed 0 (`engine/season/tests/test_in11_utter_hold_commit.py`); `oblige` RUNS-IN-LOOP at seed 1 (22 of 24), never reaches the fold at seeds 0, 2 (§4); `release` RUNS-IN-LOOP (3, 5, 3) |
 
-**First season, step by step** (seed 0, tick 0 then tick 1).
+**The first two seasons, step by step** (seed 0, tick 0 then tick 1; per-verb counts are acts that reached the fold, except where `commit`
+gives both bases).
 1. Build: 83 persons; starting budgets 52 at 5, 27 at 6, 1 at 7, 2 at 10, 1 at 13; 47 live holds.
 2. MATTER at tick 0: the cohorts want 148 grain and 74 salt and find nothing, each 6 units short; at `body_step` 0 no body moves; ageing is
    skipped; yield is taken (37 `yield.taken`, 37 `stores.changed`); no leg to end.
@@ -96,7 +97,9 @@ larders grow (§3b: `set_s_001` 40/30/50/10 → 75/57/99/19 in two seasons), cla
 births, stance and weather.
 
 **Failure and ending.** The loop does not stop on an ending: the season reports `endings`, a read and never an actor (`driver.py:514-518`;
-`world_q.py:1764`), and the realm as built reaches none (`endings` is `[]` in both seasons at seed 0). The only failure in this lane is death,
+`world_q.py:1764`), and the realm as built reaches none (`endings` is `[]` in both seasons at seed 0, uncommitted round-3 probe; after tick 0 it cannot be
+otherwise: `theocracy` needs a live hold on the King's seat, which is vacant once he dies, `world_q.py:1831`, and `peninsular_sovereignty` is
+"unreachable in computed play", `rosters.yaml:2536`; the static build reaches nothing, `world_q.py:1789-1791`). The only failure in this lane is death,
 and at shipped values only combat kills (G9; `matter.py:520, 549`). Death is final and closes every tenure naming the dead (`world.py:645-656`);
 nobody heals passively and nobody inherits (`verb_table.yaml:1113`). A settlement's cohort never starves at shipped values and its weight never
 changes, but it can be deleted whole by one `Felled` (ERRATA C1). No cohort dies at seeds 0 and 1; at seed 2 one is gone by the end of season 2:

@@ -184,7 +184,7 @@ Overview §7 sets these beside the other handles.
 **In-world duration.** The code states durations only in comments: a combat engagement "~10s" (`modules/combat/wrapper.py:504`) and a
 mass-battle phase, one charge-and-return cycle of ~5-6 ticks, a battle of 3-6 phases "matching the 30-90 minutes of active fighting"
 (`modules/mass_battle/orchestration.py:184-192`). A season and a round have no stated length. The loop's only year is the swept
-`season_factor_draw` table (four entries, FX:464-469), off as shipped; the dead MS track also counts in years
+`season_factor_draw` table (four entries, FX:464-469), off as shipped; the MS track (no live caller) also counts in years
 (`systems/overview/sim/ms_track.py:25, :45`). So "a season" is a count, not a calendar. Nearest verified precedents: one turn = one year
 (`tutorials/T01_realm.md`, Old World [V3 FW-OW]); one turn per season (`tutorials/T12_paradox_classical.md`, Total War: Rome II [V3 R2M
 0015a]); one turn = one month (`tutorials/T17_repo_strategy_a.md`, Dominions [V3 IW5:introduction_to_dominions]); two actions in each of five
@@ -304,7 +304,7 @@ Each line: old claim → new claim (evidence). Probes re-run at `51d7b05` unless
 
 Each line: old claim → new claim (evidence). Applied after the third independent audit of this file; each cite was reopened at the current tree.
 - §4 in-world duration "a duration only for a combat engagement ... a battle tick none" → durations stated only in comments, combat "~10s" and a mass-battle phase of ~5-6 ticks, 3-6 phases to a battle (`modules/combat/wrapper.py:504`; `modules/mass_battle/orchestration.py:184-192`); the §4 mass-battle row amended to match.
-- §4 "a year exists only in the swept arms of `season_factor_draw`" → the loop's only year is that table, and the dead MS track also counts in years (`systems/overview/sim/ms_track.py:25, :45`).
+- §4 "a year exists only in the swept arms of `season_factor_draw`" → the loop's only year is that table, and the MS track (no live caller) also counts in years (`systems/overview/sim/ms_track.py:25, :45`).
 - §3 "no verb has a separate action price" and "Nothing prices one subsystem's acts above another's" → only travel (`move`, `migrate`) takes an action off the rest of the season, and hold-minting verbs return one (`es/decision/budget.py:60`; `es/loop/effects_migration.py:119`).
 - §3 EC cell "work 77/0 (never on a dwelling or garrison ...)" → `work` stages a rise only where a live works names the Site, else `work.unavailable`, and never on a dwelling or garrison (`es/loop/effects_economy.py:103`; RY:2631-2632).
 - §3 Pax Pamir gloss "where holdings add actions but the cap stays fixed" → up to two actions a turn, each court card at most once, favoured-suit card actions not counting against the cap (T15:76-77 [V3 p8-9], [V3 p12]).

@@ -101,7 +101,8 @@ Automated: everything. No faction acts; a person acts, through a seat where the 
 #### First season, step by step (seed 0, tick 0 → 1; round-3 probes)
 1. Tick 0: Crown 11 members; provinces Crown 6, Hafenmark 4, Varfell 4, Church 1; `uncontrolled` = [terr_T15]; 32 of 32 seats
    held; 2 live `oblige`; 0 WAR Propositions.
-2. Over the five rounds the realm spends these FA acts (reached the fold / ok): survey 27/5, forge 21/4, utter 17/17, commit 36/0,
+2. Over the five rounds the realm spends these FA acts (reached the fold / ok; `python ctl/control.py 0 1` in this directory
+   reproduces them, no seize or oblige appearing in its table): survey 27/5, forge 21/4, utter 17/17, commit 36/0,
    release 26/2, covenant 8/0, give 8/0, march 9/9 (each declared and each refused), dispatch 5/2, sabotage 17/0, seize 0, oblige 0.
 3. The decisive acts are personal combat, not FA. The King (p_npc_020) dies as the subject of the Queen's (p_npc_032) `accept`, and
    the Duchess of Hafenmark (p_npc_050) of a Crown member's (p_npc_083) `fight`; the seam writes only the subject (overview §6 #7).
@@ -320,7 +321,7 @@ Each season a person's budget is `max(1, 5 + 1 per live hold − body-band penal
 landholding, a Record or Proposition you made — so `utter`, which always succeeds and opens a hold, is a budget lever. The
 budget is a cost budget: a scene holding more than one act is extended and costs `extended_scene_cost = 2` (`fixtures.py:489`),
 and the driver releases at most one scene per round over five rounds (`loop/driver.py:456`), so a budget of 5 buys 2+2+1 = 7
-acts and a budget of 6 buys 9; the cap is 10 (cross-audit ruling C1). In the seed-0 run that is about 7.6 acts per person
+acts and a budget of 6 buys 9; spending is capped at 10 actions, five scenes at cost 2, so at most 15 acts (cross-audit ruling C1). In the seed-0 run that is about 7.6 acts per person
 per season on the basis `d.resolved` 1,132 / ~74 persons / 2 seasons. For each question (in `attention_key` order) the chooser forms one Candidate per
 verb row per **referent the question carries** (`es/decision/options.py:134-238`), scores it on value alignment and stance,
 and samples at `choice_temperature = 0.1` (`fixtures.py:286`). Two rosters narrow FA formation further:
@@ -417,7 +418,7 @@ admission and reached the fold (admission refusals are uncounted) and "ok" = at 
 | `give` | holder of the Record | receiver present where you are | hold moves to the receiver; `record.given` | `give.refused` | 16/0, 21/0, 19/1 |
 | `seize` | seat-holder, `remit:issue` | purview reaches the object's place; Record half: you hold a warrant naming it and someone else holds it; Rung half: a settlement held by another faction, your seat's faction mustered there (residents count), you committed to that faction; forms only on a warrant-named referent | closes the displaced `hold` (if any), opens yours; `record.seized`/`rung.seized` | `seize.unauthorized` (seat), `seize.refused` (world) | 0/0 in all seeds |
 | `march` | seat-holder, `remit:dispatch` | subject a Rung; only a settlement musters an army | Won/Unopposed: army relocated to the target, `army.arrived`; Lost: casualties and stance on the attacker; Won: casualties and stance on the defenders (a grudge row toward the winning faction, a morale row toward their own; `effects_combat.py:259-261, 293-306`) | `march.refused` | 21, 10, 4 declared; 0 fields, 0 arrivals |
-| `dispatch` | seat-holder, `remit:dispatch` | the named person exists | no tenure, store or person field (`writes: []`); `order.given`, public by kind, reaches every living ledger at WITNESS (a hand-built dispatch plus one season: 79 ledgers, 219 `told_by`, 18 firsthand; I1v claim 4) | `dispatch.refused`, `person.demanded` | 18/6, 18/7, 10/10 |
+| `dispatch` | seat-holder, `remit:dispatch` | the named person exists | no tenure, store or person field (`writes: []`); `order.given`, public by kind, reaches every living ledger at WITNESS (a hand-built dispatch plus one season: 79 ledgers, 219 `told_by`, 18 firsthand; I1v claim 4, seed not recorded, uncommitted round-3 probe) | `dispatch.refused`, `person.demanded` | 18/6, 18/7, 10/10 |
 | `sabotage` | anyone present at the Site | Site exists, you stand at it | stages −(condition × 1/n) on `Site.condition`, n = persons present; `site.damaged` | `sabotage.refused` | 34/0, 22/0, 33/0 |
 | `succeed` | the holder designating an heir | you hold the office | row declared, **no effect registered** (decline note at `verb_table.yaml:1113`) | — | not resolvable |
 

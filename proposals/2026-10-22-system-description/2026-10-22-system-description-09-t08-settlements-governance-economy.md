@@ -47,17 +47,17 @@ chance is *which* act a person chooses (sampler at `choice_temperature=0.1`, `da
 ## 0a How it plays
 
 **As built.** Paths under `engine/season/`; run figures are `ctl/realm_seed{0,1,2}_2seasons.txt` ("attempted" = acts that reached the
-fold, "ok" = a non-refusal event; ERRATA G2) and the round-3 re-runs at `51d7b05` listed in §8. Grades are ERRATA G1, per seed
-(s0 · s1 · s2).
+fold, not acts formed; "ok" = a non-refusal event; ERRATA G2, R-F3) and the round-3 re-runs at `51d7b05` listed in §8 (uncommitted: the
+`ctl/` files are the only committed instrument). Grades are ERRATA G1, per seed (s0 · s1 · s2).
 
 **Setup choices.** At world build the only choice is the seed: `build_realm(seed)` gives every one of the 37 settlements one harbour and
 one seam at condition 1000 (`harness/populated.py:772-777`), a dwelling per hearth (`:793-797`) and a garrison per settlement
 (`:815-818`), 32 seats (31 rows in `offices.yaml` plus the derived `off_npc_084`, `harness/populated.py:1241-1250`) and empty stores
 everywhere (§1). The shipped controls are fixed: `body_step=0`, `oblige_term=4`, `default_upkeep=1` (`data/fixtures.py:594, 892, 905`).
 The seed changes what the choosers form and the pursuits drawn for persons with none authored (`harness/populated.py:893`), and does not change the map, Sites, seats or stores (the 32 seats and their conferral bases are identical in seeds 0-2): seed 1
-swears 22 obliges (24 attempted), seeds 0 and 2 none (§4). The season loop has no player interface of its own; a person at the callback
+swears 22 obliges (24 reached the fold), seeds 0 and 2 none (§4). The season loop has no player interface of its own; a person at the callback
 (`harness/play_surface.py:41-52`, `dispatching_chooser`, reached only by tests today) chooses which acts to submit and their payloads.
-Any of the 47 resolvable verbs with any extra fields is folded; a non-resolvable one aborts the season (round-3 re-run). There is no
+Any of the 47 resolvable verbs with any extra fields is folded; a non-resolvable one aborts the season (uncommitted round-3 probe). There is no
 settlement, policy or faction to pick before play.
 
 **The loop.** One tick is one season: CALENDAR, then MATTER, then five rounds of DELIBERATE, RESOLVE, ENCOUNTER, WITNESS, then CENSUS
@@ -69,21 +69,21 @@ claims decay (`:317-347`), cohorts draw grain and salt from the nearest store (`
 
 **The choice menu.** Cost is the scene cost above plus the matter named.
 
-| verb | cost | effect | when a person picks it | grade (s0 · s1 · s2) |
+| verb | cost | effect | who may / through what | grade (s0 · s1 · s2) |
 |---|---|---|---|---|
 | `oblige` | 1 | swears service to a seat for 4 seasons | from anywhere, to any seat he does not hold (§2.4) | RUNS-IN-LOOP at s1 only (24/22) |
-| `transfer` | 1 + the amount | moves stores; through a seat to its obligees, renews terms | from a claim's referent; only cohort → own person rung executed (§4) | RUNS-IN-LOOP at s0, s2 (1, 5); renewal TESTS-ONLY |
-| `requisition` | 1 | stock from a rung in purview into the seat's rung | through a seat granting `issue` | TESTS-ONLY (2/0, 5/0, 5/0) |
+| `transfer` | 1 + the amount | moves stores; through a seat to its obligees, renews terms | from a claim's referent; only cohort → own person rung executed (§4) | RUNS-IN-LOOP at s0, s2 (1, 5); renewal TESTS-ONLY (`tests/test_term_upkeep.py`) |
+| `requisition` | 1 | stock from a rung in purview into the seat's rung | through a seat granting `issue` | TESTS-ONLY (2/0, 5/0, 5/0; `tests/test_u7_remit.py:228`) |
 | `confer` | 1 | seats a person; refills a vacancy | through a seat granting `confer` | RUNS-IN-LOOP at s1 only (5/1, a self-conferral) |
-| `revoke` | 1 | strips a seat; bans an appointee | through a seat on the rung directly above | TESTS-ONLY (6/0, –, 4/0) |
-| `establish` | 1 | a new seat or remit | through a seat granting `confer` | TESTS-ONLY (–, 5/0, 4/0) |
+| `revoke` | 1 | strips a seat; bans an appointee | through a seat on the rung directly above | TESTS-ONLY (6/0, –, 4/0; `tests/test_in31_revocation_cost.py`) |
+| `establish` | 1 | a new seat or remit | through a seat granting `confer` | TESTS-ONLY (–, 5/0, 4/0; `tests/test_governance_build.py:1118`) |
 | `release` | 1 | resigns a seat, quits service | on any edge of his own | RUNS-IN-LOOP (45/3, 44/5, 46/3) |
 | `issue` | 1 | a writ for one executor; +1 hold | through a seat granting `issue` | RUNS-IN-LOOP (6/5, 12/5, 14/8) |
 | `dispatch` | 1 | nothing but `order.given`, told to every ledger | through a seat granting `dispatch` | RUNS-IN-LOOP (18/6, 18/7, 10/10), writes nothing |
 | `convene` | 1 | a dated sitting | through a seat granting `convene` | RUNS-IN-LOOP at s2 only (5/1) |
-| `create_record` works → `found` / `build` | 1 + 1; grain 10 or timber 10 | a new hearth or community, or a Site at 0 | own; a computed `create_record` never mints a works | TESTS-ONLY (found 24/0, build 19/0 at s0) |
-| `work` / `restore` / `sabotage` | 1 each | raise or lower a Site by 1/n of headroom | own, present; formed on non-Site referents | TESTS-ONLY (77/0, 23/0, 34/0 at s0) |
-| `migrate` / `move` | 1 + a leg | residence and presence / presence only | own | migrate TESTS-ONLY (81/0); move RUNS-IN-LOOP (42/16) |
+| `create_record` works → `found` / `build` | 1 + 1; grain 10 or timber 10 | a new hearth or community, or a Site at 0 | own; a computed `create_record` never mints a works | TESTS-ONLY (found 24/0, build 19/0 at s0; `tests/test_works_founding.py`) |
+| `work` / `restore` / `sabotage` | 1 each | raise or lower a Site by 1/n of headroom | `work`: own (no presence clause); `restore`, `sabotage`: own, present; formed on non-Site referents | TESTS-ONLY (77/0, 23/0, 34/0 at s0; `tests/test_works_founding.py`, `tests/test_in12_step9.py:121`) |
+| `migrate` / `move` | 1 + a leg | residence and presence / presence only | own | migrate TESTS-ONLY (81/0; `tests/test_migrate_capacity.py`); move RUNS-IN-LOOP (42/16) |
 
 **First season, step by step (seed 0).** Tick 0 MATTER: every cohort wants grain 4 and salt 2 and finds no store, so nothing is drawn and
 no shortfall is written; then each settlement yields grain 40, salt 30, ore 50, timber 10 and its harbour and seam wear to 990 (§3; over

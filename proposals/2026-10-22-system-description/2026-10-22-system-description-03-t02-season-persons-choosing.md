@@ -854,7 +854,7 @@ Ran (throwaway scripts of this audit, not committed; `cd /home/user/ttrpg`, HEAD
 - Not confirmed: which clause (death or purview) decided `case.unauthorized` on Yrsa. Both map to the same kind and both fail.
   The errata's "about half of mirror fights fell the actor" is not re-run here.
 
-Round 3 (HEAD `51d7b05`; throwaway scripts, not committed, so every figure in this paragraph is an "uncommitted round-3 probe" figure; `cd /home/user/ttrpg`):
+Round 3 (HEAD `51d7b05`; throwaway scripts, not committed, so the figures in this paragraph are "uncommitted round-3 probe" figures; ctl corroborates only the per-tick sums and alive counts; `cd /home/user/ttrpg`):
 - Opened: `decision/budget.py:15-90`; `loop/deliberate.py:84-120, 196-224, 236-290`; `loop/driver.py:440-460, 500-532`;
   `decision/choose.py:125-155, 372-395, 630-675`; `loop/matter.py:290-306, 508-556`; `loop/resolve.py:270-292, 386-402`;
   `queries/world_q.py:1764-1840, 2217-2345, 2374-2400, 2530-2550`; `harness/play_surface.py:1-60`; `harness/populated.py:470-480, 629-636`;
