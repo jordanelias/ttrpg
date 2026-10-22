@@ -1,0 +1,60 @@
+seed=1 seasons=2 acts=1122 persons_alive=77
+verb attempted ok(non-refusal event)
+  accept            9    6
+  build            17    0
+  carry            32    0
+  challenge        22    6
+  commit           56    1
+  conceal          34   34
+  confer            5    1
+  covenant          4    0
+  create_record    88   88
+  determine         1    1
+  dispatch         18    7
+  establish         5    0
+  fight             5    5
+  forge            51    6
+  forgive           2    2
+  found            27    0
+  give             21    0
+  interview        16    2
+  issue            12    5
+  march            10   10
+  migrate         143    0
+  move             35   17
+  oblige           24   22
+  open_case         2    1
+  petition         31    7
+  reconstruct      52   46
+  release          44    5
+  requisition       5    0
+  research          8    1
+  restore          31    0
+  sabotage         22    0
+  surveil          29    9
+  survey           38    5
+  tell             25    7
+  tend             22    0
+  train            30    0
+  transfer         37    0
+  utter            39   39
+  work             70    0
+  field.won 0
+  field.lost 0
+  field.unopposed 0
+  army.arrived 0
+  march.declared 10
+  march.refused 10
+  person.died 6
+  body.changed 5
+  contest.undecided 3
+  news.told 7
+  matter.turned 0
+  finding.made 58
+  claim.deposited 11793
+  claim.decayed 6025
+  stores.changed 111
+  yield.taken 74
+  person.individuated 0
+live oblige 24 cap-200 ledgers 16 of 77
+capability nonempty 0 pursuits empty 37

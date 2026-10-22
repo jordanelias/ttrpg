@@ -1,0 +1,473 @@
+# Tutorial: Faction Actions (FA) — how a person in a seat joins, leads, takes ground for, treats on behalf of, and (one day) makes war for a faction
+
+Repo `jordanelias/ttrpg`, HEAD `a4ca9a5`. All `engine/season/` paths are written `es/`. Counts come from the control run
+(`scratchpad/ctl/realm_seed{0,1,2}_2seasons.txt`: `build_realm(seed)`, two seasons, acts attributed by `Event.causes[0]`,
+"ok" = at least one non-refusal event) unless a probe of mine is named (§9).
+
+## 0 Before you start
+
+**The frame.** In the code there is no player character and no GM. Every person is a chooser that spends a per-season budget of
+scene actions (five, plus one per live `hold`, less penalties; §2.6) on acts drawn from one closed table of verbs (`es/verb_table.yaml`, 53 rows). "You" below means the
+acting person — a player's character if one is ever seated, an NPC today — so this tutorial teaches what an actor can do,
+what the rules do with it, and what an actor must arrange to reach a goal. Rules that exist only in a proposal are marked
+**[PROPOSED]** and kept in §7.
+
+**The one idea to hold.** *A faction never acts.* A person holding an office acts, through that office (`es/data/verbs.py:125`;
+`es/rosters.yaml:1588`). A faction is not an object in the world: it is an uttered sentence (a `Proposition`) plus the live
+`commit` edges people hold to it. Everything else — its members, leaders, land, provinces, army, wars — is a question asked
+of those edges at the moment it is needed, and stored nowhere (`es/queries/faction_q.py:85-95`, a frozen view "NEVER a member
+of `World`").
+
+**What you need from other subsystems.**
+- *Governance (GV):* offices (seats), the rung ladder (person → hearth → community → settlement → territory → province → duchy
+  → realm), `hold` edges, purview, `oblige` (service) and its term. A seat-holder's remit licenses `covenant`, `seize`, `march`
+  and `dispatch`; every other act used here (`survey`, `forge`, `commit`, `release`, `utter`, `oblige`, `give`, `sabotage`)
+  is `own`-eligible, a person's own right.
+- *Social contest / NPC life:* `utter` (the only verb that mints a Proposition) and `commit` (the only membership edge).
+- *Mass battle (MB):* `march`, the one contested FA-adjacent act; its field is resolved by MB. Occupation, which `seize` needs,
+  is any member of the seat's faction standing in the town's subtree — a resident counts; a march's arrival is one way to
+  put members there (§3.2).
+- *Information (FI):* `survey` and `forge` produce the faction sheet, the only way a person "reads" a faction.
+- *The decision layer:* which acts a person even considers is decided by what his questions are about (§2.6). This is why
+  so little FA executes.
+
+**Status (grade per the draft preamble and errata G1).** Mixed: membership, the faction view, faction-goal salience and
+`survey` are **RUNS-IN-LOOP**; `oblige` (entering service) is RUNS-IN-LOOP at seed 1 only (22 of 24), never attempted at seeds 0 and 2; `commit`
+executes once each at seeds 1 and 2, on uttered Propositions, never on a faction; `dispatch` executes (6, 7, 10 per seed) but
+writes nothing; `covenant`, `seize`, `sabotage`,
+`at_war` and the march arrival are **TESTS-ONLY** (wired, 0 successful executions in all three seeds); `declare`, `recruit`,
+`conspire`, `assign` are **DESIGN-ONLY**.
+
+## 1 The pieces
+
+| term | what it is | numbers / limits | where it lives |
+|---|---|---|---|
+| faction Proposition | the faction's identity: id `fac_<slug>`; a creed of mood `OUGHT`, `subject` = the authored leader, `value` = the faction name, `scope` = its role template; or mood `HOLDS` where canon gives no leader | 9 at build: 6 OUGHT creeds (Crown, Church of Solmund, Hafenmark, Varfell, Löwenritter, Restoration Movement), 3 HOLDS (Guilds, Schoenland, test `faction x`) | `es/harness/populated.py:940-946`; `es/data/rosters.py:358` (`faction_prop_id`, `'Crown'→'fac_crown'`) |
+| membership | a live `commit` Tenure person → faction Proposition. "THIS IS THE WHOLE OF MEMBERSHIP AND THERE IS NO SECOND ROUTE" | build_realm(0): 40 members; 43 persons belong to none (37 cohorts + 6 unplaced cast); nobody holds two | `es/queries/world_q.py:1365-1376`; opened at world-gen `populated.py:975` |
+| `members(w,f)` | sorted subjects of live `commit`s to `f` | Crown 11, Church 7, Varfell 5, Hafenmark 4, Löwenritter 4, Restoration 4, Guilds 4, Schoenland 1, faction x 0 (build) | `world_q.py:1365` |
+| `leaders(w,f)` | members who hold a live `hold` on an Office whose `faction` is `f` — the intersection, not either half | one entry per held SEAT, not per person (`world_q.py:1412-1416`): Crown 11 entries = 10 people (p_npc_020 holds two Crown seats), Church 7, Hafenmark 4, Varfell 4, Löwenritter 3, Guilds 2, Restoration 1; entries sum to 32 = seats, 31 distinct holders | `world_q.py:1379-1416` |
+| `head(w,f)` | the subject of the last live `commit` to `f` carrying a non-`None` `Tenure.degree` | **always `None`**: no builder or verb writes a degree on a `commit` | `faction_q.py:116-147` |
+| Office (seat) | a post anchored at a rung, with a remit, a conferral and a revocation basis; its `faction` is derived from its `body` | 32 offices (31 authored + unauthored `off_npc_084`); all 32 held at build, by 31 distinct persons; 6 seats have `conferral: null` and can never be refilled (§5a) | `es/offices.yaml`; `es/state/carriers.py` |
+| remit | the acts a seat licenses, from the roster `issue, determine, confer, revoke, dispatch, convene`; the holder exercises a *snapshot* (`granted_acts`) taken when he was seated. The tree contradicts itself on whether the roster is closed: `rosters.yaml:315` "the CLOSED five", `:316` `open: true`, `verb_table.yaml:257` "is closed" | `remit_default` ("NOT CANON", a testing fixture) IS applied in the shipped build: loop-built seats are seated with every remit act and keep `dispatch` through `remit_unruled` even where `offices.yaml` names a remit; 22 of 23 loop-built seats hold `dispatch`, which is where `march` comes from (`offices.yaml:100-119, :141`) | `es/rosters.yaml:314-322`, `:324-332`; `es/state/gate.py:312-342` |
+| `Act.via` | the seat an act is exercised through; refused "the instant the occupant is not seated" | — | `gate.py:312` (`seat_hold`) |
+| `seat_faction(via)` | the faction Proposition id of the seat exercised | — | `gate.py:345-350` |
+| purview | where a seat reaches: its own rung + every descendant, plus (since IN-40) the ground of any seat whose holder owes it a live `oblige`, one edge deep | upward reach is never purview | `gate.py:353-400` |
+| `hold` on a rung | title to a place, owned by a person | build_realm(0): 15 of 17 territories held by four persons (King p_npc_020 ×6, p_npc_050 ×4, p_npc_052 ×4, p_npc_021 ×1); `terr_T15` unheld; `terr_T16` is Schoenland's, whose authored hold does not re-home to a person (`populated.py:1084-1087`); no settlement held | `world_q.py:166` (`hold_force`, one holder or `Forbidden`) |
+| `faction_holding(w,s)` | which faction a holder coheres under: the faction itself if `s` is a rostered faction Proposition, else the one faction he is committed to; `None` for none **or two** | — | `world_q.py:1620-1653` |
+| `holder_faction_of(w,r)` | walk `r`'s ancestry to the nearest held rung, return its holder's faction | a settlement under a held territory reads the territory's faction | `world_q.py:1656-1681` |
+| `provinces_of(w,r)` | `{faction: [territories]}` beneath `r` whose holders cohere under one faction; no minimum size; `r` itself excluded | realm, build: Crown 6, Hafenmark 4, Varfell 4, Church 1 | `world_q.py:1563-1617` |
+| `uncontrolled(w,r)` | territories at/under `r` whose `holder_faction_of` is `None` ("the revolt query"); one caller, a census report | realm, build: `['terr_T15']` | `world_q.py:1699-1736` |
+| `sovereign_fraction(w,r)` | (largest single holder's share of HELD non-person rungs, count of unheld) | realm, build: `(0.4, 304)` = 6 of 15 held | `world_q.py:1514-1560` |
+| `footprint(w,f)` | rungs `f` holds + rungs its members stand in | — | `world_q.py:1419-1438` |
+| `mustered(w,r,f)` | members of `f` with a live `contain` (presence) anywhere in `r`'s subtree | — | `world_q.py:1470-1487` |
+| `density(w,r,f)` | (members present in subtree, persons present in subtree) | — | `world_q.py:1449-1467` |
+| `fortification_of(w,r)` | `Σ garrison condition / (condition_scale × n garrisons)` in the subtree; 0.0 with none | `condition_scale = 1000` (`es/data/fixtures.py:217`); one garrison per settlement seeded | `world_q.py:1490-1511` |
+| `at_war(w,a,b)` | True iff some Proposition of mood `WAR` with `{subject, value} == {a, b}` has any live `commit` | no production caller; `False` for every pair in every run | `faction_q.py:216-252` |
+| `oblige` | service: a live Tenure person → seat, the joiner's own act, with a term | `oblige_term = 4` seasons; lapses at MATTER unless a `transfer` through the seat renews it; `default_upkeep = 1` per obligee per term | `es/verb_table.yaml:878`; `fixtures.py:882, :895` |
+| `establishment_of(w,seat)` | the persons obliged to a seat (its retinue) | build_realm(0): 2 live `oblige` (both authored, term-less) | `world_q.py:1739-1765`; `populated.py:1317-1339` |
+| `may_muster` | gate: may this seat move that person's presence? Seat sits + grant carries `dispatch` + the person holds a live `commit` to the seat's faction | — | `gate.py:309` (`MUSTER_ACT = "dispatch"`), `:864-891` |
+| `may_seize` | gate: may this seat close another person's `hold`? Seat sits + grant carries `issue` + purview reaches the object's place | — | `gate.py:288` (`SEIZURE_ACT = "issue"`), `:833-861` |
+| dispensation | a `Record` of kind `dispensation`, content `{terms, to, at}`; the instrument of both a writ (`issue`) and a covenant | stages wound by default: `record_stages_default 3`, `record_stage_term 1` | `es/loop/effects_information.py:170-237` |
+| warrant | a held dispensation whose `terms` names a Record or Rung; the only source of a computed `seize` | `warrant_sourced: {seize: dispensation}` | `es/rosters.yaml:1869-1900` |
+| faction sheet | a `Record` of kind `faction_sheet` freezing `faction_q.resolve` (proposition, members, holdings, seats, head) at the moment it is made | keys checked against the roster at import | `faction_q.py:255-281`; `effects_information.py:634-735` |
+| organization goal | a `goals.yaml` row minted at world-gen as an OUGHT Proposition; the organization's persons `commit` to it | 35 rows; `orientation` rows mint nothing (pursuit weights only) | `es/goals.yaml`; `populated.py:468-620` |
+| role template | a faction's expected-pursuit vector | 6 templates; Varfell and Löwenritter share `military-order`; Guilds and Schoenland have none; `intelligence-diplomatic` held by no faction | `es/rosters.yaml:1594-1634`, `:2680+` |
+| `loyalty` | cosine of a person's pursuits against his faction's template, mapped to 0–100; 50 = indifferent; `None` with no template | — | `es/data/cast.py:328-367` |
+| ambition | a live `commit` to an OUGHT Proposition (so every creed member has his creed as an ambition) | — | `world_q.py:1817-1852` |
+
+## 2 How it works
+
+### 2.1 A faction is a sentence and the people who hold to it
+
+At world-gen each rostered faction with an authored leader and template gets a creed: `Proposition(fac_<slug>, "OUGHT",
+<leader's person id>, "carries the creed of", <faction name>, 0, scope=<template>)`; the others get a `HOLDS` Proposition
+naming themselves (`populated.py:940-946`). Each cast member whose authored affiliation is on the faction roster then gets
+one `commit` to it (`populated.py:975`). A person with no rostered affiliation stays unaffiliated, by ruling ("Not everyone
+has to belong to a faction", quoted at `populated.py:954`). Cohorts (persons of weight > 1) get no membership.
+
+From then on, membership changes only by acts:
+- **Leaving** is `release` of your own `commit` (`verb_table.yaml:965-979`, domain `hold, commit, oblige, succeed, tie,
+  knot`). It writes `Tenure.until` and emits `tenure.closed` + `commitment.ended`. The chronicle channel is a
+  KIND filter: any Event whose kind some `binding_decision` row emits goes to everyone alive (`es/epistemic.py:649-686`), and
+  `release` is such a row, so a defection is public (so is MATTER's own `tenure.closed`).
+- **Joining** is `commit` to the faction Proposition (`verb_table.yaml:167-182`; effect `effects_information.py:1038`).
+  The only precondition is that the subject is an existing Proposition. A Proposition has no place, so it enters a person's
+  reach only as the object of one of his own live edges (`effects_information.py:1013-1018`; `verb_table.yaml:1501`): the
+  utterer's maker's `hold` puts his own utterance in reach, which is why `commit` executes once each at seeds 1 and 2. A
+  non-member has no edge to a faction's Proposition, so no computed `commit` ever names a faction he does not already belong
+  to: joining has no computed route (§2.6).
+
+A faction's leadership is read *through* membership: `leaders` is members ∩ holders of that faction's offices; an office-
+holder who is not committed is "staff, not a leader" (`world_q.py:1382-1386`). There is no head: `head` reads a `degree`
+that nothing writes.
+
+### 2.2 Land, title and provinces
+
+Title is a `hold` edge from a **person** to a rung, one live holder per object (`hold_force`, `world_q.py:166-168`). A
+faction "holds" land only through its members:
+
+1. `faction_holding(holder)` = the single faction the holder is committed to; none or two → `None` (`world_q.py:1647-1653`).
+2. `holder_faction_of(rung)` = walk the rung's ancestry (the rung itself first) to the first held rung and apply step 1 to its
+   holder (`:1676-1681`). Settlements are unheld at build, so a town reads its territory's faction.
+3. `provinces_of(rung)` groups the held territories beneath `rung` by step 1. A province exists only while its territories
+   share a faction holder, so it appears and vanishes with no act (`:1563-1617`, quoting the 2026-07-13 ruling).
+4. `uncontrolled(rung)` lists territories where step 2 gives `None`: unheld up the chain, a holder of no faction, or a holder
+   of two (`:1699-1736`). A holder's death closes his `hold`, so a death can turn land uncontrolled.
+
+Measured at `build_realm(0)`: provinces Crown 6, Hafenmark 4, Varfell 4, Church 1; `uncontrolled` = `terr_T15`. `terr_T16`
+and its settlement `set_s_037` are not under `r_valoria` at all (my probe: 10 non-person rungs outside the realm's subtree).
+This is by design: Schoenland is foreign and is built as a root rung so it stays out of the realm's queries
+(`populated.py:725-735`).
+
+### 2.3 Presence and strength
+
+An army is not a unit; it is whoever of a faction is standing somewhere when the question is asked.
+- `mustered(r, f)` = members of `f` with a live `contain` edge to any rung in `{r} ∪ descendants(r)` (`world_q.py:1483-1487`).
+  It reads the subtree because persons live in buildings under a settlement, never at the settlement rung itself.
+- `density(r, f)` = (those members, all persons present in the same subtree); the denominator is people present, so it reads
+  "how much of this place is theirs" (`:1457-1467`).
+- `fortification_of(r)` = mean garrison condition over 1000; any positive value makes the field a WALLS terrain row when MB
+  resolves it (`:1501-1511`). Nothing about strength is stored on a faction.
+
+### 2.4 Acting through a seat: three gates in order
+
+The four `remit:`-eligible acts here (`covenant`, `seize`, `march`, `dispatch`) pass three gates in turn; `own` acts skip
+the seat half of gate 1. A failure at any of them is an
+event (`<verb>.refused` or `.unauthorized`), never an error.
+1. **Eligibility.** `Act.via` must be a seat the actor holds now (`seat_hold`), and that hold's snapshot `granted_acts` must
+   carry the remit act the row names (`gate.py:312-342`). `covenant` and `seize` need `issue`; `march` and `dispatch` need
+   `dispatch`.
+2. **Typed precondition.** The row's `requires_typed` cell, three-valued (an unevaluable clause refuses). Examples:
+   `covenant` = `to` exists and is a Person ∧ `subject` exists and is a Proposition (`verb_table.yaml:254-268`); `seize` =
+   the seat's purview reaches the subject's place (`:1042-1054`); `march` = the subject is an existing Rung (`:803-813`).
+3. **The effect's own decline.** The body may return `NO_CHANGE` (refused at the `write` clause). `seize` declines unless an
+   occupation exists (§3.2); `survey` declines unless the subject coheres under exactly one faction.
+
+Purview is asked of the seat, not the person: a seat reaches its rung and everything below it, and since IN-40 also the
+ground of any seat whose holder owes it a live `oblige` (vassalage), one edge deep (`gate.py:353-400`).
+
+### 2.5 What a faction "wants"
+
+Wanting is expressed on persons, through three code paths:
+- **Goals.** `es/goals.yaml` (35 rows) names goals for factions, bodies and seats. At world-gen every non-`orientation` goal is
+  minted as an OUGHT Proposition and the organization's persons `commit` to it; `influences` links make a child body's
+  persons also commit to the parent goal, `establishes` links take the parent off them (`populated.py:468-620`).
+- **Ambitions and attention.** Every live `commit` to an OUGHT is an ambition (`world_q.py:1817`), so each member's creed and
+  his organizations' goals become ambitions. `attention_key` (`world_q.py:2092`) orders a person's questions: tier 0 =
+  questions about an ambition's referents (a creed's referent is its leader; a `seat_holders` goal's referent is whoever sits
+  in the named seats), tier 1 = his own tenure objects and purview, then deeds, then the standing need question, then the
+  rest. Within tiers 0 and 3 the order is by **salience**, the cosine of the person's pursuit weights against `expected(org)`
+  = role-template pursuits + the summed `pursuits:` of that organization's goals (`es/data/goals.py:208-226`).
+- **Loyalty.** `cast.loyalty` maps the same kind of cosine to 0–100 and sets the sign and weight of the stance rows a goal
+  seeds toward its referents (`cast.py:328-367`; `populated.py:616-620`).
+
+So a faction "wants" something only in the sense that its members look at certain people first, and lean toward or against
+them. No faction has a treasury, mandate or stat line (errata G17: the `faction_state` layer was deleted).
+
+### 2.6 How an actor arrives at an FA act
+
+Each season a person's budget is `max(1, 5 + 1 per live hold − body-band penalty − 1 per travel leg)` SCENE ACTIONS
+(`es/decision/budget.py:19-20, 57-61`; `budget_office_bonus = 1`, `fixtures.py:526`). Every live `hold` counts — a seat, a
+landholding, a Record or Proposition you made — so `utter`, which always succeeds and opens a hold, is a budget lever. The
+budget is a cost budget: a scene holding more than one act is extended and costs `extended_scene_cost = 2` (`fixtures.py:489`),
+and the driver releases at most one scene per round over five rounds (`loop/driver.py:456`), so a budget of 5 buys 2+2+1 = 7
+acts and a budget of 6 buys 9; the cap is 10 (cross-audit ruling C1). In the seed-0 run that is about 7.6 acts per person
+per season on the basis `d.resolved` 1,132 / ~74 persons / 2 seasons. For each question (in `attention_key` order) the chooser forms one Candidate per
+verb row per **referent the question carries** (`es/decision/options.py:134-238`), scores it on value alignment and stance,
+and samples at `choice_temperature = 0.1` (`fixtures.py:286`). Two rosters narrow FA formation further:
+- `warrant_sourced: {seize: dispensation}` — `seize` forms only on a referent that a held dispensation's `terms` names
+  (`options.py:194-206`).
+- `terms_sourced: {commit: [dispensation]}` — `commit` also forms on the `terms` of a dispensation the person holds and is
+  addressed by (`options.py:150-165`). This is the acceptance route for a covenant.
+
+The consequence is the main fact of this subsystem in play: a verb forms on whatever the question is about, and the FA verbs
+need operands that questions rarely carry — a Proposition (`covenant`, `commit`), a Site (`sabotage`), a settlement
+(`march`), a warranted settlement (`seize`). In the seed-0 run the 13 `covenant` subjects were 5 Rungs, 3 Persons and 5
+absent; the 21 `march` targets were 16 person-rungs, 3 hearths and 2 vanished ids; no `sabotage` named a Site; the 5 issued
+dispensations named 3 Persons and 2 Records, so no warrant ever named a settlement (my probe, §9).
+
+## 3 A worked example
+
+**Scenario.** The Crown takes Hafenmark's town `set_s_016`, then the King offers Hafenmark's leader a treaty. Everything below
+was folded through the real `SeasonDriver.resolve`/`encounter` on `build_realm(0)` at tick 0, in memory (§9 commands).
+
+### 3.1 How many men the Crown can raise, and where
+
+`members(fac_crown)` = 11: p_npc_008, 009, 020, 030, 031, 032, 033, 035, 036, 037, 083. Their homes (nearest settlement by
+`ancestry`): set_s_001 ×5 (009, 030, 031, 036, 083), set_s_002 (020), set_s_004 (032), set_s_014 ×2 (033, 035), set_s_018
+(008), set_s_036 (037 — a Crown man lodged in the Church's cathedral).
+
+The marcher is p_npc_033, holder of `off_npc_033` ("Crown's Spymaster", rung `terr_T1`, `granted_acts = (dispatch, issue)`).
+`sides_of` finds his home `b_s_014_barracks`, climbs to the first settlement, `set_s_014`, and musters there
+(`es/loop/sides.py:40`, body after the H-149 check):
+
+- `mustered(set_s_014, fac_crown)` = [p_npc_033, p_npc_035] → an army of **2**.
+- `density(set_s_014, fac_crown)` = (2, 5) → the Crown is 2 of the 5 persons present, 0.4 of the place.
+
+The target: `holder_faction_of(set_s_016)` walks `set_s_016 → terr_T7` (held by p_npc_050, committed only to Hafenmark) →
+`fac_hafenmark`. `fortification_of(set_s_016)` = 1000 / (1000 × 1) = **1.0** (one garrison at full condition).
+`mustered(set_s_016, fac_hafenmark)` = [] and `density` = (0, 1): the only person present is `cohort_set_s_016`, a cohort that
+belongs to no faction. The walls are perfect and nobody is on them.
+
+### 3.2 March, then seize
+
+| step | act | what the code asked | events | state written |
+|---|---|---|---|---|
+| 1 | `march` p_npc_033 via off_npc_033, subject set_s_016 | remit `dispatch` ✓; subject is a Rung ✓; target kind in `march_target_kinds` (settlement) ✓; defending side = Hafenmark, mustered there = none | `march.declared`, `field.unopposed`, `army.arrived` | 033 and 035's `contain` closed and reopened at set_s_016 (`_relocate`); no title written ("an arrival wrote a title" is refused, R-6) |
+| 2 | (query) | `mustered(set_s_016, fac_crown)` | — | [p_npc_033, p_npc_035]: the Crown now occupies the town; `holder_faction_of` still `fac_hafenmark` |
+| 3 | `seize` p_npc_020 (King) via off_npc_020, subject set_s_016 | remit `issue` ✓ (King's grant: confer, convene, determine, dispatch, issue, revoke); purview of `r_valoria` reaches set_s_016 ✓; effect: settlement kind ✓, seat faction `fac_crown` = actor's faction ✓, holder faction `fac_hafenmark` ≠ Crown ✓, Crown mustered there ✓, `hold_force(set_s_016)` = None so no hold to close | `rung.seized` | one new `hold` p_npc_020 → set_s_016 (`_take_hold`, `effects_information.py:858-873`) |
+| 4 | (queries) | `holder_faction_of(set_s_016)`; `holder_faction_of(terr_T7)` | — | `fac_crown`; `fac_hafenmark` — the town changed hands, the territory did not |
+
+Because the fortification only enters a *contested* field, an unopposed march ignores it. Because the town had no holder of
+its own, the seizure closed nothing: the King's new hold *shadows* Hafenmark's territory hold in the ancestry walk. Crown
+`resolve(...).holdings` gains `set_s_016`; `provinces_of` is unchanged (it counts territories only). The control (no march,
+same seize) folds to `seize.refused` (`es/tests/test_march.py:793-824` runs the same sequence).
+
+**A march is not the only way to occupy.** The licence is `mustered(town, seat faction)` (`effects_information.py:927-931,
+959`), which counts any member standing in the subtree, residents included. At seed 0, tick 0, the Crown already occupies
+the Church-held `set_s_036` through its resident `p_npc_037`, and the King's seat can seize it with no march and no field
+(`es/tests/test_march.py:918-927`; control: re-house the resident and the same act is refused). That this never happens in
+the realm run is a formation fact, not a rule: `seize` forms only on a referent a held warrant names, and no issued
+dispensation's `terms` named a settlement.
+
+### 3.3 The treaty
+
+| step | act | result | written |
+|---|---|---|---|
+| 0 | control: `covenant` King via off_npc_020, subject p_npc_050 (a person), to p_npc_050 | `covenant.refused` | nothing — the subject must be a Proposition |
+| 1 | `utter` King, payload `{mood: OUGHT, subject: p_npc_020, predicate: "keeps peace with", value: fac_hafenmark}` | `proposition.uttered` | `Proposition(prop:cv_u, OUGHT, p_npc_020, 'keeps peace with', fac_hafenmark, when=0)` + the King's maker's `hold` on it |
+| 2 | `covenant` King via off_npc_020, subject prop:cv_u, to p_npc_050 | `covenant.offered` | `Record rec:cv_c`, kind `dispensation`, rung `r_valoria` (the seat's), content `{terms: prop:cv_u, to: [p_npc_050], at: None}`, stages at ticks 1, 2, 3; held by the King alone |
+| 3 | `give` King → p_npc_050 | `give.refused` | nothing: the King stands at `b_s_002_cottage`, Baralta at `b_s_001_court`, and `give` needs the receiver present |
+| 4 | `move` p_npc_050 to b_s_002_cottage, then `give` again | `travel.moved`; `record.given` | King's hold on the Record closed, Baralta's opened |
+| 5 | WITNESS deposits the content; Baralta's own `questions_for` → `opening_set` | 1 `commit` Candidate on prop:cv_u (via `terms_sourced`) | — |
+| 6 | that Candidate packed and folded; then the King's own `commit` | `commitment.made` ×2 | live edges on prop:cv_u: King `hold`, King `commit`, Baralta `commit` |
+
+Now both parties are committed, which is what the effect's docstring calls "in force" — "a reading nothing performs yet"
+(`effects_information.py:248-253`). `at_war(fac_crown, fac_hafenmark)` is `False` before and after; `members(fac_hafenmark)`
+is unchanged. The one thing that did change is Baralta's mind: `ambitions(p_npc_050)` now ends in `prop:cv_u`, whose
+referent is the King, so questions about the King move into Baralta's attention tier 0. The offerer is not committed by
+offering; step 6's second `commit` is his own, separate act.
+
+## 4 What you can do
+
+All rows below are uncontested except `march` (prize "a field", bands Declared/Won/Lost/Unopposed, resolved by MB). An
+uncontested act either writes or is refused. Acts are paid from the scene-action budget (§2.6). Counts: attempted/ok, seeds 0/1/2, where "attempted" = acts that passed
+admission and reached the fold (admission refusals are uncounted) and "ok" = at least one non-refusal event.
+
+| verb | who may | precondition | writes on success | refusal | realm |
+|---|---|---|---|---|---|
+| `survey` | anyone (`own`) | a claim on the subject in your own ledger; subject coheres under one faction (faction, member, or held place) | a `faction_sheet` Record in your hand, content = the five-field view now; `faction.surveyed` (private) | `survey.refused` | 57/13, 38/5, 59/13 |
+| `forge` | anyone | as `survey` | the same sheet with `head` falsified to the forger | `forge.refused` | 52/12, 51/6, 57/15 |
+| `commit` | anyone | subject is an existing Proposition | your `commit` edge; `commitment.made` | `commitment.refused` | 61/0, 56/1, 63/1 |
+| `release` | owner of the edge | a live releasable edge of yours | `Tenure.until`; public `tenure.closed`/`commitment.ended` | `release.refused` | 45/3, 44/5, 46/3 |
+| `utter` | anyone | — | a Proposition (mood from payload; computed acts mint OUGHT) + your hold on it | — | 39/39, 39/39, 49/49 |
+| `oblige` | the joiner (`own`) | subject is a seat you were told of, whose `binds` admits you, that you do not hold, with no live `oblige` to it | your `oblige` with a 4-season term; `duty.taken` | `duty.refused` | 0/0, 24/22, 0/0 |
+| `covenant` | seat-holder, `remit:issue` | `to` is a Person (not you); `subject` is a Proposition | a dispensation (terms, to) held by you; `covenant.offered` (not broadcast) | `covenant.refused` | 13/0, 4/0, 1/0 |
+| `give` | holder of the Record | receiver present where you are | hold moves to the receiver; `record.given` | `give.refused` | 16/0, 21/0, 19/1 |
+| `seize` | seat-holder, `remit:issue` | purview reaches the object's place; Record half: you hold a warrant naming it and someone else holds it; Rung half: a settlement held by another faction, your seat's faction mustered there (residents count), you committed to that faction; forms only on a warrant-named referent | closes the displaced `hold` (if any), opens yours; `record.seized`/`rung.seized` | `seize.unauthorized` (seat), `seize.refused` (world) | 0/0 in all seeds |
+| `march` | seat-holder, `remit:dispatch` | subject a Rung; only a settlement musters an army | Won/Unopposed: army relocated to the target, `army.arrived`; Lost: casualties and stance on the attacker; Won also writes the defenders' bodies | `march.refused` | 21, 10, 4 declared; 0 fields, 0 arrivals |
+| `dispatch` | seat-holder, `remit:dispatch` | the named person exists | **nothing** (`writes: []`); public `order.given` | `dispatch.refused`, `person.demanded` | 18/6, 18/7, 10/10 |
+| `sabotage` | anyone present at the Site | Site exists, you stand at it | stages −(condition × 1/n) on `Site.condition`, n = persons present; `site.damaged` | `sabotage.refused` | 34/0, 22/0, 33/0 |
+| `succeed` | the holder designating an heir | you hold the office | row declared, **no effect registered** (decline note at `verb_table.yaml:1113`) | — | not resolvable |
+
+Notes: `march`'s "ok" in the ctl files counts `march.declared` as a non-refusal; every one of those acts also emitted
+`march.refused`. `sabotage` alone at a fabric would take it to 0 in one act (`effects_economy.py:141-157`), but in the realm a garrison sits
+on the settlement rung, where that settlement's cohort is always present (`share` counts persons on the rung,
+`world_q.py:436, 1181-1186`; probe: `share(s_s_016_garrison) = (1, 1)` with only `cohort_set_s_016` there), so a saboteur
+makes n ≥ 2 and one act takes at most half.
+
+## 5 Pursuing goals here
+
+**(a) Goals and their representation.**
+
+| goal | how the code represents success | today |
+|---|---|---|
+| belong to / leave a faction | a live / closed `commit` to `fac_*` | leave: yes; join: no computed route |
+| lead a faction | be in `leaders` (member + faction office); "head" | `leaders` yes; `head` never |
+| take territory or a title | your `hold` on a rung; `holder_faction_of` flips | settlements only, via march + seize; territories and seats cannot be taken |
+| lose territory | your `hold` closed (seized, released, your death) or your faction ties break | death and release yes |
+| make peace or a treaty | both parties' `commit` to an uttered Proposition named in a dispensation | runs hand-built only |
+| make war | a WAR Proposition with a live `commit`; `at_war` True | hand-built only (`tests/test_faction_q.py:220-260`); gates nothing |
+| raise retainers | `oblige` edges to your seat = `establishment_of(seat)` | seed 1: 22 men swore to Church seats; terms lapse unless paid |
+| raise an army | your faction's members present where you march from | yes, but only men already housed there |
+| know a rival | hold a `faction_sheet` | yes (`survey`) |
+| secure succession | an heir claims the vacant seat | no: `succeed` has no effect (`verb_table.yaml:1113`). A dead holder's seat falls vacant; `confer` can refill it only if the seat has a conferral basis (`loop/predicates.py:126-127`; `gate.py:643-657`). Six seats have `conferral: null` — King, Duke of Valorsmark, Duchess of Hafenmark, Widow Regent, Heir, Princess (`offices.yaml:188, 201, 214, 240, 253, 266`) — so once vacant, the throne stays empty for good. Elsewhere `confer` executed once (seed 1: 1 of 5) |
+
+**(b) The plays.**
+- *Take a town without a fight.* If members of your faction already live in a rival-held settlement, it is already
+  occupied: a seat granting `issue` whose purview reaches it can `seize` it at once, provided it holds a warrant naming it.
+- *Take a town.* (1) Hold a seat granting `dispatch` whose holder lives in a settlement where your faction has members.
+  (2) `march` on a foreign-held settlement; if no defender of the holding faction stands in its subtree, the field is
+  Unopposed and your army arrives. (3) A seat granting `issue` whose purview reaches the town — your own or a fellow member's
+  higher seat — `seize`s it. Your faction now reads as its holder while the territory above stays the rival's.
+- *Hold a town.* Keep members standing in it: the next rival march meets defenders and a contested field, where the garrison's
+  condition becomes WALLS. Lowering a rival's garrison with `sabotage` before marching is the designed counter.
+- *Make a treaty.* `utter` the terms; `covenant` them to the other party through an `issue` seat; get the instrument into his
+  hands with `give` (co-located; arrange it with `move`); he accepts with his own `commit`; you commit too. Breach is either
+  party's `release`, which is public.
+- *Bind a vassal.* A seat-holder who `oblige`s to your seat extends your purview over his seat's ground (IN-40). The oath is
+  his act, not yours.
+- *Keep retainers.* Each `oblige` runs 4 seasons; a `transfer` through the seat of `upkeep_of(seat)` (default 1) per obligee
+  renews it (`world_q.py:1768-1799`). 0 renewals occurred in any seed.
+- *Undermine a faction's land.* Make its holder commit to a second faction (or none): his land becomes `uncontrolled` and
+  its province dissolves, with no act aimed at the land at all.
+
+**(c) Costs, risks, counter-play, blocks.** Scenes are the only cost; there is no resource, casus belli or war score. A
+march with defenders present is a real field: a loss writes casualties and stance on the attacker. A seized town is retaken the
+same way. The blocks are formation blocks, not rules: no computed question supplies the King a settlement to march on or a
+warrant naming one, a Proposition to covenant, or a Site to sabotage (§2.6).
+
+**(d) What the structure rewards and punishes.** Presence is everything: `mustered` counts heads present, so the faction with
+people living in a town defends it, and an unfortified but occupied town beats a fortified empty one. Single allegiance is
+rewarded: two commits make your land nobody's. Offering a treaty costs the offerer a seat act and binds nobody until both
+commit, and nothing reads the result — today a treaty is dominated by doing nothing, except for its effect on the acceptor's
+attention. `dispatch` is a dead end mechanically (it writes nothing). `seize` of a territory or a seat is impossible by
+construction ("A SEAT is never seized", `effects_information.py:892`; territory refused by kind, `:933-935`).
+
+**(e) What success leaves.** A seizure leaves one `hold` and a `rung.seized` event handed to the seat's obligees (post_remit),
+and changes every later `holder_faction_of`, `survey` sheet and march defender read for that town. A treaty leaves a Record,
+two `commit` edges and two new ambitions. A defection leaves a public `commitment.ended`. Nothing leaves a faction-level
+record, because there is no faction-level store.
+
+## 6 How it connects
+
+- **From GV:** seats, remits, purview, `oblige`, `transfer` upkeep, `confer`/`revoke` to fill and empty seats. A faction's land
+  is GV's `hold`; FA only interprets it through `commit`.
+- **From SC/NP:** `utter` and `commit` are the raw material of creeds, treaties and wars; `release` is breach and defection.
+- **To MB:** `sides_of` builds the attacking army with `mustered` at the marcher's home settlement under `seat_faction(via)`,
+  excluding detained men; the defender is `holder_faction_of(target)`, and the provider musters defenders and reads
+  `fortification_of` (`sides.py:40-144`; `es/seam/wrappers/mass_battle.py`). `may_muster` requires each moved man's live
+  `commit` to the seat's faction (`gate.py:864-891`).
+- **From and to FI:** `survey`/`forge` make the sheet; a forged sheet's false `head` redirects petitions to the forger; the
+  sheet's holder is the only person who knows its content.
+- **Information reach:** `binding_decision` kinds (`release`, `dispatch`'s `order.given`) are public via chronicle; `seize`'s
+  and `covenant`'s kinds go only to the exercised seat's obligees (`verb_table.yaml` emits notes at `:1058` and `:274`).
+- **Combination worth knowing:** march (MB) + seize (FA) + occupation (`mustered`) is the only working route by which title
+  moves without consent.
+
+## 7 Playing it as proposed
+
+The governing roster is `proposals/2026-10-16-verbs/2026-10-16-verbs-03-standards-roster-and-reconciliation.md:148-158`
+(errata G19): **seven FA hosts — `covenant`, `declare`, `recruit`, `conspire`, `assign`, `seize`, `sabotage`**. `levy` belongs to
+MB (ruling R-01) and `succeed` to GV (R-11); the FA lexicon's nine-host list (verbs-15) is overridden on both. Everything in
+this section is **[PROPOSED]**.
+
+- **[PROPOSED] `declare` (war).** A seat makes a WAR Proposition naming two factions plus its own edge, as a `binding_decision`,
+  so it is public; `at_war` then reads True. Waits on: M1 (a reader of `at_war`; MB-G15, which act it gates), D-V6 (own
+  row), D-V3 (public channel past SC-01 step 13), Q3 (any `dispatch` seat, "marshals starting wars", versus the faction head
+  only — which needs `head`, always `None` today).
+- **[PROPOSED] covenant readers (M2).** An in-force Query; peace releasing war commits; alliance counted in `mustered` (M3,
+  FA-G07); truce ranking; tribute renewing like upkeep; breach priced by one `deed:` cell. Open: Q1, does a treaty bind the
+  signer or the seat (as built, it lapses with a signer's death).
+- **[PROPOSED] `recruit`.** A contested offer of service through a seat; on Won the recruit's `oblige` to your seat with a term.
+  Waits on: M10 (SC's contest resolver on the counterparty), IN-70 (opinion as obstacle), Q4 (may a won contest open an edge
+  the counterparty owns). Today the only route to retainers is the recruit's own `oblige`.
+- **[PROPOSED] `conspire`.** Draw a person into a plot against a seat: the first act mints an OUGHT plot Proposition naming the
+  seat; later acts open invitees' edges on Won. Waits on: M7 (a plot reader), `conceal` (IN-12 step 10), M10.
+- **[PROPOSED] `assign`** (was the rebuilt `dispatch`; rename held as D-V7). Post a named obligee to a place with a task:
+  writes `Tenure.payload` on his `oblige` and, for elsewhere, his `contain` via `_relocate`. Waits on: M5 (a posting reader).
+- **[PROPOSED] MB `levy`.** `recruits −n`, `troops_raw +n` on one rung; waits on M4 / J-1 (no `recruits` matter kind exists).
+- **[PROPOSED] GV succession (IN-61).** The heir claims a vacant throne under an `inheritance` basis; RS-27: heirship is a title.
+- **[PROPOSED] remediation (`proposals/2026-10-21-v9-remediation/`, held back).** REM-27 gives `march` `referent_class: Rung`
+  offered only for settlements the marcher's ledger names, aiming at the first realm field; REM-23 gives `commit`
+  `referent_class: Proposition`. No remediation item names a faction mechanic as its primary subject.
+- **Parked:** runtime faction founding (FA-G39 / H-186), marriage alliance (FA-G43 / D-V2), hostage (FA-G30), embargo (FA-G33).
+
+**Inert or refused at shipped values:** `head` (no degree writer); `at_war` (no reader, no computed WAR utterance); `dispatch`
+(writes nothing; the in-tree "14 of 15 computed orders name a non-person" at `verb_table.yaml:383` is an old figure — ctl shows
+18/6, 18/7, 10/10); `succeed` (no effect); covenant "in force" (no reader);
+`remit_default` is a test fixture, not canon. Anything that needs a faction-level treasury or stat track will not appear: that
+layer was deleted (errata G17).
+
+## 8 Common mistakes and traps
+
+- **"A faction is an entity with state."** No: a Proposition plus edges; `faction_q.Faction` is a view rebuilt per barrier.
+- **"Covenanting binds both sides."** The offer writes only the offerer's Record. The addressee must hold it (a co-located
+  `give`) and `commit`; the offerer must also `commit`. And nothing reads the result.
+- **"Seize takes territory or a seat."** Only a held Record under warrant or an occupied *settlement*. A settlement seizure
+  usually closes no hold (nobody held the town) and shadows the territory holder.
+- **"Fortification protects a town."** Only if someone defends it; an Unopposed field never reads it.
+- **"`march` executes in the realm."** The ctl column counts `march.declared`; all 21/10/4 refused, 0 arrivals.
+- **"A member of two factions counts for both."** He counts for neither as a land-holder (`faction_holding` → `None`), though
+  `members` lists him in both.
+- **Seat ids.** `offices.yaml` ids (`off_spymaster`) are not the built ids of loop-built seats (`off_npc_033`); six minted
+  seats keep their row ids (e.g. `off_duke_valorsmark`); read the built world.
+- **"A dead ruler's seat is refilled."** Not if the seat has `conferral: null` — the throne and five other top seats (§5a).
+- **"Occupation needs a march."** Any resident member of the seat's faction occupies (§3.2).
+- **"`leaders` counts people."** It lists one entry per seat held; the Crown's 11 are 10 people.
+- **"The remit roster is closed."** The tree says both: "CLOSED" in prose, `open: true` in data (`rosters.yaml:315-316`).
+- **"`remit_default` is only a test fixture."** It is labelled one, and it is applied in the shipped realm build (§1).
+- **`levy`.** `world_q.py:1118-1127` "ruled `levy` deleted" refers to a round-one extraction clause, not troop raising.
+- **Code-docstring drift:** `faction_q.py:36,126` cite the world-builder's commit opener at `populated.py:692`; it is at `:975`.
+
+Draft appendix A5 (FA block) corrected here:
+1. A5 §2 lists nine FA hosts including `levy`, `dispatch`, `succeed`. Governing roster is seven (verbs-03:148-158; errata G19);
+   `levy` MB's, `succeed` GV's, `dispatch` → `assign`.
+2. A5 §4 "`covenant` … the lexicon says it does not [exist] … refuted". The lexicon claim is stale at its base, not refuted (errata C6).
+3. A5 §3 lists `holder_faction_of` callers as `sides.py` and the MB wrapper. The code callers are `sides.py:131`,
+   `_eff_march` (`effects_combat.py:270`), `seize` (`effects_information.py:958`), `uncontrolled` (`world_q.py:1736`) and
+   `faction_of` (`:1695`, which `survey` uses); `seam/wrappers/mass_battle.py` mentions it only in prose (my grep, §9).
+4. A5's opening P1 table gives `march` as "21 attempted, — executed"; the ctl file shows 21 "ok", which is only
+   `march.declared`. My probe: all 21 also refused, targets never settlements.
+5. A5 §2 "service = live `oblige` … (P1: 0)" and "0 live `oblige` edges" are seed-0 only: build has 2 authored term-less obligees
+   (`populated.py:1317-1339`), and seed 1 ends with 24 live (errata G2, C5).
+6. A5 §2's `seize` "closes one `hold`, opens one": the Rung half closes one only if the settlement itself was held (§3.2).
+7. A5 §1 "Nine factions are rostered" is right, but A5's membership counts (Crown 9 …, 31) are after two seasons with deaths; at
+   build there are 40 members (Crown 11).
+8. A5 §4 grades `holder_faction_of`/`mustered`/`fortification_of` "reachable from loop; not measured". Sharper: no realm march
+   reaches `mustered` or `fortification_of`, because `sides_of` returns an empty army for a non-settlement target before
+   either is called (`sides.py`, H-149 check), and every realm target was a non-settlement (probe 4).
+9. A5 does not say `sovereign_fraction`'s denominator is held rungs only (errata C5): realm (0.4, 304) is 6 of 15.
+
+§8 Round-2 corrections (audit2; each cited line reopened before accepting):
+1. F1 / C8 — §5a said `confer` can refill a dead holder's seat. Six null-conferral seats, the throne included, can never be
+   refilled (`predicates.py:126-127`, `gate.py:643-657`, `offices.yaml:188-266`). Accepted.
+2. F2 — §0/§5b/§6 implied occupation comes from a march. It is `mustered`, residents included (`test_march.py:918-927`).
+   Accepted; §3.2 note and a §5b play added.
+3. F3 — §1 said 16 of 17 territories held; the counts sum to 15 (`populated.py:1084-1087`; my own probe printed 15). Accepted.
+4. F5 — `leaders` is one entry per seat (`world_q.py:1412-1416`); Crown 11 entries = 10 people (probe). Accepted.
+5. F6 / X7 / C4 — §1 called the remit roster closed; the tree contradicts itself (`rosters.yaml:315-316`, `verb_table.yaml:257`).
+   Accepted.
+6. F7 — the dispatch "14 of 15" is an old in-tree figure (`verb_table.yaml:383`); ctl figures substituted. Accepted.
+7. F10 — §2.1 said no computed `commit` names a Proposition. Utter's maker's hold puts a Proposition in reach, and `commit`
+   executes at seeds 1 and 2; the claim holds only for a non-member joining a faction. Accepted, reworded.
+8. F11 — caller list corrected (item 3 above). Accepted.
+9. F13 — `remit_default` is applied in the shipped build and is the source of `dispatch`/`march` (`offices.yaml:100-119, 141`).
+   Accepted.
+10. F17 — T16/set_s_037 outside the realm is by design, not a defect (`populated.py:725-735`). Accepted.
+11. F18 / X18 — "every FA act except sabotage is remit-eligible" was false; limited to `covenant`, `seize`, `march`,
+    `dispatch`. Accepted.
+12. C1 — scene budget rewritten as scene actions with extended-scene cost; "each act takes one slot in a scene" removed.
+    I opened `budget.py:19-20, 57-61`, `fixtures.py:489, 526` and `driver.py:456`; the 7/9/10 arithmetic is the ruling's.
+13. C2 / C5 — "attempted" defined as reached the fold; the chronicle channel described as a kind filter. Accepted.
+14. X20 — this tutorial uses tick numbers for its example (tick 0) and "two seasons" only as run length. No change needed.
+15. F9 (not in the requested list, but it affected §4) — "one saboteur takes a fabric to 0" is false in the realm because the
+    cohort shares the garrison's rung; reopened `world_q.py:436` and probed `share`. Accepted.
+No finding was rejected.
+
+## 9 Checks
+
+- Read: `es/queries/faction_q.py` (whole); `es/queries/world_q.py:166-168, 1365-1852, 2092-2200`; `es/state/gate.py:272-400,
+  833-891`; `es/loop/effects_information.py:92-256, 634-1095`; `es/loop/effects_economy.py:109-177`; `es/loop/sides.py` (whole);
+  `es/verb_table.yaml` rows `commit :167`, `covenant :254`, `dispatch :372`, `give :533`, `march :803`, `oblige :878`,
+  `release :965`, `sabotage :1019`, `seize :1042`, `succeed :1096`, `survey :1127`; `es/rosters.yaml:314-332, 1594-1700,
+  1869-1935, 2680-2720`; `es/data/goals.py:191-226`; `es/data/cast.py:328-367`; `es/decision/options.py:100-250`;
+  `es/decision/budget.py:50-61`; `es/epistemic.py:649-686`; `es/harness/populated.py:468-620, 940-980, 1317-1340`;
+  `es/data/fixtures.py:217, 228, 286, 391, 526-527, 882, 895`; `es/tests/test_in12_covenant.py`, `test_march.py:500-860`,
+  `test_faction_q.py:200-260`; proposals `verbs-03:140-160`; ctl files; `audit/ERRATA.md`.
+- Round 2, opened: `loop/predicates.py:120-130`; `state/gate.py:643-657`; `offices.yaml:100-119, 141, 188-266` (six `conferral:
+  null`); `rosters.yaml:314-317`; `verb_table.yaml:257, 1499-1502`; `decision/budget.py:19-20`; `data/fixtures.py:487-490`;
+  `loop/driver.py:454-458`; `harness/populated.py:725-736, 1084-1088`; `tests/test_march.py:918-927`; `world_q.py:430-436,
+  1181-1186`; grep of `holder_faction_of(` over non-test `.py`. Probe 5: `leaders(fac_crown)` 11 entries / 10 distinct
+  (p_npc_020 twice); 31 distinct office holders; `share(s_s_016_garrison) = (1, 1)`.
+- Probe 1 (`python -I`, build_realm(0)): faction table of §1 (members/leaders/seats/holdings/head), 40 members, 43 none, 0 with
+  two; provinces Crown 6/Hafenmark 4/Varfell 4/Church 1; `uncontrolled` = [terr_T15]; `sovereign_fraction` = (0.4, 304), 15
+  held rungs in the realm subtree (020 ×6, 052 ×4, 050 ×4, 021 ×1); 10 rungs (terr_T16, set_s_037 …) outside it; 2 live oblige.
+- Probe 2 (march + seize, §3.1-3.2): events `['march.declared','field.unopposed','army.arrived']` then `['rung.seized']`;
+  values as quoted.
+- Probe 3 (covenant, §3.3): events and Record content as quoted; 1 commit Candidate formed after the give.
+- Probe 4 (seed 0 and seed 1, two seasons, populated.run recipe): subject classes of `covenant`, `march`, `sabotage` (`site`
+  operand: Rung 15, Person 7, Record 6, none 6 — never a Site), `commit`; issued dispensation `terms` classes; 0 WAR
+  Propositions (103 OUGHT, 3 HOLDS); seed 1 `oblige` 24 (22 `duty.taken`, all to Church of Solmund seats), 0 `term.renewed`.
+- `git status` clean after every probe. Not confirmed: whether the chronicle channel actually carried `order.given` in these
+  runs (docstring measurements are older); why seed 0's two authored obligees closed; the `forge` cell details (row not opened).
