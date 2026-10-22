@@ -3050,6 +3050,11 @@ tables:
         v9 IN-12 step 5: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above); #453 §9.1 gives the
         row no lean on any axis. It scores 0.0 on every axis until a cell is authored. Revert: the
         seven cells, IN-08's method.
+      raze: >-
+        v9 IN-12 step 11: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above); #453 §9.2 gives the
+        row no lean on any axis. It scores 0.0 on every axis until a cell is authored, so no witness
+        is scarred by a razing and `rung.razed` judges as no deed. Revert: the seven cells, IN-08's
+        method.
       tell: >-
         No cell on any axis BY DESIGN: testimony's moral weight is in WHAT is told (a claim), which
         no verb x axis cell can carry, and telling is driven by regard (the telling workplan's G1),
