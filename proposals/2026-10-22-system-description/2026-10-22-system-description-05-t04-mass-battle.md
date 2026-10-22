@@ -206,7 +206,10 @@ chooser's stance toward the winning faction (§5e). No army has experience, a re
 6. **Losses applied** and ranks closed. Then `recalc_size`: `size = floor(hp / 100)`, and **size 0 routs the whole army** (`units:2930-2938`).
    This runs before the 80-troop subunit check, so for a one-subunit army **the binding rout line is 100 troops**. A side of 80-99 troops
    routs on tick 1.
-7. **Command 0** sets morale to 0, an instant rout (`orch:2221`). Measured: command 0 against 4 is routed in 200 of 200 seeds.
+7. **Command 0** sets morale to 0, an instant rout (`orch:2221-2225`; its comment: "M1: general IS the army"). Nothing writes command during a
+   battle: inside `modules/` and `engine/` the only writers are the constructors at `units:2717, 2722, 2811`, and a validator fixture sets it on a
+   test unit (`systems/mass_battle/sim/validators.py:287`). So a general never falls mid-fight; the rule fires only on an army built at command 0.
+   Measured: command 0 against 4 is routed in 200 of 200 seeds.
 8. **Envelopment shock**: a unit struck in the flank or rear that fails a discipline roll takes a morale hit.
 9. **Per-tick subunit rout**: morale ≤ 0 or under 80 troops (`orch:2262-2268`).
 10. **Every sixth tick, a phase boundary** (`orch:337`):
@@ -271,6 +274,14 @@ are draws.
 - **The season** teaches none of that. Its only varying inputs are summed weight, a morale start that showed no measurable effect, and a terrain
   row that is WALLS on every realm settlement. At realm weights both sides rout on tick 1. What the season does teach is the strategic
   shell: who may march, from where, at whom, and what a loss writes.
+- **One resolver, and what precedent says about it** (reference only, `CLAUDE.md` §0.05). The season's field is the same `run_battle` the
+  engine-direct path runs (`MB.py:283`), so there is no fast path to diverge from a played one. Total War's own first-party texts warn that its
+  fast path is worse for the player (M2TW manual p21: casualties "may be heavier" and the General can die; 3K's Delegate "ignores many possible
+  player inputs") [V3 manual p21; fandom Battle] (T07 Total War §3, `research/game_precedent_suite/tutorials/T07_mass_battle.md`). The verified
+  single-resolver precedents are Dominions (battles always simulated from a pre-set Army Setup, orders and spell scripts, replayed next turn)
+  [V3] (T17 Dominions §2, `.../tutorials/T17_repo_strategy_a.md`) and Field of Glory II (no auto-resolve in its 227-page manual) [V3] (T07
+  Field of Glory II §8). Football Manager's "instant ≈ played" is not established (T16 FM §8, `.../tutorials/T16_managers_narrative.md`). What
+  Dominions has and the season lacks is the pre-battle intent step, §7's `marshal`.
 
 ## 3 A worked example
 

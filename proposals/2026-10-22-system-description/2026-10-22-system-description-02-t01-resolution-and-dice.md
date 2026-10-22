@@ -1,7 +1,8 @@
 # Tutorial: Resolution and dice — how a contested act becomes one of four degrees, and what moves the odds
 
 Repo `jordanelias/ttrpg` at HEAD `a4ca9a5`. Every number below was read from the code or computed by calling the repo's own
-functions; the commands are in §9. Paths are relative to the repo root.
+functions; the commands are in §9. Paths are relative to the repo root. Revised in round 3 against `51d7b05` (PR #495 on top of PR #494)
+and the game-precedent suite (`research/game_precedent_suite/`); the changes are listed under §8, "Round-3 corrections".
 
 ## 0 Before you start
 
@@ -31,6 +32,82 @@ means no executing code. On that rule:
   back to the default.
 - The advantage term (`leverage` is a literal 0.0), the S27.4 refusal (never fires) and fractional obstacles (none observed) are
   **TESTS-ONLY**.
+
+## 0a How it plays
+
+*Round-3 addition, in the form of the precedent suite's "how it plays" tutorials (`research/game_precedent_suite/tutorials/T05_social_rpgs.md`).
+Every code line below was opened at `51d7b05`. The as-built text comes first; the [PROPOSED] block closes the section and none of it executes.*
+
+**Setup choices.**
+- Nothing about dice is chosen at world build except the seed. `build_realm(seed)` seats a cast whose `capability` is empty for every
+  person (`ctl/realm_seed0_2seasons.txt:59`; seeds 1 and 2 `:60`), so the social pool is `pool_default` = 2 and any Ob without a scored
+  opponent is `obstacle_default` = 2 under `obstacle_ceiling` = 2 (`fixtures.py:413-419`). TN is 7 and the owner refuses any other value
+  (`dice_engine.py:182-193`). Those fixtures are injected, swept stand-ins (H-126, H-127, H-213), not choices.
+- A person at the callback (`harness/play_surface.py:41-52`; TESTS-ONLY, because the season loop has no player interface of its own)
+  chooses a verb and its operands, such as the subject and `to`. No `Act` field sets the pool or Ob the roll uses: the seam builds both from
+  the world (`sigma.py:185-191`), and a hand-declared `Act.obstacle` reaches only the S27.4 refusal (`resolve.py:978-997`). The only
+  `input()`-driven harness under `systems/`, `engine/` and `modules/` (grep) is a separate human-plays-a-contest harness for the
+  multi-exchange kernel, outside the season loop (`systems/social_contest/sim/contest/agon_harness.py`).
+
+**The loop** (one roll per contested act, inside RESOLVE; all automated):
+1. The chooser forms the act from alignment and stance; it reads no odds (§5a).
+2. `_admits` checks eligibility and the typed cell. A refusal emits the verb's refusal kind and the act ends there (`resolve.py:1025-1032`).
+3. The seam reads the pool and Ob (`sigma.py:185-191`); `roll.py:103-113` composes the Ob from opposition, room, forgery and the ceiling;
+   leverage is 0.0.
+4. The act's own generator deals the dice: `draw_factory(world_seed, tick)(actor, "roll:<prize or verb>:<act id>")` (`resolve.py:792, :852`;
+   `ids.py:48, :87-89`).
+5. S27.4 may refuse (`sigma.py:273-275`); at pool ≥ 1 under ceiling 2 it cannot.
+6. `degree_from_net` bands the margin (`dice_engine.py:286-301`); the fold picks `writes[degree]` and `emits[degree]` (`resolve.py:825`).
+7. WITNESS turns the events into claims; a Partial `tell` may arrive distorted (`witness.py:136-175`).
+
+**The choice menu** (the verbs that reach the dice; full rows in §4). Counts are §4's `attempted/ok` per seed 0 / 1 / 2 unless marked.
+
+| verb | cost | effect by band, F / P / S / O | when a person picks it | grade |
+|---|---|---|---|---|
+| `tell` | one act in a scene, spent on any band | `news.untold` / `news.told` (the copy may be lossy) / told / told; writes nothing | holds a claim on the subject; the hearer is `with` him | RUNS-IN-LOOP (told 4/7/6) |
+| `speak` | one act | `matter.turned` / `.held` / `.advanced` / `.carried`; writes nothing | a docketed matter exists | RUNS-IN-LOOP (seed 0: 3 rolled, all Failure); room terms at control |
+| `argue` | one act | `argument.lost` / `argument.won` / `argument.won` + `pursuit.moved` (S, O) | a Proposition exists; the opponent is `with` him | TESTS-ONLY (0 rolled; formed and stopped 10/17/18, §4) |
+| `determine` | one act; needs `remit:determine` | `matter.undetermined` / `matter.determined` (Tenure graded Partial) / + `pursuit.moved` (S, O) | a seat, a docket, a bench, a quorum | RUNS-IN-LOOP at seed 1 only (1 rolled of 6 formed) |
+| `research`, `surveil` | one act | `finding.none` / `finding.made` (P = S = O) | a Record exists / present at a Rung | RUNS-IN-LOOP (`research` 7/1/2; `surveil` 5/9/5) |
+| `examine` | one act | as `research` | present at a Site | TESTS-ONLY (0 admitted; formed 62/59/39; its `site` operand is filled from the subject, `decision/options.py:1047-1048`) |
+
+No verb buys dice, lowers an Ob or adds advantage at a price; the `speak` room is earned through witnessed deeds (§5b). The precedent menus
+put a spend before the roll (T05 precedent, BG3 §3: Add Bonus; Disco §3: clothing and drugs before a check); this one has none.
+
+**First season, step by step** (seed 0, tick 0; the faces were re-derived at `51d7b05` from `ids.draw_factory`):
+1. `build_realm(0)`: every `capability` is empty (`ctl/realm_seed0_2seasons.txt:59`).
+2. DELIBERATE: `p_npc_086` forms a `tell` to `p_npc_010` (§3).
+3. RESOLVE admits it. Pool 2 (no `copying` key); Ob 2 (the hearer holds no key, and `tell` has no room); leverage 0.
+4. `draw_factory(0, tick 0)("p_npc_086", "roll:a standing:762758bdca098db1")` deals 8 and 10: net 3, margin 1, Success.
+5. The fold emits `news.told`, and WITNESS then turns the event into claims.
+6. Same season: his `tell` to `p_npc_007` rolls 5 and 1 (net −1): Failure, `news.untold`. `p_npc_041` speaks at `b_s_036_cathedral`:
+   reception −0.529 lifts the Ob to 2.529, the ceiling clips it to 2, he rolls 2 and 6: Failure, `matter.turned` (§3).
+7. Over two seasons seed 0 rolls 70 times: 54 F / 9 P / 7 S / 0 O (§9). Four tellings land (`ctl/realm_seed0_2seasons.txt:50`) and all
+   3 speeches fail (`:51`).
+
+**What changes later.** Nothing on this layer. `train` mints no key (`ctl/` shows `train` 38/0, 30/0, 30/0 attempted/ok for seeds 0 / 1 / 2),
+so season-2 odds equal season-1 odds. The one input that drifts is a bench's reception as ledgers fill, which can move `speak`'s Ob
+between 1 and 2 (§5b).
+
+**Failure and ending.** There is no ending on this layer. The loop does not halt on one: `SeasonDriver.season` reads `world_q.endings_reached`
+once a season as a report, and the realm as built reaches none (`loop/driver.py:515-518`; `queries/world_q.py:1764`; ERRATA G17 for the
+deleted victory layer). A Failure spends the act and writes nothing; it emits a kind that witnesses may hold, except the inquiries'
+`finding.none`, which is undeposited (ERRATA C8). There is no reroll in the season, no streak protection and no debt: the same act can be
+formed next season at identical odds. The social roll kills nobody; a fight's season degree is its wound band (`seam/ladder.py:136-182`).
+
+**Consequential versus cosmetic choices.**
+- *Consequential:* which verb (its row decides what each band writes); speaking before a favourable bench (Ob 2 → 1 takes
+  Partial-or-better from 26 % to 58 %); for `determine` and `argue`, Success against Partial (pursuits move only at Success or better).
+- *Cosmetic to the odds:* who rolls (every pool is 2); minor or moderate advantage on the social path (quantised to nothing, Table B, and
+  nobody can supply it while `leverage` is a literal 0.0); any Ob in (1, 2] (plays as 2); a hostile bench (clipped by the ceiling).
+- *Against precedent:* BG3 and Disco place the consequential choice in the build and the party (T05 precedent, BG3 §7, Disco §7). Valoria
+  as built has no build.
+
+**[PROPOSED] (none of it executes).**
+- Stored attributes through a domain faculty (J-T1 Option B), or a character template seating `capability` (§7), would be the first setup
+  choice that moves the odds.
+- One ladder from practice to dice (J-T6), so that pool, Ob and capability read from one source (§7).
+- Complication as the modal band (ENP v2 proposal 6): the ruled ladder cannot deliver it at Ob ≥ 1 (§7).
 
 ## 1 The pieces
 
@@ -269,7 +346,7 @@ Partial `tell` delivers the news but perhaps not intact. A Partial `determine` o
 | `speak` | 3/3 | 0/0 | 2/2 | all three seed-0 speeches were Failures: `matter.turned` is not a refusal kind |
 | `determine` | 0/0 | 1/1 | 0/0 | runs at seed 1 only |
 | `argue` | 0/0 | 0/0 | 0/0 | formed and stopped before the roll 10 / 17 / 18 times: `argument.refused` 10 / 17 / 15, and 3 `act.ineligible` in seed 2 |
-| `examine` | 0/0 | 0/0 | 0/0 | formed by the chooser but never passing admission (CROSS C2; not re-measured here) |
+| `examine` | 0/0 | 0/0 | 0/0 | formed by the chooser but never passing admission (CROSS C2; measured in round 3: 62 / 59 / 39 formed, none reaching the roll) |
 
 Cohort persons (`cohort_set_s_*`) roll inquiries as well as named persons.
 
@@ -483,6 +560,40 @@ Everything in this section is **[PROPOSED]**: none of it executes.
 - **R2-6 (X13).** Eligibility is a disjunction. `own` admits everyone, and `presence:<…>` never admits (H-75; `resolve.py`,
   `_eligible`, opened). The inquiries' "who may" therefore reads `own`. For `examine` and `surveil`, presence is enforced by the
   typed cell's `present_at`, not by eligibility.
+
+### Round-3 corrections
+
+Each cited line was re-opened at `51d7b05`. Where the precedent-suite disposition (`research/game_precedent_suite/dispositions/D_T01.md`)
+carried a shifted or loose citation, the corrected one is used here.
+
+- **R3-1 (§3 rules of thumb).** Old: no comparison of a whole Ob step with the common roll shapes. New: a step moves Partial-or-better by up
+  to 32.0 points at pool 2 (28.2 at pool 3, 22.0 at pool 5), against 5.0 on a d20 and at most 16.7 on 2d6; the pool-2 net is a bell (SD ÷
+  range 0.189). Evidence: exact enumeration of `_die_result` (`dice_engine.py:153-161`) banded by `degree_from_net` (`:286-301`).
+- **R3-2 (§1 `p_success` row).** Old: "helper only; no season caller". New: also understates Partial-or-better on whole dice (14.4 against
+  26.0 % at pool 2 / Ob 2; 43.0 against 58.0 at Ob 1; 50.0 against 60.0 at pool 5 / Ob 2). Evidence: `sigma_leverage.p_success(ob, pool)`
+  called at those pairs, against Table A.
+- **R3-3 (§5d).** Old: silent on the shape of the middle band. New: Partial is narrow by ruling (ED-IN-0187), 19 % at the shipped pair and
+  never modal at pools 1–8 against Ob 1–4; Failure (74 %) is the typical outcome and writes nothing. Evidence: enumeration over
+  `degree_from_net`; `dice_engine.py:238`.
+- **R3-4 (§7).** Old: no entry for complication as the modal band. New: [PROPOSED] ENP v2 proposal 6 cannot be met by a pool or fixture at
+  Ob ≥ `OB_MIN`; the only modal-Partial cell is pool 1 at Ob 0. Evidence: enumeration over pools 1–40, whole Ob 0 to 2 × pool
+  (`roll.py:80-82` for the unfloored Ob; `proposals/2026-09-12-emergent-narrative-primitives-v2/01_THE_TEN.md:293-336`).
+- **R3-5 (§6 personal combat).** Old: silent on combat's odds override. New: `UPSET_FLOOR` 0.05 flips `winner` but not the wound bands
+  the season reads; the social path has no equivalent floor. Evidence: `modules/combat/config.py:295`, `modules/combat/wrapper.py:526-529`,
+  `seam/ladder.py:141, :155`, `hole_register.yaml:2393` (H-119).
+- **R3-6 (§4 "What executes", §8 item 18).** Old: "`argue` is unreached in all three seeds, and `determine` attempted once (seed 1)". New:
+  `argue` never reaches the roll but is formed and stopped 10 / 17 / 18 times (`argument.refused` 10 / 17 / 15, plus 3 `act.ineligible` in
+  seed 2); `determine` reaches the roll once and is refused 2 / 5 / 2 times; seed 0 holds 275 acts beyond `d.resolved`; the `examine` row's
+  "not re-measured here" becomes the measured 62 / 59 / 39 formed. Evidence: `w.acts`
+  against `d.resolved`, re-run on seeds 0/1/2 at `51d7b05`; `resolve.py:61-91, :1025-1032`.
+- **R3-7 (§6 mass battle, §8 item 10).** Old: "A guard test holds the copies equal". New: two guard tests (ladder, and face rule at
+  `test_tn7_always.py:95`); the per-die μ/σ literals are typed in four files; `roll_pool`'s comment that the volley path hand-rolls its
+  dice is stale. Evidence: `resolution.py:37-55, :43-45, :104-120, :227`; `orchestration.py:1565-1574`; `engine/reference/contest-groundup/engine.py:35`.
+- **R3-8 (§5a).** Old: no statement on streak memory or on what a seated player would see. New: the per-act generator is seeded from
+  `(world_seed, tick, actor, purpose)` alone, no surface shows a chance, so realised odds equal Table A. Evidence: `state/ids.py:16-21, :87-89`;
+  overview §7.
+- **R3-9 (new §0a).** Old: no account of what a person chooses, or what changes later. New: the section above, re-checked against PR #494:
+  the season now reports `world_q.endings_reached` and the realm as built reaches none (`loop/driver.py:515-518`). The ctl counts still hold.
 
 ## 9 Checks
 

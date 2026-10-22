@@ -554,6 +554,11 @@ household, births, inheritance, routes, exposure, POIs, foraging.
 Doc/code mismatches outside the draft: L18 calls `tend`, `train`, `forgive` absent (stale; rows at `verb_table.yaml:1146,1451,453`).
 The geography file contradicts itself on the settlement edges: 55 at :580/:589, 56 at :602, and "24 primary + 1 sea" at :640. 55 is
 what loads. L17's line cites into `matter.py` and `world_q.py` are stale by up to 213 lines.
+The quarantined `.designs/systems/_architecture/reference/player_agency_v30.md` (ARCHIVED-NOT-CANON; not edited here) disagrees with
+the code twice. `:63` says "The player has 3–5 scene actions per season"; the budget is `max(1, 5 + live holds − body bands − travel legs)`
+scene actions (`budget.py:57-61`), and budget 5 buys at most 7 acts (§2.5). `:61` calls Pathologic 2 "a hard time constraint (12 days)";
+its playable calendar is Days 1–11 and Day 12 is the ending text [CONTESTED] (T09 precedent, Pathologic 2 §8,
+`research/game_precedent_suite/tutorials/T09_sanity_b.md`).
 
 ### §8 Round-2 corrections (audits J and L, cross-rulings C1–C13). I opened each cited line before accepting it.
 
