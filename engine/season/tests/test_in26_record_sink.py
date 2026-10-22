@@ -151,7 +151,10 @@ def test_in26_a_withheld_verb_the_table_lacks_is_refused():
 
 
 def test_in26_an_own_hold_declines_member_whose_cell_asks_no_holding_is_refused_at_load():
-    assert VERBS._load_own_hold_declines([VERB]) == VERBS.OWN_HOLD_DECLINES == {VERB}
+    # v9 IN-12 (`give` + Rung): `give` JOINED the roster (its cell dropped the `existence` conjunct), so the
+    # shipped set is two verbs; `[VERB]` alone still loads as itself.
+    assert VERBS._load_own_hold_declines([VERB]) == {VERB}
+    assert VERBS.OWN_HOLD_DECLINES == {VERB, "give"}
     assert VERBS._load_own_hold_declines(["give"]) == {"give"}, "give's cell asks the holding too"
     for planted in (["create_record"], ["no_such_verb"]):
         with pytest.raises(Forbidden, match="own_hold_declines"):

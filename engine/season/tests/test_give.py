@@ -95,7 +95,8 @@ def test_give_is_a_resolvable_verb_that_opens_hold_and_refuses_as_itself():
     row = VERB_TABLE["give"]
     assert row.eligibility == ("own", "hold:<record>"), row.eligibility
     assert row.writes == ("Tenure.until", "Tenure.since"), row.writes
-    assert row.emits == ("record.given",) and row.emits_on_refusal == ("give.refused",)
+    # v9 IN-12 (`give` + Rung): the Rung half earns its own kind, `rung.ceded`, beside `record.given`.
+    assert row.emits == ("record.given", "rung.ceded") and row.emits_on_refusal == ("give.refused",)
     # PLAN POSITION `14`: TYPED, ON `T4`'s `with` STEM, AND `_req_give` RETIRED -- one owner.
     assert row.requires_typed is not None and "give" not in REQUIRES_PREDICATES, (
         "`give` must carry a typed cell and no predicate (`test_wa_one_owner_...`)")
