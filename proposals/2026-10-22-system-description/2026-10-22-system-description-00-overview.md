@@ -51,10 +51,10 @@ Three kinds of act never reach the fold and are not counted: contested or graded
 actor was already gone (`:974`) and acts refused for an obstacle above `obstacle_refusal_multiple` times the pool (`:980`); an ordinary
 precondition refusal of an uncontested act does reach the fold and is counted. The act store
 `w.acts` holds 1,407 / 1,394 / 1,447 formed acts against 1,132 / 1,122 / 1,175 that reached the fold (275 missing in seed 0: `research` 111,
-`examine` 62, `surveil` 21, `speak` 19, `accept` 16, `fight` 12, `argue` 10 ...; I1 verification, re-run at `51d7b05`). So "att" means
+`examine` 62, `surveil` 21, `speak` 19, `accept` 16, `fight` 12, `argue` 10 ...; uncommitted round-3 probe, the I1 verification, re-run at `51d7b05`). So "att" means
 *reached the fold*, not *attempted*; where a verb is formed and refused before the fold, the formed count is given too. Runs are identical
 across processes (checked with random `PYTHONHASHSEED`). Results differ by seed: seed 1 executes `oblige` 22 of 24 and `confer` 1 of 5,
-which seed 0 never forms. Every "never" below is therefore a statement about the seeds run (0 and 1 chiefly, 2 for spot checks), not about
+which seed 0 never forms, and seed 2 executes `convene` 1 of 5, which seed 1 never forms. Every "never" below is therefore a statement about the seeds run (0 and 1 chiefly, 2 for spot checks), not about
 the game.
 
 **Who "you" are.** The code has no player character and no GM. Every person is a chooser that picks scenes from a closed verb table. The
