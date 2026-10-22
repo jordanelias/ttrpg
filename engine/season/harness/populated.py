@@ -999,10 +999,11 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         # `npcs.yaml`'s home (the roster's home is the realm's derivation, which seats NPC-011 at Lowenskyst's
         # barracks and the two others in Feldmark's commons -- the empire's persons are not in the realm).
         # `foreign_home` is empty unless `foreign=True`, so the control arm reads no faction here.
-        _row_here = cast.row(cid)
-        _fac_here = cast.faction_of(_row_here)[0] if _row_here else None
-        if _fac_here in foreign_home:
-            home = foreign_home[_fac_here][1]
+        if foreign_home:
+            _row_here = cast.row(cid)
+            _fac_here = cast.faction_of(_row_here)[0] if _row_here else None
+            if _fac_here in foreign_home:
+                home = foreign_home[_fac_here][1]
         w.persons[pid] = Person(pid, str(case.get("name") or cid))
         w.rungs[pid] = Rung(pid, "person")
         w.add_tenure(Tenure(f"t_{pid}_in", pid, home, "contain", 0))
