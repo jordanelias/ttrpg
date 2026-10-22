@@ -1,5 +1,5 @@
 """`season.loop.effects_governance` -- office/seat lifecycle: confer, establish, release, revoke,
-convene, oblige, requisition.
+pardon, convene, oblige, requisition.
 
 EXTRACTED from `effects.py` at the per-subsystem split (Phase 4). Holds every effect that opens or
 closes a `hold`/`oblige` Tenure on an Office or Seat, schedules a sitting, or moves a requisition into a
@@ -13,10 +13,11 @@ from __future__ import annotations
 
 from typing import Optional
 
-from ..data.rosters import RELEASABLE_KINDS
+from ..data.rosters import RELEASABLE_KINDS, RESTRAINT_KINDS
+from ..data.verbs import VERB_TABLE
 from ..gaps import InstrumentDefect
 from ..loop.predicates import office_described_by, office_named_by
-from ..queries.world_q import BAN_KIND, restrained
+from ..queries.world_q import BAN_KIND, DETAIN_KIND, restrained
 from ..state.carriers import Tenure, Term
 from ..state.gate import (NO_CHANGE, Change, Subject, has_revocation_disposal,
                           revocation_disposal)
@@ -309,6 +310,48 @@ def _eff_revoke(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
             w.add_tenure(b)
     return Change(tuple(Subject.edge(t) for t in closed) + tuple(Subject.edge(b) for b in bans),
                   perform)
+
+
+# v9 IN-12 step 5: THE KIND EACH CLOSED RESTRAINT EARNS -- the `pardon` row's `emits:` in its declared
+# order (`detain` then `ban`, `verb_table.yaml`), read off the table so no kind is spelt here (`seize`'s
+# `_SEIZED_RECORD, _SEIZED_RUNG` precedent).
+_DETENTION_ENDED, _BAN_ENDED = VERB_TABLE["pardon"].emits
+_RESTRAINT_ENDED = {DETAIN_KIND: _DETENTION_ENDED, BAN_KIND: _BAN_ENDED}
+if set(_RESTRAINT_ENDED) != set(RESTRAINT_KINDS):
+    raise InstrumentDefect(
+        f"`pardon` names a closer kind for {sorted(_RESTRAINT_ENDED)}, and the restraints are "
+        f"{sorted(RESTRAINT_KINDS)}: a restraint with no ended-kind would close and publish nothing")
+
+
+@effect_for("pardon")
+def _eff_pardon(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """v9 IN-12 step 5 (#453 §9.1, the `pardon` row): EVERY LIVE RESTRAINT the subject owns ON THE
+    EXERCISED SEAT ENDS -- a `detain` (custody: `arrest`'s, or a bench's disposal) and a `ban` (a bench's
+    disposal, or IN-31's revocation cost) whose OBJECT is `Act.via`. It is `revoke`'s shape -- a seat
+    closing another's edge under a basis -- and never `release`'s (the prisoner's own edge he may not
+    end himself, `RELEASABLE_KINDS`), and never an `oblige` (D-5: no obligee-side closer of an
+    obligation, #453 §8.3).
+
+    THE CLOSURE BASIS (the entry's): `state/gate.py`'s `determination` closes a `detain`/`ban` only
+    through the seat that is the edge's object, by a holder `may_determine` admits -- the row's `bench`
+    conjunct asks that same predicate first, so the fold refuses what the gate would raise on. So a
+    custody `arrest` opened on the ISSUING seat is pardoned by that seat's bench, not the arresting one.
+
+    EACH EDGE EARNS ITS OWN KIND (`_RESTRAINT_ENDED`): `detention.ended` for a custody, `ban.ended` for
+    an exclusion, so one act ending both publishes both and a custody alone never an ended ban.
+    DECLINES (`NO_CHANGE` -> `pardon.refused`, the `write` clause): the subject holds no live restraint
+    on the exercised seat, or no seat is exercised.
+    G4 -- WHAT IT NAMES: each closed edge, which always moves (live -> closed)."""
+    party, seat = _operand(a, "subject"), a.via
+    if seat is None:
+        return NO_CHANGE
+    edges = [t for t in w.tenures if t.subject == party and t.object == seat
+             and t.kind in RESTRAINT_KINDS and t.live]
+
+    def perform() -> None:
+        for t in edges:
+            t.until = w.tick
+    return Change(tuple(Subject.edge(t, _RESTRAINT_ENDED[t.kind]) for t in edges), perform)
 
 
 def _closing(w: "World", edges: list, earns: "str | None" = None) -> Change:

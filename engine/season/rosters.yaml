@@ -123,7 +123,10 @@ rosters:
       `confer` declines to seat one. v9 IN-31 (H-100): `revoke` opens a `ban` too, on the man whose
       `appointed` seat it strips, objected on the revoking seat (`state/gate.py::
       REVOCATION_DISPOSAL`), so `ban`'s derived openers are `determine` and `revoke`; a revocation's
-      ban has no term and no closer but his death.
+      ban has no term. v9 IN-12 step 5: `arrest` opens a `detain` too (on the seat that ISSUED the
+      warrant), so `detain`'s derived openers are `arrest` and `determine`; and `pardon` is the CLOSER of
+      both (`domain: [detain, ban]`, the loader's closer clause), through the seat that is the edge's
+      object, under the gate's `determination` basis.
     values: [hold, contain, commit, oblige, succeed, tie, knot, reside, detain, ban]
     # ⚠ LOADER INVARIANT 6's SECOND HALF (`04 §B.13 #6`, `04:466-467`, `ID-14`): every kind's OPENER
     # set is declared. THIS ROW USED TO CARRY THE MAPPING BY HAND -- `openers: {hold: [confer,
@@ -1896,8 +1899,14 @@ rosters:
       loader (`data/verbs.py::WARRANT_SOURCED`) and its readers (`decision/options.py::opening_set` and
       `loop/effects_information.py::_held_warrant_names`),
       and `seize` forms on any referent, refused in the fold.]
+      v9 IN-12 step 5 ADDS `arrest`, the line this note foresaw (*"a warrant naming a PERSON"*): it forms
+      person-side only on a person a held dispensation's `terms` names, and its effect
+      (`_eff_arrest`) reads the same held warrant world-side (`_held_warrants`, `seize`'s reading
+      shared) and opens the `detain` on the seat that ISSUED it. H-94's "a Person (warrant) term has
+      no route" is answered for `arrest` by this line.
     values:
       seize: dispensation
+      arrest: dispensation
 
   terms_sourced:
     source: >-
@@ -3032,6 +3041,15 @@ tables:
         row no lean on any axis (*"the row takes the default alignment cell, 0.0"*). It scores 0.0 on
         every axis until a cell is authored, so no witness is scarred by a forgiveness and its one
         emission, `stance.moved`, judges as no deed. Revert: the seven cells, IN-08's method.
+      arrest: >-
+        v9 IN-12 step 5: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above); #453 §9.1 gives the
+        row no lean on any axis. It scores 0.0 on every axis until a cell is authored, so no witness
+        is scarred by an arrest and `arrest.made` judges as no deed. Revert: the seven cells, IN-08's
+        method.
+      pardon: >-
+        v9 IN-12 step 5: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above); #453 §9.1 gives the
+        row no lean on any axis. It scores 0.0 on every axis until a cell is authored. Revert: the
+        seven cells, IN-08's method.
       tell: >-
         No cell on any axis BY DESIGN: testimony's moral weight is in WHAT is told (a claim), which
         no verb x axis cell can carry, and telling is driven by regard (the telling workplan's G1),

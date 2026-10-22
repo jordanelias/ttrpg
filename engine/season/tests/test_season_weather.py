@@ -197,9 +197,18 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # in the realm's two seasons), `world_q.event_place` places an act-caused Event by its actor, and a covered
 # mover's `travel.ended` chains to his move (`loop/matter.py`). Was ed761c59... / ee8e5500... (one, two
 # seasons); the build hash and the season-1 event sequence are unmoved.
+# RE-PINNED at v9 IN-12 step 5 (`arrest`, `pardon`), A BEHAVIOUR MOVE DECLARED: `pardon` is a new
+# `remit:determine` row the realm's bench-holders FORM on their questions' referents and the chooser ATTEMPTS
+# -- every attempt refused (`pardon.refused` 2 in season one, 5 by two seasons: no realm person holds a live
+# restraint on the pardoner's seat), so the act mix moves. `arrest` forms 0 times (the realm's two warrants,
+# both `p_npc_040`'s, name a Record, and their holder's seat grants no `dispatch`), so it moves nothing; IN-70
+# moved nothing. The build hash is equal; one and two seasons move. Was 8bfd47a9... / 8abd76f3... (one, two
+# seasons). ARMS, run on this tree: `arrest` and `pardon` withheld from every `opening_set` (`Fixtures
+# withheld_verbs`) reproduces the old hashes, event counts and digests exactly (6633 / 19535), and so does
+# `pardon` ALONE withheld -- the mover is `pardon`'s formation and refusals, `arrest` none.
 BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
-               1: "8bfd47a909a52aef79cec4d40e968580",
-               2: "8abd76f3a5337791188861a38ecbaa4d"}
+               1: "c9e46891d32ab8e45b456749b0023f64",
+               2: "47eda125ced86d97af649fe42628a673"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -238,8 +247,9 @@ BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
 # RE-RECORDED at v9 IN-12 step 10 `conceal` with `BASE_HASHES` (6321 -> 6642, 17559 -> 19553).
 # RE-RECORDED at v9 IN-12 step 13 `forgive` with `BASE_HASHES` (6642 -> 6633, 19553 -> 19538).
 # RE-RECORDED at B-Q's BATCH-CLOSE with `BASE_HASHES` (season 1 events unmoved, 6633; season 2 19538 -> 19535).
-BASE_EVENTS = {1: (6633, "6309463792a9d873e9a58c8598e1a648b8305a817c0f0bee243e267b1859e571"),
-               2: (19535, "f2a7b22ad32e9b14fefbe06f228ca41a159722562011f5b9cd939d62529b5d1b")}
+# RE-RECORDED at v9 IN-12 step 5 `pardon` with `BASE_HASHES` (6633 -> 6635, 19535 -> 18681).
+BASE_EVENTS = {1: (6635, "d7b3ab4d4407ac50484f96d2796a3000ca5a44d6b1ba4e45ebb2bbb54047ce2e"),
+               2: (18681, "0987148114a6f49d9ac7c1b3e17168c703c7be10f4c74a141bcadb4700ed3a4f")}
 
 
 def _digest(w) -> tuple:
