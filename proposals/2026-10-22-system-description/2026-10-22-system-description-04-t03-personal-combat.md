@@ -70,8 +70,8 @@ part, all automated after step 1:
 
 **First season, step by step** (seed 0; each call logged at the seam; the 25 calls and 9 deaths are `ctl/realm_seed0_2seasons.txt`'s).
 1. Tick 0, `p_npc_006` `fight`s the King, `p_npc_020`. Both at body 1000, `end 4`. Four turns. 006 is felled in the scene; the King takes two wounds
-   (health 18 of 40). Band Wounded: the King's body becomes 1000 × 18 ÷ 40 = 450, two bands down, so `end 2` (and two scene actions fewer next
-   season, `decision/budget.py:57-61`). 006 is not written.
+   (health 18 of 40). Band Wounded: the King's body becomes 1000 × 18 ÷ 40 = 450, two bands down, so `end 2` (and, had he lived, two scene actions
+   fewer next season, `decision/budget.py:57-61`). 006 is not written.
 2. `p_npc_011` `accept`s against `p_npc_082`. Nobody has issued a challenge yet (the first `challenge.issued` is at fold position 91 of 1,132;
    this `accept` is at position 10). Three turns; 082 is Felled, removed, his tenures closed.
 3. `p_npc_040` `fight`s `p_npc_003` and is felled: band Untouched, `contest.undecided`, nothing written. Next, `p_npc_038` `accept`s against 003 and fells him.
@@ -127,7 +127,7 @@ Cosmetic in the season: `challenge` (writes nothing, answered by nobody in seeds
 | **`accept`** | season verb: answer a challenge; the same fight as `fight` | same writes/emits as `fight`; refusal `accept.refused` | `VT:737-765` |
 | **prize `"the body"`** | routes a contested verb to the `personal_combat` provider at RESOLVE | no `step:`, so it fights at RESOLVE | `ROS:1273-1277`, `:1296-1298` |
 | **`Person.body`** | a person's physical state | scale 1000 (`condition_scale`, `FX:217`); every realm person starts at 1000 (run) | `FX:217` |
-| **body bands** | floors on body: `full_operations 800`, `limited 500`, `withdrawal_only 100` | penalty = number of floors body is below (0–3) | `ROS:2561-2564`; `budget.py:71-83` |
+| **body bands** | floors on body: `full_operations 800`, `limited 500`, `withdrawal_only 100` | penalty = number of floors body is below (0–3) | `ROS:2627-2630`; `budget.py:71-83` |
 | **`end`** (endurance) | the one Combatant field the season sets | `end = max(1, 4 − body band penalty)` → 4/3/2/1 | `SW:130-138` |
 | **Combatant** | one fighter in the engine | defaults `strength 4, agi 4, end 4, cog 3, att 3, spirit 3, focus 3, history 3, disp 4, weapon 'arming', armor 'light', tradition 'none'` | `MC/combatant.py:93-94` |
 | **disposition** (`disp`) | aggression axis 1–7, 4 neutral; lean `(disp−4)/3` | skews commit depth, initiative drift, counter choice | `MC/combat_systems.py:181-183` |
@@ -163,7 +163,7 @@ Cosmetic in the season: `challenge` (writes nothing, answered by nobody in seeds
 | **tradition** | a "cognitive mode", not a rule-set | 7 + `none`; familiarity 1.0 same/none, 0.93 adjacent, 0.85 otherwise | `MC/traditions.py:1-8`, `:32-55` |
 | **ability** | a tradition-gated multiplier/bonus on a named channel | 9 abilities (e.g. `indes` +0.15 counter success; `misura` ×1.15 measure); inert outside own tradition | `MC/ability_primitives.py:29-70`, `:100-126` |
 | **Yield** | a Phase-1 surrender declaration | needs `yield_decl`; the season never passes one | `MC/wrapper.py:467-513`; `MC/fight.py:52` |
-| **upset floor** | 5 % chance a decided result's sign is flipped | flips `result`, not the trackers | `MC/wrapper.py:529-530` |
+| **upset floor** | 5 % chance a decided result's sign is flipped | flips `result`, not the trackers; the season band reads the subject's tracker (`ROS:820-848`; `seam/ladder.py:155-156`), so the floor never reaches the world and its stated purpose ("no matchup is ever certain", `:526-527`) is not delivered in the season | `MC/wrapper.py:526-530` |
 | **band (season degree)** | Felled / Wounded / Untouched, read off the SUBJECT's tracker | Felled if `felled`, Wounded if `wounds > 0`, else Untouched | `ROS:784-848`; `seam/ladder.py::combat_degree` |
 | **wound harm model** | how much body a Wounded band costs | shipped `scene_fraction`: `body = max(1, body·health_remaining // health_full)` | `FX:624`; `EC:134-151` |
 | **`tend`** | season verb: raise a person's body to 1000 | requires subject exists and is `with` the actor | `VT:1146-1168`; `EC:370-393` |
@@ -177,9 +177,9 @@ engine plays turns, engagements, beats and exchanges; the season reads one band 
 1. **DELIBERATE.** Your chooser answers one question and forms candidates about its referents. `fight` is eligible for anyone (`own`) and
    requires only that the subject is a living person (`VT:614-621`): no co-location, no hostility, no war test. It scores
    `Σ pursuit weight × alignment` plus a stance term plus a constant (`decision/choose.py:149-151`). `fight` has two alignment cells:
-   `grandiose_humble −0.3` and `deontological_instrumental +0.3` (`ROS:3280`, `:3346`). The stance term ships as `legacy`
-   (`FX:823`): your stored stance toward the subject is ADDED to every verb about him, at weight `1 + stance_gain`, and
-`stance_gain` ships at 1.0 (`FX:837`; `choose.py:84-86`), so the stance counts double. So a grudge (negative stance) makes `fight`
+   `grandiose_humble −0.3` and `deontological_instrumental +0.3` (`ROS:3346`, `:3412`). The stance term ships as `legacy`
+   (`FX:833`): your stored stance toward the subject is ADDED to every verb about him, at weight `1 + stance_gain`, and
+`stance_gain` ships at 1.0 (`FX:847`; `choose.py:84-86`), so the stance counts double. So a grudge (negative stance) makes `fight`
    on him score **lower**, not higher (`choose.py:54-79` docstring). Candidates are then ordered by a Gumbel draw at temperature 0.1.
 2. **RESOLVE.** The fold re-checks the precondition against the world; a subject who does not exist refuses with `kill.refused`
    (`VT:705`). Otherwise `loop/resolve.py::_contest` calls the seam with `claimants = [actor, subject]`.
@@ -263,7 +263,8 @@ The band is read off the **subject's** tracker only (`ROS:820-848`): `felled` �
 - **Wounded**: `body = max(1, body × health_remaining // health_full)`; emits `body.changed`. A wound cannot kill.
 - **Untouched**: writes nothing; emits `contest.undecided` — even when the actor was the one felled.
 The fold then scars the act's observers (`loop/resolve.py::_scar_witnesses`). The trace is returned to the caller but never folded
-into `World` (`SW:245-252`). The actor's tracker is discarded: **the attacker is never written**.
+into `World` (`SW:245-252`). The actor's wound state reaches the effect (`SW:230`, `:237` return both parties) and is not read: `_eff_kill` reads
+`wound_state[subject]` only (`EC:125`). **The attacker is never written.**
 
 ## 3 A worked example
 
@@ -367,7 +368,7 @@ goals a fight can serve are therefore read off what the band writes:
 | goal | represented by | reachable today? |
 |---|---|---|
 | **kill** a person | the subject's Felled band: body 0, `remove_person`, every tenure naming him closed | yes, by chance: 48.5 % of mirror fights |
-| **wound** a person | the Wounded band: body scaled down, which lowers his `end` and his scene budget next season | yes, by chance: 28 % of mirror fights; you cannot choose wound over kill |
+| **wound** a person | the Wounded band: body scaled down, which lowers his `end` and his scene budget next season | not by winning: the fight runs to the first felling (`MC/wrapper.py:516-520`), so a subject left Wounded or Untouched means the attacker was felled. Of the 112 Wounded mirror fights (§3) at least 111 felled the actor (206 non-Felled = 205 felled actors + 1 undecided); in the realm, 15 of 15 (seeds 0-2). The body cut lands on the winner |
 | **force a duel** | `challenge` → the other's `accept` | no carrier: `challenge` writes nothing and `accept` does not read it (`VT:749`) |
 | **provoke / be seen** | `challenge.issued` and the fight's band kind, fanned to witnesses as claims | yes; it changes what others hold, not what they do |
 | **defend yourself** | nothing: there is no guard, no interpose, no refusal to be attacked | no; your only defence is your body band |
@@ -405,7 +406,7 @@ independently forms `accept` against you.
 - **Attacking is dominant over being attacked.** Only the subject can lose body or life; the act's two parties are asymmetric by
   construction (`EC:107-109`).
 - **`accept` is a `fight` with different alignment cells** (`rigid_flexible −0.3`, `grandiose_humble −0.2`,
-  `deontological_instrumental −0.4` against `fight`'s `−0.3` and `+0.3`; `ROS:3236`, `:3280-3283`, `:3346-3348`), so a person weighted
+  `deontological_instrumental −0.4` against `fight`'s `−0.3` and `+0.3`; `ROS:3302`, `:3346-3349`, `:3412-3414`), so a person weighted
   toward the deontological pole prefers `accept` and the instrumental pole prefers `fight`; neither requires a challenge.
 - **Issuing a challenge is mechanically empty and exposes you** as the subject of any later `accept`.
 - **Body is the whole build.** Kit, tradition, training and attributes are inert in the season; a trained fighter fights as an untrained

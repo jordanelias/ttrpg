@@ -2,9 +2,9 @@
 
 Repo `jordanelias/ttrpg` at HEAD `a4ca9a5`; revised in round 3 against `51d7b05` and the precedent suite
 (`research/game_precedent_suite/`; the dispositions are `dispositions/D_T10.md` and `D_T10_also.md`). Text added or replaced in round 3
-cites the tree at `51d7b05`; cites I did not touch are still at `a4ca9a5`, and PR #494 moved them: `world_q.py` +3 for lines 46–1679 and
-+125 from line 1738 (e.g. `places_named` 1986 → 2111), `person_q.py` +2 for lines 58–418 and +90 above, `fixtures.py` +10 above line 715,
-`rosters.yaml` +66 above line 2490. Paths are relative to the repo root; `es/` stands for `engine/season/`. The run figures are
+cites the tree at `51d7b05`; cites I did not touch are still at `a4ca9a5`, and PR #494 moved them: `world_q.py` +3 for lines 46–1676 and
++125 from line 1739 (e.g. `places_named` 1986 → 2111), `person_q.py` +2 for lines 58–416 and +90 above, `fixtures.py` +10 above line 715,
+`rosters.yaml` +66 above line 2488. Paths are relative to the repo root; `es/` stands for `engine/season/`. The run figures are
 taken from `ctl/realm_seed{0,1,2}_2seasons.txt` (the control run: `build_realm(seed)`, 2 seasons; "ok" means the act produced at least one
 event that is not a refusal) and from my own read-only probes over the same recipe (§9).
 
