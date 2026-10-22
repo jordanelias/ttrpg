@@ -58,6 +58,10 @@ from ..data.pursuits import pursuit_cosine_axes, to_axes
 # doers off the person-side family.
 from ..data import goals as _goals
 from .person_q import deed_doers
+# v9 IN-70: a person's opinion of a faction -- the formula person-side, membership and the faction's
+# expectations here; the doer of a paired deed is the pairing rule's (IN-58).
+from ..data.verbs import DEED_KINDS
+from .person_q import PAIRED_KINDS, opinion
 from ..state.attribution import anchor_of, causing_act, event_by_id, matured_terms  # noqa: F401 -- re-exported
 from ..state.carriers import Person, Question, Site, Tenure
 # ⚠ `parent_of` AND `descendants` ARE RE-EXPORTED, NOT DEFINED HERE (G3, plan position 6). The
@@ -1915,6 +1919,90 @@ def _goal_referents(w: World, p: Person, goal, prop, path: frozenset) -> tuple:
     return deed_doers(p.ledger, obj, p.id, against)
 
 
+# A `deed_doers` goal's referents are the doers it acts AGAINST: every authored form names them so --
+# "threats" (`against:`), "corruption" (`kinds:`), "heresy" (`engaging:`) -- and the row carries no
+# `stance:` of its own. So a goal engaging a pole without a `stance:` takes the opposed side.
+# [ASSUMPTION; medium; Jordan to correct -- v9 IN-70; revert: a goal with no `stance:` engages no side,
+# and the affiliation term reads 0 for every authored faction.]
+_DEED_DOERS_SIDE = -1
+
+
+def engaged_poles(faction: str) -> tuple:
+    """THE AFFILIATION POLES A FACTION'S OWN GOALS ENGAGE, and the side each takes: `((affiliation,
+    sign), ...)` in `goals.yaml` order, one pair per goal (v9 IN-70's affiliation term). A goal engages
+    a pole when its `object:` is a `deed_doers` naming it (`engaging: <affiliation>`, IN-67's form); its
+    side is the goal's `stance:` where authored, else `_DEED_DOERS_SIDE`. `faction` is the faction's
+    NAME, as `goals.yaml`'s `org: {faction: ...}` and `data/goals.py::expected` key it; its bodies' and
+    seats' goals are theirs, not the faction's (`expected`'s scope). The creed engages no pole: it names
+    a leader, not an affiliation. Reads the one goals loader; no World."""
+    return tuple((g.object["engaging"], g.stance if g.stance is not None else _DEED_DOERS_SIDE)
+                 for g in _goals.goals()
+                 if (g.org_kind, g.org) == ("faction", faction)
+                 and g.object["kind"] == "deed_doers" and "engaging" in g.object)
+
+
+def opinion_of(w: World, p: Person, faction: str) -> float:
+    """v9 IN-70 (RS-23, RS-24; ED-IN-0293 (6)): `p`'s OPINION OF THE FACTION whose Proposition id is
+    `faction`, on `[-3, +3]`, computed when asked and stored nowhere (A-29, T-a). The formula and its
+    three normalisations are `person_q.opinion`'s (`04` §A.2: the person-side family reads a
+    `PersonInterior` only); THIS reads what that family cannot -- the World half -- and hands it down:
+
+      * what the faction expects of its members: `data/goals.py::expected("faction", name)` (IN-69's
+        owner: its role template plus its faction goals' pursuits);
+      * the poles its goals engage: `engaged_poles`;
+      * whom `p` regards on its behalf: its head -- the subject of its creed Proposition, the authored
+        leader `harness/populated.py` subjects the creed on, where that is a living person -- then every
+        doer `p`'s OWN ledger names (`person_q.deed_doers` over every deed kind: a paired deed's doer
+        by the `seen.who` pairing, any other by its subject) who is a live member of it (`members`:
+        membership is `commit`, a World read, IN-67's `seat_holders` precedent). `p` himself never.
+
+    `Unspecified` for an id that is no rostered faction's Proposition: a non-faction has no opinion,
+    and none is guessed."""
+    name = FACTION_BY_PROP.get(faction)
+    if name is None:
+        raise Unspecified(f"{faction!r} is not a faction's Proposition", "rosters.yaml: factions",
+                          needs="a faction Proposition id (`FACTION_BY_PROP`)",
+                          law="v9 IN-70 -- an opinion is of a faction")
+    inside = set(members(w, faction))
+    creed = w.propositions.get(faction)
+    head = creed.subject if creed is not None and creed.subject in w.persons else None
+    regarded = tuple(x for x in dict.fromkeys(
+        ((head,) if head is not None else ())
+        + tuple(d for d in deed_doers(p.ledger, {"kinds": DEED_KINDS}, p.id) if d in inside))
+        if x != p.id)
+    return opinion(p, _goals.expected("faction", name), engaged_poles(name), regarded, w.fixtures)
+
+
+def opinion_referents(w: World, p: Person, c) -> tuple:
+    """WHOM A DEED DONE TO SOMEONE TURNS `p` TOWARD, read when the question forms (v9 IN-70, RS-23: *"the
+    members of the faction whose member killed my lord"*) -- the faction-level referents of the
+    question `c` raises. `c` is a claim `p` holds. For an untold `PAIRED_KINDS` deed claim that `p`
+    JUDGES -- `person_q.paired_deed_term`, the ONE scorer (IN-58, IN-72): his pursuits lean on its kind
+    (the authored `deed:` cells, a death or a wound) and its `seen.who` pairing names one doer, never a
+    guess -- whose doer coheres under exactly one faction (`faction_holding`) and of which `p`'s
+    `opinion_of` is BELOW INDIFFERENCE (`< 0`, every term's midpoint): the doer, then every other live
+    member of that faction, `members` order, `p` himself never. `()` otherwise -- a hidden hand, a deed
+    `p` does not judge (a `finding.made`), a doer of no single faction (LIMIT: a DEAD doer is in no
+    `members` and so in no faction -- `faction_holding` reads a living person's `commit` edges), a
+    faction `p` is indifferent to or favours.
+
+    So ALLEGIANCE decides it, not the deed alone: two witnesses of one killing with the same pursuits
+    read different referents when one is the victim's ally (his regard of the killer falls through
+    IN-58's `_bond`) or holds the pole the killer's faction hunts (the affiliation term). It ADMITS
+    nothing: `questions_for` adds these to a question it already formed from `c` (Q2, through `reach`),
+    so a claim `reach` refuses -- a dead victim's death claim, H-209 -- raises no faction either."""
+    if c.predicate not in PAIRED_KINDS:
+        return ()
+    doer, _term = paired_deed_term(p, projected_axes(p, w.fixtures.get("scar_weight_shift")), c,
+                                   lambda: _seen_index(p.ledger))
+    if doer is None or doer == p.id:
+        return ()
+    faction = faction_holding(w, doer)
+    if faction is None or opinion_of(w, p, faction) >= 0:
+        return ()
+    return (doer,) + tuple(m for m in members(w, faction) if m not in (doer, p.id))
+
+
 def vacancies(w: World, p: Person) -> tuple:
     """THE VACANT SEATS `p` MAY FILL (IN-53, H-207 'VACANCY AS NEED'), sorted by id: every Office
     with no live `hold` -- the test `_req_confer` runs before its `or` disjunct -- for which
@@ -2342,7 +2430,11 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
         if (c.subject in R                                       # clause 1 -- the thing itself
                 or ((pl := place_of(w, c.subject)) is not None and pl in R)   # clause 2 -- where it is
                 or any(x in R for x in named(c))):                # clause 3 -- whom the CONTENT names
-            out.append(Question(f"q:claim:{c.id}", "claim_landed", (c.subject,), c.id))
+            # v9 IN-70: a paired deed's question also turns `p` toward the doer's faction where his
+            # opinion of it is below indifference (`opinion_referents`); the subject stays first, and
+            # admission (the three clauses above) is untouched. REVERT: `(c.subject,)` alone.
+            extra = tuple(x for x in opinion_referents(w, p, c) if x != c.subject)
+            out.append(Question(f"q:claim:{c.id}", "claim_landed", (c.subject,) + extra, c.id))
 
     # v9 SC-02 `22b` STEP 23: A STANDING CROSSING IS A QUESTION ABOUT THE PEOPLE WHO TOLD (`standing_crossed`,
     # above). The crossing question read only SITE crossings before (through WITNESS and Q2); this is the
