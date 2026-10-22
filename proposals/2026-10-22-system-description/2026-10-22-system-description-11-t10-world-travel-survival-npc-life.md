@@ -28,6 +28,89 @@ season code reads it). NP: cohorts, named persons, body bands, regard and `forgi
 only (1 each); both are TESTS-ONLY at seed 0. Kin, birth, marriage, household and inheritance are **DESIGN-ONLY** or absent. Grades follow
 ERRATA G1 only, applied per seed: a refusal firing is not the verb executing.
 
+## 0a How it plays
+
+The lane as a run of the built game, then what is proposed. Figures are seed 0 of the control run unless they name a seed
+(`ctl/realm_seed{0,1,2}_2seasons.txt`, re-run at `51d7b05`; count columns are *reached the fold / ok*, as in §4). The form follows the
+precedent tutorials' "how it plays" sections (`research/game_precedent_suite/tutorials/`, tier 3, reference only).
+
+**Setup choices.**
+- *At world build* the one choice is the seed, `build_realm(seed)` (`ctl/control.py:7`). It fixes 83 persons (37 cohorts of weight 2, 46 named),
+  37 settlements and 211 hearths (§1); every body starts at 1000 and every person has `born` 0 (`fixtures.py:608`, `carriers.py:687`).
+- *The survival controls are fixtures, not choices*: `body_step` 0, `age_step` 0.0, `illness_rate` 0.0, `season_factor` 1.0 with an empty draw
+  table (`fixtures.py:463, 469, 594, 606-607`). Their swept arms run only in tests (`fixtures.py:591-593`).
+- *At the callback*: the season loop has no player interface. `dispatching_chooser` hands the persons in its `overrides` map to a callback
+  that returns their Acts or Scenes (`play_surface.py:41-52`; TESTS-ONLY). It can name any rung as a destination and any of the 47 resolvable
+  verbs with any payload: hand-built `migrate` (to an empty hearth), `tend` (on oneself) and `march` (at a settlement) each ran through the
+  season loop at `51d7b05`. Outside the loop, `systems/social_contest/sim/contest/agon_harness.py` is a stdin-driven human-played social
+  contest, and two HTTP designer workbenches exist (`systems/combat/combat_engine_v1/workbench/server.py`,
+  `systems/mass_battle/sim/workbench/server.py`).
+
+**The loop** (one season = one tick; all of it automated).
+1. CALENDAR.
+2. MATTER: season factor (`matter.py:364`); larder draw, cohorts only (`world_q.py:1020`); hunger to body, skipped at `body_step` 0
+   (`matter.py:520`); ageing and illness, skipped (`matter.py:549`); debit and yield (`matter.py:560-606`); legs end (`matter.py:643-655`);
+   claim decay 5 (ERRATA G8).
+3. Five rounds (`driver.py:449-456`): DELIBERATE recomputes each budget (`budget.py:57-61`) and releases one scene, charging it
+   (`deliberate.py:252-260`); RESOLVE folds; ENCOUNTER fights fields; WITNESS deposits by co-location.
+4. CENSUS individuates demanded persons (`census.py:35`); the season then reports `endings` (`driver.py:514-518`).
+
+**The choice menu.** Candidates are scored by pursuit alignment plus stance toward the subject and ordered with Gumbel noise at τ 0.1
+(ERRATA G12). Hunger enters only as a constant added to every candidate, and room is not read when a choice is formed (`choose.py:217-238`;
+`world_q.py:2126-2129`).
+
+| verb | cost | effect | when a person picks it | grade (seeds 0, 1, 2) |
+|---|---|---|---|---|
+| `move` | one act; −1 point per leg until the next MATTER (`budget.py:60`) | `contain` moves, leg recorded (`effects_migration.py:91-119`) | the question's referent is a rung; a person rung or a non-rung is formed and refused | RUNS-IN-LOOP (16, 17, 12 executed; at seed 0 all to where the mover stood) |
+| `migrate` | as `move` | `reside` moves if `population + weight ≤ capacity` (`effects_migration.py:203`) | his ledger names a rung he does not live under (`world_q.py:2111-2146`) | TESTS-ONLY (0 of 81, 143, 143) |
+| `tend` | one act | subject's body to 1000 (`effects_combat.py:371-393`) | a living person "with" him, or himself | TESTS-ONLY (0 of 34, 22, 19) |
+| `train` | one act | +1 in a key the subject holds | a vocation key exists (only `copying`) | TESTS-ONLY (0 of 38, 30, 30) |
+| `forgive` | one act | his negative rows on the referent deleted (`effects_combat.py:431-450`) | only when he holds such a row | RUNS-IN-LOOP (1, 2, 2) |
+| `give` | one act | a held Record changes hands | he holds a Record, the receiver is with him | RUNS at seed 2 only (1 of 19) |
+| `commit`, `oblige`, `release` | one act each | open a commitment or a duty; close an own edge | a Proposition or seat in reach; any own live edge | `commit` RUNS at seeds 1, 2 (1 each); `oblige` at seed 1 (22 of 24); `release` RUNS-IN-LOOP (3, 5, 3) |
+
+**First season, step by step** (seed 0, tick 0 then tick 1).
+1. Build: 83 persons; starting budgets 52 at 5, 27 at 6, 1 at 7, 2 at 10, 1 at 13; 47 live holds.
+2. MATTER at tick 0: the cohorts want 148 grain and 74 salt and find nothing, each 6 units short; at `body_step` 0 no body moves; ageing is
+   skipped; yield is taken (37 `yield.taken`, 37 `stores.changed`); no leg to end.
+3. Rounds 0–4: 676 acts released and charged, 535 reach the fold. In this lane: `move` 18 (5 `travel.moved`, 13 `travel.blocked`), `migrate` 25
+   (25 `migrate.refused`), `tend` 15 and `train` 23 (all refused), `forgive` 1 (`stance.moved`), `give` 8, `commit` 39 released and 36
+   folded, `release` 26.
+4. Combat (another lane) kills 5 named persons, the King (`p_npc_020`) among them; 4 `body.changed`; no cohort dies.
+5. Live holds reach 121 by the season's end; budgets then spread from 3 to 11 (legs not yet cleared).
+6. Tick 1: the draw is met from last season's yield; 5 legs end (`travel.ended`); 731 acts released, 597 resolved; `move` 24 (11 moved),
+   `migrate` 56 refused, `tend` 19 refused; 4 more deaths. Two wounded survivors finish at 250 and 48, untended. Acts per acting person
+   (act-store basis): 8.14, then 9.37, maximum 15.
+
+**What changes later.** Budgets diverge: holders mint holds and reach the 15-act ceiling while the wounded fall toward 2–3 (`budget.py:57-61`,
+§3a). Seats without a conferral basis empty and stay empty (§5c). Harbours and seams lose 10 condition a season (`rosters.yaml:1465-1470`), so
+grain cover is about 10 seasons and yield reaches 0 at tick 100 without `restore` (C9). Nothing else drifts: no ageing, births, stance decay or
+weather year.
+
+**Failure and ending.** The loop does not stop on an ending: the season reports `endings`, a read and never an actor (`driver.py:514-518`;
+`world_q.py:1764`), and the realm as built reaches none (`endings` is `[]` in both seasons at seed 0). The only failure in this lane is death,
+and at shipped values only combat kills (G9; `matter.py:520, 549`). Death is final and closes every tenure naming the dead (`world.py:645-656`);
+nobody heals passively and nobody inherits (`verb_table.yaml:1113`). A settlement does not fail in the run: its cohort never starves at shipped
+values, never shrinks and never grows (0 cohort deaths in seeds 0–2; one `Felled` would delete it whole, ERRATA C1).
+
+**Consequential vs cosmetic choices.**
+- Consequential: holds (+1 point each, `budget.py:57`); wounds (−1 point per band, `budget.py:64-83`); a leg in an early round (one or two acts,
+  §3a); where you stand (who sees you, whom "with" admits, where a cohort eats, §2.1); custody (closes every road, `effects_migration.py:52-53`).
+- Cosmetic or dominated: a `move` to where you stand (16 of 16 executed at seed 0, §4); terrain, adjacency and POIs (no reader, §1); hunger and
+  age (inert, and no score term lets hunger move a choice); `migrate` (0 of 367); `train` (0 of 98).
+
+**As proposed** — every line **[PROPOSED]** (§7; ERRATA G16).
+- [PROPOSED] Player seat: IN-47 makes a player one person's decision procedure ("embedded", G16), on the callback above; IN-46, the played
+  fight, is T03's.
+- [PROPOSED] Setup: a year and a storm season (M-WT-2); hunger live at `body_step` 10 [ASSUMPTION] with a settlement hunger Query (RB-5, JQ-6);
+  ageing rates Jordan's (#457 D2).
+- [PROPOSED] Loop and menu: route cost over `settlement_adjacency` × `terrain_cost_matrix` replaces the flat leg (M-WT-1); journey roll and
+  exposure (M-WT-3, -4); `travel` (a same-place journey not formed, H-140), `explore`, `forage` (MB's), `tie`, `marry`, `hire`, `defect`,
+  `succeed` (GV's), `pledge`.
+- [PROPOSED] Recovery: passive recovery with announced upward crossings (M1, H-211) and a care degree (M2) would make a wound cost time.
+- [PROPOSED] Failure and ending: none proposed in T10's sources. Births are ruled out for now (ED-WR-0011, §7), so a death is answered by
+  no birth; estate transmission at death is M11. Even with RB-5, hunger binds only before the first yield (G18, C9).
+
 ## 1 The pieces
 
 | term | what it is | numbers / limits | where it lives |
