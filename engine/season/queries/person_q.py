@@ -517,11 +517,11 @@ def opinion_terms(p: Person, expected: dict, engaged: tuple, regarded: tuple, fx
         direction -- reads `0.0`, the salience precedent.
       * `affiliation` -- the mean, over the `(affiliation, sign)` pairs in `engaged` (the poles the
         faction's own goals engage, and the side each takes; the caller reads them), of
-        `sign * intensity / AFFILIATION_CEILING`: `p`'s held intensity on that pole (IN-63: a stored 0
-        is a held rejection; an absent pole reads 0) over the spine's ceiling. `0.0` for no pole. A
+        `sign * intensity / AFFILIATION_CEILING`: `p`'s held intensity on that pole (a held 0 and an
+        absent pole read alike, 0) over the spine's ceiling. `0.0` for no pole. A
         MEAN, not a sum, so the term stays on `[-1, +1]` however many poles a faction engages.
-      * `regard` -- the mean, over the persons in `regarded` (the faction's head and the doers `p`
-        believes are its members; the caller reads them), of `clamp(regard(p, x, fx) / STANCE_MAX,
+      * `regard` -- the mean, over the persons in `regarded` (the faction's head and the doers `p`'s
+        own ledger names who are live members of it; the caller reads them, and membership is world truth), of `clamp(regard(p, x, fx) / STANCE_MAX,
         -1, 1)` -- `regard`, the one owner, normalised exactly as `decision/options.py::teller_weight`
         normalises it. `0.0` for nobody.
 
@@ -542,7 +542,9 @@ def opinion(p: Person, expected: dict, engaged: tuple, regarded: tuple, fx=None)
     """`p`'s OPINION OF A FACTION, on `[-3, +3]`: the sum of `opinion_terms` (v9 IN-70). `0` is
     indifference -- each term's own midpoint -- so the sign is the side. Computed when asked, never
     written (A-29, T-a). Person-side; the World half is `world_q.opinion_of`. Added left to right, not
-    by `sum()`, whose float summation is compensated since Python 3.12: one order, one number."""
+    by `sum()`, whose float summation is compensated since Python 3.12: one order, one number. (The
+    means inside `opinion_terms` use `sum()`; the value is consumed only as `< 0`, so a last-ulp
+    difference between Python versions matters only at exact cancellation.)"""
     pursuit, affiliation, reg = opinion_terms(p, expected, engaged, regarded, fx)
     return pursuit + affiliation + reg
 

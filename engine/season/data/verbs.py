@@ -904,8 +904,9 @@ def _load_verb_table() -> dict:
         # MISSING is a failable clause with no kind -- the fold would reach `refusal_for` and raise;
         # EXTRA is a kind for a clause that cannot fail, read by nothing (`ID-13`). A name on a FLAT
         # row is refused for the same reason: nothing keys it. A CONTESTED row may key its refusals
-        # only to ONE kind: the seam's party gap (`loop/resolve.py::_refuse_party_gap`) is a refusal
-        # point this schema has no clause for, and it emits the union. ONE refusal names every
+        # only to ONE kind, unless it keys `COUNTERPARTY_CLAUSE` (below): the seam's party gap
+        # (`loop/resolve.py::_refuse_party_gap`) is a refusal point this schema has no clause for
+        # and emits the union, except where the row keys the counterparty clause, whose kinds it emits. ONE refusal names every
         # defect found, so a table edit that breaks three things is told all three.
         _names = row.requires_typed.conjuncts() if row.requires_typed is not None else ()
         if by_clause or _names:
@@ -1041,11 +1042,12 @@ def _load_verb_table() -> dict:
     # (`contain`, `reside`: `_eff_move`/`_eff_migrate` close the old edge as they open the new). The set
     # that needs a declared closer is READ off `data/rosters.py`, never spelt: `RESTRAINT_KINDS`, the
     # kinds excluded from `RELEASABLE_KINDS` because an AUTHORITY ends them -- today exactly the kinds
-    # outside `RELEASABLE_KINDS ∪ {contain, reside}`. ⚠ LIMIT: a kind excluded from `RELEASABLE_KINDS`
-    # by a THIRD set (not the relocation pair, not `RESTRAINT_KINDS`) would escape this clause; naming
-    # the relocation pair once in `data/rosters.py` closes it, an edit outside IN-12's files. A declared
-    # closer naming a kind that needs none (a releasable kind -- `release`'s, a second closer of an edge
-    # whose holder ends it himself, T-m -- or no kind at all) is refused too.
+    # outside `RELEASABLE_KINDS ∪ {contain, reside}`; no third excluded set can exist, because
+    # `RELEASABLE_KINDS` is DEFINED in `data/rosters.py` as `TENURE_KINDS` less that pair less
+    # `RESTRAINT_KINDS`. A declared closer naming a kind that needs none (a releasable kind -- `release`'s,
+    # a second closer of an edge whose holder ends it himself, T-m -- or no kind at all) is refused too:
+    # [ASSUMPTION; medium; Jordan to correct] an addition beyond #453 `:1518-1520`, which asks only that
+    # every restraint have a closer; revert: drop `_stray_domain` and its refusal.
     _needs_closer = frozenset(RESTRAINT_KINDS)
     _stray_domain = sorted((v, sorted(d - _needs_closer)) for v, d in _closer_domains.items()
                            if d - _needs_closer)

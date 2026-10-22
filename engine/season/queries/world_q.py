@@ -2059,7 +2059,9 @@ def engaged_poles(faction: str) -> tuple:
     side is the goal's `stance:` where authored, else `_DEED_DOERS_SIDE`. `faction` is the faction's
     NAME, as `goals.yaml`'s `org: {faction: ...}` and `data/goals.py::expected` key it; its bodies' and
     seats' goals are theirs, not the faction's (`expected`'s scope). The creed engages no pole: it names
-    a leader, not an affiliation. Reads the one goals loader; no World."""
+    a leader, not an affiliation [ASSUMPTION; medium; Jordan to correct; revert: the creed's engagement
+    (`data/affiliations.py::engagement`) joins the pairs, signed by it; the entry's text names "goals
+    or creed"]. Reads the one goals loader; no World."""
     return tuple((g.object["engaging"], g.stance if g.stance is not None else _DEED_DOERS_SIDE)
                  for g in _goals.goals()
                  if (g.org_kind, g.org) == ("faction", faction)
@@ -2082,7 +2084,11 @@ def opinion_of(w: World, p: Person, faction: str) -> float:
         membership is `commit`, a World read, IN-67's `seat_holders` precedent). `p` himself never.
 
     `Unspecified` for an id that is no rostered faction's Proposition: a non-faction has no opinion,
-    and none is guessed."""
+    and none is guessed.
+
+    [ASSUMPTION; medium; Jordan to correct; revert: the entry's own wording, a SUM of the three terms'
+    inputs rather than the affiliation and regard MEANS: a term then leaves `[-1, +1]` with the number
+    of poles or regarded persons] The affiliation and regard terms are MEANS, so each stays on `[-1, +1]`."""
     name = FACTION_BY_PROP.get(faction)
     if name is None:
         raise Unspecified(f"{faction!r} is not a faction's Proposition", "rosters.yaml: factions",
@@ -2115,7 +2121,14 @@ def opinion_referents(w: World, p: Person, c) -> tuple:
     read different referents when one is the victim's ally (his regard of the killer falls through
     IN-58's `_bond`) or holds the pole the killer's faction hunts (the affiliation term). It ADMITS
     nothing: `questions_for` adds these to a question it already formed from `c` (Q2, through `reach`),
-    so a claim `reach` refuses -- a dead victim's death claim, H-209 -- raises no faction either."""
+    so a claim `reach` refuses -- a dead victim's death claim, H-209 -- raises no faction either.
+
+    [ASSUMPTION; medium; Jordan to correct; revert: no gate, the referents form whatever the sign] The
+    gate is `opinion_of < 0`: a faction `p` is indifferent to or favours is not turned toward.
+    [ASSUMPTION; medium; Jordan to correct; revert: only the members `p`'s own ledger names, `opinion_of`'s
+    `regarded` set] The referents are every live member of the doer's faction, the RS-23 text
+    ("the members of the faction whose member killed my lord"); membership is world truth read by this
+    function, not a belief `p` holds (the `seat_holders` precedent, ED-IN-0292 (2))."""
     if c.predicate not in PAIRED_KINDS:
         return ()
     doer, _term = paired_deed_term(p, projected_axes(p, w.fixtures.get("scar_weight_shift")), c,
@@ -2543,10 +2556,11 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # position `15c` (r2 `01` §A.5.3/§A.5.4, `02` §A.9.1): the deposit rule landed at positions
     # `15`/`16` (`loop/witness.py`'s content deposit), so a `content:<kind>` claim now carries the
     # Record's real `subject_matter` instead of `True` -- the producer §A.5.3 was waiting for.
-    # ⚠ NOT A FOURTH SOURCE, NOT A WIDENED REFERENT (§A.5.4). One `Question` shape, one `source`
-    # string ("claim_landed", unchanged), one `occasioned_by` route. The Question is still
-    # `(c.subject,)` -- clause 3 only ADMITS the claim into `out`; it does not change what the
-    # Question is ABOUT. `requires_operands` is untouched by this clause for exactly that reason.
+    # ⚠ NOT A FOURTH SOURCE (§A.5.4). One `Question` shape, one `source` string ("claim_landed",
+    # unchanged), one `occasioned_by` route. Clause 3 only ADMITS the claim into `out`; it does not
+    # change what the Question is ABOUT: that is `(c.subject,)`, widened only by v9 IN-70's
+    # `opinion_referents` (below), when the holder's opinion of the doer's faction is under 0.
+    # `requires_operands` is untouched by this clause for exactly that reason.
     R = reach(w, p)
     floor = landing_floor(w, since)
     for c in p.ledger:
