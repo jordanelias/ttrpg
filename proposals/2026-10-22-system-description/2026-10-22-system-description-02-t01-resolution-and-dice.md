@@ -40,6 +40,10 @@ means no executing code. On that rule:
 *Round-3 addition, in the form of the precedent suite's "how it plays" tutorials (`research/game_precedent_suite/tutorials/T05_social_rpgs.md`).
 Every code line below was opened at `51d7b05`. The as-built text comes first; the [PROPOSED] block closes the section and none of it executes.*
 
+Terms below (S27.4, Ob, net, margin, F/P/S/O, `_admits`, the fold, `with`, `remit:determine`, docket, bench, quorum, the H- numbers) are
+defined in §1 and §4. In the menu, "cost: one act" is a share of the scene budget, not a price: it is one of the ~7 act slots a budget
+of 5 buys (1 scene action as a lone scene, or a share of an extended scene costing 2 for up to 3 acts; ERRATA Part 2 C1).
+
 **Setup choices.**
 - Nothing about dice is chosen at world build except the seed. `build_realm(seed)` seats a cast whose `capability` the code states is
   empty on every corpus person (`seam/wrappers/sigma.py:123`), and `train` mints no key (`verb_table.yaml:1468`). The run bears it out:
@@ -66,7 +70,8 @@ Every code line below was opened at `51d7b05`. The as-built text comes first; th
 
 **The choice menu** (the verbs that reach the dice; full rows in §4). Counts are per seed 0 / 1 / 2 and are §4's `ok` (at least one
 non-refusal event, `ctl/control.py:13, :21`; Partial-or-better for `tell` and the inquiries, but not for `speak`, `argue` or `determine`,
-whose Failure kinds are not in its refusal list) unless marked rolled or formed.
+whose Failure kinds are not in its refusal list) unless marked rolled or formed; the formed and stopped counts come from an uncommitted
+round-3 probe (§9).
 
 | verb | cost | effect by band, F / P / S / O | when a person picks it | grade |
 |---|---|---|---|---|
@@ -107,10 +112,11 @@ formed next season at identical odds. The social roll kills nobody; a fight's se
 
 **Consequential versus cosmetic choices.**
 - *Consequential:* which verb (its row decides what each band writes); speaking before a favourable bench (Ob 2 → 1 takes
-  Partial-or-better from 26 % to 58 %); for `determine` and `argue`, Success against Partial (pursuits move only at Success or better).
+  Partial-or-better from 26 % to 58 %); and whether to attempt `determine` or `argue` at all: a 7 % bet at the shipped pair on the only
+  band (Success or better) that moves pursuits.
 - *Cosmetic to the odds:* who rolls (every pool is 2); every named advantage level, minor to major, at the shipped pool 2 (the first x that moves
   a pool-2 band is 1.015σ, §5b; minor moves nothing at pools 1–8, and moderate first moves a band at pool 7, where `net_boost(0.5, 7)`
-  is 1.02, Table B), and nobody can supply any while `leverage` is a literal 0.0; any Ob in (1, 2] (plays as 2); a hostile bench (clipped by the ceiling).
+  is 1.02; Table B shows it at pool 8), and nobody can supply any while `leverage` is a literal 0.0; any Ob in (1, 2] (plays as 2); a hostile bench (clipped by the ceiling).
 - *Against precedent:* BG3 places the consequential choice in the build and the party (BG3 §7, `T05_social_rpgs.md:231`); Disco places it
   in the attribute spread and the thoughts (Disco §7, `:73`). Valoria as built has no build.
 
@@ -348,7 +354,7 @@ Partial `tell` delivers the news but perhaps not intact. A Partial `determine` o
 - Acts refused at admission still emit their refusal kind and stay in the act store: seed 0 holds 275 acts beyond `d.resolved` (1,407
   against 1,132; seed 1 1,394 against 1,122; seed 2 1,447 against 1,175), among them `research` 111, `examine` 62, `surveil` 21, `speak`
   19 and `argue` 10. Nineteen of the 275 are `act.ineligible`, an actor a predecessor act removed (`resolve.py:61-91`). Counted as
-  `w.acts` against `d.resolved`, re-run on seeds 0/1/2 at `51d7b05`.
+  `w.acts` against `d.resolved`, re-run on seeds 0/1/2 at `51d7b05` (uncommitted round-3 probe, §9).
 
 | verb | seed 0 | seed 1 | seed 2 | notes |
 |---|---|---|---|---|
@@ -561,7 +567,7 @@ Everything in this section is **[PROPOSED]**: none of it executes.
     always zero, is not a running mechanic (§0).
 18. **Counts.** Every execution count here is from `ctl/realm_seed{0,1,2}_2seasons.txt` or this tutorial's own probe (§9), never from
     the draft's A2 §C.3 table, which counted differently (ERRATA G2: e.g. its research 125 and examine 62 attempted, against ctl's
-    research 14 and examine 0 in seed 0). `argue` never reaches the roll in any seed, though it is formed and stopped 10 / 17 / 18 times (`argument.refused` 10 / 17 / 15, plus 3 `act.ineligible` in seed 2); `determine` reaches the roll once (seed 1) and is refused 2 / 5 / 2 times.
+    research 14 and examine 0 in seed 0). `argue` never reaches the roll in any seed, though it is formed and stopped 10 / 17 / 18 times (`argument.refused` 10 / 17 / 15, plus 3 `act.ineligible` in seed 2); `determine` reaches the roll once (seed 1) and is refused 2 / 5 / 2 times (uncommitted round-3 probe, §9).
 
 **§8 Round-2 corrections** (each cited line re-opened before accepting it):
 
@@ -592,8 +598,8 @@ carried a shifted or loose citation, the corrected one is used here.
 - **R3-1 (§3 rules of thumb).** Old: no comparison of a whole Ob step with the common roll shapes. New: a step moves Partial-or-better by up
   to 32.0 points at pool 2 (28.2 at pool 3, 22.0 at pool 5), against 5.0 on a d20 and at most 16.7 on 2d6; the pool-2 net is a bell (SD ÷
   range 0.189). Evidence: exact enumeration of `_die_result` (`dice_engine.py:153-161`) banded by `degree_from_net` (`:286-301`).
-- **R3-2 (§1 `p_success` row).** Old: "helper only; no season caller". New: also understates Partial-or-better on whole dice (14.4 against
-  26.0 % at pool 2 / Ob 2; 43.0 against 58.0 at Ob 1; 50.0 against 60.0 at pool 5 / Ob 2). Evidence: `sigma_leverage.p_success(ob, pool)`
+- **R3-2 (§1 `p_success` row).** Old: "helper only; no season caller". New: also understates Partial-or-better on whole dice at the admitted pairs
+  checked (14.4 against 26.0 % at pool 2 / Ob 2; 43.0 against 58.0 at Ob 1; 50.0 against 60.0 at pool 5 / Ob 2), and overstates at a refused one. Evidence: `sigma_leverage.p_success(ob, pool)`
   called at those pairs, against Table A.
 - **R3-3 (§5d).** Old: silent on the shape of the middle band. New: Partial is narrow by ruling (ED-IN-0187), 19 % at the shipped pair and
   never modal at pools 1–8 against Ob 1–4; Failure (74 %) is the typical outcome and writes nothing. Evidence: enumeration over
@@ -610,13 +616,34 @@ carried a shifted or loose citation, the corrected one is used here.
   "not re-measured here" becomes the measured 62 / 59 / 39 formed. Evidence: `w.acts`
   against `d.resolved`, re-run on seeds 0/1/2 at `51d7b05`; `resolve.py:61-91, :1025-1032`.
 - **R3-7 (§6 mass battle, §8 item 10).** Old: "A guard test holds the copies equal". New: two guard tests (ladder, and face rule at
-  `test_tn7_always.py:95`); the per-die μ/σ literals are typed in four files; `roll_pool`'s comment that the volley path hand-rolls its
-  dice is stale. Evidence: `resolution.py:37-55, :43-45, :104-120, :227`; `orchestration.py:1565-1574`; `engine/reference/contest-groundup/engine.py:35`.
+  `test_tn7_always.py:95`); the per-die μ/σ literals are typed in five files, and the mass-battle pair is unguarded; `roll_pool`'s comment that the volley path
+  hand-rolls its dice is stale. Evidence: `resolution.py:37-55, :43-45, :104-120, :227`; `modules/mass_battle/config.py:306`;
+  `orchestration.py:1565-1574`; `engine/reference/contest-groundup/engine.py:35`.
 - **R3-8 (§5a).** Old: no statement on streak memory or on what a seated player would see. New: the per-act generator is seeded from
-  `(world_seed, tick, actor, purpose)` alone, no surface shows a chance, so realised odds equal Table A. Evidence: `state/ids.py:16-21, :87-89`;
+  `(world_seed, tick, actor, purpose)` alone, no surface in the season loop shows a chance, so realised odds equal Table A. Evidence: `state/ids.py:16-21, :87-89`;
   overview §7.
 - **R3-9 (new §0a).** Old: no account of what a person chooses, or what changes later. New: the section above, re-checked against PR #494:
   the season now reports `world_q.endings_reached` and the realm as built reaches none (`loop/driver.py:515-518`). The ctl counts still hold.
+
+#### Audit fixes
+
+Each line is old -> new; every cited line was opened in the tree before the edit.
+
+- **F1 (§6 mass battle, R3-7).** "typed in four files" -> five files plus the oracle copy `tests/sim/v32-combat-balance/m1_dice_sigma_core.py:28`, adding mass battle's μ at `modules/mass_battle/config.py:306`; the engine pair is pinned (`test_tn7_always.py:172-179`), the mass-battle pair is not (σ unpinned, μ only `pytest.approx`, `test_fractional_pool.py:31`).
+- **F2 (§6 combat).** "The social path has no such floor" -> no fixed floor, but Partial-or-better is at least 0.1^pool and Failure is never 0 at Ob > 0 at any pair S27.4 admits (`sigma.py:273`; Table A).
+- **F3 (§0a Setup, First season step 1).** The ctl `capability nonempty 0` line cited as proof for the build -> stated as a run-end count over survivors (`ctl/control.py:29`), with the code's own statement at `sigma.py:123` and `verb_table.yaml:1468`.
+- **F4 (header, §9).** "the commands are in §9" -> the header says round-3 figures came from uncommitted scripts, and §9 names each computation (act store, `p_success`, pools 1–40 enumeration, hand arithmetic); formed and stopped counts are tagged "uncommitted round-3 probe".
+- **F5 (§0a Consequential/cosmetic).** "minor or moderate advantage ... quantised to nothing" -> every named level at pool 2, the first moving x being 1.015σ; moderate first moves a band at pool 7 (`net_boost(0.5, 7)` = 1.02), not pool 8 as the audit's fix text had it.
+- **F6 (§0a What changes later).** "Nothing on this layer" -> only `speak` changes, through reception and unmirrored proofs (`sigma.py:180-182`, `roll.py:104`).
+- **F7 (§5a, R3-8).** "no surface shows a chance" -> none in the season loop; the combat workbench traces branch odds (`workbench/server.py:8-9`) and the mass-battle workbench none (`workbench/trace.py:11`), correcting the audit's "two workbenches".
+- **F8 (§1 `p_success` row, R3-2).** "On whole dice it understates" -> at every admitted pair checked (pools 1–5), 10.0–15.0 points at the four pairs used, 17.3 at pool 1 / Ob 1, and an overstatement at refused pairs (pool 1 / Ob 3: 0.0006); the range "7–15" is not used.
+- **F9 (§0a precedent note).** "Disco §3: clothing and drugs before a check" -> drugs cost reál and Health/Morale and are taken before a check; clothing is free (`T05_social_rpgs.md:36-37`).
+- **F10 (§0a Against precedent).** "BG3 and Disco place the consequential choice in the build and the party" -> BG3 in the build and the party (`T05:231`), Disco in the attribute spread and the thoughts (`T05:73`).
+- **F11 (§0a menu).** "Counts are §4's `attempted/ok`" -> `ok` per seed, with `research` and `surveil` given as ok of rolled; K2: `ok` is any non-refusal event (`ctl/control.py:13, :21`), so a `determine` Failure also counts, which §8 item 8 and R2-1 had wrong.
+- **F12 (§5d).** "across the competent range" -> "at the modifiers and dice counts shown", and the band is the most likely one only at PbtA +1 and Blades 2–3 dice (hand arithmetic).
+- **F13 (§0a).** Terms used before their definitions, and "cost: one act" -> a pointer to §1 and §4 and the scene-budget basis of ERRATA Part 2 C1.
+- **F14 (§0a Consequential).** "Success against Partial" -> whether to attempt `determine` or `argue` at all, a 7 % bet on the only band that moves pursuits.
+- **K1 (§4 "What executes", §8 item 8).** "an act refused at admission continues before `_fold`" -> scoped to contested or graded acts refused by `_admits` (`resolve.py:1013-1032`); ordinary precondition refusals run inside `_fold` (`:428`) and are counted.
 
 ## 9 Checks
 

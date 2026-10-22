@@ -507,7 +507,7 @@ your `tenure.opened`, `order.given`, `dispensation.issued`, and also every MATTE
   converting the stock are not present: no computed act adds or upgrades a yielding Site (build 19/0, 17/0, 21/0) and nothing converts
   stock, so I-22 is stale only in naming `facility_tier`. Heroes of Might and
   Magic's town dwellings are the precedent shape (`research/game_precedent_suite/tutorials/T17_repo_strategy_a.md`, HoMM §2.3). The
-  contrast is RimWorld, where output is the labour you assign (`T03_colony_a.md`, RimWorld §2.2 and §3).
+  contrast is RimWorld, where output is the labour you assign (`T03_colony_a.md`, RimWorld §2.2 and §3; tag V2).
 - **Food is in surplus within any plausible horizon** at shipped numbers: ~38 grain made against 4 eaten per settlement
   per season. Not forever: harbours wear 10 a season and nothing repairs them in the realm (`restore` 0 successes), so
   condition reaches 0 after 100 MATTERs and grain yield truncates to 0 a few ticks earlier (`int(40 × c/1000) = 0` once
@@ -515,33 +515,40 @@ your `tenure.opened`, `order.given`, `dispensation.issued`, and also every MATTE
   is 40/4 = 10 seasons after the tick-0 MATTER.
 - **Every settlement is the same economy.** `build_realm` gives each of the 37 settlements one Site of every yielding kind at
   full condition (`harness/populated.py:772-777`), so each makes grain 40, salt 30, ore 50, timber 10 and none lacks what another
-  has; nothing gives a reason to move goods between places. [precedent: `research/game_precedent_suite/tutorials/T10_npc_economy.md`,
-  Anno 1800 §2.7 and §7, where island fertilities decide what each can make and trade routes move the surplus]
+  has; nothing gives a reason to move goods between settlements (paying men does force a requisition settlement → territory treasury → hearth, §3). [precedent: `research/game_precedent_suite/tutorials/T10_npc_economy.md`,
+  Anno 1800 §2.7 and §7, where island fertilities decide what each can make and trade routes move the surplus; tag V3]
 - **Stores never cap, spoil or cost anything.** Wear touches Sites only (`rosters.yaml:1422`); realm stores rise 0 → 4,810 → 9,250 over
-  two seasons in all three seeds (37 settlements × 130, then × 250; round-3 re-run, §8). Ore has no reader at all (no `.py` under `loop/`,
-  `queries/`, `state/` or `seam/` names it, grep at `51d7b05`); timber's only sink is `works_cost` (10 per Site, `rosters.yaml:1501`).
+  two seasons in all three seeds (37 settlements × 130 after the first yield, then × 250 after the second, net of the 6 eaten:
+  37 × 130 = 4,810 and 37 × (130 + 126 − 6) = 9,250, from `loop/matter.py:589-591` and `rosters.yaml:2577-2583`). Ore has no consumer or sink: nothing
+  draws, costs or converts it, and it moves only by a generic `transfer` or `requisition` (the `stores:<kind>` read, `queries/world_q.py:2777-2779`;
+  `store_kind_of` forms a transfer of whatever kind a claim names, `decision/options.py:743-744`; no `.py` under `loop/`, `queries/`, `state/` or
+  `seam/` names `ore`, grep at `51d7b05`, which cannot see those generic readers). Timber's only sink is `works_cost` (10 per Site, `rosters.yaml:1501`).
 - **War costs no production.** Yield has no labour term (`loop/matter.py:589-591`) and one Felled deletes a cohort whole (ERRATA C1,
   personal combat), so a lost fight removes a settlement's eaters and none of its yield.
 - **The horizon is measured on two seasons and three seeds**, plus the yield arithmetic above; no campaign-level instrument exists
   (`CLAUDE.md` §7).
 - **Treasuries are hollow.** Seats sit on territory/duchy rungs, which yield nothing; paying anyone needs a requisition
   first. Upkeep is cheap (1 unit per man per 4 seasons) relative to settlement surplus.
-- **Governing leaves no rule behind.** No act sets a standing parameter: `issue` mints one writ for one executor that nothing at
+- **Governing leaves no rule behind.** No act sets a standing economic rate (tax, ration, wage): `issue` mints one writ for one executor that nothing at
   MATTER reads (`verb_table.yaml:561`; a held writ seeds its holder's own act operands, `decision/options.py:915-930`, but nobody is
-  bound to act on one), and `tax`, `ration` and `proclaim` are DESIGN-ONLY (§7). Nor is there a standing tribute: a treasury refills
-  only when its holder spends one of his own acts on a `requisition`, each time (`loop/effects_governance.py:426-464`). A seat's
+  bound to act on one), and `tax`, `ration` and `proclaim` are DESIGN-ONLY (§7). What a governing act does leave standing is a seat or a
+  remit (`establish`, `loop/effects_governance.py:145-204`) or a dated sitting (`convene`), neither of which sets a rate. Nor is there a
+  standing tribute: a treasury refills only by an act, each time: a `requisition` by its holder (`loop/effects_governance.py:426-464`) or
+  someone's `transfer` into the rung (`transfer` is `own`-eligible, §4). A seat's
   power lasts as long as the act that uses it. [precedent: `research/game_precedent_suite/tutorials/T01_realm.md`, Victoria 3 §3
-  (a law is a standing parameter) and Crusader Kings III §2.6 (vassal contracts deliver tax and levies automatically)]
+  (a law is a standing parameter) and Crusader Kings III §2.6 (vassal contracts deliver tax and levies automatically); tag V3]
 - **Population is fixed and only falls.** Cohort weight is set at build; nothing births or attracts a person (the only mint is CENSUS
   individuation, `loop/census.py:106`, TESTS-ONLY; the closed cast of 46 is ruled, ED-WR-0011, Jordan 2026-09-13, Option A, "for
   now"), and persons fall 83 → 74 in two seasons of seed 0 (every death is combat, ERRATA G9). Capacity therefore gates movement
   inside a fixed population.
-- **Holding is never penalised.** Each live `hold` adds 1 to the budget up to the 10-cost ceiling (`decision/budget.py:57-61`), and
+- **Holding is never penalised.** Each live `hold` adds 1 to the budget without limit (`decision/budget.py:57-61`: `return max(1, b)`, uncapped); at most 10 cost can be spent
+  (5 releasable scenes at `extended_scene_cost=2`, `loop/deliberate.py:89-93`, `data/fixtures.py:489`). And
   nothing charges for holding more: one person may hold several seats (seed 1's self-conferral seated a holder who already held a seat),
   so no assignment is an opportunity cost. [precedent: `T01_realm.md`, CK3 §3 (the domain limit); `T18_repo_strategy_b.md`, Stellaris
-  §3 (Empire Size)]
+  §3 (Empire Size); tag V3]
 - **Governance does not touch output.** Yield reads a Site's condition only (`loop/matter.py:589-591`), so a vacant seat, or the
-  vacant throne, costs no yield. [precedent: `T13_koei.md`, Knights of Honor II §3 and §7, where a governor is the output multiplier]
+  vacant throne, costs no yield. [precedent: `T13_koei.md`, Knights of Honor II §3 and §7, where a governor is the output multiplier of a province's resources; tag V3. The source adds that goods
+  production needs no governor, `T13_koei.md:298`]
 - **Upkeep must be paid to where men stand.** Men scattered across hearths need one transfer per hearth.
 - **Unseating has one gate, two exits.** Both `revoke` and a displacing `confer` need revocation authority over the
   seat; `confer` also needs a holder with no live `commit`, and in exchange seats your man in the same act and bans
@@ -589,7 +596,7 @@ not rows), governed by `proposals/2026-10-16-verbs/` verbs-03 §III.5 where a le
   scarce worlds: at today's ratio the realm cannot go hungry after the tick-0 MATTER (ERRATA G18; cover figure caveat in §5d).
   A cohort that falls or dies would also lower no yield (yield reads a Site's condition only, `loop/matter.py:589-591`), so no famine
   spiral could form. [precedent: `research/game_precedent_suite/tutorials/T04_colony_b.md`, Banished §6-7, where dead workers stop
-  producing]
+  producing; tag M]
 - **[PROPOSED] tax / ration / proclaim** — one `edict` Record kind (M-EDICT). `tax` (waits on M-TAX; its other named wait, IN-23, has
   landed since PR #494 as the person-side Queries `legitimacy(p, holder, window)` and `stability(p, rung, window)`,
   `queries/person_q.py:451, 480`, each one person's own windowed estimate, read by the story-bar report and by no chooser or MATTER
@@ -616,7 +623,7 @@ not rows), governed by `proposals/2026-10-16-verbs/` verbs-03 §III.5 where a le
   Total War §6, `T14_squad_settlement.md` JA2 §2, `T01_realm.md` CK3 §6); `dispatch` → `order` rename held (D-V7); H-174 (upkeep to
   presence or residence); IN-48 (delegation without a `hold`, `hole_register.yaml` H-108: no standing order exists, so every
   requisition, payment and conferral is a fresh act against the same budget; DESIGN-ONLY) [precedent: `T01_realm.md` CK3 §3 council
-  row, `T02_warband.md` Bannerlord §3 governor row].
+  row, `T02_warband.md` Bannerlord §3 governor row; tags V3 for CK3, V2 for Bannerlord].
 - **Stubbed / inert at shipped defaults:** `body_step 0`, `age_step 0`, `illness_rate 0`, `season_factor_draw ()`;
   `Rung.envelope` has no producer; `faction_q.head` always None; Parliament "RULED AND NOT BUILT" (H-90).
 
@@ -626,9 +633,11 @@ not rows), governed by `proposals/2026-10-16-verbs/` verbs-03 §III.5 where a le
 - *A settlement is not an object.* It has no population, unrest or treasury field; all of those are Queries or another
   rung's stores. A seat's treasury is its own rung, and almost no seat sits on a rung that yields. Unrest exists only as one
   person's own reading, `stability(p, rung, window)` (IN-23, PR #494, `queries/person_q.py:480`): minus the number of unrest claims
-  that person holds about the rung from the window (a death, wound, field won, seizure or requisition there, or a shortfall claim).
-  Only the story-bar report reads it, and over two seasons of seed 0 it is 0 for every (person, office rung) pair (round-3 re-run;
-  `hole_register.yaml` H-224), so no governance act moves any unrest a decision uses. The revolt reading `uncontrolled(w, rung)`
+  that person holds from the window whose SUBJECT is the rung itself, not where it happened (`queries/person_q.py:497-504`): the deed kinds
+  `person.died`, `body.changed`, `field.won`, `rung.seized`, `record.seized` and `requisition.taken`, and a shortfall claim. A death or
+  wound claim names a person, so those two kinds never count at a rung.
+  Only the story-bar report reads it, and over two seasons of seed 0 it is 0 for every (person, office rung) pair (uncommitted round-3
+  probe; `hole_register.yaml` H-224), so no governance act moves any unrest a decision uses. The revolt reading `uncontrolled(w, rung)`
   (`queries/world_q.py:1710`) lists unheld territories and has one caller, a harness census report (`harness/populated.py:1518`; T09).
   [precedent: `research/game_precedent_suite/tutorials/T02_warband.md`, Bannerlord §5, where fief loyalty drifts toward 50 and
   rebellion risk starts below 25; tag V2]
@@ -653,7 +662,7 @@ not rows), governed by `proposals/2026-10-16-verbs/` verbs-03 §III.5 where a le
 **Where the draft appendices (GV §A5, EC §A6) were wrong, and the correction used here.**
 1. *GV §4 "`transfer` incl. upkeep renewal RUNS-IN-LOOP (barely)" and EC §4 "`transfer` + upkeep renewal RUNS-IN-LOOP".*
    Upkeep renewal never executes: 0 `term.renewed` in seeds 0–2 (2 seasons) and in seed 1 over 6 seasons. The
-   executed transfers (1, 0, 5) are cohorts moving grain from their settlement into their own person rung (my probe, §9).
+   executed transfers (1, 0, 5) are cohorts moving grain from their settlement into their own person rung (my probe, §9; uncommitted).
    Renewal is TESTS-ONLY (`tests/test_term_upkeep.py`).
 2. *GV §4 "`confer`, `establish`, `oblige` TESTS-ONLY; P1 attempted 0".* Seed 0 only. Seed 1: `oblige` 24/22, `confer`
    5/1, `establish` 5/0; seed 2: `convene` 5/1 (ctl/ files; ERRATA G2).
@@ -727,7 +736,8 @@ the broadcast kinds (C5); I took it from the audit.
 ### Round-3 corrections
 
 Revised against `51d7b05` (PR #494 on top of the `a4ca9a5` text) and the precedent suite. Each cited line was re-opened at that tree;
-"re-run" means the probe was run again at `51d7b05` (read-only, `python3 -I`; scripts are not committed). Tags `[precedent: ...]` point
+"re-run" means the probe was run again at `51d7b05` (read-only, `python3 -I`; scripts are not committed, so each figure so marked is an
+uncommitted round-3 probe and `ctl/` is the only committed instrument). Tags `[precedent: ...]` point
 at `research/game_precedent_suite/` (reference, tier 3) and carry the precedent's own tag; none is a rule about Valoria.
 1. *Seven, not six, null-conferral seats (§1, §5b, §5c).* Old: "the six `conferral: null` seats". New: seven of the 32 built seats, the
    six authored rows plus the rowless guild-leader seat `off_npc_084` (`harness/populated.py:1241-1250`; `loop/predicates.py:126-127`;

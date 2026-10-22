@@ -390,7 +390,7 @@ were session files and are not committed; their numbers cannot be reproduced fro
   (FI-03's trail) lands in seeds 0-2. A Partial finding closes that trail to its finder for as long as he holds that claim (`epistemic.py:356-366`); eviction
   at the ledger cap removes the claim (`state/ledgers.py:24-32`). People learn by presence, by being told (the told deposit,
   `loop/witness.py:822-830`, `:860`), by holding a written object (`document_key`), by the chronicle channel for binding-decision kinds
-  (`epistemic.py:649`), and at seeds 1-2 through a seat (`post_remit`, R-13).
+  (`epistemic.py:649`), and through a seat (`post_remit`, R-13).
 - **R-F9 Economy.** In natural play no `work` or `restore` names a Site: the `site` operand is the question's subject (`decision/options.py:1047-1048`;
   I1 verification claim 2), and `work` also waits on a works Record that names the Site (Part 1 C5; `loop/effects_economy.py:103-104`). Given a Site,
   `work` can never run on dwellings and garrisons, 248 of the 322 Sites: their `band_floors` are empty
@@ -420,8 +420,11 @@ were session files and are not committed; their numbers cannot be reproduced fro
   renderer (`harness/chronicle.py`) is an observer the loop never imports. Goals are attention-only (A-31, `engine/season/goals.yaml:10-12`)
   and nothing tests whether one is met. **Restates Part 1 G17**: the deleted `victory` layer is still deleted; an ending vocabulary now
   exists, is reported, and is unreached.
-- **R-13 `post_remit`.** It admits one person at seeds 1 and 2: the King's obligee `p_npc_070` holds an `inferred` claim of a refused
-  royal act at tick 0 (round-3 trace). **Overturns Part 1 C8's "post_remit admitted nobody"** for those seeds (round-2 audit H F4 had
+- **R-13 `post_remit`.** It admits one person: the King's obligee `p_npc_070` holds an `inferred` claim of a refused royal act at tick 0
+  (uncommitted round-3 probe). The producer is the obligee predicate `_ch_post_remit` (`epistemic.py:563`, through `Act.via`; the claim source is
+  set at `loop/witness.py:598`), not the seat-report limb (`:513-524`), which reads only actorless Events (`:517-518`); the Events are the King's refused
+  `open_case` via `off_npc_020` (`act.ineligible`, seeds 0 and 1) and `revoke` (`revoke.refused`, seed 2). The claim is still held at the end of two
+  seasons at seeds 1 and 2; at seed 0 it was deposited at tick 0 and `p_npc_070` is gone by the end of tick 1 (re-run, uncommitted). **Overturns Part 1 C8's "post_remit admitted nobody"** (round-2 audit H F4 had
   flagged it); `witness_key` still admits nobody.
 - **R-14 The wound loop.** wound → body → `end` → next fight runs: seed 0, tick 0, the King is Wounded to body 450 (`end 2`) and Felled the
   same tick; over seeds 0-2, 11 calls met a subject below `end 4` and 7 Felled him (seam trace). **Restates Part 1 C9** for this loop.

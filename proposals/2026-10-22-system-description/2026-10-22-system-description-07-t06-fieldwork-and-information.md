@@ -16,7 +16,8 @@ Repo HEAD `a4ca9a5`; revised in round 3 against `51d7b05` (after PR #494) and th
   refusals for an obstacle too high for the pool (`:974-998`).
 - *ok* means at least one Event that is not a refusal. For a graded inquiry that means Partial or better.
 
-"Probe" means a read-only script I ran for this tutorial (§9). Times are given as **ticks** (one tick per
+"Probe" means a read-only script I ran for this tutorial (§9). The scripts are not committed, so a figure
+marked probe is an uncommitted round-3 probe figure; ctl is the only committed instrument. Times are given as **ticks** (one tick per
 season; the first MATTER runs at tick 0), not as "season N".
 
 ## 0 Before you start
@@ -60,7 +61,7 @@ decision layer (`questions_for`, `opening_set`) turns your claims into your next
 | `witness_key` channel | TESTS-ONLY: it admitted nobody in seeds 0 or 2 (0 `firsthand_via_knot`) |
 | `post_remit` slot (the obligee channel and IN-22 seat reports) | RUNS-IN-LOOP through the obligee channel (errata Part 3 R-13): at tick 0 the King's obligee p_npc_070 holds an `inferred` claim of a refused royal act in seeds 0, 1 and 2 (uncommitted round-3 probe). Seed 0's end-of-run count of 0 `inferred` is a survival count, not an absence: p_npc_070 dies at tick 1 there. Test: `engine/season/tests/test_obligees.py:167` |
 | the inquiry rolls, `survey`, `forge`, `conceal`, `create_record`, `tell` | RUNS-IN-LOOP |
-| what an inquiry uncovers (the found deposit) | TESTS-ONLY: 0 found deposits in seeds 0, 1 and 2 (probe) |
+| what an inquiry uncovers (the found deposit) | TESTS-ONLY: 0 found deposits in seeds 0, 1 and 2 (uncommitted round-3 probe) |
 | `give` | 0 of 16 in seed 0; 1 of 19 in seed 2 (a cover changed hands) |
 | told drift and private circles | Partial drift TESTS-ONLY in effect; circles are RUNS-IN-LOOP at control (`telling_privacy=0`) |
 | `systems/fieldwork/sim/knots.py` | TESTS-ONLY (unplugged) |
@@ -81,7 +82,7 @@ L.A. Noire), "T19 precedent" is `.../T19_tactics_narrative.md` (Lacuna, Ace Atto
 
 **Setup choices.**
 - World build: `build_realm(seed)` seats the same 83 persons, 322 Sites and 412 Rungs at seeds 0, 1 and 2;
-  the seed changes the draws, not who exists (probe). Nothing in the information model is chosen per world.
+  the seed changes the draws, not who exists (uncommitted round-3 probe). Nothing in the information model is chosen per world.
   Shipped: `refraction_gain 0.5` (`fixtures.py:874`), `claim_decay_per_season 5` (`:293`), `told_weight 0.5`
   (`:788`), `record_gain 0.5` (`:801`), `telling_privacy 0.0` (`:863`); inquiry pool 2, obstacle 2, ceiling 2
   (§2.8).
@@ -221,6 +222,9 @@ fight, no investigation content); the fieldwork lexicon's M1-M10 (§7).
 |---|---|---|---|
 | Event, log | what happened (truth): kind, causes, changes, degree | append-only | `state/carriers.py:232` |
 | Rung | a node of the containment tree: a place, a holding, or a person's own rung | — | `state/carriers.py` |
+| Site | a built thing at a Rung, with an integer `condition` that gates verbs; a different carrier from a Rung and from a Record | kinds in the realm: dwelling, harbour, seam, garrison; 322 at build | `state/carriers.py:737` |
+| cohort | a Person at `weight > 1`, standing for the people of one populated rung; a named individual has weight 1 | rows authored in `cohorts.yaml` | `state/carriers.py` (`Person`); `cohorts.yaml` |
+| View, Sensation | the chooser's two person-side inputs besides the budget query: a View holds ids (`holder`, `claim_ids`, `question`), never references; a Sensation is the only bridge from world truth into `choose` | — | `state/carriers.py:435`, `:388` |
 | Tenure | a stored relation edge (`hold`, `commit`, `oblige`, `knot`, …) with `since`/`until` | live while open | `state/carriers.py:77` |
 | Proposition | an immutable uttered statement with a mood (default `OUGHT`); `utter` makes one | never edited | `carriers.py:849`; `effects_information.py:1001` |
 | Office, purview, establishment | a seat; the places it reaches; the people attached to it (who the `post_remit` channel admits) | — | `epistemic.py:563-646` |
@@ -816,6 +820,64 @@ brackets (probe = a read-only run of `build_realm(seed)` for seeds 0, 1 and 2, t
     `loop/deliberate.py:119-170`, not to a session note; the options.py veto is `:308-309`, not `:300-307`;
     "a Partial closes the trail for good" reads "for as long as the claim stays in his ledger".
 
+#### Audit fixes
+
+Each line is old -> new, with the line that was re-opened; the number is the audit finding. Figures marked probe
+are uncommitted round-3 probes (§9, "Audit-fix pass").
+
+1. Header "attempted": "passed admission; admission refusals are not counted" -> counted at fold entry
+   (`loop/resolve.py:377-379`, before the check at `:428-430`) and uncounted only for graded or contested verbs
+   (`:1012-1032`), so interview 21 of 32 and reconstruct 6 of 39 attempts were refusals.
+2. Partial closure: "terminal", "for good", "permanently" (0a, §3, §5c, §8 trap 3) -> until the claim is evicted
+   from his ledger (`epistemic.py:356-365`; `state/ledgers.py:24-32`; `loop/matter.py:321-322` keeps a claim at 0).
+3. §0 `post_remit` row: TESTS-ONLY at seed 0 and "which of the two I did not trace" -> the obligee channel (errata
+   Part 3 R-13) puts an `inferred` claim in p_npc_070's ledger at tick 0 in seeds 0, 1 and 2, and seed 0's end-of-run
+   0 is a death artefact (he died at tick 1; probe), one step past the audit; the §9 "Not confirmed" bullet is deleted.
+4. 0a setup: "capability is empty ..., so every investigator rolls the same two dice" -> no `VERB_CAPABILITY` row
+   names an inquiry (`rosters.yaml:1229-1231`), so capability would not change the pool.
+5. 0a callback: `research` of a held Record listed as something the chooser never does -> dropped, since §3 has the
+   chooser forming it.
+6. 0a menu cost: "Every act costs one act of budget" and "1 act" -> 1 as a lone scene or a share of an extended
+   scene costing 2 for up to 3 acts, "one act of a scene" (errata Part 2 C1).
+7. `examine` cause: "no question's subject is a Site", `work` and `restore` only -> formed on the referent, never
+   a Site in 160 formations (probe), already named at `verb_table.yaml:1312-1313`, fix REM-22
+   (`...remediation-02...:360-379`) unbuilt, `sabotage` added with lines `:988-995`, `:1025-1032`, `:1512-1517`,
+   and the fill given as one cause among several for the three (`effects_economy.py:103-104`,
+   `rosters.yaml:2631-2632`, no works Record minted; probe).
+8. `examine` TESTS-ONLY grade: probe alone -> cites `engine/season/tests/test_fi01_graded_inquiries.py:223-239`.
+9. Survival counts: "TESTS-ONLY at seeds 0-1" for the teller record and "skipped or evicted" for seeds 1 and 2 ->
+   TESTS-ONLY at seed 0 (`test_told_by_channel.py:1363`), untested at seed 1, "or held by someone who died" added
+   (ctl `person.died` 9 / 6 / 11).
+10. Provenance paragraph: surveys "find a model of where a belief came from in only one title" -> provenance and
+    fabricable, traceable evidence, uploads not in the repo, "Holds" resting on the fabrication half that D_T06
+    row 66 grades LACKS in the realm, `20G:235` added.
+11. Proposed setup: "logbook, case board or phone log" -> the Obra Dinn book and the Lacuna phone log only (the
+    Shadows of Doubt board is player-built, VCD `:784` DOES NOT APPLY).
+12. M2: the precedents' quoted "nothing more here" -> Obra Dinn's blurred face (T06 `:53`) and L.A. Noire's music
+    stopping (T06 `:248`).
+13. IN-47: "built by REM-30 ..., the design stays PROPOSED" as ruled -> to be built, unbuilt (`requirements.yaml:818`),
+    D-2 ruled the build proceeds and keeping the design PROPOSED is an [ASSUMPTION] (`remediation-02:552-555`).
+14. AX-7 cite: `fieldwork-architecture-and-nonadversarial-play.md:91-92` -> dropped, since it rejects only Obra
+    Dinn's global oracle; `verb-coverage-and-gap-fill.md:787-788` stays.
+15. Chooser entry: REM-30's `loop/driver.py:355` -> `loop/driver.py:370`, called at `loop/deliberate.py:170`.
+16. First season: figures in neither D_T06 nor §9 -> each reproduced by a one-season probe and listed in §9, with
+    68.3 defined as claims per ledger (5,329 over 78 persons) and forge as formed 21, minted 4.
+17. `research` menu cell: "most formed acts name a person or place" -> formed on the referent, which must be a
+    Record to pass, about 108 refused at seed 0 (§4: 115 `finding.none` less 7 Failures).
+19. Undefined terms: Site, cohort, View, Sensation and "the precedents' verification scale" -> §1 rows
+    (`state/carriers.py:737,435,388`; `cohorts.yaml`), "of the four T06 precedents", and an `examine` trigger cell
+    that holds a trigger instead of a grade.
+20. Path base: "relative to /home/user/ttrpg" -> unprefixed and `harness/`, `loop/`, `decision/`, `queries/`,
+    `state/`, `seam/`, `data/` paths are under `engine/season/`.
+21. "Inert at shipped values": listed `examine`, `interview`, `reconstruct` -> a separate line, since they are
+    inert by a formation defect or by construction, not by a fixture value.
+22. `dispatching_chooser`: "one named person's choosing" -> every person in `overrides`, and the callback also
+    receives `auto` (`harness/play_surface.py:14-16,41-51`).
+23. §5(d) `examine`: "cannot learn it by going there later" -> "cannot read it off the place later", since a
+    `tell` from someone still there is a route.
+24. 0a menu: re-stated grades and causes -> points at §0 and §4, and the drifted cells (items 2, 4, 5) are
+    corrected, with 0a not restructured.
+
 ## 9 Checks
 
 - Opened: `modules/fieldwork/find.py:28-34`; `seam/wrappers/fieldwork.py:46-64`;
@@ -845,14 +907,29 @@ brackets (probe = a read-only run of `build_realm(seed)` for seeds 0, 1 and 2, t
     reconstruct 6.
 - Round 3 (`python -I`, `build_realm(seed)` for seeds 0, 1 and 2, two seasons, the ctl recipe; scripts not
   committed): `examine` formed 62 / 59 / 39, no `site` operand one of the 322 Sites (seed 0, by act: 45 Rungs,
-  15 Persons, 2 Records); found deposits 0 / 0 / 0; ledger sources alive `inferred` 0 / 1 / 1; chained claims alive
-  0 / 0 / 1; `news.told` 4 / 7 / 6; same 83 persons, 322 Sites and 412 Rungs at build in all three seeds;
-  `endings` `[]` in both seasons at seed 0; seed 0, one season: p_npc_037 took nine fieldwork acts and went
-  from 0 to 187 claims (177 firsthand, 10 `told_by` at 67); a hand-built `examine` of a Site where a person
-  stands reached the roll (degree Failure). Re-opened: `rosters.yaml:1145,2424-2490`;
+  15 Persons, 2 Records); found deposits 0 / 0 / 0; ledger sources alive `inferred` 0 / 1 / 1 at the end of two
+  seasons; chained claims alive 0 / 0 / 1; `news.told` 4 / 7 / 6; same 83 persons, 322 Sites and 412 Rungs at
+  build in all three seeds; `endings` `[]` in both seasons at seed 0; seed 0, one season: p_npc_037 took nine
+  fieldwork acts and went from 0 to 187 claims (177 firsthand, 10 `told_by` at 67); a hand-built `examine` of a
+  Site where a person stands reached the roll (degree Failure). Re-opened: `rosters.yaml:1145,2424-2490`;
   `decision/options.py:300-309,1043-1049,1470-1545`; `queries/world_q.py:2217-2240,2374,1764`;
   `loop/deliberate.py:119-170`; `harness/play_surface.py:41-52`; `loop/driver.py:101,449-456,510,515-518`;
   `fixtures.py:293,788,801,863,874,933`; `epistemic.py:336-404,932-938`; `loop/witness.py:276-315`.
+- Audit-fix pass (`python -I`, `build_realm(seed)`, the ctl recipe; scripts not committed; uncommitted round-3
+  probe). Seed 0, one season: 78 persons alive after it holding 5,329 claims (mean 68.3 per ledger); p_npc_037
+  took nine fieldwork acts, the next two persons seven each; `research` formed 59 (55 refused at admission, 2
+  ineligible, 2 reached the roll, both Partial, both by cohorts, on a Record); `surveil` formed 28 (14
+  refused, 14 rolled: 1 Partial, 13 Failures); `examine` formed 30, all refused; `forge` formed 21 (17 refused,
+  4 minted); `give` formed 8, all refused; `tell` formed 3 (2 Success, 1 Failure). Seeds 0, 1 and 2, two
+  seasons: p_npc_070 holds an `inferred` claim at the end of the first season (tick 0) in all three seeds
+  (`act.ineligible` on p_npc_020 at seeds 0 and 1, `revoke.refused` at seed 2) and still holds it at the end of
+  the second at seeds 1 and 2; at seed 0 he died at tick 1, so the end-of-run `inferred` count is 0 there. Seed 0 Records after two seasons: `text` 93,
+  `faction_sheet` 25, `cover` 19, `petition` 14, `dispensation` 5, no works Record; Sites: dwelling 211,
+  harbour 37, seam 37, garrison 37. Re-opened: `loop/resolve.py:372-382,424-432,965-1035`; `epistemic.py:354-365`;
+  `state/ledgers.py:17-32`; `loop/matter.py:318-324`; `decision/options.py:1040-1050`; `rosters.yaml:1225-1231,2629-2633`;
+  `verb_table.yaml:985-998,1020-1034,1308-1315,1508-1518`; `engine/season/tests/test_fi01_graded_inquiries.py:223-239`;
+  `engine/season/tests/test_obligees.py:167`; `engine/season/tests/test_told_by_channel.py:1363`;
+  `harness/play_surface.py:8-20,40-56`; `loop/driver.py:353-372`; `loop/deliberate.py:168-171`.
 - Round 2, re-opened: `rosters.yaml:1226-1232`; `sigma.py:110-117`; `verb_table.yaml:155-158,300-313,355,900-903`;
   `fixtures.py:486-490`; `epistemic.py:650-656,683-687`; `decision/choose.py:643-657`; `loop/driver.py:454-458`;
   `decision/budget.py:18-22`.
@@ -860,7 +937,6 @@ brackets (probe = a read-only run of `build_realm(seed)` for seeds 0, 1 and 2, t
   O 0.142, S 0.328. The refraction table in 2.4 is computed from the formula.
 - Not confirmed:
   - why 40 of 52 forges are refused in seed 0;
-  - whether the one `inferred` claim at each of seeds 1 and 2 came from the `post_remit` channel or a seat report;
   - the seed-1 and seed-2 tellings beyond their surviving chained claims (0 and 1);
   - which binding row emits `tenure.closed` (taken from CROSS C5);
   - `deliberate.py:252-259` (CROSS C1), which I did not find at that path.
