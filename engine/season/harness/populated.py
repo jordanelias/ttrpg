@@ -69,11 +69,11 @@ from collections import Counter, defaultdict
 
 from ..data import cast, files
 from ..data import goals as goals_data
-from ..queries.world_q import RESIDE_KIND, capacity, home_of as home_of_q, members, uncontrolled
+from ..queries.world_q import RESIDE_KIND, ancestry, capacity, home_of as home_of_q, members, uncontrolled
 from ..gaps import Forbidden, Unspecified
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
-from ..data.rosters import (BODY_FACTION, FACTIONS, OFFICES_BY_HOLDER, OFFICES_SEATS,
-                            ROLE_TEMPLATE_OF, authored_remit, faction_prop_id, load_yaml,
+from ..data.rosters import (BODY_FACTION, FACTIONS, FOREIGN_CAST, FOREIGN_SEATS, OFFICES_BY_HOLDER,
+                            OFFICES_SEATS, ROLE_TEMPLATE_OF, authored_remit, faction_prop_id, load_yaml,
                             refuse_a_titled_post_off_its_rung, remit_or_default,
                             territory_rung_id, title_domain)
 from ..decision import make_chooser
@@ -444,6 +444,100 @@ def seat_cohorts(w: World, rows: list, names: dict | None = None) -> list:
     return out
 
 
+# -- THE GUARD COHORTS (v9 IN-36 carrying IN-60's guard content, RS-26) ------------------------------
+GUARD_FIELDS = frozenset({"seat", "weight"})
+
+
+def guard_rows(text: str | None = None) -> list:
+    """THE AUTHORED GUARD ROWS OF `cohorts.yaml: guards`, schema-checked: `[{seat, weight}, ...]` in file
+    order. `text` is the file's contents for a caller that plants rows. Refused here, without a world: a row
+    with a field the file does not declare (`GUARD_FIELDS`), a weight that is not an int `> 1` (S9: a guard
+    is a cohort, and a weight-1 row would mint a named individual), a seat that is no `offices.yaml: seats`
+    id, a seat twice, and NO ROWS AT ALL (`guards=True` over an empty section would seat nobody and read as
+    a guarded realm)."""
+    if text is None:
+        text = files.COHORTS_YAML.read_text(encoding="utf-8")
+    rows = (load_yaml(text) or {}).get("guards") or []
+    if not rows:
+        raise Unspecified(
+            "`cohorts.yaml` declares no `guards:` row", "engine/season/cohorts.yaml",
+            needs="one `{seat, weight}` row per guarded principal's seat",
+            law="v9 IN-36 (IN-60's content, RS-26) -- `build_realm(guards=True)` over no row guards nobody")
+    seats = {s["id"] for s in OFFICES_SEATS}
+    seen: set = set()
+    for n, row in enumerate(rows):
+        if not isinstance(row, dict) or set(row) != GUARD_FIELDS:
+            raise Unspecified(
+                f"`cohorts.yaml` guards row {n} is {row!r}", "engine/season/cohorts.yaml",
+                needs=f"exactly the fields {sorted(GUARD_FIELDS)}",
+                law="v9 IN-36 -- a guard row names a seat and a weight, and nothing undeclared")
+        wt = row["weight"]
+        if isinstance(wt, bool) or not isinstance(wt, int) or wt <= 1:
+            raise Forbidden(f"`cohorts.yaml` guards row {n} ({row['seat']!r}) has weight {wt!r}", "S9",
+                            law="S9 -- A COHORT IS A PERSON AT weight > 1; a guard is one")
+        if row["seat"] not in seats or row["seat"] in seen:
+            raise Unspecified(
+                f"`cohorts.yaml` guards row {n} names the seat {row['seat']!r}, "
+                f"{'twice' if row['seat'] in seen else 'which offices.yaml does not carry'}",
+                "engine/season/cohorts.yaml",
+                needs="one row per `offices.yaml: seats` id",
+                law="v9 IN-36 -- one guard per principal's seat; a second doubles the sworn weight under one id")
+        seen.add(row["seat"])
+    return rows
+
+
+def seat_guards(w: World, rows: list, authored: dict, partial: bool = False) -> list:
+    """SEAT THE GUARD COHORTS IN A BUILT WORLD and return their person ids in row order. Each row becomes a
+    Person at the row's weight, its `person` rung, a `contain` edge (where it IS) at the exact rung its seat's
+    HOLDER is present at, a `reside` edge at the nearest settlement above that rung (a guard is posted at a
+    door and lives in the town, so the capacity ceiling is checked against the town's, as for any cohort),
+    and a live `oblige` to the seat -- the edge `world_q.guard_weight` (IN-60) counts. No `commit`, no `hold`,
+    no pursuits: a guard is a cohort (`seat_cohorts`' rule), not a character.
+
+    `authored` is `_office_census["authored"]` (an `offices.yaml` seat id -> the Office id standing for it).
+    A seat this world did not seat, or one nobody holds, REFUSES -- unless `partial` (a `cap` dropped the
+    cast), where the row is skipped as the per-case loops skip their absent. The holder of a seat held by two
+    persons posts the guard at the FIRST (`w.tenures` order)."""
+    out: list = []
+    where = home_of_q(w)
+    for row in rows:
+        oid = authored.get(row["seat"])
+        holder = next((t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == oid
+                       and t.subject in w.persons), None) if oid else None
+        if holder is None or holder not in where:
+            if partial:
+                continue
+            raise Unspecified(
+                f"`cohorts.yaml` guards the seat {row['seat']!r}, which this realm "
+                f"{'did not seat' if oid is None else 'seated and nobody holds, or whose holder stands nowhere'}",
+                "engine/season/cohorts.yaml",
+                needs="a seat `build_realm` seated, held by a person who is present at a rung",
+                law="v9 IN-36 (IN-60's content) -- a guard stands where the principal is; none is guessed")
+        post = where[holder]
+        town = next((r for r in ancestry(w, post) if w.rungs[r].kind == "settlement"), post)
+        wt = row["weight"]
+        room = capacity(w, town)
+        if wt > room:
+            raise Forbidden(
+                f"`cohorts.yaml` gives the guard of {row['seat']!r} a weight of {wt}; its town {town!r} "
+                f"has capacity {room}", "ED-SE-0051",
+                law="RR-2 -- capacity bounds POPULATION; a guard lives in the town and may not stand for "
+                    "more people than its dwellings house (checked, never derived)")
+        pid = f"{COHORT_PREFIX}guard_{row['seat']}"
+        if pid in w.persons or pid in w.rungs:
+            raise Unspecified(
+                f"guard id {pid!r} is already taken in this world", "engine/season/cohorts.yaml",
+                needs="a seat whose guard id no cast member or rung already uses",
+                law="v9 IN-36 -- a guard is seated beside the cast, never over it")
+        w.persons[pid] = Person(pid, f"the guard of {w.offices[oid].post}", weight=wt)
+        w.rungs[pid] = Rung(pid, "person")
+        w.add_tenure(Tenure(f"t_{pid}_in", pid, post, "contain", 0))
+        w.add_tenure(Tenure(f"t_{pid}_home", pid, town, RESIDE_KIND, 0))
+        w.add_tenure(Tenure(f"t_{pid}_oblige", pid, oid, "oblige", 0))
+        out.append(pid)
+    return out
+
+
 def goals_missing(w: World, rows: tuple) -> list:
     """THE ORGANIZATIONS THIS BUILT WORLD SEATS THAT NO GOAL ROW IS ABOUT (v9 FA-06): `["faction X", "body Y",
     ...]`, in roster order. A faction is seated by an AUTHORED HEAD that stands in the cast (`cast.
@@ -456,6 +550,8 @@ def goals_missing(w: World, rows: tuple) -> list:
     seated = {o.body for oid, o in w.offices.items() if o.body and oid in held}
     out = []
     for fac in sorted(FACTIONS):
+        if fac in FOREIGN_CAST and faction_prop_id(fac) not in w.propositions:
+            continue                      # v9 IN-36: a foreign faction this world did not seat is asked for nothing
         lead = cast.faction_leader(fac)
         if lead and f"p_{_slug(lead)}" in w.persons and ("faction", fac) not in have:
             out.append(f"faction {fac!r}")
@@ -627,8 +723,21 @@ def seed_goals(w: World, rows: tuple, authored: dict, cid_of: dict, partial: boo
 
 
 def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
-                goals: bool = True, goals_complete: bool = True) -> World:
+                goals: bool = True, goals_complete: bool = True, foreign: bool = False,
+                guards: bool = False) -> World:
     """The whole map, its buildings, and one person per season loop.
+
+    `foreign` (v9 IN-36) seats the EXTERNAL EMPIRE: the factions `rosters.yaml: foreign_cast` names get their
+    root rung, their settlement (no parent, so outside the realm), a Proposition, their cast rows' persons
+    homed there, their `offices.yaml: foreign_seats` and their goal rows. `False` (the shipped default) is the
+    CONTROL ARM: none of it exists, and the world is byte-identical to the realm before the empire was authored
+    (the `foreign_cast` roster says why a faction is a `factions` member in both arms and a world's member in
+    one). [ASSUMPTION; medium; Jordan to correct -- the default stays `False` so every golden pinned on the
+    default realm stands; flipping it is this one default, plus those goldens' re-record.]
+
+    `guards` (v9 IN-36, carrying IN-60's guard content) seats `cohorts.yaml: guards` -- a cohort of `weight > 1`
+    sworn (`oblige`) to a principal's seat, posted at the exact rung the seat's holder is present at. `False`
+    (the default) is its control arm, for the same reason. The two switches are independent.
 
     `goals` seeds `goals.yaml`'s organization goals (`seed_goals`, v9 IN-68). `False` is the CONTROL
     ARM (`harness/decision_spread.py --control`): the same realm with no goal minted, committed to or
@@ -741,6 +850,27 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         w.rungs[rid] = Rung(rid, "settlement")
         _index_anchor(w, anchors, sid, rid)
         w.add_tenure(Tenure(f"t_{rid}_in", rid, territory_rung_id(s["territory"]), "contain", 0))
+
+    # -- THE FOREIGN FACTIONS' PLACES (v9 IN-36; `foreign=True` only) ----------------------------------
+    # A ROOT territory with no `contain` edge into `r_valoria` -- T16's own shape (above), so it is outside
+    # `descendants(realm)`, outside `endings_reached`'s victory selector (every territory under a `realm` rung)
+    # and outside `census`'s `uncontrolled_in_realm`. It is a `territory`, NEVER a `realm`: a foreign realm rung
+    # would join both of those silently. THAT ABSENCE IS THE BORDER; crossing it is a `march`'s arrival leg
+    # (`loop/effects_migration.py::_relocate`), not a path authored here. One settlement under the root is where
+    # the faction's persons live. No quarter, building, site or garrison: nothing here is marched on, and the
+    # persons are named individuals who do not eat from a larder (`ED-IN-0255`).
+    foreign_home: dict = {}
+    for fac_name, place in sorted((FOREIGN_CAST if foreign else {}).items()):
+        trid, srid = territory_rung_id(place["territory"]["code"]), f"set_{_slug(place['settlement']['code'])}"
+        w.rungs[trid] = Rung(trid, "territory")
+        _index_anchor(w, anchors, place["territory"]["code"], trid)
+        w.rungs[srid] = Rung(srid, "settlement")
+        _index_anchor(w, anchors, place["settlement"]["code"], srid)
+        w.add_tenure(Tenure(f"t_{srid}_in", srid, trid, "contain", 0))
+        foreign_home[fac_name] = (trid, srid)
+    # A faction named in `foreign_cast` that this world did not build does not exist in it: no Proposition, no
+    # member, no seat, no goal. `absent` is that set, and every site below that reads `FACTIONS` filters by it.
+    absent = frozenset(FOREIGN_CAST) - frozenset(foreign_home)
 
     # -- the authored layers: quarters, then buildings -------------------------
     # ⚠ A SETTLEMENT WITH NO VENUE ROW WOULD SILENTLY HOLD NOBODY, so an unknown type RAISES
@@ -861,6 +991,13 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         if home is None:
             home = commons[n_common % len(commons)][1]
             n_common += 1
+        # v9 IN-36: a person of a faction this world seated FOREIGN lives at that faction's settlement, over
+        # `npcs.yaml`'s home (the roster's home is the realm's derivation, which seats NPC-011 at Lowenskyst's
+        # barracks and the two others in Feldmark's commons -- the empire's persons are not in the realm).
+        # `foreign_home` is empty unless `foreign=True`, so the control arm reads no faction here.
+        _fac_here = cast.faction_of(cast.row(cid))[0] if cast.row(cid) else None
+        if _fac_here in foreign_home:
+            home = foreign_home[_fac_here][1]
         w.persons[pid] = Person(pid, str(case.get("name") or cid))
         w.rungs[pid] = Rung(pid, "person")
         w.add_tenure(Tenure(f"t_{pid}_in", pid, home, "contain", 0))
@@ -933,6 +1070,8 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     # the same reason. `members()` reads a `commit` edge's KIND and OBJECT, never the Proposition's
     # mood, so membership in those two is unaffected; what they lack is a standing question.
     for fac_name in sorted(FACTIONS):
+        if fac_name in absent:            # v9 IN-36: a foreign faction this world did not seat has no creed to utter
+            continue
         fid = faction_prop_id(fac_name)   # one owner: data/rosters.py
         lead_cid = cast.faction_leader(fac_name)
         lead_pid = f"p_{_slug(lead_cid)}" if lead_cid else None
@@ -949,6 +1088,10 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         pid = f"p_{_slug(cid)}"
         r = cast.row(cid)
         fac_name, sub, raw = cast.faction_of(r) if r else (None, None, "")
+        if fac_name in absent:
+            # v9 IN-36: a person of a foreign faction this world did not seat is UNPLACED, exactly as the
+            # cell read before the faction was on the roster (`Altonia`, raw) -- counted, not dropped.
+            fac_name = None
         if fac_name is None:
             # ⭐ **UNPLACED IS A CORRECT OUTCOME, NOT A PENDING ONE — RULED by Jordan,
             # 2026-09-14: *"Not everyone has to belong to a faction."*** This was carried as an
@@ -1100,6 +1243,13 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
             unheld_for_want_of_a_head.append((territory_rung_id(tid), held_by))
             continue
         w.add_tenure(Tenure(f"t_hold_{territory_rung_id(tid)}", lead_pid, territory_rung_id(tid), "hold", 0))
+    # v9 IN-36: and a foreign faction holds its own root territory, by its head -- the same `hold` a realm
+    # territory's holder has, so `holder_faction_of` reads the empire's settlement as the empire's (a `march`
+    # INTO it is opposed, and a seat there can `seize` what it holds). No head, no hold: the silence shows.
+    for fac_name, (trid, _srid) in sorted(foreign_home.items()):
+        lead_cid = cast.faction_leader(fac_name)
+        if lead_cid and f"p_{_slug(lead_cid)}" in w.persons:
+            w.add_tenure(Tenure(f"t_hold_{trid}", f"p_{_slug(lead_cid)}", trid, "hold", 0))
     # Reported by `census`, never read by the loop — the same treatment `_tie_census` gets.
     w._unheld_for_want_of_a_head = unheld_for_want_of_a_head
 
@@ -1161,7 +1311,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         if r is None:
             continue
         fac_name, _sub, _raw = cast.faction_of(r)
-        if fac_name is None:
+        if fac_name is None or fac_name in absent:
             continue                          # unplaced above; an office needs a faction (§11)
         over = (overlays.get(cid) or {}).get("office") or {}
         title = cast.title_of(r)
@@ -1268,7 +1418,9 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     # nobody can sit in would be a ghost in `leaders`), and a minted seat grants exactly its
     # authored remit: it held nothing before, so nothing is "kept" (`authored_remit`).
     minted: list = []
-    for row in OFFICES_SEATS:
+    # v9 IN-36: and the foreign seats of the factions this world seated (`offices.yaml: foreign_seats`).
+    seat_rows = tuple(OFFICES_SEATS) + tuple(r for r in FOREIGN_SEATS if r["faction"] in foreign_home)
+    for row in seat_rows:
         if row["id"] in authored:
             continue
         pid = f"p_{_slug(row['holder'])}"
@@ -1314,7 +1466,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     # -- A SEAT'S OBLIGEES SERVE IT (`obligees:`; `04 §B.7` call 2: a council is one seat and many
     # holders, through `oblige`). Opened with no term: `term?` is lawful null, and a seat seeded at
     # world-gen has no opening act to declare one (`_eff_oblige` is the act that does).
-    for row in OFFICES_SEATS:
+    for row in seat_rows:
         seat = authored.get(row["id"])
         if seat is None:
             continue                  # a `cap` dropped this seat's holder, so the seat does not exist
@@ -1454,7 +1606,8 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     # builds the control arm; the shipped `goals.yaml` carries rows (FA-05, FA-06), so the arms differ.
     # v9 FA-06: the world that seats an organization no row is about REFUSES (`goals_complete`).
     w._goal_census = seed_goals(
-        w, goals_data.goals() if goals else (), w._office_census["authored"],
+        w, tuple(g for g in goals_data.goals() if goals_data.org_faction(g.org_kind, g.org) not in absent)
+        if goals else (), w._office_census["authored"],
         {f"p_{_slug(str(c.get('id')))}": str(c.get("id")) for c in cases}, partial=cap is not None,
         complete=goals and goals_complete)
 
@@ -1476,6 +1629,10 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     names = {f"set_{_slug(sid)}": str(s.get("name") or sid)
              for sid, s in geo["settlements"].items()}
     seat_cohorts(w, cohort_rows(), names)
+    # v9 IN-36 (IN-60's content): AFTER the population cohorts, so a guard never lands on a population row's
+    # id or capacity read, and AFTER the seats, whose holders it is posted beside. `guards=False` seats none.
+    if guards:
+        seat_guards(w, guard_rows(), w._office_census["authored"], partial=cap is not None)
     return w
 
 

@@ -186,6 +186,11 @@ _OFFICES_DOC = _load_offices()
 # two rows (`off_king`, `off_duke_valorsmark`) -- `OFFICES_BY_HOLDER` below deliberately is not
 # that reader.
 OFFICES_SEATS = tuple(_OFFICES_DOC.get("seats") or ())
+# The seats of a FOREIGN faction (`rosters.yaml: foreign_cast`), authored in the same row shape under their own key
+# so the realm's own seat count stands (v9 IN-36). `build_realm(foreign=True)` reads them beside `OFFICES_SEATS`
+# and `foreign=False` reads neither them nor any goal about them; `data/goals.py` knows both, as a goal row's
+# `org: {seat:}` may name either. Nothing else reads this.
+FOREIGN_SEATS = tuple(_OFFICES_DOC.get("foreign_seats") or ())
 # case id -> every seat row that names it as `holder`, so a caller matches on POST rather than
 # guessing which of a multi-seat holder's rows applies (NPC-020 holds two). A list, not a single
 # row, because `roster_map`'s single-mapping shape would silently keep the LAST of NPC-020's two
@@ -989,6 +994,21 @@ FACTION_BY_PROP = {faction_prop_id(f): f for f in FACTIONS}
 BODY_FACTION = roster_map("office_bodies", "faction")
 BODY_FUNCTION = roster_map("office_bodies", "function")
 ROLE_TEMPLATE_OF = roster_map("role_templates", "by_faction")
+#: `{faction name: {territory: {code}, settlement: {code}}}` -- the factions whose persons and
+#: places exist only in a world built with `build_realm(foreign=True)` (v9 IN-36). A member of `FACTIONS` in
+#: both arms; absent from the control arm's world. Read by `harness/populated.py`, nothing else.
+FOREIGN_CAST = roster_map("foreign_cast", "by_faction")
+for _f, _place in FOREIGN_CAST.items():
+    # Checked at load, `_load_rosters`' reason: a row naming no faction, or a place with no code, would seat
+    # nobody in `foreign=True` and read as a quiet empire (a roster declared and never read).
+    if _f not in FACTIONS or not all(isinstance((_place.get(k) or {}).get("code"), str)
+                                     for k in ("territory", "settlement")):
+        raise Unspecified(
+            f"rosters.yaml `foreign_cast` row {_f!r} is not a `factions` member with a territory and a "
+            f"settlement, each {{code}}", "rosters.yaml -- foreign_cast",
+            needs="a faction named in `names_index.yaml` (`token_class: faction`) and both places",
+            law="v9 IN-36 -- a foreign faction is a faction first; its places are what `foreign=True` mints")
+del _f, _place
 
 # ---------------------------------------------------------------------------
 # THE `modules:` ROSTER (plan position `30`; A-25, `ED-IN-0284` revised by `ED-IN-0285`) -- THE ONE

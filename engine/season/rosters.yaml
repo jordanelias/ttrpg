@@ -1669,6 +1669,46 @@ rosters:
       "Varfell": "NPC-052"                  # Magnus Vaynard
       "Restoration Movement": "NPC-003"     # Yrsa Vossen
       "Löwenritter": "NPC-070"              # Lisbeth Ehrenwall
+      # v9 IN-36 (#457 D4, RS-21 item 4). [ASSUMPTION; medium; Jordan to correct] The empire's head is the
+      # Katepano (frontier governor), the one registry row whose own `arc_trajectory` is *"Decides whether
+      # Altonia probes, presses, or invades"*. No `role_templates` entry accompanies it: canon gives the
+      # empire none, so the head has a person to be a referent and a goal (`goals.yaml`) but no creed
+      # template to be loyal to. Revert: the Doux (NPC-011) or the Kommerkiarios (NPC-090) as head.
+      "Altonia": "NPC-089"                  # Zoe Palaiologina
+
+  foreign_cast:
+    source: >-
+      v9 IN-36 (#457 D4, answered RS-21 item 4 [medium; Jordan to correct]: one foreign faction, two
+      seats, in `references/npc_registry.yaml`), read by `harness/populated.py::build_realm(foreign=)`
+      through `data/rosters.py::FOREIGN_CAST`.
+    row: IN-36
+    note: >-
+      WHAT THIS IS. The factions whose persons and places `build_realm(foreign=True)` seats and
+      `foreign=False` (the shipped default) leaves out of the world: a faction named here has no
+      Proposition, no member, no seat, no goal and no rung in the control arm, so that arm is byte-identical
+      to the realm before the empire existed. A foreign faction is still a `factions` member in BOTH arms
+      (`names_index.yaml: token_class: faction` is its owner), which is what puts it in
+      `data/rosters.py::FACTION_BY_PROP` and lets `cast.faction_of` resolve its cast rows with no edit.
+      ⚠ `Schoenland` IS NOT HERE AND IS FOREIGN ALL THE SAME: its persons and its T16 root are already in
+      the realm as built (`build_realm` keeps T16 out of the realm by giving it no parent), so a switch on
+      it would move a world that does not need to move. This block is the factions whose WHOLE existence is
+      new, and it is not a roster of every foreign faction.
+      WHAT A ROW SAYS. `territory` is the foreign ROOT RUNG, a `territory` with no `contain` edge into
+      `r_valoria` -- never a `realm`, so `endings_reached`'s victory selector (every territory under a
+      `realm` rung) and `populated.census`'s `uncontrolled_in_realm` do not count it; the BORDER is that
+      absence. `settlement` is the one place its persons live, under the root. Crossing the border is a
+      `march`'s arrival leg (`loop/effects_migration.py::_relocate`), so nothing here is a path.
+      ⚠ NOT BUILT, AND NOT THIS ROW'S: a scheduled arrival (#457 `:145-155`), perception channels at the
+      border, the Schoenland trade demand (FA-01, which needs IN-33's `exchange`).
+      [ASSUMPTION; medium; Jordan to correct] The codes are the author's, and a place has a code and no
+      name because a `Rung` carries no name (`state/carriers.py`): canon names Altonia's chokepoint only as
+      T3's `Lowenskyst Fortress` (`venues.yaml`), not a homeland place. `ALT` is the empire's frontier
+      territory and `ALT-1` its staging post, the settlement the Katepano and the Kommerkiarios seat at.
+      Revert: Jordan names the homeland places.
+    by_faction:
+      "Altonia":
+        territory:  {code: "ALT"}
+        settlement: {code: "ALT-1"}
 
   office_bodies:
     source: "`systems/world/reference/worldbuilding_v30.md` §6.1 (Court Parliament and Governance), §3.1 (Church Four-Cardinal structure), §4.1 (Löwenritter internal structure), §5.1 (Guild structure)."

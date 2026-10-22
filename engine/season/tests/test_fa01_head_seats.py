@@ -119,7 +119,9 @@ def _computed_acts_via(w, pid: str, seats: set) -> list:
 
 
 def test_fa01_every_authored_head_holds_a_seat_of_its_own_faction():
-    w = POP.build_realm(0)
+    # v9 IN-36: the empire's head (Altonia, NPC-089) is authored in both arms and SEATED only by `foreign=True`,
+    # so this builds that arm: every faction with a head has its head in a seat, the empire's included.
+    w = POP.build_realm(0, foreign=True)
     heads = _heads()
     assert set(FACTIONS) - set(heads) == LEADERLESS
     checked = 0
