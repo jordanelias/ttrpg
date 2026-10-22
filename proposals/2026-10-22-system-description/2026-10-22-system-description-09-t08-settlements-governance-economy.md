@@ -94,8 +94,8 @@ refused before the fold. What executes in this subsystem is `move` 16 of 42, `is
 `revoke` 0 of 6 (ctl seed 0). Tick 1 MATTER: the Valorsplatz cohort eats 4 grain and 2 salt from its own larder and the harbour at 990
 yields 39, not 40 (§3). A callback playing the Lord Treasurer can do what the chooser never does: three men swear (`oblige`), she
 requisitions 2 grain from `set_s_001` into `terr_T1` and pays them at the court hearth; two terms run to tick 9, the third closes at
-tick 5 (§3, re-run at `51d7b05`). A callback can also found: `create_record {kind: works, plan: hearth}` in one season, `found` in the
-next, `rung.founded` (round-3 re-run). By the end of season 2, persons are 83 → 74 (nine `person.died`; every death is combat, ERRATA G9).
+tick 5 (§3, re-run at `51d7b05`). A callback can also found: `create_record {kind: works, subject_matter: {plan: hearth, at: <settlement>}}` in one
+season, `found` in the next, `rung.founded` (round-3 re-run). By the end of season 2, persons are 83 → 74 (nine `person.died`; every death is combat, ERRATA G9).
 
 **What changes later.** Only time and deaths. Harbours and seams lose 10 condition a season and nothing repairs them in computed play, so
 yield truncates a unit early and reaches 0 near tick 100 (§5d). At tick 5 the first act-opened terms mature: seed 1's live obliges fall
@@ -106,7 +106,7 @@ With the Duke's seat gone no `revoke` can pass anywhere (§5c). Stores keep risi
 stability Queries PR #494 added (IN-23) change nothing here: each is one person's own windowed estimate (`queries/person_q.py:451, 480`),
 read by the story-bar report and by no chooser or MATTER step (`hole_register.yaml` H-224).
 
-**Failure and ending.** There is none. The loop has no fail state and nothing halts the run (ERRATA G17). The season now reports
+**Failure and ending.** There is none. The loop has no fail state (ERRATA G17) and nothing halts the run. The season now reports
 `endings_reached` (`queries/world_q.py:1764`; `loop/driver.py:515-518`; PR #494), a read of the `rosters.yaml: endings` rows and never an
 actor, and the realm as built reaches none (`rosters.yaml:2494-2522`; empty after each of seasons 1 and 2 in seeds 0-2, re-run at
 `51d7b05`). MATTER kills nobody at shipped values (ERRATA G9); no place starves, rebels or empties for economic reasons. The losses that
@@ -115,8 +115,8 @@ exist are permanent but local: a dead holder's null seat, a banned appointee, a 
 **Consequential vs cosmetic choices.** Consequential: staying alive (a death closes every seat and service naming the person, overview
 §5.1); `confer` into a vacancy, the only refill; `oblige`, whose term schedules its own end. Inert or cosmetic at shipped values: which
 person holds a seat (no act's effect reads the holder, H-164), `dispatch` (writes nothing), `issue` (a held writ seeds its holder's own
-operands, `decision/options.py:915-930`, but nobody must act on one and the executor holds it only after a `give`, 1 of 56 executed in
-ctl), every food decision (surplus from tick 1), `transfer` into a person rung (it leaves the food supply, §4), and any reading of
+operands, `decision/options.py:915-930`, but the issuer holds it, nobody must act on one, and handing it over is `give`, 1 of 56
+executed in ctl), every food decision (surplus from tick 1), `transfer` into a person rung (it leaves the food supply, §4), and any reading of
 legitimacy or stability.
 
 **[PROPOSED]** (none of this runs; §7; ERRATA G16, G18). *Played mode:* D-2 (RULED yes) has RB-3 build IN-46 (a paused, played fight) and
@@ -137,14 +137,14 @@ decisions there in Victoria 3, Tropico 6 and Patrician IV (`research/game_preced
 | **hearth** | the lowest place rung: a building (court, market, wharf…) | 211 in the realm; each has one `dwelling` Site | built by `harness/populated.py` from `venues.yaml` |
 | **Site** | a built fabric on a rung that yields, houses or fortifies | `kind` ∈ harbour, seam, dwelling, garrison (the roster also lists `body`, which "IS NOT A SITE": it is the person's body band row, `rosters.yaml:1386`); `condition` 0..1000 | `state/carriers.py:737`; `rosters.yaml:1376` |
 | **condition** | a Site's state on `condition_scale` | 1000 = full; every realm Site starts at 1000 | `data/fixtures.py:217` |
-| **yield** | what a Site mints each season | harbour {grain 40, salt 30}; seam {ore 50, timber 10}; nothing else yields; scaled by condition/1000 × `season_factor` (1.0) | `rosters.yaml:2491`; `loop/matter.py:589-591` |
+| **yield** | what a Site mints each season | harbour {grain 40, salt 30}; seam {ore 50, timber 10}; nothing else yields; scaled by condition/1000 × `season_factor` (1.0) | `rosters.yaml:2557`; `loop/matter.py:589-591` |
 | **wear** | condition lost per season | harbour 10, seam 10, body 10, dwelling 0, garrison 0 | `rosters.yaml:1422`; `loop/matter.py:663` |
-| **band floor** | a named use-threshold on condition; crossing it downward emits `condition.band_crossed` | harbour {bulk_shipping 800, fishing 100}; seam {deep_mining 700, surface_gleaning 50} | `rosters.yaml:2520` |
+| **band floor** | a named use-threshold on condition; crossing it downward emits `condition.band_crossed` | harbour {bulk_shipping 800, fishing 100}; seam {deep_mining 700, surface_gleaning 50} | `rosters.yaml:2586` |
 | **stores** | integer stock by matter kind held on a rung (the larder, and a seat's treasury) | empty everywhere at build | `Rung.stores`, `state/carriers.py:1040` |
 | **matter kind** | a registered good | grain, salt, timber, ore, coin; `coin` is registered but nothing produces or reads it | `rosters.yaml:1409` |
 | **cohort** | a person of `weight > 1`: "the people of" a settlement | 37, one per settlement, weight 2 each; the only eaters (ED-IN-0255) | `state/carriers.py:655`; `cohorts.yaml` |
-| **subsistence weight** | food wanted per unit of weight per season | grain 2, salt 1 → a weight-2 cohort wants 4 grain + 2 salt | `rosters.yaml:1540`; `queries/world_q.py:1017` |
-| **nearest store** | the larder a cohort eats from: first rung up its ladder holding the kind | walk stops at the first rung with stock; the remainder is not walked further | `queries/world_q.py:902` |
+| **subsistence weight** | food wanted per unit of weight per season | grain 2, salt 1 → a weight-2 cohort wants 4 grain + 2 salt | `rosters.yaml:1540`; `queries/world_q.py:1020` |
+| **nearest store** | the larder a cohort eats from: first rung up its ladder holding the kind | walk stops at the first rung with stock; the remainder is not walked further | `queries/world_q.py:905` |
 | **shortfall** | the unfed part of a draw, carried as an `Observation(rung, "shortfall:<kind>", units)` on the drained larder's write | fires only when a larder drains with a mouth unfed | `loop/matter.py:469-474` |
 | **body** | a person's condition; would fall with hunger | `body_step=0` shipped: no body falls | `data/fixtures.py:594` |
 | **Office / seat** | a post anchored to a rung, with powers | 32 in the realm: 31 authored in `offices.yaml` + `off_npc_084` (guild leader), derived with no row, rungless, so it reaches nothing (`harness/populated.py:1240-1244`); loop-built seats take ids `off_npc_NNN` (the King's seat is `off_npc_020`), while six minted rows keep their row ids (`off_duke_valorsmark`, `off_lord_steward`, `off_cardinal_fortitude`, `off_cardinal_temperance`, `off_senior_inquisitor`, `off_restoration_leader`; `offices.yaml:120-127`); fields `post, rung, remit_acts, conferral, revocation, upkeep, body, faction` | `state/carriers.py:899`; `offices.yaml` |
@@ -153,20 +153,20 @@ decisions there in Victoria 3, Tropico 6 and Patrician IV (`research/game_preced
 | **purview** | where a seat's writ runs: its own rung and every rung below, plus the ground of seats whose holders are sworn to it (one edge deep, IN-40) | asked of the seat exercised (`Act.via`), never of the actor | `state/gate.py:353` |
 | **conferral basis** | how a seat is filled | appointed, elected, annex, or none; realm authored: appointed 17 / elected 8 / none 6; the derived guild-leader seat `off_npc_084` also has none (its `conferral` is read from a row that does not exist, `harness/populated.py:1241-1250`), so 7 of the 32 built seats. A **none** seat (King, Duke of Valorsmark, Duchess of Hafenmark, Widow Regent (post "Queen"), Heir (post "Prince"), Princess, guild leader) can never be conferred, so once vacant it stays empty: `succeed` has no effect | `rosters.yaml:2234`; `offices.yaml:188-266`; `loop/predicates.py:126-127` |
 | **revocation basis** | who may strip a seat | `rung_above_same_faction`, `rung_above_in_holdings`, or none ("strippable by nobody") | `rosters.yaml:2254`; `state/gate.py:568` |
-| **ban** | a restraint Tenure: banned persons cannot be seated or sworn | opened permanently on an *appointed* holder who is revoked | `state/gate.py:599`; `queries/world_q.py:1242` |
-| **oblige** | a Tenure Person→Office: you serve this seat | an act-opened edge carries a `Term`, `oblige_term=4` seasons; the two authored at world-gen (NPC-070 → the King's seat, NPC-041 → `off_restoration_leader`) carry **no term** and never lapse | `loop/effects_governance.py:377`; `data/fixtures.py:882`; `harness/populated.py:1317-1339` |
+| **ban** | a restraint Tenure: banned persons cannot be seated or sworn | opened permanently on an *appointed* holder who is revoked | `state/gate.py:599`; `queries/world_q.py:1245` |
+| **oblige** | a Tenure Person→Office: you serve this seat | an act-opened edge carries a `Term`, `oblige_term=4` seasons; the two authored at world-gen (NPC-070 → the King's seat, NPC-041 → `off_restoration_leader`) carry **no term** and never lapse | `loop/effects_governance.py:377`; `data/fixtures.py:892`; `harness/populated.py:1317-1339` |
 | **chronicle** | a witness channel that is an **event-kind filter**: any Event whose kind some `binding_decision` row emits is deposited for **everyone alive**, as `told_by` hearsay | so `tenure.opened/closed`, `order.given`, `date.scheduled`, `dispensation.issued`… are public, whoever produced them — including MATTER's `tenure.closed` lapses and `pursuit.moved` from `determine` | `epistemic.py:652-654, 685-686` |
 | **Term** | `(matures_at, declared_by)` on a Tenure; MATTER closes the edge when `matures_at <= tick` | `declared_by` = the act that last wound it | `state/carriers.py:43`; `loop/matter.py:296-303` |
-| **establishment** | the persons with a live `oblige` to a seat | a Query, stored nowhere | `queries/world_q.py:1739` |
-| **upkeep** | grain (any kind) per obligee that one payment must cover to renew his term | `Office.upkeep`, else `default_upkeep=1` | `queries/world_q.py:1768`; `data/fixtures.py:895` |
+| **establishment** | the persons with a live `oblige` to a seat | a Query, stored nowhere | `queries/world_q.py:1864` |
+| **upkeep** | grain (any kind) per obligee that one payment must cover to renew his term | `Office.upkeep`, else `default_upkeep=1` | `queries/world_q.py:1893`; `data/fixtures.py:905` |
 | **treasury** | the `stores` of the seat's own rung (no Treasury class) | a territory seat's treasury is the territory rung, which yields nothing | `loop/effects_governance.py:426-464` |
-| **works** | a `Record` of kind `works` with `{plan, at}`: a plan to found a rung kind or build a Site kind at a rung | one live works per (plan, at); its stages ripen into a ceiling | `state/carriers.py:751`; `queries/world_q.py:353` |
-| **ceiling** | how high `work`/`restore` may raise a Site | full scale (1000) if no works names it; else scale × matured stages / declared stages | `queries/world_q.py:382` |
-| **share** | the commons: one act moves `1/n` of the headroom, n = persons present at the Site's rung | `(1, max(1, n))` | `queries/world_q.py:422` |
+| **works** | a `Record` of kind `works` with `{plan, at}`: a plan to found a rung kind or build a Site kind at a rung | one live works per (plan, at); its stages ripen into a ceiling | `state/carriers.py:751`; `queries/world_q.py:356` |
+| **ceiling** | how high `work`/`restore` may raise a Site | full scale (1000) if no works names it; else scale × matured stages / declared stages | `queries/world_q.py:385` |
+| **share** | the commons: one act moves `1/n` of the headroom, n = persons present at the Site's rung | `(1, max(1, n))` | `queries/world_q.py:425` |
 | **works cost** | what founding or building takes from the paying rung | hearth / community {grain 10}; harbour, seam, dwelling, garrison {timber 10}; none for settlement or above | `rosters.yaml:1501` |
-| **population** | sum of `weight` over live `reside` edges in a rung's subtree | e.g. `set_s_001` = 12 (one cohort of 2 + 10 cast) | `queries/world_q.py:1262` |
-| **capacity** | how many may live under a rung: dwelling Sites in the subtree, floor 1 | `set_s_001` = 9; gates newcomers only | `queries/world_q.py:1310`; `rosters.yaml:1472` |
-| **governors** | persons holding a seat whose purview reaches a rung; they receive shortfall claims | | `queries/world_q.py:835` |
+| **population** | sum of `weight` over live `reside` edges in a rung's subtree | e.g. `set_s_001` = 12 (one cohort of 2 + 10 cast) | `queries/world_q.py:1265` |
+| **capacity** | how many may live under a rung: dwelling Sites in the subtree, floor 1 | `set_s_001` = 9; gates newcomers only | `queries/world_q.py:1313`; `rosters.yaml:1472` |
+| **governors** | persons holding a seat whose purview reaches a rung; they receive shortfall claims | | `queries/world_q.py:838` |
 | **MATTER** | the actorless barrier that runs once per season before any scene | order: works stages, term lapses, claim decay, draw, body fall, yield, travel clear, wear | `loop/matter.py:165-709`; `loop/driver.py:448` |
 
 ## 2 How it works
@@ -180,7 +180,7 @@ You relate to places by two edges, kept apart on purpose:
 
 - **presence** — a live `contain` edge to where you stand (`home_of`, `queries/world_q.py`). `move` changes it.
   Presence decides which larder a cohort eats from, who is "present at" a Site, and where upkeep lands.
-- **residence** — a live `reside` edge to where you live (`residence_of`, `queries/world_q.py:1208`). Only `migrate`
+- **residence** — a live `reside` edge to where you live (`residence_of`, `queries/world_q.py:1211`). Only `migrate`
   changes it. Residence decides `population` and therefore the capacity test.
 
 Everything aggregate (population, capacity, purview, establishment, governors) is a Query computed on demand and stored
@@ -196,7 +196,7 @@ The driver runs `calendar → matter → 5 × (deliberate, resolve, encounter, w
    wound it (`:296-303`). This is how unpaid service ends: nobody has to act.
 3. **The draw.** For each cohort (individuals do not eat), for each kind: `want = subsistence_weight[k] × weight`;
    `src = nearest_store(...)` walking up from where the cohort is present; `take = min(want, held)`
-   (`queries/world_q.py:1017-1094`). If `take < want` and a larder was drained, the larder's `stores.changed` write
+   (`queries/world_q.py:1020-1097`). If `take < want` and a larder was drained, the larder's `stores.changed` write
    carries `Observation(src, "shortfall:<kind>", demanded − delivered)` (`loop/matter.py:469-474`).
 4. **Body fall.** `lost = body_step × units short`; shipped `body_step = 0`, so nothing happens (`:513-534`).
 5. **Per rung: debit the draw, then credit yield.** For each Site on the rung,
@@ -266,7 +266,7 @@ refused (`loop/effects_information.py:73-90`). Then:
 - `work` and `restore` raise a Site by `_rise = (ceiling − condition) × 1 // n` (`loop/effects_economy.py:109-138`).
   With one person present the whole headroom is filled in one act; with n present each act moves 1/n.
   `ceiling` is 1000 where no works names the Site, else `1000 × matured stages // declared stages`
-  (`queries/world_q.py:382-419`): the pace of a works is its ripened stages, not a rate. `work` stages a rise only when a
+  (`queries/world_q.py:385-422`): the pace of a works is its ripened stages, not a rate. `work` stages a rise only when a
   live works names the Site's kind at its rung; with none, it stages 0 and is refused (`work.unavailable`). For a `dwelling` or a
   `garrison` no works helps: their `band_floors` cells are empty on purpose (`rosters.yaml:2631-2632`), and the `floor` read raises a
   typed `Unspecified` before any rise is staged (`queries/world_q.py:2783-2799`), so the act is refused (`work.unavailable` on a dwelling at condition 0
@@ -276,14 +276,14 @@ refused (`loop/effects_information.py:73-90`). Then:
   removes the Site.
 - **In the realm nobody is alone at a producing Site.** Harbour, seam and garrison sit on the settlement rung, where
   that settlement's cohort is always present (`harness/populated.py:439-442`), and `share` counts *persons* present at
-  the rung (`queries/world_q.py:422-436, 1181-1186`; the cohort counts as one, whatever its weight). So any individual's
+  the rung (`queries/world_q.py:425-439, 1184-1189`; the cohort counts as one, whatever its weight). So any individual's
   `restore`, `work` or `sabotage` there has n ≥ 2: at most half the headroom (or half the condition) per act.
 
 There is no degree term in any of these: the rows are uncontested, so `f(degree)` is the identity (H-164).
 
 ### 2.6 Capacity and migration
 
-`capacity(rung) = max(1, number of dwelling Sites in the subtree)` (`queries/world_q.py:1310-1334`). `migrate` refuses a
+`capacity(rung) = max(1, number of dwelling Sites in the subtree)` (`queries/world_q.py:1313-1337`). `migrate` refuses a
 **newcomer** (no residence, or a residence outside the destination's subtree) when
 `population(dest) + your weight > capacity(dest)`; the test is at the destination only (`loop/effects_migration.py:122-217`).
 Population may already exceed capacity (at build `set_s_001` has population 12 against capacity 9; after two seasons of
@@ -293,7 +293,7 @@ raises capacity at its rung and every ancestor.
 ### 2.7 The governor feedback: shortfall → claim → transfer
 
 When a larder drains with a mouth unfed (§2.2 step 3), WITNESS deposits the shortfall Observation, as a claim, into those
-present and into every holder whose seat's purview reaches the drained rung (`governors_of`, `queries/world_q.py:835`;
+present and into every holder whose seat's purview reaches the drained rung (`governors_of`, `queries/world_q.py:838`;
 `SEAT_CHANNEL`). A governor's `claim_landed` question can then form a `transfer`: `kind` and `amount` are read off the
 claim (`decision/options.py:859`), `to` is the drained rung (the claim's referent), and `from` is where the giver stands
 or, through a seat, the seat's rung. Built, tested (`tests/test_in22_shortfall_reach.py`), and silent in the realm,
@@ -410,7 +410,7 @@ larder walk, so that grain leaves the food supply. No seed formed a seat-paid up
 
 | goal | what "done" is in state | Query that reads it |
 |---|---|---|
-| feed a place | its cohort's draw is met (`take = want`) every season | `subsistence_draw`, `demanded`/`delivered` (`world_q.py:1017-1178`) |
+| feed a place | its cohort's draw is met (`take = want`) every season | `subsistence_draw`, `demanded`/`delivered` (`world_q.py:1020-1181`) |
 | grow a place | more Sites (yield), more dwellings (capacity), a founded hearth/community beneath it | `capacity`, `descendants` |
 | pay your men | your seat's `oblige` edges carry terms in the future | `establishment_of`, `upkeep_of` |
 | keep your men | the same edges still live after MATTER | `establishment_of` |
@@ -465,7 +465,7 @@ first season in all three seeds, and his seat and the Duke of Valorsmark's are v
 | pay / keep men | `oblige` forms in seed 1 only (24 attempts, 22 sworn), and there everyone swore to `off_senior_inquisitor`, whose remit is `[determine]` alone: no `issue`, so its holder can never pay through it. Over 6 seasons of seed 1: 0 `term.renewed`; live obliges 47 → 35 at the tick-5 MATTER as the first terms lapsed |
 | requisition | computed acts name a hearth (stock is on the settlement) or a rung outside purview: 2/0, 5/0, 5/0 |
 | remove a rival | `revoke` is formed on persons and Records, never an Office (H-203): 6/0, –, 4/0. Even with an `office` payload, only six (seat, target) pairs can ever revoke in the seeded world, all through `off_duke_valorsmark` (the rung directly above `terr_T1`, `state/gate.py:452-487`); that seat is null-conferral and held by the King, who dies in the first season, so it is vacant by season 2 in every seed and after that no `revoke` can pass. Hand-built with an `office` operand through that seat, `revoke` closes the hold and opens a `ban`; through the King's own seat it is refused (round-3 re-run) |
-| migrate | always to an occupied hearth (capacity 1), though 185 of 211 hearths are empty at build: every effect call was `hearth, ascends, FULL` (81/81 in seed 0, re-run; 142/142 and 141/141 in seeds 1 and 2), the `to` operand being the question's subject (`decision/options.py:1045-1046`). A hand-built `migrate` to an empty hearth executes (`residence.changed`; round-3 re-run): 81/0, 143/0, 143/0 |
+| migrate | always to an occupied hearth (capacity 1), though 185 of 211 hearths are empty at build: every effect call was `hearth, ascends, FULL` (81/81, 142/142 and 141/141 in seeds 0-2, round-3 re-run), the `to` operand being the question's subject (`decision/options.py:1045-1046`). A hand-built `migrate` to an empty hearth executes (`residence.changed`; round-3 re-run): 81/0, 143/0, 143/0 |
 | secure a succession | seven seats have no conferral basis and cannot be refilled (§5b); the King dies in the first season in all three seeds, leaving the throne and the Duke of Valorsmark's seat vacant; the only refill in the three seeds is seed 1's `confer` of the Senior Inquisitor's seat, a self-conferral |
 | relief transfer | no larder drains with a mouth unfed at any MATTER (at tick 0 there is nothing to drain; after it, surplus), so no shortfall claim exists; 0 shortfall Observations in seeds 0 and 1 |
 
@@ -482,7 +482,8 @@ your `tenure.opened`, `order.given`, `dispensation.issued`, and also every MATTE
   no works cannot be worked or restored higher; the only thing that changes yield is wear (−1% a season, truncated). This is the
   accrual-by-structure shape the repo's precedent companion lists as absent (I-22, written against `facility_tier`, which the
   season loop does not carry: `research/valoria_game_precedent_companion_v1.md:553`, `..._part4.md:297`); Heroes of Might and
-  Magic's town dwellings are the precedent shape (`research/game_precedent_suite/tutorials/T17_repo_strategy_a.md`, HoMM §2.3).
+  Magic's town dwellings are the precedent shape (`research/game_precedent_suite/tutorials/T17_repo_strategy_a.md`, HoMM §2.3). The
+  contrast is RimWorld, where output is the labour you assign (`T03_colony_a.md`, RimWorld §2.2 and §3).
 - **Food is in surplus within any plausible horizon** at shipped numbers: ~38 grain made against 4 eaten per settlement
   per season. Not forever: harbours wear 10 a season and nothing repairs them in the realm (`restore` 0 successes), so
   condition reaches 0 after 100 MATTERs and grain yield truncates to 0 a few ticks earlier (`int(40 × c/1000) = 0` once
@@ -492,8 +493,8 @@ your `tenure.opened`, `order.given`, `dispensation.issued`, and also every MATTE
   full condition (`harness/populated.py:772-777`), so each makes grain 40, salt 30, ore 50, timber 10 and none lacks what another
   has; nothing gives a reason to move goods between places. [precedent: `research/game_precedent_suite/tutorials/T10_npc_economy.md`,
   Anno 1800 §2.7 and §7, where island fertilities decide what each can make and trade routes move the surplus]
-- **Stores never cap, spoil or cost anything.** Wear touches Sites only (`rosters.yaml:1422`); realm stores rise 0 → 9,250 in two
-  seasons (37 settlements × 250 after the tick-1 MATTER; round-3 re-run, §8). Ore has no reader at all (no `.py` under `loop/`,
+- **Stores never cap, spoil or cost anything.** Wear touches Sites only (`rosters.yaml:1422`); realm stores rise 0 → 4,810 → 9,250 over
+  two seasons in all three seeds (37 settlements × 130, then × 250; round-3 re-run, §8). Ore has no reader at all (no `.py` under `loop/`,
   `queries/`, `state/` or `seam/` names it, grep at `51d7b05`); timber's only sink is `works_cost` (10 per Site, `rosters.yaml:1501`).
 - **War costs no production.** Yield has no labour term (`loop/matter.py:589-591`) and one Felled deletes a cohort whole (ERRATA C1,
   personal combat), so a lost fight removes a settlement's eaters and none of its yield.
@@ -605,8 +606,8 @@ not rows), governed by `proposals/2026-10-16-verbs/` verbs-03 §III.5 where a le
   Only the story-bar report reads it, and over two seasons of seed 0 it is 0 for every (person, office rung) pair (round-3 re-run;
   `hole_register.yaml` H-224), so no governance act moves any unrest a decision uses. The revolt reading `uncontrolled(w, rung)`
   (`queries/world_q.py:1710`) lists unheld territories and has one caller, a harness census report (`harness/populated.py:1518`; T09).
-  [precedent: `research/game_precedent_suite/tutorials/T02_warband.md`, Bannerlord §5, where fief loyalty couples to output and to
-  rebellion]
+  [precedent: `research/game_precedent_suite/tutorials/T02_warband.md`, Bannerlord §5, where fief loyalty drifts toward 50 and
+  rebellion risk starts below 25; tag V2]
 - *Individuals do not eat* (ED-IN-0255). Grain paid to a person's hearth feeds nobody.
 - *MATTER runs before your scenes.* The tick-0 draw always finds empty larders; your acts at tick 0 already see stock.
 - *Shortfall is not hunger.* A shortfall Observation needs a larder that *drains*; an empty larder that nobody could draw
@@ -699,6 +700,56 @@ not rows), governed by `proposals/2026-10-16-verbs/` verbs-03 §III.5 where a le
 No round-2 finding assigned to T08 was rejected. One I did not verify myself: `pursuit.moved` (from `determine`) is among
 the broadcast kinds (C5); I took it from the audit.
 
+### Round-3 corrections
+
+Revised against `51d7b05` (PR #494 on top of the `a4ca9a5` text) and the precedent suite. Each cited line was re-opened at that tree;
+"re-run" means the probe was run again at `51d7b05` (read-only, `python3 -I`; scripts are not committed). Tags `[precedent: ...]` point
+at `research/game_precedent_suite/` (reference, tier 3) and carry the precedent's own tag; none is a rule about Valoria.
+1. *Seven, not six, null-conferral seats (§1, §5b, §5c).* Old: "the six `conferral: null` seats". New: seven of the 32 built seats, the
+   six authored rows plus the rowless guild-leader seat `off_npc_084` (`harness/populated.py:1241-1250`; `loop/predicates.py:126-127`;
+   `offices.yaml:188-266`; re-run of `has_conferral_basis` over `build_realm(0..2)`: appointed 17, elected 8, none 7). The posts behind
+   the suite's names are "Queen" (`off_widow_regent`) and "Prince (Heir Apparent)" (`off_heir`). Round-2 item 1 above counted authored
+   rows only. Measured: null seats are 3 of 8, 5 of 7 and 6 of 10 vacated seats; the King (`p_npc_020`) is gone from `w.persons` after
+   season 1 in every seed (a `person.died` Event names him); his seat and the Duke of Valorsmark's are vacant at the end of season 2 in
+   all three; 8, 7 and 10 seats vacated, one refilled in total (seed 1).
+2. *Revoke is blocked twice (§5b, §5c; F2).* Old: `revoke` 6/0, –, 4/0 explained by the missing `office` operand alone. New: also only
+   six (seat, target) pairs can revoke at world build, all through `off_duke_valorsmark` (`state/gate.py:452-487`; scan re-run), and that
+   seat is vacant by season 2 in every seed, so no `revoke` can pass after it. Hand-built through that seat, `revoke` closes the hold and
+   opens a `ban`; through the King's own seat it is refused (re-run).
+3. *`work` on dwellings and garrisons (§2.5, §4).* Old: a works lets `work` run on any Site kind. New: the `floor` read raises a typed
+   `Unspecified` for the empty `band_floors` cells (`rosters.yaml:2631-2632`; `queries/world_q.py:2783-2799`), so `work` never runs on
+   248 of 322 Sites; `restore` refuses a Site at its ceiling (re-run: `work.unavailable` on a built dwelling with a works, and on a
+   dwelling at 1000; `restore.refused` at 1000, `site.restored` below).
+4. *`migrate` (§4, §5c).* Old: "always to an occupied hearth". New: also 185 of 211 hearths are empty and a hand-built `migrate` to an
+   empty hearth executes; every computed effect call was `hearth, ascends, FULL` (81, 142, 141; re-run), the destination being the
+   question's subject (`decision/options.py:1045-1046`).
+5. *`exchange` (§4).* Old: "row declared, no effect". New: also not in `resolvable_verbs()` (`loop/driver.py:101`); a callback that
+   submits it raises `Unspecified` and aborts the season (re-run, `Unspecified` "has a precondition the fold cannot evaluate").
+6. *§5d additions.* Every settlement is the same economy (`harness/populated.py:772-777`); stores never cap or spoil, 0 → 4,810 → 9,250
+   in all three seeds (re-run), ore has no reader; war costs no production; the horizon is two seasons and three seeds; governing leaves no
+   rule behind and no standing tribute; population is fixed and only falls, with ED-WR-0011 cited (ruled by Jordan 2026-09-13, Option A, a
+   closed cast of 46, "for now"; `registers/editorial_ledger_wr_archive.jsonl`; `loop/census.py:106`); holding is never penalised; governance does not touch output; the accrual-by-structure shape is already present (companion I-22 is stale on
+   `facility_tier`).
+7. *§5c additions.* A hand-built `create_record {kind: works}` then `found`/`build` runs inside a real season (`rung.founded`,
+   `site.built`; re-run); a "secure a succession" row.
+8. *PR #494 (IN-23): legitimacy and stability (§7, §8).* Old: `tax` "waits on M-TAX, IN-23"; "unrest ... Queries". New: IN-23 has landed
+   as person-side Queries (`queries/person_q.py:451, 480`), each one person's windowed estimate, read by `harness/storybar.py::estimates`
+   and by no chooser or MATTER step (`hole_register.yaml` H-224); re-run of the story-bar on seed 0: legitimacy 167 and 158 distinct
+   values over 2,028 and 1,776 (person, seat-holder) pairs, stability 0 for all 546 and 518 (person, office rung) pairs. So `f(legitimacy)
+   = 1` still holds for the proposed `tax`, and no unrest is a settlement quantity. The same PR's `endings_reached` (§0a): the season
+   reports it and the realm as built reaches none (empty after seasons 1 and 2 in seeds 0-2; re-run).
+9. *§7 additions.* A cohort that falls would lower no yield, so no famine spiral could form (RB-5); H-159's two branches both have
+   precedent (desertion in Bannerlord, Warhammer III and JA2, carried debt in CK3); IN-48 / H-108 delegation named.
+10. *§9 "Could not confirm" (seed 1's `off_senior_inquisitor`).* Resolved: `p_npc_004` held it through season 1, died in tick 1, and
+    `p_npc_021` self-conferred it in the same season (re-run).
+11. *Line numbers.* PR #494 moved `queries/world_q.py` (+3 below line 1676, up to +125 above 1738), `rosters.yaml` (+66 above 2489) and
+    `data/fixtures.py` (+10 above 716); the body cites in §0a-§7 are re-based (e.g. `establishment_of` 1739 → 1864, `site_yield` 2491 →
+    2557, `band_floors` 2520 → 2586, `oblige_term` 882 → 892). The Round-2 list above and §9 Checks keep the `a4ca9a5` numbers, being
+    the record of what was opened then.
+12. *Not applied.* The upload's Knights of Honor II figure ("roughly 10% of income") is not carried: no T08 text states it, and the
+    precedent gives about ten times (`T13_koei.md`, KoH II §7). Edits aimed at files outside this suite (E-12 to E-18) are out of this
+    file's scope.
+
 ## 9 Checks
 
 Opened at HEAD `a4ca9a5` (paths under `engine/season/`): `loop/effects_economy.py:20-356` (work, `_rise`, `_fall`,
@@ -725,5 +776,6 @@ Ran (read-only, `python3 -I`, scripts and outputs in
   40, 43, 47, 35), `term.renewed` 0 throughout.
 - Control counts from `ctl/realm_seed{0,1,2}_2seasons.txt` (script `ctl/control.py`), compared by `diff`.
 
-Could not confirm: why `p_npc_004` no longer held `off_senior_inquisitor` when the seed-1 `confer` passed (vacancy
-not traced); the in-tree claim that `restore` executes in the realm (§8 item 7).
+Could not confirm: the in-tree claim that `restore` executes in the realm (§8 item 7). Resolved in round 3 (re-run at `51d7b05`):
+`p_npc_004` held `off_senior_inquisitor` through season 1 and died in tick 1; `p_npc_021` self-conferred the seat in that same season
+(`tenure.opened`, `confer {to: p_npc_021, subject: off_senior_inquisitor}`); 7 seats were vacated in seed 1, 6 remain.

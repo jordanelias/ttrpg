@@ -1,8 +1,14 @@
 # Tutorial: Faction Actions (FA) — how a person in a seat joins, leads, takes ground for, treats on behalf of, and (one day) makes war for a faction
 
-Repo `jordanelias/ttrpg`, HEAD `a4ca9a5`. All `engine/season/` paths are written `es/`. Counts come from the control run
-(`scratchpad/ctl/realm_seed{0,1,2}_2seasons.txt`: `build_realm(seed)`, two seasons, acts attributed by `Event.causes[0]`,
-"ok" = at least one non-refusal event) unless a probe of mine is named (§9).
+Repo `jordanelias/ttrpg`, written against HEAD `a4ca9a5` and **revised in round 3 against `51d7b05`** (PR #495 on PR #494) and
+the precedent suite (`research/game_precedent_suite/`, reference, tier 3; the changes are listed in "Round-3 corrections" at the end
+of §8). All `engine/season/` paths are written `es/`. Counts come from the control run
+(`proposals/2026-10-22-system-description/ctl/realm_seed{0,1,2}_2seasons.txt`: `build_realm(seed)`, two seasons, acts attributed by
+`Event.causes[0]`, "ok" = at least one non-refusal event) unless a probe of mine is named (§9); round 3 re-ran the probes at
+`51d7b05` and the counts held. Line cites in §§0-8 are current at `51d7b05` (PR #494 moved `world_q.py` and `rosters.yaml` lines);
+§9 and the round-2 list keep the `a4ca9a5` numbers they were read at. "I1v" below is the independent re-run of the capability
+inventory's claims (seeds 0-2, two seasons, hand-built acts through the callback); it is not committed, and the precedent suite's
+dispositions (`research/game_precedent_suite/dispositions/D_T09.md`) quote its results.
 
 ## 0 Before you start
 

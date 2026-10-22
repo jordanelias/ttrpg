@@ -1,7 +1,9 @@
 # Tutorial: Fieldwork, investigation and the information model — how a person comes to know, hide, plant and spread what happened
 
-Repo HEAD `a4ca9a5`. Paths are relative to `/home/user/ttrpg`. "Ctl" means the control run files
-`scratchpad/ctl/realm_seed{0,1,2}_2seasons.txt` (seeds 0-2, two seasons). Every run column reads
+Repo HEAD `a4ca9a5`; revised in round 3 against `51d7b05` (after PR #494) and the precedent suite
+(`research/game_precedent_suite/`); the round-3 changes are listed in `### Round-3 corrections`, before
+§9. Paths are relative to `/home/user/ttrpg`. "Ctl" means the control run files
+`proposals/2026-10-22-system-description/ctl/realm_seed{0,1,2}_2seasons.txt` (seeds 0-2, two seasons). Every run column reads
 **attempted/ok**:
 
 - *attempted* counts acts that passed admission and reached the fold (`d.resolved`). Acts refused at
@@ -50,17 +52,156 @@ decision layer (`questions_for`, `opening_set`) turns your claims into your next
 | WITNESS fan-out, refraction, decay, cap and eviction | RUNS-IN-LOOP |
 | `co_located`, `chronicle` and `document_key` channels | RUNS-IN-LOOP |
 | `witness_key` channel | TESTS-ONLY: it admitted nobody in seeds 0 or 2 (0 `firsthand_via_knot`) |
-| `post_remit` slot (the obligee channel and IN-22 seat reports) | TESTS-ONLY at seed 0 (0 `inferred`). At seed 2 one `inferred` claim exists. With 0 found deposits, it must come from the channel (`witness.py:598`) or a seat report (`witness.py:513-524`), so this slot executes at seed 2. Which of the two I did not trace |
+| `post_remit` slot (the obligee channel and IN-22 seat reports) | TESTS-ONLY at seed 0 (0 `inferred`). Seeds 1 and 2 each end season 2 with one `inferred` claim. With 0 found deposits in every seed, each must come from the channel (`witness.py:598`) or a seat report (`witness.py:513-524`), so this slot executes at seeds 1 and 2. Which of the two I did not trace |
 | the inquiry rolls, `survey`, `forge`, `conceal`, `create_record`, `tell` | RUNS-IN-LOOP |
-| what an inquiry uncovers (the found deposit) | TESTS-ONLY: 0 found deposits in seeds 0 and 2 (probe) |
+| what an inquiry uncovers (the found deposit) | TESTS-ONLY: 0 found deposits in seeds 0, 1 and 2 (probe) |
 | `give` | 0 of 16 in seed 0; 1 of 19 in seed 2 (a cover changed hands) |
 | told drift and private circles | Partial drift TESTS-ONLY in effect; circles are RUNS-IN-LOOP at control (`telling_privacy=0`) |
 | `systems/fieldwork/sim/knots.py` | TESTS-ONLY (unplugged) |
-| `destroy_record` | TESTS-ONLY. The row is typed and has an effect (`verb_table.yaml:292-313`; `effects_information.py:969`), so a hand-built act executes, but formation is withheld by fixture (`fixtures.py:923`) |
+| `destroy_record` | TESTS-ONLY. The row is typed and has an effect (`verb_table.yaml:292-313`; `effects_information.py:969`), so a hand-built act executes, but formation is withheld by fixture (`fixtures.py:933`) |
 | `thread_read`, every proposed verb | DESIGN-ONLY |
 
 `engine/season/requirements.yaml:169-172` lists the scale "investigations / detective / interactive
 fiction" as `in_loop: false`. The verbs run, but there is no playable investigation mode.
+
+## 0a How it plays
+
+Round 3. As built first, then a `[PROPOSED]` block. A precedent cite names a tutorial file and a game
+heading: "T06 precedent" is `research/game_precedent_suite/tutorials/T06_investigation.md` (Obra Dinn,
+Shadows of Doubt, Pentiment, L.A. Noire) and "T19 precedent" is
+`research/game_precedent_suite/tutorials/T19_tactics_narrative.md` (Lacuna, Ace Attorney). "D_T06" is
+`research/game_precedent_suite/dispositions/D_T06.md`. Precedent tags (`[V3]`, `[M]`, `[CONTESTED]`) stay
+with those files.
+
+### How it plays (as built)
+
+**Setup choices.**
+- World build: `build_realm(seed)` seats the same 83 persons, 322 Sites and 412 Rungs at seeds 0, 1 and 2;
+  the seed changes the draws, not who exists (probe). Nothing in the information model is chosen per world.
+  Shipped: `refraction_gain 0.5` (`fixtures.py:874`), `claim_decay_per_season 5` (`:293`), `told_weight 0.5`
+  (`:788`), `record_gain 0.5` (`:801`), `telling_privacy 0.0` (`:863`); inquiry pool 2, obstacle 2, ceiling 2
+  (§2.8).
+- No person has a background that changes what he can learn: capability is empty on every realm person (ctl
+  "capability nonempty 0"), so every investigator rolls the same two dice (§2.8). `[precedent: T06 precedent,
+  Pentiment §1: a biography per act unlocks lines and points]`.
+- The season loop has no player interface. The one seam is `dispatching_chooser`
+  (`harness/play_surface.py:41-52`, used only by tests): it sends one named person's choosing to a callback
+  that receives the person (his ledger with him), a View, a Sensation and the budget query, not the World
+  (`loop/deliberate.py:119-170`). Such a callback may return any of the 47 resolvable verbs
+  (`loop/driver.py:101`) with any payload, so it can do what the chooser never does: `examine` a Site he
+  stands at (a hand-built `examine` of a present Site reached the roll; probe), `give` a forged sheet or
+  `research` a Record he holds (§3). Elsewhere, `systems/social_contest/sim/contest/agon_harness.py` is a
+  stdin-driven human-played social contest and the combat and mass-battle `workbench/server.py` files are
+  HTTP designer tools; none of the three plays an investigation.
+
+**The loop.** One season, every person, all of it automated (overview §2.1; §2):
+1. MATTER takes 5 confidence off every claim (`loop/matter.py:317-347`) and matures Record stages, so covers
+   lapse after about three seasons (§2.10).
+2. Five rounds (`loop/driver.py:449-456`). DELIBERATE: claims that landed since a person's last deliberation
+   raise questions, ordered by `attention_key` (`queries/world_q.py:2217`; `questions_for` at `:2374`);
+   candidates form on the question's referent; his ledger vetoes what it knows false
+   (`decision/options.py:308-309`); he packs scenes from his budget (7 acts at budget 5, §0).
+3. RESOLVE: the graded inquiries roll 2d10 against Ob 2 (Failure 0.74, Partial 0.19, Success 0.07; §2.8).
+   Nobody is shown these odds (overview §7, information row). Refusals and Failures emit `finding.none`. A
+   graded finding on an open trail returns `(event, terms)` (`modules/fieldwork/find.py:28-34`, through the
+   `inquiry` role, §2.9). `[precedent: T06 precedent, Pentiment §7: its check is shown as triangles at the
+   moment of choice]`.
+4. WITNESS: each Event reaches each person through the first channel that admits him, refracted
+   (§2.2-2.4); found claims land at 50; a telling lands at the teller's confidence with the chain extended
+   (§2.5); a ledger over 200 evicts (`state/ledgers.py:17-32`).
+5. The next round's questions come from what just landed. Nothing pauses, and no one is ever asked to state
+   a conclusion.
+
+Outside the loop, `harness/chronicle.py` (IN-37, PR #494) prints the deepest cross-person act chain of a
+finished log. It reads acts and Events, not ledgers, and the loop never imports it.
+
+**The choice menu.** Every act costs one act of budget (a lone scene costs 1; an extended scene costs 2 for
+up to 3 acts; §0). Run figures: ctl attempted/ok, seeds 0 · 1 · 2.
+
+| verb | cost | effect | when a person picks it | grade (ctl) |
+|---|---|---|---|---|
+| (be present) | none | firsthand 100 with `who` on everything in the room | always: it is where he is | RUNS-IN-LOOP |
+| `research` | 1 act | graded; uncovers a forged Record's trail if one is open | a question about a Record; most formed acts name a person or place and are refused | RUNS-IN-LOOP 14/7 · 8/1 · 4/2; 0 found deposits |
+| `surveil` | 1 act | graded; a Rung he stands in; no Person case | a question about the place he is in | RUNS-IN-LOOP 30/5 · 29/9 · 22/5 |
+| `examine` | 1 act | graded; a Site he stands at | never admitted: no question's subject is a Site (§4) | TESTS-ONLY 0/0 (62 / 59 / 39 formed, all refused) |
+| `interview` | 1 act | ungraded `finding.made`; reads nothing from the interviewee | a question about a person | RUNS-IN-LOOP 32/11 · 16/2 · 39/11; uncovers nothing |
+| `reconstruct` | 1 act | ungraded; uncovers nothing | a held claim on the subject | RUNS-IN-LOOP 39/33 · 52/46 · 55/49; uncovers nothing |
+| `survey` | 1 act; +1 budget while held | a true faction sheet in his hold | a held claim; the subject coheres under one faction | RUNS-IN-LOOP 57/13 · 38/5 · 59/13 |
+| `forge` | 1 act; +1 budget | a sheet naming him head; `forgery_quality 1`, capped away | as `survey` | RUNS-IN-LOOP 52/12 · 51/6 · 57/15 |
+| `conceal` | 1 act; +1 budget | a cover: later deposits are about the alias; `who` still shows | any time | RUNS-IN-LOOP 19/19 · 34/34 · 28/28 |
+| `create_record` | 1 act; +1 budget | a `text` Record in his hold | any time; the cheapest budget lever | RUNS-IN-LOOP 87/87 · 88/88 · 89/89 |
+| `give` | 1 act | moves a held Record and its content to a person with him | a question naming a Record he holds (formed mostly on persons and buildings) | TESTS-ONLY at seeds 0-1 (16/0, 21/0); executes at seed 2 (19/1, a cover) |
+| `tell` | 1 act | contested; the hearer copies his best claim with him in the chain | a held claim; the hearer with him | RUNS-IN-LOOP 23/4 · 25/7 · 19/6 |
+
+**First season, step by step** (seed 0, tick 0; a read-only probe of one season on the ctl recipe, not
+committed).
+1. Every ledger starts empty (83 persons, 0 claims). p_npc_037, the season's busiest investigator, holds 0.
+2. He takes nine fieldwork acts. Five are `research`: on the King (p_npc_020), on p_npc_030 and three times
+   on the cathedral building. None names a Record, so all five are refused at admission; each spent budget
+   and left nothing in any ledger, his own included (`rosters.yaml:1145`).
+3. Three are `create_record`: each mints a `text` Record into his hold and so adds 1 to his next budget
+   (`decision/budget.py:57-61`).
+4. One is `reconstruct` on the cathedral: `finding.made` with no degree. It uncovers nothing, and everyone in
+   the room now holds a claim that he asked.
+5. Meanwhile WITNESS fills his ledger from where he stood: 0 to 187 claims, 177 firsthand and 10 `told_by`
+   at 67 (`order.given`, `tenure.closed` and the `seen` claims about them; the realm mean is 68.3).
+   Everything he learned came from presence and those 67-grade copies; his inquiries uncovered nothing.
+6. Realm-wide that season: `research` formed 59 and reached the roll twice (both Partial, both cohorts on a
+   Record); `surveil` formed 28 and reached the roll 14 times (1 Partial, 13 Failures); `examine` formed 30,
+   refused 30; `forge` minted 4 sheets; `give` formed 8, refused 8, so no forged sheet changed hands; `tell`
+   landed 2 of 3.
+7. Nothing uncovered a trail (0 found deposits). The only route that does is the hand-built chain
+   forge, give, research of §3, which the realm does not take.
+
+**What changes later.** Ledgers fill: 13 of 74 at the cap after two seasons in seed 0, mean 199 of 200 after
+four (ERRATA C9). Eviction then removes old firsthand claims first (§2.6). Covers lapse after about three
+seasons. Held Records keep raising budgets. No verb unlocks and no inquiry gets stronger.
+
+**Failure and ending.** There is no failure state and no case to fail (§5a). A failed or refused inquiry
+leaves nothing in any ledger. A Partial finding closes that trail to its finder for as long as the claim
+stays in his ledger (`epistemic.py:356-365`). The season now reports `endings` and halts on none
+(`loop/driver.py:515-518`, `queries/world_q.py:1764`); at seed 0 both seasons report `[]` (probe), and
+`rosters.yaml: endings` calls its sovereignty row unreachable in computed play. `[precedent: T06 precedent,
+Obra Dinn §6: it cannot be failed either, a wrong entry costs nothing beyond staying out of the lock, and it
+ends on a count of fates solved; here a Partial is terminal for that trail. Shadows of Doubt §6: a wrong
+name costs 100 and the killer keeps killing]`.
+
+**Consequential vs cosmetic choices.**
+- Consequential: where a person stands (firsthand 100 with `who`, against an inferred 50); what he holds (it
+  gates `tell`, `survey`, `forge`, `reconstruct`); whether his act's kind is one a binding row emits
+  (chronicle) or is done through a seat (`post_remit`); a `conceal` before acting (the alias); whom he tells,
+  since a teller's record re-weights his word (TESTS-ONLY at seeds 0-1, one chained claim at seed 2; §2.5).
+- Inert at shipped values: `forgery_quality` (capped), `interview` and `reconstruct` (uncover nothing),
+  capability (empty), `telling_privacy` (0), `examine` (never runs), `Seen.why` (always None,
+  `epistemic.py:932-938`).
+- Dominant: presence over inquiry; `create_record` as a budget lever (§4, §5d).
+
+### How it plays [PROPOSED]
+
+Nothing below executes. Sources: IN-47 (`proposals/2026-10-07-character-sheet-spaces.md` §2 arm C1 and §4,
+`:88-90`, `:162-185`; built by REM-30,
+`proposals/2026-10-21-v9-remediation/2026-10-21-v9-remediation-02-items-rb0-to-rb3.md:559-568`, D-2 RULED
+that the build proceeds, the design stays PROPOSED); IN-46 (REM-31, same file `:570-589`: a paused fight, no
+investigation content); the fieldwork lexicon's M1-M10 (§7).
+- Setup [PROPOSED]: a player takes a person the world builder already seated (IN-47 creation, arm C1) and
+  reads his case from the ledger the loop already writes: "unknowns stay unknown, false beliefs stay believed"
+  (`character-sheet-spaces.md:180-181`), with an out-of-sim chronicle rendered over `causes[]`
+  (`:171-175`). That is the precedents' logbook, case board or phone log (T06 precedent, Obra Dinn §2 and
+  Shadows of Doubt §2; T19 precedent, Lacuna §2) made from claims instead of authored clues.
+- Loop [PROPOSED]: unchanged; the player's choice enters at the chooser slot (REM-30 cites
+  `loop/driver.py:355`, not re-derived here) through his own View, Question and Candidates.
+- Choice menu [PROPOSED]: every inquiry yields a selected fact at remove 0 (M1); a refusal says so
+  (`inquiry.refused`, M2: the precedents' "nothing more here"); a Failure can mislead (M3); the hider's skill
+  sets the obstacle (M4); the interviewee answers by his own act next season (M5); `watch` can unmask a cover
+  (M1, M4); a finding can be brought as a proof (M9). Each waits on the item §7 names.
+- What it would still not have, by axiom: a verifier of the player's conclusion (AX-7;
+  `proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md:91-92`;
+  `proposals/2026-10-03-verb-coverage-and-gap-fill.md:787-788`), a standing counter-intelligence task (T-i;
+  `verb-coverage-and-gap-fill.md:819`), an intelligence meter (T-a; `:820`). On the precedents' verification
+  scale it would sit with Pentiment (no truth check, consequence only; T06 precedent, Pentiment §7), but over
+  a simulated truth that Pentiment lacks.
+- Failure and ending [PROPOSED]: nothing in the loop halts on an ending. IN-27 is built only as the report
+  above, and `endings_reached` says the realm as built reaches none.
 
 ## 1 The pieces
 
@@ -81,15 +222,15 @@ fiction" as `in_loop: false`. The verbs run, but there is no playable investigat
 | content claim | `content:<kind>`: what a Record you newly hold says, frozen | one per newly held Record | `loop/witness.py:68-83` |
 | source | how the claim came to be held: `firsthand`, `told_by`, `inferred`, `firsthand_via_knot` | fixed by the channel | `rosters.yaml:419-434` |
 | chain, hops, teller | who passed it on (origin first); `hops = len(chain)`, `teller = chain[-1]` | empty for anything that was not told | `state/carriers.py:337-379` |
-| visibility, circle | `"own"`, or `(teller, addressee)` for a confided telling | circles form with probability `telling_privacy = 0.0` | `fixtures.py:853`; `witness.py:108-133` |
+| visibility, circle | `"own"`, or `(teller, addressee)` for a confided telling | circles form with probability `telling_privacy = 0.0` | `fixtures.py:863`; `witness.py:108-133` |
 | witness channel | a rule deciding whether a person learns of an Event; precedence order `co_located, witness_key, document_key, chronicle, post_remit` | one channel per person per Event (the strongest one) | `rosters.yaml:419`; `epistemic.py:794-840` |
 | remove | how far a channel is from seeing the thing | 0, 1/3, 2/3, 2/3, 1 | `decision/options.py:1338-1353` |
-| refraction | received confidence = `int(conf·(1−g·remove)·(1−g·dissent)+0.5)` | `refraction_gain g = 0.5`; competence factor fixed at 1 | `options.py:1410-1448`; `fixtures.py:864` |
+| refraction | received confidence = `int(conf·(1−g·remove)·(1−g·dissent)+0.5)` | `refraction_gain g = 0.5`; competence factor fixed at 1 | `options.py:1410-1448`; `fixtures.py:874` |
 | dissent | 1 if the incoming claim contradicts your own firsthand claim about yourself or about a cell, or your ledger makes the reported act impossible for its actor | 0 or 1 | `options.py:1365-1407` |
 | decay | MATTER takes 5 confidence off every claim each season, floored at 0 | `claim_decay_per_season = 5` | `loop/matter.py:317-347`; `fixtures.py:293` |
 | eviction | while a ledger is over the cap, drop the claim with the lowest `confidence × (when+1)` | cap 200 | `state/ledgers.py:17-32` |
-| Said | what a `tell` carries, copied from the teller's ledger when he chooses | best non-`seen` claim on the subject | `carriers.py:369`; `queries/person_q.py:909` |
-| teller weight | weight given to hearsay when it is read: `told_weight^hops × relation × record`, clamped to [0,1] | `told_weight = 0.5`; `rank()` always 0 | `options.py:1513`; `fixtures.py:778` |
+| Said | what a `tell` carries, copied from the teller's ledger when he chooses | best non-`seen` claim on the subject | `carriers.py:369`; `queries/person_q.py:999` |
+| teller weight | weight given to hearsay when it is read: `told_weight^hops × relation × record`, clamped to [0,1] | `told_weight = 0.5`; `rank()` always 0 | `options.py:1513`; `fixtures.py:788` |
 | Record | a world-side document: `kind`, `subject_matter`, `stages`, `forgery_quality` | kinds seen in the realm: `text`, `faction_sheet`, `cover`, `petition`, `dispensation` | `carriers.py:751` |
 | hold | a `hold` Tenure: who has a Record. Each live hold also adds 1 to your scene budget | one live holder per Record | `effects_information.py:170-196`; `budget.py:57` |
 | `_mint_document` | the one function that makes a Record and opens the maker's hold | 3 stages, one season apart (`record_stages_default=3`, `record_stage_term=1`) | `effects_information.py:170`; `fixtures.py:524-525` |
@@ -99,13 +240,13 @@ fiction" as `in_loop: false`. The verbs run, but there is no playable investigat
 | anchor | what an Event is *about* (`anchor_of`): the actor, or his live cover | `seen.who` still reads the real actor | `attribution.py:105-150` |
 | inquiry | the six verbs that write nothing to the world and emit `finding.made` or `finding.none` | 3 are graded (`research`, `examine`, `surveil`) | `verb_table.yaml:1321-1438`; `rosters.yaml:1115-1143` |
 | degree, band | Overwhelming / Success / Partial / Failure, from `margin = net − Ob` | ≥3 / ≥1 / 0 to <1 / <0 | `engine/dice_engine/dice_engine.py:227-239` |
-| `finding_terms` | which `Seen` terms a band uncovers | O and S: `[stratum, marks, who]`; P: `[stratum, marks]`; F: none | `rosters.yaml:2446-2472` |
-| covert kind | a deed kind that leaves a findable *trail* | one member: `record.forged` | `rosters.yaml:2474-2489` |
+| `finding_terms` | which `Seen` terms a band uncovers | O and S: `[stratum, marks, who]`; P: `[stratum, marks]`; F: none | `rosters.yaml:2447-2473` |
+| covert kind | a deed kind that leaves a findable *trail* | one member: `record.forged` | `rosters.yaml:2475-2490` |
 | trail | `trail_of`: the most recent covert Event on the subject, if a person did it, it was not you, and you do not already hold it | at most one per kind per side | `epistemic.py:368-404` |
 | `holds_trail` | "already known": you hold `(s, e.kind, True)` on a subject specific to the Event, made no earlier than the Event | any source counts | `epistemic.py:336-365` |
 | found claim | what a finding deposits: source `inferred` (the `post_remit` slot), refracted at remove 1 | 100 → 50 | `witness.py:259-315` |
 | `undeposited_kinds` | Event kinds that WITNESS gives to nobody | `finding.none` only | `rosters.yaml:1145` |
-| Question | an item on your agenda for your next deliberation, raised by claims that landed since your last one | one question per deliberation | `queries/world_q.py:2249` |
+| Question | an item on your agenda for your next deliberation, raised by claims that landed since your last one | one question per deliberation | `queries/world_q.py:2374` |
 | known-false veto | drops an option whose precondition your own ledger says is false | absence of a claim is UNKNOWN, never False | `options.py:308`; `epistemic.py:72-134` |
 | knot (engine) | a `knot` Tenure that feeds the `witness_key` channel | its opener `tie / knot` cannot be resolved (H-182) | `epistemic.py:543-560` |
 | knot (sim) | a separate bond model: tiers, strain, rupture | no season caller | `systems/fieldwork/sim/knots.py` |
@@ -189,6 +330,15 @@ When a told claim is *read*, it weighs `0.5^hops × relation × record` (`option
 for one hop, 0.25 for two. `ledger_weigh` returns `None` (plain reading) for a ledger with no chained
 claim (`options.py:1356-1362`).
 
+**Provenance.** Each claim keeps its `source`, its `chain` and so its `teller` (`state/carriers.py:337-379`),
+and `record()` (`decision/options.py:1470-1510`, `record_gain 0.5` at `fixtures.py:801`) re-weights
+everything a teller passed on by how often his told cells matched the hearer's own firsthand claims. Two
+uploaded surveys each find a model of where a belief came from in only one title, The Guild 2
+(`consolidated_twenty_games.md:179`, of twenty titles; `Citizens_Settlements_and_Factions_-_Nine_Titles.md:390`,
+of nine; `research/game_precedent_suite/dispositions/ATTACHMENTS_CROSSCHECK.md` §A, "Holds" within the
+precedent tables); Valoria holds one. The chained half is nearly unused at shipped values: 0, 0 and 1
+chained claims survive two seasons in seeds 0, 1 and 2 (probe).
+
 **2.6 Fading and forgetting.** MATTER, once per season, takes 5 off every claim's confidence and emits
 `claim.decayed` (`matter.py:317-347`). Over the cap of 200, WITNESS evicts the lowest
 `confidence × (when + 1)` (`ledgers.py:17-32`). A 100-confidence claim from tick 0 scores 100, and a
@@ -197,7 +347,7 @@ can witness a forgetting, and nothing "unsays" a claim.
 
 **2.7 How beliefs drive choice.** The chooser sees your ledger, never the World. Claims that landed
 since your last deliberation raise **Questions** about subjects within your reach
-(`world_q.py:2249`), and `opening_set` forms candidates on the question's referents. Your ledger also
+(`world_q.py:2374`), and `opening_set` forms candidates on the question's referents. Your ledger also
 vetoes options it makes known-false (`options.py:308`) and supplies names and operands. News sets the
 agenda; beliefs do not create preferences.
 
@@ -222,7 +372,7 @@ failed precondition) also emits `finding.none`. `interview` and `reconstruct` ar
 `finding.made` with `degree None`.
 
 **2.9 What a finding uncovers** (the "planted trail"). At RESOLVE, `find_trail` dispatches only
-`finding.made` (`rosters.yaml:2423-2445`). The host builds a `FieldworkInput` with the band, the trail
+`finding.made` (`rosters.yaml:2424-2446`). The host builds a `FieldworkInput` with the band, the trail
 and `finding_terms` (`seam/wrappers/fieldwork.py:49-63`), and `modules/fieldwork/find.py` returns
 `(trail event, terms[band])` for each trail item. No band (Failure, or ungraded) means nothing is
 uncovered.
@@ -318,7 +468,7 @@ the chooser formed, including those refused at admission.
 |---|---|---|---|---|
 | `research` | subject is a Record (you need only know its id) | graded, 2.8. O/S/P: `finding.made`, uncovers a trail if one exists | nothing | 14 / 7 (probe: 6 P, 1 S, 7 F); 115 `finding.none`, so about 108 formed acts were refused at admission |
 | `surveil` | subject is a Rung and you are `present_at` it | graded. The Person case is absent, so the trail's "deeds by" side is unreachable | nothing | 30 / 5 (2 P, 3 S, 25 F) |
-| `examine` | a Site exists and you are present at it | graded | nothing | **0 / 0 in seeds 0-2: it never passes admission.** It is formed 62 times in seed 0, and all 62 emit `finding.none` at admission (probe; reason not traced) |
+| `examine` | a Site exists and you are present at it | graded | nothing | **0 / 0 in seeds 0-2: it never passes admission.** It is formed 62 / 59 / 39 times in seeds 0 / 1 / 2, and every one emits `finding.none` at admission. The cause is the operand: `site` is filled with the question's subject (`decision/options.py:1047-1048`), and none of the 160 formed acts was given a Site (322 Sites exist; seed 0: 45 Rungs, 15 Person ids, 4 of them dead by the end, and 2 Records; probe). `work` and `restore` also take a `site` operand (`verb_table.yaml`), so the same fill reaches them |
 | `interview` | subject is a Person | ungraded `finding.made`. Uncovers nothing and reads nothing from the interviewee | nothing | 32 / 11 |
 | `reconstruct` | you hold a claim on the subject | ungraded. Uncovers nothing | nothing | 39 / 33 |
 | `thread_read` | `requires_typed: none` (TS ≥ 30, no carrier, H-85) | not resolvable | — | never formed |
@@ -328,7 +478,7 @@ the chooser formed, including those refused at admission.
 | `create_record` | none | `record.created`; a `text` Record in your hold | Record | 87 / 87 |
 | `give` | a Record you hold, to a person `with` you | `record.given`; your hold closes and the receiver's opens; he gets the content | Tenures | 16 / 0 (seed 1: 21 / 0; seed 2: 19 / 1, a cover) |
 | `tell` | a claim on the subject, and the hearer `with` you | contested; 2.5 | nothing | 23 / 4 (seed 1: 25 / 7; seed 2: 19 / 6) |
-| `destroy_record` | a Record you hold | `record.destroyed` | Record | withheld from formation (`fixtures.py:923`); TESTS-ONLY |
+| `destroy_record` | a Record you hold | `record.destroyed` | Record | withheld from formation (`fixtures.py:933`); TESTS-ONLY |
 | `utter`, `petition`, `issue` (`remit:issue`), `open_case` (`remit:determine`) | (their own rows) | make Propositions, petitions, dispensations and case files. Their kinds are chronicle-public only if a `binding_decision` row emits them (2.2) | Record / Proposition | 39/39, 42/14, 6/5, 12/6 |
 
 Every Record you hold adds 1 to your scene budget (`budget.py:57-58`). A failed or refused inquiry is
@@ -426,12 +576,15 @@ first.
 - **`interview` and `reconstruct` are dominated**: they spend budget, uncover nothing by construction
   (no degree, so no `finding_terms` row), and emit a `finding.made` that tells bystanders you asked.
 - **`examine` never passes admission** in seeds 0-2. It is formed 62 times in seed 0 and refused every
-  time.
+  time, because the question that forms it never names a Site (§4). So a person who was not at a place
+  when something happened there cannot learn it by going there later: `examine` never runs, and the only
+  covert kind, `record.forged`, writes a Record, not a place (Play 1).
 - **Presence dominates inquiry**: 100 firsthand against 50 inferred.
 - **Telling something your hearer saw with you deposits nothing.** This is a mechanism: dedup skips a
   copy the hearer already holds unchained (`witness.py:932-935`). The evidence is small: all 4 seed-0
-  tellings hit it (probe). That is one seed, n = 4. Seeds 1 and 2 have 7 and 6 `news.told`, which I did
-  not trace. I make no claim that telling is generally wasted. A telling to someone who was absent does
+  tellings hit it (probe). That is one seed, n = 4. Seeds 1 and 2 have 7 and 6 `news.told`; at the end of
+  season 2 they leave 0 and 1 chained claims alive (probe), so most of their copies were also skipped or
+  evicted; which, I did not trace. I make no claim that telling is generally wasted. A telling to someone who was absent does
   land (the §3 example).
 - **Kind-sharing broadcast.** Any Event whose kind a `binding_decision` row emits reaches every person
   at 67 (2.2). That includes kinds produced by non-binding acts (`argue`'s `pursuit.moved`) and by
@@ -489,7 +642,7 @@ first.
 Also proposed: `search` and `track` as modes of `examine`, `decipher` (parked), `eavesdrop` and
 `intercept` (parked), `trace` (TW, needs plugged knots). The lexicon also proposes that `forge` emit
 `faction.surveyed` in place of `record.forged`. My reading: that would leave `covert_kinds` naming a
-kind no row emits, which `data/verbs.py::_check_covert_kinds` refuses at import (`rosters.yaml:2480-2484`),
+kind no row emits, which `data/verbs.py::_check_covert_kinds` refuses at import (`rosters.yaml:2481-2485`),
 so the two would have to move together. The canon price "+2 Exposure" was declined (FI-G29).
 
 **Stubbed or inert at shipped values today:**
@@ -537,7 +690,7 @@ so the two would have to move together. The canon price "+2 Exposure" was declin
 
 **Stale statements in the tree and the extracts:**
 
-11. `rosters.yaml:2484-2485` says `conceal` is unbuilt. It is built (`verb_table.yaml:207`; 19 of 19 in
+11. `rosters.yaml:2485-2486` says `conceal` is unbuilt. It is built (`verb_table.yaml:207`; 19 of 19 in
     seed 0).
 12. G20 FI-G23/G24 ("`forgery_quality` written by nothing") and FI-G26 ("no `conceal` verb") are stale
     at HEAD. L12's `watch` is a *proposed* rename; HEAD has only `surveil` (errata C8).
@@ -578,7 +731,7 @@ so the two would have to move together. The canon price "+2 Exposure" was declin
    0, executing at seed 2 (§0). The producers are `witness.py:289` (found, 0 in seed 2), `:513-524`
    (seat report) and `:598` (channel).
 3. *H-F6, `destroy_record`.* Accepted. It is TESTS-ONLY, not DESIGN-ONLY: the row is typed with an
-   effect, and formation is withheld by `fixtures.py:923` (`verb_table.yaml:306-312`).
+   effect, and formation is withheld by `fixtures.py:933` (`verb_table.yaml:306-312`).
 4. *H-F7, `open_case`.* Accepted. Its eligibility is `remit:determine` only (`verb_table.yaml:902`), and
    `issue`'s is `remit:issue`. The §4 claim "every row includes `own`" is fixed.
 5. *H-F10 and CROSS C1, scene budget.* Accepted. `interactions_per_scene = 3` (`fixtures.py:488`) and
@@ -605,8 +758,8 @@ so the two would have to move together. The canon price "+2 Exposure" was declin
   `decision/options.py:615-625,1338-1448,1513-1545`; `state/ledgers.py:17-32`; `loop/matter.py:312-347`;
   `state/attribution.py:105-265`; `loop/effects_information.py:170-200,258-270,744-830`;
   `verb_table.yaml:207-222,281-313,434-452,533-580,925-948,1127-1200,1321-1438,1495-1505`;
-  `rosters.yaml:415-434,1018-1025,1115-1160,2423-2489`;
-  `data/fixtures.py:228-247,293,386,414-439,489-527,761-864,923`;
+  `rosters.yaml:415-434,1018-1025,1115-1160,2424-2490`;
+  `data/fixtures.py:228-247,293,386,414-439,489-527,771-874,933`;
   `modules/social_contest/roll.py:96-125`; `engine/dice_engine/dice_engine.py:153-161,196-239`;
   `seam/wrappers/sigma.py:119-191`; `decision/budget.py:40-61`; `requirements.yaml:169-180`;
   `systems/fieldwork/sim/knots.py:46-97,201-227`; `engine/season/tests/test_fi03_trail.py:1-300,534-625`;
@@ -632,8 +785,7 @@ so the two would have to move together. The canon price "+2 Exposure" was declin
   O 0.142, S 0.328. The refraction table in 2.4 is computed from the formula.
 - Not confirmed:
   - why 40 of 52 forges are refused in seed 0;
-  - why every `examine` is refused at admission;
-  - whether seed 2's one `inferred` claim came from the `post_remit` channel or a seat report;
-  - the seed-1 and seed-2 tellings;
+  - whether the one `inferred` claim at each of seeds 1 and 2 came from the `post_remit` channel or a seat report;
+  - the seed-1 and seed-2 tellings beyond their surviving chained claims (0 and 1);
   - which binding row emits `tenure.closed` (taken from CROSS C5);
   - `deliberate.py:252-259` (CROSS C1), which I did not find at that path.
