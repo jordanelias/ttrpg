@@ -479,14 +479,44 @@ your `tenure.opened`, `order.given`, `dispensation.issued`, and also every MATTE
 ### 5d What the mechanics structurally reward and punish
 
 - **Production needs no labour.** Yield is base × condition; nobody has to work a harbour. A Site at full condition with
-  no works cannot be worked or restored higher; the only thing that changes yield is wear (−1% a season, truncated).
+  no works cannot be worked or restored higher; the only thing that changes yield is wear (−1% a season, truncated). This is the
+  accrual-by-structure shape the repo's precedent companion lists as absent (I-22, written against `facility_tier`, which the
+  season loop does not carry: `research/valoria_game_precedent_companion_v1.md:553`, `..._part4.md:297`); Heroes of Might and
+  Magic's town dwellings are the precedent shape (`research/game_precedent_suite/tutorials/T17_repo_strategy_a.md`, HoMM §2.3).
 - **Food is in surplus within any plausible horizon** at shipped numbers: ~38 grain made against 4 eaten per settlement
   per season. Not forever: harbours wear 10 a season and nothing repairs them in the realm (`restore` 0 successes), so
   condition reaches 0 after 100 MATTERs and grain yield truncates to 0 a few ticks earlier (`int(40 × c/1000) = 0` once
   c < 25). The cover reading D02 quotes (21.7 → 41.7 seasons) sums *all* stores, ore and timber included; grain alone
   is 40/4 = 10 seasons after the tick-0 MATTER.
+- **Every settlement is the same economy.** `build_realm` gives each of the 37 settlements one Site of every yielding kind at
+  full condition (`harness/populated.py:772-777`), so each makes grain 40, salt 30, ore 50, timber 10 and none lacks what another
+  has; nothing gives a reason to move goods between places. [precedent: `research/game_precedent_suite/tutorials/T10_npc_economy.md`,
+  Anno 1800 §2.7, where island fertilities decide what each can make]
+- **Stores never cap, spoil or cost anything.** Wear touches Sites only (`rosters.yaml:1422`); realm stores rise 0 → 9,250 in two
+  seasons (37 settlements × 250 after the tick-1 MATTER; round-3 re-run, §8). Ore has no reader at all (no `.py` under `loop/`,
+  `queries/`, `state/` or `seam/` names it, grep at `51d7b05`); timber's only sink is `works_cost` (10 per Site, `rosters.yaml:1501`).
+- **War costs no production.** Yield has no labour term (`loop/matter.py:589-591`) and one Felled deletes a cohort whole (ERRATA C1,
+  personal combat), so a lost fight removes a settlement's eaters and none of its yield.
+- **The horizon is measured on two seasons and three seeds**, plus the yield arithmetic above; no campaign-level instrument exists
+  (`CLAUDE.md` §7).
 - **Treasuries are hollow.** Seats sit on territory/duchy rungs, which yield nothing; paying anyone needs a requisition
   first. Upkeep is cheap (1 unit per man per 4 seasons) relative to settlement surplus.
+- **Governing leaves no rule behind.** No act sets a standing parameter: `issue` mints one writ for one executor that nothing at
+  MATTER reads (`verb_table.yaml:561`; a held writ seeds its holder's own act operands, `decision/options.py:915-930`, but nobody is
+  bound to act on one), and `tax`, `ration` and `proclaim` are DESIGN-ONLY (§7). Nor is there a standing tribute: a treasury refills
+  only when its holder spends one of his own acts on a `requisition`, each time (`loop/effects_governance.py:426-464`). A seat's
+  power lasts as long as the act that uses it. [precedent: `research/game_precedent_suite/tutorials/T01_realm.md`, Victoria 3 §3
+  (a law is a standing parameter) and Crusader Kings III §2.6 (vassal contracts deliver tax and levies automatically)]
+- **Population is fixed and only falls.** Cohort weight is set at build; nothing births or attracts a person (the only mint is CENSUS
+  individuation, `loop/census.py:106`, TESTS-ONLY; the closed cast of 46 is ruled, ED-WR-0011, Jordan 2026-09-13, Option A, "for
+  now"), and persons fall 83 → 74 in two seasons of seed 0 (every death is combat, ERRATA G9). Capacity therefore gates movement
+  inside a fixed population.
+- **Holding is never penalised.** Each live `hold` adds 1 to the budget up to the 10-cost ceiling (`decision/budget.py:57-61`), and
+  nothing charges for holding more: one person may hold several seats (seed 1's self-conferral seated a holder who already held a seat),
+  so no assignment is an opportunity cost. [precedent: `T01_realm.md`, CK3 §3 (the domain limit); `T18_repo_strategy_b.md`, Stellaris
+  §3 (Empire Size)]
+- **Governance does not touch output.** Yield reads a Site's condition only (`loop/matter.py:589-591`), so a vacant seat, or the
+  vacant throne, costs no yield. [precedent: `T13_koei.md`, Knights of Honor II §2-3, where a governor is the output multiplier]
 - **Upkeep must be paid to where men stand.** Men scattered across hearths need one transfer per hearth.
 - **Unseating has one gate, two exits.** Both `revoke` and a displacing `confer` need revocation authority over the
   seat; `confer` also needs a holder with no live `commit`, and in exchange seats your man in the same act and bans
