@@ -193,7 +193,7 @@ OFFICES_SEATS = tuple(_OFFICES_DOC.get("seats") or ())
 # `org: {seat:}` may name either; the orphan check below reads them too.
 FOREIGN_SEATS = tuple(_OFFICES_DOC.get("foreign_seats") or ())
 #: seat id -> its row over BOTH keys. The ids share one namespace (`_load_offices` refuses a repeat), so nothing is lost.
-SEAT_ROW_BY_ID = {s["id"]: s for s in (*OFFICES_SEATS, *FOREIGN_SEATS)}
+SEAT_ROW_BY_ID = {s["id"]: s for s in (*OFFICES_SEATS, *FOREIGN_SEATS) if isinstance(s, dict) and "id" in s}
 # case id -> every seat row that names it as `holder`, so a caller matches on POST rather than
 # guessing which of a multi-seat holder's rows applies (NPC-020 holds two). A list, not a single
 # row, because `roster_map`'s single-mapping shape would silently keep the LAST of NPC-020's two

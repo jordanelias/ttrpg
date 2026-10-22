@@ -77,7 +77,7 @@ def test_the_control_arm_seats_no_altonian_entity_and_leaves_the_cast_rows_unpla
     unplaced = dict(control._unplaced_cast)
     assert {c: unplaced.get(c) for c in ("NPC-011", "NPC-089", "NPC-090")} == {
         "NPC-011": "Altonia", "NPC-089": "Altonia", "NPC-090": "Altonia"}, unplaced
-    # three in the foreign arm are placed and the other unplaced rows are untouched
+    # three in the foreign arm are placed
     assert FID not in control.propositions
 
 

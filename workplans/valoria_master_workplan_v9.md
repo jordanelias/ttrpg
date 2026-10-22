@@ -261,8 +261,8 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | IN-32 | H-182 ties | IN/FI | BLK | IN-06 | R-05 | B-S | `_part5` |
 | IN-33 | H-58 `exchange` | IN | B | — (reverted `cdc03f67`; restorable under §0.5: `ad2f930f`..`b5c4685d`) | R-05 | none (B-I closed `9d93cfab`) | `_part5` |
 | IN-35 | #457 FORCE-HAZARD; SEAM-CLOCK | IN/WR/SE | BLK | IN-06 | — | B-S | `_part5` |
-| IN-36 | #457 FORCE-FOREIGN | IN/FA/MB | BLK | IN-13 (landed `2e19aee8`; B-M closed `be02666e`) | — | B-V | `_part5` |
-| IN-38 | `13`-rest | IN | B | — | R-09, R-06 | B-V | `_part5` |
+| IN-36 | #457 FORCE-FOREIGN | IN/FA/MB | B (landed `7c59d74c`, narrowed) | IN-13 (landed `2e19aee8`; B-M closed `be02666e`) | — | B-V | `_part5` |
+| IN-38 | `13`-rest | IN | B (landed `1dcfce10`, narrowed) | — | R-09, R-06 | B-V | `_part5` |
 | IN-44 | SM-10, SM-12; A-24's wording | IN | J | Layer 0/1: Jordan's files | — | — | `_part8` (table, not an entry) |
 | IN-45 | `work` (`forge`, `carry`, `migrate` landed at B-K) | IN/SE | J | ED-IN-0297 (`needs_jordan`) | R-05 | none (B-K closed `c8d1db3a`) | `_part5` |
 | IN-46 | = SM-6 | IN/PC | B | build (design landed at B-C); no build batch | R-04 | none (re-read at B-L, `e77794a2`) | `_part4` |

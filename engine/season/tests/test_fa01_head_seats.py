@@ -49,9 +49,9 @@ from ..state.carriers import Act
 from ..state.ids import H
 
 # [ASSUMPTION; medium; Jordan to correct; revert: drop the `faction x` member if the spine's test faction
-# leaves `rosters.yaml: factions`]: the factions with no authored head. `Guilds` and `Schoenland` are B-V's
-# content (IN-36: who leads them is `#457` D4's cast, authored in `references/npc_registry.yaml`); B-V
-# moves this pin when it seats them. `faction x` is the governance spine's test faction (Jordan
+# leaves `rosters.yaml: factions`]: the factions with no authored head. `Guilds` and `Schoenland` stay
+# leaderless: `#457` D4's answer is ONE foreign faction with two seats (the empire, IN-36), and canon gives
+# neither a leader, so this pin moves only when a ruling supplies one. `faction x` is the governance spine's test faction (Jordan
 # 2026-09-18, `governance_spine.yaml`), never placed in the realm.
 LEADERLESS = {"Guilds", "Schoenland", "faction x"}
 

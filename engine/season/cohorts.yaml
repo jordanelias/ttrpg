@@ -116,7 +116,9 @@ cohorts:
 # NOT `offices.yaml: obligees:`. That field takes CASE ids (`harness/populated.py`'s obligees loop), and a
 # cohort traces to no case; `seat_guards` writes the same `oblige` Tenure the loop writes, so the throne's and
 # the duchies' sworn weight is these rows' and the seat rows' `obligees:` stay as authored (B-V's EXIT clause
-# "`obligees:` non-empty" is read through these rows, not by editing the seat rows).
+# "`obligees:` non-empty" is read through these rows, not by editing the seat rows, and only when
+# `build_realm(guards=True)`). [ASSUMPTION; medium; Jordan to correct] Revert: author the duchy rows' `obligees:`
+# with case ids, which moves the default-arm hash.
 #
 # [ASSUMPTION; medium; Jordan to correct] The weights: the King's guard stands at 4, a duke's at 2 -- "dukes are
 # easier to reach than kings because less sworn weight stands at a duchy" (IN-60), as DATA, not a table. The
