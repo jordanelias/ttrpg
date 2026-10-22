@@ -562,7 +562,13 @@ not rows), governed by `proposals/2026-10-16-verbs/` verbs-03 §III.5 where a le
   Observation to the existing larder write, so governors and cohorts hold `(town, hunger, band)` claims; REM-52 ships
   `body_step = 10` (a cohort short 6 units falls 1000 → 940). Even built, it binds only before the first yield and in
   scarce worlds: at today's ratio the realm cannot go hungry after the tick-0 MATTER (ERRATA G18; cover figure caveat in §5d).
-- **[PROPOSED] tax / ration / proclaim** — one `edict` Record kind (M-EDICT). `tax` (waits on M-TAX, IN-23): MATTER moves
+  A cohort that falls or dies would also lower no yield (yield reads a Site's condition only, `loop/matter.py:589-591`), so no famine
+  spiral could form. [precedent: `research/game_precedent_suite/tutorials/T04_colony_b.md`, Banished §6-7, where dead workers stop
+  producing]
+- **[PROPOSED] tax / ration / proclaim** — one `edict` Record kind (M-EDICT). `tax` (waits on M-TAX; its other named wait, IN-23, has
+  landed since PR #494 as the person-side Queries `legitimacy(p, holder, window)` and `stability(p, rung, window)`,
+  `queries/person_q.py:451, 480`, each one person's own windowed estimate, read by the story-bar report and by no chooser or MATTER
+  step, `hole_register.yaml` H-224, so MATTER still has no world-level legitimacy to read): MATTER moves
   `amount × yield` of a rung into the seat's treasury each season, capped by stores, `f(legitimacy) = 1`; `defy` withholds
   that season, `evade` reduces the evader's hearth share. `ration` (waits on M-DRAW and Jordan's draw-policy ruling) cuts
   the per-mouth draw. `proclaim` publishes a notice to the residents of a place's subtree. Whether all three take
@@ -580,7 +586,12 @@ not rows), governed by `proposals/2026-10-16-verbs/` verbs-03 §III.5 where a le
 - **[PROPOSED] formation fixes**: REM-22 gives `restore`/`work` a `Site` referent class; REM-29 a `room` stem so a refused
   migrant learns.
 - **Open decisions named:** D-V1 (depose a living top-seat holder); draw policy; EC-G22/H-159 (unpaid upkeep: lapse, as
-  shipped, or arrears debt); `dispatch` → `order` rename held (D-V7); H-174 (upkeep to presence or residence).
+  shipped, or arrears debt; precedent has both: desertion in Bannerlord, Total War: Warhammer III and Jagged Alliance 2, carried debt
+  in Crusader Kings III, all [V3]; `research/game_precedent_suite/tutorials/` `T02_warband.md` Bannerlord §2.2, `T07_mass_battle.md`
+  Total War §6, `T14_squad_settlement.md` JA2 §2, `T01_realm.md` CK3 §6); `dispatch` → `order` rename held (D-V7); H-174 (upkeep to
+  presence or residence); IN-48 (delegation without a `hold`, `hole_register.yaml` H-108: no standing order exists, so every
+  requisition, payment and conferral is a fresh act against the same budget; DESIGN-ONLY) [precedent: `T01_realm.md` CK3 §3 council
+  row, `T02_warband.md` Bannerlord §3 governor row].
 - **Stubbed / inert at shipped defaults:** `body_step 0`, `age_step 0`, `illness_rate 0`, `season_factor_draw ()`;
   `Rung.envelope` has no producer; `faction_q.head` always None; Parliament "RULED AND NOT BUILT" (H-90).
 
