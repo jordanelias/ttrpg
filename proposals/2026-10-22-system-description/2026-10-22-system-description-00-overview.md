@@ -2,10 +2,12 @@
 
 ## Status: PROPOSED (reference). Merging this PR ratifies nothing; this suite describes the code and two proposal directories as read on 2026-10-21/22 and is reference, not a ruling (`CLAUDE.md` §0.05).
 ## Lane: IN (cross-cutting). Grade under `CLAUDE.md` §0.2: `paper`. What it changes in `engine/season/`: nothing.
-## Provenance: produced by extraction → synthesis → tutorial writing, then two rounds of independent adversarial audit (findings in file 13). Probe scripts the tutorials cite (`t01_odds.py` and the like) lived in the session scratchpad and are NOT committed; only `ctl/` (the control run) is.
+## Provenance: produced by extraction → synthesis → tutorial writing, then two rounds of independent adversarial audit (findings in file 13), then a round-3 precedent-disposition pass with two verification probes (file 13 Part 3; the precedent suite is `research/game_precedent_suite/`). Probe scripts the tutorials cite (`t01_odds.py` and the like) were session working files and are NOT committed; only `ctl/` (the control run) is.
 
-HEAD `a4ca9a5`, 2026-10-21. Reference only; nothing here is ratified. Built by: cheap extractors (Haiku/Sonnet) → Opus synthesisers →
-Opus tutorial writers, then two rounds of independent adversarial audit whose findings were applied.
+Written against `a4ca9a5` (2026-10-21); revised in round 3 (2026-10-22) against `51d7b05` and the precedent suite. The control run is
+byte-identical on `51d7b05` for seeds 0, 1 and 2 (two seasons), so every `ctl/` count below still holds; code line numbers were re-opened
+at `51d7b05` wherever round 3 touched a sentence. Reference only; nothing here is ratified. Built by: cheap extractors (Haiku/Sonnet) →
+Opus synthesisers → Opus tutorial writers, then two rounds of independent adversarial audit whose findings were applied.
 
 | file | what it is |
 |---|---|
@@ -13,8 +15,9 @@ Opus tutorial writers, then two rounds of independent adversarial audit whose fi
 | `2026-10-22-system-description-01-shared-reference.md` | glossary of every primitive, process-id key, action economy, time scales, resources, comparison axes |
 | `2026-10-22-system-description-02-t01-resolution-and-dice.md` … `2026-10-22-system-description-11-t10-world-travel-survival-npc-life.md` | ten tutorials, one per subsystem: pieces, mechanics, worked example with real numbers, actions, how to pursue goals, as-proposed, traps |
 | `2026-10-22-system-description-12-reference-appendices.md` | first-draft subsystem references A1–A8 (superseded wherever the tutorials or the errata differ) |
-| `2026-10-22-system-description-13-errata-and-audit-record.md` | round-1 errata, cross-cutting rulings, every audit finding, the control-run method |
+| `2026-10-22-system-description-13-errata-and-audit-record.md` | round-1 errata, cross-cutting rulings, every audit finding, the control-run method, and the round-3 rulings (Part 3) |
 | `ctl/` | control-run outputs (seeds 0, 1, 2; two seasons) and the script |
+| `research/game_precedent_suite/README.md` | the precedent suite the round-3 revision compared Valoria against: capability tables, "how it plays" tutorials for about seventy games, and the disposition record (reference, tier 3) |
 
 Read order for the question "how is each subsystem played": 00 → 01 → the tutorial for the subsystem. T02 (season, persons, choosing) and T01 (dice) are prerequisites for the rest.
 
@@ -22,7 +25,7 @@ Read order for the question "how is each subsystem played": 00 → 01 → the tu
 
 # Valoria as a game system: engine, resolution, subsystems (revised after audit)
 
-Repo `jordanelias/ttrpg` at HEAD `a4ca9a5` (2026-10-21). Sources: the code tree; `proposals/2026-10-21-v9-remediation/` (4 parts, "remediation");
+Repo `jordanelias/ttrpg`, written at `a4ca9a5` (2026-10-21), revised in round 3 at `51d7b05`. Sources: the code tree; `proposals/2026-10-21-v9-remediation/` (4 parts, "remediation");
 `proposals/2026-10-16-verbs/` (23 parts, "verbs"). This overview supersedes the first draft's overview; the corrections it applies are
 itemised in the Errata (Part C). Where an appendix (Part E) disagrees with this overview or the Errata, the Errata and this overview win.
 
@@ -39,10 +42,15 @@ itemised in the Errata (Part C). Where an appendix (Part E) disagrees with this 
 - **DESIGN-ONLY**: no executing code (a proposal, a stub, an empty hook, a deleted layer).
 
 **Run figures.** "The realm run" is `build_realm(seed)`, two seasons, with the chooser built as `populated.run` builds it. The control script
-is `scratchpad/ctl/control.py`; outputs for seeds 0, 1, 2 are in `scratchpad/ctl/realm_seed*_2seasons.txt`. It counts per verb the acts that
-reached RESOLVE ("att") and the acts with at least one non-refusal event ("ok"). Runs are identical across processes (checked with random
-`PYTHONHASHSEED`). Results differ by seed: seed 1 executes `oblige` 22 of 24 and `confer` 1 of 5, which seed 0 never attempts. Every
-"never" below is therefore a statement about the seeds run (0 and 1 chiefly, 2 for spot checks), not about the game.
+is `ctl/control.py` in this directory; outputs for seeds 0, 1, 2 are `ctl/realm_seed*_2seasons.txt`. It counts per verb the acts that
+**reached the fold** ("att", `d.resolved`, appended in `loop/resolve.py:377-379`) and the acts with at least one non-refusal event ("ok").
+Contested and graded acts refused at admission or failed at the contest branch never reach the fold and are not counted: the act store
+`w.acts` holds 1,407 / 1,394 / 1,447 formed acts against 1,132 / 1,122 / 1,175 that reached the fold (275 missing in seed 0: `research` 111,
+`examine` 62, `surveil` 21, `speak` 19, `accept` 16, `fight` 12, `argue` 10 ...; I1 verification, re-run at `51d7b05`). So "att" means
+*reached the fold*, not *attempted*; where a verb is formed and refused before the fold, the formed count is given too. Runs are identical
+across processes (checked with random `PYTHONHASHSEED`). Results differ by seed: seed 1 executes `oblige` 22 of 24 and `confer` 1 of 5,
+which seed 0 never forms. Every "never" below is therefore a statement about the seeds run (0 and 1 chiefly, 2 for spot checks), not about
+the game.
 
 **Who "you" are.** The code has no player character and no GM. Every person is a chooser that picks scenes from a closed verb table. The
 tutorials (Part D) teach the rules from the position of the acting person.
@@ -67,7 +75,9 @@ Four facts organise the rest:
    count, morale start and one terrain row. The seam into social contest varies a default pool, plus bench "reception" and "proofs" terms on
    `speak`/`determine`, and forgery on inquiries.
 2. **Wiring is not execution.** Most governance, faction, economy and migration verbs are wired and fire zero successful times in the realm
-   runs. The chooser forms acts that the fold then refuses (`work` 77 reached RESOLVE / 0 succeeded; `migrate` 81 / 0 in seed 0).
+   runs. The chooser forms acts that the fold then refuses (`work` 77 reached the fold / 0 succeeded; `migrate` 81 / 0 in seed 0). The
+   verbs themselves run: a callback that hand-builds the act with the right operand gets an outcome for `march`, `found`, `build`,
+   `revoke`, `establish`, `migrate`, `tend`, `restore` and `work` (I1 verification claim 5), so most zeros are formation defects, not dead effects.
 3. **Consequence ships switched off.** Hunger, ageing, illness, the scar-to-pursuit shift and the confliction damper default to zero, so MATTER
    kills nobody and every realm death is combat. The remediation's hunger design (RB-5) would bind only before the first yield, even
    if built (food cover rises from 21.7 to 41.7 seasons).
@@ -88,13 +98,19 @@ Four facts organise the rest:
 | Write gate | every change goes through `World.write`: a token constructed in `driver.py` (one per barrier), a 40-row write matrix (+6 retired), authorship rules F3, no-op rule F9 | content hash makes runs reproducible |
 | Chooser | per person per round: one question in, candidates out, score + Gumbel order at τ = 0.1, scene budget from 5 | never receives a World (by type and test); constructed only by harnesses and probes, never in `loop/` |
 | Verb fold | 53 rows: eligibility, typed precondition (37 typed, 6 `none`, 10 no key), writes per degree, emitted events, refusal kinds | refusals are events |
-| WITNESS | the information bus: five ranked channels, refraction, ledger cap 200 | chronicle channel broadcasts every `binding_decision`-stratum act to everyone |
+| WITNESS | the information bus: five ranked channels, refraction, ledger cap 200 | the chronicle channel broadcasts every Event whose kind a `binding_decision` row emits (a kind filter, `epistemic.py:685-686`; CROSS C5) to everyone |
 | MATTER | the actorless clock: term lapse, claim decay (5 per season), larder draw, yield, wear, travel-leg end, hunger, ageing | `Rung.stores` is also written at RESOLVE by `transfer`/`requisition` |
-| Queries | aggregates (population, faction members, province, war, sovereignty, reception) computed on demand, stored nowhere | |
+| Queries | aggregates (population, faction members, province, war, sovereignty, reception) computed on demand, stored nowhere | since PR #494 also `endings_reached` (reported by every season, `loop/driver.py:515-518`) and IN-23's `legitimacy` / `stability`, one person's windowed estimate (`queries/person_q.py:451`, `:480`), whose only reader is the `harness/storybar.py` instrument |
 
-No player interface exists. A "play surface" is a callback that hands named persons to a human function (harness only). D-2 (ruled yes) has the
-remediation build IN-46 (a played, paused fight) and IN-47 (character-sheet space) in RB-3; the repo's comparative frame describes the intended
-player position as "embedded: the player is one person's decision procedure".
+No player interface reaches the season loop. A "play surface" is a callback that hands named persons to a human function
+(`harness/play_surface.py:41-52`, `dispatching_chooser`, exercised only by tests); a callback can submit any resolvable verb with any extra
+payload, and every hand-built act the I1 verification submitted ran (claim 5). Outside the loop, `systems/social_contest/sim/contest/agon_harness.py`
+lets a human play Side A of one Bout-kernel contest from stdin against a kernel policy (`input()` at `:148-155`; three scripted runs at
+`51d7b05`, `yes 1 | python3 -m systems.social_contest.sim.contest.agon_harness`: 9 prompts over 3 exchanges each, verdict `A_decisive` once
+and a committee compromise twice, so the harness is not seeded), and two HTTP workbenches (`systems/combat/combat_engine_v1/workbench/server.py`,
+`systems/mass_battle/sim/workbench/server.py`) let a designer configure and trace one duel or one battle with branch odds. None of them
+seats a person in the realm. D-2 (ruled yes) has the remediation build IN-46 (a played, paused fight) and IN-47 (character-sheet space)
+in RB-3; the repo's comparative frame describes the intended player position as "embedded: the player is one person's decision procedure".
 
 ### 2.2 Resolution: one ladder, three resolvers, three dice codes
 - **The ladder** (`engine/dice_engine/dice_engine.py:286-301`): margin = net − Ob; Failure < 0, Partial [0,1), Success [1,3), Overwhelming ≥ 3.
@@ -129,24 +145,30 @@ own module roster (`references/module_contracts.yaml`) has 26 rows, mostly `sim_
 **Designed layers whose code was deleted** (`module_contracts.yaml`): `victory` (MS reaches 0 → Post-Calamity; all factions dissolved →
 Anarchy; code deleted at plan position 28-iii), the MS clock `systems/overview/sim/ms_track.py` (0–100, −1 per year, start 60, no live caller),
 `faction_state` (Mandate, Treasury, stats 1–7; action code deleted at 29b), `accounting_sequence`, `piety_track`
-(= `systems/characters/sim/conviction.py`). **The running loop has no ending condition and no world-scale clock.**
+(= `systems/characters/sim/conviction.py`). **The running loop has no ending condition that halts it and no world-scale clock.** Since PR
+#494 (IN-27) the season *reports* endings: `world_q.endings_reached` is "a read, never an actor" (`queries/world_q.py:1764-1767`) over the
+two `rosters.yaml: endings` rows (`:2494-2553`), `peninsular_sovereignty` (the victory: GD-1 without its sustain, Accord and Stability
+clauses, "UNREACHABLE IN COMPUTED PLAY", `:2531-2541`) and `theocracy` (the King's seat held under the Church; not a victory). The realm
+as built reaches neither: `endings` is `[]` after both seasons in seeds 0, 1, 2 (round-3 probe). The read RUNS-IN-LOOP; reaching an
+ending is TESTS-ONLY (`engine/season/tests/test_in27_endings.py`).
 
 ---
 
 ## 3 Reachability matrix
 
-"att/ok" = acts that reached RESOLVE / acts with a non-refusal event; seed 0 first, `[seed 1]` where it differs in kind. Source:
+"att/ok" = acts that reached the fold / acts with a non-refusal event (§0); seed 0 first, `[seed 1]` where it differs in kind; "formed N"
+is the act-store count where acts are refused before the fold (round-3 probe at `51d7b05`, matching the I1 verification). Source:
 `ctl/realm_seed{0,1}_2seasons.txt`. "ok" includes events that change nothing (e.g. `dispatch`, `tell`); the state-changing subset is smaller
 (the audit counted about 14 verbs that changed world state). Grades follow §0.
 
 | subsystem | standalone size | what the season reaches | realm run | grade |
 |---|---|---|---|---|
 | Resolution core | 673 LOC | every contested verb | every contest | RUNS-IN-LOOP |
-| Season loop / state / gate | 13,141 LOC | itself | 1,132 acts reached the fold in seed 0, 1,122 in seed 1 | RUNS-IN-LOOP |
+| Season loop / state / gate | 13,141 LOC | itself | 1,132 acts reached the fold in seed 0, 1,122 in seed 1 (1,407 and 1,394 formed) | RUNS-IN-LOOP |
 | Chooser | 2,546 LOC | called at `deliberate.py:170` | all acts | RUNS-IN-LOOP |
-| **PC** | 5,643 + 2,812 LOC; 54 weapon keys, 7 traditions + `none`, 9 abilities | `fight`, `accept` → wrapper; only `end` varies | fight 7/4 [5/5], accept 18/11 [9/6], challenge 23/6; `person.died` 9 [6], `contest.undecided` 10 [3] | RUNS-IN-LOOP (default build); weapons, traditions, abilities TESTS-ONLY |
-| **MB** | 10,154 + 3,089 LOC | `march` declared at RESOLVE, fought at ENCOUNTER; one Line subunit per side | `march.declared` 21 [10], `march.refused` 25 [10], `field.won/lost/unopposed` 0, `army.arrived` 0 | wiring RUNS-IN-LOOP; the battle TESTS-ONLY |
-| **SC** roll | 127 LOC | `tell`, `speak`, `argue`, `determine`; graded inquiries | tell 23/4 [25/7]; speak 3/3 (all `matter.turned`) [0]; argue 0 reached the roll; determine 0 [1/1] | tell, speak RUNS-IN-LOOP (degenerate); argue, determine TESTS-ONLY |
+| **PC** | 5,643 + 2,812 LOC; 54 weapon keys, 7 traditions + `none`, 9 abilities | `fight`, `accept` → wrapper; only `end` varies | fight 7/4 of 19 formed [5/5 of 13], accept 18/11 of 34 [9/6 of 29], challenge 23/6; `person.died` 9 [6], `contest.undecided` 10 [3]; over seeds 0-2, 33 of 59 combat calls felled the actor in the scene and every one of them left the subject Wounded or Untouched (round-3 seam trace) | RUNS-IN-LOOP (default build); weapons, traditions, abilities TESTS-ONLY |
+| **MB** | 10,154 + 3,089 LOC | `march` declared at RESOLVE, fought at ENCOUNTER; one Line subunit per side | `march.declared` 21 [10], `march.refused` 25 [10], `field.won/lost/unopposed` 0, `army.arrived` 0; no natural `march` names a settlement in seeds 0-2 (targets are persons, hearths, territories, dead ids), so the army is empty and the act refused | wiring RUNS-IN-LOOP; the battle TESTS-ONLY in natural play. The loop's ENCOUNTER does call it on a hand-built settlement march: `march {subject: set_s_036}` by `p_npc_033` via `off_npc_033` gives `march.declared` then `field.lost` in seeds 0, 1, 2 (attacker body 1000 → 20, budget 6 → 3; I1 verification, re-run at `51d7b05`) |
+| **SC** roll | 127 LOC | `tell`, `speak`, `argue`, `determine`; graded inquiries | tell 23/4 of 27 formed [25/7 of 33]; speak 3/3 of 22 formed (all `matter.turned`) [0 of 14, all `speech.unheard`]; argue formed 10 [17; 18 at seed 2], every one refused before the roll (`argument.refused`); determine 0 of 2 formed [1/1 of 6] | tell, speak RUNS-IN-LOOP (degenerate); argue TESTS-ONLY; determine executes at seed 1 only |
 | SC kernel (Bout) | 6,693 LOC | none | 389 checks pass under test | TESTS-ONLY |
 | SC proceedings | docket, bench, 8 arrangements, 6 speech kinds | docket and bench read; arrangements only via `disposes` on a hand-named row | petition 42/14, open_case 12/6, convene 1/0 | docket/bench RUNS; arrangements, speech kinds DESIGN-ONLY as mechanism |
 | **FI** | `modules/fieldwork` 36 LOC; knots 406 LOC | 6 inquiry verbs + 4 document makers | research 14/7, surveil 30/5, interview 32/11, reconstruct 39/33, survey 57/13, forge 52/12, conceal 19/19; 0 finding deposits | document makers RUN; inquiries RUN with empty yield; knots TESTS-ONLY |
