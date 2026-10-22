@@ -1,6 +1,9 @@
 # Tutorial: Social Contest and Proceedings (SC) — telling, arguing, pleading and judging: how one person moves another's beliefs, wants and legal standing
 
 Repo `jordanelias/ttrpg`, HEAD `a4ca9a5`. Every behaviour claim cites a file I opened; runs are listed in §9.
+Revised in round 3 (2026-10-22) against `51d7b05` and the precedent suite (`research/game_precedent_suite/`): §0a is new, the
+edits are listed under "Round-3 corrections" at the end of §8, and code citations in §§0-8 were re-based to `51d7b05` where
+PR #494 moved them. §9's Opened and Ran lists record the original `a4ca9a5` session.
 
 ## 0 Before you start
 
@@ -545,6 +548,34 @@ multi-exchange run inside one act (`roll.py:36-37`); kernel games `consensus`, `
     "21" counted events, not acts.
 16. *C11.* Added one-clause definitions of the shared primitives and id families in §0.
 
+### Round-3 corrections
+Each line is old claim -> new claim, with the evidence. Round 3 read the code at `51d7b05`; the precedent record is
+`research/game_precedent_suite/dispositions/D_T05.md`.
+1. *§0 (B), D_T05 row 12 / 74.* "a tested laboratory that the season loop never calls" -> also the repo's one human-played social
+   contest, `agon_harness.py`, unreachable from the season (`agon_harness.py:148-155, 323-345`; no `.py` imports it; ran it four times
+   with scripted input: 9 prompts over 3 exchanges each time, `A_decisive` x3, `committee` x1). New §0a section.
+2. *§2.4 win conditions, row 27.* "VoteAtClose" named without its rule -> the ballot is stated (`resolver.py:98-147`, defaults
+   `sharpness` 0.6, `noise` 0.8, `random.gauss`; Panel weights by `discipline`; `modes.py:502-509` binds it to `guild_arbitration`).
+3. *§2.3, row 75.* "a matter is whatever a docket item names (in practice a person)" -> a person or a Rung that is no person; `determine`
+   needs a Person (`verb_table.yaml:327-328`). Evidence: seed 0 docket after tick 0 is `terr_T13`, `p_npc_038`, `b_s_001_court`; 2 of
+   its 6 `case.opened` over two seasons name a territory or building (re-run at `51d7b05`).
+4. *§5c, rows 4 and 62.* "so you guess" -> in computed play nobody guesses (`decision/options.py:1335` is the only mention of
+   `reception` under `decision/`); at shipped values `tell`, `argue` and `determine` have no hidden odds (`verb_table.yaml:346`,
+   `sigma.py:119-131`).
+5. *§5c, row 5.* "Failure writes nothing" with no word on repeats -> a failed `tell` can be formed again at the same odds: the season
+   records only realised acts (`loop/deliberate.py:305-340`, `loop/driver.py:488-503`) and `tell`'s Failure kind `news.untold` is also its
+   refusal kind (`verb_table.yaml:1196, 1240-1243`). The disposition says "a failed act"; I scoped it to `tell` because other rows'
+   Failure kinds (for example `matter.turned`) are not refusal kinds and I did not trace what that does for them.
+6. *§5d, row 18.* New bullet: `determine` reads neither the party nor the room (`verb_table.yaml:346`); .26 for every party.
+7. *Line drift after #494.* Citations to `queries/world_q.py` +3 (every cite here sits after line 44), `queries/person_q.py` +2 below line
+   416 and +90 above it, `data/fixtures.py` +10 above line 715, `data/rosters.py` +1 (`git diff a4ca9a5 51d7b05 -U0` on each; the text at
+   every re-based range is identical to the old one). Re-based: `world_q.py` 530-540/546-603/606-633/179-210/232-302/439-516/244-266/
+   286-287/298-299/269-302/458-468/632-633/519-528/569-578 -> 533-543/549-606/609-636/182-213/235-305/442-519/247-269/289-290/301-302/
+   272-305/461-471/635-636/522-531/572-581; `person_q.py` 480-523/503-523 -> 570-613/593-613 and 145-155 -> 147-157; `fixtures.py`
+   761/864/913 -> 771/874/923; `rosters.py` 841 -> 842. §9's Opened/Ran lists are left as the `a4ca9a5` record.
+8. *Not applied, by instruction.* The overview edits (player interface, player-position row) and the nine bracketed corrections to
+   repo precedent documents belong to other files; they are in `D_T05.md` rows 30-40, 71-74.
+
 ## 9 Checks
 
 - Opened: `modules/social_contest/roll.py:1-125`; `seam/wrappers/sigma.py:80-278`; `verb_table.yaml:108-369, 900-964,
@@ -563,6 +594,14 @@ multi-exchange run inside one act (`roll.py:36-37`); kernel games `consensus`, `
   `resolver.py:301, 376-406`, `primitives.py:225-230`, `budget.py:17-20`, `fixtures.py:486-490`, `choose.py:643-657`,
   `rosters.yaml:313-317`; ran `tutorial/t05_acts.py 0` (formed vs fold-reaching counts: tell 27/23, speak 22/3, argue
   10/0, determine 2/0, petition 42/42, carry 28/28, open_case 13/12, convene 1/1, utter 40/39, commit 64/61).
+- Round 3 (2026-10-22, `51d7b05`): opened `agon_harness.py:1-160, 313-530`, `resolver.py:95-150`, `modes.py:480-560`,
+  `verb_table.yaml:314-346, 1068-1092, 1193-1246`, `loop/deliberate.py:215-230, 305-375`, `loop/driver.py:440-560`,
+  `loop/calendar.py:36-76`, `data/verbs.py:1193-1235`, `rosters.yaml:2494-2534`, `queries/world_q.py:519-534, 1764-1795`,
+  `harness/play_surface.py:30-60`; ran `yes 1 | python3 -m systems.social_contest.sim.contest.agon_harness` (4 complete runs),
+  a one-season `build_realm(0)` probe on the `ctl/control.py` recipe (formed/reached `tell` 3/3, `speak` 9/2, `argue` 2/0,
+  `determine` 1/0, `petition` 22/22, `carry` 12/12, `open_case` 8/7, `convene` 1/1, `utter` 18/17, `commit` 39/36; docket after
+  tick 0: three dateless items) and a two-season probe of seeds 0, 1, 2 for the docket and the subjects of `case.opened`.
+  Those probe scripts are not committed.
 - Not confirmed: the one seed-0 `speak` formed but producing no `speak` event; `reception`'s
   `deed_term` values in §3.2 are constructed inputs, not read from a realm ledger.
 

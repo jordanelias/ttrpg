@@ -1,8 +1,15 @@
 # Tutorial: Personal Combat (PC) — settle a matter body against body: kill, wound, or walk away from a duel the engine fights for you
 
-Repo `jordanelias/ttrpg` at HEAD `a4ca9a5`. Path abbreviations: `MC/` = `modules/combat/`; `SW` = `engine/season/seam/wrappers/combat.py`;
+Repo `jordanelias/ttrpg` at HEAD `a4ca9a5`; **revised in round 3 against `51d7b05` and the precedent suite** (`research/game_precedent_suite/`;
+this file's disposition record is `dispositions/D_T03.md` there; the corrections are listed under `### Round-3 corrections`, end of §8).
+Path abbreviations: `MC/` = `modules/combat/`; `SW` = `engine/season/seam/wrappers/combat.py`;
 `EC` = `engine/season/loop/effects_combat.py`; `VT` = `engine/season/verb_table.yaml`; `ROS` = `engine/season/rosters.yaml`;
-`FX` = `engine/season/data/fixtures.py`. Every number below was read from code or produced by a read-only run (§9).
+`FX` = `engine/season/data/fixtures.py`; `GMS` = `proposals/2026-10-07-grid-mode-suspension.md` (IN-46's design);
+`L09` = `proposals/2026-10-16-verbs/2026-10-16-verbs-09-lexicon-personal-combat.md`;
+`REM2` = `proposals/2026-10-21-v9-remediation/2026-10-21-v9-remediation-02-items-rb0-to-rb3.md`;
+`WB` = `systems/combat/combat_engine_v1/workbench/`; `PS/` = `research/game_precedent_suite/` (reference, tier 3; precedent games are cited as
+`T02`, `T05`, `T14`, `T18` = `PS/tutorials/T02_warband.md`, `T05_social_rpgs.md`, `T14_squad_settlement.md`, `T18_repo_strategy_b.md`, and `R4` =
+`PS/tables/R4_combat_social_rpgs.md`, each with its game heading and section). Every number below was read from code or produced by a read-only run (§9).
 
 ## 0 Before you start
 
