@@ -1,6 +1,10 @@
 # Tutorial: World, Travel and Survival (WT) and NPC Life (NP) — where a person stands, what it costs to go elsewhere, and how a person keeps the people around them alive, trained and on good terms
 
-Repo `jordanelias/ttrpg` at HEAD `a4ca9a5`. Paths are relative to the repo root; `es/` stands for `engine/season/`. The run figures are
+Repo `jordanelias/ttrpg` at HEAD `a4ca9a5`; revised in round 3 against `51d7b05` and the precedent suite
+(`research/game_precedent_suite/`; the dispositions are `dispositions/D_T10.md` and `D_T10_also.md`). Text added or replaced in round 3
+cites the tree at `51d7b05`; cites I did not touch are still at `a4ca9a5`, and PR #494 moved them: `world_q.py` +3 for lines 46–1679 and
++125 from line 1738 (e.g. `places_named` 1986 → 2111), `person_q.py` +2 for lines 58–418 and +90 above, `fixtures.py` +10 above line 715,
+`rosters.yaml` +66 above line 2490. Paths are relative to the repo root; `es/` stands for `engine/season/`. The run figures are
 taken from `ctl/realm_seed{0,1,2}_2seasons.txt` (the control run: `build_realm(seed)`, 2 seasons; "ok" means the act produced at least one
 event that is not a refusal) and from my own read-only probes over the same recipe (§9).
 
@@ -490,7 +494,13 @@ cannot empty a town". It eats where it stands. One `Felled` deletes it whole (ER
 - **Capacity** is the only block on settling, and it is the destination's alone.
 - **Budget** is the price of everything: a leg (−1 point), a wound band (−1 point each), a refused attempt (its scene's cost, 1 or 2).
   Each point is one or two acts (§2.5 table).
-- **Death** is permanent, vacates seats (`test_in34_bodies_clock.py`), and has no successor mechanism (`succeed` is declined).
+- **Death** is permanent, vacates seats (`test_in34_bodies_clock.py`), and has no successor mechanism (`succeed` is declined: its one
+  reader, transmission at death, is unbuilt, `verb_table.yaml:1113`). 7 of the 32 built offices have no conferral basis (`off_npc_020`,
+  `off_duke_valorsmark`, `off_npc_030`, `off_npc_031`, `off_npc_032`, `off_npc_050` and the unauthored guild-leader seat `off_npc_084`;
+  `has_conferral_basis`, `state/gate.py:643-657`, and `_req_confer` refuses them first, `predicates.py:126-127`), so none can be refilled
+  once its holder dies. At the end of season 2 the vacant seats number 8, 6 and 10 at seeds 0–2, and 3, 5 and 6 of them are those seats.
+  The King (`p_npc_020`) dies within two seasons at every seed, vacating `off_npc_020` and the second seat he holds,
+  `off_duke_valorsmark`. The one refill in all three seeds is a `confer` at seed 1 (4 later `confer.refused`).
 - **Being seen.** Arriving puts you in front of every witness at the destination; there is no fog and no concealment of the journey
   itself.
 

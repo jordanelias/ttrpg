@@ -1,6 +1,8 @@
 # Tutorial: Settlements, Governance and Economy (GV + EC) — hold a seat, feed a place, pay your men, and build
 
-Repo `jordanelias/ttrpg`, HEAD `a4ca9a5`. Paths below are under `engine/season/` unless written in full.
+Repo `jordanelias/ttrpg`, written at HEAD `a4ca9a5`; revised in round 3 against `51d7b05` (PR #494 included) and the precedent suite
+(`research/game_precedent_suite/`, reference, tier 3). The round-3 changes are listed under §8 "Round-3 corrections". Paths below
+are under `engine/season/` unless written in full.
 
 ## 0 Before you start
 
