@@ -15,3 +15,25 @@ scale:
     remit: []
     why: '`one_line`: ''A guild leader ...''; `who_acts` names ''the wider guild leadership council'',
       the same Guild body NPC-007''s case derives its faction from.'
+# `IN-38` (`13`-rest) `cast:` -- read off THIS case's own sentences (quoted), written by an author, matched by no
+# code. [ASSUMPTION; medium; Jordan to correct] Revert: delete this `cast:` block (the `scale:` above, with her
+# case-level office, is untouched). Seated: the one person who_acts singles out; NOT "the wider guild leadership
+# council" or "the working guild-class membership" (a body and a class). No `capability`: none is named.
+cast:
+- who: Frieda Kessler
+  role: protagonist
+  # one_line: "in named internal opposition to another named guild leader"; who_acts[2]: "the named rival she
+  # opposes".
+  ought:
+    about: the named rival
+    predicate: is the guild leader she opposes
+- who: the named rival
+  role: the guild leader she opposes
+  office:
+    post: guild leader
+    body: Guild
+    remit: []
+    why: >-
+      `one_line`: "another named guild leader"; `Guild` is canon's guild body, whose faction is Guilds
+      (`rosters.yaml: office_bodies`) -- the same reading this file's case-level office takes for her. The case
+      names no act the post carries, so no remit is authored.

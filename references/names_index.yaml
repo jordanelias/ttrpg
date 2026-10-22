@@ -299,7 +299,10 @@ entries:
   # -- organizations --
   world.restoration_movement: {canonical: "Restoration Movement", aliases: ["Restoration", "Movement", "RM"], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['Restoration Movement', '\bRM\b(?![a-z])']}
   # -- realms --
-  world.altonia: {canonical: "Altonia", aliases: [], legacy: [], category: proper_noun, enforce: warn}
+  # v9 IN-36: Altonia is a member of `engine/season/rosters.yaml: factions` (the external empire), so
+  # `token_class: faction` -- `cast.py`'s `_ALIAS_MAP` selects on it, which is what resolves NPC-011, NPC-089 and
+  # NPC-090's `faction: Altonia` cell into the roster. No `patterns:` -- the vector audit reads none for it.
+  world.altonia: {canonical: "Altonia", aliases: [], legacy: [], category: proper_noun, enforce: warn, token_class: faction}
   world.valoria: {canonical: "Valoria", aliases: ["Average Valorian", "Stable Valoria", "Unstable Valoria", "Valorian", "Valnese"], legacy: [], category: proper_noun, enforce: warn}
   world.valorsmark: {canonical: "Valorsmark", aliases: [], legacy: [], category: proper_noun, enforce: warn}
   # -- regions --

@@ -34,7 +34,7 @@ from dataclasses import dataclass
 from typing import Optional
 
 from . import files
-from .rosters import (AFFILIATIONS, BODY_FACTION, FACTIONS, OFFICES_SEATS, load_yaml, office_faction,
+from .rosters import (AFFILIATIONS, BODY_FACTION, FACTIONS, SEAT_ROW_BY_ID, load_yaml, office_faction,
                       require_member, roster, roster_map)
 from ..gaps import Forbidden, Unspecified
 
@@ -197,7 +197,7 @@ def org_faction(org_kind: str, org: str) -> Optional[str]:
         return org
     if org_kind == "body":
         return BODY_FACTION.get(org)
-    seat = next((s for s in OFFICES_SEATS if s["id"] == org), None) if org_kind == "seat" else None
+    seat = SEAT_ROW_BY_ID.get(org) if org_kind == "seat" else None
     if seat is None:
         return None
     if seat.get("body") is None and seat.get("faction") is None:
@@ -248,7 +248,7 @@ def parse(doc) -> tuple:
     if not isinstance(rows, list):
         raise Unspecified("goals.yaml has no `goals:` list", "goals.yaml",
                           needs="`goals: []` or a list of goal rows", law=_LAW)
-    seats = {s["id"]: s for s in OFFICES_SEATS}
+    seats = SEAT_ROW_BY_ID
     ids = []
     for i, row in enumerate(rows):
         if not isinstance(row, dict) or not isinstance(row.get("id"), str) or not row["id"].strip():

@@ -1,0 +1,29 @@
+# NPC-041 — `cast:` overlay only (`IN-38`, `13`-rest). See `NPC-039.yaml` for why a `cast:` block lives in an
+# overlay. Read off THIS case's own sentences (quoted), written by an author, matched by no code.
+# [ASSUMPTION; medium; Jordan to correct] Revert: delete this file (the case returns to three anonymous seats).
+#
+# No `capability`: the case leaves "every substantive trait field blank".
+case: NPC-041
+cast:
+- who: Aldric Hann
+  role: protagonist
+  # one_line: 'Restoration Movement leadership specifically qualified as "visible," co-holding the role
+  # alongside a second named leader'.
+  office:
+    post: visible leader
+    faction: Restoration Movement
+    remit: []
+    why: >-
+      `one_line`: 'Restoration Movement leadership specifically qualified as "visible"'. NO `body`: the movement's
+      authority is "informal" in canon (`rosters.yaml: office_bodies` note) and it has no organ, so `faction` is
+      authored directly. The case names no act the post carries, so no remit is authored.
+  # one_line: "co-holding the role alongside a second named leader"; who_acts[2]: "Yrsa Vossen, his co-leader".
+  ought:
+    about: Yrsa Vossen
+    predicate: is his co-leader in the Restoration Movement
+- who: Yrsa Vossen
+  role: his co-leader
+  # who_acts[2], verbatim: "Yrsa Vossen, his co-leader". No `office:`: this case names her no post.
+- who: the player
+  role: WAITS-ON-PLAYER
+  # who_acts[3] is "the player".

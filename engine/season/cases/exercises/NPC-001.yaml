@@ -9,3 +9,30 @@ scale:
     answering to no institution, but `who_acts` lists her potential sponsors as a duke, a movement leader
     and *the queen consort* -- a span from a single duchy to the Crown itself, which is realm-wide reach
     even though she holds no seat in any of their hierarchies.'
+# `IN-38` (`13`-rest) `cast:` -- read off THIS case's own sentences (quoted), written by an author, matched by no
+# code. [ASSUMPTION; medium; Jordan to correct] Revert: delete this `cast:` block (the case returns to three
+# anonymous seats; the `scale:` above is untouched). Seated: each singular actor who_acts names. NOT seated: "the
+# wider network of people who share her post" and "any independently founded organization" (a class and a body).
+# No `office:` on her: one_line says her post "answers to no institution". No `capability`: none is named.
+# Each sponsor's `ought:` is who_acts's own word for him or her ("as a potential sponsor", "as an alternate
+# sponsor", "as a potential patron").
+cast:
+- who: Edeyja
+  role: protagonist
+- who: the revolutionary duke
+  role: a potential sponsor
+  ought:
+    about: Edeyja
+    predicate: is a potential sponsor of her
+- who: the movement leader
+  role: an alternate sponsor
+  ought:
+    about: Edeyja
+    predicate: is an alternate sponsor of her
+- who: the queen consort
+  role: a potential patron
+  ought:
+    about: Edeyja
+    predicate: is a potential patron of her
+- who: a player or party acting on her directly
+  role: WAITS-ON-PLAYER

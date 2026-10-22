@@ -186,7 +186,7 @@ goals:
       the Crown on axis 8 -- an accommodation faction (the King) against a resistance faction (the Widow
       Regent); the plan names the Crown's aim as resistance to Altonia, and an orientation takes neither
       side. ASSUMPTION; medium; Jordan to correct -- revert: delete the row and the accommodation reading
-      stands. Altonia itself is not a faction yet (IN-36).]
+      stands. Altonia is a faction since IN-36, seated only by `build_realm(foreign=True)`.]
   - id: goal_crown_inner_circle_counsel
     org: {body: Inner Circle}
     text: the Inner Circle keeps the king's counsel -- the realm's arms, treasury and intelligence sound
@@ -429,3 +429,44 @@ goals:
     source: >-
       Intent only: `worldbuilding_v30` §4.1 (Royal Investigators: investigation, counter-espionage, court
       prosecution). [ASSUMPTION; medium; Jordan to correct -- the weights.]
+
+  # ---- Altonia (the external empire, v9 IN-36; seated only by `build_realm(foreign=True)`) -------------------
+  - id: goal_altonia_conquer_valoria
+    org: {faction: Altonia}
+    text: Altonia conquers Valoria
+    object: {kind: rung, rung: r_valoria}
+    stance: -1
+    pursuits: {honour: 0.4, reputation: 0.3, wealth: 0.3}
+    source: >-
+      The user, 2026-10-14, DIRECT: "altonia generically wants to conquer valoria" (ED-IN-0293 row 3; the three
+      cast rows NPC-011, NPC-089 and NPC-090 carry the same aim in their `affiliations:` comments). The goal's
+      referent is the realm rung (`r_valoria`); the objective to march on is a settlement (the Katepano's
+      seat goal below). [ASSUMPTION; medium; Jordan to correct -- the weights; `stance: -1` as the plan
+      authored it: a `rung` object names no person, so `seed_goals` writes no stance row from it (`referents`
+      is empty), and "toward the Crown head's seat" would be a second, `seat_holders` row not authored here -- and that row
+      would write no stance either: Altonia has no role template, so `stance_from_loyalty` is None for its persons.
+      Revert: no Altonian goal; the empire's persons act on their pursuits alone.]
+  - id: goal_katepano_take_the_chokepoint
+    org: {seat: off_katepano}
+    text: the Katepano takes Lowenskyst Fortress, the pass into Valoria
+    object: {kind: rung, rung: set_s_007}
+    pursuits: {honour: 0.5, reputation: 0.3, stability: 0.2}
+    derives: {from: goal_altonia_conquer_valoria, kind: influences}
+    source: >-
+      `valoria_geography_v30.yaml` T3 Lowenskyst ("NE Altonian pass. Primary chokepoint") and S-007 Lowenskyst
+      Fortress, which `venues.yaml` seats `Altonian` at ("Primary Altonian chokepoint"); the Katepano "decides
+      whether Altonia probes, presses, or invades" (NPC-089). A `march` needs a SETTLEMENT referent
+      (`MARCH_TARGET_KINDS`) and a realm-wide rung forms none, so the empire's conquest forms a `march` on the
+      settlement its pass opens on, which arrives unopposed as built (H-233). [ASSUMPTION; medium; Jordan to correct -- the chokepoint as the
+      first objective; the weights. Revert: the seat goal's `rung` is any other settlement, or the row goes
+      and the empire's march forms on no referent.]
+  - id: goal_kommerkiarios_treaty_order
+    org: {seat: off_kommerkiarios}
+    text: the Kommerkiarios keeps the ancient trade treaties in force
+    object: {kind: orientation}
+    pursuits: {stability: 0.8, wealth: 0.1}
+    derives: {from: goal_altonia_conquer_valoria, kind: influences}
+    source: >-
+      NPC-090's own row: "Enforces ancient trade treaties"; stability .80, wealth .10 (the instrument of the
+      empire's aim "pressed here through the ancient trade treaties", ED-IN-0293 (10)). An orientation: it
+      mints no Proposition. [ASSUMPTION; medium; Jordan to correct -- the weights.]

@@ -44,3 +44,22 @@ scale:
       institutional propriety", which is the authority to issue. ⚠ NOT `determine`: nothing in the
       case says she judges anything, and `determine` is the sitting's act. Where the text does not
       say, the remit does not carry it.
+# `IN-38` (`13`-rest) `cast:` -- read off THIS case's own sentences (quoted), written by an author, matched by no
+# code. [ASSUMPTION; medium; Jordan to correct] Revert: delete this `cast:` block (the `scale:` above, with her
+# case-level office, is untouched). Seated: each person who_acts names or singles out. No `office:` on another
+# entry: this case names none. No `capability`: none is named.
+cast:
+- who: Kolbrun Thale
+  role: protagonist
+  # who_acts[2]: "Almud Almqvist (her principal)".
+  ought:
+    about: Almud Almqvist
+    predicate: is her principal
+- who: Almud Almqvist
+  role: her principal
+- who: the concealed actor she investigates
+  role: who_acts[3]
+- who: Sæmund Haelgrund
+  role: cross-office friction
+- who: the settlement-layer intelligence broker she contacts
+  role: who_acts[5]

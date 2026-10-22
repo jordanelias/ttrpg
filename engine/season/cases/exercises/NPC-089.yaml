@@ -1,0 +1,23 @@
+# NPC-089 — `cast:` overlay only (`IN-38`, `13`-rest). See `NPC-039.yaml` for why a `cast:` block lives in an
+# overlay. Read off THIS case's own sentences (quoted), written by an author, matched by no code.
+# [ASSUMPTION; medium; Jordan to correct] Revert: delete this file (the case returns to three anonymous seats).
+# Rides v9 IN-36: `faction: Altonia` below loads only because IN-36 made Altonia a `factions` member
+# (`corpus_run.CAST` is read at import, and a bad office raises SystemExit); revert IN-36 and this file goes first.
+#
+# No `ought:` and no second person: who_acts holds only the protagonist, "a more senior authority above her, if
+# one exists (unnamed in the source)" (the case does not say there is one) and "the neighboring factions" (a
+# group). No `capability`: the case names none.
+case: NPC-089
+cast:
+- who: Zoe Palaiologina
+  role: protagonist
+  # one_line: "A frontier governor of a foreign empire".
+  office:
+    post: frontier governor
+    faction: Altonia
+    remit: []
+    why: >-
+      `one_line` names the post ("A frontier governor") and "a foreign empire"; the registry row for this id
+      (`references/npc_registry.yaml`: `faction: Altonia`, `role: Katepano (frontier governor)`) names that
+      empire, and Altonia is in `FACTIONS`. NO `body`: canon names no Altonian organ, so `faction` is authored
+      directly. The case names no act the post carries, so no remit is authored.

@@ -591,3 +591,37 @@ seats:
     obligees:   ["NPC-041"]
     source:     "systems/world/reference/worldbuilding_v30.md §8 (\"informal\")"
     note:       "[NEW]. r2 03 §A.15 flags this as the weakest row: canon gives the movement no organ and no territory, so `body: null` is honest and the rung (T15 Askeheim, the one realm territory no faction holds) is authored. `revocation: null` follows from canon's own \"informal\"."
+
+# THE FOREIGN FACTION'S TWO SEATS (v9 IN-36; #457 D4, RS-21 item 4: one foreign faction, two seats). Same row
+# shape as `seats:` and NOT counted among its thirty-one: the seats of `rosters.yaml: foreign_cast`'s factions
+# exist only in a world built with `build_realm(foreign=True)`, which MINTS them (their holders have no
+# loop-built seat: a registry row with no title and no sub-organization is a life, not a seat, §11).
+# `rung` is a `settlement` anchor on the foreign place `foreign_cast` mints. [ASSUMPTION; medium; Jordan to
+# correct] The head holds `dispatch` (the `march` gate) and `issue` (`seize`, `covenant`, `requisition`); the
+# trade prefect holds `issue` alone. Revert: another remit, or the Doux (NPC-011) in a seat.
+foreign_seats:
+  - id:         off_katepano
+    post:       "Katepano"
+    rung:       {settlement: "ALT-1"}
+    body:       null
+    faction:    "Altonia"
+    remit_acts: [dispatch, issue]
+    conferral:  null
+    revocation: null
+    holder:     "NPC-089"
+    obligees:   []
+    source:     "references/npc_registry.yaml NPC-089 (`role: Katepano (frontier governor)`; `arc_trajectory`: \"Decides whether Altonia probes, presses, or invades\")"
+    note:       "[NEW]. The empire's head (`rosters.yaml: faction_leaders`). `conferral`/`revocation` null: canon names no way the empire fills or strips the post."
+
+  - id:         off_kommerkiarios
+    post:       "Kommerkiarios"
+    rung:       {settlement: "ALT-1"}
+    body:       null
+    faction:    "Altonia"
+    remit_acts: [issue]
+    conferral:  null
+    revocation: null
+    holder:     "NPC-090"
+    obligees:   []
+    source:     "references/npc_registry.yaml NPC-090 (`role: Kommerkiarios (trade prefect at Schoenland interface)`; `arc_trajectory`: \"Enforces ancient trade treaties\")"
+    note:       "[NEW]. The Kommerkiarios, trade prefect at the Schoenland interface. FA-01 (not built here) names which seat offers the trade demand."

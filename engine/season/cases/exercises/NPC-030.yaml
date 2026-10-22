@@ -1,0 +1,29 @@
+# NPC-030 — `cast:` overlay only (`IN-38`, `13`-rest). See `NPC-039.yaml` for why a `cast:` block lives in an
+# overlay. Read off THIS case's own sentences (quoted), written by an author, matched by no code.
+# [ASSUMPTION; medium; Jordan to correct] Revert: delete this file (the case returns to three anonymous seats).
+#
+# Seated: each singular actor who_acts names. No `office:` and no `capability`: the case names no post and no
+# `verb_capability` key.
+case: NPC-030
+cast:
+- who: Elske Almqvist
+  role: protagonist
+- who: the foreign administrator guarding her
+  role: whose every relevant decision her safety drives
+  # one_line: "A princess ... whose safety alone drives another person's every relevant decision"; who_acts[2].
+  ought:
+    about: Elske Almqvist
+    predicate: is kept safe
+- who: the foreign imperial court
+  role: who_acts[3]
+- who: the king
+  role: who_acts[4]
+- who: the revolutionary duke
+  role: whose territory any retrieval must cross
+  # who_acts[5], verbatim: "the revolutionary duke whose territory any retrieval must cross".
+- who: the heir apparent
+  role: whose death is the trigger
+  # who_acts[6], verbatim: "the heir apparent, whose death is the trigger".
+- who: players
+  role: WAITS-ON-PLAYER
+  # who_acts[7] is "players".

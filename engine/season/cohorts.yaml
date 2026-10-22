@@ -99,3 +99,32 @@ cohorts:
 - {rung: set_s_035, weight: 2}   # S-035 Salgrund (Village, T13)
 - {rung: set_s_036, weight: 2}   # S-036 Himmelenger (Cathedral-City, T9)
 - {rung: set_s_037, weight: 2}   # S-037 Schoenland (City, T16)
+
+# THE GUARD COHORTS (v9 IN-36 carrying IN-60's guard content, RS-26; seated only by `build_realm(guards=True)`).
+# A guard is a cohort -- a Person at `weight > 1` -- SWORN (`oblige`) to a principal's seat and posted at the exact
+# rung that seat's HOLDER is present at, so IN-60's `guard_weight` (the sworn weight present at a rung, beside
+# the principal) reads nonzero where the principal is. Not a population row: it stands for the people of no
+# place, and is read apart from `cohorts:` above, by `harness/populated.py::guard_rows` / `seat_guards`. It is
+# a cohort all the same (S9.1): the larder draw feeds it as it feeds any `weight > 1` Person.
+#
+# FIELDS
+#   seat    an `offices.yaml: seats` id. The POSTING is not authored: it is where the seat's holder is present at
+#           the build (`world_q.home_of`), so a re-exported `npcs.yaml` cannot strand a guard at a stale rung.
+#   weight  the sworn weight, an int `> 1`, never above the capacity of the settlement the cohort RESIDES in
+#           (the nearest settlement above the posting: a guard is posted at a door and lives in the town).
+#
+# NOT `offices.yaml: obligees:`. That field takes CASE ids (`harness/populated.py`'s obligees loop), and a
+# cohort traces to no case; `seat_guards` writes the same `oblige` Tenure the loop writes, so the throne's and
+# the duchies' sworn weight is these rows' and the seat rows' `obligees:` stay as authored (B-V's EXIT clause
+# "`obligees:` non-empty" is read through these rows, not by editing the seat rows, and only when
+# `build_realm(guards=True)`). [ASSUMPTION; medium; Jordan to correct] Revert: author the duchy rows' `obligees:`
+# with case ids, which moves the default-arm hash.
+#
+# [ASSUMPTION; medium; Jordan to correct] The weights: the King's guard stands at 4, a duke's at 2 -- "dukes are
+# easier to reach than kings because less sworn weight stands at a duchy" (IN-60), as DATA, not a table. The
+# Crown's own duchy seat (`off_duke_valorsmark`) is held by the King, so his one guard covers both. Revert: other
+# weights, or no guards (`guard_weight` reads 0 everywhere and IN-59 (b) is a gate nothing closes).
+guards:
+- {seat: off_king, weight: 4}
+- {seat: off_duchess_hafenmark, weight: 2}
+- {seat: off_duke_varfell, weight: 2}

@@ -49,9 +49,9 @@ from ..state.carriers import Act
 from ..state.ids import H
 
 # [ASSUMPTION; medium; Jordan to correct; revert: drop the `faction x` member if the spine's test faction
-# leaves `rosters.yaml: factions`]: the factions with no authored head. `Guilds` and `Schoenland` are B-V's
-# content (IN-36: who leads them is `#457` D4's cast, authored in `references/npc_registry.yaml`); B-V
-# moves this pin when it seats them. `faction x` is the governance spine's test faction (Jordan
+# leaves `rosters.yaml: factions`]: the factions with no authored head. `Guilds` and `Schoenland` stay
+# leaderless: `#457` D4's answer is ONE foreign faction with two seats (the empire, IN-36), and canon gives
+# neither a leader, so this pin moves only when a ruling supplies one. `faction x` is the governance spine's test faction (Jordan
 # 2026-09-18, `governance_spine.yaml`), never placed in the realm.
 LEADERLESS = {"Guilds", "Schoenland", "faction x"}
 
@@ -119,7 +119,9 @@ def _computed_acts_via(w, pid: str, seats: set) -> list:
 
 
 def test_fa01_every_authored_head_holds_a_seat_of_its_own_faction():
-    w = POP.build_realm(0)
+    # v9 IN-36: the empire's head (Altonia, NPC-089) is authored in both arms and SEATED only by `foreign=True`,
+    # so this builds that arm: every faction with a head has its head in a seat, the empire's included.
+    w = POP.build_realm(0, foreign=True)
     heads = _heads()
     assert set(FACTIONS) - set(heads) == LEADERLESS
     checked = 0

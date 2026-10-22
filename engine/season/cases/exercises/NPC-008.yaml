@@ -36,3 +36,24 @@ scale:
       `convene`: the case says he obstructs reform others propose, never that he decides or calls a
       sitting. A clerk who could convene Parliament would be a different character, and §6.1 gives
       the nominating power to Parliament itself rather than to the Ministries that serve it.
+# `IN-38` (`13`-rest) `cast:` -- read off THIS case's own sentences (quoted), written by an author, matched by no
+# code. [ASSUMPTION; medium; Jordan to correct] Revert: delete this `cast:` block (the `scale:` above, with his
+# case-level office, is untouched). who_acts[2] is "any leader or PC proposing a Parliamentary-structure-changing
+# action (e.g. Lenneth, Baralta, Vaynard)": the three NAMED examples are seated as the proposers the case gives,
+# and the PC half is a WAITS-ON-PLAYER entry. NOT seated: "the Ministry as an institution (in his absence)".
+# No `capability`: none is named.
+cast:
+- who: Peder Almstedt
+  role: protagonist
+  # one_line: "lets him passively obstruct any reform that would alter it".
+  ought:
+    about: Lenneth
+    predicate: may propose a reform that would alter the founding terms he holds
+- who: Lenneth
+  role: a proposer of Parliamentary-structure-changing action
+- who: Baralta
+  role: a proposer of Parliamentary-structure-changing action
+- who: Vaynard
+  role: a proposer of Parliamentary-structure-changing action
+- who: a PC proposing a Parliamentary-structure-changing action
+  role: WAITS-ON-PLAYER

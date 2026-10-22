@@ -3,8 +3,9 @@
 # Read off THIS case's own sentences (quoted), written by an author, matched by no code.
 #
 # No `office:` on any seat: he is "An Altonian prince" and the authority above him is "the Altonian
-# imperial authority", and Altonia is no canonical faction (`rosters.yaml: factions`), so
-# `office_faction` would refuse any seat authored for them -- absent is the refusal, not a default
+# imperial authority", and Altonia WAS no canonical faction when this was written (`rosters.yaml: factions`;
+# v9 IN-36 has since made it one, so an `office:` would now load -- none is authored, unchanged), so
+# `office_faction` would then refuse any seat authored for them -- absent is the refusal, not a default
 # faction. No `capability`: nothing in the case is a `verb_capability` key (`copying` only).
 # ⚠ `the Altonian imperial authority` BELOW IS AN INSTITUTION SEATED AS A PERSON (an entry with no
 # office, so `_seat_office`'s [ASSUMPTION] is not reached); it moved no executed set here.
