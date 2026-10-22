@@ -2104,7 +2104,7 @@ def opinion_of(w: World, p: Person, faction: str) -> float:
     return opinion(p, _goals.expected("faction", name), engaged_poles(name), regarded, w.fixtures)
 
 
-def opinion_referents(w: World, p: Person, c) -> tuple:
+def opinion_referents(w: World, p: Person, c, memo: Optional[dict] = None) -> tuple:
     """WHOM A DEED DONE TO SOMEONE TURNS `p` TOWARD, read when the question forms (v9 IN-70, RS-23: *"the
     members of the faction whose member killed my lord"*) -- the faction-level referents of the
     question `c` raises. `c` is a claim `p` holds. For an untold `PAIRED_KINDS` deed claim that `p`
@@ -2128,7 +2128,11 @@ def opinion_referents(w: World, p: Person, c) -> tuple:
     [ASSUMPTION; medium; Jordan to correct; revert: only the members `p`'s own ledger names, `opinion_of`'s
     `regarded` set] The referents are every live member of the doer's faction, the RS-23 text
     ("the members of the faction whose member killed my lord"); membership is world truth read by this
-    function, not a belief `p` holds (the `seat_holders` precedent, ED-IN-0292 (2))."""
+    function, not a belief `p` holds (the `seat_holders` precedent, ED-IN-0292 (2)).
+
+    `memo` is the caller's per-`p` cache of `opinion_of` by faction: `questions_for` asks this once per
+    claim in `p`'s ledger, and `opinion_of` scans the whole ledger and every Tenure, so the answer is
+    computed once per faction and not once per claim."""
     if c.predicate not in PAIRED_KINDS:
         return ()
     doer, _term = paired_deed_term(p, projected_axes(p, w.fixtures.get("scar_weight_shift")), c,
@@ -2136,7 +2140,13 @@ def opinion_referents(w: World, p: Person, c) -> tuple:
     if doer is None or doer == p.id:
         return ()
     faction = faction_holding(w, doer)
-    if faction is None or opinion_of(w, p, faction) >= 0:
+    if faction is None:
+        return ()
+    if memo is None:
+        memo = {}
+    if faction not in memo:
+        memo[faction] = opinion_of(w, p, faction)
+    if memo[faction] >= 0:
         return ()
     return (doer,) + tuple(m for m in members(w, faction) if m not in (doer, p.id))
 
@@ -2563,6 +2573,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # `requires_operands` is untouched by this clause for exactly that reason.
     R = reach(w, p)
     floor = landing_floor(w, since)
+    opinions: dict = {}                    # `opinion_referents`' per-call memo of `opinion_of` by faction
     for c in p.ledger:
         if (c.when, c.round) < floor:
             continue
@@ -2572,7 +2583,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
             # v9 IN-70: a paired deed's question also turns `p` toward the doer's faction where his
             # opinion of it is below indifference (`opinion_referents`); the subject stays first, and
             # admission (the three clauses above) is untouched. REVERT: `(c.subject,)` alone.
-            extra = tuple(x for x in opinion_referents(w, p, c) if x != c.subject)
+            extra = tuple(x for x in opinion_referents(w, p, c, opinions) if x != c.subject)
             out.append(Question(f"q:claim:{c.id}", "claim_landed", (c.subject,) + extra, c.id))
 
     # v9 SC-02 `22b` STEP 23: A STANDING CROSSING IS A QUESTION ABOUT THE PEOPLE WHO TOLD (`standing_crossed`,
