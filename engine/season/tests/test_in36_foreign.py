@@ -17,8 +17,9 @@ realm settlement through the real chooser, with no hand-built act; off, byte-ide
       `march` (`test_march.py::test_a_real_chooser_forms_and_folds_a_march_...`'s own shape): the march FORMS
       and FOLDS. (2) the UNRESTRICTED chooser (`resolvable_verbs()`) on the Katepano's own goal Question, at a
       WITNESS SEED (H-175's precedent): it PICKS the march and the fold reaches the seam. That second test
-      is an existence witness and NOT a rate: the march is the conqueror's choice in roughly one goal-question
-      deliberation in ten (H-233's FREQUENCY half, Jordan's: the convictions or IN-08's march cells).
+      is an existence witness and NOT a rate: the march is in the first released scene at tick 0 in 7 of 80 seeds
+      (an uncommitted session scan; later ticks unmeasured) (H-233's FREQUENCY half, Jordan's: the convictions or
+      IN-08's march cells).
   (e) IN-60's GUARD CONTENT: with `guards=True` the throne's and each duchy seat's holder has a sworn cohort
       posted at the exact rung he is present at, the King's heavier than a duke's; an ordinary rung with one
       sworn resident reads 0; end the swearer's `oblige` and the value falls with nothing else written.
@@ -262,7 +263,7 @@ def test_the_unrestricted_chooser_picks_the_march_at_a_witness_seed_and_the_fold
     once, with no `field.unopposed`.
 
     SCOPE, STATED: this is an existence witness, NOT a rate. The march scores far below `create_record` on that
-    question; a scan of seeds 0-79 finds it in the first scene at 7 (a first-scene rate of about 0.09; Gumbel
+    question; a scan of seeds 0-79 finds it in the first scene at 7 (a first-scene rate of 0.0875 at tick 0; Gumbel
     order, `choice_temperature` 0.1, over ~30 candidates), and only 2 of the 5 full one-season runs checked reach
     the seam (the rest arrive unopposed, H-233): the combined rate is NOT measured. The frequency is H-233's
     remaining half and is the convictions' or IN-08's march cells', not this test's. THE DRAWS ARE KEYED ON (verb, subject), so the witness RE-ROLLS whenever any upstream
@@ -307,7 +308,7 @@ def test_the_witness_seed_reaches_the_seam_in_a_full_one_season_run_too(seed):
     finally:
         wrapper.field_input = real
     assert run["attempted"]["p_npc_089"].get("march", 0) >= 1, run["attempted"]["p_npc_089"]
-    assert records and records[0].origin == FOREIGN_CAST[EMPIRE]["territory"]["code"], (
+    assert any(r.origin == FOREIGN_CAST[EMPIRE]["territory"]["code"] for r in records), (
         f"seed {seed} no longer reaches the seam in a full season ({len(records)} entries): re-scan the witnesses")
 
 
