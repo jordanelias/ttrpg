@@ -202,7 +202,9 @@ conflict (ERRATA G11 is resolved this way by cross-ruling C1). A leg or a wound 
   read only by the larder draw and the death hazard (`world_q.py:1012,1074`); no verb gate tests it. Cohorts have no pursuits (37 of
   37 empty), hold no seat and eat; named persons act through offices and do not eat.
 - **Bodies fall** in combat (`fight`/`accept` through the PC seam; a lost field in `march`, `effects_combat.py:293-299`, which no seeded season reached) and, if switched
-  on, in MATTER. They rise only by `tend` (`effects_combat.py:370-393`). Upward band crossings emit nothing (H-211). A fight writes only its subject; the
+  on, in MATTER. They rise only by `tend` (`effects_combat.py:370-393`). Upward band crossings emit nothing (H-211). Downward ones emit only from MATTER's hunger write (`matter.py:530`, the one call of
+  `_crossings` for a body); a combat wound crosses floors without a `condition.band_crossed` Event, so no body crossing fires in the realm
+  run (seed 0, two seasons: 6 `body.changed`, 0 `condition.band_crossed`). A fight writes only its subject; the
   actor is never written (ERRATA C1; `effects_combat.py:41-43`, `:179`), so a killing marks no winner.
 - **Grudges** are written at runtime only by `march` (one row `(winning faction, −1.0, field_grudge_weight 1)` and one morale row
   against your own faction, `effects_combat.py:300-306`) and removed only by `forgive` (ERRATA C1). The referent of a battle grudge is
@@ -215,8 +217,8 @@ conflict (ERRATA G11 is resolved this way by cross-ruling C1). A leg or a wound 
 
 ## 3 A worked example
 
-All numbers come from `build_realm(0)` and the shipped fixtures, computed read-only (`python -I`, scripts under
-`scratchpad/t10/`; §9).
+All numbers come from `build_realm(0)` and the shipped fixtures, computed read-only (`python -I`; the probe scripts
+are not committed, the control recipe `ctl/control.py` is; §9).
 
 **3a. A wounded traveller's budget.** `p_npc_001` holds no office (0 live holds). `p_npc_003` holds one.
 
@@ -602,7 +604,7 @@ Opened (path:line at HEAD `a4ca9a5`): `es/decision/budget.py:18-83`; `es/data/fi
 :453,:533,:839,:863,:1146,:1451; `es/harness/populated.py:715-760`; `es/harness/probes.py:144-149`; `systems/settlements/valoria_geography_v30.yaml`
 (loaded with `yaml.safe_load`).
 
-Ran (all `python -I`, read-only, scripts in `scratchpad/t10/`):
+Ran (all `python -I`, read-only; the probe scripts are not committed, the control recipe is `ctl/control.py`):
 - `probe1.py 0 0`: 83 persons (37 cohorts weight 2, 46 at 1); rung kinds as in §1; 211 dwellings; every body 1000, `born` 0; at build the
   realm draw wants 148 grain / 74 salt and takes 0.
 - `probe2.py 0 2`: `set_s_001` stores 40/30/50/10 after season 1, 75/57/99/19 after season 2; `migrate` 81 reached the effect, 81 over

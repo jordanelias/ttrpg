@@ -37,7 +37,7 @@ in this section was opened at `51d7b05`. The as-built text comes first, then a `
 
 **Setup choices.** The one input is the world seed. `harness/populated.py::build_realm(seed)` seats 83 persons (46 named, 37 cohorts) and
 32 offices, all held at build, and mints 64 OUGHT Propositions: 46 personal wants (`prop_npc_*`), 6 faction creeds (`fac_*`) and 12
-organization goals (23 of the 35 `goals.yaml` rows are `orientation` and mint nothing; `harness/populated.py:473-476`, `goals.yaml:1-30`).
+organization goals (23 of the 35 `goals.yaml` rows are `orientation` and mint nothing; `harness/populated.py:474-477`, `goals.yaml:1-30`).
 Its other parameters (`cap`, `from_roster`, `goals`, `goals_complete`, `:629-630`) are builder switches, not choices. There is no
 difficulty, nation or character pick; the remaining knobs are fixture arms (temperature `data/fixtures.py:286`, scar shift `:707`,
 confliction `:715`), swept controls rather than choices. A client that registers a person in `overrides` chooses for that person at each
@@ -45,7 +45,7 @@ deliberation. Its callback receives the Person, a View (the last 12 own claims a
 standing; `state/carriers.py:388`), the budget query and `auto`, the shipped chooser (`harness/play_surface.py:14-19`). It may return any
 of the 47 resolvable verbs with any payload. DELIBERATE raises on an over-budget return (`loop/deliberate.py:202`), a scene of more than 3
 acts (`:220`) and an act whose actor is someone else (`:281`); a verb whose precondition the fold cannot evaluate (`exchange`) raises
-`Unspecified` and aborts the season (`loop/resolve.py:282-290`).
+`Unspecified` and aborts the season (`loop/resolve.py:283-284`).
 
 **The loop (one tick).** 1 CALENDAR: dates due this tick fire. 2 MATTER: terms mature (`loop/matter.py:294-304`), claims lose 5 confidence
 (errata G8), cohorts draw food, sites yield and wear (§2.1); hunger, ageing and illness are coded and ship at 0 (`matter.py:513-520`,
@@ -87,7 +87,7 @@ first is the pursuit term when the subject is shared and the stance term when it
 6. RESOLVE: Arnlod's `accept` on Yrsa (contested_physical) runs before Sæmund's social acts and Fells her; his `create_record` lands (+1
    hold), `petition` is refused (no living `to`), `open_case` is `case.unauthorized`.
 7. WITNESS: he holds a firsthand claim about Arnlod, the referent of his personal want, so round 1 asks a tier-0 question about Arnlod
-   (`queries/world_q.py:2217-2341`); `open_case` on Arnlod lands, `train` and `commit` are refused.
+   (`queries/world_q.py:2217-2332`); `open_case` on Arnlod lands, `train` and `commit` are refused.
 8. Over five rounds he releases 4 scenes, spends 8 actions, resolves 11 acts with 3 non-refusals and ends the tick holding 3 Records:
    budget 9 at tick 1 (round-3 probe: 9). Realm-wide in that tick: 676 acts formed, 535 reached the fold, 83 → 78 persons alive.
 
@@ -99,7 +99,7 @@ founded or built and no field is fought (ctl `field.*` 0; a hand-built `march` a
 Persons acquire no skills (`train` 0 ok) and their pursuits never move (scar shift 0, `data/fixtures.py:707`).
 
 **Failure and ending.** None for the world. The season returns `endings` (`world_q.endings_reached`, a read added by PR #494; `loop/driver.py:518,
-532`) over two `rosters.yaml: endings` rows (`peninsular_sovereignty`, the victory row, and `theocracy`; `rosters.yaml:2494-2552`); the realm
+532`) over two `rosters.yaml: endings` rows (`peninsular_sovereignty`, the victory row, and `theocracy`; `rosters.yaml:2494-2553`); the realm
 as built reaches neither (`endings` was `[]` after both ticks at seed 0), and nothing halts on it, so the loop runs as many ticks as its
 caller asks. A person ends only by being Felled; MATTER kills nobody at shipped values (errata G9). No goal is ever met, because no code
 tests one (`goals.yaml:11-12`: a goal "never acts, and nothing aggregates"). A seated person has no continuation: `succeed` is not

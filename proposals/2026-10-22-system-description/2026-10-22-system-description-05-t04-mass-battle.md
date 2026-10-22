@@ -89,7 +89,7 @@ Automated: everything after the target pick. There is no pause, no withdraw, no 
 
 | verb | cost and effect | natural play (ctl, seeds 0-2) | callback play (run at `51d7b05`) | grade |
 |---|---|---|---|---|
-| `march` at a settlement held by another faction, members present | one scene action. Won: defenders' bodies scaled, rows, you arrive (a travel leg each). Lost: your bodies scaled, rows, you stay | never formed: declared subjects are persons, hearths and territories (§3.3) | `set_s_036`, 2 v 6: `field.lost`, body 1000 → 20, at seeds 0-2. No Won field has been run | TESTS-ONLY |
+| `march` at a settlement held by another faction, members present | one scene action. Won: defenders' bodies scaled, rows, you arrive (a travel leg each). Lost: your bodies scaled, rows, you stay | never formed: declared subjects are persons, hearths and territories (§3.3) | `set_s_036`, 2 v 6: `field.lost`, body 1000 → 20, at seeds 0-2. No Won field has been fought; Won is exercised only through a constructed `Resolution` (`test_march.py:254`) | TESTS-ONLY |
 | `march` at a settlement with no opposing holder, or none of the holder's people present | one scene action. Unopposed: your mustered members arrive (a travel leg each); no battle, no casualty, no row | never formed (`army.arrived` 0) | `set_s_014` → `set_s_003`, seeds 0-2: `field.unopposed`, `army.arrived`, bodies unchanged | TESTS-ONLY |
 | `march` at any other Rung (person, hearth, territory) | one scene action; Declared, then `march.refused` | every natural march: declared 21 / 10 / 4, refused 25 / 10 / 4 | refused the same way (`test_march.py`, hearth target; not re-run here) | RUNS-IN-LOOP (the refusal only) |
 | do nothing (defend) | none; presence defends and walls apply by themselves | always; the defender has no chooser | same | — |
@@ -170,12 +170,12 @@ chooser's stance toward the winning faction (§5e). No army has experience, a re
 | **angle (octagon)** | where a blow lands relative to facing | under 45° GREEN ×1.0, under 90° YELLOW ×1.5, else RED ×2.0 | `geometry.py:142-178`; `cfg:219` |
 | **stamina** | endurance | 100; −1 per cell in contact per tick; at 0, −1 die | `cfg:158-159` |
 | **morale** | will to stay | season start 1-7; rout at ≤ 0 | `MB.py:93-101, 119` |
-| **rout** | leaving the fight | **army: `hp < 100` (size 0), checked every tick first**; then subunit morale ≤ 0 or under 80 troops; army command ≤ 0, 60% of troops in routed subunits, or total morale ≤ 0 | `units:2930-2938`; `orch:2205-2206, 2262-2268`; `units:2876` |
+| **rout** | leaving the fight | **army: `hp < 100` (size 0), checked every tick first**; then subunit morale ≤ 0 or under 80 troops; army command ≤ 0, 60% of troops in routed subunits (`ROUT_CASCADE_FRAC`, `cfg:116`, whose note calls it inert for any one-subunit army, so for every season army), or total morale ≤ 0 | `units:2930-2938`; `orch:2205-2206, 2262-2268`; `units:2876, 2893` |
 | **terrain row** | one modifier per field | OPEN_FLAT, WALLS, UPHILL, RIVER_CROSSING, FOREST_BROKEN, NARROW_PASS | `MM/terrain.py:45-50, 109` |
 | **`march`** | the one season verb: settlement scale, contested, needs `remit:dispatch` | bands Declared / Won / Lost / Unopposed | `VT:803-834` |
-| **mustered** (query) | members of a faction present in a Rung's subtree | weight-summed | `engine/season/queries/world_q.py:1470` |
-| **holder_faction_of** | faction of the nearest **held** Rung at or above the target | seeded settlements are not held directly, so the walk reaches the territory's holder | `world_q.py:1656-1680` |
-| **fortification** | mean condition of the garrison Sites in a settlement's subtree, 0-1 | > 0 makes the field WALLS; 37 of 37 realm settlements > 0; garrison wear 0 | `world_q.py:1490`; `RY:1451-1470` |
+| **mustered** (query) | members of a faction present in a Rung's subtree | weight-summed | `engine/season/queries/world_q.py:1473` |
+| **holder_faction_of** | faction of the nearest **held** Rung at or above the target | seeded settlements are not held directly, so the walk reaches the territory's holder | `world_q.py:1659-1681` |
+| **fortification** | mean condition of the garrison Sites in a settlement's subtree, 0-1 | > 0 makes the field WALLS; 37 of 37 realm settlements > 0; garrison wear 0 | `world_q.py:1493`; `RY:1451-1470` |
 | **Person.weight** | the season's headcount for one person | realm: 1 (46 named) or 2 (37 cohorts) | measured, `build_realm(0)` |
 | **Person.body** | physical condition | 1000 for all 83 at build; budget band floors 800 / 500 / 100 | measured; fixture `band_floors.body` |
 
@@ -226,7 +226,7 @@ are draws.
 ### 2.2 The season path, step by step
 
 1. **DELIBERATE.** A seated person whose office grants `remit:dispatch` may form `march` against a subject Rung (`VT:807`). The chooser scores it
-   on four of the seven value axes: hierarchical −0.5, partisan −0.4, grandiose −0.4 and instrumental +0.4 (`RY:3054, 3140, 3292, 3353`).
+   on four of the seven value axes: hierarchical −0.5, partisan −0.4, grandiose −0.4 and instrumental +0.4 (`RY:3120, 3206, 3358, 3419`).
 2. **RESOLVE.** The typed cell is `form: existence, of: subject, kind: Rung` (`VT:809-813`). It does not narrow to settlements. If it passes,
    the act folds at `Declared`, emits `march.declared` and writes nothing.
 3. **ENCOUNTER** (`loop/encounter.py`), same round. `sides_of` (`loop/sides.py:41-131`) then works out the sides:
