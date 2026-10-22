@@ -38,7 +38,8 @@ itemised in the Errata (Part C). Where an appendix (Part E) disagrees with this 
 - **RUNS-IN-LOOP at control**: it executes but is inert at shipped fixture values (`body_step 0`, `age_step 0.0`, `illness_rate 0.0`,
   `telling_privacy 0.0`, `confliction_weight 0`, `scar_weight_shift 0`).
 - **TESTS-ONLY**: implemented or wired, but it executes only under unit tests, fixture worlds or oracle scripts, or it fired zero successful times
-  in the realm run. A refusal gate firing is not the verb executing.
+  in the realm run. A refusal gate firing is not the verb executing. A behaviour that runs inside the real season only on an act a harness
+  callback hand-built (round 3: a settlement `march` fighting a field) stays TESTS-ONLY: the grade is about the natural run (file 13 Part 3 R-F5).
 - **DESIGN-ONLY**: no executing code (a proposal, a stub, an empty hook, a deleted layer).
 
 **Run figures.** "The realm run" is `build_realm(seed)`, two seasons, with the chooser built as `populated.run` builds it. The control script
@@ -146,7 +147,7 @@ own module roster (`references/module_contracts.yaml`) has 26 rows, mostly `sim_
 Anarchy; code deleted at plan position 28-iii), the MS clock `systems/overview/sim/ms_track.py` (0–100, −1 per year, start 60, no live caller),
 `faction_state` (Mandate, Treasury, stats 1–7; action code deleted at 29b), `accounting_sequence`, `piety_track`
 (= `systems/characters/sim/conviction.py`). **The running loop has no ending condition that halts it and no world-scale clock.** Since PR
-#494 (IN-27) the season *reports* endings: `world_q.endings_reached` is "a read, never an actor" (`queries/world_q.py:1764-1767`) over the
+#494 (IN-27) the season *reports* endings: `world_q.endings_reached` is "a Query over holds and seats that the season reports -- never an actor" (`queries/world_q.py:1764-1766`; the driver calls it "A READ", `loop/driver.py:515`) over the
 two `rosters.yaml: endings` rows (`:2494-2553`), `peninsular_sovereignty` (the victory: GD-1 without its sustain, Accord and Stability
 clauses, "UNREACHABLE IN COMPUTED PLAY", `:2531-2541`) and `theocracy` (the King's seat held under the Church; not a victory). The realm
 as built reaches neither: `endings` is `[]` after both seasons in seeds 0, 1, 2 (round-3 probe). The read RUNS-IN-LOOP; reaching an
@@ -267,7 +268,7 @@ the holder of a seat does. Zoom is structural (queries aggregate up the rung lad
 | 8 | No ending is reached and none halts the loop; no world clock. Since PR #494 the season reports `endings_reached` each tick (§2.3): its victory row is unreachable in computed play by its own note, and the realm reached no ending in seeds 0-2. IN-23's legitimacy and stability are one person's windowed estimates read only by `harness/storybar.py`; IN-37's chronicle renderer (`harness/chronicle.py`) is an observer the loop never imports. Goals are attention-only: "it never acts, and nothing aggregates" (A-31, `engine/season/goals.yaml:10-12`), and nothing tests whether one is met | design gap (deleted layers; the ending rows are `[ASSUMPTION]`-graded) |
 | 9 | Documents lag the code: the verbs proposal counts 46 shipped rows (HEAD 53); `VT:` line cites drift +3 to +228; `CLAUDE.md` §3/§5 name `engine/autoload/dice_engine.py` and a campaign driver that do not exist | drift |
 | 10 | Acceptance is partly doc-derived; `register --requirements` checks syntax only. The R-08 stored text is partly self-corrected: the sampler is built (requirements.yaml:1274-1285), the row stays partial because inclination cannot break ties | instrument |
-| 11 | No succession. Seven of the 32 built seats have no conferral basis and can never be refilled once vacant: King, Queen (the Widow Regent row), Prince (the Heir row), Princess, Duchess of Hafenmark, Duke of Valorsmark (`conferral: null`, `offices.yaml:188, 201, 214, 240, 253, 266`) and the unauthored guild-leader seat `off_npc_084`, which `harness/populated.py:1240-1250` builds with no row and so with conferral None; `_req_confer` refuses them first (`loop/predicates.py:126-127`) and `succeed` has no effect (`verb_table.yaml:1113`). The King dies at tick 0 in every seed; seats vacated by the end of season 2 are 8 / 7 / 10 (seeds 0 / 1 / 2), null-basis seats 3 / 5 / 6 of them, and only one seat is refilled in any seed (a self-conferral at seed 1) | by construction (null rows) / design gap (no transmission) |
+| 11 | No succession. Seven of the 32 built seats have no conferral basis and can never be refilled once vacant: King, Queen (the Widow Regent row), Prince (the Heir row), Princess, Duchess of Hafenmark, Duke of Valorsmark (`conferral: null`, `offices.yaml:188, 201, 214, 240, 253, 266`) and the unauthored guild-leader seat `off_npc_084`, which `harness/populated.py:1240-1250` builds with no row and so with conferral None; `_req_confer` refuses them first (`loop/predicates.py:126-127`) and `succeed` has no effect (`verb_table.yaml:1113`). The King dies at tick 0 in every seed; seats vacated by the end of season 2 are 8 / 7 / 10 (seeds 0 / 1 / 2), null-basis seats 3 / 5 / 6 of them, and one seat is refilled across the three seeds (a self-conferral at seed 1) | by construction (null rows) / design gap (no transmission) |
 | 12 | The control run's "att" column counts acts that reached the fold, not acts formed (§0): 275 acts in seed 0 are formed and refused before the fold and do not appear, which the first draft read as "never attempted" for `argue`, `examine` and seed-1 `speak` | instrument |
 | 13 | The only closed-form odds helper, `sigma_leverage.p_success`, is the Gaussian stand-in and understates Partial-or-better on the real social dice by 7-15 points (pool 2 / Ob 2: 14.4 % against 26.0 % exact; pool 2 / Ob 1: 43.0 against 58.0), so a surface that printed it would show worse odds than the dice deal; under the ruled ladder Partial is never the most likely band at pools 1-8 against Ob 1-4 (largest 32 %, pool 2 / Ob 1). Layer 1 says no state is hidden from the player (AX-7, `architecture/meta/01_AXIOMS.md:301-302`) | latent (no surface reads it) |
 
@@ -275,28 +276,84 @@ the holder of a seat does. Zoom is structural (queries aggregate up the rung lad
 
 ## 7 Handles for comparison
 
-Grades in brackets: [R] runs in the loop, [W] wired with zero successes or tests only, [D] design only.
+Grades in brackets: **[R]** runs in the loop (ERRATA G1 RUNS-IN-LOOP), **[W]** wired with
+zero successes, or tests, harnesses and hand-built acts only, **[D]** design only, **[P]** proposed. The axes in §7.1-§7.2 are those of
+*Twenty Games, One Frame* ("20G", an upload that is not in the tree: Part 2 §2.1 defines them, §2.2 plots twenty titles, §2.3 names four
+empty cells, Part 4 lists nine asymmetries). The repo's earlier reading of Valoria on those axes is `research/by_lane/00_COMPARATIVE_ANALYSIS.md:302-336`
+("COMP"); the cells below were re-derived from the code at `51d7b05`, not copied from it. Precedent pointers name a file under
+`research/game_precedent_suite/` ("T07" = `tutorials/T07_mass_battle.md`, "R4" = `tables/R4_combat_social_rpgs.md`) and the game heading,
+and carry the source's own tag. Precedent is tier-3 reference: it shows what Valoria lacks or does differently, and decides nothing.
+
+### 7.1 The 20G axes, filled for Valoria
+
+| 20G axis (its poles) | Valoria as built | as proposed | nearest verified precedent |
+|---|---|---|---|
+| **1 population resolution** (individual → household → typed pool → token → absent) | two tiers at once: 46 named persons as individual objects [R]; the populace as one acting Person per settlement (37 cohorts at `weight` 2), a token whose size nothing writes at runtime [R]; population is fixed at build and only falls (83 → 74 persons at seed 0 in two seasons, every death combat) | growth at CENSUS to capacity (J-C-9, COMP:534) [P]; hunger binds settlements (RB-5) [P] | individual citizens who age five times a year: Banished (T04 [V3 wiki Seasons, Citizens]); pops by class: Imperator (T12 [V3 IIa]) |
+| **2 named-agent cardinality** (none → scarce and capped → many → unbounded) | scarce and closed by ruling, not by a slot rule: 46, a closed cast "for now" (ED-WR-0011, ruled Option A, `registers/editorial_ledger_wr_archive.jsonl`; `loop/census.py:39-40` "NO CLOCK GENERATES ANYTHING"); CENSUS individuation exists and fired 0 times in seeds 0-2 [W]; falls by death only (46 → 37 named at seed 0 in two seasons) | births parked on the ruling ("We will return much later") | a hard cap of eight knight slots: Knights of Honor II (T13 [V3 WK Royal Court]); 1,000+ playable officers: Romance of the Three Kingdoms VIII Remake (T13 [V3 R8 3100]) |
+| **3 contested object** (land / allegiance / labour / time / logistics) | the body (`fight`, `accept`) [R]; a standing, a proposition or a matter (the social roll) [R]; seats (`confer`, one success in three seeds) [W]; stores (`requisition`, 0 successes) [W]; land by `seize`, licensed by members present (0 formed) [W], and a field only on a hand-built march [W]; allegiance moves only by a person's own `commit` / `release` [R]. Labour and time are uncontested: yield reads a Site's condition and no person (`loop/matter.py:589-591`), and there is no clock to race | land by occupation (IN-13, COMP:311) [P]; troops levied from settlements (J-C-2) [P] | allegiance: Pax Pamir (T15); labour: Banished (T04); time: Against the Storm, lost at Impatience 14 (T15 [V3 wiki; Steam]); logistics: Manor Lords (T04) |
+| **4 player position** (administrator above the system ↔ embedded actor) | none in the loop [R, an absence]; a callback seat in the harness [W]; outside the loop a stdin-played social contest and two designer workbenches (§2.1) [W] | embedded: "for a player character the player IS the decision procedure" (`architecture/meta/04_CODE_ARCHITECTURE.md:844-846`); IN-46 played fight, IN-47 character-sheet space (D-2) [P] | embedded and continuing through an heir: Crusader Kings III (T01 [V3 GF `reactive_advice_succession_desc`]); administrator who "never command[s] a dwarf directly": Dwarf Fortress (T03 [V3 DFq]) |
+| **5 control channel** (rung 1 direct order → 2 zone → 3 delegate → 4 lobby a body) | a person commands only his own acts: one verb and subject from the menu per scene slot (rung 1) [R]; rung 3 inert: `dispatch` writes nothing (`verb_table.yaml:380`) and an `issue`d writ binds nobody (I1 verification claim 4) [R as an Event, no effect]; rung 4 partly: `petition` / `open_case` → a bench's `determine` (one disposal, seed 1) [W]; rung 2 absent [D] | the vote over commitments is blocked on J-4 (COMP:313) [P] | rung 2: Dwarf Fortress zones and stockpiles (T03 [V3 DFq]); rung 3: RTK XIV area overseers (T13 [V3 R14 4200]); rung 4: Victoria 3's three-phase law enactment (T01 [V3 V3REF defines + laws]) |
+| **6 coupling latency** (immediate / shock-punctuated / lagged cohort) | one round: an Event deposits at WITNESS in the round it happens and can shape the next round's question (`loop/driver.py:510`) [R]; shocks: a death closes every tenure naming the dead (the King dies at tick 0 in every seed and vacates two seats) [R]; a slow lag on belief only: claim decay 5 a season [R]; no lagged cohort: population is fixed and births are ruled out for now; the one scheduled lag, the 4-season `oblige` term, never renewed (`term.renewed` 0) [W] | a lagged population (J-C-9) [P] | lag: Banished, where children take about ten years to work (T04); shock: at a death the succession law picks the heir and titles may split: Crusader Kings II (T12 [V3 CK2F Succession Laws 2018-01-31]); scheduled lag: Victoria 3 law checkpoints about every 100 days (T01 [V3 V3REF defines + laws]) |
+| **7 durability and reset** (persistent / ephemeral / ephemeral with meta-progression) | persistent, and nothing halts: the season reports `endings_reached` (§2.3), whose victory row is unreachable in computed play by its own note; no ending reached in seeds 0-2 [R as a read; reaching one W] | IN-27's relational victory is the built Query; GD-1's Accord, Stability and sustain clauses have no carrier (`rosters.yaml:2531-2541`) | ephemeral with meta-progression: Against the Storm (T15 [V3 wiki; Steam]); game over at no heir or at 1453: Crusader Kings III (T01 [V3 GF `game_over_desc`]) |
+| clock count (discipline, not an axis) | one world clock, `w.tick` (one season), with five rounds as a driver-local index; a fight (≤ 12 turns) and a battle (≤ 18 ticks) run to completion inside one step: auto-resolve only [R] | a paused, played fight (IN-46) would give the second clock a player [P] | the per-battle choice of fighting or auto-resolving: Total War (T07 [V3 manual p21, p47]) |
+| legibility (discipline) | no surface [R, an absence]; closed-form odds exist and are shown to no one, and the only helper understates them (§6 #13); refusals are Events kept in the actor's own ledger; the designer workbenches show branch odds outside the loop [W] | "No state is hidden from the player" (AX-7, `architecture/meta/01_AXIOMS.md:301-302`); IN-47 [P] | the pass probability shown on hover: Disco Elysium (R4 [V2 gry-online.pl poradnik]); the loss timer given a face ("Impatience"): Against the Storm (T15) |
+
+### 7.2 The 20G asymmetries and empty cells, against Valoria
+
+| 20G asymmetry | Valoria | evidence |
+|---|---|---|
+| A1 allegiance with a delay | crossed in shape (belief travels by telling and regard is read at choice time), not delayed | `news.told` 4 / 7 / 6 in seeds 0-2; `loyalty` is computed and read only at world-gen to seed stance (`data/cast.py:328`; `harness/populated.py:620, :1047`) |
+| A2 zone plus delegate | not crossed | rung 2 absent, rung 3 inert (§7.1 row 5) |
+| A3 conscription that removes a cohort | not crossed | an army is the faction's members present (`queries/world_q.py:1473` `mustered`); no levy verb; one Felled deletes a cohort whole, so war removes eaters and no yield |
+| A4 relational victory | partly built | `endings_reached` scores holds under one faction (IN-27); unreachable in computed play |
+| A5 graduated agent layer | crossed in mechanism, not in data | every consequence ships behind a fixture dial with a zero control (`body_step`, `age_step`, `illness_rate`, `telling_privacy`, `confliction_weight`, `scar_weight_shift`) and the chooser's τ = 0.1; the 37 cohorts carry no pursuits |
+| A6 ephemerality with carry-over | not applicable | persistent |
+| A7 dual-use political currency | not crossed | no currency; `coin` is registered and no site yields it (file 01 §5) |
+| A8 scarce named agents over an anonymous many | structure crossed, loop not | 46 named over 37 cohorts; no steward acts on a populace, and yield reads no people |
+| A9 belief with provenance | crossed; deceit absent | every Claim keeps `source` and `chain` (`state/carriers.py:291-348`), refracted by remove; no lie verb; forgery inert at the ceiling; chained claims nearly unused (0 / 0 / 1 alive after two seasons in seeds 0-2, round-3 probe) |
+
+20G's empty cells, read against Valoria: **1** fine populace × scarce named agents: the structure is there (46 named over 37 cohorts), the
+loop is not. **2** labour contested between players: empty. **3** lagged allegiance: crossed in shape, thin in delivery. **4** zone and
+delegate together: empty. 20G bounds these itself: "Read 'empty' as corpus-bounded" (its §2.3, naming Dwarf Fortress, RimWorld, the Victoria
+series and Frostpunk as likely occupants); the precedent suite covers all four (T03, T01, T04).
+
+### 7.3 The handles the round-2 audit found missing (file 13, audit L)
+
+| handle | Valoria as built | nearest verified precedent |
+|---|---|---|
+| **action economy across subsystems** | one budget for every subsystem, in scene actions per season: `max(1, 5 + live holds − body bands − legs)`; a scene of more than one act costs 2; ceiling 5 scenes × 2 = 10 actions; no verb has its own action price; budgets drift up with holds (§5.3). Per-subsystem costs and degrees: file 01 §3 | up to two actions a turn, each court card usable once: Pax Pamir (T15 [V3 p8-9]); two actions a season: King of Dragon Pass (T16 [V3 manual]); Body Points per command, refilled each season: Genghis Khan II (T13 [V3 IA:GK2 l.467-490, 705-718]) |
+| **in-world time per season / round / tick** | one tick is one season and `w.tick += 1` is the only advance (`loop/driver.py:519`); five rounds per season are a driver-local index with no stated duration; no year exists (`season_of_year` is `None`, `queries/world_q.py:954`); a combat turn is "~10 s"; a battle tick has no stated duration. File 01 §4 | one turn = one year: Old World (T01 [V3 FW-OW]); one turn per season: Rome II (T12 [V3 R2M 0015a]); one turn = one month: Dominions (T17 [V3 IW5:introduction_to_dominions]); five seasons then Sacred Time: King of Dragon Pass (T16 [V3 manual]) |
+| **campaign length and end state** | none: the realm runs as many seasons as the harness asks; nothing halts; endings are reported and none is reached; no world clock (the MS track has no caller) | a default end date of 1453 and game over without an heir: Crusader Kings III (T01 [V3 GF]); a default 300-turn limit: Oriental Empires (T12 [V3 OEW FAQ]); "no win state": Banished (T04 [V3 steam news]) |
+| **resolution families, with genre analogues** | (a) social path and graded inquiries: a success-counting d10 pool against an obstacle, read off a four-band margin ladder: a bell like 2d6, but in whole steps (one Ob step moves Partial-or-better by up to 32 points at pool 2; T01 tutorial) [R]; (b) personal combat: a beat-level duel simulated to the first felling inside one step, degree off the subject's wound tracker [R]; (c) mass battle: a 51 × 51 grid with Lanchester-linear casualties, auto-resolved at ENCOUNTER [W]; (d) governance, economy, travel, NPC life, factions: deterministic typed preconditions, no draw [R]; (e) the chooser: a utility score with Gumbel sampling at τ = 0.1 [R] | (a) 2d6 + skill against a difficulty: Disco Elysium (T05 [V3 DEw/Skills]); a flat d20 against a DC: Baldur's Gate 3 (T05 [V3 BGw/Dice_rolls]); (b), (c) auto-resolve beside a played battle: Total War (T07 [V3 manual p21]); a square-grid wargame: Field of Glory II (T07 [V3 FoG2 Medieval manual 2022-07-25]); (e) needs-and-traits autonomy for every unplayed Sim: The Sims 4 (T10 [V3 wiki Free_will]) |
+| **sources and sinks per resource** | grain and salt: harbour yield in, cohort larder draw out; ore: no reader; timber: the works cost; coin: none; stores never cap, spoil or cost upkeep (realm stores 0 → 9,250 in two seasons, every seed). Full table: file 01 §5 | per-minute maintenance on most buildings: Anno 1800 (T10 [V3 wiki Marketplace]); heat allocated per district and paid in coal or oil: Frostpunk 2 (T04 [V3 steam 1.3]) |
+| **player-interface position** | none in the loop; a test-only callback seat; a stdin social contest and two designer workbenches outside it (§2.1) | a pre-battle panel with a strength comparison and projected result: Total War (T07 [V3 manual p21, p47]); one played Sim among autonomous ones: The Sims 4 (T10 [V3 wiki Free_will]) |
+| **information model against standard fog of war** | no map and no sight radius: each person holds a bounded ledger (cap 200) fed only by WITNESS channels (co-location first; the chronicle broadcasts binding-row kinds realm-wide), refracted by remove, decaying 5 a season; the World holds the truth and no decision code reads it (AX-2). The fog is epistemic and per person, not spatial | map fog as a setup option: Shadow Empire (T18 [V3 manual 3.1.3.2]); a reconnaissance level that sets how much of the enemy order of battle you see: Ultimate General (T07 [V3 ugcw wiki]); a fixed truth beside a separate player belief: Return of the Obra Dinn (R5 [V2 wiki General]); "player knows only what they find": Shadows of Doubt (R5 [V2 store page]); hidden schemes that leak through breaches: Crusader Kings III (R1 [V2 GF]) |
+
+### 7.4 Per-subsystem handles (the round-1 table, corrected in round 3)
 
 | axis | resolution core | PC | MB | SC | FI / information | GV · FA · EC · WT · NP | chooser / persons |
 |---|---|---|---|---|---|---|---|
-| resolution style | success-counting d10 pool with a −1 face; fixed TN 7; variable Ob; Gaussian stand-in for big pools [R] | Gaussian roll per exchange within many probability draws; degree from accumulated damage [R, default build] | own d10 per side, each net the other's Ob; Lanchester casualties; stochastic rout [W: no field fought] | one pool roll per act [R]; exchange-race with judged tally [W, kernel] | one borrowed roll; table lookup of what is uncovered [R, empty yield] | none: deterministic state writes [R/W by verb] | utility score + Gumbel sampling, τ = 0.1 [R] |
-| granularity | one roll | beat → ~10 s engagement → ≤ 12 turns | 51×51 cells, 18 ticks [W] | one act; 1–5 exchanges (kernel) | one act per inquiry | one verb per scene action; ≤ 5 scenes of ≤ 3 acts per person-season (~8–10 acts observed) | one question per deliberation |
+| resolution style | success-counting d10 pool with a −1 face; fixed TN 7; variable Ob; Gaussian stand-in for big pools [R] | Gaussian roll per exchange within many probability draws; degree from accumulated damage [R, default build] | own d10 per side, each net the other's Ob; Lanchester casualties; stochastic rout [W: no natural field; runs in the loop on a hand-built settlement march] | one pool roll per act [R]; exchange-race with judged tally [W, kernel] | one borrowed roll; table lookup of what is uncovered [R, empty yield] | none: deterministic state writes [R/W by verb] | utility score + Gumbel sampling, τ = 0.1 [R] |
+| granularity | one roll | beat → ~10 s engagement → ≤ 12 turns | 51×51 cells, 18 ticks [W] | one act; 1–5 exchanges (kernel) | one act per inquiry | one verb per scene action; ≤ 5 scenes of ≤ 3 acts per person-season (seed 0, per acting person per tick: 8.1 / 9.4 formed, 6.4 / 7.7 reaching the fold, at most 15) | one question per deliberation |
 | scale | every | 1 v 1 only | army v army [W] | person ↔ person / bench | person | hearth to realm on one ladder | all |
 | state model | — | scalars; persistence only as `Person.body` | troop counts, HP, per-cell morale [W] | stateless (season); Standing/Reserve/Room (kernel) | event log + per-person claim ledgers | integer stores, 0–1000 condition, typed edges, computed aggregates | weight vectors, signed stance, bounded belief store |
 | agency | engine rolls | chooser picks verb and target; engine picks every move | chooser picks `march`; defender has no chooser | chooser picks verb and target; opponent static | engine-chosen for all | every act is a person's; a seat grants a remit; no faction turn | autonomous for all; player is intended as "embedded" (D-2/IN-47) |
-| information | closed-form odds exist, shown to no one | scene invisible except as witnessed Events | none in-battle | no deception channel | strictly subjective; chooser reads only own ledger; governance acts public | co-location is visibility; chronicle broadcasts binding acts | cannot see odds, opponent, place, witnesses, clock, contents |
+| information | closed-form odds exist (Gaussian, understating), shown to no one | scene invisible except as witnessed Events | none in-battle | no deception channel | strictly subjective; chooser reads only own ledger; governance acts public | co-location is visibility; the chronicle broadcasts binding-row Event kinds | cannot see odds, opponent, place, witnesses, clock, contents |
 | failure model | `Failure: []` lawful | lethal on Felled; wound scales `body`, floor 1; actor never written | loser's bodies scaled; grudge; winner untouched [W] | failed act costs the slot, writes nothing | silent: inquiry failure and refusal teach nothing | refusals are Events; unpaid service lapses | acts fail at the fold, cost a scene, leave a belief (except inquiries) |
-| content model | — | authored physics tables; generic combatants | authored troop/terrain tables; armies from persons | authored closed sets; no dialogue | generated from Events | 31 authored seats, 37 settlements, 17 territories; nothing founds in the run | 46 authored cast, 37 cohorts |
+| content model | — | authored physics tables; generic combatants | authored troop/terrain tables; armies from persons | authored closed sets; no dialogue | generated from Events | 31 authored seats + 1 derived, 37 settlements, 17 territories; nothing founds in the run | 46 authored cast, 37 cohorts |
 | pacing | — | resolved in RESOLVE | one call at ENCOUNTER [W] | one act per scene slot | findings deposit at WITNESS in the same round, shape the next round's question | seasonal | 5 scene releases per season |
-| **player position** | — | none today; IN-46 planned | — | — | `in_loop: false` for an investigation mode | — | "embedded" per repo frame; IN-47 planned |
+| **player position** | — | none today; IN-46 planned; the combat workbench configures and traces a duel for a designer | none; the mass-battle workbench configures an army for a designer | none in the loop; a standalone stdin kernel harness, `agon_harness.py` | `in_loop: false` for an investigation mode | — | "embedded" per repo frame; IN-47 planned |
 | **control channel** | — | verb choice only | `march` only | verb + target | verb + target | remit acts via seats | the verb menu |
 | **contested object** | the obstacle | the body | a field (a place) | a standing, a proposition, a matter | a record's secrecy | stores, seats, sites | — |
-| **ending / progression** | — | death | — | — | — | none in the loop (deleted `victory`) | scar/conviction only; no growth path |
+| **ending / progression** | — | death | — | — | — | endings reported each season, none reached (IN-27); nothing halts | scar/conviction only; no growth path |
 
-The repo already holds a sourced frame of 20 comparison games (`research/by_lane/00_COMPARATIVE_ANALYSIS.md:302-336`: population resolution,
-named-agent cardinality, contested object, player position, control channel, coupling latency, durability/ending, clock count, legibility) and
-names Mount & Blade as the closest whole-game analogue (`research/valoria_game_precedent_companion_v1.md:506`). I did not read these; the
-bold axes above are taken from that frame as the audit reported it.
+**TW** has no column above because nothing of it reaches the loop: resolution a d10 pool at TN 7 [W]; state two integers per
+practitioner, a recoverable stretch of up to 6 over a lasting resting point [W]; failure model none in the loop, the crossing only
+relabels and latches [W]; control channel none (no thread verb is resolvable). Nearest verified precedents for a cost track of this
+shape: Sunless Sea's Terror, which rises in the dark and is capped back to 50 in port (T08 [V3 SSf Terror, Returning_to_London]); Don't
+Starve's revive bought with 30 maximum Health (T09 [V3 DSw Meat_Effigy]); Pathologic 2's death penalties, which bind every save in the
+file (T09 [V3 PLw Game_Mechanics]). The closest whole-game analogue the repo names is Mount & Blade
+(`research/valoria_game_precedent_companion_v1.md:506`); the suite's Bannerlord and Warband tutorials are T02.
 
 ---
 
@@ -329,16 +386,40 @@ verbs-03 §III.5, not in conflict.
   (PC/EC/WT/NP rows); the designed-and-deleted world layers, D-2 and the JQ forks were omitted; the R-08 reading was wrong.
 - **Round-2 audit of the tutorials** (six more auditors: G, H, I, J, K accuracy per tutorial; L cross-tutorial consistency, verb coverage and teaching
   completeness). Finding counts: G 15, H 16, I 19, J 17, K 14, L 23. Load-bearing outcomes: the scene-cost rule was wrong in six tutorials (a multi-act
-  scene costs 2; the "dispute" is resolved); six authored seats (the throne among them) can never be refilled once vacant; occupation for `seize`
+  scene costs 2; the "dispute" is resolved); six authored seats (the throne among them) can never be refilled once vacant (seven built seats,
+  counting the unauthored `off_npc_084`: round 3, file 13 Part 3 R-F1); occupation for `seize`
   is members present, not only a march; the rout rule for a one-subunit army is 100 troops, not 80; the first Column experiment never took effect;
   inquiries do not draw on any capability key; `forgive` raises the stance term. All were applied by the tutorial writers after re-opening the cited lines.
 - **Control run.** An independent script re-ran the realm (seeds 0, 1, 2) and showed (a) results are deterministic across processes, (b) the
-  first draft's per-verb counts mixed counting methods, (c) several "never attempted" statements are seed 0 only.
-- **Not done / residual risk.** The corrected tutorials were not audited a third time (the repo's own rule against looping a gate). The reference
-  appendices (Part E) are first-draft text with a known error list; the tutorials and the Errata supersede them. Lexicon appendices still rest on a first-pass gap
-  register that describes itself as stale. `.designs/` (quarantined) was not read. Quantities from runs are one horizon (two seasons) and three
-  seeds. The 72% sampler-override figure is a harness-slice reading, not a season measurement. Why `give`, `march` and `commit` are refused
-  was not traced.
-- **Status.** Everything under `proposals/` is PROPOSED and ratifies nothing; this suite is reference, not a ruling, and is not committed.
+  first draft's per-verb counts mixed counting methods, (c) several "never attempted" statements are seed 0 only. Round 3 found that its "att"
+  column counts acts that reached the fold, not acts formed (§0, §6 #12). It is byte-identical on `51d7b05`.
+- **Round 3 (precedent dispositions and verification).** A verified precedent suite (`research/game_precedent_suite/`) was routed game by game
+  to the ten tutorials; thirteen read-only Opus critics gave every item a disposition (HAS / LACKS / DIFFERS / CONTRADICTS / DISCARD); an
+  independent probe re-checked the code-capability inventory those critics read; ten appliers made the CONTRADICTS edits after re-opening
+  each cited line at `51d7b05`; this file, file 01 and file 13 were revised by one more applier, who re-ran the decisive probes at `51d7b05`
+  (control run, combat seam trace, hand-built march, seat conferral and revocation scans). The rulings are file 13 Part 3; §7 was rebuilt
+  from 20G's own axes rather than the audit's report of them.
+- **Not done / residual risk.** The corrected tutorials were not given a third accuracy audit (the repo's own rule against looping a gate);
+  round 3 was a comparison pass with verification probes, not a re-audit. The reference appendices (Part E) are first-draft text with a known
+  error list; the tutorials and the Errata supersede them. Lexicon appendices still rest on a first-pass gap register that describes itself as
+  stale. `.designs/` (quarantined) was not read. Quantities from runs are one horizon (two seasons) and three seeds. The 72% sampler-override
+  figure is a harness-slice reading, not a season measurement. `march` and `commit` refusals are traced (I1 verification claim 2: no natural
+  march names a settlement; computed `commit`s rarely name a Proposition); why `give` is refused was not traced.
+- **Status.** Everything under `proposals/` is PROPOSED and ratifies nothing; this suite is reference, not a ruling. It was merged in PR #495;
+  the round-3 revision is a later change on top of it.
+
+### Round-3 corrections
+
+Each line: old claim → new claim (evidence; the R-ids are file 13 Part 3). Probes re-run at `51d7b05`.
+- Header "HEAD `a4ca9a5`" → written at `a4ca9a5`, revised at `51d7b05`; control run byte-identical there.
+- §0 "att" = "acts that reached RESOLVE" → acts that reached the fold, with formed counts where they differ (R-F3; `loop/resolve.py:377-379`); TESTS-ONLY covers behaviour seen only on hand-built acts (R-F5).
+- §1 fact 2: the zeros are mostly formation defects; the effects run on hand-built acts (I1 verification claim 5).
+- §2.1 "No player interface exists" → none reaches the season loop; `agon_harness.py` and two designer workbenches outside it (R-F4); Queries row adds `endings_reached`, `legitimacy`, `stability` (R-F12); WITNESS row: chronicle is a kind filter (CROSS C5).
+- §2.3 "no ending condition" → endings reported each season since PR #494, unreachable in computed play, none reached, nothing halts (R-F12).
+- §3: formed counts for `fight`, `accept`, `tell`, `speak`, `argue`, `determine`, `research`, `surveil`, `examine` (R-F3); MB grade note on the hand-built field (R-F5); `post_remit` executes at seeds 1-2 (R-13); GV seats and revocation (R-F1, R-F2); EC and WT causes (R-F9, R-F10); NP per-seed grades and the births ruling (R-F7).
+- §5.1 binding acts broadcast → binding-row Event kinds broadcast (CROSS C5). §5.2: wound loop runs (R-14); lost-field loop fought by hand (R-F5); hunger enters no score (R-F10); `give` executed once at seed 2. §5.3: budget drift and acts per acting person per tick (R-F6).
+- §6 rows 2, 6, 7, 8 revised; rows 11 (no succession, R-F1), 12 (the ctl column, R-F3), 13 (the odds helper, R-F11) added.
+- §7 rebuilt from 20G's own axes, asymmetries and empty cells, with graded cells, the seven handles audit L listed as missing, and a precedent pointer per handle into `research/game_precedent_suite/`; the round-1 table kept as §7.4 with corrected cells and a TW note.
+- §9: round-3 method added; "the suite is not committed" → merged in PR #495; `march` and `commit` refusals now traced.
 
 ---
