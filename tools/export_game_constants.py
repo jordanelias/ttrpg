@@ -72,7 +72,8 @@ MAPPING = {
     # not visible from here) simply has no oracle value for either constant.
     # VICTORY_SUSTAIN_SEASONS LEFT THIS TABLE at plan position `28-iii` (SPINE-DELETE, 2026-10-01). Its
     # Python owner, `engine.autoload.SUSTAIN_SEASONS`, lived in `engine/autoload/victory.py`, which was
-    # deleted (the oracle models no ending today -- `H-176` in engine/season/hole_register.yaml). Same
+    # deleted (the retired oracle modelled no ending; the season loop reports `endings` since v9 IN-27 --
+    # `H-176` in engine/season/hole_register.yaml -- and carries no sustain count). Same
     # treatment the four COHERENCE_* pairs got above: an owner that retired leaves the table rather than
     # being re-pointed by name. The port's own constant is untouched by this repo; the parity reader
     # (`valoria-game/tools/check_constants_parity.py`) simply has no oracle value to compare it to.

@@ -2372,7 +2372,7 @@ rosters:
       its two `systems/` rules from here instead of spelling directories. ⚠ [ASSUMPTION, position
       `30`] the four stubs' homes follow `ED-IN-0284`'s own reasons -- `articulation` and `ui` are
       presentation (holonic §45's `game/`), `victory` is a set of conditions the host would
-      evaluate (`H-176`, unbuilt), `_architecture` is not a system and its subject is Layer 1's --
+      evaluate (`H-176`; built since as `world_q.endings_reached`, v9 IN-27), `_architecture` is not a system and its subject is Layer 1's --
       so none is a `systems/` home, and a `systems/<stub>/` directory, where one exists, stays in
       `R04_PENDING_SUBSYSTEMS` as `ED-IN-0284` rules (with `npcs`). `factions` keeps `systems/factions/` (`ED-IN-0283`: the folders are the
       homes of their systems); its automated play is `decision/` (A-25).
@@ -2402,7 +2402,7 @@ rosters:
     open: true
     note: >-
       THE PARTITION OF THE DEED KINDS BY THE ROUTE TO STANDING THE ACT TAKES, read by
-      `queries/world_q.py::reception` and nothing else. `dominance` lists the COERCIVE kinds -- an act
+      `queries/world_q.py::reception` and, since v9 IN-23, `queries/person_q.py::UNREST_KINDS`. `dominance` lists the COERCIVE kinds -- an act
       that takes from, or forces, another (a death, a wound, a field won, a seizure, a requisition);
       `prestige` is EVERY OTHER deed kind, the complement, so it carries no list: the one behaviour
       step 20 rules (*a failure against a dominance-standing speaker zeroes that hearer's
@@ -2413,7 +2413,8 @@ rosters:
       Every member must be a deed kind (`data/verbs.py::DEED_KINDS`); `data/verbs.py::_check_dominance_kinds` refuses at
       import otherwise. [ASSUMPTION; medium; Jordan to correct -- the membership: which acts are
       coercive is stated nowhere in the corpus; revert: an empty `dominance` list, and no hearer's
-      weight is ever eroded.]
+      weight is ever eroded -- and, since v9 IN-23, `person_q.UNREST_KINDS` is empty too, so
+      `person_q.stability`'s deed half counts nothing.]
     values: [dominance, prestige]
     kinds:
       dominance: [person.died, body.changed, field.won, rung.seized, record.seized, requisition.taken]
@@ -2485,6 +2486,71 @@ rosters:
       costed `surveil` (ED-FI-0009) are unbuilt and belong to their own positions.
       Why a trail is reachable only through a plant: see `epistemic.trail_of`.
     values: ["record.forged"]
+
+  # ── v9 IN-27 (END-VICTORY; H-176, GD-1): THE ENDING VOCABULARY ────────────────────────────────────
+  # Appended last, `inquiry_modules`' reason: no line-cited row above moves. Here and not a file of its
+  # own: a closed set of definitions the loop reads is a roster (this file's header), and `modules:` is
+  # the sibling row shape (`members:` keyed by identity, each row refused by name at load).
+  endings:
+    source: >-
+      v9 IN-27 (END-VICTORY), on #457 D6's adopted answer (`workplans/valoria_master_workplan_v9_part5.md`
+      RS-21 row 3): *"the ending vocabulary is a Query over holds and seats that the season reports --
+      never an actor"*. Read by `queries/world_q.py::endings_reached`, reported by
+      `loop/driver.py::SeasonDriver.season` as `endings`.
+    cite: "H-176; GD-1; #457 D6; T-b"
+    note: >-
+      WHAT ENDS A PLAYED REALM, as opposed to its running out of seasons. Terms, defined where the
+      loader reads them (`CLAUDE.md` §4): an ENDING is a row here; it is REACHED when every hold its
+      `holds:` selects is live and every holder coheres under `under:`, AND an act opened at least one
+      edge the condition stands on (`T-b`: the realm as built reaches nothing; a holder's `commit` is
+      such an edge only when it is his sole live commit to that faction, so a redundant `commit` act is
+      not credited). ⚠ THE CROSSING ITSELF MAY BE AUTHORLESS: an old `commit` act is credited while a
+      MATTER death (no act) completes the condition, and no pure read can locate the crossing, because
+      the moment the condition was last false is not stored (`T-a`) [ASSUMPTION; medium; Jordan to
+      correct]. Revert: every edge the condition reads opened by an act -- which makes
+      `peninsular_sovereignty` unreachable by construction (every seeded territory hold re-opened by an
+      act, and `terr_T15`'s, unheld at build, by a verb that does not exist, `H-186`). A `holds:`
+      selects by a world field, EXACTLY ONE of `{post: <an offices.yaml seat post>}` (every Office with
+      that post; a loop-built seat keeps its `off_<holder>` id, so an `offices.yaml` id names nothing
+      the loop holds) or `{rung_kind: <a rung_kinds member>}` (every rung of that kind UNDER A `realm`
+      RUNG, held at or above it, `holder_faction_of`'s walk; `terr_T16`, Schoenland's foreign root, is
+      outside the realm and not selected).
+      `under:` is a `factions` member, or `one_faction` (every selected holder under the same faction,
+      whichever). `victory:` marks GD-1's win path; GD-1 permits exactly one, and the load refuses a
+      second. A row stores nothing and is not an actor: reaching one emits no Event, halts nothing and
+      writes nothing (`SeasonDriver.season` reports it). ⚠ NOT CARRIED, BY THE CUTS: no stored
+      stability or legitimacy value, no threshold counter, no clock (#457 §5; `T-a`, `T-b`, `T-c`).
+    members:
+      peninsular_sovereignty:
+        victory: true
+        holds: {rung_kind: territory}
+        under: one_faction
+        source: >-
+          GD-1 (`canon/04_game_design_constraints.md`): *"Peninsular Sovereignty is the sole victory
+          condition ... control all 15 territories"*.
+        assumption_note: >-
+          [ASSUMPTION; medium; Jordan to correct] GD-1's other clauses are not carried: `Accord >= 2`
+          and `Political Stability <= 6` read stored scalars #457 §5 cuts, `sustained 2 consecutive
+          seasons` is a clock, and `treaties counting` has no carrier. Every territory under a `realm`
+          rung counts, not a fixed 15; the foreign root (`terr_T16`, Schoenland's, kept out of the realm
+          by `build_realm`) is excluded. UNREACHABLE IN COMPUTED PLAY whoever holds what: `terr_T15`
+          is Uncontrolled at build (`H-186`) and no verb opens a `hold` on any territory (`H-176`).
+          A consumer that treats `victory: true` as the game's end must carry this caveat itself --
+          the row is GD-1 minus its sustain, Accord and Stability clauses, and nothing in the loop
+          halts on it (`SeasonDriver.season` only reports `endings`).
+          Revert: Jordan names a carrier for any of them.
+      theocracy:
+        victory: false
+        holds: {post: King}
+        under: "Church of Solmund"
+        source: >-
+          #457 D6's context (RS-21 row 3), Jordan 2026-10-04: *"ratcheting of Church as faction until it
+          attempts to seize lands and become a theocracy"* -- an endpoint. NOT a victory: GD-1 strikes
+          `Altonian Theocracy` as an alternate win path.
+        assumption_note: >-
+          [ASSUMPTION; medium; Jordan to correct] "become a theocracy" is read as the King's seat held by
+          a person who coheres under the Church of Solmund (a Church man crowned, or a king converted).
+          The land half ("seize lands") is not a condition. Revert: Jordan names the Church's endpoint.
 
 tables:
 

@@ -17,6 +17,7 @@ beside `write_matrix.yaml`'s loader because `season.data.matrix` needs it and
 
 from __future__ import annotations
 
+from dataclasses import dataclass as _dataclass, fields as _fields
 from typing import Optional
 
 from . import files
@@ -1044,6 +1045,78 @@ def _load_modules(members: dict, kinds) -> dict:
 
 
 MODULES = _load_modules(roster_map("modules", "members"), MODULE_KINDS)
+
+
+# ---------------------------------------------------------------------------
+# THE `endings:` ROSTER (v9 IN-27, H-176, GD-1) -- the ending vocabulary, read by
+# `queries/world_q.py::endings_reached` and nothing else. `rosters.yaml: endings`' note defines the
+# terms; `_load_modules`' shape, validated at load for `_load_rosters`' reason.
+# ---------------------------------------------------------------------------
+@_dataclass(frozen=True)
+class EndingRow:
+    """One `endings` row as the Query reads it. ITS FIELDS ARE THE ROW GRAMMAR -- the keys a row may
+    carry beside an annotation (`note`, `*_note`) -- so the schema is written once, here. `holds` is
+    `(selector, value)`."""
+    victory: bool
+    holds: tuple
+    under: str
+    source: str
+
+
+#: This loader's own grammar (`_MODULE_FIELDS`' reason): the two world fields a `holds:` may select
+#: by, and the `under:` token that names no faction.
+ENDING_SELECTORS = ("post", "rung_kind")
+ENDING_ANY_ONE = "one_faction"
+
+
+def _load_endings(members: dict, factions, rung_kinds, posts) -> dict:
+    """`{ending id: EndingRow}`, every row refused by name if it is malformed, and the roster refused
+    if it marks more than one row `victory` (GD-1)."""
+    keys = [f.name for f in _fields(EndingRow)]
+
+    def bad(name, what, needs):
+        raise Unspecified(f"`endings` row {name!r} {what}", "rosters.yaml -- endings", needs=needs,
+                          law="v9 IN-27 -- an ending is defined by who holds which seats or rungs, "
+                              "read off the world; a row the Query cannot read reaches nothing silently")
+    out = {}
+    for name, row in members.items():
+        if not isinstance(row, dict):
+            bad(name, "is not a row", f"a mapping with {keys}")
+        extra = sorted(k for k in row if k not in keys
+                       and not (k == "note" or str(k).endswith("_note")))
+        if extra:
+            bad(name, f"carries unknown key(s) {extra}",
+                f"only {keys}, or an annotation spelled `note` or `*_note`")
+        if not isinstance(row.get("victory"), bool):
+            bad(name, f"has victory {row.get('victory')!r}", "`victory: true` or `victory: false`")
+        holds = row.get("holds")
+        if not isinstance(holds, dict) or len(holds) != 1 or next(iter(holds)) not in ENDING_SELECTORS:
+            bad(name, f"has holds {holds!r}", f"exactly one of {list(ENDING_SELECTORS)}")
+        (sel, val), = holds.items()
+        # a list or mapping here is unhashable against `posts` and would raise a bare TypeError
+        domain, why, wants = ((posts, "no offices.yaml seat carries", "a post of offices.yaml: seats")
+                              if sel == "post" else
+                              (rung_kinds, "is not a rung_kinds member", "a rung_kinds member"))
+        if not isinstance(val, str) or val not in domain:
+            bad(name, f"selects {sel} {val!r}, which {why}", wants)
+        under = row.get("under")
+        if not isinstance(under, str) or (under != ENDING_ANY_ONE and under not in factions):
+            bad(name, f"has under {under!r}", f"a `factions` member, or {ENDING_ANY_ONE!r}")
+        if not isinstance(row.get("source"), str) or not row["source"].strip():
+            bad(name, "names no `source:`", "the GD-1 clause or ruling the row rests on")
+        out[str(name)] = EndingRow(row["victory"], (sel, val), under, row["source"])
+    won = sorted(n for n, r in out.items() if r.victory)
+    if len(won) > 1:
+        raise Unspecified(
+            f"`endings` marks {len(won)} rows `victory: true` ({won})", "rosters.yaml -- endings",
+            needs="one victory row; every other row is an ending, not a win path",
+            law="GD-1 -- *Peninsular Sovereignty is the sole victory condition*; the alternates are STRUCK")
+    return out
+
+
+#: The `post`s an `offices.yaml` seat carries -- what an `endings` row's `post:` selector may name.
+OFFICE_POSTS = frozenset(s.get("post") for s in OFFICES_SEATS)
+ENDINGS = _load_endings(roster_map("endings", "members"), FACTIONS, RUNG_KINDS, OFFICE_POSTS)
 
 
 def office_faction(body: str | None, declared: str | None) -> str:

@@ -205,10 +205,10 @@ grades nothing) and `harness/soak.py`'s cost and act-mix grades (IN-20). `corpus
 `NOT-COMPUTABLE — closed by W23 + W26 + W30` [v8's reading, 2026-10-01; not re-run here]. Candidate gates:
 (i) THE BAR for proceedings, built at SC-01 step 16 (`22`; `801f733e`, B-N closed `cf69ceed`) as a test on seeds picked from a
 sweep (`engine/season/tests/test_sc01_the_bar.py`: the chain can close with zero authored acts, not that it usually does);
-(ii) `corpus_run`'s ARC ENDS becoming computable and (iii) a chronicle render, IN-37, neither built (the
+(ii) `corpus_run`'s ARC ENDS becoming computable, not built, and (iii) a chronicle render, `engine/season/harness/chronicle.py` (IN-37, landed `bd5d5b45`) (the
 `chronicle` witness channel's deletion at SC-01 step 13 is held, `hole_register.yaml` H-214: it waits on the `<rung kind>`
-reach channel). Path: SC-01 step 16 (landed `801f733e`) → IN-37 → IN-27 (#457 D6, the ending vocabulary:
-answered as the plan's recommendation, RS-21 item 3) (`_part3` §A(2)).
+reach channel). Path: SC-01 step 16 (landed `801f733e`) → IN-37 (landed `bd5d5b45`) → IN-27 (#457 D6, the ending vocabulary:
+answered as the plan's recommendation, RS-21 item 3; landed `6ae70998`) (`_part3` §A(2)).
 
 ### M3 — GODOT VERTICAL SLICE
 
@@ -257,14 +257,11 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | IN-12 | #453 steps 5, 5a, 11 and `give` + Rung (steps 6, 7, 9, 10, 13 landed: `5ea1bb47`, `664986ee`, `996c16dc`, `67686661`, `5da7c44e`) | IN/SC/SE/MB | BLK | per step | R-04, R-05 | B-R | `_part5` |
 | IN-14 | #457 BOUND-ATTENTION; H-92, H-10 | IN | ask-then | — | — | B-Z | `_part4` |
 | IN-18 | telling G5, G8 (step 2a, G1–G3 landed `ac9724fc`; G6 landed `66bf51f9`) | IN | BLK | G5's trigger, M0e > 0 (`oblige` landed `905b7a21`) | — | none (B-I closed `9d93cfab`) | `_part4` |
-| IN-23 | #457 CARRY-STABILITY | IN | B | — | — | B-U | `_part5` |
-| IN-27 | #457 END-VICTORY; H-176 (GD-1) | IN/FA | BLK | IN-37 | — | B-U | `_part5` |
-| IN-30 | `24h` P5 remainder; H-186 | IN/FA/SE | BLK | IN-27 | — | B-U | `_part5` |
+| IN-30 | `24h` P5 remainder; H-186 | IN/FA/SE | stopped | B-R (`raze`), H-149 | — | none | `_part5` |
 | IN-32 | H-182 ties | IN/FI | BLK | IN-06 | R-05 | B-S | `_part5` |
 | IN-33 | H-58 `exchange` | IN | B | — (reverted `cdc03f67`; restorable under §0.5: `ad2f930f`..`b5c4685d`) | R-05 | none (B-I closed `9d93cfab`) | `_part5` |
 | IN-35 | #457 FORCE-HAZARD; SEAM-CLOCK | IN/WR/SE | BLK | IN-06 | — | B-S | `_part5` |
 | IN-36 | #457 FORCE-FOREIGN | IN/FA/MB | BLK | IN-13 (landed `2e19aee8`; B-M closed `be02666e`) | — | B-V | `_part5` |
-| IN-37 | #457 STORY-READ | IN | B | — (SC-01 step 16 landed `801f733e`; B-N closed `cf69ceed`) | — | B-U | `_part5` |
 | IN-38 | `13`-rest | IN | B | — | R-09, R-06 | B-V | `_part5` |
 | IN-44 | SM-10, SM-12; A-24's wording | IN | J | Layer 0/1: Jordan's files | — | — | `_part8` (table, not an entry) |
 | IN-45 | `work` (`forge`, `carry`, `migrate` landed at B-K) | IN/SE | J | ED-IN-0297 (`needs_jordan`) | R-05 | none (B-K closed `c8d1db3a`) | `_part5` |
@@ -286,7 +283,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | SC-08 | — | SC | B | — (SC-01 landed; B-N closed `cf69ceed`) | — | B-O | `_part6` |
 | SE-02 | = IN-07 | — | — | — | — | B-T | `_part4` |
 | SE-04 | #457 CAST-POPULACE; H-170, H-171 | SE | BLK | IN-07 | — | B-T | `_part6` |
-| SE-05 | = IN-30 | — | — | — | — | B-U | `_part5` |
+| SE-05 | = IN-30 | — | — | — | — | none (= IN-30, stopped) | `_part5` |
 | SE-06 | SE-04 (c)'s vector half; ED-IN-0293 reading (b) | SE/IN | J | §J.2 row 4; ED-IN-0296 (written at B-X's close `2f0c0227`, `needs_jordan`) | R-06 (contributor) | B-Z | `_part6` |
 | MB-07r | J-18 (A): flip the depth support cap ON | MB | BLK | J (recalibration; the golden gate's time budget) | — | B-Z | `_part7` |
 | MB-08 | #445 U-1, U-2, U-6 | MB | LEAVE | named, unscheduled | — | B-Z | `_part7` |
@@ -301,13 +298,13 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | GO-05 | SM-13; ED-PC-0013 (1) | GO | BLK | GO-01 | — | B-Z | `_part7` |
 | GO-06 | `valoria-game` parity | GO | BLK | `valoria-game` checkout | — | B-Z | `_part7` |
 | FA-01 | #445 P-3; FORCE-FOREIGN's cast | FA | B | mechanism landed at B-J | R-04 | B-V | `_part7` |
-| FA-02 | = IN-30 | — | — | — | — | B-U | `_part5` |
+| FA-02 | = IN-30 | — | — | — | — | none (= IN-30, stopped) | `_part5` |
 | FA-03 | #453 §10.2 faction map | FA | LEAVE | reference | — | B-Z | `_part7` |
 | FA-07 | the original design's faction-vs-faction mechanisms | FA | LEAVE | named, unscheduled | — | B-Z | `_part7` |
 
 ## 4. CROSSWALK — v8 and the proposals ↔ v9
 
-**Batches B-A … B-T, B-U, B-V, B-X, B-Y, B-Z** (B-Y placed by ruling, RS-28, B-W closed `3bf936ee`; B-X closed `2f0c0227`, placed by RS-30; members, shared files, entry gates, exit instruments, re-records, lanes, handoff cards): `_part3` §B, the only copy.
+**Batches B-A … B-T, B-U, B-V, B-X, B-Y, B-Z** (B-Y placed by ruling, RS-28, B-W closed `3bf936ee`; B-X closed `2f0c0227`, placed by RS-30; B-U closed `156f3e5d`; members, shared files, entry gates, exit instruments, re-records, lanes, handoff cards): `_part3` §B, the only copy.
 
 | v8 position · telling · §SM | v9 |
 |---|---|
@@ -331,13 +328,13 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 
 | #457 — `proposals/2026-10-04-forcing-churn-and-the-story-bar.md` | v9 |
 |---|---|
-| STORY-BAR · STORY-SOAK · STORY-READ | landed at B-C (IN-19, `harness/storybar.py`) · landed at B-C (IN-20, `harness/soak.py`'s grades) · IN-37 |
+| STORY-BAR · STORY-SOAK · STORY-READ | landed at B-C (IN-19, `harness/storybar.py`) · landed at B-C (IN-20, `harness/soak.py`'s grades) · landed `bd5d5b45` (IN-37, `harness/chronicle.py`) |
 | FORCE-WEATHER · FORCE-BODIES · FORCE-HAZARD (+ SEAM-CLOCK) · FORCE-FOREIGN | landed, `3544d568` · IN-34 (landed `44fdb4df`) · IN-35 · IN-36 (+ FA-01's cast) |
-| CARRY-INTERIOR · CARRY-SHORTFALL · CARRY-STABILITY | merged into IN-08 · IN-22 · IN-23 |
+| CARRY-INTERIOR · CARRY-SHORTFALL · CARRY-STABILITY | merged into IN-08 · IN-22 · landed `c4eb6f84` (IN-23) |
 | BOUND-LOOPS · BOUND-STAKES · BOUND-ATTENTION · BOUND-PAPER | instrument landed at B-C (IN-24, `harness/loops.py`; the church ratchet's bound waits on IN-12: IN-10 landed `fae9e623` without its loop half) · IN-25 (landed `ac9724fc`) · IN-14 · IN-26 (landed `ceadc2a7`) |
 | CAST-POPULACE · CAST-DISPOSITION | SE-04 · merged into IN-08 + IN-12 step 9 (landed `996c16dc`; J-13 (iii) the adopted interim; `tell` stays uncelled, G-1) |
-| SEAM-LADDER · END-VICTORY | merged into IN-04 · IN-27 |
-| §7 D1 · D2 · D3 · D4 · D5 · D6 | IN-35 · IN-34 (landed `44fdb4df`) · answered: no dated pins (T-c) · IN-36, FA-01 · A-24 → IN-06 · IN-27 (D2, D4, D6 answered as the plan's recommendation, RS-21) |
+| SEAM-LADDER · END-VICTORY | merged into IN-04 · landed `6ae70998` (IN-27) |
+| §7 D1 · D2 · D3 · D4 · D5 · D6 | IN-35 · IN-34 (landed `44fdb4df`) · answered: no dated pins (T-c) · IN-36, FA-01 · A-24 → IN-06 · IN-27 (landed `6ae70998`; D2, D4, D6 answered as the plan's recommendation, RS-21) |
 
 **#445** (`proposals/2026-09-30-character-and-play-surface/`): S-1 → landed at B-E (`ac9724fc`) · M-1/S-4, S-2/L-1 → landed at B-L (`9ad86e87`) · K-1/K-5, K-3 → PC-06 · U-3 → landed at B-D2 (`b31d2c31`)
 · U-1/U-2/U-6 → MB-08 · P-1 → IN-08 · P-2 → IN-22 · P-3 → FA-01 · P-4, V-4, V-5 → SC-07 · S-6 → FI-01 · V-1 → J-2
@@ -345,7 +342,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 
 **Hole-register rows a position now owns:** H-25, H-106 → IN-10's loop half, not built when IN-10 landed (`fae9e623`): the church ratchet waits on IN-12 (their instrument landed at B-C: `engine/season/harness/loops.py`) · H-26 (IN-21 landed `3544d568`) · H-44 (re-scoped at IN-09, `128299db`) · H-47 → IN-06 · H-48 →
 IN-18 G6 (landed `66bf51f9`) · H-51 (SE-01 landed `d12c8db9`) · H-58 → IN-33 · H-59 → IN-12 (`forgive`, landed `5da7c44e`) · H-92, H-10 → IN-14 · H-100 → IN-31 (landed `d16bd895`) · H-101 → IN-40 (landed `3f320093`) ·
-H-110 → IN-29 · H-160 → IN-22 · H-162 → SC-03b · H-166 → IN-12 step 11 (`raze`, limit 3's closer; IN-28 landed `32024e27`) · H-170, H-171 → SE-04 · H-175 → read at B-C (IN-39, landed; the reading is its `cite:`), its remainder unowned · H-176 → IN-27 ·
+H-110 → IN-29 · H-160 → IN-22 · H-162 → SC-03b · H-166 → IN-12 step 11 (`raze`, limit 3's closer; IN-28 landed `32024e27`) · H-170, H-171 → SE-04 · H-175 → read at B-C (IN-39, landed; the reading is its `cite:`), its remainder unowned · H-176 → IN-27 (landed `6ae70998`) ·
 H-180, H-181 → re-checked at IN-17 (landed `ac9724fc`; both stay absent) · H-182 → IN-32 (re-checked at IN-17) · H-186 → IN-30.
 
 **Retired, never reused:**

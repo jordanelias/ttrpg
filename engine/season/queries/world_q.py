@@ -36,12 +36,15 @@ from typing import Callable, Optional
 
 from ..data.requires import UNKNOWN, binding_from_act
 from ..data.rosters import (
-    BAN_KIND, DETAIN_KIND, DOMINANCE_KINDS, FACTION_BY_PROP, QUESTION_SOURCES, RECORD_CONTENT,
-    RECORD_KINDS, REMOVE_ORDINAL, RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STANDING_CROSSED, TENURE_KINDS,
+    BAN_KIND, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP,
+    QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, REMOVE_ORDINAL, RESTRAINT_KINDS, RUNG_KINDS,
+    SITE_KINDS, STANDING_CROSSED, TENURE_KINDS, faction_prop_id,
 )
 # IN-09: the Record kinds a held document is an occasion for, derived off the verb table's rows;
 # v9 IN-49: the remit acts a seat exercises on a `Rung`-classed referent, the same way.
-from ..data.verbs import RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS
+# v9 IN-27: `_OPENERS_FROM_EFFECTS` is which verbs open which Tenure kind, derived off the effects
+# (`OPENERS-DERIVE`); `endings_reached` evaluates the `ENDINGS` vocabulary imported above.
+from ..data.verbs import RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS, _OPENERS_FROM_EFFECTS
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
 # the asker-first module (which may not import this one; this edge runs the other way).
@@ -1674,10 +1677,18 @@ def holder_faction_of(w: World, rung_id: str) -> Optional[str]:
     one screen away from `ancestry` itself in this same file -- exactly the duplication that
     function's own docstring exists to end."""
     TRACE.query("holder_faction_of", "resolver")
+    t = governing_hold(w, rung_id)
+    return faction_holding(w, t.subject) if t is not None else None
+
+
+def governing_hold(w: World, rung_id: str) -> Optional[Tenure]:
+    """The live `hold` that governs `rung_id` -- on the nearest rung AT OR ABOVE it that is held
+    (`ancestry`), or `None`. `holder_faction_of`'s walk, its one owner; `endings_reached` reads the
+    Tenure itself, for the act that opened it."""
     for cur in ancestry(w, rung_id):
         t = hold_force(w, cur)
         if t is not None:
-            return faction_holding(w, t.subject)
+            return t
     return None
 
 
@@ -1729,11 +1740,125 @@ def uncontrolled(w: World, rung_id: str) -> list[str]:
     meets the letter of r2 `05` §A.1.5 RULED (d), as `establishment_of` below records (*a Query
     with no consumer is a false N-line*), and no more: nothing in the loop or the chooser asks it,
     so the content hash cannot move by it and, under `CLAUDE.md` §0.2, it is a tested read that a
-    harness reports. `engine/season/tests/test_revolt_query.py` is its falsifier."""
+    harness reports. `engine/season/tests/test_revolt_query.py` is its falsifier.
+    ⚠ v9 IN-30 TRIED TO GIVE IT A CALLER AND STOPPED: no existing verb takes or governs unheld land
+    (`seize` declines it, `march` moves presence only), and the `Rung` stamp reaches only `migrate`
+    and `requisition`, which read no holding -- so any caller needs a ruling first (`H-186`)."""
     TRACE.query("uncontrolled", "resolver")
     return sorted(r for r in _subtree(w, rung_id)
                   if r in w.rungs and w.rungs[r].kind == "territory"
                   and holder_faction_of(w, r) is None)
+
+
+@dataclass(frozen=True)
+class EndingReached:
+    """One reached ending, as `endings_reached` reports it: the row's id and `victory`, the hold ids its
+    condition reads, and its antecedents -- the opening Events' ids and their acts' ids. Sorted tuples."""
+    ending: str
+    victory: bool
+    holds: tuple
+    events: tuple
+    acts: tuple
+
+
+def endings_reached(w: World) -> list:
+    """v9 IN-27 (H-176, GD-1; #457 D6: *"a Query over holds and seats that the season reports -- never
+    an actor"*). The `rosters.yaml: endings` rows the realm has reached, in file order, each an
+    `EndingReached`: the hold ids its condition reads, and its ANTECEDENTS -- the logged Events that
+    opened the edges the condition stands on, and the acts that caused them. A read: it takes no token,
+    stores nothing, emits nothing, and is recomputed at every call (`T-a`).
+
+    A ROW'S CONDITION: every hold its `holds:` selects is live (a `post` selects every Office with that
+    post, `hold_force`; a `rung_kind` every rung of that kind UNDER A `realm` RUNG, `governing_hold`),
+    and every holder coheres under `under:` (`faction_holding`; `one_faction`: all under the same one).
+    Nothing selected is not reached: "every King is a Church man" is vacuously true of a realm with no
+    King. ⚠ UNDER A REALM, by `ancestry`, the walk `harness/populated.py::census` sums its
+    `uncontrolled_in_realm` over: `build_realm` leaves `terr_T16`, Schoenland's foreign territory, a
+    root rung outside the realm on purpose and held by nobody, so a selector over every territory
+    would ask a hold no person can ever take and the victory row would be unreachable by construction.
+
+    ⚠ `T-b`: WHAT IS BUILT IS *AN ACT OPENED AT LEAST ONE EDGE THE CONDITION STANDS ON*. The edges the
+    condition reads are the selected `hold`s and each person-holder's live `commit` to the faction he
+    coheres under, WHEN IT IS HIS SOLE LIVE COMMIT TO IT (`faction_holding` reads that edge, so a king
+    who converts reaches the row by his own act; a second commit to a faction he already coheres under
+    is an edge the condition does not fail without, so an act minting it changed nothing and is not
+    credited -- `_eff_commit` mints a fresh edge every time). Each selected hold is the one live hold on
+    its object, so it needs no such rule. An edge's antecedent is the first logged Event naming it whose
+    causing act (`causing_act`) is of a verb that opens its kind (`data/verbs.py`'s derived opener
+    table) -- so a re-grant or a closure naming the edge is not its opening (a proxy on the causing
+    verb; `_opened_by_acts` says why it holds). The realm AS BUILT
+    therefore reaches nothing, even where a row's condition already holds at build: a seeded edge has
+    no opening Event, and nor does an edge planted by hand. One such act suffices, and THE CROSSING
+    ITSELF MAY BE AUTHORLESS: an old `commit` act is credited while a MATTER death (no act) is what
+    completes the condition, and no pure read can locate the crossing, because the moment the
+    condition was last false is not stored (`T-a`) [ASSUMPTION; medium; Jordan to correct]. It is NOT
+    "reached only with a person's act among the crossing's antecedents". Revert: every edge the
+    condition reads opened by an act -- under which every seeded territory hold must be re-opened by
+    an act and `terr_T15`'s, unheld at build, by a verb that does not exist (`H-186`), so
+    `peninsular_sovereignty` becomes unreachable by construction.
+
+    ⚠ NO `TRACE.query` ROW, `ambitions`' reason: `SeasonDriver.season` calls this once per season, the
+    probe corpus runs seasons, and a row here moved the committed `runs/TRACE.txt` and `results.json`
+    (MEASURED, `test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte`) -- a read-only
+    step must move no artifact. It reads through `governing_hold`, not `holder_faction_of`, for the same
+    reason."""
+    out: list = []
+    for name, row in ENDINGS.items():
+        edges = _ending_edges(w, row)
+        if not edges:
+            continue
+        opened = _opened_by_acts(w, edges)
+        if not opened:
+            continue
+        out.append(EndingReached(name, row.victory,
+                                 tuple(sorted(t.id for t in edges if t.kind == "hold")),
+                                 tuple(sorted({e.id for e, _ in opened.values()})),
+                                 tuple(sorted({a.id for _, a in opened.values()}))))
+    return out
+
+
+def _ending_edges(w: World, row) -> tuple:
+    """The live edges an `endings` row's condition reads, or `()` when it does not hold."""
+    sel, val = row.holds
+    if sel == "post":
+        holds = [hold_force(w, o) for o in sorted(w.offices) if w.offices[o].post == val]
+    elif sel == "rung_kind":
+        holds = [governing_hold(w, r) for r in sorted(w.rungs) if w.rungs[r].kind == val
+                 and any(a in w.rungs and w.rungs[a].kind == "realm" for a in ancestry(w, r))]
+    else:       # the loader admits `ENDING_SELECTORS` only; a third must be given a branch here
+        raise Forbidden(f"ending selector {sel!r} has no enumerator", "queries/world_q.py::_ending_edges",
+                        f"a branch for it, beside `ENDING_SELECTORS`' two")
+    if not holds or any(t is None for t in holds):
+        return ()
+    facs = [faction_holding(w, t.subject) for t in holds]
+    want = {facs[0]} if row.under == ENDING_ANY_ONE else {faction_prop_id(row.under)}
+    if None in facs or set(facs) != want:
+        return ()
+    commits = []
+    for t, f in zip(holds, facs):
+        mine = [c for c in (w.persons[t.subject].tenures if t.subject in w.persons else ())
+                if c.kind == "commit" and c.live and c.object == f]
+        if len(mine) == 1:                  # the SOLE commit: one the condition fails without
+            commits += mine
+    return tuple({t.id: t for t in holds + commits}.values())
+
+
+def _opened_by_acts(w: World, edges: tuple) -> dict:
+    """`{edge id: (opening Event, its Act)}` for each edge an act opened (`endings_reached` says how).
+    ⚠ A PROXY: an Event "opens" an edge it names when the verb that CAUSED it opens that edge's kind,
+    not by anything the Event records, which is true only because `establish`, `release` and `revoke`
+    -- which name a hold edge they re-stamp or close -- are not `hold` openers (`loop/effects_governance.py`
+    constructs a `Tenure(` only at its three opener sites: `confer`'s hold, `revoke`'s ban, `oblige`)."""
+    kind_of = {t.id: t.kind for t in edges}
+    out: dict = {}
+    for e in w.log:
+        for c in e.changes:
+            if c.subject not in kind_of or c.subject in out:
+                continue
+            a = causing_act(w, e)
+            if a is not None and a.verb in _OPENERS_FROM_EFFECTS.get(kind_of[c.subject], ()):
+                out[c.subject] = (e, a)
+    return out
 
 
 def establishment_of(w: World, office_id: str) -> list[str]:

@@ -51,10 +51,12 @@ from ..data.affiliations import AFFILIATION_CEILING, conviction_map, engagement
 from ..data.cast import STANCE_MAX
 from ..data.pursuits import to_axes
 from ..data.requires import (
-    KNOWN_PERSON_CLAIM, REQUIRES_OPERANDS, REQUIRES_STEMS, UNKNOWN, WORLD_ONLY_STEMS,
+    KNOWN_PERSON_CLAIM, REQUIRES_OPERANDS, REQUIRES_STEMS, SHORTFALL_PREDICATE, UNKNOWN,
+    WORLD_ONLY_STEMS,
 )
 from ..data.rosters import (
-    AFFILIATIONS, DEGREE_STEP, PURSUIT_AXES, RECORD_CONTENT, SEEN_PREDICATE, roster, roster_map,
+    AFFILIATIONS, DEGREE_STEP, DOMINANCE_KINDS, PURSUIT_AXES, RECORD_CONTENT, SEEN_PREDICATE, roster,
+    roster_map,
 )
 from ..state.carriers import Person, Said
 from ..trace_log import TRACE
@@ -412,6 +414,94 @@ def regard(p: Person, referent: str, fx=None) -> float:
         return stored
     judged, told = deeds_judged(p, referent, fx.get("scar_weight_shift"))
     return stored + jg * judged + tg * told
+
+
+# ---------------------------------------------------------------------------
+# v9 IN-23 (CARRY-STABILITY): LEGITIMACY AND STABILITY AS ONE PERSON'S OWN WINDOWED ESTIMATE.
+# Ruling R7 (`references/design_rulings_2026-09-06.md`, reference): *"no magnitude carrier is admitted at
+# any scale"*, and *"there is no single faction-legitimacy number ... a ruler can be wrong about their
+# own standing"*. So neither is a field, a cache or a world-level sum: each is asked of ONE person's
+# own stance rows and claims, and two persons holding different ledgers read different values.
+# ---------------------------------------------------------------------------
+
+#: THE DEED KINDS `stability` COUNTS AS UNREST AT ITS SUBJECT: the coercive kinds of
+#: `rosters.yaml: standing_routes.kinds.dominance` (a death, a wound, a field won, a seizure of a rung
+#: or a record, a requisition), read off that roster and listing no kind here. With the shortfall
+#: claim's stem (`SHORTFALL_PREDICATE`) they are the whole of what `stability` reads.
+UNREST_KINDS = DOMINANCE_KINDS
+
+
+def recent_claims(ledger, window) -> list:
+    """THE CLAIMS IN `ledger` FROM ITS HOLDER'S LAST `window` SEASONS, in ledger order: those whose
+    `when` is less than `window` seasons before the NEWEST claim the ledger holds (so `window == 1` is
+    the newest season alone). An empty ledger has no recent claims.
+
+    ⚠ ANCHORED ON THE HOLDER'S NEWEST CLAIM, NOT ON THE CLOCK. `choose` receives no tick (S18.2: two
+    scalars), and an estimate is recent only against what else its holder knows: a person who has
+    heard nothing for seasons reads his last news as current, which is R7's *a ruler can be wrong
+    about their own standing* in time as well as in content [ASSUMPTION; medium; Jordan to correct;
+    revert: the caller passes `World.tick` as the anchor]. `window` is a whole number of seasons
+    >= 1 (`Fixtures.estimate_window_seasons`, H-224); anything else raises."""
+    if isinstance(window, bool) or not isinstance(window, int) or window < 1:
+        raise ValueError(f"estimate window {window!r} is not a whole number of seasons >= 1 (H-224)")
+    newest = max((c.when for c in ledger), default=0)
+    return [c for c in ledger if newest - c.when < window]
+
+
+def legitimacy(p: Person, holder: str, window, scar_shift: float = 0.0) -> float:
+    """HOW `p` READS `holder`'s STANDING -- the legitimacy of a seat-holder as one person estimates it
+    (R7: a Query over stance; v9 IN-23). Computed when read and never written:
+
+        legitimacy = stance_toward(p, holder) + Σ deed_term(p, axis_w, c)
+                     over c in attributed_deeds(recent_claims(p.ledger, window), holder)
+
+    `p`'s own stance rows toward the holder (a stance row has no `when`, so the window does not cut
+    it) plus what `p`'s own pursuits make of the holder's deeds `p` holds claims of from the window
+    -- firsthand and told alike FOR THE UNPAIRED KINDS ONLY, because R7's channel is the news:
+    legitimacy falls where the news of a deed has reached. ⚠ The PAIRED kinds (`person.died`,
+    `body.changed`) count firsthand only: `attributed_deeds` drops a told copy of one (it carries no
+    `seen`, so it names no doer), so second-hand news of a killing or a wound never moves legitimacy.
+    Each deed is scored by its one owner (`deed_term`; `attributed_deeds` decides
+    which claims are the holder's, the paired kinds through `seen.who`), so this is `regard`'s two
+    halves read over the window at unit weight, not a second scoring of a deed. Which seat the holder
+    holds is the CALLER's: `p` holds no claim of who sits where (`H-195`: no `held_by` claim), so
+    `holder` is passed. Person-side, no World (AX-2)."""
+    TRACE.query("legitimacy", "person")
+    total = stance_toward(p, holder)
+    deeds = attributed_deeds(recent_claims(p.ledger, window), holder)
+    if not deeds:
+        return total
+    axis_w = projected_axes(p, scar_shift)
+    for c in deeds:
+        total += deed_term(p, axis_w, c)
+    return total
+
+
+def stability(p: Person, rung: str, window) -> int:
+    """HOW STABLE `p` READS `rung` -- minus the number of signs of unrest `p` holds about it from the
+    window (R7; v9 IN-23). `0` is *no unrest I know of*: a person who holds nothing about a place is
+    owed nothing (`04_CODE_ARCHITECTURE.md` §C.11), and reads it as stable.
+
+    A sign is a claim in `recent_claims(p.ledger, window)` whose SUBJECT is `rung` and that is either
+      * a deed claim (`is_deed`) of an `UNREST_KINDS` kind: `person.died`, `body.changed`,
+        `field.won`, `rung.seized`, `record.seized`, `requisition.taken` (the dominance roster's
+        members at IN-23), or
+      * a shortfall claim, `(rung, "shortfall:<kind>", units)` (`SHORTFALL_PREDICATE`, deposited by
+        WITNESS from MATTER's larder write).
+    Firsthand and told count alike, one each [ASSUMPTION; medium; Jordan to correct -- unweighted by
+    confidence or by teller; one deed can count twice, but only where `loop/witness.py`'s `T5` guard
+    lets a second copy in -- told first and seen after, or told from two different origins (a told
+    copy of a deed already held firsthand, or of the same origin, is skipped at deposit); revert:
+    grade each sign by `Claim.confidence`]. NOT read, though they exist: `tenure.closed` (it also closes a
+    `contain`, so a person moving house would read as a fallen seat), `march.declared` (an intent, not
+    yet coercion), and the `seen` claims (they carry a stratum, not a kind). Only claims whose subject
+    IS the rung count: a person does not know what a rung contains (containment is the world's).
+    Person-side, no World (AX-2)."""
+    TRACE.query("stability", "person")
+    return -sum(1 for c in recent_claims(p.ledger, window)
+                if c.subject == rung and (
+                    (is_deed(c) and c.predicate in UNREST_KINDS)
+                    or str(c.predicate).partition(":")[0] == SHORTFALL_PREDICATE))
 
 
 def violated_pursuits(p: Person, verb: str) -> tuple:
