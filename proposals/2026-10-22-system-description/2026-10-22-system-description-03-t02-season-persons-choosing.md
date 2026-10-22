@@ -1,8 +1,11 @@
 # Tutorial: The season, the person and how an actor chooses — what a turn is, who acts, and how to predict what any person will do with it
 
-Repo `jordanelias/ttrpg` at HEAD `a4ca9a5`. All code paths are under `engine/season/` unless they start with another top-level
-directory. "The realm" is `harness/populated.py::build_realm(seed)`; "the control run" is
-`scratchpad/ctl/realm_seed{0,1,2}_2seasons.txt` (2 seasons per seed). "My probe" means scripts in `scratchpad/t02/` (§9).
+Repo `jordanelias/ttrpg` at HEAD `a4ca9a5`; **revised in round 3 against `51d7b05` (PR #494 landed between) and the precedent suite
+(`research/game_precedent_suite/`)**. §0a and the round-3 edits were opened at `51d7b05`; every other line cite in this file is as of
+`a4ca9a5`, and `### Round-3 corrections` (end of §8) lists the ranges PR #494 moved. All code paths are under `engine/season/` unless
+they start with another top-level directory. "The realm" is `harness/populated.py::build_realm(seed)`; "the control run" is
+`ctl/realm_seed{0,1,2}_2seasons.txt` beside this file (2 seasons per seed). "My probe" means this audit's throwaway scripts, which are
+not committed (§9).
 
 ## 0 Before you start
 
@@ -25,6 +28,97 @@ shipped values: scar weight shift, confliction damping, declared intent, and the
 values) are TESTS-ONLY. The conviction crisis is RUNS-IN-LOOP per seed: 5 folds at seed 0 and 3 at seed 2, all at tick 1, and none at
 seed 1 in two ticks (§9, probe7). Grades follow the errata rule (G1): a refusal firing is not the verb executing. Execution is
 stated per seed.
+
+## 0a How it plays
+
+Precedent forms used for shape: `research/game_precedent_suite/tutorials/T01_realm.md` (Old World), `T13_koei.md` (Genghis Khan II) and
+`T16_managers_narrative.md` (King of Dragon Pass, Six Ages, Football Manager 26). Figures are seed 0 unless a seed is named; every code line
+in this section was opened at `51d7b05`. The as-built text comes first, then a `[PROPOSED]` block.
+
+**Setup choices.** The one input is the world seed. `harness/populated.py::build_realm(seed)` seats 83 persons (46 named, 37 cohorts) and
+32 offices, all held at build, and mints 64 OUGHT Propositions: 46 personal wants (`prop_npc_*`), 6 faction creeds (`fac_*`) and 12
+organization goals (23 of the 35 `goals.yaml` rows are `orientation` and mint nothing; `harness/populated.py:473-476`, `goals.yaml:1-30`).
+Its other parameters (`cap`, `from_roster`, `goals`, `goals_complete`, `:629-630`) are builder switches, not choices. There is no
+difficulty, nation or character pick; the remaining knobs are fixture arms (temperature `data/fixtures.py:286`, scar shift `:707`,
+confliction `:715`), swept controls rather than choices. A client that registers a person in `overrides` chooses for that person at each
+deliberation. Its callback receives the Person, a View (the last 12 own claims and the question), a Sensation (two scalars, subsistence and
+standing; `state/carriers.py:388`), the budget query and `auto`, the shipped chooser (`harness/play_surface.py:14-19`). It may return any
+of the 47 resolvable verbs with any payload. DELIBERATE raises on an over-budget return (`loop/deliberate.py:202`), a scene of more than 3
+acts (`:220`) and an act whose actor is someone else (`:281`); a verb whose precondition the fold cannot evaluate (`exchange`) raises
+`Unspecified` and aborts the season (`loop/resolve.py:282-290`).
+
+**The loop (one tick).** 1 CALENDAR: dates due this tick fire. 2 MATTER: terms mature (`loop/matter.py:294-304`), claims lose 5 confidence
+(errata G8), cohorts draw food, sites yield and wear (§2.1); hunger, ageing and illness are coded and ship at 0 (`matter.py:513-520`,
+`:549`; `data/fixtures.py:594, 606-607`). 3 Five rounds (`loop/driver.py:449-456`), each DELIBERATE (every person answers one question and
+returns scenes; nothing is written), RESOLVE (all released acts in stratum order), ENCOUNTER (declared marches fought) and WITNESS (events
+become claims). 4 CENSUS. 5 `tick += 1` (`driver.py:445-456, 514-519`; §2.1 gives the step order). Everything is automated: persons not in
+`overrides` are chosen by `make_chooser`; nothing pauses and nothing waits for a human.
+
+**The choice menu.** Every act costs its share of a scene: 1 alone, 2 for a scene of two or three acts (`decision/choose.py:643-658`;
+`data/fixtures.py:488-489`), against a budget of 5 + 1 per live hold − body bands − travel legs (`decision/budget.py:57-61`), at most one
+scene per round (`loop/deliberate.py:252-259`). A person picks a verb whenever it is formable on the question's subject; which one comes
+first is the pursuit term when the subject is shared and the stance term when it is not, then noise at τ = 0.1 (`choose.py:130-151`,
+`:376-392`). The full menu is §4; the verbs a person reaches most:
+
+| verb | cost | effect | when a person picks it | ctl att/ok s0 · s1 · s2; grade |
+|---|---|---|---|---|
+| `utter` | scene share | mints a Proposition and a maker's hold (+1 budget) | any question; never refused | 39/39 · 39/39 · 49/49; RUNS-IN-LOOP |
+| `create_record` | scene share | a Record you hold (+1 budget) | any question; never refused | 87/87 · 88/88 · 89/89; RUNS-IN-LOOP |
+| `commit` | scene share | a membership edge to a Proposition | formed mostly on persons, then refused | 61/0 · 56/1 · 63/1; RUNS-IN-LOOP at s1, s2 |
+| `release` | scene share | closes a tenure of your own | toward a referent you hold an edge to | 45/3 · 44/5 · 46/3; RUNS-IN-LOOP |
+| `forgive` | scene share | deletes your negative stance rows on the subject | only toward someone you hold a grudge row on | 1/1 · 2/2 · 2/2; RUNS-IN-LOOP |
+| `oblige` | scene share | a 4-season service edge to a seat | on a seat your ledger names | — · 24/22 · —; RUNS-IN-LOOP at s1 |
+| `move` | scene share, then −1 budget per leg | moves your `contain` | toward a referent with a path | 42/16 · 35/17 · 40/12; RUNS-IN-LOOP |
+| `tell` | scene share, contested | the hearer receives your chosen claim | a co-located hearer and a claim to say | 23/4 · 25/7 · 19/6; RUNS-IN-LOOP |
+| `petition` | scene share | a petition Record you hold (+1 budget) | `to` a living person | 42/14 · 31/7 · 34/11; RUNS-IN-LOOP |
+| `fight`, `accept` | scene share, contested | Felled / Wounded / Untouched on the subject | any living referent; `accept` needs no challenge | 7/4 and 18/11 (s0); RUNS-IN-LOOP |
+| `train`, `tend` | scene share | +1 capability; body to 1000 | a co-located person | 0 ok in all seeds; TESTS-ONLY |
+
+("att" counts acts that reached the fold; contested acts refused at admission are not counted, trap 9.)
+
+**First tick, step by step (Sæmund Haelgrund, `p_npc_004`, seed 0; the numbers are §3's, whose control run is byte-identical at `51d7b05`).**
+1. Build: budget 5 + 1 hold (his seat) = 6; the realm's budgets are 5 for 52 persons, 6 for 27, then 7, 10, 10 and 13 (round-3 probe).
+2. MATTER at tick 0 changes nothing for him (no stores at his rung, urgency 0).
+3. Round 0: his ledger is empty, so his question is his most salient `need`: the Restoration's leader Yrsa (salience 0.95055;
+   `queries/world_q.py:2295-2310`).
+4. 30 of 46 verbs survive the gates on Yrsa; the stance term (−8) is common to all, so pursuit gaps and noise order them: the sampled head
+   is `petition, open_case, create_record`.
+5. Packed 2 + 2 + 2; round 0 releases the first scene, spending 2 (`loop/deliberate.py:252-259`).
+6. RESOLVE: Arnlod's `accept` on Yrsa (contested_physical) runs before Sæmund's social acts and Fells her; his `create_record` lands (+1
+   hold), `petition` is refused (no living `to`), `open_case` is `case.unauthorized`.
+7. WITNESS: he holds a firsthand claim about Arnlod, the referent of his personal want, so round 1 asks a tier-0 question about Arnlod
+   (`queries/world_q.py:2217-2341`); `open_case` on Arnlod lands, `train` and `commit` are refused.
+8. Over five rounds he releases 4 scenes, spends 8 actions, resolves 11 acts with 3 non-refusals and ends the tick holding 3 Records:
+   budget 9 at tick 1 (round-3 probe: 9). Realm-wide in that tick: 676 acts formed, 535 reached the fold, 83 → 78 persons alive.
+
+**What changes later.** Budgets climb with paper (mean 5.57 → 6.41 → 7.69 over two ticks; 11 of 74 above the 10-action release ceiling
+after tick 1). Convictions fold at tick 1 (5 at seed 0, 0 at seed 1, 3 at seed 2). Seats empty and some stay empty: 8, 7 and 10 seats
+are vacated in two seasons (8, 6 and 10 still vacant; one refill, in seed 1), the King (`p_npc_020`) is dead after the first season at all
+three seeds, and seven null-conferral seats cannot be refilled. Ledgers fill (13 of 74 at the 200 cap, ctl). In the natural run nothing is
+founded or built and no field is fought (ctl `field.*` 0; a hand-built `march` at a settlement does run the battle oracle in the loop).
+Persons acquire no skills (`train` 0 ok) and their pursuits never move (scar shift 0, `data/fixtures.py:707`).
+
+**Failure and ending.** None for the world. The season returns `endings` (`world_q.endings_reached`, a read added by PR #494; `loop/driver.py:518,
+532`) over two `rosters.yaml: endings` rows (`peninsular_sovereignty`, the victory row, and `theocracy`; `rosters.yaml:2494-2552`); the realm
+as built reaches neither (`endings` was `[]` after both ticks at seed 0), and nothing halts on it, so the loop runs as many ticks as its
+caller asks. A person ends only by being Felled; MATTER kills nobody at shipped values (errata G9). No goal is ever met, because no code
+tests one (`goals.yaml:11-12`: a goal "never acts, and nothing aggregates"). A seated person has no continuation: `succeed` is not
+resolvable (§7).
+
+**Consequential vs cosmetic choices.**
+- Consequential: whom the question puts in front of you (tier, then salience); your stance toward that subject, which outweighs values by
+  one to two orders of magnitude (§2.4); how many holds you keep (every Record and Proposition is +1 budget, up to the ceiling);
+  co-location for `tell`, `give`, `tend`, `train`; the stratum order, which lets a movement or a duel change the world before your social
+  act is checked.
+- Cosmetic or inert: pursuit gaps under about 0.1 (reversed one time in four, §2.5); urgency (the same for every candidate); the value
+  term of the 13 uncelled verbs; a cohort's order (pure noise); the confliction damper and the scar shift (both at control).
+- Wasted by construction: whole families formed on the wrong class of subject (`work` 77/0, `migrate` 81/0, `commit` on persons); a
+  budget above 10.
+
+**[PROPOSED] Playing it as proposed.** IN-46: the driver suspends at ENCOUNTER for a played fight (`workplans/valoria_master_workplan_v9_part4.md:32-34`);
+IN-47: creation is "a cast entry the world-gen builder seats" (`:39-41`; D-2 ruled yes, the design held PROPOSED); REM-21..25 and REM-2C
+stamp right-class referents (RB-2a); L1-6 option B removes urgency (REM-44); D-V6 adds a contents-aware value term; J-T1 attributes. None
+is built; D-2 ruled the two RB-3 designs to proceed (errata G16). §7 lists the waits.
 
 ## 1 The pieces
 
@@ -53,7 +147,7 @@ stated per seed.
 | **"with"** | the relation "the two persons are at the same place" | `place_of(a) == place_of(b)` | `queries/world_q.py:2717` |
 | **commit** | membership/adherence edge to a Proposition | a faction *is* its Proposition plus its commits | `queries/world_q.py:1365` |
 | **ambition** | a live `commit` to an OUGHT Proposition | creed `fac_*`, org goal `goal_*`, personal want `prop_npc_*` | `queries/world_q.py:1817` |
-| **goal** | an organization's authored aim, minted as an OUGHT Proposition at world-gen | 35 rows; changes attention only, never acts | `goals.yaml:1-12`; `data/goals.py` |
+| **goal** | an organization's authored aim; 12 of the rows are minted as OUGHT Propositions at world-gen, the 23 `orientation` rows mint nothing | 35 rows; changes attention only, never acts | `goals.yaml:1-12`; `data/goals.py` |
 | **question** | the one thing a person deliberates about this round | sources `claim_landed`, `need`; one per deliberation | `queries/world_q.py:2249`; `decision/questions.py:45-76` |
 | **attention tier** | order in which a person's questions are taken | 0 ambition referent · 1 own tenure/purview · 2 valued deed · 3 need · 4 rest | `queries/world_q.py:2092-2135` |
 | **view** | the ledger ids `choose` may see | last 12 claims (`view_k`) | `decision/questions.py:22-42` |
@@ -88,8 +182,16 @@ The order below is the order an actor meets the rules in one season.
 | 4 | CENSUS | once | A person named by an order but not yet in the world is individuated; otherwise nobody is generated. |
 | 5 | `tick += 1` | once | The only clock advance. |
 
+Since PR #494 the season also calls `world_q.endings_reached(w)` between CENSUS and `tick += 1` and returns it as `endings`: a read with
+no token, Event or write, on which the run does not halt (`loop/driver.py:515-519, 532`; the function is `queries/world_q.py:1764`).
+
 Because WITNESS runs every round, what happened in round 0 is already in your ledger when you deliberate in round 1. Within one
 round all persons choose simultaneously, against the same frozen world; the world only changes at RESOLVE.
+
+[precedent: `research/game_precedent_suite/tutorials/T16_managers_narrative.md`, King of Dragon Pass §2] The rhythm is the one King of Dragon
+Pass uses (the world answers after each action), at a higher rate: KoDP gives a clan two actions a season ("time will pass only when you
+initiate an action"); a Valoria person releases up to five scenes of up to three acts, and at seed 0 an acting person formed 8.1 acts in
+tick 0 and 9.4 in tick 1 (§2.6): four to five times KoDP's two, and 7.5 times at the 15-act ceiling.
 
 ### 2.2 A question arrives
 
@@ -106,7 +208,9 @@ You do not survey the world and pick a goal. Each round the driver hands you a s
 
 The sort key is the attention tier (§1), then, inside tiers 0 and 3, **salience**: the cosine between your projected pursuits and
 what the organization expects (its role template plus its goals' pursuits). Your own personal want always has salience 0.0, so a
-member whose values fit the organization answers the organization's goal first.
+member whose values fit the organization answers the organization's goal first. This "salience" is value fit (the `pursuit_cosine_axes`
+call, `queries/world_q.py:2295-2310`), not the storylet sense of the rule matching the most conditions
+[precedent: `research/game_precedent_suite/dispositions/D_T02.md`, row E5c].
 
 At world build every ledger is empty, so **in round 0 every named person's question is a `need`** (my probe: 46 of 46). Cohorts
 have no ambitions and no questions at build; they start acting once claims land on them (probe: 234 of 535 tick-0 acts are by
@@ -174,8 +278,14 @@ Every live `hold` counts: a seat, a held territory, every Record you hold and ev
 the ordered list greedily into chunks of 3. A chunk of more than one act is extended and costs 2; if only 1 action is left, the chunk
 is trimmed to one act (`decision/choose.py:640-669`). So budget 5 buys scenes costing 2 + 2 + 1 (7 acts) and budget 6 buys 2 + 2 + 2
 (9 acts); one travel leg drops a budget-6 holder to 5, i.e. 9 acts become 7. The ceiling is 5 released scenes × cost 2 = 10 actions.
-Observed acts per person per tick at seed 0, over 2 ticks and 83 → 74 persons alive: 6.8–7.6 counting acts that reached the fold
-(1,132), or 8.5–9.5 counting every act formed (1,407 in `w.acts`).
+Budgets drift up, because every Record and every uttered Proposition is a hold: at seed 0 the mean budget is 5.57 at build, 6.41 after
+tick 0 and 7.69 after tick 1, and after tick 1 eleven of 74 persons hold a budget above 10, an excess no round can release (round-3
+probe, §9). The tree's own comment calls the count "WIDER THAN OFFICES", against S26.3's by-office budget, and files it as H-92
+(`loop/deliberate.py:95, 107-109`; `hole_register.yaml:1142`).
+Observed at seed 0, per tick, over the persons alive at the start of the tick (every one of them formed at least one act): in tick 0,
+83 persons formed 676 acts and 535 reached the fold (8.1 and 6.4 per person); in tick 1, 78 persons formed 731 and 597 reached the fold
+(9.4 and 7.7). In each tick at least one person formed 15 acts, the 5-scene × 3-act ceiling. "Reached the fold" is the control run's
+"attempted" basis (trap 9); "formed" is the unique acts in `w.acts`. The two-tick totals are 1,132 reached and 1,407 formed.
 
 ### 2.7 Release and resolution
 
@@ -212,7 +322,8 @@ The loop that closes every round: **act → event → claim in observers → new
 
 1. Find their question: round 0 is their most salient `need`; later rounds favour claims about their ambitions' referents (tier 0),
    then about their own tenures or purview (tier 1).
-2. The subject is that question's referent. Every eligible verb is formed on it.
+2. The subject is that question's referent. Every eligible verb is formed on it. In one line: the attention tier and, inside tiers 0
+   and 3, salience pick whom you face; weighted sampling (∝ exp(score/τ), `decision/choose.py:376-392`) picks what you do to them.
 3. If there is one subject, the order of verbs is their pursuit-term order, blurred by noise. A verb 0.1 ahead of another is placed
    before it about three times in four (pairwise); being placed **first among ~30** is much rarer: Sæmund's top-scoring verb had
    P(first) = 0.17.
@@ -413,12 +524,13 @@ heals, trains, migrates, requisitions or offers a covenant refused in all three 
 |---|---|---|
 | values | `pursuits` (15 weights) → 7 axis weights | the pursuit term of every score |
 | allegiance | a `commit` to a faction Proposition `fac_*` (subject: the faction head) | a `need` question about the head; stance rows toward the head seeded from loyalty |
-| organization goal | a `commit` to an OUGHT Proposition minted from `goals.yaml` (35 rows; faction, body or seat level) | a `need` question about its referents; `stance: ±1` signs the members' seeded stance toward the target |
+| organization goal | a `commit` to an OUGHT Proposition minted from `goals.yaml` (35 rows, of which 12 mint a Proposition; faction, body or seat level) | a `need` question about its referents; `stance: ±1` signs the members' seeded stance toward the target |
 | personal want | a `commit` to `prop_npc_*`, an OUGHT Proposition about one named person | a `need` question with salience 0.0 |
 
 Goals change **what a person attends to, never what they value** (`goals.yaml:11-12`): the score has no goal term. No code tests
 whether a goal is met; a grep of `data/goals.py`, `queries/world_q.py`, `decision/` and `loop/` for completion logic finds none, and the
-loop has no ending condition (errata G17). A goal of kind `orientation` mints nothing and only shifts salience.
+loop halts on no ending: PR #494's `endings_reached` (§2.1) is a read over the `rosters.yaml: endings` rows, not over goals, and the realm as
+built reaches none (errata G17; `endings` was `[]` after both ticks at seed 0, round 3). A goal of kind `orientation` mints nothing and only shifts salience.
 
 **(b) Plays.** "Pursuing" a goal means getting its referent in front of you and having the right act formable and admissible on it:
 
@@ -439,7 +551,7 @@ loop has no ending condition (errata G17). A goal of kind `orientation` mints no
    `survey` turns a faction-coherent subject into a faction sheet. Graded inquiries need Record, Rung or Site subjects (B).
 6. **Grow your budget.** `create_record` and `utter` have no precondition and always succeed (87/87 and 39/39 at seed 0), and each
    leaves you a hold. Each one adds a scene action from the next round (Sæmund 6 → 9 over tick 0). The ceiling is 10 actions
-   (5 scenes × 2).
+   (5 scenes × 2); a budget above 10 is unspendable (H-92, §2.6).
 
 **(c) Costs, risks, counter-play.** Every act costs budget whether or not it lands, and a refused act is retried in later rounds
 (Sæmund attempted `train` on Arnlod twice). Other people's acts resolve in the same fold: anything in an earlier stratum (movement,
@@ -483,7 +595,18 @@ at tick 1 (e.g. Hedda Kronvald's orthodoxy 3 folded into einhir_restoration, 1 �
 
 - **A seated player.** IN-47 (character-sheet space: creation is "a cast entry the world-gen builder seats") and IN-46 (grid-mode
   suspension: a played fight) are scheduled as REM-30 / REM-31 in batch RB-3 (decision D-2, ruled yes; designs held PROPOSED). Today
-  the only human seam is the harness `dispatching_chooser` (`harness/play_surface.py`).
+  the only seam into the season loop is the harness `dispatching_chooser` (`harness/play_surface.py:41-52`, exercised only by tests:
+  `tests/test_play_surface_dispatch.py`, `tests/test_combat_trace_returned.py`). Outside the loop,
+  `systems/social_contest/sim/contest/agon_harness.py` lets a human play Side A of one social contest from stdin against an AI policy
+  (`_raw_input`, `:148-155`, calls `input()`; it drives the contest kernel, which no season reaches), and the combat and mass-battle
+  workbenches (`systems/combat/combat_engine_v1/workbench/server.py`, `systems/mass_battle/sim/workbench/server.py`) are HTTP designer
+  tools that trace one duel or one battle (the combat trace's branch events carry the alternate branches and their odds); none of
+  them seats a person in the realm. As built, a seated person would receive the person's View, Sensation, budget query and the shipped
+  chooser's proposal (`auto`), and no odds (`harness/play_surface.py:14-19`); a candidate set 22 to 56 verbs wide at round 0, 30 for
+  Sæmund (§3 step 2), up to five times a season; and no continuation if the person dies: `succeed` is not resolvable (§4 H–J) and the
+  King, `p_npc_020`, was dead after the first season in all three seeds probed in round 3 (§9). Crusader Kings II, Genghis Khan II and
+  Old World continue the player through an heir (precedent: `research/game_precedent_suite/tutorials/T12_paradox_classical.md`,
+  Crusader Kings II §2; `T13_koei.md`, Genghis Khan II §6; `T01_realm.md`, Old World §2).
 - **Right-class referents.** REM-21..REM-25 and REM-2C (batch RB-2a; REM-26, `move` paths, opens RB-2b) would stamp Site, Record and Rung referents onto questions, so
   `restore`, `examine`, `research`, `found`, `build` and `petition` form on the things they act on; REM-29 (`migrate` capacity) and
   REM-2A (`transfer`) in RB-2b. Waits on the referent-class roster.
@@ -511,7 +634,8 @@ at tick 1 (e.g. Hedda Kronvald's orthodoxy 3 folded into einhir_restoration, 1 �
 4. **"A budget above 5 is wasted."** Draft A1 §2.2 says so, citing `loop/deliberate.py:89-97`. Errata G11 recorded an in-tree
    dispute (`data/fixtures.py:497-502` treats the remainder as a cost budget). Round-2 ruling C1 resolves it in this tutorial's
    reading: what is capped is **scenes** (5 released, one per round); the excess **actions** pay for extended scenes (ceiling 10), and
-   Sæmund spent 8 actions in 4 scenes. A travel leg does cost a seat-holder acts (9 → 7).
+   Sæmund spent 8 actions in 4 scenes. A budget above 10 is the one that is wasted (§2.6, H-92). A travel leg does cost a seat-holder
+   acts (9 → 7).
 5. **"Holds are offices."** `budget` counts every live hold, including every Record created and every Proposition uttered
    (`decision/budget.py:57`; `loop/effects_information.py:125-139`).
 6. **"`accept` answers a challenge."** It is a duel on anyone living (§5 d).
@@ -584,7 +708,7 @@ Opened: `decision/choose.py:54-160, 217-240, 330-482, 640-669`; `decision/budget
 `verb_table.yaml` rows `commit` (:167), `create_record` (:281), `open_case` (:900), `petition` (:925), `accept` `requires_note`, `work`
 (:1506-1520); `goals.yaml:1-30`. Extracts C02, C04, C05; draft A1 §2, A2 §A-C; `audit/ERRATA.md`.
 
-Ran (all in `scratchpad/t02/`, `cd /home/user/ttrpg`, HEAD `a4ca9a5`):
+Ran (throwaway scripts of this audit, not committed; `cd /home/user/ttrpg`, HEAD `a4ca9a5`; round-3 re-runs are listed in the last paragraph):
 - `probe1.py`: 83 persons, 46 named; per-person pursuits, stance, convictions, holds, commits.
 - `probe2.py "" 1`: every named person's round-0 question was a `need`; candidate counts 22–56; scenes.
 - `probe2.py p_npc_004 1`: Sæmund's 5 deliberations, 30 candidates with score terms, u, g, keys; 11 acts and their events

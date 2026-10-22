@@ -1,6 +1,7 @@
 # Tutorial: Mass Battle — send an army at a place, and learn what the battle engine rewards once two armies meet
 
-Repo `jordanelias/ttrpg` at HEAD `a4ca9a5`. Path abbreviations: `MM/` = `modules/mass_battle/`, `MB.py` = `MM/massbattle.py`,
+Repo `jordanelias/ttrpg` at HEAD `a4ca9a5`; revised in round 3 against `51d7b05` and the precedent suite (`research/game_precedent_suite/`); the
+corrections are listed in `### Round-3 corrections`, at the end of §8. Path abbreviations: `MM/` = `modules/mass_battle/`, `MB.py` = `MM/massbattle.py`,
 `SW` = `engine/season/seam/wrappers/mass_battle.py`, `EC` = `engine/season/loop/effects_combat.py`, `VT` = `engine/season/verb_table.yaml`,
 `RY` = `engine/season/rosters.yaml`, `cfg` = `MM/config.py`, `orch` = `MM/orchestration.py`, `units` = `MM/hierarchy/units.py`.
 
@@ -43,9 +44,104 @@ A **faction** is a `fac_*` Proposition plus the `commit` Tenures pointing at it.
 
 - In the control run (`ctl/realm_seed*_2seasons.txt`, two seasons; "attempted" = acts admitted to the fold), `march` reaches the fold and is
   declared at seeds 0, 1 and 2, with attempted/ok of 21/21, 10/10 and 4/4.
-- The "ok" counts the `Declared` event. Every declared march is then refused, so no field is fought at any seed: `field.won`, `field.lost`,
-  `field.unopposed` and `army.arrived` are 0 in all three.
-- The engine itself runs only under tests, harnesses and direct calls.
+- The "ok" counts the `Declared` event. Every declared march is then refused, so no field is fought in the control run at any seed:
+  `field.won`, `field.lost`, `field.unopposed` and `army.arrived` are 0 in all three.
+- The engine itself runs only under tests, harnesses and direct calls, but the season loop reaches it whenever an act names a settlement held
+  by another faction with members present (`loop/sides.py:108-132`; `SW:236-262`). A hand-built `march {subject: set_s_036}` by `p_npc_033` via
+  `off_npc_033`, folded through RESOLVE and ENCOUNTER on `build_realm(0)`, `(1)` and `(2)`, gives `march.declared` then `field.lost` (2 attackers,
+  Σ weight 2, against 6; each attacker's body 1000 → 20). Run again inside one full season, with `harness/play_surface.py:41`
+  (`dispatching_chooser`) handing `p_npc_033` the act and every other person on the shipped chooser, it gives `field.lost` once at each of seeds
+  0-2. `engine/season/tests/test_march.py:368-456` has the real chooser form the act when a `Question` names the settlement. No act the shipped
+  chooser formed at seeds 0-2 names a settlement (§3.3). The grade stays TESTS-ONLY (errata G1).
+- **Natural play and callback play, as this tutorial uses the words.** *Natural play*: the shipped chooser (`make_chooser` over
+  `resolvable_verbs()`, as `populated.run` builds it) forms every act; this is the control run. *Callback play*: a client hands a named person's act
+  in (`dispatching_chooser`), or a test hand-builds it (`_march_act` in `test_march.py`); the loop folds it with the same RESOLVE and ENCOUNTER.
+  §3.3 and §5 label each claim with one of the two.
+
+## 0a How it plays
+
+One march from the actor's choice to what is left afterwards, as built at `51d7b05`. Everything that exists only in a design is in the
+`[PROPOSED]` block at the end. Precedent cites are to `research/game_precedent_suite/tutorials/` (tier 3 reference, `CLAUDE.md` §0.05):
+`T07_mass_battle.md` (Total War, Field of Glory II), `T17_repo_strategy_a.md` (Dominions) and `T19_tactics_narrative.md` (Unicorn Overlord).
+
+**Setup choices.**
+- *At world build (seed).* `build_realm(seed)` fixes everything a field reads: who lives where (each person's `weight`, 1 or 2; §1), which
+  faction holds each territory (`holder_faction_of`, §1), and each settlement's garrison condition, which is above 0 on all 37, so every realm
+  field is WALLS (`MB.py:272-273`; §1). No troop type, formation, unit stance or general is chosen: `resolve_field` builds one fixed shape
+  (`MB.py:170-186, 213-232`).
+- *At DELIBERATE (natural play: the shipped chooser; callback play: the client).* One choice: the target Rung. The army is whoever of the seat's
+  faction is mustered at the actor's home settlement (`loop/sides.py:115`), less anyone detained (`:122`).
+
+**The loop.** One season is CALENDAR → MATTER → five rounds of (DELIBERATE → RESOLVE → ENCOUNTER → WITNESS) → CENSUS (overview §2.1). A march:
+1. DELIBERATE: the chooser forms `march` against a Rung, scored on four value axes (§2.2 step 1).
+2. RESOLVE: the typed cell checks only that the subject is a Rung; the act folds at Declared, emits `march.declared` and writes nothing (§2.2 step 2).
+3. ENCOUNTER, same round: a non-settlement target gets an empty army and is refused (`loop/sides.py:108`); a target held by your own faction, or
+   by nobody, names no defender (`:132`).
+4. Provider: no defender present → Unopposed, no battle (`SW:238-249`); otherwise `resolve_field` runs the full engine, `run_battle(..., max_turns=18)`
+   (`MB.py:283`).
+5. Grade: `attacker_wins = not a.routed and (b.routed or a% > d%)` (`MB.py:287`) → Won or Lost; ties and mutual routs go to the defender.
+6. Writes, losers only: body scaled (`EC:298-299`), a grudge row and a morale row (`EC:300-305`); on Won or Unopposed the movers relocate
+   (`EC:257, 291`).
+
+Automated: everything after the target pick. There is no pause, no withdraw, no choice of fidelity, no aftermath screen.
+
+**The choice menu.** The two middle columns are the point: what the shipped chooser does, and what a callback can make the loop do.
+
+| verb | cost and effect | natural play (ctl, seeds 0-2) | callback play (run at `51d7b05`) | grade |
+|---|---|---|---|---|
+| `march` at a settlement held by another faction, members present | one scene action. Won: defenders' bodies scaled, rows, you arrive (a travel leg each). Lost: your bodies scaled, rows, you stay | never formed: declared subjects are persons, hearths and territories (§3.3) | `set_s_036`, 2 v 6: `field.lost`, body 1000 → 20, at seeds 0-2. No Won field has been run | TESTS-ONLY |
+| `march` at a settlement with no opposing holder, or none of the holder's people present | one scene action. Unopposed: your mustered members arrive (a travel leg each); no battle, no casualty, no row | never formed (`army.arrived` 0) | `set_s_014` → `set_s_003`, seeds 0-2: `field.unopposed`, `army.arrived`, bodies unchanged | TESTS-ONLY |
+| `march` at any other Rung (person, hearth, territory) | one scene action; Declared, then `march.refused` | every natural march: declared 21 / 10 / 4, refused 25 / 10 / 4 | refused the same way (`test_march.py`, hearth target; not re-run here) | RUNS-IN-LOOP (the refusal only) |
+| do nothing (defend) | none; presence defends and walls apply by themselves | always; the defender has no chooser | same | — |
+| engine-direct options (formation, stance, troop type, Orders, officers, multi-unit, pursuit) | a Python call (§3.2) | not offered | not offered; a designer only | TESTS-ONLY |
+
+**First season, step by step.**
+- *Natural play* (two seasons; `ctl/realm_seed0_2seasons.txt:20, 41-46`): 21 `march` acts reach the fold and all 21 are declared; `march.refused` is
+  25 (the 4 extra failed the typed cell at RESOLVE, §3.3); `field.won`, `field.lost`, `field.unopposed` and `army.arrived` are all 0. Seeds 1 and 2:
+  10 and 4 declared, 0 fields (`realm_seed1_2seasons.txt:22, 42-47`; `realm_seed2_2seasons.txt:21, 42-47`).
+- *Callback play, a traced field* (identical at seeds 0-2; the pair `test_march.py:82-136` uses):
+  1. RESOLVE: `p_npc_033` (Crown) via `off_npc_033` declares `march {subject: set_s_036}`; `march.declared`.
+  2. ENCOUNTER: `set_s_036` is a settlement. Attackers are the Crown members mustered at his home settlement `set_s_014`: `p_npc_033` and
+     `p_npc_035` (Σ weight 2). The defending faction is the Church of Solmund, with 6 members present (Σ 6).
+  3. `fortification_of(set_s_036)` = 1.0, so WALLS: defender DR 1 + 3 = 4 (`MB.py:272-273`).
+  4. `run_battle`: one Line infantry block of 2 troops against one of 6, both from (8, 12). Both have hp < 100, so `size = 0` and both rout on
+     tick 1 (`units:2930-2938`); a mutual rout goes to the defender (`MB.py:287`): Lost.
+  5. Writes: each attacker's body 1000 → `int(1000 × 0.02)` = 20 (`EC:299`), plus `(fac_church_of_solmund, −1, 1)` and `(fac_crown, −1, 1)`
+     (`EC:300-305`). The six defenders are untouched.
+  6. Next season: body 20 is under all three band floors (800 / 500 / 100), so `p_npc_033`'s budget falls from 6 to max(1, 5 + 1 hold − 3) = 3
+     (measured), i.e. 3 acts instead of 9 (§3.1; errata Part 2 C1), and his next morale start is 4 (§3.1).
+
+**What changes later.** As built, nothing compounds. Walls never decay (garrison wear 0, §5c). At realm weights a body rises only by `tend`, which
+executed 0 of 34 times at seed 0 (overview §3 NP row). Musters change when a `contain` or `commit` edge changes. A lost field's grudge rows feed the
+chooser's stance toward the winning faction (§5e). No army has experience, a recruit pool, pay or supply: none of the 53 verb rows is `levy`, `muster`,
+`recruit`, `supply` or `forage` (`VT`).
+
+**Failure and ending.**
+- A field's failure is Lost: the losers' bodies are scaled (floor 1; nobody dies under the default `scaled_by_degree`, `EC:299`), two stance rows are
+  written, and attackers stay at their origin. Only the `total` setting removes them (`EC:316`).
+- Inside a battle: the 18-tick clock; rout at size 0, subunit morale ≤ 0 or under 80 troops, the 60% army line (inert for one subunit, `cfg:116`),
+  or command 0 (never set during a battle, `units:2717, 2722, 2811`). Routed units never rally: `rally_check` is empty (`orch:288-290`).
+- The season now reports endings (`world_q.endings_reached`, `world_q.py:1764`: a read over holds and seats, never an actor), and the realm as built
+  reaches none. A field writes no `hold` (§2.2 step 8), so no field result is an input to it.
+
+**Consequential vs cosmetic choices.**
+- *Consequential in the season:* whether the target is a settlement (else refused); whether its holder has anyone present (else Unopposed). Summed
+  weight (400 v 200: 66.0% against 44.0%) and walls (29.0%) are consequential in the season-shaped runs of `resolve_field` (§3.2), which no realm
+  weight reaches: at realm weights every opposed field is Lost (§3.1).
+- *Cosmetic in the season:* the morale start (stance −2: 43.5% and 44.5%, no measurable change); UPHILL and RIVER_CROSSING (noise), and never reached
+  in the realm because WALLS takes precedence (§2.2 step 6).
+- *Engine-direct only (a Python call, never a season act):* tier, power, the knights preset and command 0 move the win share beyond noise. Discipline 2
+  and an Arrowhead without a charge order lower it by 6-8 points, at the edge of the ±7 margin. The other arms are noise (§3.2).
+
+**[PROPOSED]** (§7; nothing here executes).
+- *Player command.* No played mass battle is designed: IN-46 is a played, paused personal fight (overview §2.1), and whether a player may command a
+  field is open (J-C-31, §7). A seated player could, at most, pick the target.
+- *What precedent puts at this step* [precedent: reference only]: army composition and a recruit choice (T07 Total War §1, §3), force selection to a
+  cap (T07 Field of Glory II §1), an Army Setup with orders and spell scripts set before a battle that is always simulated (T17 Dominions §2), and
+  per-character Tactics (T19 Unicorn Overlord §2). The season has none of these; §7's `levy`, `muster` and `marshal` are the proposed entries.
+- *Later:* REM-27 narrows `march` to settlements the marcher has been told of; REM-32/JQ-4 adds a weight-to-troop conversion, which must lift a side to
+  100 troops or more; Suite 1 `levy`, `muster`, `drill`, `disband` (M-2, M-8); Suite 2 `marshal` with `rally`, `pursue`, `retreat`, `withstand`
+  (M-3, M-4, M-5); Suite 3 `storm`, `besiege`, `supply`, `forage` (M-1, M-6); Suite 4 `surrender`.
 
 ## 1 The pieces
 
