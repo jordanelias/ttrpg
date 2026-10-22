@@ -1,4 +1,4 @@
-# NPC-041 — `cast:` overlay only (`IN-38`, `13`-rest). See `NPC-006.yaml` for why a `cast:` block lives in an
+# NPC-041 — `cast:` overlay only (`IN-38`, `13`-rest). See `NPC-039.yaml` for why a `cast:` block lives in an
 # overlay. Read off THIS case's own sentences (quoted), written by an author, matched by no code.
 # [ASSUMPTION; medium; Jordan to correct] Revert: delete this file (the case returns to three anonymous seats).
 #

@@ -443,7 +443,8 @@ goals:
       referent is the realm rung (`r_valoria`); the objective to march on is a settlement (the Katepano's
       seat goal below). [ASSUMPTION; medium; Jordan to correct -- the weights; `stance: -1` as the plan
       authored it: a `rung` object names no person, so `seed_goals` writes no stance row from it (`referents`
-      is empty), and "toward the Crown head's seat" would be a second, `seat_holders` row not authored here.
+      is empty), and "toward the Crown head's seat" would be a second, `seat_holders` row not authored here -- and that row
+      would write no stance either: Altonia has no role template, so `stance_from_loyalty` is None for its persons.
       Revert: no Altonian goal; the empire's persons act on their pursuits alone.]
   - id: goal_katepano_take_the_chokepoint
     org: {seat: off_katepano}
@@ -455,15 +456,15 @@ goals:
       `valoria_geography_v30.yaml` T3 Lowenskyst ("NE Altonian pass. Primary chokepoint") and S-007 Lowenskyst
       Fortress, which `venues.yaml` seats `Altonian` at ("Primary Altonian chokepoint"); the Katepano "decides
       whether Altonia probes, presses, or invades" (NPC-089). A `march` needs a SETTLEMENT referent
-      (`MARCH_TARGET_KINDS`) and a realm-wide rung forms none, so the empire's conquest reaches the seam through
-      the settlement its pass opens on. [ASSUMPTION; medium; Jordan to correct -- the chokepoint as the
+      (`MARCH_TARGET_KINDS`) and a realm-wide rung forms none, so the empire's conquest forms a `march` on the
+      settlement its pass opens on, which arrives unopposed as built (H-233). [ASSUMPTION; medium; Jordan to correct -- the chokepoint as the
       first objective; the weights. Revert: the seat goal's `rung` is any other settlement, or the row goes
       and the empire's march forms on no referent.]
   - id: goal_kommerkiarios_treaty_order
     org: {seat: off_kommerkiarios}
     text: the Kommerkiarios keeps the ancient trade treaties in force
     object: {kind: orientation}
-    pursuits: {stability: 0.8, wealth: 0.2}
+    pursuits: {stability: 0.8, wealth: 0.1}
     derives: {from: goal_altonia_conquer_valoria, kind: influences}
     source: >-
       NPC-090's own row: "Enforces ancient trade treaties"; stability .80, wealth .10 (the instrument of the

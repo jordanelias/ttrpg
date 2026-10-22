@@ -624,4 +624,4 @@ foreign_seats:
     holder:     "NPC-090"
     obligees:   []
     source:     "references/npc_registry.yaml NPC-090 (`role: Kommerkiarios (trade prefect at Schoenland interface)`; `arc_trajectory`: \"Enforces ancient trade treaties\")"
-    note:       "[NEW]. The seat the Schoenland trade demand forms from (FA-01, not built here)."
+    note:       "[NEW]. The Kommerkiarios, trade prefect at the Schoenland interface. FA-01 (not built here) names which seat offers the trade demand."

@@ -738,6 +738,10 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     `guards` (v9 IN-36, carrying IN-60's guard content) seats `cohorts.yaml: guards` -- a cohort of `weight > 1`
     sworn (`oblige`) to a principal's seat, posted at the exact rung the seat's holder is present at. `False`
     (the default) is its control arm, for the same reason. The two switches are independent.
+    [ASSUMPTION; medium; Jordan to correct] `guards` ships OFF (as `foreign` does): the on arm moves the realm hash
+    and switches on an unmeasured side effect (the guards enter the obligee witness channel and the larder draw),
+    so IN-60's EXIT reads on `build_realm(0, guards=True)` until a position flips the default as its own declared
+    mover. Revert: the default is `True` and the realm hashes and 1-/2-season pins are re-recorded.
 
     `goals` seeds `goals.yaml`'s organization goals (`seed_goals`, v9 IN-68). `False` is the CONTROL
     ARM (`harness/decision_spread.py --control`): the same realm with no goal minted, committed to or

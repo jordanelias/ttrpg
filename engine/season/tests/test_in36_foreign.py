@@ -127,7 +127,8 @@ def test_altonias_goal_rows_are_seeded_with_the_seats_goals_derived_from_the_emp
 
 # ---------------------------------------------------------------------------------------------- (c)
 
-def test_the_foreign_root_is_outside_the_realm_for_endings_and_the_uncontrolled_census(control, foreign):
+def test_the_foreign_root_is_outside_the_realm_for_endings_and_the_uncontrolled_census(control):
+    foreign = POP.build_realm(0, foreign=True)          # its own world: the falsifier below ends a hold
     root = f"terr_{FOREIGN_CAST[EMPIRE]['territory']['code']}"
     assert not any(foreign.rungs[a].kind == "realm" for a in POP.ancestry(foreign, root)), "the border is breached"
     assert [r for r in foreign.rungs.values() if r.kind == "realm"] == [foreign.rungs["r_valoria"]]
@@ -139,7 +140,8 @@ def test_the_foreign_root_is_outside_the_realm_for_endings_and_the_uncontrolled_
     assert world_q.holder_faction_of(foreign, root) is None
     assert world_q.uncontrolled(foreign, root) == [root], "the test world is not testing the unheld root"
     assert POP.census(foreign)["uncontrolled_in_realm"] == POP.census(control)["uncontrolled_in_realm"]
-    # and the victory selector's own realm test (`world_q._ending_edges`) reaches no foreign territory
+    # and the predicate `world_q._ending_edges` selects territories by (`world_q.py:1830-1831`), RE-SPELLED here and
+    # not called, reaches no foreign territory
     chosen = [r for r in sorted(foreign.rungs) if foreign.rungs[r].kind == "territory"
               and any(a in foreign.rungs and foreign.rungs[a].kind == "realm" for a in POP.ancestry(foreign, r))]
     assert root not in chosen and len(chosen) >= 15
@@ -170,8 +172,8 @@ def test_the_natural_goal_question_forms_a_march_candidate_on_the_chokepoint_for
                                            foreign.fixtures) if c.verb == "march"], pid
 
 
-def test_a_foreign_march_formed_by_the_real_chooser_folds_to_the_mass_battle_entry(foreign):
-    w = foreign
+def test_a_march_formed_by_a_chooser_restricted_to_march_folds_to_the_mass_battle_entry():
+    w = POP.build_realm(0, foreign=True)       # its own world: the driver below relocates the three Altonians
     target = "set_s_001"                  # Valorsplatz: Crown-held and peopled by Crown members (a fought field)
     assert world_q.holder_faction_of(w, target) == "fac_crown" and world_q.mustered(w, target, "fac_crown")
     p, v, cands = _march_candidate(w, target)
@@ -235,7 +237,7 @@ def _guard_weight(w, rung: str) -> int:
                if t.kind == "oblige" and t.live and t.subject in here and held_by.get(t.object) in here)
 
 
-def test_the_control_arm_has_no_guard_and_the_throne_alone_carries_obligees(control):
+def test_the_control_arm_seats_no_guard_and_reads_zero_at_every_hearth(control):
     assert not [p for p in control.persons if p.startswith(POP.COHORT_PREFIX + "guard_")]
     assert all(_guard_weight(control, r) == 0 for r in control.rungs if control.rungs[r].kind == "hearth")
 
@@ -261,7 +263,7 @@ def test_a_guard_stands_where_each_principal_is_and_the_king_is_guarded_harder_t
         assert w.persons[pid].weight > 1 and not [t for t in w.tenures if t.subject == pid and t.kind in ("hold", "commit")]
 
 
-def test_ending_the_guards_oblige_drops_the_reading_with_no_other_write(guarded):
+def test_ending_the_guards_oblige_drops_the_reading_with_no_other_write():
     w = POP.build_realm(0, guards=True)
     holder = next(t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == w._office_census["authored"]["off_king"])
     rung = world_q.home_of(w)[holder]
@@ -270,7 +272,7 @@ def test_ending_the_guards_oblige_drops_the_reading_with_no_other_write(guarded)
     for t in w.tenures:
         if t.kind == "oblige" and t.subject == f"{POP.COHORT_PREFIX}guard_off_king":
             t.until = w.tick
-    assert _guard_weight(w, rung) == 0, "a stored value would not have fallen"
+    assert _guard_weight(w, rung) == 0, "the guard's live oblige edge is what the definition reads; closing it must drop the read"
 
 
 def test_guard_rows_refuse_what_they_cannot_read():

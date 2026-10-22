@@ -1605,7 +1605,7 @@ rosters:
       identity — and `systems/world/` has no competing role-template concept, so there is nothing
       to be superseded BY. The day world says otherwise, world wins and this roster changes.
       ⚠ TWO FACTIONS HAVE NO TEMPLATE, RECORDED AS AN ABSENCE BY NAME (the roster's size is not
-      an invariant — RULED 2026-09-19). §4's player-eligible
+      an invariant — RULED 2026-09-19; v9 IN-36 adds a THIRD, `Altonia`, which has a head and no template, below). §4's player-eligible
       column covers Crown, Church of Solmund, Hafenmark, Varfell, Löwenritter and Restoration
       Movement. `Guilds` and `Schoenland` are absent from it. `faction_role_template` leaves them
       out rather than assigning a plausible one — inventing `mercantile-procedural` for the Guilds

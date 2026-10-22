@@ -1963,7 +1963,8 @@ def ambitions(w: World, p: Person) -> list:
     creed as an ought: sure"*, subject the faction's authored leader) and membership is a `commit`
     to it, so `ambitions` DOES return a member's `fac_*` creed (MEASURED, `build_realm(0)`, Batch C
     close: 35 of 83 persons' `ambitions` include one). Only the three factions with no leader or
-    template in canon (`Guilds`, `Schoenland`, `faction x`) keep HOLDS and are filtered by mood.
+    template in canon (`Guilds`, `Schoenland`, `faction x`) keep HOLDS and are filtered by mood -- and `Altonia`
+    (v9 IN-36), which has a head and no template, in a `foreign=True` world.
 
     ⚠ ONE OWNER OF *"a live `commit` to an OUGHT"*. `questions_for`'s Q4 source reads this rather
     than restating it, so the ambition mechanism `R-06` names exists once. A proposition id that is

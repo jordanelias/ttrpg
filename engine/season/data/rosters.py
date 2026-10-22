@@ -168,11 +168,12 @@ def _load_offices() -> dict:
     # A ROW ID IS UNIQUE, CHECKED HERE AND NOWHERE ELSE. `populated.build_realm` keys the seats it
     # matched by row id (`authored[row["id"]]`) and skips a row already in that dict, so a second row
     # under one id was collapsed without a sound -- and the minted-id guard runs after that skip.
-    ids = [row.get("id") for row in doc["seats"] if isinstance(row, dict)]
+    # `foreign_seats:` (v9 IN-36) is the same row shape under its own key; its ids share the one namespace.
+    ids = [row.get("id") for row in (*doc["seats"], *(doc.get("foreign_seats") or ())) if isinstance(row, dict)]
     repeated = sorted({i for i in ids if i is not None and ids.count(i) > 1}, key=str)
     if repeated:
         raise Unspecified(
-            f"offices.yaml `seats:` carries more than one row under the id(s) {repeated}",
+            f"offices.yaml `seats:` and `foreign_seats:` carry more than one row under the id(s) {repeated}",
             "offices.yaml -- seats",
             needs="one row per `id`",
             law="`offices.yaml: meta: rule` -- one seat = one row; a repeated id is collapsed "
@@ -998,17 +999,33 @@ ROLE_TEMPLATE_OF = roster_map("role_templates", "by_faction")
 #: places exist only in a world built with `build_realm(foreign=True)` (v9 IN-36). A member of `FACTIONS` in
 #: both arms; absent from the control arm's world. Read by `harness/populated.py`, nothing else.
 FOREIGN_CAST = roster_map("foreign_cast", "by_faction")
+if not FOREIGN_CAST:
+    raise Unspecified(
+        "rosters.yaml `foreign_cast` names no faction", "rosters.yaml -- foreign_cast",
+        needs="a `by_faction:` row for each foreign faction, or no `foreign_cast:` consumer at all",
+        law="v9 IN-36 -- an empty section reads as a quiet empire (`_load_offices` refuses an empty `seats:` alike)")
 for _f, _place in FOREIGN_CAST.items():
     # Checked at load, `_load_rosters`' reason: a row naming no faction, or a place with no code, would seat
     # nobody in `foreign=True` and read as a quiet empire (a roster declared and never read).
-    if _f not in FACTIONS or not all(isinstance((_place.get(k) or {}).get("code"), str)
-                                     for k in ("territory", "settlement")):
+    if _f not in FACTIONS or not isinstance(_place, dict) or not all(
+            isinstance((_place.get(k) or {}).get("code"), str) for k in ("territory", "settlement")):
         raise Unspecified(
             f"rosters.yaml `foreign_cast` row {_f!r} is not a `factions` member with a territory and a "
             f"settlement, each {{code}}", "rosters.yaml -- foreign_cast",
             needs="a faction named in `names_index.yaml` (`token_class: faction`) and both places",
             law="v9 IN-36 -- a foreign faction is a faction first; its places are what `foreign=True` mints")
 del _f, _place
+# A foreign seat for a faction `foreign_cast` does not name is dropped by `build_realm` without a sound, and its
+# goal rows would be seeded with no committer: the quiet empire, one key over.
+_orphan_seats = [row.get("id") if isinstance(row, dict) else row for row in FOREIGN_SEATS
+                 if not isinstance(row, dict) or row.get("faction") not in FOREIGN_CAST]
+if _orphan_seats:
+    raise Unspecified(
+        f"offices.yaml `foreign_seats:` row(s) {_orphan_seats!r} name a faction that `rosters.yaml: foreign_cast` "
+        f"does not", "offices.yaml -- foreign_seats",
+        needs="a `faction:` that is a key of `foreign_cast: by_faction`",
+        law="v9 IN-36 -- a seat of a faction with no foreign places seats nobody")
+del _orphan_seats
 
 # ---------------------------------------------------------------------------
 # THE `modules:` ROSTER (plan position `30`; A-25, `ED-IN-0284` revised by `ED-IN-0285`) -- THE ONE
