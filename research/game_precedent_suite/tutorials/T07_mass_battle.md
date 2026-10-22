@@ -114,7 +114,7 @@ Clock: alternating player turns ("I go, you go"), each with a turn limit; per-un
 2. Start of your turn: eligible Disrupted/Fragmented/Routed units test to rally automatically (a unit with a general always tests); command range is fixed at this moment [V3 §9.1, §14.3].
 3. You issue orders in any sequence: Move, Turn, Fall Back, Form Square, Shoot (must be ordered, your turn only), Charge (click twice; tooltip shows Win:Draw:Lose odds from 1000 sample resolutions), Fight Melee for combats already joined, Move General, Dismount, Stakes, War Wagons [V3 §11, §11.11, §11.13.1].
 4. Press End Turn (confirm). Any melee still "due" is resolved automatically; you cannot dodge a melee round by not clicking it [V3 §11.14].
-5. Enemy AI plays the same sequence; combats, cohesion tests, pursuit, push-backs and break-offs resolve by dice (break-off decided by the AI) [V3 §13.3-13.5, §14].
+5. Enemy AI plays the same sequence; combats and cohesion tests (2d6, §14.2) resolve by dice, while push-backs follow a fixed cadence (every other "lost badly" result if the unit faces orthogonally, every third if diagonally, §13.4) and break-off is decided by the AI (§13.5) [V3 §13.3-13.5, §14].
 6. Repeat until a side "breaks" (60% of original troops routed or dispersed; or 40-59% with the enemy 25% lower) or the turn limit ends it [V3 §18].
 Interrupts: flank-march arrivals and ambushes (all enemy units take a cohesion test when an ambush arrives) [V3 §5.3.13]. Automated: all dice, rallies, pursuit, routers' moves, ZOC enforcement, rout % scoreboard. Campaign: after each battle the Campaign Stage screen opens (replay/retreat/recruit/garrison/strategic choice), then the next generated map [V3 §7.3].
 

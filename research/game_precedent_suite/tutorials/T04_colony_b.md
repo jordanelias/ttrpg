@@ -113,7 +113,7 @@ Automated: heat radius effects, hauling, eating, healing, Automatons (work 24 h 
 | Food chain: hunter's hut, cookhouse, Soup/Additives (frequent) | workers, laws | raw food becomes 2 rations (v2 table citing gamingbolt; not re-opened) | continuous |
 | Emergency/Extended Shift (frequent) | Discontent | 24 h workplace opening | when a resource gap bites |
 | Sign a Law (rare, a few dozen over a run) | Hope and/or Discontent | opens buildings; exclusion pairs | each time the book is free |
-| Faith or Order Purpose (once) | rest of the run | replaces Hope/Discontent with Devotion/Obedience bars [V3 thegamer ; Wikipedia] | near the end, before the storm |
+| Faith or Order Purpose (once) | rest of the run | turns the Hope bar into Devotion (Faith) or Obedience (Order); Discontent stays, and Order laws lower it [V3 Frostpunk Fandom Hope page; thegamer laws guide says only "your Hope bar will turn into Obedience"] | near the end, before the storm |
 | Answer event dilemmas (rare) | people, hope | one-off | when they pop up |
 | Medical policy (rare) | Hope, lives | Triage heals 60% but 25% of those die [V3 gamepressure] | when illness spikes |
 | Child labour, funerals, Cemetery/Corpse Disposal (rare) | Hope | labour vs hope trade | early mid game |
