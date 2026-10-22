@@ -294,7 +294,13 @@ jobs:
     # no test having failed. Both moved to `season-tests` below. The paragraphs above predate the
     # season step (added 2026-09-05, ED-IN-0204) and describe `tests/valoria` alone, so they stand;
     # ~9m10s against 16 minutes is the latest hosted-runner observation of that step.
-    timeout-minutes: 16
+    #
+    # [RAISED 16 -> 24, 2026-10-22] The step now straddles the cap on the SAME commit: run 39757559675 (PR #498
+    # @44b09535) cancelled it at 16m00s, attempt 2 of that run passed it in about 11 minutes, and `main`'s runs
+    # 39702726847 (@51d7b05c) and 39766690827 (@287ac3d9) were cancelled at the cap, each failing `All Gates Green`
+    # with no test failing. A local run of the whole directory takes about 4m on four cores. A cancel at the cap
+    # reads as a red check, not as "the runner was slow", so the cap is moved clear of the observed spread.
+    timeout-minutes: 24
     permissions:
       contents: read
     steps:
