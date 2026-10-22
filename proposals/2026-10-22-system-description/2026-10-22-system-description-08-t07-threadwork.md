@@ -52,7 +52,8 @@ Site field or flag represents one. **Exposure** (the fieldwork sense; not the E-
 Thread Sensitivity, `coherence.py:41-42` and `canon/philosophy/07_drift.md:311-316`, the sense suite file 01 uses) is, in fieldwork canon,
 a per-territory tally of investigative visibility, which canon raises by 2 for Surveil and by 1 for Thread-Read (ED-FI-0009 row 1, `registers/editorial_ledger_fi.jsonl`).
 The same row's retraction answers it in code terms: conspicuousness is the size of an Event's observer set, which WITNESS already
-computes (`architecture/meta/01_AXIOMS.md:1100-1101`), so no per-territory carrier is to be built; **no code carries the tally**. The
+computes (`architecture/meta/01_AXIOMS.md:1100-1101`), and a per-territory meter "was the wrong shape to begin with"; **no code
+carries the tally**. The
 `thread_read` row says its co-movement and Coherence cost "ARE NOT EXPRESSED HERE" and carries "the Exposure gap" on ED-FI-0009
 (`engine/season/verb_table.yaml:1423`), and the loader forbids `exposure` as a bare axis name because the word has three senses
 (`engine/season/rosters.yaml:504`, `:526-528`). **Precedent citations** (reference only, tier 3) use three aliases:
@@ -161,7 +162,7 @@ In that table, the **Calamity** is canon's over-drawing of the substrate, to whi
 locks and lowered by `mend` (IN-35; D05:202); a **Locked Zone** is a place where becoming has been precluded, which in code today has no
 representation (its one docstring mention is an example of a place where a mender is not in equilibrium, and the flag
 `environment_in_equilibrium` is False elsewhere out of equilibrium too); **Exposure** is the per-territory fieldwork tally that
-`thread_read` would raise by 1, which the ED-FI-0009 retraction reads as the size of an Event's observer set, not a carrier to build
+`thread_read` would raise by 1, which the ED-FI-0009 retraction reads as the size of an Event's observer set, not a per-territory meter
 (all three: §0). Open before any of it plays: the TS carrier (H-85, build B4), the seam (M1), a
 recovery clock or rest verb (K-WR-8), and what follows the crossing (K-WR-5, TW-G11) (§7).
 
@@ -697,6 +698,33 @@ Each was checked against the cited line at `51d7b05` before being applied. Prece
    (`proposals/2026-10-21-v9-remediation/2026-10-21-v9-remediation-02-items-rb0-to-rb3.md:548-551`, `:559`, `:570`).
 10. **Stale line numbers after PR #494.** `rosters.yaml:2672` -> `:2738`; `:2671-2676` -> `:2737-2742`; `:2670-2676` -> `:2736-2742`
     (the `thread_read` cells moved +66); `tools/export_game_constants.py` "lines 60, 133" -> "60, 134".
+
+#### Audit fixes
+
+Each was checked against the cited line before being applied (independent round-3 audit of this file; finding numbers are the audit's).
+
+1. **Exposure (§0, §0a, §7; audit 1).** "No code carries it" alone -> adds that the ED-FI-0009 row's own retraction reads conspicuousness as the size of an Event's observer set (`registers/editorial_ledger_fi.jsonl` row 1; `architecture/meta/01_AXIOMS.md:1100-1101`).
+2. **Locked Zone gloss (§0, §0a, §5(c); audit 2).** "A place where `environment_in_equilibrium` would be False" -> no code representation; the docstring names it as one example and the flag is False elsewhere too (`operations.py:544-548`; `canon/philosophy/09_terminology.md:117`).
+3. **Sunless Sea free reduction (§5(d), item 5; audit 3, partly).** "Once per voyage [V2, not re-checked in v3]" -> once per SAY [V2], and SAY re-rolls each minute at zee [V3] (`R7_magic_sanity_travel.md:46`; `T08_sanity_a.md:110`, `:175`); the V2 tag stays on "once per SAY" because v3 corrected only the re-roll cadence.
+4. **Pathologic 2 (§2.3, §5(f); audit 4).** "The fully permanent case" -> lasts the save file, removed only by a new file or the Fellow Traveler's deal (`T09_sanity_b.md:79`, `:128`; `R7_magic_sanity_travel.md:103`).
+5. **Missing section names (§2.3, §5(d); audit 5).** Magic-sanity table "Delivery of the cost" and "Comparison" (absent from the in-repo file) -> in-repo sections by number (`R7_magic_sanity_travel.md:18`, `:27`, `:46`, `:74`; `T08_sanity_a.md` and `T09_sanity_b.md` sections as cited).
+6. **`verb_table.yaml:1423` wording (§0, §7, item 2; audit 6).** "+1 Exposure ... NOT EXPRESSED HERE" -> the row says its co-movement and Coherence cost "ARE NOT EXPRESSED HERE" and carries "the Exposure gap" on ED-FI-0009.
+7. **Locked Zone grep (§0, item 2; audit 7).** "Finds nothing only because the mention breaks across lines" -> scoped to `--include=*.py`, plus the two registrations and the frozen `params_tables.yaml:5628-5630` Mending row (`references/alias_registry.yaml:374-377`, `references/definitions/vocab_source.yaml:361-364`).
+8. **Ending (§0a, item 9; audit 8).** "Its docstring says the realm as built reaches none" -> none was reached in seeds 0-2 (uncommitted round-3 probe, suite file 13 R-F12); at build none, and one opening act would suffice (`queries/world_q.py:1789-1791`).
+9. **Callback menu (§0a; audit 9).** "A seated person's menu holds no thread verb" -> the delegate `auto` never proposes one, while the callback may return any Act and a hand-built `thread_read` was not tried (`harness/play_surface.py:21-25`).
+10. **Exposure sense (§0; audit 10).** One unmarked sense -> "the fieldwork sense; not the E-2 sense" used by suite file 01 (`coherence.py:41-42`; `canon/philosophy/07_drift.md:311-316`; `rosters.yaml:526-528`).
+11. **Worked-example acts (§0a; audit 11).** "Spending three of his roughly 7 acts" -> three workings that cost no act in the oracle (§4), each one act under §7.
+12. **Index lines (§5(f), items 8, §9; audit 12).** `research/00_INDEX.md:177`, `:257` -> `:178`, `:258`.
+13. **Eternal Darkness power pool (§5(f); audit 13).** "Power has its own pool" -> casts cost MP, but steering a summoned Horror drains Sanity (`T08_sanity_a.md:209`, `:247`).
+14. **Don't Starve Tent (§5(d); audit 14).** "Six uses" untagged -> tagged [V2] (`T09_sanity_b.md:32`, `:70`).
+15. **Bloodlines frenzy (§0a, §5(a), §5(f); audit 15).** Frenzy as the threshold's effect -> triggered by hunger, pain or humiliation with a risk that depends on Humanity, the floor's effect [CONTESTED] (`T09_sanity_b.md:161`, `:204`; `R7_magic_sanity_travel.md:116-117`).
+16. **Calamity (§0, §0a; audit 16).** "The proposals turn it into territorial strain" -> an ongoing level that strain from live weaves and locks feeds and `mend` lowers, as §5(e) and §7 already said (`canon/00_philosophical_foundations_rules.md:83`; IN-35; `2026-10-16-verbs-06-what-verbs-do-to-the-world-2.md:70`).
+17. **Mending (§0a; audit 17).** "Free, paying its worker and walking set back" as one cast -> free at every degree, and one of the two paths per cast (`operations.py:322`, `:449-451`, `:494-509`, `:159-167`, `:572-577`).
+18. **Leap (§0a menu; audit 18).** "Before a lattice" -> never on its own: the lattice rolls its own Leaps and solo operations need none (`collective.py:115-116`).
+19. **History (§0a; audit 19).** "A flat 3 dice whatever its value" -> "for every history ≥ 0", matching trap 6 (`operations.py:246`).
+20. **Meltdown cost (§0a, §5(a), §5(f); audit 20).** Cited at DD2 §2 step 7 (the 80/20 fork) alone -> adds §6, where the quirk chance and 3 Affinity per bond are stated (`T08_sanity_a.md:76`).
+21. **Dispatch seam (§0a [PROPOSED]; audit 21).** "A seated player would be one person's decision procedure" -> the seam is built and run only by tests (`harness/play_surface.py:41-52`; `engine/season/tests/test_play_surface_dispatch.py`).
+22. **Reviewer quote (§5(d); audit 22).** The reviewer calls "the meter" strategically gentle -> calls the game, played that way, "strategically gentle" (`T08_sanity_a.md:241`).
 
 ## 9 Checks
 

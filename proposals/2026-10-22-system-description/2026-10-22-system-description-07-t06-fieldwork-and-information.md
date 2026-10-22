@@ -58,7 +58,7 @@ decision layer (`questions_for`, `opening_set`) turns your claims into your next
 | WITNESS fan-out, refraction, decay, cap and eviction | RUNS-IN-LOOP |
 | `co_located`, `chronicle` and `document_key` channels | RUNS-IN-LOOP |
 | `witness_key` channel | TESTS-ONLY: it admitted nobody in seeds 0 or 2 (0 `firsthand_via_knot`) |
-| `post_remit` slot (the obligee channel and IN-22 seat reports) | TESTS-ONLY at seed 0 (0 `inferred`). Seeds 1 and 2 each end season 2 with one `inferred` claim. With 0 found deposits in every seed, each must come from the channel (`witness.py:598`) or a seat report (`witness.py:513-524`), so this slot executes at seeds 1 and 2. Which of the two I did not trace |
+| `post_remit` slot (the obligee channel and IN-22 seat reports) | RUNS-IN-LOOP through the obligee channel (errata Part 3 R-13): at tick 0 the King's obligee p_npc_070 holds an `inferred` claim of a refused royal act in seeds 0, 1 and 2 (uncommitted round-3 probe). Seed 0's end-of-run count of 0 `inferred` is a survival count, not an absence: p_npc_070 dies at tick 1 there. Test: `engine/season/tests/test_obligees.py:167` |
 | the inquiry rolls, `survey`, `forge`, `conceal`, `create_record`, `tell` | RUNS-IN-LOOP |
 | what an inquiry uncovers (the found deposit) | TESTS-ONLY: 0 found deposits in seeds 0, 1 and 2 (probe) |
 | `give` | 0 of 16 in seed 0; 1 of 19 in seed 2 (a cover changed hands) |
@@ -120,23 +120,25 @@ L.A. Noire), "T19 precedent" is `.../T19_tactics_narrative.md` (Lacuna, Ace Atto
 Outside the loop, `harness/chronicle.py` (IN-37, PR #494) prints the deepest cross-person act chain of a
 finished log. It reads acts and Events, not ledgers, and the loop never imports it.
 
-**The choice menu.** Every act costs one act of budget (a lone scene costs 1; an extended scene costs 2 for
-up to 3 acts; §0). Run figures: ctl attempted/ok, seeds 0 · 1 · 2.
+**The choice menu.** Every act spends scene-action budget: 1 as a lone scene, or a share of an extended scene
+costing 2 for up to 3 acts (§0; errata Part 2 C1). Run figures: ctl attempted/ok, seeds 0 · 1 · 2. Grades
+per part are in §0 (status table); per-verb prerequisites and refusal causes are in §4. Where this summary
+differs from them, they govern.
 
 | verb | cost | effect | when a person picks it | grade (ctl) |
 |---|---|---|---|---|
 | (be present) | none | firsthand 100 with `who` on everything in the room | always: it is where he is | RUNS-IN-LOOP |
-| `research` | 1 act | graded; uncovers a forged Record's trail if one is open | a question about a Record; most formed acts name a person or place and are refused | RUNS-IN-LOOP 14/7 · 8/1 · 4/2; 0 found deposits |
-| `surveil` | 1 act | graded; a Rung he stands in; no Person case | a question about the place he is in | RUNS-IN-LOOP 30/5 · 29/9 · 22/5 |
-| `examine` | 1 act | graded; a Site he stands at | never admitted: no question's subject is a Site (§4) | TESTS-ONLY 0/0 (62 / 59 / 39 formed, all refused) |
-| `interview` | 1 act | ungraded `finding.made`; reads nothing from the interviewee | a question about a person | RUNS-IN-LOOP 32/11 · 16/2 · 39/11; uncovers nothing |
-| `reconstruct` | 1 act | ungraded; uncovers nothing | a held claim on the subject | RUNS-IN-LOOP 39/33 · 52/46 · 55/49; uncovers nothing |
-| `survey` | 1 act; +1 budget while held | a true faction sheet in his hold | a held claim; the subject coheres under one faction | RUNS-IN-LOOP 57/13 · 38/5 · 59/13 |
-| `forge` | 1 act; +1 budget | a sheet naming him head; `forgery_quality 1`, capped away | as `survey` | RUNS-IN-LOOP 52/12 · 51/6 · 57/15 |
-| `conceal` | 1 act; +1 budget | a cover: later deposits are about the alias; `who` still shows | any time | RUNS-IN-LOOP 19/19 · 34/34 · 28/28 |
-| `create_record` | 1 act; +1 budget | a `text` Record in his hold | any time; the cheapest budget lever | RUNS-IN-LOOP 87/87 · 88/88 · 89/89 |
-| `give` | 1 act | moves a held Record and its content to a person with him | a question naming a Record he holds (formed mostly on persons and buildings) | TESTS-ONLY at seeds 0-1 (16/0, 21/0); executes at seed 2 (19/1, a cover) |
-| `tell` | 1 act | contested; the hearer copies his best claim with him in the chain | a held claim; the hearer with him | RUNS-IN-LOOP 23/4 · 25/7 · 19/6 |
+| `research` | one act of a scene | graded; uncovers a forged Record's trail if one is open | formed on the question's referent, which must be a Record to pass admission; about 108 formed acts in seed 0 are refused there (§4) | RUNS-IN-LOOP 14/7 · 8/1 · 4/2; 0 found deposits |
+| `surveil` | one act of a scene | graded; a Rung he stands in; no Person case | a question about the place he is in | RUNS-IN-LOOP 30/5 · 29/9 · 22/5 |
+| `examine` | one act of a scene | graded; a Site he stands at | formed on the question's referent, never a Site in 160 formations (uncommitted round-3 probe); fix tracked as REM-22 (§4) | TESTS-ONLY 0/0 (62 / 59 / 39 formed, all refused); test `engine/season/tests/test_fi01_graded_inquiries.py:223-239` |
+| `interview` | one act of a scene | ungraded `finding.made`; reads nothing from the interviewee | a question about a person | RUNS-IN-LOOP 32/11 · 16/2 · 39/11; uncovers nothing |
+| `reconstruct` | one act of a scene | ungraded; uncovers nothing | a held claim on the subject | RUNS-IN-LOOP 39/33 · 52/46 · 55/49; uncovers nothing |
+| `survey` | one act of a scene; +1 budget while held | a true faction sheet in his hold | a held claim; the subject coheres under one faction | RUNS-IN-LOOP 57/13 · 38/5 · 59/13 |
+| `forge` | one act of a scene; +1 budget | a sheet naming him head; `forgery_quality 1`, capped away | as `survey` | RUNS-IN-LOOP 52/12 · 51/6 · 57/15 |
+| `conceal` | one act of a scene; +1 budget | a cover: later deposits are about the alias; `who` still shows | any time | RUNS-IN-LOOP 19/19 · 34/34 · 28/28 |
+| `create_record` | one act of a scene; +1 budget | a `text` Record in his hold | any time; the cheapest budget lever | RUNS-IN-LOOP 87/87 · 88/88 · 89/89 |
+| `give` | one act of a scene | moves a held Record and its content to a person with him | a question naming a Record he holds (formed mostly on persons and buildings) | TESTS-ONLY at seeds 0-1 (16/0, 21/0); executes at seed 2 (19/1, a cover) |
+| `tell` | one act of a scene | contested; the hearer copies his best claim with him in the chain | a held claim; the hearer with him | RUNS-IN-LOOP 23/4 · 25/7 · 19/6 |
 
 **First season, step by step** (seed 0, tick 0; a read-only probe of one season on the ctl recipe).
 1. Every ledger starts empty (83 persons, 0 claims). p_npc_037, the season's busiest investigator, holds 0.

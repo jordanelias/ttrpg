@@ -94,7 +94,7 @@ C4 REMIT roster: rosters.yaml:316 `open: true`, but :315 and verb_table.yaml:257
 C5 BROADCAST: the chronicle channel is a KIND filter (epistemic.py:652-654, :685-686): any Event whose kind some binding_decision row emits is broadcast to everyone, including pursuit.moved (from determine) and MATTER's tenure.closed. Not "every binding_decision act".
 C6 UNCELLED VERBS: tell and thread_read are uncelled by design; restore is NOT (its note: "THE PREMISE IS STALE ... cells are owed", rosters.yaml:2979-2985); carry, examine, interview are gaps. (Overturns ERRATA G13 for restore.)
 C7 COHORT COMMIT: no code gate stops cohorts committing; NP-G36 is a [PROPOSED] gap row; observed: none did.
-C8 NULL-CONFERRAL seats (King, Duke of Valorsmark, Duchess of Hafenmark, Widow Regent, Heir, Princess) can never be refilled once vacant; succeed has no effect.
+C8 NULL-CONFERRAL seats (six authored rows: King, Duke of Valorsmark, Duchess of Hafenmark, Widow Regent, Heir, Princess; seven built seats with the unauthored `off_npc_084`, Part 3 R-F1) can never be refilled once vacant; succeed has no effect.
 C9 HUNGER cover caveat: D02's "cover 21.7 -> 41.7 seasons" counts ore and timber as food; grain alone is ~10 seasons; yield reaches 0 only at tick 100 without repair.
 C10 requires: teach the typed cell (requires_typed), not the prose `requires:` string, and say which half is untyped (speak: venue half; determine: the date).
 C11 PRIMITIVES and PROCESS IDS: the master file will carry a shared glossary (Rung, Tenure, Record, Proposition/mood, Office/purview, stratum, prize, "with", establishment, Observation, Calamity/Locked Zone/Exposure, H-/REM-/JQ-/D-V/R-/M-/J-T ids). Still define each primitive in one clause on first use in your tutorial.
@@ -327,7 +327,7 @@ Round 3: re-run at `51d7b05` for seeds 0, 1 and 2; the three outputs are byte-id
 are counted in the act store (`w.acts`); Part 3 R-F3 gives both.
 
 
-## Part 3 — Round-3 rulings (precedent-disposition pass and I1 verification)
+## Part 3 — Round-3 findings (precedent-disposition pass and I1 verification)
 
 **Method.** A verified precedent suite (`research/game_precedent_suite/`: capability tables and "how it plays" tutorials for about seventy
 games, and the disposition record) was routed game by game to the ten Valoria tutorials. Thirteen read-only Opus disposition critics gave
@@ -339,17 +339,17 @@ and re-ran the decisive probes there. No LACKS row survived `CLAUDE.md` §0's fi
 each stays design-level, reference only. Except `ctl/`, the probes cited here (the I1 verification, the seam trace, the round-3 trace, the revoke scan)
 were session files and are not committed; their numbers cannot be reproduced from the tree, and each is tagged "(uncommitted round-3 probe)" at its first use below.
 
-**Rulings.** Each is a fact several critics found independently, re-opened at the code at `51d7b05`. Where one overturns a line above, it says which.
+**Round-3 findings.** Each is a fact several critics found independently, re-opened at the code at `51d7b05`; none is a ruling of Jordan's. Where one overturns a line above, it says which.
 
 - **R-F1 Null-conferral seats.** Seven of the 32 built seats have no conferral basis and can never be refilled once vacant: King
-  (`off_npc_020`), Queen, the `off_widow_regent` row (`off_npc_032`), Prince, the `off_heir` row (`off_npc_031`), Princess (`off_npc_030`),
+  (`off_npc_020`), Queen (the Widow Regent row, `off_npc_032`), Prince (the Heir row, `off_npc_031`), Princess (`off_npc_030`),
   Duchess of Hafenmark (`off_npc_050`), Duke of Valorsmark (`off_duke_valorsmark`), and the unauthored guild-leader seat `off_npc_084`.
   Evidence: `conferral: null` at `engine/season/offices.yaml:188, 201, 214, 240, 253, 266`; `harness/populated.py:1240-1250` builds
   `off_npc_084` with no row, so `conferral=None`; `has_conferral_basis` (`state/gate.py:643`) and `_req_confer` (`loop/predicates.py:126-127`)
   refuse them; `succeed` has no effect (`verb_table.yaml:1113`). Probe: appointed 17, elected 8, none 7, the same list in seeds 0-2.
-  The King dies at tick 0 in every seed (seed 0: Wounded in a fight with `p_npc_006`, who fell, then Felled by the Queen's `accept`); seats vacated by the end
-  of season 2 are 8 / 7 / 10, null-basis seats 3 / 5 / 6 of them; one seat is refilled across the three seeds (seed 1, a self-conferral of
-  `off_senior_inquisitor`). **Overturns Part 2 C8's "six"**, which counted authored rows only.
+  The King dies at tick 0 in every seed (seed 0: Wounded in a fight with `p_npc_006`, who fell, then Felled by the Queen's `accept`); seats vacated after two seasons
+  (ticks 0-1) are 8 / 7 / 10, null-basis seats 3 / 5 / 6 of them (uncommitted round-3 probe); one seat is refilled across the three seeds (seed 1, a
+  self-conferral of `off_senior_inquisitor`), so the seats still vacant at the end are 8 / 6 / 10. **Overturns Part 2 C8's "six"**, which counted authored rows only.
 - **R-F2 Revocation.** A revocation can pass only through `off_duke_valorsmark`: the six (seat, target) pairs at build all use it, held by the
   King (`state/gate.py:452-484`; revoke scan, uncommitted round-3 probe). The realm seats are on the rung above the duchy seats but fail on
   faction or holdings (`offices.yaml:78-85`; `state/gate.py:452-484`, `:547-565`). It is vacant from tick 0 in every seed and has no basis, so after

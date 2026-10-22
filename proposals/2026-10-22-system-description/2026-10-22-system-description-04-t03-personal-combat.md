@@ -379,7 +379,7 @@ goals a fight can serve are therefore read off what the band writes:
 | goal | represented by | reachable today? |
 |---|---|---|
 | **kill** a person | the subject's Felled band: body 0, `remove_person`, every tenure naming him closed | yes, by chance: 48.5 % of mirror fights |
-| **wound** a person | the Wounded band: body scaled down, which lowers his `end` and his scene budget next season | not by winning: the fight runs to the first felling or to 12 turns (`MC/wrapper.py:504`, `:516-520`, `:524-525`), so a Wounded or Untouched subject means the attacker was felled unless the fight ran out undecided. Of the 112 Wounded mirror fights (§3), 111 felled the actor and 1 was undecided (206 non-Felled = 205 felled actors + 1 undecided; the 111 / 1 split by band is an uncommitted round-3 probe, 94 Untouched all felled the actor); in the realm, 15 of 15 (seeds 0-2). The body cut lands on the winner |
+| **wound** a person | the Wounded band: body scaled down, which lowers his `end` and his scene budget next season | not by winning: the fight runs to the first felling or to 12 turns (`MC/wrapper.py:504`, `:516-520`, `:524-525`), so a Wounded or Untouched subject means the attacker was felled unless the fight ran out undecided. Of the 112 Wounded mirror fights (§3), 111 felled the actor and 1 was undecided (206 non-Felled = 205 felled actors + 1 undecided; the 111 / 1 split by band is an uncommitted round-3 probe, 94 Untouched all felled the actor); in the realm, 15 of 15 (seeds 0-2; uncommitted round-3 probe). The body cut lands on the winner |
 | **force a duel** | `challenge` → the other's `accept` | no carrier: `challenge` writes nothing and `accept` does not read it (`VT:749`) |
 | **provoke / be seen** | `challenge.issued` and the fight's band kind, fanned to witnesses as claims | yes; it changes what others hold, not what they do |
 | **defend yourself** | nothing: there is no guard, no interpose, no refusal to be attacked | no; your only defence is your body band |
@@ -404,7 +404,7 @@ independently forms `accept` against you.
 ### 5c Costs, risks, counter-play, blockers
 - **Cost:** one act from the season's budget (budget 5 → at most 7 acts, §1). No stamina, wealth, office or standing is spent.
 - **Risk to the attacker:** none in world state today. The actor's wound state is returned and not read (§2.6); in 51 % of mirror fights the
-  attacker is felled in the scene and stands up unharmed in the world. In the realm it is 33 of 59 combat calls over seeds 0-2 (56 %), within noise of the mirror's 51 %.
+  attacker is felled in the scene and stands up unharmed in the world. In the realm it is 33 of 59 combat calls over seeds 0-2 (56 %; uncommitted round-3 probe), within noise of the mirror's 51 %.
   At tick 1 of seed 0, `p_npc_004`, cut to body 48 (`end 1`) by two fights he won as subject, attacked, was felled in one turn, and kept body 48.
 - **Risk to bystanders:** observers take a scar count per violated pursuit (`loop/resolve.py:597-610`), which shifts no pursuit at
   shipped values (`scar_weight_shift 0`, ERRATA G1).
@@ -505,7 +505,7 @@ the realm (§4).
 2. **"If I attack and lose, I die."** The actor is never written (`EC:107-109`); a felled attacker survives in the world at full body.
 3. **"`contest.undecided` means nobody was hurt."** It means the *subject* was untouched; in 23.5 % of mirror fights it hides a felled
    attacker. So does `body.changed`: a Wounded band is a fight the attacker lost, bar one that ran 12 turns undecided (§5a). Over seeds 0-2,
-   33 of 59 realm combat calls felled the actor in the scene (16 / 8 / 9) and none was written; the only harm combat writes besides a death
+   33 of 59 realm combat calls felled the actor in the scene (16 / 8 / 9; uncommitted round-3 probe) and none was written; the only harm combat writes besides a death
    lands on the subject, who in every realm case (15 of 15 Wounded calls) had felled his attacker. The verb table reads these bands the other way
    ("blood was drawn and nobody fell", `VT:656-661`); the data do not deliver that reading (33 of 33 realm and 205 of 206 mirror non-Felled calls had a felled actor).
 4. **"`winner` tells me who fell."** In about 4 % of decided fights the upset floor flips `result` and so `winner` names the felled
@@ -566,13 +566,13 @@ the realm (§4).
 Against `51d7b05` and the precedent suite (`PS/dispositions/D_T03.md`); each cited line was re-opened at the current tree before it was accepted.
 - **§7 Played fights** (D_T03 row 50). Old: IN-46 "pauses per engagement so a seated player chooses `feint` … `interpose`". New: IN-46's design is a
   per-turn decider with an [ASSUMPTION] set {engage, withdraw}, chosen by a party test at the seam; the eight-move menu is L09 M11's. Evidence:
-  `GMS:116-131`, `:11-13`; `L09:52`, `:145-160`, `:329`; `REM2:575-576` (REM-31 changes four files, none an effect file; a grep of the four
-  remediation parts for `_eff_kill|K-PC|two-sided|PC-G09` finds nothing).
-- **§8 #6** (row 26). Old: "the link was not re-measured". New: 0 of 39 resolved `accept`s (18 / 9 / 12) follow a `challenge.issued` from their
-  subject; 4 challengers accepted against their own challenged. Evidence: the control recipe re-run on `51d7b05` (per-act rows in fold order;
-  39 `accept`s, 0 forward links, 4 reverse links; a planted challenge counts 1).
+  `GMS:116-131`, `:11-13`; `L09:52`, `:145-160`, `:329`; `REM2:575-576` (REM-31's `change:` line is "per the design"; a grep of the remediation
+  parts and `workplans/` for `_eff_kill|K-PC-2|two-sided|wound_state\[|both parties` finds nothing; see Audit fixes below).
+- **§8 #6** (row 26). Old: "the link was not re-measured". New: 0 of 39 resolved `accept`s (18 / 9 / 12) follow a `challenge.issued` by their
+  subject naming the acceptor; 4 `accept`s followed a challenge by the same actor against the same subject. Evidence: the I1 verification's per-act
+  rows and the control recipe re-run on `51d7b05` (per-act rows in fold order; 39 `accept`s, 0 forward links, 4 reverse links; a planted challenge counts 1).
 - **§5d, challenge bullet** (row 26). Old: issuing a challenge "exposes you as the subject of any later `accept`". New: it could; in seeds 0-2 it
-  did not, and the challengers were the ones who accepted. Same evidence.
+  did not, and four `accept`s followed a challenge by the same actor (fold-order co-occurrence). Same evidence.
 - **§5a, wound row** (row 49). Old: "yes, by chance: 28 % of mirror fights; you cannot choose wound over kill". New: not by winning; a Wounded
   subject is one the attacker failed to fell. Evidence: `MC/wrapper.py:516-520`; §3's counts (206 non-Felled = 205 felled actors + 1 undecided);
   realm trace 15 of 15 Wounded calls had the actor felled.
@@ -594,6 +594,25 @@ Against `51d7b05` and the precedent suite (`PS/dispositions/D_T03.md`); each cit
   cites Battle Brothers, Jagged Alliance 2 and XCOM only (Kingdom Come: Deliverance §6 says death reloads the last save, which does not show it);
   the callback paragraph names the one test that hand-builds a `fight`.
 - Not changed, noted: §8 #2 says a felled attacker survives "at full body"; true of the mirror example, not of `p_npc_004` above.
+
+#### Audit fixes
+
+Round-3 audit of this file (F_04), each cite re-opened at the current tree before it was applied.
+- **§0a cosmetic list (1).** "tradition and abilities (unreachable; §3 shows they would decide fights)" -> weapon and armour would decide fights, tradition and abilities move nothing beyond noise on equal swords (§3, `:318-319`).
+- **§5a wound row, §8 #3 (2, 15).** "a Wounded or Untouched subject means the attacker was felled" -> unless the fight ran 12 turns undecided (`MC/wrapper.py:504`, `:524-525`; 1 of 400 mirror fights, a Wounded one: 111 of 112), with the verb table's contrary reading (`VT:656-661`) named.
+- **§0a IN-46 bullet, §7 (3).** IN-46 "suspends at the seam" -> it defers every fight from RESOLVE to ENCOUNTER (`GMS:37-49`; `REM2:585-587`, hash mover) and replaces the engine call at `MC/fight.py:52` for a played claimant (`GMS:33-35`).
+- **§0a, §7, Round-3 list (4, 14).** "`REM2:575-576` lists four files, none an effect file" -> that line is "per the design"; the design adds three more files (`GMS:209-214`), and B-Y, which runs first (`REM2:549-550`), edits `loop/effects_combat.py` only to emit `duel.yielded` (`part7:58-59`); the grep over remediation and workplans (0 hits) carries the claim; M3/M4 are v9 positions PC-10b / PC-10a.
+- **§0a Failure and ending (5).** "a fight's harm falls on the side that lost it" -> every combatant keeps the harm he took in Battle Brothers and XCOM (`T02:167`, `:205`; `T18:169`, `:205`), JA2 adds capture for the loser (`T14:61`); Valoria writes the subject only.
+- **§0a loop step 5 (6).** The scar clause sat under WITNESS -> moved to step 4: the scar is written at RESOLVE (`loop/resolve.py:557`, `:597-606`).
+- **§5c (7).** "In the realm the share is higher: 33 of 59" -> 56 %, within noise of the mirror's 51 %.
+- **§0a cosmetic list (8).** `challenge` "answered by nobody" -> writes nothing, its `challenge.issued` is deposited as a claim (`VT:730-731`), and its effect on later choices was not measured.
+- **§8 #6, §5d challenge bullet (10).** "the control recipe re-run" and "four challengers used `accept`" -> the I1 verification's per-act rows plus the re-run, a `challenge.issued` by the subject naming the acceptor, and four `accept`s that follow a same-pair challenge in fold order (no answer: `VT:749`).
+- **§0a choice menu (11).** The `challenge` and `tend` "when a person picks it" cells held effects -> `challenge` cites its three alignment cells (`ROS:3164`, `:3344`, `:3413`), `tend` has no cell (`ROS:3017-3019`), and the "never answered" claim moved to the effect column.
+- **§0a callback paragraph (12).** "none of the nine hand-built chains in the I1 verification was a `fight`" -> dropped; the count and the absence cannot be reproduced from the repo (`PS/README.md:26`, `:29` give neither).
+- **§0a menu, §5d dead end (13).** `tend` TESTS-ONLY without a test -> `engine/season/tests/test_in12_step9.py:203-209` (a computed `tend` at body 400 reaches the scale); the hand-built body-250 control and the self-targeted 4 / 4 / 3 are tagged uncommitted round-3 probe.
+- **§0a Failure and ending (16).** "the realm as built reaches none (`world_q.py:1789-1790`)" -> adds the run result: `endings` was `[]` after both seasons at seeds 0-2 (errata R-F12; overview §2.3).
+- **§0a (17).** Added the trace-call numbers of the walkthrough (#0-#3, #5), and definitions of the callback, fold position, AUTOMATED / PLAYABLE and the party test; "is what that set may widen to" -> L09 M11's menu is the lexicon's candidate for widening it (`GMS:119-120`).
+- **Header, probe tags.** Added `part7`; the realm figures drawn from the seam-call trace (15 of 15, 33 of 59, 111 / 1 band split) carry "(uncommitted round-3 probe)" at first use.
 
 ## 9 Checks
 

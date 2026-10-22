@@ -76,7 +76,9 @@ Every code line below was opened at `51d7b05`. The as-built text comes first; th
 | `examine` | one act | as `research` | present at a Site | TESTS-ONLY (0 admitted; formed 62/59/39; its `site` operand is filled from the subject, `decision/options.py:1047-1048`) |
 
 No verb buys dice, lowers an Ob or adds advantage at a price; the `speak` room is earned through witnessed deeds (§5b). The precedent menus
-put a spend before the roll (T05 precedent, BG3 §3: Add Bonus; Disco §3: clothing and drugs before a check); this one has none.
+put a spend before the roll (T05 precedent: BG3 §3, Add Bonus, a slot or item spent before the d20 [V3], `T05_social_rpgs.md:193`; Disco
+§3, drugs cost reál and Health/Morale for a temporary skill shift [V3], taken before a check [M], `:37`; Disco's clothing is free, `:36`);
+this one has none.
 
 **First season, step by step** (seed 0, tick 0; the faces were re-derived at `51d7b05` from `ids.draw_factory`):
 1. `build_realm(0)`: every `capability` is empty (`sigma.py:123`); the ctl count (`ctl/realm_seed0_2seasons.txt:59`) is over survivors
@@ -90,9 +92,10 @@ put a spend before the roll (T05 precedent, BG3 §3: Add Bonus; Disco §3: cloth
 7. Over two seasons seed 0 rolls 70 times: 54 F / 9 P / 7 S / 0 O (§9). Four tellings land (`ctl/realm_seed0_2seasons.txt:50`) and all
    3 speeches fail (`:51`).
 
-**What changes later.** Nothing on this layer. `train` mints no key (`ctl/` shows `train` 38/0, 30/0, 30/0 attempted/ok for seeds 0 / 1 / 2),
-so season-2 odds equal season-1 odds. The one input that drifts is a bench's reception as ledgers fill, which can move `speak`'s Ob
-between 1 and 2 (§5b).
+**What changes later.** `train` mints no key (`ctl/` shows `train` 38/0, 30/0, 30/0 attempted/ok for seeds 0 / 1 / 2), so pools and
+opposition stay as built. Only `speak` changes: the room's two terms, the bench's reception and the speaker's unmirrored proofs
+(read from ledgers, `sigma.py:180-182`; subtracted at `roll.py:104`), drift as ledgers fill and can move its Ob between 1 and 2 (§5b);
+every other verb's season-2 odds equal season 1's.
 
 **Failure and ending.** There is no ending on this layer. The loop does not halt on one: `SeasonDriver.season` reads `world_q.endings_reached`
 once a season as a report, and the realm as built reaches none (`loop/driver.py:515-518`; `queries/world_q.py:1764`; ERRATA G17 for the
@@ -103,10 +106,11 @@ formed next season at identical odds. The social roll kills nobody; a fight's se
 **Consequential versus cosmetic choices.**
 - *Consequential:* which verb (its row decides what each band writes); speaking before a favourable bench (Ob 2 → 1 takes
   Partial-or-better from 26 % to 58 %); for `determine` and `argue`, Success against Partial (pursuits move only at Success or better).
-- *Cosmetic to the odds:* who rolls (every pool is 2); minor or moderate advantage on the social path (quantised to nothing, Table B, and
-  nobody can supply it while `leverage` is a literal 0.0); any Ob in (1, 2] (plays as 2); a hostile bench (clipped by the ceiling).
-- *Against precedent:* BG3 and Disco place the consequential choice in the build and the party (T05 precedent, BG3 §7, Disco §7). Valoria
-  as built has no build.
+- *Cosmetic to the odds:* who rolls (every pool is 2); every named advantage level, minor to major, at the shipped pool 2 (the first x that moves
+  a pool-2 band is 1.015σ, §5b; minor moves nothing at pools 1–8, and moderate first moves a band at pool 7, where `net_boost(0.5, 7)`
+  is 1.02, Table B), and nobody can supply any while `leverage` is a literal 0.0; any Ob in (1, 2] (plays as 2); a hostile bench (clipped by the ceiling).
+- *Against precedent:* BG3 places the consequential choice in the build and the party (BG3 §7, `T05_social_rpgs.md:231`); Disco places it
+  in the attribute spread and the thoughts (Disco §7, `:73`). Valoria as built has no build.
 
 **[PROPOSED] (none of it executes).**
 - Stored attributes through a domain faculty (J-T1 Option B), or a character template seating `capability` (§7), would be the first setup
@@ -134,7 +138,7 @@ formed next season at identical odds. The social roll kills nobody; a fight's se
 | **modifier levels** | named advantage sizes | minor 0.25, moderate 0.50, strong 0.75, major 1.00 ("Class B draft sim-seeds … NOT canonical") | `sigma_leverage.py:95-102` |
 | **soft cap** | squashes summed advantage | `1.5·tanh(x/1.5)`; ceiling M_MAX = 1.5σ, never reached | `sigma_leverage.py:104, :141-148` |
 | **net boost** (μ-shift) | the advantage converted to net successes and added to the roll | `soft_cap(x)·0.800·√max(1,N)` | `sigma_leverage.py:190-203` |
-| **`p_success`** | closed-form P(net ≥ Ob) on the Gaussian stand-in | helper only; no season caller. On whole dice it understates Partial-or-better: 14.4 % against 26.0 % at pool 2 / Ob 2, 43.0 against 58.0 at pool 2 / Ob 1, 50.0 against 60.0 at pool 5 / Ob 2, so a surface that printed it would show worse odds than the dice deal | `sigma_leverage.py:246-279` |
+| **`p_success`** | closed-form P(net ≥ Ob) on the Gaussian stand-in | helper only; no season caller; it is the social roll's closed form (combat has its own, `degree_distribution`, `systems/combat/combat_engine_v1/workbench/probabilities.py:30`). On whole dice it understates Partial-or-better at every pair S27.4 admits that was checked (pools 1–5): 14.4 % against 26.0 % at pool 2 / Ob 2, 43.0 against 58.0 at pool 2 / Ob 1, 50.0 against 60.0 at pool 5 / Ob 2 (10.0–15.0 points at those pairs and pool 4 / Ob 2; 17.3 at pool 1 / Ob 1; under 5 at pool 2 / Ob 3–4), so a surface that printed it would show worse odds than the dice deal at those pairs. On a refused pair, where the dice give exactly 0, it overstates (pool 1 / Ob 3: 0.0006, §8 item 3) | `sigma_leverage.py:246-279` |
 | **`eff_ob`** | "DISPLAY ONLY" effective difficulty | not a resolution value | `sigma_leverage.py:169-177` |
 | **OB_MIN** | the obstacle floor a room's favour cannot go below | 1 | `sigma_leverage.py:108`; read by `roll.py:105, :110` |
 | **obstacle ceiling** | a cap on how hard a social matter can get (H-213) | shipped 2; swept 1/2/3, `None` = uncapped | `engine/season/data/fixtures.py:418-419`; `roll.py:107-113` |
@@ -362,8 +366,9 @@ row to write or emit what you want. Success or better moves pursuits on `argue` 
 makes a finding; each `speak` band moves the matter differently. The code represents the goal only as the degree token the fold keys on.
 Nothing records a target degree, and the chooser does not read odds: no `p_success`, obstacle or odds term appears anywhere in
 `engine/season/decision/` (grep, §9). The chooser picks by the verb's alignment with the person's values and stance
-(`decision/choose.py:149`, per D06 §4.6), and the dice then decide. Nor would a seated player see them: no surface shows a chance
-(overview §7), and the per-act draws carry no streak memory of any kind (`state/ids.py:16-21, :87-89`: the generator is seeded from
+(`decision/choose.py:149`, per D06 §4.6), and the dice then decide. Nor would a seated player see them: no surface in the season loop shows a chance
+(overview §7; outside it, the combat designer workbench traces branch odds for one duel, `systems/combat/combat_engine_v1/workbench/server.py:8-9`,
+while the mass-battle workbench traces one battle with no odds, `systems/mass_battle/sim/workbench/trace.py:11`), and the per-act draws carry no streak memory of any kind (`state/ids.py:16-21, :87-89`: the generator is seeded from
 `(world_seed, tick, actor, purpose)` alone; contrast BG3's Karmic Dice [V3] and XCOM's aim assist [V3, with [CONTESTED] refinements]:
 `research/game_precedent_suite/tutorials/T05_social_rpgs.md`, BG3 §7-§8, and `T18_repo_strategy_b.md`, XCOM §7), so realised odds
 equal Table A.
@@ -641,8 +646,9 @@ figures. Each round-3 figure comes from one of these:
   `speak` 19, `argue` 10 and `act.ineligible` 19. By seed it also gives `argument.refused` 10 / 17 / 15 plus 3 `act.ineligible` at
   seed 2, `determine.refused` 2 / 5 / 2, and `examine` formed 62 / 59 / 39.
 - **`sigma_leverage.p_success(ob, pool)`.** Called at (2, 2), (1, 2), (2, 5) and over pools 1–5 × whole Ob up to 2 × pool, set against the
-  exact dice odds: it understates at every admitted pair (10–15 points at pool 2–5 / Ob 1–2; 17.3 at pool 1 / Ob 1; 0.8 at pool 2 /
-  Ob 4) and gives 0.0006 at the refused pool 1 / Ob 3, where the dice give 0.
+  exact dice odds: it understates at every admitted pair (10.0–15.0 points at pool 2 / Ob 1 and 2, pool 4 / Ob 2 and pool 5 / Ob 2; 8.6 to
+  12.5 at the other pool 3–5 / Ob 1–2 pairs; 17.3 at pool 1 / Ob 1; 0.8 at pool 2 / Ob 4) and gives 0.0006 at the refused pool 1 /
+  Ob 3, where the dice give 0.
 - **Exact odds.** `_die_result` convolved over faces 1–10 for pools 1–40, banded by `degree_from_net` at every whole Ob from 0 to
   2 × pool: Tables A and B, the largest Partial share at Ob ≥ 1 (32.0 %, pool 2 / Ob 1), and the single modal-Partial cell (pool 1 /
   Ob 0, 50 %).

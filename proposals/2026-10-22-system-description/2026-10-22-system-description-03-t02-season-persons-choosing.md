@@ -431,8 +431,12 @@ How to read a row. **May** = eligibility (`own` = anyone; `remit:x` = a seat who
 against the world: the typed cell `requires_typed`, not the prose `requires:` string. Where half a precondition is untyped, it is
 said: `speak` types only "a docket item names the subject" (the venue half is not checked), and `determine` types the party, docket,
 bench and quorum but not the fired date. **Does** = writes and success event; contested rows by degree. **Refused as** = the refusal
-event. **Run** = control run `attempted/ok` for seeds 0 · 1 · 2. "Attempted" means admitted to the fold (`loop/resolve.py:377-379`),
-so acts refused at admission are uncounted (trap 9); for contested and graded rows "ok" means Partial or better; `—` = none admitted.
+event. **Run** = control run `attempted/ok` for seeds 0 · 1 · 2. "Attempted" means the act reached the fold, which counts it on entry,
+before its own precondition check (`loop/resolve.py:377-379`), so an ordinary precondition refusal IS counted; left out are acts whose
+actor was already gone (`:974-977`), refusals for an obstacle too high for the pool (`:980-998`) and contested or graded acts refused by
+`_admits` before the seam (`:1012-1032`; trap 9). "ok" means at least one non-refusal Event (`ctl/control.py:13, 21`), so for contested
+rows it is not Partial-or-better (the 3 `speak` at seed 0 are all `matter.turned`, a Failure; for `fight` and `accept` it means Felled or
+Wounded on the subject); `—` = none admitted.
 Every act costs its share of a scene. ✗ = not in the menu (not resolvable, or withheld). Row text from `verb_table.yaml` (dump in §9).
 
 **A. Take a stand: allegiance and feeling**
@@ -772,6 +776,55 @@ list was opened at `51d7b05`; "probe" is the round-3 re-run described in §9.
   `data/fixtures.py` past :715 by +10 (:823, :837 -> :833, :847); `loop/driver.py` past :514 by +4 (:515 -> :519; :528 -> :532). Cites
   that did not move: `driver.py:449-456`, `fixtures.py:481, 488-489, 511`, `rosters.yaml:378-445, 1145`, `hole_register.yaml:1306`.
 
+#### Audit fixes
+
+Round-3 audit of this file (`F_03`), each finding checked against the tree before it was applied; numbers are the audit's. Finding 13
+belongs to the errata (file 13, R-F4), not to this file.
+
+- F1, §0a choice menu, callback paragraph, §1 `scene` row: "every act costs 1 alone, 2 for a scene of two or three acts" -> the packer's
+  rule only; `Scene.cost` reads the `extended` flag (`state/carriers.py:593-594`), the packer sets it (`decision/choose.py:636`), DELIBERATE
+  charges by it (`loop/deliberate.py:198, 253`), so a client's unflagged three-act Scene would cost 1 (from reading; not run).
+- F2, §0a "Wasted by construction": `work` 77/0 and `migrate` 81/0 listed as wrong-class subjects -> `examine` 62 released and 0 admitted,
+  `sabotage` 34/0, `commit` on persons 61/0; `work` refuses for another reason (§8, A2 §B.3) and `migrate` met full hearths (errata R-F8,
+  R-F10; the migrate clause is the errata's, not re-derived here).
+- F3, §0a loop step 3: "every person answers one question" -> a person with budget left is asked only if his inputs changed or his queue is
+  empty, else his next queued scene is released (`loop/deliberate.py:167-170`, §2.7).
+- F4, §7: "22 to 56 verbs wide" -> candidates, from a 46-verb menu (§2.3 gate 1; the source counts candidates, D_T02 KD3).
+- F5, §7: "receives the shipped chooser's proposal (`auto`)" -> receives `auto`, the shipped chooser, and may call it (`harness/play_surface.py:15-19`).
+- F6, §0a "Failure and ending": `endings == []` presented as a sample -> after the King's death (tick 0, seeds 0-2) it cannot be otherwise:
+  `off_king` has `conferral: null` (`offices.yaml:182-188`), `theocracy` needs a live hold (`queries/world_q.py:1831-1832`) and
+  `peninsular_sovereignty` is "UNREACHABLE IN COMPUTED PLAY" (`rosters.yaml:2536`).
+- F7, §0a: "No goal is ever met, because no code tests one (`goals.yaml:11-12`)" -> "registered as met: no code tests one (§5 a)"; the cite
+  supports only "never acts, nothing aggregates", and an aim can come about unrecorded (`goals.yaml:230-234`, Yrsa dead in round 0).
+- F8, §2.1 King of Dragon Pass paragraph: "four to five times KoDP's two" (acts) -> 2.5 times in answers, since the world answers per round
+  (`loop/driver.py:510`); the Round-3 bullet for §2.1 is reworded to match.
+- F9, Round-3 list: cites of "D_T02 Part 3", "E1".."E6" and "CROSSCUT F6/F12" -> Part 1 row ids only and errata R-F6 / R-F12 (the committed
+  `dispositions/D_T02.md` has Parts 1 and 4; its E3, E4 and E5 collide with rows E3a-i, E4a-g, E5a-g).
+- F10, Round-3 list: file 10 "lines 73 and 152" -> lines 60, 193 and 287, all of which already limit minting to non-`orientation` rows.
+- F11, §0a and §1 `goal` row: `goals.yaml:1-30` and `:1-12` -> `:24, 39-430` for the orientation rule and the 23/6/4/2 rows, with `:3-4` marked stale.
+- F12, §7: `tests/test_play_surface_dispatch.py`, `tests/test_combat_trace_returned.py` -> `engine/season/tests/...` (the top-level `tests/` holds neither).
+- F14, §0a "Failure and ending" and the §2.1 note: no grade for the endings read -> the read RUNS-IN-LOOP, reaching an ending is TESTS-ONLY
+  (`engine/season/tests/test_in27_endings.py`).
+- F15, §0a callback paragraph: three DELIBERATE raise sites -> four, adding `InstrumentDefect` for a return that is neither Act nor Scene
+  (`loop/deliberate.py:556-558`).
+- F16, §0a "What changes later": "pursuits never move (scar shift 0)" -> at seed 0 also because `argue` and `determine`, the two pursuit
+  writers (`verb_table.yaml:151-152, 348-349`), never pass admission; `determine` is admitted once at seed 1 (ctl).
+- F17, §0a, §2.6, §5 a, §7, the Round-3 list and §9: probe-only figures (endings `[]`, still-vacant 8/6/10, budget shape, 22-56, seeds 1-2
+  per-tick, injected raises) -> tagged "(uncommitted round-3 probe)"; no figure was deleted.
+- F18, §5 b6 and trap 4: "a budget above 10 is the one that is wasted" -> always wasted, and the excess over 5 actions is spent only
+  through extended scenes, since a cost-1 scene leaves budget unspent below 10 (`decision/choose.py:653-655`).
+- F19, §0a "The loop": "nothing pauses and nothing waits for a human" -> "in the shipped run (no overrides)", since a callback is arbitrary code.
+- F20, §5 a and §0a: "errata G17" -> errata R-F12 (restates G17); the hand-built `march` run gains its cite, errata R-F5.
+- F21, §0a "Cosmetic or inert": "reversed one time in four" for gaps under 0.1 -> "at least one time in four" (27% at a gap of 0.1, §2.5).
+- F22, §0a step 8, §2.1, §2.6, §9: "formed" for the `w.acts` count -> "released" (`loop/resolve.py:967`); §2.6 now says that a "formed" count with
+  `w.acts` as its basis (§4, trap 9) means released and that "formed" in §2.3 means a candidate was built.
+- F23, §0a: plan ids and terms used before §1 and §7 -> a pointer sentence ("terms in §1, plan ids in §7"); "D-V6 adds" -> "D-V6 (open) adds".
+- F24, §0a table: `fight`/`accept` gave s0 only, `train`/`tend` gave no att -> all three seeds from ctl (5/5 and 9/6 at s1, 8/5 and 12/10
+  at s2; `train` 38 · 30 · 30, `tend` 34 · 22 · 19), with the test cite `engine/season/tests/test_in12_step9.py` for the TESTS-ONLY grade.
+- F25, Round-3 list: `members` :1365 -> :1368 listed under the +125 shift of `world_q.py` -> separated as +3 before :1674 (`git diff a4ca9a5 51d7b05`).
+- Not an audit finding (CANON_FIXES K1, K2), §4 header: "acts refused at admission are uncounted" and "ok" as Partial or better for contested rows ->
+  the fold counts an act on entry (`loop/resolve.py:377-379`) and "ok" is any non-refusal Event (`ctl/control.py:13, 21`; 3 `speak` at seed 0 are Failures).
+
 ## 9 Checks
 
 Opened: `decision/choose.py:54-160, 217-240, 330-482, 640-669`; `decision/budget.py:40-83`; `queries/world_q.py:2092-2135, 2249-2262`;
@@ -808,7 +861,7 @@ Round 3 (HEAD `51d7b05`; throwaway scripts, not committed, so every figure in th
   `data/fixtures.py` (lines 234, 286, 488-489, 511, 594, 606-607, 707, 715); `rosters.yaml:2490-2553`; `goals.yaml:1-40`;
   `state/carriers.py:386-410`; `systems/social_contest/sim/contest/agon_harness.py:1-40, 135-165`; the two workbench `server.py` heads;
   `workplans/valoria_master_workplan_v9_part4.md:32-41`; `hole_register.yaml:1142-1152`.
-- Per-seed, two ticks on `build_realm(seed)` with the control-run chooser: persons alive, acts formed (unique ids in `w.acts`), acts reached
+- Per-seed, two ticks on `build_realm(seed)` with the control-run chooser: persons alive, acts released (unique ids in `w.acts`), acts reached
   (growth of `d.resolved`), maximum per person, the budget distribution and mean, count above 10, whether `p_npc_020` is alive, offices
   with no live hold. Seed 0: build mean 5.57 over (5 x 52, 6 x 27, 7, 10 x 2, 13); tick 0 676 / 535 over 83 persons, max 15, mean budget
   6.41, King dead; tick 1 731 / 597 over 78, max 15, mean 7.69, 11 of 74 above 10, 8 offices vacant. Seed 1: 686 / 542, then 708 / 580; 6

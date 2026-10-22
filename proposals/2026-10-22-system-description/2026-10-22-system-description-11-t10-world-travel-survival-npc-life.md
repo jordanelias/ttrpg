@@ -61,8 +61,9 @@ precedent tutorials' "how it plays" sections (`research/game_precedent_suite/tut
 4. CENSUS individuates demanded persons (`census.py:35`); the season then reports `endings` (`driver.py:514-518`).
 
 **The choice menu.** Candidates are scored by pursuit alignment plus stance toward the subject and ordered with Gumbel noise at τ 0.1
-(ERRATA G12). Hunger enters only as a constant added to every candidate, and room is not read when a choice is formed (`choose.py:217-238`;
-`world_q.py:2126-2129`).
+(ERRATA G12). The larder term (`urgency` of `Sensation.subsistence`, which in the realm run is the harness's home-stores formula, `harness/probes.py:144-149`,
+not a body or hunger state) is added identically to every candidate (`choose.py:448, 452-453`), and a constant shift cannot reorder an ordering by
+score/τ plus Gumbel noise (`:388`), which is all `pack_scenes` receives (`:481`). Room is not read when a choice is formed (`world_q.py:2126-2129`).
 
 | verb | cost | effect | when a person picks it | grade (seeds 0, 1, 2) |
 |---|---|---|---|---|
@@ -71,8 +72,8 @@ precedent tutorials' "how it plays" sections (`research/game_precedent_suite/tut
 | `tend` | one act | subject's body to 1000 (`effects_combat.py:371-393`) | a living person "with" him, or himself | TESTS-ONLY (0 of 34, 22, 19) |
 | `train` | one act | +1 in a key the subject holds | a vocation key exists (only `copying`) | TESTS-ONLY (0 of 38, 30, 30) |
 | `forgive` | one act | his negative rows on the referent deleted (`effects_combat.py:431-450`) | only when he holds such a row | RUNS-IN-LOOP (1, 2, 2) |
-| `give` | one act | a held Record changes hands | he holds a Record, the receiver is with him | RUNS at seed 2 only (1 of 19) |
-| `commit`, `oblige`, `release` | one act each | open a commitment or a duty; close an own edge | a Proposition or seat in reach; any own live edge | `commit` RUNS at seeds 1, 2 (1 each); `oblige` at seed 1 (22 of 24); `release` RUNS-IN-LOOP (3, 5, 3) |
+| `give` | one act | a held Record changes hands | he holds a Record, the receiver is with him | RUNS-IN-LOOP at seed 2 (1 of 19); TESTS-ONLY at seeds 0, 1 (`engine/season/tests/test_give.py`) |
+| `commit`, `oblige`, `release` | one act each | open a commitment or a duty; close an own edge | a Proposition or seat in reach; any own live edge | `commit` RUNS-IN-LOOP at seeds 1, 2 (1 each), TESTS-ONLY at seed 0 (`engine/season/tests/test_in11_utter_hold_commit.py`); `oblige` RUNS-IN-LOOP at seed 1 (22 of 24), never reaches the fold at seeds 0, 2 (§4); `release` RUNS-IN-LOOP (3, 5, 3) |
 
 **First season, step by step** (seed 0, tick 0 then tick 1).
 1. Build: 83 persons; starting budgets 52 at 5, 27 at 6, 1 at 7, 2 at 10, 1 at 13; 47 live holds.
@@ -222,9 +223,11 @@ runs at tick 0, the second at tick 1. In order:
    take `min(want, held)`. Named persons are skipped: "the individual does not eat" (ED-IN-0255).
 3. **Hunger to body** (`matter.py:513-534`): `lost = body_step × units short`; body falls by `lost`; a downward band crossing emits;
    at body 0 the person dies. At `body_step = 0` the loop hits `continue` and nothing moves.
-   Even switched on, hunger moves no choice: the chooser's need term, `urgency(subsistence)`, is added identically to every candidate and
-   "CANNOT CHANGE ANY DECISION" (`es/decision/choose.py:217-238`). A short cohort's choices would change only through its body bands
-   (budget) and the Events its losses emit, never through a preference for food.
+   Even switched on, hunger enters no score: the chooser's larder term, `urgency(subsistence)`, is added identically to every candidate
+   (`es/decision/choose.py:448, 452-453`), a constant shift cannot reorder an ordering by score/τ plus Gumbel noise (`:388`), and `pack_scenes`
+   receives only that order (`:481`); the docstring at `:217-238` says the same, as reference. The term reads `Sensation.subsistence`, which in
+   the realm run is the harness's home-stores formula (`harness/probes.py:144-149`). A short cohort's choices would change only through its
+   body bands (budget) and the Events its losses emit, never through a preference for food.
 4. **Ageing and illness** (`matter.py:549-554`): skipped entirely unless `age_step` or `illness_rate` is non-zero. Then each non-cohort
    draws against `min(1, illness_rate + age_step × age)` and dies on a hit. Cohorts have no hazard by design (`world_q.py:1004-1008`, the
    test at `:1015`). Because `age_at_build` is 0 (`fixtures.py:608`) and no builder sets `Person.born`, every person the realm builds is
@@ -523,8 +526,9 @@ cannot empty a town". It eats where it stands. One `Felled` deletes it whole (ER
 - **`migrate` is a dead end in the realm**: 0 successes in 367 acts that reached the fold over three seeds, each charged a scene.
 - **`train` is a dead end by construction** (no key holders); **`tend` is reachable but idle** (bodies stay whole outside combat).
 - **Hunger and age are switched off**, so keeping a settlement fed or a person young rewards nothing; even with `body_step` on, the
-  realm's larders run ahead of demand after the first MATTER (tick 0), within the horizon in §3b; and no fixture value lets hunger move a
-  choice, because the need term is the same for every candidate (`choose.py:220-231`).
+  realm's larders run ahead of demand after the first MATTER (tick 0), within the horizon in §3b; and no fixture value lets hunger enter the
+  score, because the larder term is the same for every candidate (`choose.py:448, 452-453`). It reaches choice only through body bands and the
+  Events a loss emits (§2.4 step 3).
 - **Holding pays acts.** +1 point per live hold: from 7 to 9 acts with one hold. Minting holds with `utter` or `create_record` (always
   successful in the run) is the cheapest way to buy a journey back. No one, office-holder or not, travels free: a round-0 leg costs a
   budget-6 holder two acts (9 → 7).
