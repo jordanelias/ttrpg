@@ -8,3 +8,25 @@ scale:
     and the institution''s own reach is realm-wide): `who_acts` names Vossen''s counterparts as ''a reform-minded
     royal'' and ''the church''s field investigator conducting persecution'' -- her movement''s reach touches
     the Crown and the Church both, which is realm-wide, not local to one settlement.'
+# `IN-38` (`13`-rest) `cast:` -- read off THIS case's own sentences (quoted), written by an author, matched by no
+# code. [ASSUMPTION; medium; Jordan to correct] Revert: delete this `cast:` block (the `scale:` above is
+# untouched). Seated: each singular actor who_acts names; NOT "local settlement populations" (a group). No
+# `office:`: one_line says her authority "exists entirely through relationship and visibility rather than any
+# formal seat". No `capability`: none is named.
+cast:
+- who: Yrsa Vossen
+  role: protagonist
+  # who_acts[3]: "a reform-minded royal who could offer patronage".
+  ought:
+    about: a reform-minded royal
+    predicate: could offer her movement patronage
+- who: a secondary, more operationally-focused movement leader
+  role: who_acts[2]
+- who: a reform-minded royal
+  role: who could offer patronage
+- who: the church's field investigator
+  role: conducting persecution
+- who: a rival faction's disgraced heir
+  role: who could back the movement
+- who: players
+  role: WAITS-ON-PLAYER

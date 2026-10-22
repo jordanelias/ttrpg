@@ -19,3 +19,22 @@ scale:
       without being the Crown''s faction. `faction` is authored directly, per `office_faction`''s
       no-organ case, rather than naming `Lions'' Table` as the body, which would be a second opinion on
       a body this overlay''s `post` does not claim.'
+# `IN-38` (`13`-rest) `cast:` -- read off THIS case's own sentences (quoted), written by an author, matched by no
+# code. [ASSUMPTION; medium; Jordan to correct] Revert: delete this `cast:` block (the `scale:` above, with her
+# case-level office, is untouched). Seated: each singular actor who_acts names; NOT "the wider military chain of
+# command" (a body). No `capability`: none is named.
+cast:
+- who: Lisbeth Ehrenwall
+  role: protagonist
+  # who_acts[4]: "her designated successor".
+  ought:
+    about: her designated successor
+    predicate: is her designated successor
+- who: the king
+  role: who_acts[2]
+- who: the liaison individual the internal struggle keys on
+  role: who_acts[3]
+- who: her designated successor
+  role: designated successor
+- who: players
+  role: WAITS-ON-PLAYER

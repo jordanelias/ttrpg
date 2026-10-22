@@ -1,0 +1,31 @@
+# NPC-032 — `cast:` overlay only (`IN-38`, `13`-rest). See `NPC-006.yaml` for why a `cast:` block lives in an
+# overlay. Read off THIS case's own sentences (quoted), written by an author, matched by no code.
+# [ASSUMPTION; medium; Jordan to correct] Revert: delete this file (the case returns to three anonymous seats).
+#
+# Seated: each singular actor who_acts names. No `office:` (the case says she has "no independent action economy
+# of her own") and no `capability` (knowledge[2] says her "personal-capability ceiling" is a structural stop, with
+# no figure).
+case: NPC-032
+cast:
+- who: Lenneth Almqvist
+  role: protagonist
+  # one_line: "whose entire programme routes through persuading a man whose blockage is uncertainty, not
+  # disagreement"; who_acts[2]: "the king".
+  ought:
+    about: the king
+    predicate: is persuaded by her programme
+- who: the king
+  role: the man she must persuade
+- who: the heir apparent
+  role: who_acts[3]
+- who: the church leader
+  role: who_acts[4]
+- who: the standing army's commander
+  role: who_acts[5]
+- who: the rival duchess
+  role: who_acts[6]
+- who: the revolutionary duke
+  role: who_acts[7]
+- who: players
+  role: WAITS-ON-PLAYER
+  # who_acts[8] is "players".

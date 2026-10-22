@@ -8014,8 +8014,14 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # attempted `train`. Each executes from a hand-built world (`test_in12_step9.py`). A re-record, said so.
     # ⚠⚠ v9 IN-12 `give` + Rung: `carry` LEAVES (it executes in ARC-34; the executed-set note at
     # `test_the_corpus_runs_and_the_ranking_cannot_discriminate`'s `ever`). A re-record, said so.
+    # ⚠⚠ v9 IN-38 (`13`-rest), 11 -> 12: `dispatch` JOINS, nothing leaves. A RE-RECORD WITH ITS REASON: NPC-033's
+    # `cast:` overlay (Kolbrun Thale, five seated persons) is the one world where `dispatch` is formed and
+    # refused -- her case-level office carries `remit: [issue, dispatch]`; MEASURED by `corpus_run.run_case`
+    # at seed 0, the same case WITHOUT the overlay as control (`dispatch` not refused there, in no corpus world
+    # either). It executes nowhere; `ever` is unmoved. [ASSUMPTION; medium; Jordan to correct] Revert: delete
+    # `cases/exercises/NPC-033.yaml`'s `cast:` block and drop `dispatch` here.
     assert refused_only == {"build", "found", "work", "survey", "commit",
-                            "restore", "forge", "seize", "covenant", "sabotage", "train"}, (
+                            "restore", "forge", "seize", "covenant", "sabotage", "train", "dispatch"}, (
         f"the always-refused set moved to {sorted(refused_only)}. `move` and `transfer` left it "
         "when `W-C` closed `H-94`'s structural half — the Candidate carries operands now — and "
         "`work` stays for a reason about the corpus's questions rather than about the channel")
@@ -8566,7 +8572,18 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
         # SAME-BREATH CHECK: no verb became universal (the largest, `reconstruct`, is 132 < 143), the status
         # census is UNMOVED (103 RUNS-UNDECLARED · 40 SPAN-UNAUTHORED, the run above), and `refused_only`
         # lost `carry` for its own reason (its note).
-    assert len(by_sig) == 123, (
+    # ⚠⚠ **123 -> 124, v9 IN-38 (`13`-rest), MEASURED BY `corpus_run.run_case`, seed 0, THE SAME TREE WITHOUT THE 14
+    # NEW `cast:` BLOCKS AS CONTROL, which reads 123.** THE UNIT AND THE DIRECTION: 14 NPC cases' executed sets
+    # CHANGED (001 003 008 013 030 031 032 033 034 041 050 070 084 089) and the corpus-wide distinct count rose by
+    # ONE -- most of the changed sets already existed elsewhere, which is the reading of this instrument the
+    # receipt states: the per-case metric moves with every structural change, the corpus-wide one barely does.
+    # Executed-world counts (base -> now): accept 108 -> 109, challenge 80 -> 78, conceal 92 -> 91, fight 2 -> 5,
+    # move 46 -> 48, petition 74 -> 76, research 17 -> 18, surveil 66 -> 68, tell 88 -> 89, tend 34 -> 33,
+    # transfer 39 -> 44, utter 118 -> 119. THE SAME-BREATH CHECK: `ever` is UNMOVED (19 verbs), the universal set
+    # stays empty, the status census is UNMOVED (103 RUNS-UNDECLARED · 40 SPAN-UNAUTHORED), and `refused_only`
+    # gains `dispatch` for its own reason (its note). [ASSUMPTION; medium; Jordan to correct] Revert: delete the 14
+    # `cast:` blocks (`NPC-001 -003 -008 -013 -030 -031 -032 -033 -034 -041 -050 -070 -084 -089`) and restore 123.
+    assert len(by_sig) == 124, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -8964,11 +8981,14 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # (`WHERE THE 56 GO`: never attempted). It is `remit:dispatch`-eligible and forms on a Rung referent,
     # `march`'s eligibility and cell, and `march` is never attempted here either (H-175). A named residue
     # of the step's EXIT (R-05; `hole_register.yaml` H-228), re-recorded by outcome: 19 -> 20.
+    # ⚠ v9 IN-38 (`13`-rest): `dispatch` LEAVES, to `refused_only` (that note): attempted and refused in NPC-033
+    # once its `cast:` overlay seats five; MEASURED at seed 0, the same case without the overlay as control.
+    # A re-record, said so: 20 -> 19.
     assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish",
                                               "destroy_record", "march", "oblige", "open_case",
                                               "determine", "comply", "migrate", "requisition",
-                                              "speak", "examine", "dispatch", "argue", "forgive",
-                                              "arrest", "pardon", "raze"}, (    # IN-57: `dispatch` out, to `refused_only`; FI-01: back
+                                              "speak", "examine", "argue", "forgive",
+                                              "arrest", "pardon", "raze"}, (    # IN-57: `dispatch` out, to `refused_only`; FI-01: back; IN-38: out again
         f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Five of "
         "the original six are the governance verbs no corpus overlay grants (`establish` is "
         "`remit:confer`-eligible); `march` is eligible in NPC-033/038 and WOULD form a real "
@@ -10221,10 +10241,13 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # executed-set note there). A re-record, said so.
     # ⚠⚠ v9 IN-12 `give` + Rung: `carry` LEAVES (it executes in ARC-34; the executed-set note at
     # `test_the_corpus_runs_and_the_ranking_cannot_discriminate`'s `ever`). A re-record, said so.
+    # ⚠⚠ v9 IN-38 (`13`-rest): `dispatch` JOINS, attempted and refused in NPC-033 alone once its `cast:` overlay
+    # seats five (the note at `test_the_corpus_runs_and_the_ranking_cannot_discriminate`'s `refused_only`).
+    # A re-record, said so.
     assert set(refused) - set(executed) == {"work", "found",
                                             "build", "survey", "commit",
                                             "restore", "forge", "seize", "covenant",
-                                            "sabotage", "train"}, (
+                                            "sabotage", "train", "dispatch"}, (
         f"the always-refused set is {sorted(set(refused) - set(executed))}. `work` refuses because "
         "its `site` operand binds either to a non-Site referent (UNKNOWN) or to a real site whose "
         "condition never clears the floor in this corpus; `dispatch` LEFT at `17-cast` (see above; it "

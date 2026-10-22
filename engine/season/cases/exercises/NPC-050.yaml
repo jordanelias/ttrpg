@@ -6,3 +6,25 @@ scale:
   why: '`one_line` and `who_acts` both name Baralta a duchess whose ''total personal command of her own
     duchy'' is the case''s own subject -- unlike the Crown/Church-wide cases above, this case''s institutional
     reach is explicitly bounded to her own duchy, not the realm she is pressing a claim against.'
+# `IN-38` (`13`-rest) `cast:` -- read off THIS case's own sentences (quoted), written by an author, matched by no
+# code. [ASSUMPTION; medium; Jordan to correct] Revert: delete this `cast:` block (the `scale:` above is
+# untouched). Seated: each singular actor who_acts names; "her own inner council" is a body and is not seated.
+# No `office:`: the case calls her "A duchess" without saying which faction's duchy it is. No `capability`.
+cast:
+- who: Inge Baralta
+  role: protagonist
+  # one_line: "pressing a decades-long claim on a throne she cannot simply take"; who_acts[2]: "the king".
+  ought:
+    about: the king
+    predicate: holds the throne she presses a claim on
+- who: the king
+  role: holds the throne
+- who: the church leader
+  role: who_acts[3]
+- who: her legal advisor
+  role: who_acts[4]
+- who: the standing army's commander
+  role: a competing claimant
+  # who_acts[5], verbatim: "the standing army's commander (a competing claimant)".
+- who: players
+  role: WAITS-ON-PLAYER

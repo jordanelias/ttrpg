@@ -21,3 +21,26 @@ scale:
       draft''s `faction: Crown` (r2 `03` §A.13.2 note **) -- so `faction` is authored directly, per
       `office_faction`''s no-organ case, and the Crown Inner Circle sits in the dual loyalty rather
       than the office.'
+# `IN-38` (`13`-rest) `cast:` -- read off THIS case's own sentences (quoted), written by an author, matched by no
+# code. [ASSUMPTION; medium; Jordan to correct] Revert: delete this `cast:` block (the `scale:` above, with his
+# case-level office, is untouched). Seated: the two persons who_acts names; NOT "Crown Inner Circle peers" or "the
+# Church's Inquisitor apparatus" (a group and an apparatus). No `capability`: none is named.
+cast:
+- who: Gustav Linder
+  role: protagonist
+  # one_line: "his true loyalty answers to the Confessor"; who_acts[2]: "Confessor Himlensendt (true superior)".
+  ought:
+    about: Confessor Himlensendt
+    predicate: is his true superior
+- who: Confessor Himlensendt
+  role: true superior
+  office:
+    post: Confessor
+    body: Holy See
+    remit: []
+    why: >-
+      who_acts[2] names him "Confessor Himlensendt (true superior)"; `Holy See` is canon's body for the Church's
+      leadership, where "'Confessor' = address" (`rosters.yaml: office_bodies`), so `faction` derives. The case
+      names no act the post carries, so no remit is authored.
+- who: Almud Almqvist
+  role: nominal council principal and the gate-check target

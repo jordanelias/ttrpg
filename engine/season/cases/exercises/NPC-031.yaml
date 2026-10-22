@@ -1,0 +1,24 @@
+# NPC-031 — `cast:` overlay only (`IN-38`, `13`-rest). See `NPC-006.yaml` for why a `cast:` block lives in an
+# overlay. Read off THIS case's own sentences (quoted), written by an author, matched by no code.
+# [ASSUMPTION; medium; Jordan to correct] Revert: delete this file (the case returns to three anonymous seats).
+#
+# Seated: each singular actor who_acts names. NOT seated: "whichever outside parties invest in him" (a class) and
+# "the current regent, if any" (the case does not say there is one). No `office:`, no `capability`.
+case: NPC-031
+cast:
+- who: Torben Almqvist
+  role: protagonist
+- who: the king
+  role: who_acts[2]
+- who: the queen consort
+  role: who_acts[3]
+- who: a foreign imperial court
+  role: an outside power that may invest in him
+  # one_line: "whose eventual allegiance is won by whichever outside power invests in him fastest within a closing
+  # window"; who_acts[5].
+  ought:
+    about: Torben Almqvist
+    predicate: is invested in within the closing alignment window
+- who: players
+  role: WAITS-ON-PLAYER
+  # who_acts[7] is "players".
