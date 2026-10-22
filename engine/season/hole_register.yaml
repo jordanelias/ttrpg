@@ -4835,6 +4835,19 @@ rows:
     cite:      "MEASURED at v9 B-R's Phase 1 (base `084da81b`), PYTHONHASHSEED=0: `raze_witness_probe` through the real `SeasonDriver.witness` over the `rung.razed` event on the hand-built occupied town: `event_place` None, `place_of(razer)` None, `observers_for` 1 (p_npc_033, source `firsthand_via_knot`, 2 claims), the two other persons who stood in the town learn nothing; `army.arrived` had 3 observers before the raze. Limit (2) is read from `gate.py` (`sits_over`, `may_determine`) and H-228 and was not run. The antagonist's third point, `give` refusals never learned (rosters.yaml `own_hold_declines`), was MEASURED over 143 corpus worlds at seed 0: 6 `give.refused`, every one a Record, none a seat or Proposition, none repeated across deliberations, so no row is opened for it"
     source:    "v9 IN-12 steps 5 and 11 (`workplans/valoria_master_workplan_v9_part5.md`), batch B-R Phase 1 reconciliation, 2026-10-22"
 
+  - id:        H-232
+    tier:      1
+    hole:      "`pardon` AND `raze` FORM ON EVERY ELIGIBLE REFERENT AND ARE REFUSED AT THE EFFECT, SO THEY COST SCENES AND MOVE THE HASH WITHOUT EVER EXECUTING. `pardon`'s typed cell asks only that the subject is a person the seat sits over, `raze`'s only that the subject is a Rung; neither cell can see whether anything is held or occupied (measured at the build: `pardon.refused` 2 then 5 and `raze.refused` 10 then 28 over one and two seasons, executed 0 for both, and each is a declared hash mover that a withholding control reproduces). The repo's formation filter for this shape is a CLASSED REFERENT stamped in `questions_for` (`world_q.larders_in_purview`, the `requisition` and `referent_class: Record` shape): a restrained-persons class for `pardon`, an occupied-settlements class for `raze`."
+    kind:      "MECHANISM"
+    owner:     "`queries/world_q.py::questions_for` (the stamp) and `verb_table.yaml` (`referent_class:` on the two rows); a new class partition, not a tidy-up"
+    grade:     "measured"
+    default:   "the two rows form on every eligible referent and are refused at the effect"
+    site:      "`engine/season/verb_table.yaml` `pardon`, `raze`; `engine/season/queries/world_q.py::questions_for`; `engine/season/tests/test_season_weather.py` BASE_HASHES (the two re-pins this removes)"
+    sweep:     ["as shipped: form on every eligible referent, refused at the effect", "a restrained-persons class for `pardon` and an occupied-settlements class for `raze` stamped in `questions_for`: the two withholding controls already reproduce the OLD hashes, so this removes two of B-R's three re-pins (the `give` re-pin, item 2, stays)"]
+    unblocks:  "scenes not spent on a refused act; a cleaner act mix in the realm; R-05's `pardon` and `raze` rows read against forming that can execute"
+    cite:      "MEASURED at v9 B-R (`pardon.refused` and `raze.refused` at `aperture 1 0` and the 1- and 2-season hashes, `engine/season/tests/test_season_weather.py`); the formation-filter shape read at B-R's `/simplify` altitude review from `world_q.py` `larders_in_purview` and its `requisition` and `referent_class: Record` uses, and not built here: it is a new class and a stamp, outside IN-12's files"
+    source:    "v9 IN-12 steps 5 and 11 (`workplans/valoria_master_workplan_v9_part5.md`), batch B-R `/simplify`, 2026-10-22"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"

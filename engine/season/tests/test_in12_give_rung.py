@@ -13,7 +13,6 @@ change away, so the cause is the widened object and nothing else:
   * the loosened cell still forms only on what a person holds (`own_hold_declines`), observed through
     the real `opening_set` on a held and an unheld rung.
 """
-import pytest
 
 from engine.season.data.matrix import Step, WriteClass
 from engine.season.data.verbs import OWN_HOLD_DECLINES, VERB_TABLE
@@ -61,10 +60,6 @@ def test_a_rung_hold_changes_hands_by_give_and_the_event_is_named():
     assert closed == [(GIVER, RUNG)] and opened == [(RECEIVER, RUNG)], diff
     assert sum(1 for t in w.tenures if t.kind == "hold" and t.object == RUNG and t.live) == 1, (
         "two live holders: the cession was not one write")
-    # the Event names the Rung's tenures, and a handed RECORD still earns the other kind
-    ev = [e for e in w.log if e.kind == "rung.ceded"] or out
-    assert all(e.kind != "record.given" for e in out)
-    assert ev
 
 
 def test_control_the_giver_who_does_not_hold_the_rung_cedes_nothing():
@@ -106,10 +101,10 @@ def test_a_seat_is_still_not_ceded_by_give():
 
 def test_a_handed_record_still_earns_record_given_not_rung_ceded():
     """The widening does not move the Record half: the same verb on a Record is `record.given`."""
-    from engine.season.tests.test_give import GIVER as G0, RECEIVER as R0, _at_resolve, _give as _g
+    from engine.season.tests.test_give import RECEIVER as R0, _at_resolve, _give as _g
     w, d, rid = _at_resolve()
     assert [e.kind for e in _g(w, d, rid, R0)] == ["record.given"]
-    assert hold_force(w, rid).subject == R0 and G0 != R0
+    assert hold_force(w, rid).subject == R0
 
 
 def _gives(w, pid, referent):

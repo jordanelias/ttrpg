@@ -48,7 +48,6 @@ from __future__ import annotations
 import copy
 from unittest import mock
 
-import pytest
 import yaml
 
 from ..data import verbs as VERBS
@@ -286,13 +285,12 @@ def test_in12_5_a_warrant_from_an_issue_only_seat_opens_no_custody():
     Duke's warrant (the first whose seat could close it), opens `detain -> off_duke`, and the Duke's
     `pardon` closes it. (`off_dicastery`, `scope_rung` None, is not a second arm: it cannot `issue` here
     -- `issue.unauthorized` -- so no warrant of its exists to test.)"""
-    issuing = NOTARY
     w, d = _world(pool_default=30)
     w.offices[NOTARY] = Office(NOTARY, "Notary", "D", ["issue"], faction="Crown")
-    w.add_tenure(Tenure("t_issuer", FAR, issuing, "hold", since=0))
+    w.add_tenure(Tenure("t_issuer", FAR, NOTARY, "hold", since=0))
     w.persons[FAR].ledger.append(Claim("c_far_knows", FAR, PRISONER, "exists:Person", 1, 0,
                                        "firsthand", 100, "own"))
-    _warrant_to_watchman(w, d, issuer=FAR, seat=issuing, key="wx")
+    _warrant_to_watchman(w, d, issuer=FAR, seat=NOTARY, key="wx")
     out = _fold_at(w, d, "Success", _act("a1", "arrest", WATCHMAN, WATCH, subject=PRISONER))
     assert _kinds(out) == ["arrest.refused"], _kinds(out)
     assert not _restraints(w), "a custody opened on a seat whose bench could never pardon it"

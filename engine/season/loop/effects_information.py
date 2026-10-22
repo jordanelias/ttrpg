@@ -18,13 +18,13 @@ from typing import Optional
 from ..data.arrangements import ARRANGEMENTS
 from ..data.matrix import matrix_row
 from ..data.requires import RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS
-from ..data.rosters import COVER_KEY, COVER_KIND, MARCH_TARGET_KINDS, RECORD_CONTENT, RECORD_KIND_KEYS
+from ..data.rosters import COVER_KEY, COVER_KIND, RECORD_CONTENT, RECORD_KIND_KEYS
 from ..data.verbs import VERB_TABLE, WARRANT_SOURCED
 from ..queries import faction_q
 from ..queries.person_q import ABOUT_KEYS, argued_pursuits, consequence_pursuits
 from ..queries.world_q import (
     BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_PETITION, docketed, docketed_under,
-    faction_holding, faction_of, hold_force, holder_faction_of, mustered, place_of, restrained,
+    faction_holding, faction_of, hold_force, place_of, restrained,
     slot_for, works_for, works_target,
 )
 from ..state.attribution import causing_act
@@ -32,11 +32,11 @@ from ..state.carriers import Proposition, Record, Tenure
 from ..state.carriers import DETERMINED_BY
 from ..state.gate import (
     DISPOSABLE_KINDS, NO_CHANGE, UNDECLARED_DISPOSAL, Change, Subject, may_determine, may_seize,
-    may_warrant, seat_faction,
+    may_warrant,
 )
 from ..state.ids import H
 
-from .effects_shared import _new_oblige_term, _operand, effect_for
+from .effects_shared import _new_oblige_term, _operand, effect_for, occupying_faction
 
 # v9 SC-02 `22b` step 24: the kind a pursuit write earns, read off its matrix row (`write_matrix.yaml`
 # `(Person, pursuits)`, `emits:`), never spelt here; a row emitting other than one kind fails at import.
@@ -973,18 +973,14 @@ def _seize_rung(w: "World", a: "Act", rid: str) -> Change:
     dispensation's `terms` names the rung (`rosters.yaml: warrant_sourced`; `test_season_shape.py` plants
     one on a hearth), but at the effect it licenses on OCCUPATION, not on the warrant. No computed source
     of such a warrant has been measured -- a named residue, not a wiring gap in this effect."""
-    rung = w.rungs.get(rid)
-    mine = seat_faction(w, a.via)
-    if rung is None or rung.kind not in MARCH_TARGET_KINDS or mine is None:
+    mine = occupying_faction(w, a.via, rid)
+    if mine is None:
         return NO_CHANGE
     # The title written is the ACTOR'S OWN hold, and a hold coheres under the faction its holder is
     # committed to (`faction_holding`; `None` for no commit or two): an actor not committed to the seat's
     # faction would take the town for a faction that is not his [ASSUMPTION; medium; Jordan to correct;
     # revert: drop the decline].
     if faction_holding(w, a.actor) != mine:
-        return NO_CHANGE
-    holder = holder_faction_of(w, rid)
-    if holder is None or holder == mine or not mustered(w, rid, mine):
         return NO_CHANGE
     held = hold_force(w, rid)
     if held is not None and (held.subject == a.actor

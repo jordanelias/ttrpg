@@ -12,15 +12,15 @@ adds `raze`, the closer of `H-166` limit 3: the one verb that ends a Rung (`w.ru
 
 from __future__ import annotations
 
-from ..data.rosters import MARCH_TARGET_KINDS, RUNG_KINDS, SITE_KINDS
-from ..queries.world_q import holder_faction_of, mustered, works_target
+from ..data.rosters import RUNG_KINDS, SITE_KINDS
+from ..queries.world_q import works_target
 from ..state.carriers import Rung, Site, Tenure
-from ..state.gate import NO_CHANGE, Change, Subject, seat_faction
+from ..state.gate import NO_CHANGE, Change, Subject
 from ..state.ids import H
 from ..state.world import rung_kind_ascends
 from ..trace_log import TRACE
 
-from .effects_shared import _debit, _decline_ascent, _operand, _shift, effect_for
+from .effects_shared import _debit, _decline_ascent, _operand, _shift, effect_for, occupying_faction
 
 
 def _works_named(w: "World", a: "Act") -> tuple:
@@ -282,12 +282,7 @@ def _eff_raze(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     G4 -- WHAT IT NAMES: THE RUNG, whole, earning `rung.razed`; it always moves (present -> absent).
     The closed edges are the cascade and are not named, as `destroy_record`'s are not."""
     rid = _operand(a, "subject")
-    rung = w.rungs.get(rid)
-    mine = seat_faction(w, a.via)
-    if rung is None or rung.kind not in MARCH_TARGET_KINDS or mine is None:
-        return NO_CHANGE
-    holder = holder_faction_of(w, rid)
-    if holder is None or holder == mine or not mustered(w, rid, mine):
+    if occupying_faction(w, a.via, rid) is None:
         return NO_CHANGE
 
     def perform() -> None:

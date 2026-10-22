@@ -2130,25 +2130,34 @@ def opinion_referents(w: World, p: Person, c, memo: Optional[dict] = None) -> tu
     ("the members of the faction whose member killed my lord"); membership is world truth read by this
     function, not a belief `p` holds (the `seat_holders` precedent, ED-IN-0292 (2)).
 
-    `memo` is the caller's per-`p` cache of `opinion_of` by faction: `questions_for` asks this once per
-    claim in `p`'s ledger, and `opinion_of` scans the whole ledger and every Tenure, so the answer is
-    computed once per faction and not once per claim."""
+    `memo` is the caller's per-`p`, per-call cache: `questions_for` asks this once per claim in `p`'s
+    ledger, and the pursuit axes, the `seen.who` index (each O(ledger)), `opinion_of` and `members` (each a
+    scan of every Tenure) do not change between claims, so each is computed once per call (axes and index)
+    or per faction, and not once per claim."""
     if c.predicate not in PAIRED_KINDS:
         return ()
-    doer, _term = paired_deed_term(p, projected_axes(p, w.fixtures.get("scar_weight_shift")), c,
-                                   lambda: _seen_index(p.ledger))
+    if memo is None:
+        memo = {}
+    if "axes" not in memo:
+        memo["axes"] = projected_axes(p, w.fixtures.get("scar_weight_shift"))
+
+    def _seen():                           # built once, and only if some claim's lean asks for it
+        if "seen" not in memo:
+            memo["seen"] = _seen_index(p.ledger)
+        return memo["seen"]
+    doer, _term = paired_deed_term(p, memo["axes"], c, _seen)
     if doer is None or doer == p.id:
         return ()
     faction = faction_holding(w, doer)
     if faction is None:
         return ()
-    if memo is None:
-        memo = {}
-    if faction not in memo:
-        memo[faction] = opinion_of(w, p, faction)
-    if memo[faction] >= 0:
+    if ("opinion", faction) not in memo:
+        memo[("opinion", faction)] = opinion_of(w, p, faction)
+    if memo[("opinion", faction)] >= 0:
         return ()
-    return (doer,) + tuple(m for m in members(w, faction) if m not in (doer, p.id))
+    if ("members", faction) not in memo:
+        memo[("members", faction)] = members(w, faction)
+    return (doer,) + tuple(m for m in memo[("members", faction)] if m not in (doer, p.id))
 
 
 def vacancies(w: World, p: Person) -> tuple:
