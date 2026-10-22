@@ -47,10 +47,9 @@ Propositions in seeds 0-2 (my probe).
 
 ## 0a How it plays
 
-What a run of this subsystem looks like, as built and then as proposed. Counts are `build_realm(seed)` at seeds 0, 1, 2, two
-seasons, from the control run and from round-3 probes at `51d7b05` (session scripts, not committed); "reached the fold / ok"
-follows §4. Comparisons tagged `[precedent: …]` are reference, tier 3 (`research/game_precedent_suite/`), and decide nothing; the
-disposition row behind each is in `research/game_precedent_suite/dispositions/D_T09.md`.
+What a run of this subsystem looks like, as built and then as proposed. Counts are `build_realm(seed)` at seeds 0-2, two seasons,
+from the control run and round-3 probes at `51d7b05` (session scripts, not committed); "reached the fold / ok" follows §4.
+`[precedent: …]` tags are reference, tier 3, and decide nothing (`research/game_precedent_suite/`, dispositions in `D_T09.md`).
 
 ### As built
 
@@ -65,8 +64,7 @@ disposition row behind each is in `research/game_precedent_suite/dispositions/D_
   `es/data/fixtures.py:286`), who dies, and whether anyone swears service (seed 1 only).
 - **A player at the callback** (`es/harness/play_surface.py:41-52`, `dispatching_chooser`; tests only, and the season loop has no
   other player interface) picks acts for one named person per call: any of the 47 resolvable verbs with any operands (I1v claim 5).
-  It is the only way today to name a faction to join, a settlement to march on, terms to covenant or a war to utter; computed play
-  forms none of these (§2.6).
+  It is today's only way to name a faction to join, a settlement to march on, terms to covenant or a war to utter (§2.6).
 
 #### The loop (one season = one tick)
 1. CALENDAR, then MATTER: a matured `oblige` term closes (`es/loop/matter.py:296-303`); claim confidence decays (`:305`).
@@ -79,9 +77,9 @@ disposition row behind each is in `research/game_precedent_suite/dispositions/D_
    ENCOUNTER in the same round (`es/verb_table.yaml:803-831`).
 5. WITNESS deposits claims. A `release` (and every other `binding_decision` kind) reaches every living ledger
    (`es/epistemic.py:649-686`, a kind filter).
-6. CENSUS (`es/loop/census.py`), then the driver reads `endings_reached` and returns it with the season's counts
-   (`es/loop/driver.py:514-531`): a read, never an actor. Members, leaders, provinces and `at_war` are Queries recomputed when
-   something asks; the `Faction` view is never stored (`es/queries/faction_q.py:85-95`).
+6. CENSUS (`es/loop/census.py`), then the driver reads `endings_reached` and returns it (`es/loop/driver.py:514-531`): a read,
+   never an actor. Members, leaders, provinces and `at_war` are Queries recomputed when asked; the `Faction` view is never stored
+   (`es/queries/faction_q.py:85-95`).
 
 Automated: everything. No faction acts; a person acts, through a seat where the verb needs a remit (§2.4).
 
@@ -105,9 +103,8 @@ Automated: everything. No faction acts; a person acts, through a seat where the 
 2. Over the five rounds the realm spends these FA acts (reached the fold / ok): survey 27/5, forge 21/4, utter 17/17, commit 36/0,
    release 26/2, covenant 8/0, give 8/0, march 9/9 (each declared and each refused), dispatch 5/2, sabotage 17/0, seize 0, oblige 0.
 3. The decisive acts are personal combat, not FA. The King (p_npc_020) dies as the subject of the Queen's (p_npc_032) `accept`, and
-   the Duchess of Hafenmark (p_npc_050) as the subject of a Crown member's (p_npc_083) `fight`. The seam writes only the subject
-   (overview §6 #7). In seeds 1 and 2 the King also dies in season 0, to the Prince's `fight` (seed 1) and the Queen's `accept`
-   (seed 2).
+   the Duchess of Hafenmark (p_npc_050) of a Crown member's (p_npc_083) `fight`; the seam writes only the subject (overview §6 #7).
+   In seeds 1 and 2 the King also dies in season 0, to the Prince's `fight` (seed 1) and the Queen's `accept` (seed 2).
 4. A death closes every tenure naming the dead (`es/state/world.py:645-646`). At tick 1: 78 persons, Crown 10 members; the King's 6
    and the Duchess's 4 territories are unheld; provinces Varfell 4, Church 1; `uncontrolled` 11 of the realm's 16 territories (5
    still held); `sovereign_fraction` (0.8, 314); 6 seats vacant, 3 of them (King, Duke of Valorsmark, Duchess) with no conferral
@@ -115,16 +112,14 @@ Automated: everything. No faction acts; a person acts, through a seat where the 
 5. Nothing answers. No faction acts; `uncontrolled` is read by one census line (`populated.py:1518`); no verb can retake or grant
    the land (`es/loop/effects_information.py:950, 959`; only `seize` and `found` open a rung hold); nobody declares war or defects
    (0 WAR Propositions, 0 faction `commitment.ended`).
-6. By hand the same tick admits the chains §3 traces (march + seize; the treaty). A settlement march with defenders present fights
-   and loses inside a real season: `march {subject: set_s_036}` through the callback folds `march.declared`, then `field.lost`
-   (re-run in round 3 at seed 0; I1v claim 2).
+6. By hand the same tick admits the chains §3 traces (march + seize; the treaty); a settlement march through the callback folds
+   `march.declared`, then `field.lost`, inside a real season (re-run in round 3 at seed 0; I1v claim 2).
 
 #### What changes later
-- Season 1 (tick 1 → 2): seed 0 ends at 31 members and 8 vacant seats; seed 1 opens 22 `oblige` to Church seats (24 live) and one
-  self-conferral (I1v claim 3); seed 2 loses Hafenmark's holder in this season and converges on the same map. At tick 2 every seed
-  reads provinces Varfell 4 / Church 1 and 11 territories uncontrolled.
-- Seed 1's 22 service terms were opened in season 1 and mature at tick 5 unless the seats pay upkeep; 0 renewals have occurred
-  (I1v E6) and the runs stop at tick 2, so the lapse is unmeasured.
+- Season 1 (tick 1 → 2): seed 0 ends at 31 members and 8 vacant seats; seed 1 opens 22 `oblige` to Church seats (24 live; they mature
+  at tick 5 unless the seats pay upkeep, and the runs stop at tick 2, so the lapse is unmeasured) and one self-conferral (I1v
+  claim 3); seed 2 loses Hafenmark's holder in this season. At tick 2 every seed reads provinces Varfell 4 / Church 1 and 11
+  territories uncontrolled.
 - No act refills a dead holder's land; provinces change only when a holder dies or changes his own commits.
   `[precedent: Crusader Kings III passes titles on death by the title's succession law, and losing titles on succession is normal there [V3]; T01 precedent, Crusader Kings III §2 item 5 and §6]`
 
@@ -149,12 +144,11 @@ run ends when the player dies with no dynasty heir [V3]; T01 precedent, Crusader
 - **Dominated:** offering a treaty costs a seat act and binds no one, so it loses to doing nothing (§5d).
 
 ### As proposed [PROPOSED]
-- **[PROPOSED] Played mode.** D-2 (ruled yes) lets RB-3 build IN-46 and IN-47
-  (`proposals/2026-10-21-v9-remediation/2026-10-21-v9-remediation-01-verdict-and-coverage.md:153`). For FA a played person would
-  choose operands computed play never forms: a faction to join, a settlement to march on, terms to covenant. The callback accepts
-  these today (I1v claim 5); the IN-46 and IN-47 designs stay PROPOSED and held (same line).
-- **[PROPOSED] Formation.** REM-27 aims at a fought field in computed play by giving `march` a settlement referent; REM-23 gives
-  `commit` a Proposition referent (§7).
+- **[PROPOSED] Played mode and formation.** D-2 (ruled yes) lets RB-3 build IN-46 and IN-47, whose designs stay PROPOSED and held
+  (`proposals/2026-10-21-v9-remediation/2026-10-21-v9-remediation-01-verdict-and-coverage.md:153`). A played person would choose
+  operands computed play never forms (a faction to join, a settlement to march on, terms to covenant); the callback accepts them
+  today (I1v claim 5). REM-27 would give `march` a settlement referent, aiming at a fought field, and REM-23 gives `commit` a
+  Proposition referent (§7).
 - **[PROPOSED] Verbs** (governing roster `proposals/2026-10-16-verbs/2026-10-16-verbs-03-standards-roster-and-reconciliation.md:148-158`,
   errata G19): `declare` (a public WAR Proposition; `at_war` would read True, its reader M1 still open), covenant readers (M2: peace
   releasing war commits, alliance counted in `mustered`, tribute renewing like upkeep), `recruit` (a contested offer of service),
@@ -188,7 +182,7 @@ run ends when the player dies with no dynasty heir [V3]; T01 precedent, Crusader
 | `mustered(w,r,f)` | members of `f` with a live `contain` (presence) anywhere in `r`'s subtree | — | `world_q.py:1473-1490` |
 | `density(w,r,f)` | (members present in subtree, persons present in subtree) | no production caller (grep: only `_check_alignment_density`, `es/data/verbs.py:1576`, a different function, matches the name) | `world_q.py:1452-1470` |
 | `fortification_of(w,r)` | `Σ garrison condition / (condition_scale × n garrisons)` in the subtree; 0.0 with none | `condition_scale = 1000` (`es/data/fixtures.py:217`); one garrison per settlement seeded | `world_q.py:1493-1514` |
-| `at_war(w,a,b)` | True iff some Proposition of mood `WAR` with `{subject, value} == {a, b}` has any live `commit` | no production caller; `False` for every pair in every run | `faction_q.py:216-252` |
+| `at_war(w,a,b)` | True iff some Proposition of mood `WAR` with `{subject, value} == {a, b}` has any live `commit` | no production caller; `False` for every pair in every computed run (a hand-built WAR Proposition plus a `commit` makes it True, even inside a real season, I1v claim 5) | `faction_q.py:216-252` |
 | `oblige` | service: a live Tenure person → seat, the joiner's own act, with a term | `oblige_term = 4` seasons; lapses at MATTER unless a `transfer` through the seat renews it; `default_upkeep = 1` per obligee per term | `es/verb_table.yaml:878`; `fixtures.py:892, :905` |
 | `establishment_of(w,seat)` | the persons obliged to a seat (its retinue) | build_realm(0): 2 live `oblige` (both authored, term-less) | `world_q.py:1864-1890`; `populated.py:1317-1339` |
 | `may_muster` | gate: may this seat move that person's presence? Seat sits + grant carries `dispatch` + the person holds a live `commit` to the seat's faction | — | `gate.py:309` (`MUSTER_ACT = "dispatch"`), `:864-891` |
@@ -431,20 +425,20 @@ makes n ≥ 2 and one act takes at most half.
 |---|---|---|
 | belong to / leave a faction | a live / closed `commit` to `fac_*` | leave: yes; join: no computed route |
 | lead a faction | be in `leaders` (member + faction office); "head" | `leaders` yes; `head` never |
-| take territory or a title | your `hold` on a rung; `holder_faction_of` flips | settlements only, via march + seize; territories and seats cannot be taken; no verb grants a territory to another person, and a settlement with no held rung above it cannot be seized at all (`effects_information.py:959`; H-166 leaves who holds an unheld place unruled, `:939`): `set_s_037` at build, and at seed 0, tick 1, 25 settlements under the realm read holder `None` (round-3 probe) |
+| take territory or a title | your `hold` on a rung; `holder_faction_of` flips | settlements only, via march + seize; territories and seats cannot be taken; no verb grants a territory to another person, and a settlement whose `holder_faction_of` is `None` (no held rung above it, or a holder in no faction or two) cannot be seized at all (`effects_information.py:959`; H-166 leaves who holds an unheld place unruled, `:939`): `set_s_037` at build, and 25 settlements under the realm at seed 0, tick 1 (round-3 probe) |
 | lose territory | your `hold` closed (seized, released, your death) or your faction ties break | death and release yes; death is the realm's main land event (by tick 2, 11 of the realm's 16 territories uncontrolled in every seed, §2.2) |
 | make peace or a treaty | both parties' `commit` to an uttered Proposition named in a dispensation | runs hand-built only |
 | make war | a WAR Proposition with a live `commit`; `at_war` True | hand-built only (`tests/test_faction_q.py:220-260`; also inside a real season, I1v claim 5); gates nothing |
 | raise retainers | `oblige` edges to your seat = `establishment_of(seat)` | seed 1: 22 men swore to Church seats; terms lapse unless paid; retainers are not an army: `mustered` and `may_muster` count faction members only (`world_q.py:1473-1490`, `state/gate.py:864-891`), so an obligee who is not a member marches with nobody |
 | raise an army | your faction's members present where you march from | yes, but only men already housed there |
 | know a rival | hold a `faction_sheet` | yes (`survey`) |
-| secure succession | an heir claims the vacant seat | no: `succeed` has no effect (`verb_table.yaml:1113`). A dead holder's seat falls vacant; `confer` can refill it only if the seat has a conferral basis (`loop/predicates.py:126-127`; `gate.py:643-657`). Six authored seats have `conferral: null` — King, Duke of Valorsmark, Duchess of Hafenmark, Widow Regent, Heir, Princess (`offices.yaml:188, 201, 214, 240, 253, 266`) — and the guild-leader seat `off_npc_084` has no row at all, so no conferral either (7 of 32; `harness/populated.py:1240-1251`). Once vacant, the throne stays empty for good, and it is vacant after season 0 in all three seeds: the King dies in personal combat, as the subject of the Queen's `accept` (seeds 0 and 2) or of the Prince's `fight` (seed 1). Elsewhere `confer` executed once (seed 1: 1 of 5), against 8, 7 and 10 seats vacated by the end of season 2 (8, 6 and 10 still vacant; I1v claim 3, round-3 probe). `[precedent: in Crusader Kings III control passes to the heir on death and a run ends only when none exists [V3]; T01 precedent, Crusader Kings III §2 item 5 and §6]` |
+| secure succession | an heir claims the vacant seat | no: `succeed` has no effect (`verb_table.yaml:1113`). A dead holder's seat falls vacant; `confer` can refill it only if the seat has a conferral basis (`loop/predicates.py:126-127`; `gate.py:643-657`). Seven of the 32 seats have no conferral basis: six authored `conferral: null` rows — King, Duke of Valorsmark, Duchess of Hafenmark, Widow Regent, Heir, Princess (`offices.yaml:188, 201, 214, 240, 253, 266`) — and the unauthored guild-leader seat `off_npc_084`, built with no row (`harness/populated.py:1240-1251`). Once vacant, the throne stays empty for good, and it is vacant after season 0 in all three seeds: the King dies in personal combat, as the subject of the Queen's `accept` (seeds 0 and 2) or of the Prince's `fight` (seed 1). Elsewhere `confer` executed once (seed 1: 1 of 5), against 8, 7 and 10 seats vacated by the end of season 2 (8, 6 and 10 still vacant; I1v claim 3, round-3 probe). `[precedent: in Crusader Kings III control passes to the heir on death and a run ends only when none exists [V3]; T01 precedent, Crusader Kings III §2 item 5 and §6]` |
 
 **(b) The plays.**
 - *Take a town without a fight.* If members of your faction already live in a rival-held settlement, it is already
-  occupied: a seat granting `issue` whose purview reaches it can `seize` it at once, however many of the holder's own people stand
+  occupied: a seat granting `issue` whose purview reaches it can `seize` it at once, however many of the holding faction's people stand
   there: the effect "asks nothing of the defenders", only that your seat's faction is mustered there
-  (`effects_information.py:926-931, 959`). At seed 0 the Church has 6 of the 9 persons in `set_s_036` and the Crown's one resident
+  (`effects_information.py:927-931, 959`). At seed 0 the Church has 6 of the 9 persons in `set_s_036` and the Crown's one resident
   still licenses the King's seizure (`tests/test_march.py:918-930`; my probe). A member's own `move` into the town is enough as
   well (hand-built at seed 0: a Crown member `move`d into Hafenmark's `set_s_016` and the King's `seize` folded to `rung.seized`,
   where the control without the move was refused; `effects_migration.py:24-74`, and `mustered` reads `contain`). In computed play
@@ -463,8 +457,8 @@ makes n ≥ 2 and one act takes at most half.
 - *Bind a vassal.* A seat-holder who `oblige`s to your seat extends your purview over his seat's ground (IN-40). The oath is
   his act, not yours. Nothing flows up: he owes no tax and no troops, and his oath lapses after `oblige_term` (4 seasons) unless
   your seat pays him upkeep (`upkeep_of`: "WHAT THIS SEAT PAYS EACH PERSON OBLIGED TO IT", `world_q.py:1893-1924`). The liege pays
-  the vassal. `[precedent: in Crusader Kings III a vassal contract sets the tax and levies owed up to the liege [V3]; T01 precedent,
-  Crusader Kings III §3]`
+  the vassal. `[precedent: in Crusader Kings III a vassal contract sets how much tax and levy the vassal owes the liege (tax steps
+  0/2.5/10/15/25%) [V2 R1 D2]; T01 precedent, Crusader Kings III §3]`
 - *Keep retainers.* Each `oblige` runs 4 seasons; a `transfer` through the seat of `upkeep_of(seat)` (default 1) per obligee
   renews it (`world_q.py:1893-1924`). 0 renewals occurred in any seed, and no 4-season term can mature within a two-season run
   (seed 1's 22 service terms were opened in season 1 and mature at tick 5, `loop/matter.py:296-303`), so neither lapse nor renewal
@@ -474,16 +468,17 @@ makes n ≥ 2 and one act takes at most half.
   (`effects_information.py:958-960`), and a march into it is Unopposed with no title written (`loop/sides.py:131-132`; H-166).
 - *Defect with your land.* A landholder who `release`s his creed and `commit`s to another faction takes his territories with him:
   `faction_holding` reads his one live `commit` (`world_q.py:1623-1656`), so the province moves with no war, no timer and no act
-  aimed at land. He loses nothing else: a seat he holds stays its body's faction and keeps its remit (he becomes staff), though he
+  aimed at land (hand-built at seed 0: the Duke of Varfell's `release`, then `commit` to the Crown, took provinces Crown 6 → 10 and
+  Varfell 4 → 0). He loses nothing else: a seat he holds stays its body's faction and keeps its remit (he becomes staff), though he
   can no longer `seize` through it (`effects_information.py:956`). The `release` is public; witnesses judge it as a deed (its
   `alignment` cells are +0.3 on `precedent_substantive` and `rigid_flexible`, `rosters.yaml:3162, 3300`). Joining has no computed
   route (§2.1), so this happens only hand-built. `[precedent: in Pax Pamir changing loyalty is free but total, since you lose every
-  gift, prize and patriot of the old coalition (T15 precedent, Pax Pamir §3 and §4 item 13); Valoria inverts it]`
+  gift, prize and patriot of the old coalition [V3 rulebook]; T15 precedent, Pax Pamir §3]` Valoria inverts it.
 
 **(c) Costs, risks, counter-play, blocks.** Scenes are the only cost; there is no resource, casus belli or war score. War state
 gates nothing: `march` asks for none (`loop/sides.py:107-133`), so any `dispatch` seat may march on any foreign-held settlement at
 any time; a WAR Proposition can be uttered by anyone about any two factions (`utter` is `own` and requires nothing,
-`verb_table.yaml:1495-1499`) and ends when its committers release (`faction_q.py:226-233`). A breach of a treaty is public and
+`verb_table.yaml:1495-1499`) and ends when its committers release (`faction_q.py:229-233`). A breach of a treaty is public and
 costs the breaker only witnesses' judgment of the `release` deed (§5b). A
 march with defenders present is a real field: a loss writes casualties and stance on the attacker. A seized town is retaken the
 same way. The blocks are formation blocks, not rules: no computed question supplies the King a settlement to march on or a
@@ -500,7 +495,9 @@ construction ("A SEAT is never seized", `effects_information.py:892`; territory 
 **(e) What success leaves.** A seizure leaves one `hold` and a `rung.seized` event handed to the seat's obligees (post_remit),
 and changes every later `holder_faction_of`, `survey` sheet and march defender read for that town. A treaty leaves a Record,
 two `commit` edges and two new ambitions. A defection leaves a public `commitment.ended`. Nothing leaves a faction-level
-record, because there is no faction-level store.
+record, because there is no faction-level store. A death leaves the most: every tenure naming the dead closes
+(`state/world.py:645-646`), so the ruler's death empties his seats and his land in one step. A faction left with no members
+persists as an unread Proposition (Schoenland at seed 0 by tick 2).
 
 ## 6 How it connects
 
@@ -560,13 +557,17 @@ layer was deleted (errata G17).
 - **"Seize takes territory or a seat."** Only a held Record under warrant or an occupied *settlement*. A settlement seizure
   usually closes no hold (nobody held the town) and shadows the territory holder.
 - **"Fortification protects a town."** Only if someone defends it; an Unopposed field never reads it.
-- **"`march` executes in the realm."** The ctl column counts `march.declared`; all 21/10/4 refused, 0 arrivals.
+- **"`march` executes in the realm."** The ctl column counts `march.declared`; all 21/10/4 refused, 0 arrivals. A hand-built
+  settlement march does fight inside a real season: `march {subject: set_s_036}` by p_npc_033 folds `march.declared`, then
+  `field.lost` with two `body` writes on the attacker (I1v claim 2; re-run in round 3 through the callback at seed 0).
 - **"A member of two factions counts for both."** He counts for neither as a land-holder (`faction_holding` → `None`), though
   `members` lists him in both.
 - **Seat ids.** `offices.yaml` ids (`off_spymaster`) are not the built ids of loop-built seats (`off_npc_033`); six minted
   seats keep their row ids (e.g. `off_duke_valorsmark`); read the built world.
-- **"A dead ruler's seat is refilled."** Not if the seat has `conferral: null` — the throne and five other top seats (§5a).
+- **"A dead ruler's seat is refilled."** Not if the seat has no conferral basis (`conferral: null`, or no row at all) — the throne,
+  five other top seats and `off_npc_084` (§5a).
 - **"Occupation needs a march."** Any resident member of the seat's faction occupies (§3.2).
+- **"Defection costs the defector."** It costs him only witnesses' judgment; his land goes with him (§5b).
 - **"`leaders` counts people."** It lists one entry per seat held; the Crown's 11 are 10 people.
 - **"The remit roster is closed."** The tree says both: "CLOSED" in prose, `open: true` in data (`rosters.yaml:315-316`).
 - **"`remit_default` is only a test fixture."** It is labelled one, and it is applied in the shipped realm build (§1).
@@ -618,6 +619,34 @@ Draft appendix A5 (FA block) corrected here:
     cohort shares the garrison's rung; reopened `world_q.py:436` and probed `share`. Accepted.
 No finding was rejected.
 
+### Round-3 corrections
+
+Revised against `51d7b05` and the precedent suite. Each line: old claim → new claim, with the evidence; code lines reopened at the
+current tree before they went in. Where another suite file states the same fact, it is aligned in that file, not here.
+1. Header — the control-run outputs were cited from a session directory → the committed `proposals/2026-10-22-system-description/ctl/…`; counts re-run at `51d7b05` and held (probes, seeds 0-2).
+2. Line cites (PR #494, `git diff a4ca9a5 51d7b05`) — `world_q.py` +3 (imports, from `:45`), +11 (after the new `governing_hold`), +14, and +125 from `establishment_of` on; `holder_faction_of`'s walk `:1676-1681` → `:1679-1681`, over `governing_hold` `:1684-1692`; `rosters.yaml:2680+` → `:2746+`; `fixtures.py:882, :895` → `:892, :905`; `rosters.py:358` → `:359`; `test_march.py:918-927` → `:918-930` in §3.2.
+3. §1 Office row, §5a, §8 — "6 seats have `conferral: null`" → seven seats have no conferral basis: the six authored rows plus the unauthored `off_npc_084` (`offices.yaml:188, 201, 214, 240, 253, 266`; `harness/populated.py:1240-1251`; probe lists the same seven at seeds 0-2); this supersedes the six of round-2 item 1.
+4. §5a succession — silent on the outcome → the throne is vacant after season 0 in all three seeds (King dead in personal combat), with 8, 7 and 10 seats vacated by the end of season 2 (probe; I1v claim 3).
+5. §1 remit row — "22 of 23 loop-built seats hold `dispatch`" → 25 of the 32 seats (`offices.yaml:106-114` counted 22 of 23 at 29 authored seats, before IN-64; per-seat `granted_acts`, round-3 probe).
+6. §0 Status — no statement on defection or war → none computed: 0 faction `commitment.ended`, 0 WAR Propositions (probe, seeds 0-2).
+7. §2.1 — `loyalty` unmentioned as read-only at world-gen, and no note on `confer` → added (`data/cast.py:328-367`; `populated.py:620, :1047`; `loop/predicates.py:158-159`).
+8. §1 `leaders`, `provinces_of`, `sovereign_fraction`, `density`, `loyalty` rows and §2.3 — callers unstated → no production caller (`loyalty`: world-gen only) (grep of non-test `es/` `.py`; docstring hits `world_q.py:1593-1594`).
+9. §2.2 — land after a death unstated → a dead holder's land is never refilled; at tick 2 provinces Varfell 4 / Church 1, 11 of 16 territories uncontrolled in every seed (probe; `effects_information.py:950, 959`; `world_q.py:1744-1746`).
+10. §2.5 — "no treasury, mandate or stat line" → adds that legitimacy and stability (IN-23, PR #494) are one person's estimate, read only by `harness/storybar.py:185-186` (`queries/person_q.py:451, :480`).
+11. §2.6 — "the 21 `march` targets" → the 21 that reached the fold (25 in the act store; seeds 1-2 also never a settlement) (I1v claim 2 and its systematic-error note).
+12. §3 — example presented without a date → runs at tick 0 only; the King dies in season 0 in every seed (probe).
+13. §4 `march` — "Won also writes the defenders' bodies" → Won writes casualties and stance on the defenders (`effects_combat.py:259-261, 293-306`; `verb_table.yaml:816-820`).
+14. §4 `dispatch` — "**nothing** (`writes: []`); public `order.given`" → no tenure, store or person field, and `order.given` reaches every living ledger (I1v claim 4; `epistemic.py:649-686`); §9's "not confirmed" clause answered.
+15. §5a — "death and release yes" (lose territory), "hand-built only" (make war), the retainers cell → add the death-collapse figure, the in-season hand-built war chain (I1v claim 5), and that retainers are not an army (`world_q.py:1473-1490`; `gate.py:864-891`); "take territory" adds that an unheld town cannot be seized (`effects_information.py:939, 959`).
+16. §5b "Take a town without a fight" — "provided it holds a warrant naming it" → the licence is occupation however many defenders stand there, and a member's own `move` suffices (`effects_information.py:927-931, 959`; `test_march.py:918-930`; hand-built `move` then `seize` folded to `rung.seized`, control refused).
+17. §5b "Make a treaty", "Bind a vassal", "Keep retainers", "Undermine a faction's land" — add: breach costs only witnesses' judgment; a covenant carries no term (`effects_information.py:1094-1096`); nothing flows up to the liege, who pays (`world_q.py:1893-1924`); no term matures within a two-season run (`matter.py:296-303`; seed 1 terms mature at tick 5); unheld land is unseizable (`effects_information.py:958-960`; `sides.py:131-132`).
+18. §5b — no defection play → "Defect with your land" added (`world_q.py:1623-1656`; `effects_information.py:956`; `rosters.yaml:3162, 3300`); §8 trap "Defection costs the defector" added.
+19. §5c — "no resource, casus belli or war score" → also: war state gates nothing, any person may utter a WAR Proposition (`sides.py:107-133`; `verb_table.yaml:1495-1499`; `faction_q.py:229-233`); §1 `at_war` row "False in every run" → "every computed run" (a hand-built WAR chain makes it True, I1v claim 5).
+20. §5d — "the faction with people living in a town defends it" → against a march, not against a seizure; territory refusal is tagged `[ASSUMPTION; medium; Jordan to correct]` (`effects_information.py:933-935`).
+21. §5e — "nothing leaves a faction-level record" → adds that a death leaves the most (`state/world.py:645-646`).
+22. §8 `march` trap and dead-ruler trap — "all 21/10/4 refused" only → adds the hand-built settlement march that fights inside a season (re-run, seed 0: `march.declared`, `field.lost`); "the throne and five other top seats" → "the throne, five other top seats and `off_npc_084`".
+23. §0a (new) — the draft's "the running loop has no ending condition (errata G17: `victory` deleted)" → the season reports `endings` (`world_q.endings_reached`, IN-27, PR #494) and the realm as built reaches none (`[]` at seeds 0-2); `peninsular_sovereignty` is unreachable in computed play (`rosters.yaml:2524-2541`).
+
 ## 9 Checks
 
 - Read: `es/queries/faction_q.py` (whole); `es/queries/world_q.py:166-168, 1365-1852, 2092-2200`; `es/state/gate.py:272-400,
@@ -642,5 +671,17 @@ No finding was rejected.
 - Probe 4 (seed 0 and seed 1, two seasons, populated.run recipe): subject classes of `covenant`, `march`, `sabotage` (`site`
   operand: Rung 15, Person 7, Record 6, none 6 — never a Site), `commit`; issued dispensation `terms` classes; 0 WAR
   Propositions (103 OUGHT, 3 HOLDS); seed 1 `oblige` 24 (22 `duty.taken`, all to Church of Solmund seats), 0 `term.renewed`.
-- `git status` clean after every probe. Not confirmed: whether the chronicle channel actually carried `order.given` in these
-  runs (docstring measurements are older); why seed 0's two authored obligees closed; the `forge` cell details (row not opened).
+- `git status` clean after every probe. Not confirmed: why seed 0's two authored obligees closed; the `forge` cell details (row
+  not opened). Whether the chronicle channel carried `order.given` was answered in round 3: it reached all 79 living ledgers in a
+  hand-built dispatch plus one season (I1v claim 4).
+- Round 3, run at `51d7b05` (`python -I`, repo untouched; session scripts, not committed): `build_realm(seed)` at seeds 0-2 for two
+  seasons (provinces, `uncontrolled`, `sovereign_fraction`, members, WAR Propositions, live `oblige` and their terms, null-conferral
+  and vacant seats at each tick); season-0 FA act counts and death causes; `mustered` and `density` at `set_s_036`; each seat's
+  `granted_acts` (25 of 32 hold `dispatch`); the `endings` each season returned (`[]` at every seed and tick); a hand-built
+  settlement march through `dispatching_chooser` inside a season at seed 0 (`march.declared`, `field.lost`); a hand-built `move`
+  then `seize` at seed 0 with a no-move control; a hand-built `release` then `commit` by the Duke of Varfell at seed 0; `holder_faction_of` over the 37 settlements at seed 0, tick 1. Opened for the round-3
+  edits: `loop/effects_information.py:240-254, 789-830, 855-1000, 1039-1100`; `loop/effects_combat.py:225-310`;
+  `loop/effects_migration.py:24-80`; `loop/sides.py:100-135`; `loop/driver.py:505-535`; `loop/matter.py:288-310`;
+  `loop/predicates.py:118-162`; `queries/world_q.py:1368-1750, 1864-1977`; `queries/person_q.py:415-505`;
+  `harness/storybar.py:185`; `harness/populated.py:606-624, 1036-1052, 1236-1256, 1482-1520`; `rosters.yaml:2488-2545`;
+  `offices.yaml:86-150`; `state/world.py:645-690`; `tests/test_march.py:880-930`; `tests/test_in27_endings.py:78, 357`.
