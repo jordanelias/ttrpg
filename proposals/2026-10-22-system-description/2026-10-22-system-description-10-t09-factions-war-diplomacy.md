@@ -41,7 +41,9 @@ of `World`").
 `survey` are **RUNS-IN-LOOP**; `oblige` (entering service) is RUNS-IN-LOOP at seed 1 only (22 of 24), never attempted at seeds 0 and 2; `commit`
 executes once each at seeds 1 and 2, on uttered Propositions, never on a faction; `dispatch` executes (6, 7, 10 per seed) but
 writes nothing; `covenant`, `seize`, `sabotage`,
-`at_war` and the march arrival are **TESTS-ONLY** (wired, 0 successful executions in all three seeds); `declare`, `recruit`,
+`at_war` and the march arrival are **TESTS-ONLY** (wired, 0 successful executions in all three seeds; tests in
+`engine/season/tests/`: `test_in12_covenant.py`, `test_in12_seize.py`, `test_in12_step9.py` for `sabotage`, `test_faction_q.py:220-260`,
+`test_march.py:82-136`); `declare`, `recruit`,
 `conspire`, `assign` are **DESIGN-ONLY**. No computed defection and no computed war: 0 faction `commitment.ended` and 0 WAR
 Propositions in seeds 0-2 (my probe).
 
@@ -95,7 +97,7 @@ Automated: everything. No faction acts; a person acts, through a seat where the 
 | `covenant` | `issue` | a dispensation naming the terms, held by him | needs a Proposition subject | TESTS-ONLY (0 ok; `test_in12_covenant.py`) |
 | `march` | `dispatch` | army = the seat's faction's members present at his home settlement (`sides.py:110-115`); field at ENCOUNTER | needs a settlement subject to muster anyone | TESTS-ONLY (21/10/4 reached the fold, each `march.declared` then `march.refused`; 0 fields; `test_march.py:82-136`) |
 | `seize` | `issue` | his hold on an occupied town | forms only on a town a held warrant names | TESTS-ONLY (0 attempted; `test_in12_seize.py`, `test_march.py:793-824`) |
-| `dispatch` | `dispatch` | no state write; `order.given` in every ledger (I1v claim 4) | any person named | RUNS-IN-LOOP (6/7/10), writes nothing |
+| `dispatch` | `dispatch` | no write of its own; `order.given` in every ledger (I1v claim 4) | any person named | RUNS-IN-LOOP (6/7/10), writes nothing of its own |
 | `sabotage` / `give` | none | Site condition down / a Record moves | present at a Site / receiver co-located | `sabotage` TESTS-ONLY (0; `test_in12_step9.py`); `give` RUNS-IN-LOOP at seed 2 only (0/0/1) |
 
 #### First season, step by step (seed 0, tick 0 → 1; round-3 probes)
@@ -187,7 +189,7 @@ run ends when the player dies with no dynasty heir [V3]; T01 precedent, Crusader
 | `faction_holding(w,s)` | which faction a holder coheres under: the faction itself if `s` is a rostered faction Proposition, else the one faction he is committed to; `None` for none **or two** | — | `world_q.py:1623-1656` |
 | `holder_faction_of(w,r)` | walk `r`'s ancestry to the nearest held rung, return its holder's faction | a settlement under a held territory reads the territory's faction | `world_q.py:1659-1681`, walk `:1684-1692` |
 | `provinces_of(w,r)` | `{faction: [territories]}` beneath `r` whose holders cohere under one faction; no minimum size; `r` itself excluded | realm, build: Crown 6, Hafenmark 4, Varfell 4, Church 1; no production caller (grep of non-test `es/` `.py`: comments and docstrings only) | `world_q.py:1566-1620` |
-| `uncontrolled(w,r)` | territories at/under `r` whose `holder_faction_of` is `None` ("the revolt query"); one caller, a census report | realm, build: `['terr_T15']` | `world_q.py:1710-1750` |
+| `uncontrolled(w,r)` | territories at/under `r` whose `holder_faction_of` is `None` ("the revolt query"); one caller, a line of the harness report (`populated.py:1518`) | realm, build: `['terr_T15']` | `world_q.py:1710-1750` |
 | `sovereign_fraction(w,r)` | (largest single holder's share of HELD non-person rungs, count of unheld) | realm, build: `(0.4, 304)` = 6 of 15 held; no production caller (grep of non-test `es/` `.py`: comments and docstrings only) | `world_q.py:1517-1563` |
 | `footprint(w,f)` | rungs `f` holds + rungs its members stand in | — | `world_q.py:1422-1441` |
 | `mustered(w,r,f)` | members of `f` with a live `contain` (presence) anywhere in `r`'s subtree | — | `world_q.py:1473-1490` |
@@ -262,8 +264,8 @@ grants land: `give` moves Records only, `:819`, and only `seize` and `found` ope
 `loop/effects_founding.py:169`; v9 IN-30 tried to give `uncontrolled` a caller and stopped for want of a verb that takes unheld
 land, `world_q.py:1744-1746`). The King (6 territories) dies in season 0 in every seed, the Duchess of Hafenmark (4) in season 0
 at seeds 0-1 and in season 1 at seed 2, so at tick 2 every seed reads provinces Varfell 4 / Church 1, `uncontrolled` 11 of the
-realm's 16 territories and `sovereign_fraction` (0.8, 314) (my probe, seeds 0-2). `uncontrolled` has one caller, a census line
-(`harness/populated.py:1518`), so nothing revolts or reacts.
+realm's 16 territories and `sovereign_fraction` (0.8, 314) (my probe, seeds 0-2). `uncontrolled` has one caller, a line of the harness
+report (`harness/populated.py:1518`, run after the season loop, not the loop's CENSUS step), so nothing revolts or reacts.
 
 ### 2.3 Presence and strength
 
@@ -319,7 +321,8 @@ is no single faction-legitimacy number"), recomputed when read; their only calle
 Each season a person's budget is `max(1, 5 + 1 per live hold − body-band penalty − 1 per travel leg)` SCENE ACTIONS
 (`es/decision/budget.py:19-20, 57-61`; `budget_office_bonus = 1`, `fixtures.py:526`). Every live `hold` counts — a seat, a
 landholding, a Record or Proposition you made — so `utter`, which always succeeds and opens a hold, is a budget lever. The
-budget is a cost budget: a scene holding more than one act is extended and costs `extended_scene_cost = 2` (`fixtures.py:489`),
+budget is a cost budget: a scene holding more than one act is extended and costs `extended_scene_cost = 2` (`fixtures.py:489`; `Scene.cost` reads the scene's
+`extended` flag, not its act count, `state/carriers.py:593-594`, and the shipped packer sets the flag for a chunk of more than one act, `decision/choose.py:636`),
 and the driver releases at most one scene per round over five rounds (`loop/driver.py:456`), so a budget of 5 buys 2+2+1 = 7
 acts and a budget of 6 buys 9; spending is capped at 10 actions, five scenes at cost 2, so at most 15 acts (cross-audit ruling C1). In the seed-0 run that is about 7.6 acts per person
 per season on the basis `d.resolved` 1,132 / ~74 persons / 2 seasons. For each question (in `attention_key` order) the chooser forms one Candidate per
@@ -403,8 +406,10 @@ offering; step 6's second `commit` is his own, separate act.
 ## 4 What you can do
 
 All rows below are uncontested except `march` (prize "a field", bands Declared/Won/Lost/Unopposed, resolved by MB). An
-uncontested act either writes or is refused. Acts are paid from the scene-action budget (§2.6). Counts: attempted/ok, seeds 0/1/2, where "attempted" = acts that passed
-admission and reached the fold (admission refusals are uncounted) and "ok" = at least one non-refusal event.
+uncontested act either writes or is refused. Acts are paid from the scene-action budget (§2.6). Counts: attempted/ok, seeds 0/1/2, where "attempted" = acts that reached the fold
+(`d.resolved`, appended on entry to `_fold` before its own precondition check, `loop/resolve.py:377-379`, so ordinary precondition
+refusals are counted; left out are acts whose actor was already gone, refusals for an obstacle too high for the pool, and contested
+or graded acts refused before the seam, `:974-998, :1012-1032`) and "ok" = at least one non-refusal event (`ctl/control.py:13, :21`).
 
 | verb | who may | precondition | writes on success | refusal | realm |
 |---|---|---|---|---|---|
@@ -418,12 +423,12 @@ admission and reached the fold (admission refusals are uncounted) and "ok" = at 
 | `give` | holder of the Record | receiver present where you are | hold moves to the receiver; `record.given` | `give.refused` | 16/0, 21/0, 19/1 |
 | `seize` | seat-holder, `remit:issue` | purview reaches the object's place; Record half: you hold a warrant naming it and someone else holds it; Rung half: a settlement held by another faction, your seat's faction mustered there (residents count), you committed to that faction; forms only on a warrant-named referent | closes the displaced `hold` (if any), opens yours; `record.seized`/`rung.seized` | `seize.unauthorized` (seat), `seize.refused` (world) | 0/0 in all seeds |
 | `march` | seat-holder, `remit:dispatch` | subject a Rung; only a settlement musters an army | Won/Unopposed: army relocated to the target, `army.arrived`; Lost: casualties and stance on the attacker; Won: casualties and stance on the defenders (a grudge row toward the winning faction, a morale row toward their own; `effects_combat.py:259-261, 293-306`) | `march.refused` | 21, 10, 4 declared; 0 fields, 0 arrivals |
-| `dispatch` | seat-holder, `remit:dispatch` | the named person exists | no tenure, store or person field (`writes: []`); `order.given`, public by kind, reaches every living ledger at WITNESS (a hand-built dispatch plus one season: 79 ledgers, 219 `told_by`, 18 firsthand; I1v claim 4, seed not recorded, uncommitted round-3 probe) | `dispatch.refused`, `person.demanded` | 18/6, 18/7, 10/10 |
+| `dispatch` | seat-holder, `remit:dispatch` | the named person exists | no tenure, store or person field of its own (`writes: []`); `order.given`, public by kind, reaches every living ledger at WITNESS (a hand-built dispatch plus one season: 79 ledgers, 219 `told_by`, 18 firsthand; I1v claim 4, seed not recorded, uncommitted round-3 probe) | `dispatch.refused`, `person.demanded` | 18/6, 18/7, 10/10 |
 | `sabotage` | anyone present at the Site | Site exists, you stand at it | stages −(condition × 1/n) on `Site.condition`, n = persons present; `site.damaged` | `sabotage.refused` | 34/0, 22/0, 33/0 |
 | `succeed` | the holder designating an heir | you hold the office | row declared, **no effect registered** (decline note at `verb_table.yaml:1113`) | — | not resolvable |
 
-Notes: `march`'s "ok" in the ctl files counts `march.declared` as a non-refusal; every one of those acts also emitted
-`march.refused`. `sabotage` alone at a fabric would take it to 0 in one act (`effects_economy.py:141-157`), but in the realm a garrison sits
+Notes: `march`'s "ok" in the ctl files counts `march.declared` as a non-refusal, so for this contested verb "ok" is not
+Partial-or-better; every one of those acts also emitted `march.refused`. `sabotage` alone at a fabric would take it to 0 in one act (`effects_economy.py:141-157`), but in the realm a garrison sits
 on the settlement rung, where that settlement's cohort is always present (`share` counts persons on the rung,
 `world_q.py:439, 1184-1189`; probe: `share(s_s_016_garrison) = (1, 1)` with only `cohort_set_s_016` there), so a saboteur
 makes n ≥ 2 and one act takes at most half.
@@ -660,6 +665,32 @@ current tree before they went in. Where another suite file states the same fact,
 21. §5e — "nothing leaves a faction-level record" → adds that a death leaves the most (`state/world.py:645-646`).
 22. §8 `march` trap and dead-ruler trap — "all 21/10/4 refused" only → adds the hand-built settlement march that fights inside a season (re-run, seed 0: `march.declared`, `field.lost`); "the throne and five other top seats" → "the throne, five other top seats and `off_npc_084`".
 23. §0a (new) — the draft's "the running loop has no ending condition (errata G17: `victory` deleted)" → the season reports `endings` (`world_q.endings_reached`, IN-27, PR #494) and the realm as built reaches none (`[]` at seeds 0-2); `peninsular_sovereignty` is unreachable in computed play (`rosters.yaml:2524-2541`).
+
+#### Audit fixes
+
+Round-3 findings (audit F_10, each cite reopened at the current tree before it went in; numbers 1-19 are the audit's, C1-C2 are canon-wording items):
+1. Menu header "per acting person … each act costs one scene action" → realm totals over two seasons, a one-act scene costs 1 and a scene of 2-3 acts costs 2 (`ctl/realm_seed0_2seasons.txt:20, :39`; `decision/budget.py:57-61`).
+2. `march` row "his faction's members" → the seat's faction's members at his home settlement (`loop/sides.py:110-115`).
+3. `loyalty` and `dispatch` leave the cosmetic list for "not cosmetic, but not live choices", §2.1 says "goal and creed stance rows", and the menu and §4 `dispatch` cells say "of its own" (`harness/populated.py:991-992, :1047-1049`; `decision/choose.py:54, :150`; `state/carriers.py:669`).
+4. §6 "march + seize + occupation is the only route" → `seize` on occupation by a resident, a member's `move` or a march's arrival (`loop/effects_information.py:927-931, :959`; `tests/test_march.py:918-930`).
+5. §5b "Nothing flows up" → he owes no tax or troops, but the liege seat gains purview over his ground, which `requisition` and `seize` read (`state/gate.py:389-428, :861`; `verb_table.yaml:766-780`).
+6. §5a succession precedent "a run ends only when none exists" → "or at the 1453 end date" (`research/game_precedent_suite/tutorials/T01_realm.md:20, :77`).
+7. First season step 4 → adds the Queen's realm seat, which stays held at seed 0, under its built id `off_npc_032` (the audit gave the offices row id `off_widow_regent`; `offices.yaml:234-245`; uncommitted round-3 probe, rerun at seed 0 in this pass).
+8. Menu `sabotage`/`give` row "TESTS-ONLY (give 0/0/1)" → `sabotage` TESTS-ONLY with its test and `give` RUNS-IN-LOOP at seed 2 only (errata G1, X4; ctl `give` 19/1 at seed 2), and the `covenant` and `seize` rows and the §0 Status paragraph now cite their tests (`test_in12_covenant.py`, `test_in12_seize.py`, `test_in12_step9.py`, `test_faction_q.py:220-260`, `test_march.py:82-136`).
+9. Menu `march` row "declaration RUNS-IN-LOOP" → TESTS-ONLY, 21/10/4 reached the fold and each `march.declared` was then `march.refused` (errata R-F5, G1; ctl seed 0 `march.declared 21`, `march.refused 25`).
+10. Loop step 6 and First season step 5 → `uncontrolled` is read by one line of the harness report, after the run (`harness/populated.py:1482, :1518, :1536`; `queries/world_q.py:1739-1742`), and only `members` and `mustered` are named as Queries the loop asks; §1 and §2.2 reworded to match.
+11. Loop step 2 and §2.6 "the cap is 10" → spending is capped at 10 actions (five scenes at cost 2), at most 15 acts (`decision/choose.py:636`; `data/fixtures.py:488`); §2.6 also states that `Scene.cost` reads the `extended` flag (`state/carriers.py:593-594`).
+12. §1 `provinces_of`, `sovereign_fraction`, `density` rows and Round-3 item 8 "docstring hits at `world_q.py:1593-1594` only" → comments and docstrings only, no production caller (grep of non-test `es/` `.py`, rerun in this pass).
+13. §0a "What changes later" → provinces also change when a holder releases his `hold` (`verb_table.yaml:971`, `release` domain).
+14. §5b "Defect with your land" → adds that the old faction's creed still names the defector as its leader (`harness/populated.py:944`; `rosters.yaml:1666`), and the audit's second sharpening (no seated holder can be displaced by `confer` in the built realm) was left out because it fixes no wrong sentence (`loop/predicates.py:158-159`).
+15. §5b "Undermine a faction's land" "The land is then unseizable" → the towns under it cannot be seized (`loop/effects_information.py:959`); territories are refused by kind regardless (`:950`).
+16. §2.2 `give` cite `:820` → `:819`; `may_muster` cites `gate.py:864-891` → `:864-887` (§1, §5a, §6, Round-3 item 15).
+17. §5a retainers cell "marches with nobody" → an obligee outside the seat's faction is in no march, `may_muster` drops him (`state/gate.py:887`).
+18. [PROPOSED] block → IN-46 and IN-47 glossed and marked unbuilt with the `[ASSUMPTION]` and IN-46's fight deferral named, "REM-23 gives" → "would give" (also in §7), "release one scene" → "submit one scene", and M1 and M2 pointed to §7 (`proposals/2026-10-07-grid-mode-suspension.md:37-49`).
+19. Season-0 FA counts (First season step 2) → cited to the committed `ctl/control.py 0 1`, which reproduces them, and the §4 `dispatch` ledger figures (79 / 219 / 18) → tagged "seed not recorded, uncommitted round-3 probe", because a rerun here at seeds 0-2 gave 78 / 78 / 77 living ledgers and did not reproduce them.
+C1. §4 intro "admission refusals are uncounted" → acts that reached the fold are counted, ordinary precondition refusals included, with three exclusions (canon wording K1; `loop/resolve.py:377-379, :974-998, :1012-1032`).
+C2. §4 `march` note, §2.6 and the §0 Status paragraph → "ok" is not Partial-or-better for a contested verb (K2; `ctl/control.py:13, :21`), `Scene.cost` reads the `extended` flag (K13; `state/carriers.py:593-594`), and TESTS-ONLY rows cite tests (K22).
+Audit item 20 (errata F13 "22 of 23" against 25 of 32) belongs to file 13 and is not edited here.
 
 ## 9 Checks
 

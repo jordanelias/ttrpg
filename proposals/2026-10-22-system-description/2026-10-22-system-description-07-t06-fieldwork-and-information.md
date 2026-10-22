@@ -177,34 +177,40 @@ killing]`.
 - Consequential: where a person stands (firsthand 100 with `who`, against an inferred 50); what he holds (it
   gates `tell`, `survey`, `forge`, `reconstruct`); whether his act's kind is one a binding row emits
   (chronicle) or is done through a seat (`post_remit`); a `conceal` before acting (the alias); whom he tells,
-  since a teller's record re-weights his word (TESTS-ONLY at seeds 0-1, one chained claim at seed 2; §2.5).
-- Inert at shipped values: `forgery_quality` (capped), `interview` and `reconstruct` (uncover nothing),
-  capability (empty), `telling_privacy` (0), `examine` (never runs), `Seen.why` (always None,
-  `epistemic.py:932-938`).
+  since a teller's record re-weights his word (TESTS-ONLY at seed 0, where all 4 tellings were deduped,
+  `engine/season/tests/test_told_by_channel.py:1363`; untested at seed 1, where 7 tellings were not traced; one
+  chained claim alive at seed 2; §2.5).
+- Inert at shipped values: `forgery_quality` (capped), capability (empty), `telling_privacy` (0), `Seen.why`
+  (always None, `epistemic.py:932-938`).
+- Inert for other reasons: `examine` never passes admission (the operand is filled with a non-Site referent,
+  §4), and `interview` and `reconstruct` uncover nothing by construction (no degree, so no `finding_terms`
+  row; §5d).
 - Dominant: presence over inquiry; `create_record` as a budget lever (§4, §5d).
 
 ### How it plays [PROPOSED]
 
 Nothing below executes. Sources: IN-47 (`proposals/2026-10-07-character-sheet-spaces.md` §2 arm C1 `:88-90`,
-§4 `:162-185`; built by REM-30, `proposals/2026-10-21-v9-remediation/2026-10-21-v9-remediation-02-items-rb0-to-rb3.md:559-568`,
-D-2 RULED that the build proceeds, the design stays PROPOSED); IN-46 (REM-31, same file `:570-589`: a paused
+§4 `:162-185`; to be built by REM-30, `proposals/2026-10-21-v9-remediation/2026-10-21-v9-remediation-02-items-rb0-to-rb3.md:559-568`;
+IN-47 is unbuilt, appearing only in a `blocks` list at `requirements.yaml:818`. D-2 RULED that the build
+proceeds; keeping the design PROPOSED is an [ASSUMPTION; medium; Jordan to correct], same file `:552-555`); IN-46 (REM-31, same file `:570-589`: a paused
 fight, no investigation content); the fieldwork lexicon's M1-M10 (§7).
 - Setup: a player takes a person the world builder already seated (IN-47 arm C1) and reads his case from the
   ledger the loop already writes ("unknowns stay unknown, false beliefs stay believed",
   `character-sheet-spaces.md:180-181`), with an out-of-sim chronicle rendered over `causes[]` (`:171-175`).
-  That is the precedents' logbook, case board or phone log (T06 precedent, Obra Dinn §2 and Shadows of Doubt
-  §2; T19 precedent, Lacuna §2) made from claims instead of authored clues.
-- Loop: unchanged; the player's choice enters at the chooser slot (REM-30 cites `loop/driver.py:355`, not
-  re-derived here) through his own View, Question and Candidates.
+  That is the Obra Dinn book (T06 precedent, Obra Dinn §2) or the Lacuna phone log (T19 precedent, Lacuna
+  §2) made from claims instead of authored clues.
+- Loop: unchanged; the player's choice enters at the chooser slot (`season(self, choose, ...)`,
+  `loop/driver.py:370`, called at `loop/deliberate.py:170`; REM-30's `loop/driver.py:355` is stale at HEAD)
+  through his own View, Question and Candidates.
 - Choice menu: every inquiry yields a selected fact at remove 0 (M1); a refusal says so (`inquiry.refused`,
-  M2: the precedents' "nothing more here"); a Failure can mislead (M3); the hider's skill sets the obstacle
+  M2: the precedents' completeness hints, Obra Dinn's blurred face, T06 precedent Obra Dinn §4 step 8 (`:53`),
+  and L.A. Noire's music stopping, L.A. Noire §2 step 2 (`:248`)); a Failure can mislead (M3); the hider's skill sets the obstacle
   (M4); the interviewee answers by his own act next season (M5); `watch` can unmask a cover (M1, M4); a
   finding can be brought as a proof (M9). Each waits on the item §7 names.
 - Still absent, by axiom: a verifier of the player's conclusion (AX-7;
-  `proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md:91-92`;
   `proposals/2026-10-03-verb-coverage-and-gap-fill.md:787-788`), a standing counter-intelligence task (T-i;
-  same file `:819`), an intelligence meter (T-a; `:820`). On the precedents' verification scale it would sit
-  with Pentiment (no truth check, consequence only; T06 precedent, Pentiment §7), over a simulated truth that
+  same file `:819`), an intelligence meter (T-a; `:820`). Of the four T06 precedents it would sit nearest
+  Pentiment (no truth check, consequence only; T06 precedent, Pentiment §7), over a simulated truth that
   Pentiment lacks.
 - Failure and ending: nothing in the loop halts on an ending. IN-27 is built only as the report above, and
   `endings_reached` says the realm as built reaches none.
@@ -339,11 +345,15 @@ claim (`options.py:1356-1362`).
 **Provenance.** Each claim keeps its `source`, its `chain` and so its `teller` (`state/carriers.py:337-379`),
 and `record()` (`decision/options.py:1470-1510`, `record_gain 0.5` at `fixtures.py:801`) re-weights
 everything a teller passed on by how often his told cells matched the hearer's own firsthand claims. Two
-uploaded surveys each find a model of where a belief came from in only one title, The Guild 2
-(`consolidated_twenty_games.md:179`, of twenty titles; `Citizens_Settlements_and_Factions_-_Nine_Titles.md:390`,
-of nine; `research/game_precedent_suite/dispositions/ATTACHMENTS_CROSSCHECK.md` §A, "Holds" within the
-precedent tables); Valoria holds one. The chained half is nearly unused at shipped values: 0, 0 and 1
-chained claims survive two seasons in seeds 0, 1 and 2 (probe).
+uploaded surveys (not in the repo, `research/game_precedent_suite/README.md:30`) find belief with provenance
+*and fabricable, traceable evidence* in only one title, The Guild 2 (`consolidated_twenty_games.md:179,235`,
+of twenty titles; `Citizens_Settlements_and_Factions_-_Nine_Titles.md:390`, of nine).
+`research/game_precedent_suite/dispositions/ATTACHMENTS_CROSSCHECK.md` §A row 2 marks that "Holds" within v2,
+and its verdict rests on the fabrication half, since Dwarf Fortress rumours also originate with witnesses.
+Valoria holds the provenance half; D_T06 row 66 grades the fabrication-tracing half LACKS in the realm (§3
+shows it only in a hand-built world). The chained half is nearly unused at shipped values: 0, 0 and 1
+chained claims were alive at the end of two seasons in seeds 0, 1 and 2 (uncommitted round-3 probe), a
+survival count that cannot see a claim evicted, or held by someone who died.
 
 **2.6 Fading and forgetting.** MATTER, once per season, takes 5 off every claim's confidence and emits
 `claim.decayed` (`matter.py:317-347`). Over the cap of 200, WITNESS evicts the lowest
@@ -432,8 +442,9 @@ claims at `int(100 × (1 − 0.5×1) × (1 − 0) + 0.5) = 50`:
 `(rec, finding.made)` and `seen(S){who: p_high}` at 100, unrefracted because he is the actor.
 
 *Partial (act id 1):* only `(rec, record.forged)` and `seen(rec){who: None}`, at 50. He learns the
-sheet was forged, not by whom. **The trail is now closed to him for good**: a later Success on the
-same Record deposits nothing (`holds_trail`, `epistemic.py:356-360`).
+sheet was forged, not by whom. **The trail is now closed to him until that claim is evicted from his
+ledger** (`epistemic.py:356-365`; `state/ledgers.py:24-32`): a later Success on the same Record deposits
+nothing (`holds_trail`; decay leaves a claim in place even at 0 confidence, `loop/matter.py:321-322`).
 
 *Counter-information:* p_other is in S and receives `(rec, finding.made)` and `seen(S){who: p_high}` at
 100. **The forger learns he was investigated, and by whom, with more confidence than the investigator
@@ -474,7 +485,7 @@ the chooser formed, including those refused at admission.
 |---|---|---|---|---|
 | `research` | subject is a Record (you need only know its id) | graded, 2.8. O/S/P: `finding.made`, uncovers a trail if one exists | nothing | 14 / 7 (probe: 6 P, 1 S, 7 F); 115 `finding.none`, so about 108 formed acts were refused at admission |
 | `surveil` | subject is a Rung and you are `present_at` it | graded. The Person case is absent, so the trail's "deeds by" side is unreachable | nothing | 30 / 5 (2 P, 3 S, 25 F) |
-| `examine` | a Site exists and you are present at it | graded | nothing | **0 / 0 in seeds 0-2: it never passes admission.** It is formed 62 / 59 / 39 times in seeds 0 / 1 / 2, and every one emits `finding.none` at admission. The cause is the operand: `site` is filled with the question's subject (`decision/options.py:1047-1048`), and none of the 160 formed acts was given a Site (322 Sites exist; seed 0, by act: 45 Rungs, 15 Persons, 4 of them dead by the end, and 2 Records; probe). `work` and `restore` also take a `site` operand (`verb_table.yaml`), so the same fill reaches them |
+| `examine` | a Site exists and you are present at it | graded | nothing | **0 / 0 in seeds 0-2: it never passes admission.** It is formed 62 / 59 / 39 times in seeds 0 / 1 / 2, and every one emits `finding.none` at admission. The cause is the operand: `site` is filled with the question's subject (`decision/options.py:1047-1048`), and none of the 160 formed acts was given a Site (322 Sites exist; seed 0, by act: 45 Rungs, 15 Persons, 4 of them dead by the end, and 2 Records; probe), although `verb_table.yaml:996` says a referent can be a Site since `11a`. The cause is not new: `verb_table.yaml:1312-1313` already names the Site binding as the reason `examine` is always refused, and REM-22 (rev. 3 adds `examine`, D-04; `proposals/2026-10-21-v9-remediation/2026-10-21-v9-remediation-02-items-rb0-to-rb3.md:360-379`) is the tracked fix; no `referent_class: Site` exists in `verb_table.yaml` yet. Test of the graded roll once a Site is given: `engine/season/tests/test_fi01_graded_inquiries.py:223-239`. `restore` (`verb_table.yaml:988-995`), `work` (`:1512-1517`) and `sabotage` (`:1025-1032`) also take a `site` operand, so the same fill reaches them (ctl attempted/ok, seeds 0 · 1 · 2: restore 23/0 · 31/0 · 30/0, sabotage 34/0 · 22/0 · 33/0, work 77/0 · 70/0 · 63/0). For those three the fill is one cause among several: `work` stages a rise only where a live works names the Site (`loop/effects_economy.py:103-104`), a dwelling or garrison floor is empty (`rosters.yaml:2631-2632`; 248 of 322 Sites), and natural play mints no works Record (seed 0, two seasons: Records of kind `text`, `faction_sheet`, `cover`, `petition` and `dispensation` only; uncommitted round-3 probe) |
 | `interview` | subject is a Person | ungraded `finding.made`. Uncovers nothing and reads nothing from the interviewee | nothing | 32 / 11 |
 | `reconstruct` | you hold a claim on the subject | ungraded. Uncovers nothing | nothing | 39 / 33 |
 | `thread_read` | `requires_typed: none` (TS ≥ 30, no carrier, H-85) | not resolvable | — | never formed |
@@ -569,7 +580,8 @@ first.
   `seen{who: you}` at 100 (`epistemic.py:428-453`). That includes the forger, if he is there.
 - Failure and refusal both leave nothing in any ledger. You cannot tell a missed roll from an
   impossible inquiry, and nobody else can either.
-- A Partial on a trail permanently denies you the hand.
+- A Partial on a trail denies you the hand until that claim is evicted from your ledger
+  (`epistemic.py:356-365`; `state/ledgers.py:24-32`).
 - The forger can see you coming (3, tick 2). There is no counter-espionage verb (ED-FI-0002 unbuilt).
 - Blockers: no `give` of a forged Record in seed 0 (the chooser's `give` subjects are people and
   buildings, §8), so in practice the plant never happens.
@@ -583,14 +595,15 @@ first.
   (no degree, so no `finding_terms` row), and emit a `finding.made` that tells bystanders you asked.
 - **`examine` never passes admission** in seeds 0-2. It is formed 62 times in seed 0 and refused every
   time, because the question that forms it never names a Site (§4). So a person who was not at a place
-  when something happened there cannot learn it by going there later: `examine` never runs, and the only
+  when something happened there cannot read it off the place later: `examine` never runs, and the only
   covert kind, `record.forged`, writes a Record, not a place (Play 1).
 - **Presence dominates inquiry**: 100 firsthand against 50 inferred.
 - **Telling something your hearer saw with you deposits nothing.** This is a mechanism: dedup skips a
   copy the hearer already holds unchained (`witness.py:932-935`). The evidence is small: all 4 seed-0
   tellings hit it (probe). That is one seed, n = 4. Seeds 1 and 2 have 7 and 6 `news.told`; at the end of
-  season 2 they leave 0 and 1 chained claims alive (probe), so most of their copies were also skipped or
-  evicted; which, I did not trace. I make no claim that telling is generally wasted. A telling to someone
+  season 2 they leave 0 and 1 chained claims alive (probe), a survival count that cannot tell a copy skipped
+  by dedup from one evicted, or held by someone who died (ctl `person.died` 9 / 6 / 11 in seeds 0 / 1 / 2);
+  I did not trace which. I make no claim that telling is generally wasted. A telling to someone
   who was absent does land (the §3 example).
 - **Kind-sharing broadcast.** Any Event whose kind a `binding_decision` row emits reaches every person
   at 67 (2.2). That includes kinds produced by non-binding acts (`argue`'s `pursuit.moved`) and by
@@ -679,7 +692,8 @@ so the two would have to move together. The canon price "+2 Exposure" was declin
    changes what claims are *about* (verified, §9).
 2. **"A forgery is hard to detect."** Its quality is capped away. Every research on it rolls 2 dice
    against Ob 2.
-3. **"A Partial is a step toward the answer."** It closes that trail to you permanently (`epistemic.py:356-360`).
+3. **"A Partial is a step toward the answer."** It closes that trail to you until that claim is evicted from your ledger (`epistemic.py:356-365`;
+   `state/ledgers.py:24-32`).
 4. **"`research` needs the document in hand."** It needs only an existing Record id
    (`verb_table.yaml:1364-1372`). The *trail*, however, is reachable only through a plant.
 5. **"`interview`/`reconstruct` succeeded, so something was learned."** Ctl counts their

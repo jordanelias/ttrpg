@@ -64,7 +64,9 @@ Every code line below was opened at `51d7b05`. The as-built text comes first; th
 6. `degree_from_net` bands the margin (`dice_engine.py:286-301`); the fold picks `writes[degree]` and `emits[degree]` (`resolve.py:825`).
 7. WITNESS turns the events into claims; a Partial `tell` may arrive distorted (`witness.py:136-175`).
 
-**The choice menu** (the verbs that reach the dice; full rows in §4). Counts are §4's `attempted/ok` per seed 0 / 1 / 2 unless marked.
+**The choice menu** (the verbs that reach the dice; full rows in §4). Counts are per seed 0 / 1 / 2 and are §4's `ok` (at least one
+non-refusal event, `ctl/control.py:13, :21`; Partial-or-better for `tell` and the inquiries, but not for `speak`, `argue` or `determine`,
+whose Failure kinds are not in its refusal list) unless marked rolled or formed.
 
 | verb | cost | effect by band, F / P / S / O | when a person picks it | grade |
 |---|---|---|---|---|
@@ -72,7 +74,7 @@ Every code line below was opened at `51d7b05`. The as-built text comes first; th
 | `speak` | one act | `matter.turned` / `.held` / `.advanced` / `.carried`; writes nothing | a docketed matter exists | RUNS-IN-LOOP (seed 0: 3 rolled, all Failure); room terms at control |
 | `argue` | one act | `argument.lost` / `argument.won` / `argument.won` + `pursuit.moved` (S, O) | a Proposition exists; the opponent is `with` him | TESTS-ONLY (0 rolled; formed and stopped 10/17/18, §4) |
 | `determine` | one act; needs `remit:determine` | `matter.undetermined` / `matter.determined` (Tenure graded Partial) / + `pursuit.moved` (S, O) | a seat, a docket, a bench, a quorum | RUNS-IN-LOOP at seed 1 only (1 rolled of 6 formed) |
-| `research`, `surveil` | one act | `finding.none` / `finding.made` (P = S = O) | a Record exists / present at a Rung | RUNS-IN-LOOP (`research` 7/1/2; `surveil` 5/9/5) |
+| `research`, `surveil` | one act | `finding.none` / `finding.made` (P = S = O) | a Record exists / present at a Rung | RUNS-IN-LOOP (`research` 7/1/2 ok of 14/8/4 rolled; `surveil` 5/9/5 ok of 30/29/22 rolled) |
 | `examine` | one act | as `research` | present at a Site | TESTS-ONLY (0 admitted; formed 62/59/39; its `site` operand is filled from the subject, `decision/options.py:1047-1048`) |
 
 No verb buys dice, lowers an Ob or adds advantage at a price; the `speak` room is earned through witnessed deeds (§5b). The precedent menus
@@ -339,8 +341,9 @@ Partial `tell` delivers the news but perhaps not intact. A Partial `determine` o
 (`verb_table.yaml:353`). For `research`, `examine` and `surveil`, Partial and better are indistinguishable in what they emit.
 
 **What executes** (control run, `build_realm`, 2 seasons, from the `ctl/` files). Each entry is `attempted/ok` per seed 0 / 1 / 2.
-- "attempted" means the act reached `_fold`. `d.resolved` is appended there (`loop/resolve.py:377-379`), and an act refused at
-  admission `continue`s before it (`:1025-1032`). For these verbs, then, "attempted" = admitted and rolled.
+- "attempted" means the act reached `_fold`. `d.resolved` is appended there (`loop/resolve.py:377-379`), and a contested or graded act
+  that `_admits` refuses `continue`s before it (`:1013-1032`); other verbs' precondition refusals run inside `_fold` (`:428`) and are
+  counted. For these verbs, then, "attempted" = admitted and rolled.
 - "ok" means at least one non-refusal event.
 - Acts refused at admission still emit their refusal kind and stay in the act store: seed 0 holds 275 acts beyond `d.resolved` (1,407
   against 1,132; seed 1 1,394 against 1,122; seed 2 1,447 against 1,175), among them `research` 111, `examine` 62, `surveil` 21, `speak`
@@ -412,9 +415,10 @@ to 58 %. Nothing else in the code moves a social roll's odds for a person today.
   Partial or better needs net ≥ 1, 58 % at pool 2. Today nobody holds the key, so this does not arise.
 - The middle band is narrow by ruling. Partial is "met but not exceeded" (ED-IN-0187; `dice_engine.py:238, :286-301`): 19 % at the
   shipped pair, and never the most likely band at any pool 1–8 against Ob 1–4 (largest: 32 % at pool 2, Ob 1). PbtA's 7–9 band and
-  Blades' 4–5 band sit at 41–45 % across the competent range (recomputed here: PbtA 41.7 / 44.4 / 41.7 % at +0 / +1 / +2 on 2d6;
-  Blades 44.4 / 45.4 / 42.0 % at 2 / 3 / 4 dice; the repo records the figure at `research/by_lane/IN_infrastructure.md:145` as
-  "arithmetic, corpus unverified"). On the social path the typical outcome is Failure, which writes nothing, not a complication.
+  Blades' 4–5 band sit at 41–45 % at the modifiers and dice counts shown (recomputed here: PbtA 41.7 / 44.4 / 41.7 % at +0 / +1 / +2 on
+  2d6; Blades 44.4 / 45.4 / 42.0 % at 2 / 3 / 4 dice; the repo records the figure at `research/by_lane/IN_infrastructure.md:145` as
+  "arithmetic, corpus unverified"). That band is the most likely one only at PbtA +1 and at Blades 2–3 dice: it ties the miss at PbtA +0
+  (41.7 each) and 10+ at +2, and at 4 dice a 6 leads it (51.8 % against 42.0 %). On the social path the typical outcome is Failure, which writes nothing, not a complication.
 
 **(e) What success leaves in the world.** The roll writes nothing. What the degree leaves comes from the verb row: events (`news.told`,
 `finding.made`, `matter.determined`...), which WITNESS turns into claims in observers' ledgers; and for `argue`/`determine` at Success
@@ -523,9 +527,11 @@ Everything in this section is **[PROPOSED]**: none of it executes.
 7. **A hostile bench is not a harder roll.** Its negative reception raises Ob above 2, and the ceiling cuts it back (seed 0, `p_npc_041`:
    reception −0.529, Ob 2.0).
 8. **Counting `finding.none` or `news.untold` as Failures overcounts them.** These kinds are also the refusal kinds of the inquiries and
-   of `tell`. An admission refusal never reaches `_fold`, so it is absent from the `ctl/` counts altogether (§4). Inside those
-   counts, "ok" equals Partial-or-better only where the Failure kind is a refusal-looking kind (`news.untold`, `finding.none`,
-   `matter.undetermined`). For `speak` (`matter.turned`) and `argue` (`argument.lost`) a Failure counts as "ok".
+   of `tell`. A contested or graded act that `_admits` refuses before the seam never reaches `_fold` (`resolve.py:1013-1032`), so it is
+   absent from the `ctl/` counts altogether (§4); an ordinary precondition refusal inside `_fold` is counted. Inside those
+   counts, "ok" (any non-refusal event, `ctl/control.py:13, :21`) equals Partial-or-better only where the Failure kind is in that
+   refusal list (`news.untold`, `finding.none`). For `speak` (`matter.turned`), `argue` (`argument.lost`) and `determine`
+   (`matter.undetermined`) a Failure counts as "ok".
 9. **Stale paths.** `CLAUDE.md` §5 cites `engine/autoload/dice_engine.py`; the directory does not exist (the owner is
    `engine/dice_engine/dice_engine.py`). D05 cites `sigma._obstacle_of` (:112); that site was deleted at SC-01 step 14
    (`sigma.py:137-141`), and the obstacle is `roll.py::obstacle`'s.
@@ -561,9 +567,9 @@ Everything in this section is **[PROPOSED]**: none of it executes.
 
 - **R2-1 (F1, C2, X19).** The ctl columns are relabelled `attempted/ok` in one order, with "attempted" defined as "reached `_fold`"
   (`resolve.py:377-379`, `:1025-1032`, opened). Every count is given per seed.
-  *Partly disputed:* C2 and F1 say "ok" = Partial-or-better for contested verbs. That holds for `tell`, the inquiries and `determine`,
-  but not for `speak` or `argue`, whose Failure kinds are not in the ctl refusal list. Seed 0's `speak` 3/3 were three Failures
-  (§3, my probe). See item 8.
+  *Partly disputed:* C2 and F1 say "ok" = Partial-or-better for contested verbs. That holds for `tell` and the inquiries, but not for
+  `speak`, `argue` or `determine`, whose Failure kinds are not in the ctl refusal list (`ctl/control.py:13`). Seed 0's `speak` 3/3
+  were three Failures (§3, my probe). See item 8.
 - **R2-2 (F2).** "`copying` 1–3 is easier" was wrong. Only scores 1–2 are easier (Ob 0.5–1); 3 gives Ob 1.5, which plays as Ob 2.
   Corrected in §5d.
 - **R2-3 (F3, X3, CROSS C10).** §4's "requires" column now teaches the typed cell. `speak` types only the DocketItem existence; its

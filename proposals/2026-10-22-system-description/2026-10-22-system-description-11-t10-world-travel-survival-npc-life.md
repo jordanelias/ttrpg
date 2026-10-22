@@ -36,7 +36,7 @@ ERRATA G1 only, applied per seed: a refusal firing is not the verb executing.
 
 The lane as a run of the built game, then what is proposed. Figures are seed 0 of the control run unless they name a seed
 (`ctl/realm_seed{0,1,2}_2seasons.txt`, re-run at `51d7b05`; count columns are *reached the fold / ok*, as in §4). The form follows the
-precedent tutorials' "how it plays" sections (`research/game_precedent_suite/tutorials/`, tier 3, reference only).
+precedent tutorials' "how it plays" sections (`research/game_precedent_suite/tutorials/`; tier 3 of `research/00_INDEX.md` §1, so reference only).
 
 **Setup choices.**
 - *At world build* the one choice is the seed, `build_realm(seed)` (`ctl/control.py:7`). It fixes 83 persons (37 cohorts of weight 2, 46 named),
@@ -83,8 +83,8 @@ gives both bases).
 3. Rounds 0–4: 676 acts released and charged, 535 reach the fold. In this lane: `move` 18 (5 `travel.moved`, 13 `travel.blocked`), `migrate` 25
    (25 `migrate.refused`), `tend` 15 and `train` 23 (all refused), `forgive` 1 (`stance.moved`), `give` 8, `commit` 39 released and 36
    folded, `release` 26.
-4. Combat (another lane) kills 5 named persons, the King (`p_npc_020`) among them; 4 `body.changed`; no cohort dies.
-5. Live holds reach 121 by the season's end; budgets then spread from 3 to 11 (legs not yet cleared).
+4. Combat (another lane) kills 5 named persons, the King (`p_npc_020`) among them; 4 `body.changed` at tick 0 (uncommitted round-3 probe; ctl counts 6 over both seasons); no cohort dies.
+5. Live holds reach 121 by the season's end; budgets then spread from 3 to 11 (legs not yet cleared; uncommitted round-3 probe).
 6. Tick 1: the draw is met from last season's yield; 5 legs end (`travel.ended`); 731 acts released, 597 resolved; `move` 24 (11 moved),
    `migrate` 56 refused, `tend` 19 refused; 4 more deaths. Two wounded survivors finish at 250 and 48, untended. Acts per acting person
    (act-store basis): 8.14, then 9.37, maximum 15.
@@ -112,9 +112,10 @@ and `cohort_set_s_029` (uncommitted round-3 probe; every death there is an `acce
 - Cosmetic or dominated: a `move` to where you stand (16 of 16 executed at seed 0, §4); terrain, adjacency and POIs (no reader, §1); hunger and
   age (inert, and no score term lets hunger move a choice); `migrate` (0 of 367); `train` (0 of 98).
 
-**As proposed** — every line **[PROPOSED]** (§7; ERRATA G16).
-- [PROPOSED] Player seat: IN-47 makes a player one person's decision procedure ("embedded", G16), on the callback above; IN-46, the played
-  fight, is T03's.
+**As proposed** — every line **[PROPOSED]** except the player seat (§7; ERRATA G16).
+- [RULED to build, unbuilt] Player seat (D-2, RULED yes, Jordan 2026-10-21, ERRATA G16): IN-47 is "character-sheet space", on the callback above;
+  IN-46, the played fight, is T03's. "Embedded: one person's decision procedure" is the repo's comparative frame for a player
+  (`research/by_lane/00_COMPARATIVE_ANALYSIS.md:312`), not IN-47's description.
 - [PROPOSED] Setup: a year and a storm season (M-WT-2); hunger live at `body_step` 10 [ASSUMPTION] with a settlement hunger Query (RB-5, JQ-6);
   ageing rates Jordan's (#457 D2).
 - [PROPOSED] Loop and menu: route cost over `settlement_adjacency` × `terrain_cost_matrix` replaces the flat leg (M-WT-1); journey roll and
@@ -232,8 +233,8 @@ runs at tick 0, the second at tick 1. In order:
    the realm run is the harness's home-stores formula (`harness/probes.py:144-149`). A short cohort's choices would change only through its
    body bands (budget) and the Events its losses emit, never through a preference for food.
 4. **Ageing and illness** (`matter.py:549-554`): skipped entirely unless `age_step` or `illness_rate` is non-zero. Then each non-cohort
-   draws against `min(1, illness_rate + age_step × age)` and dies on a hit. Cohorts have no hazard by design (`world_q.py:1004-1008`, the
-   test at `:1015`). Because `age_at_build` is 0 (`fixtures.py:608`) and no builder sets `Person.born`, every person the realm builds is
+   draws against `min(1, illness_rate + age_step × age)` and dies on a hit. Cohorts have no hazard by design (`world_q.py:1004-1008`; the
+   `if p.is_cohort` check at `:1015` returns 0.0). Because `age_at_build` is 0 (`fixtures.py:608`) and no builder sets `Person.born`, every person the realm builds is
    the same age (`carriers.py:687`), so switching ageing on would give all of them one shared hazard each season (formula, not run).
 5. **Stores and yield** (`matter.py:560-606`): draws are debited; each harbour yields grain 40 and salt 30, each seam ore 50 and timber
    10, scaled by `condition / 1000` and the season factor (`SITE_YIELD`). Sites wear by `wear_per_season`: harbour 10, seam 10,
@@ -720,7 +721,7 @@ Nothing in the round-2 findings for T10 did I reject.
 2. **Hunger and the score** (row 8). Old: silent. New: `urgency(subsistence)` is added identically to every candidate and cannot change a
    decision, so switched-on hunger would reach choice only through bands and Events. §2.4 step 3, §5d. Evidence: `choose.py:217-238`.
 3. **The zeros and their controls** (rows 18, 37). Old: `migrate` 0/81 "capacity", `tend` untended wounds. New: seeds 1 and 2 reach the
-   effect 142 and 141 of 143 times, all over capacity; seed 0's 81 destinations were all occupied hearths (62 cohort, 19 named) and none of
+   effect 142 and 141 of 143 times, all over capacity; seed 0's 81 destinations were all occupied hearths (62 cohort, 19 named; uncommitted round-3 probe) and none of
    the 185 empty ones was chosen; a hand-built `migrate` to an empty hearth gives `residence.changed` and a hand-built self-`tend` at 250 gives
    `body.tended`, 250 → 1000. §4, §5b. Evidence: `world_q.py:2111-2146`; re-run with a wrapped `migrate` effect and a callback.
 4. **The mend is an assumption** (rows 3, 15, 23). Old: "One `tend` restores the body to 1000 whatever the wound." New: it also consumes
@@ -734,7 +735,7 @@ Nothing in the round-2 findings for T10 did I reject.
 7. **What a fight and a grudge leave** (rows 57, 61). Old: silent. New: a fight writes only its subject; nothing decays a stance row, and the
    write matrix refuses a stance write at MATTER. §2.6. Evidence: `effects_combat.py:41-43, 179, 306, 449`; `state/world.py:58-61`.
 8. **Band crossings** (also-row 39). Old: "Upward band crossings emit nothing (H-211)." New: downward crossings emit only from MATTER's hunger
-   write, so a combat wound crosses floors silently (seed 0: 6 `body.changed`, 0 `condition.band_crossed`). §2.6. Evidence: `matter.py:39-90,
+   write, so a combat wound crosses floors silently (seed 0: 6 `body.changed` by ctl, 0 `condition.band_crossed` by an uncommitted round-3 probe). §2.6. Evidence: `matter.py:39-90,
    530, 690`.
 9. **Age and the budget** (also-row 33). New clause: age is not an input to `budget()`. §2.5. Evidence: `budget.py:57-61, 71-83`.
 10. **Births** (also-row 3). Old: "[HELD, Jordan] ... ED-WR-0011 (`needs_jordan: true`)". New: RULED 2026-09-13, Option A, a closed
@@ -743,7 +744,7 @@ Nothing in the round-2 findings for T10 did I reject.
 11. **`.designs` disagreement** (also-row 61). New note in §8: `player_agency_v30.md:61, :63` ("12 days"; "3–5 scene actions per season") disagrees
     with `budget.py:57-61` and with Pathologic 2's Days 1–11; the quarantined file is not edited.
 12. **Ending** (new since #494; changes the Part 3 draft's "no ending condition"). Old: "no ending condition in the loop (G17)". New: the season
-    reports `endings` (a read, never an actor), and the realm as built reaches none (`[]` in both seasons at seed 0). §0a. Evidence:
+    reports `endings` (a read, never an actor), and the realm as built reaches none (`[]` in both seasons at seed 0; uncommitted round-3 probe). §0a. Evidence:
     `driver.py:514-518`; `world_q.py:1764`; re-run.
 13. **Player interface** (cross-suite qualifier). §0a carries the qualifier: none in the season loop, a test-only callback, and two other human-facing
     seams exist (`agon_harness.py`, two workbench servers).
