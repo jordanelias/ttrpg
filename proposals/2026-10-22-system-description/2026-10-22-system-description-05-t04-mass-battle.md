@@ -430,14 +430,25 @@ retreat. None of these is reachable from `march`.
 | defend | nothing you do: being a present member of `holder_faction_of(target)`, behind garrison condition > 0 | any defender choice; the defender has no chooser |
 | deter | nothing | a show of force has no act |
 
-**(b) The honest plays.** A commander's real options are **march, or nothing**.
+The rows say what the rules do when the act runs. Natural play (the shipped chooser, §0 Status) reaches none of them at seeds 0-2; each has run
+only as callback play (§3.3).
+
+**(b) The honest plays.** A commander's real options are **march, or nothing**. Each play says whether natural play forms it and whether callback
+play has run it.
 
 1. **March where nobody can oppose you.** The target is a settlement whose `holder_faction_of` is your faction or None, or whose holding
    faction has nobody present. No engine call is made and you arrive. You must not already stand under the target, or the act is refused.
-   This is the only march the rules reward.
+   This is the only march the rules reward. *Natural play: never formed (`army.arrived` is 0 at seeds 0-2). Callback play: run, `set_s_014` →
+   `set_s_003`, `field.unopposed` and `army.arrived`, bodies unchanged, at all three seeds.*
 2. **March into an opposed field.** Today this is a certain loss: both sides are under 100 troops, so both rout on tick 1, and a mutual rout
-   goes to the defender. It costs each attacker body down to 10 × the side's weight, and 2-3 acts a season afterwards.
-3. **Do nothing.** Not marching dominates play 2.
+   goes to the defender. It costs each attacker body down to 10 × the side's weight, and 2-3 acts a season afterwards. *Natural play: never
+   formed. Callback play: run for one pair, `set_s_036`, 2 v 6: `field.lost`, body 1000 → 20, budget 6 → 3, at all three seeds. "Certain loss" for
+   every other pair is inference from §3.1, not a run.*
+3. **Do nothing.** Not marching dominates play 2. *Both kinds of play: no event and no write.*
+
+**What natural play does instead.** At seeds 0-2 the chooser forms `march` against persons, hearths and territories (21 / 10 / 4 declared). Each is
+declared at RESOLVE and refused at ENCOUNTER with an empty army (§2.2 step 3): it spends a scene action and writes nothing. No natural march at
+seeds 0-2 is play 1 or play 2.
 
 Prepare by being where the army is. Attackers are counted at your home settlement, so the only way to raise "army size" is to have more of
 your faction's members living there. Nothing lets you choose formation, stance or troop type.
@@ -448,7 +459,7 @@ your faction's members living there. Nothing lets you choose formation, stance o
   - a seat granting `dispatch`;
   - a settlement target;
   - members at home;
-  - in the realm, the chooser never forms the act on a settlement (§3.3).
+  - in natural play at seeds 0-2, the shipped chooser never forms the act on a settlement (§3.3); a callback can (§0 Status).
 - **Walls** never decay: garrison wear is 0 (`RY:1451-1470`).
   - `sabotage` lowers a `Site.condition` when its actor stands at the Site (`VT:1030-1035`), and `restore` raises it.
   - A fortification of 0 would make the river and polygon rows reachable, but no measured seed did this.
@@ -547,11 +558,14 @@ executes. Where a lexicon's body and its rulings disagree, the rulings (verbs-03
 - Equipment is unwired except reach.
 - Forest and river speed effects are inert; NARROW_PASS applies nothing.
 - `field_morale_loyalty_gain = 0`.
-- Every declared realm `march` is refused.
+- Every naturally formed realm `march` is refused (a hand-built settlement march is fought and lost, §3.3).
 
 ## 8 Common mistakes and traps
 
-1. **"`march` 21/21 means fields were fought."** The "ok" is the `Declared` event. Field events are 0 at seeds 0-2.
+1. **"`march` 21/21 means fields were fought."** The "ok" is the `Declared` event. Field events are 0 at seeds 0-2 in the control run (natural play). The in-tree note that
+   `march` "EXECUTES via natural computed play" (`engine/season/hole_register.yaml` H-175, `:3861-3880`; `test_march.py:38-45`) is the same reading:
+   `harness/aperture.py:14` counts an act executed when its row's `emits:` Event is logged, and the funnel H-175 quotes reads `ex 6 ref 6 both 6`,
+   so all six were declared and then refused (re-run at `51d7b05`: `att 9 ex 9 ref 9 both 9`).
 2. **"`troop_type='infantry'` gives infantry stats."** Stats apply only through `Subunit.of_type`, and `infantry` has no preset. The season army
    is P4 D5 M5 by Unit defaults.
 3. **"The loser's body scales by the survivor share."** It scales by `effective_size / size_max`, with `size_max` floored at 100 troops. Under 100

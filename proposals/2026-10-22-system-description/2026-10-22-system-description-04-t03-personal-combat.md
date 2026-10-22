@@ -9,8 +9,7 @@ Path abbreviations: `MC/` = `modules/combat/`; `SW` = `engine/season/seam/wrappe
 `REM2` = `proposals/2026-10-21-v9-remediation/2026-10-21-v9-remediation-02-items-rb0-to-rb3.md`;
 `WB` = `systems/combat/combat_engine_v1/workbench/`; `PS/` = `research/game_precedent_suite/` (reference, tier 3; precedent games are cited as
 `T02`, `T05`, `T10`, `T14`, `T18` = `PS/tutorials/T02_warband.md`, `T05_social_rpgs.md`, `T10_npc_economy.md`, `T14_squad_settlement.md`,
-`T18_repo_strategy_b.md`, and `R4` =
-`PS/tables/R4_combat_social_rpgs.md`, each with its game heading and section). Every number below was read from code or produced by a read-only run (§9).
+`T18_repo_strategy_b.md`, and `R4` = `PS/tables/R4_combat_social_rpgs.md`, each with its game heading and section). Every number below was read from code or produced by a read-only run (§9).
 
 ## 0 Before you start
 
