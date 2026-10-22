@@ -13,10 +13,12 @@ realm settlement through the real chooser, with no hand-built act; off, byte-ide
       selector and `census`'s `uncontrolled_in_realm` do not count it, even when nobody holds it.
   (d) A FOREIGN MARCH REACHES THE SEAM THROUGH THE REAL CHOOSER: the Katepano is asked a real `Question` whose
       one referent is a realm settlement, the real `make_chooser` forms the act and names `via` itself, and the
-      real driver folds it to the mass-battle entry. ⚠ SCOPE, STATED: the chooser here is restricted to
-      `march` (`test_march.py::test_a_real_chooser_forms_and_folds_a_march_...`'s own shape), so the test shows
-      the empire's march FORMS and FOLDS, not that the unrestricted chooser PICKS it - it does not in a
-      measured 2-season probe (`hole_register.yaml` H-233).
+      real driver folds it to the mass-battle entry. ⚠ SCOPE, STATED: two shapes. (1) the chooser restricted to
+      `march` (`test_march.py::test_a_real_chooser_forms_and_folds_a_march_...`'s own shape): the march FORMS
+      and FOLDS. (2) the UNRESTRICTED chooser (`resolvable_verbs()`) on the Katepano's own goal Question, at a
+      WITNESS SEED (H-175's precedent): it PICKS the march and the fold reaches the seam. That second test
+      is an existence witness and NOT a rate: the march is the conqueror's choice in roughly one goal-question
+      deliberation in ten (H-233's FREQUENCY half, Jordan's: the convictions or IN-08's march cells).
   (e) IN-60's GUARD CONTENT: with `guards=True` the throne's and each duchy seat's holder has a sworn cohort
       posted at the exact rung he is present at, the King's heavier than a duke's; an ordinary rung with one
       sworn resident reads 0; end the swearer's `oblige` and the value falls with nothing else written.
@@ -28,8 +30,10 @@ import pytest
 
 from engine.season.data import cast
 from engine.season.data.rosters import ENDINGS, FACTION_BY_PROP, FACTIONS, FOREIGN_CAST, FOREIGN_SEATS, faction_prop_id
+from engine.season.decision import aggregate_questions, assemble, budget
 from engine.season.decision.choose import make_chooser
 from engine.season.decision.options import opening_set
+from engine.season.loop.driver import resolvable_verbs
 from engine.season.harness import populated as POP
 from engine.season.queries import world_q
 from engine.season.seam.wrappers import mass_battle as wrapper
@@ -116,14 +120,14 @@ def test_two_seats_are_held_and_the_head_alone_may_march(foreign):
 
 
 def test_altonias_goal_rows_are_seeded_with_the_seats_goals_derived_from_the_empires(foreign):
-    ids = {"goal_altonia_conquer_valoria", "goal_katepano_take_the_chokepoint"}
+    ids = {"goal_altonia_conquer_valoria", "goal_katepano_press_the_capital"}
     assert ids <= set(foreign.propositions)
     assert "goal_kommerkiarios_treaty_order" not in foreign.propositions       # an orientation mints nothing
     committed = {gid: sorted(t.subject for t in foreign.tenures if t.kind == "commit" and t.live
                              and t.object == gid) for gid in ids}
     assert committed["goal_altonia_conquer_valoria"] == sorted(CAST)
-    assert committed["goal_katepano_take_the_chokepoint"] == ["p_npc_089"]
-    assert foreign.propositions["goal_katepano_take_the_chokepoint"].subject == "set_s_007"
+    assert committed["goal_katepano_press_the_capital"] == ["p_npc_089"]
+    assert foreign.propositions["goal_katepano_press_the_capital"].subject == "set_s_001"
 
 
 # ---------------------------------------------------------------------------------------------- (c)
@@ -161,18 +165,19 @@ def _march_candidate(w, target: str):
     return p, v, [c for c in opening_set(p, v, q, w.fixtures) if c.verb == "march"]
 
 
-def test_the_natural_goal_question_forms_a_march_candidate_on_the_chokepoint_for_the_head_alone(foreign):
-    """The goal row's own Question (`q:need:<goal id>`, Q4) names `set_s_007`, and clause 3 forms a march
-    Candidate on it for the Katepano - and for nobody else of the empire (no `dispatch`)."""
+def test_the_natural_goal_question_forms_a_march_candidate_on_the_capital_for_the_head_alone(foreign):
+    """The goal row's own Question (`q:need:<goal id>`, Q4) names `set_s_001` (Valorsplatz, the Crown's
+    capital), and clause 3 forms a march Candidate on it for the Katepano - and for nobody else of the empire
+    (no `dispatch`)."""
     p = foreign.persons["p_npc_089"]
     qs = {q.id: q for q in world_q.questions_for(foreign, p)}
-    q = qs["q:need:goal_katepano_take_the_chokepoint"]
-    assert q.referents == ("set_s_007",), q.referents
+    q = qs["q:need:goal_katepano_press_the_capital"]
+    assert q.referents == ("set_s_001",), q.referents
     cands = opening_set(p, View(p.id, [], foreign.fixtures.get("view_k"), q), q, foreign.fixtures)
-    assert any(c.verb == "march" and c.subject == "set_s_007" for c in cands)
+    assert any(c.verb == "march" and c.subject == "set_s_001" for c in cands)
     for pid in ("p_npc_011", "p_npc_090"):
         other = foreign.persons[pid]
-        q2 = Question("q:in36_nodispatch", "need", ("set_s_007",))
+        q2 = Question("q:in36_nodispatch", "need", ("set_s_001",))
         assert not [c for c in opening_set(other, View(pid, [], foreign.fixtures.get("view_k"), q2), q2,
                                            foreign.fixtures) if c.verb == "march"], pid
 
@@ -210,8 +215,9 @@ def test_a_march_formed_by_a_chooser_restricted_to_march_folds_to_the_mass_battl
 
 def test_the_same_march_with_no_defender_arrives_unopposed_at_the_chokepoint():
     """Lowenskyst has no Crown member present as built (its barracks held only the Altonian Doux, who now lives
-    at the empire's own settlement), so the goal's own objective is walked into, not fought for. Recorded as a
-    FINDING, not a design (H-233): the realm's defence of its chokepoint is garrison Site and nobody."""
+    at the empire's own settlement), so a march on the pass is walked into, not fought for - which is why the
+    Katepano's goal is aimed at the capital behind it and not at the pass. Recorded as a FINDING, not a design
+    (H-233): the realm's defence of its chokepoint is garrison Site and nobody."""
     w = POP.build_realm(0, foreign=True)
     assert world_q.mustered(w, "set_s_007", "fac_crown") == []
     p, v, _ = _march_candidate(w, "set_s_007")
@@ -221,6 +227,66 @@ def test_the_same_march_with_no_defender_arrives_unopposed_at_the_chokepoint():
     events = _fold_one(w, act)
     assert "field.unopposed" in [e.kind for e in events]
     assert world_q.home_of(w)["p_npc_089"] == "set_s_007", "the army did not arrive"
+
+
+#: WITNESS SEEDS for the natural-play test below, found by a scan of seeds 0-79 (`foreign=True`, tick 0): the
+#: seeds where the REAL unrestricted chooser's first released scene on the Katepano's goal Question holds a
+#: `march` on Valorsplatz, `via == "off_katepano"`, and whose march also folds to the seam in a one-season run
+#: with no `field.unopposed`. [ASSUMPTION; medium; Jordan to correct -- two witnesses, not a rate.]
+WITNESS_SEEDS = (39, 53)
+
+
+def _first_scene_of_the_goal_question(seed: int):
+    """The Katepano's first released scene on `q:need:goal_katepano_press_the_capital`, from the SHIPPED path:
+    `questions_for` -> the shipped aggregation -> `assemble` -> the real unrestricted `make_chooser`
+    (`aperture.instrumented_season`'s own construction). Returns `(world, person, act or None)`; the act is READ
+    off the scene, never set."""
+    w = POP.build_realm(seed, foreign=True)
+    w._rehome()
+    p, fx = w.persons["p_npc_089"], w.fixtures
+    q = aggregate_questions(world_q.questions_for(w, p, None), fx.get("question_aggregation_rule"))
+    assert q is not None and q.id == "q:need:goal_katepano_press_the_capital", q
+    v = assemble(p, q, fx.get("view_k"))
+    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    chooser = make_chooser(fx, mint, verbs=resolvable_verbs(), draw=draw_factory(w.world_seed, lambda: w.tick))
+    scenes = chooser(p, v, Sensation(0), lambda: max(0, budget(p, v, fx.get("scene_budget"), fx)))
+    acts = [a for a in (scenes[0].acts if scenes else ()) if a.verb == "march" and a.payload.get("subject") == "set_s_001"]
+    return w, p, (acts[0] if acts else None)
+
+
+@pytest.mark.parametrize("seed", WITNESS_SEEDS)
+def test_the_unrestricted_chooser_picks_the_march_at_a_witness_seed_and_the_fold_reaches_the_seam(seed):
+    """H-233's chosen half, met AT A WITNESS SEED and nowhere claimed beyond it (H-175's precedent). The real
+    unrestricted chooser, on the Katepano's own goal Question (`q:need:goal_katepano_press_the_capital`), releases
+    a first scene holding a `march` on Valorsplatz, and the real driver folds it to `mass_battle.field_input`
+    once, with no `field.unopposed`.
+
+    SCOPE, STATED: this is an existence witness, NOT a rate. The march scores far below `create_record` on that
+    question and is picked in about one goal-question deliberation in ten (Gumbel order, `choice_temperature`
+    0.1, over ~30 candidates); the frequency is H-233's remaining half and is the convictions' or IN-08's march
+    cells', not this test's. THE DRAWS ARE KEYED ON (verb, subject), so the witness RE-ROLLS whenever any upstream
+    input moves (a candidate, a score, a seed's cast): the seeds below are then stale, not the mechanism broken.
+    FAILURE MESSAGE NAMES THE SCAN, rather than skipping: re-scan seeds 0-79 (`foreign=True`; per seed
+    `questions_for` -> `aggregate_questions` -> `assemble` -> `make_chooser(... verbs=resolvable_verbs())`, scene 0
+    holds `march` on `set_s_001` with `via == "off_katepano"`) and keep seeds that also fold to the seam."""
+    w, p, act = _first_scene_of_the_goal_question(seed)
+    assert act is not None, (
+        f"seed {seed} is no longer a witness: the Katepano's first scene on her goal Question holds no march on "
+        f"set_s_001. RE-SCAN seeds 0-79 for new WITNESS_SEEDS (draws are keyed on (verb, subject), so any upstream "
+        f"move re-rolls them); do not skip this test.")
+    assert act.actor == "p_npc_089" and act.via == "off_katepano", f"the chooser did not name the empire's seat: {act.via!r}"
+    assert world_q.holder_faction_of(w, "set_s_001") == "fac_crown" and world_q.mustered(w, "set_s_001", "fac_crown")
+    records = []
+    real = wrapper.field_input
+    wrapper.field_input = lambda *a, **k: records.append(real(*a, **k)) or records[-1]
+    try:
+        events = _fold_one(w, act)
+    finally:
+        wrapper.field_input = real
+    kinds = [e.kind for e in events]
+    assert "march.declared" in kinds and "field.unopposed" not in kinds, kinds
+    assert len(records) == 1, f"the mass-battle entry was reached {len(records)} times, not once: {kinds}"
+    assert records[0].territory == "T1" and records[0].origin == FOREIGN_CAST[EMPIRE]["territory"]["code"], records[0]
 
 
 # ---------------------------------------------------------------------------------------------- (e)

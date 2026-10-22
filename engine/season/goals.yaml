@@ -446,19 +446,23 @@ goals:
       is empty), and "toward the Crown head's seat" would be a second, `seat_holders` row not authored here -- and that row
       would write no stance either: Altonia has no role template, so `stance_from_loyalty` is None for its persons.
       Revert: no Altonian goal; the empire's persons act on their pursuits alone.]
-  - id: goal_katepano_take_the_chokepoint
+  - id: goal_katepano_press_the_capital
     org: {seat: off_katepano}
-    text: the Katepano takes Lowenskyst Fortress, the pass into Valoria
-    object: {kind: rung, rung: set_s_007}
+    text: the Katepano presses on Valorsplatz, the Crown's capital, through the Lowenskyst pass
+    object: {kind: rung, rung: set_s_001}
     pursuits: {honour: 0.5, reputation: 0.3, stability: 0.2}
     derives: {from: goal_altonia_conquer_valoria, kind: influences}
     source: >-
       `valoria_geography_v30.yaml` T3 Lowenskyst ("NE Altonian pass. Primary chokepoint") and S-007 Lowenskyst
-      Fortress, which `venues.yaml` seats `Altonian` at ("Primary Altonian chokepoint"); the Katepano "decides
-      whether Altonia probes, presses, or invades" (NPC-089). A `march` needs a SETTLEMENT referent
-      (`MARCH_TARGET_KINDS`) and a realm-wide rung forms none, so the empire's conquest forms a `march` on the
-      settlement its pass opens on, which arrives unopposed as built (H-233). [ASSUMPTION; medium; Jordan to correct -- the chokepoint as the
-      first objective; the weights. Revert: the seat goal's `rung` is any other settlement, or the row goes
+      Fortress, which `venues.yaml` seats `Altonian` at ("Primary Altonian chokepoint"): the pass the march goes
+      THROUGH, not what it is aimed at; the Katepano "decides whether Altonia probes, presses, or invades"
+      (NPC-089). The objective is the Crown head's seat, Valorsplatz (`set_s_001`, Crown-held and peopled by
+      Crown members, so a march on it meets a defence). A `march` needs a SETTLEMENT referent
+      (`MARCH_TARGET_KINDS`) and a realm-wide rung forms none, so the empire's conquest forms a `march` on this
+      settlement. FINDING KEPT: the chokepoint itself (`set_s_007`) has no Crown member present as built, so a
+      march on it arrives `field.unopposed` (H-233), which is why it is not the objective. [ASSUMPTION; medium;
+      Jordan to correct -- Valorsplatz as the first objective; the weights. Revert: `rung: set_s_007` and the id
+      `goal_katepano_take_the_chokepoint` (the chokepoint as the objective, an unopposed march), or the row goes
       and the empire's march forms on no referent.]
   - id: goal_kommerkiarios_treaty_order
     org: {seat: off_kommerkiarios}
