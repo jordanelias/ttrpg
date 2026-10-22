@@ -431,18 +431,24 @@ makes n ≥ 2 and one act takes at most half.
 |---|---|---|
 | belong to / leave a faction | a live / closed `commit` to `fac_*` | leave: yes; join: no computed route |
 | lead a faction | be in `leaders` (member + faction office); "head" | `leaders` yes; `head` never |
-| take territory or a title | your `hold` on a rung; `holder_faction_of` flips | settlements only, via march + seize; territories and seats cannot be taken |
-| lose territory | your `hold` closed (seized, released, your death) or your faction ties break | death and release yes |
+| take territory or a title | your `hold` on a rung; `holder_faction_of` flips | settlements only, via march + seize; territories and seats cannot be taken; no verb grants a territory to another person, and a settlement with no held rung above it cannot be seized at all (`effects_information.py:959`; H-166 leaves who holds an unheld place unruled, `:939`): `set_s_037` at build, and at seed 0, tick 1, 25 settlements under the realm read holder `None` (round-3 probe) |
+| lose territory | your `hold` closed (seized, released, your death) or your faction ties break | death and release yes; death is the realm's main land event (by tick 2, 11 of the realm's 16 territories uncontrolled in every seed, §2.2) |
 | make peace or a treaty | both parties' `commit` to an uttered Proposition named in a dispensation | runs hand-built only |
-| make war | a WAR Proposition with a live `commit`; `at_war` True | hand-built only (`tests/test_faction_q.py:220-260`); gates nothing |
-| raise retainers | `oblige` edges to your seat = `establishment_of(seat)` | seed 1: 22 men swore to Church seats; terms lapse unless paid |
+| make war | a WAR Proposition with a live `commit`; `at_war` True | hand-built only (`tests/test_faction_q.py:220-260`; also inside a real season, I1v claim 5); gates nothing |
+| raise retainers | `oblige` edges to your seat = `establishment_of(seat)` | seed 1: 22 men swore to Church seats; terms lapse unless paid; retainers are not an army: `mustered` and `may_muster` count faction members only (`world_q.py:1473-1490`, `state/gate.py:864-891`), so an obligee who is not a member marches with nobody |
 | raise an army | your faction's members present where you march from | yes, but only men already housed there |
 | know a rival | hold a `faction_sheet` | yes (`survey`) |
-| secure succession | an heir claims the vacant seat | no: `succeed` has no effect (`verb_table.yaml:1113`). A dead holder's seat falls vacant; `confer` can refill it only if the seat has a conferral basis (`loop/predicates.py:126-127`; `gate.py:643-657`). Six seats have `conferral: null` — King, Duke of Valorsmark, Duchess of Hafenmark, Widow Regent, Heir, Princess (`offices.yaml:188, 201, 214, 240, 253, 266`) — so once vacant, the throne stays empty for good. Elsewhere `confer` executed once (seed 1: 1 of 5) |
+| secure succession | an heir claims the vacant seat | no: `succeed` has no effect (`verb_table.yaml:1113`). A dead holder's seat falls vacant; `confer` can refill it only if the seat has a conferral basis (`loop/predicates.py:126-127`; `gate.py:643-657`). Six authored seats have `conferral: null` — King, Duke of Valorsmark, Duchess of Hafenmark, Widow Regent, Heir, Princess (`offices.yaml:188, 201, 214, 240, 253, 266`) — and the guild-leader seat `off_npc_084` has no row at all, so no conferral either (7 of 32; `harness/populated.py:1240-1251`). Once vacant, the throne stays empty for good, and it is vacant after season 0 in all three seeds: the King dies in personal combat, as the subject of the Queen's `accept` (seeds 0 and 2) or of the Prince's `fight` (seed 1). Elsewhere `confer` executed once (seed 1: 1 of 5), against 8, 7 and 10 seats vacated by the end of season 2 (8, 6 and 10 still vacant; I1v claim 3, round-3 probe). `[precedent: in Crusader Kings III control passes to the heir on death and a run ends only when none exists [V3]; T01 precedent, Crusader Kings III §2 item 5 and §6]` |
 
 **(b) The plays.**
 - *Take a town without a fight.* If members of your faction already live in a rival-held settlement, it is already
-  occupied: a seat granting `issue` whose purview reaches it can `seize` it at once, provided it holds a warrant naming it.
+  occupied: a seat granting `issue` whose purview reaches it can `seize` it at once, however many of the holder's own people stand
+  there: the effect "asks nothing of the defenders", only that your seat's faction is mustered there
+  (`effects_information.py:926-931, 959`). At seed 0 the Church has 6 of the 9 persons in `set_s_036` and the Crown's one resident
+  still licenses the King's seizure (`tests/test_march.py:918-930`; my probe). A member's own `move` into the town is enough as
+  well (hand-built at seed 0: a Crown member `move`d into Hafenmark's `set_s_016` and the King's `seize` folded to `rung.seized`,
+  where the control without the move was refused; `effects_migration.py:24-74`, and `mustered` reads `contain`). In computed play
+  the act forms only on a town a held warrant names; at the effect the licence is occupation, not the warrant.
 - *Take a town.* (1) Hold a seat granting `dispatch` whose holder lives in a settlement where your faction has members.
   (2) `march` on a foreign-held settlement; if no defender of the holding faction stands in its subtree, the field is
   Unopposed and your army arrives. (3) A seat granting `issue` whose purview reaches the town — your own or a fellow member's
@@ -451,25 +457,45 @@ makes n ≥ 2 and one act takes at most half.
   condition becomes WALLS. Lowering a rival's garrison with `sabotage` before marching is the designed counter.
 - *Make a treaty.* `utter` the terms; `covenant` them to the other party through an `issue` seat; get the instrument into his
   hands with `give` (co-located; arrange it with `move`); he accepts with his own `commit`; you commit too. Breach is either
-  party's `release`, which is public.
+  party's `release`, which is public, and costs the breaker nothing else but witnesses' judgment of the `release` deed. A covenant
+  carries no term (its `commit` edges are opened with none, `effects_information.py:1094-1096`): it lasts until a release or a
+  party's death.
 - *Bind a vassal.* A seat-holder who `oblige`s to your seat extends your purview over his seat's ground (IN-40). The oath is
-  his act, not yours.
+  his act, not yours. Nothing flows up: he owes no tax and no troops, and his oath lapses after `oblige_term` (4 seasons) unless
+  your seat pays him upkeep (`upkeep_of`: "WHAT THIS SEAT PAYS EACH PERSON OBLIGED TO IT", `world_q.py:1893-1924`). The liege pays
+  the vassal. `[precedent: in Crusader Kings III a vassal contract sets the tax and levies owed up to the liege [V3]; T01 precedent,
+  Crusader Kings III §3]`
 - *Keep retainers.* Each `oblige` runs 4 seasons; a `transfer` through the seat of `upkeep_of(seat)` (default 1) per obligee
-  renews it (`world_q.py:1893-1924`). 0 renewals occurred in any seed.
+  renews it (`world_q.py:1893-1924`). 0 renewals occurred in any seed, and no 4-season term can mature within a two-season run
+  (seed 1's 22 service terms were opened in season 1 and mature at tick 5, `loop/matter.py:296-303`), so neither lapse nor renewal
+  is observed.
 - *Undermine a faction's land.* Make its holder commit to a second faction (or none): his land becomes `uncontrolled` and
-  its province dissolves, with no act aimed at the land at all.
+  its province dissolves, with no act aimed at the land at all. The land is then unseizable by anyone
+  (`effects_information.py:958-960`), and a march into it is Unopposed with no title written (`loop/sides.py:131-132`; H-166).
+- *Defect with your land.* A landholder who `release`s his creed and `commit`s to another faction takes his territories with him:
+  `faction_holding` reads his one live `commit` (`world_q.py:1623-1656`), so the province moves with no war, no timer and no act
+  aimed at land. He loses nothing else: a seat he holds stays its body's faction and keeps its remit (he becomes staff), though he
+  can no longer `seize` through it (`effects_information.py:956`). The `release` is public; witnesses judge it as a deed (its
+  `alignment` cells are +0.3 on `precedent_substantive` and `rigid_flexible`, `rosters.yaml:3162, 3300`). Joining has no computed
+  route (§2.1), so this happens only hand-built. `[precedent: in Pax Pamir changing loyalty is free but total, since you lose every
+  gift, prize and patriot of the old coalition (T15 precedent, Pax Pamir §3 and §4 item 13); Valoria inverts it]`
 
-**(c) Costs, risks, counter-play, blocks.** Scenes are the only cost; there is no resource, casus belli or war score. A
+**(c) Costs, risks, counter-play, blocks.** Scenes are the only cost; there is no resource, casus belli or war score. War state
+gates nothing: `march` asks for none (`loop/sides.py:107-133`), so any `dispatch` seat may march on any foreign-held settlement at
+any time; a WAR Proposition can be uttered by anyone about any two factions (`utter` is `own` and requires nothing,
+`verb_table.yaml:1495-1499`) and ends when its committers release (`faction_q.py:226-233`). A breach of a treaty is public and
+costs the breaker only witnesses' judgment of the `release` deed (§5b). A
 march with defenders present is a real field: a loss writes casualties and stance on the attacker. A seized town is retaken the
 same way. The blocks are formation blocks, not rules: no computed question supplies the King a settlement to march on or a
 warrant naming one, a Proposition to covenant, or a Site to sabotage (§2.6).
 
 **(d) What the structure rewards and punishes.** Presence is everything: `mustered` counts heads present, so the faction with
-people living in a town defends it, and an unfortified but occupied town beats a fortified empty one. Single allegiance is
+people living in a town defends it against a march (a contested field), but not against a seizure, which one rival member present
+licenses (§5b), and an unfortified but occupied town beats a fortified empty one. Single allegiance is
 rewarded: two commits make your land nobody's. Offering a treaty costs the offerer a seat act and binds nobody until both
 commit, and nothing reads the result — today a treaty is dominated by doing nothing, except for its effect on the acceptor's
 attention. `dispatch` is a dead end mechanically (it writes nothing). `seize` of a territory or a seat is impossible by
-construction ("A SEAT is never seized", `effects_information.py:892`; territory refused by kind, `:933-935`).
+construction ("A SEAT is never seized", `effects_information.py:892`; territory refused by kind, `:933-935`, tagged there `[ASSUMPTION; medium; Jordan to correct]`).
 
 **(e) What success leaves.** A seizure leaves one `hold` and a `rung.seized` event handed to the seat's obligees (post_remit),
 and changes every later `holder_faction_of`, `survey` sheet and march defender read for that town. A treaty leaves a Record,
