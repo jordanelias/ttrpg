@@ -44,6 +44,90 @@ cost. Observed: about 7.6 acts per person-season (basis: `d.resolved` 1,132 acts
 No act in this subsystem rolls dice. Every effect is a deterministic write behind a typed precondition; the only
 chance is *which* act a person chooses (sampler at `choice_temperature=0.1`, `data/fixtures.py:286`).
 
+## 0a How it plays
+
+**As built.** Paths under `engine/season/`; run figures are `ctl/realm_seed{0,1,2}_2seasons.txt` ("attempted" = acts that reached the
+fold, "ok" = a non-refusal event; ERRATA G2) and the round-3 re-runs at `51d7b05` listed in §8. Grades are ERRATA G1, per seed
+(s0 · s1 · s2).
+
+**Setup choices.** At world build the only choice is the seed: `build_realm(seed)` gives every one of the 37 settlements one harbour and
+one seam at condition 1000 (`harness/populated.py:772-777`), a dwelling per hearth (`:793-797`) and a garrison per settlement
+(`:815-818`), 32 seats (31 rows in `offices.yaml` plus the derived `off_npc_084`, `harness/populated.py:1241-1250`) and empty stores
+everywhere (§1). The shipped controls are fixed: `body_step=0`, `oblige_term=4`, `default_upkeep=1` (`data/fixtures.py:594, 892, 905`).
+The seed changes what the choosers form, not what is built (the 32 seats and their conferral bases are identical in seeds 0-2): seed 1
+swears 22 obliges (24 attempted), seeds 0 and 2 none (§4). The season loop has no player interface of its own; a person at the callback
+(`harness/play_surface.py:41-52`, `dispatching_chooser`, reached only by tests today) chooses which acts to submit and their payloads.
+Any of the 47 resolvable verbs with any extra fields is folded; a non-resolvable one aborts the season (round-3 re-run). There is no
+settlement, policy or faction to pick before play.
+
+**The loop.** One tick is one season: CALENDAR, then MATTER, then five rounds of DELIBERATE, RESOLVE, ENCOUNTER, WITNESS, then CENSUS
+(`loop/driver.py:447-457, 514`). MATTER is wholly automated (`loop/matter.py:165-709`): works stages ripen, terms lapse (`:296-303`),
+claims decay (`:317-347`), cohorts draw grain and salt from the nearest store (`queries/world_q.py:905, 1020`), bodies would fall
+(`:513-520`, inert at 0), Sites yield `int(base × condition / 1000)` (`:589-591`) and wear. Each person then spends a cost budget of
+`5 + 1 per live hold − body bands − 1 per leg` (`decision/budget.py:57-61`): a lone act costs 1, a scene of 2-3 acts costs 2
+(`data/fixtures.py:488-489`), so 5 buys 7 acts and a seat-holder's 6 buys 9 (round-2 C1). Nothing in this subsystem rolls dice (§0).
+
+**The choice menu.** Cost is the scene cost above plus the matter named.
+
+| verb | cost | effect | when a person picks it | grade (s0 · s1 · s2) |
+|---|---|---|---|---|
+| `oblige` | 1 | swears service to a seat for 4 seasons | from anywhere, to any seat he does not hold (§2.4) | RUNS-IN-LOOP at s1 only (24/22) |
+| `transfer` | 1 + the amount | moves stores; through a seat to its obligees, renews terms | from a claim's referent; only cohort → own person rung executed (§4) | RUNS-IN-LOOP at s0, s2 (1, 5); renewal TESTS-ONLY |
+| `requisition` | 1 | stock from a rung in purview into the seat's rung | through a seat granting `issue` | TESTS-ONLY (2/0, 5/0, 5/0) |
+| `confer` | 1 | seats a person; refills a vacancy | through a seat granting `confer` | RUNS-IN-LOOP at s1 only (5/1, a self-conferral) |
+| `revoke` | 1 | strips a seat; bans an appointee | through a seat on the rung directly above | TESTS-ONLY (6/0, –, 4/0) |
+| `establish` | 1 | a new seat or remit | through a seat granting `confer` | TESTS-ONLY (–, 5/0, 4/0) |
+| `release` | 1 | resigns a seat, quits service | on any edge of his own | RUNS-IN-LOOP (45/3, 44/5, 46/3) |
+| `issue` | 1 | a writ for one executor; +1 hold | through a seat granting `issue` | RUNS-IN-LOOP (6/5, 12/5, 14/8) |
+| `dispatch` | 1 | nothing but `order.given`, told to every ledger | through a seat granting `dispatch` | RUNS-IN-LOOP (18/6, 18/7, 10/10), writes nothing |
+| `convene` | 1 | a dated sitting | through a seat granting `convene` | RUNS-IN-LOOP at s2 only (5/1) |
+| `create_record` works → `found` / `build` | 1 + 1; grain 10 or timber 10 | a new hearth or community, or a Site at 0 | own; a computed `create_record` never mints a works | TESTS-ONLY (found 24/0, build 19/0 at s0) |
+| `work` / `restore` / `sabotage` | 1 each | raise or lower a Site by 1/n of headroom | own, present; formed on non-Site referents | TESTS-ONLY (77/0, 23/0, 34/0 at s0) |
+| `migrate` / `move` | 1 + a leg | residence and presence / presence only | own | migrate TESTS-ONLY (81/0); move RUNS-IN-LOOP (42/16) |
+
+**First season, step by step (seed 0).** Tick 0 MATTER: every cohort wants grain 4 and salt 2 and finds no store, so nothing is drawn and
+no shortfall is written; then each settlement yields grain 40, salt 30, ore 50, timber 10 and its harbour and seam wear to 990 (§3; over
+two MATTERs the ctl file shows `yield.taken` 74 = 37 settlements × 2 and `stores.changed` 111). Five rounds follow: 1,132 acts reach the
+fold over the two seasons (ctl seed 0, line 1) out of 1,407 formed (the story-bar run's act count, re-run at `51d7b05`); the rest are
+refused before the fold. What executes in this subsystem is `move` 16 of 42, `issue` 5 of 6, `dispatch` 6 of 18, `release` 3 of 45 and
+`transfer` 1 of 45; `work` 0 of 77, `restore` 0 of 23, `found` 0 of 24, `build` 0 of 19, `migrate` 0 of 81, `requisition` 0 of 2,
+`revoke` 0 of 6 (ctl seed 0). Tick 1 MATTER: the Valorsplatz cohort eats 4 grain and 2 salt from its own larder and the harbour at 990
+yields 39, not 40 (§3). A callback playing the Lord Treasurer can do what the chooser never does: three men swear (`oblige`), she
+requisitions 2 grain from `set_s_001` into `terr_T1` and pays them at the court hearth; two terms run to tick 9, the third closes at
+tick 5 (§3, re-run at `51d7b05`). A callback can also found: `create_record {kind: works, plan: hearth}` in one season, `found` in the
+next, `rung.founded` (round-3 re-run). By the end of season 2, persons are 83 → 74 (nine `person.died`; every death is combat, ERRATA G9).
+
+**What changes later.** Only time and deaths. Harbours and seams lose 10 condition a season and nothing repairs them in computed play, so
+yield truncates a unit early and reaches 0 near tick 100 (§5d). At tick 5 the first act-opened terms mature: seed 1's live obliges fall
+47 → 35 and none is ever renewed (§5c). Seats empty as holders die. The King (`p_npc_020`) is dead after the first season in all three
+seeds; his seat and the Duke of Valorsmark's (his second seat), both null-conferral, are vacant at the end of season 2 in all three and
+can never refill; by then 8, 7 and 10 seats have been vacated, and the only refill in the three seeds is seed 1's self-conferral (§5b).
+With the Duke's seat gone no `revoke` can pass anywhere (§5c). Stores keep rising (0 → 9,250 by season 2, §5d). The legitimacy and
+stability Queries PR #494 added (IN-23) change nothing here: each is one person's own windowed estimate (`queries/person_q.py:451, 480`),
+read by the story-bar report and by no chooser or MATTER step (`hole_register.yaml` H-224).
+
+**Failure and ending.** There is none. The loop has no fail state and nothing halts the run (ERRATA G17). The season now reports
+`endings_reached` (`queries/world_q.py:1764`; `loop/driver.py:515-518`; PR #494), a read of the `rosters.yaml: endings` rows and never an
+actor, and the realm as built reaches none (`rosters.yaml:2494-2522`; empty after each of seasons 1 and 2 in seeds 0-2, re-run at
+`51d7b05`). MATTER kills nobody at shipped values (ERRATA G9); no place starves, rebels or empties for economic reasons. The losses that
+exist are permanent but local: a dead holder's null seat, a banned appointee, a lapsed oblige.
+
+**Consequential vs cosmetic choices.** Consequential: staying alive (a death closes every seat and service naming the person, overview
+§5.1); `confer` into a vacancy, the only refill; `oblige`, whose term schedules its own end. Inert or cosmetic at shipped values: which
+person holds a seat (no act's effect reads the holder, H-164), `dispatch` (writes nothing), `issue` (a held writ seeds its holder's own
+operands, `decision/options.py:915-930`, but nobody must act on one and the executor holds it only after a `give`, 1 of 56 executed in
+ctl), every food decision (surplus from tick 1), `transfer` into a person rung (it leaves the food supply, §4), and any reading of
+legitimacy or stability.
+
+**[PROPOSED]** (none of this runs; §7; ERRATA G16, G18). *Played mode:* D-2 (RULED yes) has RB-3 build IN-46 (a paused, played fight) and
+IN-47 (character-sheet space), so one person's choices become the player's through the existing callback seam. *Remediation:* RB-2a's
+REM-22 gives `work` and `restore` a Site referent; H-165 would mint the works inside `found`/`build`; RB-5 (REM-50/51/52, JQ-6) adds a
+`hunger(w, S)` reading and `body_step = 10`, which binds only before the first yield at today's ratio (ERRATA G18). *Verbs:* `tax`,
+`ration` and `proclaim` as one `edict` Record kind; `arrest`/`pardon`; `craft` with a recipes roster; `exchange` with a `price_of` Query;
+`hire`; `borrow`/`lend`/`debt` (§7). With those, the menu above would gain a standing-rule verb, a wage and a price; precedent puts the
+decisions there in Victoria 3, Tropico 6 and Patrician IV (`research/game_precedent_suite/tutorials/T01_realm.md` Vic3 §3,
+`T11_policy_sims.md` Tropico 6 §3, `T10_npc_economy.md` Patrician IV §2.3).
+
 ## 1 The pieces
 
 | term | what it is | numbers / limits | where it lives |

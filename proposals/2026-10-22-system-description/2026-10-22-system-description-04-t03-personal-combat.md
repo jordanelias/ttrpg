@@ -392,8 +392,9 @@ independently forms `accept` against you.
 
 ### 5c Costs, risks, counter-play, blockers
 - **Cost:** one act from the season's budget (budget 5 → at most 7 acts, §1). No stamina, wealth, office or standing is spent.
-- **Risk to the attacker:** none in world state today. The actor's tracker is discarded; in 51 % of mirror fights the attacker is felled
-  in the scene and stands up unharmed in the world.
+- **Risk to the attacker:** none in world state today. The actor's wound state is returned and not read (§2.6); in 51 % of mirror fights the
+  attacker is felled in the scene and stands up unharmed in the world. In the realm the share is higher: 33 of 59 combat calls over seeds 0-2.
+  At tick 1 of seed 0, `p_npc_004`, cut to body 48 (`end 1`) by two fights he won as subject, attacked, was felled in one turn, and kept body 48.
 - **Risk to bystanders:** observers take a scar count per violated pursuit (`loop/resolve.py:597-610`), which shifts no pursuit at
   shipped values (`scar_weight_shift 0`, ERRATA G1).
 - **Counter-play for the subject:** none inside the act. He cannot guard, flee, yield or refuse; nobody can interpose. His only levers are
@@ -408,10 +409,14 @@ independently forms `accept` against you.
 - **`accept` is a `fight` with different alignment cells** (`rigid_flexible −0.3`, `grandiose_humble −0.2`,
   `deontological_instrumental −0.4` against `fight`'s `−0.3` and `+0.3`; `ROS:3302`, `:3346-3349`, `:3412-3414`), so a person weighted
   toward the deontological pole prefers `accept` and the instrumental pole prefers `fight`; neither requires a challenge.
-- **Issuing a challenge is mechanically empty and exposes you** as the subject of any later `accept`.
+- **Issuing a challenge is mechanically empty.** It could expose you as the subject of a later `accept`; in seeds 0-2 no challenged person
+  accepted, and four challengers used `accept` on their own challenged (§8 #6), at no risk to themselves (§5c).
 - **Body is the whole build.** Kit, tradition, training and attributes are inert in the season; a trained fighter fights as an untrained
   one (`train` writes `capability`, unread by combat).
-- **Dead end:** `tend` never executed in three seeds (0 of 75), so recovery is built but not reached; a Wounded body otherwise stays down.
+- **Dead end:** `tend` never executed in three seeds (0 of 75), so recovery is built but not reached; a Wounded body otherwise stays down. The verb works when it names a wounded person: a hand-built `tend`
+  on oneself at body 250, run through the real season loop, raised it to 1000 with `body.tended` (the I1 verification's paired control, re-run on
+  `51d7b05`). The computed `tend`s name a subject who is not a person in the world (dead, a rung, a record), one not `with` the tender, or a body
+  already whole (§4); the self-targeted ones, 4 / 4 / 3 across seeds 0-2, were all refused.
 - **Cohorts:** a cohort `Person` (one record standing for many) fights as one default fighter and is deleted whole by one Felled band.
 
 ### 5e What success leaves in the world
