@@ -725,7 +725,7 @@ def _refuse_party_gap(self, w: "World", a: Act) -> list:
     FAILING, so a row that KEYS `COUNTERPARTY_CLAUSE` emits `row.refusal_for(COUNTERPARTY_CLAUSE)` here
     and not its union -- which is what lets a contested keyed row carry two kinds (`arrest`), and the
     loader's contested-row rule narrows to rows that key no counterparty (`data/verbs.py`). Every row
-    keying it before this edit (`determine`, `tell`) keys ONE kind, equal to its union, so none moves.
+    keying it before this edit (`determine`, `tell`; `issue` keys it too but is not contested, so it never reaches this body) keys ONE kind, equal to its union, so none moves.
     S27.4's refusal (a pool under 1D, `ContestRefused` `REFUSED`) reaches this body too and takes the
     counterparty kind [ASSUMPTION; medium; Jordan to correct; revert: the union, always]."""
     row = VERB_TABLE.get(a.verb)

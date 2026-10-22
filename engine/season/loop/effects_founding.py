@@ -271,7 +271,8 @@ def _eff_raze(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     row *subject or object ceases to exist*: *"`destroy` sets `until` on every Tenure naming the id
     and nothing else"*): every live edge whose subject or object is the Rung -- its own `contain` in
     its parent, the `contain`/`reside` of what stands in it, any `hold` on it -- closes, and the gate
-    admits each closure under `cascade` (`state/gate.py`: the Rung is in the write's `gone`).
+    admits each closure under `cascade` (`state/gate.py`: the Rung is in the write's `gone`), save the razer's
+    own `contain` there, which closes under `T-m` first (`test_in12_raze.py`).
     `_eff_destroy_record`'s body, on the Rung store (it closes every live edge naming the Rung, subject or object; `destroy_record`'s closes the object only). ⚠ NOTHING IS RE-HOMED, AND THAT IS #453's OWN
     RECORDED GAP (*"persons contained in a razed Rung are left placeless by the cascade"*) and `H-228`'s:
     a quarter or hearth in the town becomes a root of its own, a person or cohort standing in it is

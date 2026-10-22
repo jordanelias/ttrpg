@@ -348,8 +348,9 @@ def test_in21_control_draw_off_and_draw_at_one_reproduce_the_base_hashes():
 def test_the_give_withheld_arm_reproduces_the_one_season_pin():
     """THE `give` + Rung RE-PIN'S CONTROL, ENCODED (it stood as prose above): `give` added to the shipped
     `Fixtures withheld_verbs` reads the CURRENT one-season pin exactly -- hash, event count and digest --
-    so at the shipped arm the realm forms no `give` in season one, and the re-pin's mover is `give`'s
-    formation and nothing else. If `give` forms again in the realm, `BASE_HASHES[1]` moves with it and
+    so at the shipped arm the realm forms no `give` in season one. That `give` formation is the re-pin's
+    ONLY mover is the commit's measurement, not this test's: it needs the base tree (the pre-change pin,
+    `195b1ac6`/`47eda125`, is no longer producible on one tree). If `give` forms again in the realm, `BASE_HASHES[1]` moves with it and
     this arm stops matching: the re-pin would then need a new control, not a re-recorded one."""
     w = POP.build_realm(0)
     shipped = tuple(w.fixtures.get("withheld_verbs"))

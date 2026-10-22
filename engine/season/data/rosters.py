@@ -468,7 +468,7 @@ if not RESTRAINT_KINDS <= frozenset(TENURE_KINDS):
         needs="a `detain` and a `ban` member, or every restraint reader retired with them",
         law="#453 §8.3 -- a kind its holder may not release must exist to be excluded; a name "
             "the roster does not carry would exclude nothing and read as a world with no prisoner")
-# ⚠ ID-14 (04:391): `determine` and `arrest` open `detain` and `determine` opens `ban`; `pardon` (IN-12 step 5,
+# ⚠ ID-14 (04:391): `determine` and `arrest` open `detain`, `determine` and `revoke` open `ban`; `pardon` (IN-12 step 5,
 # `loop/effects_governance.py::_eff_pardon`) closes both through the gate's bench closure, and the loader's
 # closer clause (`data/verbs.py`) refuses a table in which a RESTRAINT_KINDS member is in no row's `domain:`.
 # Loader invariant 6 compares `release`'s domain against THIS line, so it cannot see a restraint no row closes.
