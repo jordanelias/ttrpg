@@ -10,6 +10,7 @@
 |---|---|---|
 | `tables/` | ten capability tables (`R1`..`R9`, `R3a`, `R3b`): per game, per capability id (A1..M5, the checklist below), YES / PART / NO / `?` with a clause on how | the **what a game supports** layer. Cells carry a tag; `Still unknown` and `Sources` close each file. |
 | `tutorials/` | nineteen files (`T01`..`T19`), one `### <Game> - facts line` section per game with eight headings: setup choices, the loop, the choice menu, first hour, what changes later, failure and ending, consequential vs cosmetic choices, open items | the **how it plays** layer: what a player decides, in what order, at what cost |
+| `THROUGHLINES.md` | one cross-reading of all three layers: 42 primitives, their equivalence classes across games, 13 templates (compositions of primitives) and 10 throughlines, each class and template with a Valoria column taken from the dispositions | reference only; cites carry the source's tag; it creates no work item |
 | `dispositions/` | thirteen files `D_T01`..`D_T10` (+ `also` files) and two records of claims checked | the **what it means for Valoria** layer: every precedent item compared with a named part of the Valoria suite |
 
 **The rule this suite was built under.** Everything researched is used as a surface for comparative improvement, even if read and discarded. So each item routed to a Valoria tutorial (T01..T10 = suite files 02..11) has a disposition:
