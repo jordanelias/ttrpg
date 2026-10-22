@@ -2309,12 +2309,12 @@ def test_invariant_12_refuses_a_degree_keyed_emits_with_nothing_to_key_it_on():
     # Record half), a re-record; 46 -> 47, `covenant` (v9 IN-12 step 7), a re-record; 47 -> 51, `argue`,
     # `sabotage`, `tend`, `train` (v9 IN-12 step 9), a re-record; 51 -> 52, `conceal` (v9 IN-12 step 10), a
     # re-record; 52 -> 53, `forgive` (v9 IN-12 step 13), a re-record; 53 -> 55, `arrest` and `pardon`
-    # (v9 IN-12 step 5), a re-record. This
+    # (v9 IN-12 step 5), a re-record; 55 -> 56, `raze` (v9 IN-12 step 11), a re-record. This
     # is a CONTROL, not a claim about
     # the roster: its job is to fail if the loader started refusing everything, so it moves with
     # the table by construction and the number is read from the file rather than chosen.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen -- the control that stops both arms above passing on a loader that refuses everything]
-    assert len(VERBS._load_verb_table()) == 55
+    assert len(VERBS._load_verb_table()) == 56
 
 
 def test_w2_a_planted_write_to_an_unruled_field_raises_and_names_the_pair():
@@ -6312,9 +6312,12 @@ def test_the_generic_remit_seats_every_office_and_unblocks_the_nine():
     #  v9 IN-12 step 7 added a thirteenth: `covenant` is `remit:issue`-eligible only (#453 §9.2, K-14).
     #  Re-recorded by outcome: 12 -> 13, the one row that moved.
     #  v9 IN-12 step 5 added two: `arrest` (`remit:dispatch`, #453 §9.1, `WARRANT_ACT`) and `pardon`
-    #  (`remit:determine`, #453 §9.1). Re-recorded by outcome: 13 -> 15, the two rows that moved.]
-    assert len(gov) == 15, (f"{len(gov)} verbs carry a `remit:` alternative; expected H-71's nine "
-                            "plus march plus transfer plus seize plus covenant plus arrest plus pardon")
+    #  (`remit:determine`, #453 §9.1). Re-recorded by outcome: 13 -> 15, the two rows that moved.
+    #  v9 IN-12 step 11 added one: `raze` (`remit:dispatch`, #453 §9.2, `march`'s act). Re-recorded by
+    #  outcome: 15 -> 16, the one row that moved.]
+    assert len(gov) == 16, (f"{len(gov)} verbs carry a `remit:` alternative; expected H-71's nine "
+                            "plus march plus transfer plus seize plus covenant plus arrest plus pardon "
+                            "plus raze")
     formable = set()
     for t in held:
         p = w.persons.get(t.subject)
@@ -8931,11 +8934,15 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # HELD dispensation names (`rosters.yaml: warrant_sourced`), `seize`'s formation; `pardon` is
     # `remit:determine`-eligible, `determine`'s and `open_case`'s remit. A named residue of the step's EXIT
     # (R-05), re-recorded by outcome: 17 -> 19.
+    # ⚠ v9 IN-12 step 11: `raze` JOINS -- MEASURED by `python -m engine.season.harness.corpus_run` at seed 0
+    # (`WHERE THE 56 GO`: never attempted). It is `remit:dispatch`-eligible and forms on a Rung referent,
+    # `march`'s eligibility and cell, and `march` is never attempted here either (H-175). A named residue
+    # of the step's EXIT (R-05; `hole_register.yaml` H-228), re-recorded by outcome: 19 -> 20.
     assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish",
                                               "destroy_record", "march", "oblige", "open_case",
                                               "determine", "comply", "migrate", "requisition",
                                               "speak", "examine", "dispatch", "argue", "forgive",
-                                              "arrest", "pardon"}, (    # IN-57: `dispatch` out, to `refused_only`; FI-01: back
+                                              "arrest", "pardon", "raze"}, (    # IN-57: `dispatch` out, to `refused_only`; FI-01: back
         f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Five of "
         "the original six are the governance verbs no corpus overlay grants (`establish` is "
         "`remit:confer`-eligible); `march` is eligible in NPC-033/038 and WOULD form a real "
@@ -10533,7 +10540,9 @@ def test_wc_the_fold_binds_what_the_person_bound():
     # arm, once a document is in his hand. DERIVED FROM THE FIXTURE AND THE ROSTER.
     from ..data.verbs import OWN_HOLD_DECLINES
     WALK_HELD: frozenset = frozenset(OWN_HOLD_DECLINES) | frozenset(w.fixtures.get("withheld_verbs"))
-    WALK_EXCLUDES: frozenset = (frozenset({"march"}) | WALK_REMIT | WALK_NAMED | WALK_WARRANT
+    # v9 IN-12 step 11 ADDED `raze` BESIDE `march`, FOR `march`'s OWN LICENSED REASON: its one
+    # `eligibility:` alternative is `remit:dispatch` and `p_low` holds no office (#453 §9.2).
+    WALK_EXCLUDES: frozenset = (frozenset({"march", "raze"}) | WALK_REMIT | WALK_NAMED | WALK_WARRANT
                                 | WALK_HELD)
     cands = [c for c in decision.opening_set(p, v, q, w.fixtures)
              if VERB_TABLE[c.verb].requires_typed is not None]
@@ -14041,9 +14050,10 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # (the seventh entry); the other three are not. A re-record. 51 -> 52, `conceal` (v9 IN-12 step 10),
     # uncontested, a re-record. 52 -> 53, `forgive` (v9 IN-12 step 13), uncontested, a re-record. 53 -> 55,
     # `arrest` (contested, the contested set above moves with it) and `pardon` (uncontested), v9 IN-12
-    # step 5, a re-record.
+    # step 5, a re-record. 55 -> 56, `raze` (v9 IN-12 step 11), uncontested (#453 §9.2: contests none),
+    # a re-record.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen]
-    assert len(VERB_TABLE) == 55, len(VERB_TABLE)
+    assert len(VERB_TABLE) == 56, len(VERB_TABLE)
     # AND THE SIX ARE SIX, not a row that says six. This is the half of the pin that the old
     # count could not express: a table carrying the placeholder passed `== 32` while no act in it
     # could be formed, and `runs/CASELOG_NPC.md:64` reported the same case as a blocked one.

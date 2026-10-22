@@ -1105,6 +1105,29 @@ verbs:
     grade:       "assumption"
     grade_note:  "an argued addition (#453 §10.4 step 9): the row and the mirror are v9 IN-12's, on #453 §9.3 `:1865-1890`, K-04 `:2600-2605`, K-09 `:2640-2646`."
     source:      "v9 IN-12 step 9 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.3 `:1865-1890`"
+  - verb:        "raze"
+    scale:       "settlement"
+    scale_note:  "#453 §9.2: a razing ends the settlement it names -- the place IS the subject, `march`'s and `seize`'s scale for the same reason."
+    stratum:     "contested_physical"
+    eligibility: ["remit:dispatch"]
+    eligibility_note: "v9 IN-12 step 11 (#453 §9.2, the `raze` row): `remit:dispatch`, the act that musters the army (`march`'s eligibility, `state/gate.py::MUSTER_ACT`'s grant) -- the seat that can put an army on a town is the seat that can level it. J-8 (whether `dispatch` is a remit act at all, `offices.yaml` `meta: remit_unruled`) is Jordan's; this row moves with the ruling. Built on `remit_default` (§A v9, J-8 partly answered), `arrest`'s precedent."
+    beneficiary: "none"
+    beneficiary_note: "#453 K-06: `none`, the declaration for an act whose good accrues to a Site or a Rung (`rosters.yaml: beneficiary_kinds`) -- and a razed Rung is no longer there to carry it."
+    requires:    "the subject is an existing Rung"
+    requires_typed:
+      form:      existence
+      of:        subject
+      kind:      Rung
+    requires_typed_note: "⚠ v9 IN-12 step 11 KEEPS THE ROW TYPED, ON `march`'s CELL, WHERE #453 §9.2 SENDS IT UNTYPED. #453: *'untyped -- \"Site or Rung\" is a disjunction ... a registered predicate and a flat `raze.refused`'*. This row ends a RUNG ONLY (the entry's falsifier is `w.rungs` shrinks), so the disjunction is not asked and the one conjunct the grammar can spell is kept: `existence` of `subject` kind `Rung`, `march`'s own cell (`WorldReader.read` answers `exists:Rung` generically). THE SUB-KIND AND THE LICENCE ARE THE EFFECT'S (`loop/effects_founding.py::_eff_raze`): a `march_target_kinds` member (a settlement), and OCCUPATION -- the exercised seat's faction `mustered` there, the place held by another faction -- the read `seize`'s Rung half inlines (`_seize_rung`), copied. A refusal at either is `raze.refused` (the `write` clause). The Site half of #453's row (`Site.exists` -> absent, `site.razed`) is NOT BUILT (`hole_register.yaml` H-228). [ASSUMPTION; medium; Jordan to correct; revert: `requires_typed: none` + a registered predicate asking the same reads, #453's own text.]"
+    writes:      ["Rung.exists"]
+    writes_note: "NO `contests:` (#453 §9.2: *'contests: none'*): the fight for the town is `march`'s field, already fought; the razing is what an occupier does with what the field gave him. v9 IN-12 step 11:`loop/effects_founding.py::_eff_raze` DELETES THE RUNG and closes every live Tenure naming it, in ONE write -- `_eff_destroy_record`'s body on the Rung store, and Layer 1's cascade exactly (`architecture/meta/04_CODE_ARCHITECTURE.md` §B.8: *'`destroy` sets `until` on every Tenure naming the id and nothing else'*). The closures are admitted at the gate under `cascade` (the Rung is in the write's `gone`) and are not declared, as `destroy_record` declares none. `(Rung, exists)` admits `[RES]`, ACTS, social (`write_matrix.yaml`); no matrix row is added. ⚠ NOTHING IS RE-HOMED (#453's recorded GAP; H-228): what stood in the town is left placeless and a Site's `rung` field keeps the gone id."
+    emits:       ["rung.razed"]
+    emits_note:  "#453 §9.2's kind for the Rung half (`site.razed` waits on the Site half, H-228). A NEW kind, emitted by this row alone (`data/verbs.py::KIND_VERB`); not `rung.seized` -- a taking keeps the place and a razing ends it."
+    emits_on_refusal: ["raze.refused"]
+    refusal_note: "#453 §9.2: *'refusal `raze.refused` (flat)'*, `march`'s shape on a typed row: the subject is no Rung (the `existence` conjunct), or the effect declined -- not a settlement, the seat has no faction, nobody or the seat's own faction holds the place, or the seat's faction is not mustered there (no army)."
+    grade:       "assumption"
+    grade_note:  "an argued addition (#453 §10.4 step 11): the row is v9 IN-12's, on #453 §9.2 `:1800-1822`, K-06 `:2617-2619`; the occupation licence is IN-13's read (`_seize_rung`), copied."
+    source:      "v9 IN-12 step 11 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.2 `:1800-1822`"
   - verb:        "seize"
     scale:       "settlement"
     scale_note:  "a seizure reaches the place its object is at, as `requisition`'s reaches a rung: the exercised seat's purview over where the dispossessed holder lives"

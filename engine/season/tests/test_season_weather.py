@@ -206,9 +206,17 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # seasons). ARMS, run on this tree: `arrest` and `pardon` withheld from every `opening_set` (`Fixtures
 # withheld_verbs`) reproduces the old hashes, event counts and digests exactly (6633 / 19535), and so does
 # `pardon` ALONE withheld -- the mover is `pardon`'s formation and refusals, `arrest` none.
+# RE-PINNED at v9 IN-12 step 11 (`raze`), A BEHAVIOUR MOVE DECLARED: `raze` is a new `remit:dispatch` row on
+# `march`'s cell (`existence` of a Rung) that the realm's dispatch-holders FORM on their questions' Rung
+# referents and the chooser ATTEMPTS -- every attempt refused (`raze.refused` 10 in season one, 28 by two
+# seasons; `rung.razed` 0: no realm `march` reaches a foreign settlement, H-149/H-175, so no seat's faction
+# occupies one), so the act mix moves. The build hash is equal; one and two seasons move. Was c9e46891... /
+# 47eda125... (one, two seasons). CONTROL, run on this tree: `raze` withheld from every `opening_set`
+# (`Fixtures withheld_verbs`) reproduces the old hashes, event counts and digests exactly (6635 / 18681) --
+# the mover is `raze`'s formation and refusals.
 BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
-               1: "c9e46891d32ab8e45b456749b0023f64",
-               2: "47eda125ced86d97af649fe42628a673"}
+               1: "00f9b52ca657f8e7c27eaa45cf41b9cf",
+               2: "195b1ac60f8637894d4fedc17af3672a"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -248,8 +256,9 @@ BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
 # RE-RECORDED at v9 IN-12 step 13 `forgive` with `BASE_HASHES` (6642 -> 6633, 19553 -> 19538).
 # RE-RECORDED at B-Q's BATCH-CLOSE with `BASE_HASHES` (season 1 events unmoved, 6633; season 2 19538 -> 19535).
 # RE-RECORDED at v9 IN-12 step 5 `pardon` with `BASE_HASHES` (6633 -> 6635, 19535 -> 18681).
-BASE_EVENTS = {1: (6635, "d7b3ab4d4407ac50484f96d2796a3000ca5a44d6b1ba4e45ebb2bbb54047ce2e"),
-               2: (18681, "0987148114a6f49d9ac7c1b3e17168c703c7be10f4c74a141bcadb4700ed3a4f")}
+# RE-RECORDED at v9 IN-12 step 11 `raze` with `BASE_HASHES` (6635 -> 6655, 18681 -> 18608).
+BASE_EVENTS = {1: (6655, "56fef8cab89c4986963b052fa7c18c37d6232e031a5f55d45ade47adc1894660"),
+               2: (18608, "332324f512acfb3a2a6b2982d3379844788468904f2ecf95adf858b0c4ca77af")}
 
 
 def _digest(w) -> tuple:
