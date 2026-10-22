@@ -2027,7 +2027,13 @@ rosters:
       `existence` conjunct, whose read clause 4 then learns (H-156's decaying shape).
       [ASSUMPTION; medium; Jordan to correct; revert: drop the member, and `destroy_record` forms on every
       referent, plan position `14`'s measured shape.]
-    values: [destroy_record]
+      v9 IN-12 (`give` + Rung, #453 §9.6) JOINED `give`: its cell dropped the `existence` conjunct (the
+      grammar has no disjunction, `verb_table.yaml: give`'s `requires_typed_note`), so the held-referent
+      narrowing is what keeps the loosened cell from forming a gift of every referent a question carries.
+      What `give` holds that is neither a Record nor a Rung (a seat) still forms and is declined by the
+      effect (`give.refused`). [ASSUMPTION; medium; Jordan to correct; revert: drop the member, and restore
+      the `existence` conjunct.]
+    values: [destroy_record, give]
 
   shortfall_sourced_operands:
     source: >-

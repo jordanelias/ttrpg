@@ -787,6 +787,11 @@ def _eff_forge(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     return _mint_sheet(w, a, forged=True)
 
 
+# The kind each half of `give` earns: the `give` row's `emits:` in its declared order (`verb_table.yaml`,
+# Record then Rung), read off the table so neither kind is spelt here -- `_SEIZED_RECORD`'s shape.
+_GIVEN_RECORD, _GIVEN_RUNG = VERB_TABLE["give"].emits
+
+
 @effect_for("give")
 def _eff_give(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """Plan position 16 (`H-84`): the actor's `hold` on the Record ENDS and the receiver's OPENS, in
@@ -808,8 +813,13 @@ def _eff_give(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     row's typed cell (`with`, plan position `14`, which retired `_req_give`), and not the giver is
     the fold's `counterparty` clause.
 
+    v9 IN-12 (`give` + Rung, #453 §9.6): THE OBJECT MAY BE A RUNG -- a CESSION, the one consensual route by
+    which title moves. Same two-hold write, same gate basis (`handover` is general over every non-seat
+    `hold`); the kind earned is `rung.ceded` there and `record.given` for a Record. A rung whose `hold` the
+    actor does not carry (nobody holds it, or somebody else does) declines, as a Record does.
+
     G4 -- WHAT IT NAMES: the two edges, OPENED FIRST as `_eff_confer` names them. Both are `edge`
-    subjects the tenure diff judges, and both earn the row's one kind, `record.given`. The receipts
+    subjects the tenure diff judges, and both earn the object's kind (`record.given`, or `rung.ceded`). The receipts
     therefore name TENURES, not the Record -- `_eff_confer`'s lesson on what a receipt may assert --
     and every reader that wants the Record goes through `epistemic._hold_tenure_ends`, which is
     `claim_subjects`' and `seen_subject`'s route and, since this position, WITNESS's deposit rule's.
@@ -818,7 +828,17 @@ def _eff_give(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     inside one tick would otherwise re-mint A's first `hold` id, and two Tenures sharing an id is
     what `World._tenure_changes` tolerates rather than wants."""
     rid, to = _operand(a, "subject"), _operand(a, "to")
-    held = hold_force(w, rid) if rid in w.records else None
+    # v9 IN-12 (`give` + Rung, #453 §9.6): THE OBJECT IS A RECORD OR A RUNG, and the cell no longer says
+    # which (the grammar has no disjunction), so the kind is asked HERE. Anything else -- a seat, a person
+    # -- declines (`NO_CHANGE` -> `give.refused`); the gate's `handover` would refuse a seat regardless.
+    # The kind earned follows the object: a ceded rung publishes `rung.ceded`, never `record.given`.
+    if rid in w.records:
+        earns = _GIVEN_RECORD
+    elif rid in w.rungs:
+        earns = _GIVEN_RUNG
+    else:
+        return NO_CHANGE
+    held = hold_force(w, rid)
     if held is None or held.subject != a.actor:
         return NO_CHANGE
     nt = Tenure(H(w.world_seed, w.tick, to, f"hold:{rid}:{a.id}"), to, rid, "hold", since=w.tick)
@@ -826,7 +846,7 @@ def _eff_give(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     def perform() -> None:
         held.until = w.tick                # the giver's release, FIRST
         w.add_tenure(nt)                   # then the receiver's hold
-    return Change((Subject.edge(nt), Subject.edge(held)), perform)
+    return Change((Subject.edge(nt, earns), Subject.edge(held, earns)), perform)
 
 
 # WHICH RECORD KIND IS A WARRANT FOR A VERB, and WHICH OF ITS CONTENT KEYS NAMES WHAT IT AUTHORIZES: the

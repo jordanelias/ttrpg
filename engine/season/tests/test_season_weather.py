@@ -214,9 +214,18 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # 47eda125... (one, two seasons). CONTROL, run on this tree: `raze` withheld from every `opening_set`
 # (`Fixtures withheld_verbs`) reproduces the old hashes, event counts and digests exactly (6635 / 18681) --
 # the mover is `raze`'s formation and refusals.
+# RE-PINNED at v9 IN-12 `give` + Rung (cession), A BEHAVIOUR MOVE DECLARED: `give`'s typed cell dropped its
+# `existence` conjunct (kind `Record`; the grammar has no disjunction) and `give` joined
+# `rosters.yaml: own_hold_declines`, so a person forms a gift only of a referent he HOLDS. In the realm no
+# question's referent is a thing its asker holds, so `give` forms 0 times (33 formed, `give.refused` 7 in
+# season one and 18 by two seasons before; `record.given` and `rung.ceded` 0 in both), and the act mix moves.
+# The build hash is equal; one and two seasons move. Was 00f9b52c... / 195b1ac6... (one, two seasons).
+# CONTROL, run on BOTH trees (this one and its base, 68eaaa41): `give` withheld from every `opening_set`
+# (`Fixtures withheld_verbs`) gives 8cb4f4e2... / cf3625f5... (6603 / 19990) on each, equal to this pin -- the
+# mover is `give`'s formation alone, and nothing else in the change reaches the realm.
 BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
-               1: "00f9b52ca657f8e7c27eaa45cf41b9cf",
-               2: "195b1ac60f8637894d4fedc17af3672a"}
+               1: "8cb4f4e273523f76d1616a71584b50c0",
+               2: "cf3625f54e6876621b71798e1eb56741"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -257,8 +266,9 @@ BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
 # RE-RECORDED at B-Q's BATCH-CLOSE with `BASE_HASHES` (season 1 events unmoved, 6633; season 2 19538 -> 19535).
 # RE-RECORDED at v9 IN-12 step 5 `pardon` with `BASE_HASHES` (6633 -> 6635, 19535 -> 18681).
 # RE-RECORDED at v9 IN-12 step 11 `raze` with `BASE_HASHES` (6635 -> 6655, 18681 -> 18608).
-BASE_EVENTS = {1: (6655, "56fef8cab89c4986963b052fa7c18c37d6232e031a5f55d45ade47adc1894660"),
-               2: (18608, "332324f512acfb3a2a6b2982d3379844788468904f2ecf95adf858b0c4ca77af")}
+# RE-RECORDED at v9 IN-12 `give` + Rung with `BASE_HASHES` (6655 -> 6603, 18608 -> 19990).
+BASE_EVENTS = {1: (6603, "958f42832e4fdfda38ba55107ea22e8d2d78476800609d4d562ea4f0459d5eac"),
+               2: (19990, "abd3946bd04cf2578b7fa700017b855109333e6447e271e4e04d6eb6581a48ef")}
 
 
 def _digest(w) -> tuple:
