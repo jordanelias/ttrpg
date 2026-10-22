@@ -54,7 +54,7 @@ fold, "ok" = a non-refusal event; ERRATA G2) and the round-3 re-runs at `51d7b05
 one seam at condition 1000 (`harness/populated.py:772-777`), a dwelling per hearth (`:793-797`) and a garrison per settlement
 (`:815-818`), 32 seats (31 rows in `offices.yaml` plus the derived `off_npc_084`, `harness/populated.py:1241-1250`) and empty stores
 everywhere (§1). The shipped controls are fixed: `body_step=0`, `oblige_term=4`, `default_upkeep=1` (`data/fixtures.py:594, 892, 905`).
-The seed changes what the choosers form, not what is built (the 32 seats and their conferral bases are identical in seeds 0-2): seed 1
+The seed changes what the choosers form and the pursuits drawn for persons with none authored (`harness/populated.py:893`), and does not change the map, Sites, seats or stores (the 32 seats and their conferral bases are identical in seeds 0-2): seed 1
 swears 22 obliges (24 attempted), seeds 0 and 2 none (§4). The season loop has no player interface of its own; a person at the callback
 (`harness/play_surface.py:41-52`, `dispatching_chooser`, reached only by tests today) chooses which acts to submit and their payloads.
 Any of the 47 resolvable verbs with any extra fields is folded; a non-resolvable one aborts the season (round-3 re-run). There is no
@@ -87,36 +87,45 @@ claims decay (`:317-347`), cohorts draw grain and salt from the nearest store (`
 
 **First season, step by step (seed 0).** Tick 0 MATTER: every cohort wants grain 4 and salt 2 and finds no store, so nothing is drawn and
 no shortfall is written; then each settlement yields grain 40, salt 30, ore 50, timber 10 and its harbour and seam wear to 990 (§3; over
-two MATTERs the ctl file shows `yield.taken` 74 = 37 settlements × 2 and `stores.changed` 111). Five rounds follow: 1,132 acts reach the
-fold over the two seasons (ctl seed 0, line 1) out of 1,407 formed (the story-bar run's act count, re-run at `51d7b05`); the rest are
-refused before the fold. What executes in this subsystem is `move` 16 of 42, `issue` 5 of 6, `dispatch` 6 of 18, `release` 3 of 45 and
+two MATTERs the ctl file shows `yield.taken` 74 = 37 settlements × 2 and `stores.changed` 111). Five rounds follow. Over the two seasons
+of the ctl run (the figures below are two-season totals, not the first season's), 1,132 acts reach the fold (`d.resolved`, ctl seed 0,
+line 1; it appends on entry to `_fold`, `loop/resolve.py:377-379`, so ordinary admission refusals are counted) out of 1,407 in the act
+store (`w.acts`, released to RESOLVE; uncommitted round-3 probe at `51d7b05`; ERRATA R-F3). The other acts stop before the fold: the
+actor was already gone, the obstacle was too high for the pool, or a contested act was refused at admission (`loop/resolve.py:974-1032`).
+What reaches the fold and executes in this subsystem is `move` 16 of 42, `issue` 5 of 6, `dispatch` 6 of 18, `release` 3 of 45 and
 `transfer` 1 of 45; `work` 0 of 77, `restore` 0 of 23, `found` 0 of 24, `build` 0 of 19, `migrate` 0 of 81, `requisition` 0 of 2,
-`revoke` 0 of 6 (ctl seed 0). Tick 1 MATTER: the Valorsplatz cohort eats 4 grain and 2 salt from its own larder and the harbour at 990
-yields 39, not 40 (§3). A callback playing the Lord Treasurer can do what the chooser never does: three men swear (`oblige`), she
-requisitions 2 grain from `set_s_001` into `terr_T1` and pays them at the court hearth; two terms run to tick 9, the third closes at
-tick 5 (§3, re-run at `51d7b05`). A callback can also found: `create_record {kind: works, subject_matter: {plan: hearth, at: <settlement>}}` in one
-season, `found` in the next, `rung.founded` (round-3 re-run). By the end of season 2, persons are 83 → 74 (nine `person.died`; every death is combat, ERRATA G9).
+`revoke` 0 of 6 (ctl seed 0, two seasons, reached the fold / executed). Tick 1 MATTER: the Valorsplatz cohort eats 4 grain and 2 salt from its own larder and the harbour at 990
+yields 39, not 40 (§3). Hand-built acts through the fold (§3): three persons `oblige` to the Lord Treasurer's seat; she requisitions 2 grain from
+`set_s_001` into `terr_T1` and pays them at the court hearth; two terms run to tick 9, the third closes at tick 5 (§3; uncommitted
+round-3 probe). The chooser never pays upkeep (0 `term.renewed`; uncommitted round-3 probe, the ctl files do not count it). A callback can also found: `create_record {kind: works, subject_matter: {plan: hearth, at: <settlement>}}` in one
+season, `found` in the next, `rung.founded` (uncommitted round-3 probe). By the end of season 2, persons are 83 → 74 (nine `person.died`; every death is combat, ERRATA G9).
 
 **What changes later.** Only time and deaths. Harbours and seams lose 10 condition a season and nothing repairs them in computed play, so
 yield truncates a unit early and reaches 0 near tick 100 (§5d). At tick 5 the first act-opened terms mature: seed 1's live obliges fall
-47 → 35 and none is ever renewed (§5c). Seats empty as holders die. The King (`p_npc_020`) is dead after the first season in all three
-seeds; his seat and the Duke of Valorsmark's (his second seat), both null-conferral, are vacant at the end of season 2 in all three and
-can never refill; by then 8, 7 and 10 seats have been vacated, and the only refill in the three seeds is seed 1's self-conferral (§5b).
-With the Duke's seat gone no `revoke` can pass anywhere (§5c). Stores keep rising (0 → 9,250 by season 2, §5d). The legitimacy and
+47 → 35 and none is renewed in six seasons (§5c). Seats empty as holders die. The King (`p_npc_020`) dies in the first season (tick 0) in all
+three seeds (uncommitted round-3 probe); his seat and the Duke of Valorsmark's (his second seat), both null-conferral, are vacant from the
+King's death at tick 0 in all three and can never refill; by the end of season 2, 8, 7 and 10 seats have been vacated (uncommitted
+round-3 probe), and the only refill in the three seeds is seed 1's self-conferral (§5b). With the Duke's seat vacant, no seat that exists
+at build can `revoke`; only a hand-built `establish` of a same-faction seat on the parent rung reopens it (offices.yaml:72-74;
+`loop/predicates.py:295-300`; computed `establish` is 5/0 and 4/0 at seeds 1 and 2 and carries no operands; §5c). Stores keep rising (0 → 9,250 by season 2, §5d). The legitimacy and
 stability Queries PR #494 added (IN-23) change nothing here: each is one person's own windowed estimate (`queries/person_q.py:451, 480`),
 read by the story-bar report and by no chooser or MATTER step (`hole_register.yaml` H-224).
 
 **Failure and ending.** There is none. The loop has no fail state (ERRATA G17) and nothing halts the run. The season now reports
 `endings_reached` (`queries/world_q.py:1764`; `loop/driver.py:515-518`; PR #494), a read of the `rosters.yaml: endings` rows and never an
-actor, and the realm as built reaches none (`rosters.yaml:2494-2522`; empty after each of seasons 1 and 2 in seeds 0-2, re-run at
-`51d7b05`). MATTER kills nobody at shipped values (ERRATA G9); no place starves, rebels or empties for economic reasons. The losses that
-exist are permanent but local: a dead holder's null seat, a banned appointee, a lapsed oblige.
+actor, and the realm as built reaches none (`rosters.yaml:2494-2522`; `endings == []` after tick 0 at seeds 0-2, uncommitted round-3
+probe at `51d7b05`; after tick 0 it cannot be otherwise: the throne seat is null-conferral and vacant once the King dies, `theocracy`
+reads a live hold on the King seat, `queries/world_q.py:1831`, and `peninsular_sovereignty` is "UNREACHABLE IN COMPUTED PLAY",
+`rosters.yaml:2536`). MATTER kills nobody at shipped values (ERRATA G9); no place starves, rebels or empties for economic reasons. The losses that
+exist are permanent but local: a dead holder's null seat, a banned appointee.
 
 **Consequential vs cosmetic choices.** Consequential: staying alive (a death closes every seat and service naming the person, overview
-§5.1); `confer` into a vacancy, the only refill; `oblige`, whose term schedules its own end. Inert or cosmetic at shipped values: which
-person holds a seat (no act's effect reads the holder, H-164), `dispatch` (writes nothing), `issue` (a held writ seeds its holder's own
-operands, `decision/options.py:915-930`, but the issuer holds it, nobody must act on one, and handing it over is `give`, 1 of 56
-executed in ctl), every food decision (surplus from tick 1), `transfer` into a person rung (it leaves the food supply, §4), and any reading of
+§5.1); `confer` into a vacancy, the only refill; `oblige`, whose term schedules its own end; and which person holds a seat, which changes no
+effect's arithmetic (H-164 is the `f(degree)` identity term of `_rise`, `hole_register.yaml:3716-3720`) but decides what the seat is used for,
+since the holder's own profile picks every act through it and the `theocracy` ending reads the King seat's holder (`rosters.yaml:2542-2553`).
+Inert or cosmetic at shipped values: `dispatch` (writes nothing), `issue` (a held writ seeds its holder's own
+operands, `decision/options.py:915-930`, but the issuer holds it, nobody must act on one, and handing it over is `give`, 16/0, 21/0 and
+19/1 in ctl at seeds 0, 1 and 2), every food decision (surplus from tick 1), `transfer` into a person rung (it leaves the food supply, §4), and any reading of
 legitimacy or stability.
 
 **[PROPOSED]** (none of this runs; §7; ERRATA G16, G18). *Played mode:* D-2 (RULED yes) has RB-3 build IN-46 (a paused, played fight) and

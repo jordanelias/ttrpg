@@ -33,30 +33,36 @@ stated per seed.
 
 Precedent forms used for shape: `research/game_precedent_suite/tutorials/T01_realm.md` (Old World), `T13_koei.md` (Genghis Khan II) and
 `T16_managers_narrative.md` (King of Dragon Pass, Six Ages, Football Manager 26). Figures are seed 0 unless a seed is named; every code line
-in this section was opened at `51d7b05`. The as-built text comes first, then a `[PROPOSED]` block.
+in this section was opened at `51d7b05`. The as-built text comes first, then a `[PROPOSED]` block. Terms are defined in §1 and plan ids
+(REM-, RB-, L1-6, D-, J-T1) in §7; this section uses them first.
 
 **Setup choices.** The one input is the world seed. `harness/populated.py::build_realm(seed)` seats 83 persons (46 named, 37 cohorts) and
 32 offices, all held at build, and mints 64 OUGHT Propositions: 46 personal wants (`prop_npc_*`), 6 faction creeds (`fac_*`) and 12
-organization goals (23 of the 35 `goals.yaml` rows are `orientation` and mint nothing; `harness/populated.py:474-477`, `goals.yaml:1-30`).
+organization goals (23 of the 35 `goals.yaml` rows are `orientation` and mint nothing; `harness/populated.py:474-477`, `goals.yaml:24, 39-430`;
+the header's "mints one OUGHT Proposition per row" at `:3-4` is stale).
 Its other parameters (`cap`, `from_roster`, `goals`, `goals_complete`, `:629-630`) are builder switches, not choices. There is no
 difficulty, nation or character pick; the remaining knobs are fixture arms (temperature `data/fixtures.py:286`, scar shift `:707`,
 confliction `:715`), swept controls rather than choices. A client that registers a person in `overrides` chooses for that person at each
 deliberation. Its callback receives the Person, a View (the last 12 own claims and the question), a Sensation (two scalars, subsistence and
 standing; `state/carriers.py:388`), the budget query and `auto`, the shipped chooser (`harness/play_surface.py:14-19`). It may return any
 of the 47 resolvable verbs with any payload. DELIBERATE raises on an over-budget return (`loop/deliberate.py:202`), a scene of more than 3
-acts (`:220`) and an act whose actor is someone else (`:281`); a verb whose precondition the fold cannot evaluate (`exchange`) raises
-`Unspecified` and aborts the season (`loop/resolve.py:283-284`).
+acts (`:220`), an act whose actor is someone else (`:281`) and a return that is neither an Act nor a Scene (`InstrumentDefect`,
+`:556-558`); a verb whose precondition the fold cannot evaluate (`exchange`) raises `Unspecified` and aborts the season
+(`loop/resolve.py:283-284`). The over-budget check prices a scene by its `extended` flag, not its act count (see "The choice menu", below).
 
 **The loop (one tick).** 1 CALENDAR: dates due this tick fire. 2 MATTER: terms mature (`loop/matter.py:294-304`), claims lose 5 confidence
 (errata G8), cohorts draw food, sites yield and wear (§2.1); hunger, ageing and illness are coded and ship at 0 (`matter.py:513-520`,
-`:549`; `data/fixtures.py:594, 606-607`). 3 Five rounds (`loop/driver.py:449-456`), each DELIBERATE (every person answers one question and
-returns scenes; nothing is written), RESOLVE (all released acts in stratum order), ENCOUNTER (declared marches fought) and WITNESS (events
+`:549`; `data/fixtures.py:594, 606-607`). 3 Five rounds (`loop/driver.py:449-456`), each DELIBERATE (a person with budget left is asked one question only if his inputs changed or
+his queue is empty, otherwise his next queued scene is released: `loop/deliberate.py:167-170`, §2.7; nothing is written), RESOLVE (all released acts in stratum order), ENCOUNTER (declared marches fought) and WITNESS (events
 become claims). 4 CENSUS. 5 `tick += 1` (`driver.py:445-456, 514-519`; §2.1 gives the step order). Everything is automated: persons not in
-`overrides` are chosen by `make_chooser`; nothing pauses and nothing waits for a human.
+`overrides` are chosen by `make_chooser`; in the shipped run (no overrides) nothing pauses and nothing waits for a human.
 
 **The choice menu.** Every act costs its share of a scene: 1 alone, 2 for a scene of two or three acts (`decision/choose.py:643-658`;
-`data/fixtures.py:488-489`), against a budget of 5 + 1 per live hold − body bands − travel legs (`decision/budget.py:57-61`), at most one
-scene per round (`loop/deliberate.py:252-259`). A person picks a verb whenever it is formable on the question's subject; which one comes
+`data/fixtures.py:488-489`) — the packer's rule, not one enforced on what a client returns: `Scene.cost` reads the scene's `extended`
+flag, not its act count (`state/carriers.py:593-594`; the packer sets the flag at `decision/choose.py:636`), so a client's three-act
+Scene left unflagged costs 1 and a client could release 15 acts for 5 actions (from reading; not run; falsifier: inject such a Scene
+through `dispatching_chooser` and read `d._spent`). Costs are charged against a budget of 5 + 1 per live hold − body bands − travel legs
+(`decision/budget.py:57-61`), and at most one scene is released per round (`loop/deliberate.py:252-259`). A person picks a verb whenever it is formable on the question's subject; which one comes
 first is the pursuit term when the subject is shared and the stance term when it is not, then noise at τ = 0.1 (`choose.py:130-151`,
 `:376-392`). The full menu is §4; the verbs a person reaches most:
 
@@ -71,13 +77,13 @@ first is the pursuit term when the subject is shared and the stance term when it
 | `move` | scene share, then −1 budget per leg | moves your `contain` | toward a referent with a path | 42/16 · 35/17 · 40/12; RUNS-IN-LOOP |
 | `tell` | scene share, contested | the hearer receives your chosen claim | a co-located hearer and a claim to say | 23/4 · 25/7 · 19/6; RUNS-IN-LOOP |
 | `petition` | scene share | a petition Record you hold (+1 budget) | `to` a living person | 42/14 · 31/7 · 34/11; RUNS-IN-LOOP |
-| `fight`, `accept` | scene share, contested | Felled / Wounded / Untouched on the subject | any living referent; `accept` needs no challenge | 7/4 and 18/11 (s0); RUNS-IN-LOOP |
-| `train`, `tend` | scene share | +1 capability; body to 1000 | a co-located person | 0 ok in all seeds; TESTS-ONLY |
+| `fight`, `accept` | scene share, contested | Felled / Wounded / Untouched on the subject | any living referent; `accept` needs no challenge | `fight` 7/4 · 5/5 · 8/5 and `accept` 18/11 · 9/6 · 12/10; RUNS-IN-LOOP |
+| `train`, `tend` | scene share | +1 capability; body to 1000 | a co-located person | `train` 38 · 30 · 30 and `tend` 34 · 22 · 19 att, 0 ok in all seeds; TESTS-ONLY (`engine/season/tests/test_in12_step9.py`) |
 
 ("att" counts acts that reached the fold; contested acts refused at admission are not counted, trap 9.)
 
 **First tick, step by step (Sæmund Haelgrund, `p_npc_004`, seed 0; the numbers are §3's, whose control run is byte-identical at `51d7b05`).**
-1. Build: budget 5 + 1 hold (his seat) = 6; the realm's budgets are 5 for 52 persons, 6 for 27, then 7, 10, 10 and 13 (round-3 probe).
+1. Build: budget 5 + 1 hold (his seat) = 6; the realm's budgets are 5 for 52 persons, 6 for 27, then 7, 10, 10 and 13 (uncommitted round-3 probe).
 2. MATTER at tick 0 changes nothing for him (no stores at his rung, urgency 0).
 3. Round 0: his ledger is empty, so his question is his most salient `need`: the Restoration's leader Yrsa (salience 0.95055;
    `queries/world_q.py:2295-2310`).
@@ -89,20 +95,27 @@ first is the pursuit term when the subject is shared and the stance term when it
 7. WITNESS: he holds a firsthand claim about Arnlod, the referent of his personal want, so round 1 asks a tier-0 question about Arnlod
    (`queries/world_q.py:2217-2332`); `open_case` on Arnlod lands, `train` and `commit` are refused.
 8. Over five rounds he releases 4 scenes, spends 8 actions, resolves 11 acts with 3 non-refusals and ends the tick holding 3 Records:
-   budget 9 at tick 1 (round-3 probe: 9). Realm-wide in that tick: 676 acts formed, 535 reached the fold, 83 → 78 persons alive.
+   budget 9 at tick 1 (round-3 probe: 9). Realm-wide in that tick: 676 acts released, 535 reached the fold, 83 → 78 persons alive.
 
 **What changes later.** Budgets climb with paper (mean 5.57 → 6.41 → 7.69 over two ticks; 11 of 74 above the 10-action release ceiling
 after tick 1). Convictions fold at tick 1 (5 at seed 0, 0 at seed 1, 3 at seed 2). Seats empty and some stay empty: 8, 7 and 10 seats
-are vacated in two seasons (8, 6 and 10 still vacant; one refill, in seed 1), the King (`p_npc_020`) is dead after the first season at all
+are vacated in two seasons (8, 6 and 10 still vacant, one refill in seed 1: uncommitted round-3 probe), the King (`p_npc_020`) is dead after the first season at all
 three seeds, and seven null-conferral seats cannot be refilled. Ledgers fill (13 of 74 at the 200 cap, ctl). In the natural run nothing is
-founded or built and no field is fought (ctl `field.*` 0; a hand-built `march` at a settlement does run the battle oracle in the loop).
-Persons acquire no skills (`train` 0 ok) and their pursuits never move (scar shift 0, `data/fixtures.py:707`).
+founded or built and no field is fought (ctl `field.*` 0; a hand-built `march` at a settlement does run the battle oracle in the loop, errata R-F5).
+Persons acquire no skills (`train` 0 ok) and at seed 0 their pursuits never move: the scar shift is 0 (`data/fixtures.py:707`) and the two
+pursuit writers, `argue` and `determine` (`verb_table.yaml:151-152, 348-349`), never pass admission there (`determine` is admitted once
+at seed 1, ctl).
 
 **Failure and ending.** None for the world. The season returns `endings` (`world_q.endings_reached`, a read added by PR #494;
 `loop/driver.py:518, 532`) over two `rosters.yaml: endings` rows (`peninsular_sovereignty`, the victory row, and `theocracy`;
-`rosters.yaml:2494-2553`); the realm as built reaches neither (`endings` was `[]` after both ticks at seed 0), and nothing halts on it, so
-the loop runs as many ticks as its caller asks. A person ends only by being Felled; MATTER kills nobody at shipped values (errata G9). No goal is ever met, because no code
-tests one (`goals.yaml:11-12`: a goal "never acts, and nothing aggregates"). A seated person has no continuation: `succeed` is not
+`rosters.yaml:2494-2553`); the realm as built reaches neither. The read RUNS-IN-LOOP; reaching an ending is TESTS-ONLY
+(`engine/season/tests/test_in27_endings.py`). `endings` was `[]` after both ticks at seed 0 (uncommitted round-3 probe), and once the King
+is dead (after tick 0 at seeds 0-2) it cannot be otherwise: the throne is a null-conferral seat (`offices.yaml:182-188`) vacant from then
+on, `theocracy` needs a live hold on a `post: King` seat and `_ending_edges` returns `()` without one (`queries/world_q.py:1831-1832`), and
+`peninsular_sovereignty` is "UNREACHABLE IN COMPUTED PLAY" (`rosters.yaml:2536`). Nothing halts on it, so
+the loop runs as many ticks as its caller asks. A person ends only by being Felled; MATTER kills nobody at shipped values (errata G9). No goal is ever registered as met: no code
+tests one (§5 a); `goals.yaml:11-12` says a goal "never acts, and nothing aggregates". A goal's aim can come about unrecorded: Yrsa, the
+referent of `goal_church_suppress_restoration` (`goals.yaml:230-234`), died in round 0 (§3). A seated person has no continuation: `succeed` is not
 resolvable (§7).
 
 **Consequential vs cosmetic choices.**
@@ -110,14 +123,15 @@ resolvable (§7).
   one to two orders of magnitude (§2.4); how many holds you keep (every Record and Proposition is +1 budget, up to the ceiling);
   co-location for `tell`, `give`, `tend`, `train`; the stratum order, which lets a movement or a duel change the world before your social
   act is checked.
-- Cosmetic or inert: pursuit gaps under about 0.1 (reversed one time in four, §2.5); urgency (the same for every candidate); the value
+- Cosmetic or inert: pursuit gaps under about 0.1 (reversed at least one time in four, §2.5); urgency (the same for every candidate); the value
   term of the 13 uncelled verbs; a cohort's order (pure noise); the confliction damper and the scar shift (both at control).
-- Wasted by construction: whole families formed on the wrong class of subject (`work` 77/0, `migrate` 81/0, `commit` on persons); a
-  budget above 10.
+- Wasted by construction: whole families formed on the wrong class of subject (`examine` 62 released and 0 admitted, errata R-F8;
+  `sabotage` 34/0; `commit` on persons, 61/0); `work` 77/0 refuses for another reason (§8, A2 §B.3), and `migrate` 81/0 met full
+  hearths (errata R-F10); a budget above 10.
 
 **[PROPOSED] Playing it as proposed.** IN-46: the driver suspends at ENCOUNTER for a played fight (`workplans/valoria_master_workplan_v9_part4.md:32-34`);
 IN-47: creation is "a cast entry the world-gen builder seats" (`:39-41`; D-2 ruled yes, the design held PROPOSED); REM-21..25 and REM-2C
-stamp right-class referents (RB-2a); L1-6 option B removes urgency (REM-44); D-V6 adds a contents-aware value term; J-T1 attributes. None
+stamp right-class referents (RB-2a); L1-6 option B removes urgency (REM-44); D-V6 (open) adds a contents-aware value term; J-T1 attributes. None
 is built; D-2 ruled the two RB-3 designs to proceed (errata G16). §7 lists the waits.
 
 ## 1 The pieces
@@ -147,7 +161,7 @@ is built; D-2 ruled the two RB-3 designs to proceed (errata G16). §7 lists the 
 | **"with"** | the relation "the two persons are at the same place" | `place_of(a) == place_of(b)` | `queries/world_q.py:2717` |
 | **commit** | membership/adherence edge to a Proposition | a faction *is* its Proposition plus its commits | `queries/world_q.py:1365` |
 | **ambition** | a live `commit` to an OUGHT Proposition | creed `fac_*`, org goal `goal_*`, personal want `prop_npc_*` | `queries/world_q.py:1817` |
-| **goal** | an organization's authored aim; 12 of the rows are minted as OUGHT Propositions at world-gen, the 23 `orientation` rows mint nothing | 35 rows; changes attention only, never acts | `goals.yaml:1-12`; `data/goals.py` |
+| **goal** | an organization's authored aim; 12 of the rows are minted as OUGHT Propositions at world-gen, the 23 `orientation` rows mint nothing | 35 rows; changes attention only, never acts | `goals.yaml:11-12, 24, 39-430` (`:3-4` is stale); `data/goals.py` |
 | **question** | the one thing a person deliberates about this round | sources `claim_landed`, `need`; one per deliberation | `queries/world_q.py:2249`; `decision/questions.py:45-76` |
 | **attention tier** | order in which a person's questions are taken | 0 ambition referent · 1 own tenure/purview · 2 valued deed · 3 need · 4 rest | `queries/world_q.py:2092-2135` |
 | **view** | the ledger ids `choose` may see | last 12 claims (`view_k`) | `decision/questions.py:22-42` |
@@ -155,7 +169,7 @@ is built; D-2 ruled the two RB-3 designs to proceed (errata G16). §7 lists the 
 | **score** | pursuit term + stance term + urgency | stance gain 1.0 doubles the stance term | `decision/choose.py:130-151` |
 | **temperature τ** | noise scale of the Gumbel (Plackett–Luce) ordering | 0.1 | `data/fixtures.py:286`; `decision/choose.py:350-390` |
 | **scene budget** | scene actions a person may spend this season | `max(1, 5 + holds − body bands − travel legs)` | `decision/budget.py:57-61` |
-| **scene** | a bundle of ≤ 3 acts released together | costs 1, or 2 if it holds more than one act | `decision/choose.py:640-669`; `data/fixtures.py:488-489` |
+| **scene** | a bundle of ≤ 3 acts released together | costs 1, or 2 if flagged `extended` (`state/carriers.py:593-594`); the packer flags any scene of more than one act | `decision/choose.py:636, 640-669`; `data/fixtures.py:488-489` |
 | **act** | one intended verb application by one person | id `H(seed, tick, actor, "act:…")` | `state/carriers.py:598` |
 | **verb row** | one line of the action menu: eligibility, precondition, writes, emits, refusals | 53 rows; 47 resolvable; menu 46 | `verb_table.yaml`; `loop/driver.py:101-200` |
 | **eligibility** | who may attempt: `own` (anyone), `remit:<act>` (a seat granting it), `hold:<x>`, `presence:<x>` | `presence:` always declines | `loop/resolve.py:103-166` |
@@ -183,15 +197,17 @@ The order below is the order an actor meets the rules in one season.
 | 5 | `tick += 1` | once | The only clock advance. |
 
 Since PR #494 the season also calls `world_q.endings_reached(w)` between CENSUS and `tick += 1` and returns it as `endings`: a read with
-no token, Event or write, on which the run does not halt (`loop/driver.py:515-519, 532`; the function is `queries/world_q.py:1764`).
+no token, Event or write, on which the run does not halt (`loop/driver.py:515-519, 532`; the function is `queries/world_q.py:1764`). The read
+RUNS-IN-LOOP; reaching an ending is TESTS-ONLY (`engine/season/tests/test_in27_endings.py`).
 
 Because WITNESS runs every round, what happened in round 0 is already in your ledger when you deliberate in round 1. Within one
 round all persons choose simultaneously, against the same frozen world; the world only changes at RESOLVE.
 
 [precedent: `research/game_precedent_suite/tutorials/T16_managers_narrative.md`, King of Dragon Pass §2] The rhythm is the one King of Dragon
 Pass uses (the world answers after each action), at a higher rate: KoDP gives a clan two actions a season ("time will pass only when you
-initiate an action"); a Valoria person releases up to five scenes of up to three acts, and at seed 0 an acting person formed 8.1 acts in
-tick 0 and 9.4 in tick 1 (§2.6): four to five times KoDP's two, and 7.5 times at the 15-act ceiling.
+initiate an action"); the Valoria world answers per round, not per act (WITNESS runs each round, `loop/driver.py:510`), so a Valoria person
+is answered after each of up to five rounds, 2.5 times KoDP's two, each answer covering a scene of up to three acts (at seed 0, 8.1 and 9.4
+acts released per person per tick, §2.6).
 
 ### 2.2 A question arrives
 
@@ -279,13 +295,15 @@ the ordered list greedily into chunks of 3. A chunk of more than one act is exte
 is trimmed to one act (`decision/choose.py:640-669`). So budget 5 buys scenes costing 2 + 2 + 1 (7 acts) and budget 6 buys 2 + 2 + 2
 (9 acts); one travel leg drops a budget-6 holder to 5, i.e. 9 acts become 7. The ceiling is 5 released scenes × cost 2 = 10 actions.
 Budgets drift up, because every Record and every uttered Proposition is a hold: at seed 0 the mean budget is 5.57 at build, 6.41 after
-tick 0 and 7.69 after tick 1, and after tick 1 eleven of 74 persons hold a budget above 10, an excess no round can release (round-3
-probe, §9). The tree's own comment calls the count "WIDER THAN OFFICES", against S26.3's by-office budget, and files it as H-92
+tick 0 and 7.69 after tick 1, and after tick 1 eleven of 74 persons hold a budget above 10, an excess no round can release
+(uncommitted round-3 probe, §9). The tree's own comment calls the count "WIDER THAN OFFICES", against S26.3's by-office budget, and files it as H-92
 (`loop/deliberate.py:95, 107-109`; `hole_register.yaml:1142`).
-Observed at seed 0, per tick, over the persons alive at the start of the tick (every one of them formed at least one act): in tick 0,
-83 persons formed 676 acts and 535 reached the fold (8.1 and 6.4 per person); in tick 1, 78 persons formed 731 and 597 reached the fold
-(9.4 and 7.7). In each tick at least one person formed 15 acts, the 5-scene × 3-act ceiling. "Reached the fold" is the control run's
-"attempted" basis (trap 9); "formed" is the unique acts in `w.acts`. The two-tick totals are 1,132 reached and 1,407 formed.
+Observed at seed 0, per tick, over the persons alive at the start of the tick (every one of them had at least one act released): in tick 0,
+83 persons had 676 acts released and 535 reached the fold (8.1 and 6.4 per person); in tick 1, 78 persons had 731 released and 597 reached
+the fold (9.4 and 7.7). In each tick at least one person had 15 acts released, the 5-scene × 3-act ceiling. "Reached the fold" is the
+control run's "attempted" basis (trap 9); "released" is the unique acts in `w.acts`, appended as RESOLVE takes them
+(`loop/resolve.py:967`). The two-tick totals are 1,132 reached and 1,407 released. Where this file gives a "formed" count with `w.acts`
+as its basis (§4, trap 9), it means released; "formed" in §2.3 means a candidate was built.
 
 ### 2.7 Release and resolution
 
@@ -530,7 +548,7 @@ heals, trains, migrates, requisitions or offers a covenant refused in all three 
 Goals change **what a person attends to, never what they value** (`goals.yaml:11-12`): the score has no goal term. No code tests
 whether a goal is met; a grep of `data/goals.py`, `queries/world_q.py`, `decision/` and `loop/` for completion logic finds none, and the
 loop halts on no ending: PR #494's `endings_reached` (§2.1) is a read over the `rosters.yaml: endings` rows, not over goals, and the realm as
-built reaches none (errata G17; `endings` was `[]` after both ticks at seed 0, round 3). A goal of kind `orientation` mints nothing and only shifts salience.
+built reaches none (errata R-F12, which restates Part 1 G17; `endings` was `[]` after both ticks at seed 0, uncommitted round-3 probe). A goal of kind `orientation` mints nothing and only shifts salience.
 
 **(b) Plays.** "Pursuing" a goal means getting its referent in front of you and having the right act formable and admissible on it:
 
@@ -551,7 +569,7 @@ built reaches none (errata G17; `endings` was `[]` after both ticks at seed 0, r
    `survey` turns a faction-coherent subject into a faction sheet. Graded inquiries need Record, Rung or Site subjects (B).
 6. **Grow your budget.** `create_record` and `utter` have no precondition and always succeed (87/87 and 39/39 at seed 0), and each
    leaves you a hold. Each one adds a scene action from the next round (Sæmund 6 → 9 over tick 0). The ceiling is 10 actions
-   (5 scenes × 2); a budget above 10 is unspendable (H-92, §2.6).
+   (5 scenes × 2); a budget above 10 is always wasted, and the excess over 5 actions is spent only through extended scenes (H-92, §2.6).
 
 **(c) Costs, risks, counter-play.** Every act costs budget whether or not it lands, and a refused act is retried in later rounds
 (Sæmund attempted `train` on Arnlod twice). Other people's acts resolve in the same fold: anything in an earlier stratum (movement,
@@ -596,13 +614,14 @@ at tick 1 (e.g. Hedda Kronvald's orthodoxy 3 folded into einhir_restoration, 1 �
 - **A seated player.** IN-47 (character-sheet space: creation is "a cast entry the world-gen builder seats") and IN-46 (grid-mode
   suspension: a played fight) are scheduled as REM-30 / REM-31 in batch RB-3 (decision D-2, ruled yes; designs held PROPOSED). Today
   the only seam into the season loop is the harness `dispatching_chooser` (`harness/play_surface.py:41-52`, exercised only by tests:
-  `tests/test_play_surface_dispatch.py`, `tests/test_combat_trace_returned.py`). Outside the loop,
+  `engine/season/tests/test_play_surface_dispatch.py`, `engine/season/tests/test_combat_trace_returned.py`). Outside the loop,
   `systems/social_contest/sim/contest/agon_harness.py` lets a human play Side A of one social contest from stdin against an AI policy
   (`_raw_input`, `:148-155`, calls `input()`; it drives the contest kernel, which no season reaches), and the combat and mass-battle
   workbenches (`systems/combat/combat_engine_v1/workbench/server.py`, `systems/mass_battle/sim/workbench/server.py`) are HTTP designer
   tools that trace one duel or one battle (the combat trace's branch events carry the alternate branches and their odds); none of
-  them seats a person in the realm. As built, a seated person would receive the person's View, Sensation, budget query and the shipped
-  chooser's proposal (`auto`), and no odds (`harness/play_surface.py:14-19`); a candidate set 22 to 56 verbs wide at round 0, 30 for
+  them seats a person in the realm. As built, a seated person would receive the person's View, Sensation, budget query and `auto`, the shipped
+  chooser, which it may call for a proposal, and no odds (`harness/play_surface.py:14-19`); a candidate set 22 to 56 candidates wide at
+  round 0 (uncommitted round-3 probe), from a 46-verb menu (§2.3 gate 1), 30 for
   Sæmund (§3 step 2), up to five times a season; and no continuation if the person dies: `succeed` is not resolvable (§4 H–J) and the
   King, `p_npc_020`, was dead after the first season in all three seeds probed in round 3 (§9). Crusader Kings II, Genghis Khan II and
   Old World continue the player through an heir (precedent: `research/game_precedent_suite/tutorials/T12_paradox_classical.md`,
@@ -634,7 +653,9 @@ at tick 1 (e.g. Hedda Kronvald's orthodoxy 3 folded into einhir_restoration, 1 �
 4. **"A budget above 5 is wasted."** Draft A1 §2.2 says so, citing `loop/deliberate.py:89-97`. Errata G11 recorded an in-tree
    dispute (`data/fixtures.py:497-502` treats the remainder as a cost budget). Round-2 ruling C1 resolves it in this tutorial's
    reading: what is capped is **scenes** (5 released, one per round); the excess **actions** pay for extended scenes (ceiling 10), and
-   Sæmund spent 8 actions in 4 scenes. A budget above 10 is the one that is wasted (§2.6, H-92). A travel leg does cost a seat-holder
+   Sæmund spent 8 actions in 4 scenes. A budget above 10 is always wasted, and the excess over 5 actions is spent only through extended
+   scenes: a scene that costs 1 (a one-act chunk, or the trim when one action is left, `decision/choose.py:653-655`) leaves budget unspent
+   below 10 too (§2.6, H-92). A travel leg does cost a seat-holder
    acts (9 → 7).
 5. **"Holds are offices."** `budget` counts every live hold, including every Record created and every Proposition uttered
    (`decision/budget.py:57`; `loop/effects_information.py:125-139`).
@@ -704,45 +725,49 @@ at tick 1 (e.g. Hedda Kronvald's orthodoxy 3 folded into einhir_restoration, 1 �
 Against `51d7b05` and the precedent suite (`research/game_precedent_suite/`; dispositions: `dispositions/D_T02.md`). Each line cited in this
 list was opened at `51d7b05`; "probe" is the round-3 re-run described in §9.
 
-- §7 "the only human seam is the harness `dispatching_chooser`" (D_T02 C1/E1) -> the only seam into the season loop is that chooser
+- §7 "the only human seam is the harness `dispatching_chooser`" (D_T02 C1) -> the only seam into the season loop is that chooser
   (`harness/play_surface.py:41-52`, tests only); outside the loop a stdin-played social contest
   (`systems/social_contest/sim/contest/agon_harness.py:148-155`) and two HTTP designer workbenches exist, and none seats a person in the
-  realm. Deviation from E1's text: only the combat trace is documented to carry branch odds
+  realm. Deviation from the draft's text: only the combat trace is documented to carry branch odds
   (`systems/combat/combat_engine_v1/workbench/server.py:9`), so the mass-battle server is not said to.
-- §2.6 "6.8–7.6 acts per person per tick (reached the fold) or 8.5–9.5 (formed), over 2 ticks and 83 → 74 persons" (D_T02 C2/E2; basis
-  fix, CROSSCUT F6) -> per tick, per person alive at its start: tick 0, 8.1 formed and 6.4 reached the fold (676 and 535 over 83 persons);
+- §2.6 "6.8–7.6 acts per person per tick (reached the fold) or 8.5–9.5 (formed), over 2 ticks and 83 → 74 persons" (D_T02 C2; basis
+  fix, errata R-F6) -> per tick, per person alive at its start: tick 0, 8.1 released and 6.4 reached the fold (676 and 535 over 83 persons);
   tick 1, 9.4 and 7.7 (731 and 597 over 78); maximum 15 in both ticks. The old range divided two-tick totals by the start and end head
-  counts, and 6.4 at tick 0 fell outside it. Evidence: probe, seed 0 (676 + 731 = 1,407 formed and 535 + 597 = 1,132 reached, as before).
-  The Round-2 line above, "acts per person-season ~6-8 ... 6.8–7.6 ... 8.5–9.5", is superseded by this one. Seeds 1 and 2 in the probe:
-  8.3 and 9.1 formed (seed 1), 8.4 and 9.7 (seed 2).
-- §2.6, §5 b6, trap 4 (D_T02 OW3/A23/E3) -> added: budgets drift up with paper (mean 5.57 at build, 6.41 after tick 0, 7.69 after tick 1;
+  counts, and 6.4 at tick 0 fell outside it. Evidence: probe, seed 0 (676 + 731 = 1,407 released and 535 + 597 = 1,132 reached, as before).
+  The Round-2 line above, "acts per person-season ~6-8 ... 6.8–7.6 ... 8.5–9.5", is superseded by this one. Seeds 1 and 2 in the probe
+  (uncommitted round-3 probe): 8.3 and 9.1 released (seed 1), 8.4 and 9.7 (seed 2).
+- §2.6, §5 b6, trap 4 (D_T02 OW3/A23) -> added: budgets drift up with paper (mean 5.57 at build, 6.41 after tick 0, 7.69 after tick 1;
   11 of 74 above 10, so unspendable); the tree's own comment calls the count "WIDER THAN OFFICES" and files it as H-92
   (`loop/deliberate.py:95, 107-109`). Trap 4 now says it is the budget above 10, not above 5, that is wasted.
-- §2.1 (D_T02 KD2/E4) -> added: the answer-after-each-action rhythm is King of Dragon Pass's (two actions a season), at four to five times
-  its rate in acts and 7.5 times at the ceiling. Deviation from E4's text: it said "four to seven times" beside "up to five scenes", and
-  five scenes against two is 2.5, so the multiple is stated in acts (8.1 and 9.4 against 2; 15 against 2).
-- §2.2 and §2.9 rule 2 (D_T02 E5b/E5c/E6) -> added: "salience" here is value fit (`queries/world_q.py:2295-2310`), not the storylet sense;
-  the attention tier and salience pick the subject, weighted sampling the verb. Deviation from E6's one-line text: it said "salience
+- §2.1 (D_T02 KD2) -> added: the answer-after-each-action rhythm is King of Dragon Pass's (two actions a season). Deviation from the
+  draft's text, which said "four to seven times" beside "up to five scenes": five scenes against two is 2.5. The first round-3 text
+  restated the multiple in acts (four to five times; 7.5 at the 15-act ceiling), which counted acts that are answered together; the
+  audit fix below states it in answers (2.5).
+- §2.2 and §2.9 rule 2 (D_T02 E5b/E5c) -> added: "salience" here is value fit (`queries/world_q.py:2295-2310`), not the storylet sense;
+  the attention tier and salience pick the subject, weighted sampling the verb. Deviation from the draft's one-line text: it said "salience
   picks whom you face", but the attention tier decides first and salience orders only inside tiers 0 and 3.
-- §7 "A seated player" (D_T02 GK5/A9/KD3/A2/E5) -> added: what a seat would receive (no odds, `play_surface.py:14-19`), the width of the
-  candidate set (22 to 56 at round 0) and no continuation on death. Deviation from E5's text: "the King dies within two seasons" is
-  sharper in the probe, since `p_npc_020` was dead after the first season at seeds 0, 1 and 2; "five times a season" is "up to five".
-- §2.1 and §5 a, "the loop has no ending condition" (CROSSCUT F12; PR #494) -> the season reports `world_q.endings_reached(w)` as `endings`
+- §7 "A seated player" (D_T02 GK5/A9/KD3/A2) -> added: what a seat would receive (no odds, `play_surface.py:14-19`), the width of the
+  candidate set (22 to 56 at round 0, uncommitted round-3 probe) and no continuation on death. Deviation from the draft's text: "the King
+  dies within two seasons" is sharper in the probe, since `p_npc_020` was dead after the first season at seeds 0, 1 and 2; "five times a
+  season" is "up to five".
+- §2.1 and §5 a, "the loop has no ending condition" (errata R-F12; PR #494) -> the season reports `world_q.endings_reached(w)` as `endings`
   (`loop/driver.py:518, 532`; `queries/world_q.py:1764`), a read over two `rosters.yaml: endings` rows that halts nothing. The realm as
-  built reaches none (`endings == []` after two ticks at seed 0), and `peninsular_sovereignty` is unreachable in computed play by its own
+  built reaches none (`endings == []` after two ticks at seed 0, uncommitted round-3 probe), and `peninsular_sovereignty` is unreachable in computed play by its own
   note (`rosters.yaml:2494-2553`). No goal is tested by it. §2.1 gained a note rather than a table row, so the step numbers stay.
 - §1 `goal` row and §5 a table: "minted as an OUGHT Proposition (35 rows)" -> 35 rows, of which 12 mint a Proposition and 23 are
   `orientation` (probe: 12 `goal_*` OUGHT Propositions in `build_realm(0)`: 6 `seat_holders`, 4 `deed_doers`, 2 `rung`). Found while
-  checking the "How it plays" draft, which said one per row; file 10 (T09, lines 73 and 152) also says "35 rows"; its line 152 already limits minting to non-`orientation` rows.
+  checking the "How it plays" draft, which said one per row; file 10 (lines 60, 193, 287) already limits minting to non-`orientation` rows.
 - Header and §9 -> the control-run path was a session-local directory and is now `ctl/` beside this file; the probe scripts are said to be
   uncommitted (they were session-local too).
-- New §0a "How it plays" (D_T02 Part 3). Differences from the draft: "mints one OUGHT Proposition per row" became the 64 / 46 / 6 / 12 split
-  above; "DELIBERATE refuses only ..." became "raises", with the three raise sites (`loop/deliberate.py:202, 220, 281`) and `Unspecified`
+- New §0a "How it plays" (its draft is not in the committed `dispositions/D_T02.md`, which has Parts 1 and 4). Differences from the draft:
+  "mints one OUGHT Proposition per row" became the 64 / 46 / 6 / 12 split
+  above; "DELIBERATE refuses only ..." became "raises", with the raise sites (`loop/deliberate.py:202, 220, 281`, and `:556-558` since the
+  audit fix below) and `Unspecified`
   for `exchange` (`loop/resolve.py:283-284`, executed); "8, 7 and 10 vacated" keeps the vacated counts and adds the still-vacant 8, 6 and
-  10 (probe); IN-27 is no longer called DESIGN-ONLY there, because its ending read is built (previous bullets).
+  10 (uncommitted round-3 probe); IN-27 is no longer called DESIGN-ONLY there, because its ending read is built (previous bullets).
 - Line cites in §§1-9 that PR #494 moved (taken at `a4ca9a5`; offsets from `git diff a4ca9a5 51d7b05`, each confirmed by opening a target):
   `queries/world_q.py` past :1738 by +125 (`attention_key` :2092 -> :2217-2332; `questions_for` :2249 -> :2374; the `with` stem :2717 ->
-  :2842; `ambitions` :1817 -> :1942; `members` :1365 -> :1368); `queries/person_q.py` past :419 by +90 (:580-581 -> :670-671; :680-720 ->
+  :2842; `ambitions` :1817 -> :1942) and before :1674 by +3 (`members` :1365 -> :1368); `queries/person_q.py` past :419 by +90 (:580-581 -> :670-671; :680-720 ->
   :770-810); `rosters.yaml` past :2488 by +66 (:2979-2985 -> :3045-3051; :2966-2986 -> :3032-3052; :2969-2978 -> :3035-3044);
   `data/fixtures.py` past :715 by +10 (:823, :837 -> :833, :847); `loop/driver.py` past :514 by +4 (:515 -> :519; :528 -> :532). Cites
   that did not move: `driver.py:449-456`, `fixtures.py:481, 488-489, 511`, `rosters.yaml:378-445, 1145`, `hole_register.yaml:1306`.
@@ -776,7 +801,7 @@ Ran (throwaway scripts of this audit, not committed; `cd /home/user/ttrpg`, HEAD
 - Not confirmed: which clause (death or purview) decided `case.unauthorized` on Yrsa. Both map to the same kind and both fail.
   The errata's "about half of mirror fights fell the actor" is not re-run here.
 
-Round 3 (HEAD `51d7b05`; throwaway scripts, not committed; `cd /home/user/ttrpg`):
+Round 3 (HEAD `51d7b05`; throwaway scripts, not committed, so every figure in this paragraph is an "uncommitted round-3 probe" figure; `cd /home/user/ttrpg`):
 - Opened: `decision/budget.py:15-90`; `loop/deliberate.py:84-120, 196-224, 236-290`; `loop/driver.py:440-460, 500-532`;
   `decision/choose.py:125-155, 372-395, 630-675`; `loop/matter.py:290-306, 508-556`; `loop/resolve.py:270-292, 386-402`;
   `queries/world_q.py:1764-1840, 2217-2345, 2374-2400, 2530-2550`; `harness/play_surface.py:1-60`; `harness/populated.py:470-480, 629-636`;

@@ -25,7 +25,7 @@ arrange to reach a goal. Rules that exist only in proposals are marked **[PROPOS
 - *Settlements and governance* (GV): offices (live `hold` Tenures) raise your scene budget; `capacity` counts dwelling Sites.
 
 **Status, one line.** WT: the containment ladder, presence, `move`, the leg cost and MATTER's leg end are **RUNS-IN-LOOP**. `migrate` is
-**TESTS-ONLY** (0 successes in 81, 143 and 143 attempts, seeds 0–2). Weather, hunger, ageing and illness are **RUNS-IN-LOOP at control**
+**TESTS-ONLY** (0 successes in 81, 143 and 143 acts that reached the fold, seeds 0–2). Weather, hunger, ageing and illness are **RUNS-IN-LOOP at control**
 (they run and do nothing at shipped values). Routes, terrain, exposure, POIs and foraging are **DESIGN-ONLY** (the data exists and no
 season code reads it). NP: cohorts, named persons, body bands, regard and `forgive` are **RUNS-IN-LOOP** (`forgive` executes at seeds
 0, 1 and 2). `tend` and `train` are **TESTS-ONLY** at every seed. `give` executes at seed 2 only (1 of 19), and `commit` at seeds 1 and 2
@@ -52,11 +52,12 @@ precedent tutorials' "how it plays" sections (`research/game_precedent_suite/tut
 
 **The loop** (one season = one tick; all of it automated).
 1. CALENDAR.
-2. MATTER: season factor (`matter.py:364`); larder draw, cohorts only (`world_q.py:1020`); hunger to body, skipped at `body_step` 0
-   (`matter.py:520`); ageing and illness, skipped (`matter.py:549`); debit and yield (`matter.py:560-606`); legs end (`matter.py:643-655`);
-   claim decay 5 (ERRATA G8).
+2. MATTER, in file order: claim decay 5 (`matter.py:317-347`, ERRATA G8) and standing crossings (`:351`); season factor (`:364`); larder draw,
+   cohorts only (`world_q.py:1020`); hunger to body, skipped at `body_step` 0 (`matter.py:520`); ageing and illness, skipped (`:549`); debit and
+   yield (`:560-606`); legs end (`:643-655`); wear 10 on harbour and seam (`:657-691`).
 3. Five rounds (`driver.py:449-456`): DELIBERATE recomputes each budget (`budget.py:57-61`) and releases one scene, charging it
-   (`deliberate.py:252-260`); RESOLVE folds; ENCOUNTER fights fields; WITNESS deposits by co-location.
+   (`deliberate.py:252-260`); RESOLVE folds; ENCOUNTER fights fields; WITNESS deposits by co-location and, for binding-decision kinds, to everyone (the chronicle channel,
+   `epistemic.py:649`; ERRATA C5).
 4. CENSUS individuates demanded persons (`census.py:35`); the season then reports `endings` (`driver.py:514-518`).
 
 **The choice menu.** Candidates are scored by pursuit alignment plus stance toward the subject and ordered with Gumbel noise at τ 0.1
@@ -66,7 +67,7 @@ precedent tutorials' "how it plays" sections (`research/game_precedent_suite/tut
 | verb | cost | effect | when a person picks it | grade (seeds 0, 1, 2) |
 |---|---|---|---|---|
 | `move` | one act; −1 point per leg until the next MATTER (`budget.py:60`) | `contain` moves, leg recorded (`effects_migration.py:91-119`) | the question's referent is a rung; a person rung or a non-rung is formed and refused | RUNS-IN-LOOP (16, 17, 12 executed; at seed 0 all to where the mover stood) |
-| `migrate` | as `move` | `reside` moves if `population + weight ≤ capacity` (`effects_migration.py:203`) | his ledger names a rung he does not live under (`world_q.py:2111-2146`) | TESTS-ONLY (0 of 81, 143, 143) |
+| `migrate` | as `move` | `reside` moves if `population + weight ≤ capacity` (`effects_migration.py:203`) | his ledger names a rung he does not live under (`world_q.py:2111-2146`) or, for a seat-holder, a stocked larder his seat reaches (`world_q.py:2148`, spliced at `:2540-2545`) | TESTS-ONLY (0 of 81, 143, 143 that reached the fold) |
 | `tend` | one act | subject's body to 1000 (`effects_combat.py:371-393`) | a living person "with" him, or himself | TESTS-ONLY (0 of 34, 22, 19) |
 | `train` | one act | +1 in a key the subject holds | a vocation key exists (only `copying`) | TESTS-ONLY (0 of 38, 30, 30) |
 | `forgive` | one act | his negative rows on the referent deleted (`effects_combat.py:431-450`) | only when he holds such a row | RUNS-IN-LOOP (1, 2, 2) |
@@ -88,14 +89,18 @@ precedent tutorials' "how it plays" sections (`research/game_precedent_suite/tut
 
 **What changes later.** Budgets diverge: holders mint holds and reach the 15-act ceiling while the wounded fall toward 2–3 (`budget.py:57-61`,
 §3a). Seats without a conferral basis empty and stay empty (§5c). Harbours and seams lose 10 condition a season (`rosters.yaml:1465-1470`), so
-grain cover is about 10 seasons and yield reaches 0 at tick 100 without `restore` (C9). Nothing else drifts: no ageing, births, stance decay or
-weather year.
+yield reaches 0 at tick 100 without `restore` (C9); grain cover of about 10 seasons is a separate stock-against-draw figure (C9). Also drifting:
+larders grow (§3b: `set_s_001` 40/30/50/10 → 75/57/99/19 in two seasons), claims decay 5 a season (`matter.py:317-347`;
+`claim_decay_per_season`, `fixtures.py:293`) and ledgers fill toward the cap of 200 (13 of 74 at the cap at seed 0, ctl). Not drifting: age,
+births, stance and weather.
 
 **Failure and ending.** The loop does not stop on an ending: the season reports `endings`, a read and never an actor (`driver.py:514-518`;
 `world_q.py:1764`), and the realm as built reaches none (`endings` is `[]` in both seasons at seed 0). The only failure in this lane is death,
 and at shipped values only combat kills (G9; `matter.py:520, 549`). Death is final and closes every tenure naming the dead (`world.py:645-656`);
-nobody heals passively and nobody inherits (`verb_table.yaml:1113`). A settlement does not fail in the run: its cohort never starves at shipped
-values, never shrinks and never grows (0 cohort deaths in seeds 0–2; one `Felled` would delete it whole, ERRATA C1).
+nobody heals passively and nobody inherits (`verb_table.yaml:1113`). A settlement's cohort never starves at shipped values and its weight never
+changes, but it can be deleted whole by one `Felled` (ERRATA C1). No cohort dies at seeds 0 and 1; at seed 2 one is gone by the end of season 2:
+ctl shows `pursuits empty` 36 against 37 at seeds 0 and 1 with 72 alive, only cohorts have empty pursuits, and the 11 deaths are 10 named persons
+and `cohort_set_s_029` (uncommitted round-3 probe; every death there is an `accept` or `fight`).
 
 **Consequential vs cosmetic choices.**
 - Consequential: holds (+1 point each, `budget.py:57`); wounds (−1 point per band, `budget.py:64-83`); a leg in an early round (one or two acts,
@@ -112,7 +117,7 @@ values, never shrinks and never grows (0 cohort deaths in seeds 0–2; one `Fell
   exposure (M-WT-3, -4); `travel` (a same-place journey not formed, H-140), `explore`, `forage` (MB's), `tie`, `marry`, `hire`, `defect`,
   `succeed` (GV's), `pledge`.
 - [PROPOSED] Recovery: passive recovery with announced upward crossings (M1, H-211) and a care degree (M2) would make a wound cost time.
-- [PROPOSED] Failure and ending: none proposed in T10's sources. Births are ruled out for now (ED-WR-0011, §7), so a death is answered by
+- [PROPOSED] Failure and ending: none proposed in T10's sources. Births are ruled out for now (ED-WR-0011, §7; the cast is closed in the run, not by construction), so a death is answered by
   no birth; estate transmission at death is M11. Even with RB-5, hunger binds only before the first yield (G18, C9).
 
 ## 1 The pieces
@@ -267,8 +272,9 @@ So every point counts. A hold adds two acts when it turns a trailing single into
 Observed, on two bases (name one whenever you quote the figure): `d.resolved` (acts that reached the fold) gives 1,132 acts over about
 74–83 persons and 2 seasons, about 7 per person-season (per-season means 6.3–8.0, §9); the act store (`w.acts`, every act passed to
 RESOLVE, `resolve.py:967`, each charged at release, `deliberate.py:252-260`) gives 676 then 731 acts at seed 0, 8.14 then 9.37 per
-acting person, maximum 15 (seed 1: 8.27 then 9.08; seed 2: 8.45 then 9.69; re-run at `51d7b05`). `d.resolved` is appended only inside the fold (`resolve.py:377-379`), so it omits acts refused at admission or at the contest branch
-(`resolve.py:1012-1030`, which `continue`s past the fold). The act-store mean passes the base
+acting person, maximum 15 (seed 1: 8.27 then 9.08; seed 2: 8.45 then 9.69; re-run at `51d7b05`). `d.resolved` is appended on entry to the fold (`resolve.py:377-379`), before the fold's own precondition check, so ordinary admission
+refusals are counted. It leaves out three sets: acts whose actor was already gone (`resolve.py:974-977`), refusals for an obstacle too high for
+the pool (`:981-998`), and contested or graded acts refused by `_admits` before the seam (`:1025-1032`). The act-store mean passes the base
 7 because live holds grow from 47 to 121 during season 0 (`utter`, `create_record`) and the remainder is recomputed every round.
 
 | your body | bands below | penalty |
@@ -291,8 +297,10 @@ conflict (ERRATA G11 is resolved this way by cross-ruling C1). A leg or a wound 
 - **Bodies fall** in combat (`fight`/`accept` through the PC seam; a lost field in `march`, `effects_combat.py:293-299`, which no seeded season reached) and, if switched
   on, in MATTER. They rise only by `tend` (`effects_combat.py:370-393`). Upward band crossings emit nothing (H-211). Downward ones emit only from MATTER's hunger write (`matter.py:530`, the one call of
   `_crossings` for a body); a combat wound crosses floors without a `condition.band_crossed` Event, so no body crossing fires in the realm
-  run (seed 0, two seasons: 6 `body.changed`, 0 `condition.band_crossed`). A fight writes only its subject; the
-  actor is never written (ERRATA C1; `effects_combat.py:41-43`, `:179`), so a killing marks no winner.
+  run (seed 0, two seasons: 6 `body.changed` by ctl; 0 `condition.band_crossed` by an uncommitted round-3 probe). The fight's effect writes only its
+  subject's body, and the actor's body is never written (ERRATA C1; `effects_combat.py:41-43`, `:179`). The RESOLVE fold may still scar the actor
+  like any other observer (`loop/resolve.py:597-606, 644-650`; `scar_excludes_actor=False`, `fixtures.py:695`; `fight` violates eight pursuit
+  elements by `elements_violated_by`), so the effect marks no winner, but his `scar` can move.
 - **Grudges** are written at runtime only by `march` (one row `(winning faction, −1.0, field_grudge_weight 1)` and one morale row
   against your own faction, `effects_combat.py:300-306`) and removed only by `forgive` (ERRATA C1). The referent of a battle grudge is
   a *faction Proposition*, not a person. Seeded stance rows come from the cast's loyalty at build. Nothing decays a stance row: no MATTER
@@ -373,8 +381,8 @@ The same arithmetic on the *swept* arms (formula only, not run): at `body_step =
 After that, no cohort in this realm is short within the horizon above. So even switched on, hunger here is one bad first season, not
 a famine.
 
-**3c. Why a settler is refused.** In seed 0, 72 of the 81 `migrate` attempts name `b_s_001_court`, a hearth with one dwelling
-(capacity 1) where 8 people reside. A named settler: `8 + 1 = 9 > 1`, refused. A cohort: `8 + 2 = 10 > 1`, refused. All 81 attempts reach
+**3c. Why a settler is refused.** In seed 0, 72 of the 81 `migrate` acts that reached the fold name `b_s_001_court`, a hearth with one dwelling
+(capacity 1) where 8 people reside. A named settler: `8 + 1 = 9 > 1`, refused. A cohort: `8 + 2 = 10 > 1`, refused. All 81 reach
 the effect and all 81 fail the capacity test; none is a same-home or custody refusal, and the smallest overshoot is 1. Note also that
 a **cohort cannot settle in any hearth at the shipped build**: an empty one gives `0 + 2 = 2 > 1`. A hearth with two or more dwellings,
 which `found`/`build` could create (`world_q.py:1317-1321`, 0 executions in the run), would change that. Today only a settlement or
@@ -383,7 +391,7 @@ capacity 7 would admit one.
 
 ## 4 What you can do
 
-| verb | prerequisites | cost | who | outcome | writes | realm run (attempted / ok, seeds 0, 1, 2) |
+| verb | prerequisites | cost | who | outcome | writes | realm run (reached the fold / ok, seeds 0, 1, 2) |
 |---|---|---|---|---|---|---|
 | `move` | typed cell `contain_path` (of: actor, to: to): destination is a rung sharing an ancestor (true everywhere under the realm, false into or out of Schoenland's T16); effect-side: not in custody, destination kind above `person` | one act in a scene, plus 1 budget point per leg for the rest of the season | anyone, self only (`own`) | deterministic, no dice: arrive, or `travel.blocked` | `contain` close/open, `travel_leg` | 42/16, 35/17, 40/12 |
 | `migrate` | as `move`, plus not already home, plus room at the destination (`population + weight ≤ capacity`) | as `move` | anyone, self only | `residence.changed`, or `travel.blocked` (no path) / `migrate.refused` (write) | as `move`, plus `reside` close/open | 81/0, 143/0, 143/0 |
@@ -392,15 +400,17 @@ capacity 7 would admit one.
 | `forgive` | you hold at least one negative stance row naming the subject (the Candidate is only formed then) | one act in a scene | anyone, own rows | all your negative rows toward that referent are deleted; positive rows stay | your own `Person.stance` | 1/1, 2/2, 2/2 |
 | `give` | typed cell `all: [existence(subject, Record), relation(subject, held_by), relation(to, with)]`: you hold the Record and the receiver is with you | one act in a scene | the holder | your `hold` closes, theirs opens, one write: `record.given` | Tenure `until`/`since` | 16/0, 21/0, 19/1 |
 | `commit` | typed cell: `existence` of the subject, kind Proposition (`verb_table.yaml:171-175`) | one act in a scene | anyone. No code gate stops a cohort; none did in the run (NP-G36 is a [PROPOSED] gap row) | `commitment.made` | `commit` Tenure | 61/0, 56/1, 63/1 |
-| `oblige` | (sworn service to a seat) | one act in a scene | the joiner | `duty.taken` | `oblige` Tenure | not attempted, 24/22, not attempted |
+| `oblige` | (sworn service to a seat) | one act in a scene | the joiner | `duty.taken` | `oblige` Tenure | none reached the fold, 24/22, none reached the fold |
 | `release` | a live edge of yours in its domain (`hold, commit, oblige, succeed, tie, knot`) | one act in a scene | owner | `tenure.closed` | edge `until` | 45/3, 44/5, 46/3 |
 | `succeed`, `tie / knot` | rows present, effects **declined** | — | — | nothing; `succeed` declares `heir.designated` but nothing emits it | nothing | not in the menu |
 
 Sources: rows at `verb_table.yaml:863` (move), `:839` (migrate), `:1146` (tend), `:1451` (train), `:453` (forgive), `:533` (give), `:167`
 (commit), `:878` (oblige), `:965` (release), `:1096` (succeed), `:1439` (tie / knot); effects at `effects_migration.py:24,122` and
 `effects_combat.py:370,396,430`. No verb in this lane rolls dice. Every outcome is a deterministic precondition and effect, and the
-degree is the identity on an uncontested row (`effects_combat.py:376-378`). Run columns are **attempted/ok**: "attempted" counts acts
-that passed admission and reached the fold (`resolve.py:377-379`), so refusals at admission are not in the count (cross-ruling C2).
+degree is the identity on an uncontested row (`effects_combat.py:376-378`). Run columns are **reached the fold / ok** (ctl's `att` column), which counts acts
+that reached the fold (`resolve.py:377-379`, appended on entry), so the fold's own precondition refusals ARE in the count (`tend` 0/34 below
+includes 20 of them). Left out are acts whose actor was already gone (`:974-977`), refusals for an obstacle too high for the pool (`:981-998`)
+and contested or graded acts refused by `_admits` before the seam (`:1025-1032`).
 
 Why the zeros (my probes, seed 0):
 - **`tend` 0/34**: 30 targets were others and 4 were self. 20 were refused at the typed precondition, before the effect. Which conjunct
@@ -455,8 +465,8 @@ the *state* it moves:
 place or seen its larder drawn. Then pick one with room: `population + your weight ≤ capacity`. For a named person (weight 1), that means
 an empty hearth (185 of 211 at seed-0 build) or a settlement or territory below capacity. For a cohort (weight 2) it means a
 settlement or larger with two spare places; no hearth at the shipped build (each has one dwelling). Capacity rises only with
-dwelling Sites (`found`/`build`, `world_q.py:1317-1321`; 0 executions in the run). The chooser does not read room, and it offers only rungs your own ledger names (`world_q.py:2111-2146`, `places_named`); at seed 0
-every computed destination was an occupied hearth (81 of 81: 62 by cohorts, 19 by named persons), and none of the 185 empty ones was ever
+dwelling Sites (`found`/`build`, `world_q.py:1320-1324`; 0 executions in the run). The chooser does not read room, and it offers only rungs your own ledger names (`world_q.py:2111-2146`, `places_named`) or, for a seat-holder, a stocked larder his seat reaches (`larders_in_purview`, `world_q.py:2148`, spliced at `:2540-2545`). That second source does not exclude a rung above his home, and for such a rung `_eff_migrate`'s newcomer test is false, so capacity is never checked (`effects_migration.py:201-203`). At seed 0
+every computed destination was an occupied hearth (81 of 81: 62 by cohorts, 19 by named persons; uncommitted round-3 probe), so that case did not arise, and none of the 185 empty ones was ever
 chosen. So in practice persons keep naming the full court hearth of S-001. Nobody can settle into or out of Schoenland (no shared ancestor, §2.2).
 
 **Keep someone alive.** Wounds come from `fight`/`accept` (and from a lost field, which no seeded season reached). Then: go where the
@@ -482,7 +492,7 @@ holds `copying`, each act adds 1. That means one more die for the verbs `verb_ca
 "gates nothing": it adds dice and opens no option.
 
 **What a settlement's people can and cannot do.** A cohort chooses like anyone. It can `move` (14 of the 16 executed seed-0 moves were
-cohorts, all to their own settlement), attempt `migrate` (62 of 81 attempts), `survey`, `work` and others. No code gate stops it from
+cohorts, all to their own settlement), attempt `migrate` (62 of the 81 that reached the fold), `survey`, `work` and others. No code gate stops it from
 committing to a faction (`commit` needs only an existing Proposition); none did in the run, and NP-G36's "cohorts cannot commit" is a
 [PROPOSED] gap row, not a built rule. It holds no seat and so cannot act through one. Its weight never changes: there are no births, no growth, and no partial migration, so "famine
 cannot empty a town". It eats where it stands. One `Felled` deletes it whole (ERRATA C1).
@@ -510,7 +520,7 @@ cannot empty a town". It eats where it stands. One `Felled` deletes it whole (ER
   nearness, roads, mountains and rivers are not inputs to any choice.
 - **Staying is rewarded over going** by exactly one budget point per destination. Nothing pays you for arriving except presence.
 - **The journey to where you stand is a dominated option the chooser still takes** (16 of 16 executed seed-0 moves).
-- **`migrate` is a dead end in the realm**: 0 successes in 367 attempts over three seeds, each attempt charged a scene.
+- **`migrate` is a dead end in the realm**: 0 successes in 367 acts that reached the fold over three seeds, each charged a scene.
 - **`train` is a dead end by construction** (no key holders); **`tend` is reachable but idle** (bodies stay whole outside combat).
 - **Hunger and age are switched off**, so keeping a settlement fed or a person young rewards nothing; even with `body_step` on, the
   realm's larders run ahead of demand after the first MATTER (tick 0), within the horizon in §3b; and no fixture value lets hunger move a
@@ -592,7 +602,9 @@ alone cover is about 10 seasons, cross-ruling C9). Ageing and illness rates are 
 - **[PROPOSED] `hire`** (EC's row, R-01) and **`defect`** (close A, open B in one write, `allegiance.changed`; medium confidence).
 - **[PROPOSED] `succeed`** as the heir's claim (GV's row, R-11; IN-61; waits on M12, a vacancy reaching the heir); `oblige` → **`pledge`**.
 - **[RULED, Jordan 2026-09-13] no births for now: ED-WR-0011**, Option A, a closed authored cast of 46 with no season-tick generation
-  ("We will return much later"; `registers/editorial_ledger_wr_archive.jsonl`, its later row); `es/loop/census.py:39-40` holds it. L18
+  ("We will return much later"; `registers/editorial_ledger_wr_archive.jsonl`, its later row); `es/loop/census.py:39-40` holds the "no clock
+  generates" half, but a `dispatch` naming an absent id can still individuate one person (`census.py:46-99`; a Person is built at `:106`), so the
+  cast is closed in the run (`person.individuated` 0 at seeds 0–2, ctl), not by construction. L18
   (`…-18-lexicon-npc-life-and-persons.md:85-86`, `:705`) still calls the row open: it read the superseded first row. `rear`, children
   and the dynastic layer stay PARKED on that ruling.
   Estate transmission at death is M11. Household has no source at all.
@@ -685,7 +697,7 @@ its playable calendar is Days 1–11 and Day 12 is the ending text [CONTESTED] (
 12. **Acts per person-season (L X10).** The basis is named: `d.resolved` 1,132 acts, seed 0, 2 seasons, about 7; per-season means 6.3–8.0.
     The draft errata's "~8-10" is not supported on the `d.resolved` basis the ctl files use; it is supported on the act-store basis
     (8.1, 9.4; see Round-3 corrections). §2.5, trap 9.
-13. **Column order and tick names (L X19, X20; C2, C3).** Run columns are attempted/ok, with "attempted" meaning admitted to the fold.
+13. **Column order and tick names (L X19, X20; C2, C3).** Run columns were attempted/ok, with "attempted" meaning admitted to the fold (now "reached the fold", Audit fixes 3 and 19).
     MATTERs are named by tick (the first at tick 0); §3b had said "season 1 MATTER".
 14. **Grades per seed (C12, L X4).** §0 now states `give` executes at seed 2, `commit` at seeds 1 and 2, and both are TESTS-ONLY at seed 0.
 15. **Primitives (C11).** Added one-clause definitions of Tenure, hold/Office, Record/Proposition, "with" and round to §1.
@@ -697,7 +709,7 @@ Nothing in the round-2 findings for T10 did I reject.
 1. **Acts per person-season** (D_T10 row 36). Old: "about 7 per person-season ... the draft errata's ~8-10 is not supported by the ctl files".
    New: two bases. `d.resolved` gives about 7 (6.3–8.0); the act store gives 8.14 then 9.37 at seed 0, maximum 15 (676 and 731 acts; seed 1
    8.27, 9.08; seed 2 8.45, 9.69), so ~8–10 is supported on that basis. §2.5, trap 9, round-2 item 12. Evidence: `resolve.py:377-379, 967,
-   1012-1030`; `deliberate.py:252-260`; re-run of the seed-0 control. (The overview's "~8–10 acts observed" needs the same two bases.)
+   974-977, 981-998, 1025-1032`; `deliberate.py:252-260`; re-run of the seed-0 control. (The overview's "~8–10 acts observed" needs the same two bases.)
 2. **Hunger and the score** (row 8). Old: silent. New: `urgency(subsistence)` is added identically to every candidate and cannot change a
    decision, so switched-on hunger would reach choice only through bands and Events. §2.4 step 3, §5d. Evidence: `choose.py:217-238`.
 3. **The zeros and their controls** (rows 18, 37). Old: `migrate` 0/81 "capacity", `tend` untended wounds. New: seeds 1 and 2 reach the
@@ -710,7 +722,7 @@ Nothing in the round-2 findings for T10 did I reject.
    would apply one shared hazard (formula, not run). §2.4 step 4. Evidence: `world_q.py:1004-1008, 1015`; `fixtures.py:608`; `carriers.py:687`.
 6. **Death without succession** (rows 5, 24, 90; also-row 7). Old: "no successor mechanism (`succeed` is declined)". New: 7 of 32 offices
    have no conferral basis (ids listed, §5c), so they never refill; vacant at the end of season 2: 8, 6, 10 (null-basis seats 3, 5, 6); the
-   King is dead after the first season at all three seeds; one refill in total across the three seeds (seed 1). Errata C8 and the T08/T09 files say six: seven.
+   King is dead after the first season at all three seeds; one refill in total across the three seeds (seed 1). Errata Part 2 C8 said six; Part 3 R-F1, T08 and T09 say seven.
    Evidence: `state/gate.py:643-657`; `predicates.py:126-127`; `verb_table.yaml:1113`; re-run of the realm, seeds 0–2.
 7. **What a fight and a grudge leave** (rows 57, 61). Old: silent. New: a fight writes only its subject; nothing decays a stance row, and the
    write matrix refuses a stance write at MATTER. §2.6. Evidence: `effects_combat.py:41-43, 179, 306, 449`; `state/world.py:58-61`.
@@ -730,7 +742,7 @@ Nothing in the round-2 findings for T10 did I reject.
     seams exist (`agon_harness.py`, two workbench servers).
 14. **New section `## 0a How it plays`** (D_T10 Part 3), re-verified line by line against `51d7b05`. Differences from the draft: the ending
     line (item 12), the births line (item 10), the player-interface qualifier (item 13), `world_q.py` cites moved by #494, and "a settlement
-    cannot fail" became "does not fail in the run" (0 cohort deaths; one `Felled` would delete a cohort).
+    cannot fail" became "does not fail in the run" (0 cohort deaths at seed 0; at seed 2 one cohort is gone, Audit fixes 1).
 15. **Scratchpad paths removed** from §3 and §9; the probe scripts are not committed.
 
 ## 9 Checks
@@ -769,7 +781,7 @@ Ran (all `python -I`, read-only; the probe scripts are not committed, the contro
   (read only).
 - Round 3, ran (`python -I`, read-only, seeds 0–2, two seasons, the `ctl/control.py` recipe; scripts not committed): per-season store and
   `d.resolved` act counts, deaths, verb counts and live holds (seed 0: 676 and 731 acts, 535 and 597 resolved, holds 47 → 121, deaths 5
-  and 4, no cohort death; seeds 1 and 2 as in Round-3 correction 1); start budgets (52 at 5, 27 at 6, 1 at 7, 2 at 10, 1 at 13);
+  and 4, no cohort death; seeds 1 and 2 as in Round-3 correction 1; at seed 2 `cohort_set_s_029` is gone by the end, from a separate audit-fix probe); start budgets (52 at 5, 27 at 6, 1 at 7, 2 at 10, 1 at 13);
   conferral of every office and the vacant seats at the end (null-basis seats 7 of 32 at every seed; vacant 8, 6, 10; King dead at every
   seed); `confer` acts (0, 5, 0; seed 1 one `tenure.opened`, four `confer.refused`); a wrapped `migrate` effect (seed 0: 81 of 81 to occupied
   hearths, 62 cohort and 19 named); `endings` returned by each season (`[]`); `condition.band_crossed` count (0 beside 6 `body.changed`);

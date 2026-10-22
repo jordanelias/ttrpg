@@ -1,7 +1,9 @@
 # Tutorial: Resolution and dice — how a contested act becomes one of four degrees, and what moves the odds
 
 Repo `jordanelias/ttrpg` at HEAD `a4ca9a5`. Every number below was read from the code or computed by calling the repo's own
-functions; the commands are in §9. Paths are relative to the repo root. Revised in round 3 against `51d7b05` (PR #495 on top of PR #494)
+functions, except the precedent shapes (PbtA, Blades, d20, 2d6, 3d6), which are hand arithmetic; §9 lists what was opened and what was
+run. The round-3 figures were computed by scripts that are not committed (`ctl/` is the only committed instrument); §9 names each
+computation. Paths are relative to the repo root. Revised in round 3 against `51d7b05` (PR #495 on top of PR #494)
 and the game-precedent suite (`research/game_precedent_suite/`); the changes are listed under §8, "Round-3 corrections".
 
 ## 0 Before you start
@@ -39,8 +41,10 @@ means no executing code. On that rule:
 Every code line below was opened at `51d7b05`. The as-built text comes first; the [PROPOSED] block closes the section and none of it executes.*
 
 **Setup choices.**
-- Nothing about dice is chosen at world build except the seed. `build_realm(seed)` seats a cast whose `capability` is empty for every
-  person (`ctl/realm_seed0_2seasons.txt:59`; seeds 1 and 2 `:60`), so the social pool is `pool_default` = 2 and any Ob without a scored
+- Nothing about dice is chosen at world build except the seed. `build_realm(seed)` seats a cast whose `capability` the code states is
+  empty on every corpus person (`seam/wrappers/sigma.py:123`), and `train` mints no key (`verb_table.yaml:1468`). The run bears it out:
+  every person alive after two seasons has an empty `capability` (`ctl/realm_seed0_2seasons.txt:59`, counted at run end by
+  `ctl/control.py:29`; seeds 1 and 2 `:60`). So the social pool is `pool_default` = 2 and any Ob without a scored
   opponent is `obstacle_default` = 2 under `obstacle_ceiling` = 2 (`fixtures.py:413-419`). TN is 7 and the owner refuses any other value
   (`dice_engine.py:182-193`). Those fixtures are injected, swept stand-ins (H-126, H-127, H-213), not choices.
 - A person at the callback (`harness/play_surface.py:41-52`; TESTS-ONLY, because the season loop has no player interface of its own)
@@ -75,7 +79,8 @@ No verb buys dice, lowers an Ob or adds advantage at a price; the `speak` room i
 put a spend before the roll (T05 precedent, BG3 §3: Add Bonus; Disco §3: clothing and drugs before a check); this one has none.
 
 **First season, step by step** (seed 0, tick 0; the faces were re-derived at `51d7b05` from `ids.draw_factory`):
-1. `build_realm(0)`: every `capability` is empty (`ctl/realm_seed0_2seasons.txt:59`).
+1. `build_realm(0)`: every `capability` is empty (`sigma.py:123`); the ctl count (`ctl/realm_seed0_2seasons.txt:59`) is over survivors
+   at run end, so it bears this out but cannot show the nine dead were empty at build.
 2. DELIBERATE: `p_npc_086` forms a `tell` to `p_npc_010` (§3).
 3. RESOLVE admits it. Pool 2 (no `copying` key); Ob 2 (the hearer holds no key, and `tell` has no room); leverage 0.
 4. `draw_factory(0, tick 0)("p_npc_086", "roll:a standing:762758bdca098db1")` deals 8 and 10: net 3, margin 1, Success.
@@ -424,16 +429,23 @@ degree also rides on the Event (`Event.degree`, `state/carriers.py:260`).
   override of its own odds: `UPSET_FLOOR` = 0.05 (`modules/combat/config.py:295`, "DESIGNER RULE — Jordan", ED-PC-0036) makes the
   decided loser the `winner` with probability 0.05 (`modules/combat/wrapper.py:526-529`). The season reads the wound bands, never
   `result` (`seam/ladder.py:141, :155`), so the flip does not reach the fold (H-119, `engine/season/hole_register.yaml:2393`: the
-  reported winner is the felled fighter in 6.06 % of 300 seeded fights). The social path has no such floor: pool 2 / Ob 2 can never be
-  Overwhelming, and pool 1 / Ob 2 can never reach Success. The "no matchup is certain" floor therefore differs by resolver. [precedent:
+  reported winner is the felled fighter in 6.06 % of 300 seeded fights). The social path has no fixed floor, but its pass/fail line is
+  never certain at a pair S27.4 admits: the refusal (Ob > 2 × pool, `sigma.py:273`) removes exactly the pairs above the dice's maximum
+  net (2 × pool, all tens), so Partial-or-better is at least 0.1^pool (1 % at pool 2 / Ob 4, Table A) and Failure is never 0 at Ob > 0.
+  Its certain zeros are in the upper bands: pool 2 / Ob 2 can never be Overwhelming, and pool 1 / Ob 2 can never reach Success. The
+  floor is 5 % in combat (on `winner` only, above) and 0.1^pool here, so the "no matchup is certain" guarantee differs by resolver. [precedent:
   BG3's natural 1 and natural 20 on attacks and ability checks, and Disco's snake-eyes rule (no active check above 97.2 % or below
   2.8 %), keep a check short of certain; `research/game_precedent_suite/tables/R4_combat_social_rpgs.md`.]
 - **Mass battle.** `march` resolves at ENCOUNTER through `modules/mass_battle/resolution.py`, which copies the face rule, the 0.800
   spread and the ladder (with a 1e-9 epsilon) rather than importing them. Two guard tests hold the copies equal:
   `tests/valoria/test_degree_ladder_single_owner.py` the ladder (per `resolution.py:104-112`), and
   `tests/valoria/test_tn7_always.py::test_the_mass_battle_roller_uses_the_same_face_window` (`:95`) the face rule. The per-die μ/σ
-  literals are typed in four files (`dice_engine.py:174-175`, `sigma_leverage.py:78, :112-113`, `resolution.py:227` for σ,
-  `engine/reference/contest-groundup/engine.py:35`). The season grades the field Won / Lost / Unopposed.
+  literals are typed in five files (`dice_engine.py:174-175`, `sigma_leverage.py:78, :112-113`, `modules/mass_battle/resolution.py:227`
+  for σ, `modules/mass_battle/config.py:306` for μ, `engine/reference/contest-groundup/engine.py:35`), plus the oracle copy
+  `tests/sim/v32-combat-balance/m1_dice_sigma_core.py:28`. Only the engine pair is pinned (`test_tn7_always.py:172-179` asserts
+  0.40 / 0.800 in `dice_engine` and `sigma_leverage.PER_DIE`); neither mass-battle copy is guarded. No test pins the mass-battle σ
+  magnitude (`test_degree_boundary_epsilon.py:158-165` checks sign and zero only), and its μ is checked by `pytest.approx(0.4)`
+  (`tests/valoria/test_fractional_pool.py:31`). The season grades the field Won / Lost / Unopposed.
 - **Fieldwork.** The three graded inquiries roll here (§4); `forgery_quality` from an examined Record is their one Ob modifier, and it
   is inert under the ceiling.
 - **Witness.** It reads the degree: a Partial `tell` can be copied lossily (`witness.py:136-139`).
@@ -619,6 +631,23 @@ Ran (`PYTHONDONTWRITEBYTECODE=1 python -I`, scripts in the scratchpad, repo read
 - `t01_example.py`: captured faces per act in seed 0, tick 0, and re-derived each from `H(seed, tick, actor, purpose)`; all matched.
   Examples used in §3: `p_npc_086` → `p_npc_010` [8, 10] Success; → `p_npc_007` [5, 1] Failure; `p_npc_041` `speak` [2, 6] Failure.
 - Control-run files `ctl/realm_seed{0,1,2}_2seasons.txt` for attempted counts.
+
+Ran at `51d7b05` (round 3; scripts not committed). `git diff --stat 51d7b05 HEAD -- engine modules systems` is empty, so the code is the
+same at the current HEAD; the act-store, `p_success` and pools 1–40 computations below were re-run in the audit-fix pass with the same
+figures. Each round-3 figure comes from one of these:
+- **Act store against `d.resolved`.** Build the realm and run two seasons as `ctl/control.py:6-11` does, then take the ids in `w.acts`
+  that are not in `d.resolved`, by `act.verb` and by the first-cause event kind. It gives the 275 beyond `d.resolved` at seed 0 (1,407
+  against 1,132; seed 1 1,394 against 1,122; seed 2 1,447 against 1,175), and at seed 0 `research` 111, `examine` 62, `surveil` 21,
+  `speak` 19, `argue` 10 and `act.ineligible` 19. By seed it also gives `argument.refused` 10 / 17 / 15 plus 3 `act.ineligible` at
+  seed 2, `determine.refused` 2 / 5 / 2, and `examine` formed 62 / 59 / 39.
+- **`sigma_leverage.p_success(ob, pool)`.** Called at (2, 2), (1, 2), (2, 5) and over pools 1–5 × whole Ob up to 2 × pool, set against the
+  exact dice odds: it understates at every admitted pair (10–15 points at pool 2–5 / Ob 1–2; 17.3 at pool 1 / Ob 1; 0.8 at pool 2 /
+  Ob 4) and gives 0.0006 at the refused pool 1 / Ob 3, where the dice give 0.
+- **Exact odds.** `_die_result` convolved over faces 1–10 for pools 1–40, banded by `degree_from_net` at every whole Ob from 0 to
+  2 × pool: Tables A and B, the largest Partial share at Ob ≥ 1 (32.0 %, pool 2 / Ob 1), and the single modal-Partial cell (pool 1 /
+  Ob 0, 50 %).
+- **Hand arithmetic, not the repo's functions.** PbtA P(2d6 + m in [7, 9]) for m = 0 / 1 / 2 (15/36, 16/36, 15/36); Blades
+  (5/6)^n − (1/2)^n for n = 2 / 3 / 4 dice; the d20, 2d6 and 3d6 comparison figures in §3.
 
 Not confirmed: `world_q.reception`/`proofs` bodies (docstrings only); that the seam's `fight` call reaches `wrapper.py`'s `core.resolve`
 lines (composition row and grep only); `decision/choose.py:149` (cited from D06, not opened); the proposal extracts' document claims

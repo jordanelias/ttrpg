@@ -37,18 +37,25 @@ acts take effect; a **seam Event** is the only driver allowed to write `(Person,
 **Calamity** is, in canon, "an over-drawing of the substrate … What came through the resulting fracture were threadcut beings"
 (`canon/00_philosophical_foundations_rules.md:83`); **no code defines it**. The only code that named it,
 `check_calamity_threshold(world) -> CalamityState`, read the world-level Rendering/Mending Stability bands down to the Rupture and is
-struck for want of a carrier (`systems/threadwork/sim/rendering.py:33-37`); in the proposals ([PROPOSED]) the Calamity becomes territorial
-strain that live weaves and locks add to a place and that `mend` holds back (IN-35; §5(e), §7). A **Locked Zone** is, in canon, "a place
-where becoming has been precluded … Persists indefinitely, because the process that would undo it is the one precluded"
-(`canon/philosophy/09_terminology.md:117`); **no code defines it**. The term is registered as a mechanic name with no definition
-(`references/alias_registry.yaml:374-377`) and is used once in code, in a docstring: a mender "standing in a Locked Zone" is outside the
-equilibrium that `recover` needs, which is why `environment_in_equilibrium` defaults to False (`operations.py:544-548`; a line-by-line
-grep for `locked.zone` finds nothing only because that mention breaks across lines 547-548). In code terms it is a place where the
-caller would pass `environment_in_equilibrium=False`; no Site field or flag represents one. **Exposure** is a fieldwork-canon tally of
-investigative visibility "tracked per territory", which canon raises by 2 for Surveil and by 1 for Thread-Read (quoted in
-`registers/editorial_ledger_fi.jsonl`, ED-FI-0009); **no code carries it**: the `thread_read` row records its `+1 Exposure` as "NOT
-EXPRESSED HERE" (`engine/season/verb_table.yaml:1423`), and the loader forbids `exposure` as a bare axis name because the word has three
-senses (`engine/season/rosters.yaml:504`, `:526-528`). **Precedent citations** (reference only, tier 3) use three aliases:
+struck for want of a carrier (`systems/threadwork/sim/rendering.py:33-37`); in the proposals ([PROPOSED]) the Calamity gets an ongoing
+level, which territorial strain from live weaves and locks feeds and `mend` lowers (IN-35; D05:202; §5(e), §7). A **Locked Zone** is, in
+canon, "a place where becoming has been precluded … Persists indefinitely, because the process that would undo it is the one
+precluded" (`canon/philosophy/09_terminology.md:117`); **no code defines it**. The name is registered twice as a mechanic with no
+definition (`references/alias_registry.yaml:374-377`; `references/definitions/vocab_source.yaml:361-364`) and appears as a Mending
+target ("Locked Zone border", Ob 8+, TS 70+) in the frozen prose capture `engine/engine_params/params_tables.yaml:5628-5630`
+(reference, CLAUDE.md §5). Python mentions it once, in a docstring, as an example of a place where a mender is not in equilibrium: a
+default of True "would hand recovery to a mender standing in a Locked Zone" (`operations.py:544-548`). The caller-supplied flag
+`environment_in_equilibrium` is False there, and False everywhere else out of equilibrium too, so the flag does not pick out a Locked
+Zone; canon separates a Locked Zone from "a region drawn toward a worse equilibrium" (`09_terminology.md:117`).
+`grep -rni 'locked.zone' --include=*.py` finds nothing because that one Python mention breaks across `operations.py:547-548`. No
+Site field or flag represents one. **Exposure** (the fieldwork sense; not the E-2 sense, presence near a drifting being, which develops
+Thread Sensitivity, `coherence.py:41-42` and `canon/philosophy/07_drift.md:311-316`, the sense suite file 01 uses) is, in fieldwork canon,
+a per-territory tally of investigative visibility, which canon raises by 2 for Surveil and by 1 for Thread-Read (ED-FI-0009 row 1, `registers/editorial_ledger_fi.jsonl`).
+The same row's retraction answers it in code terms: conspicuousness is the size of an Event's observer set, which WITNESS already
+computes (`architecture/meta/01_AXIOMS.md:1100-1101`), so no per-territory carrier is to be built; **no code carries the tally**. The
+`thread_read` row says its co-movement and Coherence cost "ARE NOT EXPRESSED HERE" and carries "the Exposure gap" on ED-FI-0009
+(`engine/season/verb_table.yaml:1423`), and the loader forbids `exposure` as a bare axis name because the word has three senses
+(`engine/season/rosters.yaml:504`, `:526-528`). **Precedent citations** (reference only, tier 3) use three aliases:
 "sanity_a" and "sanity_b" are `research/game_precedent_suite/tutorials/T08_sanity_a.md` and `.../T09_sanity_b.md`, and "magic-sanity
 table" is `research/game_precedent_suite/tables/R7_magic_sanity_travel.md`; each is cited by game and section. Process ids: `H-` hole-register rows
 (`engine/season/hole_register.yaml`), `M1`-`M12` the threadwork lexicon's mechanic gaps, `TW-G` gap-register rows, `R-` verbs-proposal
@@ -69,9 +76,10 @@ unless a cite is given. Precedent aliases are defined in §0.
 
 **Setup choices.** *At world build:* none. `build_realm(seed)` seats no threadwork state: `Person` declares no TS or Coherence field and
 `(Person, coherence)` is "unproduced" (`engine/season/write_matrix.yaml:185-192`); the `ts:` values in `references/npc_registry.yaml` are
-read by no season code (§6). The seed changes nothing here. *At the callback:* a seated person's menu holds no thread verb, because the
-chooser keeps only candidates in `resolvable_verbs()` and that set lacks `thread_read` (`harness/populated.py:1531`;
-`decision/choose.py:438-439`). *In the oracle*, the only place threadwork runs, the caller chooses the practitioner's Spirit, TS and history
+read by no season code (§6). The seed changes nothing here. *At the callback:* the delegate `auto` it is handed never proposes a thread
+verb, because the chooser keeps only candidates in `resolvable_verbs()` and that set lacks `thread_read` (`harness/populated.py:1531`;
+`decision/choose.py:438-439`). The callback itself may return any Act, since the seam does not validate what it returns
+(`harness/play_surface.py:21-25`), and a hand-built `thread_read` was not tried (§0). *In the oracle*, the only place threadwork runs, the caller chooses the practitioner's Spirit, TS and history
 (pool `spirit × 2 + min(3, history + 3) + ts // 10`, `operations.py:235-247`), the target dict (`scale`, `recency`, `configuration_of`) and
 whether the environment stands in equilibrium (`environment_in_equilibrium`, `operations.py:512`; `coherence.py:341`).
 
@@ -91,7 +99,7 @@ caller calls, nothing automated:
 | verb | cost | effect | when a person picks it |
 |---|---|---|---|
 | `thread_read` (season verb) | none | none: the row writes `[]` (`verb_table.yaml:1410-1423`); DESIGN-ONLY | never: the chooser cannot form it |
-| Leap | 0; −1 on Partial or Failure | gate only | before a lattice |
+| Leap | 0; −1 on Partial or Failure | gate only | never on its own: the lattice rolls its own Leaps and solo operations need none (§2.5, §8 item 5) |
 | weave, pull | scale cost s; s−1 on Partial or Failure | a degree; nothing written to the target | small work: Object or Personal fails 4-8% at pool 14 (§2.1) |
 | past-pull | s−1; s−2 | a degree | reaching a past moment by recency |
 | lock, dissolve | s−1; s−2 | identical to each other | only when weave would not do: one unit dearer |
@@ -105,33 +113,37 @@ caller calls, nothing automated:
 `destroy_record` is withheld, suite file 13 G3) and none is a thread verb; 1,132 acts reach the fold over two seasons with 74 persons alive
 at the end, and no line of the per-verb table names a thread verb (`ctl/realm_seed0_2seasons.txt:1-59`). After a two-season run
 (`headless.run`, seed 1) no threadwork module is imported (§9). A practitioner's first season in the game is therefore empty. *In the
-oracle*, take practitioner A (Spirit 4, TS 30, pool 14), spending three of his roughly 7 acts (suite file 13, Part 2 C1) on workings, with the
+oracle*, take practitioner A (Spirit 4, TS 30, pool 14), taking three workings (they cost no act in the oracle, §4; under §7 each would be one of his roughly 7 acts, suite file 13, Part 2 C1), with the
 dice of §3 steps 1-3: Relational weave, Success, −1 → resting 0, elastic 1, Stable; Structural weave, Failure, −3 → 0/4, Fragmented;
 Structural lock, Failure, −4 → 8 > 6, so resting 2, elastic 6, Fractured. A season's rest in equilibrium then empties the stretch
 (`coherence.py:374-375`) and leaves resting 2, present 2, Dissonant: rest will not lower the resting point (`coherence.py:341-377`). One
 own-aim Mending Success (§3 step 6) takes resting 2 → 1, at no cost.
 
 **What changes later.** In the loop, nothing. In the oracle, only the resting point accumulates: TS is never written (TW-G42, P-08), history
-adds a flat 3 dice whatever its value (`operations.py:246`), the elastic range is the same 6 for every being and never hardens
+adds a flat 3 dice for every history ≥ 0 (`operations.py:246`), the elastic range is the same 6 for every being and never hardens
 (`coherence.py:31-34`, `:114-115`), and resilience resists nothing at the shipped gain 0 (`operations.py:156-157`).
 
-**Failure and ending.** There is none in the loop. The season reports endings as a read and never halts on one, and its docstring says the
-realm as built reaches none (`loop/driver.py:514-518`; `queries/world_q.py:1764`, `:1790-1791`); no ending condition reads threadwork
+**Failure and ending.** There is none in the loop. The season reports endings as a read and never halts on one (`loop/driver.py:514-518`;
+`queries/world_q.py:1764`). None was reached in seeds 0-2 over two seasons (suite file 13 R-F12; uncommitted round-3 probe). At build the
+realm reaches none, and one opening act would suffice (`world_q.py:1789-1791`). No ending condition reads threadwork
 (the conditions read holds and faction commits, `world_q.py:1771-1773`). In the oracle, a resting point past 5 is the crossing: every band
 reads "Coherence failure", self-Mending is refused, the report latches once, and stress arithmetic continues; nothing else follows
-(`coherence.py:215-227`, `:400-404`, `:411-432`; what follows has no carrier, `:67-70`). Where Sunless Sea's mutiny, Bloodlines' frenzy and
-Darkest Dungeon II's Meltdown take something away (sanity_a, Sunless Sea §2 step 6 and Darkest Dungeon II §2 step 7; sanity_b, Bloodlines
-§2), the crossing takes away only the way back.
+(`coherence.py:215-227`, `:400-404`, `:411-432`; what follows has no carrier, `:67-70`). Where Sunless Sea's mutiny, Bloodlines' frenzy
+(triggered by hunger, pain or humiliation, with a risk that depends on Humanity; the floor's effect is [CONTESTED]) and Darkest Dungeon
+II's Meltdown take something away (sanity_a, Sunless Sea §2 step 6 and Darkest Dungeon II §2 step 7 and §6; sanity_b, Bloodlines §2 and
+§8), the crossing takes away only the way back.
 
 **Consequential vs cosmetic choices.** Consequential (oracle only): the scale, which raises Ob and cost together; resting between workings
 (stretch stacks, and set is taken only past 6); own-aim Mending, the only inward move on set; the equilibrium flag, which gates every
-recovery. Dominant: Mending, free at every degree, paying its worker and walking set back (`operations.py:159-167`). Cosmetic or dead:
+recovery. Dominant: Mending, free at every degree (`operations.py:322`, `:449-451`); aimed at another it pays the worker 1-2 elastic in equilibrium
+(`:494-509`), aimed at oneself it walks set back (`:159-167`): one or the other per cast (`:572-577`). Cosmetic or dead:
 Locking against Dissolution (identical), history (a flat 3), breadth and distance (unread), band labels (read by nothing), resilience at
 gain 0, the MS delta (reported, dropped), co-movement cards (text only).
 
 **[PROPOSED] As proposed.** In the remediation plan (`proposals/2026-10-21-v9-remediation/`), batch B-S "plugs `systems/threadwork`" (part 03, lines 10-11); RB-3a (REM-30, IN-47, a character-sheet space) opens after B-S merges and RB-3b (REM-31, IN-46, the
-played fight) after B-Y (part 02, lines 548-551, :559, :570); D-2 is ruled yes (suite file 13 G16). A seated player would be one
-person's decision procedure through the callback (`harness/play_surface.py:41-52`). Under the verbs lexicon (§7), a working would be one act
+played fight) after B-Y (part 02, lines 548-551, :559, :570); D-2 is ruled yes (suite file 13 G16). The seam a seated player would use
+is built and run only by tests (`harness/play_surface.py:41-52`; `engine/season/tests/test_play_surface_dispatch.py`; suite file 13
+R-F4). Under the verbs lexicon (§7), a working would be one act
 of the ordinary scene economy (7 acts a season at budget 5), pass a Leap stage, and write `(Person, coherence)` through a seam Event at
 RESOLVE, the only writer `state/world.py:1010-1019` admits.
 
@@ -145,10 +157,12 @@ RESOLVE, the only writer `state/world.py:1010-1019` admits.
 | `ward` | one act | a one-season protecting Tenure | against a hostile working | DESIGN-ONLY |
 | `knot` | one act; TN 7, Ob 2 | a directed knot Tenure; rupture costs Coherence −1 | to bind to a partner | DESIGN-ONLY |
 
-In that table, the **Calamity** is canon's over-drawing of the substrate, which the proposals turn into territorial strain that live weaves
-and locks add to a place and `mend` holds back (IN-35); a **Locked Zone** is a place where becoming has been precluded, which in code today
-is only a place where `environment_in_equilibrium` would be False; **Exposure** is the per-territory fieldwork tally that `thread_read`
-would raise by 1, carried by no code today (all three: §0). Open before any of it plays: the TS carrier (H-85, build B4), the seam (M1), a
+In that table, the **Calamity** is canon's over-drawing of the substrate, to which the proposals give an ongoing level, fed by territorial strain from live weaves and
+locks and lowered by `mend` (IN-35; D05:202); a **Locked Zone** is a place where becoming has been precluded, which in code today has no
+representation (its one docstring mention is an example of a place where a mender is not in equilibrium, and the flag
+`environment_in_equilibrium` is False elsewhere out of equilibrium too); **Exposure** is the per-territory fieldwork tally that
+`thread_read` would raise by 1, which the ED-FI-0009 retraction reads as the size of an Event's observer set, not a carrier to build
+(all three: §0). Open before any of it plays: the TS carrier (H-85, build B4), the seam (M1), a
 recovery clock or rest verb (K-WR-8), and what follows the crossing (K-WR-5, TW-G11) (§7).
 
 ## 1 The pieces
@@ -254,8 +268,8 @@ stress of k. The two stored numbers behave like a spring with a permanent-set li
   **resting point** exactly and elastic stays pinned at 6. Example: elastic 4, stress 4 → 8 > 6 → resting point +2, elastic 6.
   Precedent handle: Sunless Sea caps Terror at 50 on return to London and converts the excess into 0-4 Nightmare's Strength,
   proportional to Terror (sanity_a, Sunless Sea §2 step 7 and §8), where Valoria keeps the excess exactly. Pathologic 2's per-death
-  max-Health penalty is the fully permanent case (sanity_b, Pathologic 2 §6); Valoria's set, unlike it, walks back under own-aim
-  Mending until the crossing (§2.4).
+  max-Health penalty lasts the whole save file, removed only by starting a new file or by the Fellow Traveler's deal at an undisclosed
+  cost (sanity_b, Pathologic 2 §1, §6); Valoria's set, unlike it, walks back under own-aim Mending until the crossing (§2.4).
 - **Stretch recovers; set does not.** `recover(seasons, environment_in_equilibrium, mending)` lowers elastic by `6 × seasons + mending`,
   floored at 0, **only if the environment is in equilibrium**; it never assigns the resting point (`coherence.py:369-377`). Time never
   adds displacement (`coherence.py:35-38`).
@@ -266,9 +280,10 @@ stress of k. The two stored numbers behave like a spring with a permanent-set li
   ts // 10` with no Coherence term (`operations.py:235-247`), and no code outside `coherence.py` reads `band` or `resting_band` (grep of
   the tree; only `tests/valoria/test_coherence_elastic_plastic.py:156-161` reads them). Before the crossing, displacement changes only
   the label and the headroom left before set. By contrast, each sanity or stress meter in the six sampled precedent titles delivers its
-  cost during play (magic-sanity table, "Delivery of the cost"): Eternal Darkness's room-entry effects below 50% and Health drain at 0,
-  Don't Starve's shadow creatures at low Sanity, Darkest Dungeon II's Meltdown at Stress 10 (sanity_a, Eternal Darkness §2 steps 5-6;
-  sanity_b, Don't Starve §2 step 5; sanity_a, Darkest Dungeon II §2 step 7; aliases in §0).
+  cost during play: Eternal Darkness's room-entry effects below 50% and Health drain at 0, Don't Starve's shadow creatures at low
+  Sanity, Darkest Dungeon II's Meltdown at Stress 10, Sunless Sea's mutiny at Terror 100, Pathologic 2's per-death penalties and
+  Bloodlines' Humanity-weighted frenzy risk and dialogue tone (sanity_a, Eternal Darkness §2 steps 5-6, Darkest Dungeon II §2 step 7 and
+  §6, Sunless Sea §2 step 6; sanity_b, Don't Starve §2 step 5, Pathologic 2 §6, Bloodlines §2 and §7; aliases in §0).
 - **Crossing the band.** When the resting point exceeds `HUMAN_BAND_LIMIT` = 5, `crossed` is true (`coherence.py:215-219`). From then
   on: every band reading is "Coherence failure", whatever the stretch (`:221-227`); `mend_resting_point` **refuses** ("restoring a
   remembered state — manipulation, not Mending", `:400-404`), so the set can never come back; `check_coherence_failure_transition`
@@ -428,7 +443,7 @@ build-gated verb, and `anchor` is culled (L13 §5). "Anchor" in `collective.py` 
 | goal | represented in code as | represented nowhere (yet) |
 |---|---|---|
 | make a working **take** (cohere, open, preclude, end, repair a target) | the returned `degree` | any change to the target: no Site, Person, Tenure or Claim is written (§8) |
-| **stay human** | `CoherenceState.resting_point ≤ 5` (`coherence.py:215-219`). Crossing changes exactly three things: every band reads "Coherence failure" (`:221-227`); own-aim Mending is refused, so the set can never come back (`:400-404`; `operations.py:605-610`); the failure report latches (`:411-432`). Nothing outside `coherence.py` and `operations.py:607` reads `crossed`, and `check_coherence_failure_transition` is called only by `tests/valoria/test_coherence_elastic_plastic.py` (grep) | any consequence in the world: no death, change of side, loss of acts or effect on others is wired (TW-G11). In the precedent set the threshold can take control or end the run: Bloodlines' frenzy, Sunless Sea's mutiny at Terror 100, Darkest Dungeon II's Meltdown (sanity_b, Bloodlines §2; sanity_a, Sunless Sea §2 step 6 and Darkest Dungeon II §2 step 7) |
+| **stay human** | `CoherenceState.resting_point ≤ 5` (`coherence.py:215-219`). Crossing changes exactly three things: every band reads "Coherence failure" (`:221-227`); own-aim Mending is refused, so the set can never come back (`:400-404`; `operations.py:605-610`); the failure report latches (`:411-432`). Nothing outside `coherence.py` and `operations.py:607` reads `crossed`, and `check_coherence_failure_transition` is called only by `tests/valoria/test_coherence_elastic_plastic.py` (grep) | any consequence in the world: no death, change of side, loss of acts or effect on others is wired (TW-G11). In the precedent set the threshold can take control or end the run: Bloodlines' frenzy (triggered by hunger, pain or humiliation, with a risk that depends on Humanity; the floor's effect is [CONTESTED]), Sunless Sea's mutiny at Terror 100, Darkest Dungeon II's Meltdown (sanity_b, Bloodlines §2 and §8; sanity_a, Sunless Sea §2 step 6 and Darkest Dungeon II §2 step 7 and §6) |
 | **recover** stretch | `elastic_displacement` → 0 via `recover` or Mending feedback | a clock or rest verb that calls `recover` in a season (K-WR-8) |
 | **undo** permanent set | own-aim Mending, −1 resting point per Success+ | a harder Ob or a cost for it (`operations.py:159-167` `[GAP]`) |
 | work at larger scale than you can alone | the collective lattice (bigger pool) | breadth (`BREADTH_OB` is unread) |
@@ -458,7 +473,7 @@ you protect is the gap between your resting point and 5. Elastic stretch is borr
   carries most of its expected cost in the failure.
 - **Stacking without rest takes set.** Three Structural Locking Failures in a row cross a fresh practitioner (§2.3).
 - **The environment gate.** Recovery and Mending's feedback land only when the caller says the environment is in equilibrium; the
-  Mending default is False. A practitioner working in a Locked Zone (a place where the equilibrium condition fails, §0; Mending's ordinary
+  Mending default is False. A practitioner working in a Locked Zone (one place, among others, where the equilibrium condition fails, §0; Mending's ordinary
   workplace, per `operations.py:546-548`) recovers nothing.
 - **A failed Leap still costs** (−1), and in a lattice a Partial Leap counts as success *and* costs −1.
 - **An opponent's TS is your Ob.** Your Ob rises by `max(1, opponent TPS // 2)`: +1 against TS below 40, +2 at TS 40-59, +3 at
@@ -472,9 +487,11 @@ you protect is the gap between your resting point and 5. Elastic stretch is borr
   yourself it is the only inward move on the resting point, with no cadence limit. The code names this as a gap: "repeated casts can
   walk a permanent set to 0" (`operations.py:166`). Permanent set is therefore not permanent for anyone not yet crossed.
   No title in the verified sanity and stress set has an ungated, unlimited-rate free repair (an absence claim, not exhaustive): Eternal Darkness's free Sanity refund needs a downed enemy and
-  returns about what that enemy's gaze took, and a reviewer still calls the meter "strategically gentle"; Darkest Dungeon II recovers
-  Stress per Inn; Sunless Sea's free reductions (family time) are limited to once per voyage [V2, not re-checked in v3]; and Don't
-  Starve's Tent has six uses (sanity_a, Eternal Darkness §3 and §7 and Sunless Sea §3; magic-sanity table, "Comparison").
+  returns about what that enemy's gaze took, and a reviewer calls the game, played that way, "strategically gentle"; Darkest Dungeon II
+  recovers Stress per Inn; Sunless Sea's free family time (−20 Terror) is gated by Something Awaits You, once per SAY [V2], and SAY
+  re-rolls each minute at zee; and Don't Starve's Tent has six uses [V2] (sanity_a, Eternal Darkness §3 and §7, Sunless Sea §2, §7
+  and §8; sanity_b, Don't Starve §3 and §8; magic-sanity table §1 (Darkest Dungeon II Inn rows, `:18`, `:27`), §2 (`:46`) and §4
+  (`:74`)).
 - **Locking and Dissolution are identical in code** (same Ob, same cost, same MS); with no target written, choosing between them
   changes nothing (TW-G23).
 - **Past-Pulling at Object/Personal**: the `max(-1, …)` cap at `operations.py:412` changes nothing, since 0 − 1 is already −1.
@@ -500,17 +517,17 @@ heresy persecution needs a thread act to witness, charge and arrest (TW-G31); a 
 
 ### (f) Precedent handles (reference only)
 
-The repo's research index records no game source for threadwork (`research/00_INDEX.md:177`, `:257`); these handles come from the
+The repo's research index records no game source for threadwork (`research/00_INDEX.md:178`, `:258`); these handles come from the
 precedent research (tier 3: reference, not mechanism). Names are the aliases defined in §0.
 
 | Valoria piece | nearest verified precedent | the difference |
 |---|---|---|
 | elastic stretch, repaid by rest | Don't Starve's Codex Umbra: 55 max Sanity rented for 2.5 days (magic-sanity table §4) | DS repays on a timer; Valoria only when the caller passes `environment_in_equilibrium=True` (`coherence.py:374`) |
 | excess over the range becomes set | Sunless Sea: Terror capped at 50 in London, the excess converted to 0-4 Nightmare's Strength (sanity_a, Sunless Sea §2 step 7) | Valoria keeps the excess exactly; SS converts it in bands |
-| lasting set | Pathologic 2: per-death max-Health penalty (sanity_b, Pathologic 2 §6) | P2's is permanent; Valoria's walks back until the crossing (§2.4) |
+| lasting set | Pathologic 2: per-death max-Health penalty (sanity_b, Pathologic 2 §1, §6) | P2's lasts the save file (a new file or the Deal only); Valoria's walks back until the crossing (§2.4) |
 | Mending pays the mender | Eternal Darkness finishing refund (sanity_a, Eternal Darkness §2 step 4); Bloodlines reconciliation grants Humanity (magic-sanity table §6) | ED ties the refund to the loss its source caused; VtMB gates it by a dialogue feat; Valoria by a roll and the equilibrium flag |
-| cost charged to the identity meter | Eternal Darkness MP, Bloodlines blood: power has its own pool (sanity_a, Eternal Darkness §3; sanity_b, Bloodlines §3) | Valoria has one channel: a working's cost is its Coherence charge (C-2, `coherence.py:48-51`) |
-| what the threshold does | Darkest Dungeon II's Meltdown/Resolute fork; Bloodlines' frenzy; Sunless Sea's mutiny (sanity_a, Darkest Dungeon II §2 step 7 and Sunless Sea §2 step 6; sanity_b, Bloodlines §2) | Valoria's crossing relabels the bands, latches a report and blocks self-Mending, nothing more (§2.3) |
+| cost charged to the identity meter | Eternal Darkness: casts cost MP, but steering a summoned Horror drains Sanity (sanity_a, Eternal Darkness §3, §8); Bloodlines: powers cost blood (sanity_b, Bloodlines §3) | Valoria has one channel: a working's cost is its Coherence charge (C-2, `coherence.py:48-51`) |
+| what the threshold does | Darkest Dungeon II's Meltdown/Resolute fork; Bloodlines' frenzy (triggered by hunger, pain or humiliation, with a risk that depends on Humanity; the floor's effect is [CONTESTED]); Sunless Sea's mutiny (sanity_a, Darkest Dungeon II §2 step 7 and §6 and Sunless Sea §2 step 6; sanity_b, Bloodlines §2, §8) | Valoria's crossing relabels the bands, latches a report and blocks self-Mending, nothing more (§2.3) |
 
 ## 6 How it connects
 
@@ -550,7 +567,7 @@ Unlike today, each verb would also write its target:
 
 | verb | what you would do | what it would write | waits on |
 |---|---|---|---|
-| `thread_read` (hosts `trace`, `diagnose`) | perceive the substrate at a site; `trace` follows a knot you hold; `diagnose` reads a person's displacement | a Claim at WITNESS in your own ledger; −1 Coherence at Relational+ and +1 Exposure (the per-territory fieldwork tally of §0; canon, "NOT EXPRESSED HERE", `verb_table.yaml:1423`) | M2 TS carrier and gate (H-85; build B4), M1, M3, FI-G01 content yield |
+| `thread_read` (hosts `trace`, `diagnose`) | perceive the substrate at a site; `trace` follows a knot you hold; `diagnose` reads a person's displacement | a Claim at WITNESS in your own ledger; −1 Coherence at Relational+ and +1 Exposure (the per-territory fieldwork tally of §0, which the ED-FI-0009 retraction reads as the size of an Event's observer set; the row's co-movement and Coherence cost "ARE NOT EXPRESSED HERE" and it carries "the Exposure gap" on ED-FI-0009, `verb_table.yaml:1423`) | M2 TS carrier and gate (H-85; build B4), M1, M3, FI-G01 content yield |
 | `weave` | make a thing cohere | your Coherence; a held-load Tenure `weave` that stands while you hold it; strain for the Calamity (§0) | M1, M2, M3, M5 (IN-35), M6 held shapes |
 | `lock` | preclude a thing becoming; on a Site, a Locked Zone (§0) | Tenure `lock` read by the write gate as a refusal, until mended | M1, M2, M3, M6; Sites first (person-target form not designed) |
 | `dissolve` | end a thing | Site `condition` to the floor, a held shape closed destructively, a residue mark | M1, M3, M6, M10; built after weave/mend/lock (TW-G23) |
@@ -657,22 +674,25 @@ Each was checked against the cited line at `51d7b05` before being applied. Prece
    (`engine/season/harness/populated.py:1531`, `decision/choose.py:438-439`; suite file 13 Part 2 C2, round-2 audit G F1).
 2. **Calamity, Locked Zone, Exposure (§0, with glosses at §5(c), §5(e), §6, §7, §0a).** Was: "no code defines" each, with a grep for
    `locked.zone` "finding nothing". Now: the code reading is stated. The Calamity's only code was the struck `check_calamity_threshold`
-   (`rendering.py:33-37`). The Locked Zone is a registered name with no definition (`alias_registry.yaml:374-377`) and one docstring use,
-   which the grep misses because it breaks across lines (`operations.py:544-548`). Exposure is recorded as "NOT EXPRESSED HERE"
-   (`verb_table.yaml:1423`) and forbidden as a bare axis name (`rosters.yaml:504`, `:526-528`).
+   (`rendering.py:33-37`). The Locked Zone is a registered name with no definition (`alias_registry.yaml:374-377`) and one docstring
+   mention, as an example, which the `.py` grep misses because it breaks across lines (`operations.py:544-548`). Exposure's tally has
+   no carrier: the row carries "the Exposure gap" on ED-FI-0009 (`verb_table.yaml:1423`), whose retraction reads it as an observer-set
+   size (`architecture/meta/01_AXIOMS.md:1100-1101`); the loader forbids it as a bare axis name (`rosters.yaml:504`, `:526-528`).
 3. **Bands (§2.3, new bullet).** Added: a band is a label; the pool has no Coherence term (`operations.py:235-247`) and only
    `tests/valoria/test_coherence_elastic_plastic.py:156-161` reads `band` or `resting_band` outside `coherence.py` (grep).
 4. **Permanent set (§2.3, "Stress stacks" bullet).** Added: Sunless Sea's cap-and-convert and Pathologic 2's per-death penalty as
    precedent handles (`coherence.py:331-334`, `:400-404`).
 5. **"Mending dominates" (§5(d)).** Added: no title in the verified sanity and stress set has an ungated, unlimited-rate free repair
-   (an absence claim, not exhaustive); Sunless Sea's "once per voyage" is [V2], not re-checked in v3 (`operations.py:159-167`).
+   (an absence claim, not exhaustive); Sunless Sea's family time is gated once per SAY [V2], and SAY re-rolls each minute at zee [V3]
+   (`operations.py:159-167`).
 6. **"Stay human" (§5(a)).** Added: in the precedent set the threshold can take control or end the run (`coherence.py:67-70`).
 7. **Trap 17 (§8, new).** Added: "leaving the human band" is not a Humanity score (`operations.py:277-287`;
    `systems/fieldwork/sim/knots.py:368-379`).
 8. **§5(f) (new).** Added: the precedent-handles table; the research index records no game source for threadwork
-   (`research/00_INDEX.md:177`, `:257`).
+   (`research/00_INDEX.md:178`, `:258`).
 9. **§0a (new).** Added: how it plays, as built and [PROPOSED]. The ending line reflects PR #494: the season now reports endings as a
-   read and does not halt on one, and the realm as built reaches none (`loop/driver.py:514-518`; `queries/world_q.py:1764`, `:1790-1791`).
+   read and does not halt on one, and none was reached in seeds 0-2 (uncommitted round-3 probe; `loop/driver.py:514-518`;
+   `queries/world_q.py:1764`, `:1789-1791`).
    The remediation sentence was corrected from the critic draft: RB-3a (REM-30) builds IN-47, and IN-46 is RB-3b (REM-31)
    (`proposals/2026-10-21-v9-remediation/2026-10-21-v9-remediation-02-items-rb0-to-rb3.md:548-551`, `:559`, `:570`).
 10. **Stale line numbers after PR #494.** `rosters.yaml:2672` -> `:2738`; `:2671-2676` -> `:2737-2742`; `:2670-2676` -> `:2736-2742`
@@ -712,6 +732,6 @@ Each was checked against the cited line at `51d7b05` before being applied. Prece
   `queries/world_q.py:1764-1812`, `rosters.yaml:2736-2742` and `:495-535`, `write_matrix.yaml:183-196`, `state/world.py:1010-1019`,
   `systems/threadwork/sim/operations.py:142-167`, `:235-247`, `:276-288`, `:468-611`, `coherence.py:25-56`, `:64-72`, `:112-120`,
   `:298-377`, `:398-406`, `rendering.py:1-41`, `systems/fieldwork/sim/knots.py:366-380`, `references/alias_registry.yaml:370-380`,
-  `canon/philosophy/09_terminology.md:117`, `research/00_INDEX.md:177`, `:257`, the ED-FI-0009 rows; ran `resolvable_verbs()` (47,
+  `canon/philosophy/09_terminology.md:117`, `research/00_INDEX.md:178`, `:258`, the ED-FI-0009 rows; ran `resolvable_verbs()` (47,
   `thread_read` absent) and grepped the tree for readers of `band` and `resting_band`. Precedent claims were checked against the precedent
   research text, not the games.

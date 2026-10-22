@@ -2,12 +2,18 @@
 
 Repo HEAD `a4ca9a5`; revised in round 3 against `51d7b05` (after PR #494) and the precedent suite
 (`research/game_precedent_suite/`); the round-3 changes are listed in `### Round-3 corrections`, before
-§9. Paths are relative to `/home/user/ttrpg`. "Ctl" means the control run files
+§9. Paths are relative to `/home/user/ttrpg`, except that a path with no directory prefix or starting
+`harness/`, `loop/`, `decision/`, `queries/`, `state/`, `seam/` or `data/` is under `engine/season/`
+(`modules/...`, `systems/...`, `engine/dice_engine/...` and `proposals/...` are repo-root). "Ctl" means the control run files
 `proposals/2026-10-22-system-description/ctl/realm_seed{0,1,2}_2seasons.txt` (seeds 0-2, two seasons). Every run column reads
 **attempted/ok**:
 
-- *attempted* counts acts that passed admission and reached the fold (`d.resolved`). Acts refused at
-  admission are not counted.
+- *attempted* counts acts that reached the fold (`d.resolved`): `_fold` appends the act on entry
+  (`loop/resolve.py:377-379`), before its own admission check (`:428-430`). The three graded inquiries and the
+  contested verbs are admitted before the fold (`:1012-1032`), so their admission refusals are not counted.
+  For every other verb the admission refusal is counted (seed 0: interview 21 of 32 and reconstruct 6 of 39
+  attempts were refusals; restore 23 attempted, 0 ok). Also left out: acts whose actor was already gone, and
+  refusals for an obstacle too high for the pool (`:974-998`).
 - *ok* means at least one Event that is not a refusal. For a graded inquiry that means Partial or better.
 
 "Probe" means a read-only script I ran for this tutorial (§9). Times are given as **ticks** (one tick per
@@ -79,15 +85,18 @@ L.A. Noire), "T19 precedent" is `.../T19_tactics_narrative.md` (Lacuna, Ace Atto
   Shipped: `refraction_gain 0.5` (`fixtures.py:874`), `claim_decay_per_season 5` (`:293`), `told_weight 0.5`
   (`:788`), `record_gain 0.5` (`:801`), `telling_privacy 0.0` (`:863`); inquiry pool 2, obstacle 2, ceiling 2
   (§2.8).
-- No person has a background that changes what he can learn: capability is empty on every realm person (ctl
-  "capability nonempty 0"), so every investigator rolls the same two dice (§2.8). `[precedent: T06 precedent,
+- No person has a background that changes what he can learn: no `VERB_CAPABILITY` row names an inquiry
+  (`rosters.yaml:1229-1231`), so every investigator rolls `pool_default` 2 whatever his capability (§2.8);
+  capability is also empty on every realm person (ctl "capability nonempty 0"). `[precedent: T06 precedent,
   Pentiment §1: a biography per act unlocks lines and points]`.
 - The season loop has no player interface. The one seam is `dispatching_chooser`
-  (`harness/play_surface.py:41-52`, tests only): it sends one named person's choosing to a callback that
-  receives the person, a View, a Sensation and the budget query, not the World (`loop/deliberate.py:119-170`).
+  (`harness/play_surface.py:14-16,41-51`, tests only): it sends the choosing of each person named in
+  `overrides` to a callback that receives the person, a View, a Sensation, the budget query and `auto` (the
+  delegate chooser), not the World (`loop/deliberate.py:119-170`).
   The callback may return any of the 47 resolvable verbs (`loop/driver.py:101`) with any payload, so it can do
-  what the chooser never does: `examine` a Site he stands at (hand-built, it reached the roll; probe), `give`
-  a forged sheet, `research` a Record he holds (§3). Elsewhere `systems/social_contest/sim/contest/agon_harness.py`
+  what the chooser never does: `examine` a Site he stands at (hand-built, it reached the roll; probe; the
+  graded `examine` is also exercised by `engine/season/tests/test_fi01_graded_inquiries.py:223-239`) or `give`
+  a forged sheet. Elsewhere `systems/social_contest/sim/contest/agon_harness.py`
   is a stdin-driven human-played social contest, and the combat and mass-battle `workbench/server.py` files
   are HTTP designer tools; none plays an investigation.
 

@@ -6,8 +6,9 @@ the precedent suite (`research/game_precedent_suite/`). Locators into the files 
 two versions) and spot-checked; the rest did not move. The control run is byte-identical on `51d7b05`. Abbreviations: `es/` = `engine/season/`;
 **CR** `es/state/carriers.py`; **RY** `es/rosters.yaml`; **VT** `es/verb_table.yaml`; **FX** `es/data/fixtures.py`;
 **WQ** `es/queries/world_q.py`; **DE** `engine/dice_engine/dice_engine.py`; **DR** `references/descriptor_registry.yaml`;
-**ctl0/ctl1** the control run `ctl/realm_seed{0,1}_2seasons.txt` in this directory (reached the fold/ok, two seasons; §3 says what
-"reached the fold" leaves out). Grades are ERRATA G1's
+**ctl0-ctl2** the control run `ctl/realm_seed{0,1,2}_2seasons.txt` in this directory (reached the fold/ok, two seasons; `ok` = at least
+one non-refusal Event, `ctl/control.py:13, :21`, so a Failure Event such as `matter.turned` counts as ok; §3 says what "reached the fold"
+leaves out). Grades are ERRATA G1's
 only: **RUNS-IN-LOOP** (a non-refusal outcome inside `SeasonDriver.season` over `build_realm`), **at control** (runs, inert at the
 shipped value), **TESTS-ONLY** (wired, executes only under tests/fixtures/oracles, or zero successes in the realm run), **DESIGN-ONLY**
 (no executing code). A refusal firing is not the verb executing. **[PROPOSED]** marks anything only a proposal describes.
@@ -117,40 +118,47 @@ Hold-minters: `create_record`, `issue`, `open_case`, `petition`, `survey`, `forg
   act is extended and costs 2 (FX:489); if only 1 action is left the chunk is cut to one act (`es/decision/choose.py:643-657`).
 - The driver runs 5 rounds (`rounds = scene_budget`, `es/loop/driver.py:449, :456`) and releases at most `scenes_per_round` = 1 scene
   per round (FX:511), charging `Scene.cost` against the remainder (`es/loop/deliberate.py:250-259`; CR:593-594).
-- Result: budget 5 → 2+2+1 = **7 acts**; budget 6 → 2+2+2 = **9**; a travel leg costs a budget-6 holder one act (9 → 7). Ceiling:
+- Result: budget 5 → 2+2+1 = **7 acts**; budget 6 → 2+2+2 = **9**; a travel leg costs a budget-6 holder one action, two acts (9 → 7). Ceiling:
   5 scenes × 2 = 10 actions. What `deliberate.py:89-97` calls unspendable is a sixth *scene*, not the sixth *action*.
 - Acts per person-season observed: about 6.3-8.0 depending on basis (ctl0: 1,132 acts reached the fold, 74 persons alive at the end,
-  2 seasons ≈ 7.6). Per acting person per tick at seed 0 (round-3 probe at `51d7b05`): **8.1 then 9.4 formed** (the act store `w.acts`,
+  2 seasons ≈ 7.6). Per acting person per tick at seed 0 (uncommitted round-3 probe at `51d7b05`): **8.1 then 9.4 formed** (the act store `w.acts`,
   every act released and charged), **6.4 then 7.7 reaching the fold** (`d.resolved`), at most 15 in both ticks (the 5 × 3 ceiling). Name the
   basis when quoting.
 - Budgets drift up, because every held Record and every uttered Proposition is a hold: seed 0 mean 5.57 at build, 6.41 after tick 0, 7.69
-  after tick 1, when 11 of 74 persons hold more than 10, which no round can release (H-92; `es/loop/deliberate.py:107-113`).
+  after tick 1 (uncommitted round-3 probe), when 11 of 74 persons have a budget above 10 actions, which no round can release (H-92;
+  `es/loop/deliberate.py:107-113`).
 - A refused act still costs its place and leaves an `actor` observation in the actor's own ledger (later vetoable as known-false);
   a refused act stays retryable, a succeeded opportunity leaves the queue (T02 §2.7; `es/decision/options.py:308`).
 
-**Per subsystem.** Every verb costs its place in a scene; no verb has a separate action price. Material costs are listed where they
-exist. Odds are for the shipped default (pool 2, Ob 2) unless stated. ctl0 = reached the fold/ok at seed 0; [seed 1] where it differs in
-kind. "Reached the fold" omits acts refused at admission or at the contest branch, so the formed count (`w.acts`) is given where it differs
-(file 13 Part 3 R-F3).
+**Per subsystem.** Every verb costs its place in a scene; only travel (`move`, `migrate`) also takes an action off the rest of the
+season, and the hold-minting verbs return one (+1 hold). Material costs are listed where they exist. Odds are for the shipped default
+(pool 2, Ob 2) unless stated. ctl0 = reached the fold/ok at seed 0; [seed 1] where it differs in kind. "Reached the fold" is
+`d.resolved`: `_fold` appends an act on entry, before its own precondition check, so ordinary admission refusals are counted
+(`es/loop/resolve.py:377-379`); left out are acts whose actor was already gone (`:974-977`), refusals for an obstacle too high for the
+pool (`:981-998`) and contested or graded acts refused by `_admits` before the seam (`:1012-1032`). The formed count (`w.acts`, an act
+released to RESOLVE, `:967`) is given where it differs (file 13 Part 3 R-F3); every "of N formed" count below is an (uncommitted
+round-3 probe) figure, because `ctl/control.py` counts `d.resolved` only.
 
 | subsystem | verbs (row names) | extra cost | resolver and typical odds | what each degree buys | ctl0 |
 |---|---|---|---|---|---|
-| SC | `tell`, `speak`, `argue`, `determine`; `petition`, `open_case`, `carry`, `convene`, `commit`, `utter` | `determine`, `open_case` need `remit:determine`; `convene` `remit:convene` | one d10 roll; pool 2 vs Ob 2: F 74 / P 19 / S 7 / O 0 % (T01:160, Table A :171). `speak` with a favourable room: Ob 1 → 42 / 32 / 25 / 1 | `tell`: F nothing deposited, P drifted told claim, S/O told claim. `argue`: S/O shift hearer's pursuits by step × 0.1 (`DEGREE_STEP` −1/0/+1/+2). `determine`: P opens the disposal (`oblige`/`detain`/`ban`), S/O also shift the judge's pursuits | tell 23/4 of 27 formed; speak 3/3 of 22 formed [0 of 14]; argue 0 of 10 formed reached the roll; determine 0 of 2 formed [1/1 of 6]; petition 42/14; open_case 12/6 |
+| SC | `tell`, `speak`, `argue`, `determine`; `petition`, `open_case`, `carry`, `convene`, `commit`, `utter` | `determine`, `open_case` need `remit:determine`; `convene` `remit:convene` | one d10 roll; pool 2 vs Ob 2: F 74 / P 19 / S 7 / O 0 % (T01:160, Table A :171). `speak` with a favourable room: Ob 1 → 42 / 32 / 25 / 1 | `tell`: F nothing deposited, P drifted told claim, S/O told claim. `argue`: S/O shift hearer's pursuits by step × 0.1 (`DEGREE_STEP` −1/0/+1/+2). `determine`: P opens the disposal (`oblige`/`detain`/`ban`), S/O also shift the judge's pursuits | tell 23/4 of 27 formed; speak 3/3 (all Failure, `matter.turned`) of 22 formed [0 of 14]; argue 0 of 10 formed reached the roll; determine 0 of 2 formed [1/1 of 6]; petition 42/14; open_case 12/6 |
 | FI | graded `research`, `examine`, `surveil`; ungraded `interview`, `reconstruct`; makers `survey`, `forge`, `conceal`, `create_record`; `give` | maker verbs mint a Record (+1 hold, +1 budget) | graded inquiries take the social roll (pool 2, Ob 2 + forgery, ≤ 2) | O/S uncover `stratum, marks, who`; P `stratum, marks`; F nothing (RY:2447-2473) | research 14/7 of 125 formed; surveil 30/5 of 51; examine 0 of 62 formed (its `site` is the question's subject, never a Site, `es/decision/options.py:1047-1048`); interview 32/11; reconstruct 39/33; survey 57/13; forge 52/12; conceal 19/19; create_record 87/87; give 16/0 |
-| PC | `fight`, `accept` (contest *the body*), `challenge` (writes nothing) | none | beat-level duel, Gaussian roll per exchange, pool `max(5, history+6)` = 9, Ob history/2 = 1.5; season reads the subject: mirror fight Felled 48.5 / Wounded 28 / Untouched 23.5 % (T03:202, n = 400) | Felled: subject removed, every tenure naming him closed. Wounded: body scaled by health remaining. Untouched: nothing. The actor is never written, and every Wounded or Untouched band is a fight the actor lost in the scene (33 of 59 realm calls, seeds 0-2) | fight 7/4 of 19 formed; accept 18/11 of 34; challenge 23/6 |
-| MB | `march` (contests *a field*) | `remit:dispatch` | declared at RESOLVE (band `Declared`), fought at ENCOUNTER by `mass_battle.resolve_field` | Won / Lost / Unopposed; a lost field writes grudge and morale stance rows | march 21 declared, 25 `march.refused`, 0 fields; no natural march names a settlement; a hand-built one does fight (`field.lost`, attacker body 1000 → 20) |
+| PC | `fight`, `accept` (contest *the body*), `challenge` (writes nothing) | none | beat-level duel, Gaussian roll per exchange, pool `max(5, history+6)` = 9, Ob history/2 = 1.5; season reads the subject: mirror fight Felled 48.5 / Wounded 28 / Untouched 23.5 % (T03:202, n = 400) | Felled: subject removed, every tenure naming him closed. Wounded: body scaled by health remaining. Untouched: nothing. The actor is never written; in seeds 0-2 all 33 Wounded or Untouched bands (of 59 realm calls) were fights in which the actor was felled (uncommitted round-3 probe; not a mechanism, since `fight` also ends undecided after 12 turns, `modules/combat/wrapper.py:504, :524-525`) | fight 7/4 of 19 formed; accept 18/11 of 34; challenge 23/6 |
+| MB | `march` (contests *a field*) | `remit:dispatch` | declared at RESOLVE (band `Declared`), fought at ENCOUNTER by `mass_battle.resolve_field` | Won / Lost / Unopposed; a lost field writes grudge and morale stance rows | march 21 declared, 25 `march.refused`, 0 fields; no natural march names a settlement; a hand-built one does fight (`field.lost`, attacker body 1000 → 20, uncommitted round-3 probe) |
 | GV | `issue`, `confer`, `revoke`, `dispatch`, `convene` (remit); `release`, `oblige`, `establish`, `succeed` | upkeep 1 per obligee per term, paid by `transfer` | no dice; typed precondition decides | one outcome or a refusal | release 45/3; issue 6/5; dispatch 18/6; revoke 6/0 (no `office` operand; one usable seat, `off_duke_valorsmark`, vacant from tick 0); oblige 0 [24/22]; confer 0 [5/1] |
-| EC | `transfer` (default amount 1, FX:559), `requisition`, `work`, `restore`, `found`, `build`, `sabotage` | `found`: {grain 10} for hearth/community; `build`: {timber 10} per Site (RY:1532-1538) | no dice | — | transfer 45/1; requisition 2/0; work 77/0 (never on a dwelling or garrison: empty `band_floors`, RY:2631-2632); restore 23/0 (refused at full condition); found 24/0; build 19/0; sabotage 34/0 |
+| EC | `transfer` (default amount 1, FX:559), `requisition`, `work`, `restore`, `found`, `build`, `sabotage` | `found`: {grain 10} for hearth/community; `build`: {timber 10} per Site (RY:1532-1538) | no dice | — | transfer 45/1; requisition 2/0; work 77/0 (no one cause: its `site` operand is filled with the question's subject, `es/decision/options.py:1047-1048`; it stages a rise only where a live works names the Site, `es/loop/effects_economy.py:103`, else `work.unavailable`; on a dwelling or garrison never: empty `band_floors`, RY:2631-2632); restore 23/0 (refused at full condition); found 24/0; build 19/0; sabotage 34/0 |
 | FA | `survey`, `covenant`, `seize`, `sabotage`; FA rides GV seats and `march` | `seize` needs `issue` and purview | no dice | — | survey 57/13; covenant 13/0 |
-| WT | `move`, `migrate` | each leg −1 budget for the rest of the season | no dice | — | move 42/16; migrate 81/0 (destinations only from the mover's own ledger, WQ:2111; every chosen hearth full) |
+| WT | `move`, `migrate` | each leg −1 budget for the rest of the season | no dice | — | move 42/16; migrate 81/0 (destinations only from the mover's own ledger, WQ:2111; every chosen hearth full, uncommitted round-3 probe) |
 | NP | `tend`, `train`, `forgive`, `give`, `commit` | none | no dice | `tend` body to 1000 (requires *with*) | forgive 1/1; tend 34/0; train 38/0; commit 61/0 |
 | TW | none in the loop (`thread_read` not resolvable) | Coherence by scale (Object/Personal 0, Relational/Field −1, Structural/Foundational −2; −1 more on P/F) | oracle only: pool `spirit×2 + min(3, history+3) + ts//10` = 14 by default | — | 0 (TESTS-ONLY) |
 
 **The action economy as a comparison handle.** One budget serves every subsystem: an act in any of them costs its place in a scene, a
-scene of more than one act costs 2, and holdings raise the budget without limit while the release ceiling stays at 10 actions. Nothing
-prices one subsystem's acts above another's. Nearest verified precedents (`research/game_precedent_suite/`, reference, tier 3): Pax
-Pamir's two actions a turn, each court card usable once (`tutorials/T15_pressure_political.md`, Pax Pamir [V3 p8-9]), where holdings add
-actions but the cap stays fixed; King of Dragon Pass's two actions a season (`tutorials/T16_managers_narrative.md`, King of Dragon Pass
+scene of more than one act costs 2, and holdings raise the budget without limit while the release ceiling stays at 10 actions. Only
+travel prices an act above its place: each `move` or `migrate` leg takes one action off the rest of the season (`es/decision/budget.py:60`;
+`es/loop/effects_migration.py:119`);
+hold-minting verbs return one (+1 hold). Nearest verified precedents (`research/game_precedent_suite/`, reference, tier 3): Pax
+Pamir's up to two actions a turn, each court card usable for at most one (`tutorials/T15_pressure_political.md`, Pax Pamir [V3 p8-9]),
+favoured-suit card actions not counting against the cap (T15 [V3 p12]); King of Dragon Pass's two actions a season (`tutorials/T16_managers_narrative.md`, King of Dragon Pass
 [V3 manual]); Genghis Khan II's Body Points per command, refilled each season and falling with age (`tutorials/T13_koei.md`, Genghis Khan
 II [V3 IA:GK2 l.467-490, 705-718]); Old World's Orders per turn, whose formula is [CONTESTED] (`tutorials/T01_realm.md`, Old World).
 Overview §7 sets these beside the other handles.
@@ -164,7 +172,7 @@ Overview §7 sets these beside the other handles.
 | **scene** | ≤ 1 released per person per round; 1-3 acts. | FX:488-489, :511 |
 | **MATTER cadence** | Once per season, before round 0; CALENDAR before it, CENSUS after round 4. MATTER at tick 0 is the first MATTER (CROSS C3). | `es/loop/driver.py:447-448, :514` |
 | **combat** | `fight` ≤ 12 turns; each turn one engagement "~10 s"; an engagement ≤ 24 beats and ≤ 4 exchanges (`BURST_MAX`); resolved whole inside RESOLVE. | `modules/combat/wrapper.py:487, :504, :111-118, :463`; `modules/combat/config.py:112` |
-| **mass battle** | One battle turn = up to 18 ticks = 3 phases × 6 ticks; one call at ENCOUNTER. No in-world duration stated for a tick. | `modules/mass_battle/orchestration.py:1815-1818`; `modules/mass_battle/config.py:155` |
+| **mass battle** | One battle turn = up to 18 ticks = 3 phases × 6 ticks; one call at ENCOUNTER. A phase is one charge-and-return cycle (comment, `orchestration.py:184-192`); no duration is stated for a tick itself. | `modules/mass_battle/orchestration.py:1815-1818`; `modules/mass_battle/config.py:155` |
 | **terms** | `oblige` 4 seasons (renewable by upkeep `transfer`); Record stages 3, one season apart (a cover is live about 3 seasons); a convened Date is due at `tick + 1` by default. | FX:892, :524-525; `es/loop/effects_governance.py:363` |
 | **claim decay** | −5 confidence per claim per season at MATTER, floored at 0: a firsthand claim at 100 reaches 0 after 20 seasons unless evicted first. | FX:293; `es/loop/matter.py:317` |
 | **wear** | Condition −10 per season for harbour, seam and the `body` site row; dwelling and garrison 0. With no repair, yield reaches 0 only at tick 100 (CROSS C9). | RY:1465-1470; `es/loop/matter.py:663` |
@@ -173,13 +181,15 @@ Overview §7 sets these beside the other handles.
 | **world clock** | None in the loop. The MS track (0-100, −1 per year, start 60) has no live caller. [designed, deleted] | `systems/overview/sim/ms_track.py:25, :45`; ERRATA G17 |
 | **campaign length** | None: the realm runs as many seasons as the caller asks. Since PR #494 each season reports `endings` (IN-27), which nothing halts on; the realm reached none in seeds 0-2. | `es/loop/driver.py:515-518`; `es/queries/world_q.py:1764`; RY:2494-2553 |
 
-**In-world duration.** The code states a duration only for a combat engagement ("~10 s"). A season has no length in days or months, a round
-none, a battle tick none; a year exists only in the swept arms of `season_factor_draw` (four entries, FX:464-469) and is off as shipped,
-so "a season" is a count, not a calendar. Nearest verified precedents: one turn = one year
+**In-world duration.** The code states durations only in comments: a combat engagement "~10s" (`modules/combat/wrapper.py:504`) and a
+mass-battle phase, one charge-and-return cycle of ~5-6 ticks, a battle of 3-6 phases "matching the 30-90 minutes of active fighting"
+(`modules/mass_battle/orchestration.py:184-192`). A season and a round have no stated length. The loop's only year is the swept
+`season_factor_draw` table (four entries, FX:464-469), off as shipped; the dead MS track also counts in years
+(`systems/overview/sim/ms_track.py:25, :45`). So "a season" is a count, not a calendar. Nearest verified precedents: one turn = one year
 (`tutorials/T01_realm.md`, Old World [V3 FW-OW]); one turn per season (`tutorials/T12_paradox_classical.md`, Total War: Rome II [V3 R2M
-0015a]); one turn = one month (`tutorials/T17_repo_strategy_a.md`, Dominions [V3 IW5:introduction_to_dominions]); five seasons then
-Sacred Time, two actions each (`tutorials/T16_managers_narrative.md`, King of Dragon Pass [V3 manual]); a default end date of 1453
-(`tutorials/T01_realm.md`, Crusader Kings III [V3 GF]).
+0015a]); one turn = one month (`tutorials/T17_repo_strategy_a.md`, Dominions [V3 IW5:introduction_to_dominions]); two actions in each of five
+seasons, then Sacred Time (magic allocation) (`tutorials/T16_managers_narrative.md`, King of Dragon Pass [V3 manual]); a default end date
+of 1453 (`tutorials/T01_realm.md`, Crusader Kings III [V3 GF]).
 
 ## 5 Resources
 
@@ -202,10 +212,10 @@ arrives at another (`es/loop/effects_economy.py:215-219`; `es/loop/effects_gover
 Absent in code: coin flow, prices, trade, credit, tax, crafting, troop stocks (DESIGN-ONLY; T08 §7, ERRATA C7).
 
 **Sources and sinks as a comparison handle.** Every settlement is built with one Site of each yielding kind at full condition
-(`es/harness/populated.py:771-776`), so all 37 produce the same four goods and none lacks what another has; yield reads a Site's
+(`es/harness/populated.py:772-777`), so all 37 produce the same four goods and none lacks what another has; yield reads a Site's
 condition and no person (`es/loop/matter.py:589-591`), so a death removes eaters and no output; stores never cap, spoil or cost upkeep,
-and realm stores rise 0 → 9,250 in two seasons in every seed (round-3 probe). `work` can never raise a dwelling or garrison (their
-`band_floors` are empty, RY:2631-2632; 248 of 322 Sites). Population is fixed at build and only falls. Nearest verified precedents:
+and realm stores rise 0 → 9,250 in two seasons in every seed (uncommitted round-3 probe). `work` can never raise a dwelling or garrison (their
+`band_floors` are empty, RY:2631-2632; 248 of 322 Sites, uncommitted round-3 probe). Population is fixed at build and only falls. Nearest verified precedents:
 per-minute maintenance on most buildings (`tutorials/T10_npc_economy.md`, Anno 1800 [V3 wiki Marketplace rev 2023-04-11]); heat allocated
 per district and paid in coal or oil (`tutorials/T04_colony_b.md`, Frostpunk 2 [V3 steam 1.3]); granary, storehouse and firewood stocked
 before winter (`tutorials/T04_colony_b.md`, Manor Lords).
@@ -225,14 +235,14 @@ The cells below were checked against the code at `51d7b05` in round 3; the grade
 | axis | as built (code at `a4ca9a5`, re-checked at `51d7b05`) | as proposed [PROPOSED] |
 |---|---|---|
 | **1 population resolution** | 46 named persons at weight 1 plus 37 cohorts, each one Person at weight 2; population is Σ weight over `reside` edges; weight has no runtime writer, so cohorts never change size (CR:659; WQ:1265; COMP:309) | population grows at CENSUS to `capacity` (J-C-9, COMP:534); hunger binds settlements (RB-5, `...-v9-remediation-03-...md:193`) |
-| **2 named-agent cardinality** | 46, a closed cast "for now": ED-WR-0011 was RULED by Jordan 2026-09-13, Option A (`registers/editorial_ledger_wr_archive.jsonl`, the second ED-WR-0011 row; `es/loop/census.py:39-40`); CENSUS individuation exists and fired 0 times (ctl0-2); the count only falls (46 → 37 named at seed 0 in two seasons) | births parked on that ruling ("We will return much later") |
-| **3 contested object** | the body (`fight`), a standing / proposition / matter (SC), seats (`confer`/`revoke`), stores (`requisition`); a field is declared but never fought in the natural run (ctl0), and fought only on a hand-built settlement march; labour and time uncontested (yield reads no person, `es/loop/matter.py:589-591`; COMP:311) | land by occupation (IN-13, COMP:311); troops levied from settlements (J-C-2, COMP:527; verbs R-01 `levy`) |
+| **2 named-agent cardinality** | 46, a closed cast "for now": ED-WR-0011 was RULED by Jordan 2026-09-13, Option A (`registers/editorial_ledger_wr_archive.jsonl`, the second ED-WR-0011 row; `es/loop/census.py:39-40`); CENSUS individuation exists and fired 0 times (ctl0-ctl2); the count fell 46 → 37 at seed 0 in two seasons, and only a CENSUS individuation could raise it (`es/loop/census.py:96-108`) | — (births ruled out "for now", ED-WR-0011: "We will return much later") |
+| **3 contested object** | the body (`fight`), a standing / proposition / matter (SC), seats (`confer`/`revoke`), stores (`requisition`), land by `seize` under occupation (IN-13, built: `es/loop/effects_information.py:915-927`; no `seize` row in ctl0-ctl2, so none reached the fold); a field is declared but never fought in the natural run (ctl0), and fought only on a hand-built settlement march; labour and time uncontested (yield reads no person, `es/loop/matter.py:589-591`; COMP:311) | troops levied from settlements (J-C-2, COMP:527; verbs R-01 `levy`) |
 | **4 player position** | none in the season loop: every person is a chooser, and the only seam is the test-only callback `dispatching_chooser` (`es/harness/play_surface.py:41-52`; ERRATA G16). Outside the loop, `systems/social_contest/sim/contest/agon_harness.py` is a stdin-played social contest and two HTTP workbenches serve a designer (overview §2.1) | embedded: "for a player character the player IS the decision procedure" (`architecture/meta/04_CODE_ARCHITECTURE.md:844-846`); IN-46 played fight, IN-47 character-sheet space (D-2) |
 | **5 control channel** | a verb and its subject from the menu for one question per round; seats add remit acts; a person never commands another (VT; `es/decision/options.py`); COMP's ladder: rung 1 present, rung 4 partly (computed `open_case`/`determine`), rungs 2-3 absent (COMP:313) | rung 4's vote over commitments blocked on J-4; rung 2 (zone) absent in the plan (COMP:313) |
 | **6 coupling latency** | an Event reaches observers' ledgers at WITNESS in the same round and can shape the next round's question (`es/loop/driver.py:510`); telling carries belief onward (4 of 1,270 claims, COMP:314); no lagged cohort | a lagged population (J-C-9, COMP:534) |
-| **7 durability / ending** | persistent with no ending condition that halts it; `victory` (MS = 0 → Post-Calamity; all factions dissolved → Anarchy) was deleted (`references/module_contracts.yaml:675-680`; ERRATA G17). Since PR #494 the season reports `endings_reached` (IN-27: `peninsular_sovereignty`, the victory, "UNREACHABLE IN COMPUTED PLAY", RY:2531-2541; `theocracy`); the realm reached none in seeds 0-2 | the relational victory is now the built Query; GD-1's Accord, Stability and sustain clauses have no carrier (RY:2531-2541) |
+| **7 durability / ending** | persistent with no ending condition that halts it; `victory` (MS = 0 → Post-Calamity; all factions dissolved → Anarchy) was deleted (`references/module_contracts.yaml:675-706`; ERRATA G17). Since PR #494 the season reports `endings` (the `world_q.endings_reached` Query, `es/loop/driver.py:518, :532`; IN-27: `peninsular_sovereignty`, the victory, "UNREACHABLE IN COMPUTED PLAY", RY:2531-2541; `theocracy`); the realm reached none in seeds 0-2. Grade: the read RUNS-IN-LOOP; reaching one is TESTS-ONLY (`engine/season/tests/test_in27_endings.py`). The relational victory is partly built (overview §7 A4); GD-1's Accord, Stability and sustain clauses have no carrier (RY:2531-2541) | — (no carrier proposed for GD-1's Accord, Stability and sustain; RY:2541 "Revert: Jordan names a carrier") |
 | **clock count** | one world clock, `w.tick` (seasons), with five rounds as a driver-local sub-index; combat turns and battle ticks run to completion inside one step (auto-resolve); the MS world clock has no caller (CR:305-308; ms_track.py:45). COMP counts "two clocks, auto-resolve only" (COMP:316) | a paused, played fight (IN-46) would give the second clock a player (COMP:316) |
-| **legibility** | no surface: the chooser sees verb identity, not odds, opponent, place, witnesses or clock (T02 §2.4); odds exist in closed form (`sigma_leverage.p_success`) and are shown to no one, and that helper is the Gaussian stand-in, which understates Partial-or-better on the real social dice by 7-15 points (14.4 % against 26.0 % at pool 2 / Ob 2); COMP: "legibility empty" (COMP:316) | Layer 1 says "No state is hidden from the player" (`architecture/meta/01_AXIOMS.md:301-302`), split against its own §C.11 (COMP:36); IN-47 |
+| **legibility** | no surface: the chooser sees verb identity, not odds, opponent, place, witnesses or clock (T02 §2.4); odds exist in closed form (`sigma_leverage.p_success`) and are shown to no one, and that helper (`engine/dice_engine/sigma_leverage.py`, the social roll's only closed form) is the Gaussian stand-in, which understates Partial-or-better on the real social dice by 10-15 points in the four cases file 13 R-F11 lists (pools 2-5, Ob 1-2; 14.4 % against 26.0 % at pool 2 / Ob 2) and by 17.3 points at pool 1 / Ob 1 (exact enumeration, `PER_DIE` 7 = (0.40, 0.800) at `:77-79`); COMP: "legibility empty" (COMP:316) | Layer 1 says "No state is hidden from the player" (`architecture/meta/01_AXIOMS.md:301-302`), split against its own §C.11 (COMP:36); IN-47 |
 
 COMP = `research/by_lane/00_COMPARATIVE_ANALYSIS.md`.
 
@@ -244,7 +254,7 @@ COMP = `research/by_lane/00_COMPARATIVE_ANALYSIS.md`.
    unspendable, which stays true. CROSS C1 governs.
 2. **Acts per season.** T08:36 says "about 8–10 acts a season (ERRATA G11)". CROSS C1: about 6.3–8.0 by basis (ctl0: 1,132 acts
    reached the fold over 2 seasons). Round 3: both readings hold on their own basis; per acting person per tick, 6.4 / 7.7 reach the fold
-   and 8.1 / 9.4 are formed (seed 0), so "8–10" is right for formed acts and wrong for the ctl column (§3).
+   and 8.1 / 9.4 are formed (seed 0; uncommitted round-3 probe), so "8–10" is right for formed acts and wrong for the ctl column (§3).
 3. **"Up to 5 scene actions".** T07:7 ("picks up to 5 scene actions per season") and T04:9-10 ("5 scenes of up to 3 acts") misstate the
    budget: it is `max(1, 5 + holds − bands − legs)` actions, at most 5 scenes and 10 actions, and budget 5 buys 7 acts.
 4. **Grade definition.** T07:27-29 defines the grades as the draft did ("RUNS-IN-LOOP = the season loop reaches it"), which CROSS C12
@@ -266,20 +276,52 @@ Opened: CR:43-107, :232-348, :469-612, :655-760, :849-912, :1040-1073; RY:101-26
 DR:136-218; `modules/combat/wrapper.py:111-118, :463, :487-504`; `modules/combat/config.py:112`; `modules/mass_battle/orchestration.py:1810-1820`;
 `modules/mass_battle/config.py:150-160`; `systems/threadwork/sim/coherence.py:115-133, :374`; `systems/overview/sim/ms_track.py:25, :45`;
 canon `09_terminology.md:77-117`, `08_history.md:13-24`, `07_drift.md:311-315`; `architecture/meta/04_CODE_ARCHITECTURE.md:844-846`;
-`01_AXIOMS.md:301-302`; `references/module_contracts.yaml:675-680`; COMP:10-39, :290-336; proposal headers named in §2. `grep` of
+`01_AXIOMS.md:301-302`; `references/module_contracts.yaml:675-706`; COMP:10-39, :290-336; proposal headers named in §2. `grep` of
 `engine/`, `modules/`, `systems/` Python for Calamity/Locked Zone carriers (only the struck `rendering.py` function) and for `coin`.
-Counts from ctl0/ctl1 as printed. T01-T10 §1 tables read as of 22:07; tutorials were being edited, so their line numbers may move.
+Round 3 also opened: RY:2494-2553, :2618-2636, :2982; WQ:1764, :2111; `es/offices.yaml` (`conferral` rows);
+`es/harness/populated.py:772-777, :1240-1252`; `es/loop/census.py:30-109`; `es/harness/play_surface.py:41-52`;
+`es/decision/options.py:1030-1057`; `es/loop/matter.py:587-591, :622-630`; `es/loop/effects_economy.py:28-125`;
+`es/loop/effects_information.py:905-934`; `es/loop/resolve.py:370-384, :958-1037`; `es/loop/driver.py:516-518, :532` (`endings`);
+`engine/dice_engine/sigma_leverage.py:70-82, :246-275`; `modules/mass_battle/orchestration.py:178-197`;
+`modules/combat/wrapper.py:484-528`; `engine/season/tests/test_in27_endings.py`; `ctl/control.py`; T15:76-77; T16:173-174.
+Counts from ctl0-ctl2 as printed. T01-T10 §1 tables read as of 22:07; tutorials were being edited, so their line numbers may move.
 
 ### Round-3 corrections
 
 Each line: old claim → new claim (evidence). Probes re-run at `51d7b05` unless the line says otherwise.
 - Locators into `rosters.yaml`, `queries/world_q.py`, `data/fixtures.py`, `loop/driver.py`, `queries/person_q.py` → re-mapped to `51d7b05` (PR #494 moved them; unchanged lines matched between versions, spot-checked).
 - ctl0 "attempted/ok" → "reached the fold/ok", with formed counts where acts are refused before the fold (file 13 Part 3 R-F3; `es/loop/resolve.py:377-379`).
-- Acts per person-season "6.3-8.0 by basis" → plus the per-tick, per-acting-person readings 8.1 / 9.4 formed and 6.4 / 7.7 reaching the fold, max 15, and the budget drift 5.57 → 6.41 → 7.69 (R-F6; round-3 probe).
+- Acts per person-season "6.3-8.0 by basis" → plus the per-tick, per-acting-person readings 8.1 / 9.4 formed and 6.4 / 7.7 reaching the fold, max 15, and the budget drift 5.57 → 6.41 → 7.69 (R-F6; uncommitted round-3 probe).
 - Office row: conferral counts and "can never be refilled" added: 7 of 32 seats have no basis (R-F1; `offices.yaml:188-266`; `populated.py:1240-1250`).
 - §3 table: `examine`, `work`, `restore`, `revoke`, `march`, `migrate` refusal causes added (R-F2, R-F5, R-F8, R-F9, R-F10; I1 verification claim 2).
 - §4: campaign-length row and in-world duration added; §5: sources-and-sinks handle added; §3: action-economy handle added, each with precedent pointers into `research/game_precedent_suite/`.
 - §6 axis 2 "closed 'for now'; births have no position" → ED-WR-0011 RULED Option A, 2026-09-13 (R-F7; `registers/editorial_ledger_wr_archive.jsonl`).
 - §6 axis 4 "none: no player interface" → none in the season loop; a stdin social contest and two designer workbenches outside it (R-F4).
 - §6 axis 7 "no ending condition" → endings reported each season since PR #494, none reached, nothing halts (R-F12; `es/loop/driver.py:515-518`).
-- §6 legibility: the closed-form helper understates Partial-or-better by 7-15 points (R-F11; `sigma_leverage.p_success` against exact enumeration).
+- §6 legibility: the closed-form helper understates Partial-or-better by 10-15 points in the four R-F11 cases, 17.3 at pool 1 / Ob 1 (R-F11; `sigma_leverage.p_success` against exact enumeration).
+
+#### Audit fixes
+
+Each line: old claim → new claim (evidence). Applied after the third independent audit of this file; each cite was reopened at the current tree.
+- §4 in-world duration "a duration only for a combat engagement ... a battle tick none" → durations stated only in comments, combat "~10s" and a mass-battle phase of ~5-6 ticks, 3-6 phases to a battle (`modules/combat/wrapper.py:504`; `modules/mass_battle/orchestration.py:184-192`); the §4 mass-battle row amended to match.
+- §4 "a year exists only in the swept arms of `season_factor_draw`" → the loop's only year is that table, and the dead MS track also counts in years (`systems/overview/sim/ms_track.py:25, :45`).
+- §3 "no verb has a separate action price" and "Nothing prices one subsystem's acts above another's" → only travel (`move`, `migrate`) takes an action off the rest of the season, and hold-minting verbs return one (`es/decision/budget.py:60`; `es/loop/effects_migration.py:119`).
+- §3 EC cell "work 77/0 (never on a dwelling or garrison ...)" → `work` stages a rise only where a live works names the Site, else `work.unavailable`, and never on a dwelling or garrison (`es/loop/effects_economy.py:103`; RY:2631-2632).
+- §3 Pax Pamir gloss "where holdings add actions but the cap stays fixed" → up to two actions a turn, each court card at most once, favoured-suit card actions not counting against the cap (T15:76-77 [V3 p8-9], [V3 p12]).
+- §6 axis 7 built text in the "as proposed" cell → moved to the as-built cell with the grade (read RUNS-IN-LOOP; reaching one TESTS-ONLY, `engine/season/tests/test_in27_endings.py`), "now the built Query" → "partly built" (overview §7 A4); the proposed cell now says no carrier is proposed (RY:2541).
+- §6 axis 2 proposed cell "births parked on that ruling" → "births ruled out 'for now', ED-WR-0011" (`registers/editorial_ledger_wr_archive.jsonl`).
+- §6 legibility "understates Partial-or-better ... by 7-15 points" → 10-15 points in the four R-F11 cases (pools 2-5, Ob 1-2) and 17.3 at pool 1 / Ob 1 (exact enumeration against `engine/dice_engine/sigma_leverage.py:77-79`).
+- ctl column "speak 3/3 of 22 formed" → "3/3 (all Failure, `matter.turned`)", with `ok` defined in the header as at least one non-refusal Event (`ctl/control.py:13, :21`).
+- Probe-only figures with no committed instrument (formed counts, per-tick acts, budget drift, 11 of 74, attacker body 1000 → 20, chosen hearths full, 9,250, 248 of 322) → each tagged "(uncommitted round-3 probe)"; `ctl/control.py` counts `d.resolved` only.
+- §3 PC cell "every Wounded or Untouched band is a fight the actor lost" → in seeds 0-2 all 33 Wounded or Untouched bands (of 59 calls) were fights in which the actor was felled, not a mechanism (`modules/combat/wrapper.py:504, :524-525`).
+- §3 "a travel leg costs a budget-6 holder one act (9 → 7)" → one action, two acts (budget 6 → 5 is 2+2+2 → 2+2+1; `es/decision/budget.py:60`).
+- §5 handle `populated.py:771-776` → `:772-777`, where line 777 carries the full-condition clause.
+- §6 axis 7 `module_contracts.yaml:675-680` → `:675-706`, where the `g_ms0` and `g_diss` gates sit at :685-689 and :700-702.
+- §6 axis 2 "the count only falls" → the count fell 46 → 37 at seed 0 and only a CENSUS individuation (0 fired) could raise it (`es/loop/census.py:96-108`).
+- §6 axis 7 "reports `endings_reached`" → reports `endings`, the `world_q.endings_reached` Query (`es/loop/driver.py:518, :532`).
+- §3 "11 of 74 persons hold more than 10" → "have a budget above 10 actions" (a hold is a tenure, not an action).
+- Header "ctl0/ctl1" → "ctl0-ctl2" for `ctl/realm_seed{0,1,2}_2seasons.txt`.
+- Checks "Opened" → the round-3 cites added, and `module_contracts.yaml:675-706`.
+- §4 KoDP "five seasons then Sacred Time, two actions each" → two actions in each of five seasons, then Sacred Time, a magic allocation step (T16:173-174).
+- §3 "Reached the fold" omitted "acts refused at admission" → `_fold` appends on entry, so ordinary admission refusals are counted; the three omitted classes are named (`es/loop/resolve.py:377-379, :974-977, :981-998, :1012-1032`).
+- §6 axis 3 "land by occupation (IN-13)" in the "as proposed" cell → IN-13 is built, moved to the as-built cell; no `seize` row in ctl0-ctl2 (`es/loop/effects_information.py:915-927`).
