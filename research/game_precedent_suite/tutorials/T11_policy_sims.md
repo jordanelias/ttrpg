@@ -155,7 +155,7 @@ Automated: timers, outcome selection, resource refills for repeatable ops, repor
 | Pick the advisor | different time and, on some ops, different odds | The Chantry Remains: 48 / 60 / 60 min; better outcome 75% Josephine, 50% Leliana, 25% Cullen [V3 .../The_Chantry_Remains rev 2025-08-29] | every op |
 | Repeatable "Gather" / region resource ops | time | herbs, cloth, leather, metals, coin [V3 .../War_table_(repeatable)] | frequent mid-game |
 | Story-gate op | 15+ Power; excludes the other branch | moves the main plot; mages vs templars | rare, big |
-| Spend a perk | one perk point | 34 perks in four trees, 19 obtainable [V3 Inquisition_perks] | at rank-ups |
+| Spend a perk | one perk point | 34 perks in four trees, 19 obtainable [V3 Inquisition_perks]; the one-point-per-rank-up rule is not on that page [source not re-opened] | at rank-ups |
 | Recruit agents (field decision) | dialogue choices | -5% time for one advisor each | occasional |
 | Skyhold upgrade | resources; one of three branches | +1 Power; unlocks table ops; cosmetic variants | rare |
 | Judge prisoners at the throne | none | consequences [M] | rare |

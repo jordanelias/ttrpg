@@ -205,7 +205,7 @@ Clock: real time, no turns; chapter levels joined by a mansion hub. Meters: red 
 | Swap weapon (torch, firearm) | none | torch kills Mantorok and Xel'lotath zombies by fire [V3 EDf Zombie] | per enemy type | frequent |
 | Cast a stored spell (Shield, Damage Field, Magickal Attack, Dispel, Reveal Invisible) | MP by Circle size (3, 5, 7) | defend, damage, dispel; puzzle barriers are keyed to specific runes [V3 EDf Magick rev 2024-12-04] | combat and puzzles | frequent |
 | Pick the alignment rune of a cast | Recover: Xel'lotath (Sanity) 10/20/30 MP, Chattur'gha (Health) 30/40/50, Mantorok (both) 40/50/60, Ulyaoth refunds its own MP | counter Pious's Ancient: Ulyaoth > Chattur'gha > Xel'lotath > Ulyaoth [V3 EDf Alignment rev 2018-07-20] | every cast | frequent |
-| Assemble a new spell (Circle + alignment + verb + noun + up to six Pargon power runes) | found runes only | discover spells without scrolls [V3 NWR] | on finding a rune | occasional |
+| Assemble a new spell (Circle + alignment + verb + noun + up to six Pargon power runes) | found runes only | discover spells without scrolls [V3 NWR]; the six-rune limit is on the Fandom Magick page [V3] | on finding a rune | occasional |
 | Summon and steer Zombie, Trapper or Horror | MP; Sanity drains constantly while steering a Horror [V3 EDf Horror rev 2024-02-28] | fight, open doors, move objects | bosses, puzzles | occasional |
 | Enchant a weapon | 5/10/15 MP, lasts 2 minutes | x1.375 / x1.5 / x2 vs the weak alignment; Mantorok saps [V3 EDf Magick] | hard fights | occasional |
 | Drink Liquid Courage or use a restore item | limited stock (Edward starts with about 7) | about half the Sanity bar [V3 EDf Liquid_Courage rev 2024-11-27] | emergencies | rare |
