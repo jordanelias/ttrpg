@@ -43,7 +43,7 @@ Paradox Development Studio (Paradox Interactive); real-time-with-pause grand str
 8. Unpause at speed 3. Hire advisors you can afford; spend the first monarch points on technology; take Admin/Diplomatic/Influence ideas when a slot opens [V3 Marquoz].
 9. A war will arrive (France's first event is the Surrender of Maine). Unprotected provinces fall to one regiment in 30 days; forts must be besieged (6-9 months in the example) [V3 Superjump].
 10. Open the peace screen: war score 33 in the example but only 17 points of demands were taken; the AI accepts by war length, relative strength and allies [V3 Superjump].
-11. Check relations and AE afterwards; coalitions form against high-AE nations and members leave at low AE (1.37.3) [V3 Steam 2024-09-10].
+11. Check relations and AE afterwards; members leave a coalition once AE is low (1.37.3) [V3 Steam 2024-09-10]; coalitions forming against high-AE nations is the usual rule [M, not in that note].
 12. Keep stacking points into tech to stay ahead: "even a difference of one point can have a huge impact" [V3 Marquoz].
 #### 5. What changes later
 Institutions appear and spread (feudalism, renaissance...), so tech costs rubber-band (a missing institution is +50% per tech) [V3 2021-09-28 diary]. Age of Absolutism: most privileges lower absolutism, so players revoke them (needs Loyalty > Influence) [V3 Steam 2020-06-23 replies]. Colonisation, trade nodes, Reformation, large coalitions, revolts, estate disasters. Pressure ramps because the AI's alliance blocs and your own AE grow [M].
