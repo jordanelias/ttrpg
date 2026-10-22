@@ -499,7 +499,7 @@ cannot empty a town". It eats where it stands. One `Felled` deletes it whole (ER
   `off_duke_valorsmark`, `off_npc_030`, `off_npc_031`, `off_npc_032`, `off_npc_050` and the unauthored guild-leader seat `off_npc_084`;
   `has_conferral_basis`, `state/gate.py:643-657`, and `_req_confer` refuses them first, `predicates.py:126-127`), so none can be refilled
   once its holder dies. At the end of season 2 the vacant seats number 8, 6 and 10 at seeds 0–2, and 3, 5 and 6 of them are those seats.
-  The King (`p_npc_020`) dies within two seasons at every seed, vacating `off_npc_020` and the second seat he holds,
+  The King (`p_npc_020`) is dead after the first season at every seed (checked by re-running seeds 0-2 at 51d7b05), vacating `off_npc_020` and the second seat he holds,
   `off_duke_valorsmark`. The one refill in all three seeds is a `confer` at seed 1 (4 later `confer.refused`).
 - **Being seen.** Arriving puts you in front of every witness at the destination; there is no fog and no concealment of the journey
   itself.
@@ -710,7 +710,7 @@ Nothing in the round-2 findings for T10 did I reject.
    would apply one shared hazard (formula, not run). §2.4 step 4. Evidence: `world_q.py:1004-1008, 1015`; `fixtures.py:608`; `carriers.py:687`.
 6. **Death without succession** (rows 5, 24, 90; also-row 7). Old: "no successor mechanism (`succeed` is declined)". New: 7 of 32 offices
    have no conferral basis (ids listed, §5c), so they never refill; vacant at the end of season 2: 8, 6, 10 (null-basis seats 3, 5, 6); the
-   King dies within two seasons at all three seeds; one refill in all three seeds (seed 1). Errata C8 and the T08/T09 files say six: seven.
+   King is dead after the first season at all three seeds; one refill in total across the three seeds (seed 1). Errata C8 and the T08/T09 files say six: seven.
    Evidence: `state/gate.py:643-657`; `predicates.py:126-127`; `verb_table.yaml:1113`; re-run of the realm, seeds 0–2.
 7. **What a fight and a grudge leave** (rows 57, 61). Old: silent. New: a fight writes only its subject; nothing decays a stance row, and the
    write matrix refuses a stance write at MATTER. §2.6. Evidence: `effects_combat.py:41-43, 179, 306, 449`; `state/world.py:58-61`.
