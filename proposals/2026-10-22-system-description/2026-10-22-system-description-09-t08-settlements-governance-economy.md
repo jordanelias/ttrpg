@@ -151,7 +151,7 @@ decisions there in Victoria 3, Tropico 6 and Patrician IV (`research/game_preced
 | **remit act** | a power a seat grants its holder | six values: issue, determine, confer, revoke, dispatch, convene. **The tree contradicts itself**: the roster is declared `open: true` (`rosters.yaml:316`; H-52 turns on it) while its own `source:` (`:315`) and `verb_table.yaml:257, 801, 1478` call it CLOSED. Loop-built seats are seated with `remit_default` (a "NOT CANON" test fixture) and keep `dispatch` through `remit_unruled` (`offices.yaml:100-119, 141`) | `rosters.yaml:314-322` |
 | **hold** | a Tenure Person→Office (or Rung, Record, Proposition): you sit in the seat / own the place | one live hold per object; its payload snapshots the seat's remit (`granted_acts`) | `state/carriers.py:77` |
 | **purview** | where a seat's writ runs: its own rung and every rung below, plus the ground of seats whose holders are sworn to it (one edge deep, IN-40) | asked of the seat exercised (`Act.via`), never of the actor | `state/gate.py:353` |
-| **conferral basis** | how a seat is filled | appointed, elected, annex, or none; realm authored: appointed 17 / elected 8 / none 6. A **none** seat (King, Duke of Valorsmark, Duchess of Hafenmark, Widow Regent, Heir, Princess) can never be conferred, so once vacant it stays empty: `succeed` has no effect | `rosters.yaml:2234`; `offices.yaml:188-266`; `loop/predicates.py:126-127` |
+| **conferral basis** | how a seat is filled | appointed, elected, annex, or none; realm authored: appointed 17 / elected 8 / none 6; the derived guild-leader seat `off_npc_084` also has none (its `conferral` is read from a row that does not exist, `harness/populated.py:1241-1250`), so 7 of the 32 built seats. A **none** seat (King, Duke of Valorsmark, Duchess of Hafenmark, Widow Regent (post "Queen"), Heir (post "Prince"), Princess, guild leader) can never be conferred, so once vacant it stays empty: `succeed` has no effect | `rosters.yaml:2234`; `offices.yaml:188-266`; `loop/predicates.py:126-127` |
 | **revocation basis** | who may strip a seat | `rung_above_same_faction`, `rung_above_in_holdings`, or none ("strippable by nobody") | `rosters.yaml:2254`; `state/gate.py:568` |
 | **ban** | a restraint Tenure: banned persons cannot be seated or sworn | opened permanently on an *appointed* holder who is revoked | `state/gate.py:599`; `queries/world_q.py:1242` |
 | **oblige** | a Tenure Person→Office: you serve this seat | an act-opened edge carries a `Term`, `oblige_term=4` seasons; the two authored at world-gen (NPC-070 → the King's seat, NPC-041 → `off_restoration_leader`) carry **no term** and never lapse | `loop/effects_governance.py:377`; `data/fixtures.py:882`; `harness/populated.py:1317-1339` |
@@ -267,8 +267,11 @@ refused (`loop/effects_information.py:73-90`). Then:
   With one person present the whole headroom is filled in one act; with n present each act moves 1/n.
   `ceiling` is 1000 where no works names the Site, else `1000 × matured stages // declared stages`
   (`queries/world_q.py:382-419`): the pace of a works is its ripened stages, not a rate. `work` stages a rise only when a
-  live works names the Site's kind at its rung; with none, it stages 0 and is refused (`work.unavailable`).
-  `restore` needs no works and repairs wear up to full scale.
+  live works names the Site's kind at its rung; with none, it stages 0 and is refused (`work.unavailable`). For a `dwelling` or a
+  `garrison` no works helps: their `band_floors` cells are empty on purpose (`rosters.yaml:2631-2632`), and the `floor` read raises a
+  typed `Unspecified` before any rise is staged (`queries/world_q.py:2783-2799`), so the act is refused (`work.unavailable` on a dwelling at condition 0
+  with a works naming it, and at 1000; round-3 re-run). So `work` can never run on 248 of the realm's 322 Sites
+  (211 dwellings + 37 garrisons). `restore` needs no works and repairs wear up to full scale.
 - `sabotage` stages `−condition × 1 // n` (`:141-177`): one saboteur alone takes a Site to 0 in one act. It never
   removes the Site.
 - **In the realm nobody is alone at a producing Site.** Harbour, seam and garrison sit on the settlement rung, where
@@ -373,18 +376,19 @@ brackets); effects in `loop/effects_*.py`.
 | **oblige** [878] | yourself | subject is a seat; you do not hold it; no live oblige to it already; not banned | `oblige` to the seat, `Term(tick + 4)`; `duty.taken` | `duty.refused` | – · 24/22 · – |
 | **requisition** [766] | a seat granting `issue` | subject rung within `via`'s purview; `stores(subject, kind) ≥ amount` | `amount` moves subject rung → seat's rung; `requisition.taken` | `.unauthorized` / `.refused` | 2/0 · 5/0 · 5/0 |
 | **transfer** [1475] | a seat granting `issue`, or yourself, or a holder of the store | `stores(from, kind) ≥ amount`; both sides rungs; not a self-transfer; amount > 0 | `amount` moves from → to (conserved); through a seat, from its rung, to obligees' place: renews terms (§2.4); `transfer.made`, `term.renewed` | `transfer.refused` | 45/1 · 37/0 · 43/5 |
-| **work** [1506] | yourself (`own`; `presence:<site>` is only a second alternative) | typed precondition is `condition ≥ floor` and nothing else (floor = the least demanding use: harbour 100, seam 50) — **no presence clause**; the rise is staged only if a live works names this Site's kind at its rung, else `work.unavailable` | stages `+_rise` on condition; `site.worked` | `work.unavailable` | 77/0 · 70/0 · 63/0 |
-| **restore** [982] | yourself, present at the Site | the Site exists; you are present at it | stages `+_rise` up to the ceiling; `site.restored` | `restore.refused` | 23/0 · 31/0 · 30/0 |
+| **work** [1506] | yourself (`own`; `presence:<site>` is only a second alternative) | typed precondition is `condition ≥ floor` and nothing else (floor = the least demanding use: harbour 100, seam 50; dwelling and garrison have no floor, so the read refuses there, §2.5) — **no presence clause**; the rise is staged only if a live works names this Site's kind at its rung, else `work.unavailable` | stages `+_rise` on condition; `site.worked` | `work.unavailable` | 77/0 · 70/0 · 63/0 |
+| **restore** [982] | yourself, present at the Site | the Site exists; you are present at it; it has headroom below its ceiling (a Site at 1000 refuses, `restore.refused`; a Site below its ceiling rises, `site.restored`; round-3 re-run) | stages `+_rise` up to the ceiling; `site.restored` | `restore.refused` | 23/0 · 31/0 · 30/0 |
 | **sabotage** [1019] | yourself, present at the Site | the Site exists; you are present | stages `−condition // n`; `site.damaged` | `sabotage.refused` | 34/0 · 22/0 · 33/0 |
 | **found** [487] | yourself | subject is a works you hold, planning a rung kind that ascends to `at`; the works' rung covers `works_cost` | new Rung + `contain` + your `hold` on it; cost moves payer → new rung; `rung.founded` | `found.refused` | 24/0 · 27/0 · 23/0 |
 | **build** [510] | yourself | subject is a works you hold, planning a Site kind; cost covered | new Site at condition 0; cost consumed; `site.built` | `build.refused` | 19/0 · 17/0 · 21/0 |
-| **migrate** [839] | yourself | not detained; a contain path to `to`; as a newcomer, room (§2.6) | presence and residence both move; `residence.changed` | `migrate.refused`, `travel.blocked` | 81/0 · 143/0 · 143/0 |
+| **migrate** [839] | yourself | not detained; a contain path to `to`; as a newcomer, room (§2.6) | presence and residence both move; `residence.changed` | `migrate.refused`, `travel.blocked`; every computed call is refused at the capacity test on an occupied hearth (§5c) | 81/0 · 143/0 · 143/0 |
 | **move** [863] | yourself | not detained; a contain path | presence only; a travel leg cleared at next MATTER; `travel.moved` | `travel.blocked` | 42/16 · 35/17 · 40/12 |
 | **dispatch** [372] | a seat granting `dispatch` | the named person exists | **nothing** (`writes: []`); `order.given`. Naming an absent id emits `person.demanded`, which makes CENSUS individuate a person — TESTS-ONLY: `person.individuated` is 0 in all three seeds | `dispatch.refused` | 18/6 · 18/7 · 10/10 |
 | **comply** [183] | yourself (`own`); formed only on a writ you hold and your own ledger names (`referent_class: Record`, H-203) | typed: the subject is a `dispensation`, and a claim of its terms is in your own ledger | **nothing** (`writes: []`); `compliance.given`. The act the writ asks for is your own separate act | `compliance.impossible` | – · – · – |
 | **issue** [561] | a seat granting `issue` | executor is a Person within purview; terms from your own ledger | a `dispensation` Record (a writ) you hold; `dispensation.issued` | `issue.unauthorized` / `.refused` | 6/5 · 12/5 · 14/8 |
 
-Also on the table but inert here: `exchange` [416] (row declared, no effect), `succeed` [1096] (no effect),
+Also on the table but inert here: `exchange` [416] (row declared, no effect; not in `resolvable_verbs()`, `loop/driver.py:101`, so a
+callback that submits it raises `Unspecified` and aborts the season rather than being refused; round-3 re-run), `succeed` [1096] (no effect),
 `evade / defy` [401] (not resolvable: `requires_typed: none` and no predicate, `verb_table.yaml:403-408`; it would
 emit `compliance.withheld` only), `seize` [1042] (FA/MB: closes a holder's hold on an occupied settlement or Record).
 `create_record` (FI) is the works producer; a computed `create_record` carries no payload and always mints `text`
@@ -434,15 +438,19 @@ term matures; paying early is not wasted (the new term runs on from the old one)
 **Remove a rival.** Sit in a seat granting `revoke` on the rung *directly above* his seat's rung, of his faction
 (`rung_above_same_faction`), or on that parent rung while you hold *his seat's own rung* as a holding, any faction
 (`rung_above_in_holdings`); act `revoke` naming the office. If his seat was appointed, he is banned for life: he cannot be conferred or sworn again. A seat with no
-revocation basis (the King's, `off_npc_020`) cannot be taken this way at all. **The other route is `confer`:** a
+revocation basis (the King's, `off_npc_020`) cannot be taken this way at all. In the built realm only the Duke of Valorsmark's seat
+qualifies (§5c). **The other route is `confer`:** a
 *vacant* seat needs only purview; displacing a holder needs the same revocation authority *and* a holder with no live
 `commit` (`loop/predicates.py:141-160`), and it closes his hold without a ban. Seed 1's one executed `confer` was the
 Confessor (`off_npc_021`, remit includes `confer`) seating himself on the Senior Inquisitor's seat beside him at `terr_T9`.
 
-**Secure a succession.** Only for seats with a conferral basis. The six `conferral: null` seats — the throne
-(`off_npc_020`), the Duke of Valorsmark, the Duchess of Hafenmark, the Widow Regent, the Heir and the Princess — refuse
-every `confer` (`loop/predicates.py:126-127`; `offices.yaml:188-266`), and `succeed` has no effect, so if the holder
-dies or releases the seat it stays empty for the rest of the run. Keeping the holder alive is the only play.
+**Secure a succession.** Only for seats with a conferral basis. The seven null-conferral seats (six authored `conferral: null`,
+plus the rowless guild-leader seat `off_npc_084`) — the throne (`off_npc_020`), the Duke of Valorsmark, the Duchess of Hafenmark,
+the Widow Regent, the Heir, the Princess and the guild leader — refuse every `confer` (`loop/predicates.py:126-127`;
+`offices.yaml:188-266`; `harness/populated.py:1241-1250`), and `succeed` has no effect, so if the holder
+dies or releases the seat it stays empty for the rest of the run. Keeping the holder alive is the only play. Measured (seeds 0-2,
+2 seasons, round-3 re-run at `51d7b05`): null seats are 3 of 8, 5 of 7 and 6 of 10 vacated seats; the King (`p_npc_020`) dies in the
+first season in all three seeds, and his seat and the Duke of Valorsmark's are vacant at the end of season 2 in all three.
 
 **Fund a founding.** (1) `create_record` with `kind: works`, `subject_matter: {plan: hearth, at: <settlement>}`,
 `rung: <the paying rung>`. (2) Hold the works. (3) The paying rung holds grain 10 (timber 10 for a Site). (4) `found`
@@ -453,11 +461,12 @@ dies or releases the seat it stays empty for the rest of the run. Keeping the ho
 | play | what blocks it today (seeds 0–2, 2 seasons; ctl/ files) |
 |---|---|
 | work / restore / sabotage | the chooser forms them on non-Site referents (REM-22's `referent_class: Site` is unbuilt): work 77/0, 70/0, 63/0; restore 23/0, 31/0, 30/0; sabotage 34/0, 22/0, 33/0 |
-| found / build | no computed act ever creates a works (computed `create_record` mints `text`; H-165): found 24/0, 27/0, 23/0; build 19/0, 17/0, 21/0 |
+| found / build | no computed act ever creates a works (computed `create_record` mints `text`; H-165): found 24/0, 27/0, 23/0; build 19/0, 17/0, 21/0. A hand-built `create_record {kind: works}`, then `found` or `build` in the next season, does run inside a real season (`rung.founded`, `site.built`; round-3 re-run), so the block is formation, not the effect |
 | pay / keep men | `oblige` forms in seed 1 only (24 attempts, 22 sworn), and there everyone swore to `off_senior_inquisitor`, whose remit is `[determine]` alone: no `issue`, so its holder can never pay through it. Over 6 seasons of seed 1: 0 `term.renewed`; live obliges 47 → 35 at the tick-5 MATTER as the first terms lapsed |
 | requisition | computed acts name a hearth (stock is on the settlement) or a rung outside purview: 2/0, 5/0, 5/0 |
-| remove a rival | `revoke` is formed on persons and Records, never an Office (H-203): 6/0, –, 4/0 |
-| migrate | always to an occupied hearth (capacity 1): 81/0, 143/0, 143/0 |
+| remove a rival | `revoke` is formed on persons and Records, never an Office (H-203): 6/0, –, 4/0. Even with an `office` payload, only six (seat, target) pairs can ever revoke in the seeded world, all through `off_duke_valorsmark` (the rung directly above `terr_T1`, `state/gate.py:452-487`); that seat is null-conferral and held by the King, who dies in the first season, so it is vacant by season 2 in every seed and after that no `revoke` can pass. Hand-built with an `office` operand through that seat, `revoke` closes the hold and opens a `ban`; through the King's own seat it is refused (round-3 re-run) |
+| migrate | always to an occupied hearth (capacity 1), though 185 of 211 hearths are empty at build: every effect call was `hearth, ascends, FULL` (81/81 in seed 0, re-run; 142/142 and 141/141 in seeds 1 and 2), the `to` operand being the question's subject (`decision/options.py:1045-1046`). A hand-built `migrate` to an empty hearth executes (`residence.changed`; round-3 re-run): 81/0, 143/0, 143/0 |
+| secure a succession | seven seats have no conferral basis and cannot be refilled (§5b); the King dies in the first season in all three seeds, leaving the throne and the Duke of Valorsmark's seat vacant; the only refill in the three seeds is seed 1's `confer` of the Senior Inquisitor's seat, a self-conferral |
 | relief transfer | no larder drains with a mouth unfed at any MATTER (at tick 0 there is nothing to drain; after it, surplus), so no shortfall claim exists; 0 shortfall Observations in seeds 0 and 1 |
 
 **Counter-play that exists:** a rival in a seat above yours may `revoke` you (and ban you, if you were appointed); the same

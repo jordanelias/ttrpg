@@ -372,18 +372,40 @@ baseline P4 C4 D5 M5 DR1. "A wins" uses the season rule; the engine winner colum
   So contact does track the measured closing speed. Units below discipline 5 move slower than the nominal 0.7/0.4 multiplier; why, beyond the
   cohesion factor, I did not trace. With no contact, the tie goes to the defender.
 
-### 3.3 Why no field is fought in the seeded realm
+### 3.3 Why no field is fought in the seeded realm, and what happens when one is
 
-From `t04_probe_march.py` over `build_realm(seed)`, two seasons:
+Two kinds of run, kept apart (defined in §0 Status). **Natural play**: the shipped chooser forms every act. **Callback play**: a client hands a
+person's act in, or a test hand-builds it.
+
+**Natural play** (`t04_probe_march.py` over `build_realm(seed)`, two seasons; re-run at `51d7b05` with the same counts):
 
 - **Seed 0.** 25 `march` acts were formed. 4 failed the typed cell at RESOLVE (`exists:Rung = 0`: the subject was a person id) and are not in
   ctl's "attempted". 21 were declared: 16 at `person` Rungs, 3 at `hearth` Rungs, and 2 whose subject did not resolve to a Rung after the run.
   All 21 were refused at ENCOUNTER.
 - **Seed 1.** 10 were declared: 6 at `territory` Rungs, 3 at `person` Rungs and 1 whose subject did not resolve. All were refused.
-- **No act at any measured seed targeted a settlement.**
+- **Seed 2.** 4 were declared: 3 at `territory` Rungs and 1 whose subject did not resolve. All were refused.
+- **No act at seeds 0-2 targeted a settlement.** Natural play at these seeds fights no field: every march is a declared act at a non-settlement,
+  then refused with an empty army.
 
-Had one done so, the largest realm muster is 6 weight (`set_s_036`, Church of Solmund). The next is 5 (`set_s_001`, Crown), and the other 26
-non-empty musters are 2 or 1. So every opposed field would be Lost (§3.1), and WALLS, because all 37 settlements are fortified.
+**Callback play** (nothing the chooser formed; run at `51d7b05`):
+
+- **An opposed field.** A hand-built `march {subject: set_s_036}` by `p_npc_033` via `off_npc_033` (Crown, home settlement `set_s_014`; the pair
+  `test_march.py:82-136` uses), folded through RESOLVE and ENCOUNTER on `build_realm(0)`, `(1)` and `(2)`, gives `march.declared` then `field.lost`.
+  The attackers are `p_npc_033` and `p_npc_035` (Σ weight 2) against 6 (Σ 6, Church of Solmund); `fortification_of(set_s_036)` is 1.0, so WALLS.
+  Each attacker's body goes 1000 → 20 and gains `(fac_church_of_solmund, −1, 1)` and `(fac_crown, −1, 1)`; the defenders are untouched; each
+  attacker's `budget()` falls from 6 to 3. The same act handed in by `dispatching_chooser` inside one full season, with everyone else on the shipped
+  chooser, gives `field.lost` once at each of the three seeds.
+- **An unopposed march.** The same actor and seat to `set_s_003` (Crown-held; none of the holder's people mustered there) gives `march.declared`,
+  `field.unopposed` and `army.arrived`; both attackers arrive and their bodies stay at 1000 (all three seeds).
+- **A chooser-formed act.** `test_march.py:368-456`: the real chooser forms `march` when a constructed `Question` names `set_s_036`, and the fold
+  gives `field.lost`. That chooser is restricted to `march` (`verbs=frozenset({"march"})`), so it does not show that the unrestricted chooser would
+  rank the act first (§8 trap 1).
+- **A Won field has not been fought.** `test_march.py:254` exercises Won through a constructed `Resolution`; its own note is that the reverse
+  pairing (6 attackers against 2) still resolved Lost, because corpus-scale forces rout on contact.
+
+The largest realm muster is 6 weight (`set_s_036`, Church of Solmund). The next is 5 (`set_s_001`, Crown), and the other 26 non-empty musters are 2
+or 1. So every opposed field would be Lost (§3.1), and WALLS, because all 37 settlements are fortified. One pair was run; for every other pair
+that is inference from §3.1 and these musters, not a run.
 
 ## 4 What you can do
 

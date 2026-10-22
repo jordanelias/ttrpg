@@ -692,6 +692,47 @@ its playable calendar is Days 1–11 and Day 12 is the ending text [CONTESTED] (
 
 Nothing in the round-2 findings for T10 did I reject.
 
+### Round-3 corrections (against `51d7b05` and the precedent suite; "row" is a row of `dispositions/D_T10.md`, "also-row" of `D_T10_also.md`)
+
+1. **Acts per person-season** (D_T10 row 36). Old: "about 7 per person-season ... the draft errata's ~8-10 is not supported by the ctl files".
+   New: two bases. `d.resolved` gives about 7 (6.3–8.0); the act store gives 8.14 then 9.37 at seed 0, maximum 15 (676 and 731 acts; seed 1
+   8.27, 9.08; seed 2 8.45, 9.69), so ~8–10 is supported on that basis. §2.5, trap 9, round-2 item 12. Evidence: `resolve.py:377-379, 967,
+   1012-1030`; `deliberate.py:252-260`; re-run of the seed-0 control. (The overview's "~8–10 acts observed" needs the same two bases.)
+2. **Hunger and the score** (row 8). Old: silent. New: `urgency(subsistence)` is added identically to every candidate and cannot change a
+   decision, so switched-on hunger would reach choice only through bands and Events. §2.4 step 3, §5d. Evidence: `choose.py:217-238`.
+3. **The zeros and their controls** (rows 18, 37). Old: `migrate` 0/81 "capacity", `tend` untended wounds. New: seeds 1 and 2 reach the
+   effect 142 and 141 of 143 times, all over capacity; seed 0's 81 destinations were all occupied hearths (62 cohort, 19 named) and none of
+   the 185 empty ones was chosen; a hand-built `migrate` to an empty hearth gives `residence.changed` and a hand-built self-`tend` at 250 gives
+   `body.tended`, 250 → 1000. §4, §5b. Evidence: `world_q.py:2111-2146`; re-run with a wrapped `migrate` effect and a callback.
+4. **The mend is an assumption** (rows 3, 15, 23). Old: "One `tend` restores the body to 1000 whatever the wound." New: it also consumes
+   nothing, and the code flags the magnitude [ASSUMPTION; medium; Jordan to correct]. §5b. Evidence: `effects_combat.py:378-379`.
+5. **One age for everyone** (row 19). Old: silent. New: cohorts have no hazard by design and every built person has `born` 0, so ageing
+   would apply one shared hazard (formula, not run). §2.4 step 4. Evidence: `world_q.py:1004-1008, 1015`; `fixtures.py:608`; `carriers.py:687`.
+6. **Death without succession** (rows 5, 24, 90; also-row 7). Old: "no successor mechanism (`succeed` is declined)". New: 7 of 32 offices
+   have no conferral basis (ids listed, §5c), so they never refill; vacant at the end of season 2: 8, 6, 10 (null-basis seats 3, 5, 6); the
+   King dies within two seasons at all three seeds; one refill in all three seeds (seed 1). Errata C8 and the T08/T09 files say six: seven.
+   Evidence: `state/gate.py:643-657`; `predicates.py:126-127`; `verb_table.yaml:1113`; re-run of the realm, seeds 0–2.
+7. **What a fight and a grudge leave** (rows 57, 61). Old: silent. New: a fight writes only its subject; nothing decays a stance row, and the
+   write matrix refuses a stance write at MATTER. §2.6. Evidence: `effects_combat.py:41-43, 179, 306, 449`; `state/world.py:58-61`.
+8. **Band crossings** (also-row 39). Old: "Upward band crossings emit nothing (H-211)." New: downward crossings emit only from MATTER's hunger
+   write, so a combat wound crosses floors silently (seed 0: 6 `body.changed`, 0 `condition.band_crossed`). §2.6. Evidence: `matter.py:39-90,
+   530, 690`.
+9. **Age and the budget** (also-row 33). New clause: age is not an input to `budget()`. §2.5. Evidence: `budget.py:57-61, 71-83`.
+10. **Births** (also-row 3). Old: "[HELD, Jordan] ... ED-WR-0011 (`needs_jordan: true`)". New: RULED 2026-09-13, Option A, a closed
+    authored cast of 46, no births for now; L18 read the superseded first row. §7. Evidence: `registers/editorial_ledger_wr_archive.jsonl`
+    (two ED-WR-0011 rows); `census.py:39-40`. (File 12's two ED-WR-0011 lines need the same change.)
+11. **`.designs` disagreement** (also-row 61). New note in §8: `player_agency_v30.md:61, :63` ("12 days"; "3–5 scene actions per season") disagrees
+    with `budget.py:57-61` and with Pathologic 2's Days 1–11; the quarantined file is not edited.
+12. **Ending** (new since #494; changes the Part 3 draft's "no ending condition"). Old: "no ending condition in the loop (G17)". New: the season
+    reports `endings` (a read, never an actor), and the realm as built reaches none (`[]` in both seasons at seed 0). §0a. Evidence:
+    `driver.py:514-518`; `world_q.py:1764`; re-run.
+13. **Player interface** (cross-suite qualifier). §0a carries the qualifier: none in the season loop, a test-only callback, and two other human-facing
+    seams exist (`agon_harness.py`, two workbench servers).
+14. **New section `## 0a How it plays`** (D_T10 Part 3), re-verified line by line against `51d7b05`. Differences from the draft: the ending
+    line (item 12), the births line (item 10), the player-interface qualifier (item 13), `world_q.py` cites moved by #494, and "a settlement
+    cannot fail" became "does not fail in the run" (0 cohort deaths; one `Felled` would delete a cohort).
+15. **Scratchpad paths removed** from §3 and §9; the probe scripts are not committed.
+
 ## 9 Checks
 
 Opened (path:line at HEAD `a4ca9a5`): `es/decision/budget.py:18-83`; `es/data/fixtures.py:217,228,463,469,488-511,526-527,571-608,
@@ -720,6 +761,20 @@ Ran (all `python -I`, read-only; the probe scripts are not committed, the contro
   `es/data/fixtures.py:491-509`; `es/verb_table.yaml:167-182` (commit); `es/decision/options.py:1515-1524` (teller weight);
   `es/harness/populated.py:720-736`; `es/data/geography.py:1-10`; `es/rosters.yaml:1460-1471`; `es/queries/world_q.py:1310-1321`;
   geography file :578-603, :638-642; `es/loop/effects_information.py:125,1030` (`utter`'s maker's hold); grep of `is_cohort` readers.
+- Round 3, opened at `51d7b05`: `es/decision/choose.py:217-238`; `es/loop/effects_combat.py:24-70, 100-182, 290-308, 365-395, 425-451`;
+  `es/queries/world_q.py:985-1018, 1030-1048, 1764-1800, 2111-2146`; `es/loop/driver.py:445-460, 508-535`; `es/loop/resolve.py:374-380, 960-975, 1012-1034`;
+  `es/loop/deliberate.py:245-265`; `es/loop/matter.py:39-92, 362-366, 511-535, 547-551, 641-656`; `es/state/gate.py:643-657`;
+  `es/loop/predicates.py:120-130`; `es/state/world.py:50-72, 640-660`; `es/state/carriers.py:680-688`; `es/data/fixtures.py:586-608`;
+  `es/harness/play_surface.py:1-52`; `es/loop/census.py:33-43, 104-106`; `es/verb_table.yaml:1096-1114, 1155-1166`; `es/offices.yaml:192-200`; `registers/editorial_ledger_wr_archive.jsonl` (the two ED-WR-0011 rows); `.designs/systems/_architecture/reference/player_agency_v30.md:55-66`
+  (read only).
+- Round 3, ran (`python -I`, read-only, seeds 0–2, two seasons, the `ctl/control.py` recipe; scripts not committed): per-season store and
+  `d.resolved` act counts, deaths, verb counts and live holds (seed 0: 676 and 731 acts, 535 and 597 resolved, holds 47 → 121, deaths 5
+  and 4, no cohort death; seeds 1 and 2 as in Round-3 correction 1); start budgets (52 at 5, 27 at 6, 1 at 7, 2 at 10, 1 at 13);
+  conferral of every office and the vacant seats at the end (null-basis seats 7 of 32 at every seed; vacant 8, 6, 10; King dead at every
+  seed); `confer` acts (0, 5, 0; seed 1 one `tenure.opened`, four `confer.refused`); a wrapped `migrate` effect (seed 0: 81 of 81 to occupied
+  hearths, 62 cohort and 19 named); `endings` returned by each season (`[]`); `condition.band_crossed` count (0 beside 6 `body.changed`);
+  and three hand-built acts through the callback (self-`tend` at 250 → 1000, `migrate` to an empty hearth → `residence.changed`, `march` at
+  a settlement → `march.declared` then `field.lost`; `len(resolvable_verbs())` = 47).
 
 Not confirmed: why `give` and `commit` are refused in seed 0 (not diagnosed); the §3a act counts as an executed trace (they are derived
 from the packing and release code, not observed on one person in a run); whether a `tend` packed in the same scene as the `move` sees the
