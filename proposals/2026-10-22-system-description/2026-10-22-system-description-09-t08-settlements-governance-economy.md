@@ -599,7 +599,14 @@ not rows), governed by `proposals/2026-10-16-verbs/` verbs-03 §III.5 where a le
 
 **Traps in the rules.**
 - *A settlement is not an object.* It has no population, unrest or treasury field; all of those are Queries or another
-  rung's stores. A seat's treasury is its own rung, and almost no seat sits on a rung that yields.
+  rung's stores. A seat's treasury is its own rung, and almost no seat sits on a rung that yields. Unrest exists only as one
+  person's own reading, `stability(p, rung, window)` (IN-23, PR #494, `queries/person_q.py:480`): minus the number of unrest claims
+  that person holds about the rung from the window (a death, wound, field won, seizure or requisition there, or a shortfall claim).
+  Only the story-bar report reads it, and over two seasons of seed 0 it is 0 for every (person, office rung) pair (round-3 re-run;
+  `hole_register.yaml` H-224), so no governance act moves any unrest a decision uses. The revolt reading `uncontrolled(w, rung)`
+  (`queries/world_q.py:1710`) lists unheld territories and has one caller, a harness census report (`harness/populated.py:1518`; T09).
+  [precedent: `research/game_precedent_suite/tutorials/T02_warband.md`, Bannerlord §5, where fief loyalty couples to output and to
+  rebellion]
 - *Individuals do not eat* (ED-IN-0255). Grain paid to a person's hearth feeds nobody.
 - *MATTER runs before your scenes.* The tick-0 draw always finds empty larders; your acts at tick 0 already see stock.
 - *Shortfall is not hunger.* A shortfall Observation needs a larder that *drains*; an empty larder that nobody could draw
