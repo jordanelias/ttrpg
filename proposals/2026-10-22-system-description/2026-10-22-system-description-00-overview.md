@@ -44,8 +44,12 @@ itemised in the Errata (Part C). Where an appendix (Part E) disagrees with this 
 
 **Run figures.** "The realm run" is `build_realm(seed)`, two seasons, with the chooser built as `populated.run` builds it. The control script
 is `ctl/control.py` in this directory; outputs for seeds 0, 1, 2 are `ctl/realm_seed*_2seasons.txt`. It counts per verb the acts that
-**reached the fold** ("att", `d.resolved`, appended in `loop/resolve.py:377-379`) and the acts with at least one non-refusal event ("ok").
-Contested and graded acts refused at admission or failed at the contest branch never reach the fold and are not counted: the act store
+**reached the fold** ("att", `d.resolved`, appended in `loop/resolve.py:377-379`) and the acts with at least one non-refusal event ("ok": an
+Event whose kind's last word is not on the script's refusal list, `ctl/control.py:13, :21`; so "ok" is not Partial-or-better: seed 0's 3 `speak`
+"ok" are all `matter.turned`, a Failure, and for `fight` and `accept` it means a Felled or Wounded subject).
+Three kinds of act never reach the fold and are not counted: contested or graded acts refused at admission (`loop/resolve.py:1025`), acts whose
+actor was already gone (`:974`) and acts refused for an obstacle above `obstacle_refusal_multiple` times the pool (`:980`); an ordinary
+precondition refusal of an uncontested act does reach the fold and is counted. The act store
 `w.acts` holds 1,407 / 1,394 / 1,447 formed acts against 1,132 / 1,122 / 1,175 that reached the fold (275 missing in seed 0: `research` 111,
 `examine` 62, `surveil` 21, `speak` 19, `accept` 16, `fight` 12, `argue` 10 ...; I1 verification, re-run at `51d7b05`). So "att" means
 *reached the fold*, not *attempted*; where a verb is formed and refused before the fold, the formed count is given too. Runs are identical

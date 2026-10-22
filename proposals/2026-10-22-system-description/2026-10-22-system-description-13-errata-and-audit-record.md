@@ -398,12 +398,15 @@ were session files and are not committed; their numbers cannot be reproduced fro
   settlements are built with one Site of each yielding kind (`harness/populated.py:771-776`), so they yield the same four goods. Yield reads a
   Site's condition and the season factor, never a worker (`loop/matter.py:589-591`). In seeds 0-2 population only falls (83 → 74 persons at seed 0;
   CENSUS individuation, `loop/census.py:57-77`, fired 0 times: ctl `person.individuated 0`).
-- **R-F10 Combat and NPC life.** Every Wounded or Untouched band is a fight the attacker lost: over seeds 0-2, 33 of 59 combat calls felled
-  the actor in the scene, exactly the 33 non-Felled ones (seam trace re-run at `51d7b05`); the seam returns both parties' wound states
+- **R-F10 Combat and NPC life.** In seeds 0-2 all 33 non-Felled bands (of 59 combat calls) came from fights in which the actor was felled (seam
+  trace re-run at `51d7b05`, uncommitted round-3 probe). That is not a mechanism: `wrapper.fight` also ends after 12 turns with result 0
+  (`modules/combat/wrapper.py:504`, `:524-525`), 1 of the 400 mirror fights in file 04 ended undecided, and the realm's 33 of 33 is within noise of the
+  mirror's 205 of 206; the verb table's own reading of the bands ("blood was drawn and nobody fell", `verb_table.yaml:653-661`) is contradicted by the
+  data. The seam returns both parties' wound states
   (`seam/wrappers/combat.py:230`) and `_eff_kill` reads the subject's only (`loop/effects_combat.py:108`, `:125`). None of the 39 resolved
   `accept`s answered a challenge from its subject (D_T03 critic's count over the I1 per-act rows). No score term reads hunger:
   `urgency(subsistence)` adds the same amount to every candidate and "CANNOT CHANGE ANY DECISION" (`decision/choose.py:220`). Migration
-  0 of 367: destinations come only from places the mover's own ledger names (`queries/world_q.py:2111`), every effect call met a full
+  0 of 367 reaching the fold (ctl att 81 + 143 + 143): destinations come only from places the mover's own ledger names (`queries/world_q.py:2111`), every effect call met a full
   hearth, and none of the 185 hearths empty at build was chosen (I1 verification claim 2).
 - **R-F11 Odds.** The only closed-form helper for the social roll, `sigma_leverage.p_success`, is the Gaussian stand-in and understates
   Partial-or-better on the real social dice by 10-15 points at the four pairs measured (exact enumeration at `51d7b05`: 14.4 % against 26.0 % at

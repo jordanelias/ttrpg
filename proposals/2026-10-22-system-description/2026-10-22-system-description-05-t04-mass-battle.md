@@ -671,7 +671,7 @@ Each line is old claim -> new claim, with the evidence opened at `51d7b05` (read
 - **§2.1 step 7.** "Command 0 ... instant rout (`orch:2221`)" -> `orch:2221-2225`, with the comment "M1: general IS the army", and nothing writes
   command during a battle (`units:2717, 2722, 2811`; fixture `systems/mass_battle/sim/validators.py:287`), so the rule fires only on an army built at
   command 0. Evidence: grep of `.command` assignments over `modules/`, `systems/mass_battle/`, `engine/`.
-- **§2.3, new bullet.** Nothing on precedent -> one resolver; Total War's own manuals warn its fast path is worse for the player; Dominions and Field
+- **§2.3, new bullet.** Nothing on precedent -> one resolver; the M2TW manual warns its fast path is worse for the player (3K's Delegate line is the community wiki's); Dominions and Field
   of Glory II are the verified single-resolver precedents; Football Manager's "instant ≈ played" is not established. Evidence: T07 Total War §3 and
   Field of Glory II §8, T17 Dominions §2, T16 FM §8 (tags carried).
 - **§3.3.** "No act at any measured seed targeted a settlement. Had one done so ..." -> natural play (seeds 0, 1, 2 itemised; seed 2: 4 declared, 3
@@ -687,6 +687,43 @@ Each line is old claim -> new claim, with the evidence opened at `51d7b05` (read
   refused; `aperture 1 0` re-run at `51d7b05` reads `att 9 ex 9 ref 9 both 9`.
 - **Not changed.** The §0 claim that the tree "contradicts itself on whether [the remit] roster is closed" and every figure in §3.1-§3.2 were not
   re-run; the disposition record raised nothing against them.
+
+#### Audit fixes
+
+A later audit of round 3 (findings numbered 1-17); each line is old claim -> new claim, opened at the current tree before it was applied.
+
+1. §0a menu row 1, §3.3, §5(a): "Won is exercised only through a constructed `Resolution`" and "each has run only as callback play" -> Won also runs with
+   the engine entry patched (`_patch_won`, `test_march.py:492-499`, `:878`, `:907-915`, `:962`; more constructed Resolutions at `:546-603`), and "break an
+   army" has never come out of the engine.
+2. §0a engine-direct bullet: "The other arms are noise" -> a levy side against heavy infantry gives 0.0% in either seat (no contact), so it moves
+   the share too (§3.2 table).
+3. §0a menu row 2, §3.3, §5(b) play 1: Unopposed credited to "none of the holder's people mustered there" -> `set_s_003` is the Crown's own settlement
+   (`test_march.py:148`; `loop/sides.py:132` names no defender when `holder == faction`), and the enemy-held empty case is `test_march.py:793-805`.
+4. §5(b) play 2: "costs each attacker ... 2-3 acts a season" -> "leaves each attacker 2-3 acts a season afterwards (from 7 or 9)" (§0 action
+   economy, §3.1).
+5. §3.3 natural run: "25 `march` acts were formed" read as the probe's count -> 25 formed (act store) and 21 reached the fold (`d.resolved`); seed 1 had 11
+   formed, 10 declared, and the 11th (a hearth) drew `act.ineligible`, re-run in this pass.
+6. §0a step 6, §2.2 step 8: "Writes, losers only ... the movers relocate" and "the winner is never written" -> casualty and stance writes are the losers'
+   only, the attackers relocate with a travel leg on Won or Unopposed (`EC:257, 290-291`; `VT:818, 820`), and the winner takes no casualty or stance row.
+7. §0a "What changes later": "As built, nothing compounds" -> an arrival writes `contain` edges that change later musters (`test_march.py:690-705`) and
+   license a `seize` (`:793-823`).
+8. §0 Status engine bullet: "reaches it whenever an act names a settlement held by another faction with members present" -> given a hand-built act,
+   it also needs `remit:dispatch` and an undetained attacker mustered at his origin (`loop/sides.py:108-132`), else `loop/resolve.py:787-788` refuses it.
+9. §0a step 6, §3.3, §5(b): "Next season ... 6 to 3 (measured)" and "each attacker ... at all three seeds" -> measured right after the fold for both
+   attackers at seeds 0-2, and for `p_npc_033` after one full season; a later season's budget also counts new holds (errata R-F6; `decision/budget.py:57`).
+10. §2.3 precedent bullet and its round-3 line: "Total War's own first-party texts warn" -> the M2TW manual warns, and the 3K "ignores many possible player
+    inputs" line is from the community wiki (`T07_mass_battle.md:8, 39`).
+11. §0 Status, §3.3, §9: round-3 figures with no named instrument -> tagged "(uncommitted round-3 probe)", with a round-3 Ran list naming each script;
+    `aperture 1 0` now says one season, seed 0; the Unopposed arm at seeds 1-2 was run in this pass.
+12. §0 Status, §0a, §3.3, §5: "natural play" -> "natural run" (errata R-F5, overview), and "callback play" split into a hand fold, a callback in a season
+    and a constructed Question (`test_march.py:70-79`, `:368-456`); the tick-0 fold is no longer called a season. Round-3 lines above keep the old words.
+13. §0a [PROPOSED]: "T07 Total War §1, §3" -> "§3 and its per-title table" (`T07_mass_battle.md:32, 50`; §1 covers campaign, faction and difficulty only).
+14. §0a setup choices: "every realm field is WALLS (`MB.py:272-273`)" -> adds the choice itself, `terrain.py:174-178`; `MB.py:272-273` applies the DR.
+15. §0a and §1 rout row: "the 60% army line (inert for one subunit, `cfg:116`)" -> its threshold is inert and the line fires exactly when the lone
+    subunit routs (`units:2893`).
+16. §8 trap 1 and §0a: "is the same reading" -> "makes the same mistake"; "tier 3 reference" -> "reference only".
+17. §7 and §3.3: "Every naturally formed realm `march` is refused" -> "that reached the fold ... at seeds 0-2" (the audit's fix, narrowed by the seed-1
+    `act.ineligible` act); "every march is a declared act" -> "every declared march".
 
 ## 9 Checks
 

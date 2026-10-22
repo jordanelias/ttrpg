@@ -414,7 +414,7 @@ capacity 7 would admit one.
 Sources: rows at `verb_table.yaml:863` (move), `:839` (migrate), `:1146` (tend), `:1451` (train), `:453` (forgive), `:533` (give), `:167`
 (commit), `:878` (oblige), `:965` (release), `:1096` (succeed), `:1439` (tie / knot); effects at `effects_migration.py:24,122` and
 `effects_combat.py:370,396,430`. No verb in this lane rolls dice. Every outcome is a deterministic precondition and effect, and the
-degree is the identity on an uncontested row (`effects_combat.py:376-378`). Run columns are **reached the fold / ok** (ctl's `att` column), which counts acts
+degree is the identity on an uncontested row (`effects_combat.py:376-378`). Run columns are **reached the fold / ok** (ctl labels the first one "attempted"), which counts acts
 that reached the fold (`resolve.py:377-379`, appended on entry), so the fold's own precondition refusals ARE in the count (`tend` 0/34 below
 includes 20 of them). Left out are acts whose actor was already gone (`:974-977`), refusals for an obstacle too high for the pool (`:981-998`)
 and contested or graded acts refused by `_admits` before the seam (`:1025-1032`).
@@ -756,7 +756,7 @@ Nothing in the round-2 findings for T10 did I reject.
 
 #### Audit fixes
 
-Numbered as in the round-3 antagonist audit of this file; each was opened at the current tree before it was applied. Figures marked
+Numbered as in the round-3 antagonist audit of this file (its finding 12 belongs to another file); each was opened at the current tree before it was applied. Figures marked
 "uncommitted round-3 probe" have no committed instrument (`ctl/` is the only one).
 
 1. §0a "Failure and ending", item 14, §9: "0 cohort deaths in seeds 0–2" and "does not fail" -> no cohort dies at seeds 0 and 1, and one is gone at seed 2 (`cohort_set_s_029`; ctl `pursuits empty` 36 against 37 with 72 alive, the only `.pursuits =` writers `effects_information.py:549, 579` having no verb in the seed-2 ctl; named directly by an uncommitted round-3 probe).

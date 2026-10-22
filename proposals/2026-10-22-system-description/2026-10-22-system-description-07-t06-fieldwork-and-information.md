@@ -769,7 +769,8 @@ so the two would have to move together. The canon price "+2 Exposure" was declin
    Rewritten in 2.2, Play 3, 5(d) and §6. MATTER's `tenure.closed` I took from CROSS C5 without
    re-tracing which binding row emits it.
 8. *L-X19, column order.* My columns already read attempted/ok. The header now defines attempted as
-   "passed admission" and ok as Partial-or-better for graded rows (CROSS C2).
+   "passed admission" and ok as Partial-or-better for graded rows (CROSS C2). Round 3 replaced the
+   "passed admission" definition (Audit fixes, item 1); the header governs.
 9. *L framing note.* Accepted. "Telling to companions is wasted" generalised from 4 tellings in one seed.
    It is restated as the dedup mechanism plus its n = 4 evidence, with no general claim (5d).
 10. *CROSS C3 and C11.* Ticks replace "season N" in 2.6. Rung, Tenure, Proposition, Office, purview,

@@ -404,7 +404,7 @@ brackets); effects in `loop/effects_*.py`.
 | **issue** [561] | a seat granting `issue` | executor is a Person within purview; terms from your own ledger | a `dispensation` Record (a writ) you hold; `dispensation.issued` | `issue.unauthorized` / `.refused` | 6/5 · 12/5 · 14/8 |
 
 Also on the table but inert here: `exchange` [416] (row declared, no effect; not in `resolvable_verbs()`, `loop/driver.py:101`, so a
-callback that submits it raises `Unspecified` and aborts the season rather than being refused; round-3 re-run), `succeed` [1096] (no effect),
+callback that submits it raises `Unspecified` and aborts the season rather than being refused; uncommitted round-3 probe), `succeed` [1096] (no effect),
 `evade / defy` [401] (not resolvable: `requires_typed: none` and no predicate, `verb_table.yaml:403-408`; it would
 emit `compliance.withheld` only), `seize` [1042] (FA/MB: closes a holder's hold on an occupied settlement or Record).
 `create_record` (FI) is the works producer; a computed `create_record` carries no payload and always mints `text`
@@ -483,10 +483,10 @@ first season (tick 0) in all three seeds, and his seat and the Duke of Valorsmar
 | play | what blocks it today (seeds 0–2, 2 seasons; ctl/ files) |
 |---|---|
 | work / restore / sabotage | no single cause. The chooser forms them on non-Site referents (`site` is the question's referent, `decision/options.py:1047-1048`; REM-22's `referent_class: Site` is unbuilt): work 77/0, 70/0, 63/0; restore 23/0, 31/0, 30/0; sabotage 34/0, 22/0, 33/0. And `work` has two more gates a Site referent would not lift: it stages a rise only where a live works names the Site (`loop/effects_economy.py:103-104`), and refuses on a dwelling or garrison, whose floor cell is empty (`rosters.yaml:2631-2632`; 248 of 322 Sites). No works Record is minted by natural play (next row) |
-| found / build | no computed act ever creates a works (computed `create_record` mints `text`; H-165): found 24/0, 27/0, 23/0; build 19/0, 17/0, 21/0. A hand-built `create_record {kind: works}`, then `found` or `build` in the next season, does run inside a real season (`rung.founded`, `site.built`; round-3 re-run), so the block is formation, not the effect |
+| found / build | no computed act ever creates a works (computed `create_record` mints `text`; H-165): found 24/0, 27/0, 23/0; build 19/0, 17/0, 21/0. A hand-built `create_record {kind: works}`, then `found` or `build` in the next season, does run inside a real season (`rung.founded`, `site.built`; uncommitted round-3 probe), so the block is formation, not the effect |
 | pay / keep men | `oblige` forms in seed 1 only (24 attempts, 22 sworn), and there everyone swore to `off_senior_inquisitor`, whose remit is `[determine]` alone: no `issue`, so its holder can never pay through it. Over 6 seasons of seed 1: 0 `term.renewed`; live obliges 47 → 35 at the tick-5 MATTER as the first terms lapsed |
 | requisition | computed acts name a hearth (stock is on the settlement) or a rung outside purview: 2/0, 5/0, 5/0 |
-| remove a rival | `revoke` is formed on persons and Records, never an Office (H-203): 6/0, –, 4/0. Even with an `office` payload, only six (seat, target) pairs can revoke at world build, all through `off_duke_valorsmark` (the rung directly above `terr_T1`, `state/gate.py:452-487`); that seat is null-conferral and held by the King, who dies in the first season (tick 0), so it is vacant from his death in every seed. After that no seat that exists at build can `revoke`; only a hand-built `establish` of a same-faction seat on the parent rung reopens it (`offices.yaml:72-74`; `loop/predicates.py:295-300`; computed `establish` is 5/0 and 4/0 at seeds 1 and 2 and carries no operands). Hand-built with an `office` operand through that seat, `revoke` closes the hold and opens a `ban`; through the King's own seat it is refused (round-3 re-run) |
+| remove a rival | `revoke` is formed on persons and Records, never an Office (H-203): 6/0, –, 4/0. Even with an `office` payload, only six (seat, target) pairs can revoke at world build, all through `off_duke_valorsmark` (the rung directly above `terr_T1`, `state/gate.py:452-487`); that seat is null-conferral and held by the King, who dies in the first season (tick 0), so it is vacant from his death in every seed. After that no seat that exists at build can `revoke`; only a hand-built `establish` of a same-faction seat on the parent rung reopens it (`offices.yaml:72-74`; `loop/predicates.py:295-300`; computed `establish` is 5/0 and 4/0 at seeds 1 and 2 and carries no operands). Hand-built with an `office` operand through that seat, `revoke` closes the hold and opens a `ban`; through the King's own seat it is refused (uncommitted round-3 probe) |
 | migrate | always to an occupied hearth (capacity 1), though 185 of 211 hearths are empty at build (uncommitted round-3 probe): every computed call that reached the effect was `hearth, ascends, FULL` (81, 142 and 141 in seeds 0-2, of the 81, 143 and 143 that reached the fold; uncommitted round-3 probe), the `to` operand being the question's subject (`decision/options.py:1045-1046`). A hand-built `migrate` to an empty hearth executes (`residence.changed`; uncommitted round-3 probe): ctl 81/0, 143/0, 143/0 |
 | secure a succession | seven seats have no conferral basis and cannot be refilled (§5b); the King dies in the first season in all three seeds, leaving the throne and the Duke of Valorsmark's seat vacant; the only refill in the three seeds is seed 1's `confer` of the Senior Inquisitor's seat, a self-conferral |
 | relief transfer | no larder drains with a mouth unfed at any MATTER (at tick 0 there is nothing to drain; after it, surplus), so no shortfall claim exists; 0 shortfall Observations in seeds 0 and 1 |
@@ -743,35 +743,36 @@ at `research/game_precedent_suite/` (reference, tier 3) and carry the precedent'
    six authored rows plus the rowless guild-leader seat `off_npc_084` (`harness/populated.py:1241-1250`; `loop/predicates.py:126-127`;
    `offices.yaml:188-266`; re-run of `has_conferral_basis` over `build_realm(0..2)`: appointed 17, elected 8, none 7). The posts behind
    the suite's names are "Queen" (`off_widow_regent`) and "Prince (Heir Apparent)" (`off_heir`). Round-2 item 1 above counted authored
-   rows only. Measured: null seats are 3 of 8, 5 of 7 and 6 of 10 vacated seats; the King (`p_npc_020`) is gone from `w.persons` after
-   season 1 in every seed (a `person.died` Event names him); his seat and the Duke of Valorsmark's are vacant at the end of season 2 in
-   all three; 8, 7 and 10 seats vacated, one refilled in total (seed 1).
+   rows only. Measured (uncommitted round-3 probe): null seats are 3 of 8, 5 of 7 and 6 of 10 vacated seats; the King (`p_npc_020`) is gone
+   from `w.persons` after season 1 in every seed (a `person.died` Event names him); his seat and the Duke of Valorsmark's are vacant from
+   his death at tick 0 in all three; 8, 7 and 10 seats vacated by the end of season 2, one refilled in total (seed 1).
 2. *Revoke is blocked twice (§5b, §5c; F2).* Old: `revoke` 6/0, –, 4/0 explained by the missing `office` operand alone. New: also only
-   six (seat, target) pairs can revoke at world build, all through `off_duke_valorsmark` (`state/gate.py:452-487`; scan re-run), and that
-   seat is vacant by season 2 in every seed, so no `revoke` can pass after it. Hand-built through that seat, `revoke` closes the hold and
-   opens a `ban`; through the King's own seat it is refused (re-run).
+   six (seat, target) pairs can revoke at world build, all through `off_duke_valorsmark` (`state/gate.py:452-487`; scan re-run, uncommitted),
+   and that seat is vacant from the King's death at tick 0 in every seed, so no seat that exists at build can `revoke` after it. Hand-built
+   through that seat, `revoke` closes the hold and opens a `ban`; through the King's own seat it is refused (uncommitted round-3 probe).
 3. *`work` on dwellings and garrisons (§2.5, §4).* Old: a works lets `work` run on any Site kind. New: the `floor` read raises a typed
    `Unspecified` for the empty `band_floors` cells (`rosters.yaml:2631-2632`; `queries/world_q.py:2783-2799`), so `work` never runs on
    248 of 322 Sites; `restore` refuses a Site at its ceiling (re-run: `work.unavailable` on a built dwelling with a works, and on a
    dwelling at 1000; `restore.refused` at 1000, `site.restored` below).
 4. *`migrate` (§4, §5c).* Old: "always to an occupied hearth". New: also 185 of 211 hearths are empty and a hand-built `migrate` to an
-   empty hearth executes; every computed effect call was `hearth, ascends, FULL` (81, 142, 141; re-run), the destination being the
-   question's subject (`decision/options.py:1045-1046`).
+   empty hearth executes; every computed effect call was `hearth, ascends, FULL` (81, 142, 141 of the 81, 143, 143 that reached the fold;
+   uncommitted round-3 probe), the destination being the question's subject (`decision/options.py:1045-1046`).
 5. *`exchange` (§4).* Old: "row declared, no effect". New: also not in `resolvable_verbs()` (`loop/driver.py:101`); a callback that
    submits it raises `Unspecified` and aborts the season (re-run, `Unspecified` "has a precondition the fold cannot evaluate").
 6. *§5d additions.* Every settlement is the same economy (`harness/populated.py:772-777`); stores never cap or spoil, 0 → 4,810 → 9,250
-   in all three seeds (re-run), ore has no reader; war costs no production; the horizon is two seasons and three seeds; governing leaves no
+   in all three seeds (derived from the yield rows, §5d), ore has no consumer or sink; war costs no production; the horizon is two seasons and three seeds; governing leaves no
    rule behind and no standing tribute; population is fixed and only falls, with ED-WR-0011 cited (ruled by Jordan 2026-09-13, Option A, a
-   closed cast of 46, "for now"; `registers/editorial_ledger_wr_archive.jsonl`; `loop/census.py:106`); holding is never penalised; governance does not touch output; the accrual-by-structure shape is already present (companion I-22 is stale on
+   closed cast of 46, "for now"; `registers/editorial_ledger_wr_archive.jsonl`; `loop/census.py:106`); holding is never penalised; governance does not touch output; accrual by structure is present and raising the rate is not (companion I-22 is stale only in naming
    `facility_tier`).
 7. *§5c additions.* A hand-built `create_record {kind: works}` then `found`/`build` runs inside a real season (`rung.founded`,
    `site.built`; re-run); a "secure a succession" row.
 8. *PR #494 (IN-23): legitimacy and stability (§7, §8).* Old: `tax` "waits on M-TAX, IN-23"; "unrest ... Queries". New: IN-23 has landed
    as person-side Queries (`queries/person_q.py:451, 480`), each one person's windowed estimate, read by `harness/storybar.py::estimates`
-   and by no chooser or MATTER step (`hole_register.yaml` H-224); re-run of the story-bar on seed 0: legitimacy 167 and 158 distinct
-   values over 2,028 and 1,776 (person, seat-holder) pairs, stability 0 for all 546 and 518 (person, office rung) pairs. So `f(legitimacy)
+   and by no chooser or MATTER step (`hole_register.yaml` H-224); re-run of the story-bar on seed 0 (uncommitted round-3 probe): legitimacy 167 and 158 distinct
+   values over 2,028 = 78 × 26 and 1,776 = 74 × 24 (person, seat-holder) pairs, stability 0 for all 546 = 78 × 7 and 518 = 74 × 7 (person, office rung) pairs
+   (the pair counts follow from `harness/storybar.py:182-186`; the distinct-value counts are the probe's). So `f(legitimacy)
    = 1` still holds for the proposed `tax`, and no unrest is a settlement quantity. The same PR's `endings_reached` (§0a): the season
-   reports it and the realm as built reaches none (empty after seasons 1 and 2 in seeds 0-2; re-run).
+   reports it and the realm as built reaches none (`endings == []` after tick 0 at seeds 0-2; uncommitted round-3 probe).
 9. *§7 additions.* A cohort that falls would lower no yield, so no famine spiral could form (RB-5); H-159's two branches both have
    precedent (desertion in Bannerlord, Warhammer III and JA2, carried debt in CK3); IN-48 / H-108 delegation named.
 10. *§9 "Could not confirm" (seed 1's `off_senior_inquisitor`).* Resolved: `p_npc_004` held it through season 1, died in tick 1, and
