@@ -164,6 +164,44 @@ verbs:
     grade:       "assumption"
     grade_note:  "an argued addition (#453 §10.4 step 9): the row, the pursuit direction and the Partial reading are v9 IN-12's, on #453 §9.4 `:1896-1923`, K-21 `:2737-2742`."
     source:      "v9 IN-12 step 9 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.4 `:1896-1923`"
+  - verb:        "arrest"
+    stratum:     "contested_physical"
+    eligibility: ["remit:dispatch"]
+    eligibility_note: "v9 IN-12 step 5 (#453 §9.1, the `arrest` row): `remit:dispatch` -- the act `state/gate.py::WARRANT_ACT` names, so the fold's eligibility and the gate's `warrant` basis read one grant. J-8 (whether `dispatch` is a remit act at all, `offices.yaml` `meta: remit_unruled`) is Jordan's; this row moves with `WARRANT_ACT` and the ruling. Built on `remit_default` (§A v9, J-8 partly answered)."
+    beneficiary: "none"
+    beneficiary_note: "#453 §9.1: `none` -- custody is taken AGAINST the prisoner and FOR the seat that issued the warrant (K-17/K-52), an Office no Candidate carries; `seize`'s and `revoke`'s shape."
+    requires:    "the subject is a person"
+    requires_typed:
+      form:      existence
+      of:        subject
+      kind:      Person
+      conjunct:  party
+    requires_typed_note: "v9 IN-12 step 5 -- #453 §9.1's cell, one conjunct: *'`existence` of `subject` kind Person (conjunct `party`)'*. ⚠ THE WARRANT IS NOT A CONJUNCT, AND THAT IS THE ROW'S OWN TEXT (*'The warrant is not a stem'*): a Record's content, which no form of the grammar reads and no gate basis may (K-52). Person-side it is `rosters.yaml: warrant_sourced` (`arrest: dispensation`, `seize`'s line beside it) -- `arrest` forms only on a `subject` a HELD dispensation's `terms` names (`decision/options.py::opening_set`); world-side the effect (`loop/effects_information.py::_eff_arrest`) reads the same held warrant and declines an act whose actor holds none (`arrest.refused`, the `write` clause). The seat's authority is the gate's `warrant` basis (`state/gate.py::may_warrant`), asked by the effect before it builds the edge, so an admitted act is never killed at the gate."
+    counterparty: subject
+    counterparty_note: "#453 §9.1: *'counterparty `subject`'* -- THE PRISONER IS THE SECOND SIDE: the contest's opponent (`loop/resolve.py::_contest` reads `row.counterparty`), the man who resists. A self-arrest is declined person-side and refused by the fold's `counterparty` clause (`may_warrant` refuses it at the gate too)."
+    contests:    "a standing"
+    contests_note: "#453 §9.1: *'contests: `a standing` (`sigma_leverage`, interim) [CONFIDENCE: medium -- whether resisting arrest is a contest of standing or of the body]'*: the prize `tell` already claims (`rosters.yaml: contest_subsystems.prizes`). No new prize, no new provider. [ASSUMPTION; medium; Jordan to correct; revert: a contest of the body, whose Failure hands off to `fight` rather than carrying its own prize.]"
+    writes:
+      Overwhelming: ["Tenure.since"]
+      Success:      ["Tenure.since"]
+      Partial:      ["Tenure.since"]
+      Failure:      []
+    writes_note: "v9 IN-12 step 5 (#453 §9.1): `loop/effects_information.py::_eff_arrest` OPENS ONE `detain` EDGE, prisoner -> THE SEAT THAT ISSUED THE WARRANT, read through `state/attribution.py::causing_act` on the warrant Record's creating Event -- that Act's `via` (K-17/K-52): the enforcement seat acts `via` but does not own the edge, so the issuing seat's bench is who may `pardon` it. Admitted at the gate under the `warrant` basis (`state/gate.py::may_warrant`: the exercised seat sits, grants `WARRANT_ACT`, and its purview reaches the prisoner's home). `Partial` opens the edge as `Success` does (#453: *'[ASSUMPTION: no degraded magnitude exists for an edge]'*); no `Tenure.degree` is written (the row does not declare it). `Failure` writes nothing: the man resisted. DECLINES (`NO_CHANGE` -> `arrest.refused`, the `write` clause): no held warrant names the subject; its issuing seat is unreadable or no seat; the subject is already in custody (one live `detain` per prisoner, #453 §8.1 Custody [ASSUMPTION]); or the gate's `warrant` basis would refuse."
+    emits:
+      Overwhelming: ["arrest.made"]
+      Success:      ["arrest.made"]
+      Partial:      ["arrest.made"]
+      Failure:      ["arrest.resisted"]
+    emits_note: "#453 §9.1's kinds, keyed on the ladder's own four names. Two NEW kinds, each emitted by this row alone (`data/verbs.py::KIND_VERB`)."
+    emits_on_refusal:
+      eligibility:  ["arrest.unauthorized"]
+      party:        ["arrest.refused"]
+      write:        ["arrest.refused"]
+      counterparty: ["arrest.refused"]
+    refusal_note: "#453 §9.1: *'eligibility -> `arrest.unauthorized`; party, write, counterparty -> `arrest.refused`'*. TWO KINDS ON A CONTESTED KEYED ROW ARE LAWFUL SINCE v9 IN-12 step 5's PARTY-GAP FOLD EDIT (K-02): the seam's party gap and S27.4's under-1D refusal emit `row.refusal_for(COUNTERPARTY_CLAUSE)` (`loop/resolve.py::_refuse_party_gap`), and the loader's contested-row rule narrows to rows that key no `counterparty` (`data/verbs.py`). ⚠ S27.4's refusal is labelled with the counterparty kind (`arrest.refused`) though it is the actor's pool, not the counterparty, that failed [ASSUMPTION; medium; Jordan to correct; revert: one kind under every key]."
+    grade:       "assumption"
+    grade_note:  "an argued addition (#453 §10.4 step 5): the matrix row `(Tenure, since)` is the tree's; the row, the issuing-seat reading and the warrant formation are v9 IN-12's, on #453 §9.1 `:1570-1611`, K-17, K-52, K-53."
+    source:      "v9 IN-12 step 5 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.1 `:1570-1611`"
   - verb:        "commit"
     stratum:     "social"
     eligibility: ["own"]
@@ -922,6 +960,34 @@ verbs:
     eligibility_note: "W3: graded `assumption`, NOT `ruled`. #353's five remit acts are CLOSED -- issue, determine, confer, revoke, dispatch -- and opening a case is not among them, so V2 invented this eligibility. `own` is a different game (anyone may open a case), which is why it is swept rather than chosen. The roster is `rosters.yaml: remit_acts`."
     eligibility_sweep_note: ["remit:determine (V2's value)", "own", "hold:<the matter's record>"]
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "pardon"
+    scale:       "settlement"
+    scale_note:  "#453 §9.1: *'settlement'* -- a pardon is the bench's act at the seat that owns the restraint, `determine`'s scale"
+    stratum:     "binding_decision"
+    eligibility: ["remit:determine"]
+    beneficiary: "subject"
+    beneficiary_note: "#453 §9.1: *'beneficiary `subject`'* -- the man released."
+    requires:    "the subject is a person over whom the exercised seat sits as a bench"
+    requires_typed:
+      all:
+        - form:      existence
+          of:        subject
+          kind:      Person
+        - form:      basis
+          of:        subject
+          basis:     bench
+    requires_typed_note: "⚠ v9 IN-12 step 5 KEEPS THE ROW TYPED, ON `seize`'s IN-13 PRECEDENT, WHERE #453 §9.1 SENDS IT UNTYPED. #453: *'a live edge of kind `detain` or `ban` whose object is the exercised seat ... a disjunction over kinds, which the typed grammar does not have, so the row takes `release`'s route: `requires_typed: none` ... and a registered predicate'*. This keeps the TWO conjuncts the grammar CAN spell and moves the disjunction to the effect: `existence` of `subject` kind Person (only a person owns a restraint) and `basis` `bench` of `subject` -- the SAME `state/gate.py::may_determine` the gate's `determination` basis asks to admit the closure (#453: *'under the widened `determination` basis'*), read early, so the fold refuses exactly what the gate would raise on. WHICH EDGE closes -- a live `detain` or `ban` of the subject's whose object is `Act.via` -- is `loop/effects_governance.py::_eff_pardon`'s, which declines a subject holding none (`pardon.refused`, the `write` clause). ⚠ THE CLOSURE BASIS (the entry's): `determination` closes a restraint only THROUGH THE SEAT THAT IS THE EDGE'S OBJECT, by a bench-granted holder -- so a warrant-opened `detain` (object: the ISSUING seat, `arrest`) is pardoned by that seat's bench, and a revocation's `ban` (object: the revoking seat, IN-31) by the revoking seat's. [ASSUMPTION; medium; Jordan to correct; revert: `requires_typed: none` + a registered predicate asking the same two reads and the edge, #453's own text.]"
+    domain:      [detain, ban]
+    domain_note: "#453 §8.2: THE LOADER'S CLOSER CLAUSE READS THIS COLUMN ON EVERY ROW (`data/verbs.py`, loader invariant 6's closer clause, v9 IN-12 step 5): every Tenure kind outside `RELEASABLE_KINDS` and the two that end by a relocation (`contain`, `reside`) -- `data/rosters.py::RESTRAINT_KINDS` -- must sit in some row's declared `domain:`; the load is red without this row's `[detain, ban]`. `_eff_pardon` closes `RESTRAINT_KINDS`, the gate's closable pair; the loader refuses a domain naming any other kind (a releasable kind is `release`'s)."
+    writes:      ["Tenure.until"]
+    writes_note: "#453 §9.1: *'writes: `Tenure.until`, under the widened `determination` basis (closing `detain` and `ban` only, §8.3)'*. `_eff_pardon` closes EVERY live restraint the subject owns on `Act.via` -- a custody and a ban on one seat both end (*'grant wholly'*) [ASSUMPTION; medium; Jordan to correct; revert: the oldest one only]. Never an `oblige` (D-5: no obligee-side closer of an obligation, §8.3); the gate's `determination` clause closes `RESTRAINT_KINDS` only."
+    emits:       ["detention.ended", "ban.ended"]
+    emits_note: "#453 §9.1: *'`detention.ended` / `ban.ended`, per-kind closers on R-3's `commitment.ended` precedent'*. EACH CLOSED EDGE EARNS ITS OWN KIND (`Subject.earns`), so a pardoned custody never publishes an ended ban. ORDER IS READ: `_eff_pardon` unpacks this column `detain` then `ban` (`seize`'s precedent). Two NEW kinds; `binding_decision`, so `chronicle` broadcasts them."
+    emits_on_refusal: ["pardon.refused"]
+    refusal_note: "#453 §9.1: *'refusal `pardon.refused`'* -- FLAT, one kind for every failable clause: ineligible; no person; the exercised seat does not sit as a bench over him (`bench`); or he holds no live `detain`/`ban` on the exercised seat (the effect's decline)."
+    grade:       "assumption"
+    grade_note:  "an argued addition (#453 §10.4 step 5): the matrix row `(Tenure, until)` is the tree's; the row, the typed-route reading and the closure basis are v9 IN-12's, on #453 §9.1 `:1710-1740`, §8.2-§8.3."
+    source:      "v9 IN-12 step 5 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.1 `:1710-1740`"
   - verb:        "petition"
     stratum:     "social"
     eligibility: ["own"]

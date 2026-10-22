@@ -821,8 +821,9 @@ def may_warrant(w: "World", actor: Optional[str], via: Optional[str],
     owns a Tenure of this kind, and a man does not arrest himself).
     ⚠ WHAT IT DOES NOT DECIDE (K-52): whether a WARRANT EXISTS and which seat issued it. The warrant
     is a Record the gate never reads, and the edge's object -- the issuing seat -- is `arrest`'s effect
-    to read off the warrant's creating Act; both land with `arrest` (#453 §10.4 step 5). Until then
-    this basis has no producer, and its one exerciser is `test_u7_remit.py`."""
+    to read off the warrant's creating Act; both landed with `arrest` (v9 IN-12 step 5,
+    `loop/effects_information.py::_eff_arrest`), its producer, which asks this predicate before it
+    builds the edge."""
     if not _seat_grants(w, actor, via, WARRANT_ACT):
         return False
     if prisoner is None or prisoner == actor or prisoner not in w.persons:
@@ -1034,7 +1035,7 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
                   the actor, by `may_warrant` -- `via` a seat the actor sits in, granted
                   `WARRANT_ACT`, whose purview reaches where the prisoner is. v9 SC-03a, K-52;
                   AUTHORITY-BOUND on `via`, reading Tenures and `state/` readers only. Its producer
-                  is `arrest` (#453 §10.4 step 5), not yet built.
+                  is `arrest` (v9 IN-12 step 5).
       `seizure`   a PURE CLOSURE of another person's `hold` on a RECORD (never a seat's), by
                   `may_seize` -- `via` a seat the actor sits in, granted `SEIZURE_ACT`, whose purview
                   reaches the dispossessed's home. v9 IN-12 step 6; AUTHORITY-BOUND on `via`,
@@ -1199,8 +1200,8 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
     # v9 SC-03a, K-52: THE WARRANT. An OPENED `detain` whose object is a SEAT and whose owner the
     # exercised seat may take into custody (`may_warrant`). Not `via`-objected as `determination`
     # is: the custody edge's object is the ISSUING seat (K-17/K-52), which the enforcement seat acts
-    # through but does not own. Opening only -- custody ends by a bench (`determination`: admitted
-    # here, no effect writes that closure yet) or by `pardon` (step 5), never by the arresting hand.
+    # through but does not own. Opening only -- custody ends by the issuing seat's bench under
+    # `determination` (`pardon`, v9 IN-12 step 5), never by the arresting hand.
     if (opened and t.kind == DETAIN_KIND and t.object in w.offices
             and may_warrant(w, actor, via, t.subject)):
         return WARRANT

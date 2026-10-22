@@ -880,14 +880,19 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     their row: `rosters.py` 2 (`check_fold_kinds`, loader invariant 7's fold half; `check_logged_kinds`,
     the kinds MATTER logs with no write behind them), `verbs.py` 3 (`derive_event_kinds`' two,
     invariant 7's derivation; the flat-row refusal, invariant 4's flat half). Falsifier: `test_sc02_typed_ids_and_loader.py` plants each and the load raises
-    naming it."""
+    naming it.
+
+    ⚠ 79 -> 81, v9 IN-12 step 5, TWO NEW LOAD-TIME REFUSALS in `verbs.py`, both loader invariant 6's
+    CLOSER CLAUSE (#453 §8.2): a restraint kind no row's `domain:` declares, and a `domain:` naming a kind
+    that needs no declared closer. Falsifier: `test_in12_arrest.py::
+    test_in12_5_the_closer_clause_is_green_only_while_pardon_declares_detain_and_ban` plants each."""
     mods = _model_modules()
     # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- see the sibling assertion above]
     assert len(mods) >= 8, f"model set collapsed to {len(mods)} — this guard would pass vacuously"
     total = sum(_code_only(m.read_text()).count("raise SystemExit") for m in mods)
     # [JUSTIFIED: a MEASURED PROPERTY OF THIS PACKAGE, not a game value -- the load-time refusals counted across the model set, and the point of pinning it is that a move must not drop one]
-    assert total == 79, (
-        f"{total} load-time exits across the model set, expected 79. Per file: "
+    assert total == 81, (
+        f"{total} load-time exits across the model set, expected 81. Per file: "
         + ", ".join(f"{m.name}={_code_only(m.read_text()).count('raise SystemExit')}"
                     for m in mods if _code_only(m.read_text()).count("raise SystemExit")))
 
@@ -2303,12 +2308,13 @@ def test_invariant_12_refuses_a_degree_keyed_emits_with_nothing_to_key_it_on():
     # `repudiate` CUT (v9 IN-11, #453 R-3 (b)), a re-record; 45 -> 46, `seize` (v9 IN-12 step 6, the
     # Record half), a re-record; 46 -> 47, `covenant` (v9 IN-12 step 7), a re-record; 47 -> 51, `argue`,
     # `sabotage`, `tend`, `train` (v9 IN-12 step 9), a re-record; 51 -> 52, `conceal` (v9 IN-12 step 10), a
-    # re-record; 52 -> 53, `forgive` (v9 IN-12 step 13), a re-record. This
+    # re-record; 52 -> 53, `forgive` (v9 IN-12 step 13), a re-record; 53 -> 55, `arrest` and `pardon`
+    # (v9 IN-12 step 5), a re-record. This
     # is a CONTROL, not a claim about
     # the roster: its job is to fail if the loader started refusing everything, so it moves with
     # the table by construction and the number is read from the file rather than chosen.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen -- the control that stops both arms above passing on a loader that refuses everything]
-    assert len(VERBS._load_verb_table()) == 53
+    assert len(VERBS._load_verb_table()) == 55
 
 
 def test_w2_a_planted_write_to_an_unruled_field_raises_and_names_the_pair():
@@ -6304,9 +6310,11 @@ def test_the_generic_remit_seats_every_office_and_unblocks_the_nine():
     #  v9 IN-12 step 6 added a twelfth: `seize` is `remit:issue`-eligible (#453 §9.1, `requisition`'s act).
     #  Re-recorded by outcome: 11 -> 12, the one row that moved.
     #  v9 IN-12 step 7 added a thirteenth: `covenant` is `remit:issue`-eligible only (#453 §9.2, K-14).
-    #  Re-recorded by outcome: 12 -> 13, the one row that moved.]
-    assert len(gov) == 13, (f"{len(gov)} verbs carry a `remit:` alternative; expected H-71's nine "
-                            "plus march plus transfer plus seize plus covenant")
+    #  Re-recorded by outcome: 12 -> 13, the one row that moved.
+    #  v9 IN-12 step 5 added two: `arrest` (`remit:dispatch`, #453 §9.1, `WARRANT_ACT`) and `pardon`
+    #  (`remit:determine`, #453 §9.1). Re-recorded by outcome: 13 -> 15, the two rows that moved.]
+    assert len(gov) == 15, (f"{len(gov)} verbs carry a `remit:` alternative; expected H-71's nine "
+                            "plus march plus transfer plus seize plus covenant plus arrest plus pardon")
     formable = set()
     for t in held:
         p = w.persons.get(t.subject)
@@ -8918,10 +8926,16 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # one: MEASURED through `build_at` and `run_case` at seed 0 (scratch, not kept) -- 0 negative rows at
     # build in the 86 worlds that build, and 0 `forgive` Candidates out of 280198 formed across the whole
     # run (`march`, the one runtime writer, is never attempted here, H-175). 16 -> 17.
+    # ⚠ v9 IN-12 step 5: `arrest` and `pardon` JOIN -- MEASURED by `python -m engine.season.harness.corpus_run`
+    # at seed 0 (`WHERE THE 55 GO`: never attempted), not diagnosed per case. `arrest` forms only on a person a
+    # HELD dispensation names (`rosters.yaml: warrant_sourced`), `seize`'s formation; `pardon` is
+    # `remit:determine`-eligible, `determine`'s and `open_case`'s remit. A named residue of the step's EXIT
+    # (R-05), re-recorded by outcome: 17 -> 19.
     assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish",
                                               "destroy_record", "march", "oblige", "open_case",
                                               "determine", "comply", "migrate", "requisition",
-                                              "speak", "examine", "dispatch", "argue", "forgive"}, (    # IN-57: `dispatch` out, to `refused_only`; FI-01: back
+                                              "speak", "examine", "dispatch", "argue", "forgive",
+                                              "arrest", "pardon"}, (    # IN-57: `dispatch` out, to `refused_only`; FI-01: back
         f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Five of "
         "the original six are the governance verbs no corpus overlay grants (`establish` is "
         "`remit:confer`-eligible); `march` is eligible in NPC-033/038 and WOULD form a real "
@@ -10500,7 +10514,10 @@ def test_wc_the_fold_binds_what_the_person_bound():
     # new structural member -- the seat, `via` -- can be observed at all.
     # v9 IN-12 step 7 ADDED `covenant`, FOR THE SAME LICENSED REASON: `remit:issue` is its only
     # alternative (#453 K-14), so it is walked below through `p_high` with the others.
-    WALK_REMIT: frozenset = frozenset({"requisition", "open_case", "determine", "issue", "covenant"})
+    # v9 IN-12 step 5 ADDED `pardon`, FOR THE SAME LICENSED REASON: `remit:determine` is its only alternative
+    # (#453 §9.1). (`arrest`, `remit:dispatch`, joins through `WALK_WARRANT` below, derived from the roster.)
+    WALK_REMIT: frozenset = frozenset({"requisition", "open_case", "determine", "issue", "covenant",
+                                       "pardon"})
     # v9 IN-09: a row declaring `referent_named` forms only on a referent the person's own ledger
     # names (`comply`: a writ he holds), and this question names none, so it is not in the walk.
     # DERIVED FROM THE ROW'S OWN COLUMN, never from a verb name.
@@ -13999,9 +14016,11 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # row's `counterparty:` (`to`, the hearer), and its `Person.pursuits` write keyed by degree
     # (`Overwhelming`/`Success` only); `test_in12_step9.py` block 3 folds it through the real seam over 40
     # act ids, reads the bands it reaches, and observes the hearer's pursuits move on the won bands only.
+    # v9 IN-12 step 5: `arrest` IS contested (`a standing`, `tell`'s prize), the eighth entry; `pardon` is not.
     assert contested == {"fight": "the body", "tell": "a standing", "march": "a field",
                          "accept": "the body", "speak": "a matter",
-                         "determine": "a proposition", "argue": "a proposition"}, (
+                         "determine": "a proposition", "argue": "a proposition",
+                         "arrest": "a standing"}, (
         f"the set of contesting verbs moved: {contested}. Every claim `W-E` published about what "
         "can be graded today is scoped to this set. A SEVENTH entry is a real widening and wants "
         "its own measurement; losing one of these six means its prize row or its verb row has "
@@ -14020,9 +14039,11 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # 46 -> 47, `covenant` (v9 IN-12 step 7), uncontested, a re-record; 47 -> 51, `argue`, `sabotage`,
     # `tend`, `train` (v9 IN-12 step 9) -- `argue` IS contested, so the contested set above moves with it
     # (the seventh entry); the other three are not. A re-record. 51 -> 52, `conceal` (v9 IN-12 step 10),
-    # uncontested, a re-record. 52 -> 53, `forgive` (v9 IN-12 step 13), uncontested, a re-record.
+    # uncontested, a re-record. 52 -> 53, `forgive` (v9 IN-12 step 13), uncontested, a re-record. 53 -> 55,
+    # `arrest` (contested, the contested set above moves with it) and `pardon` (uncontested), v9 IN-12
+    # step 5, a re-record.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen]
-    assert len(VERB_TABLE) == 53, len(VERB_TABLE)
+    assert len(VERB_TABLE) == 55, len(VERB_TABLE)
     # AND THE SIX ARE SIX, not a row that says six. This is the half of the pin that the old
     # count could not express: a table carrying the placeholder passed `== 32` while no act in it
     # could be formed, and `runs/CASELOG_NPC.md:64` reported the same case as a blocked one.
@@ -15925,4 +15946,7 @@ def test_t4_petition_and_issue_bind_to_and_contest_exactly_as_before():
     # and is contested now, so the judge rolls against the party exactly as `tell` rolls against the hearer.
     # v9 IN-12 step 9: `argue` joins -- contested (`a proposition`) against its `counterparty: to`, the hearer,
     # `tell`'s shape exactly (#453 §9.4). A re-record.
-    assert {v for v, r in VERB_TABLE.items() if r.contests and r.counterparty} == {"tell", "determine", "argue"}
+    # v9 IN-12 step 5: `arrest` joins -- contested (`a standing`) against its `counterparty: subject`, the
+    # prisoner, `determine`'s shape (#453 §9.1). A re-record.
+    assert {v for v, r in VERB_TABLE.items() if r.contests and r.counterparty} == {"tell", "determine", "argue",
+                                                                                   "arrest"}
