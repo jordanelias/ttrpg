@@ -1,6 +1,9 @@
 # Tutorial: Social Contest and Proceedings (SC) — telling, arguing, pleading and judging: how one person moves another's beliefs, wants and legal standing
 
 Repo `jordanelias/ttrpg`, HEAD `a4ca9a5`. Every behaviour claim cites a file I opened; runs are listed in §9.
+Revised in round 3 (2026-10-22) against `51d7b05` and the precedent suite (`research/game_precedent_suite/`): §0a is new, the
+edits are listed under "Round-3 corrections" at the end of §8, and code citations in §§0-8 were re-based to `51d7b05` where
+PR #494 moved them. §9's Opened and Ran lists record the original `a4ca9a5` session.
 
 ## 0 Before you start
 
@@ -41,8 +44,130 @@ code.)
 **Two things share the name "social contest".** (A) The *season roll*, one dice roll per act, is what the game runs.
 (B) The *Bout kernel*, a multi-exchange rhetorical duel, is a tested laboratory that the season loop never calls. The
 code says so: *"KEEP THIS ROLL, DO NOT ADOPT THE KERNEL … the timing of its retirement is Jordan's, `SM-15`"*
-(`modules/social_contest/roll.py:16-18`). Parts 1-6 below teach (A) and the proceedings built around it. Part 2.4 teaches
-(B) as a standalone game. Part 7 teaches what is only proposed.
+(`modules/social_contest/roll.py:16-18`). The kernel is also the repo's one human-played social contest:
+`systems/social_contest/sim/contest/agon_harness.py` reads `input()` (`:148-155`) and lets a person play Side A of one
+named proceeding (default `formal_contest`, 3 exchanges) against a kernel policy (default `logos_spammer`), choosing each
+exchange a move kind from a list built from the exchange's state (`:323-345`), then, after `advance` or `hard`, a Style (4) and an
+Appeal (3), with the venue's tracker printed after each exchange. It counts its own prompts: `yes 1 | python3 -m
+systems.social_contest.sim.contest.agon_harness` asks 9 over 3 exchanges (the verdict varies from run to run because the harness
+does not seed `random`, `resolver.py:12, 139, 334`; `A_decisive` and `committee` were both observed, errata R-F4; no tally is a
+measurement). It is an oracle harness, imported by no `.py` file, so the
+season cannot reach it; §0a shows a session. Parts 1-6 below teach (A) and the proceedings built around it. Part 2.4 teaches
+(B) as a standalone game. Part 7 teaches what is only proposed. [precedent: `research/game_precedent_suite/dispositions/D_T05.md`, row 12]
+
+## 0a How it plays
+
+As built, then [PROPOSED]. Counts are seeds 0 · 1 · 2 over two seasons from `ctl/`, graded by the rule in §0, unless a line says
+"probe": one season of `build_realm(0)` on the recipe of `ctl/control.py`, re-run at `51d7b05` (an uncommitted round-3 probe, §9). Other games' versions of each heading are in
+`research/game_precedent_suite/tutorials/T05_social_rpgs.md` (Disco :5, Griftlands :86, BG3 :164, KCD :242); the proceedings
+precedents behind D_T05 rows 18, 57 and 75 are in `tutorials/T14_squad_settlement.md` (The Guild 2 :209, Guild 3 :267) and
+`tutorials/T19_tactics_narrative.md` (Triangle Strategy :6, Ace Attorney :157). What each comparison means for this file is in
+`research/game_precedent_suite/dispositions/D_T05.md` (reference, tier 3).
+
+### Setup choices
+- Nothing here is chosen at world build. `build_realm(seed)` seats the authored cast (46 named persons and 37 cohorts, overview §1)
+  and its offices; whoever holds a seat whose remit grants `determine` or `convene` is the bench or the convener (§0). At build
+  there is no Date and the docket is empty, on every seed (probe at seeds 0-2; `harness/populated.py` writes no `docket` or `dates`
+  entry, grep).
+- `Person.capability` is empty on every person: `build_realm` writes none (§1), and ctl reads "capability nonempty 0" of the 74 · 77 · 72
+  alive after two seasons (`ctl/control.py:22, 29`), so every social roll is two dice
+  (`seam/wrappers/sigma.py:119-131`). The seed is the only lever and it moves outcomes, not rules (§0).
+- A person at the callback (`harness/play_surface.py:41-52`, used by tests only) is handed one person's turn and returns `Act`s to
+  the same RESOLVE. He chooses a verb row and its operands (`subject`, `to`, the `said` claim) and nothing inside the contest.
+
+### The loop (one season; overview §2.1)
+1. CALENDAR: a due Date with a holder forms an empty docket slot; one without a holder lapses (`loop/calendar.py:39-68`).
+2. MATTER: claim confidence decays 5 per season (overview §2.1).
+3. Five rounds (`scene_budget` 5, `data/fixtures.py:228`; `loop/driver.py:449-512`), each DELIBERATE → RESOLVE → ENCOUNTER →
+   WITNESS. DELIBERATE: the chooser forms candidates, scores verb alignment plus stance, then samples (§5a); it never reads the room
+   (§5c). RESOLVE: the typed precondition (refusal kind, slot spent), one roll (`modules/social_contest/roll.py:120-125`), the band,
+   the row's writes and emits. WITNESS: told claims and emitted kinds deposit by channel; `binding_decision` kinds go realm-wide (§6).
+4. CENSUS, the season's `endings_reached` read, then `tick += 1` (`loop/driver.py:514-519`). The only choice is which act fills a slot.
+
+### The choice menu (§4; grades per seed)
+| verb | cost | what it does | what it takes | grade, seeds 0 · 1 · 2 |
+|---|---|---|---|---|
+| `tell` | 1 slot (2 per extended scene) | told claim to everyone present; Failure is witnessed | a held claim; hearer present | RUNS-IN-LOOP: `news.told` 4 · 7 · 6 |
+| `argue` | slot | hearer's held pursuits move 10% (S) or 20% (O) of the gap | an uttered Proposition; hearer present | TESTS-ONLY: 0 won, 0 lost (`engine/season/tests/test_in12_step9.py:270, 276` asserts both kinds) |
+| `speak` | slot | a witnessed `matter.*`; writes nothing | a docketed matter not his own | RUNS-IN-LOOP s0, s2 (all `matter.turned`); none s1 |
+| `determine` | slot | graded disposal on the party; judge's pursuits move on S/O | seat granted `determine`; docketed Person in his ground | RUNS-IN-LOOP s1 only (one Partial) |
+| `petition` | slot; mints a hold (+1 budget) | petition Record addressed to its own subject (H-94) | anyone | RUNS-IN-LOOP: 14 · 7 · 11 filed |
+| `carry` | slot | would docket the petition | a held petition | TESTS-ONLY: 0 on every seed (`engine/season/tests/test_in45_carry.py:98-100, 115` asserts `petition.carried`) |
+| `open_case` | slot; mints a hold | case file and docket item | seat granted `determine`, purview reaches | RUNS-IN-LOOP: 6 · 1 · 5 |
+| `convene` | slot | a Date due next tick | seat granted `convene` | RUNS-IN-LOOP s2 only (1 of 5) |
+| `utter` | slot; mints a hold | a Proposition | anyone; no precondition and no refusal kind (`verb_table.yaml:1499, 1503`), so every `utter` reaching the fold succeeds; 1 of 18 formed at tick 0 never reached it (`act.ineligible`: its actor was already gone, `loop/resolve.py:61-91, 974-977`; probe) | RUNS-IN-LOOP: 39 · 39 · 49 (ctl attempted = ok) |
+| `commit` | slot | a commitment Tenure | a Proposition as subject | RUNS-IN-LOOP s1, s2 (one each) |
+
+### First season, step by step (probe: seed 0, tick 0)
+1. CALENDAR finds no Date: none exists at build and none is written on seed 0 in two seasons (§5c).
+2. Over five rounds persons form 115 social-contest acts (formed / reaching the fold): `commit` 39/36, `petition` 22/22, `utter` 18/17,
+   `carry` 12/12, `speak` 9/2, `open_case` 8/7, `tell` 3/3, `argue` 2/0, `determine` 1/0, `convene` 1/1.
+3. Admission refuses 84: 36 `commitment.refused`, 16 `petition.refused`, 12 `carry.refused`, 7 `speech.unheard`, 4 `case.unauthorized`,
+   2 `argument.refused`, 1 `determine.refused`, 1 `convene.refused`, 5 `act.ineligible` (the actor was already gone, not an admission
+   refusal: `commit` 3, `open_case` 1, `utter` 1, by the formed and fold-reaching counts above). The other 31 run: 17 `proposition.uttered`,
+   6 `petition.filed`, 3 `case.opened`, 2 `news.told`, 1 `news.untold`, 2 `matter.turned` (both `speak`s that rolled drew Failure).
+4. One actor, `p_npc_086`: `transfer` refused, `tend` refused, `petition {to: p_npc_010, subject: p_npc_010}` filed (addressed to the
+   person it is about), then three `tell`s of one claim about `p_npc_010` (`transfer.refused`, confidence 100): to `p_npc_010` drew
+   `news.told`; to `p_npc_007` drew `news.untold`; the same act again, in a later scene, drew `news.told`.
+5. The docket after tick 0: three dateless items, `terr_T13`, `p_npc_038`, `b_s_001_court`, arrangement `None`. Only `p_npc_038` is a
+   Person, so only it can ever be determined (§2.3).
+
+### What changes later
+- By the end of season 2 (ctl seed 0, attempted / ok): `tell` 23/4, `speak` 3/3, `petition` 42/14, `open_case` 12/6, `carry` 28/0,
+  `commit` 61/0, `convene` 1/0 (ok = an Event whose kind's last segment is not in the REF list of `ctl/control.py:13, 21`: `tell`'s
+  Failure `news.untold` is excluded and `speak`'s `matter.turned` is included, so `speak` 3/3 is three Failures). The docket only grows
+  (3 items after season 1, 6 after season 2, none determined; uncommitted round-3 two-season probe, §9); no Date is written;
+  13 of 74 ledgers sit at the 200-claim cap.
+- No capacity grows: `train` raises only a capability key a person already holds (`sigma.py:119-131`), so the pool stays 2, and Ob
+  never exceeds the ceiling 2 (`data/fixtures.py:416-419`).
+- Seed 1 holds the one verdict of the three seeds: `p_npc_021`, seated at `off_npc_021`, opened the case on `p_npc_004` and
+  determined it, Partial (`matter.determined`; uncommitted round-3 two-season probe, §9).
+
+### Failure and ending
+- A Failure writes nothing and is witnessed; a refusal spends the slot; a Failed `determine` leaves the matter docketed
+  (`matter.undetermined`), and that judge cannot form the same `determine` on that party again before the next season (§5c). No
+  contest ends anything: the most a contest does to a party is open an `oblige`, `detain` or `ban` edge he owns
+  (`verb_table.yaml:353`).
+- The season now reports `endings_reached` after CENSUS (`loop/driver.py:518`). It "halts nothing and writes nothing", and "the realm
+  as built reaches nothing" (`rosters.yaml:2494-2522`; `queries/world_q.py:1764-1795`), so no social act ends a run.
+
+### Consequential and cosmetic choices
+- Consequential: `utter`, `petition`, `open_case` (each mints a hold, +1 scene budget; Records and docket items persist); `determine`
+  (a binding Tenure; the party joins the seat's establishment); `tell` (claims that feed others' questions and choices). Most reliable
+  lever: `utter`, which succeeds at the fold and adds a hold (+1 scene action, spendable only up to the 10-action cap; §5b play 6).
+- Inert at shipped values: a room below 1.0, a hearer's capability of 3 or more, forgery and hostile rooms under the ceiling, quorum 1,
+  and `speak` as a means to a verdict (§5d).
+
+### A played contest inside the repo: `agon_harness.py`
+The kernel's stdin harness is the one place a person plays a social contest here. It is oracle code: no `.py` file imports it, so
+`engine/season/` cannot reach it. Run `python3 -m systems.social_contest.sim.contest.agon_harness` (`--proceeding` any of the 8 in
+§2.4, `--human-faculty` 5, `--ai-faculty` 4, `--ai-policy` `logos`; `:503-520`).
+- **Setup screen:** venue ("Formal Contest (3 exchanges)"), adjudicator ("Crowd"), the Argue pool (13D at faculty 5, §2.4's
+  `max(5, 2·faculty+3)`), the track's start and bands, and a stakes line the docstring calls a demo frame, not a scene.
+- **Each exchange:** Face, Concentration and the venue's own tracker; an "Appraise" line (a local pool roll fed to the armature reader,
+  not a kernel move; docstring WORKAROUND 1); then a menu of move kinds built from the exchange's state: `advance`, `support`, `pass`
+  always, `hard` while Concentration >= 5 (`can_hard` is affordability, `resolver.py:277`; an unlicensed `hard` is an immediate
+  barred-device loss, `agon_harness.py:328-330`), `evidence` while an unpresented dossier item on the live ground is held
+  (`resolver.py:281`), `shift` while a higher ground exists, `rebut` only where the venue allows it (`:323-345`). `advance` and `hard` then ask a Style (4: Precedent, Suppression, Vision, Insinuation) and an Appeal (3: Ethos,
+  Pathos, Logos); `shift` asks a ground; the rest ask nothing. The AI side plays a kernel policy (`logos_spammer`). The "Interaction"
+  line it prints is flavour; resolution does not read it.
+- **A session:** answering `1` at every prompt (`yes 1 | python3 -m ...`) gives six options on each of the 3 exchanges and 9 prompts
+  in all. The verdict varies from run to run because the harness does not seed `random` (`resolver.py:12, 139, 334`); `A_decisive` and
+  `committee` were both observed (errata R-F4), and no tally is a measurement.
+- **Why it exists:** its docstring says no human had played the kernel and that the 2026-07-05 audit (D4/N-7) put an exchange at about
+  13 per-decision consults against a 3-4 ceiling; the harness counts prompts to check. Its count is capped at 3 prompts per exchange on
+  valid input (the kind, then a Style and an Appeal after `advance` or `hard`, or a ground after `shift`, or nothing:
+  `agon_harness.py:347-366`), so it can neither confirm nor refute the audit's ~13 consults; it counts prompts, not consults. [precedent: `research/game_precedent_suite/dispositions/D_T05.md`, rows 12, 74]
+
+### [PROPOSED]
+- Played mode: D-2 (ruled) builds IN-46 (a played, paused fight, PC) and IN-47 (character-sheet space) (overview §2.1). Neither is a
+  played social contest, and neither document was read for this pass. The harness above is the repo's only played-mode social
+  precedent; its menu is the same move kinds filtered by state, never drawn, and the season roll offers no in-contest choice at all. A
+  drawn per-turn hand (Griftlands) has no counterpart in either resolver (`D_T05.md` row 12).
+- Verbs: V11's seven suites and remediation items REM-23, REM-24, REM-25, REM-10 and REM-06 are in §7.
+- Precedent-named gaps §7 does not list (design-level, reference only, `D_T05.md` rows): an evidence-to-verdict link (18); a retry gate
+  keyed on a change in the world (5; today a failed `tell` can re-form in a later round and any other failed contested act from the
+  next season, at identical odds, §5c); agenda-bearing voters (57); a docket that refuses non-person matters or can dispose them (75).
 
 ## 1 The pieces
 
@@ -56,20 +181,20 @@ code says so: *"KEEP THIS ROLL, DO NOT ADOPT THE KERNEL … the timing of its re
 | **opposition** | the opponent's score on the same capability key, if the opponent is a person holding it | else `None`; `determine`/`argue` have no capability row, so always `None` | `sigma.py:134-146` |
 | **obstacle (Ob)** | what the net must clear: `opposition/2`, else `obstacle_default`, then the room, then forgery, then the ceiling | default **2**, `OB_MIN` 1, ceiling **2** | `modules/social_contest/roll.py:103-113`; `data/fixtures.py:416-419` |
 | **room** | `reception_gain·reception + proof_step·proofs`, subtracted from Ob; only for `a matter` | gains **1.0** and **0.25**; a favourable room cannot take Ob below 1 | `roll.py:104-105`; `fixtures.py:425-427` |
-| **reception** | signed sum, over the bench, of each judge's ledger regard for the speaker's attributed deeds | weighted by remove (firsthand 1.0, knot 0.75, told 0.5, inferred 0.25) × confidence/100 × the judge's valence | `queries/world_q.py:530-540, 546-603` |
-| **proofs** | sum of remove weights of the speaker's claims about the opponent's deeds that the opponent does not *mirror* (hold the same subject+predicate) | 0 if no bench, no opponent, or opponent = speaker | `world_q.py:606-633` |
+| **reception** | signed sum, over the bench, of each judge's ledger regard for the speaker's attributed deeds | weighted by remove (firsthand 1.0, knot 0.75, told 0.5, inferred 0.25) × confidence/100 × the judge's valence | `queries/world_q.py:533-543, 549-606` |
+| **proofs** | sum of remove weights of the speaker's claims about the opponent's deeds that the opponent does not *mirror* (hold the same subject+predicate) | 0 if no bench, no opponent, or opponent = speaker | `world_q.py:609-636` |
 | **forgery_quality** | added to Ob for a graded inquiry examining a Record (FI's verbs, not SC's) | cannot raise a default Ob under ceiling 2 | `roll.py:96-106`; `sigma.py:184-191` |
 | **S27.4 refusal** | `Ob > 2 × pool` → the act is refused, scene spent | under ceiling 2 only a pool below 1 is refused | `sigma.py:273-275` |
 | **degree / band** | `margin = net − Ob`: <0 Failure, [0,1) Partial, [1,3) Success, ≥3 Overwhelming | no extension on the season path | `dice_engine.py:227-240`; C07 §4A.8 |
-| **`DEGREE_STEP`** | band → step used by every pursuit mover | Failure −1, Partial 0, Success +1, Overwhelming +2 | `engine/season/data/rosters.py:841` |
-| **pursuits** | a person's weighted wants (`Person.pursuits`), which drive the chooser's scoring | moved by `argue` (hearer) and `determine` (judge), step × `pursuit_shift` **0.1** | `queries/person_q.py:480-523`; `fixtures.py:433` |
-| **told claim** | the claim a `tell` deposits in every hearer present (source `told_by`, at the teller's confidence, refracted) | Partial drifts it: one addressee dropped, or a number moved within `told_drift_band` 0.5; Failure deposits nothing | `loop/witness.py:136-230, 822-870`; `fixtures.py:761, 864` |
-| **docket** | `World.docket`, a list of items `{date, matter, arrangement, petition}` | a matter can be docketed once; an empty slot has `matter: None` | `world_q.py:179-210` |
+| **`DEGREE_STEP`** | band → step used by every pursuit mover | Failure −1, Partial 0, Success +1, Overwhelming +2 | `engine/season/data/rosters.py:842` |
+| **pursuits** | a person's weighted wants (`Person.pursuits`), which drive the chooser's scoring | moved by `argue` (hearer) and `determine` (judge), step × `pursuit_shift` **0.1** | `queries/person_q.py:570-613`; `fixtures.py:433` |
+| **told claim** | the claim a `tell` deposits in every hearer present (source `told_by`, at the teller's confidence, refracted) | Partial drifts it: one addressee dropped, or a number moved within `told_drift_band` 0.5; Failure deposits nothing | `loop/witness.py:136-230, 822-870`; `fixtures.py:771, 874` |
+| **docket** | `World.docket`, a list of items `{date, matter, arrangement, petition}` | a matter can be docketed once; an empty slot has `matter: None` | `world_q.py:182-213` |
 | **petition** | a `Record` of kind `petition` `{terms, to, from}` held by its maker | minted by `petition`, docketed by `carry` | `loop/effects_information.py:613-631, 355-414` |
 | **case file** | a `text` Record minted by `open_case`, which dockets its subject | needs a seat granted `determine` whose purview reaches the matter | `effects_information.py:273-351`; `verb_table.yaml:900-923` |
-| **Date / sitting** | `convene` writes a Date `{venue, holder = convener's seat, due_at = tick+1}`; at CALENDAR a due Date with a holder forms an empty docket slot, one without a holder lapses | the slot re-opens after each determination ("a standing court") | `loop/effects_governance.py:326-370`; `loop/calendar.py:28-75`; `world_q.py:232-302` |
-| **bench (`judging_set`)** | live `hold`ers of seats granted `determine` whose scope contains the venue | its `matter` argument is accepted and unused | `world_q.py:439-516` |
-| **quorum** | `bench.size >= bench_quorum` | shipped **1**, so it cannot refuse a seated judge | `verb_table.yaml:337-342`; `fixtures.py:913` |
+| **Date / sitting** | `convene` writes a Date `{venue, holder = convener's seat, due_at = tick+1}`; at CALENDAR a due Date with a holder forms an empty docket slot, one without a holder lapses | the slot re-opens after each determination ("a standing court") | `loop/effects_governance.py:326-370`; `loop/calendar.py:28-70`; `world_q.py:235-305` |
+| **bench (`judging_set`)** | live `hold`ers of seats granted `determine` whose scope contains the venue | its `matter` argument is accepted and unused | `world_q.py:442-519` |
+| **quorum** | `bench.size >= bench_quorum` | shipped **1**, so it cannot refuse a seated judge | `verb_table.yaml:337-342`; `fixtures.py:923` |
 | **disposal** | the Tenure `determine` opens on the party, owned by the party, on the judge's seat: `oblige` (with a term), `detain` or `ban`, graded with the band | kind from the docket item's arrangement row; `None` (every computed case) → `oblige` | `effects_information.py:513-524, 583-609` |
 | **arrangement** | a proceeding's rules row (13 keys plus `id`, closed-set loader) | 8 rows; only `disposes` is read, and only on a hand-named item; the 2 rows disposing `Record` are refused by `open_case` | `arrangements.yaml:8-14`; `engine/season/arrangements.yaml:106-276` |
 | **speech kind** | a forensic move name | 6 rows (`deny … hand_error_back`), `impugn_motive` capped at Partial; no reader | `arrangements.yaml:56-95` |
@@ -120,7 +245,13 @@ Overwhelming is impossible at pool 2 against Ob 2: two dice net at most +4 and t
 
 ### 2.3 Proceedings: bringing, hearing and determining a matter
 
-A *matter* is whatever a docket item names (in practice a person). There are two ways onto the docket and one way off.
+A *matter* is whatever a docket item names: a person or, in computed play, often a Rung that is no person (seed 0 after
+tick 0: `terr_T13`, `p_npc_038`, `b_s_001_court`; 2 of the 6 `case.opened` over two seasons on seed 0 name such a Rung, a
+territory and a building; uncommitted round-3 probe, §9). Only a person fills a docket slot (`slot_for`, `world_q.py:251-254,
+260-261`), so a Rung matter is always dateless, and `sittings_before` skips it (`:296`), so it is never before a sitting.
+`determine`'s `party` conjunct requires a Person (`verb_table.yaml:327-328`), so a Rung matter
+can be spoken to (`b_s_001_court` drew a `matter.turned`) but never determined, and it stays on the docket.
+There are two ways onto the docket and one way off. [precedent: `research/game_precedent_suite/dispositions/D_T05.md`, row 75]
 
 - **Without a seat (petition route).** `petition` mints a petition Record `{terms, to, from}` into your hand
   (`effects_information.py:613-631`). A *computed* petition's `to` and `subject` bind the question's one referent, so it is
@@ -129,13 +260,13 @@ A *matter* is whatever a docket item names (in practice a person). There are two
   the petition to another person first.
 - **From a seat (case route).** A holder of a seat granted `determine` whose purview reaches the matter's place may
   `open_case`: a `text` case file is minted at the seat's rung, and the matter fills the first open slot at the nearest
-  sitting whose venue contains the matter's place, or else is appended dateless (`:273-351`; `world_q.py:244-266`). A
+  sitting whose venue contains the matter's place, or else is appended dateless (`:273-351`; `world_q.py:247-269`). A
   matter already docketed is declined. A computed case always writes `arrangement: None` (`effects_information.py:331-332`).
 - **A sitting.** A holder of `remit:convene` names a venue above the person tier; `convene` writes a Date due next tick
   whose holder is the convener's seat (`effects_governance.py:357-370`). At CALENDAR a due Date *with* a holder fires and
-  forms an empty slot; one without a holder fires and lapses (`calendar.py:39-74`). A slot re-opens after each
-  determination, so one convening is a standing court (`world_q.py:286-287`). Judges on the bench whose ledger holds a
-  `date.fired` claim about that venue stamped with the firing's tick, from any source (`world_q.py:298-299`), are then asked about the sitting's person matters (`sittings_before`, `:269-302`).
+  forms an empty slot; one without a holder fires and lapses (`calendar.py:39-68`). A slot re-opens after each
+  determination, so one convening is a standing court (`world_q.py:289-290`). Judges on the bench whose ledger holds a
+  `date.fired` claim about that venue stamped with the firing's tick, from any source (`world_q.py:301-302`), are then asked about the sitting's person matters (`sittings_before`, `:272-305`).
 - **Hearing (`speak`).** Anyone at a place may speak to a docketed matter that is not his own. The contest reads the bench
   at the speaker's place through the room terms. Its four bands emit `matter.carried` / `.advanced` / `.held` / `.turned`
   and **write nothing** (`verb_table.yaml:1080-1090`); witnesses learn which way it went.
@@ -149,7 +280,7 @@ A *matter* is whatever a docket item names (in practice a person). There are two
   `oblige` carrying `oblige_term`, which the party may later `release` (`:599-608`).
 - **What the bench is.** `judging_set(w, venue)` = live `hold`ers of seats granted `determine` whose scope rung contains
   the venue. Its `matter` argument is unused: *"nothing yet maps a docketed matter to its governing arrangement row"*
-  (`world_q.py:458-468`). **Arrangements and speech kinds** are loaded but the only key read is `disposes`, on a hand-named
+  (`world_q.py:461-471`). **Arrangements and speech kinds** are loaded but the only key read is `disposes`, on a hand-named
   item; no act carries a speech kind.
 
 ### 2.4 The Bout kernel (standalone, TESTS-ONLY)
@@ -168,7 +299,7 @@ faults after every move, and checks the win condition at the end of each exchang
 | advancement | `gain = 2.6 · degree · resonance · readiness · U(0.92,1.08) · bias`; resonance mixes the venue's appeal × tense weight with the judge's character by a leak `(1−discipline) + 0.5·standing_frac` (cap .9), floor .15; readiness `0.40 + 0.60·min(1, 0.4·standing_frac + 0.4·room_frac)` | `resolver.py:35-44`, C07 §4B.5 |
 | moves | `advance`/`hard` (on the live ground; `hard` licit only when well ahead before a lay or hostile judge), `shift`, `support`, `pass`, `evidence` (best dossier item on the ground, corroboration 1.0/.7/.5/.35/.25, cap 3), `rebut` (venue must allow; a degree ≥ 2 erases up to 3 of the opponent's tally) | `resolver.py:341-438, 371-373` |
 | faults (clinch, immediate loss) | barred device, self-contradiction, evasion × 2 (off-ground or disallowed rebut), silence × 2 (pass or unaffordable) | `primitives.py:262-279` |
-| win conditions | ThresholdRace, TallyAtClose, ProofBar, GraceThreshold, PersuasionTrack (`clamp(start + 1.5·(advA−advB), 0, 10)`: ≥9 A_total, ≥7 A_decisive, >3 committee, >1 B_decisive, else B_total), VoteAtClose | `resolver.py:52-147` |
+| win conditions | ThresholdRace, TallyAtClose, ProofBar, GraceThreshold, PersuasionTrack (`clamp(start + 1.5·(advA−advB), 0, 10)`: ≥9 A_total, ≥7 A_decisive, >3 committee, >1 B_decisive, else B_total), VoteAtClose (a terminal secret ballot: each juror votes A iff `sharpness·(advA−advB) + N(0, noise)` > 0, defaults 0.6 and 0.8, so a close room is near a coin-flip; simple majority, or for the Panel the summed `discipline` weight, which `guild_arbitration` uses; draws on the global `random` stream) | `resolver.py:52-147`; `modes.py:502-509` |
 | proceedings (8) | `formal_contest` 3 ex., `grand_contest` 5, `royal_audience` 3, `church_tribunal` 5 (start FACT, track 6.0), `guild_arbitration` 3 (panel vote), `casual_dispute` 1, `private_negotiation` 3, `personal_appeal` 1 | `modes.py:485-519` |
 | adjudicators | `expert_judge` (learned, discipline .75, logos .55), `crowd` (15, discipline .30, pathos .55), `no_adjudicator`, `panel` (5 expert judges) | `modes.py:433-468` |
 
@@ -202,12 +333,12 @@ shipped formulas:
 
 - **reception.** J1 holds one firsthand claim (weight 1.0, confidence 100/100) of a deed of Ines's that his own pursuits
   value at `deed_term` +0.4 → 0.40. J2 holds one told claim (weight 0.5, confidence 80/100) of a deed valued +0.5 → 0.20.
-  reception = **0.60** (`world_q.py:546-603`).
+  reception = **0.60** (`world_q.py:549-606`).
 - **proofs.** Ines holds two firsthand claims of Corvin's deeds that Corvin does not hold (1.0 each) and one told claim
-  he mirrors (0). proofs = **2.0** (`world_q.py:606-633`). ⚠ This is the unusual case: a deed claim counts only when its
-  doer is the opponent (`person_q.py:145-155`), and the doer witnesses his own act through `co_located`
+  he mirrors (0). proofs = **2.0** (`world_q.py:609-636`). ⚠ This is the unusual case: a deed claim counts only when its
+  doer is the opponent (`person_q.py:147-157`), and the doer witnesses his own act through `co_located`
   (`epistemic.py:548-551`), so he normally holds the same (subject, predicate) and the mirror cancels it
-  (`world_q.py:632-633`). Proofs survive only where Corvin's own claim has left his ledger (the 200-claim cap, decay).
+  (`world_q.py:635-636`). Proofs survive only where Corvin's own claim has left his ledger (the 200-claim cap, decay).
   In practice proofs are near zero and the room is reception alone.
 - **room** = 1.0 × 0.60 + 0.25 × 2.0 = **1.10**. Ob = max(2 − 1.10, min(2, 1)) = max(0.90, 1) = **1.0**; ceiling 2 leaves 1.0.
 - **Odds:** F .42 · P .32 · S .25 · O .01 (against .74/.19/.07/0 with no room). Had J2's claim been absent and Ines held
@@ -244,13 +375,14 @@ absorbs the difference.
 An act is not one budget point: a lone act costs 1, an extended scene of 2-3 acts costs 2 (§0). "ctl" = attempted / ok,
 seeds 0 · 1 · 2, 2 seasons (`ctl/realm_seed*_2seasons.txt`): *attempted* = acts that reached the fold (`d.resolved`,
 `resolve.py:375-379`); contested acts refused at their typed precondition never reach it, so I add the refusal counts and
-the formed count (`w.acts`) from my own probes (§9). For contested verbs *ok* includes the Failure band (e.g. `speak`'s
-`matter.turned`). The prerequisites column gives the typed cell (`requires_typed`).
+the formed count (`w.acts`) from my own probes (§9). *ok* = an Event whose kind's last segment is not in the REF list of
+`ctl/control.py:13, 21`: `speak`'s `matter.turned`, `argue`'s `argument.lost` and `determine`'s `matter.undetermined` count as ok,
+`tell`'s Failure `news.untold` does not, so `tell` ok is Partial-or-better and `speak` 3/3 at seed 0 is three Failures. The prerequisites column gives the typed cell (`requires_typed`).
 
 | verb | who | prerequisites (typed) | contest | by band | writes | realm |
 |---|---|---|---|---|---|---|
 | `tell` | anyone (`own`) | you hold a claim on `subject`; `to` is with you | `a standing` vs `to` | O/S/P `news.told` (+`confidence.broken` only if you break a confidence circle; none exist at `telling_privacy` 0); F `news.untold` | nothing; WITNESS deposits the told claim | ctl 23/4 · 25/7 · 19/6; +4 admission refusals (s0). Seed 0 bands: S 3, P 1, F 19 |
-| `argue` | anyone | `subject` is an uttered Proposition; `to` is with you | `a proposition` vs `to` | O/S hearer's held pursuits move toward yours by 0.1·step of the gap (`person_q.py:503-523`); P `argument.won`, no write; F `argument.lost` | `Person.pursuits` (hearer) | not in ctl; admission refusals 10 (s0), 17 (s1), seed-1 refusals all `exists:Proposition` = 0; `argument.won`/`.lost` 0 |
+| `argue` | anyone | `subject` is an uttered Proposition; `to` is with you | `a proposition` vs `to` | O/S hearer's held pursuits move toward yours by 0.1·step of the gap (`person_q.py:593-613`); P `argument.won`, no write; F `argument.lost` | `Person.pursuits` (hearer) | not in ctl; admission refusals 10 (s0), 17 (s1), seed-1 refusals all `exists:Proposition` = 0; `argument.won`/`.lost` 0 |
 | `speak` | anyone | `subject` is docketed (not yourself) | `a matter` vs `subject`, bench room | O `matter.carried`, S `.advanced`, P `.held`, F `.turned` | nothing | ctl 3/3 · 0 · 2/2 (seed 0: all three `matter.turned`); seed 0 formed 22 (`w.acts`): 3 resolved, 18 `speech.unheard`, 1 untraced; `speech.unheard` 14 (s1) |
 | `determine` | seat granted `determine` | subject is a Person, docketed, you sit on the bench over his home, bench ≥ quorum 1 | `a proposition` vs party | O/S disposal graded + judge's pursuits; P disposal graded Partial; F `matter.undetermined` | `Tenure.since/degree`, `DocketItem.matter`, `Person.pursuits` (judge) | ctl 0 · 1/1 · 0 (seed 1: one `matter.determined` at Partial); `determine.refused` 2 (s0), 5 (s1) |
 | `petition` | anyone | `to` is a Person, `from` is a Rung; not to yourself; computed `to` = `subject` (H-94) | none | `petition.filed` | `Record.exists` (petition, your `hold`, +1 budget) | ctl 42/14 · 31/7 · 34/11; seed-1 refusals all `exists:Person` = 0 |
@@ -287,10 +419,22 @@ statement exists that others can commit to (a Proposition, `commit` Tenures).
    one; `utter` never refuses, so it is a reliable budget lever (audit ruling C1).
 
 **(c) Costs, risks, counter-play, blocks.** Each act spends budget (1 alone, 2 per extended scene); at the defaults three in four contested acts
-fail, and Failure writes nothing ("no failing forward"). You cannot read the bench's or the opponent's ledgers: the room
-is resolver-side only (`world_q.py:519-528`), so you guess. Counter-play is structural, not chosen: an opponent who comes
+fail, and Failure writes nothing ("no failing forward"). Nothing stops a failed `tell` being formed again in a later round of the
+same season at the same odds. Within a season the loop bars only a repeat of an act already realised (`loop/deliberate.py:305-340,
+374-376`; `data/verbs.py:1193-1231`), and the bar resets each season (`loop/driver.py:443`). An act is realised when it emitted an
+Event and none of its Events is one of its row's refusal kinds (`loop/driver.py:488-503`). `tell`'s Failure kind `news.untold` is also
+its refusal kind (`verb_table.yaml:1196, 1240-1243`), so a failed telling stays open. A failed `argue` (`argument.lost` against
+refusal `argument.refused`, `:160, 162`), `speak` (`matter.turned` against `speech.unheard`, `:1090, 1092`) or `determine`
+(`matter.undetermined` against `determine.refused`, `:358, 361`) is realised, and that actor's same opportunity is dropped until the
+next season. Seed 0, tick 0 (uncommitted round-3 probe): `p_npc_086`'s `tell` to `p_npc_007` drew `news.untold`, then the
+same act in a later scene drew `news.told`, so the odds per act understate the odds per intention. You cannot read the
+bench's or the opponent's ledgers: the room is resolver-side only (`world_q.py:522-531`), so you guess. In computed play
+nobody guesses: decision code never reads the room (`decision/` names `reception` only in a comment,
+`decision/options.py:1335`). For `tell`, `argue` and `determine` there is nothing hidden to guess at shipped values: each of the three rolls pool 2 against
+Ob 2 for every hearer or party (§2.2), F .74 · P .19 · S .07 · O 0. Only `speak` reads a bench room (`sigma.py:253-256`), and only a
+room >= 1.0 moves its odds (§2.2). [precedent: `research/game_precedent_suite/dispositions/D_T05.md`, rows 4, 5, 62] Counter-play is structural, not chosen: an opponent who comes
 to hold the same (subject, predicate) cancels that proof; a judge who saw someone successfully dominate you discounts
-your earlier dominance deeds (route erosion, `world_q.py:569-578`); a bound party may `release` an `oblige`. Realm
+your earlier dominance deeds (route erosion, `world_q.py:572-581`); a bound party may `release` an `oblige`. Realm
 blocks: pool 2 and leverage 0 for everyone; formation mismatches (computed `argue`, `commit`, `carry`, and some
 `petition`s form on referents of the wrong kind and are refused); no Date was ever written on seed 0, so every docket
 item there was dateless.
@@ -298,6 +442,10 @@ item there was dateless.
 **(d) What the mechanics structurally reward or punish.**
 - `speak` does not change `determine`'s odds: the verdict roll reads no room and no prior speech. As a means to a
   verdict, pleading is dominated; its only product is witnessed events.
+- The verdict does not read the party either: `determine` rolls the judge's pool against Ob 2 for every party
+  (`verb_table.yaml:346`: *"the roll is the same for every party"*; in code, `_opposition_of` returns `None` without a
+  `verb_capability` key, `sigma.py:134-146`, and the room is read only for `heard_by: bench`, `:253-256`), so a party whose deeds the
+  bench witnessed and one it never heard of face the same .26 chance of a disposal. [precedent: `research/game_precedent_suite/dispositions/D_T05.md`, row 18]
 - Room below 1.0, and a hearer's capability of 3, are inert (Ob rounds up). Only a teller's capability, a room ≥ 1, or an
   opponent at capability ≤ 2 move odds.
 - Overwhelming is unreachable at defaults, so `argue`'s 20% move and `determine`'s top band do not occur.
@@ -397,7 +545,7 @@ multi-exchange run inside one act (`roll.py:36-37`); kernel games `consensus`, `
 2. *X1 / C1 scene budget.* "Every act costs one action" was wrong: an extended scene of 2-3 acts costs 2
    (`fixtures.py:489`, `choose.py:643-657`), so budget 5 buys 7 acts. Fixed in §0, §4 and §5c, and I added play 6 (hold-minting
    verbs raise the budget).
-3. *F3 proofs.* Accepted after opening `person_q.py:145-155`, `epistemic.py:548-551`, `world_q.py:632-633`: the opponent
+3. *F3 proofs.* Accepted after opening `person_q.py:147-157`, `epistemic.py:548-551`, `world_q.py:635-636`: the opponent
    normally witnesses his own deed and so mirrors it; §3.2 and play 5 now say proofs are near zero in practice.
 4. *F5 Failure deposits.* "Nothing is deposited" was wrong: `news.untold` still deposits event-kind and `seen` claims
    (`witness.py:359-365`); only the told content is withheld (`:860`).
@@ -406,7 +554,7 @@ multi-exchange run inside one act (`roll.py:36-37`); kernel games `consensus`, `
 7. *F11 hostile room.* My "a hostile room cannot hurt you" holds only against a defaulted Ob 2; against a capability
    holder the base is below 2 and a hostile room raises it (`roll.py:89-94, 103-113`). Corrected in §5d.
 8. *F12 capability.* The `copying: 3` person is in the case-corpus overlay, never in a realm build; variants relabelled.
-9. *F13 sitting question.* `sittings_before` checks subject, predicate and tick, not source (`world_q.py:298-299`); its
+9. *F13 sitting question.* `sittings_before` checks subject, predicate and tick, not source (`world_q.py:301-302`); its
    docstring's "firsthand" is not enforced. §2.3 corrected.
 10. *F14 kernel leverage.* `Leverage.net` adds 0.5 only on-ground (`primitives.py:228-230`). My figure stands for every
     *rolled* move, because the resolver always passes `on_ground=True` (`resolver.py:301`) after an off-ground advance has
@@ -421,6 +569,56 @@ multi-exchange run inside one act (`roll.py:36-37`); kernel games `consensus`, `
 15. *X21.* Seed-0 `speak`: 22 formed (`w.acts`, my run), 3 resolved, 18 `speech.unheard`; the 22nd is untraced. My earlier
     "21" counted events, not acts.
 16. *C11.* Added one-clause definitions of the shared primitives and id families in §0.
+
+### Round-3 corrections
+Each line is old claim -> new claim, with the evidence. Round 3 read the code at `51d7b05`; the precedent record is
+`research/game_precedent_suite/dispositions/D_T05.md`.
+1. *§0 (B), D_T05 row 12 / 74.* "a tested laboratory that the season loop never calls" -> also the repo's one human-played social
+   contest, `agon_harness.py`, unreachable from the season (`agon_harness.py:148-155, 323-345`; no `.py` imports it; ran it with scripted
+   input: 9 prompts over 3 exchanges each time; the verdict varies because `random` is unseeded, so no run tally is given). New §0a section.
+2. *§2.4 win conditions, row 27.* "VoteAtClose" named without its rule -> the ballot is stated (`resolver.py:98-147`, defaults
+   `sharpness` 0.6, `noise` 0.8, `random.gauss`; Panel weights by `discipline`; `modes.py:502-509` binds it to `guild_arbitration`).
+3. *§2.3, row 75.* "a matter is whatever a docket item names (in practice a person)" -> a person or a Rung that is no person; `determine`
+   needs a Person (`verb_table.yaml:327-328`). Evidence: seed 0 docket after tick 0 is `terr_T13`, `p_npc_038`, `b_s_001_court`; 2 of
+   its 6 `case.opened` over two seasons name a territory or building (re-run at `51d7b05`).
+4. *§5c, rows 4 and 62.* "so you guess" -> in computed play nobody guesses (`decision/options.py:1335` is the only mention of
+   `reception` under `decision/`); at shipped values `tell`, `argue` and `determine` have no hidden odds (`verb_table.yaml:346`,
+   `sigma.py:119-131`).
+5. *§5c, row 5.* "Failure writes nothing" with no word on repeats -> a failed `tell` can be formed again at the same odds: the season
+   records only realised acts (`loop/deliberate.py:305-340`, `loop/driver.py:488-503`) and `tell`'s Failure kind `news.untold` is also its
+   refusal kind (`verb_table.yaml:1196, 1240-1243`). The disposition says "a failed act"; I scoped it to `tell` because other rows'
+   Failure kinds (`argument.lost`, `matter.turned`, `matter.undetermined`) are not refusal kinds, so those acts are realised and
+   barred until the next season (`driver.py:443`, traced in §5c).
+6. *§5d, row 18.* New bullet: `determine` reads neither the party nor the room (`verb_table.yaml:346`); .26 for every party.
+7. *Line drift after #494.* Citations to `queries/world_q.py` +3 (every cite here sits after line 44), `queries/person_q.py` +2 below line
+   416 and +90 above it, `data/fixtures.py` +10 above line 715, `data/rosters.py` +1 (`git diff a4ca9a5 51d7b05 -U0` on each; the text at
+   every re-based range is identical to the old one). Re-based: `world_q.py` 530-540/546-603/606-633/179-210/232-302/439-516/244-266/
+   286-287/298-299/269-302/458-468/632-633/519-528/569-578 -> 533-543/549-606/609-636/182-213/235-305/442-519/247-269/289-290/301-302/
+   272-305/461-471/635-636/522-531/572-581; `person_q.py` 480-523/503-523 -> 570-613/593-613 and 145-155 -> 147-157; `fixtures.py`
+   761/864/913 -> 771/874/923; `rosters.py` 841 -> 842. §9's Opened/Ran lists are left as the `a4ca9a5` record.
+8. *Not applied, by instruction.* The overview edits (player interface, player-position row) and the nine bracketed corrections to
+   repo precedent documents belong to other files; they are in `D_T05.md` rows 30-40, 71-74.
+
+#### Audit fixes
+Each line is old -> new, from the round-3 critique, with the line opened at the current tree.
+1. *Harness runs (§0, §0a, correction 1, §9).* "four complete runs: `A_decisive` three times, `committee` once (n = 4)" -> the verdict varies because `random` is unseeded (`resolver.py:12, 139, 334`), both verdicts observed (errata R-F4), no tally given.
+2. *Retry gate (§5c, §0a, [PROPOSED], correction 5).* "did not trace" and "a retry gate on failed acts" as a gap -> the bar lasts one season (`driver.py:443`), only `tell`'s Failure kind is also its refusal kind, and failed `argue`, `speak` and `determine` are realised and barred until the next season (`driver.py:488-503`, `deliberate.py:374-376`, `verb_table.yaml:160-162, 358-361, 1090-1092`).
+3. *Hidden odds (§5c).* "every realm act rolls pool 2 against Ob 2 ... only `speak`'s bench room is unknown" -> the three contested rolls are pool 2 against Ob 2 for every party, and only `speak` reads a bench room, which moves odds only at >= 1.0 (`roll.py:103-105`, `sigma.py:253-256`).
+4. *ctl "ok" (§0a, §4).* "ok includes the Failure band" for contested verbs -> ok is a non-REF event kind, so `tell`'s `news.untold` is excluded and `speak`'s `matter.turned`, `argue`'s `argument.lost` and `determine`'s `matter.undetermined` are included (`ctl/control.py:13, 21`).
+5. *`utter` (§0a table).* "never refuses" -> no precondition and no refusal kind, but 1 of 18 formed at tick 0 never reached the fold because its actor was gone (`act.ineligible`, `resolve.py:61-91, 974-977`); the audit's "declined" is corrected to "actor already gone", and the 5 `act.ineligible` are no longer called admission refusals.
+6. *"Dominant: `utter`" (§0a).* -> "Most reliable lever", spendable only up to the 10-action cap (errata Part 2 C1).
+7. *Unlabelled probe counts (§0a, §2.3, §5c).* docket growth, the seed-1 verdict ids, the Rung counts and the `p_npc_086` example -> tagged "uncommitted round-3 probe", the probe header says so too; no recipe is printed because the scripts are not in the tree.
+8. *Menu gates (§0a).* "`hard` when `can_hard`", "`evidence` while an item is held" -> `hard` while Concentration >= 5 (affordability, `resolver.py:277`; unlicensed `hard` is a barred-device loss, `agon_harness.py:328-330`), `evidence` while an unpresented dossier item on the live ground is held (`resolver.py:281`).
+9. *Prompt count (§0a).* "3.0 per exchange on one path is not a refutation" -> the count is capped at 3 prompts per exchange on valid input (`agon_harness.py:347-366`), so it cannot confirm or refute ~13 consults.
+10. *Precedent pointers (§0a).* T05 for every heading -> T05 covers four games; the proceedings rows 18, 57 and 75 draw on `T14_squad_settlement.md` (Guild 2 :209, Guild 3 :267) and `T19_tactics_narrative.md` (Triangle :6, Ace Attorney :157).
+11. *Inert capability (§0a).* "a hearer's capability" -> "of 3 or more", as §5d says.
+12. *Style and Appeal (§0).* asked every exchange -> asked only after `advance` or `hard` (`agon_harness.py:350-357`).
+13. *Calendar range (§0a, §1, §2.3).* `calendar.py:39-74` and `28-75` ran past the 70-line file -> `:39-68` and `28-70`.
+14. *No Date, no capability (§0a).* "all 83 persons" -> every person: `build_realm` writes none and ctl reads 0 of the 74 · 77 · 72 alive (`ctl/control.py:22, 29`); "on every seed (probe)" now cites `harness/populated.py` writing no `docket` or `dates` entry.
+15. *TESTS-ONLY cites (§0a).* `argue` and `carry` named no test -> `test_in12_step9.py:270, 276` and `test_in45_carry.py:98-100, 115`.
+16. *Rung on the docket (§2.3).* the mechanism rested on the probe -> `slot_for` fills a slot only for a person (`world_q.py:251-254, 260-261`), so a Rung matter is dateless, and `sittings_before` skips it (`:296`).
+17. *`determine` odds (§5d).* the YAML `contests_note` as the only support -> plus `sigma.py:134-146` (no `verb_capability` key, so no opposition) and `:253-256` (room only for `heard_by`).
+18. *Disposal edge (§0a).* "a party loses at most an `oblige`, `detain` or `ban` edge" -> the contest opens that edge, which he owns (`verb_table.yaml:353`).
 
 ## 9 Checks
 
@@ -440,6 +638,14 @@ multi-exchange run inside one act (`roll.py:36-37`); kernel games `consensus`, `
   `resolver.py:301, 376-406`, `primitives.py:225-230`, `budget.py:17-20`, `fixtures.py:486-490`, `choose.py:643-657`,
   `rosters.yaml:313-317`; ran `tutorial/t05_acts.py 0` (formed vs fold-reaching counts: tell 27/23, speak 22/3, argue
   10/0, determine 2/0, petition 42/42, carry 28/28, open_case 13/12, convene 1/1, utter 40/39, commit 64/61).
+- Round 3 (2026-10-22, `51d7b05`): opened `agon_harness.py:1-160, 313-530`, `resolver.py:95-150`, `modes.py:480-560`,
+  `verb_table.yaml:314-346, 1068-1092, 1193-1246`, `loop/deliberate.py:215-230, 305-375`, `loop/driver.py:440-560`,
+  `loop/calendar.py:36-76`, `data/verbs.py:1193-1235`, `rosters.yaml:2494-2534`, `queries/world_q.py:519-534, 1764-1795`,
+  `harness/play_surface.py:30-60`; ran `yes 1 | python3 -m systems.social_contest.sim.contest.agon_harness` (complete runs; verdicts differ because `random` is unseeded, so none is tallied),
+  a one-season `build_realm(0)` probe on the `ctl/control.py` recipe (formed/reached `tell` 3/3, `speak` 9/2, `argue` 2/0,
+  `determine` 1/0, `petition` 22/22, `carry` 12/12, `open_case` 8/7, `convene` 1/1, `utter` 18/17, `commit` 39/36; docket after
+  tick 0: three dateless items) and a two-season probe of seeds 0, 1, 2 for the docket and the subjects of `case.opened`.
+  Those probe scripts are not committed.
 - Not confirmed: the one seed-0 `speak` formed but producing no `speak` event; `reception`'s
   `deed_term` values in §3.2 are constructed inputs, not read from a realm ledger.
 

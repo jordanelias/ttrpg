@@ -1,5 +1,9 @@
 # Errata and audit record
 
+Parts 1 and 2 and the audit records below were written at `a4ca9a5` and cite line numbers there; they are kept as recorded. Part 3 (round 3)
+was written against `51d7b05` and the precedent suite (`research/game_precedent_suite/`), and where it restates or overturns an earlier
+line it says so. The control run (`ctl/`) is byte-identical on `51d7b05`.
+
 ## Part 1 — Round-1 errata (applied to the tutorials)
 
 # ERRATA — corrections to the first draft, from six independent audits (A accuracy-core, B accuracy-combat/SC/TW, C accuracy-gov/econ/info,
@@ -80,17 +84,17 @@ C9 Loops: say "reaches X; return leg unmeasured" for conviction loop, yield loop
 # CROSS-CUTTING RULINGS for all tutorials (from round-2 audit L, J, G, H, K, I). Apply wherever your tutorial touches them.
 C1 SCENE BUDGET (ERRATA G11 is RESOLVED; use this). budget() returns SCENE ACTIONS (budget.py:19-20): max(1, 5 + 1 per live `hold` (seat, landholding, held Record or Proposition) - body bands - 1 per travel leg).
    pack_scenes treats it as a COST budget; a scene holding more than one act is EXTENDED and costs extended_scene_cost = 2 (fixtures.py:489); a chunk is trimmed to one act when only 1 is left (choose.py:643-657).
-   The driver releases at most 1 scene per round over 5 rounds (rounds 0..4; driver.py:456) and charges cost(ext) (deliberate.py:252-259). So budget 5 -> 2+2+1 = 7 acts; budget 6 -> 2+2+2 = 9; a leg costs a budget-6 holder one act (9 -> 7).
+   The driver releases at most 1 scene per round over 5 rounds (rounds 0..4; driver.py:456) and charges cost(ext) (deliberate.py:252-259). So budget 5 -> 2+2+1 = 7 acts; budget 6 -> 2+2+2 = 9; a leg costs a budget-6 holder one scene action, which cuts 9 acts to 7 (budget 5 -> 2+2+1).
    Hold-minters: create_record, issue, open_case, petition, survey, forge, utter (and conceal via a cover Record); `utter` always succeeds so it is a budget lever. Cap = 5 scenes x cost 2 = 10 actions. There is NO 'free journey' for an office-holder.
    Acts per person-season: ~6.3-8.0 depending on basis (d.resolved 1,132 / ~74 persons / 2 seasons ~ 7.6; w.acts 1,407): always name your basis. Never say "up to 5 scene actions" or "each act costs one scene".
-C2 SEED RULE. State per-seed execution ("executes at seed 1, not seed 0"). ctl "attempted" = acts that reached the fold (admitted; resolve.py:377-379); admission refusals are uncounted; for contested/graded verbs "ok" = Partial-or-better.
+C2 SEED RULE. State per-seed execution ("executes at seed 1, not seed 0"). ctl "attempted" = acts that reached the fold (`d.resolved`, appended on entry to `_fold`, resolve.py:377-379), so ordinary admission refusals ARE counted (seed 0: `interview`, ungraded, reached the fold 32 times, 21 with no non-refusal event); left out are acts whose actor was already gone (:974-977), refusals for an obstacle too high for the pool (:981-998) and contested or graded acts refused by `_admits` before the seam (:1012-1032); "ok" = at least one non-refusal Event (ctl/control.py:13, :21), not Partial-or-better (speak's Failure, `matter.turned`, counts; for fight and accept "ok" means Felled or Wounded on the subject).
    Verbs formed but refused at admission (examine: 62 formed seed 0, 0 admitted) are "never pass admission", not "never formed/attempted". Print run columns as attempted/ok.
 C3 TICKS not "season 0/1": MATTER at tick 0 is the first MATTER.
 C4 REMIT roster: rosters.yaml:316 `open: true`, but :315 and verb_table.yaml:257,801,1478 say "CLOSED": the tree contradicts itself; say so. remit_default ("NOT CANON, a testing fixture") IS applied in the shipped realm build and is where dispatch, hence march, comes from.
 C5 BROADCAST: the chronicle channel is a KIND filter (epistemic.py:652-654, :685-686): any Event whose kind some binding_decision row emits is broadcast to everyone, including pursuit.moved (from determine) and MATTER's tenure.closed. Not "every binding_decision act".
 C6 UNCELLED VERBS: tell and thread_read are uncelled by design; restore is NOT (its note: "THE PREMISE IS STALE ... cells are owed", rosters.yaml:2979-2985); carry, examine, interview are gaps. (Overturns ERRATA G13 for restore.)
 C7 COHORT COMMIT: no code gate stops cohorts committing; NP-G36 is a [PROPOSED] gap row; observed: none did.
-C8 NULL-CONFERRAL seats (King, Duke of Valorsmark, Duchess of Hafenmark, Widow Regent, Heir, Princess) can never be refilled once vacant; succeed has no effect.
+C8 NULL-CONFERRAL seats (six authored rows: King, Duke of Valorsmark, Duchess of Hafenmark, Widow Regent, Heir, Princess; seven built seats with the unauthored `off_npc_084`, Part 3 R-F1) can never be refilled once vacant; succeed has no effect.
 C9 HUNGER cover caveat: D02's "cover 21.7 -> 41.7 seasons" counts ore and timber as food; grain alone is ~10 seasons; yield reaches 0 only at tick 100 without repair.
 C10 requires: teach the typed cell (requires_typed), not the prose `requires:` string, and say which half is untyped (speak: venue half; determine: the date).
 C11 PRIMITIVES and PROCESS IDS: the master file will carry a shared glossary (Rung, Tenure, Record, Proposition/mood, Office/purview, stratum, prize, "with", establishment, Observation, Calamity/Locked Zone/Exposure, H-/REM-/JQ-/D-V/R-/M-/J-T ids). Still define each primitive in one clause on first use in your tutorial.
@@ -314,5 +318,138 @@ but their original tables were not saved to files; their substance is in the ERR
 ## Control-run method
 
 `ctl/control.py` runs `build_realm(seed)` for two seasons with the chooser built as `harness/populated.py::run` builds it. "att" counts acts that reached `_fold`
-(`d.resolved`); "ok" counts acts with at least one non-refusal event attributed by `Event.causes[0]`. Contested and graded verbs refused at admission are not
-counted; for them "ok" is Partial-or-better. Output is identical across processes (checked with random PYTHONHASHSEED). Results differ by seed.
+(`d.resolved`); "ok" counts acts with at least one non-refusal event attributed by `Event.causes[0]` (`control.py:13`, `:21`). Not counted in "att": acts whose actor
+was already gone, refusals for an obstacle too high for the pool, and contested or graded acts refused by `_admits` before the seam (`loop/resolve.py:974-998`,
+`:1012-1032`); other admission refusals are counted. For `tell` and the graded inquiries "ok" is Partial-or-better, because their Failure kinds end in `untold` or
+`none`, which `control.py:13` treats as refusals; for `speak`, `argue` and `determine` the Failure kinds (`turned`, `lost`, `undetermined`) count as ok; for `fight` and
+`accept` it means Felled or Wounded on the subject (Untouched is `contest.undecided`; seed 0: 15 ok = 9 `person.died` + 6 `body.changed`). Output is identical across processes (checked with random PYTHONHASHSEED). Results differ by seed.
+Round 3: re-run at `51d7b05` for seeds 0, 1 and 2; the three outputs are byte-identical to the committed files. The acts the "att" column leaves out
+are counted in the act store (`w.acts`); Part 3 R-F3 gives both.
+
+
+## Part 3 — Round-3 findings (precedent-disposition pass and I1 verification)
+
+**Method.** A verified precedent suite (`research/game_precedent_suite/`: capability tables and "how it plays" tutorials for about seventy
+games, and the disposition record) was routed game by game to the ten Valoria tutorials. Thirteen read-only Opus disposition critics gave
+every routed item HAS / LACKS / DIFFERS / CONTRADICTS / DISCARD against a named tutorial section and a code line opened at `3aa908b`
+(`a4ca9a5` plus this suite). The I1 verification (at `3aa908b`: an independent re-check of the capability inventory, with paired controls for
+ten named refusal causes; `seize` not run) gated the critics. A re-run of `ctl/control.py` at `51d7b05`, byte-identical for seeds 0-2, gated the appliers.
+Ten appliers made the CONTRADICTS edits to files 02-11 after re-opening each cited line at `51d7b05`; one more revised files 00, 01 and 13
+and re-ran the decisive probes there. No LACKS row survived `CLAUDE.md` §0's five-step triage as a Jordan question, and none is this session's work:
+each stays design-level, reference only. Except `ctl/`, the probes cited here (the I1 verification, the seam trace, the round-3 trace, the revoke scan)
+were session files and are not committed; their numbers cannot be reproduced from the tree, and each is tagged "(uncommitted round-3 probe)" at its first use below.
+
+**Round-3 findings.** Each is a fact several critics found independently, re-opened at the code at `51d7b05`; none is a ruling of Jordan's. Where one overturns a line above, it says which.
+
+- **R-F1 Null-conferral seats.** Seven of the 32 built seats have no conferral basis and can never be refilled once vacant: King
+  (`off_npc_020`), Queen (the Widow Regent row, `off_npc_032`), Prince (the Heir row, `off_npc_031`), Princess (`off_npc_030`),
+  Duchess of Hafenmark (`off_npc_050`), Duke of Valorsmark (`off_duke_valorsmark`), and the unauthored guild-leader seat `off_npc_084`.
+  Evidence: `conferral: null` at `engine/season/offices.yaml:188, 201, 214, 240, 253, 266`; `harness/populated.py:1240-1250` builds
+  `off_npc_084` with no row, so `conferral=None`; `has_conferral_basis` (`state/gate.py:643`) and `_req_confer` (`loop/predicates.py:126-127`)
+  refuse them; `succeed` has no effect (`verb_table.yaml:1113`). Probe: appointed 17, elected 8, none 7, the same list in seeds 0-2.
+  The King dies at tick 0 in every seed (seed 0: Wounded in a fight with `p_npc_006`, who fell, then Felled by the Queen's `accept`); seats vacated after two seasons
+  (ticks 0-1) are 8 / 7 / 10, null-basis seats 3 / 5 / 6 of them (uncommitted round-3 probe); one seat is refilled across the three seeds (seed 1, a
+  self-conferral of `off_senior_inquisitor`), so the seats still vacant at the end are 8 / 6 / 10. **Overturns Part 2 C8's "six"**, which counted authored rows only.
+- **R-F2 Revocation.** A revocation can pass only through `off_duke_valorsmark`: the six (seat, target) pairs at build all use it, held by the
+  King (`state/gate.py:452-484`; revoke scan, uncommitted round-3 probe). The realm seats are on the rung above the duchy seats but fail on
+  faction or holdings (`offices.yaml:78-85`; `state/gate.py:452-484`, `:547-565`). It is vacant from tick 0 in every seed and has no basis, so after
+  that no `revoke` can pass, on top of the computed acts' missing `office` operand (I1 verification claim 2).
+- **R-F3 The control-run column.** "att" counts acts that reached the fold (`d.resolved`, appended at `loop/resolve.py:377-379`), not acts
+  formed: 1,132 / 1,122 / 1,175 against 1,407 / 1,394 / 1,447 in the act store. "Never attempted / never formed" is wrong for `argue` (formed
+  10 / 17 / 18, every one refused before the roll), `speak` at seed 1 (14 formed, all `speech.unheard`), `examine` (62 / 59 / 39 formed, none
+  admitted) and the `determine` (2 / 6 / 2), `accept` (34 / 29 / 29) and `fight` (19 / 13 / 17) denominators. Say "reached the fold" for a ctl
+  column and give the formed count from `w.acts`. `thread_read` is never formed because the menu is `resolvable_verbs()` (`loop/driver.py:101`,
+  used at `harness/populated.py:1531`), which lacks it. **Restates Part 2 C2**, whose word "attempted" this replaces.
+- **R-F4 Player interface.** None reaches the season loop: the only seam is `dispatching_chooser` (`harness/play_surface.py:41-52`), exercised
+  only by tests. Outside the loop, `systems/social_contest/sim/contest/agon_harness.py` is a stdin-played Bout-kernel contest (`input()` at
+  `:148-155`): three scripted runs at `51d7b05` took 9 prompts over 3 exchanges each and ended in both `A_decisive` and a committee
+  compromise. The same input (`yes 1`) gave different verdicts across runs because the harness never seeds `random`
+  (module-level `random` at `systems/social_contest/sim/contest/resolver.py:12`, `:139`, `:334`; no seed in `agon_harness.py`), so no run tally is a
+  measurement. Two HTTP designer workbenches trace a duel (with branch odds: the combat trace carries `dist`,
+  `systems/combat/combat_engine_v1/workbench/server.py:8-9`) and a battle (one n=1 trace, no odds: `systems/mass_battle/sim/workbench/trace.py:11`;
+  server `systems/mass_battle/sim/workbench/server.py`). **Qualifies Part 1 G16.**
+- **R-F5 Hand-built acts.** A callback can submit any resolvable verb with any extra payload; every hand-built act of a resolvable verb, by its own
+  actor, in a scene of 3 acts or fewer, was folded in the I1 verification (claim 5, uncommitted round-3 probe). A non-resolvable `exchange` raised `Unspecified` and aborted the
+  season, an act naming another person as actor raised `Forbidden`, and a four-act scene raised `Ungraded`. A hand-built `march {subject: set_s_036}` by `p_npc_033` via `off_npc_033` gives `march.declared`, then
+  `field.lost` at ENCOUNTER, in seeds 0, 1 and 2 (attacker body 1000 → 20, budget 6 → 3; re-run at `51d7b05`, uncommitted round-3 probe). So "no field is fought" and
+  "the battle oracle runs only under tests" are true of the natural run, not of the loop. No natural `march` names a settlement in seeds
+  0-2, so its army is empty and it is refused. The grade stays TESTS-ONLY (`engine/season/tests/test_march.py:80-136`,
+  `test_a_lost_field_writes_casualties_and_stance_on_the_attacker_only`): G1 grades the natural run.
+- **R-F6 Scene budget and acts per person.** Part 2 C1's budget arithmetic stands; its acts-per-person line (the "~6.3-8.0 ... w.acts 1,407" range) is
+  replaced by the per-tick figures below. Budgets drift up because every held Record and uttered Proposition is a
+  hold and `create_record` and `utter` always succeed: seed 0 mean 5.57 at build, 6.41 after tick 0, 7.69 after tick 1 (uncommitted round-3 probe), when
+  11 of 74 persons have a budget above 10 (the 10-action ceiling is Part 2 C1's five scenes at cost 2; the hold-counting drift is H-92,
+  `loop/deliberate.py:107-113`, whose own comment at `:89-97` gives 5). Per tick, per person alive at its start, seed 0: 8.1 / 9.4 formed
+  (676 and 731 over 83 and 78 persons), 6.4 / 7.7 reaching the fold (535 and 597), at most 15. State the basis with every number. **Reconciles
+  Part 1 G11's "~8-10"**: right for formed acts, not for the ctl column.
+- **R-F7 Births.** ED-WR-0011 was RULED by Jordan on 2026-09-13, Option A: a closed cast of 46, no births "for now" (the second ED-WR-0011
+  row in `registers/editorial_ledger_wr_archive.jsonl`; `loop/census.py:39-40`, "NO CLOCK GENERATES ANYTHING"). Calling it held or
+  `needs_jordan` reads the superseded first row.
+- **R-F8 Inquiry.** `examine` refuses every attempt because its `site` operand is filled with the question's subject (`decision/options.py:1047-1048`),
+  never a Site. `research` is formed 125 / 109 / 116 times and makes `finding.made` 7 / 1 / 2 times (I1 verification); no found deposit
+  (FI-03's trail) lands in seeds 0-2. A Partial finding closes that trail to its finder for as long as he holds that claim (`epistemic.py:356-366`); eviction
+  at the ledger cap removes the claim (`state/ledgers.py:24-32`). People learn by presence, by being told (the told deposit,
+  `loop/witness.py:822-830`, `:860`), by holding a written object (`document_key`), by the chronicle channel for binding-decision kinds
+  (`epistemic.py:649`), and through a seat (`post_remit`, R-13).
+- **R-F9 Economy.** In natural play no `work` or `restore` names a Site: the `site` operand is the question's subject (`decision/options.py:1047-1048`;
+  I1 verification claim 2), and `work` also waits on a works Record that names the Site (Part 1 C5; `loop/effects_economy.py:103-104`). Given a Site,
+  `work` can never run on dwellings and garrisons, 248 of the 322 Sites: their `band_floors` are empty
+  (`rosters.yaml:2631-2632`), so the floor read refuses (`queries/world_q.py:2787-2801`); `restore` refuses at full condition. All 37
+  settlements are built with one Site of each yielding kind (`harness/populated.py:771-776`), so they yield the same four goods. Yield reads a
+  Site's condition and the season factor, never a worker (`loop/matter.py:589-591`). In seeds 0-2 population only falls (83 → 74 persons at seed 0;
+  CENSUS individuation, `loop/census.py:57-77`, fired 0 times: ctl `person.individuated 0`).
+- **R-F10 Combat and NPC life.** In seeds 0-2 all 33 non-Felled bands (of 59 combat calls) came from fights in which the actor was felled (seam
+  trace re-run at `51d7b05`, uncommitted round-3 probe). That is not a mechanism: `wrapper.fight` also ends after 12 turns with result 0
+  (`modules/combat/wrapper.py:504`, `:524-525`), 1 of the 400 mirror fights in file 04 ended undecided, and the realm's 33 of 33 is within noise of the
+  mirror's 205 of 206; the verb table's own reading of the bands ("blood was drawn and nobody fell", `verb_table.yaml:653-661`) is contradicted by the
+  data. The seam returns both parties' wound states
+  (`seam/wrappers/combat.py:230`) and `_eff_kill` reads the subject's only (`loop/effects_combat.py:108`, `:125`). None of the 39 resolved
+  `accept`s answered a challenge from its subject (D_T03 critic's count over the I1 per-act rows). No score term reads hunger:
+  `urgency(subsistence)` adds the same amount to every candidate and "CANNOT CHANGE ANY DECISION" (`decision/choose.py:220`). Migration
+  0 of 367 reaching the fold (ctl att 81 + 143 + 143): destinations come only from places the mover's own ledger names (`queries/world_q.py:2111`), every effect call met a full
+  hearth, and none of the 185 hearths empty at build was chosen (I1 verification claim 2).
+- **R-F11 Odds.** The only closed-form helper for the social roll, `sigma_leverage.p_success`, is the Gaussian stand-in and understates
+  Partial-or-better on the real social dice by 10-15 points at the four pairs measured (exact enumeration at `51d7b05`: 14.4 % against 26.0 % at
+  pool 2 / Ob 2; 43.0 against 58.0 at pool 2 / Ob 1; 40.1 against 51.2 at pool 4 / Ob 2; 50.0 against 60.0 at pool 5 / Ob 2), by 17.3 points at
+  pool 1 / Ob 1 (40.0 against 22.7), by under 5 points at Ob 3-4 for pools 1-2, and overstates at pool 1 / Ob 3. The combat workbench's
+  `degree_distribution` (`systems/combat/combat_engine_v1/workbench/probabilities.py:30`) is a second closed form, for the combat roll. Under the ruled ladder Partial is never the most likely band
+  at pools 1-8 against Ob 1-4 (largest 32 %, pool 2 / Ob 1). Layer 1: "No state is hidden from the player" (AX-7,
+  `architecture/meta/01_AXIOMS.md:301-302`).
+- **R-F12 Ending.** The realm as built reaches no ending. Since PR #494 the season reports `world_q.endings_reached` (IN-27,
+  `loop/driver.py:515-518`; `queries/world_q.py:1764-1766`), "a Query over holds and seats that the season reports -- never an actor", over two rows (`rosters.yaml:2494-2553`):
+  `peninsular_sovereignty`, the victory, "UNREACHABLE IN COMPUTED PLAY" by its own note (`:2531-2541`), and `theocracy`, not a victory.
+  It returned `[]` after both seasons in seeds 0-2 (probe), and nothing halts on it. IN-23's `legitimacy` and `stability`
+  (`queries/person_q.py:451`, `:480`) are one person's windowed estimates whose only reader is `harness/storybar.py`; IN-37's chronicle
+  renderer (`harness/chronicle.py`) is an observer the loop never imports. Goals are attention-only (A-31, `engine/season/goals.yaml:10-12`)
+  and nothing tests whether one is met. **Restates Part 1 G17**: the deleted `victory` layer is still deleted; an ending vocabulary now
+  exists, is reported, and is unreached.
+- **R-13 `post_remit`.** It admits one person: the King's obligee `p_npc_070` holds an `inferred` claim of a refused royal act at tick 0
+  (uncommitted round-3 probe). The producer is the obligee predicate `_ch_post_remit` (`epistemic.py:563`, through `Act.via`; the claim source is
+  set at `loop/witness.py:598`), not the seat-report limb (`:513-524`), which reads only actorless Events (`:517-518`); the Events are the King's refused
+  `open_case` via `off_npc_020` (`act.ineligible`, seeds 0 and 1) and `revoke` (`revoke.refused`, seed 2). The claim is still held at the end of two
+  seasons at seeds 1 and 2; at seed 0 it was deposited at tick 0 and `p_npc_070` is gone by the end of tick 1 (re-run, uncommitted). **Overturns Part 1 C8's "post_remit admitted nobody"** (round-2 audit H F4 had
+  flagged it); `witness_key` still admits nobody.
+- **R-14 The wound loop.** wound → body → `end` → next fight runs: seed 0, tick 0, the King is Wounded to body 450 (`end 2`) and Felled the
+  same tick; over seeds 0-2, 11 calls met a subject below `end 4` and 7 Felled him (seam trace). **Restates Part 1 C9** for this loop.
+
+**Corrections to the round-3 brief itself, resolved from the code.** The draft list for R-F1 named the Queen and the Widow Regent, and the
+Prince and the Heir, as separate seats; each pair is one row. Its R-F8 said research leaves zero findings; it makes `finding.made` 7 / 1 / 2
+times, and what is zero is found deposits. It credited the FI-02 inquiry role and the FI-03 trail to PR #494; they landed in PR #489, which
+`a4ca9a5` already contains (`git merge-base --is-ancestor 46ec000 a4ca9a5`), so the suite was written with them. The single `agon_harness`
+verdict reported earlier is one of several: the harness is unseeded.
+
+**What remains Jordan's.** Nothing above is a design ruling; each states what the code does. These stay open and are his:
+- the remediation's forks **JQ-1..JQ-6** (`proposals/2026-10-21-v9-remediation/`, part 04): how much of a person is the draw; whether
+  "pool only" reaches combat and mass battle ("materially different games"); the four character-change magnitudes; weight → troop value;
+  whether to ratify the two RB-3 designs (IN-46, IN-47; remediation-04:77); the hunger ratio;
+- the verbs proposal's **D-V1..D-V21** (part 04 "Items for Jordan"), among them D-V6 (a contents-aware value term) and D-V7 (whether `dispatch` is renamed; verbs-04:152);
+- **J-C-2** (whether a levy costs population), **J-T1, J-T2, J-T4** (persons; J-T3 is answered for the template, verbs-01:341), **SM-15** (when the social-contest kernel retires);
+- the two open `needs_jordan` rows the tutorials cite: **ED-IN-0296** (`registers/editorial_ledger_in.jsonl:72-73`; the decision-surface ask: question aggregation and stance polarity, cohort pursuit vectors, the own-act screen and tier 1) and
+  **ED-IN-0297** (`:74`; where a works comes from in computed play, the producer behind R-F9).
+
+**Defaults already taken, which he may correct** (not open questions): the code's own `[ASSUMPTION; ...; Jordan to correct]` readings the suite quotes,
+among them the two ending rows' reading of GD-1 and of "become a theocracy" (`rosters.yaml:2531-2553`), the territory refusal for `seize`, `tend`'s full mend
+and the estimate window (H-224). Retiring file 12 (the first-draft appendices) is not a Jordan question: it is a delete plus a `FORK:` row
+(`CLAUDE.md` §2), not done here.
+
+Every LACKS row in `research/game_precedent_suite/dispositions/` is reference: it shows what a precedent buys or costs and decides nothing.

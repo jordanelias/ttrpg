@@ -1,8 +1,16 @@
 # Tutorial: Personal Combat (PC) — settle a matter body against body: kill, wound, or walk away from a duel the engine fights for you
 
-Repo `jordanelias/ttrpg` at HEAD `a4ca9a5`. Path abbreviations: `MC/` = `modules/combat/`; `SW` = `engine/season/seam/wrappers/combat.py`;
+Repo `jordanelias/ttrpg` at HEAD `a4ca9a5`; **revised in round 3 against `51d7b05` and the precedent suite** (`research/game_precedent_suite/`;
+this file's disposition record is `dispositions/D_T03.md` there; the corrections are listed under `### Round-3 corrections`, end of §8).
+Path abbreviations: `MC/` = `modules/combat/`; `SW` = `engine/season/seam/wrappers/combat.py`;
 `EC` = `engine/season/loop/effects_combat.py`; `VT` = `engine/season/verb_table.yaml`; `ROS` = `engine/season/rosters.yaml`;
-`FX` = `engine/season/data/fixtures.py`. Every number below was read from code or produced by a read-only run (§9).
+`FX` = `engine/season/data/fixtures.py`; `GMS` = `proposals/2026-10-07-grid-mode-suspension.md` (IN-46's design);
+`L09` = `proposals/2026-10-16-verbs/2026-10-16-verbs-09-lexicon-personal-combat.md`;
+`REM2` = `proposals/2026-10-21-v9-remediation/2026-10-21-v9-remediation-02-items-rb0-to-rb3.md`;
+`part7` = `workplans/valoria_master_workplan_v9_part7.md`;
+`WB` = `systems/combat/combat_engine_v1/workbench/`; `PS/` = `research/game_precedent_suite/` (reference, tier 3; precedent games are cited as
+`T02`, `T05`, `T10`, `T14`, `T18` = `PS/tutorials/T02_warband.md`, `T05_social_rpgs.md`, `T10_npc_economy.md`, `T14_squad_settlement.md`,
+`T18_repo_strategy_b.md`, and `R4` = `PS/tables/R4_combat_social_rpgs.md`, each with its game heading and section). Every number below was read from code or produced by a read-only run (§9).
 
 ## 0 Before you start
 
@@ -25,6 +33,101 @@ admitted and fought; acts refused at admission are not counted. Weapons, armour,
 except endurance are **TESTS-ONLY** (they execute only when an oracle script or test builds a non-default `Combatant`). Yield is TESTS-ONLY.
 Duel terms, capture, guards, ranged arms and played fights are **DESIGN-ONLY**.
 
+## 0a How it plays
+
+*Added in round 3, in the format of the precedent suite's tutorials (`PS/tutorials/`). Grades per ERRATA G1. Numbers come from the control runs
+(`ctl/`, seeds 0-2, two seasons) and from a read-only trace of the same recipe that logs every personal-combat seam call (the probe is not
+committed; its totals are in the header of `PS/dispositions/D_T03.md`, and a re-run on `51d7b05` reproduced its three traces byte for byte).
+The as-built text comes first; the last block is [PROPOSED].*
+
+**Setup choices.** *At world build*: `build_realm(seed)` makes every realm person at body 1000 (`FX:217`, `condition_scale`); nothing else about a
+person reaches a fight. Each fighter is the class-default Combatant (`arming`, `light`, tradition `none`) except `end`, derived from body bands
+(`SW:34-49`, `:130-138`; `MC/fight.py:45`). The seed fixes every fight: the RNG is `H(world_seed, tick, actor, "contest:the body:<cause>")`
+(`SW:222`). *At the callback* (a function the harness registers for one person, which then picks that person's acts in place of the chooser): a harness-only hook
+(`engine/season/harness/play_surface.py::dispatching_chooser`) can hand the loop any resolvable
+act; for combat that is a verb and a subject, nothing more. One test does it for a `fight` (Carin against the bailiff in the `headless` world,
+`engine/season/tests/test_combat_trace_returned.py`). Compare the setup surface of the precedents: Battle Brothers picks origin, recruits and kit (T02
+precedent, Battle Brothers §1, §3); Jagged Alliance 2 builds an I.M.P. merc from a 500-point pool (T14 precedent, Jagged Alliance 2 §1). In
+Valoria the build is the body.
+
+**The loop.** One season is CALENDAR → MATTER → five rounds of DELIBERATE → RESOLVE → ENCOUNTER → WITNESS → CENSUS (overview §2.1). Combat's
+part, all automated after step 1:
+1. DELIBERATE: the chooser forms `fight` / `accept` / `challenge` about its question's referents and orders them by score plus Gumbel noise
+   (§2.1). No odds, opponent body or place enters the score.
+2. RESOLVE: the fold re-checks "the subject is a living person" (`VT:617-621`), then calls the seam (`SW:207-226`).
+3. The engine plays up to 12 turns and stops at the first felling (`MC/wrapper.py:504-520`); every move for both sides is drawn.
+4. The band is read off the **subject's** tracker (`ROS:784-848`; `seam/ladder.py:155-156`); `_eff_kill` writes the subject only (`EC:107-178`);
+   the same fold also scars the act's observers (`loop/resolve.py:557`, `:597-606`: written at RESOLVE, not WITNESS), which moves nothing at shipped values (§5c).
+5. WITNESS deposits `person.died` / `body.changed` / `contest.undecided` as claims.
+
+**The choice menu.**
+
+| verb | cost | effect | when a person picks it | grade |
+|---|---|---|---|---|
+| `fight` | one act in a scene (a multi-act scene costs 2, §1) | subject Felled: body 0, removed, tenures closed; Wounded: body × health left ÷ health full; Untouched: nothing | a living person is among his question's referents; the instrumental pole favours it (§5d) | RUNS-IN-LOOP (ok 4/5/5, seeds 0-2, §4) |
+| `accept` | as `fight` | as `fight`, on the challenger; reads no challenge (`VT:742-749`) | the deontological pole favours it; no challenge is needed | RUNS-IN-LOOP (ok 11/6/10) |
+| `challenge` | one act | writes nothing; emits `challenge.issued`; never answered in seeds 0-2: 0 of 39 resolved `accept`s followed one (§8 #6) | a person weighted toward the precedent, grandiose or deontological pole (cells −0.3 / −0.6 / −0.3, `ROS:3164`, `:3344`, `:3413`) | RUNS-IN-LOOP, emission only (ok 6/6/12) |
+| `tend` | one act | body raised to 1000; in practice it names the dead, the absent or the whole (§5d) | no alignment cell (`ROS:3017-3019`), so only the stance term, the constant and the Gumbel draw rank it | TESTS-ONLY by the grade rule (0 of 75): `engine/season/tests/test_in12_step9.py:203-209` (a computed `tend` at body 400 raises it to the scale); a hand-built `tend` on a body of 250 also raised it to 1000 (uncommitted round-3 probe) |
+
+**First season, step by step** (seed 0; each call logged at the seam; steps 1-4 follow trace calls #0-#3 and #5, skipping #4, `p_npc_088` against `p_npc_004`, Untouched; the 25 calls and 9 deaths are `ctl/realm_seed0_2seasons.txt`'s).
+1. Tick 0, `p_npc_006` `fight`s the King, `p_npc_020`. Both at body 1000, `end 4`. Four turns. 006 is felled in the scene; the King takes two wounds
+   (health 18 of 40). Band Wounded: the King's body becomes 1000 × 18 ÷ 40 = 450, two bands down, so `end 2` (and, had he lived, two scene actions
+   fewer next season, `decision/budget.py:57-61`). 006 is not written.
+2. `p_npc_011` `accept`s against `p_npc_082`. Nobody has issued a challenge yet (the first `challenge.issued` is at fold position 91 of 1,132;
+   this `accept` is at position 10; a fold position is an act's index, from 0, in the order the fold resolves a run's acts across both seasons). Three turns; 082 is Felled, removed, his tenures closed.
+3. `p_npc_040` `fight`s `p_npc_003` and is felled: band Untouched, `contest.undecided`, nothing written. Next, `p_npc_038` `accept`s against 003 and fells him.
+4. `p_npc_032`, the Queen, `accept`s against the King, now at `end 2` (health full 23). Four turns; the King is Felled. His seat has no
+   conferral basis (`engine/season/offices.yaml:188`). The Queen took two wounds in the scene (health 19 of 40) and is not written.
+5. Tick 0 closes with 15 combat calls: 5 Felled, 4 Wounded, 6 Untouched, and the actor felled in all 10 non-Felled calls.
+6. Tick 1 (10 calls) shows the carry-over: `p_npc_004`, cut to 650 and then 48 by two fights he won as subject, attacks at `end 1`, is felled in
+   one turn, and keeps body 48 to the end of the run.
+
+**What changes later.** A lowered body carries from fight to fight; wounds do not (trackers reset per call, `MC/wrapper.py:498`). Over seeds 0-2,
+11 calls met a subject below `end 4` and 7 of them Felled him. No fighter improves (`train` writes `capability`, which the fight never reads) and
+no `tend` lands. Deaths run 9 / 6 / 11 in two seasons.
+
+**Failure and ending.** The run has no ending to fail into: the season now reports `endings` (`loop/driver.py:518`; `queries/world_q.py:1764`;
+rows `peninsular_sovereignty` and `theocracy`, `ROS:2524`, `:2542`), halts on none of them, and the realm as built reaches none
+(`world_q.py:1789-1790`; `endings` was `[]` after both seasons at seeds 0-2, errata R-F12; overview §2.3); no death, the King's included, ends it. A subject's failure is final (`EC:178`). An attacker's failure does not exist
+in the world: 33 of 59 calls felled the actor and none was written. Nobody can surrender (the season passes no `yield_decl`, `MC/fight.py:52`),
+be captured, be spared or reload. In the precedents every combatant keeps the harm he took, the side that started the fight included, win or
+lose (T02 precedent, Battle Brothers §2 step 6, §6; T18 precedent, XCOM §2 step 5, §6); in Jagged Alliance 2 losing also costs the loser capture
+(T14 precedent, Jagged Alliance 2 §6). Valoria writes harm on the subject only: death when he loses, a body cut when he wins.
+
+**Consequential vs cosmetic.** Consequential: whom you can name (your referents); the target's body; being the actor rather than the subject.
+Cosmetic in the season: `challenge` (writes nothing; its `challenge.issued` is deposited as a claim, `VT:730-731`, and whether those claims change later choices was not measured); the upset floor (flips a field nothing reads,
+`MC/wrapper.py:526-530`); `winner`; weapon and armour (unreachable; §3 shows they would decide fights); tradition and abilities (unreachable,
+and on equal swords §3 shows they move nothing beyond noise).
+
+**As proposed [PROPOSED].** All DESIGN-ONLY; reference only.
+- [PROPOSED] IN-46 (REM-31, ruled to build by D-2) defers every fight from RESOLVE to ENCOUNTER (`GMS:37-49`; a declared hash mover whose
+  goldens are re-pinned, `REM2:585-587`), so loop step 2 above and the prize row of §1 ("fights at RESOLVE") stop being true. For a played
+  claimant it also replaces the engine call at `MC/fight.py:52` (`GMS:33-35`): a decider picks, each turn, from
+  [ASSUMPTION] {engage, withdraw}, reading the turn index and a read-only view of both fighters (`GMS:116-122`); the engine's own comment already
+  marks the per-turn unit ("the GAME calls one engagement per turn", `MC/wrapper.py:504`). It changes when a fight is fought and who decides a
+  turn, not who is written. The mode is set by a party test at the seam (does either claimant belong to a person the host plays?, `GMS:124-126`):
+  AUTOMATED is today's engine call, PLAYABLE the decider. The two with equal choices must end at
+  one `content_hash` (the falsifier, `REM2:570-589`). Against the precedents' played fights: XCOM and Baldur's Gate 3 put a hit chance on the
+  decision (T18 precedent, XCOM §7; R4 precedent, Baldur's Gate 3 M4) and IN-46's decider receives none, although the workbench already turns
+  trace inputs into branch odds (`WB probabilities.py:109-123`); Jagged Alliance 2 lets the player choose auto-resolve per battle (T14 precedent,
+  Jagged Alliance 2 §2) where IN-46 decides by a party test at the seam; Battle Brothers and Kingdom Come: Deliverance let the build decide (T02
+  precedent, Battle Brothers §7; T05 precedent, Kingdom Come: Deliverance §5) where IN-46 leaves the Combatant at its default (M13 is separate).
+- [PROPOSED] L09 M11: the decider set widened to the scene's moves (`feint`, `lunge`, `parry`, `dodge`, `grapple`, `flee`, `yield`,
+  `interpose`), one engagement per act; L09 M1: both parties take their band (`SW:230` already returns both). M1 is not a remediation item:
+  a grep of `proposals/2026-10-21-v9-remediation/` and `workplans/` for `_eff_kill|K-PC-2|two-sided|wound_state\[|both parties` finds nothing,
+  REM-31's `change:` line (`REM2:575-576`) is "per the design", and the design's file list (`GMS:209-214`) names no effect file. So under IN-46 as
+  scheduled a played attacker who is felled still stands. Batch B-Y runs before REM-31 (`REM2:549-550`) and edits `loop/effects_combat.py`
+  only to emit `duel.yielded` (`part7:58-59`).
+- [PROPOSED] L09 M3/M4 duel terms (first blood, yield, death), also scheduled as v9 positions PC-10b / PC-10a in batch B-Y (`part7:56-60`), which
+  runs before REM-31 (`REM2:549-550`): by the time IN-46 lands, `accept` will need a held challenge Record and `blood` / `yield` stops will exist.
+  M5 capture and rescue; M15 a grudge on the survivor; M13 per-person inputs
+  (Jordan's). These map onto the precedents' non-lethal exits and aftermaths: Griftlands' surrender and spare-or-kill (T05 precedent, Griftlands §2),
+  the capture of Jagged Alliance 2 and Kenshi (T14 precedent, Jagged Alliance 2 §6; T02 precedent, Kenshi §2), Wildermyth's Mortal Choice (T10
+  precedent, Wildermyth §6), JA2's morale cost of a death (T14 precedent, Jagged Alliance 2 §7).
+- [PROPOSED] IN-46's design names no outcome for a played person's death: `GMS` mentions a felling only as the loop's own exit (`:111`), and its
+  "Not decided here" list (`:172-180`) does not carry one. [precedent: T02 precedent, Battle Brothers §1, §6 (the Lone Wolf origin ends the run when
+  he dies)]
+
 ## 1 The pieces
 
 | term | what it is | numbers / limits | where it lives |
@@ -35,7 +138,7 @@ Duel terms, capture, guards, ranged arms and played fights are **DESIGN-ONLY**.
 | **`accept`** | season verb: answer a challenge; the same fight as `fight` | same writes/emits as `fight`; refusal `accept.refused` | `VT:737-765` |
 | **prize `"the body"`** | routes a contested verb to the `personal_combat` provider at RESOLVE | no `step:`, so it fights at RESOLVE | `ROS:1273-1277`, `:1296-1298` |
 | **`Person.body`** | a person's physical state | scale 1000 (`condition_scale`, `FX:217`); every realm person starts at 1000 (run) | `FX:217` |
-| **body bands** | floors on body: `full_operations 800`, `limited 500`, `withdrawal_only 100` | penalty = number of floors body is below (0–3) | `ROS:2561-2564`; `budget.py:71-83` |
+| **body bands** | floors on body: `full_operations 800`, `limited 500`, `withdrawal_only 100` | penalty = number of floors body is below (0–3) | `ROS:2627-2630`; `budget.py:71-83` |
 | **`end`** (endurance) | the one Combatant field the season sets | `end = max(1, 4 − body band penalty)` → 4/3/2/1 | `SW:130-138` |
 | **Combatant** | one fighter in the engine | defaults `strength 4, agi 4, end 4, cog 3, att 3, spirit 3, focus 3, history 3, disp 4, weapon 'arming', armor 'light', tradition 'none'` | `MC/combatant.py:93-94` |
 | **disposition** (`disp`) | aggression axis 1–7, 4 neutral; lean `(disp−4)/3` | skews commit depth, initiative drift, counter choice | `MC/combat_systems.py:181-183` |
@@ -71,7 +174,7 @@ Duel terms, capture, guards, ranged arms and played fights are **DESIGN-ONLY**.
 | **tradition** | a "cognitive mode", not a rule-set | 7 + `none`; familiarity 1.0 same/none, 0.93 adjacent, 0.85 otherwise | `MC/traditions.py:1-8`, `:32-55` |
 | **ability** | a tradition-gated multiplier/bonus on a named channel | 9 abilities (e.g. `indes` +0.15 counter success; `misura` ×1.15 measure); inert outside own tradition | `MC/ability_primitives.py:29-70`, `:100-126` |
 | **Yield** | a Phase-1 surrender declaration | needs `yield_decl`; the season never passes one | `MC/wrapper.py:467-513`; `MC/fight.py:52` |
-| **upset floor** | 5 % chance a decided result's sign is flipped | flips `result`, not the trackers | `MC/wrapper.py:529-530` |
+| **upset floor** | 5 % chance a decided result's sign is flipped | flips `result`, not the trackers; the season band reads the subject's tracker (`ROS:820-848`; `seam/ladder.py:155-156`), so the floor never reaches the world and its stated purpose ("no matchup is ever certain", `:526-527`) is not delivered in the season | `MC/wrapper.py:526-530` |
 | **band (season degree)** | Felled / Wounded / Untouched, read off the SUBJECT's tracker | Felled if `felled`, Wounded if `wounds > 0`, else Untouched | `ROS:784-848`; `seam/ladder.py::combat_degree` |
 | **wound harm model** | how much body a Wounded band costs | shipped `scene_fraction`: `body = max(1, body·health_remaining // health_full)` | `FX:624`; `EC:134-151` |
 | **`tend`** | season verb: raise a person's body to 1000 | requires subject exists and is `with` the actor | `VT:1146-1168`; `EC:370-393` |
@@ -85,9 +188,9 @@ engine plays turns, engagements, beats and exchanges; the season reads one band 
 1. **DELIBERATE.** Your chooser answers one question and forms candidates about its referents. `fight` is eligible for anyone (`own`) and
    requires only that the subject is a living person (`VT:614-621`): no co-location, no hostility, no war test. It scores
    `Σ pursuit weight × alignment` plus a stance term plus a constant (`decision/choose.py:149-151`). `fight` has two alignment cells:
-   `grandiose_humble −0.3` and `deontological_instrumental +0.3` (`ROS:3280`, `:3346`). The stance term ships as `legacy`
-   (`FX:823`): your stored stance toward the subject is ADDED to every verb about him, at weight `1 + stance_gain`, and
-`stance_gain` ships at 1.0 (`FX:837`; `choose.py:84-86`), so the stance counts double. So a grudge (negative stance) makes `fight`
+   `grandiose_humble −0.3` and `deontological_instrumental +0.3` (`ROS:3346`, `:3412`). The stance term ships as `legacy`
+   (`FX:833`): your stored stance toward the subject is ADDED to every verb about him, at weight `1 + stance_gain`, and
+`stance_gain` ships at 1.0 (`FX:847`; `choose.py:84-86`), so the stance counts double. So a grudge (negative stance) makes `fight`
    on him score **lower**, not higher (`choose.py:54-79` docstring). Candidates are then ordered by a Gumbel draw at temperature 0.1.
 2. **RESOLVE.** The fold re-checks the precondition against the world; a subject who does not exist refuses with `kill.refused`
    (`VT:705`). Otherwise `loop/resolve.py::_contest` calls the seam with `claimants = [actor, subject]`.
@@ -171,7 +274,8 @@ The band is read off the **subject's** tracker only (`ROS:820-848`): `felled` �
 - **Wounded**: `body = max(1, body × health_remaining // health_full)`; emits `body.changed`. A wound cannot kill.
 - **Untouched**: writes nothing; emits `contest.undecided` — even when the actor was the one felled.
 The fold then scars the act's observers (`loop/resolve.py::_scar_witnesses`). The trace is returned to the caller but never folded
-into `World` (`SW:245-252`). The actor's tracker is discarded: **the attacker is never written**.
+into `World` (`SW:245-252`). The actor's wound state reaches the effect (`SW:230`, `:237` return both parties) and is not read: `_eff_kill` reads
+`wound_state[subject]` only (`EC:125`). **The attacker is never written.**
 
 ## 3 A worked example
 
@@ -275,7 +379,7 @@ goals a fight can serve are therefore read off what the band writes:
 | goal | represented by | reachable today? |
 |---|---|---|
 | **kill** a person | the subject's Felled band: body 0, `remove_person`, every tenure naming him closed | yes, by chance: 48.5 % of mirror fights |
-| **wound** a person | the Wounded band: body scaled down, which lowers his `end` and his scene budget next season | yes, by chance: 28 % of mirror fights; you cannot choose wound over kill |
+| **wound** a person | the Wounded band: body scaled down, which lowers his `end` and his scene budget next season | not by winning: the fight runs to the first felling or to 12 turns (`MC/wrapper.py:504`, `:516-520`, `:524-525`), so a Wounded or Untouched subject means the attacker was felled unless the fight ran out undecided. Of the 112 Wounded mirror fights (§3), 111 felled the actor and 1 was undecided (206 non-Felled = 205 felled actors + 1 undecided; the 111 / 1 split by band is an uncommitted round-3 probe, 94 Untouched all felled the actor); in the realm, 15 of 15 (seeds 0-2; uncommitted round-3 probe). The body cut lands on the winner |
 | **force a duel** | `challenge` → the other's `accept` | no carrier: `challenge` writes nothing and `accept` does not read it (`VT:749`) |
 | **provoke / be seen** | `challenge.issued` and the fight's band kind, fanned to witnesses as claims | yes; it changes what others hold, not what they do |
 | **defend yourself** | nothing: there is no guard, no interpose, no refusal to be attacked | no; your only defence is your body band |
@@ -299,8 +403,9 @@ independently forms `accept` against you.
 
 ### 5c Costs, risks, counter-play, blockers
 - **Cost:** one act from the season's budget (budget 5 → at most 7 acts, §1). No stamina, wealth, office or standing is spent.
-- **Risk to the attacker:** none in world state today. The actor's tracker is discarded; in 51 % of mirror fights the attacker is felled
-  in the scene and stands up unharmed in the world.
+- **Risk to the attacker:** none in world state today. The actor's wound state is returned and not read (§2.6); in 51 % of mirror fights the
+  attacker is felled in the scene and stands up unharmed in the world. In the realm it is 33 of 59 combat calls over seeds 0-2 (56 %; uncommitted round-3 probe), within noise of the mirror's 51 %.
+  At tick 1 of seed 0, `p_npc_004`, cut to body 48 (`end 1`) by two fights he won as subject, attacked, was felled in one turn, and kept body 48.
 - **Risk to bystanders:** observers take a scar count per violated pursuit (`loop/resolve.py:597-610`), which shifts no pursuit at
   shipped values (`scar_weight_shift 0`, ERRATA G1).
 - **Counter-play for the subject:** none inside the act. He cannot guard, flee, yield or refuse; nobody can interpose. His only levers are
@@ -313,12 +418,18 @@ independently forms `accept` against you.
 - **Attacking is dominant over being attacked.** Only the subject can lose body or life; the act's two parties are asymmetric by
   construction (`EC:107-109`).
 - **`accept` is a `fight` with different alignment cells** (`rigid_flexible −0.3`, `grandiose_humble −0.2`,
-  `deontological_instrumental −0.4` against `fight`'s `−0.3` and `+0.3`; `ROS:3236`, `:3280-3283`, `:3346-3348`), so a person weighted
+  `deontological_instrumental −0.4` against `fight`'s `−0.3` and `+0.3`; `ROS:3302`, `:3346-3349`, `:3412-3414`), so a person weighted
   toward the deontological pole prefers `accept` and the instrumental pole prefers `fight`; neither requires a challenge.
-- **Issuing a challenge is mechanically empty and exposes you** as the subject of any later `accept`.
+- **Issuing a challenge is mechanically empty.** It could expose you as the subject of a later `accept`; in seeds 0-2 no challenged person
+  accepted, and four `accept`s came after a `challenge.issued` by the same actor against the same subject (§8 #6; fold-order co-occurrence, since
+  `accept` reads no challenge), at no risk to themselves (§5c).
 - **Body is the whole build.** Kit, tradition, training and attributes are inert in the season; a trained fighter fights as an untrained
   one (`train` writes `capability`, unread by combat).
-- **Dead end:** `tend` never executed in three seeds (0 of 75), so recovery is built but not reached; a Wounded body otherwise stays down.
+- **Dead end:** `tend` never executed in three seeds (0 of 75), so recovery is built but not reached; a Wounded body otherwise stays down. The verb works when it names a wounded person: a computed `tend` at body 400 raises it to the scale in
+  `engine/season/tests/test_in12_step9.py:203-209`, and a hand-built `tend` on oneself at body 250, run through the real season loop, raised it to
+  1000 with `body.tended` (uncommitted round-3 probe; its first version crashed because its subject died that season, the rerun on another person
+  ran clean). The computed `tend`s name a subject who is not a person in the world (dead, a rung, a record), one not `with` the tender, or a body
+  already whole (§4); the self-targeted ones, 4 / 4 / 3 across seeds 0-2 (uncommitted round-3 probe), were all refused.
 - **Cohorts:** a cohort `Person` (one record standing for many) fights as one default fighter and is deleted whole by one Felled band.
 
 ### 5e What success leaves in the world
@@ -365,8 +476,18 @@ M7, M8, M9, M11, M13.
   the actor from witnesses.
 - [PROPOSED] **N-party scenes, `guard`, `interpose`** (M7 K-PC-5, M8; guard edge is L09 §3.9 item 1, Jordan's).
 - [PROPOSED] **`shoot`** (M9): a missile kind inside the one resolver, never a second one.
-- [PROPOSED] **Played fights** (M11, IN-46 / K-PC-4): the fight pauses per engagement so a seated player chooses `feint`, `lunge`,
-  `parry`, `dodge`, `grapple`, `flee`, `yield`, `interpose`. D-2 (RULED yes, 2026-10-21) puts IN-46 in RB-3 (ERRATA G16; D02 REM-31).
+- [PROPOSED] **Played fights** (IN-46, REM-31; L09 M11 / K-PC-4). IN-46's design (`GMS` §3, `:116-131`) suspends the one provider call and hands a
+  seated player a per-turn decider over `wrapper.fight`'s turn loop: it reads the turn index and a read-only view of both fighters and returns
+  one member of a closed set, **[ASSUMPTION] {engage, withdraw}**; it draws nothing. The mode is set by a party test at the seam (is a claimant a
+  played person), not chosen per fight. L09 M11's menu (the Suite D moves `feint`, `lunge`, `parry`, `dodge`, `grapple`, `flee`, `yield`,
+  `interpose`, one engagement per act; `L09:145-160`, `:329`) is the lexicon's candidate for widening that set (`GMS:119-120` says only that PC's Plan
+  layer, M-4, "may widen it"); the
+  per-engagement variant is open (`GMS:11-13`). D-2 (RULED yes, 2026-10-21) puts IN-46 in RB-3 (ERRATA G16; REM-31, `REM2:570-589`). IN-46
+  defers every fight to ENCOUNTER and replaces the engine call at `MC/fight.py:52` for a played claimant (`GMS:33-49`; `REM2:585-587`, goldens
+  re-pinned). It changes when a fight is fought and who decides a turn, not who is written: a played attacker who is felled still stands (M1 is
+  not a remediation item; no remediation part or workplan names `_eff_kill`, K-PC-2 or a two-sided band, and `GMS:209-214` lists no effect file; B-Y's
+  PC-10b edits `loop/effects_combat.py` only to emit `duel.yielded`, `part7:58-59`). With B-Y first (`REM2:549-550`), IN-46 lands after `accept` needs a held
+  challenge Record and after `blood` / `yield` stops exist (L09 M3 / M4 as PC-10b / PC-10a).
 - [PROPOSED] **Per-person inputs** (M13, K-PC-1, Jordan's): attributes, experience and kit reach the Combatant — the step that would make
   every row of the §3 pairing table reachable.
 - [PROPOSED] **Contents-aware value term** (D-V6): would turn `accept`, `assassinate`, `capture` into contents of `fight`.
@@ -383,15 +504,22 @@ the realm (§4).
    and abilities on equal arming swords moved the win rate by about one point (§3).
 2. **"If I attack and lose, I die."** The actor is never written (`EC:107-109`); a felled attacker survives in the world at full body.
 3. **"`contest.undecided` means nobody was hurt."** It means the *subject* was untouched; in 23.5 % of mirror fights it hides a felled
-   attacker.
+   attacker. So does `body.changed`: a Wounded band is a fight the attacker lost, bar one that ran 12 turns undecided (§5a). Over seeds 0-2,
+   33 of 59 realm combat calls felled the actor in the scene (16 / 8 / 9; uncommitted round-3 probe) and none was written; the only harm combat writes besides a death
+   lands on the subject, who in every realm case (15 of 15 Wounded calls) had felled his attacker. The verb table reads these bands the other way
+   ("blood was drawn and nobody fell", `VT:656-661`); the data do not deliver that reading (33 of 33 realm and 205 of 206 mirror non-Felled calls had a felled actor).
 4. **"`winner` tells me who fell."** In about 4 % of decided fights the upset floor flips `result` and so `winner` names the felled
    fighter (17 of 400 control fights; `MC/wrapper.py:529-530`). Nothing writes from `winner`.
-5. **"A grudge makes me likelier to attack."** Under the shipped `legacy` stance arm it makes it less likely (`FX:823`;
+5. **"A grudge makes me likelier to attack."** Under the shipped `legacy` stance arm it makes it less likely (`FX:833`;
    `choose.py:54-79`).
 6. **"`accept` answers a challenge."** It answers nobody's challenge: its cell refuses only a dead or absent
    challenger (`VT:742-749`). The "0 of 12" figure in that note was measured at IN-08 (seed 0, four seasons, 142 `accept` attempted, 12
-   executed), not in this run. This run (seed 0, two seasons) has 18 attempted `accept`s and 6 `challenge.issued`; the link was not
-   re-measured.
+   executed), not in this run. Re-measured on this run's recipe (the I1 verification's per-act rows, a session check of the capability inventory that is not filed,
+   `PS/README.md`; the control recipe re-run on `51d7b05` gives the same rows; per-act rows in fold order, seeds 0-2, two seasons; uncommitted round-3
+   probe): 0 of 39 resolved `accept`s (18 / 9 / 12) follow a `challenge.issued` by their subject naming the acceptor; a planted challenge is counted,
+   so the test can see a link. The only challenge-linked `accept`s run the other way: a prior `challenge.issued` by the acting person against the same
+   subject (seed 0: fold positions 576 and 939, both Felled; seed 2: positions 559 Wounded, 1080 Felled), and as the actor he is never written.
+   This is fold-order co-occurrence, not an answer: `accept` reads no challenge (`VT:749`).
 7. **"Season fights use footwork and reach."** Both fighters carry `arming` (reach 5.42), the gap is 0, so stop-hits, reopening and
    disengage never occur (control: 0 approach, 0 stop-hit, 0 disengage events in 400 fights).
 8. **"Ob rises with wounds."** Ob is `defender.history/2` and nothing else (`MC/core.py:108-115`); wounds are a σ term.
@@ -426,17 +554,70 @@ the realm (§4).
   emits and `continue`s before it (`:1025-1032`). For `fight`/`accept`, attempted therefore means admitted and fought. Relabelled in §0 and §4.
 - **0-of-12 `accept` link (G-F5).** It is an IN-08 four-season measurement, as `VT:749` says, not this run's. Fixed in §8 item 6.
 - **Overwhelming wounds (G-F11).** 26 // 9 = 2 wounds, not 3; the worked example already said 2. Fixed in §2.5.
-- **Stance weight (G-F12).** The term is `(1 + stance_gain) × stance` (`choose.py:84-86`), and `stance_gain` ships at 1.0 (`FX:837`), so
+- **Stance weight (G-F12).** The term is `(1 + stance_gain) × stance` (`choose.py:84-86`), and `stance_gain` ships at 1.0 (`FX:847`), so
   the stance counts double. Fixed in §2.1. The sign conclusion (a grudge lowers `fight`'s score under `legacy`) is unchanged.
 - **`tend` refusal split (L-X9).** I keep my split (18 absent / 2 not `with` / 14 whole) because it comes from the events' own `observed`
   tuples; the `with` check appears only on the 16 events whose subject existed. I now state that the kind is flat (`VT:1164-1165`) and the
   split is inferred. A split that reads 20 failed `with` is counting absent subjects as failing `with`.
 - **Column order (L-X19).** Run columns are attempted / ok throughout, matching the ctl files.
 
+### Round-3 corrections
+
+Against `51d7b05` and the precedent suite (`PS/dispositions/D_T03.md`); each cited line was re-opened at the current tree before it was accepted.
+- **§7 Played fights** (D_T03 row 50). Old: IN-46 "pauses per engagement so a seated player chooses `feint` … `interpose`". New: IN-46's design is a
+  per-turn decider with an [ASSUMPTION] set {engage, withdraw}, chosen by a party test at the seam; the eight-move menu is L09 M11's. Evidence:
+  `GMS:116-131`, `:11-13`; `L09:52`, `:145-160`, `:329`; `REM2:575-576` (REM-31's `change:` line is "per the design"; a grep of the remediation
+  parts and `workplans/` for `_eff_kill|K-PC-2|two-sided|wound_state\[|both parties` finds nothing; see Audit fixes below).
+- **§8 #6** (row 26). Old: "the link was not re-measured". New: 0 of 39 resolved `accept`s (18 / 9 / 12) follow a `challenge.issued` by their
+  subject naming the acceptor; 4 `accept`s followed a challenge by the same actor against the same subject. Evidence: the I1 verification's per-act
+  rows and the control recipe re-run on `51d7b05` (per-act rows in fold order; 39 `accept`s, 0 forward links, 4 reverse links; a planted challenge counts 1).
+- **§5d, challenge bullet** (row 26). Old: issuing a challenge "exposes you as the subject of any later `accept`". New: it could; in seeds 0-2 it
+  did not, and four `accept`s followed a challenge by the same actor (fold-order co-occurrence). Same evidence.
+- **§5a, wound row** (row 49). Old: "yes, by chance: 28 % of mirror fights; you cannot choose wound over kill". New: not by winning; a Wounded
+  subject is one the attacker failed to fell. Evidence: `MC/wrapper.py:516-520`; §3's counts (206 non-Felled = 205 felled actors + 1 undecided);
+  realm trace 15 of 15 Wounded calls had the actor felled.
+- **§8 #3** (rows 25, 39). Added: `body.changed` hides a felled attacker as `contest.undecided` does; 33 of 59 realm calls (16 / 8 / 9) felled the
+  actor and none was written. Evidence: seam-call trace, seeds 0-2 (59 calls: Felled 26, Wounded 15, Untouched 18), re-run on `51d7b05`, byte-identical.
+- **§1 upset floor** (rows 22, 40). Added: the season band reads the subject's tracker, so the floor never reaches the world. Evidence:
+  `MC/wrapper.py:526-530`; `seam/ladder.py:155-156`; `ROS:820-848`; nothing in `engine/season/` reads a combat `winner`.
+- **§2.6 and §5c** (row 25). Old: "The actor's tracker is discarded". New: both wound states reach the effect (`SW:230`, `:237`) and `_eff_kill`
+  reads the subject's only (`EC:125`). The §5c wording follows §2.6; the fact that the attacker is never written is unchanged.
+- **§5d, dead end** (row 4). Added: `tend` works on a wounded person (hand-built, body 250 → 1000, `body.tended`); the computed ones are all
+  refused (self-targeted 4 / 4 / 3). Evidence: control re-run through the real season loop on `51d7b05`; `EC:385-393`.
+- **§5c, risk to the attacker** (row 24). Added: 33 of 59 realm calls, and `p_npc_004`'s tick-1 chain (body 650, then 48, then felled attacking,
+  body 48 at the end of the run). Evidence: seam-call trace calls 22-24, seed 0; `p_npc_004` body 48 after season 2.
+- **Line numbers moved by PR #494** (no claim changed). `FX:823` → `833`; `FX:837` → `847` (+10 lines after `FX:716`). `ROS:2561-2564` →
+  `2627-2630`; `ROS:3280`, `:3346` → `3346`, `:3412`; `ROS:3236`, `:3280-3283`, `:3346-3348` → `3302`, `:3346-3349`, `:3412-3414`; the §9 ranges
+  likewise (+66 lines after `ROS:2488`). Each new line was opened. `MC/`, `SW`, `EC`, `VT`, `budget.py` and `resolve.py` did not change.
+- **§0a is new.** Its draft was re-verified against the tree; changed on the way: the King's "budget of 3" is dropped (the budget also counts held
+  offices); "no ending" is restated for PR #494 (the season now reports `endings`; the realm as built reaches none); the loser-takes-the-harm line
+  cites Battle Brothers, Jagged Alliance 2 and XCOM only (Kingdom Come: Deliverance §6 says death reloads the last save, which does not show it);
+  the callback paragraph names the one test that hand-builds a `fight`.
+- Not changed, noted: §8 #2 says a felled attacker survives "at full body"; true of the mirror example, not of `p_npc_004` above.
+
+#### Audit fixes
+
+Round-3 audit of this file (F_04), each cite re-opened at the current tree before it was applied.
+- **§0a cosmetic list (1).** "tradition and abilities (unreachable; §3 shows they would decide fights)" -> weapon and armour would decide fights, tradition and abilities move nothing beyond noise on equal swords (§3, `:318-319`).
+- **§5a wound row, §8 #3 (2, 15).** "a Wounded or Untouched subject means the attacker was felled" -> unless the fight ran 12 turns undecided (`MC/wrapper.py:504`, `:524-525`; 1 of 400 mirror fights, a Wounded one: 111 of 112), with the verb table's contrary reading (`VT:656-661`) named.
+- **§0a IN-46 bullet, §7 (3).** IN-46 "suspends at the seam" -> it defers every fight from RESOLVE to ENCOUNTER (`GMS:37-49`; `REM2:585-587`, hash mover) and replaces the engine call at `MC/fight.py:52` for a played claimant (`GMS:33-35`).
+- **§0a, §7, Round-3 list (4, 14).** "`REM2:575-576` lists four files, none an effect file" -> that line is "per the design"; the design adds three more files (`GMS:209-214`), and B-Y, which runs first (`REM2:549-550`), edits `loop/effects_combat.py` only to emit `duel.yielded` (`part7:58-59`); the grep over remediation and workplans (0 hits) carries the claim; M3/M4 are v9 positions PC-10b / PC-10a.
+- **§0a Failure and ending (5).** "a fight's harm falls on the side that lost it" -> every combatant keeps the harm he took in Battle Brothers and XCOM (`T02:167`, `:205`; `T18:169`, `:205`), JA2 adds capture for the loser (`T14:61`); Valoria writes the subject only.
+- **§0a loop step 5 (6).** The scar clause sat under WITNESS -> moved to step 4: the scar is written at RESOLVE (`loop/resolve.py:557`, `:597-606`).
+- **§5c (7).** "In the realm the share is higher: 33 of 59" -> 56 %, within noise of the mirror's 51 %.
+- **§0a cosmetic list (8).** `challenge` "answered by nobody" -> writes nothing, its `challenge.issued` is deposited as a claim (`VT:730-731`), and its effect on later choices was not measured.
+- **§8 #6, §5d challenge bullet (10).** "the control recipe re-run" and "four challengers used `accept`" -> the I1 verification's per-act rows plus the re-run, a `challenge.issued` by the subject naming the acceptor, and four `accept`s that follow a same-pair challenge in fold order (no answer: `VT:749`).
+- **§0a choice menu (11).** The `challenge` and `tend` "when a person picks it" cells held effects -> `challenge` cites its three alignment cells (`ROS:3164`, `:3344`, `:3413`), `tend` has no cell (`ROS:3017-3019`), and the "never answered" claim moved to the effect column.
+- **§0a callback paragraph (12).** "none of the nine hand-built chains in the I1 verification was a `fight`" -> dropped; the count and the absence cannot be reproduced from the repo (`PS/README.md:26`, `:29` give neither).
+- **§0a menu, §5d dead end (13).** `tend` TESTS-ONLY without a test -> `engine/season/tests/test_in12_step9.py:203-209` (a computed `tend` at body 400 reaches the scale); the hand-built body-250 control and the self-targeted 4 / 4 / 3 are tagged uncommitted round-3 probe.
+- **§0a Failure and ending (16).** "the realm as built reaches none (`world_q.py:1789-1790`)" -> adds the run result: `endings` was `[]` after both seasons at seeds 0-2 (errata R-F12; overview §2.3).
+- **§0a (17).** Added the trace-call numbers of the walkthrough (#0-#3, #5), and definitions of the callback, fold position, AUTOMATED / PLAYABLE and the party test; "is what that set may widen to" -> L09 M11's menu is the lexicon's candidate for widening it (`GMS:119-120`).
+- **Header, probe tags.** Added `part7`; the realm figures drawn from the seam-call trace (15 of 15, 33 of 59, 111 / 1 band split) carry "(uncommitted round-3 probe)" at first use.
+
 ## 9 Checks
 
-Opened (path:line): `MC/fight.py:32-69`; `SW:85-253`; `engine/season/decision/budget.py:55-83`; `FX:217, 228, 623-640, 823`;
-`ROS:784-870, 1268-1300, 1465-1470, 2520-2564, 3236, 3273-3283, 3336-3348`; `VT:612-765, 1146-1168`; `EC:30-179, 360-396`;
+Opened (path:line): `MC/fight.py:32-69`; `SW:85-253`; `engine/season/decision/budget.py:55-83`; `FX:217, 228, 623-640, 833`;
+`ROS:784-870, 1268-1300, 1465-1470, 2586-2630, 3302, 3339-3349, 3402-3414`; `VT:612-765, 1146-1168`; `EC:30-179, 360-396`;
 `MC/wrapper.py:18-27, 440-465, 467-532`; `MC/core.py:50-75, 100-127`; `MC/combat_systems.py:1036-1046, 1086-1104`;
 `engine/dice_engine/sigma_leverage.py:95-160, 299-330`; `engine/dice_engine/dice_engine.py:227-257`;
 `engine/substrate/pc_engine.py:30-52`; `engine/season/decision/choose.py:54-84, 140-151`; `engine/season/loop/resolve.py:597-610`.
@@ -455,3 +636,9 @@ Ran (read-only, `python -I`, scripts under `$SP/t03/`):
 Not confirmed: why the chooser forms acts against persons never in the realm (observed, not traced); the wear row `body: 10`
 (`ROS:1468`) was not traced to a person-side reader. The budget question (ERRATA G11) is settled by CROSS C1, whose cited lines I opened
 (`deliberate.py:252-259`, `choose.py:643-657`, `FX:488-489`, `budget.py:19-20`).
+
+Round 3 (against `51d7b05`) opened: `GMS:1-249`; `L09:23, 52, 145-160, 164, 316, 329`; `REM2:570-589`; `seam/ladder.py:136-185`; `offices.yaml:182-188`;
+`loop/driver.py:514-532`; `queries/world_q.py:1764-1795`; `ROS:2490-2545`; `engine/season/tests/test_combat_trace_returned.py`; the precedent
+sections cited in §0a. Ran (read-only, `python -I -B`): the seam-call trace of seeds 0-2, two seasons (59 calls; byte-identical to the earlier
+trace); the per-act link count (39 `accept`s, 0 forward, 4 reverse; positive control 1); a hand-built self `tend` at body 250 (→ 1000); the final
+body of `p_npc_004` (48). The probe scripts are not committed.

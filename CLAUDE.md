@@ -80,6 +80,12 @@ is reported in. Name the conflict; never silently rank them.
     **Escalate only what survives all five:** a live design choice where two defensible options lead to
     materially different games, or where the answer would overwrite ratified canon. ⚠ **This cuts BOTH
     ways** — clearing the standing queue is session work.
+- **THE REQUEST IS THE SCOPE; REVIEW RUNS ONE ROUND, THEN STOPS (RULED, Jordan 2026-10-22: *"uncontrolled
+  audit recursion loop"*).** Audit → fix → audit-the-fixes → fix is the forbidden shape. (1) An audit, critic
+  or fix pass the request did not name is scope growth: ask Jordan one question, do not start it. (2) The
+  adversarial pass runs ONCE per deliverable; its fixes are not themselves audited, and its findings do not
+  seed a second fan-out. (3) Before any second wave of agents, STOP and report what the first found. (4) The
+  deliverable named and its one pass applied is the stop condition: *"more could be checked"* is not a reason.
 - **Max effort on the deliverable named by the current milestone** (done = **the behaviour executes**,
   §0.2): the most thorough path *that deliverable* warrants, verified over plausible, finished rather
   than sampled. **Work is this session's work if Jordan asked for it this session, or it traces to an
