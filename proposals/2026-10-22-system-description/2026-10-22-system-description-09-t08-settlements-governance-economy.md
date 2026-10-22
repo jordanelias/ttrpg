@@ -491,7 +491,7 @@ your `tenure.opened`, `order.given`, `dispensation.issued`, and also every MATTE
 - **Every settlement is the same economy.** `build_realm` gives each of the 37 settlements one Site of every yielding kind at
   full condition (`harness/populated.py:772-777`), so each makes grain 40, salt 30, ore 50, timber 10 and none lacks what another
   has; nothing gives a reason to move goods between places. [precedent: `research/game_precedent_suite/tutorials/T10_npc_economy.md`,
-  Anno 1800 §2.7, where island fertilities decide what each can make]
+  Anno 1800 §2.7 and §7, where island fertilities decide what each can make and trade routes move the surplus]
 - **Stores never cap, spoil or cost anything.** Wear touches Sites only (`rosters.yaml:1422`); realm stores rise 0 → 9,250 in two
   seasons (37 settlements × 250 after the tick-1 MATTER; round-3 re-run, §8). Ore has no reader at all (no `.py` under `loop/`,
   `queries/`, `state/` or `seam/` names it, grep at `51d7b05`); timber's only sink is `works_cost` (10 per Site, `rosters.yaml:1501`).

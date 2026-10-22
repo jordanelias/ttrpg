@@ -565,7 +565,7 @@ executes. Where a lexicon's body and its rulings disagree, the rulings (verbs-03
 1. **"`march` 21/21 means fields were fought."** The "ok" is the `Declared` event. Field events are 0 at seeds 0-2 in the control run (natural play). The in-tree note that
    `march` "EXECUTES via natural computed play" (`engine/season/hole_register.yaml` H-175, `:3861-3880`; `test_march.py:38-45`) is the same reading:
    `harness/aperture.py:14` counts an act executed when its row's `emits:` Event is logged, and the funnel H-175 quotes reads `ex 6 ref 6 both 6`,
-   so all six were declared and then refused (re-run at `51d7b05`: `att 9 ex 9 ref 9 both 9`).
+   so all six were declared and then refused (`aperture 1 0` re-run at `51d7b05`: `att 9 ex 9 ref 9 both 9`).
 2. **"`troop_type='infantry'` gives infantry stats."** Stats apply only through `Subunit.of_type`, and `infantry` has no preset. The season army
    is P4 D5 M5 by Unit defaults.
 3. **"The loser's body scales by the survivor share."** It scales by `effective_size / size_max`, with `size_max` floored at 100 troops. Under 100
@@ -622,6 +622,49 @@ executes. Where a lexicon's body and its rulings disagree, the rulings (verbs-03
 - **X11**: holds, not offices.
 - **X22**: `holder_faction_of` walks up; trap 9.
 - **L's teaching notes**: I defined Rung and Tenure in §0; §4 now lists one act; §5b is restated as march-or-nothing; §2.3 is new.
+
+### Round-3 corrections
+
+Round 3 revised this file against `51d7b05` and the precedent suite (`research/game_precedent_suite/`, dispositions in `dispositions/D_T04.md`).
+Each line is old claim -> new claim, with the evidence opened at `51d7b05` (read-only runs, `python -I -B`).
+
+- **Header.** Written at `a4ca9a5` only -> also revised against `51d7b05`. PR #494 did not touch `modules/mass_battle/` or `EC`; it moved lines in
+  `rosters.yaml` (+66 after line 2490), `world_q.py` (+3 from the top, +14 after 1680) and nothing else this file cites. The §9 "Opened" ranges are
+  at `a4ca9a5` and are left as the record of what was opened then.
+- **§0 Status, ctl bullet.** "no field is fought at any seed" -> "no field is fought in the control run at any seed" (natural play). Evidence:
+  `ctl/realm_seed*_2seasons.txt` (field.* and army.arrived 0); §3.3.
+- **§0 Status, engine bullet.** "The engine itself runs only under tests, harnesses and direct calls" -> the season loop reaches it whenever an act
+  names a settlement held by another faction with members present. Evidence: hand-built `march {subject: set_s_036}` by `p_npc_033` via
+  `off_npc_033`, RESOLVE then ENCOUNTER, seeds 0-2: `march.declared`, `field.lost`, bodies 1000 → 20, `budget()` 6 → 3 (`test_march.py:82-136` pair;
+  `loop/sides.py:108-132`; `SW:236-262`); the same act through `harness/play_surface.py:41` inside one full season: `field.lost` once per seed.
+  The grade stays TESTS-ONLY (errata G1).
+- **§0 Status and §3.3 and §5, vocabulary.** "the realm" / "the chooser" used for both kinds of run -> *natural play* (the shipped chooser forms every
+  act) and *callback play* (a client or a test supplies the act), defined once in §0 Status and used as a label in §0a, §3.3 and §5.
+- **§0a added.** New section "How it plays". Every cite in it was opened at `51d7b05`; the seed-0 budget (6 → 3) and the Unopposed arm
+  (`set_s_014` → `set_s_003`, `field.unopposed` and `army.arrived`, bodies 1000, seeds 0-2) were run for this section.
+- **§1 rout row.** "60% of troops in routed subunits" -> also "`ROUT_CASCADE_FRAC`, `cfg:116`, whose note calls it inert for any one-subunit army, so
+  for every season army"; where-cell adds `units:2893`. Evidence: `units:2876-2896`; `cfg:116`.
+- **§1 and §2.2 step 1, shifted cites.** `world_q.py:1470` -> `1473`; `1656-1680` -> `1659-1681`; `1490` -> `1493`; `RY:3054, 3140, 3292, 3353` ->
+  `RY:3120, 3206, 3358, 3419` (the four `march` value-axis cells, same values: -0.5, -0.4, -0.4, +0.4). Evidence: `git diff a4ca9a5 51d7b05` hunks.
+- **§2.1 step 7.** "Command 0 ... instant rout (`orch:2221`)" -> `orch:2221-2225`, with the comment "M1: general IS the army", and nothing writes
+  command during a battle (`units:2717, 2722, 2811`; fixture `systems/mass_battle/sim/validators.py:287`), so the rule fires only on an army built at
+  command 0. Evidence: grep of `.command` assignments over `modules/`, `systems/mass_battle/`, `engine/`.
+- **§2.3, new bullet.** Nothing on precedent -> one resolver; Total War's own manuals warn its fast path is worse for the player; Dominions and Field
+  of Glory II are the verified single-resolver precedents; Football Manager's "instant ≈ played" is not established. Evidence: T07 Total War §3 and
+  Field of Glory II §8, T17 Dominions §2, T16 FM §8 (tags carried).
+- **§3.3.** "No act at any measured seed targeted a settlement. Had one done so ..." -> natural play (seeds 0, 1, 2 itemised; seed 2: 4 declared, 3
+  at territories, 1 unresolved) separated from callback play (opposed field run, Unopposed run, chooser-formed act under a `Question`, Won not
+  fought). Evidence: `t04_probe_march.py`-equivalent re-run for seeds 0-2 (25 / 11 formed, 21 / 10 / 4 declared); `test_march.py:254, 368-456`.
+- **§5 (a), (b), (c).** Plays 1 and 2 were stated as the rules' behaviour without saying none had run -> each carries its natural and callback
+  status; a paragraph says what natural play does instead; the blocks bullet "in the realm, the chooser never forms ..." -> "in natural play at seeds
+  0-2 ...". "Certain loss" for pairs other than `set_s_036` is marked as inference from §3.1.
+- **§7, stubbed or inert.** "Every declared realm `march` is refused" -> "Every naturally formed realm `march` is refused (a hand-built settlement
+  march is fought and lost, §3.3)".
+- **§8 trap 1.** "Field events are 0 at seeds 0-2" -> "... in the control run (natural play)", plus H-175's "EXECUTES via natural computed play" read the
+  same way: `aperture.py:14` counts the `emits:` Event, and the funnel `ex 6 ref 6 both 6` (`hole_register.yaml:3861-3880`) is six acts declared then
+  refused; `aperture 1 0` re-run at `51d7b05` reads `att 9 ex 9 ref 9 both 9`.
+- **Not changed.** The §0 claim that the tree "contradicts itself on whether [the remit] roster is closed" and every figure in §3.1-§3.2 were not
+  re-run; the disposition record raised nothing against them.
 
 ## 9 Checks
 
