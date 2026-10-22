@@ -12,6 +12,7 @@ nothing else (`architecture/meta/04_CODE_ARCHITECTURE.md` §B.8), so what stood 
 placeless and a Site's `rung` field keeps the gone id. Those assertions redden when H-228 closes.
 """
 
+from engine.season import epistemic as EP
 from engine.season.data.matrix import Step, WriteClass
 from engine.season.harness import populated as POP
 from engine.season.harness.populated import build_realm
@@ -118,6 +119,47 @@ def test_in12_11_each_decline_of_the_occupation_read_is_refused():
     territories = sum(1 for r in w.rungs.values() if r.kind == "territory")
     assert _raze(w, "terr_T7", act_id="rz_terr") == ["raze.refused"]
     assert sum(1 for r in w.rungs.values() if r.kind == "territory") == territories
+
+
+def test_in12_11_a_place_nobody_holds_is_not_razed():
+    """`_eff_raze`'s `holder is None` decline (H-166: who holds an unheld place is unruled), ONE change
+    from the admitted razing: the town is occupied by the real march, and every live `hold` on its
+    ancestry is then closed (`holder_faction_of` is `None`) while the Crown still stands there --
+    `raze.refused` and the town stands. MUTATION, run 2026-10-22: `holder is None or` deleted from
+    `_eff_raze` -> RED (`['rung.razed']`), restored -> GREEN. (The `mine is None` decline has no such test: an Office
+    without a faction is refused at construction (H-99, `data/rosters.py`), and forced past it by
+    attribute the next clause's `mustered(w, rid, None)` is empty and declines anyway -- the clause
+    is never the sole cause, so a test of it could not observe its removal.)"""
+    w = _occupy(build_realm(0))
+    chain = set(world_q.ancestry(w, TOWN)) | {TOWN}
+    for t in w.tenures:
+        if t.live and t.kind == "hold" and t.object in chain:
+            t.until = w.tick
+    assert world_q.holder_faction_of(w, TOWN) is None
+    assert world_q.mustered(w, TOWN, CROWN) and G.seat_faction(w, SEAT) == CROWN
+    assert _raze(w) == ["raze.refused"]
+    assert TOWN in w.rungs
+
+
+def test_in12_11_somebody_learns_of_the_razing():
+    """A razing is WITNESSED: the real WITNESS barrier (`SeasonDriver.witness`, the shipped fan-out
+    mode) over the `rung.razed` Event leaves a `rung.razed` claim in some living person's ledger. The
+    Event is handed to WITNESS directly because a season run after the fold fans only its own Events.
+    POSITIVE CONTROL, same world: before the razing the march's `army.arrived` (act-caused, placed at
+    the town) has observers, so an empty fan here would be the razing's, not the instrument's.
+    ⚠ MEASURED 2026-10-22, NOT PINNED: the razer's own `contain` closes in the razing write, so
+    `event_place` is `None` and the co-located channel admits nobody; the one observer is the razer
+    (`witness_key`), and the others who stood in the town learn nothing."""
+    w = _occupy(build_realm(0))
+    mode = w.fixtures.get("fan_out_mode")
+    arrived = [e for e in w.log if e.kind == "army.arrived"][-1]
+    w.discard_caches()
+    assert EP.observers_for(w, arrived, mode, list(w.persons)), "CONTROL: the arrival fans to nobody"
+    assert _raze(w) == ["rung.razed"]
+    ev, = [e for e in w.log if e.kind == "rung.razed"]
+    SeasonDriver(w).witness(mint_token(w, WriteClass.INTERIOR), [ev])
+    knowers = [p.id for p in w.persons.values() if any(c.predicate == ev.kind for c in p.ledger)]
+    assert knowers, "nobody's ledger holds a claim about the razing"
 
 
 def test_in12_11_h228_what_stood_in_the_town_is_left_placeless_pinned_as_it_reads():

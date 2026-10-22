@@ -31,8 +31,8 @@ from ..state.attribution import causing_act
 from ..state.carriers import Proposition, Record, Tenure
 from ..state.carriers import DETERMINED_BY
 from ..state.gate import (
-    DISPOSABLE_KINDS, NO_CHANGE, UNDECLARED_DISPOSAL, Change, Subject, may_seize, may_warrant,
-    seat_faction,
+    DISPOSABLE_KINDS, NO_CHANGE, UNDECLARED_DISPOSAL, Change, Subject, may_determine, may_seize,
+    may_warrant, seat_faction,
 )
 from ..state.ids import H
 
@@ -1006,6 +1006,14 @@ def _issuing_seat(w: "World", rid: str) -> Optional[str]:
     return via if via in w.offices else None
 
 
+def _may_close_custody(w: "World", seat: str, prisoner: str) -> bool:
+    """Could the seat's LIVE HOLDER close a `detain` the prisoner owns on it -- `may_determine`, the
+    predicate `state/gate.py`'s `determination` clause closes a restraint under (`pardon`'s basis)? An
+    unheld seat closes nothing."""
+    held = hold_force(w, seat)
+    return held is not None and may_determine(w, held.subject, seat, prisoner)
+
+
 @effect_for("arrest")
 def _eff_arrest(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """v9 IN-12 step 5 (#453 §9.1, the `arrest` row): A `detain` EDGE OPENS, the prisoner (the act's
@@ -1020,10 +1028,15 @@ def _eff_arrest(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     prisoner, #453 §8.1 Custody [ASSUMPTION; medium; Jordan to correct; revert: a second bench's
     warrant opens a second custody, "relaxation to the secular arm"]); (2) the actor HOLDS A WARRANT
     NAMING HIM (`_held_warrants`, `seize`'s reading); (3) the warrant's issuing seat is readable
-    (`_issuing_seat`); (4) the exercised seat may take him (`may_warrant`, the gate's own predicate, so
-    an act the precondition admitted is never killed at the gate). Anything else declines (`NO_CHANGE`
-    -> `arrest.refused`, the `write` clause). Several warrants: the first in tenure order whose issuing
-    seat is readable.
+    (`_issuing_seat`) AND ITS LIVE HOLDER COULD CLOSE THE CUSTODY (`may_determine` over the prisoner,
+    the gate's own predicate for `determination`, which `pardon` closes under): a custody is opened only
+    on a seat whose bench could `pardon` it, so a warrant from an issue-only seat, or from a seat whose
+    ground does not hold the prisoner, opens nothing
+    [ASSUMPTION; medium; Jordan to correct; revert: arrest opens a custody on any issuing seat and a
+    custody nothing can close is a recorded limit]; (4) the exercised seat may take him (`may_warrant`,
+    the gate's own predicate, so an act the precondition admitted is never killed at the gate). Anything
+    else declines (`NO_CHANGE` -> `arrest.refused`, the `write` clause). Several warrants: the first in
+    tenure order whose issuing seat is readable and could close it.
 
     THE GATE: `warrant` (`state/gate.py`: an opened `detain` whose object is a seat, owned by another
     person, by a seat granted `WARRANT_ACT` whose purview reaches his home). The kind is a LITERAL so
@@ -1034,7 +1047,7 @@ def _eff_arrest(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
         return NO_CHANGE
     seat = next((s for s in (_issuing_seat(w, rid)
                              for rid in _held_warrants(w, a.actor, a.verb, prisoner))
-                 if s is not None), None)
+                 if s is not None and _may_close_custody(w, s, prisoner)), None)
     if seat is None or not may_warrant(w, a.actor, a.via, prisoner):
         return NO_CHANGE
     nt = Tenure(H(w.world_seed, w.tick, prisoner, f"detain:{seat}:{a.id}"), prisoner, seat, "detain",

@@ -216,8 +216,8 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # the mover is `raze`'s formation and refusals.
 # RE-PINNED at v9 IN-12 `give` + Rung (cession), A BEHAVIOUR MOVE DECLARED: `give`'s typed cell dropped its
 # `existence` conjunct (kind `Record`; the grammar has no disjunction) and `give` joined
-# `rosters.yaml: own_hold_declines`, so a person forms a gift only of a referent he HOLDS. In the realm no
-# question's referent is a thing its asker holds, so `give` forms 0 times (33 formed, `give.refused` 7 in
+# `rosters.yaml: own_hold_declines`, so a person forms a gift only of a referent he HOLDS. In the realm almost
+# no question's referent is a thing its asker holds (H-229 counts one held-rung question), so `give` forms 0 times (33 formed, `give.refused` 7 in
 # season one and 18 by two seasons before; `record.given` and `rung.ceded` 0 in both), and the act mix moves.
 # The build hash is equal; one and two seasons move. Was 00f9b52c... / 195b1ac6... (one, two seasons).
 # CONTROL, run on BOTH trees (this one and its base, 68eaaa41): `give` withheld from every `opening_set`
@@ -343,6 +343,21 @@ def test_in21_control_draw_off_and_draw_at_one_reproduce_the_base_hashes():
     assert h == BASE_HASHES, f"draw off moved a hash: {h}"
     assert events[1][0] >= 5000 and events[2][0] >= 15000, f"the seasons emitted too little: {events}"
     assert events == BASE_EVENTS, f"the bodies clock at its control moved the event sequence: {events}"
+
+
+def test_the_give_withheld_arm_reproduces_the_one_season_pin():
+    """THE `give` + Rung RE-PIN'S CONTROL, ENCODED (it stood as prose above): `give` added to the shipped
+    `Fixtures withheld_verbs` reads the CURRENT one-season pin exactly -- hash, event count and digest --
+    so at the shipped arm the realm forms no `give` in season one, and the re-pin's mover is `give`'s
+    formation and nothing else. If `give` forms again in the realm, `BASE_HASHES[1]` moves with it and
+    this arm stops matching: the re-pin would then need a new control, not a re-recorded one."""
+    w = POP.build_realm(0)
+    shipped = tuple(w.fixtures.get("withheld_verbs"))
+    assert "give" not in shipped, "fixture: `give` is already withheld at the shipped arm"
+    w.fixtures = w.fixtures.sweep("withheld_verbs", shipped + ("give",))
+    POP.run(seasons=1, seed=0, w=w)
+    assert w.content_hash() == BASE_HASHES[1], w.content_hash()
+    assert _digest(w) == BASE_EVENTS[1], _digest(w)
 
 
 def test_in21_a_table_of_ones_reads_the_same_as_no_table():
