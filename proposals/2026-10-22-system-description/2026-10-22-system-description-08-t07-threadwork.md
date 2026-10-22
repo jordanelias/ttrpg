@@ -16,8 +16,10 @@ goal. Rules that exist only in a proposal are labelled **[PROPOSED]** and are ke
 `systems/threadwork/`: a grep of `engine/season/**/*.py` for `threadwork|coherence|attempt_*` returns only the write-gate guard at
 `engine/season/state/world.py:1010-1019`, and after `headless.run(seasons=2, seed=1)` `sys.modules` holds no module whose name contains
 `threadwork`, `knots` or `coherence` (§9). The one threadwork verb row in the table, `thread_read`, is not among the 47 resolvable
-verbs (`resolvable_verbs()` → `'thread_read' in r` is `False`), and in the control runs (seeds 0, 1 and 2, 2 seasons each) no
-`thread_read` act reaches the fold at any seed (no line in `ctl/realm_seed{0,1,2}_2seasons.txt`; "attempted" there counts admitted acts).
+verbs (`resolvable_verbs()` → `'thread_read' in r` is `False`), and the chooser's menu is exactly `resolvable_verbs()`
+(`engine/season/harness/populated.py:1531`, filtered at `decision/choose.py:438-439`), so no person ever forms a `thread_read` act. The
+control runs agree (no line in `ctl/realm_seed{0,1,2}_2seasons.txt` at any of seeds 0, 1, 2), but their "attempted" column counts only
+acts that reached the fold, so by itself it could not show that an act was never formed (suite file 13: Part 2 C2; round-2 audit G F1).
 So **"Playing it today" (§§1-6) teaches the standalone Python oracle**: functions a test or script calls directly with an actor
 object, a target dict and a seeded random generator. §7 teaches the proposed wiring into the loop.
 
@@ -445,7 +447,7 @@ resilience gain 0/1/3 (R-14); the history-term fix `min(3, history) + 3` (REM-45
 
 | item | state | evidence |
 |---|---|---|
-| `thread_read` row | exists; not resolvable; attempted 0 times in seeds 0, 1 and 2 (2 seasons each) | `verb_table.yaml:1410-1423`; `resolvable_verbs()`; `ctl/realm_seed{0,1,2}_2seasons.txt` (no thread line) |
+| `thread_read` row | exists; not resolvable, so never formed (the chooser's menu is `resolvable_verbs()`); reaches the fold 0 times at seeds 0, 1 and 2 (2 seasons each) | `verb_table.yaml:1410-1423`; `resolvable_verbs()`; `harness/populated.py:1531`; `ctl/realm_seed{0,1,2}_2seasons.txt` (no thread line) |
 | resilience | inert: gain 0 returns the cost unchanged | `operations.py:157`, `:269-270` |
 | MS delta, opposing composure/knot penalty, co-movement MS | computed and dropped | `operations.py:211-213`; `opposing.py:117` |
 | co-movement, threadcut | TESTS-ONLY by G1: implemented, no caller and no unit test; run only by `t07/cm_tc.py` | grep of the tree for `draw_comovement_card`, `resolve_threadcut_interaction` |
