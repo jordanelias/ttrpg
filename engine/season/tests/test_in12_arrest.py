@@ -16,12 +16,16 @@ What each block proves, and the control that stops it passing vacuously:
   4. THE OBSERVABLES, through the real fold: a warrant issued by `off_duke`, handed to a watchman, and his
      `arrest` through HIS seat opens `detain : prisoner -> off_duke` (THE ISSUING SEAT); the prisoner's
      `move` is `travel.blocked`; the Duke's `pardon` through `off_duke` ends it with `detention.ended` in
-     `w.log`, and the same `move` then executes. CONTROLS: no warrant held -> `arrest.refused`; the
-     watchman's `pardon` through his own seat is refused (no bench, and the edge is not his seat's).
+     `w.log`, and the same `move` then executes. A second arrest of the held man, folded at a PINNED
+     winning band, is `arrest.refused` by the one-live-`detain` clause. CONTROLS: no warrant held ->
+     `arrest.refused`; the watchman's `pardon` through his own seat is refused (no bench, and the edge is
+     not his seat's). A warrant from an ISSUE-ONLY seat (no `determine`, so its bench could never
+     `pardon`) opens no custody; the Duke's warrant beside it, in the same world, does, and is pardoned.
   5. FORMATION: `arrest` forms on a referent a held warrant names and on no other.
   6. STEP 5a, THE CHARGE: a hand-built `HOLDS` Proposition about the accused, a petition naming it (its
      `terms`), and a witness's `commit` to it executing; the witness FORMS no such `commit` from the held
-     petition -- the named residue `hole_register.yaml` H-227 records, observed rather than assumed.
+     petition -- the named residue `hole_register.yaml` H-227 records, observed rather than assumed;
+     CONTROL in the same call: the `commit` on the petition itself (`rec:pt1`) does form.
 
 MUTATIONS, run at the build 2026-10-22 (each RED, then restored and GREEN):
   * `loop/resolve.py::_refuse_party_gap` back to `row.emits_on_refusal` (the union) -> block 3's fold test
@@ -33,6 +37,10 @@ MUTATIONS, run at the build 2026-10-22 (each RED, then restored and GREEN):
   * `loop/effects_migration.py::_eff_move`'s custody refusal (SC-03a's `restrained(..., DETAIN_KIND)`)
     switched off -> block 4's `travel.blocked` assertion RED (`['travel.moved']`).
   * `_eff_arrest`'s `_issuing_seat` replaced by `a.via` -> block 4's issuing-seat assertion RED.
+  * `_eff_arrest`'s `restrained(w, prisoner, DETAIN_KIND)` clause deleted -> block 4's pinned second
+    arrest RED (`['arrest.made']`). Run 2026-10-22.
+  * `_eff_arrest`'s `_may_close_custody` filter deleted -> the issue-only-seat test RED
+    (`['arrest.made']`: a `detain` on `off_notary`, which no bench can close). Run 2026-10-22.
 """
 
 from __future__ import annotations
@@ -51,6 +59,7 @@ from ..data.verbs import _OPENERS_FROM_EFFECTS, COUNTERPARTY_CLAUSE, VERB_TABLE,
 from ..harness import probes as P
 from ..loop import resolve as R
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
+from ..seam.contest import Resolution
 from ..state.carriers import Act, Claim, Office, Question, Tenure
 from .test_in10_record_operands import _acts, _formed, _hold_document
 
@@ -84,6 +93,15 @@ def _fold(w, d, *acts):
     return out
 
 
+def _fold_at(w, d, band, act):
+    """ONE contested act through the fold at a PINNED band -- the same `_fold` body the seam dispatches
+    to with the band its contest decided -- so a write-clause decline is observed and never masked by a
+    lost roll (`arrest.resisted`, where `_eff_arrest` never runs)."""
+    out = R._fold(d, w, mint_token(w, WriteClass.ACTS), act, Resolution(band, {}))
+    w.log.extend(out)
+    return out
+
+
 def _kinds(events):
     return [e.kind for e in events]
 
@@ -92,17 +110,18 @@ def _act(key, verb, actor, via, **payload):
     return Act(id=key, actor=actor, verb=verb, via=via, payload=payload)
 
 
-def _warrant_to_watchman(w, d, names=PRISONER):
-    """The Duke ISSUES a warrant through `off_duke` whose `terms` names `names` (the real `issue`, so the
-    Record has a creating Event), and it is handed to the watchman -- planted, as `give`'s own tests own
-    the handing: the Duke's maker's `hold` closes and the watchman's opens."""
-    assert _kinds(_fold(w, d, _act("w1", "issue", DUKE, SEAT, subject=names, to=PRISONER))) \
+def _warrant_to_watchman(w, d, names=PRISONER, issuer=DUKE, seat=SEAT, key="w1"):
+    """`issuer` ISSUES a warrant through `seat` (the Duke through `off_duke` by default) whose `terms`
+    names `names` (the real `issue`, so the Record has a creating Event), and it is handed to the
+    watchman -- planted, as `give`'s own tests own the handing: the maker's `hold` closes and the
+    watchman's opens."""
+    assert _kinds(_fold(w, d, _act(key, "issue", issuer, seat, subject=names, to=PRISONER))) \
         == ["dispensation.issued"]
-    rid = "rec:w1"
+    rid = f"rec:{key}"
     for t in w.tenures:
         if t.kind == "hold" and t.object == rid and t.live:
             t.until = w.tick
-    w.add_tenure(Tenure("t_w_watch", WATCHMAN, rid, "hold", since=w.tick))
+    w.add_tenure(Tenure(f"t_{key}_watch", WATCHMAN, rid, "hold", since=w.tick))
     return rid
 
 
@@ -221,9 +240,10 @@ def test_in12_5_arrest_opens_custody_on_the_issuing_seat_blocks_move_and_pardon_
     assert edge.live and edge.object == SEAT, edge          # THE ISSUING SEAT, not the watch's
     # the prisoner's own journey is refused while the custody is live (SC-03a's reader)
     assert _kinds(_fold(w, d, _act("mv", "move", PRISONER, None, to="S"))) == ["travel.blocked"]
-    # a second arrest of a man already held is declined at the write (one live `detain` per prisoner)
-    again = _fold(w, d, _act("a2", "arrest", WATCHMAN, WATCH, subject=PRISONER))
-    assert _kinds(again) in (["arrest.refused"], ["arrest.resisted"]), _kinds(again)
+    # a second arrest of a man already held is declined at the write (one live `detain` per prisoner),
+    # folded at a PINNED winning band so the effect runs and the `restrained(...)` clause is what refuses
+    again = _fold_at(w, d, "Success", _act("a2", "arrest", WATCHMAN, WATCH, subject=PRISONER))
+    assert _kinds(again) == ["arrest.refused"], _kinds(again)
     assert len(_restraints(w)) == 1
     # CONTROL: the arresting seat cannot pardon -- no bench (no `determine`), and not the edge's object
     assert _kinds(_fold(w, d, _act("p0", "pardon", WATCHMAN, WATCH, subject=PRISONER))) \
@@ -251,6 +271,39 @@ def test_in12_5_control_no_held_warrant_no_custody():
     assert _kinds(_fold(w, d, _act("a1", "arrest", WATCHMAN, WATCH, subject=PRISONER))) \
         == ["arrest.refused"]
     assert not _restraints(w)
+
+
+NOTARY = "off_notary"                          # an ISSUE-ONLY seat at `D`: grants `issue`, no `determine`
+
+
+def test_in12_5_a_warrant_from_an_issue_only_seat_opens_no_custody():
+    """`arrest` opens a custody only on an issuing seat whose live holder passes `may_determine` over the
+    prisoner -- the basis `pardon` closes under -- so it never opens a `detain` nothing can close. The
+    seat: `off_notary`, granting `issue` and not `determine` (`offices.yaml`'s issue-only seats' shape).
+    Folded at a PINNED winning band, so the refusal is the effect's and not a lost roll.
+    POSITIVE CONTROL, same world, one change: the Duke's warrant (`off_duke` grants `determine` and its
+    ground `D` holds the prisoner's `Hh`) is handed to the same watchman -- the arrest now takes the
+    Duke's warrant (the first whose seat could close it), opens `detain -> off_duke`, and the Duke's
+    `pardon` closes it. (`off_dicastery`, `scope_rung` None, is not a second arm: it cannot `issue` here
+    -- `issue.unauthorized` -- so no warrant of its exists to test.)"""
+    issuing = NOTARY
+    w, d = _world(pool_default=30)
+    w.offices[NOTARY] = Office(NOTARY, "Notary", "D", ["issue"], faction="Crown")
+    w.add_tenure(Tenure("t_issuer", FAR, issuing, "hold", since=0))
+    w.persons[FAR].ledger.append(Claim("c_far_knows", FAR, PRISONER, "exists:Person", 1, 0,
+                                       "firsthand", 100, "own"))
+    _warrant_to_watchman(w, d, issuer=FAR, seat=issuing, key="wx")
+    out = _fold_at(w, d, "Success", _act("a1", "arrest", WATCHMAN, WATCH, subject=PRISONER))
+    assert _kinds(out) == ["arrest.refused"], _kinds(out)
+    assert not _restraints(w), "a custody opened on a seat whose bench could never pardon it"
+    # CONTROL: the Duke's warrant, held beside the first -- the arrest opens on the seat that can close it
+    _warrant_to_watchman(w, d, key="w1")
+    out = _fold_at(w, d, "Success", _act("a2", "arrest", WATCHMAN, WATCH, subject=PRISONER))
+    assert _kinds(out) == ["arrest.made"], _kinds(out)
+    edge, = _restraints(w)
+    assert edge.live and edge.object == SEAT, edge
+    assert _kinds(_fold(w, d, _act("p1", "pardon", DUKE, SEAT, subject=PRISONER))) == ["detention.ended"]
+    assert not edge.live
 
 
 def test_in12_5_pardon_ends_a_revocation_ban_through_the_revoking_seat():
@@ -309,8 +362,12 @@ def test_in12_5a_a_hand_built_charge_a_petition_naming_it_and_a_witness_commit()
                    rec_id="rec:pt1")
     q = Question("q:charge", "claim_landed", ("rec:pt1",), None)
     # `commit` forms on the question's own referent (the petition, refused in the fold: no Proposition)
-    # and never on what the petition SAYS -- the charge
-    assert not [c for c in _formed(w, witness, q) if c.verb == "commit" and c.subject == "prop_charge"], \
+    # and never on what the petition SAYS -- the charge. POSITIVE CONTROL in the same call (§0.1 pt 3):
+    # the `commit` on `rec:pt1` H-227 cites DOES form, so the absence below is not an empty formation.
+    commits = [c for c in _formed(w, witness, q) if c.verb == "commit"]
+    assert [c for c in commits if c.subject == "rec:pt1"], \
+        f"CONTROL: no `commit` on the petition formed at all ({[c.subject for c in commits]})"
+    assert not [c for c in commits if c.subject == "prop_charge"], \
         "H-227 closed? a witness now forms `commit` on the charge from a held petition -- update the hole"
     out = _fold(w, d, _act("c1", "commit", witness, None, subject="prop_charge"))
     assert _kinds(out) == ["commitment.made"], _kinds(out)

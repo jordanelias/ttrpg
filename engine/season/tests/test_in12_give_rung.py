@@ -10,7 +10,8 @@ change away, so the cause is the widened object and nothing else:
   * what is NOT the actor's to cede is refused (`give.refused`, nothing moves): a rung somebody else
     holds, a rung nobody holds, a seat (the gate's `handover` is for non-seat holds), a receiver who is
     not present;
-  * the loosened cell still forms only on what a person holds (`own_hold_declines`).
+  * the loosened cell still forms only on what a person holds (`own_hold_declines`), observed through
+    the real `opening_set` on a held and an unheld rung.
 """
 import pytest
 
@@ -19,7 +20,8 @@ from engine.season.data.verbs import OWN_HOLD_DECLINES, VERB_TABLE
 from engine.season.harness import probes as P
 from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.queries.world_q import hold_force
-from engine.season.state.carriers import Act, Tenure
+from engine.season.state.carriers import Act, Question, Tenure
+from engine.season.tests.test_in10_record_operands import _formed, _knows
 
 GIVER, RECEIVER, FAR, OTHER = "p_low", "p_mid", "p_high", "p_other"
 RUNG = "S"                       # `tiny_world`'s settlement; p_high lives there, p_low and p_mid in `Hh`
@@ -110,11 +112,26 @@ def test_a_handed_record_still_earns_record_given_not_rung_ceded():
     assert hold_force(w, rid).subject == R0 and G0 != R0
 
 
+def _gives(w, pid, referent):
+    """The `give` Candidates `pid` FORMS on a question carrying `referent` -- the real `opening_set`."""
+    _knows(w.persons[pid], RECEIVER)
+    q = Question(f"q:give:{referent}", "claim_landed", (referent,), None)
+    return [c for c in _formed(w, pid, q) if c.verb == "give"]
+
+
 def test_the_loosened_cell_forms_only_on_what_a_person_holds():
     """The cell no longer asks the object's kind, so the person-side `held_by` reading
-    (`own_hold_declines`) is what keeps a gift of an unheld referent from forming. Control: the cell
-    still binds `held_by` of `subject` (the loader refuses the roster member otherwise)."""
+    (`own_hold_declines`, `decision/options.py::opening_set`'s narrowing) is what keeps a gift of an
+    unheld referent from forming. OBSERVED THROUGH FORMATION, one change apart: the same question about
+    the settlement `S` forms a `give` on it for the man who holds it, and none for the same man once
+    another holds it. MUTATION, run 2026-10-22: `opening_set`'s `if verb in OWN_HOLD_DECLINES` narrowing
+    deleted -> RED (the unheld arm forms a `give` on `S`), restored -> GREEN."""
     assert "give" in OWN_HOLD_DECLINES
     row = VERB_TABLE["give"]
     assert row.emits == ("record.given", "rung.ceded"), row.emits
     assert row.requires_typed.known_person_operands() == ("to",)
+    w, _ = _world(holder=GIVER)
+    held = _gives(w, GIVER, RUNG)
+    assert held and {c.subject for c in held} == {RUNG}, "CONTROL: no `give` forms on a held rung"
+    w, _ = _world(holder=OTHER)
+    assert _gives(w, GIVER, RUNG) == [], "a `give` formed on a rung the would-be giver does not hold"
