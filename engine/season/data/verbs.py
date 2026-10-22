@@ -53,7 +53,7 @@ from .requires import (
 )
 from .rosters import (
     COVERT_KINDS, DOMINANCE_KINDS, FOLD_KINDS, LOGGED_KINDS, GRADED_INQUIRIES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
-    VERB_CAPABILITY,
+    RESTRAINT_KINDS, VERB_CAPABILITY,
     is_event_kind,
     RUNG_KINDS, STRATA, TENURE_KINDS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
     roster_map,
@@ -573,6 +573,7 @@ def _load_verb_table() -> dict:
     doc = load_yaml(VERB_TABLE_YAML.read_text())
     out = {}
     _release_domain: frozenset = frozenset()
+    _closer_domains: dict = {}             # v9 IN-12 step 5: every OTHER row's declared `domain:`
     for r in doc["verbs"]:
         name = r["verb"]
         if name in out:
@@ -767,6 +768,8 @@ def _load_verb_table() -> dict:
                     "escapes it only while it names a carrier this row can hold.")
         if name == "release":
             _release_domain = frozenset(r.get("domain") or ())
+        elif "domain" in r:
+            _closer_domains[name] = frozenset(r.get("domain") or ())
         # The two keyed columns must agree on their band set, or a band writes with nothing to
         # report or reports with nothing written.
         if by_degree and emits_by_degree and set(by_degree) != set(emits_by_degree):
@@ -901,8 +904,9 @@ def _load_verb_table() -> dict:
         # MISSING is a failable clause with no kind -- the fold would reach `refusal_for` and raise;
         # EXTRA is a kind for a clause that cannot fail, read by nothing (`ID-13`). A name on a FLAT
         # row is refused for the same reason: nothing keys it. A CONTESTED row may key its refusals
-        # only to ONE kind: the seam's party gap (`loop/resolve.py::_refuse_party_gap`) is a refusal
-        # point this schema has no clause for, and it emits the union. ONE refusal names every
+        # only to ONE kind, unless it keys `COUNTERPARTY_CLAUSE` (below): the seam's party gap
+        # (`loop/resolve.py::_refuse_party_gap`) is a refusal point this schema has no clause for
+        # and emits the union, except where the row keys the counterparty clause, whose kinds it emits. ONE refusal names every
         # defect found, so a table edit that breaks three things is told all three.
         _names = row.requires_typed.conjuncts() if row.requires_typed is not None else ()
         if by_clause or _names:
@@ -924,9 +928,18 @@ def _load_verb_table() -> dict:
             # `ID-9` only if the union holds more than one kind -- a kind published for a conjunct
             # that did not fail. A contested row whose every key emits ONE kind (`tell`:
             # `news.untold` for `holds` and `hearer`) emits exactly that kind at the party gap too.
-            if (row.contests or _graded) and len(row.emits_on_refusal) > 1:
+            # ⚠ NARROWED AGAIN AT v9 IN-12 step 5 (#453 K-02, the party-gap fold edit): THE SEAM'S
+            # PARTY GAP IS THE COUNTERPARTY CLAUSE FAILING, so a row that KEYS `COUNTERPARTY_CLAUSE`
+            # emits that key's kinds there (`loop/resolve.py::_refuse_party_gap`) and not the union,
+            # and may key two kinds (`arrest`: `arrest.unauthorized` / `arrest.refused`). The rule
+            # still binds a contested or graded row that keys no counterparty. ⚠ S27.4's refusal (a
+            # pool under 1D) reaches the same point and takes the counterparty kind too [ASSUMPTION;
+            # medium; Jordan to correct; revert: this line without the `COUNTERPARTY_CLAUSE` test].
+            if ((row.contests or _graded) and len(row.emits_on_refusal) > 1
+                    and COUNTERPARTY_CLAUSE not in by_clause):
                 _defects.append("declares `contests:` or a `graded_inquiries` route, whose "
-                                "party-gap refusal no clause names, "
+                                "party-gap refusal no clause names, keys no `counterparty` "
+                                "refusal for it, "
                                 "and keys more than one refusal kind, so that refusal would emit "
                                 "kinds for conjuncts that did not fail")
             _after_fold = set(_names) & {ELIGIBILITY_CLAUSE, WRITE_CLAUSE, COUNTERPARTY_CLAUSE}
@@ -1020,6 +1033,36 @@ def _load_verb_table() -> dict:
             "(04 PART D row 15) requires them equal: a kind in the roster and not in this "
             "domain is an edge that can be opened and never closed, and a kind here and "
             "not in the roster is a closer for a relation that does not exist.")
+    # LOADER INVARIANT 6, THE CLOSER CLAUSE (v9 IN-12 step 5, #453 §8.2 `:1518-1520`): *"every kind
+    # outside `RELEASABLE_KINDS ∪ {contain, reside}` must sit in some row's declared `domain:`, read on
+    # every row"*. The check above compares `release`'s domain with `RELEASABLE_KINDS` and EXEMPTS every
+    # excluded kind, so a kind its holder may not release (`detain`, `ban`, `data/rosters.py::
+    # RESTRAINT_KINDS`) could be opened and closed by nobody and load clean -- ID-14 open for both
+    # until `pardon` (step 5) declared `[detain, ban]`. The kinds that end by a relocation stay exempt
+    # (`contain`, `reside`: `_eff_move`/`_eff_migrate` close the old edge as they open the new). The set
+    # that needs a declared closer is READ off `data/rosters.py`, never spelt: `RESTRAINT_KINDS`, the
+    # kinds excluded from `RELEASABLE_KINDS` because an AUTHORITY ends them -- today exactly the kinds
+    # outside `RELEASABLE_KINDS ∪ {contain, reside}`; no third excluded set can exist, because
+    # `RELEASABLE_KINDS` is DEFINED in `data/rosters.py` as `TENURE_KINDS` less that pair less
+    # `RESTRAINT_KINDS`. A declared closer naming a kind that needs none (a releasable kind -- `release`'s,
+    # a second closer of an edge whose holder ends it himself, T-m -- or no kind at all) is refused too:
+    # [ASSUMPTION; medium; Jordan to correct] an addition beyond #453 `:1518-1520`, which asks only that
+    # every restraint have a closer; revert: drop `_stray_domain` and its refusal.
+    _needs_closer = frozenset(RESTRAINT_KINDS)
+    _stray_domain = sorted((v, sorted(d - _needs_closer)) for v, d in _closer_domains.items()
+                           if d - _needs_closer)
+    if _stray_domain:
+        raise SystemExit(
+            f"verb_table.yaml: declared `domain:` member(s) {_stray_domain} name no kind that needs a "
+            f"declared closer ({sorted(_needs_closer)}). A `domain:` outside `release` closes a kind "
+            "its holder cannot release; a releasable kind is `release`'s, and a non-kind closes nothing.")
+    _unclosed = sorted(_needs_closer - frozenset().union(*_closer_domains.values()))
+    if _unclosed:
+        raise SystemExit(
+            f"verb_table.yaml: Tenure kind(s) {_unclosed} are restraints (`RESTRAINT_KINDS`: their "
+            "holder may not release them) and no row declares them in its `domain:`. #453 §8.2's "
+            "closer clause (loader invariant 6) -- a kind no act can close is an edge opened forever; "
+            "declare its closer's `domain:` (`pardon`: `[detain, ban]`).")
     # LOADER INVARIANT 6, SECOND HALF (`04 §B.13 #6`, `04:466-467`, `ID-14`): EVERY KIND'S OPENER
     # SET IS DECLARED. `_derive_openers_from_effects()` seeds every `TENURE_KINDS` member with an
     # empty list before it reads anything, so "a kind with no entry" is now impossible BY

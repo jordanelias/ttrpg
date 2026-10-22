@@ -49,7 +49,7 @@ from ..data import verbs as _verbs
 from ..data import affiliations as _aff
 from ..data.affiliations import AFFILIATION_CEILING, conviction_map, engagement
 from ..data.cast import STANCE_MAX
-from ..data.pursuits import to_axes
+from ..data.pursuits import pursuit_cosine_axes, to_axes
 from ..data.requires import (
     KNOWN_PERSON_CLAIM, REQUIRES_OPERANDS, REQUIRES_STEMS, SHORTFALL_PREDICATE, UNKNOWN,
     WORLD_ONLY_STEMS,
@@ -116,7 +116,8 @@ def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0) -> tuple:
     nothing, so a hidden actor stays hidden. A paired deed lands in `judged` or `told` by the deed
     claim's own `firsthand`, as every deed does.
     ⚠ THE SWORN-TO HALF SHIPS OFF (IN-58): `oblige` is a `World` Tenure read by a `world_q` reader and
-    this module reads a `PersonInterior` only. FACTION-LEVEL grievance is a named residue.
+    this module reads a `PersonInterior` only. FACTION-LEVEL grievance is v9 IN-70's: `opinion` here,
+    its World half and its referents in `world_q` (`opinion_of`, `opinion_referents`).
     [ASSUMPTION, H-192: a deed's claim subject is read as its doer for every other kind; the sum is
     unnormalised.] Person-side, no World (AX-2).
     ⚠ v9 SC-02 `22a`: WHICH claims are `referent`'s deeds is `attributed_deeds`' and WHAT each is worth
@@ -502,6 +503,50 @@ def stability(p: Person, rung: str, window) -> int:
                 if c.subject == rung and (
                     (is_deed(c) and c.predicate in UNREST_KINDS)
                     or str(c.predicate).partition(":")[0] == SHORTFALL_PREDICATE))
+
+def opinion_terms(p: Person, expected: dict, engaged: tuple, regarded: tuple, fx=None) -> tuple:
+    """`(pursuit, affiliation, regard)`: THE THREE TERMS OF `p`'s OPINION OF A FACTION, each on `[-1, +1]`
+    (v9 IN-70; RS-23, RS-24; ED-IN-0293 (6): *"a sympathy for a faction is an OPINION, computed at read
+    from convictions and allegiances"*). One ladder per quantity (`CLAUDE.md` §0.06 S): every term is
+    normalised by the owner that already normalises it, before the sum.
+
+      * `pursuit` -- `data/pursuits.py::pursuit_cosine_axes` of `p`'s projected pursuits
+        (`projected_axes`, the vector `world_q.attention_key`'s salience reads, at the same
+        `scar_weight_shift`) against `to_axes(expected)`, the faction's expected pursuit map
+        (`data/goals.py::expected`, IN-69's owner). Already a cosine. `None` -- a side with no
+        direction -- reads `0.0`, the salience precedent.
+      * `affiliation` -- the mean, over the `(affiliation, sign)` pairs in `engaged` (the poles the
+        faction's own goals engage, and the side each takes; the caller reads them), of
+        `sign * intensity / AFFILIATION_CEILING`: `p`'s held intensity on that pole (a held 0 and an
+        absent pole read alike, 0) over the spine's ceiling. `0.0` for no pole. A
+        MEAN, not a sum, so the term stays on `[-1, +1]` however many poles a faction engages.
+      * `regard` -- the mean, over the persons in `regarded` (the faction's head and the doers `p`'s
+        own ledger names who are live members of it; the caller reads them, and membership is world truth), of `clamp(regard(p, x, fx) / STANCE_MAX,
+        -1, 1)` -- `regard`, the one owner, normalised exactly as `decision/options.py::teller_weight`
+        normalises it. `0.0` for nobody.
+
+    PERSON-SIDE, NO WORLD (`04` §A.2: `person_q` reads a `PersonInterior` only): WHO the faction's head
+    and members are, what it expects and which poles its goals engage are the caller's to read
+    (`world_q.opinion_of`), and arrive here as plain values. Nothing is stored (A-29, T-a)."""
+    shift = fx.get("scar_weight_shift") if fx is not None else 0.0
+    cosine = pursuit_cosine_axes(projected_axes(p, shift), to_axes(expected or {}))
+    held = p.conviction or {}
+    aff = (sum(sign * held.get(name, 0) / AFFILIATION_CEILING for name, sign in engaged) / len(engaged)
+           if engaged else 0.0)
+    reg = (sum(max(-1.0, min(1.0, regard(p, x, fx) / STANCE_MAX)) for x in regarded) / len(regarded)
+           if regarded else 0.0)
+    return (0.0 if cosine is None else cosine), aff, reg
+
+
+def opinion(p: Person, expected: dict, engaged: tuple, regarded: tuple, fx=None) -> float:
+    """`p`'s OPINION OF A FACTION, on `[-3, +3]`: the sum of `opinion_terms` (v9 IN-70). `0` is
+    indifference -- each term's own midpoint -- so the sign is the side. Computed when asked, never
+    written (A-29, T-a). Person-side; the World half is `world_q.opinion_of`. Added left to right, not
+    by `sum()`, whose float summation is compensated since Python 3.12: one order, one number. (The
+    means inside `opinion_terms` use `sum()`; the value is consumed only as `< 0`, so a last-ulp
+    difference between Python versions matters only at exact cancellation.)"""
+    pursuit, affiliation, reg = opinion_terms(p, expected, engaged, regarded, fx)
+    return pursuit + affiliation + reg
 
 
 def violated_pursuits(p: Person, verb: str) -> tuple:

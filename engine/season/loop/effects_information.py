@@ -1,6 +1,6 @@
 """`season.loop.effects_information` -- records, propositions, matters: create_record, issue,
-covenant, conceal, open_case, carry, determine, argue, petition, survey, forge, give, destroy_record, utter,
-commit.
+covenant, conceal, open_case, carry, determine, argue, petition, survey, forge, give, seize, arrest,
+destroy_record, utter, commit.
 
 EXTRACTED from `effects.py` at the per-subsystem split (Phase 4). Holds the document/proposition/
 matter cluster: the one mint (`_mint_document`) that `create_record`, `issue`, `petition` and
@@ -18,23 +18,25 @@ from typing import Optional
 from ..data.arrangements import ARRANGEMENTS
 from ..data.matrix import matrix_row
 from ..data.requires import RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS
-from ..data.rosters import COVER_KEY, COVER_KIND, MARCH_TARGET_KINDS, RECORD_CONTENT, RECORD_KIND_KEYS
+from ..data.rosters import COVER_KEY, COVER_KIND, RECORD_CONTENT, RECORD_KIND_KEYS
 from ..data.verbs import VERB_TABLE, WARRANT_SOURCED
 from ..queries import faction_q
 from ..queries.person_q import ABOUT_KEYS, argued_pursuits, consequence_pursuits
 from ..queries.world_q import (
     BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_PETITION, docketed, docketed_under,
-    faction_holding, faction_of, hold_force, holder_faction_of, mustered, place_of, slot_for,
-    works_for, works_target,
+    faction_holding, faction_of, hold_force, place_of, restrained,
+    slot_for, works_for, works_target,
 )
+from ..state.attribution import causing_act
 from ..state.carriers import Proposition, Record, Tenure
 from ..state.carriers import DETERMINED_BY
 from ..state.gate import (
-    DISPOSABLE_KINDS, NO_CHANGE, UNDECLARED_DISPOSAL, Change, Subject, may_seize, seat_faction,
+    DISPOSABLE_KINDS, NO_CHANGE, UNDECLARED_DISPOSAL, Change, Subject, may_determine, may_seize,
+    may_warrant,
 )
 from ..state.ids import H
 
-from .effects_shared import _new_oblige_term, _operand, effect_for
+from .effects_shared import _new_oblige_term, _operand, effect_for, occupying_faction
 
 # v9 SC-02 `22b` step 24: the kind a pursuit write earns, read off its matrix row (`write_matrix.yaml`
 # `(Person, pursuits)`, `emits:`), never spelt here; a row emitting other than one kind fails at import.
@@ -785,6 +787,11 @@ def _eff_forge(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     return _mint_sheet(w, a, forged=True)
 
 
+# The kind each half of `give` earns: the `give` row's `emits:` in its declared order (`verb_table.yaml`,
+# Record then Rung), read off the table so neither kind is spelt here -- `_SEIZED_RECORD`'s shape.
+_GIVEN_RECORD, _GIVEN_RUNG = VERB_TABLE["give"].emits
+
+
 @effect_for("give")
 def _eff_give(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """Plan position 16 (`H-84`): the actor's `hold` on the Record ENDS and the receiver's OPENS, in
@@ -806,8 +813,13 @@ def _eff_give(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     row's typed cell (`with`, plan position `14`, which retired `_req_give`), and not the giver is
     the fold's `counterparty` clause.
 
+    v9 IN-12 (`give` + Rung, #453 §9.6): THE OBJECT MAY BE A RUNG -- a CESSION, the one consensual route by
+    which title moves. Same two-hold write, same gate basis (`handover` is general over every non-seat
+    `hold`); the kind earned is `rung.ceded` there and `record.given` for a Record. A rung whose `hold` the
+    actor does not carry (nobody holds it, or somebody else does) declines, as a Record does.
+
     G4 -- WHAT IT NAMES: the two edges, OPENED FIRST as `_eff_confer` names them. Both are `edge`
-    subjects the tenure diff judges, and both earn the row's one kind, `record.given`. The receipts
+    subjects the tenure diff judges, and both earn the object's kind (`record.given`, or `rung.ceded`). The receipts
     therefore name TENURES, not the Record -- `_eff_confer`'s lesson on what a receipt may assert --
     and every reader that wants the Record goes through `epistemic._hold_tenure_ends`, which is
     `claim_subjects`' and `seen_subject`'s route and, since this position, WITNESS's deposit rule's.
@@ -816,7 +828,17 @@ def _eff_give(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     inside one tick would otherwise re-mint A's first `hold` id, and two Tenures sharing an id is
     what `World._tenure_changes` tolerates rather than wants."""
     rid, to = _operand(a, "subject"), _operand(a, "to")
-    held = hold_force(w, rid) if rid in w.records else None
+    # v9 IN-12 (`give` + Rung, #453 §9.6): THE OBJECT IS A RECORD OR A RUNG, and the cell no longer says
+    # which (the grammar has no disjunction), so the kind is asked HERE. Anything else -- a seat, a person
+    # -- declines (`NO_CHANGE` -> `give.refused`); the gate's `handover` would refuse a seat regardless.
+    # The kind earned follows the object: a ceded rung publishes `rung.ceded`, never `record.given`.
+    if rid in w.records:
+        earns = _GIVEN_RECORD
+    elif rid in w.rungs:
+        earns = _GIVEN_RUNG
+    else:
+        return NO_CHANGE
+    held = hold_force(w, rid)
     if held is None or held.subject != a.actor:
         return NO_CHANGE
     nt = Tenure(H(w.world_seed, w.tick, to, f"hold:{rid}:{a.id}"), to, rid, "hold", since=w.tick)
@@ -824,30 +846,36 @@ def _eff_give(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     def perform() -> None:
         held.until = w.tick                # the giver's release, FIRST
         w.add_tenure(nt)                   # then the receiver's hold
-    return Change((Subject.edge(nt), Subject.edge(held)), perform)
+    return Change((Subject.edge(nt, earns), Subject.edge(held, earns)), perform)
 
 
-# WHICH RECORD KIND IS A WARRANT FOR `seize`, and WHICH OF ITS CONTENT KEYS NAMES WHAT IT AUTHORIZES:
-# the kind is `data/verbs.py::WARRANT_SOURCED`'s (`rosters.yaml: warrant_sourced`, the one loader both the
-# person side and this one import), the key `person_q.ABOUT_KEYS`' (the one owner of "what a document is about"),
-# never spelt here.
-_SEIZE_WARRANT_KIND = WARRANT_SOURCED["seize"]
-_SEIZE_WARRANT_KEY = ABOUT_KEYS[_SEIZE_WARRANT_KIND]
-
-
-def _held_warrant_names(w: "World", actor: str, rid: str) -> bool:
-    """DOES A WARRANT THE ACTOR HOLDS NAME RECORD `rid`? -- a live `hold` of his own on a Record of the
-    warrant kind (`rosters.yaml: warrant_sourced`) whose `_SEIZE_WARRANT_KEY` content says `rid`. World-side:
-    the effect owns the licence because the gate never reads a Record's content (K-52); the person-side
-    twin is `decision/options.py::opening_set`'s formation on the same reading, off his own ledger."""
+# WHICH RECORD KIND IS A WARRANT FOR A VERB, and WHICH OF ITS CONTENT KEYS NAMES WHAT IT AUTHORIZES: the
+# kind is `data/verbs.py::WARRANT_SOURCED`'s (`rosters.yaml: warrant_sourced`, the one loader both the person
+# side and this one import), the key `person_q.ABOUT_KEYS`' (the one owner of "what a document is about"),
+# never spelt here. v9 IN-12 step 5: `arrest` reads the same map, so the reading is one function for both.
+def _held_warrants(w: "World", actor: str, verb: str, named: str) -> tuple:
+    """THE WARRANTS THE ACTOR HOLDS NAMING `named`, for `verb` -- the ids of the Records on his own live
+    `hold` edges whose kind is `verb`'s warrant kind (`rosters.yaml: warrant_sourced`) and whose
+    about-key content says `named`, in tenure order. World-side: the effect owns the licence because the
+    gate never reads a Record's content (K-52); the person-side twin is `decision/options.py::
+    opening_set`'s formation on the same reading, off his own ledger."""
+    kind = WARRANT_SOURCED[verb]
+    key = ABOUT_KEYS[kind]
+    out = []
     for t in w.tenures:
         if t.kind != "hold" or not t.live or t.subject != actor or t.object not in w.records:
             continue
         rec = w.records[t.object]
         sm = rec.subject_matter
-        if rec.kind == _SEIZE_WARRANT_KIND and isinstance(sm, dict) and sm.get(_SEIZE_WARRANT_KEY) == rid:
-            return True
-    return False
+        if rec.kind == kind and isinstance(sm, dict) and sm.get(key) == named:
+            out.append(t.object)
+    return tuple(dict.fromkeys(out))
+
+
+def _held_warrant_names(w: "World", actor: str, rid: str) -> bool:
+    """DOES A WARRANT THE ACTOR HOLDS NAME RECORD `rid`? -- `seize`'s licence (IN-12 step 6), read
+    through `_held_warrants`, the one reading `arrest` shares."""
+    return bool(_held_warrants(w, actor, "seize", rid))
 
 
 # The kind each half earns: the `seize` row's `emits:` in its declared order (`verb_table.yaml`, Record
@@ -945,9 +973,8 @@ def _seize_rung(w: "World", a: "Act", rid: str) -> Change:
     dispensation's `terms` names the rung (`rosters.yaml: warrant_sourced`; `test_season_shape.py` plants
     one on a hearth), but at the effect it licenses on OCCUPATION, not on the warrant. No computed source
     of such a warrant has been measured -- a named residue, not a wiring gap in this effect."""
-    rung = w.rungs.get(rid)
-    mine = seat_faction(w, a.via)
-    if rung is None or rung.kind not in MARCH_TARGET_KINDS or mine is None:
+    mine = occupying_faction(w, a.via, rid)
+    if mine is None:
         return NO_CHANGE
     # The title written is the ACTOR'S OWN hold, and a hold coheres under the faction its holder is
     # committed to (`faction_holding`; `None` for no commit or two): an actor not committed to the seat's
@@ -955,14 +982,73 @@ def _seize_rung(w: "World", a: "Act", rid: str) -> Change:
     # revert: drop the decline].
     if faction_holding(w, a.actor) != mine:
         return NO_CHANGE
-    holder = holder_faction_of(w, rid)
-    if holder is None or holder == mine or not mustered(w, rid, mine):
-        return NO_CHANGE
     held = hold_force(w, rid)
     if held is not None and (held.subject == a.actor
                              or not may_seize(w, a.actor, a.via, held.subject, rid)):
         return NO_CHANGE
     return _take_hold(w, a, rid, held, _SEIZED_RUNG)
+
+
+def _issuing_seat(w: "World", rid: str) -> Optional[str]:
+    """THE SEAT THAT ISSUED THE WARRANT `rid` -- the `via` of the Act that caused the Record's CREATING
+    Event (#453 §9.1 / K-52: *"read through `state/attribution.py::causing_act` on the warrant Record's
+    creating Event -- that Act's `via`"*), or `None` when no Event wrote it (a hand-planted Record), no
+    act caused that Event, or the act exercised no seat the world still holds. The creating Event is the
+    FIRST in the log whose changes name the Record (`loop/matter.py`'s `prior` reads the last, for a
+    different question)."""
+    made = next((e for e in w.log if any(c.subject == rid for c in e.changes)), None)
+    act = causing_act(w, made) if made is not None else None
+    via = getattr(act, "via", None)
+    return via if via in w.offices else None
+
+
+def _may_close_custody(w: "World", seat: str, prisoner: str) -> bool:
+    """Could the seat's LIVE HOLDER close a `detain` the prisoner owns on it -- `may_determine`, the
+    predicate `state/gate.py`'s `determination` clause closes a restraint under (`pardon`'s basis)? An
+    unheld seat closes nothing."""
+    held = hold_force(w, seat)
+    return held is not None and may_determine(w, held.subject, seat, prisoner)
+
+
+@effect_for("arrest")
+def _eff_arrest(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """v9 IN-12 step 5 (#453 §9.1, the `arrest` row): A `detain` EDGE OPENS, the prisoner (the act's
+    `subject`) -> THE SEAT THAT ISSUED THE WARRANT the actor holds naming him (`_issuing_seat`, K-17/K-52):
+    the enforcement seat (`Act.via`) acts but does not own the custody, so the issuing seat's bench is
+    who may `pardon` it (`state/gate.py`'s `determination` closes a restraint only through the seat that
+    is its object). The row is contested (`a standing`); the fold calls this body on `Overwhelming`,
+    `Success` and `Partial` only, each opening the same edge (#453: no degraded magnitude for an edge).
+
+    WHAT LICENSES IT, IN THE ORDER IT IS ASKED, each one owner of its rule: (1) the subject is a person
+    and not already in custody (`world_q.restrained`, the restraint's one read -- one live `detain` per
+    prisoner, #453 §8.1 Custody [ASSUMPTION; medium; Jordan to correct; revert: a second bench's
+    warrant opens a second custody, "relaxation to the secular arm"]); (2) the actor HOLDS A WARRANT
+    NAMING HIM (`_held_warrants`, `seize`'s reading); (3) the warrant's issuing seat is readable
+    (`_issuing_seat`) AND ITS LIVE HOLDER COULD CLOSE THE CUSTODY (`may_determine` over the prisoner,
+    the gate's own predicate for `determination`, which `pardon` closes under): a custody is opened only
+    on a seat whose bench could `pardon` it, so a warrant from an issue-only seat, or from a seat whose
+    ground does not hold the prisoner, opens nothing
+    [ASSUMPTION; medium; Jordan to correct; revert: arrest opens a custody on any issuing seat and a
+    custody nothing can close is a recorded limit]; (4) the exercised seat may take him (`may_warrant`,
+    the gate's own predicate, so an act the precondition admitted is never killed at the gate). Anything
+    else declines (`NO_CHANGE` -> `arrest.refused`, the `write` clause). Several warrants: the first in
+    tenure order whose issuing seat is readable and could close it.
+
+    THE GATE: `warrant` (`state/gate.py`: an opened `detain` whose object is a seat, owned by another
+    person, by a seat granted `WARRANT_ACT` whose purview reaches his home). The kind is a LITERAL so
+    `data/verbs.py::_derive_openers_from_effects` reads `arrest` as a `detain` opener.
+    G4 -- WHAT IT NAMES: the edge, which always moves (absent -> present)."""
+    prisoner = _operand(a, "subject")
+    if prisoner not in w.persons or prisoner == a.actor or restrained(w, prisoner, DETAIN_KIND):
+        return NO_CHANGE
+    seat = next((s for s in (_issuing_seat(w, rid)
+                             for rid in _held_warrants(w, a.actor, a.verb, prisoner))
+                 if s is not None and _may_close_custody(w, s, prisoner)), None)
+    if seat is None or not may_warrant(w, a.actor, a.via, prisoner):
+        return NO_CHANGE
+    nt = Tenure(H(w.world_seed, w.tick, prisoner, f"detain:{seat}:{a.id}"), prisoner, seat, "detain",
+                since=w.tick)
+    return Change((Subject.edge(nt),), lambda: w.add_tenure(nt))
 
 
 @effect_for("destroy_record")

@@ -57,7 +57,10 @@ from .test_season_shape import _wd_arm9
 # `total` (36, 8) -- the graded inquiries and the skip arm (a refused inquiry deposits nothing). A
 # re-record of the control, read off this test's own failing assertion. Re-read: control (36, 8), 0.5 ->
 # (36, 9), 1 -> (35, 11); the shifted arm still rises above the control as a rate (11/35 > 8/36).
-_BASELINE_TOTAL = (36, 8)
+# 36/8 -> 36/7, v9 IN-12 `give` + Rung (B-R): `give` no longer forms on a referent its asker does not
+# hold, the same move `test_season_shape.py`'s `wd_a_fork` records for `total` (36, 7). A re-record of
+# the control, read off this test's own failing assertion in CI run 1 of B-R (control (36, 7)).
+_BASELINE_TOTAL = (36, 7)
 
 
 def _person(pursuits: dict, scar: dict) -> Person:

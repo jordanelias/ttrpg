@@ -719,9 +719,23 @@ def _refuse_party_gap(self, w: "World", a: Act) -> list:
     `_refuse_after_the_fact`) -- found missing in the M4 review pass's own correctional
     round: a verb with an empty `emits_on_refusal:` (or a hand-built Act naming no real
     verb row at all) produced ZERO Events here, a silent drop, where every other refusal
-    path in this module already falls back."""
+    path in this module already falls back.
+
+    ⚠ v9 IN-12 step 5 (#453 K-02, the party-gap fold edit): THE PARTY GAP IS THE COUNTERPARTY CLAUSE
+    FAILING, so a row that KEYS `COUNTERPARTY_CLAUSE` emits `row.refusal_for(COUNTERPARTY_CLAUSE)` here
+    and not its union -- which is what lets a contested keyed row carry two kinds (`arrest`), and the
+    loader's contested-row rule narrows to rows that key no counterparty (`data/verbs.py`). Every row
+    keying it before this edit (`determine`, `tell`; `issue` keys it too but is not contested, so it never reaches this body) keys ONE kind, equal to its union, so none moves.
+    S27.4's refusal (a pool under 1D, `ContestRefused` `REFUSED`) reaches this body too and takes the
+    counterparty kind [ASSUMPTION; medium; Jordan to correct; revert: the union, always]."""
     row = VERB_TABLE.get(a.verb)
-    kinds = _demand_earned(w, a, row.emits_on_refusal if row is not None else (), False) or (FOLD_REFUSED,)
+    if row is None:
+        declared = ()
+    elif COUNTERPARTY_CLAUSE in row.refusals_by_clause:
+        declared = row.refusal_for(COUNTERPARTY_CLAUSE)
+    else:
+        declared = row.emits_on_refusal
+    kinds = _demand_earned(w, a, declared, False) or (FOLD_REFUSED,)
     produced = _act_events(self, w, a, kinds)  # `_act_events` owns the id scheme (§8)
     for _e in produced:
         self.act_of[_e.id] = a

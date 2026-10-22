@@ -880,14 +880,19 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     their row: `rosters.py` 2 (`check_fold_kinds`, loader invariant 7's fold half; `check_logged_kinds`,
     the kinds MATTER logs with no write behind them), `verbs.py` 3 (`derive_event_kinds`' two,
     invariant 7's derivation; the flat-row refusal, invariant 4's flat half). Falsifier: `test_sc02_typed_ids_and_loader.py` plants each and the load raises
-    naming it."""
+    naming it.
+
+    ⚠ 79 -> 81, v9 IN-12 step 5, TWO NEW LOAD-TIME REFUSALS in `verbs.py`, both loader invariant 6's
+    CLOSER CLAUSE (#453 §8.2): a restraint kind no row's `domain:` declares, and a `domain:` naming a kind
+    that needs no declared closer. Falsifier: `test_in12_arrest.py::
+    test_in12_5_the_closer_clause_is_green_only_while_pardon_declares_detain_and_ban` plants each."""
     mods = _model_modules()
     # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- see the sibling assertion above]
     assert len(mods) >= 8, f"model set collapsed to {len(mods)} — this guard would pass vacuously"
     total = sum(_code_only(m.read_text()).count("raise SystemExit") for m in mods)
     # [JUSTIFIED: a MEASURED PROPERTY OF THIS PACKAGE, not a game value -- the load-time refusals counted across the model set, and the point of pinning it is that a move must not drop one]
-    assert total == 79, (
-        f"{total} load-time exits across the model set, expected 79. Per file: "
+    assert total == 81, (
+        f"{total} load-time exits across the model set, expected 81. Per file: "
         + ", ".join(f"{m.name}={_code_only(m.read_text()).count('raise SystemExit')}"
                     for m in mods if _code_only(m.read_text()).count("raise SystemExit")))
 
@@ -2303,12 +2308,13 @@ def test_invariant_12_refuses_a_degree_keyed_emits_with_nothing_to_key_it_on():
     # `repudiate` CUT (v9 IN-11, #453 R-3 (b)), a re-record; 45 -> 46, `seize` (v9 IN-12 step 6, the
     # Record half), a re-record; 46 -> 47, `covenant` (v9 IN-12 step 7), a re-record; 47 -> 51, `argue`,
     # `sabotage`, `tend`, `train` (v9 IN-12 step 9), a re-record; 51 -> 52, `conceal` (v9 IN-12 step 10), a
-    # re-record; 52 -> 53, `forgive` (v9 IN-12 step 13), a re-record. This
+    # re-record; 52 -> 53, `forgive` (v9 IN-12 step 13), a re-record; 53 -> 55, `arrest` and `pardon`
+    # (v9 IN-12 step 5), a re-record; 55 -> 56, `raze` (v9 IN-12 step 11), a re-record. This
     # is a CONTROL, not a claim about
     # the roster: its job is to fail if the loader started refusing everything, so it moves with
     # the table by construction and the number is read from the file rather than chosen.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen -- the control that stops both arms above passing on a loader that refuses everything]
-    assert len(VERBS._load_verb_table()) == 53
+    assert len(VERBS._load_verb_table()) == 56
 
 
 def test_w2_a_planted_write_to_an_unruled_field_raises_and_names_the_pair():
@@ -6304,9 +6310,14 @@ def test_the_generic_remit_seats_every_office_and_unblocks_the_nine():
     #  v9 IN-12 step 6 added a twelfth: `seize` is `remit:issue`-eligible (#453 §9.1, `requisition`'s act).
     #  Re-recorded by outcome: 11 -> 12, the one row that moved.
     #  v9 IN-12 step 7 added a thirteenth: `covenant` is `remit:issue`-eligible only (#453 §9.2, K-14).
-    #  Re-recorded by outcome: 12 -> 13, the one row that moved.]
-    assert len(gov) == 13, (f"{len(gov)} verbs carry a `remit:` alternative; expected H-71's nine "
-                            "plus march plus transfer plus seize plus covenant")
+    #  Re-recorded by outcome: 12 -> 13, the one row that moved.
+    #  v9 IN-12 step 5 added two: `arrest` (`remit:dispatch`, #453 §9.1, `WARRANT_ACT`) and `pardon`
+    #  (`remit:determine`, #453 §9.1). Re-recorded by outcome: 13 -> 15, the two rows that moved.
+    #  v9 IN-12 step 11 added one: `raze` (`remit:dispatch`, #453 §9.2, `march`'s act). Re-recorded by
+    #  outcome: 15 -> 16, the one row that moved.]
+    assert len(gov) == 16, (f"{len(gov)} verbs carry a `remit:` alternative; expected H-71's nine "
+                            "plus march plus transfer plus seize plus covenant plus arrest plus pardon "
+                            "plus raze")
     formable = set()
     for t in held:
         p = w.persons.get(t.subject)
@@ -6820,7 +6831,11 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     # v9 IN-12 step 10: (11, 11) -> (13, 13), a re-record with the unit that moved it: `conceal` mints a
     # `cover` Record with the mint's stages, a new act and new `term.matured` links in the act mix. The
     # two arms are still EQUAL, so the depth clause is still not discriminating (not walked, as above).
-    assert (depths[3], depths[6]) == (13, 13), (
+    # v9 IN-12 `give` + Rung: (13, 13) -> (9, 9), a re-record with the unit that moved it: `give` no longer
+    # forms on a referent its asker does not hold (the cell dropped `existence`, and `give` joined
+    # `own_hold_declines`), so this world's act mix moved. The two arms are still EQUAL (the read is
+    # `{0: 0, 3: 9, 6: 9}`), so the depth clause is still not discriminating (not walked, as above).
+    assert (depths[3], depths[6]) == (9, 9), (
         f"the maturation depth ceiling moved: {depths}. This is a MEASUREMENT of a mixed chain "
         "whose length the act mix sets, not a discriminator — `H-80`'s discriminator is the COUNT, "
         "asserted below and still live. Re-pin these two numbers with the unit that moved them. "
@@ -6880,7 +6895,8 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     # [GROUNDED: re-measured at IN-50 -- the five-season chain reads 11 against the seven-season arm's 12 (`depths[3]`, re-pinned above), 8 and 9 at its base `2a2ed152`; refusals now cite their occasion (`_act_events`), so both chains lengthen, and the RELATION still holds. WALKED at the B-I close: the five-season chain is the seven-season 3-stage chain above less its last `term.matured` (`record.created, restore.refused, kill.refused, record.created, term.matured, record.created, finding.none, record.created, record.created, term.matured, term.matured`), through `record.created` and the two IN-50 refusal links]
     # [GROUNDED: re-measured at v9 FI-01 -- the five-season chain reads 9 against the seven-season arm's 11 (`depths[3]`, re-pinned above), moved by the same unit (the graded inquiries and the skip arm: the B-I walk above ran through a `finding.none`); the RELATION still holds]
     # [GROUNDED: re-measured at v9 IN-12 step 10 -- the five-season chain reads 11 against the seven-season arm's 13 (`depths[3]`, re-pinned above), moved by the same unit (`conceal`'s `cover` Records and their stages in the act mix); the RELATION still holds]
-    assert max(depth5(e) for e in mats5) == 11 < depths[3], (
+    # [GROUNDED: re-measured at v9 IN-12 `give` + Rung -- the five-season chain reads 7 against the seven-season arm's 9 (`depths[3]`, re-pinned above), moved by the same unit (`give` no longer forming on a referent its asker does not hold, the act mix); the RELATION still holds]
+    assert max(depth5(e) for e in mats5) == 7 < depths[3], (
         f"the longest maturation chain over FIVE seasons is {max(depth5(e) for e in mats5)}, not "
         "the 9 measured under `U2`, or it is not below the seven-season figure above. The ceiling "
         "MOVING with the season count is what makes the 3-stage and 6-stage arms saturated there "
@@ -7839,7 +7855,15 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # is refused in none; every verb executing at the base still executes (per-world counts move by a few:
     # accept 107 -> 108, challenge 81 -> 80, give 1 -> 4, interview 5 -> 4, release 1 -> 2, research
     # 13 -> 16, transfer 41 -> 40).
-    assert ever == {"accept", "challenge", "conceal", "create_record", "interview", "fight",
+    # ⚠⚠ v9 IN-12 `give` + Rung, 18 -> 19: `carry` JOINS, nothing leaves. A RE-RECORD WITH ITS REASON AND ITS
+    # LIMIT: `give`'s cell dropped its `existence` conjunct and `give` joined `own_hold_declines`, so `give`
+    # forms only on a referent its asker holds. MEASURED by `corpus_run.run_case` over the 143 live worlds,
+    # seed 0, base tree (`68eaaa41`) as control: `give` is refused in 55 worlds -> 6 and executes in 4 -> 6
+    # (every executed one is a Record; no `rung.ceded` in any world); `carry` executes in 0 -> 1 (ARC-34) --
+    # the act mix the vanished refusals freed, not `carry`'s own cell, which this change does not touch.
+    # Other per-world counts move by one or three (conceal 91 -> 92, fight 1 -> 2, research 16 -> 17,
+    # surveil 65 -> 66, tell 91 -> 88, transfer 40 -> 39, utter 117 -> 118).
+    assert ever == {"accept", "carry", "challenge", "conceal", "create_record", "interview", "fight",
                     "give", "issue", "move", "petition", "reconstruct", "release", "research",
                     "surveil", "tell", "tend", "transfer", "utter"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
@@ -7988,8 +8012,10 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # non-person referent) or, admitted on a person, at its effect: the subject holds no vocation (J-13
     # (iii)'s write clause) -- in NPC-088 too, where Carin (`{copying: 3}`) is never the subject of her own
     # attempted `train`. Each executes from a hand-built world (`test_in12_step9.py`). A re-record, said so.
+    # ⚠⚠ v9 IN-12 `give` + Rung: `carry` LEAVES (it executes in ARC-34; the executed-set note at
+    # `test_the_corpus_runs_and_the_ranking_cannot_discriminate`'s `ever`). A re-record, said so.
     assert refused_only == {"build", "found", "work", "survey", "commit",
-                            "restore", "forge", "carry", "seize", "covenant", "sabotage", "train"}, (
+                            "restore", "forge", "seize", "covenant", "sabotage", "train"}, (
         f"the always-refused set moved to {sorted(refused_only)}. `move` and `transfer` left it "
         "when `W-C` closed `H-94`'s structural half — the Candidate carries operands now — and "
         "`work` stays for a reason about the corpus's questions rather than about the channel")
@@ -8531,7 +8557,16 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
         # (the `ever` note's counts). THE SAME-BREATH CHECK: `conceal` is not universal (91 < 143), the
         # universal set stays empty, and the status census is UNMOVED (103 RUNS-UNDECLARED · 40
         # SPAN-UNAUTHORED, `python -m engine.season.harness.corpus_run`).
-    assert len(by_sig) == 120, (
+        # ⚠⚠ **120 -> 123, v9 IN-12 `give` + Rung, MEASURED BY `corpus_run.run_case`, seed 0, AGAINST THE BASE TREE
+        # (`68eaaa41`) AS CONTROL, which reads 120.** THE UNIT AND THE DIRECTION: variety ROSE by three; `give`
+        # forms only on a referent its asker holds, so the 55 worlds where it was formed and refused re-rank
+        # by the scenes it no longer spends, and `carry` executes in one (ARC-34). Executed-world counts
+        # `give` 4 -> 6, `conceal` 91 -> 92, `fight` 1 -> 2, `reconstruct` 131 -> 132, `research` 16 -> 17,
+        # `surveil` 65 -> 66, `utter` 117 -> 118, `tell` 91 -> 88, `transfer` 40 -> 39, `carry` 0 -> 1. THE
+        # SAME-BREATH CHECK: no verb became universal (the largest, `reconstruct`, is 132 < 143), the status
+        # census is UNMOVED (103 RUNS-UNDECLARED · 40 SPAN-UNAUTHORED, the run above), and `refused_only`
+        # lost `carry` for its own reason (its note).
+    assert len(by_sig) == 123, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -8720,7 +8755,9 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # ⚠⚠ v9 SC-01 step 12: `speak` LEAVES -- the `ever` and `by_sig` notes above (79 worlds -> 0).
     # ⚠⚠ v9 IN-12 step 9: `tend` JOINS -- the `ever` note above (it executes in some worlds, not all).
     # ⚠⚠ v9 IN-12 step 10: `conceal` JOINS -- the `ever` note above (91 worlds of 143, not all).
-    assert varying == {"accept", "challenge", "conceal", "create_record", "fight", "give",
+    # ⚠⚠ v9 IN-12 `give` + Rung: `carry` JOINS -- the `ever` note above (one world of 143, ARC-34, so it
+    # varies and is not universal).
+    assert varying == {"accept", "carry", "challenge", "conceal", "create_record", "fight", "give",
                        "interview", "issue", "move",
                        "petition", "reconstruct", "release", "research",
                        "surveil", "tell", "tend", "transfer", "utter"}, (
@@ -8918,10 +8955,20 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # one: MEASURED through `build_at` and `run_case` at seed 0 (scratch, not kept) -- 0 negative rows at
     # build in the 86 worlds that build, and 0 `forgive` Candidates out of 280198 formed across the whole
     # run (`march`, the one runtime writer, is never attempted here, H-175). 16 -> 17.
+    # ⚠ v9 IN-12 step 5: `arrest` and `pardon` JOIN -- MEASURED by `python -m engine.season.harness.corpus_run`
+    # at seed 0 (`WHERE THE 55 GO`: never attempted), not diagnosed per case. `arrest` forms only on a person a
+    # HELD dispensation names (`rosters.yaml: warrant_sourced`), `seize`'s formation; `pardon` is
+    # `remit:determine`-eligible, `determine`'s and `open_case`'s remit. A named residue of the step's EXIT
+    # (R-05), re-recorded by outcome: 17 -> 19.
+    # ⚠ v9 IN-12 step 11: `raze` JOINS -- MEASURED by `python -m engine.season.harness.corpus_run` at seed 0
+    # (`WHERE THE 56 GO`: never attempted). It is `remit:dispatch`-eligible and forms on a Rung referent,
+    # `march`'s eligibility and cell, and `march` is never attempted here either (H-175). A named residue
+    # of the step's EXIT (R-05; `hole_register.yaml` H-228), re-recorded by outcome: 19 -> 20.
     assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish",
                                               "destroy_record", "march", "oblige", "open_case",
                                               "determine", "comply", "migrate", "requisition",
-                                              "speak", "examine", "dispatch", "argue", "forgive"}, (    # IN-57: `dispatch` out, to `refused_only`; FI-01: back
+                                              "speak", "examine", "dispatch", "argue", "forgive",
+                                              "arrest", "pardon", "raze"}, (    # IN-57: `dispatch` out, to `refused_only`; FI-01: back
         f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Five of "
         "the original six are the governance verbs no corpus overlay grants (`establish` is "
         "`remit:confer`-eligible); `march` is eligible in NPC-033/038 and WOULD form a real "
@@ -10072,7 +10119,10 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # restored (`body.tended`); the measurement is at the same test's `ever` note. Nothing leaves.
     # ⚠⚠ v9 IN-12 step 10: `conceal` JOINS (17 -> 18) -- 91 worlds, a `cover` minted on any referent; the
     # measurement is at the same test's `ever` note. Nothing leaves.
-    assert set(executed) == {"accept", "challenge", "conceal", "create_record", "interview",
+    # ⚠⚠ v9 IN-12 `give` + Rung: `carry` JOINS (18 -> 19) -- one world (ARC-34), the act mix the vanished
+    # `give` refusals freed; the measurement is at `test_the_corpus_runs_and_the_ranking_cannot_discriminate`'s
+    # `ever` note. Nothing leaves.
+    assert set(executed) == {"accept", "carry", "challenge", "conceal", "create_record", "interview",
                              "fight", "give", "issue",
                              "move", "petition", "reconstruct", "release", "research",
                              "surveil", "tell", "tend", "transfer", "utter"}, (
@@ -10169,9 +10219,11 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # ⚠⚠ v9 IN-12 step 9: `sabotage` and `train` JOIN -- attempted and refused wherever attempted (the note at
     # `test_the_corpus_runs_and_the_ranking_cannot_discriminate`'s `refused_only`); `tend` executes (the
     # executed-set note there). A re-record, said so.
+    # ⚠⚠ v9 IN-12 `give` + Rung: `carry` LEAVES (it executes in ARC-34; the executed-set note at
+    # `test_the_corpus_runs_and_the_ranking_cannot_discriminate`'s `ever`). A re-record, said so.
     assert set(refused) - set(executed) == {"work", "found",
                                             "build", "survey", "commit",
-                                            "restore", "forge", "carry", "seize", "covenant",
+                                            "restore", "forge", "seize", "covenant",
                                             "sabotage", "train"}, (
         f"the always-refused set is {sorted(set(refused) - set(executed))}. `work` refuses because "
         "its `site` operand binds either to a non-Site referent (UNKNOWN) or to a real site whose "
@@ -10500,7 +10552,10 @@ def test_wc_the_fold_binds_what_the_person_bound():
     # new structural member -- the seat, `via` -- can be observed at all.
     # v9 IN-12 step 7 ADDED `covenant`, FOR THE SAME LICENSED REASON: `remit:issue` is its only
     # alternative (#453 K-14), so it is walked below through `p_high` with the others.
-    WALK_REMIT: frozenset = frozenset({"requisition", "open_case", "determine", "issue", "covenant"})
+    # v9 IN-12 step 5 ADDED `pardon`, FOR THE SAME LICENSED REASON: `remit:determine` is its only alternative
+    # (#453 §9.1). (`arrest`, `remit:dispatch`, joins through `WALK_WARRANT` below, derived from the roster.)
+    WALK_REMIT: frozenset = frozenset({"requisition", "open_case", "determine", "issue", "covenant",
+                                       "pardon"})
     # v9 IN-09: a row declaring `referent_named` forms only on a referent the person's own ledger
     # names (`comply`: a writ he holds), and this question names none, so it is not in the walk.
     # DERIVED FROM THE ROW'S OWN COLUMN, never from a verb name.
@@ -10516,7 +10571,9 @@ def test_wc_the_fold_binds_what_the_person_bound():
     # arm, once a document is in his hand. DERIVED FROM THE FIXTURE AND THE ROSTER.
     from ..data.verbs import OWN_HOLD_DECLINES
     WALK_HELD: frozenset = frozenset(OWN_HOLD_DECLINES) | frozenset(w.fixtures.get("withheld_verbs"))
-    WALK_EXCLUDES: frozenset = (frozenset({"march"}) | WALK_REMIT | WALK_NAMED | WALK_WARRANT
+    # v9 IN-12 step 11 ADDED `raze` BESIDE `march`, FOR `march`'s OWN LICENSED REASON: its one
+    # `eligibility:` alternative is `remit:dispatch` and `p_low` holds no office (#453 §9.2).
+    WALK_EXCLUDES: frozenset = (frozenset({"march", "raze"}) | WALK_REMIT | WALK_NAMED | WALK_WARRANT
                                 | WALK_HELD)
     cands = [c for c in decision.opening_set(p, v, q, w.fixtures)
              if VERB_TABLE[c.verb].requires_typed is not None]
@@ -11403,6 +11460,12 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
     # attempts (on a Record, refused; on Carin, admitted) -- and ONE OUT, the second
     # `("hearth_ostvik", "stores:grain", 0)`: the act mix those attempts moved. Order otherwise unchanged;
     # the property this pin is for holds (held at the end, none evicted).
+    # v9 IN-12 `give` + Rung: 15 -> 13 entries, a re-record read off the failing assertion's own output: TWO
+    # OUT, nothing in, order otherwise unchanged -- `("hearth_ostvik", "exists:Record", 0)` and the second
+    # `("p_carin", "exists:Person", 1)`. `give`'s cell dropped its `existence` conjunct (kind `Record`), so a
+    # `give` no longer reads `exists:Record` on a referent and deposits the refusal; and `give` joined
+    # `own_hold_declines`, so the actor forms none on a referent he does not hold. The property this pin is for
+    # holds (held at the end, none evicted).
     assert actor_end == [("hearth_ostvik", "stores:grain", 0),
                          ("einhir_texts", "exists:Person", 0),
                          ("rec:6bf46a143f347c12", "exists:Person", 0),
@@ -11412,12 +11475,10 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
                          ("rec:0a9f85a0f7f67871", "exists:Proposition", 0),
                          ("hearth_ostvik", "exists:Person", 0),
                          ("hearth_ostvik", "exists:Site", 0),
-                         ("hearth_ostvik", "exists:Record", 0),
                          ("hearth_ostvik", "exists:Proposition", 0),
                          ("rec:6095547f999b4ff8", "exists:Person", 0),
                          ("p_carin", "exists:Person", 1),
-                         ("p_carin", "exists:Proposition", 0),
-                         ("p_carin", "exists:Person", 1)], (
+                         ("p_carin", "exists:Proposition", 0)], (
         f"the `actor` arm's end-of-run grammar claims are {actor_end}, not the single surviving "
         "`stores:grain` read. Empty would mean the cap is evicting again — i.e. the fan-out "
         "default moved back toward `total`, or a new deposit channel opened — and every `H-40` / "
@@ -11895,8 +11956,15 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # `exists:Proposition` (`commit`'s), `sabotage` on `exists:Site` (`restore`'s), `tend`/`train` on
     # `exists:Person` (`fight`'s) -- so a refusal's deposited `exists:<kind>` 0 read, its own or another
     # verb's, drops the next Candidate on that referent: `fight`'s and `carry`'s arrival shape above.
+    # ⚠⚠ FIFTEEN -> THIRTEEN, v9 IN-12 `give` + Rung: `give` and `research` LEAVE, nothing joins. MEASURED
+    # BEFORE RE-PINNING, base tree (`68eaaa41`) vs this one, `harness/headless.py`'s world over the three
+    # seasons: `give` formed on a referent its asker does not hold and was refused there (its cell no longer
+    # reads `exists:Record`, and `give` joined `rosters.yaml: own_hold_declines`), so it forms none and
+    # drops on no belief -- resolved acts `give` 1 -> 0, `reconstruct` 4 -> 5, `survey` 3 -> 4, `train`
+    # 2 -> 1, `work` 3 -> 1. `research` leaves by the act mix and not its cell: its drops were all on
+    # `hearth_ostvik` at the base and none are on this tree.
     assert {v for v, _ in hl_live} == {"accept", "argue", "challenge", "commit", "examine", "fight",
-                                       "give", "interview", "petition", "research", "restore",
+                                       "interview", "petition", "restore",
                                        "sabotage", "tend", "train", "transfer"}, (
         f"the headless drops are on {sorted({v for v, _ in hl_live})}. `examine`/`restore`/"
         "`interview`/`fight`/`research` are the `exists:` and `existence:`-cell drops the "
@@ -12114,8 +12182,13 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # `('tend','hearth_ostvik')`, `('tend','rec:6bf46a143f347c12')`, `('train','hearth_ostvik')`,
     # `('train','rec:6bf46a143f347c12')` -- the four new rows on their shared `existence` cells (the
     # `hl_live` note above) -- and `('commit','p_carin')`, by the act mix. Every one of the 19 survives.
-    assert len(dropped) == 27, (
-        f"{len(dropped)} executable clause-4 drops, not 27. The drops are the channel itself; if "
+    # v9 IN-12 `give` + Rung: 27 -> 30, UP BY THREE, read off this test's own `dropped` on this tree and on a copy
+    # of the base tree 68eaaa41 (scratch, not kept): SEVEN IN, `('accept'|'challenge'|'fight'|'interview'|
+    # 'petition'|'tend'|'train', 'einhir_texts')`, and FOUR OUT, `('give','hearth_ostvik')` (the row's own
+    # `existence` refusal, gone with the conjunct), `('research','hearth_ostvik')`, `('argue','p_carin')`,
+    # `('commit','p_carin')` -- the act mix the vanished `give` refusals moved. The clause still fires.
+    assert len(dropped) == 30, (
+        f"{len(dropped)} executable clause-4 drops, not 30. The drops are the channel itself; if "
         "this falls toward zero the clause has stopped firing, which is a different and worse "
         "failure than the loss of outcome-relevance recorded above.")
     # ⚠⚠⚠ **THE BITE CAME BACK UNDER G1a, THE GUARD ABOVE DEMANDED A REASON, AND THE REASON IS
@@ -13137,7 +13210,11 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # deliberation would read (the clause-4 producers the six inquiries opened, `test_wb_clause_four_…`:
     # 240 -> 104 drops on ARC-01). Mechanism not isolated past FI-01's two halves; 9 > 4 still holds.
     # v9 IN-12 step 9: 36/9 -> 36/10, a re-record (the `none`-arm IN-12 note above); 10 > 1 holds.
-    assert (got["actor"]["genuine"], got["actor"]["diverged"]) == (36, 10), (
+    # v9 IN-12 `give` + Rung: 36/10 -> 36/8, a re-record read off the failing assertion's own `got` (`none` 40/2
+    # UNMOVED; `total` 36/7): `give` no longer forms on a referent its asker does not
+    # hold, one fewer Candidate a fork can diverge into. The fork population is unmoved. Mechanism not isolated
+    # past that; 8 > 1 holds.
+    assert (got["actor"]["genuine"], got["actor"]["diverged"]) == (36, 8), (
         f"the shipped default diverged {got['actor']['diverged']} times of "
         f"{got['actor']['genuine']}: {got}. `W-D`'s acceptance was lost at `all_five` on "
         "2026-09-07 and recovered on 2026-09-10 when §F1 clause 4 got producers other than "
@@ -13179,7 +13256,7 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # [GROUNDED: measured 2026-09-30 at plan position `19c`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- `total` arm genuine 32, diverged 11; 32/10 with `migrate` unresolvable]
     # [GROUNDED: 32/11 -> 30/11 at plan position `24f`, 2026-09-30 -- divergence unmoved; mechanism in the `none`-arm `24f` block above]
     # [GROUNDED: 30/11 -> 29/6 at IN-08's cells commit (B-G) -- the re-scored ranking and the duel pair; mechanism and both trees' figures in the `none`-arm IN-08 block above]
-    assert (got["total"]["genuine"], got["total"]["diverged"]) == (36, 8), got    # IN-11: 29/6 -> 26/6 (the actor-arm note); IN-57: -> 36/10 (the attention-tier key); IN-45 `carry`: -> 36/11 (the actor-arm note); FI-01: -> 36/8 (the actor-arm note)
+    assert (got["total"]["genuine"], got["total"]["diverged"]) == (36, 7), got    # IN-12 `give` + Rung: -> 36/7 (the actor-arm note); IN-11: 29/6 -> 26/6 (the actor-arm note); IN-57: -> 36/10 (the attention-tier key); IN-45 `carry`: -> 36/11 (the actor-arm note); FI-01: -> 36/8 (the actor-arm note)
     # AND THE TWO LAYERS ARE SEPARATED. The finding is the DECISION count above; this is the layer
     # beneath it — whether the fork moved the act stream at all.
     #
@@ -13570,7 +13647,10 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # v9 IN-12 step 9: 9 -> 10, a re-record: the sibling test's population move (the `(40, 1)` / `(36, 10)`
     # notes there, read off this test's own `got`: `none` 1/1, `actor` 10/10, `total` 8/8); still equal to
     # `wide` (10 both), not 0.
-    assert got["actor"]["verbonly"] == 10, (
+    # v9 IN-12 `give` + Rung: 10 -> 8, a re-record: the sibling test's population move (the `(36, 8)` note
+    # there, read off this test's own `got`: `none` 2/2 UNMOVED, `actor` 8/8, `total` 7/7); still equal to
+    # `wide` (8 both), not 0.
+    assert got["actor"]["verbonly"] == 8, (
         f"the shipped default adds {got['actor']['verbonly']} VERB-SET divergences: {got}. A 0 "
         "means the clause-4 producers the six investigation acts opened are gone again and the "
         "2026-09-07 loss is back; any other number means the population moved and must be "
@@ -13667,7 +13747,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # ⚠⚠ **33/10 -> 31/7, PLAN POSITION `7a`, 2026-09-29 -- SAME MECHANISM AS THE `none`-ARM BLOCK
     # ABOVE, AND `wide` STILL EQUALS `verbonly` (7 both).**
     # [GROUNDED: measured 2026-09-29 on this tree after position `7a`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- shipped arm genuine 31, wide 7]
-    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (36, 10), got     # `24f`: 31/7 -> 32/7; IN-08: -> 35/9; IN-11: -> 32/9 (the hold, see `test_wd_a_fork_changes_…`); IN-57: -> 36/11; IN-45 `carry`: -> 36/12 (the `verbonly` note); FI-01: -> 36/9 (the `verbonly` note); IN-12 step 9: -> 36/10 (the `verbonly` note)
+    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (36, 8), got     # IN-12 `give` + Rung: -> 36/8 (the `verbonly` note); `24f`: 31/7 -> 32/7; IN-08: -> 35/9; IN-11: -> 32/9 (the hold, see `test_wd_a_fork_changes_…`); IN-57: -> 36/11; IN-45 `carry`: -> 36/12 (the `verbonly` note); FI-01: -> 36/9 (the `verbonly` note); IN-12 step 9: -> 36/10 (the `verbonly` note)
     # [GROUNDED: re-measured 2026-09-10 after ED-FI-0009 -- `total` 5 of 18 under the widened (verb, subject) fingerprint]
     # [GROUNDED: re-measured 2026-09-10 under `U4` -- `total` 5 of 19 under the widened (verb, subject) fingerprint]
     # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (28, 3) at the `total` arm]
@@ -13698,7 +13778,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # formed wherever `move` is. `wide` still equals `verbonly` (11 both); 32/10 with `migrate`
     # unresolvable.
     # [GROUNDED: measured 2026-09-30 at plan position `19c`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- `total` genuine 32, wide 11 (= verbonly 11); 32/10 with `migrate`'s `@effect_for` removed]
-    assert (got["total"]["genuine"], got["total"]["wide"]) == (36, 8), got    # `24f`: 32/11 -> 30/11; IN-08: -> 29/6; IN-11: -> 26/6; IN-57: -> 36/10; IN-45 `carry`: -> 36/11; FI-01: -> 36/8
+    assert (got["total"]["genuine"], got["total"]["wide"]) == (36, 7), got    # IN-12 `give` + Rung: -> 36/7 (the `verbonly` note); `24f`: 32/11 -> 30/11; IN-08: -> 29/6; IN-11: -> 26/6; IN-57: -> 36/10; IN-45 `carry`: -> 36/11; FI-01: -> 36/8
 
 
 # ===========================================================================
@@ -13999,9 +14079,11 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # row's `counterparty:` (`to`, the hearer), and its `Person.pursuits` write keyed by degree
     # (`Overwhelming`/`Success` only); `test_in12_step9.py` block 3 folds it through the real seam over 40
     # act ids, reads the bands it reaches, and observes the hearer's pursuits move on the won bands only.
+    # v9 IN-12 step 5: `arrest` IS contested (`a standing`, `tell`'s prize), the eighth entry; `pardon` is not.
     assert contested == {"fight": "the body", "tell": "a standing", "march": "a field",
                          "accept": "the body", "speak": "a matter",
-                         "determine": "a proposition", "argue": "a proposition"}, (
+                         "determine": "a proposition", "argue": "a proposition",
+                         "arrest": "a standing"}, (
         f"the set of contesting verbs moved: {contested}. Every claim `W-E` published about what "
         "can be graded today is scoped to this set. A SEVENTH entry is a real widening and wants "
         "its own measurement; losing one of these six means its prize row or its verb row has "
@@ -14020,9 +14102,12 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # 46 -> 47, `covenant` (v9 IN-12 step 7), uncontested, a re-record; 47 -> 51, `argue`, `sabotage`,
     # `tend`, `train` (v9 IN-12 step 9) -- `argue` IS contested, so the contested set above moves with it
     # (the seventh entry); the other three are not. A re-record. 51 -> 52, `conceal` (v9 IN-12 step 10),
-    # uncontested, a re-record. 52 -> 53, `forgive` (v9 IN-12 step 13), uncontested, a re-record.
+    # uncontested, a re-record. 52 -> 53, `forgive` (v9 IN-12 step 13), uncontested, a re-record. 53 -> 55,
+    # `arrest` (contested, the contested set above moves with it) and `pardon` (uncontested), v9 IN-12
+    # step 5, a re-record. 55 -> 56, `raze` (v9 IN-12 step 11), uncontested (#453 §9.2: contests none),
+    # a re-record.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen]
-    assert len(VERB_TABLE) == 53, len(VERB_TABLE)
+    assert len(VERB_TABLE) == 56, len(VERB_TABLE)
     # AND THE SIX ARE SIX, not a row that says six. This is the half of the pin that the old
     # count could not express: a table carrying the placeholder passed `== 32` while no act in it
     # could be formed, and `runs/CASELOG_NPC.md:64` reported the same case as a blocked one.
@@ -15925,4 +16010,7 @@ def test_t4_petition_and_issue_bind_to_and_contest_exactly_as_before():
     # and is contested now, so the judge rolls against the party exactly as `tell` rolls against the hearer.
     # v9 IN-12 step 9: `argue` joins -- contested (`a proposition`) against its `counterparty: to`, the hearer,
     # `tell`'s shape exactly (#453 §9.4). A re-record.
-    assert {v for v, r in VERB_TABLE.items() if r.contests and r.counterparty} == {"tell", "determine", "argue"}
+    # v9 IN-12 step 5: `arrest` joins -- contested (`a standing`) against its `counterparty: subject`, the
+    # prisoner, `determine`'s shape (#453 §9.1). A re-record.
+    assert {v for v, r in VERB_TABLE.items() if r.contests and r.counterparty} == {"tell", "determine", "argue",
+                                                                                   "arrest"}

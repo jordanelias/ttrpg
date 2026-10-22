@@ -197,9 +197,35 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # in the realm's two seasons), `world_q.event_place` places an act-caused Event by its actor, and a covered
 # mover's `travel.ended` chains to his move (`loop/matter.py`). Was ed761c59... / ee8e5500... (one, two
 # seasons); the build hash and the season-1 event sequence are unmoved.
+# RE-PINNED at v9 IN-12 step 5 (`arrest`, `pardon`), A BEHAVIOUR MOVE DECLARED: `pardon` is a new
+# `remit:determine` row the realm's bench-holders FORM on their questions' referents and the chooser ATTEMPTS
+# -- every attempt refused (`pardon.refused` 2 in season one, 5 by two seasons: no realm person holds a live
+# restraint on the pardoner's seat), so the act mix moves. `arrest` forms 0 times (the realm's two warrants,
+# both `p_npc_040`'s, name a Record, and their holder's seat grants no `dispatch`), so it moves nothing; IN-70
+# moved nothing. The build hash is equal; one and two seasons move. Was 8bfd47a9... / 8abd76f3... (one, two
+# seasons). ARMS, run on this tree: `arrest` and `pardon` withheld from every `opening_set` (`Fixtures
+# withheld_verbs`) reproduces the old hashes, event counts and digests exactly (6633 / 19535), and so does
+# `pardon` ALONE withheld -- the mover is `pardon`'s formation and refusals, `arrest` none.
+# RE-PINNED at v9 IN-12 step 11 (`raze`), A BEHAVIOUR MOVE DECLARED: `raze` is a new `remit:dispatch` row on
+# `march`'s cell (`existence` of a Rung) that the realm's dispatch-holders FORM on their questions' Rung
+# referents and the chooser ATTEMPTS -- every attempt refused (`raze.refused` 10 in season one, 28 by two
+# seasons; `rung.razed` 0: no realm `march` reaches a foreign settlement, H-149/H-175, so no seat's faction
+# occupies one), so the act mix moves. The build hash is equal; one and two seasons move. Was c9e46891... /
+# 47eda125... (one, two seasons). CONTROL, run on this tree: `raze` withheld from every `opening_set`
+# (`Fixtures withheld_verbs`) reproduces the old hashes, event counts and digests exactly (6635 / 18681) --
+# the mover is `raze`'s formation and refusals.
+# RE-PINNED at v9 IN-12 `give` + Rung (cession), A BEHAVIOUR MOVE DECLARED: `give`'s typed cell dropped its
+# `existence` conjunct (kind `Record`; the grammar has no disjunction) and `give` joined
+# `rosters.yaml: own_hold_declines`, so a person forms a gift only of a referent he HOLDS. In the realm almost
+# no question's referent is a thing its asker holds (H-229 counts one held-rung question), so `give` forms 0 times (33 formed, `give.refused` 7 in
+# season one and 18 by two seasons before; `record.given` and `rung.ceded` 0 in both), and the act mix moves.
+# The build hash is equal; one and two seasons move. Was 00f9b52c... / 195b1ac6... (one, two seasons).
+# CONTROL, run on BOTH trees (this one and its base, 68eaaa41): `give` withheld from every `opening_set`
+# (`Fixtures withheld_verbs`) gives 8cb4f4e2... / cf3625f5... (6603 / 19990) on each, equal to this pin -- the
+# mover is `give`'s formation alone, and nothing else in the change reaches the realm.
 BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
-               1: "8bfd47a909a52aef79cec4d40e968580",
-               2: "8abd76f3a5337791188861a38ecbaa4d"}
+               1: "8cb4f4e273523f76d1616a71584b50c0",
+               2: "cf3625f54e6876621b71798e1eb56741"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -238,8 +264,11 @@ BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
 # RE-RECORDED at v9 IN-12 step 10 `conceal` with `BASE_HASHES` (6321 -> 6642, 17559 -> 19553).
 # RE-RECORDED at v9 IN-12 step 13 `forgive` with `BASE_HASHES` (6642 -> 6633, 19553 -> 19538).
 # RE-RECORDED at B-Q's BATCH-CLOSE with `BASE_HASHES` (season 1 events unmoved, 6633; season 2 19538 -> 19535).
-BASE_EVENTS = {1: (6633, "6309463792a9d873e9a58c8598e1a648b8305a817c0f0bee243e267b1859e571"),
-               2: (19535, "f2a7b22ad32e9b14fefbe06f228ca41a159722562011f5b9cd939d62529b5d1b")}
+# RE-RECORDED at v9 IN-12 step 5 `pardon` with `BASE_HASHES` (6633 -> 6635, 19535 -> 18681).
+# RE-RECORDED at v9 IN-12 step 11 `raze` with `BASE_HASHES` (6635 -> 6655, 18681 -> 18608).
+# RE-RECORDED at v9 IN-12 `give` + Rung with `BASE_HASHES` (6655 -> 6603, 18608 -> 19990).
+BASE_EVENTS = {1: (6603, "958f42832e4fdfda38ba55107ea22e8d2d78476800609d4d562ea4f0459d5eac"),
+               2: (19990, "abd3946bd04cf2578b7fa700017b855109333e6447e271e4e04d6eb6581a48ef")}
 
 
 def _digest(w) -> tuple:
@@ -314,6 +343,22 @@ def test_in21_control_draw_off_and_draw_at_one_reproduce_the_base_hashes():
     assert h == BASE_HASHES, f"draw off moved a hash: {h}"
     assert events[1][0] >= 5000 and events[2][0] >= 15000, f"the seasons emitted too little: {events}"
     assert events == BASE_EVENTS, f"the bodies clock at its control moved the event sequence: {events}"
+
+
+def test_the_give_withheld_arm_reproduces_the_one_season_pin():
+    """THE `give` + Rung RE-PIN'S CONTROL, ENCODED (it stood as prose above): `give` added to the shipped
+    `Fixtures withheld_verbs` reads the CURRENT one-season pin exactly -- hash, event count and digest --
+    so at the shipped arm the realm forms no `give` in season one. That `give` formation is the re-pin's
+    ONLY mover is the commit's measurement, not this test's: it needs the base tree (the pre-change pin,
+    `195b1ac6`/`47eda125`, is no longer producible on one tree). If `give` forms again in the realm, `BASE_HASHES[1]` moves with it and
+    this arm stops matching: the re-pin would then need a new control, not a re-recorded one."""
+    w = POP.build_realm(0)
+    shipped = tuple(w.fixtures.get("withheld_verbs"))
+    assert "give" not in shipped, "fixture: `give` is already withheld at the shipped arm"
+    w.fixtures = w.fixtures.sweep("withheld_verbs", shipped + ("give",))
+    POP.run(seasons=1, seed=0, w=w)
+    assert w.content_hash() == BASE_HASHES[1], w.content_hash()
+    assert _digest(w) == BASE_EVENTS[1], _digest(w)
 
 
 def test_in21_a_table_of_ones_reads_the_same_as_no_table():

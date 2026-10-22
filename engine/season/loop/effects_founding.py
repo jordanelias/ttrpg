@@ -1,4 +1,4 @@
-"""`season.loop.effects_founding` -- minting works: found, build.
+"""`season.loop.effects_founding` -- minting works: found, build; and their closer, raze.
 
 EXTRACTED from `effects.py` at the per-subsystem split (Phase 4). Holds the pair that grows the
 world rather than only wearing it down (`ARCH` F.20): `found` mints a Rung of whatever kind a works
@@ -6,7 +6,8 @@ plans, `build` mints a Site at condition 0. `_works_named` (what a works names, 
 at) and `_made_by` (the one id scheme so one works makes one thing) are this pair's own reading of
 their operand and stay local -- nothing outside `found`/`build` calls either; so does `_cost` (v9
 IN-28, `H-166`: what a plan costs the works' rung, `rosters.yaml: works_cost`). See `effects_shared.py`
-for `effect_for`, `_operand` and the shared §10-ladder refusal `_decline_ascent`.
+for `effect_for`, `_operand` and the shared §10-ladder refusal `_decline_ascent`. v9 IN-12 step 11
+adds `raze`, the closer of `H-166` limit 3: the one verb that ends a Rung (`w.rungs` shrinks).
 """
 
 from __future__ import annotations
@@ -19,7 +20,7 @@ from ..state.ids import H
 from ..state.world import rung_kind_ascends
 from ..trace_log import TRACE
 
-from .effects_shared import _debit, _decline_ascent, _operand, _shift, effect_for
+from .effects_shared import _debit, _decline_ascent, _operand, _shift, effect_for, occupying_faction
 
 
 def _works_named(w: "World", a: "Act") -> tuple:
@@ -240,3 +241,54 @@ def _eff_build(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
             _debit(payer, kind, amount)
     return Change((Subject.entity("sites", sid, "site.built"),
                    Subject.entity("rungs", payer.id, "site.built")), perform)
+
+
+@effect_for("raze")
+def _eff_raze(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """v9 IN-12 step 11 (#453 §9.2 `raze`, §10.4 step 11) -- AN OCCUPIED SETTLEMENT IS RAZED: the Rung
+    ends (`(Rung, exists)` -> absent) and every live Tenure naming it closes in the same write. The
+    closer of `H-166` limit 3 (*"`w.rungs` now grows and nothing shrinks it"*), built after that row's
+    own order: the cost (limit 1) and the holder (limit 2) landed at v9 IN-28.
+
+    THE LICENCE IS OCCUPATION, READ AS `seize`'s RUNG HALF READS IT (`loop/effects_information.py::
+    _seize_rung`, whose inlined read this copies, the entry's instruction): the exercised seat's FACTION
+    (`seat_faction`) `mustered` at the settlement (`world_q.mustered`, the one query of who stands
+    there), the settlement held by ANOTHER faction (`holder_faction_of`). DECLINES (`NO_CHANGE` ->
+    `raze.refused`), each one change from an admitted razing:
+      * the subject is no Rung, or not a `march_target_kinds` kind (occupation is defined only at the
+        places a march arrives at, `_seize_rung`'s first decline) [ASSUMPTION; medium; Jordan to
+        correct; revert: any Rung kind, the licence still occupation];
+      * the exercised seat has no faction;
+      * nobody holds the settlement (H-166: who holds an unheld place is unruled, `_seize_rung`'s
+        reading) or the seat's own faction does -- a faction does not raze its own town;
+      * the seat's faction is not mustered there (NO ARMY: the entry's falsifier).
+    ⚠ NOT COPIED FROM `_seize_rung`: its decline on an actor not committed to the seat's faction. Its
+    stated reason is that `seize` writes the ACTOR'S OWN `hold`; `raze` writes no title, so the reason
+    does not reach it. The seat's authority to act at all is the fold's (eligibility `remit:dispatch`
+    via `seat_hold`, the row's `existence` conjunct).
+
+    THE CASCADE IS LAYER 1's, AND IT IS ALL OF IT (`architecture/meta/04_CODE_ARCHITECTURE.md` §B.8's
+    row *subject or object ceases to exist*: *"`destroy` sets `until` on every Tenure naming the id
+    and nothing else"*): every live edge whose subject or object is the Rung -- its own `contain` in
+    its parent, the `contain`/`reside` of what stands in it, any `hold` on it -- closes, and the gate
+    admits each closure under `cascade` (`state/gate.py`: the Rung is in the write's `gone`), save the razer's
+    own `contain` there, which closes under `T-m` first (`test_in12_raze.py`).
+    `_eff_destroy_record`'s body, on the Rung store (it closes every live edge naming the Rung, subject or object; `destroy_record`'s closes the object only). ⚠ NOTHING IS RE-HOMED, AND THAT IS #453's OWN
+    RECORDED GAP (*"persons contained in a razed Rung are left placeless by the cascade"*) and `H-228`'s:
+    a quarter or hearth in the town becomes a root of its own, a person or cohort standing in it is
+    placeless, and a Site or Record whose `rung` field names it keeps naming an id the world no
+    longer holds (a field, not a Tenure, so the cascade does not reach it). Ending the Sites with
+    their Rung, or re-homing what stood in it, is a write Layer 1 does not license here.
+
+    G4 -- WHAT IT NAMES: THE RUNG, whole, earning `rung.razed`; it always moves (present -> absent).
+    The closed edges are the cascade and are not named, as `destroy_record`'s are not."""
+    rid = _operand(a, "subject")
+    if occupying_faction(w, a.via, rid) is None:
+        return NO_CHANGE
+
+    def perform() -> None:
+        del w.rungs[rid]
+        for t in w.tenures:
+            if t.live and (t.subject == rid or t.object == rid):
+                t.until = w.tick
+    return Change((Subject.entity("rungs", rid, "rung.razed"),), perform)

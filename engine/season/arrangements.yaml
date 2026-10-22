@@ -195,8 +195,8 @@ arrangements:
   # written bare -- the source names no basis, and the loader admits bare `admitted` (§E.2 writes it
   # bare on three games). ⚠ `appeal_basis: none` makes the finding final, so the disposal must be
   # closable by another act (§E.2's own P-12 flag): the `ban` is closable by `pardon` (#453 step 5,
-  # unbuilt); the gate's `determination` closure arm admits a bench's closure of it
-  # (`state/gate.py`), but no effect writes one yet.
+  # built at v9 IN-12: `loop/effects_governance.py::_eff_pardon`); the gate's `determination` closure arm
+  # admits a bench's closure of it (`state/gate.py`).
   - id:               tribunal
     disposal:          bench
     bench_basis:        determine
