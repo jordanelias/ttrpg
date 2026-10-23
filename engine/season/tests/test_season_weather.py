@@ -233,9 +233,15 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # gate swept out of reach (`thread_sensitivity_gate` 999), each reproduces the OLD event counts and digests
 # exactly (6603 / 19990, `BASE_EVENTS` as it was) under the new build hash -- the event-level mover is
 # `thread_read`'s formation alone, and the hash-only mover is the field.
+# RE-PINNED at v9 IN-59 (a) (RS-26, the attack half of the access gate), A BEHAVIOUR MOVE DECLARED: `fight`,
+# `challenge` and `accept` gain a `relation: with` conjunct on `subject`, so the fold refuses a duel verb whose
+# subject is not where the actor is, and the act mix moves (`aperture 1 0`, realm, seed 0: `fight` att/ex/ref
+# 4/4/0 -> 1/1/0, `accept` 11/11/0 -> 1/1/0, `challenge` 13/4/9 -> 17/1/16). The build hash is equal (the
+# build reads no verb row; `guards=True` and `foreign=True` equal too); one and two seasons move. Was
+# 628830a8... / 74ce9a1e... (one, two seasons). The `give`-withheld arm still reads the one-season pin.
 BASE_HASHES = {0: "8e4032a26cfeabdc55bba2178b82d564",
-               1: "628830a8f0b1bfc677713e1362a225f5",
-               2: "74ce9a1e6ea2ece37c00e0484e963777"}
+               1: "57fae32f8c6f7994ee01b997ac775214",
+               2: "3c4e03e63fcbea02f70cfff4ab24b1b3"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -278,8 +284,9 @@ BASE_HASHES = {0: "8e4032a26cfeabdc55bba2178b82d564",
 # RE-RECORDED at v9 IN-12 step 11 `raze` with `BASE_HASHES` (6635 -> 6655, 18681 -> 18608).
 # RE-RECORDED at v9 IN-12 `give` + Rung with `BASE_HASHES` (6655 -> 6603, 18608 -> 19990).
 # RE-RECORDED at v9 PC-06 K-3 `thread_read` with `BASE_HASHES` (6603 -> 6594, 19990 -> 19221).
-BASE_EVENTS = {1: (6594, "b39468709289a998a4cf14603263cddee9f3423c3e6faed0c248d8ddfabeb437"),
-               2: (19221, "9be6d67d7fcba247d71d7d95b549ed7006186542e0ee2336896ccadd6b68778d")}
+# RE-RECORDED at v9 IN-59 (a) with `BASE_HASHES` (6594 -> 7018, 19221 -> 21710).
+BASE_EVENTS = {1: (7018, "e3d6e385be347d953930a717b4ee8b9130ffba9e345fe67f72ae30ca072c9df2"),
+               2: (21710, "2da1c8f4276f30075fc42baf09b22ea2b20226519ed65da465d05dfccc3340f4")}
 
 
 def _digest(w) -> tuple:
@@ -374,7 +381,11 @@ def test_the_give_withheld_arm_reproduces_the_one_season_pin():
 
 #: The one-season event sequence BEFORE v9 PC-06 K-3 (`BASE_EVENTS[1]` at `26884a93`), kept as the K-3
 #: re-pin's control: the event-level mover must be `thread_read`'s formation and nothing else.
-PRE_K3_EVENTS_1 = (6603, "958f42832e4fdfda38ba55107ea22e8d2d78476800609d4d562ea4f0459d5eac")
+#: RE-RECORDED at v9 IN-59 (a), STATED: the duel verbs' `with` conjunct moves the `thread_read`-withheld arm
+#: too (6603 / 958f4283... -> 7028 / 4f9b8312...), so the K-3-time sequence is no longer producible on one
+#: tree. The value below is that arm on the IN-59 tree, `PYTHONHASHSEED=0`; from here it is a change detector
+#: that still shows `thread_read` moves the season (it differs from `BASE_EVENTS[1]`), as `BASE_EVENTS` became.
+PRE_K3_EVENTS_1 = (7028, "4f9b8312e98cdcad01223190395be1a0d54b2e332eb19472ce972e8e9d2c5ea1")
 
 
 def test_the_thread_read_withheld_arm_reproduces_the_pre_k3_event_sequence():
