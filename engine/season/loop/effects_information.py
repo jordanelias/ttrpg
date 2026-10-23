@@ -24,10 +24,9 @@ from ..queries import faction_q
 from ..queries.person_q import ABOUT_KEYS, argued_pursuits, consequence_pursuits
 from ..queries.world_q import (
     BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_PETITION, docketed, docketed_under,
-    faction_holding, faction_of, hold_force, place_of, restrained,
+    faction_holding, faction_of, hold_force, issuing_seat, place_of, restrained,
     slot_for, works_for, works_target,
 )
-from ..state.attribution import causing_act
 from ..state.carriers import Proposition, Record, Tenure
 from ..state.carriers import DETERMINED_BY
 from ..state.gate import (
@@ -989,19 +988,6 @@ def _seize_rung(w: "World", a: "Act", rid: str) -> Change:
     return _take_hold(w, a, rid, held, _SEIZED_RUNG)
 
 
-def _issuing_seat(w: "World", rid: str) -> Optional[str]:
-    """THE SEAT THAT ISSUED THE WARRANT `rid` -- the `via` of the Act that caused the Record's CREATING
-    Event (#453 §9.1 / K-52: *"read through `state/attribution.py::causing_act` on the warrant Record's
-    creating Event -- that Act's `via`"*), or `None` when no Event wrote it (a hand-planted Record), no
-    act caused that Event, or the act exercised no seat the world still holds. The creating Event is the
-    FIRST in the log whose changes name the Record (`loop/matter.py`'s `prior` reads the last, for a
-    different question)."""
-    made = next((e for e in w.log if any(c.subject == rid for c in e.changes)), None)
-    act = causing_act(w, made) if made is not None else None
-    via = getattr(act, "via", None)
-    return via if via in w.offices else None
-
-
 def _may_close_custody(w: "World", seat: str, prisoner: str) -> bool:
     """Could the seat's LIVE HOLDER close a `detain` the prisoner owns on it -- `may_determine`, the
     predicate `state/gate.py`'s `determination` clause closes a restraint under (`pardon`'s basis)? An
@@ -1013,7 +999,7 @@ def _may_close_custody(w: "World", seat: str, prisoner: str) -> bool:
 @effect_for("arrest")
 def _eff_arrest(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """v9 IN-12 step 5 (#453 §9.1, the `arrest` row): A `detain` EDGE OPENS, the prisoner (the act's
-    `subject`) -> THE SEAT THAT ISSUED THE WARRANT the actor holds naming him (`_issuing_seat`, K-17/K-52):
+    `subject`) -> THE SEAT THAT ISSUED THE WARRANT the actor holds naming him (`issuing_seat`, K-17/K-52):
     the enforcement seat (`Act.via`) acts but does not own the custody, so the issuing seat's bench is
     who may `pardon` it (`state/gate.py`'s `determination` closes a restraint only through the seat that
     is its object). The row is contested (`a standing`); the fold calls this body on `Overwhelming`,
@@ -1024,7 +1010,7 @@ def _eff_arrest(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     prisoner, #453 §8.1 Custody [ASSUMPTION; medium; Jordan to correct; revert: a second bench's
     warrant opens a second custody, "relaxation to the secular arm"]); (2) the actor HOLDS A WARRANT
     NAMING HIM (`_held_warrants`, `seize`'s reading); (3) the warrant's issuing seat is readable
-    (`_issuing_seat`) AND ITS LIVE HOLDER COULD CLOSE THE CUSTODY (`may_determine` over the prisoner,
+    (`issuing_seat`) AND ITS LIVE HOLDER COULD CLOSE THE CUSTODY (`may_determine` over the prisoner,
     the gate's own predicate for `determination`, which `pardon` closes under): a custody is opened only
     on a seat whose bench could `pardon` it, so a warrant from an issue-only seat, or from a seat whose
     ground does not hold the prisoner, opens nothing
@@ -1041,7 +1027,7 @@ def _eff_arrest(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     prisoner = _operand(a, "subject")
     if prisoner not in w.persons or prisoner == a.actor or restrained(w, prisoner, DETAIN_KIND):
         return NO_CHANGE
-    seat = next((s for s in (_issuing_seat(w, rid)
+    seat = next((s for s in (issuing_seat(w, rid)
                              for rid in _held_warrants(w, a.actor, a.verb, prisoner))
                  if s is not None and _may_close_custody(w, s, prisoner)), None)
     if seat is None or not may_warrant(w, a.actor, a.via, prisoner):

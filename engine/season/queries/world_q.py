@@ -1193,6 +1193,105 @@ def presence(w: World, rung_id: str) -> list[str]:
             and t.subject in w.persons]
 
 
+def guard_weight(w: World, rung_id: str) -> int:
+    """v9 IN-60 (RS-26) -- THE SWORN WEIGHT PRESENT AT A RUNG: the summed `Person.weight` of the persons
+    `presence` lists at `rung_id` (the exact rung, never a descendant) who owe a live, sworn `oblige`
+    (`sworn_to`, IN-40's walk) to a seat HELD by a person ALSO present there. Cohorts (`weight > 1`)
+    are the guard forces (`cohorts.yaml: guards`, written by `build_realm(guards=True)`). Its reader is
+    IN-59 (b)'s `audience` limb, *an unguarded place is open*, which reads `== 0`.
+
+    COMPUTE-ON-DEMAND, STORED NOWHERE (T-a): read off live tenures every call, so ending one swearer's
+    `oblige` (or the principal leaving the rung) drops it with no other write. A seat adds no modifier
+    (`04` §B.7: *"NEVER: who holds it · who serves it · a modifier of any kind"*): a duke is easier to
+    reach than a king only because less sworn weight stands at his home -- data, not a table.
+
+    ⚠ THE PRINCIPAL'S OWN PLACE [ASSUMPTION; medium; Jordan to correct; revert: any seat whose
+    purview reaches the rung]: the attack gate (IN-59 (a)) puts an attacker at the victim's own place,
+    so a guard counted anywhere else never stands on the path to him; and the purview reading would
+    let one Crown obligee living at an inn make the inn guarded against everyone. A sworn resident
+    with no principal present therefore reads 0.
+      * EACH PERSON ONCE, however many present seats he is sworn to: the sum is over persons.
+      * AN IMPOSED OBLIGE IS NOT AN OATH (`Tenure.imposed`), skipped exactly as `purview_reaches`'
+        oblige clause skips it: a man sentenced to serve the bench does not guard it."""
+    TRACE.query("guard_weight", "resolver")
+    here = set(presence(w, rung_id))
+    if not here:                       # nobody stands there: no seat to read, no oath to walk
+        return 0
+    seats = {t.object for t in w.tenures
+             if t.kind == "hold" and t.live and t.subject in here and t.object in w.offices}
+    sworn = {t.subject for s in seats for t in sworn_to(w, s) if not t.imposed and t.subject in here}
+    return sum(w.persons[p].weight for p in sworn)
+
+
+def issuing_seat(w: World, rid: str) -> Optional[str]:
+    """THE SEAT THAT ISSUED THE WRIT `rid` -- the `via` of the Act that caused the Record's CREATING
+    Event (#453 §9.1 / K-52: *"read through `state/attribution.py::causing_act` on the warrant Record's
+    creating Event -- that Act's `via`"*), or `None` when no Event wrote it (a hand-planted Record), no
+    act caused that Event, or the act exercised no seat in `w.offices` (existence in the table; not that
+    the issuer still holds it). The creating Event is the
+    FIRST in the log whose changes name the Record (`loop/matter.py`'s `prior` reads the last, for a
+    different question). `arrest` and the `audience` stem's writ limb both ask it, and `queries/` may not
+    import `loop/`, so the one owner sits where both readers reach it."""
+    made = next((e for e in w.log if any(c.subject == rid for c in e.changes)), None)
+    act = causing_act(w, made) if made is not None else None
+    via = getattr(act, "via", None)
+    return via if via in w.offices else None
+
+
+def admits_audience(w: World, actor: str, rung: str) -> bool:
+    """v9 IN-59 (b) (RS-26) -- MAY `actor` ENTER `rung`? The `audience` stem's answer
+    (`WorldReader.read`), asked of a `move`'s or a `migrate`'s destination. Any one of FOUR LIMBS admits,
+    each a property of the mover read off live state (compute-on-demand, stored nowhere, T-a), in the
+    order the code asks them:
+
+      1. NOBODY GUARDS IT: `guard_weight(w, rung) == 0` (IN-60) -- an unguarded place is open. That is
+         every rung of `build_realm(0)` as built (MEASURED at the B-Y close), and a rung closes wherever a
+         live sworn `oblige` stands with its principal, so the gate binds where guards stand, whatever
+         put them there.
+      2. HIS OWN SEAT: he is among `governors_of(w, rung)` -- a live `hold` on a seat whose purview
+         reaches the rung (`purview_reaches`) -- a king walks into his court. ⚠ ANY HELD SEAT, NOT
+         `Act.via`: `architecture/meta/04_CODE_ARCHITECTURE.md:350` says purview is asked of the seat
+         EXERCISED, through `via`; `move` and `migrate` are `own`-eligible and carry no seat, and a
+         `relation` reads only the actor and the rung, so "the seat he exercises" is read as every seat
+         he sits in [ASSUMPTION; medium; Jordan to correct; revert: none short of a `via` on movement
+         acts, which the grammar does not carry].
+      3. AN OATH: a live `oblige` he owes to a seat that reaches the rung -- sworn men enter. The scan is
+         over his own obliges (`sworn_to` is keyed by seat, the inverse question), and an IMPOSED oblige
+         is a sentence, not an oath (`Tenure.imposed`): skipped as `guard_weight` and `purview_reaches`'
+         oblige clause skip it.
+      4. A WRIT: he holds a live writ addressed to him (`writs_held`) whose issuing seat
+         (`issuing_seat`, K-52) reaches the rung -- an invitation, minted by `issue`. A hand-planted
+         writ has no creating Event and therefore no issuer, and opens nothing. ⚠ Any addressed
+         `dispensation` counts: its content, its `at` and the issuer's continued tenure are not read
+         [ASSUMPTION; medium; Jordan to correct; revert: read them]; and a writ reaches its addressee
+         only by `give` (`ED-IN-0292` (1), RULED NO), so the limb is built but unreached in computed play.
+
+    ⚠ LIMIT, STATED: no limb admits a person to the rung where he LIVES (`residence_of`). Where a live sworn
+    `oblige` stands with its principal, limb 1 reads `> 0` and an unsworn, seatless, writless household member
+    who steps out cannot `move` or `migrate` back. Inert while `guards` is OFF and no such oath stands at a
+    principal's home (MEASURED at the B-Y close for `build_realm(0)`: no rung reads above 0); a fifth limb
+    extends RS-26's four, which the plan carries as an assumption [ASSUMPTION; medium; Jordan to correct]."""
+    TRACE.query("admits_audience", "resolver")
+    if guard_weight(w, rung) == 0:
+        return True
+    if actor in governors_of(w, rung):
+        return True
+    # Limbs 3 and 4 ask `purview_reaches` of ONLY the seats the actor is sworn to / holds a writ from, not of
+    # every office in the table (each call walks `w.tenures`, so the all-offices set was offices x tenures).
+    if any(t.kind == "oblige" and t.live and t.subject == actor and not t.imposed
+           and t.object in w.offices and purview_reaches(w, w.offices[t.object], rung)
+           for t in w.tenures):
+        return True
+    p = w.persons.get(actor)
+    if p is None:
+        return False
+    for rid in writs_held(w, p):
+        seat = issuing_seat(w, rid)
+        if seat is not None and purview_reaches(w, w.offices[seat], rung):
+            return True
+    return False
+
+
 # ===========================================================================
 # RESIDENCE -- plan position `19c` (MIGRATE). Where a person LIVES, as distinct from where they ARE.
 # ===========================================================================
@@ -3017,6 +3116,15 @@ class WorldReader:
                 return UNKNOWN
             here, there = place_of(w, subject), place_of(w, arg)
             return UNKNOWN if here is None or there is None else here == there
+        if stem == "audience":
+            # v9 IN-59 (b) (RS-26): MAY THE ACTOR (`arg`) ENTER THE RUNG `subject` -- `with`'s shape,
+            # asked of a destination instead of a second person. `admits_audience` is the one owner of
+            # the four limbs. UNKNOWN for a subject that is no rung or an actor who is no person: a
+            # destination nobody can name refuses, never a guessed admission (`ID-5`). The person
+            # side never answers this (`WORLD_ONLY_STEMS`).
+            if subject not in w.rungs or arg not in w.persons:
+                return UNKNOWN
+            return admits_audience(w, arg, subject)
         if stem == "claim.held":
             p = w.persons.get(self._actor)
             return UNKNOWN if p is None else any(c.subject == subject for c in p.ledger)

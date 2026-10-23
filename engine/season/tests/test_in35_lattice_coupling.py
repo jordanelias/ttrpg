@@ -21,9 +21,9 @@ THE ENTRY'S FALSIFIER, ONE TEST PER ARM, each able to see the failure it exclude
       world at a non-zero weight DIFFERS (the control that can fail). The realm-level half: at
       `23b33e9e` (IN-35) the 1- and 2-season content-hash pins in `test_season_weather.py` read the
       same as before it; K-3 later moved those pins (`Person.thread_sensitivity` is in every `repr`),
-      so AT HEAD the live control is `test_the_thread_read_withheld_arm_reproduces_the_pre_k3_event_
-      sequence`, which equals the pre-IN-35 one-season event sequence -- the identity is checked over
-      one season, at event kind/id level only; the hash-level identity is historical (`@23b33e9e`).
+      so AT HEAD the live control is `test_the_thread_read_withheld_arm_is_pinned_and_differs_from_the_shipped_season`, a change detector
+      since IN-59 (a) moved that arm (it no longer equals the pre-IN-35 sequence); the hash-level identity
+      is historical (`@23b33e9e`).
 
 THE WORLD is hand-built: a realm, every territory the geography names (by its rung id, so the real
 borders apply), one harbour per territory at full condition, inserted nearest-the-source first, and

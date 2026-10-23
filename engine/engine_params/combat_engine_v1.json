@@ -231,7 +231,8 @@
    "WIND_K": 0.9,
    "WIND_MOMENT_K": 0.3,
    "WOUND_ATK_OB": 0.15,
-   "WOUND_DEF_OB": 0.25
+   "WOUND_DEF_OB": 0.25,
+   "YIELD_HEALTH_FRAC": 0.5
   },
   "core": {
    "BASE_POOL": 6,

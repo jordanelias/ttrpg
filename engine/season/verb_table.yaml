@@ -649,13 +649,17 @@ verbs:
     eligibility: ["own"]
     beneficiary: "actor"
     beneficiary_note: "⚠⚠ THE ROW THAT PROVES THIS COLUMN CANNOT BE DERIVED FROM `writes:`. It writes `Person.body` and `Person.exists` ON THE SUBJECT, and the good does not accrue to the person felled. A write can be a HARM, so a rule reading the write column would name the victim as the beneficiary of their own killing. `CAT-2`'s *declare it* is what this row is evidence for."
-    requires:    "the subject is a living person"
+    requires:    "the subject is a living person, present where the actor is"
     requires_typed:
-      form:      existence
-      of:        subject
-      kind:      Person
+      all:
+        - form:      existence
+          of:        subject
+          kind:      Person
+        - form:      relation
+          of:        subject
+          relation:  with
     contests: "the body"
-    requires_typed_note: "⚠⚠ RULED BY JORDAN 2026-09-20: *\"admit kill and wound as resolvable verbs\"* (`ED-IN-0261`, amended). This cell is what carries that ruling, and the ruling it REVERSES is in the same row: `ED-IN-0261` as first written refused `H-80`'s item on the ground that the row is not a verb. THE ROW WAS UNTYPED (`requires: —`) AND THAT IS THE WHOLE OF WHY IT WAS UNCHOOSABLE — `driver.py`'s contest gate asks `row.requires_typed is not None` because `operands_for` returns `{}` for an untyped row, so a computed contested act would have reached the seam with ONE claimant and `combat_seam` would have returned `PARTY-GAP`. Typing it binds `subject`, which IS the second claimant, and the gate's own recorded reason for the exclusion therefore no longer holds. ⚠ THE CLAUSE IS NOT A STAND-IN AND IS THE NARROWEST ONE THAT DOES THE JOB: you cannot fight someone who is not there, `Person.exists` is the field this row's `Felled` band writes, and `exists:Person` is answered by the reader today (`requires.py:191`). A WIDER precondition — a hostility test, a co-location test, an eligibility-to-fight test — would be an invention, and `G4` weighs under-refusing and inventing equally. What this cell must NOT be read as saying is that a killing needs no more justification than a living target; it says the FOLD can form and carry the act, and everything about whether the person WANTS to is `score` and the deontological gate, neither of which exists yet. ⚠ THE SLASHED NAME SURVIVES THIS COMMIT AND IS SEPARATELY RULED WRONG (*\"kill / wound isn't supposed to be a verb by itself\"*). Splitting it into `kill` and `wound` needed a row of alignment cells each, and `ALIGNMENT` was re-celled whole over the seven `pursuit_axes` — so the split rode that commit (IN-08), where it landed as `challenge` -> `accept` alone: `kill` and `wound` are not verbs (RS-5, ED-IN-0288)."
+    requires_typed_note: "⚠ v9 IN-59 (a) (RS-26, the ATTACK half of the access gate) ADDED THE SECOND CONJUNCT, `relation` of `subject`, `with` -- `give`'s co-location carrier, no form, operand or stem added: an attack needs the attacker where his target is. `with` is WORLD-ONLY (`data/requires.py: WORLD_ONLY_STEMS`), so the fighter forms the Candidate on the person he knows of and the fold refuses a target who is not where he is (`kill.refused`, the row's one refusal kind). `presence:` is NOT what carries it (the fold and `opening_set` both decline that column, `H-33`). [ASSUMPTION; medium; Jordan to correct; revert: the single `existence` cell, under which a man fights anyone living anywhere.] ⚠⚠ RULED BY JORDAN 2026-09-20: *\"admit kill and wound as resolvable verbs\"* (`ED-IN-0261`, amended). This cell is what carries that ruling, and the ruling it REVERSES is in the same row: `ED-IN-0261` as first written refused `H-80`'s item on the ground that the row is not a verb. THE ROW WAS UNTYPED (`requires: —`) AND THAT IS THE WHOLE OF WHY IT WAS UNCHOOSABLE — `driver.py`'s contest gate asks `row.requires_typed is not None` because `operands_for` returns `{}` for an untyped row, so a computed contested act would have reached the seam with ONE claimant and `combat_seam` would have returned `PARTY-GAP`. Typing it binds `subject`, which IS the second claimant, and the gate's own recorded reason for the exclusion therefore no longer holds. ⚠ THE CLAUSE IS NOT A STAND-IN AND IS THE NARROWEST ONE THAT DOES THE JOB: you cannot fight someone who is not there, `Person.exists` is the field this row's `Felled` band writes, and `exists:Person` is answered by the reader today (`requires.py:191`). A WIDER precondition — a hostility test, an eligibility-to-fight test — would be an invention, and `G4` weighs under-refusing and inventing equally. What this cell must NOT be read as saying is that a killing needs no more justification than a living target; it says the FOLD can form and carry the act, and everything about whether the person WANTS to is `score` and the deontological gate, neither of which exists yet. ⚠ THE SLASHED NAME SURVIVES THIS COMMIT AND IS SEPARATELY RULED WRONG (*\"kill / wound isn't supposed to be a verb by itself\"*). Splitting it into `kill` and `wound` needed a row of alignment cells each, and `ALIGNMENT` was re-celled whole over the seven `pursuit_axes` — so the split rode that commit (IN-08), where it landed as `challenge` -> `accept` alone: `kill` and `wound` are not verbs (RS-5, ED-IN-0288)."
     requires_note: "⚠ `contests:` IS A REAL FIELD NOW, NOT A NOTE. ARCHITECTURE_V2.md:394 declares the column -- `contests: <prize> | none`, *if set, routes to the seam at RESOLVE (§39)* -- and :434 sets it on this row. The transcription put it here, where nothing reads it, so the fold executed a kill as a DIRECT WRITE. Jordan, 2026-09-02: *that would trigger the personal combat scene. you can't just kill or wound.* The design already said so."
     # ⚠ DEGREE-KEYED 2026-09-03 (#358 rev.2 §C.4 / F6, loader invariant 12). The flat list below
     # was UNCONDITIONAL AFTER THE SEAM RESOLVED, so LOSING the fight killed the loser's target
@@ -753,19 +757,23 @@ verbs:
     eligibility: ["own"]
     beneficiary: "actor"
     beneficiary_note: "`fight`'s column and reason (`candidate_pursuit_cells.md` §3.4: *`challenge`: `actor`*): the challenger stands to gain by the contest he calls for, and the challenged is the one put to the question."
-    requires:    "the challenged is a living person other than the challenger"
+    requires:    "the challenged is a living person other than the challenger, present where the challenger is"
     requires_typed:
-      form:      existence
-      of:        subject
-      kind:      Person
-    requires_typed_note: "`fight`'s cell, for `fight`'s reason: you cannot call out someone who is not there, and `exists:Person` is answered by the reader today. Nothing narrower is invented (`G4`). The SELF-challenge is the `counterparty:` column's, below."
+      all:
+        - form:      existence
+          of:        subject
+          kind:      Person
+        - form:      relation
+          of:        subject
+          relation:  with
+    requires_typed_note: "`fight`'s cell, for `fight`'s reason: you cannot call out someone who is not there. `exists:Person` is answered by the reader today, and since v9 IN-59 (a) (RS-26) so is the second conjunct, `relation` of `subject`, `with` (`give`'s co-location carrier, WORLD-ONLY: the challenger forms the Candidate on whom he knows of and the fold refuses a challenged who is not where he is, `challenge.refused`) [ASSUMPTION; medium; Jordan to correct; revert: the single `existence` cell]. Nothing narrower is invented (`G4`). The SELF-challenge is the `counterparty:` column's, below."
     counterparty: subject
     counterparty_note: "THE CHALLENGED IS THE SECOND SIDE, AND A MAN DOES NOT CHALLENGE HIMSELF. `determine`'s and `oblige`'s shape (`counterparty: subject`): `decision/options.py::opening_set` forms no Candidate whose counterparty is the person, and the fold's `counterparty` clause (`loop/resolve.py::_admits`) refuses a hand-built one."
     writes:      []
     writes_note: "WRITES NOTHING, `speak`'s shape one party narrower: the challenge is an utterance made before witnesses, and what it changes is what they -- the challenged first -- come to know, by the witness channels (`challenge.issued` is deposited like any kind). No state carries a standing challenge: the one that would (a held challenge `accept` reads in its precondition) has no carrier in the tree, and inventing a `Tenure` kind or `Record` kind for it is a design call this commit does not make. So the link from a challenge to its acceptance is the CHOOSER's -- the challenged hears of it and may answer -- and not the fold's [ASSUMPTION; the residue is named in `accept`'s `requires_note`]."
     emits:       ["challenge.issued"]
     emits_on_refusal: ["challenge.refused"]
-    refusal_note: "FLAT: one kind for every failable clause. Refusal conditions: the challenged is no living person (the cell), or -- for a hand-built act only, a computed one never being formed -- he is the challenger (the fold's `counterparty` clause)."
+    refusal_note: "FLAT: one kind for every failable clause. Refusal conditions: the challenged is no living person, or is not where the challenger is (the cell's two conjuncts), or -- for a hand-built act only, a computed one never being formed -- he is the challenger (the fold's `counterparty` clause)."
     grade:       "assumption"
     grade_note: "the VERB is ruled (ED-IN-0261: *fight, challenge, accept are* verbs); its row -- the cell, writing nothing, the kinds -- is IN-08's reading, graded as `found` and `survey` are."
     source:      "ED-IN-0261 (2026-09-20; as narrowed 2026-10-06); `proposals/2026-09-20-pursuit-basis-worksheet.yaml` §4 (*`challenge` / `accept` -- the duel pair*)"
@@ -774,14 +782,18 @@ verbs:
     eligibility: ["own"]
     beneficiary: "actor"
     beneficiary_note: "`fight`'s column and reason, `candidate_pursuit_cells.md` §3.4 (*`accept`: `actor`*). As on `fight`, the writes land on the SUBJECT -- here the challenger -- and a harm is not a benefit to the person harmed."
-    requires:    "the challenger is a living person"
+    requires:    "the challenger is a living person, present where the actor is"
     requires_typed:
-      form:      existence
-      of:        subject
-      kind:      Person
+      all:
+        - form:      existence
+          of:        subject
+          kind:      Person
+        - form:      relation
+          of:        subject
+          relation:  with
     contests: "the body"
-    requires_typed_note: "`fight`'s cell exactly, and for `fight`'s reason: typing it binds `subject`, the second claimant the seam needs, so a computed `accept` reaches `combat_seam` with two parties rather than returning `PARTY-GAP`. `contests: \"the body\"` is ED-IN-0261's own words for this row."
-    requires_note: "⚠ WHAT THIS CELL CANNOT YET ASK: *the subject has challenged me*. `challenge` writes nothing (its `writes_note`), so no state holds a standing challenge for the fold to read, and the cell refuses only a dead or absent challenger. An `accept` formed with no challenge behind it resolves as a duel all the same -- the fold cannot tell the difference. Recorded as a residue rather than closed by inventing a carrier [ASSUMPTION; Jordan to correct]. MEASURED at IN-08's cells commit (populated realm, seed 0, four seasons, 142 `accept` acts attempted): 12 executed, and in 0 of the 12 did the acceptor's ledger hold a `challenge` claim about the subject at choice time (6 `challenge.issued` events in the log) -- the chooser's link between the two is not there yet."
+    requires_typed_note: "`fight`'s cell exactly, and for `fight`'s reason: typing it binds `subject`, the second claimant the seam needs, so a computed `accept` reaches `combat_seam` with two parties rather than returning `PARTY-GAP`. Since v9 IN-59 (a) (RS-26) the cell carries `fight`'s second conjunct too, `relation` of `subject`, `with` (WORLD-ONLY: the Candidate forms and the fold refuses a challenger who is not where the actor is, `accept.refused`) [ASSUMPTION; medium; Jordan to correct; revert: the single `existence` cell]. `contests: \"the body\"` is ED-IN-0261's own words for this row."
+    requires_note: "⚠ WHAT THIS CELL CANNOT YET ASK: *the subject has challenged me*. `challenge` writes nothing (its `writes_note`), so no state holds a standing challenge for the fold to read, and the cell refuses only a dead challenger or one not where the actor is (IN-59 (a)). An `accept` formed with no challenge behind it resolves as a duel all the same -- the fold cannot tell the difference. Recorded as a residue rather than closed by inventing a carrier [ASSUMPTION; Jordan to correct]. MEASURED at IN-08's cells commit (populated realm, seed 0, four seasons, 142 `accept` acts attempted): 12 executed, and in 0 of the 12 did the acceptor's ledger hold a `challenge` claim about the subject at choice time (6 `challenge.issued` events in the log) -- the chooser's link between the two is not there yet."
     # The SAME degree-keyed writes and emits as `fight`, read off the SAME scene (`combat_seam` ->
     # `wound_state[THE ACT'S SUBJECT]`), by the SAME effect (`loop/effects_combat.py::_eff_kill`,
     # registered for both rows). A duel is a fight both sides agreed to; what the scene can
@@ -878,20 +890,26 @@ verbs:
     beneficiary_note: "`move`'s column and reason: the migrant goes where he chose to live. No operand beneficiary -- the destination is a Rung, which no Candidate carrier holds."
     referent_class: Rung
     referent_class_note: "v9 IN-45 `migrate` (H-168 limit 1, [ASSUMPTION; medium; Jordan to correct]): THE DESTINATION CHANNEL. FORMED ONLY ON A PLACE THE PERSON HAS BEEN TOLD OF AND DOES NOT ALREADY LIVE UNDER -- `queries/world_q.py::places_named` stamps those Rungs onto the question he answers as `Rung` (IN-53 D1's partition, `_stamped`), and `to` binds that referent through the unchanged referent rule (`decision/options.py::_derive_operand`; the document a question is about does not re-aim a classed referent). No ninth operand, no Record kind: the closed eight stand. ATTACKED FIRST AND REJECTED: the held-Record channel (`rosters.yaml: record_sourced_operands`) -- `to` is already mapped on `dispensation`, `petition` and `faction_sheet` to an addressee, and the one kind with a free place key, `works: {to: at}`, is declared by no computed act (H-165 limit 2, ED-IN-0297) and would re-aim every `to`-binding row on a question about a works; the shortfall channel answers `kind`/`amount` and leaves `to` the drained rung, a dearth and not a destination. MEASURED before the class (19c, H-168): formed wherever `move` is, on the question's single referent, and refused every time -- most into the actor's own residence; those formations stop. REVERT: delete this column (and `places_named`'s splice)."
-    requires:    "a contain path exists, and the destination has room"
+    requires:    "a contain path exists, the actor may enter the destination, and the destination has room"
     requires_typed:
-      form:      contain_path
-      of:        actor
-      to:        to
-      conjunct:  path
-    requires_typed_note: "`move`'s cell, clause for clause and for `move`'s reasons (§E3 `:408`, *a `contain` path exists*): the journey is the same journey, so a person who believes there is no road (`contain.path:<to>` False, deposited off a `travel.blocked`) forms neither a `move` nor a `migrate` there, through the one reader (`belief_contradicts`). NAMED `path` because the row keys its refusals. The destination's ROOM is not a cell: the grammar compares one entity's scalar against an operand or a second read on the SAME entity, and room is the destination's capacity against its residents PLUS the migrant's own weight, minus himself if he already lives under it -- so it is the effect's decline, on `_eff_found`'s precedent for what the grammar cannot spell. So is a destination the ladder will not seat him in, and one he already lives in."
+      all:
+        - form:      contain_path
+          of:        actor
+          to:        to
+          conjunct:  path
+        - form:      relation
+          of:        to
+          relation:  audience
+          conjunct:  audience
+    requires_typed_note: "⚠ v9 IN-59 (b) (RS-26, the AUDIENCE half of the access gate) ADDED `move`'s second conjunct here too, `relation` of `to`, `audience` -- otherwise a settler walks past the guard a traveller is stopped by. NAMED `audience` because the row keys its refusals, and keyed to `travel.blocked`: a guarded door refusing him is the journey failing, the fact `path` already emits; `audience` is WORLD-ONLY, so no witness deposits it as a belief about the road. [ASSUMPTION; medium; Jordan to correct; revert: the single `path` cell.] `move`'s cell, clause for clause and for `move`'s reasons (§E3 `:408`, *a `contain` path exists*): the journey is the same journey, so a person who believes there is no road (`contain.path:<to>` False, deposited off a `travel.blocked`) forms neither a `move` nor a `migrate` there, through the one reader (`belief_contradicts`). NAMED `path` because the row keys its refusals. The destination's ROOM is not a cell: the grammar compares one entity's scalar against an operand or a second read on the SAME entity, and room is the destination's capacity against its residents PLUS the migrant's own weight, minus himself if he already lives under it -- so it is the effect's decline, on `_eff_found`'s precedent for what the grammar cannot spell. So is a destination the ladder will not seat him in, and one he already lives in."
     writes:      ["Person.travel_leg", "Tenure.until", "Tenure.since"]
     writes_note: "`move`'s three pairs, because the journey is `move`'s (`loop/effects.py::_relocate`, one body for both verbs): the leg (ended at the next MATTER), the old `contain` closed and the new opened. The `reside` edges ride the same two Tenure pairs -- the old residence's `until`, the new one's `since` -- which is why no pair is added. No `write_matrix.yaml` row is added: a Tenure's `since`/`until` rows are kind-agnostic, and the gate's F3 judges each edge (all four are the migrant's own, `T-m`)."
     emits:       ["residence.changed"]
     emits_on_refusal:
-      path:  ["travel.blocked"]
-      write: ["migrate.refused"]
-    refusal_note: "KEYED PER CLAUSE (`04 §B.13` invariant 4's per-conjunct half, plan position `19`'s shape). `path` is the journey failing, and it emits `move`'s own `travel.blocked` because it IS the same fact -- *there is no road from here to there* -- so a witness of either verb learns the same thing. `write` is the destination refusing the settler: the ladder will not seat him there, he already lives there, he is in custody (a live `detain`, v9 SC-03a: `_decline_custody`), or -- RR-2's throttle -- it is AT CAPACITY, a newcomer whose weight would take `world_q.population` past `world_q.capacity`. ELIGIBILITY is `own`, which cannot decline, so it keys nothing."
+      path:     ["travel.blocked"]
+      audience: ["travel.blocked"]
+      write:    ["migrate.refused"]
+    refusal_note: "KEYED PER CLAUSE (`04 §B.13` invariant 4's per-conjunct half, plan position `19`'s shape). `path` is the journey failing, and it emits `move`'s own `travel.blocked` because it IS the same fact -- *there is no road from here to there* -- so a witness of either verb learns the same thing. `write` is the destination refusing the settler: the ladder will not seat him there, he already lives there, he is in custody (a live `detain`, v9 SC-03a: `_decline_custody`), or -- RR-2's throttle -- it is AT CAPACITY, a newcomer whose weight would take `world_q.population` past `world_q.capacity`. `audience` (v9 IN-59 (b)) is the mover's standing at a guarded destination, and emits `travel.blocked` too: it is the same fact as `move`'s refusal of an unadmitted entrant. ELIGIBILITY is `own`, which cannot decline, so it keys nothing."
     grade:       "assumption"
     grade_note:  "the VERB is RR-2's (ruled: *a verb persons take*); its row -- the cell, the writes, the kinds, the throttle's place -- is plan position `19c`'s, argued at `_eff_migrate`, graded as `found`'s and `build`'s are. Its `alignment` cells arrived with IN-08's cells commit, graded `reasoned` (`rosters.yaml: tables.alignment`)."
     source:      "plan `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md` 19c (MIGRATE, carrying 24d-ii); `proposals/2026-09-17-governance-and-behaviour/RULINGS.yaml` RR-2; `01_THE_BUILD_ORDER.md` S9"
@@ -899,12 +917,16 @@ verbs:
     stratum:     "movement"
     eligibility: ["own"]
     beneficiary: "actor"
-    requires:    "a contain path exists"
+    requires:    "a contain path exists, and the actor may enter the destination"
     requires_typed:
-      form:      contain_path
-      of:        actor
-      to:        to
-    requires_typed_note: "§E3 `:408` — *a `contain` path exists*. ⚠ THIS DROPS TWO TERMS `_req_move` CARRIED AND THE DROP IS DELIBERATE: that predicate ended `on_ladder or here.kind == \"person\"`, which is true of every actor with a person-rung, so the ladder term decided nothing; and its `dest == a.actor` refusal is kept, as the reader's own rule that a node is not a path to itself. What replaces them is an actual path check — the two rungs must be connected in the containment forest — which is what the cell says and what `_req_move` never tested. ⚠ THIS CELL ENDED *\"No case moves: `to` is unbound for every computed act (`H-94`), so the verdict is UNKNOWN and the fold refuses, exactly as before\"* AND `W-C` FALSIFIED IT WITHOUT EDITING IT. Struck by the `W-C` adversarial pass. `operands_for` binds `to` from the question's referent, so a computed `move` carries a destination: measured over the 89 runnable corpus worlds, `move` EXECUTES 650 times and is blocked 73. The path check is what decides it now — `corpus_run.build_at` makes every person a `person`-kind rung, so a SIBLING destination fails `contain_ascends` and emits `travel.blocked`, while the actor's own containing rung is a valid ascent."
+      all:
+        - form:      contain_path
+          of:        actor
+          to:        to
+        - form:      relation
+          of:        to
+          relation:  audience
+    requires_typed_note: "⚠ v9 IN-59 (b) (RS-26, the AUDIENCE half of the access gate) ADDED THE SECOND CONJUNCT, `relation` of `to`, `audience` -- `with`'s shape asked of the destination rung and the actor, one new stem (`data/requires.py: REQUIRES_STEMS`), no form or operand added. `world_q.admits_audience` answers it: admitted if a seat the mover holds reaches the rung, or he holds a live writ from such a seat (`issue`), or he owes a live sworn `oblige` to one (IN-40), or nobody guards it (`guard_weight == 0`, IN-60). WORLD-ONLY, so the mover forms the Candidate and the fold refuses (`travel.blocked`, the row's one refusal kind). NOT a `basis` conjunct: that form takes its seat from `Act.via`, and a seatless `move` would then be refused everywhere. [ASSUMPTION; medium; Jordan to correct; revert: the single `contain_path` cell.] §E3 `:408` — *a `contain` path exists*. ⚠ THIS DROPS TWO TERMS `_req_move` CARRIED AND THE DROP IS DELIBERATE: that predicate ended `on_ladder or here.kind == \"person\"`, which is true of every actor with a person-rung, so the ladder term decided nothing; and its `dest == a.actor` refusal is kept, as the reader's own rule that a node is not a path to itself. What replaces them is an actual path check — the two rungs must be connected in the containment forest — which is what the cell says and what `_req_move` never tested. ⚠ THIS CELL ENDED *\"No case moves: `to` is unbound for every computed act (`H-94`), so the verdict is UNKNOWN and the fold refuses, exactly as before\"* AND `W-C` FALSIFIED IT WITHOUT EDITING IT. Struck by the `W-C` adversarial pass. `operands_for` binds `to` from the question's referent, so a computed `move` carries a destination: measured over the 89 runnable corpus worlds, `move` EXECUTES 650 times and is blocked 73. The path check is what decides it now — `corpus_run.build_at` makes every person a `person`-kind rung, so a SIBLING destination fails `contain_ascends` and emits `travel.blocked`, while the actor's own containing rung is a valid ascent."
     writes:      ["Person.travel_leg", "Tenure.until", "Tenure.since"]
     emits:       ["travel.moved"]
     emits_on_refusal: ["travel.blocked"]

@@ -36,7 +36,7 @@ MUTATIONS, run at the build 2026-10-22 (each RED, then restored and GREEN):
     table's own text (`_loads`), so it is run on every run rather than once by hand.
   * `loop/effects_migration.py::_eff_move`'s custody refusal (SC-03a's `restrained(..., DETAIN_KIND)`)
     switched off -> block 4's `travel.blocked` assertion RED (`['travel.moved']`).
-  * `_eff_arrest`'s `_issuing_seat` replaced by `a.via` -> block 4's issuing-seat assertion RED.
+  * `_eff_arrest`'s `issuing_seat` replaced by `a.via` -> block 4's issuing-seat assertion RED.
   * `_eff_arrest`'s `restrained(w, prisoner, DETAIN_KIND)` clause deleted -> block 4's pinned second
     arrest RED (`['arrest.made']`). Run 2026-10-22.
   * `_eff_arrest`'s `_may_close_custody` filter deleted -> the issue-only-seat test RED
