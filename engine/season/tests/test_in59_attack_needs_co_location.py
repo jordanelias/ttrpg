@@ -19,7 +19,6 @@ FALSIFIERS, each able to observe its failure (`CLAUDE.md` §0.1 pt 2):
 """
 from __future__ import annotations
 
-import contextlib
 import dataclasses
 
 import pytest
@@ -29,7 +28,6 @@ from engine.season.data import verbs as V
 from engine.season.data.matrix import Step, WriteClass
 from engine.season.data.requires import build_typed_requires
 from engine.season.harness import probes as P
-from engine.season.loop import driver as D, resolve as R
 from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.queries import world_q
 from engine.season.seam.wrappers import combat as C
@@ -61,19 +59,6 @@ def _refused(verb: str, evs: list) -> bool:
     kinds = set(V.VERB_TABLE[verb].emits_on_refusal)
     assert evs, f"{verb}: the fold returned no Event at all"
     return all(e.kind in kinds for e in evs)
-
-
-@contextlib.contextmanager
-def _row_planted(verb: str, row):
-    """Plant `row` under `verb` in EVERY table object the fold reads. `loop/resolve.py` and
-    `loop/driver.py` bind `VERB_TABLE` at import; `test_governance_build.py` reloads `data.verbs`, after
-    which `V.VERB_TABLE` is a NEW dict, so patching `V` alone plants a row nobody reads and the mutation
-    stays refused (the order-dependent red of CI run 1, B-Y)."""
-    tables = {id(m.VERB_TABLE): m.VERB_TABLE for m in (V, R, D)}
-    with contextlib.ExitStack() as stack:
-        for t in tables.values():
-            stack.enter_context(mock.patch.dict(t, {verb: row}))
-        yield
 
 
 def _without_with(verb: str):
@@ -128,7 +113,7 @@ def test_mutation_dropping_the_with_conjunct_lets_the_cross_rung_act_execute():
     checked = 0
     for verb in DUEL_VERBS:
         assert _refused(verb, _fold(verb, ELSEWHERE)), verb
-        with _row_planted(verb, _without_with(verb)):
+        with mock.patch.dict(V.VERB_TABLE, {verb: _without_with(verb)}):
             evs = _fold(verb, ELSEWHERE)
         assert not _refused(verb, evs), (verb, [e.kind for e in evs])
         checked += 1

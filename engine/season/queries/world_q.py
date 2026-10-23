@@ -1215,8 +1215,10 @@ def guard_weight(w: World, rung_id: str) -> int:
         oblige clause skips it: a man sentenced to serve the bench does not guard it."""
     TRACE.query("guard_weight", "resolver")
     here = set(presence(w, rung_id))
-    seats = sorted({t.object for t in w.tenures
-                    if t.kind == "hold" and t.live and t.subject in here and t.object in w.offices})
+    if not here:                       # nobody stands there: no seat to read, no oath to walk
+        return 0
+    seats = {t.object for t in w.tenures
+             if t.kind == "hold" and t.live and t.subject in here and t.object in w.offices}
     sworn = {t.subject for s in seats for t in sworn_to(w, s) if not t.imposed and t.subject in here}
     return sum(w.persons[p].weight for p in sworn)
 
@@ -1228,8 +1230,7 @@ def issuing_seat(w: World, rid: str) -> Optional[str]:
     act caused that Event, or the act exercised no seat in `w.offices` (existence in the table; not that
     the issuer still holds it). The creating Event is the
     FIRST in the log whose changes name the Record (`loop/matter.py`'s `prior` reads the last, for a
-    different question). MOVED HERE from `loop/effects_information.py` at v9 IN-59 (b), which re-imports
-    it for `arrest`: the `audience` stem's writ limb asks the same question, and `queries/` may not
+    different question). `arrest` and the `audience` stem's writ limb both ask it, and `queries/` may not
     import `loop/`, so the one owner sits where both readers reach it."""
     made = next((e for e in w.log if any(c.subject == rid for c in e.changes)), None)
     act = causing_act(w, made) if made is not None else None
@@ -1239,38 +1240,37 @@ def issuing_seat(w: World, rid: str) -> Optional[str]:
 
 def admits_audience(w: World, actor: str, rung: str) -> bool:
     """v9 IN-59 (b) (RS-26) -- MAY `actor` ENTER `rung`? The `audience` stem's answer
-    (`WorldReader.read`), asked of a `move`'s or a `migrate`'s destination. FOUR LIMBS, any one admits,
-    each a property of the mover read off live state and each composed on its one owner:
+    (`WorldReader.read`), asked of a `move`'s or a `migrate`'s destination. Any one of FOUR LIMBS admits,
+    each a property of the mover read off live state (compute-on-demand, stored nowhere, T-a), in the
+    order the code asks them:
 
-      1. HIS OWN SEAT: he is among `governors_of(w, rung)` -- a live `hold` on a seat whose purview
+      1. NOBODY GUARDS IT: `guard_weight(w, rung) == 0` (IN-60) -- an unguarded place is open. That is
+         every rung of `build_realm(0)` as built (MEASURED at the B-Y close), and a rung closes wherever a
+         live sworn `oblige` stands with its principal, so the gate binds where guards stand, whatever
+         put them there.
+      2. HIS OWN SEAT: he is among `governors_of(w, rung)` -- a live `hold` on a seat whose purview
          reaches the rung (`purview_reaches`) -- a king walks into his court. ⚠ ANY HELD SEAT, NOT
          `Act.via`: `architecture/meta/04_CODE_ARCHITECTURE.md:350` says purview is asked of the seat
          EXERCISED, through `via`; `move` and `migrate` are `own`-eligible and carry no seat, and a
          `relation` reads only the actor and the rung, so "the seat he exercises" is read as every seat
          he sits in [ASSUMPTION; medium; Jordan to correct; revert: none short of a `via` on movement
          acts, which the grammar does not carry].
-      2. A WRIT: he holds a live writ addressed to him (`writs_held`) whose issuing seat
+      3. AN OATH: a live `oblige` he owes to a seat that reaches the rung -- sworn men enter. The scan is
+         over his own obliges (`sworn_to` is keyed by seat, the inverse question), and an IMPOSED oblige
+         is a sentence, not an oath (`Tenure.imposed`): skipped as `guard_weight` and `purview_reaches`'
+         oblige clause skip it.
+      4. A WRIT: he holds a live writ addressed to him (`writs_held`) whose issuing seat
          (`issuing_seat`, K-52) reaches the rung -- an invitation, minted by `issue`. A hand-planted
          writ has no creating Event and therefore no issuer, and opens nothing. ⚠ Any addressed
          `dispensation` counts: its content, its `at` and the issuer's continued tenure are not read
          [ASSUMPTION; medium; Jordan to correct; revert: read them]; and a writ reaches its addressee
-         only by `give` (`ED-IN-0292` (1), RULED NO), so the limb is built but unreached in computed play.
-      3. AN OATH: he owes a live `oblige` to a seat that reaches the rung (`sworn_to`, IN-40's walk; the
-         same seats `purview_reaches`' oblige clause reads) -- sworn men enter. An IMPOSED oblige is a
-         sentence, not an oath (`Tenure.imposed`), skipped as `guard_weight` and the oblige clause skip it.
-      4. NOBODY GUARDS IT: `guard_weight(w, rung) == 0` (IN-60) -- an unguarded place is open. That is
-         every rung of `build_realm(0)` as built (MEASURED at the B-Y close), and a rung closes wherever a
-         live sworn `oblige` stands with its principal, so the gate binds where guards stand, whatever
-         put them there.
-
-    Compute-on-demand, stored nowhere (T-a). The limbs are asked cheapest-decisive-first (the guard
-    limb), which changes no answer -- the four are a disjunction."""
+         only by `give` (`ED-IN-0292` (1), RULED NO), so the limb is built but unreached in computed play."""
     TRACE.query("admits_audience", "resolver")
     if guard_weight(w, rung) == 0:
         return True
     if actor in governors_of(w, rung):
         return True
-    # Limbs 3 and 2 ask `purview_reaches` of ONLY the seats the actor is sworn to / holds a writ from, not of
+    # Limbs 3 and 4 ask `purview_reaches` of ONLY the seats the actor is sworn to / holds a writ from, not of
     # every office in the table (each call walks `w.tenures`, so the all-offices set was offices x tenures).
     if any(t.kind == "oblige" and t.live and t.subject == actor and not t.imposed
            and t.object in w.offices and purview_reaches(w, w.offices[t.object], rung)

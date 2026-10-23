@@ -314,8 +314,7 @@ def test_the_witness_seed_reaches_the_seam_in_a_full_one_season_run_too(seed):
 
 # ---------------------------------------------------------------------------------------------- (e)
 
-# The guard reading is IN-60's Query, `world_q.guard_weight` (B-Y); the local helper that stood in for it
-# at B-V is retired, so the definition has one owner (`test_in60_guard_weight.py` holds its falsifiers).
+# The guard reading is IN-60's Query, `world_q.guard_weight` (`test_in60_guard_weight.py` holds its falsifiers).
 
 def test_the_control_arm_seats_no_guard_and_reads_zero_at_every_hearth(control):
     assert not [p for p in control.persons if p.startswith(POP.COHORT_PREFIX + "guard_")]

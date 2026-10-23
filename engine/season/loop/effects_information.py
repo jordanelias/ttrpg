@@ -24,11 +24,9 @@ from ..queries import faction_q
 from ..queries.person_q import ABOUT_KEYS, argued_pursuits, consequence_pursuits
 from ..queries.world_q import (
     BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_PETITION, docketed, docketed_under,
-    faction_holding, faction_of, hold_force, place_of, restrained,
+    faction_holding, faction_of, hold_force, issuing_seat, place_of, restrained,
     slot_for, works_for, works_target,
 )
-# `_issuing_seat`'s one owner moved to `world_q` at v9 IN-59 (b) (the `audience` stem's writ limb reads it).
-from ..queries.world_q import issuing_seat as _issuing_seat
 from ..state.carriers import Proposition, Record, Tenure
 from ..state.carriers import DETERMINED_BY
 from ..state.gate import (
@@ -1001,7 +999,7 @@ def _may_close_custody(w: "World", seat: str, prisoner: str) -> bool:
 @effect_for("arrest")
 def _eff_arrest(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """v9 IN-12 step 5 (#453 §9.1, the `arrest` row): A `detain` EDGE OPENS, the prisoner (the act's
-    `subject`) -> THE SEAT THAT ISSUED THE WARRANT the actor holds naming him (`_issuing_seat`, K-17/K-52):
+    `subject`) -> THE SEAT THAT ISSUED THE WARRANT the actor holds naming him (`issuing_seat`, K-17/K-52):
     the enforcement seat (`Act.via`) acts but does not own the custody, so the issuing seat's bench is
     who may `pardon` it (`state/gate.py`'s `determination` closes a restraint only through the seat that
     is its object). The row is contested (`a standing`); the fold calls this body on `Overwhelming`,
@@ -1012,7 +1010,7 @@ def _eff_arrest(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     prisoner, #453 §8.1 Custody [ASSUMPTION; medium; Jordan to correct; revert: a second bench's
     warrant opens a second custody, "relaxation to the secular arm"]); (2) the actor HOLDS A WARRANT
     NAMING HIM (`_held_warrants`, `seize`'s reading); (3) the warrant's issuing seat is readable
-    (`_issuing_seat`) AND ITS LIVE HOLDER COULD CLOSE THE CUSTODY (`may_determine` over the prisoner,
+    (`issuing_seat`) AND ITS LIVE HOLDER COULD CLOSE THE CUSTODY (`may_determine` over the prisoner,
     the gate's own predicate for `determination`, which `pardon` closes under): a custody is opened only
     on a seat whose bench could `pardon` it, so a warrant from an issue-only seat, or from a seat whose
     ground does not hold the prisoner, opens nothing
@@ -1029,7 +1027,7 @@ def _eff_arrest(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     prisoner = _operand(a, "subject")
     if prisoner not in w.persons or prisoner == a.actor or restrained(w, prisoner, DETAIN_KIND):
         return NO_CHANGE
-    seat = next((s for s in (_issuing_seat(w, rid)
+    seat = next((s for s in (issuing_seat(w, rid)
                              for rid in _held_warrants(w, a.actor, a.verb, prisoner))
                  if s is not None and _may_close_custody(w, s, prisoner)), None)
     if seat is None or not may_warrant(w, a.actor, a.via, prisoner):

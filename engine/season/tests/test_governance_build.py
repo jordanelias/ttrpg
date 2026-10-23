@@ -778,6 +778,7 @@ def _load_with(table_text: str):
     from pathlib import Path
     from ..data import files, verbs as _verbs
     real = files.VERB_TABLE_YAML
+    table = _verbs.VERB_TABLE            # the dict `loop/resolve.py`, `loop/driver.py` and the rest bound at import
     with tempfile.TemporaryDirectory() as d:
         arm = Path(d) / "verb_table.yaml"
         arm.write_text(table_text)
@@ -787,6 +788,14 @@ def _load_with(table_text: str):
         finally:
             files.VERB_TABLE_YAML = real
             importlib.reload(_verbs)
+            # The restoring reload binds a NEW dict; every module that imported the first keeps the old one, so a
+            # test that plants a row through `data.verbs.VERB_TABLE` after this call would plant where nobody
+            # reads. Keep the first dict's identity and refill it with the restored table.
+            restored = _verbs.VERB_TABLE
+            if restored is not table:
+                table.clear()
+                table.update(restored)
+                _verbs.VERB_TABLE = table
 
 
 _LEVY_ROW = (
