@@ -136,6 +136,8 @@ inputs have no carrier:
 - **The break and rupture consequences** (`composure_damage`, `disposition_set_to`, `apply_knot_loss`
   `:328-343`) have no season carrier; the coherence change has none either (§3.3).
 
+**IN-32 was built as below at B-S and FALSIFIED by its own stopping rule** (attempt `53ed995d`, reverted `7c6df560`; `hole_register.yaml` H-182's `cite:` and H-237): the shape that follows is the attempt's, not what the tree holds, and IN-32 stays unbuilt.
+
 **What IN-32 builds instead, host-side** `[ASSUMPTION; medium; Jordan to correct]`. The row
 `tie / knot` (`verb_table.yaml`) names two kinds for one opener. H-182 (`hole_register.yaml`) is about
 **ties** — *a telling does not knit teller and hearer* — and names the tie's reader:
@@ -238,8 +240,8 @@ per-person value. Named here `[ASSUMPTION; medium; Jordan to correct]`:
   `Fixtures` value, not a literal (`work`'s `floor`, H-08). The 30 is `fieldwork_v30.md:297`'s figure,
   so K-3 carries it as that value's source, not as the reason it is correct;
 - **the authored values**: 32 of the registry's persons carry `ts:`. Most are `null # [GAP]`, which
-  leaves the key absent, so the person cannot attempt (canon: *"Characters below the gate cannot
-  attempt the action"*). Four values are at least 30, two of them non-numeric (`75–80`, `~50`). How a
+  leaves the key absent, so the person cannot attempt (canon: *TS >= 30 required*, `fieldwork_v30.md` §4.2; the decline
+  at formation is the design's own reasoning, since §2.2's *cannot attempt* governs the attribute gates). Four values are at least 30, two of them non-numeric (`75–80`, `~50`). How a
   range or an approximate value reads is K-3's parse rule to state; *proposed:* the lower bound of a
   range, the number in `~N`. Whether any such person is in `build_realm(0)`'s cast decides whether K-3's
   EXIT (`thread_read` executed in computed play) can be met at all, and is K-3's first measurement.

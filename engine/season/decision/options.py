@@ -139,10 +139,12 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             continue
         # v9 PC-06 K-3 (`H-85`): A ROW WHOSE CELL ASKS THE ACTOR'S OWN STATE FORMS ONLY WHERE HIS OWN
         # STATE ADMITS IT -- `thread_read`'s Thread Sensitivity gate, read off the cell's stems
-        # (`OWN_STATE_STEMS`), never off a verb name. The design's intent, *"Characters below the gate
-        # cannot attempt the action"* (`fieldwork_v30.md` §2.2, reference, not the mechanism; the
-        # mechanism is this branch and its test) -- so a person below it, or with no authored
-        # value, never forms the Candidate, rather than forming it and being refused. The polarity is
+        # (`OWN_STATE_STEMS`), never off a verb name. Canon's verb-level statement is *TS >= 30
+        # required* (`fieldwork_v30.md` §4.2; reference, not the mechanism). §2.2's *cannot attempt*
+        # governs the attribute gates, and ED-FI-0009's retraction withdrew reading it as verb
+        # availability; that a person below the gate does not FORM the act is THIS branch's reasoning
+        # and its test -- so a person below it, or with no authored value, never forms the
+        # Candidate, rather than forming it and being refused. The polarity is
         # NOT clause 4's (known-false declines, unknown forms): his sensitivity is not a belief about
         # the world he can be wrong about, the self-contest decline's reasoning below. The SAME cell,
         # asked of the same answerer the fold delegates to (`OwnStateReader`), so the two cannot

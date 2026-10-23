@@ -38,6 +38,7 @@ from . import files
 from .rosters import FACTIONS, load_yaml
 from ..gaps import Unspecified
 from ...substrate import names as _names
+from ...substrate.descriptors import PRACTITIONER_STATS
 
 NPC_REGISTRY_YAML = files.NPC_REGISTRY_YAML
 
@@ -273,6 +274,8 @@ def conviction_of(r: dict) -> dict:
 #: (`~50`) as its number. [ASSUMPTION; medium; Jordan to correct; revert: the upper bound, or a
 #: refusal of both shapes.] The lower bound is the conservative reading of a gate -- a person
 #: authored "75 to 80" is at least 75 -- and `~` states imprecision, not a different number.
+#: `Person.thread_sensitivity`'s lower bound, from the descriptor leaf that owns it.
+_TS_FLOOR = PRACTITIONER_STATS["prac.thread_sensitivity"]["floor"]
 _TS_RANGE = re.compile(r"^\s*(?P<n>\d+)\s*[-–—]\s*\d+\s*$")
 _TS_APPROX = re.compile(r"^\s*~\s*(?P<n>\d+)\s*$")
 
@@ -291,9 +294,9 @@ def thread_sensitivity_of(r: dict) -> Optional[int]:
     if v is None:
         return None
     if isinstance(v, int) and not isinstance(v, bool):
-        if v < 0:
+        if v < _TS_FLOOR:
             raise Unspecified(
-                f"cast row {r.get('id', '?')}: ts {v!r} is negative", "references/npc_registry.yaml",
+                f"cast row {r.get('id', '?')}: ts {v!r} is below the floor {_TS_FLOOR}", "references/npc_registry.yaml",
                 needs="a whole number at or above 0, or null",
                 law="v9 PC-06 K-3 -- a sensitivity below nothing is not a reading of the registry")
         return v

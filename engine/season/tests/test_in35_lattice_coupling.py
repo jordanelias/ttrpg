@@ -12,8 +12,9 @@ THE ENTRY'S FALSIFIER, ONE TEST PER ARM, each able to see the failure it exclude
       oracle independent of the edges the rule couples across.
   (b) MANAGED: persons standing at the fabric execute `restore` each season through the real RESOLVE
       fold, IN THE DRIVER'S ORDER (MATTER opens the season, RESOLVE follows). Holding the first ring
-      stops the front at that ring: ring 1 crosses once, at season 1's MATTER, before anybody mends,
-      and nothing beyond it ever crosses. A mend at the source does NOT recall a ring MATTER has
+      stops the front at that ring: ring 1 crosses in EVERY season's MATTER (the source is never mended,
+      so each MATTER pulls ring 1 from the full scale back under its floor and RESOLVE mends it: a
+      limit cycle, not a fixed point), and nothing beyond it ever crosses. A mend at the source does NOT recall a ring MATTER has
       already pulled: the front reaches every territory in the season the unmanaged arm does. Each
       beside the unmanaged arm on the same world, which does cross.
   (c) WEIGHT 0 REPRODUCES TODAY: every Site ends where its kind's wear alone puts it, and the same
@@ -105,12 +106,14 @@ def _run(w: World, menders_at: tuple = ()) -> dict:
     """`SEASONS` seasons IN THE DRIVER'S ORDER (`loop/driver.py::SeasonDriver.season`: MATTER, then the
     rounds' DELIBERATE/RESOLVE): at each, the real MATTER barrier, then the menders' `restore` through
     the real RESOLVE fold. So the first MATTER pulls before anybody has mended, as in computed play.
-    Returns `{territory: the season its harbour first crossed FLOOR}`, the seasons' summed lattice
+    Returns `{territory: the season its harbour first crossed FLOOR}`, `{territory: how many seasons it
+    crossed}`, the seasons' summed lattice
     condition, the restores that executed, and `{site: its condition at each MATTER open}`; the
     crossings are read off the Events MATTER emitted (each anchored, through its cause, on the wear
     write that crossed)."""
     d = SeasonDriver(w)
     first, totals, restored = {}, [sum(s.condition for s in w.sites.values())], 0
+    crossings: dict = {}
     at_open: dict = {sid: [] for sid in w.sites}
     for season in range(1, SEASONS + 1):
         w.tick += 1
@@ -123,6 +126,7 @@ def _run(w: World, menders_at: tuple = ()) -> dict:
             site = w.sites[worn.changes[0].subject]
             if site.condition < w.fixtures.get("band_floors")["harbour"][FLOOR]:
                 first.setdefault(site.rung, season)
+                crossings[site.rung] = crossings.get(site.rung, 0) + 1
         acts = [Act(id=f"mend_{season}_{t}", actor=f"p_mender_{t}", verb="restore",
                     payload={"site": _sid(t)}) for t in menders_at]
         if acts:
@@ -131,7 +135,8 @@ def _run(w: World, menders_at: tuple = ()) -> dict:
             w.log.extend(out)
             restored += sum(e.kind == "site.restored" for e in out)
         totals.append(sum(s.condition for s in w.sites.values()))
-    return {"first": first, "totals": totals, "restored": restored, "at_open": at_open}
+    return {"first": first, "totals": totals, "restored": restored, "at_open": at_open,
+            "crossings": crossings}
 
 
 # ======================================================================================
@@ -154,8 +159,8 @@ def test_in35_unmanaged_the_lattice_falls_and_crossings_reach_territories_in_ord
     assert order == [1, 2, 3, 4, 5], order
     for near, far in zip(order, order[1:]):
         assert max(by_band[near]) < min(by_band[far]), by_band
-    # The effect per territory, as the Query reads it at the end: every territory but the source's own
-    # (already below its floor before the run, so it never CROSSED) has a closed use.
+    # The effect per territory, as the Query reads it at the end: every territory has a closed use, the
+    # source's own included (below its floor before the run, so it never CROSSED, but shut all the same).
     shut = {t for t in bands if world_q.closed_uses(w, t)}
     assert shut == set(bands), sorted(set(bands) - shut)
 
@@ -178,7 +183,8 @@ def test_in35_the_front_advances_one_ring_a_season_at_most():
 
 def test_in35_managed_holding_the_first_ring_stops_the_front_there_and_the_unmanaged_arm_does_not():
     """Menders at both ring-1 harbours `restore` at every RESOLVE. Season 1's MATTER pulls ring 1 before
-    anybody has mended (the driver's order), so ring 1 crosses once, and nothing beyond it ever does:
+    anybody has mended (the driver's order), so ring 1 crosses in every season's MATTER (the source stays
+    at 0, so the pull is the same each time), and nothing beyond it ever does:
     each restore puts ring 1 back at the full scale before the next MATTER opens, so ring 2 opens every
     season at exactly its kind's wear (no pull), while the same world unmended crosses ring after ring."""
     managed = _run(_world(ON, RING_1), RING_1)
@@ -186,6 +192,7 @@ def test_in35_managed_holding_the_first_ring_stops_the_front_there_and_the_unman
     scale, wear = DEFAULT_FIXTURES.get("condition_scale"), DEFAULT_FIXTURES.wear("harbour")
     assert managed["restored"] >= len(RING_1) * SEASONS, managed["restored"]   # EXECUTED, every season
     assert managed["first"] == {t: 1 for t in RING_1}, managed["first"]
+    assert managed["crossings"] == {t: SEASONS for t in RING_1}, managed["crossings"]   # the limit cycle
     ring_2 = [t for t, b in _bands().items() if b == 2]
     checked = 0
     for t in ring_2:
