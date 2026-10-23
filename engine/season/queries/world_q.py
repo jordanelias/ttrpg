@@ -1193,6 +1193,34 @@ def presence(w: World, rung_id: str) -> list[str]:
             and t.subject in w.persons]
 
 
+def guard_weight(w: World, rung_id: str) -> int:
+    """v9 IN-60 (RS-26) -- THE SWORN WEIGHT PRESENT AT A RUNG: the summed `Person.weight` of the persons
+    `presence` lists at `rung_id` (the exact rung, never a descendant) who owe a live, sworn `oblige`
+    (`sworn_to`, IN-40's walk) to a seat HELD by a person ALSO present there. Cohorts (`weight > 1`)
+    are the guard forces (`cohorts.yaml: guards`, written by `build_realm(guards=True)`). Its reader is
+    IN-59 (b)'s `audience` limb, *an unguarded place is open*, which reads `== 0`.
+
+    COMPUTE-ON-DEMAND, STORED NOWHERE (T-a): read off live tenures every call, so ending one swearer's
+    `oblige` (or the principal leaving the rung) drops it with no other write. A seat adds no modifier
+    (`04` §B.7: *"NEVER: who holds it · who serves it · a modifier of any kind"*): a duke is easier to
+    reach than a king only because less sworn weight stands at his home -- data, not a table.
+
+    ⚠ THE PRINCIPAL'S OWN PLACE [ASSUMPTION; medium; Jordan to correct; revert: any seat whose
+    purview reaches the rung]: the attack gate (IN-59 (a)) puts an attacker at the victim's own place,
+    so a guard counted anywhere else never stands on the path to him; and the purview reading would
+    let one Crown obligee living at an inn make the inn guarded against everyone. A sworn resident
+    with no principal present therefore reads 0.
+      * EACH PERSON ONCE, however many present seats he is sworn to: the sum is over persons.
+      * AN IMPOSED OBLIGE IS NOT AN OATH (`Tenure.imposed`), skipped exactly as `purview_reaches`'
+        oblige clause skips it: a man sentenced to serve the bench does not guard it."""
+    TRACE.query("guard_weight", "resolver")
+    here = set(presence(w, rung_id))
+    seats = sorted({t.object for t in w.tenures
+                    if t.kind == "hold" and t.live and t.subject in here and t.object in w.offices})
+    sworn = {t.subject for s in seats for t in sworn_to(w, s) if not t.imposed and t.subject in here}
+    return sum(w.persons[p].weight for p in sworn)
+
+
 # ===========================================================================
 # RESIDENCE -- plan position `19c` (MIGRATE). Where a person LIVES, as distinct from where they ARE.
 # ===========================================================================
