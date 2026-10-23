@@ -894,7 +894,9 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     build_typed_requires` refuses a cell mixing `OWN_STATE_STEMS` with any other stem (the person's own
     reading decides whether such a row forms, so an unanswerable conjunct would decline it for
     everybody), and `queries/person_q.py` refuses an `OWN_STATE_STEMS` that `OwnStateReader` has no
-    branch for. Neither is reachable at run time."""
+    branch for. Neither is reachable at run time. Falsifier for the first: `test_k3_thread_sensitivity.py::
+    test_k3_c_a_cell_mixing_an_own_state_stem_with_any_other_is_refused_at_load` plants the shipped
+    `thread_read` cell beside an `existence` conjunct and the load raises naming it."""
     mods = _model_modules()
     # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- see the sibling assertion above]
     assert len(mods) >= 8, f"model set collapsed to {len(mods)} — this guard would pass vacuously"
@@ -7626,7 +7628,8 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # identical fact that keeps `work` refused two paragraphs above, and a fact about these
     # WORLDS rather than about the row. `thread_read` requires Thread Sensitivity >= 30, which
     # `requires_operands` has no name for (`H-85`), so it carries no typed cell and is not in
-    # `resolvable_verbs()` at all — which is what canon says of a character below the gate.
+    # `resolvable_verbs()` at all — which is what canon says of a character below the gate — until
+    # v9 PC-06 K-3, which types it over the actor's own Thread Sensitivity (`OWN_STATE_STEMS`).
     # ⚠ 10 -> 11, `release` (`04 §A.3` row 14, 2026-09-11), AND IT IS THE SECOND TIME THIS SET GREW
     # BY ADDING A VERB. `release` is generic over tenure kind and its `requires:` is read by a
     # registered predicate rather than a typed cell, so it binds `subject` from the question's
@@ -7899,7 +7902,7 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # refuses for the reason stated immediately above, reached from a different chain and a
     # different operand. Two verbs, one fact about these worlds: their questions are about rungs,
     # records, persons and claims, and never about a site. The other five investigation acts are
-    # not here — four execute and `thread_read` is not resolvable at all (`H-85`).
+    # not here — four execute and `thread_read` is not resolvable at all (`H-85`), until v9 PC-06 K-3.
     # ⚠ TWO -> THREE, `R8.1`, AND `dispatch` IS NOT THE SITE FACT: it needs a PERSON referent and
     # lost its one to a `seen` claim about a rung in hash order (traced above the `ever` assertion).
     # ⚠⚠ THREE -> TWO, POSITION `11a`, 2026-09-29: `examine` LEAVES, FOR THE REASON GIVEN AT THE
@@ -11200,7 +11203,8 @@ def test_wb_a_refusals_reads_land_as_a_claim_that_contradicts_and_the_candidate_
     # THE DELTA ABOVE IS THE PROPERTY AND IT IS UNCHANGED — exactly one Candidate goes — so what
     # moved is the denominator, not the mechanism. `thread_read` is the sixth and does not form:
     # it carries no typed cell (`H-85`, Thread Sensitivity has no operand) and is therefore not in
-    # `resolvable_verbs()` at all.
+    # `resolvable_verbs()` at all — until v9 PC-06 K-3, after which it is typed and still does not
+    # form here, because no person in this world passes its gate.
     # ⚠ 27 -> 28, `release` (2026-09-11): one more resolvable verb forms one more Candidate on the
     # same referent. Same reading as the line above — the delta of one is untouched, 28 -> 27 with
     # the same single `transfer` drop, and the denominator is what moved.

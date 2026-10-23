@@ -933,13 +933,13 @@ DEFAULT_FIXTURES = Fixtures(
     # RIGHT side of its `scalar_threshold` cell (`thread_sensitivity >= thread_sensitivity.gate`), read
     # by `queries/person_q.py::OwnStateReader`'s gate stem, the only injection site, for the fold and
     # the person alike; `bench_quorum`'s shape one row up. `30` is SHIPPED and its SOURCE is
-    # `fieldwork_v30.md:297` (*TS >= 30*), which is design prose and reference (`CLAUDE.md` §0.05):
-    # the source of the number, not the reason it is correct. `0` is the CONTROL: every AUTHORED value
-    # passes (the cast's three `ts: 0` rows included) and every unauthored one still refuses, which is
-    # what makes "`None` is not 0" observable. `50` is the tighter point. [ASSUMPTION; medium; Jordan
-    # to correct.]
-    # [JUSTIFIED: engine/season/hole_register.yaml H-85 -- the Thread Sensitivity gate; fieldwork_v30.md:297 gives TS >= 30 as design prose, which sources the number and does not make it correct, so it is injected and swept 0 / 30 / 50]
-    thread_sensitivity_gate=30,        # `H-85`, swept 0 (control) / 30 (SHIPPED) / 50
+    # `fieldwork_v30.md` §4.2 (the Thread-Read row, *TS >= 30*), which is design prose and reference
+    # (`CLAUDE.md` §0.05): the source of the number, not the reason it is correct. `0` is the CONTROL:
+    # every AUTHORED value passes (the cast's three `ts: 0` rows included) and every unauthored one still
+    # refuses, which is what makes "`None` is not 0" observable. `50` is the tighter point, declared,
+    # not run. [ASSUMPTION; medium; Jordan to correct.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-239 -- `site: Fixtures thread_sensitivity_gate`, graded `assumption`; fieldwork_v30.md §4.2 gives TS >= 30 as design prose, which sources the number and does not make it correct, so it is injected and swept 0 / 30 / 50 (50 declared, not run)]
+    thread_sensitivity_gate=30,        # `H-239`, swept 0 (control) / 30 (SHIPPED) / 50 (declared, not run)
     # `H-156` (v9 IN-26, BOUND-PAPER). THE VERBS `decision/options.py::opening_set` FORMS NO CANDIDATE FOR
     # -- `H-156`'s option (a), *hold it out of formation*, as a switch rather than a row edit, so the hold
     # and its release are one value and the hand-built fold is untouched (a withheld verb still executes

@@ -106,6 +106,13 @@ def test_k3_a_a_person_reads_nobody_elses_sensitivity_and_no_ledger_answers_it()
         "a ledger answered a sensitivity -- a told number would decide the gate")
     # a subject that is no person has no sensitivity, and the fold refuses rather than raising
     assert WorldReader(w, ACTOR).read("Hh", "thread_sensitivity") is UNKNOWN
+    # AT THE FOLD TOO: the fold's reader is built on its own actor, so a cell naming ANOTHER person
+    # reads UNKNOWN even where that person carries a value, and the actor's own reading is unchanged
+    other.thread_sensitivity = GATE + 20
+    assert WorldReader(w, ACTOR).read("p_mid", "thread_sensitivity") is UNKNOWN, (
+        "the fold read another person's sensitivity")
+    assert WorldReader(w, ACTOR).read(ACTOR, "thread_sensitivity") == GATE + 10
+    assert WorldReader(w, "p_mid").read("p_mid", "thread_sensitivity") == GATE + 20
 
 
 # ======================================================================================
@@ -161,6 +168,29 @@ def test_k3_c_no_row_and_no_key_are_no_value_and_the_registry_reads_as_authored(
 # ======================================================================================
 # (d) `thread_read` HAS LEFT THE NO-PREDICATE SET
 # ======================================================================================
+
+def _authored_cell() -> dict:
+    """`thread_read`'s `requires_typed:` exactly as `verb_table.yaml` authors it, read off the file
+    rather than retyped here, so the mixed cell below is built on the shipped one."""
+    import yaml
+    doc = yaml.safe_load((pathlib.Path(__file__).resolve().parents[1] / "verb_table.yaml")
+                         .read_text(encoding="utf-8"))
+    rows = [r for r in doc["verbs"] if r.get("verb") == VERB]
+    assert len(rows) == 1, f"{len(rows)} `{VERB}` rows in verb_table.yaml"
+    return rows[0]["requires_typed"]
+
+
+def test_k3_c_a_cell_mixing_an_own_state_stem_with_any_other_is_refused_at_load():
+    """The person's own reading decides whether the row forms at all (`opening_set`), so a conjunct
+    `OwnStateReader` cannot answer would read UNKNOWN and silently decline the verb for everybody.
+    `build_typed_requires` refuses the mix at load. CONTROL: the shipped cell alone builds."""
+    from ..data.requires import build_typed_requires
+    own = _authored_cell()
+    assert set(build_typed_requires("x", own).stems()) == OWN_STATE_STEMS, "the control did not build"
+    mixed = {"all": [own, {"form": "existence", "of": "subject", "kind": "Person"}]}
+    with pytest.raises(SystemExit, match=r"asks own-state stem\(s\)"):
+        build_typed_requires("x", mixed)
+
 
 def test_k3_d_thread_read_is_resolvable_and_its_precondition_evaluable():
     row = VERB_TABLE[VERB]

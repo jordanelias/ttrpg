@@ -738,7 +738,8 @@ def witness(self, token: Token, events: list[Event]) -> int:
                     continue
                 # ⚠ AND A READ ONLY THE WORLD ANSWERS IS OBSERVED, NEVER DEPOSITED (`ED-IN-0282`,
                 # telling workplan `T4`, batch-2 close `F1`). `WORLD_ONLY_STEMS` is `with` -- where
-                # another person is NOW. The person side never reads it back (`LedgerReader`'s early
+                # another person is NOW -- and, since v9 PC-06 K-3, `OWN_STATE_STEMS` (a person's
+                # Thread Sensitivity and its gate, which he answers of himself). The person side never reads it back (`LedgerReader`'s early
                 # UNKNOWN), but a claim in a ledger is read by everyone who does not ask by stem:
                 # `claim.held` accepts any claim on the subject (`world_q`), Q2 raises a question on
                 # the hearer for a claim landing about them and `opening_set` forms a `tell` from it,

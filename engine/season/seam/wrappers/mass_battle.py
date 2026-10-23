@@ -98,15 +98,11 @@ _PROVIDER = "mass_battle"
 def _territory_of(w: Any, rung: str) -> Optional[str]:
     """The geography territory id of the territory `rung` sits in, or `None`.
 
-    The nearest `territory`-kind rung at or above `rung` (`world_q.ancestry`, the walk
-    `holder_faction_of` and `loop/sides.py`'s origin both use), read back to its geography row by
+    The nearest `territory`-kind rung at or above `rung` (`world_q.enclosing_territory`, the one
+    owner of that walk, over `world_q.ancestry`), read back to its geography row by
     `territory_id_of`. `None` -- no territory above, or one no geography row minted (a corpus
     fixture's) -- is `terrain_row_for_territory`'s no-modifier case, not a refusal."""
-    for cur in world_q.ancestry(w, rung):
-        r = w.rungs.get(cur)
-        if r is not None and r.kind == "territory":
-            return territory_id_of(cur)
-    return None
+    return territory_id_of(world_q.enclosing_territory(w, rung))
 
 
 def _creed_referent(w: Any, fac: str) -> Optional[str]:

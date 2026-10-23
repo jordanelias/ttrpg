@@ -57,7 +57,7 @@ declared -- are printed too; a cycle through them is invisible to this check.
 
 PART (c) (`check_bounds`, pure). [ASSUMPTION: the looped quantity of a LOOP row is EACH quantity on
 its declared cycles that has a reader in `QUANTITY_READERS`, read at the end of every season and
-maximised over seasons and seeds.] No LOOP row's `default:` carries a number, so every bound is
+maximised over seasons and seeds.] No LOOP row's `default:` carries a numeric bound, so every bound is
 caller-supplied (`--bound ROW:QUANTITY=VALUE`): a reading with no bound prints UNCHECKED, never a
 pass. An amplifier with no LOOP row has no bound to read and is not observed here -- part (b) is what
 names it. Every numeric argument is required of the caller and none has a default

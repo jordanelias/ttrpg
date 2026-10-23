@@ -1364,7 +1364,9 @@ rosters:
       ⚠ THE GATE IS NOT HERE AND THAT IS THE POINT. #353 §9.2 says *"The only class-shaped gate in
       the design is Thread Sensitivity"* and supplies no carrier, no predicate and no taxonomy for
       it to gate OVER. This roster is the taxonomy half — the half `rosters.yaml` is the ruled
-      home for — and `H-85` records that the gate half stays open.
+      home for. The VERB gate is built since v9 PC-06 K-3 (`thread_read`'s typed cell over
+      `Person.thread_sensitivity`, `H-85`/`H-239`); a gate over these KINDS is not: no code reads
+      this roster, so `thread_substrate` gates nothing yet (`H-85`).
       The two values are NPC-087's own: material "retainable by ordinary non-sensitive minds"
       against "Thread-substrate knowledge subject to the setting's epistemological barrier". A
       third kind, or a per-subject scheme, is `H-85`'s sweep, not an edit anyone should make here
