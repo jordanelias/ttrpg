@@ -239,9 +239,17 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # 4/4/0 -> 1/1/0, `accept` 11/11/0 -> 1/1/0, `challenge` 13/4/9 -> 17/1/16). The build hash is equal (the
 # build reads no verb row; `guards=True` and `foreign=True` equal too); one and two seasons move. Was
 # 628830a8... / 74ce9a1e... (one, two seasons). The `give`-withheld arm still reads the one-season pin.
+# RE-RECORDED at v9 IN-59 (b) (RS-26, the audience half), A HASH-ONLY MOVE STATED: `move` and `migrate` gain
+# a `relation: audience` conjunct on `to`, and at the shipped default (`guards` OFF) every `guard_weight` is
+# 0, so every audience reads admitted and the act mix is EQUAL -- `BASE_EVENTS` reproduce exactly (7018 /
+# e3d6e385..., 21710 / 2da1c8f4...). What moves the hash is the conjunct's own `audience:<actor>`
+# Observation on each `move`/`migrate` Event's `observed` (44 Events in season one). CONTROL, run on this
+# tree: those Observations stripped from the one-season log re-read 57fae32f... exactly. The build,
+# `guards=True` and `foreign=True` hashes are equal (8e4032a2 / c98563e0 / 90b531a1). Was 57fae32f... /
+# 3c4e03e6... (one, two seasons).
 BASE_HASHES = {0: "8e4032a26cfeabdc55bba2178b82d564",
-               1: "57fae32f8c6f7994ee01b997ac775214",
-               2: "3c4e03e63fcbea02f70cfff4ab24b1b3"}
+               1: "b2464a6c87dd9d2da9e3b3cbc8143fdf",
+               2: "5301d6b62af614f4e96407a9c3466a50"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base

@@ -27,7 +27,8 @@ from ..queries.world_q import (
     faction_holding, faction_of, hold_force, place_of, restrained,
     slot_for, works_for, works_target,
 )
-from ..state.attribution import causing_act
+# `_issuing_seat`'s one owner moved to `world_q` at v9 IN-59 (b) (the `audience` stem's writ limb reads it).
+from ..queries.world_q import issuing_seat as _issuing_seat
 from ..state.carriers import Proposition, Record, Tenure
 from ..state.carriers import DETERMINED_BY
 from ..state.gate import (
@@ -987,19 +988,6 @@ def _seize_rung(w: "World", a: "Act", rid: str) -> Change:
                              or not may_seize(w, a.actor, a.via, held.subject, rid)):
         return NO_CHANGE
     return _take_hold(w, a, rid, held, _SEIZED_RUNG)
-
-
-def _issuing_seat(w: "World", rid: str) -> Optional[str]:
-    """THE SEAT THAT ISSUED THE WARRANT `rid` -- the `via` of the Act that caused the Record's CREATING
-    Event (#453 §9.1 / K-52: *"read through `state/attribution.py::causing_act` on the warrant Record's
-    creating Event -- that Act's `via`"*), or `None` when no Event wrote it (a hand-planted Record), no
-    act caused that Event, or the act exercised no seat the world still holds. The creating Event is the
-    FIRST in the log whose changes name the Record (`loop/matter.py`'s `prior` reads the last, for a
-    different question)."""
-    made = next((e for e in w.log if any(c.subject == rid for c in e.changes)), None)
-    act = causing_act(w, made) if made is not None else None
-    via = getattr(act, "via", None)
-    return via if via in w.offices else None
 
 
 def _may_close_custody(w: "World", seat: str, prisoner: str) -> bool:

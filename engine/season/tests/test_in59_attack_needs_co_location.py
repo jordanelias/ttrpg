@@ -34,7 +34,7 @@ from engine.season.seam.wrappers import combat as C
 from engine.season.state.carriers import Act
 
 DUEL_VERBS = ("fight", "challenge", "accept")
-# roster-exempt: TEST FIXTURE ids, `probes.tiny_world`'s.
+# `probes.tiny_world`'s fixture ids (corpus: no exemption needed, they duplicate no roster).
 ACTOR, BESIDE, ELSEWHERE, FAR = "p_low", "p_mid", "p_high", "p_king"
 
 
