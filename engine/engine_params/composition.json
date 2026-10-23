@@ -31,6 +31,27 @@
       "verb": null,
       "needed_by": "engine/season/queries/world_q.py \u2014 `demanded` and `delivered` (v9 IN-07 E1, A-25) build the typed input record (`under_input` -> `queries/inputs.py::Under`: the subtree, the draw and the column) and call this entry by role string through `engine.substrate.composition.require`, keeping their own `TRACE.query` lines. Since v9 IN-07 E2 MATTER's drained-rung gap is computed inside the module by `settlements.subsist`, over this same function. Declared in `world_q.QUERY_ENTRIES` and held by `manifest/registrar.py::require_entries`, as `settlements.larder_draw` is."
     },
+    "settlements.fabric": {
+      "target": "modules.settlements.fabric:fabric",
+      "kind": "callable",
+      "entry": "query",
+      "verb": null,
+      "needed_by": "engine/season/queries/world_q.py \u2014 `ceiling` and `share` (v9 IN-07 E5, A-25) each build their half of the typed input record (`fabric_input` -> `queries/inputs.py::FabricInput`: `condition_scale`, the live works, its declared and matured terms; or the persons present) and call this entry by role string through `engine.substrate.composition.require`, reading their field of the `Fabric` back. `works_for`, `matured_terms`, the two-live-works `Forbidden`, the fold's clamp and `_rise` stay host. Declared in `world_q.QUERY_ENTRIES` and held by `manifest/registrar.py::require_entries`, as `settlements.larder_draw` is."
+    },
+    "settlements.fortification": {
+      "target": "modules.settlements.fortification:fortification",
+      "kind": "callable",
+      "entry": "query",
+      "verb": null,
+      "needed_by": "engine/season/queries/world_q.py \u2014 `fortification_of` (v9 IN-07 E6, A-25), the wrapper the field adapter `seam/wrappers/mass_battle.py` calls, builds the typed input record (`fort_input` -> `queries/inputs.py::FortInput`: the subtree's garrison conditions and `condition_scale`) and calls this entry by role string through `engine.substrate.composition.require`, keeping its `TRACE.query` line. Declared in `world_q.QUERY_ENTRIES` and held by `manifest/registrar.py::require_entries`, as `settlements.larder_draw` is."
+    },
+    "settlements.housing": {
+      "target": "modules.settlements.housing:housing",
+      "kind": "callable",
+      "entry": "query",
+      "verb": null,
+      "needed_by": "engine/season/queries/world_q.py \u2014 `population` and `capacity` (v9 IN-07 E4, A-25) each build their half of the typed input record (`housing_input` -> `queries/inputs.py::HousingInput`: the subtree, then the residents with their weights, or the dwelling Sites' rungs and `capacity_floor`) and call this entry by role string through `engine.substrate.composition.require` (`capacity` has a driverless caller, `harness/populated.py`), keeping their own `TRACE.query` lines and reading their field of the `Housing` back. `residence_of` and `_eff_migrate`'s refusal stay host. Declared in `world_q.QUERY_ENTRIES` and held by `manifest/registrar.py::require_entries`, as `settlements.larder_draw` is."
+    },
     "settlements.larder_draw": {
       "target": "modules.settlements.larder:larder_draw",
       "kind": "callable",

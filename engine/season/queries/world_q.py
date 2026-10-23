@@ -90,7 +90,8 @@ from ..state.world import World
 from ..trace_log import TRACE
 # v9 IN-07 E1: the `settlements` module's records (the one host leaf a module imports) and the
 # role-string resolver its entries are reached through. Neither pulls in module code at import.
-from .inputs import DrawRecord, DrawRow, Eater, LarderInput, ProduceInput, SubsistInput, Under
+from .inputs import (DrawRecord, DrawRow, Eater, FabricInput, FortInput, HousingInput, LarderInput,
+                     ProduceInput, SubsistInput, Under)
 from ..data.fixtures import SITE_YIELD
 from engine.substrate import composition
 
@@ -414,21 +415,12 @@ def ceiling(w: World, site: Site) -> int:
     total)`, which would LOWER a standing fabric the moment a works naming it was declared (0 terms
     ripe: ceiling 0) and any delta was staged. The fold's one clamp (`loop/resolve.py::resolve`)
     therefore takes `max(condition, ceiling)` as its upper bound: a ceiling below a fabric's
-    condition stops it rising, and takes nothing away that stands."""
-    scale = w.fixtures.get("condition_scale")
-    live = works_for(w, site.rung, site.kind)
-    if len(live) > 1:
-        raise Forbidden(
-            f"{len(live)} live works plan a {site.kind!r} at {site.rung!r}: "
-            f"{[r.id for r in live]}", "S15",
-            law="r2 04 §A.6.3 -- one works per target, `hold_force`'s cardinality reading one "
-                "object up; `create_record` declines a second, so this world was built by hand")
-    if not live:
-        return scale
-    declared = len(live[0].stages)
-    if declared == 0:
-        return scale
-    return scale * min(matured_terms(w, live[0].id), declared) // declared
+    condition stops it rising, and takes nothing away that stands.
+
+    ⚠ THE ARITHMETIC IS THE `settlements` MODULE'S (v9 IN-07 E5, A-25): `settlements.fabric`
+    (`modules/settlements/fabric.py`, `entry: query`). This wrapper projects the ceiling half
+    (`fabric_input`, which keeps the two-live-works `Forbidden`, design A6)."""
+    return _entry(FABRIC)(fabric_input(w, site, "ceiling")).ceiling
 
 
 def share(w: World, site: Site) -> tuple:
@@ -444,8 +436,30 @@ def share(w: World, site: Site) -> tuple:
     `proposals/2026-08-31-ideal/10_SUPERSEDING.md:1275-1279`). ⚠ r2 DECLARES A SWEEP
     (`presence_reciprocal, holders_reciprocal, one`) and it is NOT built: a sweep is a fixture with a
     register row, and no measurement here needs a second arm yet -- the shape is ruled, the reading
-    is the default, and `H-164` carries the unbuilt arms."""
-    return (1, max(1, len(presence(w, site.rung))))
+    is the default, and `H-164` carries the unbuilt arms.
+
+    The ratio is `settlements.fabric`'s (v9 IN-07 E5); this wrapper projects the share half."""
+    return _entry(FABRIC)(fabric_input(w, site, "share")).share
+
+
+def fabric_input(w: World, site: Site, half: str) -> FabricInput:
+    """THE PROJECTION `settlements.fabric` reads (v9 IN-07 E5), ONE HALF AT A TIME so each public name
+    pays only its old body's reads: `"ceiling"` reads `condition_scale`, `works_for` (refusing two live
+    works, A6), the works' declared terms and -- only when it declares any -- `matured_terms`' log scan;
+    `"share"` reads `presence` (which traces). The other half is `None`."""
+    if half == "share":
+        return FabricInput(None, None, None, None, len(presence(w, site.rung)))
+    scale = w.fixtures.get("condition_scale")
+    live = works_for(w, site.rung, site.kind)
+    if len(live) > 1:
+        raise Forbidden(
+            f"{len(live)} live works plan a {site.kind!r} at {site.rung!r}: "
+            f"{[r.id for r in live]}", "S15",
+            law="r2 04 §A.6.3 -- one works per target, `hold_force`'s cardinality reading one "
+                "object up; `create_record` declines a second, so this world was built by hand")
+    declared = len(live[0].stages) if live else 0
+    matured = matured_terms(w, live[0].id) if declared else 0
+    return FabricInput(scale, len(live), declared, matured, None)
 
 
 def judging_set(w: World, venue: str, matter: Optional[str] = None) -> list[str]:
@@ -1031,13 +1045,20 @@ def subsistence_draw(w: World) -> dict:
 #: role roster names these rows (`proposals/2026-10-07-unplugged-systems-replug.md` §4).
 LARDER_DRAW = "settlements.larder_draw"
 DRAWN_UNDER = "settlements.drawn_under"
-QUERY_ENTRIES = ((LARDER_DRAW, "query"), (DRAWN_UNDER, "query"))
+#: v9 IN-07 E4..E6: `population`/`capacity`, `ceiling`/`share` and `fortification_of`'s rules. One role
+#: per pair of public names, each returning both halves (`queries/inputs.py`'s E4..E6 records).
+HOUSING = "settlements.housing"
+FABRIC = "settlements.fabric"
+FORTIFICATION = "settlements.fortification"
+QUERY_ENTRIES = ((LARDER_DRAW, "query"), (DRAWN_UNDER, "query"), (HOUSING, "query"),
+                 (FABRIC, "query"), (FORTIFICATION, "query"))
 
 
 def _entry(role: str):
     """A module entry by role string, through `composition.require` (cached per process). Not
-    `MODULE_ENTRIES`: `subsistence_draw`, `demanded` and `delivered` have driverless callers
-    (`harness/scarce.py`, tests on a bare world), and the table fills only at driver construction."""
+    `MODULE_ENTRIES`: `subsistence_draw`, `demanded`, `delivered` and `capacity` have driverless callers
+    (`harness/scarce.py`, `harness/populated.py`, tests on a bare world), and the table fills only at
+    driver construction."""
     return composition.require(role)
 
 
@@ -1404,11 +1425,26 @@ def population(w: World, rung_id: str, residence: Optional[dict] = None) -> int:
 
     `residence` -- a precomputed `residence_of(w)`, for a caller (`_eff_migrate`) that already built
     one this same act and would otherwise pay the full-Tenure scan twice (`/simplify`, BATCH-CLOSE
-    Phase 2). `None` (every existing caller) computes it here exactly as before."""
+    Phase 2). `None` (every existing caller) computes it here exactly as before.
+
+    ⚠ THE SUM IS THE `settlements` MODULE'S (v9 IN-07 E4, A-25): `settlements.housing`
+    (`modules/settlements/housing.py`, `entry: query`); this wrapper projects the population half."""
     TRACE.query("population", "resolver")
-    here = _subtree(w, rung_id)
-    residents = residence_of(w) if residence is None else residence
-    return sum(w.persons[pid].weight for pid, home in residents.items() if home in here)
+    return _entry(HOUSING)(housing_input(w, rung_id, "population", residence)).population
+
+
+def housing_input(w: World, rung_id: str, half: str, residence: Optional[dict] = None) -> HousingInput:
+    """THE PROJECTION `settlements.housing` reads (v9 IN-07 E4), ONE HALF AT A TIME so each public name
+    pays only its old body's reads: the subtree, then `"population"` -- every `residence_of` entry (the
+    caller's precomputed map when given) with its `Person.weight` -- or `"capacity"` -- each `dwelling`
+    Site's own rung and the `capacity_floor` fixture. The other half is `None`."""
+    here = frozenset(_subtree(w, rung_id))
+    if half == "population":
+        residents = residence_of(w) if residence is None else residence
+        return HousingInput(here, tuple((pid, home, w.persons[pid].weight)
+                                        for pid, home in residents.items()), None, None)
+    dwellings = tuple(s.rung for s in w.sites.values() if s.kind == DWELLING_KIND)
+    return HousingInput(here, None, dwellings, w.fixtures.get("capacity_floor")[DWELLING_KIND])
 
 
 # THE `site_kinds` MEMBER `capacity` COUNTS -- Jordan's `ED-SE-0055` (2026-09-25): *"add a `dwelling`
@@ -1446,11 +1482,12 @@ def capacity(w: World, rung_id: str) -> int:
       (`_subtree`) -- a hearth counts its dwelling, and every ancestor counts it again. That is what
       makes one more dwelling under a rung raise its capacity and every ancestor's by the same step.
     * NOTHING IS STORED: `Rung.__setattr__` refuses an aggregate field, and this is recomputed at
-      every call (`AX` T-a)."""
+      every call (`AX` T-a).
+
+    ⚠ THE COUNT AND FLOOR ARE THE `settlements` MODULE'S (v9 IN-07 E4, A-25): `settlements.housing`;
+    this wrapper projects the capacity half (`housing_input`)."""
     TRACE.query("capacity", "resolver")
-    here = _subtree(w, rung_id)
-    built = sum(1 for s in w.sites.values() if s.kind == DWELLING_KIND and s.rung in here)
-    return max(w.fixtures.get("capacity_floor")[DWELLING_KIND], built)
+    return _entry(HOUSING)(housing_input(w, rung_id, "capacity")).capacity
 
 
 # ===========================================================================
@@ -1620,14 +1657,21 @@ def fortification_of(w: World, rung_id: str) -> float:
     ⚠ ITS CALLER IS THE BATTLE PATH (plan position `20-iv`, `H-150`; until then nothing called
     this). `seam/wrappers/mass_battle.py::resolve()` reads it at the march target and passes it to
     `massbattle.resolve_field` as `fort_level`, where any positive value makes the field A.9's
-    WALLS row (`terrain.py::terrain_row_for_territory`). This Query decides none of that."""
+    WALLS row (`terrain.py::terrain_row_for_territory`). This Query decides none of that.
+
+    ⚠ THE MEAN IS THE `settlements` MODULE'S (v9 IN-07 E6, A-25): `settlements.fortification`
+    (`modules/settlements/fortification.py`, `entry: query`); this stays the wrapper the adapter calls."""
     TRACE.query("fortification_of", "resolver")
+    return _entry(FORTIFICATION)(fort_input(w, rung_id))
+
+
+def fort_input(w: World, rung_id: str) -> FortInput:
+    """THE PROJECTION `settlements.fortification` reads (v9 IN-07 E6): every `garrison` Site's condition
+    in the subtree, in `World.sites` order, and `condition_scale` -- read only when there is a garrison,
+    as the old body read it (a no-garrison world reads no fixture)."""
     here = _subtree(w, rung_id)
-    garrisons = [s for s in w.sites.values() if s.kind == "garrison" and s.rung in here]
-    if not garrisons:
-        return 0.0
-    scale = w.fixtures.get("condition_scale")
-    return sum(s.condition for s in garrisons) / (scale * len(garrisons))
+    conditions = tuple(s.condition for s in w.sites.values() if s.kind == "garrison" and s.rung in here)
+    return FortInput(conditions, w.fixtures.get("condition_scale") if conditions else None)
 
 
 def enclosing_territory(w: World, rung_id: Optional[str]) -> Optional[str]:

@@ -29,6 +29,8 @@ v9 IN-07 E1 adds the settlements module's larder records after them: `Eater`, `L
 in, `DrawRow`/`DrawRecord` out (built by `queries/world_q.py::larder_input` and `under_input`).
 v9 IN-07 E2 adds `SubsistInput` in, `SubsistOutcome`/`BodyFall` out, for `settlements.subsist`.
 v9 IN-07 E3 adds `ProduceInput` in, `ProduceRow`/`ProduceOutcome` out, for `settlements.produce`.
+v9 IN-07 E4..E6 add `HousingInput`/`Housing`, `FabricInput`/`Fabric` and `FortInput` (its entry returns a
+`float`), for `settlements.housing`, `settlements.fabric` and `settlements.fortification`.
 """
 from __future__ import annotations
 
@@ -337,3 +339,71 @@ class ProduceRow:
 class ProduceOutcome:
     """What `settlements.produce` returns: `rows`, one `ProduceRow` per rung with a nonzero yield, sorted."""
     rows: tuple
+
+
+# v9 IN-07 E4..E6: the settlements module's three one-line `query` entries -- housing, a fabric's bound
+# and share, a settlement's walls. Built by `queries/world_q.py`'s projection builders (`housing_input`,
+# `fabric_input`, `fort_input`), read by `modules/settlements/housing.py`, `fabric.py` and
+# `fortification.py`; the public wrappers (`population`, `capacity`, `ceiling`, `share`,
+# `fortification_of`) read the output back. ⚠ A HALF LEFT `None` WAS NOT PROJECTED: one record serves two
+# public names (E4: `population` and `capacity`; E5: `ceiling` and `share`), and each wrapper projects only
+# the half it reads, so it pays the scans, `TRACE.query` rows and fixture reads its old body paid and no
+# more (`residence_of` traces, `presence` traces, `Fixtures.reads` reaches `harness/corpus_run.py`'s
+# report). The module answers `None` for a half it was not given.
+
+@dataclass(frozen=True)
+class HousingInput:
+    """What `settlements.housing` reads. Built by `queries/world_q.py::housing_input`:
+      * `subtree`        -- the rung and everything under it (`world_q._subtree`);
+      * `residents`      -- `((pid, residence rung, Person.weight), ...)`, every `residence_of` entry in
+                            its own order; `None` when `capacity` asks;
+      * `dwelling_rungs` -- `(rung, ...)`: each `dwelling` Site's own `rung`, one entry per Site, in
+                            `World.sites` order; `None` when `population` asks;
+      * `floor`          -- `capacity_floor[dwelling]` (`ED-SE-0051`); `None` when `population` asks."""
+    subtree: frozenset
+    residents: Optional[tuple]
+    dwelling_rungs: Optional[tuple]
+    floor: Optional[int]
+
+
+@dataclass(frozen=True)
+class Housing:
+    """What `settlements.housing` returns: the subtree's `population` (summed resident weight) and its
+    `capacity` (dwellings floored); either is `None` when its half was not projected."""
+    population: Optional[int]
+    capacity: Optional[int]
+
+
+@dataclass(frozen=True)
+class FabricInput:
+    """What `settlements.fabric` reads. Built by `queries/world_q.py::fabric_input`:
+      * `scale`      -- the `condition_scale` fixture; `None` when `share` asks;
+      * `live_works` -- how many live works name the site (`works_for`; the host refuses two, A6);
+      * `declared`   -- that works' declared terms (`len(stages)`), `0` with no live works;
+      * `matured`    -- its ripened terms (`matured_terms`, a log scan), counted only when `declared > 0`
+                        (`0` otherwise, unread), so the scan is paid exactly where it was;
+      * `present`    -- how many persons stand at the site's rung (`len(presence)`); `None` when
+                        `ceiling` asks. The first four are `None` when `share` asks."""
+    scale: Optional[int]
+    live_works: Optional[int]
+    declared: Optional[int]
+    matured: Optional[int]
+    present: Optional[int]
+
+
+@dataclass(frozen=True)
+class Fabric:
+    """What `settlements.fabric` returns: `ceiling` (the bound on the fabric's rise) and `share`
+    (`(1, n)`, the commons ratio); either is `None` when its half was not projected."""
+    ceiling: Optional[int]
+    share: Optional[tuple]
+
+
+@dataclass(frozen=True)
+class FortInput:
+    """What `settlements.fortification` reads. Built by `queries/world_q.py::fort_input`:
+      * `conditions` -- `(Site.condition, ...)` of every `garrison` Site in the subtree, `World.sites` order;
+      * `scale`      -- the `condition_scale` fixture, read only when `conditions` is non-empty (the old
+                        body's read), else `None`. The entry returns a bare `float`."""
+    conditions: tuple
+    scale: Optional[int]

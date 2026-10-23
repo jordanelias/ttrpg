@@ -285,6 +285,12 @@ def test_19c_the_throttle_on_the_populated_realm_admits_an_empty_hearth_once():
     # AND A COHORT IS THROTTLED BY ITS WEIGHT (`24f`): the next empty hearth houses one, and a
     # settlement's people -- weight 2 -- are refused there where a single newcomer was admitted.
     crowd = sorted(p for p in lives if w.persons[p].is_cohort)[0]
+    # v9 IN-07 E4: `population` SUMS WEIGHT, NOT HEADS -- a rung housing a cohort (weight > 1) reads
+    # more than the heads residing under it. (A headcount `settlements.housing` passes every other
+    # line here, since the refusal below is the actor's own `weight` against an empty hearth.)
+    under = set(world_q._subtree(w, lives[crowd]))
+    heads = sum(1 for home in world_q.residence_of(w).values() if home in under)
+    assert w.persons[crowd].weight > 1 and world_q.population(w, lives[crowd]) > heads
     spare = next(r for r, rung in sorted(w.rungs.items())
                  if rung.kind == "hearth" and world_q.population(w, r) == 0
                  and lives[crowd] not in world_q.ancestry(w, r))

@@ -163,6 +163,19 @@ def test_24e_the_ceiling_rises_one_term_at_a_time_and_is_full_where_no_works_nam
     assert world_q.matured_terms(w, "wk") == 3 == world_q.matured_terms(w, "tx")
 
 
+def test_24e_the_share_is_one_over_the_persons_present_floored_at_one():
+    """r2 `04` §A.6.4, RULED: `share = (1, n)`, `n` the persons standing at the fabric's rung, floored
+    at one so a fabric nobody stands at is not divided by zero (v9 IN-07 E5: `settlements.fabric`'s
+    share half). The probe moves the harbour's `rung` on a copy, so no world write is involved: the
+    hearth holds three persons, the duchy none."""
+    import dataclasses
+    w, _d = _world()
+    harbour = w.sites[HARBOUR]
+    assert len(world_q.presence(w, "Hh")) == 3 and world_q.presence(w, "D") == []
+    assert world_q.share(w, dataclasses.replace(harbour, rung="Hh")) == (1, 3)
+    assert world_q.share(w, dataclasses.replace(harbour, rung="D")) == (1, 1)
+
+
 def test_24e_a_works_whose_master_is_gone_bounds_nothing():
     """r2 §A.6.3: *a works with no master is not a bound* -- and MATTER stops ripening it
     (`loop/matter.py`: *a half-made copy STOPS*). The master dies -- MATTER's own death write, the
