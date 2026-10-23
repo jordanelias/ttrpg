@@ -1264,7 +1264,13 @@ def admits_audience(w: World, actor: str, rung: str) -> bool:
          writ has no creating Event and therefore no issuer, and opens nothing. ⚠ Any addressed
          `dispensation` counts: its content, its `at` and the issuer's continued tenure are not read
          [ASSUMPTION; medium; Jordan to correct; revert: read them]; and a writ reaches its addressee
-         only by `give` (`ED-IN-0292` (1), RULED NO), so the limb is built but unreached in computed play."""
+         only by `give` (`ED-IN-0292` (1), RULED NO), so the limb is built but unreached in computed play.
+
+    ⚠ LIMIT, STATED: no limb admits a person to the rung where he LIVES (`residence_of`). Where a live sworn
+    `oblige` stands with its principal, limb 1 reads `> 0` and an unsworn, seatless, writless household member
+    who steps out cannot `move` or `migrate` back. Inert while `guards` is OFF and no such oath stands at a
+    principal's home (MEASURED at the B-Y close for `build_realm(0)`: no rung reads above 0); a fifth limb
+    extends RS-26's four, which the plan carries as an assumption [ASSUMPTION; medium; Jordan to correct]."""
     TRACE.query("admits_audience", "resolver")
     if guard_weight(w, rung) == 0:
         return True

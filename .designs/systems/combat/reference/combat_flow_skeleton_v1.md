@@ -21,7 +21,7 @@
 
 | Callable | Anchor | Called by |
 |---|---|---|
-| `wrapper.fight(A, B, cfg=None, rng=None, max_bouts=12) -> int` | `systems/combat/combat_engine_v1/wrapper.py:487 fight` | `engine/cross_scale/combat_bridge.py:106 resolve` (campaign seam, flag-gated — §7); `systems/combat/combat_engine_v1/workbench/balance.py:65`, `systems/combat/combat_engine_v1/workbench/server.py:77`, `systems/combat/combat_engine_v1/workbench/trace.py:23`, `systems/combat/combat_engine_v1/workbench/armour_participation.py:78`, `systems/combat/combat_engine_v1/workbench/armour_participation.py:145`, `systems/combat/combat_engine_v1/workbench/build_levers.py:73` (offline balance/trace harnesses, CLI-invoked); `tests/valoria/test_combat_invariants.py` |
+| `wrapper.fight(A, B, cfg=None, rng=None, max_bouts=12) -> int` | `systems/combat/combat_engine_v1/wrapper.py:533 fight` | `engine/cross_scale/combat_bridge.py:106 resolve` (campaign seam, flag-gated — §7); `systems/combat/combat_engine_v1/workbench/balance.py:65`, `systems/combat/combat_engine_v1/workbench/server.py:77`, `systems/combat/combat_engine_v1/workbench/trace.py:23`, `systems/combat/combat_engine_v1/workbench/armour_participation.py:78`, `systems/combat/combat_engine_v1/workbench/armour_participation.py:145`, `systems/combat/combat_engine_v1/workbench/build_levers.py:73` (offline balance/trace harnesses, CLI-invoked); `tests/valoria/test_combat_invariants.py` |
 | `wrapper.engagement(A, B, first, cfg, rng, prev_closed=False)` | `systems/combat/combat_engine_v1/wrapper.py:47 engagement` | `wrapper.fight:480` only — internal, not an outside-callable entry |
 | `combat_bridge.derive_parties(ctx, world)` | `engine/cross_scale/combat_bridge.py:89 derive_parties` | `engine/cross_scale/scene_dispatch.py:236 derive_parties` |
 | `combat_bridge.resolve(a, b, rng)` | `engine/cross_scale/combat_bridge.py:106 resolve` | `engine/cross_scale/scene_dispatch.py:240 resolve` |
@@ -34,7 +34,7 @@
 
 | Input | Kind | Origin | Anchor |
 |---|---|---|---|
-| `A`, `B` (`Combatant` objects) | arg | caller-constructed | `systems/combat/combat_engine_v1/wrapper.py:487 fight` |
+| `A`, `B` (`Combatant` objects) | arg | caller-constructed | `systems/combat/combat_engine_v1/wrapper.py:533 fight` |
 | `cfg` (defaults to module-level `CFG`) | param | `systems/combat/combat_engine_v1/config.py:2 CFG` (in-code literal dict, not file-read) | `systems/combat/combat_engine_v1/wrapper.py:467` (cfg=cfg or CFG) |
 | `rng` (`random.Random`) | arg | caller-supplied or freshly constructed | `systems/combat/combat_engine_v1/wrapper.py:467` (rng=rng or random.Random()) |
 | `max_bouts` | arg | caller-supplied, default 12 | `systems/combat/combat_engine_v1/wrapper.py:487` (max_bouts=12) |
@@ -48,7 +48,7 @@
 
 ## 3. Flow
 
-S1. **`fight(A, B, cfg, rng, max_bouts)`** — the multi-bout sim harness that runs to a decision (win-rate harness); the intended per-turn game call is **`engagement`** (S2), one engagement per game turn — see §7 for that entry point's reachability. `systems/combat/combat_engine_v1/wrapper.py:487 fight`.
+S1. **`fight(A, B, cfg, rng, max_bouts)`** — the multi-bout sim harness that runs to a decision (win-rate harness); the intended per-turn game call is **`engagement`** (S2), one engagement per game turn — see §7 for that entry point's reachability. `systems/combat/combat_engine_v1/wrapper.py:533 fight`.
   - S1.1 `[write]` Re-init both `WoundTracker`s and live state (`stamina`, `conc`, `initiative`, `poise`) via `_init_live`. `systems/combat/combat_engine_v1/wrapper.py:471-472`.
   - S1.2 `[emit]` `_emit('fight_start', …)`. `systems/combat/combat_engine_v1/wrapper.py:473`.
   - S1.3 `[loop]` For `turn` in `range(max_bouts)` (each iteration = one **engagement**, `systems/combat/combat_engine_v1/wrapper.py:477`):

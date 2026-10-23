@@ -25,8 +25,9 @@ MUTATIONS, run at the build 2026-10-23, each RED then restored GREEN (results in
     (the oath also falsifier 3's sworn migrant).
   * the oath limb's `not t.imposed` dropped -> `imposed_oblige` RED; the writ limb's issuing-seat test
     dropped (any held writ admits) -> `planted_writ` RED; the oath limb admitting an oblige to ANY
-    office -> `oath_out_of_reach` RED; the writ limb testing `issuing_seat(...) is not None` instead of
-    `in reaching` -> `writ_out_of_reach` RED (B-Y close, Phase 1).
+    office -> `oath_out_of_reach` RED; the writ limb dropping its `purview_reaches(...)` test on the issuing seat
+    -> `writ_out_of_reach` RED; the oath limb dropping its `purview_reaches(...)` test -> `oath_out_of_reach`
+    RED (B-Y close, Phase 1; re-run after Phase 2 rewrote the limbs).
 """
 
 from __future__ import annotations
