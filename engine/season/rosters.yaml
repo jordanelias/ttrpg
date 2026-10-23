@@ -1136,7 +1136,7 @@ rosters:
       ⚠ THREE ROWS, AND THE OTHER THREE ARE NOT GRADED: `interview` is a PROMPT (#453 K-36: the
       questioned person answers by their own `tell`, so there is no degree on the asker);
       `reconstruct` waits on a value space nothing supplies (K-37: no invented number); `thread_read`
-      waits on that and on H-85 (no Thread Sensitivity carrier). `surveil`'s Person case is absent
+      waits on that (its H-85 Thread Sensitivity carrier and gate landed at v9 PC-06 K-3). `surveil`'s Person case is absent
       from its row (one cell binds one kind) and waits on ED-FI-0009. A verb that waits keeps its
       flat `emits:` and is not counted as graded.
     keys: [verb_table]
@@ -2259,7 +2259,10 @@ rosters:
     values: [existence, scalar_threshold, contain_path, cardinality, relation, own_ledger, basis]
     needs:
       existence:        [subject, site, from, to]
-      scalar_threshold: [subject, site, from, to, kind, amount, floor]
+      # `actor` added at v9 PC-06 K-3 (`H-85`): `thread_read`'s gate is a scalar OF THE ACTOR (his
+      # own Thread Sensitivity), as `contain_path`'s and `relation`'s `actor` already are -- an
+      # operand already in `requires_operands`, structural and never carried (`binding_of`).
+      scalar_threshold: [actor, subject, site, from, to, kind, amount, floor]
       contain_path:     [actor, subject, from, to]
       cardinality:      [subject, from, to]
       relation:         [actor, subject, site, from, to]
@@ -3110,7 +3113,10 @@ tables:
       thread_read: >-
         No typed cell (`H-85`), not in `resolvable_verbs()`, and `opening_set` can never form a
         Candidate for it, so a weight on it would be dead (`candidate_pursuit_cells.md` §3.7
-        `:1028`, carrying the old table's rule).
+        `:1028`, carrying the old table's rule). ⚠ THE PREMISE IS STALE SINCE v9 PC-06 K-3: the row
+        is typed (the Thread Sensitivity gate) and resolvable, and it forms for a person whose own
+        sensitivity passes the gate. It stays here because the draft's declared set names it and
+        its cells are owed by the draft's method, `restore`'s case below; it scores 0.0 meanwhile.
       restore: >-
         The draft gives it no cell (§7.4 `:1382`) on the premise that it is unresolvable. ⚠ THE
         PREMISE IS STALE: `restore` IS in `resolvable_verbs()` and executes in `corpus_run` (read

@@ -47,7 +47,11 @@ from engine.season.state.carriers import Act, Candidate, Claim, Question, View
 # v9 IN-45: `carry` LEFT -- effected (`_eff_carry`) on the gate's existing `entity` shape, the reason
 # answered: the petition's `Record.stages` is the moved subject the docket append rides on, and the
 # matter is the petition's `terms` (`engine/season/tests/test_in45_carry.py`).
-DECLINED = ("exchange", "succeed", "thread_read", "tie / knot")
+# v9 PC-06 K-3: `thread_read` LEFT -- typed (a `scalar_threshold` of the actor's own Thread Sensitivity,
+# `H-85`), the reason answered: its carrier (`Person.thread_sensitivity`, from the cast's `ts:`), and a
+# person below the gate forms no Candidate, so it is not formed-and-refused in every world
+# (`engine/season/tests/test_k3_thread_sensitivity.py`).
+DECLINED = ("exchange", "succeed", "tie / knot")
 
 
 def _view(w, pid):

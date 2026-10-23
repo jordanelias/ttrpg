@@ -93,6 +93,8 @@ STEM_READS = {
     "condition":    (("Site.condition", "+"),),
     "floor":        (),                                   # `band_floors`, a fixture: written by none
     "quorum":       (),                                   # `bench_quorum`, a fixture
+    "thread_sensitivity":      (),                        # `Person.thread_sensitivity`: set at build, written by none (K-3)
+    "thread_sensitivity.gate": (),                        # `thread_sensitivity_gate`, a fixture
     "contain.path": _TENURE,
     "held_by":      (("Tenure.since", "+"), ("Tenure.until", "-")),
     "present_at":   _TENURE,

@@ -46,7 +46,7 @@ from ..state.carriers import Act, Claim, Record, Site
 # one prompt, two waiting, and the rest graded -- derived, so the graded set is not a second copy of
 # `graded_inquiries` (`test_season_shape.py::test_jordan_no_definition_is_hardcoded_in_a_body`).
 INQUIRIES = ("examine", "interview", "research", "surveil", "thread_read", "reconstruct")
-WAITING = {"reconstruct": "K-37 (no value space)", "thread_read": "K-37 and H-85 (no TS carrier)"}
+WAITING = {"reconstruct": "K-37 (no value space)", "thread_read": "K-37 (no value space; its H-85 carrier landed at v9 PC-06 K-3)"}
 PROMPT = "interview"
 GRADED = {v for v in INQUIRIES if v != PROMPT and v not in WAITING}
 REC, ACTOR = "rec_fi01", "p_low"

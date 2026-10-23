@@ -26,7 +26,8 @@ from __future__ import annotations
 from typing import Any, Callable, Optional
 from ..data.cast import STANCE_MAX
 from ..data.requires import (
-    CELL_STEMS, RECORD_SOURCED_OPERANDS, SHORTFALL_PREDICATE, SHORTFALL_SOURCED_OPERANDS, VIA,
+    CELL_STEMS, OWN_STATE_STEMS, RECORD_SOURCED_OPERANDS, SHORTFALL_PREDICATE,
+    SHORTFALL_SOURCED_OPERANDS, VIA, binding_of, evaluate,
 )
 from ..data.rosters import (
     CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, REMOVE_ORDINAL, require_member,
@@ -40,8 +41,8 @@ from ..data.verbs import (
 from ..epistemic import belief_contradicts
 from ..gaps import Forbidden
 from ..queries.person_q import (
-    LedgerReader, content_kind, content_said, held_against, known_persons, ledger_names, projected_axes,
-    regard, said_of,
+    LedgerReader, OwnStateReader, content_kind, content_said, held_against, known_persons, ledger_names,
+    projected_axes, regard, said_of,
 )
 from ..state.carriers import Candidate, Claim, Person, Question, Record, View
 from ..trace_log import TRACE
@@ -135,6 +136,21 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         if verb in withheld:
             continue
         if not person_side_eligible(p, row):
+            continue
+        # v9 PC-06 K-3 (`H-85`): A ROW WHOSE CELL ASKS THE ACTOR'S OWN STATE FORMS ONLY WHERE HIS OWN
+        # STATE ADMITS IT -- `thread_read`'s Thread Sensitivity gate, read off the cell's stems
+        # (`OWN_STATE_STEMS`), never off a verb name. The design's intent, *"Characters below the gate
+        # cannot attempt the action"* (`fieldwork_v30.md:76`, reference, not the mechanism; the
+        # mechanism is this branch and its test) -- so a person below it, or with no authored
+        # value, never forms the Candidate, rather than forming it and being refused. The polarity is
+        # NOT clause 4's (known-false declines, unknown forms): his sensitivity is not a belief about
+        # the world he can be wrong about, the self-contest decline's reasoning below. The SAME cell,
+        # asked of the same answerer the fold delegates to (`OwnStateReader`), so the two cannot
+        # disagree; `build_typed_requires` refuses a cell mixing these stems with any other.
+        if (row.requires_typed is not None
+                and OWN_STATE_STEMS & set(row.requires_typed.stems())
+                and evaluate(row.requires_typed, OwnStateReader(p, fx),
+                             binding_of(p.id, {})).value is not True):
             continue
         if tolerance is not None and refuses(verb, axis, tolerance):
             TRACE.note(f"{p.id} refuses {verb!r}: its `{axis}` alignment exceeds their own "

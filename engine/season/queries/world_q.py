@@ -34,7 +34,7 @@ import functools
 from dataclasses import dataclass, replace
 from typing import Callable, Optional
 
-from ..data.requires import UNKNOWN, binding_from_act
+from ..data.requires import OWN_STATE_STEMS, UNKNOWN, binding_from_act
 from ..data.rosters import (
     BAN_KIND, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP,
     QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, REMOVE_ORDINAL, RESTRAINT_KINDS, RUNG_KINDS,
@@ -48,7 +48,7 @@ from ..data.verbs import RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS, _OPENERS_FROM_E
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
 # the asker-first module (which may not import this one; this edge runs the other way).
-from .person_q import LedgerReader, content_said, intent_named, ledger_names
+from .person_q import LedgerReader, OwnStateReader, content_said, intent_named, ledger_names
 # v9 IN-57: `attention_key`'s tier 2 scores a deed claim by `deed_valence`, one owner per factor.
 from .person_q import (
     _seen_index, crisis_weights, deed_valence, paired_deed_term, projected_axes)
@@ -3059,4 +3059,11 @@ class WorldReader:
             # `bench_quorum` (`H-161`), the stand-in for an arrangement's own `quorum:` until a
             # docketed matter maps to its arrangement row. The same for every subject today.
             return w.fixtures.get("bench_quorum")
+        if stem in OWN_STATE_STEMS:
+            # v9 PC-06 K-3 (`H-85`): `thread_sensitivity` and its gate, asked of the person the cell
+            # names (`of: actor`), through `person_q.OwnStateReader` -- the one answerer, which the
+            # person's own formation asks too, so the fold and the person cannot read it apart. A
+            # subject that is no person has no sensitivity: UNKNOWN, which refuses.
+            p = w.persons.get(subject)
+            return UNKNOWN if p is None else OwnStateReader(p, w.fixtures).read(subject, predicate)
         return UNKNOWN
