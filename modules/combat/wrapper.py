@@ -44,11 +44,12 @@ def _carry(ready, cfg):
     # going live. Debt now clamps to 0 — no banked action, and no free one either.
     return {c: (max(0.0, r) % cfg['ACT_THRESHOLD']) for c, r in ready.items()}
 
-def engagement(A, B, first, cfg, rng, prev_closed=False):
+def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
     """One engagement (the exchange inside a bout). `first` is the initiating Combatant object. `prev_closed` is the
     measure state the PREVIOUS engagement ended in (see the re-presentation gate below). Returns (felled Combatant or
     None, ended_closed) — the second element threads forward as the next engagement's prev_closed. A and B are fixed
-    objects throughout — never swapped."""
+    objects throughout — never swapped. `terms` is `fight`'s non-lethal duel terms (RS-25), or None under lethal
+    ones: when set, the burst ends at the first beat that opens with `_terms_met` true, and `fight` reads the stop."""
     aggressor = first; defender = B if first is A else A
     # OPEN-MEASURE RESET (ED-PC-0033): a NEW engagement begins at open measure — weapons at full extension, no lunge
     # committed. The per-beat transient geometry (grip_position, lunge_depth) is otherwise carried on the Combatant
@@ -115,6 +116,11 @@ def engagement(A, B, first, cfg, rng, prev_closed=False):
           longer=longer.label, shorter=shorter.label, weapon_A=A.weapon, weapon_B=B.weapon,
           reach_A=round(erA,2), reach_B=round(erB,2), measure_gap=round(measure_gap,2), closed=closed)
     while beats < soft*3:
+        # DUEL TERMS (RS-25): checked at the head of every beat, so a wound dealt by ANY site above or below (stop-hit,
+        # pursuit, exchange, bind) is seen before another draw is taken. A pure read of the trackers: no draw, and
+        # under lethal terms (`terms is None`) not even the read, so the lethal fight is byte-identical.
+        if terms is not None and _terms_met(A, B, terms):
+            _emit('separation', reason='terms'); return None, closed
         beats+=1
         # CONDITIONAL TEMPO (correction 2): recompute each beat with current fatigue — grip/stance/fatigue change
         # cadence; it is not a static weapon property. Approach uses general cadence; closed uses close-cadence.
@@ -484,8 +490,47 @@ class Yield:
     def __init__(self, by, turn=1, accepted=True, objective_contested=False):
         self.by, self.turn, self.accepted, self.objective_contested = by, int(turn), bool(accepted), bool(objective_contested)
 
-def fight(A, B, cfg=None, rng=None, max_bouts=12, yield_decl=None):
+# ── DUEL TERMS (RS-25, plan position PC-10a) ─────────────────────────────────────────────────────────────────────
+# Jordan 2026-10-14: "a duel doesn't have to be lethal". The terms are agreed BEFORE the scene, like `Yield`, but unlike
+# it they REACT to the bouts: under a non-lethal term the fight stops when a fighter's own WoundTracker crosses it, and
+# that fighter yields. [ASSUMPTION; medium; Jordan to correct -- the three terms, the two stop rules and the threshold.
+# Revert: no terms; every fight is lethal, as before.]
+#   - 'death' : today's fight, unchanged -- runs to a felling or to UNRESOLVED. The default.
+#   - 'blood' : stops at the first WOUND (a wound gate crossed, `wt.wounds >= 1`), not at the first point of damage.
+#   - 'yield' : stops when Health falls to YIELD_HEALTH_FRAC of full (`wt.health_remaining`).
+# The stop rides the result exactly as an accepted `Yield` does: a `yield` trace event (with `terms` beside it), the
+# opponent's result, and no further roll -- so `seam/wrappers/combat.py::surrender_of` lifts it unchanged, and no
+# band is added (H-98). ⚠ What a term does NOT do: it does not reshape a blow. A strike that fells a fighter on the
+# beat it lands (a decisive blow crossing every gate, or the gate past the threshold) is a felling under any term;
+# the stop is read between beats, never inside a strike.
+DUEL_TERMS = ('yield', 'blood', 'death')   # closed set; the season's `challenge_terms` roster names these (PC-10b)
+LETHAL_TERMS = 'death'
+YIELD_HEALTH_FRAC = 0.5   # 'yield': the fraction of full Health at or below which a fighter yields [ASSUMPTION]
+
+def _terms_crossed(c, terms):
+    """True when Combatant `c` has crossed the non-lethal `terms`. A pure read of its tracker; no draw."""
+    if terms == 'blood':
+        return c.wt.wounds >= 1
+    return c.wt.health_remaining <= YIELD_HEALTH_FRAC * c.wt.health_full
+
+def _terms_met(A, B, terms):
+    return _terms_crossed(A, terms) or _terms_crossed(B, terms)
+
+def _terms_yielder(A, B, terms):
+    """Which fighter yields once the terms are met: the one who crossed them; if both crossed on the same beat, the one
+    with the smaller fraction of Health left; on an exact tie, nobody -- honour is even, and the fight ends UNRESOLVED
+    (the ruled outcome, Jordan 2026-06-02), with no yield. Called only after `_terms_met`."""
+    a, b = _terms_crossed(A, terms), _terms_crossed(B, terms)
+    if a != b:
+        return A if a else B
+    fa, fb = (c.wt.health_remaining / c.wt.health_full for c in (A, B))
+    return A if fa < fb else B if fb < fa else None
+
+def fight(A, B, cfg=None, rng=None, max_bouts=12, yield_decl=None, terms=LETHAL_TERMS):
     import random
+    if terms not in DUEL_TERMS:
+        raise ValueError(f"terms {terms!r} is not one of {DUEL_TERMS}")
+    stop = None if terms == LETHAL_TERMS else terms   # None: the lethal fight takes neither the check nor its read
     if yield_decl is not None:
         if not (yield_decl.by is A or yield_decl.by is B):
             raise ValueError("Yield.by must be the A or B Combatant passed to fight (compared by identity)")
@@ -513,11 +558,24 @@ def fight(A, B, cfg=None, rng=None, max_bouts=12, yield_decl=None):
                 return result
         first = A if rng.random()<0.5 else B
         _emit('turn_start', turn=turn+1, first=first.label)
-        loser, prev_closed = engagement(A,B,first,cfg,rng,prev_closed)
+        loser, prev_closed = engagement(A,B,first,cfg,rng,prev_closed,terms=stop)
         _emit('engagement_end', turn=turn+1, felled=(loser.label if loser is not None else None))
         if loser is not None:
             result = -1 if loser is A else 1   # +1 => A won
             break
+        if stop is not None and _terms_met(A, B, stop):
+            # THE TERMS ARE MET (RS-25): the fighter who crossed them yields, standing. It is the accepted-`Yield` ending
+            # -- the same `yield` event `surrender_of` lifts, the opponent's result, NO UPSET_FLOOR draw (a lucky blow
+            # cannot steal a fight the terms have already closed) -- read at the END of the turn the terms were met in,
+            # where a declared `Yield` is read at the start of its turn. An exact tie yields nobody: UNRESOLVED.
+            yielder = _terms_yielder(A, B, stop)
+            if yielder is None:
+                _emit('fight_result', result=0, winner=None)
+                return 0
+            _emit('yield', turn=turn+1, by=yielder.label, accepted=True, refused=None, terms=stop)
+            result, winner = (-1, B) if yielder is A else (1, A)
+            _emit('fight_result', result=result, winner=winner.label)
+            return result
         for c in (A,B):
             c.stamina=min(c.stamina_max, c.stamina+cfg['RECOVERY_FRAC']*(c.stamina_max-c.stamina)*(c.stamina_max/cfg['STAMINA_REF']))
             c.conc=max(0,min(c.conc_max, c.conc-cfg['CONC_DRAIN_BOUT']+cfg['CONC_RECOVER_FRAC']*(c.conc_max-c.conc)))
