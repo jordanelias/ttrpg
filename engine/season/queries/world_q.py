@@ -1270,13 +1270,20 @@ def admits_audience(w: World, actor: str, rung: str) -> bool:
         return True
     if actor in governors_of(w, rung):
         return True
-    reaching = {o.id for o in w.offices.values() if purview_reaches(w, o, rung)}
-    if not reaching:
-        return False
-    if any(t.subject == actor and not t.imposed for s in sorted(reaching) for t in sworn_to(w, s)):
+    # Limbs 3 and 2 ask `purview_reaches` of ONLY the seats the actor is sworn to / holds a writ from, not of
+    # every office in the table (each call walks `w.tenures`, so the all-offices set was offices x tenures).
+    if any(t.kind == "oblige" and t.live and t.subject == actor and not t.imposed
+           and t.object in w.offices and purview_reaches(w, w.offices[t.object], rung)
+           for t in w.tenures):
         return True
     p = w.persons.get(actor)
-    return p is not None and any(issuing_seat(w, rid) in reaching for rid in writs_held(w, p))
+    if p is None:
+        return False
+    for rid in writs_held(w, p):
+        seat = issuing_seat(w, rid)
+        if seat is not None and purview_reaches(w, w.offices[seat], rung):
+            return True
+    return False
 
 
 # ===========================================================================

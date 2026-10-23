@@ -395,12 +395,12 @@ def test_the_give_withheld_arm_reproduces_the_one_season_pin():
 #: too (6603 / 958f4283... -> 7028 / 4f9b8312...), so the K-3-time sequence is no longer producible on one
 #: tree. The value below is that arm on the IN-59 tree, `PYTHONHASHSEED=0`; from here it is a change detector
 #: that still shows `thread_read` moves the season (it differs from `BASE_EVENTS[1]`), as `BASE_EVENTS` became.
-PRE_K3_EVENTS_1 = (7028, "4f9b8312e98cdcad01223190395be1a0d54b2e332eb19472ce972e8e9d2c5ea1")
+THREAD_READ_WITHHELD_EVENTS_1 = (7028, "4f9b8312e98cdcad01223190395be1a0d54b2e332eb19472ce972e8e9d2c5ea1")
 
 
 def test_the_thread_read_withheld_arm_is_pinned_and_differs_from_the_shipped_season():
     """THE THREAD-READ-WITHHELD ARM, A CHANGE DETECTOR: `thread_read` added to the shipped `Fixtures
-    withheld_verbs` reads `PRE_K3_EVENTS_1` -- the arm's own event count and digest on the IN-59 tree, no
+    withheld_verbs` reads `THREAD_READ_WITHHELD_EVENTS_1` -- the arm's own event count and digest on the IN-59 tree, no
     longer the PRE-K-3 sequence it was recorded as at K-3 (IN-59 (a) moved that arm too; see the
     constant's comment) -- and that differs from the shipped season's `BASE_EVENTS[1]`, so
     `thread_read`'s formation still moves what a season does. The K-3-time control (the arm equalling the
@@ -410,8 +410,8 @@ def test_the_thread_read_withheld_arm_is_pinned_and_differs_from_the_shipped_sea
     assert "thread_read" not in shipped, "fixture: `thread_read` is already withheld at the shipped arm"
     w.fixtures = w.fixtures.sweep("withheld_verbs", shipped + ("thread_read",))
     POP.run(seasons=1, seed=0, w=w)
-    assert _digest(w) == PRE_K3_EVENTS_1, _digest(w)
-    assert PRE_K3_EVENTS_1 != BASE_EVENTS[1], "the control equals the pin -- K-3 moved nothing to control for"
+    assert _digest(w) == THREAD_READ_WITHHELD_EVENTS_1, _digest(w)
+    assert THREAD_READ_WITHHELD_EVENTS_1 != BASE_EVENTS[1], "the arm equals the shipped pin -- withholding `thread_read` moved nothing"
 
 
 def test_in21_a_table_of_ones_reads_the_same_as_no_table():
