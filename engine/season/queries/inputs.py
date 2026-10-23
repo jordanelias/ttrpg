@@ -25,6 +25,8 @@ construct it and this leaf is the one host file a module may import
 
 v9 FI-02 + FI-03 (`SM-3`, `ED-FI-0002`) add the fieldwork container's pair, at the foot of the file:
 `TrailItem` and `FieldworkInput` in, `Findings` out -- the `inquiry` role's records, for the same reason.
+v9 IN-07 E1 adds the settlements module's larder records after them: `Eater`, `LarderInput` and `Under`
+in, `DrawRow`/`DrawRecord` out (built by `queries/world_q.py::larder_input` and `under_input`).
 """
 from __future__ import annotations
 
@@ -190,3 +192,60 @@ class Findings:
     """What the fieldwork module's `find` returns, and the host adapter refuses anything else: per
     uncovered trail item, `(event id, the terms shown)`. Empty is a real answer -- nothing found."""
     found: tuple
+
+
+# ---------------------------------------------------------------------------
+# THE SETTLEMENTS MODULE'S LARDER RECORDS (v9 IN-07 E1; `proposals/2026-10-07-settlements-computation-
+# modules.md` §3 E1, intent only). Read by `modules/settlements/larder.py`'s two `query` entries; built
+# by `queries/world_q.py`'s projection builders, which also turn the output back into the public dict
+# shapes. ⚠ EVERY COLLECTION IS AN ORDERED TUPLE, NEVER A MAPPING: the order the draw debits a rung's
+# kinds reaches `Rung.stores`' insertion order, and that order reaches `World.content_hash()`.
+# ---------------------------------------------------------------------------
+
+@dataclass(frozen=True)
+class Eater:
+    """One housed person the larder draw considers: id, home rung, `Person.weight` and
+    `Person.is_cohort` -- the carrier's own predicate, handed in so the module never re-derives it."""
+    pid: str
+    home: str
+    weight: int
+    is_cohort: bool
+
+
+@dataclass(frozen=True)
+class LarderInput:
+    """What `settlements.larder_draw` reads, and nothing else. Built by
+    `queries/world_q.py::larder_input` from `World`:
+      * `weights` -- `subsistence_weight`, `((kind, weight), ...)` sorted by kind;
+      * `eaters`  -- every housed person (`home_of`), `Eater`s sorted by pid, cohort or not;
+      * `ladders` -- `((home, (rung, parent, ...)), ...)`: each home's containment ancestry, the home
+                     first, cut at the first id that is not a rung;
+      * `stores`  -- `((rung, ((kind, units), ...)), ...)` for every rung on a ladder, each in its own
+                     `Rung.stores` order."""
+    weights: tuple
+    eaters: tuple
+    ladders: tuple
+    stores: tuple
+
+
+@dataclass(frozen=True)
+class DrawRow:
+    """One eater's draw: `cells` is `((kind, want, take, source or None), ...)` in kind order."""
+    pid: str
+    home: str
+    cells: tuple
+
+
+@dataclass(frozen=True)
+class DrawRecord:
+    """What `settlements.larder_draw` returns: one `DrawRow` per eating cohort, in pid order."""
+    rows: tuple
+
+
+@dataclass(frozen=True)
+class Under:
+    """What `settlements.drawn_under` reads: a draw, the subtree (`world_q._subtree`) whose homes
+    count, and the column summed -- `"want"` (`demanded`) or `"take"` (`delivered`)."""
+    record: DrawRecord
+    subtree: frozenset
+    column: str

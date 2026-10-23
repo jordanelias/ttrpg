@@ -5945,7 +5945,7 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
     # seasons of combat, so a DIFFERENT number of `Hh` residents (`p_low`/`p_mid`/`p_other`) survive
     # to the end — and once `Hh`'s own grain empties (season 1 onward, unaffected: `hearth ==
     # [2, 0, 0, ...]`, asserted above), every LIVING `Hh` resident draws from `S` instead, through
-    # `nearest_store`'s ascent (item 3a). Fewer survivors draw less from `S`, which is exactly the
+    # the larder walk's ascent (item 3a; `settlements.larder_draw` since v9 IN-07 E1). Fewer survivors draw less from `S`, which is exactly the
     # `+10` this run measures with fewer survivors in the `no_move` arm. This is orthogonal to
     # `H-94`'s operand question and to `transfer`/`move` entirely — a population channel neither verb
     # touches, reachable only because combat itself is newly reachable in this fixture.
@@ -6067,7 +6067,7 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
     # construction): by `migrate` (`19c`), which executes here at tick 8 (`residence.changed`,
     # `p_low` now `reside`s at `S`) once `survey`'s formed-and-refused Candidates reshuffle the arm's
     # scenes. He is NOT an extra eater on `S`: `Hh`'s larder is empty from season 1 (asserted
-    # above), so every living `Hh` resident already draws on `S` through `nearest_store`'s ascent,
+    # above), so every living `Hh` resident already draws on `S` through the larder walk's ascent,
     # and standing at `S` changes where he draws from by nothing. The accounting identity above --
     # undrained `S` is 306 in every arm, MEASURED in all six cells before and after this position --
     # is the proof, and this line now asserts what the refuted mechanism would need and did not get:

@@ -271,9 +271,12 @@ class SeasonDriver:
         # (and its converse). `manifest/registrar.py` and `manifest/registry.py` hold the rules.
         from ..manifest import (
             check_contest_prizes, check_effects, check_graded_inquiries, check_inquiry_modules,
-            check_preconditions, check_rows, register_module_entries,
+            check_preconditions, check_rows, register_module_entries, require_entries,
         )
         register_module_entries(VERB_TABLE)
+        # v9 IN-07: the host's declared needs, held against the table just filled -- the refusal a
+        # deleted role-less row (a `query` no role roster names) meets in a fresh process.
+        require_entries(world_q.QUERY_ENTRIES)
         check_rows()
         check_contest_prizes(VERB_TABLE)
         check_graded_inquiries(VERB_TABLE)

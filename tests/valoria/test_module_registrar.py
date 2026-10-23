@@ -44,6 +44,11 @@ Plan position IN-41 (`SM-11` + `SM-9`; it left the plan at B-B's close, `4a2e449
 `test_a_row_with_an_effect_and_an_effect_declining_note_refuses_naming_the_verb`, and its "`oblige` and
 `destroy_record` construct" half in
 `test_refusal_a_covers_contested_rows_and_lets_every_declared_row_construct`.
+
+v9 IN-07 E1 landed the first ROLE-LESS entry rows (`settlements.larder_draw`, `settlements.drawn_under`,
+both `entry: query`), which no role roster names, and with them the host-declared need
+(`queries/world_q.py::QUERY_ENTRIES`, held by `manifest/registrar.py::require_entries`). Its falsifier:
+`test_a_host_declared_entry_row_deleted_stripped_or_rekinded_in_a_fresh_process_refuses_naming_it`.
 """
 from __future__ import annotations
 
@@ -199,6 +204,46 @@ print(repr((role, in_rows, before, construct())))
         assert in_rows, f"the prize rows name {role!r}, which no composition row declares"
         assert before == [], f"MODULE_ENTRIES was filled before construction: {before}"
         _assert_refused(refusal, repr(role), "module_entry", "no composition row declares")
+
+
+#: The host-declared needs -- read from the declaring file, never named here.
+_HOST_NEEDS = """
+from engine.season.queries import world_q
+needs = list(world_q.QUERY_ENTRIES)
+"""
+
+
+def test_a_host_declared_entry_row_deleted_stripped_or_rekinded_in_a_fresh_process_refuses_naming_it():
+    """v9 IN-07 E1's falsifier: a ROLE-LESS row -- a `query` no role roster names -- deleted, stripped
+    of its `entry:`, or re-keyed to another entry kind, before any driver exists -> driver construction
+    refuses naming the role (`manifest/registrar.py::require_entries`, over
+    `queries/world_q.py::QUERY_ENTRIES`). Without the host's declared need the registrar alone refuses
+    none of the three in a fresh process: its table is empty, so it holds nothing to miss.
+    `before == []` is what makes this the fresh-process form. EVERY declared need, one fresh process
+    per arm, so a second need sorted ahead of the first cannot hide it."""
+    needs = _run(_HOST_NEEDS + "print(repr(needs))\n")
+    assert len(needs) >= 2, f"fewer host-declared entries than IN-07 E1 landed: {needs}"
+    arms = {"deleted": "del composition.ROLES[role]",
+            "stripped": "composition.ROLES[role] = dict(composition.ROLES[role], entry=None)",
+            "rekinded": "composition.ROLES[role] = dict(composition.ROLES[role], entry='step_call')"}
+    checked = 0
+    for i in range(len(needs)):
+        for arm, edit in arms.items():
+            got = _run(_HOST_NEEDS + f"""
+role, kind = needs[{i}]
+in_rows = composition.ROLES.get(role, {{}}).get("entry") == kind
+before = sorted(MODULE_ENTRIES)
+{edit}
+print(repr((role, in_rows, before, construct())))
+""")
+            role, in_rows, before, refusal = got
+            assert in_rows, f"the host needs {role!r}, which no composition row declares as that entry"
+            assert before == [], f"MODULE_ENTRIES was filled before construction: {before}"
+            names = (repr(role), "the host needs module entry") + (
+                ("`entry: step_call`",) if arm == "rekinded" else ("no composition row declares",))
+            _assert_refused(refusal, *names)
+            checked += 1
+    assert checked == 3 * len(needs), checked
 
 
 def test_a_prize_entry_whose_composition_row_targets_another_module_refuses_naming_it():

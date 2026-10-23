@@ -88,6 +88,10 @@ from ..state.gate import sworn_to
 from ..state.ids import H, ROOT, draw_factory
 from ..state.world import World
 from ..trace_log import TRACE
+# v9 IN-07 E1: the `settlements` module's records (the one host leaf a module imports) and the
+# role-string resolver its entries are reached through. Neither pulls in module code at import.
+from .inputs import DrawRecord, DrawRow, Eater, LarderInput, Under
+from engine.substrate import composition
 
 
 # ===========================================================================
@@ -906,55 +910,6 @@ def named(c) -> tuple:
     return tuple(ids) if ids else ()
 
 
-def nearest_store(w: World, rung_id: Optional[str], kind: str,
-                  available: Optional[dict] = None) -> Optional[str]:
-    """THE LARDER LADDER: the nearest rung AT OR ABOVE `rung_id` holding any `kind`, or `None`.
-
-    ⚠⚠ IT EXISTS BECAUSE THE SUBSISTENCE ECONOMY IS TWO HALVES THAT NEVER MEET. MEASURED on
-    `build_realm(0)` after one season, before this Query: **4,810 units, every one of them at the
-    37 SETTLEMENT rungs and none at the 211 hearths**, while all 46 persons live in **26 hearths**
-    — so `matter`'s per-rung draw counted **zero eaters at every rung that had stores** and the
-    whole subsistence step was INERT on a world that runs. The walk is the join, and it moves no
-    matter and creates no store: a person reaches UP the ladder they already live on.
-
-    ⚠ IT RETURNS THE RUNG ITSELF WHERE THE RUNG HAS STOCK, which is what makes this a
-    GENERALISATION rather than a replacement. A hearth with its own larder feeds its own people
-    exactly as before; the walk is a no-op wherever the old per-rung code was already right. That
-    is the control `LB-3a` pairs with, and if it ever moves, the walk is not a generalisation.
-
-    ⚠ `None` AT THE ROOT IS A SHORTFALL, NEVER AN ERROR. A person under a realm that holds nothing
-    goes hungry, and hunger is a fact about the world; raising here would make an empty larder an
-    instrument defect. What the caller does with it is the caller's — today MATTER records it and
-    acts on nothing (L5: a threshold crossing MAY NEVER PRODUCE AN OUTCOME).
-
-    ⚠ `available` IS THE CALLER'S RUNNING VIEW DURING ONE DRAW, and it is the reason two eaters
-    cannot spend the same unit. `{(rung_id, kind): units_left}`; absent, the world's own stores
-    answer. Without it a caller that defers its writes — as MATTER must, because the gate applies
-    the write — would show every eater the FULL larder and scarcity would never bind, which is the
-    exact defect `loop/effects.py`'s own header names for `transfer` (*"`transfer` twice from a
-    one-unit larder succeeds twice: the scarcity §27.1 rests on never happens"*).
-
-    ⚠ ITERATIVE WITH A VISITED SET, on `descendants`'s precedent (S38.1). `contain_ascends` makes
-    the ladder strictly ascending at `add_tenure`, so a cycle should be unreachable — but a walk
-    that hangs on a malformed fixture is a worse failure than one that stops, and the guard costs
-    one set."""
-    TRACE.query("nearest_store", "resolver")
-    seen: set = set()
-    cur = rung_id
-    while cur is not None and cur in w.rungs and cur not in seen:
-        seen.add(cur)
-        if available is not None:
-            held = available.get((cur, kind))
-            if held is None:
-                held = (w.rungs[cur].stores or {}).get(kind, 0)
-        else:
-            held = (w.rungs[cur].stores or {}).get(kind, 0)
-        if held > 0:
-            return cur
-        cur = parent_of(w, cur)
-    return None
-
-
 def season_of_year(w: World) -> Optional[int]:
     """v9 IN-21: which season of the year `w.tick` falls in, or `None` when no year is declared. The
     year is the length of `season_factor_draw`'s table (one entry per season, in order), so the
@@ -1052,53 +1007,90 @@ def subsistence_draw(w: World) -> dict:
     Queries would then report a hunger the draw no longer feeds); keeping the individual in the
     record at `want = 0` (a row that can never be short is noise every reader must skip).
 
-    THE ARITHMETIC IS ITEM 3a's, UNCHANGED, and every clause keeps its reason (see MATTER's pass):
-      * per housed COHORT (`home_of`), in SORTED id order: the write order must be deterministic;
-      * per `subsistence_weight` kind, SORTED: `want = weight x Person.weight`, skipped when `<= 0`.
-        `Person.weight` is the cohort multiplier, *"A COHORT IS A PERSON AT weight > 1"*, so a
-        synecdoche of two hundred wants what two hundred eat (`24f`'s territorial quantity is this);
-      * the source is `nearest_store` over the RUNNING view `left`, so two eaters cannot spend the
-        same unit (`nearest_store`'s own `available` paragraph);
-      * `take = min(want, held)`, and the remainder is NOT walked further up. `source None` means
-        no rung at or above the home holds any of that kind.
-    No weights registered gives `{}`, which is MATTER's own `if weights:`.
+    ⚠ THE ARITHMETIC IS THE `settlements` MODULE'S (v9 IN-07 E1, A-25): `settlements.larder_draw`
+    (`modules/settlements/larder.py`, `entry: query`) owns the cohort exemption, the walk up the
+    ladder over the running view, and `take = min(want, held)`; its docstring keeps every clause's
+    reason. This is the host half: `larder_input` projects `World` into the typed record, the entry
+    computes, and this turns the `DrawRecord` back into the dict shape its callers read, row order
+    and kind order kept (both reach `Rung.stores`' insertion order, and so the content hash).
 
     ⚠ IT DOES NOT `TRACE`, on `ancestry`'s rule: a helper extracted to remove duplication must be
-    INVISIBLE to its callers. The `home_of` and per-eater `nearest_store` calls inside it trace
-    exactly as MATTER's inline loop did, in the same order, so MATTER's trace and every committed
-    artifact are unchanged by the extraction. MEASURED at `19d`: the regenerated `runs/` are
-    byte-identical, and so are four worlds' content hashes, event counts and claim counts
-    (`headless`, `governance_spine`, `tiny_world`, `populated.build_realm(0)`). The in-tree control
-    is `test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte`."""
+    INVISIBLE to its callers. The `home_of` call inside it traces as MATTER's inline loop did. The
+    per-eater `nearest_store` rows the walk used to trace are gone with the walk (IN-07 E1's
+    assumption A4: no committed artifact carries one, and
+    `test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte` is the control)."""
+    return _draw_dict(_entry(LARDER_DRAW)(larder_input(w)))
+
+
+#: v9 IN-07 E1: the module entries this file calls, `(role, entry kind)`. THE HOST'S HALF OF *"two
+#: owners say which module is called"*: the composition row says WHICH module provides a role, and
+#: this says the host NEEDS it. `manifest/registrar.py::require_entries` refuses at driver
+#: construction a role here that `MODULE_ENTRIES` does not hold, or holds under another kind -- the
+#: refusal a deleted or stripped `query` row would otherwise never meet in a fresh process, since no
+#: role roster names these rows (`proposals/2026-10-07-unplugged-systems-replug.md` §4).
+LARDER_DRAW = "settlements.larder_draw"
+DRAWN_UNDER = "settlements.drawn_under"
+QUERY_ENTRIES = ((LARDER_DRAW, "query"), (DRAWN_UNDER, "query"))
+
+
+def _entry(role: str):
+    """A module entry by role string, through `composition.require` (cached per process). Not
+    `MODULE_ENTRIES`: `subsistence_draw`, `demanded` and `delivered` have driverless callers
+    (`harness/scarce.py`, tests on a bare world), and the table fills only at driver construction."""
+    return composition.require(role)
+
+
+def larder_input(w: World) -> LarderInput:
+    """THE PROJECTION `settlements.larder_draw` reads: the weights, every housed person, each home's
+    ladder and the stores on it. Read-only.
+
+      * `eaters` are every person `home_of` houses, in sorted id order, cohort or not -- the module
+        applies the exemption and the carrier supplies `is_cohort` (`Person.is_cohort`, S9).
+      * a ladder is `ancestry(home)` cut at the first id that is not a rung, which is where the old
+        walk stopped (`ancestry` itself returns `[id]` for an unknown id).
+      * `stores` is each ladder rung's `Rung.stores` in its own order (`None` read as empty).
+    No weights registered projects no eaters and calls no `home_of`, so the trace is MATTER's
+    `if weights:` as it was."""
     weights = w.fixtures.get("subsistence_weight")
-    out: dict = {}
     if not weights:
-        return out
+        return LarderInput((), (), (), ())
     homes = home_of(w)
-    left: dict = {}           # (rung, kind) -> units still unspent this draw
+    eaters, ladders, stores, seen = [], [], [], set()
     for pid in sorted(homes):
         person = w.persons[pid]
-        if not person.is_cohort:
-            continue                  # `24f`: the individual does not eat from the larder (above)
-        row: dict = {}
-        # `H-11`'s rule, unchanged: the loop is over the WEIGHTS registry, so a kind with no weight
-        # is not drawn at all -- a missing row is never read as a weight of zero.
-        for k, wt in sorted(weights.items()):
-            want = wt * person.weight
-            if want <= 0:
-                continue
-            src = nearest_store(w, homes[pid], k, available=left)
-            if src is None:
-                row[k] = (want, 0, None)
-                continue
-            held = left.get((src, k))
-            if held is None:
-                held = (w.rungs[src].stores or {}).get(k, 0)
-            take = min(want, held)
-            left[(src, k)] = held - take
-            row[k] = (want, take, src)
-        out[pid] = (homes[pid], row)
-    return out
+        eaters.append(Eater(pid, homes[pid], person.weight, person.is_cohort))
+    for home in sorted(set(homes.values())):
+        ladder = []
+        for rid in ancestry(w, home):
+            if rid not in w.rungs:
+                break
+            ladder.append(rid)
+            if rid not in seen:
+                seen.add(rid)
+                stores.append((rid, tuple((w.rungs[rid].stores or {}).items())))
+        ladders.append((home, tuple(ladder)))
+    return LarderInput(tuple(sorted(weights.items())), tuple(eaters), tuple(ladders), tuple(stores))
+
+
+def _draw_dict(record: DrawRecord) -> dict:
+    """`DrawRecord` -> `{pid: (home, {kind: (want, take, source)})}`, in the record's order."""
+    return {r.pid: (r.home, {k: (want, take, src) for k, want, take, src in r.cells})
+            for r in record.rows}
+
+
+def _draw_record(draw: dict) -> DrawRecord:
+    """The inverse of `_draw_dict`, for a caller (MATTER) that hands `demanded`/`delivered` the dict."""
+    return DrawRecord(tuple(DrawRow(pid, home, tuple((k, *cell) for k, cell in row.items()))
+                            for pid, (home, row) in draw.items()))
+
+
+def under_input(w: World, rung_id: str, draw: Optional[dict], column: str) -> Under:
+    """THE PROJECTION `settlements.drawn_under` reads: `rung_id`'s subtree, the draw (MATTER's own
+    when given, else the one the stores as they stand would give) and the column. The subtree is
+    read before the draw, the order the trace has always shown."""
+    here = frozenset(_subtree(w, rung_id))
+    record = _entry(LARDER_DRAW)(larder_input(w)) if draw is None else _draw_record(draw)
+    return Under(record, here, column)
 
 
 def demanded(w: World, rung_id: str, draw: Optional[dict] = None) -> dict:
@@ -1138,7 +1130,7 @@ def demanded(w: World, rung_id: str, draw: Optional[dict] = None) -> dict:
       * THE EATERS WHOSE WALK *ENDS* AT `rung_id`. That set depends on which rungs hold stock, so an
         empty settlement would demand nothing: the need would vanish exactly where it is unmet."""
     TRACE.query("demanded", "resolver")
-    return _drawn_under(w, rung_id, draw, 0)
+    return dict(_entry(DRAWN_UNDER)(under_input(w, rung_id, draw, "want")))
 
 
 def delivered(w: World, rung_id: str, draw: Optional[dict] = None) -> dict:
@@ -1167,22 +1159,7 @@ def delivered(w: World, rung_id: str, draw: Optional[dict] = None) -> dict:
         in one term and not the other.
       * ROUND ONE'S `delivered(levy, rung, season)`, for `demanded`'s reason above."""
     TRACE.query("delivered", "resolver")
-    return _drawn_under(w, rung_id, draw, 1)
-
-
-def _drawn_under(w: World, rung_id: str, draw: Optional[dict], i: int) -> dict:
-    """The shared body of `demanded` (`i = 0`, want) and `delivered` (`i = 1`, take): one pass over
-    the draw record, keeping the eaters homed in `rung_id`'s subtree. Both read the same cells, so
-    both return the same keys. Does not `TRACE`; its two callers own their names."""
-    here = _subtree(w, rung_id)
-    record = subsistence_draw(w) if draw is None else draw
-    out: dict = {}
-    for _pid, (home, row) in record.items():
-        if home not in here:
-            continue
-        for k, cell in row.items():
-            out[k] = out.get(k, 0) + cell[i]
-    return dict(sorted(out.items()))
+    return dict(_entry(DRAWN_UNDER)(under_input(w, rung_id, draw, "take")))
 
 
 def presence(w: World, rung_id: str) -> list[str]:
@@ -1803,7 +1780,7 @@ def holder_faction_of(w: World, rung_id: str) -> Optional[str]:
     or `None` -- read up its own ancestry, since a SETTLEMENT is the object of a `hold` Tenure only
     after a `seize` (v9 IN-13) or a `found` (v9 IN-28); `hold_force` on a seeded one returns `None`:
     every seeded live `hold` targets a `territory` or an `Office`, and the walk takes the nearest held rung either way.
-    `nearest_store`'s own walk, applied to holding rather than to a larder: the nearest rung AT OR
+    The larder walk's shape (`modules/settlements/larder.py`), applied to holding rather than to a larder: the nearest rung AT OR
     ABOVE `rung_id` that IS held, then `faction_holding` on ITS holder (a person) -- never on
     `rung_id` itself, which `faction_holding` cannot answer
     for at all (`subject not in w.persons` returns `None` immediately; it takes the HOLDER, not
@@ -1811,7 +1788,7 @@ def holder_faction_of(w: World, rung_id: str) -> Optional[str]:
     from the name).
 
     ⚠ `None` FOR "NOBODY HOLDS ANY RUNG UP THIS CHAIN" IS A SHORTFALL, NOT AN ERROR --
-    `nearest_store`'s own reading of an empty root. What a `march` targeting an unheld
+    the larder walk's own reading of an empty root. What a `march` targeting an unheld
     (`Uncontrolled`) settlement means is `march`'s own eligibility to decide, not this Query's.
 
     ⚠ THE WALK IS `ancestry`, NOT A FOURTH HAND-ROLLED COPY (M4 review pass, `/simplify` reuse

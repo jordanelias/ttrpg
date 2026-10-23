@@ -475,8 +475,10 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # and this pass derives its writes from the record it returns. The inline loop that stood here
     # (per housed eater, sorted; per weighted kind, sorted; `nearest_store` over the running `left`
     # view; `take = min(want, held)`) moved there VERBATIM, because `demanded`/`delivered` need the
-    # same arithmetic. A second copy would let MATTER feed a person the Queries call hungry. The
-    # derivation below reproduces `draws` and `short_by_person` exactly, in the same insertion
+    # same arithmetic. A second copy would let MATTER feed a person the Queries call hungry. Since
+    # v9 IN-07 E1 the arithmetic is the `settlements.larder_draw` module entry's
+    # (`modules/settlements/larder.py`; the walk was `nearest_store`), and `subsistence_draw` is
+    # its host projection, keeping the record's shape and order. The derivation below reproduces `draws` and `short_by_person` exactly, in the same insertion
     # order. That order reaches `r.stores.update(...)`'s key order, and with it the content hash.
     record = world_q.subsistence_draw(w)
     draws: dict = {}          # source rung -> {kind: units it gives up}
@@ -505,7 +507,7 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # a state change (L3: an aggregate is never a field, so there is nothing to write), and a
     # hand-built `subsistence.short` Event would need an anchor that `anchor_of` can reach. `_crossings`
     # anchors on the write that crossed; a rung with no write has no receipt to name. The larder
-    # write DOES exist at exactly this moment. A drained source was drawn (`take >= 1`: `nearest_store`
+    # write DOES exist at exactly this moment. A drained source was drawn (`take >= 1`: the larder walk
     # only returns a rung holding `> 0`), so the gate emits `stores.changed` there, and
     # `Event.observed` is the field for *what was read to reach this Event* (`W-B`). Only its
     # writer is new, here at MATTER.

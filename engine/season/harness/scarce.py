@@ -146,7 +146,7 @@ def governed(seed: int = 0, fixtures=DEFAULT_FIXTURES, steward_holds: bool = Tru
     Both weigh 1, so neither eats from a larder (`world_q.subsistence_draw`). THE PAYING HALF (limit
     1): both seats grant `issue`, and `terr_march` holds a treasury, so the reeve can pay a shortfall
     OUT OF HIS SEAT'S RUNG through his seat. ⚠ The treasury is on the hungry cohort's ladder, so from
-    the season after `set_hungry` runs dry the cohort's draw walks up to it (`nearest_store`); the
+    the season after `set_hungry` runs dry the cohort's draw walks up to it (`settlements.larder_draw`); the
     first season's draw is unchanged, because `set_hungry` holds some of each kind and the walk stops
     at the nearest rung holding any. A SEPARATE BUILDER, NOT A FLAG ON `build`, on this module's own
     reason: the shipped `build` answers `19d`'s question and its measurements stay its own."""
