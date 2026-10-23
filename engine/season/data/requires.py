@@ -776,12 +776,6 @@ def binding_from_act(a) -> dict:
 # eight): `thread_sensitivity`, the actor's own `Person.thread_sensitivity`, and `thread_sensitivity.gate`,
 # the SECOND READ it is held against (`Fixtures thread_sensitivity_gate`) -- `determine`'s `bench.size`
 # against `quorum`, `work`'s `floor` shape. Both are `OWN_STATE_STEMS` (below).
-REQUIRES_STEMS = frozenset({
-    "exists", "stores", "condition", "floor", "contain.path", "held_by", "present_at",
-    "claim.held", "rank", "purview", "bench", "bench.size", "quorum", "with",
-    "thread_sensitivity", "thread_sensitivity.gate",
-})
-
 # THE STEMS A PERSON ANSWERS OF HIMSELF, WITH NO LEDGER AND NO WORLD (v9 PC-06 K-3): his own Thread
 # Sensitivity and the gate it is held against. `queries/person_q.py::OwnStateReader` is their ONE
 # answerer; the fold's `WorldReader` delegates to it for the person the act names, and the person's
@@ -791,6 +785,11 @@ REQUIRES_STEMS = frozenset({
 # MECHANISM, as `REQUIRES_STEMS` is -- which of the grammar's own predicates a person answers of
 # himself, not vocabulary the world contains.
 OWN_STATE_STEMS = frozenset({"thread_sensitivity", "thread_sensitivity.gate"})
+
+REQUIRES_STEMS = frozenset({
+    "exists", "stores", "condition", "floor", "contain.path", "held_by", "present_at",
+    "claim.held", "rank", "purview", "bench", "bench.size", "quorum", "with",
+}) | OWN_STATE_STEMS
 
 # THE STEMS THE PERSON-SIDE READER NEVER ANSWERS: `queries/person_q.py::LedgerReader.read` returns
 # UNKNOWN for them whatever the ledger holds, so §F1 clause 4 never declines on them. `with` asks

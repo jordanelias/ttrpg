@@ -1689,7 +1689,7 @@ def census(w: World) -> dict:
             # territory with a Site below a floor, and how many such Sites it holds.
             "sites_below_a_floor_by_territory": {
                 r: n for r in sorted(w.rungs) if w.rungs[r].kind == "territory"
-                for n in (len(closed_uses(w, r)),) if n}}
+                if (n := len(closed_uses(w, r)))}}
 
 
 def run(seasons: int = 1, seed: int = 0, cap: int | None = None, w: World | None = None) -> dict:

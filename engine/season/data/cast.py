@@ -273,7 +273,7 @@ def conviction_of(r: dict) -> dict:
 #: (`~50`) as its number. [ASSUMPTION; medium; Jordan to correct; revert: the upper bound, or a
 #: refusal of both shapes.] The lower bound is the conservative reading of a gate -- a person
 #: authored "75 to 80" is at least 75 -- and `~` states imprecision, not a different number.
-_TS_RANGE = re.compile(r"^\s*(?P<lo>\d+)\s*[-–—]\s*(?P<hi>\d+)\s*$")
+_TS_RANGE = re.compile(r"^\s*(?P<n>\d+)\s*[-–—]\s*\d+\s*$")
 _TS_APPROX = re.compile(r"^\s*~\s*(?P<n>\d+)\s*$")
 
 
@@ -300,7 +300,7 @@ def thread_sensitivity_of(r: dict) -> Optional[int]:
     if isinstance(v, str):
         m = _TS_RANGE.match(v) or _TS_APPROX.match(v)
         if m is not None:
-            return int(m.group("lo") if "lo" in m.groupdict() else m.group("n"))
+            return int(m.group("n"))
     raise Unspecified(
         f"cast row {r.get('id', '?')}: ts {v!r} is no whole number, range or `~N`",
         "references/npc_registry.yaml",
