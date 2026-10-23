@@ -51,8 +51,8 @@ from ..data.affiliations import AFFILIATION_CEILING, conviction_map, engagement
 from ..data.cast import STANCE_MAX
 from ..data.pursuits import pursuit_cosine_axes, to_axes
 from ..data.requires import (
-    KNOWN_PERSON_CLAIM, REQUIRES_OPERANDS, REQUIRES_STEMS, SHORTFALL_PREDICATE, UNKNOWN,
-    WORLD_ONLY_STEMS,
+    KNOWN_PERSON_CLAIM, OWN_STATE_STEMS, REQUIRES_OPERANDS, REQUIRES_STEMS, SHORTFALL_PREDICATE,
+    UNKNOWN, WORLD_ONLY_STEMS,
 )
 from ..data.rosters import (
     AFFILIATIONS, DEGREE_STEP, DOMINANCE_KINDS, PURSUIT_AXES, RECORD_CONTENT, SEEN_PREDICATE, roster,
@@ -1025,6 +1025,42 @@ class LedgerReader:
         ledger to one cell (`decision/options._pair`) and wants `read`'s ordering without reaching
         into a private name."""
         return self._best(lambda _c: True)
+
+
+class OwnStateReader:
+    """THE QUESTIONS A PERSON ANSWERS OF HIMSELF (v9 PC-06 K-3, `H-85`) -- `OWN_STATE_STEMS`, and
+    nothing else: every other predicate is UNKNOWN here.
+
+    ⚠ THE ONE ANSWERER OF BOTH STEMS, FOR BOTH SIDES. The fold's `queries/world_q.py::WorldReader`
+    delegates to it for the person the act names, and `decision/options.py::opening_set` asks it of
+    the person forming, so the gate and the person's own reading of it are one read, not two copies.
+    It takes the PERSON and the fixtures and no World and no ledger: a person's sensitivity is his
+    own state (`Person.thread_sensitivity`), not a belief about the world (§F1's asymmetry is about
+    the world, as `opening_set`'s self-contest decline is about being alone in a room).
+
+      * `thread_sensitivity` -- the subject's own value, and ONLY when the subject is this person: a
+        person reads nobody else's. `None` (nothing authored) is UNKNOWN, never 0, so it refuses at
+        the fold and does not pass a gate swept to 0.
+      * `thread_sensitivity.gate` -- `Fixtures thread_sensitivity_gate`, the SECOND READ the value
+        is held against (`work`'s `floor`, `determine`'s `quorum`), the same for every subject."""
+
+    def __init__(self, p: Person, fx):
+        self._p, self._fx = p, fx
+
+    def read(self, subject, predicate: str):
+        stem = str(predicate).partition(":")[0]
+        if stem == "thread_sensitivity":
+            v = self._p.thread_sensitivity if subject == self._p.id else None
+            return UNKNOWN if v is None else v
+        if stem == "thread_sensitivity.gate":
+            return self._fx.get("thread_sensitivity_gate")
+        return UNKNOWN
+
+
+if OWN_STATE_STEMS != {"thread_sensitivity", "thread_sensitivity.gate"}:
+    raise SystemExit(f"`data/requires.py: OWN_STATE_STEMS` is {sorted(OWN_STATE_STEMS)}, and "
+                     "`OwnStateReader.read` answers only `thread_sensitivity` and its gate: a stem "
+                     "added there with no branch here would read UNKNOWN for everybody")
 
 
 SAID_SLANTS = roster("said_slants")

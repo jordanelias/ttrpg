@@ -772,10 +772,25 @@ def binding_from_act(a) -> dict:
 # `world_q.place_of`; the person side never does (`WORLD_ONLY_STEMS`, below).
 # roster-exempt: MECHANISM. These are the grammar's own predicate stems -- what a REQUIREMENT MAY
 # ASK -- not the game's vocabulary; `rosters.yaml` says what the world contains.
+# ⚠ v9 PC-06 K-3 (`H-85`) ADDED TWO, A STEM AND NOT AN OPERAND (`requires_operands` stays the closed
+# eight): `thread_sensitivity`, the actor's own `Person.thread_sensitivity`, and `thread_sensitivity.gate`,
+# the SECOND READ it is held against (`Fixtures thread_sensitivity_gate`) -- `determine`'s `bench.size`
+# against `quorum`, `work`'s `floor` shape. Both are `OWN_STATE_STEMS` (below).
 REQUIRES_STEMS = frozenset({
     "exists", "stores", "condition", "floor", "contain.path", "held_by", "present_at",
     "claim.held", "rank", "purview", "bench", "bench.size", "quorum", "with",
+    "thread_sensitivity", "thread_sensitivity.gate",
 })
+
+# THE STEMS A PERSON ANSWERS OF HIMSELF, WITH NO LEDGER AND NO WORLD (v9 PC-06 K-3): his own Thread
+# Sensitivity and the gate it is held against. `queries/person_q.py::OwnStateReader` is their ONE
+# answerer; the fold's `WorldReader` delegates to it for the person the act names, and the person's
+# own formation asks it of himself (`decision/options.py::opening_set`), so the two sides cannot read
+# the value differently. They are also WORLD-ONLY to a ledger (`WORLD_ONLY_STEMS`): a witness to a
+# reading sees the act, never the number, and the gate is a constant nobody needs told.
+# MECHANISM, as `REQUIRES_STEMS` is -- which of the grammar's own predicates a person answers of
+# himself, not vocabulary the world contains.
+OWN_STATE_STEMS = frozenset({"thread_sensitivity", "thread_sensitivity.gate"})
 
 # THE STEMS THE PERSON-SIDE READER NEVER ANSWERS: `queries/person_q.py::LedgerReader.read` returns
 # UNKNOWN for them whatever the ledger holds, so §F1 clause 4 never declines on them. `with` asks
@@ -789,8 +804,10 @@ REQUIRES_STEMS = frozenset({
 # `epistemic.py`'s `co_located` channel). UNKNOWN is never a contradiction, so the person forms
 # the Candidate and the fold refuses an absent hearer.
 # MECHANISM, as `REQUIRES_STEMS` is -- which of the grammar's own predicates a ledger may answer,
-# not vocabulary the world contains.
-WORLD_ONLY_STEMS = frozenset({"with"})
+# not vocabulary the world contains. ⚠ v9 PC-06 K-3 adds `OWN_STATE_STEMS`: no ledger answers a
+# person's sensitivity either (he answers it of himself, `OwnStateReader`), and WITNESS deposits no
+# claim about it, so no told or seen number can stand in for the one on the person.
+WORLD_ONLY_STEMS = frozenset({"with"}) | OWN_STATE_STEMS
 
 # THE STEMS A LEDGER CLAIM IS A *CELL* OF -- one `(subject, predicate)` slot that holds one value at a
 # time and can be re-asserted, so two claims on it agree or disagree (`decision/options.py::record`).
@@ -1004,5 +1021,16 @@ def build_typed_requires(verb: str, cell) -> Optional[TypedRequires]:
         return {k: v for k, v in c.items() if k != CONJUNCT_KEY} if isinstance(c, dict) else c
     stripped = ({**cell, "all": [strip(c) for c in tops]} if "all" in cell and tops is cell["all"]
                 else strip(cell))
-    return TypedRequires(_build_clause(verb, stripped),
-                         names if any(n is not None for n in names) else ())
+    req = TypedRequires(_build_clause(verb, stripped),
+                        names if any(n is not None for n in names) else ())
+    # v9 PC-06 K-3: A CELL ASKING THE ACTOR'S OWN STATE ASKS NOTHING ELSE. `opening_set` forms such a
+    # row only where `OwnStateReader` reads the WHOLE cell True, so a conjunct it cannot answer (a
+    # ledger's or the world's) would read UNKNOWN and silently decline the row for everybody. Refused
+    # here, at load, rather than discovered as a verb nobody forms.
+    own = set(req.stems()) & OWN_STATE_STEMS
+    if own and not set(req.stems()) <= OWN_STATE_STEMS:
+        raise SystemExit(
+            f"verb_table.yaml: {verb!r} asks own-state stem(s) {sorted(own)} beside "
+            f"{sorted(set(req.stems()) - OWN_STATE_STEMS)}; a cell over `OWN_STATE_STEMS` asks only "
+            "those, because the person's own reading of it decides whether the row forms at all")
+    return req

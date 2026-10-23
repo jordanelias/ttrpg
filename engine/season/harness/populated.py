@@ -1034,6 +1034,10 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         # IN-08 H10: the religious affiliations, from the same row and NEVER drawn -- a drawn creed
         # is an invented one. No fallback: a row without `affiliations:` holds none (`{}`).
         w.persons[pid].conviction = cast.conviction_of(cast.row(cid) or {})
+        # v9 PC-06 K-3 (`H-85`): Thread Sensitivity, from the same row's `ts:`, set here and NEVER
+        # written in play. No fallback and no draw: a row with no authored value leaves `None`, and a
+        # `None` cannot pass `thread_read`'s gate (`Person.thread_sensitivity`'s comment).
+        w.persons[pid].thread_sensitivity = cast.thread_sensitivity_of(cast.row(cid) or {})
 
     # -- WHO BELONGS TO WHAT ----------------------------------------------------
     #

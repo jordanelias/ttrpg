@@ -268,6 +268,47 @@ def conviction_of(r: dict) -> dict:
     return held
 
 
+#: The authored shapes `ts:` takes that are not a bare whole number (v9 PC-06 K-3): a RANGE
+#: (`75–80`; an en dash, a hyphen or an em dash) reads as its LOWER bound, and an APPROXIMATE value
+#: (`~50`) as its number. [ASSUMPTION; medium; Jordan to correct; revert: the upper bound, or a
+#: refusal of both shapes.] The lower bound is the conservative reading of a gate -- a person
+#: authored "75 to 80" is at least 75 -- and `~` states imprecision, not a different number.
+_TS_RANGE = re.compile(r"^\s*(?P<lo>\d+)\s*[-–—]\s*(?P<hi>\d+)\s*$")
+_TS_APPROX = re.compile(r"^\s*~\s*(?P<n>\d+)\s*$")
+
+
+def thread_sensitivity_of(r: dict) -> Optional[int]:
+    """`Person.thread_sensitivity`'s authored source (v9 PC-06 K-3, `H-85`): the row's `ts:` key, a
+    whole number, or `None` where nothing is authored -- the key absent, `ts: null # [GAP]`, or no row
+    at all (the caller's `cast.row(cid) or {}`). `None` is NOT 0: a person nobody screened reads
+    UNKNOWN at the gate and cannot attempt (`Person.thread_sensitivity`'s comment).
+
+    The two non-numeric shapes the registry authors are read by `_TS_RANGE` / `_TS_APPROX` (above);
+    ANY OTHER SHAPE REFUSES, naming the row, rather than being coerced to a plausible number -- this
+    module reads and validates, it does not guess (its docstring). `conviction_of`'s precedent: one
+    reader, called once per person at world build (`harness/populated.py::build_realm`)."""
+    v = (r or {}).get("ts")
+    if v is None:
+        return None
+    if isinstance(v, int) and not isinstance(v, bool):
+        if v < 0:
+            raise Unspecified(
+                f"cast row {r.get('id', '?')}: ts {v!r} is negative", "references/npc_registry.yaml",
+                needs="a whole number at or above 0, or null",
+                law="v9 PC-06 K-3 -- a sensitivity below nothing is not a reading of the registry")
+        return v
+    if isinstance(v, str):
+        m = _TS_RANGE.match(v) or _TS_APPROX.match(v)
+        if m is not None:
+            return int(m.group("lo") if "lo" in m.groupdict() else m.group("n"))
+    raise Unspecified(
+        f"cast row {r.get('id', '?')}: ts {v!r} is no whole number, range or `~N`",
+        "references/npc_registry.yaml",
+        needs="a whole number, a range `A–B` (read as A), `~N` (read as N), or null",
+        law="v9 PC-06 K-3 -- an authored value this reader cannot parse refuses rather than "
+            "being read as a plausible number")
+
+
 def title_of(r: dict) -> Optional[str]:
     """The row's `title`, present on seven of the 46. Not normalised against `titles.domains` —
     `Doux`, `Confessor`, `Father` and `Prince` are real titles that govern no rung, and forcing

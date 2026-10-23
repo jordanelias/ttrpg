@@ -223,9 +223,19 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # CONTROL, run on BOTH trees (this one and its base, 68eaaa41): `give` withheld from every `opening_set`
 # (`Fixtures withheld_verbs`) gives 8cb4f4e2... / cf3625f5... (6603 / 19990) on each, equal to this pin -- the
 # mover is `give`'s formation alone, and nothing else in the change reaches the realm.
-BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
-               1: "8cb4f4e273523f76d1616a71584b50c0",
-               2: "cf3625f54e6876621b71798e1eb56741"}
+# RE-PINNED at v9 PC-06 K-3 (`H-85`), A SCHEMA AND BEHAVIOUR MOVE DECLARED. (1) THE BUILD HASH MOVES: `Person`
+# gains `thread_sensitivity` (`None` unless authored), so every person's `repr` -- folded into `content_hash`
+# -- changes, and ten cast persons carry an authored value (four at or above the gate). (2) ONE AND TWO
+# SEASONS MOVE: `thread_read` is typed and forms for the four persons whose own sensitivity passes it; one
+# reading executes in the realm's first season (`aperture 1 0`: formed 4, offered 4, attempted 1, executed 1),
+# so the act mix moves. Was d3edd90a... / 8cb4f4e2... / cf3625f5... (build, one, two seasons). CONTROL, run on
+# this tree: `thread_read` withheld from every `opening_set` (`Fixtures withheld_verbs`), and separately the
+# gate swept out of reach (`thread_sensitivity_gate` 999), each reproduces the OLD event counts and digests
+# exactly (6603 / 19990, `BASE_EVENTS` as it was) under the new build hash -- the event-level mover is
+# `thread_read`'s formation alone, and the hash-only mover is the field.
+BASE_HASHES = {0: "8e4032a26cfeabdc55bba2178b82d564",
+               1: "628830a8f0b1bfc677713e1362a225f5",
+               2: "74ce9a1e6ea2ece37c00e0484e963777"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -267,8 +277,9 @@ BASE_HASHES = {0: "d3edd90ab3b743a92255740ba03861da",
 # RE-RECORDED at v9 IN-12 step 5 `pardon` with `BASE_HASHES` (6633 -> 6635, 19535 -> 18681).
 # RE-RECORDED at v9 IN-12 step 11 `raze` with `BASE_HASHES` (6635 -> 6655, 18681 -> 18608).
 # RE-RECORDED at v9 IN-12 `give` + Rung with `BASE_HASHES` (6655 -> 6603, 18608 -> 19990).
-BASE_EVENTS = {1: (6603, "958f42832e4fdfda38ba55107ea22e8d2d78476800609d4d562ea4f0459d5eac"),
-               2: (19990, "abd3946bd04cf2578b7fa700017b855109333e6447e271e4e04d6eb6581a48ef")}
+# RE-RECORDED at v9 PC-06 K-3 `thread_read` with `BASE_HASHES` (6603 -> 6594, 19990 -> 19221).
+BASE_EVENTS = {1: (6594, "b39468709289a998a4cf14603263cddee9f3423c3e6faed0c248d8ddfabeb437"),
+               2: (19221, "9be6d67d7fcba247d71d7d95b549ed7006186542e0ee2336896ccadd6b68778d")}
 
 
 def _digest(w) -> tuple:
@@ -359,6 +370,26 @@ def test_the_give_withheld_arm_reproduces_the_one_season_pin():
     POP.run(seasons=1, seed=0, w=w)
     assert w.content_hash() == BASE_HASHES[1], w.content_hash()
     assert _digest(w) == BASE_EVENTS[1], _digest(w)
+
+
+#: The one-season event sequence BEFORE v9 PC-06 K-3 (`BASE_EVENTS[1]` at `26884a93`), kept as the K-3
+#: re-pin's control: the event-level mover must be `thread_read`'s formation and nothing else.
+PRE_K3_EVENTS_1 = (6603, "958f42832e4fdfda38ba55107ea22e8d2d78476800609d4d562ea4f0459d5eac")
+
+
+def test_the_thread_read_withheld_arm_reproduces_the_pre_k3_event_sequence():
+    """THE K-3 RE-PIN'S CONTROL, ENCODED: `thread_read` added to the shipped `Fixtures withheld_verbs`
+    reads the PRE-K-3 one-season event count and digest exactly, while the hash stays the new build's
+    (`Person.thread_sensitivity` is in every `repr`). So the four passing persons' one reading is the
+    whole of the act-mix move, and the field moves the hash and nothing a season does. If a second
+    mover lands with `thread_read`, this arm stops matching."""
+    w = POP.build_realm(0)
+    shipped = tuple(w.fixtures.get("withheld_verbs"))
+    assert "thread_read" not in shipped, "fixture: `thread_read` is already withheld at the shipped arm"
+    w.fixtures = w.fixtures.sweep("withheld_verbs", shipped + ("thread_read",))
+    POP.run(seasons=1, seed=0, w=w)
+    assert _digest(w) == PRE_K3_EVENTS_1, _digest(w)
+    assert PRE_K3_EVENTS_1 != BASE_EVENTS[1], "the control equals the pin -- K-3 moved nothing to control for"
 
 
 def test_in21_a_table_of_ones_reads_the_same_as_no_table():
