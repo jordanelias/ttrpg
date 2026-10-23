@@ -65,6 +65,7 @@ exercised by this run.**
 | `age_step` | `0.0` | no — a harness fixture |
 | `illness_rate` | `0.0` | no — a harness fixture |
 | `age_at_build` | `0` | no — a harness fixture |
+| `lattice_coupling` | `0` | no — a harness fixture |
 | `wound_harm_model` | `scene_fraction` | no — a harness fixture |
 | `combat_wounded_above` | `None` | no — a harness fixture |
 | `field_casualty_model` | `scaled_by_degree` | no — a harness fixture |
@@ -96,4 +97,5 @@ exercised by this run.**
 | `oblige_term` | `4` | no — a harness fixture |
 | `default_upkeep` | `1` | no — a harness fixture |
 | `bench_quorum` | `1` | no — a harness fixture |
+| `thread_sensitivity_gate` | `30` | no — a harness fixture |
 | `withheld_verbs` | `('destroy_record',)` | no — a harness fixture |

@@ -102,8 +102,11 @@ def _lattice_strain(w: "World", scale: int) -> dict:
       the rule rather than of `w.sites`' order.
     * A `+` LOOP (`H-235`): the lower the neighbour, the more this Site falls, and so on outward.
       BOUNDED BY MENDING -- persons' `restore` acts (`loop/effects_economy.py::_eff_restore`,
-      ungraded, its `_rise` unchanged) raise a fabric toward its ceiling at RESOLVE, before this
-      barrier reads it; a mended Site has no gap to pass on. No new verb, role or module: the
+      ungraded, its `_rise` unchanged) raise a fabric toward its ceiling at RESOLVE, which the driver
+      runs AFTER this season's MATTER and before the next one's. So holding a ring stops the front at
+      that ring (a ring restored each RESOLVE opens every MATTER whole and passes no gap on); a mend
+      at the source does not recall a ring MATTER has already pulled, which pulls the next ring
+      itself (`test_in35_lattice_coupling.py`, both arms, in driver order). No new verb, role or module: the
       threadwork module stays unplugged (`proposals/2026-10-07-unplugged-systems-replug.md` §3.4,
       §6 items 3 and 5), and `systems/overview/sim/ms_track.py`'s stored 0-100 scalar and yearly
       rate have no place here -- a world track that moved by itself would be a fourth clock
@@ -116,9 +119,10 @@ def _lattice_strain(w: "World", scale: int) -> dict:
 
     ⚠ THE CONTROL TAKES NOTHING: at weight 0 (shipped) this returns `{}` before reading a Site or
     tracing a line, and the season is today's byte for byte. ⚠ WHAT IT DOES NOT BUILD: the SOURCE.
-    No act yet strains the lattice (thread operations as a carrier, `H-85`, plan `33`) and Askeheim
-    (T15) holds no Site in the built realm, so on `build_realm` a non-zero weight couples ordinary
-    wear and repair, not a Calamity (`H-236`)."""
+    No act yet strains the lattice AT ASKEHEIM (thread operations as a carrier, `H-85`, plan `33`) and
+    Askeheim (T15) holds no Site in the built realm, so on `build_realm` a non-zero weight couples
+    ordinary wear, `sabotage` (which lowers any present fabric it reaches) and repair, not a Calamity
+    (`H-236`)."""
     weight = w.fixtures.get("lattice_coupling")
     if not weight:
         return {}

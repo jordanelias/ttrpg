@@ -11,17 +11,25 @@ THE ENTRY'S FALSIFIER, ONE TEST PER ARM, each able to see the failure it exclude
       distance"* from Askeheim) -- data the rule does NOT read, so the order is checked against an
       oracle independent of the edges the rule couples across.
   (b) MANAGED: persons standing at the fabric execute `restore` each season through the real RESOLVE
-      fold, and the front does not advance -- at the source nothing crosses; holding the first ring,
-      nothing beyond it crosses. Each beside the unmanaged arm on the same world, which does cross.
+      fold, IN THE DRIVER'S ORDER (MATTER opens the season, RESOLVE follows). Holding the first ring
+      stops the front at that ring: ring 1 crosses once, at season 1's MATTER, before anybody mends,
+      and nothing beyond it ever crosses. A mend at the source does NOT recall a ring MATTER has
+      already pulled: the front reaches every territory in the season the unmanaged arm does. Each
+      beside the unmanaged arm on the same world, which does cross.
   (c) WEIGHT 0 REPRODUCES TODAY: every Site ends where its kind's wear alone puts it, and the same
-      world at a non-zero weight DIFFERS (the control that can fail). The realm-level half is the
-      1- and 2-season content-hash pins in `test_season_weather.py`, unchanged by this position.
+      world at a non-zero weight DIFFERS (the control that can fail). The realm-level half: at
+      `23b33e9e` (IN-35) the 1- and 2-season content-hash pins in `test_season_weather.py` read the
+      same as before it; K-3 later moved those pins (`Person.thread_sensitivity` is in every `repr`),
+      so AT HEAD the live control is `test_the_thread_read_withheld_arm_reproduces_the_pre_k3_event_
+      sequence`, which equals the pre-IN-35 one-season event sequence -- the identity is checked over
+      one season, at event kind/id level only; the hash-level identity is historical (`@23b33e9e`).
 
 THE WORLD is hand-built: a realm, every territory the geography names (by its rung id, so the real
-borders apply), one harbour per territory at full condition, and Askeheim's (`terr_T15`) planted at
-0. ⚠ THE PLANT IS THE SOURCE THE TREE DOES NOT YET HAVE (`H-236`): no act strains the lattice and the
-built realm holds no Site at Askeheim. Harbour wear (10 a season) alone needs 21 seasons to cross the
-first floor (800), so every crossing inside these runs is the coupling's.
+borders apply), one harbour per territory at full condition, inserted nearest-the-source first, and
+Askeheim's (`terr_T15`) planted at 0. ⚠ THE PLANT IS THE SOURCE THE TREE DOES NOT YET HAVE (`H-236`):
+no act strains the lattice AT ASKEHEIM and the built realm holds no Site there. Harbour wear (10 a
+season) alone needs 21 seasons to cross the first floor (800), so every crossing inside these runs is
+the coupling's.
 """
 
 from __future__ import annotations
@@ -38,6 +46,7 @@ from ..queries import world_q
 from ..state.attribution import event_by_id
 from ..state.carriers import Act, Person, Rung, Site, Tenure
 from ..state.world import World
+from ..trace_log import TRACE
 
 SOURCE = territory_rung_id("T15")            # Askeheim, the epicentre
 RING_1 = (territory_rung_id("T6"), territory_rung_id("T13"))
@@ -54,9 +63,17 @@ def _bands() -> dict:
 
 def _sid(t: str) -> str:
     """A territory's harbour, NAMED SO ITS ID SORTS BY DISTANCE FROM THE SOURCE (`site_b0_...` first).
-    `_lattice_strain` walks `sorted(w.sites)`, so a rule that read a neighbour's write of the same
-    barrier would carry the front outward in ONE season on this world; the one-ring test sees it."""
+    `_lattice_strain` keys its map on `sorted(w.sites)`; the wear loop that WRITES walks
+    `w.sites.values()` in insertion order, and `_world` inserts in the same band order (`_band_order`),
+    so a rule that read a neighbour's write of the same barrier would carry the front outward in ONE
+    season on this world whichever of the two walks it rode; the one-ring test sees it."""
     return f"site_b{_bands().get(t, 9)}_{t}"
+
+
+def _band_order(territories) -> list:
+    """The territories nearest the source first (band, then id): the order `_world` inserts Sites."""
+    bands = _bands()
+    return sorted(territories, key=lambda t: (bands.get(t, 9), t))
 
 
 def _world(weight: int, menders_at: tuple = ()) -> World:
@@ -70,7 +87,7 @@ def _world(weight: int, menders_at: tuple = ()) -> World:
         n[0] += 1
         w.add_tenure(Tenure(f"t{n[0]}", sub, obj, kind, since=0))
 
-    for t in sorted(set(adjacent_territories()) | set(_bands())):
+    for t in _band_order(set(adjacent_territories()) | set(_bands())):
         w.rungs[t] = Rung(t, "territory")
         edge(t, "R", "contain")
         w.sites[_sid(t)] = Site(_sid(t), t, "harbour", condition=0 if t == SOURCE else scale)
@@ -85,21 +102,20 @@ def _world(weight: int, menders_at: tuple = ()) -> World:
 
 
 def _run(w: World, menders_at: tuple = ()) -> dict:
-    """`SEASONS` seasons: at each, the menders' `restore` through the real RESOLVE fold, then the real
-    MATTER barrier. Returns `{territory: the season its harbour first crossed FLOOR}` and the seasons'
-    summed lattice condition, read off the crossing Events MATTER emitted (each anchored, through its
-    cause, on the wear write that crossed)."""
+    """`SEASONS` seasons IN THE DRIVER'S ORDER (`loop/driver.py::SeasonDriver.season`: MATTER, then the
+    rounds' DELIBERATE/RESOLVE): at each, the real MATTER barrier, then the menders' `restore` through
+    the real RESOLVE fold. So the first MATTER pulls before anybody has mended, as in computed play.
+    Returns `{territory: the season its harbour first crossed FLOOR}`, the seasons' summed lattice
+    condition, the restores that executed, and `{site: its condition at each MATTER open}`; the
+    crossings are read off the Events MATTER emitted (each anchored, through its cause, on the wear
+    write that crossed)."""
     d = SeasonDriver(w)
     first, totals, restored = {}, [sum(s.condition for s in w.sites.values())], 0
+    at_open: dict = {sid: [] for sid in w.sites}
     for season in range(1, SEASONS + 1):
         w.tick += 1
-        acts = [Act(id=f"mend_{season}_{t}", actor=f"p_mender_{t}", verb="restore",
-                    payload={"site": _sid(t)}) for t in menders_at]
-        if acts:
-            out = d.resolve(mint_token(w, WriteClass.ACTS), acts,
-                            contest_max_depth=w.fixtures.get("contest_max_depth"))
-            w.log.extend(out)
-            restored += sum(e.kind == "site.restored" for e in out)
+        for sid, s in w.sites.items():
+            at_open[sid].append(s.condition)
         for ev in d.matter(mint_token(w, WriteClass.MATTER), []):
             if ev.kind != "condition.band_crossed":
                 continue
@@ -107,8 +123,15 @@ def _run(w: World, menders_at: tuple = ()) -> dict:
             site = w.sites[worn.changes[0].subject]
             if site.condition < w.fixtures.get("band_floors")["harbour"][FLOOR]:
                 first.setdefault(site.rung, season)
+        acts = [Act(id=f"mend_{season}_{t}", actor=f"p_mender_{t}", verb="restore",
+                    payload={"site": _sid(t)}) for t in menders_at]
+        if acts:
+            out = d.resolve(mint_token(w, WriteClass.ACTS), acts,
+                            contest_max_depth=w.fixtures.get("contest_max_depth"))
+            w.log.extend(out)
+            restored += sum(e.kind == "site.restored" for e in out)
         totals.append(sum(s.condition for s in w.sites.values()))
-    return {"first": first, "totals": totals, "restored": restored}
+    return {"first": first, "totals": totals, "restored": restored, "at_open": at_open}
 
 
 # ======================================================================================
@@ -153,28 +176,52 @@ def test_in35_the_front_advances_one_ring_a_season_at_most():
 # (b) MANAGED: MENDING (`restore`, PERSONS' ACTS) STABILIZES
 # ======================================================================================
 
-@pytest.mark.parametrize("menders_at, may_cross", [
-    ((SOURCE,), frozenset()),                # the source mended: nothing crosses anywhere
-    (RING_1, frozenset(RING_1)),             # the first ring held: nothing beyond it crosses
-], ids=["mend-the-source", "hold-the-first-ring"])
-def test_in35_managed_mending_stabilizes_and_the_unmanaged_arm_does_not(menders_at, may_cross):
-    managed = _run(_world(ON, menders_at), menders_at)
+def test_in35_managed_holding_the_first_ring_stops_the_front_there_and_the_unmanaged_arm_does_not():
+    """Menders at both ring-1 harbours `restore` at every RESOLVE. Season 1's MATTER pulls ring 1 before
+    anybody has mended (the driver's order), so ring 1 crosses once, and nothing beyond it ever does:
+    each restore puts ring 1 back at the full scale before the next MATTER opens, so ring 2 opens every
+    season at exactly its kind's wear (no pull), while the same world unmended crosses ring after ring."""
+    managed = _run(_world(ON, RING_1), RING_1)
+    unmanaged = _run(_world(ON))
+    scale, wear = DEFAULT_FIXTURES.get("condition_scale"), DEFAULT_FIXTURES.wear("harbour")
+    assert managed["restored"] >= len(RING_1) * SEASONS, managed["restored"]   # EXECUTED, every season
+    assert managed["first"] == {t: 1 for t in RING_1}, managed["first"]
+    ring_2 = [t for t, b in _bands().items() if b == 2]
+    checked = 0
+    for t in ring_2:
+        assert managed["at_open"][_sid(t)] == [scale - k * wear for k in range(SEASONS)], t
+        checked += 1
+    for t in RING_1:
+        assert managed["at_open"][_sid(t)] == [scale] * SEASONS, t
+        checked += 1
+    assert checked == len(ring_2) + len(RING_1) and ring_2, checked
+    beyond = {t for t in unmanaged["first"] if t not in RING_1 and t != SOURCE}
+    assert len(beyond) >= 10, sorted(beyond)                     # the same world, unmended, does cross
+    assert managed["totals"][-1] > unmanaged["totals"][-1] + 5000, (managed["totals"], unmanaged["totals"])
+
+
+def test_in35_a_mended_source_does_not_recall_a_ring_matter_has_already_pulled():
+    """THE OTHER HALF, INVERTED FROM WHAT THE RULE CANNOT DO: a mender at the source restores it at every
+    RESOLVE, but season 1's MATTER has already pulled ring 1 below its floor, and a pulled ring pulls
+    the next. So the front reaches every banded territory in the season the unmanaged arm does: mending
+    the source does not stop it. Holding a ring does (the test above)."""
+    managed = _run(_world(ON, (SOURCE,)), (SOURCE,))
     unmanaged = _run(_world(ON))
     assert managed["restored"] >= SEASONS, managed["restored"]   # the arm EXECUTED, every season
-    assert set(managed["first"]) <= may_cross, sorted(managed["first"])
-    beyond = {t for t in unmanaged["first"] if t not in may_cross and t != SOURCE}
-    assert len(beyond) >= 10, sorted(beyond)                     # the same world, unmended, does cross
-    # bounded: after the first season the managed lattice loses no more than ordinary wear plus the
-    # menders' own sites' pull, while the unmanaged one keeps falling faster
-    assert managed["totals"][-1] > unmanaged["totals"][-1] + 5000, (managed["totals"], unmanaged["totals"])
+    banded = {t for t, b in _bands().items() if b >= 1}
+    assert all(unmanaged["first"].get(t) for t in banded), unmanaged["first"]   # not vacuous
+    assert {t: managed["first"].get(t) for t in banded} == {t: unmanaged["first"].get(t) for t in banded}, (
+        managed["first"], unmanaged["first"])
+    assert all(managed["first"].get(t) == 1 for t in RING_1), managed["first"]
 
 
 # ======================================================================================
 # (c) WEIGHT 0 REPRODUCES TODAY, AND THE CONTROL CAN FAIL
 # ======================================================================================
 
-def test_in35_weight_zero_is_wear_alone_and_a_nonzero_weight_differs():
-    zero, on = _world(0), _world(ON)
+@pytest.mark.parametrize("weight", [250, ON])           # H-235's two non-zero sweep points
+def test_in35_weight_zero_is_wear_alone_and_a_nonzero_weight_differs(weight):
+    zero, on = _world(0), _world(weight)
     start = {sid: s.condition for sid, s in zero.sites.items()}
     _run(zero), _run(on)
     wear = zero.fixtures.wear("harbour")
@@ -188,15 +235,23 @@ def test_in35_weight_zero_is_wear_alone_and_a_nonzero_weight_differs():
 def test_in35_the_control_reads_no_site_and_the_weight_is_refused_outside_its_share():
     w = _world(0)
     scale = w.fixtures.get("condition_scale")
+    # A SECOND harbour at the source, at full condition: its only weaker neighbour is the source's own
+    # harbour, IN ITS OWN TERRITORY, so it is pulled only if the rule reads a Site's own territory and
+    # not just the bordering ones.
+    extra = "site_b0_extra_at_source"
+    w.sites[extra] = Site(extra, SOURCE, "harbour", condition=scale)
+    traced = len(TRACE.rows)
     assert _lattice_strain(w, scale) == {}
+    assert len(TRACE.rows) == traced, "the control traced a line"
     for bad in (-1, scale + 1, float("nan")):
         w.fixtures = DEFAULT_FIXTURES.sweep("lattice_coupling", bad)
         with pytest.raises(ValueError):
             _lattice_strain(w, scale)
     w.fixtures = DEFAULT_FIXTURES.sweep("lattice_coupling", ON)
     pulled = _lattice_strain(w, scale)
-    assert set(pulled) == {_sid(t) for t in RING_1}, sorted(pulled)
-    assert all(v == ON * scale // scale for v in pulled.values()), pulled
+    assert set(pulled) == {extra, *(_sid(t) for t in RING_1)}, sorted(pulled)
+    gap = scale                                  # each pulled Site is at the scale, its weakest at 0
+    assert all(v == ON * gap // scale for v in pulled.values()), pulled
 
 
 def test_in35_the_shipped_weight_is_the_control():

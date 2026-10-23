@@ -3060,10 +3060,13 @@ class WorldReader:
             # docketed matter maps to its arrangement row. The same for every subject today.
             return w.fixtures.get("bench_quorum")
         if stem in OWN_STATE_STEMS:
-            # v9 PC-06 K-3 (`H-85`): `thread_sensitivity` and its gate, asked of the person the cell
-            # names (`of: actor`), through `person_q.OwnStateReader` -- the one answerer, which the
-            # person's own formation asks too, so the fold and the person cannot read it apart. A
-            # subject that is no person has no sensitivity: UNKNOWN, which refuses.
-            p = w.persons.get(subject)
+            # v9 PC-06 K-3 (`H-85`): `thread_sensitivity` and its gate, through
+            # `person_q.OwnStateReader` -- the one answerer, which the person's own formation asks
+            # too, so the fold and the person cannot read it apart. ⚠ BUILT ON THIS READER'S OWN
+            # ACTOR, NOT ON THE CELL'S SUBJECT (`claim.held`'s precedent, above): the reader's
+            # `subject == self._p.id` test then holds at the fold as on the person side, so a cell
+            # naming another person (`of: subject`) reads UNKNOWN and refuses -- a person reads
+            # nobody else's. An actor that is no person has no sensitivity: UNKNOWN, which refuses.
+            p = w.persons.get(self._actor)
             return UNKNOWN if p is None else OwnStateReader(p, w.fixtures).read(subject, predicate)
         return UNKNOWN
