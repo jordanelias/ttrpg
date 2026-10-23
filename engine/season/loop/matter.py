@@ -21,6 +21,7 @@ from __future__ import annotations
 
 from typing import NamedTuple, Optional
 from ..data.fixtures import SITE_YIELD
+from ..data.geography import adjacent_territories
 from ..data.matrix import Step
 from ..data.requires import SHORTFALL_PREDICATE, Observation
 from ..data.rosters import STANDING_CROSSED
@@ -83,6 +84,67 @@ def _crossings(w: "World", subject_id: str, floors: dict, before, after,
                            chose="EMIT a witnessable Event; write no social row; produce no outcome",
                            alternatives=["write the consequence directly (L5 forbids: a crossing MAY NEVER PRODUCE AN OUTCOME)",
                                          "silently drop the verb from the set (then nobody can witness it)"])
+    return out
+
+
+def _lattice_strain(w: "World", scale: int) -> dict:
+    """v9 IN-35 FORCE-HAZARD -- THE CALAMITY RE-EXPRESSED AS A COUPLING RULE (#457 `:123-143`): `{site
+    id: the extra wear this season}`, which the wear loop below adds to the Site's kind's rate. ONE
+    RULE, NO SOURCE AND NO SCALAR: a Site loses `lattice_coupling / condition_scale` of its gap down to
+    the WEAKEST Site of its own territory or a bordering one (`world_q.enclosing_territory`,
+    `data/geography.py::adjacent_territories`), so a worn place drags the fabric beside it down, and
+    that fabric the next ring out, one border a season at most. Nothing else moves the lattice.
+
+    * READ FROM THE BARRIER'S OPENING CONDITIONS, ALL OF THEM, BEFORE ANY WEAR IS WRITTEN. The wear
+      loop is a parallel map (S31.2: `_in_parallel_map`), so a Site may not read a neighbour's write
+      of this same barrier; a front therefore advances one ring per season, never across the realm in
+      one sorted pass. That is what makes *"reach territories in order of distance"* a property of
+      the rule rather than of `w.sites`' order.
+    * A `+` LOOP (`H-235`): the lower the neighbour, the more this Site falls, and so on outward.
+      BOUNDED BY MENDING -- persons' `restore` acts (`loop/effects_economy.py::_eff_restore`,
+      ungraded, its `_rise` unchanged) raise a fabric toward its ceiling at RESOLVE, before this
+      barrier reads it; a mended Site has no gap to pass on. No new verb, role or module: the
+      threadwork module stays unplugged (`proposals/2026-10-07-unplugged-systems-replug.md` §3.4,
+      §6 items 3 and 5), and `systems/overview/sim/ms_track.py`'s stored 0-100 scalar and yearly
+      rate have no place here -- a world track that moved by itself would be a fourth clock
+      (`loop/census.py`: NO CLOCK GENERATES ANYTHING). This is matter wearing, the licensed clock.
+    * NEVER BELOW THE WEAKEST NEIGHBOUR: the share is at most the whole gap (`0 <= weight <= scale`,
+      refused otherwise), so the coupling alone cannot overshoot, and `max(0, ...)` below still floors
+      the write.
+    * EVERY SITE, WHATEVER ITS KIND -- the lattice is the territories' fabric, not a kind, so nothing
+      is special-cased; a Site with no territory above it couples to nothing and nothing to it.
+
+    ⚠ THE CONTROL TAKES NOTHING: at weight 0 (shipped) this returns `{}` before reading a Site or
+    tracing a line, and the season is today's byte for byte. ⚠ WHAT IT DOES NOT BUILD: the SOURCE.
+    No act yet strains the lattice (thread operations as a carrier, `H-85`, plan `33`) and Askeheim
+    (T15) holds no Site in the built realm, so on `build_realm` a non-zero weight couples ordinary
+    wear and repair, not a Calamity (`H-236`)."""
+    weight = w.fixtures.get("lattice_coupling")
+    if not weight:
+        return {}
+    if not 0 <= weight <= scale:            # `not ... <=`, so a NaN is refused too
+        raise ValueError(f"lattice_coupling {weight} is not a share in [0, {scale}] (H-235)")
+    borders = adjacent_territories()
+    where = {sid: world_q.enclosing_territory(w, w.sites[sid].rung) for sid in sorted(w.sites)}
+    by_terr: dict = {}
+    for sid, t in where.items():
+        if t is not None:
+            by_terr.setdefault(t, []).append(sid)
+    out: dict = {}
+    for sid, t in where.items():
+        if t is None:
+            continue
+        near = [n for u in (t, *sorted(borders.get(t, ()))) for n in by_terr.get(u, ()) if n != sid]
+        if not near:
+            continue
+        gap = max(0, w.sites[sid].condition) - max(0, min(w.sites[n].condition for n in near))
+        if gap > 0 and (weight * gap) // scale:
+            out[sid] = (weight * gap) // scale
+    TRACE.decision(f"the lattice coupling pulls {len(out)} Site(s) toward their weakest neighbour",
+                   "v9 IN-35 / #457 FORCE-HAZARD",
+                   chose="add the pull to the Site's kind's wear, read from the barrier's opening conditions",
+                   alternatives=["a stored Mending Stability scalar decaying a year at a time (a fourth clock)",
+                                 "read a neighbour's write of this barrier (a sorted pass, not a parallel map)"])
     return out
 
 
@@ -655,12 +717,17 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
                 causes=[prior_leg] if prior_leg else [ROOT])
 
     # S25: NO SOCIAL QUANTITY MOVES HERE. L4 at its sharpest.
-    w._in_parallel_map = True
     scale = w.fixtures.get("condition_scale")
+    # v9 IN-35: the lattice coupling, read off every Site's opening condition BEFORE the parallel map
+    # writes one (`_lattice_strain`). `{}` at the shipped weight 0, so `wear` below is today's.
+    pull = _lattice_strain(w, scale)
+    w._in_parallel_map = True
     floors_all = w.fixtures.get("band_floors")
     for s in w.sites.values():
         before = s.condition
-        wear = w.fixtures.wear(s.kind)      # NO SILENT DEFAULT -- unregistered kind raises
+        # NO SILENT DEFAULT -- unregistered kind raises. Plus the coupling's pull: ONE wear write, so
+        # one `condition.worn` and one crossing check per Site whatever moved it.
+        wear = w.fixtures.wear(s.kind) + pull.get(s.id, 0)
         # `W4`. WEAR IS A LICENSED CLOCK, AND A CLOCK CHAINS TO ITSELF. `[ROOT]` is for the
         # campaign seed and a licensed clock's GENUINE FIRST emission (#353 `:682-685`); every
         # later tick of the same clock names the tick before it. So the number of `[ROOT]`

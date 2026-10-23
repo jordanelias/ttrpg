@@ -147,6 +147,10 @@ STEP_READS = (
     # loop/matter.py::matter -- `claim_decay`; emits `claim.decayed`
     Process("MATTER: claim decay", (("Claim.confidence", "+"),),
             (("Claim.confidence", "-"), (EVENT, "+")), "MAT"),
+    # loop/matter.py::_lattice_strain (v9 IN-35) -- a LOWER neighbour means MORE pull (`-`), and the
+    # pull is wear (`-`); emits through the wear write's `condition.worn`
+    Process("MATTER: lattice coupling", (("Site.condition", "-"),),
+            (("Site.condition", "-"), (EVENT, "+")), "MAT"),
 )
 
 #: Each LOOP row's cycle(s), as canonical quantity tuples (see `canonical`). The SIGN is the row's.
@@ -157,6 +161,8 @@ DECLARED_CYCLES = {
     "H-103": (("Claim.confidence",),),
     "H-104": (("Person.claim_ledger",),),
     "H-112": ((EVENT,),),
+    # the lattice coupling: a worn Site wears its neighbours, which wear theirs (v9 IN-35)
+    "H-235": (("Site.condition",),),
 }
 
 
@@ -413,7 +419,7 @@ def build_processes() -> tuple:
     declared = {_STEP_OF[p.step] for p in procs if p.step}
     blind = {"untyped_requires": untyped, "drift": drift,
              "undeclared_step_reads": sorted(writing_steps - declared)
-             + ["MATTER (every pass but claim decay)", "DELIBERATE (all but its question sources)",
+             + ["MATTER (every pass but claim decay and the lattice coupling)", "DELIBERATE (all but its question sources)",
                 f"WITNESS channels as one union, not per channel ({len(WITNESS_CHANNELS)} rostered)"]}
     return tuple(procs), blind
 
