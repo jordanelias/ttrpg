@@ -1462,16 +1462,6 @@ def rank(p: Person, teller: str) -> int:
     return 0
 
 
-def tied(p: Person, teller: str) -> int:
-    """`1` if `p` holds a LIVE `tie` to `teller`, else `0` (v9 IN-32, H-182: the tie's reader).
-
-    `p`'s OWN directed edge (`04_CODE_ARCHITECTURE.md` §A.3 row 9: a `tie` is two directed edges, one
-    owned by each party), read off `p.tenures` and no World (AX-2), so the TELLER'S tie to `p` is not
-    read: being tied to somebody makes you credit them, and their tie to you does not. The producer
-    is `loop/effects_information.py::_eff_tie`; `release` ends the edge and with it this read."""
-    return int(any(t.kind == "tie" and t.live and t.object == teller for t in p.tenures))
-
-
 def _is_cell(c: Claim) -> bool:
     """Is `c` a claim on a CELL -- a slot that holds one value (`data/requires.py: CELL_STEMS`)?"""
     return str(c.predicate).partition(":")[0] in CELL_STEMS
@@ -1529,9 +1519,7 @@ def teller_weight(p: Person, fx: "Fixtures") -> Callable[[Claim], float]:
         hops     = len(c.chain)         teller = c.chain[-1]           (origin = c.chain[0])
         relation = 1 + rank_gain * rank(p, teller)
                      + regard_gain * clamp(regard(p, teller, fx) / STANCE_MAX, -1, 1)
-                     + tie_gain * tied(p, teller)
-                   (`regard` is G1's: stored stance plus the judged and told halves at their gains;
-                   `tied` is v9 IN-32's: 1 while `p` holds a live `tie` to the teller, `_eff_tie`'s edge)
+                   (`regard` is G1's: stored stance plus the judged and told halves at their gains)
         record   = `record(p, teller, fx)`: 1.0 with no pair; else 1 + record_gain * balance (`T6`)
 
     `RULINGS.yaml` CAT-3, closed: store the teller and grade the claim WHEN READ, by the hearer's
@@ -1543,17 +1531,15 @@ def teller_weight(p: Person, fx: "Fixtures") -> Callable[[Claim], float]:
 
     ⚠ THE FIXTURES ARE READ ON THE FIRST TOLD CLAIM, NOT AT BUILD. A ledger with no teller in it
     reads none of them, so a world with no telling reads exactly what it read before `T3a`.
-    ⚠ AT THE CONTROL VALUES (`told_weight` 1.0, `rank_gain`, `regard_gain`, `tie_gain` and
-    `record_gain` all 0) EVERY CLAIM WEIGHS EXACTLY 1.0 and `LedgerReader` orders as it did before
-    `T3a`. ⚠ `tie_gain` 0 is also IN-32's own control: a tie then moves no weight, the pre-IN-32 reader.
+    ⚠ AT THE CONTROL VALUES (`told_weight` 1.0, `rank_gain`, `regard_gain` and `record_gain` all
+    0) EVERY CLAIM WEIGHS EXACTLY 1.0 and `LedgerReader` orders as it did before `T3a`.
     ⚠ THE ONE-HOP BOUND. `told_weight` x `relation` x `record` is clamped at 1.0, and a one-hop claim
     at the shipped 0.5 stays strictly below a firsthand claim's 1.0 only while `relation` x `record`
     stays below 2. At NEUTRAL regard a good record ALONE gives 0.5 x 1 x 1.5 = 0.75 (< 1); 1.0 needs
     `relation` x `record` >= 2, i.e. at the best record (1.5) `relation` >= 4/3 -- regard >= 2/3 of
     `STANCE_MAX` at the shipped `regard_gain`. A regarded teller whose earlier hearsay was confirmed
     can therefore tie a firsthand claim on support and win on `when`; `rank` reads 0 (`H-181`) so it
-    adds nothing yet. A tie (v9 IN-32) at the shipped `tie_gain` 0.5 is worth what full regard is:
-    a tied teller at neutral regard and the best record gives 0.5 x 1.5 x 1.5 = 1.125, clamped to 1.0. `record` is not independent of what it weighs: see `record`'s last warning.
+    adds nothing yet. `record` is not independent of what it weighs: see `record`'s last warning.
     ⚠ `relation` AND `record` EACH DEPEND ON THE TELLER ALONE AND ON `p`'s LEDGER, WHICH DOES NOT
     CHANGE INSIDE ONE `opening_set`, so each is computed ONCE PER TELLER (except under `loop/witness.py`'s
     `ledger_weigh`, whose closure outlives deposits within one (witness, Event): its memo is the
@@ -1567,16 +1553,14 @@ def teller_weight(p: Person, fx: "Fixtures") -> Callable[[Claim], float]:
             return 1.0
         teller = c.teller
         if not gains:
-            gains.extend((fx.get("told_weight"), fx.get("rank_gain"), fx.get("regard_gain"),
-                          fx.get("tie_gain")))
-        told_weight, rank_gain, regard_gain, tie_gain = gains
+            gains.extend((fx.get("told_weight"), fx.get("rank_gain"), fx.get("regard_gain")))
+        told_weight, rank_gain, regard_gain = gains
         relation = relation_of.get(teller)
         if relation is None:
             relation = relation_of[teller] = (
                 1.0
                 + rank_gain * rank(p, teller)
-                + regard_gain * _clamp(regard(p, teller, fx) / STANCE_MAX, -1.0, 1.0)
-                + tie_gain * tied(p, teller))
+                + regard_gain * _clamp(regard(p, teller, fx) / STANCE_MAX, -1.0, 1.0))
         # ABSENT: H-180 stake  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
         rec = record_of.get(teller)
         if rec is None:

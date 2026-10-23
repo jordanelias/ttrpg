@@ -1526,26 +1526,13 @@ verbs:
     stratum:     "social"
     eligibility: ["own"]
     beneficiary: "actor"
-    requires:    "the partner is a person and is with the actor"
-    requires_note: "⚠ SUPERSEDED TRANSCRIPTION: *stored once, on the lower id (§15.1)* is `holonic §15.1`'s reading, which `architecture/meta/04_CODE_ARCHITECTURE.md` §A.3 row 9 (`:191`) overrides -- `tie`/`knot` are TWO DIRECTED EDGES, one owned by each party, and strain is a Query. The transcribed precondition was `—`; v9 IN-32 gives the row the cell below."
-    requires_typed:
-      all:
-        - form:      existence
-          of:        subject
-          kind:      Person
-        - form:      relation
-          of:        subject
-          relation:  with
-    requires_typed_note: "v9 IN-32 (H-182): THE PARTNER IS THE ACT'S `subject` (`proposals/2026-10-07-unplugged-systems-replug.md` §6 item 2, ladder step 4: IN-09 typed `comply` with no new name) -- NO OPERAND IS COINED, `requires_operands` stays closed (IN-33's coining route was reverted, H-58). The cell is `train`'s two conjuncts verbatim: `existence` of `subject` kind Person (a tie joins two persons) and `relation` of `subject` `with` (the partner present; `with` is `ED-IN-0282`'s, world-only, so the person forms the Candidate and the fold refuses an absent partner). Two existing forms on existing stems. [ASSUMPTION; medium; Jordan to correct; revert: the `existence` conjunct alone, a tie at any distance]"
-    counterparty: subject
-    counterparty_note: "v9 IN-32: THE PARTNER IS THE SECOND SIDE, on `arrest`'s and `oblige`'s shape (`counterparty: subject`): a person standing with himself satisfies the `with` conjunct (`world_q.place_of`), so a tie to oneself -- the `Tenure(X, X)` fiat `ED-IN-0210` ruling 1 names -- is declined person-side (`decision/options.py::opening_set`) and refused by the fold's `counterparty` clause, never by a second copy of that rule in the effect."
+    requires:    "—"
+    requires_note: "⚠ SUPERSEDED TRANSCRIPTION: *stored once, on the lower id (§15.1)* is `holonic §15.1`'s reading, which `architecture/meta/04_CODE_ARCHITECTURE.md` §A.3 row 9 (`:191`) overrides -- `tie`/`knot` are TWO DIRECTED EDGES, one owned by each party, and strain is a Query."
     writes:      ["Tenure.since"]
-    writes_note: "v9 IN-32 (H-182): `loop/effects_information.py::_eff_tie` OPENS THE ACTOR'S OWN `tie` TO THE PARTNER (host-side; `systems/fieldwork/sim/knots.py` stays unplugged and uncalled, §3.1 of the re-review), admitted under `T-m` and ended by `release` (`domain:` holds `tie`). ⚠ ONE ROW, TWO KINDS, ONE OPENED: the body constructs only `tie`, as a literal, so `data/verbs.py::_derive_openers_from_effects` reads this row as a `tie` opener and `knot` keeps no opener (`tenure_kinds_without_an_opener`) -- the narrowest shape the table's schema has, since no column names WHICH kind a writing row opens (`release`'s `domain:` is a closer's set, `train`'s vocation a payload key). `knot` STAYS DECLINED: a knot forms by ED-FI-0005's roll, and one opened ungraded would feed the live `knot` reader (`epistemic.py::_ch_witness_key`) with edges canon says only that roll forms. THE READER: `decision/options.py::teller_weight`'s `relation` term (`tied`, `Fixtures tie_gain`), the hearer's own tie to the teller. DECLINES (`NO_CHANGE` -> `bond.refused`, the `write` clause): the actor already holds a live tie to the partner -- one per directed pair."
     emits:       ["bond.formed"]
-    emits_on_refusal: ["bond.refused"]
-    refusal_note: "v9 IN-32: ONE FLAT KIND, the row's own `bond.*` family (`train.refused`'s shape): the partner is no person, is not with the actor, is the actor (the fold's `counterparty` clause), or is already tied to by the actor (the effect's decline)."
-    grade:       "assumption"
-    grade_note:  "an argued addition (v9 IN-32, H-182): `writes`/`emits` are the §E3 transcription; the cell, the counterparty, the refusal kind, the single-kind opener and the reader are IN-32's, on the B-S re-review of IN-06's design (`proposals/2026-10-07-unplugged-systems-replug.md` §3.1, §6 items 1-2)."
+    emits_on_refusal: []
+    grade:       "ruled"
+    effect_decline_note: "PLAN POSITION `14` (U7-own) STOPPED ON IT (`H-182`). ⚠ THE GROUND IS NOT `ID-13` FOR BOTH KINDS (CORRECTED AT THE BATCH C CLOSE): `ID-13`, A CARRIER NOBODY READS, HOLDS FOR `tie` ONLY, because `knot` HAS A READER (below). WHAT STOPS `tie / knot` IS THE PARTNER OPERAND THE ROW DOES NOT BIND (BOTH KINDS) AND, FOR `knot`, THAT IT BELONGS TO `29f`'S KNOTS WORK; `tie`'s own ground is `ID-13` AND that operand. ⚠ AN EARLIER READING OF THIS NOTE WAS FALSE AND IS CORRECTED HERE: it rested on `holonic §15.1` (a tie stored ONCE on the lower id), so a tie by the higher-id party *writes an edge he does not own* and `release` *cannot end it from his side*. 04 §A.3 row 9 (`:191`) overrides it -- two directed edges -- so each party owns his own, `state/gate.py`'s `T-m` (`:707-710`) admits the owner opening it, and `release`'s `domain:` includes `tie` and `knot`, so nobody writes an edge he does not own and the owner can end it. WHAT STOPS IT, PER KIND: `tie` has NO production reader -- the only code naming the kind is `release`'s domain and `harness/probes.py` -- so an executed `tie` would write an edge nothing reads; the reader that would make it live is `decision/options.py::teller_weight`'s `relation` term (`~:1032-1079`, the hearer's relation to the teller), which today reads `rank` and `regard` and no tie. `knot` HAS a reader, `epistemic.py::_ch_witness_key`, and it reads the edge UNDIRECTED (either endpoint, either role), against 04 `:388` (*`tie`/`knot` are directed*) -- recorded as an observation for the `29f` lane, which owns the `firsthand_via_knot` channel, and not decided here. BOTH kinds also lack the operand: the row's cells bind the actor and no partner, so a computed act names nobody to bond with. The row still names two kinds for one opener. The decline stands."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "train"
     stratum:     "uncontested_material"
