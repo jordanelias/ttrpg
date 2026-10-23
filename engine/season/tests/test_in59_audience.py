@@ -11,8 +11,8 @@ THE FALSIFIERS, each on a hand-built world (`probes.tiny_world`: `R` > `D` > `S`
 fold (`SeasonDriver.resolve`). The guarded court is `S` with a sworn cohort planted beside the Duke
 (`guard_weight(S) == 3`), the edge `build_realm(guards=True)` writes:
   1. `move` into the guarded court: REFUSED (`travel.blocked`) for a stranger and for three near-misses
-     (an imposed oblige, a hand-planted writ with no issuing Event, a seat whose purview does not reach
-     `S`); ADMITTED (`travel.moved`) for a seat-holder whose seat reaches `S`, a writ-holder (a real
+     (an imposed oblige, a hand-planted writ with no issuing Event, and each limb's REACH condition: a
+     seat, an oath and a real writ whose seat's purview does not reach `S`); ADMITTED (`travel.moved`) for a seat-holder whose seat reaches `S`, a writ-holder (a real
      `issue` through `off_duke`, handed to him), and a sworn man (a live `oblige` to `off_duke`).
   2. An ordinary `move` into an UNGUARDED rung by a seatless person still executes -- the failure if the
      stem were a `basis` conjunct (every seatless `move` refused); and the SAME stranger into the same
@@ -24,7 +24,9 @@ MUTATIONS, run at the build 2026-10-23, each RED then restored GREEN (results in
   * each admitting limb dropped in turn (seat / oath / writ) -> its admitted case in falsifier 1 RED
     (the oath also falsifier 3's sworn migrant).
   * the oath limb's `not t.imposed` dropped -> `imposed_oblige` RED; the writ limb's issuing-seat test
-    dropped (any held writ admits) -> `planted_writ` RED.
+    dropped (any held writ admits) -> `planted_writ` RED; the oath limb admitting an oblige to ANY
+    office -> `oath_out_of_reach` RED; the writ limb testing `issuing_seat(...) is not None` instead of
+    `in reaching` -> `writ_out_of_reach` RED (B-Y close, Phase 1).
 """
 
 from __future__ import annotations
@@ -70,13 +72,14 @@ def _go(w, d, verb, key, who=MOVER, to=COURT):
     return _kinds(_fold(w, d, Act(id=key, actor=who, verb=verb, payload={"to": to})))
 
 
-def _writ_to_mover(w, d, key="w1"):
-    """A REAL writ: the Duke `issue`s through `off_duke` (so the Record has a creating Event and an
-    issuing seat, K-52) addressed to the mover, and it is handed to him -- planted, as `give`'s own
-    tests own the handing (`test_in12_arrest.py::_warrant_to_watchman`'s shape)."""
-    w.persons[DUKE].ledger.append(Claim("c_knows_mover", DUKE, MOVER, "exists:Person", 1, 0,
-                                        "firsthand", 100, "own"))
-    assert _kinds(_fold(w, d, Act(id=key, actor=DUKE, verb="issue", via=SEAT,
+def _writ_to_mover(w, d, key="w1", issuer=DUKE, seat=SEAT):
+    """A REAL writ: `issuer` `issue`s through `seat` (default the Duke through `off_duke`, so the Record
+    has a creating Event and an issuing seat, K-52) addressed to the mover, and it is handed to him --
+    planted, as `give`'s own tests own the handing (`test_in12_arrest.py::_warrant_to_watchman`'s
+    shape)."""
+    w.persons[issuer].ledger.append(Claim("c_knows_mover", issuer, MOVER, "exists:Person", 1, 0,
+                                          "firsthand", 100, "own"))
+    assert _kinds(_fold(w, d, Act(id=key, actor=issuer, verb="issue", via=seat,
                                   payload={"subject": MOVER, "to": MOVER}))) == ["dispensation.issued"]
     rid = f"rec:{key}"
     for t in w.tenures:
@@ -116,11 +119,26 @@ def test_in59b_falsifier_1_a_guarded_court_refuses_a_stranger_and_admits_seat_wr
         assert world_q.writs_held(w, w.persons[MOVER]) == ("rec_planted",)
         return MOVER, "travel.blocked"
 
-    def seat_out_of_reach(w, d):                 # a seat on a sibling hearth reaches nothing at `S`
-        w.rungs["Hx"] = type(w.rungs["Hh"])("Hx", "hearth")
-        w.add_tenure(Tenure("t_hx", "Hx", "S", "contain", 0))
-        w.offices["off_warden"] = Office("off_warden", "Warden", "Hx", ["issue"], faction="Crown")
+    def _warden_seat(w, rung="Hx"):              # a seat on a hearth reaches nothing at `S`
+        if rung not in w.rungs:
+            w.rungs[rung] = type(w.rungs["Hh"])(rung, "hearth")
+            w.add_tenure(Tenure("t_hx", rung, "S", "contain", 0))
+        w.offices["off_warden"] = Office("off_warden", "Warden", rung, ["issue"], faction="Crown")
+
+    def seat_out_of_reach(w, d):
+        _warden_seat(w)
         w.add_tenure(Tenure("t_warden", MOVER, "off_warden", "hold", 0))
+        return MOVER, "travel.blocked"
+
+    def oath_out_of_reach(w, d):                 # sworn, but to a seat that reaches nothing at `S`
+        _warden_seat(w)
+        w.add_tenure(Tenure("t_mover_oath_hx", MOVER, "off_warden", "oblige", 0))
+        return MOVER, "travel.blocked"
+
+    def writ_out_of_reach(w, d):                 # a REAL writ, issued through a seat that reaches nothing at
+        _warden_seat(w, rung="Hh")               # `S`; at `Hh` it reaches the mover, so `issue` is authorized
+        w.add_tenure(Tenure("t_warden", "p_other", "off_warden", "hold", 0))
+        _writ_to_mover(w, d, key="w2", issuer="p_other", seat="off_warden")
         return MOVER, "travel.blocked"
 
     def seat_holder(w, d):                       # his own seat's purview reaches the court
@@ -137,8 +155,8 @@ def test_in59b_falsifier_1_a_guarded_court_refuses_a_stranger_and_admits_seat_wr
         return MOVER, "travel.moved"
 
     checked = 0
-    for case in (stranger, imposed_oblige, planted_writ, seat_out_of_reach,
-                 seat_holder, writ_holder, sworn_man):
+    for case in (stranger, imposed_oblige, planted_writ, seat_out_of_reach, oath_out_of_reach,
+                 writ_out_of_reach, seat_holder, writ_holder, sworn_man):
         w, d = _world()
         assert world_q.guard_weight(w, COURT) == 3, "the court is guarded"
         who, want = case(w, d)
@@ -146,7 +164,7 @@ def test_in59b_falsifier_1_a_guarded_court_refuses_a_stranger_and_admits_seat_wr
         where = world_q.home_of(w)[who]
         assert (where == COURT) == (want == "travel.moved"), (case.__name__, where)
         checked += 1
-    assert checked == 7
+    assert checked == 9
 
 
 # ======================================================================================

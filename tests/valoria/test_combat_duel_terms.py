@@ -104,7 +104,10 @@ def _blood_cases():
         for seed in range(60):
             _, ctrl, _, _, _ = _fight(seed, pair=pair)
             k = _first(ctrl, lambda e: max(e['_wounds']) >= 1)
-            if k is not None and _turn_of(ctrl, len(ctrl) - 1) > _turn_of(ctrl, k):
+            # ONE fighter wounded at the first wounded event: when both cross in one beat the yielder is the
+            # one with less Health left (`wrapper._terms_yielder`), which `first_wounded` below does not predict.
+            if (k is not None and _turn_of(ctrl, len(ctrl) - 1) > _turn_of(ctrl, k)
+                    and (ctrl[k]['_wounds'][0] >= 1) != (ctrl[k]['_wounds'][1] >= 1)):
                 out.append((pair, seed))
             if sum(1 for p, _ in out if p == pair) == 4:
                 break
@@ -153,7 +156,7 @@ def test_the_blood_assertions_observe_a_missing_stop(monkeypatch):
     """(5) THE MUTATION, kept executable: with the stop rule a no-op, the same assertions go red on every case."""
     cases = _blood_cases()
     assert cases
-    monkeypatch.setattr(wrapper, '_terms_met', lambda A, B, terms: False)
+    monkeypatch.setattr(wrapper, '_terms_met', lambda A, B, terms, cfg: False)
     red = 0
     for pair, seed in cases:
         with pytest.raises(AssertionError):
@@ -194,7 +197,7 @@ def test_the_module_entry_reads_the_terms_off_the_typed_input():
 
 def test_a_yield_duel_stops_at_the_health_threshold():
     from engine.season.seam.wrappers.combat import surrender_of
-    frac = wrapper.YIELD_HEALTH_FRAC
+    frac = CFG['YIELD_HEALTH_FRAC']
     checked = 0
     for pair in _PAIRS:
         for seed in range(30):

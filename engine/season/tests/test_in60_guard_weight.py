@@ -2,8 +2,8 @@
 
 `guard_weight(w, rung)` sums the `Person.weight` of the persons `presence` lists at the rung (exact) who
 owe a live, sworn `oblige` to a seat HELD by a person ALSO present there -- the principal's own place.
-Compute-on-demand, stored nowhere; a seat adds no modifier (`04` §B.7). Nothing calls it yet: its
-reader is IN-59 (b), so the realm hashes do not move (`test_season_weather.py` pins them).
+Compute-on-demand, stored nowhere; a seat adds no modifier (`04` §B.7). Its reader is IN-59 (b)
+(`admits_audience`'s guard limb); at IN-60 alone nothing called it, so the realm hashes did not move.
 
 THE FALSIFIERS, on a hand-built world where the cause is controlled, each with its mutation:
   1. RECOMPUTE (T-a): end one swearer's `oblige` and the value falls by exactly his weight, with no

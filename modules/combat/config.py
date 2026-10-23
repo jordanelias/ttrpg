@@ -292,6 +292,9 @@ CFG = dict(
   # weapon's wind affinity + learned binding abilities + disposition), all already live in mode_sigma/bind_sigma.
   # The tradition gates ACCESS to a technique kit; investment + skill drive efficacy.
   # 95% videogame cap: structural per-exchange floor so no matchup reads 100/0 (always an upset chance)
+  YIELD_HEALTH_FRAC=0.5,  # [ASSUMPTION; medium; Jordan to correct -- v9 PC-10a, RS-25.] Under the 'yield' duel term a fighter
+  # yields once his Health falls to this fraction of full (`wrapper._terms_crossed`); 'blood' stops at the first wound
+  # and 'death' is the lethal fight. Here, in CFG, so it crosses the exporter with every other tunable.
   UPSET_FLOOR=0.05,   # [DESIGNER RULE — Jordan; deliberate, NOT an emergent mechanic. Tagged ED-PC-0036.]
   # The '95% cap': with this probability the DECIDED loser steals the win, so no matchup is ever certain. This is the
   # one place the engine deliberately OVERRIDES its own emergent outcome — the trace stream emits `engagement_end

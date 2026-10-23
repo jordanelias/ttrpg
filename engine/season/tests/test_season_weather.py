@@ -240,8 +240,10 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # build reads no verb row; `guards=True` and `foreign=True` equal too); one and two seasons move. Was
 # 628830a8... / 74ce9a1e... (one, two seasons). The `give`-withheld arm still reads the one-season pin.
 # RE-RECORDED at v9 IN-59 (b) (RS-26, the audience half), A HASH-ONLY MOVE STATED: `move` and `migrate` gain
-# a `relation: audience` conjunct on `to`, and at the shipped default (`guards` OFF) every `guard_weight` is
-# 0, so every audience reads admitted and the act mix is EQUAL -- `BASE_EVENTS` reproduce exactly (7018 /
+# a `relation: audience` conjunct on `to`, and at the shipped default build (`guards` OFF) every `guard_weight`
+# is 0 (MEASURED at the B-Y close, seed 0: no rung of `build_realm(0)` reads above 0; a live sworn `oblige`
+# standing with its principal would close a rung wherever one arises), so every audience reads admitted in
+# these runs and the act mix is EQUAL -- `BASE_EVENTS` reproduce exactly (7018 /
 # e3d6e385..., 21710 / 2da1c8f4...). What moves the hash is the conjunct's own `audience:<actor>`
 # Observation on each `move`/`migrate` Event's `observed` (44 Events in season one). CONTROL, run on this
 # tree: those Observations stripped from the one-season log re-read 57fae32f... exactly. The build,
@@ -396,12 +398,13 @@ def test_the_give_withheld_arm_reproduces_the_one_season_pin():
 PRE_K3_EVENTS_1 = (7028, "4f9b8312e98cdcad01223190395be1a0d54b2e332eb19472ce972e8e9d2c5ea1")
 
 
-def test_the_thread_read_withheld_arm_reproduces_the_pre_k3_event_sequence():
-    """THE K-3 RE-PIN'S CONTROL, ENCODED: `thread_read` added to the shipped `Fixtures withheld_verbs`
-    reads the PRE-K-3 one-season event count and digest exactly, while the hash stays the new build's
-    (`Person.thread_sensitivity` is in every `repr`). So the four passing persons' one reading is the
-    whole of the act-mix move, and the field moves the hash and nothing a season does. If a second
-    mover lands with `thread_read`, this arm stops matching."""
+def test_the_thread_read_withheld_arm_is_pinned_and_differs_from_the_shipped_season():
+    """THE THREAD-READ-WITHHELD ARM, A CHANGE DETECTOR: `thread_read` added to the shipped `Fixtures
+    withheld_verbs` reads `PRE_K3_EVENTS_1` -- the arm's own event count and digest on the IN-59 tree, no
+    longer the PRE-K-3 sequence it was recorded as at K-3 (IN-59 (a) moved that arm too; see the
+    constant's comment) -- and that differs from the shipped season's `BASE_EVENTS[1]`, so
+    `thread_read`'s formation still moves what a season does. The K-3-time control (the arm equalling the
+    pre-K-3 sequence) can no longer be read on one tree."""
     w = POP.build_realm(0)
     shipped = tuple(w.fixtures.get("withheld_verbs"))
     assert "thread_read" not in shipped, "fixture: `thread_read` is already withheld at the shipped arm"

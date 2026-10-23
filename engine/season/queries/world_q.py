@@ -1225,7 +1225,8 @@ def issuing_seat(w: World, rid: str) -> Optional[str]:
     """THE SEAT THAT ISSUED THE WRIT `rid` -- the `via` of the Act that caused the Record's CREATING
     Event (#453 §9.1 / K-52: *"read through `state/attribution.py::causing_act` on the warrant Record's
     creating Event -- that Act's `via`"*), or `None` when no Event wrote it (a hand-planted Record), no
-    act caused that Event, or the act exercised no seat the world still holds. The creating Event is the
+    act caused that Event, or the act exercised no seat in `w.offices` (existence in the table; not that
+    the issuer still holds it). The creating Event is the
     FIRST in the log whose changes name the Record (`loop/matter.py`'s `prior` reads the last, for a
     different question). MOVED HERE from `loop/effects_information.py` at v9 IN-59 (b), which re-imports
     it for `arrest`: the `audience` stem's writ limb asks the same question, and `queries/` may not
@@ -1241,31 +1242,37 @@ def admits_audience(w: World, actor: str, rung: str) -> bool:
     (`WorldReader.read`), asked of a `move`'s or a `migrate`'s destination. FOUR LIMBS, any one admits,
     each a property of the mover read off live state and each composed on its one owner:
 
-      1. HIS OWN SEAT: a seat he holds (a live `hold` on an Office) whose purview reaches the rung
-         (`purview_reaches`) -- a king walks into his court. ⚠ ANY HELD SEAT, NOT `Act.via`: `move` and
-         `migrate` are `own`-eligible and carry no seat, and a `relation` reads only the actor and the
-         rung, so "the seat he exercises" is read as every seat he sits in [ASSUMPTION; medium; Jordan
-         to correct; revert: none short of a `via` on movement acts, which the grammar does not carry].
+      1. HIS OWN SEAT: he is among `governors_of(w, rung)` -- a live `hold` on a seat whose purview
+         reaches the rung (`purview_reaches`) -- a king walks into his court. ⚠ ANY HELD SEAT, NOT
+         `Act.via`: `architecture/meta/04_CODE_ARCHITECTURE.md:350` says purview is asked of the seat
+         EXERCISED, through `via`; `move` and `migrate` are `own`-eligible and carry no seat, and a
+         `relation` reads only the actor and the rung, so "the seat he exercises" is read as every seat
+         he sits in [ASSUMPTION; medium; Jordan to correct; revert: none short of a `via` on movement
+         acts, which the grammar does not carry].
       2. A WRIT: he holds a live writ addressed to him (`writs_held`) whose issuing seat
          (`issuing_seat`, K-52) reaches the rung -- an invitation, minted by `issue`. A hand-planted
-         writ has no creating Event and therefore no issuer, and opens nothing.
+         writ has no creating Event and therefore no issuer, and opens nothing. ⚠ Any addressed
+         `dispensation` counts: its content, its `at` and the issuer's continued tenure are not read
+         [ASSUMPTION; medium; Jordan to correct; revert: read them]; and a writ reaches its addressee
+         only by `give` (`ED-IN-0292` (1), RULED NO), so the limb is built but unreached in computed play.
       3. AN OATH: he owes a live `oblige` to a seat that reaches the rung (`sworn_to`, IN-40's walk; the
          same seats `purview_reaches`' oblige clause reads) -- sworn men enter. An IMPOSED oblige is a
          sentence, not an oath (`Tenure.imposed`), skipped as `guard_weight` and the oblige clause skip it.
-      4. NOBODY GUARDS IT: `guard_weight(w, rung) == 0` (IN-60) -- an unguarded place is open, which is
-         every rung of a world built without guard content, so the gate binds only where guards stand.
+      4. NOBODY GUARDS IT: `guard_weight(w, rung) == 0` (IN-60) -- an unguarded place is open. That is
+         every rung of `build_realm(0)` as built (MEASURED at the B-Y close), and a rung closes wherever a
+         live sworn `oblige` stands with its principal, so the gate binds where guards stand, whatever
+         put them there.
 
     Compute-on-demand, stored nowhere (T-a). The limbs are asked cheapest-decisive-first (the guard
     limb), which changes no answer -- the four are a disjunction."""
     TRACE.query("admits_audience", "resolver")
     if guard_weight(w, rung) == 0:
         return True
+    if actor in governors_of(w, rung):
+        return True
     reaching = {o.id for o in w.offices.values() if purview_reaches(w, o, rung)}
     if not reaching:
         return False
-    if any(t.kind == "hold" and t.live and t.subject == actor and t.object in reaching
-           for t in w.tenures):
-        return True
     if any(t.subject == actor and not t.imposed for s in sorted(reaching) for t in sworn_to(w, s)):
         return True
     p = w.persons.get(actor)
