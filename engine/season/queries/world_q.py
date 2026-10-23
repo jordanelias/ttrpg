@@ -1518,6 +1518,45 @@ def fortification_of(w: World, rung_id: str) -> float:
     return sum(s.condition for s in garrisons) / (scale * len(garrisons))
 
 
+def enclosing_territory(w: World, rung_id: Optional[str]) -> Optional[str]:
+    """v9 IN-35: the first `territory` rung on `rung_id`'s containment walk up (`ancestry`, the one
+    walk; the rung itself included), or `None` where the walk meets none -- a Site at the realm or a
+    duchy, or a rung outside the tree. Read by `loop/matter.py::_lattice_strain`, which couples a Site
+    to the Sites of its own and the bordering territories (`data/geography.py::adjacent_territories`).
+    Traces nothing, as `ancestry` traces nothing: the coupling's control arm never calls it."""
+    for r in ancestry(w, rung_id) if rung_id else ():
+        rung = w.rungs.get(r)
+        if rung is not None and rung.kind == "territory":
+            return r
+    return None
+
+
+def closed_uses(w: World, rung_id: str) -> dict:
+    """v9 IN-35, THE CALAMITY'S EFFECT PER TERRITORY, AS A QUERY OVER BAND FLOORS (#457 `:131`):
+    `{site id: (the site-use verbs it has fallen below, sorted)}` for every Site in `rung_id`'s
+    containment subtree that is below at least one floor of its kind. Composed on `verbs` (S12.1's one
+    owner of *condition gates verbs*) against `band_floors` keyed by the Site's kind. ⚠ THE BAND TABLE
+    KEYS ON SITE KIND AND THIS QUERY KEYS IT ON A TERRITORY BY CONTAINMENT, so no territory-keyed floor
+    is needed and none is written (`H-38`: one band scheme). Computed on demand and never stored (L3).
+
+    ⚠ ITS READER IS A REPORT, `harness/populated.py::census` (`uncontrolled`'s precedent: a report, not
+    a rule). No decision reads it: what a person meets is the crossing itself, an Event `_crossings`
+    emits and WITNESS fans out, and the use it closed, which the `floor` stem and `yield` already read
+    off `Site.condition`. Empty where nothing in the subtree is below a floor."""
+    floors_all = w.fixtures.get("band_floors") or {}
+    here = _subtree(w, rung_id)
+    out: dict = {}
+    for sid in sorted(w.sites):
+        s = w.sites[sid]
+        if s.rung not in here:
+            continue
+        floors = floors_all.get(s.kind, {})
+        shut = tuple(sorted(set(floors) - verbs(w, s, floors)))
+        if shut:
+            out[sid] = shut
+    return out
+
+
 def sovereign_fraction(w: World, rung_id: str) -> tuple[float, int]:
     """§17's one Query with a DECLARED return type: `-> (fraction, undetermined_count)`.
 

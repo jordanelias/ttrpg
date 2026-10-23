@@ -606,6 +606,14 @@ DEFAULT_FIXTURES = Fixtures(
     age_step=0.0,                      # v9 IN-34, swept 0 (control, SHIPPED) / test arms only
     illness_rate=0.0,                  # v9 IN-34, swept 0 (control, SHIPPED) / test arms only
     age_at_build=0,                    # v9 IN-34, a declared default (seasons old at tick 0)
+    # v9 IN-35 FORCE-HAZARD (#457 `:123-143`): THE LATTICE COUPLING WEIGHT -- the share, on
+    # `condition_scale`, of a Site's gap down to the weakest Site in its own or a bordering territory that
+    # it loses PER SEASON (SEAM-CLOCK, #457 `:174`: one unit, the season), added to its kind's wear in
+    # `loop/matter.py`'s wear loop. `0` is THE CONTROL, SHIPPED: the pass returns before reading any Site,
+    # so the season is today's (`body_step`'s and `age_step`'s shape). In [0, condition_scale]; outside it
+    # raises (`_lattice_strain`), since a share above the whole gap would overshoot the weakest neighbour.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-235 -- `site: Fixtures lattice_coupling`, graded `assumption`; #457 gives the coupling and no magnitude (its only rate is the retired scalar's -1 a year), so it is injected and swept 0 / 250 / 500]
+    lattice_coupling=0,                # `H-235`, swept 0 (control, SHIPPED) / 250 / 500
     # `W-E` / `H-123`. HOW MUCH BODY A WOUND COSTS WHEN THE SCENE SAYS THE SUBJECT BLED AND DID
     # NOT GO DOWN. Part E's `writes:` names the CELL and never the VALUE, and no in-chain document
     # supplies this one -- so it is declared, defaulted and swept rather than chosen in a body,
