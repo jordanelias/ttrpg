@@ -21,7 +21,6 @@ from __future__ import annotations
 
 from typing import NamedTuple, Optional
 from .. import manifest
-from ..data.fixtures import SITE_YIELD
 from ..data.geography import adjacent_territories
 from ..data.matrix import Step
 from ..data.requires import SHORTFALL_PREDICATE, Observation
@@ -42,8 +41,10 @@ from ..trace_log import TRACE
 #: driver hands both to `manifest/registrar.py::require_entries` at construction, which refuses a role
 #: here that `MODULE_ENTRIES` does not hold, or holds under another kind: the refusal a deleted or
 #: stripped `step_call` row no role roster names would otherwise never meet in a fresh process.
+#: v9 IN-07 E3 adds the yield and credit, `settlements.produce`, called after `SUBSIST` (#353 §25).
 SUBSIST = "settlements.subsist"
-STEP_CALLS = ((SUBSIST, "step_call"),)
+PRODUCE = "settlements.produce"
+STEP_CALLS = ((SUBSIST, "step_call"), (PRODUCE, "step_call"))
 
 
 def _step_call(role: str):
@@ -639,6 +640,17 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
             if hazard > 0 and keyed(pid, "body_hazard").random() < hazard:
                 _die(w, token, pid)
 
+    # ⚠ v9 IN-07 E3: THE YIELD AND CREDIT ARITHMETIC that stood in the loop below -- per Site whose own
+    # `rung` is this rung, per `SITE_YIELD` base, the condition- and `season_factor`-scaled `int(...)`,
+    # zero entries dropped, then `stores + produced` read after this rung's debit -- is the
+    # `settlements.produce` step_call's (`modules/settlements/produce.py`), called ONCE, here, AFTER
+    # `settlements.subsist` (#353 §25: draw before produce), on the host's projection
+    # (`world_q.produce_input`, the stores read BEFORE this loop's debit writes, with E2's
+    # `larder_after` handed in so the module credits the debited larder, as this loop's order did).
+    # Its rows are ordered tuples in the order the old loop built its dicts; the writes stay here.
+    prod = _step_call(PRODUCE)(world_q.produce_input(w, scale_, factor, sub.larder_after))
+    yielded = {row.rung: (dict(row.produced), dict(row.credited)) for row in prod.rows}
+
     for rid in sorted(w.rungs):
         r = w.rungs[rid]
         # The debit is the module's (`SubsistOutcome.larder_after`: changed rungs only, each take
@@ -657,24 +669,19 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
                     observed=short_seen.get(rid, ()))
         # `yield` — #353 §25's *"only here"* row. The base is the SITE's, scaled by its
         # condition and then by `season_factor`, so a worn place produces less without a
-        # second wear concept (`H-93`, and `rosters.yaml: site_yield` for why).
-        produced: dict = {}
+        # second wear concept (`H-93`, and `rosters.yaml: site_yield` for why). The arithmetic is
+        # `settlements.produce`'s (above); a rung with no nonzero yield has no row and no write.
         # ⚠ THE SITE'S OWN `rung`, NOT THE RUNG'S `sites` LIST. The first version read
         # `r.sites`, and that list is a BACK-REFERENCE NOTHING MAINTAINS — it is empty for
         # every rung in the corpus, so the whole yield step was INERT and would have shipped
         # as an unreachable barrier stage. `Site.rung` is the maintained side (S12), and
         # reading the side that is actually written is the difference between a step that
         # runs and a step that merely exists (§0.2). Caught by `F10` failing for a different
-        # reason and then looking at the fixture.
-        for site in sorted(w.sites.values(), key=lambda x: x.id):
-            if site.rung != rid:
-                continue
-            for k, base in (SITE_YIELD.get(site.kind) or {}).items():
-                produced[k] = produced.get(k, 0) + int(
-                    base * (max(0, site.condition) / scale_) * factor)
-        produced = {k: v for k, v in produced.items() if v}
-        if not produced:
+        # reason and then looking at the fixture. (`world_q.produce_input` hands the module
+        # `Site.rung`.)
+        if rid not in yielded:
             continue
+        produced, credited = yielded[rid]
         prior_y = w.last_emission_of("yield.taken", rid)
         w.write("yield", token,
                 lambda r=r, produced=produced: object.__setattr__(r, "yield", dict(produced)),
@@ -682,7 +689,6 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
                 emits="yield.taken", subject=rid,
                 causes=[prior_y] if prior_y else [ROOT])
         prior_s = w.last_emission_of("stores.changed", rid)
-        credited = {k: (r.stores or {}).get(k, 0) + v for k, v in produced.items()}
         w.write("stores", token,
                 lambda r=r, credited=credited: r.stores.update(credited),
                 record_kind="Rung", fieldname="stores", driver="Event",

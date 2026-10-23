@@ -28,6 +28,7 @@ v9 FI-02 + FI-03 (`SM-3`, `ED-FI-0002`) add the fieldwork container's pair, at t
 v9 IN-07 E1 adds the settlements module's larder records after them: `Eater`, `LarderInput` and `Under`
 in, `DrawRow`/`DrawRecord` out (built by `queries/world_q.py::larder_input` and `under_input`).
 v9 IN-07 E2 adds `SubsistInput` in, `SubsistOutcome`/`BodyFall` out, for `settlements.subsist`.
+v9 IN-07 E3 adds `ProduceInput` in, `ProduceRow`/`ProduceOutcome` out, for `settlements.produce`.
 """
 from __future__ import annotations
 
@@ -296,3 +297,43 @@ class SubsistOutcome:
     shortfalls: tuple
     falls: tuple
     larder_after: tuple
+
+
+# v9 IN-07 E3: the `settlements.produce` step_call's records -- one season's yield and credit. Built by
+# `queries/world_q.py::produce_input`, read by `modules/settlements/produce.py`, interpreted by MATTER
+# (`loop/matter.py`), which makes the `yield` and `stores` writes from the outcome.
+
+@dataclass(frozen=True)
+class ProduceInput:
+    """What `settlements.produce` reads, and nothing else. Built by `queries/world_q.py::produce_input`:
+      * `table`        -- `((site_kind, ((kind, base), ...)), ...)`: `SITE_YIELD`, each kind's bases in
+                          its table order (that order reaches `Rung.stores`' key order);
+      * `scale`        -- the `condition_scale` fixture, as MATTER read it;
+      * `factor`       -- this season's `world_q.season_factor_of`, as MATTER read it (one draw a season);
+      * `sites`        -- `((site_id, site_kind, rung, condition), ...)`, every Site sorted by id;
+      * `stores`       -- `((rung, ((kind, units), ...)), ...)`, every rung sorted, each in its own
+                          `Rung.stores` order, read BEFORE this season's debit is written;
+      * `larder_after` -- `SubsistOutcome.larder_after` (E2): the debited rungs and kinds only. The module
+                          overlays it on `stores`, because MATTER credits a rung after that rung's debit."""
+    table: tuple
+    scale: object
+    factor: object
+    sites: tuple
+    stores: tuple
+    larder_after: tuple
+
+
+@dataclass(frozen=True)
+class ProduceRow:
+    """One producing rung: `produced` is its `yield` (`((kind, units), ...)`, nonzero only, site order
+    then table order) and `credited` the stores it is written to (`((kind, held + produced), ...)`, in
+    `produced`'s order, `held` read after the same rung's debit)."""
+    rung: str
+    produced: tuple
+    credited: tuple
+
+
+@dataclass(frozen=True)
+class ProduceOutcome:
+    """What `settlements.produce` returns: `rows`, one `ProduceRow` per rung with a nonzero yield, sorted."""
+    rows: tuple

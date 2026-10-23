@@ -38,6 +38,13 @@
       "verb": null,
       "needed_by": "engine/season/queries/world_q.py \u2014 `subsistence_draw` (v9 IN-07 E1, A-25) builds the typed input record (`larder_input` -> `queries/inputs.py::LarderInput`), calls this entry by role string through `engine.substrate.composition.require` (its callers include driverless ones, `harness/scarce.py`), and turns the `DrawRecord` back into its public dict; `demanded`/`delivered` call it the same way when handed no draw. MATTER (`loop/matter.py`) no longer calls it: since v9 IN-07 E2 it calls `settlements.subsist`, which runs the same `larder_draw` inside the module. No role roster names this row, so the host declares the need (`world_q.QUERY_ENTRIES`) and `manifest/registrar.py::require_entries` refuses at driver construction its absence, or an `entry:` other than `query`."
     },
+    "settlements.produce": {
+      "target": "modules.settlements.produce:produce",
+      "kind": "callable",
+      "entry": "step_call",
+      "verb": null,
+      "needed_by": "engine/season/loop/matter.py \u2014 MATTER (v9 IN-07 E3, A-25) builds the typed input record (`queries/world_q.py::produce_input` -> `queries/inputs.py::ProduceInput`: the `SITE_YIELD` table, every Site, every rung's stores before the debit, `condition_scale`, this season's factor and `settlements.subsist`'s `larder_after`), calls this entry ONCE a season through `manifest.MODULE_ENTRIES` (`matter.py::_step_call`), AFTER `settlements.subsist` (#353 \u00a725: draw before produce), and makes the `yield` and `stores` credit writes, with their `last_emission_of` causes, from the `ProduceOutcome`. Site wear stays host. No role roster names this row, so the host declares the need (`matter.py::STEP_CALLS`) and `manifest/registrar.py::require_entries` refuses at driver construction its absence, or an `entry:` other than `step_call`."
+    },
     "settlements.subsist": {
       "target": "modules.settlements.subsist:subsist",
       "kind": "callable",

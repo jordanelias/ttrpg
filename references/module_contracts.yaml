@@ -79,6 +79,10 @@ composition_roles:
     target: "modules.settlements.subsist:subsist"
     entry: step_call
     needed_by: "engine/season/loop/matter.py — MATTER (v9 IN-07 E2, A-25) builds the typed input record (`queries/world_q.py::subsist_input` -> `queries/inputs.py::SubsistInput`), calls this entry ONCE a season through `manifest.MODULE_ENTRIES` (`matter.py::_step_call`, the lookup `fieldwork.find`'s host makes; MATTER runs only inside a driver), and makes every write from the `SubsistOutcome`: the body writes and their crossings, deaths, the debit writes with `observed=`, `World._subsistence_shortfall`. `entry: step_call` because a loop step calls it, before the yield (#353 §25). No role roster names this row, so the host declares the need (`matter.py::STEP_CALLS`) and `manifest/registrar.py::require_entries` refuses at driver construction its absence, or an `entry:` other than `step_call`."
+  settlements.produce:
+    target: "modules.settlements.produce:produce"
+    entry: step_call
+    needed_by: "engine/season/loop/matter.py — MATTER (v9 IN-07 E3, A-25) builds the typed input record (`queries/world_q.py::produce_input` -> `queries/inputs.py::ProduceInput`: the `SITE_YIELD` table, every Site, every rung's stores before the debit, `condition_scale`, this season's factor and `settlements.subsist`'s `larder_after`), calls this entry ONCE a season through `manifest.MODULE_ENTRIES` (`matter.py::_step_call`), AFTER `settlements.subsist` (#353 §25: draw before produce), and makes the `yield` and `stores` credit writes, with their `last_emission_of` causes, from the `ProduceOutcome`. Site wear stays host. No role roster names this row, so the host declares the need (`matter.py::STEP_CALLS`) and `manifest/registrar.py::require_entries` refuses at driver construction its absence, or an `entry:` other than `step_call`."
 
   fieldwork.find:
     target: "modules.fieldwork.find:find"

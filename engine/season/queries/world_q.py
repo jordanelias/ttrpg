@@ -90,7 +90,8 @@ from ..state.world import World
 from ..trace_log import TRACE
 # v9 IN-07 E1: the `settlements` module's records (the one host leaf a module imports) and the
 # role-string resolver its entries are reached through. Neither pulls in module code at import.
-from .inputs import DrawRecord, DrawRow, Eater, LarderInput, SubsistInput, Under
+from .inputs import DrawRecord, DrawRow, Eater, LarderInput, ProduceInput, SubsistInput, Under
+from ..data.fixtures import SITE_YIELD
 from engine.substrate import composition
 
 
@@ -1090,6 +1091,21 @@ def subsist_input(w: World) -> SubsistInput:
     larder, chains = _larder_parts(w)
     return SubsistInput(larder, chains, w.fixtures.get("body_step"),
                         tuple((e.pid, w.persons[e.pid].body) for e in larder.eaters))
+
+
+def produce_input(w: World, scale, factor, larder_after: tuple) -> ProduceInput:
+    """THE PROJECTION `settlements.produce` reads (v9 IN-07 E3): the `SITE_YIELD` table, every Site
+    (sorted by id) with its kind, own `rung` and `condition`, and every rung's stores as they stand --
+    read by MATTER BEFORE its per-rung loop writes this season's debit, so the module overlays
+    `larder_after` (`SubsistOutcome.larder_after`, E2) itself. `scale` and `factor` are MATTER's own
+    reads (`condition_scale`, `season_factor_of`'s one draw a season), handed through unchanged.
+    Read-only; it writes and traces nothing."""
+    return ProduceInput(
+        tuple((site_kind, tuple((bases or {}).items())) for site_kind, bases in SITE_YIELD.items()),
+        scale, factor,
+        tuple((s.id, s.kind, s.rung, s.condition) for s in sorted(w.sites.values(), key=lambda x: x.id)),
+        tuple((rid, tuple((w.rungs[rid].stores or {}).items())) for rid in sorted(w.rungs)),
+        larder_after)
 
 
 def _draw_dict(record: DrawRecord) -> dict:

@@ -50,7 +50,8 @@ both `entry: query`), which no role roster names, and with them the host-declare
 (`queries/world_q.py::QUERY_ENTRIES`, held by `manifest/registrar.py::require_entries`). Its falsifier:
 `test_a_host_declared_entry_row_deleted_stripped_or_rekinded_in_a_fresh_process_refuses_naming_it`.
 v9 IN-07 E2 added the first role-less `step_call` row (`settlements.subsist`, which MATTER calls) and its
-host need (`loop/matter.py::STEP_CALLS`); the same falsifier covers it.
+host need (`loop/matter.py::STEP_CALLS`); the same falsifier covers it, and E3's `settlements.produce`
+(a second `step_call` in the same tuple).
 """
 from __future__ import annotations
 
@@ -226,7 +227,7 @@ def test_a_host_declared_entry_row_deleted_stripped_or_rekinded_in_a_fresh_proce
     `before == []` is what makes this the fresh-process form. EVERY declared need, one fresh process
     per arm, so a second need sorted ahead of the first cannot hide it."""
     needs = _run(_HOST_NEEDS + "print(repr(needs))\n")
-    assert len(needs) >= 3, f"fewer host-declared entries than IN-07 E1 and E2 landed: {needs}"
+    assert len(needs) >= 4, f"fewer host-declared entries than IN-07 E1, E2 and E3 landed: {needs}"
     assert {kind for _role, kind in needs} >= {"query", "step_call"}, needs
     # The re-kinded arm moves each need to a kind it is NOT (a `step_call` re-keyed to `step_call`
     # would be no edit at all).
