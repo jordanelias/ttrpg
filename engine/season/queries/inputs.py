@@ -31,6 +31,7 @@ v9 IN-07 E2 adds `SubsistInput` in, `SubsistOutcome`/`BodyFall` out, for `settle
 v9 IN-07 E3 adds `ProduceInput` in, `ProduceRow`/`ProduceOutcome` out, for `settlements.produce`.
 v9 IN-07 E4..E6 add `HousingInput`/`Housing`, `FabricInput`/`Fabric` and `FortInput` (its entry returns a
 `float`), for `settlements.housing`, `settlements.fabric` and `settlements.fortification`.
+v9 IN-52 adds `ProvisionInput` in, `Provision` out, for `settlements.provision` (the levy-to-field feed).
 """
 from __future__ import annotations
 
@@ -407,3 +408,32 @@ class FortInput:
                         body's read), else `None`. The entry returns a bare `float`."""
     conditions: tuple
     scale: Optional[int]
+
+
+# v9 IN-52: the `settlements.provision` query's records -- the levy-to-field feed. Built per side by
+# `seam/wrappers/mass_battle.py::provision_input`, read by `modules/settlements/provision.py`; the field
+# adapter hands `troops` to the mass-battle entry and `_eff_march` debits `consumed` from the treasury.
+
+@dataclass(frozen=True)
+class ProvisionInput:
+    """What `settlements.provision` reads, and nothing else. Built by
+    `seam/wrappers/mass_battle.py::provision_input`, once per side:
+      * `weight` -- the side's Σ `Person.weight` (what the field fields today);
+      * `stores` -- `((kind, units), ...)`: the side's treasury, in its own `Rung.stores` order, `()`
+                    for a side with no treasury rung;
+      * `ration` -- `((kind, units per weight), ...)`: the `subsistence_weight` fixture, sorted by kind --
+                    the larder's own ladder, so a field eats as the people it is made of eat;
+      * `on`     -- the `field_provisioning` fixture. `False` is the control arm, today's field."""
+    weight: int
+    stores: tuple
+    ration: tuple
+    on: bool
+
+
+@dataclass(frozen=True)
+class Provision:
+    """What `settlements.provision` returns: `troops`, the side's fielded troops, and `consumed`,
+    `((kind, units), ...)` in `ration` order, what fielding them eats from the treasury (`()` when the
+    arm is off)."""
+    troops: int
+    consumed: tuple

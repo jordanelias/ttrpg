@@ -87,9 +87,10 @@ from typing import Any, Optional
 from ...manifest.providers import provider
 from ...data.geography import geography
 from ...data.rosters import territory_id_of
-from ...queries.inputs import MassBattleInput
+from ...queries.inputs import MassBattleInput, ProvisionInput
 from ...queries.person_q import stance_toward
 from ...queries import world_q
+from engine.substrate import composition
 from ._entry import entry_for
 
 _PROVIDER = "mass_battle"
@@ -197,6 +198,37 @@ def field_input(w: Any, claimants: list, other: list, rung: str) -> MassBattleIn
         geography=geography())
 
 
+def _attacker_treasury(w: Any, causes: list) -> Optional[str]:
+    """v9 IN-52: THE ATTACKER'S TREASURY -- the rung of the office the marching act exercised (`Act.via`),
+    the treasury `requisition` fills (`loop/effects_governance.py::_eff_requisition`'s `seat.rung`), or
+    `None` for an act exercising no seat, a rungless seat, or no act among `causes`.
+
+    `contest()` hands this provider `causes = [a.id]`, never the act: the act is found in `w.acts` by
+    `state/attribution.py::causing_act`'s first-match rule over those ids (the fold appends the act
+    before it folds it, `loop/resolve.py::resolve`)."""
+    act = next((w.acts.get(c) for c in causes if w.acts.get(c) is not None), None)
+    office = w.offices.get(act.via) if act is not None and act.via else None
+    rid = office.rung if office is not None else None
+    return rid if rid in w.rungs else None
+
+
+def _defender_treasury(w: Any, rung: str) -> Optional[str]:
+    """v9 IN-52 [ASSUMPTION LF-2, delegated-ruled]: THE DEFENDER'S TREASURY -- the nearest held rung at or
+    above the target, the walk `world_q.holder_faction_of` makes (`world_q.governing_hold`, its one owner;
+    it traces nothing), or `None` where nothing up the chain is held."""
+    t = world_q.governing_hold(w, rung)
+    return t.object if t is not None and t.object in w.rungs else None
+
+
+def provision_input(w: Any, weight: int, treasury: Optional[str]) -> ProvisionInput:
+    """THE PROJECTION `settlements.provision` reads (v9 IN-52), for one side: its Σ weight, its treasury's
+    `Rung.stores` in their own order (`()` for no treasury rung), the `subsistence_weight` ration sorted by
+    kind, and the `field_provisioning` fixture (`H-241`; `False`, shipped, is the control arm). Read-only."""
+    stores = tuple((w.rungs[treasury].stores or {}).items()) if treasury is not None else ()
+    ration = tuple(sorted((w.fixtures.get("subsistence_weight") or {}).items()))
+    return ProvisionInput(weight, stores, ration, bool(w.fixtures.get("field_provisioning")))
+
+
 @provider("contest", _PROVIDER)
 def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
             verb: str = "", subject: Optional[str] = None,
@@ -255,8 +287,20 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     # there (`H-150` -- `fortification_of`'s caller on the battle path).
     # PLAN POSITION `20-v`: the walls' DR is the `field_walls_dr` fixture (`H-150`), `None` = A.9's
     # own number, which the module reads from its terrain table -- this adapter decides none of it.
-    result = entry.fn(field_input(w, claimants, other, rung), rng)
+    inp = field_input(w, claimants, other, rung)
+    # v9 IN-52, THE LEVY-TO-FIELD FEED [LF-1..LF-3]: each side's fielded troops are `settlements.provision`'s
+    # answer on its treasury, reached by role string; `resolve_field` sizes each Unit by them, and
+    # `_eff_march` debits each side's `consumed` from the treasury named beside it. With `field_provisioning`
+    # off (shipped) the entry returns `troops = Σ weight` and `consumed = ()`: the field and the world as
+    # they were. An unprovisioned side fields 0, which `resolve_field`'s crash floor lifts (A16).
+    prov = composition.require(world_q.PROVISION)
+    treasuries = (_attacker_treasury(w, causes), _defender_treasury(w, rung))
+    fed = tuple(prov(provision_input(w, sum(side), t)) for side, t in zip(inp.weights, treasuries))
+    result = entry.fn(inp, rng, troops_a=fed[0].troops, troops_b=fed[1].troops)
     return dict(status="RESOLVED", module=_PROVIDER, resolver="dice_pool",
+                # v9 IN-52: `((treasury rung, consumed), ...)`, attacker then defender -- what `_eff_march`
+                # debits (LF-3). Empty `consumed` on both sides while the arm is off.
+                provision=tuple((t, p.consumed) for t, p in zip(treasuries, fed)),
                 # ⚠ LIFTED TO TOP LEVEL, NOT LEFT NESTED UNDER `result` (M4). `degree_of`
                 # (`seam/ladder.py`) reads a provider's return directly -- `wound_state` and
                 # `net`/`ob` are already top-level for the other two providers -- so a third,

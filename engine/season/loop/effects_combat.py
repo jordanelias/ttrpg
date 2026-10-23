@@ -25,7 +25,7 @@ from ..queries.world_q import ancestry, holder_faction_of, home_of
 from ..state.gate import NO_CHANGE, Change, Subject, may_muster, seat_faction
 
 from .effects_migration import _relocate
-from .effects_shared import _operand, effect_for
+from .effects_shared import _debit, _operand, effect_for
 
 
 # `accept` (the duel pair's second half) is the same contest over the same prize, `contests: "the
@@ -221,7 +221,12 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     through, `seat_of`'s own field) and `world_q.holder_faction_of` on the target rung,
     exactly as `loop/sides.py::sides_of` derives them, because both are facts about the ACT and
     re-deriving them here is cheaper and safer than threading a third value through `Resolution`
-    for one reader."""
+    for one reader.
+
+    ⚠ v9 IN-52 (the levy-to-field feed, [ASSUMPTION LF-3]): on `Won` and `Lost` each side's treasury is
+    debited by what its field ate (`_ration_debits`, the provider's `provision` key), after the casualties
+    and the arrival. The treasuries are NOT re-derived here: they are what the provider bounded the troops
+    by, and the debit must land on the store that was read. Empty while `field_provisioning` is off."""
     if res is None or not isinstance(res.result, dict):
         raise Unspecified(
             f"`march` on {_operand(a, 'subject')!r} was folded with no result to read a "
@@ -259,7 +264,8 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     losers = [] if res.degree == UNOPPOSED else (attackers if attacker_lost else defenders)
     pct = engine_result.get("attacker_size_pct" if attacker_lost else "defender_size_pct")
     touched = [pid for pid in losers if pid in w.persons]
-    if not touched and not movers:
+    debits = _ration_debits(w, res)
+    if not touched and not movers and not debits:
         return NO_CHANGE
     model = w.fixtures.get("field_casualty_model")
     require_member(
@@ -272,7 +278,7 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     loser_faction = attacker_faction if attacker_lost else defender_faction
     if model == "none" and winner_faction is None and loser_faction is None:
         touched = []
-        if not movers:
+        if not movers and not debits:
             return NO_CHANGE
     morale_w = w.fixtures.get("field_morale_weight")
     grudge_w = w.fixtures.get("field_grudge_weight")
@@ -289,6 +295,10 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         # THE ARRIVAL, AFTER THE CASUALTIES: on `Won` the losers are the defenders, never a mover.
         for pid in movers:
             _relocate(w, a, target, mover=pid)
+        # v9 IN-52 [LF-3]: THE FIELD EATS ITS RATION from each side's treasury, last.
+        for rid, consumed in debits:
+            for kind, units in consumed:
+                _debit(w.rungs[rid], kind, units)
 
     def _casualties() -> None:
         for pid in touched:
@@ -318,9 +328,24 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # G4 -- WHAT IT NAMES: the losers by the fields the casualty writes (earning as above); the movers
     # WHOLE, `move`'s reason (a `contain` leg is stored on its Person, so his digest carries the legs
     # and `travel_leg`).
+    # v9 IN-52: each debited treasury by its `stores`, earning the band's OWN kind -- a treasury that
+    # moved must not publish an arrival nobody made (`earns=None` would earn every declared kind).
     return Change(tuple(Subject.entity("persons", pid, earns=loser_earns, fields=fields)
                         for pid in touched)
-                  + tuple(Subject.entity("persons", pid) for pid in movers), perform)
+                  + tuple(Subject.entity("persons", pid) for pid in movers)
+                  + tuple(Subject.entity("rungs", rid, earns=_band_kind(res.degree), fields=("stores",))
+                          for rid in dict.fromkeys(rid for rid, _ in debits)), perform)
+
+
+def _ration_debits(w: "World", res: "Resolution") -> list:
+    """v9 IN-52 [ASSUMPTION LF-3, delegated-ruled]: WHAT THE FIELD EATS, `[(treasury rung, consumed), ...]`,
+    attacker then defender -- the provider's `provision` key (`seam/wrappers/mass_battle.py::resolve`), the
+    `settlements.provision` entry's `consumed` beside the treasury it was bounded by. A side with no
+    treasury rung, or nothing consumed, is left out. EMPTY WHILE `field_provisioning` IS OFF (shipped): the
+    entry consumes nothing on the control arm, so this reads no fixture of its own and the arm has one
+    owner. An `Unopposed` march fought no field and its result carries no `provision`."""
+    return [(rid, tuple(consumed)) for rid, consumed in (res.result.get("provision") or ())
+            if rid is not None and consumed and rid in w.rungs]
 
 
 def _band_kind(degree: str) -> str:

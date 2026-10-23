@@ -493,7 +493,9 @@ def _patch_won(monkeypatch, defender_pct=0.5):
     """The mass-battle module entry, patched to report the ATTACKER winning: an opposed field whose
     survivors the engine reports, so `field_degree` grades `Won` and `_eff_march` reads a real band."""
     from engine.season.seam.wrappers import mass_battle as MB
-    entry = SimpleNamespace(fn=lambda inp, rng: dict(attacker_wins=True, degree="Success",
+    # `**_`: since v9 IN-52 the adapter also hands the entry each side's fielded troops
+    # (`troops_a`/`troops_b`, the levy-to-field feed); this patched field does not read them.
+    entry = SimpleNamespace(fn=lambda inp, rng, **_: dict(attacker_wins=True, degree="Success",
                                                       attacker_size_pct=1.0,
                                                       defender_size_pct=defender_pct))
     monkeypatch.setattr(MB, "entry_for", lambda prize, module: (entry, None))

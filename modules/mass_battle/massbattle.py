@@ -303,7 +303,7 @@ def _run_and_grade(unit_a, unit_b, terrain, rng, walls_dr=None):
     }
 
 
-def resolve_field(inp, rng=None):
+def resolve_field(inp, rng=None, *, troops_a=None, troops_b=None):
     """THE SEASON-FACING ENTRY POINT, AND THE `mass_battle` MODULE'S ENTRY (A-25, plan position `31c`) --
     `04 §C.5.1`'s roster contract, reconciled with this module's OWN requirement for a `Unit` to hand
     `run_battle`.
@@ -360,8 +360,17 @@ def resolve_field(inp, rng=None):
       `geography` -- the parsed geography file both lookups read, the HOST's (read once per process by
           `engine/season/data/geography.py`). This module opens no file and never writes into it.
 
+    v9 IN-52 (the levy-to-field feed): `troops_a`/`troops_b` are each side's FIELDED troops when the host
+    provisioned the field (`settlements.provision`, read by the adapter), `None` -- the default -- meaning
+    the side's Σ weight, the field before the feed. They size the Unit in the weight's place and nothing
+    else; `_MIN_TROOPS`' floor still applies, so an unprovisioned side (`0`) fields the crash floor.
+
     Returns exactly what `_run_and_grade` returns."""
     weight_a, weight_b = (sum(side) for side in inp.weights)
+    if troops_a is not None:
+        weight_a = troops_a
+    if troops_b is not None:
+        weight_b = troops_b
     stance_a, stance_b = inp.stances
     loyalty_a, loyalty_b = inp.loyalties
     unit_a = _weighted_unit("side_a", weight_a, _morale_start(stance_a, loyalty_a, inp.loyalty_gain))

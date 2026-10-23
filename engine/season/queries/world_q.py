@@ -1050,8 +1050,12 @@ DRAWN_UNDER = "settlements.drawn_under"
 HOUSING = "settlements.housing"
 FABRIC = "settlements.fabric"
 FORTIFICATION = "settlements.fortification"
+#: v9 IN-52: the levy-to-field feed's query. Its caller is the field adapter
+#: (`seam/wrappers/mass_battle.py::resolve`, which reads the role from here), not a wrapper in this file;
+#: it is declared here so the one host need the driver checks stays one tuple.
+PROVISION = "settlements.provision"
 QUERY_ENTRIES = ((LARDER_DRAW, "query"), (DRAWN_UNDER, "query"), (HOUSING, "query"),
-                 (FABRIC, "query"), (FORTIFICATION, "query"))
+                 (FABRIC, "query"), (FORTIFICATION, "query"), (PROVISION, "query"))
 
 
 def _entry(role: str):
