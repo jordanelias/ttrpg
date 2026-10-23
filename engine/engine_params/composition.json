@@ -29,14 +29,21 @@
       "kind": "callable",
       "entry": "query",
       "verb": null,
-      "needed_by": "engine/season/queries/world_q.py \u2014 `demanded` and `delivered` (v9 IN-07 E1, A-25) build the typed input record (`under_input` -> `queries/inputs.py::Under`: the subtree, the draw and the column) and call this entry by role string through `engine.substrate.composition.require`, keeping their own `TRACE.query` lines. MATTER (`loop/matter.py`) reads each drained rung's gap through them. Declared in `world_q.QUERY_ENTRIES` and held by `manifest/registrar.py::require_entries`, as `settlements.larder_draw` is."
+      "needed_by": "engine/season/queries/world_q.py \u2014 `demanded` and `delivered` (v9 IN-07 E1, A-25) build the typed input record (`under_input` -> `queries/inputs.py::Under`: the subtree, the draw and the column) and call this entry by role string through `engine.substrate.composition.require`, keeping their own `TRACE.query` lines. Since v9 IN-07 E2 MATTER's drained-rung gap is computed inside the module by `settlements.subsist`, over this same function. Declared in `world_q.QUERY_ENTRIES` and held by `manifest/registrar.py::require_entries`, as `settlements.larder_draw` is."
     },
     "settlements.larder_draw": {
       "target": "modules.settlements.larder:larder_draw",
       "kind": "callable",
       "entry": "query",
       "verb": null,
-      "needed_by": "engine/season/queries/world_q.py \u2014 `subsistence_draw` (v9 IN-07 E1, A-25) builds the typed input record (`larder_input` -> `queries/inputs.py::LarderInput`), calls this entry by role string through `engine.substrate.composition.require` (its callers include driverless ones, `harness/scarce.py`), and turns the `DrawRecord` back into its public dict; `demanded`/`delivered` call it the same way when handed no draw. MATTER (`loop/matter.py`) reads the draw through `subsistence_draw`. No role roster names this row, so the host declares the need (`world_q.QUERY_ENTRIES`) and `manifest/registrar.py::require_entries` refuses at driver construction its absence, or an `entry:` other than `query`."
+      "needed_by": "engine/season/queries/world_q.py \u2014 `subsistence_draw` (v9 IN-07 E1, A-25) builds the typed input record (`larder_input` -> `queries/inputs.py::LarderInput`), calls this entry by role string through `engine.substrate.composition.require` (its callers include driverless ones, `harness/scarce.py`), and turns the `DrawRecord` back into its public dict; `demanded`/`delivered` call it the same way when handed no draw. MATTER (`loop/matter.py`) no longer calls it: since v9 IN-07 E2 it calls `settlements.subsist`, which runs the same `larder_draw` inside the module. No role roster names this row, so the host declares the need (`world_q.QUERY_ENTRIES`) and `manifest/registrar.py::require_entries` refuses at driver construction its absence, or an `entry:` other than `query`."
+    },
+    "settlements.subsist": {
+      "target": "modules.settlements.subsist:subsist",
+      "kind": "callable",
+      "entry": "step_call",
+      "verb": null,
+      "needed_by": "engine/season/loop/matter.py \u2014 MATTER (v9 IN-07 E2, A-25) builds the typed input record (`queries/world_q.py::subsist_input` -> `queries/inputs.py::SubsistInput`), calls this entry ONCE a season through `manifest.MODULE_ENTRIES` (`matter.py::_step_call`, the lookup `fieldwork.find`'s host makes; MATTER runs only inside a driver), and makes every write from the `SubsistOutcome`: the body writes and their crossings, deaths, the debit writes with `observed=`, `World._subsistence_shortfall`. `entry: step_call` because a loop step calls it, before the yield (#353 \u00a725). No role roster names this row, so the host declares the need (`matter.py::STEP_CALLS`) and `manifest/registrar.py::require_entries` refuses at driver construction its absence, or an `entry:` other than `step_call`."
     },
     "social_contest.roll": {
       "target": "modules.social_contest.roll:roll",

@@ -52,6 +52,7 @@ from ..harness import populated as POP
 from ..harness import probes as P
 from ..harness import register as REG
 from ..harness.run_cases import load_cases
+from ..loop import matter as matter_step
 from ..loop.driver import SeasonDriver, mint_token
 from ..queries import world_q
 from ..state.attribution import anchor_of
@@ -310,8 +311,11 @@ def test_24f_drain_guard_a_cohort_draws_stock_on_the_built_realm_and_matter_is_c
         monkeypatch):
     """`test_w8`'s non-vacuity guard, retired 2026-09-18 because the drain it observed was a DUKE
     hauling grain, REBUILT ON THE TERRITORIAL QUANTITY as that retirement's own comment asks. It
-    observes the draw MATTER actually ran: `subsistence_draw` is wrapped, not re-called, so the
-    record asserted on is the one the barrier derived its writes from.
+    observes the draw MATTER actually ran: the module entry MATTER calls is wrapped, not re-called,
+    so the record asserted on is the one the barrier derived its writes from. (v9 IN-07 E2: MATTER
+    calls `settlements.subsist` through `loop/matter.py::_step_call`, no longer
+    `world_q.subsistence_draw`; the wrap moved there, and reads the outcome's `draw` in the dict
+    shape `subsistence_draw` returns.)
 
     Two MATTER barriers on `build_realm(0)`: the first takes the yield (its draw finds nothing, the
     dearth above), the second draws from that stock. The guard asserts it observed at least one
@@ -322,14 +326,19 @@ def test_24f_drain_guard_a_cohort_draws_stock_on_the_built_realm_and_matter_is_c
     _matter(w)
     w.tick += 1
     seen: list = []
-    real = world_q.subsistence_draw
+    real = matter_step._step_call
 
-    def recording(w_):
-        rec = real(w_)
-        seen.append(rec)
-        return rec
+    def recording(role):
+        fn = real(role)
 
-    monkeypatch.setattr(world_q, "subsistence_draw", recording)
+        def call(inp):
+            out = fn(inp)
+            if role == matter_step.SUBSIST:
+                seen.append(world_q._draw_dict(out.draw))
+            return out
+        return call
+
+    monkeypatch.setattr(matter_step, "_step_call", recording)
     held_before = sum(sum((r.stores or {}).values()) for r in w.rungs.values())
 
     evs = _matter(w)

@@ -49,6 +49,8 @@ v9 IN-07 E1 landed the first ROLE-LESS entry rows (`settlements.larder_draw`, `s
 both `entry: query`), which no role roster names, and with them the host-declared need
 (`queries/world_q.py::QUERY_ENTRIES`, held by `manifest/registrar.py::require_entries`). Its falsifier:
 `test_a_host_declared_entry_row_deleted_stripped_or_rekinded_in_a_fresh_process_refuses_naming_it`.
+v9 IN-07 E2 added the first role-less `step_call` row (`settlements.subsist`, which MATTER calls) and its
+host need (`loop/matter.py::STEP_CALLS`); the same falsifier covers it.
 """
 from __future__ import annotations
 
@@ -206,10 +208,11 @@ print(repr((role, in_rows, before, construct())))
         _assert_refused(refusal, repr(role), "module_entry", "no composition row declares")
 
 
-#: The host-declared needs -- read from the declaring file, never named here.
+#: The host-declared needs -- read from the declaring files, never named here.
 _HOST_NEEDS = """
 from engine.season.queries import world_q
-needs = list(world_q.QUERY_ENTRIES)
+from engine.season.loop import matter as matter_step
+needs = list(world_q.QUERY_ENTRIES) + list(matter_step.STEP_CALLS)
 """
 
 
@@ -217,20 +220,26 @@ def test_a_host_declared_entry_row_deleted_stripped_or_rekinded_in_a_fresh_proce
     """v9 IN-07 E1's falsifier: a ROLE-LESS row -- a `query` no role roster names -- deleted, stripped
     of its `entry:`, or re-keyed to another entry kind, before any driver exists -> driver construction
     refuses naming the role (`manifest/registrar.py::require_entries`, over
-    `queries/world_q.py::QUERY_ENTRIES`). Without the host's declared need the registrar alone refuses
+    `queries/world_q.py::QUERY_ENTRIES` and, since IN-07 E2, `loop/matter.py::STEP_CALLS` -- a role-less
+    `step_call`). Without the host's declared need the registrar alone refuses
     none of the three in a fresh process: its table is empty, so it holds nothing to miss.
     `before == []` is what makes this the fresh-process form. EVERY declared need, one fresh process
     per arm, so a second need sorted ahead of the first cannot hide it."""
     needs = _run(_HOST_NEEDS + "print(repr(needs))\n")
-    assert len(needs) >= 2, f"fewer host-declared entries than IN-07 E1 landed: {needs}"
+    assert len(needs) >= 3, f"fewer host-declared entries than IN-07 E1 and E2 landed: {needs}"
+    assert {kind for _role, kind in needs} >= {"query", "step_call"}, needs
+    # The re-kinded arm moves each need to a kind it is NOT (a `step_call` re-keyed to `step_call`
+    # would be no edit at all).
+    other = {"query": "step_call", "step_call": "query"}
     arms = {"deleted": "del composition.ROLES[role]",
             "stripped": "composition.ROLES[role] = dict(composition.ROLES[role], entry=None)",
-            "rekinded": "composition.ROLES[role] = dict(composition.ROLES[role], entry='step_call')"}
+            "rekinded": "composition.ROLES[role] = dict(composition.ROLES[role], entry=OTHER[kind])"}
     checked = 0
     for i in range(len(needs)):
         for arm, edit in arms.items():
             got = _run(_HOST_NEEDS + f"""
 role, kind = needs[{i}]
+OTHER = {other!r}
 in_rows = composition.ROLES.get(role, {{}}).get("entry") == kind
 before = sorted(MODULE_ENTRIES)
 {edit}
@@ -240,7 +249,8 @@ print(repr((role, in_rows, before, construct())))
             assert in_rows, f"the host needs {role!r}, which no composition row declares as that entry"
             assert before == [], f"MODULE_ENTRIES was filled before construction: {before}"
             names = (repr(role), "the host needs module entry") + (
-                ("`entry: step_call`",) if arm == "rekinded" else ("no composition row declares",))
+                (f"declares `entry: {other[needs[i][1]]}`",) if arm == "rekinded"
+                else ("no composition row declares",))
             _assert_refused(refusal, *names)
             checked += 1
     assert checked == 3 * len(needs), checked

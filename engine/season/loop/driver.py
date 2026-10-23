@@ -275,8 +275,9 @@ class SeasonDriver:
         )
         register_module_entries(VERB_TABLE)
         # v9 IN-07: the host's declared needs, held against the table just filled -- the refusal a
-        # deleted role-less row (a `query` no role roster names) meets in a fresh process.
-        require_entries(world_q.QUERY_ENTRIES)
+        # deleted role-less row (a `query` or `step_call` no role roster names) meets in a fresh
+        # process. The larder queries `world_q` calls (E1), and the step_call MATTER calls (E2).
+        require_entries(world_q.QUERY_ENTRIES + MATTER_STEP_CALLS)
         check_rows()
         check_contest_prizes(VERB_TABLE)
         check_graded_inquiries(VERB_TABLE)
@@ -561,7 +562,7 @@ from .calendar import calendar                                            # noqa
 from .census import census                                                # noqa: E402
 from .deliberate import deliberate                                        # noqa: E402
 from .encounter import encounter                                         # noqa: E402
-from .matter import matter                                               # noqa: E402
+from .matter import STEP_CALLS as MATTER_STEP_CALLS, matter              # noqa: E402
 from .resolve import (_admits, _apply_write, _contest, _eligible, _fold,  # noqa: E402
                        _grade, _occasion_ids, _survives, resolve)
 from .witness import witness                                              # noqa: E402

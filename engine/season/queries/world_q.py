@@ -90,7 +90,7 @@ from ..state.world import World
 from ..trace_log import TRACE
 # v9 IN-07 E1: the `settlements` module's records (the one host leaf a module imports) and the
 # role-string resolver its entries are reached through. Neither pulls in module code at import.
-from .inputs import DrawRecord, DrawRow, Eater, LarderInput, Under
+from .inputs import DrawRecord, DrawRow, Eater, LarderInput, SubsistInput, Under
 from engine.substrate import composition
 
 
@@ -1051,17 +1051,25 @@ def larder_input(w: World) -> LarderInput:
       * `stores` is each ladder rung's `Rung.stores` in its own order (`None` read as empty).
     No weights registered projects no eaters and calls no `home_of`, so the trace is MATTER's
     `if weights:` as it was."""
+    return _larder_parts(w)[0]
+
+
+def _larder_parts(w: World) -> tuple:
+    """`(LarderInput, chains)`: `larder_input`'s projection and, from the same `ancestry` walks, each
+    home's whole chain uncut (`SubsistInput.chains`, IN-07 E2), so the season's one projection walks
+    each home once and calls `home_of` once, as MATTER's draw always has."""
     weights = w.fixtures.get("subsistence_weight")
     if not weights:
-        return LarderInput((), (), (), ())
+        return LarderInput((), (), (), ()), ()
     homes = home_of(w)
-    eaters, ladders, stores, seen = [], [], [], set()
+    eaters, ladders, chains, stores, seen = [], [], [], [], set()
     for pid in sorted(homes):
         person = w.persons[pid]
         eaters.append(Eater(pid, homes[pid], person.weight, person.is_cohort))
     for home in sorted(set(homes.values())):
+        chain = tuple(ancestry(w, home))
         ladder = []
-        for rid in ancestry(w, home):
+        for rid in chain:
             if rid not in w.rungs:
                 break
             ladder.append(rid)
@@ -1069,7 +1077,19 @@ def larder_input(w: World) -> LarderInput:
                 seen.add(rid)
                 stores.append((rid, tuple((w.rungs[rid].stores or {}).items())))
         ladders.append((home, tuple(ladder)))
-    return LarderInput(tuple(sorted(weights.items())), tuple(eaters), tuple(ladders), tuple(stores))
+        chains.append((home, chain))
+    return (LarderInput(tuple(sorted(weights.items())), tuple(eaters), tuple(ladders), tuple(stores)),
+            tuple(chains))
+
+
+def subsist_input(w: World) -> SubsistInput:
+    """THE PROJECTION `settlements.subsist` reads (v9 IN-07 E2): the larder projection, each home's
+    chain, the `body_step` fixture and every eater's `Person.body`. Read-only; it writes nothing and
+    traces what `larder_input` traces (`home_of`), so MATTER's trace is the draw's as it was. MATTER
+    calls the entry with it once a season and makes every write from the outcome."""
+    larder, chains = _larder_parts(w)
+    return SubsistInput(larder, chains, w.fixtures.get("body_step"),
+                        tuple((e.pid, w.persons[e.pid].body) for e in larder.eaters))
 
 
 def _draw_dict(record: DrawRecord) -> dict:

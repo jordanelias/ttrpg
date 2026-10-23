@@ -27,6 +27,7 @@ v9 FI-02 + FI-03 (`SM-3`, `ED-FI-0002`) add the fieldwork container's pair, at t
 `TrailItem` and `FieldworkInput` in, `Findings` out -- the `inquiry` role's records, for the same reason.
 v9 IN-07 E1 adds the settlements module's larder records after them: `Eater`, `LarderInput` and `Under`
 in, `DrawRow`/`DrawRecord` out (built by `queries/world_q.py::larder_input` and `under_input`).
+v9 IN-07 E2 adds `SubsistInput` in, `SubsistOutcome`/`BodyFall` out, for `settlements.subsist`.
 """
 from __future__ import annotations
 
@@ -249,3 +250,49 @@ class Under:
     record: DrawRecord
     subtree: frozenset
     column: str
+
+
+# v9 IN-07 E2: the `settlements.subsist` step_call's records -- one season's subsistence ledger. Built by
+# `queries/world_q.py::subsist_input`, read by `modules/settlements/subsist.py`, interpreted by MATTER
+# (`loop/matter.py`), which makes every write from the outcome.
+
+@dataclass(frozen=True)
+class SubsistInput:
+    """What `settlements.subsist` reads, and nothing else. Built by `queries/world_q.py::subsist_input`:
+      * `larder`    -- the `LarderInput` the draw reads (`larder_input`'s projection, unchanged);
+      * `chains`    -- `((home, (home, parent, ..., root)), ...)` per home, sorted: each home's whole
+                       containment ancestry (`ancestry`), NOT cut at a non-rung as a ladder is. A drained
+                       rung's gap counts the eaters whose chain passes through it -- `_subtree`'s
+                       membership read from the other end, which is what `demanded`/`delivered` sum;
+      * `body_step` -- the `body_step` fixture: body lost per unit short (`0` is the control arm);
+      * `bodies`    -- `((pid, Person.body), ...)` for every eater in `larder.eaters`, sorted by pid."""
+    larder: LarderInput
+    chains: tuple
+    body_step: int
+    bodies: tuple
+
+
+@dataclass(frozen=True)
+class BodyFall:
+    """One body the season's dearth falls: who, the body it falls to (`max(0, body - lost)`), and
+    whether that is death (`body_after <= 0`)."""
+    pid: str
+    body_after: int
+    dies: bool
+
+
+@dataclass(frozen=True)
+class SubsistOutcome:
+    """What `settlements.subsist` returns. Every collection is an ordered tuple:
+      * `draw`            -- the `DrawRecord` (`settlements.larder_draw`'s, the same rule);
+      * `short_by_person` -- `((pid, ((kind, units), ...)), ...)`, pid order then kind order;
+      * `shortfalls`      -- `((rung, ((kind, units), ...)), ...)`: each drained rung (sorted) with its
+                             subtree's positive gap per kind it ran out of (sorted), `want - take` summed;
+      * `falls`           -- `BodyFall`s, pid order, only where the loss is `> 0`;
+      * `larder_after`    -- `((rung, ((kind, units), ...)), ...)`, sorted rung, changed rungs only; kinds
+                             in the order the draw first debited them (it reaches `Rung.stores`' order)."""
+    draw: DrawRecord
+    short_by_person: tuple
+    shortfalls: tuple
+    falls: tuple
+    larder_after: tuple
