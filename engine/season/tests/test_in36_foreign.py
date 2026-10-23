@@ -314,18 +314,12 @@ def test_the_witness_seed_reaches_the_seam_in_a_full_one_season_run_too(seed):
 
 # ---------------------------------------------------------------------------------------------- (e)
 
-def _guard_weight(w, rung: str) -> int:
-    """IN-60's DEFINITION, read off tenures in this file (the Query is B-Y's): the summed weight of persons
-    PRESENT at `rung` (exact) who hold a live `oblige` to a seat held by a person ALSO present there."""
-    here = set(world_q.presence(w, rung))
-    held_by = {t.object: t.subject for t in w.tenures if t.kind == "hold" and t.live}
-    return sum(w.persons[t.subject].weight for t in w.tenures
-               if t.kind == "oblige" and t.live and t.subject in here and held_by.get(t.object) in here)
-
+# The guard reading is IN-60's Query, `world_q.guard_weight` (B-Y); the local helper that stood in for it
+# at B-V is retired, so the definition has one owner (`test_in60_guard_weight.py` holds its falsifiers).
 
 def test_the_control_arm_seats_no_guard_and_reads_zero_at_every_hearth(control):
     assert not [p for p in control.persons if p.startswith(POP.COHORT_PREFIX + "guard_")]
-    assert all(_guard_weight(control, r) == 0 for r in control.rungs if control.rungs[r].kind == "hearth")
+    assert all(world_q.guard_weight(control, r) == 0 for r in control.rungs if control.rungs[r].kind == "hearth")
 
 
 def test_a_guard_stands_where_each_principal_is_and_the_king_is_guarded_harder_than_a_duke(guarded):
@@ -337,13 +331,13 @@ def test_a_guard_stands_where_each_principal_is_and_the_king_is_guarded_harder_t
     reads = {}
     for seat, wt in by_seat.items():
         holder = next(t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == authored[seat])
-        reads[seat] = _guard_weight(w, home[holder])
+        reads[seat] = world_q.guard_weight(w, home[holder])
         assert reads[seat] == wt > 1, (seat, reads[seat], wt)
     assert reads["off_king"] > reads["off_duchess_hafenmark"] and reads["off_king"] > reads["off_duke_varfell"], reads
     # An ordinary rung - the inn a sworn Crown obligee lives at - reads 0 with no principal present: the
     # Grand Master (NPC-070, the throne's named obligee) is sworn to the King, and lives apart from him.
     gm_home = home["p_npc_070"]
-    assert home["p_npc_020"] != gm_home and _guard_weight(w, gm_home) == 0
+    assert home["p_npc_020"] != gm_home and world_q.guard_weight(w, gm_home) == 0
     # the guard is a cohort (S9) and holds no title and no commitment
     for pid in (p for p in w.persons if p.startswith(POP.COHORT_PREFIX + "guard_")):
         assert w.persons[pid].weight > 1 and not [t for t in w.tenures if t.subject == pid and t.kind in ("hold", "commit")]
@@ -353,12 +347,12 @@ def test_ending_the_guards_oblige_drops_the_reading_with_no_other_write():
     w = POP.build_realm(0, guards=True)
     holder = next(t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == w._office_census["authored"]["off_king"])
     rung = world_q.home_of(w)[holder]
-    before = _guard_weight(w, rung)
+    before = world_q.guard_weight(w, rung)
     assert before == {r["seat"]: r["weight"] for r in POP.guard_rows()}["off_king"]
     for t in w.tenures:
         if t.kind == "oblige" and t.subject == f"{POP.COHORT_PREFIX}guard_off_king":
             t.until = w.tick
-    assert _guard_weight(w, rung) == 0, "the guard's live oblige edge is what the definition reads; closing it must drop the read"
+    assert world_q.guard_weight(w, rung) == 0, "the guard's live oblige edge is what the definition reads; closing it must drop the read"
 
 
 def test_guard_rows_refuse_what_they_cannot_read():
