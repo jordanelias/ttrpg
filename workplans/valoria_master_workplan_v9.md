@@ -268,8 +268,6 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | IN-48 | H-108 (delegation half) | IN/FA/SE | B | — (IN-40 landed `3f320093`; IN-10 (a), (b) and IN-11 landed `905b7a21`, `2a2ed152`) | R-04 | B-JR | `_part5` |
 | IN-52 | the levy-to-field feed (from IN-07's design); LF-1..LF-3 | IN/SE/MB | BLK | IN-49's `levy` executing (built `be828e15`), IN-07's extractions | — | B-T | `_part4` |
 | IN-58 | RS-23, RS-24: grievance at read — its sworn-to half (the stance-only half landed `3bf936ee`) | IN/FA | BLK | IN-40's `oblige` edge readable person-side (D) | R-07 (contributor) | none (B-W closed `3bf936ee`) | `_part5` |
-| IN-59 | RS-26: the access gate | IN/SC/PC | BLK | IN-60; B-V's guard content and W2's arm for its audience half | R-04 (contributor), R-05 | B-Y | `_part5` |
-| IN-60 | RS-26: the security Query | IN/SE/FA | BLK | IN-36's guard content (D, B-V) | R-04 (contributor) | B-Y | `_part5` |
 | IN-61 | RS-27: succession (replaces IN-51, retired); #453 R-5 (b) re-specified | IN/FA/SE | stopped | H-230 (limits (1), (2)); SC-04's `succession` row (H-217: IN-61 owns it); ED-IN-0292 (2) (J) | R-05, R-04 | none (stopped at B-R, closed `541c8d12`) | `_part5` |
 | SC-02 | `22a` → `23` → `22b` (RESIDUE after B-P, `eba20137`) | SC | BLK | H-218, H-219, H-221, H-222; ED-SC-0040 (J) | — | B-Z | `_part6` |
 | SC-03b | #453 step 4; H-162 | SC | BLK | SC-08 (SC-01 landed, B-N closed `cf69ceed`; SC-03a landed `c2f855d2`) | R-05, R-04 | B-O | `_part6` |
@@ -287,7 +285,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | PC-05 | ED-PC-0013 (1) | PC | BLK | GO-01, GO-05 | — | B-Z | `_part7` |
 | PC-06 | #445 K-1/K-5 (K-3 landed at B-S, `1023197b`; S-1 landed at B-E, `ac9724fc`; M-1/S-4, S-2/L-1 at B-L, `9ad86e87`) | PC | LEAVE (K-1/K-5, unscheduled: K-2 first) | K-2 with its first reader | — | none (B-S closed `6e833a57`) | `_part7` |
 | PC-08 | Phase 4a/4b/5, WS-7; #445 M-2..M-6, K-4/V-3 | PC | LEAVE | named, unscheduled | — | B-Z | `_part7` |
-| PC-10 | RS-25: duel terms and the yield (PC-10a module, PC-10b season) | PC/IN | B (PC-10a) · BLK (PC-10b) | PC-10b: PC-10a (D) | R-05 | B-Y | `_part7` |
+| PC-10 | RS-25: duel terms and the yield (PC-10a landed `daae7401`; PC-10b season, STOPPED at B-Y, unbuilt) | IN | BLK:H-240 (design-first stopped; needs a declared grammar change) | H-240 limit (1): a declared grammar change or a derivation route | R-05 | none (B-Y closed `8071ca36`) | `_part7` |
 | FI-05 | = IN-32 | — | — | — | — | none (= IN-32) | `_part5` |
 | WR-01 | `27` remainder: the R-14 term, the `engine/season/` reach | WR | BLK (narrowed) | a working with a cost running in the season (IN-06's re-review, `759eefb8`, §6 item 11) | — | none (B-S closed `6e833a57`) | `_part7` |
 | GO-01 | `26`; D2 tenth attribute | GO | J | J-9 | — | B-Z | `_part7` |
@@ -300,7 +298,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 
 ## 4. CROSSWALK — v8 and the proposals ↔ v9
 
-**Batches B-A … B-T, B-U, B-V, B-X, B-Y, B-Z** (B-Y placed by ruling, RS-28, B-W closed `3bf936ee`; B-X closed `2f0c0227`, placed by RS-30; B-U closed `156f3e5d`; B-R closed `541c8d12`; B-S closed `6e833a57`; members, shared files, entry gates, exit instruments, re-records, lanes, handoff cards): `_part3` §B, the only copy.
+**Batches B-A … B-T, B-U, B-V, B-X, B-Y, B-Z** (B-Y placed by ruling, RS-28, B-W closed `3bf936ee`; B-X closed `2f0c0227`, placed by RS-30; B-U closed `156f3e5d`; B-R closed `541c8d12`; B-S closed `6e833a57`; B-Y closed `8071ca36`, PR #502; members, shared files, entry gates, exit instruments, re-records, lanes, handoff cards): `_part3` §B, the only copy.
 
 | v8 position · telling · §SM | v9 |
 |---|---|
