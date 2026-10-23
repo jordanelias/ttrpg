@@ -1,6 +1,6 @@
 """`season.loop.effects_information` -- records, propositions, matters: create_record, issue,
 covenant, conceal, open_case, carry, determine, argue, petition, survey, forge, give, seize, arrest,
-destroy_record, utter, commit.
+destroy_record, utter, commit, tie / knot (v9 IN-32: the `tie` half).
 
 EXTRACTED from `effects.py` at the per-subsystem split (Phase 4). Holds the document/proposition/
 matter cluster: the one mint (`_mint_document`) that `create_record`, `issue`, `petition` and
@@ -1179,4 +1179,44 @@ def _eff_commit(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     prop_id = _operand(a, "subject")
     nt = Tenure(H(w.world_seed, w.tick, a.actor, f"commit:{prop_id}:{a.id}"), a.actor, prop_id,
                 "commit", since=w.tick)
+    return Change((Subject.edge(nt),), lambda: w.add_tenure(nt))
+
+
+@effect_for("tie / knot")
+def _eff_tie(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """v9 IN-32 (H-182) -- A TIE OPENS: the actor's own `tie` Tenure to the act's `subject`, a person
+    he is with. It writes `Tenure.since` and the fold emits `bond.formed`, exactly the row's declared
+    writes and kinds. Host-side, on the B-S re-review of IN-06's design
+    (`proposals/2026-10-07-unplugged-systems-replug.md` §3.1, §6 items 1-2): `systems/fieldwork/sim/
+    knots.py` is not called, and no composition row reaches it.
+
+    THE PARTNER IS THE ACT'S `subject` (§6 item 2, ladder step 4: IN-09 typed `comply` with no new
+    name). No operand is coined. Who may be the partner is asked BEFORE this body, each by its one
+    owner: the row's typed cell (`existence` of `subject` kind Person, and `relation` of `subject`
+    `with`, `train`'s two conjuncts) and the fold's `counterparty` clause (`counterparty: subject`,
+    so a tie to oneself is declined person-side and refused at the fold). Nothing here re-asks them.
+
+    ONE OPENER, ONE KIND. The row names two kinds; this body constructs only `tie`, as a LITERAL, so
+    `data/verbs.py::_derive_openers_from_effects` reads `tie / knot` as a `tie` opener and `knot`
+    keeps no opener. A `knot` forms by ED-FI-0005's roll, and an ungraded one would feed the live
+    `knot` reader (`epistemic.py::_ch_witness_key`, through `queries/cache.py::tenure_index`) with
+    edges canon says only that roll forms [ASSUMPTION; medium; Jordan to correct; revert: this body
+    opens a `knot` beside the `tie`, ungraded, and the witness channel reads it].
+
+    THE EDGE IS DIRECTED AND THE ACTOR'S (`architecture/meta/04_CODE_ARCHITECTURE.md` §A.3 row 9: two
+    directed edges, one owned by each party), so `state/gate.py`'s `T-m` admits it and `release`
+    (whose `domain:` holds `tie`) ends it. The partner gains no edge: his tie, if he ties back, is his
+    own act. Its reader is the actor's own: `decision/options.py::teller_weight`'s `relation` term
+    weighs what a person he is tied to tells him (`Fixtures tie_gain`).
+
+    G4 -- WHAT IT NAMES: THE EDGE, which always moves (absent -> present). A tie the actor already
+    holds, live, to the same partner moves nothing, so it declines (`NO_CHANGE` -> `bond.refused`,
+    the `write` clause): one live tie per directed pair, so `release` ends a tie in one act. The id
+    salts on the partner and the act (`_eff_commit`'s pattern)."""
+    partner = _operand(a, "subject")
+    p = w.persons.get(a.actor)
+    if p is None or any(t.kind == "tie" and t.live and t.object == partner for t in p.tenures):
+        return NO_CHANGE
+    nt = Tenure(H(w.world_seed, w.tick, a.actor, f"tie:{partner}:{a.id}"), a.actor, partner,
+                "tie", since=w.tick)
     return Change((Subject.edge(nt),), lambda: w.add_tenure(nt))

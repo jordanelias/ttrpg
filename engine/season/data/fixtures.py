@@ -798,6 +798,16 @@ DEFAULT_FIXTURES = Fixtures(
     rank_gain=0.5,                     # `H-178`, swept 0 (control) / 0.5 (SHIPPED) / 1.0
     # [JUSTIFIED: engine/season/hole_register.yaml H-179 -- regard's gain on a teller's weight; CAT-3 orders peer > enemy, no magnitude, so it is injected and swept 0 / 0.5 / 1.0]
     regard_gain=0.5,                   # `H-179`, swept 0 (control) / 0.5 (SHIPPED) / 1.0
+    # `H-182` (v9 IN-32). HOW FAR A HEARER'S OWN `tie` TO THE TELLER MOVES THE WEIGHT OF WHAT THEY TOLD:
+    # `relation` gains `tie_gain * tied(p, teller)` (`decision/options.py::tied`, 1 while the hearer
+    # holds a live `tie` to the teller, `loop/effects_information.py::_eff_tie`'s edge). `0` is the
+    # CONTROL: a tie moves no weight and the reader is the pre-IN-32 one. SHIPPED `0.5`, `regard_gain`'s
+    # value one term over, so a tie is worth what full regard is [ASSUMPTION; medium; Jordan to
+    # correct; revert: 0.0], on Jordan's 2026-10-09 ruling (*"Gains are improvements and therefore
+    # ship."*, `judged_gain` below) and because at 0 an executed tie is read by nothing that moves --
+    # IN-32's own falsifier (ID-13). A declared hash mover wherever a tied hearer weighs his partner's word.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-182 -- a tie's gain on a teller's weight; no document gives how much a tie credits the tied, so it is injected and swept 0 / 0.5 / 1.0]
+    tie_gain=0.5,                      # `H-182`, swept 0 (control) / 0.5 (SHIPPED) / 1.0
     # `H-183` (telling workplan `T6`, `ED-IN-0282`). HOW FAR A TELLER'S RECORD MOVES THE WEIGHT OF
     # THEIR HEARSAY: `record = 1 + record_gain * (agree - dis) / (agree + dis)` over the hearer's
     # claims that teller passed on, each paired with the hearer's OWN firsthand claim on the same
