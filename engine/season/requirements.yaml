@@ -1191,6 +1191,10 @@ rows:
       stance row's weight is `stance_from_loyalty` of the member's loyalty, computed from the registry's raw pursuits at build, and
       `--control` leaves `Person.stance` alone; it is constant across candidates in `--decisions` (one referent) and live in
       `--season --control`, which carries leg (4) and the attention counts.
+      READING @287ac3d9 (the tree with v9 B-V merged; IN-38's re-measure, the first reading after its 14 overlays): `corpus_run`
+      prints RANKING DISCRIMINATION 16..24 of 24..24 candidates with a celled axis carrying a nonzero pursuit score (33 candidates in all),
+      143 distinct worlds, 124 distinct executed sets, 19 verbs executed. IN-38's overlays moved the distinct-set count by one (123 to 124)
+      and no discrimination figure: the ranking's tie-break and celled-axis set are the overlays' blind spot, not their subject.
     measure: "python -m engine.season.harness.corpus_run  # 'RANKING DISCRIMINATION' line"
     blocks: [IN-38, IN-08, IN-18, IN-12]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W27: `17` landed (build_at seats a `cast:`), IN-38 remains; H-62 re-scoped to IN-08, IN-18, IN-12 step 9
@@ -1409,6 +1413,9 @@ rows:
       so "corpus hearers carry no capability" in the T4 paragraph is true of its own date and not of
       this tree. Status stays `partial`: the roll still varies by seed and fixture, and by person in
       one case of 143.
+      READING @287ac3d9 (IN-38's re-measure): `headless --seasons 2 --seed 0` content hash d3bcc94411c9b1138c9555a0c5725df3, 50 of 56 verbs
+      the fold can execute; `test_we_only_a_verb_that_declares_contests_can_be_graded_today` 1 passed. The by-person conjunct is unmoved:
+      IN-38 authored no `capability`, so `_pool_of` varies by person only in the cases that already carried one.
     measure: "python -m engine.season.harness.headless --seasons 2 --seed 0 ; python -m pytest engine/season/tests -k test_we_only_a_verb_that_declares_contests_can_be_graded_today"
     blocks: [H-98]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W23 spent in substance (`fight` resolves through the combat seam and is graded)
