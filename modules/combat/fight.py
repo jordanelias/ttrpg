@@ -45,11 +45,16 @@ def fight(inp: PersonalCombatInput, rng: Optional[random.Random] = None) -> dict
     A, B = combatant.Combatant(a_id, end=a_end), combatant.Combatant(b_id, end=b_end)
     trace: list = []
     prev = getattr(wrapper, "_TRACE", None)
+    # THE DUEL TERMS (RS-25, PC-10a): read off the typed input when it carries them, else the engine's lethal
+    # default -- so a record built without the field fights exactly as before. `PersonalCombatInput` does not
+    # declare `terms` yet: the season passing them (and the field) is PC-10b's, and this module may not edit the
+    # host. The engine refuses a term outside `wrapper.DUEL_TERMS` by name.
+    terms = getattr(inp, "terms", wrapper.LETHAL_TERMS)
     try:
         # The engine's own note: `_TRACE` adds no rng draw and no state mutation, so capturing it
         # CANNOT change the result. That is why the scene may be recorded without perturbing it.
         wrapper._TRACE = trace.append
-        result = wrapper.fight(A, B, rng=rng)
+        result = wrapper.fight(A, B, rng=rng, terms=terms)
     finally:
         wrapper._TRACE = prev
 
