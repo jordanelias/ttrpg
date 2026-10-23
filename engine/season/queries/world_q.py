@@ -1221,6 +1221,57 @@ def guard_weight(w: World, rung_id: str) -> int:
     return sum(w.persons[p].weight for p in sworn)
 
 
+def issuing_seat(w: World, rid: str) -> Optional[str]:
+    """THE SEAT THAT ISSUED THE WRIT `rid` -- the `via` of the Act that caused the Record's CREATING
+    Event (#453 §9.1 / K-52: *"read through `state/attribution.py::causing_act` on the warrant Record's
+    creating Event -- that Act's `via`"*), or `None` when no Event wrote it (a hand-planted Record), no
+    act caused that Event, or the act exercised no seat the world still holds. The creating Event is the
+    FIRST in the log whose changes name the Record (`loop/matter.py`'s `prior` reads the last, for a
+    different question). MOVED HERE from `loop/effects_information.py` at v9 IN-59 (b), which re-imports
+    it for `arrest`: the `audience` stem's writ limb asks the same question, and `queries/` may not
+    import `loop/`, so the one owner sits where both readers reach it."""
+    made = next((e for e in w.log if any(c.subject == rid for c in e.changes)), None)
+    act = causing_act(w, made) if made is not None else None
+    via = getattr(act, "via", None)
+    return via if via in w.offices else None
+
+
+def admits_audience(w: World, actor: str, rung: str) -> bool:
+    """v9 IN-59 (b) (RS-26) -- MAY `actor` ENTER `rung`? The `audience` stem's answer
+    (`WorldReader.read`), asked of a `move`'s or a `migrate`'s destination. FOUR LIMBS, any one admits,
+    each a property of the mover read off live state and each composed on its one owner:
+
+      1. HIS OWN SEAT: a seat he holds (a live `hold` on an Office) whose purview reaches the rung
+         (`purview_reaches`) -- a king walks into his court. ⚠ ANY HELD SEAT, NOT `Act.via`: `move` and
+         `migrate` are `own`-eligible and carry no seat, and a `relation` reads only the actor and the
+         rung, so "the seat he exercises" is read as every seat he sits in [ASSUMPTION; medium; Jordan
+         to correct; revert: none short of a `via` on movement acts, which the grammar does not carry].
+      2. A WRIT: he holds a live writ addressed to him (`writs_held`) whose issuing seat
+         (`issuing_seat`, K-52) reaches the rung -- an invitation, minted by `issue`. A hand-planted
+         writ has no creating Event and therefore no issuer, and opens nothing.
+      3. AN OATH: he owes a live `oblige` to a seat that reaches the rung (`sworn_to`, IN-40's walk; the
+         same seats `purview_reaches`' oblige clause reads) -- sworn men enter. An IMPOSED oblige is a
+         sentence, not an oath (`Tenure.imposed`), skipped as `guard_weight` and the oblige clause skip it.
+      4. NOBODY GUARDS IT: `guard_weight(w, rung) == 0` (IN-60) -- an unguarded place is open, which is
+         every rung of a world built without guard content, so the gate binds only where guards stand.
+
+    Compute-on-demand, stored nowhere (T-a). The limbs are asked cheapest-decisive-first (the guard
+    limb), which changes no answer -- the four are a disjunction."""
+    TRACE.query("admits_audience", "resolver")
+    if guard_weight(w, rung) == 0:
+        return True
+    reaching = {o.id for o in w.offices.values() if purview_reaches(w, o, rung)}
+    if not reaching:
+        return False
+    if any(t.kind == "hold" and t.live and t.subject == actor and t.object in reaching
+           for t in w.tenures):
+        return True
+    if any(t.subject == actor and not t.imposed for s in sorted(reaching) for t in sworn_to(w, s)):
+        return True
+    p = w.persons.get(actor)
+    return p is not None and any(issuing_seat(w, rid) in reaching for rid in writs_held(w, p))
+
+
 # ===========================================================================
 # RESIDENCE -- plan position `19c` (MIGRATE). Where a person LIVES, as distinct from where they ARE.
 # ===========================================================================
@@ -3045,6 +3096,15 @@ class WorldReader:
                 return UNKNOWN
             here, there = place_of(w, subject), place_of(w, arg)
             return UNKNOWN if here is None or there is None else here == there
+        if stem == "audience":
+            # v9 IN-59 (b) (RS-26): MAY THE ACTOR (`arg`) ENTER THE RUNG `subject` -- `with`'s shape,
+            # asked of a destination instead of a second person. `admits_audience` is the one owner of
+            # the four limbs. UNKNOWN for a subject that is no rung or an actor who is no person: a
+            # destination nobody can name refuses, never a guessed admission (`ID-5`). The person
+            # side never answers this (`WORLD_ONLY_STEMS`).
+            if subject not in w.rungs or arg not in w.persons:
+                return UNKNOWN
+            return admits_audience(w, arg, subject)
         if stem == "claim.held":
             p = w.persons.get(self._actor)
             return UNKNOWN if p is None else any(c.subject == subject for c in p.ledger)

@@ -786,9 +786,14 @@ def binding_from_act(a) -> dict:
 # himself, not vocabulary the world contains.
 OWN_STATE_STEMS = frozenset({"thread_sensitivity", "thread_sensitivity.gate"})
 
+# ⚠ v9 IN-59 (b) (RS-26, the AUDIENCE half of the access gate) ADDED `audience`: `relation` (form 5)
+# asked of a DESTINATION RUNG and the actor, `with`'s shape -- *may the actor enter this place* --
+# on `move` and `migrate`. `WorldReader.read` answers it through `world_q.admits_audience`; WORLD-ONLY
+# (below), so the person forms the Candidate and the fold refuses. One stem; no form, no operand.
+# roster-exempt: MECHANISM. The grammar's own predicate stems (what a REQUIREMENT MAY ASK), not the game's vocabulary; `rosters.yaml` says what the world contains.
 REQUIRES_STEMS = frozenset({
     "exists", "stores", "condition", "floor", "contain.path", "held_by", "present_at",
-    "claim.held", "rank", "purview", "bench", "bench.size", "quorum", "with",
+    "claim.held", "rank", "purview", "bench", "bench.size", "quorum", "with", "audience",
 }) | OWN_STATE_STEMS
 
 # THE STEMS THE PERSON-SIDE READER NEVER ANSWERS: `queries/person_q.py::LedgerReader.read` returns
@@ -806,7 +811,10 @@ REQUIRES_STEMS = frozenset({
 # not vocabulary the world contains. ⚠ v9 PC-06 K-3 adds `OWN_STATE_STEMS`: no ledger answers a
 # person's sensitivity either (he answers it of himself, `OwnStateReader`), and WITNESS deposits no
 # claim about it, so no told or seen number can stand in for the one on the person.
-WORLD_ONLY_STEMS = frozenset({"with"}) | OWN_STATE_STEMS
+# ⚠ v9 IN-59 (b): `audience` is WORLD-ONLY for `with`'s reason -- who stands guarded where, who holds
+# what writ and who is sworn to whom NOW is the world's to decide, and a deposited stale reading would
+# let a belief open (or shut) a court.
+WORLD_ONLY_STEMS = frozenset({"with", "audience"}) | OWN_STATE_STEMS
 
 # THE STEMS A LEDGER CLAIM IS A *CELL* OF -- one `(subject, predicate)` slot that holds one value at a
 # time and can be re-asserted, so two claims on it agree or disagree (`decision/options.py::record`).
