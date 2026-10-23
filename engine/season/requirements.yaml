@@ -873,7 +873,8 @@ rows:
       reported it as a blocker on two cases. Split into six rows with typed preconditions built
       from the EXISTING closed grammar (no new form, operand or stem), four execute, one is
       always refused, and `thread_read` is not resolvable at all: it requires Thread Sensitivity
-      >= 30, which the closed `requires_operands` roster has no name for (`H-85`).
+      >= 30, which the closed `requires_operands` roster has no name for (`H-85`) -- until v9
+      PC-06 K-3, which types it over two own-state stems (no new operand).
       ⚠ **37 -> 38 AND 10 -> 11 EXECUTE, `release` (2026-09-11).** `04_CODE_ARCHITECTURE.md`
       §A.3 row 14 names it — *four closing verbs missing → one `release` verb, eligibility `own`,
       generic over kind* — and `registers/handoffs/architecture_meta_HANDOFF_NEXT.md` §2a rules the repair: *"The

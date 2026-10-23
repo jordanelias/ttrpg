@@ -69,7 +69,8 @@ from collections import Counter, defaultdict
 
 from ..data import cast, files
 from ..data import goals as goals_data
-from ..queries.world_q import RESIDE_KIND, ancestry, capacity, home_of as home_of_q, members, uncontrolled
+from ..queries.world_q import (RESIDE_KIND, ancestry, capacity, closed_uses, home_of as home_of_q, members,
+                                uncontrolled)
 from ..gaps import Forbidden, Unspecified
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
 from ..data.rosters import (BODY_FACTION, FACTIONS, FOREIGN_CAST, FOREIGN_SEATS, OFFICES_BY_HOLDER,
@@ -1033,6 +1034,10 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         # IN-08 H10: the religious affiliations, from the same row and NEVER drawn -- a drawn creed
         # is an invented one. No fallback: a row without `affiliations:` holds none (`{}`).
         w.persons[pid].conviction = cast.conviction_of(cast.row(cid) or {})
+        # v9 PC-06 K-3 (`H-85`): Thread Sensitivity, from the same row's `ts:`, set here and NEVER
+        # written in play. No fallback and no draw: a row with no authored value leaves `None`, and a
+        # `None` cannot pass `thread_read`'s gate (`Person.thread_sensitivity`'s comment).
+        w.persons[pid].thread_sensitivity = cast.thread_sensitivity_of(cast.row(cid) or {})
 
     # -- WHO BELONGS TO WHAT ----------------------------------------------------
     #
@@ -1678,7 +1683,13 @@ def census(w: World) -> dict:
             # Summed over REALM rungs: `terr_T16` is a root rung outside the realm (see `build_realm`), so
             # it is not counted.
             "uncontrolled_in_realm": sum(len(uncontrolled(w, r.id))
-                                            for r in w.rungs.values() if r.kind == "realm")}
+                                            for r in w.rungs.values() if r.kind == "realm"),
+            # v9 IN-35: the Calamity's effect per territory (`world_q.closed_uses`, a Query over band
+            # floors), its one reader -- `uncontrolled`'s precedent above: a report, not a rule. Each
+            # territory with a Site below a floor, and how many such Sites it holds.
+            "sites_below_a_floor_by_territory": {
+                r: n for r in sorted(w.rungs) if w.rungs[r].kind == "territory"
+                if (n := len(closed_uses(w, r)))}}
 
 
 def run(seasons: int = 1, seed: int = 0, cap: int | None = None, w: World | None = None) -> dict:

@@ -200,7 +200,14 @@ def test_h134_two_seats_are_two_acts_ids_opportunities_and_the_store():
 # on `Hh` (the question's plain referents; the row is untyped and carries no operand, `create_record`'s
 # shape). CONTROL: the same reading with `conceal`'s Candidates filtered out before `_acts` re-hashes to
 # `(66, 66, "e4d7ccf8...")` exactly (scratch, not kept).
-_CONTROL = (68, 68, "12f062cafafef977f3c10ca24d21690d726963e8a00753acc2ef17281b9d694a")
+# RE-PINNED AT v9 PC-06 K-3 (B-S, on 1023197b): 68 -> 66, `12f062ca...` -> `914b5298...`. Exactly the two
+# `thread_read` Candidates (and their two acts) leave and none is added: the row now carries a typed cell
+# over the person's own `thread_sensitivity`, `p_one` has no authored value (`None` reads UNKNOWN), and the
+# person-side own-state decline forms no Candidate it would refuse. CONTROL: the same reading with
+# `p_one.thread_sensitivity = 30` forms the two again (68, on `off_duke` and `Hh`), and with those two
+# Candidates' new `{subject, to}` operands and their acts' `to` stripped it re-hashes to
+# `(68, 68, "12f062ca...")` exactly; at 29 it reads 66 (scratch, not kept).
+_CONTROL = (66, 66, "914b52980bc0daee50bd81ec88b7d5c7a313839afae4d2be0f71fe2f7bcea603")
 
 
 def _control_reading():

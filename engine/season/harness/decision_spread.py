@@ -222,16 +222,13 @@ def projected_vector(p, fx) -> list:
 
 
 def territory_of(w, pid: str, homes: Optional[dict] = None) -> str:
-    """The first TERRITORY rung on the person's home ancestry (`containment.ancestry`, the one walk);
+    """The first TERRITORY rung on the person's home ancestry (`world_q.enclosing_territory`, the one walk);
     their home rung itself when none is a territory. `homes` is `world_q.home_of(w)` where the caller
     already holds it (a loop over persons), else it is read here -- the map is a scan of every tenure."""
     home = (world_q.home_of(w) if homes is None else homes).get(pid)
     if home is None:
         return "-"
-    for r in world_q.ancestry(w, home):
-        if w.rungs[r].kind == "territory":
-            return r
-    return home
+    return world_q.enclosing_territory(w, home) or home
 
 
 def profile_key(w, p) -> tuple:

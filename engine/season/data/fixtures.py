@@ -606,6 +606,14 @@ DEFAULT_FIXTURES = Fixtures(
     age_step=0.0,                      # v9 IN-34, swept 0 (control, SHIPPED) / test arms only
     illness_rate=0.0,                  # v9 IN-34, swept 0 (control, SHIPPED) / test arms only
     age_at_build=0,                    # v9 IN-34, a declared default (seasons old at tick 0)
+    # v9 IN-35 FORCE-HAZARD (#457 `:123-143`): THE LATTICE COUPLING WEIGHT -- the share, on
+    # `condition_scale`, of a Site's gap down to the weakest Site in its own or a bordering territory that
+    # it loses PER SEASON (SEAM-CLOCK, #457 `:174`: one unit, the season), added to its kind's wear in
+    # `loop/matter.py`'s wear loop. `0` is THE CONTROL, SHIPPED: the pass returns before reading any Site,
+    # so the season is today's (`body_step`'s and `age_step`'s shape). In [0, condition_scale]; outside it
+    # raises (`_lattice_strain`), since a share above the whole gap would overshoot the weakest neighbour.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-235 -- `site: Fixtures lattice_coupling`, graded `assumption`; #457 gives the coupling and no magnitude (its only rate is the retired scalar's -1 a year), so it is injected and swept 0 / 250 / 500]
+    lattice_coupling=0,                # `H-235`, swept 0 (control, SHIPPED) / 250 / 500
     # `W-E` / `H-123`. HOW MUCH BODY A WOUND COSTS WHEN THE SCENE SAYS THE SUBJECT BLED AND DID
     # NOT GO DOWN. Part E's `writes:` names the CELL and never the VALUE, and no in-chain document
     # supplies this one -- so it is declared, defaulted and swept rather than chosen in a body,
@@ -921,6 +929,17 @@ DEFAULT_FIXTURES = Fixtures(
     # which is stated, not hidden: it is observable at `2` and `3`, where a lone judge is refused.
     # [JUSTIFIED: engine/season/hole_register.yaml H-161 -- the bench quorum; the observable rules THAT a determination below quorum refuses, and no document gives the number for a bench-disposal arrangement, so it is injected and swept 1 / 2 / 3]
     bench_quorum=1,                    # `H-161`, swept 1 (SHIPPED, loosest) / 2 / 3
+    # `H-85` (v9 PC-06 K-3). THE THREAD SENSITIVITY A PERSON MUST HAVE TO ATTEMPT `thread_read` -- the
+    # RIGHT side of its `scalar_threshold` cell (`thread_sensitivity >= thread_sensitivity.gate`), read
+    # by `queries/person_q.py::OwnStateReader`'s gate stem, the only injection site, for the fold and
+    # the person alike; `bench_quorum`'s shape one row up. `30` is SHIPPED and its SOURCE is
+    # `fieldwork_v30.md` §4.2 (the Thread-Read row, *TS >= 30*), which is design prose and reference
+    # (`CLAUDE.md` §0.05): the source of the number, not the reason it is correct. `0` is the CONTROL:
+    # every AUTHORED value passes (the cast's three `ts: 0` rows included) and every unauthored one still
+    # refuses, which is what makes "`None` is not 0" observable. `50` is the tighter point, declared,
+    # not run. [ASSUMPTION; medium; Jordan to correct.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-239 -- `site: Fixtures thread_sensitivity_gate`, graded `assumption`; fieldwork_v30.md §4.2 gives TS >= 30 as design prose, which sources the number and does not make it correct, so it is injected and swept 0 / 30 / 50 (50 declared, not run)]
+    thread_sensitivity_gate=30,        # `H-239`, swept 0 (control) / 30 (SHIPPED) / 50 (declared, not run)
     # `H-156` (v9 IN-26, BOUND-PAPER). THE VERBS `decision/options.py::opening_set` FORMS NO CANDIDATE FOR
     # -- `H-156`'s option (a), *hold it out of formation*, as a switch rather than a row edit, so the hold
     # and its release are one value and the hand-built fold is untouched (a withheld verb still executes

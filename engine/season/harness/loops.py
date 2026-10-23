@@ -57,7 +57,7 @@ declared -- are printed too; a cycle through them is invisible to this check.
 
 PART (c) (`check_bounds`, pure). [ASSUMPTION: the looped quantity of a LOOP row is EACH quantity on
 its declared cycles that has a reader in `QUANTITY_READERS`, read at the end of every season and
-maximised over seasons and seeds.] No LOOP row's `default:` carries a number, so every bound is
+maximised over seasons and seeds.] No LOOP row's `default:` carries a numeric bound, so every bound is
 caller-supplied (`--bound ROW:QUANTITY=VALUE`): a reading with no bound prints UNCHECKED, never a
 pass. An amplifier with no LOOP row has no bound to read and is not observed here -- part (b) is what
 names it. Every numeric argument is required of the caller and none has a default
@@ -93,6 +93,8 @@ STEM_READS = {
     "condition":    (("Site.condition", "+"),),
     "floor":        (),                                   # `band_floors`, a fixture: written by none
     "quorum":       (),                                   # `bench_quorum`, a fixture
+    "thread_sensitivity":      (),                        # `Person.thread_sensitivity`: set at build, written by none (K-3)
+    "thread_sensitivity.gate": (),                        # `thread_sensitivity_gate`, a fixture
     "contain.path": _TENURE,
     "held_by":      (("Tenure.since", "+"), ("Tenure.until", "-")),
     "present_at":   _TENURE,
@@ -147,6 +149,10 @@ STEP_READS = (
     # loop/matter.py::matter -- `claim_decay`; emits `claim.decayed`
     Process("MATTER: claim decay", (("Claim.confidence", "+"),),
             (("Claim.confidence", "-"), (EVENT, "+")), "MAT"),
+    # loop/matter.py::_lattice_strain (v9 IN-35) -- a LOWER neighbour means MORE pull (`-`), and the
+    # pull is wear (`-`); emits through the wear write's `condition.worn`
+    Process("MATTER: lattice coupling", (("Site.condition", "-"),),
+            (("Site.condition", "-"), (EVENT, "+")), "MAT"),
 )
 
 #: Each LOOP row's cycle(s), as canonical quantity tuples (see `canonical`). The SIGN is the row's.
@@ -157,6 +163,8 @@ DECLARED_CYCLES = {
     "H-103": (("Claim.confidence",),),
     "H-104": (("Person.claim_ledger",),),
     "H-112": ((EVENT,),),
+    # the lattice coupling: a worn Site wears its neighbours, which wear theirs (v9 IN-35)
+    "H-235": (("Site.condition",),),
 }
 
 
@@ -413,7 +421,7 @@ def build_processes() -> tuple:
     declared = {_STEP_OF[p.step] for p in procs if p.step}
     blind = {"untyped_requires": untyped, "drift": drift,
              "undeclared_step_reads": sorted(writing_steps - declared)
-             + ["MATTER (every pass but claim decay)", "DELIBERATE (all but its question sources)",
+             + ["MATTER (every pass but claim decay and the lattice coupling)", "DELIBERATE (all but its question sources)",
                 f"WITNESS channels as one union, not per channel ({len(WITNESS_CHANNELS)} rostered)"]}
     return tuple(procs), blind
 

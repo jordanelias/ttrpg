@@ -573,7 +573,10 @@ def test_wa_an_unknown_predicate_stem_refuses_at_load():
         f"typed cells declare stem(s) outside REQUIRES_STEMS: {sorted(declared - REQUIRES_STEMS)}")
     # (b) every closed stem is one a reader actually dispatches on — else the roster grows
     #     entries nothing honours, which is the same defect one direction over.
-    src = _i.getsource(WorldReader) + _i.getsource(LedgerReader)
+    # v9 PC-06 K-3: `OwnStateReader` is the third reader -- `WorldReader` delegates `OWN_STATE_STEMS`
+    # to it, and it is the one that dispatches on `thread_sensitivity` and its gate.
+    from ..queries.person_q import OwnStateReader
+    src = _i.getsource(WorldReader) + _i.getsource(LedgerReader) + _i.getsource(OwnStateReader)
     unread = [st for st in REQUIRES_STEMS if f'"{st}"' not in src]
     assert not unread, (
         f"REQUIRES_STEMS declares {sorted(unread)}, which no reader dispatches on. A stem no "
@@ -885,14 +888,22 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     ⚠ 79 -> 81, v9 IN-12 step 5, TWO NEW LOAD-TIME REFUSALS in `verbs.py`, both loader invariant 6's
     CLOSER CLAUSE (#453 §8.2): a restraint kind no row's `domain:` declares, and a `domain:` naming a kind
     that needs no declared closer. Falsifier: `test_in12_arrest.py::
-    test_in12_5_the_closer_clause_is_green_only_while_pardon_declares_detain_and_ban` plants each."""
+    test_in12_5_the_closer_clause_is_green_only_while_pardon_declares_detain_and_ban` plants each.
+
+    ⚠ 81 -> 83, v9 PC-06 K-3, TWO NEW LOAD-TIME REFUSALS, both at import: `data/requires.py::
+    build_typed_requires` refuses a cell mixing `OWN_STATE_STEMS` with any other stem (the person's own
+    reading decides whether such a row forms, so an unanswerable conjunct would decline it for
+    everybody), and `queries/person_q.py` refuses an `OWN_STATE_STEMS` that `OwnStateReader` has no
+    branch for. Neither is reachable at run time. Falsifier for the first: `test_k3_thread_sensitivity.py::
+    test_k3_c_a_cell_mixing_an_own_state_stem_with_any_other_is_refused_at_load` plants the shipped
+    `thread_read` cell beside an `existence` conjunct and the load raises naming it."""
     mods = _model_modules()
     # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- see the sibling assertion above]
     assert len(mods) >= 8, f"model set collapsed to {len(mods)} — this guard would pass vacuously"
     total = sum(_code_only(m.read_text()).count("raise SystemExit") for m in mods)
     # [JUSTIFIED: a MEASURED PROPERTY OF THIS PACKAGE, not a game value -- the load-time refusals counted across the model set, and the point of pinning it is that a move must not drop one]
-    assert total == 81, (
-        f"{total} load-time exits across the model set, expected 81. Per file: "
+    assert total == 83, (
+        f"{total} load-time exits across the model set, expected 83. Per file: "
         + ", ".join(f"{m.name}={_code_only(m.read_text()).count('raise SystemExit')}"
                     for m in mods if _code_only(m.read_text()).count("raise SystemExit")))
 
@@ -7617,7 +7628,8 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # identical fact that keeps `work` refused two paragraphs above, and a fact about these
     # WORLDS rather than about the row. `thread_read` requires Thread Sensitivity >= 30, which
     # `requires_operands` has no name for (`H-85`), so it carries no typed cell and is not in
-    # `resolvable_verbs()` at all — which is what canon says of a character below the gate.
+    # `resolvable_verbs()` at all — which is what canon says of a character below the gate — until
+    # v9 PC-06 K-3, which types it over the actor's own Thread Sensitivity (`OWN_STATE_STEMS`).
     # ⚠ 10 -> 11, `release` (`04 §A.3` row 14, 2026-09-11), AND IT IS THE SECOND TIME THIS SET GREW
     # BY ADDING A VERB. `release` is generic over tenure kind and its `requires:` is read by a
     # registered predicate rather than a typed cell, so it binds `subject` from the question's
@@ -7890,7 +7902,7 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # refuses for the reason stated immediately above, reached from a different chain and a
     # different operand. Two verbs, one fact about these worlds: their questions are about rungs,
     # records, persons and claims, and never about a site. The other five investigation acts are
-    # not here — four execute and `thread_read` is not resolvable at all (`H-85`).
+    # not here — four execute and `thread_read` is not resolvable at all (`H-85`), until v9 PC-06 K-3.
     # ⚠ TWO -> THREE, `R8.1`, AND `dispatch` IS NOT THE SITE FACT: it needs a PERSON referent and
     # lost its one to a `seen` claim about a rung in hash order (traced above the `ever` assertion).
     # ⚠⚠ THREE -> TWO, POSITION `11a`, 2026-09-29: `examine` LEAVES, FOR THE REASON GIVEN AT THE
@@ -8999,11 +9011,15 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # ⚠ v9 IN-38 (`13`-rest): `dispatch` LEAVES, to `refused_only` (that note): attempted and refused in NPC-033
     # once its `cast:` overlay seats five; MEASURED at seed 0, the same case without the overlay as control.
     # A re-record, said so: 20 -> 19.
+    # ⚠ v9 PC-06 K-3: `thread_read` JOINS -- MEASURED by `python -m engine.season.harness.corpus_run` at
+    # seed 0 (`WHERE THE 56 GO`: 6 -> 5 with no predicate, 19 -> 20 never attempted; executed and
+    # always-refused unchanged). It is typed now (the Thread Sensitivity gate, `H-85`), and no corpus
+    # person carries a sensitivity (`build_at` reads no cast row), so nobody forms it. A re-record: 19 -> 20.
     assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish",
                                               "destroy_record", "march", "oblige", "open_case",
                                               "determine", "comply", "migrate", "requisition",
                                               "speak", "examine", "argue", "forgive",
-                                              "arrest", "pardon", "raze"}, (    # IN-57: `dispatch` out, to `refused_only`; FI-01: back; IN-38: out again
+                                              "arrest", "pardon", "raze", "thread_read"}, (    # IN-57: `dispatch` out, to `refused_only`; FI-01: back; IN-38: out again; K-3: `thread_read` in
         f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Five of "
         "the original six are the governance verbs no corpus overlay grants (`establish` is "
         "`remit:confer`-eligible); `march` is eligible in NPC-033/038 and WOULD form a real "
@@ -9638,11 +9654,25 @@ def test_wa_an_empty_ledger_is_unknown_for_every_form_and_the_candidate_still_fo
     # holds nothing here) -- neither is clause 4. DERIVED FROM THE FIXTURE AND THE ROSTER.
     from ..data.verbs import OWN_HOLD_DECLINES
     needs_held |= set(OWN_HOLD_DECLINES) | set(w.fixtures.get("withheld_verbs"))
+    # v9 PC-06 K-3: a row whose cell asks the actor's OWN STATE (`OWN_STATE_STEMS`, `thread_read`'s
+    # Thread Sensitivity) is declined by that state, not by clause 4 -- `p_low` carries no sensitivity.
+    # DERIVED FROM THE CELL'S STEMS; its control, below, is the same person once his own state admits it.
+    from ..data.requires import OWN_STATE_STEMS
+    own_state = {v for v, r in VERB_TABLE.items() if r.requires_typed is not None
+                 and OWN_STATE_STEMS & set(r.requires_typed.stems())}
+    assert own_state, "no row asks own state -- the exclusion below excludes nothing"
+    needs_held |= own_state
     typed_own = {v for v, r in VERB_TABLE.items()
                  if r.requires_typed is not None and person_side_eligible(p, r)} - needs_held
     assert typed_own <= offered, (
         f"{sorted(typed_own - offered)} were filtered out of the option set by a person who holds "
         "NO claims at all. Clause 4 is KNOWN-FALSE, not 'unproven'")
+    p.thread_sensitivity = w.fixtures.get("thread_sensitivity_gate")
+    regained = {c.verb for c in decision.opening_set(
+        p, View(p.id, [], w.fixtures.get("view_k"), q), q, w.fixtures)}
+    assert own_state <= regained, (
+        f"{sorted(own_state - regained)} did not form for a person whose own state passes it -- the "
+        "exclusion above is hiding a row that never forms")
 
 
 def test_wa_a_planted_claim_removes_transfer_and_a_larger_one_leaves_it():
@@ -10558,6 +10588,10 @@ def test_wc_the_fold_binds_what_the_person_bound():
     # walk, its `to` bound to the classed place; no plain-referent row forms on a class.
     q = Question("q:wc_agree", "need", ("S", "Hh"), classes=(("D", "Rung"),))
     v = View(p.id, [], w.fixtures.get("view_k"), q)
+    # v9 PC-06 K-3: `thread_read` forms only for a person whose own Thread Sensitivity passes its gate
+    # (`OWN_STATE_STEMS`), so `p_low` is given exactly the gate and the row stays in the walk -- its
+    # `actor`-of cell is then one more binding the equality below covers, rather than an exclusion.
+    p.thread_sensitivity = w.fixtures.get("thread_sensitivity_gate")
     # ⚠ THE WALK IS OVER TYPED VERBS AND THE SCOPE IS DECLARED RATHER THAN HIDDEN. An UNTYPED
     # verb's two bindings DO differ -- the person's is `{actor}` and the fold's is
     # `{actor, subject}`, because `_payload_of` always writes the subject and an untyped verb
@@ -11169,7 +11203,8 @@ def test_wb_a_refusals_reads_land_as_a_claim_that_contradicts_and_the_candidate_
     # THE DELTA ABOVE IS THE PROPERTY AND IT IS UNCHANGED — exactly one Candidate goes — so what
     # moved is the denominator, not the mechanism. `thread_read` is the sixth and does not form:
     # it carries no typed cell (`H-85`, Thread Sensitivity has no operand) and is therefore not in
-    # `resolvable_verbs()` at all.
+    # `resolvable_verbs()` at all — until v9 PC-06 K-3, after which it is typed and still does not
+    # form here, because no person in this world passes its gate.
     # ⚠ 27 -> 28, `release` (2026-09-11): one more resolvable verb forms one more Candidate on the
     # same referent. Same reading as the line above — the delta of one is untouched, 28 -> 27 with
     # the same single `transfer` drop, and the denominator is what moved.
@@ -11238,7 +11273,13 @@ def test_wb_a_refusals_reads_land_as_a_claim_that_contradicts_and_the_candidate_
     # RE-DERIVED, not adjusted: with `conceal` removed from `decision/options.py`'s `VERB_TABLE` in-process,
     # this test passes at (32, 31) unchanged.
     # [GROUNDED: measured at v9 IN-12 step 10 on 996c16dc + this change -- (33, 32) as built, (32, 31) with `conceal` removed; the drop `['transfer']` in both]
-    assert (len(before), len(after)) == (33, 32), (
+    # ⚠ 33 -> 32, v9 PC-06 K-3: the other direction. `thread_read` (eligibility `own`) had formed one
+    # Candidate on `S` while untyped (it was never offered: not resolvable); typed now over the actor's own
+    # Thread Sensitivity, it forms only for a person whose own reading passes the gate, and `p_low` carries
+    # none. The drop is still exactly `transfer`. RE-DERIVED, not adjusted: with `opening_set`'s own-state
+    # decline disabled in place, this test passes at (33, 32) unchanged.
+    # [GROUNDED: measured at v9 PC-06 K-3 on 26884a93 + this change -- (32, 31) as built, (33, 32) with the own-state decline disabled; the drop `['transfer']` in both]
+    assert (len(before), len(after)) == (32, 31), (
         f"the absolute counts moved to {(len(before), len(after))}. They are the denominator the "
         "delta above is read against, and the delta alone does not reproduce them — re-derive "
         "`H-122`'s reading rather than adjusting this line")

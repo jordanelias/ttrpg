@@ -705,6 +705,16 @@ class Person:
     # threshold 3 (`loop/resolve.py::_conviction_crisis`, IN-08 H13). Confliction is DERIVED
     # from it (`queries/person_q.py::confliction`), never stored here.
     conviction: dict = field(default_factory=dict)
+    # v9 PC-06 K-3 (`H-85`): THREAD SENSITIVITY, the design's one class-shaped gate (#353 §9.2), as a
+    # per-person whole number. Filled ONCE at world build from the cast's authored `ts:` key
+    # (`data/cast.py::thread_sensitivity_of`, `conviction_of`'s precedent) and NEVER WRITTEN IN PLAY,
+    # `born`'s precedent: it has no `write_matrix.yaml` row, so the gate refuses any write to it.
+    # `None` IS "NO AUTHORED VALUE", NOT 0: most cast rows carry `ts: null # [GAP]` and every corpus
+    # person carries no row at all, and a `None` reads UNKNOWN to the gate, which refuses -- so a
+    # person nobody screened cannot attempt, rather than reading 0 and passing a gate swept to 0. Its
+    # ONE READER is `queries/person_q.py::OwnStateReader` (the `thread_sensitivity` stem of
+    # `data/requires.py`), which both the fold's `WorldReader` and the person's own decline ask.
+    thread_sensitivity: Optional[int] = None
     travel_leg: list[str] = field(default_factory=list)
     # ⚠ W5 MOVED THE TENURE STORE HERE, and `Tenure`'s OWN DOCSTRING already said this: "S15 --
     # THE ONE EDGE. Owned by its SUBJECT (S15.1)." The class asserted the ownership and the
