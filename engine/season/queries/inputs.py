@@ -25,6 +25,13 @@ construct it and this leaf is the one host file a module may import
 
 v9 FI-02 + FI-03 (`SM-3`, `ED-FI-0002`) add the fieldwork container's pair, at the foot of the file:
 `TrailItem` and `FieldworkInput` in, `Findings` out -- the `inquiry` role's records, for the same reason.
+v9 IN-07 E1 adds the settlements module's larder records after them: `Eater`, `LarderInput` and `Under`
+in, `DrawRow`/`DrawRecord` out (built by `queries/world_q.py::larder_input` and `under_input`).
+v9 IN-07 E2 adds `SubsistInput` in, `SubsistOutcome`/`BodyFall` out, for `settlements.subsist`.
+v9 IN-07 E3 adds `ProduceInput` in, `ProduceRow`/`ProduceOutcome` out, for `settlements.produce`.
+v9 IN-07 E4..E6 add `HousingInput`/`Housing`, `FabricInput`/`Fabric` and `FortInput` (its entry returns a
+`float`), for `settlements.housing`, `settlements.fabric` and `settlements.fortification`.
+v9 IN-52 adds `ProvisionInput` in, `Provision` out, for `settlements.provision` (the levy-to-field feed).
 """
 from __future__ import annotations
 
@@ -190,3 +197,247 @@ class Findings:
     """What the fieldwork module's `find` returns, and the host adapter refuses anything else: per
     uncovered trail item, `(event id, the terms shown)`. Empty is a real answer -- nothing found."""
     found: tuple
+
+
+# ---------------------------------------------------------------------------
+# THE SETTLEMENTS MODULE'S LARDER RECORDS (v9 IN-07 E1; `proposals/2026-10-07-settlements-computation-
+# modules.md` §3 E1, intent only). Read by `modules/settlements/larder.py`'s two `query` entries; built
+# by `queries/world_q.py`'s projection builders, which also turn the output back into the public dict
+# shapes. ⚠ EVERY COLLECTION IS AN ORDERED TUPLE, NEVER A MAPPING: the order the draw debits a rung's
+# kinds reaches `Rung.stores`' insertion order, and that order reaches `World.content_hash()`.
+# ---------------------------------------------------------------------------
+
+@dataclass(frozen=True)
+class Eater:
+    """One housed person the larder draw considers: id, home rung, `Person.weight` and
+    `Person.is_cohort` -- the carrier's own predicate, handed in so the module never re-derives it."""
+    pid: str
+    home: str
+    weight: int
+    is_cohort: bool
+
+
+@dataclass(frozen=True)
+class LarderInput:
+    """What `settlements.larder_draw` reads, and nothing else. Built by
+    `queries/world_q.py::larder_input` from `World`:
+      * `weights` -- `subsistence_weight`, `((kind, weight), ...)` sorted by kind;
+      * `eaters`  -- every housed person (`home_of`), `Eater`s sorted by pid, cohort or not;
+      * `ladders` -- `((home, (rung, parent, ...)), ...)`: each COHORT eater's home's containment
+                     ancestry (only a cohort eats, so no other home is projected), the home first, cut at
+                     the first id that is not a rung;
+      * `stores`  -- `((rung, ((kind, units), ...)), ...)` for every rung on a cohort ladder, each in its
+                     own `Rung.stores` order. An eater whose home has no ladder here draws from nothing,
+                     so the cohort exemption (`larder_draw`'s) and this projection must agree."""
+    weights: tuple
+    eaters: tuple
+    ladders: tuple
+    stores: tuple
+
+
+@dataclass(frozen=True)
+class DrawRow:
+    """One eater's draw: `cells` is `((kind, want, take, source or None), ...)` in kind order."""
+    pid: str
+    home: str
+    cells: tuple
+
+
+@dataclass(frozen=True)
+class DrawRecord:
+    """What `settlements.larder_draw` returns: one `DrawRow` per eating cohort, in pid order."""
+    rows: tuple
+
+
+@dataclass(frozen=True)
+class Under:
+    """What `settlements.drawn_under` reads: a draw, the subtree (`world_q._subtree`) whose homes
+    count, and the column summed -- `"want"` (`demanded`) or `"take"` (`delivered`)."""
+    record: DrawRecord
+    subtree: frozenset
+    column: str
+
+
+# v9 IN-07 E2: the `settlements.subsist` step_call's records -- one season's subsistence ledger. Built by
+# `queries/world_q.py::subsist_input`, read by `modules/settlements/subsist.py`, interpreted by MATTER
+# (`loop/matter.py`), which makes every write from the outcome.
+
+@dataclass(frozen=True)
+class SubsistInput:
+    """What `settlements.subsist` reads, and nothing else. Built by `queries/world_q.py::subsist_input`:
+      * `larder`    -- the `LarderInput` the draw reads (`larder_input`'s projection, unchanged);
+      * `chains`    -- `((home, (home, parent, ..., root)), ...)` per COHORT home, sorted: each home's whole
+                       containment ancestry (`ancestry`), NOT cut at a non-rung as a ladder is. A drained
+                       rung's gap counts the eaters whose chain passes through it -- `_subtree`'s
+                       membership read from the other end on a single-parent containment tree (every
+                       builder's; `World.add_tenure` checks ascent, not uniqueness, and `parent_of`
+                       takes the first live edge), which is what `demanded`/`delivered` sum;
+      * `body_step` -- the `body_step` fixture: body lost per unit short (`0` is the control arm);
+      * `bodies`    -- `((pid, Person.body), ...)` for every eater in `larder.eaters`, sorted by pid."""
+    larder: LarderInput
+    chains: tuple
+    body_step: int
+    bodies: tuple
+
+
+@dataclass(frozen=True)
+class BodyFall:
+    """One body the season's dearth falls: who, and the body it falls to (`max(0, body - lost)`); the
+    host reads death as `body_after <= 0`."""
+    pid: str
+    body_after: int
+
+
+@dataclass(frozen=True)
+class SubsistOutcome:
+    """What `settlements.subsist` returns. Every collection is an ordered tuple:
+      * `draw`            -- the `DrawRecord` (`settlements.larder_draw`'s, the same rule);
+      * `short_by_person` -- `((pid, ((kind, units), ...)), ...)`, pid order then kind order;
+      * `shortfalls`      -- `((rung, ((kind, units), ...)), ...)`: each drained rung (sorted) with its
+                             subtree's positive gap per kind it ran out of (sorted), `want - take` summed;
+      * `falls`           -- `BodyFall`s, pid order, only where the loss is `> 0`;
+      * `larder_after`    -- `((rung, ((kind, units), ...)), ...)`, sorted rung, changed rungs only; kinds
+                             in the order the draw first debited them (it reaches `Rung.stores`' order)."""
+    draw: DrawRecord
+    short_by_person: tuple
+    shortfalls: tuple
+    falls: tuple
+    larder_after: tuple
+
+
+# v9 IN-07 E3: the `settlements.produce` step_call's records -- one season's yield and credit. Built by
+# `queries/world_q.py::produce_input`, read by `modules/settlements/produce.py`, interpreted by MATTER
+# (`loop/matter.py`), which makes the `yield` and `stores` writes from the outcome.
+
+@dataclass(frozen=True)
+class ProduceInput:
+    """What `settlements.produce` reads, and nothing else. Built by `queries/world_q.py::produce_input`:
+      * `table`        -- `((site_kind, ((kind, base), ...)), ...)`: `SITE_YIELD`, each kind's bases in
+                          its table order (that order reaches `Rung.stores`' key order);
+      * `scale`        -- the `condition_scale` fixture, as MATTER read it;
+      * `factor`       -- this season's `world_q.season_factor_of`, as MATTER read it (one draw a season);
+      * `sites`        -- `((site_id, site_kind, rung, condition), ...)`, every Site sorted by id;
+      * `stores`       -- `((rung, ((kind, units), ...)), ...)`, every rung a Site stands on, sorted,
+                          each in its own `Rung.stores` order, read BEFORE this season's debit is written;
+      * `larder_after` -- `SubsistOutcome.larder_after` (E2): the debited rungs and kinds only. The module
+                          overlays it on `stores`, because MATTER credits a rung after that rung's debit."""
+    table: tuple
+    scale: object
+    factor: object
+    sites: tuple
+    stores: tuple
+    larder_after: tuple
+
+
+@dataclass(frozen=True)
+class ProduceRow:
+    """One producing rung: `produced` is its `yield` (`((kind, units), ...)`, nonzero only, site order
+    then table order) and `credited` the stores it is written to (`((kind, held + produced), ...)`, in
+    `produced`'s order, `held` read after the same rung's debit)."""
+    rung: str
+    produced: tuple
+    credited: tuple
+
+
+@dataclass(frozen=True)
+class ProduceOutcome:
+    """What `settlements.produce` returns: `rows`, one `ProduceRow` per rung with a nonzero yield, sorted."""
+    rows: tuple
+
+
+# v9 IN-07 E4..E6: the settlements module's three one-line `query` entries -- housing, a fabric's bound
+# and share, a settlement's walls. Built by `queries/world_q.py`'s projection builders (one per half:
+# `_housing_population_input`/`_housing_capacity_input`, `_fabric_ceiling_input`/`_fabric_share_input`;
+# and `fort_input`), read by `modules/settlements/housing.py`, `fabric.py` and
+# `fortification.py`; the public wrappers (`population`, `capacity`, `ceiling`, `share`,
+# `fortification_of`) read the output back. ⚠ A HALF LEFT `None` WAS NOT PROJECTED: one record serves two
+# public names (E4: `population` and `capacity`; E5: `ceiling` and `share`), and each wrapper projects only
+# the half it reads, so it pays the scans, `TRACE.query` rows and fixture reads its old body paid and no
+# more (`residence_of` traces, `presence` traces, `Fixtures.reads` reaches `harness/corpus_run.py`'s
+# report). The module answers `None` for a half it was not given.
+
+@dataclass(frozen=True)
+class HousingInput:
+    """What `settlements.housing` reads. Built by `queries/world_q.py::_housing_population_input` / `_housing_capacity_input`:
+      * `subtree`        -- the rung and everything under it (`world_q._subtree`);
+      * `residents`      -- `((pid, residence rung, Person.weight), ...)`, every `residence_of` entry in
+                            its own order; `None` when `capacity` asks;
+      * `dwelling_rungs` -- `(rung, ...)`: each `dwelling` Site's own `rung`, one entry per Site, in
+                            `World.sites` order; `None` when `population` asks;
+      * `floor`          -- `capacity_floor[dwelling]` (`ED-SE-0051`); `None` when `population` asks."""
+    subtree: frozenset
+    residents: Optional[tuple]
+    dwelling_rungs: Optional[tuple]
+    floor: Optional[int]
+
+
+@dataclass(frozen=True)
+class Housing:
+    """What `settlements.housing` returns: the subtree's `population` (summed resident weight) and its
+    `capacity` (dwellings floored); either is `None` when its half was not projected."""
+    population: Optional[int]
+    capacity: Optional[int]
+
+
+@dataclass(frozen=True)
+class FabricInput:
+    """What `settlements.fabric` reads. Built by `queries/world_q.py::_fabric_ceiling_input` / `_fabric_share_input`:
+      * `scale`      -- the `condition_scale` fixture; `None` when `share` asks;
+      * `live_works` -- how many live works name the site (`works_for`; the host refuses two, A6);
+      * `declared`   -- that works' declared terms (`len(stages)`), `0` with no live works;
+      * `matured`    -- its ripened terms (`matured_terms`, a log scan), counted only when `declared > 0`
+                        (`0` otherwise, unread), so the scan is paid exactly where it was;
+      * `present`    -- how many persons stand at the site's rung (`len(presence)`); `None` when
+                        `ceiling` asks. The first four are `None` when `share` asks."""
+    scale: Optional[int]
+    live_works: Optional[int]
+    declared: Optional[int]
+    matured: Optional[int]
+    present: Optional[int]
+
+
+@dataclass(frozen=True)
+class Fabric:
+    """What `settlements.fabric` returns: `ceiling` (the bound on the fabric's rise) and `share`
+    (`(1, n)`, the commons ratio); either is `None` when its half was not projected."""
+    ceiling: Optional[int]
+    share: Optional[tuple]
+
+
+@dataclass(frozen=True)
+class FortInput:
+    """What `settlements.fortification` reads. Built by `queries/world_q.py::fort_input`:
+      * `conditions` -- `(Site.condition, ...)` of every `garrison` Site in the subtree, `World.sites` order;
+      * `scale`      -- the `condition_scale` fixture, read only when `conditions` is non-empty (the old
+                        body's read), else `None`. The entry returns a bare `float`."""
+    conditions: tuple
+    scale: Optional[int]
+
+
+# v9 IN-52: the `settlements.provision` query's records -- the levy-to-field feed. Built per side by
+# `seam/wrappers/mass_battle.py::provision_input`, read by `modules/settlements/provision.py`; the field
+# adapter hands `troops` to the mass-battle entry and `_eff_march` debits `consumed` from the treasury.
+
+@dataclass(frozen=True)
+class ProvisionInput:
+    """What `settlements.provision` reads, and nothing else. Built by
+    `seam/wrappers/mass_battle.py::provision_input`, once per side:
+      * `weight` -- the side's Σ `Person.weight` (what the field fields today);
+      * `stores` -- `((kind, units), ...)`: the side's treasury, in its own `Rung.stores` order, `()`
+                    for a side with no treasury rung;
+      * `ration` -- `((kind, units per weight), ...)`: the `subsistence_weight` fixture, sorted by kind --
+                    the larder's own ladder, so a field eats as the people it is made of eat;
+      * `on`     -- the `field_provisioning` fixture. `False` is the control arm, today's field."""
+    weight: int
+    stores: tuple
+    ration: tuple
+    on: bool
+
+
+@dataclass(frozen=True)
+class Provision:
+    """What `settlements.provision` returns: `troops`, the side's fielded troops, and `consumed`,
+    `((kind, units), ...)` in `ration` order, what fielding them eats from the treasury (`()` when the
+    arm is off)."""
+    troops: int
+    consumed: tuple

@@ -271,9 +271,14 @@ class SeasonDriver:
         # (and its converse). `manifest/registrar.py` and `manifest/registry.py` hold the rules.
         from ..manifest import (
             check_contest_prizes, check_effects, check_graded_inquiries, check_inquiry_modules,
-            check_preconditions, check_rows, register_module_entries,
+            check_preconditions, check_rows, register_module_entries, require_entries,
         )
         register_module_entries(VERB_TABLE)
+        # v9 IN-07: the host's declared needs, held against the table just filled -- the refusal a
+        # deleted role-less row (a `query` or `step_call` no role roster names) meets in a fresh
+        # process. The `query` entries `world_q` declares (E1, E4-E6, IN-52's `provision`), and the
+        # step_calls MATTER calls (E2, E3).
+        require_entries(world_q.QUERY_ENTRIES + MATTER_STEP_CALLS)
         check_rows()
         check_contest_prizes(VERB_TABLE)
         check_graded_inquiries(VERB_TABLE)
@@ -558,7 +563,7 @@ from .calendar import calendar                                            # noqa
 from .census import census                                                # noqa: E402
 from .deliberate import deliberate                                        # noqa: E402
 from .encounter import encounter                                         # noqa: E402
-from .matter import matter                                               # noqa: E402
+from .matter import STEP_CALLS as MATTER_STEP_CALLS, matter              # noqa: E402
 from .resolve import (_admits, _apply_write, _contest, _eligible, _fold,  # noqa: E402
                        _grade, _occasion_ids, _survives, resolve)
 from .witness import witness                                              # noqa: E402

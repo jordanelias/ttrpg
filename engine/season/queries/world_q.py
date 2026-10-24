@@ -88,6 +88,12 @@ from ..state.gate import sworn_to
 from ..state.ids import H, ROOT, draw_factory
 from ..state.world import World
 from ..trace_log import TRACE
+# v9 IN-07 E1: the `settlements` module's records (the one host leaf a module imports) and the
+# role-string resolver its entries are reached through. Neither pulls in module code at import.
+from .inputs import (DrawRecord, DrawRow, Eater, FabricInput, FortInput, HousingInput, LarderInput,
+                     ProduceInput, SubsistInput, Under)
+from ..data.fixtures import SITE_YIELD
+from engine.substrate import composition
 
 
 # ===========================================================================
@@ -409,21 +415,12 @@ def ceiling(w: World, site: Site) -> int:
     total)`, which would LOWER a standing fabric the moment a works naming it was declared (0 terms
     ripe: ceiling 0) and any delta was staged. The fold's one clamp (`loop/resolve.py::resolve`)
     therefore takes `max(condition, ceiling)` as its upper bound: a ceiling below a fabric's
-    condition stops it rising, and takes nothing away that stands."""
-    scale = w.fixtures.get("condition_scale")
-    live = works_for(w, site.rung, site.kind)
-    if len(live) > 1:
-        raise Forbidden(
-            f"{len(live)} live works plan a {site.kind!r} at {site.rung!r}: "
-            f"{[r.id for r in live]}", "S15",
-            law="r2 04 §A.6.3 -- one works per target, `hold_force`'s cardinality reading one "
-                "object up; `create_record` declines a second, so this world was built by hand")
-    if not live:
-        return scale
-    declared = len(live[0].stages)
-    if declared == 0:
-        return scale
-    return scale * min(matured_terms(w, live[0].id), declared) // declared
+    condition stops it rising, and takes nothing away that stands.
+
+    ⚠ THE ARITHMETIC IS THE `settlements` MODULE'S (v9 IN-07 E5, A-25): `settlements.fabric`
+    (`modules/settlements/fabric.py`, `entry: query`). This wrapper projects the ceiling half
+    (`_fabric_ceiling_input`, which keeps the two-live-works `Forbidden`, design A6)."""
+    return _entry(FABRIC)(_fabric_ceiling_input(w, site)).ceiling
 
 
 def share(w: World, site: Site) -> tuple:
@@ -439,8 +436,38 @@ def share(w: World, site: Site) -> tuple:
     `proposals/2026-08-31-ideal/10_SUPERSEDING.md:1275-1279`). ⚠ r2 DECLARES A SWEEP
     (`presence_reciprocal, holders_reciprocal, one`) and it is NOT built: a sweep is a fixture with a
     register row, and no measurement here needs a second arm yet -- the shape is ruled, the reading
-    is the default, and `H-164` carries the unbuilt arms."""
-    return (1, max(1, len(presence(w, site.rung))))
+    is the default, and `H-164` carries the unbuilt arms.
+
+    The ratio is `settlements.fabric`'s (v9 IN-07 E5); this wrapper projects the share half
+    (`_fabric_share_input`)."""
+    return _entry(FABRIC)(_fabric_share_input(w, site)).share
+
+
+def _fabric_share_input(w: World, site: Site) -> FabricInput:
+    """THE SHARE HALF of the projection `settlements.fabric` reads (v9 IN-07 E5): `presence` at the
+    site's rung (which traces), and nothing else, so `share` pays only its old body's reads. The
+    ceiling half is `None`."""
+    return FabricInput(scale=None, live_works=None, declared=None, matured=None,
+                       present=len(presence(w, site.rung)))
+
+
+def _fabric_ceiling_input(w: World, site: Site) -> FabricInput:
+    """THE CEILING HALF of the projection `settlements.fabric` reads (v9 IN-07 E5), so `ceiling` pays
+    only its old body's reads: `condition_scale`, `works_for` (refusing two live works, A6), the works'
+    declared terms and -- only when it declares any -- `matured_terms`' log scan. `live_works` is
+    always an int here, which is how the module tells this half was projected. The share half is
+    `None`."""
+    scale = w.fixtures.get("condition_scale")
+    live = works_for(w, site.rung, site.kind)
+    if len(live) > 1:
+        raise Forbidden(
+            f"{len(live)} live works plan a {site.kind!r} at {site.rung!r}: "
+            f"{[r.id for r in live]}", "S15",
+            law="r2 04 §A.6.3 -- one works per target, `hold_force`'s cardinality reading one "
+                "object up; `create_record` declines a second, so this world was built by hand")
+    declared = len(live[0].stages) if live else 0
+    matured = matured_terms(w, live[0].id) if declared else 0
+    return FabricInput(scale, len(live), declared, matured, present=None)
 
 
 def judging_set(w: World, venue: str, matter: Optional[str] = None) -> list[str]:
@@ -906,55 +933,6 @@ def named(c) -> tuple:
     return tuple(ids) if ids else ()
 
 
-def nearest_store(w: World, rung_id: Optional[str], kind: str,
-                  available: Optional[dict] = None) -> Optional[str]:
-    """THE LARDER LADDER: the nearest rung AT OR ABOVE `rung_id` holding any `kind`, or `None`.
-
-    ⚠⚠ IT EXISTS BECAUSE THE SUBSISTENCE ECONOMY IS TWO HALVES THAT NEVER MEET. MEASURED on
-    `build_realm(0)` after one season, before this Query: **4,810 units, every one of them at the
-    37 SETTLEMENT rungs and none at the 211 hearths**, while all 46 persons live in **26 hearths**
-    — so `matter`'s per-rung draw counted **zero eaters at every rung that had stores** and the
-    whole subsistence step was INERT on a world that runs. The walk is the join, and it moves no
-    matter and creates no store: a person reaches UP the ladder they already live on.
-
-    ⚠ IT RETURNS THE RUNG ITSELF WHERE THE RUNG HAS STOCK, which is what makes this a
-    GENERALISATION rather than a replacement. A hearth with its own larder feeds its own people
-    exactly as before; the walk is a no-op wherever the old per-rung code was already right. That
-    is the control `LB-3a` pairs with, and if it ever moves, the walk is not a generalisation.
-
-    ⚠ `None` AT THE ROOT IS A SHORTFALL, NEVER AN ERROR. A person under a realm that holds nothing
-    goes hungry, and hunger is a fact about the world; raising here would make an empty larder an
-    instrument defect. What the caller does with it is the caller's — today MATTER records it and
-    acts on nothing (L5: a threshold crossing MAY NEVER PRODUCE AN OUTCOME).
-
-    ⚠ `available` IS THE CALLER'S RUNNING VIEW DURING ONE DRAW, and it is the reason two eaters
-    cannot spend the same unit. `{(rung_id, kind): units_left}`; absent, the world's own stores
-    answer. Without it a caller that defers its writes — as MATTER must, because the gate applies
-    the write — would show every eater the FULL larder and scarcity would never bind, which is the
-    exact defect `loop/effects.py`'s own header names for `transfer` (*"`transfer` twice from a
-    one-unit larder succeeds twice: the scarcity §27.1 rests on never happens"*).
-
-    ⚠ ITERATIVE WITH A VISITED SET, on `descendants`'s precedent (S38.1). `contain_ascends` makes
-    the ladder strictly ascending at `add_tenure`, so a cycle should be unreachable — but a walk
-    that hangs on a malformed fixture is a worse failure than one that stops, and the guard costs
-    one set."""
-    TRACE.query("nearest_store", "resolver")
-    seen: set = set()
-    cur = rung_id
-    while cur is not None and cur in w.rungs and cur not in seen:
-        seen.add(cur)
-        if available is not None:
-            held = available.get((cur, kind))
-            if held is None:
-                held = (w.rungs[cur].stores or {}).get(kind, 0)
-        else:
-            held = (w.rungs[cur].stores or {}).get(kind, 0)
-        if held > 0:
-            return cur
-        cur = parent_of(w, cur)
-    return None
-
-
 def season_of_year(w: World) -> Optional[int]:
     """v9 IN-21: which season of the year `w.tick` falls in, or `None` when no year is declared. The
     year is the length of `season_factor_draw`'s table (one entry per season, in order), so the
@@ -1029,9 +1007,10 @@ def subsistence_draw(w: World) -> dict:
     ⚠ EXTRACTED FROM MATTER, NOT WRITTEN BESIDE IT. `loop/matter.py`'s larder pass (item 3a) did
     exactly this arithmetic inline, and `demanded`/`delivered` below need the same arithmetic. With
     two copies of *what an eater wants, and what the walk gives them*, MATTER could feed a person
-    whom the Queries report as hungry (§8). MATTER now calls this and derives its writes and its
-    `_subsistence_shortfall` from the record; the two Queries sum it over a subtree. So there is
-    one owner, and the Queries cannot disagree with the draw that actually runs.
+    whom the Queries report as hungry (§8). MATTER calls `settlements.subsist` (`subsist_input`), which
+    runs the same `larder_draw`; this projection serves tests and bare-world callers, and the two Queries
+    sum it over a subtree. So there is one owner, and the Queries cannot disagree with the draw that
+    actually runs.
 
     ⚠⚠ ONLY A COHORT EATS (plan position `24f`, `ED-IN-0255`, Jordan 2026-09-18: *"NPC synecdoches
     that just represent the overall population affected ... i don't think having lords and guild
@@ -1052,53 +1031,143 @@ def subsistence_draw(w: World) -> dict:
     Queries would then report a hunger the draw no longer feeds); keeping the individual in the
     record at `want = 0` (a row that can never be short is noise every reader must skip).
 
-    THE ARITHMETIC IS ITEM 3a's, UNCHANGED, and every clause keeps its reason (see MATTER's pass):
-      * per housed COHORT (`home_of`), in SORTED id order: the write order must be deterministic;
-      * per `subsistence_weight` kind, SORTED: `want = weight x Person.weight`, skipped when `<= 0`.
-        `Person.weight` is the cohort multiplier, *"A COHORT IS A PERSON AT weight > 1"*, so a
-        synecdoche of two hundred wants what two hundred eat (`24f`'s territorial quantity is this);
-      * the source is `nearest_store` over the RUNNING view `left`, so two eaters cannot spend the
-        same unit (`nearest_store`'s own `available` paragraph);
-      * `take = min(want, held)`, and the remainder is NOT walked further up. `source None` means
-        no rung at or above the home holds any of that kind.
-    No weights registered gives `{}`, which is MATTER's own `if weights:`.
+    ⚠ THE ARITHMETIC IS THE `settlements` MODULE'S (v9 IN-07 E1, A-25): `settlements.larder_draw`
+    (`modules/settlements/larder.py`, `entry: query`) owns the cohort exemption, the walk up the
+    ladder over the running view, and `take = min(want, held)`; its docstring keeps every clause's
+    reason. This is the host half: `larder_input` projects `World` into the typed record, the entry
+    computes, and this turns the `DrawRecord` back into the dict shape its callers read, row order
+    and kind order kept (both reach `Rung.stores`' insertion order, and so the content hash).
 
     ⚠ IT DOES NOT `TRACE`, on `ancestry`'s rule: a helper extracted to remove duplication must be
-    INVISIBLE to its callers. The `home_of` and per-eater `nearest_store` calls inside it trace
-    exactly as MATTER's inline loop did, in the same order, so MATTER's trace and every committed
-    artifact are unchanged by the extraction. MEASURED at `19d`: the regenerated `runs/` are
-    byte-identical, and so are four worlds' content hashes, event counts and claim counts
-    (`headless`, `governance_spine`, `tiny_world`, `populated.build_realm(0)`). The in-tree control
-    is `test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte`."""
+    INVISIBLE to its callers. The `home_of` call inside it traces as MATTER's inline loop did. The
+    per-eater `nearest_store` rows the walk used to trace are gone with the walk (IN-07 E1's
+    assumption A4: no committed artifact carries one, and
+    `test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte` is the control), and the
+    `demanded`, `delivered` and `descendants` rows MATTER traced per drained rung (the gap is now
+    `settlements.subsist`'s, untraced)."""
+    return _draw_dict(_entry(LARDER_DRAW)(larder_input(w)))
+
+
+#: v9 IN-07 E1: the module entries this file calls, `(role, entry kind)`. THE HOST'S HALF OF *"two
+#: owners say which module is called"*: the composition row says WHICH module provides a role, and
+#: this says the host NEEDS it. `manifest/registrar.py::require_entries` refuses at driver
+#: construction a role here that `MODULE_ENTRIES` does not hold, or holds under another kind -- the
+#: refusal a deleted or stripped `query` row would otherwise never meet in a fresh process, since no
+#: role roster names these rows (`proposals/2026-10-07-unplugged-systems-replug.md` §4).
+LARDER_DRAW = "settlements.larder_draw"
+DRAWN_UNDER = "settlements.drawn_under"
+#: v9 IN-07 E4..E6: `population`/`capacity`, `ceiling`/`share` and `fortification_of`'s rules. One role
+#: per pair of public names, each returning both halves (`queries/inputs.py`'s E4..E6 records).
+HOUSING = "settlements.housing"
+FABRIC = "settlements.fabric"
+FORTIFICATION = "settlements.fortification"
+#: v9 IN-52: the levy-to-field feed's query. Its caller is the field adapter
+#: (`seam/wrappers/mass_battle.py::resolve`, which reads the role from here), not a wrapper in this file;
+#: it is declared here so the one host need the driver checks stays one tuple.
+PROVISION = "settlements.provision"
+QUERY_ENTRIES = ((LARDER_DRAW, "query"), (DRAWN_UNDER, "query"), (HOUSING, "query"),
+                 (FABRIC, "query"), (FORTIFICATION, "query"), (PROVISION, "query"))
+
+
+def _entry(role: str):
+    """A module entry by role string, through `composition.require` (cached per process). Not
+    `MODULE_ENTRIES`: `subsistence_draw`, `demanded`, `delivered` and `capacity` have driverless callers
+    (`harness/populated.py`: `capacity` at world-gen; tests on a bare world), and the table fills only
+    at driver construction."""
+    return composition.require(role)
+
+
+def larder_input(w: World) -> LarderInput:
+    """THE PROJECTION `settlements.larder_draw` reads: the weights, every housed person, each home's
+    ladder and the stores on it. Read-only.
+
+      * `eaters` are every person `home_of` houses, in sorted id order, cohort or not -- the module
+        applies the exemption and the carrier supplies `is_cohort` (`Person.is_cohort`, S9).
+      * a ladder is `ancestry(home)` cut at the first id that is not a rung, which is where the old
+        walk stopped (`ancestry` itself returns `[id]` for an unknown id); one per cohort eater's home.
+      * `stores` is each ladder rung's `Rung.stores` in its own order (`None` read as empty).
+    No weights registered projects no eaters and calls no `home_of`, so the trace is MATTER's
+    `if weights:` as it was."""
+    return _larder_parts(w)[0]
+
+
+def _larder_parts(w: World) -> tuple:
+    """`(LarderInput, chains)`: `larder_input`'s projection and, from the same `ancestry` walks, each
+    COHORT home's whole chain uncut (`SubsistInput.chains`, IN-07 E2). It calls `home_of` once and walks
+    only the homes a cohort eater lives at: every eater stays in `eaters` (the module applies the
+    exemption), but `larder_draw` skips a non-cohort eater and `subsist` reads `chains` and `stores` only
+    for the cohort rows and the rungs they debit, so a ladder for any other home is never read."""
     weights = w.fixtures.get("subsistence_weight")
-    out: dict = {}
     if not weights:
-        return out
+        return LarderInput((), (), (), ()), ()
     homes = home_of(w)
-    left: dict = {}           # (rung, kind) -> units still unspent this draw
+    eaters, ladders, chains, stores, seen = [], [], [], [], set()
     for pid in sorted(homes):
         person = w.persons[pid]
-        if not person.is_cohort:
-            continue                  # `24f`: the individual does not eat from the larder (above)
-        row: dict = {}
-        # `H-11`'s rule, unchanged: the loop is over the WEIGHTS registry, so a kind with no weight
-        # is not drawn at all -- a missing row is never read as a weight of zero.
-        for k, wt in sorted(weights.items()):
-            want = wt * person.weight
-            if want <= 0:
-                continue
-            src = nearest_store(w, homes[pid], k, available=left)
-            if src is None:
-                row[k] = (want, 0, None)
-                continue
-            held = left.get((src, k))
-            if held is None:
-                held = (w.rungs[src].stores or {}).get(k, 0)
-            take = min(want, held)
-            left[(src, k)] = held - take
-            row[k] = (want, take, src)
-        out[pid] = (homes[pid], row)
-    return out
+        eaters.append(Eater(pid, homes[pid], person.weight, person.is_cohort))
+    for home in sorted({h for pid, h in homes.items() if w.persons[pid].is_cohort}):
+        chain = tuple(ancestry(w, home))
+        ladder = []
+        for rid in chain:
+            if rid not in w.rungs:
+                break
+            ladder.append(rid)
+            if rid not in seen:
+                seen.add(rid)
+                stores.append((rid, tuple((w.rungs[rid].stores or {}).items())))
+        ladders.append((home, tuple(ladder)))
+        chains.append((home, chain))
+    return (LarderInput(tuple(sorted(weights.items())), tuple(eaters), tuple(ladders), tuple(stores)),
+            tuple(chains))
+
+
+def subsist_input(w: World) -> SubsistInput:
+    """THE PROJECTION `settlements.subsist` reads (v9 IN-07 E2): the larder projection, each home's
+    chain, the `body_step` fixture and every eater's `Person.body`. Read-only; it writes nothing and
+    traces what `larder_input` traces (`home_of`), so MATTER's trace is the draw's, less those rows (the
+    `demanded`, `delivered` and `descendants` rows `subsistence_draw`'s A4 note names). MATTER calls the
+    entry with it once a season and makes every write from the outcome."""
+    larder, chains = _larder_parts(w)
+    return SubsistInput(larder, chains, w.fixtures.get("body_step"),
+                        tuple((e.pid, w.persons[e.pid].body) for e in larder.eaters))
+
+
+def produce_input(w: World, scale, factor, larder_after: tuple) -> ProduceInput:
+    """THE PROJECTION `settlements.produce` reads (v9 IN-07 E3): the `SITE_YIELD` table, every Site
+    (sorted by id) with its kind, own `rung` and `condition`, and the stores as they stand of every
+    rung some Site stands on (a rung with no Site yields nothing, and a Site's rung that is not in
+    `w.rungs` was never iterated) -- read by MATTER BEFORE its per-rung loop writes this season's
+    debit, so the module overlays `larder_after` (`SubsistOutcome.larder_after`, E2) itself. `scale`
+    and `factor` are MATTER's own reads (`condition_scale`, `season_factor_of`'s one draw a season),
+    handed through unchanged. Read-only; it writes and traces nothing."""
+    return ProduceInput(
+        tuple((site_kind, tuple((bases or {}).items())) for site_kind, bases in SITE_YIELD.items()),
+        scale, factor,
+        tuple((s.id, s.kind, s.rung, s.condition) for s in sorted(w.sites.values(), key=lambda x: x.id)),
+        tuple((rid, tuple((w.rungs[rid].stores or {}).items()))
+              for rid in sorted({s.rung for s in w.sites.values()} & w.rungs.keys())),
+        larder_after)
+
+
+def _draw_dict(record: DrawRecord) -> dict:
+    """`DrawRecord` -> `{pid: (home, {kind: (want, take, source)})}`, in the record's order."""
+    return {r.pid: (r.home, {k: (want, take, src) for k, want, take, src in r.cells})
+            for r in record.rows}
+
+
+def _draw_record(draw: dict) -> DrawRecord:
+    """The inverse of `_draw_dict`, for a caller holding the dict (the `draw=` argument; tests)."""
+    return DrawRecord(tuple(DrawRow(pid, home, tuple((k, *cell) for k, cell in row.items()))
+                            for pid, (home, row) in draw.items()))
+
+
+def under_input(w: World, rung_id: str, draw: Optional[dict], column: str) -> Under:
+    """THE PROJECTION `settlements.drawn_under` reads: `rung_id`'s subtree, the draw (MATTER's own
+    when given, else the one the stores as they stand would give) and the column. The subtree is
+    read before the draw, the order the trace has always shown."""
+    here = frozenset(_subtree(w, rung_id))
+    record = _entry(LARDER_DRAW)(larder_input(w)) if draw is None else _draw_record(draw)
+    return Under(record, here, column)
 
 
 def demanded(w: World, rung_id: str, draw: Optional[dict] = None) -> dict:
@@ -1122,7 +1191,7 @@ def demanded(w: World, rung_id: str, draw: Optional[dict] = None) -> dict:
     count, `T-l`) times a registered table, so this is `density`'s weighted HEADCOUNT and not a
     tally. It reads live `contain` edges only, through `home_of` (clause 3).
 
-    ⚠ `draw` is MATTER's own record when MATTER asks, so the numbers are the draw that ran. When it
+    ⚠ `draw` is a caller's own record when given, so the numbers are that record's. When it
     is omitted, it is the draw the stores AS THEY NOW STAND would give. For `demanded` the two agree
     anyway: `want` reads no store. Kinds are those `subsistence_weight` registers with a positive
     want; `delivered` returns the same keys.
@@ -1138,7 +1207,7 @@ def demanded(w: World, rung_id: str, draw: Optional[dict] = None) -> dict:
       * THE EATERS WHOSE WALK *ENDS* AT `rung_id`. That set depends on which rungs hold stock, so an
         empty settlement would demand nothing: the need would vanish exactly where it is unmet."""
     TRACE.query("demanded", "resolver")
-    return _drawn_under(w, rung_id, draw, 0)
+    return dict(_entry(DRAWN_UNDER)(under_input(w, rung_id, draw, "want")))
 
 
 def delivered(w: World, rung_id: str, draw: Optional[dict] = None) -> dict:
@@ -1167,22 +1236,7 @@ def delivered(w: World, rung_id: str, draw: Optional[dict] = None) -> dict:
         in one term and not the other.
       * ROUND ONE'S `delivered(levy, rung, season)`, for `demanded`'s reason above."""
     TRACE.query("delivered", "resolver")
-    return _drawn_under(w, rung_id, draw, 1)
-
-
-def _drawn_under(w: World, rung_id: str, draw: Optional[dict], i: int) -> dict:
-    """The shared body of `demanded` (`i = 0`, want) and `delivered` (`i = 1`, take): one pass over
-    the draw record, keeping the eaters homed in `rung_id`'s subtree. Both read the same cells, so
-    both return the same keys. Does not `TRACE`; its two callers own their names."""
-    here = _subtree(w, rung_id)
-    record = subsistence_draw(w) if draw is None else draw
-    out: dict = {}
-    for _pid, (home, row) in record.items():
-        if home not in here:
-            continue
-        for k, cell in row.items():
-            out[k] = out.get(k, 0) + cell[i]
-    return dict(sorted(out.items()))
+    return dict(_entry(DRAWN_UNDER)(under_input(w, rung_id, draw, "take")))
 
 
 def presence(w: World, rung_id: str) -> list[str]:
@@ -1391,11 +1445,33 @@ def population(w: World, rung_id: str, residence: Optional[dict] = None) -> int:
 
     `residence` -- a precomputed `residence_of(w)`, for a caller (`_eff_migrate`) that already built
     one this same act and would otherwise pay the full-Tenure scan twice (`/simplify`, BATCH-CLOSE
-    Phase 2). `None` (every existing caller) computes it here exactly as before."""
+    Phase 2). `None` (every existing caller) computes it here exactly as before.
+
+    ⚠ THE SUM IS THE `settlements` MODULE'S (v9 IN-07 E4, A-25): `settlements.housing`
+    (`modules/settlements/housing.py`, `entry: query`); this wrapper projects the population half."""
     TRACE.query("population", "resolver")
-    here = _subtree(w, rung_id)
+    return _entry(HOUSING)(_housing_population_input(w, rung_id, residence)).population
+
+
+def _housing_population_input(w: World, rung_id: str, residence: Optional[dict]) -> HousingInput:
+    """THE POPULATION HALF of the projection `settlements.housing` reads (v9 IN-07 E4), so `population`
+    pays only its old body's reads: the subtree, then every `residence_of` entry (the caller's
+    precomputed map when given) with its `Person.weight`. The capacity half is `None`."""
+    here = frozenset(_subtree(w, rung_id))
     residents = residence_of(w) if residence is None else residence
-    return sum(w.persons[pid].weight for pid, home in residents.items() if home in here)
+    return HousingInput(here, tuple((pid, home, w.persons[pid].weight)
+                                    for pid, home in residents.items()),
+                        dwelling_rungs=None, floor=None)
+
+
+def _housing_capacity_input(w: World, rung_id: str) -> HousingInput:
+    """THE CAPACITY HALF of the projection `settlements.housing` reads (v9 IN-07 E4), so `capacity`
+    pays only its old body's reads: the subtree, then each `dwelling` Site's own rung and the
+    `capacity_floor` fixture. The population half is `None`."""
+    here = frozenset(_subtree(w, rung_id))
+    dwellings = tuple(s.rung for s in w.sites.values() if s.kind == DWELLING_KIND)
+    return HousingInput(here, residents=None, dwelling_rungs=dwellings,
+                        floor=w.fixtures.get("capacity_floor")[DWELLING_KIND])
 
 
 # THE `site_kinds` MEMBER `capacity` COUNTS -- Jordan's `ED-SE-0055` (2026-09-25): *"add a `dwelling`
@@ -1433,11 +1509,12 @@ def capacity(w: World, rung_id: str) -> int:
       (`_subtree`) -- a hearth counts its dwelling, and every ancestor counts it again. That is what
       makes one more dwelling under a rung raise its capacity and every ancestor's by the same step.
     * NOTHING IS STORED: `Rung.__setattr__` refuses an aggregate field, and this is recomputed at
-      every call (`AX` T-a)."""
+      every call (`AX` T-a).
+
+    ⚠ THE COUNT AND FLOOR ARE THE `settlements` MODULE'S (v9 IN-07 E4, A-25): `settlements.housing`;
+    this wrapper projects the capacity half (`_housing_capacity_input`)."""
     TRACE.query("capacity", "resolver")
-    here = _subtree(w, rung_id)
-    built = sum(1 for s in w.sites.values() if s.kind == DWELLING_KIND and s.rung in here)
-    return max(w.fixtures.get("capacity_floor")[DWELLING_KIND], built)
+    return _entry(HOUSING)(_housing_capacity_input(w, rung_id)).capacity
 
 
 # ===========================================================================
@@ -1607,14 +1684,21 @@ def fortification_of(w: World, rung_id: str) -> float:
     ⚠ ITS CALLER IS THE BATTLE PATH (plan position `20-iv`, `H-150`; until then nothing called
     this). `seam/wrappers/mass_battle.py::resolve()` reads it at the march target and passes it to
     `massbattle.resolve_field` as `fort_level`, where any positive value makes the field A.9's
-    WALLS row (`terrain.py::terrain_row_for_territory`). This Query decides none of that."""
+    WALLS row (`terrain.py::terrain_row_for_territory`). This Query decides none of that.
+
+    ⚠ THE MEAN IS THE `settlements` MODULE'S (v9 IN-07 E6, A-25): `settlements.fortification`
+    (`modules/settlements/fortification.py`, `entry: query`); this stays the wrapper the adapter calls."""
     TRACE.query("fortification_of", "resolver")
+    return _entry(FORTIFICATION)(fort_input(w, rung_id))
+
+
+def fort_input(w: World, rung_id: str) -> FortInput:
+    """THE PROJECTION `settlements.fortification` reads (v9 IN-07 E6): every `garrison` Site's condition
+    in the subtree, in `World.sites` order, and `condition_scale` -- read only when there is a garrison,
+    as the old body read it (a no-garrison world reads no fixture)."""
     here = _subtree(w, rung_id)
-    garrisons = [s for s in w.sites.values() if s.kind == "garrison" and s.rung in here]
-    if not garrisons:
-        return 0.0
-    scale = w.fixtures.get("condition_scale")
-    return sum(s.condition for s in garrisons) / (scale * len(garrisons))
+    conditions = tuple(s.condition for s in w.sites.values() if s.kind == "garrison" and s.rung in here)
+    return FortInput(conditions, w.fixtures.get("condition_scale") if conditions else None)
 
 
 def enclosing_territory(w: World, rung_id: Optional[str]) -> Optional[str]:
@@ -1803,7 +1887,7 @@ def holder_faction_of(w: World, rung_id: str) -> Optional[str]:
     or `None` -- read up its own ancestry, since a SETTLEMENT is the object of a `hold` Tenure only
     after a `seize` (v9 IN-13) or a `found` (v9 IN-28); `hold_force` on a seeded one returns `None`:
     every seeded live `hold` targets a `territory` or an `Office`, and the walk takes the nearest held rung either way.
-    `nearest_store`'s own walk, applied to holding rather than to a larder: the nearest rung AT OR
+    The larder walk's shape (`modules/settlements/larder.py`), applied to holding rather than to a larder: the nearest rung AT OR
     ABOVE `rung_id` that IS held, then `faction_holding` on ITS holder (a person) -- never on
     `rung_id` itself, which `faction_holding` cannot answer
     for at all (`subject not in w.persons` returns `None` immediately; it takes the HOLDER, not
@@ -1811,7 +1895,7 @@ def holder_faction_of(w: World, rung_id: str) -> Optional[str]:
     from the name).
 
     ⚠ `None` FOR "NOBODY HOLDS ANY RUNG UP THIS CHAIN" IS A SHORTFALL, NOT AN ERROR --
-    `nearest_store`'s own reading of an empty root. What a `march` targeting an unheld
+    the larder walk's own reading of an empty root. What a `march` targeting an unheld
     (`Uncontrolled`) settlement means is `march`'s own eligibility to decide, not this Query's.
 
     ⚠ THE WALK IS `ancestry`, NOT A FOURTH HAND-ROLLED COPY (M4 review pass, `/simplify` reuse

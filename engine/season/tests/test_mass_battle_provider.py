@@ -92,6 +92,19 @@ def _fight_open(monkeypatch, w, attackers, subject, target, seed):
                                rng=random.Random(seed))
 
 
+def test_fortification_is_the_mean_garrison_condition_over_scale():
+    """v9 IN-07 E6 (`settlements.fortification`): `sum / (scale * n)` -- several garrisons AVERAGE,
+    so the value stays in `[0.0, 1.0]`. `build_realm(0)` seeds one garrison per settlement, where a
+    dropped `n` is invisible; this hands the target two, one whole and one razed, and reads half."""
+    import dataclasses
+    w = build_realm(0)
+    scale = w.fixtures.get("condition_scale")
+    sid, site = next((sid, s) for sid, s in sorted(w.sites.items()) if s.kind == "garrison")
+    w.sites[sid] = dataclasses.replace(site, condition=scale)
+    w.sites[sid + "_second"] = dataclasses.replace(site, id=sid + "_second", condition=0)
+    assert world_q.fortification_of(w, site.rung) == 0.5
+
+
 def test_resolves_end_to_end_through_contest():
     w = build_realm(0)
     crown = faction_q.resolve(w, "fac_crown")

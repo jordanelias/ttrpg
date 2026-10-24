@@ -32,7 +32,7 @@ from .registry import (
 )
 # Plan position `30` (A-25): the REGISTRAR and its one table. `registrar.py`'s docstring defines
 # a module entry; `SeasonDriver.__init__` runs it, then the refusals above, on every construction.
-from .registrar import MODULE_ENTRIES, ModuleEntry, register_module_entries
+from .registrar import MODULE_ENTRIES, ModuleEntry, register_module_entries, require_entries
 
 __all__ = sorted(
     _n for _n, _v in list(globals().items())

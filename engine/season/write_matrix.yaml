@@ -358,11 +358,15 @@ rows:
     emits:   "`rung.founded`"
   - kind:    "Rung"
     field:   "stores"
-    steps:   [MAT, RES]
+    steps:   [MAT, RES, ENC]
     class:   "MATTER/ACTS"
     social:  "false"
     by:      "DR-1"
     emits:   "`stores.changed`"
+    # ⚠ `ENC` ADDED AT v9 IN-52 ON `(Person, body)`'s M4 PRECEDENT just above: a fought field eats its
+    # ration from each side's treasury at the ENCOUNTER step (`_eff_march`, the levy-to-field feed's
+    # debit, LF-3), where `march`'s prize row defers. `ENCOUNTER` shares RESOLVE's write class
+    # (`data/matrix.py`), so `class:` is unchanged.
   - kind:    "Rung"
     field:   "yield"
     steps:   [MAT]

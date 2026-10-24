@@ -688,6 +688,12 @@ DEFAULT_FIXTURES = Fixtures(
     # difference between a walled and an open field removed), `1` the middle arm. Injection site: this
     # line, read by `seam/wrappers/mass_battle.py::field_input` into the record's `walls_dr` (`31c`).
     field_walls_dr=None,     # `H-150`, swept 3 (A.9, = the default) / 0 (control) / 1
+    # v9 IN-52 (`H-241`). THE LEVY-TO-FIELD FEED'S ARM [ASSUMPTION LF-1..LF-3, delegated-ruled,
+    # `_part5` §J.2]: `True` bounds each side's fielded troops by its treasury at the larder's ration
+    # (`modules/settlements/provision.py`) and debits what the field eats (`_eff_march`); `False` is the
+    # CONTROL, SHIPPED -- every field is Σ weight, as before the feed. The flip ON is its own declared
+    # hash-moving commit. Injection site: this line, read by `seam/wrappers/mass_battle.py::provision_input`.
+    field_provisioning=False,  # `H-241`, swept False (control, SHIPPED) / True / True on empty treasuries
     # IN-08 H3 (`ED-IN-0261`'s scar model). `scar_step` -- a float magnitude per unit of alignment,
     # written on the wounded person by `_eff_kill` -- RETIRED with that mechanism: the scar is a
     # COUNT per pursuit, one per observer per violated pursuit (`loop/resolve.py::_scar_witnesses`),

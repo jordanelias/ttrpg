@@ -369,7 +369,9 @@ def test_lb16_a_faction_with_no_authored_head_holds_nothing_and_it_is_counted():
 
 
 # ---------------------------------------------------------------------------
-# ITEM 3a -- `nearest_store` and the per-eater draw. Falsifier LB-3a.
+# ITEM 3a -- the larder walk and the per-eater draw. Falsifier LB-3a. Since v9 IN-07 E1 the walk is
+# the `settlements.larder_draw` module entry's (`modules/settlements/larder.py`; it was
+# `world_q.nearest_store`), reached through MATTER's `world_q.subsistence_draw` as before.
 # ---------------------------------------------------------------------------
 
 def _matter_once(w, *, keep_yield=False):
@@ -478,7 +480,7 @@ def test_lb3a_a_hearth_with_no_larder_eats_from_its_settlement():
 def test_lb3a_control_a_hearth_with_its_own_larder_eats_locally_and_unchanged():
     """THE PAIRED CONTROL, and it is what makes the walk a GENERALISATION rather than a change.
 
-    `nearest_store` returns the rung ITSELF where that rung has stock, so a hearth with a larder
+    The larder walk returns the rung ITSELF where that rung has stock, so a hearth with a larder
     feeds its own people exactly as the per-rung loop did. **If this arm moves, the walk is not a
     generalisation** — it is a new rule wearing one's clothes, and every reading of the populated
     world would then be confounded by a second change nobody asked for."""
@@ -507,7 +509,7 @@ def test_lb3a_the_root_larder_at_zero_feeds_nobody_and_raises_nothing():
     """A person under a realm that holds nothing goes hungry, and hunger is a fact about the
     world — not a `KeyError`, and not an `Unspecified`.
 
-    `nearest_store` returns `None` at the root and the caller records a shortfall. Raising here
+    The larder walk finds no source at the root and the caller records a shortfall. Raising here
     would make an empty larder an instrument defect, and a season that dies on a bare world is a
     season nobody can run the starving case in."""
     w = _cohort_tiny_world()
@@ -554,7 +556,7 @@ def test_lb3a_a_cohort_eats_by_its_weight_and_not_by_its_head_count():
 
 
 def test_lb3a_two_eaters_cannot_spend_the_same_unit():
-    """SCARCITY BINDS, and it binds because `nearest_store` is given the caller's running view.
+    """SCARCITY BINDS, and it binds because the larder walk reads the draw's running view.
 
     The writes are deferred to the gate, so a loop reading `w.rungs[...].stores` directly would
     show every eater the FULL larder — the defect `loop/effects.py`'s own header names for

@@ -67,6 +67,40 @@ composition_roles:
     verb: march
     needed_by: "engine/season/seam/wrappers/mass_battle.py — the host adapter `@provider(\"contest\", \"mass_battle\")` builds the typed input record (`field_input`) and calls this entry through `manifest.MODULE_ENTRIES` (plan position `31c`, A-25; the `a field` prize's provider since ED-IN-0279, M3). The prize row `a field` (`engine/season/rosters.yaml` `contest_subsystems`) names it in `module_entry:`, and `manifest/registry.py::check_contest_prizes` refuses at driver construction a prize row whose `module_entry:` no composition row declares, or one that disagrees with it. The target moved from `systems/mass_battle/sim/` with the import closure of `massbattle.py` at `31c` (a package: its imports are dotted, so no `PATH_SEAM_ALLOWED` entry)."
 
+  settlements.larder_draw:
+    target: "modules.settlements.larder:larder_draw"
+    entry: query
+    needed_by: "engine/season/queries/world_q.py — `subsistence_draw` (v9 IN-07 E1, A-25) builds the typed input record (`larder_input` -> `queries/inputs.py::LarderInput`), calls this entry by role string through `engine.substrate.composition.require` (its callers include driverless ones, the tests on a bare world; `harness/scarce.py` builds its driver first), and turns the `DrawRecord` back into its public dict; `demanded`/`delivered` call it the same way when handed no draw. MATTER (`loop/matter.py`) no longer calls it: since v9 IN-07 E2 it calls `settlements.subsist`, which runs the same `larder_draw` inside the module. No role roster names this row, so the host declares the need (`world_q.QUERY_ENTRIES`) and `manifest/registrar.py::require_entries` refuses at driver construction its absence, or an `entry:` other than `query`."
+  settlements.drawn_under:
+    target: "modules.settlements.larder:drawn_under"
+    entry: query
+    needed_by: "engine/season/queries/world_q.py — `demanded` and `delivered` (v9 IN-07 E1, A-25) build the typed input record (`under_input` -> `queries/inputs.py::Under`: the subtree, the draw and the column) and call this entry by role string through `engine.substrate.composition.require`, keeping their own `TRACE.query` lines. Since v9 IN-07 E2 MATTER's drained-rung gap is computed inside the module by `settlements.subsist`, over this same function. Declared in `world_q.QUERY_ENTRIES` and held by `manifest/registrar.py::require_entries`, as `settlements.larder_draw` is."
+  settlements.subsist:
+    target: "modules.settlements.subsist:subsist"
+    entry: step_call
+    needed_by: "engine/season/loop/matter.py — MATTER (v9 IN-07 E2, A-25) builds the typed input record (`queries/world_q.py::subsist_input` -> `queries/inputs.py::SubsistInput`), calls this entry ONCE a season through `manifest.MODULE_ENTRIES` (`matter.py::_step_call`, the lookup `fieldwork.find`'s host makes; MATTER runs only inside a driver), and makes every write from the `SubsistOutcome`: the body writes and their crossings, deaths, the debit writes with `observed=`, `World._subsistence_shortfall`. `entry: step_call` because a loop step calls it, before the yield (#353 §25). No role roster names this row, so the host declares the need (`matter.py::STEP_CALLS`) and `manifest/registrar.py::require_entries` refuses at driver construction its absence, or an `entry:` other than `step_call`."
+  settlements.produce:
+    target: "modules.settlements.produce:produce"
+    entry: step_call
+    needed_by: "engine/season/loop/matter.py — MATTER (v9 IN-07 E3, A-25) builds the typed input record (`queries/world_q.py::produce_input` -> `queries/inputs.py::ProduceInput`: the `SITE_YIELD` table, every Site, every rung's stores before the debit, `condition_scale`, this season's factor and `settlements.subsist`'s `larder_after`), calls this entry ONCE a season through `manifest.MODULE_ENTRIES` (`matter.py::_step_call`), AFTER `settlements.subsist` (#353 §25: draw before produce), and makes the `yield` and `stores` credit writes, with their `last_emission_of` causes, from the `ProduceOutcome`. Site wear stays host. No role roster names this row, so the host declares the need (`matter.py::STEP_CALLS`) and `manifest/registrar.py::require_entries` refuses at driver construction its absence, or an `entry:` other than `step_call`."
+
+  settlements.housing:
+    target: "modules.settlements.housing:housing"
+    entry: query
+    needed_by: "engine/season/queries/world_q.py — `population` and `capacity` (v9 IN-07 E4, A-25) each build their half of the typed input record (`_housing_population_input` / `_housing_capacity_input` -> `queries/inputs.py::HousingInput`: the subtree, then the residents with their weights, or the dwelling Sites' rungs and `capacity_floor`) and call this entry by role string through `engine.substrate.composition.require` (`capacity` has a driverless caller, `harness/populated.py`), keeping their own `TRACE.query` lines and reading their field of the `Housing` back. `residence_of` and `_eff_migrate`'s refusal stay host. Declared in `world_q.QUERY_ENTRIES` and held by `manifest/registrar.py::require_entries`, as `settlements.larder_draw` is."
+  settlements.fabric:
+    target: "modules.settlements.fabric:fabric"
+    entry: query
+    needed_by: "engine/season/queries/world_q.py — `ceiling` and `share` (v9 IN-07 E5, A-25) each build their half of the typed input record (`_fabric_ceiling_input` / `_fabric_share_input` -> `queries/inputs.py::FabricInput`: `condition_scale`, the live works, its declared and matured terms; or the persons present) and call this entry by role string through `engine.substrate.composition.require`, reading their field of the `Fabric` back. `works_for`, `matured_terms`, the two-live-works `Forbidden`, the fold's clamp and `_rise` stay host. Declared in `world_q.QUERY_ENTRIES` and held by `manifest/registrar.py::require_entries`, as `settlements.larder_draw` is."
+  settlements.provision:
+    target: "modules.settlements.provision:provision"
+    entry: query
+    needed_by: "engine/season/seam/wrappers/mass_battle.py — the field adapter `resolve` (v9 IN-52, the levy-to-field feed, A-25) builds the typed input record once per side (`provision_input` -> `queries/inputs.py::ProvisionInput`: the side's Σ weight, its treasury's stores -- the attacker's the rung of `Act.via`'s office, the one `requisition` fills; the defender's the nearest held rung at or above the target, `world_q.governing_hold`'s walk [LF-2] -- the `subsistence_weight` ration and the `field_provisioning` fixture), calls this entry by role string through `engine.substrate.composition.require`, hands `troops` to `mass_battle.resolve_field` (`troops_a`/`troops_b`) and returns `consumed` for `loop/effects_combat.py::_eff_march` to debit [LF-3]. Shipped OFF: with the fixture `False` the entry returns `troops = weight`, `consumed = ()`. Declared in `world_q.QUERY_ENTRIES` and held by `manifest/registrar.py::require_entries`, as `settlements.larder_draw` is."
+  settlements.fortification:
+    target: "modules.settlements.fortification:fortification"
+    entry: query
+    needed_by: "engine/season/queries/world_q.py — `fortification_of` (v9 IN-07 E6, A-25), the wrapper the field adapter `seam/wrappers/mass_battle.py` calls, builds the typed input record (`fort_input` -> `queries/inputs.py::FortInput`: the subtree's garrison conditions and `condition_scale`) and calls this entry by role string through `engine.substrate.composition.require`, keeping its `TRACE.query` line. Declared in `world_q.QUERY_ENTRIES` and held by `manifest/registrar.py::require_entries`, as `settlements.larder_draw` is."
+
   fieldwork.find:
     target: "modules.fieldwork.find:find"
     entry: step_call

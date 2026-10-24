@@ -28,7 +28,8 @@ THE FALSIFIERS, each with the failure it would show:
     TERRITORIAL quantity"*): on the built realm, at least one cohort draws real stock, the record
     MATTER used names no individual, and the realm's matter is conserved across the draw exactly.
 
-MUTATION-CHECKED at `24f`: deleting the `is_cohort` skip in `subsistence_draw` reddens five tests --
+MUTATION-CHECKED at `24f`: deleting the `is_cohort` skip (then in `subsistence_draw`; since v9 IN-07 E1
+in `modules/settlements/larder.py`, `settlements.larder_draw`) reddens five tests --
 the eater set, the ceiling test's eater line, the falsifier (`p_npc_008`, seated under `set_s_018`,
 falls 1000 -> 970), its control, and the drain guard. ⚠ AND ONE MUTATION IT DOES NOT CATCH, said
 rather than implied: seating the cohorts BEFORE the cast's tie block leaves every test here green,
@@ -52,6 +53,7 @@ from ..harness import populated as POP
 from ..harness import probes as P
 from ..harness import register as REG
 from ..harness.run_cases import load_cases
+from ..loop import matter as matter_step
 from ..loop.driver import SeasonDriver, mint_token
 from ..queries import world_q
 from ..state.attribution import anchor_of
@@ -249,7 +251,7 @@ def test_24f_falsifier_in_dearth_the_office_holder_keeps_his_body_and_the_cohort
     and its body moves."* On the BUILT realm -- *"a guard that passes only on `probes.py:744` is the
     dead-on-arrival case above, passing"*. v9 SE-01 (`24g`) runs it at EVERY live arm of `H-125`'s
     sweep (read off the register), and asserts the fall is exactly `arm x shortfall` -- the live
-    arm's whole arithmetic, `loop/matter.py`'s `lost = step * sum(short)`.
+    arm's whole arithmetic, `modules/settlements/subsist.py`'s `lost = step * sum(short)`.
 
     THE DEARTH IS THE REALM'S OWN, NOT PLANTED. At build every larder is empty and MATTER draws
     before it takes the first yield (#353 §25's order), so the first draw finds no stock anywhere:
@@ -310,8 +312,11 @@ def test_24f_drain_guard_a_cohort_draws_stock_on_the_built_realm_and_matter_is_c
         monkeypatch):
     """`test_w8`'s non-vacuity guard, retired 2026-09-18 because the drain it observed was a DUKE
     hauling grain, REBUILT ON THE TERRITORIAL QUANTITY as that retirement's own comment asks. It
-    observes the draw MATTER actually ran: `subsistence_draw` is wrapped, not re-called, so the
-    record asserted on is the one the barrier derived its writes from.
+    observes the draw MATTER actually ran: the module entry MATTER calls is wrapped, not re-called,
+    so the record asserted on is the one the barrier derived its writes from. (v9 IN-07 E2: MATTER
+    calls `settlements.subsist` through `loop/matter.py::_step_call`, no longer
+    `world_q.subsistence_draw`; the wrap moved there, and reads the outcome's `draw` in the dict
+    shape `subsistence_draw` returns.)
 
     Two MATTER barriers on `build_realm(0)`: the first takes the yield (its draw finds nothing, the
     dearth above), the second draws from that stock. The guard asserts it observed at least one
@@ -322,14 +327,19 @@ def test_24f_drain_guard_a_cohort_draws_stock_on_the_built_realm_and_matter_is_c
     _matter(w)
     w.tick += 1
     seen: list = []
-    real = world_q.subsistence_draw
+    real = matter_step._step_call
 
-    def recording(w_):
-        rec = real(w_)
-        seen.append(rec)
-        return rec
+    def recording(role):
+        fn = real(role)
 
-    monkeypatch.setattr(world_q, "subsistence_draw", recording)
+        def call(inp):
+            out = fn(inp)
+            if role == matter_step.SUBSIST:
+                seen.append(world_q._draw_dict(out.draw))
+            return out
+        return call
+
+    monkeypatch.setattr(matter_step, "_step_call", recording)
     held_before = sum(sum((r.stores or {}).values()) for r in w.rungs.values())
 
     evs = _matter(w)

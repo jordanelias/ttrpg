@@ -40,8 +40,9 @@ boot naming the row"*):
 (`social_contest.roll`, called by `seam/wrappers/sigma.py`). `tests/valoria/test_module_registrar.py`
 plants rows, each case in a fresh subprocess, because `MODULE_ENTRIES` is a process global another
 test's imports could fill. A row that must EXIST is declared by the prize row naming it
-(`module_entry:`), and `registry.check_contest_prizes` refuses its absence; this module refuses
-only a role it already holds.
+(`module_entry:`), and `registry.check_contest_prizes` refuses its absence; `register_module_entries`
+refuses only a role it already holds. A row no role roster names is declared by the host that calls
+it, and `require_entries` below refuses its absence (v9 IN-07).
 """
 
 from __future__ import annotations
@@ -126,3 +127,37 @@ def register_module_entries(verb_table: dict) -> list:
                     needs="one registration per entry, by the registrar from its row")
     MODULE_ENTRIES.update(fresh)
     return sorted(fresh)
+
+
+def require_entries(needs) -> list:
+    """Refuse a HOST-DECLARED need that `MODULE_ENTRIES` cannot meet; return the roles checked.
+
+    v9 IN-07 (`proposals/2026-10-07-unplugged-systems-replug.md` §4, the three deletion-refusal
+    accounts reconciled): a row a role roster names (`module_entry:`) is held by
+    `registry._check_module_entry`; a ROLE-LESS row -- a `query` row, or a `step_call`/`verb_call` no
+    roster names -- is held here. `needs` is `((role, entry kind), ...)`, declared by the host
+    (`queries/world_q.py::QUERY_ENTRIES`, which also carries the field adapter's `PROVISION`
+    (`seam/wrappers/mass_battle.py`), and `loop/matter.py::STEP_CALLS`), and the driver passes it right after
+    `register_module_entries`, so the table already holds every row that carries `entry:`. Two
+    refusals, each naming the role:
+      * a needed role `MODULE_ENTRIES` does not hold -- its composition row was deleted or stripped of
+        `entry:`, and in a fresh process nothing else would notice;
+      * a needed role registered under another `entry:` kind -- the host calls it one way and the row
+        declares another.
+    The host states WHAT it needs; the composition row states WHICH module provides it."""
+    checked = []
+    for role, kind in needs:
+        held = MODULE_ENTRIES.get(role)
+        if held is None:
+            _refuse(f"the host needs module entry {role!r} (`entry: {kind}`), which no composition "
+                    f"row declares as an entry",
+                    needs="the composition row back in references/module_contracts.yaml "
+                          "`composition_roles:` (re-run tools/export_composition.py), or the host's "
+                          "need removed with its caller from where it is declared "
+                          "(queries/world_q.py::QUERY_ENTRIES or loop/matter.py::STEP_CALLS)")
+        if held.entry != kind:
+            _refuse(f"the host needs module entry {role!r} as `entry: {kind}`, and its composition "
+                    f"row declares `entry: {held.entry}`",
+                    needs="the row's `entry:` and the host's declared need naming one kind")
+        checked.append(role)
+    return checked

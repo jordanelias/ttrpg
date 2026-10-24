@@ -20,13 +20,14 @@ nowhere else. See the call below and `_rehome`'s own docstring for why here and 
 from __future__ import annotations
 
 from typing import NamedTuple, Optional
-from ..data.fixtures import SITE_YIELD
+from .. import manifest
 from ..data.geography import adjacent_territories
 from ..data.matrix import Step
 from ..data.requires import SHORTFALL_PREDICATE, Observation
 from ..data.rosters import STANDING_CROSSED
 from ..decision import agreement, standing_of
 from ..decision.budget import bands_below
+from ..gaps import Unspecified
 from ..queries import world_q
 from ..queries.person_q import LedgerReader
 from ..state.carriers import Event
@@ -34,6 +35,30 @@ from ..state.gate import Token
 from ..state.ids import H, ROOT, draw_factory
 from ..trace_log import TRACE
 
+
+#: v9 IN-07 E2: the module entries MATTER calls, `(role, entry kind)` -- the host's half of *"two owners
+#: say which module is called"*, as `queries/world_q.py::QUERY_ENTRIES` is for the `query` entries. The
+#: driver hands both to `manifest/registrar.py::require_entries` at construction, which refuses a role
+#: here that `MODULE_ENTRIES` does not hold, or holds under another kind: the refusal a deleted or
+#: stripped `step_call` row no role roster names would otherwise never meet in a fresh process.
+#: v9 IN-07 E3 adds the yield and credit, `settlements.produce`, called after `SUBSIST` (#353 §25).
+SUBSIST = "settlements.subsist"
+PRODUCE = "settlements.produce"
+STEP_CALLS = ((SUBSIST, "step_call"), (PRODUCE, "step_call"))
+
+
+def _step_call(role: str):
+    """The module entry `role` from `MODULE_ENTRIES`, which the registrar filled at driver construction
+    (MATTER only runs inside a driver) -- the lookup `seam/wrappers/_entry.py` makes for `fieldwork.find`,
+    the other `step_call`. Absent, MATTER refuses naming the role rather than skipping the step."""
+    held = manifest.MODULE_ENTRIES.get(role)
+    if held is None:
+        raise Unspecified(
+            f"MATTER calls module entry {role!r}, which MODULE_ENTRIES does not hold",
+            "04 PART E step 10",
+            needs="a SeasonDriver constructed in this process (the registrar fills the table), and the "
+                  "composition row in references/module_contracts.yaml `composition_roles:`")
+    return held.fn
 
 
 # -- MATTER -- barrier 2 -- THE WORLD FREEZES AT ITS END (S25) -----------
@@ -449,9 +474,9 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     #
     # ⚠⚠ AND SINCE PLAN POSITION `24f` ONLY A COHORT EATS (`ED-IN-0255`: subsistence is *"a
     # territorial issue"*, carried by *"NPC synecdoches"*, and *"lords and guild members"* do not
-    # worry about it). The exemption is `world_q.subsistence_draw`'s, the one owner, so nothing
-    # below changes: a `weight == 1` person is simply absent from `record`, so he is never in
-    # `draws`, never in `short_by_person`, and item 3b below never falls his body for dearth. The
+    # worry about it). The exemption is the larder draw's (`settlements.larder_draw`), the one owner,
+    # so nothing below changes: a `weight == 1` person is simply absent from the draw, so he debits
+    # no larder, is never in `short_by_person`, and item 3b below never falls his body for dearth. The
     # eaters are `cohorts.yaml`'s authored rows, one per populated rung, seated at world-gen by
     # `harness/populated.py::build_realm`. `tests/test_territorial_subsistence.py` holds the
     # falsifier on the built realm: under a non-zero `body_step`, an office-holder under a
@@ -471,25 +496,26 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # `H-38` closed with *"`Site.condition` is the model"*, and this spends that closure rather
     # than minting a `band_floors.person` second scheme.
     floors_body = (w.fixtures.get("band_floors") or {}).get("body", {})
-    # ⚠ PLAN POSITION `19d`: THE ARITHMETIC ABOVE NOW LIVES IN ONE OWNER, `world_q.subsistence_draw`,
-    # and this pass derives its writes from the record it returns. The inline loop that stood here
+    # ⚠ PLAN POSITION `19d`: THE ARITHMETIC ABOVE NOW LIVES IN ONE OWNER, `settlements.larder_draw`,
+    # which `settlements.subsist` runs (E2, below); this pass derives its writes from that outcome. The
+    # inline loop that stood here
     # (per housed eater, sorted; per weighted kind, sorted; `nearest_store` over the running `left`
     # view; `take = min(want, held)`) moved there VERBATIM, because `demanded`/`delivered` need the
-    # same arithmetic. A second copy would let MATTER feed a person the Queries call hungry. The
-    # derivation below reproduces `draws` and `short_by_person` exactly, in the same insertion
-    # order. That order reaches `r.stores.update(...)`'s key order, and with it the content hash.
-    record = world_q.subsistence_draw(w)
-    draws: dict = {}          # source rung -> {kind: units it gives up}
-    short_by_person: dict = {}
-    drained: dict = {}        # source rung -> {kinds it RAN OUT OF with a mouth still unfed}
-    for pid, (_home, row) in record.items():
-        for k, (want, take, src) in row.items():
-            if src is not None:
-                draws.setdefault(src, {})[k] = draws.setdefault(src, {}).get(k, 0) + take
-            if take < want:
-                short_by_person.setdefault(pid, {})[k] = want - take
-                if src is not None:
-                    drained.setdefault(src, set()).add(k)
+    # same arithmetic. A second copy would let MATTER feed a person the Queries call hungry. Since
+    # v9 IN-07 E1 the arithmetic is the `settlements.larder_draw` module entry's
+    # (`modules/settlements/larder.py`; the walk was `nearest_store`), and `subsistence_draw` is
+    # its host projection, keeping the record's shape and order.
+    # ⚠ v9 IN-07 E2: AND THE DERIVATION THAT STOOD HERE -- the per-source debit, who is short, which
+    # larders drained, each drained rung's gap, whose body falls and the larder left -- is the
+    # `settlements.subsist` step_call's (`modules/settlements/subsist.py`), called ONCE, here, on the
+    # host's projection (`world_q.subsist_input`). Its outcome is ordered tuples in the order the old
+    # loop built its dicts; the dicts below are rebuilt in that order, which reaches
+    # `r.stores.update(...)`'s key order, and with it the content hash. Every write stays here.
+    # Window invariant: the debit and credit below are absolute values computed from this snapshot, so
+    # nothing between here and the per-rung loop may write `Rung.stores` (a writer placed there is overwritten).
+    sub = _step_call(SUBSIST)(world_q.subsist_input(w))
+    short_by_person = {pid: dict(kinds) for pid, kinds in sub.short_by_person}
+    larder_after = {rid: dict(kinds) for rid, kinds in sub.larder_after}
     # -- THE SHORTFALL RIDES ON THE DRAINED LARDER'S OWN WRITE (plan position `19d`) -------------
     #
     # A larder that runs dry while a mouth is still unfed is the one moment the gap between
@@ -505,7 +531,7 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # a state change (L3: an aggregate is never a field, so there is nothing to write), and a
     # hand-built `subsistence.short` Event would need an anchor that `anchor_of` can reach. `_crossings`
     # anchors on the write that crossed; a rung with no write has no receipt to name. The larder
-    # write DOES exist at exactly this moment. A drained source was drawn (`take >= 1`: `nearest_store`
+    # write DOES exist at exactly this moment. A drained source was drawn (`take >= 1`: the larder walk
     # only returns a rung holding `> 0`), so the gate emits `stores.changed` there, and
     # `Event.observed` is the field for *what was read to reach this Event* (`W-B`). Only its
     # writer is new, here at MATTER.
@@ -532,12 +558,11 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # worlds hold stock (234 `transfer.made` among them) and record 0 shortfalls. So every
     # committed artifact is byte-identical, and the mechanism fires only where the world is
     # actually scarce (`harness/scarce.py`).
-    short_seen: dict = {}     # drained rung -> (Observation, ...), sorted by kind
-    for src in sorted(drained):
-        need, got = world_q.demanded(w, src, record), world_q.delivered(w, src, record)
-        short_seen[src] = tuple(
-            Observation(src, f"{SHORTFALL_PREDICATE}:{k}", need[k] - got.get(k, 0))
-            for k in sorted(drained[src]) if need.get(k, 0) > got.get(k, 0))
+    # The gap is the module's (`SubsistOutcome.shortfalls`, `demanded - delivered` over the subtree
+    # by the same `drawn_under`); the Observation and its predicate are host vocabulary.
+    short_seen: dict = {      # drained rung -> (Observation, ...), sorted by kind
+        src: tuple(Observation(src, f"{SHORTFALL_PREDICATE}:{k}", n) for k, n in gaps)
+        for src, gaps in sub.shortfalls}
     if short_by_person:
         # ⚠ A SHORTFALL EMITS NOTHING AND DECIDES NOTHING, on L5's rule: a threshold crossing
         # *"MAY NEVER PRODUCE AN OUTCOME"*. Inventing starvation here would be the outcome L5
@@ -576,26 +601,25 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # the rehome replaced — leaves every reader seeing the full body forever, with every test
     # still green. `LB-3b` asserts the crossing AND the budget drop for exactly that reason:
     # either half alone is satisfiable by a write nobody reads.
-    step = w.fixtures.get("body_step")
-    for pid in sorted(short_by_person):
+    # v9 IN-07 E2: the loss (`body_step x units short`), the `body_step = 0` control arm (no fall, no
+    # write) and death at zero are the module's (`SubsistOutcome.falls`); the writes are these.
+    for fall in sub.falls:
+        pid = fall.pid
         person = w.persons.get(pid)
         if person is None:
             continue
-        lost = step * sum(short_by_person[pid].values())
-        if lost <= 0:
-            continue                      # the `body_step = 0` control arm: nothing moves
         was = person.body
         prior_b = w.last_emission_of("body.changed", pid)
         _m = len(w._emitted_by_write)
         w.write("body", token,
-                lambda person=person, lost=lost: setattr(person, "body", max(0, person.body - lost)),
+                lambda person=person, after=fall.body_after: setattr(person, "body", after),
                 record_kind="Person", fieldname="body", driver="Event",
                 emits="body.changed", subject=pid,
                 causes=[prior_b] if prior_b else [ROOT])
         fell = w._emitted_by_write[_m] if len(w._emitted_by_write) > _m else None
         emitted.extend(_crossings(w, pid, floors_body, was, person.body,
                                   fell.id if fell else None))
-        if person.body <= 0:
+        if fall.body_after <= 0:
             # death through the one owner: see _die
             _die(w, token, pid)
 
@@ -619,45 +643,48 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
             if hazard > 0 and keyed(pid, "body_hazard").random() < hazard:
                 _die(w, token, pid)
 
+    # ⚠ v9 IN-07 E3: THE YIELD AND CREDIT ARITHMETIC that stood in the loop below -- per Site whose own
+    # `rung` is this rung, per `SITE_YIELD` base, the condition- and `season_factor`-scaled `int(...)`,
+    # zero entries dropped, then `stores + produced` read after this rung's debit -- is the
+    # `settlements.produce` step_call's (`modules/settlements/produce.py`), called ONCE, here, AFTER
+    # `settlements.subsist` (#353 §25: draw before produce), on the host's projection
+    # (`world_q.produce_input`, the stores read BEFORE this loop's debit writes, with E2's
+    # `larder_after` handed in so the module credits the debited larder, as this loop's order did).
+    # Its rows are ordered tuples in the order the old loop built its dicts; the writes stay here.
+    prod = _step_call(PRODUCE)(world_q.produce_input(w, scale_, factor, sub.larder_after))
+    yielded = {row.rung: (dict(row.produced), dict(row.credited)) for row in prod.rows}
+
     for rid in sorted(w.rungs):
         r = w.rungs[rid]
-        draw = draws.get(rid)
-        if draw:
-            have = dict(r.stores or {})
-            # The pre-pass already capped every take at what was there, so this cannot go
-            # negative and `max(0, ...)` would only hide an arithmetic error.
-            after = {k: have.get(k, 0) - amt for k, amt in draw.items()}
-            if any(after[k] != have.get(k, 0) for k in after):
-                prior = w.last_emission_of("stores.changed", rid)
-                # `observed=`: the shortfall this draw left at `rid` if it ran dry here (`19d`,
-                # above). Empty for every larder that met its mouths, which is every one the
-                # shipped worlds draw.
-                w.write("stores", token,
-                        lambda r=r, after=after: r.stores.update(after),
-                        record_kind="Rung", fieldname="stores", driver="Event",
-                        emits="stores.changed", subject=rid,
-                        causes=[prior] if prior else [ROOT],
-                        observed=short_seen.get(rid, ()))
+        # The debit is the module's (`SubsistOutcome.larder_after`: changed rungs only, each take
+        # already capped at what was there); the write and its `observed=` are these.
+        after = larder_after.get(rid)
+        if after:
+            prior = w.last_emission_of("stores.changed", rid)
+            # `observed=`: the shortfall this draw left at `rid` if it ran dry here (`19d`,
+            # above). Empty for every larder that met its mouths, which is every one the
+            # shipped worlds draw.
+            w.write("stores", token,
+                    lambda r=r, after=after: r.stores.update(after),
+                    record_kind="Rung", fieldname="stores", driver="Event",
+                    emits="stores.changed", subject=rid,
+                    causes=[prior] if prior else [ROOT],
+                    observed=short_seen.get(rid, ()))
         # `yield` — #353 §25's *"only here"* row. The base is the SITE's, scaled by its
         # condition and then by `season_factor`, so a worn place produces less without a
-        # second wear concept (`H-93`, and `rosters.yaml: site_yield` for why).
-        produced: dict = {}
+        # second wear concept (`H-93`, and `rosters.yaml: site_yield` for why). The arithmetic is
+        # `settlements.produce`'s (above); a rung with no nonzero yield has no row and no write.
         # ⚠ THE SITE'S OWN `rung`, NOT THE RUNG'S `sites` LIST. The first version read
         # `r.sites`, and that list is a BACK-REFERENCE NOTHING MAINTAINS — it is empty for
         # every rung in the corpus, so the whole yield step was INERT and would have shipped
         # as an unreachable barrier stage. `Site.rung` is the maintained side (S12), and
         # reading the side that is actually written is the difference between a step that
         # runs and a step that merely exists (§0.2). Caught by `F10` failing for a different
-        # reason and then looking at the fixture.
-        for site in sorted(w.sites.values(), key=lambda x: x.id):
-            if site.rung != rid:
-                continue
-            for k, base in (SITE_YIELD.get(site.kind) or {}).items():
-                produced[k] = produced.get(k, 0) + int(
-                    base * (max(0, site.condition) / scale_) * factor)
-        produced = {k: v for k, v in produced.items() if v}
-        if not produced:
+        # reason and then looking at the fixture. (`world_q.produce_input` hands the module
+        # `Site.rung`.)
+        if rid not in yielded:
             continue
+        produced, credited = yielded[rid]
         prior_y = w.last_emission_of("yield.taken", rid)
         w.write("yield", token,
                 lambda r=r, produced=produced: object.__setattr__(r, "yield", dict(produced)),
@@ -665,7 +692,6 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
                 emits="yield.taken", subject=rid,
                 causes=[prior_y] if prior_y else [ROOT])
         prior_s = w.last_emission_of("stores.changed", rid)
-        credited = {k: (r.stores or {}).get(k, 0) + v for k, v in produced.items()}
         w.write("stores", token,
                 lambda r=r, credited=credited: r.stores.update(credited),
                 record_kind="Rung", fieldname="stores", driver="Event",
