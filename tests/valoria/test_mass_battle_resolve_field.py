@@ -70,3 +70,29 @@ def test_resolve_field_does_not_crash_on_a_zero_weight_side():
     # `_MIN_TROOPS` exists so a truly empty side does not reach that crash.
     result = massbattle.resolve_field(_record(w, crown.members, []))
     assert result["degree"] in {"Overwhelming", "Success", "Partial", "Failure"}
+
+
+def test_resolve_field_sizes_each_side_by_its_fielded_troops_when_given(monkeypatch):
+    """v9 IN-52 (the levy-to-field feed): `troops_a`/`troops_b`, when given, REPLACE each side's weight sum
+    as its Subunit's troops, side for side, and `_MIN_TROOPS` still floors a side fielding 0. The control:
+    the weight sums differ from both pairs asked for, so a call ignoring the keywords cannot pass, and the
+    second pair is unequal, so a call swapping the sides cannot."""
+    captured = []
+
+    def fake_run_and_grade(unit_a, unit_b, terrain, world, walls_dr=None):
+        captured.append((unit_a.subunits[0].troops, unit_b.subunits[0].troops))
+        return {"attacker_wins": True, "degree": "Success",
+                "attacker_size_pct": 1.0, "defender_size_pct": 0.0}
+
+    monkeypatch.setattr(massbattle, "_run_and_grade", fake_run_and_grade)
+    w = build_realm(0)
+    crown = faction_q.resolve(w, "fac_crown")
+    guilds = faction_q.resolve(w, "fac_guilds")
+    rec = _record(w, crown.members, guilds.members)
+    sums = (float(sum(w.persons[p].weight for p in crown.members)),
+            float(sum(w.persons[p].weight for p in guilds.members)))
+    massbattle.resolve_field(rec, troops_a=1, troops_b=0)
+    massbattle.resolve_field(rec, troops_a=3, troops_b=5)
+    assert captured == [(1.0, massbattle._MIN_TROOPS), (3.0, 5.0)], captured
+    assert sums not in captured, ("the control is vacuous if the weight sums equal a pair asked for",
+                                  sums)

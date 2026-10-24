@@ -135,8 +135,9 @@ def require_entries(needs) -> list:
     v9 IN-07 (`proposals/2026-10-07-unplugged-systems-replug.md` §4, the three deletion-refusal
     accounts reconciled): a row a role roster names (`module_entry:`) is held by
     `registry._check_module_entry`; a ROLE-LESS row -- a `query` row, or a `step_call`/`verb_call` no
-    roster names -- is held here. `needs` is `((role, entry kind), ...)`, declared by the host file
-    that calls the entry (`queries/world_q.py::QUERY_ENTRIES`), and the driver passes it right after
+    roster names -- is held here. `needs` is `((role, entry kind), ...)`, declared by the host
+    (`queries/world_q.py::QUERY_ENTRIES`, which also carries the field adapter's `PROVISION`
+    (`seam/wrappers/mass_battle.py`), and `loop/matter.py::STEP_CALLS`), and the driver passes it right after
     `register_module_entries`, so the table already holds every row that carries `entry:`. Two
     refusals, each naming the role:
       * a needed role `MODULE_ENTRIES` does not hold -- its composition row was deleted or stripped of
@@ -152,7 +153,8 @@ def require_entries(needs) -> list:
                     f"row declares as an entry",
                     needs="the composition row back in references/module_contracts.yaml "
                           "`composition_roles:` (re-run tools/export_composition.py), or the host's "
-                          "need removed with its caller")
+                          "need removed with its caller from where it is declared "
+                          "(queries/world_q.py::QUERY_ENTRIES or loop/matter.py::STEP_CALLS)")
         if held.entry != kind:
             _refuse(f"the host needs module entry {role!r} as `entry: {kind}`, and its composition "
                     f"row declares `entry: {held.entry}`",

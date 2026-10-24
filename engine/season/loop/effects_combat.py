@@ -328,12 +328,12 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # G4 -- WHAT IT NAMES: the losers by the fields the casualty writes (earning as above); the movers
     # WHOLE, `move`'s reason (a `contain` leg is stored on its Person, so his digest carries the legs
     # and `travel_leg`).
-    # v9 IN-52: each debited treasury by its `stores`, earning the band's OWN kind -- a treasury that
-    # moved must not publish an arrival nobody made (`earns=None` would earn every declared kind).
+    # v9 IN-52: each debited treasury is a subject by its `stores`, earning what the losers earn
+    # (`loser_earns`): `None` beside a moving army, the band's own kind when nobody moves.
     return Change(tuple(Subject.entity("persons", pid, earns=loser_earns, fields=fields)
                         for pid in touched)
                   + tuple(Subject.entity("persons", pid) for pid in movers)
-                  + tuple(Subject.entity("rungs", rid, earns=_band_kind(res.degree), fields=("stores",))
+                  + tuple(Subject.entity("rungs", rid, earns=loser_earns, fields=("stores",))
                           for rid in dict.fromkeys(rid for rid, _ in debits)), perform)
 
 

@@ -26,6 +26,7 @@ from types import SimpleNamespace
 import pytest
 
 from engine.season.data.matrix import Step, WriteClass
+from engine.season.harness import probes as P
 from engine.season.harness.populated import build_realm
 from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.manifest.registrar import MODULE_ENTRIES
@@ -213,6 +214,75 @@ def test_the_field_eats_its_ration_from_the_treasury_only_when_on(on, monkeypatc
         assert seen[0][1] == {"troops_a": 2, "troops_b": 6}, seen
         assert w.rungs[TREASURY_A].stores == {"grain": 4, "salt": 1}, w.rungs[TREASURY_A].stores
     assert dict(w.rungs[TREASURY_B].stores or {}) == before_b
+
+
+def test_the_shipped_arm_is_off():
+    """THE SHIPPED-DEFAULT ASSERTION (`H-241`): the flip moves no pinned hash while the realm fights no
+    field, so this is the observer that the arm shipped is the control."""
+    assert P.DEFAULT_FIXTURES.get("field_provisioning") is False, (
+        "the shipped arm moved: the flip is its own declared commit; restate this test there")
+
+
+def test_on_the_defenders_treasury_is_debited_by_its_own_fielded_troops(monkeypatch):
+    """LF-3, THE DEFENDER'S HALF: grain 6 and salt 3 at the shipped ration (grain 2, salt 1) field 3 of the
+    defender's 6, and the fold debits exactly that ration from the defender's treasury -- to nothing. A debit
+    dropping the defender's side (index 1 of the provision) leaves its stores untouched."""
+    assert dict(build_realm(0).fixtures.get("subsistence_weight")) == {"grain": 2, "salt": 1}, (
+        "the shipped ration moved; re-derive this test's numbers")
+    seen = _recording(monkeypatch)
+    w = _world(True, treasury_b={"grain": 6, "salt": 3})
+    _fold(w, _march_act())
+    assert len(seen) == 1, seen
+    assert seen[0][1]["troops_b"] == 3, seen
+    assert w.rungs[TREASURY_B].stores == {"grain": 0, "salt": 0}, w.rungs[TREASURY_B].stores
+
+
+def _patch_won_recording(monkeypatch):
+    """The mass-battle entry patched to report the ATTACKER winning (`test_march.py::_patch_won`'s shape,
+    accepting `**_`), recording the troops it was handed."""
+    from engine.season.seam.wrappers import mass_battle as MB
+    seen: list = []
+
+    def fn(inp, rng, **kw):
+        seen.append(kw)
+        return dict(attacker_wins=True, degree="Success", attacker_size_pct=1.0, defender_size_pct=0.5)
+    monkeypatch.setattr(MB, "entry_for", lambda prize, module: (SimpleNamespace(fn=fn), None))
+    return seen
+
+
+def test_on_a_won_march_with_movers_publishes_the_arrival_beside_a_debited_treasury(monkeypatch):
+    """A debited treasury earns what the losers earn: `None` beside a moving army. Earning the band's own
+    kind instead would put `field.won` in the fold's `earned` set and so DROP `army.arrived` from a `Won`
+    whose army moved (`loop/resolve.py`: a non-empty `earned` publishes only those kinds)."""
+    seen = _patch_won_recording(monkeypatch)
+    w = _world(True, treasury_a={"grain": 4, "salt": 1})
+    kinds = {e.kind for e in _fold(w, _march_act())}
+    assert {"field.won", "army.arrived"} <= kinds, sorted(kinds)
+    assert seen == [{"troops_a": 1, "troops_b": 0}], seen
+    assert w.rungs[TREASURY_A].stores == {"grain": 2, "salt": 0}, w.rungs[TREASURY_A].stores
+
+
+def test_on_one_treasury_for_both_sides_is_never_eaten_twice(monkeypatch):
+    """THE SAME RUNG ON BOTH SIDES: the seat's office re-pointed to the defender's held rung, so the
+    attacker's and the defender's treasury are one. The attacker eats first (2 troops: grain 4, salt 2);
+    the defender is provisioned on what is left (grain 3, salt 1: 1 troop, grain 2, salt 1). Provisioned
+    on the whole store instead, the defender would field 3 and the store would go negative."""
+    seen = _recording(monkeypatch)
+    w = _world(True, treasury_b={"grain": 7, "salt": 3})
+    w.offices[SEAT].rung = TREASURY_B
+    r = _provider_field(w, _march_act("m_probe"))
+    (side_a, consumed_a), (side_b, consumed_b) = r["provision"]
+    assert side_a == side_b == TREASURY_B, r["provision"]
+    w = _world(True, treasury_b={"grain": 7, "salt": 3})
+    w.offices[SEAT].rung = TREASURY_B
+    seen.clear()
+    _fold(w, _march_act())
+    assert len(seen) == 1 and seen[0][1] == {"troops_a": 2, "troops_b": 1}, seen
+    after = w.rungs[TREASURY_B].stores
+    assert all(units >= 0 for units in after.values()), after
+    eaten = {k: dict(consumed_a).get(k, 0) + dict(consumed_b).get(k, 0) for k in ("grain", "salt")}
+    assert eaten == {"grain": 6, "salt": 3}, (consumed_a, consumed_b)
+    assert after == {k: {"grain": 7, "salt": 3}[k] - eaten[k] for k in eaten}, after
 
 
 # ======================================================================================

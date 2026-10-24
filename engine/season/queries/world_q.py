@@ -999,9 +999,10 @@ def subsistence_draw(w: World) -> dict:
     ⚠ EXTRACTED FROM MATTER, NOT WRITTEN BESIDE IT. `loop/matter.py`'s larder pass (item 3a) did
     exactly this arithmetic inline, and `demanded`/`delivered` below need the same arithmetic. With
     two copies of *what an eater wants, and what the walk gives them*, MATTER could feed a person
-    whom the Queries report as hungry (§8). MATTER now calls this and derives its writes and its
-    `_subsistence_shortfall` from the record; the two Queries sum it over a subtree. So there is
-    one owner, and the Queries cannot disagree with the draw that actually runs.
+    whom the Queries report as hungry (§8). MATTER calls `settlements.subsist` (`subsist_input`), which
+    runs the same `larder_draw`; this projection serves tests and bare-world callers, and the two Queries
+    sum it over a subtree. So there is one owner, and the Queries cannot disagree with the draw that
+    actually runs.
 
     ⚠⚠ ONLY A COHORT EATS (plan position `24f`, `ED-IN-0255`, Jordan 2026-09-18: *"NPC synecdoches
     that just represent the overall population affected ... i don't think having lords and guild
@@ -1033,7 +1034,9 @@ def subsistence_draw(w: World) -> dict:
     INVISIBLE to its callers. The `home_of` call inside it traces as MATTER's inline loop did. The
     per-eater `nearest_store` rows the walk used to trace are gone with the walk (IN-07 E1's
     assumption A4: no committed artifact carries one, and
-    `test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte` is the control)."""
+    `test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte` is the control), and the
+    `demanded`, `delivered` and `descendants` rows MATTER traced per drained rung (the gap is now
+    `settlements.subsist`'s, untraced)."""
     return _draw_dict(_entry(LARDER_DRAW)(larder_input(w)))
 
 
@@ -1061,8 +1064,8 @@ QUERY_ENTRIES = ((LARDER_DRAW, "query"), (DRAWN_UNDER, "query"), (HOUSING, "quer
 def _entry(role: str):
     """A module entry by role string, through `composition.require` (cached per process). Not
     `MODULE_ENTRIES`: `subsistence_draw`, `demanded`, `delivered` and `capacity` have driverless callers
-    (`harness/scarce.py`, `harness/populated.py`, tests on a bare world), and the table fills only at
-    driver construction."""
+    (`harness/populated.py`: `capacity` at world-gen; tests on a bare world), and the table fills only
+    at driver construction."""
     return composition.require(role)
 
 
@@ -1111,8 +1114,9 @@ def _larder_parts(w: World) -> tuple:
 def subsist_input(w: World) -> SubsistInput:
     """THE PROJECTION `settlements.subsist` reads (v9 IN-07 E2): the larder projection, each home's
     chain, the `body_step` fixture and every eater's `Person.body`. Read-only; it writes nothing and
-    traces what `larder_input` traces (`home_of`), so MATTER's trace is the draw's as it was. MATTER
-    calls the entry with it once a season and makes every write from the outcome."""
+    traces what `larder_input` traces (`home_of`), so MATTER's trace is the draw's, less those rows (the
+    `demanded`, `delivered` and `descendants` rows `subsistence_draw`'s A4 note names). MATTER calls the
+    entry with it once a season and makes every write from the outcome."""
     larder, chains = _larder_parts(w)
     return SubsistInput(larder, chains, w.fixtures.get("body_step"),
                         tuple((e.pid, w.persons[e.pid].body) for e in larder.eaters))
@@ -1140,7 +1144,7 @@ def _draw_dict(record: DrawRecord) -> dict:
 
 
 def _draw_record(draw: dict) -> DrawRecord:
-    """The inverse of `_draw_dict`, for a caller (MATTER) that hands `demanded`/`delivered` the dict."""
+    """The inverse of `_draw_dict`, for a caller holding the dict (the `draw=` argument; tests)."""
     return DrawRecord(tuple(DrawRow(pid, home, tuple((k, *cell) for k, cell in row.items()))
                             for pid, (home, row) in draw.items()))
 
@@ -1175,7 +1179,7 @@ def demanded(w: World, rung_id: str, draw: Optional[dict] = None) -> dict:
     count, `T-l`) times a registered table, so this is `density`'s weighted HEADCOUNT and not a
     tally. It reads live `contain` edges only, through `home_of` (clause 3).
 
-    ⚠ `draw` is MATTER's own record when MATTER asks, so the numbers are the draw that ran. When it
+    ⚠ `draw` is a caller's own record when given, so the numbers are that record's. When it
     is omitted, it is the draw the stores AS THEY NOW STAND would give. For `demanded` the two agree
     anyway: `want` reads no store. Kinds are those `subsistence_weight` registers with a positive
     want; `delivered` returns the same keys.

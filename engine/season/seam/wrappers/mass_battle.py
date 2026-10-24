@@ -220,11 +220,19 @@ def _defender_treasury(w: Any, rung: str) -> Optional[str]:
     return t.object if t is not None and t.object in w.rungs else None
 
 
-def provision_input(w: Any, weight: int, treasury: Optional[str]) -> ProvisionInput:
+def provision_input(w: Any, weight: int, treasury: Optional[str], eaten: tuple = ()) -> ProvisionInput:
     """THE PROJECTION `settlements.provision` reads (v9 IN-52), for one side: its Σ weight, its treasury's
     `Rung.stores` in their own order (`()` for no treasury rung), the `subsistence_weight` ration sorted by
-    kind, and the `field_provisioning` fixture (`H-241`; `False`, shipped, is the control arm). Read-only."""
+    kind, and the `field_provisioning` fixture (`H-241`; `False`, shipped, is the control arm). Read-only.
+
+    `eaten`: `((kind, units), ...)` another side has already consumed from THIS treasury in the same field
+    (the defender's treasury when it is the attacker's own rung), subtracted from the projected stores so one
+    store is never eaten twice. No floor is applied (the entry fields 0 on a non-positive store); `()` leaves
+    the projection exactly as it was."""
     stores = tuple((w.rungs[treasury].stores or {}).items()) if treasury is not None else ()
+    if eaten:
+        less = dict(eaten)
+        stores = tuple((kind, units - less.get(kind, 0)) for kind, units in stores)
     ration = tuple(sorted((w.fixtures.get("subsistence_weight") or {}).items()))
     return ProvisionInput(weight, stores, ration, bool(w.fixtures.get("field_provisioning")))
 
@@ -293,9 +301,15 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     # `_eff_march` debits each side's `consumed` from the treasury named beside it. With `field_provisioning`
     # off (shipped) the entry returns `troops = Σ weight` and `consumed = ()`: the field and the world as
     # they were. An unprovisioned side fields 0, which `resolve_field`'s crash floor lifts (A16).
+    # ONE TREASURY FOR BOTH SIDES (the defender's held rung is the attacker's seat rung): the attacker eats
+    # first, attacker-then-defender being the order `_ration_debits` writes, and the defender is provisioned
+    # NET of what the attacker ate, so the debit never exceeds the store.
     prov = composition.require(world_q.PROVISION)
     treasuries = (_attacker_treasury(w, causes), _defender_treasury(w, rung))
-    fed = tuple(prov(provision_input(w, sum(side), t)) for side, t in zip(inp.weights, treasuries))
+    a = prov(provision_input(w, sum(inp.weights[0]), treasuries[0]))
+    shared = treasuries[1] is not None and treasuries[1] == treasuries[0]
+    b = prov(provision_input(w, sum(inp.weights[1]), treasuries[1], a.consumed if shared else ()))
+    fed = (a, b)
     result = entry.fn(inp, rng, troops_a=fed[0].troops, troops_b=fed[1].troops)
     return dict(status="RESOLVED", module=_PROVIDER, resolver="dice_pool",
                 # v9 IN-52: `((treasury rung, consumed), ...)`, attacker then defender -- what `_eff_march`

@@ -28,7 +28,8 @@ THE FALSIFIERS, each with the failure it would show:
     TERRITORIAL quantity"*): on the built realm, at least one cohort draws real stock, the record
     MATTER used names no individual, and the realm's matter is conserved across the draw exactly.
 
-MUTATION-CHECKED at `24f`: deleting the `is_cohort` skip in `subsistence_draw` reddens five tests --
+MUTATION-CHECKED at `24f`: deleting the `is_cohort` skip (then in `subsistence_draw`; since v9 IN-07 E1
+in `modules/settlements/larder.py`, `settlements.larder_draw`) reddens five tests --
 the eater set, the ceiling test's eater line, the falsifier (`p_npc_008`, seated under `set_s_018`,
 falls 1000 -> 970), its control, and the drain guard. ⚠ AND ONE MUTATION IT DOES NOT CATCH, said
 rather than implied: seating the cohorts BEFORE the cast's tie block leaves every test here green,

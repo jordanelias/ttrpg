@@ -267,7 +267,9 @@ class SubsistInput:
       * `chains`    -- `((home, (home, parent, ..., root)), ...)` per home, sorted: each home's whole
                        containment ancestry (`ancestry`), NOT cut at a non-rung as a ladder is. A drained
                        rung's gap counts the eaters whose chain passes through it -- `_subtree`'s
-                       membership read from the other end, which is what `demanded`/`delivered` sum;
+                       membership read from the other end on a single-parent containment tree (every
+                       builder's; `World.add_tenure` checks ascent, not uniqueness, and `parent_of`
+                       takes the first live edge), which is what `demanded`/`delivered` sum;
       * `body_step` -- the `body_step` fixture: body lost per unit short (`0` is the control arm);
       * `bodies`    -- `((pid, Person.body), ...)` for every eater in `larder.eaters`, sorted by pid."""
     larder: LarderInput

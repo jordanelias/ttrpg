@@ -5,8 +5,9 @@ Gate `15c` (its operands). Beside `24f`, whose territorial quantity it feeds"*. 
 verb's operands from a shortfall claim."*
 
 What the position built, each asked of the real MATTER barrier, the real WITNESS and the real fold:
-  1. `world_q.subsistence_draw` -- the ONE owner of the larder draw's arithmetic, extracted from
-     MATTER. MATTER derives its writes from it; the two Queries sum it.
+  1. `world_q.subsistence_draw` -- the host projection of the larder draw, extracted from MATTER; the
+     arithmetic's one owner is `settlements.larder_draw` (`modules/settlements/larder.py`). MATTER runs
+     the same draw through `settlements.subsist` (`world_q.subsist_input`); the two Queries sum it.
   2. `world_q.demanded` / `world_q.delivered` -- the need, and what the larder ladder delivers against
      it, over a rung's containment subtree. `demanded - delivered` is the shortfall.
   3. MATTER records that shortfall as an `Observation` on the `stores.changed` Event of a larder the

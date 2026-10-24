@@ -37,7 +37,7 @@ from ..trace_log import TRACE
 
 
 #: v9 IN-07 E2: the module entries MATTER calls, `(role, entry kind)` -- the host's half of *"two owners
-#: say which module is called"*, as `queries/world_q.py::QUERY_ENTRIES` is for the larder queries. The
+#: say which module is called"*, as `queries/world_q.py::QUERY_ENTRIES` is for the `query` entries. The
 #: driver hands both to `manifest/registrar.py::require_entries` at construction, which refuses a role
 #: here that `MODULE_ENTRIES` does not hold, or holds under another kind: the refusal a deleted or
 #: stripped `step_call` row no role roster names would otherwise never meet in a fresh process.
@@ -496,8 +496,9 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # `H-38` closed with *"`Site.condition` is the model"*, and this spends that closure rather
     # than minting a `band_floors.person` second scheme.
     floors_body = (w.fixtures.get("band_floors") or {}).get("body", {})
-    # ⚠ PLAN POSITION `19d`: THE ARITHMETIC ABOVE NOW LIVES IN ONE OWNER, `world_q.subsistence_draw`,
-    # and this pass derives its writes from the record it returns. The inline loop that stood here
+    # ⚠ PLAN POSITION `19d`: THE ARITHMETIC ABOVE NOW LIVES IN ONE OWNER, `settlements.larder_draw`,
+    # which `settlements.subsist` runs (E2, below); this pass derives its writes from that outcome. The
+    # inline loop that stood here
     # (per housed eater, sorted; per weighted kind, sorted; `nearest_store` over the running `left`
     # view; `take = min(want, held)`) moved there VERBATIM, because `demanded`/`delivered` need the
     # same arithmetic. A second copy would let MATTER feed a person the Queries call hungry. Since

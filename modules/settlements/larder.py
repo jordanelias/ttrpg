@@ -6,7 +6,8 @@ registered in `manifest.MODULE_ENTRIES` by the registrar at driver construction,
 `manifest/registrar.py::require_entries` against the host's declared needs
 (`queries/world_q.py::QUERY_ENTRIES`), so a deleted or stripped row refuses at construction. The host
 reaches them by role string through `engine.substrate.composition.require`, because some callers run
-with no driver (`harness/scarce.py`, the tests that read `demanded`/`delivered` on a bare world).
+with no driver (the tests that read `demanded`/`delivered` on a bare world; `harness/scarce.py` builds its
+driver before it calls them).
 
 It takes the host's typed input record and returns a typed output record, and imports the record types,
 nothing else. It never reads or writes `World`, holds no token and keeps no state between calls; it

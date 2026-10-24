@@ -229,7 +229,7 @@ def test_a_host_declared_entry_row_deleted_stripped_or_rekinded_in_a_fresh_proce
     `before == []` is what makes this the fresh-process form. EVERY declared need, one fresh process
     per arm, so a second need sorted ahead of the first cannot hide it."""
     needs = _run(_HOST_NEEDS + "print(repr(needs))\n")
-    assert len(needs) >= 7, f"fewer host-declared entries than IN-07 E1..E6 landed: {needs}"
+    assert len(needs) >= 8, f"fewer host-declared entries than IN-07 E1..E6 and IN-52 landed: {needs}"
     assert {kind for _role, kind in needs} >= {"query", "step_call"}, needs
     # The re-kinded arm moves each need to a kind it is NOT (a `step_call` re-keyed to `step_call`
     # would be no edit at all).
