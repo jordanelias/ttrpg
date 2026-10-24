@@ -7,15 +7,16 @@
  "log_events": 69592,
  "acts_resolved": 2620,
  "admission": {
-  "ADMITTED": 1749,
+  "ADMITTED": 1562,
   "UNKNOWN_READ(no read recorded)": 184,
   "PRECONDITION_FALSE": 1332,
   "UNKNOWN_READ": 177
  },
+ "admission_rechecks": 187,
  "admission_by_verb": {
   "accept": {
    "PRECONDITION_FALSE": 60,
-   "ADMITTED": 6
+   "ADMITTED": 3
   },
   "argue": {
    "PRECONDITION_FALSE": 39
@@ -66,7 +67,7 @@
   },
   "fight": {
    "PRECONDITION_FALSE": 35,
-   "ADMITTED": 4
+   "ADMITTED": 2
   },
   "forge": {
    "PRECONDITION_FALSE": 5,
@@ -90,7 +91,7 @@
    "ADMITTED": 12
   },
   "march": {
-   "ADMITTED": 60
+   "ADMITTED": 30
   },
   "migrate": {
    "ADMITTED": 454,
@@ -134,7 +135,7 @@
   },
   "research": {
    "PRECONDITION_FALSE": 231,
-   "ADMITTED": 74
+   "ADMITTED": 37
   },
   "restore": {
    "PRECONDITION_FALSE": 54
@@ -147,18 +148,18 @@
   },
   "speak": {
    "PRECONDITION_FALSE": 43,
-   "ADMITTED": 8
+   "ADMITTED": 4
   },
   "surveil": {
    "PRECONDITION_FALSE": 82,
-   "ADMITTED": 90
+   "ADMITTED": 45
   },
   "survey": {
    "PRECONDITION_FALSE": 2,
    "ADMITTED": 73
   },
   "tell": {
-   "ADMITTED": 132,
+   "ADMITTED": 66,
    "PRECONDITION_FALSE": 17,
    "UNKNOWN_READ": 5
   },
@@ -186,13 +187,13 @@
  },
  "admission_by_tick": {
   "0": {
-   "ADMITTED": 324,
+   "ADMITTED": 299,
    "UNKNOWN_READ(no read recorded)": 21,
    "PRECONDITION_FALSE": 361,
    "UNKNOWN_READ": 37
   },
   "1": {
-   "ADMITTED": 451,
+   "ADMITTED": 399,
    "UNKNOWN_READ(no read recorded)": 32,
    "PRECONDITION_FALSE": 285,
    "UNKNOWN_READ": 51
@@ -200,11 +201,11 @@
   "2": {
    "UNKNOWN_READ": 42,
    "PRECONDITION_FALSE": 338,
-   "ADMITTED": 459,
+   "ADMITTED": 416,
    "UNKNOWN_READ(no read recorded)": 59
   },
   "3": {
-   "ADMITTED": 515,
+   "ADMITTED": 448,
    "UNKNOWN_READ": 47,
    "PRECONDITION_FALSE": 348,
    "UNKNOWN_READ(no read recorded)": 72

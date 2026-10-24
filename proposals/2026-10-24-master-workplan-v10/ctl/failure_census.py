@@ -30,8 +30,15 @@ if hooks:
         return r
     SeasonDriver._eligible = _eligible
     _orig = SeasonDriver._admits
+    _seen = set(); _recheck = [0]
     def _admits(self, w, a, row):
         r = _orig(self, w, a, row)
+        # an admitted contested act is checked a second time inside `_fold` (resolve.py, after the
+        # contest branch's own check); the decision is the first call, so a repeat is counted apart
+        if a.id in _seen:
+            _recheck[0] += 1
+            return r
+        _seen.add(a.id)
         try:
             ok, kinds, v = r
             adm.append((a.verb, bool(ok), repr(v.value), v.failed, tuple(kinds or ()), a.id, w.tick,
@@ -77,6 +84,7 @@ for verb, ok, val, fl, kinds, aid, tick, elig, nobs in adm:
     if not ok and aid not in rids: invisible[verb] += 1
     if c.startswith(("UNKNOWN_READ", "PRECONDITION_FALSE")): failed[(verb, c, fl)] += 1
 res["admission"] = dict(cls)
+res["admission_rechecks"] = _recheck[0] if hooks else None
 res["admission_by_verb"] = {v: dict(c) for v, c in sorted(by_verb.items())}
 res["admission_by_tick"] = {str(t): dict(c) for t, c in sorted(per_tick.items())}
 res["failed_conjunct"] = [[v, c, f, n] for (v, c, f), n in failed.most_common()]

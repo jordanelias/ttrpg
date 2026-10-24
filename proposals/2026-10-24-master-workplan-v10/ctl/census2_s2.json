@@ -7,15 +7,16 @@
  "log_events": 64769,
  "acts_resolved": 2633,
  "admission": {
-  "ADMITTED": 1679,
+  "ADMITTED": 1534,
   "PRECONDITION_FALSE": 1332,
   "UNKNOWN_READ(no read recorded)": 202,
   "UNKNOWN_READ": 205
  },
+ "admission_rechecks": 145,
  "admission_by_verb": {
   "accept": {
    "PRECONDITION_FALSE": 84,
-   "ADMITTED": 6
+   "ADMITTED": 3
   },
   "argue": {
    "PRECONDITION_FALSE": 39
@@ -53,7 +54,7 @@
   },
   "determine": {
    "PRECONDITION_FALSE": 9,
-   "ADMITTED": 2
+   "ADMITTED": 1
   },
   "dispatch": {
    "ADMITTED": 11,
@@ -67,7 +68,7 @@
   },
   "fight": {
    "PRECONDITION_FALSE": 36,
-   "ADMITTED": 10
+   "ADMITTED": 5
   },
   "forge": {
    "PRECONDITION_FALSE": 6,
@@ -92,7 +93,7 @@
    "PRECONDITION_FALSE": 12
   },
   "march": {
-   "ADMITTED": 16
+   "ADMITTED": 8
   },
   "migrate": {
    "ADMITTED": 423,
@@ -136,7 +137,7 @@
   },
   "research": {
    "PRECONDITION_FALSE": 251,
-   "ADMITTED": 50
+   "ADMITTED": 25
   },
   "restore": {
    "PRECONDITION_FALSE": 57
@@ -149,18 +150,18 @@
   },
   "speak": {
    "PRECONDITION_FALSE": 40,
-   "ADMITTED": 10
+   "ADMITTED": 5
   },
   "surveil": {
    "PRECONDITION_FALSE": 68,
-   "ADMITTED": 100
+   "ADMITTED": 50
   },
   "survey": {
    "PRECONDITION_FALSE": 3,
    "ADMITTED": 88
   },
   "tell": {
-   "ADMITTED": 96,
+   "ADMITTED": 48,
    "PRECONDITION_FALSE": 14,
    "UNKNOWN_READ": 8
   },
@@ -188,25 +189,25 @@
  },
  "admission_by_tick": {
   "0": {
-   "ADMITTED": 339,
+   "ADMITTED": 316,
    "PRECONDITION_FALSE": 327,
    "UNKNOWN_READ(no read recorded)": 32,
    "UNKNOWN_READ": 38
   },
   "1": {
-   "ADMITTED": 391,
+   "ADMITTED": 352,
    "PRECONDITION_FALSE": 344,
    "UNKNOWN_READ(no read recorded)": 44,
    "UNKNOWN_READ": 40
   },
   "2": {
-   "ADMITTED": 450,
+   "ADMITTED": 410,
    "UNKNOWN_READ": 57,
    "UNKNOWN_READ(no read recorded)": 59,
    "PRECONDITION_FALSE": 327
   },
   "3": {
-   "ADMITTED": 499,
+   "ADMITTED": 456,
    "UNKNOWN_READ": 70,
    "PRECONDITION_FALSE": 334,
    "UNKNOWN_READ(no read recorded)": 67

@@ -7,15 +7,16 @@
  "log_events": 68348,
  "acts_resolved": 2628,
  "admission": {
-  "ADMITTED": 1778,
+  "ADMITTED": 1581,
   "UNKNOWN_READ(no read recorded)": 137,
   "PRECONDITION_FALSE": 1350,
   "UNKNOWN_READ": 184
  },
+ "admission_rechecks": 197,
  "admission_by_verb": {
   "accept": {
    "PRECONDITION_FALSE": 76,
-   "ADMITTED": 10
+   "ADMITTED": 5
   },
   "argue": {
    "PRECONDITION_FALSE": 22
@@ -53,7 +54,7 @@
   },
   "determine": {
    "PRECONDITION_FALSE": 9,
-   "ADMITTED": 4
+   "ADMITTED": 2
   },
   "dispatch": {
    "ADMITTED": 13,
@@ -67,7 +68,7 @@
   },
   "fight": {
    "PRECONDITION_FALSE": 36,
-   "ADMITTED": 6
+   "ADMITTED": 3
   },
   "forge": {
    "PRECONDITION_FALSE": 1,
@@ -92,7 +93,7 @@
    "PRECONDITION_FALSE": 4
   },
   "march": {
-   "ADMITTED": 42,
+   "ADMITTED": 21,
    "PRECONDITION_FALSE": 3
   },
   "migrate": {
@@ -137,7 +138,7 @@
   },
   "research": {
    "PRECONDITION_FALSE": 228,
-   "ADMITTED": 94
+   "ADMITTED": 47
   },
   "restore": {
    "PRECONDITION_FALSE": 49
@@ -153,18 +154,18 @@
   },
   "speak": {
    "PRECONDITION_FALSE": 35,
-   "ADMITTED": 14
+   "ADMITTED": 7
   },
   "surveil": {
    "PRECONDITION_FALSE": 80,
-   "ADMITTED": 118
+   "ADMITTED": 59
   },
   "survey": {
    "PRECONDITION_FALSE": 6,
    "ADMITTED": 86
   },
   "tell": {
-   "ADMITTED": 106,
+   "ADMITTED": 53,
    "PRECONDITION_FALSE": 23,
    "UNKNOWN_READ": 2
   },
@@ -192,25 +193,25 @@
  },
  "admission_by_tick": {
   "0": {
-   "ADMITTED": 310,
+   "ADMITTED": 272,
    "UNKNOWN_READ(no read recorded)": 27,
    "PRECONDITION_FALSE": 356,
    "UNKNOWN_READ": 37
   },
   "1": {
-   "ADMITTED": 443,
+   "ADMITTED": 391,
    "PRECONDITION_FALSE": 348,
    "UNKNOWN_READ(no read recorded)": 30,
    "UNKNOWN_READ": 46
   },
   "2": {
-   "ADMITTED": 504,
+   "ADMITTED": 451,
    "PRECONDITION_FALSE": 332,
    "UNKNOWN_READ": 52,
    "UNKNOWN_READ(no read recorded)": 26
   },
   "3": {
-   "ADMITTED": 521,
+   "ADMITTED": 467,
    "PRECONDITION_FALSE": 314,
    "UNKNOWN_READ": 49,
    "UNKNOWN_READ(no read recorded)": 54

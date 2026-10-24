@@ -65,6 +65,13 @@ for (k, p, v), n in l.items():
     if p.startswith("exists:") and v == "0": kinds[p] += n
 T["exists_zero"] = ", ".join(f"`{p}` {n}" for p, n in kinds.most_common())
 T["exists_zero_total"] = sum(kinds.values())
+cond_nonsite = sum(n for (k, p, v), n in l.items() if p == "condition" and v == "UNKNOWN")
+T["condition_nonsite"] = str(cond_nonsite)
+T["wrong_referent_total"] = f"{T['exists_zero_total'] + cond_nonsite:,}"
+T["wrong_referent_pct"] = f"{100 * (T['exists_zero_total'] + cond_nonsite) / tot_ev:.1f}%"
+T["docket_empty"] = str(kinds.get("exists:DocketItem", 0))
+T["graded_loss_n"] = str(sum(r["funnel"].get(v, {}).get("both", 0) for r in R for v in ("tell", "research", "surveil")))
+T["exists_zero_total"] = f"{T['exists_zero_total']:,}"
 
 # write failures
 wr = collections.Counter(); gp = collections.Counter(); dc = collections.Counter(); nt = collections.Counter(); wc = collections.Counter()
