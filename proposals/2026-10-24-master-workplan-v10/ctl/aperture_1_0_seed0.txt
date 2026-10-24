@@ -1,0 +1,276 @@
+THE APERTURE — 56 verb-table rows; the per-row, per-holder, per-source figures below are never summed into one (the `★` falsifier)
+
+RESOLVABLE (`resolvable_verbs()`): 51 rows
+  yes: ['accept', 'argue', 'arrest', 'build', 'carry', 'challenge', 'commit', 'comply', 'conceal', 'confer', 'convene', 'covenant', 'create_record', 'destroy_record', 'determine', 'dispatch', 'establish', 'examine', 'fight', 'forge', 'forgive', 'found', 'give', 'interview', 'issue', 'march', 'migrate', 'move', 'oblige', 'open_case', 'pardon', 'petition', 'raze', 'reconstruct', 'release', 'requisition', 'research', 'restore', 'revoke', 'sabotage', 'seize', 'speak', 'surveil', 'survey', 'tell', 'tend', 'thread_read', 'train', 'transfer', 'utter', 'work']
+  no : ['construe', 'evade / defy', 'exchange', 'succeed', 'tie / knot']
+
+SEAT-GATED ROWS (an `eligibility:` alternative is `remit:`): ['arrest', 'confer', 'convene', 'covenant', 'determine', 'dispatch', 'establish', 'issue', 'march', 'open_case', 'pardon', 'raze', 'requisition', 'revoke', 'seize']
+
+==================================================================================================================================
+REALM — seed 0, 1 season(s), 83 persons at build (82 at the end), 31 seated
+  CONTROL  populated.run acts 539 vs measured 539; content_hash EQUAL -> the instrument observed the season without moving it
+  FUNNEL  (person, verb) pairs attempted but never offered: 0 · formed but not eligible at build: 0
+
+  UNFORMABLE FOR EVERY PERSON IN THIS WORLD (a property of the ROW): []
+
+  PER HOLDER — seat, depth, grant; eligible of rows; unformable beyond the row-level set above; then the seat-gated funnel
+    legend: - not eligible · e eligible · f formed, not foldable · o offered · a attempted · r refused only · x executed
+                                             arre conf conv cove dete disp esta issu marc open pard raze requ revo seiz
+    p_npc_003       Leader@1                    -    -    -    e    -    -    -    e    -    -    -    -    o    -    e
+      grant ['issue'] · eligible 45 of 56 · seat-withheld ['arrest', 'confer', 'convene', 'determine', 'dispatch', 'establish', 'march', 'open_case', 'pardon', 'raze', 'revoke']
+    p_npc_004       Senior Inquisitor@1         -    -    -    -    o    -    -    -    -    x    o    -    -    -    -
+      grant ['determine'] · eligible 44 of 56 · seat-withheld ['arrest', 'confer', 'convene', 'covenant', 'dispatch', 'establish', 'issue', 'march', 'raze', 'requisition', 'revoke', 'seize']
+    p_npc_005       TS Riskbreaker (Co@2        e    -    -    -    -    o    -    -    o    -    -    o    -    -    -
+      grant ['dispatch'] · eligible 45 of 56 · seat-withheld ['confer', 'convene', 'covenant', 'determine', 'establish', 'issue', 'open_case', 'pardon', 'requisition', 'revoke', 'seize']
+    p_npc_007       economic represent@1        e    -    -    -    -    o    -    -    x    -    -    o    -    -    -
+      grant ['dispatch'] · eligible 45 of 56 · seat-withheld ['confer', 'convene', 'covenant', 'determine', 'establish', 'issue', 'open_case', 'pardon', 'requisition', 'revoke', 'seize']
+    p_npc_008       Chief Parliamentar@2        -    -    -    o    -    -    -    o    -    -    -    -    o    -    e
+      grant ['issue'] · eligible 45 of 56 · seat-withheld ['arrest', 'confer', 'convene', 'determine', 'dispatch', 'establish', 'march', 'open_case', 'pardon', 'raze', 'revoke']
+    p_npc_009       Lord Steward@2              -    -    -    o    -    -    -    o    -    -    -    -    e    -    e
+      grant ['issue'] · eligible 45 of 56 · seat-withheld ['arrest', 'confer', 'convene', 'determine', 'dispatch', 'establish', 'march', 'open_case', 'pardon', 'raze', 'revoke']
+    p_npc_013       Cardinal of Pruden@1        e    -    -    o    -    o    -    o    o    -    -    o    o    -    e
+      grant ['dispatch', 'issue'] · eligible 49 of 56 · seat-withheld ['confer', 'convene', 'determine', 'establish', 'open_case', 'pardon', 'revoke']
+    p_npc_020       King@0; Duke@1              e    e    o    o    o    o    o    o    o    x    o    o    o    o    e
+      grant ['confer', 'convene', 'determine', 'dispatch', 'issue', 'revoke'] · eligible 56 of 56 · seat-withheld none
+    p_npc_021       Confessor@1                 e    e    o    o    o    o    o    e    x    r    o    o    r    o    e
+      grant ['confer', 'convene', 'determine', 'dispatch', 'issue', 'revoke'] · eligible 56 of 56 · seat-withheld none
+    p_npc_030       Princess (married @0        e    -    -    -    -    o    -    -    o    -    -    o    -    -    -
+      grant ['dispatch'] · eligible 45 of 56 · seat-withheld ['confer', 'convene', 'covenant', 'determine', 'establish', 'issue', 'open_case', 'pardon', 'requisition', 'revoke', 'seize']
+    p_npc_031       Prince (Heir Appar@0        e    -    -    -    -    o    -    -    o    -    -    o    -    -    -
+      grant ['dispatch'] · eligible 45 of 56 · seat-withheld ['confer', 'convene', 'covenant', 'determine', 'establish', 'issue', 'open_case', 'pardon', 'requisition', 'revoke', 'seize']
+    p_npc_032       Queen (Widow Regen@0        e    e    o    o    o    o    o    o    o    x    o    o    o    o    e
+      grant ['confer', 'convene', 'determine', 'dispatch', 'issue', 'revoke'] · eligible 56 of 56 · seat-withheld none
+    p_npc_033       Crown's Spymaster@2         e    -    -    r    -    o    -    o    x    -    -    o    r    -    e
+      grant ['dispatch', 'issue'] · eligible 49 of 56 · seat-withheld ['confer', 'convene', 'determine', 'establish', 'open_case', 'pardon', 'revoke']
+    p_npc_034       Archbishop's Repre@2        e    -    -    -    -    o    -    -    o    -    -    r    -    -    -
+      grant ['dispatch'] · eligible 45 of 56 · seat-withheld ['confer', 'convene', 'covenant', 'determine', 'establish', 'issue', 'open_case', 'pardon', 'requisition', 'revoke', 'seize']
+    p_npc_035       Royal Guard Captai@2        e    -    -    -    -    o    -    -    o    -    -    o    -    -    -
+      grant ['dispatch'] · eligible 45 of 56 · seat-withheld ['confer', 'convene', 'covenant', 'determine', 'establish', 'issue', 'open_case', 'pardon', 'requisition', 'revoke', 'seize']
+    p_npc_036       Royal Marshal@2             e    -    o    o    -    o    -    o    o    -    -    o    e    -    e
+      grant ['convene', 'dispatch', 'issue'] · eligible 50 of 56 · seat-withheld ['confer', 'determine', 'establish', 'open_case', 'pardon', 'revoke']
+    p_npc_037       Lord Treasurer@2            e    -    -    o    -    o    -    o    o    -    -    o    o    -    e
+      grant ['dispatch', 'issue'] · eligible 49 of 56 · seat-withheld ['confer', 'convene', 'determine', 'establish', 'open_case', 'pardon', 'revoke']
+    p_npc_038       Cardinal Justice@1          e    -    o    r    o    o    -    o    o    o    r    o    o    -    e
+      grant ['convene', 'determine', 'dispatch', 'issue'] · eligible 53 of 56 · seat-withheld ['confer', 'establish', 'revoke']
+    p_npc_039       Cardinal of Temper@1        -    -    -    r    -    -    -    o    -    -    -    -    o    -    e
+      grant ['issue'] · eligible 45 of 56 · seat-withheld ['arrest', 'confer', 'convene', 'determine', 'dispatch', 'establish', 'march', 'open_case', 'pardon', 'raze', 'revoke']
+    p_npc_040       Cardinal of Fortit@1        -    -    o    o    -    -    -    x    -    -    -    -    o    -    o
+      grant ['convene', 'issue'] · eligible 46 of 56 · seat-withheld ['arrest', 'confer', 'determine', 'dispatch', 'establish', 'march', 'open_case', 'pardon', 'raze', 'revoke']
+    p_npc_050       Duchess@1                   e    e    o    o    -    x    o    o    o    -    -    r    e    o    e
+      grant ['confer', 'convene', 'dispatch', 'issue', 'revoke'] · eligible 53 of 56 · seat-withheld ['determine', 'open_case', 'pardon']
+    p_npc_052       Duke@1                      e    e    o    e    -    o    o    e    o    -    -    r    o    o    e
+      grant ['confer', 'convene', 'dispatch', 'issue', 'revoke'] · eligible 53 of 56 · seat-withheld ['determine', 'open_case', 'pardon']
+    p_npc_070       commander of the s@2        e    -    o    -    -    o    -    -    o    -    -    o    -    -    -
+      grant ['convene', 'dispatch'] · eligible 46 of 56 · seat-withheld ['confer', 'covenant', 'determine', 'establish', 'issue', 'open_case', 'pardon', 'requisition', 'revoke', 'seize']
+    p_npc_071       Legal Advisor to B@1        e    -    -    -    -    o    -    -    x    -    -    o    -    -    -
+      grant ['dispatch'] · eligible 45 of 56 · seat-withheld ['confer', 'convene', 'covenant', 'determine', 'establish', 'issue', 'open_case', 'pardon', 'requisition', 'revoke', 'seize']
+    p_npc_072       Military Commander@1        e    -    o    -    -    o    -    -    x    -    -    o    -    -    -
+      grant ['convene', 'dispatch'] · eligible 46 of 56 · seat-withheld ['confer', 'covenant', 'determine', 'establish', 'issue', 'open_case', 'pardon', 'requisition', 'revoke', 'seize']
+    p_npc_073       Senior Jarl of the@1        e    -    -    -    o    r    -    -    o    o    o    o    -    -    -
+      grant ['determine', 'dispatch'] · eligible 48 of 56 · seat-withheld ['confer', 'convene', 'covenant', 'establish', 'issue', 'requisition', 'revoke', 'seize']
+    p_npc_074       Skald-Chief@1               e    -    -    -    o    r    -    -    o    x    o    o    -    -    -
+      grant ['determine', 'dispatch'] · eligible 48 of 56 · seat-withheld ['confer', 'convene', 'covenant', 'establish', 'issue', 'requisition', 'revoke', 'seize']
+    p_npc_080       Riskbreaker (doctr@2        e    -    -    -    -    o    -    -    o    -    -    o    -    -    -
+      grant ['dispatch'] · eligible 45 of 56 · seat-withheld ['confer', 'convene', 'covenant', 'determine', 'establish', 'issue', 'open_case', 'pardon', 'requisition', 'revoke', 'seize']
+    p_npc_081       Commune Representa@1        e    -    -    -    -    o    -    -    o    -    -    o    -    -    -
+      grant ['dispatch'] · eligible 45 of 56 · seat-withheld ['confer', 'convene', 'covenant', 'determine', 'establish', 'issue', 'open_case', 'pardon', 'requisition', 'revoke', 'seize']
+    p_npc_082       Military Jarl@1             e    -    x    -    -    o    -    -    o    -    -    o    -    -    -
+      grant ['convene', 'dispatch'] · eligible 46 of 56 · seat-withheld ['confer', 'covenant', 'determine', 'establish', 'issue', 'open_case', 'pardon', 'requisition', 'revoke', 'seize']
+    p_npc_084       guild leader@None           e    e    o    e    o    o    o    e    o    r    o    o    o    o    e
+      grant ['confer', 'convene', 'determine', 'dispatch', 'issue', 'revoke'] · eligible 56 of 56 · seat-withheld none
+
+  NOT SEATED — 52 persons, 1 distinct eligible set(s)
+    52 persons: eligible 41 of 56; not eligible ['arrest', 'confer', 'convene', 'covenant', 'determine', 'dispatch', 'establish', 'issue', 'march', 'open_case', 'pardon', 'raze', 'requisition', 'revoke', 'seize']
+
+  PER VERB — persons eligible (seated/unseated) · persons formed · persons offered · ACTS attempted · executed · refused · both (both columns matched: two Events for `march`, ONE graded-loss Event for `tell` — see `corpus_run.attribute`) · neither
+    accept           R  elig  31/52  formed  82  offered  82  att    1  ex    1  ref    0  both   0  neither 0
+    argue            R  elig  31/52  formed  32  offered  32  att    0  ex    0  ref    0  both   0  neither 0
+    arrest           R  elig  25/0   formed   0  offered   0  att    0  ex    0  ref    0  both   0  neither 0
+    build            R  elig  31/52  formed  83  offered  83  att   10  ex    0  ref   10  both   0  neither 0   refused as {'build.refused': 10}
+    carry            R  elig  31/52  formed  83  offered  83  att   14  ex    0  ref   14  both   0  neither 0   refused as {'carry.refused': 14}
+    challenge        R  elig  31/52  formed  82  offered  82  att   17  ex    1  ref   16  both   0  neither 0   refused as {'challenge.refused': 16}
+    commit           R  elig  31/52  formed  83  offered  83  att   37  ex    0  ref   37  both   0  neither 0   refused as {'commitment.refused': 37}
+    comply           R  elig  31/52  formed   0  offered   0  att    0  ex    0  ref    0  both   0  neither 0
+    conceal          R  elig  31/52  formed  83  offered  83  att   13  ex   13  ref    0  both   0  neither 0
+    confer           R  elig   6/0   formed   0  offered   0  att    0  ex    0  ref    0  both   0  neither 0
+    construe         .  elig  31/52  formed  83  offered   0  att    0  ex    0  ref    0  both   0  neither 0
+    convene          R  elig  12/0   formed  12  offered  12  att    1  ex    1  ref    0  both   0  neither 0
+    covenant         R  elig  16/0   formed  13  offered  13  att    6  ex    0  ref    6  both   0  neither 0   refused as {'covenant.refused': 6}
+    create_record    R  elig  31/52  formed  83  offered  83  att   46  ex   46  ref    0  both   0  neither 0
+    destroy_record   R  elig  31/52  formed   0  offered   0  att    0  ex    0  ref    0  both   0  neither 0
+    determine        R  elig   8/0   formed   8  offered   8  att    0  ex    0  ref    0  both   0  neither 0
+    dispatch         R  elig  25/0   formed  25  offered  25  att    5  ex    1  ref    4  both   0  neither 0   refused as {'dispatch.refused': 4}
+    establish        R  elig   6/0   formed   6  offered   6  att    0  ex    0  ref    0  both   0  neither 0
+    evade / defy     .  elig  31/52  formed  83  offered   0  att    0  ex    0  ref    0  both   0  neither 0
+    examine          R  elig  31/52  formed  83  offered  83  att    0  ex    0  ref    0  both   0  neither 0
+    exchange         .  elig  31/52  formed  83  offered   0  att    0  ex    0  ref    0  both   0  neither 0
+    fight            R  elig  31/52  formed  82  offered  82  att    1  ex    1  ref    0  both   0  neither 0
+    forge            R  elig  31/52  formed  83  offered  83  att   20  ex    5  ref   15  both   0  neither 0   refused as {'forge.refused': 15}
+    forgive          R  elig  31/52  formed  11  offered  11  att    1  ex    1  ref    0  both   0  neither 0
+    found            R  elig  31/52  formed  83  offered  83  att   11  ex    0  ref   11  both   0  neither 0   refused as {'found.refused': 11}
+    give             R  elig  31/52  formed   0  offered   0  att    0  ex    0  ref    0  both   0  neither 0
+    interview        R  elig  31/52  formed  83  offered  83  att   20  ex    5  ref   15  both   0  neither 0   refused as {'finding.none': 15}
+    issue            R  elig  16/0   formed  12  offered  12  att    3  ex    2  ref    1  both   0  neither 0   refused as {'issue.unauthorized': 1}
+    march            R  elig  25/0   formed  25  offered  25  att   10  ex   10  ref   10  both  10  neither 0   refused as {'march.refused': 10}
+    migrate          R  elig  31/52  formed  75  offered  75  att   26  ex    0  ref   26  both   0  neither 0   refused as {'migrate.refused': 26}
+    move             R  elig  31/52  formed  83  offered  83  att   18  ex    4  ref   14  both   0  neither 0   refused as {'travel.blocked': 14}
+    oblige           R  elig  31/52  formed   0  offered   0  att    0  ex    0  ref    0  both   0  neither 0
+    open_case        R  elig   8/0   formed   8  offered   8  att    8  ex    5  ref    3  both   0  neither 0   refused as {'case.unauthorized': 3}
+    pardon           R  elig   8/0   formed   8  offered   8  att    2  ex    0  ref    2  both   0  neither 0   refused as {'pardon.refused': 2}
+    petition         R  elig  31/52  formed  82  offered  82  att   20  ex    8  ref   12  both   0  neither 0   refused as {'petition.refused': 12}
+    raze             R  elig  25/0   formed  25  offered  25  att    6  ex    0  ref    6  both   0  neither 0   refused as {'raze.refused': 6}
+    reconstruct      R  elig  31/52  formed  83  offered  83  att   22  ex   15  ref    7  both   0  neither 0   refused as {'finding.none': 7}
+    release          R  elig  31/52  formed  83  offered  83  att   26  ex    3  ref   23  both   0  neither 0   refused as {'release.refused': 23}
+    requisition      R  elig  16/0   formed  13  offered  13  att    2  ex    0  ref    2  both   0  neither 0   refused as {'requisition.refused': 1, 'requisition.unauthorized': 1}
+    research         R  elig  31/52  formed  83  offered  83  att    2  ex    2  ref    0  both   0  neither 0
+    restore          R  elig  31/52  formed  83  offered  83  att    6  ex    0  ref    6  both   0  neither 0   refused as {'restore.refused': 6}
+    revoke           R  elig   6/0   formed   6  offered   6  att    0  ex    0  ref    0  both   0  neither 0
+    sabotage         R  elig  31/52  formed  83  offered  83  att   14  ex    0  ref   14  both   0  neither 0   refused as {'sabotage.refused': 14}
+    seize            R  elig  16/0   formed   1  offered   1  att    0  ex    0  ref    0  both   0  neither 0
+    speak            R  elig  31/52  formed  82  offered  82  att    3  ex    3  ref    0  both   0  neither 0
+    succeed          .  elig  31/52  formed  83  offered   0  att    0  ex    0  ref    0  both   0  neither 0
+    surveil          R  elig  31/52  formed  83  offered  83  att   12  ex   12  ref   11  both  11  neither 0   refused as {'finding.none': 11}
+    survey           R  elig  31/52  formed  83  offered  83  att   25  ex    9  ref   16  both   0  neither 0   refused as {'survey.refused': 16}
+    tell             R  elig  31/52  formed  37  offered  37  att    9  ex    9  ref    4  both   4  neither 0   refused as {'news.untold': 4}
+    tend             R  elig  31/52  formed  83  offered  83  att   18  ex    0  ref   18  both   0  neither 0   refused as {'tend.refused': 18}
+    thread_read      R  elig  31/52  formed   4  offered   4  att    1  ex    1  ref    0  both   0  neither 0
+    tie / knot       .  elig  31/52  formed  83  offered   0  att    0  ex    0  ref    0  both   0  neither 0
+    train            R  elig  31/52  formed  83  offered  83  att   27  ex    0  ref   27  both   0  neither 0   refused as {'train.refused': 27}
+    transfer         R  elig  31/52  formed  83  offered  83  att   21  ex    0  ref   21  both   0  neither 0   refused as {'transfer.refused': 21}
+    utter            R  elig  31/52  formed  83  offered  83  att   20  ex   20  ref    0  both   0  neither 0
+    work             R  elig  31/52  formed  83  offered  83  att   35  ex    0  ref   35  both   0  neither 0   refused as {'work.unavailable': 35}
+
+  QUESTIONS BY SOURCE — delivered at barrier 2, summed over every round (`questions_for`, via the driver's own projection)
+    claim_landed     3974 questions ·  83 persons reached ·  31 of them seated
+    need              644 questions ·  51 persons reached ·  31 of them seated
+
+  CLAIMS BY SOURCE — `populated.run`'s own figure, the control arm
+    told_by                1565
+    firsthand_via_knot        0
+    inferred                  8
+    firsthand              4292
+
+  PER AGGREGATION RULE, AT EVERY REAL DELIBERATION (shipped: first; re-aggregation mismatches against the real call: 0)
+    first           deliberations  352 · referents/delib   0.89 · candidates/delib   32.72 (min 0, max 73) · candidates/referent  36.68 · distinct verbs formed 50 · of them foldable 45
+    all             deliberations  352 · referents/delib   4.72 · candidates/delib  209.64 (min 0, max 1253) · candidates/referent  44.40 · distinct verbs formed 51 · of them foldable 46
+    one_per_source  deliberations  352 · referents/delib   1.21 · candidates/delib   46.04 (min 0, max 144) · candidates/referent  38.13 · distinct verbs formed 51 · of them foldable 46
+      vs first: all adds ['give'], loses []
+      vs first: one_per_source adds ['give'], loses []
+
+==================================================================================================================================
+SPINE — seed 0, 1 season(s), 13 persons at build (13 at the end), 13 seated
+  CONTROL  populated.run acts 59 vs measured 59; content_hash EQUAL -> the instrument observed the season without moving it
+  FUNNEL  (person, verb) pairs attempted but never offered: 0 · formed but not eligible at build: 0
+
+  UNFORMABLE FOR EVERY PERSON IN THIS WORLD (a property of the ROW): []
+
+  PER HOLDER — seat, depth, grant; eligible of rows; unformable beyond the row-level set above; then the seat-gated funnel
+    legend: - not eligible · e eligible · f formed, not foldable · o offered · a attempted · r refused only · x executed
+                                             arre conf conv cove dete disp esta issu marc open pard raze requ revo seiz
+    lp_community_a  Community Leader@5          e    e    e    e    e    e    e    e    e    e    e    e    r    e    e
+      grant ['confer', 'convene', 'determine', 'dispatch', 'issue', 'revoke'] · eligible 56 of 56 · seat-withheld none
+    lp_community_b  Community Leader@5          e    e    o    o    o    r    o    o    o    o    o    r    o    o    e
+      grant ['confer', 'convene', 'determine', 'dispatch', 'issue', 'revoke'] · eligible 56 of 56 · seat-withheld none
+    lp_duchy_a      Duke@1                      e    e    e    e    e    e    e    e    e    e    e    e    r    e    e
+      grant ['confer', 'convene', 'determine', 'dispatch', 'issue', 'revoke'] · eligible 56 of 56 · seat-withheld none
+    lp_duchy_b      Duke@1                      e    e    o    o    o    o    o    o    o    o    o    o    o    r    e
+      grant ['confer', 'convene', 'determine', 'dispatch', 'issue', 'revoke'] · eligible 56 of 56 · seat-withheld none
+    lp_hearth_a     Hearth Head@6               e    e    r    e    o    o    r    e    o    x    r    r    o    o    e
+      grant ['confer', 'convene', 'determine', 'dispatch', 'issue', 'revoke'] · eligible 56 of 56 · seat-withheld none
+    lp_hearth_b     Hearth Head@6               e    e    o    e    o    x    o    e    o    o    o    o    e    r    e
+      grant ['confer', 'convene', 'determine', 'dispatch', 'issue', 'revoke'] · eligible 56 of 56 · seat-withheld none
+    lp_province_a   Count@2                     e    e    e    e    e    e    e    e    e    e    e    e    r    e    e
+      grant ['confer', 'convene', 'determine', 'dispatch', 'issue', 'revoke'] · eligible 56 of 56 · seat-withheld none
+    lp_province_b   Count@2                     e    e    r    o    o    o    r    o    o    o    o    o    o    r    e
+      grant ['confer', 'convene', 'determine', 'dispatch', 'issue', 'revoke'] · eligible 56 of 56 · seat-withheld none
+    lp_realm        Sovereign@0                 e    e    o    e    o    o    o    e    o    x    o    o    o    r    e
+      grant ['confer', 'convene', 'determine', 'dispatch', 'issue', 'revoke'] · eligible 56 of 56 · seat-withheld none
+    lp_settlement_a Mayor@4                     e    e    e    e    e    e    e    e    e    e    e    e    r    e    e
+      grant ['confer', 'convene', 'determine', 'dispatch', 'issue', 'revoke'] · eligible 56 of 56 · seat-withheld none
+    lp_settlement_b Mayor@4                     e    e    r    e    o    o    o    e    o    x    o    o    o    o    e
+      grant ['confer', 'convene', 'determine', 'dispatch', 'issue', 'revoke'] · eligible 56 of 56 · seat-withheld none
+    lp_territory_a  Lord@3                      e    e    e    e    e    e    e    e    e    e    e    e    r    e    e
+      grant ['confer', 'convene', 'determine', 'dispatch', 'issue', 'revoke'] · eligible 56 of 56 · seat-withheld none
+    lp_territory_b  Lord@3                      e    e    o    o    o    o    o    x    o    o    o    o    o    o    e
+      grant ['confer', 'convene', 'determine', 'dispatch', 'issue', 'revoke'] · eligible 56 of 56 · seat-withheld none
+
+  NOT SEATED — 0 persons, 0 distinct eligible set(s)
+
+  PER VERB — persons eligible (seated/unseated) · persons formed · persons offered · ACTS attempted · executed · refused · both (both columns matched: two Events for `march`, ONE graded-loss Event for `tell` — see `corpus_run.attribute`) · neither
+    accept           R  elig  13/0   formed   8  offered   8  att    0  ex    0  ref    0  both   0  neither 0
+    argue            R  elig  13/0   formed   4  offered   4  att    0  ex    0  ref    0  both   0  neither 0
+    arrest           R  elig  13/0   formed   0  offered   0  att    0  ex    0  ref    0  both   0  neither 0
+    build            R  elig  13/0   formed   8  offered   8  att    2  ex    0  ref    2  both   0  neither 0   refused as {'build.refused': 2}
+    carry            R  elig  13/0   formed   8  offered   8  att    0  ex    0  ref    0  both   0  neither 0
+    challenge        R  elig  13/0   formed   8  offered   8  att    1  ex    0  ref    1  both   0  neither 0   refused as {'challenge.refused': 1}
+    commit           R  elig  13/0   formed   8  offered   8  att    0  ex    0  ref    0  both   0  neither 0
+    comply           R  elig  13/0   formed   0  offered   0  att    0  ex    0  ref    0  both   0  neither 0
+    conceal          R  elig  13/0   formed   8  offered   8  att    2  ex    2  ref    0  both   0  neither 0
+    confer           R  elig  13/0   formed   0  offered   0  att    0  ex    0  ref    0  both   0  neither 0
+    construe         .  elig  13/0   formed   8  offered   0  att    0  ex    0  ref    0  both   0  neither 0
+    convene          R  elig  13/0   formed   8  offered   8  att    3  ex    0  ref    3  both   0  neither 0   refused as {'convene.refused': 3}
+    covenant         R  elig  13/0   formed   4  offered   4  att    0  ex    0  ref    0  both   0  neither 0
+    create_record    R  elig  13/0   formed   8  offered   8  att    1  ex    1  ref    0  both   0  neither 0
+    destroy_record   R  elig  13/0   formed   0  offered   0  att    0  ex    0  ref    0  both   0  neither 0
+    determine        R  elig  13/0   formed   8  offered   8  att    0  ex    0  ref    0  both   0  neither 0
+    dispatch         R  elig  13/0   formed   8  offered   8  att    3  ex    1  ref    2  both   0  neither 0   refused as {'dispatch.refused': 2}
+    establish        R  elig  13/0   formed   8  offered   8  att    3  ex    0  ref    3  both   0  neither 0   refused as {'establish.refused': 3}
+    evade / defy     .  elig  13/0   formed   8  offered   0  att    0  ex    0  ref    0  both   0  neither 0
+    examine          R  elig  13/0   formed   8  offered   8  att    0  ex    0  ref    0  both   0  neither 0
+    exchange         .  elig  13/0   formed   8  offered   0  att    0  ex    0  ref    0  both   0  neither 0
+    fight            R  elig  13/0   formed   8  offered   8  att    0  ex    0  ref    0  both   0  neither 0
+    forge            R  elig  13/0   formed   8  offered   8  att    0  ex    0  ref    0  both   0  neither 0
+    forgive          R  elig  13/0   formed   0  offered   0  att    0  ex    0  ref    0  both   0  neither 0
+    found            R  elig  13/0   formed   8  offered   8  att    0  ex    0  ref    0  both   0  neither 0
+    give             R  elig  13/0   formed   0  offered   0  att    0  ex    0  ref    0  both   0  neither 0
+    interview        R  elig  13/0   formed   8  offered   8  att    2  ex    2  ref    0  both   0  neither 0
+    issue            R  elig  13/0   formed   4  offered   4  att    1  ex    1  ref    0  both   0  neither 0
+    march            R  elig  13/0   formed   8  offered   8  att    0  ex    0  ref    0  both   0  neither 0
+    migrate          R  elig  13/0   formed  12  offered  12  att    5  ex    0  ref    5  both   0  neither 0   refused as {'migrate.refused': 5}
+    move             R  elig  13/0   formed   8  offered   8  att    1  ex    1  ref    0  both   0  neither 0
+    oblige           R  elig  13/0   formed   0  offered   0  att    0  ex    0  ref    0  both   0  neither 0
+    open_case        R  elig  13/0   formed   8  offered   8  att    3  ex    3  ref    0  both   0  neither 0
+    pardon           R  elig  13/0   formed   8  offered   8  att    1  ex    0  ref    1  both   0  neither 0   refused as {'pardon.refused': 1}
+    petition         R  elig  13/0   formed   8  offered   8  att    2  ex    1  ref    1  both   0  neither 0   refused as {'petition.refused': 1}
+    raze             R  elig  13/0   formed   8  offered   8  att    2  ex    0  ref    2  both   0  neither 0   refused as {'raze.refused': 2}
+    reconstruct      R  elig  13/0   formed   8  offered   8  att    0  ex    0  ref    0  both   0  neither 0
+    release          R  elig  13/0   formed   8  offered   8  att    1  ex    1  ref    0  both   0  neither 0
+    requisition      R  elig  13/0   formed  12  offered  12  att    5  ex    0  ref    5  both   0  neither 0   refused as {'requisition.unauthorized': 5}
+    research         R  elig  13/0   formed   8  offered   8  att    1  ex    1  ref    1  both   1  neither 0   refused as {'finding.none': 1}
+    restore          R  elig  13/0   formed   8  offered   8  att    4  ex    0  ref    4  both   0  neither 0   refused as {'restore.refused': 4}
+    revoke           R  elig  13/0   formed   8  offered   8  att    4  ex    0  ref    4  both   0  neither 0   refused as {'revoke.refused': 4}
+    sabotage         R  elig  13/0   formed   8  offered   8  att    1  ex    0  ref    1  both   0  neither 0   refused as {'sabotage.refused': 1}
+    seize            R  elig  13/0   formed   0  offered   0  att    0  ex    0  ref    0  both   0  neither 0
+    speak            R  elig  13/0   formed   8  offered   8  att    0  ex    0  ref    0  both   0  neither 0
+    succeed          .  elig  13/0   formed   8  offered   0  att    0  ex    0  ref    0  both   0  neither 0
+    surveil          R  elig  13/0   formed   8  offered   8  att    0  ex    0  ref    0  both   0  neither 0
+    survey           R  elig  13/0   formed   8  offered   8  att    1  ex    0  ref    1  both   0  neither 0   refused as {'survey.refused': 1}
+    tell             R  elig  13/0   formed   4  offered   4  att    0  ex    0  ref    0  both   0  neither 0
+    tend             R  elig  13/0   formed   8  offered   8  att    3  ex    0  ref    3  both   0  neither 0   refused as {'tend.refused': 3}
+    thread_read      R  elig  13/0   formed   0  offered   0  att    0  ex    0  ref    0  both   0  neither 0
+    tie / knot       .  elig  13/0   formed   8  offered   0  att    0  ex    0  ref    0  both   0  neither 0
+    train            R  elig  13/0   formed   8  offered   8  att    2  ex    0  ref    2  both   0  neither 0   refused as {'train.refused': 2}
+    transfer         R  elig  13/0   formed   8  offered   8  att    1  ex    0  ref    1  both   0  neither 0   refused as {'transfer.refused': 1}
+    utter            R  elig  13/0   formed   8  offered   8  att    4  ex    4  ref    0  both   0  neither 0
+    work             R  elig  13/0   formed   8  offered   8  att    0  ex    0  ref    0  both   0  neither 0
+
+  QUESTIONS BY SOURCE — delivered at barrier 2, summed over every round (`questions_for`, via the driver's own projection)
+    claim_landed      128 questions ·   8 persons reached ·   8 of them seated
+    need                5 questions ·   5 persons reached ·   5 of them seated
+
+  CLAIMS BY SOURCE — `populated.run`'s own figure, the control arm
+    told_by                  96
+    firsthand_via_knot        0
+    inferred                  0
+    firsthand               190
+
+  PER AGGREGATION RULE, AT EVERY REAL DELIBERATION (shipped: first; re-aggregation mismatches against the real call: 0)
+    first           deliberations   65 · referents/delib   0.31 · candidates/delib   12.92 (min 0, max 47) · candidates/referent  42.00 · distinct verbs formed 47 · of them foldable 42
+    all             deliberations   65 · referents/delib   0.95 · candidates/delib   39.23 (min 0, max 266) · candidates/referent  41.13 · distinct verbs formed 48 · of them foldable 43
+    one_per_source  deliberations   65 · referents/delib   0.31 · candidates/delib   12.92 (min 0, max 47) · candidates/referent  42.00 · distinct verbs formed 47 · of them foldable 42
+      vs first: all adds ['give'], loses []
+      vs first: one_per_source adds [], loses []
+
+real	0m21.404s
+user	0m20.829s
+sys	0m0.136s

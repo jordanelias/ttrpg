@@ -1,0 +1,30 @@
+            light = Combatant('b', weapon='arming', armor='none')
+            heavy = Combatant('b', weapon='arming', armor='heavy')
+>           assert S.bind_sigma(agg, light, CFG, TR).hex() == bind_hex, weapon
+E           AssertionError: bear_spear
+E           assert '0x1.c57592d86e352p-1' == '0x1.c57592d86e353p-1'
+E             
+E             - 0x1.c57592d86e353p-1
+E             ?                 ^
+E             + 0x1.c57592d86e352p-1
+E             ?                 ^
+
+tests/valoria/test_combat_lever_sign_safety.py:482: AssertionError
+=============================== warnings summary ===============================
+tests/valoria/test_ci_common_primitives.py:238
+  /home/user/ttrpg/tests/valoria/test_ci_common_primitives.py:238: SyntaxWarning: invalid escape sequence '\d'
+    `validate_ed_citations` matches flat `ED-\d+` ONLY BY DESIGN — the archives it
+
+tests/valoria/test_vacuous_assertion_check.py::test_live_corpus_has_no_provably_vacuous_assertions
+tests/valoria/test_evacuation_plan.py::test_split_path_hits_require_a_WHOLLY_evacuating_target
+  <unknown>:238: SyntaxWarning: invalid escape sequence '\d'
+
+tests/valoria/test_evacuation_plan.py::test_split_path_hits_require_a_WHOLLY_evacuating_target
+  <unknown>:163: SyntaxWarning: invalid escape sequence '\.'
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/valoria/test_forked_status.py::test_the_fork_rows_name_a_real_ref
+FAILED tests/valoria/test_forked_status.py::test_the_evacuated_content_is_actually_at_the_ref
+FAILED tests/valoria/test_combat_lever_sign_safety.py::test_default_builds_are_byte_identical_at_both_lever_sites
+3 failed, 1960 passed, 23 skipped, 15 xfailed, 4 warnings in 290.52s (0:04:50)
