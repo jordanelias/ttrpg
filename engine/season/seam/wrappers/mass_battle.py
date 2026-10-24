@@ -309,12 +309,11 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     a = prov(provision_input(w, sum(inp.weights[0]), treasuries[0]))
     shared = treasuries[1] is not None and treasuries[1] == treasuries[0]
     b = prov(provision_input(w, sum(inp.weights[1]), treasuries[1], a.consumed if shared else ()))
-    fed = (a, b)
-    result = entry.fn(inp, rng, troops_a=fed[0].troops, troops_b=fed[1].troops)
+    result = entry.fn(inp, rng, troops_a=a.troops, troops_b=b.troops)
     return dict(status="RESOLVED", module=_PROVIDER, resolver="dice_pool",
                 # v9 IN-52: `((treasury rung, consumed), ...)`, attacker then defender -- what `_eff_march`
                 # debits (LF-3). Empty `consumed` on both sides while the arm is off.
-                provision=tuple((t, p.consumed) for t, p in zip(treasuries, fed)),
+                provision=tuple((t, p.consumed) for t, p in zip(treasuries, (a, b))),
                 # ⚠ LIFTED TO TOP LEVEL, NOT LEFT NESTED UNDER `result` (M4). `degree_of`
                 # (`seam/ladder.py`) reads a provider's return directly -- `wound_state` and
                 # `net`/`ob` are already top-level for the other two providers -- so a third,

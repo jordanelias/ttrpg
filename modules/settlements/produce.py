@@ -32,12 +32,13 @@ def produce(inp: ProduceInput) -> ProduceOutcome:
     """What each rung's fabric yields this season, and the stores each producing rung is credited to."""
     table = {site_kind: bases for site_kind, bases in inp.table}
     after = {rung: dict(kinds) for rung, kinds in inp.larder_after}
+    by_rung: dict = {}        # one pass over the Sites, not one per rung; each rung's list keeps id order
+    for _sid, site_kind, site_rung, condition in inp.sites:
+        by_rung.setdefault(site_rung, []).append((site_kind, condition))
     rows = []
     for rung, kinds in inp.stores:
         produced: dict = {}
-        for _sid, site_kind, site_rung, condition in inp.sites:
-            if site_rung != rung:
-                continue
+        for site_kind, condition in by_rung.get(rung, ()):
             for k, base in table.get(site_kind) or ():
                 produced[k] = produced.get(k, 0) + int(
                     base * (max(0, condition) / inp.scale) * inp.factor)
