@@ -617,7 +617,7 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
         fell = w._emitted_by_write[_m] if len(w._emitted_by_write) > _m else None
         emitted.extend(_crossings(w, pid, floors_body, was, person.body,
                                   fell.id if fell else None))
-        if fall.dies:
+        if fall.body_after <= 0:
             # death through the one owner: see _die
             _die(w, token, pid)
 

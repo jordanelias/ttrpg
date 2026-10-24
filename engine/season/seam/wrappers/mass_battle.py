@@ -302,18 +302,21 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     # off (shipped) the entry returns `troops = Σ weight` and `consumed = ()`: the field and the world as
     # they were. An unprovisioned side fields 0, which `resolve_field`'s crash floor lifts (A16).
     # ONE TREASURY FOR BOTH SIDES (the defender's held rung is the attacker's seat rung): the attacker eats
-    # first, attacker-then-defender being the order `_ration_debits` writes, and the defender is provisioned
-    # NET of what the attacker ate, so the debit never exceeds the store.
+    # first, attacker-then-defender being the order `_ration_debits` writes, and each side is provisioned
+    # NET of what its treasury has already had eaten this field, so the debit never exceeds the store. A
+    # side with no treasury (`None`) projects no stores and consumes `()`, so it nets nothing.
     prov = composition.require(world_q.PROVISION)
     treasuries = (_attacker_treasury(w, causes), _defender_treasury(w, rung))
-    a = prov(provision_input(w, sum(inp.weights[0]), treasuries[0]))
-    shared = treasuries[1] is not None and treasuries[1] == treasuries[0]
-    b = prov(provision_input(w, sum(inp.weights[1]), treasuries[1], a.consumed if shared else ()))
-    result = entry.fn(inp, rng, troops_a=a.troops, troops_b=b.troops)
+    fed, eaten = [], {}
+    for t, side in zip(treasuries, inp.weights):
+        p = prov(provision_input(w, sum(side), t, eaten.get(t, ())))
+        eaten[t] = p.consumed
+        fed.append(p)
+    result = entry.fn(inp, rng, troops_a=fed[0].troops, troops_b=fed[1].troops)
     return dict(status="RESOLVED", module=_PROVIDER, resolver="dice_pool",
                 # v9 IN-52: `((treasury rung, consumed), ...)`, attacker then defender -- what `_eff_march`
                 # debits (LF-3). Empty `consumed` on both sides while the arm is off.
-                provision=tuple((t, p.consumed) for t, p in zip(treasuries, (a, b))),
+                provision=tuple((t, p.consumed) for t, p in zip(treasuries, fed)),
                 # ⚠ LIFTED TO TOP LEVEL, NOT LEFT NESTED UNDER `result` (M4). `degree_of`
                 # (`seam/ladder.py`) reads a provider's return directly -- `wound_state` and
                 # `net`/`ob` are already top-level for the other two providers -- so a third,

@@ -73,12 +73,12 @@ def subsist(inp: SubsistInput) -> SubsistOutcome:
         if lost <= 0:
             continue
         after = max(0, bodies[pid] - lost)
-        falls.append(BodyFall(pid, after, after <= 0))
+        falls.append(BodyFall(pid, after))
 
-    held = {rung: dict(kinds) for rung, kinds in inp.larder.stores}
+    held = dict(inp.larder.stores)
     larder_after = []
     for src in sorted(debit):
-        have = held.get(src, {})
+        have = dict(held.get(src, ()))
         left = tuple((kind, have.get(kind, 0) - units) for kind, units in debit[src].items())
         if any(units != have.get(kind, 0) for kind, units in left):
             larder_after.append((src, left))

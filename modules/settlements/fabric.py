@@ -29,7 +29,7 @@ from engine.season.queries.inputs import Fabric, FabricInput
 def fabric(inp: FabricInput) -> Fabric:
     """The fabric's ceiling and the commons' share, each from its own half of the record."""
     ceiling = None
-    if inp.scale is not None:
+    if inp.live_works is not None:
         if not inp.live_works or inp.declared == 0:
             ceiling = inp.scale
         else:

@@ -280,11 +280,10 @@ class SubsistInput:
 
 @dataclass(frozen=True)
 class BodyFall:
-    """One body the season's dearth falls: who, the body it falls to (`max(0, body - lost)`), and
-    whether that is death (`body_after <= 0`)."""
+    """One body the season's dearth falls: who, and the body it falls to (`max(0, body - lost)`); the
+    host reads death as `body_after <= 0`."""
     pid: str
     body_after: int
-    dies: bool
 
 
 @dataclass(frozen=True)
@@ -316,8 +315,8 @@ class ProduceInput:
       * `scale`        -- the `condition_scale` fixture, as MATTER read it;
       * `factor`       -- this season's `world_q.season_factor_of`, as MATTER read it (one draw a season);
       * `sites`        -- `((site_id, site_kind, rung, condition), ...)`, every Site sorted by id;
-      * `stores`       -- `((rung, ((kind, units), ...)), ...)`, every rung sorted, each in its own
-                          `Rung.stores` order, read BEFORE this season's debit is written;
+      * `stores`       -- `((rung, ((kind, units), ...)), ...)`, every rung a Site stands on, sorted,
+                          each in its own `Rung.stores` order, read BEFORE this season's debit is written;
       * `larder_after` -- `SubsistOutcome.larder_after` (E2): the debited rungs and kinds only. The module
                           overlays it on `stores`, because MATTER credits a rung after that rung's debit."""
     table: tuple
@@ -345,8 +344,9 @@ class ProduceOutcome:
 
 
 # v9 IN-07 E4..E6: the settlements module's three one-line `query` entries -- housing, a fabric's bound
-# and share, a settlement's walls. Built by `queries/world_q.py`'s projection builders (`housing_input`,
-# `fabric_input`, `fort_input`), read by `modules/settlements/housing.py`, `fabric.py` and
+# and share, a settlement's walls. Built by `queries/world_q.py`'s projection builders (one per half:
+# `_housing_population_input`/`_housing_capacity_input`, `_fabric_ceiling_input`/`_fabric_share_input`;
+# and `fort_input`), read by `modules/settlements/housing.py`, `fabric.py` and
 # `fortification.py`; the public wrappers (`population`, `capacity`, `ceiling`, `share`,
 # `fortification_of`) read the output back. ⚠ A HALF LEFT `None` WAS NOT PROJECTED: one record serves two
 # public names (E4: `population` and `capacity`; E5: `ceiling` and `share`), and each wrapper projects only
@@ -356,7 +356,7 @@ class ProduceOutcome:
 
 @dataclass(frozen=True)
 class HousingInput:
-    """What `settlements.housing` reads. Built by `queries/world_q.py::housing_input`:
+    """What `settlements.housing` reads. Built by `queries/world_q.py::_housing_population_input` / `_housing_capacity_input`:
       * `subtree`        -- the rung and everything under it (`world_q._subtree`);
       * `residents`      -- `((pid, residence rung, Person.weight), ...)`, every `residence_of` entry in
                             its own order; `None` when `capacity` asks;
@@ -379,7 +379,7 @@ class Housing:
 
 @dataclass(frozen=True)
 class FabricInput:
-    """What `settlements.fabric` reads. Built by `queries/world_q.py::fabric_input`:
+    """What `settlements.fabric` reads. Built by `queries/world_q.py::_fabric_ceiling_input` / `_fabric_share_input`:
       * `scale`      -- the `condition_scale` fixture; `None` when `share` asks;
       * `live_works` -- how many live works name the site (`works_for`; the host refuses two, A6);
       * `declared`   -- that works' declared terms (`len(stages)`), `0` with no live works;

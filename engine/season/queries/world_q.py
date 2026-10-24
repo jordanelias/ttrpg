@@ -419,8 +419,8 @@ def ceiling(w: World, site: Site) -> int:
 
     ⚠ THE ARITHMETIC IS THE `settlements` MODULE'S (v9 IN-07 E5, A-25): `settlements.fabric`
     (`modules/settlements/fabric.py`, `entry: query`). This wrapper projects the ceiling half
-    (`fabric_input`, which keeps the two-live-works `Forbidden`, design A6)."""
-    return _entry(FABRIC)(fabric_input(w, site, "ceiling")).ceiling
+    (`_fabric_ceiling_input`, which keeps the two-live-works `Forbidden`, design A6)."""
+    return _entry(FABRIC)(_fabric_ceiling_input(w, site)).ceiling
 
 
 def share(w: World, site: Site) -> tuple:
@@ -438,17 +438,25 @@ def share(w: World, site: Site) -> tuple:
     register row, and no measurement here needs a second arm yet -- the shape is ruled, the reading
     is the default, and `H-164` carries the unbuilt arms.
 
-    The ratio is `settlements.fabric`'s (v9 IN-07 E5); this wrapper projects the share half."""
-    return _entry(FABRIC)(fabric_input(w, site, "share")).share
+    The ratio is `settlements.fabric`'s (v9 IN-07 E5); this wrapper projects the share half
+    (`_fabric_share_input`)."""
+    return _entry(FABRIC)(_fabric_share_input(w, site)).share
 
 
-def fabric_input(w: World, site: Site, half: str) -> FabricInput:
-    """THE PROJECTION `settlements.fabric` reads (v9 IN-07 E5), ONE HALF AT A TIME so each public name
-    pays only its old body's reads: `"ceiling"` reads `condition_scale`, `works_for` (refusing two live
-    works, A6), the works' declared terms and -- only when it declares any -- `matured_terms`' log scan;
-    `"share"` reads `presence` (which traces). The other half is `None`."""
-    if half == "share":
-        return FabricInput(None, None, None, None, len(presence(w, site.rung)))
+def _fabric_share_input(w: World, site: Site) -> FabricInput:
+    """THE SHARE HALF of the projection `settlements.fabric` reads (v9 IN-07 E5): `presence` at the
+    site's rung (which traces), and nothing else, so `share` pays only its old body's reads. The
+    ceiling half is `None`."""
+    return FabricInput(scale=None, live_works=None, declared=None, matured=None,
+                       present=len(presence(w, site.rung)))
+
+
+def _fabric_ceiling_input(w: World, site: Site) -> FabricInput:
+    """THE CEILING HALF of the projection `settlements.fabric` reads (v9 IN-07 E5), so `ceiling` pays
+    only its old body's reads: `condition_scale`, `works_for` (refusing two live works, A6), the works'
+    declared terms and -- only when it declares any -- `matured_terms`' log scan. `live_works` is
+    always an int here, which is how the module tells this half was projected. The share half is
+    `None`."""
     scale = w.fixtures.get("condition_scale")
     live = works_for(w, site.rung, site.kind)
     if len(live) > 1:
@@ -459,7 +467,7 @@ def fabric_input(w: World, site: Site, half: str) -> FabricInput:
                 "object up; `create_record` declines a second, so this world was built by hand")
     declared = len(live[0].stages) if live else 0
     matured = matured_terms(w, live[0].id) if declared else 0
-    return FabricInput(scale, len(live), declared, matured, None)
+    return FabricInput(scale, len(live), declared, matured, present=None)
 
 
 def judging_set(w: World, venue: str, matter: Optional[str] = None) -> list[str]:
@@ -1076,7 +1084,7 @@ def larder_input(w: World) -> LarderInput:
       * `eaters` are every person `home_of` houses, in sorted id order, cohort or not -- the module
         applies the exemption and the carrier supplies `is_cohort` (`Person.is_cohort`, S9).
       * a ladder is `ancestry(home)` cut at the first id that is not a rung, which is where the old
-        walk stopped (`ancestry` itself returns `[id]` for an unknown id).
+        walk stopped (`ancestry` itself returns `[id]` for an unknown id); one per cohort eater's home.
       * `stores` is each ladder rung's `Rung.stores` in its own order (`None` read as empty).
     No weights registered projects no eaters and calls no `home_of`, so the trace is MATTER's
     `if weights:` as it was."""
@@ -1085,8 +1093,10 @@ def larder_input(w: World) -> LarderInput:
 
 def _larder_parts(w: World) -> tuple:
     """`(LarderInput, chains)`: `larder_input`'s projection and, from the same `ancestry` walks, each
-    home's whole chain uncut (`SubsistInput.chains`, IN-07 E2), so the season's one projection walks
-    each home once and calls `home_of` once, as MATTER's draw always has."""
+    COHORT home's whole chain uncut (`SubsistInput.chains`, IN-07 E2). It calls `home_of` once and walks
+    only the homes a cohort eater lives at: every eater stays in `eaters` (the module applies the
+    exemption), but `larder_draw` skips a non-cohort eater and `subsist` reads `chains` and `stores` only
+    for the cohort rows and the rungs they debit, so a ladder for any other home is never read."""
     weights = w.fixtures.get("subsistence_weight")
     if not weights:
         return LarderInput((), (), (), ()), ()
@@ -1095,7 +1105,7 @@ def _larder_parts(w: World) -> tuple:
     for pid in sorted(homes):
         person = w.persons[pid]
         eaters.append(Eater(pid, homes[pid], person.weight, person.is_cohort))
-    for home in sorted(set(homes.values())):
+    for home in sorted({h for pid, h in homes.items() if w.persons[pid].is_cohort}):
         chain = tuple(ancestry(w, home))
         ladder = []
         for rid in chain:
@@ -1124,16 +1134,18 @@ def subsist_input(w: World) -> SubsistInput:
 
 def produce_input(w: World, scale, factor, larder_after: tuple) -> ProduceInput:
     """THE PROJECTION `settlements.produce` reads (v9 IN-07 E3): the `SITE_YIELD` table, every Site
-    (sorted by id) with its kind, own `rung` and `condition`, and every rung's stores as they stand --
-    read by MATTER BEFORE its per-rung loop writes this season's debit, so the module overlays
-    `larder_after` (`SubsistOutcome.larder_after`, E2) itself. `scale` and `factor` are MATTER's own
-    reads (`condition_scale`, `season_factor_of`'s one draw a season), handed through unchanged.
-    Read-only; it writes and traces nothing."""
+    (sorted by id) with its kind, own `rung` and `condition`, and the stores as they stand of every
+    rung some Site stands on (a rung with no Site yields nothing, and a Site's rung that is not in
+    `w.rungs` was never iterated) -- read by MATTER BEFORE its per-rung loop writes this season's
+    debit, so the module overlays `larder_after` (`SubsistOutcome.larder_after`, E2) itself. `scale`
+    and `factor` are MATTER's own reads (`condition_scale`, `season_factor_of`'s one draw a season),
+    handed through unchanged. Read-only; it writes and traces nothing."""
     return ProduceInput(
         tuple((site_kind, tuple((bases or {}).items())) for site_kind, bases in SITE_YIELD.items()),
         scale, factor,
         tuple((s.id, s.kind, s.rung, s.condition) for s in sorted(w.sites.values(), key=lambda x: x.id)),
-        tuple((rid, tuple((w.rungs[rid].stores or {}).items())) for rid in sorted(w.rungs)),
+        tuple((rid, tuple((w.rungs[rid].stores or {}).items()))
+              for rid in sorted({s.rung for s in w.sites.values()} & w.rungs.keys())),
         larder_after)
 
 
@@ -1438,21 +1450,28 @@ def population(w: World, rung_id: str, residence: Optional[dict] = None) -> int:
     ⚠ THE SUM IS THE `settlements` MODULE'S (v9 IN-07 E4, A-25): `settlements.housing`
     (`modules/settlements/housing.py`, `entry: query`); this wrapper projects the population half."""
     TRACE.query("population", "resolver")
-    return _entry(HOUSING)(housing_input(w, rung_id, "population", residence)).population
+    return _entry(HOUSING)(_housing_population_input(w, rung_id, residence)).population
 
 
-def housing_input(w: World, rung_id: str, half: str, residence: Optional[dict] = None) -> HousingInput:
-    """THE PROJECTION `settlements.housing` reads (v9 IN-07 E4), ONE HALF AT A TIME so each public name
-    pays only its old body's reads: the subtree, then `"population"` -- every `residence_of` entry (the
-    caller's precomputed map when given) with its `Person.weight` -- or `"capacity"` -- each `dwelling`
-    Site's own rung and the `capacity_floor` fixture. The other half is `None`."""
+def _housing_population_input(w: World, rung_id: str, residence: Optional[dict]) -> HousingInput:
+    """THE POPULATION HALF of the projection `settlements.housing` reads (v9 IN-07 E4), so `population`
+    pays only its old body's reads: the subtree, then every `residence_of` entry (the caller's
+    precomputed map when given) with its `Person.weight`. The capacity half is `None`."""
     here = frozenset(_subtree(w, rung_id))
-    if half == "population":
-        residents = residence_of(w) if residence is None else residence
-        return HousingInput(here, tuple((pid, home, w.persons[pid].weight)
-                                        for pid, home in residents.items()), None, None)
+    residents = residence_of(w) if residence is None else residence
+    return HousingInput(here, tuple((pid, home, w.persons[pid].weight)
+                                    for pid, home in residents.items()),
+                        dwelling_rungs=None, floor=None)
+
+
+def _housing_capacity_input(w: World, rung_id: str) -> HousingInput:
+    """THE CAPACITY HALF of the projection `settlements.housing` reads (v9 IN-07 E4), so `capacity`
+    pays only its old body's reads: the subtree, then each `dwelling` Site's own rung and the
+    `capacity_floor` fixture. The population half is `None`."""
+    here = frozenset(_subtree(w, rung_id))
     dwellings = tuple(s.rung for s in w.sites.values() if s.kind == DWELLING_KIND)
-    return HousingInput(here, None, dwellings, w.fixtures.get("capacity_floor")[DWELLING_KIND])
+    return HousingInput(here, residents=None, dwelling_rungs=dwellings,
+                        floor=w.fixtures.get("capacity_floor")[DWELLING_KIND])
 
 
 # THE `site_kinds` MEMBER `capacity` COUNTS -- Jordan's `ED-SE-0055` (2026-09-25): *"add a `dwelling`
@@ -1493,9 +1512,9 @@ def capacity(w: World, rung_id: str) -> int:
       every call (`AX` T-a).
 
     ⚠ THE COUNT AND FLOOR ARE THE `settlements` MODULE'S (v9 IN-07 E4, A-25): `settlements.housing`;
-    this wrapper projects the capacity half (`housing_input`)."""
+    this wrapper projects the capacity half (`_housing_capacity_input`)."""
     TRACE.query("capacity", "resolver")
-    return _entry(HOUSING)(housing_input(w, rung_id, "capacity")).capacity
+    return _entry(HOUSING)(_housing_capacity_input(w, rung_id)).capacity
 
 
 # ===========================================================================

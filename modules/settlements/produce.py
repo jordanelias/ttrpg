@@ -30,8 +30,8 @@ from engine.season.queries.inputs import ProduceInput, ProduceOutcome, ProduceRo
 
 def produce(inp: ProduceInput) -> ProduceOutcome:
     """What each rung's fabric yields this season, and the stores each producing rung is credited to."""
-    table = {site_kind: bases for site_kind, bases in inp.table}
-    after = {rung: dict(kinds) for rung, kinds in inp.larder_after}
+    table = dict(inp.table)
+    after = dict(inp.larder_after)
     by_rung: dict = {}        # one pass over the Sites, not one per rung; each rung's list keeps id order
     for _sid, site_kind, site_rung, condition in inp.sites:
         by_rung.setdefault(site_rung, []).append((site_kind, condition))
@@ -46,7 +46,7 @@ def produce(inp: ProduceInput) -> ProduceOutcome:
         if not produced:
             continue
         held = dict(kinds)
-        held.update(after.get(rung, {}))
+        held.update(after.get(rung, ()))
         credited = tuple((k, held.get(k, 0) + v) for k, v in produced.items())
         rows.append(ProduceRow(rung, tuple(produced.items()), credited))
     return ProduceOutcome(tuple(rows))

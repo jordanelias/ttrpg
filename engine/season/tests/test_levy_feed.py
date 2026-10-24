@@ -25,8 +25,8 @@ from types import SimpleNamespace
 
 import pytest
 
+from engine.season.data.fixtures import DEFAULT_FIXTURES
 from engine.season.data.matrix import Step, WriteClass
-from engine.season.harness import probes as P
 from engine.season.harness.populated import build_realm
 from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.manifest.registrar import MODULE_ENTRIES
@@ -219,7 +219,7 @@ def test_the_field_eats_its_ration_from_the_treasury_only_when_on(on, monkeypatc
 def test_the_shipped_arm_is_off():
     """THE SHIPPED-DEFAULT ASSERTION (`H-241`): the flip moves no pinned hash while the realm fights no
     field, so this is the observer that the arm shipped is the control."""
-    assert P.DEFAULT_FIXTURES.get("field_provisioning") is False, (
+    assert DEFAULT_FIXTURES.get("field_provisioning") is False, (
         "the shipped arm moved: the flip is its own declared commit; restate this test there")
 
 
