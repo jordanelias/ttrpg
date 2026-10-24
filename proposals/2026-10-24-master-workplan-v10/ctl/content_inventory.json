@@ -54,6 +54,49 @@
   ]
  ],
  "top3_share": 0.429,
+ "march_declaration_acts": 59,
+ "strict": {
+  "executed_acts": 2528,
+  "executed_verbs": 31,
+  "effective_verbs": 10.4,
+  "top3": [
+   [
+    "create_record",
+    546
+   ],
+   [
+    "reconstruct",
+    295
+   ],
+   [
+    "utter",
+    269
+   ]
+  ],
+  "top3_share": 0.439
+ },
+ "strict_strata": {
+  "social": {
+   "verbs_executed": 13,
+   "executed": 886
+  },
+  "contested_physical": {
+   "verbs_executed": 4,
+   "executed": 189
+  },
+  "binding_decision": {
+   "verbs_executed": 6,
+   "executed": 137
+  },
+  "uncontested_material": {
+   "verbs_executed": 6,
+   "executed": 1210
+  },
+  "movement": {
+   "verbs_executed": 2,
+   "executed": 106
+  }
+ },
  "persons": 83,
  "cohorts": 37,
  "person_fields": {
@@ -156,6 +199,12 @@
    "named": 12
   }
  },
+ "pursuits": {
+  "named": 15,
+  "axes": 7
+ },
+ "faction_view": true,
+ "tie_knot_row": true,
  "goals_rows": 38,
  "oracle_content": {
   "weapons": 54,

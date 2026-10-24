@@ -1,5 +1,7 @@
 """The v10 batch map: which position belongs to which batch, and each batch's card.
 
+STATE AFTER THE NERS FOLD (`-08`): the handle sets and batch assignments below follow the fold (CP-T02-06 moved to B10-10; CL-EVENTS added; the cut handles REM-40, REM-41, REM-51, CP-T02-04, CP-T02-08, CP-T05-05, CP-T06-06 and CP-T07-01 are kept as keys so the coverage run still knows them, their dispositions being in `-07` section 2). The cards' text and orders below are the first draft's and are NOT maintained: the plan files are the record.
+
 This file is the author's judgment in one place; make_index.py renders the plan's member tables
 from it plus the extraction files. The plan files are the record; this file is not a plan."""
 
@@ -98,7 +100,7 @@ CARDS = {
    exit="Per item as its home states.",
    hash="MOVERS on the on-arms; `travel_leg` becoming `(dest, points, path)` is a schema mover; each declared",
    shared="`state/world.py`, `loop/census.py`, `data/fixtures.py`, `queries/world_q.py`"),
- "B10-19": dict(name="DESIGN-FIRST CLUSTERS (NARRATION, CHARACTER, TROOP)", lanes="IN, WR, MB", code=False,
+ "B10-19": dict(name="DESIGN-FIRST CLUSTERS (NARRATION, CHARACTER, TROOP, EVENT DECK)", lanes="IN, WR, MB", code=False,
    gate="The question each cluster hangs on is answered (Jordan queue). No cluster is buildable before its question.",
    exit="Per cluster: the question answered, then the cluster's own position list is slotted into the next unopened batch by R8.",
    hash="none until built",
@@ -136,6 +138,7 @@ CP["CP-T07-01"] = "B10-09"
 for n in range(1, 11): CP[f"CP-T08-{n:02d}"] = "B10-16"
 for n in range(1, 10): CP[f"CP-T09-{n:02d}"] = "B10-17"
 for n in range(1, 10): CP[f"CP-T10-{n:02d}"] = "B10-18"
+CP["CP-T02-06"] = "B10-10"
 
 # v9-origin positions still open (kept under their v9 handle) and the new CR positions
 V9 = {
@@ -160,7 +163,7 @@ CR = {
  "CR-05": ("B10-02", "The 35 `skip`/`xfail` markers: read each reason, record whether its condition still holds"),
 }
 NM = {f"NM-W{n}": "B10-19" for n in range(10)}
-CL = {"CL-CHAR": "B10-19", "CL-ATTR": "B10-19", "CL-TROOP": "B10-19"}
+CL = {"CL-CHAR": "B10-19", "CL-ATTR": "B10-19", "CL-TROOP": "B10-19", "CL-EVENTS": "B10-19"}
 
 # In-batch order, where a home or the #501 index states one (a handle list is a serial order; '||' = file-disjoint lanes)
 ORDER = {

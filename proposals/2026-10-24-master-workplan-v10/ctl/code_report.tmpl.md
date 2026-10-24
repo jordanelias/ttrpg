@@ -16,7 +16,7 @@ Ranked, worst first:
 4. **Eight carrier fields end every run empty, and 62 of 146 declared Event kinds are never emitted.** Each empty field already has a reason on the record (four `Rung` containers that ratified Layer 1 declares and nothing maintains; `Record.ttl` with no reader or writer; `Person.capability` waiting on J-13's remainder; `Office.upkeep` read but declared by no office; `Claim.chain` empty at the end because only a spoken `tell` builds it and `tell` rarely wins), so none is a new defect; the never-emitted kinds are the larger signal. (§9)
 5. **Stability, endings and the strategic scale do not reach play.** `stability` reads 0 at every office rung in every reading; no ending is reachable in computed play; the realm fights no field. These are already registered holes (H-224, H-176, H-175); this report only confirms them at the current HEAD. (§11)
 6. **Three tests fail in this container.** Two are the known shallow-clone failures; one is a 1-unit-in-the-last-place drift in a combat pin that CI does not show. (§3)
-7. **Much of the content an emergence reading needs is absent, and what is present but shipped off adds volume, not variety.** Equipment, martial traditions, troop types, bonds, subfactions and event decks have no carrier in the season loop; capability is empty and its vocabulary is one vocation; turning on the content that exists changed event volume by +7% to +19% and the number of effective verbs by less than one. (§14)
+7. **Much of the content an emergence reading needs is absent, and what is present but shipped off adds volume, not variety.** Equipment, martial traditions and troop types have no carrier in the season loop; a faction is a view with no subfaction; bonds have a carrier (`tie` and `knot`) whose verb is declined for want of a partner operand; no event deck exists; capability is empty and its vocabulary is one vocation. Turning on the content that exists raised event volume by 7% to 19% with all four arms on (single arms: −1.2% to +11.8%) and moved the number of effective verbs by at most 1.0. (§14)
 
 ## 1. Method, instruments and controls
 
@@ -110,7 +110,7 @@ A refusal passes through up to four gates, in this order, and each leaves a diff
 
 {{T:last_read}}
 
-{{T:refusal_events}} `exists:<Kind> = 0` — the act was formed on a referent of the wrong kind, or on none — accounts for {{T:exists_zero_total}} refusal Events: {{T:exists_zero}} (a lower bound, since only the 60 most frequent reads per seed are kept; `DocketItem` counts dockets naming the subject, so 0 there means nothing is docketed). `condition = UNKNOWN` ({{T:condition_nonsite}}, all `work`) belongs to the same class. These are the failure classes REM-21 to REM-28 name; they are all still present at HEAD. None of the remediation's formation or instrument items has been built: REM-21's stamper registry (`STAMPERS`), REM-10's `attempts(w, n)` and REM-40's removal of the fold's `act.ineligible`/`act.refused`/`attempt.refused` literals are all absent from `engine/season/` (grep, this session); v9's B-Q to B-Y and B-T landed instead.
+{{T:refusal_events}} `exists:<Kind> = 0` — the act was formed on a referent of the wrong kind, or on none — accounts for {{T:exists_zero_total}} refusal Events: {{T:exists_zero}} (a lower bound, since only the 60 most frequent reads per seed are kept; `DocketItem` counts dockets naming the subject, so 0 there means nothing is docketed). `condition = UNKNOWN` ({{T:condition_nonsite}}, all `work`) belongs to the same class. These are the failure classes REM-21 to REM-28 name; they are all still present at HEAD. None of the remediation's formation or instrument items has been built: REM-21's stamper registry (`STAMPERS`), REM-10's `attempts(w, n)` and REM-40's removal of the fold's `act.ineligible`/`act.refused`/`attempt.refused` literals are all absent from `engine/season/` (grep, this session); v9's B-Q to B-Y and B-T landed instead. The NERS fold (`-08`) later found that REM-40's design had shipped as SC-02 `23` and cut it, and dropped the `STAMPERS` registry from REM-21; this sentence records what the grep found, not what the plan still builds.
 
 ## 7. Read failures
 
@@ -224,33 +224,35 @@ An emergence reading needs inputs that differ from person to person and options 
 
 {{T:strata}}
 
-The executed surface is record-keeping and talk. Economy and works execute 6 of 17 verbs, mostly record verbs; movement attempts are 7% executed because `migrate` is refused at capacity; contested physical acts are the duel and little else (no march arrives, §4).
+The executed surface is record-keeping and talk. The `march` row is a declaration, so the strict figures are the second ones. Economy and works execute 6 of 17 verbs, mostly record verbs; movement attempts are 7% executed because `migrate` is refused at capacity; contested physical acts are the duel and little else (no march arrives, §4).
 
 ### 14.2 What content exists, and what reaches the realm
 
 {{T:inventory}}
 
+The cells for the two foreign seats, the duel's class defaults and a cohort's weight are typed in `build_report_tables.py`, not computed `[UNVERIFIED: typed, not read from the tree by the script]`.
+
 Three kinds of absence, which a reading must keep apart:
-- **No carrier.** Equipment, martial traditions, troop types, bonds beyond `hold` and `oblige`, subfactions and event decks have no place in the season loop's state. The oracle modules hold some of it (weapons, traditions, troop-type roles) but the seam passes defaults. A system with no carrier cannot be switched on, so its emergent range is unmeasurable here, not zero.
-- **Carrier present, content empty or sparse.** Capability (one vocation, seated on no one), pursuit vectors for 46 of 83 persons, 79 of 280 decision cells, no conviction scars.
+- **No carrier.** Equipment, martial traditions, troop types, subfactions and event decks have no place in the season loop's state. The oracle modules hold some of it (weapons, traditions, troop-type roles) but the seam passes defaults. A system with no carrier cannot be switched on, so its emergent range is unmeasurable here, not zero.
+- **Carrier present, content empty or sparse, or the verb declined.** Capability (one vocation, seated on no one), pursuit vectors for 46 of 83 persons, 79 of 280 decision cells, no conviction scars; bonds (`tie` and `knot` Tenures exist; the verb is declined for want of a partner operand, H-182).
 - **Built and shipped off.** The external empire (`build_realm(foreign=True)`), the guard cohorts (`guards=True`), the weather draw (`season_factor_draw`), and the swept control arms recorded in the hole register.
 
 ### 14.3 What happens when the content that exists is switched on
 
-Each arm changes one thing on the shipped loop (seeds 0 and 1, four seasons); `all four on` combines the empire, the guards, the seeded vocation and the weather draw. The baseline hashes equal the census hashes.
+Each arm changes one thing on the shipped loop (seeds 0 and 1, four seasons), except `empire + guards`, which combines two, and `all four on`, which combines the empire, the guards, the seeded vocation and the weather draw. The baseline hashes equal the census hashes.
 
 {{T:probe}}
 
 {{T:probe8}}
 
-- **Volume, not variety.** Event counts move by up to +19% (seed 0, all on) and +7% (seed 1); executed acts move by 4% or less; effective verbs stay between 10.4 and 11.6 in every arm. No march arrives in any arm. One fought field occurs in fourteen arms (`field.lost`, seed 1, all four on).
-- **A noise floor.** Any perturbation moves the executed-verb set by about two low-count verbs: seeding capability made `train` execute and dropped `give` and `transfer` (seed 0). An effect smaller than that cannot be read from this instrument.
-- **The weather draw is inert.** It changes world values (the hash) and not one event or act, at four seasons (seed 1) and at eight (seed 0): nothing yet reads the yield factor into a decision. At seed 0 and four seasons the four draws (ticks 0 to 3) all came up 1.0, so the factor never differed; at eight seasons it did (0.5, 2.0, 2.0, 0.5 at ticks 4 to 7) and still moved no event or act.
+- **Volume, not variety.** {{T:probe_volume}}
+- **What the instrument hides.** {{T:probe_noise}}
+- **The weather draw is inert.** It changes world values (the hash) and not one event or act, at four seasons (seed 1) and at eight (seed 0): nothing yet reads the yield factor into a decision. At seed 0 and four seasons the four draws (ticks 0 to 3) all came up 1.0, so the factor never differed `[UNVERIFIED: the draw values were read in the session and are not saved in ctl/]`; at eight seasons it did (0.5, 2.0, 2.0, 0.5 at ticks 4 to 7) `[UNVERIFIED: same]` and the event and executed-act counts stay equal.
 
 ### 14.4 What this licenses
 
-It licenses claims about propagation, refusal structure, formation feasibility and determinism, which do not need content. It does not license any claim about variety of approach in combat, war, economy or bonds, about narrative hooks without the player (no deck, no births), or "no dominant option" at a seat (an upper bound only). The R-06 comparison `DISTINCT EXECUTED SETS` saturated before this probe and is blind to effects of this size.
+It licenses claims about propagation, refusal structure, formation feasibility and determinism, which do not need content. It does not license any claim about variety of approach in combat, war, economy or bonds, about narrative hooks without the player (no deck; births are ruled out by ED-WR-0011), or "no dominant option" at a seat (an upper bound only). The R-06 comparison `DISTINCT EXECUTED SETS` saturated before this probe and is blind to effects of this size.
 
-Limits: two seeds; four or eight seasons; one change at a time except the last arm; the inverse Herfindahl over executed verbs is a coarse measure of variety; the probe does not author any content, it only switches on what the tree holds.
+Limits: two seeds; four or eight seasons; one change at a time except the empire + guards and all-four arms; the inverse Herfindahl over executed verbs is a coarse measure of variety; the probe does not author any content, it only switches on what the tree holds.
 
 Reproduction: `python ctl/content_inventory.py ctl ctl/content_inventory.json`; `python ctl/content_probe.py ARM SEED SEASONS OUT.json` with ARM one of `baseline foreign guards foreign_guards capability exogenous all`; `python ctl/build_report_tables.py ctl ctl/report_tables.json`.

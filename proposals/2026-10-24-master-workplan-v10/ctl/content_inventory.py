@@ -30,6 +30,16 @@ T = sum(ex.values()); hh = sum((n / T) ** 2 for n in ex.values())
 res["executed_acts"] = T; res["executed_verbs"] = len(ex); res["effective_verbs"] = round(1 / hh, 1)
 res["top3"] = [[v, n] for v, n in ex.most_common(3)]; res["top3_share"] = round(sum(n for _, n in ex.most_common(3)) / T, 3)
 
+# --- strict: `march` acts end made or both (a declaration) and none ever arrives (code report section 4), so they are reported apart
+ex_s = collections.Counter({v: n for v, n in ex.items() if v != "march"}); Ts = sum(ex_s.values())
+res["march_declaration_acts"] = ex.get("march", 0)
+res["strict"] = {"executed_acts": Ts, "executed_verbs": len(ex_s), "effective_verbs": round(1 / sum((n / Ts) ** 2 for n in ex_s.values()), 1),
+                 "top3": [[v, n] for v, n in ex_s.most_common(3)], "top3_share": round(sum(n for _, n in ex_s.most_common(3)) / Ts, 3)}
+by_s = collections.defaultdict(collections.Counter)
+for v, row in VERB_TABLE.items():
+    by_s[str(row.stratum)]["verbs_executed"] += ex_s.get(v, 0) > 0; by_s[str(row.stratum)]["executed"] += ex_s.get(v, 0)
+res["strict_strata"] = {k: dict(c) for k, c in by_s.items()}
+
 # --- content that reaches build_realm(0)
 w = build_realm(0, None); P = list(w.persons.values())
 def empty(v): return v is None or (hasattr(v, "__len__") and len(v) == 0) or v == 0
@@ -53,6 +63,11 @@ res["carriers_absent"] = {n: not hasattr(__import__("engine.season.state.carrier
 res["person_has_kit_or_tradition"] = any(f in {x.name for x in __import__("dataclasses").fields(type(P[0]))} for f in ("kit", "equipment", "tradition", "weapon"))
 npcs = yaml.safe_load(open("engine/season/npcs.yaml"))
 res["npc_roster"] = {"rows": len(npcs["npcs"]), "with_concerns": sum(1 for n in npcs["npcs"] if n.get("concerns")), "ties": dict(collections.Counter(n.get("tie") for n in npcs["npcs"]))}
+from engine.season.data import pursuits as PU
+res["pursuits"] = {"named": len(PU.PURSUITS), "axes": len(PU.PURSUIT_AXES)}
+from engine.season.queries import faction_q as FQ
+res["faction_view"] = hasattr(FQ, "Faction")
+res["tie_knot_row"] = "tie / knot" in VERB_TABLE
 res["goals_rows"] = len(yaml.safe_load(open("engine/season/goals.yaml"))["goals"])
 import importlib
 sys.path.insert(0, "modules/combat")
