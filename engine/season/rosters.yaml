@@ -1081,7 +1081,7 @@ rosters:
   # | social contest      | RESOLVE (S39)      | claimants, prize, causes | a degree | BUILT, σ-LEVERAGE MODE — `a standing`/`a matter` are rolled by `modules/social_contest/roll.py` (a `Margin`), called by `seam/wrappers/sigma.py`, provider `social_contest` (v9 SC-01 steps 13 + 15); the proceedings nested run is unbuilt |
   # | mass battle         | ENCOUNTER (`a field`) | claimants, prize, causes | a degree | BUILT — `modules/mass_battle/massbattle.py`, called by `seam/wrappers/mass_battle.py` (the `contest_subsystems` row `a field`) |
   # | investigation       | RESOLVE (FI-01)    | actor, subject (`examine`: site) | a degree | ITS OWN KIND — not a contest: GRADED, by the roll the `graded_inquiries` row names (below), with no prize |
-  # | settlement mgmt     | UNRULED (see below)| UNRULED | UNRULED | ⚠ NOT CALLED — done INLINE (see below) |
+  # | settlement mgmt     | RESOLVE/MATTER     | stores, sites, residents | stores, yield, a draw | CALLED — `modules/settlements/` (`settlements.subsist` and `settlements.produce`, `step_call`s MATTER makes; the `query` entries `world_q` makes), v9 IN-07 |
   # | faction mgmt        | UNRULED            | UNRULED | UNRULED | absent from the loop entirely |
   # | character dev       | UNRULED            | UNRULED | UNRULED | no creation, no progression, no chronicle |
   #
@@ -1091,12 +1091,11 @@ rosters:
   # architecture rather than recording it, and the seam is precisely the thing that must not be
   # invented.
   #
-  # ⚠ SETTLEMENT IS THE ONE THE RULING RESOLVES. `loop/matter.py::matter` runs stores/yield/subsistence
-  # INLINE, and `systems/settlements` holds no sim module now (its economy sims were deleted at plan
-  # position `29c`), so which owner wins is moot: the loop's own is the only one. Under the ruling an
-  # economy the loop computes itself is a mode that never got its seam; whether it is ever CALLED
-  # instead is unruled, which is why the row above reads UNRULED. Two ladders for one quantity is a
-  # NERS **S** defect (§0.06, *calculations consistent in methodology*).
+  # ⚠ SETTLEMENT WAS THE ONE THE RULING RESOLVED, AND IT IS NOW CALLED. `systems/settlements` held no sim
+  # module (its economy sims were deleted at plan position `29c`), and MATTER ran stores/yield/subsistence
+  # INLINE; since v9 IN-07 MATTER calls the `settlements` module (`modules/settlements/`), so the loop's
+  # inline economy is gone and there is one ladder for each quantity (two would be a NERS **S** defect,
+  # §0.06, *calculations consistent in methodology*).
   #
   # ⚠ FACTION CANNOT BE A STRAIGHT PORT even once its seam is ruled. Layer 1 PART D rows 1/8/14
   # forbid a faction that acts, a stored aggregate, and a banner holding territory, so
