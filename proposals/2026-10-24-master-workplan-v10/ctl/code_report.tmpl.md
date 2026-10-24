@@ -1,6 +1,6 @@
 # Code report — what the engine, the season loop and the subsystems do at HEAD, measured by running them (T00 · lane IN)
 ## Status: PROPOSED. Reference, not canon (`CLAUDE.md` §0.05). Merging this file ratifies nothing and moves no row of THE NINE: a row moves only on its own `measured:` block.
-## Lane: IN (cross-cutting). Evidence for the v10 plan proposal that sits beside it (`2026-10-24-v10-00-head.md`). The figures in §4 to §11 are produced by scripts in `ctl/` and can be re-run from the tree; the line counts and the settlement count in §2 and the non-pytest gate rows in §3 were read off the console and are not saved there `[UNVERIFIED: not re-derivable from ctl/]`.
+## Lane: IN (cross-cutting). Evidence for the v10 plan proposal that sits beside it (`2026-10-24-v10-00-head.md`). The figures in §4 to §11 and §14 are produced by scripts in `ctl/` and can be re-run from the tree; the line counts and the settlement count in §2 and the non-pytest gate rows in §3 were read off the console and are not saved there `[UNVERIFIED: not re-derivable from ctl/]`.
 ## Grade under `CLAUDE.md` §0.2: `paper` as a plan input; the figures themselves are `measured` at HEAD `b7a1e1b`, shallow clone, one container (see §12).
 ## Placement, and a conflict named. `CLAUDE.md` §0 bars audit documents that create work for a future session, with one exception: a terminal pass whose verdict is the thing asked for may sit beside its subject. Jordan asked for this report and for the plan it feeds (2026-10-24), so it records verdicts about artifacts that already exist and proposes no work itself; the work is the plan's. If the plan is not adopted, this file is reference and may stay or go on its own.
 
@@ -16,6 +16,7 @@ Ranked, worst first:
 4. **Eight carrier fields end every run empty, and 62 of 146 declared Event kinds are never emitted.** Each empty field already has a reason on the record (four `Rung` containers that ratified Layer 1 declares and nothing maintains; `Record.ttl` with no reader or writer; `Person.capability` waiting on J-13's remainder; `Office.upkeep` read but declared by no office; `Claim.chain` empty at the end because only a spoken `tell` builds it and `tell` rarely wins), so none is a new defect; the never-emitted kinds are the larger signal. (§9)
 5. **Stability, endings and the strategic scale do not reach play.** `stability` reads 0 at every office rung in every reading; no ending is reachable in computed play; the realm fights no field. These are already registered holes (H-224, H-176, H-175); this report only confirms them at the current HEAD. (§11)
 6. **Three tests fail in this container.** Two are the known shallow-clone failures; one is a 1-unit-in-the-last-place drift in a combat pin that CI does not show. (§3)
+7. **Much of the content an emergence reading needs is absent, and what is present but shipped off adds volume, not variety.** Equipment, martial traditions, troop types, bonds, subfactions and event decks have no carrier in the season loop; capability is empty and its vocabulary is one vocation; turning on the content that exists changed event volume by +7% to +19% and the number of effective verbs by less than one. (§14)
 
 ## 1. Method, instruments and controls
 
@@ -211,3 +212,45 @@ python -m engine.season.harness.aperture 1 0
 ```
 
 The JSON the report was built from is in `ctl/`. Each run of the census takes about 90 seconds on four cores.
+
+
+## 14. Content, and what the realised choice surface can and cannot say
+
+An emergence reading needs inputs that differ from person to person and options that execute. This section measures both. Everything here is computed by `ctl/content_inventory.py` (what is authored and what reaches the realm, and the realised surface from the census runs) and `ctl/content_probe.py` (one change at a time on the shipped loop); the tables are rendered from their JSON.
+
+### 14.1 The realised surface
+
+{{T:surface_scalars}}. By verb stratum:
+
+{{T:strata}}
+
+The executed surface is record-keeping and talk. Economy and works execute 6 of 17 verbs, mostly record verbs; movement attempts are 7% executed because `migrate` is refused at capacity; contested physical acts are the duel and little else (no march arrives, §4).
+
+### 14.2 What content exists, and what reaches the realm
+
+{{T:inventory}}
+
+Three kinds of absence, which a reading must keep apart:
+- **No carrier.** Equipment, martial traditions, troop types, bonds beyond `hold` and `oblige`, subfactions and event decks have no place in the season loop's state. The oracle modules hold some of it (weapons, traditions, troop-type roles) but the seam passes defaults. A system with no carrier cannot be switched on, so its emergent range is unmeasurable here, not zero.
+- **Carrier present, content empty or sparse.** Capability (one vocation, seated on no one), pursuit vectors for 46 of 83 persons, 79 of 280 decision cells, no conviction scars.
+- **Built and shipped off.** The external empire (`build_realm(foreign=True)`), the guard cohorts (`guards=True`), the weather draw (`season_factor_draw`), and the swept control arms recorded in the hole register.
+
+### 14.3 What happens when the content that exists is switched on
+
+Each arm changes one thing on the shipped loop (seeds 0 and 1, four seasons); `all four on` combines the empire, the guards, the seeded vocation and the weather draw. The baseline hashes equal the census hashes.
+
+{{T:probe}}
+
+{{T:probe8}}
+
+- **Volume, not variety.** Event counts move by up to +19% (seed 0, all on) and +7% (seed 1); executed acts move by 4% or less; effective verbs stay between 10.4 and 11.6 in every arm. No march arrives in any arm. One fought field occurs in fourteen arms (`field.lost`, seed 1, all four on).
+- **A noise floor.** Any perturbation moves the executed-verb set by about two low-count verbs: seeding capability made `train` execute and dropped `give` and `transfer` (seed 0). An effect smaller than that cannot be read from this instrument.
+- **The weather draw is inert.** It changes world values (the hash) and not one event or act, at four seasons (seed 1) and at eight (seed 0): nothing yet reads the yield factor into a decision. At seed 0 and four seasons the four draws (ticks 0 to 3) all came up 1.0, so the factor never differed; at eight seasons it did (0.5, 2.0, 2.0, 0.5 at ticks 4 to 7) and still moved no event or act.
+
+### 14.4 What this licenses
+
+It licenses claims about propagation, refusal structure, formation feasibility and determinism, which do not need content. It does not license any claim about variety of approach in combat, war, economy or bonds, about narrative hooks without the player (no deck, no births), or "no dominant option" at a seat (an upper bound only). The R-06 comparison `DISTINCT EXECUTED SETS` saturated before this probe and is blind to effects of this size.
+
+Limits: two seeds; four or eight seasons; one change at a time except the last arm; the inverse Herfindahl over executed verbs is a coarse measure of variety; the probe does not author any content, it only switches on what the tree holds.
+
+Reproduction: `python ctl/content_inventory.py ctl ctl/content_inventory.json`; `python ctl/content_probe.py ARM SEED SEASONS OUT.json` with ARM one of `baseline foreign guards foreign_guards capability exogenous all`; `python ctl/build_report_tables.py ctl ctl/report_tables.json`.

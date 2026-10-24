@@ -1,0 +1,166 @@
+{
+ "strata": {
+  "social": {
+   "verbs": 19,
+   "verbs_attempted": 15,
+   "verbs_executed": 13,
+   "attempts": 2341,
+   "executed": 886
+  },
+  "contested_physical": {
+   "verbs": 8,
+   "verbs_attempted": 7,
+   "verbs_executed": 5,
+   "attempts": 1235,
+   "executed": 248
+  },
+  "binding_decision": {
+   "verbs": 10,
+   "verbs_attempted": 9,
+   "verbs_executed": 6,
+   "attempts": 567,
+   "executed": 137
+  },
+  "uncontested_material": {
+   "verbs": 17,
+   "verbs_attempted": 15,
+   "verbs_executed": 6,
+   "attempts": 4027,
+   "executed": 1210
+  },
+  "movement": {
+   "verbs": 2,
+   "verbs_attempted": 2,
+   "verbs_executed": 2,
+   "attempts": 1610,
+   "executed": 106
+  }
+ },
+ "executed_acts": 2587,
+ "executed_verbs": 32,
+ "effective_verbs": 10.9,
+ "top3": [
+  [
+   "create_record",
+   546
+  ],
+  [
+   "reconstruct",
+   295
+  ],
+  [
+   "utter",
+   269
+  ]
+ ],
+ "top3_share": 0.429,
+ "persons": 83,
+ "cohorts": 37,
+ "person_fields": {
+  "capability": {
+   "non_empty": 0,
+   "distinct": 0
+  },
+  "pursuits": {
+   "non_empty": 46,
+   "distinct": 46
+  },
+  "conviction": {
+   "non_empty": 46,
+   "distinct": 23
+  },
+  "stance": {
+   "non_empty": 35,
+   "distinct": 23
+  },
+  "scar": {
+   "non_empty": 0,
+   "distinct": 0
+  },
+  "thread_sensitivity": {
+   "non_empty": 7,
+   "distinct": 7
+  }
+ },
+ "tenure_kinds_at_build": {
+  "contain": 410,
+  "reside": 83,
+  "commit": 141,
+  "hold": 47,
+  "oblige": 2
+ },
+ "offices": 32,
+ "offices_with_upkeep": 0,
+ "office_factions": {
+  "L\u00f6wenritter": 3,
+  "Crown": 11,
+  "Church of Solmund": 7,
+  "Guilds": 2,
+  "Hafenmark": 4,
+  "Varfell": 4,
+  "Restoration Movement": 1
+ },
+ "site_kinds": {
+  "harbour": 37,
+  "seam": 37,
+  "dwelling": 211,
+  "garrison": 37
+ },
+ "vocations": [
+  "copying"
+ ],
+ "verb_capability": {
+  "tell": "copying",
+  "speak": "copying"
+ },
+ "alignment": {
+  "non_zero_cells": 79,
+  "possible": 280,
+  "celled_verbs": 40,
+  "verbs": 56,
+  "uncelled": [
+   "argue",
+   "arrest",
+   "carry",
+   "conceal",
+   "covenant",
+   "examine",
+   "forgive",
+   "interview",
+   "pardon",
+   "raze",
+   "restore",
+   "sabotage",
+   "tell",
+   "tend",
+   "thread_read",
+   "train"
+  ]
+ },
+ "fixtures_shipped_off": {
+  "season_factor_draw": "()"
+ },
+ "carriers_absent": {
+  "Faction": true,
+  "Troop": true,
+  "Cohort": true
+ },
+ "person_has_kit_or_tradition": false,
+ "npc_roster": {
+  "rows": 46,
+  "with_concerns": 46,
+  "ties": {
+   "institution": 15,
+   "neighbour": 17,
+   "roof": 2,
+   "named": 12
+  }
+ },
+ "goals_rows": 38,
+ "oracle_content": {
+  "weapons": 54,
+  "traditions": 8,
+  "mass_battle_troop_type_roles": 8,
+  "mass_battle_role_spec": 15
+ }
+}

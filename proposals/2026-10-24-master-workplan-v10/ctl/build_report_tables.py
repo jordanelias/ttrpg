@@ -168,5 +168,38 @@ T["chain_outcomes"] = (f"of {n_e:,} cross-person edges, {m_succ.group(1)} ({m_su
     f"Act outcomes at seed 0 (acts with Events in the log): {m_out.group(1)}; `unk` is an act that `corpus_run.attribute` does not return (not diagnosed). "
     f"The deepest chain has {m_chain.group(1)} steps: {cc['refused']} refused, {cc['made']} made, {cc['both']} both, {cc['unk']} unclassified.")
 
+
+# --- §14: content and the choice surface (content_inventory.json, probe/out_*.json)
+INV = J("content_inventory.json")
+T["strata"] = md(["verb stratum", "verbs executed at least once / total", "attempts", "executed", "executed share"],
+    [[k, f'{c["verbs_executed"]} / {c["verbs"]}', f'{c["attempts"]:,}', f'{c["executed"]:,}', f'{100*c["executed"]/c["attempts"]:.0f}%']
+     for k, c in sorted(INV["strata"].items(), key=lambda x: -x[1]["attempts"])])
+T["surface_scalars"] = (f'{INV["executed_acts"]:,} executed acts; {INV["executed_verbs"]} of 56 verbs execute at least once; the inverse Herfindahl over executed verbs '
+    f'is {INV["effective_verbs"]} ("effective verbs"); the top three, {", ".join(f"`{v}` {n}" for v, n in INV["top3"])}, are {100*INV["top3_share"]:.0f}% of executions')
+pf = INV["person_fields"]
+T["inventory"] = md(["content", "what the tree holds", "what reaches `build_realm(0)`"], [
+    ["Capability", f'`VOCATIONS` = {INV["vocations"]}, from `VERB_CAPABILITY` = {INV["verb_capability"]}', f'{pf["capability"]["non_empty"]} of {INV["persons"]} persons'],
+    ["Ambitions (pursuit vectors)", f'15 axes; 46 named persons from NPC test cases (`npcs.yaml`: names and wants are the corpus\'s, not authored)', f'{pf["pursuits"]["non_empty"]} of {INV["persons"]} persons ({pf["pursuits"]["distinct"]} distinct); the {INV["cohorts"]} cohorts carry none'],
+    ["Convictions", "creed weights", f'{pf["conviction"]["non_empty"]} persons ({pf["conviction"]["distinct"]} distinct); scar {pf["scar"]["non_empty"]}'],
+    ["Decision making (verb × axis cells)", f'{INV["alignment"]["non_zero_cells"]} non-zero cells of {INV["alignment"]["possible"]} possible on {INV["alignment"]["celled_verbs"]} celled verbs', f'{len(INV["alignment"]["uncelled"])} of {INV["alignment"]["verbs"]} verbs uncelled: a conviction cannot rank them'],
+    ["Relationships, knots, bonds", f'`npcs.yaml` gives each of {INV["npc_roster"]["rows"]} named persons a `concerns` subject and a `tie` ({INV["npc_roster"]["ties"]})', f'tenures at build {INV["tenure_kinds_at_build"]}; no acquaintance, kin or spouse edge'],
+    ["Faction affiliations, subfactions", f'{len(INV["office_factions"])} faction names, held as a string on {INV["offices"]} offices', f'no Faction carrier {INV["carriers_absent"]["Faction"]}; no subfaction'],
+    ["Offices", f'{INV["offices"]} seated offices (+2 foreign seats, shipped off)', f'upkeep declared by {INV["offices_with_upkeep"]} of {INV["offices"]}'],
+    ["Equipment, martial traditions", f'`modules/combat`: {INV["oracle_content"]["weapons"]} weapons, {INV["oracle_content"]["traditions"]} traditions', f'a `Person` carries no kit, tradition or weapon field ({not INV["person_has_kit_or_tradition"]}); the season duel uses the class defaults (weapon `arming`, armour `light`, tradition `none`; only `end` is derived)'],
+    ["Troop types, army variations", f'`modules/mass_battle`: {INV["oracle_content"]["mass_battle_troop_type_roles"]} troop-type roles, {INV["oracle_content"]["mass_battle_role_spec"]} role specs', f'no Troop carrier {INV["carriers_absent"]["Troop"]}; the engine feeds coarse infantry/cavalry; a cohort is a Person of weight 2'],
+    ["Event decks, exogenous events", "designs only (`proposals/2026-08-31-unified-code-shape/05_WORLD_CHURN.md`)", f'none in `engine/season`; `season_factor_draw` ships {INV["fixtures_shipped_off"]["season_factor_draw"]}; no birth event'],
+])
+import glob as _g
+order = ["baseline", "foreign", "guards", "foreign_guards", "capability", "exogenous", "all"]
+label = {"baseline": "baseline", "foreign": "external empire on", "guards": "guards on", "foreign_guards": "empire + guards", "capability": "capability seeded (`copying` 1 to 3)", "exogenous": "weather draw on", "all": "all four on"}
+rows = []
+for f in sorted(_g.glob(os.path.join(D, "probe", "out_*.json"))):
+    d = json.load(open(f)); m = d["march"]
+    rows.append((d["seed"], order.index(d["arm"]), [d["seed"], label[d["arm"]], f'{d["events"]:,}', d["executed"], d["executed_verbs"], d["effective_verbs"], f'{m["march.declared"]}/{m["march.refused"]}/{m["army.arrived"]}', sum(d["field_events"].values())]))
+T["probe"] = md(["seed", "arm (four seasons)", "events", "executed acts", "executed verbs", "effective verbs", "marches declared / refused / arrived", "field events"], [r[2] for r in sorted(rows)])
+e8 = {json.load(open(f))["arm"]: json.load(open(f)) for f in _g.glob(os.path.join(D, "probe", "out8_*.json"))}
+T["probe8"] = (f'Eight seasons at seed 0, baseline against the weather draw: {e8["baseline"]["events"]:,} events and {e8["baseline"]["executed"]:,} executed acts in both; '
+    f'hashes {e8["baseline"]["hash"]} and {e8["exogenous"]["hash"]}.')
+
 json.dump(T, open(OUT, "w"), indent=1)
 print("tables:", len(T))
