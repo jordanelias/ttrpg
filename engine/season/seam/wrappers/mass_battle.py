@@ -7,7 +7,9 @@ place, its fortification, each side's stance, the walls fixture) and the adapter
 the PARTY-GAP refusals and the `Unopposed` branch, calls the module entry the prize row names
 (`module_entry:`, registered in `manifest.MODULE_ENTRIES` from its composition row, `entry: verb_call`,
 `verb: march`) and lifts what comes back. The fight itself -- the Units, the terrain row, the battle and
-its survivor-ratio grade -- is the module's, reached by string. `loop/sides.py` stays host too: it builds
+its survivor-ratio grade -- is the module's, reached by string. Since v9 IN-52 `resolve` also asks
+`settlements.provision` (a `query` entry, through `composition.require`) how many of each side's troops
+its treasury can field, shipped OFF (`field_provisioning`, `H-241`). `loop/sides.py` stays host too: it builds
 the claimants the record's weights are read for. Below, `massbattle`'s functions are the ENTRY's
 module's since `31c`.
 

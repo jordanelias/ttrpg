@@ -223,10 +223,12 @@ class LarderInput:
     `queries/world_q.py::larder_input` from `World`:
       * `weights` -- `subsistence_weight`, `((kind, weight), ...)` sorted by kind;
       * `eaters`  -- every housed person (`home_of`), `Eater`s sorted by pid, cohort or not;
-      * `ladders` -- `((home, (rung, parent, ...)), ...)`: each home's containment ancestry, the home
-                     first, cut at the first id that is not a rung;
-      * `stores`  -- `((rung, ((kind, units), ...)), ...)` for every rung on a ladder, each in its own
-                     `Rung.stores` order."""
+      * `ladders` -- `((home, (rung, parent, ...)), ...)`: each COHORT eater's home's containment
+                     ancestry (only a cohort eats, so no other home is projected), the home first, cut at
+                     the first id that is not a rung;
+      * `stores`  -- `((rung, ((kind, units), ...)), ...)` for every rung on a cohort ladder, each in its
+                     own `Rung.stores` order. An eater whose home has no ladder here draws from nothing,
+                     so the cohort exemption (`larder_draw`'s) and this projection must agree."""
     weights: tuple
     eaters: tuple
     ladders: tuple
@@ -264,7 +266,7 @@ class Under:
 class SubsistInput:
     """What `settlements.subsist` reads, and nothing else. Built by `queries/world_q.py::subsist_input`:
       * `larder`    -- the `LarderInput` the draw reads (`larder_input`'s projection, unchanged);
-      * `chains`    -- `((home, (home, parent, ..., root)), ...)` per home, sorted: each home's whole
+      * `chains`    -- `((home, (home, parent, ..., root)), ...)` per COHORT home, sorted: each home's whole
                        containment ancestry (`ancestry`), NOT cut at a non-rung as a ladder is. A drained
                        rung's gap counts the eaters whose chain passes through it -- `_subtree`'s
                        membership read from the other end on a single-parent containment tree (every

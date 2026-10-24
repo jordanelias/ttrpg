@@ -251,7 +251,7 @@ def test_24f_falsifier_in_dearth_the_office_holder_keeps_his_body_and_the_cohort
     and its body moves."* On the BUILT realm -- *"a guard that passes only on `probes.py:744` is the
     dead-on-arrival case above, passing"*. v9 SE-01 (`24g`) runs it at EVERY live arm of `H-125`'s
     sweep (read off the register), and asserts the fall is exactly `arm x shortfall` -- the live
-    arm's whole arithmetic, `loop/matter.py`'s `lost = step * sum(short)`.
+    arm's whole arithmetic, `modules/settlements/subsist.py`'s `lost = step * sum(short)`.
 
     THE DEARTH IS THE REALM'S OWN, NOT PLANTED. At build every larder is empty and MATTER draws
     before it takes the first yield (#353 §25's order), so the first draw finds no stock anywhere:

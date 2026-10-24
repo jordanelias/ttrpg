@@ -511,6 +511,8 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # host's projection (`world_q.subsist_input`). Its outcome is ordered tuples in the order the old
     # loop built its dicts; the dicts below are rebuilt in that order, which reaches
     # `r.stores.update(...)`'s key order, and with it the content hash. Every write stays here.
+    # Window invariant: the debit and credit below are absolute values computed from this snapshot, so
+    # nothing between here and the per-rung loop may write `Rung.stores` (a writer placed there is overwritten).
     sub = _step_call(SUBSIST)(world_q.subsist_input(w))
     short_by_person = {pid: dict(kinds) for pid, kinds in sub.short_by_person}
     larder_after = {rid: dict(kinds) for rid, kinds in sub.larder_after}
