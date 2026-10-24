@@ -251,7 +251,6 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 
 | handle | alias | lane | STATE | GATE (the entry holds the whole of it) | R | batch | home |
 |---|---|---|---|---|---|---|---|
-| IN-07 | `36` | IN/SE | B | build (design landed at B-C) | — | B-T | `_part4` |
 | IN-09 | `19b`: `evade / defy`, `construe` (`comply` landed `128299db`) | IN | B | — (restorable under §0.5: `a1c83e62`, `60073e75`) | R-05 | none (B-I closed `9d93cfab`) | `_part5` |
 | IN-12 | #453 steps 5, 5a: their remainder (step 5's built half `34642a96`; 11 `68eaaa41`, `give` + Rung `c6459377`; 6, 7, 9, 10, 13: `5ea1bb47`, `664986ee`, `996c16dc`, `67686661`, `5da7c44e`) | IN/SC | BLK | H-226, H-227, H-209 | R-04, R-05 | none (B-R closed `541c8d12`) | `_part5` |
 | IN-14 | #457 BOUND-ATTENTION; H-92, H-10 | IN | ask-then | — | — | B-Z | `_part4` |
@@ -266,7 +265,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | IN-46 | = SM-6 | IN/PC | B | build (design landed at B-C); no build batch | R-04 | none (re-read at B-L, `e77794a2`) | `_part4` |
 | IN-47 | #445 (character sheet) | IN/PC/WR | B | review (design landed at B-C); no build batch | R-04 | none (reviewed at B-H, `c13144b9`) | `_part4` |
 | IN-48 | H-108 (delegation half) | IN/FA/SE | B | — (IN-40 landed `3f320093`; IN-10 (a), (b) and IN-11 landed `905b7a21`, `2a2ed152`) | R-04 | B-JR | `_part5` |
-| IN-52 | the levy-to-field feed (from IN-07's design); LF-1..LF-3 | IN/SE/MB | BLK | IN-49's `levy` executing (built `be828e15`), IN-07's extractions | — | B-T | `_part4` |
+| IN-52 | the levy-to-field feed's flip ON (built OFF `128bc9db`); LF-1..LF-3 | IN/SE/MB | BLK | `requisition` executing in computed play (H-163 limit 3(a)) | — | B-Z | `_part4` |
 | IN-58 | RS-23, RS-24: grievance at read — its sworn-to half (the stance-only half landed `3bf936ee`) | IN/FA | BLK | IN-40's `oblige` edge readable person-side (D) | R-07 (contributor) | none (B-W closed `3bf936ee`) | `_part5` |
 | IN-61 | RS-27: succession (replaces IN-51, retired); #453 R-5 (b) re-specified | IN/FA/SE | stopped | H-230 (limits (1), (2)); SC-04's `succession` row (H-217: IN-61 owns it); ED-IN-0292 (2) (J) | R-05, R-04 | none (stopped at B-R, closed `541c8d12`) | `_part5` |
 | SC-02 | `22a` → `23` → `22b` (RESIDUE after B-P, `eba20137`) | SC | BLK | H-218, H-219, H-221, H-222; ED-SC-0040 (J) | — | B-Z | `_part6` |
@@ -276,8 +275,7 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 | SC-06 | SM-1 | SC | ask-then | SM-1 | — | B-Z | `_part6` |
 | SC-07 | #445 P-4, V-4, V-5 | SC | BLK | a carrier per item (SC-01 landed, B-N closed `cf69ceed`) | — | B-Z | `_part6` |
 | SC-08 | — | SC | B | — (SC-01 landed; B-N closed `cf69ceed`) | — | B-O | `_part6` |
-| SE-02 | = IN-07 | — | — | — | — | B-T | `_part4` |
-| SE-04 | #457 CAST-POPULACE; H-170, H-171 | SE | BLK | IN-07 | — | B-T | `_part6` |
+| SE-04 | (b) H-171, (c) #457 CAST-POPULACE; (a) done `dd0a1c5a` | SE | BLK | (b) IN-44; (c) the spread construal (J) | — | B-Z | `_part6` |
 | SE-05 | = IN-30 | — | — | — | — | none (= IN-30, stopped) | `_part5` |
 | SE-06 | SE-04 (c)'s vector half; ED-IN-0293 reading (b) | SE/IN | J | §J.2 row 4; ED-IN-0296 (written at B-X's close `2f0c0227`, `needs_jordan`) | R-06 (contributor) | B-Z | `_part6` |
 | MB-07r | J-18 (A): flip the depth support cap ON | MB | BLK | J (recalibration; the golden gate's time budget) | — | B-Z | `_part7` |
@@ -298,11 +296,11 @@ are not here (`CLAUDE.md` §2) — among them the CI fix that had left `main` re
 
 ## 4. CROSSWALK — v8 and the proposals ↔ v9
 
-**Batches B-A … B-T, B-U, B-V, B-X, B-Y, B-Z** (B-Y placed by ruling, RS-28, B-W closed `3bf936ee`; B-X closed `2f0c0227`, placed by RS-30; B-U closed `156f3e5d`; B-R closed `541c8d12`; B-S closed `6e833a57`; B-Y closed `8071ca36`, PR #502; members, shared files, entry gates, exit instruments, re-records, lanes, handoff cards): `_part3` §B, the only copy.
+**Batches B-A … B-T, B-U, B-V, B-X, B-Y, B-Z** (B-Y placed by ruling, RS-28, B-W closed `3bf936ee`; B-X closed `2f0c0227`, placed by RS-30; B-U closed `156f3e5d`; B-R closed `541c8d12`; B-S closed `6e833a57`; B-Y closed `8071ca36`, PR #502; B-T closed `2c6684e6`, PR #503; members, shared files, entry gates, exit instruments, re-records, lanes, handoff cards): `_part3` §B, the only copy.
 
 | v8 position · telling · §SM | v9 |
 |---|---|
-| `B0-CI` · `30` · `31a` · `31b` · `31c` · `33` · `36` | built (`7b619328`; not a position) · IN-02 · IN-03 · IN-04 (= PC-09) · IN-05 (= MB-09) · IN-06 (re-reviewed, landed `759eefb8`; nothing plugs) · IN-07 (= SE-02; its levy feed split to IN-52 at B-C) |
+| `B0-CI` · `30` · `31a` · `31b` · `31c` · `33` · `36` | built (`7b619328`; not a position) · IN-02 · IN-03 · IN-04 (= PC-09) · IN-05 (= MB-09) · IN-06 (re-reviewed, landed `759eefb8`; nothing plugs) · IN-07 (landed `befce041`..`5099cb24`; its levy feed split to IN-52 at B-C) |
 | cells commit, `12b`/`12c`/`12d`, H6–H11, `12`, `12e`, Phase 6f | IN-08 (landed: the cells commit `0f998f64`, the chain `c13144b9`) |
 | `19b` · `13`-rest · pre-flight P-4, P-6 | IN-09 · IN-38 · read at B-C (IN-39, landed; `_part3` §P) |
 | `22` · `22a` → `23` → `22b` · `2-ii` | SC-01 (landed; B-N closed `cf69ceed`) · SC-02 · SC-05 |
