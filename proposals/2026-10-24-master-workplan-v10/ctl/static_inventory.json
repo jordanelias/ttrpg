@@ -1,0 +1,2242 @@
+{
+ "hole_rows_total": 231,
+ "hole_grade_total": {
+  "ruled": 33,
+  "assumption": 94,
+  "absent": 37,
+  "measured": 67
+ },
+ "hole_scope": [
+  {
+   "id": "H-166",
+   "grade": "assumption",
+   "kind": "PRODUCER",
+   "tier": 1,
+   "hole": "WHAT `found` AND `build` MAKE IS PAID FOR BY NOBODY, HELD BY NOBODY AND ENDED BY NOBODY. Plan position `24e` built the two producers `ARCH` F.20 asked for and nothing around them, each gap stated where it was met. (1) NO COST: neither verb, nor `restore`, consumes matter. `proposals/2026-09-10-settl",
+   "owner": "loop/effects_founding.py -- `_cost`, `_eff_found`, `_eff_build` (limits 1, 2, built); rosters.yaml -- `works_cost` (limit 1's value), `site_kinds` (limit 4); the CENSUS barrier or a verb (limit 3, 04_",
+   "unblocks": "R-VARIETY's *where to found, and what to build* as a CHOICE with a price (04_EVALUATION \u00a76), a founded place that belongs to somebody, and a map that can lose a place as well as gain one. Which to build first is a design order: (1) is a stake/material operand or a works-rung debit at the rise (an op",
+   "source": "plan position `24e` (WORKS & FOUNDING), 2026-09-29; narrowed at v9 IN-28 (`workplans/valoria_master_workplan_v9_part5.md`), batch B-K item 8, 2026-10-16",
+   "closeish_tokens": [
+    "CLOSED"
+   ],
+   "cite_head": "MEASURED at plan position `24e`, 2026-09-29, by reading every write `_eff_found`/`_eff_build`/`_eff_restore` make: a Rung and a `contain` edge, a Site, a staged `(Site, condition)` delta -- no `(Rung, stores)` write, no `hold`, and no verb in `verb_table.yaml` writes `(Rung, exists)` or `(Site, exists)` to absent. CLAUDE.md \u00a70's ladder: not superseded; not irrelevant (all four are on the objects this position made); no design document in the chain gives the cost or the holder -- P4 (`04_EVALUATI"
+  },
+  {
+   "id": "H-176",
+   "grade": "absent",
+   "kind": "PRODUCER",
+   "tier": 1,
+   "hole": "GD-1: NO ENDING IS SHOWN REACHABLE IN COMPUTED PLAY. The vocabulary and the step are built (v9 IN-27): `rosters.yaml: endings` (`peninsular_sovereignty`, GD-1's one victory row; `theocracy`), read by `queries/world_q.py::endings_reached`, reported by `SeasonDriver.season` as `endings`. What is built",
+   "owner": "`queries/world_q.py::endings_reached` (the Query) and `loop/driver.py::SeasonDriver.season` (the report); the rows are `rosters.yaml: endings`, each [ASSUMPTION; medium; Jordan to correct]",
+   "unblocks": "any statement that a played realm ENDS, as opposed to running out of seasons",
+   "source": "plan position `28-iii` (SPINE-DELETE), master workplan v8 `_part3` item 11; narrowed at v9 IN-27 (`workplans/valoria_master_workplan_v9_part5.md`)",
+   "closeish_tokens": [],
+   "cite_head": "Graded `absent`, strictest-first for a row graded in parts (`harness/register.py::GRADE_STRICTNESS`): the vocabulary and the step are built and executed, but no ending is shown reachable by the realm's own choices. OBSERVED at IN-27 (B-U), 2026-10-21, on SEED 0 ONLY: `build_realm(0)`, two seasons through `populated.run`'s chooser, `endings == []` each season at the pinned hashes 8bfd47a9 / 8abd76f3 (`engine/season/tests/test_in27_endings.py::test_in27_two_seasons_of_the_built_realm_run_the_step_"
+  },
+  {
+   "id": "H-186",
+   "grade": "absent",
+   "kind": "ABSENT_RULE",
+   "tier": 1,
+   "hole": "GD-3's INSURGENCY TRIGGER HAS NO SEASON FORM BEYOND ITS FIRST CONDITION. The retired oracle (`git show 5c5d8ec6:systems/world/sim/insurgency_pipeline.py`) fired on 2+ CONTIGUOUS Uncontrolled territories SUSTAINED 2 consecutive seasons, and promoted an insurgency to a faction on `L` >= 3, 2+ territor",
+   "owner": "`queries/world_q.py::uncontrolled` (the built first condition) and `queries/world_q.py::faction_holding` (faction identity, keyed on the roster)",
+   "unblocks": "a caller that ACTS on `uncontrolled` (its only caller is still `populated.census`, a report) -- lawfully a question source or stamp in `queries/world_q.py::questions_for`, not a `loop/` threshold (`cite:`); IN-30 waits on `H-166` (and `raze`, IN-12 step 11) and `H-149`, not on a ruling (`cite:`, THE",
+   "source": "plan position `24h` P5, v8 Batch 3a (2026-10-02)",
+   "closeish_tokens": [],
+   "cite_head": "plan position `24h` P5, 2026-10-02. FALSIFIERS, run: `engine/season/tests/test_revolt_query.py`, 7 passed. `build_realm(0)` returns one territory under its realm (`terr_T15`, the geography's `Uncontrolled`), equal to a re-derivation from `w.tenures` that does not call the Query's owner; one planted single-faction `hold` per uncontrolled territory returns 0, a control pair differing in exactly those edges; a holder of no faction leaves the land uncontrolled, and a second rostered commitment makes"
+  },
+  {
+   "id": "H-187",
+   "grade": "assumption",
+   "kind": "NUMBER",
+   "tier": 1,
+   "hole": "HOW FAR A PERSON'S WEIGHT SHIFTS ONCE A SCAR COUNT REACHES THRESHOLD 2. `ED-IN-0261` rules the thresholds (1 destabilise, 2 WEIGHT SHIFTS and the others gain proportionally, 3+ crisis) and the unit (a count), and states no magnitude for the shift; `Person.scar` has been a `{pursuit: count}` since IN",
+   "owner": "`queries/person_q.py::crisis_weights` (the reader), read by `decision/options.py::project` for `decision/choose.py`'s score",
+   "unblocks": "`ED-IN-0261`'s only decision-loop closer: *2,403 forks reconverge 100%, later-decision divergence ~4%* is the loop it is aimed at; that instrument was NOT re-run for this arm (see `cite:`), so the arm is not shown to close it. Its reader half: H13 (threshold 3) and H11 (the affiliation table) build ",
+   "source": "IN-08 H9 (`workplans/valoria_master_workplan_v9_part5.md`), `ED-IN-0261` item 4",
+   "closeish_tokens": [],
+   "cite_head": "MEASURED at H9, NPC-088 slice, seed 0, 4 seasons at 2 slots (W-D genuine/diverged): `total` arm 0 -> 29/6 (the baseline, unmoved), 0.5 -> 29/6, 1 -> 32/10; `none` 37/4, 37/5, 37/5; `actor` 35/9, 35/8, 35/7. So the verdict at `total` FLIPS across the sweep (no move at 0.5, up at 1), and the other arms move without rising. THIS IS A ONE-SLICE, ONE-SEED PROXY for `ED-IN-0261`'s corpus figure (2,403 forks reconverge 100%, later-decision divergence ~4%), which was NOT re-taken; and 6 -> 10 is not a r"
+  },
+  {
+   "id": "H-188",
+   "grade": "assumption",
+   "kind": "NUMBER",
+   "tier": 1,
+   "hole": "HOW RELIGIOUS CONFLICTION ENTERS THE SCORE. `ED-IN-0251` R1 rules confliction DERIVED from an `incompatible` relation and never stored, and IN-08 names `score` as the derived Query's caller (6f, ID-13); no source states the form or a magnitude. Built as the narrowest form that names no entity: the p",
+   "owner": "`queries/person_q.py::confliction` (the Query), read by `decision/choose.py`'s `make_chooser`",
+   "unblocks": "the confliction Query's reader (ID-13), and any affiliation content: the first cast row with two incompatible affiliations makes this arm an outcome mover",
+   "source": "IN-08 6f (`workplans/valoria_master_workplan_v9_part5.md`), `ED-IN-0251` R1",
+   "closeish_tokens": [],
+   "cite_head": "MEASURED at IN-08 6f on base 912b3d0a, `build_realm(0)`, seed 0, one season: realm 5b8618f2 and season d0015936 at 0, 0.2 and 1 alike, equal to the base; 6852 events, kind multiset 9dc73e04 and (kind, `actor_of`) sequence 1aaa2da4 at every arm and on the base; `march.declared` 6, `march.refused` 7 (the `test_build_realm_determinism.py` pin holds). FALSIFIERS, run: `engine/season/tests/test_6f_score_confliction.py` (3 passed): a planted person holding an incompatible pair at full intensity ranks "
+  },
+  {
+   "id": "H-189",
+   "grade": "assumption",
+   "kind": "RULING",
+   "tier": 1,
+   "hole": "THE CRISIS AT SCAR THRESHOLD 3 (IN-08 `12e` H13; G-Q6 as the affiliation draft recommends, `candidate_affiliation_content.md:212-213`; `ED-IN-0261` rules 3+ as the terminal crisis). BUILT: FOLD along `incompatible` and DESTROYED, on the conviction track. NOT BUILT, each refusing rather than inventin",
+   "owner": "`queries/person_q.py::conviction_after_crisis` (the selector, a reader) and `loop/resolve.py::_conviction_crisis` (the one write, through the gate, after `_scar_witnesses`)",
+   "unblocks": "every cast row holds an affiliation since IN-64, so the crisis is reachable in the shipped realm; TWO LATENT LIMITS OF IN-71 FOUND AT THE v9 B-X CLOSE: (1) `crisis_weights` reads `Person.conviction == {}` as never authored and leaves `doctrine` unscaled, while `conviction_after_crisis`'s DESTROYED b",
+   "source": "IN-08 `12e` H13 (`workplans/valoria_master_workplan_v9_part5.md`), `ED-IN-0261`; recorded at the B-H close, 2026-10-08",
+   "closeish_tokens": [],
+   "cite_head": "THE LADDER (`CLAUDE.md` \u00a70), PER CHOICE; nothing survives it, so `needs_jordan` is not set. RESTABILISE: not superseded, not irrelevant (the draft names it); the draft is the design document and stops at 'the threshold-2 mechanism continuing'; no precedent rounds a float shift onto the 0-5 spine; architecture (5): leave the vector unwritten, since an invented rounding would be a number nobody chose (\u00a742.2.1, REFUSE). PURSUIT-TRACK CRISIS: (2) irrelevant today -- there is no relation to fold alon"
+  },
+  {
+   "id": "H-190",
+   "grade": "assumption",
+   "kind": "NUMBER",
+   "tier": 1,
+   "hole": "HOW OFTEN A TELLER DECLARES AN INTENT (telling `T7`, G9). A telling whose teller has CHOSEN, this deliberation, a later act naming the telling's topic -- the topic is the teller, or an id the act binds under `rosters.yaml: intent_claim` -- may pass on that intent instead of what the teller holds abo",
+   "owner": "`decision/choose.py::declare_intents`, called by `make_chooser`'s `choose` on `pack_scenes`' return; the claim kind's shape is `queries/person_q.py::intent_said` / `intent_named`",
+   "unblocks": "a hearer who knows what somebody means to do before they do it (G9), and through `queries/world_q.py::named` a `claim_landed` question for a hearer whose reach covers the act's target; intent reconciliation (`H-191`) reads what this deposits",
+   "source": "v9 IN-16, telling `T7` (G9; `workplans/valoria_master_workplan_v9_part4.md`), `ED-IN-0282`, 2026-10-09",
+   "closeish_tokens": [],
+   "cite_head": "MEASURED 2026-10-09 (scratch `t7_arms.py`; `build_realm(0)`, seed 0). BASE a59d52f9 (the pre-rebase base: off HEAD's first-parent line, reachable only through the merge 48991c37), BEFORE the first T7 edit: realm 5b8618f2, one season d0015936, three seasons 43b1fac8. x3 43b1fac8 -> ca06376e at 7fc4371b (IN-18 step 2a), not at the rebase onto f2670889 (f2670889, 3fcf63d5, a467126a read 43b1fac8; one season d0015936 throughout). SELF-TELLING FREQUENCY ON THE BASE, controls first (a transparent spy "
+  },
+  {
+   "id": "H-191",
+   "grade": "absent",
+   "kind": "WIRING",
+   "tier": 1,
+   "hole": "INTENT RECONCILIATION -- WHETHER A DECLARED INTENT WAS KEPT IS READ BY NOTHING. A hearer holding `(A, intent:<verb>, ...)` never learns from it whether A did the act: `decision/options.py::record` pairs a teller's CELL claims against the hearer's firsthand ones, and an intent is no cell (its stem is",
+   "owner": "decision/options.py -- `record`'s pairing step, at the field-less `ABSENT: H-191 intent reconciliation` marker; `H-183`'s `unblocks:` names it",
+   "unblocks": "a teller whose declared intents go unkept is credited less (G7's deception, by deeds rather than lies), and a hearer who acts on an intent that has lapsed. Trigger: a shipped `intent_disclosure` above 0 (`H-190`) puts intent claims in hearers' ledgers, and the hearer witnesses, or is told, an event ",
+   "source": "v9 IN-16, telling `T7` (G9; `workplans/valoria_master_workplan_v9_part4.md`), `ED-IN-0282`, 2026-10-09",
+   "closeish_tokens": [],
+   "cite_head": "LADDER RUN at `T7`, 2026-10-09: not superseded; not irrelevant -- MEASURED (scratch `t7_arms.py`, `build_realm(0)`, three seasons, `intent_disclosure` 1.0): of 32 released tellings carrying an intent, the teller resolved a later act with the intended verb on a named id in 16 and not in 16 (0.5: 12 of 17), so kept and unkept intents both occur; the match is by verb and subject, an approximation; no design document says what a kept or broken intent does to a teller's credit or when an intent lapse"
+  },
+  {
+   "id": "H-192",
+   "grade": "assumption",
+   "kind": "NUMBER",
+   "tier": 1,
+   "hole": "HOW FAR WHAT A PERSON MAKES OF ANOTHER'S DEEDS MOVES THEIR REGARD FOR THEM (telling `G1`, judged regard). `regard = stance_toward + judged_gain * judged + told_valence_gain * told`; `judged` sums, over the deed claims the holder holds FIRSTHAND about the referent (an event-kind claim `(x, <kind>, Tr",
+   "owner": "`queries/person_q.py::regard` and `deeds_judged`; read by `decision/options.py::teller_weight`'s `relation`",
+   "unblocks": "regard that moves on what a person has SEEN another do, by their own pursuits (two witnesses of one deed regard its doer oppositely); R-07's regard conjunct; G2's polarity reads it in score term 2; G3's slant and G6's circle read it",
+   "source": "v9 IN-18 G1 (`workplans/valoria_master_workplan_v9_part4.md`), telling workplan \u00a73/\u00a75, `ED-IN-0282`, 2026-10-09",
+   "closeish_tokens": [],
+   "cite_head": "M0b RE-MEASURED 2026-10-09 on IN-18's base a467126a (IN-17's commit), before G1's first edit (scratch `m0b.py`, `build_realm(0)`, one season, `intent_disclosure` 0): 163 of 448 (holder, person) pairs holding a deed claim judge it non-zero at `declared` (36.4 %), 189 of 448 at `uniform` (42.2 %) -- above \u00a76's 5 %, so G1 lands with no `deed:` cell. FALSIFIERS: `engine/season/tests/test_told_by_channel.py -k g1`. THE LADDER (`CLAUDE.md` section 0): not superseded; not irrelevant (the plan's G1); no"
+  },
+  {
+   "id": "H-193",
+   "grade": "assumption",
+   "kind": "NUMBER",
+   "tier": 1,
+   "hole": "HOW FAR A DEED ONE WAS TOLD OF MOVES REGARD (telling `G1`, the told half). `told` is `deeds_judged`'s sum over the deed claims somebody TOLD the holder (every deed claim not held firsthand), scored exactly as the judged half; `told_valence_gain` is its magnitude [ASSUMPTION]. The told half does not ",
+   "owner": "`queries/person_q.py::regard` and `deeds_judged`",
+   "unblocks": "regard moved by hearsay about a person's deeds -- the telling's effect on how the hearer regards its subject",
+   "source": "v9 IN-18 G1 (`workplans/valoria_master_workplan_v9_part4.md`), telling workplan \u00a73/\u00a75, `ED-IN-0282`, 2026-10-09",
+   "closeish_tokens": [],
+   "cite_head": "As `H-192`. FALSIFIER: `test_g1_opposite_pursuits_judge_one_deed_with_opposite_regard`'s told arm. THE LADDER: as `H-192`"
+  },
+  {
+   "id": "H-194",
+   "grade": "assumption",
+   "kind": "RULING",
+   "tier": 1,
+   "hole": "WHICH WAY REGARD FOR AN ACT'S SUBJECT PULLS ON IT (telling `G2`, polarity in \u00a7F2 term 2). \u00a7F2's term 2 is `stance_toward(c.subject)`, added with one sign to every candidate, so a grudge makes `fight` on its object score LOWER. `declared` reads G1's `regard` and negates it where the subject is the ac",
+   "owner": "`decision/choose.py::stance_term`, called by `make_chooser`'s `score`; arms in `rosters.yaml: stance_polarities`",
+   "unblocks": "a grudge or a judged deed that makes a person MORE ready to fight its object; IN-25's stance-term gain (it tunes the term this arm signs); G4 was dropped at IN-18 (control 0, live 2, occasioned 0)",
+   "source": "v9 IN-18 G2 (`workplans/valoria_master_workplan_v9_part4.md`), telling workplan \u00a75, `ED-IN-0282`, 2026-10-09",
+   "closeish_tokens": [],
+   "cite_head": "FALSIFIER: `engine/season/tests/test_told_by_channel.py -k g2` -- a person holding `march`'s grudge-row shape toward `p_x` ranks `fight` on `p_x` below `fight` on `p_y` at `legacy` and above it at `declared`, through `make_chooser`'s real ranking; `tell` about `p_x` keeps its sign. The `march` half of \u00a75's falsifier is not observable while `H-195` holds. THE LADDER (`CLAUDE.md` section 0): not superseded; not irrelevant (\u00a76: G2 'lands regardless'); no design document gives a sign by role; preced"
+  },
+  {
+   "id": "H-195",
+   "grade": "absent",
+   "kind": "WIRING",
+   "tier": 1,
+   "hole": "THE `holder` OPERAND -- WHO A RUNG'S REGARDED PARTY IS, PERSON-SIDE. Under `stance_polarity: declared` a rung subject (`march`'s) reads 0 at G1's control; at live gains it reads the deed claims held about it (`transfer.made` on a changed rung, under `claim_subject_rule: both`) -- nobody holds stance",
+   "owner": "`decision/choose.py::stance_term`, at the field-less `ABSENT: H-195 holder` marker",
+   "unblocks": "\u00a75's G2 falsifier's `march` half: members of a faction holding a grudge choose `march` on F-held rungs more under `declared` than `legacy`. Trigger: M0g -- the share of persons holding a `held_by` claim -- at or above 5 %",
+   "source": "v9 IN-18 G2 (`workplans/valoria_master_workplan_v9_part4.md`), telling workplan \u00a75, `ED-IN-0282`, 2026-10-09",
+   "closeish_tokens": [],
+   "cite_head": "MEASURED 2026-10-09 on IN-18's base a467126a (IN-17's commit) (scratch `m0g.py`, `build_realm(0)`, one season): 0 of 80 persons hold a claim on the `held_by` stem (0.0 %), below \u00a75's 5 %, so the operand reads 0 as \u00a75's marker cell says. LADDER: not superseded; not irrelevant (the plan's marker); no document says how a person learns who holds a rung; precedent: `known_persons` reads acquaintance from the holder's own claims only (AX-2); architecture (5): reading the world's `holder_faction_of` fr"
+  },
+  {
+   "id": "H-196",
+   "grade": "assumption",
+   "kind": "RULING",
+   "tier": 1,
+   "hole": "WHICH CLAIM A TELLER PASSES ON ABOUT A SUBJECT (telling `G3`, slant). `said_of`'s pick is the newest non-`seen` claim, then the most confident; under `valence` the teller's claims about the subject are first narrowed to those the teller judges most strongly -- the largest `|deed_valence|` (G1's scor",
+   "owner": "`queries/person_q.py::said_of` (its `teller` argument, passed by `decision/options.py::opening_set`); arms in `rosters.yaml: said_slants`",
+   "unblocks": "a teller who passes on what matters to them -- the old outrage over the recent trivia -- so hearsay drifts toward the tellers' own values; G7's deception reads what was said",
+   "source": "v9 IN-18 G3 (`workplans/valoria_master_workplan_v9_part4.md`), telling workplan \u00a75, `ED-IN-0282`, 2026-10-09",
+   "closeish_tokens": [],
+   "cite_head": "TRIGGER MET: M0a > 0 after T4 (realm person-subject executed 2 of 3, telling workplan \u00a76). FALSIFIER: `engine/season/tests/test_told_by_channel.py -k g3` -- an older strongly-judged deed against a newer unjudged claim: the newer is said at `newest`, the older at `valence`, the newer again when the teller judges nothing. THE LADDER (`CLAUDE.md` section 0): not superseded; not irrelevant (the plan's G3); no design document says which claim a teller chooses; precedent `H-190`; architecture (5): reu"
+  },
+  {
+   "id": "H-197",
+   "grade": "assumption",
+   "kind": "NUMBER",
+   "tier": 1,
+   "hole": "HOW OFTEN A TELLING IS MADE IN CONFIDENCE (telling `G6`, confidences). A telling may be PRIVATE: every hearer of it holds the told claim with `Claim.visibility == (teller, addressee)` -- the circle -- instead of `own`, and a holder who later tells a claim held under a circle to an addressee outside ",
+   "owner": "`loop/witness.py::_circle_of` (the told deposit's circle line) writes `Claim.visibility` (`state/carriers.py`); `loop/resolve.py::_confidence_broken` reads it in the fold and keeps `confidence.broken`",
+   "unblocks": "a confided claim deposited `visibility == (A, B)`, and a retelling outside the circle emitting `confidence.broken` -- betrayal as an event the world can react to; a `deed:confidence.broken` alignment cell (`H-66`) and a breach subject on the betrayer rather than the topic would let regard read it. S",
+   "source": "v9 IN-18 G6 (`workplans/valoria_master_workplan_v9_part4.md`), telling workplan \u00a75, `ED-IN-0282`, 2026-10-09",
+   "closeish_tokens": [],
+   "cite_head": "BUILT IN TESTS; THE WIRING GAP BELOW IS `H-204`'S, NOT THIS ROW'S (this row grades the swept chance). THE BREAK PATH IS NOT REACHED IN COMPUTED PLAY AT `said_slant: newest`, because the retelling's `said` is `said_of`'s newest-then-most-confident pick (`queries/person_q.py::said_of`, `LedgerReader._best`, first-found wins a tie) and the confided told copy is not that pick: in the constructed case the hearing deposits the hearer's own event-kind claim `(topic, news.told, True)` at confidence 100 "
+  },
+  {
+   "id": "H-198",
+   "grade": "absent",
+   "kind": "RULING",
+   "tier": 1,
+   "hole": "DECEPTION (telling `G7`) -- A TELLER NEVER LIES. `said_of` always passes on a claim the teller holds, unaltered (`told_drift_band`'s drift at `Partial` is loss in the channel, not intent). Nothing says WHEN a person lies or WHAT the lie says: a deed claim is `(x, <kind>, True)` and no deposit ever h",
+   "owner": "`queries/person_q.py::said_of`, at the field-less `ABSENT: H-198 deception` marker",
+   "unblocks": "a liar whose caught lies cost them credit -- `record` (`H-183`) already prices it: `test_t6_a_teller_contradicted_twice_weighs_less_than_one_confirmed_twice` is \u00a75's G7 falsifier ('after two caught lies, the liar's record is below an honest teller's') and passes with no lie mechanism, so that falsif",
+   "source": "v9 IN-18 G7 (`workplans/valoria_master_workplan_v9_part4.md`), telling workplan \u00a75, `ED-IN-0282`, 2026-10-09",
+   "closeish_tokens": [],
+   "cite_head": "TRIGGER MET (M0a > 0; G2 and G3 built at v9 IN-18, 2026-10-09). NOT BUILT: \u00a75's falsifier observes `record`, which T6 built and which passes today, so a lie rule built here would land with no falsifier able to fail on it -- the gate rule ('a field lands only with its reader and its falsifier'). THE LADDER (`CLAUDE.md` section 0): not superseded; not irrelevant; no design document gives when or what a person lies; no precedent; architecture (5): two defensible lie rules (alter a held cell value v"
+  },
+  {
+   "id": "H-199",
+   "grade": "assumption",
+   "kind": "FORMULA",
+   "tier": 1,
+   "hole": "THE MAGNITUDE OF REFRACTION -- `AX-7`'s divergence formula (v9 IN-15; `H-36` rules its shape). How far the channel a claim arrived on and what its receiver already held lower the confidence it lands at: `confidence' = floor(confidence * (1 - g*remove(channel)) * (1 - g*dissent) * competence + 1/2)`.",
+   "owner": "`decision/options.py::refracted_confidence` (with `channel_remove` and `dissents`), applied by `loop/witness.py::_refract` to all six `Claim` constructions (event-kind, observation, `seen`, `content:`",
+   "unblocks": "two witnesses of one act holding it at different confidence by how it reached them and what they already held -- `AX-7`'s falsifier ('a deposit unmediated by channel, competence or prior belief') answered at any gain above 0. A lowered confidence decays to 0 sooner (`claim_decay_per_season`), is evi",
+   "source": "v9 IN-15 (`workplans/valoria_master_workplan_v9_part4.md`), `AX-7` (`ED-IN-0244`, RR-P), `H-36`, 2026-10-09",
+   "closeish_tokens": [],
+   "cite_head": "v9 IN-15, 2026-10-09 [ASSUMPTION; medium; Jordan to correct; revert: set `refraction_gain` to the ruled magnitude, or replace `refracted_confidence`'s factors]. FALSIFIER: `engine/season/tests/test_ax7_refraction.py` -- one telling heard through two channels (presence and a knot) deposits two confidences at 0.5 and the teller's own for both at 0; a firsthand prior that disagrees lowers the told copy and one that is absent does not; the actor's own deposits are never refracted. MEASURED (scratch,"
+  },
+  {
+   "id": "H-200",
+   "grade": "absent",
+   "kind": "RULING",
+   "tier": 1,
+   "hole": "COMPETENCE -- `AX-7`'s second input to divergence (*'the reader's competence'*) HAS NO CARRIER. `Person.capability` is keyed by a verb's capability (`VERB_CAPABILITY`, read by `seam/wrappers/sigma.py::_capability` as dice), is empty on every corpus person, and names no competence at reading or witne",
+   "owner": "`decision/options.py::refracted_confidence`, at the field-less `ABSENT: H-200 competence` marker",
+   "unblocks": "a practised observer and a careless one holding one act at different confidence -- the third of `AX-7`'s three inputs",
+   "source": "v9 IN-15 (`workplans/valoria_master_workplan_v9_part4.md`), `AX-7` (`ED-IN-0244`), 2026-10-09",
+   "closeish_tokens": [],
+   "cite_head": "LADDER RUN at v9 IN-15, 2026-10-09: not superseded (`AX-7` names it); not irrelevant (one of the three inputs `AX-7` rules 'together'); no design document says what competence measures or where it is held; no precedent -- `Person.capability` 'supplies dice and gates nothing' (`rosters.yaml: eligibility_kinds`' note) and is keyed per verb, so reading it as perception would put a second meaning on one field; the architecture (5) cannot choose between a new person field and a capability key without"
+  },
+  {
+   "id": "H-201",
+   "grade": "measured",
+   "kind": "WIRING",
+   "tier": 1,
+   "hole": "THE ACT-LEVEL PRIOR -- WHETHER A WITNESS BELIEVED THE WITNESSED ACT COULD NOT HAPPEN -- IS NOT A REFRACTION TERM. `dissents` scores a claim against the receiver's firsthand belief on the claim's OWN key, so the event-kind claim `(x, <kind>, True)` and the `seen` claim -- the deposits `AX-7`'s falsif",
+   "owner": "`decision/options.py::dissents`, at the field-less `ABSENT: H-201 act-level prior` marker; the missing piece is an `actor=` keyword on `epistemic.belief_contradicts` (default `p.id`), a file outside I",
+   "unblocks": "a witness who held the granary empty doubting the transfer out of it they saw -- `AX-7`'s prior belief, reaching the act itself and not only the cells it read",
+   "source": "v9 IN-15 (`workplans/valoria_master_workplan_v9_part4.md`), `AX-7` (`ED-IN-0244`), `HANDOFF_IN.md`, 2026-10-09",
+   "closeish_tokens": [
+    "CLOSED"
+   ],
+   "cite_head": "CLOSED, BUILT 2026-10-09 (B-E; Jordan's ruling this session: the `epistemic.py` keyword is made -- ca4102bf, `belief_contradicts(..., actor=None)`, default `p.id`, the ledger the person's own -- and the act-level prior is WIRED INTO `dissents`). `hole:` and `owner:` are LEFT AS TRANSCRIBED, as `H-109` and G1b's row leave theirs. BUILT: `dissent` is 1 when the claim's own key disagrees (IN-15) OR, for the event-kind and `seen` deposits, when the receiver's ledger makes the witnessed act's `requir"
+  },
+  {
+   "id": "H-202",
+   "grade": "assumption",
+   "kind": "NUMBER",
+   "tier": 1,
+   "hole": "HOW HARD \u00a7F2's STANCE TERM PULLS ON A CHOICE -- THE TERM HAS NO GAIN (v9 IN-25, BOUND-STAKES; #457 `:165`: the dukes' and Church's 'ever-rising stakes' have no tunable rate). `score(c)` adds the stance term at weight 1 beside the pursuit dot, so how far a grudge or a judged deed can outweigh a perso",
+   "owner": "`decision/choose.py::stance_term`, called once per candidate by `make_chooser`'s `score`",
+   "unblocks": "a grudge whose weight in a choice can be tuned against a person's pursuits -- the rate at which the stakes a lost field writes come to drive what the losers choose; IN-12 step 13's `forgive` closes the rows this gain scores",
+   "source": "v9 IN-25 (`workplans/valoria_master_workplan_v9_part5.md`), #457 `:165` (`proposals/2026-10-04-forcing-churn-and-the-story-bar.md`), 2026-10-09",
+   "closeish_tokens": [],
+   "cite_head": "v9 IN-25, 2026-10-09 [ASSUMPTION; medium; values: Jordan (#457 `:165`); revert: set `stance_gain` to the ruled value, or move the gain off the term]. FALSIFIER: `engine/season/tests/test_in25_stance_gain.py` -- a planted person whose stance toward one candidate's subject is 0.6 of the pursuit gap keeps the pursuits' order at 0 and reverses it at 1 and 3 through `make_chooser`'s real ranking; with no stance it is unmoved at 3; `stance_term` is the control's value times `1 + g` exactly on all thre"
+  },
+  {
+   "id": "H-203",
+   "grade": "absent",
+   "kind": "WIRING",
+   "tier": 1,
+   "hole": "NO RECORD IN THE WORLD NAMES AN OFFICE, AND NO WRIT REACHES THE PERSON WHO WOULD ACT ON IT (v9 IN-09, IN-10; MEASURED at B-I, HEAD c3a698ce). `confer`, `establish` and `revoke` read the `office` operand (`loop/predicates.py`), and the held-Record channel (#453 `:2309-2357`) can answer `subject` only",
+   "owner": "the question source in `decision/options.py` (a referent of kind Office from a held Record's `terms` or a `tenure.opened` deposit) and `loop/predicates.py`'s `office` reads (`_req_confer`, `office_des",
+   "unblocks": "IN-09's three verbs and IN-10's `confer`/`establish`/`revoke` executing in computed play, and with them IN-10 (a) `oblige`, IN-33 `exchange`, IN-18 G5",
+   "source": "v9 IN-09, IN-10 (`workplans/valoria_master_workplan_v9_part5.md`), #453 `:524`, `:2309-2357`, K-25, 2026-10-09",
+   "closeish_tokens": [
+    "FALSIFIED",
+    "REVERTED"
+   ],
+   "cite_head": "MEASURED 2026-10-09 (B-I). TWO ATTEMPTS BUILT, FALSIFIED AND REVERTED, each kept in history: IN-09's cells (30d38a12, reverted bd7a14de: all three verbs typed and resolvable, 0 executed, 609 always-refused candidates per verb on non-writ referents, `issue`/`levy`/`transfer` crowded out, ARC R3 97 -> 95 of 97) and IN-10's enabler (65b96572, reverted 7d6e3bc2: `record_sourced_operands` per-kind map, `held_record_claims`, `issue` joined to the known-person fan; its own tests pass and realm `issue` "
+  },
+  {
+   "id": "H-204",
+   "grade": "absent",
+   "kind": "WIRING",
+   "tier": 1,
+   "hole": "G6's BREAK PATH IS NOT REACHED IN COMPUTED PLAY. At `said_slant: newest` the production pick `queries/person_q.py::said_of` returns the hearer's own event-kind claim `(topic, news.told, True)` (confidence 100, appended first in `witness.py`) rather than the confided copy `(..., visibility == (teller",
+   "owner": "`queries/person_q.py::said_of` (the pick) and `loop/witness.py` (the event-kind claim)",
+   "unblocks": "G6's `confidence.broken` executing in play, and SC-02 `22a`'s keep-or-delete decision on `Claim.visibility` (`H-197`)",
+   "source": "v9 IN-18 G6, B-I close Phase 3, 2026-10-10",
+   "closeish_tokens": [],
+   "cite_head": "MEASURED at B-I: `telling_privacy` 1.0 over 3 realm seasons makes 4 confided deposits, `said_of` picks the circled copy for 0 of 4 pairs, 0 `confidence.broken` of 19 tellings. Constructed check: `test_g6_limit_the_production_said_pick_shadows_the_confided_copy` in `engine/season/tests/test_told_by_channel.py`. REPAIR NAMED, NOT BUILT: exclude the hearing's own `news.told` event claim from the pick when a told copy is held (precedent: R8.1's exclusion of `seen`, `queries/person_q.py` ~:528-534); "
+  },
+  {
+   "id": "H-205",
+   "grade": "absent",
+   "kind": "NUMBER",
+   "tier": 1,
+   "hole": "THE VOW-BREAK IS PRICED AT `release`'s ALIGNMENT CELLS. After IN-11 cut `repudiate`, `commitment.ended` has one emitter (`release`), so `KIND_VERB` (`data/verbs.py::_derive_kind_verb`) maps it to `release` and `deed_valence` / `deeds_judged` / `regard` (`queries/person_q.py`) judge a witnessed vow-b",
+   "owner": "`rosters.yaml` deed cells",
+   "unblocks": "a witnessed vow-break reading as a deed with its own sign",
+   "source": "v9 IN-11, B-I close Phase 3, 2026-10-10",
+   "closeish_tokens": [],
+   "cite_head": "The IN-11 plan entry (v9 `_part5` `### IN-11`) said its pricing becomes a `deed:commitment.ended` cell (IN-08); none was authored. A value choice: attach it to Jordan's CELL-VALUE AND COSINE PASS, `workplans/valoria_master_workplan_v9_part5.md` section J.2"
+  },
+  {
+   "id": "H-206",
+   "grade": "absent",
+   "kind": "WIRING",
+   "tier": 1,
+   "hole": "A DEAD SEAT-HOLDER'S OFFICE AND CLOSED `hold` ARE NAMED BY NO CLAIM (v9 IN-34; the HOLDER half LANDED, `Item: H206`: a `person.died` written at MATTER is now placed where the dead man stood, so the persons there hold claims naming him). What remains is the OFFICE and `hold` half, i.e. vacancy claims",
+   "owner": "WITNESS: either give an actorless death a place (the removed person's last container), or list the cascade's closed tenures among the Event's changes so a fan-out can anchor on the office",
+   "unblocks": "claims naming a dead seat-holder's office and closed hold (vacancy claims), and a witnessed `person.individuated`",
+   "source": "v9 IN-34 (`workplans/valoria_master_workplan_v9_part5.md`), #457 D2, 2026-10-10",
+   "closeish_tokens": [
+    "CLOSED",
+    "FALSIFIED",
+    "LANDED",
+    "REVERTED"
+   ],
+   "cite_head": "IN-34 RE-LANDED (`Item: IN-34`, after the holder-half fix below): `Person.born` (age is a Query over the clock, default `-age_at_build`), one bodies pass at MATTER after the hunger pass drawing one keyed value per living individual against `world_q.body_hazard` (a cohort has hazard 0, as only a cohort goes hungry), a hit written through `World.remove_person` emitting `person.died` chained via `last_emission_of`; `loop/census.py::_individuate` gives a minted person `born=w.tick-age_at_build`. Shi"
+  },
+  {
+   "id": "H-207",
+   "grade": "absent",
+   "kind": "WIRING",
+   "tier": 1,
+   "hole": "AN OFFICE-REFERENT SOURCE DOES NOT MAKE `revoke` OR `confer` EXECUTE ON `build_realm(0)` (v9 IN-53; MEASURED at B-I, base 732b6780). Four things stand between a seat question and an executed `revoke`/`confer`, none inside IN-53's EDITS. (1) ONE ACTOR, ONE SEASON: at tick 0 exactly one (actor, seat) ",
+   "owner": "per cause: (1) cast content (`offices.yaml`, `harness/populated.py`: R-05's rule is that none is invented); (2) `decision/options.py::aggregate_questions` / H-54's `question_aggregation_rule`, or a pe",
+   "unblocks": "IN-53 (and through it IN-10 (a)(b), IN-33, IN-18 G5, B-J): `revoke` and `confer` executing in computed play",
+   "source": "v9 IN-53 (`workplans/valoria_master_workplan_v9_part5.md`), H-203, H-54, H-134, 2026-10-10",
+   "closeish_tokens": [
+    "FALSIFIED",
+    "LANDED",
+    "REVERTED"
+   ],
+   "cite_head": "RULED BY JORDAN, 2026-10-12 (recorded; `Item: H-207-rulings`; his words where quoted, the readings are mine and [ASSUMPTION; medium; Jordan to correct]). (A) `question_aggregation_rule` STAYS `first` (H-54); a computed `revoke` is NOT driven: no motive in the chooser's scoring offers it, and none is to be special-cased in. What remains is a design-first motive, a VACANCY read as a `need`, and IN-53's exit moves to `confer` onto a seat vacated of its own accord (four seats are, after season 1). ("
+  },
+  {
+   "id": "H-208",
+   "grade": "assumption",
+   "kind": "NUMBER",
+   "tier": 1,
+   "hole": "THE VALUES OF IN-34'S THREE FIXTURES ARE NOT CHOSEN (v9 IN-34; #457 D2). `Person.born` is read only by `queries/world_q.py::age_of` and `body_hazard`; the hazard per individual per season is min(1, `illness_rate` + `age_step` x age) with age in seasons, validated in [0, 1]. A cohort has hazard 0 -- ",
+   "owner": "Jordan (#457 D2: the rates and the starting age)",
+   "unblocks": "ageing and illness through the bodies motion (IN-34), and a seat-holder's death by age witnessed by the persons at his place (H-206's holder half)",
+   "source": "v9 IN-34 (`workplans/valoria_master_workplan_v9_part5.md`), #457 D2, H-206, 2026-10-11",
+   "closeish_tokens": [
+    "LANDED"
+   ],
+   "cite_head": "BUILT AND LANDED DARK at `Item: IN-34` (a first attempt, b4f7a917, was reverted for H-206). Probe at `age_step` 0.25 on `build_realm(0)`, one season: one `person.died` for a seat-holder with causes [ROOT]; the 7 persons at his place held 14 claims naming him (7 `person.died`, 7 `seen`), the persons elsewhere held none; at step 0 the same holder lives and no claim names his death. Tests sweep their own arms only (AGE_ARMS, ILL_ARMS in `engine/season/tests/test_in34_bodies_clock.py`). NAMING: `Per"
+  },
+  {
+   "id": "H-209",
+   "grade": "measured",
+   "kind": "MECHANISM",
+   "tier": 1,
+   "hole": "A DEAD VICTIM'S DEATH CLAIM NEVER BECOMES A QUESTION, SO IN-72 DOES NOT UNBLOCK RS-23'S PETITION CONJUNCT (IN-12 step 5). `questions_for` admits a claim only when its subject, or the subject's place, is in the holder's `reach` (`queries/world_q.py`), and a dead man has no place (`place_of`'s person ",
+   "owner": "the IN-12 step 5 builder (B-R)",
+   "unblocks": "IN-12 step 5's RS-23 conjunct (a petition against a killer from a hearer whose regard moved)",
+   "source": "v9 IN-72 (`workplans/valoria_master_workplan_v9_part5.md`), RS-23, ED-IN-0296, 2026-10-15",
+   "closeish_tokens": [],
+   "cite_head": "MEASURED at `Item: IN-72` (e6adbc65), seed 0, six seasons: 11 non-actor `person.died` claims held, 0 in `reach`; wound claims: 16 (witness, claim) pairs reached questions, 6 from 4 witnesses ranked tier 2, none a first question. Asked with ED-IN-0296 (recorded, not asked there)"
+  },
+  {
+   "id": "H-210",
+   "grade": "assumption",
+   "kind": "NUMBER",
+   "tier": 1,
+   "hole": "HOW GOOD A FORGERY IS: the value `forge` writes on `Record.forgery_quality`, which an examination's roll contests (BUILT at SC-02 `22b` step 25, writer and reader together; `cite:`). No document gives the number or its scale. THE ROW'S HISTORY, KEPT: `Record.forgery_quality` WAS DEFERRED, WRITER AND",
+   "owner": "`loop/effects_information.py::_eff_forge` (the writer, through `_mint_sheet` -> `_mint_document`) and `modules/social_contest/roll.py::obstacle` (the reader: the obstacle's single owner, ED-SC-0033 cl",
+   "unblocks": "a forgery that can be FOUND OUT AGAINST ITS QUALITY: the proceedings plan's step 25 (an examination that finds it deposits the forgery as a claim, FI-03's `_found_claims`; one that finds nothing leaves it standing), and with it the weight a forged document carries in a proof (`H-169`'s K-48 consumer",
+   "source": "v9 IN-45 `forge` (`workplans/valoria_master_workplan_v9_part5.md`), batch B-K item 2, 2026-10-16",
+   "closeish_tokens": [
+    "SUPERSEDED"
+   ],
+   "cite_head": "BUILT at v9 SC-02 `22b` step 25 (B-P, 2026-10-17, base `2c8cdcec`), writer with reader in one change. THE READER, DECIDED BY CLAUSE (5): the plan's *examination contests the record's forgery quality* is an obstacle term -- the contested quantity of a roll is its obstacle -- and FI-01 already rolls `research` (subject a Record) through the one roll owner with no prize (`graded_inquiries`), so the quality is an instance modifier (`degree_from_net`'s ruling, *score/2 plus whatever specific modifier"
+  },
+  {
+   "id": "H-211",
+   "grade": "measured",
+   "kind": "PRODUCER",
+   "tier": 1,
+   "hole": "A BODY ONLY FALLS, SO RECOVERY IS SILENT: r2 `04_MATTER_AND_WORKS.md` `MW-11` (`test_an_upward_body_band_crossing_emits`) IS RED, FOR TWO CAUSES. (1) NO WRITER RAISES A BODY: MATTER's body pass (`loop/matter.py`) falls a cohort's body by `body_step x` its unmet units and writes nothing when it is fe",
+   "owner": "loop/matter.py -- the body pass (cause 1: r2 \u00a7A.4's signed step) and `_crossings` (cause 2: an upward predicate, r2's control on it below); not v9 IN-28's or SE-03's",
+   "unblocks": "r2's `MW-L+1` ration loop (fed -> body up -> band re-crossed upward -> penalty down -> budget up), the positive arm the body loop `MW-L-3` has none of today; and MW-11 green. Its own control, when (2) is built: the per-season count of DOWNWARD site crossings (`Counter(e.kind for e in w.log)`) must n",
+   "source": "v9 SE-03, riding IN-28 (`workplans/valoria_master_workplan_v9_part6.md`, `_part5`), batch B-K item 8, 2026-10-16",
+   "closeish_tokens": [],
+   "cite_head": "MEASURED at v9 SE-03 (IN-28's close), 2026-10-16, by a one-off pytest probe (not kept in the tree: a red test may not be skipped, v9 \u00a70.5) on a hand-built world: realm > territory > settlement, one cohort (weight 2) housed in the settlement, `body_step` 10 (`H-125`'s live arm). FED (grain and salt 1000 each) from body 450, below `limited` (500): six MATTER barriers, the body reads 450 every season and no `condition.band_crossed` is anchored on the cohort -- MW-11 RED. CONTROL A, the instrument c"
+  },
+  {
+   "id": "H-212",
+   "grade": "absent",
+   "kind": "PRODUCER",
+   "tier": 1,
+   "hole": "WHAT AN OCCUPYING ARMY DOES TO AN OCCUPIED SETTLEMENT'S LARDER (#453 \u00a710.4's deferred row, `:2473`, and `:2109`, which recommend this row and do not write it; v9 IN-13 writes it because IN-13 creates occupation). Since v9 IN-13 a won or unopposed `march` relocates its army to the destination (`loop/",
+   "owner": "the MATTER-side reader over the occupation Query -- its natural site is the larder walk (`modules/settlements/larder.py::larder_draw`, projected by `queries/world_q.py::larder_input`; the larder ladde",
+   "unblocks": "siege and blockade as a cost rather than a posture (#453 \u00a75 family 24, WIDENED: *'`march` arriving at an enemy-held settlement; occupation, a Query; its larder effect deferred'*): an occupier drawing on, or denying, the occupied larder, so that holding a town costs the town and a long occupation rea",
+   "source": "v9 IN-13 (`workplans/valoria_master_workplan_v9_part5.md`), #453 `:2109`, `:2473`, batch B-M, 2026-10-16",
+   "closeish_tokens": [],
+   "cite_head": "WRITTEN BY v9 IN-13 (#453 \u00a710.4 step 8), 2026-10-16, AS THE PLAN DIRECTS (IN-13 WHAT (1), landed `2e19aee8`; the entry left the plan with B-M): the row names its MATTER reader as owner and builds nothing. CLAUDE.md \u00a70's ladder, run: (1) not superseded -- no later ruling or commit gives occupation a larder effect; (2) not irrelevant -- occupation is built and executes (`engine/season/tests/test_march.py::test_in13_exit_vi_seize_on_an_occupied_settlement_flips_its_holder` reaches it through the re"
+  },
+  {
+   "id": "H-213",
+   "grade": "assumption",
+   "kind": "NUMBER",
+   "tier": 1,
+   "hole": "HOW HARD ONE MATTER CAN GET: the ceiling on a social contest's composed obstacle (v9 SC-01 step 14, Contradiction 3 of the proceedings reconciliation, resolved toward a CEILING and never a pool floor). The pool has a 1D floor and the obstacle had no cap, so a floor-pool party against a strong opposi",
+   "owner": "`modules/social_contest/roll.py::obstacle` -- the social contest module, the obstacle's single owner (ED-SC-0033 clause (3)); the seam's own site `seam/wrappers/sigma.py::_obstacle_of` was deleted at ",
+   "unblocks": "M-7 green at the shipped arm (the deprivation constraint, Jordan 2026-09-06: *don't go so far as to deprive player of a chance at winning*), and the obstacle step 15's provider reads (the ceiling is an injected value the provider consumes)",
+   "source": "v9 SC-01 step 14 (`workplans/valoria_master_workplan_v9_part6.md` \u00a7SC-01, CARRIED *Step 14*), batch B-N, 2026-10-16",
+   "closeish_tokens": [],
+   "cite_head": "MEASURED at v9 SC-01 step 14, 2026-10-16, base `947747e0`. THE QUANTITY: `sigma_leverage.p_success(obstacle(record), pool=1)` for a requested Ob of 4..11 (`opposition = 2 x Ob`), plus the exact count of the ten 1D d10 faces the real entry and the real ladder grade above Failure. CONTROL ARM (`None`, the tree before this step): Ob 4 -> 0.000003 and Ob 5..11 -> 0.000000, 0 of 10 faces -- M-7 FAILS, and buying \u03c3-advantage does not rescue it (Ob 4 at `major` 0.000144). SHIPPED ARM (2): every request"
+  },
+  {
+   "id": "H-214",
+   "grade": "measured",
+   "kind": "WIRING",
+   "tier": 1,
+   "hole": "THE `chronicle` WITNESS CHANNEL'S DELETION IS HELD: the proceedings design deletes it as matching nobody (`21_RECONCILIATION.md` C-6) and pairs the deletion with the channel that replaces its reach, the `<rung kind>` reach channel (`proposals/2026-09-05-proceedings-subsystem/19_PLAN.md` step 16). Th",
+   "owner": "`engine/season/epistemic.py::_ch_chronicle`",
+   "unblocks": "the deletion of `chronicle` that v9 SC-01 step 13 held (scheduled by no position; SC-01 left the plan at B-N's close, `cf69ceed`, where its entry is read), once the `<rung kind>` reach channel exists to carry the hearsay of a binding decision",
+   "source": "v9 SC-01 step 13, batch B-N, phase-1 review (2026-10-16)",
+   "closeish_tokens": [],
+   "cite_head": "MEASURED at v9 SC-01 step 13 (B-N, 2026-10-16, tree `29af7354`), an arm not kept in-tree: `_ch_chronicle` forced `False`, everything else shipped, `build_realm(0)`: 1 season `told_by` claims 879 -> 0, events 7,060 -> 5,986, hash `27717c62` -> `8ae2dce6`; 2 seasons `told_by` 3,187 -> 0, events 23,220 -> 17,300. The reasoning is `_ch_chronicle`'s docstring. CLAUDE.md \u00a70's ladder: not superseded (no later ruling deletes it without the pairing); not irrelevant (it mints every `told_by` in the realm)"
+  },
+  {
+   "id": "H-215",
+   "grade": "assumption",
+   "kind": "NUMBER",
+   "tier": 1,
+   "hole": "HOW FAR THE BENCH'S REGARD MOVES A SPEAKER'S OBSTACLE (proceedings `19_PLAN.md` step 17, *summed over the bench and scaled into the obstacle*): the gain on `queries/world_q.py::reception`, the bench's signed sum of each member's deed claims about the speaker x remove x decayed confidence x the membe",
+   "owner": "`modules/social_contest/roll.py::obstacle` -- the obstacle's single owner (ED-SC-0033 clause (3)); the reading is `queries/world_q.py::reception`, carried raw by `seam/wrappers/sigma.py::contest_input",
+   "unblocks": "the room reading the speaker (`19_PLAN.md` PHASE 3, *the phase that makes it a game*), and M-3 (the weak-speaker swing) once the nested run exists to sweep it in",
+   "source": "v9 SC-02 `22a` (`workplans/valoria_master_workplan_v9_part6.md` \u00a7SC-02; `19_PLAN.md` steps 17 and 20), batch B-P, 2026-10-17",
+   "closeish_tokens": [],
+   "cite_head": "MEASURED at v9 SC-02 `22a` (B-P, 2026-10-17, base `cf10ec05`). THE VALENCE SOURCE WAS THE SWEPT CHOICE (step 17) AND ARM 1 WON: arm 1 reads each deed's kind through the alignment table (`data/verbs.py::align_kind`, a `deed:<kind>` cell else the emitting verb's row -- the valence `person_q.regard` already reads); arm 2 a table keyed on event kind alone, the authored `deed:<kind>` cells and nothing behind them (three kinds: `person.died`, `body.changed`, `matter.undetermined`). Instrument: `build_"
+  },
+  {
+   "id": "H-216",
+   "grade": "assumption",
+   "kind": "NUMBER",
+   "tier": 1,
+   "hole": "HOW FAR ONE UNMIRRORED PROOF MOVES THE OBSTACLE (proceedings `19_PLAN.md` step 18, *one they do not [hold] moves it by the step times its remove*): the step on `queries/world_q.py::proofs`, the speaker's deed claims about his opponent weighed by `remove_weight`, each counting zero when the opponent ",
+   "owner": "`modules/social_contest/roll.py::obstacle` (ED-SC-0033 clause (3)); the reading is `queries/world_q.py::proofs`, carried raw by `seam/wrappers/sigma.py::contest_input` for a `heard_by: bench` prize",
+   "unblocks": "evidence moving a hearing's outcome (`13_ADVERSARIAL.md` finding 9, *producing a document at a hearing could not change its outcome*), and the hoard-or-spend decision once the nested run (`21_RECONCILIATION.md` step 15) spends proofs one at a time",
+   "source": "v9 SC-02 `22a` (`workplans/valoria_master_workplan_v9_part6.md` \u00a7SC-02; `19_PLAN.md` step 18), batch B-P, 2026-10-17",
+   "closeish_tokens": [],
+   "cite_head": "MEASURED at v9 SC-02 `22a` (B-P, 2026-10-17, base `cf10ec05`): `build_realm(0)`, one season, every (person, docketed person matter) pair -- 154 pairs, 4 docket items: 49 deed claims about the matter exist BEFORE the mirror and ALL 49 ARE MIRRORED (the party holds his own deed: WITNESS deposits the actor's own act to him), so the proofs term is 0 on every pair (seeds 1 and 2: 76 and 78 pairs, 0 non-zero). In computed play the mirror is total today; the term moves an obstacle only for a party who "
+  },
+  {
+   "id": "H-217",
+   "grade": "measured",
+   "kind": "WIRING",
+   "tier": 1,
+   "hole": "THE `succession` ARRANGEMENT ROW IS NOT SEEDED: SC-04 was to seed `succession` (`disposes: hold`) so a rival's petition could be docketed and `determine`d over a vacant throne (RS-23, RS-27; IN-61's tribunal route, B-R). `determine` has no site that opens a `hold`: `loop/effects_information.py::_dis",
+   "owner": "`loop/effects_information.py::_disposal` (the `determine` opener) and `state/gate.py`'s determination clause, both UNOWNED by any position today: IN-61's EDITS (B-R) name `state/gate.py` for `has_conf",
+   "unblocks": "IN-61's tribunal route over a vacant throne (`_part5` IN-61; `_part6` SC-04's `succession` row, whose limit was already stated: it can only AWARD a VACANT seat)",
+   "source": "v9 SC-04 (`workplans/valoria_master_workplan_v9_part6.md` \u00a7SC-04), batch B-P, 2026-10-17",
+   "closeish_tokens": [],
+   "cite_head": "MEASURED at v9 SC-04 (B-P, 2026-10-17, base `07510eae`): the row was seeded and four tests went red, two outside SC-04's EDITS (`test_u7_remit.py::test_19_the_disposal_opener_closes_c1s_report`, `::test_sc03a_the_determination_basis_opens_each_disposed_kind_and_no_other`), because adding `hold` to the disposable kinds lets the gate admit a bench opening a `hold` on its own seat and lets `open_case` dock a matter `determine` declines forever. Making them green needs a `_disposal` site for `hold` "
+  },
+  {
+   "id": "H-218",
+   "grade": "absent",
+   "kind": "PRODUCER",
+   "tier": 1,
+   "hole": "WHAT AN INVESTIGATION ACT DEPOSITS, BY DEGREE, AND WHETHER ITS SUBJECT LEARNS HE WAS ASKED (proceedings `19_PLAN.md` step 19, intent: each of `interview`, `examine`, `research`, `reconstruct`, `surveil` gains a `product` column -- a stance, a retention, a record, an inference, a presence -- deposite",
+   "owner": "the investigation rows (`verb_table.yaml`) and their deposit at WITNESS: `rosters.yaml` `graded_inquiries` (the roll route), `inquiry_modules` + `finding_terms` (what a graded finding uncovers, keyed ",
+   "unblocks": "a misread an investigator acts on (`19_PLAN.md` step 19's *absence must not be legible*), and a questioned person who learns he was questioned when he was not in the room",
+   "source": "v9 SC-02 `22a` piece 2 (`workplans/valoria_master_workplan_v9_part6.md` \u00a7SC-02; `19_PLAN.md` step 19), batch B-P, 2026-10-17",
+   "closeish_tokens": [
+    "SUPERSEDED"
+   ],
+   "cite_head": "MEASURED at v9 SC-02 `22a` piece 2 (B-P, 2026-10-17, tree `ece00cfd`). CLAUDE.md \u00a70's ladder: (1) SUPERSEDED IN BOTH LOAD-BEARING HALVES by `proposals/2026-10-03-verb-coverage-and-gap-fill.md` (RATIFIED AS INTENT, ED-IN-0288; later than `19_PLAN.md`, ED-SC-0039): K-36 (that file, line 2899) rules `interview` a PROMPT -- the stance it would deposit lives in the questioned person's ledger, which the fold may not read (F8), so there is NO DEGREE ON THE ASKER and the reply is the questioned person's"
+  },
+  {
+   "id": "H-219",
+   "grade": "absent",
+   "kind": "PRODUCER",
+   "tier": 1,
+   "hole": "FAILURE'S SEVERITY BY THE OBSERVER SET (proceedings `19_PLAN.md` step 21, intent: the observer set of the failing Event at WITNESS, minus the actor, against one floor -- a failure seen by nobody writes the actor's own stance and stops, one seen by enough others also fires the row's TERMINAL write). ",
+   "owner": "the degree-keyed `writes:` of the contested social rows (`verb_table.yaml` `speak`, `determine`, `tell`) and WITNESS (`loop/witness.py`), where the observer set is formed (`epistemic.observers_for`)",
+   "unblocks": "*terminal = being seen at it* (`18_FINDINGS.md` shape 4): a discovered failure costing more than an unseen one, which the design calls the corpus's cleanest severity rule",
+   "source": "v9 SC-02 `22a` piece 2 (`workplans/valoria_master_workplan_v9_part6.md` \u00a7SC-02; `19_PLAN.md` step 21), batch B-P, 2026-10-17",
+   "closeish_tokens": [],
+   "cite_head": "MEASURED at v9 SC-02 `22a` piece 2 (B-P, 2026-10-17, tree `ece00cfd`), reading `data/verbs.py::VERB_TABLE`'s `writes_by_degree` for every row: no row's `Failure` band writes anything a severity could grade -- `speak`, `tell` and `determine` write `[]` at `Failure` (and `speak` at every band: `H-63`'s step-12 clause, the speaker's own stance write names no value), `fight`/`accept` (`Untouched`) and `march` (`Lost`) are not social failures, and no row declares a TERMINAL write beside a costly one "
+  },
+  {
+   "id": "H-220",
+   "grade": "absent",
+   "kind": "WIRING",
+   "tier": 1,
+   "hole": "THE EVENT LOG ITSELF ACCEPTS ANY KIND (loader invariant 7's second half, `04 \u00a7B.13 #7`: *'the log accepts no other kind'*): the derived roster (`data/verbs.py::EVENT_KINDS`) is enforced where the FOLD builds an Event (`loop/resolve.py::_act_events`), not at `state/log.py::EventLog.append`, because t",
+   "owner": "`state/log.py::EventLog.append` (the refusal point 04 names) and the probe/exercise corpus that builds the undeclared Events (`harness/probes.py::Ev` and the tests listed in `cite:`)",
+   "unblocks": "the log refusing a body-literal kind from ANY emitter (matter, census, witness, a probe), not only the fold's; today `World.write` is held to the matrix's `emits:` by the gate and `_act_events` to the roster, and nothing holds a direct `w.log.append(Event(...))`",
+   "source": "v9 SC-02 `23` (`workplans/valoria_master_workplan_v9_part6.md` \u00a7SC-02; `architecture/meta/04_CODE_ARCHITECTURE.md` \u00a7B.13 invariant 7, F.20b), batch B-P, 2026-10-17",
+   "closeish_tokens": [],
+   "cite_head": "MEASURED at v9 SC-02 `23` (B-P, 2026-10-17, base `b817aa3c`). A scan of every `Event(`/`Ev(`/`ev(` call under `engine/season` and `tests/valoria` for a kind literal outside the derived roster found these undeclared kinds: `theft.done`, `plague.struck`, `sitting.decided`, `thing.happened` (all `harness/probes.py`), `a.shout` (`tests/test_season_shape.py`), `speech.made` (`harness/probes.py` P15 and two tests; no verb row emits it since SC-01 step 12), `condition.changed` and `plague.struck` (`tes"
+  },
+  {
+   "id": "H-221",
+   "grade": "assumption",
+   "kind": "NUMBER",
+   "tier": 1,
+   "hole": "HOW FAR A DETERMINATION MOVES ITS MAKER'S OWN PURSUITS (proceedings `19_PLAN.md` step 24, *conviction moves by consequence*: *the top band hardens, success moves a little, a held matter moves nothing, and a failure moves the determiner AGAINST their own axis*; the plan's `convictions` is `(Person, p",
+   "owner": "`queries/person_q.py::consequence_pursuits` (the magnitude, read off `pursuit_lean` -- the one owner of a verb's lean on a pursuit -- and `data/rosters.py::DEGREE_STEP`, the ladder's own ordinal measu",
+   "unblocks": "the bench's character drifting with what it does (`19_PLAN.md` step 24's artifact: lenient findings move one judge's weight, and the same arrangement then reads a speaker differently -- `reception`'s valence is the member's projected pursuits, `H-215`), and the forty-season run that alone can say wh",
+   "source": "v9 SC-02 `22b` (`workplans/valoria_master_workplan_v9_part6.md` \u00a7SC-02; `19_PLAN.md` step 24), batch B-P, 2026-10-17",
+   "closeish_tokens": [],
+   "cite_head": "BUILT at v9 SC-02 `22b` step 24 (B-P, 2026-10-17, base `2c8cdcec`). THE AXIS, BY CLAUSE (5): pursuits are fifteen weights, not axes, so *the axis the determination aligns with* is read as each held pursuit's LEAN -- its unit projection (`pursuit_projection`) dotted with `determine`'s alignment row (`hierarchical_equal` -1.0, `partisan_equitable` 0.6): `person_q.pursuit_lean`, factored out of the scar's sign test `_pursuits_violated_by` (byte-identical), and the derivative of the chooser's pursui"
+  },
+  {
+   "id": "H-222",
+   "grade": "measured",
+   "kind": "PRODUCER",
+   "tier": 1,
+   "hole": "PRESSURE AS A PERSON-KEYED STANDING BAND CROSSING NEVER FIRES IN COMPUTED PLAY (proceedings `19_PLAN.md` step 23). The step is BUILT (v9 SC-02 `22b`, late, 2026-10-17) and proven on a hand-built world: MATTER records a crossing when the standing gap over the claims landed before last season's WITNES",
+   "owner": "the input: claims ABOUT a person on a `person_predicates` member, which no deposit mints -- the vocabulary's writer is `19_PLAN.md` step 19 (STOPPED, `H-218`) after `Person.marks` was deleted (`ED-IN-",
+   "unblocks": "the crossing in computed play, once a deposit mints firsthand claims on the `person_predicates` vocabulary (step 19, `H-218`) that can follow a telling; the realm hash then moves wherever a crossing fires",
+   "source": "v9 SC-02 `22b` piece 2 (`workplans/valoria_master_workplan_v9_part6.md` \u00a7SC-02; `19_PLAN.md` step 23), batch B-P, 2026-10-17; rewritten when step 23 was built, the same day",
+   "closeish_tokens": [],
+   "cite_head": "BUILT at v9 SC-02 `22b` step 23, LATE (B-P, 2026-10-17, base `17489e67`), after a reviewer overturned the stop recorded below under v9 \u00a70.5's 2026-10-13 ruling (a position is built when wired and proven on a hand-built world; its realm count is not required). PROVEN by `tests/test_sc02_22b_standing_crossing.py` on `probes.tiny_world`: the bailiff (`p_high`, `off_duke`) holds `grade: noble`, is told three things about himself through the REAL told channel in one WITNESS barrier (`residence` retol"
+  },
+  {
+   "id": "H-223",
+   "grade": "assumption",
+   "kind": "NUMBER",
+   "tier": 1,
+   "hole": "WHERE THE STANDING GAP'S BANDS FALL (proceedings `19_PLAN.md` step 23: *if the band differs, record a crossing*). No document gives a band table for standing: `band_floors` keys site kinds and `body` (a key outside `site_kinds` is refused at load), so the floors are an injected tuple on the gap's ow",
+   "owner": "`loop/matter.py::_standing_crossings` (`decision/budget.py::bands_below`, the body's reading -- the floors a value is below -- over these floors)",
+   "unblocks": "the person-keyed standing crossing (`H-222`), whose question names the tellers",
+   "source": "v9 SC-02 `22b` (`workplans/valoria_master_workplan_v9_part6.md` \u00a7SC-02; `19_PLAN.md` step 23), batch B-P, 2026-10-17",
+   "closeish_tokens": [],
+   "cite_head": "BUILT at v9 SC-02 `22b` step 23 (B-P, 2026-10-17). `()` is the CONTROL: one band, so nothing can cross -- the tree as it was before the step. EXECUTED at every arm by `tests/test_sc02_22b_standing_crossing.py::test_step23_the_h223_sweep_the_control_arm_crosses_nothing`, which reads this row's `sweep:`: a gap moving 1000 -> 333 crosses (500,) and (250, 500, 750) and not (). EITHER DIRECTION, unlike `_crossings`' site rule (a fall only): from `H-29`'s maximum-gap default a first pairing can only N"
+  },
+  {
+   "id": "H-224",
+   "grade": "assumption",
+   "kind": "NUMBER",
+   "tier": 1,
+   "hole": "HOW FAR BACK A PERSON'S OWN ESTIMATE OF LEGITIMACY AND STABILITY READS (v9 IN-23, CARRY-STABILITY). Ruling R7 rules legitimacy and stability Queries over a person's own interior -- never a stored value, never a world-level sum, so a ruler can be wrong about his own standing -- and calls what a perso",
+   "owner": "`queries/person_q.py::recent_claims`, `legitimacy`, `stability` (the Queries). Both are read by `harness/storybar.py::estimates` (the STORY-BAR instrument) only. A chooser consumer (`decision/choose.p",
+   "unblocks": "R7's explanation surface (\u00a7C.11: what a character is shown is his own estimate), read today by the STORY-BAR instrument; stability's inputs about a seat's rung wait on shortfall claims reaching governors (CARRY-SHORTFALL, H-160)",
+   "source": "v9 IN-23 (`workplans/valoria_master_workplan_v9_part5.md`), #457 `:163` (`proposals/2026-10-04-forcing-churn-and-the-story-bar.md`), ruling R7, batch B-U",
+   "closeish_tokens": [],
+   "cite_head": "MEASURED at v9 IN-23 by the STORY-BAR (`python -m engine.season.harness.storybar --base-seed 0 --n 1 --seasons 2 --arms off off`): legitimacy over 2,028 / 1,776 (person, seat-holder) pairs, mean 0.030 / 0.031, min -4.068 / -4.229, max 5.379 / 5.520, 167 / 158 distinct values; stability over 546 / 518 (person, office rung, vacant offices' included) pairs reads 0 for every pair both seasons -- no person holds a dominance-kind or shortfall claim about any seat's rung in two seasons (every such clai"
+  },
+  {
+   "id": "H-225",
+   "grade": "measured",
+   "kind": "MECHANISM",
+   "tier": 1,
+   "hole": "A KILLING TURNS NOBODY TOWARD THE KILLER'S FACTION IN COMPUTED PLAY, SO IN-70'S EXIT ATTENTION CONJUNCT IS NOT MET IN THE REALM (it holds on a hand-built world). v9 IN-70 adds the doer's faction's members to the question a paired deed's claim raises (`world_q.opinion_referents`, through `questions_f",
+   "owner": "cause (1): `H-209`'s (the IN-12 step 5 builder, B-R); cause (2): `queries/world_q.py::faction_holding` / `members` (membership is `commit`, read off the living)",
+   "unblocks": "IN-70's EXIT attention conjunct in computed play; with it IN-12 step 5's RS-23 petition conjunct (which also waits on `H-194`'s `declared` arm, ED-IN-0296)",
+   "source": "v9 IN-70 (`workplans/valoria_master_workplan_v9_part5.md`), RS-23, batch B-R, 2026-10-22",
+   "closeish_tokens": [],
+   "cite_head": "MEASURED at v9 IN-70 (B-R, base `f2866d02`), `build_realm(s)` + two seasons, seeds 0, 1, 2, PYTHONHASHSEED=0: untold `person.died` claims with a paired doer held by a member of the victim's faction 9 / 14 / 17, admitted to `questions_for` 0 / 0 / 0 (cause 1); admitted paired wound claims with a doer 7 / 0 / 1, of which ONE holder's opinion of the doer's faction is below indifference (seed 0, `p_npc_041`, Restoration Movement, of the Church: -0.4537) and its doer `p_npc_034` died that season (cau"
+  },
+  {
+   "id": "H-226",
+   "grade": "measured",
+   "kind": "MECHANISM",
+   "tier": 1,
+   "hole": "`interrogate` (IN-12 step 5) HAS NO SITE FOR ITS CUSTODY AND CHARGE READS INSIDE IN-12's FILES, SO THE ROW IS NOT BUILT. #453 \u00a79.1 types only `existence` of `subject` kind Person and reads custody (a live `detain`) and the charge (the `HOLDS` Proposition, or since RS-23 the accused, the docketed pet",
+   "owner": "IN-12 step 5 (B-R); the fix edits `loop/predicates.py` and `loop/driver.py` (route (a)) or `loop/resolve.py::_fold` (route (b))",
+   "unblocks": "`interrogate`'s R-05 execution; `confession.made` in `w.log` (IN-12 step 5's EXIT); step 5a's effect-side read of the charge; #453 K-56's later per-kind value",
+   "source": "v9 IN-12 step 5 (`workplans/valoria_master_workplan_v9_part5.md`), #453 \u00a79.1 `:1613-1660`, K-18, K-56, batch B-R, 2026-10-22",
+   "closeish_tokens": [
+    "REVERTED"
+   ],
+   "cite_head": "MEASURED at v9 IN-12 step 5 (B-R, base `f3e1b7b9`): with route (a) built, `python -c 'resolvable_verbs()'` left `interrogate` out (`VerbRow.precondition_evaluable` True, `effect_carried` True, the contested gate `row.requires_typed is not None` False). Reverted under the batch's stopping rule (main file \u00a70.5: revert and register, never widen) because `loop/predicates.py` and `loop/driver.py` are outside IN-12's EDITS. CLAUDE.md \u00a70's ladder: not superseded (#453 \u00a79.1 is the live intent), not irre"
+  },
+  {
+   "id": "H-227",
+   "grade": "measured",
+   "kind": "MECHANISM",
+   "tier": 1,
+   "hole": "A WITNESS DOES NOT FORM A `commit` TO A CHARGE FROM A PETITION HE HOLDS (IN-12 step 5a's EXIT: *'a witness's `commit` to it formed from the held petition'*). The charge (#453 \u00a78.1) composes with no new carrier -- an `utter` of a `HOLDS` Proposition whose `subject` is the accused, a `petition` whose ",
+   "owner": "IN-12 step 5a (B-R); the occasion set is `data/verbs.py::_derive_record_referent_kinds` / `queries/world_q.py::writs_held` (IN-09's)",
+   "unblocks": "IN-12 step 5a's formed testimony; with a `mood` source (#453 \u00a714.9), a computed charge",
+   "source": "v9 IN-12 step 5a (`workplans/valoria_master_workplan_v9_part5.md`), #453 \u00a78.1 Charge, K-35, batch B-R, 2026-10-22",
+   "closeish_tokens": [],
+   "cite_head": "MEASURED at v9 IN-12 step 5a (B-R, base `f3e1b7b9`): `RECORD_REFERENT_KINDS == frozenset({'dispensation'})`; the hand-built chain (utter HOLDS -> petition naming it -> the witness holding it) forms `commit` on `rec:pt1` and not on `prop_charge`, and the witness's hand-built `commit` to `prop_charge` is `commitment.made` -- `engine/season/tests/test_in12_arrest.py::test_in12_5a_a_hand_built_charge_a_petition_naming_it_and_a_witness_commit`, which reddens when this hole closes. Not built: the occa"
+  },
+  {
+   "id": "H-228",
+   "grade": "measured",
+   "kind": "MECHANISM",
+   "tier": 1,
+   "hole": "`raze` (IN-12 step 11) ENDS A RUNG AND NOTHING AROUND IT, AND IT NEVER EXECUTES IN COMPUTED PLAY. Three limits, each measured at the build. (1) WHAT STOOD IN A RAZED TOWN IS LEFT PLACELESS (A PRISONER STANDING THERE LOSES HIS HOME, SO `state/gate.py::sits_over` FAILS AND A `detain` ON HIM IS NEVER P",
+   "owner": "loop/effects_founding.py -- `_eff_raze` (limits 1, 2); a re-homing of what stood in the razed place needs a gate basis beside `cascade` (`state/gate.py`) and a Layer 1 amendment to \u00a7B.8 (limit 1); the",
+   "unblocks": "a razed town's people and fabric with a place to be; #453 \u00a79.2's Site half; `raze`'s R-05 execution once a realm march reaches a foreign settlement (H-149/H-175)",
+   "source": "v9 IN-12 step 11 (`workplans/valoria_master_workplan_v9_part5.md`), #453 \u00a79.2 `raze` `:1800-1822`, batch B-R, 2026-10-22",
+   "closeish_tokens": [],
+   "cite_head": "MEASURED at v9 IN-12 step 11 (B-R, base `34642a96`), PYTHONHASHSEED=0: on `build_realm(0)` the Crown (`p_npc_033` via `off_npc_033`) marches on Hafenmark-held `set_s_016` (`army.arrived`) and razes it (`rung.razed`; `w.rungs` 412 -> 411); before the razing `set_s_016` carries its own `contain` in `terr_T7`, the `contain` and `reside` of `cohort_set_s_016`, the `contain` of two quarters and of the two arrived Crown members, and three Sites (`s_s_016_harbour`, `_seam`, `_garrison`) name it in `Sit"
+  },
+  {
+   "id": "H-229",
+   "grade": "measured",
+   "kind": "MECHANISM",
+   "tier": 1,
+   "hole": "`give` + RUNG (IN-12, #453 \u00a79.6, a CESSION) EXECUTES 0 TIMES IN COMPUTED PLAY, AND ITS WIDENING MOVED THE `give` FORMATION OF EVERY WORLD. Two limits, each measured. (1) NO PERSON FORMS A GIFT OF A RUNG HE HOLDS: `give` has no `referent_class:`, so it forms on its question's plain referent (`VerbRow",
+   "owner": "decision/options.py -- `opening_set`'s referents for `give` (limit 1: a held-rung referent source, a `referent_class: Rung` stamp of the rungs a person holds in `queries/world_q.py::questions_for`, `r",
+   "unblocks": "R-05's `give` + Rung row reading >= 1 in computed play; title moving by consent between persons (the one consensual route, #453 `:2072`)",
+   "source": "v9 IN-12 `give` + Rung (`workplans/valoria_master_workplan_v9_part5.md`), #453 \u00a79.6 `give` row, batch B-R, 2026-10-22",
+   "closeish_tokens": [],
+   "cite_head": "MEASURED at v9 IN-12 `give` + Rung (B-R, base `68eaaa41`), PYTHONHASHSEED=0: `aperture 1 0` realm `give` row formed 33 -> 0, attempted 7 -> 0, executed 0 -> 0 (SPINE formed 2 -> 1); `corpus_run` executed set 18 -> 19 verbs (`carry` joins); `engine/season/tests/test_season_weather.py` BASE_HASHES / BASE_EVENTS re-pinned with the control (`give` withheld on both trees reads 8cb4f4e2 / cf3625f5, 6603 / 19990 events, equal to the new pin). The held-rung count is `queries.world_q.questions_for` at DE"
+  },
+  {
+   "id": "H-230",
+   "grade": "measured",
+   "kind": "PRODUCER",
+   "tier": 1,
+   "hole": "THE HEIR IS NEVER TOLD THE THRONE IS VACANT, SO IN-61 (succession: the heir's own `succeed` claim, RS-27) STOPPED AT ITS DESIGN-FIRST STEP, UNBUILT. IN-61 item (4) routes the occasion through `queries/world_q.py::seats_named` -- the seats among the heir's own `ledger_names` -- and requires that, in ",
+   "owner": "limit (1): whatever makes a seat's vacancy reach a person as a claim naming the seat -- the death write's subjects (`loop/matter.py`'s death write, `World.remove_person`'s closures earning `tenure.clo",
+   "unblocks": "IN-61's design-first check, then its build: the `inheritance` basis, the `successions` registry, `succeed` re-specified as the heir's claim, the `succession` arrangement row (H-217); R-05's `succeed` row; RS-23/RS-27's succession crises",
+   "source": "v9 IN-61 (`workplans/valoria_master_workplan_v9_part5.md`), RS-27, design-first step (4), batch B-R, 2026-10-22",
+   "closeish_tokens": [],
+   "cite_head": "MEASURED at v9 IN-61's design-first step (B-R tail, base `c6459377`), PYTHONHASHSEED=0, before any edit, through `harness/populated.py::build_realm` + `run` with a spy on `loop.driver.questions_for` (the barrier-2 call site) recording every question set handed to `p_npc_031` (the heir, `off_heir`'s holder, seated as `off_npc_031`). SEED 0: the King `p_npc_020` dies in season 1 (`person.died` `00b79e960e79d2b7`, its `changes` one body `Receipt`); his throne `hold` `t_off_npc_020_hold` is gone fro"
+  },
+  {
+   "id": "H-231",
+   "grade": "measured",
+   "kind": "MECHANISM",
+   "tier": 1,
+   "hole": "TWO CONSEQUENCES OF B-R'S EDGE-OPENING AND EDGE-CLOSING ACTS ARE NOT BUILT FOR. (1) A RAZING IS WITNESSED BY THE RAZER ALONE: the razer's own `contain` at the town closes in the same write, so `event_place` for the act-caused `rung.razed` Event is `place_of(actor)` = None and `_ch_co_located` reache",
+   "owner": "limit (1): `queries/world_q.py::event_place` for an act whose write closes the actor's own `contain` (place the Event before the cascade, or at the parent); limit (2): `state/gate.py::may_determine` /",
+   "unblocks": "a razing the people who stood in the town can learn of; a custody that cannot outlive the seat that could end it",
+   "source": "v9 IN-12 steps 5 and 11 (`workplans/valoria_master_workplan_v9_part5.md`), batch B-R Phase 1 reconciliation, 2026-10-22",
+   "closeish_tokens": [],
+   "cite_head": "MEASURED at v9 B-R's Phase 1 (base `084da81b`), PYTHONHASHSEED=0: `raze_witness_probe` through the real `SeasonDriver.witness` over the `rung.razed` event on the hand-built occupied town: `event_place` None, `place_of(razer)` None, `observers_for` 1 (p_npc_033, source `firsthand_via_knot`, 2 claims), the two other persons who stood in the town learn nothing; `army.arrived` had 3 observers before the raze. Limit (2) is read from `gate.py` (`sits_over`, `may_determine`) and H-228 and was not run. "
+  },
+  {
+   "id": "H-232",
+   "grade": "measured",
+   "kind": "MECHANISM",
+   "tier": 1,
+   "hole": "`pardon` AND `raze` FORM ON EVERY ELIGIBLE REFERENT AND ARE REFUSED AT THE EFFECT, SO THEY COST SCENES AND MOVE THE HASH WITHOUT EVER EXECUTING. `pardon`'s typed cell asks only that the subject is a person the seat sits over, `raze`'s only that the subject is a Rung; neither cell can see whether any",
+   "owner": "`queries/world_q.py::questions_for` (the stamp) and `verb_table.yaml` (`referent_class:` on the two rows); a new class partition, not a tidy-up",
+   "unblocks": "scenes not spent on a refused act; a cleaner act mix in the realm; R-05's `pardon` and `raze` rows read against forming that can execute",
+   "source": "v9 IN-12 steps 5 and 11 (`workplans/valoria_master_workplan_v9_part5.md`), batch B-R `/simplify`, 2026-10-22",
+   "closeish_tokens": [],
+   "cite_head": "MEASURED at v9 B-R (`pardon.refused` and `raze.refused` at `aperture 1 0` and the 1- and 2-season hashes, `engine/season/tests/test_season_weather.py`); the formation-filter shape read at B-R's `/simplify` altitude review from `world_q.py` `larders_in_purview` and its `requisition` and `referent_class: Record` uses, and not built here: it is a new class and a stamp, outside IN-12's files. `arrest` also forms 0 times in computed play: `queries/world_q.py::issuing_seat` returns None for every hand"
+  },
+  {
+   "id": "H-233",
+   "grade": "measured",
+   "kind": "PRODUCER",
+   "tier": 1,
+   "hole": "THE EMPIRE'S MARCH IS CHOSEN AT WITNESS SEEDS AND NOT AS THE CONQUEROR'S USUAL CHOICE (v9 IN-36, B-V). With `build_realm(foreign=True)` the Katepano (`p_npc_089`, `off_katepano`, which grants `dispatch`) is asked `q:need:goal_katepano_press_the_capital`, whose one referent is Valorsplatz (`set_s_001",
+   "owner": "`decision/choose.py::score_terms` / `stance_term` (the ranking), `engine/season/rosters.yaml: tables.alignment` (the march row's cells, IN-08), `harness/populated.py::seed_goals` (no stance row toward",
+   "unblocks": "a foreign `march` reaching the mass-battle seam in natural play as the conqueror's usual choice, not only at a witness seed (B-V's EXIT, whose existence half `test_in36_foreign.py` now shows at seeds 39 and 53 through the unrestricted chooser, and shows with the chooser restricted to `march`, the sh",
+   "source": "v9 IN-36 (`workplans/valoria_master_workplan_v9_part5.md` \u00a7IN-36: *a foreign `march` reaches the mass-battle seam against a realm settlement through the real chooser*), batch B-V",
+   "closeish_tokens": [],
+   "cite_head": "RE-MEASURED at v9 IN-36 on `92f4c6af`, `PYTHONHASHSEED=0` (session probes, not repo artifacts). (1) The row's own falsifier, on the UNCHANGED goal: `aperture.instrumented_season(populated.build_realm(S, foreign=True), 2)` read `['attempted']['p_npc_089'].get('march')` = None, None, None, 4 at S = 0, 1, 2, 3 - the march IS chosen at seed 3 (the earlier reading of zero at seeds 0 to 2 was a sample of a random draw). (2) After the retarget: a scan of seeds 0 to 79 (`foreign=True`, `w._rehome()`, `q"
+  },
+  {
+   "id": "H-234",
+   "grade": "measured",
+   "kind": "RULING",
+   "tier": 1,
+   "hole": "NO UNREST SIGN HAS A SETTLEMENT FOR SUBJECT AND NONE IS TOLD, SO `person_q.stability` READS 0 FOR EVERY PERSON AT EVERY SETTLEMENT RUNG, AND FA-01'S TRADE-DEMAND CLAUSE CANNOT PRESS (v9 FA-01, B-V). Every unrest sign any person holds, in the default arm and in `foreign=True`, is `firsthand`; none is",
+   "owner": "ED-IN-0298 (needs_jordan: how news of coercion travels; a sixth channel is a row in `architecture/meta/04_CODE_ARCHITECTURE.md` section C.6, Layer 1), `epistemic.py` (`_ch_chronicle`, `trail_of`), IN-",
+   "unblocks": "FA-01's trade-demand clause (the churn engine: external trade demands by Schoenland); IN-36's perception channels at the border; any later reader of a settlement-subject unrest claim, inside the realm as much as across the border",
+   "source": "v9 FA-01 (`workplans/valoria_master_workplan_v9_part7.md`), `proposals/2026-10-04-forcing-churn-and-the-story-bar.md` lines 145 to 155 (FORCE-FOREIGN), ED-IN-0298",
+   "closeish_tokens": [],
+   "cite_head": "MEASURED at v9 B-V on tip `4d9459d4`, in-memory runs (`PYTHONHASHSEED=0`, `aperture.instrumented_season` and `populated.run`, `build_realm(S)` and `build_realm(S, foreign=True)`, seeds 0 to 2, 1 to 4 seasons; the probes are session scripts, not repo artifacts): NPC-090 `stability(p, rung, w)` at w = 1, 4 and 20 was 0 in all 5 rounds of all 3 seeds for `set_s_009`, `set_s_018` and `set_s_001`; his ledger held 33 to 167 claims and no unrest sign by `person_q.stability`'s own predicate (`UNREST_KIN"
+  },
+  {
+   "id": "H-235",
+   "grade": "assumption",
+   "kind": "LOOP",
+   "tier": 1,
+   "hole": "THE LATTICE COUPLING (v9 IN-35, FORCE-HAZARD: the Calamity re-expressed). A Site loses `lattice_coupling / condition_scale` of its gap down to the weakest Site of its own or a bordering territory each season, added to its kind's wear in MATTER's wear loop; so a worn place wears the fabric beside it,",
+   "owner": "engine/season/loop/matter.py::_lattice_strain (the rule, in the wear loop); engine/season/loop/effects_economy.py::_eff_restore (the bound: Mending); engine/season/data/geography.py::adjacent_territor",
+   "unblocks": "the Calamity as matter motion (#457 FORCE-HAZARD): a front that reaches territories in order of distance unless persons hold it; a non-zero default, which needs a source (H-236) AND H-165/H-07's decision on the wear-0 kinds (dwellings and garrisons ship at rate 0, `rosters.yaml` `wear_per_season`'s ",
+   "source": "v9 IN-35 (`workplans/valoria_master_workplan_v9_part5.md`); `proposals/2026-10-04-forcing-churn-and-the-story-bar.md` lines 123 to 143 (FORCE-HAZARD) and 174 (SEAM-CLOCK); `proposals/2026-10-07-unplugged-systems-replug.md` sections 3.4 and ",
+   "closeish_tokens": [],
+   "cite_head": "BUILT AT v9 IN-35 (batch B-S), on `2decf4a0`, `PYTHONHASHSEED=0`. EXECUTED: `engine/season/tests/test_in35_lattice_coupling.py` on a hand-built world (every geography territory by its rung id, one harbour each at 1000, Askeheim's planted at 0) at weight 500 over 8 seasons: the summed condition falls every season, every territory of `radiation_bands:` bands 1 to 5 crosses `bulk_shipping` and the first crossing season is strictly increasing in band (the bands are data the rule does not read, so th"
+  },
+  {
+   "id": "H-236",
+   "grade": "measured",
+   "kind": "PRODUCER",
+   "tier": 1,
+   "hole": "THE LATTICE COUPLING HAS NO SOURCE IN THE BUILT REALM, SO A NON-ZERO WEIGHT THERE COUPLES ORDINARY WEAR, NOT A CALAMITY (v9 IN-35). The rule (H-235) only carries a gap outward; nothing makes one at Askeheim. No act strains the lattice AT ASKEHEIM -- thread operations as a carrier (H-85, plan `33`) a",
+   "owner": "H-85 (thread operations as a carrier, so strain can be an act's consequence); the world-gen of a fabric at Askeheim (`harness/populated.py::build_realm`), which would move the realm hash; Jordan, for ",
+   "unblocks": "IN-35's falsifier on the built realm rather than a hand-built world; a non-zero `lattice_coupling` default",
+   "source": "v9 IN-35 (`workplans/valoria_master_workplan_v9_part5.md`, *Needs:* thread operations as a carrier, H-85, plan `33`); `proposals/2026-10-04-forcing-churn-and-the-story-bar.md` lines 123 to 143",
+   "closeish_tokens": [],
+   "cite_head": "MEASURED at v9 IN-35 on `2decf4a0` plus the IN-35 working tree, `PYTHONHASHSEED=0` (a session probe, not a repo artifact): `build_realm(0)` holds 322 Sites (37 harbours, 37 seams, 211 dwellings, 37 garrisons), every one under a territory, 0 under `terr_T15`, all at 1000 at build, so `_lattice_strain` at weight 500 pulls 0 Sites at build. `populated.run` 2 seasons: weight 0 hashes cf3625f5 (the pin `@23b33e9e`; K-3 later moved it to 74ce9a1e, so the hash-level identity is historical; `test_season"
+  },
+  {
+   "id": "H-237",
+   "grade": "measured",
+   "kind": "PRODUCER",
+   "tier": 1,
+   "hole": "AT SEEDS 0 AND 5 (THE IN-32 STOPPING RULE'S SEEDS) NO TOLD CLAIM CARRIES A CHAIN, SO `teller_weight` IS UNREACHED THERE (v9 IN-32). `decision/options.py::teller_weight` builds only when `ledger_weigh` has a chained told claim to weigh; measured at seed 0 and seed 5 over 2 seasons there is none, so a",
+   "owner": "H-157's lane (chained told claims); the telling workplan's `T3a`/`T3b`, which weigh a chain when read. Unassigned beyond that.",
+   "unblocks": "IN-32 (`tie / knot`'s effect, H-182), and any gain on `teller_weight` being observable on the realm",
+   "source": "v9 IN-32 (`workplans/valoria_master_workplan_v9_part5.md`); the attempt 53ed995d and its revert 7c6df560",
+   "closeish_tokens": [],
+   "cite_head": "MEASURED at v9 IN-32 on `23b33e9e`, `PYTHONHASHSEED=0` (a session probe, not a repo artifact): over 2 seasons at seed 0 there are 0 told claims with a chain, `ledger_weigh` returns None and `teller_weight` is never built; seed 5 gives the same. H-157's figure of 6 chained claims at seed 5 no longer reproduces (it now deposits 0). Also seen and not chased: 16 `bond.formed` Events against 15 `tie` Tenures over 2 seasons on the attempt's tree."
+  },
+  {
+   "id": "H-238",
+   "grade": "measured",
+   "kind": "PRODUCER",
+   "tier": 1,
+   "hole": "NO CORPUS PERSON CARRIES A THREAD SENSITIVITY, SO `thread_read` CANNOT EXECUTE IN `corpus_run` (v9 PC-06 K-3). `harness/corpus_run.py::build_at` seats a case's `cast:` entries and anonymous seats as `p_a`, `p_b`, ... and reads no cast-registry row (their pursuits are drawn, their `capability` is the",
+   "owner": "the corpus builder (`harness/corpus_run.py::build_at`, `W28-cast`'s overlay lane). Whether PC-06's EXIT is read off the corpus or the realm is ANSWERED at ladder step 1, not escalated: `workplans/valo",
+   "unblocks": "PC-06 K-3's EXIT as written; any corpus case whose arc turns on what a sensitive character perceives",
+   "source": "v9 PC-06 K-3 (`workplans/valoria_master_workplan_v9_part7.md` `### PC-06`)",
+   "closeish_tokens": [],
+   "cite_head": "MEASURED at v9 PC-06 K-3 on `26884a93` plus the change, `PYTHONHASHSEED=0` (session runs, not repo artifacts): `corpus_run` (137 s) prints `WHERE THE 56 GO: 5 have no predicate/effect \u00b7 20 foldable but never even attempted` with `thread_read` among the twenty, against 6 / 19 on the base; executed (19) and always-refused (12) unchanged. `aperture 1 0` (21 s) on the same tree: realm `thread_read` formed 4, offered 4, attempted 1, executed 1, refused 0; spine formed 0 (its thirteen `lp_*` holders c"
+  },
+  {
+   "id": "H-239",
+   "grade": "assumption",
+   "kind": "NUMBER",
+   "tier": 1,
+   "hole": "THE THREAD SENSITIVITY A PERSON MUST HAVE TO ATTEMPT `thread_read` -- the RIGHT side of its `scalar_threshold` cell (`thread_sensitivity >= thread_sensitivity.gate`, v9 PC-06 K-3). The design names the number and gives no reason for it, so it is injected and swept, as `bench_quorum` is (H-161).",
+   "owner": "queries/person_q.py -- `OwnStateReader.read`'s `thread_sensitivity.gate` stem, the one read (the fold's `WorldReader` and the person's own `opening_set` both ask it); `verb_table.yaml` -- `thread_read",
+   "unblocks": "a different population of persons who can attempt a reading: at 30, four of `build_realm(0)`'s ten authored values pass (H-85's cite)",
+   "source": "v9 PC-06 K-3 (batch B-S close; split out of H-85, which keeps the knowledge-kind roster)",
+   "closeish_tokens": [],
+   "cite_head": "MUTATION-CHECKED at the B-S close (v9 \u00a70.5's *a mutation red*): `opening_set`'s own-state decline disabled turns `test_k3_a` red; `WorldReader`'s own-state branch disabled turns three of `test_k3_thread_sensitivity.py` red; both restored. The 30's SOURCE is the fieldwork design document (`fieldwork_v30.md` \u00a74.2, the Thread-Read row of the investigation actions: *TS >= 30 required*; \u00a72.2's *cannot attempt* governs the attribute gates, not this one: ED-FI-0009's retraction). That is design prose a"
+  },
+  {
+   "id": "H-240",
+   "grade": "measured",
+   "kind": "PRODUCER",
+   "tier": 1,
+   "hole": "A `challenge` RECORD CANNOT BE BOUND BY `accept` THROUGH THE REFERENT CLASS AS PC-10b WRITES IT, SO PC-10b STOPPED AT ITS DESIGN-FIRST STEP, UNBUILT. With `referent_class: Record`, `accept`'s `subject` is the Record; the fold takes the opponent from `payload[row.counterparty or \"subject\"]`, so the s",
+   "owner": "limit (1): the grammar -- either a Record-content relation stem (`names:<operand>`: the Record `subject` names X under key K) with a challenger content key and `counterparty: to` on `accept`, or a der",
+   "unblocks": "PC-10b: the `challenge` Record and `challenge_terms`, `accept` bound to a held challenge, `duel.yielded`; R-05's `accept` residue (`accept`'s `requires_note`) and the `challenge`/`accept` HANDOFF_IN row",
+   "source": "v9 PC-10b (`workplans/valoria_master_workplan_v9_part7.md` `### PC-10`), RS-25, design-first step, batch B-Y, 2026-10-23",
+   "closeish_tokens": [],
+   "cite_head": "READ at B-Y's PC-10b design-first step (base `590f753a`): `loop/resolve.py:787-790` takes the opponent from the counterparty operand else `subject`; `seam/wrappers/combat.py:213-216` returns PARTY-GAP for a claimant that is no person (the branch a Record id as second claimant reaches; fewer than two claimants is :207-211); `decision/options.py:1201-1213` forms a held-Record bag only where `_content_answer(c, \"subject\") == subject`. The producer's trace and the orchestrator's reading of those thr"
+  },
+  {
+   "id": "H-241",
+   "grade": "assumption",
+   "kind": "PRODUCER",
+   "tier": 1,
+   "hole": "WHETHER A LEVIED TREASURY PROVISIONS A SEASON FIELD. `requisition` moves stores into the seat's treasury (the rung of `Act.via`'s office) and a field is people (`\u03a3 Person.weight` per side, one troops-sized subunit, J-18), so before v9 IN-52 nothing a levy did reached a field. The feed is built and S",
+   "owner": "`modules/settlements/provision.py::provision` (the bound, LF-1); `seam/wrappers/mass_battle.py::provision_input` (the treasuries: the attacker's the rung of `Act.via`'s office, the defender's the near",
+   "unblocks": "the levy-to-field feed (`proposals/2026-10-07-settlements-computation-modules.md` \u00a75): a side's fielded troops bounded by its levied treasury, and a field that consumes what it was provisioned with; the IN-52 flip ON",
+   "source": "v9 IN-52 (`workplans/valoria_master_workplan_v9_part4.md`, the IN-52 entry), the design's \u00a75 (LF-1..LF-3, A16, J-18), batch B-T, 2026-10-23",
+   "closeish_tokens": [],
+   "cite_head": "BUILT AT v9 IN-52 (B-T), shipped OFF. Falsifiers: `engine/season/tests/test_levy_feed.py` (the module's bound and its control arm; the ON arm on a hand-built world: a short attacker treasury fields fewer troops than its weight and falls by `consumed`, an empty defender treasury fields no more than the floor, a planted second `requisition` into the same treasury raises the next field's troops; the OFF arm returns `troops = weight` and debits nothing) and `tests/valoria/test_module_registrar.py` ("
+  }
+ ],
+ "ed_open_since_v9": [
+  {
+   "id": "ED-914",
+   "date": "2026-10-07",
+   "status": "partial",
+   "needs_jordan": false,
+   "file": "editorial_ledger.jsonl",
+   "description": "SUPERSEDING ROW \u2014 the two RESIDUALS the 2026-06-28 `progress` field left open are RECORDED, nothing re-ruled (v9 FI-04, adopted by ED-IN-0286). (1) PP-719 IS RECORDED, NOT STRUCK: it lives at `references/propagation_map.md:30` (the heading `## PP-719 fieldwork \u00a75.6b sustained Disposition reduction clarification (2026-05-10)`, Class E, a one-line wording clarification, no mechanical change; opened). It is not in `registers/patch_register_active.yaml` and need not be: that file's header (`:1-12`) declares PP frozen historical vocabulary (ceiling PP-726, ED-IN-0190) whose citations resolve at fork ref c451bcb, and `tools/ci_pp_frozen_check.py` (`:1-30`) fails only on a PP above the ceiling or a"
+  },
+  {
+   "id": "ED-FA-0039",
+   "date": "2026-10-15",
+   "status": "open",
+   "needs_jordan": false,
+   "file": "editorial_ledger_fa.jsonl",
+   "description": "BUILT at v9 FA-05 (`workplans/valoria_master_workplan_v9_part7.md`): the first nine rows of `engine/season/goals.yaml` (seven mint a Proposition, two are orientations), content only on IN-66..IN-69's landed schema, loader and seeding. DIRECT (the user's words, ED-IN-0293 rows 3-4, 2026-10-14): (8) *\"each faction needs to have goals\"* and *\"riskbreaker goal is to ensure safety of royal family monarch as well as prevent corruption and threats\"* -> `goal_riskbreakers_royal_safety` (`seat_holders` of `off_king`, `off_widow_regent`, `off_heir`, `off_princess`, stance +1), `goal_riskbreakers_prevent_threats` (`deed_doers against:` the safety goal), `goal_riskbreakers_prevent_corruption` (`deed_doe"
+  },
+  {
+   "id": "ED-FI-0009",
+   "date": "2026-10-06",
+   "status": "open",
+   "needs_jordan": false,
+   "file": "editorial_ledger_fi.jsonl",
+   "description": "SUPERSEDING ROW \u2014 closes the `needs_jordan` flag on ED-FI-0009; STATUS STAYS OPEN, deliberately (a build is owed). CLOSED AT LADDER STEPS 3 AND 5 for J-22: option (A) is taken, which is what step 3 already answered (work item 4.5, carried at `engine/season/verb_table.yaml:962-969`: claims graded by degree). The routing is a declared non-prize column, not a prize (`engine/season/rosters.yaml:1031-1034` forbids a prize); the `emits` arm of the loader check at `engine/season/data/verbs.py:589-604` is a loader check, not ratified Layer 1 text, and learns to accept it; the finding cut is a swept fixture. Option (B) would reverse step 3. THE DEPOSIT HALF, whether WITNESS deposits `finding.none` (`"
+  },
+  {
+   "id": "ED-IN-0261",
+   "date": "2026-10-06",
+   "status": "partial",
+   "needs_jordan": false,
+   "file": "editorial_ledger_in.jsonl",
+   "description": "SUPERSEDING ROW \u2014 the 2026-09-28 row's `needs_jordan: true`, which names C1 to C4 and G-Q6, is CLEARED by Jordan's 2026-10-06 ruling RS-1, which folds the two `candidate_*` drafts into the build (ED-IN-0291): C1, the projection cells and the alignment re-cell; C2, the migration to the fifteen; C3, the affiliation roster, the `incompatible:` cells and intensity; C4, verb by affiliation engagement; G-Q6, crisis threshold 3's terminal branch. G-Q5 (answered NEITHER, a per-person precedence, by the same fold) is recorded beside them. The ruled rows are not edited; this row carries three changes forward. (1) THE FIFTEEN PURSUITS now read: virtue, honour, liberty, justice, wealth, reputation, scho"
+  },
+  {
+   "id": "ED-IN-0292",
+   "date": "2026-10-14",
+   "status": "partial",
+   "needs_jordan": true,
+   "file": "editorial_ledger_in.jsonl",
+   "description": "SUPERSEDING ROW. (1) RULED NO by the user, 2026-10-14 (*\"founding is for settlements or something? anyway, just say no for now\"*): a newborn Record is not a `founding` basis; 04 section C.2 (`:609-610`) stands as ratified. IN-10 (c)'s writ-to-addressee mint and its gate clause are reverted (option 2 of the original row); the cost, stated: no computed `comply` forms until a writ is `give`n to its addressee. Recorded at engine/season/hole_register.yaml H-203 (end of `cite:`). (2) STILL OPEN, needs_jordan: the vacancy stamp (`queries/world_q.py::vacancies`) against AX-7 -- a vacancy as a world fact with no ledger origin, so `confer` forms for persons who never learned of it. The user's answer a"
+  },
+  {
+   "id": "ED-IN-0293",
+   "date": "2026-10-15",
+   "status": "open",
+   "needs_jordan": false,
+   "file": "editorial_ledger_in.jsonl",
+   "description": "SUPERSEDING ROW (v9 IN-64); the four earlier rows stand except where corrected here. CORRECTION TO ROW 1: its MEASURED 'the 46 authored cast rows hold 1 pursuit (20) or 3 (26)' counted the KEYS of each row's `convictions:` block (`primary` alone, or `primary`, `cultural_label`, `self_other_initial`), not pursuits. Re-measured by hand on 089297bd (`references/npc_registry.yaml`, the names under every list-valued group): 30 rows name 2 pursuits, 13 name 1 and 3 name 0 -- NPC-030, NPC-031 and NPC-041, `primary: null`, which ran on the `seed_pursuits` hash draw (`engine/season/harness/populated.py:699-700`) and are authored at 4e942bac. CORRECTION TO ROW 3: the block on a goal naming no entity i"
+  },
+  {
+   "id": "ED-IN-0295",
+   "date": "2026-10-15",
+   "status": "open",
+   "needs_jordan": false,
+   "file": "editorial_ledger_in.jsonl",
+   "description": "B-X's DESIGN DECISIONS, each answered by the ladder (CLAUDE.md section 0) and each [ASSUMPTION; medium; Jordan to correct], written at IN-64's commit; the reasoning is `workplans/valoria_master_workplan_v9_part5.md` section A rows A-30..A-37. A-30 (ED-IN-0293 (7)): NO new hierarchy store -- faction = `rosters.yaml: factions`, body = `office_bodies.faction`, seat = `offices.yaml: seats`; faction-under-faction is the head's sworn `oblige` (IN-40); membership derived (a live `commit` to the creed, a live `hold`). Revert: a stored `faction_parents.by_faction` map. A-31 (8), (9): a goal is an OUGHT Proposition minted at world-gen from `engine/season/goals.yaml` through one loader, `data/goals.py`"
+  },
+  {
+   "id": "ED-IN-0296",
+   "date": "2026-10-15",
+   "status": "open",
+   "needs_jordan": true,
+   "file": "editorial_ledger_in.jsonl",
+   "description": "B-X's CLOSE ASK, three questions that survive CLAUDE.md section 0's five-step ladder (ladder steps 1-4 are silent; step 5 cannot pick a default that changes what every NPC does), asked with the measurement in `engine/season/requirements.yaml` R-06's B-X EXIT READING (seeds 0, 1, 2, PYTHONHASHSEED=0, the repaired arm 0). (1) H-54 / H-194: do `question_aggregation_rule` (shipped `first`) and `stance_polarity` (shipped `legacy`) ship as they are? `decision_spread --arms`, one season per arm, seed 0 (hash, acts, distinct executed multisets): first/legacy 93608c22 602 79; first/declared e521091d 571 78; all/legacy 60c345e7 533 80; all/declared 459c75c6 524 79. Under `first` a person answers one q"
+  },
+  {
+   "id": "ED-IN-0297",
+   "date": "2026-10-16",
+   "status": "open",
+   "needs_jordan": true,
+   "file": "editorial_ledger_in.jsonl",
+   "description": "WHERE DOES A WORKS COME FROM IN COMPUTED PLAY? MEASURED (engine/season/tests/test_works_founding.py section 7, hand-built world, real create_record -> WITNESS -> questions_for -> opening_set -> fold): once a works exists, found/build form on it through its maker's own content deposit and execute, and work executes on a question about the Site it names; the plan's candidate (a record_sourced_operands entry for works) is inert: the only site mapping {plan, at} allows, {site: at}, binds the Rung and work is refused. What no computed act can do is DECLARE a works: create_record is untyped and mints text. LADDER: (1) not superseded (J-4 interim (b) governs the scene tax, not the producer); (2) no"
+  },
+  {
+   "id": "ED-IN-0298",
+   "date": "2026-10-22",
+   "status": "open",
+   "needs_jordan": true,
+   "file": "editorial_ledger_in.jsonl",
+   "description": "NARROWED: THE ASK IS THE LAYER-1 AUTHORIZATION, NOT A MENU. Supersedes the first ED-IN-0298 row's three-way framing. LADDER, re-run: (1) not superseded; (2) not irrelevant; (3) ANSWERED BY A DESIGN DOCUMENT as to the DIRECTION: proposals/2026-10-04-forcing-churn-and-the-story-bar.md (RATIFIED AS INTENT for FORCE-FOREIGN, ED-IN-0287, RS-21) lists perception channels at the border under FORCE-FOREIGN's Builds, and IN-36's narrowed entry records it unbuilt; (4) ANSWERED BY PRECEDENT as to the SHAPE: the proceedings design pairs chronicle's deletion with a reach channel keyed on event kind (proposals/2026-09-05-proceedings-subsystem/19_PLAN.md steps 15-16), so making coercive deeds matter of rec"
+  },
+  {
+   "id": "ED-SC-0040",
+   "date": "2026-10-18",
+   "status": "open",
+   "needs_jordan": true,
+   "file": "editorial_ledger_sc.jsonl",
+   "description": "B-P's layer-conformance pass: THE BENCH'S RECEPTION AND THE MIRROR READ OTHER PERSONS' LEDGERS AT RESOLVE, WHICH RATIFIED LAYER 1 WORDS ONE WAY AND THE RATIFIED-AS-INTENT PROCEEDINGS DESIGN THE OTHER. `queries/world_q.py::reception(w, speaker, venue)` reads each bench member's ledger (through `person_q.attributed_deeds` / `suffered_deeds` / `deed_term`) and `proofs(w, speaker, opponent, venue)` reads the OPPONENT's ledger directly (`mirror = {(c.subject, c.predicate) for c in opp.ledger}`, the first cross-holder ledger read in world_q); both are called inside the fold, through `seam/wrappers/sigma.py::contest_input`, for a `speak` (the `a matter` prize row, `heard_by: bench`). `architecture/"
+  }
+ ],
+ "ed_needs_jordan_any_date": [
+  "ED-IN-0292",
+  "ED-IN-0296",
+  "ED-IN-0297",
+  "ED-IN-0298",
+  "ED-SC-0040"
+ ],
+ "state_index": [
+  {
+   "handle": "IN-09",
+   "alias": "`19b`: `evade / defy`, `construe` (`comply` landed `128299db`)",
+   "lane": "IN",
+   "state": "B",
+   "gate": "\u2014 (restorable under \u00a70.5: `a1c83e62`, `60073e75`)",
+   "R": "R-05",
+   "batch": "none (B-I closed `9d93cfab`)",
+   "home": "`_part5`"
+  },
+  {
+   "handle": "IN-12",
+   "alias": "#453 steps 5, 5a: their remainder (step 5's built half `34642a96`; 11 `68eaaa41`, `give` + Rung `c6459377`; 6, 7, 9, 10, 13: `5ea1bb47`, `664986ee`, `996c16dc`, `67686661`, `5da7c44e`)",
+   "lane": "IN/SC",
+   "state": "BLK",
+   "gate": "H-226, H-227, H-209",
+   "R": "R-04, R-05",
+   "batch": "none (B-R closed `541c8d12`)",
+   "home": "`_part5`"
+  },
+  {
+   "handle": "IN-14",
+   "alias": "#457 BOUND-ATTENTION; H-92, H-10",
+   "lane": "IN",
+   "state": "ask-then",
+   "gate": "\u2014",
+   "R": "\u2014",
+   "batch": "B-Z",
+   "home": "`_part4`"
+  },
+  {
+   "handle": "IN-18",
+   "alias": "telling G5, G8 (step 2a, G1\u2013G3 landed `ac9724fc`; G6 landed `66bf51f9`)",
+   "lane": "IN",
+   "state": "BLK",
+   "gate": "G5's trigger, M0e > 0 (`oblige` landed `905b7a21`)",
+   "R": "\u2014",
+   "batch": "none (B-I closed `9d93cfab`)",
+   "home": "`_part4`"
+  },
+  {
+   "handle": "IN-30",
+   "alias": "`24h` P5 remainder; H-186",
+   "lane": "IN/FA/SE",
+   "state": "stopped",
+   "gate": "H-149 (`raze` landed `68eaaa41`)",
+   "R": "\u2014",
+   "batch": "none",
+   "home": "`_part5`"
+  },
+  {
+   "handle": "IN-32",
+   "alias": "H-182 ties",
+   "lane": "IN/FI",
+   "state": "B (narrowed: attempted `53ed995d`, falsified by its own stopping rule, reverted `7c6df560`)",
+   "gate": "\u2014 (H-182's `cite:`, H-237)",
+   "R": "R-05",
+   "batch": "none (B-S closed `6e833a57`)",
+   "home": "`_part5`"
+  },
+  {
+   "handle": "IN-33",
+   "alias": "H-58 `exchange`",
+   "lane": "IN",
+   "state": "B",
+   "gate": "\u2014 (reverted `cdc03f67`; restorable under \u00a70.5: `ad2f930f`..`b5c4685d`)",
+   "R": "R-05",
+   "batch": "none (B-I closed `9d93cfab`)",
+   "home": "`_part5`"
+  },
+  {
+   "handle": "IN-36",
+   "alias": "#457 FORCE-FOREIGN",
+   "lane": "IN/FA/MB",
+   "state": "B (landed `7c59d74c` at B-V, closed `b1eabf5d`; narrowed)",
+   "gate": "IN-13 (landed `2e19aee8`; B-M closed `be02666e`)",
+   "R": "\u2014",
+   "batch": "none (B-V closed)",
+   "home": "`_part5`"
+  },
+  {
+   "handle": "IN-38",
+   "alias": "`13`-rest",
+   "lane": "IN",
+   "state": "B (landed `1dcfce10`, narrowed)",
+   "gate": "\u2014",
+   "R": "R-09, R-06",
+   "batch": "none (B-V closed)",
+   "home": "`_part5`"
+  },
+  {
+   "handle": "IN-44",
+   "alias": "SM-10, SM-12; A-24's wording",
+   "lane": "IN",
+   "state": "J",
+   "gate": "Layer 0/1: Jordan's files",
+   "R": "\u2014",
+   "batch": "\u2014",
+   "home": "`_part8` (table, not an entry)"
+  },
+  {
+   "handle": "IN-45",
+   "alias": "`work` (`forge`, `carry`, `migrate` landed at B-K)",
+   "lane": "IN/SE",
+   "state": "J",
+   "gate": "ED-IN-0297 (`needs_jordan`)",
+   "R": "R-05",
+   "batch": "none (B-K closed `c8d1db3a`)",
+   "home": "`_part5`"
+  },
+  {
+   "handle": "IN-46",
+   "alias": "= SM-6",
+   "lane": "IN/PC",
+   "state": "B",
+   "gate": "build (design landed at B-C); no build batch",
+   "R": "R-04",
+   "batch": "none (re-read at B-L, `e77794a2`)",
+   "home": "`_part4`"
+  },
+  {
+   "handle": "IN-47",
+   "alias": "#445 (character sheet)",
+   "lane": "IN/PC/WR",
+   "state": "B",
+   "gate": "review (design landed at B-C); no build batch",
+   "R": "R-04",
+   "batch": "none (reviewed at B-H, `c13144b9`)",
+   "home": "`_part4`"
+  },
+  {
+   "handle": "IN-48",
+   "alias": "H-108 (delegation half)",
+   "lane": "IN/FA/SE",
+   "state": "B",
+   "gate": "\u2014 (IN-40 landed `3f320093`; IN-10 (a), (b) and IN-11 landed `905b7a21`, `2a2ed152`)",
+   "R": "R-04",
+   "batch": "B-JR",
+   "home": "`_part5`"
+  },
+  {
+   "handle": "IN-52",
+   "alias": "the levy-to-field feed's flip ON (built OFF `128bc9db`); LF-1..LF-3",
+   "lane": "IN/SE/MB",
+   "state": "BLK",
+   "gate": "`requisition` executing in computed play (H-163 limit 3(a))",
+   "R": "\u2014",
+   "batch": "B-Z",
+   "home": "`_part4`"
+  },
+  {
+   "handle": "IN-58",
+   "alias": "RS-23, RS-24: grievance at read \u2014 its sworn-to half (the stance-only half landed `3bf936ee`)",
+   "lane": "IN/FA",
+   "state": "BLK",
+   "gate": "IN-40's `oblige` edge readable person-side (D)",
+   "R": "R-07 (contributor)",
+   "batch": "none (B-W closed `3bf936ee`)",
+   "home": "`_part5`"
+  },
+  {
+   "handle": "IN-61",
+   "alias": "RS-27: succession (replaces IN-51, retired); #453 R-5 (b) re-specified",
+   "lane": "IN/FA/SE",
+   "state": "stopped",
+   "gate": "H-230 (limits (1), (2)); SC-04's `succession` row (H-217: IN-61 owns it); ED-IN-0292 (2) (J)",
+   "R": "R-05, R-04",
+   "batch": "none (stopped at B-R, closed `541c8d12`)",
+   "home": "`_part5`"
+  },
+  {
+   "handle": "SC-02",
+   "alias": "`22a` \u2192 `23` \u2192 `22b` (RESIDUE after B-P, `eba20137`)",
+   "lane": "SC",
+   "state": "BLK",
+   "gate": "H-218, H-219, H-221, H-222; ED-SC-0040 (J)",
+   "R": "\u2014",
+   "batch": "B-Z",
+   "home": "`_part6`"
+  },
+  {
+   "handle": "SC-03b",
+   "alias": "#453 step 4; H-162",
+   "lane": "SC",
+   "state": "BLK",
+   "gate": "SC-08 (SC-01 landed, B-N closed `cf69ceed`; SC-03a landed `c2f855d2`)",
+   "R": "R-05, R-04",
+   "batch": "B-O",
+   "home": "`_part6`"
+  },
+  {
+   "handle": "SC-04",
+   "alias": "`18` tails (RESIDUE after B-P, `eba20137`)",
+   "lane": "SC",
+   "state": "B",
+   "gate": "H-217 (IN-61's)",
+   "R": "\u2014",
+   "batch": "B-Z",
+   "home": "`_part6`"
+  },
+  {
+   "handle": "SC-05",
+   "alias": "`2-ii`; SM-2, SM-15",
+   "lane": "SC",
+   "state": "ask-then",
+   "gate": "SM-15",
+   "R": "\u2014",
+   "batch": "B-Z",
+   "home": "`_part6`"
+  },
+  {
+   "handle": "SC-06",
+   "alias": "SM-1",
+   "lane": "SC",
+   "state": "ask-then",
+   "gate": "SM-1",
+   "R": "\u2014",
+   "batch": "B-Z",
+   "home": "`_part6`"
+  },
+  {
+   "handle": "SC-07",
+   "alias": "#445 P-4, V-4, V-5",
+   "lane": "SC",
+   "state": "BLK",
+   "gate": "a carrier per item (SC-01 landed, B-N closed `cf69ceed`)",
+   "R": "\u2014",
+   "batch": "B-Z",
+   "home": "`_part6`"
+  },
+  {
+   "handle": "SC-08",
+   "alias": "\u2014",
+   "lane": "SC",
+   "state": "B",
+   "gate": "\u2014 (SC-01 landed; B-N closed `cf69ceed`)",
+   "R": "\u2014",
+   "batch": "B-O",
+   "home": "`_part6`"
+  },
+  {
+   "handle": "SE-04",
+   "alias": "(b) H-171, (c) #457 CAST-POPULACE; (a) done `dd0a1c5a`",
+   "lane": "SE",
+   "state": "BLK",
+   "gate": "(b) IN-44; (c) the spread construal (J)",
+   "R": "\u2014",
+   "batch": "B-Z",
+   "home": "`_part6`"
+  },
+  {
+   "handle": "SE-05",
+   "alias": "= IN-30",
+   "lane": "\u2014",
+   "state": "\u2014",
+   "gate": "\u2014",
+   "R": "\u2014",
+   "batch": "none (= IN-30, stopped)",
+   "home": "`_part5`"
+  },
+  {
+   "handle": "SE-06",
+   "alias": "SE-04 (c)'s vector half; ED-IN-0293 reading (b)",
+   "lane": "SE/IN",
+   "state": "J",
+   "gate": "\u00a7J.2 row 4; ED-IN-0296 (written at B-X's close `2f0c0227`, `needs_jordan`)",
+   "R": "R-06 (contributor)",
+   "batch": "B-Z",
+   "home": "`_part6`"
+  },
+  {
+   "handle": "MB-07r",
+   "alias": "J-18 (A): flip the depth support cap ON",
+   "lane": "MB",
+   "state": "BLK",
+   "gate": "J (recalibration; the golden gate's time budget)",
+   "R": "\u2014",
+   "batch": "B-Z",
+   "home": "`_part7`"
+  },
+  {
+   "handle": "MB-08",
+   "alias": "#445 U-1, U-2, U-6",
+   "lane": "MB",
+   "state": "LEAVE",
+   "gate": "named, unscheduled",
+   "R": "\u2014",
+   "batch": "B-Z",
+   "home": "`_part7`"
+  },
+  {
+   "handle": "PC-05",
+   "alias": "ED-PC-0013 (1)",
+   "lane": "PC",
+   "state": "BLK",
+   "gate": "GO-01, GO-05",
+   "R": "\u2014",
+   "batch": "B-Z",
+   "home": "`_part7`"
+  },
+  {
+   "handle": "PC-06",
+   "alias": "#445 K-1/K-5 (K-3 landed at B-S, `1023197b`; S-1 landed at B-E, `ac9724fc`; M-1/S-4, S-2/L-1 at B-L, `9ad86e87`)",
+   "lane": "PC",
+   "state": "LEAVE (K-1/K-5, unscheduled: K-2 first)",
+   "gate": "K-2 with its first reader",
+   "R": "\u2014",
+   "batch": "none (B-S closed `6e833a57`)",
+   "home": "`_part7`"
+  },
+  {
+   "handle": "PC-08",
+   "alias": "Phase 4a/4b/5, WS-7; #445 M-2..M-6, K-4/V-3",
+   "lane": "PC",
+   "state": "LEAVE",
+   "gate": "named, unscheduled",
+   "R": "\u2014",
+   "batch": "B-Z",
+   "home": "`_part7`"
+  },
+  {
+   "handle": "PC-10",
+   "alias": "RS-25: duel terms and the yield (PC-10a landed `daae7401`; PC-10b season, STOPPED at B-Y, unbuilt)",
+   "lane": "IN",
+   "state": "BLK:H-240 (design-first stopped; needs a declared grammar change)",
+   "gate": "H-240 limit (1): a declared grammar change or a derivation route",
+   "R": "R-05",
+   "batch": "none (B-Y closed `8071ca36`)",
+   "home": "`_part7`"
+  },
+  {
+   "handle": "FI-05",
+   "alias": "= IN-32",
+   "lane": "\u2014",
+   "state": "\u2014",
+   "gate": "\u2014",
+   "R": "\u2014",
+   "batch": "none (= IN-32)",
+   "home": "`_part5`"
+  },
+  {
+   "handle": "WR-01",
+   "alias": "`27` remainder: the R-14 term, the `engine/season/` reach",
+   "lane": "WR",
+   "state": "BLK (narrowed)",
+   "gate": "a working with a cost running in the season (IN-06's re-review, `759eefb8`, \u00a76 item 11)",
+   "R": "\u2014",
+   "batch": "none (B-S closed `6e833a57`)",
+   "home": "`_part7`"
+  },
+  {
+   "handle": "GO-01",
+   "alias": "`26`; D2 tenth attribute",
+   "lane": "GO",
+   "state": "J",
+   "gate": "J-9",
+   "R": "\u2014",
+   "batch": "B-Z",
+   "home": "`_part7`"
+  },
+  {
+   "handle": "GO-05",
+   "alias": "SM-13; ED-PC-0013 (1)",
+   "lane": "GO",
+   "state": "BLK",
+   "gate": "GO-01",
+   "R": "\u2014",
+   "batch": "B-Z",
+   "home": "`_part7`"
+  },
+  {
+   "handle": "GO-06",
+   "alias": "`valoria-game` parity",
+   "lane": "GO",
+   "state": "BLK",
+   "gate": "`valoria-game` checkout",
+   "R": "\u2014",
+   "batch": "B-Z",
+   "home": "`_part7`"
+  },
+  {
+   "handle": "FA-01",
+   "alias": "#445 P-3; FORCE-FOREIGN's cast",
+   "lane": "FA",
+   "state": "mechanism landed at B-J; content landed at B-V; the trade-demand clause BLK:J (`ED-IN-0298`)",
+   "gate": "mechanism landed at B-J",
+   "R": "R-04",
+   "batch": "B-Z (the clause)",
+   "home": "`_part7`"
+  },
+  {
+   "handle": "FA-02",
+   "alias": "= IN-30",
+   "lane": "\u2014",
+   "state": "\u2014",
+   "gate": "\u2014",
+   "R": "\u2014",
+   "batch": "none (= IN-30, stopped)",
+   "home": "`_part5`"
+  },
+  {
+   "handle": "FA-03",
+   "alias": "#453 \u00a710.2 faction map",
+   "lane": "FA",
+   "state": "LEAVE",
+   "gate": "reference",
+   "R": "\u2014",
+   "batch": "B-Z",
+   "home": "`_part7`"
+  },
+  {
+   "handle": "FA-07",
+   "alias": "the original design's faction-vs-faction mechanisms",
+   "lane": "FA",
+   "state": "LEAVE",
+   "gate": "named, unscheduled",
+   "R": "\u2014",
+   "batch": "B-Z",
+   "home": "`_part7`"
+  }
+ ],
+ "verb_static": [
+  {
+   "verb": "carry",
+   "has_effect": true,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "ruled"
+  },
+  {
+   "verb": "argue",
+   "has_effect": true,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "assumption"
+  },
+  {
+   "verb": "arrest",
+   "has_effect": true,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "assumption"
+  },
+  {
+   "verb": "commit",
+   "has_effect": true,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "ruled"
+  },
+  {
+   "verb": "comply",
+   "has_effect": false,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": false,
+   "grade": "ruled"
+  },
+  {
+   "verb": "conceal",
+   "has_effect": true,
+   "typed_requires": false,
+   "predicate": false,
+   "has_precondition": false,
+   "emits": true,
+   "emits_on_refusal": false,
+   "writes": true,
+   "grade": "assumption"
+  },
+  {
+   "verb": "confer",
+   "has_effect": true,
+   "typed_requires": false,
+   "predicate": true,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "ruled"
+  },
+  {
+   "verb": "convene",
+   "has_effect": true,
+   "typed_requires": false,
+   "predicate": true,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "ruled"
+  },
+  {
+   "verb": "covenant",
+   "has_effect": true,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "assumption"
+  },
+  {
+   "verb": "create_record",
+   "has_effect": true,
+   "typed_requires": false,
+   "predicate": false,
+   "has_precondition": false,
+   "emits": true,
+   "emits_on_refusal": false,
+   "writes": true,
+   "grade": "ruled"
+  },
+  {
+   "verb": "destroy_record",
+   "has_effect": true,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "ruled"
+  },
+  {
+   "verb": "determine",
+   "has_effect": true,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "assumption"
+  },
+  {
+   "verb": "dispatch",
+   "has_effect": false,
+   "typed_requires": false,
+   "predicate": true,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": false,
+   "grade": "ruled"
+  },
+  {
+   "verb": "establish",
+   "has_effect": true,
+   "typed_requires": false,
+   "predicate": true,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "assumption"
+  },
+  {
+   "verb": "evade / defy",
+   "has_effect": false,
+   "typed_requires": false,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": false,
+   "grade": "ruled"
+  },
+  {
+   "verb": "exchange",
+   "has_effect": false,
+   "typed_requires": false,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "assumption"
+  },
+  {
+   "verb": "forge",
+   "has_effect": true,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "assumption"
+  },
+  {
+   "verb": "forgive",
+   "has_effect": true,
+   "typed_requires": false,
+   "predicate": false,
+   "has_precondition": false,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "assumption"
+  },
+  {
+   "verb": "found",
+   "has_effect": true,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "assumption"
+  },
+  {
+   "verb": "build",
+   "has_effect": true,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "assumption"
+  },
+  {
+   "verb": "give",
+   "has_effect": true,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "ruled"
+  },
+  {
+   "verb": "issue",
+   "has_effect": true,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "ruled"
+  },
+  {
+   "verb": "fight",
+   "has_effect": true,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "ruled"
+  },
+  {
+   "verb": "challenge",
+   "has_effect": false,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": false,
+   "grade": "assumption"
+  },
+  {
+   "verb": "accept",
+   "has_effect": true,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "assumption"
+  },
+  {
+   "verb": "requisition",
+   "has_effect": true,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "assumption"
+  },
+  {
+   "verb": "march",
+   "has_effect": true,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "ruled"
+  },
+  {
+   "verb": "migrate",
+   "has_effect": true,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "assumption"
+  },
+  {
+   "verb": "move",
+   "has_effect": true,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "assumption"
+  },
+  {
+   "verb": "oblige",
+   "has_effect": true,
+   "typed_requires": false,
+   "predicate": true,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "ruled"
+  },
+  {
+   "verb": "open_case",
+   "has_effect": true,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "assumption"
+  },
+  {
+   "verb": "pardon",
+   "has_effect": true,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "assumption"
+  },
+  {
+   "verb": "petition",
+   "has_effect": true,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "ruled"
+  },
+  {
+   "verb": "construe",
+   "has_effect": false,
+   "typed_requires": false,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": false,
+   "grade": "absent"
+  },
+  {
+   "verb": "release",
+   "has_effect": true,
+   "typed_requires": false,
+   "predicate": true,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "ruled"
+  },
+  {
+   "verb": "restore",
+   "has_effect": true,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "ruled"
+  },
+  {
+   "verb": "revoke",
+   "has_effect": true,
+   "typed_requires": false,
+   "predicate": true,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "ruled"
+  },
+  {
+   "verb": "sabotage",
+   "has_effect": true,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "assumption"
+  },
+  {
+   "verb": "raze",
+   "has_effect": true,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "assumption"
+  },
+  {
+   "verb": "seize",
+   "has_effect": true,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "assumption"
+  },
+  {
+   "verb": "speak",
+   "has_effect": false,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": false,
+   "grade": "assumption"
+  },
+  {
+   "verb": "succeed",
+   "has_effect": false,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "assumption"
+  },
+  {
+   "verb": "survey",
+   "has_effect": true,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "assumption"
+  },
+  {
+   "verb": "tend",
+   "has_effect": true,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "assumption"
+  },
+  {
+   "verb": "tell",
+   "has_effect": false,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": false,
+   "grade": "ruled"
+  },
+  {
+   "verb": "examine",
+   "has_effect": false,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": false,
+   "grade": "assumption"
+  },
+  {
+   "verb": "interview",
+   "has_effect": false,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": false,
+   "grade": "assumption"
+  },
+  {
+   "verb": "research",
+   "has_effect": false,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": false,
+   "grade": "assumption"
+  },
+  {
+   "verb": "surveil",
+   "has_effect": false,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": false,
+   "grade": "assumption"
+  },
+  {
+   "verb": "thread_read",
+   "has_effect": false,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": false,
+   "grade": "assumption"
+  },
+  {
+   "verb": "reconstruct",
+   "has_effect": false,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": false,
+   "grade": "ruled"
+  },
+  {
+   "verb": "tie / knot",
+   "has_effect": false,
+   "typed_requires": false,
+   "predicate": false,
+   "has_precondition": false,
+   "emits": true,
+   "emits_on_refusal": false,
+   "writes": true,
+   "grade": "ruled"
+  },
+  {
+   "verb": "train",
+   "has_effect": true,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "assumption"
+  },
+  {
+   "verb": "transfer",
+   "has_effect": true,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "ruled"
+  },
+  {
+   "verb": "utter",
+   "has_effect": true,
+   "typed_requires": false,
+   "predicate": false,
+   "has_precondition": false,
+   "emits": true,
+   "emits_on_refusal": false,
+   "writes": true,
+   "grade": "assumption"
+  },
+  {
+   "verb": "work",
+   "has_effect": true,
+   "typed_requires": true,
+   "predicate": false,
+   "has_precondition": true,
+   "emits": true,
+   "emits_on_refusal": true,
+   "writes": true,
+   "grade": "ruled"
+  }
+ ],
+ "yaml_null_scan": {
+  "engine/season/ENDINGS_CLASSIFIED.yaml": {
+   "values": 200,
+   "null_or_empty": 0,
+   "top_paths": []
+  },
+  "engine/season/arrangements.yaml": {
+   "values": 134,
+   "null_or_empty": 0,
+   "top_paths": []
+  },
+  "engine/season/cohorts.yaml": {
+   "values": 80,
+   "null_or_empty": 0,
+   "top_paths": []
+  },
+  "engine/season/goals.yaml": {
+   "values": 346,
+   "null_or_empty": 0,
+   "top_paths": []
+  },
+  "engine/season/governance_spine.yaml": {
+   "values": 53,
+   "null_or_empty": 1,
+   "top_paths": [
+    [
+     "rungs.[].under",
+     1
+    ]
+   ]
+  },
+  "engine/season/hole_register.yaml": {
+   "values": 2883,
+   "null_or_empty": 119,
+   "top_paths": [
+    [
+     "rows.[].site",
+     93
+    ],
+    [
+     "rows.[].default",
+     15
+    ],
+    [
+     "rows.[].cite",
+     10
+    ],
+    [
+     "[].sweep.[]",
+     1
+    ]
+   ]
+  },
+  "engine/season/npcs.yaml": {
+   "values": 325,
+   "null_or_empty": 18,
+   "top_paths": [
+    [
+     "npcs.[].institution",
+     18
+    ]
+   ]
+  },
+  "engine/season/offices.yaml": {
+   "values": 399,
+   "null_or_empty": 59,
+   "top_paths": [
+    [
+     "seats.[].faction",
+     19
+    ],
+    [
+     "seats.[].revocation",
+     16
+    ],
+    [
+     "seats.[].body",
+     12
+    ],
+    [
+     "seats.[].conferral",
+     6
+    ],
+    [
+     "foreign_seats.[].body",
+     2
+    ],
+    [
+     "foreign_seats.[].conferral",
+     2
+    ]
+   ]
+  },
+  "engine/season/requirements.yaml": {
+   "values": 115,
+   "null_or_empty": 0,
+   "top_paths": []
+  },
+  "engine/season/rosters.yaml": {
+   "values": 1256,
+   "null_or_empty": 231,
+   "top_paths": [
+    [
+     "tables.incompatible.default_cell",
+     1
+    ],
+    [
+     "cells.inner_tradition.einhir_restoration",
+     1
+    ],
+    [
+     "cells.altonian_civics.solmund_orthodoxy",
+     1
+    ],
+    [
+     "cells.altonian_civics.inner_tradition",
+     1
+    ],
+    [
+     "cells.altonian_civics.thread_truth",
+     1
+    ],
+    [
+     "cells.altonian_civics.einhir_restoration",
+     1
+    ]
+   ]
+  },
+  "engine/season/venues.yaml": {
+   "values": 209,
+   "null_or_empty": 0,
+   "top_paths": []
+  },
+  "engine/season/verb_table.yaml": {
+   "values": 1251,
+   "null_or_empty": 0,
+   "top_paths": []
+  },
+  "engine/season/write_matrix.yaml": {
+   "values": 318,
+   "null_or_empty": 0,
+   "top_paths": []
+  },
+  "references/npc_registry.yaml": {
+   "values": 2262,
+   "null_or_empty": 176,
+   "top_paths": [
+    [
+     "characters.[].age",
+     29
+    ],
+    [
+     "characters.[].coherence",
+     28
+    ],
+    [
+     "characters.[].stats",
+     28
+    ],
+    [
+     "characters.[].territory",
+     24
+    ],
+    [
+     "characters.[].birthplace",
+     24
+    ],
+    [
+     "characters.[].ts",
+     22
+    ]
+   ]
+  }
+ },
+ "markers": [
+  [
+   [
+    "tests/valoria",
+    "skip"
+   ],
+   15
+  ],
+  [
+   [
+    "tests/valoria",
+    "xfail"
+   ],
+   5
+  ],
+  [
+   [
+    "engine/season/tests",
+    "skip"
+   ],
+   15
+  ]
+ ],
+ "marker_lines": [
+  [
+   "tests/valoria/test_vector_audit.py",
+   492,
+   "@pytest.mark.skip(reason=\"subject retired: tools/observability/build_incompleteness.py went with \""
+  ],
+  [
+   "tests/valoria/test_ci_common_primitives.py",
+   115,
+   "pytest.skip('not a git checkout')"
+  ],
+  [
+   "tests/valoria/test_combat_ob_from_defender_consumers.py",
+   194,
+   "@pytest.mark.xfail(strict=True, raises=AssertionError, reason=("
+  ],
+  [
+   "tests/valoria/test_mass_battle_byte_exact.py",
+   154,
+   "pytest.skip("
+  ],
+  [
+   "tests/valoria/test_flow_skeletons.py",
+   178,
+   "pytest.skip('missing skeleton \u2014 reported by test_every_roster_subsystem_has_a_skeleton')"
+  ],
+  [
+   "tests/valoria/test_flow_skeletons.py",
+   200,
+   "pytest.skip('missing skeleton \u2014 reported by test_every_roster_subsystem_has_a_skeleton')"
+  ],
+  [
+   "tests/valoria/test_flow_skeletons.py",
+   570,
+   "pytest.skip('missing skeleton \u2014 reported by test_every_roster_subsystem_has_a_skeleton')"
+  ],
+  [
+   "tests/valoria/test_flow_skeletons.py",
+   618,
+   "pytest.skip('missing skeleton \u2014 reported by test_every_roster_subsystem_has_a_skeleton')"
+  ],
+  [
+   "tests/valoria/test_flow_skeletons.py",
+   677,
+   "pytest.skip('missing skeleton \u2014 reported by test_every_roster_subsystem_has_a_skeleton')"
+  ],
+  [
+   "tests/valoria/test_mass_battle_maneuvers.py",
+   86,
+   "@pytest.mark.xfail("
+  ],
+  [
+   "tests/valoria/test_join_audit_workings.py",
+   87,
+   "pytest.skip('no joined units in the tree yet')"
+  ],
+  [
+   "tests/valoria/test_combat_audit_pins.py",
+   188,
+   "pytest.skip(f\"{weapon} selects {head!r} at {armor}, not the versatile head\")"
+  ],
+  [
+   "tests/valoria/test_gauge_invariants.py",
+   64,
+   "@pytest.mark.xfail(reason=\"known-open: a side-dependent mechanism exists in the envelopment rows \""
+  ],
+  [
+   "tests/valoria/test_gauge_invariants.py",
+   103,
+   "@pytest.mark.xfail(reason=\"known-open: battles are far too lethal \u2014 the mirror kills ~85% of the \""
+  ],
+  [
+   "tests/valoria/test_tool_input_paths_resolve.py",
+   262,
+   "pytest.skip(f'{const} is a generated output: {OUTPUT_PATHS[key]}')"
+  ],
+  [
+   "tests/valoria/test_charge_momentum_impulse.py",
+   54,
+   "pytest.skip(\"node/field path not active in this configuration\")"
+  ],
+  [
+   "tests/valoria/test_charge_momentum_impulse.py",
+   68,
+   "pytest.skip(\"legacy grid path recorded no motion in this configuration\")"
+  ],
+  [
+   "tests/valoria/conftest.py",
+   65,
+   "item.add_marker(pytest.mark.xfail(strict=True, reason=f'KNOWN-RED: {reason}'))"
+  ],
+  [
+   "tests/valoria/test_col_grid_rebuild.py",
+   20,
+   "pytestmark = pytest.mark.skipif(not PER_CELL, reason=\"column view only exists under PER_CELL\")"
+  ],
+  [
+   "tests/valoria/test_mass_battle_support_rank_cap.py",
+   84,
+   "pytest.skip(\"ambient MB_SUPPORT_RANK_CAP=1 \u2014 the shipped-default arm cannot be observed here\")"
+  ],
+  [
+   "engine/season/tests/test_fi03_trail.py",
+   269,
+   "pytest.skip(\"finding_terms shows the hand at every band -- the ruled revert; nothing to withhold\")"
+  ],
+  [
+   "engine/season/tests/test_fi03_trail.py",
+   347,
+   "pytest.skip(\"finding_terms shows the hand at every band -- nothing is withheld to learn later\")"
+  ],
+  [
+   "engine/season/tests/test_in59_attack_needs_co_location.py",
+   46,
+   "pytest.skip(f\"personal_combat engine unavailable: {C.load_error()}\")"
+  ],
+  [
+   "engine/season/tests/test_season_shape.py",
+   9050,
+   "pytest.skip(f\"personal_combat engine unavailable: {C.load_error()}\")"
+  ],
+  [
+   "engine/season/tests/test_season_shape.py",
+   9099,
+   "pytest.skip(f\"personal_combat engine unavailable: {C.load_error()}\")"
+  ],
+  [
+   "engine/season/tests/test_season_shape.py",
+   13918,
+   "pytest.skip(f\"personal_combat engine unavailable: {C.load_error()}\")"
+  ],
+  [
+   "engine/season/tests/test_season_shape.py",
+   13985,
+   "pytest.skip(f\"personal_combat engine unavailable: {C.load_error()}\")"
+  ],
+  [
+   "engine/season/tests/test_season_shape.py",
+   14011,
+   "pytest.skip(f\"personal_combat engine unavailable: {C.load_error()}\")"
+  ],
+  [
+   "engine/season/tests/test_season_shape.py",
+   14403,
+   "pytest.skip(f\"personal_combat engine unavailable: {C.load_error()}\")"
+  ],
+  [
+   "engine/season/tests/test_h206_a_death_at_matter_is_witnessed.py",
+   159,
+   "pytest.skip(f\"personal_combat engine unavailable: {C.load_error()}\")"
+  ],
+  [
+   "engine/season/tests/test_h13_conviction_crisis.py",
+   53,
+   "pytest.skip(\"every rostered pair is incompatible; restabilise has no case to read\")"
+  ],
+  [
+   "engine/season/tests/test_h13_conviction_crisis.py",
+   80,
+   "pytest.skip(\"the hub has one incompatible partner; no target choice to test\")"
+  ],
+  [
+   "engine/season/tests/test_combat_band_edges.py",
+   51,
+   "pytest.skip(f\"personal_combat engine unavailable: {C.load_error()}\")"
+  ],
+  [
+   "engine/season/tests/test_combat_trace_returned.py",
+   42,
+   "pytest.skip(f\"personal_combat engine unavailable: {C.load_error()}\")"
+  ],
+  [
+   "engine/season/tests/test_in58_grievance_at_read.py",
+   95,
+   "pytest.skip(f\"personal_combat engine unavailable: {C.load_error()}\")"
+  ]
+ ]
+}

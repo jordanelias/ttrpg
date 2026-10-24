@@ -1,0 +1,62 @@
+[
+ {
+  "at": "build",
+  "persons": 83,
+  "know_nobody": 83,
+  "known_median": 0,
+  "known_max": 0,
+  "ledger_min": 0,
+  "ledger_median": 0,
+  "ledger_max": 0,
+  "ledger_at_cap": 0,
+  "claims_with_chain": 0
+ },
+ {
+  "at": "season_end_1",
+  "persons": 82,
+  "know_nobody": 46,
+  "known_median": 0.0,
+  "known_max": 8,
+  "ledger_min": 29,
+  "ledger_median": 49.0,
+  "ledger_max": 200,
+  "ledger_at_cap": 1,
+  "claims_with_chain": 0
+ },
+ {
+  "at": "season_end_2",
+  "persons": 80,
+  "know_nobody": 44,
+  "known_median": 0.0,
+  "known_max": 8,
+  "ledger_min": 67,
+  "ledger_median": 106.0,
+  "ledger_max": 200,
+  "ledger_at_cap": 17,
+  "claims_with_chain": 0
+ },
+ {
+  "at": "season_end_3",
+  "persons": 80,
+  "know_nobody": 43,
+  "known_median": 0.0,
+  "known_max": 7,
+  "ledger_min": 150,
+  "ledger_median": 200.0,
+  "ledger_max": 200,
+  "ledger_at_cap": 46,
+  "claims_with_chain": 4
+ },
+ {
+  "at": "season_end_4",
+  "persons": 80,
+  "know_nobody": 40,
+  "known_median": 0.5,
+  "known_max": 8,
+  "ledger_min": 200,
+  "ledger_median": 200.0,
+  "ledger_max": 200,
+  "ledger_at_cap": 80,
+  "claims_with_chain": 0
+ }
+]

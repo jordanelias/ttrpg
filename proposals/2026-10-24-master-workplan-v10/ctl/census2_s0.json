@@ -1,0 +1,2429 @@
+{
+ "seed": 0,
+ "seasons": 4,
+ "hooks": true,
+ "content_hash": "ee6d622c7fe04cf43f9c2a0df3445802",
+ "persons_end": 80,
+ "log_events": 68348,
+ "acts_resolved": 2628,
+ "admission": {
+  "ADMITTED": 1778,
+  "UNKNOWN_READ(no read recorded)": 137,
+  "PRECONDITION_FALSE": 1350,
+  "UNKNOWN_READ": 184
+ },
+ "admission_by_verb": {
+  "accept": {
+   "PRECONDITION_FALSE": 76,
+   "ADMITTED": 10
+  },
+  "argue": {
+   "PRECONDITION_FALSE": 22
+  },
+  "build": {
+   "PRECONDITION_FALSE": 40
+  },
+  "carry": {
+   "PRECONDITION_FALSE": 61,
+   "ADMITTED": 1
+  },
+  "challenge": {
+   "PRECONDITION_FALSE": 67,
+   "ADMITTED": 6
+  },
+  "commit": {
+   "PRECONDITION_FALSE": 119
+  },
+  "conceal": {
+   "ADMITTED": 46
+  },
+  "confer": {
+   "ADMITTED": 1,
+   "UNKNOWN_READ(no read recorded)": 4
+  },
+  "convene": {
+   "ADMITTED": 1,
+   "UNKNOWN_READ(no read recorded)": 9
+  },
+  "covenant": {
+   "PRECONDITION_FALSE": 18
+  },
+  "create_record": {
+   "ADMITTED": 189
+  },
+  "determine": {
+   "PRECONDITION_FALSE": 9,
+   "ADMITTED": 4
+  },
+  "dispatch": {
+   "ADMITTED": 13,
+   "UNKNOWN_READ(no read recorded)": 14
+  },
+  "establish": {
+   "UNKNOWN_READ(no read recorded)": 4
+  },
+  "examine": {
+   "PRECONDITION_FALSE": 110
+  },
+  "fight": {
+   "PRECONDITION_FALSE": 36,
+   "ADMITTED": 6
+  },
+  "forge": {
+   "PRECONDITION_FALSE": 1,
+   "ADMITTED": 111
+  },
+  "forgive": {
+   "ADMITTED": 1
+  },
+  "found": {
+   "PRECONDITION_FALSE": 44
+  },
+  "give": {
+   "PRECONDITION_FALSE": 1,
+   "ADMITTED": 1
+  },
+  "interview": {
+   "ADMITTED": 25,
+   "PRECONDITION_FALSE": 29
+  },
+  "issue": {
+   "ADMITTED": 18,
+   "PRECONDITION_FALSE": 4
+  },
+  "march": {
+   "ADMITTED": 42,
+   "PRECONDITION_FALSE": 3
+  },
+  "migrate": {
+   "ADMITTED": 373,
+   "PRECONDITION_FALSE": 26
+  },
+  "move": {
+   "ADMITTED": 88,
+   "UNKNOWN_READ": 31,
+   "PRECONDITION_FALSE": 5
+  },
+  "oblige": {
+   "ADMITTED": 33,
+   "UNKNOWN_READ(no read recorded)": 29
+  },
+  "open_case": {
+   "PRECONDITION_FALSE": 6,
+   "ADMITTED": 17
+  },
+  "pardon": {
+   "ADMITTED": 6,
+   "PRECONDITION_FALSE": 3
+  },
+  "petition": {
+   "ADMITTED": 22,
+   "PRECONDITION_FALSE": 39
+  },
+  "raze": {
+   "ADMITTED": 33,
+   "PRECONDITION_FALSE": 4
+  },
+  "reconstruct": {
+   "PRECONDITION_FALSE": 7,
+   "ADMITTED": 86
+  },
+  "release": {
+   "UNKNOWN_READ(no read recorded)": 71,
+   "ADMITTED": 13
+  },
+  "requisition": {
+   "PRECONDITION_FALSE": 16
+  },
+  "research": {
+   "PRECONDITION_FALSE": 228,
+   "ADMITTED": 94
+  },
+  "restore": {
+   "PRECONDITION_FALSE": 49
+  },
+  "revoke": {
+   "UNKNOWN_READ(no read recorded)": 6
+  },
+  "sabotage": {
+   "PRECONDITION_FALSE": 53
+  },
+  "seize": {
+   "ADMITTED": 3
+  },
+  "speak": {
+   "PRECONDITION_FALSE": 35,
+   "ADMITTED": 14
+  },
+  "surveil": {
+   "PRECONDITION_FALSE": 80,
+   "ADMITTED": 118
+  },
+  "survey": {
+   "PRECONDITION_FALSE": 6,
+   "ADMITTED": 86
+  },
+  "tell": {
+   "ADMITTED": 106,
+   "PRECONDITION_FALSE": 23,
+   "UNKNOWN_READ": 2
+  },
+  "tend": {
+   "PRECONDITION_FALSE": 50,
+   "ADMITTED": 24
+  },
+  "thread_read": {
+   "ADMITTED": 4
+  },
+  "train": {
+   "PRECONDITION_FALSE": 56,
+   "ADMITTED": 30
+  },
+  "transfer": {
+   "PRECONDITION_FALSE": 24,
+   "ADMITTED": 68
+  },
+  "utter": {
+   "ADMITTED": 85
+  },
+  "work": {
+   "UNKNOWN_READ": 151
+  }
+ },
+ "admission_by_tick": {
+  "0": {
+   "ADMITTED": 310,
+   "UNKNOWN_READ(no read recorded)": 27,
+   "PRECONDITION_FALSE": 356,
+   "UNKNOWN_READ": 37
+  },
+  "1": {
+   "ADMITTED": 443,
+   "PRECONDITION_FALSE": 348,
+   "UNKNOWN_READ(no read recorded)": 30,
+   "UNKNOWN_READ": 46
+  },
+  "2": {
+   "ADMITTED": 504,
+   "PRECONDITION_FALSE": 332,
+   "UNKNOWN_READ": 52,
+   "UNKNOWN_READ(no read recorded)": 26
+  },
+  "3": {
+   "ADMITTED": 521,
+   "PRECONDITION_FALSE": 314,
+   "UNKNOWN_READ": 49,
+   "UNKNOWN_READ(no read recorded)": 54
+  }
+ },
+ "failed_conjunct": [
+  [
+   "research",
+   "PRECONDITION_FALSE",
+   null,
+   228
+  ],
+  [
+   "work",
+   "UNKNOWN_READ",
+   null,
+   151
+  ],
+  [
+   "commit",
+   "PRECONDITION_FALSE",
+   null,
+   119
+  ],
+  [
+   "examine",
+   "PRECONDITION_FALSE",
+   null,
+   110
+  ],
+  [
+   "surveil",
+   "PRECONDITION_FALSE",
+   null,
+   80
+  ],
+  [
+   "accept",
+   "PRECONDITION_FALSE",
+   null,
+   76
+  ],
+  [
+   "release",
+   "UNKNOWN_READ(no read recorded)",
+   null,
+   71
+  ],
+  [
+   "challenge",
+   "PRECONDITION_FALSE",
+   null,
+   67
+  ],
+  [
+   "carry",
+   "PRECONDITION_FALSE",
+   null,
+   61
+  ],
+  [
+   "train",
+   "PRECONDITION_FALSE",
+   null,
+   56
+  ],
+  [
+   "sabotage",
+   "PRECONDITION_FALSE",
+   null,
+   53
+  ],
+  [
+   "tend",
+   "PRECONDITION_FALSE",
+   null,
+   50
+  ],
+  [
+   "restore",
+   "PRECONDITION_FALSE",
+   null,
+   49
+  ],
+  [
+   "found",
+   "PRECONDITION_FALSE",
+   null,
+   44
+  ],
+  [
+   "build",
+   "PRECONDITION_FALSE",
+   null,
+   40
+  ],
+  [
+   "petition",
+   "PRECONDITION_FALSE",
+   null,
+   39
+  ],
+  [
+   "fight",
+   "PRECONDITION_FALSE",
+   null,
+   36
+  ],
+  [
+   "speak",
+   "PRECONDITION_FALSE",
+   null,
+   35
+  ],
+  [
+   "move",
+   "UNKNOWN_READ",
+   null,
+   31
+  ],
+  [
+   "interview",
+   "PRECONDITION_FALSE",
+   null,
+   29
+  ],
+  [
+   "oblige",
+   "UNKNOWN_READ(no read recorded)",
+   null,
+   29
+  ],
+  [
+   "transfer",
+   "PRECONDITION_FALSE",
+   null,
+   24
+  ],
+  [
+   "tell",
+   "PRECONDITION_FALSE",
+   "hearer",
+   23
+  ],
+  [
+   "migrate",
+   "PRECONDITION_FALSE",
+   "audience",
+   23
+  ],
+  [
+   "argue",
+   "PRECONDITION_FALSE",
+   null,
+   22
+  ],
+  [
+   "covenant",
+   "PRECONDITION_FALSE",
+   null,
+   18
+  ],
+  [
+   "dispatch",
+   "UNKNOWN_READ(no read recorded)",
+   null,
+   14
+  ],
+  [
+   "requisition",
+   "PRECONDITION_FALSE",
+   "authority",
+   12
+  ],
+  [
+   "convene",
+   "UNKNOWN_READ(no read recorded)",
+   null,
+   9
+  ],
+  [
+   "reconstruct",
+   "PRECONDITION_FALSE",
+   null,
+   7
+  ],
+  [
+   "survey",
+   "PRECONDITION_FALSE",
+   null,
+   6
+  ],
+  [
+   "open_case",
+   "PRECONDITION_FALSE",
+   "authority",
+   6
+  ],
+  [
+   "determine",
+   "PRECONDITION_FALSE",
+   "docket",
+   6
+  ],
+  [
+   "revoke",
+   "UNKNOWN_READ(no read recorded)",
+   null,
+   6
+  ],
+  [
+   "move",
+   "PRECONDITION_FALSE",
+   null,
+   5
+  ],
+  [
+   "requisition",
+   "PRECONDITION_FALSE",
+   "stores",
+   4
+  ],
+  [
+   "issue",
+   "PRECONDITION_FALSE",
+   "authority",
+   4
+  ],
+  [
+   "raze",
+   "PRECONDITION_FALSE",
+   null,
+   4
+  ],
+  [
+   "establish",
+   "UNKNOWN_READ(no read recorded)",
+   null,
+   4
+  ],
+  [
+   "confer",
+   "UNKNOWN_READ(no read recorded)",
+   null,
+   4
+  ],
+  [
+   "march",
+   "PRECONDITION_FALSE",
+   null,
+   3
+  ],
+  [
+   "pardon",
+   "PRECONDITION_FALSE",
+   null,
+   3
+  ],
+  [
+   "determine",
+   "PRECONDITION_FALSE",
+   "party",
+   3
+  ],
+  [
+   "migrate",
+   "PRECONDITION_FALSE",
+   "path",
+   3
+  ],
+  [
+   "tell",
+   "UNKNOWN_READ",
+   "hearer",
+   2
+  ],
+  [
+   "forge",
+   "PRECONDITION_FALSE",
+   null,
+   1
+  ],
+  [
+   "give",
+   "PRECONDITION_FALSE",
+   null,
+   1
+  ]
+ ],
+ "admission_refusals_not_in_resolved": {
+  "surveil": 80,
+  "fight": 36,
+  "accept": 76,
+  "examine": 110,
+  "research": 228,
+  "speak": 35,
+  "march": 3,
+  "argue": 22,
+  "tell": 25,
+  "determine": 9
+ },
+ "funnel": {
+  "accept": {
+   "made": 5
+  },
+  "build": {
+   "refused": 40
+  },
+  "carry": {
+   "refused": 61,
+   "made": 1
+  },
+  "challenge": {
+   "refused": 67,
+   "made": 6
+  },
+  "commit": {
+   "refused": 119
+  },
+  "conceal": {
+   "made": 46
+  },
+  "confer": {
+   "made": 1,
+   "refused": 4
+  },
+  "convene": {
+   "made": 1,
+   "refused": 9
+  },
+  "covenant": {
+   "refused": 18
+  },
+  "create_record": {
+   "made": 189
+  },
+  "determine": {
+   "made": 2
+  },
+  "dispatch": {
+   "made": 13,
+   "refused": 14
+  },
+  "establish": {
+   "refused": 4
+  },
+  "fight": {
+   "made": 3
+  },
+  "forge": {
+   "refused": 68,
+   "made": 44
+  },
+  "forgive": {
+   "made": 1
+  },
+  "found": {
+   "refused": 44
+  },
+  "give": {
+   "refused": 1,
+   "made": 1
+  },
+  "interview": {
+   "made": 25,
+   "refused": 29
+  },
+  "issue": {
+   "made": 18,
+   "refused": 4
+  },
+  "march": {
+   "both": 21
+  },
+  "migrate": {
+   "refused": 396,
+   "made": 3
+  },
+  "move": {
+   "refused": 97,
+   "made": 27
+  },
+  "oblige": {
+   "made": 33,
+   "refused": 29
+  },
+  "open_case": {
+   "refused": 14,
+   "made": 9
+  },
+  "pardon": {
+   "refused": 9
+  },
+  "petition": {
+   "made": 22,
+   "refused": 39
+  },
+  "raze": {
+   "refused": 37
+  },
+  "reconstruct": {
+   "refused": 7,
+   "made": 86
+  },
+  "release": {
+   "refused": 71,
+   "made": 13
+  },
+  "requisition": {
+   "refused": 16
+  },
+  "research": {
+   "made": 19,
+   "both": 28
+  },
+  "restore": {
+   "refused": 49
+  },
+  "revoke": {
+   "refused": 6
+  },
+  "sabotage": {
+   "refused": 53
+  },
+  "seize": {
+   "refused": 3
+  },
+  "speak": {
+   "made": 7
+  },
+  "surveil": {
+   "made": 11,
+   "both": 48
+  },
+  "survey": {
+   "refused": 49,
+   "made": 43
+  },
+  "tell": {
+   "made": 16,
+   "both": 37
+  },
+  "tend": {
+   "refused": 74
+  },
+  "thread_read": {
+   "made": 4
+  },
+  "train": {
+   "refused": 86
+  },
+  "transfer": {
+   "refused": 90,
+   "made": 2
+  },
+  "utter": {
+   "made": 85
+  },
+  "work": {
+   "refused": 151
+  }
+ },
+ "unrowed_acts": 0,
+ "resolved_by_verb": {
+  "move": 124,
+  "dispatch": 27,
+  "raze": 37,
+  "march": 21,
+  "thread_read": 4,
+  "tend": 74,
+  "create_record": 189,
+  "transfer": 92,
+  "forge": 112,
+  "reconstruct": 93,
+  "survey": 92,
+  "sabotage": 53,
+  "found": 44,
+  "work": 151,
+  "build": 40,
+  "train": 86,
+  "restore": 49,
+  "commit": 119,
+  "petition": 61,
+  "utter": 85,
+  "carry": 62,
+  "interview": 54,
+  "open_case": 23,
+  "challenge": 73,
+  "conceal": 46,
+  "forgive": 1,
+  "migrate": 399,
+  "release": 84,
+  "fight": 3,
+  "surveil": 59,
+  "requisition": 16,
+  "tell": 53,
+  "covenant": 18,
+  "speak": 7,
+  "issue": 22,
+  "convene": 10,
+  "pardon": 9,
+  "accept": 5,
+  "research": 47,
+  "revoke": 6,
+  "establish": 4,
+  "confer": 5,
+  "give": 2,
+  "determine": 2,
+  "seize": 3,
+  "oblige": 62
+ },
+ "event_kinds": {
+  "yield.taken": 148,
+  "stores.changed": 259,
+  "condition.worn": 1288,
+  "travel.blocked": 123,
+  "order.given": 13,
+  "dispatch.refused": 14,
+  "raze.refused": 37,
+  "finding.none": 530,
+  "kill.refused": 36,
+  "march.declared": 21,
+  "accept.refused": 76,
+  "finding.made": 145,
+  "tend.refused": 74,
+  "record.created": 189,
+  "transfer.refused": 90,
+  "forge.refused": 68,
+  "survey.refused": 49,
+  "sabotage.refused": 53,
+  "found.refused": 44,
+  "work.unavailable": 151,
+  "build.refused": 40,
+  "train.refused": 86,
+  "restore.refused": 49,
+  "speech.unheard": 35,
+  "commitment.refused": 119,
+  "petition.filed": 22,
+  "proposition.uttered": 85,
+  "carry.refused": 61,
+  "case.unauthorized": 6,
+  "case.opened": 9,
+  "challenge.refused": 67,
+  "cover.assumed": 46,
+  "stance.moved": 1,
+  "march.refused": 24,
+  "claim.deposited": 31492,
+  "travel.moved": 27,
+  "migrate.refused": 370,
+  "release.refused": 71,
+  "person.died": 3,
+  "act.ineligible": 4,
+  "record.forged": 44,
+  "faction.surveyed": 43,
+  "requisition.refused": 4,
+  "requisition.unauthorized": 12,
+  "argument.refused": 22,
+  "petition.refused": 39,
+  "news.told": 16,
+  "news.untold": 62,
+  "covenant.refused": 18,
+  "matter.turned": 5,
+  "dispensation.issued": 18,
+  "issue.unauthorized": 4,
+  "date.scheduled": 1,
+  "tenure.closed": 13,
+  "determine.refused": 9,
+  "pardon.refused": 9,
+  "contest.undecided": 4,
+  "challenge.issued": 6,
+  "date.fired": 1,
+  "docket.formed": 1,
+  "term.matured": 531,
+  "claim.decayed": 31330,
+  "travel.ended": 21,
+  "revoke.refused": 6,
+  "case.refused": 8,
+  "convene.refused": 9,
+  "establish.refused": 4,
+  "transfer.made": 2,
+  "matter.advanced": 1,
+  "tenure.opened": 1,
+  "confer.refused": 4,
+  "petition.carried": 1,
+  "give.refused": 1,
+  "record.given": 1,
+  "matter.determined": 2,
+  "seize.refused": 3,
+  "duty.taken": 33,
+  "duty.refused": 29,
+  "matter.held": 1,
+  "body.changed": 1,
+  "residence.changed": 3
+ },
+ "undeclared_event_kinds": [],
+ "declared_never_emitted": [
+  "act.refused",
+  "argument.lost",
+  "argument.won",
+  "army.arrived",
+  "arrest.made",
+  "arrest.refused",
+  "arrest.resisted",
+  "arrest.unauthorized",
+  "attempt.refused",
+  "ban.ended",
+  "body.tended",
+  "bond.formed",
+  "capability.raised",
+  "coherence.changed",
+  "commitment.ended",
+  "commitment.made",
+  "compliance.given",
+  "compliance.impossible",
+  "compliance.withheld",
+  "condition.attached",
+  "condition.band_crossed",
+  "confidence.broken",
+  "construal.impossible",
+  "conviction.moved",
+  "covenant.offered",
+  "destroy.refused",
+  "detention.ended",
+  "envelope.changed",
+  "exchange.made",
+  "exchange.refused",
+  "field.lost",
+  "field.unopposed",
+  "field.won",
+  "forgive.refused",
+  "heir.designated",
+  "issue.refused",
+  "matter.carried",
+  "matter.undetermined",
+  "office.established",
+  "person.demanded",
+  "person.individuated",
+  "pursuit.moved",
+  "record.destroyed",
+  "record.expired",
+  "record.seized",
+  "record.staged",
+  "remit.changed",
+  "requisition.taken",
+  "rung.ceded",
+  "rung.founded",
+  "rung.razed",
+  "rung.seized",
+  "scar.taken",
+  "seize.unauthorized",
+  "site.built",
+  "site.damaged",
+  "site.restored",
+  "site.worked",
+  "standing.band_crossed",
+  "succession.refused",
+  "tenure.graded",
+  "tenure.payload_set",
+  "term.renewed",
+  "terms.distorted",
+  "weight.changed"
+ ],
+ "events_degree_none": 68151,
+ "events_observed_empty": 65615,
+ "events_changes_empty": 2732,
+ "events_causes_empty": 0,
+ "refusal_last_read": [
+  [
+   "migrate.refused",
+   "audience:#",
+   "True",
+   370
+  ],
+  [
+   "finding.none",
+   "exists:Record",
+   "0",
+   228
+  ],
+  [
+   "work.unavailable",
+   "condition",
+   "UNKNOWN",
+   151
+  ],
+  [
+   "commitment.refused",
+   "exists:Proposition",
+   "0",
+   119
+  ],
+  [
+   "finding.none",
+   "exists:Site",
+   "0",
+   110
+  ],
+  [
+   "forge.refused",
+   "claim.held",
+   "True",
+   67
+  ],
+  [
+   "travel.blocked",
+   "audience:#",
+   "True",
+   61
+  ],
+  [
+   "carry.refused",
+   "exists:petition",
+   "0",
+   61
+  ],
+  [
+   "finding.none",
+   "present_at:#",
+   "False",
+   53
+  ],
+  [
+   "sabotage.refused",
+   "exists:Site",
+   "0",
+   53
+  ],
+  [
+   "restore.refused",
+   "exists:Site",
+   "0",
+   49
+  ],
+  [
+   "finding.none",
+   "present_at:#",
+   "True",
+   48
+  ],
+  [
+   "accept.refused",
+   "with:#",
+   "False",
+   44
+  ],
+  [
+   "found.refused",
+   "exists:works",
+   "0",
+   44
+  ],
+  [
+   "survey.refused",
+   "claim.held",
+   "True",
+   43
+  ],
+  [
+   "build.refused",
+   "exists:works",
+   "0",
+   40
+  ],
+  [
+   "petition.refused",
+   "exists:Person",
+   "0",
+   39
+  ],
+  [
+   "challenge.refused",
+   "with:#",
+   "False",
+   37
+  ],
+  [
+   "news.untold",
+   "with:#",
+   "True",
+   37
+  ],
+  [
+   "speech.unheard",
+   "exists:DocketItem",
+   "0",
+   35
+  ],
+  [
+   "raze.refused",
+   "exists:Rung",
+   "1",
+   33
+  ],
+  [
+   "accept.refused",
+   "exists:Person",
+   "0",
+   32
+  ],
+  [
+   "travel.blocked",
+   "audience:#",
+   "UNKNOWN",
+   31
+  ],
+  [
+   "train.refused",
+   "with:#",
+   "True",
+   30
+  ],
+  [
+   "challenge.refused",
+   "exists:Person",
+   "0",
+   30
+  ],
+  [
+   "finding.none",
+   "exists:Person",
+   "0",
+   29
+  ],
+  [
+   "train.refused",
+   "with:#",
+   "False",
+   28
+  ],
+  [
+   "train.refused",
+   "exists:Person",
+   "0",
+   28
+  ],
+  [
+   "finding.none",
+   "exists:Record",
+   "1",
+   28
+  ],
+  [
+   "finding.none",
+   "exists:Rung",
+   "0",
+   27
+  ],
+  [
+   "tend.refused",
+   "exists:Person",
+   "0",
+   26
+  ],
+  [
+   "tend.refused",
+   "with:#",
+   "False",
+   24
+  ],
+  [
+   "transfer.refused",
+   "stores:grain",
+   "0",
+   24
+  ],
+  [
+   "tend.refused",
+   "with:#",
+   "True",
+   24
+  ],
+  [
+   "travel.blocked",
+   "audience:#",
+   "False",
+   24
+  ],
+  [
+   "news.untold",
+   "with:#",
+   "False",
+   23
+  ],
+  [
+   "argument.refused",
+   "exists:Proposition",
+   "0",
+   22
+  ],
+  [
+   "transfer.refused",
+   "stores:grain",
+   "110",
+   19
+  ],
+  [
+   "kill.refused",
+   "with:#",
+   "False",
+   18
+  ],
+  [
+   "kill.refused",
+   "exists:Person",
+   "0",
+   18
+  ],
+  [
+   "covenant.refused",
+   "exists:Proposition",
+   "0",
+   17
+  ],
+  [
+   "transfer.refused",
+   "stores:grain",
+   "144",
+   16
+  ],
+  [
+   "transfer.refused",
+   "stores:grain",
+   "75",
+   15
+  ],
+  [
+   "transfer.refused",
+   "stores:grain",
+   "40",
+   14
+  ],
+  [
+   "requisition.unauthorized",
+   "purview:#",
+   "False",
+   12
+  ],
+  [
+   "case.refused",
+   "purview:#",
+   "True",
+   8
+  ],
+  [
+   "finding.none",
+   "claim.held",
+   "False",
+   7
+  ],
+  [
+   "survey.refused",
+   "claim.held",
+   "False",
+   6
+  ],
+  [
+   "case.unauthorized",
+   "purview:#",
+   "False",
+   6
+  ],
+  [
+   "determine.refused",
+   "exists:DocketItem",
+   "0",
+   6
+  ],
+  [
+   "pardon.refused",
+   "bench:#",
+   "True",
+   6
+  ],
+  [
+   "requisition.refused",
+   "stores:grain",
+   "0",
+   4
+  ],
+  [
+   "issue.unauthorized",
+   "purview:#",
+   "False",
+   4
+  ],
+  [
+   "raze.refused",
+   "exists:Rung",
+   "0",
+   4
+  ],
+  [
+   "travel.blocked",
+   "contain.path:#",
+   "False",
+   4
+  ],
+  [
+   "march.refused",
+   "exists:Rung",
+   "0",
+   3
+  ],
+  [
+   "pardon.refused",
+   "exists:Person",
+   "0",
+   3
+  ],
+  [
+   "determine.refused",
+   "exists:Person",
+   "0",
+   3
+  ],
+  [
+   "seize.refused",
+   "purview:#",
+   "True",
+   3
+  ],
+  [
+   "news.untold",
+   "with:#",
+   "UNKNOWN",
+   2
+  ]
+ ],
+ "refusal_events_total": 2520,
+ "refusal_events_with_no_read": 162,
+ "trace": {
+  "channels": {
+   "QUERY": 576508,
+   "STEP": 184,
+   "BARRIER": 48,
+   "DECISION": 3121,
+   "NOTE": 19518,
+   "WRITE": 82098,
+   "EVENT": 68348,
+   "ACT": 3256,
+   "GAP": 711,
+   "CLAIM": 31492
+  },
+  "write_refused": [
+   [
+    [
+     "ACTS",
+     "travel_leg"
+    ],
+    431
+   ],
+   [
+    [
+     "ACTS",
+     "exists"
+    ],
+    151
+   ],
+   [
+    [
+     "ACTS",
+     "stores"
+    ],
+    66
+   ],
+   [
+    [
+     "ACTS",
+     "capability"
+    ],
+    30
+   ],
+   [
+    [
+     "ACTS",
+     "body"
+    ],
+    24
+   ],
+   [
+    [
+     "ACTS",
+     "until"
+    ],
+    9
+   ]
+  ],
+  "write_classes": [
+   [
+    [
+     "INTERIOR",
+     true
+    ],
+    46533
+   ],
+   [
+    [
+     "MATTER",
+     true
+    ],
+    33577
+   ],
+   [
+    [
+     "ACTS",
+     true
+    ],
+    1275
+   ],
+   [
+    [
+     "ACTS",
+     false
+    ],
+    711
+   ],
+   [
+    [
+     "CALENDAR",
+     true
+    ],
+    2
+   ]
+  ],
+  "gap": [
+   [
+    "[FORBIDDEN] a (Person, travel_leg) write by # changed nothing: it named no subject",
+    431
+   ],
+   [
+    "[FORBIDDEN] a (Record, exists) write by # changed nothing: it named no subject",
+    118
+   ],
+   [
+    "[FORBIDDEN] a (Rung, stores) write by # changed nothing: every subject it named reads the same after it -- #, #",
+    57
+   ],
+   [
+    "[FORBIDDEN] a (Rung, exists) write by # changed nothing: it named no subject",
+    33
+   ],
+   [
+    "[FORBIDDEN] a (Person, capability) write by # changed nothing: it named no subject",
+    30
+   ],
+   [
+    "[FORBIDDEN] a (Person, body) write by # changed nothing: every subject it named reads the same after it -- #",
+    24
+   ],
+   [
+    "[FORBIDDEN] a (Tenure, until) write by # changed nothing: it named no subject",
+    9
+   ],
+   [
+    "[FORBIDDEN] a (Rung, stores) write by # changed nothing: it named no subject",
+    9
+   ]
+  ],
+  "note": [
+   [
+    "`remit:confer` not granted on any live `hold` this person holds; 'confer' declines",
+    1277
+   ],
+   [
+    "`remit:confer` not granted on any live `hold` this person holds; 'establish' declines",
+    1277
+   ],
+   [
+    "`remit:revoke` not granted on any live `hold` this person holds; 'revoke' declines",
+    1277
+   ],
+   [
+    "`remit:determine` not granted on any live `hold` this person holds; 'determine' declines",
+    1220
+   ],
+   [
+    "`remit:determine` not granted on any live `hold` this person holds; 'open_case' declines",
+    1220
+   ],
+   [
+    "`remit:determine` not granted on any live `hold` this person holds; 'pardon' declines",
+    1220
+   ],
+   [
+    "`remit:convene` not granted on any live `hold` this person holds; 'convene' declines",
+    1163
+   ],
+   [
+    "`remit:issue` not granted on any live `hold` this person holds; 'covenant' declines",
+    1083
+   ],
+   [
+    "`remit:issue` not granted on any live `hold` this person holds; 'issue' declines",
+    1083
+   ],
+   [
+    "`remit:issue` not granted on any live `hold` this person holds; 'requisition' declines",
+    1083
+   ],
+   [
+    "`presence:` eligibility is unevaluable person-side (H-N, the presence index); 'requisition' declines rather than admitti",
+    1083
+   ],
+   [
+    "`remit:issue` not granted on any live `hold` this person holds; 'seize' declines",
+    1083
+   ],
+   [
+    "`remit:dispatch` not granted on any live `hold` this person holds; 'arrest' declines",
+    929
+   ],
+   [
+    "`remit:dispatch` not granted on any live `hold` this person holds; 'dispatch' declines",
+    929
+   ],
+   [
+    "`remit:dispatch` not granted on any live `hold` this person holds; 'march' declines",
+    929
+   ],
+   [
+    "`remit:dispatch` not granted on any live `hold` this person holds; 'raze' declines",
+    929
+   ],
+   [
+    "'argue' needs ['to'] from a person # knows, and they know nobody; NO Candidate is formed (TN)",
+    728
+   ],
+   [
+    "'tell' needs ['to'] from a person # knows, and they know nobody; NO Candidate is formed (TN)",
+    728
+   ],
+   [
+    "'give' needs ['to'] from a person # knows, and they know nobody; NO Candidate is formed (TN)",
+    141
+   ],
+   [
+    "'covenant' needs ['to'] from a person # knows, and they know nobody; NO Candidate is formed (TN)",
+    59
+   ],
+   [
+    "'issue' needs ['to'] from a person # knows, and they know nobody; NO Candidate is formed (TN)",
+    59
+   ],
+   [
+    "# stage 'stageN' did not mature: its winder is gone (#N :N -- a half-made copy STOPS rather than finishing itself)",
+    17
+   ],
+   [
+    "N eater(s) could not meet subsistence; first N of them: {'#': {'grain': N, 'salt': N}, '#': {'grain': N, 'salt': N}, '#'",
+    1
+   ]
+  ],
+  "decision": [
+   [
+    "migrate wrote nothing",
+    370
+   ],
+   [
+    "research by #: precondition unmet",
+    228
+   ],
+   [
+    "work by #: precondition unmet",
+    151
+   ],
+   [
+    "a migration into a rung at capacity -> # into 'b_s_N_court'",
+    132
+   ],
+   [
+    "commit by #: precondition unmet",
+    119
+   ],
+   [
+    "a migration into a rung at capacity -> # into 'b_s_N_inn'",
+    118
+   ],
+   [
+    "examine by #: precondition unmet",
+    110
+   ],
+   [
+    "surveil by #: precondition unmet",
+    80
+   ],
+   [
+    "accept by #: precondition unmet",
+    76
+   ],
+   [
+    "release by #: precondition unmet",
+    71
+   ],
+   [
+    "challenge by #: precondition unmet",
+    67
+   ],
+   [
+    "forge wrote nothing",
+    67
+   ],
+   [
+    "transfer wrote nothing",
+    66
+   ],
+   [
+    "a move's destination is not up the \u00a7N ladder -> # into '#'",
+    61
+   ],
+   [
+    "move wrote nothing",
+    61
+   ],
+   [
+    "carry by #: precondition unmet",
+    61
+   ],
+   [
+    "inquiry 'surveil' dispatched",
+    59
+   ],
+   [
+    "train by #: precondition unmet",
+    56
+   ],
+   [
+    "sabotage by #: precondition unmet",
+    53
+   ],
+   [
+    "contest for 'a standing' dispatched",
+    53
+   ],
+   [
+    "contest for 'a standing' resolved",
+    53
+   ],
+   [
+    "a migration into a rung at capacity -> # into 'b_s_N_market'",
+    53
+   ],
+   [
+    "tend by #: precondition unmet",
+    50
+   ],
+   [
+    "restore by #: precondition unmet",
+    49
+   ],
+   [
+    "inquiry 'research' dispatched",
+    47
+   ],
+   [
+    "found by #: precondition unmet",
+    44
+   ],
+   [
+    "survey wrote nothing",
+    43
+   ],
+   [
+    "build by #: precondition unmet",
+    40
+   ],
+   [
+    "petition by #: precondition unmet",
+    39
+   ],
+   [
+    "a migration into a rung at capacity -> # into 'b_s_N_cathedral'",
+    39
+   ],
+   [
+    "fight by #: precondition unmet",
+    36
+   ],
+   [
+    "move by #: precondition unmet",
+    36
+   ],
+   [
+    "speak by #: precondition unmet",
+    35
+   ],
+   [
+    "raze wrote nothing",
+    33
+   ],
+   [
+    "train wrote nothing",
+    30
+   ],
+   [
+    "interview by #: precondition unmet",
+    29
+   ],
+   [
+    "oblige by #: precondition unmet",
+    29
+   ],
+   [
+    "a migration into a rung at capacity -> # into 'b_s_N_barracks'",
+    28
+   ],
+   [
+    "migrate by #: precondition unmet",
+    26
+   ],
+   [
+    "tell by #: precondition unmet",
+    25
+   ],
+   [
+    "transfer by #: precondition unmet",
+    24
+   ],
+   [
+    "tend wrote nothing",
+    24
+   ],
+   [
+    "argue by #: precondition unmet",
+    22
+   ],
+   [
+    "ordering N acts",
+    20
+   ],
+   [
+    "fan-out over N events -> N deposits",
+    20
+   ],
+   [
+    "covenant by #: precondition unmet",
+    18
+   ],
+   [
+    "requisition by #: precondition unmet",
+    16
+   ],
+   [
+    "dispatch by #: precondition unmet",
+    14
+   ],
+   [
+    "determine by #: precondition unmet",
+    9
+   ],
+   [
+    "convene by #: precondition unmet",
+    9
+   ],
+   [
+    "contest for 'the body' dispatched",
+    8
+   ],
+   [
+    "contest for 'the body' resolved",
+    8
+   ],
+   [
+    "open_case wrote nothing",
+    8
+   ],
+   [
+    "reconstruct by #: precondition unmet",
+    7
+   ],
+   [
+    "contest for 'a matter' dispatched",
+    7
+   ],
+   [
+    "contest for 'a matter' resolved",
+    7
+   ],
+   [
+    "transfer names a side that is no rung -> from '#' to '#'",
+    7
+   ],
+   [
+    "survey by #: precondition unmet",
+    6
+   ],
+   [
+    "open_case by #: precondition unmet",
+    6
+   ],
+   [
+    "pardon wrote nothing",
+    6
+   ]
+  ],
+  "query": [
+   [
+    "home_of",
+    328633
+   ],
+   [
+    "presence",
+    212568
+   ],
+   [
+    "establishment_of",
+    20093
+   ],
+   [
+    "descendants",
+    3448
+   ],
+   [
+    "budget",
+    2995
+   ],
+   [
+    "questions_for",
+    1620
+   ],
+   [
+    "reach",
+    1620
+   ],
+   [
+    "sense",
+    1620
+   ],
+   [
+    "opening_set",
+    1375
+   ],
+   [
+    "admits_audience",
+    485
+   ],
+   [
+    "guard_weight",
+    485
+   ],
+   [
+    "capacity",
+    410
+   ],
+   [
+    "residence_of",
+    373
+   ],
+   [
+    "population",
+    373
+   ],
+   [
+    "members",
+    106
+   ],
+   [
+    "holder_faction_of",
+    101
+   ],
+   [
+    "resolve",
+    87
+   ],
+   [
+    "head",
+    87
+   ],
+   [
+    "judging_set",
+    15
+   ],
+   [
+    "reception",
+    7
+   ],
+   [
+    "proofs",
+    7
+   ]
+  ]
+ },
+ "null_scan": [
+  [
+   "Claim.chain",
+   16000,
+   0,
+   16000,
+   1.0
+  ],
+  [
+   "Claim.confidence",
+   16000,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Claim.doer",
+   16000,
+   11042,
+   0,
+   0.69
+  ],
+  [
+   "Claim.holder",
+   16000,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Claim.id",
+   16000,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Claim.predicate",
+   16000,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Claim.round",
+   16000,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Claim.source",
+   16000,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Claim.subject",
+   16000,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Claim.value",
+   16000,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Claim.visibility",
+   16000,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Claim.when",
+   16000,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Event.causes",
+   68348,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Event.changes",
+   68348,
+   0,
+   2732,
+   0.04
+  ],
+  [
+   "Event.degree",
+   68348,
+   68151,
+   0,
+   0.997
+  ],
+  [
+   "Event.emitted_at",
+   68348,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Event.id",
+   68348,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Event.kind",
+   68348,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Event.observed",
+   68348,
+   0,
+   65615,
+   0.96
+  ],
+  [
+   "Office.binds",
+   32,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Office.body",
+   32,
+   13,
+   0,
+   0.406
+  ],
+  [
+   "Office.body_function",
+   32,
+   13,
+   0,
+   0.406
+  ],
+  [
+   "Office.conferral",
+   32,
+   7,
+   0,
+   0.219
+  ],
+  [
+   "Office.faction",
+   32,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Office.id",
+   32,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Office.post",
+   32,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Office.remit_acts",
+   32,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Office.revocation",
+   32,
+   17,
+   0,
+   0.531
+  ],
+  [
+   "Office.rung",
+   32,
+   1,
+   0,
+   0.031
+  ],
+  [
+   "Office.scope_rung",
+   32,
+   1,
+   0,
+   0.031
+  ],
+  [
+   "Office.upkeep",
+   32,
+   32,
+   0,
+   1.0
+  ],
+  [
+   "Person.body",
+   80,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Person.born",
+   80,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Person.capability",
+   80,
+   0,
+   80,
+   1.0
+  ],
+  [
+   "Person.conviction",
+   80,
+   0,
+   37,
+   0.463
+  ],
+  [
+   "Person.id",
+   80,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Person.ledger",
+   80,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Person.name",
+   80,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Person.pursuits",
+   80,
+   0,
+   37,
+   0.463
+  ],
+  [
+   "Person.scar",
+   80,
+   0,
+   37,
+   0.463
+  ],
+  [
+   "Person.stance",
+   80,
+   0,
+   48,
+   0.6
+  ],
+  [
+   "Person.tenures",
+   80,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Person.thread_sensitivity",
+   80,
+   70,
+   0,
+   0.875
+  ],
+  [
+   "Person.travel_leg",
+   80,
+   0,
+   71,
+   0.887
+  ],
+  [
+   "Person.weight",
+   80,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Proposition.id",
+   152,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Proposition.mood",
+   152,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Proposition.predicate",
+   152,
+   0,
+   85,
+   0.559
+  ],
+  [
+   "Proposition.scope",
+   152,
+   140,
+   0,
+   0.921
+  ],
+  [
+   "Proposition.subject",
+   152,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Proposition.value",
+   152,
+   85,
+   0,
+   0.559
+  ],
+  [
+   "Proposition.when",
+   152,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Record.forgery_quality",
+   371,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Record.id",
+   371,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Record.kind",
+   371,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Record.matured",
+   371,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Record.rung",
+   371,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Record.stages",
+   371,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Record.subject_matter",
+   371,
+   198,
+   0,
+   0.534
+  ],
+  [
+   "Record.ttl",
+   371,
+   371,
+   0,
+   1.0
+  ],
+  [
+   "Rung.dates",
+   409,
+   0,
+   409,
+   1.0
+  ],
+  [
+   "Rung.envelope",
+   409,
+   0,
+   409,
+   1.0
+  ],
+  [
+   "Rung.id",
+   409,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Rung.kind",
+   409,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Rung.records",
+   409,
+   0,
+   409,
+   1.0
+  ],
+  [
+   "Rung.sites",
+   409,
+   0,
+   409,
+   1.0
+  ],
+  [
+   "Rung.stores",
+   409,
+   0,
+   370,
+   0.905
+  ],
+  [
+   "Rung.yield",
+   409,
+   0,
+   372,
+   0.91
+  ],
+  [
+   "Site.condition",
+   322,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Site.id",
+   322,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Site.kind",
+   322,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Site.rung",
+   322,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Tenure.degree",
+   853,
+   851,
+   0,
+   0.998
+  ],
+  [
+   "Tenure.id",
+   853,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Tenure.kind",
+   853,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Tenure.object",
+   853,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Tenure.payload",
+   853,
+   820,
+   0,
+   0.961
+  ],
+  [
+   "Tenure.since",
+   853,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Tenure.subject",
+   853,
+   0,
+   0,
+   0.0
+  ],
+  [
+   "Tenure.term",
+   853,
+   818,
+   0,
+   0.959
+  ],
+  [
+   "Tenure.until",
+   853,
+   806,
+   0,
+   0.945
+  ]
+ ],
+ "never_populated": [
+  [
+   "Claim.chain",
+   16000,
+   0,
+   16000,
+   1.0
+  ],
+  [
+   "Office.upkeep",
+   32,
+   32,
+   0,
+   1.0
+  ],
+  [
+   "Person.capability",
+   80,
+   0,
+   80,
+   1.0
+  ],
+  [
+   "Record.ttl",
+   371,
+   371,
+   0,
+   1.0
+  ],
+  [
+   "Rung.dates",
+   409,
+   0,
+   409,
+   1.0
+  ],
+  [
+   "Rung.envelope",
+   409,
+   0,
+   409,
+   1.0
+  ],
+  [
+   "Rung.records",
+   409,
+   0,
+   409,
+   1.0
+  ],
+  [
+   "Rung.sites",
+   409,
+   0,
+   409,
+   1.0
+  ]
+ ],
+ "ledger_sizes": {
+  "min": 200,
+  "median": 200,
+  "max": 200,
+  "empty": 0,
+  "total_held": 16000
+ }
+}
