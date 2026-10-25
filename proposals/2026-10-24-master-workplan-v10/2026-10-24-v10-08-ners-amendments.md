@@ -5,7 +5,7 @@
 
 ## 1. How to read
 
-Jordan asked for the NERS lanes' findings to be folded into the plan using the agonist→antagonist method (`CLAUDE.md` §10). Six independent NERS lanes (`.claude/skills/ners/SKILL.md`; read-only) read the designs the plan sequences. Six producers then verified each lane claim against the tree and drafted the change as 110 blocks; five independent read-only critics attacked the blocks against the tree; the orchestrator reconciled their verdicts. That was the one adversarial round (`CLAUDE.md` §0): the fixes it produced were not audited again. Of the 110 blocks, 69 survived unchanged, 38 were amended on the critics' evidence, and 3 were rejected as drafted and rewritten (CP-T02-04, CP-T06-01, CP-T10-09).
+Jordan asked for the NERS lanes' findings to be folded into the plan using the agonist→antagonist method (`CLAUDE.md` §10). Six independent NERS lanes (`.claude/skills/ners/SKILL.md`; read-only) read the designs the plan sequences. Six producers then verified each lane claim against the tree and drafted the change as 110 blocks; five independent read-only critics attacked the blocks against the tree; the orchestrator reconciled their verdicts. That was the one adversarial round (`CLAUDE.md` §0): the fixes it produced were not audited again. Of the 110 blocks, 69 survived unchanged, 38 were amended on the critics' evidence, and 3 were rejected as drafted and rewritten (CP-T02-04, CP-T06-01, CP-T10-09). 4 further entries (HR-1 to HR-4) were added later by the hole-row pass from its own critic round; they are not among the 110 blocks.
 
 **Homes are unedited.** An entry here overrides its home on the point it names, and `-03`'s rows, gates and exits already carry the change. Actions: **CUT** (the position leaves the plan; its handle stays in `-07` §2), **NARROW** (smaller scope, a narrower N-line), **REPAIR** (the home's design changes at a named point), **RESEQUENCE** (a gate or `needs` changes), **LIMIT** (a stated limit or exit clause, no design change). A choice taken to make a repair is tagged `[ASSUMPTION; medium; Jordan to correct; revert: …]` and was answered by the ladder (`CLAUDE.md` §0), not escalated; the **Taken** lines are collected there and nowhere else, and `-05` §2 points here.
 
@@ -16,8 +16,8 @@ Jordan asked for the NERS lanes' findings to be folded into the plan using the a
 | handle | batch | action | block | after the attack |
 |---|---|---|---|---|
 | REM-50 | B10-04 | REPAIR | AM-A-04 | amended |
-| REM-51 | B10-04 | CUT | AM-A-03 | amended |
 | REM-52 | B10-04 | LIMIT | AM-A-05 | amended |
+| REM-52 | B10-04 | LIMIT | HR-2 | hole-row pass |
 | CP-T05-04 | B10-05 | LIMIT | AM-D-05 | held |
 | REM-21 | B10-05 | REPAIR | AM-A-06 | amended |
 | REM-22 | B10-05 | LIMIT | AM-A-07 | amended |
@@ -27,22 +27,19 @@ Jordan asked for the NERS lanes' findings to be folded into the plan using the a
 | REM-2C | B10-05 | LIMIT | AM-A-11 | held |
 | REM-27 | B10-06 | LIMIT | AM-A-13 | held |
 | REM-29 | B10-06 | LIMIT | AM-A-15 | amended |
-| REM-40 | B10-07 | CUT | AM-A-02 | amended |
-| REM-41 | B10-07 | CUT | AM-A-01 | amended |
+| REM-2B | B10-06 | LIMIT | HR-3 | hole-row pass |
 | CP-T01-01 | B10-08 | REPAIR | AM-B-01 | amended |
 | CP-T01-02 | B10-08 | LIMIT | AM-B-02 | held |
 | CP-T01-03 | B10-08 | NARROW | AM-B-03 | held |
 | CP-T01-05 | B10-08 | NARROW | AM-B-04 | amended |
 | CP-T01-06 | B10-08 | REPAIR | AM-B-05 | amended |
 | CP-T02-01 | B10-09 | RESEQUENCE | AM-B-06 | held |
+| CP-T02-01 | B10-09 | REPAIR | HR-1 | hole-row pass |
 | CP-T02-02 | B10-09 | RESEQUENCE | AM-B-07 | held |
 | CP-T02-03 | B10-09 | NARROW | AM-B-09 | held |
-| CP-T02-04 | B10-09 | CUT | AM-B-10 | replaced |
 | CP-T02-05 | B10-09 | LIMIT | AM-B-11 | amended |
 | CP-T02-07 | B10-09 | NARROW | AM-B-13 | held |
-| CP-T02-08 | B10-09 | CUT | AM-B-14 | held |
 | CP-T03-00 | B10-09 | REPAIR | AM-C-01 | amended |
-| CP-T07-01 | B10-09 | CUT | AM-E-01 | held |
 | IN-61 | B10-09 | RESEQUENCE | AM-B-08 | held |
 | CP-T02-06 | B10-10 | REPAIR | AM-B-12 | amended |
 | REM-32 | B10-10 | REPAIR | AM-A-20 | held |
@@ -61,13 +58,11 @@ Jordan asked for the NERS lanes' findings to be folded into the plan using the a
 | CP-T05-02 | B10-13 | REPAIR | AM-D-01 | amended |
 | CP-T05-02 | B10-13 | REPAIR | AM-D-02 | held |
 | CP-T05-03 | B10-13 | LIMIT | AM-D-04 | held |
-| CP-T05-05 | B10-13 | CUT | AM-D-06 | held |
 | CP-T06-01 | B10-14 | LIMIT | AM-D-07 | replaced |
 | CP-T06-02 | B10-14 | LIMIT | AM-D-08 | held |
 | CP-T06-03 | B10-14 | LIMIT | AM-D-09 | held |
 | CP-T06-04 | B10-14 | LIMIT | AM-D-10 | amended |
 | CP-T06-05 | B10-14 | LIMIT | AM-D-11 | held |
-| CP-T06-06 | B10-14 | CUT | AM-D-12 | amended |
 | CP-T06-07 | B10-14 | LIMIT | AM-D-13 | amended |
 | CP-T06-07 | B10-14 | REPAIR | AM-D-14 | amended |
 | CP-T06-09 | B10-14 | LIMIT | AM-D-16 | held |
@@ -93,6 +88,7 @@ Jordan asked for the NERS lanes' findings to be folded into the plan using the a
 | CP-T09-02 | B10-17 | LIMIT | AM-F-11 | amended |
 | CP-T09-03 | B10-17 | LIMIT | AM-F-12 | amended |
 | CP-T09-04 | B10-17 | REPAIR | AM-F-13 | held |
+| CP-T09-04 | B10-17 | LIMIT | HR-4 | hole-row pass |
 | CP-T09-05 | B10-17 | LIMIT | AM-F-14 | held |
 | CP-T09-07 | B10-17 | REPAIR | AM-F-15 | held |
 | CP-T09-09 | B10-17 | LIMIT | AM-F-17 | held |
@@ -106,6 +102,14 @@ Jordan asked for the NERS lanes' findings to be folded into the plan using the a
 | CP-T10-08 | B10-18 | RESEQUENCE | AM-C-07 | held |
 | CP-T10-08 | B10-18 | LIMIT | AM-F-09 | amended |
 | CP-T10-09 | B10-18 | NARROW | AM-F-03 | replaced |
+| CP-T02-04 | ? | CUT | AM-B-10 | replaced |
+| CP-T02-08 | ? | CUT | AM-B-14 | held |
+| CP-T05-05 | ? | CUT | AM-D-06 | held |
+| CP-T06-06 | ? | CUT | AM-D-12 | amended |
+| CP-T07-01 | ? | CUT | AM-E-01 | held |
+| REM-40 | ? | CUT | AM-A-02 | amended |
+| REM-41 | ? | CUT | AM-A-01 | amended |
+| REM-51 | ? | CUT | AM-A-03 | amended |
 
 ## 3. The entries
 
@@ -119,19 +123,18 @@ Each entry: the N-line after the amendment (the form of `ners/SKILL.md`: what th
 - **Because:** PARTLY — The mismatch is real: `subsistence_draw` walks `ancestry(home)` upward from the eater's home to the first non-rung (`world_q.py::_larder_parts`/`larder_input`: "a ladder is `ancestry(home)` cut at the first id that is not a rung"), while the home's `A(S)` sums `Rung.stores` over `_subtree` (`world_q.py::_subtree`, the descendants).
 - **After the attack:** The N-line used two forbidden forms (legibility; 'positions that follow have no input') and was rewritten. Three statements in the override were false or overstated and are corrected; the revert is the `body` precedent, not 'a new loader'.
 
-### REM-51 — CUT (B10-04) · AM-A-03
-
-- **N-line after:** none: cut.
-- **Override:** REM-51 and the `hunger_reach` fixture are withdrawn; no `HUNGER_PREDICATE`, no Observation attached at `loop/matter.py`, no second `transfer` source. Hunger reaches a person only as the shipped shortfall claim (IN-22) and through the body (REM-52, held at M6). Reopen condition: M6 answered with a magnitude at which REM-50's census reading shows a settlement under 2 seasons of cover in the realm, or REM-52 ships `body_step` above 0 (at 10 the producer is the season-0 `body.changed` of all 37 cohorts, and season 0 has no larder write for IN-22's shortfall claim to ride, so the dominance claim holds only at `body_step` 0). The rebuild then compares the band at the post-yield write too, so a recovery is sent, and is measured against the shortfall reach as its control. REM-44's Layer 1 hunk (rem-03:144-145) promises 'the claims a person holds about' hunger; with REM-51 cut only shortfall claims exist, so that sentence is reworded to 'the shortfall claims' when M11 lands it.
-- **Because:** YES — Opened `loop/matter.py` (line numbers have drifted; found by symbol): the shortfall Observation rides only `w.write("stores", ...)` of a rung with a debit, `observed=short_seen.get(rid, ())` (:660-672), and the comment at :544-558 states a never-stocked larder drains no rung, so nothing carries the gap.
-- **After the attack:** The cut stands. The reopen condition was too narrow (REM-52 is REM-51's producer), and REM-44's hunk could not stay 'true' as drafted.
-
 ### REM-52 — LIMIT (B10-04) · AM-A-05
 
 - **N-line after:** `body_step = 10` — cut it and the gameplay experience is worse, because hunger is then a number in a trace and never a fact about anyone: no cohort weakens or dies for want of food, and a town's population cannot answer its own larder (the loop the requirement names).
 - **Override:** No design change. Stated limit: REM-52 changes one value only after M6 is answered. Its commit re-pins every reader of the control arm, not the one the card named: `test_governance_build.py::test_lb3b_the_zero_arm_is_the_pre_item_tree_exactly`, `test_in22_shortfall_reach.py` (the `CONTROL_ARM == 0` asserts), `test_territorial_subsistence.py` (`CONTROL_ARM`, and `body_step == 0` at :294), `test_se03_body_bands.py` (it reads `CONTROL_ARM` from the default, so at 10 its live arms become `[0, 67]` and arm 0 fails 'did not die') and `test_season_shape.py`, plus every seeded realm hash pin; each is read by `grep -rn 'body_step' engine/season/tests` at the commit. Cross-item: the deaths REM-52 causes free room that a sealed `migrate` belief (REM-29) cannot see: AM-A-15 states that limit. REM-52 does not close with B10-04: it lands after M6 as its own declared-mover commit in the next unopened verb-cluster batch (P13).
 - **Because:** YES — `data/fixtures.py:594` `body_step=0`; `test_governance_build.py:677` `test_lb3b_the_zero_arm_is_the_pre_item_tree_exactly` asserts `P.DEFAULT_FIXTURES.get("body_step") == 0` (:685). The card names that one test.
 - **After the attack:** The re-pin list omitted `test_se03_body_bands.py` and named two files that do not contain `body_step`; the list is the five files `grep -rn body_step engine/season/tests` returns.
+
+### REM-52 — LIMIT (B10-04) · HR-2
+
+- **Override:** H-129: the `body.changed` read in the bodies pass (`loop/matter.py:612`) chains on the wrong person for a combat-caused body write; `written=True` is passed there in the same commit that flips `body_step` off 0. Falsifier: a wounded-then-starved pid at `body_step` 10. No new position. (H-129's residue 5, a kind mismatch of `army.arrived` against `travel.moved` at `matter.py:742`, is not fixed by this flag; it stays with H-151.)
+- **Because:** The first draft proposed a new position in B10-04; the critic showed REM-52 already owns the commit that makes the defect reachable.
+- **After the attack:** Found by the hole-row critic round (H-129 EDIT).
 
 ### CP-T05-04 — LIMIT (B10-05) · AM-D-05
 
@@ -191,19 +194,11 @@ Each entry: the N-line after the amendment (the form of `ners/SKILL.md`: what th
 - **Because:** PARTLY — The capacity test sits inside the effect body (`loop/effects_migration.py`, `population(...) + migrant.weight > capacity(...)` then `NO_CHANGE`, found by symbol near :200-206) and the home's route (a `room` CELL_STEM, the refusal's `Verdict.observed` deposited into the actor's own ledger at `observation_deposit_mode: actor`, then §F1 clause 4) is the one route the tree has for a learnable refusal (the `contain.path` precedent, `hole_register.yaml:368`).
 - **After the attack:** The decay had not been opened; at 20 seasons the seal is permanent in any 4-8 season run.
 
-### REM-40 — CUT (B10-07) · AM-A-02
+### REM-2B — LIMIT (B10-06) · HR-3
 
-- **N-line after:** none: cut.
-- **Override:** REM-40 is withdrawn: its design shipped as SC-02 `23` (`rosters.yaml: fold_kinds`, `data/verbs.py::EVENT_KINDS`, `loop/resolve.py::_act_events`) and loader invariant 4 (`data/verbs.py`, empty `emits_on_refusal` on a failable row). The four rows with an empty column cannot refuse on a declared clause (`conceal`'s no-op mint falls to the flat `act.refused`, `verb_table.yaml:257`), so they declare nothing and reach only `fold_kinds`' flat kinds. `OBSTACLE_CLAUSE` is not built: S27.4 is unreachable from the chooser. The `row is None` branch of `_refuse_party_gap` keeps its fallback. REM-20's comment fix is dropped with it (`verb_table.yaml:89-91` already describes the shipped roster). The REM-40 re-records the home lists (test_season_shape.py:911, :5493, test_g1b_attribution.py:260, probes.py:2795-2802) are not made.
-- **Because:** PARTLY — , and what survives does not survive. Opened: `rosters.yaml:1170-1190` (`fold_kinds`: ineligible, refused, attempt_refused) and `loop/resolve.py:88, 229, 302, 321, 507, 738, 1005, 1217` all read `FOLD_*`, so the literals are gone (the home's step (i) of the census). Step (iii) (`_admits` emits `row.refusal_for(ELIGIBILITY_CLAUSE)`) is shipped at `resolve.py:226-229`.
-- **After the attack:** The cut stands. 'The four rows cannot refuse' was too strong; reworded.
-
-### REM-41 — CUT (B10-07) · AM-A-01
-
-- **N-line after:** none: cut.
-- **Override:** REM-41 is withdrawn. Loader invariant 7 is built where the game's Events are made: `data/verbs.py::EVENT_KINDS` (derived from every emission column plus `rosters.yaml: fold_kinds` and `logged_kinds`) held at `loop/resolve.py::_act_events`. The residual gap H-220 records (probes and tests appending undeclared kinds directly to the log) is accepted, not built: it is load-bearing on process only. No `kinds=` parameter on `EventLog`, no `Forbidden` raise at `append`, no report-mode measurement run. If a game emitter ever appends an undeclared kind, H-220 reopens at that emitter. `matter.py`'s three direct appends (`:105`, `:234`, `:297`) are game emitters that bypass `_act_events`; they emit declared kinds and nothing checks it, so `architecture/meta/04_CODE_ARCHITECTURE.md:496` ('the log accepts no other kind') stays unmet. That is a Layer 1 edit owed, listed under IN-44. `-06` does not mark H-220 ACCEPT.
-- **Because:** YES — `engine/season/data/verbs.py:1198` `EVENT_KINDS = derive_event_kinds(VERB_TABLE, MATRIX, FOLD_KINDS, LOGGED_KINDS)`; `loop/resolve.py:1176-1182` raises `InstrumentDefect` when `EVENT_KINDS` does not cover the fold's kinds; `rosters.yaml:1170-1206` declares `fold_kinds` and `logged_kinds` (the matter.py `standing.band_crossed` kind); `hole_register.yaml:4684-4692` (H-220) says the undeclared kinds left are probe/test Events appended directly to the log.
-- **After the attack:** The cut stands. The draft's reason, that only a probe or a test could catch an undeclared kind, was false: three game emitters append unchecked. `-07` and `-06` reworded.
+- **Override:** REM-2B (the restore of IN-33's `exchange`) is a declared trajectory mover. The reverted build executed 0 times and took realm `confer` 3/3/5/1 to 3/3/0/0 and `oblige` 60/60/17/17 to 0, which works against R-04 conjunct (1). The batch exit reads `confer` and `oblige` before and after the restore; REM-2B's own exit asks for no realm execution, and still does not.
+- **Because:** H-58 (`exchange` untyped) closes through REM-2B, whose restore brings back a measured crowd-out.
+- **After the attack:** Found by the hole-row critic round (H-58 EDIT; conflict with R-04 conjunct (1)).
 
 ### CP-T01-01 — REPAIR (B10-08) · AM-B-01
 
@@ -246,6 +241,12 @@ Each entry: the N-line after the amendment (the form of `ners/SKILL.md`: what th
 - **Override:** No design change. The B10-09 card is corrected, in this block, to the home's order: CP-T02-01 and CP-T02-02 first and independent of each other's needs; IN-61 after both (and after IN-12's remainder, its own gate); CP-T02-03 (narrowed, AM-B-09), -05, -07 next; CP-T02-04 moved to B10-Z (AM-B-10); CP-T02-06 after IN-61; CP-T02-08 cut (AM-B-14). The entry gate states why B10-08 precedes B10-09 (both add rosters; the two lanes serialise on `rosters.yaml`, and no T02 item reads a T01 function after the cut). The card's shared-files line adds the files the T02 items name.
 - **Because:** YES — card row: `| CP-T02-01 | … | BUILD | ? | IN-61 |`. Home `02:388-390`: "CP-T02-02 beside CP-T02-01; both before IN-61's build", and `02:392-393`: CP-T02-01 and -02 "ride the batch that unblocks IN-61". The carried IN-61 entry (`-04`:151) gates IN-61 on H-230's two limits, which are CP-T02-01 and CP-T02-02.
 
+### CP-T02-01 — REPAIR (B10-09) · HR-1
+
+- **Override:** CP-T02-01 ships an explicit all-kinds `earns` sentinel, or names every subject's kind, in the same commit, so that a dead person subject earning `person.died` does not silence `field.won`, `army.arrived` and `field.lost` (`state/gate.py:1453`, `loop/resolve.py:536-538`, `loop/effects_combat.py:291, :333-337`): on `Won` the movers and the losers earn `None`, so `earned` becomes non-empty and `resolve.py:538` drops the other kinds. `march`'s `Won` and `Lost` emits cells also gain `person.died` (CP-T02-01 adds only `tenure.closed`, and only declared kinds emit); `Subject.earns` holds one kind, so the sentinel is what lets a dead loser earn both `field.lost` and `person.died`. Falsifiers: a total-arm `Won` march still emits `field.won` and `army.arrived`; a total-arm `Lost` march emits `field.lost` and one `person.died` per pid removed.
+- **Because:** H-141 (the trigger) and H-152 (a `total`-arm march loss kills with no `person.died`) are open rows; CP-T02-01's design is what sets H-141 off and is the natural owner of H-152.
+- **After the attack:** Found by the hole-row critic round (H-141 was REJECTed as ACCEPT; H-152 EDITed to add the emits cell and the sentinel).
+
 ### CP-T02-02 — RESEQUENCE (B10-09) · AM-B-07
 
 - **N-line after:** authored seat ids — cut it and the heir rule cannot name the realm's throne by a registry keyed on row ids; narrowed in the home to one of two routes, the simpler (an id, not a second map), revert named.
@@ -259,14 +260,6 @@ Each entry: the N-line after the amendment (the form of `ners/SKILL.md`: what th
 - **Taken (ladder step 1/3):** [ASSUMPTION; medium; Jordan to correct; revert: restore the `seat_holders` +1 `breached` row and Q4 reader 1's `breached` branch if the chronicle is deleted (H-214 lands)]
 - **Because:** PARTLY — Held: after CP-T02-01, a death-vacated seat reaches everyone alive as `tenure.closed` through `_ch_chronicle`, and `seats_named` stamps it; non-death closures already emit it (`verb_table.yaml:276` `confer`, `:1059` `release`, `:1099` `revoke`), so the only uncovered cause was death.
 
-### CP-T02-04 — CUT (B10-09) · AM-B-10
-
-- **N-line after:** none: cut.
-- **Override:** CP-T02-04 leaves B10-09 and is not re-homed in B10-Z. It is a held design with no builder: its remaining build is a vacancy motive for a superior's `revoke`, which H-207's ruling bars as a special case ('just say no for now'), and no position builds the trigger (a computed `revoke` executing: 0 of 19, refused at `verb_table.yaml:1102`). CP-T02-03 loses its second reader and stands alone (AM-B-09). Reopens when a computed `revoke` executes in a seed 0-2 run.
-- **Taken:** [ASSUMPTION; medium; Jordan to correct; revert: restore the row to B10-09 after CP-T02-03]
-- **Because:** As drafted, AM-B-10 held CP-T02-04 in B10-Z on `BLK:H-207`; a gate on a trigger nothing builds never opens.
-- **After the attack:** Rejected as drafted: the gate named a hole whose remaining build is a vacancy motive, not `revoke`, and B10-Z's gate expects a ruling nobody is asked for. Replaced by a cut with a stated reopen condition.
-
 ### CP-T02-05 — LIMIT (B10-09) · AM-B-11
 
 - **Override:** No change to the item's design. Its stamper, `oughts_named`, is one more named term in `questions_for`'s `added` splice beside REM-21's, since REM-21 as amended has no `@stamps` registry for `@stamps("Proposition")` to ride.
@@ -279,12 +272,6 @@ Each entry: the N-line after the amendment (the form of `ners/SKILL.md`: what th
 - **Override:** No design change. The carrier statement changes: the `all` rule is a partial carrier (union of referents) and the item adds what it lacks, the separate questions in `attention_key` order. Owner stays `decision/questions.py` (the View's builder) and the `View` in `state/carriers.py:435`; `auto` reads the first, so the shipped run is byte-identical. Falsifier unchanged (a callback that picks the first reproduces the hash; the second moves it), plus one arm: at `all` the callback's merged question is not what the list returns.
 - **Because:** YES — `decision/questions.py` `aggregate`: for rules other than `first`, `refs = tuple(sorted({r for q in qs for r in q.referents}))` and the classes likewise, returned as ONE `Question` under `qs[0].source`/`about`. So under `question_aggregation_rule = all` the callback already sees every referent, but merged, unordered, under the first question's source.
 
-### CP-T02-08 — CUT (B10-09) · AM-B-14
-
-- **N-line after:** none: cut.
-- **Override:** CP-T02-08 is removed. Its one live sentence (the Act interface shows the true odds, from `odds_of(w, act)`, through a closure over the client's own World) is already CP-T01-03's N-line and `01:105`. The AQ-X1 row and the "Blocked" line in the Jordan queue stop naming a T02 odds reader; CP-T01-03's believed-odds mode is withdrawn (AM-B-03).
-- **Because:** YES — `02:282-295`: "No odds function. T01 owns the one odds reader …; this item is the Act interface's contract for it … the TRUE odds … AX-7's reading"; `01:105`: "This is the **player's Act-interface display**: AX-7 binds the character, not the player, and no state is hidden from the player (`01_AXIOMS.md:299-304`)"; `01:110`: "The Act interface … calls mode (a)".
-
 ### CP-T03-00 — REPAIR (B10-09) · AM-C-01
 
 - **N-line after:** both parties of a fight take their band — cut it and starting a fight is no risk to the one who starts it (the initiator cannot die and `person.died` is never emitted for him), so the player loses the choice of whom to risk and the unwatched realm loses attackers who die.
@@ -292,12 +279,6 @@ Each entry: the N-line after the amendment (the form of `ners/SKILL.md`: what th
 - **Taken (ladder step 4):** [ASSUMPTION; medium; Jordan to correct; revert: the two-line `combat_degree` change and the per-party read, back to subject-only]
 - **Because:** YES — `resolve.py:839` mints `Resolution(degree_of(r, _target, w.fixtures), r)`; `degree_of` (`ladder.py:231-234`) calls `combat_degree(result, subject, …)`, which reads `states.get(subject)` only (`ladder.py:155-157`). `resolve.py:455` is `row.writes_at(_degree)` and `:537` is `row.emits_at(_degree)`.
 - **After the attack:** The repair breaks in the mixed case (every kind's Event carries all of an act's changes), which produced the ID-9 defect the row's own comment forbids; per-kind Events are now part of the repair, and its risk statement is corrected.
-
-### CP-T07-01 — CUT (B10-09) · AM-E-01
-
-- **N-line after:** none: cut.
-- **Override:** CP-T07-01's seeding half is deleted; `cast.thread_sensitivity_of` already seeds `Person.thread_sensitivity` (None = UNKNOWN, cannot attempt). The actor adapter (oracle reads `.spirit .focus .ts .history .resilience`) becomes the first function of CP-T07-02's host `seam/wrappers/threadwork.py`: `ts` = `Person.thread_sensitivity`; `spirit` = the oracle default 4 and `history` = 0 until JQ-2 / J-T1 rule a stored Spirit (the T01 `faculty` registration rides CP-T01-01's seam if it lands; the adapter reads it by name, no parallel read); `resilience` absent until WR-01's slot is ruled. JQ-2's gate moves from CP-T07-01 to this adapter. Control for the whole file: `thread_sensitivity_gate` swept to 999, not `ts_seed: none`.
-- **Because:** YES — `data/cast.py:283-304`: `thread_sensitivity_of` takes an int, a range (low end, via `_TS_RANGE`), `~N` (via `_TS_APPROX`), and returns `None` for null/absent ("`None` is NOT 0", docstring); `harness/populated.py:1040` calls it once per person at build; `engine/season/tests/test_k3_thread_sensitivity.py:149-155` pins both parse and refusal.
 
 ### IN-61 — RESEQUENCE (B10-09) · AM-B-08
 
@@ -424,15 +405,41 @@ Each entry: the N-line after the amendment (the form of `ners/SKILL.md`: what th
 - **Override:** No design change. State the world cost as an exit clause: `Claim.chain` is built only by a won spoken `tell` (code report: 0, 0, 4, 0 chained claims at four season ends over three seeds; 54 of 236 `tell` won), and this item removes same-season retries of failed ones, so it thins the information loop's only chain source. The exit reports `tell` attempts, `news.told` and chained-claim count per season before and after at seeds 0-2; a fall is the price, not a failure. The revert is the one kind. The ten named readers of `news.untold` (nine code files and the hole register) are re-read before the split lands.
 - **Because:** YES — `2026-10-24-v10-01-code-report.md:371`: "Claims with a chain, which only a spoken `tell` builds, numbered 0, 0, 4, 0 at the four season ends.
 
-### CP-T05-05 — CUT (B10-13) · AM-D-06
-
-- **N-line after:** none: cut.
-- **Override:** CP-T05-05 leaves B10-13. Nothing is built. Disposition kept at `-07` §2: reopens when IN-12 (B10-09) builds `interrogate` on H-226's route and `arrest` has executed once in a seeded run. One requirement is carried to IN-12's builder, because it costs nothing now and cannot be added later without a row edit: `interrogate`'s band kinds must be one kind per band (not one `confession.made` at two bands), since CP-T05-02's `hearing` counts a kind emitted at several bands as 0. CP-T05-02's `hearing` reads `interrogate` kinds only after that row exists (its home says so); no change to CP-T05-02's code.
-- **Because:** YES — `grep -c interrogate engine/season/verb_table.yaml` = 0 (no row). `hole_register.yaml` H-226 (:4760-4771): `interrogate` "HAS NO SITE … SO THE ROW IS NOT BUILT", `grade: measured`, `default: "no interrogate row: confession.made is no event kind"`; route (a) was built and reverted, the choice between (a) and (b) is the orchestrator's.
-
 ### CP-T06-01 — LIMIT (B10-14) · AM-D-07
 
 - **N-line after:** `cover.assumed` and `record.forged` in `covert_kinds` — cut them and a man acting under a cover cannot be traced to his hand by anyone who researches the cover's id. The Site half (`site.damaged`) has no producer until `sabotage` executes (0 of 156 at HEAD) and is stated as a limit.
 - **Override:** No change to the home's design. The home's one-cell step, `sabotage referent_class: Site` (F06:77), stays: it is the only planned fix for `sabotage`'s fill, which AM-C-10's walls N-line and AM-C-11's counterplay rely on. Stated limit: until `sabotage` executes once in a seeded run, `site.damaged` has no producer, `examine` on a Site stays empty, and CP-T06-01's Site half is credited on a hand-built world only.
 - **Because:** AM-D-07 proposed narrowing the item to the cover half, on the ground that nobody owns the `sabotage` step.
 - **After the attack:** Rejected as drafted: the home owns that step, so 'nobody owns it' was false, and dropping it removes the plan's only fix for `sabotage`. Replaced by a limit.
+
+### CP-T06-02 — LIMIT (B10-14) · AM-D-08
+
+- **N-line after:** the place side of `trail_of` and its index — cut them and a covert deed done at a hall while the owner was away can never be found by watching the hall; narrowed to the newest deed of each covert kind at each place.
+- **Override:** No design change. Add the limit to the item and its exit: `(kind, place)` keeps one Event, the latest, so a watcher is shown at most one deed per covert kind per place per find, and an earlier deed of the same kind at the same place becomes unreachable while the latest is held or after it is (no fall-back to the next-older). The control reports, per seed, covert Events logged per (kind, place) against distinct ones found, so the loss is a number, not a surprise. First-cut condition (F06:170) stays.
+- **Because:** YES — `state/world.py::_on_logged` (:1311-1313): `self._last_by_anchor[(e.kind, anchor_of(self, e))] = e.id` and its docstring "a later Event of the same key overwrites, as the reverse scan stopped at the latest".
+
+### CP-T06-03 — LIMIT (B10-14) · AM-D-09
+
+- **N-line after:** `epistemic.holds_trail`'s hand test — cut it and a Partial find closes the Event's hand to its finder forever; with it he may try again from the next season, at .07 a try, so staged reasoning exists across seasons, never within one.
+- **Override:** No code change. Rewrite the item's "Decision handed to the chooser" and F06 §4 steps 4-5: the Partial finder may research the same Record again NEXT SEASON (round 1 at the earliest), not in the same one; step 5 moves to next season's round 1, with the claim decayed 5 (50 → 45) and the ledger-eviction chance (cap 200) between. The hand-built tests (Partial then Success on one Record) are unaffected: they call the function, not the driver. The commit states that the realm exercises it at most once per person per Record per season.
+- **Because:** YES — `verb_table.yaml` `research` row: Partial emits `finding.made` (:1491-1492 area), `emits_on_refusal: ["finding.none"]` only; `loop/driver.py` (the `_refused_acts` / `_acted` / `_realised` block) records a key as realised when the act's Event kind is not in `emits_on_refusal`; `loop/deliberate.py::_drop_what_was_already_done` drops any Candidate whose `opportunity_key(verb, subject, payload)` is in the person's `_realised` set, and `_realised` is reset each season (`driver.py`: `self._inputs, self._realised = {}, {}`).
+
+### CP-T06-04 — LIMIT (B10-14) · AM-D-10
+
+- **Override:** CP-T06-04 needs REM-11 and REM-29. The home's sentence 'lands after REM-40' (F06:110) has no object, REM-40 being cut (AM-A-02), and is struck.
+- **Because:** YES — `loop/witness.py:~360-365` today filters `events = [e for e in events if e.kind not in UNDEPOSITED_KINDS]` (whole Event fans to nobody); the home's arm deposits the actor's reads and bystanders' `seen` (F06:107-108, "Those present learn he tried, in both cases"). The effect the lane names is the home's own stated "counter-information".
+- **After the attack:** Drafted as NO-ACTION; a dangling dependency on a cut position remained in the home's text.
+
+### CP-T06-05 — LIMIT (B10-14) · AM-D-11
+
+- **N-line after:** the retyped `interview` — cut it and the person questioned never has the matter put on his own agenda, so no one is ever asked and answers by his own act; narrowed to the prompt, to persons who know the asker's place and share it, and to answers that are themselves a contest.
+- **Override:** No design change. State three limits in the exit. (1) A questioned man who does not answer leaves no event: "stonewall" is the absence of a `tell`, so the asker cannot tell refusal from not-yet-deliberated, and nothing in `w.log` records it. (2) The fan meets the world-only `with` stem: asks at an absent person are refused at the fold with nothing deposited, so CP-T06-04's known-false veto cannot learn them, the same as `tell` today. (3) The answer is a contested `tell` against the asker's standing, so at pool 2 it fails .74 of the time; the falsifier's share is a share of formed answers, not of delivered ones.
+- **Because:** YES — F06:122 "answer or stonewall by their own agenda": no row emits anything for not answering, and an act not formed leaves no Event.
+
+### CP-T06-07 — LIMIT (B10-14) · AM-D-13
+
+- **N-line after:** `_cover_for`'s borrowed-name branch — cut it and a deed can never be laid on the wrong man without a liar: no wrongful charge, no clearing of a name. Executable by the player's Act and by hand-built Acts; NPC frames have no owner.
+- **Override:** No design change beyond AM-D-14. State two limits in the exit. (1) The framed man V is admitted by `witness_key` to the `cover.assumed` Event itself, so he may learn of the frame, and (with `who` shown) its author, the round the cover is taken, before any deed; the falsifier asserts V's ledger at that round. (2) The NPC half (a chooser forming the cover on a grudge) has no owner: T02 builds no item for F06:218 (c); in computed play the item runs on a player's Act, which can set the key through the Act interface [UNVERIFIED: whether the play surface exposes this payload key], and on hand-built Acts. Strike F06 §2's "Unwatched: grudges become frames" and §4 step 10's frame sentence from the item's claims.
+- **Taken (ladder step 5):** [ASSUMPTION; medium; Jordan to correct; revert: CUT, as for CP-T06-06, if the orchestrator reads "no computed producer" as the disqualifier.]
+- **Because:** PARTLY — (a) `state/attribution.py::_cover_for` docstring: "`cover.assumed` itself anchors on the alias", via `cover_at_logging` → `live_cover` read as the Event is logged; `epistemic.py::_ch_witness_key` (:543-560) admits `pid == anchor` unconditionally.
+- **After the attack:** A producer exists (the player's Act), which is also what separates this LIMIT from the two CUTs; the N-line and the limit say so.

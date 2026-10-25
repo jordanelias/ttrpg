@@ -161,6 +161,11 @@ CR = {
  "CR-03": ("B10-09", "Acquaintance: half of the persons know no one for four seasons; measure how the known set forms and what build-time source is lawful"),
  "CR-04": ("B10-02", "Horizon: run the soak and the census at 12 and 24 seasons; ledger saturation, decay balance, told-claim rate"),
  "CR-05": ("B10-02", "The 35 `skip`/`xfail` markers: read each reason, record whether its condition still holds"),
+ "CR-06": ("B10-03", "The gate sees an effect body that changes a tenure by itself (H-137)"),
+ "CR-07": ("B10-05", "Retire the stored `scale:` column (H-89; A1-46)"),
+ "CR-08": ("B10-18", "`(Person, weight)` has a matrix row and no writer (H-49); held on M6"),
+ "CR-09": ("B10-17", "`own_purview` and the oblige clause agree (H-101)"),
+ "CR-10": ("B10-09", "The own-act screen spares tier-1 echoes, arm D2 (IN-57; A1-05)"),
 }
 NM = {f"NM-W{n}": "B10-19" for n in range(10)}
 CL = {"CL-CHAR": "B10-19", "CL-ATTR": "B10-19", "CL-TROOP": "B10-19", "CL-EVENTS": "B10-19"}

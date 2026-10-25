@@ -25,13 +25,13 @@ These have no earlier home, so they are written out in full. Format as in §2.
 - SOURCE: `-01-code-report.md` §3.
 
 ### CR-02 — Correct the record (IN) · BATCH B10-01 · STATE BUILD (record edits) · R —
-- WHAT: the edits that make the plan's own inputs true. (a) `CURRENT.md`'s stamp (2026-10-01) predates eight heads (`tools/currency_consistency_check.py`). (b) `registers/handoffs/HANDOFF_IN.md:25` says H-188's doctrine note is "not built" while H-188's `cite:` says it was built at IN-71: read both, fix the wrong one. (c) `CLAUDE.md` §5 names `engine/autoload/dice_engine.py`, which does not exist; the owner is `engine/dice_engine/dice_engine.py` (`CURRENT.md`'s Dice row already says so): an agent-landed Layer 0 hunk (D-1) after checking the anchor for a (RULED) mark. (d) Proposal status lines that outlived their builds: `2026-10-07-settlements-computation-modules.md` ("Nothing here is built", IN-07 landed) and `2026-10-14-in31-revocation-cost-provenance.md` ("builds nothing", IN-31 landed): add one line each. (e) The v9 state-index rows that v10 does not carry (SC-03b, SC-08, IN-38: `-03` §1).
+- WHAT: the edits that make the plan's own inputs true. (a) `CURRENT.md`'s stamp (2026-10-01) predates eight heads (`tools/currency_consistency_check.py`). (b) `registers/handoffs/HANDOFF_IN.md:25` says H-188's doctrine note is "not built" while H-188's `cite:` says it was built at IN-71: read both, fix the wrong one. (c) `CLAUDE.md` §5 names `engine/autoload/dice_engine.py`, which does not exist; the owner is `engine/dice_engine/dice_engine.py` (`CURRENT.md`'s Dice row already says so): an agent-landed Layer 0 hunk (D-1) after checking the anchor for a (RULED) mark. (d) Proposal status lines that outlived their builds: `2026-10-07-settlements-computation-modules.md` ("Nothing here is built", IN-07 landed) and `2026-10-14-in31-revocation-cost-provenance.md` ("builds nothing", IN-31 landed): add one line each. (e) The v9 state-index rows that v10 does not carry (SC-03b, SC-08, IN-38: `-03` §1). (f) The register's own text where it no longer matches the tree: the rows marked `[REGISTER TEXT]` in `-06` and its part 2 (their `hole`, `cite` or `site` text; nothing else in a row changes, and `python -m engine.season.harness.register --check --rule R0,R1,R2,R3` is read before and after). (g) Live readers of the retired v9 files: `references/lane_assignments.yaml` `source:`, and each Open-table row in `registers/handoffs/HANDOFF_<LANE>.md` that names a v9 file as the home of a live v10 item (rows that cite v9 as history stay; dated record text in `requirements.yaml` stays, since re-pointing history would falsify it). (h) Three stale lines in the tree: R-05's `measure:` comment in `engine/season/requirements.yaml` ('44 today'; the table has 56); the `may_determine` docstring in `engine/season/state/gate.py` ('unruled which this basis ... (H-174)', settled by J-17); and the Status line of `proposals/2026-09-25-squad-engagement-synthesis.md` ('open: MB-01..07' becomes 'open: MB-07r (J-18 (A) built, shipped OFF), MB-08 (LEAVE)'; `MB-05r` landed and appears only there).
 - LANDED ALREADY: —
 - REMAINING UNBUILT: all of the above.
 - GATE: B10-01's entry (adoption).
-- EXIT and FALSIFIER: `python tools/currency_consistency_check.py` prints no drift; `grep -n 'engine/autoload' CLAUDE.md` is empty; a reader following `CURRENT.md` reaches v10.
+- EXIT and FALSIFIER: `python tools/currency_consistency_check.py` prints no drift; `grep -n 'engine/autoload' CLAUDE.md` is empty; a reader following `CURRENT.md` reaches v10; `grep -c valoria_master_workplan_v9 references/lane_assignments.yaml` is 0 (no tool reads that field, so only the grep observes it).
 - HASH MOVERS: none.
-- HOLES AND LEDGER IDS: H-188.
+- HOLES AND LEDGER IDS: H-188; the `[REGISTER TEXT]` rows (H-01, H-02, H-04, H-31, H-38, H-39, H-43, H-52, H-62, H-65, H-66, H-88, H-95, H-99, H-102, H-103, H-104, H-106, H-163, H-165); H-174.
 - ASKS ATTACHED: none.
 - RE-BASE: re-read each anchor by its quoted words before editing (line numbers drift).
 - SOURCE: `-01-code-report.md` §3; G1 extract on H-188; #501 index §6.
@@ -72,13 +72,73 @@ These have no earlier home, so they are written out in full. Format as in §2.
 - RE-BASE: none.
 - SOURCE: `-01-code-report.md` §3; `ctl/static_inventory.json` `marker_lines`.
 
+### CR-06 — The gate sees an effect body that changes a tenure by itself (IN) · BATCH B10-03 · STATE BUILD · R —
+- WHAT: an effect function's own body runs outside the gate's observation window (H-137), so an effect that sets `seat.until` eagerly and returns an unrelated `Change` is not refused. Take `_tenure_snapshot()` before `eff(...)` and refuse if `_tenure_changes` is non-empty after it, at `loop/resolve.py::_apply_write` (or `state/world.py::World.write`). It covers tenures only; entity fields stay convention-bound, and the entry says so. v10 adds many new effects, each following a no-eager-mutation convention that nothing enforces.
+- LANDED ALREADY: the gate's observation of an effect's returned `Change`.
+- REMAINING UNBUILT: the snapshot and the refusal.
+- GATE: B10-02 merged. Disjoint from REM-42, REM-45, REM-46, REM-47.
+- EXIT and FALSIFIER: the row's worked example (an effect body that sets `seat.until` eagerly and returns an unrelated `Change`) raises; `build_realm(0)` hash EQUAL (a read-only scan of the 39 effect functions found none that mutates eagerly; helper calls were not traced, so the hash control is the instrument).
+- HASH MOVERS: none expected; declared if the control reads otherwise.
+- HOLES AND LEDGER IDS: H-137.
+- ASKS ATTACHED: none.
+- RE-BASE: re-derive the effect call site by symbol.
+- SOURCE: the hole-row pass (`-06` part 2), critic B.
+
+### CR-07 — Retire the stored `scale:` column (IN) · BATCH B10-05 · STATE BUILD (deletion) · R —
+- WHAT: A1-46 takes the answer (scale is `Act.via.scope`, not a column on the verb) but no position performs the cut. Delete `scale:` and `scale_note` from the 13 rows of `engine/season/verb_table.yaml` that carry them, the `VerbRow.scale` field and its `RUNG_KINDS` load check (`data/verbs.py:~860`), the guard test `test_governance_scale_is_a_rung_kind_and_is_crossed_with_the_stratum` and the `.scale` asserts at `test_season_shape.py:~5281` and `:~5386-5387`, and the stale header at `verb_table.yaml:66-79` (it still says nine rows).
+- LANDED ALREADY: `Act.via.scope` and `Office.scope`.
+- REMAINING UNBUILT: the deletion.
+- GATE: B10-05's entry. The producer did not verify that `via.scope` is populated on every governance act: if it is not, the cut waits on that.
+- EXIT and FALSIFIER: the verb-table loader loads and `tests/test_season_shape.py` passes; `grep -n "scale:" engine/season/verb_table.yaml` finds none. Revert: A1-46's own (keep the column and author a reader).
+- HASH MOVERS: none (an inert column).
+- HOLES AND LEDGER IDS: H-89; A1-46; DEF-5.
+- ASKS ATTACHED: none (A1-46 is taken).
+- RE-BASE: count the rows by symbol; the count drifts.
+- SOURCE: the hole-row pass, lane 2 and critic A.
+
+### CR-08 — `(Person, weight)` has a matrix row and no writer (IN/SE) · BATCH B10-18 · STATE BUILD (held on M6) · R —
+- WHAT: SE-04 (a) landed cohort weight with no runtime writer: `write_matrix.yaml` has a `(Person, weight)` row and a `weight.changed` emission nothing emits (H-49). Either give a cohort a CENSUS writer (a cohort losing weight when its body floors) or delete the row and the emission. The choice follows M6 (how scarce the world is).
+- LANDED ALREADY: the matrix row; `Person.weight`.
+- REMAINING UNBUILT: the writer, or the deletion.
+- GATE: M6 answered; B10-04 merged (hunger).
+- EXIT and FALSIFIER: `grep -rn "weight.changed" engine/season` finds a writer, or the row is gone and the matrix loader's invariants pass.
+- HASH MOVERS: declared if a writer is built.
+- HOLES AND LEDGER IDS: H-49.
+- ASKS ATTACHED: M6.
+- RE-BASE: re-read `write_matrix.yaml` by the row's key.
+- SOURCE: the hole-row pass, lane 1.
+
+### CR-09 — `own_purview` and the oblige clause agree (IN/FA) · BATCH B10-17 · STATE BUILD (hash mover) · R R-04
+- WHAT: IN-40 closed the main hole, but `queries/world_q.py::own_purview` (limb 4 of `reach`) does not call `state/gate.py::purview_reaches`, so the set form misses the oblige clause where a seat-holder has sworn an `oblige` and the swearer's ground lies outside the sworn seat's own ground (H-101). Route `own_purview` through `purview_reaches` (or one shared clause walk). `faction_q.purview` has no game caller, so routing it changes nothing and it is left.
+- LANDED ALREADY: IN-40's predicate in `state/gate.py`.
+- REMAINING UNBUILT: the set-form agreement.
+- GATE: B10-17's entry. It serialises with CP-T09-07, which also edits `queries/world_q.py`.
+- EXIT and FALSIFIER: a hand-built world (as `test_in40_oblige_purview.py`) where a swearer's ground lies outside the sworn seat's own ground: `rung in purview(w, seat)` agrees with `purview_reaches`, and a claim about that ground enters `reach`.
+- HASH MOVERS: declared. `own_purview` feeds `reach`, `attention_key` tier 1 and `larders_in_purview`, so it moves question formation, and it imports the clause's recorded unbounded over-reach (measure both).
+- HOLES AND LEDGER IDS: H-101.
+- ASKS ATTACHED: none.
+- RE-BASE: re-read `own_purview` and `purview_reaches` by symbol.
+- SOURCE: the hole-row pass, lane 3 and critic A.
+
+### CR-10 — The own-act screen spares tier-1 echoes (arm D2) (IN) · BATCH B10-09 · STATE BUILD (hash mover) · R R-06, R-08
+- WHAT: IN-57 landed the own-act screen so that it demotes `commit` and other echoes out of the executed set (21 to 17). A1-05 answered the screen's scope (ANSWERED-DOC): arm D2, tier-1 echoes spared, tier-0 echoes still demoted. The tree still screens every tier (`queries/world_q.py:~2608-2620`) and no position builds D2. Edit `attention_key` accordingly.
+- LANDED ALREADY: the screen (every tier); `test_in57_attention_tiers.py`.
+- REMAINING UNBUILT: the D2 arm and the three-seed reading A1-05 sets as its reopen test.
+- GATE: B10-09's entry (it edits `queries/world_q.py` and `decision/questions.py`).
+- EXIT and FALSIFIER: `corpus_run` over three or more seeds: R3 on the NPC and ARC lanes, felled and wounded counts, and `commit` and `issue` executed (v9 measured that D2 loses `issue`; read it); `test_in57_attention_tiers.py` re-recorded as a declared mover. Reopen D2 if the reading reverses its R3 figures (A1-05).
+- HASH MOVERS: declared.
+- HOLES AND LEDGER IDS: none; ED-IN-0296 (3).
+- ASKS ATTACHED: A1-05 (answered; v9 called it 'a trade between two defensible games' before A1-05 answered it).
+- RE-BASE: re-read `attention_key` by symbol.
+- SOURCE: v9 `_part5`:119, :348; the hole-row pass, residue lane 3.
+
 ### NM-W0 … NM-W9 — Narration packages (IN/WR) · BATCH B10-19 · STATE as listed · R M2 (the any-seed story bar)
 Home: `proposals/2026-10-13-narration-mechanisms.md` §4 (W0-W9). The proposal is PROPOSED, grade `paper`; nothing in W1-W9 had code, a test or a run when it was written. It names four decisions for Jordan (§7 there); they are in `-05`. Premises are one seed, two seasons.
 
 | handle | package | state at HEAD | note |
 |---|---|---|---|
 | NM-W0 | corrected instruments (re-key refusal counts on `REFUSAL_KINDS`; verify the 21 "nowhere" subjects are dead persons; repeat every measurement on a second seed and four seasons) | SUBSUMED | REM-10, REM-11, REM-16 and `-01-code-report.md` do this; close on B10-02 |
-| NM-W1 | render v0: an omniscient instrument chronicle (ranking tiers, appraisal, name fallback, per-person pages, anti-repetition, snapshots) | PARTLY LANDED | IN-37 (`bd5d5b45`) landed a narrower `harness/chronicle.py` (numbered lines of actor, verb, emitted kinds); W1's fuller specification was not diffed against it |
+| NM-W1 | render v0: an omniscient instrument chronicle (ranking tiers, appraisal, name fallback, per-person pages, anti-repetition, snapshots) | PARTLY LANDED | IN-37 (`bd5d5b45`) landed a narrower `harness/chronicle.py` (numbered lines of actor, verb, emitted kinds); W1's fuller specification was not diffed against it; [UNVERIFIED] whether v9's D1-b #1 is IN-37's render |
 | NM-W2 | candidate-typing disposition: refusals as learning versus declined at formation | OVERTAKEN IN PART | REM-21 to REM-25 decline at formation; REM-29 is the learning channel for capacity; DEC-12 keeps `finding.none` off the ledger. The decision is `-05`'s |
 | NM-W3 | = IN-50 | LANDED | `5fa6ac16` (B-I) |
 | NM-W4 | a content-bearing record kind | UNBUILT | needs W2 and a working handover (`give` was attempted 14 times and executed 3 in the three seeds) |
@@ -235,7 +295,7 @@ Home: `proposals/2026-10-13-narration-mechanisms.md` §4 (W0-W9). The proposal i
 - LANDED ALREADY: none of the repair (B-B's close `4a2e4494` only narrowed and measured).
 - REMAINING UNBUILT: [v9 WHAT, full text: MEASURED, NOT LANDED (narrowed at B-B's close, `4a2e4494`). Counting only `t.granted_acts` takes the 27 NPC-rung lane cases (seed 0, 3 seasons) `attempt_cases` 20 -> 12, below `test_n3`'s floor of 15 (`assert 12 >= 15`); R-03's `test_u2_the_one_round_arm_reproduces_the_pre_tick_loop` goes red too; excluding only holds over a Record gives 13, still red (H-92 records-mint-budget). Repair shape: `loop/driver.py`'s round count becomes `max(budget(p) for living p)` with `scene_budget` the floor, a spent person skipping a round; `budget.py` first narrows to holds with non-empty `granted_acts`.] the `budget.py` narrowing; `driver.py` max-budget rounds; the `test_n3` floor re-take (declared re-pin "unless `11` shows a property; if `test_u2_` reds, stop and register"). Fixed slate is out (§26.3: budget varies by office); denser rounds are out (a second ladder for one quantity).
 - GATE: the repair shape — "RULED 2026-10-12 (Jordan: 'RESOLVE ALL GATES FOR ME', then 'yes just build it all using methodology execute'): MORE ROUNDS" [ASSUMPTION; medium; Jordan to correct]; revert: `driver.py` back to the fixture read. DEPS: the delegated ruling (`v9_p5` §J.2) -> this position. v9's batch for it reads three ways (v9_p8 §N: the entry says `B-J (own lane)`, the state index says `ask-then` / `B-Z`, B-J's row lists no IN-14 member; "Which reading governs is settled at B-J's own boundary, not here"). B-J has since closed (#476/#477) without it [INFERRED from the B-J subject naming IN-48 and IN-31, not IN-14]. v9's own rule (head §3): "the entry wins and the row is re-read" — so the entry's STATE is used here.
-- EXIT and FALSIFIER: EXIT `python -m pytest engine/season/tests/test_season_shape.py -q -k test_n3` green with floors unchanged; `build_realm(0)` hashes declared if they move. FALSIFIER "one live `hold` moves releasable scenes by one, control is today (#457 `:166`); a landholding with no granted act buys no scene."
+- EXIT and FALSIFIER: EXIT `python -m pytest engine/season/tests/test_season_shape.py -q -k test_n3` green (v9's EXIT said 'with floors unchanged' and its REMAINING plans 'the test_n3 floor re-take (declared re-pin)'; v10 follows REMAINING, because counting only `granted_acts` takes `attempt_cases` from 20 to 12); `build_realm(0)` hashes declared if they move. FALSIFIER "one live `hold` moves releasable scenes by one, control is today (#457 `:166`); a landholding with no granted act buys no scene."
 - HASH MOVERS: declared — "a hash mover if the budget moves: declared at the batch that builds it" (`build_realm(0)` hashes). Measured share cited in v9_p8 §N: `claim.decayed` is 40.5 % of the log's Events in seed 0 over three seasons.
 - HOLES AND LEDGER IDS: H-92, H-10 (`hole_register.yaml:166` H-10, `:1142-1147` H-92); R-03; #457.
 - ASKS ATTACHED: repair shape delegated-ruled 2026-10-12 [ASSUMPTION; medium; Jordan to correct] (v9_p5 §J.2 ask-then table: "more rounds"). Not reopened here.
