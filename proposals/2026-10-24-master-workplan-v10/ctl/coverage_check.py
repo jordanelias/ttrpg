@@ -12,6 +12,7 @@ inv = json.load(open(os.path.join(SC, "ctl", "static_inventory.json")))
 def rd(n): return open(os.path.join(PLAN, n)).read()
 led = rd("2026-10-24-v10-06-row-ledger.md"); xw = rd("2026-10-24-v10-07-crosswalk.md")
 if os.path.exists(os.path.join(PLAN, "2026-10-24-v10-06-row-ledger_part2.md")): led += "\n" + rd("2026-10-24-v10-06-row-ledger_part2.md")
+if os.path.exists(os.path.join(PLAN, "2026-10-24-v10-06-row-ledger_part3.md")): led += "\n" + rd("2026-10-24-v10-06-row-ledger_part3.md")
 def first_cells(text): return {m.group(1) for m in re.finditer(r"(?m)^\| ([^| ]+) \|", text)}
 fc = first_cells(led); fx = first_cells(xw)
 holes = [h["id"] if isinstance(h, dict) else h for h in inv["hole_scope"]]
@@ -28,6 +29,8 @@ import yaml
 reg_ids = [r["id"] for r in yaml.safe_load(open("engine/season/hole_register.yaml"))["rows"]]  # run from the repository root
 rep("EVERY hole-register row in -06 or -06 part 2", [h for h in reg_ids if h not in fc], len(reg_ids))
 rep("ED ids in -06", [e for e in eds if e not in fc], len(eds))
+named = inv.get("ed_open_not_named", [])
+rep("the other open editorial ids in -06 part 3", [e for e in named if e not in fc], len(named))
 rep("state-index rows in -06", [s for s in sidx if s not in fc], len(sidx))
 rep("REM in -07", [k for k in B.REM if k not in fx], len(B.REM))
 rep("CP in -07", [k for k in B.CP if k not in fx], len(B.CP))

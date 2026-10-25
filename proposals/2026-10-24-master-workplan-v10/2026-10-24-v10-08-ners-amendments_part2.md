@@ -30,6 +30,13 @@
 - **Taken (ladder step 3/4):** [ASSUMPTION; medium; Jordan to correct; revert: Structural for every Site, which prices every Site working at Ob 8 and cost -2]
 - **Because:** YES — `loop/matter.py:142` "EVERY SITE, WHATEVER ITS KIND -- the lattice is the territories' fabric, not a kind", so "lattice Site -> Structural" is every Site; the home's own worked example maps a mill (a Site) to Field (T07:396-397), contradicting it.
 
+### CP-T07-02 — REPAIR (B10-15) · HR-6
+
+- **Override:** CR-13 lands first in B10-15, so the oracle CP-T07-02's host rolls no longer charges a Leap that rolls Partial or Failure. The home's step (2) ("on Failure the act ends, `working.failed`, and the Leap's charge stands (the oracle's own −1, C-TW-3, is carried, not fixed here)", lines 120-121), its falsifier ("a Leap Failure writes the Leap's charge and no target change", lines 138-139) and its closing line 463 are replaced: a Leap Failure ends the act with `working.failed`, writes no Coherence change and no target change; a Leap Partial proceeds and writes no Coherence change of its own. The other half of the falsifier (the seam Event's deltas equal the oracle's `OperationResult.coherence_delta` plus the Leap's for the same dice) stands, and the Leap's is 0. Mutation: skip step 2 and the Leap-Failure test still reds. Control: `ts_seed: none`.
+- **Taken (ladder step 1):** [ASSUMPTION; medium; Jordan to correct; revert: CR-13 (a) is not built and the home's text stands]
+- **Because:** YES — `systems/threadwork/sim/operations.py::attempt_leap` passes `coherence_delta=0` and its docstring says a failed Leap costs no Coherence (§3.2); the −1 comes only from the blanket penalty in `_resolve_operation`, which `operations.py:319-320` records as a known defect (C-TW-3).
+- **After the attack:** Found by the editorial-id critic round (CR-13 vs the home text).
+
 ### CP-T07-03 — NARROW (B10-15) · AM-E-03
 
 - **N-line after:** `weave` — cut it and a practitioner cannot hold a place against wear by carrying the load herself, so wear suspension remains a repeated unpaid `restore` act each season. `lock` — cut it and a practitioner cannot deny a rival a place (yield 0, no one else can repair it), the only act that destroys a place's use without ending it.

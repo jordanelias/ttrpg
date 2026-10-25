@@ -5,7 +5,7 @@
 
 ## 1. How to read
 
-Jordan asked for the NERS lanes' findings to be folded into the plan using the agonist→antagonist method (`CLAUDE.md` §10). Six independent NERS lanes (`.claude/skills/ners/SKILL.md`; read-only) read the designs the plan sequences. Six producers then verified each lane claim against the tree and drafted the change as 110 blocks; five independent read-only critics attacked the blocks against the tree; the orchestrator reconciled their verdicts. That was the one adversarial round (`CLAUDE.md` §0): the fixes it produced were not audited again. Of the 110 blocks, 69 survived unchanged, 38 were amended on the critics' evidence, and 3 were rejected as drafted and rewritten (CP-T02-04, CP-T06-01, CP-T10-09). 4 further entries (HR-1 to HR-4) were added later by the hole-row pass from its own critic round; they are not among the 110 blocks.
+Jordan asked for the NERS lanes' findings to be folded into the plan using the agonist→antagonist method (`CLAUDE.md` §10). Six independent NERS lanes (`.claude/skills/ners/SKILL.md`; read-only) read the designs the plan sequences. Six producers then verified each lane claim against the tree and drafted the change as 110 blocks; five independent read-only critics attacked the blocks against the tree; the orchestrator reconciled their verdicts. That was the one adversarial round (`CLAUDE.md` §0): the fixes it produced were not audited again. Of the 110 blocks, 69 survived unchanged, 38 were amended on the critics' evidence, and 3 were rejected as drafted and rewritten (CP-T02-04, CP-T06-01, CP-T10-09). 6 further entries (HR-1 to HR-6) were added later: HR-1 to HR-4 by the hole-row pass and HR-5 and HR-6 by the editorial-id pass, each from its own critic round; they are not among the 110 blocks.
 
 **Homes are unedited.** An entry here overrides its home on the point it names, and `-03`'s rows, gates and exits already carry the change. Actions: **CUT** (the position leaves the plan; its handle stays in `-07` §2), **NARROW** (smaller scope, a narrower N-line), **REPAIR** (the home's design changes at a named point), **RESEQUENCE** (a gate or `needs` changes), **LIMIT** (a stated limit or exit clause, no design change). A choice taken to make a repair is tagged `[ASSUMPTION; medium; Jordan to correct; revert: …]` and was answered by the ladder (`CLAUDE.md` §0), not escalated; the **Taken** lines are collected there and nowhere else, and `-05` §2 points here.
 
@@ -15,6 +15,7 @@ Jordan asked for the NERS lanes' findings to be folded into the plan using the a
 
 | handle | batch | action | block | after the attack |
 |---|---|---|---|---|
+| REM-16 | B10-02 | LIMIT | HR-5 | editorial-id pass |
 | REM-50 | B10-04 | REPAIR | AM-A-04 | amended |
 | REM-52 | B10-04 | LIMIT | AM-A-05 | amended |
 | REM-52 | B10-04 | LIMIT | HR-2 | hole-row pass |
@@ -68,6 +69,7 @@ Jordan asked for the NERS lanes' findings to be folded into the plan using the a
 | CP-T06-09 | B10-14 | LIMIT | AM-D-16 | held |
 | CP-T06-09 | B10-14 | RESEQUENCE | AM-D-17 | held |
 | CP-T07-02 | B10-15 | REPAIR | AM-E-02 | held |
+| CP-T07-02 | B10-15 | REPAIR | HR-6 | editorial-id pass |
 | CP-T07-03 | B10-15 | NARROW | AM-E-03 | held |
 | CP-T07-04 | B10-15 | NARROW | AM-E-04 | held |
 | CP-T07-05 | B10-15 | NARROW | AM-E-05 | held |
@@ -114,6 +116,13 @@ Jordan asked for the NERS lanes' findings to be folded into the plan using the a
 ## 3. The entries
 
 Each entry: the N-line after the amendment (the form of `ners/SKILL.md`: what the game can no longer do without it), the override in the home's design, any answer taken and its revert, why the lane's claim held, and what the critic changed.
+
+### REM-16 — LIMIT (B10-02) · HR-5
+
+- **Override:** REM-16's re-take list gains five figures that this plan's row ledger quotes from the register without reproducing: H-95 (`corpus_run`: 143 of 143 worlds run, 57 `RESCALES` overlays), H-102 (R3 passes 46 of 46 NPC and 97 of 97 ARC), and the readings of H-33, H-40 and H-79 (`test_w9_the_sweeps_the_register_declares_are_executed`). A figure that does not reproduce on the batch's base commit reopens its row (CLOSED becomes OPEN, ACCEPT becomes MEASURE) in the batch's closing note. Hash EQUAL (readers only).
+- **Taken (ladder step 5):** [ASSUMPTION; medium; Jordan to correct; revert: drop the five from the re-take list and carry the register's figures as relayed]
+- **Because:** YES — the hole-row critics could not execute `corpus_run` or the sweeps (`-06` part 2 §1), and REM-16 is the batch's only position that re-runs relayed figures on three seeds.
+- **After the attack:** Found by the hole-row critic round (H-95 NOT-CHECKED; the sweep rows unopened).
 
 ### REM-50 — REPAIR (B10-04) · AM-A-04
 

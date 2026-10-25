@@ -166,6 +166,9 @@ CR = {
  "CR-08": ("B10-18", "`(Person, weight)` has a matrix row and no writer (H-49); held on M6"),
  "CR-09": ("B10-17", "`own_purview` and the oblige clause agree (H-101)"),
  "CR-10": ("B10-09", "The own-act screen spares tier-1 echoes, arm D2 (IN-57; A1-05)"),
+ "CR-11": ("B10-09", "A computed `establish`: where the office it founds is described (design-first; H-94 residue, H-132, H-144, H-156)"),
+ "CR-12": ("B10-12", "Melee attrition back to the locked linear law (ED-MB-0045): measure, then design-first"),
+ "CR-13": ("B10-15", "The Leap is not charged for failing (C-TW-3); the depth gate gets its reader (ED-WR-0005)"),
 }
 NM = {f"NM-W{n}": "B10-19" for n in range(10)}
 CL = {"CL-CHAR": "B10-19", "CL-ATTR": "B10-19", "CL-TROOP": "B10-19", "CL-EVENTS": "B10-19"}
@@ -180,13 +183,13 @@ ORDER = {
  "B10-06": "REM-26 → REM-27 → REM-28 → REM-29 → REM-2A → REM-2B (restores IN-09's `construe` and `evade / defy` and IN-33's `exchange` from their checkpoints; needs `git fetch --unshallow`).",
  "B10-07": "REM-40 → REM-41 → REM-44.",
  "B10-08": "CP-T01-03 → CP-T01-04 → CP-T01-06 → CP-T01-01 → CP-T01-05 → CP-T01-02 (the practice arm, shipped off, last).",
- "B10-09": "CP-T02-01 and CP-T02-02 first; CP-T03-00 as its own declared-mover commit; then CP-T02-03 → -04 → -05, CP-T02-06 (behind IN-61), -07, -08; IN-12's remainder; IN-61; IN-58; CR-03; CP-T07-01 (waits on M2).",
+ "B10-09": "CP-T02-01 and CP-T02-02 first; CP-T03-00 as its own declared-mover commit; then CP-T02-03 → -04 → -05, CP-T02-06 (behind IN-61), -07, -08; IN-12's remainder; IN-61; IN-58; CR-03; CR-10; CR-11 last (design-first); CP-T07-01 (waits on M2).",
  "B10-10": "REM-30 (beside) and REM-31 (after CP-T03-00's re-pin); REM-32.",
  "B10-11": "CP-T03-01, -02, -05, -07 (the body ceiling; T10's CP-T10-04 reads it), -08, -09 (after PC-10b's route is chosen), PC-10b; CP-T03-03 and -04 wait on M2; CP-T03-06 and -10 are parked; -11 is cut.",
- "B10-12": "CP-T04-01 → -02 → -03; -05 → -06 → -07; -08; CP-T04-04 waits on M4 (Ask C) and REM-31; CP-T04-10 waits on M3; CP-T04-09 is cut; MB-07r waits on its recalibration.",
+ "B10-12": "CP-T04-01 → -02 → -03; -05 → -06 → -07; -08; CP-T04-04 waits on M4 (Ask C) and REM-31; CP-T04-10 waits on M3; CP-T04-09 is cut; MB-07r waits on its recalibration. CR-12 last (measure then design-first).",
  "B10-13": "CP-T05-01 → -02 → -03; -05 after IN-12 builds `interrogate`; SC-02 and SC-04 residues; SC-05..07 are held (B10-Z).",
  "B10-14": "CP-T06-09 → CP-T06-07; CP-T06-01 → -02; -03, -04, -05, -06; CP-T06-08 is parked on JA-1 (CARRIED).",
- "B10-15": "CP-T07-02 → -03 → -04 → -05 → -06 → -07; -09; -10; -11 last; -08 after IN-32; WR-01; IN-32. CP-T07-07 serialises with CP-T08-10 on `decision/budget.py:57-58`.",
+ "B10-15": "CR-13 first; CP-T07-02 → -03 → -04 → -05 → -06 → -07; -09; -10; -11 last; -08 after IN-32; WR-01; IN-32. CP-T07-07 serialises with CP-T08-10 on `decision/budget.py:57-58`.",
  "B10-16": "CP-T08-01 … -08, -10 in the order the home gives; IN-14 and IN-52's flip; SE-04, SE-06 and IN-45 `work` wait on M1/M5; CP-T08-09 is withdrawn.",
  "B10-17": "CP-T09-01 → -02 → -03 → -04 → -05 → -06 → -07 → -08 → -09; IN-30; IN-36 (H-233); IN-48 design-first; FA-01's clause waits on M11.",
  "B10-18": "CP-T10-01 → -02; -03 → -05; -04 with CP-T03-07's field; -06 → -07 → -08 → -09.",
