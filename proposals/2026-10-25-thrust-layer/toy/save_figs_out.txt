@@ -1,0 +1,10 @@
+== chain depth, constrained world (cross-person causal chain depth), N=300
+BU      depth 25.8
+HYg3    depth 85.6
+HYg3d   depth 90.1
+HYg3c   depth 86.7
+== unconstrained world depth (the 62.5 vs 23.0 figure)
+BU      depth 23.0
+HYg3    depth 62.5
+== killing at season 10, HYg3d world, constrained, conseq on
+acts against killer 9.54  distinct actors 4.86  tribunals naming killer 1.31  (n=300)

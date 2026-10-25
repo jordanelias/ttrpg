@@ -1,0 +1,43 @@
+== base (N=300)
+regime  arc_all arc_null  arc-null[CI]            closed dangling five_node why_linked thread_cont  inj  peak_mag
+BU       0.087    0.102  -0.016 [-0.049,+0.019]  0.307    0.750     0.110      0.428       0.768  0.00     2.68
+TDR      0.350    0.254  +0.096 [+0.036,+0.157]  0.847    0.170     0.760      0.229       0.761  1.00     6.95
+TDSc     0.330    0.188  +0.142 [+0.090,+0.197]  0.793    0.220     0.673      0.268       0.770  0.00     6.52
+TDScf    0.257    0.148  +0.109 [+0.056,+0.159]  0.583    0.440     0.170      0.281       0.772  0.00     3.53
+HYg3c    0.413    0.214  +0.199 [+0.140,+0.261]  0.870    0.123     0.787      0.446       0.753  0.00     7.04
+HYg3d    0.380    0.288  +0.092 [+0.033,+0.156]  0.853    0.393     0.430      0.430       0.575  0.00     5.91
+
+== contrasts (diff, 95% CI)
+  TDSc-BU arc_all    +0.243 [+0.183,+0.307] 
+  TDSc-TDR arc_all    -0.020 [-0.093,+0.053] (CI spans 0)
+  TDSc-TDScf arc_all    +0.073 [-0.003,+0.143] (CI spans 0)
+  TDSc-HYg3d arc_all    -0.050 [-0.127,+0.023] (CI spans 0)
+  HYg3c-TDSc arc_all    +0.083 [+0.010,+0.157] 
+  HYg3c-TDSc why_linked +0.179 [+0.157,+0.198] 
+  HYg3c-HYg3d arc_all    +0.033 [-0.047,+0.117] (CI spans 0)
+  TDSc-TDR five_node  -0.087 [-0.157,-0.013] 
+
+== 80% refusal
+  BU     arc_all 0.190  arc-null -0.006 [-0.054,+0.039]
+  TDR    arc_all 0.710  arc-null +0.380 [+0.321,+0.437]
+  TDSc   arc_all 0.813  arc-null +0.561 [+0.511,+0.611]
+  TDScf  arc_all 0.407  arc-null +0.163 [+0.102,+0.227]
+  HYg3c  arc_all 0.853  arc-null +0.627 [+0.578,+0.673]
+  HYg3d  arc_all 0.210  arc-null -0.023 [-0.072,+0.031]
+
+== quiet world (A=8) main-thread peak magnitude: {'BU': 2.36, 'TDR': 7.74, 'TDSc': 7.65, 'TDScf': 4.27}
+== P(protagonist wins the climax contest) [n runs with a climax]: {'TDSc': (0.64, 300), 'HYg3c': (0.6466666666666666, 300)}
+== violations after killing the protagonist at season 10: {'BU': 0.0, 'TDR': 0.0, 'TDSc': 0.0, 'HYg3c': 0.0}
+
+== PREDICTIONS (registered before the first run)
+[CONFIRMED] C1: Winner stays open: P(protagonist wins climax) in [0.25, 0.75] for TDSc
+[CONFIRMED] C2: Ordering signal restored: arc_all - arc_null >= +0.05 for TDSc
+[CONFIRMED] C3: Close to the forcing director: arc_all(TDSc) >= arc_all(TDR) - 0.10
+[CONFIRMED] C4: Complete beats: five_node(TDSc) >= 0.50
+[CONFIRMED] C5: No standing motive: why_linked(TDSc) < 0.35
+[CONFIRMED] C6: Form survives a refusing substrate: arc_all(TDSc) >= 0.50 at 80% refusal
+[CONFIRMED] C7: Authored stakes fake intensity in a quiet world: peak_mag(TDSc) >= 2x BU
+[CONFIRMED] C8: Escalating stakes matter: arc_all(TDSc) >= arc_all(TDScf) + 0.05
+[CONFIRMED] C9: No violations after killing the protagonist (TDSc, HYg3c)
+[FALSIFIED] C10: Ladder + contest set pieces keep the 'why' (>= 0.55) and match TDSc on ordering signal (within 0.03)
+9/10 confirmed

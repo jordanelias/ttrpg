@@ -1,0 +1,12 @@
+chronicle seed=1 seasons=4 arm=off cap=None acts=3259 depth=11 PYTHONHASHSEED=None
+1. season 0 | Joren Bergvall transfer | emitted transfer.refused | opens the chain
+2. season 0 | Annika Feldhaus march | emitted march.declared, march.refused | answers 1. Joren Bergvall transfer
+3. season 1 | Joren Bergvall build | emitted build.refused | answers 2. Annika Feldhaus march
+4. season 2 | Annika Feldhaus transfer | emitted transfer.refused | answers 3. Joren Bergvall build
+5. season 2 | Dalla Virke forge | emitted record.forged | answers 4. Annika Feldhaus transfer
+6. season 2 | Annika Feldhaus march | emitted march.declared, march.refused | answers 5. Dalla Virke forge
+7. season 3 | Joren Bergvall argue | emitted argument.refused | answers 6. Annika Feldhaus march
+8. season 3 | Annika Feldhaus move | emitted travel.blocked | answers 7. Joren Bergvall argue
+9. season 3 | Joren Bergvall build | emitted build.refused | answers 8. Annika Feldhaus move
+10. season 3 | Annika Feldhaus survey | emitted survey.refused | answers 9. Joren Bergvall build
+11. season 3 | Joren Bergvall examine | emitted finding.none | answers 10. Annika Feldhaus survey

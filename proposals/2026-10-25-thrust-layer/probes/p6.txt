@@ -1,0 +1,53 @@
+cases 46 ends_when types {'str': 46}
+never-marked 40 presumed-marked 13 either 40
+branch count >=2: 41  ==1: 5
+ENDINGS_CLASSIFIED top keys: <class 'list'>
+NPC-088   str  br=4 NEVER PRESUMED   | never automatically -- only by discovery, arrest, or death, or by a player-driven resolution; the source names no natural conclusion.
+NPC-087   str  br=3 NEVER            | never automatically; only via a discovery-driven resolution (protect/report/leverage), or unremarked continuation.
+NPC-086   str  br=4 NEVER PRESUMED   | never explicitly stated; presumably when the conspiracy narrative is durably dispelled or the data is destroyed or discredited.
+NPC-075   str  br=2                  | his death (possibly a deliberate death-in-service act), the outpost's fall, or -- per the sourcing gap above -- an undefined further state.
+NPC-005   str  br=3 NEVER PRESUMED   | never explicitly stated; presumably her exposure and its institutional fallout, her death, or a resolution of the archive-connection arc -- 
+NPC-010   str  br=4 NEVER PRESUMED   | never explicitly named; presumably her exposure or recall event, or indefinite continuation.
+NPC-012   str  br=3                  | his recall, by his own nation or via a player-brokered genuine stability treaty, or indefinite continuation of the status quo.
+NPC-002   str  br=3 NEVER PRESUMED   | never explicitly named as a terminus; presumably resolved only when she defects, successfully compartmentalizes, or her patron falls and she
+NPC-004   str  br=2 NEVER            | never fully -- a single investigation ends when Reconstructed (successfully or not), but Sæmund's personal arc (undiscovered / defected / su
+NPC-033   str  br=2 NEVER            | never specified -- she is a persistent office with no authored personal arc or end condition in the sources
+NPC-083   str  br=3                  | not specified to conclude on its own -- the governorship ends only on removal, death, or promotion; the churn is designed to continue indefi
+NPC-008   str  br=2 NEVER            | never on its own -- the mechanism persists at the institutional level past his personal removal; only the Ministry's own dissolution would e
+NPC-038   str  br=3 NEVER            | his tenure ends on exposure-removal, pre-emptive removal, or a Grand Inquisitor succession event; otherwise never
+NPC-013   str  br=3 NEVER            | never automatically -- only a fired Parish Revolt or a PC-driven resolution closes a given territory's version of the problem; his own tenur
+NPC-007   str  br=3 NEVER            | not specified to conclude -- resolves only through the (also open-ended) supply-chain revelation or recall arcs tied to Virke, or a direct e
+NPC-071   str  br=3                  | UNCLEAR -- no arc, trajectory, or end condition is specified anywhere in the source; she is explicitly below the corpus's own stated minimum
+NPC-034   str  br=3                  | UNCLEAR -- no removal, exposure, or resolution condition is specified for the dual-loyalty tension itself; only the territorial-jurisdiction
+NPC-020   str  br=3 NEVER            | never automatically; his personal arc concludes only via one of several mutually exclusive branch conditions — reform, defensive consolidati
+NPC-021   str  br=4 NEVER            | never automatically; his personal arc resolves via unchallenged doctrinal dominance, a private crisis of faith, or public confrontation and 
+NPC-050   str  br=4 NEVER            | never automatically; her personal arc resolves via unchallenged rule of her own duchy, a forced turn to extralegal action, or being cast out
+NPC-052   str  br=4 NEVER            | never automatically; his personal arc resolves via unchecked scholarship, a personally transformative awakening, or being consumed by what h
+NPC-070   str  br=3 NEVER            | never automatically; concludes with either sustained loyalty through the campaign, an outright break in which the institution stops executin
+NPC-003   str  br=3 NEVER            | never automatically while any presence remains; the movement formally ends only via reaching the highest institutional stage, total suppress
+NPC-032   str  br=2 NEVER            | never automatically while she remains queen consort; if she is elevated to sole ruler her case continues indefinitely as a new ongoing reign
+NPC-031   str  br=4                  | the contested-alignment phase ends at the window's close (or earlier, if a party wins outright) with a locked identity; his dependent status
+NPC-030   str  br=3 NEVER PRESUMED   | never automatically as a standing leverage asset; a triggered retrieval arc ends in extraction success, extraction failure, or an indefinite
+NPC-001   str  br=4 NEVER            | never automatically — her holdout is indefinite by default; her personal arc concludes locally via a confrontation's resolution, a wager's p
+NPC-006   str  br=4 NEVER PRESUMED   | never automatically -- presumably by Ehrenwall's fall and the resulting succession, or by his death or removal from the Lions' Table; the so
+NPC-009   str  br=3 NEVER PRESUMED   | never stated explicitly; presumably his removal, death, or a resolution of the overperformer/indispensability tension -- the source names no
+NPC-011   str  br=3 NEVER PRESUMED   | never stated explicitly; presumably a permanent change in Elske's status, his removal from the Doux title, or a rupture with the Altonian im
+NPC-035   str  br=6 NEVER PRESUMED   | never stated explicitly; presumably his death, removal, or replacement -- which would itself trigger the named escalation -- or a resolution
+NPC-036   str  br=3 NEVER            | never stated; the source specifies no arc, goal, or consequence, so no terminus is named at all.
+NPC-037   str  br=3 NEVER            | never stated; no goal or arc is recorded, so no terminus is named.
+NPC-039   str  br=5 NEVER PRESUMED   | never stated explicitly; presumably resolved by the candidacy's outcome, discovery or concealment of his condition, or his death or removal 
+NPC-040   str  br=2 NEVER PRESUMED   | never stated; presumably the Fortitude candidacy's resolution, but the source names no defined terminus.
+NPC-041   str  br=3 NEVER            | never stated; no goal or arc is recorded, so no terminus is named.
+NPC-072   str  br=3 NEVER            | never stated; no goal, arc, or consequence is recorded, so no terminus is named at all -- the thinnest ends_when in the batch.
+NPC-073   str  br=2 NEVER            | never specified -- no personal arc or end condition is authored for him
+NPC-074   str  br=2 NEVER            | never specified -- no personal arc or end condition is authored for her
+NPC-080   str  br=3 NEVER            | never specified -- no end condition is authored; the entry gestures at a hidden-capacity-revealed arc without stating what would trigger or 
+NPC-081   str  br=1 NEVER            | never specified -- an ongoing council seat with a conditional succession subplot that only resolves if and when the triggering vacancy is au
+NPC-082   str  br=1 NEVER            | never specified -- persists as a standing fracture-line premise until, if ever, a break-or-no-break event is authored
+NPC-084   str  br=1 NEVER            | never specified -- an ongoing internal policy contest with no authored resolution condition
+NPC-085   str  br=2 NEVER PRESUMED   | never specified -- an ongoing advocacy role with no authored end condition; individual cases presumably end at ruling but the office persist
+NPC-089   str  br=1 NEVER            | never specified -- an ongoing external-threat governance role with no stated resolution condition
+NPC-090   str  br=1 NEVER            | never specified -- an ongoing regulatory-enforcement role with no authored end condition
+STRICT none: 22 ['NPC-007', 'NPC-009', 'NPC-011', 'NPC-013', 'NPC-033', 'NPC-034', 'NPC-036', 'NPC-037', 'NPC-039', 'NPC-040', 'NPC-041', 'NPC-071', 'NPC-072', 'NPC-073', 'NPC-074', 'NPC-080', 'NPC-083', 'NPC-084', 'NPC-085', 'NPC-088', 'NPC-089', 'NPC-090']
+STRICT presumed-only: 6 ['NPC-002', 'NPC-005', 'NPC-006', 'NPC-010', 'NPC-035', 'NPC-086']
+STRICT none-or-presumed: 28 of 46

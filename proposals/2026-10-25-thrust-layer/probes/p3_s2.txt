@@ -1,0 +1,100 @@
+seed=0 log=21710 hash=5301d6b62af614f4
+seed=1 log=23392 hash=ca2b80d23e758c8d
+seed=2 log=19465 hash=3e9be6c3566bbc0a
+determine   {'req:False': 14}
+            subject kinds: {('persons', 'ref'): 9, ('records', 'ref'): 2, ('rungs', 'ref'): 3}
+                 3 Observation(subject='p_npc_003', predicate='exists:Person', value=1)
+                 3 Observation(subject='p_npc_003', predicate='exists:DocketItem', value=0)
+                 3 Observation(subject='b_s_036_cathedral', predicate='exists:Person', value=0)
+confer      {'ok': 2, 'req:UNKNOWN': 16}
+            subject kinds: {('offices', 'ok'): 2, ('offices', 'ref'): 16}
+covenant    {'req:False': 23}
+            subject kinds: {('persons', 'ref'): 17, ('rungs', 'ref'): 6}
+                 7 Observation(subject='p_npc_003', predicate='exists:Person', value=1)
+                 7 Observation(subject='p_npc_041', predicate='exists:Proposition', value=0)
+                 7 Observation(subject='p_npc_004', predicate='exists:Person', value=1)
+open_case   {'req:False': 7, 'ok': 16}
+            subject kinds: {('persons', 'ref'): 5, ('persons', 'ok'): 11, ('rungs', 'ok'): 3, ('absent', 'ref'): 2, ('dates', 'ok'): 1, ('records', 'ok'): 1}
+                 2 Observation(subject='p_npc_003', predicate='purview:off_senior_inquisitor', value=False)
+                 2 Observation(subject='p_npc_035', predicate='purview:off_npc_084', value=False)
+                 2 Observation(subject='p_npc_041', predicate='purview:off_senior_inquisitor', value=False)
+commit      {'req:False': 177, 'ok': 3}
+            subject kinds: {('persons', 'ref'): 75, ('rungs', 'ref'): 68, ('absent', 'ref'): 4, ('records', 'ref'): 25, ('dates', 'ref'): 5, ('propositions', 'ok'): 3}
+                19 Observation(subject='p_npc_020', predicate='exists:Proposition', value=0)
+                15 Observation(subject='p_npc_003', predicate='exists:Proposition', value=0)
+                10 Observation(subject='terr_T13', predicate='exists:Proposition', value=0)
+release     {'req:UNKNOWN': 121, 'ok': 9}
+            subject kinds: {('rungs', 'ref'): 90, ('persons', 'ref'): 29, ('records', 'ok'): 7, ('propositions', 'ok'): 2, ('records', 'ref'): 2}
+oblige      {'ok': 38}
+            subject kinds: {('offices', 'ok'): 38}
+revoke      {'req:UNKNOWN': 13}
+            subject kinds: {('rungs', 'ref'): 3, ('persons', 'ref'): 10}
+arrest      {}
+            subject kinds: {}
+issue       {'ok': 16, 'req:False': 16}
+            subject kinds: {('records', 'ok'): 2, ('records', 'ref'): 1, ('persons', 'ref'): 9, ('persons', 'ok'): 10, ('rungs', 'ok'): 4, ('rungs', 'ref'): 6}
+                 5 Observation(subject='p_npc_003', predicate='exists:Person', value=1)
+                 2 Observation(subject='p_npc_003', predicate='purview:off_npc_038', value=False)
+                 1 Observation(subject='p_npc_003', predicate='purview:off_cardinal_fortitude', value=False)
+petition    {'ok': 32, 'req:False': 63}
+            subject kinds: {('persons', 'ok'): 32, ('rungs', 'ref'): 39, ('records', 'ref'): 18, ('propositions', 'ref'): 2, ('dates', 'ref'): 2, ('absent', 'ref'): 2}
+                 6 Observation(subject='terr_T13', predicate='exists:Person', value=0)
+                 3 Observation(subject='b_s_014_barracks', predicate='exists:Person', value=0)
+                 3 Observation(subject='b_s_036_cathedral', predicate='exists:Person', value=0)
+found       {'req:False': 65}
+            subject kinds: {('persons', 'ref'): 28, ('rungs', 'ref'): 34, ('records', 'ref'): 3}
+                 4 Observation(subject='p_npc_003', predicate='exists:works', value=0)
+                 3 Observation(subject='set_s_002', predicate='exists:works', value=0)
+                 3 Observation(subject='p_npc_020', predicate='exists:works', value=0)
+build       {'req:False': 62}
+            subject kinds: {('persons', 'ref'): 18, ('rungs', 'ref'): 28, ('dates', 'ref'): 2, ('records', 'ref'): 13, ('absent', 'ref'): 1}
+                 2 Observation(subject='p_npc_082', predicate='exists:works', value=0)
+                 2 Observation(subject='set_s_007', predicate='exists:works', value=0)
+                 2 Observation(subject='p_npc_040', predicate='exists:works', value=0)
+work        {'req:UNKNOWN': 227}
+            subject kinds: {('persons', 'ref'): 93, ('rungs', 'ref'): 118, ('records', 'ref'): 13, ('propositions', 'ref'): 2, ('absent', 'ref'): 1}
+                36 Observation(subject='p_npc_020', predicate='condition', value=UNKNOWN)
+                15 Observation(subject='p_npc_050', predicate='condition', value=UNKNOWN)
+                 9 Observation(subject='terr_T13', predicate='condition', value=UNKNOWN)
+give        {'ok': 1, 'req:False': 1}
+            subject kinds: {('records', 'ok'): 1, ('records', 'ref'): 1}
+                 1 Observation(subject='rec:210d164fc060864c', predicate='held_by:p_npc_080', value=True)
+                 1 Observation(subject='p_npc_020', predicate='with:p_npc_080', value=False)
+restore     {'req:False': 82}
+            subject kinds: {('persons', 'ref'): 33, ('rungs', 'ref'): 37, ('records', 'ref'): 10, ('absent', 'ref'): 1, ('dates', 'ref'): 1}
+                 5 Observation(subject='p_npc_020', predicate='exists:Site', value=0)
+                 3 Observation(subject='p_npc_003', predicate='exists:Site', value=0)
+                 3 Observation(subject='set_s_020', predicate='exists:Site', value=0)
+tend        {'req:False': 69, 'ok': 17}
+            subject kinds: {('persons', 'ref'): 30, ('persons', 'ok'): 17, ('rungs', 'ref'): 26, ('absent', 'ref'): 3, ('records', 'ref'): 9, ('dates', 'ref'): 1}
+                22 Observation(subject='p_npc_020', predicate='exists:Person', value=1)
+                 4 Observation(subject='p_npc_003', predicate='exists:Person', value=1)
+                 4 Observation(subject='p_npc_020', predicate='with:p_npc_030', value=False)
+migrate     {'ok': 463, 'req:False': 1}
+            subject kinds: {('rungs', 'ok'): 463, ('rungs', 'ref'): 1}
+                 1 Observation(subject='cohort_set_s_037', predicate='contain.path:b_s_006_guildhall', value=False)
+research    {'req:False': 349, 'ok': 50}
+            subject kinds: {('persons', 'ref'): 183, ('rungs', 'ref'): 152, ('absent', 'ref'): 10, ('records', 'ok'): 50, ('dates', 'ref'): 3, ('propositions', 'ref'): 1}
+                72 Observation(subject='p_npc_020', predicate='exists:Record', value=0)
+                34 Observation(subject='p_npc_050', predicate='exists:Record', value=0)
+                19 Observation(subject='b_s_014_barracks', predicate='exists:Record', value=0)
+examine     {'req:False': 158}
+            subject kinds: {('persons', 'ref'): 38, ('rungs', 'ref'): 92, ('records', 'ref'): 26, ('propositions', 'ref'): 1, ('dates', 'ref'): 1}
+                15 Observation(subject='terr_T13', predicate='exists:Site', value=0)
+                12 Observation(subject='b_s_014_barracks', predicate='exists:Site', value=0)
+                 9 Observation(subject='b_s_026_workshop', predicate='exists:Site', value=0)
+fight       {'req:False': 57, 'ok': 8}
+            subject kinds: {('persons', 'ref'): 28, ('rungs', 'ref'): 16, ('persons', 'ok'): 8, ('records', 'ref'): 11, ('propositions', 'ref'): 1, ('dates', 'ref'): 1}
+                16 Observation(subject='p_npc_020', predicate='exists:Person', value=1)
+                 9 Observation(subject='p_npc_020', predicate='with:p_npc_009', value=False)
+                 5 Observation(subject='p_npc_050', predicate='exists:Person', value=1)
+accept      {'req:False': 129, 'ok': 18}
+            subject kinds: {('persons', 'ref'): 79, ('rungs', 'ref'): 31, ('dates', 'ref'): 1, ('persons', 'ok'): 18, ('records', 'ref'): 16, ('absent', 'ref'): 1, ('propositions', 'ref'): 1}
+                45 Observation(subject='p_npc_020', predicate='exists:Person', value=1)
+                12 Observation(subject='p_npc_020', predicate='with:p_npc_005', value=False)
+                 8 Observation(subject='p_npc_012', predicate='exists:Person', value=1)
+challenge   {'req:False': 88, 'ok': 6}
+            subject kinds: {('persons', 'ref'): 38, ('absent', 'ref'): 2, ('rungs', 'ref'): 31, ('persons', 'ok'): 6, ('records', 'ref'): 14, ('dates', 'ref'): 3}
+                23 Observation(subject='p_npc_020', predicate='exists:Person', value=1)
+                 7 Observation(subject='p_npc_020', predicate='with:p_npc_036', value=False)
+                 6 Observation(subject='p_npc_070', predicate='exists:Person', value=1)

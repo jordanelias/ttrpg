@@ -1,0 +1,8 @@
+control                            hash=5301d6b62af6 log=21710 persons=80 died=3 body.changed=0 site/condition_ev=644 vacant_offices=2
+body_step=10                       hash=ee01b56774db log=21894 persons=80 died=3 body.changed=37 site/condition_ev=644 vacant_offices=2
+age_step=0.01                      hash=5301d6b62af6 log=21710 persons=80 died=3 body.changed=0 site/condition_ev=644 vacant_offices=2
+illness_rate=0.05                  hash=d2c12abba260 log=21082 persons=79 died=4 body.changed=0 site/condition_ev=644 vacant_offices=2
+age_at_build=160,age_step=0.01     hash=5301d6b62af6 log=21710 persons=80 died=3 body.changed=0 site/condition_ev=644 vacant_offices=2
+season_factor_draw=(0.5,1,2)x4     hash=5301d6b62af6 log=21710 persons=80 died=3 body.changed=0 site/condition_ev=644 vacant_offices=2
+lattice_coupling=250               hash=f18cc7e33895 log=21710 persons=80 died=3 body.changed=0 site/condition_ev=644 vacant_offices=2
+season_factor_draw=(0.5,)x4        hash=49fd49b57832 log=21710 persons=80 died=3 body.changed=0 site/condition_ev=644 vacant_offices=2

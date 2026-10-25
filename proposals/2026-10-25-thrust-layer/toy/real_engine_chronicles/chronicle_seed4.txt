@@ -1,0 +1,13 @@
+chronicle seed=4 seasons=4 arm=off cap=None acts=3217 depth=12 PYTHONHASHSEED=None
+1. season 0 | Kolbrun Thale fight | emitted kill.refused | opens the chain
+2. season 1 | Theodor Kreutz dispatch | emitted order.given | answers 1. Kolbrun Thale fight
+3. season 2 | Almud Almqvist issue | emitted dispensation.issued | answers 2. Theodor Kreutz dispatch
+4. season 2 | Elske Almqvist work | emitted work.unavailable | answers 3. Almud Almqvist issue
+5. season 2 | Sigrid Torsvald commit | emitted commitment.refused | answers 4. Elske Almqvist work
+6. season 2 | Torben Almqvist train | emitted train.refused | answers 5. Sigrid Torsvald commit
+7. season 2 | Elske Almqvist work | emitted work.unavailable | answers 6. Torben Almqvist train
+8. season 3 | Sigrid Torsvald accept | emitted accept.refused | answers 7. Elske Almqvist work
+9. season 3 | Elske Almqvist tell | emitted news.untold | answers 8. Sigrid Torsvald accept
+10. season 3 | Gerik Strand issue | emitted dispensation.issued | answers 9. Elske Almqvist tell
+11. season 3 | Lisbeth Ehrenwall dispatch | emitted order.given | answers 10. Gerik Strand issue
+12. season 3 | Arne Himlensendt pardon | emitted pardon.refused | answers 11. Lisbeth Ehrenwall dispatch

@@ -1,0 +1,73 @@
+seed=0 seasons=2 log=21710 tick=2 hash=5301d6b62af614f4 attempted=1511 executed=335 refused=1176 null=0
+seed=1 seasons=2 log=23392 tick=2 hash=ca2b80d23e758c8d attempted=1487 executed=346 refused=1141 null=0
+seed=2 seasons=2 log=19465 tick=2 hash=3e9be6c3566bbc0a attempted=1497 executed=374 refused=1123 null=0
+seed=3 seasons=2 log=19514 tick=2 hash=ee86da8d6d13b3fe attempted=1448 executed=342 refused=1106 null=0
+seed=4 seasons=2 log=17529 tick=2 hash=a4e880845bce3e4b attempted=1459 executed=366 refused=1093 null=0
+POOLED {'attempted': 7402, 'executed': 1763, 'refused': 5639, 'null': 0}
+verb              att    exe    ref   null
+migrate           714      3    711      0
+research          658     20    638      0
+create_record     404    404      0      0
+work              333      2    331      0
+surveil           313     31    282      0
+commit            302      6    296      0
+reconstruct       268    234     34      0
+examine           256      0    256      0
+release           235     16    219      0
+accept            227     20    207      0
+move              224     71    153      0
+utter             213    213      0      0
+forge             212    102    110      0
+survey            205    117     88      0
+transfer          195      8    187      0
+train             169      0    169      0
+interview         160     54    106      0
+tell              158     35    123      0
+carry             157      0    157      0
+tend              154      0    154      0
+challenge         151     11    140      0
+petition          149     56     93      0
+conceal           138    138      0      0
+restore           137      0    137      0
+sabotage          127      0    127      0
+build             122      0    122      0
+speak             116     10    106      0
+fight             115      9    106      0
+oblige            115    105     10      0
+found             105      1    104      0
+raze               89      0     89      0
+argue              62      0     62      0
+march              56      0     56      0
+dispatch           46     25     21      0
+issue              46     20     26      0
+open_case          44     25     19      0
+confer             35      5     30      0
+convene            31      6     25      0
+requisition        30      0     30      0
+covenant           28      0     28      0
+revoke             26      0     26      0
+determine          25      0     25      0
+establish          18      0     18      0
+pardon             17      0     17      0
+thread_read        10     10      0      0
+forgive             5      5      0      0
+give                2      1      1      0
+CLOSERS
+determine      att=25 exe=0 ref=25 null=0 in_table=True resolvable=True refusal_kinds={'determine.refused': 25}
+confer         att=35 exe=5 ref=30 null=0 in_table=True resolvable=True refusal_kinds={'confer.refused': 30}
+covenant       att=28 exe=0 ref=28 null=0 in_table=True resolvable=True refusal_kinds={'covenant.refused': 28}
+open_case      att=44 exe=25 ref=19 null=0 in_table=True resolvable=True refusal_kinds={'case.unauthorized': 10, 'case.refused': 9}
+commit         att=302 exe=6 ref=296 null=0 in_table=True resolvable=True refusal_kinds={'commitment.refused': 296}
+release        att=235 exe=16 ref=219 null=0 in_table=True resolvable=True refusal_kinds={'release.refused': 219}
+oblige         att=115 exe=105 ref=10 null=0 in_table=True resolvable=True refusal_kinds={'duty.refused': 10}
+revoke         att=26 exe=0 ref=26 null=0 in_table=True resolvable=True refusal_kinds={'revoke.refused': 26}
+succeed        att=0 exe=0 ref=0 null=0 in_table=True resolvable=False refusal_kinds={}
+arrest         att=0 exe=0 ref=0 null=0 in_table=True resolvable=True refusal_kinds={}
+issue          att=46 exe=20 ref=26 null=0 in_table=True resolvable=True refusal_kinds={'issue.unauthorized': 25, 'issue.refused': 1}
+petition       att=149 exe=56 ref=93 null=0 in_table=True resolvable=True refusal_kinds={'petition.refused': 93}
+found          att=105 exe=1 ref=104 null=0 in_table=True resolvable=True refusal_kinds={'found.refused': 104}
+build          att=122 exe=0 ref=122 null=0 in_table=True resolvable=True refusal_kinds={'build.refused': 122}
+work           att=333 exe=2 ref=331 null=0 in_table=True resolvable=True refusal_kinds={'work.unavailable': 331}
+give           att=2 exe=1 ref=1 null=0 in_table=True resolvable=True refusal_kinds={'give.refused': 1}
+restore        att=137 exe=0 ref=137 null=0 in_table=True resolvable=True refusal_kinds={'restore.refused': 137}
+tend           att=154 exe=0 ref=154 null=0 in_table=True resolvable=True refusal_kinds={'tend.refused': 154}

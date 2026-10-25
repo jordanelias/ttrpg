@@ -1,0 +1,599 @@
+#!/usr/bin/env python3
+"""Toy world for logic-testing three narrative-emergence regimes.
+
+BU   bottom-up: actors act on local drives only (reaction, opportunity, hostility, affinity, wander).
+TD   top-down, SCRIPT: a director binds protagonist/antagonist/prize at t=0 and FORCES a five-beat schedule;
+     no precondition checks (blind).
+TDR  top-down, REPLAN: the same schedule, but the director re-reads state at each beat (re-picks the most
+     hostile pair, relocates them) and still FORCES outcomes.  The strongest top-down: dynamic, state-reading.
+HY   hybrid: actors carry standing referent-bound ambitions assigned by a tension graph (top-down at
+     world-gen), with a lifecycle (fire / lapse -> successor by predicate), plus an occasion channel that
+     raises declinable summonses.  No outcome is ever written by anything but an actor's act.
+
+RNG STREAMS ARE SEPARATE (world / acts / ambition-assignment / director) so HY(w_amb=0, occasions off)
+consumes the act stream exactly as BU does: that is the control (identical log hash).
+Every metric is computed from the event log alone, regime-blind.
+"""
+import random, math, hashlib, json, statistics as st
+from collections import defaultdict, Counter
+
+T_DEF = 24
+BEAT_T = [3, 7, 12, 17, 21]
+BEAT_I = [1, 2, 3, 5, 8]
+
+
+def clip(x, lo=-1.0, hi=1.0):
+    return max(lo, min(hi, x))
+
+
+class W:
+    def __init__(s, seed, A, P, PR, T, entrench=1, refuse=0.0):
+        s.rw = random.Random(seed * 7 + 1); s.ra = random.Random(seed * 7 + 2)
+        s.rb = random.Random(seed * 7 + 3); s.rd = random.Random(seed * 7 + 4)
+        s.A, s.P, s.PR, s.T = A, P, PR, T
+        s.entrench, s.refuse = entrench, refuse
+        s.death_p = 0.25
+        rw = s.rw
+        s.place = [rw.randrange(P) for _ in range(A)]
+        s.fac = [i % 4 for i in range(A)]
+        s.skill = [rw.randint(1, 5) for _ in range(A)]
+        s.base_skill = list(s.skill)
+        s.alive = [True] * A
+        s.op = [[0.0] * A for _ in range(A)]
+        for i in range(A):
+            for j in range(A):
+                if i != j:
+                    s.op[i][j] = clip((0.3 if s.fac[i] == s.fac[j] else -0.1) + rw.uniform(-0.5, 0.5))
+        s.pplace = [rw.randrange(P) for _ in range(PR)]
+        s.pval = [rw.choice([1, 2, 3]) for _ in range(PR)]
+        s.holder = [None] * PR
+        s.ev = []
+        s.last_ref = {}
+        s.last_harm = {}
+        s.hold_since = {}
+        s.amb = [None] * A
+        s.amb_n = [0] * A
+        s.pending_occ = {}
+        s.last_occ = {}
+        s.dir = None
+
+    # ---------------------------------------------------------------- logging
+    def log(s, t, actor, verb, target, ref, delta, causes, motive, grounded, forced=False, closing=False, snap=None):
+        e = dict(id=len(s.ev), t=t, actor=actor, verb=verb, target=target, ref=ref, delta=delta,
+                 causes=[c for c in causes if c is not None], motive=motive, grounded=grounded,
+                 forced=forced, closing=closing)
+        e.update(snap or {})
+        s.ev.append(e)
+        if ref is not None and verb not in ('summon', 'ambition_fired', 'ambition_lapsed'):
+            s.last_ref[ref] = e['id']
+        return e['id']
+
+    # ---------------------------------------------------------------- grounding (decided from live state, before effects)
+    def grounded(s, motive, a, b, k, t):
+        if motive is None:
+            return False
+        m = motive[0]
+        if m == 'reaction':
+            h = s.last_harm.get(a)
+            return bool(h and h[0] == motive[1] and t - h[2] <= 3 and h[1] == b)
+        if m == 'ambition':
+            am = s.amb[a]
+            return bool(am and am['id'] == motive[1])
+        if m == 'opportunity':
+            return k is not None and s.place[a] == s.pplace[k]
+        if m == 'hostility':
+            return b is not None and s.op[a][b] < -0.3
+        if m == 'affinity':
+            return b is not None and s.op[a][b] > 0.4
+        if m == 'occasion':
+            return True
+        if m == 'asserted':          # an author-supplied reason: grounded only if the actor's own state agrees
+            if b is not None:
+                return s.op[a][b] < -0.3
+            if k is not None and s.holder[k] is not None and s.holder[k] != a:
+                return s.op[a][s.holder[k]] < -0.3
+            return False
+        return False
+
+    # ---------------------------------------------------------------- one act
+    def do(s, t, a, verb, b=None, k=None, motive=None, forced=False, force_delta=None, kill=False, extra=()):
+        if verb == 'claim':
+            ref = f"P{k}"; tgt = s.holder[k]
+            loc_ok = s.place[a] == s.pplace[k]
+            tgt_alive = True if tgt is None else s.alive[tgt]
+            gb = tgt
+        else:
+            ref = "D%d-%d" % (min(a, b), max(a, b)); tgt = b
+            loc_ok = s.place[a] == s.place[b]; tgt_alive = s.alive[b]; gb = b
+        snap = dict(actor_alive=s.alive[a], target_alive=tgt_alive, colocated=loc_ok)
+        g = s.grounded(motive, a, gb, k, t)
+        causes = [s.last_ref.get(ref)] + list(extra)
+        po = s.pending_occ.pop(a, None)
+        if po is not None:
+            causes.append(po)
+        eid = len(s.ev)
+        roll = s.ra.randint(1, 6) + s.skill[a]
+        refused = (s.refuse > 0 and not forced and s.ra.random() < s.refuse)
+        if refused:
+            roll = -99
+        delta = 0.0; closing = False
+        if verb == 'claim':
+            diff = 5 + (s.skill[tgt] // 2 if tgt not in (None, a) else 0)
+            if s.entrench and tgt not in (None, a):
+                diff += min(3, (t - s.hold_since.get((tgt, k), t)) // 2)
+            if forced or roll >= diff:
+                prev = s.holder[k]
+                s.holder[k] = a
+                delta = float(force_delta if force_delta is not None else s.pval[k])
+                if prev is not None and prev != a:
+                    closing = True
+                    s.op[prev][a] = clip(s.op[prev][a] - 0.5)
+                    s.last_harm[prev] = (eid, a, t)
+                s.hold_since[(a, k)] = t
+        elif verb == 'harm':
+            diff = 4 + s.skill[b] // 2
+            if forced or roll >= diff:
+                delta = float(force_delta) if force_delta is not None else 1.0
+                before = s.skill[b]
+                s.skill[b] = max(1, s.skill[b] - 1)
+                died = kill or (before == 1 and s.ra.random() < s.death_p)
+                if died:
+                    s.alive[b] = False; closing = True
+                    if force_delta is None:
+                        delta = 3.0
+                    for kk in range(s.PR):
+                        if s.holder[kk] == b:
+                            s.holder[kk] = None
+                s.op[b][a] = clip(s.op[b][a] - 0.6)
+                s.last_harm[b] = (eid, a, t)
+            else:
+                s.op[b][a] = clip(s.op[b][a] - 0.2)
+        elif verb == 'aid':
+            if forced or roll >= 4:
+                delta = float(force_delta) if force_delta is not None else 0.5
+                s.op[b][a] = clip(s.op[b][a] + 0.4); s.op[a][b] = clip(s.op[a][b] + 0.2)
+        s.log(t, a, verb, tgt if verb == 'claim' else b, ref, delta, causes, motive, g, forced, closing, snap)
+
+    # ---------------------------------------------------------------- co-located others
+    def near(s, a):
+        return [x for x in range(s.A) if x != a and s.alive[x] and s.place[x] == s.place[a]]
+
+    # ---------------------------------------------------------------- drives
+    def choose(s, t, a, cfg):
+        ra = s.ra
+        # 1 reaction
+        h = s.last_harm.get(a)
+        if h and t - h[2] <= 2 and s.alive[h[1]] and ra.random() < 0.6:
+            if s.place[h[1]] == s.place[a]:
+                s.do(t, a, 'harm', b=h[1], motive=('reaction', h[0]))
+            else:
+                s.place[a] = s.place[h[1]]
+            return
+        # 2 standing ambition (HY only; coin is not drawn at w=0 -> exact BU control)
+        if cfg['amb'] and cfg['w'] > 0 and ra.random() < cfg['w']:
+            am = s.amb[a]
+            if am:
+                kind, r = am['kind'], am['ref']
+                mo = ('ambition', am['id'])
+                if kind == 'claim':
+                    if s.holder[r] == a:
+                        return
+                    if s.place[a] == s.pplace[r]:
+                        s.do(t, a, 'claim', k=r, motive=mo)
+                    else:
+                        s.place[a] = s.pplace[r]
+                    return
+                if kind in ('oppose', 'protect') and s.alive[r]:
+                    if s.place[a] == s.place[r]:
+                        s.do(t, a, 'harm' if kind == 'oppose' else 'aid', b=r, motive=mo)
+                    else:
+                        s.place[a] = s.place[r]
+                    return
+        # 3 local opportunity
+        if ra.random() < 0.4:
+            c = [k for k in range(s.PR) if s.pplace[k] == s.place[a] and s.holder[k] != a]
+            if c:
+                k = max(c, key=lambda q: s.pval[q])
+                s.do(t, a, 'claim', k=k, motive=('opportunity', f"P{k}"))
+                return
+        nb = s.near(a)
+        # 4 hostility
+        if nb:
+            b = min(nb, key=lambda x: s.op[a][x])
+            if s.op[a][b] < -0.3 and ra.random() < 0.5:
+                s.do(t, a, 'harm', b=b, motive=('hostility', b))
+                return
+            # 5 affinity
+            b2 = max(nb, key=lambda x: s.op[a][x])
+            if s.op[a][b2] > 0.4 and ra.random() < 0.3:
+                s.do(t, a, 'aid', b=b2, motive=('affinity', b2))
+                return
+        # 6 wander
+        if ra.random() < 0.25:
+            s.place[a] = ra.randrange(s.P)
+
+    # ---------------------------------------------------------------- ambitions (top-down tension graph + lifecycle)
+    def new_amb(s, a, kind, ref, t):
+        s.amb_n[a] += 1
+        s.amb[a] = dict(id=f"A{a}.{s.amb_n[a]}", kind=kind, ref=ref, t0=t)
+
+    def assign_ambitions(s):
+        rb = s.rb
+        for k in range(s.PR):
+            facs = rb.sample(range(4), 2)
+            for f in facs:
+                pool = [a for a in range(s.A) if s.fac[a] == f and s.amb[a] is None]
+                if pool:
+                    s.new_amb(rb.choice(pool), 'claim', k, 0)
+        for a in range(s.A):
+            if s.amb[a] is None:
+                if rb.random() < 0.5:
+                    r = rb.choice([x for x in range(s.A) if s.fac[x] != s.fac[a]])
+                    s.new_amb(a, 'oppose', r, 0)
+                else:
+                    r = rb.choice([x for x in range(s.A) if s.fac[x] == s.fac[a] and x != a])
+                    s.new_amb(a, 'protect', r, 0)
+
+    def lifecycle(s, t):
+        for a in range(s.A):
+            am = s.amb[a]
+            if not am or not s.alive[a]:
+                continue
+            if am['kind'] == 'claim':
+                if s.holder[am['ref']] == a and s.hold_since.get((a, am['ref']), 10**9) <= t - 2:
+                    s.log(t, a, 'ambition_fired', None, f"P{am['ref']}", 0.0, [], ('ambition', am['id']), True)
+                    rivals = [x for x in range(s.A) if s.alive[x] and x != a]
+                    if rivals:
+                        s.new_amb(a, 'oppose', min(rivals, key=lambda x: s.op[a][x]), t)
+            else:
+                if not s.alive[am['ref']]:
+                    s.log(t, a, 'ambition_lapsed', None, None, 0.0, [], ('ambition', am['id']), True)
+                    c = [k for k in range(s.PR) if s.holder[k] != a]
+                    if c:
+                        k = max(c, key=lambda q: s.pval[q])
+                        s.new_amb(a, 'claim', k, t)
+                    else:
+                        rivals = [x for x in range(s.A) if s.alive[x] and x != a]
+                        s.new_amb(a, 'oppose', min(rivals, key=lambda x: s.op[a][x]), t) if rivals else None
+
+    def occasions(s, t):
+        rd = s.rd
+        pairs = []
+        for a in range(s.A):
+            am = s.amb[a]
+            if not am or not s.alive[a]:
+                continue
+            if am['kind'] == 'oppose' and s.alive[am['ref']]:
+                pairs.append((a, am['ref'], "D%d-%d" % (min(a, am['ref']), max(a, am['ref'])), s.place[am['ref']]))
+            if am['kind'] == 'claim':
+                for b in range(a + 1, s.A):
+                    ab = s.amb[b]
+                    if ab and ab['kind'] == 'claim' and ab['ref'] == am['ref'] and s.alive[b]:
+                        pairs.append((a, b, f"P{am['ref']}", s.pplace[am['ref']]))
+        for a, b, ref, dest in pairs:
+            if s.place[a] == s.place[b]:
+                continue
+            le = s.last_ref.get(ref)
+            if le is not None and t - s.ev[le]['t'] <= 4:
+                continue
+            if t - s.last_occ.get(ref, -99) <= 4:
+                continue
+            if rd.random() < 0.5:
+                eid = s.log(t, None, 'summon', None, ref, 0.0, [], ('occasion',), True)
+                s.last_occ[ref] = t
+                for x in (a, b):
+                    if rd.random() < 0.7:
+                        s.place[x] = dest
+                        s.pending_occ[x] = eid
+
+    # ---------------------------------------------------------------- directors
+    def dir_init(s):
+        rd = s.rd
+        cand = [a for a in range(s.A) if s.skill[a] >= 3] or list(range(s.A))
+        p = rd.choice(cand)
+        q = rd.choice([x for x in range(s.A) if s.fac[x] != s.fac[p]])
+        k = rd.randrange(s.PR)
+        s.dir = dict(p=p, q=q, k=k)
+
+    def beat(s, t, i, replan):
+        d = s.dir; intens = BEAT_I[i]
+        if replan:
+            alive = [a for a in range(s.A) if s.alive[a]]
+            if not (s.alive[d['p']] and s.alive[d['q']]):
+                best = None
+                for a in alive:
+                    for b in alive:
+                        if a < b:
+                            sc = s.op[a][b] + s.op[b][a]
+                            if best is None or sc < best[0]:
+                                best = (sc, a, b)
+                _, a, b = best
+                d['p'], d['q'] = (a, b) if s.skill[a] >= s.skill[b] else (b, a)
+            s.place[d['q']] = s.place[d['p']]               # director relocates (declared, delta 0)
+            here = [k for k in range(s.PR) if s.pplace[k] == s.place[d['p']]]
+            d['k'] = here[0] if here else None
+        p, q, k = d['p'], d['q'], d['k']
+        mo_h = ('hostility', None)
+        if i == 0:
+            if k is None:
+                s.do(t, q, 'harm', b=p, motive=('hostility', p) if replan else ('asserted', 'plot'), forced=True, force_delta=intens)
+            else:
+                s.do(t, q, 'claim', k=k, motive=('opportunity', f"P{k}") if replan else ('asserted', 'plot'), forced=True, force_delta=intens)
+        elif i in (1, 4):
+            s.do(t, p, 'harm', b=q, motive=('hostility', q) if replan else ('asserted', 'plot'), forced=True,
+                 force_delta=intens, kill=(i == 4))
+        elif i == 2:
+            s.do(t, q, 'harm', b=p, motive=('hostility', p) if replan else ('asserted', 'plot'), forced=True, force_delta=intens)
+        elif i == 3:
+            if k is None:
+                s.do(t, p, 'harm', b=q, motive=('hostility', q) if replan else ('asserted', 'plot'), forced=True, force_delta=intens)
+            else:
+                s.do(t, p, 'claim', k=k, motive=('opportunity', f"P{k}") if replan else ('asserted', 'plot'), forced=True, force_delta=intens)
+
+    # ---------------------------------------------------------------- perturbation (a player act)
+    def leader(s, t):
+        inv = Counter(); mass = Counter()
+        for e in s.ev:
+            if e['delta'] > 0 and e['ref']:
+                mass[e['ref']] += e['delta']
+        if not mass:
+            return None
+        top = mass.most_common(1)[0][0]
+        for e in s.ev:
+            if e['delta'] > 0 and e['ref'] == top:
+                for x in (e['actor'], e['target']):
+                    if isinstance(x, int) and s.alive[x]:
+                        inv[x] += e['delta']
+        return inv.most_common(1)[0][0] if inv else None
+
+    def player_kill(s, t, regime):
+        v = s.dir['p'] if regime in ('TD', 'TDR') and s.alive[s.dir['p']] else s.leader(t)
+        if v is None or not s.alive[v]:
+            return None
+        s.alive[v] = False
+        for kk in range(s.PR):
+            if s.holder[kk] == v:
+                s.holder[kk] = None
+        s.log(t, 'player', 'player_kill', v, None, 3.0, [], ('player',), True, closing=True,
+              snap=dict(actor_alive=True, target_alive=True, colocated=True))
+        return v
+
+
+def simulate(seed, regime, A=24, P=6, PR=6, T=T_DEF, w=0.6, occ=True, life=True, perturb_t=None, entrench=1, refuse=0.0):
+    s = W(seed, A, P, PR, T, entrench, refuse)
+    cfg = dict(amb=(regime == 'HY'), w=w)
+    if regime == 'HY':
+        s.assign_ambitions()
+    if regime in ('TD', 'TDR'):
+        s.dir_init()
+    victim = None
+    for t in range(T):
+        for a in range(A):                      # wounds heal: one point per season toward base skill
+            if s.alive[a] and s.skill[a] < s.base_skill[a]:
+                s.skill[a] += 1
+        if perturb_t is not None and t == perturb_t:
+            victim = s.player_kill(t, regime)
+        if regime == 'HY':
+            if life:
+                s.lifecycle(t)
+            if occ:
+                s.occasions(t)
+        if regime in ('TD', 'TDR') and t in BEAT_T:
+            s.beat(t, BEAT_T.index(t), replan=(regime == 'TDR'))
+        order = [a for a in range(A) if s.alive[a]]
+        s.ra.shuffle(order)
+        for a in order:
+            if s.alive[a]:
+                s.choose(t, a, cfg)
+    return s.ev, victim
+
+
+# ======================================================================== metrics (log-only)
+def executed(ev):
+    return [e for e in ev if e['delta'] > 0 and e['ref'] and isinstance(e['actor'], int)]
+
+
+def select(ev, B=12, top=3):
+    ex = executed(ev)
+    mass = Counter()
+    for e in ex:
+        mass[e['ref']] += e['delta']
+    keep = {r for r, _ in mass.most_common(top)}
+    c = [e for e in ex if e['ref'] in keep]
+    if len(c) > B:
+        c = sorted(c, key=lambda e: (-e['delta'], e['t']))[:B]
+    return sorted(c, key=lambda e: (e['t'], e['id']))
+
+
+def main_ref(ex):
+    m = Counter()
+    for e in ex:
+        m[e['ref']] += e['delta']
+    return m.most_common(1)[0][0] if m else None
+
+
+def ranks(x):
+    o = sorted(range(len(x)), key=lambda i: x[i]); r = [0.0] * len(x); i = 0
+    while i < len(o):
+        j = i
+        while j + 1 < len(o) and x[o[j + 1]] == x[o[i]]:
+            j += 1
+        for q in range(i, j + 1):
+            r[o[q]] = (i + j) / 2
+        i = j + 1
+    return r
+
+
+def spearman(x, y):
+    if len(x) < 3:
+        return 0.0
+    rx, ry = ranks(x), ranks(y)
+    mx, my = sum(rx) / len(rx), sum(ry) / len(ry)
+    num = sum((a - mx) * (b - my) for a, b in zip(rx, ry))
+    den = math.sqrt(sum((a - mx) ** 2 for a in rx) * sum((b - my) ** 2 for b in ry))
+    return num / den if den else 0.0
+
+
+def arc_test(ex, ref, lo, hi):
+    n = hi - lo
+    I = [0.0] * n
+    for e in ex:
+        if e['ref'] == ref and lo <= e['t'] < hi:
+            I[e['t'] - lo] += e['delta']
+    if sum(I) == 0:
+        return dict(rise=False, peak=False, fall=False, all=False, closed=False, tp=None)
+    S = [sum(I[max(0, i - 1):i + 2]) / len(I[max(0, i - 1):i + 2]) for i in range(n)]
+    tp = max(range(n), key=lambda i: S[i])
+    peak = 0.2 * n <= tp <= 0.85 * n
+    rise = tp >= 3 and spearman(list(range(tp + 1)), S[:tp + 1]) >= 0.5
+    post = S[tp + 1:]
+    closed = any(e['ref'] == ref and e['closing'] and e['t'] - lo > tp and e['t'] < hi for e in ex)
+    fall = len(post) >= 2 and (sum(post) / len(post)) <= 0.6 * S[tp] and closed
+    return dict(rise=rise, peak=peak, fall=fall, all=(rise and peak and fall), closed=closed, tp=tp + lo)
+
+
+def shuffled(ex, rng):
+    ts = [e['t'] for e in ex]; rng.shuffle(ts)
+    return [dict(e, t=t) for e, t in zip(ex, ts)]
+
+
+def violations(ev, t_lo=0):
+    v = Counter()
+    for e in ev:
+        if e['t'] < t_lo or not isinstance(e['actor'], int) or 'actor_alive' not in e:
+            continue
+        if not e['actor_alive']:
+            v['dead_actor'] += 1
+        if not e['target_alive']:
+            v['dead_target'] += 1
+        if not e['colocated']:
+            v['not_colocated'] += 1
+        for c in e['causes']:
+            if c >= e['id'] or ev[c]['t'] > e['t']:
+                v['bad_cause'] += 1
+    return v
+
+
+def graph_stats(ev):
+    ex = executed(ev)
+    ids = {e['id'] for e in ex}
+    cited = Counter()
+    for e in ev:
+        for c in e['causes']:
+            cited[c] += 1
+    conv = sum(1 for e in ex if len({ev[c]['actor'] for c in e['causes'] if isinstance(ev[c]['actor'], int)}) >= 2)
+    dead = sum(1 for e in ex if cited[e['id']] == 0 and not e['closing'])
+    depth = {}
+    for e in ev:
+        d = 1
+        for c in e['causes']:
+            if ev[c]['actor'] != e['actor']:
+                d = max(d, 1 + depth.get(c, 1))
+        depth[e['id']] = d
+    return dict(n=len(ex), conv=conv / len(ex) if ex else 0, dead=dead / len(ex) if ex else 0,
+                depth=max(depth.values()) if depth else 0)
+
+
+def five_node(sel, ref):
+    bt = sorted([e for e in sel if e['ref'] == ref], key=lambda e: e['t'])
+    if len(bt) < 4:
+        return False
+    cl = max(bt, key=lambda e: (e['delta'], -e['t']))
+    setup = bt[0]
+    res = [e for e in bt if e['closing'] and e['t'] > cl['t']]
+    turn = [e for e in bt if setup['t'] < e['t'] < cl['t']]
+    return bool(res and turn and setup['t'] < cl['t'])
+
+
+def cv_gaps(sel, ref):
+    ts = sorted(e['t'] for e in sel if e['ref'] == ref)
+    g = [b - a for a, b in zip(ts, ts[1:])]
+    if len(g) < 2 or sum(g) == 0:
+        return None
+    m = sum(g) / len(g)
+    return (sum((x - m) ** 2 for x in g) / len(g)) ** 0.5 / m
+
+
+def run_metrics(ev, T=T_DEF, shuf_rng=None, t_lo=0):
+    ex = executed(ev)
+    sel = select(ev)
+    M = {}
+    # --- LEGIBILITY
+    M['leg_apparent'] = sum(1 for e in sel if e['ref'] and e['delta'] > 0 and e['motive']) / len(sel) if sel else 0
+    M['leg_grounded'] = sum(1 for e in sel if e['grounded']) / len(sel) if sel else 0
+    selset = {e['id'] for e in sel}
+    def linked(e):
+        m = e['motive']
+        if not m:
+            return False
+        if m[0] == 'ambition':
+            return True
+        return m[0] == 'reaction' and m[1] in selset
+    M['why_linked'] = sum(1 for e in sel if linked(e)) / len(sel) if sel else 0
+    M['leg_grounded_raw'] = sum(1 for e in ex if e['grounded']) / len(ex) if ex else 0
+    M['forced_share'] = sum(1 for e in ex if e['forced']) / len(ex) if ex else 0
+    M['injected'] = sum(1 for e in ev if e['forced'] and e['delta'] > 0)       # outcome written by a non-actor reason
+    # --- COHERENCY
+    seen = set(); cont = 0; n = 0
+    last = {}
+    for e in sel:
+        if n > 0 and e['ref'] in last and e['t'] - last[e['ref']] <= 6:
+            cont += 1
+        last[e['ref']] = e['t']; n += 1
+    M['thread_cont'] = cont / (len(sel) - 1) if len(sel) > 1 else 0
+    cc = 0
+    selids = [e['id'] for e in sel]
+    for i, e in enumerate(sel[1:], 1):
+        hops = set(e['causes']); frontier = set(e['causes'])
+        for _ in range(2):
+            frontier = {c2 for c in frontier for c2 in ev[c]['causes']}; hops |= frontier
+        if hops & set(selids[:i]) or any(x['ref'] == e['ref'] for x in sel[:i]):
+            cc += 1
+    M['chain_conn'] = cc / (len(sel) - 1) if len(sel) > 1 else 0
+    v = violations(ev, t_lo)
+    M['viol'] = sum(v.values()); M['viol_any'] = 1 if M['viol'] else 0
+    # --- ARC
+    mr = main_ref(ex)
+    M['main_ref'] = mr
+    if mr:
+        a = arc_test(ex, mr, 0, T)
+        M.update({f'arc_{k}': (1 if a[k] else 0) for k in ('rise', 'peak', 'fall', 'all', 'closed')})
+        M['tp'] = a['tp']
+        M['arc_any3'] = 0
+        top3 = [r for r, _ in Counter({e['ref']: 0 for e in ex}).items()]
+        mass = Counter()
+        for e in ex:
+            mass[e['ref']] += e['delta']
+        M['arc_any3'] = 1 if any(arc_test(ex, r, 0, T)['all'] for r, _ in mass.most_common(3)) else 0
+        # peak magnitude of main thread
+        M['peak_mag'] = max(sum(e['delta'] for e in ex if e['ref'] == mr and e['t'] == t) for t in range(T))
+        # dangling: still hot at the end
+        M['dangling'] = 1 if sum(e['delta'] for e in ex if e['ref'] == mr and e['t'] >= T - 2) >= 0.5 * M['peak_mag'] else 0
+    else:
+        for k in ('rise', 'peak', 'fall', 'all', 'closed'):
+            M[f'arc_{k}'] = 0
+        M['tp'] = None; M['arc_any3'] = 0; M['peak_mag'] = 0; M['dangling'] = 0
+    if shuf_rng is not None and ex:
+        accs = []
+        for _ in range(3):
+            sx = shuffled(ex, shuf_rng); m2 = main_ref(sx)
+            accs.append(1 if m2 and arc_test(sx, m2, 0, T)['all'] else 0)
+        M['arc_null'] = sum(accs) / 3
+    # --- BEATS / NODES
+    M['five_node'] = 1 if mr and five_node(sel, mr) else 0
+    c = cv_gaps(sel, mr) if mr else None
+    M['gap_cv'] = c
+    g = graph_stats(ev)
+    M.update(dict(conv=g['conv'], dead=g['dead'], depth=g['depth'], n_exec=g['n'], n_sel=len(sel)))
+    # structural vs slot signature of the main thread
+    if mr:
+        th = [e for e in ex if e['ref'] == mr][:5]
+        M['sig_struct'] = tuple((e['verb'], round(e['delta'])) for e in th)
+        M['sig_slot'] = tuple((e['verb'], round(e['delta']), e['actor'], e['target']) for e in th)
+    else:
+        M['sig_struct'] = M['sig_slot'] = ()
+    return M
+
+
+def log_hash(ev):
+    return hashlib.sha1(json.dumps([(e['t'], e['actor'], e['verb'], e['target'], e['ref'], e['delta']) for e in ev]).encode()).hexdigest()
