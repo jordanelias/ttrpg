@@ -1,0 +1,167 @@
+# Valoria master workplan v10 — the row ledger, part 4: PR #506's gap register and the thrust-layer design (T06 · lane IN)
+## Status: PROPOSED. Merging this file ratifies nothing (ED-1094's loud exception).
+## Lane: IN (cross-cutting). Part of `2026-10-24-v10-00-head.md`; continues `2026-10-24-v10-06-row-ledger.md`, `…-06-row-ledger_part2.md` and `…-06-row-ledger_part3.md`.
+## Grade under `CLAUDE.md` §0.2: `paper`. IDs allocated: none.
+
+## 1. How to read
+
+Jordan: "Fold in relevant items from PR#506, reconcile carefully as required, ensure sequence of work logical." PR #506 (`e6601c0`, merged) added `proposals/2026-10-25-thrust-layer/`: `00_THRUST_LAYER_DESIGN.md` ("TL": how an ambition plus an authored ladder of typed stages, over ten thrust axes, could be made possible with no arc carrier; PROPOSED, held back in full), `01_MISSING_IN_CODE.md` ("the register": 29 gaps G-01 to G-29, each graded, with owner, minimal design, falsifier, control and a dependency order; its §7 is its pass record), `probes/` (scratch scripts P1 to P12 and their saved outputs) and `toy/` (toy-world evidence, not Valoria). Both documents are reference under `CLAUDE.md` §0.05: they bind no code and allocate no id.
+
+**What is folded and what is not.**
+- **Folded as work:** the register's substrate and instrument findings — measurements and repairs the plan needs. They land as two new positions in B10-02 (**CR-14**, the pooled census, the answered-by-source and death-census blocks and the generalized arms; **CR-15**, the executed-only story reading), as clauses on existing positions (`-08` **HR-8** on REM-10; **HR-9** on the B10-05 exit and REM-23), and as dispositions on owners that already exist (§2).
+- **Folded as one held cluster:** the thrust layer itself (TL §1 to §4, §6, §8 B2 to B6; register rows G-09, G-10, G-13, G-14, G-19, G-23, G-24, G-26, G-28) is **CL-THRUST** in B10-19, **HELD on M20**. It contravenes ratified text (TL §9; §4 below), so its release is Jordan's, not the agent's. Nothing in it is built before M20 is answered.
+- **Asked:** three questions are added to `-05`: **M19** (H-156 / S12: decline wrong-kind candidates at formation or accept them as a scene tax; non-blocking, A2-37's default stays in force), **M20** (TL D4 and the contraventions; blocks CL-THRUST) and **M21** (TL D1: is a beaten fighter ever killed outright, and where the `Slain` edge sits; blocks CL-THRUST's B5.1 only). TL's D2 and D3 are taken with a revert (§4).
+- **Not folded:** the toy-world results, the probe scripts as code, and the superseded v1 drafts (§6).
+
+Columns of §2: the id (the first cell of every row is exactly the id); what the row says, in one line; the register's grade (its §1: ABSENT-RUN, ABSENT-READ, PRESENT-INERT, PRESENT-USED, PRESENT-BROKEN); the v10 disposition and its carrier; the hash and sequence note. "Register `:L`" is a line of `01_MISSING_IN_CODE.md`; "TL `:L`" a line of `00_THRUST_LAYER_DESIGN.md`. Figures are the register's and were checked against the saved probe outputs named in §8; none was re-run in this pass.
+
+## 2. The register's 29 rows
+
+| id | what it says | register grade | v10 disposition and carrier | hash and sequence |
+|---|---|---|---|---|
+| G-01 | Wrong-kind candidates form on every referent and are refused at admission: 4,620 of 16,116 attempts (28.7%) at four seasons over seeds 0-4, 2,385 of 7,402 (32.2%) at two (P10, per act); 0 eligibility refusals | PRESENT-BROKEN | OWNED: A2-37 (`-05` part 2; taken, contested by #506, asked as M19) and REM-21 to REM-25, REM-2C, CP-T05-04 (B10-05); the exit gains HR-9's measurement and three controls. The register withdrew its own generic design (stamp every referent with its collection class: it fails on Record sub-kinds, `DocketItem`, `determine`'s two conjuncts, `examine`'s `of: site`, the partition's own rule and `Forbidden` on a duplicate class, register `:72`, `:193`), which is consistent with REM-21's per-question stamping. The Layer 1 question (may a `Question` carry a referent kind, `architecture/meta/04_CODE_ARCHITECTURE.md:171`) rides with M19 | B10-05, declared movers per item; its baseline is CR-14's pooled census, taken in B10-02 before any hash move (register step 2) |
+| G-02 | A contested act refused at admission never enters `SeasonDriver.resolved`, so every reader of `resolved` omits it: aperture `att` 1,182 against 1,511 acts that emitted Events at seed 0, two seasons (329 acts) | PRESENT-BROKEN (as an attempted or executed count; correct as a fold count) | OWNED: REM-10 (B10-02) plus HR-8: `_attribute_acts` also counts `graded_loss(act, events)`; the other readers of `resolved` (`populated.run`, `decision_spread`, `arms`, `soak`, `scarce`, `storybar`) are decided one by one in the same position; the expected reading gains the seed-0 figures (accept 4 against 48; determine 0 against 6; examine 0 against 61; research 11 against 132; fight 2 against 19). Found twice: `-01` §5 (§3 row 6) | B10-02, hash EQUAL (a read); first in the register's order (step 0) |
+| G-03 | Four readers classify "refused" and a graded loss (a Failure-degree kind in both `emits` and `emits_on_refusal`) falls on different sides of them | PRESENT-BROKEN (measurement) | Part 1 (instrument alignment): HR-8 on REM-10, `graded_loss` reported beside made and refused (2.4% of attempts at two seasons, 2.9% at four, P10). Part 2 (whether a lost `tell` or a failed inquiry is retryable; changes `_refused_acts` in `loop/driver.py`): LEAVE; the register answers it at ladder step 3 (degree decides, 04 §C.4). Trigger: a reading after B10-05 shows failed tells or inquiries starving chains (R-07, R-09); then a declared mover with its own re-baseline | Part 1: B10-02, EQUAL. Part 2: a hash mover, never before B10-05 closes |
+| G-04 | The closers barely execute (four seasons, seeds 0-4, executed of attempted): determine 3/43, confer 10/111, covenant 0/70, commit 8/564, release 63/460, revoke 0/32 | PRESENT-BROKEN | (a) REM-23 per HR-9: it reports `commit`'s admissions on a Proposition (3 of 180 today, P3) and, if the classed source yields too few for a goal to be re-committed, names the register's extension (stamp the Propositions the person's own ledger names) as the next step on M19's answer. (b) Act-minted Propositions have predicate `''` (52 of 52, `proposals/2026-10-13-narration-mechanisms.md`): a note on NM-W4 (HELD), no new position. (c) No new design: H-163 owns `determine`, H-207 owns `revoke` (a computed `revoke` is not driven, Jordan 2026-10-12) | (a) B10-05, mover. (b) B10-19, held. (c) as the owners |
+| G-05 | The benevolence and works verbs never execute: restore 0/250, tend 0/302, build 0/230, found 1/208, work 3/726, give 5/24 | PRESENT-BROKEN | OWNED: H-165, ED-IN-0297 (M5), H-229, H-168. REM-25 already moves `found` and `build` to never-attempted (no computed act declares a works); the register withdrew its falsifier for `build`, `found` and `work` for the same reason | `build`, `found`, `work` wait on M5; `restore`, `tend`, `give` are readable after B10-05 |
+| G-06 | `migrate` is the largest refusal mass and refuses after admission (2,067 of 2,080 at four seasons) | PRESENT-BROKEN | OWNED: H-168 (`-06` part 2); its limit 4 is REM-29 | B10-06. Any need share read before it lands inherits the sink |
+| G-07 | `arrest` never forms (eligible for 25 seated persons, formed 0); `succeed` is not in `resolvable_verbs()` | ABSENT-RUN | OWNED: IN-12 step 5 (`arrest`; H-226) and IN-61 (`succeed`; H-230) | B10-09, as the owners |
+| G-08 | No n-seed refusal census as a committed instrument; aperture is per seed | PRESENT-USED for one seed, ABSENT for n | CR-14 (i): `harness/aperture.py --seeds`, pooling REM-11's PER VERB lines, per-seed output kept | B10-02, EQUAL; after REM-10 and REM-11 (one file), before REM-16 (register step 1) |
+| G-09 | No seat-attached goal binds anyone in the shipped realm: the two seat rows sit on foreign seats | ABSENT-RUN | LEAVE: authored content (seat rows for domestic seats), Jordan's. Trigger: M20 answered yes, then CL-THRUST's B6 | no code; register step 5 |
+| G-10 | 24 of 38 goal rows are `orientation` and mint no Proposition (12 of 38 mint in the shipped realm) | PRESENT-USED as designed; the gap is content | LEAVE: authored content, Jordan's. Trigger: M20 answered yes, then CL-THRUST's B6 | no code; register step 5 |
+| G-11 | The `need` share cannot be split by what the need is about: all-`need` scenes 149-174 of 606-642, about a goal Proposition 43-53 (seeds 0-4, two seasons, P2) | PRESENT-USED, unmeasured by a committed instrument | CR-14 (ii): an ANSWERED-BY-SOURCE block, `need` split into {goal Proposition, creed, want, vacancy head} through `data/goals.goal(q.about)`, plus `news.told` and `news.untold` counts | B10-02, EQUAL |
+| G-12 | `harness/arms.py::run_arm` sweeps one hard-coded fixture and no build flag | PRESENT-USED, narrowed | CR-14 (iv): `(fixture name -> value)` or `(build kwarg -> value)` arms; `field_casualty_model` stays the shipped default arm; the two-proportion z kept | B10-02, EQUAL; the shipped arm's output byte-identical before and after |
+| G-13 | The whole ladder runtime is absent: the axes roster, `axis:`, stages, `current_stage`, stage referents, the R3′ pulse | ABSENT-READ | CL-THRUST (B2.1, B2.2, B3.1, B3.2). The key is named `goal_stages`, not `ladders:` (§3 row 3); the Layer 1 questions TL §8 lists go to `layer-conformance` Lens B first | B10-19, HELD on M20; B3.2 after CR-10 (B10-09) |
+| G-14 | Every lawful closure form ends through a verb that does not execute; `world_q.endings_reached` is an executable terminus TL does not use | PRESENT-BROKEN (the verbs) / PRESENT-USED (the terminus read) | The verbs: H-163, IN-61 and G-04's owners. CL-THRUST B4.1 (the threshold-raised docket crossing) is composed on `endings_reached`'s shape; B4.2 (the bound-peace reader) needs `covenant` executing | after B10-17 and M20 (register step 6) |
+| G-15 | Deaths come mostly through `accept` with no challenge behind it: 20 deaths in 5 seeds × 4 seasons, 16 of seat-holders, 11 by `accept`, 9 by `fight` (P4) | PRESENT-BROKEN | Evidence for PC-10 (B10-11): of the 11 `accept` deaths, 0 had a `challenge.issued` Event from the accept's subject aimed at the acceptor (P11b). PC-10b's refusal of an `accept` with no held challenge removes that route to death once H-240's route is chosen | B10-11 (register step 3); falsifier: P4's `accept` deaths reach 0 pooled over seeds 0-4 |
+| G-16 | No season fight can stop short by terms; `DUEL_TERMS` and `fight(..., terms=)` exist and are inert (PC-10a) | PRESENT-INERT | OWNED: PC-10b owns the terms (B10-11, BLK:H-240). The register withdrew its own fixture design: it contradicted PC-10b's text that an unchallenged `fight` keeps lethal terms | B10-11 |
+| G-17 | A killer and the man he killed never meet in a question (H-209) | ABSENT-RUN | OWNED: H-209 (IN-12, IN-58, CP-T09-02) | B10-09 and B10-17, as the owners |
+| G-18 | A dead holder's seat is named by no claim; the vacancy is acted on only through the world read `vacancies` | ABSENT-RUN (claim) / PRESENT-USED (world read) | OWNED: H-206; CP-T02-01 names the seat a death empties. Baseline reading (P4): 0 `person.died` or `tenure.closed` claims on the 16 dead holders' seats. `-06`:244 already records that CP-T02-01 does not say whether it covers the closed `hold` (H-206's option (b)) | B10-09 |
+| G-19 | The standing gate binds nobody in shipped play (`build_realm(..., guards=False)` by default; 3 guard rows of 31 seats) | PRESENT-INERT | CL-THRUST B5.2 (the gate G1 to G3), after IN-36's guards default (M1) and on CR-14's arms; it contravenes the `fight` cell note G4 (M20) | after B10-17 and M1; HELD on M20 |
+| G-20 | No committed reader of deaths per run by the killing verb and the victim's seats | ABSENT-READ | CR-14 (iii): a death-census block in aperture, `person.died` per run by the killing act's verb and the victim's held seats at death | B10-02, EQUAL |
+| G-21 | Healing the Calamity has no act and the Calamity has no source in the realm (0 threadwork modules loaded in a season, P8) | ABSENT-RUN | OWNED: H-236, H-85, IN-06, WR-01. No new design; TL axis J stays out of CL-THRUST until H-236 has a source | as the owners (WR-01 is in B10-15, HELD on M2) |
+| G-22 | Ageing cannot be switched on: `Person.born` is fixed at construction from `DEFAULT_FIXTURES`, so `age_at_build` is not sweepable on a built world (P5); H-208 records this limit and that the alternative was not taken | PRESENT-INERT | LEAVE. Trigger: M14 answered, or H-208's values authored; then `build_realm` sets `born` from the world's fixtures | hash EQUAL at the shipped 0 when it lands |
+| G-23 | Caste has no readable store or query | ABSENT-READ | CL-THRUST, on D3 as taken (§4): a Query over the affiliation convictions, no store | HELD on M20 (register step 5) |
+| G-24 | "Hide the threadwork truth" has no goal row and no record of the truth to hide | ABSENT-READ | CL-THRUST (axis H; its holder on D2 as taken, §4). The Record schema question the register leaves open has no position until a record kind for the truth exists | HELD on M20 |
+| G-25 | Case termini (`ends_when` on all 46 NPC cases) are prose that no code evaluates | PRESENT-INERT | LEAVE, no trigger: `ends_when` is not mechanized (`CLAUDE.md` §0.05 cl. 2). An executable terminus arrives only as a goal-stage predicate inside CL-THRUST | no code |
+| G-26 | The ten axes lack referent-bearing rows (B, H, I and J have none) | ABSENT-READ (content) | LEAVE: authored content, Jordan's. Trigger: M20 answered yes, then CL-THRUST's B6 | no code; register step 5 |
+| G-27 | `storybar` and `chronicle` count refused acts as story: 55 of the 66 deepest-chain acts are refused (P7) | PRESENT-BROKEN (as a narrative reading) | CR-15: `harness/storybar.py::read` gains an `executed_only` reading reported beside the current one (IN-19's pinned meaning stays); `harness/chronicle.py --executed-only` | B10-02, EQUAL; after REM-10, in the lane disjoint from aperture |
+| G-28 | No driver-side ARC reader, no bookkeeping null, no shuffled-`causes` null | ABSENT-READ | CL-THRUST B0.1 (needs CR-15), with the register's refusal null and bookkeeping null | HELD on M20 (register step 4) |
+| G-29 | The `need` and `news.told` arm instrument is absent | ABSENT-READ | CR-14: G-29 = G-11 + G-12 = TL B0.2; no third harness | B10-02, EQUAL |
+
+## 3. Reconciliations
+
+One row per place where #506 and the plan, or two readings of one figure, disagree. Each side is cited where it was opened.
+
+| # | subject | one side | other side | which stands |
+|---|---|---|---|---|
+| 1 | Whether wrong-kind formation is settled | H-156 (`engine/season/hole_register.yaml:3615`): its ladder ran and the row stays open; the `give`/`petition` precedent does not close it. The register follows it (register `:175`, escalate) | A2-37 (`-05` part 2:141): taken at step 4, decline at formation, row by row through a referent class, with a per-row revert | A2-37's default stays in force, so B10-05 proceeds; the question is asked as **M19**, non-blocking. A2-37 is re-labelled "taken, contested by #506, asked as M19" |
+| 2 | What ED-IN-0225 ruled | The archive row (`registers/archive/editorial_ledger_in_archive_pre-2026-09.yaml:3209`, text at `:3219-3221` and `:3229-3230`): an arc has "NO CARRIER: no type, no rung, no tenure kind … the carrier is not to be built … What is dropped is the DESIGN QUESTION … and with it any obligation on a future session to answer it". It dropped an obligation and forbade a carrier. TL `:481` reads "a carrier and a type" and calls a typed `ladders:` schema a narrowing | A2-40 (`-05` part 2:144): the citing docstrings (`harness/storybar.py:47`, `soak.py:45`, `populated.py:51`, `chronicle.py:8`) are narrowed to the carrier | Both lead to the same edit at the citing sites (A2-40's). Whether a typed stage schema may be built is TL's release, asked as **M20** |
+| 3 | The key name for the stage schema | TL `:453` (B2.2): `ladders:` | Register `:94` (G-13), `:179`: `ladders` already means two other things in the package (`LarderInput.ladders`, `engine/season/queries/inputs.py:221-234`; the degree ladder, `engine/season/seam/ladder.py`) | `goal_stages` (`CLAUDE.md` §4 word choice) |
+| 4 | TL's `Slain` band | TL `:276` (§5.1): `Felled` becomes down-alive and a new `Slain` band carries death | Register `:102` (G-16): not a duplicate of PC-10a, since a felling kills under any term (`modules/combat/wrapper.py:505-507`) and `Slain` is a different cut; the 2026-09-03 and 2026-09-04 rulings ("your code just has to accept the result", `engine/season/rosters.yaml:788`) and `fight`'s "This is the kill" (`engine/season/verb_table.yaml:694`) | A different cut, contravening Jordan's combat rulings: asked as **M21**; it blocks CL-THRUST's B5.1 only |
+| 5 | The refusal headline | `-01`:9: 67% of resolved acts end in a refusal and no success, 73.6% of all attempts once the uncounted refusals are added (three seeds × four seasons) | Register `:35` (P1) and `:74` (G-03): 76.8% (driver definition, five seeds, four seasons) and 73.9% with graded losses excluded | The same finding at different definitions and seed counts; the headline stands. CR-14 and HR-8 make both readings committed |
+| 6 | Refusals missing from `resolved` | `-01`:14 and §5 (`:145`): 1,899 of 5,103 admission refusals (37.2%) belong to contested acts that never enter `driver.resolved` | Register `:73` (G-02): 329 acts at seed 0, two seasons (1,511 against 1,182) | The same defect, found twice; REM-10 plus HR-8 |
+| 7 | The cross-person share | `-01`:378 and `-02`:32: 30.4% of acts have another person's act among their antecedents (storybar) | Register `:42` (P7): 4,951 of 16,295 (30.4%) as storybar reads it; 679 of 3,786 (17.9%) executed acts with an executed cross antecedent | Both stand: `-01` and `-02` keep 30.4% ("as storybar reads it") and gain the stricter 17.9% as its companion (CR-15) |
+| 8 | The R-04 closer funnel | `-02`:46: `confer` 59 acts, 4 executed; `revoke` 19, 0; `covenant` 41, 0 (three seeds) | P1 (`probes/p1_s4.txt:41`, `:45`, `:49`): confer 10 of 111, covenant 0 of 70, revoke 0 of 32 (five seeds, four seasons, driver definition) | Consistent |
+| 9 | Which dark switches move the world | Register `:40` (P5, seed 0, two seasons): `body_step=10` moves the hash (`body.changed` 0 to 37, deaths unchanged); `illness_rate=0.05` (deaths 3 to 4); `season_factor_draw=((0.5,),)*4` moves the hash; `lattice_coupling=250` moves the hash, event count unchanged; `age_step=0.01` and a swept `age_at_build` leave the hash identical | REM-52 / H-125 (`-03`:97, held on M6), CP-T10-03 (`-03`:402), CP-T10-05 (`-03`:404), M14 (`-05`:106) | Evidence for those positions' controls and for M14; no position changes |
+| 10 | Whether TL's B1.1 is blocked | TL `:436` (S12) and `:450` (B1.1): "blocked on the open S12 decision" | `-03` B10-05 card and A2-37: B10-05 proceeds on the taken default, with a per-row revert | v10 stands: B1.1 is B10-05 and is not blocked; M19 can reverse it row by row |
+
+## 4. Answers taken, and the TL items that map to existing positions
+
+**Answers taken from the design.** Each reverts alone.
+
+- **D2** (TL `:500`, answered by canon at step 3, `canon/03_canonical_timeline.md:98`): axis H (hide the threadwork truth) is held by the Church, and by the Crown's circle where Church-consecrated; the caste order is defended by the settlement's beneficiaries, the Crown and the Church. [ASSUMPTION; medium; Jordan to correct; revert: the holders are left unnamed and no referent-bearing row for axis H or for the caste order's defence is authored until Jordan names them]
+- **D3** (TL `:501`, answered by precedent at step 4): caste has no store; it is a Query over persons' convictions on the affiliation poles (`einhir_restoration`, `thread_truth`, `inner_tradition`), on the stability precedent ("a Query over stance and claims, no stored value"). [ASSUMPTION; medium; Jordan to correct; revert: caste gets its own carrier, designed as a separate CL-THRUST piece with its own Layer 1 check]
+
+**TL §7's substrate repairs.** TL's figures here come from the narration proposal and are superseded for this plan by P1, P2 and P10 (register `:51-54`).
+
+| item | TL says | v10 carrier |
+|---|---|---|
+| S1 | candidate typing: `opening_set` forms every verb on every referent | A2-37 and REM-21 to REM-25, REM-2C, CP-T05-04 (B10-05); HR-9's controls; M19 |
+| S2 | the refusal rate | read by REM-10 plus HR-8 and CR-14 (B10-02); moved by B10-05 and B10-06; §3 row 5 |
+| S3 | `need` starvation | read by CR-14 (ii) (B10-02); the R3′ pulse that would act on it is CL-THRUST B3.2 |
+| S4 | exogenous motion dark | `body_step`: REM-52 / H-125 (M6); `illness_rate`: CP-T10-05 (M6, M11); `season_factor_draw`: M16 (CL-EVENTS) and CP-T10-03; `age_step`: H-208 (M14). P5's evidence is §3 row 9 |
+| S5 | ageing has no input | G-22, LEAVE with its trigger; H-208 (M14) |
+| S6 | H-209: a death never reaches the question set | H-209 (IN-12 step 5, IN-58, CP-T09-02) |
+| S7 | H-206: a dead holder's seat is named by no claim | H-206; CP-T02-01 (B10-09) |
+| S8 | `succeed`, `tie`, `knot` have no opener | `succeed`: IN-61 (B10-09); `tie / knot`: H-182 (`-06`:27) |
+| S9 | `accept` cannot read a challenge | PC-10 (PC-10b, B10-11, BLK:H-240); G-15's evidence |
+| S10 | act-minted Propositions are empty | a note on NM-W4 (B10-19, held); G-04 (b) |
+| S11 | the closure verbs refuse | G-04's owners: H-163 (`determine`), H-207 (`confer`, `revoke`), REM-23 (`commit`) |
+| S12 | S1's disposition is unruled | M19; A2-37's default in force meanwhile (§3 row 1) |
+
+**TL §8's build order.**
+
+| item | v10 carrier |
+|---|---|
+| B0.1 | CL-THRUST, its first piece: the driver-side ARC reader, with the refusal null and the bookkeeping null (G-28); needs CR-15 |
+| B0.2 | CR-14 (B10-02): G-29 = G-11 + G-12 |
+| B1.1 | B10-05, not blocked (§3 row 10) |
+| B1.2 | not a new position (TL says so): H-209 under IN-12 step 5, and CP-T02-01 for H-206 (B10-09) |
+| B2.1 | CL-THRUST: the `thrust_axes` roster, the `axis:` key and the loader refusals; Layer 1 questions to `layer-conformance` Lens B |
+| B2.2 | CL-THRUST: the stage schema under the key `goal_stages` (§3 row 3) |
+| B3.1 | CL-THRUST: `current_stage`, read person-side |
+| B3.2 | CL-THRUST: stage referents through the classed stamper and the R3′ pulse; after CR-10 (B10-09, which edits the same `attention_key`); uses CR-14's ANSWERED-BY-SOURCE block and arms |
+| B4.1 | CL-THRUST: the threshold-raised docket crossing, composed on `world_q.endings_reached`'s shape (G-14); needs `determine` executing (H-163, IN-12, the CP-T09 items) |
+| B4.2 | CL-THRUST: the bound-peace reader; needs `covenant` executing (B10-17) |
+| B5.1 | CL-THRUST, also HELD on M21: the `Slain` band; after PC-10, which edits `fight`'s bands, and reading PC-10a |
+| B5.2 | CL-THRUST: the standing gate G1 to G3; after IN-36's guards default (M1); needs CR-14's arms |
+| B6.n | CL-THRUST: author the ladders, one axis per position, in TL §6's order; content (G-09, G-10, G-26) is Jordan's; axis J stays out until H-236 has a source |
+
+**TL §10's decisions.**
+
+| item | v10 |
+|---|---|
+| D1 | M21 |
+| D2 | taken (above) |
+| D3 | taken (above) |
+| D4 | M20 |
+
+**TL §9's contraventions, each with its owner.** Every one is a ratified text; none is the agent's to narrow.
+
+| ruling contravened | how | owner |
+|---|---|---|
+| ED-IN-0225 | narrowed in two respects (a typed stage schema is a type; the design takes up the dropped question) | M20 |
+| `narration-mechanisms.md` §3.4, a storyline object that steers the sim (`proposals/2026-10-13-narration-mechanisms.md:181`) | narrowed: a ladder steers attention and writes nothing; the line between a licensed "sequence" (Jordan 2026-08-18, `proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md:618`) and an "entire arc" is Jordan's | M20 |
+| the same §3.4 on scripted beats (`:186`) | narrowed for scripted beats; kept for need-triggered injection | M20 |
+| the `oblige` declared-term precedent (`term.declared_by`) | contravened: the R3′ deadline is a term the author declared, not an act | M20 |
+| Jordan's 2026-09-03 and 2026-09-04 combat rulings (`engine/season/rosters.yaml:788`; `verb_table.yaml:694`) | contravened in reading: `Felled` stops meaning death and its edge becomes a swept value | M21 |
+| `fight`'s cell note G4: "A WIDER precondition … would be an invention" (`engine/season/verb_table.yaml:662`) | contravened by the standing gate's G2 | M20 (B5.2 also waits on M1) |
+
+TL §9 keeps v2 R-AI, IN-61 (RS-27), L5, ED-IN-0256, ED-WR-0011, A-31 and A-33; they need no owner.
+
+## 5. Sequence logic
+
+The register's dependency order (register `:158-169`) maps onto v10's spine without change.
+
+| register step | v10 position or batch | why it sits there |
+|---|---|---|
+| 0: G-02, G-03 part 1 | REM-10 plus HR-8 (B10-02) | every later count is read through them; "a fix inside `attribute` alone leaves the others as they are" (register `:73`); a read, hash EQUAL |
+| 1: G-08, G-11, G-12, G-20 | CR-14 (B10-02), after REM-10 and REM-11 (one file, `aperture.py`, serial) and before REM-16, whose three-seed baselines use it | the controls exist before their subjects (storybar's own rule); P1 to P4 become committed readings before any hash move |
+| 4 (first half): G-27 | CR-15 (B10-02), after REM-10, in the lane disjoint from aperture (`storybar.py`, `chronicle.py`) | it is a read and costs no hash, so it lands with the other instruments rather than at step 4; CL-THRUST's B0.1 needs it |
+| 2: H-156, G-04(a), G-03 part 2 | B10-05 on A2-37's default (M19 non-blocking), REM-23 per HR-9; G-03 part 2 LEAVE with its trigger | formation gates every closer reading; B10-05 is the first declared mover and is measured against CR-14's baseline |
+| 3: G-15, G-22 | B10-11 (PC-10); G-22 LEAVE | death rarity is settled before any ladder raises pressure on seat-holders |
+| 4 (second half): G-28 | CL-THRUST B0.1 | the ARC reader is part of the held design and waits on M20 |
+| 5: G-13, G-09, G-10, G-26, G-23 | CL-THRUST B2 to B3 and B6 | ladders attach only after referent rows and Proposition referents exist; last, after M20 |
+| 6: G-14, G-19 | CL-THRUST B4.x and B5.2 | measurable only once `determine` and `covenant` execute (B10-17) and once IN-36's guards default is set (M1, B10-17) |
+| (the cluster's other edges) | CL-THRUST after CR-10 (B10-09) and PC-10 (B10-11) | CR-10 edits `attention_key`, which B3.2 also edits; PC-10 edits `fight`'s bands, which B5.1 also edits |
+
+## 6. What is not folded, and why
+
+- **The toy-world results** (`toy/`): its own README grades them model-internal and low confidence: a 24-actor abstract world built to test the logic of narrative regimes, which "says nothing about Valoria's balance or content". They inform TL's design choices and are reference with it; they carry no figure into this plan. The five `toy/real_engine_chronicles/` files are engine output saved as scratch.
+- **The probes as code** (`probes/`, P1 to P12): scratch-grade scripts. CR-14's builder reads `p1_refusal_census.py`, `p2_goals_and_need.py`, `p4_killing_consequence.py` and `p10_clean_remeasure.py` as reference implementations and imports none of them; their saved outputs are the figures CR-14's, CR-15's and HR-9's falsifiers must reproduce.
+- **The superseded v1 drafts**: both documents are v2 and record what changed from v1 (TL's adversarial-pass record; register §7). v1's text is not on disk and nothing of it is carried: in particular the register's v1 G-01 rule (withdrawn), its v1 P3b figure (replaced by P10) and its v1 `fight_terms` fixture (withdrawn). The toy's v1 files (`regimes_v1.py`, `suite_v1.py`, `predictions_v1.py`, `out_v1.txt`, `results_v1.json`) are kept by the PR as pre-registration evidence and are not folded.
+- **TL §7's inherited figures** (33.3%, 70.5%, 51 of 803, from the narration proposal): superseded for this plan by P1, P2 and P10, as the register itself says (register `:51-54`).
+
+## 7. Coverage
+
+`python proposals/2026-10-24-master-workplan-v10/ctl/coverage_check.py proposals/2026-10-24-master-workplan-v10 proposals/2026-10-24-master-workplan-v10`, run from the repository root, reads the 29 ids from `ctl/static_inventory.json` (`thrust_register_ids`) and requires each to be the first cell of a row in this file. It checks that a row exists, not that its disposition is right. The same script requires every handle this file names to be known to `ctl/batch_map.py`, so it fails while that map lacks any of CR-14, CR-15 or CL-THRUST. A negative control (a copy of this directory with the G-17 row deleted) reported `28/29  MISSING ['G-17']`.
+
+## 8. Not verified
+
+- No probe was re-run in this pass. The figures were read from the register and checked against the saved outputs `probes/p1_s4.txt`, `p2_s2.txt`, `p4_s4.txt`, `p7_s4.txt` and `p10_s4.txt`. P2's ranges are over seeds 0-4; seed 0 alone reads 149 `need` scenes of 619, 48 of them about a goal (`p2_s2.txt:8`).
+- TL's line citations for the 2026-09-04 ruling (`rosters.yaml:837-840`, `04_CODE_ARCHITECTURE.md:366`) have drifted; the ruling was found at `engine/season/rosters.yaml:788` and §3 and §4 cite that line.
+- Whether the scene's `WoundTracker` exposes a quantity that separates down from dead (TL's [ASSUMPTION] under §5.1) was not checked; B5.1 has no source without it.
+- The share of delivered questions fed by a refusal-kind claim (G-01's motion control) is unmeasured (register §7); HR-9's control (2) reads delivered questions, claims and scenes in total.
+- A player's acts bypass `opening_set` (register §6 (3)), so a formation filter binds NPCs only; not examined here.
+- Whether CP-T02-01 covers H-206's closed `hold` remains the open note at `-06`:244.

@@ -1,6 +1,6 @@
 """The v10 batch map: which position belongs to which batch, and each batch's card.
 
-STATE AFTER THE DEPENDENCY SEQUENCE (`2026-10-24-v10-09-build-00-sequence.md`): the batch assignments, ORDER and CARDS below follow the final cut in `-03` (NM-W3 and SC-06 moved to B10-01, NM-W0 to B10-02; CP-T02-06 is in B10-10 since the NERS fold; CL-EVENTS was added by it), and after the review round (REM-45 moved from B10-03 to B10-Z, held on M18; CP-T05-04 after REM-25 in B10-05; B10-09 cut in two closes; SC-02 design-first; CP-T10-08 last in B10-18). The cut handles REM-40, REM-41, REM-51, CP-T02-04, CP-T02-08, CP-T05-05, CP-T06-06 and CP-T07-01 are kept as keys, mapped to CUT, so the coverage run still knows them; their dispositions are in `-07` section 2. The plan files are the record: where this file and `-03` differ, `-03` wins.
+STATE AFTER THE DEPENDENCY SEQUENCE (`2026-10-24-v10-09-build-00-sequence.md`): the batch assignments, ORDER and CARDS below follow the final cut in `-03` (NM-W3 and SC-06 moved to B10-01, NM-W0 to B10-02; CP-T02-06 is in B10-10 since the NERS fold; CL-EVENTS was added by it), and after the review round (REM-45 moved from B10-03 to B10-Z, held on M18; CP-T05-04 after REM-25 in B10-05; B10-09 cut in two closes; SC-02 design-first; CP-T10-08 last in B10-18), and after the fold of PR #506 (CR-14 and CR-15 added to B10-02, CR-14 after REM-11 in lane 1 and CR-15 after REM-15 in lane 2, REM-16 needing both; CL-THRUST added to B10-19, held on M20, its B5.1 piece also on M21; the questions are M1 to M21). The cut handles REM-40, REM-41, REM-51, CP-T02-04, CP-T02-08, CP-T05-05, CP-T06-06 and CP-T07-01 are kept as keys, mapped to CUT, so the coverage run still knows them; their dispositions are in `-07` section 2. The plan files are the record: where this file and `-03` differ, `-03` wins.
 
 This file is the author's judgment in one place; it is not a plan."""
 
@@ -17,9 +17,9 @@ CARDS = {
    build='2026-10-24-v10-09-build-B10-01.md'),
  'B10-02': dict(name='INSTRUMENTS THAT CAN SEE THE FAILURES', lanes='IN', code=True,
    gate='merged: B10-01',
-   exit='after REM-16 and before CR-01/IN-18: World.content_hash() at build_realm(0) and after aperture 1 s (s=0,1,2) against the base commit; python -m engine.season.harness.report && python -m engine.season.harness.delta <base sha> -> hashes EQUAL; PROBE FLIPS 0; the three-seed baselines for B10-05 and B10-06 recorded in the close commit body',
+   exit='after REM-16 and before CR-01/IN-18: World.content_hash() at build_realm(0) and after aperture 1 s (s=0,1,2) against the base commit; python -m engine.season.harness.report && python -m engine.season.harness.delta <base sha> -> hashes EQUAL; PROBE FLIPS 0; the three-seed baselines for B10-05 and B10-06 recorded in the close commit body; CR-14 reproduces the register P1, P2 and P4 at seeds 0-4 and its shipped arms arm is byte-identical; CR-15 default storybar reading unchanged byte-for-byte and its executed_only reading reproduces P7; git status --short clean after every harness run',
    hash='mixed (movers: CR-01 (test-file pins only); IN-18 (only if G5 builds))',
-   shared='engine/season/harness/corpus_run.py (attribute, run_case); engine/season/harness/aperture.py; engine/season/harness/decision_spread.py; engine/season/harness/storybar.py; engine/season/loop/predicates.py (TRACE lines only); engine/season/requirements.yaml (measured: paragraphs); modules/combat/ and tests/valoria/test_combat_lever_sign_safety.py (CR-01); engine/season/loop/witness.py (IN-18, only if G5 builds)',
+   shared='engine/season/harness/corpus_run.py (attribute, run_case); engine/season/harness/aperture.py (REM-11, CR-14); engine/season/harness/arms.py (CR-14); engine/season/harness/decision_spread.py; engine/season/harness/storybar.py and harness/chronicle.py (CR-15); the other readers of resolved REM-10 decides under -08 HR-8 (harness/populated.py run, harness/soak.py, harness/scarce.py); engine/season/loop/predicates.py (TRACE lines only); engine/season/requirements.yaml (measured: paragraphs); modules/combat/ and tests/valoria/test_combat_lever_sign_safety.py (CR-01); engine/season/loop/witness.py (IN-18, only if G5 builds)',
    build='2026-10-24-v10-09-build-B10-02.md'),
  'B10-03': dict(name='CONFORMANCE A: NO-HASH DELETIONS AND CORRECTIONS', lanes='IN', code=True,
    gate='merged: B10-02; held positions: DEF-9 (M11)',
@@ -35,7 +35,7 @@ CARDS = {
    build='2026-10-24-v10-09-build-B10-04.md'),
  'B10-05': dict(name='FORMATION: ACTS FORM ONLY ON WHAT THEY CAN REACH', lanes='IN', code=True,
    gate='merged: B10-02, B10-04',
-   exit='PYTHONHASHSEED=0 python -m engine.season.harness.aperture 1 s (s=0,1,2) per item; register --requirements -> each classed verb exists:<Kind>=0 refusals fall to 0 (base 3,137 over three seeds, a lower bound); no claim that R-05 moves',
+   exit='PYTHONHASHSEED=0 python -m engine.season.harness.aperture 1 s (s=0,1,2) per item; register --requirements; CR-14 pooled census over seeds 0-4 (-08 HR-9) -> each classed verb exists:<Kind>=0 refusals fall to 0 (base 3,137 over three seeds, a lower bound); the wrong-kind-at-admission share per act falls (base 4,620 of 16,116, 28.7%, four seasons; 2,385 of 7,402, 32.2%, two); controls: pooled per-verb EXECUTED within P1 seed-to-seed range, questions delivered / claims deposited / scenes do not fall, every removed candidate force-admitted refuses on its kind; no claim that R-05 moves',
    hash='mixed (movers: REM-22; REM-23; REM-24; REM-25; CP-T05-04; REM-2C)',
    shared='engine/season/verb_table.yaml; engine/season/rosters.yaml (referent_classes); engine/season/queries/world_q.py (questions_for splice, own_referents_of_class); engine/season/data/verbs.py (DECLARED_CLASSES; VerbRow.scale removal); engine/season/decision/options.py; count pins: engine/season/tests/test_governance_build.py, test_season_shape.py (len(VERB_TABLE) == 56; executed and always-refused sets); engine/season/tests/test_referent_class_stamps.py (new)',
    build='2026-10-24-v10-09-build-B10-05.md'),
@@ -118,8 +118,8 @@ CARDS = {
    shared='engine/season/state/world.py (World.estates, remove_person); engine/season/loop/census.py; engine/season/data/fixtures.py; engine/season/data/geography.py; engine/season/queries/world_q.py (_larder_parts want; heir_of; estates_named); engine/season/queries/person_q.py (_bond); modules/mass_battle/terrain.py (terrain_type_at); references/module_contracts.yaml (route query role); engine/season/verb_table.yaml (release domain; marry); engine/season/loop/effects_migration.py (_relocate)',
    build='2026-10-24-v10-09-build-B10-18.md'),
  'B10-19': dict(name='DESIGN-FIRST CLUSTERS (NARRATION, CHARACTER, TROOP, EVENT DECK)', lanes='IN, WR, MB', code=False,
-   gate='no batch; the questions below; holds: M2 (CL-CHAR, CL-ATTR), M3 (CL-TROOP), M12 (NM-W5 alone), M16 (CL-EVENTS); no member is held on a narration decision',
-   exit='the question answered, then the cluster own position list is slotted into the next unopened batch by R8 -> no code until then',
+   gate='no batch; the questions below; holds: M2 (CL-CHAR, CL-ATTR), M3 (CL-TROOP), M12 (NM-W5 alone), M16 (CL-EVENTS), M20 (CL-THRUST; M21 its B5.1 piece alone); no member is held on a narration decision',
+   exit='the question answered, then the cluster own position list is slotted into the next unopened batch by R8; CL-THRUST pieces in TL section 8 order, each with its falsifier, control and instrument, hash EQUAL at empty data -> no code until then',
    hash='E',
    shared='proposals/ (design files only)',
    build='2026-10-24-v10-09-build-B10-19.md'),
@@ -195,16 +195,18 @@ CR = {
  "CR-11": ("B10-09", "A computed `establish`: where the office it founds is described (design-first; H-94 residue, H-132, H-144, H-156)"),
  "CR-12": ("B10-12", "Melee attrition back to the locked linear law (ED-MB-0045): measure, then design-first"),
  "CR-13": ("B10-15", "The Leap is not charged for failing (C-TW-3); the depth gate gets its reader (ED-WR-0005)"),
+ "CR-14": ("B10-02", "The pooled census and the other aperture and arms readings: aperture --seeds, ANSWERED-BY-SOURCE, the death census; arms.run_arm takes fixture or build-kwarg arms (PR #506 G-08, G-11, G-12, G-20, G-29)"),
+ "CR-15": ("B10-02", "storybar.read gains an executed_only reading beside the current one; chronicle --executed-only (PR #506 G-27)"),
 }
 NM = {f"NM-W{n}": "B10-19" for n in range(10)}
 NM["NM-W0"] = "B10-02"
 NM["NM-W3"] = "B10-01"
-CL = {"CL-CHAR": "B10-19", "CL-ATTR": "B10-19", "CL-TROOP": "B10-19", "CL-EVENTS": "B10-19"}
+CL = {"CL-CHAR": "B10-19", "CL-ATTR": "B10-19", "CL-TROOP": "B10-19", "CL-EVENTS": "B10-19", "CL-THRUST": "B10-19"}
 
 # In-batch order of the final cut ('->' is serial; 'held:' members wait on the question named and slot in by rule R8)
 ORDER = {
  'B10-01': 'REM-01 -> REM-02 -> REM-03 -> REM-04 -> REM-05 -> REM-06 -> REM-08 -> REM-09 -> NM-W3 -> SC-06 -> CR-02',
- 'B10-02': 'REM-10 -> REM-11 -> REM-13 -> REM-14 -> REM-12 -> REM-15 -> CR-05 -> CR-04 -> REM-16 -> NM-W0 -> CR-01 -> IN-18',
+ 'B10-02': 'REM-10 -> REM-11 -> CR-14 -> REM-13 -> REM-14 -> REM-12 -> REM-15 -> CR-15 -> CR-05 -> CR-04 -> REM-16 -> NM-W0 -> CR-01 -> IN-18',
  'B10-03': 'REM-42 -> REM-46 -> REM-47 -> CR-06; held: DEF-9 (M11)',
  'B10-04': 'REM-50; held: REM-52 (M6)',
  'B10-05': 'REM-21 -> REM-22 -> REM-23 -> REM-24 -> REM-25 -> CP-T05-04 -> REM-2C -> CR-07',
@@ -221,7 +223,7 @@ ORDER = {
  'B10-16': 'CP-T08-01 -> CP-T08-03 -> CP-T08-02 -> CP-T08-05 -> CP-T08-06 -> CP-T08-08 -> IN-14 -> CP-T08-10; held: CP-T08-07 (M17), CP-T08-04 (M5), IN-45 (M5), IN-52 (M17, M3), SE-04 (M1, M11), SE-06 (M1), CP-T08-09',
  'B10-17': 'IN-30 -> CP-T09-04 -> CP-T09-01 -> CP-T09-05 -> CP-T09-02 -> CP-T09-03 -> CP-T09-07 -> CR-09 -> CP-T09-08 -> CP-T09-09 -> CP-T09-06 -> IN-48; held: IN-36 (M1), FA-01 (M11)',
  'B10-18': 'CP-T10-06 -> CP-T10-07 -> CP-T10-09 -> CP-T10-01 -> CP-T10-02 -> CP-T10-03 -> CP-T10-08; held: CP-T10-04 (M11, M6), CP-T10-05 (M11, M6), CR-08 (M6)',
- 'B10-19': 'held: NM-W1, NM-W2, NM-W4, NM-W5 (M12), NM-W6, NM-W7, NM-W8, NM-W9, CL-CHAR (M2), CL-ATTR (M2), CL-TROOP (M3), CL-EVENTS (M16)',
+ 'B10-19': 'held: NM-W1, NM-W2, NM-W4, NM-W5 (M12), NM-W6, NM-W7, NM-W8, NM-W9, CL-CHAR (M2), CL-ATTR (M2), CL-TROOP (M3), CL-EVENTS (M16), CL-THRUST (M20; M21 for its B5.1 piece)',
  'B10-Z': 'held: FA-03, FA-07, GO-01 (M13, M2), GO-05 (M13), GO-06, MB-08, PC-05 (M13), PC-06, PC-08, IN-44 (M11, M15), SC-05, SC-07, REM-45 (M18)',
 }
 

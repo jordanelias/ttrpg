@@ -170,6 +170,32 @@ These have no earlier home, so they are written out in full. Format as in §2.
 - RE-BASE: re-read `_resolve_operation` and `attempt_leap` by symbol.
 - SOURCE: the editorial-id pass, lane 3 and critic ED3.
 
+### CR-14 — The pooled census and the other aperture and arms readings (IN) · BATCH B10-02 · STATE BUILD (harness, hash EQUAL) · R —
+- WHAT: four readings PR #506's register found missing from the committed instruments (G-08, G-11, G-12, G-20; G-29 is G-11 with G-12, TL B0.2). The builder may not widen it. (i) `harness/aperture.py` takes a `--seeds` list and pools its PER VERB block (REM-11's lines pooled; the per-seed output kept). (ii) An ANSWERED-BY-SOURCE block: for each deliberation, the source of the question delivered under the shipped rule, with `need` split into {goal Proposition, creed, want, vacancy head} through `data/goals.goal(q.about)`, plus `news.told` and `news.untold` counts (G-11). (iii) A death-census block: `person.died` per run by the killing act's verb and the victim's held seats at death (G-20). (iv) `harness/arms.py::run_arm` takes `(fixture name -> value)` or `(build kwarg -> value)` arms (`guards`, `foreign` and `goals` are `build_realm` parameters, not fixtures), keeps `field_casualty_model` as the shipped default arm and keeps the two-proportion z (G-12). The register's probes (`proposals/2026-10-25-thrust-layer/probes/p1_refusal_census.py`, `p2_goals_and_need.py`, `p4_killing_consequence.py`, `p10_clean_remeasure.py`) are reference implementations of scratch grade: the builder reads them and does not import them.
+- LANDED ALREADY: aperture's per-seed PER VERB block and its CONTROL line (`populated.run` acts equal, `content_hash` EQUAL; the register's P9); `arms.run_arm` with `field_casualty_model` hard-coded (`arms.py`, `run_arm`) and the two-proportion z; REM-11 (this batch) adds why each refusal refused.
+- REMAINING UNBUILT: (i) to (iv).
+- GATE: REM-10 and REM-11 landed. REM-10 first, because every count CR-14 pools is read through REM-10's reading (G-02 first; the register: "a fix inside `attribute` alone leaves the others as they are"); REM-11 first because both edit `harness/aperture.py` (serial). It precedes REM-16, whose three-seed baselines use it, and REM-13 and REM-14 (`-03` B10-02, lane 1).
+- EXIT and FALSIFIER: (i) to (iii) reproduce the register at seeds 0-4: P1 at two seasons 7,402 attempts, 1,763 executed, 5,639 refused; at four seasons 16,116, 3,744 and 12,372; P2 (two seasons, per seed) all-`need` scenes 149-174 of 606-642, about a goal Proposition 43-53 (seed 0: 149 of 619 and 48); P4 (four seasons) 20 deaths, 16 of them seat-holders, 11 by `accept` and 9 by `fight`. (iv) the shipped arm's output is byte-identical before and after, and an `off off` arm pair reads equal (storybar's idiom). Control: aperture's own CONTROL line reads EQUAL on every run; `git status --short` is clean after every run. The readings are quoted in the commit body; no test asserts a count (V2).
+- HASH MOVERS: none (reads and arm runs only).
+- HOLES AND LEDGER IDS: none in the hole register; PR #506's G-08, G-11, G-12, G-20 and G-29 (`-06` part 4).
+- ASKS ATTACHED: none.
+- RE-BASE: re-read aperture's PER VERB block and `run_arm` by symbol on REM-11's landed tree; re-run the register's seed-0 figures first (P1 at two seasons, hash `5301d6b6…`). A figure that does not reproduce is recorded in the commit body and the position does not widen to make it reproduce (P8).
+- COMMIT: `[infrastructure]`.
+- SOURCE: `proposals/2026-10-25-thrust-layer/01_MISSING_IN_CODE.md` G-08, G-11, G-12, G-20, G-29 and §5 step 1; its probes P1, P2, P4, P9 and P10.
+
+### CR-15 — The story bar's executed-only reading (IN) · BATCH B10-02 · STATE BUILD (harness, hash EQUAL) · R —
+- WHAT: `harness/storybar.py::read` takes every Event with an `act_of` entry, refusal or not, and `harness/chronicle.py` composes on it, so both count refused acts as story (PR #506, G-27). `storybar.read` gains an `executed_only` reading: an act and its antecedents are counted only when not refused, through REM-10's one owner of the made/refused rule and its `graded_loss` count (`-08` HR-8). It is reported BESIDE the current reading, never instead: the current reading is IN-19's pinned meaning. `harness/chronicle.py` gains `--executed-only`, which picks the deepest executed chain.
+- LANDED ALREADY: `storybar` (IN-19) and `chronicle` (IN-37), whose readings stand unchanged.
+- REMAINING UNBUILT: the reading and the flag.
+- GATE: REM-10 landed (its made/refused owner). Lane 2 of B10-02, after REM-15, on REM-10's landed commit (`-03` B10-02).
+- EXIT and FALSIFIER: the register's P7 reproduced (seeds 0, 1, 2, 4 and 5, four seasons): the deepest chains total 66 acts, 55 of them refused; 4,951 acts have cross-person depth 2 or more, 3,604 of them refused; the cross-person share is 4,951 of 16,295 (30.4%) as storybar reads it and 679 of 3,786 (17.9%) executed acts with an executed cross-person antecedent. Control: the default reading unchanged byte-for-byte. The readings are quoted in the commit body.
+- HASH MOVERS: none.
+- HOLES AND LEDGER IDS: none in the hole register; PR #506's G-27 (`-06` part 4).
+- ASKS ATTACHED: none.
+- RE-BASE: re-read `storybar.read` and `chronicle.deepest_chain` by symbol.
+- COMMIT: `[infrastructure]`.
+- SOURCE: `proposals/2026-10-25-thrust-layer/01_MISSING_IN_CODE.md` G-27 and §5 step 4; its probe P7 (`probes/p7_chain_refusals.py`, `p7_s4.txt`). `-01` §11 and `-02` R-01 keep their 30.4% (the same figure, as storybar reads it) and carry the 17.9% companion.
+
 ### NM-W0 … NM-W9 — Narration packages (IN/WR) · BATCH B10-19 (NM-W0: B10-02, an EDIT whose row is deleted when B10-02 closes; NM-W3: B10-01, an EDIT whose row is deleted in the adoption commit) · STATE as listed · R M2 (the any-seed story bar)
 Home: `proposals/2026-10-13-narration-mechanisms.md` §4 (W0-W9). The proposal is PROPOSED, grade `paper`; nothing in W1-W9 had code, a test or a run when it was written. It names four decisions for Jordan (§7 there); they are in `-05`. Premises are one seed, two seasons.
 
