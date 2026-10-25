@@ -9,7 +9,7 @@ Jordan: "all work identified in v9 workplan to be included" and "hole rows are c
 
 - Same columns as `-06` §2. The first cell of every data row is exactly the id. `[INFERRED]` marks a position matched by subject whose own text does not cite the row's id. `[REGISTER TEXT]` marks a row whose `hole`, `cite` or `site` text no longer matches the tree; CR-02 (f) corrects the text and changes nothing else in the row.
 - v10 status: `CLOSED (evidence)` or `OPEN: …`. What closes it: `BUILD`, `MEASURE`, `EDIT`, `RULING`, `ACCEPT` (a shipped default or swept knob stands with its control arm; no work owed), `LEAVE` (named, unscheduled, with its trigger) or `[GAP: unowned]`; §3 lists every row that needed a new position, a question, or a stated gap.
-- Handles are the keys of `-03`'s tables, or `-07` §2 for a cut one; `M1`…`M17` are the questions of `-05`.
+- Handles are the keys of `-03`'s tables, or `-07` §2 for a cut one; `M1`…`M18` are the questions of `-05`.
 - Each row was verified against the tree by one producer lane, attacked once by an independent read-only critic, and the verdicts were applied (108 cell edits on 51 rows). Everything here is `paper`: nothing was executed except where a cell says a run was made, and a figure inside a row is the register's own text unless the cell says it was re-read. Critics could not execute `corpus_run`, so rows resting on its 143-case counts (H-95, H-102) are unreproduced.
 
 ## 2. The rows
