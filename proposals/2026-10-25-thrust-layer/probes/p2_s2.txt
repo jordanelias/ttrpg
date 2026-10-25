@@ -1,0 +1,30 @@
+GOAL ROWS 38
+ by object kind {'seat_holders': 6, 'orientation': 24, 'deed_doers': 4, 'rung': 4}
+ by org kind {'faction': 20, 'body': 16, 'seat': 2}
+ seat rows [('goal_katepano_press_the_capital', 'off_katepano'), ('goal_kommerkiarios_treaty_order', 'off_kommerkiarios')]
+ orientation ids ['goal_cardinal_fortitude_enforcement', 'goal_cardinal_prudence_tithes', 'goal_cardinal_temperance_learning', 'goal_church_solmundan_orthodoxy', 'goal_crown_inner_circle_counsel', 'goal_crown_ministries_administer', 'goal_crown_resist_altonia', 'goal_guild_masters_trade', 'goal_guilds_commerce_sustained', 'goal_guilds_no_faction_controls', 'goal_hafenmark_constitutional_order', 'goal_hafenmark_dynastic_assertion', 'goal_hafenmark_inner_council_counsel', 'goal_holy_see_orthodoxy', 'goal_jarl_council_confederacy', 'goal_knights_of_the_peace_patrol', 'goal_kommerkiarios_treaty_order', 'goal_lions_table_coordination', 'goal_lowenritter_military_security', 'goal_restoration_caste_ended', 'goal_restoration_einhir_revival', 'goal_restoration_practitioners_protected', 'goal_royal_investigators_inquiry', 'goal_varfell_thread_knowledge']
+seed=0 persons=83 goal_props_minted=12/38 goal_commit_edges=55 goals_with_committers=12 persons_with_goal_ambition=35 persons_with_nonempty_need_at_t0=46
+  uncommitted non-orientation goals: ['goal_altonia_conquer_valoria', 'goal_katepano_press_the_capital']
+  scenes=619 by occasion source={'need': 149, 'claim_landed': 470} need-about-goal={'goal': 48, 'other': 101}
+  resolved acts=1182 by occasion source={'need': 249, 'claim_landed': 933}
+  log=21710 news.told=7 news.untold=25 person.died=3 hash=5301d6b62af614f4
+seed=1 persons=83 goal_props_minted=12/38 goal_commit_edges=55 goals_with_committers=12 persons_with_goal_ambition=35 persons_with_nonempty_need_at_t0=46
+  uncommitted non-orientation goals: ['goal_altonia_conquer_valoria', 'goal_katepano_press_the_capital']
+  scenes=633 by occasion source={'need': 158, 'claim_landed': 475} need-about-goal={'goal': 49, 'other': 109}
+  resolved acts=1171 by occasion source={'need': 257, 'claim_landed': 914}
+  log=23392 news.told=8 news.untold=25 person.died=1 hash=ca2b80d23e758c8d
+seed=2 persons=83 goal_props_minted=12/38 goal_commit_edges=55 goals_with_committers=12 persons_with_goal_ambition=35 persons_with_nonempty_need_at_t0=46
+  uncommitted non-orientation goals: ['goal_altonia_conquer_valoria', 'goal_katepano_press_the_capital']
+  scenes=642 by occasion source={'need': 168, 'claim_landed': 474} need-about-goal={'goal': 47, 'other': 121}
+  resolved acts=1182 by occasion source={'need': 272, 'claim_landed': 910}
+  log=19465 news.told=10 news.untold=31 person.died=3 hash=3e9be6c3566bbc0a
+seed=3 persons=83 goal_props_minted=12/38 goal_commit_edges=55 goals_with_committers=12 persons_with_goal_ambition=35 persons_with_nonempty_need_at_t0=46
+  uncommitted non-orientation goals: ['goal_altonia_conquer_valoria', 'goal_katepano_press_the_capital']
+  scenes=606 by occasion source={'need': 151, 'claim_landed': 455} need-about-goal={'goal': 43, 'other': 108}
+  resolved acts=1107 by occasion source={'need': 227, 'claim_landed': 880}
+  log=19514 news.told=6 news.untold=17 person.died=4 hash=ee86da8d6d13b3fe
+seed=4 persons=83 goal_props_minted=12/38 goal_commit_edges=55 goals_with_committers=12 persons_with_goal_ambition=35 persons_with_nonempty_need_at_t0=46
+  uncommitted non-orientation goals: ['goal_altonia_conquer_valoria', 'goal_katepano_press_the_capital']
+  scenes=627 by occasion source={'need': 174, 'claim_landed': 453} need-about-goal={'goal': 53, 'other': 121}
+  resolved acts=1111 by occasion source={'need': 258, 'claim_landed': 853}
+  log=17529 news.told=4 news.untold=25 person.died=3 hash=a4e880845bce3e4b

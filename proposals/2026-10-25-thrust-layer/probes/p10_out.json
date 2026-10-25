@@ -1,0 +1,34 @@
+{
+ "s2": {
+  "attempted": 7402,
+  "refused": 5639,
+  "adm_ref:None": 1489,
+  "refused_not_at_admission": 1521,
+  "adm_ref:collection_mismatch": 2066,
+  "wrongkind_collection": 2385,
+  "wrongkind_any": 2442,
+  "executed": 1763,
+  "adm_ref:subkind_wrong_coll": 319,
+  "refused_kind_also_in_emits": 1299,
+  "adm_ref:world_read_docket": 122,
+  "graded_loss": 175,
+  "adm_ref:absent_subject": 65,
+  "adm_ref:subkind_mismatch": 57
+ },
+ "s4": {
+  "attempted": 16116,
+  "refused": 12372,
+  "adm_ref:None": 3333,
+  "refused_not_at_admission": 3927,
+  "adm_ref:collection_mismatch": 4063,
+  "wrongkind_collection": 4620,
+  "wrongkind_any": 4794,
+  "executed": 3744,
+  "adm_ref:subkind_wrong_coll": 557,
+  "refused_kind_also_in_emits": 2731,
+  "adm_ref:world_read_docket": 216,
+  "graded_loss": 469,
+  "adm_ref:absent_subject": 102,
+  "adm_ref:subkind_mismatch": 174
+ }
+}

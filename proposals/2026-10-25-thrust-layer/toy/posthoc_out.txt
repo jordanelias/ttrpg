@@ -1,0 +1,33 @@
+regime means: arc_all arc_null arc_closed dangling why_linked five_node thread_cont dead
+BU   0.087 0.102 0.307 0.750 0.428 0.110 0.768 0.096
+TD   0.160 0.168 0.457 0.563 0.357 0.337 0.746 0.096
+TDR  0.350 0.254 0.847 0.170 0.229 0.760 0.761 0.096
+HY   0.057 0.081 0.233 0.853 0.801 0.113 0.778 0.094
+HYc  0.077 0.101 0.283 0.840 0.706 0.087 0.768 0.094
+
+bootstrap 95% CI of difference (A - B)
+TD  -BU  arc_all      +0.073  [+0.023,+0.123] 
+TDR -BU  arc_all      +0.263  [+0.197,+0.327] 
+HY  -BU  arc_all      -0.030  [-0.073,+0.013]   (CI spans 0)
+HYc -BU  arc_all      -0.010  [-0.050,+0.033]   (CI spans 0)
+HYc -HY  arc_all      +0.020  [-0.020,+0.063]   (CI spans 0)
+HYc -HY  arc_closed   +0.050  [-0.020,+0.120]   (CI spans 0)
+HYc -HY  dangling     -0.013  [-0.073,+0.047]   (CI spans 0)
+HY  -BU  why_linked   +0.374  [+0.353,+0.394] 
+HYc -BU  why_linked   +0.278  [+0.253,+0.303] 
+TDR -BU  five_node    +0.650  [+0.587,+0.707] 
+TD  -BU  five_node    +0.227  [+0.163,+0.290] 
+HYc -BU  five_node    -0.023  [-0.070,+0.023]   (CI spans 0)
+HY  -BU  thread_cont  +0.010  [-0.002,+0.023]   (CI spans 0)
+HYc -BU  thread_cont  +0.000  [-0.013,+0.014]   (CI spans 0)
+
+arc_all - arc_null: {'BU': -0.016, 'TD': -0.008, 'TDR': 0.096, 'HY': -0.024, 'HYc': -0.024}
+TD forced-beat signatures: structural distinct 1 slot distinct 298 of 300 runs
+TDR forced-beat signatures: structural distinct 4 slot distinct 278 of 300 runs
+
+SIFTING availability (any thread among top-6, any window >=8 seasons, satisfies the arc test)
+BU real 0.887  shuffled-null 0.960  diff -0.073
+TD real 0.943  shuffled-null 0.980  diff -0.037
+TDR real 0.993  shuffled-null 0.993  diff +0.000
+HY real 0.860  shuffled-null 0.947  diff -0.087
+HYc real 0.880  shuffled-null 0.968  diff -0.088

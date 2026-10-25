@@ -1,0 +1,36 @@
+seed=0 log=68348 tick=4 hash=ee6d622c7fe04cf4
+seed=1 log=69592 tick=4 hash=f2bcb30ba3927d24
+seed=2 log=64769 tick=4 hash=f3d61bab71ac088d
+seed=3 log=60553 tick=4 hash=4c7a22251188d21d
+seed=4 log=60286 tick=4 hash=9ebffa07685e9ce4
+
+== window s2: attempted=7402 executed=1763 refused=5639 null=0 refused_share=0.7618
+   refused whose refusal kind is ALSO in the row's `emits` (both columns): 1299  (0.2304 of refused)
+   graded_loss (all refusal events degree Failure AND kind in emits): 175  (0.0236 of attempted)
+   adm_ref:None                         1489  (0.2012 of attempted)
+   adm_ref:absent_subject                 65  (0.0088 of attempted)
+   adm_ref:collection_mismatch          2066  (0.2791 of attempted)
+   adm_ref:subkind_mismatch               57  (0.0077 of attempted)
+   adm_ref:subkind_wrong_coll            319  (0.0431 of attempted)
+   adm_ref:world_read_docket             122  (0.0165 of attempted)
+   refused_not_at_admission 1521
+   wrongkind_collection (collection_mismatch+subkind_wrong_coll) 2385 (0.3222 of attempted)
+   wrongkind_any (+subkind_mismatch) 2442 (0.3299)
+   top verbs by wrongkind_collection: [('research', 599), ('commit', 289), ('examine', 256), ('restore', 136), ('sabotage', 126), ('carry', 124), ('found', 100), ('interview', 99), ('build', 95), ('petition', 91)]
+== window s4: attempted=16116 executed=3744 refused=12372 null=0 refused_share=0.7677
+   refused whose refusal kind is ALSO in the row's `emits` (both columns): 2731  (0.2207 of refused)
+   graded_loss (all refusal events degree Failure AND kind in emits): 469  (0.0291 of attempted)
+   adm_ref:None                         3333  (0.2068 of attempted)
+   adm_ref:absent_subject                102  (0.0063 of attempted)
+   adm_ref:collection_mismatch          4063  (0.2521 of attempted)
+   adm_ref:subkind_mismatch              174  (0.0108 of attempted)
+   adm_ref:subkind_wrong_coll            557  (0.0346 of attempted)
+   adm_ref:world_read_docket             216  (0.0134 of attempted)
+   refused_not_at_admission 3927
+   wrongkind_collection (collection_mismatch+subkind_wrong_coll) 4620 (0.2867 of attempted)
+   wrongkind_any (+subkind_mismatch) 4794 (0.2975)
+   top verbs by wrongkind_collection: [('research', 1175), ('commit', 548), ('examine', 516), ('sabotage', 252), ('restore', 248), ('carry', 223), ('interview', 173), ('build', 169), ('petition', 165), ('found', 165)]
+
+_admits calls per unique act (s4 window): {0: 25, 1: 15275, 2: 816}
+wrong-kind (collection) keys (seed,actor,verb,subject): 3286; refused in >1 season: 235; wrong-kind acts total 4620
+hashes {0: 'ee6d622c7fe04cf4', 1: 'f2bcb30ba3927d24', 2: 'f3d61bab71ac088d', 3: '4c7a22251188d21d', 4: '9ebffa07685e9ce4'}

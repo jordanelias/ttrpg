@@ -1,0 +1,22 @@
+arm                    deaths harm_on_standing gate_refused accuse revenge outcry | arc_all arc-null[CI]            closed five_node why_linked late_events
+BU                       0.36           0.079          2.6   19.5    0.68   0.36 |   0.043 -0.056 [-0.083,-0.027]  0.217     0.077      0.442        21.8
+HYg3                     0.30           0.126          6.9   27.2    0.73   0.30 |   0.147 -0.020 [-0.062,+0.022]  0.400     0.160      0.729        26.0
+HYg3d                    0.28           0.122          6.5   25.7    0.56   0.28 |   0.263 +0.010 [-0.046,+0.067]  0.777     0.357      0.472        26.8
+TDR (forced yield)       0.41           0.092          2.7   20.5    0.66   0.41 |   0.363 +0.099 [+0.041,+0.156]  0.840     0.767      0.233        20.8
+TDSc nonlethal           0.33           0.077          2.5   19.5    0.59   0.33 |   0.127 +0.016 [-0.019,+0.051]  0.277     0.123      0.347        20.9
+HYg3c nonlethal          0.24           0.127          6.5   26.8    0.53   0.24 |   0.470 +0.244 [+0.188,+0.303]  0.637     0.517      0.440        24.7
+TDSc lethal+conseq       1.35           0.075          2.5   19.3    2.87   1.35 |   0.173 +0.044 [+0.004,+0.087]  0.347     0.147      0.336        20.7
+HYg3c lethal+conseq      1.20           0.126          6.4   26.3    3.68   1.20 |   0.500 +0.291 [+0.237,+0.346]  0.643     0.540      0.439        25.0
+TDR lethal+conseq        1.38           0.090          2.6   20.3    2.82   1.38 |   0.380 +0.141 [+0.082,+0.202]  0.853     0.773      0.235        20.9
+
+ladder: share of ambitions with >=1 goal met (HYg3, constrained): 0.957
+
+== PREDICTIONS (registered before the first run)
+[FALSIFIED] K1: Constrained arms: deaths/run <= 0.6 in every CON1 arm and harm aimed at standing <= 0.10 of harm
+[FALSIFIED] K2: Bottom-up still has no ordering signal: |arc-null(BU)| < 0.05
+[FALSIFIED] K3: A bound peace restores the silence death supplied: arc-null >= +0.08 for TDSc nonlethal and HYg3c nonlethal
+[CONFIRMED] K4: The forcing director with a forced yield keeps its signal: arc-null(TDR forced yield) >= +0.08
+[FALSIFIED] K5: Significant consequences are real: revenge events/run >= 3.0 in the lethal+conseq arms and <= 0.5 in the nonlethal arms
+[CONFIRMED] K6: A lethal climax with consequences does not lose the arc signal: arc-null(TDSc lethal+conseq) >= arc-null(TDSc nonlethal)
+[CONFIRMED] K7: The ladder survives the authority gate: >= 0.90 of ambitions meet a goal
+3/7 confirmed

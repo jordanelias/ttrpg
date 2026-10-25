@@ -1,0 +1,317 @@
+{
+ "seasons": 2,
+ "seeds": {
+  "0": {
+   "log_len": 21710,
+   "hash": "5301d6b62af614f4",
+   "tick": 2,
+   "persons": 80,
+   "attempted": 1511,
+   "executed": 335,
+   "refused": 1176,
+   "null": 0
+  },
+  "1": {
+   "log_len": 23392,
+   "hash": "ca2b80d23e758c8d",
+   "tick": 2,
+   "persons": 82,
+   "attempted": 1487,
+   "executed": 346,
+   "refused": 1141,
+   "null": 0
+  },
+  "2": {
+   "log_len": 19465,
+   "hash": "3e9be6c3566bbc0a",
+   "tick": 2,
+   "persons": 80,
+   "attempted": 1497,
+   "executed": 374,
+   "refused": 1123,
+   "null": 0
+  },
+  "3": {
+   "log_len": 19514,
+   "hash": "ee86da8d6d13b3fe",
+   "tick": 2,
+   "persons": 79,
+   "attempted": 1448,
+   "executed": 342,
+   "refused": 1106,
+   "null": 0
+  },
+  "4": {
+   "log_len": 17529,
+   "hash": "a4e880845bce3e4b",
+   "tick": 2,
+   "persons": 80,
+   "attempted": 1459,
+   "executed": 366,
+   "refused": 1093,
+   "null": 0
+  }
+ },
+ "pooled": {
+  "accept": {
+   "attempted": 227,
+   "refused": 207,
+   "rk:accept.refused": 207,
+   "executed": 20
+  },
+  "argue": {
+   "attempted": 62,
+   "refused": 62,
+   "rk:argument.refused": 62
+  },
+  "build": {
+   "attempted": 122,
+   "refused": 122,
+   "rk:build.refused": 122
+  },
+  "carry": {
+   "attempted": 157,
+   "refused": 157,
+   "rk:carry.refused": 157
+  },
+  "challenge": {
+   "attempted": 151,
+   "refused": 140,
+   "rk:challenge.refused": 140,
+   "executed": 11
+  },
+  "commit": {
+   "attempted": 302,
+   "refused": 296,
+   "rk:commitment.refused": 296,
+   "executed": 6
+  },
+  "conceal": {
+   "attempted": 138,
+   "executed": 138
+  },
+  "confer": {
+   "attempted": 35,
+   "refused": 30,
+   "rk:confer.refused": 30,
+   "executed": 5
+  },
+  "convene": {
+   "attempted": 31,
+   "executed": 6,
+   "refused": 25,
+   "rk:convene.refused": 25
+  },
+  "covenant": {
+   "attempted": 28,
+   "refused": 28,
+   "rk:covenant.refused": 28
+  },
+  "create_record": {
+   "attempted": 404,
+   "executed": 404
+  },
+  "determine": {
+   "attempted": 25,
+   "refused": 25,
+   "rk:determine.refused": 25
+  },
+  "dispatch": {
+   "attempted": 46,
+   "executed": 25,
+   "refused": 21,
+   "rk:dispatch.refused": 21
+  },
+  "establish": {
+   "attempted": 18,
+   "refused": 18,
+   "rk:establish.refused": 18
+  },
+  "examine": {
+   "attempted": 256,
+   "refused": 256,
+   "rk:finding.none": 256
+  },
+  "fight": {
+   "attempted": 115,
+   "refused": 106,
+   "rk:kill.refused": 106,
+   "executed": 9
+  },
+  "forge": {
+   "attempted": 212,
+   "refused": 110,
+   "rk:forge.refused": 110,
+   "executed": 102
+  },
+  "forgive": {
+   "attempted": 5,
+   "executed": 5
+  },
+  "found": {
+   "attempted": 105,
+   "refused": 104,
+   "rk:found.refused": 104,
+   "executed": 1
+  },
+  "give": {
+   "attempted": 2,
+   "executed": 1,
+   "refused": 1,
+   "rk:give.refused": 1
+  },
+  "interview": {
+   "attempted": 160,
+   "executed": 54,
+   "refused": 106,
+   "rk:finding.none": 106
+  },
+  "issue": {
+   "attempted": 46,
+   "refused": 26,
+   "rk:issue.unauthorized": 25,
+   "executed": 20,
+   "rk:issue.refused": 1
+  },
+  "march": {
+   "attempted": 56,
+   "refused": 56,
+   "rk:march.refused": 56
+  },
+  "migrate": {
+   "attempted": 714,
+   "refused": 711,
+   "rk:migrate.refused": 705,
+   "rk:travel.blocked": 6,
+   "executed": 3
+  },
+  "move": {
+   "attempted": 224,
+   "refused": 153,
+   "rk:travel.blocked": 153,
+   "executed": 71
+  },
+  "oblige": {
+   "attempted": 115,
+   "executed": 105,
+   "refused": 10,
+   "rk:duty.refused": 10
+  },
+  "open_case": {
+   "attempted": 44,
+   "refused": 19,
+   "rk:case.unauthorized": 10,
+   "executed": 25,
+   "rk:case.refused": 9
+  },
+  "pardon": {
+   "attempted": 17,
+   "refused": 17,
+   "rk:pardon.refused": 17
+  },
+  "petition": {
+   "attempted": 149,
+   "executed": 56,
+   "refused": 93,
+   "rk:petition.refused": 93
+  },
+  "raze": {
+   "attempted": 89,
+   "refused": 89,
+   "rk:raze.refused": 89
+  },
+  "reconstruct": {
+   "attempted": 268,
+   "refused": 34,
+   "rk:finding.none": 34,
+   "executed": 234
+  },
+  "release": {
+   "attempted": 235,
+   "refused": 219,
+   "rk:release.refused": 219,
+   "executed": 16
+  },
+  "requisition": {
+   "attempted": 30,
+   "refused": 30,
+   "rk:requisition.refused": 10,
+   "rk:requisition.unauthorized": 20
+  },
+  "research": {
+   "attempted": 658,
+   "refused": 638,
+   "rk:finding.none": 638,
+   "executed": 20
+  },
+  "restore": {
+   "attempted": 137,
+   "refused": 137,
+   "rk:restore.refused": 137
+  },
+  "revoke": {
+   "attempted": 26,
+   "refused": 26,
+   "rk:revoke.refused": 26
+  },
+  "sabotage": {
+   "attempted": 127,
+   "refused": 127,
+   "rk:sabotage.refused": 127
+  },
+  "speak": {
+   "attempted": 116,
+   "refused": 106,
+   "rk:speech.unheard": 106,
+   "executed": 10
+  },
+  "surveil": {
+   "attempted": 313,
+   "refused": 282,
+   "rk:finding.none": 282,
+   "executed": 31
+  },
+  "survey": {
+   "attempted": 205,
+   "refused": 88,
+   "rk:survey.refused": 88,
+   "executed": 117
+  },
+  "tell": {
+   "attempted": 158,
+   "refused": 123,
+   "rk:news.untold": 123,
+   "executed": 35
+  },
+  "tend": {
+   "attempted": 154,
+   "refused": 154,
+   "rk:tend.refused": 154
+  },
+  "thread_read": {
+   "attempted": 10,
+   "executed": 10
+  },
+  "train": {
+   "attempted": 169,
+   "refused": 169,
+   "rk:train.refused": 169
+  },
+  "transfer": {
+   "attempted": 195,
+   "refused": 187,
+   "rk:transfer.refused": 187,
+   "executed": 8
+  },
+  "utter": {
+   "attempted": 213,
+   "executed": 213
+  },
+  "work": {
+   "attempted": 333,
+   "refused": 331,
+   "rk:work.unavailable": 331,
+   "executed": 2
+  }
+ }
+}

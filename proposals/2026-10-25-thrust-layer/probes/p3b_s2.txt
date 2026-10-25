@@ -1,0 +1,8 @@
+seed=0 log=21710 hash=5301d6b62af614f4
+seed=1 log=23392 hash=ca2b80d23e758c8d
+seed=2 log=19465 hash=3e9be6c3566bbc0a
+seed=3 log=19514 hash=ee86da8d6d13b3fe
+seed=4 log=17529 hash=a4e880845bce3e4b
+TOTALS {'admissions': 7737, 'admitted': 3619, 'ref_req_UNKNOWN': 715, 'ref_req_False': 3403, 'ref_kind_mismatch': 2560}
+kind-mismatch by verb [('research', 599), ('commit', 289), ('examine', 256), ('carry', 153), ('restore', 136), ('sabotage', 126), ('build', 119), ('found', 104), ('speak', 102), ('interview', 99), ('petition', 91), ('accept', 75), ('challenge', 74), ('tend', 62), ('argue', 60), ('train', 58), ('fight', 54), ('surveil', 45), ('covenant', 26), ('determine', 25), ('raze', 4), ('pardon', 3)]
+admitted-then-refused by verb (effect/ENCOUNTER refusals) [('migrate', 705), ('transfer', 136), ('move', 112), ('forge', 90), ('surveil', 89), ('raze', 84), ('survey', 70), ('tell', 65), ('train', 44), ('tend', 33), ('research', 21), ('pardon', 9), ('open_case', 9)]

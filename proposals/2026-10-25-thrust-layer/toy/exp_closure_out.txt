@@ -1,0 +1,40 @@
+== base
+regime  arc_all arc_null  closed dangling why_linked five_node injected_any
+BU       0.087    0.102   0.307    0.750      0.428     0.110        0.000
+TDR      0.350    0.254   0.847    0.170      0.229     0.760        1.000
+HY       0.057    0.081   0.233    0.853      0.801     0.113        0.000
+HYd      0.260    0.258   0.767    0.447      0.437     0.550        0.000
+  HYd-BU arc_all    +0.173 [+0.113,+0.233] 
+  HYd-HY arc_all    +0.203 [+0.147,+0.257] 
+  HYd-HY arc_closed +0.533 [+0.463,+0.600] 
+  HYd-HY dangling   -0.407 [-0.480,-0.337] 
+  TDR-HYd arc_all    +0.090 [+0.013,+0.163] 
+  HYd-BU five_node  +0.440 [+0.373,+0.507] 
+  HYd arc_all - arc_null: 0.002
+== engine(80% refusal)
+regime  arc_all arc_null  closed dangling why_linked five_node injected_any
+BU       0.190    0.196   0.423    0.170      0.235     0.073        0.000
+TDR      0.710    0.330   1.000    0.000      0.168     0.993        1.000
+HY       0.103    0.100   0.320    0.350      0.772     0.067        0.000
+HYd      0.217    0.216   0.567    0.300      0.619     0.363        0.000
+  HYd-BU arc_all    +0.027 [-0.037,+0.090] (CI spans 0)
+  HYd-HY arc_all    +0.113 [+0.057,+0.170] 
+  HYd-HY arc_closed +0.247 [+0.170,+0.323] 
+  HYd-HY dangling   -0.050 [-0.123,+0.027] (CI spans 0)
+  TDR-HYd arc_all    +0.493 [+0.423,+0.567] 
+  HYd-BU five_node  +0.290 [+0.227,+0.350] 
+  HYd arc_all - arc_null: 0.001
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-ttrpg/62252c8e-ed6f-5136-b7ec-d8676b271012/scratchpad/exp_closure.py", line 24, in <module>
+    ev,_=R.simulate(s,'HYd'); asked+=sum(1 for e in ev if e['verb']=='summon' and e['thread'] and e['thread'].startswith('T')); fired+=sum(1 for e in ev if e['verb']=='rule')
+                                     ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-0/-home-user-ttrpg/62252c8e-ed6f-5136-b7ec-d8676b271012/scratchpad/exp_closure.py", line 24, in <genexpr>
+    ev,_=R.simulate(s,'HYd'); asked+=sum(1 for e in ev if e['verb']=='summon' and e['thread'] and e['thread'].startswith('T')); fired+=sum(1 for e in ev if e['verb']=='rule')
+                                                                                  ~^^^^^^^^^^
+KeyError: 'thread'
+HYd: tribunals raised per run 31.59, ruled (all three accepted) per run 11.11
+single closing spike at season 4 -> arc_all False
+single closing spike at season 8 -> arc_all True
+single closing spike at season 12 -> arc_all True
+single closing spike at season 16 -> arc_all True
+single closing spike at season 20 -> arc_all True

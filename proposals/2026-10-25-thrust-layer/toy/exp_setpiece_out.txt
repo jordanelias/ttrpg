@@ -1,0 +1,44 @@
+== base (N=300)
+regime  arc_all arc_null  arc-null[CI]            closed dangling five_node why_linked thread_cont  inj dir_writes engaged_in_sel peak_mag
+BU       0.087    0.102  -0.016 [-0.047,+0.018]  0.307    0.750     0.110      0.428       0.768  0.00       0.0          0.000     2.68
+TDR      0.350    0.254  +0.096 [+0.033,+0.156]  0.847    0.170     0.760      0.229       0.761  1.00       7.4          0.000     6.95
+TDS      0.070    0.112  -0.042 [-0.073,-0.009]  0.293    0.807     0.113      0.417       0.768  0.00       5.0          0.063     2.59
+TDSm     0.007    0.076  -0.069 [-0.090,-0.049]  0.070    0.950     0.073      0.098       0.788  0.00       5.0          0.583    15.24
+HYg3d    0.380    0.288  +0.092 [+0.033,+0.152]  0.853    0.393     0.430      0.430       0.575  0.00       0.0          0.000     5.91
+HYg3s    0.087    0.107  -0.020 [-0.054,+0.017]  0.310    0.733     0.147      0.653       0.743  0.00       5.0          0.098     2.78
+
+== contrasts (diff, 95% CI)
+  TDS-BU arc_all    -0.017 [-0.060,+0.027] (CI spans 0)
+  TDSm-TDS arc_all    -0.063 [-0.093,-0.033] 
+  TDR-TDS arc_all    +0.280 [+0.217,+0.343] 
+  TDR-TDS five_node  +0.647 [+0.583,+0.707] 
+  HYg3s-HYg3d arc_all    -0.293 [-0.353,-0.227] 
+  HYg3s-TDS arc_all    +0.017 [-0.027,+0.060] (CI spans 0)
+  HYg3s-HYg3d why_linked +0.223 [+0.200,+0.247] 
+  TDS-HYg3d arc_all    -0.310 [-0.370,-0.247] 
+
+== 80% refusal
+  BU     arc_all 0.190  arc-null -0.006 [-0.051,+0.039]
+  TDR    arc_all 0.710  arc-null +0.380 [+0.319,+0.438]
+  TDS    arc_all 0.173  arc-null +0.019 [-0.023,+0.062]
+  TDSm   arc_all 0.077  arc-null -0.002 [-0.030,+0.024]
+  HYg3d  arc_all 0.210  arc-null -0.023 [-0.072,+0.028]
+  HYg3s  arc_all 0.240  arc-null +0.044 [-0.003,+0.091]
+
+== quiet world (A=8): main-thread peak magnitude {'BU': 2.36, 'TDR': 7.74, 'TDS': 2.36, 'TDSm': 14.52}
+
+== outcome openness at end of run (P(protagonist dead only), P(antagonist dead only), P(both alive)): {'TDR': (0.0, 1.0, 0.0), 'TDS': (0.03, 0.04, 0.94), 'TDSm': (0.03, 0.04, 0.94)}
+
+== violations after killing the protagonist at season 10: {'BU': 0.0, 'TDR': 0.0, 'TDS': 0.0, 'TDSm': 0.0}
+
+== PREDICTIONS (registered before the first run)
+[FALSIFIED] S1: Outcomes stay open under TDS: P(protagonist dead only) >= 0.10, P(antagonist dead only) >= 0.10, P(both alive) >= 0.25
+[FALSIFIED] S2: TDS keeps an ordering signal: arc_all - arc_null >= +0.03 for TDS
+[CONFIRMED] S3: Open outcomes cost arcs: arc_all(TDS) <= arc_all(TDR) - 0.10
+[CONFIRMED] S4: Open outcomes cost beats: five_node(TDS) <= five_node(TDR) - 0.20
+[CONFIRMED] S5: No forced outcome and no constraint violation in any set-piece arm, perturbed or not
+[FALSIFIED] S6: The stake multiplier buys arcs but fakes intensity: arc_all(TDSm) >= arc_all(TDS) + 0.05 AND quiet-world peak_mag(TDSm) >= 2x BU while TDS < 1.5x BU
+[CONFIRMED] S7: Under 80% refusal the TDS arc gain over BU is at most half its base gain (set pieces still need the dice)
+[FALSIFIED] S8: Set pieces add no standing motive: why_linked(TDS) < 0.35
+[CONFIRMED] S9: Ladder + set pieces beats set pieces alone on the ordering signal and keeps the 'why': arc-null(HYg3s) > arc-null(TDS) and why_linked(HYg3s) >= 0.55
+5/9 confirmed
