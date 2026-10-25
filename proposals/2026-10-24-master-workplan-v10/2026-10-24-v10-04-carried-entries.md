@@ -170,7 +170,7 @@ These have no earlier home, so they are written out in full. Format as in §2.
 - RE-BASE: re-read `_resolve_operation` and `attempt_leap` by symbol.
 - SOURCE: the editorial-id pass, lane 3 and critic ED3.
 
-### NM-W0 … NM-W9 — Narration packages (IN/WR) · BATCH B10-19 · STATE as listed · R M2 (the any-seed story bar)
+### NM-W0 … NM-W9 — Narration packages (IN/WR) · BATCH B10-19 (NM-W0: B10-02; NM-W3: B10-01; each an EDIT whose row is deleted when that batch closes) · STATE as listed · R M2 (the any-seed story bar)
 Home: `proposals/2026-10-13-narration-mechanisms.md` §4 (W0-W9). The proposal is PROPOSED, grade `paper`; nothing in W1-W9 had code, a test or a run when it was written. It names four decisions for Jordan (§7 there); they are in `-05`. Premises are one seed, two seasons.
 
 | handle | package | state at HEAD | note |
