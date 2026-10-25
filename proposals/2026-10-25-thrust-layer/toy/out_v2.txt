@@ -1,0 +1,124 @@
+N=300 seeds/regime/condition, T=24 (v2 instrument)
+
+== LEGIBILITY (base)
+        leg_apparent  leg_grounded    why_linkedleg_grounded_raw
+BU             1.000         1.000         0.428         1.000
+TD             1.000         0.978         0.357         0.992
+TDR            1.000         0.991         0.229         0.999
+HY             1.000         1.000         0.801         1.000
+
+== COHERENCY (base)
+         thread_cont    chain_conn      viol_any  injected_any
+BU             0.768         0.832         0.000         0.000
+TD             0.746         0.833         0.963         1.000
+TDR            0.761         0.833         0.000         1.000
+HY             0.778         0.829         0.000         0.000
+
+== ARC (base)
+            arc_rise      arc_peak      arc_fall       arc_all      arc_null    arc_closed      arc_any3      dangling
+BU             0.480         0.733         0.233         0.087         0.102         0.307         0.250         0.750
+TD             0.503         0.843         0.380         0.160         0.168         0.457         0.343         0.563
+TDR            0.470         0.950         0.737         0.350         0.254         0.847         0.523         0.170
+HY             0.500         0.730         0.163         0.057         0.081         0.233         0.163         0.853
+
+== ARC variants (base)
+      arc_p92_relax_b4arc_p92_relax_b0arc_p85_strict_b4arc_p85_strict_b0
+BU             0.087         0.107         0.063         0.087
+TD             0.160         0.190         0.130         0.130
+TDR            0.350         0.420         0.277         0.320
+HY             0.057         0.067         0.033         0.053
+
+== DIRECTOR THREAD (base)
+             arc_dir   dir_is_main dir_mass_rank forced_in_selgrounded_forceddirector_writes
+BU             0.000         0.000         0.000         0.000         0.000         0.000
+TD             0.337         0.280         3.980         0.147         0.640         6.000
+TDR            0.610         0.720         2.140         0.332         0.962         7.377
+HY             0.000         0.000         0.000         0.000         0.000         0.000
+
+== BEATS/NODES (base)
+           five_node    gap_cv_med          conv          dead         depth         n_sel        n_exec
+BU             0.110         0.333         0.000         0.096        22.990        12.000       239.543
+TD             0.337         0.333         0.000         0.096        24.507        12.000       242.723
+TDR            0.760         0.377         0.000         0.096        22.010        12.000       242.083
+HY             0.113         0.301         0.000         0.094        30.110        12.000       272.580
+
+== DIVERSITY (base)
+               R_oat      n_struct        n_slot        tp_std      peak_mag
+BU             0.132        39.000       295.000         5.599         2.677
+TD             0.240        72.000       300.000         5.518         4.167
+TDR            0.281        84.000       299.000         3.888         6.947
+HY             0.134        40.000       298.000         5.762         2.517
+
+== PERTURBATION (kill at t=10)
+BU {'viol_post_any': 0.0, 'arc_post': 0.08, 'kill_applied': 1.0, 'arc_post_viol_share': 0.0}
+TD {'viol_post_any': 1.0, 'arc_post': 0.157, 'kill_applied': 1.0, 'arc_post_viol_share': 1.0}
+TDR {'viol_post_any': 0.0, 'arc_post': 0.377, 'kill_applied': 1.0, 'arc_post_viol_share': 0.0}
+HY {'viol_post_any': 0.0, 'arc_post': 0.047, 'kill_applied': 1.0, 'arc_post_viol_share': 0.0}
+
+== DOSE (HY, w_amb)
+0.0 {'why_linked': 0.423, 'arc_all': 0.093, 'arc_null': 0.132, 'arc_closed': 0.36, 'thread_cont': 0.763, 'leg_grounded': 1.0}
+0.25 {'why_linked': 0.578, 'arc_all': 0.11, 'arc_null': 0.109, 'arc_closed': 0.313, 'thread_cont': 0.762, 'leg_grounded': 1.0}
+0.5 {'why_linked': 0.747, 'arc_all': 0.057, 'arc_null': 0.097, 'arc_closed': 0.27, 'thread_cont': 0.775, 'leg_grounded': 1.0}
+0.75 {'why_linked': 0.876, 'arc_all': 0.027, 'arc_null': 0.062, 'arc_closed': 0.193, 'thread_cont': 0.785, 'leg_grounded': 1.0}
+1.0 {'why_linked': 0.992, 'arc_all': 0.033, 'arc_null': 0.064, 'arc_closed': 0.173, 'thread_cont': 0.8, 'leg_grounded': 1.0}
+
+== ABLATION (HY)
+noocc {'why_linked': 0.794, 'arc_all': 0.06, 'arc_closed': 0.233, 'thread_cont': 0.776, 'dead': 0.095}
+nolife {'why_linked': 0.766, 'arc_all': 0.107, 'arc_closed': 0.387, 'thread_cont': 0.757, 'dead': 0.092}
+neither {'why_linked': 0.784, 'arc_all': 0.107, 'arc_closed': 0.38, 'thread_cont': 0.772, 'dead': 0.093}
+HY full {'why_linked': 0.801, 'arc_all': 0.057, 'arc_closed': 0.233, 'thread_cont': 0.778, 'dead': 0.094}
+
+== CONDITION SWEEP (arc_all / arc_null / why_linked / leg_grounded)
+base {'BU': (0.09, 0.1, 0.43, 1.0), 'TD': (0.16, 0.17, 0.36, 0.98), 'TDR': (0.35, 0.25, 0.23, 0.99), 'HY': (0.06, 0.08, 0.8, 1.0)}
+noent {'BU': (0.14, 0.18, 0.36, 1.0), 'TD': (0.17, 0.21, 0.29, 0.98), 'TDR': (0.35, 0.27, 0.18, 0.99), 'HY': (0.05, 0.14, 0.76, 1.0)}
+engine {'BU': (0.19, 0.2, 0.24, 1.0), 'TD': (0.37, 0.34, 0.17, 0.9), 'TDR': (0.71, 0.33, 0.17, 0.98), 'HY': (0.1, 0.1, 0.77, 1.0)}
+small {'BU': (0.09, 0.1, 0.46, 1.0), 'TD': (0.22, 0.22, 0.3, 0.94), 'TDR': (0.43, 0.28, 0.25, 0.98), 'HY': (0.08, 0.11, 0.79, 1.0)}
+null {'BU': (0.08, 0.11, 0.46, 1.0), 'TD': (0.26, 0.26, 0.28, 0.93), 'TDR': (0.44, 0.27, 0.25, 0.97), 'HY': (0.07, 0.1, 0.79, 1.0)}
+
+== CONTROL {'equal': 300, 'n': 300}
+
+== PRE-REGISTERED PREDICTIONS
+[CONFIRMED] L1: Apparent legibility does not discriminate: spread across regimes < 0.05
+            1.000, 1.000, 1.000, 1.000
+[CONFIRMED] L2: Grounding of the DIRECTOR'S OWN beats: blind script TD < 0.65; replanning TDR > 0.90
+            TD 0.640 TDR 0.962
+[CONFIRMED] L3: Standing motives deepen the 'why': why_linked(HY) >= why_linked(BU) + 0.20
+            HY 0.801 BU 0.428
+[CONFIRMED] C1: Consistency, unperturbed: violation rate BU = HY = TDR = 0, TD >= 0.15
+            {'BU': '0.000', 'HY': '0.000', 'TDR': '0.000', 'TD': '0.963'}
+[CONFIRMED] C2: Injection: runs with a forced outcome: BU = HY = 0, TD = TDR = 1
+            {'BU': '0.000', 'HY': '0.000', 'TDR': '1.000', 'TD': '1.000'}
+[CONFIRMED] C3: Perturbation: post-kill violation rate TD >= 0.50; BU, HY <= 0.02; TDR <= 0.05
+            {'BU': '0.000', 'HY': '0.000', 'TDR': '0.000', 'TD': '1.000'}
+[CONFIRMED] A1: Director-thread arc fidelity (best case for top-down): arc_dir TDR >= 0.60 and TD < TDR
+            TD 0.337 TDR 0.610
+[FALSIFIED] A2: A five-beat script dominates the chronicle: share of runs where the director's thread is the observer's main thread: TD >= 0.60
+            0.280
+[FALSIFIED] A3: Observer-picked arc rate: TD >= BU + 0.10
+            TD 0.160 BU 0.087
+[CONFIRMED] A4: Apophenia: BU arc rate exceeds its shuffled null by <= 0.10
+            BU 0.087 null 0.102
+[FALSIFIED] A5: Hybrid signal over null: (HY-null) >= (BU-null) + 0.05
+            HY-null -0.024 BU-null -0.016
+[CONFIRMED] A6: Sensitivity: sign of (TD-BU) and of (HY-BU) in arc rate is the same in >= 3 of the 4 arc-criterion variants
+            TD>BU in 5/4 variants; HY>BU in 0/4
+[FALSIFIED] D2: Timing: std of main-thread peak season TD <= BU - 1.0
+            TD 5.518 BU 5.599
+[CONFIRMED] B1: Five-node completeness: TD > BU and TDR > BU and HY >= BU
+            TD 0.337 TDR 0.760 BU 0.110 HY 0.113
+[FALSIFIED] B2: Metronome: median gap CV of main-thread beats TD < BU
+            TD 0.333 BU 0.333
+[CONFIRMED] K1: Control: HY(w=0, occasions off, lifecycle off) reproduces BU's log on every seed
+            300/300
+[FALSIFIED] K2: Dose: why_linked rises with w (Spearman >= 0.9) and arc_all never drops > 0.05 between adjacent w
+            why 0.423,0.578,0.747,0.876,0.992 | arc 0.093,0.110,0.057,0.027,0.033
+[FALSIFIED] K3: Ablation: removing occasions lowers HY thread_cont by >= 0.02; removing lifecycle lowers HY arc_closed by >= 0.03
+            occasion 0.002; lifecycle -0.153
+[FALSIFIED] R1: Robustness: HY-BU on why_linked and on (arc_all - null) keep their sign in noent, engine, small
+            noent: why 0.394 arc -0.036; engine: why 0.536 arc 0.009; small: why 0.331 arc -0.019
+[CONFIRMED] N1: Quiet world: TD inflates stakes: main-thread peak magnitude in 'null' >= 2x BU's
+            TD 6.537 BU 2.360
+[CONFIRMED] E1: Refusal-heavy substrate (80%): the TD-BU gap in arc rate widens relative to base (forced beats bypass refusal)
+            gap base 0.073 -> engine 0.177
+
+13/21 confirmed

@@ -1,0 +1,46 @@
+== base
+regime   arc_all arc_null  closed dangling why_linked five_node thread_cont  n_exec  fired/goal_met n/a
+BU        0.087    0.102   0.307    0.750      0.428     0.110       0.768     240
+TDR       0.350    0.254   0.847    0.170      0.229     0.760       0.761     242
+HY        0.057    0.081   0.233    0.853      0.801     0.113       0.778     273
+HYd       0.260    0.258   0.767    0.447      0.437     0.550       0.603     278
+HYg1      0.090    0.179   0.363    0.653      0.683     0.120       0.740     266
+HYg2      0.153    0.159   0.413    0.550      0.703     0.150       0.729     268
+HYg3      0.143    0.140   0.377    0.583      0.721     0.177       0.737     270
+  HYg3-BU arc_all    +0.057 [+0.007,+0.107] 
+  HYg3-HY arc_all    +0.087 [+0.043,+0.137] 
+  HYg3-HY arc_closed +0.143 [+0.073,+0.213] 
+  HYg3-HY five_node  +0.063 [+0.007,+0.117] 
+  HYg3-HYd arc_all    -0.117 [-0.180,-0.057] 
+  TDR-HYg3 arc_all    +0.207 [+0.140,+0.273] 
+  HYg2-HY arc_all    +0.097 [+0.050,+0.143] 
+  HYg1-HY arc_all    +0.033 [-0.007,+0.077] (CI spans 0)
+  arc_all - arc_null: {'BU': -0.016, 'TDR': 0.096, 'HY': -0.024, 'HYd': 0.002, 'HYg1': -0.089, 'HYg2': -0.006, 'HYg3': 0.003}
+== engine (80% refusal)
+regime   arc_all arc_null  closed dangling why_linked five_node thread_cont  n_exec  fired/goal_met n/a
+BU        0.190    0.196   0.423    0.170      0.235     0.073       0.647      42
+TDR       0.710    0.330   1.000    0.000      0.168     0.993       0.764      46
+HY        0.103    0.100   0.320    0.350      0.772     0.067       0.673      57
+HYd       0.217    0.216   0.567    0.300      0.619     0.363       0.638      53
+HYg1      0.260    0.227   0.463    0.153      0.506     0.073       0.608      48
+HYg2      0.237    0.232   0.463    0.147      0.623     0.073       0.606      51
+HYg3      0.190    0.202   0.463    0.160      0.635     0.110       0.601      52
+  HYg3-BU arc_all    +0.000 [-0.063,+0.063] (CI spans 0)
+  HYg3-HY arc_all    +0.087 [+0.030,+0.143] 
+  HYg3-HY arc_closed +0.143 [+0.067,+0.220] 
+  HYg3-HY five_node  +0.043 [+0.000,+0.093] (CI spans 0)
+  HYg3-HYd arc_all    -0.027 [-0.093,+0.037] (CI spans 0)
+  TDR-HYg3 arc_all    +0.520 [+0.450,+0.587] 
+  HYg2-HY arc_all    +0.133 [+0.073,+0.190] 
+  HYg1-HY arc_all    +0.157 [+0.097,+0.220] 
+  arc_all - arc_null: {'BU': -0.006, 'TDR': 0.38, 'HY': 0.003, 'HYd': 0.001, 'HYg1': 0.033, 'HYg2': 0.004, 'HYg3': -0.012}
+
+== PREDICTIONS (pre-registered before the first run)
+[FALSIFIED] H1: Ladder gives closure/escalation: arc_all(HYg3) >= arc_all(HY) + 0.10 with the bootstrap CI excluding 0
+[CONFIRMED] H2: Depth dose: arc_all(HYg1) <= arc_all(HYg2) + 0.02 and arc_all(HYg2) <= arc_all(HYg3) + 0.02
+[CONFIRMED] H3: No injection and no constraint violations in any ladder arm
+[FALSIFIED] H4: Ordering signal beyond chance: arc_all - arc_null for HYg3 >= +0.05
+[CONFIRMED] H5: Motive depth preserved: why_linked(HYg3) >= 0.70
+[CONFIRMED] H6: Refusal-heavy substrate (80%): the HYg3-BU arc gain is smaller than at base
+[FALSIFIED] H7: Complete beats: five_node(HYg3) >= five_node(HY) + 0.15
+4/7 confirmed

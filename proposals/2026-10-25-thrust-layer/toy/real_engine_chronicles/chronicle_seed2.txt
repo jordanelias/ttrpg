@@ -1,0 +1,16 @@
+chronicle seed=2 seasons=4 arm=off cap=None acts=3279 depth=15 PYTHONHASHSEED=None
+1. season 0 | Sigrid Torsvald train | emitted train.refused | opens the chain
+2. season 0 | Torben Almqvist reconstruct | emitted finding.made | answers 1. Sigrid Torsvald train
+3. season 0 | Gerik Strand move | emitted travel.blocked | answers 2. Torben Almqvist reconstruct
+4. season 1 | Elske Almqvist accept | emitted accept.refused | answers 3. Gerik Strand move
+5. season 1 | Wilhelm Voss restore | emitted restore.refused | answers 4. Elske Almqvist accept
+6. season 1 | Elske Almqvist work | emitted work.unavailable | answers 5. Wilhelm Voss restore
+7. season 1 | Sigrid Torsvald accept | emitted accept.refused | answers 6. Elske Almqvist work
+8. season 1 | Gerik Strand fight | emitted kill.refused | answers 7. Sigrid Torsvald accept
+9. season 2 | Wilhelm Voss covenant | emitted covenant.refused | answers 8. Gerik Strand fight
+10. season 2 | Elske Almqvist release | emitted release.refused | answers 9. Wilhelm Voss covenant
+11. season 2 | Torben Almqvist accept | emitted accept.refused | answers 10. Elske Almqvist release
+12. season 2 | Elske Almqvist release | emitted release.refused | answers 11. Torben Almqvist accept
+13. season 2 | Sigrid Torsvald move | emitted travel.blocked | answers 12. Elske Almqvist release
+14. season 3 | Torben Almqvist commit | emitted commitment.refused | answers 13. Sigrid Torsvald move
+15. season 3 | Wilhelm Voss work | emitted work.unavailable | answers 14. Torben Almqvist commit

@@ -1,0 +1,11 @@
+N = 120 seeds per arm (0-39 overlap the earlier 40-seed sweep)
+arc_all     lam0   0.017  lam4   0.092  diff  +0.075 [+0.025,+0.133]
+arc_null    lam0   0.022  lam4   0.167  diff  +0.144 [+0.094,+0.194]
+arc_closed  lam0   0.150  lam4   0.492  diff  +0.342 [+0.233,+0.458]
+dangling    lam0   0.950  lam4   0.800  diff  -0.150 [-0.233,-0.075]
+five_node   lam0   0.042  lam4   0.217  diff  +0.175 [+0.092,+0.258]
+why_linked  lam0   0.579  lam4   0.287  diff  -0.292 [-0.347,-0.237]
+depth       lam0  18.033  lam4  30.625  diff +12.592 [+9.308,+16.142]
+n_exec      lam0 303.933  lam4 302.625  diff  -1.308 [-10.067,+7.642]
+lam4 arc_all - arc_null = -0.075 [-0.144,-0.008]
+injected total: 0 | violations rate: 0.0 | changed/leveraged: 0.324 | leveraged decisions per run: 126 | rollouts per run: 3179
