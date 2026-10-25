@@ -5,7 +5,7 @@
 
 ## 1. How to read
 
-Jordan asked for the NERS lanes' findings to be folded into the plan using the agonist→antagonist method (`CLAUDE.md` §10). Six independent NERS lanes (`.claude/skills/ners/SKILL.md`; read-only) read the designs the plan sequences. Six producers then verified each lane claim against the tree and drafted the change as 110 blocks; five independent read-only critics attacked the blocks against the tree; the orchestrator reconciled their verdicts. That was the one adversarial round (`CLAUDE.md` §0): the fixes it produced were not audited again. Of the 110 blocks, 69 survived unchanged, 38 were amended on the critics' evidence, and 3 were rejected as drafted and rewritten (CP-T02-04, CP-T06-01, CP-T10-09). 7 further entries (HR-1 to HR-7) were added later: HR-1 to HR-4 by the hole-row pass, HR-5 and HR-6 by the editorial-id pass, and HR-7 by the editorial-id review round, each from its own critic round; they are not among the 110 blocks.
+Jordan asked for the NERS lanes' findings to be folded into the plan using the agonist→antagonist method (`CLAUDE.md` §10). Six independent NERS lanes (`.claude/skills/ners/SKILL.md`; read-only) read the designs the plan sequences. Six producers then verified each lane claim against the tree and drafted the change as 110 blocks; five independent read-only critics attacked the blocks against the tree; the orchestrator reconciled their verdicts. That was the one adversarial round (`CLAUDE.md` §0): the fixes it produced were not audited again. Of the 110 blocks, 69 survived unchanged, 38 were amended on the critics' evidence, and 3 were rejected as drafted and rewritten (CP-T02-04, CP-T06-01, CP-T10-09). 9 further entries (HR-1 to HR-9) were added later: HR-1 to HR-4 by the hole-row pass, HR-5 and HR-6 by the editorial-id pass, and HR-7 by the editorial-id review round, each from its own critic round; HR-8 and HR-9 by the fold of PR #506 (the thrust-layer directory), from its gap register, whose own pass record (one producer, one antagonist, the orchestrator's re-measurement) is its §7. They are not among the 110 blocks.
 
 **Homes are unedited.** An entry here overrides its home on the point it names, and `-03`'s rows, gates and exits already carry the change. Actions: **CUT** (the position leaves the plan; its handle stays in `-07` §2), **NARROW** (smaller scope, a narrower N-line), **REPAIR** (the home's design changes at a named point), **RESEQUENCE** (a gate or `needs` changes), **LIMIT** (a stated limit or exit clause, no design change). A choice taken to make a repair is tagged `[ASSUMPTION; medium; Jordan to correct; revert: …]` and was answered by the ladder (`CLAUDE.md` §0), not escalated; the **Taken** lines are collected there and nowhere else, and `-05` §2 points here.
 
@@ -15,6 +15,7 @@ Jordan asked for the NERS lanes' findings to be folded into the plan using the a
 
 | handle | batch | action | block | after the attack |
 |---|---|---|---|---|
+| REM-10 | B10-02 | REPAIR | HR-8 | fold of PR #506 |
 | REM-16 | B10-02 | LIMIT | HR-5 | editorial-id pass |
 | REM-50 | B10-04 | REPAIR | AM-A-04 | amended |
 | REM-52 | B10-04 | LIMIT | AM-A-05 | amended |
@@ -26,6 +27,7 @@ Jordan asked for the NERS lanes' findings to be folded into the plan using the a
 | REM-24 | B10-05 | LIMIT | AM-A-09 | held |
 | REM-25 | B10-05 | LIMIT | AM-A-10 | held |
 | REM-2C | B10-05 | LIMIT | AM-A-11 | held |
+| B10-05 exit (REM-21 to REM-25, REM-2C, CP-T05-04); REM-23 | B10-05 | LIMIT | HR-9 | fold of PR #506 |
 | REM-27 | B10-06 | LIMIT | AM-A-13 | held |
 | REM-29 | B10-06 | LIMIT | AM-A-15 | amended |
 | REM-2B | B10-06 | LIMIT | HR-3 | hole-row pass |
@@ -118,6 +120,12 @@ Jordan asked for the NERS lanes' findings to be folded into the plan using the a
 
 Each entry: the N-line after the amendment (the form of `ners/SKILL.md`: what the game can no longer do without it), the override in the home's design, any answer taken and its revert, why the lane's claim held, and what the critic changed.
 
+### REM-10 — REPAIR (B10-02) · HR-8
+
+- **Override:** REM-10 gains two clauses. (1) `_attribute_acts` also counts `graded_loss(act, events)` — a Failure-degree loss whose kind is in both the row's `emits` and its `emits_on_refusal` (`tell`'s `news.untold`; `finding.none` on `examine` and `research`) — beside made and refused, and both counts are reported (PR #506's G-03 part 1; the register measures graded losses at 2.4% of attempts at two seasons and 2.9% at four, seeds 0-4, P10). (2) The other readers of `resolved` (`populated.run`, `decision_spread`, `arms`, `soak`, `scarce`, `storybar`) are decided in the same position, one by one: a reader whose docstring says "attempted" or "executed" moves to `attempts`; the rest keep the fold set and say so in their docstring. The expected reading gains the register's seed-0 figure (two seasons): aperture `att` 1,182 against 1,511 acts that emitted Events; `accept` 4 attempted against 48; `determine` 0 against 6; `examine` 0 against 61; `research` 11 against 132; `fight` 2 against 19. G-03's part 2 (whether a lost `tell` or a failed inquiry is retried) is not this position's: it changes `_refused_acts` in `loop/driver.py` and the hash, and stays LEAVE with its trigger (`-06` part 4). Hash EQUAL (readers only). CR-14 and CR-15 read through REM-10's owner and land after it.
+- **Because:** YES — G-02: a contested act refused at admission never enters `SeasonDriver.resolved` (`loop/resolve.py`, the contest branch, `_survives` and the obstacle refusal skip `_fold`, whose first statement appends to `resolved`), and the register says "a fix inside `attribute` alone leaves the others as they are". `-01` §5 found the same defect independently (1,899 of 5,103 admission refusals, 37.2%, belong to contested acts that never enter `driver.resolved`); the register's 329-act gap at seed 0 is the same defect, found twice (`-06` part 4 §3).
+- **After the attack:** Not attacked in this plan. The finding comes from PR #506's register, whose one antagonist pass checked it (its G-02 row: the critic reconciled the 329-act gap verb by verb against P9; its §7 is the pass record); the clauses are the orchestrator's ruling at the fold.
+
 ### REM-16 — LIMIT (B10-02) · HR-5
 
 - **Override:** REM-16's re-take list gains five figures that this plan's row ledger quotes from the register without reproducing: H-95 (`corpus_run`: 143 of 143 worlds run, 57 `RESCALES` overlays), H-102 (R3 passes 46 of 46 NPC and 97 of 97 ARC), and the readings of H-33, H-40 and H-79 (`test_w9_the_sweeps_the_register_declares_are_executed`). A figure that does not reproduce on the batch's base commit reopens its row (CLOSED becomes OPEN, ACCEPT becomes MEASURE) in the batch's closing note. Hash EQUAL (readers only).
@@ -190,6 +198,12 @@ Each entry: the N-line after the amendment (the form of `ners/SKILL.md`: what th
 - **N-line after:** `referent_class: Record` on `research` plus the `Record` own-referent term — cut it and the gameplay experience is worse, because `research` keeps forming on non-Records and being refused 110 times at admission while it executes 6. It adds no new executing verb.
 - **Override:** No design change; limit as AM-A-07. The own-referent term for `Record` is the one place where the `Record` class leaves the exclusion in AM-A-06's term.
 - **Because:** YES — rem-02:412-437: `research` 110 realm refusals, all `finding.none` at admission on `existence` of `subject` kind `Record`; 6 executed today. The class widens a shared Record class (`comply`, `carry`, `found`, `build`) and carries a stopping rule over five rows; its own `[UNVERIFIED]` (how `presence:<site>` binds once `subject` is classed) is settled by a hand-built falsifier.
+
+### B10-05 exit (REM-21 to REM-25, REM-2C, CP-T05-04); REM-23 — LIMIT (B10-05) · HR-9
+
+- **Override:** No design change. The batch exit gains PR #506's measurement and three controls for G-01, each read on CR-14's pooled census. The measurement: the wrong-kind-at-admission share per act must fall from its base (P10: 4,620 of 16,116 attempts, 28.7%, at four seasons over seeds 0-4; 2,385 of 7,402, 32.2%, at two), with `exists:DocketItem` = 0 (a world read, which stays a refusal) and the wrong Record sub-kind counted apart. Controls: (1) per-verb EXECUTED pooled over seeds 0-4 does not fall beyond P1's seed-to-seed range; (2) questions delivered, claims deposited and scenes do not fall (refusals are witnessed and carry motion); (3) a per-candidate check that every candidate a class removes, force-admitted, refuses on its kind. A control that fails reverts that row's `referent_class` (P8). REM-23 also reports `commit`'s admissions on a Proposition (3 of 180 today, P3) and, if the classed source yields too few for a goal to be re-committed, names the register's extension, stamping the Propositions the person's own ledger names (G-04(a)), as the next step on M19's answer; it does not build it.
+- **Because:** YES — the register measured the class per act with the record sub-kinds and `DocketItem` separated (P10 supersedes its own P3b, which counted `_admits` calls), and named the three controls with its own (withdrawn) design; they hold for any option of H-156's (G-01). The design it withdrew (stamp every referent with its collection class) fails on Record sub-kinds, `DocketItem`, `determine`'s two conjuncts, `examine`'s `of: site`, the partition's own rule and `Forbidden` on a duplicate class; REM-21's per-question stamping does not take that shape.
+- **After the attack:** Not attacked in this plan; from PR #506's register (its §7 records the antagonist pass that withdrew the generic design and replaced P3b by P10). Whether the decline is wanted at all is M19; A2-37's default stands meanwhile.
 
 ### REM-27 — LIMIT (B10-06) · AM-A-13
 
