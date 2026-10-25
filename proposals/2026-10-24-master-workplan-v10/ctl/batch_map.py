@@ -206,7 +206,7 @@ CL = {"CL-CHAR": "B10-19", "CL-ATTR": "B10-19", "CL-TROOP": "B10-19", "CL-EVENTS
 # In-batch order of the final cut ('->' is serial; 'held:' members wait on the question named and slot in by rule R8)
 ORDER = {
  'B10-01': 'REM-01 -> REM-02 -> REM-03 -> REM-04 -> REM-05 -> REM-06 -> REM-08 -> REM-09 -> NM-W3 -> SC-06 -> CR-02',
- 'B10-02': 'REM-10 -> REM-11 -> CR-14 -> REM-13 -> REM-14 -> REM-12 -> REM-15 -> CR-15 -> CR-05 -> CR-04 -> REM-16 -> NM-W0 -> CR-01 -> IN-18',
+ 'B10-02': 'REM-10 -> REM-11 -> REM-13 -> REM-14 -> REM-12 -> REM-15 -> CR-15 -> CR-14 -> CR-05 -> CR-04 -> REM-16 -> NM-W0 -> CR-01 -> IN-18',
  'B10-03': 'REM-42 -> REM-46 -> REM-47 -> CR-06; held: DEF-9 (M11)',
  'B10-04': 'REM-50; held: REM-52 (M6)',
  'B10-05': 'REM-21 -> REM-22 -> REM-23 -> REM-24 -> REM-25 -> CP-T05-04 -> REM-2C -> CR-07',
