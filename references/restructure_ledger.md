@@ -2993,3 +2993,39 @@ Their BUILDERS are forked above; re-running `build_key_graph.py` or `build_contr
 | `tests/sim/mass_battle/troop_types/__init__.py` | `modules/mass_battle/troop_types/__init__.py` |
 | `tests/sim/mass_battle/troop_types/registry.py` | `modules/mass_battle/troop_types/registry.py` |
 | `sim/provincial/massbattle.py` | `modules/mass_battle/massbattle.py` |
+
+## 2026-10-26 — the v10 adoption (`ED-IN-0299`): v9 retired; v10's plan files move to `workplans/`
+
+<!-- 2026-10-26, v10 adoption commit (`ED-IN-0299`, batch B10-01, v10 head section 9 steps 2 and 3):
+     `workplans/valoria_master_workplan_v10.md` (+ `_part2`…`_part14`) becomes the one active plan for all nine lanes
+     (CLAUDE.md §2), so v9's eight files are retired: one exact-file row each. FORK ref c1374059 is main's #504 merge commit,
+     an ancestor of the deleting commit whose v9 files are byte-identical to the deleting commit's parent (`git diff
+     c1374059 <parent> -- workplans/` is empty); a main commit is used, not the branch parent, so a squash merge leaves the
+     ref reachable (the 2026-10-06 section's BF2 lesson). The fourteen moved plan files take one MOVED row each; the
+     report (`-01`), `ctl/`, the sequence file and the twenty-three build files stay in
+     `proposals/2026-10-24-master-workplan-v10/`. -->
+
+| Old path | New path | Status |
+|---|---|---|
+| `workplans/valoria_master_workplan_v9.md` | `FORK:c1374059` | FORKED (2026-10-26, superseded by `workplans/valoria_master_workplan_v10.md`, the one active plan for every lane (`ED-IN-0299`); its open positions carried in full by v10's `_part4` and `_part5`; the ref is main's #504 merge commit, which still carries the file) |
+| `workplans/valoria_master_workplan_v9_part2.md` | `FORK:c1374059` | FORKED (2026-10-26, superseded by `workplans/valoria_master_workplan_v10.md`, the one active plan for every lane (`ED-IN-0299`); its open positions carried in full by v10's `_part4` and `_part5`; the ref is main's #504 merge commit, which still carries the file) |
+| `workplans/valoria_master_workplan_v9_part3.md` | `FORK:c1374059` | FORKED (2026-10-26, superseded by `workplans/valoria_master_workplan_v10.md`, the one active plan for every lane (`ED-IN-0299`); its open positions carried in full by v10's `_part4` and `_part5`; the ref is main's #504 merge commit, which still carries the file) |
+| `workplans/valoria_master_workplan_v9_part4.md` | `FORK:c1374059` | FORKED (2026-10-26, superseded by `workplans/valoria_master_workplan_v10.md`, the one active plan for every lane (`ED-IN-0299`); its open positions carried in full by v10's `_part4` and `_part5`; the ref is main's #504 merge commit, which still carries the file) |
+| `workplans/valoria_master_workplan_v9_part5.md` | `FORK:c1374059` | FORKED (2026-10-26, superseded by `workplans/valoria_master_workplan_v10.md`, the one active plan for every lane (`ED-IN-0299`); its open positions carried in full by v10's `_part4` and `_part5`; the ref is main's #504 merge commit, which still carries the file) |
+| `workplans/valoria_master_workplan_v9_part6.md` | `FORK:c1374059` | FORKED (2026-10-26, superseded by `workplans/valoria_master_workplan_v10.md`, the one active plan for every lane (`ED-IN-0299`); its open positions carried in full by v10's `_part4` and `_part5`; the ref is main's #504 merge commit, which still carries the file) |
+| `workplans/valoria_master_workplan_v9_part7.md` | `FORK:c1374059` | FORKED (2026-10-26, superseded by `workplans/valoria_master_workplan_v10.md`, the one active plan for every lane (`ED-IN-0299`); its open positions carried in full by v10's `_part4` and `_part5`; the ref is main's #504 merge commit, which still carries the file) |
+| `workplans/valoria_master_workplan_v9_part8.md` | `FORK:c1374059` | FORKED (2026-10-26, superseded by `workplans/valoria_master_workplan_v10.md`, the one active plan for every lane (`ED-IN-0299`); its open positions carried in full by v10's `_part4` and `_part5`; the ref is main's #504 merge commit, which still carries the file) |
+| `proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-00-head.md` | `workplans/valoria_master_workplan_v10.md` | MOVED (2026-10-26, the v10 adoption, `ED-IN-0299`: the plan file leaves `proposals/` for `workplans/`) |
+| `proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-02-the-nine.md` | `workplans/valoria_master_workplan_v10_part2.md` | MOVED (2026-10-26, the v10 adoption, `ED-IN-0299`: the plan file leaves `proposals/` for `workplans/`) |
+| `proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-03-batches.md` | `workplans/valoria_master_workplan_v10_part3.md` | MOVED (2026-10-26, the v10 adoption, `ED-IN-0299`: the plan file leaves `proposals/` for `workplans/`) |
+| `proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-04-carried-entries.md` | `workplans/valoria_master_workplan_v10_part4.md` | MOVED (2026-10-26, the v10 adoption, `ED-IN-0299`: the plan file leaves `proposals/` for `workplans/`) |
+| `proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-04-carried-entries_part2.md` | `workplans/valoria_master_workplan_v10_part5.md` | MOVED (2026-10-26, the v10 adoption, `ED-IN-0299`: the plan file leaves `proposals/` for `workplans/`) |
+| `proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-05-jordan-queue.md` | `workplans/valoria_master_workplan_v10_part6.md` | MOVED (2026-10-26, the v10 adoption, `ED-IN-0299`: the plan file leaves `proposals/` for `workplans/`) |
+| `proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-05-jordan-queue_part2.md` | `workplans/valoria_master_workplan_v10_part7.md` | MOVED (2026-10-26, the v10 adoption, `ED-IN-0299`: the plan file leaves `proposals/` for `workplans/`) |
+| `proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-06-row-ledger.md` | `workplans/valoria_master_workplan_v10_part8.md` | MOVED (2026-10-26, the v10 adoption, `ED-IN-0299`: the plan file leaves `proposals/` for `workplans/`) |
+| `proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-06-row-ledger_part2.md` | `workplans/valoria_master_workplan_v10_part9.md` | MOVED (2026-10-26, the v10 adoption, `ED-IN-0299`: the plan file leaves `proposals/` for `workplans/`) |
+| `proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-06-row-ledger_part3.md` | `workplans/valoria_master_workplan_v10_part10.md` | MOVED (2026-10-26, the v10 adoption, `ED-IN-0299`: the plan file leaves `proposals/` for `workplans/`) |
+| `proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-06-row-ledger_part4.md` | `workplans/valoria_master_workplan_v10_part11.md` | MOVED (2026-10-26, the v10 adoption, `ED-IN-0299`: the plan file leaves `proposals/` for `workplans/`) |
+| `proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-07-crosswalk.md` | `workplans/valoria_master_workplan_v10_part12.md` | MOVED (2026-10-26, the v10 adoption, `ED-IN-0299`: the plan file leaves `proposals/` for `workplans/`) |
+| `proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-08-ners-amendments.md` | `workplans/valoria_master_workplan_v10_part13.md` | MOVED (2026-10-26, the v10 adoption, `ED-IN-0299`: the plan file leaves `proposals/` for `workplans/`) |
+| `proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-08-ners-amendments_part2.md` | `workplans/valoria_master_workplan_v10_part14.md` | MOVED (2026-10-26, the v10 adoption, `ED-IN-0299`: the plan file leaves `proposals/` for `workplans/`) |

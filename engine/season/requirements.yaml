@@ -51,6 +51,7 @@ ed: "ED-IN-0204"
 #   (`dice_engine.py:241-247`, which records it as implemented nowhere). What DOES survive from §2
 #   for R-04 is the SCALE SET itself: the loop's `person`/`realm`/`settlement` vocabulary is not
 #   canon's five, and no mapping between them exists — that gap is R-04's real content.
+#   Three scale vocabularies: H-89, J.2 rank 5 (v10 REM-03 (iv), B10-01).
 #
 #   §3 EIGHT HANDOFF RULES — Personal→Thread, Personal→Faction, Personal→Scene (Contest),
 #   Scene→Faction (Domain Echo), Thread→Faction, and three more. These are the "zooms out and in
@@ -143,14 +144,22 @@ scales:
     retention: "RETAINED, NOT DONE (Jordan, 2026-09-05: \"combat engine isn't done\")"
     in_loop:   "duel only, via combat_seam.py"
     note: >-
-      ⚠ THE TWO HALVES OF THIS SCALE ARE NOT THE SAME THING AND ONLY ONE EXISTS. The duel engine is
-      real and the loop already calls it (`combat_seam.py` -> `wrapper.fight`), but it is a
-      CONTINUOUS RANGE model (`combat_systems.py::RANGE_COMMIT_PEAK`, `RANGE_AVAIL_FLOOR`) between
-      two combatants. **GRID-BASED MAP COMBAT WITH UNITS DOES NOT EXIST ANYWHERE IN THE TREE** — no
-      grid, hex or tile module in `systems/` or `engine/`; the only map artifacts are
-      `settlements/valoria_map_v30.svg` (a picture) and `world/adjacency_map.jsx` (adjacency, not a
-      tactical grid). This is unbuilt design, not an unwired seam, and it has no work item in the
-      execution plan.
+      ⚠ THE TWO HALVES OF THIS SCALE ARE NOT THE SAME THING. The duel engine is real and the loop
+      already calls it (`combat_seam.py` -> `wrapper.fight`), but it is a CONTINUOUS RANGE model
+      (`combat_systems.py::RANGE_COMMIT_PEAK`, `RANGE_AVAIL_FLOOR`) between two combatants.
+      ⚠ CORRECTED 2026-10-26 (v10 REM-03, B10-01): this note used to say grid-based map combat with
+      units exists nowhere in the tree. `modules/mass_battle` holds a cell battlefield
+      (`config.py:16` `BATTLEFIELD_SIZE`, `:25` `UNIT_GRID_SIZE`); what does not exist is the
+      decision at its scale (commander-chosen orders). THE READING OF THIS ROW
+      [ASSUMPTION; medium; Jordan to correct; revert: commander-chosen orders restored as a third
+      gate]: it reads `in_loop` when, in computed play, (i) a duel resolves (`fight` or `accept` ->
+      the combat seam; true today) and (ii) a fought field (`field.won` or `field.lost`, never
+      `field.unopposed`) resolves on `modules/mass_battle`'s cell battlefield. Commander-chosen
+      orders are not a gate: they are a named residue (the AUTOMATED mode may run the default
+      orders, `massbattle.py:170-178`), whose trigger is a position that designs a typed `Orders`
+      record shared by the PLAYABLE scene and the AUTOMATED planner (MB-08's AI-generals half,
+      LEAVE). R-04 may read `met` at CP-T04's close when conjunct (1) and the other conjuncts also
+      read (`workplans/valoria_master_workplan_v10_part2.md` §5).
   - scale:    "settlement management / city building / domain actions"
     subsystem: [settlements, overview]   # `rosters.yaml` `modules:` entries -- the one owner of where each lives (A-25, plan position `30`)
     retention: "RETAINED (Jordan, 2026-10-02, ED-IN-0283 -- the systems/ folders are the homes of their systems)"
@@ -634,7 +643,7 @@ rows:
       instrument's run-to-run noise is still not measured. B-I's re-take (HEAD 66bf51f9, full `wd_collect.py`, see R-01's last paragraph)
       reads none 74.94 / actor 42.64 / total 41.56 % at `2x3` against THESE figures: +0.04 / -1.30 / -0.84 pp, still far below 96%, status stays `met`.
       **M-mem (RS-29, the B-W close, squashed into 3bf936ee; context, not this row's status):** `build_realm(0)`, pickle bytes of every ledger claim — one season 5,238 claims / 1,569,290 bytes (300 per claim) / 1,542 distinct facts / 3,976 (fact, holder) pairs; two seasons 7,493 claims / 2,244,769 bytes / 2,145 distinct facts / 4,627 pairs (2.16 holders per fact); 63.7 % of pairs in facts held by two or more, 50.6 % by five or more; largest ledger 200 claims (a cap at work) — so memory is small and bounded, RS-29's condition for fact interning (memory shown to cost something) is not met, and none is planned; the measuring script is NOT in the tree (a session probe, recorded only in that commit's body), so re-take it before relying on a figure.
-    measure: "python proposals/2026-09-04-degree-sweep/wd_collect.py  # after wd_chunk.py x4 per arm per cell over the 143-case corpus (slices 0 36/36 72/72 108/108 143) -- U6's command, workplans/valoria_master_workplan_v9_part2.md §`11`"
+    measure: "python proposals/2026-09-04-degree-sweep/wd_collect.py  # after wd_chunk.py x4 per arm per cell over the 143-case corpus (slices 0 36/36 72/72 108/108 143) -- U6's command, workplans/valoria_master_workplan_v10_part2.md §`11`"
     blocks: []
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1); H-111 is FI-01's deposit half
 
@@ -994,7 +1003,7 @@ rows:
       `corpus_run.attribute` count "attempted" only over `SeasonDriver.resolved`, which a contested act refused at admission
       (`loop/resolve.py`'s contest branch, e.g. `speech.unheard`) never enters -- so such an act is not counted as attempted and
       `speak` reads as never attempted, though `w.acts` holds every one.
-    measure: "python -m engine.season.harness.corpus_run  # the 'WHERE THE <n> GO' line, which prints len(VERB_TABLE) -- 44 today; it was '38' as of ED-IN-0261, '32' until ED-FI-0009 made the count honest and '37' until `release` landed"
+    measure: "python -m engine.season.harness.corpus_run  # the 'WHERE THE <n> GO' line, which prints len(VERB_TABLE); the denominator is len(VERB_TABLE) at measurement time (v10 REM-02, `workplans/valoria_master_workplan_v10_part2.md` §6; [ASSUMPTION; medium; Jordan to correct]): a row leaves the table only by a ruling or a ratified design decision cited in its commit, never to move R-05, and every removal is recorded in R-05's `measured:` block; a row in the table but outside resolvable_verbs() counts under 'have no predicate/effect', so a row landed dark raises n. 'Built out' = at least one act formed by the chooser in a seeded run of a shipped builder is admitted, folds its band and emits the row's declared kinds; where the admitted band declares writes, at least one minted receipt has before ≠ after; a verb whose bands write nothing (`speak`, `interrogate`) is built out on execution; a hand-built execution never counts; the aperture clause covers realm-only verbs (`found`, `build`, `work`). It was '38' as of ED-IN-0261, '32' until ED-FI-0009 made the count honest and '37' until `release` landed"
     blocks: [H-65, IN-09, IN-10, IN-33, IN-45]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W10-core removed (it gates corpus_run's R2 check, not this row's WHERE THE <n> GO); H-94 is carried by its owners IN-10, IN-09, IN-45, IN-33
 

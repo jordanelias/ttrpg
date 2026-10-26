@@ -1,6 +1,6 @@
 # Valoria master workplan v10 — the crosswalk: every handle to its batch, and what happened to every item that is not a position (T07 · lane IN)
-## Status: PROPOSED. Merging this file ratifies nothing (ED-1094's loud exception).
-## Lane: IN (cross-cutting). Part of `2026-10-24-v10-00-head.md`.
+## Status: RATIFIED on merge (ED-1094, ED-IN-0299).
+## Lane: IN (cross-cutting).
 ## Grade under `CLAUDE.md` §0.2: `paper`. IDs allocated: none.
 
 ## 1. Handle index

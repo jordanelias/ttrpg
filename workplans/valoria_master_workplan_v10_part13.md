@@ -1,6 +1,6 @@
 # Valoria master workplan v10 — NERS amendments: where the plan overrides a home (T08 · lane IN)
-## Status: PROPOSED. Merging this file ratifies nothing (ED-1094's loud exception).
-## Lane: IN (cross-cutting). Part of `2026-10-24-v10-00-head.md`. Continued in `2026-10-24-v10-08-ners-amendments_part2.md`.
+## Status: RATIFIED on merge (ED-1094, ED-IN-0299).
+## Lane: IN (cross-cutting). Continued in `workplans/valoria_master_workplan_v10_part14.md`.
 ## Grade under `CLAUDE.md` §0.2: `paper`. IDs allocated: none.
 
 ## 1. How to read
@@ -429,7 +429,7 @@ Each entry: the N-line after the amendment (the form of `ners/SKILL.md`: what th
 
 - **N-line after:** the `tell.refused` kind — cut it and a failed telling stays a free retry within the season while every sibling contested row's failure costs the opportunity, so one contested row keeps a different method from its siblings (S). Gain is consistency and the end of repeat-until-success gossip; its cost is fewer chain-carrying claims.
 - **Override:** No design change. State the world cost as an exit clause: `Claim.chain` is built only by a won spoken `tell` (code report: 0, 0, 4, 0 chained claims at four season ends over three seeds; 54 of 236 `tell` won), and this item removes same-season retries of failed ones, so it thins the information loop's only chain source. The exit reports `tell` attempts, `news.told` and chained-claim count per season before and after at seeds 0-2; a fall is the price, not a failure. The revert is the one kind. The ten named readers of `news.untold` (nine code files and the hole register) are re-read before the split lands.
-- **Because:** YES — `2026-10-24-v10-01-code-report.md:371`: "Claims with a chain, which only a spoken `tell` builds, numbered 0, 0, 4, 0 at the four season ends.
+- **Because:** YES — `proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-01-code-report.md:371`: "Claims with a chain, which only a spoken `tell` builds, numbered 0, 0, 4, 0 at the four season ends.
 
 ### CP-T06-01 — LIMIT (B10-14) · AM-D-07
 

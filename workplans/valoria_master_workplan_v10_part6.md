@@ -1,6 +1,6 @@
 # Valoria master workplan v10 — the Jordan queue, after the five-step ladder (T04 · lane IN)
-## Status: PROPOSED. Merging this file ratifies nothing (ED-1094's loud exception). Every answer below that an agent *took*, including each decision of the decision round (§1's DECISION blocks), is [ASSUMPTION; medium; Jordan to correct] and reverts alone; the questions that remain Jordan's are §1a.
-## Lane: IN (cross-cutting). Part of `2026-10-24-v10-00-head.md`. The full ladder tables are in `2026-10-24-v10-05-jordan-queue_part2.md`.
+## Status: RATIFIED on merge (ED-1094, ED-IN-0299). Every answer below that an agent *took*, including each decision of the decision round (§1's DECISION blocks), is [ASSUMPTION; medium; Jordan to correct] and reverts alone; the questions that remain Jordan's are §1a.
+## Lane: IN (cross-cutting). The full ladder tables are in `workplans/valoria_master_workplan_v10_part7.md`.
 ## Grade under `CLAUDE.md` §0.2: `paper`. IDs allocated: none. No `needs_jordan` ledger row is written by this file; the questions ride the positions they block, and adoption step 4b (head §9) writes a closing row for each ledger id the ladder answered.
 
 ## 0. What this is
@@ -201,7 +201,7 @@ Content, not questions (stated so nobody files them as asks): the per-territory 
 
 ## 2. Answers taken (each [ASSUMPTION; medium; Jordan to correct], each reverts alone)
 
-The NERS fold took further answers under step 5, each with its revert; they are the **Taken** lines of `2026-10-24-v10-08-ners-amendments.md` and its `_part2`, and are not repeated here. The decision round's decisions are recorded once, in §1's DECISION blocks; the rows M1 to M21 below point there.
+The NERS fold took further answers under step 5, each with its revert; they are the **Taken** lines of `workplans/valoria_master_workplan_v10_part13.md` and its `_part2`, and are not repeated here. The decision round's decisions are recorded once, in §1's DECISION blocks; the rows M1 to M21 below point there.
 
 | ask | source ids | question | reason (shortened; the part-2 table has it whole) | revert |
 |---|---|---|---|---|

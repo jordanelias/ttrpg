@@ -1,6 +1,6 @@
 # Valoria master workplan v10 — NERS amendments, part 2 (T08 · lane IN)
-## Status: PROPOSED. Merging this file ratifies nothing (ED-1094's loud exception).
-## Lane: IN (cross-cutting). Part of `2026-10-24-v10-00-head.md`; continues `2026-10-24-v10-08-ners-amendments.md` (§1 how to read, §2 the table, §3 the entries from B10-01).
+## Status: RATIFIED on merge (ED-1094, ED-IN-0299).
+## Lane: IN (cross-cutting). Continues `workplans/valoria_master_workplan_v10_part13.md` (§1 how to read, §2 the table, §3 the entries from B10-01).
 ## Grade under `CLAUDE.md` §0.2: `paper`. IDs allocated: none.
 
 ## 3. The entries (continued)

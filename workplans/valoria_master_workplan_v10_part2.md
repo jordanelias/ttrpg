@@ -1,6 +1,6 @@
 # Valoria master workplan v10 — THE NINE: each requirement's `met` text, its instrument, what remains, who moves it (T02 · lane IN)
-## Status: PROPOSED. Merging this file ratifies nothing (ED-1094's loud exception). A row of THE NINE moves only on its own `measured:` block in `engine/season/requirements.yaml`, which `python -m engine.season.harness.register --requirements` validates for syntax only; it never reads what a `measured:` line says. The named gate for a row is the batch critic's read of the line against the printed figure.
-## Lane: IN (cross-cutting). Part of `2026-10-24-v10-00-head.md`. Carries v9's `_part2` (retired on adoption) in the form the rows still need; the row statements are Jordan's, 2026-09-05, ED-IN-0204.
+## Status: RATIFIED on merge (ED-1094, ED-IN-0299). A row of THE NINE moves only on its own `measured:` block in `engine/season/requirements.yaml`, which `python -m engine.season.harness.register --requirements` validates for syntax only; it never reads what a `measured:` line says. The named gate for a row is the batch critic's read of the line against the printed figure.
+## Lane: IN (cross-cutting). Carries v9's `_part2` (retired on adoption) in the form the rows still need; the row statements are Jordan's, 2026-09-05, ED-IN-0204.
 ## Grade under `CLAUDE.md` §0.2: `paper`. Nothing here moves a row.
 
 ## 0. How to read this

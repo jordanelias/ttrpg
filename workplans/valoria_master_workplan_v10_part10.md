@@ -1,6 +1,6 @@
 # Valoria master workplan v10 — the row ledger, part 3: the other open editorial ids (T06 · lane IN)
-## Status: PROPOSED. Merging this file ratifies nothing (ED-1094's loud exception).
-## Lane: IN (cross-cutting). Part of `2026-10-24-v10-00-head.md`; continues `2026-10-24-v10-06-row-ledger.md` (§3 holds the 11 editorial ids v9 named) and `…-06-row-ledger_part2.md`.
+## Status: RATIFIED on merge (ED-1094, ED-IN-0299).
+## Lane: IN (cross-cutting). Continues `workplans/valoria_master_workplan_v10_part8.md` (§3 holds the 11 editorial ids v9 named) and `workplans/valoria_master_workplan_v10_part9.md`.
 ## Grade under `CLAUDE.md` §0.2: `paper`. IDs allocated: none.
 
 ## 1. How to read

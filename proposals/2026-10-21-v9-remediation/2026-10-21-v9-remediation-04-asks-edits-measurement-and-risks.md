@@ -1,7 +1,7 @@
 # v9 remediation proposal, part 4: Jordan asks, edits to existing parts, measurement, risks, self-check
 
 ## Status: PROPOSED. Merging this file ratifies nothing: every item, ask and edit below is HELD BACK (ED-1094's loud exception). Jordan ratifies or adopts item by item, as edits to the v9 parts it names.
-## Lane: IN (cross-cutting). A proposal for edits to `workplans/valoria_master_workplan_v9*.md`, not a second plan (`CLAUDE.md` §2: one active plan per lane). On adoption its items become v9 positions and these files are deleted with a `FORK:` row.
+## Lane: IN (cross-cutting). A proposal for edits to `workplans/valoria_master_workplan_v9*.md`, not a second plan (`CLAUDE.md` §2: one active plan per lane). On adoption its items become v9 positions and these files are deleted with a `FORK:` row. **Home of v10 positions** since the v10 adoption (`ED-IN-0299`): this file holds the full spec of the v10 positions whose plan row names it (rows: `workplans/valoria_master_workplan_v10_part3.md` §1; handles: `workplans/valoria_master_workplan_v10_part12.md` §1; where `workplans/valoria_master_workplan_v10_part13.md` amends a home, the amendment governs), and is deleted with a `FORK:` row when its last position lands (v10 head §9 step 6).
 ## Grade under `CLAUDE.md` §0.2: `paper`. Nothing here executes. It moves no row of THE NINE; a row moves only on its own `measured:` block.
 ## Parts, in reading order: `2026-10-21-v9-remediation-01-verdict-and-coverage.md` → `2026-10-21-v9-remediation-02-items-rb0-to-rb3.md` → `2026-10-21-v9-remediation-03-items-rb4-rb5-and-index.md` → `2026-10-21-v9-remediation-04-asks-edits-measurement-and-risks.md`.
 
