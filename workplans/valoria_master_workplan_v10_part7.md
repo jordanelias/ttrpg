@@ -3,7 +3,7 @@
 ## Lane: IN (cross-cutting).
 ## Grade under `CLAUDE.md` §0.2: `paper`. IDs allocated: none.
 
-Outcome words: CLOSED-SUPERSEDED (step 1), CLOSED-IRRELEVANT (step 2), ANSWERED-DOC (step 3), ANSWERED-PRECEDENT (step 4), TAKEN-ARCH (step 5, [ASSUMPTION; medium; Jordan to correct]), CARRIED (the v9 plan or a ledger row already answered it with that tag; not re-judged), ESCALATE (survives all five; rolled into M1-M15). Labels added at the decision round: CLOSED as TAKEN (delegated), step n, and ANSWERED (delegated decision) (A2-37), each naming the M whose DECISION block (`-05` §1) carries the decision and its revert; A2-43 stays open under M11 and A2-36 (D-V21) stays CLOSED-IRRELEVANT until M3 is answered (A).
+Outcome words: CLOSED-SUPERSEDED (step 1), CLOSED-IRRELEVANT (step 2), ANSWERED-DOC (step 3), ANSWERED-PRECEDENT (step 4), TAKEN-ARCH (step 5, [ASSUMPTION; medium; Jordan to correct]), CARRIED (the v9 plan or a ledger row already answered it with that tag; not re-judged), ESCALATE (survives all five; rolled into M1-M15). Labels added at the decision round: CLOSED as TAKEN (delegated), step n, and ANSWERED (delegated decision) (A2-37), each naming the M whose DECISION block (`-05` §1) carries the decision and its revert; A2-43 stays open with ED-IN-0298 (M11 is answered (a), 2026-10-26) and A2-36 (D-V21) stays CLOSED-IRRELEVANT until M3 is answered (A) (M3 is confirmed at the default, ED-IN-0301).
 
 ## 1. A1 — ledger rows, remediation asks, v9's queue, hole rows (88 asks)
 
