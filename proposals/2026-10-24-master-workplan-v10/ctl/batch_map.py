@@ -1,6 +1,6 @@
 """The v10 batch map: which position belongs to which batch, and each batch's card.
 
-STATE AFTER THE DEPENDENCY SEQUENCE (`2026-10-24-v10-09-build-00-sequence.md`): the batch assignments, ORDER and CARDS below follow the final cut in `-03` (NM-W3 and SC-06 moved to B10-01, NM-W0 to B10-02; CP-T02-06 is in B10-10 since the NERS fold; CL-EVENTS was added by it), and after the review round (REM-45 moved from B10-03 to B10-Z, held on M18; CP-T05-04 after REM-25 in B10-05; B10-09 cut in two closes; SC-02 design-first; CP-T10-08 last in B10-18), and after the fold of PR #506 (CR-14 and CR-15 added to B10-02, CR-14 after REM-11 in lane 1 and CR-15 after REM-15 in lane 2, REM-16 needing both; CL-THRUST added to B10-19; the questions are M1 to M21), and after the decision round: 24 new positions (CR-16 to CR-29; GO-07 to GO-16 in the new GO dict), three new batches (the sub-batches B10-03b and B10-07b and the port gate B10-20, after B10-18 and before B10-19), REM-52 to B10-05, REM-45 to B10-15, IN-45 to B10-06, SE-06 to B10-07b, GO-01, GO-05 and GO-06 to B10-20, PC-05 to B10-03, NM-W2 to B10-05, CL-CHAR to B10-10, CL-EVENTS to B10-18; 208 positions in 23 batches. B10-01 then CLOSED (its ten rows and card left `-03` at its net-deleting close, P3): it left SPINE, CARDS and ORDER, and its twelve handles (the ten, NM-W3 and SC-06) map to CLOSED; 196 positions in 22 open batches. A "landing" in ORDER is a commit of a row that lives in another batch, not a member. The cut handles REM-40, REM-41, REM-51, CP-T02-04, CP-T02-08, CP-T05-05, CP-T06-06 and CP-T07-01 are kept as keys, mapped to CUT, so the coverage run still knows them; their dispositions are in `-07` section 2. The plan files are the record: where this file and `-03` differ, `-03` wins.
+STATE AFTER THE DEPENDENCY SEQUENCE (`2026-10-24-v10-09-build-00-sequence.md`): the batch assignments, ORDER and CARDS below follow the final cut in `-03` (NM-W3 and SC-06 moved to B10-01, NM-W0 to B10-02; CP-T02-06 is in B10-10 since the NERS fold; CL-EVENTS was added by it), and after the review round (REM-45 moved from B10-03 to B10-Z, held on M18; CP-T05-04 after REM-25 in B10-05; B10-09 cut in two closes; SC-02 design-first; CP-T10-08 last in B10-18), and after the fold of PR #506 (CR-14 and CR-15 added to B10-02, CR-14 after REM-11 in lane 1 and CR-15 after REM-15 in lane 2, REM-16 needing both; CL-THRUST added to B10-19; the questions are M1 to M21), and after the decision round: 24 new positions (CR-16 to CR-29; GO-07 to GO-16 in the new GO dict), three new batches (the sub-batches B10-03b and B10-07b and the port gate B10-20, after B10-18 and before B10-19), REM-52 to B10-05, REM-45 to B10-15, IN-45 to B10-06, SE-06 to B10-07b, GO-01, GO-05 and GO-06 to B10-20, PC-05 to B10-03, NM-W2 to B10-05, CL-CHAR to B10-10, CL-EVENTS to B10-18; 208 positions in 23 batches. B10-01 then CLOSED (its ten rows and card left `-03` at its net-deleting close, P3): it left SPINE, CARDS and ORDER, and its twelve handles (the ten, NM-W3 and SC-06) map to CLOSED; 196 positions in 22 open batches. Then the second decision round (Jordan's six items of 2026-10-26): 15 new positions (CR-41 to CR-44 to B10-08; CR-30 and CR-33 to B10-10; CR-34 and CR-31 to B10-13; CR-40 to B10-16; CR-32, CR-35, CR-36, CR-37 to B10-17, which is cut in two closes at batch open; CR-38 to B10-19; CR-39 to B10-Z); CL-EVENTS gains commits (3) and (4) in B10-18; 211 positions in 22 open batches. A "landing" in ORDER is a commit of a row that lives in another batch, not a member. The cut handles REM-40, REM-41, REM-51, CP-T02-04, CP-T02-08, CP-T05-05, CP-T06-06 and CP-T07-01 are kept as keys, mapped to CUT, so the coverage run still knows them; their dispositions are in `-07` section 2. The plan files are the record: where this file and `-03` differ, `-03` wins.
 
 This file is the author's judgment in one place; it is not a plan."""
 
@@ -229,6 +229,21 @@ CR = {
  "CR-27": ("B10-13", "`lie`: a spoken falsehood on a held cell claim (M9)"),
  "CR-28": ("B10-05", "G-04(a): own-ledger Propositions stamp as class `Proposition` (M19)"),
  "CR-29": ("B10-14", "REACH: the event-kind reach channel, then `chronicle`'s paired deletion (HELD on M11)"),
+ "CR-30": ("B10-10", "`Person.heritage`: descent as a read-off field; the `marks` term gets its carrier"),
+ "CR-31": ("B10-13", "The caste estimate: a heritage regard term (`heritage_gain`)"),
+ "CR-32": ("B10-17", "Standing ladders as posts on seats; livery in `marks`; `rank` within one scale (H-181)"),
+ "CR-33": ("B10-10", "The 34 lifepaths as creation templates (`lifepath:`, `lifepath_templates`)"),
+ "CR-34": ("B10-13", "The declared disposal is read: a vote counts live commits (C-7; H-161)"),
+ "CR-35": ("B10-17", "An elected seat is filled by its faction's bench; the contested succession (H-217); gate arm PENDING H-L0-8"),
+ "CR-36": ("B10-17", "Nominate-then-confirm: the `nominated` basis and the `resolution` Record"),
+ "CR-37": ("B10-17", "The throne revoked by joint concurrence; `depose` closed (PENDING H-L0-9)"),
+ "CR-38": ("B10-19", "Court Parliament's bench (design-first)"),
+ "CR-39": ("B10-Z", "Promotion of an emerged creed (HELD on CR-38)"),
+ "CR-40": ("B10-16", "One grain for Prosperity: delete `starting_pros`"),
+ "CR-41": ("B10-08", "Record the ministry ruling at `office_bodies`"),
+ "CR-42": ("B10-08", "No faction count is written: re-word the stale 'eight'"),
+ "CR-43": ("B10-08", "`PI` names nothing; one row per meaning; the CI start value and gloss"),
+ "CR-44": ("B10-08", "Case ids are series-prefixed; a collision is recorded (`CASE_SERIES`)"),
 }
 # the port gate's new positions (GO-01, GO-05 and GO-06 are v9 handles, in V9)
 GO = {
@@ -252,20 +267,20 @@ ORDER = {
  'B10-06': 'REM-26 -> REM-27 -> REM-28 -> CR-23 -> REM-29 -> REM-2A -> REM-2B -> IN-45',
  'B10-07': 'held: REM-44 (M11; the whole batch)',
  'B10-07b': 'SE-06 (MEASURE, then BUILD if values exist) -> CR-21 -> CR-16',
- 'B10-08': 'CP-T01-03 -> CP-T01-04 -> CP-T01-06 -> CP-T01-05 -> CP-T01-01 -> CP-T01-02 -> CR-18',
+ 'B10-08': 'CR-41 -> CR-42 -> CR-43 -> CR-44 -> CP-T01-03 -> CP-T01-04 -> CP-T01-06 -> CP-T01-05 -> CP-T01-01 -> CP-T01-02 -> CR-18',
  'B10-09': 'CP-T02-01 -> CP-T02-02 -> CP-T03-00 -> CP-T02-03 -> CP-T02-05 -> CP-T02-07 -> IN-12 -> CR-26 -> IN-61; close two: IN-58 -> CR-03 -> CR-10 -> landing CL-THRUST B3.2 -> CR-11 -> CR-25 -> CR-17',
- 'B10-10': 'landing CP-T01-05 NPC half (conditional) -> REM-31 -> REM-30 -> CR-20 -> CR-19 -> CL-CHAR (row deleted at close) -> REM-32 -> CP-T02-06',
+ 'B10-10': 'landing CP-T01-05 NPC half (conditional) -> REM-31 -> REM-30 -> CR-20 -> CR-30 (one combined Person repr re-pin with CR-20) -> CR-19 -> CR-33 -> CL-CHAR (row deleted at close) -> REM-32 -> CP-T02-06',
  'B10-11': 'CP-T03-01 -> CP-T03-02 -> CP-T03-05 -> CP-T03-09 -> PC-10 -> CP-T03-03 -> CP-T03-04 -> CP-T03-07 -> CP-T03-08 -> CP-T03-06; held: CP-T03-10 (parked), CP-T03-11 (cut)',
  'B10-12': 'CP-T04-01 -> CP-T04-05 -> CR-24 -> CP-T04-02 -> CP-T04-03 -> CP-T04-08 -> CP-T04-06 -> CP-T04-07 -> MB-07r -> CR-12; held: CP-T04-04 (M4 Ask C (b)), CP-T04-10 (M3), CP-T04-09 (cut)',
- 'B10-13': 'SC-02 (design) -> CP-T05-02 (ii)(iii) -> CP-T05-03 -> SC-04 -> [SC-02 re-source -> CP-T05-01 -> CP-T05-02 (i), on approval] -> CR-27',
+ 'B10-13': 'SC-02 (design) -> CP-T05-02 (ii)(iii) -> CP-T05-03 -> SC-04 -> CR-34 -> [SC-02 re-source -> CP-T05-01 -> CP-T05-02 (i), on approval] -> CR-27 -> CR-31; one close',
  'B10-14': 'CP-T06-09 -> CR-29 (HELD on M11) -> CP-T06-01 -> CP-T06-03 -> CP-T06-04 -> CP-T06-02 -> CP-T06-07 -> CP-T06-05; held: CP-T06-08 (JA-1), CR-29 (M11)',
  'B10-15': 'CR-13 -> REM-45 -> CP-T07-02 -> CP-T07-03 -> CP-T07-05 -> CP-T07-09 -> CP-T07-04 -> CP-T07-06 -> CP-T07-07 -> CP-T07-10 -> CP-T07-08 -> CP-T07-11 -> IN-32 -> WR-01 (BLK, own condition)',
- 'B10-16': "CP-T08-01 -> CP-T08-03 -> CP-T08-02 -> CP-T08-05 -> CP-T08-06 -> CP-T08-07 -> CP-T08-08 -> IN-14 -> CP-T08-10 -> CP-T08-04 -> IN-52 (the flip); held: SE-04 (M11, part (b)), IN-52's retirement (M3), CP-T08-09 (withdrawn)",
- 'B10-17': "IN-30 -> CP-T09-04 -> CP-T09-01 -> CP-T09-05 -> CP-T09-02 -> CP-T09-03 -> CP-T09-07 -> CR-09 -> CP-T09-08 -> CP-T09-09 -> CP-T09-06 -> IN-48; held: IN-36 (M1's residue), FA-01 (M11)",
- 'B10-18': "CP-T10-06 -> CP-T10-07 -> CP-T10-09 -> CP-T10-01 -> CP-T10-02 -> CP-T10-03 -> CP-T10-03's flip -> CL-EVENTS (commit 2) -> CR-08 -> CR-22 -> CP-T10-08; held: CP-T10-04, CP-T10-05 (M11)",
+ 'B10-16': "CR-40 -> CP-T08-01 -> CP-T08-03 -> CP-T08-02 -> CP-T08-05 -> CP-T08-06 -> CP-T08-07 -> CP-T08-08 -> IN-14 -> CP-T08-10 -> CP-T08-04 -> IN-52 (the flip); held: SE-04 (M11, part (b)), IN-52's retirement (M3), CP-T08-09 (withdrawn)",
+ 'B10-17': "IN-30 -> CP-T09-04 -> CP-T09-01 -> CP-T09-05 -> CP-T09-02 -> CP-T09-03 -> CP-T09-07 -> CR-09 -> CP-T09-08 -> CP-T09-09 -> CP-T09-06 -> CR-32 -> CR-35 (gate arm PENDING H-L0-8; shipped off until then) -> CR-36 -> CR-37 (PENDING H-L0-9) -> IN-48 (two closes: close one IN-30 to CP-T09-06; close two CR-32 to IN-48); held: IN-36 (M1's residue), FA-01 (M11)",
+ 'B10-18': "CP-T10-06 -> CP-T10-07 -> CP-T10-09 -> CP-T10-01 -> CP-T10-02 -> CP-T10-03 -> CP-T10-03's flip -> CL-EVENTS (commit 2) -> CR-08 -> CR-22 -> CL-EVENTS (commit 3) -> CL-EVENTS (commit 4) -> CP-T10-08; held: CP-T10-04, CP-T10-05 (M11)",
  'B10-20': 'GO-09 -> GO-10 -> GO-11 -> GO-12 -> GO-16 -> GO-01 -> GO-05 -> GO-08 -> GO-15; listed: GO-06 (HELD, BLK, another repository)',
- 'B10-19': "held: NM-W1, NM-W4, NM-W5 (behind NM-W1), NM-W6, NM-W7, NM-W8, NM-W9, CL-ATTR (J-T2), CL-TROOP (M3), CL-THRUST (B4.x on its gates; B5.2 on M1's residue; B6.n content)",
- 'B10-Z': 'held or LEAVE: FA-03, FA-07, MB-08, PC-06, PC-08, IN-44 (M11), SC-05, SC-07',
+ 'B10-19': "held: NM-W1, NM-W4, NM-W5 (behind NM-W1), NM-W6, NM-W7, NM-W8, NM-W9, CL-ATTR (J-T2), CL-TROOP (M3), CL-THRUST (B4.x on its gates; B5.2 on M1's residue; B6.n content); DESIGN-FIRST: CR-38 (drafted beside B10-13; approved before B10-18 closes, else on B10-20's freeze row)",
+ 'B10-Z': 'held or LEAVE: FA-03, FA-07, MB-08, PC-06, PC-08, IN-44 (M11), SC-05, SC-07, CR-39 (on CR-38)',
 }
 
 # Remediation DEF rows that the plan itself says are work, not deferrals (rev. 4; D-1 is relayed, not recorded as ruled: M11)

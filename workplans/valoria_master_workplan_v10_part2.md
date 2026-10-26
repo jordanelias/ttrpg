@@ -11,6 +11,7 @@
 - The register's `blocks:` lists are stale in places (R-01 still lists IN-10, IN-11, IN-13 and IN-50, all landed); `engine/season/requirements.yaml` is edited at B10-01 and at each re-take, never by this plan.
 - The register's R-05 `measure:` writes a fixed row count (44), which is stale: the verb table has **56** rows at HEAD (`len(VERB_TABLE)`, `ctl/static_inventory.json`), 51 of them in `resolvable_verbs()`. REM-02 (B10-01) replaces the fixed count with `len(VERB_TABLE)` read at measurement time (§6), so no count is written into the row again.
 - **After the decision round** (the M-questions taken, narrowed or left with Jordan, `-05`): each section below keeps its structure and gains the readings now in force, the earliest batch at which the row could read `met`, what still holds it and who moves it. No decision moves a row by itself; a row moves on its own `measured:` block. The `met`/`measure:` text changes are stated here as assumptions and land at the batch named; the plan does not edit `requirements.yaml` (B10-01's REM-02 and REM-03, and the re-takes, do).
+- **After the second decision round** (Jordan's six items of 2026-10-26, `-05` §1b): no decision moves a row by itself, and none is claimed; no row's earliest `met` changes. Each section below gains an *After the second decision round* line naming the contributors, stated as assumptions `[ASSUMPTION; medium; Jordan to correct; revert: each position's own, `-04` §2]`. R-05's denominator is unchanged: no position adds a verb row (`depose` is not a verb, and CR-34 to CR-37 add rows to `arrangements.yaml` and the rosters only). A computed `open_case` carries no arrangement and no petition (`queries/world_q.py:213-219`, H-80), so CR-34 to CR-37 land as hand-built mechanisms with realm reach 0, and no row reads them in computed play until that residue closes.
 
 ## 1. The board
 
@@ -19,7 +20,7 @@
 | R-01 | decisions must propagate | met | holds; re-taken at B10-06 | falls only if a re-take reads 96% or more |
 | R-02 | decisions affect subsequent decisions | met | holds; re-taken at B10-06 | same |
 | R-03 | seasons must tick scene-by-scene | met | holds | none; its `measure:` is re-run at every batch touching `loop/driver.py` or `loop/deliberate.py` (IN-12 now among them) |
-| R-04 | strategic and management actions at differing scales | partial | B10-18 at the earliest (CR-22's settlement line), and only if every `scales:` row and conjunct (1) also read | the grand-strategy row (FA-01's clause and CR-29, both on M11; `covenant` 0 of 41 executed); the social-contest row (SC-05 unslotted); `revoke` on its hand-built reading |
+| R-04 | strategic and management actions at differing scales | partial | B10-18 at the earliest (CR-22's settlement line), and only if every `scales:` row and conjunct (1) also read | the grand-strategy row (FA-01's clause and CR-29, both on M11; `covenant` 0 of 41 executed); the social-contest row (SC-05 unslotted); `revoke` on its hand-built reading; `confer` at risk if CR-35's elected narrowing ships |
 | R-05 | all verbs built out | not_met | not in v10 | `revoke` (no v10 owner: H-207's remaining path, a design-first vacancy motive); `accept` (a named residue until H-229's `give` reaches the realm); `succeed` (a residue if only CR-26's planted arm passes); `levy` and `disband` if M3 is answered A |
 | R-06 | characters robustly built (goals, ambitions, convictions, values) | partial | no named batch: no decision makes the first conjunct read; the fourth can read at B10-09 (CR-17), the fifth at B10-07b only if SE-06 builds | the first conjunct (a sparse table); SE-06's source unverified |
 | R-07 | memories, feelings, attitudes, relationships; imperfect knowledge | partial | B10-06 (REM-27), if a defended field is fought | a defended target in a marcher's ledger; CR-29's re-read of conjunct (1) is held on M11 |
@@ -53,7 +54,7 @@
 | scale | `in_loop` today | owner under v10 |
 |---|---|---|
 | character creation, development, chronicling | `false` | REM-30 (IN-47's build; B10-10), with CR-20 (the attribute carrier, nine keys) directly after it |
-| grand strategy politics | `false` | FA-01's mechanism landed (B-J); executes `via` a seat in `aperture 4 0`; CP-T09 for the rest; FA-01's clause and CR-29 held on M11 |
+| grand strategy politics | `false` | FA-01's mechanism landed (B-J); executes `via` a seat in `aperture 4 0`; CP-T09 for the rest; FA-01's clause and CR-29 held on M11; contributors from the second decision round, none reading the row by itself: CR-32 (Standing ladders as posts on seats; `rank` within one scale), IN-30's `faction_props` and CP-T09-04's unpeopled clause (an emerged faction, and `peninsular_sovereignty` reachable), CR-35 to CR-37 (elected, nominated and revoked seats, hand-built) |
 | social contests and debates | "seam unbuilt" | SC-01 landed; the realm chain stops at `convene`'s referent (REM-28); SC-02 residue; SC-05 held (unslotted) |
 | mass battles and strategy warfare | "seam built; reached via a constructed Question" | IN-13 landed; the realm fights no field yet (REM-27 at B10-06, which prints `field.unopposed` beside `field.won + field.lost`; CP-T04 at B10-12) |
 | personal combat and grid-based unit combat | "duel only" | REM-31 (IN-46's build; B10-10); a fought field (REM-27, CP-T04). `modules/mass_battle` holds a cell battlefield (`config.py:16`, `:25`); what does not exist is the decision at its scale (commander-chosen orders, a named residue below) |
@@ -65,11 +66,16 @@
   - *Earliest `met`:* B10-18 at the earliest (CR-22's settlement line), and only if every `scales:` row and conjunct (1) also read.
   - *What still holds it:* the grand-strategy row (FA-01's clause and CR-29, both on M11; `covenant` 0 of 41 executed); the social-contest row (SC-05 unslotted); `revoke` on its hand-built reading.
   - *Who moves it:* CR-23, CR-25, REM-27, CP-T04 (B10-12), REM-30, IN-45, CR-22, CP-T06.
+- **After the second decision round** (no conjunct moves; contributors as assumptions, §0):
+  - *Conjunct (1):* `confer` is AT RISK, not helped: CR-35's elected narrowing (`elected` seats filled by `determine` only) removes the Widow Regent's main vacancy candidates (`off_npc_052`, `off_npc_082`; the one seed-0 `confer` recorded on 2026-10-13 was onto `off_npc_082`); it is re-read on the post-item tree (`aperture 4 s`, s = 0-2, the `confer` row's `ex` against the pre-item tree) and, if seed-0 `confer ex` falls to 0, the narrowing waits until an election executes and `elected` keeps CONFERRAL. `determine`: CR-34 is EQUAL by construction (realm reach 0); CR-35 and CR-36 add determinations only on hand-built worlds while computed docket keys are None (H-80). `revoke`: CR-37 gives no computed route; the clause stays on H-207 (A)'s hand-built reading. `establish`: CR-25's, unchanged.
+  - *The grand-strategy row:* contributors only (the scales table above); what holds it is unchanged.
+  - *What still holds it* gains: `confer` at risk under CR-35's narrowing.
+  - *Who moves it* gains, as contributors: CR-32, CR-35, CR-36, CR-37; IN-30 and CP-T09-04 as amended.
 - **Text changes, stated as assumptions (landing where named):**
   - *Conjunct (3), the combat `scales:` row (REM-03, B10-01):* "personal combat / grid-based map combat with units" reads `in_loop` when, in computed play, (i) a duel resolves (`fight` or `accept` → the combat seam; true today) and (ii) a fought field (`field.won` or `field.lost`, never `field.unopposed`) resolves on `modules/mass_battle`'s cell battlefield. Commander-chosen orders are not a gate: they are a named residue (the AUTOMATED mode may run the default orders, `massbattle.py:170-178`), whose trigger is a position that designs a typed `Orders` record shared by the PLAYABLE scene and the AUTOMATED planner (MB-08's AI-generals half, LEAVE). R-04 may read `met` at CP-T04's close when conjunct (1) and the other conjuncts also read. **[ASSUMPTION; medium; Jordan to correct; revert: commander-chosen orders restored as a third gate]**
   - *The settlement row (IN-45 at B10-06; CR-22 at B10-18):* `measure:` gains `aperture 4 0`'s `found`, `build`, `work` rows (`att <n>, ex <m ≥ 1>`) and REM-50's census line `hunger_by_settlement` after eight seasons at seeds 0-2 with at least one band below `fed` after season 1. **[ASSUMPTION; medium; Jordan to correct]**
 - **Unbuilt:** IN-46 and IN-47 have no build until B10-10 (D-2: the builds may proceed while their designs stay held; both PR bodies list the designs as held back); a fought field; works (IN-45, B10-06); the seat-gated verbs executing; commander-chosen orders (residue, above).
-- **Moved by:** REM-03, 11, 14, 22, 27, 28, 30, 31, 32, 50, 52; CR-22, CR-23, CR-25; IN-45; CP-T04, T06, T08, T09, T10 (T08's `requisition` credit counts in computed play only where CR-23's exit recorded `requisition` executing).
+- **Moved by:** REM-03, 11, 14, 22, 27, 28, 30, 31, 32, 50, 52; CR-22, CR-23, CR-25; IN-45; CP-T04, T06, T08, T09, T10 (T08's `requisition` credit counts in computed play only where CR-23's exit recorded `requisition` executing); contributors CR-32, CR-35, CR-36, CR-37 (the second decision round, above).
 
 ## 6. R-05 — all verbs built out · not_met
 - **`met` text:** `corpus_run`'s `WHERE THE <n> GO` line reads `0 have no predicate/effect · 0 foldable but never even attempted · 0 attempted and always refused`, **or** every verb in the latter two classes is shown executing at least once in `aperture 4 0` (seat-gated verbs), the verb named. "Built out" means *executes in computed play*.
@@ -80,6 +86,15 @@
   - *Earliest `met`:* not in v10.
   - *What still holds it:* `revoke` (owner: H-207's remaining path, a design-first vacancy motive; no v10 position owns it since CP-T02-04's cut); `accept` (a named residue until H-229's `give` reaches the realm); `succeed` (a residue if only CR-26's planted arm passes); `levy` and `disband` if M3 is answered A.
   - *Who moves it:* IN-45 (`found`, `build`, `work`), REM-2B, IN-32 (`tie / knot`), CR-27 (`lie`), IN-12 (`interrogate`, re-read at B10-11), IN-61, CR-25 (`establish`), CR-23 (`requisition`), CP-T03-08 (`tend`).
+- **After the second decision round** (no verb row added; the denominator unchanged; contributors as assumptions, §0):
+  - `succeed`: IN-61's claim write opens every vacant seat whose `successions` value is the claimant's title, then closes that title, in one act (a second registered seat once CP-T09-06 lands, Valorsmark); it executes only on a seeded death with the heir alive (CR-26's reading).
+  - `covenant`: unchanged (CP-T09-03 hand-built).
+  - `seize`: CP-T09-04's unpeopled clause adds territory seizures where nobody holds or stands (base 3 attempted, 0 executed).
+  - `pardon`: unchanged (0 of 18; the tribunal's Act of Contrition is restated onto it as a structural conjunct over live edges, `-05` §1b item 5).
+  - `train`: CR-33 is a contributor (once cast persons hold capability keys, `train` can execute; read at CR-33's exit, or recorded 0 and left a named residue).
+  - `revoke`: CR-37 adds a hand-built route on the throne only; no computed route, so the clause's owner stays H-207's remaining path.
+  - `depose`: CLOSED, answered by CR-37's `revoke` under `joint_concurrence` (M8 corrected, `-05`); it is not a verb, so no row is added.
+  - *Who moves it* gains, as contributors: CR-33 (`train`), CP-T09-04 (`seize`).
 - **Text change, stated as an assumption (REM-02, B10-01):** the denominator is `len(VERB_TABLE)` at measurement time; a row leaves the table only by a ruling or a ratified design decision cited in its commit, never to move R-05, and every removal is recorded in R-05's `measured:` block. "Built out" = at least one act formed by the chooser in a seeded run of a shipped builder is admitted, folds its band and emits the row's declared kinds; where the admitted band declares writes, at least one minted receipt has before ≠ after; a verb whose bands write nothing (`speak`, `interrogate`) is built out on execution; a hand-built execution never counts; the aperture clause covers realm-only verbs (`found`, `build`, `work` cannot run in the corpus, whose 86 buildable worlds hold zero stores). **[ASSUMPTION; medium; Jordan to correct]**
 - **Earliest `met`:** not in v10 (above). A verb whose exit recorded 0 stays a named residue; no position is invented to fix it ([ASSUMPTION; medium; Jordan to correct]). R-05's denominator is `len(VERB_TABLE)`; the D-V decisions not taken elsewhere stay held and do not set it.
 
@@ -93,6 +108,7 @@
   - *Who moves it:* REM-05, REM-12, SE-06, CR-21, CR-16, CR-17.
 - **Text changes, stated as assumptions (at CR-17's exit, B10-09; at SE-06's exit, B10-07b):** the fourth conjunct's `measured:` = `python -m engine.season.harness.decision_spread --decisions` (seeds 0-2) printing, for vectored persons, a strict-top-decided share above one half at the chosen τ, beside the τ = 0.1 control share; the fifth = `decision_spread --persons` printing 83 of 83 acting persons with a non-empty vector at `build_realm(0)` (only if SE-06 builds). **[ASSUMPTION; medium; Jordan to correct]**
 - **Moved by:** REM-05, REM-12 (instruments); IN-38 landed; SE-06, CR-21, CR-16, CR-17 (M1 narrowed; its residue, H-233 and IN-36's defaults, stays Jordan's, `-05`).
+- **After the second decision round:** none. No conjunct reads descent, standing or a lifepath, and the Tensions cards (CL-EVENTS (4)) add attention and pursuits, not alignment cells.
 
 ## 8. R-07 — memories, feelings, attitudes, relationships; imperfect knowledge · partial
 - **`met` text:** the row's `measure:` passes (`-k 'choose_receives_no_world or a_view or r7_two_persons'`), **and** after two seasons of `populated.build_realm(0)` two hearers with different claims about one subject read different `regard`, **and** `_eff_march`'s stance write is reached by a fought field.
@@ -104,6 +120,7 @@
   - *Who moves it:* REM-27, CP-T04, CP-T09-02 term (c) (a second route under M10's answer); CR-16, CR-19, CR-24 (winners take their engine casualties, B10-12) and CR-27 contribute to the row without moving a conjunct alone.
 - **Text change, stated as an assumption (at REM-27's exit, B10-06):** the `measured:` line is `field.won + field.lost > 0` at `aperture 1 s`, s = 0-2, quoted with `_eff_march`'s `Person.stance` receipt on the losing side, `field.unopposed` printed beside. **[ASSUMPTION; medium; Jordan to correct]**
 - **Moved by:** REM-04 (deaths and `chronicle`), REM-27 (a reached field; conjunct 3 needs a won or lost one: REM-32, JQ-4), CP-T04, CP-T09-02 term (c); `chronicle`'s deletion is CR-29's commit (2) (B10-14, HELD on M11, H-214), which re-reads conjunct (1) in the same commit. H-209 (a dead victim's claim never becomes a question) contributes to R-07 at IN-12 step 5 (B10-09), where the hole row's `owner:` puts it; this section names it and builds nothing for it.
+- **After the second decision round** (no conjunct moves; contributors as assumptions, §0): the `regard` clause of the `met` text (two hearers with different claims about one subject read different `regard`, met at B-E) gains a second route through CR-31's heritage regard term (B10-13), content-gated: only where a heritage is authored (CR-30) and seen; CR-32's visible ladder posts in `marks` feed the same `seen` claims. The fought-field clause: the Tensions card Einhir Incident's "could raise `march`" is struck (its targets T4 and T13 are territories, so no `march` forms on them); card 1's (Royal Crisis) `fight` on the King forms on the on-arm only, which ships off. *Who moves it* gains, as contributors: CR-30, CR-31, CR-32.
 
 ## 9. R-08 — decisions not omniscient or perfectly rational · partial
 - **`met` text:** `corpus_run`'s RANKING line shows, for each person of the `p_a` sample and each realm person with a pursuit vector (read through `decision_spread --decisions`), that every tie among offered candidates is between candidates with equal *nonzero* score, and the U4 test stays green.
@@ -115,6 +132,7 @@
   - *What still holds it:* inclination breaking ties while the table is sparse.
   - *Who moves it:* REM-05, REM-12, CR-21, CR-17.
 - **Moved by:** REM-05, REM-12; CR-21, CR-17.
+- **After the second decision round:** none.
 
 ## 10. R-09 — chains of events within a scene are probabilistic · partial
 - **`met` text:** `pytest -k test_we_only_a_verb_that_declares_contests_can_be_graded_today` passes, **and** `python -m engine.season.harness.headless --seasons 2 --seed 0` shows two persons with different `capability` resolving the same contested verb at different pools, **and** `corpus_run`'s `DEGREES RESOLVED` is non-empty for at least one non-combat verb besides `tell` (REM-06 sharpens it: at two bands whose `writes_at` differ; `speak`, whose four bands write `[]`, cannot satisfy it).
@@ -126,6 +144,7 @@
   - *Who moves it:* CR-18, CR-20, REM-06, REM-13, REM-15, CP-T01.
 - **Text change, stated as an assumption (at CR-18's exit, B10-08):** `measure:` moves to `python -m engine.season.harness.aperture 4 0`; the by-person conjunct reads: two persons resolve the same contested verb at different `faculty` pools, beside the practice-off control. This is looser than the `met` text above (pools may differ by seeded history, not capability) and stays within Jordan's row statement, which names no person. **[ASSUMPTION; medium; Jordan to correct]**
 - **Moved by:** REM-06, REM-13, REM-15; CP-T01 (faculty, odds, ceiling); CR-18, CR-20. The tenth attribute's name (J-T2) is Jordan's and holds no conjunct of this row.
+- **After the second decision round** (no conjunct moves; a contributor as an assumption, §0): the by-person conjunct gains held capability keys from CR-33's lifepath templates (B10-10) for `train` to raise; a held key changes no pool by itself (the grant is at `pool_default`), so the conjunct still reads on pools that differ. *Who moves it* gains CR-33 as a contributor.
 
 ## 11. The R-01/R-02 re-take (carried from v9 `_part2` §11; `requirements.yaml` cites it)
 
