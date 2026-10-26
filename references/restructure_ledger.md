@@ -3034,9 +3034,9 @@ Their BUILDERS are forked above; re-running `build_key_graph.py` or `build_contr
 
 <!-- 2026-10-26, B10-01's net-deleting close commit: the batch's rows and card leave
      `workplans/valoria_master_workplan_v10_part3.md`, and its `-09` build-instruction file is deleted in the same
-     commit (head section 9 step 2). FORK ref 50fa6b53 is the close commit's parent (GO-13's commit), which carries
-     the file as it stood at deletion; `c1374059` (main's #504 merge) carries an earlier, pre-adoption text of it. -->
+     commit (head section 9 step 2). FORK ref c1374059 is main's #504 merge commit, a commit that stays reachable after a
+     squash merge (the ledger's 2026-10-06 note on lost branch refs); it carries the file's pre-adoption text. -->
 
 | Old path | New path | Status |
 |---|---|---|
-| `proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-build-B10-01.md` | `FORK:50fa6b53` | FORKED (2026-10-26, B10-01 closed: the batch's build instructions, read only by the batch they name; the batch's record is its commits, `28a3d3d6` to its close commit) |
+| `proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-build-B10-01.md` | `FORK:c1374059` | FORKED (2026-10-26, B10-01 closed: the batch's build instructions, read only by the batch they name; the batch's record is its commits, `28a3d3d6` to its close commit) |
