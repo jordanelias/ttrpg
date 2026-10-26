@@ -240,10 +240,6 @@ line.** This is the one claim here a session **cannot satisfy by writing**.
   of **`engine/season/`, the HEAD**, and a same-seed `World.content_hash()` comparison), but **the row
   counting THE NINE met reads `status:` strings in `engine/season/requirements.yaml`** (validated by
   `register --requirements`, still not execution). It declares itself DOC-DERIVED.
-- ⚠ **`mc_v18` is DEPRECATED IN PLACE.** No game code imports it; do not delete it — tests in CI's
-  blocking `sim-regression` job do. `tests/valoria/test_mc_v18_is_deprecated.py`'s `ALLOWED_IMPORTERS`
-  is the shrink-only live list; it fails on a NEW importer and on a stale roster line. **Nothing new is
-  built there.**
 - For a juncture with running code, "authoring the design doc" is **not** the deliverable: verify the
   code against the sim and record the contract; the doc may follow verified behaviour.
 - **A position done in code and open in its plan is a PLAN defect, not a work item.**
