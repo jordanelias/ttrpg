@@ -431,7 +431,7 @@ removed is at its fork ref; every old path resolves through `references/restruct
 typed artifact under `engine/engine_params/` behind an exporter with a blocking `--check` round-trip, or
 in a single Python owner. `engine/engine_params/params_tables.yaml` is a frozen, no-longer-regenerable,
 ungated capture of prose tables — **reference**, and it can hold pre-ruling values (its degree bands are
-superseded by `degree_from_net` in `engine/autoload/dice_engine.py`). **Check the code first, every
+superseded by `degree_from_net` in `engine/dice_engine/dice_engine.py`). **Check the code first, every
 time.** Until the typed layer covers numeric operands and structured formulas, every value crossing into
 Godot is hand-transcribed — live drift risk — and do not bind Godot resource fields to descriptor keys
 the registry still marks IN FLUX.
