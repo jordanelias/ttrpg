@@ -33,7 +33,7 @@
 
 ## VALORIA TARGET CONTEXT
 
-Valoria is a videogame (Godot 4.6), not a tabletop product. Mode labels (TTRPG / BG / Hybrid) below are **mechanical layers of the videogame**, not separate deliverables: TTRPG = personal-scale resolution layer; BG = strategic layer; Hybrid = bridge / scale-transition mechanism. Names retained as design-source-of-truth from the multi-mode origin. There is no GM — the engine handles all resolution; the term `Game Master` in §9 is preserved as design-source vocabulary mapped to engine resolution authority in implementation.
+Valoria is a videogame (Godot; engine version: `ED-GO-0002`), not a tabletop product. Mode labels (TTRPG / BG / Hybrid) below are **mechanical layers of the videogame**, not separate deliverables: TTRPG = personal-scale resolution layer; BG = strategic layer; Hybrid = bridge / scale-transition mechanism. Names retained as design-source-of-truth from the multi-mode origin. There is no GM — the engine handles all resolution; the term `Game Master` in §9 is preserved as design-source vocabulary mapped to engine resolution authority in implementation.
 
 ---
 
