@@ -291,3 +291,110 @@ def test_rem10_every_graded_loss_is_also_a_both_act(realm):
     assert all(n <= realm["both"].get(v, 0) for v, n in realm["graded"].items()), (
         realm["graded"], realm["both"])
     assert realm["unrowed"] == 0, "an act in the store names a verb no table row has"
+
+
+# ---------------------------------------------------------------------------------------------
+# REM-11 -- WHY EACH REFUSAL REFUSED. Hand-built worlds; no realm count is asserted.
+
+def _reading(w, d) -> dict:
+    """`refusal_reading` over every act the world's store holds, keyed through `d.act_of`."""
+    return A.refusal_reading(w, d, attempts(w, w.tick + 1))
+
+
+def _restore_on_a_person():
+    """`tiny_world`: a `restore` aimed at a PERSON (`p_mid`) where a Site belongs, beside a `transfer`
+    refused for want of grain -- a refusal whose deciding read is not `exists:<Kind>=0`."""
+    w, d = _world()
+    _fold(w, d, Act(id="a_rem11_restore", actor="p_low", verb="restore", payload={"site": "p_mid"}))
+    _fold(w, d, Act(id="a_rem11_tr", actor="p_low", verb="transfer",
+                    payload={"from": "S", "to": "Hh", "kind": "grain", "amount": 10 ** 6}))
+    return w, d
+
+
+def _migrate_into_a_full_rung():
+    """The spine of `test_migrate_capacity.py`: `lr_hearth_b` houses one under one dwelling, so a
+    newcomer's `migrate` is refused at the `write` clause after clearing its whole `requires`, beside
+    a `speak` on a matter no docket names, refused at admission before the contest."""
+    from .test_migrate_capacity import _fold as mig_fold
+    from .test_migrate_capacity import _world as mig_world
+    w, d = mig_world(lambda: governance_spine.build(0))
+    mig_fold(w, d, Act(id="a_rem11_mg", actor="lp_hearth_a", verb="migrate",
+                       payload={"to": "lr_hearth_b"}))
+    mig_fold(w, d, Act(id="a_rem11_speak", actor="lp_hearth_a", verb="speak",
+                       payload={"subject": "lp_community_a"}))
+    return w, d
+
+
+def test_rem11_a_restore_on_a_person_id_reads_exists_site_zero():
+    """The deciding read of a `restore` aimed at a person is `exists:Site` = 0: the subject is not a
+    Site. The `transfer` beside it is the control: it is refused on `stores:grain`, so only the
+    `restore` is counted by `exists_zero`, and neither is a post-admission refusal (a read FAILED).
+
+    MUTATION (run 2026-10-26, reverted): `_observed_of` returning `()` -- this test and the
+    post-admission test below both red."""
+    w, d = _restore_on_a_person()
+    rd = _reading(w, d)
+    assert rd["reasons"]["restore"] == {"last-read exists:Site=0": 1}, rd["reasons"]
+    assert list(rd["reasons"]["transfer"]) == ["last-read stores:grain=>0"], rd["reasons"]
+    assert A.exists_zero(rd["reasons"]) == 1
+    assert rd["post_admission"] == {}, rd["post_admission"]
+
+
+def test_rem11_a_migrate_into_a_full_rung_is_a_post_admission_refusal():
+    """`migrate` clears its whole `requires` (every recorded read passes) and is refused at the
+    `write` clause by the capacity throttle: counted `post-admission`, its reason the clause the row
+    keys. The `speak` refused at admission is the control: a read failed, so it is not counted."""
+    w, d = _migrate_into_a_full_rung()
+    rd = _reading(w, d)
+    assert rd["post_admission"] == {"migrate": 1}, rd["post_admission"]
+    assert rd["reasons"]["migrate"] == {"clause:write": 1}, rd["reasons"]
+    assert "speak" in rd["reasons"] and "speak" not in rd["post_admission"], rd
+
+
+def test_rem11_dropping_the_observed_read_blinds_both_readings(monkeypatch):
+    """THE MUTATION, IN THE SUITE: with the instrument's one read of `Event.observed` returning
+    nothing, the `restore` has no deciding read and the `migrate` is no longer provably
+    post-admission. Each reading is taken first with the read intact, so the change is what is
+    observed and not the absence of a baseline."""
+    wr, dr = _restore_on_a_person()
+    wm, dm = _migrate_into_a_full_rung()
+    assert _reading(wr, dr)["reasons"]["restore"] == {"last-read exists:Site=0": 1}
+    assert _reading(wm, dm)["post_admission"] == {"migrate": 1}
+    monkeypatch.setattr(A, "_observed_of", lambda event: ())
+    assert _reading(wr, dr)["reasons"]["restore"] == {"no-read": 1}
+    assert A.exists_zero(_reading(wr, dr)["reasons"]) == 0
+    assert _reading(wm, dm)["post_admission"] == {}
+
+
+def test_rem11_a_graded_loss_is_no_refusal_reason_and_is_never_post_admission():
+    """A `research` that drew `Failure` (`finding.none`) cleared its reads: by reads alone it would be
+    post-admission. `graded_loss` takes it out first, so it is its own reason. The control is the
+    `research` refused at admission on a Record that is not there (same kind, no degree), which is a
+    refusal with its own deciding read. (A fold that bypasses `d.resolve`, as `_lost_or_won_tell`
+    does, leaves `d.act_of` empty and the act reads `no-event`: the instrument says so, not 0.)"""
+    w, d, _ = _graded_research(failure=True)
+    rd = _reading(w, d)
+    assert rd["reasons"]["research"] == {"graded-loss": 1}, rd
+    assert rd["post_admission"] == {}
+    wa, da = _fi_world()
+    _fi_resolve(wa, da, Act(id="a_rem11_res_gone", actor=FI_ACTOR, verb="research",
+                            payload={"subject": "rec_none"}))
+    ra = _reading(wa, da)
+    assert list(ra["reasons"]["research"]) != ["graded-loss"], ra
+    assert "no-event" not in ra["reasons"]["research"], ra
+    wl, dl = _lost_or_won_tell("Failure")
+    assert _reading(wl, dl)["reasons"]["tell"] == {"no-event": 1}
+
+
+def test_rem11_kind_census_counts_by_act_and_names_the_declared_kinds_the_log_lacks():
+    """`kind_census`: the kinds of a log against `EMITTED_KINDS` with the matrix's `emits:`. A fold
+    of one `transfer` puts `transfer.made` in the log under one act; the declared kinds absent from
+    it are named, and no kind in `never` is in the log."""
+    w, d = _world()
+    _fold(w, d, Act(id="a_rem11_tr_ok", actor="p_low", verb="transfer",
+                    payload={"from": "S", "to": "Hh", "kind": "grain", "amount": 3}))
+    c = A.kind_census(w, d)
+    assert c["counts"]["transfer.made"] == {"events": 1, "acts": 1, "no_act": 0}, c["counts"]
+    assert "transfer.made" not in c["never"] and "transfer.refused" in c["never"], c["never"]
+    assert not set(c["never"]) & set(c["counts"])
+    assert len(c["never"]) < c["declared"]
