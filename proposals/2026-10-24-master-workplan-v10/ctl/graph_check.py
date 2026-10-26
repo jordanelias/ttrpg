@@ -7,19 +7,20 @@ HANDLE = re.compile(r"\b(REM-[0-9A-Z]{2}|CP-T\d\d-\d\d|CR-\d\d|NM-W\d|CL-[A-Z]+|
 ALIAS = {"IN-09": "REM-2B", "IN-33": "REM-2B", "IN-46": "REM-31", "IN-47": "REM-30", "SE-05": "IN-30", "FA-02": "IN-30", "FI-05": "IN-32"}
 batch = None; rows = {}; order = []
 for l in t:
-    m = re.match(r"^### (B10-[0-9Z]+)", l)
+    m = re.match(r"^### (B10-[0-9Z]+b?)", l)
     if m: batch = m.group(1); order.append(batch) if batch not in order else None; continue
     if batch and l.startswith("| ") and not l.startswith("| handle") and not l.startswith("|---"):
         c = [x.strip() for x in l.strip().strip("|").split("|")]
         if len(c) >= 5 and HANDLE.fullmatch(c[0]):
-            rows[c[0]] = (batch, [ALIAS.get(h, h) for h in HANDLE.findall(c[4]) if ALIAS.get(h, h) != c[0]], l)
+            rows[c[0]] = (batch, [ALIAS.get(h, h) for h in HANDLE.findall(c[4]) if ALIAS.get(h, h) != c[0]], [ALIAS.get(h, h) for h in HANDLE.findall(c[4].split("not a dependency")[0]) if ALIAS.get(h, h) != c[0]])
 idx = {b: i for i, b in enumerate(order)}
 print("positions in -03 tables:", len(rows), "batches:", len(order))
 bad_order = []; graph = collections.defaultdict(set)
-for h, (b, needs, _) in rows.items():
+for h, (b, needs, real) in rows.items():
+    for n in real:
+        if n in rows: graph[h].add(n)
     for n in needs:
         if n in rows:
-            graph[h].add(n)
             nb = rows[n][0]
             if idx[nb] > idx[b] and nb != "B10-Z": bad_order.append((h, b, "needs", n, nb))
             if nb == "B10-Z" and b != "B10-Z": bad_order.append((h, b, "needs HELD", n, nb))

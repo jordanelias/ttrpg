@@ -198,7 +198,8 @@ V9 = {
 ALIAS = {"IN-09": "REM-2B", "IN-33": "REM-2B", "IN-46": "REM-31", "IN-47": "REM-30", "SE-05": "IN-30",
          "FA-02": "IN-30", "FI-05": "IN-32"}
 STALE = {"SC-03b": "landed d855576b (B-O); listed open in v9's state index", "SC-08": "landed 59ca2055 (B-O); listed open in v9's state index",
-         "IN-38": "landed 1dcfce10 (B-V); the row stays open in v9 as 'narrowed' with no remaining work named"}
+         "IN-38": "landed 1dcfce10 (B-V); the row stays open in v9 as 'narrowed' with no remaining work named",
+         "GO-03": "landed at B-C (the `godot_conversion_strategy_v1.md:138` heading string removed; `-04` part 2, GO-01's LANDED ALREADY); named once GO-\\d\\d entered the coverage pattern"}
 CR = {
  "CR-01": ("B10-02", "The 1-ULP drift in `test_combat_lever_sign_safety` (`bear_spear` `bind_sigma`): isolate the operation, then make the pin platform-independent or key it"),
  "CR-02": ("B10-01", "Correct the record: v9's stale state-index rows, `HANDOFF_IN.md`'s stale H-188 line, `CURRENT.md`'s stamp, `CLAUDE.md` §5's missing `dice_engine` path"),
