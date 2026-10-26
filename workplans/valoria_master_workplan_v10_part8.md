@@ -108,7 +108,7 @@ These are the ids v9 names. The 113 other open ids, which no earlier file named,
 | ED-SE-0030 | 2026-07-09, status open, needs_jordan false | a promote-ready P2 docket item, never authored into canon: Corregidor overlay. | ladder step 4 (precedent: the sibling rows ED-SE-0018 to 0020, 0022 and 0024 were superseded 2026-10-06): no carrier in `engine/` (a search for the six names finds only `references/audit_registry.jsonl`); the content survives in the verb suite as GV-G25 (`proposals/2026-10-16-verbs/2026-10-16-verbs-21-gap-register-sc-and-gv.md:124`), still held under the roster question (DEF-1) [ASSUMPTION; medium; Jordan to correct; revert: reopen] | NO HANDLE: one `superseded` row at step 4b naming GV-G25 as heir | — |
 | ED-SC-0040 | 2026-10-18, status open, needs_jordan true | F8: may `reception` and `proofs` read other persons' ledgers at RESOLVE (amending 04 §B.2), or are they re-sourced from commits? | A1-08: ANSWERED-DOC (option B, re-source from commits, [ASSUMPTION; medium; Jordan to correct]); L2 has no row | SC-02 (B10-13); CP-T05-01 (B10-13) | — (revert: Jordan authorises option A) |
 
-## 4. v9's state index (42 rows)
+## 4. v9's state index (42 rows; 40 here: CR-02 deleted the stale SC-08 and IN-38 rows)
 
 | v9 handle | v9 STATE | v10 disposition | v10 batch |
 |---|---|---|---|
@@ -120,7 +120,6 @@ These are the ids v9 names. The 113 other open ids, which no earlier file named,
 | IN-32 | B (narrowed: attempted `53ed995d`, falsified by its own stopping rule, reverted `7c6df560`) | CARRIED (as the same handle, in -03); its reader re-specified (`decision/options.py::operand_bags`), needs gain REM-24 | B10-15 |
 | IN-33 | B | ALIAS of REM-2B (FOLDED INTO REM-2B): the same restore as IN-09 | B10-06 |
 | IN-36 | B (landed `7c59d74c` at B-V, closed `b1eabf5d`; narrowed) | CARRIED (as the same handle, in -03) (landed-narrowed: what remains is carried) | B10-17 |
-| IN-38 | B (landed `1dcfce10`, narrowed) | LANDED (1dcfce10, B-V); the remainder is gated on REM-05: 19 NPC cases carry no overlay and the Q4-referents observable is unused | LEAVE, trigger REM-05 (`-06` part 2 §5) |
 | IN-44 | J | CARRIED (as the same handle, in -03) | B10-Z |
 | IN-45 | J | CARRIED (as the same handle, in -03); M5 taken (B): re-specified as works authored as world data (`venues.yaml` `planned_works:`) | B10-06 |
 | IN-46 | B | ALIAS of REM-31 (FOLDED INTO REM-31): the grid-mode suspension build, opening after B-Y | B10-10 |
@@ -130,12 +129,11 @@ These are the ids v9 names. The 113 other open ids, which no earlier file named,
 | IN-58 | BLK | CARRIED (as the same handle, in -03) | B10-09 |
 | IN-61 | stopped | CARRIED (as the same handle, in -03); moves from STOPPED to its decided route: CR-26 executes check (4) directly before it, and its GATE line names check (4)'s new text | B10-09 |
 | SC-02 | BLK | CARRIED (as the same handle, in -03) | B10-13 |
-| SC-03b | BLK | STALE: landed d855576b (B-O); listed open in v9's state index | — (CR-02 in B10-01 corrects the row) |
+| SC-03b | BLK | LANDED d855576b (B-O). Narrowed to one residue: the corpus half of its EXIT, `corpus_run`'s `DEGREES RESOLVED` gaining `a proposition` bands, is unmet (read 2026-10-26, seed 0: the histogram is one over every verb, and `determine` is foldable but never attempted in the corpus; `HANDOFF_SC.md` records the same) | LEAVE: the observable as worded cannot be met; no position | — |
 | SC-04 | B | CARRIED (as the same handle, in -03) (landed-narrowed: the residue after B-P) | B10-13 |
 | SC-05 | ask-then | CARRIED (as the same handle, in -03) | B10-Z |
 | SC-06 | ask-then | CARRIED (as the same handle, in -03) | B10-01 (an EDIT: the row is deleted in the adoption commit) |
 | SC-07 | BLK | CARRIED (as the same handle, in -03) | B10-Z |
-| SC-08 | B | STALE: landed 59ca2055 (B-O); listed open in v9's state index | — (CR-02 in B10-01 corrects the row) |
 | SE-04 | BLK | CARRIED (as the same handle, in -03); part (c) closed by M1 (no spread at shipped weights); HELD on M11 for part (b) only | B10-16 |
 | SE-05 | — | ALIAS of IN-30 (takes IN-30's batch; no entry of its own) | B10-17 |
 | SE-06 | J | CARRIED (as the same handle, in -03); M1 released it: MEASURE then BUILD, HELD again (row to B10-Z) if no per-territory values exist | B10-07b |
@@ -174,7 +172,7 @@ These are the ids v9 names. The 113 other open ids, which no earlier file named,
 | IN-14's state | the state index says `ask-then` and batch B-Z; v9's own entry says BUILD (shape delegated-ruled 2026-10-12: MORE ROUNDS) | BUILD, B10-16 (`-04`) |
 | `ED-IN-0292` (1) | IN-61's entry says PENDING `needs_jordan: true`; PC-10's entry and the ledger's last row say ruled NO (2026-10-14) | ruled NO (A1-01, CLOSED-SUPERSEDED, §3); read the ledger's last row before use |
 | the Godot heading | GO-03 removed the `godot_conversion_strategy_v1.md:138` heading string at B-C; v9 part 8 K (c-held) still says the heading 'carries' it | removed; re-read the file before citing either (`-04` part 2, GO-03) |
-| SC-03b's `DEGREES RESOLVED` | v9 part 3 says B-N's `DEGREES RESOLVED` gaining `a proposition` was 'unmet and belongs to SC-03b (B-O)'; v9 never records it met after `d855576b` | open [INFERRED; unverified here]: CR-02 (B10-01) checks it before dropping the row |
+| SC-03b's `DEGREES RESOLVED` | v9 part 3 says B-N's `DEGREES RESOLVED` gaining `a proposition` was 'unmet and belongs to SC-03b (B-O)'; v9 never records it met after `d855576b` | UNMET, read 2026-10-26 by CR-02 (B10-01): `corpus_run 0` prints `DEGREES RESOLVED` as one histogram over every verb, and `determine` is in its foldable-but-never-attempted list; the SC-03b row in §4 stays, narrowed to this residue |
 
 
 ## 6. The verb suite's stale and disputed gap entries

@@ -8,7 +8,7 @@ Pins: `python tools/freshness_gate.py` (over `references/canonical_sources.yaml`
 (read its output). Old paths: `python tools/pathres.py` (over `references/restructure_ledger.md`). A
 ledger id's LAST row is its current state.
 
-_Last reconciled: 2026-10-01._
+_Last reconciled: 2026-10-26._
 
 A row naming a quarantined `.designs/` document gives its **bare filename only**: reference, not a head.
 
@@ -20,7 +20,7 @@ A row naming a quarantined `.designs/` document gives its **bare filename only**
 | **Character model / decision layer** | `proposals/2026-09-20-pursuit-basis-worksheet.yaml` — ruled, ED-IN-0261 | ED-IN-0261; conviction split ED-IN-0251 |
 | **Personal combat** | `modules/combat/`; typed export `engine/engine_params/combat_engine_v1.json` (round-trip checked in CI) | `registers/handoffs/HANDOFF_PC.md`; design reference `combat_reference_v1.md`, lineage `combat_currency_v1.md` |
 | **Mass battle** | `mass_battle_v30.md` + `mass_battle_integration_v30.md` | `registers/handoffs/HANDOFF_MB.md` |
-| **Social contest** | `social_contest_v30.md`; kernel `systems/social_contest/sim/contest/` | successor `proposals/2026-09-05-proceedings-subsystem/` ratified as intent (ED-SC-0039; ownership ED-SC-0033), build v9 SC-01; `registers/handoffs/HANDOFF_SC.md` |
+| **Social contest** | `social_contest_v30.md`; kernel `systems/social_contest/sim/contest/` | successor `proposals/2026-09-05-proceedings-subsystem/` ratified as intent (ED-SC-0039; ownership ED-SC-0033), SC-01 built, its residue in `workplans/valoria_master_workplan_v10_part4.md` (SC-02, SC-04); `registers/handoffs/HANDOFF_SC.md` |
 | **Faction / political** | `faction_canon_v30.md`, `faction_layer_v30.md`, `faction_behavior_v30.md`, `faction_state_authoring_v30.md`, `faction_politics_v30.md` | `registers/handoffs/HANDOFF_FA.md`; ED-FA-0008..0023 |
 | **Settlement / territory** | `settlement_layer_v30.md` + `settlement_adjacency_v30.md`, `territory_temperaments_v30.md`, `geography_v30.md` | `registers/handoffs/HANDOFF_SE.md`; proposed redesign `governance_play_redesign_v1.md`; hierarchy ruling `scale_hierarchy_v1.md` |
 | **Clocks & tracks** | `clock_registry_v30.md` | Truth → Conviction: ED-IN-0251 (supersedes ED-IN-0075 for the per-character axis) |

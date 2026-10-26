@@ -16,7 +16,7 @@
 # =====================================================================================
 version: 1
 updated: "2026-09-12"
-source: "workplans/valoria_master_workplan_v9.md (RATIFIED 2026-10-06, ED-IN-0286; v8 RETIRED, FORK:7b619328; v7 RETIRED, FORK:0671283) — §3 state index and the lane parts `_part4`…`_part7` (v6 RETIRED 2026-09-12, ED-IN-0216; its content is at the FORK: ref in references/restructure_ledger.md) (lineage: v5 2026-06-28 -> v4 2026-06-11 -> v3 2026-06-10 -> workplan_v2 2026-05-31 item 5.11; owns-globs unchanged; the old A/B/C lane framing is generalized by the ED-<LANE>-NNNN session lane-scoping, CLAUDE.md §4)"
+source: "workplans/valoria_master_workplan_v10.md (+ `_part2`…`_part14`; RATIFIED, ED-IN-0299; v9 RETIRED, FORK:c1374059; v8 RETIRED, FORK:7b619328; v7 RETIRED, FORK:0671283) — the state index and batch cards in `_part3` §1 and the carried entries in `_part4` and `_part5` (v6 RETIRED 2026-09-12, ED-IN-0216; its content is at the FORK: ref in references/restructure_ledger.md) (lineage: v5 2026-06-28 -> v4 2026-06-11 -> v3 2026-06-10 -> workplan_v2 2026-05-31 item 5.11; owns-globs unchanged; the old A/B/C lane framing is generalized by the ED-<LANE>-NNNN session lane-scoping, CLAUDE.md §4)"
 # ID ALLOCATION: the flat ED sequence is FROZEN; allocate per-lane from references/id_reservations.yaml
 # `lane_ids` (read next_free, bump, co-commit). roadmap_state.yaml is retired.
 
