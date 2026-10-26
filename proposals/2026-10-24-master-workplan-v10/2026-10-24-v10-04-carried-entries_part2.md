@@ -3,7 +3,136 @@
 ## Lane: IN (cross-cutting). Part of `2026-10-24-v10-00-head.md`.
 ## Grade under `CLAUDE.md` §0.2: `paper`. IDs allocated: none.
 
+## 2 (continued). New positions: the port gate (GO-07 to GO-16)
+
+Part 1 §2 holds CR-01 to CR-29; the port gate's ten new positions continue it here, written out in full in the format of part 1 §1 (with BUILDER and NEEDS). Purpose of the gate: freeze, at one recorded commit, the oracle the Godot port validates against (its pins, its registries, its draw log and its portable contracts). "v10 closed enough to port" = B10-01..B10-18 and B10-20 closed; B10-19 and B10-Z members released later are declared post-freeze movers. The gate moves no row of THE NINE and requires none to read `met`. The batch is B10-20 (`-03`; build instructions `2026-10-24-v10-09-build-B10-20.md`); three positions land early (GO-13 in B10-01, GO-14 in B10-03, GO-07 in B10-03b). The port does NOT implement CPython's Mersenne Twister: ratified `architecture/meta/04_CODE_ARCHITECTURE.md:916` (§C.12) names a seeded Godot `RandomNumberGenerator`, and `godot/godot_conversion_strategy_v1.md`'s R4 resolves cross-language parity by recorded-draw replay ("Bit-parity of RNG streams is explicitly not a goal"); the oracle exports its draw log (GO-16) and the port's goldens replay it.
+
+### GO-07 — The canonical digest (GO/IN) · BATCH B10-03b (alone) · STATE BUILD · R —
+- WHAT: `state/world.py::_entity_digest` and `content_hash` fold Python `repr()`, which a port can reproduce only by emulating CPython's `repr`. Replace it with a canonical language-neutral encoding under the same `blake2b`-128. It is its own declared-mover sub-batch after B10-03, because B10-03's card is EQUAL.
+- LANDED ALREADY: the `repr`-based digest; H-118's falsifier.
+- REMAINING UNBUILT: the encoding: fields in declaration order; integers decimal; strings length-prefixed UTF-8; `None`, booleans, tuples; mappings sorted by encoded key; enums by value; any float as its IEEE-754 bit pattern in hex. It also covers the log fold's formatted fields (`state/world.py:1390-1398`: `{c.delta}`, `^{o}`, the degree, the observed records), not only `_entity_digest`.
+- GATE: B10-03b's entry (B10-03 and B10-04 merged). NEEDS: CR-06.
+- EXIT and FALSIFIER: two worlds differing in one field of one entity differ in digest (H-118's falsifier re-run); a committed fixture entity's encoding equals a committed byte string (the cross-language vector); planted failure: a field dropped from the encoder reddens both. CONTROL: for seeds 0-2, event counts, census and per-collection entity counts are identical before and after; the old `repr` digest computed in the test over the same world is unchanged across the commit.
+- HASH MOVERS: declared MOVER (digest format only): one re-pin of every hash pin, old to new, in the commit body; the commit also re-takes every baseline B10-02's close recorded, old to new (B10-05's per-item controls read against them).
+- HOLES AND LEDGER IDS: H-118.
+- ASKS ATTACHED: none `[ASSUMPTION; medium; Jordan to correct; revert: keep `repr`; the port then emulates CPython `repr`]`.
+- RE-BASE: re-read `_entity_digest`, `content_hash` and the log fold by symbol; `grep -rn content_hash engine/season/tests engine/tests` for the pins.
+- BUILDER: `CLAUDE.md` §10's third tier (judgment) producer; a second-tier critic.
+- SOURCE: the decision round's port gate (`-03` B10-03b, B10-20).
+
+### GO-08 — The oracle pins export (GO/IN) · BATCH B10-20 (eighth: … → GO-05 → GO-08 → GO-15) · STATE BUILD · R —
+- WHAT: one exported, checked artifact holds every value the port's parity reader compares against, including the primitives' vectors and the integer contract.
+- LANDED ALREADY: the seven existing exporters with `--check`; `engine/season/harness/` runners.
+- REMAINING UNBUILT: `tools/export_oracle_pins.py` (`--build`/`--check`) writing `engine/engine_params/oracle_pins.json`: the oracle commit; per seed 0-2 the build hash, the initial world in GO-07's encoding, the no-act two-season hash, event count and step trace (slice 1), the per-round act trace and hash of a computed two-season run (slice 2); the digest of GO-16's draw log; the executed-function list of the no-act season (`sys.settrace` or `coverage`; this list fixes slice 1); a `primitives` block with `blake2b` vectors for `H` (`state/ids.py`, digest_size 8) and for the 128-bit content digest, GO-07 encoder vectors, the float yield vectors (`modules/settlements/produce.py:17-19`: fixed operand order, then `int` truncation), and the INTEGER CONTRACT vectors: `H` values are 64-bit unsigned and used in `%` and `//` with floor semantics (`loop/witness.py:198`, `:211`, `:221-222`), including values at or above 2^63, against GDScript's signed, truncating integers; Python `round()` is half-to-even (`data/cast.py:413`, `:444`); mappings iterate in insertion order and sets in hash order, so the port sorts wherever the oracle iterates a set. The ID hash and the log fold's string formatting are integer-contract items. NO Mersenne Twister or `random`-method vectors (the port replays recorded draws). `engine/season/harness/port_oracle.py` prints one line per pin. Wired into CI's validators job, blocking.
+- GATE: B10-20, after GO-05. NEEDS: GO-07, GO-09, GO-10, GO-12, GO-16.
+- EXIT and FALSIFIER: `--check` reds when one pinned value is edited by hand, and when one registry row changes without a re-build. CONTROL: two `--check` runs under `PYTHONHASHSEED` 0 and 1 both pass; `--check` on an unchanged tree reports current.
+- HASH MOVERS: EQUAL.
+- HOLES AND LEDGER IDS: none.
+- ASKS ATTACHED: none `[ASSUMPTION; medium; Jordan to correct; revert: delete the exporter and its JSON]`.
+- RE-BASE: re-derive the draw census (`random`, `randrange`, `randint`, `gauss`, `choice`, `betavariate`) by grep before writing the integer-contract list.
+- BUILDER: second tier producer; a third-tier (judgment) critic.
+- SOURCE: the port gate; `CLAUDE.md` §5.
+
+### GO-09 — The season registries export (GO/IN) · BATCH B10-20 (first) · STATE BUILD · R —
+- WHAT: the port must read the same registries the season loop loads, as data, behind a round-trip check.
+- LANDED ALREADY: `engine/season/data/files.py` and the loader.
+- REMAINING UNBUILT: `tools/export_season_registries.py` (`--build`/`--check`): every file `engine/season/data/files.py` names that the loader reads, parsed and written losslessly to `engine/engine_params/season_registries.json`, plus `DEFAULT_FIXTURES`; blocking in CI's validators job.
+- GATE: B10-20's entry. NEEDS: none.
+- EXIT and FALSIFIER: deleting one key in the JSON reds `--check`; adding a row to `verb_table.yaml` without a re-export reds it. CONTROL: the loader run over the JSON (a test-only path) yields tables equal to the loader run over the YAML.
+- HASH MOVERS: EQUAL.
+- HOLES AND LEDGER IDS: none. ASKS ATTACHED: none.
+- RE-BASE: re-read `data/files.py`'s file list by symbol.
+- BUILDER: second tier.
+- SOURCE: the port gate.
+
+### GO-10 — Refusal values as typed Results (GO/IN) · BATCH B10-20 (second) · STATE BUILD · R —
+- WHAT: the fold turns some exceptions into game outcomes; those outcomes cross to the port as values, so each such site returns a typed record instead. Defect raises stay halts.
+- LANDED ALREADY: the refusal Events.
+- REMAINING UNBUILT: the control-flow `except` sites that turn an exception into a game outcome (`loop/resolve.py:276`, `:502`, `:1137`; `loop/predicates.py:267`; re-derive by symbol) return a typed record `{code, needs, law}` whose `code` is a closed roster. The §C.12 Result-shape hunk (Layer 1, `04_CODE_ARCHITECTURE.md:993`) lands in its own PR as held back while M11 stands; the code proceeds without it.
+- GATE: B10-20, after GO-09. NEEDS: none.
+- EXIT and FALSIFIER: a planted no-op write still yields its refusal Event; `grep` finds no `except NoOpReceipt` left on the fold. CONTROL: seeds 0-2, four seasons, realm hash equal before and after.
+- HASH MOVERS: EQUAL.
+- HOLES AND LEDGER IDS: none. ASKS ATTACHED: M11, for the §C.12 hunk only (`-05`).
+- RE-BASE: re-derive the `except` sites by symbol.
+- BUILDER: third tier (judgment).
+- SOURCE: the port gate; `04_CODE_ARCHITECTURE.md` §C.12.
+
+### GO-11 — `module_contracts.yaml` re-derived from code (GO/IN) · BATCH B10-20 (third) · STATE EDIT · R —
+- WHAT: `references/module_contracts.yaml` still carries retired wiring (`key-log`) and `[ASSUMPTION]` rows; re-derive every row from the code the composition reads.
+- LANDED ALREADY: `tools/export_composition.py --check`.
+- REMAINING UNBUILT: every row re-derived: `wiring:` (`build`, `godot`, `port_rank`, `parity`; `key-log` replaced by `state-hash` or `seam-io`), `engine_clock`'s `[ASSUMPTION]` state row, `sim_module:` for `social_contest` and `mass_battle` (ED-IN-0017 F9, F10), the `golden_path:` edit; `accounting_sequence:` deleted if `grep` finds no reader.
+- GATE: B10-20, after GO-10. NEEDS: none. It does not need GO-14 (order only, not a dependency): GO-14's skeleton deletion is HELD on M11, and this position's `golden_path:` edit does not need the deletion.
+- EXIT and FALSIFIER: `grep -c "key-log" references/module_contracts.yaml` prints 0 (a planted `key-log` row reddens the exit); `python tools/export_composition.py --check` OK. CONTROL: `composition.json` byte-equal.
+- HASH MOVERS: EQUAL.
+- HOLES AND LEDGER IDS: ED-IN-0017 F9, F10. ASKS ATTACHED: none.
+- RE-BASE: re-read each row against the module it names.
+- BUILDER: second tier.
+- SOURCE: the port gate; `CLAUDE.md` §6.
+
+### GO-12 — The seam port items (GO/IN) · BATCH B10-20 (fourth) · STATE BUILD · R —
+- WHAT: the seam still resolves some things the port cannot copy: an implicit provider set, a fallback to the process-global `random`, and module flags read from the environment.
+- LANDED ALREADY: `engine/substrate/composition.py`; `registry.resolve`.
+- REMAINING UNBUILT: an explicit provider list (ED-IN-0017 F2); `modules/mass_battle/rngsource.py`'s fallback to the process-global `random` refuses (F5), so every draw goes through a keyed generator; provider `status` a closed roster (F7); `registry.resolve` refuses a missing contract and the fields it reads are exported to `composition.json` (F8); `os.environ`-read module flags (`modules/mass_battle/config.py:113`, `hierarchy/units.py:33`) frozen into exported values.
+- GATE: B10-20, after GO-11. NEEDS: GO-11.
+- EXIT and FALSIFIER: a provider module not on the list reds driver construction; a `None` rng in `mass_battle` raises instead of drawing. CONTROL: the realm hash at seeds 0-2, four seasons, equal.
+- HASH MOVERS: EQUAL.
+- HOLES AND LEDGER IDS: ED-IN-0017 F2, F5, F7, F8. ASKS ATTACHED: none.
+- RE-BASE: re-read `rngsource.py` and the flag reads by symbol.
+- BUILDER: second tier producer; a third-tier (judgment) critic.
+- SOURCE: the port gate.
+
+### GO-13 — The Layer 0 GO hunks and the `godot/` pointer text (GO) · BATCH B10-01 (after CR-02) · STATE EDIT (text); the `CLAUDE.md` hunks HELD BACK on M11 · R —
+- WHAT: the repository's own pointers to the engine version and the Godot plan contradict ED-GO-0002 and ratified Layer 1; correct the ones that are not Layer 0 now, and list the Layer 0 ones in the held-back PR.
+- LANDED ALREADY: —.
+- REMAINING UNBUILT, landing in B10-01: `CURRENT.md`'s Godot row drops "Gate-0 waits on ED-1051" and gains the ED-GO-0002 pointer; `godot/README.md`'s first-action line and its `:17`/`:25` contradiction; one marker per clause of `godot/godot_conversion_strategy_v1.md` that ratified Layer 1 now answers (the Meta autoload against §C.12 rejection 1; the RNG service against D-35; the first-module target against PART E; Part VIII #5), the strategy staying PROPOSED; `README.md:3`, `:10` and `references/glossary.md:36`'s "Godot 4.6" replaced by a pointer to ED-GO-0002. HELD BACK in its own PR while M11 stands: the `CLAUDE.md` hunks (§6: `engine_clock`'s `doc:` is set; the "authoring canon first" sentence replaced by a pointer to B10-20; the skeleton sentence removed with GO-14; the preamble's UNRESOLVED sentence replaced by "RULED by Jordan (`ED-GO-0002`)" when PR #467 is not merged; §5's dice-engine path stays CR-02 (c)'s).
+- GATE: B10-01, after CR-02. NEEDS: CR-02 (same files).
+- EXIT and FALSIFIER: `git grep -nE "Godot 4\.6" -- README.md references/glossary.md CURRENT.md` prints nothing; `grep -n "Gate-0 waits" CURRENT.md` is empty (a string left behind reddens). CONTROL: `python tools/currency_consistency_check.py` and `python tools/valoria_local.py --staged` clean.
+- HASH MOVERS: EQUAL (text).
+- HOLES AND LEDGER IDS: ED-GO-0002, ED-1051. ASKS ATTACHED: M11, for the `CLAUDE.md` hunks (`-05`).
+- RE-BASE: re-read each anchor by its quoted words (line numbers drift); check each `CLAUDE.md` anchor for a (RULED) mark before listing its hunk.
+- BUILDER: second tier.
+- SOURCE: the port gate; `CLAUDE.md` preamble, §5, §6.
+
+### GO-14 — Retire `godot/skeleton/`; close PC-05 (GO/PC) · BATCH B10-03 (after CR-06) · STATE BUILD (RETIRE); HELD on M11 with DEF-9 · R —
+- WHAT: `godot/skeleton/` covers one module, does not compile and extends a spine defined nowhere (`CLAUDE.md` §6); it holds the Key substrate's `.gd` files, retired by ED-IN-0232. Delete it, and close PC-05's re-export, whose target file it holds. It lands in the same held-back PR as GO-13's `CLAUDE.md` §6 hunk (DEF-9's rule: a deletion Layer 0 points at lands with its hunk); if that PR is unmerged at B10-03's close, GO-14 moves to B10-Z as HELD beside DEF-9 and slots by R8.
+- LANDED ALREADY: `combat_engine_v1.json` behind a blocking `--check` (the values the port reads).
+- REMAINING UNBUILT: delete `godot/skeleton/` (including `core/key_type_resource.gd` and `data/key_types/*.tres`) with one exact-file `FORK:` row per path in `references/restructure_ledger.md`; edit `references/module_contracts.yaml`'s `combat` row (`godot_home`, `godot`) and its `golden_path:` so no key points into the deleted tree (GO-11 re-derives `golden_path:` from code without needing this deletion); write a superseding `ED-PC-0013` row closing item 1 (ladder step 2: its target file is deleted). The stale `godot/` documents stay, bannered.
+- GATE: B10-03, after CR-06; M11 (the held-back PR). NEEDS: GO-13.
+- EXIT and FALSIFIER: `git ls-files godot/skeleton | wc -l` prints 0; `python tools/export_composition.py --check` OK (wiring validation runs on the edited rows). CONTROL: `pathres.load_alias_map()` holds an exact row per deleted path.
+- HASH MOVERS: EQUAL.
+- HOLES AND LEDGER IDS: ED-PC-0013 (item 1), ED-IN-0232; PC-05. ASKS ATTACHED: M11 (`-05`), through the held-back PR.
+- RE-BASE: derive the deletion set from `git ls-files godot/skeleton`, never a `find` count; allocate the `ED-PC-` id from `references/id_reservations.yaml`.
+- BUILDER: first tier (extraction).
+- SOURCE: the port gate; DEF-9 (`-03` B10-03).
+
+### GO-15 — FREEZE (GO/IN) · BATCH B10-20 (last) · STATE MEASURE · R —
+- WHAT: re-take every pin on the merged tree and record the freeze in an `ED-GO-` row: the oracle SHA, the pins artifact's digest, the draw log's digest, and the freeze list.
+- LANDED ALREADY: —.
+- REMAINING UNBUILT: the re-take, the row and the exit run. THE FREEZE LIST (positions and questions still open whose release or answer would move a pinned slice): CP-T04-10 (M3: `Rung.stores` and the larder draw), CP-T04-04 (M4 Ask C (b)), IN-36's `foreign`/`guards` default (`build_realm`), the deed lie (H-198 rule (ii)), CL-THRUST B4.x, B5.2 and B6.n, M16's fourth motion; and, by the row's own rule (every position still held when B10-20 opens whose release would move a pinned slice), read at B10-20's open: REM-44, CP-T10-04, CP-T10-05, FA-01's clause, SE-04 (b) and CR-29 (all M11; CR-29 is a WITNESS change slice 1 pins), any DESIGN-FIRST row then HELD (CR-11 with CR-25, SC-02's tail, CP-T03-06, IN-48, CR-12), the doctrine row (M14's residue), the tenth attribute if answered Recall with a reader, SC-05 if unslotted. Not on it: REM-52, CP-T10-03, REM-45, CL-EVENTS and CP-T02-06 (each lands before the freeze or is EQUAL). OPEN lines, listed in the row: the exit lines that need the held-back Layer 0 PR (`CLAUDE.md`'s preamble and §6 hunks, GO-14's skeleton deletion, GO-10's §C.12 hunk) stay OPEN and close when Jordan merges that PR or answers M11; they do not block the freeze or the port.
+- GATE: B10-20, last. NEEDS: GO-09, GO-10, GO-11, GO-12, GO-16, GO-01, GO-05, GO-08.
+- EXIT and FALSIFIER: GO-08's `--check` on the freeze commit; each of B10-20's exit lines that prints without the held-back PR (`-03` B10-20: line 1's `engine_series` read and its grep over `README.md`, `references/glossary.md` and `CURRENT.md`; lines 2 to 5; line 6's `module_contracts.yaml` grep; lines 7 to 9) prints, and a line that does not keeps B10-20 open. CONTROL: GO-08's `--check` under two hash seeds.
+- HASH MOVERS: EQUAL.
+- HOLES AND LEDGER IDS: the new `ED-GO-` freeze row (id from `references/id_reservations.yaml`).
+- ASKS ATTACHED: none of its own; the freeze list names the open questions.
+- RE-BASE: read the held rows at B10-20's open to complete the rule-derived part of the list.
+- BUILDER: third tier (judgment).
+- SOURCE: the port gate. After the freeze, a commit that changes a pinned output re-builds the pins and the draw log in the same commit and writes an `ED-GO-` row naming old and new values and the slice it moves; a disagreement the port finds is settled on the Python side first (ED-1050), re-pinned and re-exported.
+
+### GO-16 — The oracle-side draw recorder and its export (GO/IN) · BATCH B10-20 (fifth, after GO-12) · STATE BUILD · R —
+- WHAT: the port replays the oracle's draws instead of reproducing its generator, so the oracle must record every draw it makes in the pinned runs and export the log behind a round-trip check. It runs after GO-12, which makes every draw go through a keyed generator.
+- LANDED ALREADY: the keyed generator factory (`state/ids.py`, `random.Random(int(H(...), 16))`, `:87-89`).
+- REMAINING UNBUILT: the factory gains an optional harness-installed recorder that appends, per call, (purpose-key digest, method name, arguments, returned value: integers decimal, floats as IEEE-754 hex) for every method the oracle calls (`random`, `randrange`, `randint`, `gauss`, `choice`, `betavariate`, and any other the census finds); the engine path installs none. `tools/export_oracle_draws.py` (`--build`/`--check`) writes `engine/engine_params/oracle_draws.json` for the pinned runs (slice 1 and slice 2, seeds 0-2); blocking in CI's validators job.
+- GATE: B10-20, after GO-12. NEEDS: GO-12.
+- EXIT and FALSIFIER: `--check` reds when one recorded value is hand-edited; a completeness test counts draws through a counting shim on `random.Random`'s methods and asserts the count equals the recorder's, so a planted generator built outside the factory reddens it. CONTROL: the realm hash at seeds 0-2 is identical with the recorder on and off; two `--check` runs under `PYTHONHASHSEED` 0 and 1 pass.
+- HASH MOVERS: EQUAL.
+- HOLES AND LEDGER IDS: none. ASKS ATTACHED: none.
+- RE-BASE: re-derive the draw census by grep over `engine/` and `modules/`.
+- BUILDER: second tier producer; a third-tier (judgment) critic.
+- SOURCE: `04_CODE_ARCHITECTURE.md:916` (§C.12); `godot/godot_conversion_strategy_v1.md` R4 and V.2 (recorded-draw replay).
+
 ## 3 (continued). Carried v9 entries, part 2 (batches B10-16 to B10-Z)
+
+The decision round moved five of these entries (SE-06 to B10-07b; GO-01, GO-05, GO-06 to B10-20; PC-05 to B10-03); each keeps its place here and its `BATCH` field names the new batch (part 1, §1). The port gate's new positions, GO-07 to GO-16, are §2 (continued), above.
 
 ### SE-06 — ED-IN-0293 row 1 reading (b); SE-04 (c)'s VECTOR half: every cohort's pursuits and convictions, from its territory (SE, IN) · BATCH B10-07b (first: SE-06 → CR-21 → CR-16; moved from B10-16) · STATE MEASURE then BUILD (M1 taken, step 2; released from the ask) · R R-06 (contributor; the fifth conjunct)
 - WHAT: give each of the 37 cohorts the pursuits and convictions of its territory's temperament, from a `temperaments:` block in `cohorts.yaml` read by `seat_cohorts`, refusing a cohort whose territory has no row. Cohorts get no goals. There is no spread (SE-04 (c) is closed by M1: no spread at shipped weights).
@@ -42,13 +171,13 @@
 - RE-BASE: B-U (#494, "IN-30 stopped") is the stop; B-R (#496) landed `raze`/`give`+Rung whose realm execution stays 0; B-V (#498) landed FA-01's content. v9 carries all three. None found since.
 - SOURCE: `v9_p5:66-71`; state-index row `v9.md:258`; aliases `v9_p6:97` (SE-05), `v9.md:279` and `:293`.
 
-### IN-36 — FORCE-FOREIGN: an external empire and Schoenland as persons (IN; FA, MB) · BATCH B10-17 · STATE LANDED-NARROWED (landed at B-V `7c59d74c`; what remains is below) · R —
-- WHAT: what remains after the landing: Schoenland as persons (factor placed, no head, no template); perception channels at the border (not built); `stance: -1` toward the Crown head's seat (inert, H-233); the natural-play march FREQUENCY (H-233); and a Katepano march on the capital that arrives `field.unopposed`.
+### IN-36 — FORCE-FOREIGN: an external empire and Schoenland as persons (IN; FA, MB) · BATCH B10-17 · STATE LANDED-NARROWED (landed at B-V `7c59d74c`; what remains is below); HELD on M1's residue · R —
+- WHAT: what remains after the landing: Schoenland as persons (factor placed, no head, no template); perception channels at the border (not built; CR-29's reach channel, HELD on M11, is the plan's route); `stance: -1` toward the Crown head's seat (inert, H-233); the natural-play march FREQUENCY (H-233); and a Katepano march on the capital that arrives `field.unopposed`.
 - LANDED ALREADY: `7c59d74c` (B-V, closed `b1eabf5d`, PR #498; remainder PR #499). Altonia a faction (`names_index.yaml`); `rosters.yaml: foreign_cast`; two seats (`offices.yaml: foreign_seats`); three goal rows; IN-60's guard cohorts (`cohorts.yaml: guards`). Landed behind `build_realm(foreign=, guards=)`, both default OFF [ASSUMPTION; medium; Jordan to correct]; no harness flag turns either on. Hashes: `build_realm(0)` `d3edd90a` unchanged, `foreign=True` `36e59a16` (re-recorded when Katepano's goal retargeted to Valorsplatz, `goal_katepano_press_the_capital`, `set_s_001`), `guards=True` `73ecca60`. Natural-play half MET AT WITNESS SEEDS 39 and 53 only (the real unrestricted chooser picks the march on the first goal-question scene; the fold reaches `mass_battle.field_input`, ends `field.lost`; `test_in36_foreign.py`); first released scene tick 0 in 7 of 80 seeds.
 - REMAINING UNBUILT: perception channels at the border (the trade-demand clause waits on them: FA-01, ED-IN-0298, H-234); Schoenland as persons; the EXIT's march FREQUENCY half NOT MET (H-233: the march is the conqueror's usual choice only with convictions or IN-08 march cells that load it, "Jordan's, not decided here" [ASSUMPTION; medium; Jordan to correct — witnesses, not a rate]); a Katepano march forming at seeds 16, 38, 44 arrives `field.unopposed` in a full season (the King's `t_hold_terr_T1` gone by round-0 ENCOUNTER; traced at seed 16, cause unverified); flipping `foreign` or `guards` ON is its own declared hash mover (realm hashes and 1-/2-season pins re-recorded).
 - GATE: DEPS IN-36 -> FA-01's content and trade demand (D, content landed); guard content -> IN-60 `d32d7931`, IN-59 (b) `590f753a`. EDITS none further. Coupling: IN-38's NPC-089 overlay names `faction: Altonia`, so reverting IN-36 reverts that file first (`corpus_run.CAST` is read at import).
 - EXIT and FALSIFIER: natural-play half as above (witness seeds); FREQUENCY half NOT MET (H-233). v9 states no separate FALSIFIER line for the remainder beyond `test_in36_foreign.py` and the hash controls (`foreign` off reproduces the realm hash).
-- TRIGGER (hole-row pass): nothing flips `foreign` or `guards` ON; the trigger is M1's answer on H-233 (the natural-play march frequency), and the default is Jordan's [ASSUMPTION; medium; Jordan to correct].
+- TRIGGER (hole-row pass): nothing flips `foreign` or `guards` ON; the trigger is M1's answer on H-233 (the natural-play march frequency), and the default is Jordan's [ASSUMPTION; medium; Jordan to correct]. After the decision round M1 is NARROWED and this is its residue, still Jordan's (`-05`: where the frequency of a foreign march in natural play comes from, and whether `build_realm` ships `foreign` and `guards` on): IN-36 stays HELD, FORCE-FOREIGN's driver stays off, and CL-THRUST's B5.2 waits with it. IN-36's `foreign`/`guards` default is on GO-15's freeze list.
 - HASH MOVERS: flipping `foreign` or `guards` ON is a declared mover; at the shipped OFF, `build_realm(0)` is unchanged (`d3edd90a`).
 - HOLES AND LEDGER IDS: H-233, H-234, ED-IN-0298; FA-01, IN-60, IN-59, IN-38, IN-13. SOURCE #457 `:145-155`.
 - ASKS ATTACHED: H-233's march frequency — convictions or IN-08 `alignment` march cells, "Jordan's, not decided here"; ED-IN-0298 via FA-01.
@@ -91,32 +220,33 @@
 - RE-BASE: the per-row gates cite B-Q (`conceal`), B-V (Guilds head), B-X (IN-66..IN-69, FA-04..FA-06; the batch is RS-30), all closed; the rows' "B-X" and "B-V" gate words are now landed. Whether each landed gate makes its row buildable is not examined in v9 [INFERRED]. None else found.
 - SOURCE: `v9_p7:136-140`; note on FA-04..FA-07 at `v9_p7:134`; state-index row `v9.md:295`.
 
-### GO-01 — `26` GO-VERSION: the ruled engine version where code reads it; the tenth attribute name (GO) · BATCH B10-Z · STATE HELD (J-9, Jordan's; "still held, RS-21 leaves it with Jordan") · R — (M3)
-- WHAT: record the ruled engine version where code reads it, then ED-1050's deferred module re-export. "No ruling asserts a version, and this entry names none" (`CLAUDE.md` preamble: UNRESOLVED; nothing here may assert one). The tenth attribute's name (D2; the count is ruled ten, `ED-IN-0193`) rides the same ruling. "No recommendation is offered."
+### GO-01 — `26` GO-VERSION: the ruled engine version where code reads it (GO) · BATCH B10-20 (sixth: GO-09 → GO-10 → GO-11 → GO-12 → GO-16 → GO-01 → GO-05 → GO-08 → GO-15; moved from B10-Z) · STATE BUILD (released whole: the version owner only) · R — (M3)
+- WHAT: record the ruled engine version where code reads it. Jordan's 2026-10-09 ruling, ED-GO-0002 (the 4.7 series), is recorded in PR #467 (unmerged); its landing on `main` is B10-01's entry action, not a question (`-05` M13: ACTION). The tenth attribute's name no longer rides this position: it is J-T2, Jordan's, with CL-ATTR (`-04` §2), and GO-01 does not wait on it. ED-1050's module re-export lapses with PC-05 (closed by GO-14).
 - LANDED ALREADY: GO-03 (the `godot_conversion_strategy_v1.md:138` heading string removed at B-C; v9_p8 K (c-held) still says the heading "carries" it — v9 conflicts with itself, re-read the file).
-- REMAINING UNBUILT: the J-9 ruling and everything after: one machine-read owner for the version (the ruling names it), `tools/export_game_constants.py` mapping if constants move, re-export.
-- GATE: J-9 (Jordan). EVIDENCE for Jordan, not an answer: he typed "Godot 4.6" three times — 2026-09-01 18:32:41 (tnuwsf6W, 0b52767e-7f81-4b51-a266-f2ee591111ef), and 2026-09-05 "Use Godot 4.6 logic to organize" (65c48d15-e058-466e-83db-f7d5f8121ec8) and a docs URL (ebde5b0d-54ca-4a37-9652-9bbc48585064), with 9603989b; all organising instructions, none a pin. D2: "it will be 10 attributes" (2026-08-14 Q7, ED-IN-0185); no name given; "spirit" (resilience: R-14) a candidate input only.
-- EXIT and FALSIFIER: EXIT "`python tools/export_game_constants.py --check` exit 0 after re-export; the version string appears in exactly one machine-read file (`git grep` returns one owner and only pointers)." FALSIFIER: the carried spec's — "any `.gd` value differing from its `.py` oracle" — observed by `valoria-game`'s parity reader (GO-06; not runnable here), so the `--check` round trip is the half that can fail here.
+- REMAINING UNBUILT: one machine-read owner, `references/engine_series.yaml`, holding one key, `engine_series: "4.7"`, with a comment citing ED-GO-0002; `tools/export_game_constants.py` reads it (the exporter owns no value) and emits `engine_series` in `engine/engine_params/game_constants.json` under a `schema_version` bumped 1 → 2; a GO-06 item records the key change for `valoria-game`'s parity reader.
+- GATE: B10-20's entry (B10-18 merged). NEEDS: none by handle; ED-GO-0002 on `main` (PR #467 merged, rebased with its v9 hunks dropped, or B10-01's fallback: the row landed verbatim from commit `24f62f1`, held back). The earlier "Godot 4.6" mentions (v9's J-9 evidence: organising instructions, none a pin) are superseded by ED-GO-0002 and are replaced in `README.md` and `references/glossary.md` by GO-13.
+- EXIT and FALSIFIER: `python tools/export_game_constants.py --check` exit 0 after re-export; the version string appears in exactly one machine-read file (`git grep` returns one owner and only pointers); B10-20's exit line 1 prints `4.7`. FALSIFIER: editing the YAML's value without a re-export reds `export_game_constants.py --check`. CONTROL: the six existing constants are unchanged.
 - HASH MOVERS: none.
-- HOLES AND LEDGER IDS: ED-1050, ED-IN-0185, ED-IN-0193; J-9, D2, M3.
-- ASKS ATTACHED: J-9 — does Jordan rule 4.6? (the one question); plus the tenth attribute's name. Not answered here.
-- RE-BASE: none found (no B-Q..B-Y subject names GO-01). Chain: GO-01 -> GO-05 -> PC-05 (1), all B-Z.
+- HOLES AND LEDGER IDS: ED-GO-0002, ED-1050, ED-IN-0193; J-9 (answered by ED-GO-0002); M3 (the milestone).
+- ASKS ATTACHED: none open (M13 is Jordan's action: his merge of PR #467). The tenth attribute's name is J-T2 (CL-ATTR).
+- RE-BASE: none found (no B-Q..B-Y subject names GO-01). Re-read `export_game_constants.py`'s `MAPPING` and `schema_version` by symbol. The chain GO-01 -> GO-05 -> PC-05 of v9 is replaced: GO-05 needs GO-01 and GO-12; PC-05 closes by GO-14.
+- BUILDER: `CLAUDE.md` §10's first tier (extraction).
 - SOURCE: `v9_p7:86-99` (carried v8 block `:93-99`; v8 source `workplans/valoria_master_workplan_v8_part5.md:115-119,405`); state-index row `v9.md:289`; queue row `v9_p5:321`.
 
-### GO-05 — SM-13: the manifest resource lists module paths; the `.gd` RESIST re-export (GO) · BATCH B10-Z · STATE BLK:GO-01 (IN-05 satisfied) · R — (M3)
-- WHAT: at the port, each module's path is listed in the generated manifest resource so export packing sees the targets `load()` resolves by string (SM-13, GO lane). The `.gd` RESIST re-export (ED-PC-0013 item 1) follows the version ruling.
+### GO-05 — SM-13: the manifest resource lists module paths (GO) · BATCH B10-20 (seventh, after GO-01; moved from B10-Z) · STATE BUILD (M13 hold released) · R — (M3)
+- WHAT: at the port, each module's path is listed in the generated manifest resource so export packing sees the targets `load()` resolves by string (SM-13, GO lane). The manifest of module entry files is derived from `engine/engine_params/composition.json` (ED-IN-0017 F1). The `.gd` RESIST re-export half (ED-PC-0013 item 1) lapses with PC-05, closed by GO-14.
 - LANDED ALREADY: IN-05 (modules under `modules/**`; B-L closed `fc4f3ba9`).
-- REMAINING UNBUILT: the generated manifest resource; `combat_config.gd` re-export.
-- GATE: GO-01 (J-9). DEPS: IN-05 (D, satisfied); GO-01 (J).
+- REMAINING UNBUILT: the generated manifest, derived from `composition.json`, and its test.
+- GATE: B10-20, after GO-01. NEEDS: GO-01, GO-12 (same batch, earlier). DEPS: IN-05 (D, satisfied).
 - EXIT and FALSIFIER: EXIT "a test that every path the manifest lists exists under `modules/`, beside `test_importing_every_engine_module_pulls_in_no_subsystem`; `python tools/export_game_constants.py --check` exit 0." FALSIFIER "deleting one listed module path reddens the test; packing resolving every `load()` is observed by the Godot repo's export (not runnable here), which is why the Python-side test is the one that must be able to fail."
 - HASH MOVERS: none.
-- HOLES AND LEDGER IDS: SM-13, ED-PC-0013, IN-05.
-- ASKS ATTACHED: via GO-01 / J-9.
+- HOLES AND LEDGER IDS: SM-13, ED-PC-0013 (item 1 superseded by GO-14's row), ED-IN-0017 F1, IN-05.
+- ASKS ATTACHED: none open (M13 is Jordan's action, B10-01's entry).
 - RE-BASE: none found.
 - SOURCE: `v9_p7:101-106` (v8 source `v8_part5.md:379`; `registers/editorial_ledger_pc_archive.jsonl:33`); state-index row `v9.md:290`.
 
-### GO-06 — cross-repo: `valoria-game`'s parity reader against the shrunk `MAPPING`; the stale `game_constants.json` sentence (GO) · BATCH B10-Z · STATE BLK:`valoria-game` checkout (another repository; not checkable here) · R —
-- WHAT: the coherence reshape retired the `COHERENCE_*` pairs from `tools/export_game_constants.py`'s `MAPPING`. Confirm `valoria-game`'s `tools/check_constants_parity.py` (or equivalent) tolerates a smaller `MAPPING` rather than a fixed constant count, and that its generated `game_constants.json` stops carrying the sentence that named a deleted module. "Nothing here edits the other repository."
+### GO-06 — cross-repo: `valoria-game`'s parity reader against the shrunk `MAPPING`; the stale `game_constants.json` sentence (GO) · BATCH B10-20 (listed, HELD · BLK; moved from B10-Z) · STATE BLK:`valoria-game` checkout (another repository; not checkable here) · R —
+- WHAT: the coherence reshape retired the `COHERENCE_*` pairs from `tools/export_game_constants.py`'s `MAPPING`. Confirm `valoria-game`'s `tools/check_constants_parity.py` (or equivalent) tolerates a smaller `MAPPING` rather than a fixed constant count, and that its generated `game_constants.json` stops carrying the sentence that named a deleted module. GO-01 adds one item: the reader learns the new `engine_series` key and the bumped `schema_version` (1 → 2). "Nothing here edits the other repository."
 - LANDED ALREADY: the reshape on this side (WR). Remaining: unchecked.
 - REMAINING UNBUILT: the check in the other repository.
 - GATE: a `valoria-game` checkout. DEPS WR (the reshape); EDITS none here.
@@ -124,7 +254,7 @@
 - HASH MOVERS: none.
 - HOLES AND LEDGER IDS: none. (SOURCE row "Port-bridge constants-parity risk from the coherence reshape" in `registers/handoffs/HANDOFF_WR.md`.)
 - ASKS ATTACHED: none.
-- RE-BASE: none found. `CLAUDE.md` marks the Godot-version question UNRESOLVED; nothing in this entry asserts one.
+- RE-BASE: none found. The version is ED-GO-0002's (GO-01 writes it to its owner); this entry asserts nothing beyond GO-01's key. B10-20's exit line 9 (Jordan's side) reads this item.
 - SOURCE: `v9_p7:108-113`; state-index row `v9.md:291`.
 
 ### MB-08 — generated map, AI generals (#445 U-1, U-2, U-6) (MB) · BATCH B10-Z · STATE LEAVE (named, unscheduled) · R —
@@ -136,18 +266,19 @@
 - HASH MOVERS: none.
 - HOLES AND LEDGER IDS: #445 U-1, U-2, U-6; no hole rows.
 - ASKS ATTACHED: none.
+- NAMED RESIDUE (decision round, R-04 conjunct (3), `-02`): commander-chosen orders (the AUTOMATED mode may run the default orders, `massbattle.py:170-178`); trigger: a position that designs a typed `Orders` record shared by the PLAYABLE scene and the AUTOMATED planner (this entry's AI-generals half). It is not a position and does not gate R-04.
 - RE-BASE: none found.
 - SOURCE: `v9_p7:26-31` (SOURCE there: `registers/handoffs/HANDOFF_MB.md`; `proposals/2026-09-25-squad-engagement-synthesis.md:137`; `proposals/2026-09-30-character-and-play-surface/08_mass_battle_units.md:125,126,130`); state-index row `v9.md:282`.
 
-### PC-05 — ED-PC-0013 item 1: the `.gd` RESIST re-export (PC) · BATCH B10-Z · STATE BLK:GO-01, GO-05 · R —
-- WHAT: ED-PC-0013's item 1, the one sub-item left (its LAST row governs): `combat_config.gd` carries pre-2026-06-30 values; re-export it from `core.py` per ED-1050 only after GO-01 rules the version and GO-05 lists the module paths; "until then annotate it stale."
+### PC-05 — ED-PC-0013 item 1: the `.gd` RESIST re-export (PC) · BATCH B10-03 (an EDIT row after GO-14, deleted at B10-03's close, or with GO-14 if GO-14 holds; moved from B10-Z) · STATE CLOSED at ladder step 2 by GO-14 · R —
+- WHAT: ED-PC-0013's item 1, the one sub-item left (its LAST row governs): `combat_config.gd` carries pre-2026-06-30 values. The decision round closes it at ladder step 2 (irrelevant): GO-14 deletes `godot/skeleton/`, the file's home, and writes a superseding `ED-PC-0013` row closing item 1; the combat values the port reads are `combat_engine_v1.json`, behind a blocking `--check`. Nothing is re-exported.
 - LANDED ALREADY: —.
-- REMAINING UNBUILT: the re-export (`godot/skeleton/engines/combat/resources/combat_config.gd`).
-- GATE: chain GO-01 -> GO-05 -> PC-05 (v9_p3 §A); on J-9 through GO-01.
-- EXIT and FALSIFIER: EXIT "the re-exported `.gd` values equal `core.py`'s by the parity reader in `valoria-game` (GO-06, not runnable here)." FALSIFIER "any `.gd` value differing from its `.py` oracle (GO-01's falsifier, same instrument)."
+- REMAINING UNBUILT: nothing of its own; the row is deleted when GO-14 lands.
+- GATE: B10-03, after GO-14. NEEDS: GO-14 (same batch, earlier). If GO-14 holds (its held-back PR unmerged at B10-03's close), this row moves to B10-Z with it.
+- EXIT and FALSIFIER: GO-14's (`git ls-files godot/skeleton | wc -l` prints 0; the superseding `ED-PC-0013` row exists and `python tools/validate_ed_citations.py` is clean).
 - HASH MOVERS: none.
-- HOLES AND LEDGER IDS: ED-PC-0013 (last row governs), ED-1050; J-9.
-- ASKS ATTACHED: via J-9 (GO-01).
+- HOLES AND LEDGER IDS: ED-PC-0013 (last row governs; superseded by GO-14's row), ED-1050.
+- ASKS ATTACHED: none.
 - RE-BASE: none found.
 - SOURCE: `v9_p7:35-40` (SOURCE there: `registers/editorial_ledger_pc_archive.jsonl`; `registers/handoffs/HANDOFF_PC.md` row "ED-PC-0013 — audit bundle, item 1"); state-index row `v9.md:283`.
 
@@ -235,6 +366,5 @@ What v10 does with each non-entry v9 handle in `batch_map.py` (ALIAS, STALE), an
 
 ## SEEN IN THE INPUTS BUT NOT A V9 KEY (flagged for the orchestrator; no entries written)
 
-- v9 entries that are LANDED but carry open residue and are not keys of `V9`: IN-08 (`doctrine` row PROVISIONAL until the CELL-VALUE AND COSINE PASS; `refusal_axis` H-146 not armed; `tell` uncelled; the RANKING-line edit landed, `corpus_run.py:970-982`, `requirements.yaml:1149-1160`) and IN-57 (the own-act screen and tier 1 question, built as CR-10 under arm D2 (A1-05); `commit`/`examine`/`levy`/`restore` left `corpus_run`'s executed set, 21 -> 17). Their open asks (CELL-VALUE AND COSINE PASS; the own-act screen and tier 1; H-54/H-194; J-8 per post; J-15; J-19) are listed in `v9_p5:333-348` and are not carried by any entry in this file except where an entry above names them.
-- Hole rows that G1/G2 classify as open with NO v9 owner position (so no entry here can carry them): H-191, H-195 (trigger M0g), H-204, H-206 (office/closed-`hold` half; taken at ladder step 5 for CP-T02-01, `-06`:244: CP-T02-01 makes a death name the Office it empties on the claim (H-206's office half in effect, H-230 limit 1); H-206's option (b), retaining the closed `hold` person-side and deleting `World._departed`, is not covered and stays LEAVE, trigger: a position needs the dead holder's closed hold person-side [ASSUMPTION; medium; Jordan to correct; revert: a new CR position in B10-09]), H-211, H-212 (slots to the settlements batch by R3 "when a position takes it"), H-214, H-220, H-222, H-231. Rows whose only owner is a LANDED v9 position: H-187..H-190, H-192, H-193, H-196..H-202, H-205, H-207..H-210, H-213, H-215/H-216 (via SC-02), H-223..H-225, H-229, H-232..H-239, H-241 (the last attaches to IN-52, above).
-
+- v9 entries that are LANDED but carry open residue and are not keys of `V9`: IN-08 (`doctrine` row PROVISIONAL until the CELL-VALUE AND COSINE PASS, now CR-21, which leaves the doctrine row to Jordan, `-05` M14; `refusal_axis` H-146 not armed, CR-21 repairs the pole as data and arming stays open; `tell` uncelled; the RANKING-line edit landed, `corpus_run.py:970-982`, `requirements.yaml:1149-1160`) and IN-57 (the own-act screen and tier 1 question, built as CR-10 under arm D2 (A1-05); `commit`/`examine`/`levy`/`restore` left `corpus_run`'s executed set, 21 -> 17). Their open asks (CELL-VALUE AND COSINE PASS; the own-act screen and tier 1; H-54/H-194; J-8 per post; J-15; J-19) are listed in `v9_p5:333-348` and are not carried by any entry in this file except where an entry above names them.
+- Hole rows that G1/G2 classify as open with NO v9 owner position (so no entry here can carry them): H-191, H-195 (trigger M0g), H-204, H-206 (office/closed-`hold` half; taken at ladder step 5 for CP-T02-01, `-06`:244: CP-T02-01 makes a death name the Office it empties on the claim (H-206's office half in effect, H-230 limit 1); H-206's option (b), retaining the closed `hold` person-side and deleting `World._departed`, is not covered and stays LEAVE, trigger: a position needs the dead holder's closed hold person-side [ASSUMPTION; medium; Jordan to correct; revert: a new CR position in B10-09]), H-211, H-212 (slots to the settlements batch by R3 "when a position takes it"), H-214 (since the decision round: CR-29, HELD on M11), H-220, H-222, H-231. Rows whose only owner is a LANDED v9 position: H-187..H-190, H-192, H-193, H-196..H-202, H-205, H-207..H-210, H-213, H-215/H-216 (via SC-02), H-223..H-225, H-229, H-232..H-239, H-241 (the last attaches to IN-52, above).

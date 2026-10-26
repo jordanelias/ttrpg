@@ -39,8 +39,8 @@ rep("PR #506's gap-register rows (G-nn) in -06 part 4", [g for g in thrust if g 
 rep("state-index rows in -06", [s for s in sidx if s not in fc], len(sidx))
 rep("REM in -07", [k for k in B.REM if k not in fx], len(B.REM))
 rep("CP in -07", [k for k in B.CP if k not in fx], len(B.CP))
-known = fx | set(B.REM) | set(B.CP) | set(B.V9) | set(B.CR) | set(B.NM) | set(B.CL) | set(B.DEF) | set(B.ALIAS) | set(B.STALE)
-PAT = re.compile(r"\b(REM-[0-9A-Z]{2}|CP-T\d\d-\d\d|CR-\d\d|NM-W\d|CL-[A-Z]+|DEF-\d+)\b")
+known = fx | set(B.REM) | set(B.CP) | set(B.V9) | set(B.CR) | set(B.GO) | set(B.NM) | set(B.CL) | set(B.DEF) | set(B.ALIAS) | set(B.STALE)
+PAT = re.compile(r"\b(REM-[0-9A-Z]{2}|CP-T\d\d-\d\d|CR-\d\d|NM-W\d|CL-[A-Z]+|DEF-\d+|GO-\d\d)\b")
 unk = sorted({m.group(1) for m in PAT.finditer(led)} - known)
 print("handles named in -06 that the batch map does not know:", unk or "none"); bad += bool(unk)
 for f in sorted(glob.glob(os.path.join(PLAN, "*.md"))):
