@@ -142,7 +142,8 @@ Positions: 37 REM + 84 CP + 32 carried from v9 + 44 CR (new: the code report, th
 - **Sub-batch `b`** (B10-03b, B10-07b): a batch cut beside its numbered neighbour on the same spine, for one reason its card states (B10-03b: a declared mover that cannot ride B10-03's EQUAL card; B10-07b: the decision round's chooser items, run while B10-07 is held on M11).
 - **Landing**: a commit, inside one batch, of a piece of a row whose row lives in another batch (CL-EVENTS (1) in B10-05; CL-THRUST's pieces in B10-02, B10-05, B10-09; CP-T01-05's NPC half in B10-10); a landing is not a member and adds no position.
 - **Freeze**: the commit at which GO-15 (B10-20) records, in one `ED-GO-` row, the oracle SHA, the digests of the pins artifact and the draw log, and the open positions and questions whose release would move a pinned slice; the port validates against that commit (§9).
-- **TAKEN (delegated), step n; NARROWED; ACTION**: the decision round's status words, defined once in `-05`.
+- **TAKEN (delegated), step n; NARROWED; ACTION; CORRECTED**: the decision rounds' status words, defined once in `-05` (CORRECTED: a taken answer replaced by Jordan's own later request, as M8's was on 2026-10-26).
+- **PENDING THE MERGE of H-L0-n**: a position, or a named member of one, that builds only once Jordan merges that hunk of the one held-back Layer 0/1 PR (`held-back-layer0-hunks.md`); until then it is HELD, or built hand-built and shipped off where its entry says so (CR-35).
 
 ## 9. Adoption — the steps, as commands
 
