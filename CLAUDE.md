@@ -6,8 +6,8 @@ personal-scale resolution (dice pools, skill checks, social contests) with a str
 Design docs keep their TTRPG/board-game mechanical detail; those abstractions *are* the game's layers.
 
 **Implementation repo:** `jordanelias/valoria-game` (separate clone, CI, compile ratchet). ⚠️ **Its
-Godot engine version is UNRESOLVED and nothing here may assert one** — its `project.godot` and CI pin
-one version, `godot/` here documents another. Awaiting a ruling; do not settle it by editing a document.
+Godot engine version is RULED by Jordan (`ED-GO-0002`); nothing here asserts one** — that ledger row is
+the one owner, and `project.godot` and the CI pin in that repo are owed a move to it.
 
 **This file holds rules only, and POINTERS, never figures** (§1). Reasoning and history live in
 `CLAUDE_RATIONALE.md` — reference, never binding, not required reading; the story goes there, the rule
