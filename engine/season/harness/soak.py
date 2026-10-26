@@ -366,6 +366,9 @@ def _run_world(args: argparse.Namespace, head: str, world_dir: Path, argv: list)
             # `attribute(w, d, w.tick)` is the whole history every time (it is the design's
             # single owner of execution attribution, and it takes the world and driver, not a
             # slice); restricted to THIS season's acts by id lookup below, as `C.1`/`C.5` direct.
+            # REM-10 / HR-8: this keeps the FOLD SET (`d.resolved`) and `attribute`, on purpose --
+            # every row here is one resolved act joined by id to `attribute`, so the rows and the
+            # join read one set; `corpus_run.attempts` (the act store) would add acts with no row.
             attr_by_id = {act.id: (made, no) for act, made, no in attribute(w, d, w.tick)}
 
             for a in new_acts:

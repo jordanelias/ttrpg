@@ -207,7 +207,11 @@ def run(seasons: int = 3, seed: int = 0, w: World | None = None,
     that read and MATTER's draw touches a store (CALENDAR writes dates), so it is the draw MATTER
     then performs. `transfers` lists every `transfer` the fold resolved, with its operands and
     outcome, and `claim_sourced` marks one whose `kind` and `amount` equal a shortfall claim its
-    actor held about its `to`. Nothing here chooses an act."""
+    actor held about its `to`. Nothing here chooses an act.
+
+    ⚠ `transfers` READS `d.resolved`, THE FOLD SET, ON PURPOSE (REM-10 / HR-8): `transfer` is
+    uncontested, so it takes the fold path and not the contest branch whose admission refusals
+    skip `d.resolved`; the outcomes read here are per fold, which is what the set holds."""
     w = build(seed) if w is None else w
     d = SeasonDriver(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")

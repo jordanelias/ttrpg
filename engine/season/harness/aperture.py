@@ -10,9 +10,17 @@ different owner and a single count hides which one closed it:
                deliberations during the season
     offered    formed AND in `resolvable_verbs()` — `make_chooser`'s own `verbs=` filter, so the
                set the ranking actually sees
-    attempted  an Act by this person with this verb reached the fold (`SeasonDriver.resolved`)
-    executed   `corpus_run.attribute`'s `made`: the act's row's `emits:` Event is in the log
-    refused    `corpus_run.attribute`'s `refused`: its `emits_on_refusal:` Event is in the log
+    attempted  an Act by this person with this verb entered RESOLVE -- the ACT STORE (`w.acts`,
+               read by `corpus_run.attempts`), which holds a contested act refused at admission
+               that never reaches the fold (`SeasonDriver.resolved`)
+    executed   `corpus_run.attempts`'s `made`: the act's row's `emits:` Event is in the log
+    refused    `corpus_run.attempts`'s `refused`: its `emits_on_refusal:` Event is in the log
+    graded     `corpus_run.graded_loss`: a LOST contest, whose refusal-kind Event is also an `emits:`
+               kind and carries degree `Failure` -- counted in `both`, never a refusal in the sense
+               of a failed `requires`
+
+The CONTROL line still compares `populated.run`'s `acts` with `len(d.resolved)`, the fold set: the
+two arms share that owner, and the act-store reading is a different quantity.
 
 **WHY IT EXISTS.** The plan's `★` names two gaps and fills neither
 (`workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md`, *"★ — APERTURE
@@ -64,7 +72,7 @@ from ..queries import world_q
 from ..state.ids import H, draw_factory
 from . import governance_spine, populated
 from . import probes as P
-from .corpus_run import attribute
+from .corpus_run import attempts, graded_losses, unrowed_acts
 
 
 def seat_gated(row) -> bool:
@@ -158,7 +166,7 @@ def instrumented_season(w, seasons: int) -> dict:
     neither: Counter = Counter()
     both: Counter = Counter()
     refusal_kinds: dict = defaultdict(Counter)   # verb -> Counter(emits_on_refusal kind)
-    for a, made, no in attribute(w, d, seasons):
+    for a, made, no in attempts(w, seasons):
         attempted[a.actor][a.verb] += 1
         if made:
             executed[a.actor][a.verb] += 1
@@ -169,9 +177,11 @@ def instrumented_season(w, seasons: int) -> dict:
             both[a.verb] += 1
         if not (made or no):
             neither[a.verb] += 1
+    graded = Counter(a.verb for a in graded_losses(w, seasons))
     return {"acts": len(d.resolved), "formed": dict(formed), "attempted": dict(attempted),
             "executed": dict(executed), "refused": dict(refused), "neither": dict(neither),
-            "both": dict(both), "refusal_kinds": {v: dict(c) for v, c in refusal_kinds.items()},
+            "both": dict(both), "graded": dict(graded), "unrowed": unrowed_acts(w),
+            "refusal_kinds": {v: dict(c) for v, c in refusal_kinds.items()},
             "questions": {s: dict(c) for s, c in q_count.items()}, "per_rule": dict(per_rule),
             "shipped_rule": shipped, "rule_mismatch": mismatch, "foldable": foldable,
             "hash": w.content_hash()}
@@ -261,6 +271,7 @@ def report(res: dict) -> list:
                      if v not in m["eligible"].get(pid, ()))
         out.append(f"  FUNNEL  (person, verb) pairs attempted but never offered: {stray} · "
                    f"formed but not eligible at build: {gained}")
+        out.append(f"  UNROWED  acts in the act store whose verb is no table row: {m['unrowed']}")
         nobody = sorted(v for v in verbs if not any(v in e for e in m["eligible"].values()))
         out.append(f"\n  UNFORMABLE FOR EVERY PERSON IN THIS WORLD (a property of the ROW): {nobody}")
         # -- per holder -------------------------------------------------------------------
@@ -288,9 +299,10 @@ def report(res: dict) -> list:
                        f"{sorted(set(verbs) - e)}")
         # -- per verb ---------------------------------------------------------------------
         out.append("\n  PER VERB — persons eligible (seated/unseated) · persons formed · persons "
-                   "offered · ACTS attempted · executed · refused · both (both columns matched: "
-                   "two Events for `march`, ONE graded-loss Event for `tell` — see "
-                   "`corpus_run.attribute`) · neither")
+                   "offered · ACTS attempted (the act store) · executed · refused · both (both "
+                   "columns matched: two Events for `march`, ONE graded-loss Event for `tell` — "
+                   "see `corpus_run._attribute_acts`) · graded (a lost contest: a kind in both "
+                   "columns at degree Failure, always also `both`) · neither")
         seated = set(m["seats"])
         for v in verbs:
             el_s = sum(1 for p in seated if v in m["eligible"][p])
@@ -302,7 +314,8 @@ def report(res: dict) -> list:
             rf = sum(c.get(v, 0) for c in m["refused"].values())
             out.append(f"    {v:<16} {'R' if v in foldable else '.'}  elig {el_s:>3}/{el_u:<3} "
                        f"formed {fo:>3}  offered {of:>3}  att {at:>4}  ex {ex:>4}  ref {rf:>4}  "
-                       f"both {m['both'].get(v, 0):>3}  neither {m['neither'].get(v, 0)}"
+                       f"both {m['both'].get(v, 0):>3}  graded {m['graded'].get(v, 0):>3}  "
+                       f"neither {m['neither'].get(v, 0)}"
                        + (f"   refused as {m['refusal_kinds'][v]}" if v in m["refusal_kinds"]
                           else ""))
         # -- questions by source ----------------------------------------------------------
