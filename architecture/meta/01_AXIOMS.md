@@ -1254,7 +1254,7 @@ nor a term the opening act declared.
 > |---|---|---|
 > | **`T-m`** the owner's discretion | `subject == actor` | the holder |
 > | **`T-n`** a declared term | the Tenure's own `term`, set by the opening act | MATTER, or the term's `closer` |
-> | **`T-o`** ⚠ **NEW · a REVOCATION declared on the seat** | the **Seat's** `revocation` basis, exercised through `Act.via` | a superior, at a venue, paying an act |
+> | **`T-o`** ⚠ **NEW · a REVOCATION declared on the seat** | the **Seat's** `revocation` basis, exercised through `Act.via` | a superior, or a seat the revoked Seat's declared basis names (`joint_concurrence`: a concurring body), at a venue, paying an act |
 >
 > ### **T-o · A SEAT MAY END WHAT ITS REMIT REACHES, AND THE SEAT DECLARES THE REACH.**
 > **From `AX-1` + `§E.2.2`.** Authority is a property of the seat being exercised. A revocation is

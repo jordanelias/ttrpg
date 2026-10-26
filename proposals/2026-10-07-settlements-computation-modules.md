@@ -1,6 +1,6 @@
 # The settlements module — what each loop-resident computation computes, and the levy-to-field feed
 
-## Status: PROPOSED — the design IN-07 (`36`, = SE-02) owes before its build (B-T). Nothing here is built. What each extraction COMPUTES is Jordan's to review (the entry's gate, `workplans/valoria_master_workplan_v9_part4.md` §4.5, the IN-07 entry); every judgment call is marked [ASSUMPTION]. HELD BACK from ratification-on-merge (ED-1094): §5's LF-1 to LF-3 (the levy feed) are Jordan's, and the PR body lists them as held back.
+## Status: PROPOSED — the design IN-07 (`36`, = SE-02) owed before its build (B-T). BUILT as of 2026-10-26: the module this file designs (IN-07 E1 to E6, `modules/settlements/`) landed in `b7a1e1b2` (B-T, #503); the levy feed (§5, IN-52) is built and ships OFF, its flip ON is not built (`workplans/valoria_master_workplan_v10_part4.md` IN-52); at drafting this line read "Nothing here is built". What each extraction COMPUTES is Jordan's to review (the entry's gate, `FORK:c1374059:workplans/valoria_master_workplan_v9_part4.md` §4.5, the IN-07 entry); every judgment call is marked [ASSUMPTION]. HELD BACK from ratification-on-merge (ED-1094): §5's LF-1 to LF-3 (the levy feed) are Jordan's, and the PR body lists them as held back.
 
 > **Scope.** Reference, not mechanism (`CLAUDE.md` §0.05): if this file were deleted the game would behave
 > identically. It allocates no ID, writes no ledger row and schedules nothing; the plan (`_part3` §B, row B-T)

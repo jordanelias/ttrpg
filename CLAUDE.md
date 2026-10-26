@@ -6,8 +6,8 @@ personal-scale resolution (dice pools, skill checks, social contests) with a str
 Design docs keep their TTRPG/board-game mechanical detail; those abstractions *are* the game's layers.
 
 **Implementation repo:** `jordanelias/valoria-game` (separate clone, CI, compile ratchet). ⚠️ **Its
-Godot engine version is UNRESOLVED and nothing here may assert one** — its `project.godot` and CI pin
-one version, `godot/` here documents another. Awaiting a ruling; do not settle it by editing a document.
+Godot engine version is RULED by Jordan (`ED-GO-0002`); nothing here asserts one** — that ledger row is
+the one owner, and `project.godot` and the CI pin in that repo are owed a move to it.
 
 **This file holds rules only, and POINTERS, never figures** (§1). Reasoning and history live in
 `CLAUDE_RATIONALE.md` — reference, never binding, not required reading; the story goes there, the rule
@@ -240,10 +240,6 @@ line.** This is the one claim here a session **cannot satisfy by writing**.
   of **`engine/season/`, the HEAD**, and a same-seed `World.content_hash()` comparison), but **the row
   counting THE NINE met reads `status:` strings in `engine/season/requirements.yaml`** (validated by
   `register --requirements`, still not execution). It declares itself DOC-DERIVED.
-- ⚠ **`mc_v18` is DEPRECATED IN PLACE.** No game code imports it; do not delete it — tests in CI's
-  blocking `sim-regression` job do. `tests/valoria/test_mc_v18_is_deprecated.py`'s `ALLOWED_IMPORTERS`
-  is the shrink-only live list; it fails on a NEW importer and on a stale roster line. **Nothing new is
-  built there.**
 - For a juncture with running code, "authoring the design doc" is **not** the deliverable: verify the
   code against the sim and record the contract; the doc may follow verified behaviour.
 - **A position done in code and open in its plan is a PLAN defect, not a work item.**
@@ -431,7 +427,7 @@ removed is at its fork ref; every old path resolves through `references/restruct
 typed artifact under `engine/engine_params/` behind an exporter with a blocking `--check` round-trip, or
 in a single Python owner. `engine/engine_params/params_tables.yaml` is a frozen, no-longer-regenerable,
 ungated capture of prose tables — **reference**, and it can hold pre-ruling values (its degree bands are
-superseded by `degree_from_net` in `engine/autoload/dice_engine.py`). **Check the code first, every
+superseded by `degree_from_net` in `engine/dice_engine/dice_engine.py`). **Check the code first, every
 time.** Until the typed layer covers numeric operands and structured formulas, every value crossing into
 Godot is hand-transcribed — live drift risk — and do not bind Godot resource fields to descriptor keys
 the registry still marks IN FLUX.
@@ -445,10 +441,10 @@ present it as a runnable head-start.**
 
 `godot/godot_conversion_strategy_v1.md` is the governing spec — **PROPOSED, Jordan-vetoable throughout**,
 with an open register and unexecuted Gate-0 preconditions. `references/module_contracts.yaml` shows which
-modules have `doc: null` (including `engine_clock`, the temporal spine) and which resolvers are
-`[ASSUMPTION]`-grade; porting beyond the combat slice is blocked on authoring canon first, starting with
-`engine_clock`. The older `godot/` docs predate the `d+σ` model, carry `⚠️ STALE` banners and ship wrong
-schemas: implement from none of them.
+modules have `doc: null` and which resolvers are `[ASSUMPTION]`-grade; porting beyond the combat slice
+waits on the port gate (B10-20 in the active master workplan, which `CURRENT.md` names). The older
+`godot/` docs predate the `d+σ` model, carry `⚠️ STALE` banners and ship wrong schemas: implement from
+none of them.
 
 ## 7. Simulation / balance
 

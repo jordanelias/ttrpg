@@ -1,13 +1,13 @@
 # Valoria — Design Canon
 
-Design source of truth for **Valoria**, a Godot 4.6 videogame that fuses personal-scale resolution
+Design source of truth for **Valoria**, a Godot videogame (engine version: `ED-GO-0002`) that fuses personal-scale resolution
 (dice pools, skill checks, social contests) with a strategic layer (territory control, faction
 politics, domain actions). There is no GM — the engine resolves everything.
 
 | Repo | Purpose |
 |---|---|
 | `jordanelias/ttrpg` (this repo) | Design docs, parameters, simulation outputs, editorial tracking |
-| `jordanelias/valoria-game` | Godot 4.6 implementation |
+| `jordanelias/valoria-game` | Godot implementation (engine version: `ED-GO-0002`) |
 
 ## Start here
 

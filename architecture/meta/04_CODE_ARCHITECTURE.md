@@ -232,10 +232,13 @@ code reads must ship the way to re-run it*.
 
 ```
 Person := ( id, weight, capability, body, exists, travel_leg
-          , stance[], pursuits, scar[axis], axis_count[axis], coherence?
+          , stance[], pursuits, scar[axis], axis_count[axis], coherence?, heritage?
           , ledger )
 -- renamed/dropped 2026-09-24, ED-IN-0261 item 1: `convictions` -> `pursuits` (season-side name
    only, values unchanged); `marks[]` dropped (retired write_matrix.yaml field, zero readers)
+-- `heritage?` (PROPOSED, v10 second decision round, CR-30): the one member of the dropped `marks[]`
+   no Tenure derives; a read-off field (§D.1.1), written at world build only, no write-matrix row;
+   its resolver is WITNESS's `marks` term
 NOT ON IT:  beliefs (a commit to an OUGHT) · ties_index (Nobody's) · any aggregate · anything about another person
 LOCATION:   the person-kind Rung sharing its n; its contain edge is where they are -- and its live `reside` edge (Person -> Rung, one) is where they LIVE: `move` re-homes `contain` and leaves it, only `migrate` re-homes it (plan position `19c`, 2026-09-30; `loop/effects.py::_eff_migrate` carries the split)
 ```
@@ -605,6 +608,11 @@ gate.write(token, kind, field, id, change, actor?, via?) -> Receipt
         its `term` pushed later, nothing else moved           -- renewal: upkeep paid (`17b`, F.18)
       via IS a judging Seat, actor seated, OPENING an `oblige`
         on it for another person its bench's ground holds     -- determination: a bench binds (`19`)
+      via IS a judging Seat, actor seated, OPENING a `hold`
+        on a vacant Seat S other than via whose `conferral`
+        basis is filled by `determine`, for a party S's
+        faction admits, or, for a seat whose conferral basis
+        is inheritance, any claimant                          -- determination, election arm (CR-35)
       cause is an existence change this same act caused       -- destroy's cascade
       opening a `contain` for a thing this same act brought
         into existence, its only parent                       -- founding: a place founded (`24e`, F.20)

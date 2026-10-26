@@ -927,11 +927,12 @@ registers:
       authority: vocabulary audit
     - term: CV (abbreviation for Conviction Track)
       canonical_full: PT (Piety Track)
-      reason: CV was a legacy abbreviation for the per-territory track. PT is preferred per ED-644 (rename
-        pending).
+      reason: CV was a legacy abbreviation for the per-territory track. PT is preferred per ED-644; the
+        territorial track was absorbed into the affiliation roster (engine/season/rosters.yaml), so no
+        rename is outstanding.
       replacement: PT
       date: '2026-05-08'
-      authority: ED-644 + vocabulary audit (rename pending)
+      authority: ED-644 + vocabulary audit (rename resolved)
     - term: Initiative (contest-context)
       canonical_full: First to Speak
       reason: '''Initiative'' in contest context collides with combat Initiative (§5). Different systems

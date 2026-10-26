@@ -770,8 +770,9 @@ def may_determine(w: "World", actor: Optional[str], via: Optional[str], party: O
          NOT RESIDENCE, SINCE `19c`'S SPLIT (found by the terminal Phase-2-close critique,
          2026-09-30): `home_of` reads `contain`, and `19c` gave residence its own edge
          (`residence_of`'s `reside`) without this clause being revisited. A party STANDING in a
-         bench's ground binds him, whether or not he LIVES there -- unruled which this determination
-         basis is meant to ask (`hole_register.yaml` H-174).
+         bench's ground binds him, whether or not he LIVES there -- settled by J-17 (delegated-ruled
+         2026-10-12, [ASSUMPTION; medium; Jordan to correct]): jurisdiction follows presence; the
+         revert, `residence_of`, is in `hole_register.yaml` H-174.
 
     ⚠ WHY A NEW BASIS AND NOT A WIDER READING OF `conferral` -- the question plan position `19`
     carried in from its own entry (*"a conferral-basis opener"*), re-derived rather than taken on

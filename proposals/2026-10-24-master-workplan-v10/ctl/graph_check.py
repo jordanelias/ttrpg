@@ -1,8 +1,10 @@
 """One-off (not a guard) dependency check over -03's position tables (the 'needs' column): handles that need a handle in a later batch, and cycles.
-usage: python graph_check.py PLAN_DIR"""
+usage: python graph_check.py PLAN_DIR
+PLAN_DIR is the directory holding -03; after adoption (head section 9) that is `workplans`, where -03 is
+`valoria_master_workplan_v10_part3.md`: python proposals/2026-10-24-master-workplan-v10/ctl/graph_check.py workplans"""
 import sys, re, os, collections
 D = sys.argv[1]
-t = open(os.path.join(D, "2026-10-24-v10-03-batches.md")).read().split("\n")
+t = open(os.path.join(D, "valoria_master_workplan_v10_part3.md")).read().split("\n")
 HANDLE = re.compile(r"\b(REM-[0-9A-Z]{2}|CP-T\d\d-\d\d|CR-\d\d|NM-W\d|CL-[A-Z]+|DEF-\d+|(?:IN|SC|SE|MB|PC|FI|GO|FA|WR)-\d+[a-z]?)\b")
 ALIAS = {"IN-09": "REM-2B", "IN-33": "REM-2B", "IN-46": "REM-31", "IN-47": "REM-30", "SE-05": "IN-30", "FA-02": "IN-30", "FI-05": "IN-32"}
 batch = None; rows = {}; order = []

@@ -145,6 +145,13 @@ The post-war settlement establishes: the Valorian Crown (deed-monarchy, Church-c
 | Grandmaster Sigrid Ehrenwall | Late 50s | Löwenritter. Loyal to Crown as institution, not bloodline. Deed-logic enforcement mechanism. |
 
 ### Faction Starting Values (1-7 scale)
+> Board-game-era starting values, kept as history. Two rows are superseded by world: **Niflhel is
+> dissolved** (`worldbuilding_v30.md` §3.2, §10) and **"Revolution" is the Restoration Movement**
+> (the rename `geography_v30.md` orders as its own item ED-061; the ledger's ED-061 is unrelated).
+> Faction-wide stats are not engine quantities (`architecture/meta/01_AXIOMS.md` T-a). The live roster
+> of polities an office belongs to is `references/names_index.yaml`'s `token_class: faction` rows; it
+> states no count (RULED 2026-09-19).
+
 | Faction | Mandate | Influence | Wealth | Military | Intel | Stability |
 |---------|---------|-----------|--------|----------|-------|-----------|
 | Crown | 5 | 5 | 4 | 4 | — | 4 |
@@ -153,7 +160,7 @@ The post-war settlement establishes: the Valorian Crown (deed-monarchy, Church-c
 | Varfell | 4 | 4 | 4 | 4 | — | 4 |
 | Guilds | 3 | 4 | 6 | 2 | — | 5 |
 | Niflhel | — | 5 | 4 | — | — | 4 |
-| Revolution | — | 3 | — | — | — | 3 |
+| Restoration Movement | — | 3 | — | — | — | 3 |
 | Löwenritter | — | 3 | — | 5 | 3 | 5 |
 
 ### Schoenland
