@@ -445,7 +445,7 @@ present it as a runnable head-start.**
 
 `godot/godot_conversion_strategy_v1.md` is the governing spec — **PROPOSED, Jordan-vetoable throughout**,
 with an open register and unexecuted Gate-0 preconditions. `references/module_contracts.yaml` shows which
-modules have `doc: null` (including `engine_clock`, the temporal spine) and which resolvers are
+modules have `doc: null` and which resolvers are
 `[ASSUMPTION]`-grade; porting beyond the combat slice is blocked on authoring canon first, starting with
 `engine_clock`. The older `godot/` docs predate the `d+σ` model, carry `⚠️ STALE` banners and ship wrong
 schemas: implement from none of them.
