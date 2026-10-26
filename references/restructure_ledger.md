@@ -3029,3 +3029,14 @@ Their BUILDERS are forked above; re-running `build_key_graph.py` or `build_contr
 | `proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-07-crosswalk.md` | `workplans/valoria_master_workplan_v10_part12.md` | MOVED (2026-10-26, the v10 adoption, `ED-IN-0299`: the plan file leaves `proposals/` for `workplans/`) |
 | `proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-08-ners-amendments.md` | `workplans/valoria_master_workplan_v10_part13.md` | MOVED (2026-10-26, the v10 adoption, `ED-IN-0299`: the plan file leaves `proposals/` for `workplans/`) |
 | `proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-08-ners-amendments_part2.md` | `workplans/valoria_master_workplan_v10_part14.md` | MOVED (2026-10-26, the v10 adoption, `ED-IN-0299`: the plan file leaves `proposals/` for `workplans/`) |
+
+## 2026-10-26 — B10-01 closed: its build-instruction file retired (v10 head section 9 step 2, rule P3)
+
+<!-- 2026-10-26, B10-01's net-deleting close commit: the batch's rows and card leave
+     `workplans/valoria_master_workplan_v10_part3.md`, and its `-09` build-instruction file is deleted in the same
+     commit (head section 9 step 2). FORK ref 50fa6b53 is the close commit's parent (GO-13's commit), which carries
+     the file as it stood at deletion; `c1374059` (main's #504 merge) carries an earlier, pre-adoption text of it. -->
+
+| Old path | New path | Status |
+|---|---|---|
+| `proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-build-B10-01.md` | `FORK:50fa6b53` | FORKED (2026-10-26, B10-01 closed: the batch's build instructions, read only by the batch they name; the batch's record is its commits, `28a3d3d6` to its close commit) |

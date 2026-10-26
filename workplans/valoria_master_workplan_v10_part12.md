@@ -5,7 +5,7 @@
 
 ## 1. Handle index
 
-208 handles in 23 batches (B10-01 to B10-19 and B10-Z, plus B10-03b, B10-07b and B10-20); 206 are positions in `-03`'s tables after adoption, because NM-W3 (landed) and SC-06 (answered) left the tables there and keep their handles here. A handle is the one name of a position; it is never reused (P4).
+208 handles in 23 batches (B10-01 to B10-19 and B10-Z, plus B10-03b, B10-07b and B10-20); 206 were positions in `-03`'s tables after adoption, because NM-W3 (landed) and SC-06 (answered) left the tables there and keep their handles here; 196 are, in 22 open batches, since B10-01 CLOSED (its ten rows and its card left `-03` at its net-deleting close, P3; its twelve handles read `B10-01 (CLOSED)` below; CR-02's and GO-13's `-04` entries left with them). A handle is the one name of a position; it is never reused (P4).
 
 | handle | batch | kind of handle |
 |---|---|---|
@@ -99,7 +99,7 @@
 | CP-T10-08 | B10-18 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T10-09 | B10-18 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CR-01 | B10-02 | new from the code report (`-04`) |
-| CR-02 | B10-01 | new from the code report (`-04`) |
+| CR-02 | B10-01 (CLOSED) | new from the code report (`-04`) |
 | CR-03 | B10-09 | new from the code report (`-04`) |
 | CR-04 | B10-02 | new from the code report (`-04`) |
 | CR-05 | B10-02 | new from the code report (`-04`) |
@@ -140,7 +140,7 @@
 | GO-10 | B10-20 | port gate (`-04`): refusal values as typed Results |
 | GO-11 | B10-20 | port gate (`-04`): `module_contracts.yaml` re-derived from code |
 | GO-12 | B10-20 | port gate (`-04`): the seam port items |
-| GO-13 | B10-01 | port gate (`-04`): the Layer 0 GO hunks and the `godot/` pointer text; its `CLAUDE.md` hunks held back in their own PR while M11 stands |
+| GO-13 | B10-01 (CLOSED) | port gate (`-04`): the Layer 0 GO hunks and the `godot/` pointer text; its `CLAUDE.md` hunks held back in their own PR while M11 stands |
 | GO-14 | B10-03 | port gate (`-04`): retire `godot/skeleton/` and close PC-05; HELD on M11 with DEF-9 (it lands only in GO-13's held-back `CLAUDE.md` PR; unmerged at B10-03's close, its row moves to B10-Z) |
 | GO-15 | B10-20 | port gate (`-04`): FREEZE |
 | GO-16 | B10-20 | port gate (`-04`): the oracle-side draw recorder and its export (`--check`) |
@@ -161,7 +161,7 @@
 | NM-W0 | B10-02 | narration package (`proposals/2026-10-13-narration-mechanisms.md` §4); subsumed, an EDIT: the row is deleted when B10-02 closes |
 | NM-W1 | B10-19 | narration package (`proposals/2026-10-13-narration-mechanisms.md` §4) |
 | NM-W2 | B10-05 | narration package (`proposals/2026-10-13-narration-mechanisms.md` §4); closed into B10-05 (its measured arm is HR-9's control (4)), an EDIT: the row is deleted at B10-05's close with the reading quoted |
-| NM-W3 | B10-01 | narration package (`proposals/2026-10-13-narration-mechanisms.md` §4); landed (= IN-50), an EDIT: the row is deleted in the adoption commit |
+| NM-W3 | B10-01 (CLOSED) | narration package (`proposals/2026-10-13-narration-mechanisms.md` §4); landed (= IN-50), an EDIT: the row is deleted in the adoption commit |
 | NM-W4 | B10-19 | narration package (`proposals/2026-10-13-narration-mechanisms.md` §4) |
 | NM-W5 | B10-19 | narration package (`proposals/2026-10-13-narration-mechanisms.md` §4); released from M12, held behind NM-W1 only, slots by R8 after NM-W1 lands its instrument control |
 | NM-W6 | B10-19 | narration package (`proposals/2026-10-13-narration-mechanisms.md` §4) |
@@ -172,17 +172,17 @@
 | PC-06 | B10-Z | carried v9 position (`-04`) |
 | PC-08 | B10-Z | carried v9 position (`-04`) |
 | PC-10 | B10-11 | carried v9 position (`-04`) |
-| REM-01 | B10-01 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
-| REM-02 | B10-01 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
+| REM-01 | B10-01 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
+| REM-02 | B10-01 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-2A | B10-06 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-2B | B10-06 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-2C | B10-05 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
-| REM-03 | B10-01 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
-| REM-04 | B10-01 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
-| REM-05 | B10-01 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
-| REM-06 | B10-01 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
-| REM-08 | B10-01 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
-| REM-09 | B10-01 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
+| REM-03 | B10-01 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
+| REM-04 | B10-01 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
+| REM-05 | B10-01 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
+| REM-06 | B10-01 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
+| REM-08 | B10-01 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
+| REM-09 | B10-01 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-10 | B10-02 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-11 | B10-02 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-12 | B10-02 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
@@ -212,7 +212,7 @@
 | SC-02 | B10-13 | carried v9 position (`-04`) |
 | SC-04 | B10-13 | carried v9 position (`-04`) |
 | SC-05 | B10-Z | carried v9 position (`-04`) |
-| SC-06 | B10-01 | carried v9 position (`-04`); answered, an EDIT: the row is deleted in the adoption commit |
+| SC-06 | B10-01 (CLOSED) | carried v9 position (`-04`); answered, an EDIT: the row is deleted in the adoption commit |
 | SC-07 | B10-Z | carried v9 position (`-04`) |
 | SE-04 | B10-16 | carried v9 position (`-04`) |
 | SE-06 | B10-07b | carried v9 position (`-04`); released by M1: MEASURE then BUILD, first in B10-07b; its row moves to B10-Z as HELD if no per-territory values exist |

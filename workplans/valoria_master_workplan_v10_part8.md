@@ -132,7 +132,7 @@ These are the ids v9 names. The 113 other open ids, which no earlier file named,
 | SC-03b | BLK | LANDED d855576b (B-O). Narrowed to one residue: the corpus half of its EXIT, `corpus_run`'s `DEGREES RESOLVED` gaining `a proposition` bands, is unmet (read 2026-10-26, seed 0: the histogram is one over every verb, and `determine` is foldable but never attempted in the corpus; `HANDOFF_SC.md` records the same) | LEAVE: the observable as worded cannot be met; no position | — |
 | SC-04 | B | CARRIED (as the same handle, in -03) (landed-narrowed: the residue after B-P) | B10-13 |
 | SC-05 | ask-then | CARRIED (as the same handle, in -03) | B10-Z |
-| SC-06 | ask-then | CARRIED (as the same handle, in -03) | B10-01 (an EDIT: the row is deleted in the adoption commit) |
+| SC-06 | ask-then | ANSWERED (A1-45); its -03 row was deleted at adoption | B10-01 (an EDIT: the row is deleted in the adoption commit) |
 | SC-07 | BLK | CARRIED (as the same handle, in -03) | B10-Z |
 | SE-04 | BLK | CARRIED (as the same handle, in -03); part (c) closed by M1 (no spread at shipped weights); HELD on M11 for part (b) only | B10-16 |
 | SE-05 | — | ALIAS of IN-30 (takes IN-30's batch; no entry of its own) | B10-17 |

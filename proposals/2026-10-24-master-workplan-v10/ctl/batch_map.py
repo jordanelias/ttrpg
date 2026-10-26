@@ -1,20 +1,19 @@
 """The v10 batch map: which position belongs to which batch, and each batch's card.
 
-STATE AFTER THE DEPENDENCY SEQUENCE (`2026-10-24-v10-09-build-00-sequence.md`): the batch assignments, ORDER and CARDS below follow the final cut in `-03` (NM-W3 and SC-06 moved to B10-01, NM-W0 to B10-02; CP-T02-06 is in B10-10 since the NERS fold; CL-EVENTS was added by it), and after the review round (REM-45 moved from B10-03 to B10-Z, held on M18; CP-T05-04 after REM-25 in B10-05; B10-09 cut in two closes; SC-02 design-first; CP-T10-08 last in B10-18), and after the fold of PR #506 (CR-14 and CR-15 added to B10-02, CR-14 after REM-11 in lane 1 and CR-15 after REM-15 in lane 2, REM-16 needing both; CL-THRUST added to B10-19; the questions are M1 to M21), and after the decision round: 24 new positions (CR-16 to CR-29; GO-07 to GO-16 in the new GO dict), three new batches (the sub-batches B10-03b and B10-07b and the port gate B10-20, after B10-18 and before B10-19), REM-52 to B10-05, REM-45 to B10-15, IN-45 to B10-06, SE-06 to B10-07b, GO-01, GO-05 and GO-06 to B10-20, PC-05 to B10-03, NM-W2 to B10-05, CL-CHAR to B10-10, CL-EVENTS to B10-18; 208 positions in 23 batches. A "landing" in ORDER is a commit of a row that lives in another batch, not a member. The cut handles REM-40, REM-41, REM-51, CP-T02-04, CP-T02-08, CP-T05-05, CP-T06-06 and CP-T07-01 are kept as keys, mapped to CUT, so the coverage run still knows them; their dispositions are in `-07` section 2. The plan files are the record: where this file and `-03` differ, `-03` wins.
+STATE AFTER THE DEPENDENCY SEQUENCE (`2026-10-24-v10-09-build-00-sequence.md`): the batch assignments, ORDER and CARDS below follow the final cut in `-03` (NM-W3 and SC-06 moved to B10-01, NM-W0 to B10-02; CP-T02-06 is in B10-10 since the NERS fold; CL-EVENTS was added by it), and after the review round (REM-45 moved from B10-03 to B10-Z, held on M18; CP-T05-04 after REM-25 in B10-05; B10-09 cut in two closes; SC-02 design-first; CP-T10-08 last in B10-18), and after the fold of PR #506 (CR-14 and CR-15 added to B10-02, CR-14 after REM-11 in lane 1 and CR-15 after REM-15 in lane 2, REM-16 needing both; CL-THRUST added to B10-19; the questions are M1 to M21), and after the decision round: 24 new positions (CR-16 to CR-29; GO-07 to GO-16 in the new GO dict), three new batches (the sub-batches B10-03b and B10-07b and the port gate B10-20, after B10-18 and before B10-19), REM-52 to B10-05, REM-45 to B10-15, IN-45 to B10-06, SE-06 to B10-07b, GO-01, GO-05 and GO-06 to B10-20, PC-05 to B10-03, NM-W2 to B10-05, CL-CHAR to B10-10, CL-EVENTS to B10-18; 208 positions in 23 batches. B10-01 then CLOSED (its ten rows and card left `-03` at its net-deleting close, P3): it left SPINE, CARDS and ORDER, and its twelve handles (the ten, NM-W3 and SC-06) map to CLOSED; 196 positions in 22 open batches. A "landing" in ORDER is a commit of a row that lives in another batch, not a member. The cut handles REM-40, REM-41, REM-51, CP-T02-04, CP-T02-08, CP-T05-05, CP-T06-06 and CP-T07-01 are kept as keys, mapped to CUT, so the coverage run still knows them; their dispositions are in `-07` section 2. The plan files are the record: where this file and `-03` differ, `-03` wins.
 
 This file is the author's judgment in one place; it is not a plan."""
 
-SPINE = ["B10-01", "B10-02", "B10-03", "B10-03b", "B10-04", "B10-05", "B10-06", "B10-07", "B10-07b",
+# Closed batches leave SPINE, CARDS and ORDER at their net-deleting close (P3); their handles stay as keys, mapped
+# to CLOSED, so the coverage run still knows them (`-07` section 1 keeps every handle and records the batch CLOSED).
+CLOSED_BATCHES = ["B10-01"]
+CLOSED = "closed: B10-01 (`-07` section 1)"
+
+SPINE = ["B10-02", "B10-03", "B10-03b", "B10-04", "B10-05", "B10-06", "B10-07", "B10-07b",
          "B10-08", "B10-09", "B10-10", "B10-11", "B10-12", "B10-13", "B10-14", "B10-15", "B10-16",
          "B10-17", "B10-18", "B10-20", "B10-19", "B10-Z"]
 
 CARDS = {
- 'B10-01': dict(name='ADOPT AND CORRECT THE RECORD', lanes='IN', code=False,
-   gate='adoption by Jordan (the steps are the `-03` card and `-00` section 9); before B10-01, Jordan merges PR #467 (rebased on main, v9 hunks dropped), recording ED-GO-0002; fallback only if he does not: the row lands verbatim from 24f62f1 (byte diff against git show 24f62f1:registers/editorial_ledger_go.jsonl), HELD BACK in the PR body, GO next_free 2 -> 3, #467 closed naming 24f62f1; the D-1 ED-IN row (relayed, open, needs_jordan true), ED-IN-0297 closing row, ED-IN-0296 narrowing row; every Layer 0/1 hunk in its own held-back PR while M11 stands',
-   exit='python tools/currency_consistency_check.py; python -m engine.season.harness.register --requirements; python tools/validate_ed_citations.py (with ED-GO-0002); grep -c ^## Status: per plan file; register --check --rule R0,R1,R2,R3; grep -c valoria_master_workplan_v9 references/lane_assignments.yaml; GO-13: git grep -nE "Godot 4\\.6" -- README.md references/glossary.md CURRENT.md and grep -n "Gate-0 waits" CURRENT.md; on the fallback, the byte diff -> no drift; exit 0; clean; 1 per file; no new violation after CR-02 (f); 0; both greps print nothing',
-   hash='E',
-   shared='engine/season/requirements.yaml; CURRENT.md; HANDOFF.md; registers/handoffs/HANDOFF_IN.md; registers/handoffs/HANDOFF_<LANE>.md Open rows; engine/season/hole_register.yaml (text only); references/lane_assignments.yaml; references/definitions/vocab_source.yaml; CLAUDE.md 5 (one sentence, proposed text until M11); godot/README.md; godot/godot_conversion_strategy_v1.md (markers); README.md; references/glossary.md; registers/editorial_ledger_in.jsonl; registers/editorial_ledger_go.jsonl and references/id_reservations.yaml (fallback); the held-back Layer 0 PR (CLAUDE.md preamble, 0.2, 6)',
-   build='2026-10-24-v10-09-build-B10-01.md'),
  'B10-02': dict(name='INSTRUMENTS THAT CAN SEE THE FAILURES', lanes='IN', code=True,
    gate='merged: B10-01',
    exit='after REM-16 and before CR-01/IN-18: World.content_hash() at build_realm(0) and after aperture 1 s (s=0,1,2) against the base commit; python -m engine.season.harness.report && python -m engine.season.harness.delta <base sha> -> hashes EQUAL; PROBE FLIPS 0; the three-seed baselines for B10-05 and B10-06 recorded in the close commit body; CR-14 reproduces the register P1, P2, P4 and P10 at seeds 0-4 and its shipped arms arm is byte-identical; CR-15 default storybar reading unchanged byte-for-byte and its executed_only reading reproduces P7; CL-THRUST B0.1 hash EQUAL at empty data with TL section 8 falsifier and instrument; git status --short clean after every harness run',
@@ -153,8 +152,8 @@ CUT = "cut (`-07` section 2)"
 
 # handle -> batch (order inside a batch is ORDER below)
 REM = {
- "REM-01": "B10-01", "REM-02": "B10-01", "REM-03": "B10-01", "REM-04": "B10-01", "REM-05": "B10-01",
- "REM-06": "B10-01", "REM-08": "B10-01", "REM-09": "B10-01",
+ "REM-01": CLOSED, "REM-02": CLOSED, "REM-03": CLOSED, "REM-04": CLOSED, "REM-05": CLOSED,
+ "REM-06": CLOSED, "REM-08": CLOSED, "REM-09": CLOSED,
  "REM-10": "B10-02", "REM-11": "B10-02", "REM-12": "B10-02", "REM-13": "B10-02", "REM-14": "B10-02",
  "REM-15": "B10-02", "REM-16": "B10-02",
  "REM-42": "B10-03", "REM-45": "B10-15", "REM-46": "B10-03", "REM-47": "B10-03",
@@ -189,7 +188,7 @@ V9 = {
  "IN-12": "B10-09", "IN-14": "B10-16", "IN-18": "B10-02", "IN-30": "B10-17", "IN-32": "B10-15",
  "IN-36": "B10-17", "IN-44": "B10-Z", "IN-45": "B10-06", "IN-48": "B10-17", "IN-52": "B10-16",
  "IN-58": "B10-09", "IN-61": "B10-09", "SC-02": "B10-13", "SC-04": "B10-13", "SC-05": "B10-Z",
- "SC-06": "B10-01", "SC-07": "B10-Z", "SE-04": "B10-16", "SE-06": "B10-07b", "MB-07r": "B10-12",
+ "SC-06": CLOSED, "SC-07": "B10-Z", "SE-04": "B10-16", "SE-06": "B10-07b", "MB-07r": "B10-12",
  "MB-08": "B10-Z", "PC-05": "B10-03", "PC-06": "B10-Z", "PC-08": "B10-Z", "PC-10": "B10-11",
  "WR-01": "B10-15", "GO-01": "B10-20", "GO-05": "B10-20", "GO-06": "B10-20", "FA-01": "B10-17",
  "FA-03": "B10-Z", "FA-07": "B10-Z",
@@ -202,7 +201,7 @@ STALE = {"SC-03b": "landed d855576b (B-O); listed open in v9's state index", "SC
          "GO-03": "landed at B-C (the `godot_conversion_strategy_v1.md:138` heading string removed; `-04` part 2, GO-01's LANDED ALREADY); named once GO-\\d\\d entered the coverage pattern"}
 CR = {
  "CR-01": ("B10-02", "The 1-ULP drift in `test_combat_lever_sign_safety` (`bear_spear` `bind_sigma`): isolate the operation, then make the pin platform-independent or key it"),
- "CR-02": ("B10-01", "Correct the record: v9's stale state-index rows, `HANDOFF_IN.md`'s stale H-188 line, `CURRENT.md`'s stamp, `CLAUDE.md` §5's missing `dice_engine` path"),
+ "CR-02": (CLOSED, "Correct the record: v9's stale state-index rows, `HANDOFF_IN.md`'s stale H-188 line, `CURRENT.md`'s stamp, `CLAUDE.md` §5's missing `dice_engine` path"),
  "CR-03": ("B10-09", "Acquaintance: half of the persons know no one for four seasons; measure how the known set forms and what build-time source is lawful"),
  "CR-04": ("B10-02", "Horizon: run the soak and the census at 12 and 24 seasons; ledger saturation, decay balance, told-claim rate"),
  "CR-05": ("B10-02", "The 35 `skip`/`xfail` markers: read each reason, record whether its condition still holds"),
@@ -234,18 +233,17 @@ CR = {
 # the port gate's new positions (GO-01, GO-05 and GO-06 are v9 handles, in V9)
 GO = {
  "GO-07": "B10-03b", "GO-08": "B10-20", "GO-09": "B10-20", "GO-10": "B10-20", "GO-11": "B10-20",
- "GO-12": "B10-20", "GO-13": "B10-01", "GO-14": "B10-03", "GO-15": "B10-20", "GO-16": "B10-20",
+ "GO-12": "B10-20", "GO-13": CLOSED, "GO-14": "B10-03", "GO-15": "B10-20", "GO-16": "B10-20",
 }
 NM = {f"NM-W{n}": "B10-19" for n in range(10)}
 NM["NM-W0"] = "B10-02"
 NM["NM-W2"] = "B10-05"
-NM["NM-W3"] = "B10-01"
+NM["NM-W3"] = CLOSED
 CL = {"CL-CHAR": "B10-10", "CL-ATTR": "B10-19", "CL-TROOP": "B10-19", "CL-EVENTS": "B10-18", "CL-THRUST": "B10-19"}
 
 # In-batch order of the final cut ('->' is serial; 'held:' members wait on the question named and slot in by rule R8;
 # 'landing' is a commit of a row that lives in another batch, not a member)
 ORDER = {
- 'B10-01': 'REM-01 -> REM-02 -> REM-03 -> REM-04 -> REM-05 -> REM-06 -> REM-08 -> REM-09 -> CR-02 -> GO-13',
  'B10-02': 'REM-10 -> REM-11 -> REM-13 -> REM-14 -> REM-12 -> REM-15 -> CR-15 -> landing CL-THRUST B0.1 -> CR-14 -> CR-05 -> CR-04 -> REM-16 -> NM-W0 -> CR-01 -> IN-18',
  'B10-03': 'REM-42 -> REM-46 -> REM-47 -> CR-06 -> GO-14 (HELD on M11) -> PC-05 (EDIT row); held: DEF-9 (M11)',
  'B10-03b': 'GO-07',
