@@ -245,7 +245,7 @@ CL = {"CL-CHAR": "B10-10", "CL-ATTR": "B10-19", "CL-TROOP": "B10-19", "CL-EVENTS
 # In-batch order of the final cut ('->' is serial; 'held:' members wait on the question named and slot in by rule R8;
 # 'landing' is a commit of a row that lives in another batch, not a member)
 ORDER = {
- 'B10-01': 'REM-01 -> REM-02 -> REM-03 -> REM-04 -> REM-05 -> REM-06 -> REM-08 -> REM-09 -> NM-W3 -> SC-06 -> CR-02 -> GO-13',
+ 'B10-01': 'REM-01 -> REM-02 -> REM-03 -> REM-04 -> REM-05 -> REM-06 -> REM-08 -> REM-09 -> CR-02 -> GO-13',
  'B10-02': 'REM-10 -> REM-11 -> REM-13 -> REM-14 -> REM-12 -> REM-15 -> CR-15 -> landing CL-THRUST B0.1 -> CR-14 -> CR-05 -> CR-04 -> REM-16 -> NM-W0 -> CR-01 -> IN-18',
  'B10-03': 'REM-42 -> REM-46 -> REM-47 -> CR-06 -> GO-14 (HELD on M11) -> PC-05 (EDIT row); held: DEF-9 (M11)',
  'B10-03b': 'GO-07',
