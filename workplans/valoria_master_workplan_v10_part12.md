@@ -155,7 +155,7 @@
 | GO-10 | B10-20 | port gate (`-04`): refusal values as typed Results |
 | GO-11 | B10-20 | port gate (`-04`): `module_contracts.yaml` re-derived from code |
 | GO-12 | B10-20 | port gate (`-04`): the seam port items |
-| GO-13 | B10-01 (CLOSED) | port gate (`-04`): the Layer 0 GO hunks and the `godot/` pointer text; its `CLAUDE.md` hunks held back in their own PR while M11 stands |
+| GO-13 | B10-01 (CLOSED) | port gate (`-04`): the Layer 0 GO hunks and the `godot/` pointer text; its `CLAUDE.md` hunks held back in the one held-back PR while M11 stands |
 | GO-14 | B10-03 | port gate (`-04`): retire `godot/skeleton/` and close PC-05; HELD on M11 with DEF-9 (it lands only in GO-13's held-back `CLAUDE.md` PR; unmerged at B10-03's close, its row moves to B10-Z) |
 | GO-15 | B10-20 | port gate (`-04`): FREEZE |
 | GO-16 | B10-20 | port gate (`-04`): the oracle-side draw recorder and its export (`--check`) |
