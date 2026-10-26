@@ -232,10 +232,13 @@ code reads must ship the way to re-run it*.
 
 ```
 Person := ( id, weight, capability, body, exists, travel_leg
-          , stance[], pursuits, scar[axis], axis_count[axis], coherence?
+          , stance[], pursuits, scar[axis], axis_count[axis], coherence?, heritage?
           , ledger )
 -- renamed/dropped 2026-09-24, ED-IN-0261 item 1: `convictions` -> `pursuits` (season-side name
    only, values unchanged); `marks[]` dropped (retired write_matrix.yaml field, zero readers)
+-- `heritage?` (PROPOSED, v10 second decision round, CR-30): the one member of the dropped `marks[]`
+   no Tenure derives; a read-off field (§D.1.1), written at world build only, no write-matrix row;
+   its resolver is WITNESS's `marks` term
 NOT ON IT:  beliefs (a commit to an OUGHT) · ties_index (Nobody's) · any aggregate · anything about another person
 LOCATION:   the person-kind Rung sharing its n; its contain edge is where they are -- and its live `reside` edge (Person -> Rung, one) is where they LIVE: `move` re-homes `contain` and leaves it, only `migrate` re-homes it (plan position `19c`, 2026-09-30; `loop/effects.py::_eff_migrate` carries the split)
 ```
