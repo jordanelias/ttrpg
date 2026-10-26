@@ -1,0 +1,24 @@
+seed 0 seasons 4 acts in log 3256 outcome {'refused': 1758, 'made': 736, 'unk': 628, 'both': 134}
+cross-person edges 1008
+  antecedent=made     consequent=refused    201  19.9%
+  antecedent=refused  consequent=refused    164  16.3%
+  antecedent=made     consequent=made       139  13.8%
+  antecedent=made     consequent=unk        123  12.2%
+  antecedent=refused  consequent=made       117  11.6%
+  antecedent=refused  consequent=unk        114  11.3%
+  antecedent=refused  consequent=both        41  4.1%
+  antecedent=unk      consequent=refused     26  2.6%
+  antecedent=both     consequent=refused     19  1.9%
+  antecedent=unk      consequent=made        17  1.7%
+  antecedent=both     consequent=unk         14  1.4%
+  antecedent=unk      consequent=unk         11  1.1%
+  antecedent=unk      consequent=both         6  0.6%
+  antecedent=made     consequent=both         6  0.6%
+  antecedent=both     consequent=made         6  0.6%
+  antecedent=both     consequent=both         4  0.4%
+edges whose antecedent act succeeded (made or both): 512 50.8%
+deepest chain len 14 ['refused', 'refused', 'refused', 'both', 'unk', 'refused', 'made', 'made', 'refused', 'refused', 'made', 'refused', 'refused', 'refused']
+acts at depth>=5: 407 {'refused': 171, 'unk': 110, 'made': 93, 'both': 33}
+distinct event kinds 81 events 68348
+[('claim.deposited', 31492), ('claim.decayed', 31330), ('condition.worn', 1288), ('term.matured', 531), ('finding.none', 530), ('migrate.refused', 370), ('stores.changed', 259), ('record.created', 189), ('work.unavailable', 151), ('yield.taken', 148), ('finding.made', 145), ('travel.blocked', 123), ('commitment.refused', 119), ('transfer.refused', 90), ('train.refused', 86), ('proposition.uttered', 85), ('accept.refused', 76), ('tend.refused', 74), ('release.refused', 71), ('forge.refused', 68), ('challenge.refused', 67), ('news.untold', 62), ('carry.refused', 61), ('sabotage.refused', 53), ('survey.refused', 49), ('restore.refused', 49), ('cover.assumed', 46), ('found.refused', 44), ('record.forged', 44), ('faction.surveyed', 43), ('build.refused', 40), ('petition.refused', 39), ('raze.refused', 37), ('kill.refused', 36), ('speech.unheard', 35), ('duty.taken', 33), ('duty.refused', 29), ('travel.moved', 27), ('march.refused', 24), ('petition.filed', 22)]
+persons at end 80

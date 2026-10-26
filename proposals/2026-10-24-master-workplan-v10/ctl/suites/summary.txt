@@ -1,0 +1,4 @@
+engine/tests exit=0 secs=17
+engine/season/tests exit=0 secs=590
+tests/valoria exit=1 secs=291
+DONE
