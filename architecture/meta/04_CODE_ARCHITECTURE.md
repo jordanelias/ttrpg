@@ -608,6 +608,11 @@ gate.write(token, kind, field, id, change, actor?, via?) -> Receipt
         its `term` pushed later, nothing else moved           -- renewal: upkeep paid (`17b`, F.18)
       via IS a judging Seat, actor seated, OPENING an `oblige`
         on it for another person its bench's ground holds     -- determination: a bench binds (`19`)
+      via IS a judging Seat, actor seated, OPENING a `hold`
+        on a vacant Seat S other than via whose `conferral`
+        basis is filled by `determine`, for a party S's
+        faction admits, or, for a seat whose conferral basis
+        is inheritance, any claimant                          -- determination, election arm (CR-35)
       cause is an existence change this same act caused       -- destroy's cascade
       opening a `contain` for a thing this same act brought
         into existence, its only parent                       -- founding: a place founded (`24e`, F.20)
