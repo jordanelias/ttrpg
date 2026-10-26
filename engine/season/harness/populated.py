@@ -1697,7 +1697,13 @@ def run(seasons: int = 1, seed: int = 0, cap: int | None = None, w: World | None
 
     `w` takes a world ALREADY BUILT, for a caller that wants to report on the build before the
     season runs -- `main` below is the one, and without this it built the whole realm twice
-    (~10s each) to print a census it then discarded."""
+    (~10s each) to print a census it then discarded.
+
+    ⚠ `out["acts"]`, `out["actors"]` AND `out["act_subjects"]` READ `d.resolved`, THE FOLD SET, ON
+    PURPOSE (REM-10 / HR-8): `harness/aperture.py`'s CONTROL line compares this `acts` with the
+    measured arm's `len(d.resolved)`, and `harness/arms.py` reads `act_subjects` as its outcome
+    metric. The ATTEMPT census (`corpus_run.attempts`, the act store) is a different, larger
+    quantity; it does not replace this one."""
     w = build_realm(seed, cap) if w is None else w
     d = SeasonDriver(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")

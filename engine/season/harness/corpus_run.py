@@ -51,12 +51,13 @@ from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
 from ..data.matrix import Step
 # `CONVICTIONS` dropped 2026-09-16: `seed_pursuits` moved to `run_cases.py`, which is its
 # single owner, and nothing here reads the roster any more.
-from ..data.rosters import (PURSUIT_AXES, RUNG_KINDS, VERB_CAPABILITY, load_yaml,
-                            refuse_a_titled_post_off_its_rung)
+from ..data.rosters import (GRADED_INQUIRIES, PURSUIT_AXES, RUNG_KINDS, VERB_CAPABILITY,
+                            load_yaml, refuse_a_titled_post_off_its_rung)
 from ..data.verbs import VERB_TABLE, align, celled_verbs
 from ..decision import make_chooser
 from ..gaps import Forbidden, InstrumentDefect, NoProducer, ShapeGap, Unowned, Unspecified
 from ..loop.driver import SeasonDriver, resolvable_verbs
+from ..loop.effects import EFFECTS
 from ..queries.world_q import RESIDE_KIND, questions_for
 from ..state.carriers import Act, Event, Office, Person, Proposition, Rung, Site, Tenure
 from ..state.ids import H, ROOT, draw_factory
@@ -703,7 +704,12 @@ def _r3_propagates(w, driver) -> bool:
     ⚠ AND IT MUST GO THROUGH `causes[] -> Act.actor`, BECAUSE THE EVENT HAS NO ACTOR BY RULING.
     #353 §19.3 puts `actor` among the three fields the Event does NOT carry; `driver.resolved` is
     the only surface that knows who acted, which is also what `H-82`'s `log u resolved` integrity
-    check is for."""
+    check is for.
+
+    ⚠ KEEPS THE FOLD SET (`driver.resolved`) ON PURPOSE (REM-10, HR-8): R3 is a corpus STATUS over
+    acts that folded, not a census of attempts, and its statuses feed `run_case`'s `status` (so
+    `report.py`'s `runs/results.json`); reading the act store here would be a separate, unmeasured
+    change to those statuses, which this commit does not make."""
     acts = list(getattr(driver, "resolved", []))
     if len(acts) < 2:
         return False
@@ -771,10 +777,23 @@ def attribute(w: World, d, n: int) -> list:
     aperture re-measurement (`harness/aperture.py`, plan position `★`) needs the same answer PER
     ACT, so it can say which PERSON executed what. Extracted rather than re-derived there, so the
     corpus's "executed" and the populated realm's "executed" are one rule and cannot drift into
-    two ladders for one quantity (`CLAUDE.md` §0.06 S)."""
+    two ladders for one quantity (`CLAUDE.md` §0.06 S).
+
+    ⚠ THIS READS `d.resolved`, THE FOLD SET -- the acts that reached `_fold`. A CONTESTED or GRADED
+    act refused at admission (`resolve()`'s seam branch) never enters it, so this undercounts what was
+    ATTEMPTED; `attempts(w, n)` below reads the act store and counts them. This function keeps its
+    signature and its reading for the callers that want the fold set (`soak.py`, the two tests)."""
+    return _attribute_acts(w, getattr(d, "resolved", []), n)
+
+
+def _attribute_acts(w: World, acts, n: int) -> list:
+    """THE ONE OWNER of the made/refused rule: `[(act, made, refused)]` over `acts`, an iterable of
+    Acts, read against `w.log` by the fold's id derivation. `attribute` calls it over the fold set
+    and `attempts` over the act store, so "made" and "refused" are one rule for both. An act whose
+    verb is no table row is skipped here (`unrowed_acts` counts them)."""
     ids = {e.id for e in w.log}
     out = []
-    for a in getattr(d, "resolved", []):
+    for a in acts:
         row = VERB_TABLE.get(a.verb)
         if row is None:
             continue
@@ -783,6 +802,136 @@ def attribute(w: World, d, n: int) -> list:
                   if any(H(w.world_seed, t, a.actor, f"{k}:{a.id}") in ids for t in range(n + 1)))
             for kinds in (row.emits, row.emits_on_refusal))
         out.append((a, made, refused))
+    return out
+
+
+def attempts(w: World, n: int) -> list:
+    """`[(act, made, refused)]` for every act in the ACT STORE (`w.acts`) -- every act that entered
+    RESOLVE, ATTEMPTED and not only folded. `w.acts.append(a)` is the first statement of the per-act
+    loop in `loop/resolve.py::resolve`, before `_survives`, the S27.4 gate and the contest branch, so
+    a contested act refused at admission is here though it never reaches `SeasonDriver.resolved`
+    (`attribute`'s set). Same `(act, made, refused)` rule as `attribute`, through `_attribute_acts`."""
+    return _attribute_acts(w, tuple(w.acts), n)
+
+
+def unrowed_acts(w: World) -> int:
+    """How many acts in the act store name a verb that is no `VERB_TABLE` row. `_attribute_acts`
+    drops them silently; this says how many it dropped."""
+    return sum(1 for a in w.acts if a.verb not in VERB_TABLE)
+
+
+def foreign_kinds(w: World) -> Counter:
+    """`Counter({(verb, kind): n})` over Events in the log that name an act of the store in
+    `causes[]` and whose kind is in NEITHER of that act's row's columns (`emits`,
+    `emits_on_refusal`) -- what an act's Events say that its row does not declare
+    (`act.ineligible` lands here). Acts with no row are `unrowed_acts`'s."""
+    out: Counter = Counter()
+    for e in w.log:
+        for c in (e.causes or ()):
+            a = w.acts.get(c)
+            row = VERB_TABLE.get(a.verb) if a is not None else None
+            if row is None:
+                continue
+            if e.kind not in (row.emits or ()) and e.kind not in (row.emits_on_refusal or ()):
+                out[(a.verb, e.kind)] += 1
+    return out
+
+
+def graded_loss(act, events) -> bool:
+    """Is `act` a GRADED LOSS: the contest ran and went against the actor, which `emits_on_refusal`
+    records but is not a refusal (`04 §C.4`). True when the act's row has a kind in BOTH `emits` and
+    `emits_on_refusal`, `events` (the Events the act emitted) hold at least one refusal-kind Event,
+    EVERY refusal-kind Event carries `degree == "Failure"`, and at least one of those kinds is in
+    `emits` -- `tell`'s `news.untold`, `finding.none` on `examine` and `research`. A refusal at
+    admission carries no degree (`None`), so it is not a graded loss: the `degree` test is what
+    separates the two, and the kind alone cannot."""
+    row = VERB_TABLE.get(act.verb)
+    if row is None:
+        return False
+    emits, on_refusal = set(row.emits or ()), set(row.emits_on_refusal or ())
+    if not (emits & on_refusal):
+        return False
+    ref = [e for e in events if e.kind in on_refusal]
+    return bool(ref) and all(e.degree == "Failure" for e in ref) \
+        and any(e.kind in emits for e in ref)
+
+
+def graded_losses(w: World, n: int) -> list:
+    """The acts of the act store that are a `graded_loss`, over the same store and the same id
+    derivation as `attempts`. Every one is also a `both` act (`made and refused`), because a graded
+    loss has a kind in both columns."""
+    by_id = {e.id: e for e in w.log}
+    out = []
+    for a in tuple(w.acts):
+        row = VERB_TABLE.get(a.verb)
+        if row is None:
+            continue
+        evs = [by_id[i] for k in (row.emits_on_refusal or ()) for t in range(n + 1)
+               if (i := H(w.world_seed, t, a.actor, f"{k}:{a.id}")) in by_id]
+        if graded_loss(a, evs):
+            out.append(a)
+    return out
+
+
+# REM-13. THE GRADED BANDS, BY VERB, AND THE ROWS THAT EMIT AND WRITE NOTHING. Three readers over
+# what the game already holds; none writes, none is read by the game.
+
+NO_ACT = "(no act)"
+
+
+def degrees_by_verb(log, act_of: dict) -> dict:
+    """`{verb: {degree: n}}` over the graded Events of `log` (an Event carries a `degree` only when
+    the fold took the contest branch), each credited to the verb of its act, resolved through
+    `act_of` (Event id -> Act, `SeasonDriver.act_of`; `storybar.read`'s precedent). A graded Event
+    `act_of` holds no act for is credited to `NO_ACT` rather than dropped, so the per-verb totals sum
+    to the unkeyed total by construction and the sum control can fail only if this reader does."""
+    out: dict = {}
+    for e in log:
+        deg = getattr(e, "degree", None)
+        if not deg:
+            continue
+        a = act_of.get(e.id)
+        verb = a.verb if a is not None else NO_ACT
+        bucket = out.setdefault(verb, Counter())
+        bucket[str(deg)] += 1
+    return {v: dict(c) for v, c in out.items()}
+
+
+def bands_that_differ(table=None) -> dict:
+    """`{verb: bool}` for each CONTESTED row (`writes_by_degree` is the degree-keyed shape the loader
+    requires of a `contests:` row): do at least two of its bands' `VerbRow.writes_at` differ. False
+    is a contest whose every band writes the same thing -- the band is graded and then decides
+    nothing the row writes (`speak`, whose bands all write nothing, reads False)."""
+    table = VERB_TABLE if table is None else table
+    return {v: len({tuple(r.writes_at(d)) for d in r.writes_by_degree}) >= 2
+            for v, r in table.items() if r.writes_by_degree}
+
+
+def deposit_only_rulings() -> dict:
+    """`{verb: ruling}`: the rows a ruling says are deposit-only (their product is a Claim minted at
+    WITNESS, not a typed write). `tell` (`G1`); the graded inquiries (FI-01, RS-21 item 1), read from
+    `rosters.yaml: graded_inquiries` and not listed here."""
+    return {"tell": "G1", **{v: "RS-21 item 1 (FI-01)" for v in GRADED_INQUIRIES}}
+
+
+def emits_and_writes_nothing(table=None, effects=None, rulings=None) -> dict:
+    """`{verb: tag}` for each row that EMITS (a kind at some band, or flat), WRITES nothing at every
+    band (`writes_at` empty for each declared band; the flat `writes` when the row is not degree-
+    keyed) and has no `EFFECTS` body. `tag` is `"deposit-only by ruling"` where `rulings` names the
+    verb, else `"untagged"`. A contested row that is `untagged` is `04` PART D row 30a's defect in
+    substance (`speak`); this reader reports it and decides nothing."""
+    table = VERB_TABLE if table is None else table
+    effects = EFFECTS if effects is None else effects
+    rulings = deposit_only_rulings() if rulings is None else rulings
+    out = {}
+    for v, r in table.items():
+        bands = list(r.writes_by_degree) or [None]
+        if any(r.writes_at(d) for d in bands) or v in effects:
+            continue
+        emitted = r.emits or any(r.emits_by_degree.values())
+        if not emitted:
+            continue
+        out[v] = "deposit-only by ruling" if v in rulings else "untagged"
     return out
 
 
@@ -816,7 +965,9 @@ def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
     except (ShapeGap, Unspecified, Forbidden, NoProducer) as e:
         return dict(id=cid, scale=scale, status="DESIGN-GAP", executed=[], refused=[],
                     seasons=n, why=f"{type(e).__name__}: {e}", checks={"R1": False})
-    outcomes = attribute(w, d, n)
+    # REM-10: the ACT STORE, not the fold set -- a contested act refused at admission is an attempt
+    # that `d.resolved` never held, so R-05's `refused` class read it as never attempted.
+    outcomes = attempts(w, n)
     ok = sorted({a.verb for a, made, _ in outcomes if made})
     no = sorted({a.verb for a, _, refused in outcomes if refused})
     # ---- `W18`: §6.1's R1/R3/R4/R5 and §6.2's A1, computed. R2/A2/A3 are NOT-COMPUTABLE.
@@ -862,6 +1013,8 @@ def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
     # `degree` only when the fold took the CONTEST branch and `degree_of` read one off the
     # subsystem's own result — so this is a count of rolls that happened, not of acts attempted.
     degrees = Counter(str(e.degree) for e in w.log if getattr(e, "degree", None))
+    # REM-13: the same graded Events, credited to the verb of each one's act (`d.act_of`).
+    by_verb = degrees_by_verb(w.log, d.act_of)
     # `ED-IN-0222`: HOW EACH BELIEF IN THIS WORLD WAS COME BY. `rosters.yaml: claim_sources`
     # declares four and the loop wrote one until the told channel landed, which is a fact about
     # the GAME that no instrument reported -- so a claim about it could not be reproduced from
@@ -895,7 +1048,7 @@ def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
     # *"reported `WAITS-ON-PLAYER` naming the entry that caused it"*. Read through `seating`, the
     # same resolver `build_at` seats from, so the two cannot disagree about who was left out.
     return dict(id=cid, scale=scale, status=status, executed=ok, refused=no, seasons=n,
-                why="", checks=checks, degrees=dict(degrees),
+                why="", checks=checks, degrees=dict(degrees), degrees_by_verb=by_verb,
                 claim_sources=dict(sources), persons=len(w.persons),
                 told_holders=told_holders, told_redeposits=told_redeposits,
                 waits_on_player=[str(e["who"]) for e in seating(case)[1]])
@@ -1002,6 +1155,30 @@ def main(seed: int = 0) -> int:
     for r in live:
         _deg.update(r.get("degrees") or {})
     print(f"  DEGREES RESOLVED         {dict(sorted(_deg.items())) or '{} — no contest completed'}")
+    # REM-13. THE SAME GRADED EVENTS, BY THE VERB THAT MADE THEM. The pooled histogram above cannot say
+    # which verb's rolls it is: a `tell` that lost and a `fight` that lost read alike. Each row keys on
+    # the Event's act (`d.act_of`), and the CONTROL line below sums the table against the total.
+    _bv: dict = {}
+    for r in live:
+        for v, ds in (r.get("degrees_by_verb") or {}).items():
+            _bv.setdefault(v, Counter()).update(ds)
+    print("  DEGREES RESOLVED BY VERB" + ("" if _bv else " {} — no contest completed"))
+    for v in sorted(_bv):
+        print(f"     {v:24} {sum(_bv[v].values()):6}  {dict(sorted(_bv[v].items()))}")
+    _bv_total = sum(sum(c.values()) for c in _bv.values())
+    print(f"     CONTROL — per-verb sum {_bv_total} vs DEGREES RESOLVED total {sum(_deg.values())}: "
+          f"{'equal' if _bv_total == sum(_deg.values()) else '⚠ NOT EQUAL'}")
+    # REM-13, the two STATIC lines: read off the verb table, not off a run.
+    _bd = bands_that_differ()
+    print(f"  BANDS THAT DIFFER        {' · '.join(f'{v} {_bd[v]}' for v in sorted(_bd))}  "
+          f"(per contested row: do >= 2 bands' `writes_at` differ)")
+    _eo = emits_and_writes_nothing()
+    print(f"  EMITS AND WRITES NOTHING {len(_eo)} rows — emitted at some band, empty `writes_at` at "
+          f"every band, no `EFFECTS` body:")
+    for _tag in ("deposit-only by ruling", "untagged"):
+        _vs = sorted(v for v, t in _eo.items() if t == _tag)
+        print(f"     {_tag:24} {len(_vs)}  "
+              f"{[v + ' [contested]' if v in _bd else v for v in _vs]}")
     # `ED-IN-0222`. THE LINE THAT MAKES A CLAIM ABOUT BELIEF TRANSMISSION REPRODUCIBLE.
     # `rosters.yaml: claim_sources` declares four values; a run that reports three zeros is
     # reporting a hole, and one that reports none lets a session assert any number it likes.

@@ -10,9 +10,34 @@ different owner and a single count hides which one closed it:
                deliberations during the season
     offered    formed AND in `resolvable_verbs()` — `make_chooser`'s own `verbs=` filter, so the
                set the ranking actually sees
-    attempted  an Act by this person with this verb reached the fold (`SeasonDriver.resolved`)
-    executed   `corpus_run.attribute`'s `made`: the act's row's `emits:` Event is in the log
-    refused    `corpus_run.attribute`'s `refused`: its `emits_on_refusal:` Event is in the log
+    attempted  an Act by this person with this verb entered RESOLVE -- the ACT STORE (`w.acts`,
+               read by `corpus_run.attempts`), which holds a contested act refused at admission
+               that never reaches the fold (`SeasonDriver.resolved`)
+    executed   `corpus_run.attempts`'s `made`: the act's row's `emits:` Event is in the log
+    refused    `corpus_run.attempts`'s `refused`: its `emits_on_refusal:` Event is in the log
+    graded     `corpus_run.graded_loss`: a LOST contest, whose refusal-kind Event is also an `emits:`
+               kind and carries degree `Failure` -- counted in `both`, never a refusal in the sense
+               of a failed `requires`
+
+The CONTROL line still compares `populated.run`'s `acts` with `len(d.resolved)`, the fold set: the
+two arms share that owner, and the act-store reading is a different quantity.
+
+**WHY EACH REFUSAL REFUSED (REM-11).** `refused` says an act drew a refusal kind, not which clause
+refused it. Four further blocks are read off the same run, each keyed on the ACT (`d.act_of`: Event
+id -> Act, the driver's own map), never on a trace row's `act` column, which is unreliable for WRITE
+and GAP rows:
+
+    DECIDING READ     per verb, one reason per refused act: `clause:<name>` where the row keys
+                      `emits_on_refusal` by clause (`VerbRow.refusals_by_clause`), else
+                      `last-read <predicate>=<value>` (the LAST `Event.observed` read, which is not
+                      always the one that decided -- `AllOf` reads past an UNKNOWN), `no-read` when
+                      the Event carries none, `graded-loss` for a contest that ran and was lost
+    POST-ADMISSION    a refusal Event whose every recorded read passed: `evaluate` replayed over the
+                      Event's own `observed` (`_Replay`) returns True, so the act cleared its
+                      `requires` and was refused at the counterparty or write clause
+    NEVER EMITTED     `EMITTED_KINDS` together with the write matrix's `emits:` column, minus the kinds
+                      in the log
+    EMITTED KINDS     one count line per kind in the log: Events, and the distinct acts they came from
 
 **WHY IT EXISTS.** The plan's `★` names two gaps and fills neither
 (`workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md`, *"★ — APERTURE
@@ -55,16 +80,19 @@ from __future__ import annotations
 import sys
 from collections import Counter, defaultdict
 
+from ..data.matrix import MATRIX
+from ..data.requires import UNKNOWN, binding_from_act, evaluate
 from ..data.rosters import CLAIM_SOURCES, QUESTION_AGGREGATION, QUESTION_SOURCES
-from ..data.verbs import VERB_TABLE
+from ..data.verbs import COUNTERPARTY_CLAUSE, EMITTED_KINDS, VERB_TABLE, WRITE_CLAUSE
 from ..decision import (aggregate_questions, assemble, make_chooser, opening_set,
                         person_side_eligible)
+from ..gaps import Unspecified
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries import world_q
 from ..state.ids import H, draw_factory
 from . import governance_spine, populated
 from . import probes as P
-from .corpus_run import attribute
+from .corpus_run import attempts, graded_loss, graded_losses, unrowed_acts
 
 
 def seat_gated(row) -> bool:
@@ -99,6 +127,133 @@ def eligible(w) -> dict:
     w._rehome()
     return {pid: frozenset(v for v, row in VERB_TABLE.items() if person_side_eligible(p, row))
             for pid, p in w.persons.items()}
+
+
+class _Replay:
+    """A `reader` that answers `data.requires.evaluate` from the reads an Event RECORDED
+    (`Event.observed`, a tuple of `Observation(subject, predicate, value)`), so the one evaluator
+    can be asked again, after the fact, what the fold's own verdict was -- no second evaluator.
+    A read the Event did not record is UNKNOWN."""
+
+    def __init__(self, observed):
+        self._seen = {(o.subject, o.predicate): o.value for o in observed}
+
+    def read(self, subject, predicate):
+        return self._seen.get((subject, predicate), UNKNOWN)
+
+
+def _observed_of(event) -> tuple:
+    """The reads the fold recorded on `event`. The ONE place the instrument reads
+    `Event.observed`: the deciding read and the post-admission test both come through here."""
+    return tuple(event.observed or ())
+
+
+def read_label(obs, kind_stems=("exists", "stores")) -> str:
+    """`predicate=value` for one `Observation`, as the DECIDING READ block prints it. The suffix of
+    `exists:<Kind>` and `stores:<good>` names a KIND (`data/requires.py`: `Existence.kind`,
+    `ScalarThreshold.scalar`) and stays; any other suffix is an entity id and is dropped, so a stem's
+    reads pool across ids. A number prints as itself under `exists` and as `0` / `>0` elsewhere."""
+    stem = obs.predicate.partition(":")[0]
+    pred = obs.predicate if stem in kind_stems else stem
+    v = obs.value
+    if v is UNKNOWN:
+        val = "UNKNOWN"
+    elif isinstance(v, (bool, str)) or v is None:
+        val = str(v)
+    elif isinstance(v, (int, float)):
+        val = (f"{v:g}" if stem == "exists" else "0" if v == 0 else ">0")
+    else:
+        val = type(v).__name__
+    return f"{pred}={val}"
+
+
+def _replayed(row, act, observed):
+    """`evaluate`'s Verdict for `act` over its own recorded `observed`, or `None` when it cannot be
+    asked: the row has no typed cell (a predicate row records no reads) or the Event recorded none."""
+    if row.requires_typed is None or not observed:
+        return None
+    try:
+        return evaluate(row.requires_typed, _Replay(observed), binding_from_act(act))
+    except Unspecified:
+        return None
+
+
+def refusal_reading(w, d, rows) -> dict:
+    """WHY EACH REFUSED ACT REFUSED. `rows` is `corpus_run.attempts(w, n)`; for each act whose
+    `refused` is non-empty, its refusal-kind Events are found through `d.act_of` (Event id -> Act),
+    never through a trace row. One reason per ACT, from its first refusal Event:
+
+      `graded-loss`           `corpus_run.graded_loss`: the contest ran and was lost, not a refusal
+      `clause:<name>`         the row keys `emits_on_refusal` by clause (`refusals_by_clause`): the
+                              clause(s) whose kinds hold the Event's kind, narrowed to the one the
+                              replayed verdict named (`Verdict.failed`), or, when every read passed,
+                              to the write / counterparty clause
+      `last-read <p>=<v>`     otherwise, the last `Event.observed` read (`read_label`)
+      `no-read`               the Event recorded no read
+      `no-event`              the act drew a refusal kind by `attempts`'s id rule but `d.act_of` holds
+                              no Event of it for the act (an instrument defect if it is ever > 0)
+
+    POST-ADMISSION: the replayed verdict over the Event's own reads is True -- every recorded read
+    passed, so the act cleared its `requires` and the refusal fell at the counterparty or write
+    clause. A refusal that records no read, or whose row has no typed cell, is never counted there.
+    Returns `{"reasons": {verb: {reason: n}}, "post_admission": {verb: n}}`."""
+    emitted: dict = defaultdict(list)
+    for e in w.log:
+        a = d.act_of.get(e.id)
+        if a is not None:
+            emitted[a.id].append(e)
+    reasons: dict = defaultdict(Counter)
+    post: Counter = Counter()
+    for a, made, no in rows:
+        if not no:
+            continue
+        row = VERB_TABLE[a.verb]
+        evs = [e for e in emitted.get(a.id, ()) if e.kind in no]
+        if not evs:
+            reasons[a.verb]["no-event"] += 1
+            continue
+        if graded_loss(a, evs):
+            reasons[a.verb]["graded-loss"] += 1
+            continue
+        obs = _observed_of(evs[0])
+        verdict = _replayed(row, a, obs)
+        passed = verdict is not None and verdict.value is True
+        if passed:
+            post[a.verb] += 1
+        cands = [c for c, ks in row.refusals_by_clause.items() if evs[0].kind in ks]
+        if verdict is not None and verdict.failed in cands:
+            cands = [verdict.failed]
+        elif passed:
+            cands = [c for c in cands if c in (WRITE_CLAUSE, COUNTERPARTY_CLAUSE)] or cands
+        if cands:
+            reasons[a.verb]["clause:" + "|".join(cands)] += 1
+        elif obs:
+            reasons[a.verb]["last-read " + read_label(obs[-1])] += 1
+        else:
+            reasons[a.verb]["no-read"] += 1
+    return {"reasons": {v: dict(c) for v, c in reasons.items()}, "post_admission": dict(post)}
+
+
+def kind_census(w, d) -> dict:
+    """The Event kinds of a world's log against the kinds declared. `declared` is `EMITTED_KINDS`
+    (every kind some verb row emits, on success or refusal) together with the `emits:` column of
+    the write matrix (`data/matrix.py::MATRIX`); `never` is `declared` minus the kinds in the log.
+    `counts` is `{kind: {"events": n, "acts": distinct acts, "no_act": events with no act}}` over the
+    log, the act of an Event being `d.act_of`'s (a MATTER or CALENDAR Event has none)."""
+    declared = set(EMITTED_KINDS) | {k for m in MATRIX.values() for k in m.emits}
+    events: Counter = Counter()
+    no_act: Counter = Counter()
+    acts: dict = defaultdict(set)
+    for e in w.log:
+        events[e.kind] += 1
+        a = d.act_of.get(e.id)
+        if a is None:
+            no_act[e.kind] += 1
+        else:
+            acts[e.kind].add(a.id)
+    return {"declared": len(declared), "never": sorted(declared - set(events)),
+            "counts": {k: {"events": n, "acts": len(acts[k]), "no_act": no_act[k]}
+                       for k, n in sorted(events.items())}}
 
 
 def instrumented_season(w, seasons: int) -> dict:
@@ -158,7 +313,8 @@ def instrumented_season(w, seasons: int) -> dict:
     neither: Counter = Counter()
     both: Counter = Counter()
     refusal_kinds: dict = defaultdict(Counter)   # verb -> Counter(emits_on_refusal kind)
-    for a, made, no in attribute(w, d, seasons):
+    rows = attempts(w, seasons)
+    for a, made, no in rows:
         attempted[a.actor][a.verb] += 1
         if made:
             executed[a.actor][a.verb] += 1
@@ -169,9 +325,15 @@ def instrumented_season(w, seasons: int) -> dict:
             both[a.verb] += 1
         if not (made or no):
             neither[a.verb] += 1
-    return {"acts": len(d.resolved), "formed": dict(formed), "attempted": dict(attempted),
+    graded = Counter(a.verb for a in graded_losses(w, seasons))
+    why = refusal_reading(w, d, rows)
+    census = kind_census(w, d)
+    return {"acts": len(d.resolved), "reasons": why["reasons"],
+            "post_admission": why["post_admission"], "kinds": census,
+            "formed": dict(formed), "attempted": dict(attempted),
             "executed": dict(executed), "refused": dict(refused), "neither": dict(neither),
-            "both": dict(both), "refusal_kinds": {v: dict(c) for v, c in refusal_kinds.items()},
+            "both": dict(both), "graded": dict(graded), "unrowed": unrowed_acts(w),
+            "refusal_kinds": {v: dict(c) for v, c in refusal_kinds.items()},
             "questions": {s: dict(c) for s, c in q_count.items()}, "per_rule": dict(per_rule),
             "shipped_rule": shipped, "rule_mismatch": mismatch, "foldable": foldable,
             "hash": w.content_hash()}
@@ -234,6 +396,46 @@ def _control_line(m: dict) -> str:
             f"{'the instrument observed the season without moving it' if same else '⚠ THE INSTRUMENT PERTURBED THE RUN — every number below is suspect'}")
 
 
+def exists_zero(reasons: dict) -> int:
+    """Refused acts whose deciding read was `exists:<Kind>=0` -- the act named a subject that is not
+    a `<Kind>` -- summed over verbs. Only the `last-read` reasons carry it; a row that keys its
+    refusals by clause reports the clause instead."""
+    return sum(n for c in reasons.values() for r, n in c.items()
+               if r.startswith("last-read exists:") and r.endswith("=0"))
+
+
+def _refusal_blocks(m: dict) -> list:
+    """The four REM-11 blocks for one world: the deciding read per refusal, the post-admission
+    refusals, the declared kinds never emitted, and one count line per emitted kind."""
+    out = []
+    reasons, post = m["reasons"], m["post_admission"]
+    total = sum(sum(c.values()) for c in reasons.values())
+    out.append("\n  DECIDING READ PER REFUSAL — per verb, one reason per refused ACT (`d.act_of`): "
+                "`clause:` where the row keys its refusals by clause, else `last-read` (the last "
+                "`Event.observed` read, not always the one that decided)")
+    for v in sorted(reasons):
+        c = reasons[v]
+        out.append(f"    {v:<16} ref {sum(c.values()):>4}  " + " · ".join(
+            f"{r} {n}" for r, n in sorted(c.items(), key=lambda kv: (-kv[1], kv[0]))))
+    out.append(f"    TOTAL refused acts {total} · exists:*=0 {exists_zero(reasons)} · graded-loss "
+               f"{sum(c.get('graded-loss', 0) for c in reasons.values())} · no-read "
+               f"{sum(c.get('no-read', 0) for c in reasons.values())} · no-event "
+               f"{sum(c.get('no-event', 0) for c in reasons.values())}")
+    out.append("\n  POST-ADMISSION — refusals whose every recorded read passed (`evaluate` replayed "
+               "over the Event's own `observed`): the act cleared its `requires`")
+    for v in sorted(post):
+        out.append(f"    {v:<16} post-admission {post[v]:>4} of ref {sum(reasons[v].values())}")
+    out.append(f"    TOTAL post-admission {sum(post.values())}")
+    k = m["kinds"]
+    out.append(f"\n  DECLARED KINDS NEVER EMITTED — {len(k['never'])} of {k['declared']} "
+               f"(`EMITTED_KINDS` with the write matrix's `emits:`, minus the log): {k['never']}")
+    out.append(f"\n  EMITTED KINDS — {len(k['counts'])} in the log: events · distinct acts "
+               f"(through `d.act_of`) · events with no act")
+    for kind, c in k["counts"].items():
+        out.append(f"    {kind:<28} events {c['events']:>5}  acts {c['acts']:>5}  no-act {c['no_act']:>5}")
+    return out
+
+
 def report(res: dict) -> list:
     out = []
     verbs, foldable = res["verbs"], set(res["resolvable"])
@@ -261,6 +463,7 @@ def report(res: dict) -> list:
                      if v not in m["eligible"].get(pid, ()))
         out.append(f"  FUNNEL  (person, verb) pairs attempted but never offered: {stray} · "
                    f"formed but not eligible at build: {gained}")
+        out.append(f"  UNROWED  acts in the act store whose verb is no table row: {m['unrowed']}")
         nobody = sorted(v for v in verbs if not any(v in e for e in m["eligible"].values()))
         out.append(f"\n  UNFORMABLE FOR EVERY PERSON IN THIS WORLD (a property of the ROW): {nobody}")
         # -- per holder -------------------------------------------------------------------
@@ -288,9 +491,10 @@ def report(res: dict) -> list:
                        f"{sorted(set(verbs) - e)}")
         # -- per verb ---------------------------------------------------------------------
         out.append("\n  PER VERB — persons eligible (seated/unseated) · persons formed · persons "
-                   "offered · ACTS attempted · executed · refused · both (both columns matched: "
-                   "two Events for `march`, ONE graded-loss Event for `tell` — see "
-                   "`corpus_run.attribute`) · neither")
+                   "offered · ACTS attempted (the act store) · executed · refused · both (both "
+                   "columns matched: two Events for `march`, ONE graded-loss Event for `tell` — "
+                   "see `corpus_run._attribute_acts`) · graded (a lost contest: a kind in both "
+                   "columns at degree Failure, always also `both`) · neither")
         seated = set(m["seats"])
         for v in verbs:
             el_s = sum(1 for p in seated if v in m["eligible"][p])
@@ -302,9 +506,12 @@ def report(res: dict) -> list:
             rf = sum(c.get(v, 0) for c in m["refused"].values())
             out.append(f"    {v:<16} {'R' if v in foldable else '.'}  elig {el_s:>3}/{el_u:<3} "
                        f"formed {fo:>3}  offered {of:>3}  att {at:>4}  ex {ex:>4}  ref {rf:>4}  "
-                       f"both {m['both'].get(v, 0):>3}  neither {m['neither'].get(v, 0)}"
+                       f"both {m['both'].get(v, 0):>3}  graded {m['graded'].get(v, 0):>3}  "
+                       f"neither {m['neither'].get(v, 0)}"
                        + (f"   refused as {m['refusal_kinds'][v]}" if v in m["refusal_kinds"]
                           else ""))
+        # -- why each refusal refused (REM-11) ----------------------------------------------
+        out.extend(_refusal_blocks(m))
         # -- questions by source ----------------------------------------------------------
         out.append("\n  QUESTIONS BY SOURCE — delivered at barrier 2, summed over every round "
                    "(`questions_for`, via the driver's own projection)")

@@ -219,3 +219,126 @@ def test_in50_real_run_refusals_cite_another_persons_act_and_r3_holds():
         assert C._r3_propagates(w, d), f"{case['id']}: R3 reads False"
         total += seen
     assert total >= 2
+
+
+# -- REM-13 ----------------------------------------------------------------------------------------
+# `corpus_run`'s degrees BY VERB, the bands that differ, and the emission-only class. Planted worlds
+# and planted rows only: no count of a corpus run is asserted (V2), so each reading is a reader that
+# can be wrong and not a pin that can be re-recorded.
+
+def _tell_and_research(n):
+    """`tiny_world` with a `Record`, ONE `resolve` of a `tell` (to `p_mid`) and a `research`, both
+    through `d.resolve`, so `d.act_of` holds both acts (a bare `_fold` leaves it empty). Act ids are
+    swept by the caller until the seam draws the bands it needs."""
+    from engine.season.state.carriers import Claim, Said
+    from engine.season.tests.test_fi01_graded_inquiries import REC
+    from engine.season.tests.test_fi01_graded_inquiries import _resolve as fi_resolve
+    from engine.season.tests.test_fi01_graded_inquiries import _world as fi_world
+    w, d = fi_world()
+    w.persons["p_low"].ledger.append(Claim("c_rem13", "p_low", "Hh", "stores:grain", 8, 0,
+                                           "firsthand", 37, "own"))
+    fi_resolve(w, d,
+               Act(id=f"a_rem13_tell_{n}", actor="p_low", verb="tell",
+                   payload={"subject": "Hh", "to": "p_mid",
+                            "said": Said("Hh", "stores:grain", 8, 37, ())}),
+               Act(id=f"a_rem13_res_{n}", actor="p_low", verb="research", payload={"subject": REC}))
+    return w, d
+
+
+def _lost_tell_beside_a_found_research():
+    """The planted two-verb world: `tell` graded Failure, `research` graded something else."""
+    for n in range(120):
+        w, d = _tell_and_research(n)
+        bands = {e.kind: e.degree for e in w.log if e.degree}
+        if bands.get("news.untold") == "Failure" and bands.get("finding.made") not in (None, "Failure"):
+            return w, d
+    raise AssertionError("120 act ids never drew a lost tell beside a found research")
+
+
+def test_rem13_a_lost_tell_is_credited_to_tell_alone():
+    """A `tell` that grades Failure beside a `research` that does not: `tell` carries the Failure and
+    `research` carries none. The sum control is the same world's unkeyed total.
+
+    MUTATION (run 2026-10-26, reverted): every degree credited to one verb (`verb = "tell"`) -- the
+    `research` assertions red; the verb key dropped (`verb = NO_ACT`) -- the `tell` one reds."""
+    w, d = _lost_tell_beside_a_found_research()
+    by = C.degrees_by_verb(w.log, d.act_of)
+    assert set(by) == {"tell", "research"}, by
+    assert by["tell"] == {"Failure": 1}, by
+    assert "Failure" not in by["research"] and sum(by["research"].values()) == 1, by
+    # THE CONTROL: the per-verb totals sum to the old unkeyed total, degree by degree
+    total = C.Counter(str(e.degree) for e in w.log if getattr(e, "degree", None))
+    summed = C.Counter()
+    for ds in by.values():
+        summed.update(ds)
+    assert summed == total and sum(total.values()) == 2, (summed, total)
+
+
+def test_rem13_a_graded_event_whose_act_is_unknown_is_credited_to_no_act_not_dropped():
+    """The sum control cannot fail by a drop: an Event the `act_of` map does not hold lands in
+    `NO_ACT`, so the per-verb total still equals the unkeyed one."""
+    w, d = _lost_tell_beside_a_found_research()
+    by = C.degrees_by_verb(w.log, {})
+    assert set(by) == {C.NO_ACT} and sum(by[C.NO_ACT].values()) == 2, by
+
+
+def test_rem13_run_case_carries_the_per_verb_table_and_it_sums_to_the_total():
+    """On a REAL `run_case`, for each of the two named corpus cases: `degrees_by_verb` sums to
+    `degrees` degree by degree. `checked` guards against a loop that read nothing."""
+    wanted = {"ARC-23", "NPC-090"}
+    cases = [(lane, c) for lane in ("ARC", "NPC") for c in R.load_cases(lane) if c["id"] in wanted]
+    assert {c["id"] for _, c in cases} == wanted, "a named corpus case is gone; re-pick the cases"
+    checked = 0
+    for lane, c in cases:
+        row = C.run_case(c, 0, lane)
+        assert "degrees_by_verb" in row, row.keys()
+        summed = C.Counter()
+        for ds in row["degrees_by_verb"].values():
+            summed.update(ds)
+        assert dict(summed) == row["degrees"], (c["id"], dict(summed), row["degrees"])
+        checked += sum(summed.values())
+    assert checked >= 1, "neither case completed a contest: the sum control was vacuous"
+
+
+def _planted_row(**kw):
+    import dataclasses
+    base = VERB_TABLE["tell"]
+    return dataclasses.replace(base, **kw)
+
+
+def test_rem13_bands_that_differ_reads_true_for_a_planted_row_whose_bands_differ():
+    """A planted contested row with two different `writes_at` bands prints True; the same row with
+    every band alike prints False (so the reader can say both); an uncontested row is not listed."""
+    differ = _planted_row(verb="zz_differ", writes_by_degree={
+        "Success": ["Person.pursuits"], "Failure": []})
+    alike = _planted_row(verb="zz_alike", writes_by_degree={"Success": [], "Failure": []})
+    flat = _planted_row(verb="zz_flat", writes_by_degree={}, contests="", writes=())
+    out = C.bands_that_differ({"zz_differ": differ, "zz_alike": alike, "zz_flat": flat})
+    assert out == {"zz_differ": True, "zz_alike": False}, out
+    # and over the real table: exactly the degree-keyed rows are listed, each a bool
+    real = C.bands_that_differ()
+    assert set(real) == {v for v, r in VERB_TABLE.items() if r.writes_by_degree}
+    assert all(isinstance(x, bool) for x in real.values())
+
+
+def test_rem13_emits_and_writes_nothing_tags_the_ruled_and_leaves_the_rest_untagged():
+    """Planted rows: one emitting and writing nothing with a ruling -> `deposit-only by ruling`;
+    one without a ruling -> `untagged`; a writing row, a row with an effect body, and a row emitting
+    nothing are not listed."""
+    quiet = dict(writes=(), writes_by_degree={}, contests="", emits=("x.made",), emits_by_degree={})
+    rows = {
+        "zz_ruled": _planted_row(verb="zz_ruled", **quiet),
+        "zz_bare": _planted_row(verb="zz_bare", **quiet),
+        "zz_writes": _planted_row(verb="zz_writes", **{**quiet, "writes": ("Person.pursuits",)}),
+        "zz_effect": _planted_row(verb="zz_effect", **quiet),
+        "zz_mute": _planted_row(verb="zz_mute", **{**quiet, "emits": ()}),
+        "zz_bands": _planted_row(verb="zz_bands", writes=("Person.pursuits",), emits=("x.made",),
+                                 contests="", emits_by_degree={},
+                                 writes_by_degree={"Success": ["Person.pursuits"], "Failure": []}),
+    }
+    out = C.emits_and_writes_nothing(rows, effects={"zz_effect": object()},
+                                     rulings={"zz_ruled": "planted"})
+    assert out == {"zz_ruled": "deposit-only by ruling", "zz_bare": "untagged"}, out
+    # the default rulings are the code's: `tell` and the graded inquiries, read from the roster
+    assert C.deposit_only_rulings()["tell"] == "G1"
+    assert set(C.deposit_only_rulings()) - {"tell"} == set(C.GRADED_INQUIRIES)

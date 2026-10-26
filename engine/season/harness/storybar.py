@@ -214,7 +214,11 @@ def drive(seed: int, seasons: int, arm: str, cap=None, on_season=None) -> tuple:
 
 def run_seed(seed: int, seasons: int, arm: str, cap=None) -> dict:
     """`drive`, then `read`; the result carries the resolved-act count and each season's
-    `estimates` too."""
+    `estimates` too.
+
+    ⚠ `resolved` IS `len(d.resolved)`, THE FOLD SET, AND KEEPS IT (REM-10 / HR-8): it is the count of
+    acts that reached the fold, printed beside the act-store reading CR-15 adds, not instead of it.
+    `corpus_run.attempts` counts what was ATTEMPTED (a contested act refused at admission included)."""
     per = []
     w, d, bounds = drive(seed, seasons, arm, cap, on_season=lambda w, _s, _n: per.append(estimates(w)))
     out = read(w.log, d.act_of, bounds)

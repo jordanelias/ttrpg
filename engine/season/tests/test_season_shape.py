@@ -7875,8 +7875,17 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # the act mix the vanished refusals freed, not `carry`'s own cell, which this change does not touch.
     # Other per-world counts move by one or three (conceal 91 -> 92, fight 1 -> 2, research 16 -> 17,
     # surveil 65 -> 66, tell 91 -> 88, transfer 40 -> 39, utter 117 -> 118).
-    assert ever == {"accept", "carry", "challenge", "conceal", "create_record", "interview", "fight",
-                    "give", "issue", "move", "petition", "reconstruct", "release", "research",
+    # ⚠⚠ B10-02 REM-10, 19 -> 20: `examine` JOINS, nothing leaves. A RE-RECORD WITH ITS REASON, AND IT IS
+    # NEITHER PROGRESS NOR REGRESSION: `run_case` reads `corpus_run.attempts` (the act store) now, not the
+    # fold set, so an `examine` refused at ADMISSION is counted -- and `examine` emits `finding.none` both
+    # in `emits` and in `emits_on_refusal`, so `_attribute_acts` (the made/refused rule, unchanged) reads
+    # that refusal as `made`, exactly as it has always read `research`'s (`research` is in this set by the
+    # same rule). Re-computed by `run_case` over the 143 live worlds, seed 0, against the base tree
+    # (`01301fa`) as control: the only change to `ever` is `examine`. The plan's declared re-pins named the
+    # next two assertions (`refused_only`, the never-attempted set) and missed this one, the third pin that
+    # reads the same `run_case` result; it is declared here, in the same commit, for the same cause.
+    assert ever == {"accept", "carry", "challenge", "conceal", "create_record", "examine", "interview",
+                    "fight", "give", "issue", "move", "petition", "reconstruct", "release", "research",
                     "surveil", "tell", "tend", "transfer", "utter"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
         "must be re-measured rather than reused")
@@ -8035,8 +8044,14 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # records an earlier `dispatch` flip on a seat count that was stable across seven hash seeds, and this one has
     # not been shown to be. [ASSUMPTION; medium; Jordan to correct] Revert: delete
     # `cases/exercises/NPC-033.yaml`'s `cast:` block and drop `dispatch` here.
+    # ⚠⚠ B10-02 REM-10: `argue` and `speak` JOIN, nothing leaves. A RE-RECORD WITH ITS REASON: both are
+    # contested, and each is refused at admission (`argument.refused`, `speech.unheard`: neither is in
+    # `emits`), so `corpus_run.attempts` (the act store) now sees the attempt that `driver.resolved` never
+    # held and `run_case` reads them refused and never executed. They LEAVE the never-attempted set below
+    # (the instrument limit its notes name). Re-computed over the 143 live worlds, seed 0.
     assert refused_only == {"build", "found", "work", "survey", "commit",
-                            "restore", "forge", "seize", "covenant", "sabotage", "train", "dispatch"}, (
+                            "restore", "forge", "seize", "covenant", "sabotage", "train", "dispatch",
+                            "argue", "speak"}, (
         f"the always-refused set moved to {sorted(refused_only)}. `move` and `transfer` left it "
         "when `W-C` closed `H-94`'s structural half — the Candidate carries operands now — and "
         "`work` stays for a reason about the corpus's questions rather than about the channel")
@@ -8610,7 +8625,19 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # stays empty, the status census is UNMOVED (103 RUNS-UNDECLARED · 40 SPAN-UNAUTHORED), and `refused_only`
     # gains `dispatch` for its own reason (its note). Revert of the pin: delete the 14 `cast:` blocks (`NPC-001 -003
     # -008 -013 -030 -031 -032 -033 -034 -041 -050 -070 -084 -089`) and restore 123.
-    assert len(by_sig) == 124, (
+    # ⚠⚠ B10-02 REM-10, 124 -> 128. A RE-RECORD WITH ITS REASON: `run_case` reads the act store (`corpus_run.attempts`),
+    # so a world's executed list now holds the acts refused at admission whose refusal kind is also an `emits:` kind
+    # (`_attribute_acts`'s made rule, unchanged): `finding.none` on `examine` and `research`, `news.untold` on `tell`,
+    # `surveil`'s. MEASURED by `run_case` over the 143 worlds, seed 0, against the base tree (`01301fa`) as control:
+    # 141 worlds change, ALL additions (none removed), every status unchanged. Executed-world counts (base -> now):
+    # examine 0 -> 85, research 18 -> 124, surveil 68 -> 87, tell 89 -> 92; refused-world counts gain accept 0 -> 78,
+    # argue 0 -> 47, fight 0 -> 11, speak 0 -> 71, examine 0 -> 85 and rise for research 11 -> 124, surveil 65 -> 85,
+    # tell 84 -> 89. SAME-BREATH CHECK: the universal set stays empty, the status census is UNMOVED (103 RUNS-UNDECLARED
+    # · 40 SPAN-UNAUTHORED), `ever` gains `examine` only. THE LIMIT, NAMED: `executed` here includes an attempt that was
+    # refused at admission when its refusal kind is also an emitted kind, so the research/examine counts above measure
+    # attempts and not completions; `graded_loss` and the aperture's `both` column separate them, `run_case` does not.
+    # Revert of the pin: revert REM-10's `run_case` switch to `attribute` and restore 124.
+    assert len(by_sig) == 128, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -8801,7 +8828,9 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # ⚠⚠ v9 IN-12 step 10: `conceal` JOINS -- the `ever` note above (91 worlds of 143, not all).
     # ⚠⚠ v9 IN-12 `give` + Rung: `carry` JOINS -- the `ever` note above (one world of 143, ARC-34, so it
     # varies and is not universal).
-    assert varying == {"accept", "carry", "challenge", "conceal", "create_record", "fight", "give",
+    # ⚠⚠ B10-02 REM-10: `examine` JOINS -- the `ever` and `by_sig` notes above (85 worlds of 143, so it varies and is
+    # not universal). Every executed verb still varies; `universal` is empty on both sides.
+    assert varying == {"accept", "carry", "challenge", "conceal", "create_record", "examine", "fight", "give",
                        "interview", "issue", "move",
                        "petition", "reconstruct", "release", "research",
                        "surveil", "tell", "tend", "transfer", "utter"}, (
@@ -9015,11 +9044,16 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # seed 0 (`WHERE THE 56 GO`: 6 -> 5 with no predicate, 19 -> 20 never attempted; executed and
     # always-refused unchanged). It is typed now (the Thread Sensitivity gate, `H-85`), and no corpus
     # person carries a sensitivity (`build_at` reads no cast row), so nobody forms it. A re-record: 19 -> 20.
+    # ⚠⚠ B10-02 REM-10: `speak`, `examine` and `argue` LEAVE -- 20 -> 17. A RE-RECORD WITH ITS REASON: the
+    # instrument limit the three notes above name is gone, because `run_case` reads the act store and not
+    # `driver.resolved`: `speak` and `argue` are attempted and refused (now in `refused_only`, above) and
+    # `examine` is attempted and reads executed (now in `ever`, above). `determine` stays: no corpus
+    # docket names a Person, so none forms it.
     assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish",
                                               "destroy_record", "march", "oblige", "open_case",
                                               "determine", "comply", "migrate", "requisition",
-                                              "speak", "examine", "argue", "forgive",
-                                              "arrest", "pardon", "raze", "thread_read"}, (    # IN-57: `dispatch` out, to `refused_only`; FI-01: back; IN-38: out again; K-3: `thread_read` in
+                                              "forgive",
+                                              "arrest", "pardon", "raze", "thread_read"}, (    # IN-57: `dispatch` out, to `refused_only`; FI-01: back; IN-38: out again; K-3: `thread_read` in; REM-10: `speak`, `examine`, `argue` out
         f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Five of "
         "the original six are the governance verbs no corpus overlay grants (`establish` is "
         "`remit:confer`-eligible); `march` is eligible in NPC-033/038 and WOULD form a real "
