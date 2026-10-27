@@ -412,6 +412,20 @@ def read_decisions(w) -> dict:
 # --season
 
 
+def goal_class(q) -> str:
+    """The one classifier of a question's goal class: for a `need` question, `own want` (about a
+    `prop_` Proposition), `creed` (about a faction's Proposition), the org goal's id (a goal in
+    `goals_data`) or `other need`; `-` for a non-`need` source. `play_season` calls it; aperture will
+    call it (CR-14's second commit). No second classifier is written."""
+    if q.source != "need":
+        return "-"
+    if q.about.startswith("prop_"):
+        return "own want"
+    if q.about in FACTION_BY_PROP:
+        return "creed"
+    return q.about if goals_data.goal(q.about) is not None else "other need"   # an org goal, by id
+
+
 def play_season(w, seasons: int = 1) -> dict:
     """Play `seasons` seasons through `populated.run`'s composition with the chooser WATCHED, never
     steered, and read what each person did and which question they answered.
@@ -429,15 +443,6 @@ def play_season(w, seasons: int = 1) -> dict:
     split = new_split()                    # every deliberation's `draw_kind` / `field_zero`, read beside the chooser
     answered: Counter = Counter()          # (source, goal class) -> deliberations
     by_act: dict = {}                      # (actor, verb, subject) -> (source, goal class)
-
-    def goal_class(q) -> str:
-        if q.source != "need":
-            return "-"
-        if q.about.startswith("prop_"):
-            return "own want"
-        if q.about in FACTION_BY_PROP:
-            return "creed"
-        return q.about if goals_data.goal(q.about) is not None else "other need"   # an org goal, by id
 
     def watched(p, v, s, ask_budget):
         scenes = real(p, v, s, ask_budget)
