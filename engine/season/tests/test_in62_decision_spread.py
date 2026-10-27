@@ -105,6 +105,68 @@ def test_in62_persons_with_nothing_separating_their_candidates_are_never_attribu
     assert checked >= 12
 
 
+_FX_TAU = DEFAULT_FIXTURES.sweep("choice_temperature", 0.1)
+
+
+class _Fixed:
+    """A planted draw stream: `random()` returns one number."""
+    def __init__(self, u: float):
+        self.u = u
+
+    def random(self) -> float:
+        return self.u
+
+
+def _planted(favoured_verb: str):
+    """A draw that gives `favoured_verb`'s candidate the largest Gumbel noise and every other the smallest
+    (u -> 1 gives g ~ +27, u -> 0 gives g ~ -3), so the sampler's top is `favoured_verb` whatever the score."""
+    return lambda pid, purpose: _Fixed(1 - 1e-12 if f"choice:{favoured_verb}:" in purpose else 1e-12)
+
+
+def test_rem12_a_two_candidate_tie_at_tau_point_one_reads_tie_and_the_decider_stays_draw():
+    """The `draw` label's first half. FALSIFIER: swapping the `tie` and `outvoted` classifications inside
+    `attribute_top` reddens this and the next test. Identical EMPTY state: both candidates score alike."""
+    _, _, va, vb = _opposed_pair()
+    draw = draw_factory(0, lambda: 0)
+    r = DS.attribute_top(_person("p_rem12_tie"), _cands(va, vb), _FX_TAU, draw)
+    assert abs(r["margin"]) <= DS.EPS, "the premise failed: the two candidates did not tie"
+    assert r["draw_kind"] == "tie", r["draw_kind"]
+    assert r["decider"] == "draw", r["decider"]
+    # CONTROL: at tau 0 the same tie is ordered by the spelling, not the draw -- no draw kind at all
+    r0 = DS.attribute_top(_person("p_rem12_tie"), _cands(va, vb), _FX0)
+    assert (r0["draw_kind"], r0["decider"]) == (None, "tiebreak"), (r0["draw_kind"], r0["decider"])
+
+
+def test_rem12_a_strict_top_the_planted_draw_reverses_reads_outvoted_and_the_decider_stays_draw():
+    """The `draw` label's second half. The person holds one pursuit, so one candidate leads on score; the
+    planted draw hands the other candidate the sampler's top. A draw that agrees with the leader reads
+    `None` and a term, so the assertion could fail."""
+    a, _, va, vb = _opposed_pair()
+    cands = _cands(va, vb)
+    p = _person("p_rem12_out", **{a: 1.0})
+    strict = DS.attribute_top(p, cands, _FX0)["top"].verb          # the score alone: the leader
+    other = vb if strict == va else va
+    r = DS.attribute_top(p, cands, _FX_TAU, _planted(other))
+    assert r["margin"] > DS.EPS, "the premise failed: no strict score top"
+    assert r["top"].verb == other != strict, "the planted draw did not reverse the leader"
+    assert r["draw_kind"] == "outvoted", r["draw_kind"]
+    assert r["decider"] == "draw", r["decider"]
+    # CONTROL: the same person, a draw favouring the leader -> not the draw's top; a term decided it
+    ok = DS.attribute_top(p, cands, _FX_TAU, _planted(strict))
+    assert ok["top"].verb == strict and ok["draw_kind"] is None and ok["decider"] == "pursuit", (
+        ok["top"].verb, ok["draw_kind"], ok["decider"])
+
+
+def test_rem12_field_zero_sets_urgency_aside_and_is_false_for_a_person_who_holds_a_vector():
+    a, _, va, vb = _opposed_pair()
+    cands = _cands(va, vb)
+    empty = DS.attribute_top(_person("p_rem12_fz"), cands, _FX0, subsistence=3.0)
+    assert empty["field_zero"] is True
+    assert any(t[2] != 0 for t in empty["terms"]), "urgency was 0: the setting-aside was not exercised"
+    held = DS.attribute_top(_person("p_rem12_fz2", **{a: 1.0}), cands, _FX0)
+    assert held["field_zero"] is False
+
+
 def test_in62_identical_nonzero_pursuits_pick_one_top_and_the_attribution_is_pursuit():
     """The other half of "attributed to the state that decided": two persons holding the SAME pursuit
     are decided by it, and by the same candidate."""

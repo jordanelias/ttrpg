@@ -27,9 +27,11 @@ WHAT EACH MODE READS, AND WHETHER IT PLAYS A SEASON (each prints the answer in i
                `opening_set`), narrowed to `resolvable_verbs()` as the chooser narrows. Per person: the top
                candidate and its DECIDING TERM (`attribute_top`).
   --season     PLAYS ONE SEASON (`populated.run`'s composition, the chooser watched and never steered).
-               Per-person executed verb multisets, how many are distinct, and per answered question its
-               source and goal class. ATTENTION is read here ONLY: `--decisions` hands every person the
-               same question, so it cannot see which question a person answered.
+               Per-person RESOLVED verb multisets (the acts the fold resolved, `d.resolved`: made or refused
+               in the fold, not those refused at admission), how many are distinct, and per answered
+               question its source and goal class. Also the draw split of every deliberation (below).
+               ATTENTION is read here ONLY: `--decisions` hands every person the same question, so it
+               cannot see which question a person answered.
   --arms       PLAYS FOUR SEASONS, ONE PER ARM, in this process: `question_aggregation_rule` {first, all} x
                `stance_polarity` {legacy, declared} (§J.2's ask-then row, H-54 / H-194). Each arm prints
                the `--season` reading and the `--decisions` attribution counts under that arm.
@@ -55,7 +57,11 @@ evidence, and no cell is edited here.
 
 THE DECIDING TERM (`attribute_top`), in the order it is tested:
   1. `draw`      the sampler's top is NOT the score's top (the draw outvoted the score), or the top two
-                 scores are within `EPS` and `choice_temperature` > 0 (the draw ordered them);
+                 scores are within `EPS` and `choice_temperature` > 0 (the draw ordered them). The label
+                 stays one; `draw_kind` splits it: `tie` (the draw ordered a tie) against `outvoted` (the
+                 draw overrode a leader). Both modes print the split, the outvoted margins' median beside
+                 `choice_temperature`, and how many readings (and persons) had EVERY candidate score 0
+                 once the candidate-independent `urgency` term is set aside (`field_zero`);
   2. `tiebreak`  the top two scores are within `EPS` at temperature 0 (`(verb, subject)` ordered them);
   3. otherwise the TERMS whose removal leaves the top no longer strictly ahead of the field (it changes, or
      collapses into a tie): `pursuit`, `stance`, `urgency`, joined by `+`; `overdetermined` if no single
@@ -74,8 +80,10 @@ SEAMS AND KNOWN LIMITS (the code is the mechanism; these are what the code does 
     the top it returns to the real chooser's.
   * The draw is `draw_factory(world_seed, tick)` at the build's tick: a `--decisions` top is the top at that
     tick, not a distribution over ticks.
-  * Absent in `--season`: an executed act whose `(actor, verb, subject)` the watch did not see leave a
+  * Absent in `--season`: a resolved act whose `(actor, verb, subject)` the watch did not see leave a
     deliberation (a re-minted id) is counted `unmapped`, printed, and not attributed.
+  * `--season`'s draw split scores each deliberation a second time through `attribute_top` on the
+    chooser's own opening set (the draw is keyed by candidate, so the second reading consumes nothing).
 """
 from __future__ import annotations
 
@@ -173,15 +181,26 @@ def null_alignment():
 
 def attribute_top(p, cands: list, fx, draw=None, subsistence: float = 0.0) -> dict:
     """Rank `cands` for `p` as the chooser does and say WHICH TERM decided the top (the module docstring
-    lists the tests in order). Returns `{top, decider, margin, scores, terms}`; `scores` and `terms` are
-    parallel to `cands`. `cands` empty -> `top` None, `decider` `none`; one candidate -> `sole`."""
+    lists the tests in order). Returns `{top, decider, margin, scores, terms, draw_kind, field_zero}`;
+    `scores` and `terms` are parallel to `cands`. `cands` empty -> `top` None, `decider` `none`; one
+    candidate -> `sole`.
+
+    `draw_kind` SPLITS THE `draw` LABEL (the `decider` label itself is unchanged): `None` when the draw
+    decided nothing; `tie` when the top two scores are within `EPS` and `choice_temperature` > 0 (the draw
+    ordered them, and the sampled top is one of the tied); `outvoted` when the sampler's top is NOT the
+    strict score top (the draw overrode a score that had a leader). `field_zero` is true when every
+    candidate's score, less the candidate-independent `urgency` term, is within `EPS` of 0: nothing the
+    person holds scores any candidate, so no state decided the top (the vectorless)."""
     if not cands:
-        return {"top": None, "decider": "none", "margin": None, "scores": [], "terms": []}
+        return {"top": None, "decider": "none", "margin": None, "scores": [], "terms": [],
+                "draw_kind": None, "field_zero": False}
     memo = CH.deliberation_memo(p, subsistence, fx)
     terms = [CH.score_terms(p, c, fx, memo) for c in cands]
     scores = [t[0] + t[1] + t[2] for t in terms]
+    field_zero = all(abs(s - t[2]) <= EPS for s, t in zip(scores, terms))
     if len(cands) == 1:
-        return {"top": cands[0], "decider": "sole", "margin": None, "scores": scores, "terms": terms}
+        return {"top": cands[0], "decider": "sole", "margin": None, "scores": scores, "terms": terms,
+                "draw_kind": None, "field_zero": field_zero}
     by_id = {id(c): s for c, s in zip(cands, scores)}
     ranked = CH.score_order(cands, by_id)               # the chooser's own ordering, not a second copy
     index_of = {id(c): i for i, c in enumerate(cands)}
@@ -191,6 +210,7 @@ def attribute_top(p, cands: list, fx, draw=None, subsistence: float = 0.0) -> di
     best, second = scores[order[0]], scores[order[1]]
     margin = best - second
     tau = float(fx.get("choice_temperature"))
+    draw_kind = None
     if ai != order[0]:
         decider = "draw"
     elif margin <= EPS:
@@ -202,7 +222,42 @@ def attribute_top(p, cands: list, fx, draw=None, subsistence: float = 0.0) -> di
             if rest[ai] - max(r for j, r in enumerate(rest) if j != ai) <= EPS:
                 deciding.append(name)
         decider = "+".join(deciding) if deciding else "overdetermined"
-    return {"top": actual, "decider": decider, "margin": margin, "scores": scores, "terms": terms}
+    if margin <= EPS and tau > 0:
+        draw_kind = "tie" if scores[ai] >= best - EPS else "outvoted"
+    elif ai != order[0]:
+        draw_kind = "outvoted"
+    return {"top": actual, "decider": decider, "margin": margin, "scores": scores, "terms": terms,
+            "draw_kind": draw_kind, "field_zero": field_zero}
+
+
+def new_split() -> dict:
+    """An empty tally of `attribute_top`'s `draw_kind` and `field_zero` (see `tally_split`)."""
+    return {"read": 0, "tie": 0, "outvoted": 0, "outvoted_margins": [], "field_zero": 0, "zero_persons": set()}
+
+
+def tally_split(split: dict, pid: str, r: dict) -> None:
+    """Fold one `attribute_top` result for person `pid` into `split`: one reading counted, the draw's kind
+    counted (an outvoted top keeps its margin, the gap the draw overcame), a `field_zero` reading counted
+    and its person remembered. A reading with no candidate (`decider` `none`) is not a reading."""
+    if r["decider"] == "none":
+        return
+    split["read"] += 1
+    if r["draw_kind"] in ("tie", "outvoted"):
+        split[r["draw_kind"]] += 1
+    if r["draw_kind"] == "outvoted":
+        split["outvoted_margins"].append(r["margin"])
+    if r["field_zero"]:
+        split["field_zero"] += 1
+        split["zero_persons"].add(pid)
+
+
+def split_figures(split: dict) -> dict:
+    """The printable figures of a tally: counts, the outvoted margins' median (None when none), and the
+    distinct persons with a `field_zero` reading."""
+    m = split["outvoted_margins"]
+    return {"read": split["read"], "tie": split["tie"], "outvoted": split["outvoted"],
+            "outvoted_median_margin": statistics.median(m) if m else None,
+            "field_zero": split["field_zero"], "zero_persons": len(split["zero_persons"])}
 
 
 # ---------------------------------------------------------------------------------------------
@@ -324,8 +379,10 @@ def read_decisions(w) -> dict:
     draw = draw_factory(w.world_seed, lambda: w.tick)
     rows = []
     foldable = resolvable_verbs()
+    total = new_split()
     for label, ref in common_referents(w):
         q = decision_question(ref)
+        split = new_split()
         formed = {pid: formed_set(w, p, q, foldable) for pid, p in sorted(w.persons.items())}
         keyed = {pid: {(c.verb, c.subject): c for c in cs} for pid, cs in formed.items() if cs}
         common = set.intersection(*(set(k) for k in keyed.values())) if keyed else set()
@@ -336,6 +393,8 @@ def read_decisions(w) -> dict:
             cands = [keyed[pid][k] for k in order]
             r = attribute_top(w.persons[pid], cands, fx, draw, P.SUBSIST(w.persons[pid], w))
             deciders[r["decider"]] += 1
+            tally_split(split, pid, r)
+            tally_split(total, pid, r)
             tops[pid] = (r["top"].verb, r["top"].subject) if r["top"] else None
         by_faction: dict = {}
         for pid, top in tops.items():
@@ -345,8 +404,8 @@ def read_decisions(w) -> dict:
         rows.append({"referent": label, "handed": len(formed), "forming": len(keyed),
                      "common": len(common), "distinct_tops": len({t for t in tops.values() if t is not None}),
                      "faction_tops": sum(len(v) for v in by_faction.values()),
-                     "deciders": dict(deciders), "tops": tops})
-    return {"rows": rows}
+                     "deciders": dict(deciders), "tops": tops, "split": split_figures(split)})
+    return {"rows": rows, "split": split_figures(total), "tau": float(fx.get("choice_temperature"))}
 
 
 # ---------------------------------------------------------------------------------------------
@@ -355,11 +414,19 @@ def read_decisions(w) -> dict:
 
 def play_season(w, seasons: int = 1) -> dict:
     """Play `seasons` seasons through `populated.run`'s composition with the chooser WATCHED, never
-    steered, and read what each person did and which question they answered."""
+    steered, and read what each person did and which question they answered.
+
+    WHAT "DID" MEANS (HR-8): the acts the fold RESOLVED (`d.resolved`), not the acts EXECUTED (made, in
+    `corpus_run._attribute_acts`'s made/refused rule) and not the acts ATTEMPTED (`corpus_run.attempts`,
+    the act store). The `acts` count, the verb multisets and `per_act` all read the fold set: an act that
+    entered the fold and was refused there is in them, and a contested act refused at admission, which
+    never enters `d.resolved`, is not."""
     d = SeasonDriver(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    real = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
-                        draw=draw_factory(w.world_seed, lambda: w.tick))
+    foldable = resolvable_verbs()
+    draw = draw_factory(w.world_seed, lambda: w.tick)
+    real = make_chooser(w.fixtures, mint, verbs=foldable, draw=draw)
+    split = new_split()                    # every deliberation's `draw_kind` / `field_zero`, read beside the chooser
     answered: Counter = Counter()          # (source, goal class) -> deliberations
     by_act: dict = {}                      # (actor, verb, subject) -> (source, goal class)
 
@@ -376,6 +443,10 @@ def play_season(w, seasons: int = 1) -> dict:
         scenes = real(p, v, s, ask_budget)
         q = getattr(v, "question", None)
         if q is not None:
+            # the chooser's own opening set, narrowed as it narrows, scored again by `attribute_top` (pure in
+            # its inputs: the draw is keyed by the candidate, not consumed); nothing is steered
+            cands = [c for c in opening_set(p, v, q, w.fixtures) if c.verb in foldable]
+            tally_split(split, p.id, attribute_top(p, cands, w.fixtures, draw, s.subsistence))
             key = (q.source, goal_class(q))
             answered[key] += 1
             for sc in scenes:
@@ -400,6 +471,7 @@ def play_season(w, seasons: int = 1) -> dict:
     return {"seasons": seasons, "acts": len(d.resolved), "actors": len(multisets),
             "distinct_multisets": len(sigs), "largest_shared": max(sigs.values(), default=0),
             "answered": dict(answered), "per_act": dict(per_act), "unmapped": unmapped,
+            "split": split_figures(split), "tau": float(w.fixtures.get("choice_temperature")),
             "hash": w.content_hash()}
 
 
@@ -438,18 +510,30 @@ def print_decisions(r: dict, arm: str) -> None:
     tot = _decider_total(r)
     print(f"  all referents: {dict(sorted(tot.items()))}; distinct tops {sum(r_['distinct_tops'] for r_ in r['rows'])}"
           f"; distinct tops within a faction, summed over its factions {sum(r_['faction_tops'] for r_ in r['rows'])}")
+    print_split(r["split"], r["tau"])
+
+
+def print_split(sp: dict, tau: float) -> None:
+    """The draw split and the vectorless count (`attribute_top`'s `draw_kind` and `field_zero`). The
+    `draw` label's two halves: a `tie` the draw ordered, an `outvoted` score leader the draw overrode."""
+    med = "-" if sp["outvoted_median_margin"] is None else f"{sp['outvoted_median_margin']:.4f}"
+    print(f"  the draw's {sp['tie'] + sp['outvoted']} tops, split: tie {sp['tie']}, outvoted {sp['outvoted']}; "
+          f"outvoted margins' median {med} against choice_temperature {tau:g}")
+    print(f"  every candidate scores 0 (urgency set aside): {sp['field_zero']} of {sp['read']} readings, "
+          f"{sp['zero_persons']} distinct persons")
 
 
 def print_season(r: dict, arm: str) -> None:
     print(f"--season [{arm}]  PLAYS {r['seasons']} SEASON(S)")
-    print(f"  acts {r['acts']} by {r['actors']} actors; distinct per-person executed verb multisets "
+    print(f"  acts {r['acts']} by {r['actors']} actors; distinct per-person resolved verb multisets "
           f"{r['distinct_multisets']} (largest shared by {r['largest_shared']} persons)")
     print("  answered question (source / goal class): deliberations")
     for k, v in sorted(r["answered"].items()):
         print(f"    {k[0]:14} {k[1]:10} {v}")
-    print("  executed acts by the question answered: "
+    print("  resolved acts by the question answered: "
           + ", ".join(f"{k[0]}/{k[1]} {v}" for k, v in sorted(r["per_act"].items()))
           + f"; unmapped {r['unmapped']}")
+    print_split(r["split"], r["tau"])
     print(f"  content_hash {r['hash']}")
 
 
