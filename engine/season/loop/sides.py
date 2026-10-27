@@ -34,6 +34,7 @@ from ..queries.world_q import (
 )
 from ..state.carriers import Act
 from ..state.gate import seat_faction
+from ..trace_log import TRACE
 from ..state.world import World
 
 
@@ -106,6 +107,12 @@ def sides_of(w: World, a: Act, target: Optional[str],
         # no opposing holder.
         target_rung = w.rungs.get(target)
         if target_rung is None or target_rung.kind not in MARCH_TARGET_KINDS:
+            # REM-14: the refusal's clause, in the trace. `march.refused` is emitted LATER, by the
+            # fold's empty-`_parties` check, which cannot say why the army is empty; this branch can.
+            TRACE.decision(f"a march at a target that is not a rung of a marchable kind -> "
+                           f"{a.actor} on {target!r}", "E2/S27.1", chose="refuse",
+                           alternatives=["muster the army anyway (H-149's target kinds bound "
+                                         "nothing)"])
             return ([], None, target or "R")
         faction = seat_faction(w, a.via)
         home = home_of(w).get(a.actor)

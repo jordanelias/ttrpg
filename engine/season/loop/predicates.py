@@ -32,6 +32,7 @@ from ..data.rosters import BINDS_BASES, RELEASABLE_KINDS, RUNG_KINDS
 from ..gaps import Forbidden, Unowned, Unspecified
 from ..queries.world_q import BAN_KIND, restrained
 from ..state.carriers import Office, subject_of
+from ..trace_log import TRACE
 # G3: THE SEAT-AUTHORITY RULES LIVE WITH THE GATE THAT ENFORCES THEM. `seated_on_the_rung_above`,
 # `REVOCATION_RULES` and `has_conferral_basis` were defined here; the write gate's F3 clause now
 # evaluates the first two (T-o) and the third (the conferral basis), and `state/` may not import the
@@ -55,6 +56,22 @@ def requires_predicate(verb: str):
         REQUIRES_PREDICATES[verb] = fn
         return fn
     return deco
+
+
+def _refuse(clause: str, ids: str) -> bool:
+    """REM-14: THE CLAUSE A PREDICATE REFUSED ON, LEFT IN THE TRACE. Returns `False`, so a refusing
+    branch reads `return _refuse(...)`. The fold's own row (`loop/resolve.py`, "<verb> by <actor>:
+    precondition unmet") says THAT a precondition failed; a predicate with several `return False`
+    lines could not say WHICH, and `Verdict.failed` (the typed cells' answer) is `None` for a
+    predicate row. `"<clause> -> <ids>"` is the cluster-key form `harness/report.py` groups
+    DECISION rows by (`what.split(" -> ")[0]`), as `loop/effects_migration.py` writes it.
+
+    ⚠ A TRACE ROW AND NOTHING ELSE. The predicate still answers a bare bool: returning a `Verdict`
+    with observed reads would deposit claims through WITNESS and move the world hash."""
+    TRACE.decision(f"{clause} -> {ids}", "E2/S27.1", chose="refuse",
+                   alternatives=["admit the act and leave the refusal to the effect or the write "
+                                 "gate"])
+    return False
 
 
 # ---------------------------------------------------------------------------
@@ -322,10 +339,13 @@ def _req_release(w: "World", a: "Act") -> bool:
     ⚠ `contain` IS EXCLUDED BY THE ROSTER, NOT BY A LITERAL HERE. See `RELEASABLE_KINDS`."""
     subj = subject_of(a)
     if not subj:
-        return False
-    return any(t.subject == a.actor and t.object == subj
-               and t.kind in RELEASABLE_KINDS and t.live
-               for t in w.tenures)
+        return _refuse("a release names no subject", f"{a.actor}")
+    if any(t.subject == a.actor and t.object == subj
+           and t.kind in RELEASABLE_KINDS and t.live
+           for t in w.tenures):
+        return True
+    return _refuse("a release of a tenure the actor does not own toward the subject "
+                   "(live, of a releasable kind)", f"{a.actor} toward {subj!r}")
 
 
 # ⚠ `_req_give` (plan position 16) WAS HERE AND PLAN POSITION `14` RETIRED IT: `give`'s cell is
@@ -427,29 +447,35 @@ def _req_revoke(w: "World", a: "Act") -> bool:
     d = (a.payload or {}) if isinstance(a.payload, dict) else {}
     obj = d.get("office")
     if not obj or obj not in w.offices:
-        return False
+        return _refuse("a revoke names no office the world holds", f"{a.actor} on {obj!r}")
     off = w.offices[obj]
     # v9 IN-31 (H-100): PROVENANCE UNREADABLE MEANS REFUSE. What the revocation costs is read off the
     # seat's conferral basis (`state/gate.py::REVOCATION_DISPOSAL`, total over the roster and `None`),
     # so a basis with no disposal -- reached only by a hand-mutated office, `Office.__post_init__`
     # refuses one -- refuses here (`revoke.refused`) rather than default to some cost.
     if not has_revocation_disposal(off):
-        return False
+        return _refuse("a revoke of a seat whose conferral basis has no revocation disposal",
+                       f"{a.actor} on {obj!r}")
     # ⚠ G3: THE WRITE GATE'S T-o PREDICATE, ASKED EARLY -- `may_revoke` is `seat_hold` (`via`
     # present, the actor seated in it) + the basis on the roster (`None` or off-roster: the seat
     # cannot be stripped) + the rule that basis names, asked of `via`'s seat. Before G3 the rule
     # was asked of the ACTOR, over every seat they held; `04:332` asks it of the seat exercised.
     # The same function refuses the write at the gate, so this cannot admit what the gate refuses.
     if not may_revoke(w, a.actor, a.via, off):
-        return False
-    return any(t.kind == "hold" and t.object == obj and t.live for t in w.tenures)
+        return _refuse("a revoke the seat exercised has no revocation authority over the seat",
+                       f"{a.actor} via {a.via!r} on {obj!r}")
+    if any(t.kind == "hold" and t.object == obj and t.live for t in w.tenures):
+        return True
+    return _refuse("a revoke of a seat nobody holds", f"{a.actor} on {obj!r}")
 
 
 @requires_predicate("dispatch")
 def _req_dispatch(w: "World", a: "Act") -> bool:
     """Part E: *the named person exists*."""
     d = (a.payload or {}) if isinstance(a.payload, dict) else {}
-    return d.get("subject") in w.persons
+    if d.get("subject") in w.persons:
+        return True
+    return _refuse("a dispatch names no person the world holds", f"{a.actor} to {d.get('subject')!r}")
 
 
 @requires_predicate("convene")
@@ -492,7 +518,13 @@ def _req_convene(w: "World", a: "Act") -> bool:
     if subject is None:
         return True                        # §6.2's carve-out
     r = w.rungs.get(subject)
-    return r is not None and RUNG_KINDS.index(r.kind) > 0
+    if r is None:
+        return _refuse("a convene at a venue that is no rung the world holds",
+                       f"{a.actor} at {subject!r}")
+    if RUNG_KINDS.index(r.kind) > 0:
+        return True
+    return _refuse("a convene at a person-rung (an address, not a place)",
+                   f"{a.actor} at {subject!r}")
 
 
 # ---------------------------------------------------------------------------

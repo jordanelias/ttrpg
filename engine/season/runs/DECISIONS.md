@@ -3,7 +3,7 @@
 Every branch the shape took that could have gone another way, with the alternatives
 it did not take. A decision nobody records is a decision nobody can audit.
 
-**1949 decisions taken, 73 distinct.**
+**1950 decisions taken, 74 distinct.**
 
 ### ordering 0 acts  ·  `S27/S32`  ·  taken 730x
 - **chose:** five strata, then a content-derived hash key over one global array  (730x)
@@ -285,6 +285,10 @@ it did not take. A decision nobody records is a decision nobody can audit.
 - *not taken:* shard per rung (retired: made the parallelism claim unsound)
 - *not taken:* the five channels ['co_located', 'witness_key', 'document_key', 'chronicle', 'post_remit'], each with the predicate `rosters.yaml: witness_channel_predicates` injects
 - *not taken:* total (S61's specified behaviour, and H-33's control arm)
+
+### a dispatch names no person the world holds  ·  `E2/S27.1`  ·  taken 1x
+- **chose:** refuse  (1x)
+- *not taken:* admit the act and leave the refusal to the effect or the write gate
 
 ### dispatch by p_high: precondition unmet  ·  `E2/S27.1`  ·  taken 1x
 - **chose:** emit the refusal -- scarcity falls out of the fold  (1x)

@@ -11237,7 +11237,7 @@
  "_trace_counts": {
   "STEP": 7231,
   "BARRIER": 1904,
-  "DECISION": 1949,
+  "DECISION": 1950,
   "QUERY": 30278,
   "WRITE": 15540,
   "EVENT": 15303,
