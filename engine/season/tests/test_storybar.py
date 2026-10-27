@@ -113,3 +113,80 @@ def test_depth_runs_along_cross_person_edges_only():
     assert {k: (v["cls"], v["depth"]) for k, v in r.items()} == {
         "a1": ("none", 1), "a2": ("cross", 2), "a3": ("cross", 3),
         "a4": ("own", 1), "a5": ("world", 1)}
+
+
+# -- REM-15: `--draw-seeds`, the chooser's draw varied alone on one built world ------------------
+# These assert RELATIONS on a small fixture (the cap-10 cast), never a count from a realm run.
+
+DRAWS = (0, 1, 2, 3)
+
+
+def _small_world(**sweeps):
+    from ..harness.populated import build_realm
+    w = build_realm(SEED, CAP)
+    for name, value in sweeps.items():
+        w.fixtures = w.fixtures.sweep(name, value)
+    return w
+
+
+def test_the_same_draw_seed_twice_reads_identical():
+    a = SB.draw_seed_arm(_small_world(), SEASONS, [1])["runs"][1]
+    b = SB.draw_seed_arm(_small_world(), SEASONS, [1])["runs"][1]
+    assert a["acts"] > 0 and sum(a["chains"].values()) > 0, "the run read no acts; equality is vacuous"
+    assert a == b
+
+
+def test_two_draw_seeds_give_at_least_one_differing_chain_and_the_world_is_untouched():
+    base = _small_world()
+    res = SB.draw_seed_arm(base, SEASONS, DRAWS)
+    assert res["base_hash_before"] == res["base_hash_after"], "the arm mutated the base world"
+    assert {r["start_hash"] for r in res["runs"].values()} == {res["base_hash_before"]}, (
+        "the deep copies were not the same world at the start")
+    runs = [res["runs"][d] for d in DRAWS]
+    checked = differing = 0
+    for i in range(len(runs)):
+        for j in range(i + 1, len(runs)):
+            checked += 1
+            differing += SB.chain_difference(runs[i]["chains"], runs[j]["chains"]) > 0
+    assert checked >= 6
+    assert differing >= 1, "no two draw seeds differed at the shipped temperature; the arm varies nothing"
+
+
+def test_a_chooser_that_ignores_its_draw_gives_no_difference_across_draw_seeds():
+    """tau = 0 by fixture short-circuits the sampler to the score order, so the draw is never read;
+    `declare_intents`' own draw is inert at `intent_disclosure` 0.0. Any difference left is a leak of
+    the draw seed into something it must not reach (an id-keying leak): the plan's STOP-IF."""
+    base = _small_world(choice_temperature=0)
+    assert base.fixtures.get("intent_disclosure") == 0.0, (
+        "the tau = 0 control holds only at intent_disclosure 0.0 (residue 2 of `draw_seed_arm`)")
+    res = SB.draw_seed_arm(base, SEASONS, DRAWS)
+    runs = [res["runs"][d] for d in DRAWS]
+    assert runs[0]["acts"] > 0 and sum(runs[0]["chains"].values()) > 0
+    checked = 0
+    for r in runs[1:]:
+        assert r["acts"] == runs[0]["acts"] and r["depth"] == runs[0]["depth"]
+        assert SB.chain_difference(runs[0]["chains"], r["chains"]) == 0
+        checked += 1
+    assert checked >= 3
+
+
+def test_the_draw_seed_arm_with_the_worlds_own_seed_is_the_default_run():
+    """Plumbing control: `draw_seed=w.world_seed` is what `draw_seed=None` means, so the arm's run
+    must read exactly as `drive` does by default."""
+    w0 = _small_world()
+    ref_w, ref_d, ref_b = SB.drive(SEED, SEASONS, "off", CAP)
+    ref = SB.read(ref_w.log, ref_d.act_of, ref_b)
+    got = SB.draw_seed_arm(w0, SEASONS, [w0.world_seed])["runs"][w0.world_seed]
+    assert got["acts"] == len(ref["acts"]) > 0
+    assert got["depth"] == SB.summarise(ref["acts"].values())["depth"]
+    assert got["chains"] == SB.chains(ref["acts"], {a.id: a.verb for a in ref_d.act_of.values()})
+
+
+def test_chains_run_forward_along_cross_person_edges_keyed_on_verbs():
+    """Planted: a1 (talk) -> a2 (give) -> a3 (give) is one chain from a1; a1 -> a4 (talk) is shorter and
+    loses; a5 is a first act with no consequent."""
+    row = lambda cross, depth, cls: {"cross": cross, "depth": depth, "cls": cls}
+    acts = {"a1": row([], 1, "none"), "a2": row(["a1"], 2, "cross"), "a3": row(["a2"], 3, "cross"),
+            "a4": row(["a1"], 2, "cross"), "a5": row([], 1, "world")}
+    verbs = {"a1": "talk", "a2": "give", "a3": "give", "a4": "talk", "a5": "move"}
+    assert SB.chains(acts, verbs) == {("talk", "give", "give"): 1, ("move",): 1}

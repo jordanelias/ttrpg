@@ -12,6 +12,9 @@ Entry point: `python -m engine.season.harness.storybar --base-seed S --n N --sea
 `harness/soak.py` gives: this file is inside `tools/ci_sim_fabrication_check.py`'s blocking scope).
 `--cap` is `build_realm`'s own parameter and defaults to its own `None`, the full realm.
 
+`--base-seed S --seasons K --draw-seeds D D ...` (REM-15) replaces `--n`/`--arms`: one realm built from `S`,
+deep-copied per draw seed, only the chooser's draw varied (`draw_seed_arm`, which states the two residues).
+
 THE READING (`read`, a pure function over the log and `SeasonDriver.act_of`, so a test can plant on
 it). For each Event in the log its act is `act_of[e.id]`; an act's antecedents are, over every cause
 `c` of every Event of that act:
@@ -58,6 +61,7 @@ seat is read off the World here, OUTSIDE the simulation: the observer may, and t
 from __future__ import annotations
 
 import argparse
+import copy
 import os
 import sys
 from collections import Counter
@@ -190,18 +194,26 @@ def estimates(w) -> dict:
 # ONE SEEDED REALM, ONE ARM.
 # ---------------------------------------------------------------------------------------------
 
-def drive(seed: int, seasons: int, arm: str, cap=None, on_season=None) -> tuple:
+def drive(seed: int, seasons: int, arm: str, cap=None, on_season=None, world=None,
+          draw_seed=None) -> tuple:
     """Build the realm, run `seasons` seasons under `arm`; return `(world, driver, bounds)`.
 
     `on_season(world, season summary, events logged this season)`, when given, is called after each
-    season -- `harness/loops.py::observe` reads its per-season quantities through it."""
+    season -- `harness/loops.py::observe` reads its per-season quantities through it.
+
+    `world` and `draw_seed` are the `--draw-seeds` arm's two seams (`draw_seed_arm`) and both default
+    to nothing, which is the shipped reading unchanged: `world`, when given, is a built World this
+    call runs instead of building one (`seed` and `cap` are then unused); `draw_seed`, when given,
+    replaces `w.world_seed` as the seed of the CHOOSER'S `draw_factory` and of nothing else -- the
+    act-id mint below and every draw inside the driver keep `w.world_seed`."""
     if arm not in ARMS:
         raise ValueError(f"forcing arm {arm!r} is not built; this tree runs {ARMS}")
-    w = build_realm(seed, cap)
+    w = build_realm(seed, cap) if world is None else world
     d = SeasonDriver(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
-                      draw=draw_factory(w.world_seed, lambda: w.tick))
+                      draw=draw_factory(w.world_seed if draw_seed is None else draw_seed,
+                                        lambda: w.tick))
     bounds = []
     for _ in range(seasons):
         bounds.append(len(w.log))
@@ -244,6 +256,108 @@ def compare(arms, seeds, seasons: int, cap=None) -> list:
 
 
 # ---------------------------------------------------------------------------------------------
+# THE `--draw-seeds` ARM: vary only the chooser's draw, on one built world.
+# ---------------------------------------------------------------------------------------------
+
+def chains(acts: dict, verbs: dict) -> Counter:
+    """The multiset of verb-sequence chains from each FIRST ACT, over `read`'s `acts` and a
+    `{act_id: verb}` map. A first act is one with no cross-person antecedent (class other than
+    `cross`, depth 1); its chain is the verb sequence of the LONGEST path from it along cross-person
+    edges taken forward (an act, then an act that names it as a cross-person antecedent), ties broken
+    by the larger verb tuple. Keyed on verbs only, never an act id, so two runs that take the same
+    verbs by different ids read as the same chain. Pure."""
+    forward: dict = {aid: [] for aid in acts}
+    for aid, row in acts.items():
+        for b in row["cross"]:
+            if b in forward:
+                forward[b].append(aid)
+    best: dict = {}
+    # a consequent's depth is strictly greater than its antecedent's, so descending depth finishes
+    # every consequent before the act it follows
+    for aid in sorted(acts, key=lambda a: -acts[a]["depth"]):
+        tail = max((best[c] for c in forward[aid]), key=lambda t: (len(t), t), default=())
+        best[aid] = (verbs[aid],) + tail
+    return Counter(best[aid] for aid, row in acts.items() if row["cls"] != "cross")
+
+
+def fork(base):
+    """A deep copy of `base` that is a world of its own. ⚠ A bare `copy.deepcopy(World)` is not one:
+    `World.__init__` hands the log a LAMBDA, `lambda: self.acts.ids()`, and `deepcopy` shares a function
+    object rather than copying it, so the copy's log would judge a cause against the ORIGINAL's act store
+    (MEASURED: the first act-caused Event of a copied world's first season is refused as a cause that
+    "resolves to nothing"). The bound `_on_logged` rebinds by itself. The one thunk is re-pointed here,
+    from outside `state/` (a harness may not edit it), through the log's own `_act_ids` slot."""
+    w = copy.deepcopy(base)
+    w.log._act_ids = lambda: w.acts.ids()
+    return w
+
+
+def draw_seed_arm(base, seasons: int, draw_seeds) -> dict:
+    """`--draw-seeds`: ONE built world `base`, deep-copied once per draw seed, each copy run
+    `seasons` seasons with ONLY the chooser's `draw_factory` seeded by the draw seed
+    (`drive(draw_seed=...)`). The question is how much of the cross-person chain structure the
+    chooser's draw alone moves: the world, the act-id mint and `w.world_seed` are the same in every
+    copy, and `base` itself is never run.
+
+    Returns `{"base_hash_before", "base_hash_after", "runs": {draw_seed: {"start_hash", "acts",
+    "depth", "chains"}}}`: `start_hash` is the copy's `content_hash()` before it runs (equal across
+    copies and to `base_hash_before`); `base_hash_after` is `base`'s after every copy has run (a copy
+    that shared state with `base` would move it); `depth` is `summarise`'s distribution over every
+    act; `chains` is `chains`' multiset.
+
+    TWO RESIDUES, so a difference is read as the chooser's draw on THIS arm and not as the whole of
+    the world's stochasticity:
+      1. EVERY DRAW OUTSIDE THE CHOOSER'S FACTORY STAYS KEYED TO `w.world_seed`: the contest draws
+         and the weather draws read the world's seed, not the draw seed, so they are identical
+         across draw seeds and are not varied here.
+      2. `declare_intents` CONSUMES THE CHOOSER'S DRAW TOO (`decision/choose.py`: one draw keyed by
+         the person and `intent:<act id>`), so a draw seed also moves which intents are declared;
+         but that branch is INERT while `intent_disclosure` is 0.0 (its shipped value), so at that
+         value the draw seed reaches the run only through the choice order. Under a fixture that
+         raises `intent_disclosure` the arm varies both."""
+    out = {"base_hash_before": base.content_hash(), "runs": {}}
+    for ds in draw_seeds:
+        w = fork(base)
+        start = w.content_hash()
+        w, d, bounds = drive(w.world_seed, seasons, "off", world=w, draw_seed=ds)
+        r = read(w.log, d.act_of, bounds)
+        out["runs"][ds] = {"start_hash": start, "acts": len(r["acts"]),
+                           "depth": summarise(r["acts"].values())["depth"],
+                           "chains": chains(r["acts"], {a.id: a.verb for a in d.act_of.values()})}
+    out["base_hash_after"] = base.content_hash()
+    return out
+
+
+def chain_difference(a: Counter, b: Counter) -> int:
+    """How many chains the two multisets do not share: the sum over chains of `|count_a - count_b|`.
+    Zero exactly when the multisets are equal."""
+    return sum(abs(a.get(k, 0) - b.get(k, 0)) for k in set(a) | set(b))
+
+
+def _print_draw_seeds(base_seed: int, seasons: int, cap, draw_seeds, res: dict) -> None:
+    print(f"storybar --draw-seeds base-seed={base_seed} seasons={seasons} cap={cap} "
+          f"draw-seeds={list(draw_seeds)} PYTHONHASHSEED={os.environ.get('PYTHONHASHSEED')}")
+    print(f"base world hash before={res['base_hash_before']} after={res['base_hash_after']} "
+          f"({'unmutated' if res['base_hash_before'] == res['base_hash_after'] else 'MUTATED'})")
+    first = None
+    for ds, r in res["runs"].items():
+        ch = r["chains"]
+        longest = max((len(k) for k in ch), default=0)
+        print(f"[draw {ds}] start_hash={r['start_hash']} acts={r['acts']} first_acts={sum(ch.values())} "
+              f"depth={r['depth']} longest_chain={longest}")
+        for k, n in sorted(ch.items(), key=lambda kv: (-len(kv[0]), kv[0])):
+            if len(k) >= 2:
+                print(f"  chain x{n}: {' > '.join(k)}")
+        if first is None:
+            first = ds
+        else:
+            diff = chain_difference(res["runs"][first]["chains"], ch)
+            same_depth = res["runs"][first]["depth"] == r["depth"]
+            print(f"[draw {first} vs {ds}] chains {'EQUAL' if diff == 0 else 'DIFFER'} "
+                  f"(differing={diff}); depth {'EQUAL' if same_depth else 'DIFFER'}")
+
+
+# ---------------------------------------------------------------------------------------------
 # CLI.
 # ---------------------------------------------------------------------------------------------
 
@@ -262,13 +376,29 @@ def _fmt_est(e: dict) -> str:
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--base-seed", type=int, required=True)
-    ap.add_argument("--n", type=int, required=True, help="seeded realms per arm")
+    ap.add_argument("--n", type=int, help="seeded realms per arm (required without --draw-seeds)")
     ap.add_argument("--seasons", type=int, required=True)
-    ap.add_argument("--arms", nargs=2, choices=ARMS, required=True,
-                    help=f"two forcing arms to compare; built: {', '.join(ARMS)}")
+    ap.add_argument("--arms", nargs=2, choices=ARMS,
+                    help=f"two forcing arms to compare; built: {', '.join(ARMS)} "
+                         f"(required without --draw-seeds)")
     ap.add_argument("--cap", type=int, default=None,
                     help="build_realm's cast cap; omitted = build_realm's own None, the full realm")
+    ap.add_argument("--draw-seeds", type=int, nargs="+", metavar="D",
+                    help="instead of the arm comparison: build_realm(--base-seed) ONCE, deep-copy it "
+                         "per draw seed D, and vary only the chooser's draw (see `draw_seed_arm` for "
+                         "the two residues); prints the chain-depth distribution and the verb-chain "
+                         "multiset per draw seed. Takes no --n or --arms")
     args = ap.parse_args(argv)
+
+    if args.draw_seeds is not None:
+        if args.n is not None or args.arms is not None:
+            ap.error("--draw-seeds takes no --n or --arms")
+        res = draw_seed_arm(build_realm(args.base_seed, args.cap), args.seasons, args.draw_seeds)
+        _print_draw_seeds(args.base_seed, args.seasons, args.cap, args.draw_seeds, res)
+        return 0
+    missing = [f for f, v in (("--n", args.n), ("--arms", args.arms)) if v is None]
+    if missing:
+        ap.error(f"the following arguments are required: {', '.join(missing)}")
 
     seeds = list(range(args.base_seed, args.base_seed + args.n))
     res = compare(args.arms, seeds, args.seasons, args.cap)
