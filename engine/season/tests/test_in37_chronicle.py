@@ -157,6 +157,53 @@ def test_the_cli_runs_and_prints_its_header(capsys):
     assert head.startswith("chronicle seed=0 seasons=1 arm=off cap=5 ") and "PYTHONHASHSEED=" in head, head
 
 
+def _planted_through_a_refused_act():
+    """The deepest default chain is `c1 -> c2 -> c3 -> c4` and runs through `c2`, a REFUSED act. A
+    shorter rival `r1 -> r2 -> r3`, all executed, is logged after it. Cut at `c2`, `c3` is a first act and
+    `c4` stands at depth 2, so the deepest EXECUTED chain is the rival (3)."""
+    acts = {i: NS(id=i, actor=p, verb="speak") for i, p in
+            (("c1", "p1"), ("c2", "p2"), ("c3", "p3"), ("c4", "p4"),
+             ("r1", "p5"), ("r2", "p6"), ("r3", "p7"))}
+    ev = lambda i, kind, causes: NS(id=i, kind=kind, causes=causes)
+    log = [ev("ec1", "k.c1", ["c1"]), ev("ec2", "k.c2.refused", ["c2", "ec1"]),
+           ev("ec3", "k.c3", ["c3", "ec2"]), ev("ec4", "k.c4", ["c4", "ec3"]),
+           ev("er1", "k.r1", ["r1"]), ev("er2", "k.r2", ["r2", "er1"]), ev("er3", "k.r3", ["r3", "er2"])]
+    act_of = {e.id: acts[e.causes[0]] for e in log}
+    return log, act_of
+
+
+def _run_main_over_the_plant(monkeypatch, capsys, refused, *flags):
+    """`chronicle.main` over the planted log: `drive` and `refusal_sets` are replaced, nothing else."""
+    log, act_of = _planted_through_a_refused_act()
+    world = NS(log=log, persons={})
+    monkeypatch.setattr(SB, "drive", lambda *a, **k: (world, NS(act_of=act_of), [0]))
+    monkeypatch.setattr(SB, "refusal_sets", lambda w, n: (frozenset(refused), frozenset()))
+    assert CH.main(["--seed", "0", "--seasons", "1", *flags]) == 0
+    return capsys.readouterr().out.splitlines()
+
+
+def test_a_deepest_chain_through_a_refused_act_picks_a_shorter_executed_chain(monkeypatch, capsys):
+    default = _run_main_over_the_plant(monkeypatch, capsys, {"c2"})
+    assert "executed-only" not in default[0]
+    assert default[0].split(" PYTHONHASHSEED=")[0].endswith("acts=7 depth=4")
+    assert [l.split("|")[1].strip() for l in default[1:]] == [
+        "p1 speak", "p2 speak", "p3 speak", "p4 speak"]
+
+    ex = _run_main_over_the_plant(monkeypatch, capsys, {"c2"}, "--executed-only")
+    assert ex[0].startswith(default[0].split(" PYTHONHASHSEED=")[0]), "the header lost its fields"
+    assert "default_chain_refused=1 executed_acts=6 executed_depth=3" in ex[0], ex[0]
+    assert [l.split("|")[1].strip() for l in ex[1:]] == ["p5 speak", "p6 speak", "p7 speak"]
+    assert len(ex) - 1 < len(default) - 1                  # a shorter chain, and not through c2
+
+
+def test_with_nothing_refused_the_executed_pick_is_the_default_pick(monkeypatch, capsys):
+    """The mutation's control: `refused` empty, and `--executed-only` renders the default chain."""
+    default = _run_main_over_the_plant(monkeypatch, capsys, ())
+    ex = _run_main_over_the_plant(monkeypatch, capsys, (), "--executed-only")
+    assert len(default) == 5 and ex[1:] == default[1:]
+    assert "default_chain_refused=0" in ex[0] and "executed_depth=4" in ex[0]
+
+
 def test_with_no_cross_person_answer_the_first_logged_act_is_rendered_alone():
     a = NS(id="a1", actor="p1", verb="speak")
     log = [NS(id="e1", kind="k", causes=["a1"])]

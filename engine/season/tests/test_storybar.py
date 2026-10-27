@@ -190,3 +190,89 @@ def test_chains_run_forward_along_cross_person_edges_keyed_on_verbs():
             "a4": row(["a1"], 2, "cross"), "a5": row([], 1, "world")}
     verbs = {"a1": "talk", "a2": "give", "a3": "give", "a4": "talk", "a5": "move"}
     assert SB.chains(acts, verbs) == {("talk", "give", "give"): 1, ("move",): 1}
+
+
+# -- CR-15: the executed reading, beside the current one -------------------------------------------
+# These assert RELATIONS on a planted log and on the cap-10 fixture, never a count from a realm run.
+
+def _planted_refused_edge():
+    """p1's `a1` is REFUSED; p2's `a2` answers it (its only cross-person antecedent). p3's `a3` is
+    executed and p4's `a4` answers it (a cross antecedent that stays)."""
+    acts = {k: NS(id=k, actor=p) for k, p in (("a1", "p1"), ("a2", "p2"), ("a3", "p3"), ("a4", "p4"))}
+    ev = lambda i, causes: NS(id=i, causes=causes)
+    log = [ev("e1", ["a1"]), ev("e2", ["a2", "e1"]), ev("e3", ["a3"]), ev("e4", ["a4", "e3"])]
+    act_of = {e.id: acts[e.causes[0]] for e in log}
+    return log, act_of
+
+
+def test_a_planted_act_whose_only_cross_antecedent_is_refused_reads_cross_by_default_and_not_executed():
+    log, act_of = _planted_refused_edge()
+    default = SB.read(log, act_of, [0])
+    assert "executed" not in default, "the default return gained a key"
+    assert default["acts"]["a2"]["cls"] == "cross" and default["acts"]["a2"]["depth"] == 2
+
+    res = SB.read(log, act_of, [0], {"a1"})
+    assert res["acts"] == default["acts"] and res["unread"] == default["unread"]   # beside, never instead
+    ex = res["executed"]
+    assert ex["a2"]["cross"] == [] and ex["a2"]["depth"] == 1, ex["a2"]   # not cross-person once a1 is cut
+    assert "a1" not in ex                                   # a refused act is not an executed act
+    assert ex["a4"]["cross"] == ["a3"] and ex["a4"]["depth"] == 2   # an executed edge is kept: the cut is not a wipe
+
+    items = SB.executed_items(res["acts"], ex, {"a1"}, frozenset())
+    summary = SB.executed_summary(items)
+    assert (summary["executed"], summary["with_cross"], summary["refused"]) == (3, 1, 1)
+    assert summary["cross"] == 2 and summary["refused_deep"] == 0       # default: a2 and a4 read cross
+    # the mutation's control: with nothing refused the planted act reads cross-person in BOTH readings
+    none = SB.read(log, act_of, [0], frozenset())["executed"]
+    assert none["a2"]["cross"] == ["a1"] and none["a2"]["depth"] == 2
+
+
+def test_a_refused_antecedent_is_cut_not_bridged_over():
+    """a1 -> a2 (refused) -> a3: a3 answers a2 only, so a3 stands at depth 1 whatever lay behind a2."""
+    acts = {k: NS(id=k, actor=p) for k, p in (("a1", "p1"), ("a2", "p2"), ("a3", "p3"))}
+    ev = lambda i, causes: NS(id=i, causes=causes)
+    log = [ev("e1", ["a1"]), ev("e2", ["a2", "e1"]), ev("e3", ["a3", "e2"])]
+    act_of = {e.id: acts[e.causes[0]] for e in log}
+    res = SB.read(log, act_of, [0], {"a2"})
+    assert res["acts"]["a3"]["depth"] == 3
+    assert res["executed"]["a3"]["depth"] == 1 and res["executed"]["a3"]["cross"] == []
+
+
+def test_the_executed_reading_over_a_real_run_is_a_cut_of_the_default_and_the_default_is_untouched(driven):
+    w, d, bounds = driven
+    default = SB.read(w.log, d.act_of, bounds)
+    refused, graded = SB.refusal_sets(w, len(bounds))
+    assert graded <= refused, "a graded loss that is not refused"
+    rows = default["acts"]
+    assert refused & set(rows), "the run refused no act; the cut below observed nothing"
+    before = w.content_hash()
+    res = SB.read(w.log, d.act_of, bounds, refused)
+    assert w.content_hash() == before
+    assert res["acts"] == default["acts"]                  # the default keys are the default's, untouched
+    ex = res["executed"]
+    assert set(ex) == set(rows) - refused
+    checked = 0
+    for aid, r in ex.items():
+        assert r["cross"] == [b for b in rows[aid]["cross"] if b not in refused]
+        assert set(r["cross"]) <= set(ex)
+        assert r["depth"] <= rows[aid]["depth"]
+        checked += 1
+    assert checked >= 1
+    # with nothing refused the executed reading IS the default's cross and depth
+    same = SB.read(w.log, d.act_of, bounds, frozenset())["executed"]
+    assert {a: (r["cross"], r["depth"]) for a, r in same.items()} == {
+        a: (r["cross"], r["depth"]) for a, r in rows.items()}
+
+
+def test_the_executed_only_cli_prints_its_lines_beside_the_current_ones_and_the_arms_still_read_equal(capsys):
+    args = ["--base-seed", str(SEED), "--n", "1", "--seasons", "1", "--arms", "off", "off", "--cap", str(CAP)]
+    assert SB.main(args) == 0
+    plain = capsys.readouterr().out
+    assert SB.main(args + ["--executed-only"]) == 0
+    both = capsys.readouterr().out
+    kept = [l for l in both.splitlines() if "executed" not in l]
+    assert kept == plain.splitlines(), "the current lines changed under --executed-only"
+    execd = [l for l in both.splitlines() if "executed" in l]
+    assert len(execd) >= 3, "no executed line was printed"
+    assert any("executed seed=" in l and "total:" in l for l in execd)
+    assert "arms off vs off: EQUAL" in both
