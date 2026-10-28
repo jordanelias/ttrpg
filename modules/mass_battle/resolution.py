@@ -222,8 +222,8 @@ def _sigma_net_boost(net_sigma, pool, tn=7):  # [canonical: params/core.md conti
     # [canonical: Jordan ruling 2026-08-25 "TN7 always. Never change TN anywhere ever." — ED-IN-0196]
     assert tn == 7, f"TN is 7. Always. (Jordan, 2026-08-25) — got {tn}."
     # Sigma per die at TN 7 — the only TN there is (ED-IN-0196). The TN 6/8 rows of the EV
-    # table are dead under the ruling; the historical table survives, reference-only, in
-    # engine/engine_params/params_tables.yaml.
+    # table are dead under the ruling; the historical table was reference-only; its capture
+    # (params_tables.yaml) was retired (`FORK:` row in references/restructure_ledger.md).
     _SIG_PER_DIE = 0.800   # [canonical: params/core.md EV table, TN 7]
     if abs(net_sigma) < _SIGMA_ZERO_SNAP:
         return 0.0

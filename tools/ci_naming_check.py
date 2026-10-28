@@ -115,13 +115,8 @@ EXCLUDE = (
     # with it") and was then not acted on for a week; that is the §1.6 pattern in
     # miniature, and it is why the recurrence guard matters more than the cut.
     #
-    # GENERATED verbatim capture of the evacuated engine/params/**/*.md (ED-IN-0139).
-    # It inherits whatever the sources contained, including the line excluded above.
-    # NOTE the capture's exclusion CANNOT be retired with its source: the capture is
-    # still in the tree, still contains the legacy token, and is now the ONLY place
-    # that content exists — so it must stay excluded or the naming gate reds on a
-    # byte-faithful archive nobody can edit.
-    'engine/engine_params/params_tables.yaml',
+    # The generated capture of the evacuated engine/params/**/*.md (ED-IN-0139) was excluded
+    # here for the same reason; it was retired at DEF-9 (`FORK:` row), and its exclusion with it.
     'skills/prose-writer/',
     'tests/',
     'deprecated/archives/',

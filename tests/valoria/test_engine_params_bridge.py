@@ -40,13 +40,9 @@ import re
 REPO = pathlib.Path(__file__).resolve().parents[2]
 PARAMS = REPO / 'engine' / 'engine_params'
 
-#: The artifact with NO writer, and why. `params_tables.yaml` is the byte-identical capture of the
-#: 43 evacuated `engine/params/*.md` tables; `tools/export_params_constants.py` was a
-#: migration-window gate retired WITH its source, so the capture can no longer be regenerated and
-#: its "NEVER hand-edit" header is absolute (`CLAUDE.md` §5). It is a runtime input all the same —
-#: `dice_engine.py` and `sigma_leverage.py` read it — so it is excluded from the writer rule by
-#: name rather than by a predicate that would also excuse a genuinely orphaned artifact.
-NO_WRITER = {'params_tables.yaml'}
+#: Artifacts with NO writer, excluded by name. Empty: the one entry, `params_tables.yaml`, was retired
+#: (`FORK:` row in `references/restructure_ledger.md`).
+NO_WRITER = set()
 
 #: {artifact -> modules under engine/ that BIND its path at runtime}. Measured, not assumed: an
 #: earlier draft of this file listed `key_types.json` with three readers and `params_tables.yaml`
@@ -213,7 +209,7 @@ def test_the_writer_scan_is_not_vacuous():
     """§0.1 pt 2 — "every artifact has one writer" is also what a scan that finds nothing reports
     for an empty artifact list. Pin that the scan sees the real surface."""
     arts = _artifacts()
-    assert len(arts) >= 8, f'only {len(arts)} artifacts found — the walk is broken'
+    assert len(arts) >= 7, f'only {len(arts)} artifacts found — the walk is broken'
     writers = _writers()
     assert writers.get('composition.json') == {'tools/export_composition.py'}, writers.get('composition.json')
 

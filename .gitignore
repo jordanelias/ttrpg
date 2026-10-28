@@ -39,10 +39,9 @@ references/evacuation_manifest.json
 # the single owner of the build ORDER (key_graph -> engine_atlas/contract_index), because two of
 # these builders read another's output.
 #
-# ⚠ NOT UNTRACKED, AND DO NOT ADD THEM: `engine/engine_params/*.json` and `params_tables.yaml`.
-# Those are RUNTIME INPUTS — `engine/substrate/descriptors.py` and `keys.py` read them at import,
-# so an untracked clone would not start. `params_tables.yaml` is additionally NOT REGENERABLE (its
-# source docs were evacuated), making it a source rather than an artifact.
+# ⚠ NOT UNTRACKED, AND DO NOT ADD THEM: `engine/engine_params/*.json`. Those are RUNTIME INPUTS —
+# `engine/substrate/descriptors.py`, `composition.py` and `names.py` read them at import, so an
+# untracked clone would not start. (`params_tables.yaml` had no runtime reader and was retired.)
 systems/*/_identifier_census.yaml
 references/identifier_census.json
 references/key_graph.json

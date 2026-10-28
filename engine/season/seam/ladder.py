@@ -55,7 +55,7 @@ from ..gaps import Unspecified
 #      ⚠ IT IS IMPORTED AND CALLED, NOT MIRRORED. `S27.2` names a second resolver as its
 #      highest-value refusal, and a band table copied into this file WOULD BE ONE -- it would go
 #      on answering after the owner changed its mind, which is exactly what happened to
-#      `params_tables.yaml`'s captured ladder (`CLAUDE.md` §5: the capture still shows the
+#      `params_tables.yaml`'s captured ladder (retired since; it showed the
 #      PRE-RULING bands). The falsifier that this is a call and not a copy is
 #      `test_we_the_ladder_is_the_trees_and_not_a_copy_of_it`, which monkeypatches
 #      `degree_from_net` and requires every margin here to follow it.

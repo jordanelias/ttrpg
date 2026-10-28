@@ -165,8 +165,8 @@ def _die_result(face: int) -> int:
 # [Jordan, 2026-08-25: "TN7 always. Never change TN anywhere ever." — ED-IN-0196]
 # The table used to carry TN 6 (μ=0.50, σ=0.806) and TN 8 (μ=0.30, σ=0.781). Those rows are
 # dead under the ruling and are deleted rather than left as reachable-looking configuration.
-# The historical table survives, reference-only and NOT a mechanism (§0.05), in
-# engine/engine_params/params_tables.yaml.
+# The historical table was reference-only and NOT a mechanism (§0.05); its capture
+# (params_tables.yaml) was retired (`FORK:` row in references/restructure_ledger.md).
 #
 # Note the TN 6 row was always in tension with `_die_result` below, which has never read `tn`:
 # μ=0.50 is only reachable if faces 6-9 score, and no face rule here has ever done that. The
@@ -264,8 +264,8 @@ def degree_from_net(net: int | float, ob: int | float,
     only the windowed one survives contact with fractional obstacles, where exact equality
     essentially never occurs and Partial would otherwise vanish.
 
-    ⚠ THE CAPTURED PARAMS TABLE STILL SHOWS THE OLD LADDER, and it is not a competing source.
-    `engine/engine_params/params_tables.yaml` §"Degrees of Success" holds the PRE-RULING bands
+    ⚠ THE RETIRED PARAMS CAPTURE SHOWED THE OLD LADDER, and it was not a competing source.
+    `engine/engine_params/params_tables.yaml` (retired; `FORK:` row) §"Degrees of Success" held the PRE-RULING bands
     (Overwhelming at Net >= 2*Ob, Failure at Net <= 0) because it is a byte-faithful capture of the
     evacuated `params/core.md` and its own header says NEVER hand-edit. It is history, not canon:
     where it disagrees with code, the code wins (principle 7 / ED-1050). Do not restore bands from
