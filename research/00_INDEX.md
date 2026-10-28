@@ -154,6 +154,12 @@ Precedent- or history-bearing files at the snapshot, with no current counterpart
 | `SNAP:tests/sim/mass_battle/{orchestration,config,validators}.py` | The mass-battle simulator with its historical constants and validators (48, 9 and 17 historical-term mentions); current counterparts under `modules/mass_battle/` |
 | `SNAP:archives/audit/2026-04-29-topographic-analysis/`, `…/2026-04-30-terminology-vector-audit/`, `…/2026-06-22-faction-action-audit/`, `…/2026-06-09-*-comprehensive/` | Corpus-structure audits and per-subsystem analyses. Not precedent research; listed so they are not mistaken for it |
 
+### 2.F Published literature — emergent narrative, procedural generation, narrative craft
+
+| source | what it holds | status as stated · limits |
+|---|---|---|
+| `research/emergent_narrative_literature/` (`LIT`) | **Read, not named (2026-10-28).** 42 sources, each read in full from extracted text and written up with thesis, core arguments, argument structure, verbatim anchors, per-source tests for vetting a design, and what the source does not license: foundations of narrative-versus-play, interactive drama and agency, the Concordia retelling strand (Eladhari, Sych, Kreminski, Lessard), story sifting and curation, procedural generation and choice structure, engagement and spatial storytelling. `07_apparatus.md` regroups the 168 tests into a 12-gate instrument with a disagreements table; `08_not_read.md` lists what was blocked or skipped | FILED, tier 3. Quotations machine-checked against the extracted text; arguments checked by one sampled critic pass; no test run against any design. Sych's thesis and J. Ryan's dissertation are **unread** (`08`). It checks, and in places corrects, the June 2026 survey `audit/2026-06-28-narrative-state-articulation/02_prior_art_and_methodology.md` (deleted in `cadf9c75`, readable from history) whose conclusions fed `.audit/2026-07-05-emergent-narrative-engine/` (`LIT/00_README.md`, "Corrections") |
+
 ---
 
 ## 3. By function — what each function has, and where
