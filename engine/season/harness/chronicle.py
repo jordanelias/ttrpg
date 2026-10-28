@@ -27,7 +27,12 @@ where `<actor>` is the Person's `name` when it has one and the id otherwise, `<k
 distinct Event kinds the act emitted in log order, and the first line reads `opens the chain`. `<m>`
 is the line number of the antecedent act, always an earlier line.
 
-Entry point: `python -m engine.season.harness.chronicle --seed S --seasons K [--cap C]`. `--seed` and
+`--executed-only` (CR-15) runs the same pick, `deepest_chain`, over `storybar.read`'s EXECUTED rows (the
+acts `corpus_run.attempts` finds no refusal Event for, cross antecedents cut to such acts, depth
+recomputed along them) and renders that chain; the header line keeps its fields and gains the default
+pick's refused-act count. A graded loss is refused. Without the flag nothing here changes.
+
+Entry point: `python -m engine.season.harness.chronicle --seed S --seasons K [--cap C] [--executed-only]`. `--seed` and
 `--seasons` are required and have no default (this file is inside `tools/ci_sim_fabrication_check.py`'s
 blocking scope, the reason `harness/storybar.py` and `harness/soak.py` give); `--cap` is optional and
 is `build_realm`'s own parameter, defaulting to its own `None`, the full realm. The header line
@@ -138,14 +143,27 @@ def main(argv=None) -> int:
                     help=f"forcing arm; built: {', '.join(SB.ARMS)}")
     ap.add_argument("--cap", type=int, default=None,
                     help="build_realm's cast cap; omitted = build_realm's own None, the full realm")
+    ap.add_argument("--executed-only", action="store_true",
+                    help="pick the deepest chain over the EXECUTED rows (refused acts and every edge "
+                         "into one cut; storybar.read's `refused` argument) and render that; the "
+                         "header keeps its fields and adds the default pick's refused-act count and "
+                         "the executed pick's depth. Without it the output is unchanged")
     args = ap.parse_args(argv)
 
     w, d, bounds = SB.drive(args.seed, args.seasons, args.arm, args.cap)
-    res = SB.read(w.log, d.act_of, bounds)
+    refused = SB.refusal_sets(w, len(bounds))[0] if args.executed_only else None
+    res = SB.read(w.log, d.act_of, bounds, refused)
     chain = deepest_chain(res["acts"])
-    print(f"chronicle seed={args.seed} seasons={args.seasons} arm={args.arm} cap={args.cap} "
-          f"acts={len(res['acts'])} depth={len(chain)} PYTHONHASHSEED={os.environ.get('PYTHONHASHSEED')}")
-    print(render(w.log, d.act_of, res["acts"], w.persons))
+    head = (f"chronicle seed={args.seed} seasons={args.seasons} arm={args.arm} cap={args.cap} "
+            f"acts={len(res['acts'])} depth={len(chain)} PYTHONHASHSEED={os.environ.get('PYTHONHASHSEED')}")
+    rows = res["acts"]
+    if args.executed_only:
+        head += (f" executed-only: default_chain_refused={sum(1 for a in chain if a in refused)} "
+                 f"executed_acts={len(res['executed'])} "
+                 f"executed_depth={len(deepest_chain(res['executed']))}")
+        rows = res["executed"]
+    print(head)
+    print(render(w.log, d.act_of, rows, w.persons))
     return 0
 
 

@@ -107,6 +107,8 @@ from __future__ import annotations
 
 import argparse
 import collections
+import collections.abc
+import inspect
 import math
 
 from ..data.rosters import FIELD_CASUALTY_MODELS
@@ -150,19 +152,59 @@ for _name, _model in ARMS.items():
 del _name, _model
 
 
-def run_arm(model: str, n: int, base_seed: int, seasons: int) -> dict:
-    """`n` seeded realms, `field_casualty_model` swept to `model`, `seasons` seasons each.
+#: The `populated.build_realm` keyword arguments an arm may set (CR-14 (iv)), read off its signature so
+#: the two cannot drift. `seed` is the arm's own seed sequence (`base_seed + i`), never a build kwarg.
+BUILD_KWARGS = tuple(p for p in inspect.signature(populated.build_realm).parameters if p != 'seed')
+
+
+def _resolve_arm(arm) -> tuple:
+    """The ONE resolver of an arm's setting into the pair `(fixtures, build)`: `fixtures` is
+    `{fixture name: value}`, each swept onto the built world (`w.fixtures.sweep`); `build` is
+    `{kwarg: value}`, each passed to `populated.build_realm`. An arm is either
+
+      a `str`     the shipped form, a `field_casualty_model` value (what `ARMS` holds), resolved to
+                  `({'field_casualty_model': arm}, {})`; or
+      a mapping   `{'fixtures': {name: value}, 'build': {kwarg: value}}`, either key optional.
+
+    Builds no world. A `build` key outside `BUILD_KWARGS`, or a key of the mapping other than the
+    two named, raises `ValueError` rather than reaching `build_realm` (which would raise a less
+    legible `TypeError` mid-run). A fixture NAME is checked against the registry by `run_arm`, on
+    the built world (`Fixtures.get` raises `Ungraded` for an unregistered one), because the
+    registry is the world's and this resolver builds none."""
+    if isinstance(arm, str):
+        return {'field_casualty_model': arm}, {}
+    if not isinstance(arm, collections.abc.Mapping):
+        raise ValueError(f'an arm is a field_casualty_model name or a mapping, got {arm!r}')
+    extra = set(arm) - {'fixtures', 'build'}
+    if extra:
+        raise ValueError(f'an arm mapping holds `fixtures` and `build` only, got {sorted(extra)}')
+    fixtures, build = dict(arm.get('fixtures') or {}), dict(arm.get('build') or {})
+    bad = set(build) - set(BUILD_KWARGS)
+    if bad:
+        raise ValueError(f'build kwargs outside {BUILD_KWARGS}: {sorted(bad)}')
+    return fixtures, build
+
+
+def run_arm(model, n: int, base_seed: int, seasons: int) -> dict:
+    """`n` seeded realms, the arm `model` applied to each, `seasons` seasons each.
+
+    `model` is the shipped `field_casualty_model` value (a `str`) or a mapping
+    `{'fixtures': {name: value}, 'build': {kwarg: value}}` (`_resolve_arm`). There is no CLI for the
+    mapping form: `main` runs `ARMS` only, so a build-flag arm is reachable from Python.
 
     Returns `{'tally': Counter(act_subjects), 'acts': total resolved acts, 'seeds': n}`. Building
     and running are ONE step per seed (`populated.run`'s own `w=` parameter lets a caller build
     first and inspect after; not needed here, since `act_subjects` is already the census field this
     reads).
     """
+    fixtures, build = _resolve_arm(model)
     tally: collections.Counter = collections.Counter()
     total_acts = 0
     for i in range(n):
-        w = populated.build_realm(base_seed + i)
-        w.fixtures = w.fixtures.sweep('field_casualty_model', model)
+        w = populated.build_realm(base_seed + i, **build)
+        for name, value in fixtures.items():
+            w.fixtures.get(name)             # an unregistered name raises `Ungraded` here; `sweep` would write it silently
+            w.fixtures = w.fixtures.sweep(name, value)
         out = populated.run(seasons, base_seed + i, None, w=w)
         total_acts += out['acts']
         for k, v in out['act_subjects'].items():

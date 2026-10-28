@@ -70,10 +70,10 @@ from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..state.ids import H, draw_factory
 from . import probes as P
 from .populated import build_realm, census
-# `corpus_run.attribute` is the ONE owner of execution attribution -- `[(act, made, refused)]`,
-# reused rather than re-derived from `emits`/`emits_on_refusal` a second time (CLAUDE.md §8,
-# §0.06 S: "one rule and cannot drift into two ladders for one quantity"). `harness/aperture.py`
-# is the existing second caller this module becomes the third of.
+# `corpus_run._attribute_acts` is the ONE owner of the made/refused rule -- `[(act, made, refused)]`;
+# `attribute` calls it over the fold set (this module's reading) and `attempts` over the act store. Reused
+# rather than re-derived from `emits`/`emits_on_refusal` a second time (CLAUDE.md §8, §0.06 S: "one rule
+# and cannot drift into two ladders for one quantity").
 from .corpus_run import attribute
 from ..state.carriers import subject_of
 from ..gaps import ShapeGap, InstrumentDefect

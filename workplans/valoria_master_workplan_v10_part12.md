@@ -5,7 +5,7 @@
 
 ## 1. Handle index
 
-223 handles in 23 batches (B10-01 to B10-19 and B10-Z, plus B10-03b, B10-07b and B10-20): 37 REM, 84 CP, 32 carried from v9 (GO-01, GO-05 and GO-06 among them), 44 CR (CR-01 to CR-44), 10 NM, 5 CL, 1 DEF, 10 port-gate GO (GO-07 to GO-16). 206 were positions in `-03`'s tables after adoption, because NM-W3 (landed) and SC-06 (answered) left the tables there and keep their handles here; 196 were, in 22 open batches, once B10-01 CLOSED (its ten rows and its card left `-03` at its net-deleting close, P3; its twelve handles read `B10-01 (CLOSED)` below; CR-02's and GO-13's `-04` entries left with them). The second decision round (Jordan's six items of 2026-10-26) added fifteen positions, CR-30 to CR-44, and two commits of CL-EVENTS (commits (3) and (4), no handle), so 211 are positions now, in 22 open batches (221 counted on the adopted tables, before B10-01's close). A handle is the one name of a position; it is never reused (P4).
+223 handles in 23 batches (B10-01 to B10-19 and B10-Z, plus B10-03b, B10-07b and B10-20): 37 REM, 84 CP, 32 carried from v9 (GO-01, GO-05 and GO-06 among them), 44 CR (CR-01 to CR-44), 10 NM, 5 CL, 1 DEF, 10 port-gate GO (GO-07 to GO-16). 206 were positions in `-03`'s tables after adoption, because NM-W3 (landed) and SC-06 (answered) left the tables there and keep their handles here; 196 were, in 22 open batches, once B10-01 CLOSED (its ten rows and its card left `-03` at its net-deleting close, P3; its twelve handles read `B10-01 (CLOSED)` below; CR-02's and GO-13's `-04` entries left with them). The second decision round (Jordan's six items of 2026-10-26) added fifteen positions, CR-30 to CR-44, and two commits of CL-EVENTS (commits (3) and (4), no handle), so 211 were positions then, in 22 open batches (221 counted on the adopted tables, before B10-01's close), and 198 are now, in 21 open batches, once B10-02 CLOSED (thirteen of its fourteen rows and its card left `-03` at its net-deleting close, P3; its thirteen handles read `B10-02 (CLOSED)` below; IN-18's tail moved to B10-Z; the `-04` entries of CR-01, CR-04, CR-05, CR-14 and CR-15 left with them). A handle is the one name of a position; it is never reused (P4).
 
 | handle | batch | kind of handle |
 |---|---|---|
@@ -98,11 +98,11 @@
 | CP-T10-07 | B10-18 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T10-08 | B10-18 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T10-09 | B10-18 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
-| CR-01 | B10-02 | new from the code report (`-04`) |
+| CR-01 | B10-02 (CLOSED) | new from the code report (`-04`) |
 | CR-02 | B10-01 (CLOSED) | new from the code report (`-04`) |
 | CR-03 | B10-09 | new from the code report (`-04`) |
-| CR-04 | B10-02 | new from the code report (`-04`) |
-| CR-05 | B10-02 | new from the code report (`-04`) |
+| CR-04 | B10-02 (CLOSED) | new from the code report (`-04`) |
+| CR-05 | B10-02 (CLOSED) | new from the code report (`-04`) |
 | CR-06 | B10-03 | new from the hole-row pass (`-04`; H-137) |
 | CR-07 | B10-05 | new from the hole-row pass (`-04`; H-89) |
 | CR-08 | B10-18 | new from the hole-row pass (`-04`; H-49) |
@@ -111,8 +111,8 @@
 | CR-11 | B10-09 | new from the editorial-id pass (`-04`; H-94 residue, H-132, H-144, H-156), design-first |
 | CR-12 | B10-12 | new from the editorial-id pass (`-04`; ED-MB-0045), measure then design-first |
 | CR-13 | B10-15 | new from the editorial-id pass (`-04`; ED-WR-0005 C-TW-3) |
-| CR-14 | B10-02 | new from the fold of PR #506 (`-04`; the register's G-08, G-11, G-12, G-20, G-29), harness, hash EQUAL |
-| CR-15 | B10-02 | new from the fold of PR #506 (`-04`; the register's G-27), harness, hash EQUAL |
+| CR-14 | B10-02 (CLOSED) | new from the fold of PR #506 (`-04`; the register's G-08, G-11, G-12, G-20, G-29), harness, hash EQUAL |
+| CR-15 | B10-02 (CLOSED) | new from the fold of PR #506 (`-04`; the register's G-27), harness, hash EQUAL |
 | CR-16 | B10-07b | new from the decision round (`-04`; M1): the chooser's polarity, the `subject_is_opponent` repair and `stance_polarity: declared` |
 | CR-17 | B10-09 | new from the decision round (`-04`; M1): believed odds weight the alignment term; τ re-derived as its last commit (close two, last) |
 | CR-18 | B10-08 | new from the decision round (`-04`; M2): practice ships live; the pools reader |
@@ -161,7 +161,7 @@
 | GO-16 | B10-20 | port gate (`-04`): the oracle-side draw recorder and its export (`--check`) |
 | IN-12 | B10-09 | carried v9 position (`-04`) |
 | IN-14 | B10-16 | carried v9 position (`-04`) |
-| IN-18 | B10-02 | carried v9 position (`-04`) |
+| IN-18 | B10-Z (HELD; its MEASURE closed at B10-02) | carried v9 position (`-04`), narrowed |
 | IN-30 | B10-17 | carried v9 position (`-04`) |
 | IN-32 | B10-15 | carried v9 position (`-04`) |
 | IN-36 | B10-17 | carried v9 position (`-04`) |
@@ -173,7 +173,7 @@
 | IN-61 | B10-09 | carried v9 position (`-04`) |
 | MB-07r | B10-12 | carried v9 position (`-04`) |
 | MB-08 | B10-Z | carried v9 position (`-04`) |
-| NM-W0 | B10-02 | narration package (`proposals/2026-10-13-narration-mechanisms.md` §4); subsumed, an EDIT: the row is deleted when B10-02 closes |
+| NM-W0 | B10-02 (CLOSED) | narration package (`proposals/2026-10-13-narration-mechanisms.md` §4); subsumed, an EDIT: the row left `-03` at B10-02's close |
 | NM-W1 | B10-19 | narration package (`proposals/2026-10-13-narration-mechanisms.md` §4) |
 | NM-W2 | B10-05 | narration package (`proposals/2026-10-13-narration-mechanisms.md` §4); closed into B10-05 (its measured arm is HR-9's control (4)), an EDIT: the row is deleted at B10-05's close with the reading quoted |
 | NM-W3 | B10-01 (CLOSED) | narration package (`proposals/2026-10-13-narration-mechanisms.md` §4); landed (= IN-50), an EDIT: the row is deleted in the adoption commit |
@@ -198,13 +198,13 @@
 | REM-06 | B10-01 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-08 | B10-01 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-09 | B10-01 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
-| REM-10 | B10-02 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
-| REM-11 | B10-02 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
-| REM-12 | B10-02 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
-| REM-13 | B10-02 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
-| REM-14 | B10-02 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
-| REM-15 | B10-02 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
-| REM-16 | B10-02 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
+| REM-10 | B10-02 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
+| REM-11 | B10-02 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
+| REM-12 | B10-02 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
+| REM-13 | B10-02 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
+| REM-14 | B10-02 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
+| REM-15 | B10-02 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
+| REM-16 | B10-02 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-21 | B10-05 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-22 | B10-05 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-23 | B10-05 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
