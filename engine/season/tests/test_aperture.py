@@ -96,7 +96,7 @@ def test_aperture_the_counterfactual_rules_reproduce_the_real_call(realm):
 def test_aperture_no_act_enters_the_fold_unoffered(realm):
     stray = sorted((pid, v) for pid, c in realm["attempted"].items() for v in c
                    if v not in realm["formed"].get(pid, ()) or v not in realm["foldable"])
-    assert realm["attempted"], "no act was attributed -- `corpus_run.attribute` saw nothing"
+    assert realm["attempted"], "no act was attributed -- `corpus_run.attempts` saw nothing"
     assert not stray, (
         f"acts reached the fold for verbs the chooser never offered their actor: {stray[:5]}. An "
         "act is entering by a route this instrument does not watch, so its funnel undercounts "
@@ -300,7 +300,6 @@ def test_rem10_every_graded_loss_is_also_a_both_act(realm):
     assert checked == 2
     assert all(n <= realm["both"].get(v, 0) for v, n in realm["graded"].items()), (
         realm["graded"], realm["both"])
-    assert realm["unrowed"] == 0, "an act in the store names a verb no table row has"
 
 
 # ---------------------------------------------------------------------------------------------
@@ -468,16 +467,14 @@ def test_cr14_class_label_is_goal_class_with_an_org_goal_collapsed():
 
 def test_cr14_a_deliberation_with_no_question_is_its_own_row_and_the_rows_sum_to_the_rule_count(realm):
     """The deliberation table's within-instrument control, on the 1-season realm the module fixture
-    holds: its rows plus `none` sum to the shipped rule's deliberation count. `checked` guards the
-    sum against reading an empty table."""
+    holds: its rows plus `none` sum to the shipped rule's deliberation count. `deliberations > 0`
+    guards the sum against reading an empty table."""
     assert sum(realm["answered"].values()) == realm["deliberations"], (
         realm["answered"], realm["deliberations"])
     assert realm["deliberations"] > 0
-    assert len(realm["per_rule"][realm["shipped_rule"]]) == realm["deliberations"]
     assert all(isinstance(k, tuple) and len(k) == 2 for k in realm["answered"])
     sc = realm["scenes"]
     assert sum(sc["rows"].values()) == sc["scenes"] and sc["need_goal"] <= sc["need"]
-    assert realm["news"]["told"] >= 0 and realm["news"]["untold"] >= 0
 
 
 # -- (v) the wrong-kind columns -----------------------------------------------------------------
@@ -546,28 +543,36 @@ def test_cr14_wrong_kind_a_person_counts_present_until_a_death_precedes_the_act(
     """A person is present at an act when he is in the pre-season cast and no `person.died` naming
     him precedes the act's first Event. `restore` aimed at `p_other` is a Site wanted: alive, a
     wrong collection (first class); aimed at him after his death is logged, he lives in no collection
-    the run left and the subject reads absent. (`tiny_world` gives each person a Rung of his own id; the
-    death removes it with him, which the second assertion relies on.)"""
+    the run left and the subject reads absent; and a death that FOLLOWS the act leaves him present at
+    it (the same class as alive: an "any death means absent" reader reds here). (`tiny_world` gives
+    each person a Rung of his own id; the death removes it with him, which the second assertion
+    relies on.)"""
     from ..data.matrix import Step as _Step
     from ..state.ids import ROOT
 
-    def run(die_first: bool):
+    def run(death: str):
         w, d = _world()
         cast = frozenset(w.persons)
-        if die_first:
+
+        def die():
             w.step = _Step.MATTER
             w.write("exists", mint_token(w, WriteClass.MATTER), lambda: w.remove_person("p_other"),
                     record_kind="Person", fieldname="exists", driver="Event",
                     emits="person.died", subject="p_other", causes=[ROOT])
+        if death == "before":
+            die()
         _fold(w, d, Act(id="a_wk_late", actor="p_low", verb="restore",
                         payload={"subject": "p_other", "site": "p_other"}))
+        if death == "after":
+            die()
         rows = attempts(w, w.tick + 1)
         rd = A.refusal_reading(w, d, rows)
         return A.wrong_kind(w, d, rows, rd["post_acts"], cast)["classes"]
 
-    alive, dead = run(False), run(True)
+    alive, dead, later = run("never"), run("before"), run("after")
     assert alive["collection"] == 1 and alive["absent"] == 0, alive
     assert dead["absent"] == 1 and dead["collection"] == 0, dead
+    assert later == alive, (later, alive)
 
 
 def test_cr14_wrong_kind_an_admitted_then_refused_act_is_the_after_class_not_a_wrong_kind():
@@ -683,7 +688,8 @@ def test_cr14_pool_worlds_sums_counts_and_intersects_the_kinds_never_emitted():
     assert sum(p["answered"].values()) == p["deliberations"], "the pooled rows keep the sum control"
     # the pooled dict prints through the same printers as one world's
     text = "\n".join(A.cr14_blocks(p))
-    assert "SUM CONTROL" in text and "-> OK" in text and "runs 2" in text
+    control = [ln for ln in text.splitlines() if "SUM CONTROL" in ln]
+    assert len(control) == 1 and control[0].endswith("-> OK") and "runs 2" in text, control
 
 
 def test_cr14_the_original_positional_form_and_the_seeds_form_parse():

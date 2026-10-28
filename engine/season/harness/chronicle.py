@@ -151,22 +151,19 @@ def main(argv=None) -> int:
     args = ap.parse_args(argv)
 
     w, d, bounds = SB.drive(args.seed, args.seasons, args.arm, args.cap)
-    if not args.executed_only:
-        res = SB.read(w.log, d.act_of, bounds)
-        chain = deepest_chain(res["acts"])
-        print(f"chronicle seed={args.seed} seasons={args.seasons} arm={args.arm} cap={args.cap} "
-              f"acts={len(res['acts'])} depth={len(chain)} PYTHONHASHSEED={os.environ.get('PYTHONHASHSEED')}")
-        print(render(w.log, d.act_of, res["acts"], w.persons))
-        return 0
-    refused, _graded = SB.refusal_sets(w, len(bounds))
+    refused = SB.refusal_sets(w, len(bounds))[0] if args.executed_only else None
     res = SB.read(w.log, d.act_of, bounds, refused)
     chain = deepest_chain(res["acts"])
-    ex_chain = deepest_chain(res["executed"])
-    print(f"chronicle seed={args.seed} seasons={args.seasons} arm={args.arm} cap={args.cap} "
-          f"acts={len(res['acts'])} depth={len(chain)} PYTHONHASHSEED={os.environ.get('PYTHONHASHSEED')} "
-          f"executed-only: default_chain_refused={sum(1 for a in chain if a in refused)} "
-          f"executed_acts={len(res['executed'])} executed_depth={len(ex_chain)}")
-    print(render(w.log, d.act_of, res["executed"], w.persons))
+    head = (f"chronicle seed={args.seed} seasons={args.seasons} arm={args.arm} cap={args.cap} "
+            f"acts={len(res['acts'])} depth={len(chain)} PYTHONHASHSEED={os.environ.get('PYTHONHASHSEED')}")
+    rows = res["acts"]
+    if args.executed_only:
+        head += (f" executed-only: default_chain_refused={sum(1 for a in chain if a in refused)} "
+                 f"executed_acts={len(res['executed'])} "
+                 f"executed_depth={len(deepest_chain(res['executed']))}")
+        rows = res["executed"]
+    print(head)
+    print(render(w.log, d.act_of, rows, w.persons))
     return 0
 
 

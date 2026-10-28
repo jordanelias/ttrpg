@@ -707,9 +707,9 @@ def _r3_propagates(w, driver) -> bool:
     check is for.
 
     ⚠ KEEPS THE FOLD SET (`driver.resolved`) ON PURPOSE (REM-10, HR-8): R3 is a corpus STATUS over
-    acts that folded, not a census of attempts, and its statuses feed `run_case`'s `status` (so
-    `report.py`'s `runs/results.json`); reading the act store here would be a separate, unmeasured
-    change to those statuses, which this commit does not make."""
+    acts that folded, not a census of attempts, and its statuses feed `run_case`'s `status`; reading
+    the act store here would be a separate, unmeasured change to those statuses, which REM-10 does not
+    make."""
     acts = list(getattr(driver, "resolved", []))
     if len(acts) < 2:
         return False
@@ -723,7 +723,7 @@ def _r3_propagates(w, driver) -> bool:
             continue
         for k in tuple(row.emits or ()) + tuple(row.emits_on_refusal or ()):
             for t in range(w.tick + 2):
-                emitter[H(w.world_seed, t, a.actor, f"{k}:{a.id}")] = a.actor
+                emitter[_emission_id(w, t, a, k)] = a.actor
     for e in w.log:
         mine = emitter.get(e.id)
         if mine is None:
@@ -746,6 +746,13 @@ def _span_status(case: dict) -> str:
     if not isinstance(n, int) or n <= 0:
         return "SPAN-UNAUTHORED"
     return "CLAMPED" if n > MAX_SEASONS else "OK"
+
+
+def _emission_id(w: World, t: int, a, kind: str) -> str:
+    """The id the fold gives the Event of `kind` that act `a` emitted at tick `t`: `loop/resolve.py`
+    derives every emission's id as `H(seed, tick, actor, f"{kind}:{act.id}")`. The one spelling of it
+    in this module's attribution readers (`planted_control` spells it inline); attribution reads the log by it."""
+    return H(w.world_seed, t, a.actor, f"{kind}:{a.id}")
 
 
 def attribute(w: World, d, n: int) -> list:
@@ -773,16 +780,18 @@ def attribute(w: World, d, n: int) -> list:
     rather than adding a second rule for the same question (§8). The act id is unique, so a
     match at any tick is a genuine match for that act.
 
-    ⚠ ONE OWNER, TWO CALLERS. This body sat inline in `run_case` and returned only verb SETS; the
+    ⚠ EXTRACTED (the owner of the rule is now `_attribute_acts`, below). This body sat inline in `run_case` and returned only verb SETS; the
     aperture re-measurement (`harness/aperture.py`, plan position `★`) needs the same answer PER
     ACT, so it can say which PERSON executed what. Extracted rather than re-derived there, so the
-    corpus's "executed" and the populated realm's "executed" are one rule and cannot drift into
-    two ladders for one quantity (`CLAUDE.md` §0.06 S).
+    corpus's "executed" and the populated realm's "executed" share ONE RULE (`_attribute_acts`), over
+    DIFFERENT SETS: the fold set here, the act store in `aperture` (`CLAUDE.md` §0.06 S).
 
     ⚠ THIS READS `d.resolved`, THE FOLD SET -- the acts that reached `_fold`. A CONTESTED or GRADED
     act refused at admission (`resolve()`'s seam branch) never enters it, so this undercounts what was
     ATTEMPTED; `attempts(w, n)` below reads the act store and counts them. This function keeps its
-    signature and its reading for the callers that want the fold set (`soak.py`, the two tests)."""
+    signature and its reading for the callers that want the fold set (`soak.py`, the two tests, and
+    `run_case`'s `executed` list, which stays here because over the act store an admission refusal whose
+    kind is also an `emits:` kind -- `finding.none`, `news.untold` -- reads as made)."""
     return _attribute_acts(w, getattr(d, "resolved", []), n)
 
 
@@ -799,7 +808,7 @@ def _attribute_acts(w: World, acts, n: int) -> list:
             continue
         made, refused = (
             tuple(k for k in (kinds or ())
-                  if any(H(w.world_seed, t, a.actor, f"{k}:{a.id}") in ids for t in range(n + 1)))
+                  if any(_emission_id(w, t, a, k) in ids for t in range(n + 1)))
             for kinds in (row.emits, row.emits_on_refusal))
         out.append((a, made, refused))
     return out
@@ -867,7 +876,7 @@ def graded_losses(w: World, n: int) -> list:
         if row is None:
             continue
         evs = [by_id[i] for k in (row.emits_on_refusal or ()) for t in range(n + 1)
-               if (i := H(w.world_seed, t, a.actor, f"{k}:{a.id}")) in by_id]
+               if (i := _emission_id(w, t, a, k)) in by_id]
         if graded_loss(a, evs):
             out.append(a)
     return out
@@ -925,11 +934,8 @@ def emits_and_writes_nothing(table=None, effects=None, rulings=None) -> dict:
     rulings = deposit_only_rulings() if rulings is None else rulings
     out = {}
     for v, r in table.items():
-        bands = list(r.writes_by_degree) or [None]
-        if any(r.writes_at(d) for d in bands) or v in effects:
-            continue
-        emitted = r.emits or any(r.emits_by_degree.values())
-        if not emitted:
+        # `VerbRow.writes` and `.emits` are the UNION over every degree branch (`data/verbs.py`)
+        if r.writes or v in effects or not r.emits:
             continue
         out[v] = "deposit-only by ruling" if v in rulings else "untagged"
     return out
@@ -965,11 +971,14 @@ def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
     except (ShapeGap, Unspecified, Forbidden, NoProducer) as e:
         return dict(id=cid, scale=scale, status="DESIGN-GAP", executed=[], refused=[],
                     seasons=n, why=f"{type(e).__name__}: {e}", checks={"R1": False})
-    # REM-10: the ACT STORE, not the fold set -- a contested act refused at admission is an attempt
-    # that `d.resolved` never held, so R-05's `refused` class read it as never attempted.
-    outcomes = attempts(w, n)
-    ok = sorted({a.verb for a, made, _ in outcomes if made})
-    no = sorted({a.verb for a, _, refused in outcomes if refused})
+    # REM-10: `refused` reads the ACT STORE, not the fold set -- a contested act refused at admission is
+    # an attempt that `d.resolved` never held, so R-05's `refused` class read it as never attempted.
+    # `executed` STAYS ON THE FOLD SET: `_attribute_acts`'s made rule reads a refusal whose kind is also
+    # an `emits:` kind (`finding.none` on `examine` and `research`, `news.untold` on `tell`) as made, so
+    # over the act store an admission refusal would read as an execution (measured on the 143 worlds:
+    # `examine` 0 -> 85 worlds executing, every one of them refused at admission).
+    ok = sorted({a.verb for a, made, _ in attribute(w, d, n) if made})
+    no = sorted({a.verb for a, _, refused in attempts(w, n) if refused})
     # ---- `W18`: §6.1's R1/R3/R4/R5 and §6.2's A1, computed. R2/A2/A3 are NOT-COMPUTABLE.
     before = dict(DEFAULT_FIXTURES.reads)
     w2 = build_at(case, seed)

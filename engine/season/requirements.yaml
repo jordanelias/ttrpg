@@ -1053,20 +1053,22 @@ rows:
       (`loop/resolve.py`'s contest branch, e.g. `speech.unheard`) never enters -- so such an act is not counted as attempted and
       `speak` reads as never attempted, though `w.acts` holds every one.
 
-      **REM-16 RE-TAKE (v10 B10-02), 2026-10-28, tree `17ba74bc`, `PYTHONHASHSEED=0`; THE ROW STAYS `not_met`.** `corpus_run`, seed 0,
-      143 cases (`EXIT 0`): `VERBS THAT EXECUTED : 20 of 56` (`accept`, `carry`, `challenge`, `conceal`, `create_record`, `examine`,
-      `fight`, `give`, `interview`, `issue`, `move`, `petition`, `reconstruct`, `release`, `research`, `surveil`, `tell`, `tend`,
-      `transfer`, `utter`); `VERBS ONLY REFUSED : 14` (`argue`, `build`, `commit`, `covenant`, `dispatch`, `forge`, `found`,
-      `restore`, `sabotage`, `seize`, `speak`, `survey`, `train`, `work`); `WHERE THE 56 GO: 5 have no predicate/effect · 17 foldable
-      but never even attempted (arrest, comply, confer, convene, destroy_record, determine, establish, forgive, march, migrate,
-      oblige, open_case, pardon, raze, requisition, revoke, thread_read) · 14 attempted and always refused · 20 executed`, against
-      the `met` text's `0 · 0 · 0`. The denominator 56 is the line's own `len(VERB_TABLE)`. ⚠ THE 20 OVERSTATES ITS OWN VERBS, MEASURED
-      AT REM-10 (`bb444e4e`, squashed in `98989253`): `corpus_run.run_case`'s `executed` list now reads the act store, and
-      `_attribute_acts`' made rule is unchanged, so an act refused at admission counts as executed when its refusal kind is also an
-      emitted kind (`finding.none`, `news.untold`). After REM-10 `research` reads executed in 124 of 143 worlds (18 before) and
-      `examine` in 85 (0 before); `run_case`'s per-world counts for those verbs are an ATTEMPTS reading, not completions.
-      `aperture` separates them (its `both` column is an act matching both the made and the refused columns; `graded` is a lost
-      contest), `run_case` does not; `examine` and `research` are in the 20 on that rule. THE REALM READING, `aperture 1 --seeds 0 1
+      **REM-16 RE-TAKE (v10 B10-02), 2026-10-28, `PYTHONHASHSEED=0`, re-taken at the B10-02 close after `run_case`'s `executed` was
+      returned to the fold set (the REM-10 note below); THE ROW STAYS `not_met`.** `corpus_run`, seed 0, 143 cases (`EXIT 0`):
+      `VERBS THAT EXECUTED : 19 of 56` (`accept`, `carry`, `challenge`, `conceal`, `create_record`, `fight`, `give`, `interview`,
+      `issue`, `move`, `petition`, `reconstruct`, `release`, `research`, `surveil`, `tell`, `tend`, `transfer`, `utter`);
+      `VERBS ONLY REFUSED : 15` (`argue`, `build`, `commit`, `covenant`, `dispatch`, `examine`, `forge`, `found`, `restore`,
+      `sabotage`, `seize`, `speak`, `survey`, `train`, `work`); `WHERE THE 56 GO: 5 have no predicate/effect · 17 foldable but never
+      even attempted (arrest, comply, confer, convene, destroy_record, determine, establish, forgive, march, migrate, oblige,
+      open_case, pardon, raze, requisition, revoke, thread_read) · 15 attempted and always refused · 19 executed`, against the `met`
+      text's `0 · 0 · 0`; `DISTINCT EXECUTED SETS 124`. The denominator 56 is the line's own `len(VERB_TABLE)`. ⚠ THE REM-10 NOTE:
+      `run_case`'s `refused` list reads the act store (`corpus_run.attempts`), which is what moved `argue`, `speak` and `examine` from
+      never-attempted to refused; its `executed` list stays on the fold set (`corpus_run.attribute`, `driver.resolved`), because
+      `_attribute_acts`' made rule reads a refusal whose kind is also an emitted kind (`finding.none`, `news.untold`) as made, so over
+      the act store `examine` read executed in 85 worlds (0 on the fold set), every one of them refused at admission. THE 19 STILL
+      OVERSTATES ITS OWN VERBS, AS IT ALWAYS HAS: a GRADED LOSS (a lost `tell`, a failed `research`) carries that kind at degree
+      `Failure` and reads as made on the fold set too. `aperture` separates them (its `both` column is an act matching both the made
+      and the refused columns; `graded` is a lost contest), `run_case` does not. THE REALM READING, `aperture 1 --seeds 0 1
       2` (1 season, `build_realm`, seeds 0 / 1 / 2, every CONTROL line EQUAL), pooled over the three seeds: 2,127 acts attempted
       (695 / 718 / 714), 832 executed (284 / 286 / 262), 1,629 refused, 338 `both`, 38 `graded`, 4 neither. Of the 56 rows, 44 are
       attempted and 12 never (`arrest`, `comply`, `confer`, `construe`, `destroy_record`, `evade / defy`, `exchange`, `give`,
@@ -1076,8 +1078,10 @@ rows:
       85 and `march` 22 of 22 executions are `both` (0 clean); `research` 139 executions, 137 of them `both` (2 clean); `surveil` 79, 75
       (4 clean); `tell` 28, 19 (9 clean). 25 rows have at least one clean execution. THE TWO INSTRUMENTS DISAGREE BY WORLD:
       `carry`, `tend` and `give` execute in some corpus world and in none of the three realm seeds (`give` is never attempted there);
-      `commit`, `forge`, `survey` and `dispatch` execute in the realm and are only refused in the corpus; `march`, `open_case`,
-      `convene` and `forgive` execute in the realm and are never attempted in the corpus.
+      `commit`, `forge`, `survey` and `dispatch` execute in the realm and are only refused in the corpus (`examine` reads executed in
+      the realm only as `both`, all 85 of its realm executions (acts, pooled over three seeds; the 85 corpus WORLDS above are another unit and equal it by coincidence), and is only refused in the corpus: the REM-10 note above); `open_case`,
+      `convene` and `forgive` execute in the realm and are never attempted in the corpus (`march` is never attempted there either,
+      and its 22 realm executions are all `both`: `march.declared` followed by `march.refused`, which the driver counts as refused).
       WHAT THIS DOES NOT SHOW. Neither reading is the `met` text's second route (every verb of the latter two classes shown executing
       in `aperture 4 0`, the seat-gated verbs among them): `aperture 4 0` was not run for this paragraph, and the one-season pooled
       realm is shorter than its horizon. A verb's `ex` is not a verb built out (the clause needs the row's declared kinds emitted and a
@@ -1299,8 +1303,8 @@ rows:
       CONTROL, `decision_spread --null` seed 0: draw 498 of 498, tie 498, outvoted 0, no pursuit-decided reading, the same 222 all-zero
       readings from 37 persons, so the attribution can fail and does when the pursuit term is removed. DERIVED from those lines, not
       printed: among the 46 vectored persons' 276 readings (498 - 222) pursuit decides 74 / 65 / 68 = 26.8 / 23.6 / 24.6 % and the
-      sampler overrules a strict top in 202 / 211 / 208 = 73.2 / 76.4 / 75.4 % (the register-carried 28 % / 72 % above, on an older
-      tree). WHAT THIS DOES NOT SHOW. The row's `measure:` states no threshold for these shares and none is claimed: the readings
+      sampler outvotes the score leader in 202 / 211 / 208 = 73.2 / 76.4 / 75.4 % (78 of 276 = 28.3 % on the 222 / 198 / 78 reading of
+      an older tree, `proposals/2026-10-21-v9-remediation/2026-10-21-v9-remediation-02-items-rb0-to-rb3.md:226`). WHAT THIS DOES NOT SHOW. The row's `measure:` states no threshold for these shares and none is claimed: the readings
       are read, not asserted, and no conjunct moves on them. The all-zero 222 equals the tie count 222 at each seed; the printed lines
       carry no per-reading cross-tab, so that they are the same readings is an inference from equal counts. The 37 vectorless persons
       bear on the fifth conjunct REM-05 proposes (every acting person carries a pursuit vector), which this row's `measure:` does not
@@ -1439,8 +1443,10 @@ rows:
       subject: a person with no pursuit vector). CONTROL, `--null` seed 0: tie 498, outvoted 0,
       no pursuit-decided reading, the same 37 persons all-zero, so the split moves when the pursuit term is removed. THE OTHER HALF
       OF THE ROW (declining the optimum), derived from the printed lines and not printed: among the 46 vectored persons' 276 readings
-      the sampler's top is not the score leader in 202 / 211 / 208 = 73.2 / 76.4 / 75.4 %, by a median margin near 0.03; that is the
-      sampler declining the optimum at the built realm, which the row already records as built (U4). WHAT THIS DOES NOT SHOW. The
+      the sampler's top is not the score leader in 202 / 211 / 208 = 73.2 / 76.4 / 75.4 %, and the median LEAD of those readings (the
+      leader's score less the runner-up's) is near 0.03; that is the sampler declining the optimum at the built realm, which the row
+      already records as built (U4), by an amount this reading bounds from below and does not measure (the gap to the top actually
+      drawn is larger when a third or lower candidate is drawn). WHAT THIS DOES NOT SHOW. The
       row's `measure:` states no threshold for a tie or an overrule share and none is claimed; the shares are read, not asserted.
       Inclination breaking a tie remains unbuilt (the alignment table is sparse), so nothing here is an inclination: the draw breaks
       the 222. Ties are counted at tick 0 of one build per seed, not over a played season. The U4 test was not re-run for this

@@ -276,3 +276,12 @@ def test_the_executed_only_cli_prints_its_lines_beside_the_current_ones_and_the_
     assert len(execd) >= 3, "no executed line was printed"
     assert any("executed seed=" in l and "total:" in l for l in execd)
     assert "arms off vs off: EQUAL" in both
+
+
+def test_a_repeated_draw_seed_is_refused_before_any_world_is_built():
+    """`draw_seed_arm` keys its runs by draw seed, so `--draw-seeds 1 1` would run one copy and print one:
+    the CLI refuses it by name instead (no realm is built first, so the refusal is immediate)."""
+    import pytest
+    with pytest.raises(SystemExit) as e:
+        SB.main(["--base-seed", str(SEED), "--seasons", "1", "--draw-seeds", "1", "1"])
+    assert e.value.code == 2

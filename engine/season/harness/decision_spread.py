@@ -210,7 +210,6 @@ def attribute_top(p, cands: list, fx, draw=None, subsistence: float = 0.0) -> di
     best, second = scores[order[0]], scores[order[1]]
     margin = best - second
     tau = float(fx.get("choice_temperature"))
-    draw_kind = None
     if ai != order[0]:
         decider = "draw"
     elif margin <= EPS:
@@ -222,10 +221,8 @@ def attribute_top(p, cands: list, fx, draw=None, subsistence: float = 0.0) -> di
             if rest[ai] - max(r for j, r in enumerate(rest) if j != ai) <= EPS:
                 deciding.append(name)
         decider = "+".join(deciding) if deciding else "overdetermined"
-    if margin <= EPS and tau > 0:
-        draw_kind = "tie" if scores[ai] >= best - EPS else "outvoted"
-    elif ai != order[0]:
-        draw_kind = "outvoted"
+    draw_kind = None if decider != "draw" else (
+        "tie" if margin <= EPS and tau > 0 and scores[ai] >= best - EPS else "outvoted")
     return {"top": actual, "decider": decider, "margin": margin, "scores": scores, "terms": terms,
             "draw_kind": draw_kind, "field_zero": field_zero}
 
@@ -237,12 +234,14 @@ def new_split() -> dict:
 
 def tally_split(split: dict, pid: str, r: dict) -> None:
     """Fold one `attribute_top` result for person `pid` into `split`: one reading counted, the draw's kind
-    counted (an outvoted top keeps its margin, the gap the draw overcame), a `field_zero` reading counted
+    counted (an outvoted top keeps its margin: the leader's lead over the runner-up, `best - second`, which is
+    a LOWER BOUND on the gap the draw overcame, larger when the drawn top is a third or lower candidate),
+    a `field_zero` reading counted
     and its person remembered. A reading with no candidate (`decider` `none`) is not a reading."""
     if r["decider"] == "none":
         return
     split["read"] += 1
-    if r["draw_kind"] in ("tie", "outvoted"):
+    if r["draw_kind"]:
         split[r["draw_kind"]] += 1
     if r["draw_kind"] == "outvoted":
         split["outvoted_margins"].append(r["margin"])
@@ -415,8 +414,8 @@ def read_decisions(w) -> dict:
 def goal_class(q) -> str:
     """The one classifier of a question's goal class: for a `need` question, `own want` (about a
     `prop_` Proposition), `creed` (about a faction's Proposition), the org goal's id (a goal in
-    `goals_data`) or `other need`; `-` for a non-`need` source. `play_season` calls it; aperture will
-    call it (CR-14's second commit). No second classifier is written."""
+    `goals_data`) or `other need`; `-` for a non-`need` source. `play_season` calls it, and
+    `harness/aperture.py::class_label` calls it. No second classifier is written."""
     if q.source != "need":
         return "-"
     if q.about.startswith("prop_"):
@@ -521,7 +520,7 @@ def print_decisions(r: dict, arm: str) -> None:
 def print_split(sp: dict, tau: float) -> None:
     """The draw split and the vectorless count (`attribute_top`'s `draw_kind` and `field_zero`). The
     `draw` label's two halves: a `tie` the draw ordered, an `outvoted` score leader the draw overrode."""
-    med = "-" if sp["outvoted_median_margin"] is None else f"{sp['outvoted_median_margin']:.4f}"
+    med = _fmt(sp["outvoted_median_margin"])
     print(f"  the draw's {sp['tie'] + sp['outvoted']} tops, split: tie {sp['tie']}, outvoted {sp['outvoted']}; "
           f"outvoted margins' median {med} against choice_temperature {tau:g}")
     print(f"  every candidate scores 0 (urgency set aside): {sp['field_zero']} of {sp['read']} readings, "

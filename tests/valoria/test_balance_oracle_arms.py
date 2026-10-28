@@ -150,7 +150,7 @@ def test_an_arm_resolves_to_a_fixtures_and_a_build_half_against_literal_pairs():
     """CR-14 (iv): `run_arm` takes the shipped `field_casualty_model` string or a mapping with a
     `fixtures` half (swept onto the built world) and a `build` half (kwargs of `build_realm`). The
     one resolver is asked against LITERAL pairs, with no world built; swapping the halves in the
-    resolver reds every assertion here."""
+    resolver reds every assertion here but the empty mapping's."""
     resolve = oracle._resolve_arm
     assert resolve("total") == ({"field_casualty_model": "total"}, {})
     assert resolve({"fixtures": {"field_casualty_model": "total"}}) == (
@@ -171,8 +171,16 @@ def test_an_arm_names_only_a_build_kwarg_or_a_fixture_half():
         oracle._resolve_arm({"fixture": {"field_casualty_model": "total"}})
     with pytest.raises(ValueError):
         oracle._resolve_arm(7)
-    assert set(oracle.BUILD_KWARGS) == {"goals", "goals_complete", "foreign", "guards", "cap",
-                                        "from_roster"}
+    assert "seed" not in oracle.BUILD_KWARGS and "guards" in oracle.BUILD_KWARGS
+
+
+def test_an_arm_naming_an_unregistered_fixture_is_refused_not_run_as_a_null_arm():
+    """`Fixtures.sweep` writes any name; `run_arm` reads the name first (`Fixtures.get`), so a typo
+    raises `Ungraded` instead of running an arm identical to its control."""
+    import pytest
+    from engine.season.gaps import Ungraded
+    with pytest.raises(Ungraded):
+        oracle.run_arm({"fixtures": {"field_casualty_modle": "total"}}, 1, 0, 1)
 
 
 def test_the_shipped_arms_still_resolve_through_the_string_form():

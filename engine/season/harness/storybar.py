@@ -411,8 +411,8 @@ def draw_seed_arm(base, seasons: int, draw_seeds) -> dict:
     chooser's draw alone moves: the world, the act-id mint and `w.world_seed` are the same in every
     copy, and `base` itself is never run.
 
-    Returns `{"base_hash_before", "base_hash_after", "runs": {draw_seed: {"start_hash", "acts",
-    "depth", "chains"}}}`: `start_hash` is the copy's `content_hash()` before it runs (equal across
+    Returns `{"base_hash_before", "base_hash_after", "fixtures": {"choice_temperature",
+    "intent_disclosure"}, "runs": {draw_seed: {"start_hash", "acts", "depth", "chains"}}}`: `start_hash` is the copy's `content_hash()` before it runs (equal across
     copies and to `base_hash_before`); `base_hash_after` is `base`'s after every copy has run (a copy
     that shared state with `base` would move it); `depth` is `summarise`'s distribution over every
     act; `chains` is `chains`' multiset.
@@ -437,6 +437,9 @@ def draw_seed_arm(base, seasons: int, draw_seeds) -> dict:
                            "depth": summarise(r["acts"].values())["depth"],
                            "chains": chains(r["acts"], {a.id: a.verb for a in d.act_of.values()})}
     out["base_hash_after"] = base.content_hash()
+    # The two fixtures the residues below turn on, read AFTER the hash so the read cannot move it: the
+    # arm records the values it ran at.
+    out["fixtures"] = {k: base.fixtures.get(k) for k in ("choice_temperature", "intent_disclosure")}
     return out
 
 
@@ -450,8 +453,9 @@ def _print_draw_seeds(base_seed: int, seasons: int, cap, draw_seeds, res: dict) 
     print(f"storybar --draw-seeds base-seed={base_seed} seasons={seasons} cap={cap} "
           f"draw-seeds={list(draw_seeds)} PYTHONHASHSEED={os.environ.get('PYTHONHASHSEED')}")
     print(f"base world hash before={res['base_hash_before']} after={res['base_hash_after']} "
-          f"({'unmutated' if res['base_hash_before'] == res['base_hash_after'] else 'MUTATED'})")
-    first = None
+          f"({'unmutated' if res['base_hash_before'] == res['base_hash_after'] else 'MUTATED'}) "
+          f"ran at {res['fixtures']}")
+    first = next(iter(res["runs"]), None)
     for ds, r in res["runs"].items():
         ch = r["chains"]
         longest = max((len(k) for k in ch), default=0)
@@ -460,9 +464,7 @@ def _print_draw_seeds(base_seed: int, seasons: int, cap, draw_seeds, res: dict) 
         for k, n in sorted(ch.items(), key=lambda kv: (-len(kv[0]), kv[0])):
             if len(k) >= 2:
                 print(f"  chain x{n}: {' > '.join(k)}")
-        if first is None:
-            first = ds
-        else:
+        if ds != first:
             diff = chain_difference(res["runs"][first]["chains"], ch)
             same_depth = res["runs"][first]["depth"] == r["depth"]
             print(f"[draw {first} vs {ds}] chains {'EQUAL' if diff == 0 else 'DIFFER'} "
@@ -521,6 +523,9 @@ def main(argv=None) -> int:
             ap.error("--draw-seeds takes no --n or --arms")
         if args.executed_only:
             ap.error("--draw-seeds takes no --executed-only")
+        if len(set(args.draw_seeds)) != len(args.draw_seeds):
+            ap.error("--draw-seeds names a seed twice: the run is keyed by draw seed, so the repeat "
+                     "would silently collapse into one")
         res = draw_seed_arm(build_realm(args.base_seed, args.cap), args.seasons, args.draw_seeds)
         _print_draw_seeds(args.base_seed, args.seasons, args.cap, args.draw_seeds, res)
         return 0

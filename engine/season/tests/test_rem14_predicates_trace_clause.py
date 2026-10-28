@@ -63,9 +63,9 @@ def test_release_of_a_tenure_the_actor_does_not_own():
 
 
 def test_revoke_names_the_clause_it_refused_on():
-    """Three of `_req_revoke`'s four refusals, on `test_g3_not_yours.py`'s governance world. The
-    fourth (a seat whose conferral basis has no revocation disposal) is reached only by a
-    hand-mutated office -- `Office.__post_init__` refuses one -- and is not planted here."""
+    """All four of `_req_revoke`'s refusals, on `test_g3_not_yours.py`'s governance world. The
+    conferral-basis clause is reached only by a hand-mutated office (`Office.__post_init__` refuses
+    one), planted as `test_in31_revocation_cost.py` plants it: a conferral set past the constructor."""
     from .test_g3_not_yours import _gov_world
     w, _ = _gov_world()
     rv = lambda via, office, actor="p_king": Act(
@@ -90,6 +90,11 @@ def test_revoke_names_the_clause_it_refused_on():
     assert out is False and [_clause(r) for r in rows] == [
         "a revoke of a seat nobody holds"], rows
     assert all(r.detail["chose"] == "refuse" for r in rows)
+    # (2) authority holds, but the duke's seat has a conferral basis with no revocation disposal
+    w.offices["off_duke"].conferral = "purchased"
+    out, rows = _rows_of(lambda: _preds._req_revoke(w, rv("off_crown", "off_duke")))
+    assert out is False and [_clause(r) for r in rows] == [
+        "a revoke of a seat whose conferral basis has no revocation disposal"], rows
 
 
 def test_dispatch_names_no_person_the_world_holds():

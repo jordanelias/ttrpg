@@ -34,8 +34,8 @@ from ..queries.world_q import (
 )
 from ..state.carriers import Act
 from ..state.gate import seat_faction
-from ..trace_log import TRACE
 from ..state.world import World
+from ..trace_log import TRACE
 
 
 def sides_of(w: World, a: Act, target: Optional[str],

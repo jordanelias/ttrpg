@@ -21,6 +21,12 @@ counts both, headline first, so neither reading is lost):
   * THE SEAT HOLDER is the subject of a `hold` Tenure on that same seat, live at the same tick.
     `world_q.hold_force` answers only for NOW; a run's log spans ticks, so the window is read here, by
     the same `kind`/`object` test.
+  * ⚠ SURVIVORS ONLY. `World.tenures` is the living persons' `Person.tenures`, and `remove_person`
+    closes a dead person's edges and then drops him with them, so an obligee or a holder who died
+    during the run is not in `w.tenures` at all: EVERY COUNT BELOW IS A LOWER BOUND whenever one did
+    (seat-holders were 16 of the 20 deaths over seeds 0-4 at four seasons, CR-14's reading), and a 0 is
+    a 0 over the survivors. Capturing the edges while the run goes changes what this reader is handed,
+    not its arithmetic, and is not done here.
   * REPORTING, HEADLINE (`m0e`): an EXECUTED `tell` -- an Event of kind `news.told` whose causing act
     (`state/attribution.causing_act`) is a `tell` -- by an obligee, whose HEARER (the act's operand
     under the `tell` row's `counterparty:` column, read through `binding_from_act`, exactly as
@@ -66,12 +72,12 @@ class ObligeeReading:
     attempted: int = 0                # news.told + news.untold of the same
     told_by: int = 0                  # told_by claims in a holder's ledger, last hop an obligee
     inferred_about_person: int = 0    # inferred claims an obligee holds whose subject is a person
-    obligee_edges: int = 0            # oblige Tenures on a seat in w.offices, ever opened
+    obligee_edges: int = 0            # oblige Tenures on a seat in w.offices, of persons still in the world
     obligees: int = 0                 # distinct persons holding at least one such edge
     edges_with_holder: int = 0        # of those edges, how many had a holder at some tick they were live
     tells_by_obligees: int = 0        # executed tells by an obligee to anyone (the denominator)
     tells_all: int = 0                # executed tells in the log
-    ticks: tuple = ()                 # the sorted ticks the log spans
+    ticks: int = 0                    # how many distinct ticks the log spans
     by_pair: dict = field(default_factory=dict)   # (obligee, seat, holder) -> executed count
     attempted_by: dict = field(default_factory=dict)  # (kind, degree) -> count, over `attempted`
     edges_since: dict = field(default_factory=dict)   # Tenure.since -> oblige edges opened then
@@ -81,7 +87,7 @@ class ObligeeReading:
                 f"inferred_about_person={self.inferred_about_person} | obligee_edges="
                 f"{self.obligee_edges} obligees={self.obligees} edges_with_holder="
                 f"{self.edges_with_holder} | tells_by_obligees={self.tells_by_obligees} "
-                f"tells_all={self.tells_all} | ticks={len(self.ticks)}")
+                f"tells_all={self.tells_all} | ticks={self.ticks}")
 
 
 def _live_at(t, tick: int) -> bool:
@@ -89,7 +95,8 @@ def _live_at(t, tick: int) -> bool:
 
 
 def read_obligee_reports(w) -> ObligeeReading:
-    """The reading over a world's whole log (see the module docstring for every definition)."""
+    """The reading over a world's whole log, and over the Tenures of the persons it still holds (see the
+    module docstring for every definition and for what a death takes with it)."""
     out = ObligeeReading()
     counterparty = VERB_TABLE["tell"].counterparty
     seats = set(w.offices)
@@ -103,7 +110,7 @@ def read_obligee_reports(w) -> ObligeeReading:
         out.edges_since[t.since] = out.edges_since.get(t.since, 0) + 1
     out.edges_with_holder = sum(
         1 for t in obliges
-        if any(h.object == t.object and (t.until is None or h.since <= t.until)
+        if any(h.object == t.object and (t.until is None or h.since < t.until)
                and (h.until is None or h.until > t.since) for h in holds))
     by_obligee: dict = {}
     for t in obliges:
@@ -130,31 +137,26 @@ def read_obligee_reports(w) -> ObligeeReading:
         hearer = binding_from_act(a).get(counterparty)
         for seat in sorted({t.object for t in mine}):
             if hearer is not None and hearer in holders(seat, e.emitted_at):
-                out.attempted += 1
                 k = (e.kind, e.degree)
                 out.attempted_by[k] = out.attempted_by.get(k, 0) + 1
                 if e.kind == TOLD:
-                    out.m0e += 1
                     key = (a.actor, seat, hearer)
                     out.by_pair[key] = out.by_pair.get(key, 0) + 1
-    out.ticks = tuple(sorted(ticks))
+    out.attempted = sum(out.attempted_by.values())
+    out.m0e = sum(out.by_pair.values())
+    out.ticks = len(ticks)
 
     # HEARD: a told_by claim in a seat holder's ledger whose last hop is an obligee of that seat.
     for h in holds:
-        p = w.persons.get(h.subject)
-        if p is None:
-            continue
-        for c in p.ledger:
+        for c in w.persons[h.subject].ledger:
             if c.source != TOLD_BY or not c.chain or not _live_at(h, c.when):
                 continue
             if any(t.object == h.object and _live_at(t, c.when) for t in by_obligee.get(c.chain[-1], ())):
                 out.told_by += 1
     # THE WORKPLAN'S OWN M0e: what an obligee holds `inferred` about a person.
-    for pid in by_obligee:
-        p = w.persons.get(pid)
-        if p is not None:
-            out.inferred_about_person += sum(
-                1 for c in p.ledger if c.source == INFERRED and c.subject in w.persons)
+    out.inferred_about_person = sum(
+        1 for pid in by_obligee for c in w.persons[pid].ledger
+        if c.source == INFERRED and c.subject in w.persons)
     return out
 
 

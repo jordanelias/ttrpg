@@ -15,8 +15,8 @@ distinct Receipts `r_self`, `r_world` the gate minted satisfy:
   (4) `A` is in `causes*` of the Event carrying `r_self` and of the Event carrying `r_world`
       (`causes*` = the transitive closure of `Event.causes` through the log; an act id is a leaf);
   (5) `r_self` is not `r_world` (two Receipts, compared by identity).
-A death is counted apart: `ArcReading.deaths` lists, per person, the acts that have a `person.died`
-Event in their `causes*`, and no death Receipt is ever a self or a world write.
+A death is counted apart: `ArcReading.deaths` lists, per person, the acts that are in the `causes*` of a
+`person.died` Event, and no death Receipt is ever a self or a world write.
 
 WHY THE ROSTERS EXIST (the failure the planted worlds observe). Every witnessed act deposits a claim
 (`loop/witness.py`: `w.write("claim_ledger", ... emits="claim.deposited", subject=c.id, ...)`), so a
@@ -29,7 +29,7 @@ pair that is not a `write_matrix.yaml` key, has no `RES` step, or is one of thos
 runs at import and on every `read_arcs` call, so a roster handed in is refused the same way.
 
 THE ROSTERS ARE HOMED HERE, NOT IN `rosters.yaml` (the B0.1 piece moves the roster to the instrument;
-`rosters.yaml` is untouched). Their first reading is TL §1.2's table, `[ASSUMPTION; medium; Jordan to
+`rosters.yaml` is untouched). `ARC_SELF` and `ARC_WORLD` together are TL §1.2's `arc_effect_fields`. Their first reading is TL §1.2's table, `[ASSUMPTION; medium; Jordan to
 correct]`:
   * `ARC_SELF`  -- `Tenure.since/until/term/degree`, `Person.capability/stance/pursuits`.
   * `ARC_WORLD` -- `Record.exists/stages`, `DocketItem.*`, `Site.condition`, `Rung.exists/stores`,
@@ -41,8 +41,8 @@ correct]`:
     payload carries the remit grant and the determined-by mark, and `ARC_SELF` omits it).
 Ownership, not the roster, tells self from world: the same pair is a self write on `p`'s record and a
 world write on anyone else's. Clause (5) therefore holds by construction of the split (a Receipt is
-owned by `p` or it is not); it is coded as the literal test anyway so a roster or an owner rule that
-ever lets one Receipt serve both sides is caught here and not in a reading.
+owned by `p` or it is not, and goes to one list), so the test of it in `read_arcs` CANNOT FAIL and
+observes nothing; it is kept as the literal statement of the clause, and no reading depends on it.
 
 CLAUSE (1) IS AN INPUT, NOT A DEFAULT. No thrust is authored in the tree yet (`thrust_axes` is B10-05), so
 "an act formed on the thrust" has nothing to be read from. `read_arcs` takes `on_thrust(act, occasion)
@@ -73,17 +73,21 @@ reads the kind from the id and the field, in this order: a Tenure id (the Tenure
 a collection of `World` holding the id whose `(kind, field)` is a matrix key; the one kind in the matrix
 that has the field at all; the one kind whose row's `emits` holds the Event's kind. The OWNER of every
 non-Tenure record is its own id (so a person-rung, whose id is the person's, is that person's; a person
-who has since died still owns his writes), and of a claim deposit the claim's holder, read off the
-ledgers (a claim no ledger holds any more is nobody's and reads as a world write). [ASSUMPTION; medium;
-Jordan to correct] A Receipt that resolves to no kind matches no pair and counts only under
+who has since died still owns his writes to those records), and of a claim deposit the claim's holder,
+read off the ledgers (a claim no ledger holds any more is nobody's and reads as a world write). A
+Tenure's owner is read from `w.tenures` at the END of the run, which holds only the living (`remove_person`
+drops a dead person's Tenures with him), so a Receipt on a since-dead person's Tenure falls through to
+its own id and reads as a world write; `ambition_thrusts` reads a dead person's acts off-thrust, which
+masks this for that producer and for no other. [ASSUMPTION; medium; Jordan to correct] A Receipt that resolves to no kind matches no pair and counts only under
 `unrestricted=True`.
 
 NOT DONE HERE, AND SAID: the roster is by CELL, so a MATTER-driven write of an ACTS cell (the wear that
 chains `Site.condition` after an act's last emission, a term maturing) counts when it is in the act's
 `causes*`. TL §1.2 states the roster by cell and this reader follows it; `Receipt.driver` would tell the
-two apart. A death's CASCADE (the victim's tenures closing) is a `Tenure.until` Receipt like any other and
-is not subtracted either: `deaths` names the acts that reach a death, so a reader can set them apart.
-[ASSUMPTION; medium; Jordan to correct.] No stage, deadline, closing, successor or deal is read.
+two apart. A fight or accept kill's cascade (the victim's tenures closing) mints no Receipt to
+subtract: `_eff_kill` names only `Person.body`, and the gate mints for the subjects a change names. `deaths`
+names the acts that reach a death, so a reader can set them apart. [ASSUMPTION; medium; Jordan to
+correct.] No stage, deadline, closing, successor or deal is read.
 """
 
 from __future__ import annotations
@@ -96,6 +100,7 @@ from ..data.matrix import MATRIX, Step
 from ..queries import world_q
 from ..state.carriers import Receipt
 from ..state.ids import ROOT
+from .aperture import DEATH_KIND
 from .soak import _occasion_row
 from .storybar import refusal_sets
 
@@ -107,11 +112,6 @@ class ArcRosterRefused(ValueError):
 # ---------------------------------------------------------------------------------------------
 # THE ROSTERS. `(kind, field)` pairs; every one is checked against `write_matrix.yaml` at import.
 # ---------------------------------------------------------------------------------------------
-
-#: A death is the Event kind `person.died`, whichever of `Person.body` or `Person.exists` carries its
-#: Receipt (the realm's carries `body`). Read off the matrix: the one kind both rows emit.
-DEATH_KIND = "person.died"
-assert DEATH_KIND in MATRIX[("Person", "exists")].emits and DEATH_KIND in MATRIX[("Person", "body")].emits
 
 #: What no roster may name, besides a non-RES cell: the walking self-write and the death cell.
 #: `claim_ledger` is matched on the FIELD (TL §1.2 "names `claim_ledger`").
@@ -191,8 +191,8 @@ def ambition_thrusts(w):
 @dataclasses.dataclass(frozen=True)
 class ArcReading:
     """`arcs`: `{person id: {thrust id: sorted act ids A with ARC(p, A)}}` -- only persons with one.
-    `deaths`: `{person id: sorted act ids}` -- on-thrust, unrefused acts of that person with a
-    `person.died` Event in their `causes*`, whether or not they are an arc. `persons`: every actor of
+    `deaths`: `{person id: sorted act ids}` -- on-thrust, unrefused acts of that person that are in the
+    `causes*` of a `person.died` Event, whether or not they are an arc. `persons`: every actor of
     an act in the store (the denominator of a rate)."""
     arcs: dict
     deaths: dict
@@ -310,14 +310,14 @@ def read_arcs(w, d, on_thrust=None, *, n=None, refused=None, log=None, unrestric
 
     reach = _reach(log, cand)
     records = _Records(w)
-    selfs, worlds, dead = defaultdict(list), defaultdict(list), defaultdict(set)
+    selfs, worlds = defaultdict(list), defaultdict(list)
+    dead: set = set()
     for ev in log:
         hit = reach.get(ev.id)
         if not hit:
             continue
         if ev.kind == DEATH_KIND:
-            for aid in hit:
-                dead[aid].add(ev.id)
+            dead.update(hit)
             continue
         for r in ev.changes:
             if not isinstance(r, Receipt):

@@ -40,17 +40,18 @@ def _world(obliged: bool = True, oblige_since: int = 0):
     return w
 
 
-def _tell(w, to: str, actor: str = OBLIGEE, label: str = "x"):
-    """`actor` tells `to` what he holds on `TOPIC`, through the real fold at `Success`, logged and
-    WITNESSED as the driver does it. Returns the `news.told` Events."""
+def _tell(w, to: str, actor: str = OBLIGEE, label: str = "x", lost: bool = False):
+    """`actor` tells `to` what he holds on `TOPIC`, through the real fold: won (`news.told`) or `lost`
+    (`news.untold`), logged and WITNESSED as the driver does it. Returns the Events."""
+    kind = "news.untold" if lost else "news.told"
     d = SeasonDriver(w)
     w.step = Step.RESOLVE
     said = said_of(w.persons[actor].ledger, TOPIC, w.fixtures)
     a = Act(id=f"a_in18_{label}", actor=actor, verb="tell",
             payload={"subject": TOPIC, "to": to, "said": said})
     w.acts.append(a)
-    out = d._fold(w, mint_token(w, WriteClass.ACTS), a, Resolution("Success", {}))
-    assert [e.kind for e in out] == ["news.told"], [e.kind for e in out]
+    out = d._fold(w, mint_token(w, WriteClass.ACTS), a, Resolution("Failure" if lost else "Success", {}))
+    assert [e.kind for e in out] == [kind], [e.kind for e in out]
     w.log.extend(out)
     for e in out:
         d.act_of[e.id] = a
@@ -87,6 +88,18 @@ def test_in18_a_telling_to_anyone_but_the_seat_holder_is_not_a_report():
     r = OR.read_obligee_reports(w)
     assert (r.tells_by_obligees, r.m0e, r.attempted) == (1, 0, 0), r.line()
     assert r.told_by == 1, "the holder overheard: the heard line is wider, as the module says"
+
+
+def test_in18_a_lost_telling_is_attempted_and_is_not_a_report():
+    """The told/untold clause, the branch the IN-18 verdict turns on: a `tell` the obligee LOST
+    (`news.untold`, degree `Failure`) to his seat holder is an ATTEMPT (`attempted == 1`) and not a
+    report (`m0e == 0`). Mutation: drop the `e.kind == TOLD` guard on `m0e` and it reads 1, which is
+    G5's trigger firing on a telling nobody heard."""
+    w = _world(obliged=True)
+    _tell(w, HOLDER, label="lost", lost=True)
+    r = OR.read_obligee_reports(w)
+    assert (r.attempted, r.m0e, r.tells_all) == (1, 0, 0), r.line()
+    assert sum(r.attempted_by.values()) == 1 and all(k[0] == "news.untold" for k in r.attempted_by)
 
 
 def test_in18_an_edge_not_yet_live_at_the_telling_is_not_a_duty():

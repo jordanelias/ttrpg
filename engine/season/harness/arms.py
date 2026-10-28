@@ -108,6 +108,7 @@ from __future__ import annotations
 import argparse
 import collections
 import collections.abc
+import inspect
 import math
 
 from ..data.rosters import FIELD_CASUALTY_MODELS
@@ -151,9 +152,9 @@ for _name, _model in ARMS.items():
 del _name, _model
 
 
-#: The `populated.build_realm` keyword arguments an arm may set (CR-14 (iv)). `seed` is the arm's own
-#: seed sequence (`base_seed + i`), never a build kwarg.
-BUILD_KWARGS = ('goals', 'goals_complete', 'foreign', 'guards', 'cap', 'from_roster')
+#: The `populated.build_realm` keyword arguments an arm may set (CR-14 (iv)), read off its signature so
+#: the two cannot drift. `seed` is the arm's own seed sequence (`base_seed + i`), never a build kwarg.
+BUILD_KWARGS = tuple(p for p in inspect.signature(populated.build_realm).parameters if p != 'seed')
 
 
 def _resolve_arm(arm) -> tuple:
@@ -167,7 +168,9 @@ def _resolve_arm(arm) -> tuple:
 
     Builds no world. A `build` key outside `BUILD_KWARGS`, or a key of the mapping other than the
     two named, raises `ValueError` rather than reaching `build_realm` (which would raise a less
-    legible `TypeError` mid-run)."""
+    legible `TypeError` mid-run). A fixture NAME is checked against the registry by `run_arm`, on
+    the built world (`Fixtures.get` raises `Ungraded` for an unregistered one), because the
+    registry is the world's and this resolver builds none."""
     if isinstance(arm, str):
         return {'field_casualty_model': arm}, {}
     if not isinstance(arm, collections.abc.Mapping):
@@ -200,6 +203,7 @@ def run_arm(model, n: int, base_seed: int, seasons: int) -> dict:
     for i in range(n):
         w = populated.build_realm(base_seed + i, **build)
         for name, value in fixtures.items():
+            w.fixtures.get(name)             # an unregistered name raises `Ungraded` here; `sweep` would write it silently
             w.fixtures = w.fixtures.sweep(name, value)
         out = populated.run(seasons, base_seed + i, None, w=w)
         total_acts += out['acts']

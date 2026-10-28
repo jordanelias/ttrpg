@@ -339,7 +339,7 @@ def _req_release(w: "World", a: "Act") -> bool:
     ⚠ `contain` IS EXCLUDED BY THE ROSTER, NOT BY A LITERAL HERE. See `RELEASABLE_KINDS`."""
     subj = subject_of(a)
     if not subj:
-        return _refuse("a release names no subject", f"{a.actor}")
+        return _refuse("a release names no subject", a.actor)
     if any(t.subject == a.actor and t.object == subj
            and t.kind in RELEASABLE_KINDS and t.live
            for t in w.tenures):

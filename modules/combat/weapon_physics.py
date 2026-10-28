@@ -40,10 +40,12 @@ import vocabulary as V   # the engine's token ALPHABET, owned once (ED-PC-0042).
 
 def _ltr_sum(xs):
     """Left-to-right float accumulation: ((0 + x0) + x1) + x2 ... — each `+` is one IEEE-754 binary64 addition,
-    which is correctly rounded on every platform, so the result is bit-identical everywhere. The builtin `sum()`
-    is NOT: CPython 3.12 changed it to Neumaier-compensated summation for floats, so `sum()` of the same parts
-    reads one ULP apart on 3.11 and on 3.12+ (CR-01: bind_sigma for bear_spear, 16 of 52 roster binds). This is
-    the pre-3.12 value the pins in tests/valoria/test_combat_lever_sign_safety.py were recorded under. Pure."""
+    which is correctly rounded on every platform, so the ACCUMULATION is bit-identical everywhere (the parts' own
+    `**` is the platform's libm and is not controlled here). The builtin `sum()` is NOT: CPython 3.12 changed it
+    to Neumaier-compensated summation for floats, so `sum()` of the same parts reads one ULP apart on 3.11 and on
+    3.12+ (CR-01: bind_sigma for bear_spear, 16 of 52 roster binds, measured on 3.13). This is the pre-3.12 value
+    the pins in tests/valoria/test_combat_lever_sign_safety.py were recorded under. CI pins 3.11, where `sum()`
+    and this agree, so CI cannot observe the difference. Pure."""
     total = 0
     for x in xs:
         total += x
