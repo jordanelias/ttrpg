@@ -204,7 +204,8 @@ class Findings:
 # modules.md` §3 E1, intent only). Read by `modules/settlements/larder.py`'s two `query` entries; built
 # by `queries/world_q.py`'s projection builders, which also turn the output back into the public dict
 # shapes. ⚠ EVERY COLLECTION IS AN ORDERED TUPLE, NEVER A MAPPING: the order the draw debits a rung's
-# kinds reaches `Rung.stores`' insertion order, and that order reaches `World.content_hash()`.
+# kinds reaches `Rung.stores`' insertion order (the content hash no longer reads it: GO-07 folds a
+# mapping sorted by its encoded keys; the order still decides what a reader iterating `stores` sees).
 # ---------------------------------------------------------------------------
 
 @dataclass(frozen=True)

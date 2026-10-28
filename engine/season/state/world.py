@@ -176,7 +176,8 @@ def rung_kind_ascends(child_kind: str, parent_kind: str) -> bool:
 #
 #   N              None
 #   T / F          True / False
-#   U              `data.requires.UNKNOWN`, the third truth value (neither None nor False)
+#   U              `data.requires.UNKNOWN`, the third truth value (neither None nor False): ANY instance
+#                  of its class, so a deep-copied world encodes as the original does
 #   i<dec>;        an int: base-10 ASCII digits, a leading `-` when negative
 #   s<len>:<utf8>  a str (a `SeatId` too -- a str subclass carrying the same string); <len> is the
 #                  UTF-8 byte count in base-10 ASCII
@@ -188,11 +189,27 @@ def rung_kind_ascends(child_kind: str, parent_kind: str) -> bool:
 #   m<n>:...       a mapping of n entries, each <enc key><enc value>, sorted by the encoded key's bytes
 #   u<n>:... / z<n>:...  a set / a frozenset of n items, sorted by the encoded item's bytes
 #   o<enc class name><n>:...  an object: n <enc field name><enc value> pairs. A dataclass's fields in
-#                  DECLARATION order (`dataclasses.fields`); a named tuple's in `_fields` order; any
-#                  other object's (`Rung`, which is not a dataclass) `vars()` sorted by field name.
+#                  DECLARATION order (`dataclasses.fields`); a named tuple's in `_fields` order; an
+#                  object declaring `_DECLARED` (`Rung`, which is not a dataclass): those fields
+#                  sorted by name.
 #
-# Every count and length is base-10 ASCII. A value of any other type RAISES `TypeError`: a type with
-# no rule here has no portable encoding, and guessing one would be a second, silent format.
+# Every count and length is base-10 ASCII. A value of any other type RAISES `TypeError`: at
+# `content_hash`, which every season's end calls, and at `state_of`'s read of an `entity` subject
+# (either reading) in `World.write` -- AFTER `apply()` when the write itself introduced the value; a
+# closure write is not read by `state_of`. A type with no rule here has no portable encoding, and
+# guessing one would be a second, silent format.
+#
+# THREE ORDERS, and a port must implement each: `content_hash` sorts collection KEYS and Tenure ids by
+# the raw `str` (code point); a mapping's entries and a set's items sort by their ENCODED bytes, so
+# `s10:` precedes `s1:` and `s3:p_b` precedes `s5:p_aaa`; a `_DECLARED` object's fields sort by raw
+# name. Dataclass fields are never sorted. A class is encoded by its bare `__name__`, an Enum member
+# by its value alone. `t`/`l` and `u`/`z` follow the stored Python type, which the oracle's writers
+# fix per site (`_grant_remit`'s `remit_acts` is a tuple, an addressee list a list). Nested mapping
+# key order is not state. EVERY declared field folds, `repr=False` and `compare=False` ones included
+# (the retired `repr` digest dropped a `repr=False` field). A float is its bits as stored: a NaN
+# has no canonical form here and `-0.0` differs from `0.0`, as under `repr`; neither was seen when the
+# encoder was spied over four worlds at GO-07 (7605 floats; a one-off reading, not kept).
+_UNKNOWN_TYPE = type(UNKNOWN)
 _OBJECT_HEADS: dict = {}
 
 
@@ -210,6 +227,14 @@ def _object_head(cls: type) -> tuple:
             b"o" + _str_bytes(cls.__name__) + b"%d:" % len(names),
             tuple((n, _str_bytes(n)) for n in names))
     return head
+
+
+def _encode_object(v: Any, names: Any, out: bytearray) -> None:
+    """`v` as an `o` object over `names` (a named tuple's `_fields`, a `_DECLARED` set sorted)."""
+    out += b"o" + _str_bytes(type(v).__name__) + b"%d:" % len(names)
+    for n in names:
+        out += _str_bytes(n)
+        _encode_into(getattr(v, n), out)
 
 
 def _encode_into(v: Any, out: bytearray) -> None:
@@ -240,36 +265,29 @@ def _encode_into(v: Any, out: bytearray) -> None:
         for kb, vb in sorted((_canonical(k), _canonical(x)) for k, x in v.items()):
             out += kb
             out += vb
-    elif v is UNKNOWN:
+    elif t is _UNKNOWN_TYPE:
         out += b"U"
     elif isinstance(v, Enum):
         out += b"e"
         _encode_into(v.value, out)
+    # A subclass of a hot type above (a `SeatId`, an int or float subclass) encodes as its base: one
+    # encoding per type, so the delegation reads the exact-type branch and no wire line is repeated.
     elif isinstance(v, str):
         out += _str_bytes(v)
     elif isinstance(v, int):
-        out += b"i%d;" % v
+        _encode_into(int(v), out)
     elif isinstance(v, float):
-        out += b"f" + struct.pack(">d", v).hex().encode("ascii")
+        _encode_into(float(v), out)
     elif isinstance(v, tuple) and hasattr(t, "_fields"):
-        out += b"o" + _str_bytes(t.__name__) + b"%d:" % len(t._fields)
-        for n in t._fields:
-            out += _str_bytes(n)
-            _encode_into(getattr(v, n), out)
+        _encode_object(v, t._fields, out)
     elif isinstance(v, (list, tuple)):
-        out += (b"l%d:" if isinstance(v, list) else b"t%d:") % len(v)
-        for x in v:
-            _encode_into(x, out)
+        _encode_into(list(v) if isinstance(v, list) else tuple(v), out)
     elif isinstance(v, (set, frozenset)):
         out += (b"z%d:" if isinstance(v, frozenset) else b"u%d:") % len(v)
         for b in sorted(_canonical(x) for x in v):
             out += b
-    elif hasattr(v, "__dict__"):
-        attrs = vars(v)
-        out += b"o" + _str_bytes(t.__name__) + b"%d:" % len(attrs)
-        for n in sorted(attrs):
-            out += _str_bytes(n)
-            _encode_into(attrs[n], out)
+    elif getattr(t, "_DECLARED", None) is not None:
+        _encode_object(v, sorted(t._DECLARED), out)
     else:
         raise TypeError(
             f"GO-07: no canonical encoding for a {t.__module__}.{t.__qualname__} ({v!r}); "
@@ -290,7 +308,7 @@ def _entity_digest(obj: Any) -> bytes:
     `Site`, `Tenure` and the other carriers are `@dataclass`, encoded field by field in DECLARATION
     order, which is fixed by the class and not by insertion, so it is stable across two runs of the
     same seed (R4). `Rung` is not a dataclass (S10 -- it stores its fields via `object.__setattr__`
-    behind a whitelist, `Rung._DECLARED`), so it is read off `vars()`, sorted by field name, which
+    behind a whitelist, `Rung._DECLARED`), so it is read off `_DECLARED`, sorted by field name, which
     makes the order structural rather than `Rung.__init__`'s insertion order. `dates` and `docket`
     hold PLAIN DICTS, encoded as mappings sorted by encoded key, so insertion order cannot reach the
     digest either (R4)."""
@@ -616,9 +634,16 @@ class World:
         An `entity` is `(False,)` when absent and `(True, <digest>)` when present, so a creation
         and a deletion both move it. The digest is `_entity_digest` -- the encoding `content_hash`
         folds for that entity -- unless the subject names `fields`, when it is those attributes'
-        `repr`s: a snapshot, never a reference, because an in-place mutation (`scar[axis] = ...`,
-        `payload["remit_acts"] = ...`) would otherwise compare equal to itself. A `staged` cell is
-        the NET delta staged on it. An `edge` is not read here -- see `write`.
+        canonical encodings: a snapshot, never a reference, because an in-place mutation
+        (`scar[axis] = ...`, `payload["remit_acts"] = ...`) would otherwise compare equal to itself.
+        A `staged` cell is the NET delta staged on it. An `edge` is not read here -- see `write`.
+
+        GO-07: BOTH readings are the one canonical encoding, so a write that only re-orders a mapping
+        (an entity's, or a named attribute's) reads as unmoved and F9 refuses it as a no-op -- the
+        reading `before == after` has on a dict, where `repr` saw key order. It also keeps `1`, `True`
+        and `1.0` apart, as `repr` did. (Until the terminal critique of B10-03b a `fields` reading
+        stayed `repr`: two ladders for one question, and F9's verdict on ten effects depended on
+        CPython's formatting.)
 
         ⚠ A STORE THAT IS NOT A STATE COLLECTION IS A CALLER BUG, AND IT RAISES. Read as "absent"
         it would compare `(False,)` to `(False,)` and every write naming it would be refused as a
@@ -635,7 +660,7 @@ class World:
                 return (False,)
             if fields is None:
                 return (True, _entity_digest(obj))
-            return (True,) + tuple(repr(getattr(obj, f)) for f in fields)
+            return (True,) + tuple(_canonical(getattr(obj, f)) for f in fields)
         if tag == STAGED:
             return sum(d for _, d in self._staged.get(s.ref[1], ()))
         raise InstrumentDefect(f"`state_of` has no reader for a {tag!r} subject ({s.id!r}); an "
@@ -723,7 +748,7 @@ class World:
         # `H-160` limit 1 / `H-158`: THE GRANT ALSO SAYS WHERE THE SEAT'S TREASURY IS -- the seat's
         # rung, read person-side by `Tenure.seat_rung` (its one reader of the key), so a holder paying
         # through his seat can name the rung he pays out of without a `World`. Written with the acts,
-        # as one grant: the same snapshot, the same `force` re-stamp. ⚠ `repr(Tenure)` folds into
+        # as one grant: the same snapshot, the same `force` re-stamp. ⚠ the Tenure's encoding folds into
         # `World.content_hash`, so this key alone moves the digest of every world holding a seat -- a
         # declared, structural hash move, the `Office.establishment` deletion's shape.
         stamp = {"remit_acts": grant, "seat_rung": off.rung}
@@ -1520,7 +1545,8 @@ class World:
         `(name, n, item)` per `_STATE_SEQUENCES` entry, `n` its position; `("T", t.id, t)` per Tenure,
         sorted by id; and per Event in log order `("E", id, kind, emitted_at, degree, causes)`
         (`causes` as a tuple), then `("~", subject, mode, driver, field, delta)` per change, then
-        `("^", o)` per observed record. Keys and ids sort as Python sorts `str`, by code point."""
+        `("^", o)` per observed record. Keys and ids sort as Python sorts `str`, by code point. Tenures
+        sharing an id keep `World.tenures`' order (owners in `persons` order, then the unowned)."""
         # [JUSTIFIED: a HASH WIDTH, not a game value -- 16 bytes is the 32 hex characters the content hash is compared as; nothing in the model reads it as a quantity]
         h = hashlib.blake2b(digest_size=16)
         for name in self._STATE_COLLECTIONS:

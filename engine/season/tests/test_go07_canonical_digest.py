@@ -11,29 +11,36 @@ table above `_OBJECT_HEADS` in `state/world.py`) under the same `blake2b`-128, n
     RED on `term`.
   * THE CONTROL. For seeds 0, 1 and 2 after one season: the event count, the per-collection entity
     counts, the census and the OLD `repr` digest (copied below as a local function, the base
-    commit's bodies verbatim) equal what the base commit `b9beec9d` read. The old digest folds
-    every collection and the whole log, so its equality says the world did not move; only its
-    digest did. The new digest is pinned beside it, so running this file under two
-    `PYTHONHASHSEED`s shows the new hash does not depend on the process.
+    commit's bodies verbatim) equal what the base commit `b9beec9d` read. Its equality says no hashed
+    state, act count, census figure or entity count moved; only the digest did (the old digest was
+    blind to the act store, `tick` and a `Receipt`'s spec and serial, which the counts and the census
+    only partly cover). The new digest is pinned beside it, so running this file under two
+    `PYTHONHASHSEED`s shows the new hash does not depend on the process. AFTER GO-07 THIS CONTROL IS A
+    CHANGE DETECTOR: every later batch that moves the world re-records it beside `BASE_HASHES`
+    (`test_season_weather.py`).
 """
 
 from __future__ import annotations
 
+import copy
 import hashlib
 import json
 import os
 import subprocess
 import sys
+import types
 from dataclasses import fields, replace
 from enum import Enum
 from fractions import Fraction
 from pathlib import Path
+from typing import NamedTuple
 
 import pytest
 
 from ..data.requires import UNKNOWN, Observation
 from ..harness import populated as POP
 from ..state.carriers import Event, Rung, Site, StateChange, Tenure, Term
+from ..state.gate import Subject
 from ..state.world import World, _canonical, _entity_digest
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -42,8 +49,8 @@ ROOT = Path(__file__).resolve().parents[3]
 # --- THE VECTORS -----------------------------------------------------------------------------------
 
 def _tenure() -> Tenure:
-    """Every tag a world uses but `U`: str (a non-ASCII one, so a length is a BYTE count), int (a
-    negative one), None, True, float, list, tuple, mapping and a nested dataclass (`Term`)."""
+    """Str (a non-ASCII one, so a length is a BYTE count), int (a negative one), None, True, float,
+    list, tuple, mapping and a nested dataclass (`Term`). `F` and `U` are pinned directly below."""
     return Tenure("t_fix", "p_rené", "set_town", "hold", 3, None, "Partial",
                   {"remit_acts": ("issue", "dispatch"), "w": 0.1, "n": -2, "ok": True,
                    "none": None, "l": [1, "x"]},
@@ -64,30 +71,43 @@ TENURE_VECTOR = (
     b"s4:termos4:Term2:s10:matures_ati7;s11:declared_bys5:act:x")
 TENURE_VECTOR_HASH = "2bbf9687ea938a411784490f75428672"
 
-# `Rung` is not a dataclass: its `vars()`, sorted by field name.
+# `Rung` is not a dataclass: its `_DECLARED` fields, sorted by name.
 RUNG_VECTOR = (b"os4:Rung8:s5:datesl0:s8:envelopel0:s2:ids5:r_fixs4:kinds10:settlement"
                b"s7:recordsl0:s5:sitesl0:s6:storesm1:s5:graini3;s5:yieldm0:")
 OBSERVATION_VECTOR = b"os11:Observation3:s7:subjects3:p_xs9:predicates9:conditions5:valueU"
 
 # A whole world, frame by frame, in `content_hash`'s order: collections, tenures, then the log.
+#
+# THE THREE ORDERS DISAGREE HERE, ON PURPOSE, so a port that sorts everything by encoded bytes fails
+# this vector: collection keys sort by raw `str` (`r_aaaaaa` before `r_fix`, though `s5:r_fix` precedes
+# `s8:r_aaaaaa` as bytes), Tenure ids by raw `str` (`t_aaaaa` before `t_in`), and a mapping's entries by
+# encoded bytes (`s2:bb` before `s3:aaa`, though `aaa` precedes `bb` as a `str`).
 WORLD_FRAMES = (
+    b"t3:s5:rungss8:r_aaaaaaos4:Rung8:s5:datesl0:s8:envelopel0:s2:ids8:r_aaaaaas4:kinds10:settlement"
+    b"s7:recordsl0:s5:sitesl0:s6:storesm2:s2:bbi1;s3:aaai2;s5:yieldm0:",
     b"t3:s5:rungss5:r_fixos4:Rung8:s5:datesl0:s8:envelopel0:s2:ids5:r_fixs4:kinds10:settlement"
     b"s7:recordsl0:s5:sitesl0:s6:storesm1:s5:graini3;s5:yieldm0:",
     b"t3:s5:sitess5:s_fixos4:Site4:s2:ids5:s_fixs4:rungs5:r_fixs4:kinds7:harbours9:conditioni4;",
+    b"t3:s6:docketi0;m1:s4:openF",
+    b"t3:s1:Ts7:t_aaaaaos6:Tenure9:s2:ids7:t_aaaaas7:subjects8:r_aaaaaas6:objects7:r_realm"
+    b"s4:kinds7:contains5:sincei0;s5:untilNs6:degreeNs7:payloadNs4:termN",
     b"t3:s1:Ts4:t_inos6:Tenure9:s2:ids4:t_ins7:subjects5:r_fixs6:objects7:r_realms4:kinds7:contain"
     b"s5:sincei0;s5:untilNs6:degreeNs7:payloadNs4:termN",
     b"t6:s1:Es4:ev_1s11:site.workedi2;s7:Partialt2:s5:act:xs5:act:y",
     b"t6:s1:~s5:s_fixs5:writes5:act:xs9:conditioni-1;",
     b"t2:s1:^os11:Observation3:s7:subjects5:s_fixs9:predicates9:conditions5:valuei4;",
 )
-WORLD_VECTOR_HASH = "8e61fae09d98eadea54f52c2ccc0ed02"
+WORLD_VECTOR_HASH = "08536e53dab620fe03b2c49eeee0dfd4"
 
 
 def _tiny_world() -> World:
     w = World(0)
     w.rungs["r_fix"] = Rung("r_fix", "settlement", stores={"grain": 3})
+    w.rungs["r_aaaaaa"] = Rung("r_aaaaaa", "settlement", stores={"bb": 1, "aaa": 2})
     w.sites["s_fix"] = Site("s_fix", "r_fix", "harbour", condition=4)
     w.add_tenure(Tenure("t_in", "r_fix", "r_realm", "contain", 0))
+    w.add_tenure(Tenure("t_aaaaa", "r_aaaaaa", "r_realm", "contain", 0))
+    w.docket = [{"open": False}]
     # A hand-built log, as `test_wb_the_carrier_moves_the_seeded_hash` strips one: the format of the
     # Event, change and observed frames is what is pinned, not how an Event reaches the log.
     w.log = [Event("ev_1", "site.worked",
@@ -102,6 +122,19 @@ def test_go07_the_fixture_entities_encode_to_the_committed_vectors():
     assert hashlib.blake2b(enc, digest_size=16).hexdigest() == TENURE_VECTOR_HASH
     assert _entity_digest(Rung("r_fix", "settlement", stores={"grain": 3})) == RUNG_VECTOR
     assert _entity_digest(Observation("p_x", "condition", UNKNOWN)) == OBSERVATION_VECTOR
+
+
+def test_go07_a_copied_unknown_is_still_unknown():
+    """`UNKNOWN` is the one instance of a plain class with no `__deepcopy__`, so `copy.deepcopy` makes a
+    SECOND instance and an identity test misses it. A world copied after a run (`test_person_projection`,
+    `storybar.fork`) must hash as the original, and its UNKNOWN-valued observations must not raise."""
+    assert copy.deepcopy(UNKNOWN) is not UNKNOWN, "the premise: a deep copy is a second instance"
+    assert _canonical(copy.deepcopy(UNKNOWN)) == b"U"
+    assert _entity_digest(copy.deepcopy(Observation("p_x", "condition", UNKNOWN))) == OBSERVATION_VECTOR
+    w = _tiny_world()
+    w.log[0].observed = (Observation("s_fix", "condition", UNKNOWN),)
+    assert copy.deepcopy(w).content_hash() == w.content_hash()
+    assert w.content_hash() != _tiny_world().content_hash(), "the UNKNOWN observation was not hashed"
 
 
 def test_go07_the_world_hash_is_blake2b_over_the_committed_frames():
@@ -127,7 +160,7 @@ def test_go07_length_prefixing_separates_adjacent_strings():
     # The old log fold wrote `causes` as `','.join(e.causes)`, so these two cause lists collided.
     assert ",".join(("a,b",)) == ",".join(("a", "b"))
     assert _canonical(("a,b",)) != _canonical(("a", "b"))
-    assert _canonical(("",)) != _canonical(()) != _canonical([])
+    assert len({_canonical(("",)), _canonical(()), _canonical([])}) == 3
 
 
 def test_go07_mapping_and_set_order_cannot_reach_the_encoding():
@@ -135,7 +168,10 @@ def test_go07_mapping_and_set_order_cannot_reach_the_encoding():
     assert _canonical({"b": 1, "a": 2}) == b"m2:s1:ai2;s1:bi1;"
     assert _canonical({"x", "y", "z"}) == b"u3:s1:xs1:ys1:z"
     assert _canonical(frozenset({"y", "x"})) == b"z2:s1:xs1:y" != _canonical({"x", "y"})
-    assert _canonical(1) != _canonical(True) != _canonical(1.0)
+    # A set sorts by its ENCODED items (`s1:b` before `s2:aa`), not by the raw `str` (`aa` before `b`).
+    assert _canonical({"b", "aa"}) == b"u2:s1:bs2:aa"
+    assert len({_canonical(1), _canonical(True), _canonical(1.0)}) == 3
+    assert _canonical((True, False)) == b"t2:TF"
 
     class _E(Enum):
         A = "a"
@@ -146,9 +182,59 @@ def test_go07_mapping_and_set_order_cannot_reach_the_encoding():
             "s = {f'id_{i}' for i in range(40)}; print(list(s)[:3], _canonical(s).hex())")
     outs = [subprocess.run([sys.executable, "-c", prog, str(ROOT)], capture_output=True,
                            text=True, check=True,
-                           env={**os.environ, "PYTHONHASHSEED": seed}).stdout.split()[-1]
+                           env={**os.environ, "PYTHONHASHSEED": seed}).stdout.strip()
             for seed in ("0", "1")]
-    assert outs[0] == outs[1], "a set's encoding moved with PYTHONHASHSEED"
+    (order0, enc0), (order1, enc1) = (o.rsplit(" ", 1) for o in outs)
+    assert order0 != order1, "the two processes iterated the set alike: this leg observed nothing"
+    assert enc0 == enc1, "a set's encoding moved with PYTHONHASHSEED"
+
+
+def test_go07_a_named_tuple_encodes_as_an_object_in_field_order():
+    class _P(NamedTuple):
+        x: int
+        y: str
+    assert _canonical(_P(1, "a")) == b"os2:_P2:s1:xi1;s1:ys1:a"
+    assert _canonical(_P(1, "a")) != _canonical((1, "a"))
+
+
+def test_go07_a_subclass_of_a_scalar_or_sequence_encodes_as_its_base():
+    """`_encode_into` takes the exact-type branch for the hot types and a subclass fallback for the
+    rest; a subclass instance (a `SeatId`, a numpy-style float, an int or sequence subclass) encodes
+    byte-for-byte as its base type, so there is one encoding per type and not two."""
+    class _I(int): pass
+    class _F(float): pass
+    class _S(str): pass
+    class _L(list): pass
+    class _T(tuple): pass
+    for sub, base in ((_I(-7), -7), (_F(0.1), 0.1), (_S("p_a"), "p_a"),
+                      (_L([1, "x"]), [1, "x"]), (_T((1, "x")), (1, "x"))):
+        assert _canonical(sub) == _canonical(base), (type(sub), _canonical(sub), _canonical(base))
+    assert _canonical(_L([1])) != _canonical(_T((1,))), "list and tuple must stay distinct"
+
+
+def test_go07_a_fields_reading_is_the_canonical_encoding_not_repr():
+    """G4 has one notion of "moved". A `fields=` subject reads its attributes through the same
+    encoding as an `entity` subject, so a write that only re-orders a named mapping reads as
+    unmoved (`before == after` on a dict), while `1`, `1.0` and `True` stay apart and the reading is
+    a snapshot, not a reference."""
+    w = _tiny_world()
+    rung = w.rungs["r_fix"]
+    sub = Subject.entity("rungs", "r_fix", fields=("stores",))
+    whole = Subject.entity("rungs", "r_fix")
+    rung.stores = {"grain": 3, "salt": 1}
+    fields_a, whole_a = w.state_of(sub), w.state_of(whole)
+    rung.stores = {"salt": 1, "grain": 3}
+    assert w.state_of(sub) == fields_a, "a pure re-order of a named mapping read as moved"
+    assert w.state_of(whole) == whole_a, "the two readings disagree about the same re-order"
+    for other in ({"salt": 1, "grain": 3.0}, {"salt": 1, "grain": True}, {"salt": 1, "grain": 4}):
+        rung.stores = other
+        assert w.state_of(sub) != fields_a, other
+        assert w.state_of(whole) != whole_a, other
+    rung.stores = {"grain": 3, "salt": 1}
+    held = w.state_of(sub)
+    rung.stores["grain"] = 4                       # an in-place mutation of the same dict object
+    assert w.state_of(sub) != held, "the reading held a reference, not a snapshot"
+    assert all(isinstance(x, bytes) for x in w.state_of(sub)[1:]), "a fields reading is not canonical"
 
 
 def test_go07_one_field_of_one_entity_moves_the_digest():
@@ -178,9 +264,17 @@ def test_go07_one_field_of_one_entity_moves_the_digest():
 
 
 def test_go07_a_type_with_no_rule_raises_rather_than_guessing():
-    for v in (object(), Fraction(1, 3), 1j):
+    class _Plain:
+        def __init__(self):
+            self.a = 1
+
+    # The last three HAVE a `__dict__` (a function, a namespace, a plain instance): a generic
+    # `vars()` rule would encode them silently, and `lambda: 0` and `lambda: 1` would collide.
+    probes = (object(), Fraction(1, 3), 1j, lambda: 0, types.SimpleNamespace(a=1), _Plain())
+    for v in probes:
         with pytest.raises(TypeError, match="GO-07: no canonical encoding"):
             _canonical(v)
+    assert len(probes) == 6
 
 
 # --- THE CONTROL -----------------------------------------------------------------------------------
@@ -241,6 +335,14 @@ BASE = {
         "counts": {"persons": 81, "rungs": 410, "offices": 32, "sites": 322, "records": 90,
                    "propositions": 91, "dates": 1, "docket": 2, "tenures": 787, "log": 6879}},
 }
+
+
+def test_go07_control_the_build_world_old_digest_is_unmoved():
+    """The base commit's `repr` digest of `build_realm(0)`, before a single act, read this literal
+    (`test_season_weather.BASE_HASHES[0]`'s retired value); the same world now reads the new pin."""
+    w = POP.build_realm(0)
+    assert _old_content_hash(w) == "8e4032a26cfeabdc55bba2178b82d564"
+    assert w.content_hash() == "9ff5390939742b7bbb3af0fa2551e958"
 
 
 def test_go07_control_the_world_did_not_move_only_its_digest():
