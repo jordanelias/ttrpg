@@ -226,6 +226,14 @@ def _object_head(cls: type) -> tuple:
     return head
 
 
+def _encode_object(v: Any, names: Any, out: bytearray) -> None:
+    """`v` as an `o` object over `names` (a named tuple's `_fields`, a `_DECLARED` set sorted)."""
+    out += b"o" + _str_bytes(type(v).__name__) + b"%d:" % len(names)
+    for n in names:
+        out += _str_bytes(n)
+        _encode_into(getattr(v, n), out)
+
+
 def _encode_into(v: Any, out: bytearray) -> None:
     """Append `v`'s canonical encoding (the table above) to `out`."""
     t = type(v)
@@ -259,31 +267,24 @@ def _encode_into(v: Any, out: bytearray) -> None:
     elif isinstance(v, Enum):
         out += b"e"
         _encode_into(v.value, out)
+    # A subclass of a hot type above (a `SeatId`, an int or float subclass) encodes as its base: one
+    # encoding per type, so the delegation reads the exact-type branch and no wire line is repeated.
     elif isinstance(v, str):
         out += _str_bytes(v)
     elif isinstance(v, int):
-        out += b"i%d;" % v
+        _encode_into(int(v), out)
     elif isinstance(v, float):
-        out += b"f" + struct.pack(">d", v).hex().encode("ascii")
+        _encode_into(float(v), out)
     elif isinstance(v, tuple) and hasattr(t, "_fields"):
-        out += b"o" + _str_bytes(t.__name__) + b"%d:" % len(t._fields)
-        for n in t._fields:
-            out += _str_bytes(n)
-            _encode_into(getattr(v, n), out)
+        _encode_object(v, t._fields, out)
     elif isinstance(v, (list, tuple)):
-        out += (b"l%d:" if isinstance(v, list) else b"t%d:") % len(v)
-        for x in v:
-            _encode_into(x, out)
+        _encode_into(list(v) if isinstance(v, list) else tuple(v), out)
     elif isinstance(v, (set, frozenset)):
         out += (b"z%d:" if isinstance(v, frozenset) else b"u%d:") % len(v)
         for b in sorted(_canonical(x) for x in v):
             out += b
     elif getattr(t, "_DECLARED", None) is not None:
-        names = sorted(t._DECLARED)
-        out += b"o" + _str_bytes(t.__name__) + b"%d:" % len(names)
-        for n in names:
-            out += _str_bytes(n)
-            _encode_into(getattr(v, n), out)
+        _encode_object(v, sorted(t._DECLARED), out)
     else:
         raise TypeError(
             f"GO-07: no canonical encoding for a {t.__module__}.{t.__qualname__} ({v!r}); "

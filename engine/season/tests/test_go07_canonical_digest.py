@@ -196,6 +196,21 @@ def test_go07_a_named_tuple_encodes_as_an_object_in_field_order():
     assert _canonical(_P(1, "a")) != _canonical((1, "a"))
 
 
+def test_go07_a_subclass_of_a_scalar_or_sequence_encodes_as_its_base():
+    """`_encode_into` takes the exact-type branch for the hot types and a subclass fallback for the
+    rest; a subclass instance (a `SeatId`, a numpy-style float, an int or sequence subclass) encodes
+    byte-for-byte as its base type, so there is one encoding per type and not two."""
+    class _I(int): pass
+    class _F(float): pass
+    class _S(str): pass
+    class _L(list): pass
+    class _T(tuple): pass
+    for sub, base in ((_I(-7), -7), (_F(0.1), 0.1), (_S("p_a"), "p_a"),
+                      (_L([1, "x"]), [1, "x"]), (_T((1, "x")), (1, "x"))):
+        assert _canonical(sub) == _canonical(base), (type(sub), _canonical(sub), _canonical(base))
+    assert _canonical(_L([1])) != _canonical(_T((1,))), "list and tuple must stay distinct"
+
+
 def test_go07_one_field_of_one_entity_moves_the_digest():
     """H-118's falsifier, field by field: every declared field of the fixture, changed alone, moves
     the entity's encoding; and one Site field changed in one of two otherwise identical worlds moves
