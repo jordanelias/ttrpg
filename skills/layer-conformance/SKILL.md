@@ -6,7 +6,8 @@ description: >
   being made a mechanism only code can carry; whether a proposed guard earns its existence; whether
   work reaches for a level beneath Layer 0 (there is none — edit CLAUDE.md); whether a new scheme is
   spelled "Layer". LENS B (Layer-1 conformance): checks `engine/season/` and `modules/` against
-  `architecture/meta/04_CODE_ARCHITECTURE.md` by path, grades each finding STRUCTURAL / MECHANICAL /
+  `architecture/meta/04_CODE_ARCHITECTURE.md` by path (and, for `modules/`, the module rows of
+  `04` §C.12 and `architecture/holonic_ARCHITECTURE.md` §43, §45-§47), grades each finding STRUCTURAL / MECHANICAL /
   CONVENTION per that document's §0, and reads both halves of a §A.2 row. Definitions stay with their
   owners (CLAUDE.md's layer table, `architecture/`); this skill owns the method and copies no table or
   count. Output is edits plus at most a commit paragraph. Run by /close step 4. Use for: code
@@ -28,7 +29,9 @@ description: >
 |---|---|
 | what Layer 0 / Layer 1 / Layer 2 are and what each binds | **`CLAUDE.md`'s layer table**, and §0.05 for the prose/mechanism split |
 | when a guard is licensed | **`CLAUDE.md` §0.1 pt 5**, and `references/ci_checks_registry.yaml`'s `subject:` axis for the depth vocabulary |
-| what the code architecture requires | **`architecture/meta/04_CODE_ARCHITECTURE.md`** and the rest of `architecture/` |
+| what the code architecture requires | **`architecture/meta/04_CODE_ARCHITECTURE.md`** and the rest of `architecture/` (indexes: `architecture/00_ADOPTION_README.md`, `architecture/meta/README.md`) |
+| what a `modules/<name>/` package must be, and the Godot mapping it ports to | **`04`** §A.2 and §C.12; **`architecture/holonic_ARCHITECTURE.md`** §43 and §45–§47 where `04` is silent |
+| what *holon* means | **`architecture/holonic_ARCHITECTURE.md`** §0.4 |
 | what a juncture being *done* means | **`CLAUDE.md` §0.2** |
 | how a fan-out is run and what makes a critic independent | **`CLAUDE.md` §10** |
 
@@ -123,13 +126,30 @@ the verdict honest.**
 
 ### B0 · Locate the governing row, and read it there
 
-- **Which Layer-1 surface governs this code?** `04`'s Status line names the code it governs. For other
-  code, `CURRENT.md`'s Layer-1 row lists the members of `architecture/`;
-  `architecture/holonic_ARCHITECTURE.md` is the holonic member.
-- Container and reach-in hygiene across `engine/` and `systems/*/sim/` is governed by
-  `systems/_architecture/reference/holonic_container_doctrine_v1.md`, enforced by
-  `tools/ci_module_shape_check.py`. **It is NOT Layer 1**: grade against it, but never report the
-  result as a Layer-1 verdict. A1 applies to the specs this lens reads as much as to the code.
+- **Which Layer-1 surface governs this code?** `04`'s Status line names the code it governs
+  (`engine/season/` and `modules/<name>/`). Layer 1's files are `ls architecture/ architecture/meta/`;
+  `architecture/00_ADOPTION_README.md` and `architecture/meta/README.md` index them, and neither lists
+  every file (`holonic_ARCHITECTURE.md` is in neither). For a `modules/<name>/` package the rows are
+  `04` §A.2 (the seam rows: a module writes nothing and holds no token) and §C.12 (the Godot mapping),
+  then `architecture/holonic_ARCHITECTURE.md` §43 (a module is attached by a registry row, never an
+  import), §45 (typed input and output records, no `Node`, no state between calls) and §47 (nothing
+  under `core/` names an autoload). §44.3 governs the `seam/wrappers/` adapter, not the module. They
+  are Layer-1 rows: grade them as such.
+- **Where holonic and `04` disagree, `04` governs.** `holonic_ARCHITECTURE.md` is #353's
+  `ARCHITECTURE.md`, and `04` §A.3 records its differences from that chain with their forcing clauses
+  (one `Query` class against two modules, a store parameter against a token). A difference §A.3 does
+  not list is B4's third disposition: name it at the site. One is live: `04` names the presentation
+  shell `port/`; holonic §45 and `rosters.yaml` name it `game/`.
+- **One word, two trees — keep them apart.** In Layer 1, *holon* is the world-model term
+  (`holonic_ARCHITECTURE.md` §0.4: every `Rung` is one), and the wrapper died "on the wrong tree"
+  (§44.1 item 3): the rule quantified over rungs, the wrapper sat at a code level. *Container* has two live senses too: a `Rung`
+  (holonic §40, "no container gets a clock") and a playable module scene (`rosters.yaml`'s
+  `module_kinds`, ED-IN-0285); say which. A finding about module shape cites `04` and §43, §45–§47,
+  never "the holonic doctrine". The older container doctrine
+  (`holonic_container_doctrine_v1.md`, ED-1083, Key-based) is quarantined in `.designs/` and bannered
+  ARCHIVED-NOT-CANON: it is not a standard to grade against. `tools/ci_module_shape_check.py` survives
+  as a narrow report-only check (no `tests/` reach-ins or imports in runtime code); its output is
+  evidence, not a Layer-1 verdict. A1 applies to the specs this lens reads as much as to the code.
 - **Do not grade code against a spec that does not claim it.**
 - Find the row through `04`'s headings (`rg -n '^#' architecture/meta/04_CODE_ARCHITECTURE.md`), not
   a scan of the body: module ownership, reads, emits and tokens are §A.1–§A.2; the write gate is
@@ -147,8 +167,8 @@ the verdict honest.**
 
 ### B2 · Grade the finding with `04`'s own three grades, and never inflate
 
-- The grades are `STRUCTURAL`, `MECHANICAL` and `CONVENTION`, defined at `04` §0 (`04:72-76`), along
-  with the defect class of over-claiming STRUCTURAL. Read them there.
+- The grades are `STRUCTURAL`, `MECHANICAL` and `CONVENTION`, defined at `04` §0 (*How enforcement is
+  graded*), along with the defect class of over-claiming STRUCTURAL. Read them there.
 - A finding spanning Python and GDScript carries two grades where §0 grades them differently.
 - **The test: can you write the violation?**
   - It can be typed and compiles → at best MECHANICAL; name the test or scan that sees it.
@@ -157,7 +177,7 @@ the verdict honest.**
 
 ### B3 · Check by path, never by reading bodies — and check that your scan does
 
-A module boundary makes a property checkable **by path** (`04` §A.3 row 1; §E.1, `04:1046`).
+A module boundary makes a property checkable **by path** (`04` §A.3 row 1; §E.1, *`decision/` is a directory from its first commit*).
 **The recurring defect is a scan narrower than the claim it is offered as proof of.** Signatures:
 
 - an **AST walk over one file** offered as proof of a property over a **directory**;
@@ -182,10 +202,10 @@ Counters:
 |---|---|
 | **the code is wrong** — the spec row is unambiguous and the code does something else | **change the code.** The default. Not an escalation: `04` already decided it |
 | **the claim about the spec is wrong** — a finding, ledger row or plan asserts what a row says, and the row says otherwise | **verify the row before acting on the finding.** Count the members the row names verbatim separately from those you assign by adjudication (`ED-IN-0206` item 2 is the case) |
-| **the spec is internally ambiguous** — two rows of `04` decide the same symbol differently | **name the ambiguity at the site and pick, with the reason stated**; §0's test 5 closes it, no escalation. Never report a clean read of a row that has two. Live case: `budget` (`04:133` member of `decision/`; §A.2's table, `decision/`'s may-read column) |
+| **the spec is internally ambiguous** — two rows of `04` decide the same symbol differently | **name the ambiguity at the site and pick, with the reason stated**; §0's test 5 closes it, no escalation. Never report a clean read of a row that has two. Live case: `budget` (§A.2's member list names it a `decision/` member; the same section's table lists it in `decision/`'s may-read column) |
 
 **Never resolve a disagreement by declaring the prose authoritative, nor by editing `04` to match the
-code**: a spec edited to match its implementation checks nothing.
+code** — `CLAUDE.md` §0.05 owns this rule: *a spec edited to match its implementation checks nothing*.
 
 ### B5 · "It existed and it did not run" — wire the check into the path every run takes
 
@@ -236,18 +256,24 @@ Relay mechanics are `CLAUDE.md` §10's. Dispatch the critic as `subagent_type: "
 Layer-1 conformance work is a **pure move plus the co-edits its own hazards name**. Declare zero game
 yield as the expected result.
 
-Run the standing instrument set after **every** unit. No single file owns it; re-derive it from:
-`engine/season/__init__.py:20-27` (the season entry points; it spells `register --counts`), the
-governing ED row's `MEASURED-BY` field, and `tools/valoria_local.py` (repo-wide gates). As of writing:
+Run the **cheap** instruments after **every** unit and the **suites once, at the close**: `CLAUDE.md`
+§0.4 owns the cadence and names `engine/season/tests` and `engine/tests` beside `tests/valoria` (only the
+ones your change can reach). No single file owns the set; re-derive it from: `engine/season/__init__.py`'s
+module docstring (the season entry points; it spells `register --counts`), the governing ED row's
+`MEASURED-BY` field, and `tools/valoria_local.py` (repo-wide gates). As of writing:
 
 ```
+# after every unit
 python3 -m engine.season.harness.headless --case NPC-088 --seasons 2 --seed 0
 python3 -m engine.season.harness.report && python3 -m engine.season.harness.delta HEAD
-python3 -m pytest engine/season/tests -q
-python3 -m pytest tests/valoria -q -n auto     # ONCE, at the close — CLAUDE.md §0.4
 python3 -m engine.season.harness.register --requirements
 python3 tools/valoria_local.py
-GITHUB_EVENT_NAME=pull_request GITHUB_BASE_REF=main python3 tools/ci_sim_fabrication_check.py
+GITHUB_EVENT_NAME=pull_request GITHUB_BASE_REF=main python3 tools/ci_sim_fabrication_check.py  # a unit that renames or moves constants
+python3 -m pytest <the one test file covering what the unit touched> -q   # CLAUDE.md §0.4 pt 2
+
+# at most once, at the close, and only what CI would not see first — CLAUDE.md §0.4 pt 1
+python3 -m pytest engine/season/tests -q -n auto   # POSIX: it imports fcntl and resource, so native Windows needs WSL
+python3 -m pytest tests/valoria -q -n auto
 ```
 
 - **A unit that moves the content hash or a probe verdict has broken something.** Revert it and say so.
@@ -257,13 +283,14 @@ GITHUB_EVENT_NAME=pull_request GITHUB_BASE_REF=main python3 tools/ci_sim_fabrica
 **Not controls:**
 
 - **`register --requirements`**: its counts are hand-edited YAML. It is a liveness check on the board
-  (`harness/register.py:636-676` refuses an unrunnable acceptance), not evidence the behaviour happened.
+  (`register.check_requirements` refuses an unrunnable acceptance), not evidence the behaviour happened.
 - **`python -m pytest engine/tests`**: those goldens never import `engine.season`, so it is
   byte-identical on a season-package change by construction.
 
 **A pure rename makes an old constant look new to the anti-fabrication gate.** Reproduce CI's view
 with the `GITHUB_EVENT_NAME` invocation above. Put `# [JUSTIFIED: ...]` **complete on one line**, on
-the code's line or the line directly above (`tools/ci_sim_fabrication_check.py:253`); a reason
+the code's line or the line directly above (`tools/ci_sim_fabrication_check.py`'s module docstring;
+`_CANONICAL_COMMENT_PATTERN` is a per-line regex); a reason
 spanning two lines stays red, so put the prose first and the marker last. **Measure the reason**
 before citing it.
 
