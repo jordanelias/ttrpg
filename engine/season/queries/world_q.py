@@ -1543,8 +1543,10 @@ def hunger(w: World, rung_id: str, draw: Optional[dict] = None) -> tuple:
         G = Σ_k delivered(w, S, draw)[k]      what the draw gives them (the next draw, when `draw` is None)
         A = Σ stores of the rung and every rung beneath it (`_subtree`), of the kinds `demanded` names
 
-      * `unmet` = D − G, in UNITS (not a share): what goes unfed this season. It repeats `census`'s
-        `eaters_short` as a quantity, from the same draw.
+      * `unmet` = D − G, in UNITS (not a share): what the draw leaves unfed under S. It is NOT
+        `census`'s `eaters_short`, which COUNTS the persons short in the LAST MATTER's record
+        (`World._subsistence_shortfall`). `census` passes no draw, so the `unmet` it reads is the NEXT
+        draw's (at build `eaters_short` is 0 while every populated settlement reads `starving`).
       * `cover` = A / D, an exact `fractions.Fraction`: SEASONS OF FOOD ON HAND ("cover" is this
         Query's coinage and means only that ratio). `Fraction(0)` when D = 0. A `Fraction` and not the
         `(A, D)` pair `density` returns, because the pair cannot say "0" for D = 0 and a `Fraction`
@@ -1568,11 +1570,23 @@ def hunger(w: World, rung_id: str, draw: Optional[dict] = None) -> tuple:
     ⚠ THE STATED LIMIT: A COUNTS STORES THE EATERS NEVER DRAW. Eaters draw at S and ABOVE -- the walk is
     `ancestry(home)`, upward from a cohort's home to the first id that is not a rung (`_larder_parts`,
     `larder_input`), taking from the first rung that holds any -- while hearths and communities sit
-    BENEATH S (in the built realm every cohort is homed AT a settlement, so none is on a ladder), and A
-    sums `Rung.stores` over `_subtree` (S and its descendants). So a store under S that no cohort's
-    ladder passes through is counted though never drawn, and one ABOVE S, which a draw does reach, is not
-    counted. This is a known mismatch, stated and not fixed here: `unmet` (the draw itself) is exact, and
-    `cover` and the floor bands inherit the mismatch."""
+    BENEATH S (in the default `build_realm`, `guards=False`, every cohort is homed AT a settlement;
+    `guards=True` posts guard cohorts where their principals stand), and A sums `Rung.stores` over
+    `_subtree` (S and its descendants). So a store under S that no cohort's ladder passes through is
+    counted though never drawn, and one ABOVE S, which a draw does reach, is not counted. This is a known
+    mismatch, stated and not fixed here: `unmet` (the draw itself) is exact, and `cover` and the floor
+    bands inherit the mismatch.
+
+    ⚠ TWO CONSEQUENCES OF THE PLAN'S FORMULA, recorded and not changed:
+      * A and D sum UNLIKE kinds, as the plan's `Σ_k` does, while the draw substitutes none
+        (`settlements.larder_draw` walks kind by kind). So a surplus of one eaten kind can lift `cover`
+        over a floor that another kind sits under: grain 20 and salt 1000 against a want of grain 20 and
+        salt 10 read `fed` at cover 34 with one season of grain (`test_hunger.py::test_g`). `unmet` is per
+        kind, so the mask can hide `hungry` or `lean`, never `starving`.
+      * Read with no draw at a first floor of 1 (the shipped arm), `hungry` is reachable only through a take
+        from ABOVE S: every unit the draw takes at S or beneath is in A, so `unmet == 0` gives `A >= D`.
+        `census` therefore shows `hungry` only for a settlement fed from above it. A settlement with no
+        cohort under it (D = 0) reads `fed`."""
     TRACE.query("hunger", "resolver")
     rung = w.rungs.get(rung_id)
     if rung is None or rung.kind != HUNGER_KIND:
@@ -1580,8 +1594,9 @@ def hunger(w: World, rung_id: str, draw: Optional[dict] = None) -> tuple:
             f"`hunger` asked of {rung_id!r}, " + ("not a rung" if rung is None else
             f"a {rung.kind!r} rung, not a {HUNGER_KIND!r} (defined for that kind only)"))
     floors = tuple(w.fixtures.get("hunger_band_floors"))
-    if (len(floors) > len(HUNGER_FLOOR_BANDS) or list(floors) != sorted(floors)
-            or any(isinstance(f, bool) or not isinstance(f, int) or f < 0 for f in floors)):
+    if (len(floors) > len(HUNGER_FLOOR_BANDS)
+            or any(isinstance(f, bool) or not isinstance(f, int) or f < 0 for f in floors)
+            or list(floors) != sorted(floors)):
         raise Forbidden(
             f"fixture hunger_band_floors is {floors!r}", "REM-50",
             needs=f"at most {len(HUNGER_FLOOR_BANDS)} whole, non-negative, ascending seasons "

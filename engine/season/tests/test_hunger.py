@@ -159,11 +159,12 @@ def test_e_the_empty_floor_list_is_the_control_and_the_registers_own_sweep_runs(
     assert read[()] == "fed" and read[(1, 2)] == "lean" and read[(2, 4)] == "hungry"
     # a floor list that would label the wrong band is refused, not answered
     refused = 0
-    for bad in ((2, 1), (1, 2, 3), (-1,), (1.5,), (True,), ("1",)):
+    # `(1, "2")` is mixed: the type test must refuse it before an ordering of unlike types can raise
+    for bad in ((2, 1), (1, 2, 3), (-1,), (1.5,), (True,), ("1",), (1, "2")):
         with pytest.raises(Forbidden):
             _band_under(bad, half)
         refused += 1
-    assert refused == 6
+    assert refused == 7
 
 
 def _sweep_of_the_row() -> list:
@@ -212,6 +213,17 @@ def test_g_the_stated_limits_read_as_they_are():
     w = _town()
     w.rungs[S.HUNGRY].stores["ore"] = 10_000
     assert world_q.hunger(w, S.HUNGRY) == base
+    # (4) A and D sum UNLIKE kinds while the draw substitutes none, so a surplus of one eaten kind lifts
+    # `cover` over a floor that another kind sits under: the thin kind at exactly one season reads `lean`
+    # beside the other kinds at one season, and `fed` once the others are in surplus
+    thin = sorted(RATION)[0]
+    one_season = _town(stores=_stock(1))
+    assert world_q.hunger(one_season, S.HUNGRY)[0] == "lean"
+    glut = {k: (1 if k == thin else 100) * S.COHORT_WEIGHT * v for k, v in RATION.items()}
+    masked = world_q.hunger(_town(stores=glut), S.HUNGRY)
+    assert masked[0] == "fed" and masked[2] == 0, masked
+    assert masked[1] == Fraction(sum(glut.values()), S.COHORT_WEIGHT * PER_HEAD)
+    assert glut[thin] == S.COHORT_WEIGHT * RATION[thin], "and the thin kind itself is still one season"
 
 
 def test_h_it_reads_and_writes_nothing_and_the_census_reports_it():

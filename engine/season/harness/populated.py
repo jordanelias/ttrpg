@@ -1695,7 +1695,8 @@ def census(w: World) -> dict:
             # `{band: settlements}` over every settlement rung, sorted. `census` passes no draw, so
             # each `unmet` is the NEXT draw's, and at tick 0 (before any yield) every cohort reads
             # `starving`. The stated limit (stores beneath a settlement are counted though never
-            # drawn) is `hunger`'s docstring's.
+            # drawn) is `hunger`'s docstring's. A settlement with no cohort under it (D = 0) counts as
+            # `fed`, so the histogram does not tell an emptied town from a fed one.
             "hunger_by_settlement": dict(sorted(Counter(
                 hunger(w, r)[0] for r in sorted(w.rungs) if w.rungs[r].kind == HUNGER_KIND).items()))}
 

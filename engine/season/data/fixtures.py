@@ -450,7 +450,7 @@ DEFAULT_FIXTURES = Fixtures(
     # need read `hungry`, under two `lean`, else `fed`; `starving` (a shortfall in the next draw) is
     # not a floor. Read ONLY by `world_q.hunger`, whose only caller is `harness/populated.py::census`
     # (a report; the loop reads nothing here). `()` is the CONTROL: no floor band, so `starving` or `fed`.
-    # JQ-6 (Jordan) owns the number. [JUSTIFIED: engine/season/hole_register.yaml H-242 -- `site: Fixtures hunger_band_floors`, graded `assumption`; no document gives where a settlement's hunger bands fall, so the floors are injected and swept () / (1, 2) / (2, 4)]
+    # Jordan corrects the number (H-242); JQ-6 is closed by M6 and CR-22's rule reads these floors. [JUSTIFIED: engine/season/hole_register.yaml H-242 -- `site: Fixtures hunger_band_floors`, graded `assumption`; no document gives where a settlement's hunger bands fall, so the floors are injected and swept () / (1, 2) / (2, 4)]
     hunger_band_floors=(1, 2),         # `H-242`, swept () (control) / (1, 2) (SHIPPED) / (2, 4)
     # S12.1 gates verbs on `condition` against per-kind band FLOORS. S22 assigns "band
     # coefficients" and "the obstacle floor" to params; the params document proposes NO
