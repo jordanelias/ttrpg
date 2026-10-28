@@ -417,7 +417,9 @@ class World:
     # (`loop/resolve.py::_apply_write`'s `change = eff(w, a, resolution)`) -- so a mutation an
     # effect made EAGERLY, before constructing and returning its `Change`, is already baked into
     # the snapshot itself and produces no diff at all. Every shipped effect defers its mutation
-    # into `Change.apply`, which this observation does cover; nothing enforces that they must.
+    # into `Change.apply`, which this observation does cover. CR-06: `_apply_write` now takes this
+    # snapshot around the effect call too and refuses a Tenure an effect's own body moved. TENURES
+    # ONLY -- an eager write to an entity field is still bound by the convention alone.
     def _tenure_snapshot(self) -> list:
         """`(tenure, its eight written fields)` for every Tenure in the store, owner-first.
 

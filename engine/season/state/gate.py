@@ -1488,7 +1488,8 @@ class Change:
     this `Change` runs earlier, before `World.write` (and its tenure snapshot) is ever reached
     (`loop/resolve.py::_apply_write`) -- a mutation made there, before this object is even
     constructed, is invisible to F3 as well as F9, not merely to F9. Every shipped effect defers
-    its mutation into `apply`; nothing enforces that the next one must."""
+    its mutation into `apply`. CR-06: `_apply_write` now snapshots the tenure store around the
+    effect call and refuses a Tenure the body moved; entity fields stay convention-bound."""
 
     subjects: tuple
     apply: Callable[[], None]
