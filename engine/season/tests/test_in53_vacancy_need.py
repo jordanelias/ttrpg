@@ -267,9 +267,11 @@ def _planted(monkeypatch, verb, key, value):
 def test_in53v_c_the_declarations_as_built():
     # RE-RECORDED AT v9 IN-10 (a): `oblige` declares the class (was `{"confer"}`); AT v9 IN-09 the
     # `comply` declares `Record` (was `{"confer", "oblige"}`); AT v9 IN-45 `migrate` declares `Rung`;
-    # AT v9 IN-49 `requisition` declares `Rung` beside it.
+    # AT v9 IN-49 `requisition` declares `Rung` beside it; AT v10 REM-22 `restore`, `work` and `examine`
+    # declare `Site` (B10-05).
     assert {v for v, r in VERB_TABLE.items() if r.referent_class} == {"confer", "oblige", "comply",
-                                                                      "migrate", "requisition"}
+                                                                      "migrate", "requisition",
+                                                                      "restore", "work", "examine"}
     assert VERB_TABLE["migrate"].referent_class == "Rung" and not VERB_TABLE["migrate"].referent_named
     assert VERB_TABLE["requisition"].referent_class == "Rung" and not VERB_TABLE["requisition"].referent_named
     assert VERB_TABLE["confer"].referent_class == VERB_TABLE["oblige"].referent_class == "Office"

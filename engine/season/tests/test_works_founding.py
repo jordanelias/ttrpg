@@ -570,11 +570,17 @@ from ..state.ids import H as _H
 
 def _formed_on(w, pid, referent, verbs, q=None):
     """The computed acts `pid` forms for `verbs` on a question naming `referent`. The question is
-    `q` when given, else a `claim_landed` Question about nothing in his ledger. The acts come from
-    the real `opening_set` and are packed by the real `pack_scenes`."""
+    `q` when given, else a `claim_landed` Question about nothing in his ledger, AS THE SPLICE DELIVERS
+    IT (v10 REM-22): carrying its own referents of every stamped class (`world_q.own_referents_of_class`,
+    through `_stamped`), because a row declaring `referent_class: Site` (`work`) forms on a classed
+    referent alone. The acts come from the real `opening_set` and are packed by the real `pack_scenes`."""
+    from ..data.rosters import OCCASION_ONLY_CLASSES
+    from ..data.verbs import DECLARED_CLASSES
     from ..state.carriers import Question
     p = w.persons[pid]
-    q = q or Question(f"q:{referent}", "claim_landed", (referent,), None)
+    if q is None:
+        q = Question(f"q:{referent}", "claim_landed", (referent,), None)
+        q = world_q._stamped(q, world_q.own_referents_of_class(w, q, DECLARED_CLASSES - OCCASION_ONLY_CLASSES), w)
     cands = [c for c in _options.opening_set(p, _assemble(p, q, 12), q, w.fixtures) if c.verb in verbs]
     mint = lambda who, verb, subj: _H(w.world_seed, w.tick, who, f"act:{verb}:{subj}")
     return [a for s in _pack(p, cands, 99, w.fixtures, mint) for a in s.acts]
@@ -624,12 +630,17 @@ def test_in45_work_forms_on_what_the_question_names_and_never_reaches_the_site_a
         `site.worked`, 500 -> 1000.
       * CONTROL: a question naming the seam, which no works names, forms the same `work`. It is
         `work.unavailable` and the seam does not move.
-      * THE GAP: the question the maker is actually asked is about the works Record. On it `work`
-        binds `site` to the Record, which is no Site, and the act is `work.unavailable`.
+      * THE GAP: the question the maker is actually asked is about the works Record. v10 REM-22
+        (`work` declares `referent_class: Site`): the shipped `work` forms NOTHING on it, since the
+        Record is not a Site. The formation the class removed is read with the row's column blanked
+        in-process (the table as it stood before REM-22), which is where the two readings below
+        are taken, unchanged: `work` binds `site` to the Record, which is no Site, and the act is
+        `work.unavailable`.
       * THE CANDIDATE, PLANTED: `record_sourced_operands.works: {site: at}` is the one `site`
         mapping a works' keys allow, and the loader admits it. With it, `work` on that same question
         binds `site` to the Rung `S`, and the act is still `work.unavailable`. No mapping of
-        `{plan, at}` onto the closed eight names a Site."""
+        `{plan, at}` onto the closed eight names a Site. (Read on the classless row as above: the
+        shipped row never forms on the Record, so the mapping has nothing to re-aim.)"""
     w, d = _world()
     d.witness(mint_token(w, WriteClass.INTERIOR), _declare(w, d, "wk", "harbour", SETTLEMENT, terms=1))
     _ripen(w, d, 1)
@@ -647,6 +658,11 @@ def test_in45_work_forms_on_what_the_question_names_and_never_reaches_the_site_a
                if c.subject == "wk" and str(c.predicate).startswith("content:")}
     q = next(q for q in world_q.questions_for(w, w.persons[ABSENT], since=(0, 0))
              if q.referents == ("wk",) and q.about in content)
+    assert _formed_on(w, ABSENT, "wk", ("work",), q=q) == []      # v10 REM-22: the class declines the Record
+    import dataclasses
+    classless = {**_options.VERB_TABLE,
+                 "work": dataclasses.replace(_options.VERB_TABLE["work"], referent_class="")}
+    monkeypatch.setattr(_options, "VERB_TABLE", classless)        # the row as it stood before REM-22
     (on_works,) = _formed_on(w, ABSENT, "wk", ("work",), q=q)
     assert on_works.payload["site"] == "wk"
     assert _kinds(_fold(w, d, on_works)) == ["work.unavailable"] and harbour.condition == 500

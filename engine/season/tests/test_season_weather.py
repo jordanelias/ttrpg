@@ -254,9 +254,15 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # seasons); `BASE_EVENTS` unmoved, and the old `repr` digest over the same worlds still read those three
 # when measured at GO-07. `test_go07_canonical_digest.py`'s control re-reads the build (seed 0) and one
 # season (seeds 0-2); the two-season reading was taken once and is not re-run.
+# RE-PINNED at v10 REM-22 (B10-05), A BEHAVIOUR MOVE DECLARED: `restore`, `work` and `examine` declare
+# `referent_class: Site`, so they form only on a Site the question the person answers carries, and the
+# realm's questions carry none (`aperture 1 s`, realm: `restore` att 6/21/15 -> 0/0/0, `work` 35/37/38 -> 0/0/0,
+# `examine` 29/34/22 -> 0/0/0 at seeds 0/1/2). The build hash is equal (the build reads no verb row); one and
+# two seasons move, as does every other seeded realm reading. Was 947c190b... / 52a106bc... (one, two seasons).
+# CONTROL, run: with the three columns removed (the REM-21 tree) the old pair reads again.
 BASE_HASHES = {0: "9ff5390939742b7bbb3af0fa2551e958",
-               1: "947c190baae2dda4b512d42271f36dd4",
-               2: "52a106bcb0cedac9cb74c8328e962eab"}
+               1: "3c627dea508b414d5feeacbd62ce1e9d",
+               2: "39fc1d6206a734111106d16af2458003"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -300,8 +306,9 @@ BASE_HASHES = {0: "9ff5390939742b7bbb3af0fa2551e958",
 # RE-RECORDED at v9 IN-12 `give` + Rung with `BASE_HASHES` (6655 -> 6603, 18608 -> 19990).
 # RE-RECORDED at v9 PC-06 K-3 `thread_read` with `BASE_HASHES` (6603 -> 6594, 19990 -> 19221).
 # RE-RECORDED at v9 IN-59 (a) with `BASE_HASHES` (6594 -> 7018, 19221 -> 21710).
-BASE_EVENTS = {1: (7018, "e3d6e385be347d953930a717b4ee8b9130ffba9e345fe67f72ae30ca072c9df2"),
-               2: (21710, "2da1c8f4276f30075fc42baf09b22ea2b20226519ed65da465d05dfccc3340f4")}
+# RE-RECORDED at v10 REM-22 with `BASE_HASHES` (7018 -> 7345, 21710 -> 21490).
+BASE_EVENTS = {1: (7345, "a68965449b494c862bf47cb368e2328c2b04c865e538515ccfb8ea852a111100"),
+               2: (21490, "d4f4a10ed229030653f4733d84af0ae94344b2184b7ea8ad97f4f024185ee80a")}
 
 
 def _digest(w) -> tuple:
@@ -400,7 +407,8 @@ def test_the_give_withheld_arm_reproduces_the_one_season_pin():
 #: too (6603 / 958f4283... -> 7028 / 4f9b8312...), so the K-3-time sequence is no longer producible on one
 #: tree. The value below is that arm on the IN-59 tree, `PYTHONHASHSEED=0`; from here it is a change detector
 #: that still shows `thread_read` moves the season (it differs from `BASE_EVENTS[1]`), as `BASE_EVENTS` became.
-THREAD_READ_WITHHELD_EVENTS_1 = (7028, "4f9b8312e98cdcad01223190395be1a0d54b2e332eb19472ce972e8e9d2c5ea1")
+#: RE-RECORDED at v10 REM-22 with `BASE_HASHES`: 7028 / 4f9b8312... -> 7354 / eb995a13... (the three Site rows).
+THREAD_READ_WITHHELD_EVENTS_1 = (7354, "eb995a1367849ec20f5a070b99f03a16bb25d5930b1ba2659a8b44ddcf38024a")
 
 
 def test_the_thread_read_withheld_arm_is_pinned_and_differs_from_the_shipped_season():

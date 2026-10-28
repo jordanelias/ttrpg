@@ -24,6 +24,12 @@ referent_classes` gains (`Site`, `Proposition`, `Person`).
   (d) the loader still refuses an undeclared class, and takes each of the three new ones (a row
       declaring one puts it in `DECLARED_CLASSES`, the term's domain).
 
+REM-22 (`restore`, `work` and `examine` declare `referent_class: Site`; the first positive test of the
+term) is the last section: the formation (a person and a Site, the verb on the Site only), the DONE
+tests (a person present at a worn Site executes `restore`, reaches `examine`'s graded route, advances a
+works by `work`, each through the real fold) and the batch's control (3), written over the rows that
+declare `Site`, `Proposition` or `Person` so a later item adds its row by its column and not by a copy.
+
 MUTATIONS, run at the build: `_stamped`'s `dict.fromkeys` dropped (the bare concatenation) reddens the
 three (c) tests on `Question`'s refusal (and `test_in53_vacancy_need.py`'s told-of-seat fingerprint
 test); the term's domain widened from `DECLARED_CLASSES` to every referent class reddens (b)'s
@@ -31,21 +37,29 @@ byte-identity and (a)'s bare control; `vacancies`/`seats_named` swapped, and `pl
 `larders_in_purview` swapped, each redden (b)'s order test and leave the seeded realm hash
 (`build_realm(0)`, one season seed 0) unmoved -- the realm reading cannot observe a reorder.
 """
+import collections
 import dataclasses
+from unittest import mock
 
 import pytest
 
 from engine.season.data import verbs as _verbs
+from engine.season.data.requires import UNKNOWN, AllOf, Existence
 from engine.season.data.rosters import OCCASION_ONLY_CLASSES, REFERENT_CLASSES
 from engine.season.data.verbs import DECLARED_CLASSES, VERB_TABLE
+from engine.season.decision import options as _options
+from engine.season.decision.choose import _payload_of
+from engine.season.decision.options import seat_of
 from engine.season.gaps import Forbidden
 from engine.season.harness import probes as P
 from engine.season.queries import world_q
-from engine.season.state.carriers import Proposition, Question
+from engine.season.state.carriers import Act, Proposition, Question
 
 from .test_g3_not_yours import _gov_world, _hold
 from .test_in09_dispensation_answer import HOLDER, WRIT, _with_writ
-from .test_in53_vacancy_need import _ambition, _know, _planted
+from .test_in53_vacancy_need import _ambition, _formed, _know, _planted
+from .test_works_founding import ABSENT, HARBOUR, PRESENT, SETTLEMENT, _declare, _fold, _kinds, _ripen
+from .test_works_founding import _world as _works_world
 
 #: The classes REM-21 adds to `rosters.yaml: referent_classes`. A test expectation, not a roster: it
 #: duplicates no `values:` list (`test_jordan_no_definition_is_hardcoded_in_a_body`'s corpus rule), and
@@ -239,3 +253,217 @@ def test_rem21_d_a_row_declaring_a_new_class_loads_and_enters_the_terms_domain(m
     declared = _verbs._derive_declared_classes()
     assert cls in declared - OCCASION_ONLY_CLASSES and declared - {cls} <= DECLARED_CLASSES, declared
     assert Question("q:ok", "need", (), "", (("x", cls),)).classes == (("x", cls),)
+
+
+# ======================================================================================
+# REM-22 (B10-05; rem-02 §2.3 REM-22, limit `-08` AM-A-07): `restore`, `work` AND `examine` FORM ON
+# A SITE ONLY. The first positive test of REM-21's term: the data edit is three `referent_class: Site`
+# columns, and the term is what makes them stamp.
+# ======================================================================================
+
+SITE_ROWS = ("restore", "examine", "work")
+#: A question about a person, a place, a stated thing and a settlement: one referent of each kind the
+#: new classes name, plus a rung (`S`), so a class's removals are visible against every other kind.
+MIXED = ("p_low", "site_harbour", "prop_x", "S")
+GRADED_DEGREES = frozenset({"Overwhelming", "Success", "Partial", "Failure"})
+
+
+def _ask(monkeypatch, w, pid, refs=MIXED):
+    """The question `pid` answers when his one ambition is about `refs`, delivered through the real
+    `questions_for` (the splice, the term, `_stamped`). `goal_referents` is the one owner of what an
+    ambition is about and ships no producer of a person AND a place in one question, so it is stood
+    in for HERE, once, for this ambition alone; the question is otherwise the producer's."""
+    prop = f"prop_ask_{pid}"
+    _proposition(w, "prop_x", "S")
+    _ambition(w, pid, prop, refs[0])
+    real = world_q.goal_referents
+    monkeypatch.setattr(world_q, "goal_referents",
+                        lambda w_, p_, pr: refs if pr.id == prop else real(w_, p_, pr))
+    q = world_q.questions_for(w, w.persons[pid])[0]
+    assert q.id == f"q:need:{prop}" and q.referents == refs, q
+    return q
+
+
+def _act_of(c, p, actor=None):
+    """The act the chooser mints from Candidate `c` (`decision/choose.py::pack_scenes`: `_payload_of`
+    and `seat_of`), optionally in another actor's hands."""
+    return Act(f"a_{c.verb}_{actor or p.id}", actor or p.id, c.verb, payload=_payload_of(c),
+               via=seat_of(p, c))
+
+
+def _formed_without_class(w, pid, q, verb):
+    """The Candidates `verb` forms on `q` if its row declared no class: the base table's formation.
+    `opening_set` reads the module's `VERB_TABLE`, so one row's copy is swapped in for the call."""
+    row = VERB_TABLE[verb]
+    table = {**VERB_TABLE, verb: dataclasses.replace(row, referent_class="")}
+    with mock.patch.object(_options, "VERB_TABLE", table):
+        return [c for c in _formed(w, pid, q) if c.verb == verb]
+
+
+# --- (a) THE FORMATION: THE VERB FORMS ON THE SITE AND ON NOTHING ELSE ------------------------
+
+@pytest.mark.parametrize("verb", SITE_ROWS)
+def test_rem22_a_a_question_about_a_person_and_a_site_forms_the_verb_on_the_site_only(monkeypatch, verb):
+    """THE FIRST ASSERTION, which deleting the column reddens (`test_rem22_a_mutation_...` below runs
+    that deletion): `p_high` answers a question about `p_low`, the harbour, a Proposition and a rung;
+    the term stamps the one Site, and `verb` forms on it and on nothing else. THE CONTROL: the person
+    still forms rows that declare no class on every one of the four, so the class removed the verb's
+    formations and not the person's."""
+    w, _ = _works_world()
+    q = _ask(monkeypatch, w, PRESENT)
+    assert q.classes == (("site_harbour", "Site"),), q
+    formed = _formed(w, PRESENT, q)
+    assert [c.subject for c in formed if c.verb == verb] == ["site_harbour"], (verb, formed)
+    plain = {c.subject for c in formed if not VERB_TABLE[c.verb].referent_class}
+    assert set(MIXED) <= plain, plain
+
+
+def test_rem22_a_every_candidate_respects_the_partition_a_classed_row_the_class_a_plain_row_the_plain(
+        monkeypatch):
+    """Over everything `p_high` forms from the mixed question: a row declaring a class forms only on an
+    id the question carries as that class, a row declaring none only on its plain referents -- and the
+    loop asserts it compared (`CLAUDE.md` §0.1 pt 2): the three Site rows among the classed, and the
+    plain rows on all four referents."""
+    w, _ = _works_world()
+    q = _ask(monkeypatch, w, PRESENT)
+    classed, plain = collections.Counter(), collections.Counter()
+    for c in _formed(w, PRESENT, q):
+        row = VERB_TABLE[c.verb]
+        if row.referent_class:
+            assert (c.subject, row.referent_class) in q.classes, (c, q.classes)
+            classed[c.verb] += 1
+        else:
+            assert c.subject in q.referents, (c, q.referents)
+            plain[c.subject] += 1
+    assert set(SITE_ROWS) <= set(classed) and all(classed[v] == 1 for v in SITE_ROWS), classed
+    assert set(plain) == set(MIXED), plain
+
+
+@pytest.mark.parametrize("verb", SITE_ROWS)
+def test_rem22_a_mutation_without_its_column_the_row_forms_on_every_referent(monkeypatch, verb):
+    """THE MUTATION, EXECUTED: the column deleted (the row copied with no class) and the assertion
+    above has something to see -- the verb forms on all four referents, the person, the Proposition and
+    the rung among them. The unclassed formation is the base reading's: `restore` 6/21/15 and `examine`
+    29/34/22 refused at admission, on exactly such referents (`aperture 1 s`, B10-05 base)."""
+    w, _ = _works_world()
+    q = _ask(monkeypatch, w, PRESENT)
+    assert [c.subject for c in _formed_without_class(w, PRESENT, q, verb)] == list(MIXED)
+    assert [c.subject for c in _formed(w, PRESENT, q) if c.verb == verb] == ["site_harbour"]
+
+
+# --- (b) THE DONE TESTS: A PERSON AT A SITE, THROUGH THE REAL FOLD (P9) -----------------------
+
+def test_rem22_b_a_person_present_at_a_worn_site_executes_restore_through_the_fold(monkeypatch):
+    """`p_high` stands at the harbour (it lies on his rung `S`) and it is worn. The Candidate his
+    question forms is minted as the chooser mints it and folded by the real driver: `site.restored`,
+    the fabric up. THE CONTROL, the same Candidate in the hands of `p_low`, who is not there: the
+    admission refuses it on `present_at`, and the fold emits `restore.refused` and moves nothing."""
+    w, d = _works_world()
+    harbour = w.sites[HARBOUR]
+    worn = harbour.condition
+    assert worn < w.fixtures.get("condition_scale")
+    q = _ask(monkeypatch, w, PRESENT)
+    (c,) = [c for c in _formed(w, PRESENT, q) if c.verb == "restore"]
+    ok, _kinds_, verdict = d._admits(w, _act_of(c, w.persons[PRESENT], ABSENT), VERB_TABLE["restore"])
+    assert not ok and any(o.predicate.startswith("present_at") and o.value is False
+                          for o in verdict.observed), verdict
+    assert _kinds(_fold(w, d, _act_of(c, w.persons[PRESENT], ABSENT))) == ["restore.refused"]
+    assert harbour.condition == worn
+    out = _fold(w, d, _act_of(c, w.persons[PRESENT]))
+    assert _kinds(out) == ["site.restored"] and harbour.condition > worn, (_kinds(out), harbour.condition)
+
+
+def test_rem22_b_a_person_present_at_a_site_reaches_the_graded_route_of_examine(monkeypatch):
+    """The same pair for `examine`: `p_high`'s Candidate on the harbour folds through FI-01's graded
+    route -- a `finding.made` or a `finding.none` carrying a degree of the four bands, the roll having
+    been thrown. THE CONTROL, `p_low` (not there): refused at admission, `finding.none` with NO degree,
+    which is the refusal and not a lost roll."""
+    w, d = _works_world()
+    q = _ask(monkeypatch, w, PRESENT)
+    (c,) = [c for c in _formed(w, PRESENT, q) if c.verb == "examine"]
+    (away,) = _fold(w, d, _act_of(c, w.persons[PRESENT], ABSENT))
+    assert (away.kind, away.degree) == ("finding.none", None), (away.kind, away.degree)
+    (here,) = _fold(w, d, _act_of(c, w.persons[PRESENT]))
+    assert here.kind in ("finding.made", "finding.none") and here.degree in GRADED_DEGREES, (
+        here.kind, here.degree)
+
+
+@pytest.mark.parametrize("kind", [world_q.WORKS_KIND, "text"])
+def test_rem22_b_work_formed_on_a_site_advances_a_works_and_only_a_works(monkeypatch, kind):
+    """ED-IN-0297 UNTOUCHED: `p_low` (the maker) forms `work` on the harbour from his question and the
+    fold admits it (the cell passes: the Site is a Site). With a works planned at the harbour the
+    fabric rises to its ceiling, `site.worked`; the same Candidate over a Record that is no works
+    stages nothing -- `work.unavailable`, the harbour where it was."""
+    w, d = _works_world()
+    _declare(w, d, "rec", "harbour", SETTLEMENT, kind=kind)
+    _ripen(w, d, 2)
+    harbour = w.sites[HARBOUR]
+    harbour.condition = 500
+    q = _ask(monkeypatch, w, ABSENT)
+    (c,) = [c for c in _formed(w, ABSENT, q) if c.verb == "work"]
+    assert c.subject == HARBOUR and d._admits(w, _act_of(c, w.persons[ABSENT]), VERB_TABLE["work"])[0]
+    out = _fold(w, d, _act_of(c, w.persons[ABSENT]))
+    if kind == world_q.WORKS_KIND:
+        assert _kinds(out) == ["site.worked"] and harbour.condition == 666, (_kinds(out), harbour.condition)
+    else:
+        assert _kinds(out) == ["work.unavailable"] and harbour.condition == 500, _kinds(out)
+
+
+# --- (c) CONTROL (3) OF B10-05's HR-9: A CLASS REMOVES REFUSALS AND NOTHING ELSE --------------
+
+#: The classes whose rows control (3) walks. The ROWS are read off the table, so a later item that
+#: declares `Proposition` or `Person` on a row is under the control the moment its column lands: nothing
+#: here names a verb but the three this item adds, and a row is added by its data and never by a copy.
+CONTROL3_CLASSES = frozenset({"Site", "Proposition", "Person"})
+
+
+def _existence_kinds(req) -> frozenset:
+    """The `kind` of every `existence` clause in a typed cell (`AllOf` nested or not)."""
+    if isinstance(req, Existence):
+        return frozenset({req.kind})
+    if isinstance(req, AllOf):
+        return frozenset().union(*(_existence_kinds(x) for x in req.clauses))
+    return frozenset()
+
+
+def _refuses_on_the_rows_kind(row, verdict, c):
+    """The refusal is the row's own kind test: where the cell asks `existence` of a kind, an
+    `exists:<kind>` read came back 0; where it asks none (`work`'s threshold), the read of the referent
+    came back UNKNOWN and the verdict is not True. Anything else is a refusal for another reason, and
+    a class that removed it would be removing a refusal that was not about kind."""
+    kinds = _existence_kinds(row.requires_typed.requirement) if row.requires_typed is not None else frozenset()
+    if kinds:
+        assert any(o.predicate == f"exists:{k}" and o.value in (0, False)
+                   for k in kinds for o in verdict.observed), (row.verb, c, verdict)
+    else:
+        assert verdict.value is UNKNOWN and any(o.value is UNKNOWN for o in verdict.observed), (
+            row.verb, c, verdict)
+
+
+def test_rem22_c_every_candidate_a_class_removes_force_admitted_refuses_on_the_rows_kind(monkeypatch):
+    """HR-9 CONTROL (3), for every row declaring `Site`, `Proposition` or `Person`: the Candidates its
+    class removes -- those the row would form on the question's referents of any other class were it
+    classless -- are force-admitted through the fold's own `_admits` (the Candidate minted as the chooser
+    mints it) and each is refused on the row's kind. A PROOF, NOT A COUNT: the class removes refusals and
+    nothing else. The loop asserts that it checked at least one removed Candidate for EVERY classed row,
+    and the Site rows' own Candidate on the Site (the one the class keeps) is admitted by the same call,
+    so a refusal here is not the fold refusing everything."""
+    w, d = _works_world()
+    q = _ask(monkeypatch, w, PRESENT)
+    p = w.persons[PRESENT]
+    rows = {v: r for v, r in VERB_TABLE.items() if r.referent_class in CONTROL3_CLASSES}
+    assert set(SITE_ROWS) <= set(rows), sorted(rows)
+    kept = {c.verb: c for c in _formed(w, PRESENT, q)}
+    checked = collections.Counter()
+    for verb, row in sorted(rows.items()):
+        own = {r for r, k in q.classes if k == row.referent_class}
+        removed = [c for c in _formed_without_class(w, PRESENT, q, verb) if c.subject not in own]
+        for c in removed:
+            ok, _kinds_, verdict = d._admits(w, _act_of(c, p), row)
+            assert not ok, (verb, c)
+            _refuses_on_the_rows_kind(row, verdict, c)
+            checked[verb] += 1
+        if verb in SITE_ROWS:
+            assert {c.subject for c in removed} == set(MIXED) - own, (verb, removed)
+            assert d._admits(w, _act_of(kept[verb], p), row)[0], (verb, kept[verb])
+    assert set(checked) == set(rows) and min(checked.values()) >= 1, (sorted(rows), checked)

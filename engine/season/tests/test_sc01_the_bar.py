@@ -118,7 +118,13 @@ BAR_FIXTURES = DEFAULT_FIXTURES.sweep("pool_default", 30)       # v9 SC-03b: a j
 # of every option set (untyped, one Candidate per referent), and doctrine/22 now fires no date. A sweep of
 # doctrine x seeds 0..399 at 5 seasons for a run meeting every assertion of the control test below finds
 # doctrine/83 first (scratch, not kept; seeds 0..82 each fail one assertion); the PROCEEDINGS are unmoved.
-CONTROL = ("doctrine", 83, 5)      # v9 SC-03b: was ("community", 13, 5); IN-12 step 9: ("doctrine", 8, 5); step 10: ("doctrine", 22, 5)
+# v10 REM-22 (B10-05): RE-TRACED AGAIN, the conviction and season count unchanged -- `restore`, `work` and `examine`
+# declare `referent_class: Site`, so they stop forming on the clerk, the rungs and the Records the Duke is asked
+# about, and the act mix of this world moved: doctrine/83 now fires TWO dates (the control's `f, = ...` needs
+# one). A sweep of doctrine x seeds 0..8 at 5 seasons for a run meeting every assertion of the control test below
+# finds doctrine/8 first (scratch, not kept; seeds 0..5 and 7 fire no date, seed 6 determines nobody); the
+# PROCEEDINGS are unmoved. CONTROL, run: on the REM-21 tree doctrine/83 meets every assertion.
+CONTROL = ("doctrine", 8, 5)      # was ("community", 13, 5) until v9 SC-03b; ("doctrine", 8, 5) until IN-12 step 9; 22 until step 10; 83 until REM-22
 
 
 def _world(conviction: str, seed: int):

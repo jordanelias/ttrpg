@@ -321,19 +321,25 @@ def _counts(w) -> dict:
 #: Read on the base commit `b9beec9d` (the old digest; PYTHONHASHSEED 0 and 1 identical), except
 #: `new`, read on the GO-07 tree. `census` is the sha256 of `populated.run`'s return value as sorted
 #: JSON -- the census plus `acts`, `actors`, `act_subjects` and `claim_sources`.
+#: RE-RECORDED at v10 REM-22 (B10-05), A GAME MOVE DECLARED, NO DIGEST MOVE: `restore`, `work` and `examine`
+#: declare `referent_class: Site`, so the act mix of every seeded realm moves; EVERY value below is the REM-22
+#: tree's, read with this file's own helpers (`_old_content_hash`, `_counts`) and `populated.run`, and the control
+#: still means what it meant -- the digest format changed and the world, at a given tree, did not (the two
+#: digests are read of the SAME run). Was, for seeds 0 / 1 / 2: `old` b2464a6c... / 97d2d92f... / 455cfe8d...,
+#: `new` 947c190b... / 36ef9545... / 7e8df32a..., `acts` 539 / 560 / 588, `log` 7018 / 8128 / 6879.
 BASE = {
-    0: {"old": "b2464a6c87dd9d2da9e3b3cbc8143fdf", "new": "947c190baae2dda4b512d42271f36dd4", "acts": 539,
-        "census": "5198ad48b4077e7bcdca144ccf692a296897cb22e2f3a240d655c72aa1302a14",
-        "counts": {"persons": 82, "rungs": 411, "offices": 32, "sites": 322, "records": 88,
-                   "propositions": 87, "dates": 1, "docket": 5, "tenures": 785, "log": 7018}},
-    1: {"old": "97d2d92f792dc980bc2ed4656e415261", "new": "36ef95456677d233921aa79f0ce5f00d", "acts": 560,
-        "census": "997a5648f8d6709bafbb7936c1aa2086644615e2eaf0af114abaf5868e767800",
-        "counts": {"persons": 83, "rungs": 412, "offices": 32, "sites": 322, "records": 98,
-                   "propositions": 87, "dates": 0, "docket": 2, "tenures": 810, "log": 8128}},
-    2: {"old": "455cfe8dcf9a9832b88c1bda5a29bde7", "new": "7e8df32af51923945ff3060b3231ea2d", "acts": 588,
-        "census": "b2adbbfe2eb49735b26a40be341793757741b27f53895c80de78bc1993683eba",
-        "counts": {"persons": 81, "rungs": 410, "offices": 32, "sites": 322, "records": 90,
-                   "propositions": 91, "dates": 1, "docket": 2, "tenures": 787, "log": 6879}},
+    0: {"old": "ea5d101c396be7426aafa4c5376fa429", "new": "3c627dea508b414d5feeacbd62ce1e9d", "acts": 543,
+        "census": "f0d2e4b9f5a04468cd2ebffdbd3e20e3e88b64cc17e01e778cc0cbaa234ab647",
+        "counts": {"persons": 80, "rungs": 409, "offices": 32, "sites": 322, "records": 84,
+                   "propositions": 88, "dates": 1, "docket": 3, "tenures": 787, "log": 7345}},
+    1: {"old": "0982d7badd6067e78d0eeabf8787c137", "new": "9b9145f744263c2d592ef92bb0ce2099", "acts": 588,
+        "census": "b25385bc8cd5fc4e7da7d6c6720fe037ab645dc3a686cd627007b85f70ba46e3",
+        "counts": {"persons": 83, "rungs": 412, "offices": 32, "sites": 322, "records": 118,
+                   "propositions": 87, "dates": 0, "docket": 2, "tenures": 834, "log": 10146}},
+    2: {"old": "978f8690e1bbf161a71af4e4fa561333", "new": "7619c18ebc28962b75b7b3f97d2983a5", "acts": 607,
+        "census": "2c97d47bae5b9ada1d1ba89b67a85ae6833c62ac52744175b2a7ec46618913f5",
+        "counts": {"persons": 82, "rungs": 411, "offices": 32, "sites": 322, "records": 105,
+                   "propositions": 93, "dates": 1, "docket": 4, "tenures": 812, "log": 8132}},
 }
 
 

@@ -2596,6 +2596,8 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     from ..harness import populated
     from ..loop import driver
 
+    heads = {False: [], True: []}       # v10 REM-22: the question each delivery puts FIRST, per arm
+
     def season(strip):
         w = build_realm(0)
         if strip:
@@ -2608,6 +2610,8 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
         def spy(w_, p, since=None):
             out = inner(w_, p, since)
             qs.extend(out)
+            if out:
+                heads[strip].append(out[0])
             return out
         with monkeypatch.context() as m:
             # ⚠ MERGE, 2026-09-27 (ED-IN-0206, main): the reader moved from `loop.deliberate` back
@@ -2682,8 +2686,26 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # first questions identical; 605 acts each, asserted below. Before IN-57 a dwelling claim's hash
     # id could sort first, which is what moved the count. The Question-id inequality above still
     # observes a narrowed `reach`, the regression that arm's message named.
-    assert out["acts"] == cout["acts"], (
+    # ⚠⚠ v10 REM-22 (B10-05): (539, 539) -> (543, 545), A RE-RECORD WITH THE UNIT THAT MOVED IT, AND THE
+    # EQUALITY IT REPLACES WAS A COINCIDENCE OF TRAJECTORY, NOT THE PROPERTY. `restore`, `work` and `examine`
+    # declare `referent_class: Site`, so the realm's act mix moved (`aperture 1 0`: 539 -> 543 acts), and with
+    # it the point where the two arms part. MEASURED, seed 0, one season, the REM-21 tree as control (the same
+    # script on both): at the REM-21 tree the arms' act sequences are identical (539 acts each, the events
+    # that differ are `claim.deposited` and `condition.worn` alone); here they part at act 372, where the
+    # stripped arm has `p_npc_002` `migrate` to `terr_T13` and the kept arm's next act is another person's, and
+    # the arms differ in what ledgers hold (`claim.deposited` 6256 / 6172: the dwellings' wear claims; that
+    # person's ledger ends the season at 48 claims in the kept arm against 54 in the stripped) -- so 543
+    # against 545, with `duty.taken` 14 / 16, `migrate.refused` 46 / 48, `transfer.refused` 23 / 22,
+    # `finding.none` 116 / 115 and `residence.changed` 1 / 0 the other kinds that differ. NOT a dwelling
+    # question answered first: THE PROPERTY IS ASSERTED DIRECTLY NOW (the head of every delivery, per arm),
+    # and it holds -- 0 of 370 questions put first name a dwelling, 92 of the questions delivered do.
+    assert heads[False] and heads[True], "the spy saw no delivery; the zero below would be unobserved"
+    assert not [q.id for q in heads[False] if {q.about, *q.referents} & set(dw)], (
         "a dwelling question was answered first: IN-57's tier 4 no longer sorts it last")
+    assert (out["acts"], cout["acts"]) == (543, 545), (
+        f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
+        "ledgers (not a question answered first, which is asserted above) and part the arms at one "
+        "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")
 # H2 -- `ED-IN-0261`'s DEONTOLOGICAL GATE, `H-146`. A refusal at `opening_set`, not a score term:
 # the person's projected weight on the gating axis IS the threshold, and a verb that axis engages
 # past it never forms a Candidate. Roster-generic: the axis is whatever `Fixtures refusal_axis`
