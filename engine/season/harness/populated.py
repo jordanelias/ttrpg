@@ -69,8 +69,8 @@ from collections import Counter, defaultdict
 
 from ..data import cast, files
 from ..data import goals as goals_data
-from ..queries.world_q import (RESIDE_KIND, ancestry, capacity, closed_uses, home_of as home_of_q, members,
-                                uncontrolled)
+from ..queries.world_q import (HUNGER_KIND, RESIDE_KIND, ancestry, capacity, closed_uses, home_of as home_of_q,
+                                hunger, members, uncontrolled)
 from ..gaps import Forbidden, Unspecified
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
 from ..data.rosters import (BODY_FACTION, FACTIONS, FOREIGN_CAST, FOREIGN_SEATS, OFFICES_BY_HOLDER,
@@ -1689,7 +1689,15 @@ def census(w: World) -> dict:
             # territory with a Site below a floor, and how many such Sites it holds.
             "sites_below_a_floor_by_territory": {
                 r: n for r in sorted(w.rungs) if w.rungs[r].kind == "territory"
-                if (n := len(closed_uses(w, r)))}}
+                if (n := len(closed_uses(w, r)))},
+            # REM-50: `world_q.hunger`'s only caller until CP-T08-06 -- `uncontrolled`'s precedent
+            # above: a report, not a rule, read by no decision and moving no hash. A band histogram
+            # `{band: settlements}` over every settlement rung, sorted. `census` passes no draw, so
+            # each `unmet` is the NEXT draw's, and at tick 0 (before any yield) every cohort reads
+            # `starving`. The stated limit (stores beneath a settlement are counted though never
+            # drawn) is `hunger`'s docstring's.
+            "hunger_by_settlement": dict(sorted(Counter(
+                hunger(w, r)[0] for r in sorted(w.rungs) if w.rungs[r].kind == HUNGER_KIND).items()))}
 
 
 def run(seasons: int = 1, seed: int = 0, cap: int | None = None, w: World | None = None) -> dict:
