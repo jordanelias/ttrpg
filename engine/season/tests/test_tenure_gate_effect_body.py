@@ -1,10 +1,11 @@
 """CR-06 / H-137 -- the gate sees an effect body that changes a tenure by itself.
 
-`loop/resolve.py::_apply_write` runs `change = eff(w, a, resolution)` BEFORE `World.write`, and the
-tenure snapshot F3 judges from is taken inside `write()`. A tenure the effect's own body moved
-before it returned its `Change` was therefore baked into that snapshot and judged by nothing. The
-fold now observes the tenure store around the effect call and refuses a change there the same way
-the gate refuses an unauthored one: the store put back first, then `NotYours`.
+`loop/resolve.py::_apply_write` runs the effect function BEFORE `World.write`, and the tenure
+snapshot F3 judges from is taken inside `write()`. A tenure the effect's own body moved before it
+returned its `Change` was therefore baked into that snapshot and judged by nothing.
+`World.effect_body_observed`, which `_apply_write` calls, now observes the tenure store around the
+effect call and refuses a change there the same way the gate refuses an unauthored one: the store
+put back first, then `NotYours`.
 
 What each block proves, and the control that stops it passing vacuously:
 

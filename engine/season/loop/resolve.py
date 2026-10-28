@@ -39,7 +39,7 @@ from ..queries.person_q import (broken_by, confided_outside, conviction_after_cr
 from ..queries.world_q import WorldReader, ceiling, demanded_person, occasioned_by
 from ..seam import ContestError, ContestRefused, Resolution, contest, degree_of, find_trail, grade
 from ..state.carriers import Act, Event, StateChange, subject_of
-from ..state.gate import Change, NoOpReceipt, Subject, Token, not_yours, seat_hold
+from ..state.gate import Change, NoOpReceipt, Subject, Token, seat_hold
 from ..state.ids import SeatId, draw_factory, H
 from ..state.world import World
 from ..trace_log import TRACE
@@ -930,26 +930,11 @@ def _apply_write(self, w: "World", token: Token, a: Act, kind: str, fld: str, ef
     #
     # ⚠ CR-06 / `H-137`: THE EFFECT'S OWN BODY IS OBSERVED TOO, FOR TENURES. `World.write` takes its
     # tenure snapshot only after this call returns, so a Tenure the body moved before handing back
-    # its `Change` was baked into that snapshot and judged by neither F3 nor F9. The store is
-    # snapshotted around the call here instead, and a change in it is refused by the gate's own
-    # pair (the store put back, then `not_yours`). It does not ask whether the edge would have been
-    # LAWFUL: an effect body is not a write (no class or step check, no trace line, no receipt), so
-    # any tenure it moves is refused, lawful or not -- an effect defers its mutation into
-    # `Change.apply`, where the gate does ask.
-    # ⚠ TENURES ONLY, AND THAT IS THE BOUND. An eager write to an entity field (a rung's stores, a
-    # person's body) is still invisible here and stays bound by the convention alone. Two more
-    # bounds: a body that moves a tenure and then RAISES is not restored here (the raise aborts the
-    # act, as any effect's does); and `World.write` takes its own snapshot after this check -- the
-    # two are kept apart on purpose, since handing this one to `write()` would put a caller-supplied
-    # snapshot into F3's own observation of the store.
-    snap = w._tenure_snapshot()
-    change = eff(w, a, resolution)
-    eager = w._tenure_changes(snap)
-    if eager:
-        w._restore_tenures(eager)
-        raise not_yours(eager, a.actor, a.via, kind, fld,
-                        why="moved Tenures in the effect's own body, before it returned its "
-                            "Change (CR-06, H-137)")
+    # its `Change` was baked into that snapshot and judged by neither F3 nor F9.
+    # `World.effect_body_observed` runs the effect inside its own snapshot and refuses a Tenure the
+    # body moved (the store put back, then `not_yours`); its docstring states the bounds (tenures
+    # only; any tenure moved is refused, lawful or not, since a body is not a write).
+    change = w.effect_body_observed(lambda: eff(w, a, resolution), a.actor, a.via, kind, fld)
     got = w.write(fld, token, None, record_kind=kind, fieldname=fld, driver="Act",
                   actor=a.actor, via=a.via, change=change)
     # ⚠ AN EFFECT MAY EARN SOME OF ITS DECLARED KINDS AND NOT OTHERS. A subject that earns `None`

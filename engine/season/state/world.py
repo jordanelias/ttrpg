@@ -417,9 +417,9 @@ class World:
     # (`loop/resolve.py::_apply_write`'s `change = eff(w, a, resolution)`) -- so a mutation an
     # effect made EAGERLY, before constructing and returning its `Change`, is already baked into
     # the snapshot itself and produces no diff at all. Every shipped effect defers its mutation
-    # into `Change.apply`, which this observation does cover. CR-06: `_apply_write` now takes this
-    # snapshot around the effect call too and refuses a Tenure an effect's own body moved. TENURES
-    # ONLY -- an eager write to an entity field is still bound by the convention alone.
+    # into `Change.apply`, which this observation does cover. CR-06: `effect_body_observed` (below)
+    # takes this snapshot around the effect call too and refuses a Tenure an effect's own body
+    # moved. TENURES ONLY -- an eager write to an entity field is still bound by the convention.
     def _tenure_snapshot(self) -> list:
         """`(tenure, its eight written fields)` for every Tenure in the store, owner-first.
 
@@ -469,6 +469,31 @@ class World:
             else:
                 (t.subject, t.object, t.kind, t.since, t.until, t.degree, t.payload, t.term) = \
                     _written_fields(was, copy=False)
+
+    def effect_body_observed(self, build, actor: Optional[str], via: Optional[str],
+                             record_kind: str, fieldname: str) -> Any:
+        """CR-06 / `H-137`: call `build()` -- an effect function, which returns its `Change` -- and
+        refuse a Tenure that its OWN BODY moved before returning. The store is put back
+        (`_restore_tenures`) and `not_yours` raised with the reason, the pair `write()` uses for a
+        write the gate refuses. The choreography lives here, in `state/`, so that the undo of a store
+        write is not made by `loop/` reaching into this class's private members (`04 §A.1`, AX-4:
+        one write path, `state/` + the gate).
+
+        ⚠ TENURES ONLY, AND THAT IS THE BOUND. An eager write to an entity field is still invisible
+        here. A body that moves a tenure and then RAISES is not restored (the raise aborts the act,
+        as any effect's does). `write()` takes its own snapshot after this call returns and is kept
+        apart on purpose: handing this one to it would put a caller-supplied snapshot into F3's own
+        observation of the store. Any tenure the body moves is refused, lawful or not: an effect body
+        is not a write (no class or step check, no trace line, no receipt)."""
+        snap = self._tenure_snapshot()
+        out = build()
+        eager = self._tenure_changes(snap)
+        if eager:
+            self._restore_tenures(eager)
+            raise not_yours(eager, actor, via, record_kind, fieldname,
+                            why="moved Tenures in the effect's own body, before it returned its "
+                                "Change (CR-06, H-137)")
+        return out
 
     # -- G4: WHAT A SUBJECT READS, BEFORE AND AFTER A WRITE ------------------------------------
     def state_of(self, s: Subject) -> Any:
