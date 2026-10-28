@@ -40,10 +40,6 @@ import re
 REPO = pathlib.Path(__file__).resolve().parents[2]
 PARAMS = REPO / 'engine' / 'engine_params'
 
-#: Artifacts with NO writer, excluded by name. Empty: the one entry, `params_tables.yaml`, was retired
-#: (`FORK:` row in `references/restructure_ledger.md`).
-NO_WRITER = set()
-
 #: {artifact -> modules under engine/ that BIND its path at runtime}. Measured, not assumed: an
 #: earlier draft of this file listed `key_types.json` with three readers and `params_tables.yaml`
 #: with two, on the strength of a grep that could not tell a path construction from a docstring
@@ -195,11 +191,6 @@ def test_every_cooked_artifact_has_exactly_one_writer():
     problems = []
     for a in _artifacts():
         w = writers.get(a, set())
-        if a in NO_WRITER:
-            if w:
-                problems.append(f'{a}: declared writer-less but written by {sorted(w)} — if it is '
-                                f'regenerable again, delete it from NO_WRITER')
-            continue
         if len(w) != 1:
             problems.append(f'{a}: {len(w)} writer(s) {sorted(w) or "(none)"}, expected exactly 1')
     assert not problems, 'engine_params writer defects:\n  ' + '\n  '.join(problems)

@@ -13,9 +13,9 @@ What each block proves, and the control that stops it passing vacuously:
      live afterwards. Control (same host, same actor): an effect that builds the same `Change`
      with no eager closure is a success, so the refusal is the eager body's and not the host's.
   2. THE OPENED-EDGE ARM. An eager body that OPENS a tenure (one the actor would be lawfully
-     allowed to write from inside `apply`) is refused too and the edge is removed: the fold cannot
-     tell lawful from unlawful there, because the gate never saw the write. Control: the same edge
-     opened inside `apply` stands.
+     allowed to write from inside `apply`) is refused too and the edge is removed: the fold does not
+     ask whether it is lawful, because an effect body is not a write. Control: the same edge opened
+     inside `apply` stands.
   3. A LEGITIMATE `Change` IS NOT REFUSED. An effect that mutates nothing in its body and returns
      a `Change` whose `apply` writes a tenure the gate admits is observed by `World.write` as before.
 
@@ -23,27 +23,28 @@ Tenures only: an eager write to an entity field is still convention-bound (`_app
 """
 import pytest
 
-from engine.season.data.matrix import Step, WriteClass
+from engine.season.data.matrix import WriteClass
 from engine.season.harness import probes as P
-from engine.season.loop import effects as _effects
-from engine.season.loop.driver import SeasonDriver, mint_token
+from engine.season.loop.driver import mint_token
 from engine.season.state.carriers import Act, Tenure
 from engine.season.state.gate import Change, NotYours, Subject
 
-
-def _driver(w):
-    d = SeasonDriver(w)
-    w.step = Step.RESOLVE
-    return d
-
-
-def _plant(monkeypatch, verb, effect):
-    monkeypatch.setitem(_effects.EFFECTS, verb, effect)
+from .test_g4_no_op_receipt import _driver, _plant
 
 
 def _run(w, aid):
     return _driver(w).resolve(mint_token(w, WriteClass.ACTS),
                               [Act(id=aid, actor="p_low", verb="utter")])
+
+
+def _grain(w):
+    """An unrelated `Change` that does move its subject (rung `Hh`'s grain 8 -> 9)."""
+    return Change((Subject.entity("rungs", "Hh"),),
+                  lambda: w.rungs["Hh"].stores.__setitem__("grain", 9))
+
+
+def _live(w, tid):
+    return [t.live for t in w.tenures if t.id == tid]
 
 
 def test_cr06_an_effect_body_that_closes_a_seat_by_itself_is_refused_and_put_back(monkeypatch):
@@ -53,34 +54,31 @@ def test_cr06_an_effect_body_that_closes_a_seat_by_itself_is_refused_and_put_bac
     def eager(w, a, res=None):
         seat = next(t for t in w.tenures if t.id == "t9")
         seat.until = w.tick                                   # the eager mutation
-        return Change((Subject.entity("rungs", "Hh"),),
-                      lambda: w.rungs["Hh"].stores.__setitem__("grain", 9))
+        return _grain(w)
     _plant(monkeypatch, "utter", eager)
     w = P.tiny_world()
-    assert [t.live for t in w.tenures if t.id == "t9"] == [True], "the fixture seat is not live"
+    assert _live(w, "t9") == [True], "the fixture seat is not live"
     with pytest.raises(NotYours):
         _run(w, "cr06_eager")
-    assert [t.live for t in w.tenures if t.id == "t9"] == [True], "the eager closure stood"
+    assert _live(w, "t9") == [True], "the eager closure stood"
     assert w.rungs["Hh"].stores == {"grain": 8}, "the refused effect's write still ran"
 
     # CONTROL: the same host, actor and `Change` with no eager closure is a success and leaves the
     # seat live, so the `NotYours` above came from the effect body's closure and from nothing else.
     def clean(w, a, res=None):
-        return Change((Subject.entity("rungs", "Hh"),),
-                      lambda: w.rungs["Hh"].stores.__setitem__("grain", 9))
+        return _grain(w)
     _plant(monkeypatch, "utter", clean)
     w = P.tiny_world()
     evs = _run(w, "cr06_clean")
     assert [e.kind for e in evs] == ["proposition.uttered"], [e.kind for e in evs]
     assert w.rungs["Hh"].stores == {"grain": 9}
-    assert [t.live for t in w.tenures if t.id == "t9"] == [True]
+    assert _live(w, "t9") == [True]
 
 
 def test_cr06_an_effect_body_that_opens_an_edge_by_itself_is_refused_and_removed(monkeypatch):
     def eager(w, a, res=None):
         w.add_tenure(Tenure("cr06_side_hold", "p_low", "Hh", "hold", w.tick))
-        return Change((Subject.entity("rungs", "Hh"),),
-                      lambda: w.rungs["Hh"].stores.__setitem__("grain", 9))
+        return _grain(w)
     _plant(monkeypatch, "utter", eager)
     w = P.tiny_world()
     with pytest.raises(NotYours):
@@ -95,7 +93,7 @@ def test_cr06_an_effect_body_that_opens_an_edge_by_itself_is_refused_and_removed
     w = P.tiny_world()
     evs = _run(w, "cr06_open2")
     assert [e.kind for e in evs] == ["proposition.uttered"], [e.kind for e in evs]
-    assert [t.live for t in w.tenures if t.id == "cr06_side_hold"] == [True]
+    assert _live(w, "cr06_side_hold") == [True]
 
 
 def test_cr06_a_legitimate_change_is_observed_by_the_write_as_before(monkeypatch):

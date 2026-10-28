@@ -1326,17 +1326,25 @@ def not_yours(refused: list, actor: Optional[str], via: Optional[str], record_ki
     message and the law live once. `why` replaces "wrote Tenures it has no basis for" (and the list
     of bases) for a refusal that is NOT a lack of basis: CR-06 refuses an edge an effect's body moved
     before it returned its `Change`, however lawful the same edge would have been inside `apply`."""
-    head = why or "wrote Tenures it has no basis for"
     shown = ", ".join(
         f"{t.id} ({t.kind} {('owned by ' + (was.subject if was is not None else t.subject))}"
         f" on {t.object}, {'opened' if was is None else 'changed'})"
         for t, was in refused[:_NAMED_IN_MESSAGE])
     more = (f" and {len(refused) - _NAMED_IN_MESSAGE} more"
             if len(refused) > _NAMED_IN_MESSAGE else "")
+    who = (f"a ({record_kind}, {fieldname}) write by {actor or 'no actor'} "
+           f"{('exercising ' + via) if via else 'exercising no seat'} ")
+    if why is not None:
+        return NotYours(
+            f"{who}{why}: {shown}{more}", "F3",
+            needs="the mutation deferred into the returned Change's `apply`, where F3 judges it "
+                  "(CR-06, H-137)",
+            law="04 §C.2 F3 / AX-4 clause 2, applied to the effect's own body (CR-06, H-137) -- a "
+                "Tenure moves only inside `Change.apply`, where F3 judges it; an edge moved "
+                "earlier is outside the gate's window, so it is refused whole, lawful or not")
     return NotYours(
-        f"a ({record_kind}, {fieldname}) write by {actor or 'no actor'} "
-        f"{('exercising ' + via) if via else 'exercising no seat'} {head}: {shown}{more}", "F3",
-        needs=(f"{T_M} (the actor owns the edge), {T_O} (via present, the actor seated in it, the "
+        f"{who}wrote Tenures it has no basis for: {shown}{more}", "F3",
+        needs=f"{T_M} (the actor owns the edge), {T_O} (via present, the actor seated in it, the "
               f"seat's revocation basis reaching it; or a `ban` on via opened in the same write "
               f"that so closed the man's `hold` on a seat whose revocation disposal is a ban -- "
               f"one ban per closure), {CONFERRAL} (via's purview over a seat "
@@ -1355,10 +1363,7 @@ def not_yours(refused: list, actor: Optional[str], via: Optional[str], record_ki
               f"`contain` re-homed, by a holder granted `{MUSTER_ACT}`, for a member of the "
               f"exercised seat's faction), or "
               f"{FOUNDING} (a `contain` opened for a thing this same write brought into "
-              f"existence, its only parent)"
-              if why is None else
-              "the mutation deferred into the returned Change's `apply`, where F3 judges it "
-              "(CR-06, H-137)"),
+              f"existence, its only parent)",
         law="04 §C.2 F3 / AX-4 clause 2 -- the owner is the value's ONLY writer, and a non-owner "
             "writes only under a declared basis. Per-verb eligibility enforced this by "
             "CONVENTION until G3; a revocation with no seat in Act.via is refused here, so 'a "

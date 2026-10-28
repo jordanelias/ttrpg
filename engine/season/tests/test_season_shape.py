@@ -1755,7 +1755,7 @@ def test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte():
     the damage: it writes `results.json` TWICE -- once by executing the emitter, once more in
     the `finally` that restores the committed bytes, since a restore is itself a write.
     Unserialized, those writes land inside the sibling's before/after window on another worker."""
-    results = PACKAGE / "runs" / "results.json"
+    results = files.RESULTS_JSON
     assert results.is_file(), f"{results} is not on disk -- it is the one tracked run artifact"
     with _w15_exclusive():
         before = results.read_bytes()

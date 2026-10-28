@@ -267,14 +267,10 @@ def degree_from_net(net: int | float, ob: int | float,
     only the windowed one survives contact with fractional obstacles, where exact equality
     essentially never occurs and Partial would otherwise vanish.
 
-    ⚠ THE RETIRED PARAMS CAPTURE SHOWED THE OLD LADDER, and it was not a competing source.
-    `engine/engine_params/params_tables.yaml` (retired; `FORK:` row) §"Degrees of Success" held the PRE-RULING bands
-    (Overwhelming at Net >= 2*Ob, Failure at Net <= 0) because it is a byte-faithful capture of the
-    evacuated `params/core.md` and its own header says NEVER hand-edit. It is history, not canon:
-    where it disagrees with code, the code wins (principle 7 / ED-1050). Do not restore bands from
-    it. The note lives here, at the owner a reader consults, rather than in the capture — annotating
-    the capture would have broken the one property it exists to have, and its generator was retired
-    with its source, so the edit could not have been regenerated away.
+    ⚠ THE RETIRED PARAMS CAPTURE (`params_tables.yaml`, `FORK:` row) HELD THE OLD LADDER: the
+    PRE-RULING bands (Overwhelming at Net >= 2*Ob, Failure at Net <= 0), from the evacuated
+    `params/core.md`. It is history, not canon: where it disagrees with code, the code wins
+    (principle 7 / ED-1050). Do not restore bands from it.
 
     RULED OUT, explicitly, by the same ruling (all three were live here until 2026-08-14):
       * Ob-scaled Overwhelming (`net >= 2*Ob`) — Overwhelming no longer depends on difficulty.

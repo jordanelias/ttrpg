@@ -937,7 +937,11 @@ def _apply_write(self, w: "World", token: Token, a: Act, kind: str, fld: str, ef
     # any tenure it moves is refused, lawful or not -- an effect defers its mutation into
     # `Change.apply`, where the gate does ask.
     # ⚠ TENURES ONLY, AND THAT IS THE BOUND. An eager write to an entity field (a rung's stores, a
-    # person's body) is still invisible here and stays bound by the convention alone.
+    # person's body) is still invisible here and stays bound by the convention alone. Two more
+    # bounds: a body that moves a tenure and then RAISES is not restored here (the raise aborts the
+    # act, as any effect's does); and `World.write` takes its own snapshot after this check -- the
+    # two are kept apart on purpose, since handing this one to `write()` would put a caller-supplied
+    # snapshot into F3's own observation of the store.
     snap = w._tenure_snapshot()
     change = eff(w, a, resolution)
     eager = w._tenure_changes(snap)
