@@ -3040,3 +3040,4 @@ Their BUILDERS are forked above; re-running `build_key_graph.py` or `build_contr
 | Old path | New path | Status |
 |---|---|---|
 | `proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-build-B10-01.md` | `FORK:c1374059` | FORKED (2026-10-26, B10-01 closed: the batch's build instructions, read only by the batch they name; the batch's record is its commits, `28a3d3d6` to its close commit) |
+| `proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-build-B10-02.md` | `FORK:01301fa0` | FORKED (2026-10-28, B10-02 closed: the batch's build instructions, read only by the batch they name, unchanged since adoption so the text at `01301fa0` (on `main`) is the file; the batch's record is its commits, `01301fa0` to its close commit) |
