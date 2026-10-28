@@ -505,6 +505,39 @@ rows:
       `deed_valence` and `regard`, two reconvergence inputs E15 names; nothing here inspected what in 947747e0 moves the arms. Conjunct 1
       (`corpus_run`) was not re-run for this reading; `engine/season/runs/*` was regenerated at 4008a395 (the w15 artifact test, green). One
       run per arm, noise unmeasured.
+
+      **REM-16 RE-TAKE (v10 B10-02; `11`, M-7), 2026-10-28, tree `17ba74bc`, `PYTHONHASHSEED=0`, seed 0, four seasons, 143 cases, 0
+      failed, 0 fork rows failed; THE STATUS STAYS `met`.** THE RUN: the 36 `wd_chunk.py` cells (3 arms `none`/`actor`/`total` x 3
+      fixture points `default`/`narrow`/`2x3` x 4 slices) then `wd_collect.py` (`proposals/2026-09-04-degree-sweep`; the command of
+      `workplans/valoria_master_workplan_v10_part2.md` §11), each arm covering all 143 case slots once (`cases 143/143 ok` printed on
+      every one of the nine arm-cells). AT `2x3` (the acceptance point): `none` 1739/2078 = 83.69 % - `actor` 1178/2000 = 58.90 % -
+      `total` 1185/1994 = 59.43 % (probed 7425 / 7464 / 7467), BELOW the 96 % bar, and the printed CONTROL line reads `none >=
+      actor: True`. The other two cells, read and not assigned: `default` (the shipped 5 x 3) 2190/2850 = 76.84 % - 1815/2697 =
+      67.30 % - 1741/2688 = 64.77 %; `narrow` (`2x1`) 4959/5545 = 89.43 % - 3924/5440 = 72.13 % - 3953/5430 = 72.80 %, `none >=
+      actor: True` there too. Against the last re-take in this block (B-N close, tree `951d5153`: 84.11 / 53.04 / 52.76 %): `none`
+      -0.42, `actor` +5.86, `total` +6.67 pp; the move sits across the commits between the two trees, no per-item reading exists
+      for them, and it is attributed to none. CONJUNCT 1, same tree (`corpus_run`, `EXIT 0`): `check R3: 46 of 46 pass` (NPC) and
+      `check R3: 97 of 97 pass` (ARC), `CONTROL — planted cross-person edge: R3 False -> True (the detector works)`, 143 distinct
+      worlds run. THE TREE IS THE BASE'S WORLD: `build_realm(0).content_hash()` 8e4032a26cfeabdc55bba2178b82d564 here and at the
+      batch base `01301fa0`; `harness.report` then `harness.delta 01301fa0` prints `PROBE FLIPS 0`. INDEPENDENT READINGS OF THE SAME
+      QUESTION, not the `met` text: `storybar --executed-only`, four seasons, seeds 0, 1, 2, 4, 5 pooled: 4,951 of 16,295 acts = 30.4
+      % have another person's act among their antecedents (refused acts included, the current reading), and the stricter companion
+      CR-15 adds, an executed act with an executed cross-person antecedent, is 679 of 3,786 executed acts = 17.9 % (per seed 19.3 /
+      18.8 / 18.2 / 17.0 / 16.5 %); `chronicle --executed-only`: the deepest default chain per seed runs 14 / 11 / 15 / 12 / 14 acts
+      (66), of which 11 / 10 / 14 / 8 / 12 (55) are refused acts, and the deepest executed-only chain is 5 / 5 / 6 / 5 / 3. THE
+      CHOOSER'S DRAW ALONE (`storybar --draw-seeds 0 1 2`, `build_realm(0)`, 1 season, one world deep-copied per draw seed): start
+      hash 8e4032a26cfeabdc55bba2178b82d564 on all three copies and the base's hash unmoved after the runs; acts 695 / 701 / 717;
+      chains DIFFER (264 differing chains between draw 0 and 1, 235 between 0 and 2) and the depth distributions differ. TWO
+      RESIDUES of that arm, so the difference is read as the chooser's draw and not as the world's whole stochasticity: (1) the
+      contest draws and the weather draws stay keyed to `w.world_seed`, identical across draw seeds and not varied; (2)
+      `declare_intents` consumes the chooser's draw too, but that branch is inert while `intent_disclosure` is 0.0 (its value in
+      `DEFAULT_FIXTURES` at this tree), so at that value a draw seed reaches the run only through the choice order. WHAT THIS DOES NOT
+      SHOW. One run per arm, seed 0: the instrument is deterministic and has no seed or case spread, so no interval over seeds
+      exists. The window scores only strictly later ticks, so round-to-round divergence inside a season is not scored. The
+      `wd_collect` plants are still not evidence of sensitivity: `[POSITIVE]` prints `detected over baseline ... on ALL 4 plants:
+      False` at `2x3` (the unplanted `none` baseline itself diverges 9 of 34). The `none >= actor` control is a channel-open arm, not
+      a null arm (the collector says so). The `--draw-seeds` arm printed no same-draw-seed repeat; that determinism control is the
+      test's, not re-run here. The 30.4 % and 17.9 % are antecedent shares in `storybar`, not reconvergence; neither moves this row.
     measure: "python -m engine.season.harness.corpus_run  # check R3 rows + the planted control"
     blocks: [IN-10, IN-11, IN-13, H-116, IN-50]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1: regard is computed at read; the cross-person half is IN-10's, IN-11's, IN-13's); H-111 is FI-01's deposit half
@@ -643,6 +676,22 @@ rows:
       instrument's run-to-run noise is still not measured. B-I's re-take (HEAD 66bf51f9, full `wd_collect.py`, see R-01's last paragraph)
       reads none 74.94 / actor 42.64 / total 41.56 % at `2x3` against THESE figures: +0.04 / -1.30 / -0.84 pp, still far below 96%, status stays `met`.
       **M-mem (RS-29, the B-W close, squashed into 3bf936ee; context, not this row's status):** `build_realm(0)`, pickle bytes of every ledger claim — one season 5,238 claims / 1,569,290 bytes (300 per claim) / 1,542 distinct facts / 3,976 (fact, holder) pairs; two seasons 7,493 claims / 2,244,769 bytes / 2,145 distinct facts / 4,627 pairs (2.16 holders per fact); 63.7 % of pairs in facts held by two or more, 50.6 % by five or more; largest ledger 200 claims (a cap at work) — so memory is small and bounded, RS-29's condition for fact interning (memory shown to cost something) is not met, and none is planned; the measuring script is NOT in the tree (a session probe, recorded only in that commit's body), so re-take it before relying on a figure.
+
+      **REM-16 RE-TAKE (v10 B10-02; `11`, M-7), 2026-10-28, tree `17ba74bc`, `PYTHONHASHSEED=0`, seed 0, four seasons; THE STATUS STAYS
+      `met`.** The command is this row's `measure:` exactly: the 36 `wd_chunk.py` cells then `wd_collect.py`, 143 of 143 case slots
+      covered by every arm (`cases 143/143 ok, 0 failed, 0 fork rows failed` on each of the nine arm-cells; the completeness
+      assertion held). It is the same run as R-01's paragraph of this date and is not a second one. AT `2x3`: `none` 1739/2078 =
+      83.69 % - `actor` 1178/2000 = 58.90 % - `total` 1185/1994 = 59.43 %: BELOW the 96 % bar, and `none >= actor: True` is printed
+      (the control, `none` the channel-open arm). Against this row's last two `2x3` readings (B-I, HEAD `66bf51f9`: 74.94 / 42.64 /
+      41.56 %; B-N close, `951d5153`, in R-01: 84.11 / 53.04 / 52.76 %): `none` +8.75 / -0.42 pp, `actor` +16.26 / +5.86, `total`
+      +17.87 / +6.67; every arm sits far from 96 %, and the movement is across many commits with no per-item reading, so it is
+      attributed to none. `default` (5 x 3) and `narrow` (`2x1`) cells are in R-01's paragraph. Determinism: per-arm `probed` differs
+      across arms by design (7425 / 7464 / 7467 at `2x3`) and the collector does not assert it equal; no arm was run twice here, so
+      "the same arm twice reads equal" is not re-observed by this reading (the instrument's own claim, v9 `_part3` P-4). WHAT THIS
+      DOES NOT SHOW: the figure is a reconvergence rate over fork windows that score only strictly later ticks, from one seed; it
+      is not a rate of decisions reaching later decisions in a season, and 83.69 % `none` against the control carries no noise
+      estimate. The four widened-clause-4 plants are still not detected over baseline at `2x3`, so the instrument has not shown it
+      can see a planted widening.
     measure: "python proposals/2026-09-04-degree-sweep/wd_collect.py  # after wd_chunk.py x4 per arm per cell over the 143-case corpus (slices 0 36/36 72/72 108/108 143) -- U6's command, workplans/valoria_master_workplan_v10_part2.md §`11`"
     blocks: []
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1); H-111 is FI-01's deposit half
@@ -1003,6 +1052,37 @@ rows:
       `corpus_run.attribute` count "attempted" only over `SeasonDriver.resolved`, which a contested act refused at admission
       (`loop/resolve.py`'s contest branch, e.g. `speech.unheard`) never enters -- so such an act is not counted as attempted and
       `speak` reads as never attempted, though `w.acts` holds every one.
+
+      **REM-16 RE-TAKE (v10 B10-02), 2026-10-28, tree `17ba74bc`, `PYTHONHASHSEED=0`; THE ROW STAYS `not_met`.** `corpus_run`, seed 0,
+      143 cases (`EXIT 0`): `VERBS THAT EXECUTED : 20 of 56` (`accept`, `carry`, `challenge`, `conceal`, `create_record`, `examine`,
+      `fight`, `give`, `interview`, `issue`, `move`, `petition`, `reconstruct`, `release`, `research`, `surveil`, `tell`, `tend`,
+      `transfer`, `utter`); `VERBS ONLY REFUSED : 14` (`argue`, `build`, `commit`, `covenant`, `dispatch`, `forge`, `found`,
+      `restore`, `sabotage`, `seize`, `speak`, `survey`, `train`, `work`); `WHERE THE 56 GO: 5 have no predicate/effect · 17 foldable
+      but never even attempted (arrest, comply, confer, convene, destroy_record, determine, establish, forgive, march, migrate,
+      oblige, open_case, pardon, raze, requisition, revoke, thread_read) · 14 attempted and always refused · 20 executed`, against
+      the `met` text's `0 · 0 · 0`. The denominator 56 is the line's own `len(VERB_TABLE)`. ⚠ THE 20 OVERSTATES ITS OWN VERBS, MEASURED
+      AT REM-10 (`bb444e4e`, squashed in `98989253`): `corpus_run.run_case`'s `executed` list now reads the act store, and
+      `_attribute_acts`' made rule is unchanged, so an act refused at admission counts as executed when its refusal kind is also an
+      emitted kind (`finding.none`, `news.untold`). After REM-10 `research` reads executed in 124 of 143 worlds (18 before) and
+      `examine` in 85 (0 before); `run_case`'s per-world counts for those verbs are an ATTEMPTS reading, not completions.
+      `aperture` separates them (its `both` column is an act matching both the made and the refused columns; `graded` is a lost
+      contest), `run_case` does not; `examine` and `research` are in the 20 on that rule. THE REALM READING, `aperture 1 --seeds 0 1
+      2` (1 season, `build_realm`, seeds 0 / 1 / 2, every CONTROL line EQUAL), pooled over the three seeds: 2,127 acts attempted
+      (695 / 718 / 714), 832 executed (284 / 286 / 262), 1,629 refused, 338 `both`, 38 `graded`, 4 neither. Of the 56 rows, 44 are
+      attempted and 12 never (`arrest`, `comply`, `confer`, `construe`, `destroy_record`, `evade / defy`, `exchange`, `give`,
+      `oblige`, `seize`, `succeed`, `tie / knot`); 27 read executed at least once and 17 attempted and never executed (`argue`,
+      `build`, `carry`, `covenant`, `determine`, `establish`, `found`, `migrate`, `pardon`, `raze`, `requisition`, `restore`,
+      `revoke`, `sabotage`, `tend`, `train`, `work`). Executed minus `both` (an execution that is not also a refusal): `examine` 85 of
+      85 and `march` 22 of 22 executions are `both` (0 clean); `research` 139 executions, 137 of them `both` (2 clean); `surveil` 79, 75
+      (4 clean); `tell` 28, 19 (9 clean). 25 rows have at least one clean execution. THE TWO INSTRUMENTS DISAGREE BY WORLD:
+      `carry`, `tend` and `give` execute in some corpus world and in none of the three realm seeds (`give` is never attempted there);
+      `commit`, `forge`, `survey` and `dispatch` execute in the realm and are only refused in the corpus; `march`, `open_case`,
+      `convene` and `forgive` execute in the realm and are never attempted in the corpus.
+      WHAT THIS DOES NOT SHOW. Neither reading is the `met` text's second route (every verb of the latter two classes shown executing
+      in `aperture 4 0`, the seat-gated verbs among them): `aperture 4 0` was not run for this paragraph, and the one-season pooled
+      realm is shorter than its horizon. A verb's `ex` is not a verb built out (the clause needs the row's declared kinds emitted and a
+      before-to-after receipt where the band writes); no hand-built execution is counted. No row left `VERB_TABLE` and none is
+      recorded removed by this reading.
     measure: "python -m engine.season.harness.corpus_run  # the 'WHERE THE <n> GO' line, which prints len(VERB_TABLE); the denominator is len(VERB_TABLE) at measurement time (v10 REM-02, `workplans/valoria_master_workplan_v10_part2.md` §6; [ASSUMPTION; medium; Jordan to correct]): a row leaves the table only by a ruling or a ratified design decision cited in its commit, never to move R-05, and every removal is recorded in R-05's `measured:` block; a row in the table but outside resolvable_verbs() counts under 'have no predicate/effect', so a row landed dark raises n. 'Built out' = at least one act formed by the chooser in a seeded run of a shipped builder is admitted, folds its band and emits the row's declared kinds; where the admitted band declares writes, at least one minted receipt has before ≠ after; a verb whose bands write nothing (`speak`, `interrogate`) is built out on execution; a hand-built execution never counts; the aperture clause covers realm-only verbs (`found`, `build`, `work`). It was '38' as of ED-IN-0261, '32' until ED-FI-0009 made the count honest and '37' until `release` landed"
     blocks: [H-65, IN-09, IN-10, IN-33, IN-45]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W10-core removed (it gates corpus_run's R2 check, not this row's WHERE THE <n> GO); H-94 is carried by its owners IN-10, IN-09, IN-45, IN-33
@@ -1205,6 +1285,27 @@ rows:
       prints RANKING DISCRIMINATION 16..24 of 24..24 candidates with a celled axis carrying a nonzero pursuit score (33 candidates in all),
       143 distinct worlds, 124 distinct executed sets, 19 verbs executed. IN-38's overlays moved the distinct-set count by one (123 to 124)
       and no discrimination figure: the ranking's tie-break and celled-axis set are the overlays' blind spot, not their subject.
+
+      **REM-16 RE-TAKE (v10 B10-02; REM-12's reader), 2026-10-28, tree `17ba74bc`, `PYTHONHASHSEED=0`; THE ROW STAYS `partial`.** THIS ROW'S
+      `measure:` LINE, `corpus_run` seed 0, 143 cases (`EXIT 0`): `RANKING DISCRIMINATION 16..24 (numerator) of 24..24 (denominator:
+      candidates whose verb has >= 1 celled axis; 32..32 candidates in all) carry a nonzero pursuit score; the rest TIE and the tie
+      is broken BY THE DRAW`, `RANKING EXCLUDES` `carry`, `conceal`, `examine`, `interview`, `restore`, `sabotage`, `tend`, `train`: so the
+      first conjunct (a nonzero score on every candidate offered) is still UNMET, by up to 8 of 24 candidates per person. THE CHOOSER'S
+      DECIDING TERM, `decision_spread --decisions` at the built realm (no season played; 83 persons x 6 referents = 498 readings),
+      seeds 0 / 1 / 2: draw 424 / 433 / 430, pursuit 74 / 65 / 68 (the same totals at all three seeds
+      as the reader printed before REM-12, which only split the draw). REM-12's split of the draw's tops: `tie` 222 / 222 / 222, `outvoted` 202 / 211 / 208, outvoted margins' median
+      0.0301 / 0.0298 / 0.0301 against `choice_temperature` 0.1; and `every candidate scores 0 (urgency set aside)`: 222 of 498
+      readings at each seed, from 37 distinct persons (37 x 6 = 222), the cohorts that carry no pursuit vector (83 - 37 = 46 do).
+      CONTROL, `decision_spread --null` seed 0: draw 498 of 498, tie 498, outvoted 0, no pursuit-decided reading, the same 222 all-zero
+      readings from 37 persons, so the attribution can fail and does when the pursuit term is removed. DERIVED from those lines, not
+      printed: among the 46 vectored persons' 276 readings (498 - 222) pursuit decides 74 / 65 / 68 = 26.8 / 23.6 / 24.6 % and the
+      sampler overrules a strict top in 202 / 211 / 208 = 73.2 / 76.4 / 75.4 % (the register-carried 28 % / 72 % above, on an older
+      tree). WHAT THIS DOES NOT SHOW. The row's `measure:` states no threshold for these shares and none is claimed: the readings
+      are read, not asserted, and no conjunct moves on them. The all-zero 222 equals the tie count 222 at each seed; the printed lines
+      carry no per-reading cross-tab, so that they are the same readings is an inference from equal counts. The 37 vectorless persons
+      bear on the fifth conjunct REM-05 proposes (every acting person carries a pursuit vector), which this row's `measure:` does not
+      yet state; `pytest -k 'ambitions or cast'` and `conviction_spread.py` were not run for this paragraph. One build and one draw
+      per seed, 83 persons at tick 0: it is a reading of the chooser's ranking, not of play.
     measure: "python -m engine.season.harness.corpus_run  # 'RANKING DISCRIMINATION' line"
     blocks: [IN-38, IN-08, IN-18, IN-12]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W27: `17` landed (build_at seats a `cast:`), IN-38 remains; H-62 re-scoped to IN-08, IN-18, IN-12 step 9
@@ -1323,6 +1424,27 @@ rows:
       person could have broken. Off this row's `measure:` at seed 0: 19..27 of 27 celled candidates
       carry a nonzero pursuit score (32 in all); the remainder still tie and the DRAW breaks them.
       `choose.py` and `choice_temperature` are untouched; what moved is the table. Stays `partial`.
+
+      **REM-16 RE-TAKE (v10 B10-02; REM-12's reader), 2026-10-28, tree `17ba74bc`, `PYTHONHASHSEED=0`; THE ROW STAYS `partial`.** THIS ROW'S
+      `measure:` LINE, `corpus_run` seed 0 (`EXIT 0`): `RANKING DISCRIMINATION 16..24 (numerator) of 24..24 ... carry a nonzero
+      pursuit score; the rest TIE and the tie is broken BY THE DRAW` (32 candidates in all, 8 verbs excluded as uncelled): up to 8 of
+      the 24 celled candidates per person tie at zero, so the tie conjunct (every tie between equal NONZERO scores) is not read.
+      THE TIE AGAINST THE OVERRULE, `decision_spread --decisions` at the built realm, seeds 0 / 1 / 2 (498 readings each): the draw's
+      tops are 424 / 433 / 430, of which `tie` 222 / 222 / 222 (the draw ordered a tie) and `outvoted` 202 / 211 / 208 (the draw
+      overrode a score leader; margins' median 0.0301 / 0.0298 / 0.0301 against `choice_temperature` 0.1); pursuit decides the
+      other 74 / 65 / 68. Every one of the 222 ties per seed is a tie at ZERO, by count: `every candidate scores 0 (urgency set
+      aside)` is 222 of 498 readings from 37 distinct persons at each seed, the cohorts holding no pursuit vector, and the two 222s
+      are equal (inferred from equal counts; the printed lines carry no per-reading cross-tab). So no printed tie is between equal
+      nonzero scores, and the persons the ties come from hold no vector, so inclination has nothing to break them with (R-06's
+      subject: a person with no pursuit vector). CONTROL, `--null` seed 0: tie 498, outvoted 0,
+      no pursuit-decided reading, the same 37 persons all-zero, so the split moves when the pursuit term is removed. THE OTHER HALF
+      OF THE ROW (declining the optimum), derived from the printed lines and not printed: among the 46 vectored persons' 276 readings
+      the sampler's top is not the score leader in 202 / 211 / 208 = 73.2 / 76.4 / 75.4 %, by a median margin near 0.03; that is the
+      sampler declining the optimum at the built realm, which the row already records as built (U4). WHAT THIS DOES NOT SHOW. The
+      row's `measure:` states no threshold for a tie or an overrule share and none is claimed; the shares are read, not asserted.
+      Inclination breaking a tie remains unbuilt (the alignment table is sparse), so nothing here is an inclination: the draw breaks
+      the 222. Ties are counted at tick 0 of one build per seed, not over a played season. The U4 test was not re-run for this
+      paragraph.
     measure: "python -m engine.season.harness.corpus_run  # 'RANKING DISCRIMINATION' + tie ordering"
     blocks: [SC-01, IN-08, IN-18, IN-12]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W26 is SC-01's; H-62 re-scoped to IN-08, IN-18, IN-12 step 9
