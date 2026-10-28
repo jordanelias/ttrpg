@@ -46,7 +46,8 @@ def conviction_map(raw, where: str = "Person.conviction") -> dict:
     mapping counts a position HELD only above 0 (`queries/person_q.py::_held`, `confliction`,
     `conviction_after_crisis`), so a stored 0 strains nothing, is scarred by nothing and receives no
     crisis. A person holding nothing authored still reads `conviction={}`. Keys are sorted, so two
-    sources holding the same vector produce the same `repr` and the same `World.content_hash`."""
+    sources holding the same vector produce the same dict in the same iteration order (the content
+    hash folds a mapping sorted by its encoded keys since GO-07, and no longer sees the order)."""
     if raw is None:
         return {}
     if not isinstance(raw, dict):

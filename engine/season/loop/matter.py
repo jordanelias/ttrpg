@@ -510,7 +510,8 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # `settlements.subsist` step_call's (`modules/settlements/subsist.py`), called ONCE, here, on the
     # host's projection (`world_q.subsist_input`). Its outcome is ordered tuples in the order the old
     # loop built its dicts; the dicts below are rebuilt in that order, which reaches
-    # `r.stores.update(...)`'s key order, and with it the content hash. Every write stays here.
+    # `r.stores.update(...)`'s key order (not the content hash: GO-07 folds a mapping sorted by its
+    # encoded keys). Every write stays here.
     # Window invariant: the debit and credit below are absolute values computed from this snapshot, so
     # nothing between here and the per-rung loop may write `Rung.stores` (a writer placed there is overwritten).
     sub = _step_call(SUBSIST)(world_q.subsist_input(w))

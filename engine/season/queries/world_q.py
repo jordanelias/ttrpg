@@ -1037,7 +1037,8 @@ def subsistence_draw(w: World) -> dict:
     ladder over the running view, and `take = min(want, held)`; its docstring keeps every clause's
     reason. This is the host half: `larder_input` projects `World` into the typed record, the entry
     computes, and this turns the `DrawRecord` back into the dict shape its callers read, row order
-    and kind order kept (both reach `Rung.stores`' insertion order, and so the content hash).
+    and kind order kept (both reach `Rung.stores`' insertion order, which the content hash no longer
+    reads: GO-07 folds a mapping sorted by its encoded keys).
 
     ⚠ IT DOES NOT `TRACE`, on `ancestry`'s rule: a helper extracted to remove duplication must be
     INVISIBLE to its callers. The `home_of` call inside it traces as MATTER's inline loop did. The
