@@ -101,7 +101,7 @@ class Tenure:
     # on its holder), a reader in `granted_acts` below, and the gate's `conferral` re-grant clause
     # (`moved == {"payload"}`). A grant and a declared end are two facts, so they are two fields --
     # the plan's own §3.2 row 12 says the same: *"Not `Tenure.payload`, which is live."*
-    # ⚠ `repr(Tenure)` FOLDS INTO `World.content_hash` AND CARRIES EVERY FIELD NAME, so this line
+    # ⚠ `Tenure`'s ENCODING FOLDS INTO `World.content_hash` AND CARRIES EVERY FIELD NAME, so this line
     # alone moves the digest of every world holding a Tenure -- a declared, structural hash move,
     # the `Office.establishment` deletion's shape in reverse, not a behaviour change.
     term: Optional[Term] = None
@@ -753,7 +753,7 @@ class Site:
     # ⚠ `drawers: list[str]` WAS HERE AND IS DELETED (plan position `18a`, r2 item 14). Its matrix
     # row was retired at W2 (no verb produced `drawers.changed`); `01_AXIOMS.md` §D.3 names it
     # *"retired as a dead row with `Rung.stake`"*, and it had zero readers and zero writers. The
-    # `retired:` entry in `write_matrix.yaml` now says the carrier went too. `repr(Site)` folds into
+    # `retired:` entry in `write_matrix.yaml` now says the carrier went too. `Site`'s encoding folds into
     # `World.content_hash`, so this is a declared hash move, not a behaviour change.
 
 
@@ -921,7 +921,7 @@ class Office:
     # seat is two homes for one fact."* It was `[]` on every office in every world -- `establish`
     # declared it and never wrote it -- and `queries/world_q.py::establishment_of` now answers the
     # same question over live `oblige` Tenures. Its matrix row went with it (`write_matrix.yaml`
-    # `retired:`), and so did `establish`'s `writes:` entry. ⚠ `repr(Office)` folds into
+    # `retired:`), and so did `establish`'s `writes:` entry. ⚠ `Office`'s encoding folds into
     # `World.content_hash` and carries every field NAME, so this deletion alone moves the digest of
     # every world holding an office -- a declared, controlled hash move, not a behaviour change.
     # ⚠ `dates: list[str]` WAS HERE AND IS DELETED (plan position `18a`, r2 item 14, `05` §A.1.1(e)

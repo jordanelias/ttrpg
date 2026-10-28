@@ -1409,7 +1409,7 @@ TENURE_WRITE_CLASSES = frozenset(
 # WHAT `get()` READS -- ONE RULE, THREE SUBJECT SHAPES, OWNED BY `World.state_of`:
 #
 #   `entity`  an id in one of `World._STATE_COLLECTIONS`: present-or-absent, and the entity's
-#             `_entity_digest` -- THE SAME per-entity string `World.content_hash` folds, so a
+#             `_entity_digest` -- THE SAME per-entity bytes `World.content_hash` folds, so a
 #             subject has moved exactly when the content hash can see that it moved. `fields=`
 #             narrows the read to named attributes; ONE effect uses it (`kill / wound`, whose
 #             docstring says why).
