@@ -37,7 +37,7 @@ from typing import Callable, Optional
 
 from ..data.requires import OWN_STATE_STEMS, UNKNOWN, binding_from_act
 from ..data.rosters import (
-    BAN_KIND, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP,
+    BAN_KIND, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP, HUNGER_BANDS,
     QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, REMOVE_ORDINAL, RESTRAINT_KINDS, RUNG_KINDS,
     SITE_KINDS, STANDING_CROSSED, TENURE_KINDS, faction_prop_id, require_member,
 )
@@ -1518,12 +1518,13 @@ def capacity(w: World, rung_id: str) -> int:
     return _entry(HOUSING)(_housing_capacity_input(w, rung_id)).capacity
 
 
-# THE RUNG KIND `hunger` IS DEFINED FOR, and the names of its two FLOOR bands, in the order
-# `Fixtures.hunger_band_floors` lists their floors (the first floor is `hungry`'s, the second `lean`'s).
-# `starving` is `unmet > 0` and `fed` is "under no floor": neither is a floor band. Refused at import if the
-# roster stops carrying the kind (`witness.SEAT_CHANNEL`'s shape).
+# THE RUNG KIND `hunger` IS DEFINED FOR, and its bands: `rosters.yaml: hunger_bands` is the one owner, most
+# severe first. `starving` is `unmet > 0` and `fed` is "under no floor"; the members between them are the FLOOR
+# bands, in the order `Fixtures.hunger_band_floors` lists their floors (the first floor is the first floor
+# band's). Refused at import if the roster stops carrying the kind (`witness.SEAT_CHANNEL`'s shape).
 HUNGER_KIND = "settlement"
-HUNGER_FLOOR_BANDS = ("hungry", "lean")
+HUNGER_STARVING, *HUNGER_FLOOR_BANDS, HUNGER_FED = HUNGER_BANDS
+HUNGER_FLOOR_BANDS = tuple(HUNGER_FLOOR_BANDS)
 require_member(HUNGER_KIND, RUNG_KINDS,
                f"rung kind {HUNGER_KIND!r} is not a `RUNG_KINDS` member",
                "rosters.yaml -- rung_kinds",
@@ -1554,11 +1555,12 @@ def hunger(w: World, rung_id: str, draw: Optional[dict] = None) -> tuple:
         floor list that is not whole, non-negative and ascending, or longer than `HUNGER_FLOOR_BANDS`,
         RAISES `Forbidden` (the sweep arm would otherwise mislabel a band).
 
-    ⚠ A DERIVED QUERY, OWNED BY NOBODY (T-a): it writes nothing and reuses `demanded` and `delivered`, so
-    the band cannot disagree with the draw that runs (§8). THE LOOP DOES NOT READ IT. ID-13 (a Query nobody
-    calls) IS WAIVED: REM-51, its first game caller, is CUT (AM-A-03), so its only reader is
-    `harness/populated.py::census` until CP-T08-06, CP-T10-03 and CP-T10-05 land, and `tests/test_hunger.py`
-    is what catches a wrong band. The floors are an injected, swept assumption (`H-242`).
+    ⚠ A DERIVED QUERY, OWNED BY NOBODY (T-a): it writes no World store and appends no Event, and reuses
+    `demanded` and `delivered`, so the band cannot disagree with the draw that runs (§8). THE LOOP DOES NOT
+    READ IT. ID-13 (a Query nobody calls) IS WAIVED: REM-51, its first game caller, is CUT (AM-A-03), so its
+    only reader is `harness/populated.py::census` until CP-T08-06, CP-T10-03 and CP-T10-05 land, and
+    `tests/test_hunger.py` is what catches a wrong band. The floors are an injected, swept assumption
+    (`H-242`); the band names are `rosters.yaml: hunger_bands`.
 
     ⚠ THREE LIMITS, stated and not fixed:
       * A COUNTS STORES THE EATERS NEVER DRAW. Eaters draw at S and ABOVE (the walk is `ancestry(home)`,
@@ -1600,9 +1602,9 @@ def hunger(w: World, rung_id: str, draw: Optional[dict] = None) -> tuple:
             for kind, v in (w.rungs[rid].stores or {}).items() if kind in need)
     unmet = D - G
     if unmet > 0:
-        band = "starving"
+        band = HUNGER_STARVING
     else:
-        band = next((name for name, floor in zip(HUNGER_FLOOR_BANDS, floors) if A < floor * D), "fed")
+        band = next((name for name, floor in zip(HUNGER_FLOOR_BANDS, floors) if A < floor * D), HUNGER_FED)
     return band, (Fraction(A, D) if D else Fraction(0)), unmet
 
 

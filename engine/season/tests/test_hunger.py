@@ -36,8 +36,8 @@ from ..state.carriers import Rung, Tenure
 #: per-head ration by kind, read off the fixtures the Query reads, never copied
 RATION = dict(DEFAULT_FIXTURES.get("subsistence_weight"))
 PER_HEAD = sum(RATION.values())
-#: severity, mildest first: `fed`, then the floor bands in reverse floor order, then `starving`
-SEVERITY = ("fed", *reversed(world_q.HUNGER_FLOOR_BANDS), "starving")
+#: severity, mildest first: the roster is most severe first
+SEVERITY = tuple(reversed(world_q.HUNGER_BANDS))
 #: the kind a test puts a lone quantity in
 FIRST_KIND = sorted(RATION)[0]
 
@@ -141,6 +141,7 @@ def test_e_the_empty_floor_list_is_the_control_and_the_registers_own_sweep_runs(
     assert _band_under((), {})[0] == "starving" and _band_under((1, 2), {})[0] == "starving"
     assert DEFAULT_FIXTURES.get("hunger_band_floors") == (1, 2), "the shipped arm is the register's default"
     row = next(r for r in REG.load()["rows"] if r["id"] == "H-242")
+    assert "Fixtures hunger_band_floors" in row["site"], "the row must name the fixture it sweeps"
     arms = [tuple(a) for a in row["sweep"]]
     assert () in arms and DEFAULT_FIXTURES.get("hunger_band_floors") in arms and len(arms) == 3
     read = {arm: _band_under(arm, half)[0] for arm in arms}

@@ -1558,6 +1558,16 @@ rosters:
     weights:
       grain: 2
       salt:  1
+  hunger_bands:
+    source: "REM-50, as repaired by AM-A-04 (`workplans/valoria_master_workplan_v10_part13.md`, REM-50): a settlement's hunger, read by `world_q.hunger`"
+    open: false
+    note: >-
+      The bands of a settlement's hunger, MOST SEVERE FIRST. The first, `starving`, is `unmet > 0` (the
+      next draw leaves a mouth unfed) and the last, `fed`, is "under no floor"; neither is a floor. The
+      members between them are the FLOOR bands, in the order `Fixtures.hunger_band_floors` lists their
+      floors (`world_q.HUNGER_FLOOR_BANDS`). A roster of fewer than two members cannot name `starving`
+      and `fed` and refuses at import.
+    values: [starving, hungry, lean, fed]
   factions:
     source: "`systems/world/reference/geography_v30.md` (`## Status: CANONICAL`) starting-control table; `systems/world/reference/worldbuilding_v30.md` §3, §4, §5, §8, §10."
     row: H-99
