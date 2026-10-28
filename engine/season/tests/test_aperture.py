@@ -30,6 +30,16 @@ never does. Hand-built worlds (`probes.tiny_world`), no count of a realm run ass
   * `graded_loss` (HR-8): a lost `tell` (`news.untold`, `Failure`) and a `Failure` `research`
     (`finding.none`) are graded losses; an admission-refused `research` (`finding.none`, degree
     `None`), a Success `tell` and a refused `transfer` are not; every graded loss is also a `both` act.
+
+CR-14 (the pooled census). Planted worlds and planted dicts; no realm count is asserted (V2):
+  * a `need` scene about a goal id and one about a non-goal id read into the two scene rows, through
+    `decision_spread.goal_class`, the one classifier;
+  * the wrong-kind columns: a `restore` on a person id and a `carry` of a person id are the first
+    class, a `restore` on an id in no collection is an absent subject, a `determine` with no
+    DocketItem is the DocketItem column and not the first; a person is present until a death precedes
+    the act; an admitted-then-refused act is the `after` class;
+  * the death census (a MATTER death is `no act`; a killing `fight` names its verb; seats are the
+    season's start's); pooling is asserted on planted per-seed dicts, and the command line's forms parse.
 """
 
 from __future__ import annotations
@@ -398,3 +408,293 @@ def test_rem11_kind_census_counts_by_act_and_names_the_declared_kinds_the_log_la
     assert "transfer.made" not in c["never"] and "transfer.refused" in c["never"], c["never"]
     assert not set(c["never"]) & set(c["counts"])
     assert len(c["never"]) < c["declared"]
+
+
+# ---------------------------------------------------------------------------------------------
+# CR-14 -- THE POOLED CENSUS (i), THE ANSWERED-BY-SOURCE BLOCK (ii), THE DEATH CENSUS (iii), THE
+# WRONG-KIND COLUMNS (v). Planted worlds and planted dicts assert RELATIONS; the realm readings are
+# printed by the CLI and are never asserted here (V2).
+
+def _need(about: str, qid: str = "q", source: str = "need"):
+    from ..state.carriers import Question
+    return Question(qid, source, ("p_x",), about)
+
+
+def _scene_world(*occasions):
+    """A stand-in for a driver after a season: only `scenes` is read by `scene_sources`."""
+    return SimpleNamespace(scenes={f"sc{i}": SimpleNamespace(occasion=q)
+                                   for i, q in enumerate(occasions)})
+
+
+def _a_goal_id() -> str:
+    from ..data import goals as goals_data
+    return goals_data.goals()[0].id
+
+
+def test_cr14_a_need_scene_about_a_goal_and_one_about_a_non_goal_read_into_the_two_rows():
+    """A `need` question about a goal id and one about an id that is no goal, planted as scenes, land
+    in the two scene rows P2 splits `need` into; a `claim_landed` scene and a scene with no occasion
+    are the controls (not `need`). The goal class is `decision_spread.goal_class`, the one classifier.
+
+    MUTATION (run 2026-10-27, reverted): `class_label` returning `q.source` alone -- both `need`
+    scenes read into one row, `need_goal` reads 0 and the split assertions red."""
+    from ..harness import decision_spread as DS
+    goal = _a_goal_id()
+    d = _scene_world(_need(goal, "q1"), _need("rec_not_a_goal", "q2"),
+                     _need("p_x", "q3", "claim_landed"), None)
+    got = A.scene_sources(d)
+    assert got["scenes"] == 4 and got["need"] == 2 and got["need_goal"] == 1, got
+    assert got["rows"][("need", "org goal")] == 1 and got["rows"][("need", "other need")] == 1, got
+    assert got["rows"][("claim_landed", "-")] == 1 and got["rows"][("none", "-")] == 1, got
+    assert A.goal_class is DS.goal_class, "aperture must call the lifted classifier, not a copy"
+
+
+def test_cr14_mutation_classifying_through_the_source_alone_blinds_the_split(monkeypatch):
+    goal = _a_goal_id()
+    d = _scene_world(_need(goal, "q1"), _need("rec_not_a_goal", "q2"))
+    assert A.scene_sources(d)["need_goal"] == 1                 # the baseline, read first
+    monkeypatch.setattr(A, "class_label", lambda q: q.source)
+    assert A.scene_sources(d)["need_goal"] == 0                 # the split is gone: the test above reds
+
+
+def test_cr14_class_label_is_goal_class_with_an_org_goal_collapsed():
+    from ..data.rosters import FACTION_BY_PROP
+    assert A.class_label(_need("prop_somebody")) == "own want"
+    assert A.class_label(_need(next(iter(FACTION_BY_PROP)))) == "creed"
+    assert A.class_label(_need(_a_goal_id())) == "org goal"
+    assert A.class_label(_need("rec_not_a_goal")) == "other need"
+    assert A.class_label(_need("anything", source="claim_landed")) == "-"
+
+
+def test_cr14_a_deliberation_with_no_question_is_its_own_row_and_the_rows_sum_to_the_rule_count(realm):
+    """The deliberation table's within-instrument control, on the 1-season realm the module fixture
+    holds: its rows plus `none` sum to the shipped rule's deliberation count. `checked` guards the
+    sum against reading an empty table."""
+    assert sum(realm["answered"].values()) == realm["deliberations"], (
+        realm["answered"], realm["deliberations"])
+    assert realm["deliberations"] > 0
+    assert len(realm["per_rule"][realm["shipped_rule"]]) == realm["deliberations"]
+    assert all(isinstance(k, tuple) and len(k) == 2 for k in realm["answered"])
+    sc = realm["scenes"]
+    assert sum(sc["rows"].values()) == sc["scenes"] and sc["need_goal"] <= sc["need"]
+    assert realm["news"]["told"] >= 0 and realm["news"]["untold"] >= 0
+
+
+# -- (v) the wrong-kind columns -----------------------------------------------------------------
+
+def _wk_world():
+    """The world of `test_in45_carry._filed` (a petition filed by `p_low` about `p_mid` before the
+    Duke's bench), with four planted attempts folded through the real driver: a `restore` aimed at
+    a person (`p_mid`), a `restore` aimed at an id in no collection, a `carry` of a PERSON id where
+    a Petition belongs, and a `determine` of a person nothing docketed. Returns `(w, d, rows, rd,
+    cast)`."""
+    from .test_in45_carry import DUKE, PARTY, SEAT, _filed
+    from .test_u7_remit import JUDGE
+    from ..data.fixtures import DEFAULT_FIXTURES
+    w, d = _filed(DEFAULT_FIXTURES.sweep("pool_default", JUDGE["pool_default"]))
+    cast = frozenset(w.persons)
+    for key, verb, who, payload in (
+            ("a_wk_restore_person", "restore", DUKE, {"subject": PARTY, "site": PARTY}),
+            ("a_wk_restore_nowhere", "restore", DUKE, {"subject": "zz_nowhere", "site": "zz_nowhere"}),
+            ("a_wk_carry_person", "carry", "p_low", {"subject": PARTY, "petition": PARTY}),
+            ("a_wk_determine", "determine", DUKE, {"subject": PARTY})):
+        _fold(w, d, Act(id=key, actor=who, verb=verb, via=SEAT, payload=payload))
+    rows = attempts(w, w.tick + 1)
+    rd = A.refusal_reading(w, d, rows)
+    return w, d, rows, rd, cast
+
+
+def _wk_by_act(w, d, rows, rd, cast) -> dict:
+    """`{act id: the one class it fell in}`: each refused planted act is classed ALONE, by narrowing
+    `rows` to it, so a class is read per act and not inferred from a count."""
+    out = {}
+    for row in rows:
+        got = A.wrong_kind(w, d, [row], rd["post_acts"], cast)
+        if got["refused"]:
+            (cls,) = [c for c, n in got["classes"].items() if n]
+            out[row[0].id] = cls
+    return out
+
+
+def test_cr14_wrong_kind_a_site_wanted_a_person_found_counts_in_the_first_class():
+    """The four planted attempts: a `restore` on a person id is a Site wanted and a Person found (the
+    first class); on an id in no collection, an absent subject; a `carry` on a person id wants a Petition
+    (a Record sub-kind) of a subject in another collection (the first class); a `determine` on a person
+    with no DocketItem is the DocketItem column and NOT the first class. Each refused act falls in
+    exactly one class, so the classes sum to the refused acts.
+
+    MUTATION (run 2026-10-27, reverted): the `DocketItem` branch dropped -- the `determine` reads
+    `other` and the docket assertion reds; the first-class tuple emptied -- the first assertion reds."""
+    w, d, rows, rd, cast = _wk_world()
+    got = A.wrong_kind(w, d, rows, rd["post_acts"], cast)
+    by_act = _wk_by_act(w, d, rows, rd, cast)
+    assert by_act["a_wk_restore_person"] == "collection", by_act
+    assert by_act["a_wk_restore_nowhere"] == "absent", by_act
+    assert by_act["a_wk_carry_person"] == "record_in_collection", by_act
+    assert by_act["a_wk_determine"] == "docket", by_act
+    c = got["classes"]
+    assert c["collection"] >= 1 and c["record_in_collection"] >= 1 and c["absent"] >= 1 and c["docket"] >= 1
+    first = sum(c[k] for k in A.WRONG_KIND_FIRST)
+    assert first == sum(1 for k in by_act.values() if k in A.WRONG_KIND_FIRST) == 2
+    assert "docket" not in A.WRONG_KIND_FIRST and "absent" not in A.WRONG_KIND_FIRST
+    assert sum(c.values()) == got["refused"], (c, got["refused"])
+    assert got["refused"] == sum(1 for _, _, no in rows if no) and got["attempted"] == len(rows)
+    assert len(by_act) >= 4, "the loop read fewer than the four planted refusals"
+
+
+def test_cr14_wrong_kind_a_person_counts_present_until_a_death_precedes_the_act():
+    """A person is present at an act when he is in the pre-season cast and no `person.died` naming
+    him precedes the act's first Event. `restore` aimed at `p_other` is a Site wanted: alive, a
+    wrong collection (first class); aimed at him after his death is logged, he lives in no collection
+    the run left and the subject reads absent. (`tiny_world` gives each person a Rung of his own id; the
+    death removes it with him, which the second assertion relies on.)"""
+    from ..data.matrix import Step as _Step
+    from ..state.ids import ROOT
+
+    def run(die_first: bool):
+        w, d = _world()
+        cast = frozenset(w.persons)
+        if die_first:
+            w.step = _Step.MATTER
+            w.write("exists", mint_token(w, WriteClass.MATTER), lambda: w.remove_person("p_other"),
+                    record_kind="Person", fieldname="exists", driver="Event",
+                    emits="person.died", subject="p_other", causes=[ROOT])
+        _fold(w, d, Act(id="a_wk_late", actor="p_low", verb="restore",
+                        payload={"subject": "p_other", "site": "p_other"}))
+        rows = attempts(w, w.tick + 1)
+        rd = A.refusal_reading(w, d, rows)
+        return A.wrong_kind(w, d, rows, rd["post_acts"], cast)["classes"]
+
+    alive, dead = run(False), run(True)
+    assert alive["collection"] == 1 and alive["absent"] == 0, alive
+    assert dead["absent"] == 1 and dead["collection"] == 0, dead
+
+
+def test_cr14_wrong_kind_an_admitted_then_refused_act_is_the_after_class_not_a_wrong_kind():
+    """`migrate` into a full rung clears its whole `requires` and is refused at the `write` clause
+    (REM-11's post-admission); the `speak` beside it is refused at admission on a read that failed.
+    The post-admission act is the `after` class, and the classes sum to the refused acts."""
+    w, d = _migrate_into_a_full_rung()
+    rows = attempts(w, w.tick + 1)
+    rd = A.refusal_reading(w, d, rows)
+    got = A.wrong_kind(w, d, rows, rd["post_acts"], frozenset(w.persons))
+    assert got["classes"]["after"] == sum(rd["post_admission"].values()) >= 1, got
+    assert sum(got["classes"].values()) == got["refused"]
+
+
+# -- (iii) the death census ---------------------------------------------------------------------
+
+def test_cr14_death_census_places_a_matter_death_in_its_season_with_the_seat_held_at_its_start():
+    """`p_high` holds `off_duke` at the season's start and dies at MATTER: no killing act (`no act`),
+    one seat-holder victim, the seat read as of the START. A second reading with `marks` taken AFTER the
+    death shows no seat -- the instrument reads what it is handed, which is what makes the first able to
+    fail. A world with no death counts none."""
+    from .test_h206_a_death_at_matter_is_witnessed import HOLDER, OFFICE, _die_at_matter, _world as dworld
+    w = dworld()
+    d = SeasonDriver(w)
+    assert A.seats(w), "fixture: nobody holds a seat"
+    assert A.death_census(w, d, [(len(w.log), A.seats(w))])["deaths"] == []     # no death yet
+    start = [(len(w.log), A.seats(w))]
+    _die_at_matter(w)                       # `World.write` logs the Event itself
+    got = A.death_census(w, d, start)
+    assert got["deaths"] == [{"victim": HOLDER, "season": 0, "verb": "no act", "seats": [OFFICE]}], got
+    assert got["events"] == 1
+    late = A.death_census(w, d, [(len(w.log) - 1, A.seats(w))])
+    assert late["deaths"][0]["seats"] == [], late
+
+
+def test_cr14_death_census_names_the_killing_acts_verb_through_the_act_map():
+    """A `fight` that kills (`wound_harm_model = total`) is a death by `fight` -- the verb of the act
+    `d.act_of` ties the `person.died` Event to. Skipped where the personal-combat engine is absent
+    (as the test it follows is); `checked` guards the scan against finding no kill."""
+    from .test_h206_a_death_at_matter_is_witnessed import (HOLDER, _killing_act_index,
+                                                           _world as dworld)
+    i = _killing_act_index()
+    assert i is not None, "no act id in range killed p_high; the census would be vacuous"
+    w = dworld()
+    w.step = Step.RESOLVE
+    w.fixtures = w.fixtures.sweep("wound_harm_model", "total")
+    d = SeasonDriver(w)
+    start = [(len(w.log), A.seats(w))]
+    w.log.extend(d.resolve(mint_token(w, WriteClass.ACTS),
+                           [Act(id=f"h206_{i}", actor="p_near", verb="fight",
+                                payload={"subject": HOLDER})], w.fixtures.get("contest_max_depth")))
+    got = A.death_census(w, d, start)
+    assert [x["verb"] for x in got["deaths"]] == ["fight"], got
+    assert got["deaths"][0]["victim"] == HOLDER and got["deaths"][0]["seats"], got
+
+
+# -- (i) pooling and the command line -----------------------------------------------------------
+
+def _vc(**kw):
+    base = {k: 0 for k in A.VERB_COLUMNS}
+    return {**base, "refused_as": kw.pop("refused_as", {}), **kw}
+
+
+def test_cr14_pool_verb_counts_sums_every_column_and_every_refused_as_kind():
+    """Planted per-seed dicts, one verb missing from the second: every column is the sum, a verb
+    one seed lacks counts 0 there, and `refused_as` sums per kind. The per-seed dicts are not mutated."""
+    s1 = {"tell": _vc(att=5, ex=2, ref=3, both=1, graded=1, elig_s=2, refused_as={"news.untold": 3}),
+          "work": _vc(att=7, ex=7)}
+    s2 = {"tell": _vc(att=4, ex=1, ref=3, both=2, graded=2, refused_as={"news.untold": 1, "x": 2})}
+    before = repr((s1, s2))
+    got = A.pool_verb_counts([s1, s2])
+    assert got["tell"]["att"] == 9 and got["tell"]["ex"] == 3 and got["tell"]["ref"] == 6
+    assert got["tell"]["both"] == 3 and got["tell"]["graded"] == 3 and got["tell"]["elig_s"] == 2
+    assert got["tell"]["refused_as"] == {"news.untold": 4, "x": 2}
+    assert got["work"]["att"] == 7 and got["work"]["ref"] == 0
+    totals = A.verb_totals(got)
+    assert totals["att"] == 16 and totals["ref"] == 6
+    assert repr((s1, s2)) == before
+
+
+def _pw(seed, never, **over):
+    """A planted per-world dict carrying only what `pool_worlds` reads."""
+    zero = {c: 0 for c in A.WRONG_KIND_CLASSES}
+    m = {"seed": seed, "reasons": {"tell": {"clause:x": 2}}, "post_admission": {"tell": 1},
+         "kinds": {"declared": 9, "never": never, "counts": {"k": {"events": 3, "acts": 2, "no_act": 1}}},
+         "wrong_kind": {"attempted": 10, "refused": 6, "classes": {**zero, "collection": 2, "other": 4},
+                        "by_verb": {"tell": {"collection": 2}}, "other_detail": {"no-read": 1}},
+         "deaths": {"events": 1, "deaths": [{"victim": f"v{seed}", "season": 0, "verb": "fight",
+                                              "seats": []}]},
+         "answered": {("need", "creed"): 3, ("none", "-"): 1}, "deliberations": 4,
+         "scenes": {"scenes": 5, "rows": {("need", "org goal"): 2}, "need": 2, "need_goal": 2},
+         "news": {"told": 1, "untold": 2}}
+    m.update(over)
+    return m
+
+
+def test_cr14_pool_worlds_sums_counts_and_intersects_the_kinds_never_emitted():
+    """Counts add over the planted seeds; the declared-kinds line is the kinds ABSENT FROM EVERY
+    seed's log (an intersection, so a kind one seed emitted is not in it)."""
+    a, b = _pw(0, ["k1", "k2", "k3"]), _pw(1, ["k2", "k3", "k4"])
+    p = A.pool_worlds([a, b])
+    assert p["kinds"]["never"] == ["k2", "k3"], p["kinds"]
+    assert p["kinds"]["counts"]["k"] == {"events": 6, "acts": 4, "no_act": 2}
+    assert p["reasons"] == {"tell": {"clause:x": 4}} and p["post_admission"] == {"tell": 2}
+    assert p["wrong_kind"]["attempted"] == 20 and p["wrong_kind"]["refused"] == 12
+    assert p["wrong_kind"]["classes"]["collection"] == 4 and p["wrong_kind"]["classes"]["other"] == 8
+    assert p["wrong_kind"]["by_verb"] == {"tell": {"collection": 4}}
+    assert p["wrong_kind"]["other_detail"] == {"no-read": 2}
+    assert p["deaths"]["runs"] == 2 and [x["seed"] for x in p["deaths"]["deaths"]] == [0, 1]
+    assert p["answered"] == {("need", "creed"): 6, ("none", "-"): 2} and p["deliberations"] == 8
+    assert p["scenes"]["scenes"] == 10 and p["scenes"]["need_goal"] == 4
+    assert p["news"] == {"told": 2, "untold": 4}
+    assert sum(p["answered"].values()) == p["deliberations"], "the pooled rows keep the sum control"
+    # the pooled dict prints through the same printers as one world's
+    text = "\n".join(A.cr14_blocks(p))
+    assert "SUM CONTROL" in text and "-> OK" in text and "runs 2" in text
+
+
+def test_cr14_the_original_positional_form_and_the_seeds_form_parse():
+    """`aperture <seasons> <seed>` is unchanged; `aperture <seasons> --seeds S [S ...]` adds the
+    pooled form with `seasons` positional; a bare `--seeds`, a non-numeric seed and a positional seed
+    beside `--seeds` are refused."""
+    assert A.parse_args([]) == (1, [0], False)
+    assert A.parse_args(["2", "0"]) == (2, [0], False)
+    assert A.parse_args(["3"]) == (3, [0], False)
+    assert A.parse_args(["2", "--seeds", "0", "1", "4"]) == (2, [0, 1, 4], True)
+    for bad in (["2", "--seeds"], ["2", "--seeds", "a"], ["2", "0", "--seeds", "1"]):
+        with pytest.raises(ValueError):
+            A.parse_args(bad)
+    assert A.main(["2", "--seeds"]) == 2

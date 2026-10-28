@@ -70,29 +70,51 @@ delivered `Question[]` is re-aggregated under every rule on `question_aggregatio
 re-opened. Only the shipped rule's answer reaches the chooser; the others are counterfactual, so the
 rule is the only difference between the rows — no trajectory confound.
 
+**THE POOLED CENSUS AND ITS THREE BLOCKS (CR-14).** `aperture <seasons> --seeds S [S ...]` runs
+`measure` at each seed (printing each seed's own report, as before) and then the realm POOLED over the
+seeds (`pooled_report`): a PER SEED table of the headline figures, the PER VERB block summed, REM-11's
+lines pooled, and three blocks read off every run (per seed too):
+
+    WRONG KIND        per ATTEMPTED act, the first refusal Event that read `exists:<K>` = 0 on the act's
+                      subject, classed by where the subject lives (`wrong_kind`); the first class is the
+                      wrong-kind share, the rest are counted apart; admitted-then-refused stands beside
+    DEATH CENSUS      the `person.died` Events by the killing act's verb and the seats the victim held at
+                      the start of the season (`death_census`)
+    ANSWERED-BY-SOURCE  two units: DELIBERATIONS by the source (and goal class) of the question the
+                      person deliberated under, and SCENES by the source of their occasion
+                      (`scene_sources`, P2's unit), with `news.told` / `news.untold`
+
+"Goal class" is `decision_spread.goal_class`, imported; this module classifies no question itself.
+
 **WHAT THIS DOES NOT DO.** It grades nothing, pins nothing and is wired into no gate. Its output is a
 measurement of one seeded season, re-runnable: `python -m engine.season.harness.aperture [seasons]
-[seed]`.
+[seed]` or `... <seasons> --seeds S [S ...]`.
 """
 
 from __future__ import annotations
 
 import sys
+from bisect import bisect_right
 from collections import Counter, defaultdict
 
 from ..data.matrix import MATRIX
 from ..data.requires import UNKNOWN, binding_from_act, evaluate
-from ..data.rosters import CLAIM_SOURCES, QUESTION_AGGREGATION, QUESTION_SOURCES
+from ..data.rosters import (CLAIM_SOURCES, QUESTION_AGGREGATION, QUESTION_SOURCES, RECORD_KINDS,
+                            TENURE_KINDS)
 from ..data.verbs import COUNTERPARTY_CLAUSE, EMITTED_KINDS, VERB_TABLE, WRITE_CLAUSE
 from ..decision import (aggregate_questions, assemble, make_chooser, opening_set,
                         person_side_eligible)
 from ..gaps import Unspecified
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries import world_q
+from ..queries.world_q import DOCKET_KIND
+from ..state.carriers import subject_of
 from ..state.ids import H, draw_factory
+from ..state.world import World
 from . import governance_spine, populated
 from . import probes as P
 from .corpus_run import attempts, graded_loss, graded_losses, unrowed_acts
+from .decision_spread import goal_class
 
 
 def seat_gated(row) -> bool:
@@ -196,7 +218,8 @@ def refusal_reading(w, d, rows) -> dict:
     POST-ADMISSION: the replayed verdict over the Event's own reads is True -- every recorded read
     passed, so the act cleared its `requires` and the refusal fell at the counterparty or write
     clause. A refusal that records no read, or whose row has no typed cell, is never counted there.
-    Returns `{"reasons": {verb: {reason: n}}, "post_admission": {verb: n}}`."""
+    Returns `{"reasons": {verb: {reason: n}}, "post_admission": {verb: n}, "post_acts": {act id}}`
+    (`post_acts` names the acts behind `post_admission`, for the readers that class per act)."""
     emitted: dict = defaultdict(list)
     for e in w.log:
         a = d.act_of.get(e.id)
@@ -204,6 +227,7 @@ def refusal_reading(w, d, rows) -> dict:
             emitted[a.id].append(e)
     reasons: dict = defaultdict(Counter)
     post: Counter = Counter()
+    post_acts: set = set()
     for a, made, no in rows:
         if not no:
             continue
@@ -220,6 +244,7 @@ def refusal_reading(w, d, rows) -> dict:
         passed = verdict is not None and verdict.value is True
         if passed:
             post[a.verb] += 1
+            post_acts.add(a.id)
         cands = [c for c, ks in row.refusals_by_clause.items() if evs[0].kind in ks]
         if verdict is not None and verdict.failed in cands:
             cands = [verdict.failed]
@@ -231,7 +256,8 @@ def refusal_reading(w, d, rows) -> dict:
             reasons[a.verb]["last-read " + read_label(obs[-1])] += 1
         else:
             reasons[a.verb]["no-read"] += 1
-    return {"reasons": {v: dict(c) for v, c in reasons.items()}, "post_admission": dict(post)}
+    return {"reasons": {v: dict(c) for v, c in reasons.items()}, "post_admission": dict(post),
+            "post_acts": post_acts}
 
 
 def kind_census(w, d) -> dict:
@@ -256,12 +282,199 @@ def kind_census(w, d) -> dict:
                        for k, n in sorted(events.items())}}
 
 
+# ---------------------------------------------------------------------------------------------
+# CR-14 -- THE WRONG-KIND COLUMNS (v), THE DEATH CENSUS (iii), THE ANSWERED-BY-SOURCE BLOCK (ii).
+# Three readers over a finished run, each a pure function of `(w, d, ...)`; none writes.
+
+#: A death is the Event kind `person.died` (the one kind both `Person.exists` and `Person.body`
+#: emit; `harness/arc.py::DEATH_KIND` reads it off the matrix, and aperture cannot import `arc`, which
+#: imports `storybar`, which imports this module). Asserted against the matrix, as `arc` does.
+_DEATH_KIND = "person.died"
+assert _DEATH_KIND in MATRIX[("Person", "exists")].emits
+
+#: The classes of the wrong-kind columns, in print order. The first two together are THE wrong-kind
+#: share (HR-9): a subject of the wrong collection. The rest are counted apart and are not in it.
+WRONG_KIND_FIRST = ("collection", "record_in_collection")
+WRONG_KIND_CLASSES = (*WRONG_KIND_FIRST, "record_subkind", "docket", "absent", "other", "after")
+
+
+def _events_by_act(w, d) -> dict:
+    """`{act id: [(log index, Event), ...]}` -- every logged Event `d.act_of` ties to an act, in log
+    order. The act's first Event is its first entry."""
+    out: dict = defaultdict(list)
+    for i, e in enumerate(w.log):
+        a = d.act_of.get(e.id)
+        if a is not None:
+            out[a.id].append((i, e))
+    return out
+
+
+def deaths_of(w, d) -> list:
+    """`[(log index, Event, victim id)]` -- the FIRST `person.died` Event per victim, in log order. The
+    victim is the first change carrying a subject (`state/attribution.py::anchor_of`'s own tier-2 rule
+    for an Event with no act); a death whose Event names no subject is skipped (an instrument defect
+    if it is ever the case)."""
+    seen: set = set()
+    out = []
+    for i, e in enumerate(w.log):
+        if e.kind != _DEATH_KIND:
+            continue
+        victim = next((c.subject for c in e.changes if c.subject), None)
+        if victim is None or victim in seen:
+            continue
+        seen.add(victim)
+        out.append((i, e, victim))
+    return out
+
+
+def _exists_zero_on(event, sid):
+    """The wanted kind `K` of the FIRST `exists:<K>` read on `sid` that came back 0 in this refusal
+    Event's `observed`, else `None`. Reads through `_observed_of`, the one read of `Event.observed`."""
+    for o in _observed_of(event):
+        p = str(o.predicate)
+        if (p.startswith("exists:") and o.value is not UNKNOWN and o.value in (0, False)
+                and str(o.subject) == str(sid)):
+            return p.partition(":")[2]
+    return None
+
+
+def _lives_in(w, collection, sid, cast, died_at, first_i) -> bool:
+    """Does `sid` live in `w.<collection>` as the wrong-kind columns read it: a person is present when
+    he is in `cast` and no death naming him is logged before `first_i`; any other collection is read as
+    the run left it. A subject that is not a string lives nowhere."""
+    if not isinstance(sid, str) or not sid:
+        return False
+    if collection == "persons":
+        return sid in cast and died_at.get(sid, first_i) >= first_i
+    return sid in getattr(w, collection)
+
+
+def wrong_kind(w, d, rows, post_acts, cast) -> dict:
+    """THE WRONG-KIND-AT-ADMISSION COLUMNS (CR-14 (v); the register's G-08). Per ATTEMPTED act that
+    was refused (never per `_admits` call), the first refusal Event whose `observed` holds
+    `exists:<K>` = 0 on the act's subject (`subject_of`) decides:
+
+      collection           K is a collection class (`World._STATE_COLLECTIONS`: `exists:Site`) and the
+                           subject lives in another collection              \\ the first class: THE
+      record_in_collection K is a Record sub-kind (`RECORD_KINDS`) and the   / wrong-kind share
+                           subject lives in a collection other than `records`
+      record_subkind       K is a Record sub-kind and the subject is a Record (of another sub-kind)
+      docket               K is `DocketItem`: a read of the docket, not a collection
+      absent               the subject lives in no collection
+      other                a refusal with none of the above that is not post-admission (a read other
+                           than `exists:` failed, a graded loss, an act with no recorded read)
+      after                admitted-then-refused: REM-11's post-admission act (`post_acts`)
+
+    The order is the order of these tests, so every refused act is in exactly one class and the seven
+    sum to the refused acts. WHERE A SUBJECT LIVES: a person is present at the act when he is in
+    `cast` (the persons read BEFORE the season) and no `person.died` Event naming him precedes the
+    act's first Event; the other collections are read at the run's end. ⚠ TIMING: the probe this
+    follows classed against the live world at admission, so a record removed during the run, or a
+    person whose death followed the act, can class differently here.
+
+    Returns `{"attempted": n, "refused": n, "classes": {class: n}, "by_verb": {verb: {class: n}},
+    "other_detail": {"graded-loss": n, "no-read": n}}`."""
+    by_act = _events_by_act(w, d)
+    died_at = {victim: i for i, _, victim in deaths_of(w, d)}
+    collections = World._STATE_COLLECTIONS
+    classes: Counter = Counter()
+    by_verb: dict = defaultdict(Counter)
+    detail: Counter = Counter()
+    refused = 0
+    for a, made, no in rows:
+        if not no:
+            continue
+        refused += 1
+        evs = by_act.get(a.id, [])
+        first_i = evs[0][0] if evs else len(w.log)
+        sid = subject_of(a)
+        cls = None
+        for _, e in evs:
+            if e.kind not in no:
+                continue
+            kind = _exists_zero_on(e, sid)
+            if kind is None:
+                continue
+            if kind in TENURE_KINDS:                 # an edge read, not an object class
+                break
+            where = [c for c in collections if _lives_in(w, c, sid, cast, died_at, first_i)]
+            if kind == DOCKET_KIND:
+                cls = "docket"
+            elif kind in RECORD_KINDS:
+                cls = ("absent" if not where else "record_subkind" if "records" in where
+                       else "record_in_collection")
+            elif kind.lower() + "s" in collections:
+                cls = ("absent" if not where
+                       else "collection" if kind.lower() + "s" not in where else None)
+            break                                    # the first read decides, classed or not
+        if cls is None:
+            cls = "after" if a.id in post_acts else "other"
+            if cls == "other":
+                refusal = [e for _, e in evs if e.kind in no]
+                if refusal and graded_loss(a, refusal):
+                    detail["graded-loss"] += 1
+                elif not any(_observed_of(e) for e in refusal):
+                    detail["no-read"] += 1
+        classes[cls] += 1
+        by_verb[a.verb][cls] += 1
+    return {"attempted": len(rows), "refused": refused,
+            "classes": {c: classes.get(c, 0) for c in WRONG_KIND_CLASSES},
+            "by_verb": {v: dict(c) for v, c in by_verb.items()}, "other_detail": dict(detail)}
+
+
+def death_census(w, d, marks) -> dict:
+    """THE DEATH CENSUS (CR-14 (iii); the register's G-20). Each death the watched seasons held (the
+    FIRST `person.died` Event per victim, `deaths_of`), by the verb of the killing act (`d.act_of` of
+    the Event; a death with no act -- a MATTER `_die` -- is its own `no act` row) and the seats the
+    victim held. `marks` is `[(log length, seats(w)), ...]`, one per season, taken at that season's
+    START: a death is placed in the season whose log span holds it and its seats are that season's.
+    ⚠ A seat gained and lost inside one season is not seen.
+    Returns `{"deaths": [{"victim", "season", "verb", "seats"}], "events": person.died Events}`."""
+    starts = [n for n, _ in marks]
+    out = []
+    for i, e, victim in deaths_of(w, d):
+        if not starts or i < starts[0]:
+            continue
+        s = bisect_right(starts, i) - 1
+        a = d.act_of.get(e.id)
+        out.append({"victim": victim, "season": s, "verb": a.verb if a is not None else "no act",
+                    "seats": list(marks[s][1].get(victim, ()))})
+    return {"deaths": out,
+            "events": sum(1 for i, e in enumerate(w.log) if e.kind == _DEATH_KIND
+                          and starts and i >= starts[0])}
+
+
+def class_label(q) -> str:
+    """A question's goal class as the ANSWERED-BY-SOURCE tables print it: `decision_spread.goal_class`'s
+    answer (THE one classifier -- aperture imports it and writes no second), with an org goal's own id
+    collapsed to `org goal` (`goal_class` returns the goal's id for one, and returns it for nothing
+    else). A non-`need` question is `-`."""
+    c = goal_class(q)
+    return "org goal" if q.source == "need" and c == q.about else c
+
+
+def scene_sources(d) -> dict:
+    """SCENES BY OCCASION SOURCE (CR-14 (ii), P2's unit): each Scene of `d.scenes`, read at the season's
+    end, by its `occasion`'s source (`harness/soak.py::_occasion_row` reads it the same way; a scene
+    with no occasion is `none`), and a `need` scene by `class_label`. Returns
+    `{"scenes": n, "rows": {(source, label): n}, "need": n, "need_goal": n}` where `need_goal` is the
+    need scenes about a goal Proposition (an `org goal` row) and the rest of `need` are the others."""
+    rows: Counter = Counter()
+    for sc in d.scenes.values():
+        q = getattr(sc, "occasion", None)
+        rows[("none", "-") if q is None else (q.source, class_label(q))] += 1
+    need = sum(n for (s, _), n in rows.items() if s == "need")
+    return {"scenes": sum(rows.values()), "rows": dict(rows), "need": need,
+            "need_goal": rows.get(("need", "org goal"), 0)}
+
+
 def instrumented_season(w, seasons: int) -> dict:
     """Run `seasons` seasons on `w` with the chooser and the question barrier WATCHED, never
     steered. The driver/chooser construction is `populated.run`'s, line for line, so the control
     in `measure` can compare the two worlds' hashes."""
     d = SeasonDriver(w)
     fx = w.fixtures
+    cast = frozenset(w.persons)          # the persons BEFORE the season, for the wrong-kind columns
     foldable = resolvable_verbs()
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     real = make_chooser(fx, mint, verbs=foldable, draw=draw_factory(w.world_seed, lambda: w.tick))
@@ -284,12 +497,14 @@ def instrumented_season(w, seasons: int) -> dict:
     formed: dict = defaultdict(set)
     per_rule: dict = defaultdict(list)   # rule -> [(referents, candidates, verbs formed)]
     mismatch = 0                          # deliberations where the re-aggregation != the real one
+    answered: Counter = Counter()         # (source, class label) -> deliberations; `none` has no question
 
     def watched_choose(p, v, s, ask_budget):
         nonlocal mismatch
         q = getattr(v, "question", None)
         real_cands = opening_set(p, v, q, fx) if q is not None else []
         formed[p.id] |= {c.verb for c in real_cands}
+        answered[("none", "-") if q is None else (q.source, class_label(q))] += 1
         qs = delivered.get(p.id) or []
         for rule in QUESTION_AGGREGATION:
             q_r = aggregate_questions(qs, rule)
@@ -303,7 +518,9 @@ def instrumented_season(w, seasons: int) -> dict:
                                    frozenset(c.verb for c in cands)))
         return real(p, v, s, ask_budget)
 
+    marks: list = []                     # per season, at its START: (log length, seats), for the death census
     for _ in range(seasons):
+        marks.append((len(w.log), seats(w)))
         d.season(watched_choose, question=None, subsistence=P.SUBSIST,
                  contest_max_depth=fx.get("contest_max_depth"))
 
@@ -328,12 +545,18 @@ def instrumented_season(w, seasons: int) -> dict:
     graded = Counter(a.verb for a in graded_losses(w, seasons))
     why = refusal_reading(w, d, rows)
     census = kind_census(w, d)
+    told = census["counts"].get("news.told", {}).get("events", 0)
+    untold = census["counts"].get("news.untold", {}).get("events", 0)
     return {"acts": len(d.resolved), "reasons": why["reasons"],
             "post_admission": why["post_admission"], "kinds": census,
             "formed": dict(formed), "attempted": dict(attempted),
             "executed": dict(executed), "refused": dict(refused), "neither": dict(neither),
             "both": dict(both), "graded": dict(graded), "unrowed": unrowed_acts(w),
             "refusal_kinds": {v: dict(c) for v, c in refusal_kinds.items()},
+            "wrong_kind": wrong_kind(w, d, rows, why["post_acts"], cast),
+            "deaths": death_census(w, d, marks), "answered": dict(answered),
+            "deliberations": len(per_rule.get(shipped, ())), "scenes": scene_sources(d),
+            "news": {"told": told, "untold": untold},
             "questions": {s: dict(c) for s, c in q_count.items()}, "per_rule": dict(per_rule),
             "shipped_rule": shipped, "rule_mismatch": mismatch, "foldable": foldable,
             "hash": w.content_hash()}
@@ -436,6 +659,254 @@ def _refusal_blocks(m: dict) -> list:
     return out
 
 
+# The PER VERB row's columns, one owner for the per-seed block and the pooled one. `elig_s` / `elig_u`
+# are PERSONS (seated / unseated); every column is a count that sums over seeds.
+VERB_COLUMNS = ("elig_s", "elig_u", "formed", "offered", "att", "ex", "ref", "both", "graded",
+                "neither")
+
+
+def verb_counts(m: dict, verbs, foldable) -> dict:
+    """`{verb: {column: n, ..., "refused_as": {kind: n}}}` for one world: the PER VERB row's figures."""
+    seated = set(m["seats"])
+    out = {}
+    for v in verbs:
+        fo = sum(1 for s in m["formed"].values() if v in s)
+        out[v] = {"elig_s": sum(1 for p in seated if v in m["eligible"][p]),
+                  "elig_u": sum(1 for p in m["persons"] if p not in seated and v in m["eligible"][p]),
+                  "formed": fo, "offered": fo if v in foldable else 0,
+                  "att": sum(c.get(v, 0) for c in m["attempted"].values()),
+                  "ex": sum(c.get(v, 0) for c in m["executed"].values()),
+                  "ref": sum(c.get(v, 0) for c in m["refused"].values()),
+                  "both": m["both"].get(v, 0), "graded": m["graded"].get(v, 0),
+                  "neither": m["neither"].get(v, 0),
+                  "refused_as": dict(m["refusal_kinds"].get(v, {}))}
+    return out
+
+
+def pool_verb_counts(per_seed: list) -> dict:
+    """The PER VERB figures pooled over seeds: every column summed, `refused_as` summed per kind. Pure
+    over `verb_counts`' dicts; a verb absent from one seed's dict counts 0 there."""
+    out: dict = {}
+    for vc in per_seed:
+        for v, c in vc.items():
+            o = out.setdefault(v, {**{k: 0 for k in VERB_COLUMNS}, "refused_as": {}})
+            for k in VERB_COLUMNS:
+                o[k] += c.get(k, 0)
+            for kind, n in c.get("refused_as", {}).items():
+                o["refused_as"][kind] = o["refused_as"].get(kind, 0) + n
+    return out
+
+
+def _verb_line(v: str, c: dict, foldable) -> str:
+    return (f"    {v:<16} {'R' if v in foldable else '.'}  elig {c['elig_s']:>3}/{c['elig_u']:<3} "
+            f"formed {c['formed']:>3}  offered {c['offered']:>3}  att {c['att']:>4}  ex {c['ex']:>4}  "
+            f"ref {c['ref']:>4}  both {c['both']:>3}  graded {c['graded']:>3}  "
+            f"neither {c['neither']}"
+            + (f"   refused as {c['refused_as']}" if c["refused_as"] else ""))
+
+
+def verb_totals(vc: dict) -> dict:
+    """Every PER VERB column summed over the verbs."""
+    return {k: sum(c[k] for c in vc.values()) for k in VERB_COLUMNS}
+
+
+def _verb_total_line(vc: dict) -> str:
+    """The sum of every verb row's attempted / executed / refused / both / graded / neither, with
+    `att - ref` beside them (the acts that drew no refusal kind; `ex` also counts a graded loss, so
+    `att - ref` and `ex` are not the same number)."""
+    t = verb_totals(vc)
+    return (f"    {'TOTAL':<16}    att {t['att']:>5}  ex {t['ex']:>5}  ref {t['ref']:>5}  "
+            f"att-ref {t['att'] - t['ref']:>5}  both {t['both']:>4}  graded {t['graded']:>4}  "
+            f"neither {t['neither']}")
+
+
+# ---------------------------------------------------------------------------------------------
+# CR-14 blocks and pooling. `pool_worlds` sums what is a count and intersects what is an absence;
+# the printers take a world dict OR the pooled dict, which have the same keys.
+
+def pool_worlds(ms: list) -> dict:
+    """The per-world figures a pooled block reads, summed over `ms` (`measure_world`'s dicts):
+    `reasons` and `post_admission` per verb; `kinds` (declared once, `never` = the kinds absent from
+    EVERY seed's log, `counts` summed); `wrong_kind`; `deaths` (the deaths concatenated, tagged by
+    seed, `runs` counted); `answered` and `scenes` rows summed; `news`; `deliberations`. A pure
+    function over the dicts: it reads no world."""
+    reasons: dict = defaultdict(Counter)
+    post: Counter = Counter()
+    for m in ms:
+        for v, c in m["reasons"].items():
+            reasons[v].update(c)
+        post.update(m["post_admission"])
+    counts: dict = {}
+    for m in ms:
+        for kind, c in m["kinds"]["counts"].items():
+            o = counts.setdefault(kind, {"events": 0, "acts": 0, "no_act": 0})
+            for k in o:
+                o[k] += c[k]
+    never = sorted(set.intersection(*(set(m["kinds"]["never"]) for m in ms))) if ms else []
+    wk_classes = Counter()
+    wk_verb: dict = defaultdict(Counter)
+    wk_detail = Counter()
+    for m in ms:
+        wk = m["wrong_kind"]
+        wk_classes.update(wk["classes"])
+        for v, c in wk["by_verb"].items():
+            wk_verb[v].update(c)
+        wk_detail.update(wk["other_detail"])
+    answered = Counter()
+    scene_rows = Counter()
+    for m in ms:
+        answered.update(m["answered"])
+        scene_rows.update(m["scenes"]["rows"])
+    return {
+        "reasons": {v: dict(c) for v, c in reasons.items()}, "post_admission": dict(post),
+        "kinds": {"declared": max((m["kinds"]["declared"] for m in ms), default=0),
+                  "never": never, "counts": dict(sorted(counts.items()))},
+        "wrong_kind": {"attempted": sum(m["wrong_kind"]["attempted"] for m in ms),
+                       "refused": sum(m["wrong_kind"]["refused"] for m in ms),
+                       "classes": {c: wk_classes.get(c, 0) for c in WRONG_KIND_CLASSES},
+                       "by_verb": {v: dict(c) for v, c in wk_verb.items()},
+                       "other_detail": dict(wk_detail)},
+        "deaths": {"runs": len(ms), "events": sum(m["deaths"]["events"] for m in ms),
+                   "deaths": [{**x, "seed": m["seed"]} for m in ms for x in m["deaths"]["deaths"]]},
+        "answered": dict(answered), "deliberations": sum(m["deliberations"] for m in ms),
+        "scenes": {"scenes": sum(m["scenes"]["scenes"] for m in ms), "rows": dict(scene_rows),
+                   "need": sum(m["scenes"]["need"] for m in ms),
+                   "need_goal": sum(m["scenes"]["need_goal"] for m in ms)},
+        "news": {k: sum(m["news"][k] for m in ms) for k in ("told", "untold")},
+    }
+
+
+def _wrong_kind_blocks(m: dict) -> list:
+    wk = m["wrong_kind"]
+    c, att, ref = wk["classes"], wk["attempted"], wk["refused"]
+    first = sum(c[k] for k in WRONG_KIND_FIRST)
+    classed = sum(c.values())
+    share = 100 * first / att if att else 0.0
+    post_total = sum(m["post_admission"].values())
+    od = wk["other_detail"]
+    out = ["\n  WRONG KIND AT ADMISSION — per ATTEMPTED act, the first refusal Event whose `observed` "
+           "holds `exists:<K>` = 0 on the act's subject; the subject classed by where its id lives "
+           "(a person present when in the pre-season cast and not yet dead at the act's first Event; "
+           "every other collection as the run left it)",
+           f"    attempted {att} · refused {ref}",
+           f"    WRONG-KIND (first class) {first} of {att} attempts ({share:.1f}%) — "
+           f"a collection class wanted, the subject in another collection {c['collection']} · a Record "
+           f"sub-kind wanted of a subject in another collection {c['record_in_collection']}",
+           f"    wrong Record sub-kind {c['record_subkind']} · `exists:DocketItem` = 0 {c['docket']} · "
+           f"absent subject {c['absent']}",
+           f"    other admission refusal {c['other']} (of them graded-loss {od.get('graded-loss', 0)}, "
+           f"no recorded read {od.get('no-read', 0)}) · admitted-then-refused {c['after']} "
+           f"(REM-11 post-admission TOTAL {post_total})",
+           f"    SUM CONTROL  first {first} + sub-kind {c['record_subkind']} + docket {c['docket']} + "
+           f"absent {c['absent']} + other {c['other']} + after {c['after']} = {classed} vs refused "
+           f"{ref} -> {'OK' if classed == ref else 'DIFFERENT'}"]
+    for v in sorted(wk["by_verb"]):
+        bv = wk["by_verb"][v]
+        out.append(f"      {v:<16} " + " · ".join(f"{k} {bv[k]}" for k in WRONG_KIND_CLASSES if bv.get(k)))
+    return out
+
+
+def _death_blocks(m: dict) -> list:
+    dc = m["deaths"]
+    deaths = dc["deaths"]
+    by_verb = Counter(x["verb"] for x in deaths)
+    holders = sum(1 for x in deaths if x["seats"])
+    out = ["\n  DEATH CENSUS — `person.died` (the first per victim) by the killing act's verb "
+           "(`d.act_of`; `no act` = a MATTER death); seats read at the START of the season the death "
+           "falls in, so a seat gained and lost within one season is not seen",
+           f"    runs {dc.get('runs', 1)} · deaths {len(deaths)} (person.died Events {dc['events']}) · "
+           f"seat-holder victims {holders} · by killing verb "
+           f"{dict(sorted(by_verb.items(), key=lambda kv: (-kv[1], kv[0]))) or 'none'}"]
+    for x in deaths:
+        tag = f"seed {x['seed']} " if "seed" in x else ""
+        out.append(f"      {tag}{x['victim']} season {x['season']} by {x['verb']} seats {x['seats'] or 'none'}")
+    return out
+
+
+def _answered_blocks(m: dict) -> list:
+    ans, sc = m["answered"], m["scenes"]
+    sources = list(QUESTION_SOURCES) + sorted({s for s, _ in ans if s != "none"} - set(QUESTION_SOURCES))
+    out = ["\n  ANSWERED-BY-SOURCE — two units, each its own table. `need` is split by "
+           "`decision_spread.goal_class` (the one classifier): own want · creed · org goal · other need",
+           "    DELIBERATIONS by the source of the question delivered under the shipped rule "
+           "(`none` = the person deliberated with no question)"]
+    for src in [*sources, "none"]:
+        for (s, label), n in sorted(ans.items()):
+            if s == src:
+                out.append(f"      {src:<14} {label:<11} {n:>5}")
+    total = sum(ans.values())
+    out.append(f"      rows + none = {total} vs the PER AGGREGATION RULE deliberation count "
+               f"{m['deliberations']} -> {'OK' if total == m['deliberations'] else 'DIFFERENT'}")
+    out.append("    SCENES by occasion source (`d.scenes` read at the season's end; P2's unit)")
+    for src in [*sources, "none"]:
+        for (s, label), n in sorted(sc["rows"].items()):
+            if s == src:
+                out.append(f"      {src:<14} {label:<11} {n:>5}")
+    out.append(f"      scenes {sc['scenes']} · need {sc['need']}, of them about a goal Proposition "
+               f"{sc['need_goal']} · other {sc['need'] - sc['need_goal']}")
+    out.append(f"    news.told {m['news']['told']} · news.untold {m['news']['untold']}")
+    return out
+
+
+def cr14_blocks(m: dict) -> list:
+    """The CR-14 blocks for one world or a pooled one: wrong-kind columns, death census,
+    answered-by-source."""
+    return [*_wrong_kind_blocks(m), *_death_blocks(m), *_answered_blocks(m)]
+
+
+def seed_row(m: dict, verbs, foldable) -> dict:
+    """One seed's headline figures, for the PER SEED table: the PER VERB totals, the first wrong-kind
+    class and the others, the deaths and the told / untold counts."""
+    t = verb_totals(verb_counts(m, verbs, foldable))
+    c = m["wrong_kind"]["classes"]
+    d = m["deaths"]["deaths"]
+    return {**t, "first": sum(c[k] for k in WRONG_KIND_FIRST), "subkind": c["record_subkind"],
+            "docket": c["docket"], "absent": c["absent"], "other": c["other"], "after": c["after"],
+            "deaths": len(d), "holders": sum(1 for x in d if x["seats"]),
+            "told": m["news"]["told"], "untold": m["news"]["untold"],
+            "need": m["scenes"]["need"], "need_goal": m["scenes"]["need_goal"],
+            "scenes": m["scenes"]["scenes"], "delib": m["deliberations"]}
+
+
+def pooled_report(results: list) -> list:
+    """The realm pooled over `results` (each `measure`'s dict): a PER SEED table of the headline
+    figures with a POOLED row; the PER VERB block summed; REM-11's lines pooled; the CR-14 blocks.
+    The spine world stays per-seed (it is in each seed's own `report`)."""
+    verbs, foldable = results[0]["verbs"], set(results[0]["resolvable"])
+    ms = [r["realm"] for r in results]
+    seeds = [m["seed"] for m in ms]
+    out = ["=" * 100,
+           f"POOLED OVER SEEDS {seeds} — realm, {ms[0]['seasons']} season(s); every count summed over "
+           f"the seeds (the elig columns are persons-per-seed); the spine stays per seed above"]
+    out.append("  CONTROL per seed: " + " · ".join(
+        f"seed {m['seed']} {'EQUAL' if m['control']['hash'] == m['hash'] and m['control']['acts'] == m['acts'] else 'DIFFERENT'}"
+        for m in ms))
+    cols = ("att", "ex", "ref", "att-ref", "both", "graded", "neither", "first", "subkind", "docket",
+            "absent", "other", "after", "deaths", "holders", "told", "untold", "need", "need_goal",
+            "scenes", "delib")
+    rows = [seed_row(m, verbs, foldable) for m in ms]
+    for r in rows:
+        r["att-ref"] = r["att"] - r["ref"]
+    pooled = {k: sum(r[k] for r in rows) for k in cols}
+    out.append("\n  PER SEED — att/ex/ref/att-ref/both/graded/neither: the PER VERB totals · first "
+               "wrong-kind class, then sub-kind/docket/absent/other/after · deaths, seat-holders · "
+               "news.told/untold · need scenes, of them about a goal · scenes · deliberations")
+    out.append("    " + f"{'seed':>6} " + " ".join(f"{c:>8}" for c in cols))
+    for m, r in zip(ms, rows):
+        out.append("    " + f"{m['seed']:>6} " + " ".join(f"{r[c]:>8}" for c in cols))
+    out.append("    " + f"{'POOLED':>6} " + " ".join(f"{pooled[c]:>8}" for c in cols))
+    out.append("\n  PER VERB, POOLED — persons eligible (seated/unseated) · persons formed · persons "
+               "offered · ACTS attempted · executed · refused · both · graded · neither")
+    vc = pool_verb_counts([verb_counts(m, verbs, foldable) for m in ms])
+    for v in verbs:
+        out.append(_verb_line(v, vc[v], foldable))
+    out.append(_verb_total_line(vc))
+    pm = pool_worlds(ms)
+    out.extend(_refusal_blocks(pm))
+    out.extend(cr14_blocks(pm))
+    return out
+
+
 def report(res: dict) -> list:
     out = []
     verbs, foldable = res["verbs"], set(res["resolvable"])
@@ -496,20 +967,10 @@ def report(res: dict) -> list:
                    "see `corpus_run._attribute_acts`) · graded (a lost contest: a kind in both "
                    "columns at degree Failure, always also `both`) · neither")
         seated = set(m["seats"])
+        vc = verb_counts(m, verbs, foldable)
         for v in verbs:
-            el_s = sum(1 for p in seated if v in m["eligible"][p])
-            el_u = sum(1 for p in m["persons"] if p not in seated and v in m["eligible"][p])
-            fo = sum(1 for s in m["formed"].values() if v in s)
-            of = fo if v in foldable else 0
-            at = sum(c.get(v, 0) for c in m["attempted"].values())
-            ex = sum(c.get(v, 0) for c in m["executed"].values())
-            rf = sum(c.get(v, 0) for c in m["refused"].values())
-            out.append(f"    {v:<16} {'R' if v in foldable else '.'}  elig {el_s:>3}/{el_u:<3} "
-                       f"formed {fo:>3}  offered {of:>3}  att {at:>4}  ex {ex:>4}  ref {rf:>4}  "
-                       f"both {m['both'].get(v, 0):>3}  graded {m['graded'].get(v, 0):>3}  "
-                       f"neither {m['neither'].get(v, 0)}"
-                       + (f"   refused as {m['refusal_kinds'][v]}" if v in m["refusal_kinds"]
-                          else ""))
+            out.append(_verb_line(v, vc[v], foldable))
+        out.append(_verb_total_line(vc))
         # -- why each refusal refused (REM-11) ----------------------------------------------
         out.extend(_refusal_blocks(m))
         # -- questions by source ----------------------------------------------------------
@@ -548,14 +1009,43 @@ def report(res: dict) -> list:
             if rule != m["shipped_rule"]:
                 out.append(f"      vs {m['shipped_rule']}: {rule} adds {sorted(reached[rule] - base)}"
                            f", loses {sorted(base - reached[rule])}")
+        # -- CR-14: wrong kind at admission, the death census, answered-by-source ------------
+        out.extend(cr14_blocks(m))
     return out
+
+
+def parse_args(argv: list):
+    """`(seasons, seeds)` from `[seasons] [seed]` (the original form: `seeds` is `[seed]`) or
+    `[seasons] --seeds S [S ...]`. Returns `(seasons, seeds, pooled)`; raises `ValueError` on a
+    `--seeds` with no seed, a non-numeric seed, or both a positional seed and `--seeds`."""
+    if "--seeds" not in argv:
+        seasons = int(argv[0]) if argv and argv[0].isdigit() else 1
+        seed = int(argv[1]) if len(argv) > 1 and argv[1].isdigit() else 0
+        return seasons, [seed], False
+    i = argv.index("--seeds")
+    head, tail = argv[:i], argv[i + 1:]
+    if len(head) > 1 or (head and not head[0].isdigit()):
+        raise ValueError("with --seeds the only positional argument is `seasons`")
+    if not tail or not all(t.isdigit() for t in tail):
+        raise ValueError("--seeds takes one or more non-negative integer seeds")
+    return (int(head[0]) if head else 1), [int(t) for t in tail], True
 
 
 def main(argv=None) -> int:
     argv = list(sys.argv[1:] if argv is None else argv)
-    seasons = int(argv[0]) if argv and argv[0].isdigit() else 1
-    seed = int(argv[1]) if len(argv) > 1 and argv[1].isdigit() else 0
-    print("\n".join(report(measure(seed, seasons))))
+    try:
+        seasons, seeds, pooled = parse_args(argv)
+    except ValueError as e:
+        print(f"aperture: {e}\nusage: aperture [seasons] [seed] | aperture seasons --seeds S [S ...]",
+              file=sys.stderr)
+        return 2
+    results = []
+    for seed in seeds:
+        res = measure(seed, seasons)
+        results.append(res)
+        print("\n".join(report(res)), flush=True)
+    if pooled:
+        print("\n".join(pooled_report(results)), flush=True)
     return 0
 
 

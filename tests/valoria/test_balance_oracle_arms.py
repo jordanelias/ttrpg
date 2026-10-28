@@ -144,3 +144,40 @@ def test_the_retired_pair_definitions_still_import():
     assert not hasattr(oracle, '_ARMS_CONTEST_LADDER'), (
         "the contest-ladder pair was deliberately not carried into engine/season/ — "
         "see the module docstring; do not resurrect it here without re-checking both findings")
+
+
+def test_an_arm_resolves_to_a_fixtures_and_a_build_half_against_literal_pairs():
+    """CR-14 (iv): `run_arm` takes the shipped `field_casualty_model` string or a mapping with a
+    `fixtures` half (swept onto the built world) and a `build` half (kwargs of `build_realm`). The
+    one resolver is asked against LITERAL pairs, with no world built; swapping the halves in the
+    resolver reds every assertion here."""
+    resolve = oracle._resolve_arm
+    assert resolve("total") == ({"field_casualty_model": "total"}, {})
+    assert resolve({"fixtures": {"field_casualty_model": "total"}}) == (
+        {"field_casualty_model": "total"}, {})
+    assert resolve({"build": {"guards": True}}) == ({}, {"guards": True})
+    assert resolve({"fixtures": {"field_casualty_model": "total"}, "build": {"guards": True}}) == (
+        {"field_casualty_model": "total"}, {"guards": True})
+    assert resolve({}) == ({}, {})
+
+
+def test_an_arm_names_only_a_build_kwarg_or_a_fixture_half():
+    """A build key `build_realm` does not take, or a third half, is refused by name before any world
+    is built (a `TypeError` out of `build_realm` mid-run would name nothing)."""
+    import pytest
+    with pytest.raises(ValueError):
+        oracle._resolve_arm({"build": {"seed": 3}})
+    with pytest.raises(ValueError):
+        oracle._resolve_arm({"fixture": {"field_casualty_model": "total"}})
+    with pytest.raises(ValueError):
+        oracle._resolve_arm(7)
+    assert set(oracle.BUILD_KWARGS) == {"goals", "goals_complete", "foreign", "guards", "cap",
+                                        "from_roster"}
+
+
+def test_the_shipped_arms_still_resolve_through_the_string_form():
+    """`ARMS`, `main` and `two_proportion_z` are untouched: every shipped arm value is a `str` and
+    resolves to the one fixture it always swept."""
+    for model in oracle.ARMS.values():
+        assert isinstance(model, str)
+        assert oracle._resolve_arm(model) == ({"field_casualty_model": model}, {})
