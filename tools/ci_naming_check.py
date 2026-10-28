@@ -110,7 +110,7 @@ EXCLUDE = (
     'engine/engine_params/names.json',
     # 'engine/params/bg/institutions.md' RETIRED 2026-08-12 (plan step G2,
     # ED-IN-0159 §1.6) — engine/params/ was EVACUATED 2026-08-05 (ED-IN-0145), so
-    # the exclusion excluded nothing. The comment below PREDICTED this exact
+    # the exclusion excluded nothing. The comment that stood below it PREDICTED this exact
     # retirement ("when engine/params/ evacuates, this entry and the one above go
     # with it") and was then not acted on for a week; that is the §1.6 pattern in
     # miniature, and it is why the recurrence guard matters more than the cut.

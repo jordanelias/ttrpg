@@ -34,9 +34,9 @@ tools/observability/review_state_data.js
 # the single owner of the build ORDER (key_graph -> engine_atlas/contract_index), because two of
 # these builders read another's output.
 #
-# ⚠ NOT UNTRACKED, AND DO NOT ADD THEM: `engine/engine_params/*.json`. Those are RUNTIME INPUTS —
-# `engine/substrate/descriptors.py`, `composition.py` and `names.py` read them at import, so an
-# untracked clone would not start. (`params_tables.yaml` had no runtime reader and was retired.)
+# ⚠ NOT UNTRACKED, AND DO NOT ADD THEM: `engine/engine_params/*.json`. Three of them are RUNTIME
+# INPUTS — `engine/substrate/descriptors.py`, `composition.py` and `names.py` read those at import,
+# so an untracked clone would not start. (`params_tables.yaml` had no runtime reader and was retired.)
 systems/*/_identifier_census.yaml
 references/identifier_census.json
 references/key_graph.json

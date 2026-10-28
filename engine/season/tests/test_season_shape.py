@@ -1643,8 +1643,8 @@ def _run(module: str):
 
 # ── THE W15 PAIR IS SERIALIZED (ED-IN-0260's deferred fix, taken 2026-09-22) ───────────────
 # `test_w15_the_run_cases_entrypoint_writes_nothing` fingerprints this package with MTIME, and
-# `test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte` WRITES every file under
-# `runs/` by executing the emitter — twice, because its `finally` puts the committed bytes back
+# `test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte` WRITES `runs/results.json`
+# (the one tracked file there) by executing the emitter — twice, because its `finally` puts the committed bytes back
 # and a restore is itself a write. On separate xdist workers the two straddle each other and the
 # fingerprinting one reports a write that is its sibling's.
 #
