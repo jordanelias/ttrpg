@@ -1545,8 +1545,9 @@ def hunger(w: World, rung_id: str, draw: Optional[dict] = None) -> tuple:
 
       * `unmet` = D − G, in UNITS (not a share): what the draw leaves unfed under S. It is NOT
         `census`'s `eaters_short`, which COUNTS the persons short in the LAST MATTER's record
-        (`World._subsistence_shortfall`). `census` passes no draw, so the `unmet` it reads is the NEXT
-        draw's (at build `eaters_short` is 0 while every populated settlement reads `starving`).
+        (`World._subsistence_shortfall`). `census` reads the NEXT draw (`subsistence_draw`, taken once
+        for all its settlements), so the `unmet` it reports is the NEXT draw's (at build `eaters_short`
+        is 0 while every populated settlement reads `starving`).
       * `cover` = A / D, an exact `fractions.Fraction`: SEASONS OF FOOD ON HAND ("cover" is this
         Query's coinage and means only that ratio). `Fraction(0)` when D = 0. A `Fraction` and not the
         `(A, D)` pair `density` returns, because the pair cannot say "0" for D = 0 and a `Fraction`
@@ -1603,6 +1604,8 @@ def hunger(w: World, rung_id: str, draw: Optional[dict] = None) -> tuple:
                   f"(one floor per band of {HUNGER_FLOOR_BANDS}; H-242's sweep is () / (1, 2) / (2, 4))",
             law="a band is the first floor the stores fall under; an unsorted or fractional floor "
                 "list labels the wrong band")
+    if draw is None:        # one walk of the ladder, not one in `demanded` and another in `delivered`
+        draw = subsistence_draw(w)
     need = demanded(w, rung_id, draw)
     D, G = sum(need.values()), sum(delivered(w, rung_id, draw).values())
     A = sum(v for rid in _subtree(w, rung_id) if rid in w.rungs
