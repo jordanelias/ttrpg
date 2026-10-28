@@ -105,7 +105,6 @@ AUTHORED_PARSERS = {
     'module_contracts.yaml': {'tools/export_composition.py',
                               'tools/build_engine_atlas.py',
                               'tools/ci_quantity_vocabulary_check.py',
-                              'tools/evacuation_plan.py',
                               'tools/m1_acceptance.py'},
 }
 
