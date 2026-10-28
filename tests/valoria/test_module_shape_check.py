@@ -1,4 +1,4 @@
-"""Unit tests for tools/ci_module_shape_check.py (ED-1085) — the container/shape hygiene
+"""Unit tests for tools/ci_module_shape_check.py (ED-1085) — the module-shape hygiene
 guard. Synthetic-tree cases: each writes a tiny runtime layout into tmp_path and points the
 checker at it, so the rules are tested independent of the live repo's state."""
 import os

@@ -1,6 +1,6 @@
 # THE SEASON LOOP — AN **EXECUTABLE** HOLONIC ARCHITECTURE
 
-## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/`.**
+## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302): *container* means a playable module scene and *rung* is the world side (a *container* left in a quotation or a field name predates this); the presentation shell is `game/`, not `port/`.**
 ## Under `CLAUDE.md` §0.05 this document is **REFERENCE, never mechanism.** Under §0.2 **nothing in
 ## it runs.** Part X says what would make each claim done and which steps cannot be satisfied by writing.
 
@@ -50,7 +50,7 @@ Specifically inherited, and **not** re-argued here:
 | **`causes[]` required and non-empty, `[ROOT]` for antecedent-free** | §19.4 | `A1`, `A2`, `A28` |
 | **One log, not two** | §19.5 | `A29` |
 | **The seam: one resolver, one degree ladder, demote-only veto, caller-supplied `max_depth`** | §39 | `A8` |
-| **No per-container clock** | §40.3 | `A16` |
+| **No per-rung clock** | §40.3 | `A16` |
 | **Fixed point, determinism, the content hash** | §32, §33, §48 | `A4`, `A5` — with a control that fires |
 | **The whole of Part VIII's refusals** | Part VIII | see §0.4 |
 | **The Godot port, the autoload rule, the version floor ≥ 4.4** | Part VI | `A35` |

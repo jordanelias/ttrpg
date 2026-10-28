@@ -25,7 +25,7 @@ rebound value re-exported is a stale snapshot, and a reader who rebinds the pack
 would silently miss the reader.
 
 AX-2 binds every file under `decision/`: no `World`, as an import, a name, an attribute or a
-string. Enforced BY PATH over this directory (`04:1046`).
+string. Enforced BY PATH over this directory (`04 §E.1`).
 """
 
 from __future__ import annotations
@@ -343,7 +343,7 @@ def _sample_order(ranked: list, score, p: Person, fx: "Fixtures", draw) -> list:
     every tick by `season()`"*), and `harness/probes.py`'s own header argues the general case — *"A
     CONTENT-DERIVED draw was the second attempt and it collides whenever two draws in one tick are
     alike."* It is NOT used here for two reasons, both structural: it is a method on `World`, which
-    `AX-2` bars from `decision/` by path (`04:1046`), and an ORDINAL would destroy the
+    `AX-2` bars from `decision/` by path (`04 §E.1`), and an ORDINAL would destroy the
     candidate-keyed replay this function depends on — the noise must be a property of the candidate,
     not of the order it was reached in. Recorded here because a declaration that a mechanism is
     missing, made without naming the adjacent one, is the defect this lane keeps finding."""

@@ -2421,8 +2421,8 @@ rosters:
       played as an interface over the world (governance, faction management, the character sheet).
       `world_surface` -- where the player meets NPCs and events: DELIBERATE's player mode, unbuilt.
       `loop_resident` -- computation that runs inside the season loop's own steps. `data_register` --
-      a centralized register of information the loop reads, not a module. `host` -- the season loop's
-      own work, never a module. `stub` -- not a system of gameplay, kept so its name still resolves.
+      a module that is a centralized register of information the loop reads. `host` -- a module of the season
+      loop itself, not one registered into it. `stub` -- not a system of gameplay, kept so its name still resolves.
     values: [minigame, management_space, world_surface, loop_resident, data_register, host, stub]
 
   modules:

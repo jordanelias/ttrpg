@@ -6,7 +6,7 @@ is a `decision/` member whose output `choose` reads, exactly as a `decision/` fi
 column licenses.
 
 AX-2 binds every file under `decision/`: no `World`, as an import, a name, an attribute or a
-string. Enforced BY PATH over this directory (`04:1046`).
+string. Enforced BY PATH over this directory (`04 §E.1`).
 """
 
 from __future__ import annotations

@@ -1,6 +1,6 @@
 # META-ARCHITECTURE — STAGE 3 · VERBS, CONSEQUENCES, SLICES, SEASON LOOPS
 
-## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/`.**
+## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302): *container* means a playable module scene and *rung* is the world side (a *container* left in a quotation or a field name predates this); the presentation shell is `game/`, not `port/`.**
 ## Derives from `01_AXIOMS.md` and `02_HIERARCHIES.md`. Sources: those, and the PR chain #337 → #357.
 ## Top-down. **Nothing here runs and nothing here is meant to.**
 
@@ -203,12 +203,12 @@ moving one.
 > **Two bodies do not partition: the ordered fold, which needs ONE order, and the witness fan-out,
 > which is one pass over presence.**
 
-⚠ **Do not shard either.** A per-container fold has no order to fold in, and a sharded fan-out is
+⚠ **Do not shard either.** A per-rung fold has no order to fold in, and a sharded fan-out is
 what made an earlier loop's parallelism claim **unsound rather than merely unproven.**
 
-## §D.4 · No container gets a clock — from Stage 2, not from the barriers
+## §D.4 · No rung gets a clock — from Stage 2, not from the barriers
 
-By §B.2 of Stage 2, **process-nesting requires a caller-supplied cap.** A container that schedules
+By §B.2 of Stage 2, **process-nesting requires a caller-supplied cap.** A rung that schedules
 itself has no caller, so it is precisely the unbounded form the seam refused, arriving without the
 argument that made the seam safe.
 

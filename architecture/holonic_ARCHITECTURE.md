@@ -1,6 +1,6 @@
 # THE SEASON LOOP — A HOLONIC ARCHITECTURE, AND THE GUIDE TO BUILDING IT IN GODOT
 
-## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone.**
+## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302): *container* means a playable module scene and *rung* is the world side (a *container* left in a quotation or a field name predates this); the presentation shell is `game/`, not `port/`.**
 ## Under `CLAUDE.md` §0.05 this document is **REFERENCE, never mechanism.** Under §0.2 **nothing in it
 ## runs.** Part X says what would make each claim done and which steps cannot be satisfied by writing.
 
@@ -40,8 +40,8 @@ readable.
 |---|---|---|---|
 | **1** | **The missing object is a WRAPPER** that owns R-1/R-2 and checks that every Key crossing a rung boundary is an aggregate (up) or a refraction (down) | ⛔ **RETRACTED IN FULL.** The head has **no targeted module emission to check.** `Event` carries no target and no actor; up is a person's `carry` act, down is a person's `tell` act. The head's own adversarial pass: *"the only transport the suite defines **is** a chain of `tell` acts… there is no non-act news transport anywhere in the shape."* The rule was stated over a field that does not exist | B, C, D — **independently** |
 | **2** | The rule's direction model | ⛔ **RETRACTED.** The head explicitly refuses it: a Dispensation *"travels by being noticed, **not down a chain of posts**"* and *"**scope enumerates EXECUTORS, not places**"*; a cluster's venue `container` **may be NONE**; Offices may have `rung? = null` — *"A Dicastery, a chivalric order and a trans-settlement guild have no containment node"* | B, C |
-| **3** | **Two of six steps** partition per container (MATTER, DELIBERATE) | ⛔ **RETRACTED.** Two different tests were applied to two groups of steps. The honest frame is **per-owner**, and under it every step's *body* partitions except two. §31 | B, C |
-| **4** | Per-container clocks delete the only within-tick bound (the four barriers) | ⚠ **RE-GROUNDED.** The conclusion stands; the ground was wrong and self-contradictory — §4.3 said barriers bound within-tick propagation while §7 said *"a spiral inside one tick is still unbounded."* The head **already permits within-tick reaction** (a nested contest re-runs DELIBERATE inside RESOLVE) and bounds it by **`max_depth`, not by barriers.** §40 | C |
+| **3** | **Two of six steps** partition per rung (MATTER, DELIBERATE) | ⛔ **RETRACTED.** Two different tests were applied to two groups of steps. The honest frame is **per-owner**, and under it every step's *body* partitions except two. §31 | B, C |
+| **4** | Per-rung clocks delete the only within-tick bound (the four barriers) | ⚠ **RE-GROUNDED.** The conclusion stands; the ground was wrong and self-contradictory — §4.3 said barriers bound within-tick propagation while §7 said *"a spiral inside one tick is still unbounded."* The head **already permits within-tick reaction** (a nested contest re-runs DELIBERATE inside RESOLVE) and bounds it by **`max_depth`, not by barriers.** §40 | C |
 | **5** | The act budget is *"the head's own unpriced reversal… Jordan's call, not mine"* | ⛔ **RETRACTED — it is RULED, in chain.** `02_SCENE_BUDGET_RULING.md` (#351): *"**THE ACT BUDGET IS ~5, NOT 1.** Verbatim: 'please note for the ideal proposal that i expect a character to get ~5 playable scenes per season, which may mean that they get ~5 actions.'"* **#351 §4.2 and #352 §6 both missed this file too.** What is genuinely open is narrower: whether a scene equals an act. §26.3 | A |
 | **6** | The census holds **24** items, 20 unverified | ⛔ **CORRECTED to 27 and 23.** The document enumerated 27 and totalled 24 | A |
 | **7** | Jordan's twelve trajectories: *"eleven of twelve work"* | ⛔ **RETRACTED — the source says FIVE.** *"Recomputed rather than adjusted: **FIVE OF TWELVE WORK TODAY**"* | A |
@@ -55,7 +55,7 @@ readable.
 
 > ### **WHAT SURVIVED, AND IT IS THE THESIS**
 > **The season loop in the head is already holonic. It never uses the word.** R-1, R-2, T5 and T6
-> are the container rules; `Rung` is the container, one type at eight scales; `contain` is an edge.
+> are the rung rules; `Rung` is the holon, one type at eight scales; `contain` is an edge.
 > **What is missing is not a wrapper. It is the `Event` record** — the object every other missing
 > piece is stated over. §19.
 
@@ -81,7 +81,9 @@ Terms are ordinary words wherever an ordinary word exists (`CLAUDE.md` §4). Coi
 | term | definition |
 |---|---|
 | **carrier** | an identity-bearing, mutable object. There are five: `Person`, `Rung`, `Office`, `Site`, `Record` |
-| **rung** ⊕ | a container in the containment ladder. One type, eight `kind`s. Named `Rung` because [engine] `Node` and `Container` are both Godot built-ins and `class_name` collides |
+| **rung** ⊕ | a holon in the containment ladder. One type, eight `kind`s. Named `Rung` because [engine] `Node` and `Container` are both Godot built-ins and `class_name` collides |
+| **container** | a playable module scene: a minigame or management space the player can also play (`engine/season/rosters.yaml` `module_kinds`; ED-IN-0285; ED-IN-0302). **Never a `Rung`.** In Godot a scene (`PackedScene`); Godot's own `Container` is an unrelated UI layout class |
+| **module** | the unit of work: one provider, one owned-state set, one declared I/O (§41.1). Say which kind when it matters: a **host module** (part of the season loop: `04` §A.2) or a **registered module** (`modules/<name>/`, attached by a composition row, §43); a `module_kinds` kind says what a registered module is for |
 | **holon** | a thing that is at once a whole and a part. Every `Rung` is one |
 | **tenure** | the one edge type. Seven kinds. Carries `since`, optional `until` |
 | **act** | what a person does. Produced by `choose`, consumed by `resolve` |
@@ -196,7 +198,7 @@ the counter to COMPEL SOMEONE TO ACT.**
 
 ## §4 · The two module rules — the holonic core
 
-These two sentences are the container contract. **They are stated once in the chain, applied once
+These two sentences are the rung contract. **They are stated once in the chain, applied once
 more, and owned by nothing** — which is the gap §44 is about.
 
 > **R-1.** *"A rung may read its own state and any message addressed to it. It may **not** read a
@@ -226,9 +228,9 @@ answer.
 
 | | claim | verdict |
 |---|---|---|
-| **H1 · STRUCTURE** | one uniform container type at every scale; the ladder is data, not a type tree | **TRUE, and it is the design's best structural property.** §35 |
+| **H1 · STRUCTURE** | one uniform rung type at every scale; the ladder is data, not a type tree | **TRUE, and it is the design's best structural property.** §35 |
 | **H2 · CONTRACTS** | every module declares its I/O against one descent a reader can walk | **THE WORK.** Part V |
-| **H3 · EXECUTION** | each container runs its own slice of the loop, self-sustaining | **PARTIALLY, and not the way it sounds.** Containers partition a step's *body*; the *boundary* is always global; **no container gets a clock.** §31, §40 |
+| **H3 · EXECUTION** | each rung runs its own slice of the loop, self-sustaining | **PARTIALLY, and not the way it sounds.** Rungs partition a step's *body*; the *boundary* is always global; **no rung gets a clock.** §31, §40 |
 
 **The context argument, stated precisely because it is the reason to care:**
 
@@ -389,13 +391,13 @@ Query. **This is the row the whole ownership table exists to protect.**
 
 > **The `Rung` of kind `person` is the ADDRESS SLOT, and the `Person` is who stands in it.**
 
-**Generalise that sentence to all eight kinds and you have the container rule:** a rung is *where* a
+**Generalise that sentence to all eight kinds and you have the rung rule:** a rung is *where* a
 decision happens; a person is *who* makes it. A rung owns `matter`, `dates[]`, `stake[]`, `envelope`,
 `judging_set_rule` — **arrangements, not choices.**
 
 ⚠ **One caveat, stated because building on it would be building on a hole:** `judging_set_rule` is
 **unspecified** (§62). If it turns out to select *who decides*, it is decision-shaped state on a
-container and the sentence above needs a third term. Do not cite it as evidence that rungs own only
+rung and the sentence above needs a third term. Do not cite it as evidence that rungs own only
 arrangements until it is specified.
 
 ### §10.3 `envelope` is matter and does not act
@@ -896,7 +898,7 @@ language has no module system and no visibility modifiers. §53.
 
 ### §26.2 The world is frozen from the end of MATTER to the start of RESOLVE
 
-**This is what makes the map safe to parallelise**, and it is the property a per-container clock
+**This is what makes the map safe to parallelise**, and it is the property a per-rung clock
 would destroy (§40).
 
 ### §26.3 The act budget is ~5, and it is RULED
@@ -1069,10 +1071,10 @@ actual mutation happens beside it is worse than no gate: the logged value and th
 diverge, and *"enforced by construction"* becomes false while looking true. **Either the gate applies
 the write, or direct assignment is made impossible.**
 
-## §31 · The per-owner partition — which steps a container may run
+## §31 · The per-owner partition — which steps a rung may run
 
 ⚠ **THIS SECTION REPLACES A RETRACTED CLAIM** (§0.2 finding 3). The first revision said "two of six
-steps partition per container" and reached it by applying two different tests to two groups of steps.
+steps partition per rung" and reached it by applying two different tests to two groups of steps.
 
 **The correct frame is per-OWNER, not per-rung**, and the criterion is uniform: *a step's body
 partitions by the single owner of what it writes; its boundary is always global.*
@@ -1082,7 +1084,7 @@ partitions by the single owner of what it writes; its boundary is always global.
 | **CALENDAR** | **the date-holder** (a Rung *or* an Office, which may have `rung? = null`) | boundary only | writes `dates`/`dockets` owned by one holder; its predicate reads own + R-1 subtree + calendar |
 | **MATTER** | **the Site, the body, the larder's Rung** | boundary only, **with three exceptions** | §31.1 |
 | **DELIBERATE** | **the person** | **not a barrier at all** | pure map |
-| **RESOLVE** | ⛔ **does not partition** | **GLOBAL BODY** | the ordered fold needs **one** order; a per-container fold has none |
+| **RESOLVE** | ⛔ **does not partition** | **GLOBAL BODY** | the ordered fold needs **one** order; a per-rung fold has none |
 | **WITNESS** | stage 1 ⛔ **global**; stage 2 **per person** | **stage 1 is a GLOBAL BODY** | fan-out is one pass over the presence index |
 | **CENSUS** | **the Person or the Rung written** | boundary only | needs one snapshot, like DELIBERATE |
 
@@ -1115,14 +1117,14 @@ ownership row (§22.3), and they move a person **between** rungs.
 
 ## §32 · Order independence, and exactly what it rests on
 
-**Five things. Four survive any partition; the first is the one a container clock would destroy.**
+**Five things. Four survive any partition; the first is the one a rung clock would destroy.**
 
 1. **The world is frozen** from the end of MATTER to the start of RESOLVE.
 2. **No shared allocator.** Ids come from `H(world_seed, tick, subject_id, purpose)`. **There is no id
    service, no counter, and nothing to serialise on.**
 3. **The act array is canonicalized before resolution** — sorted by a content-derived key, never by
-   completion order. ⚠ Note this sorts **one global array**; per container the sort survives only per
-   container, which is exactly why RESOLVE does not partition (§31).
+   completion order. ⚠ Note this sorts **one global array**; per rung the sort survives only per
+   rung, which is exactly why RESOLVE does not partition (§31).
 4. **Sum-then-clamp-once.**
 5. ⚠ **FIXED-POINT ARITHMETIC.**
 
@@ -1191,7 +1193,7 @@ column is the failure mode.**
 
 ## §34.1 · What the loop deliberately does NOT contain
 
-- **No phase in which a container decides.** Every decision has a person's id on it.
+- **No phase in which a rung decides.** Every decision has a person's id on it.
 - **No phase in which an off-board polity acts without a person.** Off-board pressure enters as an
   **Event**, which is why it needs no phase of its own.
 - **No reaction inside a season at person scale.** *"You anticipated, or you are late."*
@@ -1422,7 +1424,7 @@ an amendment to the one owner — made once, in that file, never a parallel enum
 ⚠ **A five-band ladder exists in the corpus and the owner implements four. A five-band ladder is an
 amendment to the one owner, made once. Two ladders is the failure this seam exists to prevent.**
 
-## §40 · Termination, and why no container gets a clock
+## §40 · Termination, and why no rung gets a clock
 
 ⚠ **THIS SECTION IS RE-GROUNDED** (§0.2 finding 4). The first revision argued from the barriers and
 contradicted itself two sections later.
@@ -1447,21 +1449,21 @@ bounded one, and the bound is the cap.** §62.
 
 ### §40.3 So why no clock?
 
-**Because a per-container clock is a NESTING FORM WITHOUT A CAP ARGUMENT.**
+**Because a per-rung clock is a NESTING FORM WITHOUT A CAP ARGUMENT.**
 
 The design's existing rule for nesting forms is a **required, caller-supplied depth cap with no
 default**, because a default is a fabricated constant and because [engine] exceeding depth crashes.
-**A container that schedules itself has no `depth`, no `max_depth`, and no caller to supply one** —
+**A rung that schedules itself has no `depth`, no `max_depth`, and no caller to supply one** —
 it is precisely the unbounded form the seam refused, arriving without the argument that made the seam
 safe.
 
 **Three further costs, each independent:**
 
-1. **The frozen world is void.** With no shared tick, a `choose` in container A reads a world
-   container B's MATTER has already moved (§32 rest 1). **L2 does not catch this** — the person is not
+1. **The frozen world is void.** With no shared tick, a `choose` in rung A reads a world
+   rung B's MATTER has already moved (§32 rest 1). **L2 does not catch this** — the person is not
    omniscient, they are reading a world at an *undeclared time*.
-2. **The canonical act order is void.** RESOLVE's fold sorts **one global array**; per container the
-   sort survives only per container, and there is no global order to fold in (§31).
+2. **The canonical act order is void.** RESOLVE's fold sorts **one global array**; per rung the
+   sort survives only per rung, and there is no global order to fold in (§31).
 3. **`causes[]` can no longer be totally ordered by season index**, breaking a log invariant.
 
 > ### **AND THE PARALLELISM A CLOCK WOULD BUY IS ALREADY AVAILABLE WITHOUT ONE.**
@@ -1497,7 +1499,7 @@ GAME
 
 | edge | what knowing the parent tells you |
 |---|---|
-| **game → module** | the complete set of units. There is no intermediate container, because the two candidates are axes |
+| **game → module** | the complete set of units. There is no intermediate level, because the two candidates are axes |
 | **module → declared edge** | **the module's complete I/O surface** — the level a developer reads to work one module without reading the world |
 | **declared edge → field** | what a value means and what bounds it |
 
@@ -1681,7 +1683,7 @@ and (b) **injects a declared, demote-only extension** into the one resolver (§3
 | never | why |
 |---|---|
 | **holds state** | it becomes a second owner of a value §22 already assigns — the read/write asymmetry hazard by construction |
-| **decides** | *"No phase in which a container decides"*; L1 |
+| **decides** | *"No phase in which a rung decides"*; L1 |
 | **resolves** | *"a contest is `resolve` at a smaller scale, not a different function"* — a wrapper that computes an outcome **is** the second resolver |
 | **drives a clock** | §40.3 |
 
@@ -1957,8 +1959,8 @@ out by a declared narrowing** (*the three deferred subsystems are out of scope e
 
 | refused | why | what pays |
 |---|---|---|
-| **a per-container clock** | §40.3 — a nesting form with no cap argument; voids the frozen world, the canonical order, and a log invariant | **nothing.** The DELIBERATE map is already parallel at Godot 4.0 |
-| **a container that decides** | §34.1; L1 | nothing — every decision a rung "wants" belongs to a person standing in it |
+| **a per-rung clock** | §40.3 — a nesting form with no cap argument; voids the frozen world, the canonical order, and a log invariant | **nothing.** The DELIBERATE map is already parallel at Godot 4.0 |
+| **a rung that decides** | §34.1; L1 | nothing — every decision a rung "wants" belongs to a person standing in it |
 | **a second resolver, an auto-resolve formula, a fast path** | §27.2 | nothing measured — the seam covers battle, hearing, committee, and two brothers over a barn |
 | **a per-subsystem or per-scale key family** | §39.2's fourth leak | nothing — a subsystem varies by a **declared extension** (§39.4) |
 | **a general wrapper layer** | §44.1 — three independent lanes; there is no targeted emission to check | nothing. **The seam's injector survives and is the whole of it** |
@@ -2046,7 +2048,7 @@ claim below carries the test that would show it wrong.
 | §26.3 · **the budget is ruled at ~5** | the ruling file saying otherwise. **Checked: it says `~5, NOT 1`, verbatim** |
 | §31 · **the per-owner partition** | a step whose body cannot be partitioned by the owner of what it writes and is not RESOLVE's fold or WITNESS's fan-out — **or a fourth MATTER cross-owner operation beyond the three named** |
 | §32 · **fixed point is required, not preferred** | a band gate whose comparison cannot observe a one-ulp difference |
-| §40.3 · **a clock buys nothing** | a per-container scheme that keeps the frozen world, the canonical order and the season-index invariant **without** a shared tick |
+| §40.3 · **a clock buys nothing** | a per-rung scheme that keeps the frozen world, the canonical order and the season-index invariant **without** a shared tick |
 | §41 · **the spine is three levels below GAME** | a fourth relation that is genuinely containment rather than an index |
 | §41.4 · **`phase:` is worth one check** | show the store-API write-class parameter cannot do the first check per site |
 | §44.1 · **the wrapper is void** | show the head already stops a module emitting past its parent — **if it does, §44 is right for a second reason** |

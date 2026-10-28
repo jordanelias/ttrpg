@@ -1,6 +1,6 @@
 # THE META-ARCHITECTURE — STAGE 1 · AXIOMS, IDIOMS, SCHEMA
 
-## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/`.**
+## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302): *container* means a playable module scene and *rung* is the world side (a *container* left in a quotation or a field name predates this); the presentation shell is `game/`, not `port/`.**
 ## Scope: Jordan-directed, 2026-09-03. A **top-down** exercise to determine the ideal *logical
 ## shape* for future work. **Nothing here is built and nothing here is meant to run.**
 
@@ -74,7 +74,7 @@ than treating the number as the claim.**
 
 ### **AX-1 · ONLY A PERSON ACTS.**
 
-> No institution, no faction, no threshold, no clock, no container, and no engine is ever the
+> No institution, no faction, no threshold, no clock, no rung, and no engine is ever the
 > subject of a decision. An institution acts *by a named person at a venue*.
 
 **Why it is axiomatic.** Nothing else here implies it. A design could keep every other axiom and
@@ -479,9 +479,9 @@ uncontestable because the holder can never appear at a venue. This document repr
 retraction in §D.5 and still presented the property as free here. **It is a debt, not a dividend** —
 and under `AX-6` it is the same defect as §E.1.2's: a state nobody can end.
 
-### **T-i · No container gets a clock.**
-> **From AX-5** (a container is not on the list) **plus the nesting rule** (a nesting form needs a
-> caller-supplied depth cap; a container that schedules itself has no caller).
+### **T-i · No rung gets a clock.**
+> **From AX-5** (a rung is not on the list) **plus the nesting rule** (a nesting form needs a
+> caller-supplied depth cap; a rung that schedules itself has no caller).
 
 ### **T-j · WITNESS never touches a belief.**
 > **From AX-3.** WITNESS is where evidence lands. Evidence moves what is held true. A belief is what
@@ -897,7 +897,7 @@ chain. **A schema claim about what code reads must ship the way to re-run it.**
 
 > **IS.** *Where* a decision happens. A Rung owns **arrangements**; a Person makes **choices**. The
 > `person` kind is the address slot and the `Person` is who stands in it — and that sentence
-> generalises to all eight kinds, which is the container rule.
+> generalises to all eight kinds, which is the rung rule.
 >
 > **OWNS.** Matter (stores, its Sites, its Records, the transmission pointer), dates, envelope, and
 > ⚠ `stake` — **which the chain RETIRED as a dead row**, along with `Site.drawers`, `Person.marks`
@@ -920,7 +920,7 @@ gap, not a schema question. **The original wording is kept below because its rea
 produced the deletion.**
 
 ⚠ **`judging_set_rule` IS THE LIVE THREAT TO THIS PREDICATE AND IT IS UNSPECIFIED.** If it selects
-*who decides*, it is decision-shaped state on a container, and either the predicate needs a third
+*who decides*, it is decision-shaped state on a rung, and either the predicate needs a third
 term or the field belongs elsewhere. **Do not cite "arrangements, not choices" as settled until it
 is specified** — and note that this is the same hole (`H-32`, `D11`) that means *nothing is decided
 at a sitting*.
@@ -1491,7 +1491,7 @@ pointer by `§E.1.5` (*there are no institutional relations*).
 | `Provincial Authority = controller(province.seat)`, issuing a Directive to **every** settlement in the province (`03-design-v2.md:353`) | in a fractured province — that design's own central case — **the seat-holder commands a rival's governor**, who accrues suspicion toward, and is recalled by, a faction they do not serve |
 | `Accord(p) = 0 → holder := ∅ for every member`, computed over all members (`:361`) | **one faction's two ruined settlements strip a rival's well-governed one** |
 
-> ### **BOTH ARE ONE MISTAKE — TREATING THE GEOGRAPHIC CONTAINER AS THE CHAIN OF COMMAND — AND BOTH
+> ### **BOTH ARE ONE MISTAKE — TREATING THE GEOGRAPHIC RUNG AS THE CHAIN OF COMMAND — AND BOTH
 > ### DISAPPEAR THE MOMENT AUTHORITY IS ASKED OF THE SEAT RATHER THAN OF THE PLACE.**
 > That is §E.2.4's *purview must be asked of the SEAT being exercised, not of the actor*, and Stage 2
 > `§A.1`'s containment/subordination split — **arriving as two bugs instead of as a derivation.**

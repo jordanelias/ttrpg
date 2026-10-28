@@ -1,6 +1,6 @@
 # META-ARCHITECTURE — STAGE 2 · HIERARCHIES, DEPENDENCIES, NESTS, SCALES
 
-## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/`.**
+## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302): *container* means a playable module scene and *rung* is the world side (a *container* left in a quotation or a field name predates this); the presentation shell is `game/`, not `port/`.**
 ## Derives from `01_AXIOMS.md`. Sources: the axioms, and the PR chain #337 → #357. **Nothing else.**
 ## Top-down. **Nothing here runs and nothing here is meant to.**
 
@@ -72,20 +72,20 @@ immediately breaks.
 | candidate | nests? | why |
 |---|---|---|
 | place in place | **yes** | single parent, walkable, finite by roster |
-| faction under faction | **no** | a person's edges; many at once; spans places freely. ⚠ **But see §B.1.1 — *not a nesting* is not the same as *not a container*** |
+| faction under faction | **no** | a person's edges; many at once; spans places freely. ⚠ **But see §B.1.1 — *not a nesting* is not the same as *not a view*** |
 | office under office | **no** | same relation, same reason (§A.3) |
 | rank under rank | **no** | an ordering has no parent |
 | **a contest inside a season** | **YES — and it is the other kind** | §B.2 |
 
-### §B.1.1 · ⚠ A container for READING is not a nesting — added 2026-09-03
+### §B.1.1 · ⚠ A view for READING is not a nesting — added 2026-09-03
 
 Jordan: *"Factions could also be a container for people and holdings."* **Both halves are true and
-they are not in tension, because they answer different questions.**
+they are not in tension, because they answer different questions.** ⚠ *(2026-10-28, ED-IN-0302: "container" now means a playable module scene; Jordan's word here means a **view**.)*
 
 | | |
 |---|---|
 | **NESTING** — asked of the containment tree | **no.** A person commits to several factions at once, so single-parent fails and *aggregate over my descendants* stops being well-defined |
-| **CONTAINER** — asked of what code may hold | **yes**, as a resolved view (Stage 1 §D.11): members, holdings, seats, resolved at a barrier and owning nothing |
+| **VIEW** — asked of what code may hold | **yes**, as a resolved view (Stage 1 §D.11): members, holdings, seats, resolved at a barrier and owning nothing |
 
 > **The stored version is what breaks things, and precisely because it would be a second home.**
 > Membership written on the faction disagrees with the `commit` edges the moment either moves. **The
@@ -112,15 +112,15 @@ cited later as though somebody had. **The cap is the caller's, always** — and 
 typed refusal rather than raising, because a refusal is an outcome the fiction can carry and a crash
 is not.
 
-## §B.3 · What a container may do, stated as one contract
+## §B.3 · What a rung may do, stated as one contract
 
 Two rules, and they are the whole holonic core:
 
-> **A container reads its own state and any message addressed to it. It may compute an aggregate over
+> **A rung reads its own state and any message addressed to it. It may compute an aggregate over
 > its descendants ON DEMAND; it may not receive a pushed one, and it may not store one.**
 >
-> **A container writes only its own state. Upward influence is emitting an aggregate; downward
-> influence is emitting a refraction. No container reaches through another.**
+> **A rung writes only its own state. Upward influence is emitting an aggregate; downward
+> influence is emitting a refraction. No rung reaches through another.**
 
 **Why the middle of the ladder dies without this:** once the realm can read a person directly, no
 intermediate rung has a reason to exist and every one becomes decoration. **The prohibition is not
@@ -204,7 +204,7 @@ is written in two steps; scale is §C.3.
 > ### **A MODULE MAY WRITE ONLY WHAT IT OWNS, READ ITS OWN AND AN AGGREGATE OVER ITS DESCENDANTS, AND MUST NOT REACH THROUGH ANOTHER.**
 
 **That is `AX-4` applied to code rather than to state**, and it is the same sentence as §B.3's second
-rule with *container* replaced by *module*. **The unification is the point: one ownership rule,
+rule with *rung* replaced by *module*. **The unification is the point: one ownership rule,
 stated once, holding at both the world level and the code level.**
 
 ## §D.4 · Resolution by declaration, not by import
@@ -239,7 +239,7 @@ that cites itself.
 2. **Only places nest; process nests separately and needs a cap.** The season loop's one nesting
    point is the contest, and it is bounded by the caller.
 3. **Scale is derived, and code branches on the ordinal or the relation, never on the member.**
-4. **One ownership rule at both levels** — §B.3's container contract and §D.3's module contract are
+4. **One ownership rule at both levels** — §B.3's rung contract and §D.3's module contract are
    the same sentence, which is why `AX-4` is the most productive axiom in the set.
 5. **The subordination graph has no root**, so any mechanism that needs one has smuggled an
    institution back in.

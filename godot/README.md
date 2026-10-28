@@ -7,8 +7,9 @@ state-of-the-bridge (the conversion is **PROPOSED and largely un-executed**). Ol
 `references/restructure_ledger.md`.
 
 **Contents:**
-- `godot_conversion_strategy_v1.md` — **the governing spec** (status **PROPOSED**, Jordan-vetoable
-  throughout; the Part-VIII `[OPEN — Jordan]` register is the veto surface). Details below.
+- `godot_conversion_strategy_v1.md` — **the conversion plan** (status **PROPOSED**, Jordan-vetoable
+  throughout; the Part-VIII `[OPEN — Jordan]` register is the veto surface). The season loop's ratified
+  Godot mapping is Layer 1: `architecture/meta/04_CODE_ARCHITECTURE.md` §C.12. Details below.
 - `godot_architecture_specification.md` — the Godot architecture specification (formerly under
   `designs/videogame/`).
 - Four **stale** pre-`d+σ` docs (`scene_tree_architecture.md`, `gm_to_engine_conversion.md`,

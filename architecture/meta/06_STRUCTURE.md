@@ -1,6 +1,6 @@
 # READINGS · 06 — HIERARCHIES, NESTINGS, DEPENDENCIES, STATE CHANGES
 
-## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/`.**
+## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302): *container* means a playable module scene and *rung* is the world side (a *container* left in a quotation or a field name predates this); the presentation shell is `game/`, not `port/`.**
 ## A **reading** of Stages 1–4. ⚠ **If this and a stage disagree, the stage is right.**
 ## Answers: *"How do we structure our design going forward?"*
 
@@ -57,7 +57,7 @@ crash is not.
 > **A module writes only what it owns, reads its own state and an aggregate over its descendants, and
 > never reaches through another.**
 
-**That is the container contract with one noun changed.** One ownership rule governing both the world
+**That is the rung contract with one noun changed.** One ownership rule governing both the world
 and the code is why `AX-4` is the most productive axiom in the set.
 
 **Resolution is a registry row, never an import.** The engine names the ROLE; the registry names the

@@ -351,7 +351,7 @@ says where an old path went. Only what those cannot tell you:
 - **`engine/`** — the executable model (substrate leaf readers, autoload hub, cross-scale, campaign
   driver, `engine/engine_params/` typed exports, `engine/tests/` = CI job `sim-regression`). **It names
   no subsystem by import**: seams resolve through `engine/substrate/composition.py` (`engine/` names a
-  ROLE, `references/module_contracts.yaml` the MODULE). One `sys.path` seam, `substrate/pc_engine.py` into
+  ROLE, `references/module_contracts.yaml` the registered MODULE). One `sys.path` seam, `substrate/pc_engine.py` into
   `modules/combat/`, is in `PATH_SEAM_ALLOWED`, **shrink-only**; the execution artifact is
   `test_importing_every_engine_module_pulls_in_no_subsystem` (subprocess import, matching on FILE PATH).
   ⚠️ **Acyclic is not independence:** the engine still depends on subsystems, resolved by string.
@@ -360,9 +360,9 @@ says where an old path went. Only what those cannot tell you:
   `python -m engine.season.harness.register --requirements` (against `engine/season/requirements.yaml`)
   before citing it as done. `engine/season/hole_register.yaml` is read by the corpus grader, not the
   loop.
-- **`modules/`** — **Layer 2, the game code** the loop reaches by composition row (`composition_roles:` in
-  `references/module_contracts.yaml`), not by import (`combat` alone loads by path, via the seam above). A
-  module takes typed input, returns typed outcome, holds no token, keeps no game state (`04` §A.2; `holonic_ARCHITECTURE.md` §43, §45).
+- **`modules/`** — **Layer 2, the game code**: the registered modules the loop reaches by composition row
+  (`composition_roles:` in `references/module_contracts.yaml`), not by import (`combat` alone loads by path, via
+  the seam above). A registered module takes typed input, returns typed outcome, holds no token, keeps no game state (`04` §A.2; `holonic_ARCHITECTURE.md` §43, §45).
 - **`architecture/`** — **Layer 1.** Reference for game mechanism (§0.05), binding as agent instruction,
   resolving nothing at runtime. Scope: `architecture/meta/04_CODE_ARCHITECTURE.md`'s Status line. Indexes:
   `architecture/00_ADOPTION_README.md`, `architecture/meta/README.md`. Exempt from the size WARNING only.
@@ -444,8 +444,8 @@ the registry still marks IN FLUX.
 **Rule: a port never corrects its oracle in place (ED-1050).** If port and Python oracle disagree, fix
 canon via the ledger and re-export — never hand-edit a value into the `.gd` side.
 
-`godot/godot_conversion_strategy_v1.md` is the governing spec — **PROPOSED, Jordan-vetoable throughout**,
-with an open register and unexecuted Gate-0 preconditions. `references/module_contracts.yaml` shows which
+`godot/godot_conversion_strategy_v1.md` is the conversion plan — **PROPOSED, Jordan-vetoable throughout**,
+with an open register and unexecuted Gate-0 preconditions; the season loop's ratified Godot mapping is `04` §C.12. `references/module_contracts.yaml` shows which
 modules have `doc: null` and which resolvers are `[ASSUMPTION]`-grade; porting beyond the combat slice
 waits on the port gate (B10-20 in the active master workplan, which `CURRENT.md` names). The older
 `godot/` docs predate the `d+σ` model, carry `⚠️ STALE` banners and ship wrong schemas: implement from

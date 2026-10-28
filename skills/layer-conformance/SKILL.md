@@ -30,8 +30,8 @@ description: >
 | what Layer 0 / Layer 1 / Layer 2 are and what each binds | **`CLAUDE.md`'s layer table**, and §0.05 for the prose/mechanism split |
 | when a guard is licensed | **`CLAUDE.md` §0.1 pt 5**, and `references/ci_checks_registry.yaml`'s `subject:` axis for the depth vocabulary |
 | what the code architecture requires | **`architecture/meta/04_CODE_ARCHITECTURE.md`** and the rest of `architecture/` (indexes: `architecture/00_ADOPTION_README.md`, `architecture/meta/README.md`) |
-| what a `modules/<name>/` package must be, and the Godot mapping it ports to | **`04`** §A.2 and §C.12; **`architecture/holonic_ARCHITECTURE.md`** §43 and §45–§47 where `04` is silent |
-| what *holon* means | **`architecture/holonic_ARCHITECTURE.md`** §0.4 |
+| what a registered module (`modules/<name>/`) must be, and the Godot mapping it ports to | **`04`** §A.2 and §C.12; **`architecture/holonic_ARCHITECTURE.md`** §43 and §45–§47 where `04` is silent |
+| what *holon*, *rung*, *container* and *module* mean | **`architecture/holonic_ARCHITECTURE.md`** §0.4; the kinds of registered module: `engine/season/rosters.yaml`'s `module_kinds` |
 | what a juncture being *done* means | **`CLAUDE.md` §0.2** |
 | how a fan-out is run and what makes a critic independent | **`CLAUDE.md` §10** |
 
@@ -129,8 +129,8 @@ the verdict honest.**
 - **Which Layer-1 surface governs this code?** `04`'s Status line names the code it governs
   (`engine/season/` and `modules/<name>/`). Layer 1's files are `ls architecture/ architecture/meta/`;
   `architecture/00_ADOPTION_README.md` and `architecture/meta/README.md` index them, and neither lists
-  every file (`holonic_ARCHITECTURE.md` is in neither). For a `modules/<name>/` package the rows are
-  `04` §A.2 (the seam rows: a module writes nothing and holds no token) and §C.12 (the Godot mapping),
+  every file (`holonic_ARCHITECTURE.md` is in neither). For a registered module (`modules/<name>/`) the rows are
+  `04` §A.2 (the seam rows: a registered module writes nothing and holds no token) and §C.12 (the Godot mapping),
   then `architecture/holonic_ARCHITECTURE.md` §43 (a module is attached by a registry row, never an
   import), §45 (typed input and output records, no `Node`, no state between calls) and §47 (nothing
   under `core/` names an autoload). §44.3 governs the `seam/wrappers/` adapter, not the module. They
@@ -138,14 +138,16 @@ the verdict honest.**
 - **Where holonic and `04` disagree, `04` governs.** `holonic_ARCHITECTURE.md` is #353's
   `ARCHITECTURE.md`, and `04` §A.3 records its differences from that chain with their forcing clauses
   (one `Query` class against two modules, a store parameter against a token). A difference §A.3 does
-  not list is B4's third disposition: name it at the site. One is live: `04` names the presentation
-  shell `port/`; holonic §45 and `rosters.yaml` name it `game/`.
-- **One word, two trees — keep them apart.** In Layer 1, *holon* is the world-model term
-  (`holonic_ARCHITECTURE.md` §0.4: every `Rung` is one), and the wrapper died "on the wrong tree"
-  (§44.1 item 3): the rule quantified over rungs, the wrapper sat at a code level. *Container* has two live senses too: a `Rung`
-  (holonic §40, "no container gets a clock") and a playable module scene (`rosters.yaml`'s
-  `module_kinds`, ED-IN-0285); say which. A finding about module shape cites `04` and §43, §45–§47,
-  never "the holonic doctrine". The older container doctrine
+  not list is B4's third disposition: name it at the site. The presentation shell is `game/` (RULED
+  2026-10-28, ED-IN-0302; `04` §A.2 and §C.12 say so).
+- **Words (RULED 2026-10-28, ED-IN-0302).** *Rung* is the world side, and *holon* its explanatory word
+  (`holonic_ARCHITECTURE.md` §0.4). *Container* is a playable module scene: a registered module of kind
+  `minigame` or `management_space` (`rosters.yaml`'s `module_kinds`, ED-IN-0285), a scene in Godot.
+  *Module* is one ordinary word for a unit of code and takes a descriptor when you narrow it: a **host
+  module** (`04` §A.2) or a **registered module** (`modules/<name>/`); never "a module does X" of one kind.
+  The wrapper died "on the wrong tree" (§44.1 item 3): the rule quantified over rungs, the wrapper sat at a
+  code level. A finding about module shape cites `04` and §43, §45–§47, never "the holonic doctrine". The
+  older wrapper doctrine
   (`holonic_container_doctrine_v1.md`, ED-1083, Key-based) is quarantined in `.designs/` and bannered
   ARCHIVED-NOT-CANON: it is not a standard to grade against. `tools/ci_module_shape_check.py` survives
   as a narrow report-only check (no `tests/` reach-ins or imports in runtime code); its output is

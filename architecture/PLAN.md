@@ -1,6 +1,6 @@
 # THE IMPROVEMENT PLAN — WHAT TO BUILD, IN WHAT ORDER, AND WHAT MAY NOT BE INVENTED WHILE BUILDING IT
 
-## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/`.**
+## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302): *container* means a playable module scene and *rung* is the world side (a *container* left in a quotation or a field name predates this); the presentation shell is `game/`, not `port/`.**
 ## Scope: **PR #337 → now, for evidence AND for answers.** Every closure in Part 3 is made on #353's
 ## own text. §2.6 and W16 record what a tree-wide search returns and **the plan rests on none of it.**
 ## Companion to `ARCHITECTURE_V2.md` (the specification) and `01_NPC_VS_ARC.md` (the split).
@@ -70,7 +70,7 @@ files, and stated its own coverage and its own null results. Its return is the s
 
 Eleven of the fourteen retractions in `V2` §0.3 are upheld outright against #353's text — not a
 sample, all fourteen were checked. The inheritance of L1, L3 clause 1, Part VIII's refusals whole,
-one log, the seam, no per-container clock and fixed point: **uphold.** The honesty tests
+one log, the seam, no per-rung clock and fixed point: **uphold.** The honesty tests
 reproduce; `A31` does sweep 2 · 5 · 9; `shape_rev1.py` does declare the twelve Partition rows the
 first antagonist's finding is about, so the retraction record is verifiable.
 
@@ -1611,7 +1611,7 @@ scale, or `load_cases` refuses them in the grader too and `run_cases.py` loses 4
 are being fixed.
 
 ⚠ **THE `world` HALF: DECIDED HERE, NOT ESCALATED — the first draft did both and they contradict.**
-By §0 test 5: a `world`-scale case is instantiated as ≥2 realm Rungs under a shared container,
+By §0 test 5: a `world`-scale case is instantiated as ≥2 realm Rungs under a shared parent rung,
 because `rung_kinds` has eight members, no in-chain text defines `world`, and re-scaling is the only
 move that makes the 10 cases representable at all. Recorded on `H-95` and **removed from §9.0's
 escalation list**. Jordan may overturn it; that is a ruling, not an open question this plan waits on.
@@ -1986,7 +1986,7 @@ Two core rows — `EMG-C2`'s *"campaign-wide **institutional threat value**"* an
 - **Do not add a `target` or an `actor` field to `Event`** to make routing or witnessing easier. It is
   the twin of the attribution field the design **deliberately removed**, and it would make L2
   unenforceable.
-- **Do not add** a `Cohort` subclass · a per-container clock · a second resolver · an auto-resolve
+- **Do not add** a `Cohort` subclass · a per-rung clock · a second resolver · an auto-resolve
   band · a default `max_depth`.
 - **Do not cap, dedup or price petitions** to thin the option set. #353 `:919-945`: any of them is
   *"an engine deciding a person's options, which is L1"*. **The thin vocabulary is an accepted state.**
