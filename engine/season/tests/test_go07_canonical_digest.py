@@ -70,7 +70,7 @@ TENURE_VECTOR = (
     b"s4:termos4:Term2:s10:matures_ati7;s11:declared_bys5:act:x")
 TENURE_VECTOR_HASH = "2bbf9687ea938a411784490f75428672"
 
-# `Rung` is not a dataclass: its `vars()`, sorted by field name.
+# `Rung` is not a dataclass: its `_DECLARED` fields, sorted by name.
 RUNG_VECTOR = (b"os4:Rung8:s5:datesl0:s8:envelopel0:s2:ids5:r_fixs4:kinds10:settlement"
                b"s7:recordsl0:s5:sitesl0:s6:storesm1:s5:graini3;s5:yieldm0:")
 OBSERVATION_VECTOR = b"os11:Observation3:s7:subjects3:p_xs9:predicates9:conditions5:valueU"
