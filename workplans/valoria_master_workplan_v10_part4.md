@@ -7,7 +7,7 @@
 
 Format: `### <handle> — <title> (<lane>) · BATCH <B10-nn> · STATE <…> · R <rows>`, then WHAT, LANDED ALREADY, REMAINING UNBUILT, GATE, EXIT and FALSIFIER, HASH MOVERS, HOLES AND LEDGER IDS, ASKS ATTACHED, RE-BASE and SOURCE. Entries are in batch-spine order, except IN-44, which stays beside the entries that give it Layer-1 wording rows and whose batch is B10-Z. v9's files are deleted on adoption, so a carried entry holds v9's own wording for what the position does and what remains; `[v9 WHAT, full text: …]` marks that wording. **Where v9 contradicts itself the entry records both readings and the rule v9 itself states (the entry wins over the state index); four cases are called out in `-06`.** The re-base line rests on the extracts and on merge subjects in `git log` of a shallow clone (50 commits; almost every short sha v9 cites does not resolve); it is a reading of subjects, not of diffs.
 
-**After the decision round** (the M-questions taken or narrowed, `-05`): the round added 24 positions, CR-16 to CR-29 (§2 below, after CR-15) and GO-07 to GO-16 (the port gate, §2 continued at the head of part 2), and changed the entries it names in place. An entry the round moved to another batch (IN-45, SE-06, PC-05, GO-01, GO-05, GO-06, CL-CHAR, CL-EVENTS, NM-W2) keeps its place in this file; its `BATCH` field names the new batch, and `-03` holds the order. Each taken decision carries `[ASSUMPTION; medium; Jordan to correct; revert: …]`; the questions are `-05`'s (Jordan's "Confirm all" of 2026-10-26 answered M11 and confirmed the other eleven at their defaults: ED-IN-0300, ED-IN-0301), and an entry here only points at them. New entries add two lines to the format above: BUILDER (the tier) and, inside GATE, NEEDS (handles only; the batch gates are `-03`'s).
+**After the decision round** (the M-questions taken or narrowed, `-05`): the round added 24 positions, CR-16 to CR-29 (§2 below, after CR-15) and GO-07 to GO-16 (the port gate, §2 continued at the head of part 2), and changed the entries it names in place. An entry the round moved to another batch (IN-45, SE-06, GO-01, GO-05, GO-06, CL-CHAR, CL-EVENTS, NM-W2) keeps its place in this file; its `BATCH` field names the new batch, and `-03` holds the order. Each taken decision carries `[ASSUMPTION; medium; Jordan to correct; revert: …]`; the questions are `-05`'s (Jordan's "Confirm all" of 2026-10-26 answered M11 and confirmed the other eleven at their defaults: ED-IN-0300, ED-IN-0301), and an entry here only points at them. New entries add two lines to the format above: BUILDER (the tier) and, inside GATE, NEEDS (handles only; the batch gates are `-03`'s).
 
 **After the second decision round** (Jordan's six items of 2026-10-26, `-05` §1b): the round added 15 positions, CR-30 to CR-44 (§2 below, after CR-29), and two commits of CL-EVENTS, (3) and (4), written into its cluster entry; it changed the entries it names in place, each under a SECOND DECISION ROUND line or inside the text it replaces (IN-61, SC-04, CR-11, CR-19, CR-20, CR-22, CR-27, CL-CHAR, CL-EVENTS, CL-THRUST here; IN-30, IN-48, FA-07 and GO-15 in part 2). A new entry cites its item as "item n" of that round (`-05` §1b); each taken decision carries its `[ASSUMPTION; medium; Jordan to correct; revert: …]`.
 
@@ -27,18 +27,6 @@ These have no earlier home, so they are written out in full. Format as in §1. C
 - ASKS ATTACHED: whether the realm should start with acquaintances (not yet asked; the measurement is its evidence).
 - RE-BASE: none.
 - SOURCE: `-01-code-report.md` §10.
-
-### CR-06 — The gate sees an effect body that changes a tenure by itself (IN) · BATCH B10-03 · STATE BUILD · R —
-- WHAT: an effect function's own body runs outside the gate's observation window (H-137), so an effect that sets `seat.until` eagerly and returns an unrelated `Change` is not refused. Take `_tenure_snapshot()` before `eff(...)` and refuse if `_tenure_changes` is non-empty after it, at `loop/resolve.py::_apply_write` (or `state/world.py::World.write`). It covers tenures only; entity fields stay convention-bound, and the entry says so. v10 adds many new effects, each following a no-eager-mutation convention that nothing enforces.
-- LANDED ALREADY: the gate's observation of an effect's returned `Change`.
-- REMAINING UNBUILT: the snapshot and the refusal.
-- GATE: B10-02 merged. Disjoint from REM-42, REM-46, REM-47.
-- EXIT and FALSIFIER: the row's worked example (an effect body that sets `seat.until` eagerly and returns an unrelated `Change`) raises; `build_realm(0)` hash EQUAL (a read-only scan of the 39 effect functions found none that mutates eagerly; helper calls were not traced, so the hash control is the instrument).
-- HASH MOVERS: none expected; declared if the control reads otherwise.
-- HOLES AND LEDGER IDS: H-137.
-- ASKS ATTACHED: none.
-- RE-BASE: re-derive the effect call site by symbol.
-- SOURCE: the hole-row pass (`-06` part 2), critic B.
 
 ### CR-07 — Retire the stored `scale:` column (IN) · BATCH B10-05 · STATE BUILD (deletion) · R —
 - WHAT: A1-46 takes the answer (scale is `Act.via.scope`, not a column on the verb) but no position performs the cut. Delete `scale:` and `scale_note` from the 13 rows of `engine/season/verb_table.yaml` that carry them, the `VerbRow.scale` field and its `RUNG_KINDS` load check (`data/verbs.py:~860`), the guard test `test_governance_scale_is_a_rung_kind_and_is_crossed_with_the_stratum` and the `.scale` asserts at `test_season_shape.py:~5281` and `:~5386-5387`, and the stale header at `verb_table.yaml:66-79` (it still says nine rows).

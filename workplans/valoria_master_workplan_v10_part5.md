@@ -5,13 +5,13 @@
 
 ## 2 (continued). New positions: the port gate (GO-07 to GO-16)
 
-Part 1 §2 holds CR-01 to CR-44 (CR-02's entry left at B10-01's close; CR-30 to CR-44 are the second decision round's); the port gate's ten new positions continue it here (GO-13's entry left at B10-01's close, so nine are written below), written out in full in the format of part 1 §1 (with BUILDER and NEEDS). Purpose of the gate: freeze, at one recorded commit, the oracle the Godot port validates against (its pins, its registries, its draw log and its portable contracts). "v10 closed enough to port" = B10-01..B10-18 and B10-20 closed; B10-19 and B10-Z members released later are declared post-freeze movers. The gate moves no row of THE NINE and requires none to read `met`. The batch is B10-20 (`-03`; build instructions `proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-build-B10-20.md`); three positions land early (GO-13 in B10-01, landed and closed; GO-14 in B10-03; GO-07 in B10-03b). The port does NOT implement CPython's Mersenne Twister: ratified `architecture/meta/04_CODE_ARCHITECTURE.md:916` (§C.12) names a seeded Godot `RandomNumberGenerator`, and `godot/godot_conversion_strategy_v1.md`'s R4 resolves cross-language parity by recorded-draw replay ("Bit-parity of RNG streams is explicitly not a goal"); the oracle exports its draw log (GO-16) and the port's goldens replay it.
+Part 1 §2 holds CR-01 to CR-44 (CR-02's entry left at B10-01's close; CR-30 to CR-44 are the second decision round's); the port gate's ten new positions continue it here (GO-13's entry left at B10-01's close and GO-14's at B10-03's, so eight are written below), written out in full in the format of part 1 §1 (with BUILDER and NEEDS). Purpose of the gate: freeze, at one recorded commit, the oracle the Godot port validates against (its pins, its registries, its draw log and its portable contracts). "v10 closed enough to port" = B10-01..B10-18 and B10-20 closed; B10-19 and B10-Z members released later are declared post-freeze movers. The gate moves no row of THE NINE and requires none to read `met`. The batch is B10-20 (`-03`; build instructions `proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-build-B10-20.md`); three positions land early (GO-13 in B10-01 and GO-14 in B10-03, both landed and closed; GO-07 in B10-03b). The port does NOT implement CPython's Mersenne Twister: ratified `architecture/meta/04_CODE_ARCHITECTURE.md:916` (§C.12) names a seeded Godot `RandomNumberGenerator`, and `godot/godot_conversion_strategy_v1.md`'s R4 resolves cross-language parity by recorded-draw replay ("Bit-parity of RNG streams is explicitly not a goal"); the oracle exports its draw log (GO-16) and the port's goldens replay it.
 
 ### GO-07 — The canonical digest (GO/IN) · BATCH B10-03b (alone) · STATE BUILD · R —
 - WHAT: `state/world.py::_entity_digest` and `content_hash` fold Python `repr()`, which a port can reproduce only by emulating CPython's `repr`. Replace it with a canonical language-neutral encoding under the same `blake2b`-128. It is its own declared-mover sub-batch after B10-03, because B10-03's card is EQUAL.
 - LANDED ALREADY: the `repr`-based digest; H-118's falsifier.
 - REMAINING UNBUILT: the encoding: fields in declaration order; integers decimal; strings length-prefixed UTF-8; `None`, booleans, tuples; mappings sorted by encoded key; enums by value; any float as its IEEE-754 bit pattern in hex. It also covers the log fold's formatted fields (`state/world.py:1390-1398`: `{c.delta}`, `^{o}`, the degree, the observed records), not only `_entity_digest`.
-- GATE: B10-03b's entry (B10-03 and B10-04 merged). NEEDS: CR-06.
+- GATE: B10-03b's entry (B10-03, closing commit `f7352efc`, and B10-04 merged). NEEDS: CR-06.
 - EXIT and FALSIFIER: two worlds differing in one field of one entity differ in digest (H-118's falsifier re-run); a committed fixture entity's encoding equals a committed byte string (the cross-language vector); planted failure: a field dropped from the encoder reddens both. CONTROL: for seeds 0-2, event counts, census and per-collection entity counts are identical before and after; the old `repr` digest computed in the test over the same world is unchanged across the commit.
 - HASH MOVERS: declared MOVER (digest format only): one re-pin of every hash pin, old to new, in the commit body; the commit also re-takes every baseline B10-02's close recorded, old to new (B10-05's per-item controls read against them).
 - HOLES AND LEDGER IDS: H-118.
@@ -82,18 +82,6 @@ Part 1 §2 holds CR-01 to CR-44 (CR-02's entry left at B10-01's close; CR-30 to 
 - BUILDER: second tier producer; a third-tier (judgment) critic.
 - SOURCE: the port gate.
 
-### GO-14 — Retire `godot/skeleton/`; close PC-05 (GO/PC) · BATCH B10-03 (after CR-06) · STATE BUILD (RETIRE); released from M11 with DEF-9 · R —
-- WHAT: `godot/skeleton/` covers one module, does not compile and extends a spine defined nowhere (`CLAUDE.md` §6); it holds the Key substrate's `.gd` files, retired by ED-IN-0232. Delete it, and close PC-05's re-export, whose target file it holds. It lands in the same PR as hunk H-L0-5 (`CLAUDE.md` §6's `godot/skeleton/` sentence), listed under "Layer 0/1 hunks" and applied after the tree is deleted, never before (DEF-9's rule: a deletion Layer 0 points at lands with its hunk); a (RULED) mark at the anchor stops the hunk.
-- LANDED ALREADY: `combat_engine_v1.json` behind a blocking `--check` (the values the port reads).
-- REMAINING UNBUILT: delete `godot/skeleton/` (including `core/key_type_resource.gd` and `data/key_types/*.tres`) with one exact-file `FORK:` row per path in `references/restructure_ledger.md`; edit `references/module_contracts.yaml`'s `combat` row (`godot_home`, `godot`) and its `golden_path:` so no key points into the deleted tree (GO-11 re-derives `golden_path:` from code without needing this deletion); write a superseding `ED-PC-0013` row closing item 1 (ladder step 2: its target file is deleted). The commit also deletes `proposals/2026-10-24-master-workplan-v10/held-back-layer0-hunks.md`, the record of H-L0-1 to H-L0-10 kept until H-L0-5 lands, with its exact-file `FORK:` row. The stale `godot/` documents stay, bannered.
-- GATE: B10-03, after CR-06 (released from M11: ED-IN-0300). NEEDS: GO-13.
-- EXIT and FALSIFIER: `git ls-files godot/skeleton | wc -l` prints 0; `python tools/export_composition.py --check` OK (wiring validation runs on the edited rows). CONTROL: `pathres.load_alias_map()` holds an exact row per deleted path.
-- HASH MOVERS: EQUAL.
-- HOLES AND LEDGER IDS: ED-PC-0013 (item 1), ED-IN-0232; PC-05. ASKS ATTACHED: M11 ANSWERED (a) (`-05`; ED-IN-0300): H-L0-5 lands with this position.
-- RE-BASE: derive the deletion set from `git ls-files godot/skeleton`, never a `find` count; allocate the `ED-PC-` id from `references/id_reservations.yaml`.
-- BUILDER: first tier (extraction).
-- SOURCE: the port gate; DEF-9 (`-03` B10-03).
-
 ### GO-15 — FREEZE (GO/IN) · BATCH B10-20 (last) · STATE MEASURE · R —
 - WHAT: re-take every pin on the merged tree and record the freeze in an `ED-GO-` row: the oracle SHA, the pins artifact's digest, the draw log's digest, and the freeze list.
 - LANDED ALREADY: —.
@@ -121,7 +109,7 @@ Part 1 §2 holds CR-01 to CR-44 (CR-02's entry left at B10-01's close; CR-30 to 
 
 ## 3 (continued). Carried v9 entries, part 2 (batches B10-16 to B10-Z)
 
-The decision round moved five of these entries (SE-06 to B10-07b; GO-01, GO-05, GO-06 to B10-20; PC-05 to B10-03); each keeps its place here and its `BATCH` field names the new batch (part 1, §1). The port gate's new positions, GO-07 to GO-16, are §2 (continued), above.
+The decision round moved four of these entries still here (SE-06 to B10-07b; GO-01, GO-05, GO-06 to B10-20; PC-05's went to B10-03 and left at its close); each keeps its place here and its `BATCH` field names the new batch (part 1, §1). The port gate's new positions, GO-07 to GO-16, are §2 (continued), above.
 
 ### SE-06 — ED-IN-0293 row 1 reading (b); SE-04 (c)'s VECTOR half: every cohort's pursuits and convictions, from its territory (SE, IN) · BATCH B10-07b (first: SE-06 → CR-21 → CR-16; moved from B10-16) · STATE MEASURE then BUILD (M1 taken, step 2; released from the ask) · R R-06 (contributor; the fifth conjunct)
 - WHAT: give each of the 37 cohorts the pursuits and convictions of its territory's temperament, from a `temperaments:` block in `cohorts.yaml` read by `seat_cohorts`, refusing a cohort whose territory has no row. Cohorts get no goals. There is no spread (SE-04 (c) is closed by M1: no spread at shipped weights).
@@ -262,18 +250,6 @@ The decision round moved five of these entries (SE-06 to B10-07b; GO-01, GO-05, 
 - NAMED RESIDUE (decision round, R-04 conjunct (3), `-02`): commander-chosen orders (the AUTOMATED mode may run the default orders, `massbattle.py:170-178`); trigger: a position that designs a typed `Orders` record shared by the PLAYABLE scene and the AUTOMATED planner (this entry's AI-generals half). It is not a position and does not gate R-04.
 - RE-BASE: none found.
 - SOURCE: `v9_p7:26-31` (SOURCE there: `registers/handoffs/HANDOFF_MB.md`; `proposals/2026-09-25-squad-engagement-synthesis.md:137`; `proposals/2026-09-30-character-and-play-surface/08_mass_battle_units.md:125,126,130`); state-index row `v9.md:282`.
-
-### PC-05 — ED-PC-0013 item 1: the `.gd` RESIST re-export (PC) · BATCH B10-03 (an EDIT row after GO-14, deleted at B10-03's close; moved from B10-Z) · STATE CLOSED at ladder step 2 by GO-14 · R —
-- WHAT: ED-PC-0013's item 1, the one sub-item left (its LAST row governs): `combat_config.gd` carries pre-2026-06-30 values. The decision round closes it at ladder step 2 (irrelevant): GO-14 deletes `godot/skeleton/`, the file's home, and writes a superseding `ED-PC-0013` row closing item 1; the combat values the port reads are `combat_engine_v1.json`, behind a blocking `--check`. Nothing is re-exported.
-- LANDED ALREADY: —.
-- REMAINING UNBUILT: nothing of its own; the row is deleted when GO-14 lands.
-- GATE: B10-03, after GO-14. NEEDS: GO-14 (same batch, earlier).
-- EXIT and FALSIFIER: GO-14's (`git ls-files godot/skeleton | wc -l` prints 0; the superseding `ED-PC-0013` row exists and `python tools/validate_ed_citations.py` is clean).
-- HASH MOVERS: none.
-- HOLES AND LEDGER IDS: ED-PC-0013 (last row governs; superseded by GO-14's row), ED-1050.
-- ASKS ATTACHED: none.
-- RE-BASE: none found.
-- SOURCE: `v9_p7:35-40` (SOURCE there: `registers/editorial_ledger_pc_archive.jsonl`; `registers/handoffs/HANDOFF_PC.md` row "ED-PC-0013 — audit bundle, item 1"); state-index row `v9.md:283`.
 
 ### PC-06 — #445 recommendations ratified as intent: K-1/K-5 held (PC) · BATCH B10-Z · STATE LEAVE (K-1/K-5, unscheduled: K-2 first); K-3 LANDED · R —
 - WHAT: Nothing in the #445 digest recommendations is still scheduled. K-1/K-5 (a `Combatant` built from the person; loadout as `hold` tenures) wait on `Person.attributes` (K-2), which builds only with its first reader. M-2..M-6 stay with PC-08. K-3 and the earlier items have landed.

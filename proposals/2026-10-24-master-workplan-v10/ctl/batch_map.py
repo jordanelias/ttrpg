@@ -1,27 +1,21 @@
 """The v10 batch map: which position belongs to which batch, and each batch's card.
 
-STATE AFTER THE DEPENDENCY SEQUENCE (`2026-10-24-v10-09-build-00-sequence.md`): the batch assignments, ORDER and CARDS below follow the final cut in `-03` (NM-W3 and SC-06 moved to B10-01, NM-W0 to B10-02; CP-T02-06 is in B10-10 since the NERS fold; CL-EVENTS was added by it), and after the review round (REM-45 moved from B10-03 to B10-Z, held on M18; CP-T05-04 after REM-25 in B10-05; B10-09 cut in two closes; SC-02 design-first; CP-T10-08 last in B10-18), and after the fold of PR #506 (CR-14 and CR-15 added to B10-02, CR-14 after REM-11 in lane 1 and CR-15 after REM-15 in lane 2, REM-16 needing both; CL-THRUST added to B10-19; the questions are M1 to M21), and after the decision round: 24 new positions (CR-16 to CR-29; GO-07 to GO-16 in the new GO dict), three new batches (the sub-batches B10-03b and B10-07b and the port gate B10-20, after B10-18 and before B10-19), REM-52 to B10-05, REM-45 to B10-15, IN-45 to B10-06, SE-06 to B10-07b, GO-01, GO-05 and GO-06 to B10-20, PC-05 to B10-03, NM-W2 to B10-05, CL-CHAR to B10-10, CL-EVENTS to B10-18; 208 positions in 23 batches. B10-01 then CLOSED (its ten rows and card left `-03` at its net-deleting close, P3): it left SPINE, CARDS and ORDER, and its twelve handles (the ten, NM-W3 and SC-06) map to CLOSED; 196 positions in 22 open batches. Then the second decision round (Jordan's six items of 2026-10-26): 15 new positions (CR-41 to CR-44 to B10-08; CR-30 and CR-33 to B10-10; CR-34 and CR-31 to B10-13; CR-40 to B10-16; CR-32, CR-35, CR-36, CR-37 to B10-17, which is cut in two closes at batch open; CR-38 to B10-19; CR-39 to B10-Z); CL-EVENTS gains commits (3) and (4) in B10-18; 211 positions in 22 open batches. B10-02 then CLOSED (thirteen of its fourteen rows and its card left `-03` at its net-deleting close, P3; its close commit is `3ab145d6`): it left SPINE, CARDS and ORDER, its thirteen handles map to CLOSED and IN-18's tail maps to B10-Z; 198 positions in 21 open batches. A "landing" in ORDER is a commit of a row that lives in another batch, not a member. The cut handles REM-40, REM-41, REM-51, CP-T02-04, CP-T02-08, CP-T05-05, CP-T06-06 and CP-T07-01 are kept as keys, mapped to CUT, so the coverage run still knows them; their dispositions are in `-07` section 2. The plan files are the record: where this file and `-03` differ, `-03` wins.
+STATE AFTER THE DEPENDENCY SEQUENCE (`2026-10-24-v10-09-build-00-sequence.md`): the batch assignments, ORDER and CARDS below follow the final cut in `-03` (NM-W3 and SC-06 moved to B10-01, NM-W0 to B10-02; CP-T02-06 is in B10-10 since the NERS fold; CL-EVENTS was added by it), and after the review round (REM-45 moved from B10-03 to B10-Z, held on M18; CP-T05-04 after REM-25 in B10-05; B10-09 cut in two closes; SC-02 design-first; CP-T10-08 last in B10-18), and after the fold of PR #506 (CR-14 and CR-15 added to B10-02, CR-14 after REM-11 in lane 1 and CR-15 after REM-15 in lane 2, REM-16 needing both; CL-THRUST added to B10-19; the questions are M1 to M21), and after the decision round: 24 new positions (CR-16 to CR-29; GO-07 to GO-16 in the new GO dict), three new batches (the sub-batches B10-03b and B10-07b and the port gate B10-20, after B10-18 and before B10-19), REM-52 to B10-05, REM-45 to B10-15, IN-45 to B10-06, SE-06 to B10-07b, GO-01, GO-05 and GO-06 to B10-20, PC-05 to B10-03, NM-W2 to B10-05, CL-CHAR to B10-10, CL-EVENTS to B10-18; 208 positions in 23 batches. B10-01 then CLOSED (its ten rows and card left `-03` at its net-deleting close, P3): it left SPINE, CARDS and ORDER, and its twelve handles (the ten, NM-W3 and SC-06) map to CLOSED; 196 positions in 22 open batches. Then the second decision round (Jordan's six items of 2026-10-26): 15 new positions (CR-41 to CR-44 to B10-08; CR-30 and CR-33 to B10-10; CR-34 and CR-31 to B10-13; CR-40 to B10-16; CR-32, CR-35, CR-36, CR-37 to B10-17, which is cut in two closes at batch open; CR-38 to B10-19; CR-39 to B10-Z); CL-EVENTS gains commits (3) and (4) in B10-18; 211 positions in 22 open batches. B10-02 then CLOSED (thirteen of its fourteen rows and its card left `-03` at its net-deleting close, P3; its close commit is `3ab145d6`): it left SPINE, CARDS and ORDER, its thirteen handles map to CLOSED and IN-18's tail maps to B10-Z; 198 positions in 21 open batches. B10-03 then CLOSED (its seven rows and its card left `-03` at its net-deleting close, P3; its close commit is `f7352efc`): it left SPINE, CARDS and ORDER and its seven handles map to CLOSED; 191 positions in 20 open batches. A "landing" in ORDER is a commit of a row that lives in another batch, not a member. The cut handles REM-40, REM-41, REM-51, CP-T02-04, CP-T02-08, CP-T05-05, CP-T06-06 and CP-T07-01 are kept as keys, mapped to CUT, so the coverage run still knows them; their dispositions are in `-07` section 2. The plan files are the record: where this file and `-03` differ, `-03` wins.
 
 This file is the author's judgment in one place; it is not a plan."""
 
 # Closed batches leave SPINE, CARDS and ORDER at their net-deleting close (P3); their handles stay as keys, mapped
 # to CLOSED, so the coverage run still knows them (`-07` section 1 keeps every handle and records the batch CLOSED).
-CLOSED_BATCHES = ["B10-01", "B10-02"]
-CLOSED = "closed: B10-01, B10-02 (`-07` section 1)"
+CLOSED_BATCHES = ["B10-01", "B10-02", "B10-03"]
+CLOSED = "closed: B10-01, B10-02, B10-03 (`-07` section 1)"
 
-SPINE = ["B10-03", "B10-03b", "B10-04", "B10-05", "B10-06", "B10-07", "B10-07b",
+SPINE = ["B10-03b", "B10-04", "B10-05", "B10-06", "B10-07", "B10-07b",
          "B10-08", "B10-09", "B10-10", "B10-11", "B10-12", "B10-13", "B10-14", "B10-15", "B10-16",
          "B10-17", "B10-18", "B10-20", "B10-19", "B10-Z"]
 
 CARDS = {
- 'B10-03': dict(name='CONFORMANCE A: NO-HASH DELETIONS AND CORRECTIONS', lanes='IN', code=True,
-   gate='merged: B10-02 (3ab145d6); M11 answered (a), ED-IN-0300: DEF-9 and GO-14 build in the batch, each with its CLAUDE.md hunk (the L0-1 hunk for DEF-9; H-L0-5 for GO-14, after the tree is deleted)',
-   exit='per item (home); build_realm(0) hash against the base commit; pathres.load_alias_map() for each deleted path; pytest tests/valoria once at close; GO-14: git ls-files godot/skeleton | wc -l and python tools/export_composition.py --check -> hash EQUAL; an exact-file FORK row per deleted path (skeleton paths included); suite green; 0; OK; ED-PC-0013 superseding row',
-   hash='E',
-   shared='engine/dice_engine/sigma_leverage.py; engine/season/loop/resolve.py and engine/season/state/world.py (CR-06); engine/season/runs/ (untrack) and engine/season/tests/test_season_shape.py (the two test_w15 tests); tools/evacuation_plan.py and tests/valoria/test_engine_params_bridge.py; references/restructure_ledger.md (FORK rows); engine/engine_params/params_tables.yaml and CLAUDE.md 5 (DEF-9, held); godot/skeleton/; references/module_contracts.yaml (combat, golden_path:); registers/editorial_ledger_pc.jsonl',
-   build='2026-10-24-v10-09-build-B10-03.md'),
  'B10-03b': dict(name='THE PORTABLE DIGEST', lanes='GO, IN', code=True,
-   gate='merged: B10-03, B10-04 (a declared-mover sub-batch after B10-03 closes, because B10-03 is EQUAL)',
+   gate='merged: B10-03 (f7352efc), B10-04 (a declared-mover sub-batch after B10-03 closes, because B10-03 is EQUAL)',
    exit="GO-07's falsifier and controls; the commit body lists every hash pin and every baseline B10-02's close recorded, old to new",
    hash='M (digest format only)',
    shared='engine/season/state/world.py (_entity_digest, content_hash, the log fold); every committed hash pin and golden digest',
@@ -57,7 +51,7 @@ CARDS = {
    shared="engine/season/cohorts.yaml; engine/season/harness/populated.py (seat_cohorts); engine/season/rosters.yaml (cells, pursuit_axes); engine/season/decision/options.py (subject_is_opponent, refuses); engine/season/data/fixtures.py (stance_polarity); references/restructure_ledger.md (the drafts' FORK rows); the five provenance-comment files; HR rows H-54, H-146, H-194, H-202, H-205",
    build='2026-10-24-v10-09-build-B10-07b.md'),
  'B10-08': dict(name='DICE: ONE FACULTY, ONE ODDS FUNCTION, ONE CEILING', lanes='IN', code=True,
-   gate='merged: B10-02 (3ab145d6), B10-03, B10-06, B10-07b',
+   gate='merged: B10-02 (3ab145d6), B10-03 (f7352efc), B10-06, B10-07b',
    exit="each item falsifier and paired-seed control as its home states; band_odds(2, 2) == (0.74, 0.19, 0.07, 0.0) and the 200,000-roll arm; H-213 re-measure; CR-18's falsifier and the pools line (aperture 4 0, seed 0); the editorial pass: CR-41's and CR-42's greps and controls, CR-43's falsifier, python tools/export_names.py --check, python tools/definitions_store.py --check, python tools/vocab_store.py --check, python -m pytest tests/valoria/test_vector_audit.py -q, CR-44's new loader test and its corpus control (load_cases counted at build, equal before and after) -> as the homes state; the shipped practice arm byte-equal at practice_cap = 0 stays the control",
    hash='mixed (movers: CP-T01-04 (corpus draws at Ob 1.5); CP-T01-06 (every seed where a hostile term or a forged Record is met); CR-18 (commit 1, every seeded realm hash); CR-41, CR-42, CR-43 and CR-44 EQUAL)',
    shared='engine/season/seam/wrappers/sigma.py; engine/season/seam/ladder.py; engine/dice_engine/sigma_leverage.py (band_odds, settle_margin); modules/social_contest/roll.py (obstacle); engine/season/rosters.yaml (and the office_bodies note, CR-41); engine/season/loop/resolve.py (_contest); engine/season/loop/deliberate.py and state/carriers.py (CP-T01-05 slot, if built); engine/season/data/fixtures.py; engine/season/harness/aperture.py (CR-18 pools line); the editorial pass (CR-41 to CR-44): references/names_index.yaml; references/definitions/vocab_source.yaml; engine/engine_params/names.json (re-derived); references/definitions/definitions.yaml and references/alias_registry.yaml (re-derived); tests/valoria/test_vector_audit.py; references/ci_checks_registry.yaml; references/lane_assignments.yaml; engine/engine_params/params_tables.yaml (one comment); engine/season/harness/populated.py; engine/season/harness/invariants.py; engine/season/harness/run_cases.py; engine/season/tests/test_season_shape.py',
@@ -150,7 +144,7 @@ REM = {
  "REM-06": CLOSED, "REM-08": CLOSED, "REM-09": CLOSED,
  "REM-10": CLOSED, "REM-11": CLOSED, "REM-12": CLOSED, "REM-13": CLOSED, "REM-14": CLOSED,
  "REM-15": CLOSED, "REM-16": CLOSED,
- "REM-42": "B10-03", "REM-45": "B10-15", "REM-46": "B10-03", "REM-47": "B10-03",
+ "REM-42": CLOSED, "REM-45": "B10-15", "REM-46": CLOSED, "REM-47": CLOSED,
  "REM-50": "B10-04", "REM-51": CUT, "REM-52": "B10-05",
  "REM-21": "B10-05", "REM-22": "B10-05", "REM-23": "B10-05", "REM-24": "B10-05", "REM-25": "B10-05", "REM-2C": "B10-05",
  "REM-26": "B10-06", "REM-27": "B10-06", "REM-28": "B10-06", "REM-29": "B10-06", "REM-2A": "B10-06", "REM-2B": "B10-06",
@@ -183,7 +177,7 @@ V9 = {
  "IN-36": "B10-17", "IN-44": "B10-Z", "IN-45": "B10-06", "IN-48": "B10-17", "IN-52": "B10-16",
  "IN-58": "B10-09", "IN-61": "B10-09", "SC-02": "B10-13", "SC-04": "B10-13", "SC-05": "B10-Z",
  "SC-06": CLOSED, "SC-07": "B10-Z", "SE-04": "B10-16", "SE-06": "B10-07b", "MB-07r": "B10-12",
- "MB-08": "B10-Z", "PC-05": "B10-03", "PC-06": "B10-Z", "PC-08": "B10-Z", "PC-10": "B10-11",
+ "MB-08": "B10-Z", "PC-05": CLOSED, "PC-06": "B10-Z", "PC-08": "B10-Z", "PC-10": "B10-11",
  "WR-01": "B10-15", "GO-01": "B10-20", "GO-05": "B10-20", "GO-06": "B10-20", "FA-01": "B10-17",
  "FA-03": "B10-Z", "FA-07": "B10-Z",
 }
@@ -199,7 +193,7 @@ CR = {
  "CR-03": ("B10-09", "Acquaintance: half of the persons know no one for four seasons; measure how the known set forms and what build-time source is lawful"),
  "CR-04": (CLOSED, "Horizon: run the soak and the census at 12 and 24 seasons; ledger saturation, decay balance, told-claim rate"),
  "CR-05": (CLOSED, "The 35 `skip`/`xfail` markers: read each reason, record whether its condition still holds"),
- "CR-06": ("B10-03", "The gate sees an effect body that changes a tenure by itself (H-137)"),
+ "CR-06": (CLOSED, "The gate sees an effect body that changes a tenure by itself (H-137)"),
  "CR-07": ("B10-05", "Retire the stored `scale:` column (H-89; A1-46)"),
  "CR-08": ("B10-18", "`(Person, weight)` has a matrix row and no writer (H-49): the CENSUS writer, a cohort loses weight when its body floors (M6 taken)"),
  "CR-09": ("B10-17", "`own_purview` and the oblige clause agree (H-101)"),
@@ -242,7 +236,7 @@ CR = {
 # the port gate's new positions (GO-01, GO-05 and GO-06 are v9 handles, in V9)
 GO = {
  "GO-07": "B10-03b", "GO-08": "B10-20", "GO-09": "B10-20", "GO-10": "B10-20", "GO-11": "B10-20",
- "GO-12": "B10-20", "GO-13": CLOSED, "GO-14": "B10-03", "GO-15": "B10-20", "GO-16": "B10-20",
+ "GO-12": "B10-20", "GO-13": CLOSED, "GO-14": CLOSED, "GO-15": "B10-20", "GO-16": "B10-20",
 }
 NM = {f"NM-W{n}": "B10-19" for n in range(10)}
 NM["NM-W0"] = CLOSED
@@ -253,7 +247,6 @@ CL = {"CL-CHAR": "B10-10", "CL-ATTR": "B10-19", "CL-TROOP": "B10-19", "CL-EVENTS
 # In-batch order of the final cut ('->' is serial; 'held:' members wait on the question named and slot in by rule R8;
 # 'landing' is a commit of a row that lives in another batch, not a member)
 ORDER = {
- 'B10-03': 'REM-42 -> REM-46 -> REM-47 -> CR-06 -> GO-14 (with H-L0-5) -> PC-05 (EDIT row) -> DEF-9 (with L0-1)',
  'B10-03b': 'GO-07',
  'B10-04': 'REM-50',
  'B10-05': 'REM-21 -> REM-22 -> REM-23 -> CR-28 -> REM-24 -> REM-25 -> CP-T05-04 -> REM-2C -> CR-07 -> landings CL-THRUST B2.1/B2.2 -> landing CL-THRUST B3.1 -> REM-52 -> landing CL-EVENTS (1) -> NM-W2 (EDIT row)',
@@ -277,4 +270,4 @@ ORDER = {
 }
 
 # Remediation DEF rows that the plan itself says are work, not deferrals (rev. 4; D-1 was relayed, and is confirmed by the superseding row of ED-IN-0300, 2026-10-26: M11 answered (a); the data below is unchanged)
-DEF = {"DEF-9": ("B10-03", "Delete `engine/engine_params/params_tables.yaml` with a `FORK:` row and `CLAUDE.md` §5's sentence (NERS X3; L0-1); D-1 confirmed (ED-IN-0300)")}
+DEF = {"DEF-9": (CLOSED, "Delete `engine/engine_params/params_tables.yaml` with a `FORK:` row and `CLAUDE.md` §5's sentence (NERS X3; L0-1); D-1 confirmed (ED-IN-0300)")}
