@@ -165,14 +165,23 @@ def _die_result(face: int) -> int:
 # [Jordan, 2026-08-25: "TN7 always. Never change TN anywhere ever." — ED-IN-0196]
 # The table used to carry TN 6 (μ=0.50, σ=0.806) and TN 8 (μ=0.30, σ=0.781). Those rows are
 # dead under the ruling and are deleted rather than left as reachable-looking configuration.
-# The historical table survives, reference-only and NOT a mechanism (§0.05), in
-# engine/engine_params/params_tables.yaml.
+# The historical table was reference-only and NOT a mechanism (§0.05); its capture
+# (params_tables.yaml) was retired (`FORK:` row in references/restructure_ledger.md).
 #
 # Note the TN 6 row was always in tension with `_die_result` below, which has never read `tn`:
 # μ=0.50 is only reachable if faces 6-9 score, and no face rule here has ever done that. The
 # ruling resolves that tension in favour of the die rule.
-_MU_PER_DIE: float = 0.40      # [canonical: params/core.md §Expected Value, TN 7]
-_SIGMA_PER_DIE: float = 0.800  # [canonical: params/core.md §Expected Value, TN 7]
+#
+# The ONE owner, within engine/dice_engine/, of the per-die mean and sigma. The PUBLIC names carry the
+# literals (plain assignments: tools/export_sim_params.py reads only those, so the typed export keeps
+# the pair) and engine/dice_engine/sigma_leverage.py aliases them rather than keeping a copy. The
+# private names stay as aliases of the public ones: tests/valoria/test_tn7_always.py pins them.
+# modules/mass_battle/resolution.py (`_SIG_PER_DIE`) and modules/mass_battle/config.py
+# (`PER_DIE_NET_EV`) hold values of their own; REM-42 does not reach them.
+MU_PER_DIE = 0.40      # [canonical: params/core.md §Expected Value, TN 7]
+SIGMA_PER_DIE = 0.800  # [canonical: params/core.md §Expected Value, TN 7]
+_MU_PER_DIE: float = MU_PER_DIE
+_SIGMA_PER_DIE: float = SIGMA_PER_DIE
 
 
 _TN_RULING = ('TN is 7. Always. Jordan, 2026-08-25: "TN7 always. Never change TN anywhere '
@@ -258,14 +267,10 @@ def degree_from_net(net: int | float, ob: int | float,
     only the windowed one survives contact with fractional obstacles, where exact equality
     essentially never occurs and Partial would otherwise vanish.
 
-    ⚠ THE CAPTURED PARAMS TABLE STILL SHOWS THE OLD LADDER, and it is not a competing source.
-    `engine/engine_params/params_tables.yaml` §"Degrees of Success" holds the PRE-RULING bands
-    (Overwhelming at Net >= 2*Ob, Failure at Net <= 0) because it is a byte-faithful capture of the
-    evacuated `params/core.md` and its own header says NEVER hand-edit. It is history, not canon:
-    where it disagrees with code, the code wins (principle 7 / ED-1050). Do not restore bands from
-    it. The note lives here, at the owner a reader consults, rather than in the capture — annotating
-    the capture would have broken the one property it exists to have, and its generator was retired
-    with its source, so the edit could not have been regenerated away.
+    ⚠ THE RETIRED PARAMS CAPTURE (`params_tables.yaml`, `FORK:` row) HELD THE OLD LADDER: the
+    PRE-RULING bands (Overwhelming at Net >= 2*Ob, Failure at Net <= 0), from the evacuated
+    `params/core.md`. It is history, not canon: where it disagrees with code, the code wins
+    (principle 7 / ED-1050). Do not restore bands from it.
 
     RULED OUT, explicitly, by the same ruling (all three were live here until 2026-08-14):
       * Ob-scaled Overwhelming (`net >= 2*Ob`) — Overwhelming no longer depends on difficulty.

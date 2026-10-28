@@ -29,7 +29,7 @@ All numerical behaviour is byte-identical to m1_dice_sigma_core.py:
   • tanh via math.tanh (CPython delegates to libm, same IEEE-754 result)
   • sqrt via math.sqrt (same)
   • roll_net / roll_net_continuous delegate to dice_engine (no new die-roll path)
-  • PER_DIE constants copied verbatim with their [canonical: ...] provenance tags
+  • PER_DIE / MU_PER_DIE / SD_PER_DIE are read from the owner dice_engine (one copy of the pair)
   • LEVEL_SIGMA / M_MAX / SIGMA_N_COEFF copied verbatim with provenance tags
 
 Functions NOT ported from m1_dice_sigma_core:
@@ -75,7 +75,7 @@ from engine.dice_engine import dice_engine
 # stray non-7 tn now fails LOUDLY with a KeyError instead of silently resolving to a TN 6 or TN 8
 # row. The TN 6/8 rows are deleted under the ruling below.
 PER_DIE: dict[int, tuple[float, float]] = {
-    7: (0.40, 0.800),   # [canonical: params/core.md §Expected Value (per die)]
+    7: (dice_engine.MU_PER_DIE, dice_engine.SIGMA_PER_DIE),   # [canonical: params/core.md §Expected Value (per die)]; read from the owner, never copied
 }
 
 # TN 7 MEANS "A FACE OF 7 OR HIGHER SUCCEEDS" — equivalently, "roll above 6". Both readings are
@@ -109,8 +109,8 @@ OB_MIN = 1              # [canonical: params/core.md §Obstacle Scale]
 
 # Per-die stats (params/core.md §Expected Value): TN7 μ/σ per die. GENERAL, not contest-specific
 # — the contest's de-saturation extension reads them from here (ED-SC-0032).
-MU_PER_DIE = 0.40       # [canonical: params/core.md §Expected Value (per die), TN7]
-SD_PER_DIE = 0.80       # [canonical: params/core.md §Expected Value (per die), TN7]
+MU_PER_DIE = dice_engine.MU_PER_DIE        # alias of the owner (engine/dice_engine/dice_engine.py)
+SD_PER_DIE = dice_engine.SIGMA_PER_DIE     # alias of the owner; the owner's name is SIGMA_PER_DIE
 # OVERWHELM_SIGMA MOVED 2026-08-27 (ED-SC-0032) to
 # systems/social_contest/sim/contest/degree_extension.py. It is a contest constant — its own
 # citation is the contest groundup engine — and it belongs with the extension that reads it.

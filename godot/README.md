@@ -3,15 +3,14 @@
 Consolidated (ED-IN-0071 P2, 2026-07-16) from three former homes — `designs/godot/`,
 `designs/videogame/`, and `designs/audit/2026-06-10-godot-conversion-strategy/` — into this
 single top-level primary. It **is** the eventual `res://` project root. See `CLAUDE.md §6` for the
-state-of-the-bridge (the conversion is **PROPOSED and largely un-executed** — do not treat the
-skeleton as a runnable head-start). Old paths alias via `references/restructure_ledger.md`.
+state-of-the-bridge (the conversion is **PROPOSED and largely un-executed**). Old paths alias via
+`references/restructure_ledger.md`.
 
 **Contents:**
 - `godot_conversion_strategy_v1.md` — **the governing spec** (status **PROPOSED**, Jordan-vetoable
   throughout; the Part-VIII `[OPEN — Jordan]` register is the veto surface). Details below.
 - `godot_architecture_specification.md` — the Godot architecture specification (formerly under
   `designs/videogame/`).
-- `skeleton/` — the illustrative, non-compilable `personal_combat` slice (1 of 27 modules).
 - Four **stale** pre-`d+σ` docs (`scene_tree_architecture.md`, `gm_to_engine_conversion.md`,
   `data_serialization_spec.md`, `implementation_sequence.md`, all 2026-04-18) — each carries a
   `⚠️ STALE / PARTIALLY SUPERSEDED` banner. Do not implement from them; defer to the strategy doc.

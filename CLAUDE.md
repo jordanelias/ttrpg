@@ -425,9 +425,9 @@ removed is at its fork ref; every old path resolves through `references/restruct
 
 **Rule: never take a number for the engine or the port out of prose.** A value the engine uses lives in a
 typed artifact under `engine/engine_params/` behind an exporter with a blocking `--check` round-trip, or
-in a single Python owner. `engine/engine_params/params_tables.yaml` is a frozen, no-longer-regenerable,
-ungated capture of prose tables — **reference**, and it can hold pre-ruling values (its degree bands are
-superseded by `degree_from_net` in `engine/dice_engine/dice_engine.py`). **Check the code first, every
+in a single Python owner. `params_tables.yaml` was retired (`FORK:` row in
+`references/restructure_ledger.md`); it was a frozen capture of prose tables, and its degree bands were
+superseded by `degree_from_net` in `engine/dice_engine/dice_engine.py`. **Check the code first, every
 time.** Until the typed layer covers numeric operands and structured formulas, every value crossing into
 Godot is hand-transcribed — live drift risk — and do not bind Godot resource fields to descriptor keys
 the registry still marks IN FLUX.
@@ -435,9 +435,7 @@ the registry still marks IN FLUX.
 ## 6. Godot port pipeline
 
 **Rule: a port never corrects its oracle in place (ED-1050).** If port and Python oracle disagree, fix
-canon via the ledger and re-export — never hand-edit a value into the `.gd` side. `godot/skeleton/`
-covers a single module, does not compile, and `extends` a spine defined nowhere in the corpus: **never
-present it as a runnable head-start.**
+canon via the ledger and re-export — never hand-edit a value into the `.gd` side.
 
 `godot/godot_conversion_strategy_v1.md` is the governing spec — **PROPOSED, Jordan-vetoable throughout**,
 with an open register and unexecuted Gate-0 preconditions. `references/module_contracts.yaml` shows which

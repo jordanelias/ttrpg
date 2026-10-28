@@ -40,23 +40,15 @@ import re
 REPO = pathlib.Path(__file__).resolve().parents[2]
 PARAMS = REPO / 'engine' / 'engine_params'
 
-#: The artifact with NO writer, and why. `params_tables.yaml` is the byte-identical capture of the
-#: 43 evacuated `engine/params/*.md` tables; `tools/export_params_constants.py` was a
-#: migration-window gate retired WITH its source, so the capture can no longer be regenerated and
-#: its "NEVER hand-edit" header is absolute (`CLAUDE.md` §5). It is a runtime input all the same —
-#: `dice_engine.py` and `sigma_leverage.py` read it — so it is excluded from the writer rule by
-#: name rather than by a predicate that would also excuse a genuinely orphaned artifact.
-NO_WRITER = {'params_tables.yaml'}
-
 #: {artifact -> modules under engine/ that BIND its path at runtime}. Measured, not assumed: an
 #: earlier draft of this file listed `key_types.json` with three readers and `params_tables.yaml`
 #: with two, on the strength of a grep that could not tell a path construction from a docstring
 #: mentioning the filename. Four bindings exist in the whole of `engine/`, and three of them are
 #: already the target shape.
 #:
-#: `params_tables.yaml` has NO runtime binding — `dice_engine.py` and `sigma_leverage.py` only cite
-#: it in prose — so it is a tracked runtime input with no runtime reader, which is worth knowing
-#: and is why it is absent here rather than listed with an empty set.
+#: `params_tables.yaml` had NO runtime binding — `dice_engine.py` and `sigma_leverage.py` only cited
+#: it in prose — so it was a tracked file with no runtime reader, which is why it was absent here
+#: rather than listed with an empty set. It was retired at DEF-9 (`FORK:` row).
 #:
 #: SHRINK-ONLY toward one substrate leaf each.
 ENGINE_READERS = {
@@ -105,7 +97,6 @@ AUTHORED_PARSERS = {
     'module_contracts.yaml': {'tools/export_composition.py',
                               'tools/build_engine_atlas.py',
                               'tools/ci_quantity_vocabulary_check.py',
-                              'tools/evacuation_plan.py',
                               'tools/m1_acceptance.py'},
 }
 
@@ -200,11 +191,6 @@ def test_every_cooked_artifact_has_exactly_one_writer():
     problems = []
     for a in _artifacts():
         w = writers.get(a, set())
-        if a in NO_WRITER:
-            if w:
-                problems.append(f'{a}: declared writer-less but written by {sorted(w)} — if it is '
-                                f'regenerable again, delete it from NO_WRITER')
-            continue
         if len(w) != 1:
             problems.append(f'{a}: {len(w)} writer(s) {sorted(w) or "(none)"}, expected exactly 1')
     assert not problems, 'engine_params writer defects:\n  ' + '\n  '.join(problems)
@@ -214,7 +200,7 @@ def test_the_writer_scan_is_not_vacuous():
     """§0.1 pt 2 — "every artifact has one writer" is also what a scan that finds nothing reports
     for an empty artifact list. Pin that the scan sees the real surface."""
     arts = _artifacts()
-    assert len(arts) >= 8, f'only {len(arts)} artifacts found — the walk is broken'
+    assert len(arts) >= 7, f'only {len(arts)} artifacts found — the walk is broken'
     writers = _writers()
     assert writers.get('composition.json') == {'tools/export_composition.py'}, writers.get('composition.json')
 

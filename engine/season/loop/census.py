@@ -45,8 +45,9 @@ def census(self, token: Token) -> None:
     # season finds it held (`demanded_person` returns `None`) and individuates nobody twice.
     demands = [e for e in w.log if e.kind == PERSON_DEMANDED and e.emitted_at == w.tick]
     # ⚠ A SEASON WITH NO DEMAND TRACES EXACTLY WHAT IT TRACED BEFORE SE-01, AND THE LINE IS STILL
-    # TRUE OF IT. The committed run artifacts (`runs/DECISIONS.md`, `runs/TRACE.txt`, reproduced
-    # byte for byte by `test_w15_report_py_...`) carry this decision every season, and no run they
+    # TRUE OF IT. The run artifacts (`runs/DECISIONS.md`, `runs/TRACE.txt`, written by `report.py`;
+    # untracked since REM-46, and `runs/results.json` is the one reproduced byte for byte by
+    # `test_w15_report_py_...`) carry this decision every season, and no run they
     # record demands anyone; a season that does says so instead.
     TRACE.decision("individuation", "S29",
                    chose=("demand-driven only; generated nobody" if not demands else

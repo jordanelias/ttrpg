@@ -5,9 +5,9 @@ systems/combat/sim/combat.py — Personal combat resolution
 This module implements the v30 model (Combat Pool = Agility×2 + History + 3; TN-7 weapon matrix;
 MULTIPLICATIVE STR damage). The CANONICAL personal-combat resolver is systems/combat/combat_engine_v1/
 (sigma-leverage d_sigma resolution; pool = max(5, History+6); additive-coupled damage ×1.55; ED-1041
-bilateral-Ob wounds). The Godot port lives at godot/skeleton/engines/combat/ + the
-references/module_contracts.yaml personal_combat entry. Retained for reference/history only — do NOT
-wire new game code through this file. (Surfaced by the 2026-06-22 personal-combat audit; see also
+bilateral-Ob wounds). The port reads the typed export named by the references/module_contracts.yaml
+personal_combat entry (the GDScript slice at godot/skeleton/ was retired at GO-14). Retained for
+reference/history only — do NOT wire new game code through this file. (Surfaced by the 2026-06-22 personal-combat audit; see also
 mechanics_index.yaml, now repointed to the canonical engine.)
 
 Canon source: systems/combat/combat_v30.md §1-§7  [DEPRECATED — see banner above]

@@ -1321,19 +1321,29 @@ _NAMED_IN_MESSAGE = 4
 
 
 def not_yours(refused: list, actor: Optional[str], via: Optional[str], record_kind: str,
-              fieldname: str) -> NotYours:
+              fieldname: str, why: Optional[str] = None) -> NotYours:
     """The `NotYours` for a write whose `refused` changes no basis admitted -- built here so the
-    message and the law live once."""
+    message and the law live once. `why` replaces "wrote Tenures it has no basis for" (and the list
+    of bases) for a refusal that is NOT a lack of basis: CR-06 refuses an edge an effect's body moved
+    before it returned its `Change`, however lawful the same edge would have been inside `apply`."""
     shown = ", ".join(
         f"{t.id} ({t.kind} {('owned by ' + (was.subject if was is not None else t.subject))}"
         f" on {t.object}, {'opened' if was is None else 'changed'})"
         for t, was in refused[:_NAMED_IN_MESSAGE])
     more = (f" and {len(refused) - _NAMED_IN_MESSAGE} more"
             if len(refused) > _NAMED_IN_MESSAGE else "")
+    who = (f"a ({record_kind}, {fieldname}) write by {actor or 'no actor'} "
+           f"{('exercising ' + via) if via else 'exercising no seat'} ")
+    if why is not None:
+        return NotYours(
+            f"{who}{why}: {shown}{more}", "F3",
+            needs="the mutation deferred into the returned Change's `apply`, where F3 judges it "
+                  "(CR-06, H-137)",
+            law="04 §C.2 F3 / AX-4 clause 2, applied to the effect's own body (CR-06, H-137) -- a "
+                "Tenure moves only inside `Change.apply`, where F3 judges it; an edge moved "
+                "earlier is outside the gate's window, so it is refused whole, lawful or not")
     return NotYours(
-        f"a ({record_kind}, {fieldname}) write by {actor or 'no actor'} "
-        f"{('exercising ' + via) if via else 'exercising no seat'} wrote Tenures it has no basis "
-        f"for: {shown}{more}", "F3",
+        f"{who}wrote Tenures it has no basis for: {shown}{more}", "F3",
         needs=f"{T_M} (the actor owns the edge), {T_O} (via present, the actor seated in it, the "
               f"seat's revocation basis reaching it; or a `ban` on via opened in the same write "
               f"that so closed the man's `hold` on a seat whose revocation disposal is a ban -- "
@@ -1488,7 +1498,9 @@ class Change:
     this `Change` runs earlier, before `World.write` (and its tenure snapshot) is ever reached
     (`loop/resolve.py::_apply_write`) -- a mutation made there, before this object is even
     constructed, is invisible to F3 as well as F9, not merely to F9. Every shipped effect defers
-    its mutation into `apply`; nothing enforces that the next one must."""
+    its mutation into `apply`. CR-06: `World.effect_body_observed` (called from `_apply_write`)
+    snapshots the tenure store around the effect call and refuses a Tenure the body moved; entity
+    fields stay convention-bound."""
 
     subjects: tuple
     apply: Callable[[], None]

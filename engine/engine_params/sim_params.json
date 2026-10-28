@@ -26,9 +26,20 @@
       "value": 0.4,
       "kind": "scalar",
       "module": "engine.dice_engine",
-      "file": "engine/dice_engine/sigma_leverage.py",
-      "note": "[canonical: params/core.md §Expected Value (per die), TN7]",
-      "citation": "params/core.md §Expected Value (per die), TN7",
+      "file": "engine/dice_engine/dice_engine.py",
+      "note": "[canonical: params/core.md §Expected Value, TN 7]",
+      "citation": "params/core.md §Expected Value, TN 7",
+      "citation_grade": "source"
+    },
+    {
+      "key": "engine.dice_engine.SIGMA_PER_DIE",
+      "name": "SIGMA_PER_DIE",
+      "value": 0.8,
+      "kind": "scalar",
+      "module": "engine.dice_engine",
+      "file": "engine/dice_engine/dice_engine.py",
+      "note": "[canonical: params/core.md §Expected Value, TN 7]",
+      "citation": "params/core.md §Expected Value, TN 7",
       "citation_grade": "source"
     },
     {
@@ -51,17 +62,6 @@
       "file": "engine/dice_engine/sigma_leverage.py",
       "note": "[canonical: params/core.md §Obstacle Scale]",
       "citation": "params/core.md §Obstacle Scale",
-      "citation_grade": "source"
-    },
-    {
-      "key": "engine.dice_engine.SD_PER_DIE",
-      "name": "SD_PER_DIE",
-      "value": 0.8,
-      "kind": "scalar",
-      "module": "engine.dice_engine",
-      "file": "engine/dice_engine/sigma_leverage.py",
-      "note": "[canonical: params/core.md §Expected Value (per die), TN7]",
-      "citation": "params/core.md §Expected Value (per die), TN7",
       "citation_grade": "source"
     },
     {

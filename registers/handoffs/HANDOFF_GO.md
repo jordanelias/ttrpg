@@ -5,10 +5,10 @@
 ## Open
 | item | where it lives | next step |
 |---|---|---|
-| port gate (B10-20) | `workplans/valoria_master_workplan_v10_part3.md` §1, the B10-20 card | B10-03 (GO-14, with H-L0-5 in the same PR; `ED-IN-0300`) then B10-03b (GO-07) |
+| port gate (B10-20) | `workplans/valoria_master_workplan_v10_part3.md` §1, the B10-20 card | B10-04 (SE lane; B10-03b's entry gate), then B10-03b (GO-07) |
 
 ## Standing orders — do not re-raise, do not do
 | order | source |
 |---|---|
 | A port never corrects its oracle in place — fix canon via the ledger and re-export, never hand-edit a value into the `.gd` side | `CLAUDE.md` §6 |
-| Do not build from `godot/godot_architecture_specification.md` (STALE REFERENCE, pre-d+σ) or present `godot/skeleton/` as a runnable head-start | `CLAUDE.md` §6 |
+| Do not build from `godot/godot_architecture_specification.md` (STALE REFERENCE, pre-d+σ) | `CLAUDE.md` §6 |

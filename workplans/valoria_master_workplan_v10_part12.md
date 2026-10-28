@@ -5,7 +5,7 @@
 
 ## 1. Handle index
 
-223 handles in 23 batches (B10-01 to B10-19 and B10-Z, plus B10-03b, B10-07b and B10-20): 37 REM, 84 CP, 32 carried from v9 (GO-01, GO-05 and GO-06 among them), 44 CR (CR-01 to CR-44), 10 NM, 5 CL, 1 DEF, 10 port-gate GO (GO-07 to GO-16). 206 were positions in `-03`'s tables after adoption, because NM-W3 (landed) and SC-06 (answered) left the tables there and keep their handles here; 196 were, in 22 open batches, once B10-01 CLOSED (its ten rows and its card left `-03` at its net-deleting close, P3; its twelve handles read `B10-01 (CLOSED)` below; CR-02's and GO-13's `-04` entries left with them). The second decision round (Jordan's six items of 2026-10-26) added fifteen positions, CR-30 to CR-44, and two commits of CL-EVENTS (commits (3) and (4), no handle), so 211 were positions then, in 22 open batches (221 counted on the adopted tables, before B10-01's close), and 198 are now, in 21 open batches, once B10-02 CLOSED (thirteen of its fourteen rows and its card left `-03` at its net-deleting close, P3; its thirteen handles read `B10-02 (CLOSED)` below; IN-18's tail moved to B10-Z; the `-04` entries of CR-01, CR-04, CR-05, CR-14 and CR-15 left with them). A handle is the one name of a position; it is never reused (P4).
+223 handles in 23 batches (B10-01 to B10-19 and B10-Z, plus B10-03b, B10-07b and B10-20): 37 REM, 84 CP, 32 carried from v9 (GO-01, GO-05 and GO-06 among them), 44 CR (CR-01 to CR-44), 10 NM, 5 CL, 1 DEF, 10 port-gate GO (GO-07 to GO-16). 206 were positions in `-03`'s tables after adoption, because NM-W3 (landed) and SC-06 (answered) left the tables there and keep their handles here; 196 were, in 22 open batches, once B10-01 CLOSED (its ten rows and its card left `-03` at its net-deleting close, P3; its twelve handles read `B10-01 (CLOSED)` below; CR-02's and GO-13's `-04` entries left with them). The second decision round (Jordan's six items of 2026-10-26) added fifteen positions, CR-30 to CR-44, and two commits of CL-EVENTS (commits (3) and (4), no handle), so 211 were positions then, in 22 open batches (221 counted on the adopted tables, before B10-01's close), and 198 were then, in 21 open batches, once B10-02 CLOSED (thirteen of its fourteen rows and its card left `-03` at its net-deleting close, P3; its thirteen handles read `B10-02 (CLOSED)` below; IN-18's tail moved to B10-Z; the `-04` entries of CR-01, CR-04, CR-05, CR-14 and CR-15 left with them), and 191 are now, in 20 open batches, once B10-03 CLOSED (its seven rows and its card left `-03` at its net-deleting close, P3; its seven handles read `B10-03 (CLOSED)` below; the `-04` entries of CR-06, GO-14 and PC-05 left with them; REM-42, REM-46, REM-47 and DEF-9 have homes in `proposals/`). A handle is the one name of a position; it is never reused (P4).
 
 | handle | batch | kind of handle |
 |---|---|---|
@@ -103,7 +103,7 @@
 | CR-03 | B10-09 | new from the code report (`-04`) |
 | CR-04 | B10-02 (CLOSED) | new from the code report (`-04`) |
 | CR-05 | B10-02 (CLOSED) | new from the code report (`-04`) |
-| CR-06 | B10-03 | new from the hole-row pass (`-04`; H-137) |
+| CR-06 | B10-03 (CLOSED) | new from the hole-row pass (`-04`; H-137) |
 | CR-07 | B10-05 | new from the hole-row pass (`-04`; H-89) |
 | CR-08 | B10-18 | new from the hole-row pass (`-04`; H-49) |
 | CR-09 | B10-17 | new from the hole-row pass (`-04`; H-101) |
@@ -142,7 +142,7 @@
 | CR-42 | B10-08 | new from the second decision round (`-04`; item 6): no faction count is written; the stale "eight" re-worded |
 | CR-43 | B10-08 | new from the second decision round (`-04`; item 6): `PI` names nothing; one row per meaning; the CI starting value and gloss reconciled; `names.json` re-derived before B10-20 |
 | CR-44 | B10-08 | new from the second decision round (`-04`; item 6): case ids are series-prefixed and a collision is recorded (`CASE_SERIES`) |
-| DEF-9 | B10-03 | remediation deletion (home: `…-01-verdict-and-coverage.md` §1.4) |
+| DEF-9 | B10-03 (CLOSED) | remediation deletion (home: `…-01-verdict-and-coverage.md` §1.4) |
 | FA-01 | B10-17 | carried v9 position (`-04`) |
 | FA-03 | B10-Z | carried v9 position (`-04`) |
 | FA-07 | B10-Z | carried v9 position (`-04`) |
@@ -156,7 +156,7 @@
 | GO-11 | B10-20 | port gate (`-04`): `module_contracts.yaml` re-derived from code |
 | GO-12 | B10-20 | port gate (`-04`): the seam port items |
 | GO-13 | B10-01 (CLOSED) | port gate (`-04`): the Layer 0 GO hunks and the `godot/` pointer text; its `CLAUDE.md` hunks applied in PR #507 (H-L0-1 to H-L0-4, H-L0-6; H-L0-5 lands with GO-14) |
-| GO-14 | B10-03 | port gate (`-04`): retire `godot/skeleton/` and close PC-05; released from M11 with DEF-9 (the `CLAUDE.md` §6 hunk H-L0-5 lands in its PR, after the tree is deleted) |
+| GO-14 | B10-03 (CLOSED) | port gate (`-04`): retire `godot/skeleton/` and close PC-05; released from M11 with DEF-9 (the `CLAUDE.md` §6 hunk H-L0-5 lands in its PR, after the tree is deleted) |
 | GO-15 | B10-20 | port gate (`-04`): FREEZE |
 | GO-16 | B10-20 | port gate (`-04`): the oracle-side draw recorder and its export (`--check`) |
 | IN-12 | B10-09 | carried v9 position (`-04`) |
@@ -183,7 +183,7 @@
 | NM-W7 | B10-19 | narration package (`proposals/2026-10-13-narration-mechanisms.md` §4) |
 | NM-W8 | B10-19 | narration package (`proposals/2026-10-13-narration-mechanisms.md` §4) |
 | NM-W9 | B10-19 | narration package (`proposals/2026-10-13-narration-mechanisms.md` §4) |
-| PC-05 | B10-03 | carried v9 position (`-04`); an EDIT row after GO-14, closed at ladder step 2 by GO-14's superseding `ED-PC-0013` row; deleted at B10-03's close, or with GO-14 if GO-14 holds |
+| PC-05 | B10-03 (CLOSED) | carried v9 position (`-04`); an EDIT row after GO-14, closed at ladder step 2 by GO-14's superseding `ED-PC-0013` row; the row left `-03` at B10-03's close |
 | PC-06 | B10-Z | carried v9 position (`-04`) |
 | PC-08 | B10-Z | carried v9 position (`-04`) |
 | PC-10 | B10-11 | carried v9 position (`-04`) |
@@ -217,11 +217,11 @@
 | REM-30 | B10-10 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-31 | B10-10 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-32 | B10-10 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
-| REM-42 | B10-03 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
+| REM-42 | B10-03 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-44 | B10-07 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-45 | B10-15 | remediation item (home: `proposals/2026-10-21-v9-remediation/`); released by M18 (b): `min(3, history) + 3`, hash EQUAL, between CR-13 and CP-T07-02 |
-| REM-46 | B10-03 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
-| REM-47 | B10-03 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
+| REM-46 | B10-03 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
+| REM-47 | B10-03 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-50 | B10-04 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-52 | B10-05 | remediation item (home: `proposals/2026-10-21-v9-remediation/`); released by M6 at `body_step = 10`: its own declared-mover commit after CR-07 and the CL-THRUST landings, followed by CL-EVENTS (1) |
 | SC-02 | B10-13 | carried v9 position (`-04`) |
@@ -280,7 +280,7 @@ Parked, cut, withdrawn or folded items of the two proposal sets, with where each
 
 ## 3. The remediation proposal's deferred and declined rows (DEF-n, DEC-n)
 
-As the remediation records them (`proposals/2026-10-21-v9-remediation/…-01-verdict-and-coverage.md` §1.4). DEF-9 is a position (B10-03, released from M11 with GO-14: D-1 is confirmed by ED-IN-0300's superseding row, 2026-10-26; the `RULED yes` quoted below was relayed, and the confirmation stands on that row); DEF-1 is the verb-suite roster question (held with the D-V decisions in `-05`); the rest keep their disposition and reopen only on the condition shown.
+As the remediation records them (`proposals/2026-10-21-v9-remediation/…-01-verdict-and-coverage.md` §1.4). DEF-9 is a position (B10-03, CLOSED; released from M11 with GO-14: D-1 is confirmed by ED-IN-0300's superseding row, 2026-10-26; the `RULED yes` quoted below was relayed, and the confirmation stands on that row); DEF-1 is the verb-suite roster question (held with the D-V decisions in `-05`); the rest keep their disposition and reopen only on the condition shown.
 
 | id | what | decided by | result | reopen |
 |---|---|---|---|---|
