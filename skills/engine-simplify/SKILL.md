@@ -19,7 +19,7 @@ description: >
 
 # ENGINE SIMPLIFY
 
-## Status: PROPOSED 2026-10-28. Requested by Jordan in session; his review-and-merge is the ratification (CLAUDE.md §2, ED-1094). Invocable as a project skill through the symlink `.claude/skills/engine-simplify`.
+## Status: RATIFIED on merge of its landing PR (CLAUDE.md §2, ED-1094). Requested by Jordan in session, 2026-10-28. Invocable as a project skill through the symlink `.claude/skills/engine-simplify`.
 
 ## What this skill owns, and what it copies
 
