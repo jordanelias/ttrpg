@@ -1649,7 +1649,6 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
 def census(w: World) -> dict:
     """What was built, counted from the world rather than from the inputs."""
     kinds = Counter(r.kind for r in w.rungs.values())
-    next_draw = subsistence_draw(w)     # the NEXT draw, walked once for every settlement's `hunger` below
     # §8: `world_q.home_of` owns "where is everyone"; this used to roll its own copy, and so did
     # three other sites (see that query's docstring).
     where = home_of_q(w)
@@ -1664,6 +1663,9 @@ def census(w: World) -> dict:
         for k, v in (r.stores or {}).items():
             stores_by_kind[r.kind] += v
     short = getattr(w, "_subsistence_shortfall", {})
+    # REM-50: one walk of the larder ladder for every settlement's `hunger`, never one per call.
+    next_draw = subsistence_draw(w)
+    hunger_bands = Counter(hunger(w, r.id, next_draw)[0] for r in w.rungs.values() if r.kind == HUNGER_KIND)
     # `24f`: the cohorts are persons (S9.1), so `persons` counts them; these two rows separate them
     # from the cast, read off the world (`Person.is_cohort`) rather than off `cohorts.yaml`.
     cohorts = [p for p in w.persons.values() if p.is_cohort]
@@ -1691,15 +1693,9 @@ def census(w: World) -> dict:
             "sites_below_a_floor_by_territory": {
                 r: n for r in sorted(w.rungs) if w.rungs[r].kind == "territory"
                 if (n := len(closed_uses(w, r)))},
-            # REM-50: `world_q.hunger`'s only caller until CP-T08-06 -- `uncontrolled`'s precedent
-            # above: a report, not a rule, read by no decision and moving no hash. A band histogram
-            # `{band: settlements}` over every settlement rung, sorted. `census` passes the NEXT draw
-            # (`subsistence_draw`, walked once above), so each `unmet` is the NEXT draw's, and at tick 0
-            # (before any yield) every cohort reads `starving`. The stated limit (stores beneath a settlement are counted though never
-            # drawn) is `hunger`'s docstring's. A settlement with no cohort under it (D = 0) counts as
-            # `fed`, so the histogram does not tell an emptied town from a fed one.
-            "hunger_by_settlement": dict(sorted(Counter(
-                hunger(w, r, next_draw)[0] for r in sorted(w.rungs) if w.rungs[r].kind == HUNGER_KIND).items()))}
+            # REM-50: `world_q.hunger`'s only caller until CP-T08-06 -- `uncontrolled`'s precedent above: a
+            # report, not a rule. Each settlement's band, from the NEXT draw; D = 0 counts as `fed`.
+            "hunger_by_settlement": dict(sorted(hunger_bands.items()))}
 
 
 def run(seasons: int = 1, seed: int = 0, cap: int | None = None, w: World | None = None) -> dict:

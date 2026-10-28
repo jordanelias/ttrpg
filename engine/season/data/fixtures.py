@@ -444,13 +444,11 @@ DEFAULT_FIXTURES = Fixtures(
     # the CONTROL: one band, so nothing crosses and no person-keyed question is ever raised.
     # [JUSTIFIED: engine/season/hole_register.yaml H-223 -- `site: Fixtures standing_band_floors`, graded `assumption`; no document gives where the standing gap's bands fall, so it is injected and swept () / (500,) / (250, 500, 750)]
     standing_band_floors=(500,),       # `H-223`, swept () (control) / (500,) (SHIPPED) / (250, 500, 750)
-    # REM-50: WHERE A SETTLEMENT'S HUNGER BANDS FALL, in whole SEASONS OF FOOD ON HAND. `cover` is the
-    # stores under the settlement (of the kinds its cohorts eat) over one season's need, and the first
-    # floor is `hungry`'s, the second `lean`'s (`world_q.HUNGER_FLOOR_BANDS`): stores under one season's
-    # need read `hungry`, under two `lean`, else `fed`; `starving` (a shortfall in the next draw) is
-    # not a floor. Read ONLY by `world_q.hunger`, whose only caller is `harness/populated.py::census`
-    # (a report; the loop reads nothing here). `()` is the CONTROL: no floor band, so `starving` or `fed`.
-    # Jordan corrects the number (H-242); JQ-6 is closed by M6 and CR-22's rule reads these floors. [JUSTIFIED: engine/season/hole_register.yaml H-242 -- `site: Fixtures hunger_band_floors`, graded `assumption`; no document gives where a settlement's hunger bands fall, so the floors are injected and swept () / (1, 2) / (2, 4)]
+    # REM-50: WHERE A SETTLEMENT'S HUNGER BANDS FALL, in whole SEASONS OF FOOD ON HAND: the first floor is
+    # `hungry`'s, the second `lean`'s (`world_q.HUNGER_FLOOR_BANDS`); `starving` (a shortfall in the next
+    # draw) is not a floor. Read ONLY by `world_q.hunger`, a report the loop never reads. `()` is the
+    # CONTROL: no floor band, so `starving` or `fed`.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-242 -- `site: Fixtures hunger_band_floors`, graded `assumption`; no document gives where a settlement's hunger bands fall, so the floors are injected and swept () / (1, 2) / (2, 4)]
     hunger_band_floors=(1, 2),         # `H-242`, swept () (control) / (1, 2) (SHIPPED) / (2, 4)
     # S12.1 gates verbs on `condition` against per-kind band FLOORS. S22 assigns "band
     # coefficients" and "the obstacle floor" to params; the params document proposes NO

@@ -39,7 +39,7 @@ from ..data.requires import OWN_STATE_STEMS, UNKNOWN, binding_from_act
 from ..data.rosters import (
     BAN_KIND, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP,
     QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, REMOVE_ORDINAL, RESTRAINT_KINDS, RUNG_KINDS,
-    SITE_KINDS, STANDING_CROSSED, TENURE_KINDS, faction_prop_id,
+    SITE_KINDS, STANDING_CROSSED, TENURE_KINDS, faction_prop_id, require_member,
 )
 # IN-09: the Record kinds a held document is an occasion for, derived off the verb table's rows;
 # v9 IN-49: the remit acts a seat exercises on a `Rung`-classed referent, the same way.
@@ -1520,74 +1520,62 @@ def capacity(w: World, rung_id: str) -> int:
 
 # THE RUNG KIND `hunger` IS DEFINED FOR, and the names of its two FLOOR bands, in the order
 # `Fixtures.hunger_band_floors` lists their floors (the first floor is `hungry`'s, the second `lean`'s).
-# Named once, `DWELLING_KIND`'s shape, and refused at import if the roster stops carrying the kind.
-# `starving` and `fed` are not floor bands: `starving` is `unmet > 0` and `fed` is "under no floor".
+# `starving` is `unmet > 0` and `fed` is "under no floor": neither is a floor band. Refused at import if the
+# roster stops carrying the kind (`witness.SEAT_CHANNEL`'s shape).
 HUNGER_KIND = "settlement"
 HUNGER_FLOOR_BANDS = ("hungry", "lean")
-if HUNGER_KIND not in RUNG_KINDS:
-    raise Unspecified(
-        f"rung kind {HUNGER_KIND!r} is not a `RUNG_KINDS` member ({list(RUNG_KINDS)})",
-        "rosters.yaml -- rung_kinds",
-        needs=f"a `{HUNGER_KIND}` member, or `hunger` retired with it",
-        law="`hunger` is defined for the settlement rung only; a kind the roster does not carry is a "
-            "dead reader wearing a query's clothes (ID-13)")
+require_member(HUNGER_KIND, RUNG_KINDS,
+               f"rung kind {HUNGER_KIND!r} is not a `RUNG_KINDS` member",
+               "rosters.yaml -- rung_kinds",
+               law="`hunger` is defined for the settlement rung only; a kind the roster does not carry is a "
+                   "dead reader wearing a query's clothes (ID-13)")
 
 
 def hunger(w: World, rung_id: str, draw: Optional[dict] = None) -> tuple:
-    """`(band, cover, unmet)`: HOW WELL FED THE PEOPLE UNDER A SETTLEMENT ARE, off the draw and the
-    larders around them. S below is `rung_id`. Defined for a `settlement` rung ONLY (`HUNGER_KIND`); any
-    other id or kind RAISES `InstrumentDefect` (the call was wrong, `restrained`'s precedent). Plan
-    REM-50, as repaired by AM-A-04.
+    """`(band, cover, unmet)`: HOW WELL FED THE PEOPLE UNDER A SETTLEMENT ARE. S is `rung_id`, which must be a
+    `settlement` rung (`HUNGER_KIND`); any other id or kind RAISES `InstrumentDefect` (`restrained`'s
+    precedent). Plan REM-50, as repaired by AM-A-04.
 
         D = Σ_k demanded(w, S, draw)[k]       what the cohorts under S need of the larder this season
         G = Σ_k delivered(w, S, draw)[k]      what the draw gives them (the next draw, when `draw` is None)
-        A = Σ stores of the rung and every rung beneath it (`_subtree`), of the kinds `demanded` names
+        A = Σ stores of S and every rung beneath it (`_subtree`), of the kinds `demanded` names
+            (timber, ore and coin are stored and not eaten, `rosters.yaml: subsistence_weight`)
 
-      * `unmet` = D − G, in UNITS (not a share): what the draw leaves unfed under S. It is NOT
-        `census`'s `eaters_short`, which COUNTS the persons short in the LAST MATTER's record
-        (`World._subsistence_shortfall`). `census` reads the NEXT draw (`subsistence_draw`, taken once
-        for all its settlements), so the `unmet` it reports is the NEXT draw's (at build `eaters_short`
-        is 0 while every populated settlement reads `starving`).
-      * `cover` = A / D, an exact `fractions.Fraction`: SEASONS OF FOOD ON HAND ("cover" is this
-        Query's coinage and means only that ratio). `Fraction(0)` when D = 0. A `Fraction` and not the
-        `(A, D)` pair `density` returns, because the pair cannot say "0" for D = 0 and a `Fraction`
-        compares to a whole season directly; no Query here returns a float for it.
-      * `band`: `"starving"` if `unmet > 0`; else the first of `HUNGER_FLOOR_BANDS` whose floor
-        `Fixtures.hunger_band_floors` says the stores fall under, compared as `A < floor * D` in whole
-        numbers (no float); else `"fed"`. With D = 0 no floor is fallen under, so the band is `"fed"`.
-        `()` is THE CONTROL: no floor band exists, so the Query reads `"starving"` or `"fed"` and never
-        `"hungry"` or `"lean"`. A floor list that is not whole, non-negative and ascending, or longer
-        than `HUNGER_FLOOR_BANDS`, RAISES `Forbidden` (the sweep arm would otherwise mislabel a band).
-      * A is the sum over the kinds the cohorts EAT (`demanded`'s keys): timber, ore and coin are
-        stored and not eaten (`rosters.yaml: subsistence_weight`), so they are not food on hand.
+      * `unmet` = D − G, in UNITS: what the draw leaves unfed under S. It is NOT `census`'s `eaters_short`,
+        which COUNTS the persons short in the LAST MATTER's record (`World._subsistence_shortfall`);
+        `census` reads the NEXT draw (taken once for all its settlements), so at build `eaters_short` is 0
+        while every populated settlement reads `starving`.
+      * `cover` = A / D, an exact `fractions.Fraction`: SEASONS OF FOOD ON HAND ("cover" is this Query's
+        coinage and means only that ratio); `Fraction(0)` when D = 0. A `Fraction` and not `density`'s
+        `(A, D)` pair, because the pair cannot say "0" for D = 0; no float.
+      * `band`: `"starving"` if `unmet > 0`; else the first of `HUNGER_FLOOR_BANDS` whose floor in
+        `Fixtures.hunger_band_floors` the stores fall under, `A < floor * D` in whole numbers; else `"fed"`
+        (also when D = 0). `()` is THE CONTROL: no floor band exists, so only `"starving"` or `"fed"`. A
+        floor list that is not whole, non-negative and ascending, or longer than `HUNGER_FLOOR_BANDS`,
+        RAISES `Forbidden` (the sweep arm would otherwise mislabel a band).
 
-    ⚠ A DERIVED QUERY, OWNED BY NOBODY (T-a): it stores nothing and writes nothing (`Rung.__setattr__`
-    refuses an aggregate field), reusing `demanded` and `delivered` so the band cannot disagree with
-    the draw that runs (§8). THE LOOP DOES NOT READ IT. ID-13 (a Query nobody calls) IS WAIVED: REM-51,
-    its first game caller, is CUT (AM-A-03), so its only reader is `harness/populated.py::census` until
-    CP-T08-06, CP-T10-03 and CP-T10-05 land. A wrong band therefore moves nothing in play and is caught
-    only by `tests/test_hunger.py`. The thresholds are an injected, swept assumption (`H-242`, JQ-6).
+    ⚠ A DERIVED QUERY, OWNED BY NOBODY (T-a): it writes nothing and reuses `demanded` and `delivered`, so
+    the band cannot disagree with the draw that runs (§8). THE LOOP DOES NOT READ IT. ID-13 (a Query nobody
+    calls) IS WAIVED: REM-51, its first game caller, is CUT (AM-A-03), so its only reader is
+    `harness/populated.py::census` until CP-T08-06, CP-T10-03 and CP-T10-05 land, and `tests/test_hunger.py`
+    is what catches a wrong band. The floors are an injected, swept assumption (`H-242`).
 
-    ⚠ THE STATED LIMIT: A COUNTS STORES THE EATERS NEVER DRAW. Eaters draw at S and ABOVE -- the walk is
-    `ancestry(home)`, upward from a cohort's home to the first id that is not a rung (`_larder_parts`,
-    `larder_input`), taking from the first rung that holds any -- while hearths and communities sit
-    BENEATH S (in the default `build_realm`, `guards=False`, every cohort is homed AT a settlement;
-    `guards=True` posts guard cohorts where their principals stand), and A sums `Rung.stores` over
-    `_subtree` (S and its descendants). So a store under S that no cohort's ladder passes through is
-    counted though never drawn, and one ABOVE S, which a draw does reach, is not counted. This is a known
-    mismatch, stated and not fixed here: `unmet` (the draw itself) is exact, and `cover` and the floor
-    bands inherit the mismatch.
-
-    ⚠ TWO CONSEQUENCES OF THE PLAN'S FORMULA, recorded and not changed:
+    ⚠ THREE LIMITS, stated and not fixed:
+      * A COUNTS STORES THE EATERS NEVER DRAW. Eaters draw at S and ABOVE (the walk is `ancestry(home)`,
+        upward from a cohort's home to the first id that is not a rung, taking from the first rung that holds
+        any: `_larder_parts`, `larder_input`), while hearths and communities sit BENEATH S (in the default
+        `build_realm`, `guards=False`, every cohort is homed AT a settlement; `guards=True` posts guard
+        cohorts where their principals stand), and A sums `_subtree`. So a store under S on no cohort's
+        ladder is counted though never drawn, and one ABOVE S, which a draw does reach, is not counted.
+        `unmet` (the draw itself) is exact; `cover` and the floor bands inherit the mismatch.
       * A and D sum UNLIKE kinds, as the plan's `Σ_k` does, while the draw substitutes none
-        (`settlements.larder_draw` walks kind by kind). So a surplus of one eaten kind can lift `cover`
-        over a floor that another kind sits under: grain 20 and salt 1000 against a want of grain 20 and
-        salt 10 read `fed` at cover 34 with one season of grain (`test_hunger.py::test_g`). `unmet` is per
-        kind, so the mask can hide `hungry` or `lean`, never `starving`.
+        (`settlements.larder_draw` walks kind by kind). A surplus of one eaten kind can lift `cover` over a
+        floor another kind sits under: grain 20 and salt 1000 against a want of grain 20 and salt 10 read
+        `fed` at cover 34 (`test_hunger.py::test_g`). `unmet` is per kind, so the mask hides `hungry` or
+        `lean`, never `starving`.
       * Read with no draw at a first floor of 1 (the shipped arm), `hungry` is reachable only through a take
-        from ABOVE S: every unit the draw takes at S or beneath is in A, so `unmet == 0` gives `A >= D`.
-        `census` therefore shows `hungry` only for a settlement fed from above it. A settlement with no
-        cohort under it (D = 0) reads `fed`."""
+        from ABOVE S: every unit the draw takes at S or beneath is in A, so `unmet == 0` gives `A >= D`. A
+        settlement with no cohort under it (D = 0) reads `fed`."""
     TRACE.query("hunger", "resolver")
     rung = w.rungs.get(rung_id)
     if rung is None or rung.kind != HUNGER_KIND:
