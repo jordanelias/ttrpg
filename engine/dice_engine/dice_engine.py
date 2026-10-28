@@ -174,6 +174,12 @@ def _die_result(face: int) -> int:
 _MU_PER_DIE: float = 0.40      # [canonical: params/core.md §Expected Value, TN 7]
 _SIGMA_PER_DIE: float = 0.800  # [canonical: params/core.md §Expected Value, TN 7]
 
+# The public names of the pair above — the ONE owner of the per-die mean and sigma. Every other
+# module reads these (engine/dice_engine/sigma_leverage.py aliases them); none keeps a second copy.
+# The private names stay: tests/valoria/test_tn7_always.py pins them.
+MU_PER_DIE: float = _MU_PER_DIE
+SIGMA_PER_DIE: float = _SIGMA_PER_DIE
+
 
 _TN_RULING = ('TN is 7. Always. Jordan, 2026-08-25: "TN7 always. Never change TN anywhere '
               'ever." A varying difficulty is an Ob, not a TN. (ED-IN-0196)')
