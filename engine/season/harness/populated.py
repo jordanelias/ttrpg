@@ -1693,7 +1693,7 @@ def census(w: World) -> dict:
             "sites_below_a_floor_by_territory": {
                 r: n for r in sorted(w.rungs) if w.rungs[r].kind == "territory"
                 if (n := len(closed_uses(w, r)))},
-            # REM-50: `world_q.hunger`'s only caller until CP-T08-06 -- `uncontrolled`'s precedent above: a
+            # REM-50: `world_q.hunger`'s only caller until CP-T10-05 -- `uncontrolled`'s precedent above: a
             # report, not a rule. Each settlement's band, from the NEXT draw; D = 0 counts as `fed`.
             "hunger_by_settlement": dict(sorted(hunger_bands.items()))}
 

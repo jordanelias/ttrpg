@@ -1546,8 +1546,9 @@ def hunger(w: World, rung_id: str, draw: Optional[dict] = None) -> tuple:
         which COUNTS the persons short in the LAST MATTER's record (`World._subsistence_shortfall`);
         `census` reads the NEXT draw (taken once for all its settlements), so at build `eaters_short` is 0
         while every populated settlement reads `starving`.
-      * `cover` = A / D, an exact `fractions.Fraction`: SEASONS OF FOOD ON HAND ("cover" is this Query's
-        coinage and means only that ratio); `Fraction(0)` when D = 0. A `Fraction` and not `density`'s
+      * `cover` = A / D, an exact `fractions.Fraction`: SEASONS OF FOOD ON HAND (a ratio, unrelated to the
+        `cover` Record kind of `conceal`; likewise the band `lean` is not `person_q`'s pursuit `lean`);
+        `Fraction(0)` when D = 0. A `Fraction` and not `density`'s
         `(A, D)` pair, because the pair cannot say "0" for D = 0; no float.
       * `band`: `"starving"` if `unmet > 0`; else the first of `HUNGER_FLOOR_BANDS` whose floor in
         `Fixtures.hunger_band_floors` the stores fall under, `A < floor * D` in whole numbers; else `"fed"`
@@ -1558,8 +1559,9 @@ def hunger(w: World, rung_id: str, draw: Optional[dict] = None) -> tuple:
     ⚠ A DERIVED QUERY, OWNED BY NOBODY (T-a): it writes no World store and appends no Event, and reuses
     `demanded` and `delivered`, so the band cannot disagree with the draw that runs (§8). THE LOOP DOES NOT
     READ IT. ID-13 (a Query nobody calls) IS WAIVED: REM-51, its first game caller, is CUT (AM-A-03), so its
-    only reader is `harness/populated.py::census` until CP-T08-06, CP-T10-03 and CP-T10-05 land, and
-    `tests/test_hunger.py` is what catches a wrong band. The floors are an injected, swept assumption
+    only reader is `harness/populated.py::census` until CP-T10-05's `illness_by_hunger` lands (CP-T10-03 reads
+    its `cover` in a falsifier; CP-T08-06's `unrest` shares this band method, AM-E-17, and does not call it),
+    and `tests/test_hunger.py` is what catches a wrong band. The floors are an injected, swept assumption
     (`H-242`); the band names are `rosters.yaml: hunger_bands`.
 
     ⚠ THREE LIMITS, stated and not fixed:
