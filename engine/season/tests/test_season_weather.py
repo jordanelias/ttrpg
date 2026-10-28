@@ -249,9 +249,13 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # tree: those Observations stripped from the one-season log re-read 57fae32f... exactly. The build,
 # `guards=True` and `foreign=True` hashes are equal (8e4032a2 / c98563e0 / 90b531a1). Was 57fae32f... /
 # 3c4e03e6... (one, two seasons).
-BASE_HASHES = {0: "8e4032a26cfeabdc55bba2178b82d564",
-               1: "b2464a6c87dd9d2da9e3b3cbc8143fdf",
-               2: "5301d6b62af614f4e96407a9c3466a50"}
+# RE-PINNED at GO-07 (B10-03b), A DIGEST-FORMAT MOVE DECLARED, NO GAME MOVE: `content_hash` folds the
+# canonical encoding instead of `repr()`. Was 8e4032a2... / b2464a6c... / 5301d6b6... (build, one, two
+# seasons); `BASE_EVENTS` unmoved, and the old `repr` digest over the same worlds still read those three
+# when measured at GO-07 (`test_go07_canonical_digest.py`'s control re-reads it at one season, seeds 0-2).
+BASE_HASHES = {0: "9ff5390939742b7bbb3af0fa2551e958",
+               1: "947c190baae2dda4b512d42271f36dd4",
+               2: "52a106bcb0cedac9cb74c8328e962eab"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
