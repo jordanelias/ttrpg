@@ -1457,6 +1457,18 @@ def _derive_record_referent_kinds() -> frozenset:
 
 RECORD_REFERENT_KINDS = _derive_record_referent_kinds()
 
+
+def _derive_declared_classes() -> frozenset:
+    """v10 REM-21 (AM-A-06): THE REFERENT CLASSES SOME ROW DECLARES -- every `referent_class:` value in
+    the table, read off the rows as `RECORD_REFERENT_KINDS` is, so the own-referent term
+    (`queries/world_q.py::own_referents_of_class`) stamps only a class a row forms on and no class
+    literal lives at the stamp site. A subset of `rosters.yaml: referent_classes` (the load refuses any
+    other); `questions_for` holds back `rosters.yaml: occasion_only_classes` from it."""
+    return frozenset(row.referent_class for row in VERB_TABLE.values() if row.referent_class)
+
+
+DECLARED_CLASSES = _derive_declared_classes()
+
 # v9 IN-12 step 7: `{verb: (record kinds)}` -- the verbs that may ALSO form on what a held writ of one of
 # those kinds says (`rosters.yaml: terms_sourced`; `commit` on a covenant dispensation's Proposition).
 # REFUSED AT IMPORT, `WARRANT_SOURCED`'s reason: a verb the table lacks, a kind `writs_held` never stamps

@@ -636,6 +636,39 @@ rosters:
       purview rather than whatever he was asked about. The class is shared, as `Office` is between
       `confer` and `oblige`: each row forms on both sources and the fold disposes. REVERT: `requisition`'s
       column (which empties `RUNG_REMIT_ACTS`) and `larders_in_purview`'s splice.
+      v10 REM-21 (B10-05, AM-A-06, [ASSUMPTION; medium; Jordan to correct]): `Site`, `Proposition`
+      and `Person` -- THE THINGS A QUESTION IS ITSELF ABOUT, carried as their kind. Not a standing
+      occasion: `queries/world_q.py::own_referents_of_class`, one more term of `questions_for`'s
+      splice, stamps the PLAIN referents of the question the person answers whose collection
+      (`World.class_of`) is a class some verb row declares (`data/verbs.py::DECLARED_CLASSES`) and
+      that `occasion_only_classes` (below) does not hold back. It reads the question and never the
+      ledger, so a person who knows fifty people is offered none of them unless his question is
+      about one. `Site`: a worked or built place standing on a rung (`w.sites`,
+      `state/carriers.py::Site` -- a harbour, a seam, a works, a dwelling). `Proposition`: a stated
+      thing a person may commit to, assert or dispute (`w.propositions`,
+      `state/carriers.py::Proposition` -- an OUGHT, a covenant's term). `Person`: a person or cohort
+      by his own id (`w.persons`, `state/carriers.py::Person`); his `person`-kind rung shares the id
+      and `class_of` answers `Person` for it. While no row declares one of the three, the term stamps
+      nothing for it and no formation moves; a row's `referent_class:` naming it is what makes the
+      term stamp it. REVERT: drop the three values and the term.
+    values: [Office, Record, Rung, Site, Proposition, Person]
+
+  occasion_only_classes:
+    source: "v10 REM-21 (B10-05, AM-A-06's exclusion)"
+    open: false
+    note: >-
+      THE REFERENT CLASSES ONLY A STANDING OCCASION STAMPS -- never from a question's own referents.
+      `queries/world_q.py::questions_for` stamps a class onto the question a person answers in two
+      ways: a standing occasion, a named term of its splice reading the person's own seats, edges and
+      ledger (`vacancies` and `seats_named` as `Office`, `writs_held` as `Record`, `places_named` and
+      `larders_in_purview` as `Rung`), or `own_referents_of_class`, which carries the question's own
+      plain referents of every class a verb row declares EXCEPT the ones listed here. These three are
+      held back because their rows (`confer`, `oblige`, `comply`, `migrate`, `requisition`) were
+      measured forming on plain referents and stopped by their class (rem-02 REM-21, rejected option
+      (a)): carrying the question's own seat, writ or place as that class would widen them onto it
+      again. A member must be a `referent_classes` value (`data/rosters.py` refuses another at load).
+      Removing a class from this list is the edit that lets the own-referent term stamp it. REVERT:
+      with the term, the list goes.
     values: [Office, Record, Rung]
 
   person_predicates:

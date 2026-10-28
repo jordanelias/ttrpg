@@ -38,14 +38,16 @@ from typing import Callable, Optional
 from ..data.requires import OWN_STATE_STEMS, UNKNOWN, binding_from_act
 from ..data.rosters import (
     BAN_KIND, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP, HUNGER_BANDS,
-    QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, REMOVE_ORDINAL, RESTRAINT_KINDS, RUNG_KINDS,
-    SITE_KINDS, STANDING_CROSSED, TENURE_KINDS, faction_prop_id, require_member,
+    OCCASION_ONLY_CLASSES, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, REMOVE_ORDINAL,
+    RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STANDING_CROSSED, TENURE_KINDS, faction_prop_id,
+    require_member,
 )
 # IN-09: the Record kinds a held document is an occasion for, derived off the verb table's rows;
 # v9 IN-49: the remit acts a seat exercises on a `Rung`-classed referent, the same way.
 # v9 IN-27: `_OPENERS_FROM_EFFECTS` is which verbs open which Tenure kind, derived off the effects
 # (`OPENERS-DERIVE`); `endings_reached` evaluates the `ENDINGS` vocabulary imported above.
-from ..data.verbs import RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS, _OPENERS_FROM_EFFECTS
+# v10 REM-21: `DECLARED_CLASSES`, the referent classes some row declares, the same way.
+from ..data.verbs import DECLARED_CLASSES, RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS, _OPENERS_FROM_EFFECTS
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
 # the asker-first module (which may not import this one; this edge runs the other way).
@@ -2639,13 +2641,37 @@ def larders_in_purview(w: World, p: Person, named: Optional[frozenset] = None) -
     return tuple(out)
 
 
+def own_referents_of_class(w: World, q: Question, classes: frozenset) -> tuple:
+    """THE QUESTION'S OWN REFERENTS OF A STAMPED CLASS (v10 REM-21, AM-A-06, [ASSUMPTION; medium;
+    Jordan to correct]): the plain `referents` of `q` -- the question the person answers, `out[0]`
+    in `questions_for` -- whose collection (`World.class_of`) is in `classes`, in their order. One
+    more term of the splice, so `_stamped` carries them on that same question as that class and a row
+    declaring it forms on the thing the question is about, not on the referents of every other kind.
+
+    NOT A STANDING OCCASION: it reads the question and never the person's ledger or edges, so a
+    person who knows fifty people is offered none of them unless his question names one. `classes`
+    is `questions_for`'s: every class a row declares (`data/verbs.py::DECLARED_CLASSES`) less
+    `rosters.yaml: occasion_only_classes`, so no class literal lives here; while no row declares a
+    class outside that list the set is empty and this returns `()`. Resolver-side and read-only.
+    REVERT: drop the term in `questions_for`."""
+    if not classes:
+        return ()
+    return tuple(r for r in q.referents if w.class_of(r) in classes)
+
+
 def _stamped(q: Question, added: tuple, w: World) -> Question:
     """`q` carrying the ids in `added` as CLASSED referents (IN-53, DECISION 2026-10-13 D1) -- the
     one stamp site. Each id's class is the collection the World holds it in (`World.class_of`:
     `Office` for a seat in `w.offices`, `Record` for a document in `w.records` since IN-09), never a
     literal, and `Question` refuses a class `rosters.yaml: referent_classes` does not declare. The
-    plain `referents` are untouched (the class is a partition)."""
-    return replace(q, classes=q.classes + tuple((o, w.class_of(o)) for o in added))
+    plain `referents` are untouched (the class is a partition).
+    ONE PAIR PER QUESTION, THE FIRST (v10 REM-21 (iv-b)): `Question` refuses an `(id, class)` pair
+    carried twice, and two terms of the splice may name one id (a seat he may fill that he was also
+    told of; a place he could settle in that is also a larder in purview; a question's own referent
+    beside a standing occasion's stamp), so each pair is kept at its first position -- `q`'s own,
+    then `added` in splice order -- and never refused. REVERT: the concatenation, and every term
+    pair that can overlap filters by hand again."""
+    return replace(q, classes=tuple(dict.fromkeys(q.classes + tuple((o, w.class_of(o)) for o in added))))
 
 
 _SOURCE_ORDER = {src: i for i, src in enumerate(QUESTION_SOURCES)}
@@ -2816,8 +2842,10 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     been told of and could settle in (`places_named`, v9 IN-45 `migrate`) and the larders his seat
     may requisition (`larders_in_purview`, v9 IN-49 `requisition`). They are not
     sources: no id or source changes; a person with one of them and no question gets one `need`
-    question carrying them. And, since v9 SC-01's fired-slot step, one `claim_landed` question per
-    fired sitting whose docket holds a matter and whose bench he sits on (`sittings_before`; the loop
+    question carrying them. Stamped last, and no occasion: that first question's own plain referents
+    of a class a row declares and `rosters.yaml: occasion_only_classes` does not hold back
+    (`own_referents_of_class`, v10 REM-21). And, since v9 SC-01's fired-slot step, one
+    `claim_landed` question per fired sitting whose docket holds a matter and whose bench he sits on (`sittings_before`; the loop
     after Q4 says why it is no third source). And, since v9 SC-02 `22b` step 23, one `claim_landed`
     question on his own standing crossing this season, about the people who told (`standing_crossed`).
 
@@ -2980,12 +3008,18 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # has room, or a seat reaches it, is then the fold's (`vacancies`/`seats_named`' Office precedent,
     # H-207; H-163 records what the cross-reading costs). No source is added, so no `question_sources`
     # order moves (IN-57: the occasion rides the question he answers). REVERT: drop the term.
+    # v10 REM-21 (AM-A-06, [ASSUMPTION; medium; Jordan to correct]): AND, LAST, THE QUESTION'S OWN
+    # PLAIN REFERENTS OF EVERY CLASS A ROW DECLARES BUT `rosters.yaml: occasion_only_classes`
+    # (`own_referents_of_class`) -- no standing occasion, the question he answers read for its own
+    # kinds. "Never twice" is `_stamped`'s one dedup (the first pair kept), not a filter per term
+    # pair, so a later term composes by being appended. REVERT: drop the term.
     vacant = vacancies(w, p)
     told = ledger_names(p.ledger)
     places = places_named(w, p, told)
-    added = (vacant + tuple(o for o in seats_named(w, p, told) if o not in vacant)
-             + writs_held(w, p) + places
-             + tuple(r for r in larders_in_purview(w, p, told) if r not in places))
+    added = (vacant + seats_named(w, p, told) + writs_held(w, p) + places
+             + larders_in_purview(w, p, told)
+             + (own_referents_of_class(w, out[0], DECLARED_CLASSES - OCCASION_ONLY_CLASSES)
+                if out else ()))
     if added:
         head = out[0] if out else Question(f"q:need:{added[0]}", "need", (), added[0])
         out[:1] = [_stamped(head, added, w)]

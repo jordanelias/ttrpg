@@ -775,6 +775,16 @@ QUESTION_SOURCES = roster("question_sources", ordered=True)
 #: closed set a `Question.classes` pair and a verb row's `referent_class:` column may name. A classed
 #: referent is a partition beside the plain `referents` (`rosters.yaml: referent_classes`' note).
 REFERENT_CLASSES = roster("referent_classes")
+#: v10 REM-21 (AM-A-06's exclusion): THE CLASSES ONLY A STANDING OCCASION STAMPS -- held back from
+#: `queries/world_q.py::own_referents_of_class` (`rosters.yaml: occasion_only_classes`' note). A member
+#: that is no referent class would hold back nothing and let its namesake through, so it refuses here.
+OCCASION_ONLY_CLASSES = roster("occasion_only_classes")
+for _c in sorted(OCCASION_ONLY_CLASSES):
+    require_member(_c, REFERENT_CLASSES,
+                   f"`occasion_only_classes` names {_c!r}, which is no referent class",
+                   "rosters.yaml -- occasion_only_classes",
+                   law="v10 REM-21 -- the own-referent term holds back a declared class; a misspelt one "
+                       "holds back nothing")
 PERSON_PREDICATES = roster("person_predicates")
 VIEW_BUILDER_RULES = roster("view_builder_rules")
 QUESTION_AGGREGATION = roster("question_aggregation", ordered=True)

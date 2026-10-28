@@ -234,7 +234,9 @@ def test_in53v_c_the_classes_survive_the_fold_and_are_closed():
     # RE-RECORDED AT v9 IN-45 `migrate`: `Rung` joins, the places `places_named` stamps (H-168).
     # Spelled as a size and two memberships: `test_jordan_no_definition_is_hardcoded_in_a_body` flags a
     # three-string literal here as a roster duplicated from rosters.yaml.
-    assert len(REFERENT_CLASSES) == 3 and {"Office", "Record"} <= REFERENT_CLASSES and "Rung" in REFERENT_CLASSES
+    # RE-RECORDED AT v10 REM-21: `Site`, `Proposition` and `Person` join (was 3), the classes the
+    # own-referent term stamps once a row declares one (`test_referent_class_stamps.py`).
+    assert len(REFERENT_CLASSES) == 6 and {"Office", "Record"} <= REFERENT_CLASSES and "Rung" in REFERENT_CLASSES
     a = Question("q:claim:x", "claim_landed", ("S",), "x")
     b = Question("q:need:off_reeve", "need", (), "off_reeve", (("off_reeve", "Office"),))
     for rule in ("all", "one_per_source"):
@@ -243,7 +245,8 @@ def test_in53v_c_the_classes_survive_the_fold_and_are_closed():
         assert f.referents_for(None) == ("S",), f
     assert aggregate_questions([a, b], "first") is a
     with pytest.raises(Forbidden, match="no declared class"):
-        Question("q:bad", "need", ("off_duke",), "", (("off_duke", "Site"),))   # `Rung` is declared since IN-45
+        # `Rung` is declared since IN-45, `Site` since v10 REM-21; a misspelt class still refuses
+        Question("q:bad", "need", ("off_duke",), "", (("off_duke", "Ofice"),))
     with pytest.raises(Forbidden, match="twice"):
         Question("q:bad", "need", (), "", (("off_duke", "Office"), ("off_duke", "Office")))
 
