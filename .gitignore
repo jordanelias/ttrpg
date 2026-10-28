@@ -58,3 +58,15 @@ references/definitions/definitions.yaml
 # in engine/season/requirements.yaml R-02); runs/WD_LOG.txt is the committed record. Local copies stay.
 proposals/2026-09-04-degree-sweep/runs/wd_chunk_*.json
 proposals/2026-09-04-degree-sweep/runs/wd_acceptance.json
+# The season harness's process output: `report.py` writes TRACE.txt and the eight markdown logs on every
+# run and nothing reads them back. Untracked (REM-46); local copies stay. `runs/results.json` stays TRACKED:
+# it still observes trace moves, and the w15 reproduction test and `harness/delta.py` read it.
+engine/season/runs/TRACE.txt
+engine/season/runs/ASSUMPTIONS.md
+engine/season/runs/CASELOG_ARC.md
+engine/season/runs/CASELOG_NPC.md
+engine/season/runs/DECISIONS.md
+engine/season/runs/PROBES.md
+engine/season/runs/STEPS.md
+engine/season/runs/UNMAPPED_ARC.md
+engine/season/runs/UNMAPPED_NPC.md

@@ -1586,28 +1586,15 @@ def test_the_corpus_defects_are_reported_not_hidden():
 # and FOUR ARC CASES WERE WRONG IN A MERGED PR -- a defect nothing could notice, because no
 # artifact was ever checked against any other.
 #
-# THREE TESTS, AND THE MIDDLE ONE IS THE GUARD. An adversarial pass broke the first draft of
-# this block, which had only the outer two, and both of its findings are fixed here rather than
-# filed:
+# TWO TESTS, AND THE SECOND IS THE GUARD. An adversarial pass broke the first draft of this block,
+# which had only the entrypoint test, and the finding is fixed here rather than filed:
 #
 #   * the ENTRYPOINT test proves the silent entrypoint is silent. It proves nothing about the
 #     loud one.
 #   * the REPRODUCTION test proves the loud one is correct: it executes `report.py` and asserts
-#     every committed artifact comes back byte-identical. That covers all ten artifacts and
-#     every field rendered into them, and it is the test that would have caught all four wrong
-#     ARC cases. W15's Proof says "running EITHER entrypoint", and this is the "either".
-#   * the PER-CASE test is W15's Proof stated literally -- caselog verdict == `results.json` for
-#     all 143. IT IS A DIAGNOSIS, NOT THE GUARD: it re-parses a markdown format `report.py` owns,
-#     so a cosmetic change to that format fails it. The failure direction is safe (a false alarm,
-#     never a false pass) and the reproduction test above is what actually enforces G7.
-#
-# The first draft of the per-case test compared ONLY `verdict` while claiming in its own
-# docstring that it "would have caught the four wrong ARC cases". It would have caught ONE:
-# `run_cases.py`'s grader short-circuits on `if core_blocked: verdict = "BLOCKED"`, so SCN-06's
-# defect (blockers `A27` -> `A27, P17`) could not move a verdict at all, and EMG-C2/NSC-09 stay
-# NOT-ASSESSED either way. A false claim of enforcement is worse than none, because it stops the
-# next reader from checking (ARCHITECTURE.md S47). It now compares every field the caselog
-# renders, which does catch SCN-06.
+#     the committed `results.json` comes back byte-identical. W15's Proof says "running EITHER
+#     entrypoint", and this is the "either". `TRACE.txt` and the eight markdown logs are
+#     process artifacts, no longer tracked (REM-46), so they are not compared.
 # ===========================================================================
 
 # ⚠ RENAMED FROM `PROPOSAL` AT THE ADOPTION, NOT ALIASED. The package no longer lives under
@@ -1757,97 +1744,34 @@ def test_w15_the_run_cases_entrypoint_writes_nothing():
 
 
 def test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte():
-    """**THE GUARD.** Executes the sole emitter and asserts every committed artifact comes back
-    byte-identical. This is what makes a stale artifact impossible rather than merely unlikely:
-    it covers `results.json`, `TRACE.txt` and all eight markdown files, and every field rendered
-    into them -- not the one scalar the per-case test can reach. It subsumes the four wrong ARC
-    cases, including the three a verdict comparison cannot see.
+    """**THE GUARD.** Executes the sole emitter and asserts the one committed artifact,
+    `results.json`, comes back byte-identical (the name keeps "every committed artifact" so the
+    citations of it elsewhere still resolve; the committed set is now one file). `TRACE.txt` and the eight markdown logs are no
+    longer tracked (they are `.gitignore`d; `report.py` still writes them on disk), so a
+    clean checkout has none of them and this test reads none of them. `results.json` stays
+    tracked because it still observes trace moves (`_trace_counts`, `run_cases.py`).
 
     ⚠ HOLDS `_w15_exclusive` FOR THE SAME REASON ITS SIBLING DOES, and this is the half that does
-    the damage: it writes every file under `runs/` TWICE -- once by executing the emitter, once
-    more in the `finally` that restores the committed bytes, since a restore is itself a write.
+    the damage: it writes `results.json` TWICE -- once by executing the emitter, once more in
+    the `finally` that restores the committed bytes, since a restore is itself a write.
     Unserialized, those writes land inside the sibling's before/after window on another worker."""
-    runs = PACKAGE / "runs"
+    results = PACKAGE / "runs" / "results.json"
+    assert results.is_file(), f"{results} is not on disk -- it is the one tracked run artifact"
     with _w15_exclusive():
-        before = {f.name: f.read_bytes() for f in sorted(runs.iterdir()) if f.is_file()}
-        assert len(before) >= 10, f"expected the ten run artifacts, fingerprinted {sorted(before)}"
+        before = results.read_bytes()
         try:
             _run("report")
-            after = {f.name: f.read_bytes() for f in sorted(runs.iterdir()) if f.is_file()}
+            after = results.read_bytes()
         finally:
             # PUT THE COMMITTED BYTES BACK. Without this the test HEALS the tree it is judging: a
             # stale artifact would fail once, be silently overwritten with the correct output, and
             # pass on the next run -- so the defect it exists to catch would be unreproducible and
             # would leave an uncommitted edit nobody asked for. A test does not repair its subject.
-            for name, blob in before.items():
-                f = runs / name
-                if not f.exists() or f.read_bytes() != blob:
-                    f.write_bytes(blob)
-    assert set(before) == set(after), (
-        f"report.py changed WHICH artifacts exist: added {sorted(set(after) - set(before))}, "
-        f"removed {sorted(set(before) - set(after))}")
-    stale = sorted(k for k in before if before[k] != after[k])
-    assert not stale, (
-        f"committed artifacts do not match what report.py produces: {stale}. Either the run "
-        "is non-deterministic or the artifacts were committed from a different run (W15/G7).")
-
-
-_CASE_HEAD = re.compile(r"^## (\S+) .*?\*\*([A-Z-]+)\*\*\s*$")
-_CASE_META = re.compile(
-    r"^\*(?P<scale>.*?) · (?P<rows>\d+) rows, (?P<core>\d+) core · blockers: (?P<blockers>.*)\*$")
-
-
-def _caselog_records(kind: str) -> dict:
-    """Parse every field `report.py` renders per case out of the committed caselog -- the header
-    line's id and verdict, and the meta line's scale, row counts and blockers. Comparing the
-    verdict ALONE is what let SCN-06's defect through the first draft of this test."""
-    lines = (PACKAGE / "runs" / f"CASELOG_{kind}.md").read_text().splitlines()
-    out, pending = {}, None
-    for line in lines:
-        h = _CASE_HEAD.match(line)
-        if h:
-            pending = h.group(1)
-            out[pending] = {"verdict": h.group(2)}
-            continue
-        if pending:
-            m = _CASE_META.match(line)
-            if m:
-                out[pending].update(scale=m.group("scale"), rows=int(m.group("rows")),
-                                    core=int(m.group("core")), blockers=m.group("blockers"))
-                pending = None
-    return out
-
-
-def test_w15_every_case_record_in_the_caselog_equals_results_json():
-    """W15's Proof, stated literally: the caselog's per-case record equals `results.json`'s for
-    all 143. A DIAGNOSIS rather than the guard -- see the block comment above -- but the one that
-    names the case and the field when the reproduction test says only *CASELOG_ARC.md differs*."""
-    import json as json_
-    results = json_.loads((PACKAGE / "runs" / "results.json").read_text())
-    expected = sum(len(results[k]) for k in ("NPC", "ARC"))
-    checked = 0
-    for kind in ("NPC", "ARC"):
-        logged = _caselog_records(kind)
-        cases = {c["id"]: c for c in results[kind]}
-        assert set(logged) == set(cases), (
-            f"{kind}: caselog and results.json disagree on WHICH cases exist: "
-            f"only in log {sorted(set(logged) - set(cases))}, "
-            f"only in results {sorted(set(cases) - set(logged))}")
-        for cid, c in sorted(cases.items()):
-            got = logged[cid]
-            want = {"verdict": c["verdict"], "scale": c.get("scale", ""),
-                    "rows": c["rows"], "core": c["core"],
-                    "blockers": ", ".join(c["blockers"]) or "none"}
-            assert got == want, (
-                f"{kind} {cid}: caselog says {got}, results.json says {want} -- the artifacts "
-                "are from different runs (W15/G7)")
-            checked += 1
-    # Assert that it asserted (CLAUDE.md S0.1 point 2). The bound is derived from the corpus,
-    # never a literal: a legitimate corpus addition must not fail as an artifact defect.
-    assert checked == expected, f"compared {checked} of {expected} cases"
-    # The corpus size is 143 today. Reproduce:
-    #   python -c "import json;d=json.load(open('../runs/results.json'));print(len(d['NPC'])+len(d['ARC']))"
-    assert expected > 0, "results.json carries no cases at all"
+            if not results.exists() or results.read_bytes() != before:
+                results.write_bytes(before)
+    assert before == after, (
+        "the committed results.json does not match what report.py produces. Either the run "
+        "is non-deterministic or the artifact was committed from a different run (W15/G7).")
 
 
 # ===========================================================================
