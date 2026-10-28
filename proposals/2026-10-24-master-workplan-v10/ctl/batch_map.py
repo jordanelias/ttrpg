@@ -6,28 +6,22 @@ This file is the author's judgment in one place; it is not a plan."""
 
 # Closed batches leave SPINE, CARDS and ORDER at their net-deleting close (P3); their handles stay as keys, mapped
 # to CLOSED, so the coverage run still knows them (`-07` section 1 keeps every handle and records the batch CLOSED).
-CLOSED_BATCHES = ["B10-01", "B10-02", "B10-03"]
-CLOSED = "closed: B10-01, B10-02, B10-03 (`-07` section 1)"
+CLOSED_BATCHES = ["B10-01", "B10-02", "B10-03", "B10-04"]
+CLOSED = "closed: B10-01, B10-02, B10-03, B10-04 (`-07` section 1)"
 
-SPINE = ["B10-03b", "B10-04", "B10-05", "B10-06", "B10-07", "B10-07b",
+SPINE = ["B10-03b", "B10-05", "B10-06", "B10-07", "B10-07b",
          "B10-08", "B10-09", "B10-10", "B10-11", "B10-12", "B10-13", "B10-14", "B10-15", "B10-16",
          "B10-17", "B10-18", "B10-20", "B10-19", "B10-Z"]
 
 CARDS = {
  'B10-03b': dict(name='THE PORTABLE DIGEST', lanes='GO, IN', code=True,
-   gate='merged: B10-03 (f7352efc), B10-04 (a declared-mover sub-batch after B10-03 closes, because B10-03 is EQUAL)',
+   gate='merged: B10-03 (f7352efc), B10-04 (566de4d7) (a declared-mover sub-batch after B10-03 closes, because B10-03 is EQUAL)',
    exit="GO-07's falsifier and controls; the commit body lists every hash pin and every baseline B10-02's close recorded, old to new",
    hash='M (digest format only)',
    shared='engine/season/state/world.py (_entity_digest, content_hash, the log fold); every committed hash pin and golden digest',
    build='2026-10-24-v10-09-build-B10-03b.md'),
- 'B10-04': dict(name='HUNGER', lanes='SE, IN', code=True,
-   gate='merged: B10-02 (3ab145d6)',
-   exit='python -m pytest engine/season/tests/test_hunger.py -q; census hunger_by_settlement on build_realm(0) and on harness/scarce.build -> bands move as the falsifier states; a scarce world reads below fed; build_realm(0) hash EQUAL',
-   hash='E',
-   shared='engine/season/queries/world_q.py (hunger); engine/season/harness/populated.py (census); engine/season/data/fixtures.py (hunger_band_floors); engine/season/hole_register.yaml (one NUMBER row); engine/season/tests/test_hunger.py (new)',
-   build='2026-10-24-v10-09-build-B10-04.md'),
  'B10-05': dict(name='FORMATION: ACTS FORM ONLY ON WHAT THEY CAN REACH', lanes='IN', code=True,
-   gate="merged: B10-02 (3ab145d6), B10-04, B10-03b; layer-conformance Lens B has answered TL :462-467's two Layer 1 questions before the CL-THRUST B2.x and B3.1 landings",
+   gate="merged: B10-02 (3ab145d6), B10-04 (566de4d7), B10-03b; layer-conformance Lens B has answered TL :462-467's two Layer 1 questions before the CL-THRUST B2.x and B3.1 landings",
    exit="PYTHONHASHSEED=0 python -m engine.season.harness.aperture 1 s (s=0,1,2) per item; register --requirements; CR-14 pooled census and wrong-kind column over seeds 0-4 (-08 HR-9; the per-item base stays aperture 1 s, s=0,1,2); CR-28's falsifier; REM-52's re-pins (grep -rn body_step engine/season/tests: test_governance_build.py, test_in22_shortfall_reach.py, test_territorial_subsistence.py, test_se03_body_bands.py, test_season_shape.py, every seeded realm hash pin); CL-EVENTS (1) at (); B2.x and B3.1 at empty data; NM-W2's row deleted with HR-9 control (4)'s reading quoted -> each classed verb exists:<Kind>=0 refusals fall to 0 (base 3,137 over three seeds, a lower bound); the wrong-kind-at-admission share per act falls (base 4,620 of 16,116, 28.7%, four seasons; 2,385 of 7,402, 32.2%, two); controls: pooled per-verb EXECUTED within P1 seed-to-seed range, questions delivered / claims deposited / scenes do not fall, every removed candidate force-admitted refuses on its kind; CL-EVENTS (1), B2.x and B3.1 EQUAL; no claim that R-05 moves",
    hash='mixed (movers: REM-22; REM-23; CR-28; REM-24; REM-25; CP-T05-04; REM-2C; REM-52 (its own declared-mover commit, body_step = 10))',
    shared='engine/season/verb_table.yaml; engine/season/rosters.yaml (referent_classes; thrust_axes); engine/season/queries/world_q.py (questions_for splice, own_referents_of_class, the CR-28 stamper term); engine/season/data/verbs.py (DECLARED_CLASSES; VerbRow.scale removal); engine/season/decision/options.py; count pins: engine/season/tests/test_governance_build.py, test_season_shape.py (len(VERB_TABLE) == 56; executed and always-refused sets); engine/season/tests/test_referent_class_stamps.py (new); engine/season/data/fixtures.py (body_step); engine/season/loop/matter.py; engine/season/queries/inputs.py (ProduceInput.factor); modules/settlements/produce.py; engine/season/goals.yaml; engine/season/data/goals.py; the five body_step test files',
@@ -99,7 +93,7 @@ CARDS = {
    shared='systems/threadwork/sim/operations.py (CR-13, REM-45); engine/season/seam/wrappers/threadwork.py (new host); engine/season/state/carriers.py (Person.coherence; Site.locked); engine/season/write_matrix.yaml; engine/season/rosters.yaml (thread_scales, cells); engine/season/verb_table.yaml (weave, lock, mend, ward, thread_read, tie / knot); engine/season/loop/matter.py (locked-Site yield); engine/season/queries/world_q.py (in_equilibrium, held_load); engine/season/decision/budget.py (coherence_band_floors); engine/season/loop/effects_information.py (_eff_tie); engine/season/decision/options.py (operand_bags); engine/season/data/fixtures.py (tie_known); engine/season/seam/wrappers/sigma.py (the Will addend)',
    build='2026-10-24-v10-09-build-B10-15.md'),
  'B10-16': dict(name='SETTLEMENTS, GOVERNANCE AND ECONOMY (T08)', lanes='SE', code=True,
-   gate="merged: B10-04, B10-06, B10-15 (CR-23 and IN-45 landed at B10-06; CR-23 owns H-163 limit 3(a)); held positions: SE-04 part (b) (released from M11, in B10-Z, unscheduled); IN-52's retirement (M3, confirmed at the default); CP-T08-09 (withdrawn)",
+   gate="merged: B10-04 (566de4d7), B10-06, B10-15 (CR-23 and IN-45 landed at B10-06; CR-23 owns H-163 limit 3(a)); held positions: SE-04 part (b) (released from M11, in B10-Z, unscheduled); IN-52's retirement (M3, confirmed at the default); CP-T08-09 (withdrawn)",
    exit="per item as its home states; CP-T08-06's compliance reader, CP-T08-07, CP-T08-08 and IN-52's flip credited in computed play where CR-23's exit recorded requisition executing, otherwise on harness/scarce.governed only, and never as R-04 conjunct (1) (aperture 4 0 is its reader); CR-40's falsifier and control, python -m pytest engine/season/tests/test_mass_battle_module.py tests/valoria/test_mass_battle_terrain.py -q, the freshness-gate diff showing one pin line moved, the identifier census re-derived -> off arms EQUAL; on arms declared; CR-40 EQUAL",
    hash="mixed (movers: IN-14 (budget moves); CP-T08-08 (declared candidate); CP-T08-07's on arm; IN-52's flip (declared); CR-40 EQUAL)",
    shared='modules/settlements/ (produce.py ProduceInput); engine/season/loop/matter.py; engine/season/queries/world_q.py (labour, price_of, unrest); engine/season/queries/person_q.py (stability read); engine/season/data/fixtures.py; engine/season/rosters.yaml; engine/season/decision/budget.py (IN-14, CP-T08-10); engine/season/loop/driver.py (IN-14 rounds); engine/season/loop/effects_economy.py (CP-T08-08 upkeep_due); engine/season/tests/test_season_shape.py (test_n3 floor re-take); systems/settlements/valoria_geography_v30.yaml, references/canonical_sources.yaml (pin, re-derived) and systems/settlements/_identifier_census.yaml (re-derived) (CR-40)',
@@ -111,7 +105,7 @@ CARDS = {
    shared='engine/season/offices.yaml; engine/season/harness/populated.py; references/npc_registry.yaml; engine/season/verb_table.yaml (declare, recruit, conspire, dispatch); engine/season/loop/sides.py; engine/season/loop/effects_shared.py (occupying_faction); engine/season/queries/world_q.py (seat_people_at, own_purview, opinion_of, uncontrolled caller; faction_props; judging_set matter); engine/season/state/gate.py (may_muster oblige clause; the election arm, FILLED_BY, REVOCATION_DISPOSAL, REVOCATION_RULES); modules/social_contest/roll.py (obstacle terms); engine/season/arrangements.yaml (election, succession); engine/season/loop/effects_information.py (_disposal hold literal; _eff_determine Record site); engine/season/loop/predicates.py (_req_confer, _req_revoke); engine/season/rosters.yaml (conferral_bases, revocation_bases, record_kinds, concurring_bodies, factions.creed); engine/season/state/world.py (_grant_remit); engine/season/epistemic.py (_term_marks); engine/season/decision/options.py (rank); engine/season/tests/test_arrangements.py',
    build='2026-10-24-v10-09-build-B10-17.md'),
  'B10-18': dict(name='WORLD, TRAVEL, SURVIVAL AND NPC LIFE (T10)', lanes='WR, IN', code=True,
-   gate='merged: B10-02 (3ab145d6), B10-04, B10-05, B10-06, B10-09, B10-17; CP-T10-04 and CP-T10-05 released from M11 (ED-IN-0300)',
+   gate='merged: B10-02 (3ab145d6), B10-04 (566de4d7), B10-05, B10-06, B10-09, B10-17; CP-T10-04 and CP-T10-05 released from M11 (ED-IN-0300)',
    exit='per item as its home states; CP-T10-03 ships year_length 0, hash EQUAL (year_length 0 or every season_terms multiplier at 1.0 reproduces the base hash), then its flip as a declared mover; CL-EVENTS (2) falsifier (two territories at one tick draw different factors; () reproduces the base hash); CR-08 writer (grep -rn "weight.changed" engine/season finds it); CR-22 exit (the arms read, the season-0 floor rule, the eaters fed from a larder above their own settlement, the strict-top share at CR-17 tau as a reading); CL-EVENTS (3) loader refusals, draw and scale falsifier and its two controls (python -m pytest engine/season/tests/test_tensions.py -q; engine/season/tests/test_season_weather.py); CL-EVENTS (4) falsifier and seeding refusals, and its readings (STORY-BAR on against off; TL B0.1 ARC rate if landed; card 1 fight on the King), recorded, not a pass condition -> as stated; CL-EVENTS (3) and (4) EQUAL',
    hash="M (movers: CP-T10-06; CP-T10-07 (a new hashed collection); CP-T10-09; CP-T10-08; CP-T10-01 (the same-place rule on both arms; the leg tuple on the ON arm); CP-T10-02; CP-T10-03's year_length flip (its own commit); CL-EVENTS (2); CR-08; CR-22; CP-T10-04 and CP-T10-05 (when released); CL-EVENTS (3) and (4) EQUAL, switch off)",
    shared="engine/season/state/world.py (World.estates, remove_person); engine/season/loop/census.py; engine/season/data/fixtures.py; engine/season/data/geography.py; engine/season/queries/world_q.py (_larder_parts want; heir_of; estates_named; season_factor_of); engine/season/queries/person_q.py (_bond); modules/mass_battle/terrain.py (terrain_type_at); references/module_contracts.yaml (route query role); engine/season/verb_table.yaml (release domain; marry); engine/season/loop/effects_migration.py (_relocate); engine/season/rosters.yaml (subsistence_weight; tension_effects); engine/season/write_matrix.yaml; engine/season/loop/matter.py; engine/season/tensions.yaml (new); engine/season/data/tensions.py (new); engine/season/data/files.py (TENSIONS_YAML); engine/season/harness/populated.py (build_realm(tensions=)); engine/season/data/goals.py (read through parse); engine/season/tests/test_tensions.py (new)",
@@ -145,7 +139,7 @@ REM = {
  "REM-10": CLOSED, "REM-11": CLOSED, "REM-12": CLOSED, "REM-13": CLOSED, "REM-14": CLOSED,
  "REM-15": CLOSED, "REM-16": CLOSED,
  "REM-42": CLOSED, "REM-45": "B10-15", "REM-46": CLOSED, "REM-47": CLOSED,
- "REM-50": "B10-04", "REM-51": CUT, "REM-52": "B10-05",
+ "REM-50": CLOSED, "REM-51": CUT, "REM-52": "B10-05",
  "REM-21": "B10-05", "REM-22": "B10-05", "REM-23": "B10-05", "REM-24": "B10-05", "REM-25": "B10-05", "REM-2C": "B10-05",
  "REM-26": "B10-06", "REM-27": "B10-06", "REM-28": "B10-06", "REM-29": "B10-06", "REM-2A": "B10-06", "REM-2B": "B10-06",
  "REM-40": CUT, "REM-41": CUT, "REM-44": "B10-07",
@@ -248,7 +242,6 @@ CL = {"CL-CHAR": "B10-10", "CL-ATTR": "B10-19", "CL-TROOP": "B10-19", "CL-EVENTS
 # 'landing' is a commit of a row that lives in another batch, not a member)
 ORDER = {
  'B10-03b': 'GO-07',
- 'B10-04': 'REM-50',
  'B10-05': 'REM-21 -> REM-22 -> REM-23 -> CR-28 -> REM-24 -> REM-25 -> CP-T05-04 -> REM-2C -> CR-07 -> landings CL-THRUST B2.1/B2.2 -> landing CL-THRUST B3.1 -> REM-52 -> landing CL-EVENTS (1) -> NM-W2 (EDIT row)',
  'B10-06': 'REM-26 -> REM-27 -> REM-28 -> CR-23 -> REM-29 -> REM-2A -> REM-2B -> IN-45',
  'B10-07': 'REM-44 (with L1-6 and L1-7)',

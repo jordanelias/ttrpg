@@ -69,8 +69,8 @@ from collections import Counter, defaultdict
 
 from ..data import cast, files
 from ..data import goals as goals_data
-from ..queries.world_q import (RESIDE_KIND, ancestry, capacity, closed_uses, home_of as home_of_q, members,
-                                uncontrolled)
+from ..queries.world_q import (HUNGER_KIND, RESIDE_KIND, ancestry, capacity, closed_uses, home_of as home_of_q,
+                                hunger, members, subsistence_draw, uncontrolled)
 from ..gaps import Forbidden, Unspecified
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
 from ..data.rosters import (BODY_FACTION, FACTIONS, FOREIGN_CAST, FOREIGN_SEATS, OFFICES_BY_HOLDER,
@@ -1663,6 +1663,9 @@ def census(w: World) -> dict:
         for k, v in (r.stores or {}).items():
             stores_by_kind[r.kind] += v
     short = getattr(w, "_subsistence_shortfall", {})
+    # REM-50: one walk of the larder ladder for every settlement's `hunger`, never one per call.
+    next_draw = subsistence_draw(w)
+    hunger_bands = Counter(hunger(w, r.id, next_draw)[0] for r in w.rungs.values() if r.kind == HUNGER_KIND)
     # `24f`: the cohorts are persons (S9.1), so `persons` counts them; these two rows separate them
     # from the cast, read off the world (`Person.is_cohort`) rather than off `cohorts.yaml`.
     cohorts = [p for p in w.persons.values() if p.is_cohort]
@@ -1689,7 +1692,10 @@ def census(w: World) -> dict:
             # territory with a Site below a floor, and how many such Sites it holds.
             "sites_below_a_floor_by_territory": {
                 r: n for r in sorted(w.rungs) if w.rungs[r].kind == "territory"
-                if (n := len(closed_uses(w, r)))}}
+                if (n := len(closed_uses(w, r)))},
+            # REM-50: `world_q.hunger`'s only caller until CP-T10-05 -- `uncontrolled`'s precedent above: a
+            # report, not a rule. Each settlement's band, from the NEXT draw; D = 0 counts as `fed`.
+            "hunger_by_settlement": dict(sorted(hunger_bands.items()))}
 
 
 def run(seasons: int = 1, seed: int = 0, cap: int | None = None, w: World | None = None) -> dict:

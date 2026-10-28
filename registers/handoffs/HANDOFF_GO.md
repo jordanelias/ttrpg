@@ -5,7 +5,7 @@
 ## Open
 | item | where it lives | next step |
 |---|---|---|
-| port gate (B10-20) | `workplans/valoria_master_workplan_v10_part3.md` §1, the B10-20 card | B10-04 (SE lane; B10-03b's entry gate), then B10-03b (GO-07) |
+| port gate (B10-20) | `workplans/valoria_master_workplan_v10_part3.md` §1, the B10-20 card | B10-03b (GO-07); its entry gate is met: B10-03 (closing commit `f7352efc`) and B10-04 (closing commit `566de4d7`) |
 
 ## Standing orders — do not re-raise, do not do
 | order | source |

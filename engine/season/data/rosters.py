@@ -602,6 +602,7 @@ def check_logged_kinds(mapping: dict) -> dict:
 LOGGED_KINDS = check_logged_kinds(roster_map("logged_kinds", "values"))
 STANDING_CROSSED = LOGGED_KINDS["standing_crossed"]
 RUNG_KINDS = roster("rung_kinds", ordered=True)
+HUNGER_BANDS = roster("hunger_bands", ordered=True)
 
 
 def _check_scale_of_rung(mapping: dict, kinds) -> None:

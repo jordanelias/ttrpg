@@ -7,7 +7,7 @@
 
  it
 
-- Three tables. The first cell of every data row is exactly the id. Table 1 has 60 rows, Table 2 has 19, Table 3 has 42. The other 171 hole-register rows, and the work v9 names that is not a hole row, are in `workplans/valoria_master_workplan_v10_part9.md`. The 113 other open editorial ids are in `workplans/valoria_master_workplan_v10_part10.md`.
+- Three tables. The first cell of every data row is exactly the id. Table 1 has 61 rows, Table 2 has 19, Table 3 has 42. The other 171 hole-register rows, and the work v9 names that is not a hole row, are in `workplans/valoria_master_workplan_v10_part9.md`. The 113 other open editorial ids are in `workplans/valoria_master_workplan_v10_part10.md`.
 - `[INFERRED]` marks inference. Where I name a position because its subject matches the row and its own text does not cite the row's id, the cell says so.
 - A handle is a key of REM, CP, V9, CR, NM or CL in `ctl/batch_map.py`. A v9 alias (IN-09, IN-33, IN-46, IN-47, SE-05, FA-02, FI-05) is never a position; it is named only where it explains a target.
 - The H-nnn column "ladder" names the ask row (A1-nn from L1, A2-nn from L2) and the merged question (M-nn) only where an ask is attached. Where L1 and L2 disagree on one subject, both are shown and nothing is decided here (H-219); the decision round has since decided H-198 (M9) and left H-214 and H-234 on M11, which Jordan has since answered (a), 2026-10-26 (ED-IN-0300); both ride CR-29 and FA-01.
@@ -82,6 +82,7 @@ Sections: §2 hole rows · §3 editorial-ledger ids · §4 the state index · §
 | H-239 | assumption | OPEN: the thread-sensitivity gate ships 30 (0 the control; arm 50 declared not run); built and mutation-checked | NONE (injected and swept); MEASURE arm 50 if wanted | PC-06; CP-T07-02 (cross-references the TS>=30 gate) | B10-Z, B10-15 | — |
 | H-240 | measured | OPEN: PC-10b STOPPED at design-first, unbuilt: `accept` cannot bind a `challenge` Record through the referent class (the fold takes the Record id as second claimant: PARTY-GAP) | BUILD, route (1), decided: a Record-content relation stem in `data/requires.py: REQUIRES_STEMS` (`names:<operand>`), a `challenger` content key and `counterparty: to` on `accept`; `stakes` defaults to `death` in computed play; `admits_audience`'s writ limb narrowed to Records minted by `issue`. Route (1) adds Layer 2 grammar and owes no Layer 1 amendment; nothing is Jordan's (ED-IN-0292 (1) is RULED NO). `accept` stays a named R-05 residue until H-229's `give` reaches the realm | PC-10 (B10-11, after CP-T03-09; no longer design-first) | B10-11 | A1-01 (limit (2) ruled NO) |
 | H-241 | assumption | OPEN: the levy-to-field feed is built and `field_provisioning` ships OFF (the control); the flip waits on `requisition` executing in computed play (H-163 limit 3(a)) | BUILD the flip as its own commit: H-163 limit 3(a) is owned by CR-23 (B10-06, M17 taken (a)), so IN-52's flip is released from M17 and provisions fields from treasuries filled by `requisition`; it moves no pin while the realm fights no field. IN-52's retirement stays HELD on M3 | IN-52 (the flip, B10-16 last; needs CR-23); CR-23 | B10-16; B10-06 | A1-52 (CARRIED: LF-1 to LF-3 [medium]); M17 (TAKEN) |
+| H-242 | assumption | CLOSED (REM-50, B10-04: `hunger_band_floors` ships `(1, 2)`, `()` the control; the sweep is executed at every arm by `test_hunger.py::test_e`) | NONE (an assumption, not a ruling request); CR-22 reads these floors at B10-18 | REM-50 (landed); CR-22 | B10-04 (CLOSED); B10-18 | — |
 
 ## 3. The editorial-ledger ids open since v9
 
@@ -261,7 +262,7 @@ Counts: 8 hole rows and 3 ledger ids have no v10 handle; 52 hole rows and 8 ledg
 
 | check | result |
 |---|---|
-| hole rows with a first-cell row in §2 | 60 (58 in `ctl/static_inventory.json`'s `hole_scope`, plus H-85 and H-182, which the first extraction lanes classified) |
+| hole rows with a first-cell row in §2 | 61 (58 in `ctl/static_inventory.json`'s `hole_scope`, plus H-85 and H-182, which the first extraction lanes classified, plus H-242, the first row added after adoption, B10-04) |
 | editorial-ledger ids in §3 | 11 of 11 |
 | the other open editorial ids, in part 3 | 113 of 113 |
 | state-index rows in §4 | 42 of 42 |
