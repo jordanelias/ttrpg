@@ -435,9 +435,7 @@ the registry still marks IN FLUX.
 ## 6. Godot port pipeline
 
 **Rule: a port never corrects its oracle in place (ED-1050).** If port and Python oracle disagree, fix
-canon via the ledger and re-export — never hand-edit a value into the `.gd` side. `godot/skeleton/`
-covers a single module, does not compile, and `extends` a spine defined nowhere in the corpus: **never
-present it as a runnable head-start.**
+canon via the ledger and re-export — never hand-edit a value into the `.gd` side.
 
 `godot/godot_conversion_strategy_v1.md` is the governing spec — **PROPOSED, Jordan-vetoable throughout**,
 with an open register and unexecuted Gate-0 preconditions. `references/module_contracts.yaml` shows which

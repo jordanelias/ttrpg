@@ -871,7 +871,6 @@ modules:
     registry_system: "personal_combat"   # Key Type Registry vocabulary
     doc: systems/combat/combat_engine_v1/   # CANONICAL (ED-900/904; docket ED-1029). The DESIGN prose (`.designs/` mirrors this path); the code moved to `sim_module:` at plan position `31b`
     sim_module: modules/combat/
-    godot_home: godot/skeleton/engines/combat/   # CombatEngine (BaseEngine) + Strike/Wound modules (slice)
     typed_params: engine/engine_params/combat_engine_v1.json   # GENERATED from config.py + core.py (tools/export_engine_params.py, schema v2 — OPT-AV-17 added the core-constants section); round-trip-checked blocking in CI; the port regenerates from THIS, never hand-edits (ED-1050 discipline; ED-1052 seed)
     scales: [personal]
     resolver: d_sigma   # sigma-leverage continuous (sim.autoload.sigma_leverage since ED-1085; parity-tested vs the r1/m1 originals): pool=max(5,History+6), base Ob 3 FIXED, advantage = mu-shift on the ROLL. NOT v30 dice_pool (Agi×2 / TN-7).
@@ -919,10 +918,10 @@ modules:
       - "personal-combat audit 2026-06-22 (this session) — model-correctness + drift findings folded in"
     wiring:
       build: unwired
-      godot: gd-ported
+      godot: typed-exported
       port_rank: 0
       parity: key-log + typed-export round-trip
-      note: 'built + typed-exported + 2 of 11 EngineModules GDScript-ported (strike/wound) — the golden path
+      note: 'built + typed-exported (the 2-module GDScript slice, strike/wound, was retired at GO-14) — the golden path
         — BUT the campaign driver read on 2026-08-03 (since deleted; the season seam now calls this engine through
         engine/season/seam/wrappers/combat.py) never routed here, so end-to-end parity was unvalidated then. BLOCKER IDENTIFIED 2026-08-03
         (ED-IN-0123), and it is NOT the DISPATCH_COMBAT_BRIDGE flag: flipping that flag ON for a full seeded
@@ -1010,9 +1009,9 @@ wiring_vocabularies:
 golden_path:
   unit: combat   # the `modules:` row of that name
   chain: combat_engine_v1 (Python oracle) -> engine/engine_params/combat_engine_v1.json (typed export, CI
-    round-trip) -> godot/skeleton/engines/combat/ (strike + wound)
-  note: The only unit where Python oracle + typed export + GDScript port all exist. This is the template
-    every other port copies.
+    round-trip); the GDScript slice (godot/skeleton/) was retired at GO-14
+  note: The only unit with a Python oracle and a typed export behind a blocking --check; the port reads
+    the typed export.
 
 # FOUNDATION GAPS — not modules; they block whole tiers.
 foundation_gaps:
