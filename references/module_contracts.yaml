@@ -999,7 +999,7 @@ wiring_vocabularies:
   #   stub      — raises NotImplementedError
   #   design    — specified in a doc, zero code
   godot_states: [gd-ported, typed-exported, python-oracle, no-oracle, retire]
-  #   gd-ported      — a GDScript port exists (the skeleton slice)
+  #   gd-ported      — a GDScript port exists (none today; the skeleton slice was retired at GO-14)
   #   typed-exported — a CI-checked typed param export exists (config → JSON round-trip)
   #   python-oracle  — real Python to port FROM; no GDScript yet   ← the port work-list
   #   no-oracle      — nothing to port from; canon must be authored first (Gate-0.5 halts)
