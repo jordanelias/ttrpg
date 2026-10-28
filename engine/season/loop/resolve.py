@@ -932,9 +932,10 @@ def _apply_write(self, w: "World", token: Token, a: Act, kind: str, fld: str, ef
     # tenure snapshot only after this call returns, so a Tenure the body moved before handing back
     # its `Change` was baked into that snapshot and judged by neither F3 nor F9. The store is
     # snapshotted around the call here instead, and a change in it is refused by the gate's own
-    # pair (the store put back, then `not_yours`). It cannot ask whether the edge was LAWFUL --
-    # the gate has no `Change` to judge it against yet -- so any tenure an effect body moves is
-    # refused: an effect defers its mutation into `Change.apply`, where the gate does ask.
+    # pair (the store put back, then `not_yours`). It does not ask whether the edge would have been
+    # LAWFUL: an effect body is not a write (no class or step check, no trace line, no receipt), so
+    # any tenure it moves is refused, lawful or not -- an effect defers its mutation into
+    # `Change.apply`, where the gate does ask.
     # ⚠ TENURES ONLY, AND THAT IS THE BOUND. An eager write to an entity field (a rung's stores, a
     # person's body) is still invisible here and stays bound by the convention alone.
     snap = w._tenure_snapshot()
@@ -942,7 +943,9 @@ def _apply_write(self, w: "World", token: Token, a: Act, kind: str, fld: str, ef
     eager = w._tenure_changes(snap)
     if eager:
         w._restore_tenures(eager)
-        raise not_yours(eager, a.actor, a.via, kind, fld)
+        raise not_yours(eager, a.actor, a.via, kind, fld,
+                        why="moved Tenures in the effect's own body, before it returned its "
+                            "Change (CR-06, H-137)")
     got = w.write(fld, token, None, record_kind=kind, fieldname=fld, driver="Act",
                   actor=a.actor, via=a.via, change=change)
     # ⚠ AN EFFECT MAY EARN SOME OF ITS DECLARED KINDS AND NOT OTHERS. A subject that earns `None`

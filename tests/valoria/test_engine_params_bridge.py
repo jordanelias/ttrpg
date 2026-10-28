@@ -50,9 +50,9 @@ NO_WRITER = set()
 #: mentioning the filename. Four bindings exist in the whole of `engine/`, and three of them are
 #: already the target shape.
 #:
-#: `params_tables.yaml` has NO runtime binding — `dice_engine.py` and `sigma_leverage.py` only cite
-#: it in prose — so it is a tracked runtime input with no runtime reader, which is worth knowing
-#: and is why it is absent here rather than listed with an empty set.
+#: `params_tables.yaml` had NO runtime binding — `dice_engine.py` and `sigma_leverage.py` only cited
+#: it in prose — so it was a tracked file with no runtime reader, which is why it was absent here
+#: rather than listed with an empty set. It was retired at DEF-9 (`FORK:` row).
 #:
 #: SHRINK-ONLY toward one substrate leaf each.
 ENGINE_READERS = {

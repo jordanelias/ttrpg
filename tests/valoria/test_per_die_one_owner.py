@@ -1,10 +1,12 @@
-"""REM-42: the per-die mean and sigma are defined once, in the dice engine; sigma_leverage reads them.
+"""REM-42: within engine/dice_engine/ the per-die mean and sigma are defined once, in `dice_engine.py`;
+`sigma_leverage.py` reads them. (`modules/mass_battle/` keeps values of its own and is not asserted.)
 
 Before this, `sigma_leverage.py` kept its own `PER_DIE = {7: (0.40, 0.800)}`, `MU_PER_DIE = 0.40`
-and `SD_PER_DIE = 0.80` beside the owner's `_MU_PER_DIE` / `_SIGMA_PER_DIE`: equal in value, so no
-test could tell a copy from an alias, and changing the owner would have left the layer on top of it
-silently stale. These tests can tell: the mutation test changes the owner in a fresh interpreter and
-asserts the layer follows, and the source test fails if a numeric literal comes back.
+and `SD_PER_DIE = 0.80` beside the owner's pair: equal in value, so no test could tell a copy from an
+alias, and changing the owner would have left the layer on top of it silently stale. These tests can
+tell: the mutation test changes the owner in a fresh interpreter and asserts the layer follows (it
+catches a copy in any spelling), and the source scan fails if a numeric literal is assigned to one of
+the three names directly (a tuple-unpacking spelling is the mutation test's to catch).
 
 `SIGMA_N_COEFF` (0.8) is a different quantity (the sigma_n coefficient) and is not asserted here.
 """

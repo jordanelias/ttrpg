@@ -171,14 +171,17 @@ def _die_result(face: int) -> int:
 # Note the TN 6 row was always in tension with `_die_result` below, which has never read `tn`:
 # μ=0.50 is only reachable if faces 6-9 score, and no face rule here has ever done that. The
 # ruling resolves that tension in favour of the die rule.
-_MU_PER_DIE: float = 0.40      # [canonical: params/core.md §Expected Value, TN 7]
-_SIGMA_PER_DIE: float = 0.800  # [canonical: params/core.md §Expected Value, TN 7]
-
-# The public names of the pair above — the ONE owner of the per-die mean and sigma. Every other
-# module reads these (engine/dice_engine/sigma_leverage.py aliases them); none keeps a second copy.
-# The private names stay: tests/valoria/test_tn7_always.py pins them.
-MU_PER_DIE: float = _MU_PER_DIE
-SIGMA_PER_DIE: float = _SIGMA_PER_DIE
+#
+# The ONE owner, within engine/dice_engine/, of the per-die mean and sigma. The PUBLIC names carry the
+# literals (plain assignments: tools/export_sim_params.py reads only those, so the typed export keeps
+# the pair) and engine/dice_engine/sigma_leverage.py aliases them rather than keeping a copy. The
+# private names stay as aliases of the public ones: tests/valoria/test_tn7_always.py pins them.
+# modules/mass_battle/resolution.py (`_SIG_PER_DIE`) and modules/mass_battle/config.py
+# (`PER_DIE_NET_EV`) hold values of their own; REM-42 does not reach them.
+MU_PER_DIE = 0.40      # [canonical: params/core.md §Expected Value, TN 7]
+SIGMA_PER_DIE = 0.800  # [canonical: params/core.md §Expected Value, TN 7]
+_MU_PER_DIE: float = MU_PER_DIE
+_SIGMA_PER_DIE: float = SIGMA_PER_DIE
 
 
 _TN_RULING = ('TN is 7. Always. Jordan, 2026-08-25: "TN7 always. Never change TN anywhere '
