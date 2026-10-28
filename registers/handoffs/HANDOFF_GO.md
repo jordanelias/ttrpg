@@ -5,7 +5,7 @@
 ## Open
 | item | where it lives | next step |
 |---|---|---|
-| port gate (B10-20) | `workplans/valoria_master_workplan_v10_part3.md` §1, the B10-20 card | B10-03b (GO-07); its entry gate is met: B10-03 (closing commit `f7352efc`) and B10-04 (closing commit `566de4d7`) |
+| port gate (B10-20) | `workplans/valoria_master_workplan_v10_part3.md` §1, the B10-20 card | B10-03b (GO-07) is CLOSED (closing commit `8a80c4fc`; the item is `15593ac4` on `main`); the card's entry gate is B10-18 merged, with every batch before it closed |
 
 ## Standing orders — do not re-raise, do not do
 | order | source |
