@@ -203,7 +203,9 @@ def rung_kind_ascends(child_kind: str, parent_kind: str) -> bool:
 # name. Dataclass fields are never sorted. A class is encoded by its bare `__name__`, an Enum member
 # by its value alone. `t`/`l` and `u`/`z` follow the stored Python type, which the oracle's writers
 # fix per site (`_grant_remit`'s `remit_acts` is a tuple, an addressee list a list). Nested mapping
-# key order is not state.
+# key order is not state. EVERY declared field folds, `repr=False` and `compare=False` ones included
+# (the retired `repr` digest dropped a `repr=False` field). A float is its bits as stored: a NaN
+# has no canonical form here and `-0.0` differs from `0.0`, as under `repr`; neither occurs in the worlds measured at GO-07.
 _UNKNOWN_TYPE = type(UNKNOWN)
 _OBJECT_HEADS: dict = {}
 
