@@ -193,9 +193,11 @@ def rung_kind_ascends(child_kind: str, parent_kind: str) -> bool:
 #                  object declaring `_DECLARED` (`Rung`, which is not a dataclass): those fields
 #                  sorted by name.
 #
-# Every count and length is base-10 ASCII. A value of any other type RAISES `TypeError`, at
-# `content_hash` and at `state_of`'s read inside `World.write` (before the write applies): a type with
-# no rule here has no portable encoding, and guessing one would be a second, silent format.
+# Every count and length is base-10 ASCII. A value of any other type RAISES `TypeError`: at
+# `content_hash`, which every season's end calls, and at `state_of`'s read of an `entity` subject
+# (either reading) in `World.write` -- AFTER `apply()` when the write itself introduced the value; a
+# closure write is not read by `state_of`. A type with no rule here has no portable encoding, and
+# guessing one would be a second, silent format.
 #
 # THREE ORDERS, and a port must implement each: `content_hash` sorts collection KEYS and Tenure ids by
 # the raw `str` (code point); a mapping's entries and a set's items sort by their ENCODED bytes, so
@@ -205,7 +207,8 @@ def rung_kind_ascends(child_kind: str, parent_kind: str) -> bool:
 # fix per site (`_grant_remit`'s `remit_acts` is a tuple, an addressee list a list). Nested mapping
 # key order is not state. EVERY declared field folds, `repr=False` and `compare=False` ones included
 # (the retired `repr` digest dropped a `repr=False` field). A float is its bits as stored: a NaN
-# has no canonical form here and `-0.0` differs from `0.0`, as under `repr`; neither occurs in the worlds measured at GO-07.
+# has no canonical form here and `-0.0` differs from `0.0`, as under `repr`; neither was seen when the
+# encoder was spied over four worlds at GO-07 (7605 floats; a one-off reading, not kept).
 _UNKNOWN_TYPE = type(UNKNOWN)
 _OBJECT_HEADS: dict = {}
 
@@ -631,13 +634,16 @@ class World:
         An `entity` is `(False,)` when absent and `(True, <digest>)` when present, so a creation
         and a deletion both move it. The digest is `_entity_digest` -- the encoding `content_hash`
         folds for that entity -- unless the subject names `fields`, when it is those attributes'
-        `repr`s: a snapshot, never a reference, because an in-place mutation (`scar[axis] = ...`,
-        `payload["remit_acts"] = ...`) would otherwise compare equal to itself. A `staged` cell is
-        the NET delta staged on it. An `edge` is not read here -- see `write`.
+        canonical encodings: a snapshot, never a reference, because an in-place mutation
+        (`scar[axis] = ...`, `payload["remit_acts"] = ...`) would otherwise compare equal to itself.
+        A `staged` cell is the NET delta staged on it. An `edge` is not read here -- see `write`.
 
-        GO-07: the `entity` reading sorts every mapping by encoded key, so a write that only re-orders
-        an entity's mapping reads as unmoved and F9 refuses it as a no-op; a `fields` reading is still
-        `repr`, which sees key order.
+        GO-07: BOTH readings are the one canonical encoding, so a write that only re-orders a mapping
+        (an entity's, or a named attribute's) reads as unmoved and F9 refuses it as a no-op -- the
+        reading `before == after` has on a dict, where `repr` saw key order. It also keeps `1`, `True`
+        and `1.0` apart, as `repr` did. (Until the terminal critique of B10-03b a `fields` reading
+        stayed `repr`: two ladders for one question, and F9's verdict on ten effects depended on
+        CPython's formatting.)
 
         ⚠ A STORE THAT IS NOT A STATE COLLECTION IS A CALLER BUG, AND IT RAISES. Read as "absent"
         it would compare `(False,)` to `(False,)` and every write naming it would be refused as a
@@ -654,7 +660,7 @@ class World:
                 return (False,)
             if fields is None:
                 return (True, _entity_digest(obj))
-            return (True,) + tuple(repr(getattr(obj, f)) for f in fields)
+            return (True,) + tuple(_canonical(getattr(obj, f)) for f in fields)
         if tag == STAGED:
             return sum(d for _, d in self._staged.get(s.ref[1], ()))
         raise InstrumentDefect(f"`state_of` has no reader for a {tag!r} subject ({s.id!r}); an "

@@ -31,7 +31,8 @@ class SeatId(str):
     ⚠ IT IS A `str` SUBCLASS ON PURPOSE, AND THE REASON IS THE HASH. `World.content_hash` folds the
     string; `str.__hash__`, `__eq__`, `__repr__`, `__format__` and `encode` are all inherited, so a
     `SeatId` and the bare string it wraps are the same dict key, the same sorted position, the same
-    f-string and the same bytes in every `H(...)` purpose. The wrapper adds an `isinstance` question
+    canonical encoding (`state/world.py`'s `str` branch takes a subclass as its string) and the same
+    bytes in every `H(...)` purpose. The wrapper adds an `isinstance` question
     and nothing else; `test_sc02_typed_ids_and_loader.py` holds `build_realm(0)` to its pinned hash.
 
     ⚠ THE GRADE IS RUNTIME, AND CI RUNS NO TYPE-CHECKER. `Act.actor` cannot hold a `SeatId` because

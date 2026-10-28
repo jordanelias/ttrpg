@@ -142,7 +142,8 @@ class Tenure:
         the act reaches every sitting holder.
 
         Returns `()` for every Tenure that carries no grant, which is every kind but `hold` and
-        every `hold` on a non-office. A tuple rather than a set, because `content_hash()` folds it.
+        every `hold` on a non-office. A tuple rather than a set: it keeps the order the grants were
+        made in (and, before GO-07, a set's `repr` order would have reached `content_hash()`).
         """
         p = self.payload
         if not isinstance(p, dict):

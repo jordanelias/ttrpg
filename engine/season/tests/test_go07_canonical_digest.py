@@ -40,6 +40,7 @@ import pytest
 from ..data.requires import UNKNOWN, Observation
 from ..harness import populated as POP
 from ..state.carriers import Event, Rung, Site, StateChange, Tenure, Term
+from ..state.gate import Subject
 from ..state.world import World, _canonical, _entity_digest
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -211,6 +212,31 @@ def test_go07_a_subclass_of_a_scalar_or_sequence_encodes_as_its_base():
     assert _canonical(_L([1])) != _canonical(_T((1,))), "list and tuple must stay distinct"
 
 
+def test_go07_a_fields_reading_is_the_canonical_encoding_not_repr():
+    """G4 has one notion of "moved". A `fields=` subject reads its attributes through the same
+    encoding as an `entity` subject, so a write that only re-orders a named mapping reads as
+    unmoved (`before == after` on a dict), while `1`, `1.0` and `True` stay apart and the reading is
+    a snapshot, not a reference."""
+    w = _tiny_world()
+    rung = w.rungs["r_fix"]
+    sub = Subject.entity("rungs", "r_fix", fields=("stores",))
+    whole = Subject.entity("rungs", "r_fix")
+    rung.stores = {"grain": 3, "salt": 1}
+    fields_a, whole_a = w.state_of(sub), w.state_of(whole)
+    rung.stores = {"salt": 1, "grain": 3}
+    assert w.state_of(sub) == fields_a, "a pure re-order of a named mapping read as moved"
+    assert w.state_of(whole) == whole_a, "the two readings disagree about the same re-order"
+    for other in ({"salt": 1, "grain": 3.0}, {"salt": 1, "grain": True}, {"salt": 1, "grain": 4}):
+        rung.stores = other
+        assert w.state_of(sub) != fields_a, other
+        assert w.state_of(whole) != whole_a, other
+    rung.stores = {"grain": 3, "salt": 1}
+    held = w.state_of(sub)
+    rung.stores["grain"] = 4                       # an in-place mutation of the same dict object
+    assert w.state_of(sub) != held, "the reading held a reference, not a snapshot"
+    assert all(isinstance(x, bytes) for x in w.state_of(sub)[1:]), "a fields reading is not canonical"
+
+
 def test_go07_one_field_of_one_entity_moves_the_digest():
     """H-118's falsifier, field by field: every declared field of the fixture, changed alone, moves
     the entity's encoding; and one Site field changed in one of two otherwise identical worlds moves
@@ -309,6 +335,14 @@ BASE = {
         "counts": {"persons": 81, "rungs": 410, "offices": 32, "sites": 322, "records": 90,
                    "propositions": 91, "dates": 1, "docket": 2, "tenures": 787, "log": 6879}},
 }
+
+
+def test_go07_control_the_build_world_old_digest_is_unmoved():
+    """The base commit's `repr` digest of `build_realm(0)`, before a single act, read this literal
+    (`test_season_weather.BASE_HASHES[0]`'s retired value); the same world now reads the new pin."""
+    w = POP.build_realm(0)
+    assert _old_content_hash(w) == "8e4032a26cfeabdc55bba2178b82d564"
+    assert w.content_hash() == "9ff5390939742b7bbb3af0fa2551e958"
 
 
 def test_go07_control_the_world_did_not_move_only_its_digest():

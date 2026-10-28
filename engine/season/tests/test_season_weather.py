@@ -252,7 +252,8 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # RE-PINNED at GO-07 (B10-03b), A DIGEST-FORMAT MOVE DECLARED, NO GAME MOVE: `content_hash` folds the
 # canonical encoding instead of `repr()`. Was 8e4032a2... / b2464a6c... / 5301d6b6... (build, one, two
 # seasons); `BASE_EVENTS` unmoved, and the old `repr` digest over the same worlds still read those three
-# when measured at GO-07 (`test_go07_canonical_digest.py`'s control re-reads it at one season, seeds 0-2).
+# when measured at GO-07. `test_go07_canonical_digest.py`'s control re-reads the build (seed 0) and one
+# season (seeds 0-2); the two-season reading was taken once and is not re-run.
 BASE_HASHES = {0: "9ff5390939742b7bbb3af0fa2551e958",
                1: "947c190baae2dda4b512d42271f36dd4",
                2: "52a106bcb0cedac9cb74c8328e962eab"}
