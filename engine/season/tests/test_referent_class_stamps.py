@@ -1120,10 +1120,11 @@ def test_cp_t05_04_d_limit_3_open_case_forms_on_the_docketed_person_and_the_fold
     """LIMIT (3), found at the B10-05 close (the exit read the unclassed rows only, limit 2): the docket
     question's referents are matters still on the docket, `Person` is a class `open_case` declares, so the
     seat-holder it is delivered to forms `open_case` on the docketed person -- and `_eff_open_case`'s
-    `docketed` decline refuses it. PINNED, not fixed: zero in the realm (no `case.refused` Event over
-    `aperture 2 --seeds 0 1 2 3 4`), and a person-side decline would need the docket, which only the world
-    reads (AX-2). If a realm census ever shows `case.refused`, revert the docket question's call in
-    `questions_for` (the two `referent_class` columns stay)."""
+    `docketed` decline refuses it. PINNED, not fixed: the realm's `case.refused` over `aperture 2 --seeds 0 1 2
+    3 4` is 9 of 44 `open_case` attempts at the batch base, 7 of 33 after CP-T05-04 and 7 of 31 at the close,
+    so the docket question added none the base lacked; and a person-side decline would need the docket, which
+    only the world reads (AX-2). If that realm count ever rises above the base's, revert the docket question's
+    call in `questions_for` (the two `referent_class` columns stay)."""
     w, d = _docketed_case()
     w.tick += 3
     duke = w.persons[DUKE]

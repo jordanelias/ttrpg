@@ -389,9 +389,12 @@ def docket_question(w: World, p: Person) -> Optional[Question]:
     docketed persons are plain referents of every row that declares no `referent_class`, so those rows
     form on them; (3) `Person` is a class `open_case` declares, so a seat-holder delivered this
     question forms `open_case` on a matter that is already docketed and the fold refuses it
-    (`case.refused`, `_eff_open_case`'s `docketed` decline) -- found at the B10-05 close, zero in the
-    realm (no `case.refused` Event over `aperture 2 --seeds 0 1 2 3 4`), pinned in
-    `test_referent_class_stamps.py`. REVERT: drop the call in `questions_for` (the two `referent_class` columns stay)."""
+    (`case.refused`, `_eff_open_case`'s `docketed` decline) -- found at the B10-05 close and pinned in
+    `test_referent_class_stamps.py`. MEASURED: the realm's `open_case` refusals as `case.refused` over
+    `aperture 2 --seeds 0 1 2 3 4` are 9 of 44 attempts at the batch base, 7 of 33 after CP-T05-04 and 7 of
+    31 at the close, so the docket question added none the base lacked (the own-referent term stamps the
+    sitting question's docketed matters as `Person` too, and before the batch `open_case` formed on every
+    plain referent). REVERT, if that count ever rises above the base's: drop the call in `questions_for` (the two `referent_class` columns stay)."""
     held = [c for c in p.ledger if c.predicate in DOCKETING_KINDS]
     if not held:
         return None
@@ -1927,7 +1930,7 @@ def enclosing_territory(w: World, rung_id: Optional[str]) -> Optional[str]:
     walk; the rung itself included), or `None` where the walk meets none -- a Site at the realm or a
     duchy, or a rung outside the tree. Read by `loop/matter.py::_lattice_strain`, which couples a Site
     to the Sites of its own and the bordering territories (`data/geography.py::adjacent_territories`),
-    and by `season_factors_by_rung`, every season in every arm, the empty weather arm included.
+    and by `season_factors_by_rung` when `season_factor_draw` declares a year (at `()` it is not called).
     Traces nothing, as `ancestry` traces nothing: calling it moves no log and no hash."""
     for r in ancestry(w, rung_id) if rung_id else ():
         rung = w.rungs.get(r)
