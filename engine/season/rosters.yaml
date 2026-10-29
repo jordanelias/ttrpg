@@ -636,7 +636,9 @@ rosters:
       places a person has been told of and could settle in (`queries/world_q.py::places_named` --
       a Rung his own ledger names, the §10 ladder seats him in, and he does not already live
       under), which `questions_for` adds to the question he answers beside his seats and writs;
-      `migrate` declares it (and `requisition`, below), so its `to` binds ANOTHER place rather than the single referent
+      `migrate` declares it (and `requisition`, below, and since v10 REM-27 `march`, whose `subject` binds a stamped Rung
+      as its field, and since v10 REM-28 `convene`, whose `subject` binds one as its venue), so its `to` binds ANOTHER
+      place rather than the single referent
       of whatever he was asked about (most often his own residence). The destination channel H-168
       names, on IN-53 D1's partition and `seats_named`'s knowledge source: no operand is added
       (`to` still binds the referent, `decision/options.py::_derive_operand`) and no Record kind.

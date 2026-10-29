@@ -2801,7 +2801,18 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     assert heads[False] and heads[True], "the spy saw no delivery; the zero below would be unobserved"
     assert not [q.id for q in heads[False] if {q.about, *q.referents} & set(dw)], (
         "a dwelling question was answered first: IN-57's tier 4 no longer sorts it last")
-    assert (out["acts"], cout["acts"]) == (576, 576), (
+    # ⚠⚠ v10 REM-27 (B10-06): (576, 576) -> (581, 581), A RE-RECORD WITH THE UNIT THAT MOVED IT: `march` declares
+    # `referent_class: Rung` (`march` forms on a stamped Rung only), and `RUNG_REMIT_ACTS` widens to {issue, dispatch},
+    # so the realm's act mix moved (`aperture 1 0`, seed 0, one season: 576 -> 581, the same shift
+    # `test_go07_canonical_digest.py` records). The control is the B10-05 close (`2bc4afcf`), which reads (576, 576)
+    # under this same test. The direct parting assertion below holds on the new counts.
+    # ⚠⚠ v10 REM-28 (B10-06): (581, 581) -> (583, 584), A RE-RECORD WITH THE UNIT THAT MOVED IT: `convene` declares
+    # `referent_class: Rung` (`convene` forms on a stamped Rung only, never a person-rung or a Proposition), and
+    # `RUNG_REMIT_ACTS` widens to {issue, dispatch, convene}, so the realm's act mix moved (`aperture 1 0`, seed 0, one
+    # season: 581 -> 583; `convene` executed 1 -> 4). The control is the REM-27 fallout fix (`ee5acba1`), which reads
+    # (581, 581) under this same test, and so does this tree with `convene`'s column blanked in process. The arms'
+    # counts part now (583 / 584), and the direct parting assertion below holds on the new sequences.
+    assert (out["acts"], cout["acts"]) == (583, 584), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")

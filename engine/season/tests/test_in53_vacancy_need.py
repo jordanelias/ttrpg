@@ -275,9 +275,12 @@ def test_in53v_c_the_declarations_as_built():
     # `petition` declares `Person` (B10-05); AT v10 REM-25 `carry`, `found` and `build` declare `Record`
     # beside `comply` (B10-05; ten rows -> thirteen); AT v10 CP-T05-04 `argue` declares `Proposition` and
     # `open_case` declares `Person` (B10-05; thirteen rows -> fifteen); AT v10 REM-2C `research` declares
-    # `Record` (B10-05; fifteen rows -> sixteen; control: the CP-T05-04 tree `ea6f1dba`, fifteen).
-    assert {v for v, r in VERB_TABLE.items() if r.referent_class} == {"confer", "oblige", "comply",
-                                                                      "migrate", "requisition",
+    # `Record` (B10-05; fifteen rows -> sixteen; control: the CP-T05-04 tree `ea6f1dba`, fifteen); AT v10 REM-27
+    # `march` declares `Rung` beside `migrate` and `requisition` (B10-06; sixteen rows -> seventeen; control: the
+    # B10-05 close `2bc4afcf`, sixteen); AT v10 REM-28 (B10-06) `convene` declares `Rung` (seventeen rows -> eighteen;
+    # control: the REM-27 fallout fix `ee5acba1`, seventeen).
+    assert {v for v, r in VERB_TABLE.items() if r.referent_class} == {"confer", "oblige", "comply", "march",
+                                                                      "convene", "migrate", "requisition",
                                                                       "restore", "work", "examine",
                                                                       "commit", "petition",
                                                                       "carry", "found", "build",

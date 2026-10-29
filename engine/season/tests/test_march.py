@@ -381,10 +381,15 @@ def test_a_real_chooser_forms_and_folds_a_march_that_reaches_a_real_field_battle
     above hand-builds, chosen here so the falsifier is comparable rather than novel. Clause 3's
     PRE-EXISTING `q.referents` reading -- no march-specific arm, nothing added -- is what carries
     that referent into a real `Candidate`; nothing here supplies `subject` by hand.
+    ⚠ v10 REM-27 (B10-06): `march` now declares `referent_class: Rung`, so it forms ONLY on an id the
+    question carries as `Rung` (`Question.classes`, the partition `questions_for` stamps from
+    `places_named` / `larders_in_purview`), never on a plain referent. The constructed Question
+    therefore carries the settlement as a `Rung` pair, `test_migrate_capacity.py`'s shape; the stamp
+    itself is `test_referent_class_stamps.py::test_rem27_*`'s.
     """
     w = build_realm(0)
     p = w.persons["p_npc_033"]
-    q = Question("q:28ii_chooser_march", "need", ("set_s_036",))
+    q = Question("q:28ii_chooser_march", "need", ("set_s_036",), classes=(("set_s_036", "Rung"),))
     v = View(p.id, [], w.fixtures.get("view_k"), q)
 
     cands = opening_set(p, v, q, w.fixtures)
@@ -664,12 +669,13 @@ def test_in13_exit_ii_h151_a_march_on_ones_own_occupied_settlement_is_unopposed(
     constructed `Question` naming `set_s_001`, held by the actor's OWN faction with that faction's people
     present (at least two Crown) as its only defenders; the march is formed and packed by the REAL chooser and
     folded -- and it fights nobody: `field.unopposed`, the army arrives, and the Crown already there is
-    untouched. Before IN-13 it fought the faction against itself."""
+    untouched. Before IN-13 it fought the faction against itself. Since v10 REM-27 the settlement rides
+    as a `Rung` pair (`march`'s `referent_class`; the plain referent alone no longer forms it)."""
     w = build_realm(0)
     present = world_q.mustered(w, "set_s_001", CROWN)
     assert world_q.holder_faction_of(w, "set_s_001") == CROWN and len(present) >= 2, present
     p = w.persons["p_npc_033"]
-    q = Question("q:in13_h151", "need", ("set_s_001",))
+    q = Question("q:in13_h151", "need", ("set_s_001",), classes=(("set_s_001", "Rung"),))
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     chooser = make_chooser(w.fixtures, mint, verbs=frozenset({"march"}),
                            draw=draw_factory(w.world_seed, lambda: w.tick))

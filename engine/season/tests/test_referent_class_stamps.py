@@ -1494,3 +1494,173 @@ def test_rem22_c_every_candidate_a_class_removes_force_admitted_refuses_on_the_r
             assert {c.subject for c in removed} == set(MIXED), (verb, removed)
     assert set(checked) == set(rows) and min(checked.values()) >= 1, (sorted(rows), checked)
     assert {v: frozenset(s) for v, s in admitted_removed.items()} == REMOVES_ADMITTED, dict(admitted_removed)
+
+
+# ======================================================================================
+# v10 REM-27 (B10-06, AM-A-13 limit): `march` DECLARES `Rung`; THE STANDING `Rung` STAMP CARRIES THE FIELD
+# ======================================================================================
+# THE CLAIM: a seated marcher told of a defended settlement of another faction forms `march` on it, and
+# the act, minted as the chooser mints it, is folded by the real driver through RESOLVE and ENCOUNTER to a
+# fought field (`Won` or `Lost`), writing `Person.stance` on the losing side (`_eff_march`). The reading is
+# "reaches a field", never "contests one" (`massbattle.py::_weighted_unit`, `troops=weight`). The field
+# is stamped by `world_q.places_named`, the `Rung` occasion already in the splice: a `fields_named` term
+# was built beside it and measured unearned (stubbed to `()`, the march still formed on this field), so
+# it is not in the tree. MUTATION, executed below in REM-22's shape: the column deleted, and the march no
+# longer forms on the field.
+
+MARCHER, MARCHER_SEAT, ORIGIN, FIELD = "p_npc_033", "off_npc_033", "set_s_014", "set_s_036"
+
+
+def _told_of_field():
+    """`build_realm(0)` with `MARCHER` (Crown, a seat granting `dispatch`) told of `FIELD` (Church of
+    Solmund, defended): one claim about the settlement in his own ledger, the shape any deposit about
+    the place leaves (`person_q.ledger_names` reads its subject). Before it, nothing stamps him the field
+    and it is not what his question is about."""
+    from engine.season.harness.populated import build_realm
+    w = build_realm(0)
+    p = w.persons[MARCHER]
+    q0 = world_q.questions_for(w, p)
+    assert FIELD not in world_q.places_named(w, p), "fixture: the marcher already knows of the field"
+    assert not q0 or (FIELD, "Rung") not in q0[0].classes, q0
+    p.ledger.append(Claim("c_rem27_field", MARCHER, FIELD, "exists:Rung", 1, 0, "firsthand", 100, "own"))
+    return w, p
+
+
+def test_rem27_a_the_row_declares_rung_and_the_remit_acts_widen_to_dispatch_by_derivation():
+    """The column, and the derived widening it brings, named: `RUNG_REMIT_ACTS` is read off every `Rung`
+    row's `remit:` alternatives, so `march`'s `remit:dispatch` joins `requisition`'s `issue`. v10 REM-28
+    (B10-06): `convene` declares `Rung` too, so its `remit:convene` joins the set (`{issue, dispatch}` to
+    `{issue, dispatch, convene}`). The set is derived off the rows; this pins its value so the widening is
+    named, not silent."""
+    assert VERB_TABLE["march"].referent_class == "Rung"
+    assert _verbs.RUNG_REMIT_ACTS == frozenset({"issue", "dispatch", "convene"}), _verbs.RUNG_REMIT_ACTS
+
+
+def test_rem27_a_a_seated_marcher_told_of_a_defended_field_marches_on_it_and_fights_it():
+    """THE FALSIFIER (P9 DONE, through the real fold): the `Rung` occasion stamps `FIELD`, `march` forms on
+    it, the chooser's act exercises the dispatch seat, and RESOLVE then ENCOUNTER fight a field whose
+    losing side gains a `Person.stance` row. THE CONTROL beside it: the settlement is another faction's
+    and defended (`world_q.mustered` names its defenders), so the field is not `Unopposed`."""
+    from .test_march import _fold_one
+    w, p = _told_of_field()
+    assert FIELD in world_q.places_named(w, p)
+    attacker_f = world_q.faction_of(w, MARCHER)
+    holder_f = world_q.holder_faction_of(w, FIELD)
+    assert holder_f and holder_f != attacker_f, (attacker_f, holder_f)
+    defenders = world_q.mustered(w, FIELD, holder_f)
+    attackers = world_q.mustered(w, ORIGIN, attacker_f)
+    assert defenders and attackers, (defenders, attackers)
+    q = world_q.questions_for(w, p)[0]
+    assert (FIELD, "Rung") in q.classes, q
+    marches = {c.subject: c for c in _formed(w, MARCHER, q) if c.verb == "march"}
+    assert FIELD in marches, sorted(marches)
+    act = _act_of(marches[FIELD], p)
+    assert act.via == MARCHER_SEAT and act.payload.get("subject") == FIELD, act
+    before = {pid: list(w.persons[pid].stance or []) for pid in attackers + defenders}
+    kinds = [(e.kind, e.degree) for e in _fold_one(w, act)]
+    assert ("march.declared", "Declared") in kinds, kinds
+    fought = {deg for k, deg in kinds if k in ("field.won", "field.lost")}
+    assert fought in ({"Won"}, {"Lost"}), kinds
+    losers = defenders if fought == {"Won"} else attackers
+    grew = [pid for pid in losers if len(w.persons[pid].stance or []) > len(before[pid])]
+    assert grew and len(grew) == len(losers), (fought, losers, grew)
+
+
+def test_rem27_a_mutation_without_the_column_the_march_no_longer_forms_on_the_field():
+    """THE MUTATION, EXECUTED in REM-22's shape: `march`'s `referent_class` deleted (the base table's
+    formation, `_formed_without_class`), the same marcher on the same question no longer forms `march` on
+    `FIELD` -- the row forms on the question's single plain referent, which is not the field. The column
+    restored, the same question forms it (so the mutation had something to see)."""
+    w, p = _told_of_field()
+    q = world_q.questions_for(w, p)[0]
+    assert FIELD not in q.referents, q
+    unclassed = _formed_without_class(w, MARCHER, q, "march")
+    assert unclassed and FIELD not in {c.subject for c in unclassed}, unclassed
+    assert any(c.verb == "march" and c.subject == FIELD for c in _formed(w, MARCHER, q))
+
+
+# ======================================================================================
+# v10 REM-28 (B10-06): `convene` DECLARES `Rung`; THE STANDING `Rung` STAMP IS THE ONLY PLACE IT FORMS
+# ======================================================================================
+# THE CLAIM: a seated convener answering a question about a person, a Proposition and a place he has been
+# told of forms `convene` on the place and on nothing else. The person (a `person`-kind rung is "an address,
+# not a place": `_req_convene`'s ordinal floor) and the Proposition (no rung the world holds) are the
+# formations the class removes, and the fold refuses each; the place it keeps is admitted and folds to a
+# scheduled sitting held by the seat that convened it. MUTATION, executed below in REM-22's shape
+# (`_formed_without_class`): the column deleted, and the verb forms on all three again. The reading behind
+# it is `aperture 1 s` (`verb_table.yaml`'s `convene` note): 9 of the 11 pooled attempts were refused on
+# exactly those two kinds.
+
+CONVENE_REFS = ("p_low", "prop_x", HEARTH)
+
+
+def _convener_told_of_the_hearth(monkeypatch):
+    """`_works_world` (`p_high` sits `off_duke`, whose grant carries `convene`, and lives at `S`) with the hearth
+    `Hh` -- below `S`, not a rung he lives under -- named by a firsthand claim in his own ledger, dated before the
+    landing floor so it raises no question of its own; he then answers a question about a person, a Proposition
+    and that hearth. The hearth is the one thing `world_q.places_named` stamps as a `Rung` (the question's own
+    Rung referent is not: `Rung` is `occasion_only`)."""
+    w, d = _works_world()
+    p = w.persons[PRESENT]
+    p.ledger.append(Claim(f"c_rem28_{HEARTH}", PRESENT, HEARTH, "exists:Rung", 1, -2, "firsthand", 100, "own"))
+    assert world_q.places_named(w, p) == (HEARTH,), world_q.places_named(w, p)
+    return w, d, _ask(monkeypatch, w, PRESENT, CONVENE_REFS)
+
+
+def test_rem28_a_a_question_about_a_person_a_proposition_and_a_told_of_place_forms_convene_on_the_place_only(
+        monkeypatch):
+    """THE FIRST ASSERTION, which deleting the column reddens (`test_rem28_a_mutation_...` below runs that
+    deletion): the three referents are carried as their three classes, and `convene` forms on the `Rung` and
+    on nothing else. THE CONTROL: the person still forms the plain rows on all three, so the class removed
+    this verb's formations and not the person's."""
+    w, _, q = _convener_told_of_the_hearth(monkeypatch)
+    assert VERB_TABLE["convene"].referent_class == "Rung"
+    assert set(q.classes) == {(HEARTH, "Rung"), ("p_low", "Person"), ("prop_x", "Proposition")}, q
+    formed = _formed(w, PRESENT, q)
+    assert [c.subject for c in formed if c.verb == "convene"] == [HEARTH], formed
+    plain = {c.subject for c in formed if not VERB_TABLE[c.verb].referent_class}
+    assert set(CONVENE_REFS) <= plain, plain
+
+
+def test_rem28_a_every_candidate_the_class_removes_is_refused_by_the_fold_and_the_one_it_keeps_is_admitted(
+        monkeypatch):
+    """A PROOF, NOT A COUNT (REM-22's control (3), for a predicate row): the Candidates the class removes --
+    the person and the Proposition, which the classless row forms -- are force-admitted through the fold's own
+    `_admits` and each is refused, and the one it keeps is admitted by the same call, so a refusal here is not
+    the fold refusing everything. The loop asserts it checked both removed kinds."""
+    w, d, q = _convener_told_of_the_hearth(monkeypatch)
+    p, row = w.persons[PRESENT], VERB_TABLE["convene"]
+    removed = [c for c in _formed_without_class(w, PRESENT, q, "convene") if c.subject != HEARTH]
+    assert {c.subject for c in removed} == {"p_low", "prop_x"}, removed
+    for c in removed:
+        assert not d._admits(w, _act_of(c, p), row)[0], c
+    (kept,) = [c for c in _formed(w, PRESENT, q) if c.verb == "convene"]
+    assert d._admits(w, _act_of(kept, p), row)[0], kept
+
+
+def test_rem28_a_mutation_without_its_column_the_row_forms_on_the_person_and_the_proposition_too(monkeypatch):
+    """THE MUTATION, EXECUTED: the column deleted (the row copied with no class) and the assertion above has
+    something to see -- `convene` forms on all three plain referents, the person (a person-rung) and the
+    Proposition among them. The unclassed formation is the base reading's: 9 of 11 attempts refused, 8 on a
+    person-rung and 1 on a Proposition (`aperture 1 s`, s = 0/1/2, realm and spine, the REM-27 tree)."""
+    w, _, q = _convener_told_of_the_hearth(monkeypatch)
+    assert [c.subject for c in _formed_without_class(w, PRESENT, q, "convene")] == list(CONVENE_REFS)
+    assert [c.subject for c in _formed(w, PRESENT, q) if c.verb == "convene"] == [HEARTH]
+
+
+def test_rem28_b_a_convener_convening_at_a_told_of_place_executes_through_the_fold(monkeypatch):
+    """THE DONE TEST (P9): the Candidate the question forms on the hearth is minted as the chooser mints it and
+    folded by the real driver: `date.scheduled`, and a Date at the hearth held by the SEAT that convened it
+    (`Act.via`, the convened-slot step: CALENDAR forms a docket slot only for a date with a holder). THE
+    CONTROL, the Candidate the unclassed row forms on the person: the fold emits `convene.refused` and
+    schedules nothing."""
+    w, d, q = _convener_told_of_the_hearth(monkeypatch)
+    p = w.persons[PRESENT]
+    (person_c,) = [c for c in _formed_without_class(w, PRESENT, q, "convene") if c.subject == "p_low"]
+    refused = dataclasses.replace(_act_of(person_c, p), id="a_rem28_convene_on_the_person")   # one act per id
+    assert _kinds(_fold(w, d, refused)) == ["convene.refused"] and not w.dates, w.dates
+    (kept,) = [c for c in _formed(w, PRESENT, q) if c.verb == "convene"]
+    act = _act_of(kept, p)
+    assert _kinds(_fold(w, d, act)) == ["date.scheduled"]
+    (date,) = w.dates.values()
+    assert date["venue"] == HEARTH and date["holder"] == act.via == "off_duke" and date["convening_attached"], date

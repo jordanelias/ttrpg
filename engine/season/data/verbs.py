@@ -1659,7 +1659,17 @@ def _derive_rung_remit_acts() -> frozenset:
     (`queries/world_q.py::larders_in_purview`, which offers a larder only to a holder of a seat
     granting one of these) and the fold's eligibility cannot name different acts, and no act literal
     lives at the stamp site. Empty when no `Rung` row is exercised through a seat (`migrate` is
-    `own`): then nothing is stamped, which is the revert."""
+    `own`): then nothing is stamped, which is the revert.
+    v10 REM-27 (B10-06, AM-A-13 limit): THE DERIVED WIDENING, NAMED. `march` declares `referent_class:
+    Rung` beside `requisition`, so its `remit:dispatch` joins the set (`{issue}` to `{issue, dispatch}`):
+    `larders_in_purview` now offers larders to dispatch-holding seats too, so `requisition` may form on
+    them (the cost is named, not prevented; REM-27's stop rule reads `requisition`'s formed count before
+    and after). REVERT: `march`'s column, and the set narrows back.
+    v10 REM-28 (B10-06): THE SECOND NAMED WIDENING. `convene` declares `referent_class: Rung` too, so its
+    `remit:convene` joins the set (`{issue, dispatch}` to `{issue, dispatch, convene}`): `larders_in_purview` is asked
+    of convene-holding seats as well. MEASURED to move no offer (`aperture 1 s` and `populated.build_realm`, tick 0 and
+    one season: no seat grants `convene` without `issue` or `dispatch`, and `larders_in_purview` offers nothing to
+    anyone, 0 of 83 and 0 of 13, under either set). REVERT: `convene`'s column, and the set narrows back."""
     return frozenset(raw.strip() for row in VERB_TABLE.values() if row.referent_class == "Rung"
                      for kind, _, raw in (alt.partition(":") for alt in row.eligibility)
                      if kind.strip() == "remit" and raw.strip())
