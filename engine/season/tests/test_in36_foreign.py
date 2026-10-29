@@ -17,9 +17,10 @@ realm settlement through the real chooser, with no hand-built act; off, byte-ide
       `march` (`test_march.py::test_a_real_chooser_forms_and_folds_a_march_...`'s own shape): the march FORMS
       and FOLDS. (2) the UNRESTRICTED chooser (`resolvable_verbs()`) on the Katepano's own goal Question, at a
       WITNESS SEED (H-175's precedent): it PICKS the march and the fold reaches the seam. That second test
-      is an existence witness and NOT a rate: the march is in the first released scene at tick 0 in 7 of 80 seeds
-      (an uncommitted session scan; later ticks unmeasured) (H-233's FREQUENCY half, Jordan's: the convictions or
-      IN-08's march cells).
+      is an existence witness and NOT a rate: the march is in the first released scene at tick 0 in 10 of 80 seeds
+      (re-scanned at v10 REM-27 with the Katepano told of the capital, `_told_of_the_capital`; the v9 scan, before
+      the told claim was needed, read 7 of 80; later ticks unmeasured) (H-233's FREQUENCY half, Jordan's: the
+      convictions or IN-08's march cells).
   (e) IN-60's GUARD CONTENT: with `guards=True` the throne's and each duchy seat's holder has a sworn cohort
       posted at the exact rung he is present at, the King's heavier than a duke's; an ordinary rung with one
       sworn resident reads 0; end the swearer's `oblige` and the value falls with nothing else written.
@@ -38,7 +39,7 @@ from engine.season.loop.driver import resolvable_verbs
 from engine.season.harness import populated as POP
 from engine.season.queries import world_q
 from engine.season.seam.wrappers import mass_battle as wrapper
-from engine.season.state.carriers import Question, Sensation, Tenure, View
+from engine.season.state.carriers import Claim, Question, Sensation, Tenure, View
 from engine.season.state.ids import H, draw_factory
 
 from .test_in27_endings import _all_but_one_under_the_crown, _realm_territories
@@ -51,6 +52,21 @@ CAST = ("p_npc_011", "p_npc_089", "p_npc_090")           # the three cast rows w
 #: `foreign_seats` author; the control arm must hold none.
 FOREIGN_MARKERS = ("alt_1", "terr_alt", "fac_altonia", "off_katepano", "off_kommerkiarios", "goal_altonia",
                    "goal_katepano", "goal_kommerkiarios")
+KATEPANO, CAPITAL = "p_npc_089", "set_s_001"
+
+
+def _told_of_the_capital(w):
+    """v10 REM-27 (B10-06): THE KATEPANO IS TOLD OF THE CAPITAL, PLANTED AT TEST SCOPE -- THE CAST ALONE NO LONGER
+    SUFFICES. `march` declares `referent_class: Rung` (`verb_table.yaml`), so it forms only on a Rung the question
+    carries as `Rung`, which `world_q.places_named` stamps from the person's OWN ledger; his goal Question names
+    `CAPITAL` only as a plain referent, and `Rung` is a `rosters.yaml: occasion_only_classes` member. Before REM-27
+    the plain referent formed the march; now he must know of the place. No world builder seats a belief at build
+    (every ledger is empty in both arms; `harness/corpus_run.py`'s `knows:` is refused by name, an AX-7 Layer-1
+    question), so the claim is planted here, in `test_referent_class_stamps.py::_told_of_field`'s shape. CONTROL:
+    without it the goal Question carries no `Rung` pair and no march forms (the witness tests below go red)."""
+    w.persons[KATEPANO].ledger.append(
+        Claim("c_in36_capital", KATEPANO, CAPITAL, "exists:Rung", 1, 0, "firsthand", 100, "own"))
+    return w
 
 
 @pytest.fixture(scope="module")
@@ -60,7 +76,7 @@ def control():
 
 @pytest.fixture(scope="module")
 def foreign():
-    return POP.build_realm(0, foreign=True)
+    return _told_of_the_capital(POP.build_realm(0, foreign=True))
 
 
 @pytest.fixture(scope="module")
@@ -161,7 +177,8 @@ def test_the_foreign_root_is_outside_the_realm_for_endings_and_the_uncontrolled_
 
 def _march_candidate(w, target: str):
     p = w.persons["p_npc_089"]
-    q = Question("q:in36_chooser_march", "need", (target,))
+    # v10 REM-27: `march` forms only on a `Rung` pair (`test_march.py`'s and `test_migrate_capacity.py`'s shape).
+    q = Question("q:in36_chooser_march", "need", (target,), classes=((target, "Rung"),))
     v = View(p.id, [], w.fixtures.get("view_k"), q)
     return p, v, [c for c in opening_set(p, v, q, w.fixtures) if c.verb == "march"]
 
@@ -169,7 +186,9 @@ def _march_candidate(w, target: str):
 def test_the_natural_goal_question_forms_a_march_candidate_on_the_capital_for_the_head_alone(foreign):
     """The goal row's own Question (`q:need:<goal id>`, Q4) names `set_s_001` (Valorsplatz, the Crown's
     capital), and clause 3 forms a march Candidate on it for the Katepano - and for nobody else of the empire
-    (no `dispatch`)."""
+    (no `dispatch`). Since v10 REM-27 the capital rides that Question as a `Rung` pair, stamped by `places_named`
+    from the claim `_told_of_the_capital` plants (the `foreign` fixture), and the no-dispatch control's Question
+    carries the same pair, so it still observes the seat being what withholds the march."""
     p = foreign.persons["p_npc_089"]
     qs = {q.id: q for q in world_q.questions_for(foreign, p)}
     q = qs["q:need:goal_katepano_press_the_capital"]
@@ -178,7 +197,7 @@ def test_the_natural_goal_question_forms_a_march_candidate_on_the_capital_for_th
     assert any(c.verb == "march" and c.subject == "set_s_001" for c in cands)
     for pid in ("p_npc_011", "p_npc_090"):
         other = foreign.persons[pid]
-        q2 = Question("q:in36_nodispatch", "need", ("set_s_001",))
+        q2 = Question("q:in36_nodispatch", "need", ("set_s_001",), classes=(("set_s_001", "Rung"),))
         assert not [c for c in opening_set(other, View(pid, [], foreign.fixtures.get("view_k"), q2), q2,
                                            foreign.fixtures) if c.verb == "march"], pid
 
@@ -234,6 +253,11 @@ def test_the_same_march_with_no_defender_arrives_unopposed_at_the_chokepoint():
 #: seeds where the REAL unrestricted chooser's first released scene on the Katepano's goal Question holds a
 #: `march` on Valorsplatz, `via == "off_katepano"`, and whose march also folds to the seam in a one-season run
 #: with no `field.unopposed`. [ASSUMPTION; medium; Jordan to correct -- two witnesses, not a rate.]
+#: RE-SCANNED at v10 REM-27 (the Katepano told of the capital, `_told_of_the_capital`; this file's own
+#: `_first_scene_of_the_goal_question`, `_fold_one` and `aperture.instrumented_season`, `PYTHONHASHSEED=0`): the first
+#: scene holds the march at 10 of 80 seeds (7, 16, 38, 39, 44, 53, 63, 65, 67, 72), each of the 10 folds alone to the
+#: seam at `field.lost` and reaches it in a full one-season run, and none of the 10 holds it without the claim. The two
+#: witnesses kept are two of those ten.
 WITNESS_SEEDS = (39, 53)
 
 
@@ -241,8 +265,8 @@ def _first_scene_of_the_goal_question(seed: int):
     """The Katepano's first released scene on `q:need:goal_katepano_press_the_capital`, from the SHIPPED path:
     `questions_for` -> the shipped aggregation -> `assemble` -> the real unrestricted `make_chooser`
     (`aperture.instrumented_season`'s own construction). Returns `(world, person, act or None)`; the act is READ
-    off the scene, never set."""
-    w = POP.build_realm(seed, foreign=True)
+    off the scene, never set. The Katepano is told of the capital first (`_told_of_the_capital`, REM-27)."""
+    w = _told_of_the_capital(POP.build_realm(seed, foreign=True))
     w._rehome()
     p, fx = w.persons["p_npc_089"], w.fixtures
     q = aggregate_questions(world_q.questions_for(w, p, None), fx.get("question_aggregation_rule"))
@@ -263,9 +287,10 @@ def test_the_unrestricted_chooser_picks_the_march_at_a_witness_seed_and_the_fold
     once, with no `field.unopposed`.
 
     SCOPE, STATED: this is an existence witness, NOT a rate. The march scores far below `create_record` on that
-    question; a scan of seeds 0-79 finds it in the first scene at 7 (a first-scene rate of 0.0875 at tick 0; Gumbel
-    order, `choice_temperature` 0.1, over ~30 candidates), and only 2 of the 5 full one-season runs checked reach
-    the seam (the rest arrive unopposed, H-233): the combined rate is NOT measured. The frequency is H-233's
+    question; a scan of seeds 0-79 finds it in the first scene at 10 (a first-scene rate of 0.125 at tick 0; Gumbel
+    order, `choice_temperature` 0.1, over ~30 candidates), and all 10 full one-season runs reach the seam (v10
+    REM-27's re-scan, the Katepano told of the capital; the v9 scan read 7, and 2 of the 5 runs it checked): the
+    combined rate over later ticks is NOT measured. The frequency is H-233's
     remaining half and is the convictions' or IN-08's march cells', not this test's. THE DRAWS ARE KEYED ON (verb, subject), so the witness RE-ROLLS whenever any upstream
     input moves (a candidate, a score, a seed's cast): the seeds below are then stale, not the mechanism broken.
     FAILURE MESSAGE NAMES THE SCAN, rather than skipping: re-scan seeds 0-79 (`foreign=True`; per seed
@@ -294,12 +319,14 @@ def test_the_unrestricted_chooser_picks_the_march_at_a_witness_seed_and_the_fold
 @pytest.mark.parametrize("seed", WITNESS_SEEDS)
 def test_the_witness_seed_reaches_the_seam_in_a_full_one_season_run_too(seed):
     """The fold above takes the chosen act in isolation. H-233 records seeds (16, 38, 44) whose same march folds to
-    the seam alone and arrives `field.unopposed` in the full run, so the witness is not honest until the whole season
+    the seam alone and arrives `field.unopposed` in the full run (at v10 REM-27's re-scan, the Katepano told of the
+    capital, all three reach the seam in the full run too), so the witness is not honest until the whole season
     is run: `aperture.instrumented_season` (the realm section's own instrument, the unrestricted chooser throughout)
     on the witness seed reaches `mass_battle.field_input` at least once, from the empire's root. If this reddens
-    where the test above stays green, the seed has become one of those; re-scan (see above)."""
+    where the test above stays green, the seed has become one of those; re-scan (see above). The Katepano is
+    told of the capital first (`_told_of_the_capital`, REM-27)."""
     from engine.season.harness import aperture
-    w = POP.build_realm(seed, foreign=True)
+    w = _told_of_the_capital(POP.build_realm(seed, foreign=True))
     records = []
     real = wrapper.field_input
     wrapper.field_input = lambda *a, **k: records.append(real(*a, **k)) or records[-1]
