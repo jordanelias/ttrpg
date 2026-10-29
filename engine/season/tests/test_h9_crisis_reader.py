@@ -66,13 +66,7 @@ from .test_season_shape import _wd_arm9
 # RE-READ with `_wd_total` on this tree and on a `git worktree` at `e66a22ec` (the REM-22 tree): there control
 # (36, 7), 0.5 -> (36, 9), 1 -> (35, 11); here control (33, 6), 0.5 -> (33, 7), 1 -> (33, 8). The shifted arm still
 # rises above the control as a rate (8/33 = 24.2% > 6/33 = 18.2%; it was 11/35 > 7/36).
-# 33/6 -> 35/4, v10 CR-28 (B10-05): `queries/world_q.py::propositions_named` offers `commit` the Propositions a person's
-# ledger names and the goals he holds, so the fork population rises (33 -> 35) and the divergence count falls (6 -> 4).
-# A re-record of the control, read off this test's own failing assertion and RE-READ with `_wd_total` on this tree and
-# on a detached worktree at `73aee085` (the REM-23 tree): there control (33, 6), 0.5 -> (33, 7), 1 -> (33, 8); here
-# control (35, 4), 0.5 -> (35, 7), 1 -> (35, 6). The shifted arm still rises above the control as a rate (6/35 = 17.1%
-# > 4/35 = 11.4%; it was 8/33 > 6/33).
-_BASELINE_TOTAL = (35, 4)
+_BASELINE_TOTAL = (33, 6)
 
 
 def _person(pursuits: dict, scar: dict) -> Person:

@@ -2719,20 +2719,10 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # `duty.taken`: `claim.deposited` 5555 / 5469 (the dwellings' wear claims), `condition.worn` 322 / 111,
     # `finding.none` 129 / 127, `migrate.refused` 54 / 58, `residence.changed` 1 / 0, `transfer.refused` 25 / 24.
     # THE PROPERTY, a dwelling question never answered first, is asserted above and holds.
-    # ⚠⚠ v10 CR-28 (B10-05): (532, 534) -> (534, 534), A RE-RECORD WITH THE UNIT THAT MOVED IT: `commit` forms on the
-    # Propositions a person's ledger names and the goals he holds (`world_q.propositions_named`), so the realm's act
-    # mix moved again (`aperture 1 0`: 532 -> 534 acts). MEASURED, seed 0, one season, the REM-23 tree (`73aee085`, a
-    # detached `git worktree`) as control, the same script on both (the two arms' `d.resolved` sequences compared
-    # act by act): the control reads (532, 534) with the arms parting at one `migrate` and the kinds that differ
-    # `claim.deposited` 5555 / 5469, `condition.worn` 322 / 111, `finding.none` 129 / 127, `migrate.refused` 54 / 58,
-    # `residence.changed` 1 / 0, `transfer.refused` 25 / 24; here (534, 534), the arms' act sequences IDENTICAL and
-    # the kinds that differ `claim.deposited` 5614 / 5522 and `condition.worn` 322 / 111 alone -- the REM-21 tree's
-    # reading again, which is the same coincidence of trajectory in the other direction, and not the property: THE
-    # PROPERTY, a dwelling question never answered first, is asserted above and holds.
     assert heads[False] and heads[True], "the spy saw no delivery; the zero below would be unobserved"
     assert not [q.id for q in heads[False] if {q.about, *q.referents} & set(dw)], (
         "a dwelling question was answered first: IN-57's tier 4 no longer sorts it last")
-    assert (out["acts"], cout["acts"]) == (534, 534), (
+    assert (out["acts"], cout["acts"]) == (532, 534), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")

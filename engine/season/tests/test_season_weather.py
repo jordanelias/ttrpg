@@ -266,16 +266,9 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # `exists:Proposition=0` 36/32/33 -> 0 at seeds 0/1/2; 61 -> 1 commit acts over two seasons at seed 0). The build
 # hash is equal (the build reads no verb row); one and two seasons move. Was 3c627dea... / 39fc1d62... (one, two
 # seasons). CONTROL, run: this same script on the REM-22 tree (`e66a22ec`) reads the old pair again.
-# RE-PINNED at v10 CR-28 (B10-05), A BEHAVIOUR MOVE DECLARED: `queries/world_q.py::propositions_named` stamps the
-# Propositions a person's own ledger names (an `utter` he heard) and the goals he is committed to as `Proposition`,
-# so `commit` forms on them (`aperture 1 s`, realm: `commit` formed for 6 / 2 / 1 persons -> 63 / 65 / 69, attempted
-# 1/1/1 -> 60 / 66 / 66, executed 1/1/1 -> 60 / 66 / 66, refused 0 -> 0 at seeds 0/1/2). The build hash is equal (the
-# build reads no verb row); one and two seasons move. Was 290655d8... / 7084faf2... (one, two seasons). CONTROL, run:
-# this same script with the term stubbed to `()` (`propositions_named = lambda *a, **k: ()`), and on a detached
-# worktree at the REM-23 tree (`73aee085`), reads the old pair again.
 BASE_HASHES = {0: "9ff5390939742b7bbb3af0fa2551e958",
-               1: "8c8f391eb47d6c40bbec9be174ed6d52",
-               2: "256f861b3cfc883f0d7790e1948a94ab"}
+               1: "290655d872d978c2971fa8a9b76767f4",
+               2: "7084faf221245ab02de9d8dfdd09b6d2"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -321,11 +314,8 @@ BASE_HASHES = {0: "9ff5390939742b7bbb3af0fa2551e958",
 # RE-RECORDED at v9 IN-59 (a) with `BASE_HASHES` (6594 -> 7018, 19221 -> 21710).
 # RE-RECORDED at v10 REM-22 with `BASE_HASHES` (7018 -> 7345, 21710 -> 21490).
 # RE-RECORDED at v10 REM-23 with `BASE_HASHES` (7345 -> 6647, 21490 -> 21312).
-# RE-RECORDED at v10 CR-28 with `BASE_HASHES` (6647 -> 6685, 21312 -> 19328: `commit` forms on the Propositions a
-# person's ledger names and the goals he holds, executes ~60 times a season, and the acts it takes scene budget from
-# follow another trajectory).
-BASE_EVENTS = {1: (6685, "511e3fc1333bf2d83df611c8b11d523e095c1bb3c63a4dcb165c4547579ddfb5"),
-               2: (19328, "d5e0be020daafeab7c1cdde00b4c7f1514e803cf8083a1ba8674de8ad6f25943")}
+BASE_EVENTS = {1: (6647, "5be962f19e06caa4ca441ba998b3660e3371f1e726c05e61ba179eb5b07b8bff"),
+               2: (21312, "32f2d13e651cdc37204d2f0d8fa50fb89cf92f02743351cf600e82b7b24a6283")}
 
 
 def _digest(w) -> tuple:
@@ -426,9 +416,7 @@ def test_the_give_withheld_arm_reproduces_the_one_season_pin():
 #: that still shows `thread_read` moves the season (it differs from `BASE_EVENTS[1]`), as `BASE_EVENTS` became.
 #: RE-RECORDED at v10 REM-22 with `BASE_HASHES`: 7028 / 4f9b8312... -> 7354 / eb995a13... (the three Site rows).
 #: RE-RECORDED at v10 REM-23 with `BASE_HASHES`: 7354 / eb995a13... -> 6652 / 98bef289... (`commit` declares `Proposition`).
-#: RE-RECORDED at v10 CR-28 with `BASE_HASHES`: 6652 / 98bef289... -> 6691 / 8795e543... (`propositions_named`; the
-#: REM-23 tree, `73aee085`, reads the old pair again under the same script).
-THREAD_READ_WITHHELD_EVENTS_1 = (6691, "8795e5436e50e163a64fd312d1ceb46dca542dfea654cb76cd2cb5ca53b3b07a")
+THREAD_READ_WITHHELD_EVENTS_1 = (6652, "98bef28921349789670bfccd6746e6b99aa95ebf1ced63c70fa78a2589120daa")
 
 
 def test_the_thread_read_withheld_arm_is_pinned_and_differs_from_the_shipped_season():

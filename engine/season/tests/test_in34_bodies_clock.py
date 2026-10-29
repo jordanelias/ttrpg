@@ -206,24 +206,12 @@ def test_in34_control_the_same_holder_as_old_at_step_0_lives_and_deposits_no_dea
     c, holder, _office, _place, _home = _realm_with_an_old_holder(AGE_ARMS[1])
     assert c.fixtures.get("age_step") == 0 and c.fixtures.get("illness_rate") == 0
     POP.run(seasons=1, seed=0, w=c)
-    # ⚠ v10 CR-28 (B10-05): THE PROPERTY IS ASSERTED DIRECTLY, AND THE EQUALITY IT REPLACES WAS A COINCIDENCE OF
-    # TRAJECTORY. This asserted `holder in c.persons` (and no `person.died` for him at all) -- a proxy for *the
-    # shipped rates write no death of age*. `world_q.propositions_named` moves the act mix (`commit` executes ~60
-    # times a season), and in this realm the holder (`p_npc_004`, the first seat-holder with company) is now killed
-    # in a `fight` by `p_npc_013` -- a causing act, not MATTER's age write -- whose claim then reaches the hearth.
-    # MEASURED, the same script on a detached worktree at the REM-23 tree (`73aee085`) as control: there he lives
-    # and no claim names his death, here the one `person.died` for him has a `fight` as its causing act (the two
-    # others this season, `p_npc_050` by `fight` and `p_npc_041` by `accept`, are acts too). What the control is
-    # FOR is the age write, whose `person.died` is chained to ROOT with no causing act (the test above): none is
-    # written for anyone at the shipped rates, and a death claim about the holder exists only if he died.
-    died = [e for e in c.log if e.kind == "person.died" and any(ch.subject == holder for ch in e.changes)]
-    assert not [e for e in c.log if e.kind == "person.died" and e.causes == [ROOT]
-                and causing_act(c, e) is None], "the shipped rates wrote a death of age"
-    assert all(causing_act(c, e) is not None for e in died), "the holder died with no act to die of"
-    claims = [cl for p in c.persons.values() for cl in p.ledger
-              if cl.subject == holder and cl.predicate == "person.died"]
-    assert not claims or died, "the control deposited a death claim about a man who lives"
-    assert (holder in c.persons) != bool(died), "the holder neither lives nor died (or both)"
+    assert holder in c.persons
+    assert not [e for e in c.log if e.kind == "person.died"
+                and any(ch.subject == holder for ch in e.changes)]
+    assert not [cl for p in c.persons.values() for cl in p.ledger
+                if cl.subject == holder and cl.predicate == "person.died"], (
+        "the control deposited a death claim about a man who lives")
 
 
 @pytest.mark.parametrize("arm", AGE_ARMS[1:])    # `AGE_ARMS[0]` sets the same hazard (1.0) for the holder
