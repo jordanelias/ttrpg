@@ -2752,10 +2752,18 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # between the arms are the REM-23 set exactly: `claim.deposited` 5301 / 5215 (the dwellings' wear claims),
     # `condition.worn` 322 / 111, `finding.none` 133 / 131, `migrate.refused` 53 / 57, `residence.changed` 1 / 0,
     # `transfer.refused` 26 / 25.
+    # ⚠⚠ v10 REM-25 (B10-05): (529, 531) -> (523, 525), A RE-RECORD WITH THE UNIT THAT MOVED IT: `carry`, `found` and
+    # `build` declare `referent_class: Record`, so they form on a Record the person holds alone and the realm's act mix
+    # moved again (`aperture 1 0`: 529 -> 523 acts). MEASURED, seed 0, one season, the REM-24 tree (`f2381695`, a
+    # detached worktree) as control, the same script on both: the control reads (529, 531) with the arms parting at act
+    # 370; here (523, 525), parting at act 370 at the SAME `migrate` (the stripped arm's `p_npc_002` to `terr_T13`, the
+    # kept arm's next act `cohort_set_s_003`'s to `b_s_014_barracks`). The kinds that differ between the arms are the
+    # REM-24 set exactly: `claim.deposited` 5251 / 5165 (the dwellings' wear claims), `condition.worn` 322 / 111,
+    # `finding.none` 143 / 141, `migrate.refused` 57 / 61, `residence.changed` 1 / 0, `transfer.refused` 32 / 31.
     assert heads[False] and heads[True], "the spy saw no delivery; the zero below would be unobserved"
     assert not [q.id for q in heads[False] if {q.about, *q.referents} & set(dw)], (
         "a dwelling question was answered first: IN-57's tier 4 no longer sorts it last")
-    assert (out["acts"], cout["acts"]) == (529, 531), (
+    assert (out["acts"], cout["acts"]) == (523, 525), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")

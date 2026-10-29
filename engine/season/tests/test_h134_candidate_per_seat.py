@@ -216,7 +216,14 @@ def test_h134_two_seats_are_two_acts_ids_opportunities_and_the_store():
 # `(58, 58, "e757d716...")`, and with those four rows' `referent_class` blanked in `decision.options.VERB_TABLE`
 # in-process it re-hashes to `(66, 66, "914b5298...")` exactly. (The reverted CR-28 attempt, `678a5acb`, read the same
 # 58 on this file: its term named nothing for `p_one`.)
-_CONTROL = (58, 58, "e757d716bc8569572e9ffcdbe030762e68b665c889a24834c5e60e429329dc7c")
+# RE-PINNED AT v10 REM-25 (B10-05): 58 -> 52, `e757d716...` -> `233b0142...`. Exactly six Candidates (and their six
+# acts) leave and none is added: `carry`, `found` and `build` (`referent_class: Record`) each formed twice, on
+# `off_duke` and `Hh` (the question's plain referents), and form on neither now -- this reading's question carries no
+# Record (`p_one` holds none, so `records_held_for_holding_rows` names nothing). CONTROL, run (scratch, not kept): the
+# same `_control_reading` on a detached worktree at the REM-24 tree (`f2381695`) reads `(58, 58, "e757d716...")`, and
+# with those three rows' `referent_class` blanked in `decision.options.VERB_TABLE` in-process it re-hashes to
+# `(58, 58, "e757d716...")` exactly on the REM-25 tree.
+_CONTROL = (52, 52, "233b0142f71ffadd8dab3dcda23210b554452c2dd5b25f8a3b69f0e97b963283")
 
 
 def _control_reading():

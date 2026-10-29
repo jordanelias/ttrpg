@@ -272,9 +272,19 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # on `exists:Person=0`; executed 10/4/8 -> 10/4/8). The build hash is equal; one and two seasons move.
 # Was 290655d8... / 7084faf2... (one, two seasons). CONTROL, run: this same script on the REM-23 tree
 # (`409c467b`) reads the old pair again.
+# RE-PINNED at v10 REM-25 (B10-05), A BEHAVIOUR MOVE DECLARED: `carry`, `found` and `build` declare
+# `referent_class: Record`, and the `Record` term widens to the Records a person holds that those rows ask him to
+# hold (`records_held_for_holding_rows`), so they form only on a held petition or works (`aperture 1 s`, realm:
+# `carry` attempted 15/18/12 -> 2/0/1 with 0/0/0 -> 2/0/1 executed, `found` 11/14/21 -> 0/0/0, `build` 12/13/12 ->
+# 0/1/1; `comply` 0/0/0 -> 2/2/1 attempted on a held petition, refused on `exists:dispensation=0`; wrong-kind
+# refusals over the four rows 38/45/45 -> 2/3/2). The build hash is equal (the build reads no verb row); one and two
+# seasons move. Was cd0ea7bc... / c010a137... (one, two seasons). CONTROL, run: this file on the REM-24 tree
+# (`f2381695`) is green against the old pair; and in-process on the REM-25 tree the three columns alone (the holding
+# term stubbed to `()`) read d7c03c2d... at one season and the term alone (the three columns blanked) 8f6e7aac...,
+# so each unit moves the hash by itself.
 BASE_HASHES = {0: "9ff5390939742b7bbb3af0fa2551e958",
-               1: "cd0ea7bcab5b49a4225dde74ddb20406",
-               2: "c010a137f280077413812bcccff44ca4"}
+               1: "da1ce5ebe72129fb5fbc829afdd9b49c",
+               2: "0f791e815897aae99594d888ffe29cf9"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -321,8 +331,9 @@ BASE_HASHES = {0: "9ff5390939742b7bbb3af0fa2551e958",
 # RE-RECORDED at v10 REM-22 with `BASE_HASHES` (7018 -> 7345, 21710 -> 21490).
 # RE-RECORDED at v10 REM-23 with `BASE_HASHES` (7345 -> 6647, 21490 -> 21312).
 # RE-RECORDED at v10 REM-24 with `BASE_HASHES` (6647 -> 6396, 21312 -> 21342).
-BASE_EVENTS = {1: (6396, "993f36d78109e9a567324d8cfc9adf19701071135d9fba66e93f7e3e5ab1200a"),
-               2: (21342, "3ae8d6fe79de425f663e10ffa2d8af5c5ecc0a709a107aab30d13d861aafa2eb")}
+# RE-RECORDED at v10 REM-25 with `BASE_HASHES` (6396 -> 6348, 21342 -> 22009).
+BASE_EVENTS = {1: (6348, "e4c6a90cebbeb0f53b64e8e823622add79b43f59239c563c0c53aa6cd8c35ec9"),
+               2: (22009, "b4b399316e52ed2502425fbc56892796079a84546d37d1cc6ec0cc2efafdd2bf")}
 
 
 def _digest(w) -> tuple:
@@ -424,7 +435,9 @@ def test_the_give_withheld_arm_reproduces_the_one_season_pin():
 #: RE-RECORDED at v10 REM-22 with `BASE_HASHES`: 7028 / 4f9b8312... -> 7354 / eb995a13... (the three Site rows).
 #: RE-RECORDED at v10 REM-23 with `BASE_HASHES`: 7354 / eb995a13... -> 6652 / 98bef289... (`commit` declares `Proposition`).
 #: RE-RECORDED at v10 REM-24 with `BASE_HASHES`: 6652 / 98bef289... -> 6401 / 71a40c5a... (`petition` declares `Person`).
-THREAD_READ_WITHHELD_EVENTS_1 = (6401, "71a40c5a173f60dccbdeb3e1a3c9efb975cb9c8f140e3aef013386ce3ca7919b")
+#: RE-RECORDED at v10 REM-25 with `BASE_HASHES`: 6401 / 71a40c5a... -> 6353 / 09edad05... (`carry`, `found` and `build`
+#: declare `Record`).
+THREAD_READ_WITHHELD_EVENTS_1 = (6353, "09edad057844f642fc6aed2fd442c305fa36662f0bb877c9e66b372a104f2b4c")
 
 
 def test_the_thread_read_withheld_arm_is_pinned_and_differs_from_the_shipped_season():

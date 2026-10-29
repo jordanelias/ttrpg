@@ -343,19 +343,31 @@ def _counts(w) -> dict:
 #: CONTROL, run: the same script on the REM-23 tree (`409c467b`, a `git worktree`) reads the values this block held
 #: exactly, so the move is this unit's. Was, for seeds 0 / 1 / 2: `old` 26fa3179... / e51b0d83... / c961a57a...,
 #: `new` 290655d8... / 9537c69e... / 43b51550..., `acts` 532 / 582 / 583, `log` 6647 / 8656 / 7196.
+#: RE-RECORDED AGAIN at v10 REM-25 (B10-05), A GAME MOVE DECLARED, NO DIGEST MOVE: `carry`, `found` and `build`
+#: declare `referent_class: Record`, and the `Record` term widens from `writs_held` to `writs_held` plus
+#: `records_held_for_holding_rows`, so they form only on a Record the person holds (a petition, for the realm) --
+#: 83 of 83 persons formed each before (`carry` attempted 15 / 18 / 12, `found` 11 / 14 / 21, `build` 12 / 13 / 12,
+#: all refused on `exists:petition=0` / `exists:works=0`, `aperture 1 s`), 9 / 4 / 9 do now (`carry` attempted
+#: 2 / 0 / 1, executed 2 / 0 / 1; `found` 0 / 0 / 0; `build` 0 / 1 / 1), and `comply` forms on a held petition his
+#: ledger names (attempted 2 / 2 / 1, refused on `exists:dispensation=0`) -- and the act mix of every seeded realm
+#: moves with it. EVERY value below is the REM-25 tree's, read with this file's own helpers (`_old_content_hash`,
+#: `_counts`) and `populated.run`; CONTROL, run: this file's own control test on a detached worktree at the REM-24
+#: tree (`f2381695`) is green against the values this block held, so the move is this unit's. Was, for seeds
+#: 0 / 1 / 2: `old` 9930edaa... / eaa35b59... / 7397b498..., `new` cd0ea7bc... / 3688012e... / 9dde0b7b...,
+#: `acts` 529 / 579 / 578, `log` 6396 / 8662 / 7190.
 BASE = {
-    0: {"old": "9930edaa911772aa095f3809c769445f", "new": "cd0ea7bcab5b49a4225dde74ddb20406", "acts": 529,
-        "census": "745ff855dabfe4f31724b2e7f157b0ac668c2b1d996cf3d4c756c80798d84c4c",
-        "counts": {"persons": 82, "rungs": 411, "offices": 32, "sites": 322, "records": 86,
-                   "propositions": 92, "dates": 1, "docket": 4, "tenures": 796, "log": 6396}},
-    1: {"old": "eaa35b5907fa2a5e435a0b2b93209f26", "new": "3688012ef0e2a324d7f3a04ced30fc85", "acts": 579,
-        "census": "97bfd3eb6b36463b3b0fe909e3721b5c7c4ceb86d7129ff38933eedab52c9ee4",
-        "counts": {"persons": 83, "rungs": 412, "offices": 32, "sites": 322, "records": 116,
-                   "propositions": 91, "dates": 0, "docket": 2, "tenures": 836, "log": 8662}},
-    2: {"old": "7397b498cf8cfe00e0298726138f20b8", "new": "9dde0b7bd3664fd1bd4e94aa4184653e", "acts": 578,
-        "census": "c30727665a43057e066e6925eff9ed4936add5bfc10b26736145348fa97d4bd6",
-        "counts": {"persons": 81, "rungs": 410, "offices": 32, "sites": 322, "records": 100,
-                   "propositions": 92, "dates": 1, "docket": 2, "tenures": 797, "log": 7190}},
+    0: {"old": "38c7de45f17fdabdba759268837970d5", "new": "da1ce5ebe72129fb5fbc829afdd9b49c", "acts": 523,
+        "census": "54c9e607ddb16a9c9d00afb7f61c8243e21c691b8d32e2da26d7693d12a39994",
+        "counts": {"persons": 82, "rungs": 411, "offices": 32, "sites": 322, "records": 93,
+                   "propositions": 91, "dates": 1, "docket": 6, "tenures": 802, "log": 6348}},
+    1: {"old": "233f7e8edf80b31558645e9753fd58a0", "new": "f80b294986bb29b65238fb8232a2d829", "acts": 575,
+        "census": "9a2ae08f27c3ba52b8b3f91e6ed38881a9cb14d57b9f3b6f912aa4f8a6508b7d",
+        "counts": {"persons": 83, "rungs": 412, "offices": 32, "sites": 322, "records": 118,
+                   "propositions": 91, "dates": 0, "docket": 2, "tenures": 839, "log": 8597}},
+    2: {"old": "09176dd854009efd92b03a9573738a47", "new": "7e87cc5452615cb4da3d71b94a8db844", "acts": 591,
+        "census": "7d81dc598a6b39e9b1942e527648ab64f15fe7175d2a6bb9dceddf627431bdca",
+        "counts": {"persons": 81, "rungs": 410, "offices": 32, "sites": 322, "records": 115,
+                   "propositions": 99, "dates": 1, "docket": 2, "tenures": 819, "log": 7724}},
 }
 
 

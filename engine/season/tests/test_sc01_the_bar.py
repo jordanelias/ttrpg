@@ -23,8 +23,8 @@ pieces of character data, the kind the realm's builder authors for every person:
 ⚠ THE TWO SEEDS ARE SELECTED, AND THE RATE IS MEASURED -- THE BAR IS AN EXISTENCE CLAIM, NOT A RATE.
 MEASURED 2026-10-16 at eb9ba4e2 (a one-off sweep, not kept): this world at each of the 15 convictions x
 seeds 0..15, ten seasons, 240 runs -- 72 `matter.determined`, and 4 of them walk to a `date.fired`
-(doctrine 12, family 13, reputation 13, scholastics 6); this file runs scholastics 6 and family 13,
-two distinct seeds. The other 68 are raised by the ambition (`need`, whose occasion is `[ROOT]`,
+(doctrine 12, family 13, reputation 13, scholastics 6); this file ran scholastics 6 and family 13,
+two distinct seeds (scholastics 16 since v10 REM-25, re-traced at `PROCEEDINGS` below). The other 68 are raised by the ambition (`need`, whose occasion is `[ROOT]`,
 `world_q.occasioned_by`): the chooser docketed the clerk BEFORE any sitting fired, so `_eff_open_case`
 appended a dateless item, `docketed` then declines every later `open_case` on him, no slot ever holds
 him, and `determine`'s docket conjunct (existence of a DocketItem, dated or not) admits the
@@ -108,7 +108,16 @@ DUKE, SEAT, PARTY, WANT = "p_high", "off_duke", "p_mid", "prop_bar_duke_want"
 # (conviction, world seed, seasons): the two seeded proceedings, and the control run. The season count
 # is the first season after which the determination stands (traced at build), so each run is no longer
 # than its proceeding.
-PROCEEDINGS = (("scholastics", 6, 6), ("family", 13, 5))
+# v10 REM-25 (B10-05): RE-TRACED, scholastics/6 -> scholastics/16, the conviction and season count unchanged --
+# `carry`, `found` and `build` declare `referent_class: Record`, so they form only on a Record the person holds
+# (the Duke and the clerk hold none here), and the act mix of this world moved: scholastics/6 now fires TWO dates
+# and determines one matter whose causes reach neither (`_proceeding`: "no determination's causes reach a
+# date.fired (1 determined, 2 fired)"). The bar is an existence claim on SELECTED seeds (above), not a rate. A sweep
+# of scholastics x seeds 0..39 at 6 seasons for a run meeting every assertion of `_proceeding` finds seeds 13, 16 and
+# 21 (scratch, not kept); 16 is taken, the first that is not family's seed. family/13/5 is unmoved (it meets them
+# all). CONTROL, run: this file on the REM-24 tree (`f2381695`) meets them all at scholastics/6, so the move is this
+# unit's.
+PROCEEDINGS = (("scholastics", 16, 6), ("family", 13, 5))
 BAR_FIXTURES = DEFAULT_FIXTURES.sweep("pool_default", 30)       # v9 SC-03b: a judge whose finding opens
 # v9 IN-12 step 9: RE-TRACED, the conviction and season count unchanged -- `argue`/`sabotage`/`tend`/`train`
 # are new members of the Duke's and the clerk's option sets, so doctrine/8's trajectory moved (it now fires

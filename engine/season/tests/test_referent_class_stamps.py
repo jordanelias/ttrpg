@@ -29,10 +29,15 @@ term): the formation (a person and a Site, the verb on the Site only), the DONE 
 at a worn Site executes `restore`, reaches `examine`'s graded route, advances a works by `work`, each
 through the real fold). REM-23 (`commit` declares `referent_class: Proposition`) follows the same two
 tests for a person and a Proposition, and REM-24 (`petition` declares `referent_class: Person`) for a
-rung and a person, with what a person's own `person`-kind rung reads as. The last section is the batch's
-control (3), written over the rows
-that declare `Site`, `Proposition` or `Person` so a later item adds its row by its column and not by a
-copy.
+rung and a person, with what a person's own `person`-kind rung reads as. REM-25 (`carry`, `found` and
+`build` declare `Record`; the `Record` term widens from `writs_held` to `writs_held` plus
+`records_held_for_holding_rows`, the Records on a person's live `hold` edges whose kind a `Record` row
+asking `held_by` of `subject` asks `existence` of): the stamper, the formation (a person holding a
+petition forms `carry` on it and the fold executes it; a person holding none forms none), the works rows
+through the real fold, and the cost the shared class creates (measured, pinned). The last section is the
+batch's control (3), written over the rows
+that declare `Site`, `Proposition` or `Person`, and the `Record` rows whose cell asks the actor to hold
+the subject, so a later item adds its row by its column and not by a copy.
 
 MUTATIONS, run at the build: `_stamped`'s `dict.fromkeys` dropped (the bare concatenation) reddens the
 three (c) tests on `Question`'s refusal (and `test_in53_vacancy_need.py`'s told-of-seat fingerprint
@@ -50,19 +55,21 @@ import pytest
 from engine.season.data import verbs as _verbs
 from engine.season.data.requires import UNKNOWN, AllOf, Existence
 from engine.season.data.rosters import OCCASION_ONLY_CLASSES, REFERENT_CLASSES
-from engine.season.data.verbs import DECLARED_CLASSES, VERB_TABLE
+from engine.season.data.verbs import DECLARED_CLASSES, HOLDING_RECORD_KINDS, RECORD_REFERENT_KINDS, VERB_TABLE
 from engine.season.decision import options as _options
 from engine.season.decision.choose import _payload_of
 from engine.season.decision.options import seat_of
 from engine.season.gaps import Forbidden
 from engine.season.harness import probes as P
 from engine.season.queries import world_q
-from engine.season.state.carriers import Act, Proposition, Question
+from engine.season.state.carriers import Act, Claim, Proposition, Question, Record, Tenure
 
 from .test_g3_not_yours import _gov_world, _hold
 from .test_in09_dispensation_answer import HOLDER, WRIT, _with_writ
 from .test_in53_vacancy_need import _ambition, _formed, _know, _planted
-from .test_works_founding import ABSENT, HARBOUR, PRESENT, SETTLEMENT, _declare, _fold, _kinds, _ripen
+from .test_works_founding import (
+    ABSENT, HARBOUR, HEARTH, PRESENT, SETTLEMENT, _declare, _fold, _kinds, _ripen, _stock,
+)
 from .test_works_founding import _world as _works_world
 
 #: The classes REM-21 adds to `rosters.yaml: referent_classes`. A test expectation, not a roster: it
@@ -173,19 +180,22 @@ def test_rem21_b_the_splice_stamps_in_its_term_order_and_the_own_referents_last(
     """THE SPLICE ORDER, WHICH THE REALM CANNOT OBSERVE: in the seeded realm only `places_named` ever
     names an id (measured at the build, 1 and 2 seasons, seed 0), so a reordering of two terms moves no
     hash. Here every standing occasion names one id of its own and `Site` is planted as declared: the
-    classes read in the splice's order -- `vacancies`, `seats_named`, `writs_held`, `places_named`,
-    `larders_in_purview` -- and the question's own referent last. Swapping any two terms reddens it."""
+    classes read in the splice's order -- `vacancies`, `seats_named`, `writs_held`,
+    `records_held_for_holding_rows` (v10 REM-25: the second half of the `Record` term, directly after the
+    writs), `places_named`, `larders_in_purview` -- and the question's own referent last. Swapping any two
+    terms reddens it."""
     w, _ = _with_writ()
+    w.records["rec_held"] = Record("rec_held", "Hh", "text")
     _ambition(w, HOLDER, "prop_a", "site_harbour")
     for name, out in (("vacancies", ("off_duke",)), ("seats_named", ("off_dicastery",)),
-                      ("writs_held", (WRIT,)), ("places_named", ("D",)),
-                      ("larders_in_purview", ("S",))):
+                      ("writs_held", (WRIT,)), ("records_held_for_holding_rows", ("rec_held",)),
+                      ("places_named", ("D",)), ("larders_in_purview", ("S",))):
         monkeypatch.setattr(world_q, name, lambda *a, _out=out, **k: _out)
     monkeypatch.setattr(world_q, "DECLARED_CLASSES", DECLARED_CLASSES | {"Site"})
     (q,) = world_q.questions_for(w, w.persons[HOLDER])
     assert q.referents == ("site_harbour",), q
     assert q.classes == (("off_duke", "Office"), ("off_dicastery", "Office"), (WRIT, "Record"),
-                         ("D", "Rung"), ("S", "Rung"), ("site_harbour", "Site")), q
+                         ("rec_held", "Record"), ("D", "Rung"), ("S", "Rung"), ("site_harbour", "Site")), q
 
 
 # ======================================================================================
@@ -576,6 +586,215 @@ def test_rem24_b_a_person_petitioning_a_person_executes_through_the_fold(monkeyp
     assert [t.live for t in p.tenures if t.kind == "hold" and t.object == rec.id] == [True]
 
 
+# ======================================================================================
+# REM-25 (B10-05; rem-02 §2.3 REM-25, limit `-08` AM-A-10): `carry`, `found` AND `build` FORM ON A
+# `Record` THE PERSON HOLDS. Three `referent_class: Record` columns, and the `Record` term widened from
+# `writs_held` (comply's: a dispensation naming him) to `writs_held` plus `records_held_for_holding_rows`
+# (the Records on his live `hold` edges whose kind a `Record` row asking `held_by` of `subject` asks
+# `existence` of, `data/verbs.py::HOLDING_RECORD_KINDS`, derived off the cells with no verb name).
+# THE CLASS REMOVES WRONG-COLLECTION FORMATIONS AND IS SHARED: one class cannot tell a petition from a
+# works, so the three rows form on every held Record of either kind and the fold disposes (pinned below).
+# DECLARED SIDEWAYS MOVE: `found` and `build` leave always-refused for (nearly) never-attempted, because
+# no computed act declares a works until ED-IN-0297 is answered; the readings are `aperture 1 s`'s, in
+# the commit body, never an assertion here.
+# ======================================================================================
+
+#: The rows declaring `Record` whose cell asks the actor to hold the subject; control (3) below walks them.
+HOLDING_ROWS = ("carry", "found", "build")
+PETITION_ID = "pet_rem25"
+#: The rows' independent statement of the data the derivation reads, spelt without `data/verbs.py`.
+HOLDING_KINDS = frozenset({"petition", "works"})
+
+
+def _file_petition(w, d, pid=PRESENT, key=PETITION_ID):
+    """`pid` files a petition about `p_low` to him through the real `petition` fold: a Record of kind
+    `petition` minted into the petitioner's hand (`_mint_document`'s maker's `hold`), who is not its
+    addressee."""
+    out = _fold(w, d, Act(id=f"file_{key}", actor=pid, verb="petition",
+                          payload={"record": key, "subject": "p_low", "to": "p_low", "from": "S"}))
+    assert _kinds(out) == ["petition.filed"], _kinds(out)
+    assert w.records[key].kind == "petition" and world_q.hold_force(w, key).subject == pid
+    return key
+
+
+def test_rem25_the_two_record_terms_are_told_apart_by_the_cell_and_derived_from_it():
+    """The `Record` rows split by whether their cell asks `held_by` of `subject`: the writ row's kinds are
+    `RECORD_REFERENT_KINDS` (stamped with the addressee test), the holding rows' are `HOLDING_RECORD_KINDS`
+    (stamped by the holding alone); the two sets are disjoint and each is exactly the `existence` kinds of
+    its rows' cells. THE ANTI-VACUITY: both sets are non-empty and the holding rows are the three columns."""
+    rows = {v: r for v, r in VERB_TABLE.items() if r.referent_class == "Record"}
+    holding = {v for v, r in rows.items() if _verbs._asks_subject_held(r)}
+    assert holding == set(HOLDING_ROWS) and set(rows) - holding == {"comply"}, (sorted(rows), sorted(holding))
+    kinds = lambda vs: frozenset().union(*(_existence_kinds(rows[v].requires_typed.requirement) for v in vs))
+    assert HOLDING_RECORD_KINDS == kinds(holding) == HOLDING_KINDS
+    assert RECORD_REFERENT_KINDS == kinds(set(rows) - holding) == {"dispensation"}
+    assert not HOLDING_RECORD_KINDS & RECORD_REFERENT_KINDS
+
+
+def test_rem25_a_the_stamper_returns_the_live_holds_of_a_holding_kind_and_nothing_else():
+    """`records_held_for_holding_rows`: the Records on the person's own live `hold` edges of a holding kind,
+    sorted. NOT the addressee test (the petitioner holds his petition and is not its addressee: `writs_held`
+    stamps him nothing), NOT a text, NOT a hold that has ended, NOT the person the petition names (he holds
+    nothing). The anti-vacuity: the first call returns the petition."""
+    w, d = _works_world()
+    pet = _file_petition(w, d)
+    w.records["txt_rem25"] = Record("txt_rem25", "S", "text")
+    w.add_tenure(Tenure("hold:txt_rem25", PRESENT, "txt_rem25", "hold", since=w.tick))
+    p = w.persons[PRESENT]
+    assert world_q.records_held_for_holding_rows(w, p) == (pet,)
+    assert world_q.writs_held(w, p) == (), "a petition is no writ: the addressee test stamps it nothing"
+    assert world_q.records_held_for_holding_rows(w, w.persons["p_low"]) == ()
+    world_q.hold_force(w, pet).until = w.tick
+    assert world_q.records_held_for_holding_rows(w, p) == ()
+
+
+def test_rem25_a_a_writ_is_stamped_by_its_own_term_and_not_by_the_holding_term():
+    """The other half of the split: a held dispensation naming its holder is `writs_held`'s and the holding
+    term returns nothing for it (a dispensation is no holding row's kind), so `comply`'s addressee test is
+    unchanged. The anti-vacuity: `writs_held` stamps the writ."""
+    w, _ = _with_writ()
+    p = w.persons[HOLDER]
+    assert world_q.writs_held(w, p) == (WRIT,)
+    assert world_q.records_held_for_holding_rows(w, p) == ()
+
+
+@pytest.mark.parametrize("verb", HOLDING_ROWS)
+def test_rem25_a_a_person_holding_a_petition_forms_the_verb_on_it_and_one_holding_none_forms_none(
+        monkeypatch, verb):
+    """THE FIRST ASSERTION, which dropping the `held_by` derivation reddens (the build ran that mutation
+    against `_derive_holding_record_kinds` itself): `p_high` files a petition and answers a question about
+    `p_low`, the harbour, a Proposition and a rung; the holding term stamps the petition as a `Record`, and
+    `verb` forms on it and on nothing else. THE CONTROL: he still forms the plain rows on all four referents
+    (the class removed this verb's formations and not his), and `p_low`, who holds nothing, is stamped no
+    Record and forms none of the three."""
+    w, d = _works_world()
+    pet = _file_petition(w, d)
+    q = _ask(monkeypatch, w, PRESENT)
+    assert (pet, "Record") in q.classes, q
+    formed = _formed(w, PRESENT, q)
+    assert [c.subject for c in formed if c.verb == verb] == [pet], (verb, formed)
+    plain = {c.subject for c in formed if not VERB_TABLE[c.verb].referent_class}
+    assert set(MIXED) <= plain, plain
+    none = _ask(monkeypatch, w, ABSENT)
+    assert not [r for r, k in none.classes if k == "Record"], none
+    assert not [c for c in _formed(w, ABSENT, none) if c.verb in HOLDING_ROWS]
+
+
+@pytest.mark.parametrize("verb", HOLDING_ROWS)
+def test_rem25_a_mutation_without_its_column_the_row_forms_on_every_referent_and_never_on_the_record(
+        monkeypatch, verb):
+    """THE MUTATION, EXECUTED: the column deleted (the row copied with no class) and the assertion above
+    has something to see -- `verb` forms on all four plain referents, the person, the Site and the rung among
+    them, and NEVER on the petition (a classless row reads the plain referents only). The unclassed
+    formation is the base reading's: `carry` 15/18/12, `found` 11/14/21 and `build` 12/13/12 attempted and
+    refused at admission (`aperture 1 s`, REM-24 tree)."""
+    w, d = _works_world()
+    pet = _file_petition(w, d)
+    q = _ask(monkeypatch, w, PRESENT)
+    assert [c.subject for c in _formed_without_class(w, PRESENT, q, verb)] == list(MIXED)
+    assert [c.subject for c in _formed(w, PRESENT, q) if c.verb == verb] == [pet]
+
+
+def test_rem25_a_dropping_the_holding_derivation_stamps_nothing(monkeypatch):
+    """THE DERIVATION MUTATION, IN-PROCESS: with `HOLDING_RECORD_KINDS` empty (what dropping the `held_by`
+    derivation yields) the petition is stamped nothing, and no holding row forms for its holder -- the
+    first assertion of the formation test above would red. The CONTROL is that test: same world, shipped set."""
+    w, d = _works_world()
+    pet = _file_petition(w, d)
+    monkeypatch.setattr(world_q, "HOLDING_RECORD_KINDS", frozenset())
+    q = _ask(monkeypatch, w, PRESENT)
+    assert (pet, "Record") not in q.classes and not [r for r, k in q.classes if k == "Record"], q
+    assert not [c for c in _formed(w, PRESENT, q) if c.verb in HOLDING_ROWS]
+
+
+def test_rem25_b_a_person_carrying_his_held_petition_executes_through_the_fold(monkeypatch):
+    """THE DONE TEST (P9): the Candidate `p_high`'s question forms on his petition is minted as the chooser
+    mints it and folded by the real driver: `petition.carried`, and a docket item naming the petition.
+    THE CONTROLS, each one clause from the executing carry: the Candidate the unclassed row would also have
+    formed on the person `p_low` (the admission refuses it, `exists:petition` = 0), and the executing
+    Candidate in the hands of `p_low`, who does not hold the petition (`held_by`); each is `carry.refused`
+    and moves the docket nowhere. The class claims no more than that: it is the wrong-kind formation that is
+    gone."""
+    w, d = _works_world()
+    pet = _file_petition(w, d)
+    q = _ask(monkeypatch, w, PRESENT)
+    p = w.persons[PRESENT]
+    (c,) = [c for c in _formed(w, PRESENT, q) if c.verb == "carry"]
+    assert c.subject == pet
+    before = list(w.docket)
+    (wrong,) = [c for c in _formed_without_class(w, PRESENT, q, "carry") if c.subject == "p_low"]
+    refused = dataclasses.replace(_act_of(wrong, p), id="a_carry_wrong_kind")
+    assert _kinds(_fold(w, d, refused)) == ["carry.refused"] and w.docket == before
+    not_held = dataclasses.replace(_act_of(c, p, ABSENT), id="a_carry_not_held")
+    assert _kinds(_fold(w, d, not_held)) == ["carry.refused"] and w.docket == before
+    assert _kinds(_fold(w, d, _act_of(c, p))) == ["petition.carried"]
+    (item,) = [i for i in w.docket if i not in before]
+    assert item[world_q.DOCKET_PETITION] == pet, item
+
+
+@pytest.mark.parametrize("verb, plan, at, done, stocked", [
+    ("found", "hearth", SETTLEMENT, "rung.founded", None),
+    ("build", "harbour", HEARTH, "site.built", HEARTH),
+])
+def test_rem25_b_a_maker_holding_a_works_executes_found_and_build_through_the_fold(
+        monkeypatch, verb, plan, at, done, stocked):
+    """THE DONE TEST for the works rows (P9), on a hand-built world only: no computed act declares a works
+    (ED-IN-0297), so the realm never reaches this. The maker `p_low` declares a works through the real
+    `create_record`, holds it, is asked a question, and the holding term stamps it; `verb` forms on it and
+    the real fold executes it (`rung.founded`: a hearth at `S`; `site.built`: a harbour at `Hh`). THE
+    CONTROL: the same body with the Record declared `text` -- the term stamps it nothing and the row forms
+    nothing; and a `p_mid` who holds no works forms none."""
+    w, d = _works_world()
+    _declare(w, d, "wk", plan, at)
+    if stocked:                             # the plan's timber (v9 IN-28); `S` stocks the hearth's stake
+        _stock(w, stocked, plan)
+    q = _ask(monkeypatch, w, ABSENT)
+    assert ("wk", "Record") in q.classes, q
+    (c,) = [c for c in _formed(w, ABSENT, q) if c.verb == verb]
+    assert c.subject == "wk"
+    assert _kinds(_fold(w, d, _act_of(c, w.persons[ABSENT]))) == [done]
+    wt, dt = _works_world()
+    _declare(wt, dt, "wk", plan, at, kind="text")
+    qt = _ask(monkeypatch, wt, ABSENT)
+    assert not [r for r, k in qt.classes if k == "Record"], qt
+    assert not [c for c in _formed(wt, ABSENT, qt) if c.verb in HOLDING_ROWS]
+
+
+def test_rem25_c_the_class_is_shared_so_the_rows_form_on_each_others_records_and_the_fold_refuses(
+        monkeypatch):
+    """THE COST THE CLASS SHARING CREATES, MEASURED AND PINNED (the H-163 precedent; rem-02 REM-25): one
+    `Record` class cannot tell a petition from a works from a writ. (1) A held PETITION is a `Record` for
+    `found` and `build` too, and each, force-admitted, is refused on `exists:works` = 0 (the carry on it is
+    admitted); (2) a `comply` formed on it (once his ledger names it) is refused on `exists:dispensation`;
+    (3) a held WRIT is a `Record` for `carry`, refused on `exists:petition` = 0. Each is a wrong-SUB-kind
+    refusal where the base had wrong-COLLECTION ones: a Record is the right collection."""
+    w, d = _works_world()
+    pet = _file_petition(w, d)
+    q = _ask(monkeypatch, w, PRESENT)
+    p = w.persons[PRESENT]
+    # AFTER the question is delivered (a claim in his ledger would raise a question of its own that sorts
+    # first): his own ledger now names the petition, which is what lets `comply` (`referent_named`) form.
+    p.ledger.append(Claim("c_names_pet", PRESENT, pet, "record.created", True, w.tick, "firsthand", 100, "own"))
+    formed = {c.verb: c for c in _formed(w, PRESENT, q) if c.subject == pet}
+    assert {"carry", "found", "build", "comply"} <= set(formed), sorted(formed)
+
+    def refusals(world, driver, person, cand, verb):
+        ok, _k, verdict = driver._admits(world, _act_of(cand, person), VERB_TABLE[verb])
+        return ok, [o.predicate for o in verdict.observed if o.value in (0, False)]
+
+    assert refusals(w, d, p, formed["carry"], "carry")[0]
+    for verb, wanted in (("found", "exists:works"), ("build", "exists:works"), ("comply", "exists:dispensation")):
+        ok, reads = refusals(w, d, p, formed[verb], verb)
+        assert not ok and wanted in reads, (verb, reads)
+    ww, wd = _with_writ()
+    holder = ww.persons[HOLDER]
+    writ_q = world_q.questions_for(ww, holder)[0]
+    (carry_on_writ,) = [c for c in _formed(ww, HOLDER, writ_q) if c.verb == "carry"]
+    assert carry_on_writ.subject == WRIT
+    ok, reads = refusals(ww, wd, holder, carry_on_writ, "carry")
+    assert not ok and "exists:petition" in reads, reads
+
+
 # --- (c) CONTROL (3) OF B10-05's HR-9: A CLASS REMOVES REFUSALS AND NOTHING ELSE --------------
 
 #: The classes whose rows control (3) walks. The ROWS are read off the table, so a later item that
@@ -583,6 +802,16 @@ def test_rem24_b_a_person_petitioning_a_person_executes_through_the_fold(monkeyp
 #: here names a verb but `SITE_ROWS`, `PROPOSITION_ROWS` and `PERSON_ROWS` (the rows whose extra
 #: assertions are stated), and a row is added by its data and never by a copy.
 CONTROL3_CLASSES = frozenset({"Site", "Proposition", "Person"})
+
+
+def _control3_rows() -> dict:
+    """The classed rows control (3) walks: every row declaring one of `CONTROL3_CLASSES`, plus (v10 REM-25)
+    the `Record` rows whose cell asks the actor to HOLD the subject -- read off the cell, not a verb name.
+    `comply`, the other `Record` row, forms on a writ its own ledger names (`referent_named`) and keeps its
+    addressee test; it is held to `test_in09_dispensation_answer.py`'s formation tests."""
+    return {v: r for v, r in VERB_TABLE.items()
+            if r.referent_class in CONTROL3_CLASSES
+            or (r.referent_class == "Record" and _verbs._asks_subject_held(r))}
 
 
 def _existence_kinds(req) -> frozenset:
@@ -619,13 +848,22 @@ def test_rem22_c_every_candidate_a_class_removes_force_admitted_refuses_on_the_r
     nothing else. The loop asserts that it checked at least one removed Candidate for EVERY classed row,
     and the Site rows', the Proposition row's and the Person row's own Candidate (the one the class keeps)
     is admitted by the same call, so a refusal here is not the fold refusing everything. REM-23's `commit`
-    and REM-24's `petition` entered this loop by their column alone: `rows` is read off the table."""
+    and REM-24's `petition` entered this loop by their column alone: `rows` is read off the table.
+
+    REM-25: `carry`, `found` and `build` enter by their column and their cell (`_control3_rows`: a `Record`
+    row whose cell asks `held_by` of `subject`), in a world where `p_high` HOLDS a petition and a works, so
+    the question carries two Records. A `Record` row's class keeps every held Record (one class cannot tell
+    a petition from a works), so for these rows the kept Candidates are one per held Record and the loop
+    asserts exactly those on a Record of the row's own kind are admitted, and that there is at least one."""
     w, d = _works_world()
+    pet = _file_petition(w, d)
+    _declare(w, d, "wk_c3", "hearth", SETTLEMENT, actor=PRESENT)
     q = _ask(monkeypatch, w, PRESENT)
     p = w.persons[PRESENT]
-    rows = {v: r for v, r in VERB_TABLE.items() if r.referent_class in CONTROL3_CLASSES}
-    assert set(SITE_ROWS + PROPOSITION_ROWS + PERSON_ROWS) <= set(rows), sorted(rows)
-    kept = {c.verb: c for c in _formed(w, PRESENT, q)}
+    rows = _control3_rows()
+    assert set(SITE_ROWS + PROPOSITION_ROWS + PERSON_ROWS + HOLDING_ROWS) <= set(rows), sorted(rows)
+    formed = _formed(w, PRESENT, q)
+    kept = {c.verb: c for c in formed}
     checked = collections.Counter()
     for verb, row in sorted(rows.items()):
         own = {r for r, k in q.classes if k == row.referent_class}
@@ -638,4 +876,11 @@ def test_rem22_c_every_candidate_a_class_removes_force_admitted_refuses_on_the_r
         if verb in SITE_ROWS + PROPOSITION_ROWS + PERSON_ROWS:
             assert {c.subject for c in removed} == set(MIXED) - own, (verb, removed)
             assert d._admits(w, _act_of(kept[verb], p), row)[0], (verb, kept[verb])
+        if row.referent_class == "Record":
+            mine = [c for c in formed if c.verb == verb]
+            assert own == {pet, "wk_c3"} and {c.subject for c in mine} == own, (verb, own, mine)
+            kinds = _existence_kinds(row.requires_typed.requirement)
+            admitted = {c.subject for c in mine if d._admits(w, _act_of(c, p), row)[0]}
+            assert admitted == {r for r in own if w.records[r].kind in kinds} and admitted, (verb, admitted)
+            assert {c.subject for c in removed} == set(MIXED), (verb, removed)
     assert set(checked) == set(rows) and min(checked.values()) >= 1, (sorted(rows), checked)

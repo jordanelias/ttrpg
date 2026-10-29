@@ -34,7 +34,7 @@ import pytest
 
 from engine.season.data.matrix import Step, WriteClass
 from engine.season.data.rosters import RECORD_CONTENT
-from engine.season.data.verbs import RECORD_REFERENT_KINDS, TERMS_SOURCED, VERB_TABLE
+from engine.season.data.verbs import RECORD_REFERENT_KINDS, TERMS_SOURCED, VERB_TABLE, _asks_subject_held
 from engine.season.harness import probes as P
 from engine.season.loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from engine.season.loop.effects import EFFECTS
@@ -100,7 +100,15 @@ def test_in09_the_row_is_typed_resolvable_classed_and_emission_only():
 
 
 def test_in09_the_record_class_is_declared_by_comply_alone_and_answers_dispensations():
-    assert {v for v, r in VERB_TABLE.items() if r.referent_class == "Record"} == {VERB}
+    # RE-RECORDED AT v10 REM-25 (B10-05): `carry`, `found` and `build` declare `Record` too, so the rows
+    # declaring it were `{comply}` and are `{comply, carry, found, build}`. WHAT THIS TEST MEANT -- the
+    # writ occasion is `comply`'s alone, and `RECORD_REFERENT_KINDS` (the kinds `writs_held` stamps, with its
+    # addressee test) is `dispensation` alone -- is asserted on the rows whose cell asks no `held_by` of
+    # `subject` (the three others ask it: their kinds are `HOLDING_RECORD_KINDS`, a separate set stamped by
+    # `records_held_for_holding_rows`; `test_referent_class_stamps.py::test_rem25_the_two_record_terms_...`).
+    record_rows = {v for v, r in VERB_TABLE.items() if r.referent_class == "Record"}
+    assert record_rows == {VERB, "carry", "found", "build"}
+    assert {v for v in record_rows if not _asks_subject_held(VERB_TABLE[v])} == {VERB}
     assert RECORD_REFERENT_KINDS == frozenset({"dispensation"})
 
 

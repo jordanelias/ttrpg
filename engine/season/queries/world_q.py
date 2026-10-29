@@ -47,7 +47,9 @@ from ..data.rosters import (
 # v9 IN-27: `_OPENERS_FROM_EFFECTS` is which verbs open which Tenure kind, derived off the effects
 # (`OPENERS-DERIVE`); `endings_reached` evaluates the `ENDINGS` vocabulary imported above.
 # v10 REM-21: `DECLARED_CLASSES`, the referent classes some row declares, the same way.
-from ..data.verbs import DECLARED_CLASSES, RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS, _OPENERS_FROM_EFFECTS
+from ..data.verbs import (
+    DECLARED_CLASSES, HOLDING_RECORD_KINDS, RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS, _OPENERS_FROM_EFFECTS,
+)
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
 # the asker-first module (which may not import this one; this edge runs the other way).
@@ -2547,6 +2549,31 @@ def writs_held(w: World, p: Person) -> tuple:
                          and p.id in _addressees_of(w.records[t.object])}))
 
 
+def records_held_for_holding_rows(w: World, p: Person) -> tuple:
+    """THE RECORDS `p` HOLDS THAT A ROW ASKING HIM TO HOLD THEM ANSWERS (v10 REM-25, B10-05, AM-A-10; M19
+    taken, [ASSUMPTION; medium; Jordan to correct]), sorted by id: the Records on `p`'s own live `hold`
+    edges whose kind is one a `referent_class: Record` row whose typed cell asks `held_by` of `subject`
+    asks `existence` of (`data/verbs.py::HOLDING_RECORD_KINDS`: `carry`'s `petition`, `found`'s and
+    `build`'s `works`). The second half of the `Record` term, beside `writs_held`: THE ADDRESSEE TEST
+    IS NOT HERE, because these rows ask only that the actor HOLD the document (a petitioner holds his
+    petition from the mint and is not its addressee), while a writ reaches the person it orders (the
+    addressee test is `comply`'s, kept in `writs_held`). `()` for nearly everyone.
+
+    A STANDING OCCASION, `writs_held`'s shape: resolver-side and read-only, it supplies Record IDS,
+    which `questions_for` adds to the question the person answers as CLASSED referents, and whether the
+    act then passes is the fold's (the rows' typed cells). It reads `p`'s own edges and the store only
+    for the kinds of the Records they name. ⚠ THE CLASS IS SHARED, as `Office` is between `confer` and
+    `oblige`: a held petition is a `Record` for `comply` too (which forms on a Record his own ledger
+    names and the fold refuses on `exists:dispensation`), and a held writ is a `Record` for `carry`;
+    the stopping rule of REM-25 measured that cost. ⚠ NO 'ALREADY CARRIED' DECLINE, `writs_held`'s
+    scene tax: a holder who carried a petition is offered it again while he holds it (the fold's
+    `docketed` decline refuses a second carry of one matter). REVERT: drop the term in
+    `questions_for` (and the three rows' `referent_class`)."""
+    return tuple(sorted({t.object for t in p.tenures
+                         if t.kind == "hold" and t.live and t.object in w.records
+                         and w.records[t.object].kind in HOLDING_RECORD_KINDS}))
+
+
 def places_named(w: World, p: Person, named: Optional[frozenset] = None) -> tuple:
     """THE PLACES `p` HAS BEEN TOLD OF AND COULD SETTLE IN (v9 IN-45 `migrate`, H-168 limit 1,
     [ASSUMPTION; medium; Jordan to correct]), sorted by id: the Rungs among
@@ -2838,7 +2865,9 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     """§F1's `q` producer -- TWO sources, resolver-side, at the DELIBERATE barrier, plus FIVE
     STANDING OCCASIONS stamped onto the first question as classed referents (`_stamped`, below the
     sort): the vacant seats the person may fill (`vacancies`, IN-53), the seats he has been told of
-    (`seats_named`, v9 IN-10 (a)), the writs he holds (`writs_held`, v9 IN-09), the places he has
+    (`seats_named`, v9 IN-10 (a)), the writs he holds (`writs_held`, v9 IN-09, widened at v10 REM-25 by
+    the Records he holds that a row asking him to hold them answers, `records_held_for_holding_rows`:
+    the same `Record` term, not a sixth occasion), the places he has
     been told of and could settle in (`places_named`, v9 IN-45 `migrate`) and the larders his seat
     may requisition (`larders_in_purview`, v9 IN-49 `requisition`). They are not
     sources: no id or source changes; a person with one of them and no question gets one `need`
@@ -3000,6 +3029,10 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # IN-09 (H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to correct]): AND SO DO THE WRITS
     # HE HOLDS (`writs_held`), after the seats, as `Record` -- only `comply` declares that class, so
     # no other row's formations move. REVERT: drop the term.
+    # v10 REM-25 (AM-A-10, [ASSUMPTION; medium; Jordan to correct]): AND THE RECORDS HE HOLDS THAT A
+    # ROW ASKING HIM TO HOLD THEM ANSWERS (`records_held_for_holding_rows`), directly after the writs,
+    # as `Record` -- the same class, widened: `carry`, `found` and `build` declare it beside `comply`,
+    # so a held petition (or works) is a Record those rows form on. REVERT: drop the term.
     # v9 IN-45 `migrate` (H-168 limit 1, [ASSUMPTION; medium; Jordan to correct]): AND SO DO THE
     # PLACES HE HAS BEEN TOLD OF AND COULD SETTLE IN (`places_named`), as `Rung`. REVERT: drop the term.
     # v9 IN-49 `requisition` (H-163 limit 3, [ASSUMPTION; medium; Jordan to correct]): AND SO DO THE
@@ -3016,8 +3049,8 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     vacant = vacancies(w, p)
     told = ledger_names(p.ledger)
     places = places_named(w, p, told)
-    added = (vacant + seats_named(w, p, told) + writs_held(w, p) + places
-             + larders_in_purview(w, p, told)
+    added = (vacant + seats_named(w, p, told) + writs_held(w, p) + records_held_for_holding_rows(w, p)
+             + places + larders_in_purview(w, p, told)
              + (own_referents_of_class(w, out[0], DECLARED_CLASSES - OCCASION_ONLY_CLASSES)
                 if out else ()))
     if added:

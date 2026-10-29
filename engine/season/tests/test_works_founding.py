@@ -586,6 +586,68 @@ def _formed_on(w, pid, referent, verbs, q=None):
     return [a for s in _pack(p, cands, 99, w.fixtures, mint) for a in s.acts]
 
 
+def _without_holding_class():
+    """`opening_set`'s table with `found`'s and `build`'s `referent_class` BLANKED in-process (v10 REM-25,
+    B10-05): the formation of the REM-24 tree (`f2381695`), which `test_in45_found_and_build_form_on_a_works_
+    its_maker_is_asked_about_and_execute` was written against. THE UNIT AND THE REASON: the two rows declare
+    `Record` and form on a Record-classed referent alone -- a held Record the question carries as that
+    class -- so a question merely ABOUT the Record (a `claim_landed` question whose plain referent it is)
+    forms neither; `test_rem25_found_and_build_form_on_the_works_the_maker_holds_...` below pins the shipped
+    route."""
+    import dataclasses
+    from unittest import mock
+    from ..data.verbs import VERB_TABLE
+    from ..decision import options as _opts
+    table = {**VERB_TABLE, **{v: dataclasses.replace(VERB_TABLE[v], referent_class="")
+                              for v in ("found", "build")}}
+    return mock.patch.object(_opts, "VERB_TABLE", table)
+
+
+def _maker_declares_two_works(kind):
+    """The setup of the two tests below: a hearth at `S` and a dwelling at `Hh` declared by the real
+    `create_record`, WITNESS's deposit of each, the dwelling's timber planted, one season on."""
+    w, d = _world()
+    for key, plan, at in (("wh", "hearth", SETTLEMENT), ("wd", "dwelling", HEARTH)):
+        d.witness(mint_token(w, WriteClass.INTERIOR), _declare(w, d, key, plan, at, kind=kind))
+    _stock(w, HEARTH, "dwelling")            # the dwelling's timber (v9 IN-28); `S` stocks the stake
+    _season(w, d)
+    return w, d
+
+
+@pytest.mark.parametrize("kind", [world_q.WORKS_KIND, "text"])
+def test_rem25_found_and_build_form_on_the_works_the_maker_holds_and_a_text_forms_neither(kind):
+    """THE SHIPPED ROUTE (v10 REM-25, B10-05): the same two Records, and the maker's delivered question (the
+    head of `questions_for`) carries each he HOLDS as a `Record` -- `records_held_for_holding_rows`, kinds
+    `HOLDING_RECORD_KINDS` -- so `found` and `build` form on both, and the real fold disposes exactly as
+    the unclassed formation's did: `rung.founded` for the hearth under `found`, `site.built` for the
+    dwelling under `build`, each verb's other works refused by its own effect. A question merely ABOUT a
+    Record (a later question) carries no class and forms neither. THE CONTROL, the same body with the
+    Records declared `text`: a text is no holding kind, no question carries a `Record` and neither verb
+    forms for anyone on any question."""
+    w, d = _maker_declares_two_works(kind)
+    p = w.persons[ABSENT]
+    qs = world_q.questions_for(w, p)
+    head = qs[0]
+    if kind != world_q.WORKS_KIND:
+        assert not [r for q in qs for r, c in q.classes if c == "Record"], qs
+        assert not [a for q in qs for a in _formed_on(w, ABSENT, "wh", ("found", "build"), q=q)]
+        return
+    assert {("wd", "Record"), ("wh", "Record")} <= set(head.classes), head
+    acts = _formed_on(w, ABSENT, "wh", ("found", "build"), q=head)
+    assert sorted((a.payload.get("subject"), a.verb) for a in acts) == [
+        ("wd", "build"), ("wd", "found"), ("wh", "build"), ("wh", "found")], acts
+    got = {}
+    for key in ("wh", "wd"):
+        for a in sorted((a for a in acts if a.payload.get("subject") == key),
+                        key=lambda a: a.verb != "found"):
+            got[(key, a.verb)] = _kinds(_fold(w, d, a))
+    assert got == {("wh", "found"): ["rung.founded"], ("wh", "build"): ["build.refused"],
+                   ("wd", "found"): ["found.refused"], ("wd", "build"): ["site.built"]}, got
+    assert "hearth:wh" in w.rungs and w.sites["dwelling:wd"].condition == 0
+    about = [q for q in qs[1:] if {"wh", "wd"} & set(q.referents)]
+    assert about and not [a for q in about for a in _formed_on(w, ABSENT, "wh", ("found", "build"), q=q)]
+
+
 @pytest.mark.parametrize("kind", [world_q.WORKS_KIND, "text"])
 def test_in45_found_and_build_form_on_a_works_its_maker_is_asked_about_and_execute(kind):
     """THE MAKER IS ASKED ABOUT HIS WORKS AND `found`/`build` FORM ON IT. Two Records are declared
@@ -595,12 +657,14 @@ def test_in45_found_and_build_form_on_a_works_its_maker_is_asked_about_and_execu
     `subject = the Record`, and the fold executes them: `rung.founded` for the hearth and
     `site.built` for the dwelling. Each verb's other works is refused by that verb's own effect.
     CONTROL, the same body with the Records declared `text`: the same questions form the same verbs,
-    and every one is refused. The kind of the Record is the only difference between the arms."""
-    w, d = _world()
-    for key, plan, at in (("wh", "hearth", SETTLEMENT), ("wd", "dwelling", HEARTH)):
-        d.witness(mint_token(w, WriteClass.INTERIOR), _declare(w, d, key, plan, at, kind=kind))
-    _stock(w, HEARTH, "dwelling")            # the dwelling's timber (v9 IN-28); `S` stocks the stake
-    _season(w, d)
+    and every one is refused. The kind of the Record is the only difference between the arms.
+
+    v10 REM-25 (B10-05): READ WITH `found`'S AND `build`'S `referent_class: Record` BLANKED IN-PROCESS
+    (`_without_holding_class`) -- the formation of the REM-24 tree, which these assertions were written
+    against; the shipped route (the held Record carried as a class by the head question) is the test above's.
+    The assertions are unchanged and still execute: a question ABOUT the Record forms the two verbs on it, the
+    fold executes the works arm and refuses the text arm."""
+    w, d = _maker_declares_two_works(kind)
     p = w.persons[ABSENT]
     asked = {}
     for q in world_q.questions_for(w, p):
@@ -608,12 +672,13 @@ def test_in45_found_and_build_form_on_a_works_its_maker_is_asked_about_and_execu
             asked.setdefault(r, q)
     assert {"wh", "wd"} <= set(asked), sorted(asked)          # the maker is asked about both
     got = {}
-    for key in ("wh", "wd"):
-        acts = _formed_on(w, ABSENT, key, ("found", "build"), q=asked[key])
-        assert sorted(a.verb for a in acts) == ["build", "found"], (key, acts)
-        assert all(a.payload.get("subject") == key for a in acts), acts
-        for a in acts:
-            got[(key, a.verb)] = _kinds(_fold(w, d, a))
+    with _without_holding_class():
+        for key in ("wh", "wd"):
+            acts = _formed_on(w, ABSENT, key, ("found", "build"), q=asked[key])
+            assert sorted(a.verb for a in acts) == ["build", "found"], (key, acts)
+            assert all(a.payload.get("subject") == key for a in acts), acts
+            for a in acts:
+                got[(key, a.verb)] = _kinds(_fold(w, d, a))
     if kind == world_q.WORKS_KIND:
         assert got == {("wh", "found"): ["rung.founded"], ("wh", "build"): ["build.refused"],
                        ("wd", "found"): ["found.refused"], ("wd", "build"): ["site.built"]}, got
