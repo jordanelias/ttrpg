@@ -7818,8 +7818,8 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # ITS REASON AND ITS LIMIT: `restore`, `work` and `examine` declare `referent_class: Site`, so they form on a
     # Site alone and no corpus question carries one: `examine` / `restore` / `work` were refused in 85 / 21 / 61
     # of the 143 live worlds and are attempted in none now, and the scenes they took go to other acts. `carry`
-    # is that spill, not its own cell (untouched): it executed in ONE
-    # world (`ARC-34`, the `give` note above) and in none now, refused in 66 worlds (63 before). MEASURED by
+    # is that spill, not its own cell (untouched): it executed in ONE world (`ARC-34`, the `give` note above)
+    # and in none now, refused in 66 worlds (63 before). MEASURED by
     # `corpus_run.run_case` over the 143 live worlds, seed 0, the REM-21 tree as control (the same script on
     # both): executed-world counts `carry` 1 -> 0, `challenge` 78 -> 77, `reconstruct` 132 -> 131, `interview`
     # 4 -> 6, `move` 48 -> 52, `surveil` 68 -> 74, `tell` 89 -> 95; nothing else moves. Neither `restore`
@@ -8575,7 +8575,22 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # B10-02 REM-10 leaves this count UNMOVED: `by_sig` keys on `executed`, which stays on the fold set. (Read
     # over the act store, `executed` also held the acts refused at admission whose refusal kind is an `emits:`
     # kind -- `finding.none` on `examine` and `research`, `news.untold` on `tell` -- and the count read 128.)
-    assert len(by_sig) == 124, (
+    # ⚠⚠ **124 -> 126, v10 REM-22 (B10-05), MEASURED BY `corpus_run.run_case`, seed 0, AGAINST THE REM-21 TREE
+    # (`c88905e7`, a `git worktree`; the three columns absent) AS CONTROL, which reads 124 -- the same script on
+    # both.** THE UNIT AND THE DIRECTION: variety ROSE by two, `live` did not move (143 on both sides). `restore`,
+    # `work` and `examine` declare `referent_class: Site`, so they form on a Site-classed referent alone and no
+    # corpus question carries one: attempted (and refused) in 21 / 61 / 85 of the 143 worlds at the control, in
+    # none here. The scenes they took re-rank the rest, and 31 worlds' executed sets change (none by order alone:
+    # NPC-013 -031 -034 -038 -082 -084 -085 -088, ARC-04 -06 -11 -16 -17 -18 -21 -27 -32 -34 -35 -36 -38 -41 -43
+    # -44 -47 -48, ARC-META-COLLISION, EMG-C1 -C2, NSC-05, SCN-13), a net two more distinct signatures.
+    # Executed-world counts, control -> here: `carry` 1 -> 0, `challenge` 78 -> 77, `interview` 4 -> 6,
+    # `move` 48 -> 52, `reconstruct` 132 -> 131, `surveil` 68 -> 74, `tell` 89 -> 95; every other verb's count is
+    # unmoved (`give`, `transfer`, `conceal` and `research` change worlds, not counts). Not a ranking change:
+    # `H-96` is untouched. THE SAME-BREATH CHECK: the universal set is EMPTY on both sides (no verb regained
+    # universality; the largest, `reconstruct`, falls to 131 of 143), `varying` loses `carry` with `ever` (asserted
+    # below), `hi`/`lo` are unmoved ({1..6} both), `told_redeposits` stays 0, and the status census is UNMOVED
+    # (103 RUNS-UNDECLARED · 40 SPAN-UNAUTHORED).
+    assert len(by_sig) == 126, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -8766,7 +8781,11 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # ⚠⚠ v9 IN-12 step 10: `conceal` JOINS -- the `ever` note above (91 worlds of 143, not all).
     # ⚠⚠ v9 IN-12 `give` + Rung: `carry` JOINS -- the `ever` note above (one world of 143, ARC-34, so it
     # varies and is not universal).
-    assert varying == {"accept", "carry", "challenge", "conceal", "create_record", "fight", "give",
+    # ⚠⚠ v10 REM-22 (B10-05): `carry` LEAVES -- the `ever` and `by_sig` notes above (it executed in ARC-34 alone, now
+    # in no world; the scenes `restore`, `work` and `examine` no longer take re-ranked it out). Nothing joins;
+    # `universal` is empty on both sides, so `varying` is `ever` exactly (18). Control: the REM-21 tree reads the
+    # old 19, `carry` among them.
+    assert varying == {"accept", "challenge", "conceal", "create_record", "fight", "give",
                        "interview", "issue", "move",
                        "petition", "reconstruct", "release", "research",
                        "surveil", "tell", "tend", "transfer", "utter"}, (
@@ -12339,9 +12358,34 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # (scratch, not kept): the same tree with the skip arm off reproduces the base bite and its 21 drops
     # exactly, so the cause is the skip arm's act-mix move (a refused inquiry's reads no longer land),
     # not the maturation, which still writes at MATTER (unchanged code).
-    assert bit == set(), (
-        f"the clause-4 bite is {sorted(bit)}. A non-empty bite here would be a NEW acceptance-chain "
-        "pair and should be named and grounded as one, not silently accepted; check whether the "
+    # ⚠⚠ **v10 REM-22 (B10-05): EMPTY -> TWO PAIRS, `('transfer', 'rec:0a9f85a0f7f67871')` AND `('transfer',
+    # 'rec:6bf46a143f347c12')`, NAMED AND GROUNDED AS THE MESSAGE BELOW REQUIRES -- A REAL DENIAL, AND THE UNIT
+    # THAT MADE IT VISIBLE MOVED THE CONTROL ARM, NOT THE LIVE ONE.** Both pairs are the ACCEPTANCE'S OWN CHAIN:
+    # `p_carin`'s `transfer` Candidate (`from` = `hearth_ostvik`, form 2 `scalar_threshold`) dropped on her own
+    # `('hearth_ostvik', 'stores:grain', 0)`, deposited at (tick, round) (0,0) by her own `transfer.refused` on
+    # `einhir_texts` -- not a `seen` deposit. The drops fire at (1,1) and (2,0) for `rec:6bf4…` and (2,1) for
+    # `rec:0a9f…`, the belief present in every round since (0,0): the drop DENIES, `G1a`'s mechanism.
+    # THE DECIDING MEASUREMENT IS A COUNTERFACTUAL, NOT A COUNT (`hl_drops`'s replica, scratch, not kept): the
+    # shipped arm with clause 4 disabled for exactly these two pairs takes both, `p_carin` at (2,0) and (2,1),
+    # the very slots the `none` control takes them in, where the shipped arm backfills `carry` and `tend`. A
+    # fold-order artifact would leave them untaken with the drop gone; they are taken.
+    # THE LIVE ARM IS UNMOVED AND THAT IS THE CONTROL: on the REM-21 tree (`c88905e7`, a `git worktree`) the
+    # shipped arm's three drops are the same (tick, round, actor), on the same belief, and the same
+    # counterfactual takes both at (2,0)/(2,1) -- the denial was already there. What REM-22 moved is the `none`
+    # arm: at REM-21 its tick 0 carried `p_bailiff`'s `restore` x3 and `p_carin`'s `work` on `hearth_ostvik`
+    # (re-tried, since `none` deposits no refusal), its history diverged at the third act and neither record
+    # ever arose in it (0 acts on the two, 9 in the shipped arm), so the pairs could not be in `pairs_none`. With
+    # `restore`, `work` and `examine` formed on a Site alone, those formations are gone, the control's history
+    # reaches both records (9 acts on them), and it takes the two transfers. Resolved acts, `none` arm, REM-21 ->
+    # here: `restore` 3 -> 0, `work` 1 -> 0, `move` 6 -> 4, `transfer` 2 -> 4, `create_record` 7 -> 9, `research`
+    # 2 -> 4, `reconstruct` 2 -> 3, `commit` 0 -> 2, `petition` 0 -> 1, `train` 0 -> 1; the shipped arm: `restore`
+    # 1 -> 0, `work` 1 -> 0, `reconstruct` 5 -> 6, nothing else.
+    # [GROUNDED: measured at v10 REM-22 on this tree and on a `git worktree` at `c88905e7` -- `bit` = the two pairs here and EMPTY there; shipped-arm drops of both pairs identical in both trees; the counterfactual (clause 4 disabled for the two pairs alone) takes both at (2,0) and (2,1) in both trees]
+    assert bit == {("transfer", "rec:0a9f85a0f7f67871"), ("transfer", "rec:6bf46a143f347c12")}, (
+        f"the clause-4 bite is {sorted(bit)}, not the two `transfer` pairs pinned at REM-22. A "
+        "pair beyond those would be a NEW acceptance-chain pair and should be named and grounded "
+        "as one, not silently accepted; disable clause 4 for it alone and see whether the shipped "
+        "arm then takes it (REM-22's counterfactual), and check whether the "
         "shift is a real recovered denial or another fold-order artifact of `seen`'s deposit volume "
         "before re-pinning to it. EMPTY means a drop is recoverable again — the act "
         "gets taken in a round the belief does not reach, which is the state `U2` and `U3` left "
@@ -12512,9 +12556,20 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # leaves -- the four new rows on shared `existence` cells (`exists:Proposition`, `exists:Site`,
     # `exists:Person`), dropped on a deposited 0 read exactly as `carry` and `speak` arrived above. A
     # re-record, read off the failing assertion's own output. `tell` and `surveil` are absent.
+    # ⚠ {16 verbs} -> {14 verbs}, v10 REM-22 (B10-05): `examine` AND `restore` LEAVE, nothing joins. MEASURED
+    # BEFORE RE-PINNING, this test's own `drops(DEFAULT_FIXTURES)` replicated on this tree and on a `git
+    # worktree` at `c88905e7` (the REM-21 tree): there, 158 drops, `examine` 6 and `restore` 6, EVERY ONE on
+    # `r_realm` (a rung, not a Site); here, 229 drops and none of either. THE UNIT IS THEIR CELL'S NEW CLASS:
+    # both declare `referent_class: Site` and form on a Site-classed referent alone, so no Candidate of either
+    # forms on `r_realm` for clause 4 to drop -- the wrong-kind formation the class removes, not a lost belief.
+    # `sabotage` (no class; the same `exists:Site` cell) STAYS, 6 drops on `r_realm` in both trees, which is the
+    # control inside the arm: the belief is still deposited (`p_c`'s `('r_realm', 'exists:Site', 0)`, from the
+    # one `sabotage.refused`, held at the end in both trees) and still drops what forms on it. The other twelve
+    # verbs' counts rise by the act mix (`work` 6 -> 0 resolved acts, the same class), which this assertion does
+    # not read. The control arm drops 0 in both trees. `tell` and `surveil` are absent.
     assert {v for v, _ in live} == {"accept", "argue", "build", "carry", "challenge", "commit",
-                                    "examine", "fight", "found", "interview", "petition",
-                                    "restore", "sabotage", "speak", "tend", "train"}, (
+                                    "fight", "found", "interview", "petition",
+                                    "sabotage", "speak", "tend", "train"}, (
         f"the drops are on {sorted({v for v, _ in live})}. `tell` here means a "
         "`claim.held` claim is reaching a ledger again, which is the self-refuting belief "
         "`LEDGER_DERIVED_STEMS` excludes. `surveil` RETURNING means `tell`'s degree has stopped "
