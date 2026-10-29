@@ -14,7 +14,8 @@ description: >
   architecture compliance, layer conformance, "does this conform to 04", "which layer does this
   belong in", "mechanism or reference", "should this be a guard", "apparatus or game", "is
   engine/season conformant". Not for design quality (ners), inert mechanics (valoria-mechanic-audit), P-01..P-15
-  (valoria-canon-guard), or diff bugs (/code-review).
+  (valoria-canon-guard), unearned complexity or apparatus an edit would replace (valoria-simplify),
+  or diff bugs (/code-review).
 ---
 
 # LAYER CONFORMANCE

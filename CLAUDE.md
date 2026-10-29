@@ -364,8 +364,7 @@ says where an old path went. Only what those cannot tell you:
   (`composition_roles:` in `references/module_contracts.yaml`), not by import (`combat` alone loads by path, via
   the seam above). A registered module takes typed input, returns typed outcome, holds no token, keeps no game state (`04` §A.2; `holonic_ARCHITECTURE.md` §43, §45).
 - **`architecture/`** — **Layer 1.** Reference for game mechanism (§0.05), binding as agent instruction,
-  resolving nothing at runtime. Scope: `architecture/meta/04_CODE_ARCHITECTURE.md`'s Status line. Indexes:
-  `architecture/00_ADOPTION_README.md`, `architecture/meta/README.md`. Exempt from the size WARNING only.
+  resolving nothing at runtime. Scope: `architecture/meta/04_CODE_ARCHITECTURE.md`'s Status line (indexes: `CURRENT.md`'s Layer-1 row). Exempt from the size WARNING only.
 - **`canon/`** — foundations **P-01..P-15**, timeline, constraints, amendments; world truth only.
 - **`registers/`** — process ledgers and `registers/handoffs/`. **All ledger files are authoritative —
   read all of them.** **Never edit** the frozen ED fragments in `registers/archive/`:
@@ -525,6 +524,7 @@ A fresh remote container has pyyaml only; run the provisioner. WHEN each runs is
 | Stressing anything that resolves by a **draw** — σ-leverage, μ-shift vs Ob-shift, fractional pool/Ob, sub-1D floor | `resolution-diagnostic`. Its output is **evidence**, not a verdict: carry findings into a `ners` pass |
 | **Layer placement** — which layer does this bind, is prose being made a mechanism, does a proposed guard earn its existence | `layer-conformance` (Lens A); the **definitions** are the layer table, §0.05 and §0.1 pt 5 |
 | **Code-architecture / Layer-1 conformance** | `layer-conformance` (Lens B), which reads `architecture/meta/04_CODE_ARCHITECTURE.md` (and, for `modules/`, `holonic_ARCHITECTURE.md` §43, §45–§47) at the row and copies no table or count out of it |
+| **Distilling code and data without losing function** — unearned complexity, a second owner, new apparatus where an edit would serve, scripting drift, dead code; a high-level survey of a system in six directions; the cost of porting it | `valoria-simplify`, run between `layer-conformance`'s Lens A and Lens B |
 | Editorial-debt workflow over the JSONL ledger | `valoria-editorial-register` |
 | Structural-debt corpus scan | `valoria-vector-audit` |
 | Splitting an oversized doc | `valoria-chunker`; **nothing enforces a general length cap** (§4) |

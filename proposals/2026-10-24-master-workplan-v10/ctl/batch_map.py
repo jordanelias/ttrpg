@@ -6,22 +6,16 @@ This file is the author's judgment in one place; it is not a plan."""
 
 # Closed batches leave SPINE, CARDS and ORDER at their net-deleting close (P3); their handles stay as keys, mapped
 # to CLOSED, so the coverage run still knows them (`-07` section 1 keeps every handle and records the batch CLOSED).
-CLOSED_BATCHES = ["B10-01", "B10-02", "B10-03", "B10-04"]
-CLOSED = "closed: B10-01, B10-02, B10-03, B10-04 (`-07` section 1)"
+CLOSED_BATCHES = ["B10-01", "B10-02", "B10-03", "B10-04", "B10-03b"]
+CLOSED = "closed: B10-01, B10-02, B10-03, B10-04, B10-03b (`-07` section 1)"
 
-SPINE = ["B10-03b", "B10-05", "B10-06", "B10-07", "B10-07b",
+SPINE = ["B10-05", "B10-06", "B10-07", "B10-07b",
          "B10-08", "B10-09", "B10-10", "B10-11", "B10-12", "B10-13", "B10-14", "B10-15", "B10-16",
          "B10-17", "B10-18", "B10-20", "B10-19", "B10-Z"]
 
 CARDS = {
- 'B10-03b': dict(name='THE PORTABLE DIGEST', lanes='GO, IN', code=True,
-   gate='merged: B10-03 (f7352efc), B10-04 (566de4d7) (a declared-mover sub-batch after B10-03 closes, because B10-03 is EQUAL)',
-   exit="GO-07's falsifier and controls; the commit body lists every hash pin and every baseline B10-02's close recorded, old to new",
-   hash='M (digest format only)',
-   shared='engine/season/state/world.py (_entity_digest, content_hash, the log fold); every committed hash pin and golden digest',
-   build='2026-10-24-v10-09-build-B10-03b.md'),
  'B10-05': dict(name='FORMATION: ACTS FORM ONLY ON WHAT THEY CAN REACH', lanes='IN', code=True,
-   gate="merged: B10-02 (3ab145d6), B10-04 (566de4d7), B10-03b; layer-conformance Lens B has answered TL :462-467's two Layer 1 questions before the CL-THRUST B2.x and B3.1 landings",
+   gate="merged: B10-02 (3ab145d6), B10-04 (566de4d7), B10-03b (8a80c4fc); layer-conformance Lens B has answered TL :462-467's two Layer 1 questions before the CL-THRUST B2.x and B3.1 landings",
    exit="PYTHONHASHSEED=0 python -m engine.season.harness.aperture 1 s (s=0,1,2) per item; register --requirements; CR-14 pooled census and wrong-kind column over seeds 0-4 (-08 HR-9; the per-item base stays aperture 1 s, s=0,1,2); CR-28's falsifier; REM-52's re-pins (grep -rn body_step engine/season/tests: test_governance_build.py, test_in22_shortfall_reach.py, test_territorial_subsistence.py, test_se03_body_bands.py, test_season_shape.py, every seeded realm hash pin); CL-EVENTS (1) at (); B2.x and B3.1 at empty data; NM-W2's row deleted with HR-9 control (4)'s reading quoted -> each classed verb exists:<Kind>=0 refusals fall to 0 (base 3,137 over three seeds, a lower bound); the wrong-kind-at-admission share per act falls (base 4,620 of 16,116, 28.7%, four seasons; 2,385 of 7,402, 32.2%, two); controls: pooled per-verb EXECUTED within P1 seed-to-seed range, questions delivered / claims deposited / scenes do not fall, every removed candidate force-admitted refuses on its kind; CL-EVENTS (1), B2.x and B3.1 EQUAL; no claim that R-05 moves",
    hash='mixed (movers: REM-22; REM-23; CR-28; REM-24; REM-25; CP-T05-04; REM-2C; REM-52 (its own declared-mover commit, body_step = 10))',
    shared='engine/season/verb_table.yaml; engine/season/rosters.yaml (referent_classes; thrust_axes); engine/season/queries/world_q.py (questions_for splice, own_referents_of_class, the CR-28 stamper term); engine/season/data/verbs.py (DECLARED_CLASSES; VerbRow.scale removal); engine/season/decision/options.py; count pins: engine/season/tests/test_governance_build.py, test_season_shape.py (len(VERB_TABLE) == 56; executed and always-refused sets); engine/season/tests/test_referent_class_stamps.py (new); engine/season/data/fixtures.py (body_step); engine/season/loop/matter.py; engine/season/queries/inputs.py (ProduceInput.factor); modules/settlements/produce.py; engine/season/goals.yaml; engine/season/data/goals.py; the five body_step test files',
@@ -229,7 +223,7 @@ CR = {
 }
 # the port gate's new positions (GO-01, GO-05 and GO-06 are v9 handles, in V9)
 GO = {
- "GO-07": "B10-03b", "GO-08": "B10-20", "GO-09": "B10-20", "GO-10": "B10-20", "GO-11": "B10-20",
+ "GO-07": CLOSED, "GO-08": "B10-20", "GO-09": "B10-20", "GO-10": "B10-20", "GO-11": "B10-20",
  "GO-12": "B10-20", "GO-13": CLOSED, "GO-14": CLOSED, "GO-15": "B10-20", "GO-16": "B10-20",
 }
 NM = {f"NM-W{n}": "B10-19" for n in range(10)}
@@ -241,7 +235,6 @@ CL = {"CL-CHAR": "B10-10", "CL-ATTR": "B10-19", "CL-TROOP": "B10-19", "CL-EVENTS
 # In-batch order of the final cut ('->' is serial; 'held:' members wait on the question named and slot in by rule R8;
 # 'landing' is a commit of a row that lives in another batch, not a member)
 ORDER = {
- 'B10-03b': 'GO-07',
  'B10-05': 'REM-21 -> REM-22 -> REM-23 -> CR-28 -> REM-24 -> REM-25 -> CP-T05-04 -> REM-2C -> CR-07 -> landings CL-THRUST B2.1/B2.2 -> landing CL-THRUST B3.1 -> REM-52 -> landing CL-EVENTS (1) -> NM-W2 (EDIT row)',
  'B10-06': 'REM-26 -> REM-27 -> REM-28 -> CR-23 -> REM-29 -> REM-2A -> REM-2B -> IN-45',
  'B10-07': 'REM-44 (with L1-6 and L1-7)',

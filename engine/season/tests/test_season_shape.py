@@ -14758,7 +14758,7 @@ def test_u2_the_one_round_arm_reproduces_the_pre_tick_loop():
     `R = 1` limit is not the current behaviour changed two things at once.
 
     ⚠ **WHAT IS ASSERTED IS THE ACTS AND THE EVENTS, NOT THE HASH, AND THE HASH IS THE REASON.**
-    `Claim` gained a `round` field and `_entity_digest` is over the dataclass repr, so the content
+    `Claim` gained a `round` field and `_entity_digest` encodes every declared field, so the content
     hash MOVES by construction and asserting it would pin the field rather than the behaviour.
     Measured 2026-09-11: at `scene_budget = 1` the `(actor, verb, subject)` act multiset and the
     Event-kind multiset are IDENTICAL to the pre-tick loop's, and the hash differs.

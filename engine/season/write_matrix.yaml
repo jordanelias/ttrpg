@@ -156,8 +156,8 @@ rows:
     # owner, `CLAUDE.md` §0.05 cl.3). V2 wrote `(Office, remit)` and `Office` has no `remit` field --
     # `matrix_rows_without_a_field()['absent']` listed this row -- so the gate licensed a cell
     # nothing could write. The ROW moved rather than the FIELD because `Office.remit_acts` is read at
-    # every remit check in the package AND folds into `World.content_hash` through `repr(Office)`,
-    # whose text carries the field NAME: renaming the field would move every digest of every world
+    # every remit check in the package AND folds into `World.content_hash` through `Office`'s encoding,
+    # which carries the field NAME: renaming the field would move every digest of every world
     # holding an office, where renaming the row moves none. `remit.changed` is unchanged.
     field:   "remit_acts"
     steps:   [RES]

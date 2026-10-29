@@ -659,8 +659,9 @@ def _scar_witnesses(w: "World", token: Token, a: Act, events: list) -> None:
             counts = dict(p.scar)
             for e in broken:
                 counts[e] = counts.get(e, 0) + 1
-            # SORTED ON WRITE: `repr` of a dict field is insertion-ordered and reaches
-            # `World.content_hash()`; the retired `_scar` found this the hard way.
+            # SORTED ON WRITE: the dict's iteration order is what a reader sees; the content hash no
+            # longer reads it (GO-07 folds a mapping sorted by its encoded keys), but the retired
+            # `_scar` found, while the digest was a `repr`, that an unsorted write moved it.
             p.scar = {k: counts[k] for k in sorted(counts)}
 
     w.write("scar", token, None, record_kind="Person", fieldname="scar", driver="Act",

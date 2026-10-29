@@ -33,10 +33,14 @@ from __future__ import annotations
 
 import copy as _copymod
 import hashlib
+import struct
+from dataclasses import fields as _dc_fields
+from enum import Enum
 from typing import Any, Callable, Optional
 
 from ..data.fixtures import DEFAULT_FIXTURES, Fixtures
 from ..data.matrix import Step, WriteClass, matrix_row, partition_lookup
+from ..data.requires import UNKNOWN
 from ..data.rosters import (
     HOLD_OBJECT_KINDS, HOLD_SUBJECT_KINDS, RUNG_KINDS, TENURE_KINDS, roster)
 from ..gaps import Forbidden, InstrumentDefect, NoProducer, Unowned, Unspecified
@@ -164,24 +168,151 @@ def rung_kind_ascends(child_kind: str, parent_kind: str) -> bool:
     return order.index(parent_kind) > order.index(child_kind)
 
 
-def _entity_digest(obj: Any) -> str:
-    """`H-118`: a deterministic string for ONE entity's own state, for `World.content_hash`.
-    `Person`, `Site` and `Tenure` are `@dataclass` -- their auto-generated `__repr__` lists every
-    field in DECLARATION order, which is fixed by the class and not by insertion, so it is stable
-    across two runs of the same seed (R4). `Rung` is not a dataclass (S10 -- it stores its fields
-    via `object.__setattr__` behind a whitelist, `Rung._DECLARED`), so it is read off `vars()`;
-    `Rung.__init__` always inserts the same fields in the same order, so that dict's own iteration
-    order is already stable, and `sorted()` over its items makes the point structural rather than
-    incidental."""
-    if hasattr(obj, "__dataclass_fields__"):
-        return repr(obj)
-    if isinstance(obj, dict):
-        # `dates` and `docket` hold PLAIN DICTS, not entities.
-        # `sorted` on the items makes the digest independent of insertion order (R4).
-        return repr(sorted((str(k), repr(v)) for k, v in obj.items()))
-    if hasattr(obj, "__dict__"):
-        return repr(sorted(vars(obj).items()))
-    return repr(obj)
+# -- GO-07: THE CANONICAL ENCODING THE CONTENT HASH FOLDS -------------------------------------------
+# The port compares worlds by `World.content_hash`, and a digest over Python's `repr()` and f-string
+# formatting could be reproduced only by emulating CPython. So the hash folds THIS encoding instead:
+# one ASCII tag byte per value, then its payload. Every encoding is self-delimiting, so a run of them
+# parses back exactly one way, and nothing in it is Python's formatting of a value.
+#
+#   N              None
+#   T / F          True / False
+#   U              `data.requires.UNKNOWN`, the third truth value (neither None nor False): ANY instance
+#                  of its class, so a deep-copied world encodes as the original does
+#   i<dec>;        an int: base-10 ASCII digits, a leading `-` when negative
+#   s<len>:<utf8>  a str (a `SeatId` too -- a str subclass carrying the same string); <len> is the
+#                  UTF-8 byte count in base-10 ASCII
+#   f<hex16>       a float: its IEEE-754 binary64 bit pattern, big-endian, 16 lowercase hex digits
+#                  (`struct.pack('>d', x).hex()`). NEVER `repr(float)`.
+#   e<enc>         an Enum member: the encoding of its `.value`
+#   t<n>:<enc>...  a tuple of n items, each encoded, in order
+#   l<n>:<enc>...  a list of n items, each encoded, in order
+#   m<n>:...       a mapping of n entries, each <enc key><enc value>, sorted by the encoded key's bytes
+#   u<n>:... / z<n>:...  a set / a frozenset of n items, sorted by the encoded item's bytes
+#   o<enc class name><n>:...  an object: n <enc field name><enc value> pairs. A dataclass's fields in
+#                  DECLARATION order (`dataclasses.fields`); a named tuple's in `_fields` order; an
+#                  object declaring `_DECLARED` (`Rung`, which is not a dataclass): those fields
+#                  sorted by name.
+#
+# Every count and length is base-10 ASCII. A value of any other type RAISES `TypeError`: at
+# `content_hash`, which every season's end calls, and at `state_of`'s read of an `entity` subject
+# (either reading) in `World.write` -- AFTER `apply()` when the write itself introduced the value; a
+# closure write is not read by `state_of`. A type with no rule here has no portable encoding, and
+# guessing one would be a second, silent format.
+#
+# THREE ORDERS, and a port must implement each: `content_hash` sorts collection KEYS and Tenure ids by
+# the raw `str` (code point); a mapping's entries and a set's items sort by their ENCODED bytes, so
+# `s10:` precedes `s1:` and `s3:p_b` precedes `s5:p_aaa`; a `_DECLARED` object's fields sort by raw
+# name. Dataclass fields are never sorted. A class is encoded by its bare `__name__`, an Enum member
+# by its value alone. `t`/`l` and `u`/`z` follow the stored Python type, which the oracle's writers
+# fix per site (`_grant_remit`'s `remit_acts` is a tuple, an addressee list a list). Nested mapping
+# key order is not state. EVERY declared field folds, `repr=False` and `compare=False` ones included
+# (the retired `repr` digest dropped a `repr=False` field). A float is its bits as stored: a NaN
+# has no canonical form here and `-0.0` differs from `0.0`, as under `repr`; neither was seen when the
+# encoder was spied over four worlds at GO-07 (7605 floats; a one-off reading, not kept).
+_UNKNOWN_TYPE = type(UNKNOWN)
+_OBJECT_HEADS: dict = {}
+
+
+def _str_bytes(s: str) -> bytes:
+    b = s.encode("utf-8")
+    return b"s%d:%b" % (len(b), b)
+
+
+def _object_head(cls: type) -> tuple:
+    """A dataclass's encoding prefix and its fields in declaration order, encoded once per class."""
+    head = _OBJECT_HEADS.get(cls)
+    if head is None:
+        names = tuple(f.name for f in _dc_fields(cls))
+        head = _OBJECT_HEADS[cls] = (
+            b"o" + _str_bytes(cls.__name__) + b"%d:" % len(names),
+            tuple((n, _str_bytes(n)) for n in names))
+    return head
+
+
+def _encode_object(v: Any, names: Any, out: bytearray) -> None:
+    """`v` as an `o` object over `names` (a named tuple's `_fields`, a `_DECLARED` set sorted)."""
+    out += b"o" + _str_bytes(type(v).__name__) + b"%d:" % len(names)
+    for n in names:
+        out += _str_bytes(n)
+        _encode_into(getattr(v, n), out)
+
+
+def _encode_into(v: Any, out: bytearray) -> None:
+    """Append `v`'s canonical encoding (the table above) to `out`."""
+    t = type(v)
+    if t is str:
+        out += _str_bytes(v)
+    elif v is None:
+        out += b"N"
+    elif t is int:
+        out += b"i%d;" % v
+    elif t is list or t is tuple:
+        out += (b"l%d:" if t is list else b"t%d:") % len(v)
+        for x in v:
+            _encode_into(x, out)
+    elif t is bool:
+        out += b"T" if v else b"F"
+    elif hasattr(t, "__dataclass_fields__"):
+        prefix, names = _object_head(t)
+        out += prefix
+        for n, nb in names:
+            out += nb
+            _encode_into(getattr(v, n), out)
+    elif t is float:
+        out += b"f" + struct.pack(">d", v).hex().encode("ascii")
+    elif isinstance(v, dict):
+        out += b"m%d:" % len(v)
+        for kb, vb in sorted((_canonical(k), _canonical(x)) for k, x in v.items()):
+            out += kb
+            out += vb
+    elif t is _UNKNOWN_TYPE:
+        out += b"U"
+    elif isinstance(v, Enum):
+        out += b"e"
+        _encode_into(v.value, out)
+    # A subclass of a hot type above (a `SeatId`, an int or float subclass) encodes as its base: one
+    # encoding per type, so the delegation reads the exact-type branch and no wire line is repeated.
+    elif isinstance(v, str):
+        out += _str_bytes(v)
+    elif isinstance(v, int):
+        _encode_into(int(v), out)
+    elif isinstance(v, float):
+        _encode_into(float(v), out)
+    elif isinstance(v, tuple) and hasattr(t, "_fields"):
+        _encode_object(v, t._fields, out)
+    elif isinstance(v, (list, tuple)):
+        _encode_into(list(v) if isinstance(v, list) else tuple(v), out)
+    elif isinstance(v, (set, frozenset)):
+        out += (b"z%d:" if isinstance(v, frozenset) else b"u%d:") % len(v)
+        for b in sorted(_canonical(x) for x in v):
+            out += b
+    elif getattr(t, "_DECLARED", None) is not None:
+        _encode_object(v, sorted(t._DECLARED), out)
+    else:
+        raise TypeError(
+            f"GO-07: no canonical encoding for a {t.__module__}.{t.__qualname__} ({v!r}); "
+            f"`state/world.py`'s encoding table has no rule for this type")
+
+
+def _canonical(v: Any) -> bytes:
+    """`v`'s canonical, language-neutral encoding (the GO-07 table above `_OBJECT_HEADS`)."""
+    out = bytearray()
+    _encode_into(v, out)
+    return bytes(out)
+
+
+def _entity_digest(obj: Any) -> bytes:
+    """`H-118`: ONE entity's own state, for `World.content_hash` and the gate's `state_of`.
+
+    GO-07: it is the entity's canonical encoding (the table above), no longer its `repr()`. `Person`,
+    `Site`, `Tenure` and the other carriers are `@dataclass`, encoded field by field in DECLARATION
+    order, which is fixed by the class and not by insertion, so it is stable across two runs of the
+    same seed (R4). `Rung` is not a dataclass (S10 -- it stores its fields via `object.__setattr__`
+    behind a whitelist, `Rung._DECLARED`), so it is read off `_DECLARED`, sorted by field name, which
+    makes the order structural rather than `Rung.__init__`'s insertion order. `dates` and `docket`
+    hold PLAIN DICTS, encoded as mappings sorted by encoded key, so insertion order cannot reach the
+    digest either (R4)."""
+    return _canonical(obj)
 
 
 class World:
@@ -501,11 +632,18 @@ class World:
         of `apply()`. `state/gate.py`'s G4 block says why each shape reads what it reads.
 
         An `entity` is `(False,)` when absent and `(True, <digest>)` when present, so a creation
-        and a deletion both move it. The digest is `_entity_digest` -- the string `content_hash`
+        and a deletion both move it. The digest is `_entity_digest` -- the encoding `content_hash`
         folds for that entity -- unless the subject names `fields`, when it is those attributes'
-        `repr`s: a snapshot, never a reference, because an in-place mutation (`scar[axis] = ...`,
-        `payload["remit_acts"] = ...`) would otherwise compare equal to itself. A `staged` cell is
-        the NET delta staged on it. An `edge` is not read here -- see `write`.
+        canonical encodings: a snapshot, never a reference, because an in-place mutation
+        (`scar[axis] = ...`, `payload["remit_acts"] = ...`) would otherwise compare equal to itself.
+        A `staged` cell is the NET delta staged on it. An `edge` is not read here -- see `write`.
+
+        GO-07: BOTH readings are the one canonical encoding, so a write that only re-orders a mapping
+        (an entity's, or a named attribute's) reads as unmoved and F9 refuses it as a no-op -- the
+        reading `before == after` has on a dict, where `repr` saw key order. It also keeps `1`, `True`
+        and `1.0` apart, as `repr` did. (Until the terminal critique of B10-03b a `fields` reading
+        stayed `repr`: two ladders for one question, and F9's verdict on ten effects depended on
+        CPython's formatting.)
 
         ⚠ A STORE THAT IS NOT A STATE COLLECTION IS A CALLER BUG, AND IT RAISES. Read as "absent"
         it would compare `(False,)` to `(False,)` and every write naming it would be refused as a
@@ -522,7 +660,7 @@ class World:
                 return (False,)
             if fields is None:
                 return (True, _entity_digest(obj))
-            return (True,) + tuple(repr(getattr(obj, f)) for f in fields)
+            return (True,) + tuple(_canonical(getattr(obj, f)) for f in fields)
         if tag == STAGED:
             return sum(d for _, d in self._staged.get(s.ref[1], ()))
         raise InstrumentDefect(f"`state_of` has no reader for a {tag!r} subject ({s.id!r}); an "
@@ -610,7 +748,7 @@ class World:
         # `H-160` limit 1 / `H-158`: THE GRANT ALSO SAYS WHERE THE SEAT'S TREASURY IS -- the seat's
         # rung, read person-side by `Tenure.seat_rung` (its one reader of the key), so a holder paying
         # through his seat can name the rung he pays out of without a `World`. Written with the acts,
-        # as one grant: the same snapshot, the same `force` re-stamp. ⚠ `repr(Tenure)` folds into
+        # as one grant: the same snapshot, the same `force` re-stamp. ⚠ the Tenure's encoding folds into
         # `World.content_hash`, so this key alone moves the digest of every world holding a seat -- a
         # declared, structural hash move, the `Office.establishment` deletion's shape.
         stamp = {"remit_acts": grant, "seat_rung": off.rung}
@@ -1398,31 +1536,41 @@ class World:
         STAYS AND THE SENTENCE THAT SAID THE FIELD DOES NOT EXIST IS GONE: the guard is cheap and
         keeps this callable on a stripped Event a test builds, but a docstring asserting the
         absence of a field the dataclass declares is false, and false in the direction that stops
-        the next reader checking (found by the `W-B` adversarial pass)."""
+        the next reader checking (found by the `W-B` adversarial pass).
+
+        GO-07: WHAT IS HASHED IS A RUN OF CANONICAL ENCODINGS (the table above `_OBJECT_HEADS`), not
+        `repr()` or f-string text, so another language can rebuild it byte for byte. It is the
+        concatenation, in this order, of the encoding of one TUPLE per frame:
+        `(name, key, entity)` per entry of each `_STATE_COLLECTIONS` member, keys in sorted order;
+        `(name, n, item)` per `_STATE_SEQUENCES` entry, `n` its position; `("T", t.id, t)` per Tenure,
+        sorted by id; and per Event in log order `("E", id, kind, emitted_at, degree, causes)`
+        (`causes` as a tuple), then `("~", subject, mode, driver, field, delta)` per change, then
+        `("^", o)` per observed record. Keys and ids sort as Python sorts `str`, by code point. Tenures
+        sharing an id keep `World.tenures`' order (owners in `persons` order, then the unowned)."""
         # [JUSTIFIED: a HASH WIDTH, not a game value -- 16 bytes is the 32 hex characters the content hash is compared as; nothing in the model reads it as a quantity]
         h = hashlib.blake2b(digest_size=16)
         for name in self._STATE_COLLECTIONS:
-            for k in sorted(getattr(self, name, {}) or {}):
-                h.update(f"{name}|{k}|{_entity_digest(getattr(self, name)[k])}".encode())
+            coll = getattr(self, name, {}) or {}
+            for k in sorted(coll):
+                h.update(_canonical((name, k, coll[k])))
         for name in self._STATE_SEQUENCES:
             for n, item in enumerate(getattr(self, name, ()) or ()):
-                h.update(f"{name}|{n}|{_entity_digest(item)}".encode())
+                h.update(_canonical((name, n, item)))
         for t in sorted(self.tenures, key=lambda t: t.id):
-            h.update(f"T|{t.id}|{_entity_digest(t)}".encode())
+            h.update(_canonical(("T", t.id, t)))
         for e in self.log:
             # G1b (2026-09-26): `Event.subject` is deleted, so it is no longer folded -- the one
             # DECLARED hash move of that position, and it moves every hash that has a log. The
             # written thing is still folded, as `changes[]` below; an act's actor is not folded
             # as a name, only through the ids it was minted into (`e.id`, `causes[]`).
-            h.update(f"{e.id}|{e.kind}|{e.emitted_at}|{e.degree}|"
-                     f"{','.join(e.causes)}".encode())
+            h.update(_canonical(("E", e.id, e.kind, e.emitted_at, e.degree, tuple(e.causes))))
             for c in e.changes:
-                h.update(f"~{c.subject}|{c.mode}|{c.driver}|{c.field}|{c.delta}".encode())
+                h.update(_canonical(("~", c.subject, c.mode, c.driver, c.field, c.delta)))
             # `Event.observed` is folded here. The `getattr` default is not a claim that the
             # field is absent -- it is on `Event` since `W-B` -- it keeps this callable on an
             # Event a test has stripped, which `test_wb_the_carrier_moves_the_seeded_hash` does.
             for o in (getattr(e, "observed", None) or []):
-                h.update(f"^{o}".encode())
+                h.update(_canonical(("^", o)))
         return h.hexdigest()
 
     # -- S43: resolution AT BOOT, by string. A missing provider is a STARTUP FAILURE WITH A
