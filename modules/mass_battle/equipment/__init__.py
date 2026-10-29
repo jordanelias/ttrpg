@@ -33,6 +33,12 @@ TROOP_LOADOUT = {
     # 2026-07-02) with no loadout entry yet. Same weapon as archers (a bow), light armour to keep
     # it mobile -- the whole point of the troop type is speed + range, not endurance.
     "mounted_archers":  ("bow",         "light"),
+    # [ED-IN-0304, Jordan 2026-10-28: "draw from romance of the three kingdoms and total war for generic unit
+    # types"] three generic types the engine lacked, each PROVISIONAL-BY-ANALOGY like the pike: stats mirror the
+    # nearest canonical type (registry.TROOP_TYPE_STATS) and the differentiator is reach, role, speed or weapon.
+    "spearmen":         ("spear",       "light"),
+    "skirmishers":      ("javelin",     "light"),
+    "light_cavalry":    ("light_cut",   "light"),
 }
 
 

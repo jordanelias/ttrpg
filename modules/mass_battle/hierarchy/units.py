@@ -1307,7 +1307,7 @@ class Subunit:
         speeds = [cell_speed(self.shape, self.tier, r, c) for r, c, _o, _p in op]
         nz = [s for s in speeds if s > 0]
         base = min(nz) if nz else 0
-        if PER_CELL and self.troop_type in ('cavalry', 'mounted_archers'):
+        if PER_CELL and is_mounted(self.troop_type):
             base *= MB_CAVALRY_SPEED_MULT
         return 0.5 * base * ROUTE_BUDGET_TICKS
 
@@ -1573,7 +1573,7 @@ class Subunit:
         # FLANK face (infantry envelops the flank, cavalry the rear — Cannae's division of labour). The full
         # relative-waypoint standoff approach ("maintain distance D from the nearest enemy face while
         # circling") is the next build on top of this face-selection.
-        fast = getattr(self, 'troop_type', None) == 'cavalry' or getattr(self, 'unit_type', None) == 'cavalry'
+        fast = getattr(self, 'troop_type', None) in ('cavalry', 'light_cavalry') or getattr(self, 'unit_type', None) == 'cavalry'  # light_cavalry: ED-IN-0304
         if fast:
             return self._envelop_wheel_goal(enemy_cells)
         from modules.mass_battle import perimeter as _peri   # wired here; perimeter imports only geometry/config (no cycle)
@@ -1849,7 +1849,7 @@ class Subunit:
         # keeps its integer floor untouched -> the CI byte-exact grid oracle is preserved. Field gauge
         # goldens (bat.py cell_field/unit_field, not CI-checked) re-recorded for this ruled change.
         vel = base * disc_mult
-        if PER_CELL and self.troop_type in ('cavalry', 'mounted_archers'):
+        if PER_CELL and is_mounted(self.troop_type):
             vel *= MB_CAVALRY_SPEED_MULT
         # [ED-MB-0017, Jordan 2026-07-22] The envelop/sweep MANEUVER is a rapid flanking march (envelopment
         # is a timing race — the wing must reach the flank/rear before it is defeated in detail). A cell
@@ -1868,7 +1868,7 @@ class Subunit:
             step = int(_sf) if _sf == int(_sf) else _sf
         else:
             step = max(0, math.floor(base * disc_mult) + stance_mod)   # legacy grid oracle: integer floor
-            if PER_CELL and self.troop_type in ('cavalry', 'mounted_archers') and step > 0:
+            if PER_CELL and is_mounted(self.troop_type) and step > 0:
                 step = int(math.floor(step * MB_CAVALRY_SPEED_MULT))
         # [DG-2 §2.5 anti-abuse, Jordan-ruled "build it now" 2026-07-08] "Speed capped below any
         # realistic pursuer's closing speed (1 cell/tick ceiling)" -- a yielding body cannot
@@ -2177,7 +2177,7 @@ class Subunit:
                 # preserved; only the per-turn step TIMING changes. The cavalry multiplier scales the float
                 # velocity (not a re-floored integer). ON path is a recorded behaviour change (own baseline).
                 vel = base_speed * disc_mult
-                if PER_CELL and self.troop_type in ('cavalry', 'mounted_archers'):
+                if PER_CELL and is_mounted(self.troop_type):
                     vel *= MB_CAVALRY_SPEED_MULT
                 acc = self._speed_accum.get((orig_r, orig_c), 0.0) + vel
                 whole = math.floor(acc)
@@ -2185,7 +2185,7 @@ class Subunit:
                 actual_speed = max(0, int(whole) + stance_mod)
             else:
                 actual_speed = max(0, math.floor(base_speed * disc_mult) + stance_mod)
-                if PER_CELL and self.troop_type in ('cavalry', 'mounted_archers') and actual_speed > 0:
+                if PER_CELL and is_mounted(self.troop_type) and actual_speed > 0:
                     # Increment 4-followup: cavalry velocity primitive — cavalry closes faster, producing the
                     # momentum differential that triggers the depth-absorbed charge (Incr5). [ASSUMPTION:
                     # cavalry speed x2 — basis: shock cavalry close far faster than infantry. Class-B, vetoable.]

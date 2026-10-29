@@ -44,11 +44,11 @@ the calling chain through `systems/factions/sim/faction_action.py` and `engine/m
 | `resolve_mass_battle(faction_a, faction_b, terrain, world)` | `systems/mass_battle/sim/massbattle.py:376 resolve_mass_battle` | `systems/factions/sim/faction_action.py:393 resolve_mass_battle` (import) → `:399` (call) |
 | `_faction_to_unit(faction)` | `systems/mass_battle/sim/massbattle.py:236 _faction_to_unit` | `systems/mass_battle/sim/massbattle.py:246 _faction_to_unit` (and `:249`, `:252`) |
 | **ENGINE** (`systems/mass_battle/sim/`, the canon cell-scale engine) | | |
-| `orchestration.run_battle(unit_a, unit_b, max_turns)` | `systems/mass_battle/sim/orchestration.py:1821 run_battle` | (a) `systems/mass_battle/sim/engine.py:622 run_battle` (router branch); (b) `tests/valoria/test_deployment_geometry.py:183 run_battle` |
-| `orchestration.run_multi_turn_battle(unit_a, unit_b, shape_a, shape_b, anchor_map, max_battle_turns)` | `systems/mass_battle/sim/orchestration.py:2480 run_multi_turn_battle` | (a) `systems/mass_battle/sim/engine.py:624 run_multi_turn_battle` (router branch); (b) `tests/valoria/test_deployment_geometry.py:107 run_multi_turn_battle` |
-| `orchestration.run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b, anchor_map, max_battle_turns)` | `systems/mass_battle/sim/orchestration.py:2681 run_multi_unit_battle` | (a) `systems/mass_battle/sim/engine.py:616 run_multi_unit_battle` (router branch); (b) `tests/valoria/test_reserve_commit.py:42 run_multi_unit_battle` |
-| `engine.resolve_battle(*args, kind='multi', **kwargs)` | `systems/mass_battle/sim/engine.py:611 resolve_battle` | `systems/mass_battle/sim/workbench/trace.py:89 resolve_battle` (and `:92`) |
-| `engine.build_unit` / `build_army` / `build_envelopment` / `build_refused_flank` | `systems/mass_battle/sim/engine.py:176 build_unit`, `:213 build_army`, `:454 build_envelopment`, `:551 build_refused_flank` | `systems/mass_battle/sim/bat.py:62 build_unit`, `:89 build_envelopment`, `:101 build_refused_flank`; `tests/sim/gauge_mb.py:162 build_army` |
+| `orchestration.run_battle(unit_a, unit_b, max_turns)` | `systems/mass_battle/sim/orchestration.py:1821 run_battle` | (a) `systems/mass_battle/sim/engine.py:294 run_battle` (router branch); (b) `tests/valoria/test_deployment_geometry.py:183 run_battle` |
+| `orchestration.run_multi_turn_battle(unit_a, unit_b, shape_a, shape_b, anchor_map, max_battle_turns)` | `systems/mass_battle/sim/orchestration.py:2480 run_multi_turn_battle` | (a) `systems/mass_battle/sim/engine.py:296 run_multi_turn_battle` (router branch); (b) `tests/valoria/test_deployment_geometry.py:107 run_multi_turn_battle` |
+| `orchestration.run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b, anchor_map, max_battle_turns)` | `systems/mass_battle/sim/orchestration.py:2681 run_multi_unit_battle` | (a) `systems/mass_battle/sim/engine.py:288 run_multi_unit_battle` (router branch); (b) `tests/valoria/test_reserve_commit.py:42 run_multi_unit_battle` |
+| `engine.resolve_battle(*args, kind='multi', **kwargs)` | `systems/mass_battle/sim/engine.py:284 resolve_battle` | `systems/mass_battle/sim/workbench/trace.py:89 resolve_battle` (and `:92`) |
+| `engine.build_unit` / `build_army` / `build_envelopment` / `build_refused_flank` | `systems/mass_battle/sim/engine.py:90 build_unit`, `modules/mass_battle/armies.py:118 build_army` (moved there, ED-IN-0304), `systems/mass_battle/sim/engine.py:127 build_envelopment`, `:224 build_refused_flank` | `systems/mass_battle/sim/bat.py:62 build_unit`, `:89 build_envelopment`, `:101 build_refused_flank`; `tests/sim/gauge_mb.py:162 build_army` |
 
 ## 2. IN
 
@@ -60,7 +60,7 @@ the calling chain through `systems/factions/sim/faction_action.py` and `engine/m
 | `terrain` | arg | [CLOSED 2026-09-27, A7/ED-MB-0074] no longer hardcoded `None` — derived per-battle from `terrain.terrain_row_for_territory(target, fort_level=t.fort_level)` | `systems/factions/sim/faction_action.py:394` (import), `:402` (call); `systems/mass_battle/sim/terrain.py:124 terrain_row_for_territory` (resolver) |
 | `world` (for `world.rng`) | world-state | `systems/factions/sim/faction_action.py:403 world` | `systems/mass_battle/sim/massbattle.py:319 rngsource` |
 | **ENGINE** | | | |
-| `unit_a`, `unit_b` (`Unit` dataclass instances) | arg | constructed by `engine.build_unit`/`build_army`/`build_envelopment`/`build_refused_flank` | `systems/mass_battle/sim/engine.py:176-509` |
+| `unit_a`, `unit_b` (`Unit` dataclass instances) | arg | constructed by `engine.build_unit`/`build_army`/`build_envelopment`/`build_refused_flank` | `systems/mass_battle/sim/engine.py:90-181` |
 | `shape_a`, `shape_b`, `anchor_map` | arg | caller-supplied deployment geometry | `systems/mass_battle/sim/orchestration.py:2480-2537 run_multi_turn_battle` |
 | `pairings`, `shapes_a`, `shapes_b` | arg | caller-supplied multi-unit roster | `systems/mass_battle/sim/orchestration.py:2681-2985 run_multi_unit_battle` |
 | `max_turns` / `max_battle_turns` | param (default) | function signature default | `systems/mass_battle/sim/orchestration.py:1821 run_battle`, `:2426 run_multi_turn_battle` |
@@ -96,7 +96,7 @@ the return value is consumed):
 
 ### ENGINE — `systems/mass_battle/sim/` (the canon cell-scale engine; reached from S2 above)
 
-- **S1** `[gate]` `engine.resolve_battle(*args, kind=..., **kwargs)` routes to one of three orchestrators by `kind` — `'single'` → `run_battle`, `'multi'` → `run_multi_turn_battle`, `'multi_unit'` → `run_multi_unit_battle` — a pure pass-through router, byte-exact to calling the target directly. `systems/mass_battle/sim/engine.py:611-624 resolve_battle`
+- **S1** `[gate]` `engine.resolve_battle(*args, kind=..., **kwargs)` routes to one of three orchestrators by `kind` — `'single'` → `run_battle`, `'multi'` → `run_multi_turn_battle`, `'multi_unit'` → `run_multi_unit_battle` — a pure pass-through router, byte-exact to calling the target directly. `systems/mass_battle/sim/engine.py:284-296 resolve_battle`
 - **S2** `orchestration.run_battle(unit_a, unit_b, max_turns)` — one engagement turn, phase-bounded by `TICKS_PER_PHASE`:
   - **S2.1** `[gate]` `assert (not FIELD_MOVEMENT) or MB_NODE_COHESION` — invalid mode combination fails loudly. `systems/mass_battle/sim/orchestration.py:1758-1759`
   - **S2.2** `_draw_friction_cev` drawn once per unit per battle (lazy, first-entry-only). `systems/mass_battle/sim/orchestration.py:1767-1768`

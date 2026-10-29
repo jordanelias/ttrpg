@@ -149,7 +149,12 @@ class MassBattleInput:
       * `geography` -- the parsed geography file (`data/geography.py::geography`, read once per process
                        and SHARED by every record: read-only). The module's terrain lookup and river test
                        read it here and open no file. `repr=False`: a record in an assertion message
-                       prints its facts, not a 37 KB map."""
+                       prints its facts, not a 37 KB map;
+      * `orders_of_battle` -- ED-IN-0304: `(attacker, defender)`, each an `OrderOfBattle` (the module's own typed
+                       record, `modules/mass_battle/orderofbattle.py`, held here as an opaque value: `engine/`
+                       imports no module code) or `None`. `None` on both sides -- the default -- is the field as
+                       it was: one headcount line per side. A side with an order of battle fights as that order
+                       says; the record's headcounts are authoritative and `weights` is not read for that side."""
     weights: tuple
     territory: Optional[str]
     fort_level: float
@@ -159,6 +164,7 @@ class MassBattleInput:
     loyalties: tuple
     loyalty_gain: float
     geography: Mapping = field(repr=False)
+    orders_of_battle: Optional[tuple] = None
 
 
 # ---------------------------------------------------------------------------

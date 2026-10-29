@@ -148,7 +148,7 @@ def test_table_follows_the_weapon_classes():
     # derived from the reach map, so EVERY mapped type is covered and a reach edit moves its rank
     from modules.mass_battle.troop_types.registry import TROOP_TYPE_REACH
     expect = {0.1: 1, 0.2: 2, 0.3: 3}
-    assert len(TROOP_TYPE_REACH) == 12
+    assert len(TROOP_TYPE_REACH) == 15      # 12 + spearmen, skirmishers, light_cavalry (ED-IN-0304)
     assert {t: _cap(t) for t in TROOP_TYPE_REACH} == {t: expect[r] for t, r in TROOP_TYPE_REACH.items()}
 
 

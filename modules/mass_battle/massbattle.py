@@ -65,6 +65,7 @@ from modules.mass_battle import rngsource
 from modules.mass_battle.config import CELL_CAP
 from modules.mass_battle.hierarchy.units import Subunit, Unit
 from modules.mass_battle.orchestration import run_battle
+from modules.mass_battle.orderofbattle import OrderOfBattle, Subformation, build_unit as _build_oob_unit
 from modules.mass_battle.terrain import (FOREST_BROKEN, RIVER_CROSSING, RIVER_CROSSING_OFF_D,
                                              SPEED_TIERS, UPHILL, UPHILL_ATTACKER_OFF_D,
                                              UPHILL_DEFENDER_DEF_D, WALLS, WALLS_DEFENDER_DR,
@@ -230,6 +231,23 @@ def _weighted_unit(name, weight, morale_start=_MORALE_START_BASE):
                 subunits=[sub])
 
 
+#: The troop type a side with no order of battle fights as, once the OTHER side has one. It is the nearest canonical
+#: stand-in for `_MVP_SUBUNIT_SHAPE`'s bare 'infantry' (which has no stat preset): one line of light infantry, sized by
+#: the side's headcount. [ASSUMPTION; medium; Jordan to correct -- ED-IN-0304 phase 5 gives every faction a real
+#: preset order of battle, after which this fallback is reached only by a hand-built record.]
+_HEADCOUNT_LINE_TYPE = 'light_infantry'
+
+
+def _oob_unit(oob, weight, side, morale_start):
+    """The Unit for a side when the field carries orders of battle (ED-IN-0304). `oob` None -> a single
+    `_HEADCOUNT_LINE_TYPE` subformation of `max(weight, _MIN_TROOPS)`, so both sides deploy by the same rule.
+    Built with `faction` 'A'/'B', the engine's deployment convention, rather than `_weighted_unit`'s side names:
+    the sides must start on opposite rows, which the single-line path's shared (8, 12) never needed."""
+    if oob is None:
+        oob = OrderOfBattle((Subformation('line', _HEADCOUNT_LINE_TYPE, max(float(weight), _MIN_TROOPS)),))
+    return _build_oob_unit(oob, f'side_{side.lower()}', side, morale_start=morale_start)
+
+
 def _run_and_grade(unit_a, unit_b, terrain, rng, walls_dr=None):
     """`run_battle` plus the survivor-ratio classification -- extracted from `resolve_mass_battle`
     (deleted at `29b`; `resolve_field` is now its only caller).
@@ -373,8 +391,18 @@ def resolve_field(inp, rng=None, *, troops_a=None, troops_b=None):
         weight_b = troops_b
     stance_a, stance_b = inp.stances
     loyalty_a, loyalty_b = inp.loyalties
-    unit_a = _weighted_unit("side_a", weight_a, _morale_start(stance_a, loyalty_a, inp.loyalty_gain))
-    unit_b = _weighted_unit("side_b", weight_b, _morale_start(stance_b, loyalty_b, inp.loyalty_gain))
+    morale_a = _morale_start(stance_a, loyalty_a, inp.loyalty_gain)
+    morale_b = _morale_start(stance_b, loyalty_b, inp.loyalty_gain)
+    oob_a, oob_b = getattr(inp, 'orders_of_battle', None) or (None, None)
+    if oob_a is None and oob_b is None:
+        unit_a = _weighted_unit("side_a", weight_a, morale_a)
+        unit_b = _weighted_unit("side_b", weight_b, morale_b)
+    else:
+        # ED-IN-0304: a side with an order of battle fights as that order says. Its headcounts are authoritative,
+        # so `troops_a`/`troops_b` (the provisioning feed) are not applied to it -- recruiting is what bounds an
+        # order of battle's size (phase 2), and scaling it here would silently overrule that.
+        unit_a = _oob_unit(oob_a, weight_a, 'A', morale_a)
+        unit_b = _oob_unit(oob_b, weight_b, 'B', morale_b)
     # No territory: `river_crossed` answers False and the lookup OPEN_FLAT. WALLS outranks a crossing
     # (`terrain_row_for_territory`), so a fortified field does not derive one.
     crossing = inp.fort_level <= 0 and river_crossed(inp.origin, inp.territory, geography=inp.geography)

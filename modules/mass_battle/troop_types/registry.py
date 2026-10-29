@@ -9,10 +9,15 @@ import modules.mass_battle.config as _cfg
 import functools as _functools
 from modules.mass_battle.equipment import loadout_for
 
-__all__ = ['roles_for', 'role_allowed', 'TROOP_TYPE_STATS', 'stats_for',
+__all__ = ['MOUNTED_TYPES', 'is_mounted', 'roles_for', 'role_allowed', 'TROOP_TYPE_STATS', 'stats_for',
            'REACH_SHORT', 'REACH_MELEE_DEFAULT', 'TROOP_TYPE_REACH', 'reach_for',
            'support_ranks_for', 'support_weight',
            'unit_type_for']
+
+
+def is_mounted(troop_type):
+    """True iff `troop_type` fights mounted (MOUNTED_TYPES, below). Case-sensitive like the inline checks it replaces."""
+    return troop_type in MOUNTED_TYPES
 
 
 def roles_for(troop_type):
@@ -54,7 +59,19 @@ TROOP_TYPE_STATS = {
     # pike row, so mirroring the closest canonical type is the non-inventing choice, pending an explicit
     # §B.2 pike grounding. [provisional-by-analogy: heavy_infantry base + P-DEC-1 reach 0.3]
     "pike":             {"power": 4, "discipline": 4, "morale": 5},
+    # [ED-IN-0304, Jordan 2026-10-28: "draw from romance of the three kingdoms and total war for generic unit
+    # types"] The generic roster both games share and this table lacked: spear infantry (RTK spearmen, TW spear
+    # line), javelin skirmishers (TW skirmishers) and light cavalry (RTK/TW scouting and flanking horse). Like the
+    # pike above, each is PROVISIONAL-BY-ANALOGY: §B.2 has no row, so the stats mirror the nearest canonical type
+    # and the isolated differentiator is reach, weapon, role or speed -- no fabricated stat line.
+    "spearmen":         {"power": 3, "discipline": 3, "morale": 4},  # mirrors light_infantry; differs by spear reach 0.2 + anti-cavalry hold roles
+    "skirmishers":      {"power": 2, "discipline": 2, "morale": 3},  # mirrors sling, the lightest ranged type; differs by weapon (javelin) + harassing roles
+    "light_cavalry":    {"power": 3, "discipline": 3, "morale": 4},  # mirrors light_infantry (light cut, light armour); differs by mounted speed/density and flank/pursuit roles, no lance (no charge penetration)
 }
+# Types that fight mounted: the one owner of "is this a horse", read where the engine used to spell
+# ('cavalry', 'mounted_archers') or == 'cavalry' inline. knights_templar is deliberately NOT here: it is not in
+# those inline sites today either, and adding it would move existing behaviour (flagged, not changed).
+MOUNTED_TYPES = frozenset({"cavalry", "mounted_archers", "light_cavalry"})
 
 
 def stats_for(troop_type):
@@ -100,6 +117,9 @@ TROOP_TYPE_REACH = {
     "sling":            0.1,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — ranged, melee sidearm (ED-MB-0014)]
     "artillery":        0.1,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — ranged, melee sidearm (ED-MB-0014)]
     "mounted_archers":  0.1,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — ranged, melee sidearm (ED-MB-0014)]
+    "spearmen":         0.2,   # [ED-IN-0304: the P-DEC-1 pole/spear class, as heavy_infantry]
+    "skirmishers":      0.1,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — ranged, melee sidearm (ED-MB-0014); ED-IN-0304]
+    "light_cavalry":    0.1,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — non-pole melee; the lance's 0.2 is not carried (ED-MB-0014); ED-IN-0304]
 }
 
 
