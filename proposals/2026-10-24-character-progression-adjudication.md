@@ -647,7 +647,7 @@ with the adjudication is stated in §10.6 and left unresolved.
 - **Budget is a count.** `budget` (`engine/season/decision/budget.py:18`) returns scene actions:
   base, plus an office bonus per held `hold` tenure, minus a body-band penalty, minus a travel-leg penalty
   (docstring, `:36-38`) [CHECKED].
-- **What the score lacks.** It has no risk term and no timing term (at HEAD; v10 CR-17, B10-09, adds believed odds to the alignment term) — its three terms are the whole
+- **What the score lacks.** It has no risk term and no timing term (at HEAD; v10 CR-17, B10-09, adds believed odds to the alignment term; **Jordan ruled 2026-10-29 that persons differ in risk appetite and in short-, medium- or long-term horizon, so a risk term and a timing term are wanted**) — its three terms are the whole
   return (`choose.py:149-151`) [CHECKED] — and no lookahead: it scores each candidate once, at the
   moment of deliberation [REASONED from the same lines]. `choice_temperature` is a global sampling-noise
   setting (`data/fixtures.py:286`, `0.1`; read in `_sample_order`, `choose.py:241`, `:350`) [CHECKED].
