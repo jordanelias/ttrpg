@@ -450,9 +450,12 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     #
     # ⚠ BODIES AND TRAVEL WERE NOT BUILT WHEN THIS WAS WRITTEN; BOTH ARE NOW (item 3b below, and
     # the travel pass after the yield loop, plan position `19c`), each in #353's order.
-    # v9 IN-21 / `H-26`: ONE draw per season, keyed on the clock, owned by `world_q.season_factor_of`.
-    # With `season_factor_draw` empty (the shipped control) this is the bare `season_factor`.
-    factor = world_q.season_factor_of(w)
+    # v9 IN-21 / `H-26`: ONE draw per season per TERRITORY, keyed on the clock and the territory's rung id
+    # (v10 CL-EVENTS (1), M16 (b)), owned by `world_q.season_factor_of`; `season_factors_by_rung` is its
+    # per-rung reading, `((rung, factor), ...)` for every rung a Site stands on, which `ProduceInput.factor`
+    # carries to `settlements.produce`. With `season_factor_draw` empty (the shipped control) every rung
+    # reads the bare `season_factor` and nothing is drawn.
+    factor = world_q.season_factors_by_rung(w)
     scale_ = w.fixtures.get("condition_scale")
 
     # -- THE DRAW IS PER EATER, UP THE LARDER LADDER (item 3a) -------------------

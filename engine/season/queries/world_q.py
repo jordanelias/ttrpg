@@ -1029,16 +1029,20 @@ def season_of_year(w: World) -> Optional[int]:
     return w.tick % len(table) if table else None
 
 
-def season_factor_of(w: World) -> float:
-    """v9 IN-21 / `H-26`: the multiplier on this season's `yield`. THE ONE OWNER of the term MATTER's
-    yield step scales by.
+def season_factor_of(w: World, territory: Optional[str] = None) -> float:
+    """v9 IN-21 / `H-26`: the multiplier on this season's `yield` in `territory`. THE ONE OWNER of the
+    term MATTER's yield step scales by.
 
     `season_factor` is the constant (swept 0.5 / 1 / 2). When `season_factor_draw` declares a table
     the factor is that constant times ONE outcome drawn from the current season of the year's entry,
-    the outcomes equally likely. The draw is KEYED, not random: `ids.draw_factory`, seeded from `(world_seed, tick, ...)`, is the
-    same mint every id uses, so the same seed twice gives one hash and two seeds differ. An EMPTY
-    table is the control arm and returns the bare constant, so the default world's arithmetic is
-    untouched (`test_season_weather.py` holds the three-hash equality)."""
+    the outcomes equally likely. The draw is KEYED, not random: `ids.draw_factory`, seeded from
+    `(world_seed, tick, territory rung id)`, is the same mint every id uses, so the same seed twice gives
+    one hash, two seeds differ, and two territories at one tick draw independently (v10 CL-EVENTS (1),
+    M16 (b): weather is per territory). `territory` is a `territory` rung's id (`enclosing_territory`'s
+    answer); `None` is a place that lies in none (a Site at the realm or a duchy) and keys the draw on
+    `"world"`, which is the key this draw had before the territory joined it. An EMPTY table is the
+    control arm and returns the bare constant for every territory, drawing nothing, so the default
+    world's arithmetic is untouched (`test_season_weather.py` holds the three-hash equality)."""
     base = w.fixtures.get("season_factor")
     s = season_of_year(w)
     if s is None:
@@ -1050,8 +1054,27 @@ def season_factor_of(w: World) -> float:
         raise Unspecified(f"`season_factor_draw` season {s} declares no outcomes", "H-26",
                           needs="at least one multiplier per season, or `()` for the control",
                           law="IN-21: each season of the year holds the equally likely multipliers it draws from")
-    draw = draw_factory(w.world_seed, lambda: w.tick)("world", "season_factor")
+    draw = draw_factory(w.world_seed, lambda: w.tick)("world" if territory is None else territory,
+                                                      "season_factor")
     return base * draw.choice(outcomes)
+
+
+def _site_rungs(w: World) -> list:
+    """Every rung some Site stands on that `w.rungs` holds, sorted: the rungs `settlements.produce` yields
+    at (a rung with no Site yields nothing, and a Site's rung that is not in `w.rungs` was never iterated).
+    ONE OWNER of that set, read by `produce_input` (`stores`) and `season_factors_by_rung` (`factor`), so
+    the two records `ProduceInput` carries per rung cover the same rungs."""
+    return sorted({s.rung for s in w.sites.values()} & w.rungs.keys())
+
+
+def season_factors_by_rung(w: World) -> tuple:
+    """v10 CL-EVENTS (1): THE PER-RUNG FACTOR `ProduceInput.factor` carries -- `((rung, factor), ...)`,
+    sorted by rung, one entry per rung a Site stands on (`_site_rungs`), each the `season_factor_of` of
+    that rung's `enclosing_territory` (`None` where it lies in none). MATTER reads it ONCE a season and
+    hands it to `produce_input`; the port reads the per-rung factor from here, the same owner. Two rungs
+    in one territory read one factor (the draw is keyed on the territory, so asking twice agrees); with
+    `season_factor_draw` at `()` every rung reads the bare constant and nothing is drawn."""
+    return tuple((rid, season_factor_of(w, enclosing_territory(w, rid))) for rid in _site_rungs(w))
 
 
 def age_of(w: World, pid: str) -> int:
@@ -1226,14 +1249,14 @@ def produce_input(w: World, scale, factor, larder_after: tuple) -> ProduceInput:
     rung some Site stands on (a rung with no Site yields nothing, and a Site's rung that is not in
     `w.rungs` was never iterated) -- read by MATTER BEFORE its per-rung loop writes this season's
     debit, so the module overlays `larder_after` (`SubsistOutcome.larder_after`, E2) itself. `scale`
-    and `factor` are MATTER's own reads (`condition_scale`, `season_factor_of`'s one draw a season),
-    handed through unchanged. Read-only; it writes and traces nothing."""
+    and `factor` are MATTER's own reads (`condition_scale`; `season_factors_by_rung`, the per-territory
+    draw of the season, v10 CL-EVENTS (1)), handed through unchanged. Read-only; it writes and traces
+    nothing."""
     return ProduceInput(
         tuple((site_kind, tuple((bases or {}).items())) for site_kind, bases in SITE_YIELD.items()),
         scale, factor,
         tuple((s.id, s.kind, s.rung, s.condition) for s in sorted(w.sites.values(), key=lambda x: x.id)),
-        tuple((rid, tuple((w.rungs[rid].stores or {}).items()))
-              for rid in sorted({s.rung for s in w.sites.values()} & w.rungs.keys())),
+        tuple((rid, tuple((w.rungs[rid].stores or {}).items())) for rid in _site_rungs(w)),
         larder_after)
 
 

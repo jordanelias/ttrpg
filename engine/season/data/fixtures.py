@@ -471,7 +471,7 @@ DEFAULT_FIXTURES = Fixtures(
     # table's), each holding the equally likely multipliers on `season_factor` that season. `()` is
     # the CONTROL: no year, no draw, the bare constant above. The on arm is the declared sweep
     # `((0.5, 1.0, 2.0),) * 4`; a drought-only arm is `((0.5,),) * 4`. Drawn by
-    # `world_q.season_factor_of`, keyed on (world_seed, tick).
+    # `world_q.season_factor_of`, keyed on (world_seed, tick, territory rung id).
     season_factor_draw=(),            # `H-26`, swept () / ((0.5,),)*4 / ((0.5, 1.0, 2.0),)*4
     # ⚠ `W8` / `H-11`. #353 §10.4 makes `MatterKind` open and V2 gives the draw's SHAPE -- *from
     # the containing rung's stores, scaled by weight* -- and no weights. Registry row, not literal.
