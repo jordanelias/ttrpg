@@ -692,7 +692,10 @@ rosters:
       stamp rem-02 REM-2C rejected (every Record the person has heard of): the term reads the question
       and never the ledger. The class is shared, so `comply`, `carry`, `found` and `build` form on a
       question's own Record as well and the fold disposes (`verb_table.yaml`'s `research` note has the
-      readings). REVERT: put `Record` back here (with `research`'s column).
+      readings). A WRIT IS THE EXCEPTION (the B10-05 close): the term skips a Record of a writ kind
+      (`data/verbs.py::RECORD_REFERENT_KINDS`), which only `writs_held`'s addressee test stamps, so a
+      bystander who saw a writ issued is offered no `comply`. REVERT: put `Record` back here (with
+      `research`'s column).
     values: [Office, Rung]
 
   person_predicates:
@@ -2079,9 +2082,11 @@ rosters:
       it, forms exactly what he formed before. ⚠ WHY NOT IN-10's FAN: `operand_bags` fans held Records
       only on a row binding a known-person operand, and only where a Record's `terms` IS already the
       referent; `commit` binds `subject` alone, and nobody's question is ABOUT a Proposition he has
-      only been handed, so the fan never reaches it. ⚠ WHY NOT A `referent_class: Proposition`: a row
-      declaring a class forms ONLY on that class (`Question.referents_for`), so `commit` would lose
-      the plain referents IN-11's utterer route forms on. ONE LOADER, `data/verbs.py::TERMS_SOURCED`,
+      only been handed, so the fan never reaches it. ⚠ WHY NOT A `referent_class: Proposition` (the v9
+      reasoning; SUPERSEDED at v10 REM-23, B10-05, which gave `commit` that class under M19 and took the
+      loss, `verb_table.yaml`'s `commit` note): a row declaring a class forms ONLY on that class
+      (`Question.referents_for`), so `commit` would lose the plain referents IN-11's utterer route
+      forms on. ONE LOADER, `data/verbs.py::TERMS_SOURCED`,
       refused at import when a line names a verb the table lacks, or a kind that is no held-writ
       occasion (`RECORD_REFERENT_KINDS`, which `writs_held` stamps) or whose `subject` no held Record
       answers -- either would form for nobody. Whether the act then passes is the fold's (`commit`'s

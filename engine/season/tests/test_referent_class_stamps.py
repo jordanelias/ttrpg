@@ -1118,6 +1118,25 @@ def test_cp_t05_04_d_limit_2_a_docketed_person_is_a_plain_referent_of_every_uncl
             assert subjects <= {i for i, k in q.classes if k == row.referent_class}, (verb, subjects)
 
 
+def test_cp_t05_04_d_limit_3_open_case_forms_on_the_docketed_person_and_the_fold_refuses_it():
+    """LIMIT (3), found at the B10-05 close (the exit read the unclassed rows only, limit 2): the docket
+    question's referents are matters still on the docket, `Person` is a class `open_case` declares, so the
+    seat-holder it is delivered to forms `open_case` on the docketed person -- and `_eff_open_case`'s
+    `docketed` decline refuses it. PINNED, not fixed: zero in the realm (no `case.refused` Event over
+    `aperture 2 --seeds 0 1 2 3 4`), and a person-side decline would need the docket, which only the world
+    reads (AX-2). If a realm census ever shows `case.refused`, revert the docket question's call in
+    `questions_for` (the two `referent_class` columns stay)."""
+    w, d = _docketed_case()
+    w.tick += 3
+    duke = w.persons[DUKE]
+    q = world_q.questions_for(w, duke)[0]
+    assert q.id == f"q:docket:{CASE_PARTY}", q
+    assert [i["matter"] for i in world_q.docketed(w, CASE_PARTY)] == [CASE_PARTY], "fixture: not docketed"
+    oc = [c for c in _formed(w, DUKE, q) if c.verb == "open_case"]
+    assert [c.subject for c in oc] == [CASE_PARTY], [(c.verb, c.subject) for c in oc]
+    assert [e.kind for e in _u7_fold(w, d, _act_of(oc[0], duke))] == ["case.refused"]
+
+
 # ======================================================================================
 # REM-2C (B10-05; rem-02 §2.3 REM-2C, limit `-08` AM-A-11): `research` FORMS ONLY ON A RECORD THE
 # QUESTION IS ABOUT. One `referent_class: Record` column, and the one-value edit that takes `Record` out of
@@ -1261,27 +1280,18 @@ def test_rem2c_b_the_investigator_researches_the_held_forgery_where_his_answered
 
 # --- (c) THE DEDUP, AND THE COST THE SHARED CLASS CREATES ---------------------------------------
 
-@pytest.mark.parametrize("occasion", ["records_held_for_holding_rows", "writs_held"])
-def test_rem2c_c_a_record_a_standing_occasion_and_the_question_both_name_is_carried_once(monkeypatch, occasion):
+def test_rem2c_c_a_record_a_standing_occasion_and_the_question_both_name_is_carried_once(monkeypatch):
     """THE DEDUP (`_stamped`, REM-21 (iv-b)), now that both kinds of term can name one Record. A standing
-    occasion stamps it -- the petition `p_high` filed and holds (`records_held_for_holding_rows`), or the writ
-    naming its holder (`writs_held`) -- and the question he answers is about it too (the own-referent term
-    names it). The question carries ONE `(id, Record)` pair, at the standing occasion's position (first in
-    splice order), `Question` raises no `Forbidden`, and `research` forms on it once. THE CONTROL, the dedup
-    dropped in-process (the bare concatenation it replaced): the same call is refused on the pair carried
-    twice."""
-    if occasion == "writs_held":
-        w, _ = _with_writ()
-        pid, rec = HOLDER, WRIT
-        _knows_of(w, pid, rec)
-        assert world_q.writs_held(w, w.persons[pid]) == (rec,)
-        q = world_q.questions_for(w, w.persons[pid])[0]
-        assert q.referents == (rec,), q
-    else:
-        w, d = _works_world()
-        pid, rec = PRESENT, _file_petition(w, d)
-        assert world_q.records_held_for_holding_rows(w, w.persons[pid]) == (rec,)
-        q = _ask(monkeypatch, w, pid, refs=("p_low", rec))
+    occasion stamps it -- the petition `p_high` filed and holds (`records_held_for_holding_rows`) -- and the
+    question he answers is about it too (the own-referent term names it). The question carries ONE
+    `(id, Record)` pair, at the standing occasion's position (first in splice order), `Question` raises no
+    `Forbidden`, and `research` forms on it once. THE CONTROL, the dedup dropped in-process (the bare
+    concatenation it replaced): the same call is refused on the pair carried twice. (A writ is NOT this
+    case since the B10-05 close: the own-referent term skips it, so `writs_held` alone carries it, below.)"""
+    w, d = _works_world()
+    pid, rec = PRESENT, _file_petition(w, d)
+    assert world_q.records_held_for_holding_rows(w, w.persons[pid]) == (rec,)
+    q = _ask(monkeypatch, w, pid, refs=("p_low", rec))
     assert world_q.own_referents_of_class(w, q, DECLARED_CLASSES - OCCASION_ONLY_CLASSES)[-1] == rec, q
     assert [k for r, k in q.classes if r == rec] == ["Record"] and q.classes[0] == (rec, "Record"), q
     assert [c.subject for c in _formed(w, pid, q) if c.verb == "research"] == [rec]
@@ -1289,6 +1299,21 @@ def test_rem2c_c_a_record_a_standing_occasion_and_the_question_both_name_is_carr
         q_, classes=q_.classes + tuple((o, w_.class_of(o)) for o in added)))
     with pytest.raises(Forbidden, match="twice"):
         world_q.questions_for(w, w.persons[pid])
+
+
+def test_b10_05_close_a_writ_the_holder_and_the_question_both_name_is_carried_by_writs_held_alone():
+    """The writ's side of the dedup, after the B10-05 close: the own-referent term skips a Record of a writ
+    kind (`RECORD_REFERENT_KINDS`), so the writ's addressee-holder, whose question names it, carries ONE
+    `(WRIT, Record)` pair, stamped by `writs_held`, and the own term adds nothing -- there is no second pair
+    to dedup. `research` still forms on it once (the shared class)."""
+    w, _ = _with_writ()
+    _knows_of(w, HOLDER, WRIT)
+    assert world_q.writs_held(w, w.persons[HOLDER]) == (WRIT,)
+    q = world_q.questions_for(w, w.persons[HOLDER])[0]
+    assert q.referents == (WRIT,), q
+    assert world_q.own_referents_of_class(w, q, DECLARED_CLASSES - OCCASION_ONLY_CLASSES) == ()
+    assert [k for r, k in q.classes if r == WRIT] == ["Record"], q.classes
+    assert [c.subject for c in _formed(w, HOLDER, q) if c.verb == "research"] == [WRIT]
 
 
 def test_rem2c_c_the_class_is_shared_so_the_record_rows_form_on_each_others_records_and_the_fold_refuses(

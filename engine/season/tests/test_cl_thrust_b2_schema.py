@@ -29,9 +29,10 @@ _PURSUIT_A = "honour"
 _PURSUIT_B = "stability"
 
 # The stage cells. `of: subject` is the grammar's own operand (`requires_operands` has no `referent`: the
-# stage binds `subject := each referent` at read time, B3.1). `own_ledger` asks `claim.held` and `existence`
-# asks `exists`: both a person's own ledger answers.
-_LEDGER = {"form": "own_ledger", "of": "subject"}
+# stage binds `subject := each referent` at read time, B3.1). `relation` `held_by` asks `held_by` and `existence`
+# asks `exists`: stems a claim in a person's own ledger answers. (`own_ledger` asks `claim.held`, which no
+# claim answers person-side -- WITNESS deposits none -- so the loader REFUSES it, planted below.)
+_HELD = {"form": "relation", "of": "subject", "relation": "held_by"}
 _EXISTS = {"form": "existence", "of": "subject", "kind": "Proposition"}
 
 
@@ -60,12 +61,12 @@ def _base() -> dict:
         ],
         "goal_stages": [
             {"id": "gs_throne", "for": ["g_throne"],
-             "stages": [_stage("s1", "short", _LEDGER), _stage("s2", "long", _EXISTS)]},
+             "stages": [_stage("s1", "short", _HELD), _stage("s2", "long", _EXISTS)]},
             {"id": "gs_pair", "for": ["g_rung", "g_deeds"],
-             "stages": [_stage("s1", "short", _LEDGER),
-                        _stage("s2", "medium", {"all": [_LEDGER, _EXISTS]}),
+             "stages": [_stage("s1", "short", _HELD),
+                        _stage("s2", "medium", {"all": [_HELD, _EXISTS]}),
                         _stage("s3", "medium", _EXISTS),
-                        _stage("s4", "long", _LEDGER, {_PURSUIT_A: 0.5, _PURSUIT_B: 2})]},
+                        _stage("s4", "long", _HELD, {_PURSUIT_A: 0.5, _PURSUIT_B: 2})]},
         ],
     }
 
@@ -139,8 +140,8 @@ def test_a_valid_hand_built_document_loads_and_each_goal_carries_its_row():
     assert terms[0] == "short" and terms[1] == terms[2] == "medium" and terms[3] == "long"
     assert pair.stages[3].pursuits == {_PURSUIT_A: 0.5, _PURSUIT_B: 2}
     # the predicate IS the typed-requires builder's own product, not a second reading of the cell
-    assert pair.stages[0].predicate == build_typed_requires("probe", _LEDGER)
-    assert pair.stages[1].predicate == build_typed_requires("probe", {"all": [_LEDGER, _EXISTS]})
+    assert pair.stages[0].predicate == build_typed_requires("probe", _HELD)
+    assert pair.stages[1].predicate == build_typed_requires("probe", {"all": [_HELD, _EXISTS]})
 
 
 def test_a_missing_goal_stages_key_reads_as_empty_and_nothing_else_moves():
@@ -245,8 +246,17 @@ def _world_only_cells() -> dict:
         "audience": {"form": "relation", "of": "subject", "relation": "audience"},
         "own-state": {"form": "scalar_threshold", "of": "subject", "scalar": "thread_sensitivity",
                       "threshold_predicate": "thread_sensitivity.gate", "comparator": ">="},
-        "mixed with a person-side stem": {"all": [_LEDGER, {"form": "relation", "of": "subject",
+        "mixed with a person-side stem": {"all": [_HELD, {"form": "relation", "of": "subject",
                                                             "relation": "with"}]},
+    }
+
+
+def _ledger_derived_cells() -> dict:
+    """Cells the typed-requires builder ACCEPTS and that ask a `LEDGER_DERIVED_STEMS` stem (`claim.held`):
+    no claim answers it person-side, so a stage over one could never be met (found at the B10-05 close)."""
+    return {
+        "own_ledger": {"form": "own_ledger", "of": "subject"},
+        "mixed with a readable stem": {"all": [_HELD, {"form": "own_ledger", "of": "subject"}]},
     }
 
 
@@ -256,7 +266,7 @@ _BUILDER_REFUSED = {
     "an operand outside the form's needs": {"form": "own_ledger", "of": "actor"},
     "a stem no reader dispatches on": {"form": "relation", "of": "subject", "relation": "no_such_stem"},
     "a cell that is no mapping": "yes",
-    "an `all` of one clause": {"all": [_LEDGER]},
+    "an `all` of one clause": {"all": [_HELD]},
 }
 
 _PLANTS = [
@@ -288,7 +298,7 @@ _PLANTS = [
      Forbidden, "already claims", "gs_throne"),
     # --- `stages:`
     ("stages: absent", _drop_row("gs_throne", "stages"), Unspecified, "at least two", "gs_throne"),
-    ("stages: one stage", _set_row("gs_throne", "stages", [_stage("s1", "short", _LEDGER)]), Unspecified,
+    ("stages: one stage", _set_row("gs_throne", "stages", [_stage("s1", "short", _HELD)]), Unspecified,
      "at least two", "gs_throne"),
     ("stages: none", _set_row("gs_throne", "stages", []), Unspecified, "at least two", "gs_throne"),
     ("stages: a mapping", _set_row("gs_throne", "stages", {"s1": 1, "s2": 2}), Unspecified, "at least two",
@@ -341,12 +351,17 @@ _PLANTS += [(f"predicate: {name}", _set_stage("gs_throne", "s1", "predicate", ce
              "typed-requires builder", "gs_throne/s1") for name, cell in _BUILDER_REFUSED.items()]
 _PLANTS += [(f"predicate asks a world-only stem: {name}", _set_stage("gs_throne", "s1", "predicate", cell),
              Forbidden, "only the world answers", "gs_throne/s1") for name, cell in _world_only_cells().items()]
+_PLANTS += [(f"predicate asks a ledger-derived stem: {name}", _set_stage("gs_throne", "s1", "predicate", cell),
+             Forbidden, "no ledger claim answers", "gs_throne/s1") for name, cell in _ledger_derived_cells().items()]
+_PLANTS += [("a top-level key beside goals and goal_stages (`ladders:`)",
+             _mut(lambda d: d.__setitem__("ladders", copy.deepcopy(d["goal_stages"]))), Forbidden,
+             "top-level key", "goals.yaml")]
 
 
 def test_the_plants_ran_a_floor_of_refusals_and_each_is_unique():
     """The loop asserts that it asserted (`CLAUDE.md` §0.1 pt 2): every plant of both lists is refused with
     its own type, so a list that silently emptied (or a `pytest.raises` that never ran) cannot pass."""
-    assert len(_PLANTS) >= 45 and len(_AXIS_PLANTS) >= 5, (len(_PLANTS), len(_AXIS_PLANTS))
+    assert len(_PLANTS) >= 51 and len(_AXIS_PLANTS) >= 5, (len(_PLANTS), len(_AXIS_PLANTS))
     assert len({p[0] for p in _PLANTS}) == len(_PLANTS)
     assert len({p[0] for p in _AXIS_PLANTS}) == len(_AXIS_PLANTS)
     checked = 0
@@ -355,7 +370,7 @@ def test_the_plants_ran_a_floor_of_refusals_and_each_is_unique():
             goals.parse(doc)
         assert type(red.value) is cls and fragment in red.value.what and named in red.value.where, name
         checked += 1
-    assert checked == len(_AXIS_PLANTS) + len(_PLANTS) >= 50, checked
+    assert checked == len(_AXIS_PLANTS) + len(_PLANTS) >= 56, checked
 
 
 @pytest.mark.parametrize("name,doc,cls,fragment,named", _PLANTS, ids=[p[0] for p in _PLANTS])

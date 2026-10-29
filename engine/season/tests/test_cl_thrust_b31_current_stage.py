@@ -17,9 +17,10 @@ What each test proves, and the failure it can observe:
   (b) A COMPLETE SEQUENCE READS `None`, and a referent that has passed every stage is absent while its
       sibling is not (the per-referent reading, TL §3.1 R1: *"the first stage whose predicate is not TRUE
       for each referent"*).
-  (c) AN UNKNOWN PREDICATE DOES NOT PASS A STAGE: the verdict is asserted to BE UNKNOWN (an empty ledger; an
-      `own_ledger` cell, which `LedgerReader` never answers), so the case is the one it names; a claim that
-      reads FALSE does not pass either.
+  (c) AN UNKNOWN PREDICATE DOES NOT PASS A STAGE: the verdict is asserted to BE UNKNOWN (an empty ledger; a claim on
+      another predicate), so the case is the one it names; a claim that reads FALSE does not pass either.
+      (An `own_ledger` cell, which `LedgerReader` never answers, is no longer a case: the loader refuses
+      it, B2's plants.)
   (d) `actor := p.id`: a relation cell is TRUE only on the claim `held_by:<the person himself>`.
   (e) CONTROL: with no `goal_stages` row `current_stage` is `None` for every shipped goal and for every
       ambition of the seed-0 realm (the loop asserts it checked at least the floor, `CLAUDE.md` §0.1 pt 2),
@@ -210,14 +211,11 @@ def test_the_stage_is_read_off_the_row_the_goal_is_for_and_the_stage_carries_its
 
 def test_an_unknown_predicate_does_not_pass_a_stage_and_neither_does_a_false_one():
     checked = 0
-    own_ledger = {"form": "own_ledger", "of": "subject"}
     for name, cell, ledger, verdict in (
             # no claim on the cell's predicate: nobody knows
             ("empty ledger", S1, [], UNKNOWN),
             # a claim about the referent, but on another predicate: still nothing on THIS cell
             ("other predicate", S1, [_claim("c_x", "p_o", "p_a", "exists:Rung")], UNKNOWN),
-            # `claim.held` is answered by no claim (WITNESS deposits none): the form reads UNKNOWN for all
-            ("own_ledger", own_ledger, [_claim("c_y", "p_o", "p_a", "exists:Person")], UNKNOWN),
             # a claim that reads FALSE: a known no, equally not TRUE
             ("false claim", S1, [_claim("c_z", "p_o", "p_a", "exists:Person", 0)], False)):
         doc = _doc()
@@ -229,7 +227,7 @@ def test_an_unknown_predicate_does_not_pass_a_stage_and_neither_does_a_false_one
             assert raw is verdict, (name, raw)
             assert _stage_ids(w, "p_o") == {"p_a": "s1"}, name
         checked += 1
-    assert checked == 4
+    assert checked == 3
 
 
 # ---------------------------------------------------------------------------------------------------

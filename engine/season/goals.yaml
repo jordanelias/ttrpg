@@ -36,7 +36,8 @@
 #   source:   a provenance string (`offices.yaml`'s `source:` precedent).
 #
 # TOP-LEVEL `goal_stages:` (CL-THRUST B2.2), optional; a missing key reads as `[]` and none is authored here.
-# A list of rows `{id, for, stages}`; the loader (`data/goals.py`) refuses a key beyond those, and the
+# A list of rows `{id, for, stages}`; the loader (`data/goals.py`) refuses a key beyond those (and any
+# top-level key but `goals` and `goal_stages`, so a stray `ladders:` is refused, not read as no stages), and the
 # stage `deadline` and the row keys `closing`, `successor` and `deal` are NOT part of the schema.
 #   id:       unique.
 #   for:      a non-empty list of goal ids of this file. Never an `orientation` goal; a goal is in at most one row.
@@ -44,7 +45,8 @@
 #               term       -> a `rosters.yaml: goal_stage_terms` member (short | medium | long), never
 #                             decreasing along the row;
 #               predicate  -> a `requires_typed` cell (`of: subject`) the typed-requires builder accepts that
-#                             asks no `WORLD_ONLY_STEMS` stem -- the stage is read PERSON-SIDE;
+#                             asks no `WORLD_ONLY_STEMS` and no `LEDGER_DERIVED_STEMS` stem (`own_ledger`) --
+#                             the stage is read PERSON-SIDE, off claims in the ledger;
 #               pursuits   -> `{<pursuit>: <weight > 0>}`, at least one, as a goal's own.
 
 # v9 FA-05 (ED-FA-0039). Ids, seats, affiliations and deed kinds below are the REGISTRIES' (offices.yaml,

@@ -373,8 +373,8 @@ def docket_question(w: World, p: Person) -> Optional[Question]:
     """THE QUESTION A DOCKETING EVENT'S WITNESS IS ASKED (v10 CP-T05-04, B10-05, home T05 §2 CP-T05-04
     (b); [ASSUMPTION; medium; Jordan to correct]): ONE standing question per person, whose PLAIN
     REFERENTS are the docketed matters whose docketing Event his OWN LEDGER holds a claim of
-    (`docketed_by`; `sittings_before`'s ledger test, the claim in his own ledger and no world reading
-    of a docket), `None` when there is none. The sitting question's sibling (`questions_for`): the same
+    (`docketed_by`; `sittings_before`'s ledger test: ADMISSION is the claim in his own ledger, though the
+    matters it names are read off `w.docket`), `None` when there is none. The sitting question's sibling (`questions_for`): the same
     `claim_landed` source, no source added, `about` the claim (the newest he holds, `LedgerReader`'s
     comparator, so an act formed from it cites the docketing through `occasioned_by`). STANDING, as the
     sitting question is: the matter waits on the docket until a determination clears it. WHAT IT
@@ -383,11 +383,15 @@ def docket_question(w: World, p: Person) -> Optional[Question]:
     others present at the opening -- so `speak` and `determine`, which form on plain referents, reach it
     (`determine`'s own conjuncts still decide whether he may). Carried as plain referents, not as a
     class: a class is a referent's own type (the matter is a person, or for a legacy item a rung), and
-    `determine`'s `party` conjunct needs the person. ⚠ TWO LIMITS, READ AT THE EXIT NOT FIXED
+    `determine`'s `party` conjunct needs the person. ⚠ THREE LIMITS, READ AT THE EXIT NOT FIXED
     (`-08` AM-D-05): (1) `question_aggregation_rule="first"` (`data/fixtures.py`) delivers `out[0]`
     alone, so this question reaches the person only when it sorts first by `attention_key`; (2) the
     docketed persons are plain referents of every row that declares no `referent_class`, so those rows
-    form on them. REVERT: drop the call in `questions_for` (the two `referent_class` columns stay)."""
+    form on them; (3) `Person` is a class `open_case` declares, so a seat-holder delivered this
+    question forms `open_case` on a matter that is already docketed and the fold refuses it
+    (`case.refused`, `_eff_open_case`'s `docketed` decline) -- found at the B10-05 close, zero in the
+    realm (no `case.refused` Event over `aperture 2 --seeds 0 1 2 3 4`), pinned in
+    `test_referent_class_stamps.py`. REVERT: drop the call in `questions_for` (the two `referent_class` columns stay)."""
     if not any(d.get("matter") is not None for d in w.docket):
         return None
     reached = [(c, ms) for c in p.ledger if (ms := docketed_by(w, c))]
@@ -1908,8 +1912,9 @@ def enclosing_territory(w: World, rung_id: Optional[str]) -> Optional[str]:
     """v9 IN-35: the first `territory` rung on `rung_id`'s containment walk up (`ancestry`, the one
     walk; the rung itself included), or `None` where the walk meets none -- a Site at the realm or a
     duchy, or a rung outside the tree. Read by `loop/matter.py::_lattice_strain`, which couples a Site
-    to the Sites of its own and the bordering territories (`data/geography.py::adjacent_territories`).
-    Traces nothing, as `ancestry` traces nothing: the coupling's control arm never calls it."""
+    to the Sites of its own and the bordering territories (`data/geography.py::adjacent_territories`),
+    and by `season_factors_by_rung`, every season in every arm, the empty weather arm included.
+    Traces nothing, as `ancestry` traces nothing: calling it moves no log and no hash."""
     for r in ancestry(w, rung_id) if rung_id else ():
         rung = w.rungs.get(r)
         if rung is not None and rung.kind == "territory":
@@ -2498,9 +2503,9 @@ def current_stage(w: World, p: Person, ambition) -> Optional[dict]:
     B3.2 adds.]
 
     ⚠ A STAGE ASKING `claim.held` (an `own_ledger` cell) CAN NEVER BE PASSED HERE: `LedgerReader.read`
-    answers a stem from a claim whose predicate IS that stem, WITNESS deposits no `claim.held` claim
-    (`LEDGER_DERIVED_STEMS`), and the loader (`data/goals.py`) does not refuse the form. It reads
-    UNKNOWN for everyone, and so does not pass."""
+    answers a stem from a claim whose predicate IS that stem and WITNESS deposits no `claim.held` claim
+    (`LEDGER_DERIVED_STEMS`): it reads UNKNOWN for everyone, and so does not pass. The loader
+    (`data/goals.py::_predicate`) therefore refuses the form, so no stage can be authored over it."""
     goal = _goals.goal(ambition)
     prop = w.propositions.get(ambition)
     if goal is None or goal.stages is None or prop is None:
@@ -2720,7 +2725,8 @@ def records_held_for_holding_rows(w: World, p: Person) -> tuple:
     names and the fold refuses on `exists:dispensation`), and a held writ is a `Record` for `carry`;
     the stopping rule of REM-25 measured that cost. ⚠ NO 'ALREADY CARRIED' DECLINE, `writs_held`'s
     scene tax: a holder who carried a petition is offered it again while he holds it (the fold's
-    `docketed` decline refuses a second carry of one matter). REVERT: drop the term in
+    `docketed` decline refuses a second carry of one matter only while it stays on the docket; a
+    `determine` ends the item and the holder may carry again). REVERT: drop the term in
     `questions_for` (and the three rows' `referent_class`)."""
     return tuple(sorted({t.object for t in p.tenures
                          if t.kind == "hold" and t.live and t.object in w.records
@@ -2833,10 +2839,20 @@ def own_referents_of_class(w: World, q: Question, classes: frozenset) -> tuple:
     is `questions_for`'s: every class a row declares (`data/verbs.py::DECLARED_CLASSES`) less
     `rosters.yaml: occasion_only_classes`, so no class literal lives here; while no row declares a
     class outside that list the set is empty and this returns `()`. Resolver-side and read-only.
-    REVERT: drop the term in `questions_for`."""
+    A WRIT IS NOT STAMPED HERE (the B10-05 close, [ASSUMPTION; medium; Jordan to correct]): a Record of a
+    writ kind (`data/verbs.py::RECORD_REFERENT_KINDS`) reaches a question only through `writs_held`,
+    whose addressee test is `comply`'s whole formation (its cell asks a claim on the writ, which any
+    witness of the issue holds). Since REM-2C released `Record` to this term, a bystander whose question
+    named the writ was offered `comply` and the fold executed it; the kinds `writs_held` owns are
+    skipped, so he is offered none, and no row forms on a writ for a non-addressee. The petition and
+    works kinds are NOT skipped: `carry`, `found` and `build` form on an unheld one and the fold refuses
+    it on `held_by`, REM-2C's measured shared-class cost. REVERT: drop the term in `questions_for`
+    (or, for the writ alone, the `RECORD_REFERENT_KINDS` test below)."""
     if not classes:
         return ()
-    return tuple(r for r in q.referents if w.class_of(r) in classes)
+    return tuple(r for r in q.referents
+                 if w.class_of(r) in classes
+                 and not (r in w.records and w.records[r].kind in RECORD_REFERENT_KINDS))
 
 
 def _stamped(q: Question, added: tuple, w: World) -> Question:

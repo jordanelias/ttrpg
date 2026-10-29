@@ -508,10 +508,12 @@ class World:
         to tolerate and never a refusal. Every caller that turns a class into a verdict must
         decide what `None` means for IT; `_refuse_bad_hold` treats it as PERMITTED.
 
-        The order is the collections' own declaration order in `__init__`, and it matters at
-        exactly one place today: a faction's id is BOTH a `Proposition` key and nothing else, so
-        no id is currently in two of these. If one ever is, this returns the first and the
-        ambiguity is a defect in the id scheme rather than in this function."""
+        The order is `_entity_stores`' and it IS LOAD-BEARING at one place: a `person`-kind rung
+        carries its person's id (`harness/probes.py`, `populated.py`: every person has a same-id
+        rung), so that id is in `persons` and in `rungs`, and `Person` is answered first -- the
+        answer `place_of`, `places_named`, `larders_in_purview` and the formation classes (v10 REM-24,
+        B10-05) all rely on. Any other id in two collections returns the first, and the ambiguity is
+        a defect in the id scheme rather than in this function."""
         for name, store in self._entity_stores():
             if entity_id in store:
                 return name

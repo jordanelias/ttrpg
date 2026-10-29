@@ -201,6 +201,28 @@ def test_in09_comply_forms_on_the_held_writ_once_his_ledger_names_it():
     assert got == {(VERB, WRIT)}, sorted(got)
 
 
+def test_in09_a_witness_who_does_not_hold_the_writ_is_offered_no_comply(monkeypatch):
+    """B10-05 close (REM-2C released `Record` to the own-referent term): a person who merely SAW the writ
+    issued holds a claim on it (`claim_subject_rule: both`), so his question names it and `comply`'s cell
+    -- a claim on the writ, nothing about being its addressee -- would pass the fold (test (4) above).
+    The own-referent term skips a Record of a writ kind, so `writs_held`'s addressee test stays the whole
+    formation. The control is the same witness with the skip switched off: he then IS offered `comply`, so
+    the assertion could have failed (and the non-holder control below holds an empty ledger, which has no
+    question to answer at all)."""
+    w, _ = _with_writ()
+    _claim(w, OTHER, WRIT, "record.created", True, "c_witness")
+    witness = w.persons[OTHER]
+    assert world_q.writs_held(w, witness) == (), "fixture: he is the writ's addressee"
+    (q, *_) = world_q.questions_for(w, witness)
+    assert WRIT in q.referents, "fixture: the question is not about the writ"
+    assert (WRIT, "Record") not in q.classes, q.classes
+    assert not [c for c in _formed(w, OTHER, q) if c.verb == VERB]
+    monkeypatch.setattr(world_q, "RECORD_REFERENT_KINDS", frozenset())
+    (q, *_) = world_q.questions_for(w, witness)
+    assert (WRIT, "Record") in q.classes, "control: the skip off still stamps nothing"
+    assert [c.subject for c in _formed(w, OTHER, q) if c.verb == VERB] == [WRIT]
+
+
 def test_in09_with_no_writ_held_the_questions_are_unchanged():
     """The control: the non-holder's questions carry no `Record` class, and a held writ's ending
     returns the holder's to what they were before he held one."""

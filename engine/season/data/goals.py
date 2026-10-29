@@ -24,8 +24,8 @@ line, `data/pursuits.py` one layer down):
     one claimed by a second row), `stages:` at least two in order, each `{id, term, predicate, pursuits}`:
     `term` a `goal_stage_terms` member that never decreases along the row, `predicate` a
     `requires_typed` cell `data/requires.py::build_typed_requires` accepts (its `SystemExit` is wrapped
-    into this loader's own refusal) that asks no `WORLD_ONLY_STEMS` stem, because the stage is read
-    PERSON-SIDE, and `pursuits` through `data/pursuits.py::pursuit`. A key outside those is refused, not
+    into this loader's own refusal) that asks no `WORLD_ONLY_STEMS` and no `LEDGER_DERIVED_STEMS` stem,
+    because the stage is read PERSON-SIDE off claims in the ledger, and `pursuits` through `data/pursuits.py::pursuit`. A key outside those is refused, not
     dropped. A row is attached to the goals it is `for:` (`Goal.stages`); nothing here reads it yet.
 
 ⚠ A RUNG REFERENT IS NOT CHECKED HERE. A rung exists only once the realm is built, so `rung:` is
@@ -330,8 +330,11 @@ def _predicate(sid: str, cell):
     refuses by `SystemExit` naming `verb_table.yaml` and a verb; that is wrapped here into THIS loader's
     own refusal naming the stage (its message is kept, whole). Refused too: a cell that builds to nothing
     (`none`), and any `WORLD_ONLY_STEMS` stem -- the stage is read person-side, where `with`, `audience`
-    and the own-state stems always read UNKNOWN, so a stage over one could never be met."""
-    from .requires import WORLD_ONLY_STEMS, build_typed_requires
+    and the own-state stems always read UNKNOWN, so a stage over one could never be met. Any
+    `LEDGER_DERIVED_STEMS` stem (`claim.held`, the `own_ledger` form) is refused for the same reason:
+    `LedgerReader` answers a stem only from a claim whose predicate IS that stem and WITNESS deposits no
+    `claim.held` claim, so it reads UNKNOWN for every person (found at the B10-05 close)."""
+    from .requires import LEDGER_DERIVED_STEMS, WORLD_ONLY_STEMS, build_typed_requires
     try:
         req = build_typed_requires(sid, cell)
     except SystemExit as exc:
@@ -344,6 +347,11 @@ def _predicate(sid: str, cell):
     if world_only:
         _refuse(Forbidden, sid, f"`predicate:` asks {world_only}, which only the world answers",
                 "a cell over stems a person's own ledger can answer (not `WORLD_ONLY_STEMS`)",
+                _STAGES_LAW, _STAGES_KEY)
+    ledger_derived = sorted(set(req.stems()) & LEDGER_DERIVED_STEMS)
+    if ledger_derived:
+        _refuse(Forbidden, sid, f"`predicate:` asks {ledger_derived}, which no ledger claim answers person-side",
+                "a cell over stems a claim in a person's ledger answers (not `LEDGER_DERIVED_STEMS`)",
                 _STAGES_LAW, _STAGES_KEY)
     return req
 
@@ -442,6 +450,11 @@ def parse(doc) -> tuple:
     if not isinstance(rows, list):
         raise Unspecified("goals.yaml has no `goals:` list", "goals.yaml",
                           needs="`goals: []` or a list of goal rows", law=_LAW)
+    stray = sorted(str(k) for k in doc if k not in ("goals", _STAGES_KEY))
+    if stray:
+        raise Forbidden(f"goals.yaml carries the top-level key(s) {stray}", "goals.yaml",
+                        needs=f"`goals:` and `{_STAGES_KEY}:` only (the stage rows are `{_STAGES_KEY}`, "
+                              f"not `ladders`)", law=_STAGES_LAW)
     seats = SEAT_ROW_BY_ID
     axes = _thrust_axes()
     ids = []

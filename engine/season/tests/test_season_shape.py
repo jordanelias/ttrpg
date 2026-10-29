@@ -4987,7 +4987,11 @@ def test_r7_m6_the_narrowed_arm_does_not_starve_the_first_two_links():
 
     What this test asserts is therefore the narrower claim the numbers license: **links 1 and 2
     survive the flip**, deposits fall hard, and the arm chosen preserves the question stream that
-    the narrowest arm thins.
+    the narrowest arm thins. ⚠ SINCE v10 REM-2C (B10-05) THE ORDERING PINS AT LINK 2 READ THE OTHER WAY
+    (the control raises MORE questions than the shipped arm, a measured inversion recorded at the pins),
+    which a starved shipped arm would satisfy too; the B10-05 close added an absolute floor, the shipped
+    arm raising more than half of what the control raises, which is what now observes the starvation the
+    test is named for.
 
     ⚠⚠ POSITION `11a`, 2026-09-29: **THE TWO NARROW ARMS COLLAPSE TO ONE IN THIS FIXTURE, WHICH IS
     NEITHER "LINKS 1-2 SURVIVE" NOR "THE THIRD LINK IS LIVE" — A THIRD STATE THIS DOCSTRING HAD NOT
@@ -5168,6 +5172,15 @@ def test_r7_m6_the_narrowed_arm_does_not_starve_the_first_two_links():
         f"`presence_only` now raises at least as many questions as `total` ({got}) -- REM-2C measured it FEWER; "
         "re-measure on a control tree, and whether `total`'s ledgers are still pinned at the cap, before "
         "re-pinning the direction")
+    # ⚠ THE FLOOR THE INVERSION LEFT UNOBSERVED (found at the B10-05 close): after REM-2C the three ordering pins
+    # here are all satisfied BY a starved shipped arm (`all_five` and `presence_only` at 0 questions still pass
+    # `total > all_five`, `total > presence_only` and `all_five >= presence_only`), so none of them observes the
+    # starvation this test is named for. THE ABSOLUTE FLOOR: the shipped arm raises more than half of what the
+    # control raises. [GROUNDED: measured at the B10-05 close -- `all_five` 134, `total` 200, so 268 > 200 on this
+    # tree; 102 * 2 = 204 > 95 at the CP-T05-04 tree `ea6f1dba`, the control]
+    assert got["all_five"][2] * 2 > got["total"][2], (
+        f"the shipped arm raises {got['all_five'][2]} questions against `total`'s {got['total'][2]}: under "
+        "half, which is the starvation of link 2 this test exists to exclude")
     # ⚠⚠ `>` -> `>=`, POSITION `11a`, 2026-09-29, RECORDED AS THE STATE THE DOCSTRING ALREADY
     # NAMED RATHER THAN A NEW ONE: "EQUAL is the `U2` state, where `H-33`'s stated reason for the
     # default was gone and the row said so." It has recurred, for a related but distinct reason --

@@ -481,7 +481,12 @@ class Question:
     (`vacancies`, IN-53) and the seats he has been told of (`seats_named`, v9 IN-10 (a)), as
     `Office`, the writs he holds (`writs_held`, v9 IN-09), as `Record`, and the places he has been
     told of and could settle in (`places_named`, v9 IN-45 `migrate`) and the larders his seat may
-    requisition (`larders_in_purview`, v9 IN-49 `requisition`), as `Rung`. A verb row declaring
+    requisition (`larders_in_purview`, v9 IN-49 `requisition`), as `Rung`; and, since v10 B10-05, the
+    Records he holds that a holding row asks for (`records_held_for_holding_rows`, REM-25) as `Record`,
+    the matters on the docket he saw opened are plain referents of the docket question
+    (`docket_question`, CP-T05-04), and the question's OWN referents of every other class a row declares
+    (`own_referents_of_class`, REM-21: `Site`, `Proposition`, `Person`, and `Record` since REM-2C, a writ
+    excepted), each stamped with its collection's name. A verb row declaring
     `referent_class: C` forms ONLY on the ids carried here as `C`; a row declaring none forms ONLY on `referents`, exactly as before IN-53 (`referents_for`, read
     by `VerbRow.referents_of`). Kept apart rather than spliced into `referents` so the partition is
     exact: an id may be BOTH a plain referent (a claim about the seat) and a classed one (the seat
