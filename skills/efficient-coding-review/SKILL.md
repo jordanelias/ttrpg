@@ -1,5 +1,5 @@
 ---
-name: adversarial-review
+name: efficient-coding-review
 description: >
   ADVERSARIAL REVIEW OF A WORK PRODUCT — attacks an analysis, research corpus, survey, proposal, plan
   or instrument (not a code diff) on six lenses run in a fixed order: a HIGH-LEVEL SURVEY first (a
@@ -17,7 +17,7 @@ description: >
 
 # ADVERSARIAL REVIEW
 
-## Status: PROPOSED — ratified on merge of the PR that adds it (CLAUDE.md §2, ED-1094). Lane IN; no ED allocated. Invocable as a project skill through `.claude/skills/adversarial-review`.
+## Status: PROPOSED — ratified on merge of the PR that adds it (CLAUDE.md §2, ED-1094). Lane IN; no ED allocated. Invocable as a project skill through `.claude/skills/efficient-coding-review`.
 
 ## What this skill owns, and what it copies
 

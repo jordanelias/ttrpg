@@ -2,6 +2,11 @@
 
 ## Status: PROPOSED — HELD BACK IN FULL
 
+Currency (as `00_THRUST_LAYER_DESIGN.md`'s Status line carries it): the v10 plan has since folded the design in as
+`CL-THRUST` (`workplans/valoria_master_workplan_v10_part12.md`) and ruled M20, M21 and ED-IN-0301
+(`workplans/valoria_master_workplan_v10_part6.md`); read those rows before this file. The register's grades are as of
+2026-10-25, and B10-02 (#509) has since landed instruments for G-02, G-08, G-11, G-12, G-20, G-27, G-28 and G-29.
+
 Merging the PR that carries this file ratifies NOTHING in it (ED-1094's default is not applied; no ledger row,
 `CURRENT.md` row or Status line elsewhere is flipped). Reference under CLAUDE.md §0.05: not a mechanism, binds no code,
 creates no plan position and allocates no id. It is the third document of `proposals/2026-10-25-thrust-layer/`, beside
@@ -172,7 +177,7 @@ constrained design was written after seeing results. Whether a plain exile close
 arrangement set piece → only through `determine`'s effect (G-14). Two things exist and are underused: a MATTER crossing
 that "emits and writes nothing" (`loop/matter.py`; so a threshold can raise a docket matter without acting), and
 `world_q.endings_reached` over `rosters.yaml: endings`, an executable terminus over holds reported once per season
-(`world_q.py:1990-2024`, `driver.py:520-523`), **which TL does not mention and goal-stage termini should compose on.**
+(`world_q.py:2084-2137`, `driver.py:520-523`), **which TL does not mention and goal-stage termini should compose on.**
 
 **What it means.** Lawful top-down is arming engines the corpus already uses, not writing beats. Among 50 classified endings the
 largest closing class is a decider (20), then a crossing-forced close (19), a never-closing state (10), a roll (9) and a
