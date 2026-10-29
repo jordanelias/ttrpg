@@ -234,7 +234,15 @@ def test_the_same_march_with_no_defender_arrives_unopposed_at_the_chokepoint():
 #: seeds where the REAL unrestricted chooser's first released scene on the Katepano's goal Question holds a
 #: `march` on Valorsplatz, `via == "off_katepano"`, and whose march also folds to the seam in a one-season run
 #: with no `field.unopposed`. [ASSUMPTION; medium; Jordan to correct -- two witnesses, not a rate.]
-WITNESS_SEEDS = (39, 53)
+# RE-SCANNED at v10 CR-28 (B10-05): (39, 53) -> (16, 53). `world_q.propositions_named` offers the Katepano a `commit`
+# on the Proposition her goal and her ledger name, so her first released scene on the goal Question is another
+# draw: seed 39 holds no `march` on `set_s_001` in it any more (the draws are keyed on (verb, subject), and the
+# candidate set grew). CONTROL, run: with the term stubbed to `()` both 39 and 53 pass both tests below. THE SCAN,
+# run as the docstring below says (seeds 0-79, `foreign=True`; first scene on `q:need:goal_katepano_press_the_capital`
+# holds `march` on `set_s_001`, `via == "off_katepano"`; the fold reaches the seam once with no `field.unopposed`;
+# the full one-season run reaches the seam from the empire's root): witnesses 16, 38, 44, 53, 67, 72, and no seed
+# that passes the first stage fails a later one. The lowest new witness replaces the stale one; 53 stays.
+WITNESS_SEEDS = (16, 53)
 
 
 def _first_scene_of_the_goal_question(seed: int):

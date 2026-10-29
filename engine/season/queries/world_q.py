@@ -2641,6 +2641,49 @@ def larders_in_purview(w: World, p: Person, named: Optional[frozenset] = None) -
     return tuple(out)
 
 
+def propositions_named(w: World, p: Person, named: Optional[frozenset] = None,
+                       goals: Optional[list] = None) -> tuple:
+    """THE PROPOSITIONS `p`'S OWN STATE NAMES (v10 CR-28, register G-04 (a), H-156 option (b),
+    [ASSUMPTION; medium; Jordan to correct; revert: drop the term]), sorted by id: the Propositions among
+    `person_q.ledger_names(p.ledger)` -- chiefly the `proposition.uttered` claim a witness of an `utter`
+    holds (MEASURED, `build_realm(0)` at two seasons: the commonest predicate whose subject is a
+    Proposition, with `seen`), or a held document whose `terms` names it -- and the OUGHT
+    Propositions he is himself committed to (`ambitions`, the ONE owner of *"a live `commit` to an
+    OUGHT"*: a goal, or his faction's creed) THAT ARE A MOTIVE: an ambition `goal_referents` names no one
+    for forms no question (v9 IN-67, *"an OUGHT about nobody is not a motive"*), so it is not offered
+    either -- offering it would raise the very `need` question IN-67 refuses. The class `_stamped` stamps is `Proposition`, the
+    collection `World.class_of` finds them in, so `commit` (REM-23's `referent_class: Proposition`)
+    forms on what he was told of and what he holds, and not only on a Proposition the question he
+    answers happens to name (`own_referents_of_class`, REM-21).
+
+    `seats_named`' and `writs_held`' shape, one class over: `p`'s OWN LEDGER and OWN LIVE EDGES, never
+    the store's Propositions (AX-2) -- the World is asked only which ids are Propositions
+    (`w.propositions`) and what mood an ambition's is. Resolver-side and read-only, a STANDING OCCASION:
+    it supplies Proposition IDS, which `questions_for` adds to the question the person answers as CLASSED
+    referents, and whether an act on one passes is the fold's (`commit`'s `existence` cell). THE BOUND
+    IS THE PRECEDENTS' -- relevance to HIM, not a count: a world's Propositions he has never heard of and
+    holds no edge to are not offered, and `()` for a person whose ledger names none and who has no
+    ambition. Nothing caps the rest (neither precedent does), so a person who has heard fifty
+    Propositions is offered fifty. MEASURED, `build_realm(0)`, two seasons, 81 persons, before the no-motive
+    filter (which can only lower it): his ledger names 1 to 5 Propositions, he holds 0 to 6 goals, together 1
+    to 9. ⚠ NO 'ALREADY COMMITTED' DECLINE, and that is the
+    register's own wording (*"a goal he is committed to"*): a goal he holds is offered so it can be
+    committed to again, and the own-act screen that would keep a person from re-committing is
+    IN-57's (ED-IN-0296 (3), B10-09's CR-10), as `writs_held` offers a writ to a holder who complied.
+    ⚠ GATED ON THE DECLARATION, `larders_in_purview`' and `writs_held`' way: `()` while no verb row
+    declares the class (`data/verbs.py::DECLARED_CLASSES`), so dropping `commit`'s column (the per-row
+    M19 revert) leaves the term nothing to stamp. `named` is `ledger_names(p.ledger)` and `goals` is the
+    ambitions of `ambitions(w, p)` that formed a question, where the caller (`questions_for`) holds them
+    already; a caller that does not holds neither, and this asks `ambitions` and `goal_referents` itself."""
+    if "Proposition" not in DECLARED_CLASSES:
+        return ()
+    if named is None:
+        named = ledger_names(p.ledger)
+    if goals is None:
+        goals = [g for g in ambitions(w, p) if goal_referents(w, p, w.propositions[g])]
+    return tuple(sorted({x for x in named if x in w.propositions} | set(goals)))
+
+
 def own_referents_of_class(w: World, q: Question, classes: frozenset) -> tuple:
     """THE QUESTION'S OWN REFERENTS OF A STAMPED CLASS (v10 REM-21, AM-A-06, [ASSUMPTION; medium;
     Jordan to correct]): the plain `referents` of `q` -- the question the person answers, `out[0]`
@@ -2835,12 +2878,13 @@ def standing_crossed(w: World, p: Person, since: Optional[tuple] = None) -> Opti
 
 
 def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Question]:
-    """§F1's `q` producer -- TWO sources, resolver-side, at the DELIBERATE barrier, plus FIVE
+    """§F1's `q` producer -- TWO sources, resolver-side, at the DELIBERATE barrier, plus SIX
     STANDING OCCASIONS stamped onto the first question as classed referents (`_stamped`, below the
     sort): the vacant seats the person may fill (`vacancies`, IN-53), the seats he has been told of
     (`seats_named`, v9 IN-10 (a)), the writs he holds (`writs_held`, v9 IN-09), the places he has
-    been told of and could settle in (`places_named`, v9 IN-45 `migrate`) and the larders his seat
-    may requisition (`larders_in_purview`, v9 IN-49 `requisition`). They are not
+    been told of and could settle in (`places_named`, v9 IN-45 `migrate`), the larders his seat
+    may requisition (`larders_in_purview`, v9 IN-49 `requisition`) and the Propositions his own
+    ledger names or he is committed to (`propositions_named`, v10 CR-28 `commit`). They are not
     sources: no id or source changes; a person with one of them and no question gets one `need`
     question carrying them. Stamped last, and no occasion: that first question's own plain referents
     of a class a row declares and `rosters.yaml: occasion_only_classes` does not hold back
@@ -2956,11 +3000,13 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # v9 IN-67: what the ambition is ABOUT is `goal_referents`' (a goal's, else the subject as before);
     # an ambition about nobody forms no question.
     refs_of: dict = {}                     # handed to `attention_key`, which reads the same referents
+    motives: list = []                     # v10 CR-28: the ambitions that formed a question (`propositions_named`)
     for pid in ambs:
         refs = goal_referents(w, p, w.propositions[pid])
         refs_of[pid] = set(refs) - {None}
         if refs:
             out.append(Question(f"q:need:{pid}", "need", refs, pid))
+            motives.append(pid)
 
     # v9 SC-01 FIRED-SLOT STEP (H-163 limit 2, #453 pass-1 step 4): A JUDGE IS ASKED ABOUT THE
     # MATTERS BEFORE A SITTING HE SITS ON. One question per fired sitting (`sittings_before`: a docket
@@ -3008,6 +3054,11 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # has room, or a seat reaches it, is then the fold's (`vacancies`/`seats_named`' Office precedent,
     # H-207; H-163 records what the cross-reading costs). No source is added, so no `question_sources`
     # order moves (IN-57: the occasion rides the question he answers). REVERT: drop the term.
+    # v10 CR-28 (register G-04 (a), [ASSUMPTION; medium; Jordan to correct; revert: drop the term]): AND SO DO
+    # THE PROPOSITIONS HIS OWN STATE NAMES (`propositions_named`: an `utter` his ledger holds a claim of, a
+    # goal he is committed to), after the larders, as `Proposition` -- only `commit` declares that class, so
+    # no other row's formations move. The SIXTH STANDING OCCASION, appended in landing order and ahead of the
+    # own-referent term below, which stays last (it reads the question, these read the person).
     # v10 REM-21 (AM-A-06, [ASSUMPTION; medium; Jordan to correct]): AND, LAST, THE QUESTION'S OWN
     # PLAIN REFERENTS OF EVERY CLASS A ROW DECLARES BUT `rosters.yaml: occasion_only_classes`
     # (`own_referents_of_class`) -- no standing occasion, the question he answers read for its own
@@ -3017,7 +3068,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     told = ledger_names(p.ledger)
     places = places_named(w, p, told)
     added = (vacant + seats_named(w, p, told) + writs_held(w, p) + places
-             + larders_in_purview(w, p, told)
+             + larders_in_purview(w, p, told) + propositions_named(w, p, told, motives)
              + (own_referents_of_class(w, out[0], DECLARED_CLASSES - OCCASION_ONLY_CLASSES)
                 if out else ()))
     if added:

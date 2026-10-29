@@ -32,6 +32,17 @@ tests for a person and a Proposition. The last section is the batch's control (3
 that declare `Site`, `Proposition` or `Person` so a later item adds its row by its column and not by a
 copy.
 
+CR-28 (`world_q.propositions_named`, the sixth standing occasion: the Propositions a person's own ledger names and
+the goals he is committed to stamp as `Proposition`, so `commit` forms on an `utter` he heard and a goal he holds):
+the formation through the real `questions_for`/`opening_set`/fold for each of the two sources, the byte-identity of a
+world whose ledgers name no Proposition (and the control that the equality can fail), the bound (his own ledger and
+edges, never the store), the dedup beside the question's own referent, the no-motive rule (a goal that names no one is
+not offered, IN-67), the gate on the declaration, and the mutation (the term returning `()` reproduces REM-23's reading).
+Run at the build: the term's body replaced by `return ()` reddens every `test_cr28_*` first assertion (and the REM-21
+`c` pair, REM-22 `a`, REM-23 `a`, `test_in53_vacancy_need` `a` that now see a goal stamped); the term spliced after the
+own-referent term reddens the splice-order test and the dedup order test; `questions_for` passing every ambition and not
+the ones that formed a question reddens `test_cr28_c_a_goal_that_names_no_one...` and three IN-67 tests.
+
 MUTATIONS, run at the build: `_stamped`'s `dict.fromkeys` dropped (the bare concatenation) reddens the
 three (c) tests on `Question`'s refusal (and `test_in53_vacancy_need.py`'s told-of-seat fingerprint
 test); the term's domain widened from `DECLARED_CLASSES` to every referent class reddens (b)'s
@@ -46,6 +57,7 @@ from unittest import mock
 import pytest
 
 from engine.season.data import verbs as _verbs
+from engine.season.data.matrix import WriteClass
 from engine.season.data.requires import UNKNOWN, AllOf, Existence
 from engine.season.data.rosters import OCCASION_ONLY_CLASSES, REFERENT_CLASSES
 from engine.season.data.verbs import DECLARED_CLASSES, VERB_TABLE
@@ -54,8 +66,9 @@ from engine.season.decision.choose import _payload_of
 from engine.season.decision.options import seat_of
 from engine.season.gaps import Forbidden
 from engine.season.harness import probes as P
+from engine.season.loop.driver import mint_token
 from engine.season.queries import world_q
-from engine.season.state.carriers import Act, Proposition, Question
+from engine.season.state.carriers import Act, Claim, Proposition, Question, Tenure
 
 from .test_g3_not_yours import _gov_world, _hold
 from .test_in09_dispensation_answer import HOLDER, WRIT, _with_writ
@@ -172,18 +185,21 @@ def test_rem21_b_the_splice_stamps_in_its_term_order_and_the_own_referents_last(
     names an id (measured at the build, 1 and 2 seasons, seed 0), so a reordering of two terms moves no
     hash. Here every standing occasion names one id of its own and `Site` is planted as declared: the
     classes read in the splice's order -- `vacancies`, `seats_named`, `writs_held`, `places_named`,
-    `larders_in_purview` -- and the question's own referent last. Swapping any two terms reddens it."""
+    `larders_in_purview`, and (v10 CR-28) `propositions_named` -- and the question's own referent last.
+    Swapping any two terms reddens it."""
     w, _ = _with_writ()
     _ambition(w, HOLDER, "prop_a", "site_harbour")
+    _proposition(w, "prop_n")
     for name, out in (("vacancies", ("off_duke",)), ("seats_named", ("off_dicastery",)),
                       ("writs_held", (WRIT,)), ("places_named", ("D",)),
-                      ("larders_in_purview", ("S",))):
+                      ("larders_in_purview", ("S",)), ("propositions_named", ("prop_n",))):
         monkeypatch.setattr(world_q, name, lambda *a, _out=out, **k: _out)
     monkeypatch.setattr(world_q, "DECLARED_CLASSES", DECLARED_CLASSES | {"Site"})
     (q,) = world_q.questions_for(w, w.persons[HOLDER])
     assert q.referents == ("site_harbour",), q
     assert q.classes == (("off_duke", "Office"), ("off_dicastery", "Office"), (WRIT, "Record"),
-                         ("D", "Rung"), ("S", "Rung"), ("site_harbour", "Site")), q
+                         ("D", "Rung"), ("S", "Rung"), ("prop_n", "Proposition"),
+                         ("site_harbour", "Site")), q
 
 
 # ======================================================================================
@@ -211,7 +227,8 @@ def test_rem21_c_two_terms_emitting_one_rung_stamp_one_pair_and_no_refusal(monke
     monkeypatch.setattr(world_q, "places_named", lambda w, p, named=None: ("D",))
     monkeypatch.setattr(world_q, "larders_in_purview", lambda w, p, named=None: ("D", "S"))
     (q,) = world_q.questions_for(w, w.persons["p_mid"])
-    assert q.classes == (("D", "Rung"), ("S", "Rung")), q
+    # v10 CR-28: and the goal he holds (`prop_a`) rides after them, as a `Proposition`.
+    assert q.classes == (("D", "Rung"), ("S", "Rung"), ("prop_a", "Proposition")), q
 
 
 def test_rem21_c_an_own_referent_beside_a_standing_occasions_stamp_is_carried_once(monkeypatch):
@@ -227,7 +244,9 @@ def test_rem21_c_an_own_referent_beside_a_standing_occasions_stamp_is_carried_on
     assert world_q.own_referents_of_class(w, world_q.questions_for(w, p)[0], frozenset({"Office"})) \
         == ("off_reeve",)
     (q,) = world_q.questions_for(w, p)
-    assert q.referents == ("off_reeve",) and q.classes == tuple((o, "Office") for o in vac), q
+    # v10 CR-28: the Offices are exactly the vacancies, each once; the goal he holds follows them.
+    assert q.referents == ("off_reeve",) and q.classes == tuple((o, "Office") for o in vac) + (
+        ("prop_a", "Proposition"),), q
 
 
 # ======================================================================================
@@ -270,12 +289,17 @@ MIXED = ("p_low", "site_harbour", "prop_x", "S")
 GRADED_DEGREES = frozenset({"Overwhelming", "Success", "Partial", "Failure"})
 
 
+def _goal_of(pid):
+    """The id of the one goal `_ask` plants for `pid`, whose `need` question is the one he answers."""
+    return f"prop_ask_{pid}"
+
+
 def _ask(monkeypatch, w, pid, refs=MIXED):
     """The question `pid` answers when his one ambition is about `refs`, delivered through the real
     `questions_for` (the splice, the term, `_stamped`). `goal_referents` is the one owner of what an
     ambition is about and ships no producer of a person AND a place in one question, so it is stood
     in for HERE, once, for this ambition alone; the question is otherwise the producer's."""
-    prop = f"prop_ask_{pid}"
+    prop = _goal_of(pid)
     _proposition(w, "prop_x", "S")
     _ambition(w, pid, prop, refs[0])
     real = world_q.goal_referents
@@ -315,7 +339,9 @@ def test_rem22_a_a_question_about_a_person_and_a_site_forms_the_verb_on_the_site
     q = _ask(monkeypatch, w, PRESENT)
     # REM-23: the question's Proposition (`prop_x`) now stamps too, as `commit` declares its class; the
     # Site is the same one, first in the question's order, and this verb's formation is unchanged by it.
-    assert q.classes == (("site_harbour", "Site"), ("prop_x", "Proposition")), q
+    # v10 CR-28: and the goal he is answering (`_goal_of`), a standing occasion, ahead of both.
+    assert q.classes == ((_goal_of(PRESENT), "Proposition"), ("site_harbour", "Site"),
+                         ("prop_x", "Proposition")), q
     formed = _formed(w, PRESENT, q)
     assert [c.subject for c in formed if c.verb == verb] == ["site_harbour"], (verb, formed)
     plain = {c.subject for c in formed if not VERB_TABLE[c.verb].referent_class}
@@ -340,7 +366,13 @@ def test_rem22_a_every_candidate_respects_the_partition_a_classed_row_the_class_
             assert c.subject in q.referents, (c, q.referents)
             plain[c.subject] += 1
     both = SITE_ROWS + PROPOSITION_ROWS
-    assert set(both) <= set(classed) and all(classed[v] == 1 for v in both), classed
+    # v10 CR-28: once per id the question carries as the row's class -- the one harbour for the Site rows,
+    # and for `commit` the Proposition the question names AND the goal he holds -- which is the property
+    # the count of 1 stood for.
+    assert set(both) <= set(classed), classed
+    assert all(classed[v] == sum(k == VERB_TABLE[v].referent_class for _, k in q.classes) for v in both), (
+        classed, q.classes)
+    assert [classed[v] for v in SITE_ROWS] == [1] * len(SITE_ROWS), classed
     assert set(plain) == set(MIXED), plain
 
 
@@ -439,7 +471,9 @@ def test_rem23_a_a_question_about_a_person_and_a_proposition_forms_the_verb_on_t
     q = _ask(monkeypatch, w, PRESENT)
     assert ("prop_x", "Proposition") in q.classes, q
     formed = _formed(w, PRESENT, q)
-    assert [c.subject for c in formed if c.verb == verb] == ["prop_x"], (verb, formed)
+    # v10 CR-28: the Propositions are the question's own (`prop_x`) and the goal he holds (`_goal_of`); the
+    # person, the harbour and the rung are still not formed on -- the class removes the wrong kinds only.
+    assert [c.subject for c in formed if c.verb == verb] == [_goal_of(PRESENT), "prop_x"], (verb, formed)
     plain = {c.subject for c in formed if not VERB_TABLE[c.verb].referent_class}
     assert set(MIXED) <= plain, plain
 
@@ -453,7 +487,7 @@ def test_rem23_a_mutation_without_its_column_the_row_forms_on_every_referent(mon
     w, _ = _works_world()
     q = _ask(monkeypatch, w, PRESENT)
     assert [c.subject for c in _formed_without_class(w, PRESENT, q, verb)] == list(MIXED)
-    assert [c.subject for c in _formed(w, PRESENT, q) if c.verb == verb] == ["prop_x"]
+    assert [c.subject for c in _formed(w, PRESENT, q) if c.verb == verb] == [_goal_of(PRESENT), "prop_x"]
 
 
 def test_rem23_b_a_person_committing_to_a_proposition_executes_through_the_fold(monkeypatch):
@@ -466,8 +500,7 @@ def test_rem23_b_a_person_committing_to_a_proposition_executes_through_the_fold(
     w, d = _works_world()
     q = _ask(monkeypatch, w, PRESENT)
     p = w.persons[PRESENT]
-    (c,) = [c for c in _formed(w, PRESENT, q) if c.verb == "commit"]
-    assert c.subject == "prop_x"
+    (c,) = [c for c in _formed(w, PRESENT, q) if c.verb == "commit" and c.subject == "prop_x"]
 
     def live():
         return sorted(t.object for t in p.tenures if t.kind == "commit" and t.live)
@@ -480,6 +513,203 @@ def test_rem23_b_a_person_committing_to_a_proposition_executes_through_the_fold(
     assert live() == held, live()
     assert _kinds(_fold(w, d, _act_of(c, p))) == ["commitment.made"]
     assert live() == sorted(held + ["prop_x"]), live()
+
+
+# ======================================================================================
+# CR-28 (B10-05; register G-04 (a), H-156 option (b)): THE PROPOSITIONS A PERSON'S OWN STATE NAMES STAMP AS
+# `Proposition`, SO `commit` FORMS ON AN `utter` HE HEARD AND A GOAL HE HOLDS -- not only on a Proposition
+# the question he answers happens to name (REM-23's reading: `commit` formed for 6/2/1 persons at
+# `aperture 1 s`, and on no goal). ONE standing occasion beside `seats_named` and `writs_held`
+# (`world_q.propositions_named`), composed on REM-21's one stamp site and its dedup; no registry.
+# ======================================================================================
+
+SPEAKER, HEARER, STRANGER = "p_low", "p_mid", "p_high"    # the first two share the hearth `Hh`; `p_high` is at `S`
+
+
+def _heard_utter(w, d, key="u1"):
+    """The real `utter` by SPEAKER, folded, and the real WITNESS pass over it: the hearth's ledgers (the
+    hearer's, not the stranger's at `S`) hold the `proposition.uttered` claim about the new Proposition.
+    Returns its id."""
+    out = _fold(w, d, Act(id=key, actor=SPEAKER, verb="utter"))
+    assert _kinds(out) == ["proposition.uttered"], _kinds(out)
+    d.witness(mint_token(w, WriteClass.INTERIOR), out)
+    return f"prop:{key}"
+
+
+def _commits_on(w, pid):
+    """`(the subjects `commit` forms on, the delivered question)` for `pid`: the real `questions_for`, the
+    first question (the `first` rule delivers it), the real `opening_set`. `([], None)` when no question."""
+    qs = world_q.questions_for(w, w.persons[pid])
+    if not qs:
+        return [], None
+    return [c.subject for c in _formed(w, pid, qs[0]) if c.verb == "commit"], qs[0]
+
+
+def _live_commits(w, pid):
+    return sorted(t.object for t in w.persons[pid].tenures if t.kind == "commit" and t.live)
+
+
+def test_cr28_a_a_person_who_heard_an_utter_forms_commit_on_its_proposition():
+    """THE FIRST ASSERTION, which the term returning `()` reddens (`test_cr28_mutation_...` runs that, and the
+    build ran it against the source): `p_mid` heard `p_low` utter. The question he answers is a claim landing,
+    about the speaker -- a person, which REM-23's class keeps `commit` off -- and the term carries the
+    Proposition his ledger names beside it, so `commit` forms on that Proposition and on nothing else, and the
+    fold executes it. THE CONTROLS: the plain rows still form on the speaker (the stamp added a formation and
+    took none); `p_high` at `S` heard nothing, holds no goal, and is offered nothing."""
+    w, d = _works_world()
+    prop = _heard_utter(w, d)
+    hearer = w.persons[HEARER]
+    assert {c.predicate for c in hearer.ledger if c.subject == prop} >= {"proposition.uttered"}
+    assert not [c for c in w.persons[STRANGER].ledger if c.subject == prop]
+    on, q = _commits_on(w, HEARER)
+    assert q.referents == (SPEAKER,) and q.classes == ((prop, "Proposition"),), q
+    assert on == [prop], on
+    formed = _formed(w, HEARER, q)
+    assert SPEAKER in {c.subject for c in formed if not VERB_TABLE[c.verb].referent_class}, formed
+    assert _commits_on(w, STRANGER) == ([], None)
+    (c,) = [c for c in formed if c.verb == "commit"]
+    assert prop not in _live_commits(w, HEARER)
+    assert _kinds(_fold(w, d, _act_of(c, hearer))) == ["commitment.made"]
+    assert _live_commits(w, HEARER) == [prop]
+
+
+def test_cr28_a_a_person_committed_to_a_goal_forms_commit_on_it_and_it_executes_once_more():
+    """`p_mid` holds a goal about the harbour (an OUGHT Proposition he is committed to). His `need` question's
+    referent is the Site -- the goal itself was never among the referents a question carries (REM-23's note) --
+    and the term carries the goal beside it: `commit` forms on the goal and on nothing else, and the fold
+    opens a second live edge to it. THE CONTROL: `ambitions`, the one owner of what a goal is, still reads
+    ONE ambition (two live edges to one Proposition are one ambition), so the term did not make a second."""
+    w, d = _works_world()
+    _ambition(w, HEARER, "prop_goal", HARBOUR)
+    hearer = w.persons[HEARER]
+    on, q = _commits_on(w, HEARER)
+    assert (q.id, q.referents) == ("q:need:prop_goal", (HARBOUR,)), q
+    assert q.classes == (("prop_goal", "Proposition"), (HARBOUR, "Site")), q
+    assert on == ["prop_goal"], on
+    (c,) = [c for c in _formed(w, HEARER, q) if c.verb == "commit"]
+    assert _live_commits(w, HEARER) == ["prop_goal"] and world_q.ambitions(w, hearer) == ["prop_goal"]
+    assert _kinds(_fold(w, d, _act_of(c, hearer))) == ["commitment.made"]
+    assert _live_commits(w, HEARER) == ["prop_goal", "prop_goal"], _live_commits(w, HEARER)
+    assert world_q.ambitions(w, hearer) == ["prop_goal"]
+
+
+def test_cr28_b_a_world_whose_ledgers_name_no_proposition_is_byte_identical(monkeypatch):
+    """THE BYTE-IDENTITY CONTROL: with no ledger naming a Proposition and nobody holding a goal, every person's
+    questions equal, field for field and in `repr`, what `questions_for` returns with the term stubbed to
+    `()`. Everyone knows everyone (so there are questions to compare) and `off_duke2` is vacant (so
+    `p_king`'s question carries a standing occasion's stamp and `_stamped` runs). THE CONTROL OF THE CONTROL:
+    one ledger gains a claim naming a Proposition and exactly that person's questions differ."""
+    w, _ = _gov_world()
+    _hold(w, "off_duke2").until = w.tick
+    ids = sorted(w.persons)
+    for pid in ids:
+        _know(w, pid, *[o for o in ids if o != pid])
+    assert not [c for p in w.persons.values() for c in p.ledger if c.subject in w.propositions]
+    real = {pid: world_q.questions_for(w, p) for pid, p in w.persons.items()}
+    assert sum(bool(qs) for qs in real.values()) >= 4 and any(qs[0].classes for qs in real.values() if qs), real
+    monkeypatch.setattr(world_q, "propositions_named", lambda *a, **k: ())
+    stub = {pid: world_q.questions_for(w, p) for pid, p in w.persons.items()}
+    assert real == stub and repr(real) == repr(stub)
+    monkeypatch.undo()
+    _proposition(w, "prop_x")
+    w.persons[HEARER].ledger.append(Claim("c_named", HEARER, "prop_x", "proposition.uttered", True, 0,
+                                          "firsthand", 100, "own"))
+    named = {pid: world_q.questions_for(w, p) for pid, p in w.persons.items()}
+    assert [pid for pid in ids if named[pid] != real[pid]] == [HEARER], named
+    assert ("prop_x", "Proposition") in named[HEARER][0].classes
+
+
+def test_cr28_c_a_person_is_offered_the_propositions_he_names_and_holds_and_no_others():
+    """THE BOUND, the precedents' (`seats_named` reads his ledger, `writs_held` his edges; neither reads the
+    store): the world holds twelve Propositions, `p_mid`'s ledger names three, he holds one OUGHT goal and is
+    committed to one HOLDS creed, and a neighbour heard a fourth. He is offered exactly the three he heard and
+    the goal -- not the other eight, not the neighbour's, not a creed that is no goal (`ambitions` reads an OUGHT
+    only) -- and `commit` forms on exactly those four."""
+    w, _ = _works_world()
+    for i in range(12):
+        _proposition(w, f"prop_w{i:02d}")
+    heard = ("prop_w03", "prop_w07", "prop_w10")
+    for i, prop in enumerate(heard):
+        w.persons[HEARER].ledger.append(Claim(f"c_heard{i}", HEARER, prop, "proposition.uttered", True, 0,
+                                              "firsthand", 100, "own"))
+    w.persons[SPEAKER].ledger.append(Claim("c_other", SPEAKER, "prop_w05", "proposition.uttered", True, 0,
+                                           "firsthand", 100, "own"))
+    w.propositions["prop_creed"] = Proposition("prop_creed", "HOLDS", "S", "prop_creed holds", True, 0)
+    w.add_tenure(Tenure("tc_creed", HEARER, "prop_creed", "commit", since=0))
+    _ambition(w, HEARER, "prop_goal", HARBOUR)
+    p = w.persons[HEARER]
+    assert world_q.ambitions(w, p) == ["prop_goal"] and len(w.propositions) >= 14
+    want = tuple(sorted(heard + ("prop_goal",)))
+    assert world_q.propositions_named(w, p) == want
+    on, q = _commits_on(w, HEARER)
+    assert q.classes[:len(want)] == tuple((x, "Proposition") for x in want), q
+    assert sorted(on) == list(want) and len(on) == 4, on
+    assert world_q.propositions_named(w, w.persons[SPEAKER]) == ("prop_w05",)
+
+
+def test_cr28_c_a_proposition_named_and_the_questions_own_referent_is_carried_once():
+    """The dedup (REM-21's `_stamped`, the one stamp site): a goal about itself (`prop_b`) is both the
+    question's own plain referent (`own_referents_of_class`) and the Proposition he holds
+    (`propositions_named`), and he has heard a second (`prop_a`, sorting first). The question carries each pair
+    once, in the standing occasion's order and ahead of the own-referent term -- `Question` refuses a pair
+    carried twice, so the bare concatenation reddens it, and the own-referent term first would put `prop_b`
+    ahead."""
+    w, _ = _works_world()
+    _proposition(w, "prop_a")
+    w.persons[HEARER].ledger.append(Claim("c_heard", HEARER, "prop_a", "proposition.uttered", True, 0,
+                                          "firsthand", 100, "own"))
+    _ambition(w, HEARER, "prop_b", "prop_b")
+    (q,) = world_q.questions_for(w, w.persons[HEARER])
+    assert q.referents == ("prop_b",) and q.classes == (("prop_a", "Proposition"),
+                                                        ("prop_b", "Proposition")), q
+
+
+def test_cr28_c_a_goal_that_names_no_one_is_no_motive_and_is_not_offered(monkeypatch):
+    """IN-67's rule (*"an OUGHT about nobody is not a motive"*, `goal_referents` reading `()` forms no question) holds
+    for the stamp too: offering such a goal would carry it onto a `need` question the rule refuses (`questions_for`
+    creates one for a person who has a stamp and no question). `p_mid` holds only a goal `goal_referents` names
+    no one for: no question, nothing offered, and `commit` forms nowhere. THE CONTROL: with a second goal that
+    does name someone, he is offered that goal and not the first. (The mutation, offering every ambition, reddens the
+    first assertion; `test_in67_goal_referents.py` holds the same rule at the question.)"""
+    w, _ = _works_world()
+    real = world_q.goal_referents
+    monkeypatch.setattr(world_q, "goal_referents",
+                        lambda w_, p_, pr: () if pr.id == "prop_nobody" else real(w_, p_, pr))
+    _ambition(w, HEARER, "prop_nobody", HARBOUR)
+    p = w.persons[HEARER]
+    assert world_q.ambitions(w, p) == ["prop_nobody"]
+    assert world_q.propositions_named(w, p) == () and world_q.questions_for(w, p) == []
+    _ambition(w, HEARER, "prop_goal", HARBOUR)
+    assert world_q.propositions_named(w, p) == ("prop_goal",)
+    on, q = _commits_on(w, HEARER)
+    assert q.classes[0] == ("prop_goal", "Proposition") and on == ["prop_goal"], (q, on)
+    assert "prop_nobody" not in {r for r, _ in q.classes}, q
+
+
+def test_cr28_d_the_term_is_gated_on_the_declaration(monkeypatch):
+    """`larders_in_purview`' and `writs_held`' way: while no verb row declares `Proposition` the term names
+    nothing and the question carries no class, so dropping `commit`'s column (M19's per-row revert) leaves
+    nothing stamped for nobody to read. THE CONTROL: declared, the same ledger stamps it."""
+    w, d = _works_world()
+    prop = _heard_utter(w, d)
+    hearer = w.persons[HEARER]
+    assert world_q.propositions_named(w, hearer) == (prop,)
+    monkeypatch.setattr(world_q, "DECLARED_CLASSES", DECLARED_CLASSES - {"Proposition"})
+    assert world_q.propositions_named(w, hearer) == ()
+    assert [q.classes for q in world_q.questions_for(w, hearer)] == [()]
+
+
+def test_cr28_mutation_without_the_term_commit_forms_as_it_did_at_rem23(monkeypatch):
+    """THE MUTATION, EXECUTED: the term returning `()` and `commit` forms on neither the `utter` he heard nor
+    the goal he holds -- REM-23's reading, where it formed only on a Proposition the question itself named --
+    so the first assertions of the two tests above have something to see."""
+    w, d = _works_world()
+    prop = _heard_utter(w, d)
+    _ambition(w, STRANGER, "prop_goal", HARBOUR)
+    with_term = (_commits_on(w, HEARER)[0], _commits_on(w, STRANGER)[0])
+    assert with_term == ([prop], ["prop_goal"]), with_term
+    monkeypatch.setattr(world_q, "propositions_named", lambda *a, **k: ())
+    assert (_commits_on(w, HEARER)[0], _commits_on(w, STRANGER)[0]) == ([], [])
 
 
 # --- (c) CONTROL (3) OF B10-05's HR-9: A CLASS REMOVES REFUSALS AND NOTHING ELSE --------------

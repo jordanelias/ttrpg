@@ -113,7 +113,12 @@ def test_in53v_a_the_first_question_carries_them_and_keeps_its_id_source_and_ref
     qs = world_q.questions_for(w, p)
     assert [(q.id, q.source, q.referents) for q in qs] == [
         ("q:need:prop_a", "need", ("S",)), ("q:need:prop_b", "need", ("R",))], qs
-    assert qs[0].classes == tuple((o, "Office") for o in vac) and qs[1].classes == (), qs
+    # v10 CR-28: the two goals he holds are standing occasions too (`propositions_named`, as `Proposition`),
+    # stamped after the vacancies on that same first question; the Offices are still exactly the vacancies
+    # and the second question still carries nothing.
+    assert qs[0].classes == tuple((o, "Office") for o in vac) + (
+        ("prop_a", "Proposition"), ("prop_b", "Proposition")), qs
+    assert qs[1].classes == (), qs
 
 
 def test_in53v_a_control_with_no_vacancy_the_questions_are_byte_identical(monkeypatch):
@@ -133,7 +138,10 @@ def test_in53v_a_control_with_no_vacancy_the_questions_are_byte_identical(monkey
     monkeypatch.setattr(world_q, "vacancies", lambda w, p: ())
     stub = {pid: world_q.questions_for(w, p) for pid, p in w.persons.items()}
     assert real == stub and repr(real) == repr(stub)
-    assert all(q.classes == () for qs in real.values() for q in qs)
+    # v10 CR-28: no vacancy is no Office carried. Each person's one goal (`prop_<pid>`) is the one thing his
+    # question carries as a class -- a `Proposition`, on his one question -- and nothing else.
+    assert all(qs[0].classes == ((f"prop_{pid}", "Proposition"),) for pid, qs in real.items()), real
+    assert all(q.classes == () for qs in real.values() for q in qs[1:])
 
 
 def _sig(cands):
@@ -201,7 +209,9 @@ def test_in53v_b_only_confer_forms_on_a_classed_referent_and_only_on_one():
             only_classed = {r for r, _ in q.classes} - set(q.referents)
             for c in _formed(w, pid, q):
                 if c.verb in classed_rows:
-                    assert (c.subject, "Office") in q.classes, (pid, q.id, c)
+                    # v10 CR-28: the row's OWN class (`commit` forms on the goal he holds, a `Proposition`),
+                    # which for `confer` and `oblige` is the `Office` this test always asserted.
+                    assert (c.subject, VERB_TABLE[c.verb].referent_class) in q.classes, (pid, q.id, c)
                     checked += c.verb == "confer"
                 else:
                     assert c.subject not in only_classed, (pid, q.id, c)

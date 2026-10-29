@@ -651,6 +651,14 @@ rosters:
       and `class_of` answers `Person` for it. While no row declares one of the three, the term stamps
       nothing for it and no formation moves; a row's `referent_class:` naming it is what makes the
       term stamp it. REVERT: drop the three values and the term.
+      v10 CR-28 (B10-05, register G-04 (a), [ASSUMPTION; medium; Jordan to correct; revert: drop the
+      term]): `Proposition` is ALSO a standing occasion -- `queries/world_q.py::propositions_named`
+      stamps the Propositions a person's OWN state names (the Propositions among `ledger_names`, such
+      as an `utter` he heard, and the OUGHT Propositions `ambitions` reads, a goal he is committed
+      to), after `larders_in_purview` and ahead of `own_referents_of_class`, on the question he
+      answers; `commit` declares it, so it forms on what he was told of and holds and not only on
+      what the question names. It names nothing while no row declares the class. No value is added
+      here: the class is REM-21's.
     values: [Office, Record, Rung, Site, Proposition, Person]
 
   occasion_only_classes:
@@ -661,7 +669,8 @@ rosters:
       `queries/world_q.py::questions_for` stamps a class onto the question a person answers in two
       ways: a standing occasion, a named term of its splice reading the person's own seats, edges and
       ledger (`vacancies` and `seats_named` as `Office`, `writs_held` as `Record`, `places_named` and
-      `larders_in_purview` as `Rung`), or `own_referents_of_class`, which carries the question's own
+      `larders_in_purview` as `Rung`, `propositions_named` as `Proposition`), or
+      `own_referents_of_class`, which carries the question's own
       plain referents of every class a verb row declares EXCEPT the ones listed here. These three are
       held back because their rows (`confer`, `oblige`, `comply`, `migrate`, `requisition`) were
       measured forming on plain referents and stopped by their class (rem-02 REM-21, rejected option

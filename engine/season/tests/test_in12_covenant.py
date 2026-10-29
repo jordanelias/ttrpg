@@ -193,12 +193,26 @@ def test_the_addressees_commit_to_the_covenants_proposition_forms_from_the_held_
 
 def test_mutation_without_the_terms_sourced_line_the_addressee_forms_no_commit(monkeypatch):
     """THE NAMED MUTATION, RUN IN-TEST: `terms_sourced` emptied (the reader in `opening_set` then
-    widens nothing) and the falsifier's formation is gone -- the route is that line, nothing else."""
+    widens nothing) and the falsifier's formation is gone -- the route is that line, nothing else.
+
+    ⚠ v10 CR-28 (B10-05): THERE ARE NOW TWO ROUTES TO THE SAME FORMATION, so "nothing else" is asserted
+    on the one route at a time. The held dispensation's content claim names its `terms` in the addressee's
+    own ledger (`person_q.ledger_names`), and `world_q.propositions_named` stamps every Proposition his ledger
+    names as a `Proposition`-classed referent -- so with the `terms_sourced` line emptied the commit STILL
+    forms (the second route), and it is gone only with BOTH removed. The first assertion below was
+    `== []` under the line emptied alone; it is the property that line stood for, on the isolated route."""
+    from ..queries import world_q
     w, d = _world()
     pid = _covenant_then_give(w, d)
     assert _commits_formed(w, pid), "precondition: the shipped route forms it"
-    monkeypatch.setattr(OPT, "TERMS_SOURCED", {})
-    assert _commits_formed(w, pid) == [], "a commit on the Proposition formed with the route removed"
+    with monkeypatch.context() as m:
+        m.setattr(OPT, "TERMS_SOURCED", {})
+        assert _commits_formed(w, pid), "CR-28's route (the ledger names the terms) no longer forms it"
+        m.setattr(world_q, "propositions_named", lambda *a, **k: ())
+        assert _commits_formed(w, pid) == [], "a commit on the Proposition formed with the route removed"
+    with monkeypatch.context() as m:
+        m.setattr(world_q, "propositions_named", lambda *a, **k: ())
+        assert _commits_formed(w, pid), "the `terms_sourced` route alone no longer forms it"
 
 
 def test_a_terms_sourced_line_naming_no_held_writ_kind_is_refused_at_load():
