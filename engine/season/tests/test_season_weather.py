@@ -315,9 +315,17 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # `written=True` left in `loop/matter.py`) it reads the old pair too, while `body_step = 10` alone (`written` left
 # as it was) reads the new one-season values at seeds 0 / 1 / 2, so the move is `body_step`'s and `written=True`
 # (H-129's `body.changed` read) moves nothing here.
+# RE-PINNED at v10 REM-27 (B10-06), A BEHAVIOUR MOVE DECLARED: `march` declares `referent_class: Rung`, so it forms
+# only on a Rung the question carries as `Rung` (`places_named`, `larders_in_purview`), and `RUNG_REMIT_ACTS` widens
+# by derivation to `{issue, dispatch}` (`aperture 1 s`, realm: `march` attempted 10/15/3 -> 8/24/10, every one still
+# refused, `exists:Rung=0` 2/0/0 -> 0; `migrate` attempted 59/144/104 -> 56/139/104; `requisition` formed 16/16/16,
+# unmoved; `field.*` 0 -> 0). The build hash is equal (the build reads no verb row); one and two seasons move. Was
+# 5d2e5f77... / 05352e22... (one, two seasons). CONTROL, run in process on this tree: `march`'s column blanked in
+# the shared `VERB_TABLE` and `RUNG_REMIT_ACTS` narrowed back to `{issue}` reads the old pair, the old `BASE_EVENTS`
+# and the old `give`- and `thread_read`-withheld arms exactly.
 BASE_HASHES = {0: "9ff5390939742b7bbb3af0fa2551e958",
-               1: "5d2e5f77a8f06bd34006f7d4bc0c2649",
-               2: "05352e22d8e881b37a94dd056a6ef725"}
+               1: "ecb47cd0c546cab0fa808679987a63c0",
+               2: "5d7f362d512d96bace22b7074f91dcec"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -369,8 +377,9 @@ BASE_HASHES = {0: "9ff5390939742b7bbb3af0fa2551e958",
 # RE-RECORDED at v10 REM-2C with `BASE_HASHES` (6267 -> 6377, 20840 -> 20479).
 # RE-RECORDED at v10 REM-52 with `BASE_HASHES` (6377 -> 6484, 20479 -> 20701: the 37 `body.changed` Events of the first
 # draw and what the hungry cohorts' bodies move after them; `body_step` swept back to `0` reads the old pair).
-BASE_EVENTS = {1: (6484, "3c04404a8aee2e0f9e53efae512bb31bf989f4e9df8cd1bb3296c66d81ad906f"),
-               2: (20701, "cab315fea95dd55cebc013d5dc10183fefdc18a38f27243a66b2cfe8e8e0096f")}
+# RE-RECORDED at v10 REM-27 with `BASE_HASHES` (6484 -> 6482, 20701 -> 21258; REM-27 reverted in process reads the old pair).
+BASE_EVENTS = {1: (6482, "4e905c95ddab65dc975f91e4d62a526dd9c709c28b59a853817a5b4820db2150"),
+               2: (21258, "e21a5b937235f135a7be57c170313cb7c8c2294a0b01e88125918063a571bfab")}
 
 
 def _digest(w) -> tuple:
@@ -480,7 +489,9 @@ def test_the_give_withheld_arm_reproduces_the_one_season_pin():
 #: and `Record` leaves `occasion_only_classes`; the CP-T05-04 tree `ea6f1dba` reads the old value exactly).
 #: RE-RECORDED at v10 REM-52 with `BASE_HASHES`: 6382 / adb6a991... -> 6489 / 177721d7... (`body_step` ships at `10`; the
 #: REM-2C tree `a397fa16` reads the old value exactly, and so does this tree with `body_step` swept back to `0`).
-THREAD_READ_WITHHELD_EVENTS_1 = (6489, "177721d7cf8bcebbe58a26ef8a73d9e353d34f039dfd438be2c123fe0e4c7404")
+#: RE-RECORDED at v10 REM-27 with `BASE_HASHES`: 6489 / 177721d7... -> 6487 / a23c37a6... (`march` declares `Rung`; REM-27
+#: reverted in process reads the old value exactly).
+THREAD_READ_WITHHELD_EVENTS_1 = (6487, "a23c37a6b55bbe15a5253d5a0b8989e47a47f7bcac991f3f9e3f9d4cfef96c52")
 
 
 def test_the_thread_read_withheld_arm_is_pinned_and_differs_from_the_shipped_season():

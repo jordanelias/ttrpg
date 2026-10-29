@@ -395,19 +395,28 @@ def _counts(w) -> dict:
 #: `written=True` left in `loop/matter.py` (a scratch worktree), so the move is `body_step`'s alone and
 #: `written=True` moves nothing at these seeds. Was, for seeds 0 / 1 / 2: `old` 7a9ba50d... / 0418dc12... /
 #: 35e6932d..., `new` 8bec380b... / 82223978... / e707d359..., `acts` 577 / 637 / 630, `log` 6377 / 9117 / 7933.
+#: RE-RECORDED AGAIN at v10 REM-27 (B10-06), A GAME MOVE DECLARED, NO DIGEST MOVE: `march` declares
+#: `referent_class: Rung`, so it forms only on a Rung the question carries as `Rung` (`places_named`,
+#: `larders_in_purview`), and `RUNG_REMIT_ACTS` widens by derivation to `{issue, dispatch}` -- `march` attempted
+#: 10 / 15 / 3 -> 8 / 24 / 10 (`aperture 1 s`, every one still refused), and the act mix of every seeded realm moves
+#: with it. EVERY value below is the REM-27 tree's, read with this file's own helpers (`_old_content_hash`, `_counts`)
+#: and `populated.run`; CONTROL, run in process on this tree: `march`'s column blanked in the shared `VERB_TABLE` and
+#: `RUNG_REMIT_ACTS` narrowed back to `{issue}` reads the values this block held exactly, at all three seeds. Was, for
+#: seeds 0 / 1 / 2: `old` 3d139b32... / 31fa260b... / 3f836210..., `new` 5d2e5f77... / 8a50ca82... / b8678a41...,
+#: `acts` 576 / 637 / 629, `log` 6484 / 9227 / 8040.
 BASE = {
-    0: {"old": "3d139b32378d0e109ba379cd59ff18ad", "new": "5d2e5f77a8f06bd34006f7d4bc0c2649", "acts": 576,
-        "census": "07ee489097b7e2c7cb4785b5596470501a7cbdbc9f3b88710c2a630a881d132d",
-        "counts": {"persons": 82, "rungs": 411, "offices": 32, "sites": 322, "records": 99,
-                   "propositions": 96, "dates": 1, "docket": 4, "tenures": 813, "log": 6484}},
-    1: {"old": "31fa260be50660a8b5d320b5cc1ab158", "new": "8a50ca82911f375a9e079841bf0804e3", "acts": 637,
-        "census": "aee2404f23e26835732c2b61fb398fa47beb7e4e33798848b41c408c2ed3d4b7",
-        "counts": {"persons": 83, "rungs": 412, "offices": 32, "sites": 322, "records": 126,
-                   "propositions": 91, "dates": 0, "docket": 1, "tenures": 848, "log": 9227}},
-    2: {"old": "3f836210f6bc9fff6a165077783bb923", "new": "b8678a41d2c60af42bdb8ac7e9797164", "acts": 629,
-        "census": "e54f4221ab85d06ab4d75a784fc492076c0608d94af8a55e79d1ba69b2cbf336",
+    0: {"old": "ab2da3874588b3f8adcea77f2ae07777", "new": "ecb47cd0c546cab0fa808679987a63c0", "acts": 581,
+        "census": "ba119e5f18b1d487e178a4ddb76d18b28f17093e4a7a21ade43bd301699d54ff",
+        "counts": {"persons": 82, "rungs": 411, "offices": 32, "sites": 322, "records": 101,
+                   "propositions": 96, "dates": 1, "docket": 4, "tenures": 816, "log": 6482}},
+    1: {"old": "fd4a03157afb4f49d440b04c9458d713", "new": "27e9d2317b17d146b73d49e87dd29f07", "acts": 641,
+        "census": "b7d85367fb20f388233af94284601bee7cab6b0e650230335dfdaa4a02100703",
+        "counts": {"persons": 83, "rungs": 412, "offices": 32, "sites": 322, "records": 128,
+                   "propositions": 90, "dates": 0, "docket": 1, "tenures": 849, "log": 9221}},
+    2: {"old": "9c74e8d961d9681680f0ef6fae25a2b1", "new": "9726db8db9c1baa5c3623f0ce66c3d5c", "acts": 632,
+        "census": "285e565a0a0d8e439b80ce784716efa2cdd14d103d7d6a5e62f3c82dc95b2774",
         "counts": {"persons": 81, "rungs": 410, "offices": 32, "sites": 322, "records": 114,
-                   "propositions": 97, "dates": 1, "docket": 2, "tenures": 817, "log": 8040}},
+                   "propositions": 97, "dates": 1, "docket": 2, "tenures": 817, "log": 8096}},
 }
 
 
