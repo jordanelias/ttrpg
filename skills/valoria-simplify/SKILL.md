@@ -86,7 +86,7 @@ A direction ends in one word. **SURVEYED**: an instrument ran over the whole are
 | **bottom-up** | what justifies each artifact and each fact? | I2, I3, I1 | M1, M2, M4 | reach (M4) |
 | **vertical** | do levels respect their order and hide their detail? | I4 | M1 by area; conformance to `04` Part D is `layer-conformance`'s | an import map sees only declared edges |
 | **lateral** | do peers share anything no contract names? | I4, I3 | M1 between sibling areas; **M2** (a registry read from many areas is the widest lateral channel) | M2 is name-matching |
-| **horizontal** | along the run and the history: order, replay, carried cost | I1, I5, I6 | seeded runs; M5 | one seed; shallow history |
+| **over time** (this skill's reading of *horizontal*) | along the run and the history: order, replay, carried cost | I1, I5, I6 | seeded runs; M5 | one seed; shallow history |
 | **diagonal** | coupling across levels and peers that no structure declares | I5 (co-change), I4 (transitive core), I3 | M3, M2, plus history | without history, only I4 and I3 run: PARTLY at best |
 
 ### Triage: where to look
@@ -121,7 +121,7 @@ An artifact with no provenance goes to the ladder's first rung. One with provena
 4. *Survivors.* For each plant the control missed, find an input or seed on which original and changed code give different outputs (**live**: the control is blind there) or show the change cannot alter behaviour (**equivalent**: not a miss). Equivalence is undecidable in general, so a survivor shown neither way leaves the result INCONCLUSIVE; report the result as a range, not a score.
 
 **Pass means every plant was caught or shown equivalent. A control that misses a live plant cannot certify the real edit.**
-- *Cost:* the per-plant loop runs only the headless hash and the one test file that covers the artifact (the season suite did not finish in ten minutes, so per-plant runs of it are out); the full suites run once, at the close (`CLAUDE.md` §0.4). A control shrunk this way is itself a change of control: judge it by the plants, not the score. It may certify only if it catches every plant the full control catches, compared on one plant set; a plant the smaller control no longer executes counts as missed.
+- *Cost:* the per-plant loop runs only the headless hash and the one test file that covers the artifact (the season suite is too slow for per-plant runs, `CLAUDE_RATIONALE.md` §0.4); the full suites run once, at the close (`CLAUDE.md` §0.4). A control shrunk this way is itself a change of control: judge it by the plants, not the score. It may certify only if it catches every plant the full control catches, compared on one plant set; a plant the smaller control no longer executes counts as missed.
 - *Hygiene:* set `PYTHONDONTWRITEBYTECODE=1` and remove `__pycache__` first; a same-size edit restored within a second leaves stale bytecode that gives wrong readings. `delta` and other commands that call `git` need a worktree; an export has no `.git`.
 
 **C3 If the control misses**, take the first that serves, then **repeat C2 on the new control**: (a) **widen reach** with a run or case that reaches the artifact (M4); (b) **pin the behaviour first**, in the same change, with a test that executes it. A test of behaviour is a mechanism, not a guard (`CLAUDE.md` §0.05, §0.1 pt 5); it records what the code does, not that this is correct; and it is the one edit permitted before C2 passes; (c) otherwise report the artifact **UNOBSERVABLE** and do not edit it.

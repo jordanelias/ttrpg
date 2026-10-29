@@ -1,23 +1,25 @@
 ---
-name: adversarial-review
+name: efficient-coding-review
 description: >
-  ADVERSARIAL REVIEW OF A WORK PRODUCT — attacks an analysis, research corpus, survey, proposal, plan
-  or instrument (not a code diff) on six lenses run in a fixed order: a HIGH-LEVEL SURVEY first (a
+  ADVERSARIAL REVIEW OF A WHOLE SUBJECT, NOT A DIFF — attacks the code base (the engine, its modules and
+  subsystems, a data family, a pipeline) or a work product (an analysis, research corpus, survey, proposal,
+  plan or instrument) on six lenses run in a fixed order: a HIGH-LEVEL SURVEY first (a
   one-screen map), then ACCURACY (is each claim true, at its source), APPLICATION (does each idea
   transfer to the target, step by step), LOGIC (do the conclusions follow), ALL DIRECTIONS (the work
   and its subject walked by several routes and from several perspectives, not only the one it was
   built along) and ACROSS MODULES (a coverage matrix read from the registry). Output is a reply plus
-  edits to the work; no file, and no ledger row unless a ruling is owed. Use for: "adversarial
-  review", "attack this work", "review my research / survey / proposal / plan", "did we apply the
+  edits to the subject; no file, and no ledger row unless a ruling is owed. Use for: "adversarial
+  review", "attack this", "review the engine / this module / this subsystem", "review my research / survey / proposal / plan", "did we apply the
   ideas", "does it work across modules", "work it from all directions", "survey it from a high
-  level". Not for code diffs (/code-review), the cut test on a design object (ners), placement or
+  level". Not for code diffs (/code-review), distilling unearned complexity (valoria-simplify), the cut
+  test on a design object (ners), placement or
   Layer-1 compliance (layer-conformance), inert mechanics (valoria-mechanic-audit), or P-01..P-15
   (valoria-canon-guard).
 ---
 
-# ADVERSARIAL REVIEW
+# EFFICIENT-CODING-REVIEW — adversarial attack on the code base or a work product
 
-## Status: PROPOSED — ratified on merge of the PR that adds it (CLAUDE.md §2, ED-1094). Lane IN; no ED allocated. Invocable as a project skill through `.claude/skills/adversarial-review`.
+## Status: RATIFIED on merge of its landing PR (CLAUDE.md §2, ED-1094; #518). Lane IN; no ED allocated. Invocable as a project skill through `.claude/skills/efficient-coding-review`.
 
 ## What this skill owns, and what it copies
 
@@ -39,7 +41,7 @@ sweep, the module matrix and the reply shape. It copies no rule; each is read at
 *"all directions refers to working through the pipeline/code/logic/systems/mechanics/workflows from
 different perspectives and routes, not a specific NERS thing."* (Jordan, in session, 2026-10-28.)
 It is a **method for any subject**: never review, or build, along only the one route the thing was
-made along. STEP 5 operationalises it. It is not delegated to `ners`.
+made along. **CLAUDE.md §0 owns the rule**; STEP 5 operationalises it for a review. It is not delegated to `ners`.
 
 ## THE THROUGHLINE
 
@@ -58,6 +60,11 @@ Name: the **WORK** (paths, commit, PR) · its **PURPOSE** (the decision it infor
 (the system its ideas are applied to) and the **modules it says it reaches** · its **DECLARED STATUS**
 (what it says it read, ran or checked) · **WHAT REVIEW IT ALREADY HAD** (commit message, PR body, any
 critic pass). Attack what that review did not reach; **never re-audit its fixes** (CLAUDE.md §0).
+
+When the subject is the **code base**, the WORK is the named engine area, module, subsystem or pipeline; its
+claims are its docstrings, contracts, registries and tests, and ACCURACY is settled by running it (CLAUDE.md
+§0.2), not by reading the prose about it. A diff of it stays with `/code-review`; removing unearned
+complexity stays with `valoria-simplify`; placement and Layer-1 conformance stay with `layer-conformance`.
 
 Resolve the target's canonical head first (`CURRENT.md`, then its `## Status:` line), then **the plan row
 that names the work** (`CURRENT.md`'s plan row). The work is in one of **three states**: **CURRENT**;
@@ -95,7 +102,7 @@ quotation verbatim. Then:
   re-run it, and confirm the artifact frozen is the artifact that ran (a freeze of the predictions
   does not freeze the code they ran against).
 
-Rule per claim: **UPHOLD · OVERTURN · SOFTEN · SHARPEN · UNVERIFIABLE** (`valoria-critic`'s vocabulary).
+Rule per claim: **UPHOLD · OVERTURN · SOFTEN · SHARPEN · UNVERIFIABLE** (the first four are `valoria-critic`'s vocabulary; UNVERIFIABLE is this skill's).
 
 ## STEP 3 — APPLICATION *(does the idea transfer?)* — six tests per TRANSFER row
 
@@ -180,7 +187,7 @@ inputs) and often only that one. The finding is the directions it cannot run.
 ## STEP 7 — THE VERDICT (the reply; nothing is written to a file)
 
 ```
-ADVERSARIAL REVIEW: <work>      [SELF-AUTHORED — bias risk]      ROUNDS: 1
+EFFICIENT-CODING-REVIEW: <work>      [SELF-AUTHORED — bias risk]      ROUNDS: 1
 
 IN PLAIN WORDS   <≤ 5 sentences: what it is · whether to rely on it · the three things that limit it most>
 

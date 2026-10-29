@@ -96,7 +96,7 @@ lanes:
       - "tests/sim/HANDOFF_*"
     reserved_ed: "970-999"
     reserved_pp: "780-799"
-    entry_items: ["LC-0a", "LC-1", "LC-3", "LC-4", "LC-5"]   # v4 §6; governing spec = godot_conversion_strategy_v1
+    entry_items: ["LC-0a", "LC-1", "LC-3", "LC-4", "LC-5"]   # v4 §6; conversion plan (PROPOSED) = godot_conversion_strategy_v1
     canon_gated: ["LC-0b", "LC-7", "LC-8"]   # unblock on v4 docket J-2 / J-11 / J-9+J-10
     notes: >
       valoria-game is a separate repo, so Lane C implementation work is collision-free with A/B.

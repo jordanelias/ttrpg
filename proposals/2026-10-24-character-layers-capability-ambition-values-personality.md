@@ -67,7 +67,7 @@ A person has four layers, and one question tells each apart.
 - **Carrier:** `commit` claims to OUGHT propositions in `Person.ledger`.
 - **Writers:** world-gen goal minting (`goals.yaml`) and the `commit` verb.
 - **Readers:** `questions_for`'s `need` source (`engine/season/queries/world_q.py:2717-2757` [CHECKED]: a live `commit` to an OUGHT generates a standing question every season), `claim_landed`, and five standing occasions (vacancies, seats named, writs, places named, larders).
-- **Exit:** the proposition becomes true, or the commit is withdrawn.
+- **Exit:** the commit ends (`world_q.py:2922-2924`: it recurs every season until then). A 'met' exit is not detected today; CP-T02-03 of `2026-10-23-subsystem-completion` proposes it.
 - **Scale:** cohort: shared commits. Faction: organization goals minted as propositions. Mass battle: none; a war aim reaches the field only through a person choosing `march`.
 - **Limit, stated.** The cut between ambition and values holds at the chooser, not at the authored row. A `goals.yaml` row carries an object (what) and a REQUIRED `pursuits:` lean (why), and its `stance:` seeds `Person.stance` (`goals.yaml` header lines 25-29; `harness/populated.py:711-718` [READER: critic]). The salience target is the organization's expected values plus the goal's lean (`world_q.py:2646-2647` [READER: critic]).
 
@@ -126,7 +126,7 @@ The minimum roster is the three axis offsets. Everything else was tested and is 
 | candidate | verdict | reason |
 |---|---|---|
 | `forgiving_vindictive` | **out, dead reader** | The grudge row's referent is a *faction name*: `_eff_march` appends `(winner_faction, -1.0, grudge_w)` (`effects_combat.py:311-313` [CHECKED]). Both chooser arms read stance by `c.subject` (`choose.py:91-101` [CHECKED]), and question referents are persons, rungs, seats and records (`world_q.py:2217-2222` [READER: critic]). Under `declared` polarity `fight`'s subject is a person, so the negated regard never meets the faction row. A trait with no reachable reader is dead (ID-13). [UNVERIFIED by execution: no run shows a candidate whose subject is a faction id.] The writer (`field_grudge_weight`) and the gain (`stance_gain`) exist; the reach does not. Moving the grudge referent to a person is a separate ruling this design does not make. |
-| boldness, patience | out | The chooser has no risk term and no timing term (`choose.py:130-151` [CHECKED]: pursuit + stance + urgency). Each would need a new per-verb column. |
+| boldness, patience | out at HEAD; **ruled IN by Jordan, 2026-10-29 (ED-IN-0304): persons differ in risk appetite and in short-, medium- or long-term horizon (short: best results within the current season or the next; medium: within three to four seasons; long: five or more seasons)** (build waits on v10 CR-17) | The chooser has no risk term and no timing term at HEAD (`choose.py:130-151` [CHECKED]: pursuit + stance + urgency; v10 CR-17, B10-09, adds believed odds to the alignment term). Each would need a new per-verb column. |
 | `stance_gain` | out | Signed, so it scales gratitude and loyalty too; it is not vindictiveness. |
 | `choice_temperature` | out | Lower noise is always better for its holder, which fails test 4. |
 | budget `k` | out | More always helps: capability-shaped. It already varies by office, body and travel. |

@@ -306,6 +306,8 @@ name fails. In the season loop: a **telling**.
 
 ### §7.2 The coverage sweep — all six
 
+(The general method, *all directions* by routes and perspectives, is CLAUDE.md §0's; this sweep is its NERS case.)
+
 Run the other four directions as a table, naming the seam that carries each or recording the gap:
 
 | direction | what it means here | carried by |
