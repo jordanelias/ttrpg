@@ -273,12 +273,14 @@ def test_in53v_c_the_declarations_as_built():
     # AT v9 IN-49 `requisition` declares `Rung` beside it; AT v10 REM-22 `restore`, `work` and `examine`
     # declare `Site` (B10-05); AT v10 REM-23 `commit` declares `Proposition` (B10-05); AT v10 REM-24
     # `petition` declares `Person` (B10-05); AT v10 REM-25 `carry`, `found` and `build` declare `Record`
-    # beside `comply` (B10-05; ten rows -> thirteen).
+    # beside `comply` (B10-05; ten rows -> thirteen); AT v10 CP-T05-04 `argue` declares `Proposition` and
+    # `open_case` declares `Person` (B10-05; thirteen rows -> fifteen).
     assert {v for v, r in VERB_TABLE.items() if r.referent_class} == {"confer", "oblige", "comply",
                                                                       "migrate", "requisition",
                                                                       "restore", "work", "examine",
                                                                       "commit", "petition",
-                                                                      "carry", "found", "build"}
+                                                                      "carry", "found", "build",
+                                                                      "argue", "open_case"}
     assert VERB_TABLE["migrate"].referent_class == "Rung" and not VERB_TABLE["migrate"].referent_named
     assert VERB_TABLE["requisition"].referent_class == "Rung" and not VERB_TABLE["requisition"].referent_named
     assert VERB_TABLE["confer"].referent_class == VERB_TABLE["oblige"].referent_class == "Office"

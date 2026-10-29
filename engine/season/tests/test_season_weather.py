@@ -282,9 +282,20 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # (`f2381695`) is green against the old pair; and in-process on the REM-25 tree the three columns alone (the holding
 # term stubbed to `()`) read d7c03c2d... at one season and the term alone (the three columns blanked) 8f6e7aac...,
 # so each unit moves the hash by itself.
+# RE-PINNED at v10 CP-T05-04 (B10-05), A BEHAVIOUR MOVE DECLARED: `argue` declares `referent_class: Proposition` and
+# `open_case` declares `Person` (`aperture 1 s`, realm: `argue` formed for 37/35/39 of 83 persons -> 0/0/0, attempted
+# 8/10/5 -> 0, every one refused on `exists:Proposition=0`; `open_case` formed for 8/8/8 -> 6/6/8, executed 4/2/1 ->
+# 2/1/1), and `world_q.docket_question` asks the witness of a docketing about the matter docketed (asked in 41/8/3
+# calls, delivered as the question he answers in 20/1/0, `docket_reach` reading; `speak` and `determine` formed counts
+# unmoved). The build hash is equal (the build reads no verb row); one and two seasons move. Was da1ce5eb... /
+# 0f791e81... (one, two seasons). CONTROL, run: the same script (this file's `_digest` and `POP.run`, one world
+# continued through two seasons) on a detached worktree at the REM-25 tree (`92892b09`) reads the old pair, the old
+# `BASE_EVENTS` and the old thread-read arm exactly; and in-process on this tree the columns alone (the docket term stubbed to `None`) read
+# 7f36d369... at one season and 8fe360af... at two, the docket question alone (the two columns blanked) 66a48d9a... and
+# 2e37c57c..., so each unit moves the hash by itself.
 BASE_HASHES = {0: "9ff5390939742b7bbb3af0fa2551e958",
-               1: "da1ce5ebe72129fb5fbc829afdd9b49c",
-               2: "0f791e815897aae99594d888ffe29cf9"}
+               1: "26bcb37d617051724bbbd6c3b746c5a5",
+               2: "8d91a374f4a85097824e68f9e9bb26cc"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -332,8 +343,9 @@ BASE_HASHES = {0: "9ff5390939742b7bbb3af0fa2551e958",
 # RE-RECORDED at v10 REM-23 with `BASE_HASHES` (7345 -> 6647, 21490 -> 21312).
 # RE-RECORDED at v10 REM-24 with `BASE_HASHES` (6647 -> 6396, 21312 -> 21342).
 # RE-RECORDED at v10 REM-25 with `BASE_HASHES` (6396 -> 6348, 21342 -> 22009).
-BASE_EVENTS = {1: (6348, "e4c6a90cebbeb0f53b64e8e823622add79b43f59239c563c0c53aa6cd8c35ec9"),
-               2: (22009, "b4b399316e52ed2502425fbc56892796079a84546d37d1cc6ec0cc2efafdd2bf")}
+# RE-RECORDED at v10 CP-T05-04 with `BASE_HASHES` (6348 -> 6267, 22009 -> 20840).
+BASE_EVENTS = {1: (6267, "eeb4220d65ba8c6ce8fdb81d0d7801edc718f94fb4e753fde2153b617d727636"),
+               2: (20840, "297c8c3a3564719821912e5dc23500845283bf694f9c993d38912f7167e2c285")}
 
 
 def _digest(w) -> tuple:
@@ -437,7 +449,9 @@ def test_the_give_withheld_arm_reproduces_the_one_season_pin():
 #: RE-RECORDED at v10 REM-24 with `BASE_HASHES`: 6652 / 98bef289... -> 6401 / 71a40c5a... (`petition` declares `Person`).
 #: RE-RECORDED at v10 REM-25 with `BASE_HASHES`: 6401 / 71a40c5a... -> 6353 / 09edad05... (`carry`, `found` and `build`
 #: declare `Record`).
-THREAD_READ_WITHHELD_EVENTS_1 = (6353, "09edad057844f642fc6aed2fd442c305fa36662f0bb877c9e66b372a104f2b4c")
+#: RE-RECORDED at v10 CP-T05-04 with `BASE_HASHES`: 6353 / 09edad05... -> 6272 / 70a5221e... (`argue` declares
+#: `Proposition`, `open_case` declares `Person`, and the docket question).
+THREAD_READ_WITHHELD_EVENTS_1 = (6272, "70a5221ef75520ff6c0ffa9c7a5ee2f80e35e1c6ced2d0950005d6d153c45b9c")
 
 
 def test_the_thread_read_withheld_arm_is_pinned_and_differs_from_the_shipped_season():

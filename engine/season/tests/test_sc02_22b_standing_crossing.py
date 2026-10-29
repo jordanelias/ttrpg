@@ -24,12 +24,14 @@ is the teller who "may have said nothing".
 
 from __future__ import annotations
 
+import dataclasses
+
 import yaml
 
 from ..data import files
 from ..data.fixtures import DEFAULT_FIXTURES
-from ..data.rosters import STANDING_CROSSED
-from ..data.verbs import EVENT_KINDS
+from ..data.rosters import OCCASION_ONLY_CLASSES, STANDING_CROSSED
+from ..data.verbs import DECLARED_CLASSES, EVENT_KINDS, VERB_TABLE
 from ..data.matrix import WriteClass
 from ..decision import aggregate_questions, opening_set, standing_of
 from ..decision.choose import pack_scenes
@@ -151,20 +153,8 @@ def test_step23_the_bailiff_told_three_things_crosses_and_his_question_names_the
     assert world_q.occasioned_by(w, q) == [x.id], "an act formed from the question would not cite the crossing"
 
 
-def test_step23_he_opens_a_case_against_one_of_them_who_may_have_said_nothing():
-    """The crossing changes what can be chosen: the bailiff's opening set over the crossing's question
-    holds `open_case` on `p_low`, the origin who never spoke to him; released and folded as DELIBERATE
-    would, it opens the case and the case's Event walks back to the crossing. CONTROL, the same world at
-    the control arm `()`: no crossing, and NO question he holds names `p_low`, so no candidate on him
-    forms at all -- the telling's own claims are about the bailiff, and `p_low` reaches him only
-    through the crossing."""
-    w, d = _world()
-    _matter(w, d)
-    bailiff = w.persons[BAILIFF]
-    q, = _crossing_question(w)
-    cands = [c for c in opening_set(bailiff, View(BAILIFF, [], w.fixtures.get("view_k"), q), q, w.fixtures)
-             if c.verb == "open_case" and c.subject == ORIGIN]
-    assert cands, "no `open_case` on the silent origin formed from the crossing's question"
+def _open_the_case(w, d, bailiff, q, cands):
+    """Release `cands[0]` as DELIBERATE would and fold it: the case is opened and its Event cites the crossing."""
     acts = []
     for sc in pack_scenes(bailiff, cands[:1], 5, w.fixtures, lambda pid, verb, s: f"s23:{verb}:{s}",
                           occasion=q):
@@ -177,6 +167,33 @@ def test_step23_he_opens_a_case_against_one_of_them_who_may_have_said_nothing():
     assert opened, f"the case was not opened: {[e.kind for e in out]}"
     assert _crossings(w)[0].id in opened[0].causes, (opened[0].causes, "the case does not cite the crossing")
 
+
+def test_step23_he_opens_a_case_against_one_of_them_who_may_have_said_nothing(monkeypatch):
+    """The crossing changes what can be chosen: the bailiff's opening set over the crossing's question
+    holds `open_case` on `p_low`, the origin who never spoke to him; released and folded as DELIBERATE
+    would, it opens the case and the case's Event walks back to the crossing. CONTROL, the same world at
+    the control arm `()`: no crossing, and NO question he holds names `p_low`, so no candidate on him
+    forms at all -- the telling's own claims are about the bailiff, and `p_low` reaches him only
+    through the crossing.
+
+    v10 CP-T05-04 (B10-05): THIS TEST'S ASSERTIONS ARE KEPT AS THEY WERE AND EVALUATED WITH `open_case`'S
+    CLASS BLANKED IN-PROCESS (below). The route they walk is one the class closes: the opening set is read over
+    the crossing question as `questions_for` lists it (twelfth of twelve for the bailiff, behind eleven
+    ordinary claim questions, so under `first` it is never the one he answers) and `open_case` now declares
+    `referent_class: Person`, so it forms on a person only where the question he ANSWERS carries him as a
+    `Person` (REM-21's term stamps the delivered question's own referents, and only that one). The shipped
+    behaviour is `test_step23_cp_t05_04_...` below: the same chain through the stamped question."""
+    row = VERB_TABLE["open_case"]
+    monkeypatch.setitem(VERB_TABLE, "open_case", dataclasses.replace(row, referent_class=""))
+    w, d = _world()
+    _matter(w, d)
+    bailiff = w.persons[BAILIFF]
+    q, = _crossing_question(w)
+    cands = [c for c in opening_set(bailiff, View(BAILIFF, [], w.fixtures.get("view_k"), q), q, w.fixtures)
+             if c.verb == "open_case" and c.subject == ORIGIN]
+    assert cands, "no `open_case` on the silent origin formed from the crossing's question"
+    _open_the_case(w, d, bailiff, q, cands)
+
     wc, dc = _world(CONTROL)
     _matter(wc, dc)
     assert _crossings(wc) == []
@@ -185,6 +202,30 @@ def test_step23_he_opens_a_case_against_one_of_them_who_may_have_said_nothing():
     assert not any(c.verb == "open_case" and c.subject == ORIGIN for q in qs
                    for c in opening_set(wc.persons[BAILIFF], View(BAILIFF, [], wc.fixtures.get("view_k"), q),
                                         q, wc.fixtures))
+
+
+def test_step23_cp_t05_04_the_shipped_row_opens_the_case_on_the_origin_only_where_the_crossing_question_is_answered():
+    """THE SHIPPED BEHAVIOUR of the test above (v10 CP-T05-04, B10-05): `open_case` declares `referent_class:
+    Person`. CLOSED ROUTE, observed: the crossing question as `questions_for` lists it (not the one he answers,
+    so the splice stamps nothing on it) carries no class, and the shipped row forms NO `open_case` on the
+    origin from it. OPEN ROUTE: the question he ANSWERS is stamped by REM-21's term (its own plain referents of
+    a declared class, as `questions_for` stamps `out[0]`), here the same crossing question made the one he
+    answers; it carries the origin as a `Person`, `open_case` forms on him and on the other two tellers (the
+    question's persons) and on nothing else, and the case is opened through the same chain and cites the
+    crossing."""
+    w, d = _world()
+    _matter(w, d)
+    bailiff = w.persons[BAILIFF]
+    q, = _crossing_question(w)
+    view = View(BAILIFF, [], w.fixtures.get("view_k"), q)
+    assert q.classes == () and q.referents == TELLERS, q
+    assert not [c for c in opening_set(bailiff, view, q, w.fixtures) if c.verb == "open_case"]
+    answered = world_q._stamped(q, world_q.own_referents_of_class(w, q, DECLARED_CLASSES - OCCASION_ONLY_CLASSES), w)
+    assert answered.classes == tuple((t, "Person") for t in TELLERS), answered
+    cands = [c for c in opening_set(bailiff, View(BAILIFF, [], w.fixtures.get("view_k"), answered), answered,
+                                    w.fixtures) if c.verb == "open_case"]
+    assert sorted(c.subject for c in cands) == sorted(TELLERS), cands
+    _open_the_case(w, d, bailiff, answered, [c for c in cands if c.subject == ORIGIN])
 
 
 # ======================================================================================

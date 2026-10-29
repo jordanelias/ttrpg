@@ -34,8 +34,12 @@ rung and a person, with what a person's own `person`-kind rung reads as. REM-25 
 `records_held_for_holding_rows`, the Records on a person's live `hold` edges whose kind a `Record` row
 asking `held_by` of `subject` asks `existence` of): the stamper, the formation (a person holding a
 petition forms `carry` on it and the fold executes it; a person holding none forms none), the works rows
-through the real fold, and the cost the shared class creates (measured, pinned). The last section is the
-batch's control (3), written over the rows
+through the real fold, and the cost the shared class creates (measured, pinned). CP-T05-04 (`argue`
+declares `Proposition`, `open_case` declares `Person`, and `world_q.docket_question` asks the witness of
+a docketing about the matter docketed): the two formations and their done tests, the docket question's
+asking (the claim in his own ledger, found through the act, and no stranger), the home's two
+limits, and the one place the HR-9 control below does not hold (`open_case`'s class removes formations
+the fold admits). The last section is the batch's control (3), written over the rows
 that declare `Site`, `Proposition` or `Person`, and the `Record` rows whose cell asks the actor to hold
 the subject, so a later item adds its row by its column and not by a copy.
 
@@ -53,20 +57,32 @@ from unittest import mock
 import pytest
 
 from engine.season.data import verbs as _verbs
+from engine.season.data.matrix import WriteClass
 from engine.season.data.requires import UNKNOWN, AllOf, Existence
-from engine.season.data.rosters import OCCASION_ONLY_CLASSES, REFERENT_CLASSES
+from engine.season.data.rosters import OCCASION_ONLY_CLASSES, PURSUITS, REFERENT_CLASSES
 from engine.season.data.verbs import DECLARED_CLASSES, HOLDING_RECORD_KINDS, RECORD_REFERENT_KINDS, VERB_TABLE
 from engine.season.decision import options as _options
 from engine.season.decision.choose import _payload_of
 from engine.season.decision.options import seat_of
 from engine.season.gaps import Forbidden
 from engine.season.harness import probes as P
+from engine.season.loop.driver import mint_token
 from engine.season.queries import world_q
 from engine.season.state.carriers import Act, Claim, Proposition, Question, Record, Tenure
 
 from .test_g3_not_yours import _gov_world, _hold
 from .test_in09_dispensation_answer import HOLDER, WRIT, _with_writ
+from .test_in45_carry import PARTY as CARRY_PARTY
+from .test_in45_carry import PETITIONER as CARRY_PETITIONER
+from .test_in45_carry import _carry, _filed
+from .test_in45_carry import _fold as _carry_fold
 from .test_in53_vacancy_need import _ambition, _formed, _know, _planted
+from .test_sc01_fired_slot import _sitting
+from .test_u7_remit import DUKE, SEAT
+from .test_u7_remit import PARTY as CASE_PARTY
+from .test_u7_remit import _open
+from .test_u7_remit import _fold as _u7_fold
+from .test_u7_remit import _world as _u7_world
 from .test_works_founding import (
     ABSENT, HARBOUR, HEARTH, PRESENT, SETTLEMENT, _declare, _fold, _kinds, _ripen, _stock,
 )
@@ -795,6 +811,297 @@ def test_rem25_c_the_class_is_shared_so_the_rows_form_on_each_others_records_and
     assert not ok and "exists:petition" in reads, reads
 
 
+# ======================================================================================
+# CP-T05-04 (B10-05; home T05 §2 CP-T05-04, limits `-08` AM-D-05): THE PROCEEDINGS VERBS' FORMATION.
+# TWO COLUMNS -- `argue` declares `Proposition` (the arguer's own uttered Propositions reach his question
+# through the maker's hold), `open_case` declares `Person` -- AND ONE QUESTION, `world_q.docket_question`,
+# the sitting question's sibling: the docketed matters whose docketing Event his OWN ledger holds a claim
+# of, as PLAIN referents of a `claim_landed` question. `speak` and `determine` get NO class (a class is
+# the referent's own type), so both keep forming on plain referents and the sitting route stays. The
+# readings (formed, attempted, executed per verb; the unclassed rows that newly form on a docketed
+# person) are `aperture 1 s`'s, in the commit body, never an assertion here.
+# ======================================================================================
+
+#: The rows CP-T05-04 gives a class; control (3) below walks them by their column, these add each row's
+#: own formation assertions (`argue` forms one Candidate per hearer it knows, so it is not `PROPOSITION_ROWS`').
+ARGUE_ROWS = ("argue",)
+OPEN_CASE_ROWS = ("open_case",)
+PROCEEDINGS_ROWS = ARGUE_ROWS + OPEN_CASE_ROWS
+HEARER = "p_hearer"
+#: The Event kinds that put a matter before a room, spelt without `world_q.DOCKETING_KINDS`.
+DOCKETING_EVENT_KINDS = frozenset({"case.opened", "petition.carried"})
+
+
+def _hearer_world():
+    """`_works_world` with a hearer at the arguer's place (`argue`'s `with` conjunct) whom the arguer KNOWS
+    exists (`known_persons`, the fan `argue`'s `to` ranges over). The claim is dated before the landing
+    floor so it raises no question of its own and `_ask`'s question stays the first."""
+    w, d = _works_world()
+    P.plant_cohort(w, HEARER, SETTLEMENT)
+    w.persons[PRESENT].ledger.append(Claim(f"c_knows_{HEARER}", PRESENT, HEARER, "exists:Person", 1, -2,
+                                           "firsthand", 100, "own"))
+    return w, d
+
+
+def test_cp_t05_04_the_docketing_kinds_are_derived_off_the_rows_that_write_the_docket_item():
+    """`DOCKETING_KINDS` is the success kinds of the rows writing a docket item's `petition` key, and it is
+    exactly the two the home names -- not `determine`'s, which clears a matter and writes `DocketItem.matter`
+    alone. THE ANTI-VACUITY: the two writers are `open_case` and `carry` and the set is not empty."""
+    writers = {v for v, r in VERB_TABLE.items() if "DocketItem.petition" in r.writes}
+    assert writers == {"open_case", "carry"}, writers
+    assert world_q.DOCKETING_KINDS == DOCKETING_EVENT_KINDS
+    assert "DocketItem.matter" in VERB_TABLE["determine"].writes and "determine" not in writers
+
+
+# --- (a) THE FORMATION: argue FORMS ON THE PROPOSITION, open_case ON THE PERSON ---------------
+
+def test_cp_t05_04_a_a_question_about_a_person_and_a_proposition_forms_argue_on_the_proposition_only(
+        monkeypatch):
+    """THE FIRST ASSERTION, which deleting the column reddens (`test_cp_t05_04_a_mutation_...` below runs
+    that deletion, and the build ran it against the YAML itself): `p_high` knows a hearer and answers a
+    question about `p_low`, the harbour, a Proposition and a rung; the term stamps the Proposition, and
+    `argue` forms on it, to the hearer, and on nothing else. THE CONTROL: the person still forms the plain
+    rows on all four referents, so the class removed this verb's formations and not the person's."""
+    w, _ = _hearer_world()
+    q = _ask(monkeypatch, w, PRESENT)
+    assert ("prop_x", "Proposition") in q.classes, q
+    formed = _formed(w, PRESENT, q)
+    assert [(c.subject, c.operands["to"]) for c in formed if c.verb == "argue"] == [("prop_x", HEARER)], formed
+    plain = {c.subject for c in formed if not VERB_TABLE[c.verb].referent_class}
+    assert set(MIXED) <= plain, plain
+
+
+def test_cp_t05_04_a_a_question_about_a_rung_and_a_person_forms_open_case_on_the_person_only(monkeypatch):
+    """THE FIRST ASSERTION for the second column: `p_high`, who sits the Duke's seat (`remit:determine`),
+    answers a question about the settlement rung `S` and the person `p_low`; the term stamps the person, and
+    `open_case` forms on him and on nothing else. THE CONTROL: the plain rows still form on both."""
+    w, _ = _works_world()
+    q = _ask(monkeypatch, w, PRESENT, RUNG_AND_PERSON)
+    assert q.classes == (("p_low", "Person"),), q
+    formed = _formed(w, PRESENT, q)
+    assert [c.subject for c in formed if c.verb == "open_case"] == ["p_low"], formed
+    plain = {c.subject for c in formed if not VERB_TABLE[c.verb].referent_class}
+    assert set(RUNG_AND_PERSON) <= plain, plain
+
+
+def test_cp_t05_04_a_mutation_without_its_column_the_row_forms_on_every_referent(monkeypatch):
+    """THE MUTATION, EXECUTED for both columns (the row copied with no class): `argue` forms on all four
+    referents, the person, the Site and the rung among them -- the unclassed formation `aperture 1 s` read
+    refused 8/10/5 on `exists:Proposition=0` -- and `open_case` forms on the rung as well as the person."""
+    w, _ = _hearer_world()
+    q = _ask(monkeypatch, w, PRESENT)
+    assert [c.subject for c in _formed_without_class(w, PRESENT, q, "argue")] == list(MIXED)
+    assert [c.subject for c in _formed(w, PRESENT, q) if c.verb == "argue"] == ["prop_x"]
+    w, _ = _works_world()
+    q = _ask(monkeypatch, w, PRESENT, RUNG_AND_PERSON)
+    assert [c.subject for c in _formed_without_class(w, PRESENT, q, "open_case")] == list(RUNG_AND_PERSON)
+    assert [c.subject for c in _formed(w, PRESENT, q) if c.verb == "open_case"] == ["p_low"]
+
+
+# --- (b) THE DONE TESTS (P9): THE FORMED CANDIDATE RUNS THROUGH THE REAL FOLD -------------------
+
+def test_cp_t05_04_b_a_person_arguing_a_proposition_to_a_hearer_executes_through_the_fold(monkeypatch):
+    """The Candidate `p_high`'s question forms on the Proposition is minted as the chooser mints it and
+    folded by the real driver: a contested `argue` whose band is the seed's, and in every band a kind the
+    row emits for a lawful argument (`argument.won`, `argument.lost`) -- never `argument.refused`. The
+    two hold different pursuits so a won argument has something to move (a won argument that moves nothing
+    is refused at its write). THE CONTROL, the Candidate the unclassed row would also have formed on the
+    person `p_low`: the admission refuses it (`exists:Proposition` = 0) and the fold emits
+    `argument.refused`. The class claims no more than that: it is the wrong-kind formation that is gone, and
+    whether an arguer's question ever carries a Proposition in a season is `aperture`'s reading."""
+    w, d = _hearer_world()
+    a, b = sorted(PURSUITS)[:2]
+    w.persons[PRESENT].pursuits = {a: 0.9, b: 0.1}
+    w.persons[HEARER].pursuits = {a: 0.1, b: 0.9}
+    q = _ask(monkeypatch, w, PRESENT)
+    p = w.persons[PRESENT]
+    (c,) = [c for c in _formed(w, PRESENT, q) if c.verb == "argue"]
+    assert (c.subject, c.operands["to"]) == ("prop_x", HEARER)
+    wrong = [c for c in _formed_without_class(w, PRESENT, q, "argue") if c.subject == "p_low"]
+    assert [x.operands["to"] for x in wrong] == [HEARER]
+    refused = dataclasses.replace(_act_of(wrong[0], p), id="a_argue_wrong_kind")
+    assert _kinds(_fold(w, d, refused)) == ["argument.refused"]
+    assert _kinds(_fold(w, d, _act_of(c, p)))[0] in ("argument.won", "argument.lost")
+
+
+def test_cp_t05_04_b_a_seat_opening_a_case_on_a_person_executes_and_the_rung_it_no_longer_forms_on_would_too(
+        monkeypatch):
+    """`p_high`'s Candidate on the person is minted as the chooser mints it (the seat riding as `Act.via`)
+    and folded: `case.opened`, and the person is on the docket. THE CONTROL IS THE CLOSED ROUTE, kept
+    evaluated with the class blanked in-process (`_formed_without_class`): the Candidate the unclassed row
+    also formed on the settlement rung `S` is ADMITTED by the same fold -- `open_case` is a remit verb
+    whose cell asks the seat's purview over the matter's place, not its kind -- and docketing a rung is a
+    case `determine` can never take off (its `party` conjunct needs a person: `determine.refused`). That is
+    what the class removes (the home, D:#75), and it is an EXECUTING formation, not a refusal: the shipped
+    row no longer forms it, and a hand-built act still may."""
+    w, d = _works_world()
+    q = _ask(monkeypatch, w, PRESENT, RUNG_AND_PERSON)
+    p = w.persons[PRESENT]
+    (c,) = [c for c in _formed(w, PRESENT, q) if c.verb == "open_case"]
+    (rung,) = [c for c in _formed_without_class(w, PRESENT, q, "open_case") if c.subject == "S"]
+    assert world_q.docketed(w, "p_low") == [] and world_q.docketed(w, "S") == []
+    assert _kinds(_fold(w, d, _act_of(c, p))) == ["case.opened"]
+    assert [i["matter"] for i in world_q.docketed(w, "p_low")] == ["p_low"]
+    assert _kinds(_fold(w, d, dataclasses.replace(_act_of(rung, p), id="a_open_case_rung"))) == ["case.opened"]
+    assert [i["matter"] for i in world_q.docketed(w, "S")] == ["S"]
+    undeterminable = Act("a_determine_rung", PRESENT, "determine", payload={"subject": "S"}, via=SEAT)
+    assert _kinds(_fold(w, d, undeterminable)) == ["determine.refused"]
+    assert [i["matter"] for i in world_q.docketed(w, "S")] == ["S"], "the rung stays docketed for ever"
+
+
+# --- (c) THE DOCKET QUESTION: THE WITNESS OF A DOCKETING IS ASKED ABOUT THE MATTER ---------------
+
+def _docketed_case():
+    """The Duke (`p_high`) opens a case on `p_mid` through the real fold and the season's WITNESS deposits
+    it: a dateless docket item, and the claims of `case.opened` in the ledgers of whoever stood at `S`."""
+    w, d = _u7_world()
+    out = _u7_fold(w, d, _open("oc"))
+    assert [e.kind for e in out] == ["case.opened"]
+    d.witness(mint_token(w, WriteClass.INTERIOR), out)
+    (item,) = w.docket
+    assert item["date"] is None and item["matter"] == CASE_PARTY
+    return w, d
+
+
+def test_cp_t05_04_c_a_person_holding_case_opened_of_a_dateless_matter_is_asked_and_forms_speak_on_it():
+    """THE HOME'S FALSIFIER: the opener holds `case.opened` of a dateless docketed matter, so the docket
+    question names it (one question, plain referents, the `claim_landed` source, `about` a claim he holds
+    of the Event), it is among the questions `questions_for` returns, and `speak` forms on the matter from
+    it. THE CONTROLS: nobody who holds no such claim is asked (the copyist, the clerk and the stranger live
+    below the Duke's seat and saw nothing; the King stands outside it), and before the case is opened no
+    one is asked."""
+    w, d = _u7_world()
+    assert all(world_q.docket_question(w, p) is None for p in w.persons.values())
+    out = _u7_fold(w, d, _open("oc"))
+    d.witness(mint_token(w, WriteClass.INTERIOR), out)
+    duke = w.persons[DUKE]
+    dq = world_q.docket_question(w, duke)
+    assert (dq.id, dq.source, dq.referents, dq.classes) == (f"q:docket:{CASE_PARTY}", "claim_landed",
+                                                            (CASE_PARTY,), ())
+    assert dq.about in {c.id for c in duke.ledger if c.predicate == "case.opened"}
+    assert dq in world_q.questions_for(w, duke)
+    assert [c.subject for c in _formed(w, DUKE, dq) if c.verb == "speak"] == [CASE_PARTY]
+    for pid in sorted(set(w.persons) - {DUKE}):
+        assert world_q.docket_question(w, w.persons[pid]) is None, pid
+        assert not [q for q in world_q.questions_for(w, w.persons[pid]) if q.id.startswith("q:docket:")], pid
+
+
+def test_cp_t05_04_c_the_claim_is_of_the_event_and_names_the_actor_and_the_file_never_the_matter():
+    """WHY THE LINK IS THE ACT AND NOT THE CLAIM'S SUBJECT (the ledger test `sittings_before` makes reads a
+    firing's own subject, a venue): no claim a `case.opened` leaves names the matter -- they name its actor
+    and the case file -- so the docket question finds the matter through the act the Event's cause is
+    (`docketed_by`). Mutation: asking the claim's subject finds nothing, and the person is asked no more."""
+    w, _ = _docketed_case()
+    duke = w.persons[DUKE]
+    held = [c for c in duke.ledger if c.predicate == "case.opened"]
+    assert held and CASE_PARTY not in {c.subject for c in held}, [(c.subject, c.predicate) for c in held]
+    assert {c.subject for c in held} == {DUKE, "rec:oc"}
+    assert all(world_q.docketed_by(w, c) == (CASE_PARTY,) for c in held)
+    other = [c for c in duke.ledger if c.predicate != "case.opened"]
+    assert other and all(world_q.docketed_by(w, c) == () for c in other)
+
+
+def test_cp_t05_04_c_a_matter_taken_off_the_docket_or_never_witnessed_is_not_asked():
+    """CONTROLS, each one clause from the asked question: a matter a determination has cleared (written back
+    to `None`, the slot kept) names nothing and the Duke is asked no more; and a second case docketed but
+    never witnessed (no deposit) does not widen his question -- his claims are of the first Event only."""
+    w, d = _docketed_case()
+    duke = w.persons[DUKE]
+    assert [_u7_fold(w, d, _open("oc2", subject="p_low"))[0].kind] == ["case.opened"]
+    assert [i["matter"] for i in w.docket] == [CASE_PARTY, "p_low"]
+    assert world_q.docket_question(w, duke).referents == (CASE_PARTY,)
+    w.docket[0]["matter"] = None
+    assert world_q.docket_question(w, duke) is None
+
+
+def test_cp_t05_04_c_the_carry_route_asks_the_petitioner_about_the_matter_the_petition_names():
+    """`petition.carried` is the other docketing Event: the carried petition's terms are docketed, the item
+    names the petition, and the witnesses of the carriage -- the petitioner and whoever stood with him at
+    `Hh` -- are asked about the matter, found through the act's subject (the petition) and the item's
+    `petition` key. THE CONTROLS: the King stands at the realm and saw nothing; and before the carriage
+    (the petition filed and held, nothing docketed) no one is asked."""
+    w, d = _filed()
+    assert all(world_q.docket_question(w, p) is None for p in w.persons.values())
+    out = _carry_fold(w, d, _carry("c1"))
+    assert [e.kind for e in out] == ["petition.carried"]
+    d.witness(mint_token(w, WriteClass.INTERIOR), out)
+    low = w.persons[CARRY_PETITIONER]
+    dq = world_q.docket_question(w, low)
+    assert (dq.id, dq.referents) == (f"q:docket:{CARRY_PARTY}", (CARRY_PARTY,))
+    assert next(c.predicate for c in low.ledger if c.id == dq.about) == "petition.carried"
+    assert world_q.docket_question(w, w.persons["p_other"]).referents == (CARRY_PARTY,)
+    assert world_q.docket_question(w, w.persons["p_king"]) is None
+
+
+def test_cp_t05_04_c_a_judge_holding_date_fired_and_no_docketing_claim_still_forms_determine_from_the_sitting():
+    """THE HOME'S LAST FALSIFIER, and why `determine` gets no class: the sitting route is untouched. A
+    sitting fires at `S`, a case is opened on `p_mid` for its slot, and the Duke -- on the bench, holding
+    the firing's `date.fired` claim -- has his `case.opened` claims taken out of his ledger. He is asked by
+    the sitting question and by no docket question, and `determine` forms on the matter from it. THE
+    CONTROL: with his docketing claims back he is asked by both, and `determine` forms from either."""
+    w, d = _u7_world(pool_default=30)
+    duke = w.persons[DUKE]
+    did = _sitting(w, d)
+    out = _u7_fold(w, d, _open("oc"))
+    d.witness(mint_token(w, WriteClass.INTERIOR), out)
+    sitting = f"q:sitting:{did}:{CASE_PARTY}"
+    kept = list(duke.ledger)
+    duke.ledger[:] = [c for c in kept if c.predicate not in DOCKETING_EVENT_KINDS]
+    ids = [q.id for q in world_q.questions_for(w, duke)]
+    assert sitting in ids and not [i for i in ids if i.startswith("q:docket:")], ids
+    (sq,) = [q for q in world_q.questions_for(w, duke) if q.id == sitting]
+    assert [c.subject for c in _formed(w, DUKE, sq) if c.verb == "determine"] == [CASE_PARTY]
+    duke.ledger[:] = kept
+    qs = {q.id: q for q in world_q.questions_for(w, duke)}
+    assert sitting in qs and f"q:docket:{CASE_PARTY}" in qs
+    assert all([c.subject for c in _formed(w, DUKE, q) if c.verb == "determine"] == [CASE_PARTY]
+               for q in (qs[sitting], qs[f"q:docket:{CASE_PARTY}"]))
+
+
+# --- (d) THE TWO LIMITS OF `-08` AM-D-05, AS THEY STAND ON A HAND-BUILT WORLD ---------------------
+
+def test_cp_t05_04_d_limit_1_the_docket_question_is_delivered_only_where_it_sorts_first():
+    """LIMIT (1): `question_aggregation_rule` is `first` (`data/fixtures.py`), so a person answers `out[0]`
+    alone and the docket question reaches him only when it sorts first by `attention_key`. The Duke has
+    just witnessed the opening, so the claims it landed raise questions of their own that sort ahead and
+    the docket question is asked but not delivered; a season later those claims are no longer new, nothing
+    sorts ahead of the standing question, and it is delivered. So the formed `speak`/`determine` counts at
+    the exit are a lower bound, and the reading is the formed counts, not the question's existence."""
+    w, _ = _docketed_case()
+    duke = w.persons[DUKE]
+    assert w.fixtures.get("question_aggregation_rule") == "first"
+    ids = [q.id for q in world_q.questions_for(w, duke)]
+    assert f"q:docket:{CASE_PARTY}" in ids and ids[0] != f"q:docket:{CASE_PARTY}", ids
+    w.tick += 3
+    ids = [q.id for q in world_q.questions_for(w, duke)]
+    assert f"q:docket:{CASE_PARTY}" in ids and ids[0] == f"q:docket:{CASE_PARTY}", ids
+
+
+def test_cp_t05_04_d_limit_2_a_docketed_person_is_a_plain_referent_of_every_unclassed_row():
+    """LIMIT (2): the docket question carries the docketed person as a PLAIN referent, so every row with no
+    `referent_class` forms on him; a classed row forms only on what the splice stamps for the question
+    (`petition` and `open_case` on the person, `Person`), never on the plain referent as such. The exit
+    lists the unclassed rows that newly form (`aperture`'s reading); here the property, on the question as
+    the person is delivered it (a season on, when it sorts first): every unclassed row's subjects are the
+    docketed person, and every classed row's are inside what the question carries as that class."""
+    w, _ = _docketed_case()
+    w.tick += 3
+    duke = w.persons[DUKE]
+    q = world_q.questions_for(w, duke)[0]
+    assert q.id == f"q:docket:{CASE_PARTY}" and q.referents == (CASE_PARTY,), q
+    assert (CASE_PARTY, "Person") in q.classes, q
+    formed = _formed(w, DUKE, q)
+    plain = {c.verb for c in formed if not VERB_TABLE[c.verb].referent_class}
+    assert {"speak", "determine"} <= plain and len(plain) > 2, sorted(plain)
+    for verb in sorted({c.verb for c in formed}):
+        row = VERB_TABLE[verb]
+        subjects = {c.subject for c in formed if c.verb == verb}
+        if not row.referent_class:
+            assert subjects == {CASE_PARTY}, (verb, subjects)
+        else:
+            assert subjects <= {i for i, k in q.classes if k == row.referent_class}, (verb, subjects)
+
+
 # --- (c) CONTROL (3) OF B10-05's HR-9: A CLASS REMOVES REFUSALS AND NOTHING ELSE --------------
 
 #: The classes whose rows control (3) walks. The ROWS are read off the table, so a later item that
@@ -802,6 +1109,16 @@ def test_rem25_c_the_class_is_shared_so_the_rows_form_on_each_others_records_and
 #: here names a verb but `SITE_ROWS`, `PROPOSITION_ROWS` and `PERSON_ROWS` (the rows whose extra
 #: assertions are stated), and a row is added by its data and never by a copy.
 CONTROL3_CLASSES = frozenset({"Site", "Proposition", "Person"})
+
+#: THE ONE PLACE THE PROOF DOES NOT HOLD (CP-T05-04): `open_case`'s `Person` class removes formations the
+#: fold ADMITS, because the row is a `remit:` verb whose cell asks the seat's purview over the matter's
+#: PLACE and no kind (`basis: purview`), so the Site and the settlement rung of the question are matters
+#: the Duke's seat reaches and the fold opens a case on. The home states it as the point (D:#75: stop
+#: docketing Rungs `determine` can never take off), so the loop does not assert `not ok` for this row; it
+#: pins the removed Candidates' admitted subjects exactly (`{verb: subjects}`), so the exemption is
+#: observed and cannot go stale, and the Proposition (no place: `purview` False) is still held to a
+#: refusal. Every other classed row is held to the unconditional `not ok`.
+REMOVES_ADMITTED = {"open_case": frozenset({"site_harbour", "S"})}
 
 
 def _control3_rows() -> dict:
@@ -854,26 +1171,41 @@ def test_rem22_c_every_candidate_a_class_removes_force_admitted_refuses_on_the_r
     row whose cell asks `held_by` of `subject`), in a world where `p_high` HOLDS a petition and a works, so
     the question carries two Records. A `Record` row's class keeps every held Record (one class cannot tell
     a petition from a works), so for these rows the kept Candidates are one per held Record and the loop
-    asserts exactly those on a Record of the row's own kind are admitted, and that there is at least one."""
-    w, d = _works_world()
+    asserts exactly those on a Record of the row's own kind are admitted, and that there is at least one.
+
+    CP-T05-04: `argue` (`Proposition`) and `open_case` (`Person`) enter by their column, in a world that also
+    holds a hearer the arguer knows at his own place (`_hearer_world`: `argue` forms one Candidate per known
+    hearer, and its kept Candidate must be one the fold admits, which needs the hearer WITH him).
+    ⚠ THE PROOF FAILS FOR `open_case` AND THE LOOP SAYS SO RATHER THAN BENDING: its class removes
+    formations on the Site and the rung that the fold ADMITS (`REMOVES_ADMITTED`), pinned exactly, with the
+    Proposition still refused (on `purview`, a Proposition has no place)."""
+    w, d = _hearer_world()
     pet = _file_petition(w, d)
     _declare(w, d, "wk_c3", "hearth", SETTLEMENT, actor=PRESENT)
     q = _ask(monkeypatch, w, PRESENT)
     p = w.persons[PRESENT]
     rows = _control3_rows()
-    assert set(SITE_ROWS + PROPOSITION_ROWS + PERSON_ROWS + HOLDING_ROWS) <= set(rows), sorted(rows)
+    assert set(SITE_ROWS + PROPOSITION_ROWS + PERSON_ROWS + HOLDING_ROWS + PROCEEDINGS_ROWS) <= set(rows), sorted(rows)
     formed = _formed(w, PRESENT, q)
     kept = {c.verb: c for c in formed}
     checked = collections.Counter()
+    admitted_removed = collections.defaultdict(set)
     for verb, row in sorted(rows.items()):
         own = {r for r, k in q.classes if k == row.referent_class}
         removed = [c for c in _formed_without_class(w, PRESENT, q, verb) if c.subject not in own]
         for c in removed:
             ok, _kinds_, verdict = d._admits(w, _act_of(c, p), row)
+            checked[verb] += 1
+            if verb in REMOVES_ADMITTED:
+                if ok:
+                    admitted_removed[verb].add(c.subject)
+                else:
+                    assert any(o.predicate.startswith("purview:") and o.value is False for o in verdict.observed), (
+                        verb, c, verdict)
+                continue
             assert not ok, (verb, c)
             _refuses_on_the_rows_kind(row, verdict, c)
-            checked[verb] += 1
-        if verb in SITE_ROWS + PROPOSITION_ROWS + PERSON_ROWS:
+        if verb in SITE_ROWS + PROPOSITION_ROWS + PERSON_ROWS + PROCEEDINGS_ROWS:
             assert {c.subject for c in removed} == set(MIXED) - own, (verb, removed)
             assert d._admits(w, _act_of(kept[verb], p), row)[0], (verb, kept[verb])
         if row.referent_class == "Record":
@@ -884,3 +1216,4 @@ def test_rem22_c_every_candidate_a_class_removes_force_admitted_refuses_on_the_r
             assert admitted == {r for r in own if w.records[r].kind in kinds} and admitted, (verb, admitted)
             assert {c.subject for c in removed} == set(MIXED), (verb, removed)
     assert set(checked) == set(rows) and min(checked.values()) >= 1, (sorted(rows), checked)
+    assert {v: frozenset(s) for v, s in admitted_removed.items()} == REMOVES_ADMITTED, dict(admitted_removed)

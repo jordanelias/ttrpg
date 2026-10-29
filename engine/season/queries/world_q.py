@@ -48,7 +48,8 @@ from ..data.rosters import (
 # (`OPENERS-DERIVE`); `endings_reached` evaluates the `ENDINGS` vocabulary imported above.
 # v10 REM-21: `DECLARED_CLASSES`, the referent classes some row declares, the same way.
 from ..data.verbs import (
-    DECLARED_CLASSES, HOLDING_RECORD_KINDS, RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS, _OPENERS_FROM_EFFECTS,
+    DECLARED_CLASSES, HOLDING_RECORD_KINDS, RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS, VERB_TABLE,
+    _OPENERS_FROM_EFFECTS,
 )
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
@@ -318,6 +319,87 @@ def sittings_before(w: World, p: Person) -> list[tuple]:
         if heard and p.id in judging_set(w, venue):
             out.append((did, LedgerReader(heard).belief_among(), tuple(dict.fromkeys(matters))))
     return out
+
+
+# v10 CP-T05-04 (B10-05, AM-D-05): THE EVENT KINDS THAT PUT A MATTER BEFORE A ROOM, derived off the rows
+# (no verb name, no kind literal): the success kinds of the rows that write a docket item's `petition` key
+# -- `_docket_item`'s whole shape, which only the two docketing acts declare (`open_case` by remit, `carry`
+# by right; `determine` clears a matter and declares `DocketItem.matter` alone). Refused at import if no
+# row writes it, `WORKS_KIND`'s reason: `docket_question` would otherwise match nothing for ever and read
+# as an honest absence.
+DOCKETING_KINDS = frozenset(k for row in VERB_TABLE.values()
+                            if f"{DOCKET_KIND}.{DOCKET_PETITION}" in row.writes for k in row.emits)
+if not DOCKETING_KINDS:
+    raise Unspecified(
+        f"no verb-table row writes {DOCKET_KIND}.{DOCKET_PETITION}, so no Event kind is known to put a "
+        "matter on a docket",
+        "verb_table.yaml -- writes",
+        needs="the docketing rows' `writes:` (`_docket_item`'s keys), or `docket_question` retired with them",
+        law="ID-13 -- a reader keyed on a kind no row emits answers 'none' for every world, which is a "
+            "dead reader wearing a query's clothes")
+
+
+def docketed_by(w: World, claim) -> tuple:
+    """THE DOCKETED MATTERS THE DOCKETING EVENT `claim` IS A CLAIM OF PUT BEFORE A ROOM, or `()` (v10
+    CP-T05-04). A claim is OF an Event when its predicate is that Event's kind (`Claim.predicate` is
+    `e.kind` at the deposit) and the Event is one `occasioned_by` returns for it, the cause of the deposit
+    that put it in a ledger; the other claims WITNESS deposits for the same Event (`seen`, the `purview:`
+    read) are not, so they name nothing. The Event must be a docketing one (`DOCKETING_KINDS`), and the
+    matters are the docket items its ACT put there: the act's `subject` is the matter itself (`open_case`
+    dockets its subject) or the petition the matter rose from (`carry` dockets the petition's terms, and
+    the item names the petition under `DOCKET_PETITION`), so an item is the act's when its `matter` or its
+    `petition` is that subject. WHY THE ACT AND NOT THE CLAIM'S OWN SUBJECT, as `sittings_before` reads a
+    firing's: the claims a `case.opened` leaves name its actor and the case file
+    (`epistemic.claim_subjects`: the Event's anchor and its changes), never the matter, which only the
+    act's payload and the docket hold. A matter since taken off the docket (`determine` writes it back to
+    `None`) is not named. Resolver-side and read-only; `event_by_id` scans the log, so it is reached only
+    by a claim that passes the predicate test, which is nearly none."""
+    if claim.predicate not in DOCKETING_KINDS:
+        return ()
+    probe = Question(f"q:docket:{claim.id}", "claim_landed", (), claim.id)
+    out: dict = {}
+    for eid in occasioned_by(w, probe):
+        e = event_by_id(w, eid)
+        act = causing_act(w, e) if e is not None and e.kind in DOCKETING_KINDS else None
+        ref = act.payload.get("subject") if act is not None and isinstance(act.payload, dict) else None
+        if ref is None:
+            continue
+        out.update((d["matter"], None) for d in w.docket
+                   if d.get("matter") is not None and ref in (d["matter"], d.get(DOCKET_PETITION)))
+    return tuple(out)
+
+
+def docket_question(w: World, p: Person) -> Optional[Question]:
+    """THE QUESTION A DOCKETING EVENT'S WITNESS IS ASKED (v10 CP-T05-04, B10-05, home T05 §2 CP-T05-04
+    (b); [ASSUMPTION; medium; Jordan to correct]): ONE standing question per person, whose PLAIN
+    REFERENTS are the docketed matters whose docketing Event his OWN LEDGER holds a claim of
+    (`docketed_by`; `sittings_before`'s ledger test, the claim in his own ledger and no world reading
+    of a docket), `None` when there is none. The sitting question's sibling (`questions_for`): the same
+    `claim_landed` source, no source added, `about` the claim (the newest he holds, `LedgerReader`'s
+    comparator, so an act formed from it cites the docketing through `occasioned_by`). STANDING, as the
+    sitting question is: the matter waits on the docket until a determination clears it. WHAT IT
+    REACHES THAT THE SITTING QUESTION DOES NOT: a matter docketed with no sitting (`open_case` and
+    `carry` append a dateless item), to a person who need not sit on a bench -- the opener and the
+    others present at the opening -- so `speak` and `determine`, which form on plain referents, reach it
+    (`determine`'s own conjuncts still decide whether he may). Carried as plain referents, not as a
+    class: a class is a referent's own type (the matter is a person, or for a legacy item a rung), and
+    `determine`'s `party` conjunct needs the person. ⚠ TWO LIMITS, READ AT THE EXIT NOT FIXED
+    (`-08` AM-D-05): (1) `question_aggregation_rule="first"` (`data/fixtures.py`) delivers `out[0]`
+    alone, so this question reaches the person only when it sorts first by `attention_key`; (2) the
+    docketed persons are plain referents of every row that declares no `referent_class`, so those rows
+    form on them. REVERT: drop the call in `questions_for` (the two `referent_class` columns stay)."""
+    if not any(d.get("matter") is not None for d in w.docket):
+        return None
+    reached = [(c, ms) for c in p.ledger if (ms := docketed_by(w, c))]
+    if not reached:
+        return None
+    order: dict = {}
+    for d in w.docket:
+        if d.get("matter") is not None:
+            order.setdefault(d["matter"], len(order))
+    matters = tuple(sorted({m for _, ms in reached for m in ms}, key=order.__getitem__))
+    about = LedgerReader([c for c, _ in reached]).belief_among()
+    return Question(f"q:docket:{'|'.join(matters)}", "claim_landed", matters, about.id)
 
 
 def docketed_under(w: World, matter: Optional[str]) -> set:
@@ -2875,8 +2957,11 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     of a class a row declares and `rosters.yaml: occasion_only_classes` does not hold back
     (`own_referents_of_class`, v10 REM-21). And, since v9 SC-01's fired-slot step, one
     `claim_landed` question per fired sitting whose docket holds a matter and whose bench he sits on (`sittings_before`; the loop
-    after Q4 says why it is no third source). And, since v9 SC-02 `22b` step 23, one `claim_landed`
-    question on his own standing crossing this season, about the people who told (`standing_crossed`).
+    after Q4 says why it is no third source). And, since v10 CP-T05-04, one `claim_landed` question on
+    the docketed matters whose docketing Event (`case.opened`, `petition.carried`) his own ledger holds a
+    claim of (`docket_question`, the sitting question's sibling). And, since v9 SC-02 `22b` step 23, one
+    `claim_landed` question on his own standing crossing this season, about the people who told
+    (`standing_crossed`).
 
     ⚠ THIS CLOSES `H-04` AND §61's `NoProducer`, which between them blocked every NPC case: with
     no producer for `q`, `assemble(person, question)` was UNSATISFIABLE and DELIBERATE had no
@@ -3009,6 +3094,18 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # THE ID NAMES THE MATTERS: a slot emptied and refilled (even in one RESOLVE) is a new question.
     for did, c, matters in sittings_before(w, p):
         out.append(Question(f"q:sitting:{did}:{'|'.join(matters)}", "claim_landed", matters, c.id))
+
+    # v10 CP-T05-04 (B10-05, AM-D-05; [ASSUMPTION; medium; Jordan to correct]): THE SITTING QUESTION'S
+    # SIBLING -- ONE STANDING QUESTION PER PERSON ABOUT THE DOCKETED MATTERS WHOSE DOCKETING EVENT HIS
+    # OWN LEDGER HOLDS A CLAIM OF (`docket_question`), so a matter docketed with no sitting (`open_case`
+    # and `carry` append a dateless item, which `sittings_before` never asks about) is a question's plain
+    # referents for the people who saw it docketed. Same `claim_landed` source, no source added. THE
+    # LIMITS ARE THE SITTING QUESTION'S OWN, and are read at the exit, not lifted: `first` delivers it
+    # only when it sorts first, `attention_key` deciding; and its referents are plain, so every row with
+    # no `referent_class` forms on them. REVERT: drop this call -- no question names a matter docketed
+    # without a sitting, and `speak`/`determine` reach one by referent coincidence again.
+    if (dq := docket_question(w, p)) is not None:
+        out.append(dq)
 
     # v9 IN-57: the order is `attention_key`'s tiered read of the person's own state; the old
     # `(source, q.id)` key is its final tiebreak (history: hole_register H-54).

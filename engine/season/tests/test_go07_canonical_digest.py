@@ -355,19 +355,32 @@ def _counts(w) -> dict:
 #: tree (`f2381695`) is green against the values this block held, so the move is this unit's. Was, for seeds
 #: 0 / 1 / 2: `old` 9930edaa... / eaa35b59... / 7397b498..., `new` cd0ea7bc... / 3688012e... / 9dde0b7b...,
 #: `acts` 529 / 579 / 578, `log` 6396 / 8662 / 7190.
+#: RE-RECORDED AGAIN at v10 CP-T05-04 (B10-05), A GAME MOVE DECLARED, NO DIGEST MOVE: `argue` declares
+#: `referent_class: Proposition` and `open_case` declares `Person`, and `world_q.docket_question` asks the witness
+#: of a docketing about the matter docketed -- `argue` formed for 37 / 35 / 39 of 83 persons before (attempted 8 / 10 / 5,
+#: every one refused on `exists:Proposition=0`, `aperture 1 s`), for none now; `open_case` formed for 8 / 8 / 8 persons
+#: and 6 / 6 / 8 do (executed 4 / 2 / 1 -> 2 / 1 / 1 with the question, 3 / 1 / 1 with the columns alone: the lost case
+#: is `terr_T13`'s, a rung) -- and the act mix of every seeded realm moves with it (the docket question moves seeds 0 and
+#: 1 and not seed 2). EVERY value below is the CP-T05-04 tree's, read with this file's own helpers (`_old_content_hash`,
+#: `_counts`) and `populated.run`; CONTROL, run: this file's own control test on a detached worktree at the REM-25 tree
+#: (`92892b09`) is green against the values this block held, so the move is this unit's; and in-process on this tree the
+#: columns alone (the docket term stubbed) read `new` 7f36d369... / 43c143d5... / b3e6f82c... and the docket question
+#: alone (the columns blanked) 66a48d9a... / 209b02f9... / 7e87cc54..., so each unit moves the hash by itself (seed 2:
+#: the question moves nothing). Was, for seeds 0 / 1 / 2: `old` 38c7de45... / 233f7e8e... / 09176dd8..., `new`
+#: da1ce5eb... / f80b2949... / 7e87cc54..., `acts` 523 / 575 / 591, `log` 6348 / 8597 / 7724.
 BASE = {
-    0: {"old": "38c7de45f17fdabdba759268837970d5", "new": "da1ce5ebe72129fb5fbc829afdd9b49c", "acts": 523,
-        "census": "54c9e607ddb16a9c9d00afb7f61c8243e21c691b8d32e2da26d7693d12a39994",
-        "counts": {"persons": 82, "rungs": 411, "offices": 32, "sites": 322, "records": 93,
-                   "propositions": 91, "dates": 1, "docket": 6, "tenures": 802, "log": 6348}},
-    1: {"old": "233f7e8edf80b31558645e9753fd58a0", "new": "f80b294986bb29b65238fb8232a2d829", "acts": 575,
-        "census": "9a2ae08f27c3ba52b8b3f91e6ed38881a9cb14d57b9f3b6f912aa4f8a6508b7d",
-        "counts": {"persons": 83, "rungs": 412, "offices": 32, "sites": 322, "records": 118,
-                   "propositions": 91, "dates": 0, "docket": 2, "tenures": 839, "log": 8597}},
-    2: {"old": "09176dd854009efd92b03a9573738a47", "new": "7e87cc5452615cb4da3d71b94a8db844", "acts": 591,
-        "census": "7d81dc598a6b39e9b1942e527648ab64f15fe7175d2a6bb9dceddf627431bdca",
+    0: {"old": "956afe6bd969cbf7669314a646593f9b", "new": "26bcb37d617051724bbbd6c3b746c5a5", "acts": 524,
+        "census": "89f73447320e88f9f96bb8947e83565c3f0f92d11e60e00629e71d666eda878c",
+        "counts": {"persons": 82, "rungs": 411, "offices": 32, "sites": 322, "records": 90,
+                   "propositions": 93, "dates": 1, "docket": 4, "tenures": 800, "log": 6267}},
+    1: {"old": "508ac507c355b408f49ad49facb8af4d", "new": "3b43b9fc1642c749649d984ef6ed8653", "acts": 577,
+        "census": "2a15feaf3d67e1ce60b9353edaf3396bcdfb711361f2cabb201df2f02d88f349",
+        "counts": {"persons": 83, "rungs": 412, "offices": 32, "sites": 322, "records": 116,
+                   "propositions": 91, "dates": 0, "docket": 1, "tenures": 837, "log": 8493}},
+    2: {"old": "7d9c298181d35f9556cd900fa70a2f22", "new": "b3e6f82cfe0df6dee0a1e1452edf81af", "acts": 595,
+        "census": "2279dc1c32e14df1868cc9ee02f799eab28ae058ecc1fe42a53555379d0ca7cb",
         "counts": {"persons": 81, "rungs": 410, "offices": 32, "sites": 322, "records": 115,
-                   "propositions": 99, "dates": 1, "docket": 2, "tenures": 819, "log": 7724}},
+                   "propositions": 99, "dates": 1, "docket": 2, "tenures": 819, "log": 7707}},
 }
 
 

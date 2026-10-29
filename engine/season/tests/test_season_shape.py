@@ -8079,9 +8079,21 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # 4 -> 8, `interview` 33 -> 37, `sabotage` 89 -> 93, `surveil` 93 -> 98, `survey` 127 -> 129, `tell` 98 -> 96, `tend`
     # 73 -> 71, `train` 129 -> 127, `release` 117 -> 119, `reconstruct` 43 -> 44, `research` 127 -> 128; `forge` 131,
     # `speak` 85, `move` 115, `transfer` 85, `petition` 11, `covenant`, `dispatch` and `seize` 1 each unmoved.
+    # ⚠⚠ v10 CP-T05-04 (B10-05), 11 -> 10: `argue` LEAVES. A RE-RECORD WITH ITS REASON: it declares `referent_class:
+    # Proposition` and no corpus question carries a Proposition for it, so it is attempted in no world (refused in 116 of
+    # the 143 live worlds before, 0 after) and moves from the always-refused to the never-attempted set (asserted below):
+    # the sideways, declared move of the item, as REM-22's three and REM-23's `commit`. `open_case` declares `Person` but
+    # was never attempted in this corpus (it is `remit:determine`-eligible and no corpus seat grants it), so it does not
+    # move. MEASURED by `corpus_run.run_case`, seed 0, the REM-25 tree (`92892b09`, a detached worktree) as control (the
+    # same script on both): refused-world counts `argue` 116 -> 0, `interview` 37 -> 53, `transfer` 85 -> 89, `tell`
+    # 96 -> 100, `give` 8 -> 5, `carry` 8 -> 10, `comply` 59 -> 61, `speak` 85 -> 87, `sabotage` 93 -> 95, `accept` 90 -> 91,
+    # `challenge` 56 -> 57, `build` 6 -> 7, `petition` 11 -> 12, `tend` 71 -> 69; `found` 28, `forge` 131, `move` 115,
+    # `release` 119, `research` 128, `surveil` 98, `survey` 129, `train` 127, `reconstruct` 44, `fight` 23, `covenant`,
+    # `dispatch` and `seize` 1 each unmoved. The columns alone (the docket question stubbed) and the docket question
+    # alone (the columns blanked) are read at the `by_sig` note below.
     assert refused_only == {"build", "found", "survey",
                             "forge", "seize", "covenant", "sabotage", "train", "dispatch",
-                            "argue", "comply"}, (
+                            "comply"}, (
         f"the always-refused set moved to {sorted(refused_only)}. `move` and `transfer` left it "
         "when `W-C` closed `H-94`'s structural half — the Candidate carries operands now — and "
         "`work` stays for a reason about the corpus's questions rather than about the channel")
@@ -8706,7 +8718,24 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # ranking change: `H-96` is untouched. THE SAME-BREATH CHECK: the universal set is EMPTY on both sides (no verb
     # regained universality; the largest executed-world count is `create_record`'s 132 of 143), `varying` gains `carry`,
     # `release` and `speak` with `ever` (asserted below), `told_redeposits` stays 0, and the status census is UNMOVED.
-    assert len(by_sig) == 125, (
+    # ⚠⚠ **125 -> 128, v10 CP-T05-04 (B10-05), MEASURED BY `corpus_run.run_case`, seed 0, AGAINST THE REM-25 TREE (`92892b09`,
+    # a detached worktree; the two columns and the docket question absent) AS CONTROL, which reads 125 -- the same script on
+    # both.** THE UNIT AND THE DIRECTION: variety ROSE by three, `live` did not move (143 on both sides). The two columns do
+    # it: `argue` declares `referent_class: Proposition` and forms on a Proposition-classed referent alone, and no corpus
+    # question carries one (refused in 116 of the 143 worlds at the control, in none here), so the scenes it took re-rank
+    # the rest. EACH HALF ALONE, in-process on this tree (the same script): the columns with the docket question stubbed
+    # read 128 (24 worlds' executed sets change), the docket question with the columns blanked reads 126 (3 worlds change),
+    # both read 128 (25 worlds change: ARC-08 -20 -21 -24 -25 -30 -34 -44 -R19, EMG-C1 -C3 -X5, NPC-002 -007 -010 -013 -033
+    # -037 -039 -072 -084 -087 -088, NSC-01 -03). The flips, here against the control: joins `release` 4 worlds, `tell` 4,
+    # `research` 3, `transfer` 3, `surveil`, `reconstruct`, `carry`, `move` and `conceal` 1 each; leaves `carry` 2,
+    # `give` 2, `conceal` 2, `reconstruct` 2, `release`, `research`, `issue`, `move` and `surveil` 1 each; executed-world
+    # counts, control -> here: `release` 3 -> 6, `tell` 103 -> 107, `transfer` 45 -> 48, `research` 21 -> 23, `give`
+    # 6 -> 4, `carry` 35 -> 34, `issue` 2 -> 1, `conceal` 95 -> 94, `reconstruct` 129 -> 128; every other verb's count is
+    # unmoved. Not a ranking change: `H-96` is untouched. THE SAME-BREATH CHECK: the universal set is EMPTY on both sides
+    # (no verb regained universality; the largest executed-world count is `create_record`'s 132 of 143), `ever` and
+    # `varying` are unmoved (the same 20 verbs, asserted below), and `open_case` is attempted in no corpus world on
+    # either side, so its column moves nothing here.
+    assert len(by_sig) == 128, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -9147,12 +9176,19 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # do NOT join this set (they stay attempted-and-refused, `refused_only` above). MEASURED by `corpus_run.run_case`,
     # seed 0, the REM-24 tree (`f2381695`, a detached worktree) as control (the same script on both): the
     # never-attempted set there is these 21 with `comply`.
+    # ⚠⚠ v10 CP-T05-04 (B10-05): `argue` JOINS -- 20 -> 21. A RE-RECORD WITH ITS REASON: it declares `referent_class:
+    # Proposition` and no corpus question carries a Proposition for it, so it is attempted in no world (it left
+    # `refused_only`, above, refused in 116 of 143 worlds before, 0 after): attempted-and-always-refused -> never
+    # attempted, the same sideways, declared move as `commit`'s. MEASURED by `corpus_run.run_case`, seed 0, the REM-25
+    # tree (`92892b09`, a detached worktree) as control (the same script on both): the never-attempted set there is the
+    # 20 without `argue`. `open_case` is in this set on both sides (never attempted in the corpus).
     assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish",
                                               "destroy_record", "march", "oblige", "open_case",
                                               "determine", "migrate", "requisition",
                                               "forgive",
                                               "arrest", "pardon", "raze", "thread_read",
-                                              "work", "restore", "examine", "commit"}, (    # IN-57: `dispatch` out, to `refused_only`; FI-01: back; IN-38: out again; K-3: `thread_read` in; REM-10: `speak`, `examine`, `argue` out; REM-22: `work`, `restore`, `examine` in; REM-23: `commit` in; REM-25: `comply` out
+                                              "work", "restore", "examine", "commit",
+                                              "argue"}, (    # IN-57: `dispatch` out, to `refused_only`; FI-01: back; IN-38: out again; K-3: `thread_read` in; REM-10: `speak`, `examine`, `argue` out; REM-22: `work`, `restore`, `examine` in; REM-23: `commit` in; REM-25: `comply` out; CP-T05-04: `argue` in
         f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Five of "
         "the original six are the governance verbs no corpus overlay grants (`establish` is "
         "`remit:confer`-eligible); `march` is eligible in NPC-033/038 and WOULD form a real "
@@ -12869,7 +12905,16 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # nine verbs STAY, their counts moving with the act mix (accept/challenge/fight/interview/tend/train 14 -> 10,
     # speak 14 -> 18, argue 20 -> 14, sabotage 6 -> 12); the executable drops are the same sixteen pairs
     # (`len(dropped)` below is unmoved). The control arm drops 0 in both trees. `tell` and `surveil` are absent.
-    assert {v for v, _ in live} == {"accept", "argue", "challenge",
+    # ⚠ {9 verbs} -> {8 verbs}, v10 CP-T05-04 (B10-05): `argue` LEAVES, nothing joins. MEASURED BEFORE RE-PINNING, this
+    # test's own `drops(DEFAULT_FIXTURES)` replicated on this tree and on a detached worktree at `92892b09` (the REM-25
+    # tree), the same script on both: there, 104 drops, `argue` 14 (`p_a` 8, `r_realm` 6), accept/challenge/fight/interview/
+    # tend/train 10, speak 18, sabotage 12; here, 97 drops and none of `argue` (accept/challenge/fight/interview/tend/train
+    # 11, speak 19, sabotage 12; the drops are 84 on `r_realm`, `p_c` 13, `p_a` none). THE UNIT IS ITS CELL'S NEW CLASS:
+    # `argue` declares `referent_class: Proposition` and forms on a Proposition-classed referent alone, so no Candidate of
+    # it forms on `r_realm` or `p_a` for clause 4 to drop -- the wrong-kind formation the class removes, not a lost belief.
+    # The other eight verbs STAY, their counts moving by one with the act mix. The control arm drops 0 in both trees.
+    # `tell` and `surveil` are absent.
+    assert {v for v, _ in live} == {"accept", "challenge",
                                     "fight", "interview",
                                     "sabotage", "speak", "tend", "train"}, (
         f"the drops are on {sorted({v for v, _ in live})}. `tell` here means a "
