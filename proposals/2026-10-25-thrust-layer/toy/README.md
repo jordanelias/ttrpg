@@ -22,7 +22,7 @@ Run any script from this directory with `python3 <script>.py [N]` (stdlib only; 
 | `regimes10.py` | constrained world: rare death, standing gate, accusation, bound peace, killing consequences | `exp_con.py`, `save_figs.py` | `exp_con_out.txt`, `save_figs_out.txt` |
 
 **Pre-registration.** `predictions*.py` and `exp_*.py` were frozen before their first run; the `*.sha`
-files hold the checksums and times. v1's predictions were blind; every later set was written after seeing
+files hold the checksums and times. **Checked 2026-10-28:** the prediction and experiment scripts match their recorded hashes (13 of 17 entries); the world file recorded beside them does NOT in four freezes — `regimes.py` (`predictions.sha`), `regimes2.py` (`v2_frozen.sha`), `regimes5.py` (`ladder_pred.sha`), `regimes10.py` (`con_pred.sha`) — so the freezes cover the predictions, not the world they ran on. This README names a generator change only for v1. v1's predictions were blind; every later set was written after seeing
 earlier results (informed) and is labelled so in its docstring. HYc, HYd, the bootstrap intervals, the
 sifting test, the lookahead arm, the ladder, set-piece and constrained arms are **post hoc**. The design
 document lists the falsified predictions beside the confirmed ones.
