@@ -266,9 +266,15 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # `exists:Proposition=0` 36/32/33 -> 0 at seeds 0/1/2; 61 -> 1 commit acts over two seasons at seed 0). The build
 # hash is equal (the build reads no verb row); one and two seasons move. Was 3c627dea... / 39fc1d62... (one, two
 # seasons). CONTROL, run: this same script on the REM-22 tree (`e66a22ec`) reads the old pair again.
+# RE-PINNED at v10 REM-24 (B10-05), A BEHAVIOUR MOVE DECLARED: `petition` declares `referent_class: Person`, so it
+# forms only on a person the question the person answers names (`aperture 1 s`, realm: `petition` formed for
+# 82/81/82 of 83 persons -> 40/39/43, attempted 19/17/20 -> 10/4/8, refused 9/13/12 -> 0, each of those refusals
+# on `exists:Person=0`; executed 10/4/8 -> 10/4/8). The build hash is equal; one and two seasons move.
+# Was 290655d8... / 7084faf2... (one, two seasons). CONTROL, run: this same script on the REM-23 tree
+# (`409c467b`) reads the old pair again.
 BASE_HASHES = {0: "9ff5390939742b7bbb3af0fa2551e958",
-               1: "290655d872d978c2971fa8a9b76767f4",
-               2: "7084faf221245ab02de9d8dfdd09b6d2"}
+               1: "cd0ea7bcab5b49a4225dde74ddb20406",
+               2: "c010a137f280077413812bcccff44ca4"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -314,8 +320,9 @@ BASE_HASHES = {0: "9ff5390939742b7bbb3af0fa2551e958",
 # RE-RECORDED at v9 IN-59 (a) with `BASE_HASHES` (6594 -> 7018, 19221 -> 21710).
 # RE-RECORDED at v10 REM-22 with `BASE_HASHES` (7018 -> 7345, 21710 -> 21490).
 # RE-RECORDED at v10 REM-23 with `BASE_HASHES` (7345 -> 6647, 21490 -> 21312).
-BASE_EVENTS = {1: (6647, "5be962f19e06caa4ca441ba998b3660e3371f1e726c05e61ba179eb5b07b8bff"),
-               2: (21312, "32f2d13e651cdc37204d2f0d8fa50fb89cf92f02743351cf600e82b7b24a6283")}
+# RE-RECORDED at v10 REM-24 with `BASE_HASHES` (6647 -> 6396, 21312 -> 21342).
+BASE_EVENTS = {1: (6396, "993f36d78109e9a567324d8cfc9adf19701071135d9fba66e93f7e3e5ab1200a"),
+               2: (21342, "3ae8d6fe79de425f663e10ffa2d8af5c5ecc0a709a107aab30d13d861aafa2eb")}
 
 
 def _digest(w) -> tuple:
@@ -416,7 +423,8 @@ def test_the_give_withheld_arm_reproduces_the_one_season_pin():
 #: that still shows `thread_read` moves the season (it differs from `BASE_EVENTS[1]`), as `BASE_EVENTS` became.
 #: RE-RECORDED at v10 REM-22 with `BASE_HASHES`: 7028 / 4f9b8312... -> 7354 / eb995a13... (the three Site rows).
 #: RE-RECORDED at v10 REM-23 with `BASE_HASHES`: 7354 / eb995a13... -> 6652 / 98bef289... (`commit` declares `Proposition`).
-THREAD_READ_WITHHELD_EVENTS_1 = (6652, "98bef28921349789670bfccd6746e6b99aa95ebf1ced63c70fa78a2589120daa")
+#: RE-RECORDED at v10 REM-24 with `BASE_HASHES`: 6652 / 98bef289... -> 6401 / 71a40c5a... (`petition` declares `Person`).
+THREAD_READ_WITHHELD_EVENTS_1 = (6401, "71a40c5a173f60dccbdeb3e1a3c9efb975cb9c8f140e3aef013386ce3ca7919b")
 
 
 def test_the_thread_read_withheld_arm_is_pinned_and_differs_from_the_shipped_season():

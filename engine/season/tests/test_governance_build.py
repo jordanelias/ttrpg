@@ -157,20 +157,42 @@ def test_lb1_bo10_gate_closed_by_in11_the_utterers_hold_report_not_repair():
     (the note at the assertion); what stays is that `commit` is resolvable, formed and attempted."""
     from collections import Counter
     from ..decision import make_chooser
+    from ..decision.options import opening_set
     from ..state.ids import H, draw_factory
     w = build_realm(0)
     d = SeasonDriver(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     chooser = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                            draw=draw_factory(w.world_seed, lambda: w.tick))
-    d.season(chooser, question=None, subsistence=P.SUBSIST,
+    formed = set()          # (person, subject) of every `commit` Candidate `opening_set` forms; read-only
+
+    def watched(p, v, s, ask_budget):
+        q = getattr(v, "question", None)
+        if q is not None:
+            formed.update((p.id, c.subject) for c in opening_set(p, v, q, w.fixtures) if c.verb == "commit")
+        return chooser(p, v, s, ask_budget)
+
+    d.season(watched, question=None, subsistence=P.SUBSIST,
              contest_max_depth=w.fixtures.get("contest_max_depth"))
     kinds = Counter(e.kind for e in w.log)
 
     assert "commit" in resolvable_verbs(), (
         "`commit` dropped back out of `resolvable_verbs()` -- the effect registration regressed")
-    commit_acts = [a for a in d.resolved if a.verb == "commit"]
-    assert commit_acts, "no `commit` act formed at all on this corpus -- the gate moved further"
+    # ⚠⚠ v10 REM-24 (B10-05): THE ATTEMPT FLOOR BECOMES A FORMATION FLOOR, A RE-RECORD WITH THE UNIT THAT MOVED
+    # IT, FOR THE SAME REASON REM-23'S COUNT BECAME A PROPERTY. `petition` declares `referent_class: Person`, so
+    # the realm's act mix moved (`aperture 1 0`: 532 -> 529 acts) and the one `commit` this season had left
+    # standing -- `cohort_set_s_032`'s on `prop:e5a168fb...`, an attempt REM-23 recorded as a reading of a seeded
+    # trajectory ("1/1/1 ... not a claim that `commit` executes") -- is not chosen any more. MEASURED, this season,
+    # the REM-23 tree (`409c467b`, a `git worktree`) as control, the same script on both: `commit` acts 1 -> 0,
+    # `commitment.made` 1 -> 0, `commitment.refused` 0 -> 0; and what the floor stood for -- "the verb is still
+    # FORMED, a different regression from the gap this test documents" -- is untouched: `opening_set` forms
+    # `commit` for the same 6 persons, every Candidate on a Proposition (7 against 6 Candidates, one person's
+    # question having changed with the trajectory). So the floor is asserted on the formation, which is what the
+    # class governs, and the attempts below are held to the class's property without a floor of their own.
+    assert formed, "no `commit` Candidate was formed at all on this corpus -- the verb stopped being formed"
+    assert all(subject in w.propositions for _, subject in formed), (
+        "a `commit` Candidate was formed on an id that names no Proposition -- `referent_class: Proposition` "
+        f"no longer holds: {sorted(s for _, s in formed if s not in w.propositions)}")
     # ⚠ RETIRED AT v9 IN-45 `migrate` (B-K, 2026-10-16) UNDER v9 §0.5's 2026-10-13 RULING (*"No test
     # asserts that a verb executed in the seed-0 realm"*), which these two survived by oversight:
     # `commitment.made >= 1` and a `commit` act naming a real Proposition, both in this one seed-0
@@ -184,14 +206,16 @@ def test_lb1_bo10_gate_closed_by_in11_the_utterers_hold_report_not_repair():
     # referents it was refused on (`exists:Proposition=0`, every one of the 36) are no longer formed: MEASURED,
     # this season, REM-22 tree as control (the same script on both): `commit` attempted 38 -> 1, the Events
     # `commitment.refused` 36 -> 0 and `commitment.made` 0 -> 1. What this assertion guarded -- "the verb is
-    # still ATTEMPTED, a different regression from the gap this test documents" -- is the `commit_acts`
-    # assertion above plus the next one, which reads the ACT STORE (a refused act is in it) and asks the class's
-    # own property of every attempt: it names a Proposition, with a floor on the attempts it saw.
+    # still ATTEMPTED, a different regression from the gap this test documents" -- is the formation floor above
+    # plus the next one, which reads the ACT STORE (a refused act is in it) and asks the class's own property of
+    # every attempt: it names a Proposition. AT REM-24 the floor on the attempts moved to the formation (above) and
+    # the attempts are held to the formation instead: every `commit` attempted was a Candidate `opening_set` formed.
     attempted = [a for a in w.acts if a.verb == "commit"]
-    assert attempted, "no `commit` act was attempted at all -- the verb stopped being formed"
     assert all(subject_of(a) in w.propositions for a in attempted), (
         "a `commit` was formed on an id that names no Proposition -- `referent_class: Proposition` "
         f"no longer holds: {[subject_of(a) for a in attempted if subject_of(a) not in w.propositions]}")
+    assert {(a.actor, subject_of(a)) for a in attempted} <= formed, (
+        "a `commit` was attempted that `opening_set` did not form for that person")
 
 
 # ---------------------------------------------------------------------------
@@ -2719,10 +2743,19 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # `duty.taken`: `claim.deposited` 5555 / 5469 (the dwellings' wear claims), `condition.worn` 322 / 111,
     # `finding.none` 129 / 127, `migrate.refused` 54 / 58, `residence.changed` 1 / 0, `transfer.refused` 25 / 24.
     # THE PROPERTY, a dwelling question never answered first, is asserted above and holds.
+    # ⚠⚠ v10 REM-24 (B10-05): (532, 534) -> (529, 531), A RE-RECORD WITH THE UNIT THAT MOVED IT: `petition` declares
+    # `referent_class: Person`, so it forms on a person alone and the realm's act mix moved again (`aperture 1 0`:
+    # 532 -> 529 acts). MEASURED, seed 0, one season, the REM-23 tree (`409c467b`, a `git worktree`) as control, the
+    # same script on both: the control reads (532, 534) with the arms parting at act 370; here (529, 531), parting at
+    # act 370 at the SAME `migrate` (the stripped arm's `p_npc_002` to `terr_T13`; the kept arm's next act is
+    # `cohort_set_s_003`'s to `b_s_014_barracks`, where the control's was `cohort_set_s_034`'s). The kinds that differ
+    # between the arms are the REM-23 set exactly: `claim.deposited` 5301 / 5215 (the dwellings' wear claims),
+    # `condition.worn` 322 / 111, `finding.none` 133 / 131, `migrate.refused` 53 / 57, `residence.changed` 1 / 0,
+    # `transfer.refused` 26 / 25.
     assert heads[False] and heads[True], "the spy saw no delivery; the zero below would be unobserved"
     assert not [q.id for q in heads[False] if {q.about, *q.referents} & set(dw)], (
         "a dwelling question was answered first: IN-57's tier 4 no longer sorts it last")
-    assert (out["acts"], cout["acts"]) == (532, 534), (
+    assert (out["acts"], cout["acts"]) == (529, 531), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")

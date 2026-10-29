@@ -7854,7 +7854,16 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # 75, `tell` 95 -> 101, `tend` 33 -> 35, `transfer` 44 -> 45; `reconstruct` 131 and `utter` 119 unmoved. `commit`
     # executed in no world on either tree, so the STOP-IF of the item (its executions falling) has nothing to fall
     # from here.
-    assert ever == {"accept", "carry", "challenge", "conceal", "create_record", "interview",
+    # ⚠⚠ v10 REM-24 (B10-05), 18 -> 17: `carry` LEAVES AGAIN. A RE-RECORD WITH ITS REASON: `petition` declares `referent_class:
+    # Person`, so it forms on a person alone and no longer on the rungs, Records and Propositions this corpus's
+    # questions carry (refused in 90 of the 143 live worlds before, in 11 now), and the scenes it took go to other
+    # acts; 15 of the 143 worlds' executed sets change. `carry` is that spill, not its own cell (untouched): it
+    # executed in ONE world (ARC-34, the REM-23 note above) and in none now. MEASURED by `corpus_run.run_case` over
+    # the 143 live worlds, seed 0, the REM-23 tree (`409c467b`, a `git worktree`) as control (the same script on
+    # both): executed-world counts `carry` 1 -> 0, `fight` 6 -> 7, `give` 5 -> 4, `research` 25 -> 21, `surveil` 75 ->
+    # 78, `tell` 101 -> 103, `utter` 119 -> 120; nothing else moves, `petition` still executes in the same 77 worlds
+    # it did (the item's STOP-IF, a fall in executions, does not fire in the corpus either).
+    assert ever == {"accept", "challenge", "conceal", "create_record", "interview",
                     "fight", "give", "issue", "move", "petition", "reconstruct", "research",
                     "surveil", "tell", "tend", "transfer", "utter"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
@@ -8034,9 +8043,19 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # REM-22 tree as control (the same script on both): refused-world counts `argue` 49 -> 109, `found` 88 -> 97,
     # `sabotage` 78 -> 87, `speak` 76 -> 85, `train` 116 -> 122, `survey` 121 -> 125, `carry` 66 -> 69, `release`
     # 116 -> 117; `build` 39, `forge` 131, `covenant`, `dispatch` and `seize` 1 each unmoved.
+    # ⚠⚠ v10 REM-24 (B10-05): `carry` JOINS (12 -> 13). A RE-RECORD WITH ITS REASON: `petition` declares `referent_class:
+    # Person` and so stops being formed (and refused, in 90 of the 143 live worlds before, 11 now) on the rungs,
+    # Records and Propositions this corpus's questions carry; `carry` joins by the executed-set note above (it
+    # executed in ARC-34 alone and now in none), refused in 68 worlds (69 before) and executed in none, so it is
+    # attempted and never executed. MEASURED by `corpus_run.run_case`, seed 0, the REM-23 tree (`409c467b`, a `git
+    # worktree`) as control (the same script on both): refused-world counts `petition` 90 -> 11, `accept` 80 -> 85,
+    # `challenge` 58 -> 61, `fight` 16 -> 17, `interview` 29 -> 33, `train` 122 -> 129, `surveil` 89 -> 93, `survey`
+    # 125 -> 127, `sabotage` 87 -> 89, `found` 97 -> 98, `tell` 96 -> 98, `tend` 72 -> 73, `transfer` 84 -> 85,
+    # `research` 126 -> 127, `give` 6 -> 4, `build` 39 -> 37, `carry` 69 -> 68; `argue` 109, `speak` 85, `release`
+    # 117, `forge` 131, `covenant`, `dispatch` and `seize` 1 each unmoved.
     assert refused_only == {"build", "found", "survey",
                             "forge", "seize", "covenant", "sabotage", "train", "dispatch",
-                            "argue", "speak", "release"}, (
+                            "argue", "speak", "release", "carry"}, (
         f"the always-refused set moved to {sorted(refused_only)}. `move` and `transfer` left it "
         "when `W-C` closed `H-94`'s structural half — the Candidate carries operands now — and "
         "`work` stays for a reason about the corpus's questions rather than about the channel")
@@ -8640,7 +8659,19 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # swaps `release` for `carry` with `ever` (asserted below), `hi` is unmoved ({1..6}) and `lo` loses 5 ({1,2,3,4,6}
     # against {1..6}: min(hi) stays 1 and max(lo) stays above 1), `told_redeposits` stays 0, and the status census is
     # UNMOVED (103 RUNS-UNDECLARED · 40 SPAN-UNAUTHORED).
-    assert len(by_sig) == 124, (
+    # ⚠⚠ **124 -> 121, v10 REM-24 (B10-05), MEASURED BY `corpus_run.run_case`, seed 0, AGAINST THE REM-23 TREE
+    # (`409c467b`, a `git worktree`; the `petition` column absent) AS CONTROL, which reads 124 -- the same script on
+    # both.** THE UNIT AND THE DIRECTION: variety FELL by three, `live` did not move (143 on both sides). `petition`
+    # declares `referent_class: Person`, so it forms on a Person-classed referent alone and no longer on the rungs,
+    # Records and Propositions this corpus's questions carry: refused in 90 of the 143 worlds at the control, in 11
+    # here, and executed in the same 77 worlds on both trees. The scenes it took re-rank the rest, and 15 worlds'
+    # executed sets change (`carry` leaves ARC-34; the other flips are the per-world counts at the `ever` note above:
+    # `surveil` joins six worlds and leaves two, `research` leaves four, `tell` joins three, `give` leaves two,
+    # `fight` joins one), a net three FEWER distinct signatures. Not a ranking change: `H-96` is untouched. THE
+    # SAME-BREATH CHECK: the universal set is EMPTY on both sides (no verb regained universality; the largest,
+    # `reconstruct`, holds at 131 of 143), `varying` loses `carry` with `ever` (asserted below), `told_redeposits`
+    # stays 0, and the status census is UNMOVED (103 RUNS-UNDECLARED · 40 SPAN-UNAUTHORED).
+    assert len(by_sig) == 121, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -8839,7 +8870,11 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # executed in ARC-08 and ARC-34 and now in no world; `carry` executes in ARC-34 alone, so it varies and is not
     # universal). `universal` is empty on both sides, so `varying` is `ever` exactly (18). Control: the REM-22 tree
     # reads `release` and not `carry`.
-    assert varying == {"accept", "carry", "challenge", "conceal", "create_record", "fight", "give",
+    # ⚠⚠ v10 REM-24 (B10-05): `carry` LEAVES -- the `ever` and `by_sig` notes above (it executed in ARC-34 alone, now
+    # in no world; the scenes `petition` no longer takes on a rung, a Record or a Proposition re-ranked it out). Nothing
+    # joins; `universal` is empty on both sides, so `varying` is `ever` exactly (17). Control: the REM-23 tree
+    # (`409c467b`) reads `carry` among the 18.
+    assert varying == {"accept", "challenge", "conceal", "create_record", "fight", "give",
                        "interview", "issue", "move",
                        "petition", "reconstruct", "research",
                        "surveil", "tell", "tend", "transfer", "utter"}, (
@@ -10247,7 +10282,15 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # ARC-34 alone and `release` in neither ARC-08 nor ARC-34, where it executed before. The measurement, against the
     # REM-22 tree as control, is at the same test's `ever` note. (This pass attributes by emission id over the same
     # worlds: `release` 2 executions -> 0, `carry` 0 -> 1.)
-    assert set(executed) == {"accept", "carry", "challenge", "conceal", "create_record", "interview",
+    # ⚠⚠ v10 REM-24 (B10-05): `carry` LEAVES AGAIN (18 -> 17). A RE-RECORD WITH ITS REASON: `petition` declares
+    # `referent_class: Person`, so the act mix of 15 of the 143 worlds moved; `carry` executes in ARC-34 alone at the
+    # REM-23 tree and in no world now (the measurement, against that tree as control, is at the corpus test's `ever`
+    # note). This pass, by emission id over the same worlds, the same script on both trees (REM-23 tree `409c467b`, a
+    # `git worktree`): `carry` 1 execution -> 0 and 116 refusals -> 118; `petition` 167 executions -> 167 and 143
+    # refusals -> 11 (every refusal removed was on `exists:Person`, and no execution is lost); `give` 5 -> 4, `fight`
+    # 8 -> 9, `research` 35 -> 29, `surveil` 265 -> 262, `tell` 357 -> 362, `utter` 422 -> 423, `conceal` 128 -> 131,
+    # `move` 75 -> 73, `reconstruct` 370 -> 368, `create_record` 622 -> 621, `accept` 229 -> 230; nothing else moves.
+    assert set(executed) == {"accept", "challenge", "conceal", "create_record", "interview",
                              "fight", "give", "issue",
                              "move", "petition", "reconstruct", "research",
                              "surveil", "tell", "tend", "transfer", "utter"}, (
@@ -10362,10 +10405,15 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # executions, ARC-08 and ARC-34, are gone). MEASURED by `_wc_corpus_pass`, seed 0, the REM-22 tree as control
     # (the same script on both): refused-and-never-executed 11 -> 10; `commit` refused 468 -> 0, `release` refused
     # 567 -> 587.
+    # ⚠⚠ v10 REM-24 (B10-05): `carry` JOINS (10 -> 11). A RE-RECORD WITH ITS REASON: `petition` declares `referent_class:
+    # Person`, so the act mix of 15 of the 143 worlds moved and `carry`, which executed in ARC-34 alone, executes in
+    # none (the executed-set note above); it is refused wherever attempted. MEASURED by `_wc_corpus_pass`, seed 0, the
+    # REM-23 tree (`409c467b`, a `git worktree`) as control (the same script on both): refused-and-never-executed
+    # 10 -> 11; `carry` refused 116 -> 118 and executed 1 -> 0.
     assert set(refused) - set(executed) == {"found",
                                             "build", "survey",
                                             "forge", "seize", "covenant",
-                                            "sabotage", "train", "dispatch", "release"}, (
+                                            "sabotage", "train", "dispatch", "release", "carry"}, (
         f"the always-refused set is {sorted(set(refused) - set(executed))}. `work` refuses because "
         "its `site` operand binds either to a non-Site referent (UNKNOWN) or to a real site whose "
         "condition never clears the floor in this corpus; `dispatch` is refused only in NPC-033's five-seat "
@@ -10666,8 +10714,11 @@ def test_wc_the_fold_binds_what_the_person_bound():
     # below would need them in `WALK_EXCLUDES`, which is for a verb NOTHING ELSE keeps out of an option set.
     # v10 REM-23: AND `prop_wc` RIDES AS A `Proposition`-CLASSED REFERENT, for `commit` (typed, and formed only on
     # that class since `referent_class: Proposition`) on the same ground: without it `commit` drops out of `cands`.
+    # v10 REM-24: AND `p_mid` RIDES AS A `Person`-CLASSED REFERENT, for `petition` (typed, and formed only on that
+    # class since `referent_class: Person`) on the same ground: without it `petition` drops out of `cands`.
     q = Question("q:wc_agree", "need", ("S", "Hh"),
-                 classes=(("D", "Rung"), ("site_harbour", "Site"), ("prop_wc", "Proposition")))
+                 classes=(("D", "Rung"), ("site_harbour", "Site"), ("prop_wc", "Proposition"),
+                          ("p_mid", "Person")))
     v = View(p.id, [], w.fixtures.get("view_k"), q)
     # v9 PC-06 K-3: `thread_read` forms only for a person whose own Thread Sensitivity passes its gate
     # (`OWN_STATE_STEMS`), so `p_low` is given exactly the gate and the row stays in the walk -- its
@@ -11371,7 +11422,14 @@ def test_wb_a_refusals_reads_land_as_a_claim_that_contradicts_and_the_candidate_
     # (`e66a22ec`, a `git worktree`) lists 29 verbs before, `commit` among them, and this tree lists the same 28 less
     # `commit`; the drop `['transfer']` in both.
     # [GROUNDED: measured at v10 REM-23 -- (28, 27) as built, (29, 28) on the REM-22 tree; the one missing verb `commit`, the drop `['transfer']` in both]
-    assert (len(before), len(after)) == (28, 27), (
+    # ⚠ 28 -> 27, v10 REM-24 (B10-05): `petition` declares `referent_class: Person`, so it forms only on a person
+    # the question carries as that class and never on a plain referent like `S`, a rung (its `to` binds the
+    # referent and `exists:Person` of a rung is 0, the refusal the class removes); `p_low`'s question carries no
+    # person. The drop is still exactly `transfer`. RE-DERIVED, not adjusted: with `petition`'s `referent_class`
+    # blanked in `decision/options.py`'s `VERB_TABLE` in-process, this test passes at (28, 27) unchanged, and the
+    # REM-23 tree (`409c467b`, a `git worktree`) reads (28, 27) there; the one missing verb is `petition`.
+    # [GROUNDED: measured at v10 REM-24 -- (27, 26) as built, (28, 27) with the column blanked and on the REM-23 tree; the one missing verb `petition`, the drop `['transfer']` in both]
+    assert (len(before), len(after)) == (27, 26), (
         f"the absolute counts moved to {(len(before), len(after))}. They are the denominator the "
         "delta above is read against, and the delta alone does not reproduce them — re-derive "
         "`H-122`'s reading rather than adjusting this line")
@@ -11652,9 +11710,16 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
     # Proposition alone, so those refusals (and the deposits they carried) are gone: resolved acts `commit` 3 -> 0,
     # `create_record` 10 -> 11, `reconstruct` 6 -> 7, `survey` 4 -> 5 (the freed scenes). The property this pin is
     # for holds: `actor_arm` is also 9, so every grammar claim is held at the end and none evicted.
+    # v10 REM-24 (B10-05): 9 -> 8 entries, a re-record read off the failing assertion's own output and RE-READ by
+    # running the helper on this tree and on a `git worktree` at `409c467b` (the REM-23 tree, which reads the old 9
+    # exactly): ONE OUT, nothing in, order otherwise unchanged -- `("rec:6bf46a143f347c12", "exists:Person", 0)`,
+    # the refusal of a `petition` formed on a Record (its `to` binds the referent, and a Record is no person).
+    # `petition` declares `referent_class: Person` and forms on a person alone, so that refusal (and the deposit it
+    # carried) is gone: resolved acts `petition` 2 -> 0, `reconstruct` 7 -> 8 (the freed scene), the rest unchanged.
+    # The property this pin is for holds: `actor_arm` is also 8, so every grammar claim is held at the end and none
+    # evicted.
     assert actor_end == [("hearth_ostvik", "stores:grain", 0),
                          ("einhir_texts", "exists:Person", 0),
-                         ("rec:6bf46a143f347c12", "exists:Person", 0),
                          ("rec:6bf46a143f347c12", "exists:Record", 1),
                          ("rec:6bf46a143f347c12", "exists:petition", 0),
                          ("rec:0a9f85a0f7f67871", "exists:Person", 0),
@@ -12174,8 +12239,20 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # `test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_do` loses -- and `argue`'s seven
     # drops hung on the one about the hearth. That is the refusal's WITNESS deposit, which AM-A-08 (as AM-A-07)
     # states as the cost of the class and which `argue` (not classed here) now lacks. The bite (below) is unmoved.
+    # ⚠⚠ EIGHT -> SEVEN, v10 REM-24 (B10-05): `petition` LEAVES, nothing joins. MEASURED BEFORE RE-PINNING, this
+    # fixture's drops by verb at the shipped default, REM-23 tree (`409c467b`, a `git worktree`) -> here, the same
+    # script on both: `petition` 12 -> 0, `accept`/`challenge`/`fight`/`interview`/`tend`/`train` 12 -> 11, `transfer`
+    # 13 -> 13 (97 drops -> 79). TWO CAUSES, EACH READ: `petition` declares `referent_class: Person` and this world's
+    # questions carry no person for it on the rungs and the Record it was dropped on (`hearth_ostvik` 10,
+    # `einhir_texts` 1, `rec:6bf46a143f347c12` 1), so it is not formed for clause 4 to drop. The other six declare no
+    # class and are still formed; what moved is the BELIEF that dropped each of them once on `rec:6bf46a143f347c12`:
+    # the one refused `petition` of this world on that Record (resolved acts `petition` 2 -> 0 in the shipped arm,
+    # `reconstruct` 7 -> 8) deposited `exists:Person = 0` on it -- the entry
+    # `test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_do` loses -- which is the
+    # refusal's WITNESS deposit that AM-A-09 (as AM-A-07) states as the cost of the class. The bite (below) is
+    # unmoved.
     assert {v for v, _ in hl_live} == {"accept", "challenge", "fight",
-                                       "interview", "petition",
+                                       "interview",
                                        "tend", "train", "transfer"}, (
         f"the headless drops are on {sorted({v for v, _ in hl_live})}. `examine`/`restore`/"
         "`interview`/`fight`/`research` are the `exists:` and `existence:`-cell drops the "
@@ -12407,8 +12484,15 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # -- the set assertion above's two verbs; every one of the other 25 survives. The clause still fires, and the bite
     # below is the same two pairs in both trees (the shipped arm's drops of both are unchanged; the control arm's
     # acts moved: `commit` 2 -> 0, `create_record` 9 -> 10, `tend` 0 -> 1, `train` 1 -> 2).
-    assert len(dropped) == 25, (
-        f"{len(dropped)} executable clause-4 drops, not 25. The drops are the channel itself; if "
+    # v10 REM-24 (B10-05): 25 -> 16, DOWN BY NINE, NONE IN, read off this test's own `dropped` (the pairs, by verb and
+    # subject, at the shipped default) on this tree and on the REM-23 tree (`409c467b`, a `git worktree`, the same
+    # script on both): OUT `('petition','einhir_texts')`, `('petition','hearth_ostvik')` and
+    # `('petition','rec:6bf46a143f347c12')` -- the set assertion above's one verb -- and `('accept'|'challenge'|
+    # 'fight'|'interview'|'tend'|'train','rec:6bf46a143f347c12')`, the six pairs hung on the `exists:Person = 0` the
+    # one refused `petition` on that Record deposited; every one of the other 16 survives, and `transfer`'s four are
+    # the same four. The clause still fires.
+    assert len(dropped) == 16, (
+        f"{len(dropped)} executable clause-4 drops, not 16. The drops are the channel itself; if "
         "this falls toward zero the clause has stopped firing, which is a different and worse "
         "failure than the loss of outcome-relevance recorded above.")
     # ⚠⚠⚠ **THE BITE CAME BACK UNDER G1a, THE GUARD ABOVE DEMANDED A REASON, AND THE REASON IS
@@ -12686,8 +12770,17 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # wrong-kind formation the class removes, not a lost belief. The other twelve verbs STAY (their counts move with
     # the act mix, which this assertion does not read: `argue` 44 -> 20, `accept` 16 -> 14, `sabotage` 6 -> 6). The
     # control arm drops 0 in both trees. `tell` and `surveil` are absent.
+    # ⚠ {13 verbs} -> {12 verbs}, v10 REM-24 (B10-05): `petition` LEAVES, nothing joins. MEASURED BEFORE RE-PINNING,
+    # this test's own `drops(DEFAULT_FIXTURES)` replicated on this tree and on a `git worktree` at `409c467b` (the
+    # REM-23 tree): there, 162 drops, `petition` 14, EVERY ONE on `r_realm` (a rung, no person); here, 148 drops and
+    # none of `petition`. THE UNIT IS ITS CELL'S NEW CLASS: `petition` declares `referent_class: Person` and forms on
+    # a person-classed referent alone, so no Candidate of it forms on `r_realm` for clause 4 to drop -- the
+    # wrong-kind formation the class removes, not a lost belief. The other twelve verbs STAY with the counts they
+    # had (accept/challenge/fight/interview/speak/tend/train 14, argue 20, build/found 9, carry/sabotage 6; the 148
+    # drops are 134 on `r_realm`, `p_a` 8 and `p_c` 6, the last two as before). The control arm drops 0 in both
+    # trees. `tell` and `surveil` are absent.
     assert {v for v, _ in live} == {"accept", "argue", "build", "carry", "challenge",
-                                    "fight", "found", "interview", "petition",
+                                    "fight", "found", "interview",
                                     "sabotage", "speak", "tend", "train"}, (
         f"the drops are on {sorted({v for v, _ in live})}. `tell` here means a "
         "`claim.held` claim is reaching a ledger again, which is the self-refuting belief "
