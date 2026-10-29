@@ -6,22 +6,16 @@ This file is the author's judgment in one place; it is not a plan."""
 
 # Closed batches leave SPINE, CARDS and ORDER at their net-deleting close (P3); their handles stay as keys, mapped
 # to CLOSED, so the coverage run still knows them (`-07` section 1 keeps every handle and records the batch CLOSED).
-CLOSED_BATCHES = ["B10-01", "B10-02", "B10-03", "B10-04", "B10-03b"]
-CLOSED = "closed: B10-01, B10-02, B10-03, B10-04, B10-03b (`-07` section 1)"
+CLOSED_BATCHES = ["B10-01", "B10-02", "B10-03", "B10-04", "B10-03b", "B10-05"]
+CLOSED = "closed: B10-01, B10-02, B10-03, B10-04, B10-03b, B10-05 (`-07` section 1)"
 
-SPINE = ["B10-05", "B10-06", "B10-07", "B10-07b",
+SPINE = ["B10-06", "B10-07", "B10-07b",
          "B10-08", "B10-09", "B10-10", "B10-11", "B10-12", "B10-13", "B10-14", "B10-15", "B10-16",
          "B10-17", "B10-18", "B10-20", "B10-19", "B10-Z"]
 
 CARDS = {
- 'B10-05': dict(name='FORMATION: ACTS FORM ONLY ON WHAT THEY CAN REACH', lanes='IN', code=True,
-   gate="merged: B10-02 (3ab145d6), B10-04 (566de4d7), B10-03b (8a80c4fc); layer-conformance Lens B has answered TL :462-467's two Layer 1 questions before the CL-THRUST B2.x and B3.1 landings",
-   exit="PYTHONHASHSEED=0 python -m engine.season.harness.aperture 1 s (s=0,1,2) per item; register --requirements; CR-14 pooled census and wrong-kind column over seeds 0-4 (-08 HR-9; the per-item base stays aperture 1 s, s=0,1,2); CR-28's falsifier; REM-52's re-pins (grep -rn body_step engine/season/tests: test_governance_build.py, test_in22_shortfall_reach.py, test_territorial_subsistence.py, test_se03_body_bands.py, test_season_shape.py, every seeded realm hash pin); CL-EVENTS (1) at (); B2.x and B3.1 at empty data; NM-W2's row deleted with HR-9 control (4)'s reading quoted -> each classed verb exists:<Kind>=0 refusals fall to 0 (base 3,137 over three seeds, a lower bound); the wrong-kind-at-admission share per act falls (base 4,620 of 16,116, 28.7%, four seasons; 2,385 of 7,402, 32.2%, two); controls: pooled per-verb EXECUTED within P1 seed-to-seed range, questions delivered / claims deposited / scenes do not fall, every removed candidate force-admitted refuses on its kind; CL-EVENTS (1), B2.x and B3.1 EQUAL; no claim that R-05 moves",
-   hash='mixed (movers: REM-22; REM-23; CR-28; REM-24; REM-25; CP-T05-04; REM-2C; REM-52 (its own declared-mover commit, body_step = 10))',
-   shared='engine/season/verb_table.yaml; engine/season/rosters.yaml (referent_classes; thrust_axes); engine/season/queries/world_q.py (questions_for splice, own_referents_of_class, the CR-28 stamper term); engine/season/data/verbs.py (DECLARED_CLASSES; VerbRow.scale removal); engine/season/decision/options.py; count pins: engine/season/tests/test_governance_build.py, test_season_shape.py (len(VERB_TABLE) == 56; executed and always-refused sets); engine/season/tests/test_referent_class_stamps.py (new); engine/season/data/fixtures.py (body_step); engine/season/loop/matter.py; engine/season/queries/inputs.py (ProduceInput.factor); modules/settlements/produce.py; engine/season/goals.yaml; engine/season/data/goals.py; the five body_step test files',
-   build='2026-10-24-v10-09-build-B10-05.md'),
  'B10-06': dict(name='REACH, SCARCITY AND RESTORES', lanes='IN', code=True,
-   gate='merged: B10-02 (3ab145d6), B10-05',
+   gate='merged: B10-02 (3ab145d6), B10-05 (1d6cd152)',
    exit="aperture 1 s per item; at close the R-01/R-02 re-take: proposals/2026-09-04-degree-sweep wd_chunk.py x (3 arms x 3 fixture points x 4 slices) then wd_collect.py; then corpus_run -> reconvergence below 96% at 2x3 with none >= default; march reaches a field (field.won/lost/unopposed at aperture 1 s, field.unopposed printed beside field.won + field.lost) or the failed link is named (the residue list gains 'defended'); confer and oblige read before and after REM-2B; CR-23's falsifier, its control (stock_report = off reproduces the base hash) and requisition formation at seasons 5-8, seeds 0-2, at crossing and at season; IN-45's falsifier and R-05's found/build/work lines (aperture 4 0, seeds 0-2)",
    hash='mixed (movers: REM-27; CR-23; REM-29; REM-2B; IN-45 (build_realm and realm pins only); REM-26 and REM-28 only where a row is classed)',
    shared="engine/season/verb_table.yaml; engine/season/rosters.yaml; engine/season/loop/effects_*.py; engine/season/loop/sides.py (REM-27); engine/season/data/requires.py (REM-29 room stem); engine/season/queries/world_q.py (fields_named, has_room; requisitionable, larders_in_purview, works_sites); modules/mass_battle/ (read only); engine/season/loop/matter.py and data/fixtures.py (stock_report) (CR-23); engine/season/venues.yaml (planned_works:) and harness/populated.py (build_realm's reader) (IN-45); one HR row",
@@ -45,7 +39,7 @@ CARDS = {
    shared='engine/season/seam/wrappers/sigma.py; engine/season/seam/ladder.py; engine/dice_engine/sigma_leverage.py (band_odds, settle_margin); modules/social_contest/roll.py (obstacle); engine/season/rosters.yaml (and the office_bodies note, CR-41); engine/season/loop/resolve.py (_contest); engine/season/loop/deliberate.py and state/carriers.py (CP-T01-05 slot, if built); engine/season/data/fixtures.py; engine/season/harness/aperture.py (CR-18 pools line); the editorial pass (CR-41 to CR-44): references/names_index.yaml; references/definitions/vocab_source.yaml; engine/engine_params/names.json (re-derived); references/definitions/definitions.yaml and references/alias_registry.yaml (re-derived); tests/valoria/test_vector_audit.py; references/ci_checks_registry.yaml; references/lane_assignments.yaml; engine/engine_params/params_tables.yaml (one comment); engine/season/harness/populated.py; engine/season/harness/invariants.py; engine/season/harness/run_cases.py; engine/season/tests/test_season_shape.py',
    build='2026-10-24-v10-09-build-B10-08.md'),
  'B10-09': dict(name='PERSONS: DEATH NAMES SEATS, THE KNOWN, THE SUCCESSOR', lanes='IN, SC, SE, WR', code=True,
-   gate='merged: B10-05, B10-07b, B10-08',
+   gate='merged: B10-05 (1d6cd152), B10-07b, B10-08',
    exit="two closes, decided at batch open (close one ends at IN-61; close two runs IN-58, CR-03, CR-10, CR-11, CR-25, CR-17; ctl/ and -01 deleted only at close two); each item falsifier and control as its home states; corpus_run over three seeds for CR-10; IN-61's import check (a FILLED_BY missing a conferral basis and a basis missing from REVOCATION_DISPOSAL refused) and its one-act claim falsifier (two vacant seats keyed on the heir's title: one succeed opens both and closes the title); CR-26's pass and planted arm; IN-12's python -m pytest engine/season/tests -q -k test_u2_; CR-25's R-04 line (aperture 4 s, s=0-2, establish ex >= 1 with Act.via a confer-granting seat); CR-17's falsifier and tau line -> as the homes state; the test_arrangements.py hold-disposing tripwire is re-recorded at CR-35 (B10-17), not here",
    hash='M (movers: CP-T02-01; CP-T02-02 (every pin naming off_npc_* re-records); CP-T03-00 (size measured at the commit, seeds 0-2, two seasons); CP-T02-03; CP-T02-05; IN-61; CR-10; CR-25; CR-17; IN-12 EQUAL in the realm (claimed); CR-26 and the CL-THRUST B3.2 landing EQUAL)',
    shared='engine/season/state/world.py; engine/season/loop/census.py; engine/season/offices.yaml; engine/season/decision/options.py; engine/season/data/verbs.py; engine/season/queries/person_q.py; engine/season/queries/world_q.py; engine/season/rosters.yaml; engine/season/decision/questions.py; engine/season/state/carriers.py; engine/season/seam/ladder.py and loop/effects_combat.py (CP-T03-00); engine/season/harness/play_surface.py; engine/season/state/gate.py (IN-61, IN-12); engine/season/loop/predicates.py; engine/season/loop/driver.py; engine/season/data/fixtures.py (odds_weighting, choice_temperature); engine/season/verb_table.yaml (interrogate, establish); engine/season/tests/test_in61_heir_hears_vacancy.py (new)',
@@ -63,25 +57,25 @@ CARDS = {
    shared='modules/combat/; engine/season/seam/wrappers/combat.py; engine/season/loop/effects_combat.py; engine/season/verb_table.yaml; engine/season/data/requires.py (the individual stem; the names: stem); engine/season/rosters.yaml (duel_terms; challenge_terms, record_kinds); engine/season/state/gate.py (CP-T03-09 detain opener); engine/engine_params/pc_matchup.json and tools/export_pc_matchup.py (deleted by CP-T03-05)',
    build='2026-10-24-v10-09-build-B10-11.md'),
  'B10-12': dict(name='MASS BATTLE (T04)', lanes='MB', code=True,
-   gate='merged: B10-05, B10-10, B10-11; held positions: CP-T04-04 (M4 Ask C (b)); CP-T04-10 (M3); CP-T04-09 (cut)',
+   gate='merged: B10-05 (1d6cd152), B10-10, B10-11; held positions: CP-T04-04 (M4 Ask C (b)); CP-T04-10 (M3); CP-T04-09 (cut)',
    exit="per item as its home states; each exit reports the fought-field count it was measured on; CR-12: python3 -m systems.mass_battle.sim.lanchester_signature on both per-cell arms before and after; CR-24's falsifier; at CP-T04's close R-04's combat scales: row (i)+(ii) and R-07 conjunct (3) read -> EQUAL at the shipped arms; a mover on each flip, declared",
    hash='mixed (movers: CR-24 (wherever a defended field is fought); MB-07r (golden digests); CP-T04-06 (besiege roster flip, own commit); CR-12 (when built); CP-T04-04 (when M4 Ask C (b) releases it))',
    shared='modules/mass_battle/ (massbattle.py, orchestration.py, config.py); engine/season/loop/encounter.py; engine/season/seam/wrappers/mass_battle.py; engine/season/verb_table.yaml (march; marshal, besiege, surrender rows); engine/season/loop/sides.py (CP-T04-04, held); engine/season/loop/effects_information.py (CP-T04-07); tools/ci_golden_modes_check.py and engine/tests goldens (MB-07r, CR-12); engine/season/loop/effects_combat.py (_eff_march) and data/fixtures.py (field_winner_casualties) (CR-24)',
    build='2026-10-24-v10-09-build-B10-12.md'),
  'B10-13': dict(name='SOCIAL CONTEST AND PROCEEDINGS (T05)', lanes='SC', code=True,
-   gate='merged: B10-05, B10-06, B10-08, B10-12',
+   gate='merged: B10-05 (1d6cd152), B10-06, B10-08, B10-12',
    exit="per item on its hand-built falsifier worlds (the realm forms about three determine in twelve seed-seasons); tell attempts, news.told and chained-claim counts per season before and after CP-T05-03, seeds 0-2; CR-27's falsifier and its realm reading (reported, not thresholded); R-05 reads lie's execution; CR-34's falsifier and three controls, its realm reach recorded as 0 with the residue and trigger named (aperture 4 0's determine row not used as a control); CR-31's falsifier and control (heritage_gain 0 reproduces CR-30's tree's hash) -> as stated; the chained-claim fall is the price, recorded; one close",
    hash='M (movers: SC-02 (re-source, once its design is approved); CP-T05-01; CP-T05-02; CP-T05-03; CR-27 (lie_offered ships True); CR-31 (at the shipped heritage_gain where a heritage is authored and seen); CR-34 EQUAL in every seeded realm, by construction)',
    shared="engine/season/seam/wrappers/sigma.py (contest_input); engine/season/queries/world_q.py (reception, proofs, hearing; judging_set, CR-34); engine/season/loop/effects_governance.py; engine/season/arrangements.yaml (excommunication_deliberation to disposal: declared, CR-34); engine/season/data/ (rosters.py DEGREE_STEP read; arrangements.py quorum; for CR-34 the file that owns determine's quorum conjunct, located by symbol at the re-base); engine/season/loop/witness.py and data/verbs.py (CP-T05-03 tell.refused kind); engine/season/queries/person_q.py (lie_said_of; heritage_regard, CR-31); engine/season/decision/options.py (opening_set; teller_weight's relation term, CR-31); engine/season/rosters.yaml (lie's cells); engine/season/data/fixtures.py (lie_offered; heritage_gain, CR-31); engine/season/verb_table.yaml (the lie row) and the verb-step pins; HR rows H-161 and the new heritage_gain row",
    build='2026-10-24-v10-09-build-B10-13.md'),
  'B10-14': dict(name='FIELDWORK AND INFORMATION (T06)', lanes='FI', code=True,
-   gate='merged: B10-02 (3ab145d6), B10-05, B10-06, B10-13; held positions: CP-T06-08 (JA-1); CR-29 released from M11 (ED-IN-0300)',
+   gate='merged: B10-02 (3ab145d6), B10-05 (1d6cd152), B10-06, B10-13; held positions: CP-T06-08 (JA-1); CR-29 released from M11 (ED-IN-0300)',
    exit='per item as its home states; test_fi03_trail.py re-recorded and declared; the (kind, place) found-vs-logged count per seed for CP-T06-02; CP-T06-05 without its M9 limit sentence (CR-27 landed at B10-13) -> as stated',
    hash='M (movers: CP-T06-09; CP-T06-01; CP-T06-04; CP-T06-02; CP-T06-07; CP-T06-05; CP-T06-03 wherever a retry forms; CR-29 commit 2 when released)',
    shared='engine/season/loop/witness.py; engine/season/epistemic.py; engine/season/state/attribution.py; engine/season/loop/effects_information.py; engine/season/state/world.py (_on_logged index); engine/season/rosters.yaml (record_kinds cover; covert_kinds); engine/season/data/rosters.py (COVER_KEY, COVER_AS); engine/season/verb_table.yaml (sabotage class; interview retype); engine/season/tests/test_fi03_trail.py (declared re-record)',
    build='2026-10-24-v10-09-build-B10-14.md'),
  'B10-15': dict(name='THREADWORK (T07)', lanes='WR, PC', code=True,
-   gate='merged: B10-05, B10-14; held positions: WR-01 (BLK on its own condition)',
+   gate='merged: B10-05 (1d6cd152), B10-14; held positions: WR-01 (BLK on its own condition)',
    exit="per item as its home states; CR-13: a Leap at Partial and at Failure each net 0 Coherence, Weaving keeps the blanket penalty; REM-45's falsifier and EQUAL control; IN-32's stopping rule (aperture 1 0 tie / knot offered and executed; fanned deliberations with a tie-only partner; tie_known True against False content_hash) -> as stated; CR-13, REM-45 and the shipped () tuple of CP-T07-07 hash EQUAL",
    hash='mixed (movers: CP-T07-02 (schema: Person.coherence); CP-T07-03 (schema: Site.locked); CP-T07-09, -04, -06, -10, -08, -11 per working; IN-32; REM-45 EQUAL)',
    shared='systems/threadwork/sim/operations.py (CR-13, REM-45); engine/season/seam/wrappers/threadwork.py (new host); engine/season/state/carriers.py (Person.coherence; Site.locked); engine/season/write_matrix.yaml; engine/season/rosters.yaml (thread_scales, cells); engine/season/verb_table.yaml (weave, lock, mend, ward, thread_read, tie / knot); engine/season/loop/matter.py (locked-Site yield); engine/season/queries/world_q.py (in_equilibrium, held_load); engine/season/decision/budget.py (coherence_band_floors); engine/season/loop/effects_information.py (_eff_tie); engine/season/decision/options.py (operand_bags); engine/season/data/fixtures.py (tie_known); engine/season/seam/wrappers/sigma.py (the Will addend)',
@@ -93,13 +87,13 @@ CARDS = {
    shared='modules/settlements/ (produce.py ProduceInput); engine/season/loop/matter.py; engine/season/queries/world_q.py (labour, price_of, unrest); engine/season/queries/person_q.py (stability read); engine/season/data/fixtures.py; engine/season/rosters.yaml; engine/season/decision/budget.py (IN-14, CP-T08-10); engine/season/loop/driver.py (IN-14 rounds); engine/season/loop/effects_economy.py (CP-T08-08 upkeep_due); engine/season/tests/test_season_shape.py (test_n3 floor re-take); systems/settlements/valoria_geography_v30.yaml, references/canonical_sources.yaml (pin, re-derived) and systems/settlements/_identifier_census.yaml (re-derived) (CR-40)',
    build='2026-10-24-v10-09-build-B10-16.md'),
  'B10-17': dict(name='FACTIONS, WAR AND DIPLOMACY (T09)', lanes='FA', code=True,
-   gate="merged: B10-05, B10-06, B10-08, B10-09, B10-10 (CR-30), B10-12, B10-13 (CR-34), B10-16; CR-35's gate arm and H-217 clause and CR-37 build in the ordinary way (H-L0-8 and H-L0-9 applied, PR #507); two closes, decided by the batch's first reading at open (close one IN-30 to CP-T09-06; close two CR-32, CR-35, CR-36, CR-37 and IN-48); held positions: IN-36 (M1's residue: H-233; the foreign/guards defaults); FA-01's clause (released from M11; needs CR-29); no position adds a casus-belli conjunct to march (M10 (b))",
+   gate="merged: B10-05 (1d6cd152), B10-06, B10-08, B10-09, B10-10 (CR-30), B10-12, B10-13 (CR-34), B10-16; CR-35's gate arm and H-217 clause and CR-37 build in the ordinary way (H-L0-8 and H-L0-9 applied, PR #507); two closes, decided by the batch's first reading at open (close one IN-30 to CP-T09-06; close two CR-32, CR-35, CR-36, CR-37 and IN-48); held positions: IN-36 (M1's residue: H-233; the foreign/guards defaults); FA-01's clause (released from M11; needs CR-29); no position adds a casus-belli conjunct to march (M10 (b))",
    exit="per item as its home states; CP-T09-02, -03, -04 and -08 count their chain teeth only on an observed army.arrived or rung.seized after a computed act on a term-(c) target, seeds 0-2; CP-T09-04's falsifier (5) and readings (rung.seized, uncontrolled_in_realm, endings; seeds 0-2, eight seasons); IN-30's faction_props readings; CP-T09-06's one-claim falsifier; CR-32's, CR-35's, CR-36's and CR-37's falsifiers and controls; CR-35's confer ex re-read on the post-item tree (aperture 4 s, s=0-2) against the pre-item tree; the test_arrangements.py hold-disposing tripwire red and re-recorded at CR-35 -> as stated",
    hash='M (movers: IN-30 + CP-T09-04 (re-records test_faction_q.py and test_march.py pins); CP-T09-05; CP-T09-02; CP-T09-03; CP-T09-07; CR-09; CP-T09-08; CP-T09-06; CP-T09-01 and CP-T09-09 bodies if built; CR-32; CR-35 (when shipped on); CR-36; CR-37 (when built))',
    shared='engine/season/offices.yaml; engine/season/harness/populated.py; references/npc_registry.yaml; engine/season/verb_table.yaml (declare, recruit, conspire, dispatch); engine/season/loop/sides.py; engine/season/loop/effects_shared.py (occupying_faction); engine/season/queries/world_q.py (seat_people_at, own_purview, opinion_of, uncontrolled caller; faction_props; judging_set matter); engine/season/state/gate.py (may_muster oblige clause; the election arm, FILLED_BY, REVOCATION_DISPOSAL, REVOCATION_RULES); modules/social_contest/roll.py (obstacle terms); engine/season/arrangements.yaml (election, succession); engine/season/loop/effects_information.py (_disposal hold literal; _eff_determine Record site); engine/season/loop/predicates.py (_req_confer, _req_revoke); engine/season/rosters.yaml (conferral_bases, revocation_bases, record_kinds, concurring_bodies, factions.creed); engine/season/state/world.py (_grant_remit); engine/season/epistemic.py (_term_marks); engine/season/decision/options.py (rank); engine/season/tests/test_arrangements.py',
    build='2026-10-24-v10-09-build-B10-17.md'),
  'B10-18': dict(name='WORLD, TRAVEL, SURVIVAL AND NPC LIFE (T10)', lanes='WR, IN', code=True,
-   gate='merged: B10-02 (3ab145d6), B10-04 (566de4d7), B10-05, B10-06, B10-09, B10-17; CP-T10-04 and CP-T10-05 released from M11 (ED-IN-0300)',
+   gate='merged: B10-02 (3ab145d6), B10-04 (566de4d7), B10-05 (1d6cd152), B10-06, B10-09, B10-17; CP-T10-04 and CP-T10-05 released from M11 (ED-IN-0300)',
    exit='per item as its home states; CP-T10-03 ships year_length 0, hash EQUAL (year_length 0 or every season_terms multiplier at 1.0 reproduces the base hash), then its flip as a declared mover; CL-EVENTS (2) falsifier (two territories at one tick draw different factors; () reproduces the base hash); CR-08 writer (grep -rn "weight.changed" engine/season finds it); CR-22 exit (the arms read, the season-0 floor rule, the eaters fed from a larder above their own settlement, the strict-top share at CR-17 tau as a reading); CL-EVENTS (3) loader refusals, draw and scale falsifier and its two controls (python -m pytest engine/season/tests/test_tensions.py -q; engine/season/tests/test_season_weather.py); CL-EVENTS (4) falsifier and seeding refusals, and its readings (STORY-BAR on against off; TL B0.1 ARC rate if landed; card 1 fight on the King), recorded, not a pass condition -> as stated; CL-EVENTS (3) and (4) EQUAL',
    hash="M (movers: CP-T10-06; CP-T10-07 (a new hashed collection); CP-T10-09; CP-T10-08; CP-T10-01 (the same-place rule on both arms; the leg tuple on the ON arm); CP-T10-02; CP-T10-03's year_length flip (its own commit); CL-EVENTS (2); CR-08; CR-22; CP-T10-04 and CP-T10-05 (when released); CL-EVENTS (3) and (4) EQUAL, switch off)",
    shared="engine/season/state/world.py (World.estates, remove_person); engine/season/loop/census.py; engine/season/data/fixtures.py; engine/season/data/geography.py; engine/season/queries/world_q.py (_larder_parts want; heir_of; estates_named; season_factor_of); engine/season/queries/person_q.py (_bond); modules/mass_battle/terrain.py (terrain_type_at); references/module_contracts.yaml (route query role); engine/season/verb_table.yaml (release domain; marry); engine/season/loop/effects_migration.py (_relocate); engine/season/rosters.yaml (subsistence_weight; tension_effects); engine/season/write_matrix.yaml; engine/season/loop/matter.py; engine/season/tensions.yaml (new); engine/season/data/tensions.py (new); engine/season/data/files.py (TENSIONS_YAML); engine/season/harness/populated.py (build_realm(tensions=)); engine/season/data/goals.py (read through parse); engine/season/tests/test_tensions.py (new)",
@@ -112,7 +106,7 @@ CARDS = {
    build='2026-10-24-v10-09-build-B10-20.md'),
  'B10-19': dict(name='DESIGN-FIRST CLUSTERS (NARRATION, CHARACTER, TROOP, EVENT DECK, THRUST LADDERS)', lanes='IN, WR, MB, SC', code=False,
    gate="no batch; the questions below; CR-38 drafted in a worktree beside B10-13 and approved before B10-18 closes (ED-1094's merge default unless its PR holds it back): approved, its build runs by R8 as its own sub-batch before B10-20 opens; unapproved, it is on B10-20's freeze row as a declared post-freeze mover with the interim two-seat bench named; holds: J-T2 (CL-ATTR), M3 (CL-TROOP), M1's residue (CL-THRUST B5.2); CL-THRUST B4.x on determine and covenant executing, B6.n on content; NM-W5 held on NM-W1 only; no member is held on a narration decision",
-   exit='the question answered, then the member own position list is slotted into the next unopened batch by R8; CL-THRUST pieces in TL section 8 order (B0.1 in B10-02, B2.x and B3.1 in B10-05, B3.2 in B10-09), each with its falsifier, control and instrument, hash EQUAL at empty data -> no code until then',
+   exit='the question answered, then the member own position list is slotted into the next unopened batch by R8; CL-THRUST pieces in TL section 8 order (B0.1 in B10-02, B2.x and B3.1 LANDED in B10-05, B3.2 in B10-09), each with its falsifier, control and instrument, hash EQUAL at empty data -> no code until then',
    hash='E',
    shared='proposals/ (design files only)',
    build='2026-10-24-v10-09-build-B10-19.md'),
@@ -133,8 +127,8 @@ REM = {
  "REM-10": CLOSED, "REM-11": CLOSED, "REM-12": CLOSED, "REM-13": CLOSED, "REM-14": CLOSED,
  "REM-15": CLOSED, "REM-16": CLOSED,
  "REM-42": CLOSED, "REM-45": "B10-15", "REM-46": CLOSED, "REM-47": CLOSED,
- "REM-50": CLOSED, "REM-51": CUT, "REM-52": "B10-05",
- "REM-21": "B10-05", "REM-22": "B10-05", "REM-23": "B10-05", "REM-24": "B10-05", "REM-25": "B10-05", "REM-2C": "B10-05",
+ "REM-50": CLOSED, "REM-51": CUT, "REM-52": CLOSED,
+ "REM-21": CLOSED, "REM-22": CLOSED, "REM-23": CLOSED, "REM-24": CLOSED, "REM-25": CLOSED, "REM-2C": CLOSED,
  "REM-26": "B10-06", "REM-27": "B10-06", "REM-28": "B10-06", "REM-29": "B10-06", "REM-2A": "B10-06", "REM-2B": "B10-06",
  "REM-40": CUT, "REM-41": CUT, "REM-44": "B10-07",
  "REM-30": "B10-10", "REM-31": "B10-10", "REM-32": "B10-10",
@@ -146,7 +140,7 @@ CP["CP-T03-00"] = "B10-09"
 for n in range(1, 12): CP[f"CP-T03-{n:02d}"] = "B10-11"
 for n in range(1, 11): CP[f"CP-T04-{n:02d}"] = "B10-12"
 for n in range(1, 6): CP[f"CP-T05-{n:02d}"] = "B10-13"
-CP["CP-T05-04"] = "B10-05"
+CP["CP-T05-04"] = CLOSED
 CP["CP-T05-05"] = CUT
 for n in range(1, 10): CP[f"CP-T06-{n:02d}"] = "B10-14"
 CP["CP-T06-06"] = CUT
@@ -182,7 +176,7 @@ CR = {
  "CR-04": (CLOSED, "Horizon: run the soak and the census at 12 and 24 seasons; ledger saturation, decay balance, told-claim rate"),
  "CR-05": (CLOSED, "The 35 `skip`/`xfail` markers: read each reason, record whether its condition still holds"),
  "CR-06": (CLOSED, "The gate sees an effect body that changes a tenure by itself (H-137)"),
- "CR-07": ("B10-05", "Retire the stored `scale:` column (H-89; A1-46)"),
+ "CR-07": ("B10-Z", "Retire the stored `scale:` column (H-89; A1-46): HELD, moved from B10-05 at its close"),
  "CR-08": ("B10-18", "`(Person, weight)` has a matrix row and no writer (H-49): the CENSUS writer, a cohort loses weight when its body floors (M6 taken)"),
  "CR-09": ("B10-17", "`own_purview` and the oblige clause agree (H-101)"),
  "CR-10": ("B10-09", "The own-act screen spares tier-1 echoes, arm D2 (IN-57; A1-05)"),
@@ -203,7 +197,7 @@ CR = {
  "CR-25": ("B10-09", "A computed `establish` founds an office over a holding (CR-11's build; M8's H-132 (b), H-144 (b))"),
  "CR-26": ("B10-09", "The heir hears the vacancy (IN-61 check (4), executed)"),
  "CR-27": ("B10-13", "`lie`: a spoken falsehood on a held cell claim (M9)"),
- "CR-28": ("B10-05", "G-04(a): own-ledger Propositions stamp as class `Proposition` (M19)"),
+ "CR-28": ("B10-09", "G-04(a): own-ledger Propositions stamp as class `Proposition` (M19): moved from B10-05 at its close, behind CR-10"),
  "CR-29": ("B10-14", "REACH: the event-kind reach channel, then `chronicle`'s paired deletion (released from M11, ED-IN-0300)"),
  "CR-30": ("B10-10", "`Person.heritage`: descent as a read-off field; the `marks` term gets its carrier"),
  "CR-31": ("B10-13", "The caste estimate: a heritage regard term (`heritage_gain`)"),
@@ -228,19 +222,18 @@ GO = {
 }
 NM = {f"NM-W{n}": "B10-19" for n in range(10)}
 NM["NM-W0"] = CLOSED
-NM["NM-W2"] = "B10-05"
+NM["NM-W2"] = CLOSED
 NM["NM-W3"] = CLOSED
 CL = {"CL-CHAR": "B10-10", "CL-ATTR": "B10-19", "CL-TROOP": "B10-19", "CL-EVENTS": "B10-18", "CL-THRUST": "B10-19"}
 
 # In-batch order of the final cut ('->' is serial; 'held:' members wait on the question named and slot in by rule R8;
 # 'landing' is a commit of a row that lives in another batch, not a member)
 ORDER = {
- 'B10-05': 'REM-21 -> REM-22 -> REM-23 -> CR-28 -> REM-24 -> REM-25 -> CP-T05-04 -> REM-2C -> CR-07 -> landings CL-THRUST B2.1/B2.2 -> landing CL-THRUST B3.1 -> REM-52 -> landing CL-EVENTS (1) -> NM-W2 (EDIT row)',
  'B10-06': 'REM-26 -> REM-27 -> REM-28 -> CR-23 -> REM-29 -> REM-2A -> REM-2B -> IN-45',
  'B10-07': 'REM-44 (with L1-6 and L1-7)',
  'B10-07b': 'SE-06 (MEASURE, then BUILD if values exist) -> CR-21 -> CR-16',
  'B10-08': 'CR-41 -> CR-42 -> CR-43 -> CR-44 -> CP-T01-03 -> CP-T01-04 -> CP-T01-06 -> CP-T01-05 -> CP-T01-01 -> CP-T01-02 -> CR-18',
- 'B10-09': 'CP-T02-01 -> CP-T02-02 -> CP-T03-00 -> CP-T02-03 -> CP-T02-05 -> CP-T02-07 -> IN-12 -> CR-26 -> IN-61; close two: IN-58 -> CR-03 -> CR-10 -> landing CL-THRUST B3.2 -> CR-11 -> CR-25 -> CR-17',
+ 'B10-09': 'CP-T02-01 -> CP-T02-02 -> CP-T03-00 -> CP-T02-03 -> CP-T02-05 -> CP-T02-07 -> IN-12 -> CR-26 -> IN-61; close two: IN-58 -> CR-03 -> CR-10 -> CR-28 -> landing CL-THRUST B3.2 -> CR-11 -> CR-25 -> CR-17',
  'B10-10': 'landing CP-T01-05 NPC half (conditional) -> REM-31 -> REM-30 -> CR-20 -> CR-30 (one combined Person repr re-pin with CR-20) -> CR-19 -> CR-33 -> CL-CHAR (row deleted at close) -> REM-32 -> CP-T02-06',
  'B10-11': 'CP-T03-01 -> CP-T03-02 -> CP-T03-05 -> CP-T03-09 -> PC-10 -> CP-T03-03 -> CP-T03-04 -> CP-T03-07 -> CP-T03-08 -> CP-T03-06; held: CP-T03-10 (parked), CP-T03-11 (cut)',
  'B10-12': 'CP-T04-01 -> CP-T04-05 -> CR-24 -> CP-T04-02 -> CP-T04-03 -> CP-T04-08 -> CP-T04-06 -> CP-T04-07 -> MB-07r -> CR-12; held: CP-T04-04 (M4 Ask C (b)), CP-T04-10 (M3), CP-T04-09 (cut)',
@@ -252,7 +245,7 @@ ORDER = {
  'B10-18': "CP-T10-06 -> CP-T10-07 -> CP-T10-09 -> CP-T10-01 -> CP-T10-02 -> CP-T10-03 -> CP-T10-03's flip -> CL-EVENTS (commit 2) -> CR-08 -> CR-22 -> CL-EVENTS (commit 3) -> CL-EVENTS (commit 4) -> CP-T10-04 -> CP-T10-05 -> CP-T10-08",
  'B10-20': 'GO-09 -> GO-10 -> GO-11 -> GO-12 -> GO-16 -> GO-01 -> GO-05 -> GO-08 -> GO-15; listed: GO-06 (HELD, BLK, another repository)',
  'B10-19': "held: NM-W1, NM-W4, NM-W5 (behind NM-W1), NM-W6, NM-W7, NM-W8, NM-W9, CL-ATTR (J-T2), CL-TROOP (M3), CL-THRUST (B4.x on its gates; B5.2 on M1's residue; B6.n content); DESIGN-FIRST: CR-38 (drafted beside B10-13; approved before B10-18 closes, else on B10-20's freeze row)",
- 'B10-Z': 'held or LEAVE: FA-03, FA-07, MB-08, PC-06, PC-08, IN-44 (rows 2-16 released from M11), SC-05, SC-07, CR-39 (on CR-38)',
+ 'B10-Z': 'held or LEAVE: FA-03, FA-07, MB-08, PC-06, PC-08, IN-44 (rows 2-16 released from M11), SC-05, SC-07, CR-39 (on CR-38), CR-07 (on H-89: via.scope missing on one registry-derived seat)',
 }
 
 # Remediation DEF rows that the plan itself says are work, not deferrals (rev. 4; D-1 was relayed, and is confirmed by the superseding row of ED-IN-0300, 2026-10-26: M11 answered (a); the data below is unchanged)
