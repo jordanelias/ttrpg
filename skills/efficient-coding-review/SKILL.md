@@ -15,9 +15,9 @@ description: >
   (valoria-canon-guard).
 ---
 
-# ADVERSARIAL REVIEW
+# EFFICIENT-CODING-REVIEW — adversarial attack on a work product
 
-## Status: PROPOSED — ratified on merge of the PR that adds it (CLAUDE.md §2, ED-1094). Lane IN; no ED allocated. Invocable as a project skill through `.claude/skills/efficient-coding-review`.
+## Status: RATIFIED on merge of its landing PR (CLAUDE.md §2, ED-1094; #518). Lane IN; no ED allocated. Invocable as a project skill through `.claude/skills/efficient-coding-review`.
 
 ## What this skill owns, and what it copies
 
@@ -95,7 +95,7 @@ quotation verbatim. Then:
   re-run it, and confirm the artifact frozen is the artifact that ran (a freeze of the predictions
   does not freeze the code they ran against).
 
-Rule per claim: **UPHOLD · OVERTURN · SOFTEN · SHARPEN · UNVERIFIABLE** (`valoria-critic`'s vocabulary).
+Rule per claim: **UPHOLD · OVERTURN · SOFTEN · SHARPEN · UNVERIFIABLE** (the first four are `valoria-critic`'s vocabulary; UNVERIFIABLE is this skill's).
 
 ## STEP 3 — APPLICATION *(does the idea transfer?)* — six tests per TRANSFER row
 
@@ -180,7 +180,7 @@ inputs) and often only that one. The finding is the directions it cannot run.
 ## STEP 7 — THE VERDICT (the reply; nothing is written to a file)
 
 ```
-ADVERSARIAL REVIEW: <work>      [SELF-AUTHORED — bias risk]      ROUNDS: 1
+EFFICIENT-CODING-REVIEW: <work>      [SELF-AUTHORED — bias risk]      ROUNDS: 1
 
 IN PLAIN WORDS   <≤ 5 sentences: what it is · whether to rely on it · the three things that limit it most>
 

@@ -900,7 +900,7 @@ value). **Recursion depth is a crash** (`max_depth`, no default, typed refusal a
 `Vector2` is float32. **Fixed point for `condition`, `stores`, `margin`.**
 
 
-## §C.12 · The POSITIVE Godot mapping — what each shape becomes, and the four idioms we reject on purpose
+## §C.12 · The POSITIVE Godot mapping — what each shape becomes, and the five idioms we reject on purpose
 
 **Added 2026-09-05 at adoption (ED-IN-0204), on Jordan's instruction that Layer 1 "work with Godot
 principles while still being bespoke to our project".** §C.8–§C.10 above names what Godot
@@ -1005,7 +1005,7 @@ a porter will "fix".
 ### What stays bespoke, and is not a Godot question at all
 
 The nine modules (§A.2), the write matrix, the `requires` grammar, the degree ladder read from
-`engine/autoload/dice_engine.py`, and the Key substrate the port already ingests
+`engine/dice_engine/dice_engine.py`, and the Key substrate the port already ingests
 (`engine/engine_params/`) are **project shapes**. Godot neither helps nor hinders them; they port as
 plain typed code. Do not let a Godot idiom reshape one — the direction of fit is that the port
 serves the model, which is §6's standing port↔oracle rule (ED-1050): *never let a port "correct" its

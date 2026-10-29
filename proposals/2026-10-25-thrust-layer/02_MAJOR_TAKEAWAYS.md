@@ -96,7 +96,7 @@ and **the share of questions fed by a refusal-kind claim has not been measured.*
 - G-08, G-11, G-12: extend `aperture` and `arms` (do not write a new harness) to pool seeds, split `need` by what it is
   about, and sweep a build flag as well as a fixture.
 
-**Owner and status.** The formation question is **H-156** (`engine/season/hole_register.yaml:3615`): an open ruling that
+**Owner and status.** The formation question is **H-156** (`engine/season/hole_register.yaml:3615`): an open ruling (**taken since as M19 (a)**, `workplans/valoria_master_workplan_v10_part11.md:13`) that
 runs CLAUDE.md §0's five steps and leaves the row open, because two defensible options (decline wrong-kind candidates at
 formation, or accept the refusal tax) lead to materially different corpora. **The first delivery wrongly said this
 question "sits in no workplan"; the register's v1 design for it was withdrawn after the critic opened H-156.** It is the
@@ -135,7 +135,7 @@ occasion they carry, and the figures above replace it.
 **What it means.** The motive is the existing ambition (a `commit` to an OUGHT) plus an *authored ladder of typed stages* in
 `goals.yaml`; the current stage is derived from the person's own ledger every time, so there is no arc store (TL §1–§3).
 The starved `need` question is fixed by promoting a stage's referents for one season per deadline period with a staggered
-per-person phase (TL §3.3), which avoids the measured news regression because the commits are not all minted at season 0.
+per-person phase (TL §3.3; **R3′ and the stage `deadline` are excluded by M20**, `v10_part6.md:172`), which avoids the measured news regression because the commits are not all minted at season 0.
 
 **Missing in code.** G-09 (seat rows), G-10 (24 of 38 rows are orientation-only: authoring), G-11 (the `need` share is not
 separable by what it is about), G-12 (`arms.py` can sweep one fixture and no build flag). The ladder runtime itself is
@@ -186,7 +186,7 @@ the corpus achieves arcs (accrual, exposure, succession, decision point, contest
 `reports/R02`; most character "arcs" are positions, not trajectories (§8.2).
 
 **Missing in code.** G-13 (the whole ladder runtime: axes roster, `axis:`, stages, `current_stage`, stage referents,
-pulse promotion; no new design beyond TL, but name the key `goal_stages`, since `ladders` already means two other things in
+pulse promotion (R3′ excluded by M20); no new design beyond TL, but name the key `goal_stages`, since `ladders` already means two other things in
 the package), G-14 (closure verbs; ordering), G-25 (termini are unevaluated prose), G-26 (axes lack rows).
 
 **Wrong if.** After the closers execute, stage-referent hit rate at the new refusal floor stays at the old one (TL B3.2); or
@@ -239,7 +239,7 @@ meet in a question: H-209), G-18 (a dead holder's seat is named by no claim: H-2
 G-19 (guards: authored rows plus an A/B that needs G-12), G-20 (no committed reader of deaths by killing verb).
 
 **Owner and status.** PC-10b is stopped at B-Y (BLK:H-240, a grammar-change route unchosen); H-206 and H-209 route to
-IN-12 step 5 (BLK). TL §5.1–§5.3 compose on these; the one live design choice is where the `Slain` edge sits (D1, §11).
+IN-12 step 5 (BLK). TL §5.1–§5.3 compose on these; the one live design choice was where the `Slain` edge sits (D1, §11; **since ruled M21 (a): no `Slain` band**, `v10_part6.md:181`).
 
 **Wrong if.** Pooled over seeds, `accept` deaths do not fall when an `accept` needs a held challenge (then `accept` was not
 the route); or the consequence package produces a feud that raises deaths per run.
@@ -335,7 +335,7 @@ per referent kind (person, record, seat, rung, site, or institution-wide orienta
 
 **Evidence.**
 - *The first arc test was vacuous* [critic F1]: every witnessed act deposits a claim and the gate mints a Receipt for it
-  (`loop/witness.py:654-657`, `state/world.py:1144-1160`), so "moved and was seen" counted as an arc. The design now uses
+  (`loop/witness.py:654-657`, `state/world.py:1306-1322`), so "moved and was seen" counted as an arc. The design now uses
   named field rosters, planted cases that must read FALSE, and a bookkeeping null.
 - *The toy arc test* credited a lone closing event at any season and counted silence as closure; v1 had four instrument
   defects (a prize/duel thread split, a climax outside its own peak window, tied climaxes, an early transient inflating the
@@ -375,7 +375,7 @@ judgment node; and say plainly when a re-recorded golden moved.
 - **Anything about Valoria's balance or content from the toy.** The toy's world, metrics and arc template are the author's.
   Only the refusal rate, the goal rows and the death counts come from the engine.
 - **The primary literature.** Compton, Smith and Whitehead, Ryan and colleagues, and drama-manager work outside the repo
-  (Façade, Riedl) were read through the repo's research files and not re-fetched. [GAP]
+  (Façade, Riedl) were read through the repo's research files and not re-fetched. [GAP at filing; read since in `research/emergent_narrative_literature/`]
 - **Two-level lookahead, other value proxies, any human judgement of "construable".** Not tested.
 - **A player character.** A player's acts come through `harness/play_surface.py`'s callback and bypass `opening_set`, so any
   formation filter binds NPCs only; this set of documents says nothing else about a player character.
@@ -383,12 +383,14 @@ judgment node; and say plainly when a re-recorded golden moved.
 
 ## 11. What needs Jordan, and where each item lives
 
+*As of 2026-10-25. Decided since in the v10 plan: H-156 = M19 (a) (`v10_part11.md:13`); D1 = M21 (a) (`v10_part6.md:181`); D4 = M20, narrowed (`v10_part6.md:172`); PC-10b / H-240 = route (1) (`v10_part3.md:192`); ED-IN-0297 closed by a superseding row (`registers/editorial_ledger_in.jsonl:81`).*
+
 | Item | Question | Lives in |
 |---|---|---|
 | **H-156** | decline wrong-kind candidates at formation, or accept the tax (supplied with the measurement above) | `engine/season/hole_register.yaml:3615`; register G-01, §5 |
 | D1 | whether a beaten fighter is ever killed outright, and where the `Slain` edge sits (the un-negotiated `fight` default is already answered: lethal) | TL §10 |
 | D4 | where "a sequence of ladder stages" (licensed 2026-08-18) ends and "an entire arc" (not licensed) begins | TL §10 |
-| PC-10b / H-240 | the grammar route for a held challenge (already Jordan-gated) | workplan v9 part 7 §PC-10 |
+| PC-10b / H-240 | the grammar route for a held challenge (already Jordan-gated) | `v10_part3.md:192` (was workplan v9 part 7 §PC-10) |
 | ED-IN-0297 | where a works comes from in computed play (already open) | `registers/editorial_ledger_in.jsonl` |
 | Contraventions | ED-IN-0225 (narrowed), `narration-mechanisms.md` §3.4, the `oblige` declared-term precedent, the 2026-09-03/04 combat rulings, G4 | TL §9 |
 | Assumptions | who holds axis 2 (the Church, from canon); caste as a Query over affiliation convictions (D2, D3) | TL §10 |

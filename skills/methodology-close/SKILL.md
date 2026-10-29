@@ -241,7 +241,7 @@ Two passes, and neither is a verdict alone:
   dropped silently.
 
 ⚠ **This is not `ners`' six directions, and not its ladder-vs-aggregate reading of top-down and
-bottom-up.** `ners` §0.06 and §7.1 ask whether a *design mechanic's* demand or opportunity travels
+bottom-up.** CLAUDE.md §0.06 and `ners` §7.1 ask whether a *design mechanic's* demand or opportunity travels
 the game's own scales. This phase asks whether a *code change's* coherence travels between the
 system's altitude and its own lines — a different axis wearing the same two words. Name which one
 you are running, the same discipline `layer-conformance`'s A5 applies to the word "Layer."

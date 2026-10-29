@@ -67,7 +67,7 @@ A person has four layers, and one question tells each apart.
 - **Carrier:** `commit` claims to OUGHT propositions in `Person.ledger`.
 - **Writers:** world-gen goal minting (`goals.yaml`) and the `commit` verb.
 - **Readers:** `questions_for`'s `need` source (`engine/season/queries/world_q.py:2717-2757` [CHECKED]: a live `commit` to an OUGHT generates a standing question every season), `claim_landed`, and five standing occasions (vacancies, seats named, writs, places named, larders).
-- **Exit:** the proposition becomes true, or the commit is withdrawn.
+- **Exit:** the commit ends (`world_q.py:2922-2924`: it recurs every season until then). A 'met' exit is not detected today; CP-T02-03 of `2026-10-23-subsystem-completion` proposes it.
 - **Scale:** cohort: shared commits. Faction: organization goals minted as propositions. Mass battle: none; a war aim reaches the field only through a person choosing `march`.
 - **Limit, stated.** The cut between ambition and values holds at the chooser, not at the authored row. A `goals.yaml` row carries an object (what) and a REQUIRED `pursuits:` lean (why), and its `stance:` seeds `Person.stance` (`goals.yaml` header lines 25-29; `harness/populated.py:711-718` [READER: critic]). The salience target is the organization's expected values plus the goal's lean (`world_q.py:2646-2647` [READER: critic]).
 

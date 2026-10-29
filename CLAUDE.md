@@ -348,7 +348,7 @@ says where an old path went. Only what those cannot tell you:
   `HANDOFF_<LANE>.md`.** Oracle scripts live in `sim/`, imported as `systems.<sub>.sim.*`. ⚠ **`systems/`
   HOLDS NO `.md` AT ALL** — its design documents are in `.designs/systems/<sub>/`;
   `tools/ci_design_prose_quarantine.py` is blocking and the invariant is **zero, not a ratchet**.
-- **`engine/`** — the executable model (substrate leaf readers, autoload hub, cross-scale, campaign
+- **`engine/`** — the executable model (substrate leaf readers, cross-scale, campaign
   driver, `engine/engine_params/` typed exports, `engine/tests/` = CI job `sim-regression`). **It names
   no subsystem by import**: seams resolve through `engine/substrate/composition.py` (`engine/` names a
   ROLE, `references/module_contracts.yaml` the registered MODULE). One `sys.path` seam, `substrate/pc_engine.py` into
@@ -534,7 +534,7 @@ A fresh remote container has pyyaml only; run the provisioner. WHEN each runs is
 | Verifying a nontrivial code change that already exists, against its own stated plan, before close | `methodology-close` — a Sonnet agonist/antagonist pass, then `/code-review`+`/simplify`+`layer-conformance` fixed in sequence, then one terminal Opus critique |
 | Building a workplan phase/task (many positions) AND verifying it, before close | `methodology-execute` — `valoria-author` builds each item and commits it, cheap; `methodology-close`'s full pipeline + the pytest suite run once per BATCH (items linked by a shared file or gate), not per item; a closed batch is deleted from the plan and the run stops for a cleared window before the next opens |
 | Closing a commit | `/close` |
-| Reviewing a diff / a PR / your own just-finished work; **or attacking a work product that is not a diff** — a research corpus, survey, proposal, plan or instrument — for whether its claims are true, its ideas transfer, its logic holds, it works by every route and across modules, and a stranger can survey it | for a diff, the native `/code-review`, a fresh-context reviewer that never saw your reasoning, the only review surface for one; for a work product, `efficient-coding-review`. Nothing grades repo-wide signals any more, and nothing is supposed to |
+| Reviewing a diff / a PR / your own just-finished work; **or attacking a work product that is not a diff** — a research corpus, survey, proposal, plan or instrument — for whether its claims are true, its ideas transfer, its logic holds, it works by every route and across modules, and a stranger can survey it | for a diff, the native `/code-review`, a fresh-context reviewer that never saw your reasoning, the single-pass review for one (`methodology-close` when a stated plan exists); for a work product, `efficient-coding-review`. Nothing grades repo-wide signals any more, and nothing is supposed to |
 | Many mechanical numbers before any judgment | `valoria-measure` on Haiku — batched only; one delegated grep loses the tier arithmetic |
 | Orchestrating a multi-agent audit | the **Agent** tool directly, with `valoria-critic` for read-only critic stages |
 
