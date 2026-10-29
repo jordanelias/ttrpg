@@ -104,5 +104,5 @@ Carried, not re-asked: JQ-1, JQ-2, JQ-6, J-13's remainder, J-C-6 (the lie), ED-I
 - Two interface demands the fix pass did not reconcile: 10 accepted 04's siege leg through `relocate=False`, but 04 then dropped the leg (10's acceptance is moot); 03 parked `rescue`, so any reference elsewhere to rescuing a captive by force has nothing to land on.
 - 06's own ledger reads "asked 0" while the file carries JA-1; the row it rests on is counted elsewhere.
 - Four items exist only under an answer: 03 CP-T03-03/-04 (JQ-2 (a)), 04 CP-T04-04 (Ask C) and -10 (Ask A).
-- `CLAUDE.md` §5 cites `engine/autoload/dice_engine.py`, which does not exist (the description's defect #9). That is a Layer 0 edit outside this task; it is named here and not made.
+- `CLAUDE.md` §5 cites `engine/autoload/dice_engine.py`, which does not exist (the description's defect #9). That was a Layer 0 edit outside this task; since fixed by #507 (CLAUDE.md §5 now names `engine/dice_engine/dice_engine.py`).
 - Nothing here proposes a player-facing client. Every file designs for the Act interface; the Godot port stays blocked on canon (`CLAUDE.md` §6).

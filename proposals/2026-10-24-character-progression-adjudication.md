@@ -610,7 +610,7 @@ condition does not hold today.
 **C-8. Two attribute names already mean something in the tree.** *Body* collides with `Person.body`, the
 condition field (`carriers.py:679`) [CHECKED] — §4.5's *"body injures; attributes fixed"* uses both
 senses in one sentence. *Presence* is a registry alias of Charisma (`descriptor_registry.yaml:47`)
-[CHECKED]. Under CLAUDE.md §4's word-choice rule a reader with no memory of this repository would not
+[CHECKED]. A third: the registry already has an aggregate named *Body*, `agg.body` (`descriptor_registry.yaml:53`; its members include Agility, which the table at :460-461 gives to Hand) [CHECKED]. Under CLAUDE.md §4's word-choice rule a reader with no memory of this repository would not
 land on one meaning [REASONED]. *Bears on:* §3 element 1, §4.1, §4.5. *Still follows:* yes; the names are
 the adjudication's and are kept here unchanged.
 
@@ -647,7 +647,7 @@ with the adjudication is stated in §10.6 and left unresolved.
 - **Budget is a count.** `budget` (`engine/season/decision/budget.py:18`) returns scene actions:
   base, plus an office bonus per held `hold` tenure, minus a body-band penalty, minus a travel-leg penalty
   (docstring, `:36-38`) [CHECKED].
-- **What the score lacks.** It has no risk term and no timing term — its three terms are the whole
+- **What the score lacks.** It has no risk term and no timing term (at HEAD; v10 CR-17, B10-09, adds believed odds to the alignment term) — its three terms are the whole
   return (`choose.py:149-151`) [CHECKED] — and no lookahead: it scores each candidate once, at the
   moment of deliberation [REASONED from the same lines]. `choice_temperature` is a global sampling-noise
   setting (`data/fixtures.py:286`, `0.1`; read in `_sample_order`, `choose.py:241`, `:350`) [CHECKED].

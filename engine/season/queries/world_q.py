@@ -2316,9 +2316,9 @@ def goal_referents(w: World, p: Person, prop) -> tuple:
       * `orientation` -> `()`: a pure condition has no referent, and mints no Proposition.
 
     ⚠ `seat_holders` IS A WORLD READ WITH NO CLAIM BEHIND IT, `vacancies`' shape: it hands `p` the
-    identity of whoever sits on a throne he may never have been told of. THAT PRECEDENT IS ON JORDAN'S
-    QUEUE (ED-IN-0292 (2), `needs_jordan`: the `vacancies` stamp against AX-7), and this read follows
-    that answer -- if it comes back a claim reaching persons through the channels, `seat_holders`
+    identity of whoever sits on a throne he may never have been told of. THAT PRECEDENT WAS TAKEN
+    (ED-IN-0292 (2), closed at v10 ladder step 5, A1-02; `editorial_ledger_in.jsonl:79`), and this read
+    follows that answer -- if it is reopened as a claim reaching persons through the channels, `seat_holders`
     becomes a read of the holders `p`'s own ledger names. [ASSUMPTION; medium; Jordan to correct --
     revert: the holders the person's own ledger names, `seats_named`-style, which reads nobody at
     world-gen (H-203).] `deed_doers` is NOT that read: it takes nothing from the world.

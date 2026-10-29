@@ -156,7 +156,7 @@ the data it reads at runtime); CP-T02-06 and CP-T02-07 also touch the play-surfa
   person's feedback.
   **Reader 1, Q4 (`questions_for`):** `met` forms no `need` question; `breached` forms a `need` question whose referents are the goal's
   listed seats as Office-classed referents (the `vacancies` splice's shape), so the members of a faction whose throne is empty face the
-  throne itself — today they face nothing (`:2031-2037`). **Reader 2:** CP-T02-04. (A third reader, offering a met ambition for
+  throne itself — today they face nothing (`:2031-2037`). **Composition with the thrust ladder:** `aim_state` gates first; `current_stage` (thrust-layer design TL §3.1 R1) is read only for an `open` ambition and only adds referents to its `need` question (v10 M20, `v10_part6.md:167-172`); it is a view and ends nothing. **Reader 2:** CP-T02-04. (A third reader, offering a met ambition for
   `release`, was drafted and is dropped: `release` declares no referent class, CP-T02-05.)
 - **Owner.** `world_q.aim_state`; the `aim:` column in `goal_object_kinds`; `data/goals.py` (its one loader) refuses a kind with no
   `aim:` entry. Layer 2.

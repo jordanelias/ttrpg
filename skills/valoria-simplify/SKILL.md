@@ -86,7 +86,7 @@ A direction ends in one word. **SURVEYED**: an instrument ran over the whole are
 | **bottom-up** | what justifies each artifact and each fact? | I2, I3, I1 | M1, M2, M4 | reach (M4) |
 | **vertical** | do levels respect their order and hide their detail? | I4 | M1 by area; conformance to `04` Part D is `layer-conformance`'s | an import map sees only declared edges |
 | **lateral** | do peers share anything no contract names? | I4, I3 | M1 between sibling areas; **M2** (a registry read from many areas is the widest lateral channel) | M2 is name-matching |
-| **horizontal** | along the run and the history: order, replay, carried cost | I1, I5, I6 | seeded runs; M5 | one seed; shallow history |
+| **over time** (this skill's reading of *horizontal*) | along the run and the history: order, replay, carried cost | I1, I5, I6 | seeded runs; M5 | one seed; shallow history |
 | **diagonal** | coupling across levels and peers that no structure declares | I5 (co-change), I4 (transitive core), I3 | M3, M2, plus history | without history, only I4 and I3 run: PARTLY at best |
 
 ### Triage: where to look

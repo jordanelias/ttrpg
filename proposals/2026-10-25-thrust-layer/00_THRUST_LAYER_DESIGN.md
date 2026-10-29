@@ -169,7 +169,7 @@ The layer changes three things, all inside `queries/world_q.py`, beside the owne
 
 | Change | Owner it extends | Stored? |
 |---|---|---|
-| **R1** `current_stage(w, p, amb)` → the first stage of the ambition's ladder whose `predicate` is not TRUE for each referent, read through `p`'s own `LedgerReader` (person-side, AX-2); `None` when the ladder is complete or the ambition has none | new function beside `goal_referents` (`world_q.py:2207`) | **no** — computed when asked, `ambitions`' discipline (`world_q.py:2172-2173`) |
+| **R1** `current_stage(w, p, amb)` → the first stage of the ambition's ladder whose `predicate` is not TRUE for each referent, read through `p`'s own `LedgerReader` (person-side, AX-2); `None` when the ladder is complete or the ambition has none (**since M20, `v10_part6.md:167-172`: `None` ends nothing; `aim_state`, subsystem-completion CP-T02-03, gates Q4 first and `current_stage` only adds referents while the ambition is open**) | new function beside `goal_referents` (`world_q.py:2207`) | **no** — computed when asked, `ambitions`' discipline (`world_q.py:2172-2173`) |
 | **R2** the `need` question's referents = `goal_referents` ∪ the stage's referents, **passed through `_stamped`'s classes** (`world_q.py:2889-2897`) so that a seat reaches `confer` (which forms only on Office-classed referents, `verb_table.yaml:266-267` [c]) and an unclassed verb does not form on an office id (that would add to S1); the stage's `pursuits` join the salience target as a goal's do (`world_q.py:2643-2647`) | Q4 loop (`:2837-2841`) and `salience` | **no** |
 | **R3′** a `need` question is promoted to **tier 0 for one season in every `deadline`**, never as a standing promotion: when `(w.tick + phase(p)) % d == 0`, `phase(p)` a keyed draw `draw(p.id, "stage_phase")` in `[0, d)` (the per-candidate keyed-draw idiom of `decision/choose.py:350-388`). Promoted only if (i) the person's salience for that ambition is ≥ 0 — a head whose pursuits point against his org answers his own want first, A-33 / IN-69 (`workplans/valoria_master_workplan_v9_part5.md:178`) — and (ii) at least one candidate forms on the stage's referents (a detained holder's due stage forms only acts the custody decline refuses, `verb_table.yaml:913` [c]) | `attention_key.key` (`world_q.py:2659-2660`) | **no** |
 
@@ -235,7 +235,7 @@ promotes it cannot fail.
 |---|---|---|
 | `commit` tenures and their `since`; Propositions; ledgers; the log; dockets; tenures | current stage; due-ness; stage referents; ARC(p, a) | axes roster; `axis:`; ladders |
 
-Thrust succession is by the person's own acts: when `current_stage` is `None` (met) or the ladder's
+**Struck by M20 (`v10_part6.md:167-172`): `successor` and `closing` are excluded.** As filed: thrust succession is by the person's own acts: when `current_stage` is `None` (met) or the ladder's
 `failed_when` holds, the `need` question carries the `successor` goal's Proposition as a referent, so
 `commit` (writes `Tenure.since`) and `release` (writes `Tenure.until`, `commitment.ended`) can form. No
 row releases or commits for him.
