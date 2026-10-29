@@ -1912,6 +1912,47 @@ rosters:
       two relations and nothing else: which commits follow is IN-68's seeding rule, not a definition.
     values: [establishes, influences]
 
+  thrust_axes:
+    source: "CL-THRUST B2.1 (`proposals/2026-10-25-thrust-layer/00_THRUST_LAYER_DESIGN.md` §2.1; B10-05) -- what a goal row's optional `axis:` may name: the lines a thrust runs along, each with its opposite pole where it has one."
+    open: false
+    note: >-
+      THE CLOSED SET A GOAL ROW'S `axis:` IS CHECKED AGAINST, read by `data/goals.py` (the ONE loader
+      of `engine/season/goals.yaml`), which refuses an `axis:` off `values:`. The first ten `values:`
+      are the user's list of thrust axes; the user called the list "not exhaustive", so the roster is
+      closed but editable, and a new axis is a data edit. `opposes:` pairs an axis with the opposite
+      pole a row on the other side would carry; it is read by the same loader, which refuses a pole
+      that is not a `values:` member. The four poles that are not among the ten
+      (`reveal_thread_truth`, `uphold_church`, `uphold_caste`, `altonian_ascendancy`) ARE members
+      here, so a row on either side can be tagged.
+      [ASSUMPTION; medium; Jordan to correct -- the ten axes and the `opposes:` pairs are the design's
+      first reading (TL §2.1), and that the four opposite poles are members is its own assumption.
+      Revert: Jordan names the axes; delete or add a `values:` member and its `opposes:` entry.]
+    values: [suppress_einhir_revival, hide_thread_truth, overthrow_church, overthrow_caste,
+             purge_altonia, political_authority, faction_standing, community_benevolence,
+             heal_calamity, revive_einhir,
+             reveal_thread_truth, uphold_church, uphold_caste, altonian_ascendancy]
+    opposes:
+      suppress_einhir_revival: revive_einhir
+      revive_einhir: suppress_einhir_revival
+      hide_thread_truth: reveal_thread_truth
+      overthrow_church: uphold_church
+      overthrow_caste: uphold_caste
+      purge_altonia: altonian_ascendancy
+
+  goal_stage_terms:
+    source: "CL-THRUST B2.2 (`proposals/2026-10-25-thrust-layer/00_THRUST_LAYER_DESIGN.md` §2.2, `stage.term`; B10-05) -- the horizons a `goal_stages` stage may name, nearest first."
+    open: false
+    ordered: true
+    note: >-
+      THE TERM OF A STAGE IN `goals.yaml: goal_stages`, read by `data/goals.py`, which refuses a
+      `term:` off this list and a row whose stage terms DEcrease along this order. The order is the
+      meaning: a later stage is no nearer than the one before it. The roster names the horizons and
+      nothing else; it carries no length of time, because a stage's `deadline` is struck (M20).
+      [ASSUMPTION; medium; Jordan to correct -- the three horizons are TL §2.2's; a roster, not a
+      literal in the loader, because three strings in a body is a definition in a body. Revert: delete
+      the roster and the loader's term check with it.]
+    values: [short, medium, long]
+
   requires_operands:
     source: "`W-A`. The names a `requires_typed` cell may bind, closed."
     note: >-

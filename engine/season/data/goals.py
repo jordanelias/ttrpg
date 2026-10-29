@@ -16,7 +16,17 @@ line, `data/pursuits.py` one layer down):
   * `derives`: dangling, cyclic, or from a goal whose organization is not an ANCESTOR of the row's
     (seat -> body -> faction; a faction goal derives from a faction goal -- the oath, not this data,
     makes one faction subordinate to another, A-30);
-  * `stance` off {-1, +1}; no `pursuits:`; a repeated id.
+  * `stance` off {-1, +1}; no `pursuits:`; a repeated id;
+  * CL-THRUST B2.1: an optional `axis:`, a member of `thrust_axes` (`rosters.yaml`), refused on an
+    `orientation` row -- it mints no Proposition, so no one can be committed to it;
+  * CL-THRUST B2.2: an optional top-level `goal_stages:` list (a missing key reads as `[]`, the shipped
+    state), each row `{id, for, stages}` -- `for:` the goals it climbs (never an `orientation` goal, never
+    one claimed by a second row), `stages:` at least two in order, each `{id, term, predicate, pursuits}`:
+    `term` a `goal_stage_terms` member that never decreases along the row, `predicate` a
+    `requires_typed` cell `data/requires.py::build_typed_requires` accepts (its `SystemExit` is wrapped
+    into this loader's own refusal) that asks no `WORLD_ONLY_STEMS` stem, because the stage is read
+    PERSON-SIDE, and `pursuits` through `data/pursuits.py::pursuit`. A key outside those is refused, not
+    dropped. A row is attached to the goals it is `for:` (`Goal.stages`); nothing here reads it yet.
 
 ⚠ A RUNG REFERENT IS NOT CHECKED HERE. A rung exists only once the realm is built, so `rung:` is
 validated at seeding (IN-68), where the rung index is. This loader asks only that it be a name.
@@ -30,7 +40,7 @@ exercise the path resolution, patch `goals.GOALS_YAML`, clear `goals._CACHE` and
 from __future__ import annotations
 
 import contextlib
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Optional
 
 from . import files
@@ -41,16 +51,46 @@ from ..gaps import Forbidden, Unspecified
 GOALS_YAML = files.GOALS_YAML
 
 _LAW = "v9 IN-66 (A-31, ED-IN-0293 (8)) -- a goal is authored in goals.yaml and every name it carries resolves"
+_THRUST_LAW = ("CL-THRUST B2.1 -- a goal's axis is a member of the closed `thrust_axes` roster, and only a "
+               "goal that mints a Proposition can be one a person is committed to")
+_STAGES_LAW = ("CL-THRUST B2.2 -- a goal's stages are authored in goals.yaml and every name they carry "
+               "resolves; a stage nobody can read, or that no one can be committed to, is refused, not carried")
+
+# The top-level key (and the label a refusal names its row by) of the stage rows. NOT `ladders`: that word
+# already means `LarderInput.ladders` and the degree ladder in this package.
+_STAGES_KEY = "goal_stages"
 
 # The two signs a stance row carries (`data/cast.py::stance_from_loyalty` returns exactly these).
 _STANCE_SIGNS = (-1, 1)
 
 
 @dataclass(frozen=True)
+class Stage:
+    """One stage of a `goal_stages` row (CL-THRUST B2.2). `term` is a `goal_stage_terms` member;
+    `predicate` the `TypedRequires` `data/requires.py::build_typed_requires` built from the row's cell
+    (read PERSON-SIDE: it asks no `WORLD_ONLY_STEMS` stem); `pursuits` the stage's own `{pursuit: weight}`."""
+    id: str
+    term: str
+    predicate: object
+    pursuits: dict
+
+
+@dataclass(frozen=True)
+class GoalStages:
+    """One `goal_stages` row: `stages` in the order authored (at least two, terms never decreasing) and
+    `for_goals` the ids of the goals it climbs for -- each goal is in at most one row."""
+    id: str
+    for_goals: tuple
+    stages: tuple
+
+
+@dataclass(frozen=True)
 class Goal:
     """One validated `goals.yaml` row. `object` and `pursuits` are the row's own mappings -- a
     reader does not mutate them. `org_kind` is the one key `org:` carried (`faction`, `body` or
-    `seat`) and `org` its name; `derives_from`/`derives_kind` are both `None` for an underived goal."""
+    `seat`) and `org` its name; `derives_from`/`derives_kind` are both `None` for an underived goal.
+    `axis` is the row's optional `thrust_axes` member and `stages` the `goal_stages` row that names this
+    goal in its `for:` (CL-THRUST B2.1/B2.2); both `None` for every shipped row."""
     id: str
     org_kind: str
     org: str
@@ -61,19 +101,25 @@ class Goal:
     derives_from: Optional[str]
     derives_kind: Optional[str]
     source: str
+    axis: Optional[str] = None
+    stages: Optional[GoalStages] = None
 
 
-def _refuse(cls, gid, what: str, needs: str, law: str = _LAW):
-    raise cls(f"goal {gid!r}: {what}", f"goals.yaml -- {gid}", needs=needs, law=law)
+def _where(gid, label: str) -> str:
+    return f"goals.yaml -- {gid}" if label == "goal" else f"goals.yaml -- {label} {gid}"
 
 
-def _through(gid, check, value):
+def _refuse(cls, gid, what: str, needs: str, law: str = _LAW, label: str = "goal"):
+    raise cls(f"{label} {gid!r}: {what}", _where(gid, label), needs=needs, law=law)
+
+
+def _through(gid, check, value, label: str = "goal"):
     """Run an owner's own `Unspecified` check on `value`, re-raised NAMING THE ROW. The membership
     rule stays with its owner (`pursuit`, `affiliation`); only the occasion is added here."""
     try:
         return check(value)
     except Unspecified as exc:
-        raise Unspecified(f"goal {gid!r}: {exc.what}", f"goals.yaml -- {gid}",
+        raise Unspecified(f"{label} {gid!r}: {exc.what}", _where(gid, label),
                           needs=exc.needs, law=exc.law) from exc
 
 
@@ -164,19 +210,57 @@ def _object(gid, raw, seats: dict, goal_ids: set) -> dict:
     return dict(raw)
 
 
-def _pursuits(gid, raw) -> dict:
-    """`{pursuit: weight}`, at least one, every name the canonical fifteen's and every weight > 0."""
+def _pursuits(gid, raw, law: str = _LAW, label: str = "goal") -> dict:
+    """`{pursuit: weight}`, at least one, every name the canonical fifteen's and every weight > 0. A stage's
+    `pursuits:` is read by this same check (`law` and `label` name the occasion), never a second one."""
     from .pursuits import pursuit
     if not isinstance(raw, dict) or not raw:
         _refuse(Unspecified, gid, "carries no `pursuits:`",
-                "a mapping of at least one pursuit to a weight > 0 (the goal's lean over the fifteen)")
+                "a mapping of at least one pursuit to a weight > 0 (the goal's lean over the fifteen)",
+                law, label)
     out = {}
     for name, w in raw.items():
-        _through(gid, pursuit, str(name))
+        _through(gid, pursuit, str(name), label)
         if isinstance(w, bool) or not isinstance(w, (int, float)) or not (w > 0) or w == float("inf"):
-            _refuse(Unspecified, gid, f"pursuit {name!r} weighs {w!r}", "a finite number > 0")
+            _refuse(Unspecified, gid, f"pursuit {name!r} weighs {w!r}", "a finite number > 0", law, label)
         out[name] = w
     return out
+
+
+def _is_orientation(obj: dict) -> bool:
+    """The row mints NO Proposition (`goal_object_kinds`' note; `harness/populated.py::seed_goals` skips it),
+    so no one can be committed to it."""
+    return obj.get("kind") == "orientation"
+
+
+def _thrust_axes() -> frozenset:
+    """The `thrust_axes` roster, with its `opposes:` map checked against it: a pole that is not a member
+    would be an axis a row could never carry, and the map would pair it with nothing. Read on every parse,
+    so a defective roster refuses at the one entry rather than at the first row that names an axis."""
+    axes = roster("thrust_axes")
+    for axis, pole in roster_map("thrust_axes", "opposes").items():
+        for named in (axis, pole):
+            if not _in(named, axes):
+                raise Unspecified(
+                    f"rosters.yaml: thrust_axes.opposes pairs {axis!r} with {pole!r}, and {named!r} is "
+                    f"not a `values:` member", "rosters.yaml -- thrust_axes",
+                    needs="every axis and pole `opposes:` names is a `values:` member (add it, or drop the pair)",
+                    law=_THRUST_LAW)
+    return axes
+
+
+def _axis(gid, row: dict, obj: dict, axes: frozenset) -> Optional[str]:
+    """The row's optional `axis:`: a `thrust_axes` member, and never on an `orientation` row (it mints no
+    Proposition, so nobody can be committed to it -- a thrust about nobody). `None` where the row has none."""
+    if "axis" not in row:
+        return None
+    axis = str(row["axis"])
+    require_member(axis, axes, f"goal {gid!r}: axis {axis!r} is not rostered", f"goals.yaml -- {gid}",
+                   law=_THRUST_LAW)
+    if _is_orientation(obj):
+        _refuse(Forbidden, gid, f"an `orientation` goal carries `axis: {axis}`",
+                "drop the `axis:`, or give the row an object kind that mints a Proposition", _THRUST_LAW)
+    return axis
 
 
 def _stance(gid, row: dict) -> Optional[int]:
@@ -241,14 +325,125 @@ def _ancestors(g: Goal, seats: dict) -> set:
     return above
 
 
+def _predicate(sid: str, cell):
+    """A stage's `predicate:` as the `TypedRequires` the typed-requires builder makes of it. The builder
+    refuses by `SystemExit` naming `verb_table.yaml` and a verb; that is wrapped here into THIS loader's
+    own refusal naming the stage (its message is kept, whole). Refused too: a cell that builds to nothing
+    (`none`), and any `WORLD_ONLY_STEMS` stem -- the stage is read person-side, where `with`, `audience`
+    and the own-state stems always read UNKNOWN, so a stage over one could never be met."""
+    from .requires import WORLD_ONLY_STEMS, build_typed_requires
+    try:
+        req = build_typed_requires(sid, cell)
+    except SystemExit as exc:
+        _refuse(Unspecified, sid, f"`predicate:` is refused by the typed-requires builder: {exc}",
+                "a cell in the `requires_typed` grammar (`of: subject`)", _STAGES_LAW, _STAGES_KEY)
+    if req is None:
+        _refuse(Unspecified, sid, f"`predicate:` is {cell!r}, which builds to no requirement",
+                "a cell in the `requires_typed` grammar (`of: subject`)", _STAGES_LAW, _STAGES_KEY)
+    world_only = sorted(set(req.stems()) & WORLD_ONLY_STEMS)
+    if world_only:
+        _refuse(Forbidden, sid, f"`predicate:` asks {world_only}, which only the world answers",
+                "a cell over stems a person's own ledger can answer (not `WORLD_ONLY_STEMS`)",
+                _STAGES_LAW, _STAGES_KEY)
+    return req
+
+
+def _stages(rid: str, raw) -> tuple:
+    """A row's `stages:` as `Stage`s, in order: at least two, each `{id, term, predicate, pursuits}`, no
+    key beyond those, terms along `goal_stage_terms`' order never decreasing, and no stage id twice."""
+    if not isinstance(raw, list) or len(raw) < 2:
+        _refuse(Unspecified, rid, f"`stages:` is {raw!r}, not a list of at least two stages",
+                "an ordered list of two or more stages", _STAGES_LAW, _STAGES_KEY)
+    terms = roster("goal_stage_terms", ordered=True)
+    out, seen, last = [], set(), -1
+    for i, s in enumerate(raw):
+        if not isinstance(s, dict) or not isinstance(s.get("id"), str) or not s["id"].strip():
+            _refuse(Unspecified, f"{rid}[{i}]", f"stage {i} carries no `id:` string", "a stage id",
+                    _STAGES_LAW, _STAGES_KEY)
+        sid = f"{rid}/{s['id']}"
+        left = dict(s)
+        left.pop("id")
+        term, cell, pursuits = left.pop("term", None), left.pop("predicate", None), left.pop("pursuits", None)
+        if left:
+            _refuse(Forbidden, sid, f"carries {sorted(map(str, left))}, which a stage does not read",
+                    "a stage is its id, term, predicate and pursuits and nothing else (a key the schema does "
+                    "not read is refused, not dropped)", _STAGES_LAW, _STAGES_KEY)
+        if s["id"] in seen:
+            _refuse(Forbidden, sid, "more than one stage of the row carries this id", "one stage per `id`",
+                    _STAGES_LAW, _STAGES_KEY)
+        seen.add(s["id"])
+        require_member(term, terms, f"{_STAGES_KEY} {sid!r}: term {term!r} is not rostered",
+                       _where(sid, _STAGES_KEY), law=_STAGES_LAW)
+        if terms.index(term) < last:
+            _refuse(Forbidden, sid, f"term {term!r} is nearer than the stage before it",
+                    f"terms that never decrease along {list(terms)}", _STAGES_LAW, _STAGES_KEY)
+        last = terms.index(term)
+        out.append(Stage(s["id"], term, _predicate(sid, cell),
+                         _pursuits(sid, pursuits, _STAGES_LAW, _STAGES_KEY)))
+    return tuple(out)
+
+
+def _goal_stages(doc: dict, goals: tuple) -> tuple:
+    """`goals`, each carrying the `goal_stages` row that names it in `for:` (`Goal.stages`). A missing key
+    is `[]` and returns `goals` untouched: the shipped state. A row is refused for a repeated id; a `for:`
+    that is empty, names no goal of this file, names an `orientation` goal, or names a goal another row
+    already claims (one row per goal); `stages:` that fail `_stages`; or a key outside `{id, for, stages}`."""
+    if _STAGES_KEY not in doc:
+        return goals
+    raw = doc[_STAGES_KEY]
+    if not isinstance(raw, list):
+        raise Unspecified(f"goals.yaml `{_STAGES_KEY}:` is {raw!r}, not a list", f"goals.yaml -- {_STAGES_KEY}",
+                          needs=f"`{_STAGES_KEY}: []`, a list of rows, or no such key", law=_STAGES_LAW)
+    ids = []
+    for i, row in enumerate(raw):
+        if not isinstance(row, dict) or not isinstance(row.get("id"), str) or not row["id"].strip():
+            _refuse(Unspecified, f"[{i}]", f"row {i} carries no `id:` string", "a unique id",
+                    _STAGES_LAW, _STAGES_KEY)
+        ids.append(row["id"])
+    for rid in ids:
+        if ids.count(rid) > 1:
+            _refuse(Forbidden, rid, "more than one row carries this id", "one row per `id`",
+                    _STAGES_LAW, _STAGES_KEY)
+    by_id = {g.id: g for g in goals}
+    claimed, built = {}, []
+    for row in raw:
+        rid = row["id"]
+        left = dict(row)
+        left.pop("id")
+        for_ids, stages = left.pop("for", None), left.pop("stages", None)
+        if left:
+            _refuse(Forbidden, rid, f"carries {sorted(map(str, left))}, which a row does not read",
+                    "a row is its id, `for:` and `stages:` and nothing else (a key the schema does not "
+                    "read is refused, not dropped)", _STAGES_LAW, _STAGES_KEY)
+        if not isinstance(for_ids, list) or not for_ids:
+            _refuse(Unspecified, rid, f"`for:` is {for_ids!r}, not a non-empty list of goal ids",
+                    "the ids of the goals this row climbs for", _STAGES_LAW, _STAGES_KEY)
+        for gid in for_ids:
+            if not _in(gid, by_id):
+                _refuse(Unspecified, rid, f"`for:` names {gid!r}, which is no goal of this file",
+                        "the id of a goal row", _STAGES_LAW, _STAGES_KEY)
+            if _is_orientation(by_id[gid].object):
+                _refuse(Forbidden, rid, f"`for:` names {gid!r}, an `orientation` goal: it mints no "
+                        f"Proposition, so no one can be committed to it", "a goal that mints a Proposition",
+                        _STAGES_LAW, _STAGES_KEY)
+            if gid in claimed:
+                _refuse(Forbidden, rid, f"`for:` names {gid!r}, which row {claimed[gid]!r} already claims",
+                        "one row per goal", _STAGES_LAW, _STAGES_KEY)
+            claimed[gid] = rid
+        built.append(GoalStages(rid, tuple(for_ids), _stages(rid, stages)))
+    by_row = {gid: row for row in built for gid in row.for_goals}
+    return tuple(replace(g, stages=by_row[g.id]) if g.id in by_row else g for g in goals)
+
+
 def parse(doc) -> tuple:
     """`doc` (a parsed `goals.yaml`) as `Goal`s in file order; raise on the first row that breaks the
-    schema. `goals: []` is the shipped state and loads to `()`."""
+    schema. `goals: []` is the shipped state and loads to `()`; an absent `goal_stages:` is `[]`."""
     rows = doc.get("goals") if isinstance(doc, dict) else None
     if not isinstance(rows, list):
         raise Unspecified("goals.yaml has no `goals:` list", "goals.yaml",
                           needs="`goals: []` or a list of goal rows", law=_LAW)
     seats = SEAT_ROW_BY_ID
+    axes = _thrust_axes()
     ids = []
     for i, row in enumerate(rows):
         if not isinstance(row, dict) or not isinstance(row.get("id"), str) or not row["id"].strip():
@@ -276,11 +471,14 @@ def parse(doc) -> tuple:
             if not _in(derives_from, goal_ids):
                 _refuse(Unspecified, gid, f"`derives.from: {derives_from!r}` is no goal of this file",
                         "the id of a goal row")
+        text = _text(gid, row, "text")
+        obj = _object(gid, row.get("object"), seats, goal_ids)
+        stance, pursuits = _stance(gid, row), _pursuits(gid, row.get("pursuits"))
+        source = _text(gid, row, "source")
         out.append(Goal(
-            id=gid, org_kind=org_kind, org=org, text=_text(gid, row, "text"),
-            object=_object(gid, row.get("object"), seats, goal_ids), stance=_stance(gid, row),
-            pursuits=_pursuits(gid, row.get("pursuits")),
-            derives_from=derives_from, derives_kind=derives_kind, source=_text(gid, row, "source")))
+            id=gid, org_kind=org_kind, org=org, text=text, object=obj, stance=stance, pursuits=pursuits,
+            derives_from=derives_from, derives_kind=derives_kind, source=source,
+            axis=_axis(gid, row, obj, axes)))
     by_id = {g.id: g for g in out}
     for g in out:
         seen, cur = {g.id}, g
@@ -301,7 +499,7 @@ def parse(doc) -> tuple:
                     f"which is not above it",
                     "a parent goal of an ancestor organization (seat -> body -> faction); a "
                     "faction goal derives from a faction goal")
-    return tuple(out)
+    return _goal_stages(doc, tuple(out))
 
 
 _CACHE: Optional[tuple] = None
