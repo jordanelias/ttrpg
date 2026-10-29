@@ -1408,7 +1408,13 @@ rosters:
       2026-09-29 (plan position `24e`): `_eff_restore` EXISTS and `restore` is resolvable, raising
       any fabric its actor stands at toward the ceiling a works allows (the full scale where none
       names it).
-    values: [harbour, seam, body, dwelling, garrison]
+    # ED-IN-0304 (Jordan, 2026-10-28: recruiting needs "specific infrastructure for specific kinds of troops"): FOUR TRAINING
+    # KINDS, `barracks`, `archery_range`, `stable`, `siege_workshop`. Each is a Site whose CONDITION is how much of its
+    # troop class the place can train (`modules/mass_battle/troop_types/recruitment.py`, the one reader and the owner of
+    # which troop type trains where). They take `garrison`'s treatment in every table below and for its reason: nothing
+    # wears them down (`wear_per_season` 0), they have no floor and no band (`capacity_floor` 0, `band_floors` {}), and
+    # `works_cost` prices them like any fabric so `found`/`build` can raise one. [ASSUMPTION; medium; Jordan to correct.]
+    values: [harbour, seam, body, dwelling, garrison, barracks, archery_range, stable, siege_workshop]
 
   matter_kinds:
     source: "#353 §10.4 VERBATIM: *It is a type parameter, not an enumeration. Grain, salt, timber, ore and coin are rows in a registry, not members of a closed set in a source file.*"
@@ -1472,6 +1478,10 @@ rosters:
       body:     10
       dwelling: 0
       garrison: 0
+      barracks:       0
+      archery_range:  0
+      stable:         0
+      siege_workshop: 0
 
   capacity_floor:
     source: "`RULINGS.yaml` RR-2 (`ED-SE-0051`, ruled 2026-09-17): *\"a `capacity(w, rung)` QUERY over the rung's dwelling Sites, with a FLOOR — never a fixture table\"*; `01_THE_BUILD_ORDER.md` S10: *\"the floor is a table keyed on site kind, beside `band_floors`\"*. Plan position `24d-ii`, landed with its caller at `19c`."
@@ -1501,6 +1511,10 @@ rosters:
       body:     0
       dwelling: 1
       garrison: 0
+      barracks:       0
+      archery_range:  0
+      stable:         0
+      siege_workshop: 0
 
   works_cost:
     source: "v9 IN-28 (`H-166` limit 1, its own design order: the cost first). r2 `proposals/2026-09-17-governance-and-holdings-r2/04_MATTER_AND_WORKS.md` §A.6.6 (intent): *\"the cost is paid by `transfer` into the works' rung\"*, and nothing debited that rung when the place rose. `proposals/2026-09-10-settlements-factions-populations/04_EVALUATION.md` §6 (intent): `found` costs *\"the stake\"*, `build` costs *\"timber\"*."
@@ -1540,6 +1554,10 @@ rosters:
       seam:      {timber: 10}
       dwelling:  {timber: 10}
       garrison:  {timber: 10}
+      barracks:       {timber: 10}
+      archery_range:  {timber: 10}
+      stable:         {timber: 10}
+      siege_workshop: {timber: 10}
 
   subsistence_weight:
     source: "`H-11` — *the subsistence formula over an OPEN MatterKind registry*. ARCHITECTURE_V2.md's default: *draw from the containing rung's stores, scaled by weight*."
@@ -2700,6 +2718,10 @@ tables:
         withdrawal_only: 100
       dwelling: {}
       garrison: {}
+      barracks:       {}
+      archery_range:  {}
+      stable:         {}
+      siege_workshop: {}
 
   # IN-08 H10 -- WHICH AFFILIATIONS STRAIN WHEN HELD TOGETHER (ED-IN-0251 R1: confliction is DERIVED
   # from this relation and never stored; `queries/person_q.py::confliction`). A HALF-MATRIX: each

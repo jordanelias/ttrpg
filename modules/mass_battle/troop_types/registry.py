@@ -66,6 +66,7 @@ TROOP_TYPE_STATS = {
     # and the isolated differentiator is reach, weapon, role or speed -- no fabricated stat line.
     "spearmen":         {"power": 3, "discipline": 3, "morale": 4},  # mirrors light_infantry; differs by spear reach 0.2 + anti-cavalry hold roles
     "skirmishers":      {"power": 2, "discipline": 2, "morale": 3},  # mirrors sling, the lightest ranged type; differs by weapon (javelin) + harassing roles
+    "mounted_archers":  {"power": 3, "discipline": 3, "morale": 3},  # mirrors archers (U-5 of proposals/2026-09-30-character-and-play-surface/08_mass_battle_units.md: it had reach, roles and a density cap but no stat line); differs by mounted speed/density and the Kite role
     "light_cavalry":    {"power": 3, "discipline": 3, "morale": 4},  # mirrors light_infantry (light cut, light armour); differs by mounted speed/density and flank/pursuit roles, no lance (no charge penetration)
 }
 # Types that fight mounted: the one owner of "is this a horse", read where the engine used to spell
