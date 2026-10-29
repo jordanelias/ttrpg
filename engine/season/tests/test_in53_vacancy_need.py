@@ -279,9 +279,11 @@ def test_in53v_c_the_declarations_as_built():
     # `march` declares `Rung` beside `migrate` and `requisition` (B10-06; sixteen rows -> seventeen; control: the
     # B10-05 close `2bc4afcf`, sixteen); AT v10 REM-28 (B10-06) `convene` declares `Rung` (seventeen rows -> eighteen;
     # control: the REM-27 fallout fix `ee5acba1`, seventeen); AT v10 REM-28 (B10-06) `dispatch` declares `Person` beside
-    # `petition` and `open_case` (eighteen rows -> nineteen; control: the convene commit `b8fd583b`, eighteen).
+    # `petition` and `open_case` (eighteen rows -> nineteen; control: the convene commit `b8fd583b`, eighteen); AT v10
+    # REM-28 (B10-06) `revoke` declares `Office` beside `confer` and `oblige` (nineteen rows -> twenty; control: the
+    # dispatch commit `a4c508c5`, nineteen).
     assert {v for v, r in VERB_TABLE.items() if r.referent_class} == {"confer", "oblige", "comply", "march",
-                                                                      "convene", "dispatch", "migrate", "requisition",
+                                                                      "convene", "dispatch", "revoke", "migrate", "requisition",
                                                                       "restore", "work", "examine",
                                                                       "commit", "petition",
                                                                       "carry", "found", "build",

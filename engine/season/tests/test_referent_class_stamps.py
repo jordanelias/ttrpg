@@ -72,12 +72,14 @@ from engine.season.decision.choose import _payload_of
 from engine.season.decision.options import seat_of
 from engine.season.gaps import Forbidden
 from engine.season.harness import probes as P
+from engine.season.loop import predicates as _preds
 from engine.season.loop.driver import mint_token
 from engine.season.queries import world_q
 from engine.season.state.carriers import Act, Claim, Proposition, Question, Record, Tenure, View
 from engine.season.trace_log import TRACE
 
 from .test_g3_not_yours import _gov_world, _hold
+from .test_h134_candidate_per_seat import _with_office
 from .test_in09_dispensation_answer import HOLDER, WRIT, _with_writ
 from .test_in45_carry import PARTY as CARRY_PARTY
 from .test_in45_carry import PETITIONER as CARRY_PETITIONER
@@ -1792,4 +1794,127 @@ def test_rem28_c_the_class_moves_no_derived_set():
         assert _verbs._derive_rung_remit_acts() == _verbs.RUNG_REMIT_ACTS - {"convene"}
     with mock.patch.object(_verbs, "VERB_TABLE", classless("dispatch", "open_case", "petition")):
         assert "Person" not in _verbs._derive_declared_classes()
+    assert _verbs.RUNG_REMIT_ACTS == frozenset({"issue", "dispatch", "convene"}), _verbs.RUNG_REMIT_ACTS
+
+
+# ======================================================================================
+# v10 REM-28 (B10-06): `revoke` DECLARES `Office`; THE COLUMN REMOVES A FORMATION AND EXECUTES NOTHING
+# ======================================================================================
+# THE CLAIM, AND ITS LIMIT. A seat granting `revoke` answering a question about a person, a place and a seat it
+# was told of forms `revoke` on the seats the question carries as `Office` and on nothing else. Every refusal the
+# class removes is the one clause 'a revoke names no office the world holds' (18 of 18 pooled attempts at
+# `aperture 1 s`: a person 8, a rung 8, a Record 1, a Site 1, an Office 0). BUT `_req_revoke` reads
+# `payload['office']` and a computed act carries `subject` (`loop/predicates.py::office_named_by`: `revoke` IS NOT A
+# CALLER, IN-53 D1; H-207 ruling (A)), so the formations that SURVIVE are refused on that same clause: executions
+# stay 0 -> 0 by design, and the caller that would read `subject` is H-207 (A)'s, not this item's. The tests below
+# hold both halves: what the class removes, and what it leaves refused. With a caller, `rem28_f` and the kept-Candidates
+# loop of the second test are the ones to re-scope (they assert the computed act is refused); the formation, the
+# mutation and the removed-Candidates half do not move.
+
+REVOKER, REVOKE_TARGET = "p_king", "off_duke"
+REVOKE_REFS = ("p_low", HEARTH, REVOKE_TARGET)
+NO_OFFICE_CLAUSE = "a revoke names no office the world holds"
+
+
+def _revoker_asked_about_a_person_a_place_and_a_seat(monkeypatch):
+    """`test_g3_not_yours.py::_gov_world` (`p_king` sits `off_crown`, the King on the rung above the Duke, and
+    `off_mayor`, both granting `confer` and `revoke`; the Duke's seat is held by `p_high`; `off_reeve` is a vacant
+    Crown seat the King may fill) with the Duke's seat named by a firsthand claim in the King's own ledger, dated
+    before the landing floor so it raises no question of its own. He then answers a question about a person, a
+    hearth and that seat. The standing occasions stamp two seats as `Office` (`seats_named`: the Duke's, which he was
+    told of; `vacancies`: `off_reeve`, which he may fill); the person is a `Person`; the hearth is carried as
+    nothing (`Rung` is `occasion_only`, and the King knows nothing of it)."""
+    w, d = _gov_world()
+    w.persons[REVOKER].ledger.append(Claim(f"c_rem28_{REVOKE_TARGET}", REVOKER, REVOKE_TARGET, "exists:Office", 1, -2,
+                                           "firsthand", 100, "own"))
+    return w, d, _ask(monkeypatch, w, REVOKER, REVOKE_REFS)
+
+
+def test_rem28_e_a_question_about_a_person_a_place_and_a_seat_forms_revoke_on_the_seats_only(monkeypatch):
+    """THE FIRST ASSERTION, which deleting the column reddens (`test_rem28_e_mutation_...` below runs that deletion):
+    the person and the seats are carried as their classes and `revoke` forms on the seats and on neither the person
+    nor the place -- one Candidate per granting seat (H-134), two seats, so each Office twice. THE CONTROL: the
+    King still forms the plain rows on all three referents, so the class removed this verb's formations and not his."""
+    w, _, q = _revoker_asked_about_a_person_a_place_and_a_seat(monkeypatch)
+    assert VERB_TABLE["revoke"].referent_class == "Office"
+    assert set(q.classes) == {(REVOKE_TARGET, "Office"), ("off_reeve", "Office"), ("p_low", "Person")}, q
+    formed = _formed(w, REVOKER, q)
+    mine = [c for c in formed if c.verb == "revoke"]
+    assert collections.Counter(c.subject for c in mine) == {REVOKE_TARGET: 2, "off_reeve": 2}, mine
+    assert {seat_of(w.persons[REVOKER], c) for c in mine} == {"off_crown", "off_mayor"}
+    plain = {c.subject for c in formed if not VERB_TABLE[c.verb].referent_class}
+    assert set(REVOKE_REFS) <= plain, plain
+
+
+def test_rem28_e_the_class_keeps_the_only_referents_a_revoke_can_succeed_on_and_removes_the_rest(monkeypatch):
+    """A PROOF, NOT A COUNT, for an untyped predicate row whose one clause reads the payload's `office`. THE REMOVED
+    Candidates (the person and the hearth, which the classless row forms): the act the chooser mints is refused on
+    'names no office', and so is the same act handed the id as its `office` -- a person and a rung are no office, so
+    nothing a caller could add makes them succeed, and removing them removes refusals only. THE KEPT Candidates: the
+    computed act is refused on the same clause (the limit, below), and handed `office` (the shape a hand-built act
+    has, `test_h134_candidate_per_seat._with_office`) exactly ONE is admitted -- the Duke's seat through `off_crown`,
+    the seat on the rung above it; the vacant `off_reeve` is refused (a seat nobody holds) and `off_mayor` has no
+    authority over the Duke. The loop asserts it checked both removed kinds and all four kept Candidates."""
+    w, d, q = _revoker_asked_about_a_person_a_place_and_a_seat(monkeypatch)
+    p = w.persons[REVOKER]
+    removed = [c for c in _formed_without_class(w, REVOKER, q, "revoke") if c.subject in ("p_low", HEARTH)]
+    assert {c.subject for c in removed} == {"p_low", HEARTH} and len(removed) == 4, removed
+    for c in removed:
+        act = _act_of(c, p)
+        out, clauses = _refusal_clauses(lambda: _preds._req_revoke(w, act))
+        assert out is False and clauses == [NO_OFFICE_CLAUSE], (c, clauses)
+        out, clauses = _refusal_clauses(lambda: _preds._req_revoke(w, _with_office(act)))
+        assert out is False and clauses == [NO_OFFICE_CLAUSE], (c, clauses)
+    kept = [c for c in _formed(w, REVOKER, q) if c.verb == "revoke"]
+    assert len(kept) == 4, kept
+    for c in kept:
+        out, clauses = _refusal_clauses(lambda: _preds._req_revoke(w, _act_of(c, p)))
+        assert out is False and clauses == [NO_OFFICE_CLAUSE], (c, clauses)
+    admitted = [(c.subject, seat_of(p, c)) for c in kept if _preds._req_revoke(w, _with_office(_act_of(c, p)))]
+    assert admitted == [(REVOKE_TARGET, "off_crown")], admitted
+
+
+def test_rem28_e_mutation_without_its_column_the_row_forms_on_the_person_and_the_place_too(monkeypatch):
+    """THE MUTATION, EXECUTED: the column deleted (the row copied with no class) and the assertion above has
+    something to see -- `revoke` forms on all three plain referents, the person and the hearth among them, and on no
+    seat the question does not name (`off_reeve` is a classed referent only). The unclassed formation is the base
+    reading's: 18 of 18 attempts refused, a person 8, a rung 8, a Record 1, a Site 1 (`aperture 1 s`, s = 0/1/2,
+    realm and spine, the dispatch commit `a4c508c5`)."""
+    w, _, q = _revoker_asked_about_a_person_a_place_and_a_seat(monkeypatch)
+    unclassed = _formed_without_class(w, REVOKER, q, "revoke")
+    assert collections.Counter(c.subject for c in unclassed) == {s: 2 for s in REVOKE_REFS}, unclassed
+    assert {c.subject for c in _formed(w, REVOKER, q) if c.verb == "revoke"} == {REVOKE_TARGET, "off_reeve"}
+
+
+def test_rem28_f_the_formation_that_survives_is_still_refused_by_the_fold_and_executes_nothing(monkeypatch):
+    """THE STATED LIMIT, EXECUTED (the done test this item does NOT have): the Candidate the question forms on the
+    Duke's seat through `off_crown`, minted as the chooser mints it and folded by the real driver, is REFUSED --
+    `revoke.refused`, and the Duke's `hold` stays live. THE CONTROL, which says the refusal is the payload's key and
+    not the Candidate: the same act carrying `office` closes the hold (`tenure.closed`). When a caller reads
+    `subject` (H-207 ruling (A)), THIS is the test to re-scope: the first assertion then becomes the execution."""
+    w, d, q = _revoker_asked_about_a_person_a_place_and_a_seat(monkeypatch)
+    p = w.persons[REVOKER]
+    (kept,) = [c for c in _formed(w, REVOKER, q) if c.verb == "revoke" and c.subject == REVOKE_TARGET
+               and seat_of(p, c) == "off_crown"]
+    act = _act_of(kept, p)
+    run = lambda *acts: [e.kind for e in d.resolve(mint_token(w, WriteClass.ACTS), list(acts),
+                                                   contest_max_depth=w.fixtures.get("contest_max_depth"))]
+    assert run(act) == ["revoke.refused"] and _hold(w, REVOKE_TARGET) is not None
+    with_office = dataclasses.replace(_with_office(act), id="a_rem28_revoke_with_office")
+    assert "tenure.closed" in run(with_office) and _hold(w, REVOKE_TARGET) is None
+
+
+def test_rem28_e_the_class_moves_no_derived_set():
+    """`Office` is declared already (`confer`, `oblige`) and `RUNG_REMIT_ACTS` reads the `Rung` rows alone, so the
+    column moves neither derived set: both are re-derived over the table with `revoke`'s column blanked and read the
+    shipped sets (an INVARIANCE: the fold cannot differ, so this is the whole of what can be asserted). THE CONTROL,
+    that the derivation can move: a table with no `Office` row at all (`revoke`, `confer`, `oblige` blanked) loses
+    `Office` from `DECLARED_CLASSES`, so neither equality is one a constant could satisfy."""
+    classless = lambda *verbs: {**VERB_TABLE, **{v: dataclasses.replace(VERB_TABLE[v], referent_class="")
+                                                  for v in verbs}}
+    with mock.patch.object(_verbs, "VERB_TABLE", classless("revoke")):
+        assert _verbs._derive_rung_remit_acts() == _verbs.RUNG_REMIT_ACTS
+        assert _verbs._derive_declared_classes() == _verbs.DECLARED_CLASSES
+    with mock.patch.object(_verbs, "VERB_TABLE", classless("revoke", "confer", "oblige")):
+        assert "Office" not in _verbs._derive_declared_classes()
     assert _verbs.RUNG_REMIT_ACTS == frozenset({"issue", "dispatch", "convene"}), _verbs.RUNG_REMIT_ACTS

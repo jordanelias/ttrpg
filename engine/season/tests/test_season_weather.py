@@ -341,9 +341,16 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # and `requisition` formed counts unmoved. The build hash is equal; one and two seasons move. Was 7d99c0f7... /
 # 1196f86b... (one, two seasons). CONTROL, run in process on this tree: `dispatch`'s column blanked in the shared
 # `VERB_TABLE` reads the old pair, the old `BASE_EVENTS` and the old `give`- and `thread_read`-withheld arms exactly.
+# RE-PINNED AT v10 REM-28 `revoke` (B10-06), TWO SEASONS ONLY: `revoke` declares `referent_class: Office`, so it forms only on a
+# seat the question carries as an Office and never on a person, a rung, a Record or a Site (`names no office the world holds`,
+# 18 of 18 pooled attempts at `aperture 1 s`, all refused); it executes nothing either way (`_req_revoke` reads `office`, a
+# computed act carries `subject`), and no derived set moves. One season is unmoved (no `revoke` was attempted in the seed-0
+# realm's first season), so are the build, the `give`- and `thread_read`-withheld arms; the second season moves (`revoke`'s
+# attempts and their scenes). Was fe3cc6d3... (two seasons, the dispatch commit). CONTROL, run in process on this
+# tree: `revoke`'s column blanked in the shared `VERB_TABLE` reads the old two-season hash and events exactly.
 BASE_HASHES = {0: "9ff5390939742b7bbb3af0fa2551e958",
                1: "30a959645cd5f42b731be47b6273e2e0",
-               2: "fe3cc6d3699c34fe4c78e6b3d88e4a1c"}
+               2: "920da131bd20f97dff550c41ed4574cc"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -398,8 +405,9 @@ BASE_HASHES = {0: "9ff5390939742b7bbb3af0fa2551e958",
 # RE-RECORDED at v10 REM-27 with `BASE_HASHES` (6484 -> 6482, 20701 -> 21258; REM-27 reverted in process reads the old pair).
 # RE-RECORDED at v10 REM-28 with `BASE_HASHES` (6482 -> 7193, 21258 -> 24535; REM-28 reverted in process reads the old pair).
 # RE-RECORDED at v10 REM-28 `dispatch` with `BASE_HASHES` (7193 -> 7196, 24535 -> 24107; the column blanked in process reads the old pair).
+# RE-RECORDED at v10 REM-28 `revoke` with `BASE_HASHES` (two seasons only: 24107 -> 24109; one season unmoved at 7196).
 BASE_EVENTS = {1: (7196, "bca6d489556d4937d374a6c0dd5f3b7a55a8e9c057437b6f5956ddcab1e7d7cb"),
-               2: (24107, "3cb85ec4393a0f68044d04a8dbd872b0b83a4883071fd9ebc96280d3b1ad7df6")}
+               2: (24109, "9d00afc6f951646cc1a4bebfee60bf6927cae57d0d5110a045e83265d53ec821")}
 
 
 def _digest(w) -> tuple:

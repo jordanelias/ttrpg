@@ -66,8 +66,13 @@ def _world():
     return w
 
 
-def _candidates(w, pid):
-    q = Question("q_h134", "need", (TARGET, "Hh"), "Hh")
+def _candidates(w, pid, classed=True):
+    # v10 REM-28 (B10-06): `revoke` declares `referent_class: Office`, so it forms only on a referent the question
+    # carries AS an Office; `TARGET` IS one (`off_duke`), carried here as the stamper (`seats_named`) would carry it.
+    # The re-scope is the carried class and nothing else -- `test_migrate_capacity.py`'s shape. The carried Office
+    # also lets `confer` and `oblige` (the other `Office` rows) form on it, so the CONTROL reading below
+    # (`classed=False`) keeps the plain question it was pinned on: there `revoke` LEAVES its pin (see `_CONTROL`).
+    q = Question("q_h134", "need", (TARGET, "Hh"), "Hh", classes=((TARGET, "Office"),) if classed else ())
     p = w.persons[pid]
     return opening_set(p, View(p.id, [], 99, q), q, w.fixtures)
 
@@ -229,12 +234,18 @@ def test_h134_two_seats_are_two_acts_ids_opportunities_and_the_store():
 # same `_control_reading` on a detached worktree at the CP-T05-04 tree (`ea6f1dba`) reads `(52, 52, "233b0142...")`
 # with `research` on exactly those two, and with `research`'s `referent_class` blanked in `decision.options.VERB_TABLE`
 # in-process it re-hashes to `(52, 52, "233b0142...")` exactly on the REM-2C tree.
-_CONTROL = (50, 50, "6b31ae4180b9fd2c60c558f701f715441dcf5cbfea54fe3b4d8d8e1304a2d282")
+# RE-PINNED AT v10 REM-28 `revoke` (B10-06): 50 -> 48, `6b31ae41...` -> `2ecfb27d...`. Exactly two Candidates (and their two
+# acts) leave and none is added: `revoke` (`referent_class: Office`) formed on `off_duke` and `Hh` (the question's plain
+# referents) and forms on neither now -- this reading's question carries no Office (`classed=False`: the plain question it
+# was pinned on; the revoke tests above carry `off_duke` as an Office instead). CONTROL, run (scratch, not kept): the same
+# `_control_reading` with `revoke`'s `referent_class` blanked in the shared `VERB_TABLE` in-process re-hashes to
+# `(50, 50, "6b31ae41...")` exactly, and the Candidates that differ are those two and no others.
+_CONTROL = (48, 48, "2ecfb27d5be314d8437ce67983938530f3ae0dae892c4d3901c91c21fad54eb3")
 
 
 def _control_reading():
     w = _world()
-    cands = _candidates(w, ONE)
+    cands = _candidates(w, ONE, classed=False)
     acts = _acts(w, ONE, cands)
     rep = (
         [(c.verb, c.subject, sorted((k, repr(v)) for k, v in c.operands.items())) for c in cands],
@@ -248,7 +259,7 @@ def test_h134_control_one_seat_forms_the_same_candidates_and_ids_as_before():
     p = w.persons[ONE]
     for verb in ("revoke", "confer", "transfer"):
         assert exercisable_seats(p, VERB_TABLE[verb]) == ("off_mayor2",), verb
-    cands = _candidates(w, ONE)
+    cands = _candidates(w, ONE, classed=False)
     carried = [c for c in cands if "via" in c.operands]
     assert carried == [], "a one-seat Candidate carries a seat key"
     acts = _acts(w, ONE, cands)

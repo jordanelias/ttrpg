@@ -610,7 +610,9 @@ rosters:
       `opening_set` has no World (L2) and cannot ask what kind of thing an id is. `Office`: the
       vacant seats a person may fill (`queries/world_q.py::vacancies`, IN-53) AND the seats he has
       been told of (`seats_named`, v9 IN-10 (a)), which `questions_for` adds to the question the
-      person answers (`_stamped`); a class is the carrier's own type name, so a
+      person answers (`_stamped`); `confer` and `oblige` declare it, and since v10 REM-28 `revoke` (which
+      the column keeps from forming on anything but a seat, and which still executes nothing: its
+      `verb_table.yaml` note); a class is the carrier's own type name, so a
       stamp of a type this roster does not name is refused at the Question's construction.
       `Record` (v9 IN-09, H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to correct]): the
       writs a person HOLDS (`queries/world_q.py::writs_held` -- a live `hold` on a Record of a kind
@@ -664,7 +666,8 @@ rosters:
       thing a person may commit to, assert or dispute (`w.propositions`,
       `state/carriers.py::Proposition` -- an OUGHT, a covenant's term). `Person`: a person or cohort
       by his own id (`w.persons`, `state/carriers.py::Person`); his `person`-kind rung shares the id
-      and `class_of` answers `Person` for it. While no row declares one of the three, the term stamps
+      and `class_of` answers `Person` for it; `open_case` and `petition` declare it, and since v10
+      REM-28 `dispatch`. While no row declares one of the three, the term stamps
       nothing for it and no formation moves; a row's `referent_class:` naming it is what makes the
       term stamp it. REVERT: drop the three values and the term.
     values: [Office, Record, Rung, Site, Proposition, Person]
