@@ -41,7 +41,7 @@ from ..decision import budget as _budget
 from ..decision import operands_for, person_side_eligible
 from ..state.carriers import (
     Act, Claim, Office, Person, Proposition, Rung, Site, Tenure, View,
-    matrix_rows_without_a_field, refuse_a_title_in_a_body,
+    matrix_rows_without_a_field, refuse_a_title_in_a_body, subject_of,
 )
 
 
@@ -178,9 +178,20 @@ def test_lb1_bo10_gate_closed_by_in11_the_utterers_hold_report_not_repair():
     # (`aperture 1 0`: `commit` att 38, ex 2 -> 0) -- the chooser's selection, not IN-11's wiring.
     # Deleted, never skipped; the closure is proven on hand-built worlds by
     # `test_in11_utter_hold_commit.py` block 1.
-    assert kinds.get("commitment.refused", 0) > 0, (
-        "no `commit` refusals at all -- the verb stopped being attempted, which is a different "
-        "regression from the one this test documents")
+    # ⚠⚠ v10 REM-23 (B10-05): `commitment.refused` 36 -> 0, A RE-RECORD WITH THE UNIT THAT MOVED IT, AND THE
+    # COUNT WAS A PROXY FOR THE PROPERTY, SO THE PROPERTY IS ASSERTED. `commit` declares `referent_class:
+    # Proposition`, so it forms only on a Proposition the question names and the person-id, rung and Record
+    # referents it was refused on (`exists:Proposition=0`, every one of the 36) are no longer formed: MEASURED,
+    # this season, REM-22 tree as control (the same script on both): `commit` attempted 38 -> 1, the Events
+    # `commitment.refused` 36 -> 0 and `commitment.made` 0 -> 1. What this assertion guarded -- "the verb is
+    # still ATTEMPTED, a different regression from the gap this test documents" -- is the `commit_acts`
+    # assertion above plus the next one, which reads the ACT STORE (a refused act is in it) and asks the class's
+    # own property of every attempt: it names a Proposition, with a floor on the attempts it saw.
+    attempted = [a for a in w.acts if a.verb == "commit"]
+    assert attempted, "no `commit` act was attempted at all -- the verb stopped being formed"
+    assert all(subject_of(a) in w.propositions for a in attempted), (
+        "a `commit` was formed on an id that names no Proposition -- `referent_class: Proposition` "
+        f"no longer holds: {[subject_of(a) for a in attempted if subject_of(a) not in w.propositions]}")
 
 
 # ---------------------------------------------------------------------------
@@ -2699,10 +2710,19 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # `finding.none` 116 / 115 and `residence.changed` 1 / 0 the other kinds that differ. NOT a dwelling
     # question answered first: THE PROPERTY IS ASSERTED DIRECTLY NOW (the head of every delivery, per arm),
     # and it holds -- 0 of 370 questions put first name a dwelling, 92 of the questions delivered do.
+    # ⚠⚠ v10 REM-23 (B10-05): (543, 545) -> (532, 534), A RE-RECORD WITH THE UNIT THAT MOVED IT: `commit` declares
+    # `referent_class: Proposition`, so it forms on a Proposition alone and the realm's act mix moved again
+    # (`aperture 1 0`: 543 -> 532 acts). MEASURED, seed 0, one season, the REM-22 tree (`e66a22ec`, a `git
+    # worktree`) as control, the same script on both: the control reads (543, 545) with the arms parting at act
+    # 372; here (532, 534), parting at act 370 at the SAME `migrate` (the stripped arm's `p_npc_002` to `terr_T13`,
+    # the kept arm's next act another person's). The kinds that differ between the arms are the REM-22 set less
+    # `duty.taken`: `claim.deposited` 5555 / 5469 (the dwellings' wear claims), `condition.worn` 322 / 111,
+    # `finding.none` 129 / 127, `migrate.refused` 54 / 58, `residence.changed` 1 / 0, `transfer.refused` 25 / 24.
+    # THE PROPERTY, a dwelling question never answered first, is asserted above and holds.
     assert heads[False] and heads[True], "the spy saw no delivery; the zero below would be unobserved"
     assert not [q.id for q in heads[False] if {q.about, *q.referents} & set(dw)], (
         "a dwelling question was answered first: IN-57's tier 4 no longer sorts it last")
-    assert (out["acts"], cout["acts"]) == (543, 545), (
+    assert (out["acts"], cout["acts"]) == (532, 534), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")

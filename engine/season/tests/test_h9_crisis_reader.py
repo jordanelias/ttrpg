@@ -60,7 +60,13 @@ from .test_season_shape import _wd_arm9
 # 36/8 -> 36/7, v9 IN-12 `give` + Rung (B-R): `give` no longer forms on a referent its asker does not
 # hold, the same move `test_season_shape.py`'s `wd_a_fork` records for `total` (36, 7). A re-record of
 # the control, read off this test's own failing assertion in CI run 1 of B-R (control (36, 7)).
-_BASELINE_TOTAL = (36, 7)
+# 36/7 -> 33/6, v10 REM-23 (B10-05): `commit` declares `referent_class: Proposition`, the same move
+# `test_season_shape.py`'s `wd_a_fork` records for `total` (33, 6) -- the fork population falls and the
+# divergence count moves by one. A re-record of the control, read off this test's own failing assertion and
+# RE-READ with `_wd_total` on this tree and on a `git worktree` at `e66a22ec` (the REM-22 tree): there control
+# (36, 7), 0.5 -> (36, 9), 1 -> (35, 11); here control (33, 6), 0.5 -> (33, 7), 1 -> (33, 8). The shifted arm still
+# rises above the control as a rate (8/33 = 24.2% > 6/33 = 18.2%; it was 11/35 > 7/36).
+_BASELINE_TOTAL = (33, 6)
 
 
 def _person(pursuits: dict, scar: dict) -> Person:

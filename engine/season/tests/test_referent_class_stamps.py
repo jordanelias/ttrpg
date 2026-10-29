@@ -25,10 +25,12 @@ referent_classes` gains (`Site`, `Proposition`, `Person`).
       declaring one puts it in `DECLARED_CLASSES`, the term's domain).
 
 REM-22 (`restore`, `work` and `examine` declare `referent_class: Site`; the first positive test of the
-term) is the last section: the formation (a person and a Site, the verb on the Site only), the DONE
-tests (a person present at a worn Site executes `restore`, reaches `examine`'s graded route, advances a
-works by `work`, each through the real fold) and the batch's control (3), written over the rows that
-declare `Site`, `Proposition` or `Person` so a later item adds its row by its column and not by a copy.
+term): the formation (a person and a Site, the verb on the Site only), the DONE tests (a person present
+at a worn Site executes `restore`, reaches `examine`'s graded route, advances a works by `work`, each
+through the real fold). REM-23 (`commit` declares `referent_class: Proposition`) follows the same two
+tests for a person and a Proposition. The last section is the batch's control (3), written over the rows
+that declare `Site`, `Proposition` or `Person` so a later item adds its row by its column and not by a
+copy.
 
 MUTATIONS, run at the build: `_stamped`'s `dict.fromkeys` dropped (the bare concatenation) reddens the
 three (c) tests on `Question`'s refusal (and `test_in53_vacancy_need.py`'s told-of-seat fingerprint
@@ -311,7 +313,9 @@ def test_rem22_a_a_question_about_a_person_and_a_site_forms_the_verb_on_the_site
     formations and not the person's."""
     w, _ = _works_world()
     q = _ask(monkeypatch, w, PRESENT)
-    assert q.classes == (("site_harbour", "Site"),), q
+    # REM-23: the question's Proposition (`prop_x`) now stamps too, as `commit` declares its class; the
+    # Site is the same one, first in the question's order, and this verb's formation is unchanged by it.
+    assert q.classes == (("site_harbour", "Site"), ("prop_x", "Proposition")), q
     formed = _formed(w, PRESENT, q)
     assert [c.subject for c in formed if c.verb == verb] == ["site_harbour"], (verb, formed)
     plain = {c.subject for c in formed if not VERB_TABLE[c.verb].referent_class}
@@ -322,8 +326,8 @@ def test_rem22_a_every_candidate_respects_the_partition_a_classed_row_the_class_
         monkeypatch):
     """Over everything `p_high` forms from the mixed question: a row declaring a class forms only on an
     id the question carries as that class, a row declaring none only on its plain referents -- and the
-    loop asserts it compared (`CLAUDE.md` §0.1 pt 2): the three Site rows among the classed, and the
-    plain rows on all four referents."""
+    loop asserts it compared (`CLAUDE.md` §0.1 pt 2): the three Site rows and REM-23's `commit` among the
+    classed, and the plain rows on all four referents."""
     w, _ = _works_world()
     q = _ask(monkeypatch, w, PRESENT)
     classed, plain = collections.Counter(), collections.Counter()
@@ -335,7 +339,8 @@ def test_rem22_a_every_candidate_respects_the_partition_a_classed_row_the_class_
         else:
             assert c.subject in q.referents, (c, q.referents)
             plain[c.subject] += 1
-    assert set(SITE_ROWS) <= set(classed) and all(classed[v] == 1 for v in SITE_ROWS), classed
+    both = SITE_ROWS + PROPOSITION_ROWS
+    assert set(both) <= set(classed) and all(classed[v] == 1 for v in both), classed
     assert set(plain) == set(MIXED), plain
 
 
@@ -409,11 +414,80 @@ def test_rem22_b_work_formed_on_a_site_advances_a_works_and_only_a_works(monkeyp
         assert _kinds(out) == ["work.unavailable"] and harbour.condition == 500, _kinds(out)
 
 
+# ======================================================================================
+# REM-23 (B10-05; rem-02 §2.3 REM-23, limit `-08` AM-A-08): `commit` FORMS ON A PROPOSITION ONLY.
+# One more `referent_class:` column, the same term (`own_referents_of_class`) stamping it. THE CLASS
+# REMOVES WRONG-KIND FORMATIONS ONLY: it does not answer IN-57's own-act screen (ED-IN-0296 (3), B10-09's
+# CR-10) -- a person may still form `commit` on a Proposition he is already committed to.
+# ======================================================================================
+
+#: The rows declaring `Proposition`, named so that control (3) below asserts it walked each of them.
+#: A later item that declares the class on a row (CP-T05-04's `argue`) is under control (3) by its column
+#: whether or not it is listed here; listing it only adds the row's formation assertions to this item's.
+PROPOSITION_ROWS = ("commit",)
+
+
+@pytest.mark.parametrize("verb", PROPOSITION_ROWS)
+def test_rem23_a_a_question_about_a_person_and_a_proposition_forms_the_verb_on_the_proposition_only(
+        monkeypatch, verb):
+    """THE FIRST ASSERTION, which deleting the column reddens (`test_rem23_a_mutation_...` below runs that
+    deletion, and the build ran it against the YAML itself): `p_high` answers a question about `p_low`, the
+    harbour, a Proposition and a rung; the term stamps the Proposition, and `commit` forms on it and on
+    nothing else. THE CONTROL: the person still forms the plain rows on all four referents, so the class
+    removed this verb's formations and not the person's."""
+    w, _ = _works_world()
+    q = _ask(monkeypatch, w, PRESENT)
+    assert ("prop_x", "Proposition") in q.classes, q
+    formed = _formed(w, PRESENT, q)
+    assert [c.subject for c in formed if c.verb == verb] == ["prop_x"], (verb, formed)
+    plain = {c.subject for c in formed if not VERB_TABLE[c.verb].referent_class}
+    assert set(MIXED) <= plain, plain
+
+
+@pytest.mark.parametrize("verb", PROPOSITION_ROWS)
+def test_rem23_a_mutation_without_its_column_the_row_forms_on_every_referent(monkeypatch, verb):
+    """THE MUTATION, EXECUTED: the column deleted (the row copied with no class) and the assertion above
+    has something to see -- `commit` forms on all four referents, the person, the Site and the rung among
+    them. The unclassed formation is the base reading's: `commit` attempted 38/33/34 and refused
+    36/32/33 at admission on `exists:Proposition=0` (`aperture 1 s`, REM-22 tree)."""
+    w, _ = _works_world()
+    q = _ask(monkeypatch, w, PRESENT)
+    assert [c.subject for c in _formed_without_class(w, PRESENT, q, verb)] == list(MIXED)
+    assert [c.subject for c in _formed(w, PRESENT, q) if c.verb == verb] == ["prop_x"]
+
+
+def test_rem23_b_a_person_committing_to_a_proposition_executes_through_the_fold(monkeypatch):
+    """THE DONE TEST (P9): the Candidate `p_high`'s question forms on the Proposition is minted as the
+    chooser mints it and folded by the real driver: `commitment.made`, and a live `commit` edge from him to
+    it. THE CONTROL, the Candidate the unclassed row would also have formed on the person `p_low`: the
+    admission refuses it (`exists:Proposition` = 0), the fold emits `commitment.refused`, and no edge
+    opens. The class claims no more than that: it is the wrong-kind formation that is gone, and the
+    committer's own-act screen (ED-IN-0296 (3), CR-10) is not here."""
+    w, d = _works_world()
+    q = _ask(monkeypatch, w, PRESENT)
+    p = w.persons[PRESENT]
+    (c,) = [c for c in _formed(w, PRESENT, q) if c.verb == "commit"]
+    assert c.subject == "prop_x"
+
+    def live():
+        return sorted(t.object for t in p.tenures if t.kind == "commit" and t.live)
+
+    held = live()
+    assert "prop_x" not in held, held
+    (wrong,) = [c for c in _formed_without_class(w, PRESENT, q, "commit") if c.subject == "p_low"]
+    refused = dataclasses.replace(_act_of(wrong, p), id="a_commit_wrong_kind")
+    assert _kinds(_fold(w, d, refused)) == ["commitment.refused"]
+    assert live() == held, live()
+    assert _kinds(_fold(w, d, _act_of(c, p))) == ["commitment.made"]
+    assert live() == sorted(held + ["prop_x"]), live()
+
+
 # --- (c) CONTROL (3) OF B10-05's HR-9: A CLASS REMOVES REFUSALS AND NOTHING ELSE --------------
 
 #: The classes whose rows control (3) walks. The ROWS are read off the table, so a later item that
 #: declares `Proposition` or `Person` on a row is under the control the moment its column lands: nothing
-#: here names a verb but the three this item adds, and a row is added by its data and never by a copy.
+#: here names a verb but `SITE_ROWS` and `PROPOSITION_ROWS` (the rows whose extra assertions are stated),
+#: and a row is added by its data and never by a copy.
 CONTROL3_CLASSES = frozenset({"Site", "Proposition", "Person"})
 
 
@@ -446,13 +520,14 @@ def test_rem22_c_every_candidate_a_class_removes_force_admitted_refuses_on_the_r
     classless -- are force-admitted through the fold's own `_admits` (the Candidate minted as the chooser
     mints it) and each is refused on the row's kind. A PROOF, NOT A COUNT: the class removes refusals and
     nothing else. The loop asserts that it checked at least one removed Candidate for EVERY classed row,
-    and the Site rows' own Candidate on the Site (the one the class keeps) is admitted by the same call,
-    so a refusal here is not the fold refusing everything."""
+    and the Site rows' and the Proposition row's own Candidate (the one the class keeps) is admitted by the
+    same call, so a refusal here is not the fold refusing everything. REM-23's `commit` entered this loop
+    by its column alone: `rows` is read off the table."""
     w, d = _works_world()
     q = _ask(monkeypatch, w, PRESENT)
     p = w.persons[PRESENT]
     rows = {v: r for v, r in VERB_TABLE.items() if r.referent_class in CONTROL3_CLASSES}
-    assert set(SITE_ROWS) <= set(rows), sorted(rows)
+    assert set(SITE_ROWS + PROPOSITION_ROWS) <= set(rows), sorted(rows)
     kept = {c.verb: c for c in _formed(w, PRESENT, q)}
     checked = collections.Counter()
     for verb, row in sorted(rows.items()):
@@ -463,7 +538,7 @@ def test_rem22_c_every_candidate_a_class_removes_force_admitted_refuses_on_the_r
             assert not ok, (verb, c)
             _refuses_on_the_rows_kind(row, verdict, c)
             checked[verb] += 1
-        if verb in SITE_ROWS:
+        if verb in SITE_ROWS + PROPOSITION_ROWS:
             assert {c.subject for c in removed} == set(MIXED) - own, (verb, removed)
             assert d._admits(w, _act_of(kept[verb], p), row)[0], (verb, kept[verb])
     assert set(checked) == set(rows) and min(checked.values()) >= 1, (sorted(rows), checked)
