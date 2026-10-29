@@ -321,19 +321,93 @@ def _counts(w) -> dict:
 #: Read on the base commit `b9beec9d` (the old digest; PYTHONHASHSEED 0 and 1 identical), except
 #: `new`, read on the GO-07 tree. `census` is the sha256 of `populated.run`'s return value as sorted
 #: JSON -- the census plus `acts`, `actors`, `act_subjects` and `claim_sources`.
+#: RE-RECORDED at v10 REM-22 (B10-05), A GAME MOVE DECLARED, NO DIGEST MOVE: `restore`, `work` and `examine`
+#: declare `referent_class: Site`, so the act mix of every seeded realm moves; EVERY value below is the REM-22
+#: tree's, read with this file's own helpers (`_old_content_hash`, `_counts`) and `populated.run`, and the control
+#: still means what it meant -- the digest format changed and the world, at a given tree, did not (the two
+#: digests are read of the SAME run). Was, for seeds 0 / 1 / 2: `old` b2464a6c... / 97d2d92f... / 455cfe8d...,
+#: `new` 947c190b... / 36ef9545... / 7e8df32a..., `acts` 539 / 560 / 588, `log` 7018 / 8128 / 6879.
+#: RE-RECORDED AGAIN at v10 REM-23 (B10-05), A GAME MOVE DECLARED, NO DIGEST MOVE: `commit` declares
+#: `referent_class: Proposition`, so it forms only on a Proposition the question it answers names -- 83 of 83
+#: persons formed it before (attempted 38 / 33 / 34 at seeds 0 / 1 / 2, `aperture 1 s`), 6 / 2 / 1 do now
+#: (attempted 1 / 1 / 1) -- and the act mix of every seeded realm moves with it. EVERY value below is the REM-23
+#: tree's, read with this file's own helpers (`_old_content_hash`, `_counts`) and `populated.run`; CONTROL, run: the
+#: same script on the REM-22 tree (`e66a22ec`) reads the values this block held, so the move is this unit's.
+#: Was, for seeds 0 / 1 / 2: `old` ea5d101c... / 0982d7ba... / 978f8690..., `new` 3c627dea... / 9b9145f7... /
+#: 7619c18e..., `acts` 543 / 588 / 607, `log` 7345 / 10146 / 8132.
+#: RE-RECORDED AGAIN at v10 REM-24 (B10-05), A GAME MOVE DECLARED, NO DIGEST MOVE: `petition` declares
+#: `referent_class: Person`, so it forms only on a person the question it answers names -- formed for 82 / 81 / 82
+#: of 83 persons before (attempted 19 / 17 / 20, refused 9 / 13 / 12, every one on `exists:Person=0`), 40 / 39 / 43
+#: do now (attempted 10 / 4 / 8, refused 0) -- and the act mix of every seeded realm moves with it. EVERY value below
+#: is the REM-24 tree's, read with this file's own helpers (`_old_content_hash`, `_counts`) and `populated.run`;
+#: CONTROL, run: the same script on the REM-23 tree (`409c467b`, a `git worktree`) reads the values this block held
+#: exactly, so the move is this unit's. Was, for seeds 0 / 1 / 2: `old` 26fa3179... / e51b0d83... / c961a57a...,
+#: `new` 290655d8... / 9537c69e... / 43b51550..., `acts` 532 / 582 / 583, `log` 6647 / 8656 / 7196.
+#: RE-RECORDED AGAIN at v10 REM-25 (B10-05), A GAME MOVE DECLARED, NO DIGEST MOVE: `carry`, `found` and `build`
+#: declare `referent_class: Record`, and the `Record` term widens from `writs_held` to `writs_held` plus
+#: `records_held_for_holding_rows`, so they form only on a Record the person holds (a petition, for the realm) --
+#: 83 of 83 persons formed each before (`carry` attempted 15 / 18 / 12, `found` 11 / 14 / 21, `build` 12 / 13 / 12,
+#: all refused on `exists:petition=0` / `exists:works=0`, `aperture 1 s`), 9 / 4 / 9 do now (`carry` attempted
+#: 2 / 0 / 1, executed 2 / 0 / 1; `found` 0 / 0 / 0; `build` 0 / 1 / 1), and `comply` forms on a held petition his
+#: ledger names (attempted 2 / 2 / 1, refused on `exists:dispensation=0`) -- and the act mix of every seeded realm
+#: moves with it. EVERY value below is the REM-25 tree's, read with this file's own helpers (`_old_content_hash`,
+#: `_counts`) and `populated.run`; CONTROL, run: this file's own control test on a detached worktree at the REM-24
+#: tree (`f2381695`) is green against the values this block held, so the move is this unit's. Was, for seeds
+#: 0 / 1 / 2: `old` 9930edaa... / eaa35b59... / 7397b498..., `new` cd0ea7bc... / 3688012e... / 9dde0b7b...,
+#: `acts` 529 / 579 / 578, `log` 6396 / 8662 / 7190.
+#: RE-RECORDED AGAIN at v10 CP-T05-04 (B10-05), A GAME MOVE DECLARED, NO DIGEST MOVE: `argue` declares
+#: `referent_class: Proposition` and `open_case` declares `Person`, and `world_q.docket_question` asks the witness
+#: of a docketing about the matter docketed -- `argue` formed for 37 / 35 / 39 of 83 persons before (attempted 8 / 10 / 5,
+#: every one refused on `exists:Proposition=0`, `aperture 1 s`), for none now; `open_case` formed for 8 / 8 / 8 persons
+#: and 6 / 6 / 8 do (executed 4 / 2 / 1 -> 2 / 1 / 1 with the question, 3 / 1 / 1 with the columns alone: the lost case
+#: is `terr_T13`'s, a rung) -- and the act mix of every seeded realm moves with it (the docket question moves seeds 0 and
+#: 1 and not seed 2). EVERY value below is the CP-T05-04 tree's, read with this file's own helpers (`_old_content_hash`,
+#: `_counts`) and `populated.run`; CONTROL, run: this file's own control test on a detached worktree at the REM-25 tree
+#: (`92892b09`) is green against the values this block held, so the move is this unit's; and in-process on this tree the
+#: columns alone (the docket term stubbed) read `new` 7f36d369... / 43c143d5... / b3e6f82c... and the docket question
+#: alone (the columns blanked) 66a48d9a... / 209b02f9... / 7e87cc54..., so each unit moves the hash by itself (seed 2:
+#: the question moves nothing). Was, for seeds 0 / 1 / 2: `old` 38c7de45... / 233f7e8e... / 09176dd8..., `new`
+#: da1ce5eb... / f80b2949... / 7e87cc54..., `acts` 523 / 575 / 591, `log` 6348 / 8597 / 7724.
+#: RE-RECORDED AGAIN at v10 REM-2C (B10-05), A GAME MOVE DECLARED, NO DIGEST MOVE: `research` declares
+#: `referent_class: Record` and `Record` leaves `rosters.yaml: occasion_only_classes`, so the own-referent term stamps
+#: the question's own Records and `research` forms only on a Record -- formed for 83 / 83 / 83 persons before (attempted
+#: 69 / 66 / 53, refused at admission on `exists:Record=0` 67 / 62 / 53, `aperture 1 s`), 23 / 20 / 25 now (attempted
+#: 5 / 8 / 1, none refused at admission) -- and the act mix of every seeded realm moves with it (the freed scene slots
+#: go to other verbs). EVERY value below is the REM-2C tree's, read with this file's own helpers (`_old_content_hash`,
+#: `_counts`) and `populated.run`; CONTROL, run: this file's own control test on a detached worktree at the CP-T05-04
+#: tree (`ea6f1dba`) is green against the values this block held, so the move is this unit's (each half moves the
+#: one-season hash alone: `test_season_weather.py`'s `BASE_HASHES` note). Was, for seeds 0 / 1 / 2: `old`
+#: 956afe6b... / 508ac507... / 7d9c2981..., `new` 26bcb37d... / 3b43b9fc... / b3e6f82c..., `acts` 524 / 577 / 595,
+#: `log` 6267 / 8493 / 7707.
+#: RE-RECORDED AGAIN at v10 REM-52 (B10-05), A GAME MOVE DECLARED, NO DIGEST MOVE: `body_step` ships at `10`, `H-125`'s
+#: live arm (it was the control `0`), so the first MATTER draw of the realm, which finds every larder empty, falls
+#: the body of each cohort it leaves short by `10` x its unmet units (36 / 32 / 35 of the 37 cohorts from 1000 to 940
+#: at seeds 0 / 1 / 2, 37 `body.changed` Events at seeds 0 / 1 and 38 at seed 2, where the base held 0 / 0 / 1), and
+#: the act mix of every seeded realm moves with it (the mechanism between the Events and the acts is not split here):
+#: `acts` 577 / 637 / 630 -> 576 / 637 / 629, `log` +107 / +110 / +107 Events, `aperture 1 s`: `tend` executed
+#: (attempted less refused) 1 / 0 / 1 -> 2 / 5 / 3, `utter` attempted +1 at seed 0, `challenge` -1 and `release` +1
+#: attempted at seed 1, no other verb row moves. No budget band is crossed at 940. NOBODY DIES OF IT: at
+#: `10` the lowest body is 940, and `person.died` is the same Event set before and after (1 / 0 / 2 at seeds 0 / 1 / 2,
+#: p_npc_050; none; p_npc_034 and p_npc_041, all RESOLVE-written). EVERY value below is the REM-52 tree's, read with
+#: this file's own helpers (`_old_content_hash`, `_counts`) and `populated.run`; CONTROL, run: the same script on a
+#: detached worktree at the REM-2C tree (`a397fa16`, whose game code is `07f46301`'s) reads the values this block
+#: held exactly, and so does the REM-52 tree with `body_step` swept back to `0` in `data/fixtures.py` and
+#: `written=True` left in `loop/matter.py` (a scratch worktree), so the move is `body_step`'s alone and
+#: `written=True` moves nothing at these seeds. Was, for seeds 0 / 1 / 2: `old` 7a9ba50d... / 0418dc12... /
+#: 35e6932d..., `new` 8bec380b... / 82223978... / e707d359..., `acts` 577 / 637 / 630, `log` 6377 / 9117 / 7933.
 BASE = {
-    0: {"old": "b2464a6c87dd9d2da9e3b3cbc8143fdf", "new": "947c190baae2dda4b512d42271f36dd4", "acts": 539,
-        "census": "5198ad48b4077e7bcdca144ccf692a296897cb22e2f3a240d655c72aa1302a14",
-        "counts": {"persons": 82, "rungs": 411, "offices": 32, "sites": 322, "records": 88,
-                   "propositions": 87, "dates": 1, "docket": 5, "tenures": 785, "log": 7018}},
-    1: {"old": "97d2d92f792dc980bc2ed4656e415261", "new": "36ef95456677d233921aa79f0ce5f00d", "acts": 560,
-        "census": "997a5648f8d6709bafbb7936c1aa2086644615e2eaf0af114abaf5868e767800",
-        "counts": {"persons": 83, "rungs": 412, "offices": 32, "sites": 322, "records": 98,
-                   "propositions": 87, "dates": 0, "docket": 2, "tenures": 810, "log": 8128}},
-    2: {"old": "455cfe8dcf9a9832b88c1bda5a29bde7", "new": "7e8df32af51923945ff3060b3231ea2d", "acts": 588,
-        "census": "b2adbbfe2eb49735b26a40be341793757741b27f53895c80de78bc1993683eba",
-        "counts": {"persons": 81, "rungs": 410, "offices": 32, "sites": 322, "records": 90,
-                   "propositions": 91, "dates": 1, "docket": 2, "tenures": 787, "log": 6879}},
+    0: {"old": "3d139b32378d0e109ba379cd59ff18ad", "new": "5d2e5f77a8f06bd34006f7d4bc0c2649", "acts": 576,
+        "census": "07ee489097b7e2c7cb4785b5596470501a7cbdbc9f3b88710c2a630a881d132d",
+        "counts": {"persons": 82, "rungs": 411, "offices": 32, "sites": 322, "records": 99,
+                   "propositions": 96, "dates": 1, "docket": 4, "tenures": 813, "log": 6484}},
+    1: {"old": "31fa260be50660a8b5d320b5cc1ab158", "new": "8a50ca82911f375a9e079841bf0804e3", "acts": 637,
+        "census": "aee2404f23e26835732c2b61fb398fa47beb7e4e33798848b41c408c2ed3d4b7",
+        "counts": {"persons": 83, "rungs": 412, "offices": 32, "sites": 322, "records": 126,
+                   "propositions": 91, "dates": 0, "docket": 1, "tenures": 848, "log": 9227}},
+    2: {"old": "3f836210f6bc9fff6a165077783bb923", "new": "b8678a41d2c60af42bdb8ac7e9797164", "acts": 629,
+        "census": "e54f4221ab85d06ab4d75a784fc492076c0608d94af8a55e79d1ba69b2cbf336",
+        "counts": {"persons": 81, "rungs": 410, "offices": 32, "sites": 322, "records": 114,
+                   "propositions": 97, "dates": 1, "docket": 2, "tenures": 817, "log": 8040}},
 }
 
 

@@ -450,9 +450,12 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     #
     # ⚠ BODIES AND TRAVEL WERE NOT BUILT WHEN THIS WAS WRITTEN; BOTH ARE NOW (item 3b below, and
     # the travel pass after the yield loop, plan position `19c`), each in #353's order.
-    # v9 IN-21 / `H-26`: ONE draw per season, keyed on the clock, owned by `world_q.season_factor_of`.
-    # With `season_factor_draw` empty (the shipped control) this is the bare `season_factor`.
-    factor = world_q.season_factor_of(w)
+    # v9 IN-21 / `H-26`: ONE draw per season per TERRITORY, keyed on the clock and the territory's rung id
+    # (v10 CL-EVENTS (1), M16 (b)), owned by `world_q.season_factor_of`; `season_factors_by_rung` is its
+    # per-rung reading, `((rung, factor), ...)` for every rung a Site stands on, which `ProduceInput.factor`
+    # carries to `settlements.produce`. With `season_factor_draw` empty (the shipped control) every rung
+    # reads the bare `season_factor` and nothing is drawn.
+    factor = world_q.season_factors_by_rung(w)
     scale_ = w.fixtures.get("condition_scale")
 
     # -- THE DRAW IS PER EATER, UP THE LARDER LADDER (item 3a) -------------------
@@ -610,7 +613,10 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
         if person is None:
             continue
         was = person.body
-        prior_b = w.last_emission_of("body.changed", pid)
+        # `written=True` (H-129, REM-52): the anchor read chains a combat-caused write on the wrong
+        # person -- the fold's `body.changed` anchors on the combatant, not on `pid`. The Event that
+        # WROTE `pid`'s body is the one to chain to, as `_die`'s and `travel.ended`'s reads are.
+        prior_b = w.last_emission_of("body.changed", pid, written=True)
         _m = len(w._emitted_by_write)
         w.write("body", token,
                 lambda person=person, after=fall.body_after: setattr(person, "body", after),

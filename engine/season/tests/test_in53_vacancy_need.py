@@ -189,7 +189,10 @@ def test_in53v_b_confer_forms_on_the_vacancy_with_to_over_known_persons_and_hims
 def test_in53v_b_only_confer_forms_on_a_classed_referent_and_only_on_one():
     """Every `confer` Candidate names a referent its question carries as `Office`; no other row
     forms on an id it carries ONLY classed. RE-RECORDED AT v9 IN-10 (a): `oblige`, which declares the
-    class too, is held to `confer`'s rule (no `oblige` forms here: nobody was told of a seat)."""
+    class too, is held to `confer`'s rule (no `oblige` forms here: nobody was told of a seat).
+    RE-RECORDED AT v10 REM-24: a classed row names the referent as ITS OWN class, not `Office` -- `petition`
+    (`Person`) now forms here on the person a claim is about, and the rule it is held to is the row's
+    (`(subject, row.referent_class)` in the question's classes), `confer`'s unchanged."""
     classed_rows = {v for v, r in VERB_TABLE.items() if r.referent_class}
     w, _ = _gov_world()
     for pid in w.persons:
@@ -201,7 +204,7 @@ def test_in53v_b_only_confer_forms_on_a_classed_referent_and_only_on_one():
             only_classed = {r for r, _ in q.classes} - set(q.referents)
             for c in _formed(w, pid, q):
                 if c.verb in classed_rows:
-                    assert (c.subject, "Office") in q.classes, (pid, q.id, c)
+                    assert (c.subject, VERB_TABLE[c.verb].referent_class) in q.classes, (pid, q.id, c)
                     checked += c.verb == "confer"
                 else:
                     assert c.subject not in only_classed, (pid, q.id, c)
@@ -234,7 +237,9 @@ def test_in53v_c_the_classes_survive_the_fold_and_are_closed():
     # RE-RECORDED AT v9 IN-45 `migrate`: `Rung` joins, the places `places_named` stamps (H-168).
     # Spelled as a size and two memberships: `test_jordan_no_definition_is_hardcoded_in_a_body` flags a
     # three-string literal here as a roster duplicated from rosters.yaml.
-    assert len(REFERENT_CLASSES) == 3 and {"Office", "Record"} <= REFERENT_CLASSES and "Rung" in REFERENT_CLASSES
+    # RE-RECORDED AT v10 REM-21: `Site`, `Proposition` and `Person` join (was 3), the classes the
+    # own-referent term stamps once a row declares one (`test_referent_class_stamps.py`).
+    assert len(REFERENT_CLASSES) == 6 and {"Office", "Record"} <= REFERENT_CLASSES and "Rung" in REFERENT_CLASSES
     a = Question("q:claim:x", "claim_landed", ("S",), "x")
     b = Question("q:need:off_reeve", "need", (), "off_reeve", (("off_reeve", "Office"),))
     for rule in ("all", "one_per_source"):
@@ -243,7 +248,8 @@ def test_in53v_c_the_classes_survive_the_fold_and_are_closed():
         assert f.referents_for(None) == ("S",), f
     assert aggregate_questions([a, b], "first") is a
     with pytest.raises(Forbidden, match="no declared class"):
-        Question("q:bad", "need", ("off_duke",), "", (("off_duke", "Site"),))   # `Rung` is declared since IN-45
+        # `Rung` is declared since IN-45, `Site` since v10 REM-21; a misspelt class still refuses
+        Question("q:bad", "need", ("off_duke",), "", (("off_duke", "Ofice"),))
     with pytest.raises(Forbidden, match="twice"):
         Question("q:bad", "need", (), "", (("off_duke", "Office"), ("off_duke", "Office")))
 
@@ -264,9 +270,19 @@ def _planted(monkeypatch, verb, key, value):
 def test_in53v_c_the_declarations_as_built():
     # RE-RECORDED AT v9 IN-10 (a): `oblige` declares the class (was `{"confer"}`); AT v9 IN-09 the
     # `comply` declares `Record` (was `{"confer", "oblige"}`); AT v9 IN-45 `migrate` declares `Rung`;
-    # AT v9 IN-49 `requisition` declares `Rung` beside it.
+    # AT v9 IN-49 `requisition` declares `Rung` beside it; AT v10 REM-22 `restore`, `work` and `examine`
+    # declare `Site` (B10-05); AT v10 REM-23 `commit` declares `Proposition` (B10-05); AT v10 REM-24
+    # `petition` declares `Person` (B10-05); AT v10 REM-25 `carry`, `found` and `build` declare `Record`
+    # beside `comply` (B10-05; ten rows -> thirteen); AT v10 CP-T05-04 `argue` declares `Proposition` and
+    # `open_case` declares `Person` (B10-05; thirteen rows -> fifteen); AT v10 REM-2C `research` declares
+    # `Record` (B10-05; fifteen rows -> sixteen; control: the CP-T05-04 tree `ea6f1dba`, fifteen).
     assert {v for v, r in VERB_TABLE.items() if r.referent_class} == {"confer", "oblige", "comply",
-                                                                      "migrate", "requisition"}
+                                                                      "migrate", "requisition",
+                                                                      "restore", "work", "examine",
+                                                                      "commit", "petition",
+                                                                      "carry", "found", "build",
+                                                                      "argue", "open_case",
+                                                                      "research"}
     assert VERB_TABLE["migrate"].referent_class == "Rung" and not VERB_TABLE["migrate"].referent_named
     assert VERB_TABLE["requisition"].referent_class == "Rung" and not VERB_TABLE["requisition"].referent_named
     assert VERB_TABLE["confer"].referent_class == VERB_TABLE["oblige"].referent_class == "Office"

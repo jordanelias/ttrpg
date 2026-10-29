@@ -233,8 +233,14 @@ def test_the_dispensation_artifact_runs_through_the_real_precondition(monkeypatc
 # ======================================================================================
 
 def _petition_candidates(w, pid):
+    """The `petition` Candidates `pid` forms on a question about two people, AS THE SPLICE DELIVERS IT
+    (v10 REM-24): carrying its own referents of every stamped class (`world_q.own_referents_of_class`, through
+    `_stamped`), because `petition` declares `referent_class: Person` and forms on a classed referent alone --
+    `test_works_founding.py::_formed_on`'s precedent for REM-22's `Site` rows."""
+    from engine.season.queries import world_q
     p = w.persons[pid]
     q = Question("q:fold", "need", ("p_low", "p_mid"))
+    q = world_q._stamped(q, world_q.own_referents_of_class(w, q), w)
     return [c for c in opening_set(p, View(pid, [], w.fixtures.get("view_k")), q, w.fixtures)
             if c.verb == "petition"]
 

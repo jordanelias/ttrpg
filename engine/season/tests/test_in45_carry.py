@@ -136,19 +136,59 @@ def test_in45_carry_is_refused_without_a_held_petition():
     assert len(world_q.docketed(w, PARTY)) == 1
 
 
+def _carries(w, p, q, shipped=True):
+    """The `carry` Candidates `p` forms on `q`, through the real `opening_set`. `shipped` False reads it
+    with `carry`'s `referent_class` blanked in-process (see the test below): the formation of the REM-24
+    tree (`f2381695`), which the first test below was written against."""
+    import dataclasses
+    from unittest import mock
+    from ..decision import options as _options
+    table = VERB_TABLE if shipped else {
+        **VERB_TABLE, "carry": dataclasses.replace(VERB_TABLE["carry"], referent_class="")}
+    with mock.patch.object(_options, "VERB_TABLE", table):
+        return [c for c in opening_set(p, View(p.id, [], w.fixtures.get("view_k")), q, w.fixtures)
+                if c.verb == "carry"]
+
+
 def test_in45_the_petitioner_forms_a_carry_on_a_question_naming_his_petition():
     """WIRED, person-side: `opening_set` forms `carry` on a petition the question names (a filed
     petition reaches its petitioner's questions through his `claim_landed` deposits). CONTROL: a
-    question naming nothing forms no `carry`."""
+    question naming nothing forms no `carry`.
+
+    v10 REM-25 (B10-05): READ WITH `carry`'s `referent_class: Record` BLANKED IN-PROCESS -- the formation
+    of the REM-24 tree, which this test was written against. THE UNIT AND THE REASON: `carry` declares
+    `Record` and forms on a Record-classed referent alone, and a hand-written Question naming the petition
+    among its PLAIN referents carries no class, so under the shipped table it forms none -- asserted by
+    `test_rem25_carry_forms_on_the_petition_he_holds_and_not_on_a_question_that_merely_names_it` below. What
+    this test asserts (the referent binds `subject`, a question naming nothing forms none) is unchanged and
+    still executes; the shipped route is the holding one."""
     w, _d = _filed()
     p = w.persons[PETITIONER]
-    view = View(p.id, [], w.fixtures.get("view_k"))
-    got = [c.subject for c in opening_set(p, view, Question("q:in45", "need", (PETITION,)),
-                                          w.fixtures) if c.verb == "carry"]
+    got = [c.subject for c in _carries(w, p, Question("q:in45", "need", (PETITION,)), shipped=False)]
     assert got == [PETITION], got
-    none = [c for c in opening_set(p, view, Question("q:in45:0", "need", ()), w.fixtures)
-            if c.verb == "carry"]
+    none = _carries(w, p, Question("q:in45:0", "need", ()), shipped=False)
     assert none == [], none
+
+
+def test_rem25_carry_forms_on_the_petition_he_holds_and_not_on_a_question_that_merely_names_it():
+    """THE NEW BEHAVIOUR, WHERE THE CONSUMER IS TESTED (v10 REM-25, B10-05): under the shipped class the
+    petitioner is asked a question by the real `questions_for` and it carries his held petition as a
+    `Record`, so `carry` forms on it -- but a Question that only NAMES the petition among its plain referents
+    (a claim's subject, a hand-written one) forms no `carry`. CONTROLS: with the column blanked the plain
+    Question forms one (so it is the class that closes that route), and `p_mid`, who holds no petition, is
+    stamped none and forms none."""
+    w, _d = _filed()
+    p = w.persons[PETITIONER]
+    plain = Question("q:in45", "need", (PETITION,))
+    assert _carries(w, p, plain) == []
+    assert [c.subject for c in _carries(w, p, plain, shipped=False)] == [PETITION]
+    (held,) = world_q.questions_for(w, p)
+    assert (PETITION, "Record") in held.classes, held
+    assert [c.subject for c in _carries(w, p, held)] == [PETITION]
+    q_mid = world_q.questions_for(w, w.persons[PARTY])
+    assert not [r for q in q_mid for r, k in q.classes if k == "Record"], q_mid
+    assert world_q.records_held_for_holding_rows(w, w.persons[PARTY]) == ()
+    assert world_q.records_held_for_holding_rows(w, p) == (PETITION,)
 
 
 def test_in45_a_bench_determines_a_carried_matter():

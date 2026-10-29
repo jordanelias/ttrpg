@@ -316,7 +316,10 @@ class ProduceInput:
       * `table`        -- `((site_kind, ((kind, base), ...)), ...)`: `SITE_YIELD`, each kind's bases in
                           its table order (that order reaches `Rung.stores`' key order);
       * `scale`        -- the `condition_scale` fixture, as MATTER read it;
-      * `factor`       -- this season's `world_q.season_factor_of`, as MATTER read it (one draw a season);
+      * `factor`       -- `((rung, factor), ...)`, sorted, one entry per rung in `stores` (the same rungs):
+                          that rung's `world_q.season_factor_of`, as MATTER read it through
+                          `world_q.season_factors_by_rung` (one draw a season per TERRITORY, keyed on its
+                          rung id, so rungs of one territory read one factor; CL-EVENTS (1));
       * `sites`        -- `((site_id, site_kind, rung, condition), ...)`, every Site sorted by id;
       * `stores`       -- `((rung, ((kind, units), ...)), ...)`, every rung a Site stands on, sorted,
                           each in its own `Rung.stores` order, read BEFORE this season's debit is written;
@@ -324,7 +327,7 @@ class ProduceInput:
                           overlays it on `stores`, because MATTER credits a rung after that rung's debit."""
     table: tuple
     scale: object
-    factor: object
+    factor: tuple
     sites: tuple
     stores: tuple
     larder_after: tuple

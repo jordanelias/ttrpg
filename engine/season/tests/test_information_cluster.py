@@ -493,16 +493,52 @@ def _hold_sheet(w, holder, verb="survey", subject="p_high"):
     return w.records[rid], c
 
 
-def _petition_to(w, holder, rec, claim):
-    """The `to` of the petition `holder` forms on the question the sheet's content claim raises
+def _petitions_on(w, holder, rec, claim, shipped):
+    """The `petition` operands `holder` forms on the question the sheet's content claim raises
     (`questions_for`'s `claim_landed`: referent the Record, `about` the claim) -- person-side,
-    through `opening_set`, the real derivation."""
+    through `opening_set`, the real derivation. `shipped` False reads it with `petition`'s
+    `referent_class` blanked in-process (see `_petition_to`); True reads the shipped table."""
+    from unittest import mock
+    from ..decision import options as _options
     q = Question(f"q:claim:{claim.id}", "claim_landed", (rec.id,), claim.id)
     p = w.persons[holder]
-    got = [c.operands for c in opening_set(p, View(holder, [], w.fixtures.get("view_k")), q,
-                                           w.fixtures) if c.verb == "petition"]
+    table = VERB_TABLE if shipped else {
+        **VERB_TABLE, "petition": dataclasses.replace(VERB_TABLE["petition"], referent_class="")}
+    with mock.patch.object(_options, "VERB_TABLE", table):
+        return [c.operands for c in opening_set(p, View(holder, [], w.fixtures.get("view_k")), q,
+                                                w.fixtures) if c.verb == "petition"]
+
+
+def _petition_to(w, holder, rec, claim):
+    """The `to` of the petition `holder` forms on the question the sheet's content claim raises.
+
+    v10 REM-24 (B10-05): READ WITH `petition`'S `referent_class: Person` BLANKED IN-PROCESS -- the formation of
+    the REM-23 tree (`409c467b`), which these tests were written against. THE UNIT AND THE REASON: `petition`
+    declares `Person` and forms on a Person-classed referent alone, and a classed row skips the reader of the
+    document the question is about (`decision/options.py::_derive_operand`'s `on_referent`), so a question
+    about a SHEET (a Record) forms no `petition` under the shipped table -- asserted by
+    `test_rem24_a_question_about_a_sheet_forms_no_petition_under_the_shipped_class` below -- and the consumer row
+    (`record_sourced_operands.faction_sheet`) is read here with the partition absent, exactly as it was read
+    before the column. What these tests assert (the address is the sheet's, the fall-back is the referent, the
+    mutation reddens) is unchanged and still executes."""
+    got = _petitions_on(w, holder, rec, claim, shipped=False)
     assert len(got) == 1, got
     return got[0]["to"]
+
+
+def test_rem24_a_question_about_a_sheet_forms_no_petition_under_the_shipped_class():
+    """THE CASUALTY OF `petition`'S CLASS, STATED WHERE THE CONSUMER IS TESTED (v10 REM-24, B10-05): the sheet's
+    holder is asked about the sheet (a Record), the document names a Person as its head (`record_sourced_operands.
+    faction_sheet: to: head`), and no `petition` forms under the shipped table -- the referent is no Person, and
+    the document the question is about is not read for a classed row. CONTROL: with the column blanked (the
+    REM-23 formation) the same question forms exactly one, addressed to the head -- so it is the class, not the
+    sheet, that closes the route. NOT a wrong-kind formation the class meant to remove: `to` is a Person here."""
+    w, _ = _world()
+    _head(w, "p_high")
+    rec, claim = _hold_sheet(w, "p_low")
+    assert _petitions_on(w, "p_low", rec, claim, shipped=True) == []
+    (control,) = _petitions_on(w, "p_low", rec, claim, shipped=False)
+    assert control["to"] == "p_high" and w.class_of(control["to"]) == "Person", control
 
 
 def test_in45_the_sheet_consumer_addresses_a_petition_to_the_head_the_sheet_names(monkeypatch):

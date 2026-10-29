@@ -359,12 +359,20 @@ def test_in12_5a_a_hand_built_charge_a_petition_naming_it_and_a_witness_commit()
     _hold_document(w, w.persons[witness], "petition", w.records["rec:pt1"].subject_matter,
                    rec_id="rec:pt1")
     q = Question("q:charge", "claim_landed", ("rec:pt1",), None)
-    # `commit` forms on the question's own referent (the petition, refused in the fold: no Proposition)
-    # and never on what the petition SAYS -- the charge. POSITIVE CONTROL in the same call (§0.1 pt 3):
-    # the `commit` on `rec:pt1` H-227 cites DOES form, so the absence below is not an empty formation.
+    # `commit` formed on the question's own referent (the petition, refused in the fold: no Proposition)
+    # and never on what the petition SAYS -- the charge. v10 REM-23 (B10-05): THE FIRST HALF IS GONE BY DESIGN --
+    # `commit` declares `referent_class: Proposition`, so it forms on a Proposition-classed referent alone and the
+    # petition (a Record) is the wrong kind: it forms nothing on `rec:pt1` now (the wrong-kind formation the class
+    # removes; measured on the REM-22 tree, `e66a22ec`, it formed on `rec:pt1` and on nothing else). The property
+    # this line held -- the absence of a `commit` on the charge is not an empty formation -- needs its positive
+    # control moved with it: the same witness forms `commit` on the charge when the question carries it as the
+    # Proposition it is (POSITIVE CONTROL in the same call, §0.1 pt 3).
     commits = [c for c in _formed(w, witness, q) if c.verb == "commit"]
-    assert [c for c in commits if c.subject == "rec:pt1"], \
-        f"CONTROL: no `commit` on the petition formed at all ({[c.subject for c in commits]})"
+    assert not [c for c in commits if c.subject == "rec:pt1"], \
+        f"REM-23: `commit` formed on the petition, a Record ({[c.subject for c in commits]})"
+    q_charge = Question("q:charge_prop", "claim_landed", ("prop_charge",), None, (("prop_charge", "Proposition"),))
+    assert [c.subject for c in _formed(w, witness, q_charge) if c.verb == "commit"] == ["prop_charge"], \
+        "CONTROL: no `commit` formed on the charge even when the question carries it as a Proposition"
     assert not [c for c in commits if c.subject == "prop_charge"], \
         "H-227 closed? a witness now forms `commit` on the charge from a held petition -- update the hole"
     out = _fold(w, d, _act("c1", "commit", witness, None, subject="prop_charge"))

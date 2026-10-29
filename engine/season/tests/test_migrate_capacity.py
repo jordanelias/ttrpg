@@ -497,7 +497,14 @@ def test_in45_a_document_the_question_is_about_does_not_re_aim_a_classed_destina
     addressed to `lp_hearth_b` (`record_sourced_operands.petition: {to: to}` answers `to` on it), and
     `lr_hearth_b` rides it as a `Rung`. The `migrate` formed on the place carries `to = lr_hearth_b`,
     not the petition's addressee: a document answers acts ON it, never an act on a classed referent.
-    CONTROL: a `petition` formed on the same question is still addressed by the document."""
+    CONTROL: a `petition` formed on the same question is still addressed by the document -- READ, SINCE v10
+    REM-24 (B10-05), WITH `petition`'S `referent_class: Person` BLANKED IN-PROCESS (the REM-23 formation this
+    control was written against): `petition` declares `Person` and forms on a Person-classed referent alone, and
+    a classed row skips the reader of the document the question is about, so under the shipped table the same
+    question forms NO `petition` (asserted below, and in `test_information_cluster.py::
+    test_rem24_a_question_about_a_sheet_forms_no_petition_under_the_shipped_class`)."""
+    import dataclasses
+    from unittest import mock
     from ..harness import governance_spine as G
     from ..loop.witness import content_value
     from ..state.carriers import Question, Record
@@ -510,6 +517,11 @@ def test_in45_a_document_the_question_is_about_does_not_re_aim_a_classed_destina
     q = Question("q:claim:c_pet", "claim_landed", ("rec_p",), "c_pet", classes=((THERE, "Rung"),))
     (mg,) = _computed_migrations(w, WHO, q=q)
     assert mg.payload.get("to") == THERE, mg.payload
-    pet = [c for c in _options.opening_set(p, _assemble(p, q, 12), q, w.fixtures)
-           if c.verb == "petition"]
+    assert [c for c in _options.opening_set(p, _assemble(p, q, 12), q, w.fixtures)
+            if c.verb == "petition"] == []
+    table = {**_options.VERB_TABLE,
+             "petition": dataclasses.replace(_options.VERB_TABLE["petition"], referent_class="")}
+    with mock.patch.object(_options, "VERB_TABLE", table):
+        pet = [c for c in _options.opening_set(p, _assemble(p, q, 12), q, w.fixtures)
+               if c.verb == "petition"]
     assert pet and all(c.operands.get("to") == "lp_hearth_b" for c in pet), pet

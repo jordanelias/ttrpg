@@ -207,7 +207,29 @@ def test_h134_two_seats_are_two_acts_ids_opportunities_and_the_store():
 # `p_one.thread_sensitivity = 30` forms the two again (68, on `off_duke` and `Hh`), and with those two
 # Candidates' new `{subject, to}` operands and their acts' `to` stripped it re-hashes to
 # `(68, 68, "12f062ca...")` exactly; at 29 it reads 66 (scratch, not kept).
-_CONTROL = (66, 66, "914b52980bc0daee50bd81ec88b7d5c7a313839afae4d2be0f71fe2f7bcea603")
+# RE-PINNED AT v10 B10-05 (found red on the REM-23 tree, after CR-28's attempt was reverted): 66 -> 58,
+# `914b5298...` -> `e757d716...`. Exactly eight Candidates (and their eight acts) leave and none is added: `restore`,
+# `work` and `examine` (REM-22, `referent_class: Site`) and `commit` (REM-23, `referent_class: Proposition`) each
+# formed twice, on `off_duke` and `Hh` (the question's plain referents), and form on neither now -- this reading's
+# question carries no Site and no Proposition. NEITHER COMMIT RAN THIS FILE, so the pin stood red from REM-22. CONTROL,
+# run (scratch, not kept): the same `_control_reading` on a detached worktree at the REM-23 tree (`73aee085`) reads
+# `(58, 58, "e757d716...")`, and with those four rows' `referent_class` blanked in `decision.options.VERB_TABLE`
+# in-process it re-hashes to `(66, 66, "914b5298...")` exactly. (The reverted CR-28 attempt, `678a5acb`, read the same
+# 58 on this file: its term named nothing for `p_one`.)
+# RE-PINNED AT v10 REM-25 (B10-05): 58 -> 52, `e757d716...` -> `233b0142...`. Exactly six Candidates (and their six
+# acts) leave and none is added: `carry`, `found` and `build` (`referent_class: Record`) each formed twice, on
+# `off_duke` and `Hh` (the question's plain referents), and form on neither now -- this reading's question carries no
+# Record (`p_one` holds none, so `records_held_for_holding_rows` names nothing). CONTROL, run (scratch, not kept): the
+# same `_control_reading` on a detached worktree at the REM-24 tree (`f2381695`) reads `(58, 58, "e757d716...")`, and
+# with those three rows' `referent_class` blanked in `decision.options.VERB_TABLE` in-process it re-hashes to
+# `(58, 58, "e757d716...")` exactly on the REM-25 tree.
+# RE-PINNED AT v10 REM-2C (B10-05): 52 -> 50, `233b0142...` -> `6b31ae41...`. Exactly two Candidates (and their two
+# acts) leave and none is added: `research` (`referent_class: Record`) formed on `off_duke` and `Hh` (the question's
+# plain referents) and forms on neither now -- the question carries no Record. CONTROL, run (scratch, not kept): the
+# same `_control_reading` on a detached worktree at the CP-T05-04 tree (`ea6f1dba`) reads `(52, 52, "233b0142...")`
+# with `research` on exactly those two, and with `research`'s `referent_class` blanked in `decision.options.VERB_TABLE`
+# in-process it re-hashes to `(52, 52, "233b0142...")` exactly on the REM-2C tree.
+_CONTROL = (50, 50, "6b31ae4180b9fd2c60c558f701f715441dcf5cbfea54fe3b4d8d8e1304a2d282")
 
 
 def _control_reading():
