@@ -114,7 +114,7 @@
 | CR-14 | B10-02 (CLOSED) | new from the fold of PR #506 (`-04`; the register's G-08, G-11, G-12, G-20, G-29), harness, hash EQUAL |
 | CR-15 | B10-02 (CLOSED) | new from the fold of PR #506 (`-04`; the register's G-27), harness, hash EQUAL |
 | CR-16 | B10-07b | new from the decision round (`-04`; M1): the chooser's polarity, the `subject_is_opponent` repair and `stance_polarity: declared` |
-| CR-17 | B10-09 | new from the decision round (`-04`; M1): believed odds weight the alignment term; τ re-derived as its last commit (close two, last) |
+| CR-17 | B10-09 | new from the decision round (`-04`; M1): believed odds weight the alignment term; τ re-derived as its last commit (close two, last); carries the follow-on of ED-IN-0304 (risk appetite and decision horizon) |
 | CR-18 | B10-08 | new from the decision round (`-04`; M2): practice ships live; the pools reader |
 | CR-19 | B10-10 | new from the decision round (`-04`; M2): AX-7's competence reads Attunement (H-200) |
 | CR-20 | B10-10 | new from the decision round (`-04`; M2): the attribute carrier lands with character creation (nine keys) |

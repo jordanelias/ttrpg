@@ -821,7 +821,7 @@ def event_place(w: World, e) -> Optional[str]:
     The limb, for an ACTORLESS Event only (no act among its causes): when the anchor is a person the
     world NO LONGER HOLDS, his place is where he stood when
     `remove_person` took him out, if that was this Event's own tick (`World.departed_from`) -- the
-    container of the `contain` edge the cascade closed. It cannot be read off `w.tenures`: a Tenure is
+    enclosing rung on the `contain` edge the cascade closed. It cannot be read off `w.tenures`: a Tenure is
     owned by its subject, so his own edge left the store with him (probed on `build_realm(0)`).
     It is NOT `place_of`'s person limb, deliberately: `place_of` is also asked about the dead by
     `reach` (a claim about a dead man), and answering there would move every reader of an old
@@ -2024,7 +2024,7 @@ def provinces_of(w: World, rung_id: str) -> dict:
 
     THE REASON IS WHAT EACH QUESTION IS ABOUT. Sovereignty is a property OF the rung asked about,
     so its own holder belongs in its own answer. A province is an aggregation of the territories
-    BENEATH one, so the rung asked about is the container and not a member.
+    BENEATH one, so the rung asked about is the aggregating rung and not a member.
 
     ⚠ AN EARLIER DRAFT OF THIS PARAGRAPH JUSTIFIED IT BY SAYING THE ROOT WOULD OTHERWISE "report a
     lone territory as a province of one, which the ruling refuses" -- AND THAT IS FLATLY
@@ -2425,9 +2425,9 @@ def goal_referents(w: World, p: Person, prop) -> tuple:
       * `orientation` -> `()`: a pure condition has no referent, and mints no Proposition.
 
     ⚠ `seat_holders` IS A WORLD READ WITH NO CLAIM BEHIND IT, `vacancies`' shape: it hands `p` the
-    identity of whoever sits on a throne he may never have been told of. THAT PRECEDENT IS ON JORDAN'S
-    QUEUE (ED-IN-0292 (2), `needs_jordan`: the `vacancies` stamp against AX-7), and this read follows
-    that answer -- if it comes back a claim reaching persons through the channels, `seat_holders`
+    identity of whoever sits on a throne he may never have been told of. THAT PRECEDENT WAS TAKEN
+    (ED-IN-0292 (2), closed at v10 ladder step 5, A1-02; `editorial_ledger_in.jsonl:79`), and this read
+    follows that answer -- if it is reopened as a claim reaching persons through the channels, `seat_holders`
     becomes a read of the holders `p`'s own ledger names. [ASSUMPTION; medium; Jordan to correct --
     revert: the holders the person's own ledger names, `seats_named`-style, which reads nobody at
     world-gen (H-203).] `deed_doers` is NOT that read: it takes nothing from the world.

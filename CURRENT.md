@@ -14,8 +14,8 @@ A row naming a quarantined `.designs/` document gives its **bare filename only**
 
 | Subsystem | Head | Status and open items |
 |---|---|---|
-| **THE SEASON LOOP (game code)** | `engine/season/` — RATIFIED, ED-IN-0204 | `python -m engine.season.harness.register --requirements`; runtime registries `engine/season/data/`; Layer-1 conformance ED-IN-0206; lane `registers/handoffs/HANDOFF_IN.md` |
-| **THE CODE ARCHITECTURE (Layer 1)** | `architecture/` — RATIFIED, ED-IN-0204 | `skills/layer-conformance/SKILL.md` (Lens B checks `engine/season/` against `architecture/meta/04_CODE_ARCHITECTURE.md`) |
+| **THE SEASON LOOP (game code)** | `engine/season/` — RATIFIED, ED-IN-0204 | `python -m engine.season.harness.register --requirements`; runtime registries `engine/season/data/`; lane `registers/handoffs/HANDOFF_IN.md` |
+| **THE CODE ARCHITECTURE (Layer 1)** | `architecture/` — RATIFIED, ED-IN-0204 | indexes `architecture/00_ADOPTION_README.md`, `architecture/meta/README.md`; scope: `architecture/meta/04_CODE_ARCHITECTURE.md`'s Status line; check: `skills/layer-conformance/SKILL.md` (Lens B) |
 | **The plan** | `workplans/valoria_master_workplan_v10.md` (+ `_part2`…`_part14`) — RATIFIED, `ED-IN-0299`; the one active plan for every lane; no carve-out | short forms: the head's legend; state index and batch cards `_part3` §1; build instructions and the dependency sequence `proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-*.md`; Jordan's questions `_part6` §1a; v9's files: their `FORK:` rows; THE NINE: `python -m engine.season.harness.register --requirements` |
 | **Character model / decision layer** | `proposals/2026-09-20-pursuit-basis-worksheet.yaml` — ruled, ED-IN-0261 | ED-IN-0261; conviction split ED-IN-0251 |
 | **Personal combat** | `modules/combat/`; typed export `engine/engine_params/combat_engine_v1.json` (round-trip checked in CI) | `registers/handoffs/HANDOFF_PC.md`; design reference `combat_reference_v1.md`, lineage `combat_currency_v1.md` |
@@ -30,7 +30,7 @@ A row naming a quarantined `.designs/` document gives its **bare filename only**
 | **Player agency** | `player_agency_v30.md` | ED-IN-0016 |
 | **Articulation** | `articulation_layer_v30.md` | — |
 | **NPC behaviour** | `npc_behavior_v30.md` | — |
-| **Holonic doctrine** | `holonic_container_doctrine_v1.md` — ED-1083 | — |
+| **Wrapper doctrine (ARCHIVED, Key-based)** | `holonic_container_doctrine_v1.md` — ED-1083 | — |
 | **Propagation spec** | `propagation_spec_v1.md` — ED-1093 | the doc's own §5; `engine_clock` home is ED-1051 |
 | **Narrative engine** | `narrative_engine_design_v2_churn.md` — ED-IN-0011 | — |
 | **Dice / resolution** | in code: `engine/dice_engine/dice_engine.py` (`degree_from_net`) | prose tables EVACUATED (fork ref `c451bcb`); the capture `engine/engine_params/params_tables.yaml` was retired (`FORK:` row) — not the formula |

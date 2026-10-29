@@ -65,7 +65,7 @@ class Trace:
     def scene_act(self, actor: str, verb: str, scenes_left: int, n: int, of: int) -> None:
         """`W17`. ONE INTERACTION, INSIDE ONE SCENE, WITH BOTH UNITS NAMED.
 
-        `act()` took a single `budget_left`, and after the scene container arrived its caller
+        `act()` took a single `budget_left`, and after the scene arrived its caller
         passed a SCENE budget minus an INTERACTION index — so the artifact recorded
         `budget_left=-10` for a season the engine had just accepted. Two units in one field is
         how that happens, and the fix is two fields."""

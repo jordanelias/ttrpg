@@ -18,7 +18,7 @@ them. `entrenchment` is the only one of the three that §A.2:133 does not name, 
 real `queries/person_q` candidate in this file, and L3 owns that call.
 
 AX-2 binds every file under `decision/`: no `World`, as an import, a name, an attribute or a
-string. Enforced BY PATH over this directory (`04:1046`).
+string. Enforced BY PATH over this directory (`04 §E.1`).
 """
 
 from __future__ import annotations

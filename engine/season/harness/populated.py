@@ -799,7 +799,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     # that document lists the propagation as *"tracked, not yet executed … nothing below needs
     # further Jordan input, it needs authoring"*, which is why the stale label survived to here.
     #
-    # ⚠⚠ **AND A PROVINCE IS NOT A CONTAINER AT ALL.** §2: *"Provinces are only formed if the same
+    # ⚠⚠ **AND A PROVINCE IS NOT A RUNG AT ALL.** §2: *"Provinces are only formed if the same
     # faction holds the constituent territories … a province is an emergent aggregation that exists
     # only while its constituent territories share a common faction holder."* So it is a QUERY, never
     # a rung this builds — `queries/world_q.provinces_of`. That is the §22 shape arrived at from the

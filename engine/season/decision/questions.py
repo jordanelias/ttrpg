@@ -7,7 +7,7 @@ carry. Moved here whole from `decision.py` by unit L1 of
 and for the import-list record this file's imports are derived from.
 
 AX-2 binds every file under `decision/`: no `World`, as an import, a name, an attribute or a
-string. Enforced BY PATH over this directory -- `04:1046` -- by
+string. Enforced BY PATH over this directory -- `04 §E.1` -- by
 `tests/valoria`'s sibling in `engine/season/tests/test_season_shape.py`.
 """
 

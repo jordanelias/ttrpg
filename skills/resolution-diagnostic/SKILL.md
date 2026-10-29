@@ -119,8 +119,8 @@ The floor must reach the **location** as well as the **spread**. Flooring `√po
 evaluating below the floor sees it. **When you meet a clamp, ask which terms it reaches.**
 
 - **`dice_engine.continuous_engine_sample` does NOT floor**; its callers do. **Re-grep them.** Last
-  seen: `sigma_leverage.roll_net_continuous` (floors) and `tools/balance_oracle.py` inside
-  `_pool_arm` (an experiment arm, not a game path). `p_success` never samples; it floors itself.
+  seen: `sigma_leverage.roll_net_continuous` (floors); the retired `tools/balance_oracle.py` was a
+  second caller, inside an experiment arm (not a game path). `p_success` never samples; it floors itself.
   A new direct caller bypasses the floor — a Phase 0 finding, not a defect in the primitive.
 - **No single owner for the pool floor:** re-applied at `sigma_n`, `net_boost`, `p_success`,
   `roll_net`, `roll_net_continuous` and `dice_engine.roll_pool`, with differing literals

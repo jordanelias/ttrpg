@@ -1,4 +1,4 @@
-"""THE FIELDWORK CONTAINER'S PROVIDER -- the host adapter and the host INPUT BUILDER for the `fieldwork`
+"""THE FIELDWORK SCENE'S PROVIDER -- the host adapter and the host INPUT BUILDER for the `fieldwork`
 module's entry (v9 FI-02 + FI-03, `SM-3`, `ED-FI-0002`), registered as `@provider("inquiry", "fieldwork")`:
 the second role in `manifest/registry.py::_ROLE_ROSTERS`, whose rows (`rosters.yaml: inquiry_modules`) are
 keyed by the KIND a finding emits. Jordan, 2026-09-05 (SM-3): *"investigation is not a contest seam. it is

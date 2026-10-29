@@ -1043,8 +1043,8 @@ del _orphan_seats
 # ---------------------------------------------------------------------------
 # THE `modules:` ROSTER (plan position `30`; A-25, `ED-IN-0284` revised by `ED-IN-0285`) -- THE ONE
 # OWNER OF RETENTION. Terms, defined where the loader reads them (`CLAUDE.md` §4):
-#   * a MODULE is running code reached by a composition row (`references/module_contracts.yaml`
-#     `composition_roles:`); its one identity is its directory name, which is an entry's key here.
+#   * a MODULE is one unit of this roster, `kind:` its descriptor; a registered one is running code reached
+#     by a composition row (`composition_roles:`); its one identity is its directory name, an entry's key here.
 #   * an entry's `kind:` is a `module_kinds` member -- minigame, management space, world surface,
 #     loop-resident, data register, host or stub (`rosters.yaml` defines each in one line).
 #   * an entry's `home:` is the repo-relative path it lives at: a directory, written with a trailing

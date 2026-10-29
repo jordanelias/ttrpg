@@ -101,7 +101,7 @@
 
 ### CP-T08-04 — RESEQUENCE (B10-16) · AM-E-15
 
-- **Override:** CP-T08-04 is HELD at ED-IN-0297 (where a works comes from in computed play), with IN-45. It builds nothing in B10-16. When it is released: `smithy`/`mint` Sites are placed by `site_endowment` or built by `build`, whichever ED-IN-0297 rules; recipes stay [ASSUMPTION; medium; Jordan to correct]. CP-T08-05 no longer needs it (AM-E-16).
+- **Override:** CP-T08-04 is HELD on IN-45 (B10-06). ED-IN-0297 is closed (M5 (B), `editorial_ledger_in.jsonl:81`): works are authored as `venues.yaml` `planned_works:` rows. It builds nothing in B10-16 until IN-45 releases it. When it is released: `smithy`/`mint` Sites are built by `build` on that row; recipes stay [ASSUMPTION; medium; Jordan to correct]. CP-T08-05 no longer needs it (AM-E-16).
 - **Because:** YES — home CP-T08-04 item 3 raises `smithy`/`mint` "by the shipped `build`"; `hole_register.yaml` H-165 (limits 2-3) and H-166: `build` needs a works Record, "nothing computed declares a works"; `ctl/census2_s0..s2.json` `resolved_by_verb.build` 40/48/47, none executed. The plan already holds IN-45 on the same question (ED-IN-0297, `-04` IN-45 entry).
 
 ### CP-T08-05 — REPAIR (B10-16) · AM-E-16

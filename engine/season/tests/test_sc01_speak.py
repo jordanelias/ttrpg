@@ -79,7 +79,7 @@ def test_sc01_s12_speak_is_a_typed_contested_cell_with_four_ladder_bands():
     # A refusal is the cell's one kind; the party-gap refusal emits the same union.
     assert row.emits_on_refusal == ("speech.unheard",), row.emits_on_refusal
     # The prize routes to a registered provider, so the verb is resolvable. Interim at step 12; steps 13
-    # + 15 repointed it to the container's provider (ED-SC-0033 clause (2); `test_sc01_provider.py`).
+    # + 15 repointed it to the scene's provider (ED-SC-0033 clause (2); `test_sc01_provider.py`).
     prize = manifest_resolve("contest", "a matter")
     assert prize is not None and prize["provider"] == "social_contest", prize
     assert prize["module_entry"] == "social_contest.roll", prize

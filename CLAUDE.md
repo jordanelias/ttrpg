@@ -49,6 +49,9 @@ is reported in. Name the conflict; never silently rank them.
   *"anything key-based gets retired"*)** — `keys.py`, the echo transport and the emit/consume interface
   are gone; build nothing on them. Special-casing an
   entity or outcome is **scripting drift** — stop.
+- **"All directions" is a method, not a NERS criterion (Jordan, 2026-10-28).** Work any pipeline, code,
+  system or workflow by several routes and from several perspectives, never only the one it was built
+  along; `skills/efficient-coding-review` STEP 5 operationalises it, and §0.06 is the NERS case.
 - **Adversarial pass at every stage that gates a result.** After you draft canon, a number or a fix,
   *try to break it*: verify provenance by hand against the cited `PP-NNN`/`ED-NNN` (PP provenance is
   unvalidated — `tools/validate_ed_citations.py` covers ED only), run the relevant `tools/` validator,
@@ -57,8 +60,7 @@ is reported in. Name the conflict; never silently rank them.
   narrowest instrument that can observe the failure — never HOW OFTEN you re-run the gate (§0.4).
   - **The pass is a STAGE, not a DELIVERABLE.** Its output is edits to the thing under review plus at
     most one paragraph in the commit message. No directory, no document; at most one ledger row, only
-    if it needs a human decision (`needs_jordan: true`). **A finding that needs no ruling is fixed in
-    this commit or dropped.**
+    if it needs a human decision (`needs_jordan: true`). **A finding that needs no ruling is fixed in this commit or dropped.**
   - **One exception (RULED):** a **TERMINAL pass whose verdict is the thing asked for** may record it
     where its subject lives — a section of the target, or a sibling file in the target's directory;
     never a standing corpus, a new top-level tree or `.audit/`. **The test: DOES THIS DOCUMENT CREATE
@@ -114,6 +116,9 @@ work. our design documents in .MD are reference and information only."*
 
 - **A design document may not be cited as the reason a behaviour is correct** — only for intent, history
   and vocabulary. If canon and code disagree, decide and then CHANGE THE CODE.
+- **A spec that binds code (Layer 1) is not edited to match the code that violates it:** *a spec edited to
+  match its implementation checks nothing*. Change the code; only where two of its rows decide the same
+  thing differently, name the ambiguity at the site and pick (`layer-conformance` B4).
 - **A FACT the engine uses must live where code reads it** — a typed artifact under
   `engine/engine_params/` behind an exporter, or a single Python owner. Constants still inside
   `systems/` are the migration backlog (live count: `python tools/export_sim_params.py --build`).
@@ -166,7 +171,7 @@ ALL DIRECTIONS  top-down · bottom-up · vertical · diagonal · lateral · hori
 
 **Read the definitions, not the acronym:**
 
-- **N is defined THROUGH the other three**, tested from all six directions; an N-line holding in exactly
+- **N is defined THROUGH the other three**, tested from all directions (the six above at least; §0); an N-line holding in exactly
   one direction is *narrowed*, not passing.
 - **E is legibility, not tidiness** — *"no unnecessary overhead"* and *"intuit complex outcomes"* are
   two tests. ⚠ **Never score E as an independent axis** (amputation satisfies it alone): score it
@@ -259,8 +264,7 @@ Timings: `CLAUDE_RATIONALE.md` §0.4 — re-measure rather than quote them.
    (RULED).**
    CI runs it on every push not marked `[skip ci]`. Name what a local run would catch first; a diff of prose, ledgers, skills
    or links runs only the test files that read what it touched (`grep -rl <path> tests/`).
-2. **Mid-session, run only the file covering what you touched.** If you cannot name it, find it — that
-   costs seconds.
+2. **Mid-session, run only the file covering what you touched.** If you cannot name it, find it — that costs seconds.
 3. **Never re-run to re-confirm a green you already hold.**
 4. **A red close run re-runs the FAILING FILE ONLY while you fix it.** The full suite comes back once,
    when you believe you are done. Red is not a licence to loop the gate.
@@ -345,20 +349,22 @@ says where an old path went. Only what those cannot tell you:
   `HANDOFF_<LANE>.md`.** Oracle scripts live in `sim/`, imported as `systems.<sub>.sim.*`. ⚠ **`systems/`
   HOLDS NO `.md` AT ALL** — its design documents are in `.designs/systems/<sub>/`;
   `tools/ci_design_prose_quarantine.py` is blocking and the invariant is **zero, not a ratchet**.
-- **`engine/`** — the executable model (substrate leaf readers, autoload hub, cross-scale, campaign
+- **`engine/`** — the executable model (substrate leaf readers, cross-scale, campaign
   driver, `engine/engine_params/` typed exports, `engine/tests/` = CI job `sim-regression`). **It names
   no subsystem by import**: seams resolve through `engine/substrate/composition.py` (`engine/` names a
-  ROLE, `references/module_contracts.yaml` the MODULE). Two `sys.path` seams into `systems/` are in
-  `PATH_SEAM_ALLOWED`, **shrink-only**; the execution artifact is
+  ROLE, `references/module_contracts.yaml` the registered MODULE). One `sys.path` seam, `substrate/pc_engine.py` into
+  `modules/combat/`, is in `PATH_SEAM_ALLOWED`, **shrink-only**; the execution artifact is
   `test_importing_every_engine_module_pulls_in_no_subsystem` (subprocess import, matching on FILE PATH).
   ⚠️ **Acyclic is not independence:** the engine still depends on subsystems, resolved by string.
 - **`engine/season/`** — **Layer 2, the game code**: the season loop plus the registries it opens **at
   runtime**. ⚠ **IT RUNS AND IT IS NOT YET A GAME** — read
   `python -m engine.season.harness.register --requirements` (against `engine/season/requirements.yaml`)
-  before citing it as done. `engine/season/hole_register.yaml` is read by the corpus grader, not the
-  loop.
+  before citing it as done. `engine/season/hole_register.yaml` is read by the corpus grader, not the loop.
+- **`modules/`** — **Layer 2, the game code**: the registered modules the loop reaches by composition row
+  (`composition_roles:` in `references/module_contracts.yaml`), not by import (`combat` alone loads by path, via
+  the seam above). A registered module takes typed input, returns typed outcome, holds no token, keeps no game state (`04` §A.2; `holonic_ARCHITECTURE.md` §43, §45).
 - **`architecture/`** — **Layer 1.** Reference for game mechanism (§0.05), binding as agent instruction,
-  resolving nothing at runtime. Exempt from the size WARNING only.
+  resolving nothing at runtime. Scope: `architecture/meta/04_CODE_ARCHITECTURE.md`'s Status line (indexes: `CURRENT.md`'s Layer-1 row). Exempt from the size WARNING only.
 - **`canon/`** — foundations **P-01..P-15**, timeline, constraints, amendments; world truth only.
 - **`registers/`** — process ledgers and `registers/handoffs/`. **All ledger files are authoritative —
   read all of them.** **Never edit** the frozen ED fragments in `registers/archive/`:
@@ -437,8 +443,8 @@ the registry still marks IN FLUX.
 **Rule: a port never corrects its oracle in place (ED-1050).** If port and Python oracle disagree, fix
 canon via the ledger and re-export — never hand-edit a value into the `.gd` side.
 
-`godot/godot_conversion_strategy_v1.md` is the governing spec — **PROPOSED, Jordan-vetoable throughout**,
-with an open register and unexecuted Gate-0 preconditions. `references/module_contracts.yaml` shows which
+`godot/godot_conversion_strategy_v1.md` is the conversion plan — **PROPOSED, Jordan-vetoable throughout**,
+with an open register and unexecuted Gate-0 preconditions; the season loop's ratified Godot mapping is `04` §C.12. `references/module_contracts.yaml` shows which
 modules have `doc: null` and which resolvers are `[ASSUMPTION]`-grade; porting beyond the combat slice
 waits on the port gate (B10-20 in the active master workplan, which `CURRENT.md` names). The older
 `godot/` docs predate the `d+σ` model, carry `⚠️ STALE` banners and ship wrong schemas: implement from
@@ -517,7 +523,8 @@ A fresh remote container has pyyaml only; run the provisioner. WHEN each runs is
 | **A NERS pass** on any design object | `ners`, which owns the **method**; the four **definitions** are §0.06 |
 | Stressing anything that resolves by a **draw** — σ-leverage, μ-shift vs Ob-shift, fractional pool/Ob, sub-1D floor | `resolution-diagnostic`. Its output is **evidence**, not a verdict: carry findings into a `ners` pass |
 | **Layer placement** — which layer does this bind, is prose being made a mechanism, does a proposed guard earn its existence | `layer-conformance` (Lens A); the **definitions** are the layer table, §0.05 and §0.1 pt 5 |
-| **Code-architecture / Layer-1 conformance** | `layer-conformance` (Lens B), which reads `architecture/meta/04_CODE_ARCHITECTURE.md` at the row and copies no table or count out of it |
+| **Code-architecture / Layer-1 conformance** | `layer-conformance` (Lens B), which reads `architecture/meta/04_CODE_ARCHITECTURE.md` (and, for `modules/`, `holonic_ARCHITECTURE.md` §43, §45–§47) at the row and copies no table or count out of it |
+| **Distilling code and data without losing function** — unearned complexity, a second owner, new apparatus where an edit would serve, scripting drift, dead code; a high-level survey of a system in six directions; the cost of porting it | `valoria-simplify`, run between `layer-conformance`'s Lens A and Lens B |
 | Editorial-debt workflow over the JSONL ledger | `valoria-editorial-register` |
 | Structural-debt corpus scan | `valoria-vector-audit` |
 | Splitting an oversized doc | `valoria-chunker`; **nothing enforces a general length cap** (§4) |
@@ -527,7 +534,7 @@ A fresh remote container has pyyaml only; run the provisioner. WHEN each runs is
 | Verifying a nontrivial code change that already exists, against its own stated plan, before close | `methodology-close` — a Sonnet agonist/antagonist pass, then `/code-review`+`/simplify`+`layer-conformance` fixed in sequence, then one terminal Opus critique |
 | Building a workplan phase/task (many positions) AND verifying it, before close | `methodology-execute` — `valoria-author` builds each item and commits it, cheap; `methodology-close`'s full pipeline + the pytest suite run once per BATCH (items linked by a shared file or gate), not per item; a closed batch is deleted from the plan and the run stops for a cleared window before the next opens |
 | Closing a commit | `/close` |
-| Reviewing a diff / a PR / your own just-finished work | the native `/code-review`, a fresh-context reviewer that never saw your reasoning. It is the only review surface; nothing grades repo-wide signals any more, and nothing is supposed to |
+| Reviewing a diff / a PR / your own just-finished work; **or attacking a whole subject that is not a diff** — the code base (engine, modules, subsystems), a research corpus, survey, proposal, plan or instrument — for whether its claims are true, its ideas transfer, its logic holds, it works by every route and across modules, and a stranger can survey it | for a diff, the native `/code-review`, a fresh-context reviewer that never saw your reasoning, the single-pass review for one (`methodology-close` when a stated plan exists); for a whole subject, `efficient-coding-review`. Nothing grades repo-wide signals any more, and nothing is supposed to |
 | Many mechanical numbers before any judgment | `valoria-measure` on Haiku — batched only; one delegated grep loses the tier arithmetic |
 | Orchestrating a multi-agent audit | the **Agent** tool directly, with `valoria-critic` for read-only critic stages |
 

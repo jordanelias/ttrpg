@@ -237,7 +237,7 @@ def resolvable_verbs() -> frozenset:
 
 class SeasonDriver:
     """S23. Six steps, four barriers. DELIBERATE is a MAP, not a barrier; CENSUS SHARES
-    WITNESS'S JOIN. S40.3/S44.3: NO CONTAINER GETS A CLOCK -- there is exactly one `season()`."""
+    WITNESS'S JOIN. S40.3/S44.3: NO RUNG GETS A CLOCK -- there is exactly one `season()`."""
 
     def __init__(self, w: World):
         self.w = w

@@ -1,6 +1,6 @@
 # THE METHOD — the front door
 
-## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/`.**
+## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302, ED-IN-0303): Godot's words name Godot constructs, so a registered module's playable form is a *scene* (a run of it, a *scene instance*), and *rung* is the world side (a *container* left in a quotation, a field name or a plan title predates this); the scene tree lives in `game/`, not `port/`.**
 ## **This is the page to read first, and on most days the only one.** Stages 1–4 are the derivation
 ## that justifies it. **If this page and a stage disagree, the stage is right and this page is stale.**
 
@@ -161,7 +161,7 @@ That is question 1 again, and it is why `H-101` needed no new edge, why closure 
 and why four stages of design **added no primitive at all.**
 
 ⚠ **AND THE CLAIM WAS TESTED AFTER THE FACT, WHICH IS THE ONLY REASON IT IS WORTH ANYTHING.** Jordan
-ruled two things the design had not anticipated — **a faction is a deployable container**, and
+ruled two things the design had not anticipated — **a faction is a deployable view**, and
 **factions can be at war** — each of which looks like a demand for a new primitive. Neither was:
 a faction is a **Query return** over edges that already existed, and a war is a **Proposition with an
 owned edge**, the same shape as subordination. **The vocabulary did not grow.**

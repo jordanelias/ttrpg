@@ -1,6 +1,6 @@
 # READINGS · 10 — THE FACTION AS A DEPLOYABLE ABSTRACTION
 
-## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/`.**
+## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302, ED-IN-0303): Godot's words name Godot constructs, so a registered module's playable form is a *scene* (a run of it, a *scene instance*), and *rung* is the world side (a *container* left in a quotation, a field name or a plan title predates this); the scene tree lives in `game/`, not `port/`.**
 ## ⚠ **This document AMENDS the stages** — it is not only a reading. Jordan-directed, 2026-09-03.
 ## ✅ **FOLDED IN 2026-09-03 — this is the RATIONALE, and the stages are now the text.** A reader who
 ## wants the current design reads the stages; this page says *why* they say what they do.
@@ -116,7 +116,7 @@ present at a rung, resolved once, and every combatant is a `Person`.
 | stage | site | what landed |
 |---|---|---|
 | 1 | **§D.11**, §D.10, `T-h`, **`ID-15`**, §E.1.6, §F.2, §F.4 | the `Faction` view · the general rule · war as the second instance |
-| 2 | **§B.1.1**, §E.0 | *not a nesting* ≠ *not a container* · two properties graded ABSENT |
+| 2 | **§B.1.1**, §E.0 | *not a nesting* ≠ *not a view* · two properties graded ABSENT |
 | 3 | **§E.2.1** | the roster contract |
 | 4 | **§B.6.1**, §B.10–12, **§C.5.1** | the type · `faction_q` · the seam's contract, with its GDScript price |
 | 4 | **D-1, D-14, D-18, D-47..D-51** | one construction rebuilt · one grade **upgraded** · five rows added |

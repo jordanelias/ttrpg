@@ -1,6 +1,6 @@
 # The season loop, executable — the successor to PR #353
 
-## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/`.**
+## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302, ED-IN-0303): Godot's words name Godot constructs, so a registered module's playable form is a *scene* (a run of it, a *scene instance*), and *rung* is the world side (a *container* left in a quotation, a field name or a plan title predates this); the scene tree lives in `game/`, not `port/`.**
 
 > ### ⚠ **CONDITIONED BY #358 rev.2 ON 2026-09-03 — what its rewritten loader does to this chain.**
 > The meta-architecture was rewritten after an adversarial pass; its loader gained a twelfth
@@ -47,7 +47,7 @@ shape; round 3's errors ran **both ways**, which is worse. The measured result o
 
 **Parts I–VI of #353 are right and are inherited whole** — the one sentence, the nine throughlines,
 the five laws, R-1/R-2, the two topologies, the six steps, `Event` without an actor or a target, one
-log, the seam, no per-container clock, fixed point, the Godot port, **and all of Part VIII's
+log, the seam, no per-rung clock, fixed point, the Godot port, **and all of Part VIII's
 refusals**. 43 of 63 probe PASSes were raised by a gate, a type or a law in the shape itself.
 
 **A successor that rewrites Parts I–VI is a worse document.** The failures are not in the

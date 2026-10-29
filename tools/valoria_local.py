@@ -78,7 +78,7 @@ def main(argv):
         ('ci_vetting_check.py',         [],          True),
         ('ci_sim_fabrication_check.py', [mode_flag], True),
         ('ci_generation_consistency.py', [],         False),  # warn-only v40 currency gate
-        ('ci_module_shape_check.py',    [],          False),  # report-only container/shape hygiene (ED-1085)
+        ('ci_module_shape_check.py',    [],          False),  # report-only module-shape hygiene (ED-1085)
         ('export_engine_params.py',     ['--check'], True),   # oracle -> typed-JSON round-trip (ED-1052; blocking)
         ('export_game_constants.py',    ['--check'], True),   # oracle -> Godot-facing constants round-trip (blocking)
         ('export_descriptors.py',       ['--check'], True),   # descriptor registry -> the artifact the engine reads at runtime (blocking)

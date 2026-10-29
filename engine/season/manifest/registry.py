@@ -32,7 +32,7 @@ from ..gaps import NoProducer, Unspecified
 # per role, so `check_rows()` alone does not cover a new role's providers or entries; `check_rows()`
 # and `World.boot` iterate this map and so cover a new row's resolution unedited. `inquiry` is v9
 # FI-02's (`SM-3`; Jordan, 2026-09-05: *"investigation is not a contest seam. it is its own
-# thing."*): it maps the KIND a graded finding emits to the fieldwork container
+# thing."*): it maps the KIND a graded finding emits to the fieldwork scene
 # (`rosters.yaml: inquiry_modules`), built in one landing with its caller, FI-03 (`ED-FI-0002`),
 # because ID-13 forbids a role no caller requires.
 _ROLE_ROSTERS = {"contest": ("contest_subsystems", "prizes"),

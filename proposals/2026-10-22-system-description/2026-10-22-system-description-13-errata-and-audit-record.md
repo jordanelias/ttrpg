@@ -57,7 +57,7 @@ G19 VERBS PROPOSAL OVERRIDE RULE: every lexicon opens with "Rulings that overrid
    succeed GV's (R-11), FA roster = 7 hosts: covenant, declare, recruit, conspire, assign, seize, sabotage (verbs-03:148-158); GV = 20 rows (12 shipped+3 planned+5 new; 5 parked names are not rows); dispatch->assign/order rename is held as D-V7;
    `watch`/`travel`/`pledge`/`lodge`/`dissolve` are PROPOSED renames (V0 batch, R-10). These are NOT unresolved conflicts. The roster has 92 verbs; §III.4 has 52 host entries. Reliability: v2 itself, the divergence test and the reconciliation have NO critic;
    the from-scratch attribute work failed its critic (CONTAMINATED); [MEMORY] precedents are unchecked. [D-F1..F17]
-G20 ATTRIBUTES (verbs-02): nine ruled names Strength, Endurance, Agility, Focus, Acuity, Will, Attunement, Charisma, Bonds (descriptor_registry.yaml:36-48) + a tenth (Thread Sensitivity, own 0-100 scale); evidence ranks 7 strong, Bonds medium, Attunement "a rescaled Acuity",
+G20 ATTRIBUTES (verbs-02): nine ruled names Strength, Endurance, Agility, Focus, Acuity, Will, Attunement, Charisma, Bonds (descriptor_registry.yaml:36-48) + a tenth (verbs-02 recommends Thread Sensitivity, own 0-100 scale; the registry holds the tenth unnamed, ED-IN-0301); evidence ranks 7 strong, Bonds medium, Attunement "a rescaled Acuity",
    Charisma "near-inert at T2", Recall none; alternative E8 (8 attributes); build track B1-B7 (five builds need no ruling: template B1-B3, TS carrier B4, alignment cells B5). [D-F9,F11]
 
 ## C. Per-subsystem corrections

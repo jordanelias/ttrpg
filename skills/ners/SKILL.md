@@ -275,10 +275,11 @@ license stopping on the two it gates:
 - **Any "no dominant option" claim is an UPPER BOUND, not an estimate.** You looked and did not find
   one; that is not the same as there not being one. Say *upper bound*.
 - **Do not bank R without two-arm artifacts.** A number with no control is not a measurement in
-  either direction (CLAUDE.md §0.1 pt 4). For a campaign-level R question the two-arm instrument is
-  `tools/balance_oracle.py` — but note it is a **campaign** instrument: for a change that is
-  campaign-unreachable both arms are identical by construction, and running it would be a fake
-  control.
+  either direction (CLAUDE.md §0.1 pt 4). A campaign-level R question has **no live two-arm
+  instrument**: `tools/balance_oracle.py` is retired and `python -m engine.season.harness.arms` is NOT
+  its replacement, being a season-loop n-seed comparison over one mechanic (CLAUDE.md §7). Running
+  either on a change its loop cannot reach is a fake control, both arms identical by construction; say
+  that R is unmeasured.
 
 ### §6.3 R verdicts carry their dependency
 
@@ -304,6 +305,8 @@ name fails. In the season loop: a **telling**.
 ⚠ **A target with no ladder at its scale scores `N-A`, not FAIL** (a dice resolver has no docket).
 
 ### §7.2 The coverage sweep — all six
+
+(The general method, *all directions* by routes and perspectives, is CLAUDE.md §0's; this sweep is its NERS case.)
 
 Run the other four directions as a table, naming the seam that carries each or recording the gap:
 

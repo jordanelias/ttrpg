@@ -225,7 +225,7 @@ ci_checks:
     level: 5
     subject: compliance
     posture: harden
-    role: "Holonic container/shape hygiene on engine/sim runtime code (ED-1085): no sys.path reach-ins into tests/ trees, no tests/ imports; INFO-tier untagged module-scope constant surfacing."
+    role: "Module-shape hygiene on engine/sim runtime code (ED-1085; archived wrapper doctrine ED-1083 §3): no sys.path reach-ins into tests/ trees, no tests/ imports; INFO-tier untagged module-scope constant surfacing."
     ci_job: validators-report
     notes: "Report-only (continue-on-error), names-drift graduation lane. Also runs locally via valoria_local.py --staged (report-only)."
 

@@ -100,14 +100,14 @@ def test_extending_rung_kinds_at_the_top_of_the_ladder_is_not_a_clean_no_op_and_
     ORDER IS THE DEFINITION: `corpus_run.build_at`'s `chain = order[order.index(scale):]` walks
     from a case's own scale to the LAST element of the list, so appending ANYTHING after `realm`
     -- the only place a "new, unused" member could go without renumbering the other seven -- adds
-    a NEW OUTERMOST CONTAINER above every case's chain, unconditionally, for every scale from
+    a NEW OUTERMOST RUNG above every case's chain, unconditionally, for every scale from
     `person` up. That is `build_at` doing exactly what its own docstring says (the chain reaches
     the top of the ladder), not a hardcoded branch on a member's name -- but it means "extend and
     confirm nothing moves" is not a valid test of THIS roster the way it is of an unordered one
     (`tenure_kinds`, `test_jordan_a_roster_edit_is_a_data_edit_and_nothing_else` above). Proven
     here rather than skipped silently: appending a synthetic kind after `realm` and re-running a
     realm-scale case raises `Forbidden` at `Rung.__init__` (`state/carriers.py::S10`) the instant
-    the new top container is built, because THAT accessor is a third, separately-imported binding
+    the new top rung is built, because THAT accessor is a third, separately-imported binding
     of `RUNG_KINDS` this test does not also patch -- which is itself the finding: at least three
     modules (`data.rosters`, `harness.corpus_run`, `state.carriers`) hold independent import-time
     copies of this roster, so "the season" has no single point to extend it at. `PERMUTING` two

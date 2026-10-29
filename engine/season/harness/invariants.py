@@ -139,7 +139,7 @@ def log_not_from_the_future(w) -> list:
 
     NOT ENFORCED ON WRITE: `emitted_at` is supplied by the emitter and never compared to
     `w.tick`. An Event from the future is how a non-decreasing season index stops being one —
-    the invariant `probes.py` names as one of the three a per-container clock would void."""
+    the invariant `probes.py` names as one of the three a per-rung clock would void."""
     return [f"log_not_from_the_future: event {e.id!r} emitted_at={e.emitted_at} > tick {w.tick}"
             for e in w.log if e.emitted_at > w.tick]
 
