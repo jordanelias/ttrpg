@@ -35,7 +35,7 @@ from dataclasses import dataclass, replace
 from fractions import Fraction
 from typing import Callable, Optional
 
-from ..data.requires import OWN_STATE_STEMS, UNKNOWN, binding_from_act
+from ..data.requires import OWN_STATE_STEMS, UNKNOWN, binding_from_act, binding_of, evaluate
 from ..data.rosters import (
     BAN_KIND, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP, HUNGER_BANDS,
     OCCASION_ONLY_CLASSES, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, REMOVE_ORDINAL,
@@ -2445,6 +2445,54 @@ def _goal_referents(w: World, p: Person, goal, prop, path: frozenset) -> tuple:
         if target is not None:
             against = _goal_referents(w, p, target, w.propositions.get(target.id), path | {goal.id})
     return deed_doers(p.ledger, obj, p.id, against)
+
+
+def current_stage(w: World, p: Person, ambition) -> Optional[dict]:
+    """WHERE `p` STANDS ON AN AMBITION'S STAGES, READ FROM WHAT HE HOLDS (CL-THRUST B3.1, R1): for each
+    referent of the ambition (`goal_referents`), the FIRST stage of its `goal_stages` row whose `predicate`
+    is not TRUE of that referent -- `{referent: Stage}`, in the referents' order, a referent that has
+    passed every stage absent. `None` where nothing is left to climb: the ambition has no `goal_stages`
+    row (every shipped ambition today), it names no referent, or every referent has passed every stage.
+    `ambition` is a Proposition id, as `ambitions(w, p)` returns it (the goal's id, `data/goals.py`); an
+    id with no Proposition in `w.propositions` is no ambition and reads `None`, `ambitions`' refusal.
+
+    COMPUTED WHEN ASKED AND STORED NOWHERE (`ambitions`' discipline): no stage counter, no progress
+    field, no TRACE row (Q4 calls `goal_referents` once per ambition per person, and so would this).
+    NOTHING CALLS IT YET -- the stage's referents joining the person's own `need` question is R2/B3.2.
+
+    ⚠ PERSON-SIDE, AND THAT IS THE POINT (AX-2): the stage's cell is evaluated through `data/requires.py::
+    evaluate` against `LedgerReader(p.ledger)` -- the reader `epistemic.belief_contradicts` asks the same
+    cells of -- never `WorldReader`. A person acts on what he BELIEVES his progress is: a stage the world
+    satisfies and his ledger does not hold reads as not passed, and a false belief that it is passed
+    reads as passed (a story, not a defect). The binding is `binding_of(p.id, {"subject": referent})`:
+    `subject := the referent`, and `actor := p.id` because a relation cell (`held_by`) needs both. An
+    operand a cell names that the binding does not carry reads UNKNOWN. ⚠ UNKNOWN IS NOT TRUE: a stage
+    is passed only on a cell that evaluates to TRUE, so a ledger with no claim on the cell's predicate
+    leaves the stage open (`belief_contradicts` declines a candidate on known-FALSE alone; a stage is
+    passed on known-TRUE alone). The reader takes no `weigh`: `decision/options.py::teller_weight` is a
+    `decision` import this module may not make, so hearsay is not graded here as it is at clause 4.
+    [ASSUMPTION; medium; Jordan to correct -- B3.1; revert: pass the closure in from the one caller
+    B3.2 adds.]
+
+    ⚠ A STAGE ASKING `claim.held` (an `own_ledger` cell) CAN NEVER BE PASSED HERE: `LedgerReader.read`
+    answers a stem from a claim whose predicate IS that stem, WITNESS deposits no `claim.held` claim
+    (`LEDGER_DERIVED_STEMS`), and the loader (`data/goals.py`) does not refuse the form. It reads
+    UNKNOWN for everyone, and so does not pass."""
+    goal = _goals.goal(ambition)
+    prop = w.propositions.get(ambition)
+    if goal is None or goal.stages is None or prop is None:
+        return None
+    reader = LedgerReader(p.ledger)
+    out: dict = {}
+    for referent in goal_referents(w, p, prop):
+        if referent is None:
+            continue
+        binding = binding_of(p.id, {"subject": referent})
+        for stage in goal.stages.stages:
+            if evaluate(stage.predicate, reader, binding).value is not True:
+                out[referent] = stage
+                break
+    return out or None
 
 
 # A `deed_doers` goal's referents are the doers it acts AGAINST: every authored form names them so --
