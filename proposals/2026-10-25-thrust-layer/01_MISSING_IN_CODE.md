@@ -4,6 +4,8 @@
 
 **PROPOSED — HELD BACK IN FULL.** Merging the PR that carries this file ratifies NOTHING in it (ED-1094's default is not applied; no ledger row, `CURRENT.md` row or Status line is flipped). Reference under CLAUDE.md §0.05 — binds no code, creates no plan position, allocates no id. Companion to `00_THRUST_LAYER_DESIGN.md` ("TL"); probes are in `probes/`. v2 supersedes v1: §7 records what the antagonist pass changed. **Read §7 first** — G-01's design is withdrawn (it passed over the open ruling H-156), the P3b figure is replaced by P10's per-act one, and G-16 is re-owned.
 
+This register says what `engine/season/` and the files it reads at runtime do and do not do TODAY toward the eight takeaways expanded in `02_MAJOR_TAKEAWAYS.md` (first stated in `reports/R10`), graded by execution where execution was safe and by call-site reading where it was not, and gives the minimal code design for each gap. It is NOT a restatement of `00_THRUST_LAYER_DESIGN.md` (cited as "TL §n"); where TL already designs a piece, the row cites it and adds only what TL leaves unsaid (the owner, the loader refusal, the falsifier, the control). A gap the master plan or the hole register already owns is cited, not re-designed. Every claim carries a `path:line` opened by the producer on 2026-10-25, or a probe name under `probes/` and its result. Figures from `proposals/2026-10-13-narration-mechanisms.md` are labelled "reported there, not re-measured" unless a probe here re-measured them. "The brief" below means the orchestrator's instruction to the producer, reproduced at the end of `reports/R14_register_producer_receipt.md`.
+
 ## 1. Method and grades
 
 | Grade | Means | What would refute it |
