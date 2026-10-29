@@ -535,6 +535,7 @@ A fresh remote container has pyyaml only; run the provisioner. WHEN each runs is
 | Building a workplan phase/task (many positions) AND verifying it, before close | `methodology-execute` — `valoria-author` builds each item and commits it, cheap; `methodology-close`'s full pipeline + the pytest suite run once per BATCH (items linked by a shared file or gate), not per item; a closed batch is deleted from the plan and the run stops for a cleared window before the next opens |
 | Closing a commit | `/close` |
 | Reviewing a diff / a PR / your own just-finished work | the native `/code-review`, a fresh-context reviewer that never saw your reasoning. It is the only review surface; nothing grades repo-wide signals any more, and nothing is supposed to |
+| Attacking a **work product** (not a diff) — a research corpus, survey, proposal, plan or instrument — for whether its claims are true, its ideas transfer, its logic holds, it works by every route and across modules, and a stranger can survey it | `adversarial-review`; a code diff stays with `/code-review` |
 | Many mechanical numbers before any judgment | `valoria-measure` on Haiku — batched only; one delegated grep loses the tier arithmetic |
 | Orchestrating a multi-agent audit | the **Agent** tool directly, with `valoria-critic` for read-only critic stages |
 
