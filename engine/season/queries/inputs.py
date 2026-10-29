@@ -15,7 +15,7 @@ imports a record type must pull in nothing else of the host
 placed beside a builder that reads `data/` would drag the registries into every module.
 
 THREE INPUT RECORDS (plan positions `31a`, `31b`, `31c`) AND ONE OUTPUT RECORD, `Margin` (v9 SC-01 step
-15). `Margin` types the MODULE -> HOST boundary of the social contest container's provider: the module
+15). `Margin` types the MODULE -> HOST boundary of the social contest scene's provider: the module
 entry returns one and the host adapter (`seam/wrappers/sigma.py::resolve`) refuses anything else, so a
 winner cannot cross. The adapter still hands the seam the `dict` every provider returns -- the SEAM keeps
 one return shape (`combat` returns a scene and `mass_battle` a field, neither a margin); typing the seam
@@ -23,7 +23,7 @@ itself is a `seam/` item of its own. It lives here, not in a sibling file, becau
 construct it and this leaf is the one host file a module may import
 (`engine/season/tests/test_social_contest_module.py`).
 
-v9 FI-02 + FI-03 (`SM-3`, `ED-FI-0002`) add the fieldwork container's pair, at the foot of the file:
+v9 FI-02 + FI-03 (`SM-3`, `ED-FI-0002`) add the fieldwork scene's pair, at the foot of the file:
 `TrailItem` and `FieldworkInput` in, `Findings` out -- the `inquiry` role's records, for the same reason.
 v9 IN-07 E1 adds the settlements module's larder records after them: `Eater`, `LarderInput` and `Under`
 in, `DrawRow`/`DrawRecord` out (built by `queries/world_q.py::larder_input` and `under_input`).
@@ -162,7 +162,7 @@ class MassBattleInput:
 
 
 # ---------------------------------------------------------------------------
-# v9 FI-02 + FI-03 (`SM-3`, `ED-FI-0002`): THE FIELDWORK CONTAINER'S RECORDS -- the `inquiry` role's
+# v9 FI-02 + FI-03 (`SM-3`, `ED-FI-0002`): THE FIELDWORK SCENE'S RECORDS -- the `inquiry` role's
 # input and output, built and held by `seam/wrappers/fieldwork.py`, read by `modules/fieldwork/find.py`.
 # ---------------------------------------------------------------------------
 

@@ -1,6 +1,6 @@
 # META-ARCHITECTURE — STAGE 4 · CODE SHAPE, TYPES, SEAMS, IMPOSSIBILITIES
 
-## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone.**
+## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302, ED-IN-0303): Godot's words name Godot constructs, so a registered module's playable form is a *scene* (a run of it, a *scene instance*), and *rung* is the world side (a *container* left in a quotation, a field name or a plan title predates this); the scene tree lives in `game/`, not `port/`.**
 ## Produced by a **read-only** Fable 5.1 synthesis holding Stages 1–3 in context. Concrete shapes taken
 ## from, amended against, or rejected from the chain (#353 `ARCHITECTURE.md`, `ARCHITECTURE_V2.md`,
 ## the three YAML files). **Nothing under `canon/`, `systems/`, `research/` or `engine/` was read.**
@@ -118,7 +118,7 @@ axioms say what the owned-state sets are.**
 | **AX-5** three motions | exactly one step holds the MATTER token; a matured term cites the act that wound it | `loop/matter` |
 | **AX-6** nothing permanent without an author | every Tenure carries an optional declared term; **one generic closing verb whose eligibility is ownership**; a load-time check that every opened kind has a closer; ended edges reachable only through a separate accessor | `state/tenures` · the verb table · `data/loaders` |
 | **AX-1** only a person acts | `Act.actor : PersonId` and nothing else has that type; `resolve` has no institution parameter; a seat enters through `Act.via` | `loop/resolve` |
-| **T-i** no container gets a clock | the driver is the only caller of any step; **carriers have state and no behaviour** | `loop/driver` |
+| **T-i** no rung gets a clock | the driver is the only caller of any step; **carriers have state and no behaviour** | `loop/driver` |
 | **T-k** one resolver, one ladder | the fold lives once; the ladder lives once, in the seam | `loop/resolve` · `seam/ladder` |
 | **T-l** a cohort is a Person at weight > 1 | one `Person` class; **no subclass exists** | `state/persons` |
 | **ID-12 · ID-5 · ID-13** | every roster, table, fixture, matrix and verb row read at load by **one** loader that cross-validates and raises on any absence or any declared-but-unread row | `data/` |
@@ -151,7 +151,7 @@ seam/        contest() · ladder · the contest provider ADAPTERS, one per defer
              wrapper per deferred subsystem". A module writes nothing and holds no token; the loop interprets
              its output. The no-token, no-write discipline of the row below is unchanged.
 manifest/    role -> provider rows, resolved at boot
-port/        the Godot shell; nothing under it is simulation
+game/        the scene tree; nothing under it is simulation
 tests/       falsifiers, including the two licensed guards
 ```
 
@@ -191,7 +191,7 @@ tests/       falsifiers, including the two licensed guards
 | 4 | `scale:` on modules and on seven verb rows | **deleted; the loader rejects the key** | Stage 1 §E.3, Stage 2 §C.3, ID-13 |
 | 5 | `Office` with `establishment[]`; `Title` via a roster and a collision check | **one `Seat` type; no `Title` type; no membership field** | §D.7 (*not an entity*), §E.2.2 (*authority is a property of the seat*), ID-1, ID-2 |
 | 6 | `Event` with a `subject` field | **no `subject`.** `changes[]` are gate receipts; place is a Query | T-d as Stage 1 sharpens it — *"currently a naming convention, not a mechanism"* |
-| 7 | `Rung.judging_set_rule` | **deleted**; the judging set is a Query over seats | §D.2's NEVER — *decision-shaped state on a container* |
+| 7 | `Rung.judging_set_rule` | **deleted**; the judging set is a Query over seats | §D.2's NEVER — *decision-shaped state on a rung* |
 | 8 | `Rung.matter.transmission` | **deleted**; `succeed : Person → Person`, owned by the holder | §E.1.3 |
 | 9 | `tie`/`knot` stored once on the lower id | **two directed edges**; strain is a Query | §E.1.3 |
 | 10 | `Person.beliefs[]` | **deleted**; a belief is a `commit` to an `OUGHT` | §D.1.1 |
@@ -246,7 +246,7 @@ LOCATION:   the person-kind Rung sharing its n; its contain edge is where they a
 | invariant | grade (Py / GD) | construction |
 |---|---|---|
 | **one class; a cohort is not a subclass** | CONVENTION + a test asserting no subclasses exist | there is nothing to convert to |
-| **`choose` cannot read another person, an aggregate, or world truth** | STRUCTURAL (typed) / MECHANICAL (path scan) | it receives a `PersonInterior` — **a frozen copy with no store handle.** A smuggled global would still have to be looked up through a store the module cannot name |
+| **`choose` cannot read another person, an aggregate, or world truth** | STRUCTURAL under a checker · MECHANICAL at runtime / MECHANICAL (path scan) | it receives a `PersonInterior` — **a frozen copy with no store handle.** A smuggled global would still have to be looked up through a store the module cannot name |
 | **WITNESS never touches a conviction** | MECHANICAL / CONVENTION + scan | the INTERIOR token opens only the ledger path; convictions are ACTS rows, and the gate refuses an INTERIOR token on one |
 | **evidence cannot move a conviction** | MECHANICAL | *a loader check the stages do not name:* a verb writing a category-3 field may not phrase its `requires` over the actor's ledger. **Synthesis addition** |
 | **a field nothing reads is not a field** | MECHANICAL, weakly — a static-reference scan | **not structural; the honest state** |
@@ -394,7 +394,7 @@ is not rewritten to chase it.**
 | **what an act can open, an act can close** (ID-14) | MECHANICAL at load | the loader asserts `release`'s kind domain equals `tenure_kinds \ {contain}` ⚠ *(this cell and `D-15` both said **equals `tenure_kinds`** after invariant 6 was corrected for F4 — `contain`'s subject can never act, so the unqualified form is unsatisfiable. Corrected 2026-09-03)* ⚠ *AMENDED at plan position `19c` (2026-09-30): `tenure_kinds \ {contain, reside}`. `reside` (where a person lives) is closed by the act that opens its successor — `migrate` — so ID-14 holds through that verb, and a `release` of it would leave a person living nowhere; `data/rosters.py::RELEASABLE_KINDS` is the one derivation* |
 | no ratchet over ended edges | MECHANICAL | `ended()` is separate; a scan forbids an int-returning `world_q` function from calling it |
 | **a symmetric relation with one owner** | STRUCTURAL | `tie`/`knot` are directed; no symmetric kind exists. *I have cut you off and you do not know it* is free |
-| **a relation whose subject cannot act** | STRUCTURAL (typed) | the subject type admits `RungId` for `contain` only |
+| **a relation whose subject cannot act** | STRUCTURAL under a checker · MECHANICAL at runtime | the subject type admits `RungId` for `contain` only |
 
 > ### ⚠ **`conferrer? : SeatId` IS DELETED — `ID-13` ADMITS NO THIRD STATE, AND THIS FIELD HAD NO
 > ### READER ANYWHERE IN THIS EXERCISE (added 2026-09-03)**
@@ -920,7 +920,7 @@ a porter will "fix".
 | `Event` + the log | an append-only `Array` owned by the driver | see rejection 3 |
 | `rosters` · `verb_table` · `write_matrix` · `requirements` | `Resource` (`.tres`) or JSON, **one loader**, twelve invariants at boot | Godot's `_ready` is the natural home for a boot-time loader; a failed invariant must abort the boot, not warn |
 | the write gate | one `func` every mutation crosses; typed `Result` | no exceptions in GDScript, so a refusal is a value — which this architecture already required |
-| `port/` | `Node`s, the scene tree, signals, `_process` | the shell, and the ONLY place these appear |
+| `game/` | `Node`s, the scene tree, signals, `_process` | the scene-tree side, and the ONLY place these appear |
 | the RNG (unbuilt) | a seeded `RandomNumberGenerator` **threaded like `World`** | see rejection 4 |
 
 ### The five rejections
@@ -933,7 +933,7 @@ a porter will "fix".
    isolation is gone with no error anywhere.
 
 2. **Core carriers are NOT `Node`s**, though nodes-in-a-tree is *the* Godot idiom for game objects.
-   D-21 forbids a container with a clock: carriers have no behaviour and only the driver calls a
+   D-21 forbids a rung with a clock: carriers have no behaviour and only the driver calls a
    step. A `Node` arrives with `_process` and `_physics_process` attached, so making a `Site` a Node
    hands every carrier a clock — **the fourth clock D-17 and loader invariant 5 exist to prevent** —
    and it is engaged by default rather than by a call. The scene tree is also a second parent
@@ -943,7 +943,7 @@ a porter will "fix".
    non-empty `causes`, every cause resolvable in `log ∪ acts ∪ {ROOT}`, and non-decreasing season.
    A Godot signal carries no cause, no ordering guarantee and no receipt, so a signal-carried event
    stream cannot satisfy any of the three, and `causes[]` — the thing that makes the season
-   auditable — has nowhere to live. **Signals remain correct at the `port/` boundary**: emit one
+   auditable — has nowhere to live. **Signals remain correct at the `game/` boundary**: emit one
    per appended Event *after* the append, for the view layer to consume. The log is the truth; a
    signal is a notification about it, and never the other way round.
 
@@ -1033,15 +1033,15 @@ the assumption is the failure mode.**
 | **10a** | ⚠ **NEW (F3) · a write by a non-owner** | the gate checks `actor == subject(id)` on every Tenure write. ⚠ **AMENDED: "three declared exceptions only" is now NINE — `conferral`, `handover` (`ED-IN-0277`), `renewal` (`17b`), `determination` (`19`) and `founding` (`24e`) joined `T-n`'s matured term, `T-o`'s seat revocation **with `Act.via` present**, and a destroy cascade. §C.2's pseudocode is the current, complete enumeration; this cell is not rewritten to match it, per `CLAUDE.md` §0.05 -- see §C.2 for what each of the nine may write** | MECHANICAL at the gate — **and it was CONVENTION before, enforced by per-verb eligibility alone** |
 | 11 | a seat that knows its holder | no field | STRUCTURAL |
 | 12 | **a relation with two owners** | directed `tie`/`knot`; no symmetric kind exists | STRUCTURAL |
-| 13 | a relation whose subject cannot act | `subject` admits `RungId` for `contain` only | STRUCTURAL (typed) |
-| 14 | **a banner holding territory** | `hold`'s subject is `PersonId`. **`Faction.holdings` is a Query that READS members' holds and cannot write one** — the debt closes on the read side without reopening on the write side | STRUCTURAL (typed) |
+| 13 | a relation whose subject cannot act | `subject` admits `RungId` for `contain` only | STRUCTURAL under a checker · MECHANICAL at runtime |
+| 14 | **a banner holding territory** | `hold`'s subject is `PersonId`. **`Faction.holdings` is a Query that READS members' holds and cannot write one** — the debt closes on the read side without reopening on the write side | STRUCTURAL under a checker · MECHANICAL at runtime |
 | 15 | **open-without-close in the vocabulary** | `release` generic; the loader asserts its domain equals `tenure_kinds \ {contain}` (invariant 6, as corrected for F4) | MECHANICAL at load |
 | 16 | a ratchet over ended edges | `ended()` separate; a scan forbids int-returning callers | MECHANICAL |
 | 17 | a fourth clock | the MATTER token; loader invariant 5 | MECHANICAL at load |
 | 18 | **evidence moving a conviction** | ⚠ **UPGRADED 2026-09-03 — it was MECHANICAL on a check `F.24` disarms.** The INTERIOR write is performed by a function whose signature takes `PersonInterior` **and no ledger reference**, exactly as `choose` takes no `World` (D-2). *A conviction cannot be moved by evidence the writer cannot name.* The loader check becomes a second line, not the only one | **STRUCTURAL by signature** / MECHANICAL |
 | 19 | **a default contest depth** | `max_depth` has no default in the signature | STRUCTURAL |
 | 20 | a nested contest that crashes | the cap returns `Refusal` | MECHANICAL; **in GDScript the test must actually reach the cap** |
-| 21 | a container with a clock | carriers have no behaviour; only the driver calls a step; `t` advances in one line | STRUCTURAL by absence of a method |
+| 21 | a rung with a clock | carriers have no behaviour; only the driver calls a step; `t` advances in one line | STRUCTURAL by absence of a method |
 | 22 | a subsystem writing state | no token crosses the seam; the projection is read-only | STRUCTURAL / MECHANICAL |
 | 23 | a subsystem widening an outcome | `veto : bool`; the ladder takes the minimum | STRUCTURAL by signature |
 | 24 | a subsystem returning a winner | the return type is `Margin` | MECHANICAL |
@@ -1066,7 +1066,7 @@ the assumption is the failure mode.**
 | 40 | a knot deposit minting a new id | the deposit constructor reuses the event id | MECHANICAL |
 | 41 | **a decision reading a moving world** | DELIBERATE runs with no token in scope, on a projection built at barrier 2 | STRUCTURAL (no token) / MECHANICAL (scan) |
 | **41a** | ⚠ **NEW · an order-dependent DELIBERATE** — *the pure-map claim, asserted structurally and never observed* | `D-41`'s construction is an **absence** — no token in scope — which by `ID-10` is a check that cannot see the failure it excludes. **The observable is a permutation:** shuffle the order in which persons are deliberated and the resulting **`Scene` SET and the season hash must be identical.** ⚠ *Set, not list — `RESOLVE` canonicalises the act array by `(stratum, actor-hash, intra-person position)`, so a differing `Scene[]` ORDER out of a pure map is not the defect; a differing MEMBERSHIP is.* ⚠ **`PART E` step 12 is the nearest thing that exists and is weaker** — it compares a serial run against a pooled one, which varies the *execution mode*, and it is graded *beside — an optimisation* rather than as a property of the loop | **MECHANICAL — one permutation test.** ⚠ *The grade is not a claim that structural absence is generally weak — `D-41` is STRUCTURAL and correctly so **for the property it carries**, which is that a decision cannot read a moving world. **Order-independence is a different property, and no absence carries it**: nothing about having no token stops a pure map from being written order-sensitively* |
-| 42 | **a person knowing their faction's true strength** | every lateral traversal lives in `world_q`, which `decision/` cannot name; the person has `leaders_as_claimed` and nothing else | STRUCTURAL (typed) / MECHANICAL |
+| 42 | **a person knowing their faction's true strength** | every lateral traversal lives in `world_q`, which `decision/` cannot name; the person has `leaders_as_claimed` and nothing else | STRUCTURAL under a checker · MECHANICAL at runtime / MECHANICAL |
 | 43 | a convening predicate reading another person's interior | the predicate is a declared form over three named sources, not code | MECHANICAL at load; CONVENTION that nobody adds a fourth |
 | 44 | **a belief as a private, uncontestable field** | the field is deleted; a belief is a `commit` to an `OUGHT` — utterable, shareable, releasable | STRUCTURAL by absence |
 | 45 | the season advanced twice | `t += 1` occurs once, in the driver; CALENDAR has no access to `t` | MECHANICAL |
@@ -1124,7 +1124,7 @@ why its proof is step 2 loading against it.
 | **10** | `seam/contest` · `manifest/` · a stub wrapper returning a `Margin` | a `kill/wound` routes to the seam; the nested run returns `Refusal` at the cap — **and in GDScript actually reaches it without a crash**; a misspelled manifest row fails at boot naming the row | beside |
 | **11** | the real subsystem wrappers | out of this chain's scope by ruling | beside |
 | **12** | the parallel DELIBERATE map | serial and pooled runs produce the identical hash | beside — an optimisation |
-| **13** | the Godot shell · the two licensed guards | both guards red on a planted violation, then green; a headless run prints the Python oracle's hash in the integer domain | beside, from step 3 |
+| **13** | the `game/` scene tree · the two licensed guards | both guards red on a planted violation, then green; a headless run prints the Python oracle's hash in the integer domain | beside, from step 3 |
 
 **Critical path: 0 → 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8.** Step 8 is the bar; nothing after it is on the path.
 
@@ -1276,7 +1276,7 @@ register nor the not-a-gap register is invisible to both counts.**
 > stage they charge.
 >
 > ⚠ **AND THE 2026-09-03 AMENDMENT IS THIS THESIS RUNNING LIVE, WHICH IS WORTH MORE THAN THE TWO
-> ENTRIES.** Jordan stated two properties — *a faction is a deployable container* and *factions can
+> ENTRIES.** Jordan stated two properties — *a faction is a deployable view* and *factions can
 > be at war* — and the design absorbed both **without a new primitive**: a Query return and a
 > Proposition with an owned edge. **What it could not absorb was their representation**, and the two
 > unabsorbed pieces (`F.32` whose edge a war is, `F.33` whether `at_war` reaches `requires`) are both

@@ -1,22 +1,22 @@
 #!/usr/bin/env python3
 """
-ci_module_shape_check.py — container/shape hygiene guard (ED-1085; doctrine ED-1083 §3).
+ci_module_shape_check.py — module-shape hygiene guard (ED-1085; archived wrapper doctrine ED-1083 §3).
 
-Enforces the holonic container rules on ENGINE/SIM RUNTIME code
+Enforces the module-shape rules of the archived wrapper doctrine on ENGINE/SIM RUNTIME code
 (.designs/systems/_architecture/reference/holonic_container_doctrine_v1.md §3):
 
-  1. NO cross-container reach-ins: runtime modules must not manipulate sys.path to point
+  1. NO cross-module reach-ins: runtime modules must not manipulate sys.path to point
      into a tests/ tree (the ED-1085 failure class: combat_engine_v1/core.py importing its
      sigma kernel from the frozen tests/sim/v32-combat-balance station, dragging numpy into
      the engine runtime).
   2. NO imports from tests/ trees in runtime code (`from tests...` / `import tests...`).
   3. INFO-tier: module-scope numeric-literal constants in the combat engine's runtime modules
-     (outside config.py, the declared Class-C container) that carry no provenance tag.
+     (outside config.py, the declared Class-C home) that carry no provenance tag.
      Constant-VALUE provenance is ci_sim_fabrication_check.py's job (changed-lines, ledger-
      backed) — this only surfaces untagged module-scope literals as drift candidates. It
      never fails the run.
 
-DECLARED EXCLUSIONS (measurement/dev harnesses are not runtime containers):
+DECLARED EXCLUSIONS (measurement/dev harnesses are not runtime modules):
   * anything under a tests/ tree itself,
   * systems/combat/combat_engine_v1/workbench/ (the measurement workbench reaches into the
     frozen v32 validation station BY DESIGN — tagged at each insert),
@@ -40,7 +40,7 @@ import ci_common  # noqa: E402
 
 REPO_ROOT = ci_common.REPO
 
-# Runtime container roots this guard patrols. Plan position `31a` adds every code root that is
+# Runtime module roots this guard patrols. Plan position `31a` adds every code root that is
 # module code WHOLE -- a `ci_common.MODULE_CODE_ROOTS` row whose glob under it is `*` (`modules/`,
 # A-25: reachable running code only) -- read from that owner, never typed here. `systems/` stays
 # patrolled at the combat engine's directory alone: the rest of it is legacy and unplugged code. Plan
@@ -117,12 +117,12 @@ def check(verbose=True):
             print(f"  [INFO] {note}")
         if violations:
             print(f"[MODULE SHAPE VIOLATIONS: {len(violations)}]")
-            print("  Runtime containers must not reach into tests/ trees "
+            print("  Runtime modules must not reach into tests/ trees "
                   "(holonic_container_doctrine_v1.md §3; ED-1085):")
             for v in violations:
                 print(f"  {v}")
         else:
-            print(f"Module shape: no container reach-ins in runtime code "
+            print(f"Module shape: no module reach-ins in runtime code "
                   f"({len(infos)} INFO constant note(s)).")
     return violations
 

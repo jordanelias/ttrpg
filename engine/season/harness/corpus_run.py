@@ -518,7 +518,7 @@ def build_at(case: dict, seed: int = 0) -> World:
         w.rungs[pid] = Rung(pid, "person")
         # The parent is the deepest NON-person rung, which after the filter above is `chain[0]`.
         # A case scaled at `person` therefore seats its people in the `hearth` -- the next rung up
-        # -- rather than in a person-shaped container, which is what the ladder actually says.
+        # -- rather than in a person-kind rung, which is what the ladder actually says.
         if chain:
             w.add_tenure(Tenure(f"t_{pid}_in", pid, ids[chain[0]], "contain", 0))
             # Plan position `19c`: and they live there (`populated.build_realm`'s rule).

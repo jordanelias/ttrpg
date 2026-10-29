@@ -367,7 +367,7 @@ def holds_trail(w: World, p: Person, e: Event, rule: str) -> bool:
 
 def trail_of(w: World, subject: Optional[str], pid: str) -> list:
     """THE TRAIL AN INQUIRY ABOUT `subject` CAN UNCOVER FOR `pid` -- the host's projection for the
-    fieldwork container (`seam/wrappers/fieldwork.py::fieldwork_input`), oldest first.
+    fieldwork scene (`seam/wrappers/fieldwork.py::fieldwork_input`), oldest first.
 
     For each `rosters.yaml: covert_kinds` member -- DATA, never a walk of every deed kind -- the most
     recent Event of that kind that WROTE `subject` (deeds done TO it: `World.last_emission_of(...,

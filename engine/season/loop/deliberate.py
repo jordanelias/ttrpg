@@ -541,7 +541,7 @@ def as_scenes(produced: list, actor: str, w: "World") -> list:
     """Normalise what `choose` returned into Scenes. `W17`.
 
     ⚠ A BARE `Act` IS ONE SCENE CARRYING ONE INTERACTION, and that equivalence is what makes the
-    scene container ADDITIVE rather than a rewrite: every caller written before the 2026-09-02
+    scene ADDITIVE rather than a rewrite: every caller written before the 2026-09-02
     ruling keeps its exact meaning, because one act per scene IS the pre-ruling accounting. A
     caller that wants the ruling's new freedom -- several interactions inside one budgeted scene
     -- returns Scenes instead. Mixing the two in one list is allowed and means what it looks

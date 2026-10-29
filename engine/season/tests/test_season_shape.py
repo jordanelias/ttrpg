@@ -3664,7 +3664,7 @@ def test_w5_every_new_assumption_rows_sweep_is_actually_executed():
 
 
 # ===========================================================================
-# W17 — THE SCENE CONTAINER. Jordan's 2026-09-02 ruling: the budgeted unit is the SCENE.
+# W17 — THE SCENE. Jordan's 2026-09-02 ruling: the budgeted unit is the SCENE.
 # ===========================================================================
 
 def test_w17_the_budget_bounds_scenes_and_the_interaction_bound_is_separate():
@@ -14087,11 +14087,11 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # pin guards is the one the docstring says bit `speak` -- *untyped, so it cannot contest* -- and
     # SC-01 step 12 answered it rather than relaxed it: the row is TYPED now (`existence` of `subject`,
     # kind `DocketItem`, the proceedings design's own cell), so a computed `speak` carries its
-    # `subject` to the seam. Its prize `a matter` names the social contest container's provider, as
+    # `subject` to the seam. Its prize `a matter` names the social contest scene's provider, as
     # `tell`'s `a standing` does (it was an interim row on `sigma_leverage` until steps 13+15); graded
     # on the same ladder (`tests/test_sc01_speak.py` reads all four bands).
     # ⚠ THE SIXTH ENTRY, `determine` (v9 SC-03b, #453 §10.4 step 4), RE-RECORDED with its reason: the row
-    # is contested through the social contest container's provider (`contests: "a proposition"`, a prize
+    # is contested through the social contest scene's provider (`contests: "a proposition"`, a prize
     # row no verb claimed until now), graded on the one ladder, and its `Tenure.degree` write has a
     # producer (`_eff_determine` sets the degree on the edge it opens; `test_u7_remit.py` section 10
     # reads all four bands).

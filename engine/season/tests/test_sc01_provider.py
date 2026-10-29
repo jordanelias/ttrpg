@@ -1,5 +1,5 @@
 """v9 SC-01 steps 13 + 15, ONE change (`workplans/valoria_master_workplan_v9_part6.md` §SC-01, the
-CARRIED block's *Step 13* and *Step 15*): the social contest container's contest provider, and the
+CARRIED block's *Step 13* and *Step 15*): the social contest scene's contest provider, and the
 three social prize rows repointed to it.
 
 WHAT IS BUILT, each asked of the real manifest, the real registrar, the real fold and the real seam:
@@ -16,7 +16,7 @@ WHAT IS BUILT, each asked of the real manifest, the real registrar, the real fol
     (`world_q.place_of`), where it dispatched at the placeholder `"R"`.
 
 THE FALSIFIERS (each run red before the build, 2026-10-16, base `29af7354`):
-  * the rows name the container's provider -- RED at base (`sigma_leverage`).
+  * the rows name the scene's provider -- RED at base (`sigma_leverage`).
   * the provider is registered by importing the seam and the driver constructs -- RED at base.
   * THE HALF-STATE: the rows repointed with no provider registered refuse at driver construction naming
     the first such prize (`30`'s refusal (c)); a misspelled `provider:` and a deleted composition row

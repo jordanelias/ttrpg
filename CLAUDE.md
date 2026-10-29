@@ -114,6 +114,9 @@ work. our design documents in .MD are reference and information only."*
 
 - **A design document may not be cited as the reason a behaviour is correct** — only for intent, history
   and vocabulary. If canon and code disagree, decide and then CHANGE THE CODE.
+- **A spec that binds code (Layer 1) is not edited to match the code that violates it:** *a spec edited to
+  match its implementation checks nothing*. Change the code; only where two of its rows decide the same
+  thing differently, name the ambiguity at the site and pick (`layer-conformance` B4).
 - **A FACT the engine uses must live where code reads it** — a typed artifact under
   `engine/engine_params/` behind an exporter, or a single Python owner. Constants still inside
   `systems/` are the migration backlog (live count: `python tools/export_sim_params.py --build`).
@@ -348,8 +351,8 @@ says where an old path went. Only what those cannot tell you:
 - **`engine/`** — the executable model (substrate leaf readers, autoload hub, cross-scale, campaign
   driver, `engine/engine_params/` typed exports, `engine/tests/` = CI job `sim-regression`). **It names
   no subsystem by import**: seams resolve through `engine/substrate/composition.py` (`engine/` names a
-  ROLE, `references/module_contracts.yaml` the MODULE). Two `sys.path` seams into `systems/` are in
-  `PATH_SEAM_ALLOWED`, **shrink-only**; the execution artifact is
+  ROLE, `references/module_contracts.yaml` the registered MODULE). One `sys.path` seam, `substrate/pc_engine.py` into
+  `modules/combat/`, is in `PATH_SEAM_ALLOWED`, **shrink-only**; the execution artifact is
   `test_importing_every_engine_module_pulls_in_no_subsystem` (subprocess import, matching on FILE PATH).
   ⚠️ **Acyclic is not independence:** the engine still depends on subsystems, resolved by string.
 - **`engine/season/`** — **Layer 2, the game code**: the season loop plus the registries it opens **at
@@ -357,8 +360,11 @@ says where an old path went. Only what those cannot tell you:
   `python -m engine.season.harness.register --requirements` (against `engine/season/requirements.yaml`)
   before citing it as done. `engine/season/hole_register.yaml` is read by the corpus grader, not the
   loop.
+- **`modules/`** — **Layer 2, the game code**: the registered modules the loop reaches by composition row
+  (`composition_roles:` in `references/module_contracts.yaml`), not by import (`combat` alone loads by path, via
+  the seam above). A registered module takes typed input, returns typed outcome, holds no token, keeps no game state (`04` §A.2; `holonic_ARCHITECTURE.md` §43, §45).
 - **`architecture/`** — **Layer 1.** Reference for game mechanism (§0.05), binding as agent instruction,
-  resolving nothing at runtime. Exempt from the size WARNING only.
+  resolving nothing at runtime. Scope: `architecture/meta/04_CODE_ARCHITECTURE.md`'s Status line (indexes: `CURRENT.md`'s Layer-1 row). Exempt from the size WARNING only.
 - **`canon/`** — foundations **P-01..P-15**, timeline, constraints, amendments; world truth only.
 - **`registers/`** — process ledgers and `registers/handoffs/`. **All ledger files are authoritative —
   read all of them.** **Never edit** the frozen ED fragments in `registers/archive/`:
@@ -437,8 +443,8 @@ the registry still marks IN FLUX.
 **Rule: a port never corrects its oracle in place (ED-1050).** If port and Python oracle disagree, fix
 canon via the ledger and re-export — never hand-edit a value into the `.gd` side.
 
-`godot/godot_conversion_strategy_v1.md` is the governing spec — **PROPOSED, Jordan-vetoable throughout**,
-with an open register and unexecuted Gate-0 preconditions. `references/module_contracts.yaml` shows which
+`godot/godot_conversion_strategy_v1.md` is the conversion plan — **PROPOSED, Jordan-vetoable throughout**,
+with an open register and unexecuted Gate-0 preconditions; the season loop's ratified Godot mapping is `04` §C.12. `references/module_contracts.yaml` shows which
 modules have `doc: null` and which resolvers are `[ASSUMPTION]`-grade; porting beyond the combat slice
 waits on the port gate (B10-20 in the active master workplan, which `CURRENT.md` names). The older
 `godot/` docs predate the `d+σ` model, carry `⚠️ STALE` banners and ship wrong schemas: implement from
@@ -517,7 +523,7 @@ A fresh remote container has pyyaml only; run the provisioner. WHEN each runs is
 | **A NERS pass** on any design object | `ners`, which owns the **method**; the four **definitions** are §0.06 |
 | Stressing anything that resolves by a **draw** — σ-leverage, μ-shift vs Ob-shift, fractional pool/Ob, sub-1D floor | `resolution-diagnostic`. Its output is **evidence**, not a verdict: carry findings into a `ners` pass |
 | **Layer placement** — which layer does this bind, is prose being made a mechanism, does a proposed guard earn its existence | `layer-conformance` (Lens A); the **definitions** are the layer table, §0.05 and §0.1 pt 5 |
-| **Code-architecture / Layer-1 conformance** | `layer-conformance` (Lens B), which reads `architecture/meta/04_CODE_ARCHITECTURE.md` at the row and copies no table or count out of it |
+| **Code-architecture / Layer-1 conformance** | `layer-conformance` (Lens B), which reads `architecture/meta/04_CODE_ARCHITECTURE.md` (and, for `modules/`, `holonic_ARCHITECTURE.md` §43, §45–§47) at the row and copies no table or count out of it |
 | **Distilling code and data without losing function** — unearned complexity, a second owner, new apparatus where an edit would serve, scripting drift, dead code; a high-level survey of a system in six directions; the cost of porting it | `valoria-simplify`, run between `layer-conformance`'s Lens A and Lens B |
 | Editorial-debt workflow over the JSONL ledger | `valoria-editorial-register` |
 | Structural-debt corpus scan | `valoria-vector-audit` |

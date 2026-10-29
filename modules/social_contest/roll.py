@@ -1,5 +1,5 @@
 """THE σ-LEVERAGE ROLL -- the `social_contest` module's entry (A-25; plan position `31a`), and since v9
-SC-01 step 15 the AUTOMATED MODE of the social contest container's contest provider.
+SC-01 step 15 the AUTOMATED MODE of the social contest scene's contest provider.
 
 A MODULE ENTRY: reached by the composition row whose target is `roll` below (`entry: verb_call`,
 `verb: tell`), registered in `manifest.MODULE_ENTRIES` by the registrar at driver construction, and

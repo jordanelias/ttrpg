@@ -1,5 +1,5 @@
 """WHAT A FINDING UNCOVERS -- the `fieldwork` module's entry (A-25; v9 FI-02 + FI-03, `SM-3`,
-`ED-FI-0002`), the automated mode of the fieldwork container.
+`ED-FI-0002`), the automated mode of the fieldwork scene.
 
 A MODULE ENTRY: reached by the composition row whose target is `find` below (`entry: step_call` -- RESOLVE's
 per-act bookkeeping calls it for an Event an inquiry produced, not a verb's adapter), registered in

@@ -1,4 +1,4 @@
-"""THE SOCIAL CONTEST CONTAINER'S CONTEST PROVIDER — the host adapter and the host INPUT BUILDER for the
+"""THE SOCIAL CONTEST SCENE'S CONTEST PROVIDER — the host adapter and the host INPUT BUILDER for the
 `social_contest` module's σ-leverage roll (plan position `31a`, A-25; registered as
 `@provider("contest", "social_contest")` since v9 SC-01 steps 13 + 15, which repointed the prize rows
 `a standing`, `a proposition` and `a matter` from the interim name `sigma_leverage`, ED-SC-0033 clause

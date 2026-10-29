@@ -21,7 +21,7 @@ this package loads lazily. `boot()` is the boot. `check_rows()` is called from t
 driver-construction refusals run there too).
 
 **NO PROVIDER ROW IS LANDED HERE.** The row for a social contest is U1's; its provider is the social
-contest container's provider (`social_contest`; was interim `sigma_leverage`, `ED-SC-0037`, until v9
+contest scene's provider (`social_contest`; was interim `sigma_leverage`, `ED-SC-0037`, until v9
 SC-01 steps 13+15).
 This unit lands the signature, the crossing and the boot-time failure only.
 """
