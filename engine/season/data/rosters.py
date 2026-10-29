@@ -533,6 +533,8 @@ VERB_CAPABILITY = roster_map("verb_capability", "values")
 GRADED_INQUIRIES = roster_map("graded_inquiries", "values")
 # RS-21 item 1 (H-111): the Event kinds WITNESS deposits nothing for (`loop/witness.py::witness`).
 UNDEPOSITED_KINDS = roster("undeposited_kinds")
+# ED-IN-0304 phase 2: the verbs that change an `army` Record (`loop/effects_army.py`); `data/fixtures.py` withholds them from formation.
+ARMY_VERBS = roster("army_verbs")
 # v9 SE-01 (`24g`) / `H-51`: the refusal kind a row (`dispatch`) declares and the fold keeps ONLY when
 # the act earns it (`loop/resolve.py::_demand_earned`: from the precondition refusal of an act naming
 # nobody the world holds). ONE OWNER, read by the fold and by the loader's flat-row rule (`data/verbs.py`,

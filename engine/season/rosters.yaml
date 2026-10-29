@@ -236,6 +236,14 @@ rosters:
       # anchors on the cover's id. Not a `record_sourced_operands` kind: a cover answers no operand,
       # and `ledger_names` reads nobody out of it (`ABOUT_KEYS`).
       cover:        [terms]
+      # ED-IN-0304 phase 2 (Jordan, 2026-10-28: a faction's army is an order-of-battle record, not only
+      # `PersonId[] at weight`): A FACTION'S ARMY. Its four keys are `modules/mass_battle/armyrecord.py::KEYS`
+      # (`test_mass_battle_army_record.py` pins the two equal); that module owns what each key says and every
+      # operation on it, and the four army verbs (`recruit`, `form_unit`, `assign_troops`, `order_unit`) call it
+      # through the `mass_battle.army` composition row. MINTED by `create_record` (`kind: army`); CHANGED by the
+      # four verbs, the one kind whose `subject_matter` is written after the mint (the `(Record, subject_matter)`
+      # matrix row). Not a `record_sourced_operands` kind: an army answers no operand.
+      army:         [faction, strategy, trained, subformations]
     # HOW A MINTED DOCUMENT'S CONTENT IS READ OFF THE ACT, AND WHAT A HOLDER LEARNS FROM IT. One
     # owner for three facts the mint (`loop/effects.py::_mint_document`) and the deposit rule
     # (`loop/witness.py`) both read, so neither spells them.
@@ -2081,6 +2089,17 @@ rosters:
       revert: build `release`'s hook in the same position.]
     values: [forgive]
 
+  army_verbs:
+    source: >-
+      ED-IN-0304 phase 2 (Jordan, 2026-10-28: a faction's army is an order-of-battle record the season changes
+      from a menu). `loop/effects_army.py` is their one body.
+    note: >-
+      THE VERBS THAT CHANGE AN `army` RECORD, a list of verbs. `data/fixtures.py` adds each to `withheld_verbs`:
+      the command (a cohort, a troop type, a count, a subformation's name and tactics) is the act's payload, the
+      operand vocabulary is closed at eight and none names it, so no Candidate could carry it and no person forms
+      one. Each must be a `verb_table.yaml` verb (`opening_set` refuses a withheld name the table lacks).
+    values: [recruit, form_unit, assign_troops, order_unit]
+
   own_hold_declines:
     source: >-
       plan position IN-26 (BOUND-PAPER, `workplans/valoria_master_workplan_v9_part5.md`), `A-13`'s
@@ -3090,6 +3109,14 @@ tables:
     # naming the verb and the missing axes. Sparse is still lawful in the VALUES (a `null` reads
     # 0.0); what is no longer lawful is a verb nobody considered.
     uncelled:
+      recruit: >-
+        ED-IN-0304 phase 2: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above), and no person forms it (`Fixtures withheld_verbs`): it is a menu command on the army record, whose alignment lean nothing yet reads. It scores 0.0 on every axis. Revert: the seven cells, IN-08's method.
+      form_unit: >-
+        ED-IN-0304 phase 2: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above), and no person forms it (`Fixtures withheld_verbs`): it is a menu command on the army record, whose alignment lean nothing yet reads. It scores 0.0 on every axis. Revert: the seven cells, IN-08's method.
+      assign_troops: >-
+        ED-IN-0304 phase 2: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above), and no person forms it (`Fixtures withheld_verbs`): it is a menu command on the army record, whose alignment lean nothing yet reads. It scores 0.0 on every axis. Revert: the seven cells, IN-08's method.
+      order_unit: >-
+        ED-IN-0304 phase 2: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above), and no person forms it (`Fixtures withheld_verbs`): it is a menu command on the army record, whose alignment lean nothing yet reads. It scores 0.0 on every axis. Revert: the seven cells, IN-08's method.
       covenant: >-
         v9 IN-12 step 7: NOT CELLED BY THE PRODUCER -- authoring an alignment cell is a judgment the
         build position does not own (the plan's CLAUDE.md §0 note on IN-08's cells), and #453 §9.2

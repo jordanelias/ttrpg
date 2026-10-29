@@ -28,10 +28,11 @@ from typing import Callable, Optional
 
 from modules.mass_battle.armies import SUBUNIT_CAP
 from modules.mass_battle.orderofbattle import STANCES, STRATEGIES, TARGETINGS, OrderOfBattle, Subformation
+from modules.mass_battle.troop_types.recruitment import recruit_limit
 from modules.mass_battle.troop_types.registry import roles_for, stats_for
 
-__all__ = ['KEYS', 'new', 'raised', 'by_type', 'unassigned', 'form', 'assign', 'order', 'set_strategy', 'validate',
-           'to_order_of_battle']
+__all__ = ['KEYS', 'new', 'raised', 'by_type', 'unassigned', 'form', 'assign', 'release', 'order', 'set_strategy',
+           'validate', 'to_order_of_battle', 'apply', 'OPS']
 
 #: `subject_matter`'s exact key set. `engine/season/rosters.yaml: record_kinds.values.army` mirrors it and a test pins
 #: the two equal.
@@ -79,14 +80,17 @@ def _merge(rows, key, delta):
     return tuple(out)
 
 
-def by_type(record: dict) -> dict:
-    """Troops under arms by type, trained and assigned together: the figure the population cap counts."""
+def by_type(record: dict, cohort: Optional[str] = None) -> dict:
+    """Troops under arms by type, trained and assigned together: the figure the population cap counts. With
+    `cohort`, only the troops drawn from that cohort (the cap is per cohort: a cohort is the population)."""
     out: dict = {}
-    for _cohort, t, n in record['trained']:
-        out[t] = out.get(t, 0) + n
+    for c, t, n in record['trained']:
+        if cohort is None or c == cohort:
+            out[t] = out.get(t, 0) + n
     for sf in record['subformations']:
-        for _cohort, n in sf['assigned']:
-            out[sf['troop_type']] = out.get(sf['troop_type'], 0) + n
+        for c, n in sf['assigned']:
+            if cohort is None or c == cohort:
+                out[sf['troop_type']] = out.get(sf['troop_type'], 0) + n
     return out
 
 
@@ -229,3 +233,50 @@ def to_order_of_battle(record: dict, fitness: Optional[Callable[[str], float]] =
     if not parts:
         raise ValueError("no subformation has any troops assigned")
     return OrderOfBattle(tuple(parts), record['strategy'])
+
+
+#: The commands `apply` runs: one per season verb (`recruit`, `form_unit`, `assign_troops`, `order_unit`) and
+#: `validate`, which `create_record` asks of an army it mints.
+OPS = ('recruit', 'form', 'assign', 'order', 'validate')
+
+
+def apply(cmd) -> dict:
+    """THE ONE ENTRY THE SEASON CALLS (`mass_battle.army`, a `query` composition row): run `cmd.op` on `cmd.record`
+    with `cmd.args` and return the new record, or raise ValueError with the rule broken. `cmd` is
+    `engine/season/queries/inputs.py::ArmyCommand` (`record`, `op`, `args`); the host builds it from the act and the
+    world and writes the result back, so nothing here reads a `World`.
+
+      recruit  args cohort, troop_type, count, weight, sites ({site kind: condition}), full -- raise `count` troops
+               from `cohort`, no more than `recruit_limit` allows for that cohort's `weight` and `sites`
+      form     args name, troop_type, role (optional)
+      assign   args name, cohort, count -- a negative count releases troops back to the trained pool
+      order    args name and any of role, stance, target, fall_back_at; or strategy alone, for the army
+      validate no args -- the record unchanged if well formed
+    """
+    r, a = cmd.record, cmd.args
+    validate(r)
+    if cmd.op == 'validate':
+        return r
+    if cmd.op == 'recruit':
+        n = _pos(a['count'])
+        room = recruit_limit(a['troop_type'], a['weight'], a['sites'], by_type(r, a['cohort']), a['full'])
+        if n > room:
+            raise ValueError(f"{a['cohort']!r} can raise {room} more {a['troop_type']}, asked for {n}")
+        return raised(r, a['cohort'], a['troop_type'], n)
+    if cmd.op == 'form':
+        return form(r, a['name'], a['troop_type'], a.get('role'))
+    if cmd.op == 'assign':
+        n = a['count']
+        if n == 0 or int(n) != n:
+            raise ValueError(f"a count must be a non-zero whole number, got {n!r}")
+        return assign(r, a['name'], a['cohort'], n) if n > 0 else release(r, a['name'], a['cohort'], -n)
+    if cmd.op == 'order':
+        if 'strategy' in a:
+            if set(a) != {'strategy'}:
+                raise ValueError("an order names a strategy or a subformation's tactics, not both")
+            return set_strategy(r, a['strategy'])
+        fields = {k: a[k] for k in ('role', 'stance', 'target', 'fall_back_at') if k in a}
+        if not fields:
+            raise ValueError("an order sets at least one of role, stance, target, fall_back_at, or a strategy")
+        return order(r, a['name'], **fields)
+    raise ValueError(f"unknown army command {cmd.op!r} (known: {OPS})")

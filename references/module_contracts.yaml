@@ -96,6 +96,10 @@ composition_roles:
     target: "modules.settlements.provision:provision"
     entry: query
     needed_by: "engine/season/seam/wrappers/mass_battle.py — the field adapter `resolve` (v9 IN-52, the levy-to-field feed, A-25) builds the typed input record once per side (`provision_input` -> `queries/inputs.py::ProvisionInput`: the side's Σ weight, its treasury's stores -- the attacker's the rung of `Act.via`'s office, the one `requisition` fills; the defender's the nearest held rung at or above the target, `world_q.governing_hold`'s walk [LF-2] -- the `subsistence_weight` ration and the `field_provisioning` fixture), calls this entry by role string through `engine.substrate.composition.require`, hands `troops` to `mass_battle.resolve_field` (`troops_a`/`troops_b`) and returns `consumed` for `loop/effects_combat.py::_eff_march` to debit [LF-3]. Shipped OFF: with the fixture `False` the entry returns `troops = weight`, `consumed = ()`. Declared in `world_q.QUERY_ENTRIES` and held by `manifest/registrar.py::require_entries`, as `settlements.larder_draw` is."
+  mass_battle.army:
+    target: "modules.mass_battle.armyrecord:apply"
+    entry: query
+    needed_by: "engine/season/loop/effects_army.py — the four army verbs (`recruit`, `form_unit`, `assign_troops`, `order_unit`, ED-IN-0304 phase 2) each build the typed input record (`ArmyCommand`, `queries/inputs.py`: the army Record's `subject_matter`, the command and its operands, plus for `recruit` the cohort's weight and training Sites) and call this entry by role string through `engine.substrate.composition.require`, writing the returned `subject_matter` back to the Record. Declared in `world_q.QUERY_ENTRIES` and held by `manifest/registrar.py::require_entries`, as `settlements.larder_draw` is."
   settlements.fortification:
     target: "modules.settlements.fortification:fortification"
     entry: query

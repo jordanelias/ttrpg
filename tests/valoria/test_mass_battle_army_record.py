@@ -171,3 +171,44 @@ def test_an_army_record_fights():
     b = A.assign(A.raised(A.form(A.new('fac_guilds'), 'rabble', 'levy'), 'g1', 'levy', 90), 'rabble', 'g1', 90)
     r = _field(A.to_order_of_battle(a), A.to_order_of_battle(b))
     assert set(r) >= {'attacker_wins', 'degree', 'attacker_size_pct', 'defender_size_pct'}
+
+
+# ---------------------------------------------------------------------------- the season's one entry, `apply`
+def _cmd(record, op, **args):
+    from engine.season.queries.inputs import ArmyCommand
+    return ArmyCommand(record, op, args)
+
+
+def test_the_roster_and_the_module_name_the_same_army_keys():
+    from engine.season.data.rosters import RECORD_KIND_KEYS
+    assert tuple(RECORD_KIND_KEYS['army']) == A.KEYS, "rosters.yaml: record_kinds.army drifted from armyrecord.KEYS"
+
+
+def test_apply_runs_each_season_command_and_refuses_each_rule_it_breaks():
+    a = A.new('fac_crown')
+    sites = {'barracks': FULL}
+    r = A.apply(_cmd(a, 'recruit', cohort='c1', troop_type='heavy_infantry', count=40, weight=12, sites=sites, full=FULL))
+    assert A.by_type(r) == {'heavy_infantry': 40}
+    r = A.apply(_cmd(r, 'form', name='wall', troop_type='heavy_infantry', role='ShieldWall'))
+    r = A.apply(_cmd(r, 'assign', name='wall', cohort='c1', count=25))
+    assert A.unassigned(r, 'c1', 'heavy_infantry') == 15
+    r = A.apply(_cmd(r, 'assign', name='wall', cohort='c1', count=-5))
+    assert A.unassigned(r, 'c1', 'heavy_infantry') == 20 and A.by_type(r) == {'heavy_infantry': 40}
+    r = A.apply(_cmd(r, 'order', name='wall', stance='hold'))
+    assert r['subformations'][0]['stance'] == 'hold'
+    assert A.apply(_cmd(r, 'order', strategy='defend'))['strategy'] == 'defend'
+    assert A.apply(_cmd(r, 'validate')) == r
+    # the recruit limit is per cohort: a second cohort has its own population, the first has spent 40 of 120
+    over = dict(cohort='c1', troop_type='heavy_infantry', weight=12, sites=sites, full=FULL)
+    A.apply(_cmd(r, 'recruit', count=80, **{k: v for k, v in over.items() if k != 'count'}))
+    other = A.apply(_cmd(r, 'recruit', count=120, **{**over, 'cohort': 'c2'}))
+    assert A.by_type(other, 'c2') == {'heavy_infantry': 120} and A.by_type(other, 'c1') == {'heavy_infantry': 40}
+    for bad in (_cmd(r, 'recruit', count=81, **{k: v for k, v in over.items() if k != 'count'}),   # 40 + 81 > 120
+                _cmd(r, 'recruit', count=1, cohort='c1', troop_type='archers', weight=12, sites=sites, full=FULL),
+                _cmd(r, 'assign', name='wall', cohort='c1', count=0),
+                _cmd(r, 'order', name='wall'),
+                _cmd(r, 'order', name='wall', strategy='line'),
+                _cmd(r, 'march'),
+                _cmd({**r, 'strategy': 'rout'}, 'validate')):
+        with pytest.raises(ValueError):
+            A.apply(bad)

@@ -1585,6 +1585,98 @@ verbs:
     grade:       "assumption"
     grade_note:  "an argued addition (#453 §10.4 step 9): the row, its magnitude and the J-13 (iii) interim are v9 IN-12's, on #453 §9.4 `:1943-1968`, K-20 `:2729-2735`, K-21 `:2737-2742`."
     source:      "v9 IN-12 step 9 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.4 `:1943-1968`"
+  - verb:        "recruit"
+    stratum:     "uncontested_material"
+    eligibility: ["own"]
+    beneficiary: "none"
+    beneficiary_note: "an army is a record the actor holds, and no carrier the Candidate holds benefits from a muster roll."
+    requires:    "the subject is an army record, and the actor holds it -- the commander's standing"
+    requires_typed:
+      all:
+        - form:      existence
+          of:        subject
+          kind:      army
+        - form:      relation
+          of:        subject
+          relation:  held_by
+    requires_typed_note: "ED-IN-0304 phase 2: `build`'s cell for `build`'s reasons, with `kind: army` for `kind: works` -- the subject is an army record (`rosters.yaml: record_kinds`), and the actor holds it (the maker's standing: the commander is whoever minted it, or was `give`n it). WHAT THE COMMAND SAYS (the cohort, the troop type, the count, a subformation's name and tactics) IS THE ACT'S PAYLOAD, NOT AN OPERAND: the operand vocabulary is closed at eight (`rosters.yaml: requires_operands`) and none of them names a subformation, so no person-side formation can bind it. The verb is reached by a hand-built act, which is what the menu (`harness/play_surface.py`) builds; `Fixtures withheld_verbs` keeps `opening_set` from forming it for anybody."
+    writes:      ["Record.subject_matter"]
+    writes_note: "ED-IN-0304: `loop/effects_army.py::_eff_recruit` RAISES `count` troops of `troop_type` from the cohort Person the payload names, into the army's trained pool. The most it may raise is `troop_types/recruitment.py::recruit_limit` for that cohort's weight and the best training Site of the type's kind in its residence's subtree (`world_q.training_sites`). The one write is `Record.subject_matter`, check-only beside the `entity` shape the effect names (the army record)."
+    emits:       ["army.recruited"]
+    emits_on_refusal: ["recruit.refused"]
+    grade:       "assumption"
+    grade_note:  "ED-IN-0304 (Jordan, 2026-10-28): the army record is ruled; the verb, its magnitudes and its refusals are phase 2's. No ARCHITECTURE_V2.md cell."
+    refusal_note: "FLAT. Refusal conditions: the subject is no army, or the actor does not hold it (the cell); the payload names no cohort of the army's faction, no known troop type, or a count above `recruit_limit` for the cohort's population and training sites (the effect's decline, `modules/mass_battle/armyrecord.py`'s ValueError)."
+    source:      "ED-IN-0304 (`registers/editorial_ledger_in.jsonl`), phase 2; `modules/mass_battle/armyrecord.py`, `modules/mass_battle/troop_types/recruitment.py`"
+  - verb:        "form_unit"
+    stratum:     "uncontested_material"
+    eligibility: ["own"]
+    beneficiary: "none"
+    beneficiary_note: "an army is a record the actor holds, and no carrier the Candidate holds benefits from a muster roll."
+    requires:    "the subject is an army record, and the actor holds it -- the commander's standing"
+    requires_typed:
+      all:
+        - form:      existence
+          of:        subject
+          kind:      army
+        - form:      relation
+          of:        subject
+          relation:  held_by
+    requires_typed_note: "ED-IN-0304 phase 2: `build`'s cell for `build`'s reasons, with `kind: army` for `kind: works` -- the subject is an army record (`rosters.yaml: record_kinds`), and the actor holds it (the maker's standing: the commander is whoever minted it, or was `give`n it). WHAT THE COMMAND SAYS (the cohort, the troop type, the count, a subformation's name and tactics) IS THE ACT'S PAYLOAD, NOT AN OPERAND: the operand vocabulary is closed at eight (`rosters.yaml: requires_operands`) and none of them names a subformation, so no person-side formation can bind it. The verb is reached by a hand-built act, which is what the menu (`harness/play_surface.py`) builds; `Fixtures withheld_verbs` keeps `opening_set` from forming it for anybody."
+    writes:      ["Record.subject_matter"]
+    writes_note: "ED-IN-0304: `loop/effects_army.py::_eff_form_unit` ADDS an empty named subformation of a troop type to the army (`armyrecord.form`)."
+    emits:       ["army.formed"]
+    emits_on_refusal: ["form_unit.refused"]
+    grade:       "assumption"
+    grade_note:  "ED-IN-0304 (Jordan, 2026-10-28): the army record is ruled; the verb, its magnitudes and its refusals are phase 2's. No ARCHITECTURE_V2.md cell."
+    refusal_note: "FLAT. Refusal conditions: the subject is no army, or the actor does not hold it (the cell); the payload names an unknown troop type, a duplicate name, a role outside the type's menu, or a twelfth subformation (the effect's decline, `modules/mass_battle/armyrecord.py`'s ValueError)."
+    source:      "ED-IN-0304 (`registers/editorial_ledger_in.jsonl`), phase 2; `modules/mass_battle/armyrecord.py`, `modules/mass_battle/troop_types/recruitment.py`"
+  - verb:        "assign_troops"
+    stratum:     "uncontested_material"
+    eligibility: ["own"]
+    beneficiary: "none"
+    beneficiary_note: "an army is a record the actor holds, and no carrier the Candidate holds benefits from a muster roll."
+    requires:    "the subject is an army record, and the actor holds it -- the commander's standing"
+    requires_typed:
+      all:
+        - form:      existence
+          of:        subject
+          kind:      army
+        - form:      relation
+          of:        subject
+          relation:  held_by
+    requires_typed_note: "ED-IN-0304 phase 2: `build`'s cell for `build`'s reasons, with `kind: army` for `kind: works` -- the subject is an army record (`rosters.yaml: record_kinds`), and the actor holds it (the maker's standing: the commander is whoever minted it, or was `give`n it). WHAT THE COMMAND SAYS (the cohort, the troop type, the count, a subformation's name and tactics) IS THE ACT'S PAYLOAD, NOT AN OPERAND: the operand vocabulary is closed at eight (`rosters.yaml: requires_operands`) and none of them names a subformation, so no person-side formation can bind it. The verb is reached by a hand-built act, which is what the menu (`harness/play_surface.py`) builds; `Fixtures withheld_verbs` keeps `opening_set` from forming it for anybody."
+    writes:      ["Record.subject_matter"]
+    writes_note: "ED-IN-0304: `loop/effects_army.py::_eff_assign_troops` MOVES trained troops of one cohort into a named subformation, or back out when the count is negative (`armyrecord.assign`/`release`); no trooper is created or lost by it."
+    emits:       ["army.assigned"]
+    emits_on_refusal: ["assign_troops.refused"]
+    grade:       "assumption"
+    grade_note:  "ED-IN-0304 (Jordan, 2026-10-28): the army record is ruled; the verb, its magnitudes and its refusals are phase 2's. No ARCHITECTURE_V2.md cell."
+    refusal_note: "FLAT. Refusal conditions: the subject is no army, or the actor does not hold it (the cell); the payload names a subformation the army lacks, or moves more troops than the cohort has trained and unassigned (or, released, than the subformation holds) (the effect's decline, `modules/mass_battle/armyrecord.py`'s ValueError)."
+    source:      "ED-IN-0304 (`registers/editorial_ledger_in.jsonl`), phase 2; `modules/mass_battle/armyrecord.py`, `modules/mass_battle/troop_types/recruitment.py`"
+  - verb:        "order_unit"
+    stratum:     "uncontested_material"
+    eligibility: ["own"]
+    beneficiary: "none"
+    beneficiary_note: "an army is a record the actor holds, and no carrier the Candidate holds benefits from a muster roll."
+    requires:    "the subject is an army record, and the actor holds it -- the commander's standing"
+    requires_typed:
+      all:
+        - form:      existence
+          of:        subject
+          kind:      army
+        - form:      relation
+          of:        subject
+          relation:  held_by
+    requires_typed_note: "ED-IN-0304 phase 2: `build`'s cell for `build`'s reasons, with `kind: army` for `kind: works` -- the subject is an army record (`rosters.yaml: record_kinds`), and the actor holds it (the maker's standing: the commander is whoever minted it, or was `give`n it). WHAT THE COMMAND SAYS (the cohort, the troop type, the count, a subformation's name and tactics) IS THE ACT'S PAYLOAD, NOT AN OPERAND: the operand vocabulary is closed at eight (`rosters.yaml: requires_operands`) and none of them names a subformation, so no person-side formation can bind it. The verb is reached by a hand-built act, which is what the menu (`harness/play_surface.py`) builds; `Fixtures withheld_verbs` keeps `opening_set` from forming it for anybody."
+    writes:      ["Record.subject_matter"]
+    writes_note: "ED-IN-0304: `loop/effects_army.py::_eff_order_unit` SETS a subformation's role, stance, target and fall-back point (`armyrecord.order`), or the army's strategy (`armyrecord.set_strategy`); a field the payload leaves out is unchanged."
+    emits:       ["army.ordered"]
+    emits_on_refusal: ["order_unit.refused"]
+    grade:       "assumption"
+    grade_note:  "ED-IN-0304 (Jordan, 2026-10-28): the army record is ruled; the verb, its magnitudes and its refusals are phase 2's. No ARCHITECTURE_V2.md cell."
+    refusal_note: "FLAT. Refusal conditions: the subject is no army, or the actor does not hold it (the cell); the payload names a subformation the army lacks, or a role, stance, targeting, fall-back point or strategy outside its roster (the effect's decline, `modules/mass_battle/armyrecord.py`'s ValueError)."
+    source:      "ED-IN-0304 (`registers/editorial_ledger_in.jsonl`), phase 2; `modules/mass_battle/armyrecord.py`, `modules/mass_battle/troop_types/recruitment.py`"
   - verb:        "transfer"
     stratum:     "uncontested_material"
     eligibility: ["remit:issue", "own", "hold:<store>"]

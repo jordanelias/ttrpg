@@ -60,6 +60,7 @@ no package, no `__init__.py` barrel:
   * `effects_information.py` -- records, propositions, matters: create_record, issue, open_case,
                                  determine, petition, survey, give, destroy_record, utter, commit.
   * `effects_combat.py`      -- casualties and morale: fight (renamed from "kill / wound"), march.
+  * `effects_army.py`        -- a faction's army record: recruit, form_unit, assign_troops, order_unit (ED-IN-0304).
 
 ⚠ THIS FILE IS THE REASONED EXCEPTION TO `queries/__init__.py`'s "THIS FILE IMPORTS NONE OF ITS
 SUBMODULES" CONVENTION, NOT A SILENT COPY OF A PATTERN THAT DOES NOT FIT HERE. `queries/`'s reason
@@ -92,6 +93,7 @@ from . import effects_migration
 from . import effects_founding
 from . import effects_information
 from . import effects_combat
+from . import effects_army
 
 # Re-exported because reached BY IDENTITY, off THIS module's own dotted path, from outside this
 # file (see the docstring above for the call sites) -- not a re-implementation: each name below

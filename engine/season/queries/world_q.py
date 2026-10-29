@@ -1067,8 +1067,10 @@ FORTIFICATION = "settlements.fortification"
 #: (`seam/wrappers/mass_battle.py::resolve`, which reads the role from here), not a wrapper in this file;
 #: it is declared here so the one host need the driver checks stays one tuple.
 PROVISION = "settlements.provision"
+#: ED-IN-0304 phase 2: the army record's command entry, called by the four army verbs (`loop/effects_army.py`).
+ARMY = "mass_battle.army"
 QUERY_ENTRIES = ((LARDER_DRAW, "query"), (DRAWN_UNDER, "query"), (HOUSING, "query"),
-                 (FABRIC, "query"), (FORTIFICATION, "query"), (PROVISION, "query"))
+                 (FABRIC, "query"), (FORTIFICATION, "query"), (PROVISION, "query"), (ARMY, "query"))
 
 
 def _entry(role: str):
@@ -1793,6 +1795,32 @@ def fort_input(w: World, rung_id: str) -> FortInput:
     here = _subtree(w, rung_id)
     conditions = tuple(s.condition for s in w.sites.values() if s.kind == "garrison" and s.rung in here)
     return FortInput(conditions, w.fixtures.get("condition_scale") if conditions else None)
+
+
+def training_sites(w: World, person_id: str, kinds) -> dict:
+    """ED-IN-0304 phase 2. `{site kind: the best Site condition}` for each of `kinds` the person's residence
+    has a Site of, anywhere in its subtree -- what `troop_types/recruitment.py::recruit_limit` reads as the
+    training infrastructure of the place a cohort is raised from. A person with no `reside` edge, or a residence
+    with no Site of a kind, contributes none for it (the limit reads an absent kind as 0)."""
+    TRACE.query("training_sites", "resolver")
+    home = residence_of(w).get(person_id)
+    if home is None:
+        return {}
+    here = _subtree(w, home)
+    out: dict = {}
+    for s in w.sites.values():
+        if s.kind in kinds and s.rung in here:
+            out[s.kind] = max(out.get(s.kind, 0), s.condition)
+    return out
+
+
+def army_of(w: World, faction: str) -> Optional[str]:
+    """ED-IN-0304 phase 2. The id of the `army` Record whose `subject_matter` names `faction`, or `None`; the
+    lowest id when several do (a second is refused at its mint, `_eff_create_record`)."""
+    TRACE.query("army_of", "resolver")
+    ids = sorted(r.id for r in w.records.values()
+                 if r.kind == "army" and isinstance(r.subject_matter, dict) and r.subject_matter.get("faction") == faction)
+    return ids[0] if ids else None
 
 
 def enclosing_territory(w: World, rung_id: Optional[str]) -> Optional[str]:

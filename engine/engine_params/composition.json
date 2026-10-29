@@ -17,6 +17,13 @@
       "verb": null,
       "needed_by": "engine/season/seam/wrappers/fieldwork.py \u2014 the host adapter `@provider(\"inquiry\", \"fieldwork\")` (v9 FI-02 + FI-03, `SM-3`, `ED-FI-0002`) builds the typed input record (`fieldwork_input`) and calls this entry through `manifest.MODULE_ENTRIES`, holding its return to `queries/inputs.py::Findings`. Its caller is `engine/season/seam/contest.py::find_trail`, called from `loop/resolve.py`'s per-act bookkeeping for every Event an act produced, and dispatched by the Event's KIND through the `inquiry` role, so `entry: step_call` (a loop step calls it), not `verb_call`: no verb's adapter calls it, and binding it to one inquiry verb would make that verb call two module entries (its roll and this), against the registrar's one-module-per-verb reading (`SM-5`). The row `finding.made` (`engine/season/rosters.yaml` `inquiry_modules`) names it in `module_entry:`, and `manifest/registry.py::check_inquiry_modules` refuses at driver construction a row whose `module_entry:` no composition row declares, or one that disagrees with it."
     },
+    "mass_battle.army": {
+      "target": "modules.mass_battle.armyrecord:apply",
+      "kind": "callable",
+      "entry": "query",
+      "verb": null,
+      "needed_by": "engine/season/loop/effects_army.py \u2014 the four army verbs (`recruit`, `form_unit`, `assign_troops`, `order_unit`, ED-IN-0304 phase 2) each build the typed input record (`ArmyCommand`, `queries/inputs.py`: the army Record's `subject_matter`, the command and its operands, plus for `recruit` the cohort's weight and training Sites) and call this entry by role string through `engine.substrate.composition.require`, writing the returned `subject_matter` back to the Record. Declared in `world_q.QUERY_ENTRIES` and held by `manifest/registrar.py::require_entries`, as `settlements.larder_draw` is."
+    },
     "mass_battle.resolve_field": {
       "target": "modules.mass_battle.massbattle:resolve_field",
       "kind": "callable",

@@ -421,6 +421,19 @@ class FortInput:
     scale: Optional[int]
 
 
+@dataclass(frozen=True)
+class ArmyCommand:
+    """What `mass_battle.army` (`modules/mass_battle/armyrecord.py::apply`) reads (ED-IN-0304 phase 2). Built by
+    `loop/effects_army.py`, one per army verb:
+      * `record` -- the army Record's `subject_matter` (`armyrecord.KEYS`), as the world holds it;
+      * `op`     -- `armyrecord.OPS`: recruit, form, assign or order;
+      * `args`   -- the command's operands from the act's payload, plus for `recruit` the world's facts it needs
+                    (`weight`, `sites`, `full`). The entry returns the new `subject_matter` dict."""
+    record: dict
+    op: str
+    args: dict
+
+
 # v9 IN-52: the `settlements.provision` query's records -- the levy-to-field feed. Built per side by
 # `seam/wrappers/mass_battle.py::provision_input`, read by `modules/settlements/provision.py`; the field
 # adapter hands `troops` to the mass-battle entry and `_eff_march` debits `consumed` from the treasury.

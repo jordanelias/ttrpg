@@ -22,9 +22,12 @@ from ..data.rosters import COVER_KEY, COVER_KIND, RECORD_CONTENT, RECORD_KIND_KE
 from ..data.verbs import VERB_TABLE, WARRANT_SOURCED
 from ..queries import faction_q
 from ..queries.person_q import ABOUT_KEYS, argued_pursuits, consequence_pursuits
+from engine.substrate import composition
+
+from ..queries.inputs import ArmyCommand
 from ..queries.world_q import (
-    BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_PETITION, docketed, docketed_under,
-    faction_holding, faction_of, hold_force, issuing_seat, place_of, restrained,
+    ARMY, BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_PETITION, docketed, docketed_under,
+    army_of, faction_holding, faction_of, hold_force, issuing_seat, place_of, restrained,
     slot_for, works_for, works_target,
 )
 from ..state.carriers import Proposition, Record, Tenure
@@ -87,7 +90,24 @@ def _eff_create_record(w: "World", a: "Act", res: "Resolution | None" = None) ->
     plan, at = works_target(kind, d.get("subject_matter"))      # (None, None) for any other kind
     if works_for(w, at, plan):
         return NO_CHANGE
+    if kind == "army" and not _army_mintable(w, d.get("subject_matter")):
+        return NO_CHANGE
     return _mint_document(w, a, kind, d.get("subject_matter"), d.get("rung") or a.actor)
+
+
+def _army_mintable(w: "World", content) -> bool:
+    """ED-IN-0304 phase 2. An `army` Record is minted whole and well formed (`mass_battle.army`'s `validate`), for a
+    faction Proposition the world holds, and ONE PER FACTION (`world_q.army_of`): a second would leave two records
+    claiming to be one faction's army, with no rule for which the battle reads."""
+    if not isinstance(content, dict) or content.get("faction") not in w.propositions:
+        return False
+    if army_of(w, content["faction"]) is not None:
+        return False
+    try:
+        composition.require(ARMY)(ArmyCommand(content, "validate", {}))
+    except (ValueError, KeyError, TypeError):
+        return False
+    return True
 
 
 def _content_of(a: "Act", kind: str) -> Optional[dict]:
