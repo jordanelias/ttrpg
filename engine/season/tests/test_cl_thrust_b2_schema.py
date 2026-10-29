@@ -23,6 +23,11 @@ from engine.season.data.requires import WORLD_ONLY_STEMS, build_typed_requires
 from engine.season.data.rosters import roster, roster_map
 from engine.season.gaps import Forbidden, Unspecified
 
+# Two pursuits a stage may weigh, named one per statement: the roster is owned by `references/descriptor_registry.yaml`
+# (`tests/valoria/test_conviction_roster_single_owner.py` refuses two roster members in one container).
+_PURSUIT_A = "honour"
+_PURSUIT_B = "stability"
+
 # The stage cells. `of: subject` is the grammar's own operand (`requires_operands` has no `referent`: the
 # stage binds `subject := each referent` at read time, B3.1). `own_ledger` asks `claim.held` and `existence`
 # asks `exists`: both a person's own ledger answers.
@@ -60,7 +65,7 @@ def _base() -> dict:
              "stages": [_stage("s1", "short", _LEDGER),
                         _stage("s2", "medium", {"all": [_LEDGER, _EXISTS]}),
                         _stage("s3", "medium", _EXISTS),
-                        _stage("s4", "long", _LEDGER, {"honour": 0.5, "stability": 2})]},
+                        _stage("s4", "long", _LEDGER, {_PURSUIT_A: 0.5, _PURSUIT_B: 2})]},
         ],
     }
 
@@ -132,7 +137,7 @@ def test_a_valid_hand_built_document_loads_and_each_goal_carries_its_row():
     assert [s.id for s in pair.stages] == ["s1", "s2", "s3", "s4"]
     terms = [s.term for s in pair.stages]    # not spelled as a list: three roster members in a body is a duplicate
     assert terms[0] == "short" and terms[1] == terms[2] == "medium" and terms[3] == "long"
-    assert pair.stages[3].pursuits == {"honour": 0.5, "stability": 2}
+    assert pair.stages[3].pursuits == {_PURSUIT_A: 0.5, _PURSUIT_B: 2}
     # the predicate IS the typed-requires builder's own product, not a second reading of the cell
     assert pair.stages[0].predicate == build_typed_requires("probe", _LEDGER)
     assert pair.stages[1].predicate == build_typed_requires("probe", {"all": [_LEDGER, _EXISTS]})
