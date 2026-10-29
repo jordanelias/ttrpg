@@ -36,6 +36,7 @@ from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..loop.predicates import in_holdings, office_described_by
 from ..queries import world_q
 from ..harness import probes as P
+from ..harness import register as REG
 from ..state.attribution import anchor_of
 from ..decision import budget as _budget
 from ..decision import operands_for, person_side_eligible
@@ -627,11 +628,12 @@ def test_lb3a_two_eaters_cannot_spend_the_same_unit():
 def _starving_world(body_step=10):
     """`tiny_world` with every larder bare and no site to produce one — the empty-root arm.
 
-    ⚠ `body_step` IS SET EXPLICITLY AND THE SHIPPED DEFAULT IS `0`. `H-125` parks the magnitude at
-    the control arm because all 86 buildable corpus worlds hold zero stores, so any nonzero
-    default starves 258 people in worlds that model a scene rather than an economy. The MECHANISM
-    is exercised here at a live arm — which is what keeps it a built behaviour rather than a
-    branch nothing reaches (§0.2) — and `test_lb3b_the_zero_arm_...` pins the shipped one.
+    ⚠ `body_step` IS SET EXPLICITLY. v10 REM-52: THE SHIPPED DEFAULT IS NOW `10`, `H-125`'s live arm
+    (it was `0`, parked because all 86 buildable corpus worlds hold zero stores, so any nonzero
+    default starves 258 people in worlds that model a scene rather than an economy; the corpus has
+    no eater since `24f`, H-171). The MECHANISM is exercised here at a live arm — which is what keeps
+    it a built behaviour rather than a branch nothing reaches (§0.2) — and
+    `test_lb3b_the_zero_arm_...` sweeps the control back in.
     ⚠ ON `_cohort_tiny_world` SINCE `24f`: only a cohort eats, so only a cohort can starve."""
     w = _cohort_tiny_world()
     for rid in ("R", "D", "S", "Hh"):
@@ -716,9 +718,16 @@ def test_lb3b_the_zero_arm_is_the_pre_item_tree_exactly():
     A sweep arm that merely varies the magnitude cannot flip a verdict. This one can — it removes
     the cause rather than adjusting the result, which is the arm `harness/populated.py`'s own
     `creed_sweep` docstring calls the point of a control."""
-    w = _starving_world(body_step=0)          # the SHIPPED arm, set explicitly
-    assert P.DEFAULT_FIXTURES.get("body_step") == 0, (
-        "the shipped `body_step` is no longer the control arm; `H-125` and this test disagree")
+    w = _starving_world(body_step=0)          # the CONTROL arm, swept in explicitly (it was the shipped arm)
+    # v10 REM-52: THE SHIPPED `body_step` IS `H-125`'s LIVE ARM, no longer the control. The original
+    # assertion here (`P.DEFAULT_FIXTURES.get("body_step") == 0`) proxied for "the zero arm swept in below
+    # is the arm the sweep calls the control"; asserted directly now: the sweep row's first point is 0,
+    # the world below holds exactly that, and the shipped default is a different, positive arm.
+    h125_sweep = next(r for r in REG.load()["rows"] if r["id"] == "H-125")["sweep"]
+    assert h125_sweep[0] == 0 and w.fixtures.get("body_step") == h125_sweep[0], (
+        "the control arm swept in is not `H-125`'s first sweep point")
+    assert P.DEFAULT_FIXTURES.get("body_step") in h125_sweep and P.DEFAULT_FIXTURES.get("body_step") > 0, (
+        "the shipped `body_step` is the control again, or off the sweep; `H-125` and this test disagree")
     before = {pid: p.body for pid, p in w.persons.items()}
 
     d = SeasonDriver(w)
@@ -2781,10 +2790,18 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # dwellings' wear claims), `condition.worn` 322 / 111, `finding.made` 35 / 34, `migrate.refused` 58 / 62,
     # `record.created` 55 / 54, `residence.changed` 1 / 0, `transfer.refused` 34 / 33 (`finding.none` no longer differs).
     # THE PROPERTY, a dwelling question never answered first, is asserted above and holds.
+    # ⚠⚠ v10 REM-52 (B10-05): (577, 577) -> (576, 576), A RE-RECORD WITH THE UNIT THAT MOVED IT: `body_step` ships at `10`,
+    # so the first MATTER draw falls each short cohort's body and the realm's act mix moved (`aperture 1 0`: 577 -> 576
+    # acts). MEASURED, seed 0, one season, the REM-2C tree (`a397fa16`, a detached worktree) as control, the same script
+    # on both: the control reads (577, 577); here (576, 576), the arms still parting at act 370 at the SAME `migrate` (the
+    # stripped arm's `p_npc_002` to `terr_T13`; the kept arm's next act `p_npc_033`'s to `b_s_001_court`). The kinds that
+    # differ between the arms are the REM-2C set exactly, with the same counts but `claim.deposited` (5365 / 5272 here, 5294
+    # / 5201 there: both arms +71). THE PROPERTY, a dwelling question never answered first, is asserted above and holds,
+    # and so does the direct parting assertion below.
     assert heads[False] and heads[True], "the spy saw no delivery; the zero below would be unobserved"
     assert not [q.id for q in heads[False] if {q.about, *q.referents} & set(dw)], (
         "a dwelling question was answered first: IN-57's tier 4 no longer sorts it last")
-    assert (out["acts"], cout["acts"]) == (577, 577), (
+    assert (out["acts"], cout["acts"]) == (576, 576), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")

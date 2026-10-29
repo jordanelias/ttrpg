@@ -8,8 +8,11 @@ MW-5's claim, r2's words: *"every declared body band is occupied for at least on
 death -- and *"IT GOES RED AT THE `declared` ARM AND AT `doubled`, AND THAT IS THE POINT ... Control:
 the `halved` arm, where it goes green. The row exists so the arm is chosen by arithmetic rather than by
 preference."* So it is a test OVER THE ARMS, and both outcomes are asserted, each observed:
-  * the arms are `H-125`'s own `sweep:` row, read off the register (the shipped `body_step` is the
-    control, `0`, under which no body moves and nobody dies, so MW-5 is vacuous there and is not run);
+  * the arms are `H-125`'s own `sweep:` row, read off the register (the sweep's first point is the
+    control, `0`, under which no body moves and nobody dies, so MW-5 is vacuous there and is not run;
+    v10 REM-52: the SHIPPED `body_step` is now a live arm, `10`, so the control is read off the sweep
+    and not off `DEFAULT_FIXTURES`, which had made `[0, 67]` the live arms at the shipped 10 and arm 0
+    fail "did not die");
   * a BAND is a value of `decision/budget.py::body_band_penalty` -- the one reader of
     `band_floors["body"]` a person's budget pays -- `0` at full operations, `+1` per floor fallen below;
   * the world: one cohort (only a cohort eats, `24f`) housed in a settlement with no stores and no
@@ -48,7 +51,7 @@ TOWN, COHORT = "set_famine", "p_famine_folk"
 # [JUSTIFIED: a test-fixture size, not a game value -- the smallest weight that is a cohort (S9: weight > 1)]
 WEIGHT = 2
 H125 = next(r for r in REG.load()["rows"] if r["id"] == "H-125")
-CONTROL_ARM = DEFAULT_FIXTURES.get("body_step")
+CONTROL_ARM = H125["sweep"][0]
 LIVE_ARMS = [arm for arm in H125["sweep"] if arm != CONTROL_ARM]
 
 
@@ -110,6 +113,17 @@ def test_every_body_band_is_occupied_before_death(arm):
         # Only that SOME band is stepped over -- which one is not implied by the arithmetic (B-K
         # close, COR 7: `max(occupied) < bands - 1` over-asserted it was the bottom one).
         assert occupied != set(range(bands)), (arm, seen)
+
+
+def test_the_control_arm_is_zero_and_the_shipped_body_step_is_one_of_the_live_arms():
+    """v10 REM-52: the control is the sweep's first point (`0`, no body moves), and the arm the game SHIPS
+    (`DEFAULT_FIXTURES`, `10`) is a live arm that the parametrization above runs MW-5 at -- not a value
+    nobody exercised. A cohort at the control arm never dies in the window, which is why arm 0 is not run."""
+    assert CONTROL_ARM == 0, (CONTROL_ARM, H125["sweep"])
+    shipped = DEFAULT_FIXTURES.get("body_step")
+    assert shipped in LIVE_ARMS, (shipped, LIVE_ARMS)
+    seen, died = _bands_until_death(_famine(CONTROL_ARM), limit=6)
+    assert not died and set(seen) == {0}, ("the control arm moved a body", seen)
 
 
 def test_mw5_both_outcomes_are_reached_by_the_shipped_sweep():

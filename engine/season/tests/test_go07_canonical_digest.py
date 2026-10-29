@@ -379,19 +379,35 @@ def _counts(w) -> dict:
 #: one-season hash alone: `test_season_weather.py`'s `BASE_HASHES` note). Was, for seeds 0 / 1 / 2: `old`
 #: 956afe6b... / 508ac507... / 7d9c2981..., `new` 26bcb37d... / 3b43b9fc... / b3e6f82c..., `acts` 524 / 577 / 595,
 #: `log` 6267 / 8493 / 7707.
+#: RE-RECORDED AGAIN at v10 REM-52 (B10-05), A GAME MOVE DECLARED, NO DIGEST MOVE: `body_step` ships at `10`, `H-125`'s
+#: live arm (it was the control `0`), so the first MATTER draw of the realm, which finds every larder empty, falls
+#: the body of each cohort it leaves short by `10` x its unmet units (36 / 32 / 35 of the 37 cohorts from 1000 to 940
+#: at seeds 0 / 1 / 2, 37 `body.changed` Events at seeds 0 / 1 and 38 at seed 2, where the base held 0 / 0 / 1), and
+#: the act mix of every seeded realm moves with it (the mechanism between the Events and the acts is not split here):
+#: `acts` 577 / 637 / 630 -> 576 / 637 / 629, `log` +107 / +110 / +107 Events, `aperture 1 s`: `tend` executed
+#: (attempted less refused) 1 / 0 / 1 -> 2 / 5 / 3, `utter` attempted +1 at seed 0, `challenge` -1 and `release` +1
+#: attempted at seed 1, no other verb row moves. No budget band is crossed at 940. NOBODY DIES OF IT: at
+#: `10` the lowest body is 940, and `person.died` is the same Event set before and after (1 / 0 / 2 at seeds 0 / 1 / 2,
+#: p_npc_050; none; p_npc_034 and p_npc_041, all RESOLVE-written). EVERY value below is the REM-52 tree's, read with
+#: this file's own helpers (`_old_content_hash`, `_counts`) and `populated.run`; CONTROL, run: the same script on a
+#: detached worktree at the REM-2C tree (`a397fa16`, whose game code is `07f46301`'s) reads the values this block
+#: held exactly, and so does the REM-52 tree with `body_step` swept back to `0` in `data/fixtures.py` and
+#: `written=True` left in `loop/matter.py` (a scratch worktree), so the move is `body_step`'s alone and
+#: `written=True` moves nothing at these seeds. Was, for seeds 0 / 1 / 2: `old` 7a9ba50d... / 0418dc12... /
+#: 35e6932d..., `new` 8bec380b... / 82223978... / e707d359..., `acts` 577 / 637 / 630, `log` 6377 / 9117 / 7933.
 BASE = {
-    0: {"old": "7a9ba50d8a25545fa6569845408a3e2d", "new": "8bec380bac843cc252fad37145398858", "acts": 577,
-        "census": "e82fa8e8ad43c26248da73511206fbc19ff4ad491b4efb2d365ec7b5ef728da5",
+    0: {"old": "3d139b32378d0e109ba379cd59ff18ad", "new": "5d2e5f77a8f06bd34006f7d4bc0c2649", "acts": 576,
+        "census": "07ee489097b7e2c7cb4785b5596470501a7cbdbc9f3b88710c2a630a881d132d",
         "counts": {"persons": 82, "rungs": 411, "offices": 32, "sites": 322, "records": 99,
-                   "propositions": 95, "dates": 1, "docket": 4, "tenures": 812, "log": 6377}},
-    1: {"old": "0418dc1219381dce62f3edc12f86d1a2", "new": "8222397810642658340d582b7e327726", "acts": 637,
-        "census": "431c41243b9ecd4af867e5b27eec866c89bd9748092a8a82840e0d1581dabd80",
+                   "propositions": 96, "dates": 1, "docket": 4, "tenures": 813, "log": 6484}},
+    1: {"old": "31fa260be50660a8b5d320b5cc1ab158", "new": "8a50ca82911f375a9e079841bf0804e3", "acts": 637,
+        "census": "aee2404f23e26835732c2b61fb398fa47beb7e4e33798848b41c408c2ed3d4b7",
         "counts": {"persons": 83, "rungs": 412, "offices": 32, "sites": 322, "records": 126,
-                   "propositions": 91, "dates": 0, "docket": 1, "tenures": 848, "log": 9117}},
-    2: {"old": "35e6932de504e0b00050354fe7055cc1", "new": "e707d359cc1a3e2ef6dcc58cb9ae45d0", "acts": 630,
-        "census": "c57bd34c11d62ce2b7e5a026af0944f09b26b697aae5761853565040c140a652",
+                   "propositions": 91, "dates": 0, "docket": 1, "tenures": 848, "log": 9227}},
+    2: {"old": "3f836210f6bc9fff6a165077783bb923", "new": "b8678a41d2c60af42bdb8ac7e9797164", "acts": 629,
+        "census": "e54f4221ab85d06ab4d75a784fc492076c0608d94af8a55e79d1ba69b2cbf336",
         "counts": {"persons": 81, "rungs": 410, "offices": 32, "sites": 322, "records": 114,
-                   "propositions": 97, "dates": 1, "docket": 2, "tenures": 817, "log": 7933}},
+                   "propositions": 97, "dates": 1, "docket": 2, "tenures": 817, "log": 8040}},
 }
 
 

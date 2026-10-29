@@ -1443,6 +1443,9 @@ class World:
         `hole_register.yaml` H-129 -- a fix (reading the first minted receipt in `changes[]`
         instead of `anchor_of`) would move outputs in a `body_step > 0` sweep arm and needs its
         own decision, not a side effect of this position's field deletion.
+        ⚠ THE LAST THREE SENTENCES' STATE IS SUPERSEDED AT v10 REM-52: `body_step` ships at 10 (the caller
+        is reached on a built world) and the bodies pass of `matter` reads `body.changed` with
+        `written=True`, so both halves of H-129 are fixed at their one caller each.
         Every OTHER caller of this method (the six kinds above) is unaffected: each names a kind
         with exactly one emitter, MATTER's own auto-emission block, so tier 2 still returns `subj`
         by construction for all of them. ⚠ "SIX", NOT SEVEN, AND "MATTER'S OWN" NO LONGER COVERS

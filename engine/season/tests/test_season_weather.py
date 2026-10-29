@@ -304,9 +304,20 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # in-process on this tree the column alone (`Record` held back in `occasion_only_classes`) reads 0ee23110... at one
 # season and 0553ebbb... at two, the roster release alone (`research`'s class blanked) 325edb92... and 18a38e76...,
 # so each unit moves the hash by itself.
+# RE-PINNED at v10 REM-52 (B10-05), A BEHAVIOUR MOVE DECLARED: `Fixtures body_step` ships at `10`, `H-125`'s live arm
+# (it was the control `0`), so the realm's first MATTER draw, which finds every larder empty, falls each short cohort's
+# body by `10` x its unmet units (36 of the 37 cohorts from 1000 to 940 at seed 0; `body.changed` 0 -> 37 Events), and
+# the act mix moves (`aperture 1 0`, realm: acts 577 -> 576, `tend` executed 1 -> 2, `utter` attempted 28 -> 29). The
+# build hash is equal (the build reads no `body_step`); one and two seasons move. Was 8bec380b... / 174b6547... (one,
+# two seasons). CONTROL, run: the same script (this file's `_digest` and `POP.run`, one world continued through two
+# seasons) on a detached worktree at the REM-2C tree (`a397fa16`) reads the old pair and the old `BASE_EVENTS`
+# exactly; and on the REM-52 tree with `body_step` swept back to `0` in `data/fixtures.py` (a scratch worktree,
+# `written=True` left in `loop/matter.py`) it reads the old pair too, while `body_step = 10` alone (`written` left
+# as it was) reads the new one-season values at seeds 0 / 1 / 2, so the move is `body_step`'s and `written=True`
+# (H-129's `body.changed` read) moves nothing here.
 BASE_HASHES = {0: "9ff5390939742b7bbb3af0fa2551e958",
-               1: "8bec380bac843cc252fad37145398858",
-               2: "174b6547b436b1de1244ca59e62c1e17"}
+               1: "5d2e5f77a8f06bd34006f7d4bc0c2649",
+               2: "05352e22d8e881b37a94dd056a6ef725"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -356,8 +367,10 @@ BASE_HASHES = {0: "9ff5390939742b7bbb3af0fa2551e958",
 # RE-RECORDED at v10 REM-25 with `BASE_HASHES` (6396 -> 6348, 21342 -> 22009).
 # RE-RECORDED at v10 CP-T05-04 with `BASE_HASHES` (6348 -> 6267, 22009 -> 20840).
 # RE-RECORDED at v10 REM-2C with `BASE_HASHES` (6267 -> 6377, 20840 -> 20479).
-BASE_EVENTS = {1: (6377, "81eb354d6a1ca069e494c3573cad88fa6e9af23eb5d020270ecd4e8f413371cd"),
-               2: (20479, "6a90bad25facd2799ceca5bcc37a686f6fbf2e04a33ae371c2419f12bf95fcec")}
+# RE-RECORDED at v10 REM-52 with `BASE_HASHES` (6377 -> 6484, 20479 -> 20701: the 37 `body.changed` Events of the first
+# draw and what the hungry cohorts' bodies move after them; `body_step` swept back to `0` reads the old pair).
+BASE_EVENTS = {1: (6484, "3c04404a8aee2e0f9e53efae512bb31bf989f4e9df8cd1bb3296c66d81ad906f"),
+               2: (20701, "cab315fea95dd55cebc013d5dc10183fefdc18a38f27243a66b2cfe8e8e0096f")}
 
 
 def _digest(w) -> tuple:
@@ -465,7 +478,9 @@ def test_the_give_withheld_arm_reproduces_the_one_season_pin():
 #: `Proposition`, `open_case` declares `Person`, and the docket question).
 #: RE-RECORDED at v10 REM-2C with `BASE_HASHES`: 6272 / 70a5221e... -> 6382 / adb6a991... (`research` declares `Record`
 #: and `Record` leaves `occasion_only_classes`; the CP-T05-04 tree `ea6f1dba` reads the old value exactly).
-THREAD_READ_WITHHELD_EVENTS_1 = (6382, "adb6a9916677c8612db41514ccecfb210581622071d49184fbf3e52b8ce01e77")
+#: RE-RECORDED at v10 REM-52 with `BASE_HASHES`: 6382 / adb6a991... -> 6489 / 177721d7... (`body_step` ships at `10`; the
+#: REM-2C tree `a397fa16` reads the old value exactly, and so does this tree with `body_step` swept back to `0`).
+THREAD_READ_WITHHELD_EVENTS_1 = (6489, "177721d7cf8bcebbe58a26ef8a73d9e353d34f039dfd438be2c123fe0e4c7404")
 
 
 def test_the_thread_read_withheld_arm_is_pinned_and_differs_from_the_shipped_season():

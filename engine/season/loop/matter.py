@@ -610,7 +610,10 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
         if person is None:
             continue
         was = person.body
-        prior_b = w.last_emission_of("body.changed", pid)
+        # `written=True` (H-129, REM-52): the anchor read chains a combat-caused write on the wrong
+        # person -- the fold's `body.changed` anchors on the combatant, not on `pid`. The Event that
+        # WROTE `pid`'s body is the one to chain to, as `_die`'s and `travel.ended`'s reads are.
+        prior_b = w.last_emission_of("body.changed", pid, written=True)
         _m = len(w._emitted_by_write)
         w.write("body", token,
                 lambda person=person, after=fall.body_after: setattr(person, "body", after),

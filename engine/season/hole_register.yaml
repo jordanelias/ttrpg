@@ -914,7 +914,7 @@ rows:
     kind:      "NUMBER"
     owner:     "the subsistence pass (item 3b / `04 §A.3.3`)"
     grade:     "assumption"
-    default:   "0 -- THE CONTROL ARM, SHIPPED. Not a claim that a body should not fall; a refusal to pick the number against a corpus that cannot answer for it. See `site:`"
+    default:   "10 -- H-125's REGISTERED LIVE ARM, SHIPPED SINCE REM-52 (v10, B10-05) as a delegated pick (M6 taken (a)), [ASSUMPTION; medium; Jordan to correct; revert: 0]. Not a claim that 10 is the magnitude: CR-22 (B10-18) re-derives it by this row's own test, IS STARVATION A SEASON OR A CAMPAIGN. 0 is THE CONTROL ARM (the pre-3b tree exactly), kept as the first point of `sweep:`; it was the shipped value until REM-52, parked against a corpus that cannot answer for the number (see `cite:`)"
     site:      "Fixtures body_step, read by `queries/world_q.py::subsist_input` into `SubsistInput.body_step`; the loss is `modules/settlements/subsist.py`'s; MATTER writes `Person.body` through the gate, then `_crossings` reads `band_floors[\"body\"]` for the band edges and a body at 0 routes to `World.remove_person`, the same cascade `kill / wound` runs"
     sweep:     [0, 10, 67]
     unblocks:  "`ARCH F.20` -- *the world only decays, nothing is ever founded or built* -- at PERSON scale: with no body writer, an unfed person was indistinguishable from a fed one forever"

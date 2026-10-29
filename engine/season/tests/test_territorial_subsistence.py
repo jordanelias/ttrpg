@@ -23,7 +23,9 @@ THE FALSIFIERS, each with the failure it would show:
     `npcs.yaml`'s schema, an empty file. The ceiling is shown to READ the dwellings, not a copy;
   * `_part2`'s own falsifier, on the BUILT realm and not a probe crowd: under a non-zero `body_step`,
     an office-holder under a settlement in dearth keeps his body, and that settlement's cohort, in
-    the same dearth, draws and its body falls. CONTROL: the shipped `body_step` moves no body;
+    the same dearth, draws and its body falls. CONTROL: `body_step` swept to its control arm `0` moves
+    no body (v10 REM-52: the SHIPPED `body_step` is now the live arm `10`, so that control is swept
+    in-process and the shipped arm has its own falsifier, `test_rem52_...`);
   * THE REBUILT DRAIN GUARD (`test_w8`'s, retired 2026-09-18 with a pointer to rebuild it *"on the
     TERRITORIAL quantity"*): on the built realm, at least one cohort draws real stock, the record
     MATTER used names no individual, and the realm's matter is conserved across the draw exactly.
@@ -63,10 +65,16 @@ from ..state.ids import ROOT
 WEIGHTS = P.DEFAULT_FIXTURES.get("subsistence_weight")
 # v9 SE-01 (`24g`): THE LIVE ARMS ARE READ OFF `H-125`'s OWN `sweep:` ROW, NOT COPIED. The register is
 # where the sweep is declared and `harness/register.py` is its one reader, so a re-swept row moves
-# these tests with it. The shipped default is the CONTROL arm (`0`); every OTHER arm is a live arm,
+# these tests with it. The CONTROL arm (`0`) is the sweep's first point; every OTHER arm is a live arm,
 # and the falsifier below runs at each of them -- never a new magnitude.
+# v10 REM-52 (B10-05): THE SHIPPED DEFAULT IS NO LONGER THE CONTROL. It was (`CONTROL_ARM` read it off
+# `DEFAULT_FIXTURES`, so the control and the live arms were derived from the shipped value); `body_step`
+# now ships at `10`, a live arm, so the control is read off the sweep's own first point, `LIVE_ARMS` is
+# the sweep less that point (so 10 and 67, where it was 10 and 67 with the shipped 0 left out), and
+# `SHIPPED_ARM` is the default itself -- the arm the realm now runs at.
 H125 = next(r for r in REG.load()["rows"] if r["id"] == "H-125")
-CONTROL_ARM = P.DEFAULT_FIXTURES.get("body_step")
+CONTROL_ARM = H125["sweep"][0]
+SHIPPED_ARM = P.DEFAULT_FIXTURES.get("body_step")
 LIVE_ARMS = [arm for arm in H125["sweep"] if arm != CONTROL_ARM]
 
 
@@ -237,11 +245,17 @@ def _holder_and_cohort_pairs(w) -> list:
 
 
 def test_se01_the_sweep_has_a_control_and_at_least_one_live_arm():
-    """THE PARAMETRIZATION BELOW CANNOT BE VACUOUS: `H-125` declares a control (the shipped default,
-    `0`) and at least one live arm, and the shipped default IS one of the declared arms."""
-    assert CONTROL_ARM == 0, "the shipped `body_step` is no longer the control; `H-125` disagrees"
-    assert CONTROL_ARM in H125["sweep"], f"the shipped arm is not on `H-125`'s sweep {H125['sweep']}"
+    """THE PARAMETRIZATION BELOW CANNOT BE VACUOUS: `H-125` declares a control (the sweep's first point,
+    `0`) and at least one live arm, and the shipped default IS one of the declared arms. v10 REM-52: the
+    shipped default is a LIVE arm (`10`), no longer the control -- asserted as the property (it is a
+    positive member of the sweep, so the realm ships with hunger on), not as an equality to a number."""
+    assert CONTROL_ARM == 0, "the sweep's first point is no longer the control `0`; `H-125` disagrees"
+    assert CONTROL_ARM in H125["sweep"], f"the control arm is not on `H-125`'s sweep {H125['sweep']}"
     assert LIVE_ARMS and all(isinstance(a, int) and a > 0 for a in LIVE_ARMS), LIVE_ARMS
+    assert SHIPPED_ARM in H125["sweep"], f"the shipped arm is not on `H-125`'s sweep {H125['sweep']}"
+    assert SHIPPED_ARM in LIVE_ARMS, (
+        f"the shipped `body_step` {SHIPPED_ARM} is the control: hunger is off in the shipped realm "
+        "(REM-52 ships H-125's live arm; revert 0 is the delegated pick's own)")
 
 
 @pytest.mark.parametrize("arm", LIVE_ARMS)
@@ -287,11 +301,14 @@ def test_24f_falsifier_in_dearth_the_office_holder_keeps_his_body_and_the_cohort
     assert all(w.persons[pid].body == before[pid] for pid in w.persons if pid not in _cohorts(w))
 
 
-def test_24f_control_at_the_shipped_body_step_no_body_moves_in_the_same_dearth():
-    """THE PAIRED CONTROL: the same realm, the same first draw, the shipped `body_step` (`H-125`'s
-    control arm). The cohorts are short and no body moves, so the fall above is `body_step`'s."""
+def test_24f_control_at_the_control_body_step_no_body_moves_in_the_same_dearth():
+    """THE PAIRED CONTROL: the same realm, the same first draw, `body_step` swept to `H-125`'s control
+    arm. The cohorts are short and no body moves, so the fall above is `body_step`'s. v10 REM-52: the
+    control is swept IN-PROCESS (it was the shipped default, read as it stood; the shipped arm is now
+    `10`, and its own reading is `test_rem52_...` below); every assertion is the control's, unchanged."""
     w = POP.build_realm(0)
-    assert w.fixtures.get("body_step") == 0, "the shipped arm moved; `H-125` and this test disagree"
+    w.fixtures = w.fixtures.sweep("body_step", CONTROL_ARM)
+    assert w.fixtures.get("body_step") == 0, "the control arm moved; `H-125` and this test disagree"
     before = {pid: p.body for pid, p in w.persons.items()}
     evs = _matter(w)
     assert set(w._subsistence_shortfall) == set(_cohorts(w)), "the dearth is not the same dearth"
@@ -302,6 +319,61 @@ def test_24f_control_at_the_shipped_body_step_no_body_moves_in_the_same_dearth()
     crossed = [e for e in w.log if e.kind == "condition.band_crossed"
                and anchor_of(w, e) in w.persons]
     assert not crossed, f"the control arm published {len(crossed)} body crossing(s)"
+
+
+def test_rem52_the_shipped_arm_falls_every_short_cohort_by_step_times_its_shortfall_in_season_zero():
+    """v10 REM-52 (B10-05), THE SHIPPED ARM'S OWN FALSIFIER (H-125's live arm shipped as the default).
+    The realm as `build_realm` returns it, NO sweep, one season through `populated.run` (the real
+    driver; MATTER runs FIRST in a season, `SeasonDriver.season`, and its first draw finds every larder
+    empty): every cohort the barrier recorded short stands at exactly `scale - step * (its shortfall in
+    units)` at the season's end, or, where a `tend` restored it afterwards (`body.tended`, the one path
+    that RAISES a body), at `scale` with that Event naming it.
+    READ AT REM-52, seed 0: the lowest cohort body is 940 = 1000 - 10 * 6 (a weight-2 cohort, 3 units an
+    eater, short by its whole want), 36 of the 37 cohorts at 940 and one at 1000 (tended).
+    MUTATION, run at REM-52 on a scratch copy: `loop/matter.py`'s body write landing on a COPY of the
+    person (`person = copy.copy(w.persons.get(pid))`) leaves every body at 1000 and this test reds -- the
+    read/write asymmetry `CLAUDE.md` §0.1 pt 1 names, observed from the reader's side.
+    CONTROL, below: the same realm with `body_step` swept back to the control arm moves no body, so
+    the fall is the shipped arm's."""
+    w = POP.build_realm(0)
+    assert w.fixtures.get("body_step") == SHIPPED_ARM and SHIPPED_ARM in LIVE_ARMS, (
+        "this test reads the SHIPPED default, unswept")
+    scale = w.fixtures.get("condition_scale")
+    cohorts = _cohorts(w)
+    assert cohorts and all(p.body == scale for p in cohorts.values()), "fixture: a cohort starts short of full"
+    POP.run(1, 0, w=w)
+    short = set(w._subsistence_shortfall) & set(cohorts)
+    assert short, "the season recorded no cohort short; the arm has nothing to fall"
+    tended = {c.subject for e in w.log if e.kind == "body.tended" for c in e.changes}
+    checked, fell = 0, 0
+    for pid in sorted(short):
+        lost = SHIPPED_ARM * sum(w._subsistence_shortfall[pid].values())
+        body = w.persons[pid].body
+        if pid in tended:
+            assert body == scale, f"{pid}: tended but at {body}, not whole"
+        else:
+            assert body == max(0, scale - lost), (
+                f"{pid}: body {body}, the shipped arm's arithmetic says {max(0, scale - lost)}")
+            fell += 1
+        checked += 1
+    assert checked == len(short) and fell >= 1, (checked, fell)
+    lowest = min(w.persons[pid].body for pid in cohorts)
+    # the home's falsifier, re-derived at the shipped step: the lowest cohort stands at scale - step * (its want)
+    assert lowest == scale - SHIPPED_ARM * max(sum(_want(cohorts[pid].weight).values()) for pid in short), (
+        f"the lowest cohort body is {lowest}")
+    assert lowest < scale
+
+
+def test_rem52_control_the_realm_at_the_control_arm_leaves_every_cohort_at_scale_after_the_season():
+    """The control of the test above: `body_step` swept to `H-125`'s control arm in-process, the same
+    season. No cohort's body moves, so the fall above is the shipped arm's and not the season's."""
+    w = POP.build_realm(0)
+    w.fixtures = w.fixtures.sweep("body_step", CONTROL_ARM)
+    scale = w.fixtures.get("condition_scale")
+    cohorts = _cohorts(w)
+    POP.run(1, 0, w=w)
+    assert w._subsistence_shortfall, "nobody was short; the control proves nothing"
+    assert cohorts and all(w.persons[pid].body == scale for pid in cohorts)
 
 
 # ======================================================================================

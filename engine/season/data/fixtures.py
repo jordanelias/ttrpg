@@ -581,23 +581,25 @@ DEFAULT_FIXTURES = Fixtures(
     # seasons · `67` crosses it in one. The three arms therefore bracket the question the number
     # actually decides — IS STARVATION A SEASON OR A CAMPAIGN — instead of bracketing a magnitude.
     # Injection site: this line, read by `loop/matter.py`'s subsistence pass.
-    # ⚠⚠ SHIPPED AT THE CONTROL ARM, AND THE MEASUREMENT THAT FORCED IT IS THE POINT. At `10`,
-    # MEASURED: **all 86 buildable corpus worlds hold ZERO stores** while 258 persons live in
-    # them, so every person in every case world starves from season 1 and 19 tests move — not
-    # because scarcity bit, but because A CASE FIXTURE MODELS A SCENE AND NOT AN ECONOMY. A famine
+    # ⚠⚠ SHIPPED AT `10` SINCE REM-52 (v10, B10-05): H-125's REGISTERED LIVE ARM, TAKEN AS A DELEGATED
+    # PICK (M6 taken (a)), `[ASSUMPTION; medium; Jordan to correct; revert: 0]`. THIS LINE DOES NOT
+    # ARGUE THE MAGNITUDE: CR-22 (B10-18) re-derives it by `H-125`'s own test above, IS STARVATION A
+    # SEASON OR A CAMPAIGN. `0` stays the CONTROL arm and the first sweep point, and it is the pre-3b
+    # tree exactly; the readers of that arm sweep this fixture back to `0` in-process
+    # (`test_lb3b_the_zero_arm_is_the_pre_item_tree_exactly`). `67` stays a swept arm only.
+    # ⚠ WHY IT WAS PARKED AT `0` UNTIL NOW, KEPT BECAUSE IT STILL BOUNDS WHAT THE LIVE ARM MEASURES.
+    # MEASURED then, at `10`: **all 86 buildable corpus worlds hold ZERO stores** while 258 persons
+    # live in them, so every person in every case world starved from season 1 and 19 tests moved —
+    # not because scarcity bit, but because A CASE FIXTURE MODELS A SCENE AND NOT AN ECONOMY. A famine
     # in a world with no larder measures the fixture's silence, not the world's scarcity, which is
-    # `CLAUDE.md` §0.1 pt 2 from the other side: the reading cannot observe the thing it names.
-    #
-    # So the MECHANISM ships and the MAGNITUDE is parked at the arm that reproduces the pre-item
-    # tree exactly. `test_lb3b_the_zero_arm_is_the_pre_item_tree_exactly` pins that, and the other
-    # `LB-3b` falsifiers set the fixture explicitly, so the behaviour is EXERCISED rather than
-    # merely present (§0.2). Choosing the number needs a world that stocks a larder — which is
-    # what makes this a design call rather than a default nobody looked at.
-    # ⚠ v9 SE-01 (`24g`): THE LIVE ARM IS BUILT AND EXERCISED, AND THIS VALUE IS STILL NOT CHOSEN.
-    # J-6 settles the SHAPE -- a fixture, the control kept for the corpus, a one-line revert -- not
-    # the number. `tests/test_territorial_subsistence.py` reads `H-125`'s `sweep:` off the register
-    # and runs every non-control arm on the built realm; flipping the live default is THIS line.
-    body_step=0,                       # `H-125`, swept 0 (control, SHIPPED) / 10 / 67
+    # `CLAUDE.md` §0.1 pt 2 from the other side: the reading cannot observe the thing it names. The
+    # corpus, the spine and `headless` hold no cohort, hence no eater (H-171); read what the live arm
+    # moves in a world that stocks a larder (the built realm), not in a case world.
+    # ⚠ v9 SE-01 (`24g`): THE LIVE ARM WAS BUILT AND EXERCISED BEFORE THE VALUE WAS CHOSEN.
+    # J-6 settles the SHAPE -- a fixture, the control kept for the corpus, a one-line revert.
+    # `tests/test_territorial_subsistence.py` reads `H-125`'s `sweep:` off the register and runs every
+    # non-control arm on the built realm.
+    body_step=10,                      # `H-125`, swept 0 (control) / 10 (SHIPPED, REM-52) / 67
     # v9 IN-34 FORCE-BODIES (#457 D2, answered [medium; Jordan to correct]: ageing and illness are in
     # scope, a HAZARD READER only, rates swept). The hazard is `world_q.body_hazard`, a Query over
     # `Person.born` (ID-13: never a stored value); MATTER's bodies pass draws against it.

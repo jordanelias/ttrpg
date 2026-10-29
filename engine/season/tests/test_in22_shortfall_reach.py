@@ -35,6 +35,7 @@ from ..data.requires import SHORTFALL_PREDICATE
 from ..data.rosters import CHANNEL_CLAIM_SOURCE
 from ..data.verbs import VERB_TABLE
 from ..decision import make_chooser
+from ..decision.budget import budget
 from ..decision.options import (containing_rung_of, exercised_seat, opening_set, operands_for,
                                 treasury_of)
 from ..harness import scarce as S
@@ -44,7 +45,7 @@ from ..queries import world_q
 from ..state.carriers import View
 from ..state.ids import H, draw_factory
 from .test_demand_delivery import _season
-from .test_territorial_subsistence import CONTROL_ARM, LIVE_ARMS
+from .test_territorial_subsistence import CONTROL_ARM, LIVE_ARMS, SHIPPED_ARM
 
 GOVERNORS = (S.REEVE, S.FAR_REEVE)
 
@@ -369,8 +370,10 @@ def test_in22_the_governors_shortfall_claim_is_refracted_by_the_gain():
 # 2026-10-12): SE-01's hunger arm on, in `scarce.governed`, where the shortfall is recorded.
 # ======================================================================================
 # `H-125`'s live arms, imported from the one derivation that reads them off the register's own
-# `sweep:` row (`test_territorial_subsistence.py`): `body_step` 0 is the control, SHIPPED; every other
-# arm is one SE-01 built and exercised.
+# `sweep:` row (`test_territorial_subsistence.py`): `body_step` 0 is the control (the sweep's first
+# point); every other arm is one SE-01 built and exercised. v10 REM-52: the SHIPPED default is the live
+# arm `SHIPPED_ARM` (10), so the control is swept in-process (`_armed(CONTROL_ARM)`), and the tests that
+# read `_one_season()` unswept read the season with hunger ON.
 
 
 def _armed(step):
@@ -385,8 +388,8 @@ def test_in22_live_arm_the_hunger_bites_and_the_claim_still_reaches_the_governor
     cohort dies in the barrier that records its shortfall, and the claim is still deposited: the
     bodies pass removes the cohort (`loop/matter.py`) BEFORE the drained larder's write carries the
     record, and the seat channel keys on `governors_of` the larder, not on the dead cohort."""
-    control = _one_season()
-    assert CONTROL_ARM == 0, "the shipped `body_step` is no longer the control; `H-125` disagrees"
+    control = _armed(CONTROL_ARM)             # v10 REM-52: swept in-process; the shipped default is a live arm
+    assert CONTROL_ARM == 0, "the sweep's first point is no longer the control; `H-125` disagrees"
     assert control.persons[S.POPULACE].body == DEFAULT_FIXTURES.get("condition_scale")
     was = control.persons[S.POPULACE].body
     checked, fell, died = 0, 0, 0
@@ -436,20 +439,65 @@ def test_in22_live_arm_the_governors_question_forms_a_transfer_from_the_claim_wi
 
 
 def test_in22_live_arm_control_the_zero_arm_is_the_unarmed_season_and_the_arm_alone_moves_bodies():
-    """THE CONTROL: `body_step` swept to its control 0 reproduces the shipped fixtures' season
-    (same content hash, no body falls), and each live arm moves the hash off it -- the arm is read,
-    not merely present. The arm's only effect on the shortfall chain is the bodies, so the claims
-    the reeve holds are identical at every arm."""
-    control = _one_season()
-    assert CONTROL_ARM == 0, "the shipped `body_step` is no longer the control; `H-125` disagrees"
-    zero = _armed(0)
-    assert zero.content_hash() == control.content_hash()
-    # The shipped default is 0, so the line above cannot fail alone; this observes MATTER's bodies
-    # pass writing nothing at the control.
+    """THE CONTROL: `body_step` swept to its control 0 writes no body (no `body.changed`, no death, the
+    cohort at full), and each live arm moves the hash off it -- the arm is read, not merely present.
+    The arm's only effect on the shortfall chain is the bodies, so the claims the reeve holds are
+    identical at every arm.
+
+    v10 REM-52: THE SHIPPED DEFAULT IS THE LIVE ARM, so the old first equality (`_armed(0)` against
+    the UNSWEPT `_one_season()`: "the zero arm reproduces the shipped season") would now compare the
+    control with a hungry season and red; it proxied for two properties, each asserted directly
+    below -- the control arm writes no body (as before), and the unswept shipped season IS the
+    `SHIPPED_ARM` season (same content hash), so the default is the live arm and not another value."""
+    assert CONTROL_ARM == 0, "the sweep's first point is no longer the control; `H-125` disagrees"
+    zero = _armed(CONTROL_ARM)
+    control = zero
     assert not [e for e in zero.log if e.kind in ("body.changed", "person.died")]
+    assert zero.persons[S.POPULACE].body == DEFAULT_FIXTURES.get("condition_scale")
     armed = {a: _armed(a) for a in LIVE_ARMS}
     assert LIVE_ARMS and all([e for e in w.log if e.kind == "body.changed"] for w in armed.values())
-    assert zero.persons[S.POPULACE].body == control.persons[S.POPULACE].body
     held = {a: _held(w, S.REEVE) for a, w in armed.items()}
     assert all(h == _held(control, S.REEVE) != {} for h in held.values()), held
     assert all(w.content_hash() != control.content_hash() for w in armed.values())
+    shipped = _one_season()
+    assert SHIPPED_ARM in armed and shipped.content_hash() == armed[SHIPPED_ARM].content_hash(), (
+        "the unswept shipped season is not the season of the shipped arm")
+    assert shipped.content_hash() != zero.content_hash(), "the shipped season is the control's: hunger is off"
+
+
+def _budget_of(w, pid) -> int:
+    """What `decision.budget` gives `pid` right now: the READ side of `Person.body` (`test_governance_build.py`'s
+    `decision_budget`, on the same arguments)."""
+    return budget(w.persons[pid], View(pid, [], w.fixtures.get("view_k")), w.fixtures.get("scene_budget"),
+                  w.fixtures)
+
+
+def test_rem52_the_shipped_arm_narrows_the_short_cohorts_budget_by_the_bands_its_body_crossed():
+    """v10 REM-52 (B10-05), THE SHIPPED ARM ON `scarce.governed`, UNSWEPT. The hungry town's cohort is short
+    by its whole recorded shortfall at the first draw, so its body falls by `SHIPPED_ARM` times those units
+    (the write), the body stands below at least one `band_floors["body"]` floor (a count made here, off the
+    floors, not off `body_band_penalty`), and `decision.budget` reads it: the cohort's budget is the
+    control arm's budget less exactly the bands crossed (`budget.py`'s `condition_penalty`, the READ side
+    of the write -- the asymmetry `CLAUDE.md` §0.1 pt 1 names; a write on a copy leaves both at the
+    control's). CONTROL: the same world swept to `H-125`'s control arm loses no band and no budget.
+    READ at REM-52: shortfall 23 units (15 grain, 8 salt) x 10 = 230, body 1000 -> 770, one floor (800)
+    crossed, budget 5 -> 4 (the units, the body, the floors crossed and the budget are read from the
+    world here, not typed). MUTATION, run at REM-52 on a scratch copy: `loop/matter.py`'s body write
+    landing on a COPY of the person leaves the body at 1000 and this test reds."""
+    zero = _armed(CONTROL_ARM)
+    shipped = _one_season()
+    scale = DEFAULT_FIXTURES.get("condition_scale")
+    recorded = _recorded(shipped)
+    assert recorded and recorded == _recorded(zero), "MATTER recorded no shortfall, or the arms differ in it"
+    assert SHIPPED_ARM in LIVE_ARMS and shipped.fixtures.get("body_step") == SHIPPED_ARM
+    body = shipped.persons[S.POPULACE].body
+    assert body == scale - SHIPPED_ARM * sum(recorded.values()) and body > 0, (body, recorded)
+    floors = list(shipped.fixtures.get("band_floors")["body"].values())
+    crossed = sum(1 for f in floors if body < f)
+    assert crossed >= 1, f"the cohort's body {body} crossed no band; the budget cannot narrow ({floors})"
+    assert zero.persons[S.POPULACE].body == scale
+    assert sum(1 for f in floors if zero.persons[S.POPULACE].body < f) == 0
+    assert _budget_of(zero, S.POPULACE) > crossed, "the budget floor of 1 would hide the narrowing"
+    assert _budget_of(shipped, S.POPULACE) == _budget_of(zero, S.POPULACE) - crossed, (
+        f"budget {_budget_of(zero, S.POPULACE)} -> {_budget_of(shipped, S.POPULACE)} at body {body}; "
+        f"the bands crossed are {crossed}")
