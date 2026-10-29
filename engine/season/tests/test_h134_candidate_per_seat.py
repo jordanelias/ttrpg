@@ -207,7 +207,16 @@ def test_h134_two_seats_are_two_acts_ids_opportunities_and_the_store():
 # `p_one.thread_sensitivity = 30` forms the two again (68, on `off_duke` and `Hh`), and with those two
 # Candidates' new `{subject, to}` operands and their acts' `to` stripped it re-hashes to
 # `(68, 68, "12f062ca...")` exactly; at 29 it reads 66 (scratch, not kept).
-_CONTROL = (66, 66, "914b52980bc0daee50bd81ec88b7d5c7a313839afae4d2be0f71fe2f7bcea603")
+# RE-PINNED AT v10 B10-05 (found red on the REM-23 tree, after CR-28's attempt was reverted): 66 -> 58,
+# `914b5298...` -> `e757d716...`. Exactly eight Candidates (and their eight acts) leave and none is added: `restore`,
+# `work` and `examine` (REM-22, `referent_class: Site`) and `commit` (REM-23, `referent_class: Proposition`) each
+# formed twice, on `off_duke` and `Hh` (the question's plain referents), and form on neither now -- this reading's
+# question carries no Site and no Proposition. NEITHER COMMIT RAN THIS FILE, so the pin stood red from REM-22. CONTROL,
+# run (scratch, not kept): the same `_control_reading` on a detached worktree at the REM-23 tree (`73aee085`) reads
+# `(58, 58, "e757d716...")`, and with those four rows' `referent_class` blanked in `decision.options.VERB_TABLE`
+# in-process it re-hashes to `(66, 66, "914b5298...")` exactly. (The reverted CR-28 attempt, `678a5acb`, read the same
+# 58 on this file: its term named nothing for `p_one`.)
+_CONTROL = (58, 58, "e757d716bc8569572e9ffcdbe030762e68b665c889a24834c5e60e429329dc7c")
 
 
 def _control_reading():
