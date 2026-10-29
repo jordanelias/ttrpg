@@ -627,6 +627,11 @@ rosters:
       sub-kind, so it is SHARED: a held petition is a `Record` for all four rows and the fold refuses it
       on the kind the three others ask (`verb_table.yaml`'s `carry` note has the readings). REVERT: the
       three rows' columns and the term.
+      v10 REM-2C (B10-05, AM-A-11, [ASSUMPTION; medium; Jordan to correct]): `research` declares it too,
+      asking `existence` of the collection itself (any document, `data/verbs.py::_record_subkinds_answered`
+      adds no kind to either set), and the class leaves `occasion_only_classes` (below), so the
+      question's own Records are stamped as well (`own_referents_of_class`). REVERT: `research`'s
+      column and `Record` back in `occasion_only_classes`.
       `Rung` (v9 IN-45 `migrate`, H-168 limit 1, [ASSUMPTION; medium; Jordan to correct]): the
       places a person has been told of and could settle in (`queries/world_q.py::places_named` --
       a Rung his own ledger names, the §10 ladder seats him in, and he does not already live
@@ -671,15 +676,24 @@ rosters:
       ways: a standing occasion, a named term of its splice reading the person's own seats, edges and
       ledger (`vacancies` and `seats_named` as `Office`, `writs_held` and `records_held_for_holding_rows`
       as `Record`, `places_named` and `larders_in_purview` as `Rung`), or `own_referents_of_class`, which carries the question's own
-      plain referents of every class a verb row declares EXCEPT the ones listed here. These three are
-      held back because their rows (`confer`, `oblige`, `comply`, `migrate`, `requisition`, and since
+      plain referents of every class a verb row declares EXCEPT the ones listed here. The three of
+      REM-21 (two since REM-2C, below) were held back because their rows (`confer`, `oblige`, `comply`, `migrate`, `requisition`, and since
       v10 REM-25 `carry`, `found` and `build`) were measured forming on plain referents and stopped by
       their class (rem-02 REM-21, rejected option
       (a)): carrying the question's own seat, writ or place as that class would widen them onto it
       again. A member must be a `referent_classes` value (`data/rosters.py` refuses another at load).
       Removing a class from this list is the edit that lets the own-referent term stamp it. REVERT:
       with the term, the list goes.
-    values: [Office, Record, Rung]
+      v10 REM-2C (B10-05, AM-A-11; M19 taken, [ASSUMPTION; medium; Jordan to correct]): `Record` LEFT
+      THE LIST -- the one class AM-A-11 releases. `research` declares it and asks `existence` of the
+      collection itself (any document), which no standing occasion answers, so the own-referent term
+      now stamps the question's own Records too, beside `writs_held` and
+      `records_held_for_holding_rows` (`_stamped` keeps one pair where both name one Record). NOT the
+      stamp rem-02 REM-2C rejected (every Record the person has heard of): the term reads the question
+      and never the ledger. The class is shared, so `comply`, `carry`, `found` and `build` form on a
+      question's own Record as well and the fold disposes (`verb_table.yaml`'s `research` note has the
+      readings). REVERT: put `Record` back here (with `research`'s column).
+    values: [Office, Rung]
 
   person_predicates:
     source: "#353 §14 `:331` — `marks[]` … \"heritage · grade · Church standing · office · residence\""

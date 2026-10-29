@@ -129,13 +129,29 @@ def forged_event(w):
 def chooser_research(w, rid):
     """The `research` Candidate the real chooser path forms for the investigator on the Record -- the
     questions `questions_for` raises for him and the candidates `opening_set` forms on each. Refuses to
-    return anything it did not find there."""
+    return anything it did not find there.
+
+    ⚠ v10 REM-2C (B10-05): READ WITH `research`'s `referent_class` BLANKED IN-PROCESS, every assertion of
+    this file and of `test_sc02_22b_consequence_and_forgery.py` (which imports this) unchanged. The route
+    this walks is one the class closes: the investigator's Record question is the third of his seven at
+    tick 2 (the question he ANSWERS, the first, is about the forger), and `research` now forms only on a
+    Record his answered question carries as that class (REM-21's own-referent term stamps that question
+    alone; a held `faction_sheet` is no sub-kind a standing occasion stamps). MEASURED on this world, the
+    same script on this tree and on a detached worktree at the CP-T05-04 tree (`ea6f1dba`): there `research`
+    formed on the Record from each of the three questions naming it; here from none. The blanked row's
+    Candidate is the one the CP-T05-04 tree formed (`subject` the Record, `to` read off the sheet's content:
+    the forger), so the act and every band it draws are unchanged. THE SHIPPED BEHAVIOUR (the Record on the
+    question he answers; `to` then binds the Record itself, an operand `research`'s cell does not read) is
+    `test_referent_class_stamps.py::test_rem2c_b_the_investigator_researches_the_held_forgery_where_his_answered_question_names_it`."""
     p = w.persons[INVESTIGATOR]
     view = View(INVESTIGATOR, [], w.fixtures.get("view_k"))
-    for q in world_q.questions_for(w, p):
-        for c in opening_set(p, view, q, w.fixtures):
-            if c.verb == "research" and c.subject == rid:
-                return c
+    classless = dataclasses.replace(verbs.VERB_TABLE["research"], referent_class="")
+    with pytest.MonkeyPatch.context() as m:
+        m.setitem(verbs.VERB_TABLE, "research", classless)
+        for q in world_q.questions_for(w, p):
+            for c in opening_set(p, view, q, w.fixtures):
+                if c.verb == "research" and c.subject == rid:
+                    return c
     return None
 
 

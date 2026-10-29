@@ -368,19 +368,30 @@ def _counts(w) -> dict:
 #: alone (the columns blanked) 66a48d9a... / 209b02f9... / 7e87cc54..., so each unit moves the hash by itself (seed 2:
 #: the question moves nothing). Was, for seeds 0 / 1 / 2: `old` 38c7de45... / 233f7e8e... / 09176dd8..., `new`
 #: da1ce5eb... / f80b2949... / 7e87cc54..., `acts` 523 / 575 / 591, `log` 6348 / 8597 / 7724.
+#: RE-RECORDED AGAIN at v10 REM-2C (B10-05), A GAME MOVE DECLARED, NO DIGEST MOVE: `research` declares
+#: `referent_class: Record` and `Record` leaves `rosters.yaml: occasion_only_classes`, so the own-referent term stamps
+#: the question's own Records and `research` forms only on a Record -- formed for 83 / 83 / 83 persons before (attempted
+#: 69 / 66 / 53, refused at admission on `exists:Record=0` 67 / 62 / 53, `aperture 1 s`), 23 / 20 / 25 now (attempted
+#: 5 / 8 / 1, none refused at admission) -- and the act mix of every seeded realm moves with it (the freed scene slots
+#: go to other verbs). EVERY value below is the REM-2C tree's, read with this file's own helpers (`_old_content_hash`,
+#: `_counts`) and `populated.run`; CONTROL, run: this file's own control test on a detached worktree at the CP-T05-04
+#: tree (`ea6f1dba`) is green against the values this block held, so the move is this unit's (each half moves the
+#: one-season hash alone: `test_season_weather.py`'s `BASE_HASHES` note). Was, for seeds 0 / 1 / 2: `old`
+#: 956afe6b... / 508ac507... / 7d9c2981..., `new` 26bcb37d... / 3b43b9fc... / b3e6f82c..., `acts` 524 / 577 / 595,
+#: `log` 6267 / 8493 / 7707.
 BASE = {
-    0: {"old": "956afe6bd969cbf7669314a646593f9b", "new": "26bcb37d617051724bbbd6c3b746c5a5", "acts": 524,
-        "census": "89f73447320e88f9f96bb8947e83565c3f0f92d11e60e00629e71d666eda878c",
-        "counts": {"persons": 82, "rungs": 411, "offices": 32, "sites": 322, "records": 90,
-                   "propositions": 93, "dates": 1, "docket": 4, "tenures": 800, "log": 6267}},
-    1: {"old": "508ac507c355b408f49ad49facb8af4d", "new": "3b43b9fc1642c749649d984ef6ed8653", "acts": 577,
-        "census": "2a15feaf3d67e1ce60b9353edaf3396bcdfb711361f2cabb201df2f02d88f349",
-        "counts": {"persons": 83, "rungs": 412, "offices": 32, "sites": 322, "records": 116,
-                   "propositions": 91, "dates": 0, "docket": 1, "tenures": 837, "log": 8493}},
-    2: {"old": "7d9c298181d35f9556cd900fa70a2f22", "new": "b3e6f82cfe0df6dee0a1e1452edf81af", "acts": 595,
-        "census": "2279dc1c32e14df1868cc9ee02f799eab28ae058ecc1fe42a53555379d0ca7cb",
-        "counts": {"persons": 81, "rungs": 410, "offices": 32, "sites": 322, "records": 115,
-                   "propositions": 99, "dates": 1, "docket": 2, "tenures": 819, "log": 7707}},
+    0: {"old": "7a9ba50d8a25545fa6569845408a3e2d", "new": "8bec380bac843cc252fad37145398858", "acts": 577,
+        "census": "e82fa8e8ad43c26248da73511206fbc19ff4ad491b4efb2d365ec7b5ef728da5",
+        "counts": {"persons": 82, "rungs": 411, "offices": 32, "sites": 322, "records": 99,
+                   "propositions": 95, "dates": 1, "docket": 4, "tenures": 812, "log": 6377}},
+    1: {"old": "0418dc1219381dce62f3edc12f86d1a2", "new": "8222397810642658340d582b7e327726", "acts": 637,
+        "census": "431c41243b9ecd4af867e5b27eec866c89bd9748092a8a82840e0d1581dabd80",
+        "counts": {"persons": 83, "rungs": 412, "offices": 32, "sites": 322, "records": 126,
+                   "propositions": 91, "dates": 0, "docket": 1, "tenures": 848, "log": 9117}},
+    2: {"old": "35e6932de504e0b00050354fe7055cc1", "new": "e707d359cc1a3e2ef6dcc58cb9ae45d0", "acts": 630,
+        "census": "c57bd34c11d62ce2b7e5a026af0944f09b26b697aae5761853565040c140a652",
+        "counts": {"persons": 81, "rungs": 410, "offices": 32, "sites": 322, "records": 114,
+                   "propositions": 97, "dates": 1, "docket": 2, "tenures": 817, "log": 7933}},
 }
 
 

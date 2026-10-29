@@ -223,7 +223,13 @@ def test_h134_two_seats_are_two_acts_ids_opportunities_and_the_store():
 # same `_control_reading` on a detached worktree at the REM-24 tree (`f2381695`) reads `(58, 58, "e757d716...")`, and
 # with those three rows' `referent_class` blanked in `decision.options.VERB_TABLE` in-process it re-hashes to
 # `(58, 58, "e757d716...")` exactly on the REM-25 tree.
-_CONTROL = (52, 52, "233b0142f71ffadd8dab3dcda23210b554452c2dd5b25f8a3b69f0e97b963283")
+# RE-PINNED AT v10 REM-2C (B10-05): 52 -> 50, `233b0142...` -> `6b31ae41...`. Exactly two Candidates (and their two
+# acts) leave and none is added: `research` (`referent_class: Record`) formed on `off_duke` and `Hh` (the question's
+# plain referents) and forms on neither now -- the question carries no Record. CONTROL, run (scratch, not kept): the
+# same `_control_reading` on a detached worktree at the CP-T05-04 tree (`ea6f1dba`) reads `(52, 52, "233b0142...")`
+# with `research` on exactly those two, and with `research`'s `referent_class` blanked in `decision.options.VERB_TABLE`
+# in-process it re-hashes to `(52, 52, "233b0142...")` exactly on the REM-2C tree.
+_CONTROL = (50, 50, "6b31ae4180b9fd2c60c558f701f715441dcf5cbfea54fe3b4d8d8e1304a2d282")
 
 
 def _control_reading():

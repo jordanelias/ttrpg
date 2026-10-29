@@ -2770,13 +2770,28 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # (the dwellings' wear claims), `condition.worn` 322 / 111, `finding.none` 143 / 141, `migrate.refused` 56 / 60,
     # `residence.changed` 1 / 0, `transfer.refused` 32 / 31. THE PROPERTY, a dwelling question never answered first, is
     # asserted above and holds.
+    # ⚠⚠ v10 REM-2C (B10-05): (524, 526) -> (577, 577), A RE-RECORD WITH THE UNIT THAT MOVED IT: `research` declares
+    # `referent_class: Record` and `Record` leaves `occasion_only_classes`, so `research` forms on a Record alone and the
+    # realm's act mix moved again (`aperture 1 0`: 524 -> 577 acts, the scene slots its 64 lost attempts freed). MEASURED,
+    # seed 0, one season, the CP-T05-04 tree (`ea6f1dba`, a detached worktree) as control, the same script on both: the
+    # control reads (524, 526) with the arms parting at act 372 exactly as the note above; here (577, 577) -- EQUAL COUNTS,
+    # BUT THE ARMS STILL PART, at act 370 at the SAME `migrate` (the stripped arm's `p_npc_002` to `terr_T13`; the kept
+    # arm's next act `p_npc_033`'s to `b_s_001_court`), so the equality is a coincidence of trajectory and not the
+    # dwelling-inertness the docstring retired. The kinds that differ between the arms: `claim.deposited` 5294 / 5201 (the
+    # dwellings' wear claims), `condition.worn` 322 / 111, `finding.made` 35 / 34, `migrate.refused` 58 / 62,
+    # `record.created` 55 / 54, `residence.changed` 1 / 0, `transfer.refused` 34 / 33 (`finding.none` no longer differs).
+    # THE PROPERTY, a dwelling question never answered first, is asserted above and holds.
     assert heads[False] and heads[True], "the spy saw no delivery; the zero below would be unobserved"
     assert not [q.id for q in heads[False] if {q.about, *q.referents} & set(dw)], (
         "a dwelling question was answered first: IN-57's tier 4 no longer sorts it last")
-    assert (out["acts"], cout["acts"]) == (524, 526), (
+    assert (out["acts"], cout["acts"]) == (577, 577), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")
+    # v10 REM-2C: with the counts equal, THE PARTING THE COUNTS PROXIED IS ASSERTED DIRECTLY -- the arms' act
+    # sequences differ (at act 370 at REM-2C, the note above).
+    seq = lambda world: [(a.actor, a.verb, (a.payload or {}).get("subject")) for a in world.acts]
+    assert seq(w) != seq(cw), "the two arms' act sequences are identical: the dwellings' wear claims part nothing"
 # H2 -- `ED-IN-0261`'s DEONTOLOGICAL GATE, `H-146`. A refusal at `opening_set`, not a score term:
 # the person's projected weight on the gating axis IS the threshold, and a verb that axis engages
 # past it never forms a Candidate. Roster-generic: the axis is whatever `Fixtures refusal_axis`

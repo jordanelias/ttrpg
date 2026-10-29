@@ -556,7 +556,8 @@ def _record_kinds_answered(row: "VerbRow") -> Optional[frozenset]:
     `referent_class: Record`, the `kind` of every `existence` clause of `subject` in its typed cell
     (`comply`: `dispensation`); `None` for a row declaring any other class or none. The ONE owner:
     `_load_verb_table` refuses a `Record` row it leaves empty, and `_derive_record_referent_kinds`
-    and `_derive_holding_record_kinds` union it into the two sets the Record terms of
+    and `_derive_holding_record_kinds` union its sub-kinds (`_record_subkinds_answered`, v10 REM-2C) into
+    the two sets the Record terms of
     `queries/world_q.py::questions_for` stamp by (`writs_held`; `records_held_for_holding_rows`, told
     apart by whether the row's cell asks `held_by` of `subject`)."""
     if row.referent_class != "Record":
@@ -566,6 +567,18 @@ def _record_kinds_answered(row: "VerbRow") -> Optional[frozenset]:
     req = row.requires_typed.requirement
     return frozenset(c.kind for c in (req.clauses if isinstance(req, AllOf) else (req,))
                      if isinstance(c, Existence) and c.of == "subject")
+
+
+def _record_subkinds_answered(row: "VerbRow") -> frozenset:
+    """THE RECORD SUB-KINDS ONE ROW ANSWERS (v10 REM-2C, B10-05, AM-A-11; M19 taken, [ASSUMPTION; medium;
+    Jordan to correct]): `_record_kinds_answered` less the row's class itself, empty for a row declaring any
+    other class or none. A clause asking `existence` of the COLLECTION (`research`: `kind: Record`, any
+    document) names no sub-kind a standing occasion could stamp by -- every Record answers it -- so it is
+    in neither derivation below; such a row forms on the question's own Records, which
+    `queries/world_q.py::own_referents_of_class` stamps since the class left `rosters.yaml:
+    occasion_only_classes`, and (the class being shared) on every Record the two standing occasions stamp.
+    The ONE place that exclusion is written: both derivations read it."""
+    return (_record_kinds_answered(row) or frozenset()) - {row.referent_class}
 
 
 def _load_verb_table() -> dict:
@@ -670,14 +683,18 @@ def _load_verb_table() -> dict:
         # `records_held_for_holding_rows` off `HOLDING_RECORD_KINDS` instead); a row naming none, or
         # naming a kind `rosters.yaml: record_kinds` does not hold, would be stamped nothing and never
         # form -- a declared row read by nothing, which `04` §A.1's ID-13 row binds `data/` to raise on.
+        # v10 REM-2C (AM-A-11): THE CLASS ITSELF IS THE ONE OTHER KIND A CLAUSE MAY NAME (`research`:
+        # any Record), which no sub-kind stamp answers and the own-referent term does
+        # (`_record_subkinds_answered`); a typo, or another collection, is still refused.
         _kinds = _record_kinds_answered(row)
-        if _kinds is not None and (not _kinds or not _kinds <= RECORD_KINDS):
+        if _kinds is not None and (not _kinds or not _kinds <= RECORD_KINDS | {row.referent_class}):
             raise SystemExit(
                 f"verb_table.yaml: {name!r} declares referent_class 'Record' and its "
                 f"`requires_typed:` cell names {sorted(_kinds) or 'no'} `existence` kind(s) of "
-                f"`subject` (the record kinds are {sorted(RECORD_KINDS)}). `writs_held` and "
-                "`records_held_for_holding_rows` stamp a held Record only of a kind such a clause "
-                "names, so this row would never form.")
+                f"`subject` (the record kinds are {sorted(RECORD_KINDS)}, or the class itself). "
+                "`writs_held` and `records_held_for_holding_rows` stamp a held Record only of a kind "
+                "such a clause names, and the own-referent term a Record of any kind only for a clause "
+                "naming the class, so this row would never form.")
         # IN-10 (a) / IN-53 D2: `referent_named` and `counterparty_may_be_self` ARE BOOLEANS -- a
         # string `"false"` would read truthy.
         for col in ("referent_named", "counterparty_may_be_self"):
@@ -1470,9 +1487,11 @@ def _derive_record_referent_kinds() -> frozenset:
     (`HOLDING_RECORD_KINDS`, below): `writs_held` keeps its addressee test, which a row that needs
     only the person to HOLD the Record (`carry`'s petition) does not want. Empty when no row declares
     the class: then nothing is stamped. A row declaring it and naming no record kind is refused at
-    load (`_load_verb_table`), so the union of both sets is empty only when no row declares `Record`."""
+    load (`_load_verb_table`), so the union of both sets is empty only when no row declares `Record`.
+    v10 REM-2C: SUB-KINDS ONLY (`_record_subkinds_answered`) -- `research` asks `existence` of the class
+    itself and adds no kind here, so `writs_held` stamps exactly what it stamped before."""
     return frozenset(k for row in VERB_TABLE.values() if not _asks_subject_held(row)
-                     for k in (_record_kinds_answered(row) or ()))
+                     for k in _record_subkinds_answered(row))
 
 
 RECORD_REFERENT_KINDS = _derive_record_referent_kinds()
@@ -1487,9 +1506,10 @@ def _derive_holding_record_kinds() -> frozenset:
     different kinds, and no verb or kind literal lives at the stamp site. A row's kinds are in exactly
     one of the two sets (the `held_by` test splits them), so `comply`'s dispensation is stamped by its
     addressee test alone and a held petition by the person's holding alone. Empty when no Record row
-    asks `held_by`: then the term stamps nothing, which is the revert."""
+    asks `held_by`: then the term stamps nothing, which is the revert. Sub-kinds only, as above (v10
+    REM-2C, `_record_subkinds_answered`)."""
     return frozenset(k for row in VERB_TABLE.values() if _asks_subject_held(row)
-                     for k in (_record_kinds_answered(row) or ()))
+                     for k in _record_subkinds_answered(row))
 
 
 HOLDING_RECORD_KINDS = _derive_holding_record_kinds()

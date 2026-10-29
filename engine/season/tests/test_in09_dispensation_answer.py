@@ -34,7 +34,9 @@ import pytest
 
 from engine.season.data.matrix import Step, WriteClass
 from engine.season.data.rosters import RECORD_CONTENT
-from engine.season.data.verbs import RECORD_REFERENT_KINDS, TERMS_SOURCED, VERB_TABLE, _asks_subject_held
+from engine.season.data.verbs import (
+    RECORD_REFERENT_KINDS, TERMS_SOURCED, VERB_TABLE, _asks_subject_held, _record_subkinds_answered,
+)
 from engine.season.harness import probes as P
 from engine.season.loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from engine.season.loop.effects import EFFECTS
@@ -106,9 +108,17 @@ def test_in09_the_record_class_is_declared_by_comply_alone_and_answers_dispensat
     # addressee test) is `dispensation` alone -- is asserted on the rows whose cell asks no `held_by` of
     # `subject` (the three others ask it: their kinds are `HOLDING_RECORD_KINDS`, a separate set stamped by
     # `records_held_for_holding_rows`; `test_referent_class_stamps.py::test_rem25_the_two_record_terms_...`).
+    # RE-RECORDED AT v10 REM-2C (B10-05; control: the CP-T05-04 tree `ea6f1dba`): `research` declares `Record`
+    # too, so the rows were `{comply, carry, found, build}` and are those plus `research`, and the rows asking
+    # no `held_by` were `{comply}` and are `{comply, research}`. The meaning stands and is asserted directly:
+    # `research` asks `existence` of the collection itself (any document) and names NO sub-kind
+    # (`data/verbs.py::_record_subkinds_answered`), so the writ occasion is still `comply`'s alone --
+    # `RECORD_REFERENT_KINDS` is `dispensation` alone on both trees.
     record_rows = {v for v, r in VERB_TABLE.items() if r.referent_class == "Record"}
-    assert record_rows == {VERB, "carry", "found", "build"}
-    assert {v for v in record_rows if not _asks_subject_held(VERB_TABLE[v])} == {VERB}
+    assert record_rows == {VERB, "carry", "found", "build", "research"}
+    assert {v for v in record_rows if not _asks_subject_held(VERB_TABLE[v])} == {VERB, "research"}
+    assert {v for v in record_rows if _record_subkinds_answered(VERB_TABLE[v]) & RECORD_REFERENT_KINDS} == {VERB}
+    assert not _record_subkinds_answered(VERB_TABLE["research"])
     assert RECORD_REFERENT_KINDS == frozenset({"dispensation"})
 
 

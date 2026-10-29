@@ -4057,12 +4057,21 @@ def test_w9_check2_a_causal_chain_walks_from_her_act():
     # The base and the key without the screen both read 10 (measured); `redeposits` is still 1
     # (asserted above) and the four-season depth clause (>= 4) still holds.
     # [GROUNDED: measured at B-W by printing the published chain on this tree and on a `git worktree` at its base `5b5e31ef` -- depth 8 here, `claim.deposited <- travel.blocked(carin) <- survey.refused(bailiff) <- travel.blocked(carin) <- survey.refused(bailiff) <- travel.blocked(carin) <- commitment.refused(bailiff) <- kill.refused(carin)`; depth 10 there, five `record.created` links among its ten]
-    assert d_pub == 8, (
-        f"the published two-season run reaches {d_pub}, not the 8 that `scene_budget` rounds of "
+    # ⚠⚠ **8 -> 11, v10 REM-2C (B10-05), A RE-RECORD, SAID SO: `research` FORMS ON A RECORD ALONE AND THE ACT MIX
+    # MOVED.** `research` declares `referent_class: Record`, so the eight `research` acts of the two published seasons
+    # (on referents that were no Record) are gone, and the scenes go to `tell` 0 -> 2, `train` 0 -> 2, `conceal` 0 -> 1,
+    # `survey` 5 -> 6 and `move` 4 -> 5 (`create_record` 6 -> 5). The printed published chain now runs through a
+    # telling: `claim.deposited <- travel.blocked(carin) <- survey.refused(rec) <- travel.blocked(carin) <-
+    # survey.refused(rec) <- travel.blocked(carin) <- news.told(rec) <- news.untold(rec) <- finding.made(carin) <-
+    # train.refused(bailiff) <- kill.refused(carin)` -- acts citing the Events that occasioned them, the IN-50 shape.
+    # `redeposits` is still 1 (asserted above) and the four-season depth clause (>= 4) still holds.
+    # [GROUNDED: measured at REM-2C by printing the published chain on this tree and on a detached worktree at the CP-T05-04 tree `ea6f1dba` -- depth 11 here; depth 8 there, the B-W chain above with `kill.refused(bailiff) <- transfer.refused(carin)` as its last two links]
+    assert d_pub == 11, (
+        f"the published two-season run reaches {d_pub}, not the 11 that `scene_budget` rounds of "
         "deposit-and-decay produce over two seasons with `11a`'s repeated investigate-and-record "
         "chaining and refusals that cite their occasion (5 before IN-50; 7 before IN-08 "
         "re-scored the chooser; 10 before T4's tellings took two of its "
-        "scenes). With `redeposits == 1` still "
+        "scenes; 8 before REM-2C's `research` class). With `redeposits == 1` still "
         "holding, a different number means the ROUND COUNT "
         "changed, a clock started chaining, or `reach` stopped admitting this second-person claim; "
         "below 3, `W4`'s decay chaining has regressed")
@@ -5124,11 +5133,27 @@ def test_r7_m6_the_narrowed_arm_does_not_starve_the_first_two_links():
     # that relation checked nowhere despite the comment above claiming it as the finding. The
     # relation is now the OPPOSITE inequality, asserted directly rather than left implicit.
     # [GROUNDED: measured 2026-09-27 on this tree with `seen` (`R8.1`) live -- questions 72 / 92 / 68 at `total` / `all_five` / `presence_only`; `total`'s three ledgers are each at the 200 cap]
-    assert got["all_five"][2] > got["total"][2], (
+    # ⚠⚠ **v10 REM-2C (B10-05) INVERTS IT AGAIN, AND `total`'s LEDGERS ARE STILL AT THE CAP -- SO THE CAP IS NOT
+    # WHAT DECIDES THE DIRECTION IN THIS FIXTURE, AND THE MESSAGE'S STATED MECHANISM IS RECORDED AS FALSIFIED HERE
+    # RATHER THAN SMOOTHED.** `research` declares `referent_class: Record` and forms on a Record alone. RE-MEASURED,
+    # `_r7_run`, three seasons, on this tree and on a detached worktree at the CP-T05-04 tree (`ea6f1dba`, the
+    # control), the same script on both: there `total` / `presence_only` / `all_five` questions 95 / 102 / 102,
+    # deposits 4730 / 232 / 232, ledgers [200, 200, 200] / [0, 116, 116] x2, resolved acts 19 / 14 / 14; here 200 / 134 /
+    # 134, deposits 5325 / 290 / 290, ledgers [200, 200, 200] / [0, 145, 145] x2, acts 32 / 22 / 22 (`total` now resolves
+    # `challenge`, `comply`, `conceal`, `forge`, `surveil`, `tell` and `train` beside its old set). THE UNIT, in process on
+    # this tree: the column alone (`Record` held back in `occasion_only_classes`) reads 156 / 148 / 148 -- inverted; the
+    # roster release alone (`research` classless) reads 95 / 108 / 108 -- the control's relation. So the column moves
+    # `total`'s question stream up by more than the narrow arms' while its ledgers stay pinned: the flood it fans to
+    # everyone now lands on Record referents `research` forms on, and the acts that follow raise more Q2 questions
+    # than eviction costs it. RESTATED IN THE MEASURED DIRECTION (the G1a and R8.1 precedent above, both of which
+    # re-stated this relation off a measurement): the shipped-vs-control relation stays asserted directly, now as the
+    # control raising MORE [a judgment call: the alternative, asserting only that the arms differ, would be weaker].
+    # [GROUNDED: measured at REM-2C on this tree and at `ea6f1dba` -- questions 200 / 134 / 134 here, 95 / 102 / 102 there, at `total` / `presence_only` / `all_five`; `total`'s three ledgers at the 200 cap on both]
+    assert got["total"][2] > got["all_five"][2], (
         f"the shipped arm raises {got['all_five'][2]} questions against `total`'s "
-        f"{got['total'][2]}, not MORE. `total`'s ledgers -- {got['total'][1]} -- being pinned at "
-        "the cap is what makes this the current relation; if `total`'s ledgers are no longer at "
-        "the cap, re-measure rather than re-pin the direction")
+        f"{got['total'][2]}, not FEWER (REM-2C's measured direction; R8.1's was MORE). `total`'s ledgers -- "
+        f"{got['total'][1]} -- are at the cap on both sides of REM-2C, so the cap does not decide this "
+        "relation here; re-measure on a control tree rather than re-pin the direction")
     # ⚠⚠ `<` -> `>`, POSITION `11a`, 2026-09-29, AND IT IS THE SAME DIRECTION AS THE ASSERTION
     # ABOVE, NOT A NEW ONE. `presence_only` raising MORE than `total` (not fewer) is exactly
     # `all_five`'s own reason three lines up, applied to the other narrow arm: `total`'s ledgers
@@ -5136,10 +5161,13 @@ def test_r7_m6_the_narrowed_arm_does_not_starve_the_first_two_links():
     # deposits to eviction, which BOTH narrow arms escape now that they admit the identical set.
     # [GROUNDED: measured 2026-09-29 -- questions 130 / 172 / 172 at `total` / `presence_only` /
     # `all_five`]
-    assert got["presence_only"][2] > got["total"][2], (
-        f"`presence_only` no longer raises more questions than `total` ({got}) — then the "
-        "narrowing has stopped paying at this link for the narrowest arm too; re-measure whether "
-        "`total`'s ledgers are still pinned at the cap before re-pinning the direction")
+    # ⚠⚠ `>` -> `<`, v10 REM-2C (B10-05), THE SAME INVERSION AS THE ASSERTION ABOVE AND FOR ITS MEASURED REASON (the
+    # two narrow arms still admit the identical set): `presence_only` 102 -> 134 against `total` 95 -> 200, `total`'s
+    # ledgers at the cap on both trees. [GROUNDED: measured at REM-2C on this tree and at `ea6f1dba` -- the note above]
+    assert got["total"][2] > got["presence_only"][2], (
+        f"`presence_only` now raises at least as many questions as `total` ({got}) -- REM-2C measured it FEWER; "
+        "re-measure on a control tree, and whether `total`'s ledgers are still pinned at the cap, before "
+        "re-pinning the direction")
     # ⚠⚠ `>` -> `>=`, POSITION `11a`, 2026-09-29, RECORDED AS THE STATE THE DOCSTRING ALREADY
     # NAMED RATHER THAN A NEW ONE: "EQUAL is the `U2` state, where `H-33`'s stated reason for the
     # default was gone and the row said so." It has recurred, for a related but distinct reason --
@@ -6795,7 +6823,18 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     # stage count does not set the length. The COUNT still discriminates (matured {0: 0, 3: 60, 6: 81}).
     # CONTROL: the same script on the REM-22 tree (`e66a22ec`) reads (10, 11) and the walks recorded above at
     # REM-22 (matured 52 / 71), and its five-season chain 9.
-    assert (depths[3], depths[6]) == (14, 16), (
+    # v10 REM-2C (B10-05): (14, 16) -> (13, 13), a re-record with the unit that moved it: `research` declares
+    # `referent_class: Record` (and `Record` leaves `occasion_only_classes`), so it forms on a Record alone and stops
+    # being formed (and refused) on the persons, rungs and Propositions of this world's questions, which moves the act
+    # mix. The two arms are EQUAL, so the depth clause is not discriminating -- the case the message below does not ask
+    # to be walked; walked anyway (this test's own sweep, `none`, 7 seasons, deepest maturation chain, oldest first):
+    # n=3 and n=6 run the SAME 13-link chain, `kill.refused, train.refused, finding.made, record.created, term.matured,
+    # compliance.impossible, finding.made, accept.refused, transfer.refused, record.created, term.matured, term.matured,
+    # term.matured` -- act-mixed, and carrying a `compliance.impossible` (a `comply` formed on a question's own Record,
+    # the shared-class cost REM-2C records). The COUNT still discriminates (matured {0: 0, 3: 54, 6: 76}; `actor`
+    # 56 < 77, `total` 56 < 76). CONTROL: the same script on a detached worktree at the CP-T05-04 tree (`ea6f1dba`)
+    # reads (14, 16), the REM-23 walks above, matured 64 / 83, and its five-season chain 10.
+    assert (depths[3], depths[6]) == (13, 13), (
         f"the maturation depth ceiling moved: {depths}. This is a MEASUREMENT of a mixed chain "
         "whose length the act mix sets, not a discriminator — `H-80`'s discriminator is the COUNT, "
         "asserted below and still live. Re-pin these two numbers with the unit that moved them. "
@@ -6858,7 +6897,8 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     # [GROUNDED: re-measured at v9 IN-12 `give` + Rung -- the five-season chain reads 7 against the seven-season arm's 9 (`depths[3]`, re-pinned above), moved by the same unit (`give` no longer forming on a referent its asker does not hold, the act mix); the RELATION still holds]
     # [GROUNDED: re-measured at v10 REM-22 -- the five-season chain reads 9 against the seven-season arm's 10 (`depths[3]`, re-pinned above), 7 and 9 at its base (the REM-21 tree), moved by the same unit (`restore`, `work` and `examine` forming on a Site alone, the act mix); the RELATION still holds]
     # [GROUNDED: re-measured at v10 REM-23 -- the five-season chain reads 10 against the seven-season arm's 14 (`depths[3]`, re-pinned above), 9 and 10 at its base (the REM-22 tree), moved by the same unit (`commit` forming on a Proposition alone, the act mix); the RELATION still holds]
-    assert max(depth5(e) for e in mats5) == 10 < depths[3], (
+    # [GROUNDED: re-measured at v10 REM-2C -- the five-season chain reads 11 against the seven-season arm's 13 (`depths[3]`, re-pinned above), 10 and 14 at its base (the CP-T05-04 tree `ea6f1dba`), moved by the same unit (`research` forming on a Record alone, the act mix); it is the seven-season chain above less its last two `term.matured` links; the RELATION still holds]
+    assert max(depth5(e) for e in mats5) == 11 < depths[3], (
         f"the longest maturation chain over FIVE seasons is {max(depth5(e) for e in mats5)}, not "
         "the 9 measured under `U2`, or it is not below the seven-season figure above. The ceiling "
         "MOVING with the season count is what makes the 3-stage and 6-stage arms saturated there "
@@ -6870,16 +6910,12 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     # original check-2 floor from when the depth was a free number; it is not one now.
 
 
-def test_w9_the_sweeps_the_register_declares_are_executed():
-    """§G is declare · default · sweep, and `R2` checks only the first two. This runs the points
-    `W9`'s own rows declare, because the previous pass added five sweeps and executed none — in
-    the same session whose `test_w5_every_new_assumption_rows_sweep_is_actually_executed` names
-    that exact laundering."""
+def _h79_bailiff_subjects() -> dict:
+    """`H-79`'s sweep: per `claim_subject_rule`, the distinct subjects of the bailiff's non-`seen` claims after two
+    seasons of `build_world(0)` (`test_w9_the_sweeps_...`'s reading, factored out at v10 REM-2C so the shipped
+    table and the blanked one read it alike)."""
     from ..harness import headless as HL
-    moved = {}
-
-    # H-79 — the claim subject. `per_change` must change WHAT a ledger holds.
-    subjects = {}
+    out = {}
     for rule in sorted(CLAIM_SUBJECT_RULES):
         w = HL.build_world(0, DEFAULT_FIXTURES.sweep("claim_subject_rule", rule))
         d = SeasonDriver(w)
@@ -6894,8 +6930,46 @@ def test_w9_the_sweeps_the_register_declares_are_executed():
         # add the SAME subjects to every arm and dilute exactly the difference this measures.
         # MEASURED at the `R8.1` commit, `build_world(0)`, 2 seasons: over the whole ledger
         # actor 17 / both 18 / per_change 14 (the relation inverted); without `seen` 7 / 18 / 14.
-        subjects[rule] = len({c.subject for c in w.persons[HL.BAILIFF].ledger
-                              if c.predicate != SEEN_PREDICATE})
+        out[rule] = {c.subject for c in w.persons[HL.BAILIFF].ledger if c.predicate != SEEN_PREDICATE}
+    return out
+
+
+def test_w9_h79_per_change_changes_what_the_bailiffs_ledger_holds_at_the_shipped_table():
+    """v10 REM-2C (B10-05): `H-79`'s sweep AT THE SHIPPED TABLE, the property asserted directly. `per_change` must
+    change WHAT a ledger holds: under `actor` a claim is about the person who acted, under `per_change` about the
+    thing that changed. So the bailiff's ledger names the two actors (Carin and himself) under `actor` and not under
+    `per_change`, and names under `per_change` things `actor` never gives him. The distinct-subject COUNTS are no
+    longer ordered at this table (9 / 9, measured; the CP-T05-04 tree read 7 / 9), because `research`'s class moves the
+    `actor` arm's act mix (`test_w9_the_sweeps_...` reads the count relation with that class blanked); the sets
+    still differ on both trees, in the direction the rule names."""
+    from ..harness import headless as HL
+    s = _h79_bailiff_subjects()
+    assert {HL.CARIN, HL.BAILIFF} <= s["actor"] - s["per_change"], s
+    assert s["per_change"] - s["actor"], s
+
+
+def test_w9_the_sweeps_the_register_declares_are_executed():
+    """§G is declare · default · sweep, and `R2` checks only the first two. This runs the points
+    `W9`'s own rows declare, because the previous pass added five sweeps and executed none — in
+    the same session whose `test_w5_every_new_assumption_rows_sweep_is_actually_executed` names
+    that exact laundering."""
+    from ..harness import headless as HL
+    moved = {}
+
+    # H-79 — the claim subject. `per_change` must change WHAT a ledger holds.
+    # ⚠ v10 REM-2C (B10-05): THE COUNT RELATION BELOW WALKS A ROUTE `research`'s CLASS NOW CLOSES, SO IT IS
+    # EVALUATED WITH THAT CLASS BLANKED IN-PROCESS, ASSERTION UNCHANGED; the shipped behaviour is
+    # `test_w9_h79_per_change_changes_what_the_bailiffs_ledger_holds_at_the_shipped_table` below. MEASURED, the
+    # same script on this tree and on a detached worktree at the CP-T05-04 tree (`ea6f1dba`): there actor 7 /
+    # both 11 / per_change 9 (`research` executes 8 times in the two seasons, on referents that are no Record);
+    # here 9 / 11 / 9 -- `research` declares `referent_class: Record` and forms on a Record alone, so under the
+    # `actor` rule the two seasons' act mix moves (`research` 8 -> 1, `comply` 0 -> 1, `tell` 0 -> 1, `train`
+    # 0 -> 2, `conceal` 0 -> 1) and the bailiff's ledger names two subjects more. THE UNIT, in process on this
+    # tree: the column alone (`Record` held back in `occasion_only_classes`) reads 9 / 11 / 9; `research`'s class
+    # blanked reads 7 / 11 / 9, the control's, which is the arm this assertion now reads.
+    with pytest.MonkeyPatch.context() as m:
+        m.setitem(VERB_TABLE, "research", dataclasses.replace(VERB_TABLE["research"], referent_class=""))
+        subjects = {rule: len(s) for rule, s in _h79_bailiff_subjects().items()}
     moved["H-79 distinct claim subjects in the bailiff's ledger"] = subjects
     assert subjects["actor"] < subjects["per_change"], subjects
 
@@ -8735,7 +8809,26 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # (no verb regained universality; the largest executed-world count is `create_record`'s 132 of 143), `ever` and
     # `varying` are unmoved (the same 20 verbs, asserted below), and `open_case` is attempted in no corpus world on
     # either side, so its column moves nothing here.
-    assert len(by_sig) == 128, (
+    # ⚠⚠ **128 -> 121, v10 REM-2C (B10-05), MEASURED BY `corpus_run.run_case`, seed 0, AGAINST THE CP-T05-04 TREE
+    # (`ea6f1dba`, a detached worktree; `research`'s column absent and `Record` held back) AS CONTROL, which reads 128 --
+    # the same script on both.** THE UNIT AND THE DIRECTION: variety FELL by seven, `live` did not move (143 on both
+    # sides). `research` declares `referent_class: Record` and forms on a Record alone, so it is refused in 72 worlds
+    # where it was in 128 and EXECUTES in 81 where it did in 23 -- the formations it lost were refusals on non-Records,
+    # and the scenes they took now go to `research` on the documents the questions are about and to the rest -- and 107
+    # worlds' executed sets change (joins `research` 59 worlds, `tell` 18, `conceal` 17, `petition` 15, `tend` 15,
+    # `carry` 14, `move` 13, `interview` 12, `accept`/`challenge`/`reconstruct` 8, `surveil` 7, ...; leaves `tend` 8,
+    # `transfer` 7, `surveil` 6, ...), so more worlds share one executed set: a net seven FEWER distinct signatures.
+    # Executed-world counts, control -> here: `research` 23 -> 81, `tell` 107 -> 123, `conceal` 94 -> 110, `petition`
+    # 81 -> 96, `carry` 34 -> 45, `move` 55 -> 65, `interview` 8 -> 17, `reconstruct` 128 -> 136, `challenge` 88 -> 95,
+    # `tend` 37 -> 44, `accept` 113 -> 118, `utter` 121 -> 124, `create_record` 132 -> 134, `give` 4 -> 5, `release`
+    # 6 -> 7, `surveil` 83 -> 84, `transfer` 48 -> 45. EACH HALF ALONE, in-process on this tree (the same script): the
+    # column alone (`Record` held back in `occasion_only_classes`) reads 121 (109 worlds change); the roster release
+    # alone (`research`'s class blanked) reads 128 (1 world changes, ARC-34). Not a ranking change: `H-96` is untouched.
+    # THE SAME-BREATH CHECK: the universal set is EMPTY on both sides (no verb regained universality; the largest
+    # executed-world count is `reconstruct`'s 136 of 143), `ever`, `refused_only` and `varying` are unmoved (the same 20
+    # executed verbs, asserted below and above), `min(hi)` stays 1 and `lo` reads {1, 2, 4} (it was {1, 2, 3, 4, 6}),
+    # `told_redeposits` stays 0, and the status census is UNMOVED (103 RUNS-UNDECLARED · 40 SPAN-UNAUTHORED).
+    assert len(by_sig) == 121, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -11538,7 +11631,14 @@ def test_wb_a_refusals_reads_land_as_a_claim_that_contradicts_and_the_candidate_
     # in-process, this test passes at (27, 26) unchanged, and the REM-24 tree (`f2381695`, a detached worktree) reads
     # (27, 26) there; the three missing verbs are `build`, `carry` and `found`.
     # [GROUNDED: measured at v10 REM-25 -- (24, 23) as built, (27, 26) with the three columns blanked and on the REM-24 tree; the three missing verbs `build`/`carry`/`found`, the drop `['transfer']` in both]
-    assert (len(before), len(after)) == (24, 23), (
+    # ⚠ 24 -> 23, v10 REM-2C (B10-05): `research` declares `referent_class: Record`, so it forms only on a Record the
+    # question carries as that class and never on a plain referent like `S`, a rung (its cell asks `existence` of a
+    # Record, and `exists:Record` of a rung is 0, the refusal the class removes); `p_low`'s question carries none. The
+    # drop is still exactly `transfer`. RE-DERIVED, not adjusted: with `research`'s `referent_class` blanked in
+    # `VERB_TABLE` in-process, this test passes at (24, 23) unchanged, and the CP-T05-04 tree (`ea6f1dba`, a detached
+    # worktree) reads (24, 23) there; the one missing verb is `research`.
+    # [GROUNDED: measured at v10 REM-2C -- (23, 22) as built, (24, 23) with the column blanked and on the CP-T05-04 tree; the one missing verb `research`, the drop `['transfer']` in both]
+    assert (len(before), len(after)) == (23, 22), (
         f"the absolute counts moved to {(len(before), len(after))}. They are the denominator the "
         "delta above is read against, and the delta alone does not reproduce them — re-derive "
         "`H-122`'s reading rather than adjusting this line")
@@ -11835,13 +11935,33 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
     # the deposit it carried) is gone: resolved acts `carry` 1 -> 0, `forge` 0 -> 1 (the freed scene), the rest
     # unchanged. The property this pin is for holds: `actor_arm` is also 7, so every grammar claim is held at the end
     # and none evicted.
-    assert actor_end == [("hearth_ostvik", "stores:grain", 0),
-                         ("einhir_texts", "exists:Person", 0),
-                         ("rec:6bf46a143f347c12", "exists:Record", 1),
-                         ("rec:0a9f85a0f7f67871", "exists:Person", 0),
+    # v10 REM-2C (B10-05): 7 -> 14 entries, a re-record read off the failing assertion's own output and RE-READ by
+    # running this helper on this tree and on the CP-T05-04 tree (`ea6f1dba`, a detached worktree, which reads the old 7
+    # exactly). `research` declares `referent_class: Record` and forms on a Record alone, so the `actor` arm's act mix
+    # moved a long way: acts in the store `research` 18 -> 2, and the freed scenes go to `move` 4 -> 8, `tell` 0 -> 4,
+    # `surveil` 0 -> 4, `conceal` 1 -> 2, `forge` 1 -> 2, `train` 1 -> 2, `transfer` 1 -> 2, `survey` 5 -> 6, and `comply`,
+    # `sabotage`, `speak` 0 -> 1 (`create_record` 11 -> 8, `reconstruct` 8 -> 7, `tend` 1 -> 0). Counter subtraction, not
+    # eyeballed: THREE OUT -- `("p_carin", "exists:Person", 1)`, `("rec:0a9f85a0f7f67871", "exists:Person", 0)`,
+    # `("rec:6bf46a143f347c12", "exists:Record", 1)` -- and TEN IN, the reads of the acts that took the scenes: `surveil`'s
+    # `exists:Rung` x2 and `present_at` (Carin's and the Bailiff's) on the hearth, `sabotage`'s `exists:Site`, `speak`'s
+    # `exists:DocketItem`, `comply`'s `exists:dispensation` on `rec:6095547f999b4ff8` (a `comply` formed on a question's own
+    # Record, the shared-class cost REM-2C records), a second `stores:grain` and a second `exists:Person` on the hearth,
+    # and `("rec:2dd19669944564b8", "exists:Record", 1)`. The property this pin is for holds: `actor_arm` is also 14, so
+    # every grammar claim is held at the end and none evicted (`total` 14 -> 24, ever = end).
+    assert actor_end == [("einhir_texts", "exists:Person", 0),
+                         ("hearth_ostvik", "stores:grain", 0),
                          ("hearth_ostvik", "exists:Person", 0),
+                         ("rec:2dd19669944564b8", "exists:Record", 1),
+                         ("hearth_ostvik", "exists:Site", 0),
+                         ("hearth_ostvik", "exists:Rung", 1),
+                         ("hearth_ostvik", "present_at:p_carin", True),
+                         ("hearth_ostvik", "exists:Person", 0),
+                         ("hearth_ostvik", "exists:Rung", 1),
+                         ("hearth_ostvik", "present_at:p_bailiff", True),
                          ("rec:6095547f999b4ff8", "exists:Person", 0),
-                         ("p_carin", "exists:Person", 1)], (
+                         ("rec:6095547f999b4ff8", "exists:dispensation", 0),
+                         ("hearth_ostvik", "stores:grain", 0),
+                         ("hearth_ostvik", "exists:DocketItem", 0)], (
         f"the `actor` arm's end-of-run grammar claims are {actor_end}, not the single surviving "
         "`stores:grain` read. Empty would mean the cap is evicting again — i.e. the fan-out "
         "default moved back toward `total`, or a new deposit channel opened — and every `H-40` / "
@@ -12133,6 +12253,7 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
 
     def hl_drops(fx):
         hits = []
+        who = []                            # v10 REM-2C: the same drops with the person dropping them
         original = decision.options.belief_contradicts
         def counted(p_, row, subject, operands, seat=None, weigh=None, actor=None):
             out = original(p_, row, subject, operands, seat, weigh=weigh, actor=actor)
@@ -12140,6 +12261,7 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
             # clause-4 drop (`opening_set`, no actor) is what this counts
             if out and actor is None:
                 hits.append((row.verb, subject))
+                who.append((p_.id, row.verb, subject))
             return out
         decision.options.belief_contradicts = counted
         try:
@@ -12159,11 +12281,11 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
             seq = [(a.actor, a.verb, (a.payload or {}).get("subject")) for a in d.resolved]
         finally:
             decision.options.belief_contradicts = original
-        return hits, acts, seq
+        return hits, acts, seq, who
 
-    hl_control, hl_acts_none, hl_seq_none = hl_drops(
+    hl_control, hl_acts_none, hl_seq_none, _hl_who_none = hl_drops(
         DEFAULT_FIXTURES.sweep("observation_deposit_mode", "none"))
-    hl_live, hl_acts_live, hl_seq_live = hl_drops(DEFAULT_FIXTURES)
+    hl_live, hl_acts_live, hl_seq_live, hl_who_live = hl_drops(DEFAULT_FIXTURES)
     print(f"\n  W-B — §F1 clause-4 drops on ARC-01: none={control} shipped={live}"
           f"\n  W-B — §F1 clause-4 drops on headless NPC-088: none={hl_control} shipped={hl_live}"
           f"   acts/season {hl_acts_none} -> {hl_acts_live}")
@@ -12367,8 +12489,18 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # `test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_do` loses -- which is the
     # refusal's WITNESS deposit that AM-A-09 (as AM-A-07) states as the cost of the class. The bite (below) is
     # unmoved.
+    # ⚠⚠ SEVEN -> NINE, v10 REM-2C (B10-05): `sabotage` AND `speak` JOIN, nothing leaves. MEASURED BEFORE RE-PINNING, this
+    # fixture's drops by verb at the shipped default, on this tree and on a detached worktree at the CP-T05-04 tree
+    # (`ea6f1dba`, which reads the old seven and 79 drops exactly), the same script on both: here 164 drops --
+    # accept/challenge/fight/interview/tend/train 11 -> 24 each, `transfer` 13 -> 16, `sabotage` 0 -> 2, `speak` 0 -> 2;
+    # 156 of them on `hearth_ostvik` (a rung). THE CAUSE IS THE ACT MIX, READ: `research` declares `referent_class:
+    # Record` and forms on a Record alone, so its scenes go elsewhere (resolved acts in the shipped arm: `research`
+    # 4 -> 2, `move` 4 -> 8, `tell` 0 -> 4, `surveil` 0 -> 4, `sabotage` 0 -> 1, `create_record` 11 -> 8), and the two new
+    # verbs each drop twice on `hearth_ostvik` on a belief a refusal there deposited -- `sabotage` on `('hearth_ostvik',
+    # 'exists:Site', 0)` (its own `sabotage.refused`), `speak` on `('hearth_ostvik', 'exists:DocketItem', 0)` -- the
+    # arrival shape of `carry` and `speak` on ARC-01 below. Neither is a class's doing: neither row declares one.
     assert {v for v, _ in hl_live} == {"accept", "challenge", "fight",
-                                       "interview",
+                                       "interview", "sabotage", "speak",
                                        "tend", "train", "transfer"}, (
         f"the headless drops are on {sorted({v for v, _ in hl_live})}. `examine`/`restore`/"
         "`interview`/`fight`/`research` are the `exists:` and `existence:`-cell drops the "
@@ -12607,8 +12739,15 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # 'fight'|'interview'|'tend'|'train','rec:6bf46a143f347c12')`, the six pairs hung on the `exists:Person = 0` the
     # one refused `petition` on that Record deposited; every one of the other 16 survives, and `transfer`'s four are
     # the same four. The clause still fires.
-    assert len(dropped) == 16, (
-        f"{len(dropped)} executable clause-4 drops, not 16. The drops are the channel itself; if "
+    # v10 REM-2C (B10-05): 16 -> 17, read off this test's own `dropped` on this tree and on a detached worktree at the
+    # CP-T05-04 tree (`ea6f1dba`, which reads the old 16 exactly), the same script on both: OUT `('transfer',
+    # 'rec:0a9f85a0f7f67871')` and `('transfer', 'rec:6bf46a143f347c12')` -- the two pairs the bite below pinned: in this
+    # tree's shipped arm `rec:0a9f…` is never minted and `rec:6bf4…` is never a `transfer` referent -- and IN
+    # `('sabotage', 'hearth_ostvik')`, `('speak', 'hearth_ostvik')` (the set assertion above's two verbs) and
+    # `('transfer', 'rec:2dd19669944564b8')`, dropped once at (tick, round) (2, 1). Every one of the other 14 survives.
+    # The clause still fires.
+    assert len(dropped) == 17, (
+        f"{len(dropped)} executable clause-4 drops, not 17. The drops are the channel itself; if "
         "this falls toward zero the clause has stopped firing, which is a different and worse "
         "failure than the loss of outcome-relevance recorded above.")
     # ⚠⚠⚠ **THE BITE CAME BACK UNDER G1a, THE GUARD ABOVE DEMANDED A REASON, AND THE REASON IS
@@ -12692,8 +12831,24 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # 2 -> 4, `reconstruct` 2 -> 3, `commit` 0 -> 2, `petition` 0 -> 1, `train` 0 -> 1; the shipped arm: `restore`
     # 1 -> 0, `work` 1 -> 0, `reconstruct` 5 -> 6, nothing else.
     # [GROUNDED: measured at v10 REM-22 on this tree and on a `git worktree` at `c88905e7` -- `bit` = the two pairs here and EMPTY there; shipped-arm drops of both pairs identical in both trees; the counterfactual (clause 4 disabled for the two pairs alone) takes both at (2,0) and (2,1) in both trees]
-    assert bit == {("transfer", "rec:0a9f85a0f7f67871"), ("transfer", "rec:6bf46a143f347c12")}, (
-        f"the clause-4 bite is {sorted(bit)}, not the two `transfer` pairs pinned at REM-22. A "
+    # ⚠⚠ **v10 REM-2C (B10-05): THE TWO PAIRS -> EMPTY AT THE (verb, subject) GRAIN, AND THE DENIAL IS NOT GONE: IT MOVED
+    # TO A PAIR ANOTHER PERSON ALSO TAKES, SO THE PAIR GRAIN CANNOT SEE IT. NAMED AND GROUNDED AS THE MESSAGE BELOW
+    # REQUIRES, AND THE BITE IS NOW ALSO ASSERTED AT THE GRAIN THAT OBSERVES IT (below).** `research` declares
+    # `referent_class: Record`, and the shipped arm's act mix moved (the set assertion above): `rec:0a9f…` is never minted
+    # and `rec:6bf4…` is never a `transfer` referent there, so the two REM-22 pairs leave `dropped`. The maturation still
+    # writes at MATTER (unchanged code; `test_w9_h80s_...` reads 54 / 76 maturations on this tree). What remains is the
+    # ACCEPTANCE'S OWN CHAIN on the rung itself: `p_carin`'s `transfer` on `hearth_ostvik` (`from` = her hearth, form 2
+    # `scalar_threshold`), dropped on her `('hearth_ostvik', 'stores:grain', 0)` at (tick, round) (0,2) and in every round
+    # of ticks 1 and 2 -- the belief present in every round, the drop DENIES (`G1a`'s mechanism). THE COUNTERFACTUAL
+    # (`hl_drops`'s replica with clause 4 disabled for `('transfer', 'hearth_ostvik')` alone, scratch, not kept): the
+    # shipped arm then has `p_carin` take it three times at tick 2, the tick the `none` control has her take it twice.
+    # But `p_bailiff` takes the same `(verb, subject)` once at tick 2 in the shipped arm, so the pair is in `pairs_live`
+    # and `bit`, which is keyed without the person, reads EMPTY. CONTROL: on the CP-T05-04 tree the person-grain bite is
+    # the two REM-22 pairs, `p_carin`'s, exactly `bit` there.
+    # [GROUNDED: measured at v10 REM-2C on this tree and on a detached worktree at `ea6f1dba` -- `bit` EMPTY here, the two REM-22 pairs there; the person-grain bite `{('p_carin', 'transfer', 'hearth_ostvik')}` here, `{('p_carin', 'transfer', 'rec:0a9f85a0f7f67871'), ('p_carin', 'transfer', 'rec:6bf46a143f347c12')}` there; the counterfactual as above]
+    assert bit == set(), (
+        f"the clause-4 bite is {sorted(bit)}, not EMPTY as measured at REM-2C (the two `transfer` pairs pinned at "
+        "REM-22 before it). A "
         "pair beyond those would be a NEW acceptance-chain pair and should be named and grounded "
         "as one, not silently accepted; disable clause 4 for it alone and see whether the shipped "
         "arm then takes it (REM-22's counterfactual), and check whether the "
@@ -12703,6 +12858,15 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
         "and `G1a` recovered from; check whether the maturation still writes at MATTER before "
         "anything else. A DIFFERENT or LARGER set is the channel reaching further and wants its "
         "own measurement.")
+    # v10 REM-2C: THE BITE AT THE PERSON'S GRAIN -- a `(person, verb, subject)` clause 4 dropped, that person took at the
+    # control and did not take at the shipped default. The property the pair-grain `bit` proxies, read where another
+    # person's act on the same pair cannot mask it (the note above has the measurement and the counterfactual).
+    dropped_who = {(pid, v, subj) for pid, v, subj in hl_who_live if v in takeable}
+    bite_who = {t for t in dropped_who if t in set(hl_seq_none) and t not in set(hl_seq_live)}
+    assert bite_who == {("p_carin", "transfer", "hearth_ostvik")}, (
+        f"the person-grain clause-4 bite is {sorted(bite_who)}, not `p_carin`'s `transfer` on her hearth (REM-2C). "
+        "Ground any change as the note above does -- disable clause 4 for the new triple's pair alone and see whether "
+        "the shipped arm's person then takes it -- before re-pinning")
     assert control == [], (
         f"the CONTROL arm dropped {control}. `none` deposits nothing in the `requires` "
         "vocabulary, so clause 4 has nothing to fire on and a drop here means the channel is open "
@@ -12914,7 +13078,17 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # it forms on `r_realm` or `p_a` for clause 4 to drop -- the wrong-kind formation the class removes, not a lost belief.
     # The other eight verbs STAY, their counts moving by one with the act mix. The control arm drops 0 in both trees.
     # `tell` and `surveil` are absent.
-    assert {v for v, _ in live} == {"accept", "challenge",
+    # ⚠ {8 verbs} -> {9 verbs}, v10 REM-2C (B10-05): `comply` JOINS, nothing leaves. MEASURED BEFORE RE-PINNING, this test's
+    # own `drops(DEFAULT_FIXTURES)` replicated on this tree and on a detached worktree at `ea6f1dba` (the CP-T05-04 tree,
+    # which reads the old 8 verbs and 97 drops exactly), the same script on both: here 141 drops (accept/challenge/fight/
+    # interview/tend/train 11 -> 18, speak 19 -> 20, sabotage 12, comply 0 -> 1; 129 on `r_realm`, `p_c` 11). `comply`'s one
+    # drop is on `rec:c87ab5d1c3a66ff4`, a PETITION -- a Record, so the shared `Record` class lets `comply` form on it --
+    # on the `('rec:c87ab5d1c3a66ff4', 'exists:dispensation', 0)` that the run's one refused `comply` on it (`p_b`'s)
+    # deposited: the
+    # wrong-SUB-kind cost REM-2C's `research` note records, reaching clause 4. The other eight verbs STAY, their counts
+    # moving with the act mix (`research` forms on a Record alone). The control arm drops 0 in both trees. `tell` and
+    # `surveil` are absent.
+    assert {v for v, _ in live} == {"accept", "challenge", "comply",
                                     "fight", "interview",
                                     "sabotage", "speak", "tend", "train"}, (
         f"the drops are on {sorted({v for v, _ in live})}. `tell` here means a "
@@ -15317,8 +15491,14 @@ def test_u2_the_one_round_arm_reproduces_the_pre_tick_loop():
     # those two Events (the event-kind claims, the `seen` claims and the reads, across their witnesses)
     # are not made. Upstream of both loops, as the moves above were; the one-round arm still reproduces
     # the one-pass loop's behaviour in every non-claim kind.
-    assert kinds == {"claim.decayed": 10, "claim.deposited": 30, "condition.worn": 2,
-                     "finding.none": 2, "record.created": 3, "term.matured": 1}, kinds
+    # v10 REM-2C (B10-05), A RE-RECORD, UPSTREAM OF BOTH LOOPS AS THE MOVES ABOVE WERE: `research` declares
+    # `referent_class: Record`, so `p_carin`'s `research` on `einhir_texts` (no Record; refused at admission, one of the
+    # two `finding.none`) is no longer formed, and her slot goes to `conceal` on the same referent: `finding.none` 2 -> 1,
+    # `cover.assumed` 0 -> 1, `claim.deposited` 30 -> 35 (the cover's deposits); every other kind unchanged. Candidate
+    # FORMATION changed, which a one-pass loop reading the same table would show identically.
+    # [GROUNDED: measured at v10 REM-2C on this tree and on a detached worktree at the CP-T05-04 tree `ea6f1dba`, `HL.build_world(0)`, 2 seasons, `scene_budget=1` -- the act store there: `p_carin create_record einhir_texts` x2, `p_carin research einhir_texts`, `p_bailiff create_record rec:6bf46a143f347c12`, `p_carin reconstruct einhir_texts`, the old kinds exactly; here the same acts without the `research` and with `p_carin conceal einhir_texts` taken last]
+    assert kinds == {"claim.decayed": 10, "claim.deposited": 35, "condition.worn": 2, "cover.assumed": 1,
+                     "finding.none": 1, "record.created": 3, "term.matured": 1}, kinds
     assert d.resolved, "the one-round arm resolved nothing — the control has no behaviour in it"
 
 
