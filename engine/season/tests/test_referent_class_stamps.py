@@ -81,13 +81,11 @@ from .test_in09_dispensation_answer import HOLDER, WRIT, _with_writ
 from .test_in45_carry import PARTY as CARRY_PARTY
 from .test_in45_carry import PETITIONER as CARRY_PETITIONER
 from .test_in45_carry import _carry, _filed
-from .test_in45_carry import _fold as _carry_fold
 from .test_in53_vacancy_need import _ambition, _formed, _know, _planted
 from .test_sc01_fired_slot import _sitting
 from .test_u7_remit import DUKE, SEAT
 from .test_u7_remit import PARTY as CASE_PARTY
 from .test_u7_remit import _open
-from .test_u7_remit import _fold as _u7_fold
 from .test_u7_remit import _world as _u7_world
 from .test_works_founding import (
     ABSENT, HARBOUR, HEARTH, PRESENT, SETTLEMENT, _declare, _fold, _kinds, _ripen, _stock,
@@ -193,7 +191,7 @@ def test_rem21_b_while_no_row_declares_a_new_class_the_questions_are_byte_identi
                   for qs in real.values() if qs)
     assert exposed >= 4, exposed
     assert any(qs and qs[0].classes for qs in real.values()), real
-    monkeypatch.setattr(world_q, "own_referents_of_class", lambda w, q, classes: ())
+    monkeypatch.setattr(world_q, "own_referents_of_class", lambda *a, **k: ())
     stub = {pid: world_q.questions_for(w, p) for pid, p in w.persons.items()}
     assert real == stub and repr(real) == repr(stub)
 
@@ -971,7 +969,7 @@ def _docketed_case():
     """The Duke (`p_high`) opens a case on `p_mid` through the real fold and the season's WITNESS deposits
     it: a dateless docket item, and the claims of `case.opened` in the ledgers of whoever stood at `S`."""
     w, d = _u7_world()
-    out = _u7_fold(w, d, _open("oc"))
+    out = _fold(w, d, _open("oc"))
     assert [e.kind for e in out] == ["case.opened"]
     d.witness(mint_token(w, WriteClass.INTERIOR), out)
     (item,) = w.docket
@@ -988,7 +986,7 @@ def test_cp_t05_04_c_a_person_holding_case_opened_of_a_dateless_matter_is_asked_
     one is asked."""
     w, d = _u7_world()
     assert all(world_q.docket_question(w, p) is None for p in w.persons.values())
-    out = _u7_fold(w, d, _open("oc"))
+    out = _fold(w, d, _open("oc"))
     d.witness(mint_token(w, WriteClass.INTERIOR), out)
     duke = w.persons[DUKE]
     dq = world_q.docket_question(w, duke)
@@ -1023,7 +1021,7 @@ def test_cp_t05_04_c_a_matter_taken_off_the_docket_or_never_witnessed_is_not_ask
     never witnessed (no deposit) does not widen his question -- his claims are of the first Event only."""
     w, d = _docketed_case()
     duke = w.persons[DUKE]
-    assert [_u7_fold(w, d, _open("oc2", subject="p_low"))[0].kind] == ["case.opened"]
+    assert [_fold(w, d, _open("oc2", subject="p_low"))[0].kind] == ["case.opened"]
     assert [i["matter"] for i in w.docket] == [CASE_PARTY, "p_low"]
     assert world_q.docket_question(w, duke).referents == (CASE_PARTY,)
     w.docket[0]["matter"] = None
@@ -1038,7 +1036,7 @@ def test_cp_t05_04_c_the_carry_route_asks_the_petitioner_about_the_matter_the_pe
     (the petition filed and held, nothing docketed) no one is asked."""
     w, d = _filed()
     assert all(world_q.docket_question(w, p) is None for p in w.persons.values())
-    out = _carry_fold(w, d, _carry("c1"))
+    out = _fold(w, d, _carry("c1"))
     assert [e.kind for e in out] == ["petition.carried"]
     d.witness(mint_token(w, WriteClass.INTERIOR), out)
     low = w.persons[CARRY_PETITIONER]
@@ -1058,7 +1056,7 @@ def test_cp_t05_04_c_a_judge_holding_date_fired_and_no_docketing_claim_still_for
     w, d = _u7_world(pool_default=30)
     duke = w.persons[DUKE]
     did = _sitting(w, d)
-    out = _u7_fold(w, d, _open("oc"))
+    out = _fold(w, d, _open("oc"))
     d.witness(mint_token(w, WriteClass.INTERIOR), out)
     sitting = f"q:sitting:{did}:{CASE_PARTY}"
     kept = list(duke.ledger)
@@ -1134,7 +1132,7 @@ def test_cp_t05_04_d_limit_3_open_case_forms_on_the_docketed_person_and_the_fold
     assert [i["matter"] for i in world_q.docketed(w, CASE_PARTY)] == [CASE_PARTY], "fixture: not docketed"
     oc = [c for c in _formed(w, DUKE, q) if c.verb == "open_case"]
     assert [c.subject for c in oc] == [CASE_PARTY], [(c.verb, c.subject) for c in oc]
-    assert [e.kind for e in _u7_fold(w, d, _act_of(oc[0], duke))] == ["case.refused"]
+    assert [e.kind for e in _fold(w, d, _act_of(oc[0], duke))] == ["case.refused"]
 
 
 # ======================================================================================
@@ -1292,7 +1290,7 @@ def test_rem2c_c_a_record_a_standing_occasion_and_the_question_both_name_is_carr
     pid, rec = PRESENT, _file_petition(w, d)
     assert world_q.records_held_for_holding_rows(w, w.persons[pid]) == (rec,)
     q = _ask(monkeypatch, w, pid, refs=("p_low", rec))
-    assert world_q.own_referents_of_class(w, q, DECLARED_CLASSES - OCCASION_ONLY_CLASSES)[-1] == rec, q
+    assert world_q.own_referents_of_class(w, q)[-1] == rec, q
     assert [k for r, k in q.classes if r == rec] == ["Record"] and q.classes[0] == (rec, "Record"), q
     assert [c.subject for c in _formed(w, pid, q) if c.verb == "research"] == [rec]
     monkeypatch.setattr(world_q, "_stamped", lambda q_, added, w_: dataclasses.replace(
@@ -1311,7 +1309,7 @@ def test_b10_05_close_a_writ_the_holder_and_the_question_both_name_is_carried_by
     assert world_q.writs_held(w, w.persons[HOLDER]) == (WRIT,)
     q = world_q.questions_for(w, w.persons[HOLDER])[0]
     assert q.referents == (WRIT,), q
-    assert world_q.own_referents_of_class(w, q, DECLARED_CLASSES - OCCASION_ONLY_CLASSES) == ()
+    assert world_q.own_referents_of_class(w, q) == ()
     assert [k for r, k in q.classes if r == WRIT] == ["Record"], q.classes
     assert [c.subject for c in _formed(w, HOLDER, q) if c.verb == "research"] == [WRIT]
 

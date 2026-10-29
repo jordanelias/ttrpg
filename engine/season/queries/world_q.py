@@ -392,16 +392,15 @@ def docket_question(w: World, p: Person) -> Optional[Question]:
     (`case.refused`, `_eff_open_case`'s `docketed` decline) -- found at the B10-05 close, zero in the
     realm (no `case.refused` Event over `aperture 2 --seeds 0 1 2 3 4`), pinned in
     `test_referent_class_stamps.py`. REVERT: drop the call in `questions_for` (the two `referent_class` columns stay)."""
-    if not any(d.get("matter") is not None for d in w.docket):
+    held = [c for c in p.ledger if c.predicate in DOCKETING_KINDS]
+    if not held:
         return None
-    reached = [(c, ms) for c in p.ledger if (ms := docketed_by(w, c))]
+    reached = [(c, ms) for c in held if (ms := docketed_by(w, c))]
     if not reached:
         return None
-    order: dict = {}
-    for d in w.docket:
-        if d.get("matter") is not None:
-            order.setdefault(d["matter"], len(order))
-    matters = tuple(sorted({m for _, ms in reached for m in ms}, key=order.__getitem__))
+    found = {m for _, ms in reached for m in ms}
+    matters = tuple(m for m in dict.fromkeys(d["matter"] for d in w.docket if d.get("matter") is not None)
+                    if m in found)
     about = LedgerReader([c for c, _ in reached]).belief_among()
     return Question(f"q:docket:{'|'.join(matters)}", "claim_landed", matters, about.id)
 
@@ -1077,8 +1076,23 @@ def season_factors_by_rung(w: World) -> tuple:
     that rung's `enclosing_territory` (`None` where it lies in none). MATTER reads it ONCE a season and
     hands it to `produce_input`; the port reads the per-rung factor from here, the same owner. Two rungs
     in one territory read one factor (the draw is keyed on the territory, so asking twice agrees); with
-    `season_factor_draw` at `()` every rung reads the bare constant and nothing is drawn."""
-    return tuple((rid, season_factor_of(w, enclosing_territory(w, rid))) for rid in _site_rungs(w))
+    `season_factor_draw` at `()` every rung reads the bare constant and nothing is drawn -- and no
+    containment walk is made for it either (the answer would be discarded), nor, with the draw on, more than
+    one `season_factor_of` per territory."""
+    rungs = _site_rungs(w)
+    if not rungs:
+        return ()
+    if season_of_year(w) is None:
+        base = season_factor_of(w)
+        return tuple((rid, base) for rid in rungs)
+    by_territory: dict = {}
+    out = []
+    for rid in rungs:
+        territory = enclosing_territory(w, rid)
+        if territory not in by_territory:
+            by_territory[territory] = season_factor_of(w, territory)
+        out.append((rid, by_territory[territory]))
+    return tuple(out)
 
 
 def age_of(w: World, pid: str) -> int:
@@ -2827,7 +2841,7 @@ def larders_in_purview(w: World, p: Person, named: Optional[frozenset] = None) -
     return tuple(out)
 
 
-def own_referents_of_class(w: World, q: Question, classes: frozenset) -> tuple:
+def own_referents_of_class(w: World, q: Question, classes: Optional[frozenset] = None) -> tuple:
     """THE QUESTION'S OWN REFERENTS OF A STAMPED CLASS (v10 REM-21, AM-A-06, [ASSUMPTION; medium;
     Jordan to correct]): the plain `referents` of `q` -- the question the person answers, `out[0]`
     in `questions_for` -- whose collection (`World.class_of`) is in `classes`, in their order. One
@@ -2836,9 +2850,10 @@ def own_referents_of_class(w: World, q: Question, classes: frozenset) -> tuple:
 
     NOT A STANDING OCCASION: it reads the question and never the person's ledger or edges, so a
     person who knows fifty people is offered none of them unless his question names one. `classes`
-    is `questions_for`'s: every class a row declares (`data/verbs.py::DECLARED_CLASSES`) less
-    `rosters.yaml: occasion_only_classes`, so no class literal lives here; while no row declares a
-    class outside that list the set is empty and this returns `()`. Resolver-side and read-only.
+    defaults to the one domain `questions_for` stamps (the B10-05 close made this its owner): every
+    class a row declares (`data/verbs.py::DECLARED_CLASSES`) less `rosters.yaml: occasion_only_classes`,
+    read at call time, so no class literal lives here; while no row declares a class outside that list
+    the set is empty and this returns `()`. A caller may pass another set. Resolver-side and read-only.
     A WRIT IS NOT STAMPED HERE (the B10-05 close, [ASSUMPTION; medium; Jordan to correct]): a Record of a
     writ kind (`data/verbs.py::RECORD_REFERENT_KINDS`) reaches a question only through `writs_held`,
     whose addressee test is `comply`'s whole formation (its cell asks a claim on the writ, which any
@@ -2848,6 +2863,8 @@ def own_referents_of_class(w: World, q: Question, classes: frozenset) -> tuple:
     works kinds are NOT skipped: `carry`, `found` and `build` form on an unheld one and the fold refuses
     it on `held_by`, REM-2C's measured shared-class cost. REVERT: drop the term in `questions_for`
     (or, for the writ alone, the `RECORD_REFERENT_KINDS` test below)."""
+    if classes is None:
+        classes = DECLARED_CLASSES - OCCASION_ONLY_CLASSES
     if not classes:
         return ()
     return tuple(r for r in q.referents
@@ -3230,13 +3247,10 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # (`own_referents_of_class`) -- no standing occasion, the question he answers read for its own
     # kinds. "Never twice" is `_stamped`'s one dedup (the first pair kept), not a filter per term
     # pair, so a later term composes by being appended. REVERT: drop the term.
-    vacant = vacancies(w, p)
     told = ledger_names(p.ledger)
-    places = places_named(w, p, told)
-    added = (vacant + seats_named(w, p, told) + writs_held(w, p) + records_held_for_holding_rows(w, p)
-             + places + larders_in_purview(w, p, told)
-             + (own_referents_of_class(w, out[0], DECLARED_CLASSES - OCCASION_ONLY_CLASSES)
-                if out else ()))
+    added = (vacancies(w, p) + seats_named(w, p, told) + writs_held(w, p) + records_held_for_holding_rows(w, p)
+             + places_named(w, p, told) + larders_in_purview(w, p, told)
+             + (own_referents_of_class(w, out[0]) if out else ()))
     if added:
         head = out[0] if out else Question(f"q:need:{added[0]}", "need", (), added[0])
         out[:1] = [_stamped(head, added, w)]

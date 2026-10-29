@@ -785,6 +785,7 @@ for _c in sorted(OCCASION_ONLY_CLASSES):
                    "rosters.yaml -- occasion_only_classes",
                    law="v10 REM-21 -- the own-referent term holds back a declared class; a misspelt one "
                        "holds back nothing")
+del _c
 PERSON_PREDICATES = roster("person_predicates")
 VIEW_BUILDER_RULES = roster("view_builder_rules")
 QUESTION_AGGREGATION = roster("question_aggregation", ordered=True)

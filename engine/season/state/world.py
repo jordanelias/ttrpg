@@ -1420,8 +1420,9 @@ class World:
     def last_emission_of(self, kind: str, subject: str, *, written: bool = False) -> Optional[str]:
         """The id of the most recent Event of `kind` about `subject`, or None.
 
-        `written=True`: the Event that WROTE `subject` (H-129's fix shape), taken for `person.died`,
-        whose fold emission anchors on the killer.
+        `written=True`: the Event that WROTE `subject` (H-129's fix shape), taken for `person.died`
+        (whose fold emission anchors on the killer) and, since v10 REM-52, for the bodies pass's
+        `body.changed` read.
 
         `W4`'s chaining primitive: a licensed clock's next tick names its previous one, so
         `[ROOT]` stops appearing after the clock's genuine first emission.
@@ -1438,16 +1439,10 @@ class World:
         the deleted field carried the identical value for a fold-emitted Event (`Event(H(...), k,
         a.actor, ...)`), so `last_emission_of("body.changed", <victim>)` already missed a
         combat-caused wound before this deletion -- this docstring's overclaim is new, the gap it
-        describes is not. LATENT AT SHIPPED DEFAULTS: `body_step = 0` skips the caller
-        (`loop/matter.py`) entirely, so nothing reaches it on a built world today. The
-        `person.died` half is FIXED via `written=True`; `body.changed` still reads the anchor, so
-        that half of H-129 stands. Registered rather than fixed for `body.changed` only:
-        `hole_register.yaml` H-129 -- a fix (reading the first minted receipt in `changes[]`
-        instead of `anchor_of`) would move outputs in a `body_step > 0` sweep arm and needs its
-        own decision, not a side effect of this position's field deletion.
-        ⚠ THE LAST THREE SENTENCES' STATE IS SUPERSEDED AT v10 REM-52: `body_step` ships at 10 (the caller
-        is reached on a built world) and the bodies pass of `matter` reads `body.changed` with
-        `written=True`, so both halves of H-129 are fixed at their one caller each.
+        describes is not. Both halves of H-129 are FIXED at their one caller each
+        (`hole_register.yaml` H-129): `person.died` through `written=True` and, at v10 REM-52 (where
+        `body_step` shipped at 10, so the caller is reached on a built world), the bodies pass's
+        `body.changed`.
         Every OTHER caller of this method (the six kinds above) is unaffected: each names a kind
         with exactly one emitter, MATTER's own auto-emission block, so tier 2 still returns `subj`
         by construction for all of them. ⚠ "SIX", NOT SEVEN, AND "MATTER'S OWN" NO LONGER COVERS

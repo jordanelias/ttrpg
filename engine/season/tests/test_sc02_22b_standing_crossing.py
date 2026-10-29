@@ -30,8 +30,8 @@ import yaml
 
 from ..data import files
 from ..data.fixtures import DEFAULT_FIXTURES
-from ..data.rosters import OCCASION_ONLY_CLASSES, STANDING_CROSSED
-from ..data.verbs import DECLARED_CLASSES, EVENT_KINDS, VERB_TABLE
+from ..data.rosters import STANDING_CROSSED
+from ..data.verbs import EVENT_KINDS, VERB_TABLE
 from ..data.matrix import WriteClass
 from ..decision import aggregate_questions, opening_set, standing_of
 from ..decision.choose import pack_scenes
@@ -220,7 +220,7 @@ def test_step23_cp_t05_04_the_shipped_row_opens_the_case_on_the_origin_only_wher
     view = View(BAILIFF, [], w.fixtures.get("view_k"), q)
     assert q.classes == () and q.referents == TELLERS, q
     assert not [c for c in opening_set(bailiff, view, q, w.fixtures) if c.verb == "open_case"]
-    answered = world_q._stamped(q, world_q.own_referents_of_class(w, q, DECLARED_CLASSES - OCCASION_ONLY_CLASSES), w)
+    answered = world_q._stamped(q, world_q.own_referents_of_class(w, q), w)
     assert answered.classes == tuple((t, "Person") for t in TELLERS), answered
     cands = [c for c in opening_set(bailiff, View(BAILIFF, [], w.fixtures.get("view_k"), answered), answered,
                                     w.fixtures) if c.verb == "open_case"]

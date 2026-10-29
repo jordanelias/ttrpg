@@ -18,17 +18,10 @@ THE FALSIFIERS, each with the failure it would show:
 
 from __future__ import annotations
 
-from ..data.matrix import Step, WriteClass
-from ..harness import populated as POP
-from ..loop.driver import SeasonDriver, mint_token
 from ..queries import world_q
 from ..state.carriers import Rung, Site, Tenure
 from ..state.world import World
-
-DEFAULT = POP.P.DEFAULT_FIXTURES
-
-# [JUSTIFIED: a test-fixture size, not a game value -- `test_season_weather.py`'s year: four seasons, each holding the swept points `H-26` declares (0.5 / 1 / 2), equally likely]
-SPREAD = ((0.5, 1.0, 2.0),) * 4
+from .test_season_weather import DEFAULT, SPREAD, _matter
 
 # Test data, not a claim about Valoria's economy: one harbour at full condition yields 40 grain and 30 salt a season
 # at factor 1 (`test_season_weather.py`'s own reading), so a factor of 0.5 / 1 / 2 yields half / the same / double.
@@ -36,6 +29,7 @@ CONTROL_YIELD = {"grain": 40, "salt": 30}
 
 #: territory -> the settlements under it; `None` is the settlement under the realm itself (no territory above it).
 LAYOUT = {"terr_a": ("set_a1", "set_a2"), "terr_b": ("set_b",), None: ("set_free",)}
+RUNGS = tuple(r for rs in LAYOUT.values() for r in rs)          # sorted, as `_site_rungs` returns them
 
 
 def _world(seed: int, table) -> World:
@@ -56,13 +50,6 @@ def _world(seed: int, table) -> World:
             w.sites[f"s_{sid}_harbour"] = Site(f"s_{sid}_harbour", sid, "harbour", condition=scale)
             n += 1
     return w
-
-
-def _matter(w):
-    """MATTER alone, through the real barrier and a real MATTER token (`test_season_weather.py`'s helper)."""
-    d = SeasonDriver(w)
-    w.step = Step.MATTER
-    return d.matter(mint_token(w, WriteClass.MATTER), [])
 
 
 def _yield_of(w, rid: str) -> dict:
@@ -124,7 +111,7 @@ def test_cl_events_1_matter_hands_produce_a_factor_per_rung_and_each_rung_is_cre
     assert len(seen) == 1, "MATTER built the produce record other than once a season"
     inp = seen[0]
     factors = dict(inp.factor)
-    rungs = ("set_a1", "set_a2", "set_b", "set_free")
+    rungs = RUNGS
     assert [r for r, _ in inp.factor] == sorted(rungs), f"the factor does not cover the rungs a Site stands on: {inp.factor}"
     assert [r for r, _ in inp.stores] == [r for r, _ in inp.factor], "`factor` and `stores` cover different rungs"
     fa, fb, ff = (world_q.season_factor_of(w, t) for t in ("terr_a", "terr_b", None))
@@ -151,8 +138,8 @@ def test_cl_events_1_the_control_arm_reads_the_bare_constant_at_every_rung_and_d
 
     monkeypatch.setattr(world_q, "draw_factory", no_draw)
     base = DEFAULT.get("season_factor")
-    assert world_q.season_factors_by_rung(w) == tuple((r, base) for r in sorted(("set_a1", "set_a2", "set_b", "set_free")))
+    assert world_q.season_factors_by_rung(w) == tuple((r, base) for r in RUNGS)
     assert world_q.season_factor_of(w, "terr_a") == world_q.season_factor_of(w, "terr_b") == world_q.season_factor_of(w) == base
     _matter(w)
-    for rid in ("set_a1", "set_a2", "set_b", "set_free"):
+    for rid in RUNGS:
         assert _yield_of(w, rid) == {k: int(v * base) for k, v in CONTROL_YIELD.items()}

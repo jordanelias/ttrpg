@@ -574,13 +574,11 @@ def _formed_on(w, pid, referent, verbs, q=None):
     IT (v10 REM-22): carrying its own referents of every stamped class (`world_q.own_referents_of_class`,
     through `_stamped`), because a row declaring `referent_class: Site` (`work`) forms on a classed
     referent alone. The acts come from the real `opening_set` and are packed by the real `pack_scenes`."""
-    from ..data.rosters import OCCASION_ONLY_CLASSES
-    from ..data.verbs import DECLARED_CLASSES
     from ..state.carriers import Question
     p = w.persons[pid]
     if q is None:
         q = Question(f"q:{referent}", "claim_landed", (referent,), None)
-        q = world_q._stamped(q, world_q.own_referents_of_class(w, q, DECLARED_CLASSES - OCCASION_ONLY_CLASSES), w)
+        q = world_q._stamped(q, world_q.own_referents_of_class(w, q), w)
     cands = [c for c in _options.opening_set(p, _assemble(p, q, 12), q, w.fixtures) if c.verb in verbs]
     mint = lambda who, verb, subj: _H(w.world_seed, w.tick, who, f"act:{verb}:{subj}")
     return [a for s in _pack(p, cands, 99, w.fixtures, mint) for a in s.acts]

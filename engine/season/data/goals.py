@@ -343,12 +343,13 @@ def _predicate(sid: str, cell):
     if req is None:
         _refuse(Unspecified, sid, f"`predicate:` is {cell!r}, which builds to no requirement",
                 "a cell in the `requires_typed` grammar (`of: subject`)", _STAGES_LAW, _STAGES_KEY)
-    world_only = sorted(set(req.stems()) & WORLD_ONLY_STEMS)
+    stems = set(req.stems())
+    world_only = sorted(stems & WORLD_ONLY_STEMS)
     if world_only:
         _refuse(Forbidden, sid, f"`predicate:` asks {world_only}, which only the world answers",
                 "a cell over stems a person's own ledger can answer (not `WORLD_ONLY_STEMS`)",
                 _STAGES_LAW, _STAGES_KEY)
-    ledger_derived = sorted(set(req.stems()) & LEDGER_DERIVED_STEMS)
+    ledger_derived = sorted(stems & LEDGER_DERIVED_STEMS)
     if ledger_derived:
         _refuse(Forbidden, sid, f"`predicate:` asks {ledger_derived}, which no ledger claim answers person-side",
                 "a cell over stems a claim in a person's ledger answers (not `LEDGER_DERIVED_STEMS`)",
