@@ -333,9 +333,17 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # ecb47cd0... / 5d7f362d... (one, two seasons). CONTROL, run in process on this tree: `convene`'s column blanked in the
 # shared `VERB_TABLE` and `RUNG_REMIT_ACTS` re-derived reads the old pair, the old `BASE_EVENTS` and the old `give`- and
 # `thread_read`-withheld arms exactly.
+# RE-PINNED at v10 REM-28 `dispatch` (B10-06), A BEHAVIOUR MOVE DECLARED: `dispatch` declares `referent_class: Person`, so
+# it forms only on a person the question names and never on a rung, a Record or a Site -- `_req_dispatch`'s 'names no
+# person the world holds', 16 of 33 pooled attempts at `aperture 1 s`, all refused -- and no derived set moves
+# (`DECLARED_CLASSES` already holds `Person`, `RUNG_REMIT_ACTS` reads `Rung` rows alone). `aperture 1 s`, realm:
+# `dispatch` attempted 11 / 8 / 8 -> 2 / 8 / 6, refused 9 / 0 / 2 -> 0, executed 2 / 8 / 6 unmoved; `convene`, `migrate`
+# and `requisition` formed counts unmoved. The build hash is equal; one and two seasons move. Was 7d99c0f7... /
+# 1196f86b... (one, two seasons). CONTROL, run in process on this tree: `dispatch`'s column blanked in the shared
+# `VERB_TABLE` reads the old pair, the old `BASE_EVENTS` and the old `give`- and `thread_read`-withheld arms exactly.
 BASE_HASHES = {0: "9ff5390939742b7bbb3af0fa2551e958",
-               1: "7d99c0f7219473c63cc18177c6270815",
-               2: "1196f86b6ab4d54230114de83e3bd09c"}
+               1: "30a959645cd5f42b731be47b6273e2e0",
+               2: "fe3cc6d3699c34fe4c78e6b3d88e4a1c"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -389,8 +397,9 @@ BASE_HASHES = {0: "9ff5390939742b7bbb3af0fa2551e958",
 # draw and what the hungry cohorts' bodies move after them; `body_step` swept back to `0` reads the old pair).
 # RE-RECORDED at v10 REM-27 with `BASE_HASHES` (6484 -> 6482, 20701 -> 21258; REM-27 reverted in process reads the old pair).
 # RE-RECORDED at v10 REM-28 with `BASE_HASHES` (6482 -> 7193, 21258 -> 24535; REM-28 reverted in process reads the old pair).
-BASE_EVENTS = {1: (7193, "44160f1d46f34251530a9368a4c944fa3a99670d841d403e7e40b4814025cece"),
-               2: (24535, "daa879e8bb546991c8f8021f741944019bfb98c7177a5b02e3703b9785ab8e12")}
+# RE-RECORDED at v10 REM-28 `dispatch` with `BASE_HASHES` (7193 -> 7196, 24535 -> 24107; the column blanked in process reads the old pair).
+BASE_EVENTS = {1: (7196, "bca6d489556d4937d374a6c0dd5f3b7a55a8e9c057437b6f5956ddcab1e7d7cb"),
+               2: (24107, "3cb85ec4393a0f68044d04a8dbd872b0b83a4883071fd9ebc96280d3b1ad7df6")}
 
 
 def _digest(w) -> tuple:
@@ -504,7 +513,9 @@ def test_the_give_withheld_arm_reproduces_the_one_season_pin():
 #: reverted in process reads the old value exactly).
 #: RE-RECORDED at v10 REM-28 with `BASE_HASHES`: 6487 / a23c37a6... -> 7198 / c05bfef8... (`convene` declares `Rung`; REM-28
 #: reverted in process reads the old value exactly).
-THREAD_READ_WITHHELD_EVENTS_1 = (7198, "c05bfef8ee76e275739247a2ec09ecf0e13ee90861376b8c4e8bbbdfd977e35c")
+#: RE-RECORDED at v10 REM-28 `dispatch` with `BASE_HASHES`: 7198 / c05bfef8... -> 7201 / 9a156ea6... (`dispatch` declares `Person`; the
+#: column blanked in process reads the old value exactly).
+THREAD_READ_WITHHELD_EVENTS_1 = (7201, "9a156ea63670fa814b4cec95e4882db574dd4a9b651b3c030f8db967d8d55836")
 
 
 def test_the_thread_read_withheld_arm_is_pinned_and_differs_from_the_shipped_season():

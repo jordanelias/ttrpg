@@ -8178,8 +8178,17 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # `release` 119, `research` 128, `surveil` 98, `survey` 129, `train` 127, `reconstruct` 44, `fight` 23, `covenant`,
     # `dispatch` and `seize` 1 each unmoved. The columns alone (the docket question stubbed) and the docket question
     # alone (the columns blanked) are read at the `by_sig` note below.
+    # ⚠⚠ v10 REM-28 `dispatch` (B10-06), 10 -> 9: `dispatch` LEAVES. A RE-RECORD WITH ITS REASON: the defect it pinned is
+    # fixed. It declares `referent_class: Person`, so it forms only on a person the question names and never on a rung,
+    # a Record or a Site, which is what `_req_dispatch` refused ('names no person the world holds'): it was attempted and
+    # refused in exactly one world, NPC-033's five-seat `cast:` world (`dispatch` refused-world count 1 before, 0 after),
+    # and no corpus question there names a person for it, so it is attempted in no world and moves from the
+    # always-refused to the never-attempted set (asserted below): the sideways, declared move of the item, as REM-22's
+    # three and REM-23's `commit`. MEASURED by `corpus_run.run_case`, seed 0, over the 143 live worlds, the convene
+    # commit (`b8fd583b`) as control (the same script on both, the column blanked in process): `dispatch` refused in 1
+    # world and executed in none before, attempted in none after; `ever` is the same 20 on both sides.
     assert refused_only == {"build", "found", "survey",
-                            "forge", "seize", "covenant", "sabotage", "train", "dispatch",
+                            "forge", "seize", "covenant", "sabotage", "train",
                             "comply"}, (
         f"the always-refused set moved to {sorted(refused_only)}. `move` and `transfer` left it "
         "when `W-C` closed `H-94`'s structural half — the Candidate carries operands now — and "
@@ -9288,13 +9297,19 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # attempted, the same sideways, declared move as `commit`'s. MEASURED by `corpus_run.run_case`, seed 0, the REM-25
     # tree (`92892b09`, a detached worktree) as control (the same script on both): the never-attempted set there is the
     # 20 without `argue`. `open_case` is in this set on both sides (never attempted in the corpus).
+    # ⚠⚠ v10 REM-28 `dispatch` (B10-06): `dispatch` JOINS -- 21 -> 22. A RE-RECORD WITH ITS REASON: it declares `referent_class:
+    # Person` and was attempted-and-refused in NPC-033's one world only; no corpus question names a person for it there,
+    # so it is attempted in no world (it left `refused_only`, above, refused in 1 world before, 0 after):
+    # attempted-and-always-refused -> never attempted, the same sideways, declared move as `commit`'s and `argue`'s.
+    # MEASURED by `corpus_run.run_case`, seed 0, the convene commit (`b8fd583b`) as control (the same script on both): the
+    # never-attempted set there is the 21 without `dispatch`.
     assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish",
                                               "destroy_record", "march", "oblige", "open_case",
                                               "determine", "migrate", "requisition",
                                               "forgive",
                                               "arrest", "pardon", "raze", "thread_read",
                                               "work", "restore", "examine", "commit",
-                                              "argue"}, (    # IN-57: `dispatch` out, to `refused_only`; FI-01: back; IN-38: out again; K-3: `thread_read` in; REM-10: `speak`, `examine`, `argue` out; REM-22: `work`, `restore`, `examine` in; REM-23: `commit` in; REM-25: `comply` out; CP-T05-04: `argue` in
+                                              "argue", "dispatch"}, (    # IN-57: `dispatch` out, to `refused_only`; FI-01: back; IN-38: out again; K-3: `thread_read` in; REM-10: `speak`, `examine`, `argue` out; REM-22: `work`, `restore`, `examine` in; REM-23: `commit` in; REM-25: `comply` out; CP-T05-04: `argue` in
         f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Five of "
         "the original six are the governance verbs no corpus overlay grants (`establish` is "
         "`remit:confer`-eligible); `march` is eligible in NPC-033/038 and WOULD form a real "
@@ -10614,15 +10629,20 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # corpus attempts them on those same held petitions (33 and 6 refusals, 161 and 50 before) and refuses them on
     # `exists:works=0`, executed in none. MEASURED by `_wc_corpus_pass`, seed 0, the REM-24 tree (`f2381695`, a
     # detached worktree) as control (the same script on both): refused-and-never-executed 11 -> 10.
+    # ⚠⚠ v10 REM-28 `dispatch` (B10-06): `dispatch` LEAVES (10 -> 9). A RE-RECORD WITH ITS REASON: the defect it pinned is
+    # fixed (`referent_class: Person`, so it is no longer formed on the rungs, Records and Sites `_req_dispatch` refused);
+    # it was refused in NPC-033's world alone and is attempted in none now (the note at
+    # `test_the_corpus_runs_and_the_ranking_cannot_discriminate`'s `refused_only`). MEASURED by `_wc_corpus_pass`, seed 0,
+    # the convene commit (`b8fd583b`) as control (the same script on both): refused-and-never-executed 10 -> 9.
     assert set(refused) - set(executed) == {"found",
                                             "build", "survey",
                                             "forge", "seize", "covenant",
-                                            "sabotage", "train", "dispatch", "comply"}, (
+                                            "sabotage", "train", "comply"}, (
         f"the always-refused set is {sorted(set(refused) - set(executed))}. `work` refuses because "
         "its `site` operand binds either to a non-Site referent (UNKNOWN) or to a real site whose "
-        "condition never clears the floor in this corpus; `dispatch` is refused only in NPC-033's five-seat "
+        "condition never clears the floor in this corpus; `dispatch` WAS refused only in NPC-033's five-seat "
         "`cast:` world (v9 IN-38; it LEFT at `17-cast` and JOINED here, see above -- seed 0, SEAT COUNT "
-        "the changed variable); `commit` "
+        "the changed variable) and left again at v10 REM-28 (`referent_class: Person`, attempted in no world); `commit` "
         "because BO-9/BO-10's referent-binding gap is still open (`subject` never binds to a "
         "Proposition -- do not widen Q4 to close this here); `requisition` because no corpus seat has a "
         "rung, so none has purview anywhere (position `19`); `found`/`build` because no referent "
