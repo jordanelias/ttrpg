@@ -177,7 +177,7 @@ constrained design was written after seeing results. Whether a plain exile close
 arrangement set piece → only through `determine`'s effect (G-14). Two things exist and are underused: a MATTER crossing
 that "emits and writes nothing" (`loop/matter.py`; so a threshold can raise a docket matter without acting), and
 `world_q.endings_reached` over `rosters.yaml: endings`, an executable terminus over holds reported once per season
-(`world_q.py:2084-2137`, `driver.py:520-523`), **which TL does not mention and goal-stage termini should compose on.**
+(`world_q.endings_reached`, `driver.py:520-523`), **which TL does not mention and goal-stage termini should compose on.**
 
 **What it means.** Lawful top-down is arming engines the corpus already uses, not writing beats. Among 50 classified endings the
 largest closing class is a decider (20), then a crossing-forced close (19), a never-closing state (10), a roll (9) and a
