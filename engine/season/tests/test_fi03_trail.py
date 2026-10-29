@@ -593,7 +593,7 @@ def test_a_research_on_a_surveyed_record_forms_no_response_on_its_maker(monkeypa
     deed of the same man, not a `covert_kinds` member), handed over the same way, and the same `research`
     act drawing the same hand band: nothing is trail, nothing is deposited, and no candidate forms on the
     maker. In the realm every act executes and emits its Event (S19.4), so a trail is suppressed only at
-    the container -- this control is the other half: an act whose kind the data does not list.
+    the scene -- this control is the other half: an act whose kind the data does not list.
     ITS OWN POSITIVE ARM, so the negative cannot pass for a reason other than the list: `covert_kinds`
     widened to the survey's kind (monkeypatched on `epistemic`, the one reader), the same world, the same
     act -- a response on him forms."""
@@ -663,7 +663,7 @@ def _registered():
 
 
 def _provider_and_entry_files() -> tuple:
-    """The fieldwork container's two files, read off what is REGISTERED (the provider the `inquiry` row
+    """The fieldwork scene's two files, read off what is REGISTERED (the provider the `inquiry` row
     names, the entry its composition row resolved), not spelt as paths."""
     _registered()
     row = manifest_resolve("inquiry", "finding.made")
@@ -676,7 +676,7 @@ def test_no_game_code_branches_on_an_entity_id():
     """FI-03's SCRIPTING-DRIFT FALSIFIER: no game code special-cases a goal, a person or an NPC case by
     its id. SCOPE AND WHAT IS NOT SEEN: `_closure_scan.py`'s docstring; `harness/probes.py` is left out
     (`scanned_game_code`: its choosers are scripted by design). The floor (`>= 100` files) and the two
-    fieldwork files' membership assert the sweep read the package and the container;
+    fieldwork files' membership assert the sweep read the package and the scene;
     `test_a_planted_branch_on_an_entity_id_in_the_real_provider_is_found` is the scan's own falsifier."""
     ids = entity_ids()
     assert all(ids.values()), {k: len(v) for k, v in ids.items()}

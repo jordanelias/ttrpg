@@ -1,6 +1,6 @@
 # META-ARCHITECTURE — STAGE 4 · CODE SHAPE, TYPES, SEAMS, IMPOSSIBILITIES
 
-## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302): *container* means a playable module scene and *rung* is the world side (a *container* left in a quotation or a field name predates this); the presentation shell is `game/`, not `port/`.**
+## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302, ED-IN-0303): Godot's words name Godot constructs, so a registered module's playable form is a *scene* (a run of it, a *scene instance*), and *rung* is the world side (a *container* left in a quotation, a field name or a plan title predates this); the scene tree lives in `game/`, not `port/`.**
 ## Produced by a **read-only** Fable 5.1 synthesis holding Stages 1–3 in context. Concrete shapes taken
 ## from, amended against, or rejected from the chain (#353 `ARCHITECTURE.md`, `ARCHITECTURE_V2.md`,
 ## the three YAML files). **Nothing under `canon/`, `systems/`, `research/` or `engine/` was read.**
@@ -151,7 +151,7 @@ seam/        contest() · ladder · the contest provider ADAPTERS, one per defer
              wrapper per deferred subsystem". A module writes nothing and holds no token; the loop interprets
              its output. The no-token, no-write discipline of the row below is unchanged.
 manifest/    role -> provider rows, resolved at boot
-game/        the Godot shell; nothing under it is simulation
+game/        the scene tree; nothing under it is simulation
 tests/       falsifiers, including the two licensed guards
 ```
 
@@ -920,7 +920,7 @@ a porter will "fix".
 | `Event` + the log | an append-only `Array` owned by the driver | see rejection 3 |
 | `rosters` · `verb_table` · `write_matrix` · `requirements` | `Resource` (`.tres`) or JSON, **one loader**, twelve invariants at boot | Godot's `_ready` is the natural home for a boot-time loader; a failed invariant must abort the boot, not warn |
 | the write gate | one `func` every mutation crosses; typed `Result` | no exceptions in GDScript, so a refusal is a value — which this architecture already required |
-| `game/` | `Node`s, the scene tree, signals, `_process` | the shell, and the ONLY place these appear |
+| `game/` | `Node`s, the scene tree, signals, `_process` | the scene-tree side, and the ONLY place these appear |
 | the RNG (unbuilt) | a seeded `RandomNumberGenerator` **threaded like `World`** | see rejection 4 |
 
 ### The five rejections
@@ -1124,7 +1124,7 @@ why its proof is step 2 loading against it.
 | **10** | `seam/contest` · `manifest/` · a stub wrapper returning a `Margin` | a `kill/wound` routes to the seam; the nested run returns `Refusal` at the cap — **and in GDScript actually reaches it without a crash**; a misspelled manifest row fails at boot naming the row | beside |
 | **11** | the real subsystem wrappers | out of this chain's scope by ruling | beside |
 | **12** | the parallel DELIBERATE map | serial and pooled runs produce the identical hash | beside — an optimisation |
-| **13** | the Godot shell · the two licensed guards | both guards red on a planted violation, then green; a headless run prints the Python oracle's hash in the integer domain | beside, from step 3 |
+| **13** | the `game/` scene tree · the two licensed guards | both guards red on a planted violation, then green; a headless run prints the Python oracle's hash in the integer domain | beside, from step 3 |
 
 **Critical path: 0 → 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8.** Step 8 is the bar; nothing after it is on the path.
 

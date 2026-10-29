@@ -252,7 +252,7 @@ class World:
         # ANTECEDENT can name the emission its own write just produced -- which is how a band
         # crossing's `causes[]` reaches the wear that crossed the floor.
         self._emitted_by_write: list[Event] = []
-        # H-206. WHERE EACH REMOVED PERSON LAST STOOD, `{pid: (container, tick)}`, written by
+        # H-206. WHERE EACH REMOVED PERSON LAST STOOD, `{pid: (rung, tick)}`, written by
         # `remove_person` -- the one death cascade -- and read by `world_q.event_place`. It exists
         # because the cascade leaves NOTHING to read the place from: a Tenure is owned by its subject
         # (S15.1), so the dead man's own `contain` edge leaves `w.tenures` with him. Game state the

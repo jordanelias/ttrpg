@@ -1,6 +1,6 @@
 # THE IMPROVEMENT PLAN — WHAT TO BUILD, IN WHAT ORDER, AND WHAT MAY NOT BE INVENTED WHILE BUILDING IT
 
-## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302): *container* means a playable module scene and *rung* is the world side (a *container* left in a quotation or a field name predates this); the presentation shell is `game/`, not `port/`.**
+## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302, ED-IN-0303): Godot's words name Godot constructs, so a registered module's playable form is a *scene* (a run of it, a *scene instance*), and *rung* is the world side (a *container* left in a quotation, a field name or a plan title predates this); the scene tree lives in `game/`, not `port/`.**
 ## Scope: **PR #337 → now, for evidence AND for answers.** Every closure in Part 3 is made on #353's
 ## own text. §2.6 and W16 record what a tree-wide search returns and **the plan rests on none of it.**
 ## Companion to `ARCHITECTURE_V2.md` (the specification) and `01_NPC_VS_ARC.md` (the split).
@@ -442,7 +442,7 @@ doc marked as the one the canonical prior art already supplies. **The budgeted u
 
 ### What it costs, stated plainly, because the escalation named this cost and Jordan accepted it
 
-**It buys the container the loop does not have.** The question as put said reading 2 *"costs a second
+**It buys the scene the loop does not have.** The question as put said reading 2 *"costs a second
 budget object and a container the loop does not have"*. That is now work, not a hypothetical:
 
 - **`budget` returns SCENE actions.** #353 §26.3's prose counts acts throughout — *"a wounded duke gets
@@ -450,7 +450,7 @@ budget object and a container the loop does not have"*. That is now work, not a 
   the noun change unaltered** (five scenes each spent petitioning is still the triage the budget
   exists to create), but every one of those sentences needs re-stating in scenes.
 - **Part E's verb table is UNCHANGED and is now correctly placed.** Its ~28 verbs are the *mechanical
-  interactions*; the scene is the container above them. **Nothing in Parts D or E is invalidated** —
+  interactions*; the scene sits above them. **Nothing in Parts D or E is invalidated** —
   a level is added above, which is the cheapest possible shape for this ruling to take.
 - ⚠ **Probe `P2x` changes meaning and must be re-expressed.** It currently fails with *"`p_king`
   returned 8 acts against a budget of 5"*. Under the ruling **8 interactions across ≤5 scenes is
@@ -1196,7 +1196,7 @@ petition chain ends at a sitting and a sitting does not decide until `H-32` has 
 
 ---
 
-## **W17 — THE SCENE CONTAINER.** *(Jordan's 2026-09-02 ruling, §3.4)*
+## **W17 — THE SCENE.** *(Jordan's 2026-09-02 ruling, §3.4)*
 
 **Do.** Add the scene as the level above the verb table — **the only structural change any ruling in
 this chain has required, and it is additive.**

@@ -2416,8 +2416,8 @@ rosters:
     cite: "A-25"
     note: >-
       WHAT A `modules:` ENTRY IS, one word each, defined here and in `data/rosters.py` where the loader
-      reads it (`CLAUDE.md` §4). `minigame` -- a container the player can also play as a game inside
-      the game (combat, mass battle, social contests, fieldwork). `management_space` -- a container
+      reads it (`CLAUDE.md` §4). `minigame` -- a scene the player can also play as a game inside
+      the game (combat, mass battle, social contests, fieldwork). `management_space` -- a scene
       played as an interface over the world (governance, faction management, the character sheet).
       `world_surface` -- where the player meets NPCs and events: DELIBERATE's player mode, unbuilt.
       `loop_resident` -- computation that runs inside the season loop's own steps. `data_register` --

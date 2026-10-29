@@ -702,7 +702,7 @@ rows:
       scene
     status: met
     measured: >-
-      The scene container EXISTS and is not what's missing: `Scene` is a dataclass
+      The scene EXISTS and is not what's missing: `Scene` is a dataclass
       (`engine/season/state/carriers.py::Scene`, moved there at step 4 of the decomposition; this
       citation read `shape.py:2289` and named a file that no longer holds the class) and
       `deliberate` packs each person's choices into scenes and
@@ -785,7 +785,7 @@ rows:
       with this row's `met`.
     measure: "python -m engine.season.harness.headless --case NPC-088 --seasons 2 --seed 0  # and `pytest engine/season/tests -q -k test_u2_`, which is what §0.2 accepts"
     blocks: []
-    # spent/removed ids (v9 `_part2`, `blocks:` traces): W17 spent (the scene container landed; this row is met)
+    # spent/removed ids (v9 `_part2`, `blocks:` traces): W17 spent (the scene landed; this row is met)
 
   - id: R-04
     statement: "strategic and management actions must be possible, ie decisions at differing scales"

@@ -31,7 +31,7 @@ description: >
 | when a guard is licensed | **`CLAUDE.md` §0.1 pt 5**, and `references/ci_checks_registry.yaml`'s `subject:` axis for the depth vocabulary |
 | what the code architecture requires | **`architecture/meta/04_CODE_ARCHITECTURE.md`** and the rest of `architecture/` (indexes: `architecture/00_ADOPTION_README.md`, `architecture/meta/README.md`) |
 | what a registered module (`modules/<name>/`) must be, and the Godot mapping it ports to | **`04`** §A.2 and §C.12; **`architecture/holonic_ARCHITECTURE.md`** §43 and §45–§47 where `04` is silent |
-| what *holon*, *rung*, *container* and *module* mean | **`architecture/holonic_ARCHITECTURE.md`** §0.4; the kinds of registered module: `engine/season/rosters.yaml`'s `module_kinds` |
+| what *holon*, *rung*, *scene* and *module* mean | **`architecture/holonic_ARCHITECTURE.md`** §0.4; the kinds of registered module: `engine/season/rosters.yaml`'s `module_kinds` |
 | what a juncture being *done* means | **`CLAUDE.md` §0.2** |
 | how a fan-out is run and what makes a critic independent | **`CLAUDE.md` §10** |
 
@@ -138,11 +138,12 @@ the verdict honest.**
 - **Where holonic and `04` disagree, `04` governs.** `holonic_ARCHITECTURE.md` is #353's
   `ARCHITECTURE.md`, and `04` §A.3 records its differences from that chain with their forcing clauses
   (one `Query` class against two modules, a store parameter against a token). A difference §A.3 does
-  not list is B4's third disposition: name it at the site. The presentation shell is `game/` (RULED
+  not list is B4's third disposition: name it at the site. The scene tree lives in `game/` (RULED
   2026-10-28, ED-IN-0302; `04` §A.2 and §C.12 say so).
-- **Words (RULED 2026-10-28, ED-IN-0302).** *Rung* is the world side, and *holon* its explanatory word
-  (`holonic_ARCHITECTURE.md` §0.4). *Container* is a playable module scene: a registered module of kind
-  `minigame` or `management_space` (`rosters.yaml`'s `module_kinds`, ED-IN-0285), a scene in Godot.
+- **Words (RULED 2026-10-28, ED-IN-0302, ED-IN-0303).** *Rung* is the world side, and *holon* its explanatory word
+  (`holonic_ARCHITECTURE.md` §0.4). *Scene* is Godot's word, used as Godot uses it: a registered module's playable form (kind
+  `minigame` or `management_space`, `rosters.yaml`'s `module_kinds`, ED-IN-0285), and a run of it is a
+  *scene instance*. Godot's words name Godot constructs throughout.
   *Module* is one ordinary word for a unit of code and takes a descriptor when you narrow it: a **host
   module** (`04` §A.2) or a **registered module** (`modules/<name>/`); never "a module does X" of one kind.
   The wrapper died "on the wrong tree" (§44.1 item 3): the rule quantified over rungs, the wrapper sat at a

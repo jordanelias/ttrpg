@@ -1,6 +1,6 @@
 # META-ARCHITECTURE — STAGE 2 · HIERARCHIES, DEPENDENCIES, NESTS, SCALES
 
-## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302): *container* means a playable module scene and *rung* is the world side (a *container* left in a quotation or a field name predates this); the presentation shell is `game/`, not `port/`.**
+## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302, ED-IN-0303): Godot's words name Godot constructs, so a registered module's playable form is a *scene* (a run of it, a *scene instance*), and *rung* is the world side (a *container* left in a quotation, a field name or a plan title predates this); the scene tree lives in `game/`, not `port/`.**
 ## Derives from `01_AXIOMS.md`. Sources: the axioms, and the PR chain #337 → #357. **Nothing else.**
 ## Top-down. **Nothing here runs and nothing here is meant to.**
 
@@ -80,7 +80,7 @@ immediately breaks.
 ### §B.1.1 · ⚠ A view for READING is not a nesting — added 2026-09-03
 
 Jordan: *"Factions could also be a container for people and holdings."* **Both halves are true and
-they are not in tension, because they answer different questions.** ⚠ *(2026-10-28, ED-IN-0302: "container" now means a playable module scene; Jordan's word here means a **view**.)*
+they are not in tension, because they answer different questions.** ⚠ *(2026-10-28, ED-IN-0303: Jordan's word here means a **view**; a registered module's playable form is now a *scene*, not a container.)*
 
 | | |
 |---|---|

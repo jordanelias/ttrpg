@@ -735,7 +735,7 @@ def event_place(w: World, e) -> Optional[str]:
     The limb, for an ACTORLESS Event only (no act among its causes): when the anchor is a person the
     world NO LONGER HOLDS, his place is where he stood when
     `remove_person` took him out, if that was this Event's own tick (`World.departed_from`) -- the
-    container of the `contain` edge the cascade closed. It cannot be read off `w.tenures`: a Tenure is
+    enclosing rung on the `contain` edge the cascade closed. It cannot be read off `w.tenures`: a Tenure is
     owned by its subject, so his own edge left the store with him (probed on `build_realm(0)`).
     It is NOT `place_of`'s person limb, deliberately: `place_of` is also asked about the dead by
     `reach` (a claim about a dead man), and answering there would move every reader of an old
@@ -1914,7 +1914,7 @@ def provinces_of(w: World, rung_id: str) -> dict:
 
     THE REASON IS WHAT EACH QUESTION IS ABOUT. Sovereignty is a property OF the rung asked about,
     so its own holder belongs in its own answer. A province is an aggregation of the territories
-    BENEATH one, so the rung asked about is the container and not a member.
+    BENEATH one, so the rung asked about is the aggregating rung and not a member.
 
     ⚠ AN EARLIER DRAFT OF THIS PARAGRAPH JUSTIFIED IT BY SAYING THE ROOT WOULD OTHERWISE "report a
     lone territory as a province of one, which the ruling refuses" -- AND THAT IS FLATLY

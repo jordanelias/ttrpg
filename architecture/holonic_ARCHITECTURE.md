@@ -1,6 +1,6 @@
 # THE SEASON LOOP — A HOLONIC ARCHITECTURE, AND THE GUIDE TO BUILDING IT IN GODOT
 
-## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302): *container* means a playable module scene and *rung* is the world side (a *container* left in a quotation or a field name predates this); the presentation shell is `game/`, not `port/`.**
+## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302, ED-IN-0303): Godot's words name Godot constructs, so a registered module's playable form is a *scene* (a run of it, a *scene instance*), and *rung* is the world side (a *container* left in a quotation, a field name or a plan title predates this); the scene tree lives in `game/`, not `port/`.**
 ## Under `CLAUDE.md` §0.05 this document is **REFERENCE, never mechanism.** Under §0.2 **nothing in it
 ## runs.** Part X says what would make each claim done and which steps cannot be satisfied by writing.
 
@@ -76,14 +76,12 @@ specifics.
 
 ## §0.4 · Vocabulary — every term, defined once
 
-Terms are ordinary words wherever an ordinary word exists (`CLAUDE.md` §4). Coinages are marked ⊕.
+Terms are ordinary words wherever an ordinary word exists (`CLAUDE.md` §4). Coinages are marked ⊕. **Godot's words name Godot constructs** (ED-IN-0303): a registered module's playable form, a minigame or management space the player can also play (`engine/season/rosters.yaml` `module_kinds`, ED-IN-0285), is a **scene** (`PackedScene`, `.tscn`); a scene that runs is a **scene instance**, which the act budget counts (§26.3; the sim's record of one is `Scene`); Godot's `Container` is an unrelated UI layout class, so no class is named `Container`. **Module** is the unit of work (§41.1: one provider, one owned-state set, one declared I/O) and takes a descriptor when narrowed: a **host module** (part of the season loop, `04` §A.2) or a **registered module** (`modules/<name>/`, attached by a composition row, §43). **Rung** is the world side (ED-IN-0302).
 
 | term | definition |
 |---|---|
 | **carrier** | an identity-bearing, mutable object. There are five: `Person`, `Rung`, `Office`, `Site`, `Record` |
 | **rung** ⊕ | a holon in the containment ladder. One type, eight `kind`s. Named `Rung` because [engine] `Node` and `Container` are both Godot built-ins and `class_name` collides |
-| **container** | a playable module scene: a minigame or management space the player can also play (`engine/season/rosters.yaml` `module_kinds`; ED-IN-0285; ED-IN-0302). **Never a `Rung`.** In Godot a scene (`PackedScene`); Godot's own `Container` is an unrelated UI layout class |
-| **module** | the unit of work: one provider, one owned-state set, one declared I/O (§41.1). Say which kind when it matters: a **host module** (part of the season loop: `04` §A.2) or a **registered module** (`modules/<name>/`, attached by a composition row, §43); a `module_kinds` kind says what a registered module is for |
 | **holon** | a thing that is at once a whole and a part. Every `Rung` is one |
 | **tenure** | the one edge type. Seven kinds. Carries `since`, optional `until` |
 | **act** | what a person does. Produced by `choose`, consumed by `resolve` |

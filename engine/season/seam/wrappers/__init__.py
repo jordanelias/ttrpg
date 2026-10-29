@@ -3,7 +3,7 @@ the §A.2 table's row for them is the shortest in the document: they own **"noth
 read the projection, and they emit a `Margin`.
 
 Three wrappers: `combat.py`, the IN-side of the personal-combat call `seam/contest.py` dispatches
-to; `sigma.py`, the social contest container's provider (`social_contest`; was interim `sigma_leverage`,
+to; `sigma.py`, the social contest scene's provider (`social_contest`; was interim `sigma_leverage`,
 `ED-SC-0037`, until v9 SC-01 steps 13+15);
 and `mass_battle.py`, wired M3 of the driver-retirement plan (`ED-IN-0279`) -- `rosters.yaml`'s
 "a field" row now has a `provider:`, closing the gap this docstring used to describe. A fourth, under a
@@ -43,5 +43,5 @@ declared `sys.path` seam invisible to the scan that bounds it.
 from . import combat as _combat            # noqa: F401,E402
 from . import sigma as _sigma              # noqa: F401,E402
 from . import mass_battle as _mass_battle  # noqa: F401,E402
-# v9 FI-02 + FI-03 (`SM-3`): the `inquiry` role's provider, the fieldwork container's adapter.
+# v9 FI-02 + FI-03 (`SM-3`): the `inquiry` role's provider, the fieldwork scene's adapter.
 from . import fieldwork as _fieldwork      # noqa: F401,E402
