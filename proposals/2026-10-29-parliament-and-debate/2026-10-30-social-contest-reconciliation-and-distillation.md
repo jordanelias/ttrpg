@@ -52,7 +52,7 @@ Ordered by whether a ruling decides it. "Step" is the ladder step that answers i
 | C4 | aptness refused (older text in `03_PARAMETERS`, `06_RESOLUTION`) against priced | R-16 (step 1: superseded) | priced. The older text is stale |
 | C5 | latitude in the pool *and* the obstacle (older text) against pool only | R-18 (step 1) | pool only; obstacle keeps four room terms. The count "five terms" is the older text |
 | C6 | public debate as a twelfth game against a degenerate case | R-21 (step 1) | degenerate case (`14` is later than `07`). Eleven games plus one |
-| C7 | "appeals should not be a thing" against the `appeal` row | R-2 scoped by R-12 (step 4: precedent) | R-2 was a ruling on *Guild Arbitration* in the kernel era. Under R-12 "games are just defined parameters", so `appeal_basis: none` on arbitration honours it, and `appeal` stops being a game: it is a petition to a higher bench that re-dockets the matter, bounded by the depth cap that already runs. **No conflict remains once scoped** |
+| C7 | "appeals should not be a thing" (R-2) against the `appeal` row | R-35, Jordan 2026-10-30 (step 3: a direct clarification) | R-2 barred contesting a rendered outcome **immediately** ("let the decision ride"); an **appeal to an authority is wanted**. Both hold: (a) a rendered outcome cannot be re-docketed before the same bench at once; (b) `appeal_basis` names the *other* authority (R-34: e.g. church to crown, a lower rung to a higher) to which a petition may be carried, and the first outcome stands until that authority disposes. So `appeal` is a **route** (a petition to another authority, bounded by the depth cap that already runs), not a retry and not a game of its own. `appeal_basis: none` is correct where no other authority exists (guild arbitration, a sovereign) |
 | C8 | kernel: adopt, retire, or "evaluated, not deleted" | R-14, a direct quote (step 3) | retire. SC-05 records the "adopt" lean as indirect ("a lean, not a ruling"), and a direct quote outweighs an inferred lean. Only the *timing* is open, and the plan already treats it as a scheduling call (A1-58). `CURRENT.md`'s Social-contest row still lists the kernel as a head; that row is the artifact to edit |
 | C9 | "everything in a scene binds" against one-tick trials (D-8, P-14) | R-11 (step 3) | the ruling wins. A trial that finishes in one tick still binds, since its disposal writes a Tenure. The "re-examination" ED-SC-0038 owes is one row stating this; no escalation |
 | C10 | auto-resolve and played as two fidelities of one conflict | R-24 supersedes R-4 (step 1) | non-player contests take the module's automated path; the container is for the player's. The `E[auto] ≈ E[played]` residual died with its subject (ED-SC-0011 closure) |
@@ -76,16 +76,19 @@ Ordered by whether a ruling decides it. "Step" is the ladder step that answers i
 
 ### 2.3 What survives all five steps (for Jordan)
 
-Two conflicts survive: **M-7**, between two rulings, and **R-31 against Layer 1 §A.3**, below it.
+Two items survive: the **ceiling's value** (M-7, corrected below) and **R-31 against Layer 1 §A.3**, answered below it.
 
-**M-7.** R-8 (2026-08-27): "if you don't have enough dice you don't have enough dice", accepted. R-18 (2026-09-06):
-"don't deprive player of a chance at winning", "a brilliant speaker to be rewarded". The deprivation-floor check was
-run and fails: success probability reaches zero at obstacle 3, and σ-leverage does not lift it. Two defensible
-remedies make different games: **a pool floor above 1D** (every person always has a chance, at the cost of flattening
-small-pool differences, the very case R-8 accepted), or **an obstacle ceiling** (`roll.py` already has one; the cost
-is a cap that R-8's "stop arbitrary fiat capping" is hostile to, though it caps an input and not an outcome
-frequency). Neither is decided by the ladder. The question is: *at which end do you want the floor, on what a
-person brings or on what faces them?*
+**M-7. [CORRECTION: this section first called the remedy open; it is not.]** R-8 (2026-08-27) accepted "if you
+don't have enough dice you don't have enough dice"; R-18 (2026-09-06) asked "don't deprive player of a chance at
+winning". M-7 was run and failed at the 1D floor. The code already chose a remedy: an **obstacle ceiling** (`H-213`,
+swept; shipped value 2; `modules/social_contest/roll.py` docstring, "Contradiction 3 of the proceedings
+reconciliation, resolved"), explicitly "NOT a pool floor". The ladder answers the choice (step 3, a design
+document and the code), so it is not a question for Jordan. What survives is narrower and was found by the code audit:
+the ceiling's value equals the default obstacle (2), so for any opposition over 4 the obstacle is the same 2 as no
+opposition at all, and a hostile room cannot raise a defaulted obstacle. R-5 asks for "score ÷ 2 plus modifiers"; at
+ceiling 2 the score term and the room's hostile half do no work in live play (see the code audit, finding B-11). The
+question for Jordan: *is a ceiling of 2 what you meant by a cap on difficulty, or should the ceiling sit above the
+default so that opposition and a hostile room can bite?*
 
 **R-31 against Layer 1 §A.3: ANSWERED by Jordan, 2026-10-30: it is both.** "A King has more actions that are
 available in some contests (e.g. a royal tribunal), and their actions also carry more weight in those contests." So
@@ -136,6 +139,8 @@ Read in order, the rulings fix nine things. Nothing else in the corpus is requir
 10. **Capability = attribute × title × office × faction, set by venue and contest type** (R-31). Attribute gives dice; title gives rank in the ladder and so standing; faction gives alignment and the audience's disposition; office gives **both** the licence to act (`remit_acts`, who is heard) **and weight**, each keyed to the venue ("a King ... in a royal tribunal", Jordan 2026-10-30). Where the weight enters (pool, leverage, obstacle) is item 11's per-source choice; my default is the pool, so that leverage stays for evidence, argument and aptness and the obstacle for the defender's circumstance `[ASSUMPTION; medium; revert: move it to leverage]`. The weight is a venue-row value keyed by office, not a column on the office. The venue row decides which of these the contest reads, so a trial, a council and an embassy draw on different combinations of the same four sources. **Not** a per-proceeding skill (B.0's refusal stands: that branches on the game's name). Latitude stays pool-only (R-18). The attribute roster is in flux (ten ruled, nine shipped, the tenth unnamed); the reading must go through whatever the roster is.
 11. **One sigma-leveraged engine, continuous in dice and obstacle, with named modifier sources** (R-32). Channels: **pool** (capability, item 10), **leverage** (a μ-shift on the roll), **obstacle** (the defender's score ÷ 2 plus room terms, R-5). Sources: capability; worldly state (what the matter's referent now is); evidence (`proofs`); argument (the proposition's content and its aptness, priced per R-16); audience (reception); forgery quality. Every source maps to exactly one channel, once. The repo's own resolution-diagnostic skill holds that advantage is a μ-shift and never an Ob reduction; R-5 and the 2026-09-06 direction ("I'm fine with Ob being modified by things") allow terms on the obstacle. The two are reconcilable only by deciding, per source, whether it is the defender's circumstance (obstacle) or the actor's advantage (leverage).
 12. **One action surface, limited by contest type** (R-33). The same verb table and speech-kind roster serve every structure (dyadic, mutual, bench, count); the arrangement row decides which actions are *available* in it, through `floor` (who may act), `order` (when), `proofs` (what may be offered), `interposed` (who may act for whom), and the speech kinds' `apt_genre` / `apt_rung` / `reachable_bands`. This is the "consistent armature". It must not be confused with the kernel's `armature` (a hidden judge-conviction vector), which is a different object and dies with the kernel.
+
+13. **Authority: where a venue's decision gets its force, and who may adjudicate** (R-34, Jordan 2026-10-30). Three bases, each with its own source of imbalance: **between the parties** (negotiation: no one sits above; the imbalance is the difference in rung position and the circumstantial leverage each holds); **the polity** (a royal tribunal or parliamentary proceeding: royal, imperial or political authority vested by the nation); **the church** (a religious tribunal or heresy charge: authority from a religious basis). Authorities are not independent: royal authority **modulates or undermines** religious authority when a royal person is involved. The adjudicator is an actor holding an office **relevant to that authority**. In the model this is the content of the row's `disposal` (`mutual` is the first basis; `bench` the other two) and of `bench_basis`, which today names a remit act and is unread; it needs to name the authority, so that the bench is the set of persons holding offices of that authority, scoped to the venue. The precedence between authorities (crown over church when a crown-holder is a party) is a row-level rule, not a branch. `offices.yaml` already ties each seat to a `body` or a `faction` (`Crown`; `Holy See`, `Cardinal of Justice`, `Church of Solmund`, …), so the tie exists in data in two spellings. `[ASSUMPTION; medium: the mechanism of "modulate or undermine" (the crown joins the bench, may revoke, or raises the church bench's obstacle) is not stated by Jordan; the outcome is.]` Historical support in the repo's research: Clarendon 1164, criminous clerks and benefit of clergy, interdicts (Innocent III; Venice 1606), the Council of Constance, the Cadaver Synod.
 
 ### 3.2 Eight kinds become four
 
@@ -220,13 +225,13 @@ None adds an object, a store, a guard or a document.
 3. **`references/module_contracts.yaml`:** correct the kernel row that says it is "reached live only via `emergency_council`". (R13)
 4. **`proposals/2026-09-05-proceedings-subsystem/`, `03_PARAMETERS.md` and `06_RESOLUTION.md`:** delete the pre-R-16, pre-R-18 text (aptness refused; latitude in the obstacle); delete the 14- and 15-key counts and the "five terms". (C4, C5, C15)
 5. **Same directory, `07_THE_GAME.md`:** the twelve-games statement, to eleven plus one. (C6)
-6. **`registers/editorial_ledger_sc.jsonl`:** one row recording C7 (appeal is `appeal_basis`, R-2 scoped to arbitration) and C9 (one-tick trials bind), answering ED-SC-0038's owed re-examination. This is the one ledger row proposed, and it needs no ruling: both answers are already given.
+6. **`registers/editorial_ledger_sc.jsonl`:** one row recording C7 (appeal is a route to another authority, R-35; no immediate re-contest, R-2) and C9 (one-tick trials bind), answering ED-SC-0038's owed re-examination. This is the one ledger row proposed, and it needs no ruling: both answers are already given.
 7. **Kernel retirement:** no change to the plan's scheduling; once the kernel is removed, E11, C1 and C2 are moot.
 8. **The stance Query behind standing (S-7)** and **a visible middle for a long debate (the last row of §3.3)** are the two things the cuts depend on; they are listed so the order of cutting is not chosen by accident.
 
 ## 5. What this does not do
 
-It does not decide M-7, which only Jordan can. It does not re-run any measurement. It does not test whether the
+It does not decide the ceiling's value, which only Jordan can. It does not re-run any measurement. It does not test whether the
 four-structure reduction survives a NERS pass on the player half of R (is each structure playable at a seat a
 player occupies?); PK §3.2 found that the season loop reaches only dyadic influence and a thin edge of adjudication,
 so the player-facing half of the other three is untested by anything that executes.

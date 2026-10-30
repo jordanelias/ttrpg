@@ -44,7 +44,7 @@ excluded; they are listed in §1.3.
 | R-15 | 2026-09-06 | "whatever works best for the subsystem is what goes, so long as it can receive input and give output to seasons" | `19_PLAN.md:69` | yes; zero-new-primitives is a tiebreak only |
 | R-16 | 2026-09-06 | Aptness **priced, not refused**: a character may "choose the 'wrong' action and roll against a higher obstacle but still succeed", or choose right and "still fail" | `04_VERBS.md:252` | **yes** |
 | R-17 | 2026-09-06 | Partial must bring something forward: it writes a docket matter and the docket grows | `04_VERBS.md:131` | yes |
-| R-18 | 2026-09-06 | "why can't we have aggregates in a subsystem?"; "of course we accept those shapes" (multilateral tally, debate score); "pool only it is" (latitude enters the pool, not the obstacle); "ensure you don't go so far as to deprive player of a chance at winning"; "a brilliant speaker to be rewarded" | ED-SC-0034 | **yes** (M-7 deprivation floor was run and **failed** at the 1D floor; remedy open) |
+| R-18 | 2026-09-06 | "why can't we have aggregates in a subsystem?"; "of course we accept those shapes" (multilateral tally, debate score); "pool only it is" (latitude enters the pool, not the obstacle); "ensure you don't go so far as to deprive player of a chance at winning"; "a brilliant speaker to be rewarded" | ED-SC-0034 | **yes** (M-7 deprivation floor was run and **failed** at the 1D floor; the remedy shipped as an obstacle ceiling, `H-213`, value 2: see the code audit) |
 | R-19 | 2026-09-06 | "fears are leverage that you can press"; "cornered man breaks toward the feared thing"; "pressure is the gap"; "second-person lever stays refused" (no creditor verb, no `call_in`, no hook) | ED-SC-0035 | **yes** |
 | R-20 | 2026-09-06 | "so what if the argument doesn't come out of a closed room? ... if you're playing the head of a major faction like Baralta, you're going to be in those closed rooms"; "characters will be enacting the system as participants, audience, adjudicators" | `10_LOOPS_AND_GAPS.md:99`; `03_PARAMETERS.md:394` | yes: a role is a relation to an occasion, never a field |
 | R-21 | 2026-09-06 | "This subsystem and its games must be ABOUT the world and enacted by characters OF the world." Three tests for every row: what in the world changes, why is each person in the room, who learns it happened. "the decisions made therein still get announced to the world as the parliament's decision, which means state change and propagation" | `14_THE_WORLD_IN_THE_ROOM.md:238-357` | **yes**, "binds every row" |
@@ -60,6 +60,8 @@ excluded; they are listed in §1.3.
 | R-31 | 2026-10-30 | "Ensure that character capabilities within subsystem stem from a combination of character attribute, title, office, and faction as according to venue and contest type." | this session | **yes, newest.** Clarified 2026-10-30: office licenses acts **and** carries weight, venue-keyed ("a King ... in a royal tribunal"). Narrows `06_RESOLUTION` B.0's refusals of a per-proceeding skill and an office bonus; **contradicts Layer 1 `03` §A.3** (amendment held; §1.2) |
 | R-32 | 2026-10-30 | "Ensure that there is a sigma-leveraged engine with continuous dice and obstacles, and ensure that there are modifiers according to the capabilities above as well as worldly state, evidence, argument, audience and so forth." | this session | yes; restates R-5, R-6, R-22 and adds the modifier sources |
 | R-33 | 2026-10-30 | "Ensure that there is a logical action surface that is used by all social contest types with the actionable possibilities limited by those social contest types, ie provide a consistent armature or subsystem engine." | this session | yes; restates R-12 and adds the limit by contest type |
+| R-34 | 2026-10-30 | "There are different kinds of 'authority' for contest types: negotiation's authority is held between the contestants negotiating with the imbalance coming from differential rung positions and circumstantial leverage; a royal tribunal or parliamentary proceeding has a royal/imperial/political authority as vested by the nation itself; a religious tribunal or heresy charge has its authority come from a religious basis, but it may be modulated/undermined by royal authority if a royal person is involved. Adjudicators, consequently, will be actors whose offices are relevant to that given authority." | this session | yes, newest; fixes the source of a venue's authority and who may adjudicate (see §2.1, `bench_basis`) |
+| R-35 | 2026-10-30 | "My writing about 'appeals' is about contesting the outcome of a social contest immediately after it has been rendered; an appeal to an authority, however, is something that I do want to be possible in this engine." | this session | yes, newest. **Clarifies R-2:** no immediate re-contest of a rendered outcome; an appeal to an authority is wanted |
 
 ### 1.0 The 2026-09-06 rulings file
 
@@ -85,7 +87,7 @@ chronicle, not a game.**"
 
 1. **A contest is a host plus data rows.** Every difference between games lives in the row, never in a branch (R-12, R-15, R-25).
 2. **One ladder, one resolver, one obstacle owner; no private bands, no fiat caps; a disclosed cost is accepted** rather than patched (R-5, R-6, R-8, R-22).
-3. **The game must be winnable and a specialist must be rewarded.** The wrong choice may win, the right one may lose, nothing is refused outright (R-16, R-18). He accepts "not enough dice" (R-8) and rejects "no chance at winning" (R-18); the M-7 failure sits exactly on that boundary.
+3. **The game must be winnable and a specialist must be rewarded.** The wrong choice may win, the right one may lose, nothing is refused outright (R-16, R-18). He accepts "not enough dice" (R-8) and rejects "no chance at winning" (R-18); the M-7 failure sat exactly on that boundary, and the code answered it with an obstacle ceiling (corrected from "remedy open").
 4. **Stakes are things someone in the world can lose, and the world is told.** No internal scores as stakes; many matters per contest; results bind in the season; opinion change counts (R-11, R-21, R-26).
 5. **Consent, not command; no declaring verb, no stored tally** (R-18, R-29).
 6. **Coercion happens inside the target's own decision.** Fears are reusable leverage; a presser may not write into another person (R-19, R-23).
@@ -96,7 +98,7 @@ chronicle, not a game.**"
 
 ### 1.2 Tensions among the rulings, and questions only he can answer
 
-- **Appeal.** R-2 (2026-07-01, kernel era) says appeals should not be a thing; the proceedings design carries *appeal* as one of twelve rows. No row reconciles them.
+- **Appeal: resolved by R-35.** R-2 (2026-07-01) barred contesting an outcome immediately after it is rendered; Jordan has since said an appeal *to an authority* is wanted. They do not conflict: no retry before the same bench, an appeal route to another authority (R-34).
 - **Adopt or retire the kernel.** R-14 says retire. SC-05 records Jordan's *indirect* lean as "adopt" (from an event id, "a lean, not a ruling"). Only the timing (SM-15) is his; the plan treats it as a scheduling call (A1-58).
 - **R-11(2)** ("everything in a scene binds") reopens D-8 (one-tick trials) and the outer-act degree. No row records the re-examination.
 - **R-13 against this document.** The scope ban binds the proceedings *build*. This is a survey and the request named the prior work, so I read it; ED-SC-0038 is the precedent for relaying rulings the ban hid.
@@ -217,7 +219,7 @@ Of these, five verbs carry a social prize in code: `tell`, `argue`, `speak`, `de
 | fail-forward | Partial writes a docket matter; every band leaves the proceeding somewhere different | LIVE ● R-17 |
 | record | a durable object that later contests may cite, and that can be moved, copied, forged, seized, burned (S-5) | PROPOSED (kernel leaves only stat deltas) |
 | opinion drift | members' pursuits move; counts as world impact | PROPOSED ● R-26 |
-| appeal basis | which act reopens a matter | INTENT; tension with R-2 |
+| appeal basis | which authority a rendered outcome may be taken to, never back to the same bench at once (R-35) | INTENT; unread |
 | enforcement | promulgation is not enforcement; compliance, evasion, defiance | LIVE (verbs); delivery by `give` does not form |
 
 ---
@@ -266,7 +268,7 @@ Subkinds differ only in the keys named.
 | political tribunal | lower standing | informers; secrecy | scripted | Council of Ten, State Inquisitors (1539), Foscarini 1622: no public trial, no cross-examination; posthumous exoneration |
 | arbitration (`arbitration`, `guild_arbitration`) | neutral | party submissions | alternating, then a ballot | panel of jurors weighted by discipline |
 | excommunication (`excommunication_deliberation`) | institutional | canonical | bench | a cross-ladder demotion; Cadaver Synod |
-| appeal | the appellant | the record | written | `appeal_basis` names the act that reopens |
+| appeal | the appellant | the record | written | `appeal_basis` names the other authority it may be carried to (R-35) |
 | audit, inspection | none | the books | outside auditor | *residencia*, *visita*, Carolingian *missi*, Venetian *sindici* |
 
 The burden and order cells for arbitration, excommunication, appeal, audit and the political tribunal's order are my
@@ -330,7 +332,7 @@ Eight rows are seeded; five are not. `public debate` is demoted to a degenerate 
 | negotiation | no | K2 |
 | negotiation through envoys | no | K2 |
 | audience / embassy | no | K4 (K2 if between rulers) |
-| appeal | no | K3, with R-2 unreconciled |
+| appeal | no | a route from K3 or K4 to another authority (R-35) |
 | public debate | no | K7 (degenerate) |
 | examination | authored to test closure | K3 |
 
