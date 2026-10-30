@@ -174,7 +174,7 @@ counted twice.
 | K3 heresy tribunal | `[admit, plea, proof, judgment]`, `proof` scripted (interrogation) | church bench; warrant to the polity's officer | `ban`; warrant Record | body, then the world |
 | K4 petition | `[admit, judgment]` | the addressee; lapse when the file matures open (R-1) | grant, or nothing | the petitioner |
 | K5 panel or jury | as K3; `judgment` closes when the threshold of seats' determinations is met | each seat's own `determine` | as K3 | as K3 |
-| K6 parliament | `[admit, licence]`, speaking `order: rank` within `admit` (the *sententiae*) | the mover frames (R-30: no chair); the count | a licence; the owner's own act follows | the body, then the world (R-21) |
+| K6 parliament | `[admit, licence]`: the mover's *relatio* passes `admit`; the *sententiae* are `licence`'s speeches in `order: rank`, then the count | the mover frames (R-30: no chair); the count | a licence; the owner's own act follows | the body, then the world (R-21) |
 | K7 display | `[judgment]` (each hearer's) | each hearer | reception moves | the room |
 | K8 forum or enforcement | not a row: the `forum` stage of K3 rows, and `review`; seats contested under K3 or K6 values | as those | `confer`, `revoke`, `hold` | per row |
 
@@ -182,13 +182,13 @@ counted twice.
 `open_case` under `inquisition_hearing` winds `[admit, plea, proof, judgment]` onto the file. His seat is at T9,
 so a church bench reaches only venues inside T9 (AR I item 7); a charge against a man in another territory
 cannot pass `admit` until that is changed. The case therefore needs the venue inside T9, or a row that names
-the crown, a different authority. Inside T9's hostile parish, L(church) is low, so the inquisitor's office
-weight adds little to his dice (R-36). The accused pleads `deny`; `proof` runs as interrogation. A Partial
+the crown, a different authority. In a settlement inside T9 where few hold the church in regard (no piety Query exists yet, AR §F; this L is
+new work, AR B21), L(church) is low, so the inquisitor's office weight adds little to his dice (R-36). The accused pleads `deny`; `proof` runs as interrogation. A Partial
 pushes a further `proof` to next season and writes a docket item for each person the deponent named. The
 cluster spreads one trial into many (file 02 §1.1 row 5). The judgment is `ban`, plus a warrant to the crown's
 officer, who lives among the hostile and holds his own doctrine pursuit. His `arrest` is his choice. If he
-declines, the sentence stands unexecuted and the file stays open: the Toulouse outcome (file 02 §3.1), produced
-by no rule of proof.
+declines, the sentence stands unexecuted and the file stays open. That is the shape of Philip IV's 1291 order that his
+seneschal stop obeying inquisitors' arrest commands (file 02 §2.6), produced by no rule of proof.
 
 **Worked example 2: a royal tribunal with the King on the bench.** A cleric is charged with treason. At `forum`
 he pleads that the church must try a clerk (Clarendon c. 3). The bench's determine draws: Success for him moves
@@ -220,8 +220,8 @@ AR B17's one spelling of the office-to-authority tie.
   `decider_basis` per stage; transitions per band.
 - `loop/effects_information.py`: `_docket_item` gains `case`; `_eff_open_case` winds the row's stages through
   `_declared_stages`; `_eff_determine` runs the one transition and opens a disposal only at a terminal stage.
-- `state/gate.py`: the admission conjunct (head stage admits the verb), beside the existing determination
-  clause (`:245-258`). `[ASSUMPTION; medium; revert: an eighth requires form]` that the existing `Existence`
+- `state/gate.py`: the admission conjunct (head stage admits the verb), beside the determination clause and
+  `DISPOSABLE_KINDS` (`:245-258`). `[ASSUMPTION; medium; revert: an eighth requires form]` that the existing `Existence`
   form over the docket expresses it; `rosters.yaml: requires_forms` refuses an eighth at load.
 - `queries/world_q.py`: `stage_of`; an authority filter in `judging_set`; the count Query; L (AR).
 - `seam/wrappers/sigma.py::contest_input`: AR's producers, plus aptness read at the head stage.
@@ -237,7 +237,7 @@ AR B17's one spelling of the office-to-authority tie.
 | S1 | deletions above | suite green with fewer files; one `FORK:` row per deletion | no |
 | S2 | AR's draw: continuous pool, producers, aptness field | pool varies by person in a computed run | after G1, G5 |
 | S3 | the stage roster and `stages:` keys | the loader refuses an unknown stage; eight rows construct | no |
-| S4 | the agenda: `case`, winding, the transition | hand-built: a Partial at `proof` leaves the file's head at `proof` with a later due tick **and** a docket item per named deponent; Success pops. Re-pins `BASE_HASHES` (`engine/season/tests/test_season_weather.py:378-380`) and `WORLD_VECTOR_HASH` (`test_go07_canonical_digest.py:100`), said plainly, with a control: rows without `stages:` read the old hashes | no |
+| S4 | the agenda: `case`, winding, the transition | hand-built: a Partial at `proof` leaves the file's head at `proof` with a later due tick **and** a docket item per named deponent; Success pops. Re-pins `BASE_HASHES` (`engine/season/tests/test_season_weather.py:378-380`) and the per-seed `BASE` content hashes (`test_go07_canonical_digest.py:469-481`), said plainly, with a control: `case` withheld and rows without `stages:` read the old values | no |
 | S5 | admission and aptness by stage | the same actor is admitted to a `proof` act at `proof` and refused it at `judgment`; `deny` is priced higher at `quality` than at `proof` | no |
 | S6 | deciders by stage | a church `judgment` writes a warrant; the crown's officer declines; the file stays open; the King does not sit on a church bench | Q2 |
 | S7 | the central link (AR I item 12: a disposition operand on `determine`, a matter term in `choose`, computed play reaching `determine`) | a `proof` Success flips the `judgment` disposition against a control without it | no |
@@ -301,13 +301,11 @@ stage, not a matter type. AR's G1-G6 stand unchanged.
 
 ## 9. What I expect to be assessed on
 
-**(a) NERS.** N: the plea, staged admission and procedural detours each die under the cut; `execute` was a
-false N-line and is cut (§7). E: one roster, one key, one Query, one conjunct and one transition, against those
-three N-lines. Scored as a ratio, it is positive only for K3, K5 and K6 and nil for K1 and K7. R: strategy (the
-choice of ground), world hooks (below), completeness (every stage has a Failure fallback). It breaks at one
-extreme: a stage with no seated decider wedges forever, unless the file matures (lapse, R-1). S: it **pauses
-correctly**, which is S's own test: an empty bench halts the agenda and a seated one resumes it. Calculations
-stay one draw throughout; a count and a draw close different stages by AR's four deciders, not a fifth.
+**(a) NERS.** The cut test and the false N-line (`execute`) are in §7. E, scored as a ratio: one roster, one
+key, one Query, one conjunct and one transition buy three N-lines in K3, K5 and K6, and nothing in K1 and K7.
+R breaks at one extreme: a stage with no seated decider wedges until its file matures (lapse, R-1). S: it
+**pauses correctly**, S's own test (an empty bench halts the agenda; a seated one resumes it). The calculation
+stays one draw throughout, and stages close by AR's four deciders, not a fifth.
 
 **(b) Emergent narrative** (no player):
 1. *The cluster.* A Partial at an inquisition's `proof` → docket items for each named person (R-17) → the
@@ -334,8 +332,8 @@ neither measures nor decides (G.1.5); adjournments are counted from Events. One 
 order and the file owns the position. **Risk:** the docket item's sitting `date` and the stage's due tick both
 say "when", which is an S defect if they disagree; the due tick is a floor and the sitting is CALENDAR's.
 Composition: the module never sees a stage. ED-SC-0040 and F8 stay open exactly as in AR I item 6. **Goldens:**
-the two pinned season hashes above move once in S4, as SC-03a's two docket keys did
-(`effects_information.py:323-325`); `engine/tests/test_contest_kernel.py` goes with the kernel;
+the pinned season hashes in S4's row move once, as SC-03a's two docket keys moved them
+(`effects_information.py:320-321`); the hand-built `WORLD_VECTOR_HASH` (`test_go07_canonical_digest.py:100`) does not; `engine/tests/test_contest_kernel.py` goes with the kernel;
 `engine/tests/goldens/sigma_leverage_parity.json` does not move.
 
 `[CONFIDENCE: medium]` on the code facts, each opened at its line; low on the pace and the chooser's ability to
