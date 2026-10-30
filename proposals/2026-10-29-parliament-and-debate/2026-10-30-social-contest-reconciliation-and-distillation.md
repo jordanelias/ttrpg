@@ -76,7 +76,7 @@ Ordered by whether a ruling decides it. "Step" is the ladder step that answers i
 
 ### 2.3 What survives all five steps (for Jordan)
 
-One genuine conflict between two of the rulings:
+Two conflicts survive: **M-7**, between two rulings, and **R-31 against Layer 1 §A.3**, below it.
 
 **M-7.** R-8 (2026-08-27): "if you don't have enough dice you don't have enough dice", accepted. R-18 (2026-09-06):
 "don't deprive player of a chance at winning", "a brilliant speaker to be rewarded". The deprivation-floor check was
@@ -86,6 +86,16 @@ small-pool differences, the very case R-8 accepted), or **an obstacle ceiling** 
 is a cap that R-8's "stop arbitrary fiat capping" is hostile to, though it caps an input and not an outcome
 frequency). Neither is decided by the ladder. The question is: *at which end do you want the floor, on what a
 person brings or on what faces them?*
+
+**R-31 against Layer 1 §A.3.** R-31 (2026-10-30, newest) names *office* among the sources of capability.
+`architecture/meta/03_VERBS_AND_LOOPS.md` §A.3 says "A seat adds no verb and no modifier"; `04_CODE_ARCHITECTURE.md:351`
+makes it STRUCTURAL (no bonus field, no modifier column, the loader raises on a `capability` eligibility kind); and
+`06_RESOLUTION` B.0 refused an office bonus on that ground. A newer ruling outranks the older proposal text, but a
+spec that binds code is not edited to fit (CLAUDE.md §0.05), and the Layer-1 hunks are held for his sign-off. I took
+the reading under which they agree, **office licenses which acts a holder may take and who is heard** (its
+`remit_acts`, which the code already honours), **while attribute, title and faction supply the numbers**, and marked
+it an assumption. The question: *does R-31 mean that, or does an office carry a numeric modifier, in which case §A.3
+and its STRUCTURAL row are amended?* Everything in §3.1 items 10 to 12 holds under the first reading.
 
 Questions that were already open and are untouched by this reconciliation: J-C-6 (may a person lie), D-7 (detailed
 denial; displayed anger), the source of risk appetite and horizon.
@@ -107,6 +117,12 @@ Read in order, the rulings fix nine things. Nothing else in the corpus is requir
 7. **One reception.** The audience's reading of the speaker's ledger replaces every stored credibility number (S-7, ED-SC-0040).
 8. **One disposal vocabulary.** The existing Tenure kinds, Record, licence, seat conferral; no new verb (R-18, R-29, R-21).
 9. **One propagation rule.** A result is a fact, witnessed, read at the speed of news; a reaction must exist (S-3, S-6, S-7).
+
+### 3.1a The three requirements of 2026-10-30 (R-31 to R-33), as model items
+
+10. **Capability = attribute × title × office × faction, set by venue and contest type** (R-31). Attribute gives dice; title gives rank in the ladder and so standing; faction gives alignment and the audience's disposition; office gives the licence to act (`remit_acts`) and who is heard. The venue row decides which of these the contest reads, so a trial, a council and an embassy draw on different combinations of the same four sources. **Not** a per-proceeding skill (B.0's refusal stands: that branches on the game's name). Latitude stays pool-only (R-18). The attribute roster is in flux (ten ruled, nine shipped, the tenth unnamed); the reading must go through whatever the roster is.
+11. **One sigma-leveraged engine, continuous in dice and obstacle, with named modifier sources** (R-32). Channels: **pool** (capability, item 10), **leverage** (a μ-shift on the roll), **obstacle** (the defender's score ÷ 2 plus room terms, R-5). Sources: capability; worldly state (what the matter's referent now is); evidence (`proofs`); argument (the proposition's content and its aptness, priced per R-16); audience (reception); forgery quality. Every source maps to exactly one channel, once. The repo's own resolution-diagnostic skill holds that advantage is a μ-shift and never an Ob reduction; R-5 and the 2026-09-06 direction ("I'm fine with Ob being modified by things") allow terms on the obstacle. The two are reconcilable only by deciding, per source, whether it is the defender's circumstance (obstacle) or the actor's advantage (leverage).
+12. **One action surface, limited by contest type** (R-33). The same verb table and speech-kind roster serve every structure (dyadic, mutual, bench, count); the arrangement row decides which actions are *available* in it, through `floor` (who may act), `order` (when), `proofs` (what may be offered), `interposed` (who may act for whom), and the speech kinds' `apt_genre` / `apt_rung` / `reachable_bands`. This is the "consistent armature". It must not be confused with the kernel's `armature` (a hidden judge-conviction vector), which is a different object and dies with the kernel.
 
 ### 3.2 Eight kinds become four
 
