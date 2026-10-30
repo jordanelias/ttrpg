@@ -31,7 +31,7 @@ This analysis keeps two things apart that REM-28 ran together:
 | **the tier of a sitting** | which scale the sitting is held at, therefore its **jurisdiction** and which council counts | the Date's venue rung and its `kind` |
 | **attendance** | where a person stands, so who can hear and argue | the hearth-tier rung a person occupies; `co_located`, `with` |
 
-Whether the engine should keep location *as* the bottom tier, or model it separately, is a ruling that is Jordan's and the repo has not made. The analysis does not depend on it, but it changes the vocabulary: "convene at the realm rung" means "hold the sitting at the realm tier", not "gather at a place called the realm".
+Whether the engine should keep location *as* the bottom tier, or model it separately, is a ruling the repo has not made; for now the ladder stays the engine's only location system (resolution design §7, RJ-calls item 7). The analysis does not depend on it, but it changes the vocabulary: "convene at the realm rung" means "hold the sitting at the realm tier", not "gather at a place called the realm".
 
 ---
 
