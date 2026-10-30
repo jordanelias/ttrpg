@@ -902,9 +902,10 @@ def test_lb6d_every_verb_declares_a_rostered_beneficiary():
     # `pardon` (v9 IN-12 step 5) -- `arrest` `beneficiary: none` (#453 §9.1, `seize`'s shape), `pardon`
     # `beneficiary: subject`, so `kinds["none"]` and `kinds["subject"]` each grow by one (a re-record);
     # 55 -> 56, `raze` (v9 IN-12 step 11) -- `beneficiary: none` (#453 K-06), so `kinds["none"]` grows by
-    # one (a re-record).
+    # one (a re-record); 56 -> 60, `recruit`, `form_unit`, `assign_troops`, `order_unit` (ED-IN-0306 phase 2)
+    # -- each `beneficiary: none`, so `kinds["none"]` grows by four (a re-record).
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen -- the control that stops this census passing over a loader that returned a subset]
-    assert len(VERB_TABLE) == 56, "the verb count moved; this row's census is stale"
+    assert len(VERB_TABLE) == 62, "the verb count moved; this row's census is stale"       # 60 -> 62, ED-IN-0306 phase 5
     undeclared = [v for v, r in VERB_TABLE.items() if not r.beneficiary]
     assert not undeclared, f"verbs with no `beneficiary:`: {undeclared}"
     off_roster = [(v, r.beneficiary) for v, r in VERB_TABLE.items()
@@ -2819,14 +2820,24 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # authors two works, minted last in `build_realm`, so the masters' `found` and `build` form on them and the sampled order of
     # the realm moves by one act in each arm (seed 0, one season: 597 -> 598, `test_go07_canonical_digest.py`'s shift). The two
     # arms still part by one act. CONTROL: this world with `planned_works` emptied in process reads (597, 596) under this test.
-    assert (out["acts"], cout["acts"]) == (598, 597), (
+    # ⚠⚠ ED-IN-0306 (on main at 59f2f97f): (598, 597) -> (599, 597), A RE-RECORD WITH THE UNIT THAT MOVED IT: a computed `migrate`
+    # onto a territory rung is declined (`rosters.yaml: arrival_only_kinds`), so the freed scene moves the realm's act mix (seed 0,
+    # one season: 598 -> 599, `test_go07_canonical_digest.py`'s shift). The stripped arm is unmoved at 597. CONTROL: main at 59f2f97f
+    # reads (598, 597) under this same test.
+    assert (out["acts"], cout["acts"]) == (599, 597), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")
     # v10 REM-2C: with the counts equal, THE PARTING THE COUNTS PROXIED IS ASSERTED DIRECTLY -- the arms' act
     # sequences differ (at act 370 at REM-2C, the note above).
     seq = lambda world: [(a.actor, a.verb, (a.payload or {}).get("subject")) for a in world.acts]
-    assert seq(w) != seq(cw), "the two arms' act sequences are identical: the dwellings' wear claims part nothing"
+    # ED-IN-0306 phase 5: within ONE season the arms' act sequences no longer part -- the one parting decision was a
+    # `migrate` onto a territory, now declined in both arms (`arrival_only_kinds`) -- so the parting is asserted where it
+    # still lives, the ledgers: the wear claims reach the treatment arm's `claim.deposited` and not the control's.
+    deposited = lambda world: sum(1 for e in world.log if e.kind == "claim.deposited")
+    assert seq(w) != seq(cw) or deposited(w) != deposited(cw), (
+        "the two arms are identical in acts AND in ledger deposits: the dwellings' wear claims part nothing")
+    assert deposited(w) > deposited(cw), "the dwellings' wear claims deposited nothing the stripped arm lacks"
 # H2 -- `ED-IN-0261`'s DEONTOLOGICAL GATE, `H-146`. A refusal at `opening_set`, not a score term:
 # the person's projected weight on the gating axis IS the threshold, and a verb that axis engages
 # past it never forms a Candidate. Roster-generic: the axis is whatever `Fixtures refusal_axis`

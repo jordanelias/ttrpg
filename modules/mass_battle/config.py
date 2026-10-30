@@ -124,7 +124,7 @@ MAX_TROOPS_PER_UNIT = 10000 # design ceiling on a single unit's troop count  # [
 #  density factor (attrition `min(tpc,CELL_CAP)`) drops naturally via the higher ncells, no attrition edit.
 MB_TROOP_DENSITY_CAP = (_sigma_os.environ.get('MB_TROOP_DENSITY_CAP', '1') == '1')
 TROOP_TYPE_DENSITY_CAP = {   # mounted: ~half infantry density (a horse+rider occupies ~2x a man's ground). GROUNDED default, needs_jordan on the value.  # [canonical: P-DEC-3 mechanism; value calibration pending]
-    'cavalry': 100, 'knights_templar': 100, 'mounted_archers': 100,
+    'cavalry': 100, 'knights_templar': 100, 'mounted_archers': 100, 'light_cavalry': 100,  # light_cavalry: ED-IN-0306, mounted like the rest
 }
 def cell_cap_for(troop_type):
     """Max fighting troops per 1x1 cell for a troop type (P-DEC-3). Mounted types pack looser; every
@@ -586,6 +586,9 @@ TROOP_TYPE_ROLES = {
     "light_infantry":  ["Skirmish", "Screen", "Pursue"],
     "cavalry":         ["Shock", "Flanker", "Feint", "Screen", "Pursue"],
     "archers":         ["VolleyLine", "Harass"],
+    "spearmen":        ["ShieldWall", "Hold", "Anvil"],   # [ED-IN-0306] the pike's lighter sibling: a braced spear line, reach 0.2
+    "skirmishers":     ["Skirmish", "Harass", "Screen"],   # [ED-IN-0306] javelin screen: loose order, harass, cover the line
+    "light_cavalry":   ["Flanker", "Feint", "Screen", "Pursue"],   # [ED-IN-0306] cavalry's menu without Shock: no lance, so no charge role
     "mounted_archers": ["Kite", "Harass", "Feint"],   # report's #1 troop type; Kite blocked on the kiting primitive (gap)
     # generic fallbacks for the engine's current coarse troop_type values ('infantry'/'cavalry')
     "infantry":        ["Hold", "Push", "ShieldWall"],

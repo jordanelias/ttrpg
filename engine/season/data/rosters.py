@@ -533,6 +533,8 @@ VERB_CAPABILITY = roster_map("verb_capability", "values")
 GRADED_INQUIRIES = roster_map("graded_inquiries", "values")
 # RS-21 item 1 (H-111): the Event kinds WITNESS deposits nothing for (`loop/witness.py::witness`).
 UNDEPOSITED_KINDS = roster("undeposited_kinds")
+# ED-IN-0306 phase 2: the verbs that change an `army` Record (`loop/effects_army.py`); `data/fixtures.py` withholds them from formation.
+ARMY_VERBS = roster("army_verbs")
 # v9 SE-01 (`24g`) / `H-51`: the refusal kind a row (`dispatch`) declares and the fold keeps ONLY when
 # the act earns it (`loop/resolve.py::_demand_earned`: from the precondition refusal of an act naming
 # nobody the world holds). ONE OWNER, read by the fold and by the loader's flat-row rule (`data/verbs.py`,
@@ -971,6 +973,9 @@ FIELD_BANDS = roster("field_degree_bands", ordered=True)
 DECLARED, WON, LOST, UNOPPOSED = FIELD_BANDS
 FIELD_CASUALTY_MODELS = roster("field_casualty_models")
 MARCH_TARGET_KINDS = roster("march_target_kinds")
+SUBTREE_OCCUPATION_KINDS = roster("subtree_occupation_kinds")
+RAZE_TARGET_KINDS = roster("raze_target_kinds")
+ARRIVAL_ONLY_KINDS = roster("arrival_only_kinds")
 # ⚠ BOUND AT IMPORT LIKE THE OTHERS, AND THAT IS THE POINT. `titles` was the ONE roster read
 # lazily through a bare `_ROSTERS.get(...) or {}`, so it alone got no existence refusal -- and
 # because `_req_revoke` fails OPEN into purview-for-everything when the mapping is empty, the one

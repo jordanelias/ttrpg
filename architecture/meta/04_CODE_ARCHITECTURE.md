@@ -810,6 +810,8 @@ stakes = holdings + seats               -- what a defeat can cost, already typed
 | **what it actually forbids** | handing the wrapper anything that is not the projection. That is the whole content of the contract |
 | **grid squad combat** | the same thing one scale down — the squad is `members ∩ present-at-rung`, resolved once, every combatant a `Person` |
 
+> **AMENDED BY ED-IN-0306 (Jordan, 2026-10-28), for armies only.** An army is no longer only `PersonId[] at weight`: a faction's order of battle (formations, subformations, troop-type assignments, tactic, strategy) is a typed record the season loop reads. The freeze above is unchanged — the order of battle is resolved once with the sides and held for the contest. Plan and open items: ED-IN-0306.
+
 ⚠ **In GDScript the consequence does not hold for free.** `proj` there is a reference to live objects
 unless it is actually copied, so the guarantee Python gets from the snapshot **must be bought with a
 copy or a lock**. See D-49, which is the one row in Part D whose Python and GDScript grades diverge

@@ -214,7 +214,7 @@ def _citation_grade(citation):
 def build() -> dict:
     records = []
     for p in _iter_py_files():
-        rel = str(p.relative_to(ROOT))
+        rel = p.relative_to(ROOT).as_posix()      # "/" on every host: the committed file is read on Linux CI
         module = _subsystem(p)
         try:
             src = p.read_text(encoding="utf-8")

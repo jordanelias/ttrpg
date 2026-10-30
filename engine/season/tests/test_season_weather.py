@@ -375,9 +375,13 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # masters' `found` and `build` form on them and rank at the chooser's tail -- `aperture 4 s`, realm: executed 0 at seeds 0 and 1,
 # 1 each at seed 2: the Duke founds at tick 2, the Steward builds at tick 3). Was 9ff53909... / 41ffb48b... / 3afa013b... (build, one, two seasons). CONTROL, run in process on this
 # tree: `planned_works` emptied reads the old triple, the old `BASE_EVENTS` and the old `thread_read`-withheld arm exactly.
+# RE-PINNED AT ED-IN-0306 phases 4 and 5 (on top of main at 59f2f97f, ONE AND TWO SEASONS; the build is unmoved): `arrival_only_kinds`
+# declines a computed `migrate` onto a territory, so the seed-0 realm's act mix moves (one season: `migrate.refused` 35 -> 40,
+# `residence.changed` 3 -> 1, `claim.deposited` 8190 -> 8233; 9334 -> 9378 events). Was 6c26053b... / 299f019e... (one, two
+# seasons). CONTROL: main at 59f2f97f, probed in its own checkout by the same run, reads the old pair and the old `BASE_EVENTS`.
 BASE_HASHES = {0: "fe427626f9e91ab83ffd556c0bec4ea7",
-               1: "6c26053b03c2612057515cbe3972dd91",
-               2: "299f019e48fedf63fdbf4028bd980f1e"}
+               1: "873525dfb363231695cefb17ad4b17a1",
+               2: "9e71dfe98fcced1fdfa5b57073cd57ff"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -437,8 +441,9 @@ BASE_HASHES = {0: "fe427626f9e91ab83ffd556c0bec4ea7",
 # RE-RECORDED at v10 REM-29 with `BASE_HASHES` (9270 -> 9316, 27482 -> 28806; the `room` conjunct deleted reads the old pair).
 # RE-RECORDED at v10 REM-2B with `BASE_HASHES` (9316 -> 9319, 28806 -> 28490; the three rows put back in process read the old pair).
 # RE-RECORDED at v10 IN-45 with `BASE_HASHES` (9319 -> 9334, 28490 -> 28526; `planned_works` emptied in process reads the old pair).
-BASE_EVENTS = {1: (9334, "9b55fee5531be5b6cfbaad5be0045c22dd1746631ac6134a5e47cd1925da95bc"),
-               2: (28526, "a9dbdd5a67b4865a4f9c81147442302a84de3fec49ebc02b68715185bb2accb8")}
+# RE-RECORDED at ED-IN-0306 with `BASE_HASHES` (9334 -> 9378, 28526 -> 28665; main at 59f2f97f reads the old pair).
+BASE_EVENTS = {1: (9378, "d51c8510ef5944db51e82d4c16337ab97621ce330cb8e634c2a7f0d624abe70f"),
+               2: (28665, "0ff7f81c069914cf9c5fa52b3b5fbd9bf671083082cd215a95371b0445c3d069")}
 
 
 def _digest(w) -> tuple:
@@ -562,7 +567,9 @@ def test_the_give_withheld_arm_reproduces_the_one_season_pin():
 #: `exchange` restored; the three rows put back to their base shape in process read the old value exactly).
 #: RE-RECORDED at v10 IN-45 with `BASE_HASHES`: 9324 / f14e03ba... -> 9339 / a5cb2f02... (the planned works's terms ripen;
 #: `planned_works` emptied in process reads the old value exactly).
-THREAD_READ_WITHHELD_EVENTS_1 = (9339, "a5cb2f02f61c348cac5143c36921a46ab0b33c1d87f74167a1f07032b348ff34")
+#: RE-RECORDED at ED-IN-0306 with `BASE_HASHES`: 9339 / a5cb2f02... -> 9383 / 1b8ac5b5... (the computed `migrate` onto a territory is
+#: declined; main at 59f2f97f reads the old value exactly).
+THREAD_READ_WITHHELD_EVENTS_1 = (9383, "1b8ac5b59ad796609b8a3eae47b72ec3cad1721b413908eea2732103615348d2")
 
 
 def test_the_thread_read_withheld_arm_is_pinned_and_differs_from_the_shipped_season():

@@ -88,11 +88,12 @@ from typing import Any, Optional
 # import order); the entry lookup is `_entry.py`'s, which imports `registrar` and `registry` the same way.
 from ...manifest.providers import provider
 from ...data.geography import geography
-from ...data.rosters import territory_id_of
-from ...queries.inputs import MassBattleInput, ProvisionInput
+from ...data.rosters import SUBTREE_OCCUPATION_KINDS, territory_id_of
+from ...queries.inputs import ArmyMuster, MassBattleInput, ProvisionInput
 from ...queries.person_q import stance_toward
 from ...queries import world_q
 from engine.substrate import composition
+from ...state.gate import seat_faction
 from ._entry import entry_for
 
 _PROVIDER = "mass_battle"
@@ -171,7 +172,33 @@ def _origin_of(w: Any, pids: list) -> Optional[str]:
     return found.pop() if len(found) == 1 else None
 
 
-def field_input(w: Any, claimants: list, other: list, rung: str) -> MassBattleInput:
+def _order_of_battle(w: Any, faction: Optional[str], side: list) -> Any:
+    """ED-IN-0306 phases 3 and 5. The order of battle `faction`'s army Record fights this field with, or `None` -- the
+    side as it always fought, one headcount line. `None` for no faction, a faction with no army Record, an army whose
+    commander is not here, and an army none of whose troops has a body left.
+
+    AN ARMY IS WHERE ITS COMMANDER IS. The Record's holder is its commander; when he is among `side` (the persons the
+    adapter already mustered at the place: the attacker's at its origin, the defender's at the target) the whole army
+    takes the field, its troops drawn from cohorts wherever they live -- a cohort is a place's population and does not
+    march, so requiring it to stand on the field capped every army at one town's levy (20 troops). A commander
+    elsewhere leaves this side to fight as it always did. HOW FIT each cohort is = its `body` over `condition_scale`,
+    the scale a person is built at (`Person.body`); that is the whole casualty loop -- `march` scales the bodies of the
+    cohorts a losing army drew from by the engine's survivor fraction (`_eff_march`, `parties["fielded"]`), so the
+    next field this army fights is that much smaller, and `tend` restores it. What the Record turns into is the
+    module's (`mass_battle.army_order`, by role string): this reads facts off the world and decides nothing."""
+    rid = world_q.army_of(w, faction) if faction is not None else None
+    if rid is None:
+        return None
+    commander = world_q.hold_force(w, rid)
+    if commander is None or commander.subject not in side:
+        return None
+    full = w.fixtures.get("condition_scale")
+    fit = tuple((pid, max(0.0, min(1.0, p.body / full))) for pid, p in w.persons.items() if p.is_cohort)
+    return composition.require(world_q.ARMY_ORDER)(ArmyMuster(w.records[rid].subject_matter, fit))
+
+
+def field_input(w: Any, claimants: list, other: list, rung: str,
+                factions: tuple = (None, None)) -> MassBattleInput:
     """THE HOST INPUT BUILDER (plan position `31c`, A-25): `World` -> the frozen record the field reads.
 
     Reads `w.persons` (each side member's `weight`, and the stances `_side_stance` reads), the rung
@@ -185,30 +212,41 @@ def field_input(w: Any, claimants: list, other: list, rung: str) -> MassBattleIn
     target crosses a river is the geography's, which the module reads (`terrain.py::river_crossed`) off
     the record's `geography` -- the file `data/geography.py` reads once per process; the module opens none.
     MB-03: `loyalties` and `loyalty_gain` are the build-time loyalty rows and the fixture gain; what
-    they do to the morale-start is `massbattle._morale_start`'s."""
+    they do to the morale-start is `massbattle._morale_start`'s.
+    ED-IN-0306 phase 3: `factions` is `(attacker, defender)`, each side's faction Proposition id or `None`;
+    each side whose faction holds an army Record fights as that Record's order of battle
+    (`_order_of_battle`). Neither side having one leaves `orders_of_battle` `None`, the record exactly as it was."""
     def weights(side: list) -> tuple:
         return tuple(w.persons[pid].weight for pid in side if pid in w.persons)
+    oobs = (_order_of_battle(w, factions[0], claimants), _order_of_battle(w, factions[1], other))
     return MassBattleInput(
         weights=(weights(claimants), weights(other)),
         territory=_territory_of(w, rung),
-        fort_level=world_q.fortification_of(w, rung),
+        # Walls are a settlement's: a field fought AT a territory is a field battle in the territory's own terrain
+        # (`fortification_of` averages every garrison in a subtree and any value above 0 is WALLS, which overrides
+        # terrain), ED-IN-0306 phase 5.
+        fort_level=world_q.fortification_of(w, rung) if w.rungs[rung].kind in SUBTREE_OCCUPATION_KINDS else 0.0,
         stances=(_side_stance(w, claimants), _side_stance(w, other)),
         walls_dr=w.fixtures.get("field_walls_dr"),
         origin=_origin_of(w, claimants),
         loyalties=(_side_stance(w, claimants, _creed_referent), _side_stance(w, other, _creed_referent)),
         loyalty_gain=w.fixtures.get("field_morale_loyalty_gain"),
-        geography=geography())
+        geography=geography(),
+        orders_of_battle=None if oobs == (None, None) else oobs)
+
+
+def _causing_act(w: Any, causes: list) -> Any:
+    """The marching act, or `None`. `contest()` hands this provider `causes = [a.id]`, never the act: the act is
+    found in `w.acts` by `state/attribution.py::causing_act`'s first-match rule over those ids (the fold appends the
+    act before it folds it, `loop/resolve.py::resolve`)."""
+    return next((w.acts.get(c) for c in causes if w.acts.get(c) is not None), None)
 
 
 def _attacker_treasury(w: Any, causes: list) -> Optional[str]:
     """v9 IN-52: THE ATTACKER'S TREASURY -- the rung of the office the marching act exercised (`Act.via`),
     the treasury `requisition` fills (`loop/effects_governance.py::_eff_requisition`'s `seat.rung`), or
-    `None` for an act exercising no seat, a rungless seat, or no act among `causes`.
-
-    `contest()` hands this provider `causes = [a.id]`, never the act: the act is found in `w.acts` by
-    `state/attribution.py::causing_act`'s first-match rule over those ids (the fold appends the act
-    before it folds it, `loop/resolve.py::resolve`)."""
-    act = next((w.acts.get(c) for c in causes if w.acts.get(c) is not None), None)
+    `None` for an act exercising no seat, a rungless seat, or no act among `causes`."""
+    act = _causing_act(w, causes)
     office = w.offices.get(act.via) if act is not None and act.via else None
     rid = office.rung if office is not None else None
     return rid if rid in w.rungs else None
@@ -297,7 +335,16 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     # there (`H-150` -- `fortification_of`'s caller on the battle path).
     # PLAN POSITION `20-v`: the walls' DR is the `field_walls_dr` fixture (`H-150`), `None` = A.9's
     # own number, which the module reads from its terrain table -- this adapter decides none of it.
-    inp = field_input(w, claimants, other, rung)
+    # ED-IN-0306 phase 3: the attacker's faction is the seat the marching act was exercised through (the one
+    # `loop/sides.py::sides_of` mustered `claimants` under), the defender's is `subject`.
+    act = _causing_act(w, causes)
+    inp = field_input(w, claimants, other, rung,
+                      factions=(seat_faction(w, act.via) if act is not None else None, subject))
+    if inp.orders_of_battle is not None:
+        # WHO FOUGHT, for `_eff_march` to write casualties to (ED-IN-0306): a side fought as an order of battle drew
+        # its troops from the cohorts it names, and the fight is theirs alone; a side with none (None) fought as
+        # everybody mustered, as it always did.
+        parties = {**parties, "fielded": tuple(None if o is None else o.drawn_from for o in inp.orders_of_battle)}
     # v9 IN-52, THE LEVY-TO-FIELD FEED [LF-1..LF-3]: each side's fielded troops are `settlements.provision`'s
     # answer on its treasury, reached by role string; `resolve_field` sizes each Unit by them, and
     # `_eff_march` debits each side's `consumed` from the treasury named beside it. With `field_provisioning`
@@ -310,8 +357,11 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     prov = composition.require(world_q.PROVISION)
     treasuries = (_attacker_treasury(w, causes), _defender_treasury(w, rung))
     fed, eaten = [], {}
-    for t, side in zip(treasuries, inp.weights):
-        p = prov(provision_input(w, sum(side), t, eaten.get(t, ())))
+    fielded = parties.get("fielded") or (None, None)
+    for t, side, drawn in zip(treasuries, inp.weights, fielded):
+        # An army eats what it drew its troops from (the cohorts' weight), not everyone mustered beside it.
+        weight = sum(w.persons[pid].weight for pid in drawn if pid in w.persons) if drawn is not None else sum(side)
+        p = prov(provision_input(w, weight, t, eaten.get(t, ())))
         eaten[t] = p.consumed
         fed.append(p)
     result = entry.fn(inp, rng, troops_a=fed[0].troops, troops_b=fed[1].troops)

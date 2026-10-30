@@ -12,8 +12,8 @@ adds `raze`, the closer of `H-166` limit 3: the one verb that ends a Rung (`w.ru
 
 from __future__ import annotations
 
-from ..data.rosters import RUNG_KINDS, SITE_KINDS
-from ..queries.world_q import works_target
+from ..data.rosters import RAZE_TARGET_KINDS, RUNG_KINDS, SITE_KINDS
+from ..queries.world_q import mustered, works_target
 from ..state.carriers import Rung, Site, Tenure
 from ..state.gate import NO_CHANGE, Change, Subject
 from ..state.ids import H
@@ -252,11 +252,11 @@ def _eff_raze(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
 
     THE LICENCE IS OCCUPATION, READ AS `seize`'s RUNG HALF READS IT (`loop/effects_information.py::
     _seize_rung`, whose inlined read this copies, the entry's instruction): the exercised seat's FACTION
-    (`seat_faction`) `mustered` at the settlement (`world_q.mustered`, the one query of who stands
-    there), the settlement held by ANOTHER faction (`holder_faction_of`). DECLINES (`NO_CHANGE` ->
+    (`seat_faction`) occupying the settlement (`world_q.occupies`, the one reading of that), the
+    settlement held by ANOTHER faction (`holder_faction_of`). DECLINES (`NO_CHANGE` ->
     `raze.refused`), each one change from an admitted razing:
-      * the subject is no Rung, or not a `march_target_kinds` kind (occupation is defined only at the
-        places a march arrives at, `_seize_rung`'s first decline) [ASSUMPTION; medium; Jordan to
+      * the subject is no Rung, or not a `raze_target_kinds` kind (a settlement: a territory is marched on
+        and seized and never razed; occupation is defined only at the places a march arrives at) [ASSUMPTION; medium; Jordan to
         correct; revert: any Rung kind, the licence still occupation];
       * the exercised seat has no faction;
       * nobody holds the settlement (H-166: who holds an unheld place is unruled, `_seize_rung`'s
@@ -283,7 +283,11 @@ def _eff_raze(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     G4 -- WHAT IT NAMES: THE RUNG, whole, earning `rung.razed`; it always moves (present -> absent).
     The closed edges are the cascade and are not named, as `destroy_record`'s are not."""
     rid = _operand(a, "subject")
-    if occupying_faction(w, a.via, rid) is None:
+    # ED-IN-0306 phase 4: a territory is marched on and occupied now, and still not razed (`raze_target_kinds`).
+    mine = occupying_faction(w, a.via, rid) if rid in w.rungs and w.rungs[rid].kind in RAZE_TARGET_KINDS else None
+    # Razing stays the act of the army that is IN the town: a territory's occupation carries a settlement's
+    # SEIZURE (the title), not its destruction.
+    if mine is None or not mustered(w, rid, mine):
         return NO_CHANGE
 
     def perform() -> None:

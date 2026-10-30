@@ -38,8 +38,9 @@ from typing import Callable, Optional
 from ..data.requires import OWN_STATE_STEMS, UNKNOWN, binding_from_act, binding_of, evaluate
 from ..data.rosters import (
     BAN_KIND, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP, HUNGER_BANDS,
-    OCCASION_ONLY_CLASSES, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, REMOVE_ORDINAL,
-    RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STANDING_CROSSED, TENURE_KINDS, faction_prop_id,
+    MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, REMOVE_ORDINAL,
+    RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS,
+    faction_prop_id,
     require_member,
 )
 # IN-09: the Record kinds a held document is an occasion for, derived off the verb table's rows;
@@ -1197,8 +1198,17 @@ FORTIFICATION = "settlements.fortification"
 #: (`seam/wrappers/mass_battle.py::resolve`, which reads the role from here), not a wrapper in this file;
 #: it is declared here so the one host need the driver checks stays one tuple.
 PROVISION = "settlements.provision"
+#: ED-IN-0306 phase 2: the army record's command entry, called by the four army verbs (`loop/effects_army.py`).
+ARMY = "mass_battle.army"
+#: ED-IN-0306 phase 3: the army record -> the order of battle one field fights with, called by the field adapter.
+ARMY_ORDER = "mass_battle.army_order"
+#: ED-IN-0306 phase 5b: what a player may ask of an army and what is wrong with it, called by the military menu.
+ARMY_OPTIONS = "mass_battle.army_options"
+#: ED-IN-0306 phase 5c: the commands that raise and organise an army for a faction nobody plays.
+ARMY_PRESET = "mass_battle.army_preset"
 QUERY_ENTRIES = ((LARDER_DRAW, "query"), (DRAWN_UNDER, "query"), (HOUSING, "query"),
-                 (FABRIC, "query"), (FORTIFICATION, "query"), (PROVISION, "query"))
+                 (FABRIC, "query"), (FORTIFICATION, "query"), (PROVISION, "query"), (ARMY, "query"),
+                 (ARMY_ORDER, "query"), (ARMY_OPTIONS, "query"), (ARMY_PRESET, "query"))
 
 
 def _entry(role: str):
@@ -1917,6 +1927,60 @@ def mustered(w: World, rung_id: str, faction: str) -> list[str]:
                   and t.object in here and t.subject in inside)
 
 
+def occupies(w: World, rung_id: str, faction: str) -> bool:
+    """ED-IN-0306 phase 4. Does `faction` OCCUPY `rung_id`? Occupation is what `seize` and `raze` license on, and
+    it is presence, never a title (R-6: a won field writes presence).
+      * a rung of a `subtree_occupation_kinds` kind (a settlement): the faction is `mustered` anywhere beneath it
+        -- OR it occupies the place the settlement is held through (the next bullet), because an army that has taken
+        a territory has taken the settlements in it ("occupy that territory alongside its settlements");
+      * any other `march_target_kinds` kind (a territory): the faction has people standing AT the rung itself, which
+        a `march` that arrived there puts them (a `move` onto it does as well: presence is presence, as for a
+        settlement). Standing in one of its towns is not occupying it.
+    A rung of no march-target kind is never occupied (occupation is defined where a march can arrive)."""
+    TRACE.query("occupies", "resolver")
+    rung = w.rungs.get(rung_id)
+    if rung is None or rung.kind not in MARCH_TARGET_KINDS:
+        return False
+    if rung.kind in SUBTREE_OCCUPATION_KINDS:
+        if mustered(w, rung_id, faction):
+            return True
+        # An army that has taken a territory has taken the settlements held THROUGH it. A settlement with a hold of
+        # its own (a seizure, a founding) stands on its own and is occupied only by standing in it.
+        held = governing_hold(w, rung_id)
+        return held is not None and held.object != rung_id and occupies(w, held.object, faction)
+    return bool(standing_at(w, rung_id, faction))
+
+
+def standing_at(w: World, rung_id: str, faction: str) -> list:
+    """ED-IN-0306 phase 5. The members of `faction` whose live `contain` is AT `rung_id` itself, not anywhere beneath it:
+    who an army that has arrived at a territory is made of. `mustered` is the subtree reading (a settlement's people
+    stand in buildings under it); a territory's is this."""
+    TRACE.query("standing_at", "resolver")
+    inside = set(members(w, faction))
+    return sorted(t.subject for t in w.tenures
+                  if t.kind == "contain" and t.live and t.object == rung_id and t.subject in inside)
+
+
+def raisable_by(w: World, cohort_id: str, faction: str) -> bool:
+    """ED-IN-0306 phase 5. May `faction` raise troops from this cohort? A faction raises the people it governs: the
+    cohort lives in a place `faction` holds (`holder_faction_of` its residence, the nearest held rung at or above), or
+    it is committed to `faction`. The shipped realm seats its cohorts with no commit, so membership alone left every
+    faction without a levy. [ASSUMPTION; medium; Jordan to correct; revert: members only.]"""
+    TRACE.query("raisable_by", "resolver")
+    if cohort_id in members(w, faction):
+        return True
+    home = residence_of(w).get(cohort_id)
+    return home is not None and holder_faction_of(w, home) == faction
+
+
+def other_army_records(w: World, rid: str) -> tuple:
+    """ED-IN-0306 phase 5. The `subject_matter` of every `army` Record but `rid`, in id order: what a recruit adds to
+    the cohort's cap so that one cohort cannot be raised to its limit into two armies."""
+    TRACE.query("other_army_records", "resolver")
+    return tuple(r.subject_matter for _id, r in sorted(w.records.items())
+                 if _id != rid and r.kind == "army" and isinstance(r.subject_matter, dict))
+
+
 def fortification_of(w: World, rung_id: str) -> float:
     """M4 (`ED-IN-0279` clause (a)). A settlement's defensive strength, `0.0` to `1.0`, read off
     the `garrison` Site(s) in `rung_id`'s subtree -- `H-38`'s *"`Site.condition` is the model"*
@@ -1946,6 +2010,35 @@ def fort_input(w: World, rung_id: str) -> FortInput:
     here = _subtree(w, rung_id)
     conditions = tuple(s.condition for s in w.sites.values() if s.kind == "garrison" and s.rung in here)
     return FortInput(conditions, w.fixtures.get("condition_scale") if conditions else None)
+
+
+def training_sites(w: World, person_id: str) -> dict:
+    """ED-IN-0306 phase 2. `{site kind: the best Site condition}` for each kind of Site the person's residence has,
+    anywhere in its subtree -- what `troop_types/recruitment.py::recruit_limit` reads as the training infrastructure
+    of the place a cohort is raised from (it reads only the kinds that train a troop type, and an absent kind as 0).
+    A person with no `reside` edge contributes none."""
+    TRACE.query("training_sites", "resolver")
+    home = residence_of(w).get(person_id)
+    if home is None:
+        return {}
+    here = _subtree(w, home)
+    out: dict = {}
+    for s in w.sites.values():
+        if s.rung in here:
+            out[s.kind] = max(out.get(s.kind, 0), s.condition)
+    return out
+
+
+def army_of(w: World, faction: str) -> Optional[str]:
+    """ED-IN-0306 phase 2. The id of the HELD `army` Record whose `subject_matter` names `faction`, or `None`; the
+    lowest id when several do (a second is refused at its mint, `_eff_create_record`). An army whose holder died is
+    nobody's to command (every army verb needs the holder) and so is not the faction's army: its slot is free to
+    mint again, rather than locked forever by a record no one can change."""
+    TRACE.query("army_of", "resolver")
+    ids = sorted(r.id for r in w.records.values()
+                 if r.kind == "army" and isinstance(r.subject_matter, dict) and r.subject_matter.get("faction") == faction
+                 and hold_force(w, r.id) is not None)
+    return ids[0] if ids else None
 
 
 def enclosing_territory(w: World, rung_id: Optional[str]) -> Optional[str]:
