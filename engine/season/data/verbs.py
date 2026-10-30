@@ -1663,7 +1663,7 @@ def _derive_rung_remit_acts() -> frozenset:
     THE DERIVED WIDENING, NAMED (v10 REM-27, REM-28; B10-06): the set is the UNION over every `Rung`-classed
     row, so a row that gains `referent_class: Rung` (`march`, `convene`) widens it and `larders_in_purview` is
     asked of that row's remit holders too, whatever `requisition` itself is eligible on (the cost is named, not
-    prevented). Its current value is pinned once, in `tests/test_referent_class_stamps.py`; each widening's
+    prevented). Its current value is pinned in `tests/test_referent_class_stamps.py` (asserted three times there); each widening's
     measurement is in that row's `referent_class_note:` and its commit. REVERT: a row's column, and the set
     loses that row's act unless another `Rung` row grants it."""
     return frozenset(raw.strip() for row in VERB_TABLE.values() if row.referent_class == "Rung"

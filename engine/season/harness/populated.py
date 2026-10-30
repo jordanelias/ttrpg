@@ -557,10 +557,16 @@ def mint_planned_works(w: World, rows: list, anchors: dict, authored: dict, part
     Each row is ONE `create_record` EFFECT RUN AT TICK 0: `EFFECTS["create_record"]` is handed the act the row's
     master would have declared -- `{record, kind, subject_matter: {plan, at}, rung: <the paying rung>, stages}`
     -- and the `Change` it returns is applied, so the Record, its stages, the master's `hold` and the
-    one-live-works-per-target decline are the ones a computed `create_record` writes, with no second mint here.
+    one-live-works-per-target decline are the ones a master's declaring `create_record` writes, with no second mint here (a COMPUTED `create_record`
+    carries no payload and mints `text`: `loop/effects_information.py`).
     It is NOT folded: no `Event` is logged, no token is minted, and no driver runs (`build_realm` writes the
     world straight, as every other section of it does); the effect's own `Change` is the writer, which is what
-    makes a planned works the same Record a master's act would leave. [ASSUMPTION; medium; Jordan to correct;
+    makes a planned works the same Record a master's act would leave. WHY NOT THROUGH THE GATE (`04` §C.2, *"the seam
+    every mutation crosses"*; §A.2, *"The driver is the ONLY constructor of write tokens"*): world generation is none
+    of §A.2's nine modules, a builder holds no token and can lawfully hold none, and `build_realm` writes the world
+    straight in some two dozen places; the gated route a probe takes (`harness/probes.py`: `w.write(..., mint_token(...),
+    change=EFFECTS[...](w, act))`) mints a token outside the driver and logs an Event, so it is not followed here.
+    No scan sees a `.apply()` under `harness/`, and none is licensed (`layer-conformance` A3). [ASSUMPTION; medium; Jordan to correct;
     revert: one `create_record` act per row, folded before season 0 -- it moves the log by a `record.created`
     per row and needs a driver in the builder.]
 
@@ -596,7 +602,7 @@ def mint_planned_works(w: World, rows: list, anchors: dict, authored: dict, part
                 f"{whose} names an id that is not text, or that a Record already carries",
                 "engine/season/venues.yaml -- planned_works",
                 needs="a unique text id", law="v10 IN-45 -- one Record per id; a mint would replace it")
-        if plan not in priced:           # every priced key is a rung or site kind (`fixtures.py::_check_works_cost`)
+        if plan not in priced:           # every priced key is a rung or site kind (`fixtures.py::_check_works_cost`, at import, default fixtures)
             raise Unspecified(
                 f"{whose} plans {plan!r}, which is no priced `rung_kinds` or `site_kinds` member",
                 "engine/season/venues.yaml -- planned_works",
@@ -627,6 +633,9 @@ def mint_planned_works(w: World, rows: list, anchors: dict, authored: dict, part
             # THE WINDER OF EACH TERM IS `ROOT`: MATTER's `term.matured` names `causes[]` the Event that created
             # the Record, else the stage's third element, and a Record minted without a fold has no Event and no
             # act in the act store to name. The setting planned it -- authored world data, caused by the world.
+            # A DELIBERATE DEPARTURE from `04` §A.1's AX-5 row (*"a matured term cites the act that wound it"*): no act
+            # wound these terms, `ROOT` is PART D row 6's typed origin, and the card's other route (a folded
+            # `create_record` per row, above) would satisfy the row at the price of moving the log and every pin.
             "stages": [(w.tick + (i + 1) * term, f"term{i + 1}", ROOT) for i in range(terms)]})
         change = EFFECTS["create_record"](w, act)
         if change is NO_CHANGE:
