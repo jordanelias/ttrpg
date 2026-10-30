@@ -120,3 +120,54 @@ A port carries the dice and obstacle math (about 25 lines), a record builder ove
 ## 7. Limits
 
 The probe is one chooser over three seeds and two seasons, not a distribution; counts are what ran, not rates. The full suite was not run. Unverified by the readers: the readers of `confidence.broken`, `grade()`'s fan-in beyond the one inquiry route, and whether `rosters.yaml:2586` and `module_contracts.yaml:451` are existence-checked. I did not re-open the readers' other path:line cites. `[CONFIDENCE: medium]` on §2's PARTIAL/ABSENT grading boundary (a reasonable reader could grade items 1, 3 and 9 one step either way); the evidence for each grade is in its row.
+
+---
+
+## 8. Executability of each kind, run (probe)
+
+A measurement reader drove each kind through `SeasonDriver.resolve` on `probes.tiny_world` at a fixed seed (the existing
+tests' fixture and helpers: the real fold, seam, provider and witnessing), spying only on the return of `contest()` to
+print pool, net and obstacle; band odds come from sweeping act ids. "Strong judge" means `pool_default` 30, so that a
+disposal opens; "shipped" means 2. The drivers and raw output are not committed. Every driver exited 0.
+
+| kind | can it be constructed | reaches a roll | writes world state | computed play | first blocker |
+|---|---|---|---|---|---|
+| K1 `tell` | yes | yes: pool 2, ob 2.0; F 68% / P 20% / S 12% | none at any band; a degraded `told_by` copy is witnessed | **yes**, 35-79 attempts per seed | `verb_table.yaml:1334` writes `[]` |
+| K1 `argue` | yes | yes: pool 2, ob 2.0 | Success moves the hearer's `Person.pursuits` (0.1 to 0.18) | 1 attempt in 3 seeds | **content-blind**: changing `mood` gave the identical roll and band (`effects_information.py:555-581`) |
+| K2 negotiation | **no** | no | a five-verb chain (`convene`, `utter`, `commit` by both sides, `petition`, `give`) ran with 0 rolls and nothing relating the steps | no | no row; no offer, counter, concede or impasse verb; `give` runs with no `commit` behind it |
+| K3 six seeded rows | yes | `speak` and `determine` roll | `oblige` (arbitration); `detain` (legal_trial, interrogation); `ban` (tribunal, inquisition_hearing, excommunication_deliberation) | `open_case` runs but never names a row; **`determine` 0 executed** | the rows differ only in `disposes`: `speak` outcomes were identical across all six rows over 30 act ids |
+| K3 appeal | partly | a re-open and second `determine` roll, then decline | a second bench's edge stacks; nothing voids the lower one | no | `appeal_basis` has no reader |
+| K4 petition | yes | `determine` rolls: S 5% / P 28% / F 67% (shipped) | `petition`, `carry`, `determine` opens `oblige` on the petition's subject | `petition` 11-23 per seed, **22 of 22 addressed to the subject**; `determine` 0 | no deny, withdraw or lapse verb; `to=p_king` is not read |
+| K5 panel | yes (2 seats) | one judge's act is one roll | one edge | no | quorum counts seat-holders, not sitters; no vote or dissent field |
+| K6 parliament, council | `convene` yes; the case no | `open_case` refused before any roll | nothing | `convene` 11-16 per seed, 7 fired | `effects_information.py:334-337` |
+| K6 count | `commit` ×6 yes | no | six live `commit` edges | no | `commit` read only as membership; `commit_count_guard` (`world_q.py:164`) called only from `harness/probes.py` |
+| K7 display | yes | `speak` rolls | **none**: a witnessed speech changed `reception` by 0.0 for all 15 judges; a planted deed claim moved it to 0.8 (so the instrument could see a change) | `speak` rolled 1-4 per seed | `speak` writes `[]` at every band (`verb_table.yaml:1233`); the deposited claim is about the party, not the speaker |
+| K8 `confer`, `revoke`, `seize`, `issue`, `comply` | yes | no roll | `confer` opens a `hold`; `revoke` closes it and opens a `ban`; `seize` moves a `hold`; `issue` mints a dispensation | `confer` 1, `issue` 6-10; `revoke`, `seize`, `comply` 0 | none; they run |
+| K8 `arrest` | yes, with a warrant | yes: strong judge 40/40 `arrest.made`; shipped 78% `arrest.resisted` | `detain` on the issuing seat | **0 attempts** in all seeds | needs a held warrant record |
+| K8 deposition, election | no | n/a | n/a | n/a | no verb |
+
+**Computed play** (`build_realm`, seeds 0 to 2, 2 seasons; attempted / executed / refused):
+
+| verb | seed 0 | seed 1 | seed 2 |
+|---|---|---|---|
+| `tell` | 35/35/30 | 67/67/55 | 79/78/65 |
+| `speak` | 30/1/29 | 31/3/28 | 39/4/34 |
+| `argue` | 0 | 1/1/0 | 0 |
+| `determine` | 9/0/9 | 7/0/7 | 4/0/4 |
+| `arrest` | 0 | 0 | 0 |
+
+**Findings the matrix adds to §1 to §7.**
+- **`speak` does not reach `determine`.** The same `determine` act id gave the same band and the same `(pool, net, ob)` after zero speeches and after three. A hearing does not move its judgment.
+- **No `detain` or `ban` edge exists in any computed run.** The `oblige` edges (13, 24 and 20) come from the self-service `oblige` verb, not from `determine`. Every `speak` refusal in seed 0 is `exists:DocketItem 0` (29 of 29); `determine` refusals split between `exists:DocketItem` and `exists:Person`.
+- **Appeal wedge (hand-built, not seen in computed play).** A second `determine` on a determined matter is refused at the docket conjunct with no roll. Re-opening the same matter and determining again rolls, then declines at the write because a live edge of that kind exists on the seat; the matter stays docketed. A King's bench (`off_crown`) opens its own `ban` beside the Duke's `oblige`, and neither voids the other.
+- **Panel.** With quorum 2 and two seat-holders `determine` passes. A failed first judge leaves the matter open, so the other seat may try again with a fresh draw. A non-titled office (a Reeve) is excluded from `judging_set`; the same seat with post `Duke` sits.
+- **Corrected by the reader before reporting:** a first K7 run used a non-titled Reeve seat that `judging_set` excludes, so its 0.0 deltas were by construction; the figures above are the rerun with a titled seat and a working control.
+
+**Limits (the reader's).** The "no reader" claim for the nine unread arrangement keys is a grep, not an AST walk
+`[UNVERIFIED]`. All computed-play figures are one chooser over three seeds and two seasons. Whether the appeal wedge
+arises in computed play is not known.
+
+**What the matrix says about "can it execute."** Of the eight kinds, **one runs end to end in computed play** (K1
+`tell`), **one barely** (K1 `argue`, content-blind), **two construct by hand and stop at a disposal that computed play
+never reaches** (K3, K4), **one stops at a refusal** (K6), **one cannot be constructed at all** (K2), and **K5 and K7
+have nothing of their own to run**. K8's seat verbs run; its contests (jurisdiction, deposition) do not exist.
