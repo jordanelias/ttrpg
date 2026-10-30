@@ -236,13 +236,13 @@ def _weighted_unit(name, weight, morale_start=_MORALE_START_BASE):
 #: stand-in for `_MVP_SUBUNIT_SHAPE`'s bare 'infantry' (which has no stat preset): one line of light infantry, sized by
 #: the side's headcount. NOT `levy`, though a levy is what a side that raised nothing could call up: measured at 300 a
 #: side over twelve seeds, a levy line closes to contact in 0 of them and every other infantry or mounted type in 11-12
-#: (`Unit` discipline 1), so a levy fallback would make a field against a headcount side a standing-still draw. [ASSUMPTION; medium; Jordan to correct -- ED-IN-0304 phase 5 gives every faction a real
+#: (`Unit` discipline 1), so a levy fallback would make a field against a headcount side a standing-still draw. [ASSUMPTION; medium; Jordan to correct -- ED-IN-0305 phase 5 gives every faction a real
 #: preset order of battle, after which this fallback is reached only by a hand-built record.]
 _HEADCOUNT_LINE_TYPE = 'light_infantry'
 
 
 def _oob_unit(oob, weight, side, morale_start):
-    """The Unit for a side when the field carries orders of battle (ED-IN-0304). `oob` None -> a single
+    """The Unit for a side when the field carries orders of battle (ED-IN-0305). `oob` None -> a single
     `_HEADCOUNT_LINE_TYPE` subformation, so both sides deploy by the same rule. Its size is the most the side's
     `weight` could put under arms, `under_arms_cap(weight)` (`troop_types/recruitment.py`), NOT the bare weight:
     an order of battle counts troops (a weight-12 cohort raises up to 120) and a season weight counts households,
@@ -309,7 +309,7 @@ def _run_and_grade(unit_a, unit_b, terrain, rng, walls_dr=None, by_troops=False)
         run_battle(unit_a, unit_b, max_turns=18)
 
     if by_troops:
-        # ED-IN-0304 phase 3: the survivor share counted in TROOPS (`hp` over `hp_max`), the quantity `march` scales a
+        # ED-IN-0305 phase 3: the survivor share counted in TROOPS (`hp` over `hp_max`), the quantity `march` scales a
         # losing side's bodies by. `effective_size / size_max` is not that for an army that is not a whole number
         # of `TROOPS_PER_SIZE` blocks: `size_max` floors, `effective_size` does not, so 120 troops read as 1 block
         # against 1.2 and a side that lost troops could score above 1.0 (found by `test_army_battle.py`: a lost
@@ -416,7 +416,7 @@ def resolve_field(inp, rng=None, *, troops_a=None, troops_b=None):
         unit_a = _weighted_unit("side_a", weight_a, morale_a)
         unit_b = _weighted_unit("side_b", weight_b, morale_b)
     else:
-        # ED-IN-0304: a side with an order of battle fights as that order says. Its headcounts are authoritative,
+        # ED-IN-0305: a side with an order of battle fights as that order says. Its headcounts are authoritative,
         # so `troops_a`/`troops_b` (the provisioning feed) are not applied to it -- recruiting is what bounds an
         # order of battle's size (phase 2), and scaling it here would silently overrule that.
         unit_a = _oob_unit(oob_a, weight_a, 'A', morale_a)

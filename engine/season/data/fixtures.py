@@ -471,7 +471,7 @@ DEFAULT_FIXTURES = Fixtures(
     # table's), each holding the equally likely multipliers on `season_factor` that season. `()` is
     # the CONTROL: no year, no draw, the bare constant above. The on arm is the declared sweep
     # `((0.5, 1.0, 2.0),) * 4`; a drought-only arm is `((0.5,),) * 4`. Drawn by
-    # `world_q.season_factor_of`, keyed on (world_seed, tick).
+    # `world_q.season_factor_of`, keyed on (world_seed, tick, territory rung id).
     season_factor_draw=(),            # `H-26`, swept () / ((0.5,),)*4 / ((0.5, 1.0, 2.0),)*4
     # ⚠ `W8` / `H-11`. #353 §10.4 makes `MatterKind` open and V2 gives the draw's SHAPE -- *from
     # the containing rung's stores, scaled by weight* -- and no weights. Registry row, not literal.
@@ -581,23 +581,25 @@ DEFAULT_FIXTURES = Fixtures(
     # seasons · `67` crosses it in one. The three arms therefore bracket the question the number
     # actually decides — IS STARVATION A SEASON OR A CAMPAIGN — instead of bracketing a magnitude.
     # Injection site: this line, read by `loop/matter.py`'s subsistence pass.
-    # ⚠⚠ SHIPPED AT THE CONTROL ARM, AND THE MEASUREMENT THAT FORCED IT IS THE POINT. At `10`,
-    # MEASURED: **all 86 buildable corpus worlds hold ZERO stores** while 258 persons live in
-    # them, so every person in every case world starves from season 1 and 19 tests move — not
-    # because scarcity bit, but because A CASE FIXTURE MODELS A SCENE AND NOT AN ECONOMY. A famine
+    # ⚠⚠ SHIPPED AT `10` SINCE REM-52 (v10, B10-05): H-125's REGISTERED LIVE ARM, TAKEN AS A DELEGATED
+    # PICK (M6 taken (a)), `[ASSUMPTION; medium; Jordan to correct; revert: 0]`. THIS LINE DOES NOT
+    # ARGUE THE MAGNITUDE: CR-22 (B10-18) re-derives it by `H-125`'s own test above, IS STARVATION A
+    # SEASON OR A CAMPAIGN. `0` stays the CONTROL arm and the first sweep point, and it is the pre-3b
+    # tree exactly; the readers of that arm sweep this fixture back to `0` in-process
+    # (`test_lb3b_the_zero_arm_is_the_pre_item_tree_exactly`). `67` stays a swept arm only.
+    # ⚠ WHY IT WAS PARKED AT `0` UNTIL NOW, KEPT BECAUSE IT STILL BOUNDS WHAT THE LIVE ARM MEASURES.
+    # MEASURED then, at `10`: **all 86 buildable corpus worlds hold ZERO stores** while 258 persons
+    # live in them, so every person in every case world starved from season 1 and 19 tests moved —
+    # not because scarcity bit, but because A CASE FIXTURE MODELS A SCENE AND NOT AN ECONOMY. A famine
     # in a world with no larder measures the fixture's silence, not the world's scarcity, which is
-    # `CLAUDE.md` §0.1 pt 2 from the other side: the reading cannot observe the thing it names.
-    #
-    # So the MECHANISM ships and the MAGNITUDE is parked at the arm that reproduces the pre-item
-    # tree exactly. `test_lb3b_the_zero_arm_is_the_pre_item_tree_exactly` pins that, and the other
-    # `LB-3b` falsifiers set the fixture explicitly, so the behaviour is EXERCISED rather than
-    # merely present (§0.2). Choosing the number needs a world that stocks a larder — which is
-    # what makes this a design call rather than a default nobody looked at.
-    # ⚠ v9 SE-01 (`24g`): THE LIVE ARM IS BUILT AND EXERCISED, AND THIS VALUE IS STILL NOT CHOSEN.
-    # J-6 settles the SHAPE -- a fixture, the control kept for the corpus, a one-line revert -- not
-    # the number. `tests/test_territorial_subsistence.py` reads `H-125`'s `sweep:` off the register
-    # and runs every non-control arm on the built realm; flipping the live default is THIS line.
-    body_step=0,                       # `H-125`, swept 0 (control, SHIPPED) / 10 / 67
+    # `CLAUDE.md` §0.1 pt 2 from the other side: the reading cannot observe the thing it names. The
+    # corpus, the spine and `headless` hold no cohort, hence no eater (H-171); read what the live arm
+    # moves in a world that stocks a larder (the built realm), not in a case world.
+    # ⚠ v9 SE-01 (`24g`): THE LIVE ARM WAS BUILT AND EXERCISED BEFORE THE VALUE WAS CHOSEN.
+    # J-6 settles the SHAPE -- a fixture, the control kept for the corpus, a one-line revert.
+    # `tests/test_territorial_subsistence.py` reads `H-125`'s `sweep:` off the register and runs every
+    # non-control arm on the built realm.
+    body_step=10,                      # `H-125`, swept 0 (control) / 10 (SHIPPED, REM-52) / 67
     # v9 IN-34 FORCE-BODIES (#457 D2, answered [medium; Jordan to correct]: ageing and illness are in
     # scope, a HAZARD READER only, rates swept). The hazard is `world_q.body_hazard`, a Query over
     # `Person.born` (ID-13: never a stored value); MATTER's bodies pass draws against it.
@@ -958,7 +960,7 @@ DEFAULT_FIXTURES = Fixtures(
     # from an act that names it). Each member must be a `verb_table.yaml` verb (`opening_set` refuses
     # another). SHIPPED naming `destroy_record` -- THE SINK ARM OFF: since IN-26 its row is formable
     # (`A-13`'s shape), and withheld it forms for nobody, as before, so every hash is today's. `()` is THE
-    # SINK ARM ON (`H-156` option (b) for that row): a holder may burn what he holds. ED-IN-0304 phase 2 adds the
+    # SINK ARM ON (`H-156` option (b) for that row): a holder may burn what he holds. ED-IN-0305 phase 2 adds the
     # four army verbs (`loop/effects_army.py`): their command is the act's payload, which no Candidate carries. [ASSUMPTION; medium;
     # Jordan to correct; the flip ON is a separate, declared hash-moving commit, IN-52's precedent.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-156 -- the formation-policy row; (a) and (b) are both defensible and lead to different corpora, so the arm ships at (a), today's state, and (b) is the declared second point]

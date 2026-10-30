@@ -533,7 +533,7 @@ VERB_CAPABILITY = roster_map("verb_capability", "values")
 GRADED_INQUIRIES = roster_map("graded_inquiries", "values")
 # RS-21 item 1 (H-111): the Event kinds WITNESS deposits nothing for (`loop/witness.py::witness`).
 UNDEPOSITED_KINDS = roster("undeposited_kinds")
-# ED-IN-0304 phase 2: the verbs that change an `army` Record (`loop/effects_army.py`); `data/fixtures.py` withholds them from formation.
+# ED-IN-0305 phase 2: the verbs that change an `army` Record (`loop/effects_army.py`); `data/fixtures.py` withholds them from formation.
 ARMY_VERBS = roster("army_verbs")
 # v9 SE-01 (`24g`) / `H-51`: the refusal kind a row (`dispatch`) declares and the fold keeps ONLY when
 # the act earns it (`loop/resolve.py::_demand_earned`: from the precondition refusal of an act naming
@@ -777,6 +777,17 @@ QUESTION_SOURCES = roster("question_sources", ordered=True)
 #: closed set a `Question.classes` pair and a verb row's `referent_class:` column may name. A classed
 #: referent is a partition beside the plain `referents` (`rosters.yaml: referent_classes`' note).
 REFERENT_CLASSES = roster("referent_classes")
+#: v10 REM-21 (AM-A-06's exclusion): THE CLASSES ONLY A STANDING OCCASION STAMPS -- held back from
+#: `queries/world_q.py::own_referents_of_class` (`rosters.yaml: occasion_only_classes`' note). A member
+#: that is no referent class would hold back nothing and let its namesake through, so it refuses here.
+OCCASION_ONLY_CLASSES = roster("occasion_only_classes")
+for _c in sorted(OCCASION_ONLY_CLASSES):
+    require_member(_c, REFERENT_CLASSES,
+                   f"`occasion_only_classes` names {_c!r}, which is no referent class",
+                   "rosters.yaml -- occasion_only_classes",
+                   law="v10 REM-21 -- the own-referent term holds back a declared class; a misspelt one "
+                       "holds back nothing")
+del _c
 PERSON_PREDICATES = roster("person_predicates")
 VIEW_BUILDER_RULES = roster("view_builder_rules")
 QUESTION_AGGREGATION = roster("question_aggregation", ordered=True)
@@ -1038,8 +1049,8 @@ del _orphan_seats
 # ---------------------------------------------------------------------------
 # THE `modules:` ROSTER (plan position `30`; A-25, `ED-IN-0284` revised by `ED-IN-0285`) -- THE ONE
 # OWNER OF RETENTION. Terms, defined where the loader reads them (`CLAUDE.md` §4):
-#   * a MODULE is running code reached by a composition row (`references/module_contracts.yaml`
-#     `composition_roles:`); its one identity is its directory name, which is an entry's key here.
+#   * a MODULE is one unit of this roster, `kind:` its descriptor; a registered one is running code reached
+#     by a composition row (`composition_roles:`); its one identity is its directory name, an entry's key here.
 #   * an entry's `kind:` is a `module_kinds` member -- minigame, management space, world surface,
 #     loop-resident, data register, host or stub (`rosters.yaml` defines each in one line).
 #   * an entry's `home:` is the repo-relative path it lives at: a directory, written with a trailing

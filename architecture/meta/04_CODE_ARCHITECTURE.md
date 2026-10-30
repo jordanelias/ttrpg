@@ -1,6 +1,6 @@
 # META-ARCHITECTURE — STAGE 4 · CODE SHAPE, TYPES, SEAMS, IMPOSSIBILITIES
 
-## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302, ED-IN-0303): Godot's words name Godot constructs, so a registered module's playable form is a *scene* (a run of it, a *scene instance*), and *rung* is the world side (a *container* left in a quotation, a field name or a plan title predates this); the scene tree lives in `game/`, not `port/`.**
+## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302, ED-IN-0303): Godot's words name Godot constructs, so a registered module's playable form is a *scene* (a run of it, a *scene instance*), and *rung* is the world side (a *container* left in a quotation, a field name or a plan title predates this); the scene tree lives in `game/`, not `port/`; the Key substrate clause of §C.12 is dropped, retired by ED-IN-0232.**
 ## Produced by a **read-only** Fable 5.1 synthesis holding Stages 1–3 in context. Concrete shapes taken
 ## from, amended against, or rejected from the chain (#353 `ARCHITECTURE.md`, `ARCHITECTURE_V2.md`,
 ## the three YAML files). **Nothing under `canon/`, `systems/`, `research/` or `engine/` was read.**
@@ -902,7 +902,7 @@ value). **Recursion depth is a crash** (`max_depth`, no default, typed refusal a
 `Vector2` is float32. **Fixed point for `condition`, `stores`, `margin`.**
 
 
-## §C.12 · The POSITIVE Godot mapping — what each shape becomes, and the four idioms we reject on purpose
+## §C.12 · The POSITIVE Godot mapping — what each shape becomes, and the five idioms we reject on purpose
 
 **Added 2026-09-05 at adoption (ED-IN-0204), on Jordan's instruction that Layer 1 "work with Godot
 principles while still being bespoke to our project".** §C.8–§C.10 above names what Godot
@@ -1006,9 +1006,9 @@ a porter will "fix".
 
 ### What stays bespoke, and is not a Godot question at all
 
-The nine modules (§A.2), the write matrix, the `requires` grammar, the degree ladder read from
-`engine/autoload/dice_engine.py`, and the Key substrate the port already ingests
-(`engine/engine_params/`) are **project shapes**. Godot neither helps nor hinders them; they port as
+The nine modules (§A.2), the write matrix, the `requires` grammar and the degree ladder read from
+`engine/dice_engine/dice_engine.py` are **project shapes** (the Key substrate once listed here is
+retired, ED-IN-0232). Godot neither helps nor hinders them; they port as
 plain typed code. Do not let a Godot idiom reshape one — the direction of fit is that the port
 serves the model, which is §6's standing port↔oracle rule (ED-1050): *never let a port "correct" its
 oracle in-place.*

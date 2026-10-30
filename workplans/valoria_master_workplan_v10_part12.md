@@ -5,14 +5,14 @@
 
 ## 1. Handle index
 
-223 handles in 23 batches (B10-01 to B10-19 and B10-Z, plus B10-03b, B10-07b and B10-20): 37 REM, 84 CP, 32 carried from v9 (GO-01, GO-05 and GO-06 among them), 44 CR (CR-01 to CR-44), 10 NM, 5 CL, 1 DEF, 10 port-gate GO (GO-07 to GO-16). 206 were positions in `-03`'s tables after adoption, because NM-W3 (landed) and SC-06 (answered) left the tables there and keep their handles here; 196 were, in 22 open batches, once B10-01 CLOSED (its ten rows and its card left `-03` at its net-deleting close, P3; its twelve handles read `B10-01 (CLOSED)` below; CR-02's and GO-13's `-04` entries left with them). The second decision round (Jordan's six items of 2026-10-26) added fifteen positions, CR-30 to CR-44, and two commits of CL-EVENTS (commits (3) and (4), no handle), so 211 were positions then, in 22 open batches (221 counted on the adopted tables, before B10-01's close), and 198 were then, in 21 open batches, once B10-02 CLOSED (thirteen of its fourteen rows and its card left `-03` at its net-deleting close, P3; its thirteen handles read `B10-02 (CLOSED)` below; IN-18's tail moved to B10-Z; the `-04` entries of CR-01, CR-04, CR-05, CR-14 and CR-15 left with them), and 191 were, in 20 open batches, once B10-03 CLOSED (its seven rows and its card left `-03` at its net-deleting close, P3; its seven handles read `B10-03 (CLOSED)` below; the `-04` entries of CR-06, GO-14 and PC-05 left with them; REM-42, REM-46, REM-47 and DEF-9 have homes in `proposals/`), and 190 were then, in 19 open batches, once B10-04 CLOSED (its one row and its card left `-03` at its net-deleting close, P3; REM-50 reads `B10-04 (CLOSED)` below; its home stays in `proposals/`), and 189 are now, in 18 open batches, once B10-03b CLOSED (its one row and its card left `-03` at its net-deleting close, P3; GO-07 reads `B10-03b (CLOSED)` below; its `-04` entry left with it). A handle is the one name of a position; it is never reused (P4).
+223 handles in 23 batches (B10-01 to B10-19 and B10-Z, plus B10-03b, B10-07b and B10-20): 37 REM, 84 CP, 32 carried from v9 (GO-01, GO-05 and GO-06 among them), 44 CR (CR-01 to CR-44), 10 NM, 5 CL, 1 DEF, 10 port-gate GO (GO-07 to GO-16). 206 were positions in `-03`'s tables after adoption, because NM-W3 (landed) and SC-06 (answered) left the tables there and keep their handles here; 196 were, in 22 open batches, once B10-01 CLOSED (its ten rows and its card left `-03` at its net-deleting close, P3; its twelve handles read `B10-01 (CLOSED)` below; CR-02's and GO-13's `-04` entries left with them). The second decision round (Jordan's six items of 2026-10-26) added fifteen positions, CR-30 to CR-44, and two commits of CL-EVENTS (commits (3) and (4), no handle), so 211 were positions then, in 22 open batches (221 counted on the adopted tables, before B10-01's close), and 198 were then, in 21 open batches, once B10-02 CLOSED (thirteen of its fourteen rows and its card left `-03` at its net-deleting close, P3; its thirteen handles read `B10-02 (CLOSED)` below; IN-18's tail moved to B10-Z; the `-04` entries of CR-01, CR-04, CR-05, CR-14 and CR-15 left with them), and 191 were, in 20 open batches, once B10-03 CLOSED (its seven rows and its card left `-03` at its net-deleting close, P3; its seven handles read `B10-03 (CLOSED)` below; the `-04` entries of CR-06, GO-14 and PC-05 left with them; REM-42, REM-46, REM-47 and DEF-9 have homes in `proposals/`), and 190 were then, in 19 open batches, once B10-04 CLOSED (its one row and its card left `-03` at its net-deleting close, P3; REM-50 reads `B10-04 (CLOSED)` below; its home stays in `proposals/`), and 189 were then, in 18 open batches, once B10-03b CLOSED (its one row and its card left `-03` at its net-deleting close, P3; GO-07 reads `B10-03b (CLOSED)` below; its `-04` entry left with it), and 180 are now, in 17 open batches, once B10-05 CLOSED (nine of its eleven rows and its card left `-03` at its net-deleting close, P3; REM-21 to REM-25, REM-2C, REM-52, CP-T05-04 and NM-W2 read `B10-05 (CLOSED)` below; CR-28 reads B10-09 and CR-07 B10-Z, moved at the close; their `-04` entries stay). A handle is the one name of a position; it is never reused (P4).
 
 | handle | batch | kind of handle |
 |---|---|---|
 | CL-ATTR | B10-19 | held design cluster (`-04`); its carrier is absorbed by CR-20; what remains is the tenth attribute's name, HELD on J-T2 (confirmed at the default, ED-IN-0301: nine keys, the pending slot refuses a value) |
 | CL-CHAR | B10-10 | design cluster (`-04`); M2 answered: absorbed by CR-20 and REM-30, after CR-19; its row is deleted at B10-10's close with CR-20's exit quoted, unless the re-base finds a piece of `characters.yaml` or `template_of` neither builds; its piece check at the close reads CR-33 as well |
-| CL-EVENTS | B10-18 | design cluster (`-04`; `-05` M16, narrowed), re-scoped to FORCE-WEATHER per territory, and the Tensions receiver as a world-generation draw (the second decision round, item 2): four commits. Commit (1) lands in B10-05 after REM-52 (EQUAL at `()`); the row and commit (2), the live arm, in B10-18 after CP-T10-03's flip; commit (3), the Tensions receiver (registry, loader, roster, yield-scale member, build switch, shipped off), and commit (4), the six Tensions cards as `[ASSUMPTION]` data, in B10-18 after CR-22 and before CP-T10-08, both EQUAL and before the freeze. They are commits of this row, not handles. M16's fourth motion stays Jordan's and blocks nothing; it is not needed by commits (3) and (4) |
-| CL-THRUST | B10-19 | design cluster from the fold of PR #506 (`-04`; home `proposals/2026-10-25-thrust-layer/`; `-05` M20, taken (b) in part): one row; its pieces B0.1, B2.1/B2.2 with B3.1, and B3.2 land in B10-02, B10-05 and B10-09; B4.x (own gates), B5.2 (M1's residue) and B6.n (content) stay held; B5.1 is cut (M21). B6.n gains the arc rule (the second decision round, item 2; `-04`): a ladder position draws only from the first two `ENDINGS_CLASSIFIED.yaml` classes |
+| CL-EVENTS | B10-18 | design cluster (`-04`; `-05` M16, narrowed), re-scoped to FORCE-WEATHER per territory, and the Tensions receiver as a world-generation draw (the second decision round, item 2): four commits. Commit (1) LANDED in B10-05 after REM-52 (`df4ffc88`, EQUAL at `()`); the row and commit (2), the live arm, in B10-18 after CP-T10-03's flip; commit (3), the Tensions receiver (registry, loader, roster, yield-scale member, build switch, shipped off), and commit (4), the six Tensions cards as `[ASSUMPTION]` data, in B10-18 after CR-22 and before CP-T10-08, both EQUAL and before the freeze. They are commits of this row, not handles. M16's fourth motion stays Jordan's and blocks nothing; it is not needed by commits (3) and (4) |
+| CL-THRUST | B10-19 | design cluster from the fold of PR #506 (`-04`; home `proposals/2026-10-25-thrust-layer/`; `-05` M20, taken (b) in part): one row; its pieces B0.1 (LANDED in B10-02), B2.1/B2.2 with B3.1 (LANDED in B10-05) and B3.2 (B10-09) land in B10-02, B10-05 and B10-09; B4.x (own gates), B5.2 (M1's residue) and B6.n (content) stay held; B5.1 is cut (M21). B6.n gains the arc rule (the second decision round, item 2; `-04`): a ladder position draws only from the first two `ENDINGS_CLASSIFIED.yaml` classes |
 | CL-TROOP | B10-19 | held design cluster (`-04`) |
 | CP-T01-01 | B10-08 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T01-02 | B10-08 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
@@ -51,7 +51,7 @@
 | CP-T05-01 | B10-13 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T05-02 | B10-13 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T05-03 | B10-13 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
-| CP-T05-04 | B10-05 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
+| CP-T05-04 | B10-05 (CLOSED) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T06-01 | B10-14 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T06-02 | B10-14 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T06-03 | B10-14 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
@@ -104,7 +104,7 @@
 | CR-04 | B10-02 (CLOSED) | new from the code report (`-04`) |
 | CR-05 | B10-02 (CLOSED) | new from the code report (`-04`) |
 | CR-06 | B10-03 (CLOSED) | new from the hole-row pass (`-04`; H-137) |
-| CR-07 | B10-05 | new from the hole-row pass (`-04`; H-89) |
+| CR-07 | B10-Z (moved from B10-05 at its close: HELD, the pre-flight failed; H-89) | new from the hole-row pass (`-04`; H-89) |
 | CR-08 | B10-18 | new from the hole-row pass (`-04`; H-49) |
 | CR-09 | B10-17 | new from the hole-row pass (`-04`; H-101) |
 | CR-10 | B10-09 | new from the v9 residue (`-04`; IN-57 arm D2) |
@@ -114,7 +114,7 @@
 | CR-14 | B10-02 (CLOSED) | new from the fold of PR #506 (`-04`; the register's G-08, G-11, G-12, G-20, G-29), harness, hash EQUAL |
 | CR-15 | B10-02 (CLOSED) | new from the fold of PR #506 (`-04`; the register's G-27), harness, hash EQUAL |
 | CR-16 | B10-07b | new from the decision round (`-04`; M1): the chooser's polarity, the `subject_is_opponent` repair and `stance_polarity: declared` |
-| CR-17 | B10-09 | new from the decision round (`-04`; M1): believed odds weight the alignment term; τ re-derived as its last commit (close two, last) |
+| CR-17 | B10-09 | new from the decision round (`-04`; M1): believed odds weight the alignment term; τ re-derived as its last commit (close two, last); carries the follow-on of ED-IN-0304 (risk appetite and decision horizon) |
 | CR-18 | B10-08 | new from the decision round (`-04`; M2): practice ships live; the pools reader |
 | CR-19 | B10-10 | new from the decision round (`-04`; M2): AX-7's competence reads Attunement (H-200) |
 | CR-20 | B10-10 | new from the decision round (`-04`; M2): the attribute carrier lands with character creation (nine keys) |
@@ -125,7 +125,7 @@
 | CR-25 | B10-09 | new from the decision round (`-04`; CR-11's build, M8): a computed `establish` founds an office over a holding (close two, after CR-11) |
 | CR-26 | B10-09 | new from the decision round (`-04`; IN-61 check (4)): the heir hears the vacancy; MEASURE (a test), directly before IN-61 |
 | CR-27 | B10-13 | new from the decision round (`-04`; M9): `lie`, a spoken falsehood on a held cell claim |
-| CR-28 | B10-05 | new from the decision round (`-04`; M19): G-04(a), own-ledger Propositions stamp as class `Proposition` |
+| CR-28 | B10-09 (moved from B10-05 at its close: built, falsified and reverted there, H-156; re-taken behind CR-10) | new from the decision round (`-04`; M19): G-04(a), own-ledger Propositions stamp as class `Proposition` |
 | CR-29 | B10-14 | new from the decision round (`-04`; M11): the event-kind reach channel, then `chronicle`'s paired deletion; released from M11 (its other needs stay) |
 | CR-30 | B10-10 | new from the second decision round (`-04`; item 1): `Person.heritage`, descent as a read-off field, the `marks` term's carrier; inside CR-20's commit window, one combined `Person` repr re-pin; `heritage_roster` is not IN FLUX: Jordan confirmed its five members as written (ED-IN-0301, `-05` §1a (a)), and a Godot binding is no longer barred |
 | CR-31 | B10-13 | new from the second decision round (`-04`; item 1): the caste estimate, a heritage regard term (`heritage_gain`); last in B10-13, after CR-27 |
@@ -175,7 +175,7 @@
 | MB-08 | B10-Z | carried v9 position (`-04`) |
 | NM-W0 | B10-02 (CLOSED) | narration package (`proposals/2026-10-13-narration-mechanisms.md` §4); subsumed, an EDIT: the row left `-03` at B10-02's close |
 | NM-W1 | B10-19 | narration package (`proposals/2026-10-13-narration-mechanisms.md` §4) |
-| NM-W2 | B10-05 | narration package (`proposals/2026-10-13-narration-mechanisms.md` §4); closed into B10-05 (its measured arm is HR-9's control (4)), an EDIT: the row is deleted at B10-05's close with the reading quoted |
+| NM-W2 | B10-05 (CLOSED) | narration package (`proposals/2026-10-13-narration-mechanisms.md` §4); closed into B10-05 (its measured arm is HR-9's control (4)), an EDIT: the row was deleted at B10-05's close, the reading quoted in the close commit `1d6cd152`'s body |
 | NM-W3 | B10-01 (CLOSED) | narration package (`proposals/2026-10-13-narration-mechanisms.md` §4); landed (= IN-50), an EDIT: the row is deleted in the adoption commit |
 | NM-W4 | B10-19 | narration package (`proposals/2026-10-13-narration-mechanisms.md` §4) |
 | NM-W5 | B10-19 | narration package (`proposals/2026-10-13-narration-mechanisms.md` §4); released from M12, held behind NM-W1 only, slots by R8 after NM-W1 lands its instrument control |
@@ -191,7 +191,7 @@
 | REM-02 | B10-01 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-2A | B10-06 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-2B | B10-06 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
-| REM-2C | B10-05 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
+| REM-2C | B10-05 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-03 | B10-01 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-04 | B10-01 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-05 | B10-01 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
@@ -205,11 +205,11 @@
 | REM-14 | B10-02 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-15 | B10-02 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-16 | B10-02 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
-| REM-21 | B10-05 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
-| REM-22 | B10-05 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
-| REM-23 | B10-05 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
-| REM-24 | B10-05 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
-| REM-25 | B10-05 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
+| REM-21 | B10-05 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
+| REM-22 | B10-05 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
+| REM-23 | B10-05 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
+| REM-24 | B10-05 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
+| REM-25 | B10-05 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-26 | B10-06 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-27 | B10-06 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-28 | B10-06 | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
@@ -223,7 +223,7 @@
 | REM-46 | B10-03 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-47 | B10-03 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
 | REM-50 | B10-04 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`) |
-| REM-52 | B10-05 | remediation item (home: `proposals/2026-10-21-v9-remediation/`); released by M6 at `body_step = 10`: its own declared-mover commit after CR-07 and the CL-THRUST landings, followed by CL-EVENTS (1) |
+| REM-52 | B10-05 (CLOSED) | remediation item (home: `proposals/2026-10-21-v9-remediation/`); released by M6 at `body_step = 10`: its own declared-mover commit after CR-07 and the CL-THRUST landings, followed by CL-EVENTS (1) |
 | SC-02 | B10-13 | carried v9 position (`-04`) |
 | SC-04 | B10-13 | carried v9 position (`-04`) |
 | SC-05 | B10-Z | carried v9 position (`-04`) |
@@ -263,7 +263,7 @@ Parked, cut, withdrawn or folded items of the two proposal sets, with where each
 | ED-MB-0045 the CellTable owner and item 4 | LEAVE | trigger: a position adds a per-cell map in `modules/mass_battle` (the owner comes before new maps); item 4 stays under Jordan's cell-is-the-primitive directive (ED-MB-0040) |
 | ED-SC-0001 the combat armour-tier and ability sweeps | LEAVE | trigger: CP-T03-03 or CP-T03-04 builds (M2 released both into B10-11, JQ-2 (1) yes); then run the sweeps |
 | `covenant` formation (PR #506 G-04 (c); 0 of 70) | MEASURE, then LEAVE (no new position) | stays at MEASURE at B10-06's close (H-156's row, REM-28's why-refused line); CP-T09-03's exit names `referent_class` on `covenant` as the next link (`-09-build-B10-17`). Trigger for a position: CR-14's pooled census at B10-06's close reads `covenant` attempted and never executed after B10-05 (`-06` part 4, G-04 and G-13 rows) |
-| G-04(a): stamping the Propositions a person's own ledger names (PR #506 G-04 (a), G-13 addition 2) | SUPERSEDED by CR-28 | the earlier LEAVE is superseded: M19 is taken (a) and CR-28 (B10-05, after REM-23) builds the stamp; CL-THRUST's B3.2 needs CR-28 (`-04`, `-06` part 4 §2). Not an item any more; kept so the old LEAVE is not read as live |
+| G-04(a): stamping the Propositions a person's own ledger names (PR #506 G-04 (a), G-13 addition 2) | SUPERSEDED by CR-28 | the earlier LEAVE is superseded: M19 is taken (a) and CR-28 (built and falsified in B10-05, `hole_register.yaml` H-156; re-taken in B10-09 behind CR-10) builds the stamp; CL-THRUST's B3.2 needs CR-28 (`-04`, `-06` part 4 §2). Not an item any more; kept so the old LEAVE is not read as live |
 | H-90 sovereign power and Parliament as a constraint | LEAVE (named, unscheduled) | the row is `ruled` canon with no builder; trigger: an SC `vote` position, or an R-04 grand-strategy reading names it. The Parliament half now has two positions of its own: CR-34 (B10-13) counts a vote at a sitting and CR-38 (B10-19, design-first) is the seating; sovereign power stays LEAVE on this trigger (`-06` part 2, H-90) |
 | `depose` (M8; the verb suite's PARK row, verbs-14:187) | CLOSED (M8 corrected) | answered by `revoke` under `joint_concurrence` (CR-37, B10-17; H-L0-9 applied in PR #507): the throne is revoked through the Holy See's concurrence with a carried Parliamentary motion, two persons' acts; the deposed King keeps `off_duke_valorsmark` until his death or release. Jordan's 2026-10-26 request selected the form M8's own revert named (`-05` M8); the Royal Deposition conjunction (`proposals/2026-08-18-fieldwork-architecture-and-nonadversarial-play.md:628`) is restated as each concurrer's motive, never a gate, and is not a precondition. `depose` is not a verb, so no row is added [ASSUMPTION; medium; Jordan to correct; revert: `off_king` null, `depose` PARKED with M8's trigger (H-90's sovereign power built, or a ruling on that conjunction)] |
 | H-207's vacancy motive (`revoke`'s owner for R-05) | DESIGN-FIRST residue, no v10 position | a vacancy read as a need (`confer` onto a seat vacated of its own accord) is H-207's remaining path; it owns `revoke` for R-05 and is a named residue, not a permanent one. No v10 position builds it since CP-T02-04's cut, so R-05 cannot read `met` in v10. Trigger: a design for that motive is written and approved (`-06` H-207). CR-37 (B10-17) adds a hand-built `revoke` route on the throne only, with no computed route, so this residue is unchanged |

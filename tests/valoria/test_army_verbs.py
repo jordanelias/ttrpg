@@ -1,4 +1,4 @@
-"""ED-IN-0304 phase 2 -- THE ARMY RECORD AND THE FOUR VERBS THAT CHANGE IT, asked of the real fold and gate.
+"""ED-IN-0305 phase 2 -- THE ARMY RECORD AND THE FOUR VERBS THAT CHANGE IT, asked of the real fold and gate.
 
 What the position built: a faction's army is a `Record` of kind `army` (`rosters.yaml: record_kinds`), minted by the
 `create_record` that already ran and changed afterwards by `recruit`, `form_unit`, `assign_troops` and `order_unit`

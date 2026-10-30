@@ -236,7 +236,7 @@ rosters:
       # anchors on the cover's id. Not a `record_sourced_operands` kind: a cover answers no operand,
       # and `ledger_names` reads nobody out of it (`ABOUT_KEYS`).
       cover:        [terms]
-      # ED-IN-0304 phase 2 (Jordan, 2026-10-28: a faction's army is an order-of-battle record, not only
+      # ED-IN-0305 phase 2 (Jordan, 2026-10-28: a faction's army is an order-of-battle record, not only
       # `PersonId[] at weight`): A FACTION'S ARMY. Its four keys are `modules/mass_battle/armyrecord.py::KEYS`
       # (`test_mass_battle_army_record.py` pins the two equal); that module owns what each key says and every
       # operation on it, and the four army verbs (`recruit`, `form_unit`, `assign_troops`, `order_unit`) call it
@@ -618,19 +618,37 @@ rosters:
       `opening_set` has no World (L2) and cannot ask what kind of thing an id is. `Office`: the
       vacant seats a person may fill (`queries/world_q.py::vacancies`, IN-53) AND the seats he has
       been told of (`seats_named`, v9 IN-10 (a)), which `questions_for` adds to the question the
-      person answers (`_stamped`); a class is the carrier's own type name, so a
+      person answers (`_stamped`); `confer` and `oblige` declare it, and since v10 REM-28 `revoke` (which
+      the column keeps from forming on anything but a seat, and which still executes nothing: its
+      `verb_table.yaml` note); a class is the carrier's own type name, so a
       stamp of a type this roster does not name is refused at the Question's construction.
       `Record` (v9 IN-09, H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to correct]): the
       writs a person HOLDS (`queries/world_q.py::writs_held` -- a live `hold` on a Record of a kind
       `data/verbs.py::RECORD_REFERENT_KINDS` derives from the rows declaring this class), which
-      `questions_for` adds to the question he answers beside his seats; only `comply` declares it
+      `questions_for` adds to the question he answers beside his seats; `comply` declares it
       (`evade / defy` and `construe` were typed beside it and reverted, executing 0 times; H-203).
       REVERT: drop the value and the row's column.
+      v10 REM-25 (B10-05, AM-A-10, [ASSUMPTION; medium; Jordan to correct]): WIDENED. `carry`, `found`
+      and `build` declare it too, and the term gains its second half beside the writs
+      (`queries/world_q.py::records_held_for_holding_rows`: the Records on a person's live `hold` edges of
+      a kind in `data/verbs.py::HOLDING_RECORD_KINDS`, which that module derives from the `Record` rows
+      whose cell also asks `held_by` of `subject` -- a petition, a works -- with no addressee test, since
+      those rows ask only that the actor hold the document). The class is a collection and not a
+      sub-kind, so it is SHARED: a held petition is a `Record` for all four rows and the fold refuses it
+      on the kind the three others ask (`verb_table.yaml`'s `carry` note has the readings). REVERT: the
+      three rows' columns and the term.
+      v10 REM-2C (B10-05, AM-A-11, [ASSUMPTION; medium; Jordan to correct]): `research` declares it too,
+      asking `existence` of the collection itself (any document, `data/verbs.py::_record_subkinds_answered`
+      adds no kind to either set), and the class leaves `occasion_only_classes` (below), so the
+      question's own Records are stamped as well (`own_referents_of_class`). REVERT: `research`'s
+      column and `Record` back in `occasion_only_classes`.
       `Rung` (v9 IN-45 `migrate`, H-168 limit 1, [ASSUMPTION; medium; Jordan to correct]): the
       places a person has been told of and could settle in (`queries/world_q.py::places_named` --
       a Rung his own ledger names, the §10 ladder seats him in, and he does not already live
       under), which `questions_for` adds to the question he answers beside his seats and writs;
-      `migrate` declares it (and `requisition`, below), so its `to` binds ANOTHER place rather than the single referent
+      `migrate` declares it (and `requisition`, below, and since v10 REM-27 `march`, whose `subject` binds a stamped Rung
+      as its field, and since v10 REM-28 `convene`, whose `subject` binds one as its venue), so its `to` binds ANOTHER
+      place rather than the single referent
       of whatever he was asked about (most often his own residence). The destination channel H-168
       names, on IN-53 D1's partition and `seats_named`'s knowledge source: no operand is added
       (`to` still binds the referent, `decision/options.py::_derive_operand`) and no Record kind.
@@ -644,7 +662,54 @@ rosters:
       purview rather than whatever he was asked about. The class is shared, as `Office` is between
       `confer` and `oblige`: each row forms on both sources and the fold disposes. REVERT: `requisition`'s
       column (which empties `RUNG_REMIT_ACTS`) and `larders_in_purview`'s splice.
-    values: [Office, Record, Rung]
+      v10 REM-21 (B10-05, AM-A-06, [ASSUMPTION; medium; Jordan to correct]): `Site`, `Proposition`
+      and `Person` -- THE THINGS A QUESTION IS ITSELF ABOUT, carried as their kind. Not a standing
+      occasion: `queries/world_q.py::own_referents_of_class`, one more term of `questions_for`'s
+      splice, stamps the PLAIN referents of the question the person answers whose collection
+      (`World.class_of`) is a class some verb row declares (`data/verbs.py::DECLARED_CLASSES`) and
+      that `occasion_only_classes` (below) does not hold back. It reads the question and never the
+      ledger, so a person who knows fifty people is offered none of them unless his question is
+      about one. `Site`: a worked or built place standing on a rung (`w.sites`,
+      `state/carriers.py::Site` -- a harbour, a seam, a works, a dwelling). `Proposition`: a stated
+      thing a person may commit to, assert or dispute (`w.propositions`,
+      `state/carriers.py::Proposition` -- an OUGHT, a covenant's term). `Person`: a person or cohort
+      by his own id (`w.persons`, `state/carriers.py::Person`); his `person`-kind rung shares the id
+      and `class_of` answers `Person` for it; `open_case` and `petition` declare it, and since v10
+      REM-28 `dispatch`. While no row declares one of the three, the term stamps
+      nothing for it and no formation moves; a row's `referent_class:` naming it is what makes the
+      term stamp it. REVERT: drop the three values and the term.
+    values: [Office, Record, Rung, Site, Proposition, Person]
+
+  occasion_only_classes:
+    source: "v10 REM-21 (B10-05, AM-A-06's exclusion)"
+    open: false
+    note: >-
+      THE REFERENT CLASSES ONLY A STANDING OCCASION STAMPS -- never from a question's own referents.
+      `queries/world_q.py::questions_for` stamps a class onto the question a person answers in two
+      ways: a standing occasion, a named term of its splice reading the person's own seats, edges and
+      ledger (`vacancies` and `seats_named` as `Office`, `writs_held` and `records_held_for_holding_rows`
+      as `Record`, `places_named` and `larders_in_purview` as `Rung`), or `own_referents_of_class`, which carries the question's own
+      plain referents of every class a verb row declares EXCEPT the ones listed here. The three of
+      REM-21 (two since REM-2C, below) were held back because their rows (`confer`, `oblige`, `comply`, `migrate`, `requisition`, and since
+      v10 REM-25 `carry`, `found` and `build`) were measured forming on plain referents and stopped by
+      their class (rem-02 REM-21, rejected option
+      (a)): carrying the question's own seat, writ or place as that class would widen them onto it
+      again. A member must be a `referent_classes` value (`data/rosters.py` refuses another at load).
+      Removing a class from this list is the edit that lets the own-referent term stamp it. REVERT:
+      with the term, the list goes.
+      v10 REM-2C (B10-05, AM-A-11; M19 taken, [ASSUMPTION; medium; Jordan to correct]): `Record` LEFT
+      THE LIST -- the one class AM-A-11 releases. `research` declares it and asks `existence` of the
+      collection itself (any document), which no standing occasion answers, so the own-referent term
+      now stamps the question's own Records too, beside `writs_held` and
+      `records_held_for_holding_rows` (`_stamped` keeps one pair where both name one Record). NOT the
+      stamp rem-02 REM-2C rejected (every Record the person has heard of): the term reads the question
+      and never the ledger. The class is shared, so `comply`, `carry`, `found` and `build` form on a
+      question's own Record as well and the fold disposes (`verb_table.yaml`'s `research` note has the
+      readings). A WRIT IS THE EXCEPTION (the B10-05 close): the term skips a Record of a writ kind
+      (`data/verbs.py::RECORD_REFERENT_KINDS`), which only `writs_held`'s addressee test stamps, so a
+      bystander who saw a writ issued is offered no `comply`. REVERT: put `Record` back here (with
+      `research`'s column).
+    values: [Office, Rung]
 
   person_predicates:
     source: "#353 §14 `:331` — `marks[]` … \"heritage · grade · Church standing · office · residence\""
@@ -931,7 +996,7 @@ rosters:
     row: H-149
     note: >-
       ⚠ A CLOSED SET, NOT AN OPEN ONE, AND THE ROSTER IS CLOSED FOR A REASON BOUND ELSEWHERE. It was one member,
-      `settlement`; ED-IN-0304 phase 4 added `territory` on Jordan's ruling (a territory is marched on, occupied
+      `settlement`; ED-IN-0305 phase 4 added `territory` on Jordan's ruling (a territory is marched on, occupied
       and seized), which is the data edit this note said a second ruled kind would be.
       Person containment never terminates at a settlement rung -- every person's `contain` targets
       a `home` building beneath one (`harness/populated.py`) -- and `contain_ascends`
@@ -944,7 +1009,7 @@ rosters:
     values: [settlement, territory]
 
   subtree_occupation_kinds:
-    source: "ED-IN-0304 phase 4. Which `march_target_kinds` are occupied by standing ANYWHERE UNDER them."
+    source: "ED-IN-0305 phase 4. Which `march_target_kinds` are occupied by standing ANYWHERE UNDER them."
     note: >-
       A settlement's people stand in buildings beneath it (`march_target_kinds`' note), so a faction is
       occupying a settlement when it is mustered anywhere in its subtree. A territory is not occupied that way:
@@ -956,7 +1021,7 @@ rosters:
     values: [settlement]
 
   arrival_only_kinds:
-    source: "ED-IN-0304 phase 5. Which rung kinds a person is placed at ONLY by a `march`'s arrival."
+    source: "ED-IN-0305 phase 5. Which rung kinds a person is placed at ONLY by a `march`'s arrival."
     note: >-
       A territory is occupied by an army standing AT it (`subtree_occupation_kinds`), and occupation is presence, so a
       `move` or a `migrate` that could seat a person at a territory would let one member of a faction walk onto a
@@ -965,7 +1030,7 @@ rosters:
     values: [territory]
 
   raze_target_kinds:
-    source: "ED-IN-0304 phase 4. What `raze` may end."
+    source: "ED-IN-0305 phase 4. What `raze` may end."
     note: >-
       `raze` deletes the rung and closes every edge naming it. It stays a settlement's act: `march_target_kinds`
       gained the territory (a territory is marched on, occupied and seized), and razing the land a duchy stands on
@@ -1447,7 +1512,7 @@ rosters:
       2026-09-29 (plan position `24e`): `_eff_restore` EXISTS and `restore` is resolvable, raising
       any fabric its actor stands at toward the ceiling a works allows (the full scale where none
       names it).
-    # ED-IN-0304 (Jordan, 2026-10-28: recruiting needs "specific infrastructure for specific kinds of troops"): FOUR TRAINING
+    # ED-IN-0305 (Jordan, 2026-10-28: recruiting needs "specific infrastructure for specific kinds of troops"): FOUR TRAINING
     # KINDS, `barracks`, `archery_range`, `stable`, `siege_workshop`. Each is a Site whose CONDITION is how much of its
     # troop class the place can train (`modules/mass_battle/troop_types/recruitment.py`, the one reader and the owner of
     # which troop type trains where). They take `garrison`'s treatment in every table below and for its reason: nothing
@@ -1912,6 +1977,47 @@ rosters:
       two relations and nothing else: which commits follow is IN-68's seeding rule, not a definition.
     values: [establishes, influences]
 
+  thrust_axes:
+    source: "CL-THRUST B2.1 (`proposals/2026-10-25-thrust-layer/00_THRUST_LAYER_DESIGN.md` §2.1; B10-05) -- what a goal row's optional `axis:` may name: the lines a thrust runs along, each with its opposite pole where it has one."
+    open: false
+    note: >-
+      THE CLOSED SET A GOAL ROW'S `axis:` IS CHECKED AGAINST, read by `data/goals.py` (the ONE loader
+      of `engine/season/goals.yaml`), which refuses an `axis:` off `values:`. The first ten `values:`
+      are the user's list of thrust axes; the user called the list "not exhaustive", so the roster is
+      closed but editable, and a new axis is a data edit. `opposes:` pairs an axis with the opposite
+      pole a row on the other side would carry; it is read by the same loader, which refuses a pole
+      that is not a `values:` member. The four poles that are not among the ten
+      (`reveal_thread_truth`, `uphold_church`, `uphold_caste`, `altonian_ascendancy`) ARE members
+      here, so a row on either side can be tagged.
+      [ASSUMPTION; medium; Jordan to correct -- the ten axes and the `opposes:` pairs are the design's
+      first reading (TL §2.1), and that the four opposite poles are members is its own assumption.
+      Revert: Jordan names the axes; delete or add a `values:` member and its `opposes:` entry.]
+    values: [suppress_einhir_revival, hide_thread_truth, overthrow_church, overthrow_caste,
+             purge_altonia, political_authority, faction_standing, community_benevolence,
+             heal_calamity, revive_einhir,
+             reveal_thread_truth, uphold_church, uphold_caste, altonian_ascendancy]
+    opposes:
+      suppress_einhir_revival: revive_einhir
+      revive_einhir: suppress_einhir_revival
+      hide_thread_truth: reveal_thread_truth
+      overthrow_church: uphold_church
+      overthrow_caste: uphold_caste
+      purge_altonia: altonian_ascendancy
+
+  goal_stage_terms:
+    source: "CL-THRUST B2.2 (`proposals/2026-10-25-thrust-layer/00_THRUST_LAYER_DESIGN.md` §2.2, `stage.term`; B10-05) -- the horizons a `goal_stages` stage may name, nearest first."
+    open: false
+    ordered: true
+    note: >-
+      THE TERM OF A STAGE IN `goals.yaml: goal_stages`, read by `data/goals.py`, which refuses a
+      `term:` off this list and a row whose stage terms DEcrease along this order. The order is the
+      meaning: a later stage is no nearer than the one before it. The roster names the horizons and
+      nothing else; it carries no length of time, because a stage's `deadline` is struck (M20).
+      [ASSUMPTION; medium; Jordan to correct -- the three horizons are TL §2.2's; a roster, not a
+      literal in the loader, because three strings in a body is a definition in a body. Revert: delete
+      the roster and the loader's term check with it.]
+    values: [short, medium, long]
+
   requires_operands:
     source: "`W-A`. The names a `requires_typed` cell may bind, closed."
     note: >-
@@ -2038,9 +2144,11 @@ rosters:
       it, forms exactly what he formed before. ⚠ WHY NOT IN-10's FAN: `operand_bags` fans held Records
       only on a row binding a known-person operand, and only where a Record's `terms` IS already the
       referent; `commit` binds `subject` alone, and nobody's question is ABOUT a Proposition he has
-      only been handed, so the fan never reaches it. ⚠ WHY NOT A `referent_class: Proposition`: a row
-      declaring a class forms ONLY on that class (`Question.referents_for`), so `commit` would lose
-      the plain referents IN-11's utterer route forms on. ONE LOADER, `data/verbs.py::TERMS_SOURCED`,
+      only been handed, so the fan never reaches it. ⚠ WHY NOT A `referent_class: Proposition` (the v9
+      reasoning; SUPERSEDED at v10 REM-23, B10-05, which gave `commit` that class under M19 and took the
+      loss, `verb_table.yaml`'s `commit` note): a row declaring a class forms ONLY on that class
+      (`Question.referents_for`), so `commit` would lose the plain referents IN-11's utterer route
+      forms on. ONE LOADER, `data/verbs.py::TERMS_SOURCED`,
       refused at import when a line names a verb the table lacks, or a kind that is no held-writ
       occasion (`RECORD_REFERENT_KINDS`, which `writs_held` stamps) or whose `subject` no held Record
       answers -- either would form for nobody. Whether the act then passes is the fold's (`commit`'s
@@ -2122,7 +2230,7 @@ rosters:
 
   army_verbs:
     source: >-
-      ED-IN-0304 phase 2 (Jordan, 2026-10-28: a faction's army is an order-of-battle record the season changes
+      ED-IN-0305 phase 2 (Jordan, 2026-10-28: a faction's army is an order-of-battle record the season changes
       from a menu). `loop/effects_army.py` is their one body.
     note: >-
       THE VERBS THAT CHANGE AN `army` RECORD, a list of verbs. `data/fixtures.py` adds each to `withheld_verbs`:
@@ -3141,17 +3249,17 @@ tables:
     # 0.0); what is no longer lawful is a verb nobody considered.
     uncelled:
       recruit: >-
-        ED-IN-0304 phase 2: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above), and no person forms it (`Fixtures withheld_verbs`): it is a menu command on the army record, whose alignment lean nothing yet reads. It scores 0.0 on every axis. Revert: the seven cells, IN-08's method.
+        ED-IN-0305 phase 2: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above), and no person forms it (`Fixtures withheld_verbs`): it is a menu command on the army record, whose alignment lean nothing yet reads. It scores 0.0 on every axis. Revert: the seven cells, IN-08's method.
       form_unit: >-
-        ED-IN-0304 phase 2: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above), and no person forms it (`Fixtures withheld_verbs`): it is a menu command on the army record, whose alignment lean nothing yet reads. It scores 0.0 on every axis. Revert: the seven cells, IN-08's method.
+        ED-IN-0305 phase 2: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above), and no person forms it (`Fixtures withheld_verbs`): it is a menu command on the army record, whose alignment lean nothing yet reads. It scores 0.0 on every axis. Revert: the seven cells, IN-08's method.
       assign_troops: >-
-        ED-IN-0304 phase 2: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above), and no person forms it (`Fixtures withheld_verbs`): it is a menu command on the army record, whose alignment lean nothing yet reads. It scores 0.0 on every axis. Revert: the seven cells, IN-08's method.
+        ED-IN-0305 phase 2: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above), and no person forms it (`Fixtures withheld_verbs`): it is a menu command on the army record, whose alignment lean nothing yet reads. It scores 0.0 on every axis. Revert: the seven cells, IN-08's method.
       order_unit: >-
-        ED-IN-0304 phase 2: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above), and no person forms it (`Fixtures withheld_verbs`): it is a menu command on the army record, whose alignment lean nothing yet reads. It scores 0.0 on every axis. Revert: the seven cells, IN-08's method.
+        ED-IN-0305 phase 2: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above), and no person forms it (`Fixtures withheld_verbs`): it is a menu command on the army record, whose alignment lean nothing yet reads. It scores 0.0 on every axis. Revert: the seven cells, IN-08's method.
       disband_unit: >-
-        ED-IN-0304 phase 2: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above), and no person forms it (`Fixtures withheld_verbs`): it is a menu command on the army record, whose alignment lean nothing yet reads. It scores 0.0 on every axis. Revert: the seven cells, IN-08's method.
+        ED-IN-0305 phase 2: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above), and no person forms it (`Fixtures withheld_verbs`): it is a menu command on the army record, whose alignment lean nothing yet reads. It scores 0.0 on every axis. Revert: the seven cells, IN-08's method.
       discharge_troops: >-
-        ED-IN-0304 phase 2: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above), and no person forms it (`Fixtures withheld_verbs`): it is a menu command on the army record, whose alignment lean nothing yet reads. It scores 0.0 on every axis. Revert: the seven cells, IN-08's method.
+        ED-IN-0305 phase 2: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above), and no person forms it (`Fixtures withheld_verbs`): it is a menu command on the army record, whose alignment lean nothing yet reads. It scores 0.0 on every axis. Revert: the seven cells, IN-08's method.
       covenant: >-
         v9 IN-12 step 7: NOT CELLED BY THE PRODUCER -- authoring an alignment cell is a judgment the
         build position does not own (the plan's CLAUDE.md §0 note on IN-08's cells), and #453 §9.2

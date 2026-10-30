@@ -1,4 +1,4 @@
-"""ED-IN-0304 phase 1 -- a faction's ORDER OF BATTLE reaches the mass-battle engine.
+"""ED-IN-0305 phase 1 -- a faction's ORDER OF BATTLE reaches the mass-battle engine.
 
 `modules/mass_battle/orderofbattle.py` turns named subformations (troop type, size, role, stance) plus a strategy
 into the multi-subunit Unit the engine fights, and `massbattle.resolve_field` takes one per side from the input

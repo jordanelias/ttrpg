@@ -66,8 +66,13 @@ def _world():
     return w
 
 
-def _candidates(w, pid):
-    q = Question("q_h134", "need", (TARGET, "Hh"), "Hh")
+def _candidates(w, pid, classed=True):
+    # v10 REM-28 (B10-06): `revoke` declares `referent_class: Office`, so it forms only on a referent the question
+    # carries AS an Office; `TARGET` IS one (`off_duke`), carried here as the stamper (`seats_named`) would carry it.
+    # The re-scope is the carried class and nothing else -- `test_migrate_capacity.py`'s shape. The carried Office
+    # also lets `confer` and `oblige` (the other `Office` rows) form on it, so the CONTROL reading below
+    # (`classed=False`) keeps the plain question it was pinned on: there `revoke` LEAVES its pin (see `_CONTROL`).
+    q = Question("q_h134", "need", (TARGET, "Hh"), "Hh", classes=((TARGET, "Office"),) if classed else ())
     p = w.persons[pid]
     return opening_set(p, View(p.id, [], 99, q), q, w.fixtures)
 
@@ -207,12 +212,40 @@ def test_h134_two_seats_are_two_acts_ids_opportunities_and_the_store():
 # `p_one.thread_sensitivity = 30` forms the two again (68, on `off_duke` and `Hh`), and with those two
 # Candidates' new `{subject, to}` operands and their acts' `to` stripped it re-hashes to
 # `(68, 68, "12f062ca...")` exactly; at 29 it reads 66 (scratch, not kept).
-_CONTROL = (66, 66, "914b52980bc0daee50bd81ec88b7d5c7a313839afae4d2be0f71fe2f7bcea603")
+# RE-PINNED AT v10 B10-05 (found red on the REM-23 tree, after CR-28's attempt was reverted): 66 -> 58,
+# `914b5298...` -> `e757d716...`. Exactly eight Candidates (and their eight acts) leave and none is added: `restore`,
+# `work` and `examine` (REM-22, `referent_class: Site`) and `commit` (REM-23, `referent_class: Proposition`) each
+# formed twice, on `off_duke` and `Hh` (the question's plain referents), and form on neither now -- this reading's
+# question carries no Site and no Proposition. NEITHER COMMIT RAN THIS FILE, so the pin stood red from REM-22. CONTROL,
+# run (scratch, not kept): the same `_control_reading` on a detached worktree at the REM-23 tree (`73aee085`) reads
+# `(58, 58, "e757d716...")`, and with those four rows' `referent_class` blanked in `decision.options.VERB_TABLE`
+# in-process it re-hashes to `(66, 66, "914b5298...")` exactly. (The reverted CR-28 attempt, `678a5acb`, read the same
+# 58 on this file: its term named nothing for `p_one`.)
+# RE-PINNED AT v10 REM-25 (B10-05): 58 -> 52, `e757d716...` -> `233b0142...`. Exactly six Candidates (and their six
+# acts) leave and none is added: `carry`, `found` and `build` (`referent_class: Record`) each formed twice, on
+# `off_duke` and `Hh` (the question's plain referents), and form on neither now -- this reading's question carries no
+# Record (`p_one` holds none, so `records_held_for_holding_rows` names nothing). CONTROL, run (scratch, not kept): the
+# same `_control_reading` on a detached worktree at the REM-24 tree (`f2381695`) reads `(58, 58, "e757d716...")`, and
+# with those three rows' `referent_class` blanked in `decision.options.VERB_TABLE` in-process it re-hashes to
+# `(58, 58, "e757d716...")` exactly on the REM-25 tree.
+# RE-PINNED AT v10 REM-2C (B10-05): 52 -> 50, `233b0142...` -> `6b31ae41...`. Exactly two Candidates (and their two
+# acts) leave and none is added: `research` (`referent_class: Record`) formed on `off_duke` and `Hh` (the question's
+# plain referents) and forms on neither now -- the question carries no Record. CONTROL, run (scratch, not kept): the
+# same `_control_reading` on a detached worktree at the CP-T05-04 tree (`ea6f1dba`) reads `(52, 52, "233b0142...")`
+# with `research` on exactly those two, and with `research`'s `referent_class` blanked in `decision.options.VERB_TABLE`
+# in-process it re-hashes to `(52, 52, "233b0142...")` exactly on the REM-2C tree.
+# RE-PINNED AT v10 REM-28 `revoke` (B10-06): 50 -> 48, `6b31ae41...` -> `2ecfb27d...`. Exactly two Candidates (and their two
+# acts) leave and none is added: `revoke` (`referent_class: Office`) formed on `off_duke` and `Hh` (the question's plain
+# referents) and forms on neither now -- this reading's question carries no Office (`classed=False`: the plain question it
+# was pinned on; the revoke tests above carry `off_duke` as an Office instead). CONTROL, run (scratch, not kept): the same
+# `_control_reading` with `revoke`'s `referent_class` blanked in the shared `VERB_TABLE` in-process re-hashes to
+# `(50, 50, "6b31ae41...")` exactly, and the Candidates that differ are those two and no others.
+_CONTROL = (48, 48, "2ecfb27d5be314d8437ce67983938530f3ae0dae892c4d3901c91c21fad54eb3")
 
 
 def _control_reading():
     w = _world()
-    cands = _candidates(w, ONE)
+    cands = _candidates(w, ONE, classed=False)
     acts = _acts(w, ONE, cands)
     rep = (
         [(c.verb, c.subject, sorted((k, repr(v)) for k, v in c.operands.items())) for c in cands],
@@ -226,7 +259,7 @@ def test_h134_control_one_seat_forms_the_same_candidates_and_ids_as_before():
     p = w.persons[ONE]
     for verb in ("revoke", "confer", "transfer"):
         assert exercisable_seats(p, VERB_TABLE[verb]) == ("off_mayor2",), verb
-    cands = _candidates(w, ONE)
+    cands = _candidates(w, ONE, classed=False)
     carried = [c for c in cands if "via" in c.operands]
     assert carried == [], "a one-seat Candidate carries a seat key"
     acts = _acts(w, ONE, cands)

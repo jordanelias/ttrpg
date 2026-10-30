@@ -1,4 +1,4 @@
-"""ED-IN-0304 phase 5 -- THE MISSED BEHAVIOURS OF PHASES 1-4, asked of the shipped realm (`build_realm(0)`).
+"""ED-IN-0305 phase 5 -- THE MISSED BEHAVIOURS OF PHASES 1-4, asked of the shipped realm (`build_realm(0)`).
 
 `proposals/2026-10-29-army-phase5-design.md` lists them (M1..M10). This file is each one's falsifier, with a control that
 differs from it in one thing. The realm is the fixture on purpose: phases 1-4 passed their tests on hand-planted

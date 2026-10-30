@@ -283,7 +283,7 @@ def _eff_raze(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     G4 -- WHAT IT NAMES: THE RUNG, whole, earning `rung.razed`; it always moves (present -> absent).
     The closed edges are the cascade and are not named, as `destroy_record`'s are not."""
     rid = _operand(a, "subject")
-    # ED-IN-0304 phase 4: a territory is marched on and occupied now, and still not razed (`raze_target_kinds`).
+    # ED-IN-0305 phase 4: a territory is marched on and occupied now, and still not razed (`raze_target_kinds`).
     mine = occupying_faction(w, a.via, rid) if rid in w.rungs and w.rungs[rid].kind in RAZE_TARGET_KINDS else None
     # Razing stays the act of the army that is IN the town: a territory's occupation carries a settlement's
     # SEIZURE (the title), not its destruction.

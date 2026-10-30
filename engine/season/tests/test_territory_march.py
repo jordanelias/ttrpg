@@ -1,4 +1,4 @@
-"""ED-IN-0304 phase 4 -- A TERRITORY IS MARCHED ON, OCCUPIED AND SEIZED; A DEFENDED ONE IS NOT.
+"""ED-IN-0305 phase 4 -- A TERRITORY IS MARCHED ON, OCCUPIED AND SEIZED; A DEFENDED ONE IS NOT.
 
 Jordan: if a faction's army defends its territory successfully there is no occupation and potential seizure of it by
 the attacker; if it does not defend, the attacking army occupies the territory alongside its settlements and may seize

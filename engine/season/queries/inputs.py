@@ -150,7 +150,7 @@ class MassBattleInput:
                        and SHARED by every record: read-only). The module's terrain lookup and river test
                        read it here and open no file. `repr=False`: a record in an assertion message
                        prints its facts, not a 37 KB map;
-      * `orders_of_battle` -- ED-IN-0304: `(attacker, defender)`, each an `OrderOfBattle` (the module's own typed
+      * `orders_of_battle` -- ED-IN-0305: `(attacker, defender)`, each an `OrderOfBattle` (the module's own typed
                        record, `modules/mass_battle/orderofbattle.py`, held here as an opaque value: `engine/`
                        imports no module code) or `None`. `None` on both sides -- the default -- is the field as
                        it was: one headcount line per side. A side with an order of battle fights as that order
@@ -322,7 +322,10 @@ class ProduceInput:
       * `table`        -- `((site_kind, ((kind, base), ...)), ...)`: `SITE_YIELD`, each kind's bases in
                           its table order (that order reaches `Rung.stores`' key order);
       * `scale`        -- the `condition_scale` fixture, as MATTER read it;
-      * `factor`       -- this season's `world_q.season_factor_of`, as MATTER read it (one draw a season);
+      * `factor`       -- `((rung, factor), ...)`, sorted, one entry per rung in `stores` (the same rungs):
+                          that rung's `world_q.season_factor_of`, as MATTER read it through
+                          `world_q.season_factors_by_rung` (one draw a season per TERRITORY, keyed on its
+                          rung id, so rungs of one territory read one factor; CL-EVENTS (1));
       * `sites`        -- `((site_id, site_kind, rung, condition), ...)`, every Site sorted by id;
       * `stores`       -- `((rung, ((kind, units), ...)), ...)`, every rung a Site stands on, sorted,
                           each in its own `Rung.stores` order, read BEFORE this season's debit is written;
@@ -330,7 +333,7 @@ class ProduceInput:
                           overlays it on `stores`, because MATTER credits a rung after that rung's debit."""
     table: tuple
     scale: object
-    factor: object
+    factor: tuple
     sites: tuple
     stores: tuple
     larder_after: tuple
@@ -423,7 +426,7 @@ class FortInput:
 
 @dataclass(frozen=True)
 class ArmyCommand:
-    """What `mass_battle.army` (`modules/mass_battle/armyrecord.py::apply`) reads (ED-IN-0304 phase 2). Built by
+    """What `mass_battle.army` (`modules/mass_battle/armyrecord.py::apply`) reads (ED-IN-0305 phase 2). Built by
     `loop/effects_army.py`, one per army verb:
       * `record` -- the army Record's `subject_matter` (`armyrecord.KEYS`), as the world holds it;
       * `op`     -- `armyrecord.OPS`: recruit, form, assign or order;
@@ -436,7 +439,7 @@ class ArmyCommand:
 
 @dataclass(frozen=True)
 class ArmyMuster:
-    """What `mass_battle.army_order` (`modules/mass_battle/armyrecord.py::fielded`) reads (ED-IN-0304 phase 3).
+    """What `mass_battle.army_order` (`modules/mass_battle/armyrecord.py::fielded`) reads (ED-IN-0305 phase 3).
     Built by `seam/wrappers/mass_battle.py::field_input` for one side of one field:
       * `record` -- the faction's army Record's `subject_matter` (`armyrecord.KEYS`), as the world holds it;
       * `fit`    -- `((cohort id, fraction), ...)`: each cohort of the side PRESENT on the field (mustered at the

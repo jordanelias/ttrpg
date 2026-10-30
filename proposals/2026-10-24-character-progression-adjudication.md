@@ -1,6 +1,6 @@
 # Character progression — one adjudication from first principles
 
-## Status: PROPOSED (2026-10-24). Not ratified; merging ratifies nothing unless Jordan so rules. Reference under CLAUDE.md §0.05 — prose is not a mechanism.
+## Status: PROPOSED (2026-10-24); **partly superseded since by the ratified v10 plan** (M2 / ED-IN-0301: nine stored attributes on 1-7 with practice live; CR-18 takes the practice arm of `2026-10-23-subsystem-completion` CP-T01-02; CR-20 keeps the `max(held key, base)` floor). Read those rows before the six-attribute roster and the cut of accrual below. Not ratified; merging ratifies nothing unless Jordan so rules. Reference under CLAUDE.md §0.05 — prose is not a mechanism.
 ## Lane: IN, with PC, SC, MB, SE, FA as sources. IDs: none allocated.
 ## Read at HEAD `b7a1e1b`
 ## Builds on: `engine/season/state/carriers.py` (`Person`) · `engine/season/loop/effects_combat.py` (`_eff_train`) · `engine/season/seam/wrappers/sigma.py` · `engine/season/seam/wrappers/combat.py` · `engine/season/seam/wrappers/mass_battle.py` · `engine/season/seam/wrappers/` siblings by grep · `engine/season/harness/play_surface.py` · `engine/season/decision/choose.py` · `engine/season/decision/options.py` · `engine/season/data/fixtures.py` · `engine/season/data/cast.py` · `engine/season/loop/census.py` · `engine/season/verb_table.yaml` · `engine/season/rosters.yaml` · `modules/combat/core.py`, `combatant.py`, `traditions.py`, `combat_systems.py`, `config.py` · `systems/combat/combat_engine_v1/workbench/build_levers.py` · `references/npc_registry.yaml` · `registers/editorial_ledger_in_archive.jsonl` (ED-IN-0185) · `research/game_precedent_suite/dispositions/D_T10.md` · `proposals/2026-08-15-character-and-faction-stats-and-progression.md` · `proposals/2026-10-16-verbs/2026-10-16-verbs-01-thesis-and-persons.md` and `-02-attributes.md` · `proposals/2026-09-30-character-and-play-surface/09_the_character_sheet.md` (house style)
@@ -610,7 +610,7 @@ condition does not hold today.
 **C-8. Two attribute names already mean something in the tree.** *Body* collides with `Person.body`, the
 condition field (`carriers.py:679`) [CHECKED] — §4.5's *"body injures; attributes fixed"* uses both
 senses in one sentence. *Presence* is a registry alias of Charisma (`descriptor_registry.yaml:47`)
-[CHECKED]. Under CLAUDE.md §4's word-choice rule a reader with no memory of this repository would not
+[CHECKED]. A third: the registry already has an aggregate named *Body*, `agg.body` (`descriptor_registry.yaml:53`; its members include Agility, which the table at :460-461 gives to Hand) [CHECKED]. Under CLAUDE.md §4's word-choice rule a reader with no memory of this repository would not
 land on one meaning [REASONED]. *Bears on:* §3 element 1, §4.1, §4.5. *Still follows:* yes; the names are
 the adjudication's and are kept here unchanged.
 
@@ -647,7 +647,7 @@ with the adjudication is stated in §10.6 and left unresolved.
 - **Budget is a count.** `budget` (`engine/season/decision/budget.py:18`) returns scene actions:
   base, plus an office bonus per held `hold` tenure, minus a body-band penalty, minus a travel-leg penalty
   (docstring, `:36-38`) [CHECKED].
-- **What the score lacks.** It has no risk term and no timing term — its three terms are the whole
+- **What the score lacks.** It has no risk term and no timing term (at HEAD; v10 CR-17, B10-09, adds believed odds to the alignment term; **Jordan ruled 2026-10-29 (ED-IN-0304) that persons differ in risk appetite and in short-, medium- or long-term horizon (short: best results within the current season or the next; medium: within three to four seasons; long: five or more seasons), so a risk term and a timing term are wanted**) — its three terms are the whole
   return (`choose.py:149-151`) [CHECKED] — and no lookahead: it scores each candidate once, at the
   moment of deliberation [REASONED from the same lines]. `choice_temperature` is a global sampling-noise
   setting (`data/fixtures.py:286`, `0.1`; read in `_sample_order`, `choose.py:241`, `:350`) [CHECKED].

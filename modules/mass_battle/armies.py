@@ -308,7 +308,7 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
                   # so an explicit per-spec override silently vanished (sp.pop never ran, kw never
                   # got the key) -- see this loop's own note below for the seed-when-absent half.
                   'troops', 'concentration', 'orders',
-                  'target_condition',  # [ED-IN-0304] was missing from this tuple, so a spec's targeting preference silently vanished (the 'volleys' omission above, again); a Subunit field since class-B targeting
+                  'target_condition',  # [ED-IN-0305] was missing from this tuple, so a spec's targeting preference silently vanished (the 'volleys' omission above, again); a Subunit field since class-B targeting
                   'width', 'depth', 'distribution',  # [ED-MB-0025/0026] explicit grid + density gradient
                   'officer'):  # [A3, ED-MB-0067 Part A / ED-MB-0073] already validated above this loop;
                   # forwarded the same generic way as every other per-subunit override in this tuple.

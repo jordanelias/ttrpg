@@ -1,4 +1,4 @@
-"""modules.mass_battle.armyrecord -- the CONTENT of a faction's army record, as pure functions (ED-IN-0304, phase 2).
+"""modules.mass_battle.armyrecord -- the CONTENT of a faction's army record, as pure functions (ED-IN-0305, phase 2).
 
 Jordan ruled on 2026-10-28 that a faction's army is a record of its own (an order of battle), not only
 `PersonId[] at weight`. The season carries it as a `Record` of kind `army`; THIS module owns what that record's

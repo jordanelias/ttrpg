@@ -42,7 +42,10 @@ from ..loop import census
 from ..loop.driver import SeasonDriver, mint_token
 from ..queries import world_q
 from ..state.attribution import causing_act
+from ..state.carriers import Act, Person, Rung, Tenure
 from ..state.ids import ROOT
+from ..state.world import World
+from ._scar_helpers import wounded
 
 # TEST ARMS, not game values: nothing here is the number the game ships (those are Jordan's). Each is
 # chosen so the test can reach a certainty or a visible fraction, nothing more.
@@ -323,3 +326,60 @@ def test_in34_one_persons_missing_draw_moves_nobody_elses_the_draws_are_keyed_no
     _people, without = run(skipped)
     assert without == [d for d in base if d != skipped], (
         f"skipping {skipped}'s draw moved other people's: base {base}, without {without}")
+
+
+# -- v10 REM-52 (B10-05): H-129's `body.changed` half, reachable the day `body_step` ships off 0 -----------
+
+TOWN_129, HIT, HURT = "set_h129", "p_h129_hit", "p_h129_hurt"
+
+
+def _two_cohorts_in_a_dearth() -> World:
+    """realm > territory > settlement holding NOTHING with no Site (no yield), and two cohorts housed there,
+    so each is short by its whole want at the first MATTER barrier. Fixtures are the SHIPPED ones."""
+    w = World(0)
+    for rid, kind in (("r_realm", "realm"), ("terr_h129", "territory"), (TOWN_129, "settlement")):
+        w.rungs[rid] = Rung(rid, kind)
+    w.add_tenure(Tenure("t_in_0", "terr_h129", "r_realm", "contain", 0))
+    w.add_tenure(Tenure("t_in_1", TOWN_129, "terr_h129", "contain", 0))
+    for pid in (HIT, HURT):
+        w.persons[pid] = Person(pid, pid, weight=2)
+        w.rungs[pid] = Rung(pid, "person")
+        w.add_tenure(Tenure(f"t_{pid}_in", pid, TOWN_129, "contain", 0))
+        w.add_tenure(Tenure(f"t_{pid}_home", pid, TOWN_129, world_q.RESIDE_KIND, 0))
+    return w
+
+
+def test_h129_a_wounded_then_starved_person_chains_to_the_wound_that_wrote_him_and_the_wounder_does_not():
+    """H-129, THE `body.changed` HALF (REM-52 passes `written=True` at the bodies pass of `matter`, in the
+    same commit that ships `body_step` off 0). The fold's `body.changed` for a wound is caused by the ACT, so
+    it ANCHORS on the wounder (tier 1) and `last_emission_of("body.changed", pid)` by anchor answered for
+    the wrong person: the victim's own later starvation write chained to `[ROOT]` (the wound that wrote his
+    body was missed), and the WOUNDER's starvation write chained to the wound he had inflicted on somebody
+    else. Both ends are asserted at the SHIPPED step, the real fold (`fight`, a `Wounded` scene result) then
+    the real MATTER barrier:
+      * `HURT` (wounded by `HIT`, then starved) chains to the wound Event that wrote HIS body;
+      * `HIT` (the wounder, starved, never wounded) chains to `[ROOT]`, not to the wound he dealt.
+    MUTATION, run at REM-52 (`written=True` taken back off the read in `loop/matter.py`): both assertions
+    red -- `HURT` cites `[ROOT]`, `HIT` cites the wound -- and with it on, both pass."""
+    w = _two_cohorts_in_a_dearth()
+    assert w.fixtures.get("body_step") > 0, "this test reads the SHIPPED live arm; the control would be vacuous"
+    act = Act(id="h129_wound", actor=HIT, verb="fight", payload={"subject": HURT})
+    w.step = Step.RESOLVE
+    evs = SeasonDriver(w)._fold(w, mint_token(w, WriteClass.ACTS), act, wounded(HURT, full=10, left=5))
+    for ev in evs:                      # the fold returns the Events; the barrier logs them
+        w.log.append(ev)
+    (wound,) = [e for e in evs if e.kind == "body.changed" and any(c.subject == HURT for c in e.changes)]
+    assert causing_act(w, wound) is not None and wound.causes[0] == act.id, "fixture: the wound is not act-caused"
+    assert w.persons[HURT].body < w.fixtures.get("condition_scale") and w.persons[HIT].body == (
+        w.fixtures.get("condition_scale")), "fixture: the wound did not land on the victim alone"
+    assert w.last_emission_of("body.changed", HURT) is None, "fixture: the anchor read already finds the wound"
+    assert w.last_emission_of("body.changed", HURT, written=True) == wound.id
+
+    w.tick += 1
+    starved = [e for e in _matter(w) if e.kind == "body.changed"]
+    mine = {pid: [e for e in starved if any(c.subject == pid for c in e.changes)] for pid in (HIT, HURT)}
+    assert all(len(v) == 1 for v in mine.values()), {k: len(v) for k, v in mine.items()}
+    got = {HURT: mine[HURT][0].causes, HIT: mine[HIT][0].causes}
+    assert got == {HURT: [wound.id], HIT: [ROOT]}, (
+        f"the starvation writes cite {got}: the wounded-then-starved person's must be the wound {wound.id} "
+        f"that wrote his body, and the wounder's (never wounded) must be [ROOT], not the wound he dealt")

@@ -1374,6 +1374,19 @@ rows:
       beyond stance, shipped arm 3270 of 11449. Regard is computed at read and writes no `stance`,
       so the paragraph above stands (W-F spent, A-12). The status stays `partial`: SE-01 (landed `d12c8db9`) is on the row's path and a
       fought field remains (IN-13 landed `2e19aee8`; the realm fights 0, `hole_register.yaml` H-175/H-149; v9 `_part2` R-07).
+      ⚠⚠ **v10 REM-27 (B10-06), THE FOUGHT-FIELD CONJUNCT, READ AS `field.won + field.lost > 0` AT `aperture 1 s`, s = 0-2
+      [ASSUMPTION; medium; Jordan to correct]: 0 / 0 / 0, with `field.unopposed` 0 / 0 / 0 printed beside and never
+      added -- so the realm writes no `_eff_march` `Person.stance` receipt and conjunct 3 stays unmet.** `march` now
+      declares `referent_class: Rung` and forms on the Rungs `places_named` stamps; the realm attempts 8 / 24 / 10
+      marches, each `march.declared` then `march.refused`. THE FAILED LINK, run (a recorder on `loop/resolve.py`'s
+      `sides_of` at fold time): ENCOUNTER, on the target's KIND -- every attempted target is a hearth (8 / 20 / 7) or a
+      territory (0 / 4 / 3), for which `loop/sides.py::sides_of` musters no army (H-149, `march_target_kinds`) -- and,
+      upstream of it, FORMED: at the season's end no dispatch-seated person's question carries a settlement as `Rung`
+      (stamped: hearths 42 / 135 / 110, territories 4 / 3 / 5, one duchy at seed 1), so no march forms on a defended
+      settlement (5 of 37 settlements have their holder faction mustered at tick 0, at each seed). THE RECEIPT, HAND-BUILT
+      and not the realm's: `engine/season/tests/test_referent_class_stamps.py::test_rem27_a_a_seated_marcher_told_of_a_defended_field_marches_on_it_and_fights_it`
+      (`build_realm(0)`, the marcher told of `set_s_036`) folds through ENCOUNTER to `field.lost`, and the losing side
+      (the 2 attackers) gains `Person.stance` rows (4). The status stays `partial`.
     measure: "python -m pytest engine/season/tests -k 'choose_receives_no_world or a_view or r7_two_persons'"
     blocks: [IN-38]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1); W27: `17` landed, IN-38 remains

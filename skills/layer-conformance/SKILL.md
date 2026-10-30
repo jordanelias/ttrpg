@@ -55,7 +55,7 @@ LENS B · CONFORMANCE    does the code conform to the ratified shape?
 
 Run A first. If A finds prose asserting a mechanism, a guard whose subject is apparatus, or a
 governance scheme spelled *Layer*, B does not run on that artifact: a conformance verdict on a
-misplaced artifact certifies the placement.
+misplaced artifact certifies the placement. When a distil pass is requested (CLAUDE.md §9), `valoria-simplify` runs between A and B.
 
 ---
 

@@ -508,10 +508,12 @@ class World:
         to tolerate and never a refusal. Every caller that turns a class into a verdict must
         decide what `None` means for IT; `_refuse_bad_hold` treats it as PERMITTED.
 
-        The order is the collections' own declaration order in `__init__`, and it matters at
-        exactly one place today: a faction's id is BOTH a `Proposition` key and nothing else, so
-        no id is currently in two of these. If one ever is, this returns the first and the
-        ambiguity is a defect in the id scheme rather than in this function."""
+        The order is `_entity_stores`' and it IS LOAD-BEARING at one place: a `person`-kind rung
+        carries its person's id (`harness/probes.py`, `populated.py`: every person has a same-id
+        rung), so that id is in `persons` and in `rungs`, and `Person` is answered first -- the
+        answer `place_of`, `places_named`, `larders_in_purview` and the formation classes (v10 REM-24,
+        B10-05) all rely on. Any other id in two collections returns the first, and the ambiguity is
+        a defect in the id scheme rather than in this function."""
         for name, store in self._entity_stores():
             if entity_id in store:
                 return name
@@ -1418,8 +1420,9 @@ class World:
     def last_emission_of(self, kind: str, subject: str, *, written: bool = False) -> Optional[str]:
         """The id of the most recent Event of `kind` about `subject`, or None.
 
-        `written=True`: the Event that WROTE `subject` (H-129's fix shape), taken for `person.died`,
-        whose fold emission anchors on the killer.
+        `written=True`: the Event that WROTE `subject` (H-129's fix shape), taken for `person.died`
+        (whose fold emission anchors on the killer) and, since v10 REM-52, for the bodies pass's
+        `body.changed` read.
 
         `W4`'s chaining primitive: a licensed clock's next tick names its previous one, so
         `[ROOT]` stops appearing after the clock's genuine first emission.
@@ -1436,13 +1439,10 @@ class World:
         the deleted field carried the identical value for a fold-emitted Event (`Event(H(...), k,
         a.actor, ...)`), so `last_emission_of("body.changed", <victim>)` already missed a
         combat-caused wound before this deletion -- this docstring's overclaim is new, the gap it
-        describes is not. LATENT AT SHIPPED DEFAULTS: `body_step = 0` skips the caller
-        (`loop/matter.py`) entirely, so nothing reaches it on a built world today. The
-        `person.died` half is FIXED via `written=True`; `body.changed` still reads the anchor, so
-        that half of H-129 stands. Registered rather than fixed for `body.changed` only:
-        `hole_register.yaml` H-129 -- a fix (reading the first minted receipt in `changes[]`
-        instead of `anchor_of`) would move outputs in a `body_step > 0` sweep arm and needs its
-        own decision, not a side effect of this position's field deletion.
+        describes is not. Both halves of H-129 are FIXED at their one caller each
+        (`hole_register.yaml` H-129): `person.died` through `written=True` and, at v10 REM-52 (where
+        `body_step` shipped at 10, so the caller is reached on a built world), the bodies pass's
+        `body.changed`.
         Every OTHER caller of this method (the six kinds above) is unaffected: each names a kind
         with exactly one emitter, MATTER's own auto-emission block, so tier 2 still returns `subj`
         by construction for all of them. ⚠ "SIX", NOT SEVEN, AND "MATTER'S OWN" NO LONGER COVERS

@@ -1338,8 +1338,8 @@
       "kind": "scalar",
       "module": "mass_battle",
       "file": "modules/mass_battle/orderofbattle.py",
-      "note": "[canonical: ED-IN-0304 -- an ASSUMPTION, not canon: the smallest gap measured to join every melee type in one turn]",
-      "citation": "ED-IN-0304 -- an ASSUMPTION, not canon: the smallest gap measured to join every melee type in one turn",
+      "note": "[canonical: ED-IN-0305 -- an ASSUMPTION, not canon: the smallest gap measured to join every melee type in one turn]",
+      "citation": "ED-IN-0305 -- an ASSUMPTION, not canon: the smallest gap measured to join every melee type in one turn",
       "citation_grade": "assumption"
     },
     {
@@ -1349,8 +1349,8 @@
       "kind": "scalar",
       "module": "mass_battle",
       "file": "modules/mass_battle/orderofbattle.py",
-      "note": "[canonical: ED-IN-0304 -- a deployment ASSUMPTION of this module, not canon; Jordan to correct]",
-      "citation": "ED-IN-0304 -- a deployment ASSUMPTION of this module, not canon; Jordan to correct",
+      "note": "[canonical: ED-IN-0305 -- a deployment ASSUMPTION of this module, not canon; Jordan to correct]",
+      "citation": "ED-IN-0305 -- a deployment ASSUMPTION of this module, not canon; Jordan to correct",
       "citation_grade": "assumption"
     },
     {
@@ -1451,8 +1451,8 @@
       "kind": "scalar",
       "module": "mass_battle",
       "file": "modules/mass_battle/troop_types/recruitment.py",
-      "note": "[canonical: ED-IN-0304 -- ASSUMPTION, pre-industrial mobilisation ceiling; Jordan to correct]",
-      "citation": "ED-IN-0304 -- ASSUMPTION, pre-industrial mobilisation ceiling; Jordan to correct",
+      "note": "[canonical: ED-IN-0305 -- ASSUMPTION, pre-industrial mobilisation ceiling; Jordan to correct]",
+      "citation": "ED-IN-0305 -- ASSUMPTION, pre-industrial mobilisation ceiling; Jordan to correct",
       "citation_grade": "assumption"
     },
     {
@@ -1526,8 +1526,8 @@
       "kind": "scalar",
       "module": "mass_battle",
       "file": "modules/mass_battle/troop_types/recruitment.py",
-      "note": "[canonical: ED-IN-0304 -- ASSUMPTION, Jordan: \"you can invent one\"; sized to the engine's 100-troop unit floor and 100..800 field armies, ED-IN-0304 phase 5]",
-      "citation": "ED-IN-0304 -- ASSUMPTION, Jordan: \"you can invent one\"; sized to the engine's 100-troop unit floor and 100..800 field armies, ED-IN-0304 phase 5",
+      "note": "[canonical: ED-IN-0305 -- ASSUMPTION, Jordan: \"you can invent one\"; sized to the engine's 100-troop unit floor and 100..800 field armies, ED-IN-0305 phase 5]",
+      "citation": "ED-IN-0305 -- ASSUMPTION, Jordan: \"you can invent one\"; sized to the engine's 100-troop unit floor and 100..800 field armies, ED-IN-0305 phase 5",
       "citation_grade": "assumption"
     },
     {

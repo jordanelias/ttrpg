@@ -1,4 +1,4 @@
-"""modules.mass_battle.troop_types.recruitment -- how many troops of a type a place can raise (ED-IN-0304, phase 2).
+"""modules.mass_battle.troop_types.recruitment -- how many troops of a type a place can raise (ED-IN-0305, phase 2).
 
 Jordan, 2026-10-28, on the gap between a season cohort (a weight of single or double digits) and the battle engine
 (calibrated for hundreds of troops): *"you can invent one that makes sense. basically the more population the more
@@ -21,7 +21,7 @@ THE RULE.
 it reads (`rosters.yaml: site_kinds`) are `engine/season/`'s; the numbers and the type -> site table are here, beside
 the troop stats, so a troop type is defined once.
 
-[canonical: none -- every number below is an ASSUMPTION of ED-IN-0304 (Jordan: "you can invent one that makes
+[canonical: none -- every number below is an ASSUMPTION of ED-IN-0305 (Jordan: "you can invent one that makes
 sense"), medium confidence, Jordan to correct; revert: set MUSTER_FRACTION to 1.0 and TRAINING_SITE to {} and a place
 raises any type up to its whole population.]
 """
@@ -41,12 +41,12 @@ __all__ = ['TROOPS_PER_WEIGHT', 'MUSTER_FRACTION', 'TRAINING_SITE', 'training_si
 #: the Church 2). At 300 and a tenth under arms the Crown can raise 900, a middling faction 600, and the Church 60 --
 #: a garrison, which routs in the open and should. At the first writing's 100 the Crown's best was 300 and a town's
 #: cohort (weight 2) 20, which no field could use. [ASSUMPTION; medium; Jordan to correct; revert: 100.]
-TROOPS_PER_WEIGHT = 300  # [canonical: ED-IN-0304 -- ASSUMPTION, Jordan: "you can invent one"; sized to the engine's 100-troop unit floor and 100..800 field armies, ED-IN-0304 phase 5]
+TROOPS_PER_WEIGHT = 300  # [canonical: ED-IN-0305 -- ASSUMPTION, Jordan: "you can invent one"; sized to the engine's 100-troop unit floor and 100..800 field armies, ED-IN-0305 phase 5]
 
 #: The share of a place's people that can be under arms at once. A tenth is the usual ceiling of pre-industrial
 #: mobilisation (the able-bodied men of military age are about a fifth of a population, and half of those is a hard
 #: draw on it), and at `TROOPS_PER_WEIGHT` it lands a weight-12 cohort at 360 troops, well clear of `config.SUBUNIT_ROUT_FLOOR`.
-MUSTER_FRACTION = 0.10  # [canonical: ED-IN-0304 -- ASSUMPTION, pre-industrial mobilisation ceiling; Jordan to correct]
+MUSTER_FRACTION = 0.10  # [canonical: ED-IN-0305 -- ASSUMPTION, pre-industrial mobilisation ceiling; Jordan to correct]
 
 #: troop type -> (the Site kind it is trained at, the least condition fraction at which that Site trains it at all).
 #: Drawn from the unit classes Romance of the Three Kingdoms and Total War share: foot soldiers drill at a barracks,
@@ -66,7 +66,7 @@ TRAINING_SITE = {
     'mounted_archers': ('stable',         0.0),
     'knights_templar': ('stable',         0.5),
     'artillery':       ('siege_workshop', 0.5),
-}  # [canonical: ED-IN-0304 -- ASSUMPTION: the type -> site pairing and the 0.5 elite floor are this module's, from the RTK / Total War unit classes; Jordan to correct]
+}  # [canonical: ED-IN-0305 -- ASSUMPTION: the type -> site pairing and the 0.5 elite floor are this module's, from the RTK / Total War unit classes; Jordan to correct]
 
 
 def training_site_for(troop_type: str) -> Optional[tuple]:

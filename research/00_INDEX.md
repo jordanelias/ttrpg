@@ -164,7 +164,7 @@ Precedent- or history-bearing files at the snapshot, with no current counterpart
 
 ## 3. By function — what each function has, and where
 
-`G` = game precedent · `H` = historical · `Plan` = state-index handles (`workplans/valoria_master_workplan_v9.md` §3) whose subject is evident from their row. A blank cell means none located by the commands in §9.
+`G` = game precedent · `H` = historical · `Plan` = state-index handles (`workplans/valoria_master_workplan_v9.md` §3; v9, as of `462c68a`, since forked, successor v10) whose subject is evident from their row. A blank cell means none located by the commands in §9.
 
 | function (lane) | G | H | Plan |
 |---|---|---|---|
@@ -232,7 +232,7 @@ Families with no verb by design: 60 events and 61 inner mechanics (SYSTEM), 47 t
 
 ## 6. The plan set against the research
 
-The workplan is `workplans/valoria_master_workplan_v9.md` and `_part2`…`_part8` (RATIFIED, ED-IN-0286). State-index rows by lane, as the file stands at `462c68a` (`STATE`: B buildable · BLK blocked · J decision owed · LEAVE unscheduled):
+The workplan was `workplans/valoria_master_workplan_v9.md` and `_part2`…`_part8` (RATIFIED, ED-IN-0286; forked at `c1374059`, successor v10, ED-IN-0299). State-index rows by lane, as the file stands at `462c68a` (`STATE`: B buildable · BLK blocked · J decision owed · LEAVE unscheduled):
 
 | lane | rows | state mix | function(s) | research reach (§3) |
 |---|---|---|---|---|

@@ -23,8 +23,8 @@ pieces of character data, the kind the realm's builder authors for every person:
 ⚠ THE TWO SEEDS ARE SELECTED, AND THE RATE IS MEASURED -- THE BAR IS AN EXISTENCE CLAIM, NOT A RATE.
 MEASURED 2026-10-16 at eb9ba4e2 (a one-off sweep, not kept): this world at each of the 15 convictions x
 seeds 0..15, ten seasons, 240 runs -- 72 `matter.determined`, and 4 of them walk to a `date.fired`
-(doctrine 12, family 13, reputation 13, scholastics 6); this file runs scholastics 6 and family 13,
-two distinct seeds. The other 68 are raised by the ambition (`need`, whose occasion is `[ROOT]`,
+(doctrine 12, family 13, reputation 13, scholastics 6); this file ran scholastics 6 and family 13,
+two distinct seeds (scholastics 16 since v10 REM-25, re-traced at `PROCEEDINGS` below). The other 68 are raised by the ambition (`need`, whose occasion is `[ROOT]`,
 `world_q.occasioned_by`): the chooser docketed the clerk BEFORE any sitting fired, so `_eff_open_case`
 appended a dateless item, `docketed` then declines every later `open_case` on him, no slot ever holds
 him, and `determine`'s docket conjunct (existence of a DocketItem, dated or not) admits the
@@ -46,7 +46,7 @@ THE FALSIFIERS, each seen red before it was trusted (2026-10-16, mutations run a
   * A BROKEN CAUSE LINK REDDENS THE BAR: the sitting question built with `about=None` in
     `world_q.questions_for` -- scholastics/6 *no determination's causes reach a date.fired (1
     determined, 1 fired)*.
-  * THE CONTROL beside them, kept as a test (doctrine, seed 8; community/13 until SC-03b): a held date fires and, after it,
+  * THE CONTROL beside them, kept as a test (virtue, seed 2 since v10 CP-T05-04; doctrine/8 until it; community/13 until SC-03b): a held date fires and, after it,
     the Duke determines the clerk out of his ambition -- the walk is False there, so THE BAR's walk is
     not satisfied by a firing merely preceding a determination.
   * THE CLOSURE TEST: the planted `if arrangement.id == "tribunal":` written into the real
@@ -108,7 +108,28 @@ DUKE, SEAT, PARTY, WANT = "p_high", "off_duke", "p_mid", "prop_bar_duke_want"
 # (conviction, world seed, seasons): the two seeded proceedings, and the control run. The season count
 # is the first season after which the determination stands (traced at build), so each run is no longer
 # than its proceeding.
-PROCEEDINGS = (("scholastics", 6, 6), ("family", 13, 5))
+# v10 REM-25 (B10-05): RE-TRACED, scholastics/6 -> scholastics/16, the conviction and season count unchanged --
+# `carry`, `found` and `build` declare `referent_class: Record`, so they form only on a Record the person holds
+# (the Duke and the clerk hold none here), and the act mix of this world moved: scholastics/6 now fires TWO dates
+# and determines one matter whose causes reach neither (`_proceeding`: "no determination's causes reach a
+# date.fired (1 determined, 2 fired)"). The bar is an existence claim on SELECTED seeds (above), not a rate. A sweep
+# of scholastics x seeds 0..39 at 6 seasons for a run meeting every assertion of `_proceeding` finds seeds 13, 16 and
+# 21 (scratch, not kept); 16 is taken, the first that is not family's seed. family/13/5 is unmoved (it meets them
+# all). CONTROL, run: this file on the REM-24 tree (`f2381695`) meets them all at scholastics/6, so the move is this
+# unit's.
+# v10 CP-T05-04 (B10-05): RE-TRACED AGAIN, scholastics/16 -> scholastics/21, the conviction and season count unchanged --
+# `open_case` declares `referent_class: Person` (and `argue` declares `Proposition`, and `docket_question` asks the
+# witness of a docketing), so the Duke's `open_case` stops forming on the rungs and the Sites he is asked about, and the
+# act mix of this world moved: scholastics/16/6 now fires ONE date and determines nobody (`_proceeding`: "no
+# determination's causes reach a date.fired (0 determined, 1 fired)"). ATTRIBUTION, in-process on this tree (the same
+# script on each arm): with neither column nor the docket question (the REM-25 behaviour) scholastics/16/6, family/13/5
+# and the control all meet their assertions; the docket question alone moves none of the three (their hashes are the
+# REM-25 tree's); the `open_case` column alone breaks scholastics/16/6 and the control (the `argue` column alone moves
+# every hash and breaks neither); family/13/5 still meets every assertion with a moved hash. The bar is an existence
+# claim on SELECTED seeds (above), not a rate. A sweep of scholastics x seeds 0..39 at 6 seasons for a run meeting every
+# assertion of `_proceeding` finds seeds 13, 21 and 22 (scratch, not kept); 21 is taken, the first that is not family's
+# seed.
+PROCEEDINGS = (("scholastics", 21, 6), ("family", 13, 5))
 BAR_FIXTURES = DEFAULT_FIXTURES.sweep("pool_default", 30)       # v9 SC-03b: a judge whose finding opens
 # v9 IN-12 step 9: RE-TRACED, the conviction and season count unchanged -- `argue`/`sabotage`/`tend`/`train`
 # are new members of the Duke's and the clerk's option sets, so doctrine/8's trajectory moved (it now fires
@@ -118,7 +139,20 @@ BAR_FIXTURES = DEFAULT_FIXTURES.sweep("pool_default", 30)       # v9 SC-03b: a j
 # of every option set (untyped, one Candidate per referent), and doctrine/22 now fires no date. A sweep of
 # doctrine x seeds 0..399 at 5 seasons for a run meeting every assertion of the control test below finds
 # doctrine/83 first (scratch, not kept; seeds 0..82 each fail one assertion); the PROCEEDINGS are unmoved.
-CONTROL = ("doctrine", 83, 5)      # v9 SC-03b: was ("community", 13, 5); IN-12 step 9: ("doctrine", 8, 5); step 10: ("doctrine", 22, 5)
+# v10 REM-22 (B10-05): RE-TRACED AGAIN, the conviction and season count unchanged -- `restore`, `work` and `examine`
+# declare `referent_class: Site`, so they stop forming on the clerk, the rungs and the Records the Duke is asked
+# about, and the act mix of this world moved: doctrine/83 now fires TWO dates (the control's `f, = ...` needs
+# one). A sweep of doctrine x seeds 0..8 at 5 seasons for a run meeting every assertion of the control test below
+# finds doctrine/8 first (scratch, not kept; seeds 0..5 and 7 fire no date, seed 6 determines nobody); the
+# PROCEEDINGS are unmoved. CONTROL, run: on the REM-21 tree doctrine/83 meets every assertion.
+# v10 CP-T05-04 (B10-05): RE-TRACED AGAIN, THE CONVICTION MOVES TOO (doctrine -> virtue), the season count unchanged --
+# `open_case` declares `referent_class: Person`, and the control's pattern (the Duke convenes and opens the clerk's case
+# in one season, ONE date fires, he determines the clerk out of his ambition after it) no longer occurs in doctrine at any
+# seed swept: doctrine x seeds 0..239 at 5 seasons finds no run meeting every assertion of the control test below (at
+# seed 8 two dates fire, `f, = ...` raises; most seeds fire none). A sweep of all 15 convictions x seeds 0..24 at 5
+# seasons finds justice/8, virtue/2, virtue/6 and virtue/15 (scratch, not kept); the lowest seed, virtue/2, is taken.
+# CONTROL, run: on the REM-25 tree (the same script) doctrine/8 meets every assertion.
+CONTROL = ("virtue", 2, 5)      # was ("community", 13, 5) until v9 SC-03b; ("doctrine", 8, 5) until IN-12 step 9; 22 until step 10; 83 until REM-22; 8 until CP-T05-04
 
 
 def _world(conviction: str, seed: int):
@@ -248,8 +282,9 @@ def test_an_injected_act_reddens_the_bar(verb):
 
 
 def test_the_walk_is_false_for_a_determination_the_ambition_raised_beside_a_fired_date():
-    """THE CONTROL. Same world, doctrine at seed 83 (re-traced at IN-12 step 10, and at step 9 to seed 22,
-    against the assertions below only; the narrative that follows was traced at seed 8, SC-03b; community at seed 13 before it): the Duke convenes at `S` AND
+    """THE CONTROL. Same world, virtue at seed 2 (re-traced at v10 CP-T05-04 against the assertions below only, from
+    doctrine at seed 8; doctrine at 83 and at 22 before it, re-traced at IN-12 step 10 and step 9; the narrative that
+    follows was traced at seed 8, SC-03b; community at seed 13 before it): the Duke convenes at `S` AND
     opens the clerk's case in the same season, so the case is docketed dateless before the sitting
     fires; the sitting's slot forms empty, and after the firing the Duke determines the
     clerk out of his ambition (`need`, occasion `[ROOT]`). That determination's `causes[]` reach no

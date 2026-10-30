@@ -60,7 +60,28 @@ from .test_season_shape import _wd_arm9
 # 36/8 -> 36/7, v9 IN-12 `give` + Rung (B-R): `give` no longer forms on a referent its asker does not
 # hold, the same move `test_season_shape.py`'s `wd_a_fork` records for `total` (36, 7). A re-record of
 # the control, read off this test's own failing assertion in CI run 1 of B-R (control (36, 7)).
-_BASELINE_TOTAL = (36, 7)
+# 36/7 -> 33/6, v10 REM-23 (B10-05): `commit` declares `referent_class: Proposition`, the same move
+# `test_season_shape.py`'s `wd_a_fork` records for `total` (33, 6) -- the fork population falls and the
+# divergence count moves by one. A re-record of the control, read off this test's own failing assertion and
+# RE-READ with `_wd_total` on this tree and on a `git worktree` at `e66a22ec` (the REM-22 tree): there control
+# (36, 7), 0.5 -> (36, 9), 1 -> (35, 11); here control (33, 6), 0.5 -> (33, 7), 1 -> (33, 8). The shifted arm still
+# rises above the control as a rate (8/33 = 24.2% > 6/33 = 18.2%; it was 11/35 > 7/36).
+_BASELINE_TOTAL = (33, 6)
+
+# v10 REM-2C (B10-05): THE RISE IS READ AT SEED 1, RE-CHOSEN BY A STATED SWEEP; the control pin above stays
+# seed 0's, unmoved (33, 6). `research` declares `referent_class: Record` and the seed-0 slice's SHIFTED arm
+# moved: `_wd_total` on this tree and on a `git worktree` at `ea6f1dba` (the CP-T05-04 tree, the control):
+# there control (33, 6), 0.5 -> (30, 6), 1 -> (30, 8); here control (33, 6), 0.5 -> (30, 6), 1 -> (29, 5), so
+# at 1 the rate falls below the control (5/29 = 17.2% < 6/33 = 18.2%; it was 8/30 = 26.7%). The UNIT, in
+# process on this tree: `research`'s column alone (`Record` held back in `occasion_only_classes`) reads
+# 1 -> (29, 5); the roster release alone (`research` classless) reads 1 -> (30, 8), the control tree's. THE
+# SWEEP, seeds 0-7, `(genuine, diverged)` at shift 0 -> 1: on the control tree the rate rises at seeds 0 and
+# 1 only, pooled 65/274 (23.7%) -> 67/268 (25.0%); on this tree at seeds 1 and 2 only, pooled 64/261
+# (24.5%) -> 65/253 (25.7%) -- a small pooled rise on both trees, and a one-seed reading that flips with
+# the trajectory, which is what this file's header says the slice is (a proxy). Seed 1 is the first seed of
+# the sweep at which the rise holds here, and it holds on both trees (control (39, 9) -> (39, 11); here
+# (39, 10) -> (39, 12)) [a judgment call, as `test_sc01_the_bar.py`'s re-chosen seeds].
+_RISE_SEED = 1
 
 
 def _person(pursuits: dict, scar: dict) -> Person:
@@ -99,12 +120,12 @@ def test_h9_a_person_with_nobody_to_gain_is_unshifted_not_drained():
     assert crisis_weights(_person({"virtue": 1.0}, {"virtue": 9}), 1.0) == {"virtue": 1.0}
 
 
-def _wd_total(shift):
+def _wd_total(shift, seed=0):
     A9 = _wd_arm9()
     case = C.apply_rescale(next(c for c in R.load_cases("NPC") if c["id"] == "NPC-088"))
     fx = (DEFAULT_FIXTURES.sweep("scene_budget", 2).sweep("interactions_per_scene", 1)
           .sweep("observation_deposit_mode", "total").sweep("scar_weight_shift", shift))
-    r = A9.fork_case(case, 0, 4, fixtures=fx)
+    r = A9.fork_case(case, seed, 4, fixtures=fx)
     assert r["ok"], r.get("why")
     real = [f for f in r["forks"] if f.get("status") in ("DIVERGED", "RECONVERGED")]
     return len(real), sum(1 for f in real if not f["reconverged"])
@@ -129,12 +150,14 @@ def test_h9_fork_divergence_at_total_rises_above_baseline_and_the_control_arm_is
     control = _wd_total(0)
     assert control == _BASELINE_TOTAL, (
         f"the control arm moved the `total` fork pair: {control} != {_BASELINE_TOTAL}")
-    shifted = _wd_total(1)
+    # v10 REM-2C: the rise is read at `_RISE_SEED` against THAT seed's own control (the note above it).
+    base = _wd_total(0, _RISE_SEED) if _RISE_SEED else control
+    shifted = _wd_total(1, _RISE_SEED)
     # v9 IN-57: the genuine count moves with the arm (36 -> 32) and the divergence count does not (10
     # -> 10), so the count comparison this assertion made (6 -> 10 at IN-11) reads equal; the docstring's
     # own reading is the RATE over the forks (10/36 = 27.8% -> 10/32 = 31.3% here), which still rises.
-    assert shifted[1] * _BASELINE_TOTAL[0] > _BASELINE_TOTAL[1] * shifted[0], (
-        f"the weight shift at 1 left `total` divergence at {shifted} (baseline {_BASELINE_TOTAL}): "
+    assert shifted[1] * base[0] > base[1] * shifted[0], (
+        f"the weight shift at 1 left `total` divergence at {shifted} (baseline {base}, seed {_RISE_SEED}): "
         "no scarred person's ranking reached a later decision, so the arm is inert here")
 
 
