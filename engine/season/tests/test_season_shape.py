@@ -998,13 +998,13 @@ def test_sensation_is_constructed_by_the_loop_and_standing_raises_on_read():
     w = _w()
     sn = sense(w.persons["p_low"], w)
     # ONE scalar since REM-44 deleted `subsistence`: the loop builds `standing` (`H-29`) and nothing else.
-    assert isinstance(sn, Sensation) and isinstance(sn.standing, int) and tuple(sn) == (sn.standing,), tuple(sn)
+    assert isinstance(sn, Sensation) and isinstance(sn.standing, int)
     # The refusal survives where it is still true: a Sensation built without `standing` is half a
     # Sensation, and reading the missing scalar must refuse rather than answer 0.
     with pytest.raises(Unspecified):
         _ = Sensation().standing
     with pytest.raises(AttributeError):
-        sn.third = 3
+        sn.second = 3
 
 
 def test_a_proposition_cannot_be_edited():

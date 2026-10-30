@@ -117,8 +117,7 @@ def deliberation_memo(p: Person, fx: "Fixtures") -> dict:
     the projected axis weights (with the swept `scar_weight_shift`) and the `confliction` damp (the
     swept `confliction_weight`, H-188), hoisted once because neither depends on the candidate.
     Exists so a reading that scores a person outside `choose` (`harness/decision_spread.py`) takes
-    the SAME two factors from the same arms rather than copying them. (REM-44 deleted a third, the
-    `urgency` term: it had no candidate in it, so it moved no ranking.)"""
+    the SAME two factors from the same arms rather than copying them."""
     k = float(fx.get("confliction_weight"))
     if not k >= 0:                   # `not >=`, so a NaN is refused too
         raise ValueError(f"confliction_weight {k} is not >= 0: it would invert, divide by zero "
@@ -399,8 +398,7 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
         # the two hoisted per-deliberation factors under tuple keys (`score_terms`).
         memo: dict = deliberation_memo(p, fx)
         def score(c: Candidate) -> float:
-            # IN-62: the terms have ONE owner, `score_terms`; the score is their left-to-right sum,
-            # the float expression this closure held before REM-44 less its constant third term.
+            # IN-62: the terms have ONE owner, `score_terms`; the score is their left-to-right sum.
             pursuit, stance = score_terms(p, c, fx, memo)
             return pursuit + stance
         # ⚠ SCORED ONCE, NOT TWICE. `score` was passed to `_sample_order` and re-invoked there for

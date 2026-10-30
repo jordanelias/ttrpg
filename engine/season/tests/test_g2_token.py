@@ -355,8 +355,8 @@ def test_g2_deliberate_mutates_no_store_by_any_route(monkeypatch):
         "the plant did not leave an unhomed Tenure; the route is not being exercised")
     w.frozen = True
     d2 = SeasonDriver(w)
-    # ⚠ MERGE, 2026-09-27 (ED-IN-0206, main): `deliberate` now takes `questions` as its fourth
-    # positional argument (the third since REM-44 deleted `subsistence`) -- the per-person projection the driver builds at barrier 2 and used to
+    # ⚠ MERGE, 2026-09-27 (ED-IN-0206, main): `deliberate` now takes `questions` as its third
+    # positional argument -- the per-person projection the driver builds at barrier 2 and used to
     # compute inside `deliberate` itself. Built the same way `season()` builds it, so the planted
     # call exercises the real shape rather than an empty stand-in.
     d2.deliberate(_chooser(w), None, d2._questions_at_barrier())   # the spy asserts no store moved

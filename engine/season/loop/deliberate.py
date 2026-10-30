@@ -462,10 +462,7 @@ def _inputs_fingerprint(p: Person, qs: list) -> tuple:
                        `need` (a live `commit` to an OUGHT). A world-level change that cannot reach
                        this person cannot move this term, which is what keeps the skip from
                        degenerating into "anything happened anywhere".
-      * (`Sensation` IS NOT AN INPUT. It had a `subsistence` term until REM-44 deleted the scalar,
-                       because `urgency` was a chooser term; no chooser term reads a per-person
-                       scalar of the Sensation now. `standing` is absent for the same reason:
-                       `sense()` computes it and no chooser term reads it.)
+      * (`Sensation` is not an input: since REM-44 no chooser term reads it, `standing` included.)
       * `tenures`    — `person_side_eligible` reads them (eligibility `own`), `budget` counts the
                        live `hold`s, and `questions_for`'s `mine` set is built from them.
                        ⚠ `live` AND NOT `until`: a tenure CLOSING is the change that matters, and
@@ -527,9 +524,7 @@ def sense(p: Person, w: World) -> Sensation:
 
     REV 3. It now RETURNS a Sensation, so `choose : (Person, View, Sensation) -> Act[]` is the
     signature actually exercised. Reading `.standing` raises where the design fails to supply
-    it. REM-44 deleted the other scalar, `subsistence` (an injected formula feeding `urgency`, a
-    chooser term with no candidate in it); `standing_of` computes the one that is left
-    person-side (`H-29`)."""
+    it. `standing_of` computes it person-side (`H-29`); REM-44 deleted the other scalar, `subsistence`."""
     TRACE.query("sense", "bridge")
     return Sensation(standing_of(p, w.fixtures))
 

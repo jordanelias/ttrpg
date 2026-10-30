@@ -46,7 +46,6 @@ itself a property of the fixture, not a fixed fact about the design.
 """
 from __future__ import annotations
 import collections, itertools
-import sweep_core as K
 from sweep_core import S, C, R, Log, PS_CHOOSE, PS_OPTIONS
 
 LOOKAHEAD = 3        # `CLAUDE.md` §0.1 pt 5 / G1: declared with its reason.

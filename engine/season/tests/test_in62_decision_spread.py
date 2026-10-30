@@ -158,8 +158,7 @@ def test_rem12_a_strict_top_the_planted_draw_reverses_reads_outvoted_and_the_dec
 
 
 def test_rem12_field_zero_is_true_for_a_person_with_no_vector_and_false_for_one_who_holds_one():
-    """`field_zero` is every candidate's score within `EPS` of 0. (It once set the candidate-independent
-    `urgency` term aside first; REM-44 deleted that term, so there is nothing left to set aside.)"""
+    """`field_zero` is every candidate's score within `EPS` of 0."""
     a, _, va, vb = _opposed_pair()
     cands = _cands(va, vb)
     empty = DS.attribute_top(_person("p_rem12_fz"), cands, _FX0)

@@ -387,21 +387,13 @@ class Said(NamedTuple):
 
 
 class Sensation:
-    """S18.2 -- the bridge from world truth into `choose`, and it now carries ONE scalar, `standing`.
+    """S18.2 -- the bridge from world truth into `choose`; it carries ONE scalar, `standing`.
 
-    REM-44 DELETED THE OTHER ONE. `subsistence` was fed by an injected formula, read by `urgency`,
-    and `urgency` is a term with no `c` in it (added identically to every candidate, so inert by
-    construction); the `H-73` sweep recorded that no verdict moved across three scales. A need is
-    now a Query (for a settlement, `queries/world_q.py::hunger`) plus the shortfall claims a person
-    holds about it, not a number on this type.
-
-    The type is NOT deleted (the ruling names `subsistence`, not `Sensation`). What is left is the
-    shape REV 3 chose: keep the type and RAISE AT THE POINT OF USE. `standing` is computed by
-    `sense()` from `standing_of`; a Sensation built without it is half-built, and reading it
-    raises rather than answering 0.
-
-    S34's enforcement column rated the old two-scalar rule `convention -- the named residual
-    risk`; the one-scalar rule is the same grade, a convention a determined author can spell around."""
+    REM-44 deleted `subsistence`: its only reader, `urgency`, had no candidate in it and moved no
+    ranking (`H-73`). A need is now a Query (`world_q.hunger` for a settlement) plus the shortfall
+    claims a person holds about it. The type stays: `sense()` computes `standing` via `standing_of`,
+    and reading it on a Sensation built without it raises rather than answering 0. S34 grades the
+    one-scalar rule `convention`."""
 
     # roster-exempt: MECHANISM -- `__slots__` is a Python language construct naming this
     # class's own attributes, as on `View`.
@@ -427,9 +419,6 @@ class Sensation:
                     "reading the missing scalar must refuse rather than answer 0 -- §42.2's "
                     "polarity rule applied to a constructor")
         return self._standing
-
-    def __iter__(self):
-        return iter((self._standing,))
 
 
 class View:

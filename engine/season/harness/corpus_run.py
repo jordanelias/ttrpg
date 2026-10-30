@@ -479,8 +479,7 @@ def build_at(case: dict, seed: int = 0) -> World:
     The draw itself lives in `run_cases.seed_pursuits`, its
     single owner; this module only calls it. Rev 1 wrote
     three axis names and the weight `0.9` as literals, which is a fill off the register (`G1`) and,
-    worse, was the ENTIRE ranking function — `stance` is empty in these worlds and §F2's third term
-    (`urgency`, deleted by REM-44: it had no `c` in it) never ordered anything, so the conviction axis
+    worse, was the ENTIRE ranking function — `stance` is empty in these worlds, so the conviction axis
     alone orders every candidate. Identical
     convictions therefore forced identical rankings in every world. Seeding from the id makes them
     differ per case, reproducibly, and takes the axis names from the roster rather than a body."""

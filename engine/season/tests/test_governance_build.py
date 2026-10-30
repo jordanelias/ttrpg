@@ -1015,14 +1015,7 @@ def test_lb6d_the_column_resolves_on_candidates_the_engine_actually_forms():
     other assertion in this block still passes.
 
     IT ASSERTS THAT IT ASSERTED (§0.1 pt 2) -- the examined count is asserted non-trivial, so a
-    run that formed no candidates fails here instead of passing vacuously.
-
-    ⚠ THE CONTROL ON ITS OWN HEADLINE, because a number without one is not a measurement (§0.1
-    pt 4): roughly HALF of all candidates carry THE ACTOR AS THEIR OWN SUBJECT -- `opening_set`
-    offers every person themselves as a referent for every verb. So the count of candidates
-    whose beneficiary is the actor is inflated by the aperture's shape and must not be read as
-    *"persons are self-interested two thirds of the time"*. That is a property of the candidate
-    former, which this item does not touch and this test does not assert a bound on."""
+    run that formed no candidates fails here instead of passing vacuously."""
     from ..data.verbs import VERB_TABLE
     from ..decision import choose as _choose
     from ..harness import populated
@@ -1071,9 +1064,6 @@ def test_lb6d_the_column_resolves_on_candidates_the_engine_actually_forms():
     assert resolved > len(seen) // 4, (
         f"only {resolved} of {len(seen)} candidates resolve any beneficiary -- the column is "
         "declared but inert, which is the failure this test exists to see")
-
-    # (`benefits_me`, the 0/1 score term that once read this column, was deleted by REM-44 with
-    # `urgency`: nothing multiplied it, so it moved no ranking.)
 
 # LB-6e -- `(Person, scar[axis])`, THE MORAL LAYER'S MISSING MOTION (§54 item 21, `H-128`)
 #
