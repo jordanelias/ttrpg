@@ -24,7 +24,7 @@ from .. import manifest
 from ..data.geography import adjacent_territories
 from ..data.matrix import Step
 from ..data.requires import SHORTFALL_PREDICATE, Observation
-from ..data.rosters import STANDING_CROSSED
+from ..data.rosters import STANDING_CROSSED, require_member, roster
 from ..decision import agreement, standing_of
 from ..decision.budget import bands_below
 from ..gaps import Unspecified
@@ -59,6 +59,28 @@ def _step_call(role: str):
             needs="a SeasonDriver constructed in this process (the registrar fills the table), and the "
                   "composition row in references/module_contracts.yaml `composition_roles:`")
     return held.fn
+
+
+#: v10 CR-23: the arms of `Fixtures.stock_report` (`H-243`), `rosters.yaml: stock_reports`.
+STOCK_REPORTS = roster("stock_reports")
+
+
+def _stock_report(w: "World", rid: str, stores_after: dict, mode: str, stocked_before: dict) -> tuple:
+    """THE STOCK REPORT ON A RUNG'S LAST MATTER WRITE (v10 CR-23, M17 taken (a), [ASSUMPTION; medium;
+    Jordan to correct; revert: `stock_report = off`]): `(Observation(rid, "stores:<kind>", units),)` or
+    `()`. `kind` is the fixtures' `default_store_kind` and `units` what the write leaves; the predicate is
+    `stores:<kind>`, the `requires` vocabulary (`f"{scalar}:{key}"`, `data/requires.py::Observation`), so
+    the read a governor holds is the one `LedgerReader` and `decision/options.py::store_kind_of` read.
+    `crossing`: only when `world_q.requisitionable` at the barrier's entry (`stocked_before`) differs from
+    after this write; `season`: every such write; `off`: never. The report carries the rung's NAME into a
+    seat's ledger, not its level as a fact the seat acts on: `world_q.larders_in_purview` still reads the
+    stock from the World (`vacancies`' precedent, in tension with AX-7)."""
+    if mode == "off":
+        return ()
+    if mode == "crossing" and world_q.requisitionable(w, rid, stores_after) == stocked_before.get(rid):
+        return ()
+    kind = w.fixtures.get("default_store_kind")
+    return (Observation(rid, f"stores:{kind}", stores_after.get(kind, 0)),)
 
 
 # -- MATTER -- barrier 2 -- THE WORLD FREEZES AT ITS END (S25) -----------
@@ -517,6 +539,22 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # encoded keys). Every write stays here.
     # Window invariant: the debit and credit below are absolute values computed from this snapshot, so
     # nothing between here and the per-rung loop may write `Rung.stores` (a writer placed there is overwritten).
+    # -- v10 CR-23: THE STOCK REPORT, READ AT THE BARRIER'S ENTRY (`H-243`) ---------------------------
+    # A larder's stock reaches the seats over it at a CROSSING: MATTER's LAST actorless `stores` write to
+    # a rung in this barrier -- the credit write where the rung yields, else the debit write -- carries
+    # `_stock_report`'s Observation, and WITNESS deposits it to `world_q.governors_of` (IN-22's seat
+    # route, unchanged). `requisitionable` is read here, before the debit, which IS the barrier's entry:
+    # no MATTER step above writes `Rung.stores` (the two writes below are the barrier's only ones). The
+    # act-side writers are NOT crossings by this definition and report nothing: `loop/effects_shared.py`'s
+    # debit and credit (`transfer`, `requisition`) run at RESOLVE, actor-borne, between barriers (a larder
+    # an act drains or fills is compared at the next MATTER's entry, not reported at the act), and
+    # `harness/scarce.py`'s planted treasury is a builder's write before any season.
+    stock_mode = w.fixtures.get("stock_report")
+    require_member(stock_mode, STOCK_REPORTS, f"stock report {stock_mode!r} is not in the roster", "H-243",
+                   law="§G -- declare it, default it, sweep it; an unknown arm silently reading `off` would "
+                       "make the sweep report the control twice")
+    stocked_before = ({rid: world_q.requisitionable(w, rid) for rid in w.rungs}
+                      if stock_mode == "crossing" else {})
     sub = _step_call(SUBSIST)(world_q.subsist_input(w))
     short_by_person = {pid: dict(kinds) for pid, kinds in sub.short_by_person}
     larder_after = {rid: dict(kinds) for rid, kinds in sub.larder_after}
@@ -670,13 +708,18 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
             prior = w.last_emission_of("stores.changed", rid)
             # `observed=`: the shortfall this draw left at `rid` if it ran dry here (`19d`,
             # above). Empty for every larder that met its mouths, which is every one the
-            # shipped worlds draw.
+            # shipped worlds draw. v10 CR-23: a rung that yields nothing makes this its LAST write,
+            # so the stock report rides it, after the shortfall.
+            seen = short_seen.get(rid, ())
+            if rid not in yielded:
+                seen = seen + _stock_report(w, rid, {**(r.stores or {}), **after}, stock_mode,
+                                            stocked_before)
             w.write("stores", token,
                     lambda r=r, after=after: r.stores.update(after),
                     record_kind="Rung", fieldname="stores", driver="Event",
                     emits="stores.changed", subject=rid,
                     causes=[prior] if prior else [ROOT],
-                    observed=short_seen.get(rid, ()))
+                    observed=seen)
         # `yield` — #353 §25's *"only here"* row. The base is the SITE's, scaled by its
         # condition and then by `season_factor`, so a worn place produces less without a
         # second wear concept (`H-93`, and `rosters.yaml: site_yield` for why). The arithmetic is
@@ -699,11 +742,15 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
                 emits="yield.taken", subject=rid,
                 causes=[prior_y] if prior_y else [ROOT])
         prior_s = w.last_emission_of("stores.changed", rid)
+        # v10 CR-23: the credit is this rung's LAST write in the barrier, so the stock report rides it.
+        # `r.stores` already holds the debit above (the gate applies a write in the call).
         w.write("stores", token,
                 lambda r=r, credited=credited: r.stores.update(credited),
                 record_kind="Rung", fieldname="stores", driver="Event",
                 emits="stores.changed", subject=rid,
-                causes=[prior_s] if prior_s else [ROOT])
+                causes=[prior_s] if prior_s else [ROOT],
+                observed=_stock_report(w, rid, {**(r.stores or {}), **credited}, stock_mode,
+                                       stocked_before))
 
     # -- TRAVEL: A LEG ENDS HERE (plan position `19c`, the ride-along) --------------------------
     #

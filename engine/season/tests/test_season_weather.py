@@ -348,9 +348,16 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # realm's first season), so are the build, the `give`- and `thread_read`-withheld arms; the second season moves (`revoke`'s
 # attempts and their scenes). Was fe3cc6d3... (two seasons, the dispatch commit). CONTROL, run in process on this
 # tree: `revoke`'s column blanked in the shared `VERB_TABLE` reads the old two-season hash and events exactly.
+# RE-PINNED at v10 CR-23 (B10-06), A BEHAVIOUR MOVE DECLARED: MATTER's last `stores` write to a rung carries the stock
+# report (`stores:<kind>`) when `requisitionable` flips across the barrier (`Fixtures stock_report = crossing`, `H-243`),
+# and WITNESS deposits it to the seats over the larder: the realm's 37 settlements cross into stock at the first yield, so
+# one season's events grow by the deposits (7196 -> 9270) and `requisition` executes in computed play. The build hash is
+# equal (the build runs no MATTER); one and two seasons move. Was 30a95964... / 920da131... (one, two seasons). CONTROL,
+# run in process on this tree: `stock_report = off` reads the old pair, the old `BASE_EVENTS`, the old `give`-withheld
+# arm and the old `thread_read`-withheld arm exactly.
 BASE_HASHES = {0: "9ff5390939742b7bbb3af0fa2551e958",
-               1: "30a959645cd5f42b731be47b6273e2e0",
-               2: "920da131bd20f97dff550c41ed4574cc"}
+               1: "1d402d1566f8a2082f3839e21d9a18c2",
+               2: "b2276c73085f5cf2e5406119c60c8266"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -406,8 +413,9 @@ BASE_HASHES = {0: "9ff5390939742b7bbb3af0fa2551e958",
 # RE-RECORDED at v10 REM-28 with `BASE_HASHES` (6482 -> 7193, 21258 -> 24535; REM-28 reverted in process reads the old pair).
 # RE-RECORDED at v10 REM-28 `dispatch` with `BASE_HASHES` (7193 -> 7196, 24535 -> 24107; the column blanked in process reads the old pair).
 # RE-RECORDED at v10 REM-28 `revoke` with `BASE_HASHES` (two seasons only: 24107 -> 24109; one season unmoved at 7196).
-BASE_EVENTS = {1: (7196, "bca6d489556d4937d374a6c0dd5f3b7a55a8e9c057437b6f5956ddcab1e7d7cb"),
-               2: (24109, "9d00afc6f951646cc1a4bebfee60bf6927cae57d0d5110a045e83265d53ec821")}
+# RE-RECORDED at v10 CR-23 with `BASE_HASHES` (7196 -> 9270, 24109 -> 27482; `stock_report = off` in process reads the old pair).
+BASE_EVENTS = {1: (9270, "497857281736c1267d50cc1ce13940c53db1fd675a492d5d93c2c13ea5fb93c6"),
+               2: (27482, "98867fbe2b79b0d5d1b079b9a834f0e7b60a68e46ab69f6aac603c1b09ea3366")}
 
 
 def _digest(w) -> tuple:
@@ -523,7 +531,9 @@ def test_the_give_withheld_arm_reproduces_the_one_season_pin():
 #: reverted in process reads the old value exactly).
 #: RE-RECORDED at v10 REM-28 `dispatch` with `BASE_HASHES`: 7198 / c05bfef8... -> 7201 / 9a156ea6... (`dispatch` declares `Person`; the
 #: column blanked in process reads the old value exactly).
-THREAD_READ_WITHHELD_EVENTS_1 = (7201, "9a156ea63670fa814b4cec95e4882db574dd4a9b651b3c030f8db967d8d55836")
+#: RE-RECORDED at v10 CR-23 with `BASE_HASHES`: 7201 / 9a156ea6... -> 9275 / d87f09b9... (the stock report at crossings;
+#: `stock_report = off` in process reads the old value exactly).
+THREAD_READ_WITHHELD_EVENTS_1 = (9275, "d87f09b93ae9ef43e436974551ef14ce35dc85a3d37dd1280fce778bc5c44547")
 
 
 def test_the_thread_read_withheld_arm_is_pinned_and_differs_from_the_shipped_season():

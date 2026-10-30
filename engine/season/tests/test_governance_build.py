@@ -2812,7 +2812,12 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # season: 581 -> 583; `convene` executed 1 -> 4). The control is the REM-27 fallout fix (`ee5acba1`), which reads
     # (581, 581) under this same test, and so does this tree with `convene`'s column blanked in process. The arms'
     # counts part now (583 / 584), and the direct parting assertion below holds on the new sequences.
-    assert (out["acts"], cout["acts"]) == (583, 584), (
+    # ⚠⚠ v10 CR-23 (B10-06): (583, 584) -> (602, 603), A RE-RECORD WITH THE UNIT THAT MOVED IT: MATTER's last `stores`
+    # write to a rung carries the stock report when `requisitionable` flips (`stock_report = crossing`, `H-243`), so the
+    # seats over the realm's 37 newly stocked settlements are told of them and `requisition` forms on them; the realm's act
+    # mix moved (seed 0, one season: 583 -> 602, `test_go07_canonical_digest.py`'s shift). CONTROL: this tree with
+    # `stock_report = off` reads (583, 584) under this same test. The direct parting assertion below holds on the new counts.
+    assert (out["acts"], cout["acts"]) == (602, 603), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")

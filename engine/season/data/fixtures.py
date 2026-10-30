@@ -563,6 +563,13 @@ DEFAULT_FIXTURES = Fixtures(
     # `stores >= 0` admits every giver: a run at this point shows how much of the transfer
     # behaviour rests on the default rather than on the world.
     default_transfer_amount=1,         # `H-94`, swept 0 / 1 / 3
+    # v10 CR-23 / `H-243` (M17 taken (a), [ASSUMPTION; medium; Jordan to correct; revert: `off`]): WHEN A
+    # LARDER'S STOCK REACHES THE SEATS OVER IT. MATTER's last actorless `stores` write to a rung in the
+    # barrier carries `(rung, "stores:<default_store_kind>", units after)` -- at `crossing` only when
+    # `world_q.requisitionable` flips across the barrier, at `season` on every such write, at `off` never
+    # (the CONTROL: every content hash is the tree's before CR-23). The arms are `rosters.yaml:
+    # stock_reports`; the reader is `loop/matter.py`. Injection site: this line.
+    stock_report="crossing",           # `H-243`, swept crossing / season / off
     # ⚠ ITEM 3b. HOW MUCH BODY ONE UNIT OF UNMET SUBSISTENCE COSTS. `AX-5` names three
     # self-motions and BODIES IS THE ONE WITH NO WRITER; `04 §A.3.3` asks for the shortfall to
     # reach `Person.body` through the gate, and the write matrix licenses `(Person, body)` at

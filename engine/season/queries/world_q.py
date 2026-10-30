@@ -2787,6 +2787,25 @@ def places_named(w: World, p: Person, named: Optional[frozenset] = None) -> tupl
     return tuple(sorted(r for r in cands if r not in under))
 
 
+def requisitionable(w: World, rung_id: str, stores: Optional[dict] = None) -> bool:
+    """IS THIS LARDER WORTH A REQUISITION (v10 CR-23, M17 taken (a), [ASSUMPTION; medium; Jordan to
+    correct]): it holds a positive amount of the matter a computed requisition carries, and at least
+    that amount -- `held > 0 and held >= amount`, the kind and amount the fixtures' (`default_store_kind`,
+    `default_transfer_amount`, H-121 / H-94), which is what `decision/options.py::_derive_operand` puts on
+    a classed `requisition`. THE ONE OWNER OF THE STOCKED TEST: `larders_in_purview` asks it of every named
+    rung, and `loop/matter.py`'s stock report asks it before and after MATTER's writes to a rung, so the
+    larder a seat is offered and the crossing that tells the seat of it are one predicate.
+    `stores` is the rung's stores to read, by default its own (`Rung.stores`); MATTER passes the level its
+    last write to the rung is about to leave, because the report rides that write's own Event. The
+    `held > 0` half is not redundant: at `default_transfer_amount = 0` (H-94's control) `held >= 0` holds
+    of an empty larder. REVERT: inline it back into `larders_in_purview` and drop CR-23's report."""
+    if stores is None:
+        stores = w.rungs[rung_id].stores
+    kind, amount = w.fixtures.get("default_store_kind"), w.fixtures.get("default_transfer_amount")
+    held = (stores or {}).get(kind, 0)
+    return held > 0 and held >= amount
+
+
 def larders_in_purview(w: World, p: Person, named: Optional[frozenset] = None) -> tuple:
     """THE LARDERS `p`'S SEAT MAY REQUISITION (v9 IN-49 `requisition`, H-163 limit 3, [ASSUMPTION; medium; Jordan
     to correct]), sorted by id: the Rungs among `person_q.ledger_names(p.ledger)` (he has been told of
@@ -2806,7 +2825,8 @@ def larders_in_purview(w: World, p: Person, named: Optional[frozenset] = None) -
 
     `places_named`' shape, one occasion over: `p`'s OWN LEDGER says which places he knows of and his
     OWN `hold` edges which seats he sits in; the World is asked which ids are rungs (`World.class_of`),
-    what a rung holds (`Rung.stores`) and whether the seat reaches it. ⚠ THE STORES ARE READ HERE,
+    what a rung holds (`Rung.stores`, through `requisitionable`, the one owner of the stocked test since
+    v10 CR-23) and whether the seat reaches it. ⚠ THE STORES ARE READ HERE,
     UNLIKE `places_named`' ROOM, and that is `vacancies`' precedent (it asks the write gate's own
     `may_fill`), not an oversight: an empty larder is an occasion for nothing, and a requisition question
     raised over one is the refusal H-163 limit 3 measured (`requisition.refused` on the `stores` conjunct).
@@ -2832,14 +2852,12 @@ def larders_in_purview(w: World, p: Person, named: Optional[frozenset] = None) -
         return ()
     if named is None:
         named = ledger_names(p.ledger)
-    kind, amount = w.fixtures.get("default_store_kind"), w.fixtures.get("default_transfer_amount")
     out = []
     for r in sorted(named):
         if w.class_of(r) != "Rung":
             continue
-        held = (w.rungs[r].stores or {}).get(kind, 0)
-        if held > 0 and held >= amount and any(r != s.rung and purview_reaches(w, s, r)
-                                               for s in seats):
+        # v10 CR-23: the stocked test is `requisitionable`'s, never a copy here (its docstring).
+        if requisitionable(w, r) and any(r != s.rung and purview_reaches(w, s, r) for s in seats):
             out.append(r)
     return tuple(out)
 

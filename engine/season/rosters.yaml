@@ -2302,6 +2302,20 @@ rosters:
       among those by the same comparator; with no valenced claim it is `newest` exactly.
     values: [newest, valence]
 
+  stock_reports:
+    source: >-
+      v10 CR-23 (M17 taken (a), a seat-channel stock report at crossings, [ASSUMPTION; medium;
+      Jordan to correct; revert: stock_report = off]).
+    note: >-
+      THE ARMS OF `Fixtures.stock_report` (`H-243`), read by `loop/matter.py` at MATTER's last
+      actorless `stores` write to a rung in the barrier (the credit write where the rung yields, else
+      the debit write). `crossing` (SHIPPED) attaches `Observation(rung, "stores:<default_store_kind>",
+      units after)` to that write only when `queries/world_q.py::requisitionable` before the barrier
+      differs from after; `season` attaches it to every such write; `off` attaches nothing and is the
+      CONTROL, the tree before CR-23 exactly. WITNESS deposits the read to the seats over the rung
+      (`world_q.governors_of`, IN-22's route). `"off"` is QUOTED: bare, YAML reads it as the boolean false.
+    values: [crossing, season, "off"]
+
   beneficiary_kinds:
     source: >-
       `CAT-2`, closed at step 5 (`proposals/2026-09-17-governance-and-behaviour/RULINGS.yaml`).

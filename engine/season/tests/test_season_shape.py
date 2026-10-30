@@ -8850,7 +8850,17 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # executed-world count is `reconstruct`'s 136 of 143), `ever`, `refused_only` and `varying` are unmoved (the same 20
     # executed verbs, asserted below and above), `min(hi)` stays 1 and `lo` reads {1, 2, 4} (it was {1, 2, 3, 4, 6}),
     # `told_redeposits` stays 0, and the status census is UNMOVED (103 RUNS-UNDECLARED · 40 SPAN-UNAUTHORED).
-    assert len(by_sig) == 121, (
+    # ⚠⚠ **121 -> 120, v10 CR-23 (B10-06), MEASURED BY `corpus_run.run_case`, seed 0, AGAINST THIS TREE AT `stock_report =
+    # off` (in process, the control: the tree before CR-23) WHICH READS 121 -- the same script on both.** THE UNIT AND THE
+    # DIRECTION: variety FELL by one, `live` did not move (143 on both sides). MATTER's last `stores` write to a rung now
+    # carries the stock report when `requisitionable` flips (`H-243`), WITNESS deposits it to the seats over the larder and
+    # to its witnesses, and the deposits re-rank a few scenes: 7 worlds' executed sets change (ARC-15 -55, EMG-C1 -X5,
+    # NPC-033 -083, NSC-03; joins `issue`, `move`, `utter` 1 each; leaves `release` 2, `tell` 1, `give` 1). Executed-world
+    # counts, control -> here: `release` 7 -> 5, `give` 5 -> 4, `tell` 123 -> 122, `issue` 1 -> 2, `utter` 124 -> 125,
+    # `move` 65 -> 66; `requisition` executes in no corpus world on either side. Not a ranking change: `H-96` is
+    # untouched. THE SAME-BREATH CHECK: the universal set is EMPTY on both sides (the largest executed-world count is
+    # `reconstruct`'s 136 of 143 on both), `ever` and `refused_only` are unmoved, and `told_redeposits` stays 0.
+    assert len(by_sig) == 120, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
