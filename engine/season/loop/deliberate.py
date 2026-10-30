@@ -464,10 +464,8 @@ def _inputs_fingerprint(p: Person, qs: list) -> tuple:
                        degenerating into "anything happened anywhere".
       * (`Sensation` IS NOT AN INPUT. It had a `subsistence` term until REM-44 deleted the scalar,
                        because `urgency` was a chooser term; no chooser term reads a per-person
-                       scalar of the Sensation now. ⚠ `standing` IS DELIBERATELY ABSENT as well:
-                       `Sensation.standing` RAISES where the design fails to supply it (§18.2), and
-                       a fingerprint that raises would make the skip a second failure mode rather
-                       than a decision.)
+                       scalar of the Sensation now. `standing` is absent for the same reason:
+                       `sense()` computes it and no chooser term reads it.)
       * `tenures`    — `person_side_eligible` reads them (eligibility `own`), `budget` counts the
                        live `hold`s, and `questions_for`'s `mine` set is built from them.
                        ⚠ `live` AND NOT `until`: a tenure CLOSING is the change that matters, and

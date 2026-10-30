@@ -65,7 +65,6 @@ from ..queries import world_q
 from ..state.carriers import Office, Person, Rung, Site, Tenure
 from ..state.ids import H, draw_factory
 from ..state.world import World
-from . import probes as P
 
 # THE TWO SETTLEMENTS AND THE TWO PEOPLE. Test-fixture ids, not definitions the game resolves from.
 GRANARY, HUNGRY = "set_granary", "set_hungry"

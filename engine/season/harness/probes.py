@@ -1126,7 +1126,7 @@ def p35():
     raise Unspecified(
         "an audience-scoped second standing", "S18.2",
         needs="a second standing scalar, or an owner for an audience-scoped one",
-        law="S18.2 -- Sensation is ONE scalar (`standing`) after REM-44, and S46.1 makes widening it structural in Godot (a single scalar, not a Vector2). A second, audience-scoped standing has NO CARRIER and S22 gives NO OWNER for one -- and the first standing does not compute either (see P14)",
+        law="04 §B.10 (REM-44, ED-IN-0300; S18.2 and S46.1 predate it) -- Sensation is ONE scalar, `standing`, which `sense()` computes (P14), and 04 grades widening it STRUCTURAL in Godot. A second, audience-scoped standing has NO CARRIER and S22 gives NO OWNER for one",
     )
 
 

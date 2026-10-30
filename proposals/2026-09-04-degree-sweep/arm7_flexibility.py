@@ -85,7 +85,7 @@ def budget_binding(case: dict, seed: int = 0) -> dict:
         mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
         ch = S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs(),
                         draw=S.draw_factory(w.world_seed, lambda: w.tick))
-        d.season(ch, question=None, subsistence=K.C.P.SUBSIST)
+        d.season(ch, question=None)
         acts = len(getattr(d, "resolved", []))
     finally:
         PS_CHOOSE.pack_scenes = real
@@ -122,7 +122,7 @@ def run_case_path(case: dict, ks: tuple, seed: int = 0) -> dict:
     try:
         for k in ks:
             with take_kth(k):
-                d.season(ch, question=None, subsistence=K.C.P.SUBSIST)
+                d.season(ch, question=None)
     except BaseException as e:
         return dict(ks=list(ks), status=f"RAISED {type(e).__name__}", detail=str(e)[:120],
                     log_hash=None, world_hash=None, acts=0, events=0, verbs=[])

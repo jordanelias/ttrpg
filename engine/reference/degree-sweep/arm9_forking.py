@@ -28,7 +28,7 @@ loop where a named alternative is passed over BY THE ENGINE ITSELF: `ranked[:L]`
 `ranked[L:]` is not, where `L` is however many of `ranked`'s own leading elements the real budget
 actually affords. Every other branch in the fold is a consequence of that pick.
 
-⚠ NO RULE IS REPLACED. `score`, the sort key, `align`, `stance_toward`, `urgency`, `ask_budget`
+⚠ NO RULE IS REPLACED. `score`, the sort key, `align`, `stance_toward`, `ask_budget`
 and `pack_scenes` all run unmodified -- BASELINE calls `pack_scenes` with the person's own full
 `ranked` list and real budget, exactly as `make_chooser` does. A fork substitutes WHICH element
 sits in the LAST IN-BUDGET SLOT, at exactly one deliberation, and lets everything downstream

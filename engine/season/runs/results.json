@@ -9489,7 +9489,7 @@
    "section": "S18.2",
    "title": "a private track of regard runs separately from a public one",
    "needs": "a second standing scalar, or an owner for an audience-scoped one",
-   "law": "S18.2 -- Sensation is ONE scalar (`standing`) after REM-44, and S46.1 makes widening it structural in Godot (a single scalar, not a Vector2). A second, audience-scoped standing has NO CARRIER and S22 gives NO OWNER for one -- and the first standing does not compute either (see P14)",
+   "law": "04 \u00a7B.10 (REM-44, ED-IN-0300; S18.2 and S46.1 predate it) -- Sensation is ONE scalar, `standing`, which `sense()` computes (P14), and 04 grades widening it STRUCTURAL in Godot. A second, audience-scoped standing has NO CARRIER and S22 gives NO OWNER for one",
    "by": "no-signature",
    "tests": "a character must be able to have a standing among people who can never publicly acknowledge them, separate from their public standing"
   },
@@ -10761,7 +10761,7 @@
    "what": "an audience-scoped second standing",
    "where": "S18.2",
    "needs": "a second standing scalar, or an owner for an audience-scoped one",
-   "law": "S18.2 -- Sensation is ONE scalar (`standing`) after REM-44, and S46.1 makes widening it structural in Godot (a single scalar, not a Vector2). A second, audience-scoped standing has NO CARRIER and S22 gives NO OWNER for one -- and the first standing does not compute either (see P14)",
+   "law": "04 \u00a7B.10 (REM-44, ED-IN-0300; S18.2 and S46.1 predate it) -- Sensation is ONE scalar, `standing`, which `sense()` computes (P14), and 04 grades widening it STRUCTURAL in Godot. A second, audience-scoped standing has NO CARRIER and S22 gives NO OWNER for one",
    "case": "probe:P35",
    "expected": false
   },

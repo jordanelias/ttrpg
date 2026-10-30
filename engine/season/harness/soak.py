@@ -68,7 +68,6 @@ from pathlib import Path
 from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..state.ids import H, draw_factory
-from . import probes as P
 from .populated import build_realm, census
 # `corpus_run._attribute_acts` is the ONE owner of the made/refused rule -- `[(act, made, refused)]`;
 # `attribute` calls it over the fold set (this module's reading) and `attempts` over the act store. Reused

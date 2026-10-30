@@ -78,7 +78,6 @@ from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries.person_q import legitimacy, stability
 from ..state.ids import H, ROOT, draw_factory
-from . import probes as P
 from .aperture import seats
 from .corpus_run import attempts, graded_losses
 from .populated import build_realm

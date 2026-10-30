@@ -453,7 +453,7 @@ it, and *an arc is a chain of these links*.
 ```
 View      := ClaimId[]   -- IDS. STRUCTURAL: a packed int array holds no reference
 Sensation := (standing)  -- GDScript a single scalar (a float/int, not a Vector2) is STRUCTURAL against widening; Python a 1-field value is CONVENTION
-              -- the type is not deleted (REM-44, ED-IN-0300 2026-10-26): it holds `standing` only, which raises at its point of use
+              -- the type is not deleted (REM-44, ED-IN-0300 2026-10-26): it holds `standing` only, which `sense()` computes and no chooser term reads; built without it, reading it refuses (Python `Unspecified`)
 Refusal   := typed result -- what the seam returns at the depth cap. NEVER a raise
 world_q.<n>(w : World, ...)          person_q.<n>(p : PersonInterior, ...)
 faction_q.resolve(w, prop) -> Faction -- §B.6.1. A VIEW: same lifetime rule as the cache

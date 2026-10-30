@@ -1346,7 +1346,7 @@ def _pair(told: list[Claim], own: list[Claim], key: Callable[[Claim], Any],
 
 
 def standing_of(p: Person, fx: "Fixtures") -> int:
-    """S18.2's second scalar, PERSON-SIDE, as a fixed-point int on `condition_scale` (S48).
+    """S18.2's scalar, PERSON-SIDE, as a fixed-point int on `condition_scale` (S48).
 
         standing(p) = gap( told_by claims about p , p's own firsthand claims about p )
 

@@ -116,7 +116,6 @@ from ..state.carriers import subject_of
 from ..state.ids import H, draw_factory
 from ..state.world import World
 from . import governance_spine, populated
-from . import probes as P
 from .corpus_run import attempts, graded_loss, graded_losses, unrowed_acts
 from .decision_spread import goal_class
 

@@ -49,8 +49,8 @@ rows:
   exercises:
   - probe:P35
   from: 'A reputation track among people who can never publicly credit her, SEPARATE from a public one,
-    is a second audience-scoped standing. `P35` is the probe that reaches it: S18.2''s Sensation is EXACTLY
-    TWO floats and S22 gives no owner for a third.'
+    is a second audience-scoped standing. `P35` is the probe that reaches it: `Sensation` holds one scalar,
+    `standing` (04 §B.10 since REM-44), and S22 gives no owner for a second.'
 - need_sha: dba09c789789
   hardness: core
   need: A perception or capability she secretly has (Thread Sensitivity) must be able to be true and mechanically

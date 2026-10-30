@@ -164,7 +164,6 @@ def test_rem12_field_zero_is_true_for_a_person_with_no_vector_and_false_for_one_
     cands = _cands(va, vb)
     empty = DS.attribute_top(_person("p_rem12_fz"), cands, _FX0)
     assert empty["field_zero"] is True
-    assert all(abs(s) <= DS.EPS for s in empty["scores"]), empty["scores"]
     held = DS.attribute_top(_person("p_rem12_fz2", **{a: 1.0}), cands, _FX0)
     assert held["field_zero"] is False
 

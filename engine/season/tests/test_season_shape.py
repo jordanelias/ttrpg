@@ -999,7 +999,6 @@ def test_sensation_is_constructed_by_the_loop_and_standing_raises_on_read():
     sn = sense(w.persons["p_low"], w)
     # ONE scalar since REM-44 deleted `subsistence`: the loop builds `standing` (`H-29`) and nothing else.
     assert isinstance(sn, Sensation) and isinstance(sn.standing, int) and tuple(sn) == (sn.standing,), tuple(sn)
-    assert not hasattr(sn, "subsistence"), "the deleted scalar came back on Sensation"
     # The refusal survives where it is still true: a Sensation built without `standing` is half a
     # Sensation, and reading the missing scalar must refuse rather than answer 0.
     with pytest.raises(Unspecified):

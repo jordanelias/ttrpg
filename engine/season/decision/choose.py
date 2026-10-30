@@ -368,7 +368,7 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
     Four properties, and each is checked by a test rather than asserted here:
       1. EVERY INPUT IS PERSON-SIDE -- `pursuits` (read through `person_q.crisis_weights`,
          which also reads `scar`), `stance`, `conviction` (read through `person_q.confliction`),
-         the View, the Sensation's `standing`. No World, no resolver-side Query. L2 by
+         the View, and the Sensation, which no term reads since REM-44. No World, no resolver-side Query. L2 by
          parameter list.
       2. It CONSUMES `pursuits` and `stance`, which #353 declares as fields and no formula in
          the chain reads -- a carrier nothing consumes is dead state (§22.1's own complaint).
