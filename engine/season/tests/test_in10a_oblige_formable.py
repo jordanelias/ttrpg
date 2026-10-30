@@ -154,7 +154,9 @@ def test_in10a_the_loader_refuses_a_malformed_referent_named(monkeypatch, verb, 
 def test_in10a_the_declarations_as_built():
     from engine.season.data.verbs import VERB_TABLE
     # RE-RECORDED AT v9 IN-09: `comply` declares it too (was `{"oblige"}`).
-    assert {v for v, r in VERB_TABLE.items() if r.referent_named} == {"oblige", "comply"}
+    # RE-RECORDED AT v10 REM-2B (B10-06): `evade / defy` and `construe` declare it beside `comply` (restored from
+    # v9 IN-09's checkpoints; was `{"oblige", "comply"}`, control: the REM-2A tree `f23194871`).
+    assert {v for v, r in VERB_TABLE.items() if r.referent_named} == {"oblige", "comply", "evade / defy", "construe"}
     assert VERB_TABLE["oblige"].referent_class == "Office"
 
 

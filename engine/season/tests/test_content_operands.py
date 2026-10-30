@@ -25,7 +25,8 @@ What each block proves, and the control that stops it passing vacuously:
   5. THE OBSERVABLE (r2 `05:1247`): `Candidates with writ-derived operands > 0`, measured on the
      real populated corpus, not a hand-built fixture -- and every one of them resolves to a real,
      live entity, not a value the fold can only ever refuse.
-  6. NOTHING WIDENS THAT DID NOT NEED TO. `requires_operands` stays at eight names (`at` does not
+  6. NOTHING WIDENS THAT DID NOT NEED TO. `requires_operands` stays closed (v9
+     IN-33's `exchange` coined `return_kind`/`return_amount`, restored at v10 REM-2B; `at` does not
      join it -- r2's own ruling, *"I do not coin a ninth operand"*); `question_sources` stays at
      two (clause 3 is not a fourth source -- r2 §A.5.4, *"one `Question` shape, one `source`
      string"*). Both are regression guards on a design choice this position made, not a fact this
@@ -199,8 +200,11 @@ def test_at_is_not_a_requires_operands_member_and_derive_operand_is_never_asked_
     # requires_operands`'s own job to declare; this test's job is only to catch it growing (or
     # shrinking) without `at` in particular joining it, which the length plus the membership
     # check above both do without a second copy of the names.
-    assert len(REQUIRES_OPERANDS) == 8, (
-        "the eight-name closure moved -- `at` joining it is a ruling this position did not make")
+    # RE-RECORDED AT v10 REM-2B (restoring v9 IN-33, H-58): 8 -> 10. `exchange`'s `return_kind`/
+    # `return_amount` joined, the coining H-94 reserved to that position; `at` still did not. The pin
+    # still catches any other growth.
+    assert len(REQUIRES_OPERANDS) == 10, (
+        "the ten-name closure moved -- `at` joining it is a ruling this position did not make")
     # No typed cell can ever declare `at`, so `operands_for` can never pass it to
     # `_derive_operand`; the function itself still declines it if asked directly, honestly --
     # there is no branch, and an operand with no branch declines (`ID-13`).
@@ -307,7 +311,7 @@ def test_record_sourced_operands_refuses_each_planted_mismatch():
     `writ_sourced_operands` to plan position IN-10's per-kind `record_sourced_operands`. The
     load-time check never fires on today's data, so nothing observed whether it could raise; it once
     could not (it named `Unspecified` without importing it). Each planted mismatch is called
-    directly: an operand outside the closed eight, a content key the kind does not carry, a kind
+    directly: an operand outside the closed roster, a content key the kind does not carry, a kind
     that is no `record_kinds` member, an empty entry, and `from` (r2's ruling) on a kind that does
     carry a `from` key."""
     ops = frozenset(REQUIRES_OPERANDS)

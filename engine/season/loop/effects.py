@@ -54,7 +54,7 @@ no package, no `__init__.py` barrel:
                                  more domain files' effects share.
   * `effects_governance.py`  -- office/seat lifecycle: confer, establish, release, revoke,
                                  convene, oblige, requisition.
-  * `effects_economy.py`     -- labour, repair, material transfer: work, restore, transfer.
+  * `effects_economy.py`     -- labour, repair, material transfer: work, restore, transfer, exchange.
   * `effects_migration.py`   -- travel and settlement: move, migrate.
   * `effects_founding.py`    -- minting works: found, build.
   * `effects_information.py` -- records, propositions, matters: create_record, issue, open_case,

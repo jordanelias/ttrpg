@@ -281,8 +281,10 @@ def test_in53v_c_the_declarations_as_built():
     # control: the REM-27 fallout fix `ee5acba1`, seventeen); AT v10 REM-28 (B10-06) `dispatch` declares `Person` beside
     # `petition` and `open_case` (eighteen rows -> nineteen; control: the convene commit `b8fd583b`, eighteen); AT v10
     # REM-28 (B10-06) `revoke` declares `Office` beside `confer` and `oblige` (nineteen rows -> twenty; control: the
-    # dispatch commit `a4c508c5`, nineteen).
+    # dispatch commit `a4c508c5`, nineteen); AT v10 REM-2B (B10-06) `evade / defy` and `construe` declare `Record`
+    # beside `comply` (twenty rows -> twenty-two; control: the REM-2A tree `f23194871`, twenty).
     assert {v for v, r in VERB_TABLE.items() if r.referent_class} == {"confer", "oblige", "comply", "march",
+                                                                      "evade / defy", "construe",
                                                                       "convene", "dispatch", "revoke", "migrate", "requisition",
                                                                       "restore", "work", "examine",
                                                                       "commit", "petition",

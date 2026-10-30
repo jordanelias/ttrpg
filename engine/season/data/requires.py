@@ -63,7 +63,7 @@ def _check_record_sourced(by_kind, operands: frozenset, kind_keys: dict,
                           read_from: Optional[dict] = None) -> None:
     """Plan position IN-10 (#453 §10.1). `record_sourced_operands` -- `{record kind: {operand:
     content key}}` -- refused at import unless every kind is a `record_kinds` member, every entry a
-    non-empty map, every operand one of the closed eight, every content key one of THAT KIND's own
+    non-empty map, every operand one of the closed roster (`requires_operands`), every content key one of THAT KIND's own
     keys, and no kind maps `from` (r2's ruling: *where the actor stands* stays off a document).
     `15c`'s subset rule, tightened to the kind's keys. `read_from` (`record_kinds.content.read_from`,
     `{content key: operand}`, how the MINT reads a key) is cross-checked against this map (how a
@@ -790,10 +790,18 @@ OWN_STATE_STEMS = frozenset({"thread_sensitivity", "thread_sensitivity.gate"})
 # asked of a DESTINATION RUNG and the actor, `with`'s shape -- *may the actor enter this place* --
 # on `move` and `migrate`. `WorldReader.read` answers it through `world_q.admits_audience`; WORLD-ONLY
 # (below), so the person forms the Candidate and the fold refuses. One stem; no form, no operand.
+# ⚠ v10 REM-29 (B10-06, `-08` AM-A-15) ADDED `room`: `relation` (form 5) asked of a DESTINATION RUNG
+# and the actor, `audience`'s shape -- *is there room under this rung for the actor* (RR-2's throttle,
+# `migrate`'s `room` conjunct). `WorldReader.read` answers it through `world_q.has_room`, the one owner
+# `_eff_migrate` also calls. NOT world-only and NOT ledger-derived, so it is a `CELL_STEMS` member: the
+# refusal's read `(dest, "room:<actor>", False)` rides `Event.observed`, WITNESS deposits it to the
+# actor at `observation_deposit_mode: actor`, and `LedgerReader.read` answers the same cell from that
+# claim, so §F1 clause 4 (`epistemic.belief_contradicts`) declines his next `migrate` there. One stem;
+# no form, no operand.
 # roster-exempt: MECHANISM. The grammar's own predicate stems (what a REQUIREMENT MAY ASK), not the game's vocabulary; `rosters.yaml` says what the world contains.
 REQUIRES_STEMS = frozenset({
     "exists", "stores", "condition", "floor", "contain.path", "held_by", "present_at",
-    "claim.held", "rank", "purview", "bench", "bench.size", "quorum", "with", "audience",
+    "claim.held", "rank", "purview", "bench", "bench.size", "quorum", "with", "audience", "room",
 }) | OWN_STATE_STEMS
 
 # THE STEMS THE PERSON-SIDE READER NEVER ANSWERS: `queries/person_q.py::LedgerReader.read` returns
@@ -970,6 +978,10 @@ def _build_clause(verb: str, cell: dict) -> Requirement:
     except TypeError as e:
         raise SystemExit(f"verb_table.yaml: {verb!r}'s {form!r} cell does not fit the form: {e}")
     allowed = set(REQUIRES_FORM_NEEDS.get(form) or ())
+    # THE CLOSURE. A name joins `requires_operands` only by a roster edit made at the position that
+    # owns it -- v9 IN-33 added `exchange`'s `return_kind` (the matter kind the actor receives in
+    # return) and `return_amount` (how many units), H-94's reserved coining, restored at v10 REM-2B --
+    # never by a cell.
     for o in req.operands():
         if o not in REQUIRES_OPERANDS:
             raise SystemExit(

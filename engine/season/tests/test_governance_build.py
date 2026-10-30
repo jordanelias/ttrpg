@@ -861,10 +861,12 @@ _LEVY_ROW = (
 # it is re-pointed again, to `thread_read` -- untyped, and a row `14` DECLINED (`test_u7_own.py`) -- and
 # v9 PC-06 K-3 typed that row (the Thread Sensitivity gate), so it is re-pointed to `construe`, untyped
 # (`requires_typed: none`, D18's emitter/receiver gap) and `beneficiary: actor`, the shape the plant
-# needs. The two tests above keep `requisition`: a missing or off-roster beneficiary is refused whatever
-# the row's cell.
+# needs. v10 REM-2B (B10-06) restored v9 IN-09's typing of `construe`, so it is re-pointed again, to `conceal`
+# -- untyped (`requires: —`, `create_record`'s shape: no precondition, so no cell) and `beneficiary: actor`,
+# the shape the plant needs. The two tests above keep `requisition`: a missing or off-roster beneficiary is
+# refused whatever the row's cell.
 _UNTYPED_ROW = (
-    '  - verb:        "construe"\n'
+    '  - verb:        "conceal"\n'
     '    stratum:     "social"\n'
     '    eligibility: ["own"]\n'
     '    beneficiary: "actor"\n'
@@ -962,7 +964,7 @@ def test_lb6d_an_operand_beneficiary_the_row_cannot_carry_is_refused_at_load():
         _UNTYPED_ROW, _UNTYPED_ROW.replace('beneficiary: "actor"', 'beneficiary: "to"'), 1)
     assert unbindable != src, "the substitution did not apply -- this test is asserting nothing"
     from ..data.verbs import VERB_TABLE
-    assert VERB_TABLE["construe"].requires_typed is None, "the planted row is typed now"
+    assert VERB_TABLE["conceal"].requires_typed is None, "the planted row is typed now"
     with pytest.raises(SystemExit, match="neither binds nor admits"):
         _load_with(unbindable)
 
@@ -2813,12 +2815,27 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # season: 581 -> 583; `convene` executed 1 -> 4). The control is the REM-27 fallout fix (`ee5acba1`), which reads
     # (581, 581) under this same test, and so does this tree with `convene`'s column blanked in process. The arms'
     # counts part now (583 / 584), and the direct parting assertion below holds on the new sequences.
-    # ⚠⚠ ED-IN-0305 phase 5 (`arrival_only_kinds`): (583, 584) -> (584, 584), A RE-RECORD WITH THE UNIT THAT MOVED IT: the
-    # parting `migrate` the notes above name -- `p_npc_002` to `terr_T13`, a TERRITORY -- is now declined in both arms,
-    # because only a `march`'s arrival seats anyone at a territory. The control is main at 022fef02, which reads
-    # (583, 584) under this same test. The direct parting assertion below (the arms' act sequences differ) is the
-    # property, and it is asserted on the new sequences.
-    assert (out["acts"], cout["acts"]) == (584, 584), (
+    # ⚠⚠ v10 CR-23 (B10-06): (583, 584) -> (602, 603), A RE-RECORD WITH THE UNIT THAT MOVED IT: MATTER's last `stores`
+    # write to a rung carries the stock report when `requisitionable` flips (`stock_report = crossing`, `H-243`), so the
+    # seats over the realm's 37 newly stocked settlements are told of them and `requisition` forms on them; the realm's act
+    # mix moved (seed 0, one season: 583 -> 602, `test_go07_canonical_digest.py`'s shift). CONTROL: this tree with
+    # `stock_report = off` reads (583, 584) under this same test. The direct parting assertion below holds on the new counts.
+    # ⚠⚠ v10 REM-29 (B10-06): (602, 603) -> (598, 596), A RE-RECORD WITH THE UNIT THAT MOVED IT: `migrate`'s capacity
+    # throttle is a `room` conjunct (`world_q.has_room`), so a migrant refused at a full rung learns it (the read rides the
+    # Event and WITNESS deposits it to him) and does not re-form that `migrate`; the freed scenes move the realm's act mix
+    # (seed 0, one season: 602 -> 598, `test_go07_canonical_digest.py`'s shift). CONTROL: this tree with the `room`
+    # conjunct and its refusal key deleted from `migrate`'s row reads (602, 603) under this same test. The direct parting
+    # assertion below holds on the new counts.
+    # ⚠⚠ v10 REM-2B (B10-06): (598, 596) -> (597, 596), A RE-RECORD WITH THE UNIT THAT MOVED IT: `evade / defy`,
+    # `construe` and `exchange` are typed and resolvable again, so the chooser takes scenes for their refusals and the realm's
+    # act mix moved (seed 0, one season: 598 -> 597, `test_go07_canonical_digest.py`'s shift). The stripped arm is
+    # unmoved at 596. CONTROL: `test_go07_canonical_digest.py`'s control (the same world and season, the three rows
+    # put back to their base shape in process) reads 598 acts.
+    # ⚠⚠ v10 IN-45 (B10-06): (597, 596) -> (598, 597), A RE-RECORD WITH THE UNIT THAT MOVED IT: `venues.yaml: planned_works`
+    # authors two works, minted last in `build_realm`, so the masters' `found` and `build` form on them and the sampled order of
+    # the realm moves by one act in each arm (seed 0, one season: 597 -> 598, `test_go07_canonical_digest.py`'s shift). The two
+    # arms still part by one act. CONTROL: this world with `planned_works` emptied in process reads (597, 596) under this test.
+    assert (out["acts"], cout["acts"]) == (598, 597), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")

@@ -625,8 +625,9 @@ rosters:
       `Record` (v9 IN-09, H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to correct]): the
       writs a person HOLDS (`queries/world_q.py::writs_held` -- a live `hold` on a Record of a kind
       `data/verbs.py::RECORD_REFERENT_KINDS` derives from the rows declaring this class), which
-      `questions_for` adds to the question he answers beside his seats; `comply` declares it
-      (`evade / defy` and `construe` were typed beside it and reverted, executing 0 times; H-203).
+      `questions_for` adds to the question he answers beside his seats; `comply` declares it,
+      and since v10 REM-2B `evade / defy` and `construe` do too (typed beside it at v9 IN-09, reverted at B-I,
+      restored; H-203).
       REVERT: drop the value and the row's column.
       v10 REM-25 (B10-05, AM-A-10, [ASSUMPTION; medium; Jordan to correct]): WIDENED. `carry`, `found`
       and `build` declare it too, and the term gains its second half beside the writs
@@ -661,7 +662,7 @@ rosters:
       never twice; `requisition` declares it beside `migrate`, so its `subject` binds a stocked rung in
       purview rather than whatever he was asked about. The class is shared, as `Office` is between
       `confer` and `oblige`: each row forms on both sources and the fold disposes. REVERT: `requisition`'s
-      column (which empties `RUNG_REMIT_ACTS`) and `larders_in_purview`'s splice.
+      column (which removes `issue` from `RUNG_REMIT_ACTS`, the union over the `Rung` rows) and `larders_in_purview`'s splice.
       v10 REM-21 (B10-05, AM-A-06, [ASSUMPTION; medium; Jordan to correct]): `Site`, `Proposition`
       and `Person` -- THE THINGS A QUESTION IS ITSELF ABOUT, carried as their kind. Not a standing
       occasion: `queries/world_q.py::own_referents_of_class`, one more term of `questions_for`'s
@@ -2022,18 +2023,29 @@ rosters:
     source: "`W-A`. The names a `requires_typed` cell may bind, closed."
     note: >-
       ⚠ THE OPERAND VOCABULARY IS CLOSED, AND THAT CLOSURE IS WHAT STOPS THE GRAMMAR BECOMING A
-      SECOND RESOLVER. A cell naming an operand outside this roster REFUSES AT LOAD. It is the
-      reason `exchange` carries `requires_typed: none` rather than a typed cell: it needs the
-      counterparty's side of a trade, which has no name here. Coining one would be filling `H-94`
-      by keyword argument, which is the ruling `H-94` is waiting for and not a table edit.
-      (`comply` carried the same reason, for a DISPENSATION, until v9 IN-09 typed it without a new
-      name: the act's `subject` IS the held writ, a `Record` of kind `dispensation` --
-      `verb_table.yaml`'s `comply` row.)
+      SECOND RESOLVER. A cell naming an operand outside this roster REFUSES AT LOAD. It was the
+      reason `exchange` carried `requires_typed: none` rather than a typed cell: it needs the
+      counterparty's side of a trade, which had no name here. Coining one is filling `H-94` by
+      keyword argument, which only the position `H-94` reserves it to (v9 IN-33, restored at v10 REM-2B, below) may do.
+      (`comply`, `evade / defy` and `construe` carried the same reason, for a DISPENSATION, until v9
+      IN-09 typed them without a new name: the act's `subject` IS the held writ, a `Record` of kind
+      `dispensation` -- `verb_table.yaml`'s `comply` row.)
+      ⚠ v9 IN-33 (H-58, the position H-94 reserved the coining to; reverted at 0 executions and
+      RESTORED at v10 REM-2B, which carries the roster edit as a declared mover) ADDED TWO, AND ONLY TWO,
+      FOR `exchange`'s OTHER SIDE: `return_kind` -- the matter kind the actor RECEIVES IN RETURN -- and
+      `return_amount` -- how many units of it. The plain sense of *in return*: in an exchange the
+      actor gives `amount` of `kind` from `from` to `to`, and `to` gives `return_amount` of
+      `return_kind` back. `kind`/`amount` keep their one meaning (what moves from `from`), so no
+      name carries two. Inside the old eight a two-sided cell could only bind one kind and one
+      amount for both sides -- a like-for-like swap that moves nothing. The closure still binds:
+      the roster is closed over its `values`, and a cell naming any other operand refuses at load
+      (`data/requires.py::_build_clause`). Derived person-side in
+      `decision/options.py::_derive_operand`.
       ⚠ WHERE AN OPERAND COMES FROM IS NOT THIS ROSTER'S QUESTION. Today it is `Act.payload`,
       which carries only `subject` for a computed act, so most cells bind incompletely and
       evaluate to UNKNOWN -- which the fold reports as a refusal, exactly as the untyped
       predicates did.
-    values: [actor, subject, from, to, site, kind, amount, floor]
+    values: [actor, subject, from, to, site, kind, amount, floor, return_kind, return_amount]
 
   record_sourced_operands:
     source: >-
@@ -2042,10 +2054,10 @@ rosters:
       `15c`'s flat `writ_sourced_operands` (`to, kind, amount`), whose source was r2
       `02_THE_WRIT_AND_THE_WORD.md` §A.13.
     note: >-
-      PER RECORD KIND, WHICH OF THE CLOSED EIGHT OPERANDS (`requires_operands`) A RECORD OF THAT KIND
+      PER RECORD KIND, WHICH OF THE CLOSED OPERANDS (`requires_operands`) A RECORD OF THAT KIND
       ANSWERS, AND FROM WHICH OF ITS OWN CONTENT KEYS -- `operand: content key`. `data/requires.py`
       refuses at import a kind that is not a `record_kinds` member, an empty entry, an operand that is
-      not one of the eight, a content key that is not one of THAT KIND's keys (`record_kinds.values`),
+      not in the closed roster, a content key that is not one of THAT KIND's keys (`record_kinds.values`),
       and `from` on any kind. ⚠ `from` IS ON NO KIND, r2's own ruling: a document naming *where the
       actor stands* would let a Duke's writ reach into a larder the executor is not standing in. `at`
       is no operand (r2: *"I do not coin a ninth operand"*), so no kind maps it. ⚠ `kind` AND `amount`
@@ -2370,6 +2382,20 @@ rosters:
       among those by the same comparator; with no valenced claim it is `newest` exactly.
     values: [newest, valence]
 
+  stock_reports:
+    source: >-
+      v10 CR-23 (M17 taken (a), a seat-channel stock report at crossings, [ASSUMPTION; medium;
+      Jordan to correct; revert: stock_report = off]).
+    note: >-
+      THE ARMS OF `Fixtures.stock_report` (`H-243`), read by `loop/matter.py` at MATTER's last
+      actorless `stores` write to a rung in the barrier (the credit write where the rung yields, else
+      the debit write). `crossing` (SHIPPED) attaches `Observation(rung, "stores:<default_store_kind>",
+      units after)` to that write only when `queries/world_q.py::requisitionable` before the barrier
+      differs from after; `season` attaches it to every such write; `off` attaches nothing and is the
+      CONTROL, the tree before CR-23 exactly. WITNESS deposits the read to the seats over the rung
+      (`world_q.governors_of`, IN-22's route; the fan's other witnesses of the write take it too). `"off"` is QUOTED: bare, YAML reads it as the boolean false.
+    values: [crossing, season, "off"]
+
   beneficiary_kinds:
     source: >-
       `CAT-2`, closed at step 5 (`proposals/2026-09-17-governance-and-behaviour/RULINGS.yaml`).
@@ -2450,7 +2476,7 @@ rosters:
       # `actor` added at v9 PC-06 K-3 (`H-85`): `thread_read`'s gate is a scalar OF THE ACTOR (his
       # own Thread Sensitivity), as `contain_path`'s and `relation`'s `actor` already are -- an
       # operand already in `requires_operands`, structural and never carried (`binding_of`).
-      scalar_threshold: [actor, subject, site, from, to, kind, amount, floor]
+      scalar_threshold: [actor, subject, site, from, to, kind, amount, floor, return_kind, return_amount]
       contain_path:     [actor, subject, from, to]
       cardinality:      [subject, from, to]
       relation:         [actor, subject, site, from, to]
