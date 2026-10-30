@@ -433,19 +433,52 @@ def _counts(w) -> dict:
 #: below is the REM-28 `revoke` tree's, read with this file's own helpers and `populated.run`; CONTROL, run in process on
 #: this tree: `revoke`'s column blanked in the shared `VERB_TABLE` reads the values this block held exactly, at all three
 #: seeds. Was, seed 2: `old` 5e120ea4..., `new` e3e9e5a5..., `census` 8bdf5c05..., `acts` 627, `log` 9030.
+#: RE-RECORDED AGAIN at v10 CR-23 (B10-06), A GAME MOVE DECLARED, NO DIGEST MOVE: MATTER's last `stores` write to a rung
+#: carries the stock report (`stores:<kind>`) when `requisitionable` flips across the barrier (`Fixtures stock_report =
+#: crossing`, `H-243`), WITNESS deposits it to the seats over the larder, and the larders they are told of are stamped for
+#: `requisition`, so the act mix of every seeded realm moves (`log` 7196 / 10642 / 9029 -> 9270 / 11955 / 9381: the
+#: deposits and what follows them). EVERY value below is the CR-23 tree's, read with this file's own helpers and
+#: `populated.run`; CONTROL, run in process on this tree: `stock_report = off` reads the values this block held exactly,
+#: at all three seeds. Was, for seeds 0 / 1 / 2: `old` 0e54dc8a... / 25a37ac1... / eff84f40..., `new` 30a95964... /
+#: 79336806... / c39ac83e..., `acts` 583 / 642 / 625, `log` 7196 / 10642 / 9029.
+#: RE-RECORDED AGAIN at v10 REM-29 (B10-06), A GAME MOVE DECLARED, NO DIGEST MOVE: `migrate`'s capacity throttle is a
+#: `room` conjunct (`world_q.has_room`), so a full rung is refused at admission with the read on the Event, WITNESS
+#: deposits it to the migrant and he does not re-form that `migrate` (`aperture 1 s`, realm: attempted 67 / 135 / 88 ->
+#: 41 / 80 / 61); the freed scenes and the deposited claims move the act mix of every seeded realm (`acts` 602 / 644 / 617
+#: -> 598 / 640 / 619, `log` 9270 / 11955 / 9381 -> 9316 / 12278 / 9949). EVERY value below is the REM-29 tree's, read
+#: with this file's own helpers and `populated.run`; CONTROL, run on this tree: the `room` conjunct and its refusal key
+#: deleted from `migrate`'s row reads the values this block held exactly, at all three seeds. Was, for seeds 0 / 1 / 2:
+#: `old` f84cb2d2... / 185bd2be... / 42ac60f1..., `new` 1d402d15... / ce81d904... / 47b0b565..., `census` 3004e5b7... /
+#: c1d5db92... / ba91b58d....
+#: RE-RECORDED AGAIN at v10 REM-2B (B10-06), A GAME MOVE DECLARED, NO DIGEST MOVE: `evade / defy`, `construe` and `exchange`
+#: are typed and resolvable again (v9 IN-09 / IN-33 restored), so the chooser offers them and their attempts (`exchange` 21 /
+#: 36 / 34 at `aperture 1 s`, none executed) take scenes and emit refusals that WITNESS deposits: the act mix of every seeded
+#: realm moves (`acts` 598 / 640 / 619 -> 597 / 643 / 632, `log` 9316 / 12278 / 9949 -> 9319 / 11995 / 9722). EVERY value
+#: below is the REM-2B tree's, read with this file's own helpers and `populated.run`; CONTROL, run in process on this tree: the
+#: three rows put back to their base shape (untyped, unclassed, their decline notes, `exchange` writing one pair with no effect)
+#: read the values this block held exactly, at all three seeds. Was, for seeds 0 / 1 / 2: `old` 1842a06d... / e13520cf... /
+#: e06e57c1..., `new` 4cc07cbe... / 6e72eb59... / 8e5af677..., `census` 7ab6c655... / 26755d2c... / 03428a48....
+#: RE-RECORDED AGAIN at v10 IN-45 (B10-06), A DATA MOVE DECLARED: `venues.yaml: planned_works` authors two works, minted last in
+#: `build_realm` through `create_record`'s own effect, so the build moves (two Records and their masters' `hold` edges: `records`
+#: +2, `tenures` +2) and the seed-0 season takes one more act (597 -> 598, `log` 9319 -> 9334): the masters' `found` and `build`
+#: form on their works and the seed-0 realm's sampled order shifts. Seeds 1 and 2 keep their acts, census and log (a works's terms
+#: first ripen at tick 1, which one season does not reach). EVERY value below is the IN-45 tree's, read with this file's own helpers
+#: and `populated.run`; CONTROL, run in process on this tree: `planned_works` emptied reads the values this block held exactly, at
+#: all three seeds, and the build world's old digest and content hash. Was, for seeds 0 / 1 / 2: `old` 789bc9eb... / 64276910... /
+#: b8031dc3..., `new` 41ffb48b... / 6c52b44c... / 9bb7306d..., `census` ed0c8bac... (seed 0; seeds 1 and 2 unmoved).
 BASE = {
-    0: {"old": "0e54dc8a8a8f047043c5989364ae75a9", "new": "30a959645cd5f42b731be47b6273e2e0", "acts": 583,
-        "census": "eb2b27f3ad9cf141614c50a9c3ab9f98656464f2e3a82cc12a96a60bb44c2e0c",
-        "counts": {"persons": 82, "rungs": 411, "offices": 32, "sites": 322, "records": 103,
-                   "propositions": 96, "dates": 4, "docket": 5, "tenures": 818, "log": 7196}},
-    1: {"old": "25a37ac1755af6cf047094fcdd00305e", "new": "793368064c95f7a550692961003711b5", "acts": 642,
-        "census": "e646131864c7d911cdfec244ed78463889eb5f6eedf909f794383b599d70d7cd",
-        "counts": {"persons": 83, "rungs": 412, "offices": 32, "sites": 322, "records": 131,
-                   "propositions": 90, "dates": 5, "docket": 1, "tenures": 852, "log": 10642}},
-    2: {"old": "eff84f40baacdc0690a2d9930420d216", "new": "c39ac83e0534563bd06d892febb839f4", "acts": 625,
-        "census": "3683581bdb4d87e76cfd8e487d27b8655af4b1a2c0e8649d5a2c1029e47a9613",
-        "counts": {"persons": 81, "rungs": 410, "offices": 32, "sites": 322, "records": 114,
-                   "propositions": 98, "dates": 5, "docket": 1, "tenures": 818, "log": 9029}},
+    0: {"old": "9fa99b6ed104e996b441fc9bdbd9609f", "new": "6c26053b03c2612057515cbe3972dd91", "acts": 598,
+        "census": "e4359944d76aed884a17df302fdb5822ae86503832f241ef0397393ef8414edf",
+        "counts": {"persons": 82, "rungs": 411, "offices": 32, "sites": 322, "records": 118,
+                   "propositions": 98, "dates": 7, "docket": 6, "tenures": 847, "log": 9334}},
+    1: {"old": "ec31f61228e004a9c26025b359ac0af7", "new": "78d102f8462aee8b73887fadf7244962", "acts": 643,
+        "census": "b4da086ce5b771c39e09bd20df512a87a41f5afcf0f9753dd5b06aab2a32db53",
+        "counts": {"persons": 83, "rungs": 412, "offices": 32, "sites": 322, "records": 136,
+                   "propositions": 96, "dates": 7, "docket": 2, "tenures": 871, "log": 11995}},
+    2: {"old": "5eab30ebafe2dfab07b01d73b9fdf459", "new": "ab9592f524c3dcf7f57de55a91d3484c", "acts": 632,
+        "census": "c8133996959ccaba0b5b5231f772beb962eaddada2d80dc21eed16697625a231",
+        "counts": {"persons": 81, "rungs": 410, "offices": 32, "sites": 322, "records": 125,
+                   "propositions": 100, "dates": 7, "docket": 2, "tenures": 843, "log": 9722}},
 }
 
 
@@ -453,8 +486,8 @@ def test_go07_control_the_build_world_old_digest_is_unmoved():
     """The base commit's `repr` digest of `build_realm(0)`, before a single act, read this literal
     (`test_season_weather.BASE_HASHES[0]`'s retired value); the same world now reads the new pin."""
     w = POP.build_realm(0)
-    assert _old_content_hash(w) == "8e4032a26cfeabdc55bba2178b82d564"
-    assert w.content_hash() == "9ff5390939742b7bbb3af0fa2551e958"
+    assert _old_content_hash(w) == "bcc59ba42cdfe4fa740e8d50c3b4f7c0"        # v10 IN-45: was 8e4032a2... (control reads it)
+    assert w.content_hash() == "fe427626f9e91ab83ffd556c0bec4ea7"            # v10 IN-45: was 9ff53909... (control reads it)
 
 
 def test_go07_control_the_world_did_not_move_only_its_digest():

@@ -107,8 +107,15 @@ def test_in22_the_governor_learns_the_reads_and_not_the_write():
     write -- only what MATTER recorded. The hungry cohort, standing there, holds both (CONTROL that
     the write was witnessed at all)."""
     w = _one_season()
+    # v10 CR-23 (`H-243`): the draw that empties the larder is also a stock CROSSING, so MATTER records
+    # `stores:<kind>` (0) on the same write beside the shortfall. Both are reads MATTER recorded on the
+    # larder's own `stores.changed`, so "only what MATTER recorded" is all of them, at their recorded units
+    # (was: the shortfall predicates alone, `_held`).
+    recorded = {o.predicate: o.value for e in w.log if e.kind == "stores.changed"
+                for o in e.observed if o.subject == S.HUNGRY}
+    assert any(p.startswith("stores:") for p in recorded), recorded      # the crossing was recorded
     reeve_other = [c for c in w.persons[S.REEVE].ledger
-                   if c.subject == S.HUNGRY and c.predicate not in _held(w, S.REEVE)]
+                   if c.subject == S.HUNGRY and recorded.get(c.predicate, object()) != c.value]
     assert reeve_other == [], [(c.predicate, c.source) for c in reeve_other]
     people = {c.predicate for c in w.persons[S.POPULACE].ledger if c.subject == S.HUNGRY}
     assert "stores.changed" in people and set(_recorded(w)) <= people, people

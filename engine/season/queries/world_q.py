@@ -1649,6 +1649,29 @@ def capacity(w: World, rung_id: str) -> int:
     return _entry(HOUSING)(_housing_capacity_input(w, rung_id)).capacity
 
 
+def has_room(w: World, person: str, dest: str, residence: Optional[dict] = None) -> bool:
+    """IS THERE ROOM UNDER `dest` FOR `person` -- RR-2's throttle (plan `24d-ii`), the ONE owner (v10
+    REM-29, B10-06). False only for a NEWCOMER whose weight would take `population(dest)` past
+    `capacity(dest)`; a person who already lives under `dest` (settling from his hearth into its
+    settlement) is in its population before and after, so the move grows nothing and nothing
+    throttles it (`_eff_migrate`'s docstring argues the newcomer rule and the rejected coarser census).
+
+    TWO READERS, ONE RULE: `WorldReader.read` answers the `room` stem with it (`migrate`'s `room`
+    conjunct, so the fold refuses AT ADMISSION and the read `(dest, "room:<person>", False)` rides the
+    refusal's `Event.observed` -- the person learns by failing), and `_eff_migrate`'s capacity decline
+    calls it (for a caller that runs the effect without the fold's admission). The effect's inline test
+    is gone; this is that test, moved, not copied. `person` must be a Person (the reader answers UNKNOWN first otherwise).
+
+    `residence` -- a precomputed `residence_of(w)`, `population`'s parameter and for its reason
+    (`_eff_migrate` already built one for its own-residence decline). `None` computes it here."""
+    TRACE.query("has_room", "resolver")
+    residence = residence_of(w) if residence is None else residence
+    home = residence.get(person)
+    newcomer = home is None or dest not in ancestry(w, home)
+    return not (newcomer and population(w, dest, residence) + w.persons[person].weight
+                > capacity(w, dest))
+
+
 # THE RUNG KIND `hunger` IS DEFINED FOR, and its bands: `rosters.yaml: hunger_bands` is the one owner, most
 # severe first. `starving` is `unmet > 0` and `fed` is "under no floor"; the members between them are the FLOOR
 # bands, in the order `Fixtures.hunger_band_floors` lists their floors (the first floor is the first floor
@@ -2750,6 +2773,35 @@ def records_held_for_holding_rows(w: World, p: Person) -> tuple:
                          and w.records[t.object].kind in HOLDING_RECORD_KINDS}))
 
 
+def works_sites(w: World, p: Person) -> tuple:
+    """THE SITES A WORKS `p` HOLDS NAMES (v10 IN-45 (ii), B10-06; M5 option (B), [ASSUMPTION; medium; Jordan to
+    correct; revert: drop the term in `questions_for`, and `work` forms only on a Site a question already names]),
+    sorted by id: for each `works` Record on `p`'s own live `hold` edges, the Sites standing at the works' `at` rung
+    whose kind is its `plan` -- `ceiling`'s own match (`works_for`: a works names a site when it plans that site's KIND
+    at that site's RUNG), read from the works' side. H-165 limit 2's *'a person-side channel for a works'
+    `{plan, at}`'*: `work` declares `referent_class: Site` and `opening_set` forms it on a Site-classed referent only,
+    and no question a master answers is about the fabric his works names, so before this term `work` formed for nobody
+    even with a works held (`aperture 4 s`, realm: formed 0). A `plan` that is a Rung kind (a `hearth`) names no Site
+    and yields none.
+
+    A STANDING OCCASION, `records_held_for_holding_rows`' shape: resolver-side and read-only, it reads `p`'s own edges
+    and the Sites the works names, and supplies Site IDS that `questions_for` adds to the question he answers as
+    CLASSED referents (`_stamped`); whether the act then passes is the fold's (`work`'s typed cell: the site's
+    condition against the floor; its eligibility: he is present at the site; `_eff_work`: the works' rise, which a
+    site already at its ceiling stages as zero and the fold refuses as `work.unavailable`). ⚠ THE CLASS IS SHARED, as
+    `Record` and `Rung` are: `restore` declares `Site` too, so a master is offered `restore` on the same Sites (the
+    same fabric raised by the same formula, `_rise`). ⚠ NO 'ALREADY AT ITS CEILING' DECLINE: a Site the works names
+    that stands at full condition is offered and refused until the fabric the works builds is raised -- the cost is
+    named, not prevented. ⚠ TWO LINKS LIE BEYOND THIS TERM, MEASURED (`test_in45_works_sites.py`): `work`'s `floor` read
+    is UNKNOWN for a kind with no band floors (`dwelling`, `garrison`: `band_floors` ships `{}` for them), so a
+    dwelling works is offered `work` and the fold refuses it; and a fabric `build` has just stood is at condition 0,
+    which clears no floor, so on a kind WITH floors (`harbour`, `seam`) it is `restore` that raises the first course
+    and `work` follows once it clears. REVERT: drop the term in `questions_for`."""
+    targets = {works_target(w.records[t.object].kind, w.records[t.object].subject_matter)
+               for t in p.tenures if t.kind == "hold" and t.live and t.object in w.records}
+    return tuple(sorted(s.id for s in w.sites.values() if (s.kind, s.rung) in targets))
+
+
 def places_named(w: World, p: Person, named: Optional[frozenset] = None) -> tuple:
     """THE PLACES `p` HAS BEEN TOLD OF AND COULD SETTLE IN (v9 IN-45 `migrate`, H-168 limit 1,
     [ASSUMPTION; medium; Jordan to correct]), sorted by id: the Rungs among
@@ -2766,7 +2818,7 @@ def places_named(w: World, p: Person, named: Optional[frozenset] = None) -> tupl
     is asked only which ids are rungs (`World.class_of`, the class `_stamped` stamps, so a person's
     own `person`-kind rung, classed `Person`, is never stamped as a place) and what the ladder and
     the containment walk say. ⚠ ROOM IS NOT READ HERE: whether the place has room is the fold's
-    (`loop/effects_migration.py::_eff_migrate`'s capacity decline, `verb_table.yaml`'s `migrate`
+    (`migrate`'s `room` conjunct at admission, `world_q.has_room`, v10 REM-29; `verb_table.yaml`'s `migrate`
     note), so a person who wrongly hopes a full hearth has space still tries and is refused. ⚠ WHY
     NOT WHAT HE LIVES UNDER: a settler who already lives under `dest` changes no population and
     settles nowhere new (`_eff_migrate`'s newcomer rule), and his own residence is the refusal H-168
@@ -2785,6 +2837,25 @@ def places_named(w: World, p: Person, named: Optional[frozenset] = None) -> tupl
         return ()
     under = {r for h in homes for r in ancestry(w, h)}
     return tuple(sorted(r for r in cands if r not in under))
+
+
+def requisitionable(w: World, rung_id: str, stores: Optional[dict] = None) -> bool:
+    """IS THIS LARDER WORTH A REQUISITION (v10 CR-23, M17 taken (a), [ASSUMPTION; medium; Jordan to
+    correct]): it holds a positive amount of the matter a computed requisition carries, and at least
+    that amount -- `held > 0 and held >= amount`, the kind and amount the fixtures' (`default_store_kind`,
+    `default_transfer_amount`, H-121 / H-94), which is what `decision/options.py::_derive_operand` puts on
+    a classed `requisition`. THE ONE OWNER OF THE STOCKED TEST: `larders_in_purview` asks it of every named
+    rung, and `loop/matter.py`'s stock report asks it before and after MATTER's writes to a rung, so the
+    larder a seat is offered and the crossing that tells the seat of it are one predicate.
+    `stores` is the rung's stores to read, by default its own (`Rung.stores`); MATTER passes the level its
+    last write to the rung is about to leave, because the report rides that write's own Event. The
+    `held > 0` half is not redundant: at `default_transfer_amount = 0` (H-94's control) `held >= 0` holds
+    of an empty larder. REVERT: inline it back into `larders_in_purview` and drop CR-23's report."""
+    if stores is None:
+        stores = w.rungs[rung_id].stores
+    kind, amount = w.fixtures.get("default_store_kind"), w.fixtures.get("default_transfer_amount")
+    held = (stores or {}).get(kind, 0)
+    return held > 0 and held >= amount
 
 
 def larders_in_purview(w: World, p: Person, named: Optional[frozenset] = None) -> tuple:
@@ -2806,7 +2877,8 @@ def larders_in_purview(w: World, p: Person, named: Optional[frozenset] = None) -
 
     `places_named`' shape, one occasion over: `p`'s OWN LEDGER says which places he knows of and his
     OWN `hold` edges which seats he sits in; the World is asked which ids are rungs (`World.class_of`),
-    what a rung holds (`Rung.stores`) and whether the seat reaches it. ⚠ THE STORES ARE READ HERE,
+    what a rung holds (`Rung.stores`, through `requisitionable`, the one owner of the stocked test since
+    v10 CR-23) and whether the seat reaches it. ⚠ THE STORES ARE READ HERE,
     UNLIKE `places_named`' ROOM, and that is `vacancies`' precedent (it asks the write gate's own
     `may_fill`), not an oversight: an empty larder is an occasion for nothing, and a requisition question
     raised over one is the refusal H-163 limit 3 measured (`requisition.refused` on the `stores` conjunct).
@@ -2820,26 +2892,24 @@ def larders_in_purview(w: World, p: Person, named: Optional[frozenset] = None) -
     named, stocked rung: `purview_reaches` walks `w.tenures` for its oblige clause when the seat's own
     ground does not reach (the gate's walk, not a new one here). `()` for a person granted no such
     act, which is nearly everyone, so nothing else is read for him. REVERT: drop the term in
-    `questions_for` (or `requisition`'s `referent_class`, which empties `RUNG_REMIT_ACTS`). `named` is
+    `questions_for` (or `requisition`'s `referent_class`, which only removes `issue` from `RUNG_REMIT_ACTS`, the union over the `Rung` rows). `named` is
     `ledger_names(p.ledger)` when the caller holds it already."""
     if not RUNG_REMIT_ACTS:
         return ()
     seats = [w.offices[o] for o in dict.fromkeys(
         t.object for t in p.tenures
         if t.kind == "hold" and t.live and t.object in w.offices
-        and any(a in t.granted_acts for a in RUNG_REMIT_ACTS))]
+        and not RUNG_REMIT_ACTS.isdisjoint(t.granted_acts))]
     if not seats:
         return ()
     if named is None:
         named = ledger_names(p.ledger)
-    kind, amount = w.fixtures.get("default_store_kind"), w.fixtures.get("default_transfer_amount")
     out = []
     for r in sorted(named):
         if w.class_of(r) != "Rung":
             continue
-        held = (w.rungs[r].stores or {}).get(kind, 0)
-        if held > 0 and held >= amount and any(r != s.rung and purview_reaches(w, s, r)
-                                               for s in seats):
+        # v10 CR-23: the stocked test is `requisitionable`'s, never a copy here (its docstring).
+        if requisitionable(w, r) and any(r != s.rung and purview_reaches(w, s, r) for s in seats):
             out.append(r)
     return tuple(out)
 
@@ -3051,16 +3121,17 @@ def standing_crossed(w: World, p: Person, since: Optional[tuple] = None) -> Opti
 
 
 def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Question]:
-    """§F1's `q` producer -- TWO sources, resolver-side, at the DELIBERATE barrier, plus FIVE
+    """§F1's `q` producer -- TWO sources, resolver-side, at the DELIBERATE barrier, plus the
     STANDING OCCASIONS stamped onto the first question as classed referents (`_stamped`, below the
     sort): the vacant seats the person may fill (`vacancies`, IN-53), the seats he has been told of
     (`seats_named`, v9 IN-10 (a)), the writs he holds (`writs_held`, v9 IN-09, widened at v10 REM-25 by
     the Records he holds that a row asking him to hold them answers, `records_held_for_holding_rows`:
-    the same `Record` term, not a sixth occasion), the places he has
+    the same `Record` term, not another occasion), the places he has
     been told of and could settle in (`places_named`, v9 IN-45 `migrate`) and the larders his seat
-    may requisition (`larders_in_purview`, v9 IN-49 `requisition`). They are not
+    may requisition (`larders_in_purview`, v9 IN-49 `requisition`); and, since v10 IN-45 (ii), appended last, the
+    Sites a works he holds names (`works_sites`, `work`'s channel). They are not
     sources: no id or source changes; a person with one of them and no question gets one `need`
-    question carrying them. Stamped last, and no occasion: that first question's own plain referents
+    question carrying them. Stamped after those, and no occasion: that first question's own plain referents
     of a class a row declares and `rosters.yaml: occasion_only_classes` does not hold back
     (`own_referents_of_class`, v10 REM-21). And, since v9 SC-01's fired-slot step, one
     `claim_landed` question per fired sitting whose docket holds a matter and whose bench he sits on (`sittings_before`; the loop
@@ -3241,19 +3312,23 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # PLACES HE HAS BEEN TOLD OF AND COULD SETTLE IN (`places_named`), as `Rung`. REVERT: drop the term.
     # v9 IN-49 `requisition` (H-163 limit 3, [ASSUMPTION; medium; Jordan to correct]): AND SO DO THE
     # LARDERS HIS SEAT MAY REQUISITION (`larders_in_purview`), last, as `Rung`, never twice. The class is
-    # `Rung` either way, so both rows declaring it (`migrate`, `requisition`) form on both: whether a place
+    # `Rung` either way, so every row declaring it forms on both: whether a place
     # has room, or a seat reaches it, is then the fold's (`vacancies`/`seats_named`' Office precedent,
     # H-207; H-163 records what the cross-reading costs). No source is added, so no `question_sources`
     # order moves (IN-57: the occasion rides the question he answers). REVERT: drop the term.
-    # v10 REM-21 (AM-A-06, [ASSUMPTION; medium; Jordan to correct]): AND, LAST, THE QUESTION'S OWN
+    # v10 REM-21 (AM-A-06, [ASSUMPTION; medium; Jordan to correct]): AND, AFTER THOSE, THE QUESTION'S OWN
     # PLAIN REFERENTS OF EVERY CLASS A ROW DECLARES BUT `rosters.yaml: occasion_only_classes`
     # (`own_referents_of_class`) -- no standing occasion, the question he answers read for its own
     # kinds. "Never twice" is `_stamped`'s one dedup (the first pair kept), not a filter per term
     # pair, so a later term composes by being appended. REVERT: drop the term.
+    # v10 IN-45 (ii) (B10-06; M5 option (B), [ASSUMPTION; medium; Jordan to correct]): AND, APPENDED, THE SITES A
+    # WORKS HE HOLDS NAMES (`works_sites`), as `Site` -- the channel from a held works to the fabric `work` raises,
+    # which no question a master answers carried. REVERT: drop the term.
     told = ledger_names(p.ledger)
     added = (vacancies(w, p) + seats_named(w, p, told) + writs_held(w, p) + records_held_for_holding_rows(w, p)
              + places_named(w, p, told) + larders_in_purview(w, p, told)
-             + (own_referents_of_class(w, out[0]) if out else ()))
+             + (own_referents_of_class(w, out[0]) if out else ())
+             + works_sites(w, p))
     if added:
         head = out[0] if out else Question(f"q:need:{added[0]}", "need", (), added[0])
         out[:1] = [_stamped(head, added, w)]
@@ -3571,6 +3646,14 @@ class WorldReader:
             if subject not in w.rungs or arg not in w.persons:
                 return UNKNOWN
             return admits_audience(w, arg, subject)
+        if stem == "room":
+            # v10 REM-29 (B10-06): IS THERE ROOM UNDER THE RUNG `subject` FOR THE ACTOR (`arg`) --
+            # `audience`'s shape, through `has_room`, the one owner `_eff_migrate` calls too. UNKNOWN
+            # for a subject that is no rung or an actor who is no person (`ID-5`). NOT world-only: the
+            # read is deposited to the actor and his ledger answers it next time (`data/requires.py`).
+            if subject not in w.rungs or arg not in w.persons:
+                return UNKNOWN
+            return has_room(w, arg, subject)
         if stem == "claim.held":
             p = w.persons.get(self._actor)
             return UNKNOWN if p is None else any(c.subject == subject for c in p.ledger)

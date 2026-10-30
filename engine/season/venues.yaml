@@ -152,3 +152,47 @@ seats:
   Altonian:     S-007   # Lowenskyst Fortress — "Primary Altonian chokepoint" (T3)
   Einhir:       S-026   # Grauwald — "Einhir heritage site" (T4)
   Schoenland:   S-037
+
+# ---------------------------------------------------------------------------
+# PLANNED WORKS — what the setting planned to raise, authored as world data (v10 IN-45, M5 taken:
+# option (B)). A WORKS is a `Record` of kind `works`, `{plan, at}` — *"a <plan> at <at>"* — held by its
+# master, the one record a person's `found` or `build` can name (`verb_table.yaml`). In computed play no
+# act declares one (`create_record` is untyped and mints `text`, which `found`, `build` and `work` never
+# advance), so before this block `found` and `build` formed for nobody and `work` stayed refused.
+#
+# `harness/populated.py::mint_planned_works` reads this block once, last in `build_realm`, and mints each
+# row through `create_record`'s OWN effect (`EFFECTS["create_record"]`: the Record, the master's `hold`,
+# the one-live-works-per-target decline), so a row's Record and hold are what a master's declaring act would have
+# written at tick 0 (no `record.created` Event, so no witness holds its content claim) — no second mint, no operand coined (IN-45 adds none to `rosters.yaml: requires_operands`).
+# Delete the block and the realm is byte-identical to the realm before it (the control arm).
+#
+#   id      the works Record's id (unique in the world).
+#   kind    `works`. NEVER `text`: a text Record carries no `{plan, at}`, so its master holds nothing
+#           `found` or `build` can name, and neither verb forms.
+#   plan    what it makes: a `rung_kinds` member for `found`, a `site_kinds` member for `build`, priced
+#           in `rosters.yaml: works_cost` (a plan nobody can pay for is refused at build).
+#   at      where it is made: a rung ANCHOR, resolved by `populated.resolve_anchor` like an
+#           `offices.yaml` seat's `rung:` — `{settlement: "<geography code>"}` or, for a building, the
+#           hearth form `{hearth: "<geography code>:<building slug>"}` (the building's own `slug:` above).
+#   rung    the rung that PAYS and keeps the works (`Record.rung`, `loop/effects_founding.py::_cost`): an
+#           anchor, and the place whose stores meet the plan's `works_cost` when the master acts.
+#   master  the `offices.yaml` seat row whose holder is the works' master (`id:` of the row, resolved
+#           through the seats `build_realm` seated); his is the maker's `hold`.
+#   terms   how many terms it declares, one per season from tick 1 (`fixtures: record_stage_term`);
+#           each ripened term lifts the ceiling a `work` may raise its fabric to.
+#
+# ⚠ EVERY ROW BELOW IS [ASSUMPTION; medium; Jordan to correct; revert: option (A), a works-declaring
+# operand or verb with its own position, re-pin and J-4 re-measure]. The setting plans these places;
+# nothing in canon does. Two rows are the minimum that exercises both verbs: a `hearth` is founded
+# (a `Rung`, `rung.founded`) and a `dwelling` is built (a `Site`, `site.built`).
+planned_works:
+  # [ASSUMPTION; medium; Jordan to correct; revert: option (A), a works-declaring operand or verb with
+  # its own position, re-pin and J-4 re-measure] The Duke of Valorsmark founds a hearth at Auerheim,
+  # the Valorsmark town he lives in (`b_s_002_cottage`); Auerheim's own harbour pays the grain stake.
+  - {id: works_hearth_auerheim, kind: works, plan: hearth, at: {settlement: "S-002"},
+     rung: {settlement: "S-002"}, master: off_duke_valorsmark, terms: 3}
+  # [ASSUMPTION; medium; Jordan to correct; revert: option (A), a works-declaring operand or verb with
+  # its own position, re-pin and J-4 re-measure] The Lord Steward, who lives at the Royal Court
+  # (`b_s_001_court`), builds a dwelling there; Valorsplatz's seam pays the timber.
+  - {id: works_dwelling_court, kind: works, plan: dwelling, at: {hearth: "S-001:court"},
+     rung: {settlement: "S-001"}, master: off_lord_steward, terms: 3}

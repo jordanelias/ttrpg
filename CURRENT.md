@@ -8,7 +8,7 @@ Pins: `python tools/freshness_gate.py` (over `references/canonical_sources.yaml`
 (read its output). Old paths: `python tools/pathres.py` (over `references/restructure_ledger.md`). A
 ledger id's LAST row is its current state.
 
-_Last reconciled: 2026-10-28._
+_Last reconciled: 2026-10-30._
 
 A row naming a quarantined `.designs/` document gives its **bare filename only**: reference, not a head.
 

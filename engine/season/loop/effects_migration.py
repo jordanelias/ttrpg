@@ -10,9 +10,7 @@ for `effect_for`, `_operand` and the shared §10-ladder refusal `_decline_ascent
 
 from __future__ import annotations
 
-from ..queries.world_q import (
-    DETAIN_KIND, RESIDE_KIND, ancestry, capacity, population, residence_of, restrained,
-)
+from ..queries.world_q import DETAIN_KIND, RESIDE_KIND, has_room, residence_of, restrained
 from ..state.carriers import Tenure
 from ..state.gate import NO_CHANGE, Change, Subject
 from ..state.ids import H
@@ -173,6 +171,10 @@ def _eff_migrate(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
         plan instructs (*"throttled by `capacity` at the destination"*). A migrant who ALREADY lives
         under `dest` (settling from his hearth into its settlement) is no newcomer to it: he is in
         its population before and after, so the move grows nothing and nothing throttles it.
+        ⚠ v10 REM-29: THE TEST IS `world_q.has_room` (one owner), and since REM-29 the row's `room`
+        conjunct asks it at admission (the third conjunct, after `path` and `audience`), so the fold refuses a full rung there and the read rides
+        the refusal for the migrant to learn; the fold asks it on the same world the effect then reads,
+        so this decline answers only a caller that runs the effect without `_admits`.
         REJECTED: checking every ancestor too -- a newcomer to a hearth is a newcomer to its
         settlement, but a settlement's room is its hearths' room summed, and refusing a hearth
         with space because the town above is crowded would make the throttle a second, coarser
@@ -194,13 +196,11 @@ def _eff_migrate(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
                        alternatives=["re-open the same residence under a new id (a digest move "
                                      "published as a migration)", "treat it as a move"])
         return NO_CHANGE
-    migrant = w.persons.get(a.actor)
-    if migrant is None:
+    if a.actor not in w.persons:
         # Not a person: `act.ineligible` stops it before the fold, so only a hand-built act lands
         # here, and it has no weight to house -- `move`'s reading of the same case.
         return NO_CHANGE
-    newcomer = home is None or dest not in ancestry(w, home)
-    if newcomer and population(w, dest, residence) + migrant.weight > capacity(w, dest):
+    if not has_room(w, a.actor, dest, residence):
         TRACE.decision(f"a migration into a rung at capacity -> {a.actor} into {dest!r}",
                        "RR-2/24d-ii", chose="change nothing, so the fold emits the refusal",
                        alternatives=["admit him anyway (capacity bounds nothing)",

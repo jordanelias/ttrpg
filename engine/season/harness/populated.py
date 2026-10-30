@@ -69,18 +69,20 @@ from collections import Counter, defaultdict
 
 from ..data import cast, files
 from ..data import goals as goals_data
-from ..queries.world_q import (HUNGER_KIND, RESIDE_KIND, ancestry, capacity, closed_uses, home_of as home_of_q,
-                                hunger, members, subsistence_draw, uncontrolled)
+from ..queries.world_q import (HUNGER_KIND, RESIDE_KIND, WORKS_KIND, ancestry, capacity, closed_uses,
+                                home_of as home_of_q, hunger, members, subsistence_draw, uncontrolled)
 from ..gaps import Forbidden, Unspecified
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
 from ..data.rosters import (BODY_FACTION, FACTIONS, FOREIGN_CAST, FOREIGN_SEATS, OFFICES_BY_HOLDER,
-                            OFFICES_SEATS, ROLE_TEMPLATE_OF, authored_remit, faction_prop_id, load_yaml,
-                            refuse_a_titled_post_off_its_rung, remit_or_default,
-                            territory_rung_id, title_domain)
+                            OFFICES_SEATS, ROLE_TEMPLATE_OF, authored_remit,
+                            faction_prop_id, load_yaml, refuse_a_titled_post_off_its_rung,
+                            remit_or_default, territory_rung_id, title_domain)
 from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
-from ..state.carriers import Office, Person, Proposition, Rung, Site, Tenure
-from ..state.ids import H, draw_factory
+from ..loop.effects import EFFECTS
+from ..state.carriers import Act, Office, Person, Proposition, Rung, Site, Tenure
+from ..state.gate import NO_CHANGE
+from ..state.ids import H, ROOT, draw_factory
 from ..state.world import World
 from . import probes as P
 from .run_cases import load_cases, seed_pursuits, wants_of
@@ -116,9 +118,10 @@ def _slug(text: str) -> str:
 # §5's hand-transcription hazard, one layer earlier). A seat's `rung:` is a FORM -- a one-entry
 # mapping `{<rung kind>: <key>}` -- and there is ONE resolver over all of them. The forms in use are
 #     {realm: true} · {duchy: "<faction>"} · {territory: "<code>"} · {settlement: "<code>"}
+#     · {hearth: "<geography code>:<building slug>"} (v10 IN-45: `venues.yaml: planned_works`' `at:`)
 # and the resolver does not know that: it asks the INDEX `build_realm` fills as it mints each rung
-# (`_index_anchor`, at the four mint sites, where the key is already in hand) for exactly one rung of
-# exactly that kind. It names no rung kind and no seat, so a fifth form is a line at one more mint
+# (`_index_anchor`, at the mint sites, where the key is already in hand) for exactly one rung of
+# exactly that kind. It names no rung kind and no seat, so another form is a line at one more mint
 # site and a row, never a branch here -- and it is why a rung kind with no minted rung (`province`,
 # which `build_realm` deliberately never builds: a province is a QUERY) refuses instead of
 # resolving to something near it.
@@ -487,6 +490,14 @@ def guard_rows(text: str | None = None) -> list:
     return rows
 
 
+def _first_holder(w: World, oid) -> "str | None":
+    """THE PERSON WHO HOLDS THE OFFICE `oid` (a seat held by two persons reads as the FIRST, `w.tenures` order), or
+    `None` when `oid` is `None` or nobody holds it: `seat_guards`' read of a guard's holder and
+    `mint_planned_works`' of a works' master (`world_q.hold_force` raises on two live holders; these post at the first)."""
+    return next((t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == oid
+                 and t.subject in w.persons), None) if oid else None
+
+
 def seat_guards(w: World, rows: list, authored: dict, partial: bool = False) -> None:
     """SEAT THE GUARD COHORTS IN A BUILT WORLD. Each row becomes a
     Person at the row's weight, its `person` rung, a `contain` edge (where it IS) at the exact rung its seat's
@@ -502,8 +513,7 @@ def seat_guards(w: World, rows: list, authored: dict, partial: bool = False) -> 
     where = home_of_q(w)
     for row in rows:
         oid = authored.get(row["seat"])
-        holder = next((t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == oid
-                       and t.subject in w.persons), None) if oid else None
+        holder = _first_holder(w, oid)
         if holder is None or holder not in where:
             if partial:
                 continue
@@ -534,6 +544,108 @@ def seat_guards(w: World, rows: list, authored: dict, partial: bool = False) -> 
         w.add_tenure(Tenure(f"t_{pid}_in", pid, post, "contain", 0))
         w.add_tenure(Tenure(f"t_{pid}_home", pid, town, RESIDE_KIND, 0))
         w.add_tenure(Tenure(f"t_{pid}_oblige", pid, oid, "oblige", 0))
+
+
+# THE KEYS OF ONE `venues.yaml: planned_works` ROW -- a closed set, so a misspelt key REFUSES rather than
+# reading as an absent one (the loader-refuses-per-data-family rule `cohort_rows` and `guard_rows` keep).
+PLANNED_WORKS_FIELDS = frozenset({"id", "kind", "plan", "at", "rung", "master", "terms"})
+
+
+def mint_planned_works(w: World, rows: list, anchors: dict, authored: dict, partial: bool = False) -> list:
+    """MINT THE WORKS THE SETTING PLANNED, IN A BUILT WORLD (v10 IN-45, M5 option (B)). Returns the minted ids.
+
+    Each row is ONE `create_record` EFFECT RUN AT TICK 0: `EFFECTS["create_record"]` is handed the act the row's
+    master would have declared -- `{record, kind, subject_matter: {plan, at}, rung: <the paying rung>, stages}`
+    -- and the `Change` it returns is applied, so the Record, its stages, the master's `hold` and the
+    one-live-works-per-target decline are the ones a master's declaring `create_record` writes, with no second mint here (a COMPUTED `create_record`
+    carries no payload and mints `text`: `loop/effects_information.py`).
+    It is NOT folded: no `Event` is logged, no token is minted, and no driver runs (`build_realm` writes the
+    world straight, as every other section of it does); the effect's own `Change` is the writer, which is what
+    makes a planned works the same Record a master's act would leave. WHY NOT THROUGH THE GATE (`04` §C.2, *"the seam
+    every mutation crosses"*; §A.2, *"The driver is the ONLY constructor of write tokens"*): world generation is none
+    of §A.2's nine modules, a builder holds no token and can lawfully hold none, and `build_realm` writes the world
+    straight in some two dozen places; the gated route a probe takes (`harness/probes.py`: `w.write(..., mint_token(...),
+    change=EFFECTS[...](w, act))`) mints a token outside the driver and logs an Event, so it is not followed here.
+    No scan sees a `.apply()` under `harness/`, and none is licensed (`layer-conformance` A3). [ASSUMPTION; medium; Jordan to correct;
+    revert: one `create_record` act per row, folded before season 0 -- it moves the log by a `record.created`
+    per row and needs a driver in the builder.]
+
+    `anchors` is `build_realm`'s anchor index and `authored` is `_office_census["authored"]` (an `offices.yaml`
+    seat id -> the Office id standing for it). `at` and `rung` are anchors, resolved by `resolve_anchor` (a
+    building is `{hearth: "<code>:<slug>"}`); `master` is a seat row id and the works' maker is that seat's
+    holder -- the first live `hold` on it (`seat_guards`' read). A row whose `kind` is not a record kind that
+    carries `{plan, at}` mints a Record WITHOUT that content (`create_record`'s own reading of an act that
+    declares none), which `found`, `build` and `work` never name: that is the planted failure
+    (`test_in45_planned_works.py`), and why no shipped row is `kind: text`.
+
+    REFUSES (`Unspecified`), each one change from a row that mints: a row that is not a mapping of exactly
+    `PLANNED_WORKS_FIELDS`; an `id` already a Record's; a `plan` that `works_cost` does not price (every
+    priced key is a `rung_kinds` or `site_kinds` member, `fixtures.py::_check_works_cost`; a place nobody can pay for is dead data, `_cost`'s own
+    decline arriving a season late); `terms` that is not a positive integer; an `at` or `rung` that resolves
+    to no rung (`resolve_anchor`'s refusal, never a guess); a `master` seat this realm did not seat or nobody
+    holds; and a second live works on one `(plan, at)` target (`create_record`'s decline). `partial` (a `cap`
+    dropped the cast) skips, without a sound, a row whose master's seat was not seated, as the per-case loops
+    skip their absent. No operand is coined: the act carries only what `create_record` already reads."""
+    term = w.fixtures.get("record_stage_term")
+    priced = w.fixtures.get("works_cost") or {}
+    made: list = []
+    for row in rows:
+        if not isinstance(row, dict) or set(row) != PLANNED_WORKS_FIELDS:
+            raise Unspecified(
+                f"a `planned_works` row is {row!r}", "engine/season/venues.yaml -- planned_works",
+                needs=f"a mapping of exactly {sorted(PLANNED_WORKS_FIELDS)}",
+                law="v10 IN-45 -- a misspelt key must refuse, not read as a missing one")
+        rid, plan, terms = row["id"], row["plan"], row["terms"]
+        whose = f"planned work {rid!r}"
+        if not isinstance(rid, str) or rid in w.records:
+            raise Unspecified(
+                f"{whose} names an id that is not text, or that a Record already carries",
+                "engine/season/venues.yaml -- planned_works",
+                needs="a unique text id", law="v10 IN-45 -- one Record per id; a mint would replace it")
+        if plan not in priced:           # every priced key is a rung or site kind (`fixtures.py::_check_works_cost`, at import, default fixtures)
+            raise Unspecified(
+                f"{whose} plans {plan!r}, which is no priced `rung_kinds` or `site_kinds` member",
+                "engine/season/venues.yaml -- planned_works",
+                needs="a plan `found` or `build` can make and `rosters.yaml: works_cost` prices",
+                law="v9 IN-28 (H-166 limit 1) -- a plan with no price has nobody to pay for it")
+        if isinstance(terms, bool) or not isinstance(terms, int) or terms < 1:
+            raise Unspecified(
+                f"{whose} declares terms {terms!r}", "engine/season/venues.yaml -- planned_works",
+                needs="a positive integer", law="r2 04 §A.6.3 -- a works with no terms bounds nothing")
+        oid = authored.get(row["master"])
+        master = _first_holder(w, oid)
+        if master is None:
+            if partial:
+                continue
+            raise Unspecified(
+                f"{whose} names the master seat {row['master']!r}, which this realm "
+                f"{'did not seat' if oid is None else 'seated and nobody holds'}",
+                "engine/season/venues.yaml -- planned_works",
+                needs="an `offices.yaml` seat row `build_realm` seated, held by a person",
+                law="v10 IN-45 -- the maker's `hold` is what makes a person a works' master; none is guessed")
+        at = resolve_anchor(w, anchors, row["at"], whose)
+        payer = resolve_anchor(w, anchors, row["rung"], whose)
+        kind = row["kind"]
+        act = Act(id=rid, actor=master, verb="create_record", payload={
+            "record": rid, "kind": kind,
+            "subject_matter": {"plan": plan, "at": at} if kind == WORKS_KIND else None,
+            "rung": payer,
+            # THE WINDER OF EACH TERM IS `ROOT`: MATTER's `term.matured` names `causes[]` the Event that created
+            # the Record, else the stage's third element, and a Record minted without a fold has no Event and no
+            # act in the act store to name. The setting planned it -- authored world data, caused by the world.
+            # A DELIBERATE DEPARTURE from `04` §A.1's AX-5 row (*"a matured term cites the act that wound it"*): no act
+            # wound these terms, `ROOT` is PART D row 6's typed origin, and the card's other route (a folded
+            # `create_record` per row, above) would satisfy the row at the price of moving the log and every pin.
+            "stages": [(w.tick + (i + 1) * term, f"term{i + 1}", ROOT) for i in range(terms)]})
+        change = EFFECTS["create_record"](w, act)
+        if change is NO_CHANGE:
+            raise Unspecified(
+                f"{whose} plans a {plan!r} at {at!r}, where a live works already does",
+                "engine/season/venues.yaml -- planned_works",
+                needs="one live works per (plan, at)", law="r2 04 §A.6.3 -- `create_record` declines the second")
+        change.apply()
+        made.append(rid)
+    return made
 
 
 def goals_missing(w: World, rows: tuple) -> list:
@@ -894,6 +1006,10 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         for b in ven["buildings"][kind]:
             bid = f"b_{_slug(sid)}_{b['slug']}"
             w.rungs[bid] = Rung(bid, "hearth")
+            # THE FIFTH ANCHOR FORM (v10 IN-45): a building is `{hearth: "<geography code>:<slug>"}`, so a
+            # `venues.yaml: planned_works` row names a building the way a seat names a settlement — by what
+            # tells it apart, never by a built rung id. One more line at a mint site, no branch in the resolver.
+            _index_anchor(w, anchors, f"{sid}:{b['slug']}", bid)
             w.add_tenure(Tenure(f"t_{bid}_in", bid, f"q_{_slug(sid)}_{b['quarter']}",
                                 "contain", 0))
             buildings_at[sid].append((bid, b))
@@ -1643,6 +1759,11 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     # id or capacity read, and AFTER the seats, whose holders it is posted beside. `guards=False` seats none.
     if guards:
         seat_guards(w, guard_rows(), w._office_census["authored"], partial=cap is not None)
+    # v10 IN-45 (M5, option (B)): THE WORKS THE SETTING PLANNED, minted LAST so no tie, creed, seat, goal or
+    # cohort above can have read them -- the build up to here is byte-identical to the realm without this
+    # block, which is the control (an empty `planned_works:` reads the old hash). `venues.yaml: planned_works`.
+    mint_planned_works(w, ven.get("planned_works") or [], anchors, w._office_census["authored"],
+                       partial=cap is not None)
     return w
 
 

@@ -362,22 +362,40 @@ def test_24d_ii_capacity_has_a_caller_outside_the_tests():
 
     ⚠ `effects_migration.py`, NOT `effects.py`, SINCE THE PHASE-4 PER-SUBSYSTEM SPLIT (2026-09-30):
     `migrate` -- `capacity`'s caller (`19c`'s `_eff_migrate`) -- moved out of the monolith into its
-    own domain file; `effects.py` is now a thin aggregator that imports it but calls nothing."""
+    own domain file; `effects.py` is now a thin aggregator that imports it but calls nothing.
+
+    ⚠ v10 REM-29 (B10-06): THE CHAIN IS ONE LINK LONGER, NOT SHORTER. The throttle moved into
+    `world_q.has_room`, its one owner, so `capacity`'s caller is `has_room` (inside `world_q.py`) and
+    `has_room`'s callers are `_eff_migrate` and `WorldReader.read`'s `room` branch. Asserted link by
+    link: `has_room(` is called from `effects_migration.py`, and inside `world_q.py` the `has_room`
+    function calls `capacity(` and `WorldReader.read` calls `has_room(`."""
     import ast
     from ..data import files
-    callers, seen = [], set()
+
+    def calls(tree, name):
+        return [n for n in ast.walk(tree) if isinstance(n, ast.Call) and (
+            (isinstance(n.func, ast.Name) and n.func.id == name)
+            or (isinstance(n.func, ast.Attribute) and n.func.attr == name))]
+
+    callers, seen, world_q_src = [], set(), None
     for f in files.package_modules():
-        if "tests" in f.parts or f.name == "world_q.py":
+        if "tests" in f.parts:
+            continue
+        if f.name == "world_q.py":
+            world_q_src = f.read_text(encoding="utf-8")
             continue
         seen.add(f.name)
-        for node in ast.walk(ast.parse(f.read_text(encoding="utf-8"))):
-            if isinstance(node, ast.Call) and (
-                    (isinstance(node.func, ast.Name) and node.func.id == "capacity")
-                    or (isinstance(node.func, ast.Attribute) and node.func.attr == "capacity")):
-                callers.append(f.name)
-    assert "effects_migration.py" in seen, sorted(seen)
+        if calls(ast.parse(f.read_text(encoding="utf-8")), "has_room"):
+            callers.append(f.name)
+    assert "effects_migration.py" in seen and world_q_src is not None, sorted(seen)
     assert "effects_migration.py" in callers, (
-        f"`capacity` is called from nowhere outside the tests: {callers}")
+        f"`has_room` is called from nowhere outside the tests: {callers}")
+    tree = ast.parse(world_q_src)
+    fn = {n.name: n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)}
+    reader = next(n for n in ast.walk(tree) if isinstance(n, ast.ClassDef) and n.name == "WorldReader")
+    read = next(n for n in reader.body if isinstance(n, ast.FunctionDef) and n.name == "read")
+    assert calls(fn["has_room"], "capacity"), "`has_room` no longer asks `capacity`"
+    assert calls(read, "has_room"), "`WorldReader.read` no longer answers `room` through `has_room`"
 
 
 # ======================================================================================
@@ -445,8 +463,8 @@ def test_in45_a_computed_migrate_reaches_a_place_he_was_told_of_and_its_capacity
     exactly `lr_hearth_b`: his residence and what he lives under are not ANOTHER place, and a
     person's rung is no place to live. The computed `migrate` carries `to = lr_hearth_b`.
       * `lr_hearth_b` is FULL (one dwelling, one resident), so the computed act is refused by
-        `_eff_migrate`'s CAPACITY decline -- the throttle reached by a computed act, not only by
-        section 3's hand-built ones -- and nothing moves.
+        the CAPACITY throttle -- since v10 REM-29 the `room` conjunct at admission, `has_room` (section
+        6) -- reached by a computed act, not only by section 3's hand-built ones, and nothing moves.
       * RR-2's lever: its holder BUILDS a second dwelling, and next season the same person's computed
         `migrate` executes there: `residence.changed`, and he lives at `lr_hearth_b`.
     CONTROL: a person told of nothing forms no `migrate` at all."""
@@ -525,3 +543,126 @@ def test_in45_a_document_the_question_is_about_does_not_re_aim_a_classed_destina
         pet = [c for c in _options.opening_set(p, _assemble(p, q, 12), q, w.fixtures)
                if c.verb == "petition"]
     assert pet and all(c.operands.get("to") == "lp_hearth_b" for c in pet), pet
+
+
+# ======================================================================================
+# 6 -- v10 REM-29 (B10-06, `-08` AM-A-15): ROOM IS A CONJUNCT THE MIGRANT LEARNS FROM
+# ======================================================================================
+# RR-2's throttle was a decline hidden in `_eff_migrate`'s body: the refusal carried no read of it, so
+# a migrant refused for room re-formed the same `migrate` into the same full rung round after round.
+# `room` is now a `relation` stem (`data/requires.py: REQUIRES_STEMS`, a `CELL_STEMS` member) on
+# `migrate`'s cell, answered by `queries/world_q.py::has_room` -- the one owner, which `_eff_migrate`'s
+# decline also calls. The route under test: the fold refuses AT ADMISSION on the `room` conjunct, its
+# read `(to, "room:<actor>", False)` rides `Event.observed`, the real WITNESS deposits it into the
+# actor's own ledger (`observation_deposit_mode: actor`), and `epistemic.belief_contradicts` -- through
+# `LedgerReader.read`'s plain `(subject, predicate)` match (the home's `[UNVERIFIED]` branch, observed
+# here by the decline itself) -- declines his next `migrate` there.
+# MUTATIONS, run at the build. Each went RED, then was restored byte-exact and went GREEN:
+#   * the deposit dropped (`loop/witness.py` skipping a `room` read beside `WORLD_ONLY_STEMS`) ->
+#     `test_rem29_a` RED (no claim lands; the test's own `none` arm shows he then re-forms it);
+#   * the `room` conjunct and its refusal key deleted from `migrate`'s row (the key alone left is a
+#     loader refusal) -> `test_rem29_a` RED (the refusal is the effect's again and carries no `room`
+#     read); every older test in this file stays green, the refusal kind being the same;
+#   * `_eff_migrate` keeping its own inline throttle (`ancestry`/`population`/`capacity` imported by
+#     name at module level, the pre-REM-29 code) instead of calling `has_room` -> `test_rem29_b` RED
+#     (the patched leaf reaches the conjunct, and the effect still declines) and
+#     `test_24d_ii_capacity_has_a_caller_outside_the_tests` RED.
+
+from unittest import mock as _mock
+
+from ..data.requires import UNKNOWN as _UNKNOWN
+from ..data.requires import Observation as _Obs
+
+
+def _witness(w, d, events):
+    """The WITNESS barrier on `events`, as `season` runs it after each round's RESOLVE."""
+    return d.witness(mint_token(w, WriteClass.INTERIOR), list(events))
+
+
+def _migrations_to(w, pid, dest):
+    """Every `migrate` act `pid` forms to `dest` over EVERY question he is asked now, and the number
+    of those questions that carry `dest` as a `Rung`-classed referent (the stamp the row forms on)."""
+    carried, acts = 0, []
+    for q in _asked(w, pid):
+        if (dest, "Rung") in tuple(q.classes or ()):
+            carried += 1
+        acts += [a for a in _computed_migrations(w, pid, q=q) if a.payload.get("to") == dest]
+    return carried, acts
+
+
+def _refused_once_and_witnessed(w, d):
+    """`WHO` told of the full `THERE`, his computed `migrate` folded and refused, and the refusal's
+    Events through the real WITNESS. Returns the refusal Event."""
+    from ..queries import world_q
+    _told_of(w, WHO, THERE)
+    assert world_q.population(w, THERE) + w.persons[WHO].weight > world_q.capacity(w, THERE)
+    assert world_q.has_room(w, WHO, THERE) is False
+    (first,) = _computed_migrations(w, WHO)
+    assert first.payload.get("to") == THERE, first.payload
+    out = _fold(w, d, first)
+    assert _kinds(out) == ["migrate.refused"], _kinds(out)
+    _witness(w, d, out)
+    return out[0]
+
+
+def test_rem29_a_a_refusal_for_room_is_learned_and_his_next_deliberation_forms_no_migrate_there():
+    """THE FALSIFIER (rem-02 §2.3 REM-29). Into a full rung the first computed `migrate` is refused
+    with `Event.observed` carrying `room:<actor>` False on the destination; WITNESS deposits that read
+    into HIS ledger; and at the next deliberation -- the place still stamped on his question, so the
+    row is offered it -- he forms no `migrate` to it, this round and next season.
+    MUTATION, in the test: the same world at `observation_deposit_mode: none` (`H-122`'s control arm,
+    the deposit dropped) -- no claim lands, and he forms the same `migrate` again.
+    CONTROL: another person, told of the same full rung and never refused there, still forms it -- the
+    belief is the migrant's own (AX-2), not a filter on world truth."""
+    from ..harness import governance_spine as G
+    w, d = _world(lambda: G.build(0))
+    ev = _refused_once_and_witnessed(w, d)
+    room = f"room:{WHO}"
+    assert _Obs(THERE, room, False) in ev.observed, ev.observed
+    held = [c for c in w.persons[WHO].ledger if (c.subject, c.predicate) == (THERE, room)]
+    assert [c.value for c in held] == [False], held
+    carried, again = _migrations_to(w, WHO, THERE)
+    assert carried >= 1, "anti-vacuity: no question carries the full rung as a Rung"
+    assert again == [], again
+    _season(w, d)
+    _told_of(w, WHO, THERE)
+    carried, later = _migrations_to(w, WHO, THERE)
+    assert carried >= 1 and later == [], later
+
+    other = "lp_community_a"
+    _told_of(w, other, THERE)
+    _c, theirs = _migrations_to(w, other, THERE)
+    assert theirs, "the control formed nothing: the decline would be a filter, not his belief"
+
+    w0, d0 = _world(lambda: G.build(0))
+    w0.fixtures = w0.fixtures.sweep("observation_deposit_mode", "none")
+    _refused_once_and_witnessed(w0, d0)
+    assert not [c for c in w0.persons[WHO].ledger if c.predicate == room]
+    carried, reformed = _migrations_to(w0, WHO, THERE)
+    assert carried >= 1 and reformed, "with the deposit dropped he did not re-form it"
+
+
+def test_rem29_b_has_room_is_the_one_owner_the_conjunct_and_the_effect_both_read():
+    """ONE OWNER, OBSERVED BY MOVING IT. `world_q.capacity` patched to house everyone: the fold then
+    ADMITS the computed `migrate` into the full rung -- which requires BOTH the `room` conjunct
+    (`WorldReader.read` -> `has_room`) and `_eff_migrate`'s decline (-> `has_room`) to read through the
+    patched leaf; an inline copy of the throttle in the effect, binding its own `capacity`, would still
+    decline. CONTROL: unpatched, the same act is refused and the reader answers False; UNKNOWN for a
+    subject that is no rung and an actor who is no person (`ID-5`)."""
+    from ..harness import governance_spine as G
+    from ..loop.effects_shared import EFFECTS
+    from ..queries import world_q
+    from ..state.gate import NO_CHANGE
+    w, d = _world(lambda: G.build(0))
+    _told_of(w, WHO, THERE)
+    (act,) = _computed_migrations(w, WHO)
+    reader = world_q.WorldReader(w, WHO)
+    assert reader.read(THERE, f"room:{WHO}") is False
+    assert reader.read("no-such-rung", f"room:{WHO}") is _UNKNOWN
+    assert reader.read(THERE, "room:no-such-person") is _UNKNOWN
+    assert EFFECTS["migrate"](w, act) is NO_CHANGE
+    with _mock.patch.object(world_q, "capacity", lambda _w, _r: 10 ** 6):
+        assert reader.read(THERE, f"room:{WHO}") is True
+        assert EFFECTS["migrate"](w, act) is not NO_CHANGE
+        assert _kinds(_fold(w, d, act)) == ["residence.changed"]
+    assert world_q.residence_of(w)[WHO] == THERE

@@ -102,6 +102,8 @@ STEM_READS = {
     # IN-59 (b): presence, holds, obliges (`admits_audience`'s limbs) and a writ's creating Event
     "audience":     (("Office.exists", "?"), ("Person.weight", "?"), ("Record.exists", "?"),
                      (EVENT, "?")) + _TENURE,
+    # v10 REM-29: `has_room` -- residents' `reside` edges and weight, the dwelling Sites (`capacity`)
+    "room":         (("Person.weight", "-"), ("Site.exists", "+")) + _TENURE,
     "claim.held":   (("Person.claim_ledger", "+"),),
     "rank":         (("Rung.exists", "?"),),
     "purview":      (("Office.exists", "?"),) + _TENURE,
