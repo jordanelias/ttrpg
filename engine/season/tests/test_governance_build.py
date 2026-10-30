@@ -2830,7 +2830,11 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # act mix moved (seed 0, one season: 598 -> 597, `test_go07_canonical_digest.py`'s shift). The stripped arm is
     # unmoved at 596. CONTROL: `test_go07_canonical_digest.py`'s control (the same world and season, the three rows
     # put back to their base shape in process) reads 598 acts.
-    assert (out["acts"], cout["acts"]) == (597, 596), (
+    # ⚠⚠ v10 IN-45 (B10-06): (597, 596) -> (598, 597), A RE-RECORD WITH THE UNIT THAT MOVED IT: `venues.yaml: planned_works`
+    # authors two works, minted last in `build_realm`, so the masters' `found` and `build` form on them and the sampled order of
+    # the realm moves by one act in each arm (seed 0, one season: 597 -> 598, `test_go07_canonical_digest.py`'s shift). The two
+    # arms still part by one act. CONTROL: this world with `planned_works` emptied in process reads (597, 596) under this test.
+    assert (out["acts"], cout["acts"]) == (598, 597), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")
