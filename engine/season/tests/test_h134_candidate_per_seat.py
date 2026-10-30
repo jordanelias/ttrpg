@@ -240,7 +240,16 @@ def test_h134_two_seats_are_two_acts_ids_opportunities_and_the_store():
 # was pinned on; the revoke tests above carry `off_duke` as an Office instead). CONTROL, run (scratch, not kept): the same
 # `_control_reading` with `revoke`'s `referent_class` blanked in the shared `VERB_TABLE` in-process re-hashes to
 # `(50, 50, "6b31ae41...")` exactly, and the Candidates that differ are those two and no others.
-_CONTROL = (48, 48, "2ecfb27d5be314d8437ce67983938530f3ae0dae892c4d3901c91c21fad54eb3")
+# RE-PINNED AT v10 REM-2B (B10-06): 48 -> 42, `2ecfb27d...` -> `0842fe64...`. Exactly six Candidates (and their six
+# acts) leave and none is added: `evade / defy` and `construe` (typed on `comply`'s cell, `referent_class: Record` +
+# `referent_named`) and `exchange` (typed on `stores(from, kind)` and `stores(to, return_kind)`) each formed twice, on
+# `off_duke` and `Hh` (the question's plain referents), and form on neither now -- the question carries no Record
+# (`p_one` holds no writ), and `exchange` needs a `from` this person (no live `contain` Tenure; `exchange` is
+# `own`-eligible, so no seat's treasury) cannot derive. CONTROL, run (scratch, not kept): the same `_control_reading`
+# with the three rows put back to their base shape in `decision.options.VERB_TABLE` in-process (`requires_typed`
+# None, no `referent_class`, no `referent_named`) re-hashes to `(48, 48, "2ecfb27d...")` exactly, the Candidates that
+# differ are those six and no others, and each row alone removes two (46).
+_CONTROL = (42, 42, "0842fe64db0c6aaf96d5ec7c33e63f02ee3e8517dcf4b2d11c822ee41b97c0d3")
 
 
 def _control_reading():

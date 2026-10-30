@@ -624,6 +624,8 @@ def test_rem24_b_a_person_petitioning_a_person_executes_through_the_fold(monkeyp
 
 #: The rows declaring `Record` whose cell asks the actor to hold the subject; control (3) below walks them.
 HOLDING_ROWS = ("carry", "found", "build")
+#: The rows declaring `Record` on a writ (REM-2B restored the two beside `comply`): no `held_by`, `writs_held`'s occasion.
+WRIT_ROWS = ("comply", "evade / defy", "construe")
 PETITION_ID = "pet_rem25"
 #: The rows' independent statement of the data the derivation reads, spelt without `data/verbs.py`.
 HOLDING_KINDS = frozenset({"petition", "works"})
@@ -652,10 +654,18 @@ def test_rem25_the_two_record_terms_are_told_apart_by_the_cell_and_derived_from_
     stamps the dispensation alone -- holds unchanged, and is asserted on the SUB-kinds: `research` asks
     `existence` of the collection itself (`kind: Record`, any document), which `_record_subkinds_answered`
     keeps out of both sets, so neither set moved (`RECORD_REFERENT_KINDS` {dispensation},
-    `HOLDING_RECORD_KINDS` {petition, works}, the same on both trees)."""
+    `HOLDING_RECORD_KINDS` {petition, works}, the same on both trees).
+
+    RE-RECORDED AT v10 REM-2B (B10-06; control: the REM-2A tree `f23194871`, where the two rows were untyped):
+    `evade / defy` and `construe` declare `Record` on `comply`'s cell (no `held_by`), so the rows asking no
+    `held_by` were `{comply, research}` and are `{comply, evade / defy, construe, research}`; their `existence`
+    kinds are still `{dispensation, Record}`, and neither set moved. `construe` asks no `held_by` ON PURPOSE:
+    the checkpoint's third conjunct would move `dispensation` into `HOLDING_RECORD_KINDS` (`holding` would gain
+    `construe` and the two sets stop being disjoint), which this test reddens, and its formation consequence is
+    `test_in09_dispensation_answer.py::test_in09_a_custodian_who_is_not_the_addressee_is_offered_none_of_the_three`."""
     rows = {v: r for v, r in VERB_TABLE.items() if r.referent_class == "Record"}
     holding = {v for v, r in rows.items() if _verbs._asks_subject_held(r)}
-    assert holding == set(HOLDING_ROWS) and set(rows) - holding == {"comply"} | set(COLLECTION_ROWS), (
+    assert holding == set(HOLDING_ROWS) and set(rows) - holding == set(WRIT_ROWS) | set(COLLECTION_ROWS), (
         sorted(rows), sorted(holding))
     kinds = lambda vs: frozenset().union(*(_existence_kinds(rows[v].requires_typed.requirement) for v in vs))
     assert kinds(COLLECTION_ROWS) == {"Record"}

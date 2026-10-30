@@ -362,9 +362,16 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # acts. The build hash is equal; one and two seasons move. Was 1d402d15... / b2276c73... (one, two seasons). CONTROL, run on
 # this tree: the `room` conjunct and its refusal key deleted from `migrate`'s row (stem, `has_room` and the effect's call
 # kept) reads the old pair, the old `BASE_EVENTS`, the old `give`-withheld arm and the old `thread_read`-withheld arm exactly.
+# RE-PINNED at v10 REM-2B (B10-06), A BEHAVIOUR MOVE DECLARED AND A TRAJECTORY MOVE (HR-3): `evade / defy`, `construe` and
+# `exchange` are typed and resolvable again (restored from v9 IN-09 / IN-33's checkpoints), so the chooser offers them: `aperture
+# 1 0`, realm, `exchange` formed 83, attempted 21, executed 0; `construe` and `evade / defy` form on a held petition or works
+# the shared `Record` class stamps and are refused (`exists:dispensation=0`); the freed and taken scenes move the act mix. The
+# build hash is equal (the build reads no verb row); one and two seasons move. Was 4cc07cbe... / 333396e9... (one, two
+# seasons). CONTROL, run in process on this tree: the three rows put back to their base shape (untyped, unclassed, their
+# decline notes, `exchange` writing one pair with no effect) read the old pair and the old `BASE_EVENTS` exactly.
 BASE_HASHES = {0: "9ff5390939742b7bbb3af0fa2551e958",
-               1: "4cc07cbe5a53ea460b2272b16e5b8c89",
-               2: "333396e93a3f605f8dc7457a38fd3d03"}
+               1: "41ffb48b4c1717c6aedc26e9715806a8",
+               2: "3afa013bfd815cf81282fe6ecb5b16b1"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -422,8 +429,9 @@ BASE_HASHES = {0: "9ff5390939742b7bbb3af0fa2551e958",
 # RE-RECORDED at v10 REM-28 `revoke` with `BASE_HASHES` (two seasons only: 24107 -> 24109; one season unmoved at 7196).
 # RE-RECORDED at v10 CR-23 with `BASE_HASHES` (7196 -> 9270, 24109 -> 27482; `stock_report = off` in process reads the old pair).
 # RE-RECORDED at v10 REM-29 with `BASE_HASHES` (9270 -> 9316, 27482 -> 28806; the `room` conjunct deleted reads the old pair).
-BASE_EVENTS = {1: (9316, "f749317674f952d91a75abc1a138356c97398449b242d28c39f89a9e8a67a804"),
-               2: (28806, "8e98482add5bd25c9568b6bf375f76ea9b1ded67a76b62559ef215bae84edbde")}
+# RE-RECORDED at v10 REM-2B with `BASE_HASHES` (9316 -> 9319, 28806 -> 28490; the three rows put back in process read the old pair).
+BASE_EVENTS = {1: (9319, "e6d4db19d8df9836c66fd711708e97c394c1500130cc12b52fe01a63bf852fc9"),
+               2: (28490, "564d3b2745979bff438e7391e7b2a1fc2deb8048d389549fa8061dcd8776fcc8")}
 
 
 def _digest(w) -> tuple:
@@ -543,7 +551,9 @@ def test_the_give_withheld_arm_reproduces_the_one_season_pin():
 #: `stock_report = off` in process reads the old value exactly).
 #: RE-RECORDED at v10 REM-29 with `BASE_HASHES`: 9275 / d87f09b9... -> 9321 / 41d96575... (`migrate`'s `room` conjunct; the
 #: conjunct and its refusal key deleted read the old value exactly).
-THREAD_READ_WITHHELD_EVENTS_1 = (9321, "41d96575dc340916c63d15164f3ad25f329e1b02c1885d9f75fbab2cb40b0716")
+#: RE-RECORDED at v10 REM-2B with `BASE_HASHES`: 9321 / 41d96575... -> 9324 / f14e03ba... (`evade / defy`, `construe` and
+#: `exchange` restored; the three rows put back to their base shape in process read the old value exactly).
+THREAD_READ_WITHHELD_EVENTS_1 = (9324, "f14e03ba3039ac6b446ab6d09509f7f89686f806437cc7e02ee50de5e6911715")
 
 
 def test_the_thread_read_withheld_arm_is_pinned_and_differs_from_the_shipped_season():

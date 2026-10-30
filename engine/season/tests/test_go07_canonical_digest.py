@@ -450,19 +450,27 @@ def _counts(w) -> dict:
 #: deleted from `migrate`'s row reads the values this block held exactly, at all three seeds. Was, for seeds 0 / 1 / 2:
 #: `old` f84cb2d2... / 185bd2be... / 42ac60f1..., `new` 1d402d15... / ce81d904... / 47b0b565..., `census` 3004e5b7... /
 #: c1d5db92... / ba91b58d....
+#: RE-RECORDED AGAIN at v10 REM-2B (B10-06), A GAME MOVE DECLARED, NO DIGEST MOVE: `evade / defy`, `construe` and `exchange`
+#: are typed and resolvable again (v9 IN-09 / IN-33 restored), so the chooser offers them and their attempts (`exchange` 21 /
+#: 36 / 34 at `aperture 1 s`, none executed) take scenes and emit refusals that WITNESS deposits: the act mix of every seeded
+#: realm moves (`acts` 598 / 640 / 619 -> 597 / 643 / 632, `log` 9316 / 12278 / 9949 -> 9319 / 11995 / 9722). EVERY value
+#: below is the REM-2B tree's, read with this file's own helpers and `populated.run`; CONTROL, run in process on this tree: the
+#: three rows put back to their base shape (untyped, unclassed, their decline notes, `exchange` writing one pair with no effect)
+#: read the values this block held exactly, at all three seeds. Was, for seeds 0 / 1 / 2: `old` 1842a06d... / e13520cf... /
+#: e06e57c1..., `new` 4cc07cbe... / 6e72eb59... / 8e5af677..., `census` 7ab6c655... / 26755d2c... / 03428a48....
 BASE = {
-    0: {"old": "1842a06d224cb5a4fce9073476776bc2", "new": "4cc07cbe5a53ea460b2272b16e5b8c89", "acts": 598,
-        "census": "7ab6c6551e46304ba4598d73c61d403e6addc1fa97b2301a001ab82cecd8c167",
-        "counts": {"persons": 82, "rungs": 411, "offices": 32, "sites": 322, "records": 120,
-                   "propositions": 100, "dates": 7, "docket": 6, "tenures": 851, "log": 9316}},
-    1: {"old": "e13520cf6ae28969cb62c2592a4a8246", "new": "6e72eb599564f0caf10912b3bfe43621", "acts": 640,
-        "census": "26755d2cd34dadbf29ff349d8e1566637385cff8ae65b412347e591d29f64992",
-        "counts": {"persons": 83, "rungs": 412, "offices": 32, "sites": 322, "records": 146,
-                   "propositions": 95, "dates": 7, "docket": 2, "tenures": 885, "log": 12278}},
-    2: {"old": "e06e57c1fc46163e005b2c4d71dd10d7", "new": "8e5af67701eb6f4f40596c9a38c02666", "acts": 619,
-        "census": "03428a48638bcef946d12e2cdd3123d7bdc0593630c7f0b0cd7fcc6e090d31ec",
-        "counts": {"persons": 80, "rungs": 409, "offices": 32, "sites": 322, "records": 124,
-                   "propositions": 98, "dates": 6, "docket": 2, "tenures": 832, "log": 9949}},
+    0: {"old": "789bc9eb8100e737bce720e9db82ca64", "new": "41ffb48b4c1717c6aedc26e9715806a8", "acts": 597,
+        "census": "ed0c8bac4268590051c77dc34573bde747d04114b635824c081f28e4a290716b",
+        "counts": {"persons": 82, "rungs": 411, "offices": 32, "sites": 322, "records": 116,
+                   "propositions": 98, "dates": 7, "docket": 6, "tenures": 845, "log": 9319}},
+    1: {"old": "6427691004c0c879515665580453b85d", "new": "6c52b44c4a7d94bc064d683c0d84553d", "acts": 643,
+        "census": "b4da086ce5b771c39e09bd20df512a87a41f5afcf0f9753dd5b06aab2a32db53",
+        "counts": {"persons": 83, "rungs": 412, "offices": 32, "sites": 322, "records": 134,
+                   "propositions": 96, "dates": 7, "docket": 2, "tenures": 869, "log": 11995}},
+    2: {"old": "b8031dc3a190561e852da65673b6850e", "new": "9bb7306d53efdee71d98626b9d6dabd0", "acts": 632,
+        "census": "c8133996959ccaba0b5b5231f772beb962eaddada2d80dc21eed16697625a231",
+        "counts": {"persons": 81, "rungs": 410, "offices": 32, "sites": 322, "records": 123,
+                   "propositions": 100, "dates": 7, "docket": 2, "tenures": 841, "log": 9722}},
 }
 
 
