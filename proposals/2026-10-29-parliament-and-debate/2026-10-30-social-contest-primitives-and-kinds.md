@@ -67,7 +67,7 @@ excluded; they are listed in §1.3.
 | R-38 | 2026-10-30 | "office weight can affect both roll and obstacle" | this session | yes, newest; answers where an office-keyed weight enters (R-31) |
 | R-39 | 2026-10-30 | "a 1D party is effectively useless and destined to lose. it's like asking a murderer who says 'i love to murder and i murdered that guy' to defend himself in a court room." | this session | yes, newest; **narrows R-18** ("don't deprive player of a chance at winning"): a 1D party facing strong opposition is *meant* to lose, so M-7's 1D-floor check is not a requirement |
 | R-40 | 2026-10-30 | "if a player comes into a contest with a total of 1D, then something has gone very wrong for that player to the point they probably deserve the outcome. across character capability, argument, evidence, leverage, standing, etc it should be very difficult for a character to have less than 5D" | this session | yes, newest; fixes the **scale of the pool**: a total over many sources, typically 5D or more |
-| R-41 | 2026-10-30 | "oh--and presence/charisma for the pool too" | this session | yes, newest; adds presence/charisma to R-40's sources of the pool |
+| R-41 | 2026-10-30 | "oh--and presence/charisma for the pool too"; then "well, that's capability" | this session | yes, newest; **not a separate source**: presence/charisma is the *attribute* part of capability (R-31), already a pool source |
 
 ### 1.0 The 2026-09-06 rulings file
 
