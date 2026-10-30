@@ -6,9 +6,9 @@ Answers four questions: is it the Aristotelian triad; is it Cicero; is it contem
 armature or basis. It uses the model in `2026-10-30-social-contest-reconciliation-and-distillation.md` (items 1 to 13)
 and Jordan's rulings R-1 to R-41 (`2026-10-30-social-contest-primitives-and-kinds.md` §1). Where a point is mine and
 not a ruling or a source's, it says so. The persuasion mechanisms themselves (Aristotle's topoi and emotions, Cicero's
-officia and parts of an oration, Cialdini) are being sourced in
-`research/social_contest_procedures/03_persuasion_mechanisms.md`; until that lands, the repo's own reads carry them
-and the second table marks which are named only.
+officia and parts of an oration, Cialdini) are now sourced in
+`research/social_contest_procedures/03_persuasion_mechanisms.md` (Aristotle, Cicero and Quintilian read in full
+text; the psychology from abstracts and secondary summaries only, so weaker).
 
 ## 1. The answer
 
@@ -43,14 +43,14 @@ The test for each is the same: *which input to which side of the draw does it su
 | **logos** (the argument, by enthymeme and example) | why a case is convincing on its merits | the pool, through **argument** and **evidence** a party holds; against a party, through **proofs held against** (the obstacle) | evidence and audience feed `speak` only; argument content is read by nothing |
 | **three genres** (forensic, deliberative, epideictic) | what kind of question the room decides | **matter mood** (HOLDS, OUGHT, neither) × the structure: forensic = a bench rules a past matter; deliberative = a count licenses a future act; epideictic = an audience, no bench | derived, not a field (reconciliation E3); nothing reads mood today |
 | **topoi** | where an argument comes from | the speech-kind roster's `apt_genre` and `apt_rung`: aptness priced, not refused (R-16) | the roster loads; unread |
-| **the emotions** (Rhet. II.2-11) | what to know to move a person: the state of mind, toward whom, on what grounds | the same three things are what a stance row holds (what, toward whom, how strongly) | RESEARCH only |
+| **the emotions** (Rhet. II.2-11) | what to know to move a person: the state of mind, toward whom, on what grounds | Aristotle's rule (II.1): to arouse an emotion one must know **the audience's state, a named target, and a fact the audience believes about that target**; if any is missing, aptness is zero. The same three are what a stance row holds | sourced in file 03; no code |
 
 ### 2.2 Cicero and Quintilian
 
 | in Cicero or Quintilian | what it explains | lands in | status |
 |---|---|---|---|
 | **stasis** (conjecture, definition, quality, jurisdiction) | which question the dispute turns on | the **issue ladder** on a forensic matter (four rungs); it governs HOLDS matters only, since deliberative argument does not run on stasis (Heath) | INTENT; kernel holds a six-rung version |
-| **docere, delectare, movere** | the three jobs of a speech: inform, win goodwill, move | *docere* deposits claims (the evidence channel); *delectare* raises reception (the audience term); *movere* is the **effect**, a pursuit that moves, not an input | named in the repo; not reproduced there; sourcing in progress `[UNVERIFIED]` |
+| **docere, delectare, movere** | the three jobs of a speech: inform, win goodwill, move | *docere* deposits claims (the evidence channel); *delectare* raises reception (the audience term); *movere* is the **effect**, a pursuit that moves, not an input | sourced in file 03: the pairing differs by work (*Orator* 69: prove, please, sway; *De Oratore* II.115: prove, win favour, rouse feelings), and each of the three styles serves one duty (*Orator* 69-70) |
 | **partes orationis** (exordium, narratio, partitio, confirmatio, refutatio, peroratio) | the order a case is made in | the **`order` key** and the speech kinds: exordium = frame and win reception; narratio = `tell`; partitio = the issue gate; confirmatio and refutatio = support and attack; peroratio = recapitulate or concede | the keys and kinds load; unread |
 | **the five canons** (inventio, dispositio, elocutio, memoria, pronuntiatio) | the process of a speech | invention = choosing the claim; arrangement = `order`; memory = the ledger and Records; delivery = presence | audit source 04 only |
 | **vir bonus** (Quintilian) | the good man speaking well | standing as moral character, which self-gates (a discovered lie is terminal, the study's "being seen at it") | RESEARCH |
@@ -61,7 +61,7 @@ The test for each is the same: *which input to which side of the draw does it su
 |---|---|---|---|
 | **central and peripheral routes** (Petty and Cacioppo) | the same speech persuades by argument for a motivated hearer and by cues for a distracted one | central = argument and evidence in the pool; peripheral = standing, charisma and numbers, also the pool, but reaching the hearer through reception; **which route** is set by the bench and floor (an expert judge against a crowd) | RESEARCH |
 | **story model** (Pennington and Hastie) | jurors judge by the coherence of a story, not by items | **coherence with claims the room already holds**: evidence is weighed against the ledger, not tallied | RESEARCH |
-| **reciprocity, commitment, social proof, authority, liking, scarcity, unity** (Cialdini) | levers on compliance | reciprocity = an `oblige` owed; commitment = a `commit` edge (a stated position binds); social proof = the audience's stances; authority = **office weight** (R-31, R-38); liking and unity = charisma and faction; scarcity = circumstantial leverage | named in audit source 04; not mechanised; sourcing in progress |
+| **reciprocity, commitment, social proof, authority, liking, scarcity, unity** (Cialdini) | levers on compliance | reciprocity = an `oblige` owed; commitment = a `commit` edge (a stated position binds); social proof = the audience's stances; authority = **office weight** (R-31, R-38); liking and unity = charisma and faction; scarcity = circumstantial leverage | sourced in file 03 **with its evidence record, which is weak**: door-in-the-face behavioural compliance r = .052, not significant; the hotel-towel result partly replicated; descriptive norms can boomerang; for unity, no replication found. Treat as heuristics for what feeds pool and reception, not as mechanisms with known size |
 | **reactance, inoculation** | pressure backfires; forewarning protects | a failure band reads as "a signal about the mover"; a pre-empt speech kind | study figures; no code |
 | **anchoring, logrolling** | first offers set the range; trading across issues | negotiation: an offer sets the obstacle; many matters per contest (R-11) | RESEARCH |
 | **BATNA and ZOPA** (Fisher and Ury, Raiffa) | what a party can walk away to | **leverage** (circumstantial, worldly state), the imbalance R-34 names for negotiation | named once in the repo; "not designed" |
