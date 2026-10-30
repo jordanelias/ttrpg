@@ -237,6 +237,32 @@ Jordan's six items of 2026-10-26, each taken through the five steps by its own d
 
 **Jordan's figures, checked.** "About 60 ranks": 82 rank rows, 81 named, 59 on the eight-ladder subset. "34 vocations": 34. "45 cards": 6 + 28 + 11 (19 distinct named cards [UNVERIFIED]). "55 arcs": 55 numbers, 58 arc cases. "Eleven Prosperity values": 11 of 17 territories disagree. "Three ministry lists": three. "Eight factions": the count is written at 5 engine sites, 1 naming-owner site and `canon/03_canonical_timeline.md`'s table, against 10 roster rows.
 
+## 1c. Design-resolution questions M22 to M40 (the fold of 2026-10-30)
+
+These nineteen questions were added by the fold of 2026-10-30 (the content-architecture suite of 2026-10-28, the layers-v2 design, PR #527 and ED-IN-0304); they are not among the 147 asks and none was asked on 2026-10-26, so Jordan's "Confirm all" (ED-IN-0301) did not confirm any of them. **Their ladder, verdicts and design lanes are `-10`** (`workplans/valoria_master_workplan_v10_part15.md` §1 to §4); no DECISION block is written here. This section states only the default in force for each until `-10`'s lane closes and, where it escalates, Jordan answers. A default below is what the tree ships or what an earlier answer confirmed; it is not a new decision. The rows each blocks are `-04` CL-SLICE, CL-OPEN, CL-PERSON, CL-MGMT, CL-ATTR, CL-TROOP, CR-17 and CR-38 (M38, M39).
+
+| M | item | default in force |
+|---|---|---|
+| M22 | troop counts (M3's yes arm) | no: the field stays persons at weight (M3, confirmed, ED-IN-0301); CL-TROOP HELD |
+| M23 | the attribute list (J-T2, widened) | nine registry keys, the pending tenth slot refusing a value (J-T2, confirmed, ED-IN-0301); CR-20 as written |
+| M24 | the training rule | CR-20 as written: `faculty` takes the larger of the held key and the vocation's attribute (`max`); practice live (CR-18); `max` stays in force while `-10`'s CL-ATTR design measures both forms' no-op regions |
+| M25 | who owns a sword (J-T5) | no kit carrier; CP-T03-03 acts only on persons whose holding stores an authored arms kind (B10-11) |
+| M26 | storyline form | no story pools; CL-EVENTS' Tensions receiver as written (one card drawn at build, switch off in v10); the arcs are never runtime data (`-07` §2) |
+| M27 | mass-battle command (M4 Ask C) | the AUTOMATED mode's default orders; commander-chosen orders a named residue (`-07` §2, MB-08); same-round fields (M4 Ask C (a), confirmed, ED-IN-0301) |
+| M28 | founding in play | no settlement is founded in play; a seat only through `establish` (CR-25) |
+| M29 | mayor seats | none authored; `offices.yaml` as shipped |
+| M30 | a world Thread substrate | none: no world-level Thread condition; Thread Sensitivity on persons only |
+| M31 | the management surface | none: the player acts only through the seated person's own acts (AX-1; `04_CODE_ARCHITECTURE.md:853`); the scene budget as shipped |
+| M32 | odds shown for non-combat acts | the Act interface's true band odds, `odds_of`'s mode (a) (`-08` AM-B-03; `-08` part 2, CP-T02-08's override); CP-T01-03's believed odds (mode (b)), withdrawn by AM-B-03 and released again by M1 (§1, M1), build in B10-08 for the chooser (CR-17), not for display |
+| M33 | what the console may show | ratified `04` §C.11: no resolver-side value is visible inside a decision; only what the person's own ledger holds |
+| M34 | `selfish_selfless` at spread 0 or stored | as shipped: no stored offset |
+| M35 | τ against trait spreads | τ = 0.1 until CR-17's last commit, then CR-17's rule |
+| M36 | per-verb declared cells (payoff, force, beneficiary) | none added; `verb_table.yaml` as shipped |
+| M37 | the refusal gate's convention | dormant: `refusal_axis` ships `None` (`data/fixtures.py`, H-146); CR-21 makes the pole data and arming stays open |
+| M38 | PR #527's RJ-calls, its two Layer 1 hunks, the marquis question | CR-38 as written (`-04`) until #527 merges; canon's count and countess stand (no marquis) |
+| M39 | the motion source (#527's RJ-11 / RM2) | none in computed play: a motion is hand-built only (CR-37's specification) |
+| M40 | ED-IN-0304's undecided residue | CR-17's FOLLOW-ON as written: unbuilt and undesigned; CL-PERSON HELD |
+
 ## 2. Answers taken (each [ASSUMPTION; medium; Jordan to correct], each reverts alone)
 
 The NERS fold took further answers under step 5, each with its revert; they are the **Taken** lines of `workplans/valoria_master_workplan_v10_part13.md` and its `_part2`, and are not repeated here. The decision round's decisions are recorded once, in §1's DECISION blocks; the rows M1 to M21 below point there. The second decision round's are recorded once, in §1b; its six rows below point there.
