@@ -6,7 +6,7 @@ faction's cohorts can raise to the commands that mint-fill-organise an army, as 
 the same army. The engine side (`engine/season/harness/army_presets.py`) turns the plan into acts for the faction's
 leader; the verbs refuse what the world does not allow, so this plan adds no rule of its own beyond WHAT TO ASK FOR.
 
-THE DOCTRINE (ASSUMPTION; medium; Jordan to correct -- it is the common shape of the Romance of the Three Kingdoms and
+THE ARM_SHARES (ASSUMPTION; medium; Jordan to correct -- it is the common shape of the Romance of the Three Kingdoms and
 Total War armies Jordan named): a battle line of the best heavy foot the faction can train, missile troops behind it,
 horse for the flanks, and levy filling whatever room is left, as the reserve.
 
@@ -30,11 +30,11 @@ from modules.mass_battle.armyrecord import cohort_claims
 from modules.mass_battle.config import BLOCK_SIZE, SUBUNIT_ROUT_FLOOR
 from modules.mass_battle.troop_types.recruitment import recruit_limit, under_arms_cap
 
-__all__ = ['DOCTRINE', 'ROLE_OF', 'plan']
+__all__ = ['ARM_SHARES', 'ROLE_OF', 'plan']
 
 #: class -> (share of each cohort's under-arms cap, the types in order of preference). [ASSUMPTION; medium;
 #: Jordan to correct; the order is heaviest and most disciplined first.]
-DOCTRINE = (
+ARM_SHARES = (
     ('melee',   0.45, ('heavy_infantry', 'spearmen', 'pike', 'light_infantry')),  # [canonical: ED-IN-0306 -- ASSUMPTION: the doctrine's share of a cohort's cap; Jordan to correct]
     ('missile', 0.25, ('crossbow', 'archers', 'sling', 'skirmishers')),  # [canonical: ED-IN-0306 -- ASSUMPTION: the doctrine's share of a cohort's cap; Jordan to correct]
     ('mounted', 0.20, ('cavalry', 'knights_templar', 'light_cavalry')),  # [canonical: ED-IN-0306 -- ASSUMPTION: the doctrine's share of a cohort's cap; Jordan to correct]
@@ -72,7 +72,7 @@ def plan(q) -> tuple:
     # arms, so a class filled from the first cohorts alone would leave the later classes nothing to stand on). A trial pass
     # sees what the class WOULD raise; a type that comes to less than a subformation can stand on is dropped, then the real
     # pass. `given` is restored between, so both passes see the same rooms.
-    for _cls, share, types in DOCTRINE:
+    for _cls, share, types in ARM_SHARES:
         trial = []
         snapshot = {c: dict(g) for c, g in given.items()}
         for c, w, sites in cohorts:
@@ -105,7 +105,7 @@ def plan(q) -> tuple:
         return ()
     if sum(n for _c, _t, n in raised) < BLOCK_SIZE:       # `armyrecord.options` calls this `army_routs`: not worth raising
         return ()
-    order = [x for _k, _s, ts in DOCTRINE for x in ts] + ['levy']        # the doctrine's order, the reserve last
+    order = [x for _k, _s, ts in ARM_SHARES for x in ts] + ['levy']        # the doctrine's order, the reserve last
     types = sorted({t for _c, t, _n in raised}, key=order.index)
     cmds = [('recruit', {'cohort': c, 'troop_type': t, 'count': n}) for c, t, n in raised]
     for t in types:
