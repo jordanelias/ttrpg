@@ -2773,6 +2773,41 @@ def records_held_for_holding_rows(w: World, p: Person) -> tuple:
                          and w.records[t.object].kind in HOLDING_RECORD_KINDS}))
 
 
+def works_sites(w: World, p: Person) -> tuple:
+    """THE SITES A WORKS `p` HOLDS NAMES (v10 IN-45 (ii), B10-06; M5 option (B), [ASSUMPTION; medium; Jordan to
+    correct; revert: drop the term in `questions_for`, and `work` forms only on a Site a question already names]),
+    sorted by id: for each `works` Record on `p`'s own live `hold` edges, the Sites standing at the works' `at` rung
+    whose kind is its `plan` -- `ceiling`'s own match (`works_for`: a works names a site when it plans that site's KIND
+    at that site's RUNG), read from the works' side. H-165 limit 2's *'a person-side channel for a works'
+    `{plan, at}`'*: `work` declares `referent_class: Site` and `opening_set` forms it on a Site-classed referent only,
+    and no question a master answers is about the fabric his works names, so before this term `work` formed for nobody
+    even with a works held (`aperture 4 s`, realm: formed 0). A `plan` that is a Rung kind (a `hearth`) names no Site
+    and yields none.
+
+    A STANDING OCCASION, `records_held_for_holding_rows`' shape: resolver-side and read-only, it reads `p`'s own edges
+    and the Sites the works names, and supplies Site IDS that `questions_for` adds to the question he answers as
+    CLASSED referents (`_stamped`); whether the act then passes is the fold's (`work`'s typed cell: the site's
+    condition against the floor; its eligibility: he is present at the site; `_eff_work`: the works' rise, which a
+    site already at its ceiling stages as zero and the fold refuses as `work.unavailable`). ⚠ THE CLASS IS SHARED, as
+    `Record` and `Rung` are: `restore` declares `Site` too, so a master is offered `restore` on the same Sites (the
+    same fabric raised by the same formula, `_rise`). ⚠ NO 'ALREADY AT ITS CEILING' DECLINE: a Site the works names
+    that stands at full condition is offered and refused until the fabric the works builds is raised -- the cost is
+    named, not prevented. ⚠ TWO LINKS LIE BEYOND THIS TERM, MEASURED (`test_in45_works_sites.py`): `work`'s `floor` read
+    is UNKNOWN for a kind with no band floors (`dwelling`, `garrison`: `band_floors` ships `{}` for them), so a
+    dwelling works is offered `work` and the fold refuses it; and a fabric `build` has just stood is at condition 0,
+    which clears no floor, so on a kind WITH floors (`harbour`, `seam`) it is `restore` that raises the first course
+    and `work` follows once it clears. REVERT: drop the term in `questions_for`."""
+    named = []
+    for t in p.tenures:
+        if t.kind != "hold" or not t.live or t.object not in w.records:
+            continue
+        rec = w.records[t.object]
+        plan, at = works_target(rec.kind, rec.subject_matter)
+        if plan is not None:
+            named.extend(s.id for s in w.sites.values() if s.rung == at and s.kind == plan)
+    return tuple(sorted(set(named)))
+
+
 def places_named(w: World, p: Person, named: Optional[frozenset] = None) -> tuple:
     """THE PLACES `p` HAS BEEN TOLD OF AND COULD SETTLE IN (v9 IN-45 `migrate`, H-168 limit 1,
     [ASSUMPTION; medium; Jordan to correct]), sorted by id: the Rungs among
@@ -3099,7 +3134,8 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     the Records he holds that a row asking him to hold them answers, `records_held_for_holding_rows`:
     the same `Record` term, not a sixth occasion), the places he has
     been told of and could settle in (`places_named`, v9 IN-45 `migrate`) and the larders his seat
-    may requisition (`larders_in_purview`, v9 IN-49 `requisition`). They are not
+    may requisition (`larders_in_purview`, v9 IN-49 `requisition`); and, since v10 IN-45 (ii), appended last, the
+    Sites a works he holds names (`works_sites`, `work`'s channel). They are not
     sources: no id or source changes; a person with one of them and no question gets one `need`
     question carrying them. Stamped last, and no occasion: that first question's own plain referents
     of a class a row declares and `rosters.yaml: occasion_only_classes` does not hold back
@@ -3291,10 +3327,14 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # (`own_referents_of_class`) -- no standing occasion, the question he answers read for its own
     # kinds. "Never twice" is `_stamped`'s one dedup (the first pair kept), not a filter per term
     # pair, so a later term composes by being appended. REVERT: drop the term.
+    # v10 IN-45 (ii) (B10-06; M5 option (B), [ASSUMPTION; medium; Jordan to correct]): AND, APPENDED, THE SITES A
+    # WORKS HE HOLDS NAMES (`works_sites`), as `Site` -- the channel from a held works to the fabric `work` raises,
+    # which no question a master answers carried. REVERT: drop the term.
     told = ledger_names(p.ledger)
     added = (vacancies(w, p) + seats_named(w, p, told) + writs_held(w, p) + records_held_for_holding_rows(w, p)
              + places_named(w, p, told) + larders_in_purview(w, p, told)
-             + (own_referents_of_class(w, out[0]) if out else ()))
+             + (own_referents_of_class(w, out[0]) if out else ())
+             + works_sites(w, p))
     if added:
         head = out[0] if out else Question(f"q:need:{added[0]}", "need", (), added[0])
         out[:1] = [_stamped(head, added, w)]
