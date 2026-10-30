@@ -65,6 +65,7 @@ excluded; they are listed in §1.3.
 | R-36 | 2026-10-30 | "The legitimacy of the authority, which is related to a territory in terms of political legitimacy and religious piety, then, can impact the weight/impact of the authority for a social contest. For example, a territory that places little weight in the words of Church of Solmund may not have a heresy proceeding that occurs in those lands be biased in favour of Church because the authority vested into the church is weak there" | this session | yes, newest; scales an authority's weight (R-34) by its standing in the venue's territory |
 | R-37 | 2026-10-30 | "Ceiling should sit above the default so opposition can bite" | this session | yes, newest; answers the question left by `H-213` ("No ruling states the value"). **Meets R-18's M-7 check**, which fails above 2 at the 1D floor (measured: 0.0006 at Ob 3) |
 | R-38 | 2026-10-30 | "office weight can affect both roll and obstacle" | this session | yes, newest; answers where an office-keyed weight enters (R-31) |
+| R-39 | 2026-10-30 | "a 1D party is effectively useless and destined to lose. it's like asking a murderer who says 'i love to murder and i murdered that guy' to defend himself in a court room." | this session | yes, newest; **narrows R-18** ("don't deprive player of a chance at winning"): a 1D party facing strong opposition is *meant* to lose, so M-7's 1D-floor check is not a requirement |
 
 ### 1.0 The 2026-09-06 rulings file
 

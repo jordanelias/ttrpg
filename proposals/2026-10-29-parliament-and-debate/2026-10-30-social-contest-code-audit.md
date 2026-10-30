@@ -108,7 +108,7 @@ Ordered by what the rulings require, not by effort.
 
 ## 5. What this leaves open
 
-1. **The ceiling's value: direction answered (R-37), value not.** Jordan: the ceiling sits above the default so opposition can bite. The sweep arm is 3; at 3, M-7 fails for a 1D party (0.0006) and passes at 2D (0.0259). Confirm whether M-7 is re-scoped to the default pool (reconciliation §2.3).
+1. **The ceiling's value: direction answered (R-37), value not.** Jordan: the ceiling sits above the default so opposition can bite. The sweep arm is 3; at 3, M-7 fails for a 1D party (0.0006) and passes at 2D (0.0259). R-39 withdraws the 1D-floor M-7 check (a 1D party facing strong opposition is meant to lose), so only the value remains.
 2. **Layer 1 §A.3's wording** now that R-31 says office carries weight. A narrow wording is suggested in the reconciliation §2.3; the amendment is Jordan's.
 3. **R-34's mechanism.** He stated the outcome (royal authority modulates or undermines religious authority when a royal person is involved), not the means: the crown joins the bench, may revoke, or raises the church bench's obstacle. Each lands in a different place in §2 item 13 and in the code (`judging_set`, `revoke`, `roll.obstacle`).
 4. **Where an office-keyed weight enters: answered (R-38): both the roll and the obstacle.** The audit's three entry points (pool at `sigma.py:186`; the leverage constant at `sigma.py:191`; a new `SocialContestInput` operand composed in `roll.obstacle`) are all needed, the obstacle one for the defender's side.

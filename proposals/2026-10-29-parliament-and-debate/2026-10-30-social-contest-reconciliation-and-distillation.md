@@ -102,8 +102,13 @@ measured, not guessed. `sigma_leverage.p_success` (I ran it) for pool × obstacl
 
 So a ceiling of 3 (the sweep's third arm) lets opposition bite but fails M-7 for a **1D** party (0.06% at Ob 3). The
 default pool is 2D and R-31 gives persons more dice, so the 1D floor becomes the rare case that R-8 ("if you don't
-have enough dice you don't have enough dice") already accepts. The reconciliation is to **re-scope M-7 to the default
-pool (2D: 2.6% at Ob 3)** rather than the 1D floor, a measurement choice for Jordan to confirm, not an agent's.
+have enough dice you don't have enough dice") already accepts. **R-39 (Jordan 2026-10-30) settles the scope:** "a 1D party is effectively useless and destined to lose. it's like
+asking a murderer who says 'i love to murder and i murdered that guy' to defend himself in a court room." So the
+1D-floor M-7 check is **withdrawn as a requirement**: R-18's "chance at winning" belongs to a party with dice to bring,
+and a floor-pool party against strong opposition is correctly lost. The 2D default at Ob 3 (2.6%) is then a floor of
+plausibility, not a protection. The murderer's case is also an argument about *evidence*, not only dice: what is
+already established against a party (his own confession, a proof he cannot mirror) is item 11's evidence channel, and
+should weigh with the pool, not be a separate rule. The ceiling's value (3 is the sweep arm) remains Jordan's.
 Changing `obstacle_ceiling` moves the goldens and is a behaviour change to be re-recorded plainly (CLAUDE.md §7); it
 has not been made.
 
