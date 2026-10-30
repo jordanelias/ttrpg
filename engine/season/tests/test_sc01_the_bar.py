@@ -183,7 +183,7 @@ def _run(conviction: str, seed: int, seasons: int, wrap=None):
     if wrap is not None:
         choose = wrap(choose)
     for _ in range(seasons):
-        d.season(choose, question=None, subsistence=P.SUBSIST,
+        d.season(choose, question=None,
                  contest_max_depth=w.fixtures.get("contest_max_depth"))
     return w, d, chosen
 

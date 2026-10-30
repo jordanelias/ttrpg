@@ -831,7 +831,7 @@ def test_the_find_lands_through_the_season_loop_in_a_later_round():
                 return []
             calls.append(d.round)
             return [research("season", cand)] if len(calls) == k else []
-        d.season(choose, question=None, subsistence=P.SUBSIST,
+        d.season(choose, question=None,
                  contest_max_depth=w.fixtures.get("contest_max_depth"))
         finding = next((e for e in w.log if e.kind == "finding.made"
                         and getattr(d.act_of.get(e.id), "actor", None) == INVESTIGATOR), None)

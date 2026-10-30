@@ -18,7 +18,7 @@ budget.   NO World in scope."*
 person-first in signature and self-declares as a person Query at its own first statement. `budget`,
 `opening_set` and `assemble` stay: `04:133` names them here, so moving them would break conformance
 rather than restore it.
-    choose.py      make_chooser · urgency · pack_scenes
+    choose.py      make_chooser · pack_scenes
                    (`align` is `data.verbs.align`, `stance_toward` is `queries.person_q.stance_toward`)
     budget.py      budget · body_band_penalty
 
@@ -93,7 +93,7 @@ unchanged and still governs: *owns nothing, returns `Scene[]`, may read `PersonI
 # `belief_contradicts` are deliberately ABSENT -- see the module docstring.
 # ---------------------------------------------------------------------------
 from .budget import body_band_penalty, budget
-from .choose import make_chooser, pack_scenes, urgency
+from .choose import make_chooser, pack_scenes
 from .options import (
     agreement, containing_rung_of, operand_bags, operands_for, opening_set, project,
     person_side_eligible, standing_of, store_kind_of,

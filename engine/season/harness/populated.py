@@ -1837,7 +1837,7 @@ def run(seasons: int = 1, seed: int = 0, cap: int | None = None, w: World | None
     ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                       draw=draw_factory(w.world_seed, lambda: w.tick))
     for _ in range(seasons):
-        d.season(ch, question=None, subsistence=P.SUBSIST,
+        d.season(ch, question=None,
                  contest_max_depth=w.fixtures.get("contest_max_depth"))
     out = census(w)
     out["acts"] = len(d.resolved)

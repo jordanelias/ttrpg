@@ -1118,7 +1118,7 @@ repo land on your meaning?* The corpse is on file — `evacuate` cost three surf
 |---|---|
 | a **faction** | ⚠ **AMENDED — see §D.11.** A `Proposition` plus its `commit` edges is what it OWNS; it *does* exist as an object, as a **resolved view** |
 | an **address** | a `contain` Tenure |
-| a **need** | a `Sensation` plus a Query |
+| a **need** | a Query (for a settlement, `world_q.hunger`; REM-50) plus the shortfall claims a person holds about it (REM-44; ED-IN-0300, superseding row, 2026-10-26) |
 | **annexation** | a `hold` at distance — **not a verb** |
 | **secession** | the `commit` edges moving — **not a verb** |
 | every **aggregate** | a Query, owned by Nobody (T-a) |

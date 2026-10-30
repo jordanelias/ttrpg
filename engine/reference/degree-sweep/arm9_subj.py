@@ -143,7 +143,7 @@ def _run(case: dict, seed: int, seasons: int, fork_at: int = -1, take: int = 0,
                 # uncapped while nothing it reached contested; `U1` gave `tell` a `contests:`, and
                 # the `except BaseException` below would SWALLOW the refusal into `ok=False` --
                 # measured, one fork silently left the population that way (`genuine` 45 -> 44).
-                d.season(ch, question=None, subsistence=K.C.P.SUBSIST,
+                d.season(ch, question=None,
                          contest_max_depth=w.fixtures.get("contest_max_depth"))
     except BaseException as e:
         return dict(ok=False, why=f"{type(e).__name__}: {e}", decisions=[], in_budget=[], acts=[])
@@ -279,7 +279,7 @@ def claim_channel(sample: int = 8, seasons: int = 3, seed: int = 0) -> dict:
         for _ in range(seasons):
             # `H-87`: the caller supplies the cap. See `fork_case` above for why this is not
             # optional since `U1`.
-            d.season(ch, question=None, subsistence=K.C.P.SUBSIST,
+            d.season(ch, question=None,
                      contest_max_depth=w.fixtures.get("contest_max_depth"))
         for p in w.persons.values():
             for c in p.ledger:

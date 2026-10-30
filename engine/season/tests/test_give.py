@@ -171,9 +171,9 @@ def _two_seasons(w):
         seen["t_give"] = w.tick
         return [P.Act_(w, p, "give", payload={"subject": "rec_s", "to": RECEIVER})]
     d = SeasonDriver(w)
-    d.season(choose, question=None, subsistence=P.SUBSIST)
+    d.season(choose, question=None)
     before = list(_content_claims(w, RECEIVER, "rec_s"))
-    d.season(choose, question=None, subsistence=P.SUBSIST)
+    d.season(choose, question=None)
     return "rec_s", seen["t_mint"], seen["t_give"], before
 
 

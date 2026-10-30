@@ -1,7 +1,7 @@
 """v9 IN-62 -- ONE OWNER OF THE SCORE'S TERMS, AND THE READING THAT ATTRIBUTES A DECISION TO ONE OF THEM.
 
-`decision/choose.py::score_terms(p, c, fx, memo) -> (pursuit, stance, urgency)` owns the formula and
-`make_chooser`'s `score` adds its three terms; `harness/decision_spread.py::attribute_top` says which
+`decision/choose.py::score_terms(p, c, fx, memo) -> (pursuit, stance)` owns the formula and
+`make_chooser`'s `score` adds its two terms; `harness/decision_spread.py::attribute_top` says which
 term decided a top. Five claims, each executed and each able to fail:
 
   1. `score(c) == sum(score_terms(...))` for EVERY candidate a seeded realm season forms (observed
@@ -157,12 +157,14 @@ def test_rem12_a_strict_top_the_planted_draw_reverses_reads_outvoted_and_the_dec
         ok["top"].verb, ok["draw_kind"], ok["decider"])
 
 
-def test_rem12_field_zero_sets_urgency_aside_and_is_false_for_a_person_who_holds_a_vector():
+def test_rem12_field_zero_is_true_for_a_person_with_no_vector_and_false_for_one_who_holds_one():
+    """`field_zero` is every candidate's score within `EPS` of 0. (It once set the candidate-independent
+    `urgency` term aside first; REM-44 deleted that term, so there is nothing left to set aside.)"""
     a, _, va, vb = _opposed_pair()
     cands = _cands(va, vb)
-    empty = DS.attribute_top(_person("p_rem12_fz"), cands, _FX0, subsistence=3.0)
+    empty = DS.attribute_top(_person("p_rem12_fz"), cands, _FX0)
     assert empty["field_zero"] is True
-    assert any(t[2] != 0 for t in empty["terms"]), "urgency was 0: the setting-aside was not exercised"
+    assert all(abs(s) <= DS.EPS for s in empty["scores"]), empty["scores"]
     held = DS.attribute_top(_person("p_rem12_fz2", **{a: 1.0}), cands, _FX0)
     assert held["field_zero"] is False
 
@@ -208,7 +210,7 @@ def test_in62_the_harness_top_is_the_real_choosers_top(monkeypatch):
     for i, name in enumerate(PURSUITS):
         p = _person(f"p_in62_c{i}", **{name: 1.0, PURSUITS[(i + 3) % len(PURSUITS)]: 0.5})
         seen.clear()
-        chooser(p, SimpleNamespace(question=object()), SimpleNamespace(subsistence=0), lambda: 1)
+        chooser(p, SimpleNamespace(question=object()), SimpleNamespace(), lambda: 1)
         assert "ranked" in seen, "the chooser never ranked: the falsifier did not run"
         r = DS.attribute_top(p, cands, DEFAULT_FIXTURES, draw)
         assert r["top"] is seen["ranked"][0], (p.id, r["top"].verb, seen["ranked"][0].verb)
@@ -254,8 +256,8 @@ def season_pairs():
 
 def test_in62_score_is_the_sum_of_score_terms_for_every_candidate_a_season_forms(season_pairs):
     checked = 0
-    for score, (pursuit, stance, urgency) in season_pairs:
-        assert score == pursuit + stance + urgency, (score, pursuit, stance, urgency)
+    for score, (pursuit, stance) in season_pairs:
+        assert score == pursuit + stance, (score, pursuit, stance)
         checked += 1
     assert checked >= 1000, f"a seeded realm season formed only {checked} candidates"
     assert any(t[0] != 0 for _, t in season_pairs), "no pursuit term was nonzero: the sum proved nothing"

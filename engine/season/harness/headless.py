@@ -131,13 +131,6 @@ def build_world(seed: int = 0, fixtures: "S.Fixtures" = None) -> World:
     return w
 
 
-def subsistence(p: Person, w: World) -> int:
-    """The injected formula §42.2.1 requires. No in-chain document supplies one and S10.4 makes
-    MatterKind an OPEN registry, so summing kinds as if fungible is a model choice this instrument
-    may not make on the design's behalf. A person is at the scale unless a store says otherwise."""
-    return w.fixtures.get("condition_scale")
-
-
 def run(seasons: int = 2, seed: int = 0) -> dict:
     """Run Carin's season(s) and return the artifact. NOTHING HERE CHOOSES AN ACT."""
     w = build_world(seed)
@@ -165,7 +158,7 @@ def run(seasons: int = 2, seed: int = 0) -> dict:
         # seam started firing on `kill / wound`.
         out.append(d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                                          draw=draw_factory(w.world_seed, lambda: w.tick)),
-                            None, subsistence,
+                            None,
                             contest_max_depth=w.fixtures.get("contest_max_depth")))
     return dict(seasons=out, hash=w.content_hash(), world=w,
                 events=len(w.log), acts=sum(s["acts"] for s in out),

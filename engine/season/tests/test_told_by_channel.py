@@ -350,7 +350,7 @@ def test_t1_what_hearers_receive_is_decided_at_choose_not_at_witness():
     w.step = Step.DELIBERATE
     q = Question("q:t1", "need", (subject,), "prop")
     scenes = P.chooser(w, only=teller, verbs=frozenset({"tell"}))(
-        tp, assemble(tp, q, w.fixtures.get("view_k")), Sensation(0), lambda: 5)
+        tp, assemble(tp, q, w.fixtures.get("view_k")), Sensation(), lambda: 5)
     tells = [a for s in scenes for a in s.acts if a.verb == "tell"]
     assert tells, "the chooser formed no `tell` for a teller holding a claim -- the fixture changed"
     act = tells[0]
@@ -1011,7 +1011,7 @@ def test_t4_a_planted_false_with_claim_in_the_tellers_ledger_does_not_decline_th
         w.step = Step.DELIBERATE
         q = Question("q:t4with", "need", (subject,), "prop")
         scenes = P.chooser(w, only=teller, verbs=frozenset({"tell"}))(
-            tp, assemble(tp, q, w.fixtures.get("view_k")), Sensation(0), lambda: 5)
+            tp, assemble(tp, q, w.fixtures.get("view_k")), Sensation(), lambda: 5)
         return [a.payload.get("to") for s in scenes for a in s.acts if a.verb == "tell"]
 
     assert tells_to_hearer(False) == ["p_mid"], "the control forms no `tell` to the hearer: fixture moved"
@@ -1105,7 +1105,7 @@ def test_t4b_a_second_hearer_is_a_distinct_opportunity():
             return [tell("p_mid"), tell("p_other")]
         return []
 
-    d.season(choose, None, P.SUBSIST, contest_max_depth=w.fixtures.get("contest_max_depth"))
+    d.season(choose, None, contest_max_depth=w.fixtures.get("contest_max_depth"))
     realised = d._realised.get(teller) or set()
     from ..data.verbs import opportunity_key
     assert opportunity_key("tell", subject, {"subject": subject, "to": "p_mid"}) in realised, (
@@ -1996,7 +1996,7 @@ def _g2_ranked(arm, cands, stance, monkeypatch):
     monkeypatch.setattr(CH, "pack_scenes", spy)
     fx = DEFAULT_FIXTURES.sweep("choice_temperature", 0).sweep("stance_polarity", arm)
     CH.make_chooser(fx, lambda *a: "act")(p, SimpleNamespace(question=object()),
-                                         SimpleNamespace(subsistence=0), lambda: 1)
+                                         SimpleNamespace(), lambda: 1)
     assert "ranked" in seen, "the chooser never ranked: the falsifier did not run"
     return seen["ranked"]
 

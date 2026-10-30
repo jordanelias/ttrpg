@@ -48,8 +48,8 @@ def seed_pursuits(seed: int, case_id: str, pid: str) -> dict:
     `harness/populated.py` seats 46 people and reproduced this formula verbatim -- the same radix,
     the same `axis:` purpose strings, the same `(0.9, 0.5, 0.3)` ladder -- which is TWO OWNERS OF
     WHICH PEOPLE ARE ALIKE. Free to drift, and drifting invisibly: `stance` is empty in these
-    worlds and §F2's `urgency` term carries no conviction, so this draw ALONE orders every
-    candidate, and two copies differing by one weight would give two instruments two different
+    worlds and §F2's third term (`urgency`, deleted by REM-44) carried no conviction, so this draw
+    ALONE orders every candidate, and two copies differing by one weight would give two instruments two different
     populations while both reported on "the corpus".
 
     ⚠ THE PURPOSE STRING STAYS `axis:` THOUGH IT PICKS A CONVICTION. Changing it would re-draw

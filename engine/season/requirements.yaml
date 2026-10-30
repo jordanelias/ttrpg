@@ -1355,7 +1355,7 @@ rows:
       DECIDING TERM, `decision_spread --decisions` at the built realm (no season played; 83 persons x 6 referents = 498 readings),
       seeds 0 / 1 / 2: draw 424 / 433 / 430, pursuit 74 / 65 / 68 (the same totals at all three seeds
       as the reader printed before REM-12, which only split the draw). REM-12's split of the draw's tops: `tie` 222 / 222 / 222, `outvoted` 202 / 211 / 208, outvoted margins' median
-      0.0301 / 0.0298 / 0.0301 against `choice_temperature` 0.1; and `every candidate scores 0 (urgency set aside)`: 222 of 498
+      0.0301 / 0.0298 / 0.0301 against `choice_temperature` 0.1; and `every candidate scores 0` (printed with "(urgency set aside)" until REM-44 deleted `urgency`): 222 of 498
       readings at each seed, from 37 distinct persons (37 x 6 = 222), the cohorts that carry no pursuit vector (83 - 37 = 46 do).
       CONTROL, `decision_spread --null` seed 0: draw 498 of 498, tie 498, outvoted 0, no pursuit-decided reading, the same 222 all-zero
       readings from 37 persons, so the attribution can fail and does when the pursuit term is removed. DERIVED from those lines, not
@@ -1514,8 +1514,8 @@ rows:
       THE TIE AGAINST THE OVERRULE, `decision_spread --decisions` at the built realm, seeds 0 / 1 / 2 (498 readings each): the draw's
       tops are 424 / 433 / 430, of which `tie` 222 / 222 / 222 (the draw ordered a tie) and `outvoted` 202 / 211 / 208 (the draw
       overrode a score leader; margins' median 0.0301 / 0.0298 / 0.0301 against `choice_temperature` 0.1); pursuit decides the
-      other 74 / 65 / 68. Every one of the 222 ties per seed is a tie at ZERO, by count: `every candidate scores 0 (urgency set
-      aside)` is 222 of 498 readings from 37 distinct persons at each seed, the cohorts holding no pursuit vector, and the two 222s
+      other 74 / 65 / 68. Every one of the 222 ties per seed is a tie at ZERO, by count: `every candidate scores 0` (REM-12's label
+      said "urgency set aside" until REM-44 deleted `urgency`) is 222 of 498 readings from 37 distinct persons at each seed, the cohorts holding no pursuit vector, and the two 222s
       are equal (inferred from equal counts; the printed lines carry no per-reading cross-tab). So no printed tie is between equal
       nonzero scores, and the persons the ties come from hold no vector, so inclination has nothing to break them with (R-06's
       subject: a person with no pursuit vector). CONTROL, `--null` seed 0: tie 498, outvoted 0,

@@ -479,8 +479,9 @@ def build_at(case: dict, seed: int = 0) -> World:
     The draw itself lives in `run_cases.seed_pursuits`, its
     single owner; this module only calls it. Rev 1 wrote
     three axis names and the weight `0.9` as literals, which is a fill off the register (`G1`) and,
-    worse, was the ENTIRE ranking function — `stance` is empty in these worlds and §F2's `urgency`
-    term has no `c` in it, so the conviction axis alone orders every candidate. Identical
+    worse, was the ENTIRE ranking function — `stance` is empty in these worlds and §F2's third term
+    (`urgency`, deleted by REM-44: it had no `c` in it) never ordered anything, so the conviction axis
+    alone orders every candidate. Identical
     convictions therefore forced identical rankings in every world. Seeding from the id makes them
     differ per case, reproducibly, and takes the axis names from the roster rather than a body."""
     scale = str(case.get("scale"))
@@ -959,7 +960,7 @@ def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
             # `Forbidden` before `contest()` was ever entered, for every case reaching a contested
             # act. `w.fixtures.get(...)`, not a literal -- `DEFAULT_FIXTURES.contest_max_depth`
             # is the one registered number (§0.05).
-            d.season(ch, question=None, subsistence=P.SUBSIST,
+            d.season(ch, question=None,
                     contest_max_depth=w.fixtures.get("contest_max_depth"))
     except InstrumentDefect as e:
         # ⚠ THE TWO BUCKETS ARE SHAPE'S OWN, NOT A SECOND TAXONOMY (§8). `shape.py` states why the
@@ -992,7 +993,7 @@ def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
             # replay (or vice versa) would make the two runs different EXPERIMENTS -- one
             # reaching the contest seam and one refusing before it -- and R4 would then be
             # comparing a hash that never got a chance to diverge against one that did.
-            d2.season(ch2, question=None, subsistence=P.SUBSIST,
+            d2.season(ch2, question=None,
                      contest_max_depth=w2.fixtures.get("contest_max_depth"))
         r4 = w2.content_hash() == w.content_hash()
     except Exception:

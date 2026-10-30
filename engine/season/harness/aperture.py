@@ -529,7 +529,7 @@ def instrumented_season(w, seasons: int) -> dict:
     marks: list = []                     # per season, at its START: (log length, seats), for the death census
     for _ in range(seasons):
         marks.append((len(w.log), seats(w)))
-        d.season(watched_choose, question=None, subsistence=P.SUBSIST,
+        d.season(watched_choose, question=None,
                  contest_max_depth=fx.get("contest_max_depth"))
 
     attempted: dict = defaultdict(Counter)

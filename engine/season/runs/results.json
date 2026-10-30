@@ -9250,7 +9250,7 @@
   "P13": {
    "id": "P13",
    "verdict": "PASS",
-   "detail": "PASS-WITH-A-DISCLOSURE: `needs` is a Sensation plus a Query, stored nowhere. But the subsistence FORMULA is the instrument's, injected (S42.2.1): no in-chain document supplies one, and S10.4 makes MatterKind an OPEN registry, so summing kinds as if fungible is a model choice the design has not made",
+   "detail": "PASS-WITH-A-DISCLOSURE: a need is a Query over the world (here the home larder, `world_q.parent_of` then the rung's stores; for a settlement `world_q.hunger`), stored on no `Person` field. REM-44 deleted the injected subsistence formula that fed `Sensation` a number; no in-chain document supplied one, and S10.4 makes MatterKind an OPEN registry, so summing kinds as if fungible is a model choice the design has not made",
    "kind": null,
    "section": "S18.2",
    "title": "a person acts on a need with no stored need field",
@@ -9408,7 +9408,7 @@
   "P28": {
    "id": "P28",
    "verdict": "PASS",
-   "detail": "PASS-BY-ABSENCE: `assemble` takes THE ASKER and builds from the asker's own ledger. There is no signature in the decision surface (17 functions) that takes one person and returns another's ledger. Absence is the refusal here, not a guard",
+   "detail": "PASS-BY-ABSENCE: `assemble` takes THE ASKER and builds from the asker's own ledger. There is no signature in the decision surface (16 functions) that takes one person and returns another's ledger. Absence is the refusal here, not a guard",
    "kind": null,
    "section": "S20",
    "title": "a ledger is unreadable by anyone else",
@@ -9489,7 +9489,7 @@
    "section": "S18.2",
    "title": "a private track of regard runs separately from a public one",
    "needs": "a second standing scalar, or an owner for an audience-scoped one",
-   "law": "S18.2 -- Sensation is EXACTLY TWO FLOATS and S46.1 makes widening it structural in Godot ('nobody can add a third field to Vector2'). A second, audience-scoped standing has NO CARRIER and S22 gives NO OWNER for one -- and the first standing does not compute either (see P14)",
+   "law": "S18.2 -- Sensation is ONE scalar (`standing`) after REM-44, and S46.1 makes widening it structural in Godot (a single scalar, not a Vector2). A second, audience-scoped standing has NO CARRIER and S22 gives NO OWNER for one -- and the first standing does not compute either (see P14)",
    "by": "no-signature",
    "tests": "a character must be able to have a standing among people who can never publicly acknowledge them, separate from their public standing"
   },
@@ -10761,7 +10761,7 @@
    "what": "an audience-scoped second standing",
    "where": "S18.2",
    "needs": "a second standing scalar, or an owner for an audience-scoped one",
-   "law": "S18.2 -- Sensation is EXACTLY TWO FLOATS and S46.1 makes widening it structural in Godot ('nobody can add a third field to Vector2'). A second, audience-scoped standing has NO CARRIER and S22 gives NO OWNER for one -- and the first standing does not compute either (see P14)",
+   "law": "S18.2 -- Sensation is ONE scalar (`standing`) after REM-44, and S46.1 makes widening it structural in Godot (a single scalar, not a Vector2). A second, audience-scoped standing has NO CARRIER and S22 gives NO OWNER for one -- and the first standing does not compute either (see P14)",
    "case": "probe:P35",
    "expected": false
   },

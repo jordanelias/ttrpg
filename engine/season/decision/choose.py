@@ -1,6 +1,6 @@
 """`decision/` -- the `choose` member of `04_CODE_ARCHITECTURE.md` §A.2:133.
 
-`make_chooser` and everything it resolves by BARE NAME: `urgency` and `pack_scenes` (with
+`make_chooser` and everything it resolves by BARE NAME: `pack_scenes` (with
 `_payload_of`). `align` (from `data/verbs.py`), `stance_toward` (from `queries/person_q.py`) and
 `project` (from `options.py`) are imported here, so `from .choose import align, project` still
 resolves.
@@ -109,46 +109,44 @@ def _stance_arm(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict]) -
 # IN-62: the keys under which `make_chooser` hoists a deliberation's candidate-independent factors
 # into the `memo` `score_terms` reads. TUPLES, because `_stance_arm` keys the same dict by subject id
 # (a string), so no subject can collide with one of these.
-_AXIS_W, _DAMP, _URGENCY = ("axis_w",), ("damp",), ("urgency",)
+_AXIS_W, _DAMP = ("axis_w",), ("damp",)
 
 
-def deliberation_memo(p: Person, subsistence: float, fx: "Fixtures") -> dict:
+def deliberation_memo(p: Person, fx: "Fixtures") -> dict:
     """The `memo` `score_terms` reads, built the way `make_chooser` builds it for one deliberation:
-    the projected axis weights (with the swept `scar_weight_shift`), the `confliction` damp (the
-    swept `confliction_weight`, H-188) and the urgency term, hoisted once because none depends on
-    the candidate. Exists so a reading that scores a person outside `choose` (`harness/
-    decision_spread.py`) takes the SAME three factors from the same arms rather than copying them."""
+    the projected axis weights (with the swept `scar_weight_shift`) and the `confliction` damp (the
+    swept `confliction_weight`, H-188), hoisted once because neither depends on the candidate.
+    Exists so a reading that scores a person outside `choose` (`harness/decision_spread.py`) takes
+    the SAME two factors from the same arms rather than copying them. (REM-44 deleted a third, the
+    `urgency` term: it had no candidate in it, so it moved no ranking.)"""
     k = float(fx.get("confliction_weight"))
     if not k >= 0:                   # `not >=`, so a NaN is refused too
         raise ValueError(f"confliction_weight {k} is not >= 0: it would invert, divide by zero "
                          f"or poison the score (H-188)")
     return {_AXIS_W: project(p, fx.get("scar_weight_shift")),
-            _DAMP: 1.0 if k == 0 else 1.0 / (1.0 + k * confliction(p)),
-            _URGENCY: urgency(subsistence, fx)}
+            _DAMP: 1.0 if k == 0 else 1.0 / (1.0 + k * confliction(p))}
 
 
 def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict) -> tuple:
-    """§F2's score, term by term: `(pursuit, stance, urgency)`, and `score(c)` is their sum (IN-62).
+    """§F2's score, term by term: `(pursuit, stance)`, and `score(c)` is their sum (IN-62).
     The ONE owner of the formula (`CLAUDE.md` §8): `make_chooser`'s `score` calls this and adds, and
     a reading that wants to know WHICH TERM decided a ranking calls this and never re-derives one.
 
       * `pursuit` -- `damp * Σ_axis axis_w[axis] * align(c.verb, axis)`, `axis_w` the person's
         projected pursuits and `damp` the `confliction_weight` arm's factor (exactly 1.0 at 0);
-      * `stance` -- `stance_term(p, c, fx, memo)`, by `Fixtures.stance_polarity`, at gain `1 + g`;
-      * `urgency` -- `urgency(subsistence, fx)`, identical for every candidate (`urgency`'s docstring).
+      * `stance` -- `stance_term(p, c, fx, memo)`, by `Fixtures.stance_polarity`, at gain `1 + g`.
 
     `memo` is a `deliberation_memo(...)` (it also caches `regard` per subject for the call). A memo
-    without the three hoisted factors is refused, not defaulted: a missing factor read as 0 or 1
+    without the two hoisted factors is refused, not defaulted: a missing factor read as 0 or 1
     would score a different person than the one asked about."""
     try:
-        axis_w, damp, u = memo[_AXIS_W], memo[_DAMP], memo[_URGENCY]
+        axis_w, damp = memo[_AXIS_W], memo[_DAMP]
     except KeyError:
-        raise ValueError("score_terms needs a memo from `deliberation_memo(p, subsistence, fx)` "
-                         "(or `make_chooser`'s): the pursuit weights, damp and urgency are "
+        raise ValueError("score_terms needs a memo from `deliberation_memo(p, fx)` "
+                         "(or `make_chooser`'s): the pursuit weights and damp are "
                          "hoisted per deliberation") from None
     return (damp * sum(axis_w[ax] * align(c.verb, ax) for ax in PURSUIT_AXES),
-            stance_term(p, c, fx, memo),
-            u)
+            stance_term(p, c, fx, memo))
 
 
 def beneficiary_of(p: Person, c: Candidate) -> Optional[str]:
@@ -190,52 +188,6 @@ def beneficiary_of(p: Person, c: Candidate) -> Optional[str]:
     if kind == "subject":
         return c.subject or None
     return c.operands.get(kind)
-
-
-def benefits_me(p: Person, c: Candidate) -> float:
-    """`synthesis.md` §1.3's `benefits_me(c)` -- 1.0 where the act is taken for the actor's own
-    good, 0.0 otherwise. The `orient ·` that multiplies it is NOT here and NOT in `score`.
-
-    ⚠ NOTHING MULTIPLIES THIS YET, AND THE REASON IS A MISSING FIELD, NOT A MISSING PRODUCER
-    (CORRECTED 2026-09-20, `ED-IN-0260`; the old reason read *"`orient` ... no verb writes it"*).
-    That reason proves too much: NO VERB WROTE `Person.pursuits` EITHER when it was written (the first
-    writer is v9 SC-02 `22b` step 24's `determine`, by consequence) -- and `pursuits` is term 1 of the live score, genesis-authored from
-    `references/npc_registry.yaml` at `harness/populated.py:462-463`. Applied evenly, the old reason
-    un-wires the score's first term. What is actually missing is the STATE: `Person` has no `orient`
-    field, and the 28 authored `self_other_initial` values in that same registry are the one cell
-    `data/cast.py::pursuits_of` skips (its `continue` past non-list entries).
-    ⚠ STILL UNWIRED AFTER IN-08 6f, AND DELIBERATELY (`DONE·UNWIRED`): `Person.orient` is DROPPED
-    (`ED-IN-0261`), so the `orient ·` multiplier has no producer and 6f wires only the confliction
-    read. `ED-IN-0261` names the `selfish_selfless` axis score as the disposition this would be
-    weighed by; no position builds that term, and `STR-3`'s range floor would bind it when one does.
-
-    ⚠ IT IS A FLOAT AND NOT A BOOL BECAUSE IT IS A SCORE TERM. `beneficiary_of` carries the
-    identity for anything that needs to know WHO; this answers only *is it me*."""
-    return 1.0 if beneficiary_of(p, c) == p.id else 0.0
-
-
-def urgency(subsistence: int, fx: "Fixtures") -> float:
-    """§F2's third term. NO IN-CHAIN FORMULA -- `H-73`, `assumption`, swept.
-
-    ⚠ AND IT CANNOT CHANGE ANY DECISION, WHICH IS A DEFECT IN §F2 RATHER THAN IN THIS FUNCTION.
-    §F2's score is
-
-        score(c) = SIGMA_axis conviction[axis] * alignment(c.verb, axis)
-                 + stance_toward(c.subject)
-                 + urgency(sensation.subsistence)
-
-    and the third term HAS NO `c` IN IT. It is added identically to every candidate, so it cannot
-    move the ranking, cannot change which candidates survive `ask_budget()`, and cannot change the
-    order they are returned in. `choose` returns "the top ask_budget() candidates, ORDERED by
-    score", so a term constant across candidates is INERT BY CONSTRUCTION -- it is the dead-carrier
-    shape #353 `:739-744` names, arriving in the scoring function instead of in a field.
-
-    Kept and computed anyway, faithfully, because deleting it would hide the finding: the sweep
-    (`H-73`) reports that NO verdict moves across three urgency scales, and that null result IS
-    the measurement. `test_w5_f2s_third_term_cannot_change_any_decision` is the falsifier — corrected 2026-09-16
-    from `test_w5_f2_third_term_is_inert`, a name that has never existed in this tree. A cited
-    falsifier nobody can run is the unfalsifiable claim §0.1 pt 3 forbids, wearing a test's name."""
-    return float(subsistence) / float(fx.get("condition_scale"))
 
 
 def _sample_order(ranked: list, score, p: Person, fx: "Fixtures", draw) -> list:
@@ -416,7 +368,7 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
     Four properties, and each is checked by a test rather than asserted here:
       1. EVERY INPUT IS PERSON-SIDE -- `pursuits` (read through `person_q.crisis_weights`,
          which also reads `scar`), `stance`, `conviction` (read through `person_q.confliction`),
-         the View, the two Sensation scalars. No World, no resolver-side Query. L2 by
+         the View, the Sensation's `standing`. No World, no resolver-side Query. L2 by
          parameter list.
       2. It CONSUMES `pursuits` and `stance`, which #353 declares as fields and no formula in
          the chain reads -- a carrier nothing consumes is dead state (§22.1's own complaint).
@@ -440,17 +392,17 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
         # `U3`: the person's convictions are weights over the THIRTEEN, so they are projected into
         # the four-axis basis once per deliberation; IN-08 H9's `scar_weight_shift` and IN-08 6f's
         # `confliction` damp (`confliction_weight`, H-188; damping the pursuit pull, never
-        # inverting it [ASSUMPTION: no source states how strain enters the score]) and the urgency
-        # term are hoisted the same way. None depends on `c`; `deliberation_memo` is their owner.
+        # inverting it [ASSUMPTION: no source states how strain enters the score]) are hoisted the
+        # same way. None depends on `c`; `deliberation_memo` is their owner.
         # v9 IN-18 `G2`: term 2 by the role the subject plays (`stance_term`; `legacy` is the
         # pre-G2 `stance_toward(p, c.subject)`). `memo` holds one regard per subject per call, and
-        # the three hoisted per-deliberation factors under tuple keys (`score_terms`).
-        memo: dict = deliberation_memo(p, s.subsistence, fx)
+        # the two hoisted per-deliberation factors under tuple keys (`score_terms`).
+        memo: dict = deliberation_memo(p, fx)
         def score(c: Candidate) -> float:
             # IN-62: the terms have ONE owner, `score_terms`; the score is their left-to-right sum,
-            # the exact float expression this closure held before (`(pursuit + stance) + u`).
-            pursuit, stance, urg = score_terms(p, c, fx, memo)
-            return pursuit + stance + urg
+            # the float expression this closure held before REM-44 less its constant third term.
+            pursuit, stance = score_terms(p, c, fx, memo)
+            return pursuit + stance
         # ⚠ SCORED ONCE, NOT TWICE. `score` was passed to `_sample_order` and re-invoked there for
         # every candidate it had just been invoked for in this sort key — measured by a `/simplify`
         # profile as `align()` running 637,324 times for 78,858 candidates across a 143-case corpus

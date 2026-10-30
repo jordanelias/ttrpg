@@ -300,12 +300,12 @@ def test_in27_the_query_and_the_season_step_write_nothing(monkeypatch):
     assert _state(w) == before, "calling the Query moved the world"
     kw = dict(contest_max_depth=w.fixtures.get("contest_max_depth"))
 
-    called = SeasonDriver(w).season(P.NOCHOOSE, question=None, subsistence=P.SUBSIST, **kw)
+    called = SeasonDriver(w).season(P.NOCHOOSE, question=None, **kw)
     assert [r.ending for r in called["endings"]] == ["crowned_reeve"], called["endings"]
 
     other = _reached_world(monkeypatch)
     monkeypatch.setattr(Q, "endings_reached", lambda _w: [])
-    skipped = SeasonDriver(other).season(P.NOCHOOSE, question=None, subsistence=P.SUBSIST, **kw)
+    skipped = SeasonDriver(other).season(P.NOCHOOSE, question=None, **kw)
     assert skipped["endings"] == []
     assert _state(w) == _state(other), "the ending step moved the season"
     assert {k: v for k, v in called.items() if k != "endings"} == \
@@ -374,7 +374,7 @@ def test_in27_two_seasons_of_the_built_realm_run_the_step_and_report_no_ending(m
     d = SeasonDriver(w)
     checked = 0
     for s in (1, 2):
-        out = d.season(ch, question=None, subsistence=P.SUBSIST,
+        out = d.season(ch, question=None,
                        contest_max_depth=w.fixtures.get("contest_max_depth"))
         assert len(calls) == s and calls[-1][0] is w, calls
         assert "endings" in out and out["endings"] == [] and calls[-1][1] is out["endings"], out.get("endings")

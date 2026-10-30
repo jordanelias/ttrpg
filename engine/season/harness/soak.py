@@ -321,7 +321,7 @@ def _run_world(args: argparse.Namespace, head: str, world_dir: Path, argv: list)
             # Never continues past an exception, never retries, never adds a `try` inside the
             # engine itself.
             try:
-                season_out = d.season(ch, question=None, subsistence=P.SUBSIST,
+                season_out = d.season(ch, question=None,
                                       contest_max_depth=w.fixtures.get("contest_max_depth"))
             except InstrumentDefect as exc:
                 # `InstrumentDefect` is NOT a `ShapeGap` (`gaps.py`) and is caught first -- but it

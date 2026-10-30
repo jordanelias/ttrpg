@@ -427,10 +427,9 @@ def test_in53v_d_a_confer_onto_no_living_person_is_refused():
 
 def _fp_and_formed(w, pid, since=None):
     from engine.season.loop.deliberate import _inputs_fingerprint
-    from engine.season.state.carriers import Sensation
     p = w.persons[pid]
     qs = world_q.questions_for(w, p, since)
-    return ([q.id for q in qs], _inputs_fingerprint(p, qs, Sensation(0)),
+    return ([q.id for q in qs], _inputs_fingerprint(p, qs),
             _sig(c for q in qs for c in _formed(w, pid, q)))
 
 

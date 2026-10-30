@@ -452,7 +452,8 @@ it, and *an arc is a chain of these links*.
 
 ```
 View      := ClaimId[]   -- IDS. STRUCTURAL: a packed int array holds no reference
-Sensation := (subsistence, standing)  -- GDScript Vector2 is STRUCTURAL against widening; Python a 2-field tuple is CONVENTION
+Sensation := (standing)  -- GDScript a single scalar (a float/int, not a Vector2) is STRUCTURAL against widening; Python a 1-field value is CONVENTION
+              -- the type is not deleted (REM-44, ED-IN-0300 2026-10-26): it holds `standing` only, which raises at its point of use
 Refusal   := typed result -- what the seam returns at the depth cap. NEVER a raise
 world_q.<n>(w : World, ...)          person_q.<n>(p : PersonInterior, ...)
 faction_q.resolve(w, prop) -> Faction -- §B.6.1. A VIEW: same lifetime rule as the cache
@@ -648,7 +649,7 @@ failure it excludes; the write side can.**
 
 ## §C.3 · DELIBERATE ↔ decision
 
-**In:** a frozen `PersonInterior`, a `View` of ids, two scalars, an int, `Question[]`, and the verb
+**In:** a frozen `PersonInterior`, a `View` of ids, one scalar, an int, `Question[]`, and the verb
 table's *declarations* — `requires` evaluated as **not known-false from the person's own claims.**
 **Out:** `Scene[]`.
 

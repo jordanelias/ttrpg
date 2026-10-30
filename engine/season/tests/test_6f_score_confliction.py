@@ -73,7 +73,7 @@ def _ranking(p: Person, k: float, monkeypatch) -> list:
     fx = (DEFAULT_FIXTURES.sweep("choice_temperature", 0).sweep("stance_gain", 0.0)
           .sweep("confliction_weight", k))
     choose = CH.make_chooser(fx, lambda *a: "act")
-    choose(p, SimpleNamespace(question=object()), SimpleNamespace(subsistence=0), lambda: 1)
+    choose(p, SimpleNamespace(question=object()), SimpleNamespace(), lambda: 1)
     assert "ranked" in seen, "the chooser never ranked: the falsifier did not run"
     return seen["ranked"], hi, lo
 

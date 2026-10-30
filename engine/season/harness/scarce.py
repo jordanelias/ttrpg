@@ -222,7 +222,7 @@ def run(seasons: int = 3, seed: int = 0, w: World | None = None,
         need, got = world_q.demanded(w, HUNGRY), world_q.delivered(w, HUNGRY)
         n_log, n_acts = len(w.log), len(d.resolved)
         asked = shortfall_question(w, STEWARD) if name_the_question else None
-        d.season(ch, question=asked, subsistence=P.SUBSIST,
+        d.season(ch, question=asked,
                  contest_max_depth=w.fixtures.get("contest_max_depth"))
         new = w.log[n_log:]
         outcome = {e.causes[0]: e.kind for e in new
