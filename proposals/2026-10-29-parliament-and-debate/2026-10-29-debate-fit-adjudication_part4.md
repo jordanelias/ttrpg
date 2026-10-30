@@ -152,7 +152,7 @@ GV-001, GV-002, GV-003, GV-004, GV-034, GV-035, GV-071, OP-107, OP-047, OP-058.
 OP-049, GV-077, OP-013, CD-071, GV-079, GV-074, GV-075, OP-086, OP-072, OP-109.
 - CR-37 fits: two persons' acts, no threshold, and the deposed king keeps his duchy, so he lives on as a rival. The heir's claim as his own act fits. GV-074's PI meter and GV-075's conjunction-fired deposition **misfit** (T-b: a threshold may only raise a question, NL-081).
 - Contested succession waits on H-217 (no succession arrangement, no hold disposal; CD-071).
-- Narr: OP-072 (a Crown claim composed from two contested successions, nothing authored) is the model hook. OP-109 shows the cost of the gap: the throne empties at tick 0 and never refills.
+- Narr: OP-072 (a Crown claim composed from two contested successions, nothing authored) is the model hook. OP-109 shows the cost of the gap: the throne empties at tick 0 and never refills. **[Unreproduced: the "tick 0, every seed" reading comes from an uncommitted probe at `51d7b05`; H-230 cites the King dying in season 1 at seeds 0 and 2 on base `c6459377`; a four-season run on `120b3bf7` finds him alive at seeds 0 and 2. Three bases, none reproducible from the tree. See `2026-10-29-resolution-design.md` §2A.]**
 - Evidence: C (plan) + P.
 
 ## 3. Clusters — I
