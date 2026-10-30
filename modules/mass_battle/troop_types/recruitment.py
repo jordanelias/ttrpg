@@ -30,6 +30,8 @@ from __future__ import annotations
 import math
 from typing import Mapping, Optional
 
+from modules.mass_battle.troop_types.registry import stats_for
+
 __all__ = ['TROOPS_PER_WEIGHT', 'MUSTER_FRACTION', 'TRAINING_SITE', 'training_site_for', 'under_arms_cap',
            'recruit_limit']
 
@@ -84,7 +86,6 @@ def recruit_limit(troop_type: str, weight: float, site_conditions: Mapping[str, 
     already under arms there, by type (every type counts against the population cap; only `troop_type` against its
     own site share). `full` -- the condition scale (`condition_scale`); a Site at `full` is a complete one.
     Never negative. An unknown type raises ValueError, so a typo is not read as "needs no Site"."""
-    from modules.mass_battle.troop_types.registry import stats_for      # local: registry imports config, not this module
     if stats_for(troop_type) is None:
         raise ValueError(f"unknown troop type {troop_type!r}")
     if not full > 0:
@@ -93,14 +94,14 @@ def recruit_limit(troop_type: str, weight: float, site_conditions: Mapping[str, 
     room_total = cap - sum(int(n) for n in raised.values())
     site = training_site_for(troop_type)
     if site is None:
-        share = cap
+        # Levy has no Site, so its own count is the whole of what it shares.
+        share, kind_types = cap, {str(troop_type).strip().lower()}
     else:
         kind, floor = site
         frac = max(0.0, min(1.0, float(site_conditions.get(kind, 0.0)) / float(full)))
         share = 0 if frac <= 0.0 or frac < floor else int(math.floor(cap * frac))
-    # The Site is shared by every type trained at its kind: a quarter-built barracks trains a quarter of the cap
-    # BETWEEN its types, not a quarter each. Levy has no Site, so its own count is the whole of what it shares.
-    kind_types = {t for t, (k, _f) in TRAINING_SITE.items() if site is not None and k == site[0]} or {
-        str(troop_type).strip().lower()}
+        # The Site is shared by every type trained at its kind: a quarter-built barracks trains a quarter of the cap
+        # BETWEEN its types, not a quarter each.
+        kind_types = {t for t, (k, _f) in TRAINING_SITE.items() if k == kind}
     room_type = share - sum(int(n) for t, n in raised.items() if str(t).strip().lower() in kind_types)
     return max(0, min(room_total, room_type))

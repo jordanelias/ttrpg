@@ -94,9 +94,12 @@ class Subformation:
 
 @dataclass(frozen=True)
 class OrderOfBattle:
-    """An army: its subformations, in line order, and one strategy for the whole."""
+    """An army: its subformations, in line order, and one strategy for the whole. `drawn_from` is the host's, not the
+    battle's: the ids of the cohorts the troops were drawn from, so the host writes a fight's casualties to the people
+    who fought and not to everybody standing nearby. The battle never reads it."""
     subformations: Tuple[Subformation, ...]
     strategy: str = 'line'
+    drawn_from: Tuple[str, ...] = ()
 
 
 def class_of(troop_type: str) -> str:
@@ -139,19 +142,22 @@ def _spec_for(sf: Subformation, strategy: str) -> dict:
     cls = class_of(sf.troop_type)
     # No role named -> a plain Line with no instruction package, the shape the headcount line has always fought as.
     # The type's first menu entry is NOT a safe default: a levy's menu is the 'any' fallback (Support, Reserve), and a
-    # Reserve body does not advance. Roles are chosen on purpose, by the host or the menu.
+    # Reserve body does not advance. Roles are chosen on purpose, by the host or the menu. THE ONE RULED EXCEPTION is
+    # `build_army`'s (ED-1095, Jordan: mounted archers "shouldn't be closing in on the enemy"): a mounted_archers body
+    # with no role stands off as Kite, and naming a shape here would opt it out of that.
+    role = sf.role or ('Kite' if sf.troop_type == 'mounted_archers' else None)
     spec = dict(troop_type=sf.troop_type, troops=float(sf.troops),
                 concentration=float(cell_cap_for(sf.troop_type)))
     # STANCE PRECEDENCE: the subformation's own, then the one its role's instructions set (ShieldWall and Hold hold,
     # Push presses -- `Subunit.eff_stance` reads them only while the stance was never written on purpose), then the
     # strategy's for its class. Always writing the strategy's stance made a role unable to set it.
-    role_stance = sf.role is not None and any(k in _INSTRUCTION_STANCE for k in ROLE_SPEC[sf.role]['instructions'])
+    role_stance = role is not None and any(k in _INSTRUCTION_STANCE for k in ROLE_SPEC[role]['instructions'])
     if sf.stance is not None:
         spec['stance'] = sf.stance
     elif not role_stance:
         spec['stance'] = STRATEGIES[strategy][cls]
-    if sf.role is not None:
-        spec['role'] = sf.role
+    if role is not None:
+        spec['role'] = role
     else:
         spec['shape'] = 'Line'
     if sf.target is not None:

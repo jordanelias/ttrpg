@@ -29,6 +29,7 @@ def _world():
     w.propositions[FACTION] = Proposition(FACTION, "HOLDS", "Crown", "is a faction of this world", True, 0)
     P.plant_cohort(w, COHORT, HOME, weight=12)
     w.add_tenure(Tenure("t_c1_commit", COHORT, FACTION, "commit", since=0))
+    w.add_tenure(Tenure("t_cmd_commit", COMMANDER, FACTION, "commit", since=0))     # the commander is of the faction
     scale = w.fixtures.get("condition_scale")
     w.sites["site_barracks"] = Site("site_barracks", HOME, "barracks", condition=scale)
     d = SeasonDriver(w)
@@ -209,11 +210,21 @@ def test_a_missing_or_mistyped_payload_field_is_a_refusal_not_a_crash():
              ("assign_troops", dict(name="x", cohort=COHORT)),                # no count
              ("recruit", dict(cohort=COHORT, troop_type="levy", count=None)),
              ("order_unit", dict(stance="hold")),                             # no name
-             ("order_unit", dict(name="x", fall_back_at="soon")))
+             ("order_unit", dict(name="x", fall_back_at="soon")),
+             ("recruit", dict(cohort=[COHORT], troop_type="levy", count=1)),  # unhashable: a dict key must not be tried
+             ("form_unit", dict(name=["x"], troop_type="levy")),              # a name no string would crash the battle
+             ("form_unit", dict(name=5, troop_type="levy")))
     for i, (verb, payload) in enumerate(cases):
         out = _do(w, d, verb, f"bad_pl{i}", **payload)
         assert f"{verb}.refused" in _kinds(out), (verb, payload, _kinds(out))
         assert _army(w) == before
+
+
+def test_an_army_whose_faction_is_no_string_is_refused_not_a_crash():
+    from modules.mass_battle import armyrecord as A
+    w, d = _world()
+    out = _mint(w, d, key="army_list", content={**A.new(FACTION), "faction": [FACTION]})
+    assert _kinds(out) == ["act.refused"] and "army_list" not in w.records, _kinds(out)
 
 
 def test_an_army_whose_holder_is_gone_frees_its_factions_slot():
@@ -225,5 +236,24 @@ def test_an_army_whose_holder_is_gone_frees_its_factions_slot():
         if t.object == "army1" and t.kind == "hold" and t.live:
             t.until = w.tick
     assert world_q.army_of(w, FACTION) is None, "an army nobody holds is nobody's army"
+    w.add_tenure(Tenure("t_heir_commit", "p_mid", FACTION, "commit", since=w.tick))      # an heir of the same faction
     out = _mint(w, d, key="army2", actor="p_mid")
     assert _kinds(out) == ["record.created"] and world_q.army_of(w, FACTION) == "army2", _kinds(out)
+
+
+def test_only_a_member_of_the_faction_raises_or_commands_its_army():
+    """Otherwise a rival could mint the Church's army and lock it out, or be handed the Record and field one levy for
+    it. CONTROLS: the committed commander mints and commands (every other test); here one change each."""
+    w, d = _world()
+    out = _mint(w, d, key="army_rival", actor="p_mid")                        # p_mid is of no faction
+    assert _kinds(out) == ["act.refused"] and "army_rival" not in w.records, _kinds(out)
+    _mint(w, d)
+    for t in w.tenures:                                                       # the Record passes to p_mid by hand
+        if t.object == "army1" and t.kind == "hold" and t.live:
+            t.until = w.tick
+    w.add_tenure(Tenure("t_handed", "p_mid", "army1", "hold", since=w.tick))
+    refused = _do(w, d, "recruit", "r_out", actor="p_mid", cohort=COHORT, troop_type="levy", count=5)
+    assert "recruit.refused" in _kinds(refused) and _army(w)["trained"] == (), "a holder who is no member commanded it"
+    w.add_tenure(Tenure("t_mid_commit", "p_mid", FACTION, "commit", since=w.tick))
+    ok = _do(w, d, "recruit", "r_in", actor="p_mid", cohort=COHORT, troop_type="levy", count=5)
+    assert "army.recruited" in _kinds(ok), _kinds(ok)

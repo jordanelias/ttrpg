@@ -125,8 +125,8 @@ def form(record: dict, name: str, troop_type: str, role: Optional[str] = None) -
     unset; `order` sets them. Refuses a duplicate name, an unknown type, a role outside the type's menu, and a
     twelfth subformation (`armies.SUBUNIT_CAP`)."""
     t = _type(troop_type)
-    if not str(name).strip():
-        raise ValueError("a subformation needs a name")
+    if not isinstance(name, str) or not name.strip():
+        raise ValueError(f"a subformation needs a name (a non-empty string), got {name!r}")
     if any(sf['name'] == name for sf in record['subformations']):
         raise ValueError(f"duplicate subformation name {name!r}")
     if len(record['subformations']) >= SUBUNIT_CAP:
@@ -224,15 +224,16 @@ def to_order_of_battle(record: dict, fitness: Optional[Callable[[str], float]] =
     season passes its body fraction). A subformation left with no strength is dropped; an army with none left
     raises ValueError, since there is nothing to field."""
     fit = fitness or (lambda _c: 1.0)
-    parts = []
+    parts, drawn = [], []
     for sf in record['subformations']:
         strength = sum(n * max(0.0, min(1.0, float(fit(c)))) for c, n in sf['assigned'])
         if strength > 0:
+            drawn += [c for c, n in sf['assigned'] if n > 0 and float(fit(c)) > 0 and c not in drawn]
             parts.append(Subformation(sf['name'], sf['troop_type'], strength, role=sf['role'], stance=sf['stance'],
                                       target=sf['target'], fall_back_at=sf['fall_back_at']))
     if not parts:
         raise ValueError("no subformation has any troops assigned")
-    return OrderOfBattle(tuple(parts), record['strategy'])
+    return OrderOfBattle(tuple(parts), record['strategy'], tuple(drawn))
 
 
 #: The commands `apply` runs: one per season verb (`recruit`, `form_unit`, `assign_troops`, `order_unit`) and

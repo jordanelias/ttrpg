@@ -410,8 +410,9 @@ def resolve_field(inp, rng=None, *, troops_a=None, troops_b=None):
     loyalty_a, loyalty_b = inp.loyalties
     morale_a = _morale_start(stance_a, loyalty_a, inp.loyalty_gain)
     morale_b = _morale_start(stance_b, loyalty_b, inp.loyalty_gain)
-    oob_a, oob_b = getattr(inp, 'orders_of_battle', None) or (None, None)
-    if oob_a is None and oob_b is None:
+    oob_a, oob_b = inp.orders_of_battle or (None, None)
+    armies = oob_a is not None or oob_b is not None
+    if not armies:
         unit_a = _weighted_unit("side_a", weight_a, morale_a)
         unit_b = _weighted_unit("side_b", weight_b, morale_b)
     else:
@@ -427,4 +428,4 @@ def resolve_field(inp, rng=None, *, troops_a=None, troops_b=None):
                           terrain_row_for_territory(inp.territory, inp.fort_level, crossing,
                                                     geography=inp.geography),
                           rng, walls_dr=inp.walls_dr,
-                          **({} if oob_a is None and oob_b is None else {'by_troops': True}))
+                          **({'by_troops': True} if armies else {}))

@@ -157,6 +157,17 @@ def test_tactic_fields_reach_the_subunit():
     assert [(od.trigger, od.behavior) for od in s.orders] == [('own_strength:0.4', {'stance': 'retreat'})]
 
 
+def test_a_mounted_archers_body_with_no_role_stands_off_as_kite_and_any_other_type_stays_a_plain_line():
+    """ED-1095 (`build_army`'s implicit default) must survive the order-of-battle path, which names a shape for a body
+    with no role. The control beside it: the same subformation of another type has no role and no instructions."""
+    kite = build_unit(_oob(('m', 'mounted_archers', 300, {})), 'u', 'A', morale_start=5).subunits[0]
+    assert kite.role == 'Kite' and kite.instructions, (kite.role, kite.instructions)
+    plain = build_unit(_oob(('c', 'light_cavalry', 300, {})), 'u', 'A', morale_start=5).subunits[0]
+    assert plain.role is None and not plain.instructions
+    named = build_unit(_oob(('m', 'mounted_archers', 300, {'role': 'Harass'})), 'u', 'A', morale_start=5).subunits[0]
+    assert named.role == 'Harass', "an explicit role still wins"
+
+
 def test_side_morale_reaches_every_subunit_and_the_type_stats_still_differ():
     u = build_unit(_mixed(), 'u', 'A', morale_start=3)
     assert {s.eff_morale for s in u.subunits} == {3}

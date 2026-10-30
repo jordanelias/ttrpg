@@ -326,14 +326,25 @@ BASE = {
         "census": "5198ad48b4077e7bcdca144ccf692a296897cb22e2f3a240d655c72aa1302a14",
         "counts": {"persons": 82, "rungs": 411, "offices": 32, "sites": 322, "records": 88,
                    "propositions": 87, "dates": 1, "docket": 5, "tenures": 785, "log": 7018}},
-    1: {"old": "97d2d92f792dc980bc2ed4656e415261", "new": "36ef95456677d233921aa79f0ce5f00d", "acts": 560,
-        "census": "997a5648f8d6709bafbb7936c1aa2086644615e2eaf0af114abaf5868e767800",
+    # SEED 1 RE-RECORDED, ED-IN-0304 phase 4 (`march_target_kinds` gained `territory`): one computed `march` on a
+    # territory referent (a Varfell goal's) used to fold to `march.refused` and now resolves `field.unopposed` with
+    # `army.arrived`, the realm's first computed arrival. Event kinds of the one season, before -> after: army.arrived
+    # 0->1, field.unopposed 0->1, march.declared 9->7, march.refused 9->6, claim.deposited 7005->7001,
+    # finding.none 115->116 (the later options shift with the army's new place). Seeds 0 and 2 did not move.
+    # Was: old 97d2d92f..., new 36ef9545..., acts 560, tenures 810, log 8128, census 997a5648...
+    1: {"old": "38e1c49edf8e6fd2b1a1127d32da07ca", "new": "80df23952bb3364cc1e55e4535c397b4", "acts": 558,
+        "census": "1fe9761f2a4d4d981d81d4fe1c25fa7d5ce4e72625ba0761124cdf94572a8b6b",
         "counts": {"persons": 83, "rungs": 412, "offices": 32, "sites": 322, "records": 98,
-                   "propositions": 87, "dates": 0, "docket": 2, "tenures": 810, "log": 8128}},
-    2: {"old": "455cfe8dcf9a9832b88c1bda5a29bde7", "new": "7e8df32af51923945ff3060b3231ea2d", "acts": 588,
-        "census": "b2adbbfe2eb49735b26a40be341793757741b27f53895c80de78bc1993683eba",
-        "counts": {"persons": 81, "rungs": 410, "offices": 32, "sites": 322, "records": 90,
-                   "propositions": 91, "dates": 1, "docket": 2, "tenures": 787, "log": 6879}},
+                   "propositions": 87, "dates": 0, "docket": 2, "tenures": 811, "log": 8122}},
+    # SEED 2 RE-RECORDED, same cause: one computed territory march, `march.refused` -> `field.unopposed` +
+    # `army.arrived` (army.arrived 0->1, march.declared 3->1, march.refused 3->0), and the season's later choices
+    # follow (record.created 43->44, proposition.uttered 24->22, finding.none 102->105, ...).
+    # Was: old 455cfe8d..., new 7e8df32a..., acts 588, records 90, propositions 91, tenures 787, log 6879,
+    # census b2adbbfe...
+    2: {"old": "f6d436a4cca0a7ecc24ea45628cc55ec", "new": "e463df75d5006d310bf216f991d09cee", "acts": 583,
+        "census": "4a98cbc721d20e50b70e59ac6064f1644ebc598d92b44e88f111874b2269e8a3",
+        "counts": {"persons": 81, "rungs": 410, "offices": 32, "sites": 322, "records": 92,
+                   "propositions": 89, "dates": 1, "docket": 2, "tenures": 788, "log": 6877}},
 }
 
 

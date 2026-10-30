@@ -24,8 +24,8 @@ from __future__ import annotations
 
 from engine.substrate import composition
 
-from ..data.rosters import SITE_KINDS
 from ..queries import world_q
+from ..queries.world_q import faction_holding
 from ..queries.inputs import ArmyCommand
 from ..state.gate import NO_CHANGE, Change, Subject
 from .effects_shared import _operand, effect_for
@@ -35,12 +35,16 @@ def _army(w: "World", a: "Act"):
     """The `army` Record the act names (its `subject`), or `None` -- the subject exists and is held by the actor
     (the row's typed cell), and this reads what it IS, which no cell can."""
     rec = w.records.get(_operand(a, "subject"))
-    return rec if rec is not None and rec.kind == "army" and isinstance(rec.subject_matter, dict) else None
+    if rec is None or rec.kind != "army" or not isinstance(rec.subject_matter, dict):
+        return None
+    # Holding the Record is not commanding the army (a Record can be handed on): the commander is committed to the
+    # army's faction, as the minter had to be.
+    return rec if faction_holding(w, a.actor) == rec.subject_matter["faction"] else None
 
 
 def _payload(a: "Act", *names: str) -> dict:
     """The named keys the act's payload carries, those absent left out (an optional tactic is not set by silence)."""
-    d = a.payload if isinstance(getattr(a, "payload", None), dict) else {}
+    d = a.payload if isinstance(a.payload, dict) else {}
     return {n: d[n] for n in names if n in d}
 
 
@@ -74,11 +78,11 @@ def _eff_recruit(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     if rec is None:
         return NO_CHANGE
     args = _payload(a, "cohort", "troop_type", "count")
-    cohort = w.persons.get(args.get("cohort"))
+    cohort = w.persons.get(args.get("cohort")) if isinstance(args.get("cohort"), str) else None
     if (len(args) != 3 or cohort is None or not cohort.weight > 1
             or cohort.id not in world_q.members(w, rec.subject_matter["faction"])):
         return NO_CHANGE
-    args = dict(args, weight=cohort.weight, sites=world_q.training_sites(w, cohort.id, SITE_KINDS),
+    args = dict(args, weight=cohort.weight, sites=world_q.training_sites(w, cohort.id),
                 full=w.fixtures.get("condition_scale"))
     return _apply(w, a, "recruit", args, "army.recruited")
 

@@ -81,15 +81,21 @@ def test_standing_in_one_town_does_not_occupy_the_territory_around_it():
     assert world_q.holder_faction_of(w, UNDEFENDED) == "fac_hafenmark"
 
 
-def test_an_occupied_territory_is_never_razed_but_an_occupied_settlement_still_is():
-    w = build_realm(0)
-    _march(w, UNDEFENDED)
+def _raze(w, target, act_id):
+    return [e.kind for e in _resolve_one(w, Act(id=act_id, actor=ACTOR, verb="raze",
+                                                payload={"subject": target}, via=SEAT))]
 
-    def raze(target, act_id):
-        return [e.kind for e in _resolve_one(w, Act(id=act_id, actor=ACTOR, verb="raze",
-                                                    payload={"subject": target}, via=SEAT))]
-    assert raze(UNDEFENDED, "rz_t") == ["raze.refused"] and UNDEFENDED in w.rungs
-    assert raze(TOWN, "rz_s") == ["rung.razed"] and TOWN not in w.rungs
+
+def test_an_occupied_territory_is_never_razed_but_an_occupied_settlement_still_is():
+    taken = build_realm(0)
+    _march(taken, UNDEFENDED)
+    assert world_q.occupies(taken, UNDEFENDED, CROWN)
+    assert _raze(taken, UNDEFENDED, "rz_t") == ["raze.refused"] and UNDEFENDED in taken.rungs
+    # CONTROL, the same raze act on a settlement the army stands in
+    town = build_realm(0)
+    _march(town, TOWN)
+    assert world_q.mustered(town, TOWN, CROWN)
+    assert _raze(town, TOWN, "rz_s") == ["rung.razed"] and TOWN not in town.rungs
 
 
 def test_an_army_housed_inside_the_territory_still_has_to_arrive_at_it():
@@ -120,3 +126,12 @@ def test_a_settlement_with_a_hold_of_its_own_does_not_ride_with_an_occupied_terr
     assert world_q.governing_hold(w, TOWN).object == TOWN and world_q.holder_faction_of(w, TOWN) == CHURCH
     assert not world_q.mustered(w, TOWN, CROWN) and not world_q.occupies(w, TOWN, CROWN)
     assert world_q.occupies(w, UNDEFENDED, CROWN), "the territory itself is still occupied"
+
+
+def test_a_territorys_occupation_carries_a_settlements_seizure_but_not_its_razing():
+    """`raze` stays the act of the army IN the town. CONTROL: the same town, the army standing in it, is razed (the
+    test above); here the army only holds the territory above it and the razing is refused."""
+    w = build_realm(0)
+    _march(w, UNDEFENDED)
+    assert world_q.occupies(w, TOWN, CROWN) and not world_q.mustered(w, TOWN, CROWN)
+    assert _raze(w, TOWN, "rz_t2") == ["raze.refused"] and TOWN in w.rungs

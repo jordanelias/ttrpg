@@ -178,6 +178,9 @@ def test_a_fought_field_costs_the_loser_its_bodies_and_so_its_next_army():
     troops next time, by exactly its cohort's body fraction. The winner's cohort is untouched."""
     # two plain lines: a held shield wall against a balanced line can end with nobody having closed (no casualties)
     w, scale = _world(defender_role=None)
+    others = {p: w.persons[p].body for p in set(world_q.mustered(w, ORIGIN, ATTACKER) + world_q.mustered(w, TARGET, DEFENDER))
+              if p not in (CA, CD)}
+    assert len(others) >= 3, "vacuous without bystanders mustered beside the two cohorts"
     events = _fold(w, _march_act())
     kinds = {e.kind for e in events}
     assert kinds & {"field.won", "field.lost"}, sorted(kinds)
@@ -193,3 +196,7 @@ def test_a_fought_field_costs_the_loser_its_bodies_and_so_its_next_army():
         assert abs(_troops(oob) - 120 * bodies[loser] / scale) < 1e-6, (_troops(oob), bodies)
     else:
         assert _input(w).orders_of_battle[0 if loser == CA else 1] is None
+
+    # WHO BLEEDS IS WHO FOUGHT: the people mustered beside the cohorts, in neither army, are not scaled by a fight
+    # they were not in. (They were, before `parties["fielded"]`: the headcount path writes every mustered loser.)
+    assert {p: w.persons[p].body for p in others if p in w.persons} == others, "a bystander was hurt by the fight"

@@ -1826,11 +1826,11 @@ def fort_input(w: World, rung_id: str) -> FortInput:
     return FortInput(conditions, w.fixtures.get("condition_scale") if conditions else None)
 
 
-def training_sites(w: World, person_id: str, kinds) -> dict:
-    """ED-IN-0304 phase 2. `{site kind: the best Site condition}` for each of `kinds` the person's residence
-    has a Site of, anywhere in its subtree -- what `troop_types/recruitment.py::recruit_limit` reads as the
-    training infrastructure of the place a cohort is raised from. A person with no `reside` edge, or a residence
-    with no Site of a kind, contributes none for it (the limit reads an absent kind as 0)."""
+def training_sites(w: World, person_id: str) -> dict:
+    """ED-IN-0304 phase 2. `{site kind: the best Site condition}` for each kind of Site the person's residence has,
+    anywhere in its subtree -- what `troop_types/recruitment.py::recruit_limit` reads as the training infrastructure
+    of the place a cohort is raised from (it reads only the kinds that train a troop type, and an absent kind as 0).
+    A person with no `reside` edge contributes none."""
     TRACE.query("training_sites", "resolver")
     home = residence_of(w).get(person_id)
     if home is None:
@@ -1838,7 +1838,7 @@ def training_sites(w: World, person_id: str, kinds) -> dict:
     here = _subtree(w, home)
     out: dict = {}
     for s in w.sites.values():
-        if s.kind in kinds and s.rung in here:
+        if s.rung in here:
             out[s.kind] = max(out.get(s.kind, 0), s.condition)
     return out
 

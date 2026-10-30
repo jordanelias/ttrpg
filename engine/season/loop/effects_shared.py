@@ -153,9 +153,11 @@ def occupying_faction(w: "World", via: str, rid: str) -> Optional[str]:
     with it) and the place is held by ANOTHER faction (`holder_faction_of`).
     `None` -- the licence fails -- for a subject that is no Rung or no `march_target_kinds` kind, a seat with
     no faction, a place nobody holds (H-166: who holds an unheld place is unruled) or the seat's own
-    faction holds, or a faction that does not occupy it. A defended territory therefore stays its holder's:
-    a march that lost never arrived, so nothing occupies and nothing is seized. Every decline is a `NO_CHANGE` at the effect, so the
-    order of these tests is not observable; a caller adds its own declines (`seize`: the actor must be
+    faction holds, or a faction that does not occupy it. A defended territory therefore stays its holder's AGAINST A
+    MARCH: one that lost never arrived, so nothing occupies and nothing is seized. Occupation is PRESENCE (R-6, ruled
+    for settlements at #453), so people placed on a territory by other means (a `move`) occupy it as well; that is the
+    settlement rule's own weakness carried to the larger prize, named in `HANDOFF_MB.md`, not closed here. Every
+    decline is a `NO_CHANGE` at the effect, so the order of these tests is not observable; a caller adds its own declines (`seize`: the actor must be
     committed to the seat's faction, and `may_seize` over the hold it replaces)."""
     rung = w.rungs.get(rid)
     mine = seat_faction(w, via)

@@ -227,15 +227,18 @@ def field_input(w: Any, claimants: list, other: list, rung: str,
         orders_of_battle=None if oobs == (None, None) else oobs)
 
 
+def _causing_act(w: Any, causes: list) -> Any:
+    """The marching act, or `None`. `contest()` hands this provider `causes = [a.id]`, never the act: the act is
+    found in `w.acts` by `state/attribution.py::causing_act`'s first-match rule over those ids (the fold appends the
+    act before it folds it, `loop/resolve.py::resolve`)."""
+    return next((w.acts.get(c) for c in causes if w.acts.get(c) is not None), None)
+
+
 def _attacker_treasury(w: Any, causes: list) -> Optional[str]:
     """v9 IN-52: THE ATTACKER'S TREASURY -- the rung of the office the marching act exercised (`Act.via`),
     the treasury `requisition` fills (`loop/effects_governance.py::_eff_requisition`'s `seat.rung`), or
-    `None` for an act exercising no seat, a rungless seat, or no act among `causes`.
-
-    `contest()` hands this provider `causes = [a.id]`, never the act: the act is found in `w.acts` by
-    `state/attribution.py::causing_act`'s first-match rule over those ids (the fold appends the act
-    before it folds it, `loop/resolve.py::resolve`)."""
-    act = next((w.acts.get(c) for c in causes if w.acts.get(c) is not None), None)
+    `None` for an act exercising no seat, a rungless seat, or no act among `causes`."""
+    act = _causing_act(w, causes)
     office = w.offices.get(act.via) if act is not None and act.via else None
     rid = office.rung if office is not None else None
     return rid if rid in w.rungs else None
@@ -326,9 +329,14 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     # own number, which the module reads from its terrain table -- this adapter decides none of it.
     # ED-IN-0304 phase 3: the attacker's faction is the seat the marching act was exercised through (the one
     # `loop/sides.py::sides_of` mustered `claimants` under), the defender's is `subject`.
-    act = next((w.acts.get(c) for c in causes if w.acts.get(c) is not None), None)
+    act = _causing_act(w, causes)
     inp = field_input(w, claimants, other, rung,
                       factions=(seat_faction(w, act.via) if act is not None else None, subject))
+    if inp.orders_of_battle is not None:
+        # WHO FOUGHT, for `_eff_march` to write casualties to (ED-IN-0304): a side fought as an order of battle drew
+        # its troops from the cohorts it names, and the fight is theirs alone; a side with none (None) fought as
+        # everybody mustered, as it always did.
+        parties = {**parties, "fielded": tuple(None if o is None else o.drawn_from for o in inp.orders_of_battle)}
     # v9 IN-52, THE LEVY-TO-FIELD FEED [LF-1..LF-3]: each side's fielded troops are `settlements.provision`'s
     # answer on its treasury, reached by role string; `resolve_field` sizes each Unit by them, and
     # `_eff_march` debits each side's `consumed` from the treasury named beside it. With `field_provisioning`

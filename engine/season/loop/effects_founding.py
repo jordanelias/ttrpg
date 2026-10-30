@@ -13,7 +13,7 @@ adds `raze`, the closer of `H-166` limit 3: the one verb that ends a Rung (`w.ru
 from __future__ import annotations
 
 from ..data.rosters import RAZE_TARGET_KINDS, RUNG_KINDS, SITE_KINDS
-from ..queries.world_q import works_target
+from ..queries.world_q import mustered, works_target
 from ..state.carriers import Rung, Site, Tenure
 from ..state.gate import NO_CHANGE, Change, Subject
 from ..state.ids import H
@@ -284,8 +284,10 @@ def _eff_raze(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     The closed edges are the cascade and are not named, as `destroy_record`'s are not."""
     rid = _operand(a, "subject")
     # ED-IN-0304 phase 4: a territory is marched on and occupied now, and still not razed (`raze_target_kinds`).
-    if w.rungs.get(rid) is None or w.rungs[rid].kind not in RAZE_TARGET_KINDS \
-            or occupying_faction(w, a.via, rid) is None:
+    mine = occupying_faction(w, a.via, rid) if rid in w.rungs and w.rungs[rid].kind in RAZE_TARGET_KINDS else None
+    # Razing stays the act of the army that is IN the town: a territory's occupation carries a settlement's
+    # SEIZURE (the title), not its destruction.
+    if mine is None or not mustered(w, rid, mine):
         return NO_CHANGE
 
     def perform() -> None:

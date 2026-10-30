@@ -113,6 +113,8 @@ def test_record_refusals():
              lambda: A.assign(a, 'nobody', 'c1', 1),           # no such subformation
              lambda: A.assign(a, 'bows', 'c2', 1),             # c2 trained no archers
              lambda: A.form(a, 'wall', 'levy'),                # duplicate name
+             lambda: A.form(a, ['x'], 'levy'),                 # a name that is no string would crash the battle's name set
+             lambda: A.form(a, 5, 'levy'),
              lambda: A.form(a, 'x', 'heavy_infantry', role='Kite'),
              lambda: A.raised(a, 'c1', 'dragons', 5),
              lambda: A.raised(a, 'c1', 'levy', 0),
