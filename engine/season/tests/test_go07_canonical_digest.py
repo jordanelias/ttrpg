@@ -458,19 +458,27 @@ def _counts(w) -> dict:
 #: three rows put back to their base shape (untyped, unclassed, their decline notes, `exchange` writing one pair with no effect)
 #: read the values this block held exactly, at all three seeds. Was, for seeds 0 / 1 / 2: `old` 1842a06d... / e13520cf... /
 #: e06e57c1..., `new` 4cc07cbe... / 6e72eb59... / 8e5af677..., `census` 7ab6c655... / 26755d2c... / 03428a48....
+#: RE-RECORDED AGAIN at v10 IN-45 (B10-06), A DATA MOVE DECLARED: `venues.yaml: planned_works` authors two works, minted last in
+#: `build_realm` through `create_record`'s own effect, so the build moves (two Records and their masters' `hold` edges: `records`
+#: +2, `tenures` +2) and the seed-0 season takes one more act (597 -> 598, `log` 9319 -> 9334): the masters' `found` and `build`
+#: form on their works and the seed-0 realm's sampled order shifts. Seeds 1 and 2 keep their acts, census and log (a works's terms
+#: first ripen at tick 1, which one season does not reach). EVERY value below is the IN-45 tree's, read with this file's own helpers
+#: and `populated.run`; CONTROL, run in process on this tree: `planned_works` emptied reads the values this block held exactly, at
+#: all three seeds, and the build world's old digest and content hash. Was, for seeds 0 / 1 / 2: `old` 789bc9eb... / 64276910... /
+#: b8031dc3..., `new` 41ffb48b... / 6c52b44c... / 9bb7306d..., `census` ed0c8bac... (seed 0; seeds 1 and 2 unmoved).
 BASE = {
-    0: {"old": "789bc9eb8100e737bce720e9db82ca64", "new": "41ffb48b4c1717c6aedc26e9715806a8", "acts": 597,
-        "census": "ed0c8bac4268590051c77dc34573bde747d04114b635824c081f28e4a290716b",
-        "counts": {"persons": 82, "rungs": 411, "offices": 32, "sites": 322, "records": 116,
-                   "propositions": 98, "dates": 7, "docket": 6, "tenures": 845, "log": 9319}},
-    1: {"old": "6427691004c0c879515665580453b85d", "new": "6c52b44c4a7d94bc064d683c0d84553d", "acts": 643,
+    0: {"old": "9fa99b6ed104e996b441fc9bdbd9609f", "new": "6c26053b03c2612057515cbe3972dd91", "acts": 598,
+        "census": "e4359944d76aed884a17df302fdb5822ae86503832f241ef0397393ef8414edf",
+        "counts": {"persons": 82, "rungs": 411, "offices": 32, "sites": 322, "records": 118,
+                   "propositions": 98, "dates": 7, "docket": 6, "tenures": 847, "log": 9334}},
+    1: {"old": "ec31f61228e004a9c26025b359ac0af7", "new": "78d102f8462aee8b73887fadf7244962", "acts": 643,
         "census": "b4da086ce5b771c39e09bd20df512a87a41f5afcf0f9753dd5b06aab2a32db53",
-        "counts": {"persons": 83, "rungs": 412, "offices": 32, "sites": 322, "records": 134,
-                   "propositions": 96, "dates": 7, "docket": 2, "tenures": 869, "log": 11995}},
-    2: {"old": "b8031dc3a190561e852da65673b6850e", "new": "9bb7306d53efdee71d98626b9d6dabd0", "acts": 632,
+        "counts": {"persons": 83, "rungs": 412, "offices": 32, "sites": 322, "records": 136,
+                   "propositions": 96, "dates": 7, "docket": 2, "tenures": 871, "log": 11995}},
+    2: {"old": "5eab30ebafe2dfab07b01d73b9fdf459", "new": "ab9592f524c3dcf7f57de55a91d3484c", "acts": 632,
         "census": "c8133996959ccaba0b5b5231f772beb962eaddada2d80dc21eed16697625a231",
-        "counts": {"persons": 81, "rungs": 410, "offices": 32, "sites": 322, "records": 123,
-                   "propositions": 100, "dates": 7, "docket": 2, "tenures": 841, "log": 9722}},
+        "counts": {"persons": 81, "rungs": 410, "offices": 32, "sites": 322, "records": 125,
+                   "propositions": 100, "dates": 7, "docket": 2, "tenures": 843, "log": 9722}},
 }
 
 
@@ -478,8 +486,8 @@ def test_go07_control_the_build_world_old_digest_is_unmoved():
     """The base commit's `repr` digest of `build_realm(0)`, before a single act, read this literal
     (`test_season_weather.BASE_HASHES[0]`'s retired value); the same world now reads the new pin."""
     w = POP.build_realm(0)
-    assert _old_content_hash(w) == "8e4032a26cfeabdc55bba2178b82d564"
-    assert w.content_hash() == "9ff5390939742b7bbb3af0fa2551e958"
+    assert _old_content_hash(w) == "bcc59ba42cdfe4fa740e8d50c3b4f7c0"        # v10 IN-45: was 8e4032a2... (control reads it)
+    assert w.content_hash() == "fe427626f9e91ab83ffd556c0bec4ea7"            # v10 IN-45: was 9ff53909... (control reads it)
 
 
 def test_go07_control_the_world_did_not_move_only_its_digest():
