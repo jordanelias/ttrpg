@@ -467,18 +467,27 @@ def _counts(w) -> dict:
 #: all three seeds, and the build world's old digest and content hash. Was, for seeds 0 / 1 / 2: `old` 789bc9eb... / 64276910... /
 #: b8031dc3..., `new` 41ffb48b... / 6c52b44c... / 9bb7306d..., `census` ed0c8bac... (seed 0; seeds 1 and 2 unmoved).
 BASE = {
-    0: {"old": "9fa99b6ed104e996b441fc9bdbd9609f", "new": "6c26053b03c2612057515cbe3972dd91", "acts": 598,
-        "census": "e4359944d76aed884a17df302fdb5822ae86503832f241ef0397393ef8414edf",
+    # SEED 0 RE-RECORDED, ED-IN-0305 (`arrival_only_kinds`, on top of main at 59f2f97f): a computed `migrate` onto a territory
+    # rung is declined (migrate.refused 35->40, residence.changed 3->1, claim.deposited 8190->8233; acts 598->599). CONTROL:
+    # main at 59f2f97f, probed in its own checkout by the same run, reads the previous entry exactly.
+    0: {"old": "faa7f2b173ad28cc63a18b514d6d835a", "new": "873525dfb363231695cefb17ad4b17a1", "acts": 599,
+        "census": "89a3fbcdb936497449f34fb9402af7568537dd3ebc57e64dcfaed248e9a970a3",
         "counts": {"persons": 82, "rungs": 411, "offices": 32, "sites": 322, "records": 118,
-                   "propositions": 98, "dates": 7, "docket": 6, "tenures": 847, "log": 9334}},
-    1: {"old": "ec31f61228e004a9c26025b359ac0af7", "new": "78d102f8462aee8b73887fadf7244962", "acts": 643,
-        "census": "b4da086ce5b771c39e09bd20df512a87a41f5afcf0f9753dd5b06aab2a32db53",
-        "counts": {"persons": 83, "rungs": 412, "offices": 32, "sites": 322, "records": 136,
-                   "propositions": 96, "dates": 7, "docket": 2, "tenures": 871, "log": 11995}},
-    2: {"old": "5eab30ebafe2dfab07b01d73b9fdf459", "new": "ab9592f524c3dcf7f57de55a91d3484c", "acts": 632,
-        "census": "c8133996959ccaba0b5b5231f772beb962eaddada2d80dc21eed16697625a231",
+                   "propositions": 98, "dates": 7, "docket": 6, "tenures": 843, "log": 9378}},
+    # SEED 1 RE-RECORDED, ED-IN-0305 phases 4 and 5 (on top of main at 59f2f97f): `march_target_kinds` gained `territory`, so computed
+    # marches on territory referents now resolve (army.arrived 5->6, field.unopposed 5->6, march.declared 21->18, march.refused
+    # 16->12), and computed `move`s and `migrate`s onto a territory are declined (travel.moved 11->10, travel.blocked 22->23,
+    # residence.changed 3->2; acts 643->638). CONTROL: main at 59f2f97f reads the previous entry exactly.
+    1: {"old": "0be6716a18eb57d44cea06e05aaf643b", "new": "3c6c0de333bba66196eb5b76a07d75ed", "acts": 638,
+        "census": "b2c3ef40dcb036301a6b96166a104c46fb04eb9b36316b52d4a02e779b90e804",
+        "counts": {"persons": 83, "rungs": 412, "offices": 32, "sites": 322, "records": 135,
+                   "propositions": 96, "dates": 7, "docket": 2, "tenures": 868, "log": 11960}},
+    # SEED 2 RE-RECORDED, same cause (travel.moved 4->3, travel.blocked 27->29; acts 632->633). CONTROL: main at 59f2f97f reads
+    # the previous entry exactly.
+    2: {"old": "ab260df2819bdb10e12c8488fde208e2", "new": "07a0c78487abfd59764989aae839694a", "acts": 633,
+        "census": "10f3da318d1ec1d17663728e67fd2d099c45c57f59b79a3948112049b75944ad",
         "counts": {"persons": 81, "rungs": 410, "offices": 32, "sites": 322, "records": 125,
-                   "propositions": 100, "dates": 7, "docket": 2, "tenures": 843, "log": 9722}},
+                   "propositions": 100, "dates": 7, "docket": 2, "tenures": 842, "log": 9726}},
 }
 
 
