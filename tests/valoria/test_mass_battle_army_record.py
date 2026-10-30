@@ -1,4 +1,4 @@
-"""ED-IN-0305 phase 2 -- the rules under the season's army verbs: how many troops a place can raise
+"""ED-IN-0306 phase 2 -- the rules under the season's army verbs: how many troops a place can raise
 (`troop_types/recruitment.py`) and what an army record says and how it changes (`armyrecord.py`).
 
 Both are pure, so they are tested without a `World`. What each test is able to see go wrong is stated beside it:

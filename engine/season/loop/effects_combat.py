@@ -262,7 +262,7 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     movers = (_not_yet_under(w, attackers, target, a.actor, a.via) if arrive else [])
     attacker_lost = res.degree == LOST
     losers = [] if res.degree == UNOPPOSED else (attackers if attacker_lost else defenders)
-    # ED-IN-0305: a side that fought as an order of battle bleeds only where it fought -- the cohorts its troops were
+    # ED-IN-0306: a side that fought as an order of battle bleeds only where it fought -- the cohorts its troops were
     # drawn from (`parties["fielded"]`, the provider's) -- not everybody who happened to be mustered beside them. A
     # side that fought as a headcount (None) loses all its mustered people, as before.
     drawn = (parties.get("fielded") or (None, None))[0 if attacker_lost else 1]
@@ -379,7 +379,7 @@ def _not_yet_under(w: "World", pids: list, target: str, actor: "str | None" = No
     homes = home_of(w)
     chains: dict = {}
     out = []
-    # ED-IN-0305 phase 4: what "already there" means is `world_q.occupies`'s, so the two cannot disagree. Beneath a
+    # ED-IN-0306 phase 4: what "already there" means is `world_q.occupies`'s, so the two cannot disagree. Beneath a
     # settlement is there; a territory is occupied only AT it, so an army housed in one of its towns still arrives.
     by_subtree = w.rungs[target].kind in SUBTREE_OCCUPATION_KINDS if target in w.rungs else True
     for pid in live:

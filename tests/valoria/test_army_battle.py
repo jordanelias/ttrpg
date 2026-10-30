@@ -1,4 +1,4 @@
-"""ED-IN-0305 phase 3 -- THE ARMY RECORD FIGHTS: `field_input` reads each side's army Record into the battle.
+"""ED-IN-0306 phase 3 -- THE ARMY RECORD FIGHTS: `field_input` reads each side's army Record into the battle.
 
 What the position built: a side whose faction holds an `army` Record fights as that Record's order of battle
 (`seam/wrappers/mass_battle.py::_order_of_battle`, through the `mass_battle.army_order` composition row), the

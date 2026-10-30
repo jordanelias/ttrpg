@@ -1,4 +1,4 @@
-# ED-IN-0305 phase 5 — the missed behaviours of phases 1–4, how each is resolved, and the menu and presets that ride on them
+# ED-IN-0306 phase 5 — the missed behaviours of phases 1–4, how each is resolved, and the menu and presets that ride on them
 
 ## Status: PROPOSED (design reference; the code is the mechanism, CLAUDE.md §0.05)
 

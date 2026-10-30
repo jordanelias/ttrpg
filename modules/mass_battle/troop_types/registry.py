@@ -59,7 +59,7 @@ TROOP_TYPE_STATS = {
     # pike row, so mirroring the closest canonical type is the non-inventing choice, pending an explicit
     # §B.2 pike grounding. [provisional-by-analogy: heavy_infantry base + P-DEC-1 reach 0.3]
     "pike":             {"power": 4, "discipline": 4, "morale": 5},
-    # [ED-IN-0305, Jordan 2026-10-28: "draw from romance of the three kingdoms and total war for generic unit
+    # [ED-IN-0306, Jordan 2026-10-28: "draw from romance of the three kingdoms and total war for generic unit
     # types"] The generic roster both games share and this table lacked: spear infantry (RTK spearmen, TW spear
     # line), javelin skirmishers (TW skirmishers) and light cavalry (RTK/TW scouting and flanking horse). Like the
     # pike above, each is PROVISIONAL-BY-ANALOGY: §B.2 has no row, so the stats mirror the nearest canonical type
@@ -118,9 +118,9 @@ TROOP_TYPE_REACH = {
     "sling":            0.1,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — ranged, melee sidearm (ED-MB-0014)]
     "artillery":        0.1,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — ranged, melee sidearm (ED-MB-0014)]
     "mounted_archers":  0.1,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — ranged, melee sidearm (ED-MB-0014)]
-    "spearmen":         0.2,   # [ED-IN-0305: the P-DEC-1 pole/spear class, as heavy_infantry]
-    "skirmishers":      0.1,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — ranged, melee sidearm (ED-MB-0014); ED-IN-0305]
-    "light_cavalry":    0.1,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — non-pole melee; the lance's 0.2 is not carried (ED-MB-0014); ED-IN-0305]
+    "spearmen":         0.2,   # [ED-IN-0306: the P-DEC-1 pole/spear class, as heavy_infantry]
+    "skirmishers":      0.1,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — ranged, melee sidearm (ED-MB-0014); ED-IN-0306]
+    "light_cavalry":    0.1,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — non-pole melee; the lance's 0.2 is not carried (ED-MB-0014); ED-IN-0306]
 }
 
 

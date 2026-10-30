@@ -60,7 +60,7 @@ no package, no `__init__.py` barrel:
   * `effects_information.py` -- records, propositions, matters: create_record, issue, open_case,
                                  determine, petition, survey, give, destroy_record, utter, commit.
   * `effects_combat.py`      -- casualties and morale: fight (renamed from "kill / wound"), march.
-  * `effects_army.py`        -- a faction's army record: recruit, form_unit, assign_troops, order_unit (ED-IN-0305).
+  * `effects_army.py`        -- a faction's army record: recruit, form_unit, assign_troops, order_unit (ED-IN-0306).
 
 ⚠ THIS FILE IS THE REASONED EXCEPTION TO `queries/__init__.py`'s "THIS FILE IMPORTS NONE OF ITS
 SUBMODULES" CONVENTION, NOT A SILENT COPY OF A PATTERN THAT DOES NOT FIT HERE. `queries/`'s reason

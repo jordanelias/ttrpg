@@ -1,6 +1,6 @@
 # Capability, ambition, values and personality: four layers of a person, and what the seven axes become
 
-## Status: PROPOSED (2026-10-24). HELD BACK: nothing here ratifies on merge, unless Jordan so rules. Reference under CLAUDE.md §0.05 — prose is not a mechanism.
+## Status: PROPOSED (2026-10-24). HELD BACK: nothing here ratifies on merge, unless Jordan so rules. Reference under CLAUDE.md §0.05 — prose is not a mechanism; superseded in part by proposals/2026-10-24-character-layers-v2.md (reconstruction; v1 still carries the cuts Jordan withdrew on 2026-10-25).
 ## Lane: IN, with PC, SC, SE as sources. IDs: none allocated.
 ## Read at HEAD `d59acc9`
 ## Builds on: `engine/season/queries/world_q.py` (`questions_for`) · `engine/season/decision/choose.py`, `options.py` · `engine/season/data/cast.py`, `pursuits.py`, `fixtures.py` · `engine/season/rosters.yaml` (`tables.alignment`, `tables.pursuit_projection`) · `references/descriptor_registry.yaml` · `engine/season/goals.yaml` · `engine/season/loop/effects_combat.py` · `modules/combat/combatant.py` · `proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml` · `proposals/2026-09-18-character-decision-layer/PROPOSAL.md` · `proposals/2026-10-24-character-progression-adjudication.md` (PR #505, an input, not authority)

@@ -1198,13 +1198,13 @@ FORTIFICATION = "settlements.fortification"
 #: (`seam/wrappers/mass_battle.py::resolve`, which reads the role from here), not a wrapper in this file;
 #: it is declared here so the one host need the driver checks stays one tuple.
 PROVISION = "settlements.provision"
-#: ED-IN-0305 phase 2: the army record's command entry, called by the four army verbs (`loop/effects_army.py`).
+#: ED-IN-0306 phase 2: the army record's command entry, called by the four army verbs (`loop/effects_army.py`).
 ARMY = "mass_battle.army"
-#: ED-IN-0305 phase 3: the army record -> the order of battle one field fights with, called by the field adapter.
+#: ED-IN-0306 phase 3: the army record -> the order of battle one field fights with, called by the field adapter.
 ARMY_ORDER = "mass_battle.army_order"
-#: ED-IN-0305 phase 5b: what a player may ask of an army and what is wrong with it, called by the military menu.
+#: ED-IN-0306 phase 5b: what a player may ask of an army and what is wrong with it, called by the military menu.
 ARMY_OPTIONS = "mass_battle.army_options"
-#: ED-IN-0305 phase 5c: the commands that raise and organise an army for a faction nobody plays.
+#: ED-IN-0306 phase 5c: the commands that raise and organise an army for a faction nobody plays.
 ARMY_PRESET = "mass_battle.army_preset"
 QUERY_ENTRIES = ((LARDER_DRAW, "query"), (DRAWN_UNDER, "query"), (HOUSING, "query"),
                  (FABRIC, "query"), (FORTIFICATION, "query"), (PROVISION, "query"), (ARMY, "query"),
@@ -1928,7 +1928,7 @@ def mustered(w: World, rung_id: str, faction: str) -> list[str]:
 
 
 def occupies(w: World, rung_id: str, faction: str) -> bool:
-    """ED-IN-0305 phase 4. Does `faction` OCCUPY `rung_id`? Occupation is what `seize` and `raze` license on, and
+    """ED-IN-0306 phase 4. Does `faction` OCCUPY `rung_id`? Occupation is what `seize` and `raze` license on, and
     it is presence, never a title (R-6: a won field writes presence).
       * a rung of a `subtree_occupation_kinds` kind (a settlement): the faction is `mustered` anywhere beneath it
         -- OR it occupies the place the settlement is held through (the next bullet), because an army that has taken
@@ -1952,7 +1952,7 @@ def occupies(w: World, rung_id: str, faction: str) -> bool:
 
 
 def standing_at(w: World, rung_id: str, faction: str) -> list:
-    """ED-IN-0305 phase 5. The members of `faction` whose live `contain` is AT `rung_id` itself, not anywhere beneath it:
+    """ED-IN-0306 phase 5. The members of `faction` whose live `contain` is AT `rung_id` itself, not anywhere beneath it:
     who an army that has arrived at a territory is made of. `mustered` is the subtree reading (a settlement's people
     stand in buildings under it); a territory's is this."""
     TRACE.query("standing_at", "resolver")
@@ -1962,7 +1962,7 @@ def standing_at(w: World, rung_id: str, faction: str) -> list:
 
 
 def raisable_by(w: World, cohort_id: str, faction: str) -> bool:
-    """ED-IN-0305 phase 5. May `faction` raise troops from this cohort? A faction raises the people it governs: the
+    """ED-IN-0306 phase 5. May `faction` raise troops from this cohort? A faction raises the people it governs: the
     cohort lives in a place `faction` holds (`holder_faction_of` its residence, the nearest held rung at or above), or
     it is committed to `faction`. The shipped realm seats its cohorts with no commit, so membership alone left every
     faction without a levy. [ASSUMPTION; medium; Jordan to correct; revert: members only.]"""
@@ -1974,7 +1974,7 @@ def raisable_by(w: World, cohort_id: str, faction: str) -> bool:
 
 
 def other_army_records(w: World, rid: str) -> tuple:
-    """ED-IN-0305 phase 5. The `subject_matter` of every `army` Record but `rid`, in id order: what a recruit adds to
+    """ED-IN-0306 phase 5. The `subject_matter` of every `army` Record but `rid`, in id order: what a recruit adds to
     the cohort's cap so that one cohort cannot be raised to its limit into two armies."""
     TRACE.query("other_army_records", "resolver")
     return tuple(r.subject_matter for _id, r in sorted(w.records.items())
@@ -2013,7 +2013,7 @@ def fort_input(w: World, rung_id: str) -> FortInput:
 
 
 def training_sites(w: World, person_id: str) -> dict:
-    """ED-IN-0305 phase 2. `{site kind: the best Site condition}` for each kind of Site the person's residence has,
+    """ED-IN-0306 phase 2. `{site kind: the best Site condition}` for each kind of Site the person's residence has,
     anywhere in its subtree -- what `troop_types/recruitment.py::recruit_limit` reads as the training infrastructure
     of the place a cohort is raised from (it reads only the kinds that train a troop type, and an absent kind as 0).
     A person with no `reside` edge contributes none."""
@@ -2030,7 +2030,7 @@ def training_sites(w: World, person_id: str) -> dict:
 
 
 def army_of(w: World, faction: str) -> Optional[str]:
-    """ED-IN-0305 phase 2. The id of the HELD `army` Record whose `subject_matter` names `faction`, or `None`; the
+    """ED-IN-0306 phase 2. The id of the HELD `army` Record whose `subject_matter` names `faction`, or `None`; the
     lowest id when several do (a second is refused at its mint, `_eff_create_record`). An army whose holder died is
     nobody's to command (every army verb needs the holder) and so is not the faction's army: its slot is free to
     mint again, rather than locked forever by a record no one can change."""

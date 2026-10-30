@@ -1573,7 +1573,7 @@ class Subunit:
         # FLANK face (infantry envelops the flank, cavalry the rear — Cannae's division of labour). The full
         # relative-waypoint standoff approach ("maintain distance D from the nearest enemy face while
         # circling") is the next build on top of this face-selection.
-        fast = getattr(self, 'troop_type', None) in ('cavalry', 'light_cavalry') or getattr(self, 'unit_type', None) == 'cavalry'  # light_cavalry: ED-IN-0305
+        fast = getattr(self, 'troop_type', None) in ('cavalry', 'light_cavalry') or getattr(self, 'unit_type', None) == 'cavalry'  # light_cavalry: ED-IN-0306
         if fast:
             return self._envelop_wheel_goal(enemy_cells)
         from modules.mass_battle import perimeter as _peri   # wired here; perimeter imports only geometry/config (no cycle)

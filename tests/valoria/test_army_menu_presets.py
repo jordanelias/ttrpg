@@ -1,4 +1,4 @@
-"""ED-IN-0305 phase 5b and 5c -- THE HEADLESS MILITARY MENU AND THE PRESET ORDERS OF BATTLE.
+"""ED-IN-0306 phase 5b and 5c -- THE HEADLESS MILITARY MENU AND THE PRESET ORDERS OF BATTLE.
 
 The menu (`engine/season/harness/military_menu.py`) lists what a commander may ask of an army; the presets
 (`harness/army_presets.py`, `modules/mass_battle/troop_types/presets.py`) raise one for a faction nobody plays. Neither adds a

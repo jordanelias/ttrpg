@@ -1,5 +1,5 @@
 """modules.mass_battle.orderofbattle -- a faction's ORDER OF BATTLE as a typed input, and the builder that turns
-it into the multi-subunit `Unit` the engine fights with (ED-IN-0305, phase 1).
+it into the multi-subunit `Unit` the engine fights with (ED-IN-0306, phase 1).
 
 WHAT THIS IS. `massbattle._weighted_unit` builds every season army as ONE 'infantry' subunit sized by headcount.
 An `OrderOfBattle` says what the army actually is: named SUBFORMATIONS, each of one troop type (spearmen, archers,
@@ -63,8 +63,8 @@ STRATEGIES = {
 # that time (a levy line took no casualties at all). The single headcount line it replaces started on the same cells --
 # a battle already joined -- so this keeps the field a fight and leaves room for the missile troops' opening volley.
 # [ASSUMPTION; medium; Jordan to correct: 3 rows is the smallest gap measured to join every melee type in one turn.]
-_A_FRONT_ROW = 27   # [canonical: ED-IN-0305 -- a deployment ASSUMPTION of this module, not canon; Jordan to correct]
-_APPROACH_ROWS = 3  # [canonical: ED-IN-0305 -- an ASSUMPTION, not canon: the smallest gap measured to join every melee type in one turn]
+_A_FRONT_ROW = 27   # [canonical: ED-IN-0306 -- a deployment ASSUMPTION of this module, not canon; Jordan to correct]
+_APPROACH_ROWS = 3  # [canonical: ED-IN-0306 -- an ASSUMPTION, not canon: the smallest gap measured to join every melee type in one turn]
 _SIDE_DIR = {'A': -1, 'B': 1}
 _ANCHOR_COL = 25            # [canonical: armies.build_army's anchor_col default, ED-MB-0017] the field's centre column
 _MIN_COL, _MAX_COL = 1, BATTLEFIELD_SIZE - 2    # keep a 1-cell margin, as `_centered_line_cols` does

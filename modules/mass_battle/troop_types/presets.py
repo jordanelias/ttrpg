@@ -1,4 +1,4 @@
-"""modules.mass_battle.troop_types.presets -- the order of battle a faction raises for itself (ED-IN-0305, phase 5c).
+"""modules.mass_battle.troop_types.presets -- the order of battle a faction raises for itself (ED-IN-0306, phase 5c).
 
 A faction the player does not play still needs an army. This is the rule for the one it raises: a PURE PLAN from what a
 faction's cohorts can raise to the commands that mint-fill-organise an army, as the commands a player would give
@@ -35,9 +35,9 @@ __all__ = ['DOCTRINE', 'ROLE_OF', 'plan']
 #: class -> (share of each cohort's under-arms cap, the types in order of preference). [ASSUMPTION; medium;
 #: Jordan to correct; the order is heaviest and most disciplined first.]
 DOCTRINE = (
-    ('melee',   0.45, ('heavy_infantry', 'spearmen', 'pike', 'light_infantry')),  # [canonical: ED-IN-0305 -- ASSUMPTION: the doctrine's share of a cohort's cap; Jordan to correct]
-    ('missile', 0.25, ('crossbow', 'archers', 'sling', 'skirmishers')),  # [canonical: ED-IN-0305 -- ASSUMPTION: the doctrine's share of a cohort's cap; Jordan to correct]
-    ('mounted', 0.20, ('cavalry', 'knights_templar', 'light_cavalry')),  # [canonical: ED-IN-0305 -- ASSUMPTION: the doctrine's share of a cohort's cap; Jordan to correct]
+    ('melee',   0.45, ('heavy_infantry', 'spearmen', 'pike', 'light_infantry')),  # [canonical: ED-IN-0306 -- ASSUMPTION: the doctrine's share of a cohort's cap; Jordan to correct]
+    ('missile', 0.25, ('crossbow', 'archers', 'sling', 'skirmishers')),  # [canonical: ED-IN-0306 -- ASSUMPTION: the doctrine's share of a cohort's cap; Jordan to correct]
+    ('mounted', 0.20, ('cavalry', 'knights_templar', 'light_cavalry')),  # [canonical: ED-IN-0306 -- ASSUMPTION: the doctrine's share of a cohort's cap; Jordan to correct]
 )
 
 #: type -> the role its subformation takes, from `roles_for(type)`: a plain line for the heavy foot, volleys for the

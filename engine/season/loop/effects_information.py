@@ -96,7 +96,7 @@ def _eff_create_record(w: "World", a: "Act", res: "Resolution | None" = None) ->
 
 
 def _army_mintable(w: "World", actor: str, content) -> bool:
-    """ED-IN-0305 phase 2. An `army` Record is minted whole and well formed (`mass_battle.army`'s `validate`), for a
+    """ED-IN-0306 phase 2. An `army` Record is minted whole and well formed (`mass_battle.army`'s `validate`), for a
     faction Proposition the world holds, BY A MEMBER OF THAT FACTION (`faction_holding`: anyone else minting it
     would lock the faction out of its own army), and ONE PER FACTION (`world_q.army_of`, which counts HELD armies
     only): a second would leave two records claiming to be one faction's army, with no rule for which the battle
@@ -985,7 +985,7 @@ def _seize_rung(w: "World", a: "Act", rid: str) -> Change:
     leaves the attacker mustered there, so the seizure is admitted (#453 exit (vii)). DECLINES
     (`NO_CHANGE` -> `seize.refused`, the `write` clause), each one change from an admitted seizure:
       * the subject is not a Rung of a `march_target_kinds` kind (a seat, a person's own rung, a
-        hearth; a territory IS one since ED-IN-0305 phase 4) [ASSUMPTION; medium; Jordan to correct: occupation is defined at the
+        hearth; a territory IS one since ED-IN-0306 phase 4) [ASSUMPTION; medium; Jordan to correct: occupation is defined at the
         places a march arrives at; revert: any Rung kind, the licence still occupation];
       * the actor is not committed to the seat's faction (`faction_holding`; the title written is his own
         hold) [ASSUMPTION; medium; Jordan to correct; revert: drop the decline];

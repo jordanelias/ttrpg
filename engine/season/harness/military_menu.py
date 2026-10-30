@@ -1,5 +1,5 @@
 """THE HEADLESS MILITARY MENU -- what a person who commands a faction's army may ask of it, as data, and the acts that ask
-(ED-IN-0305 phase 5b).
+(ED-IN-0306 phase 5b).
 
     from engine.season.harness.military_menu import menu, act_for, callback, describe
     m = menu(w, "p_npc_033")                                   # a MilitaryMenu: legal army acts, with bounds, and advisories
@@ -37,7 +37,7 @@ from ..queries.world_q import faction_holding, hold_force
 from ..state.carriers import Act
 
 #: How many "can raise" rows `describe` spells out before saying "and N more". [canonical: none -- a display length]
-SHOWN = 12  # [canonical: ED-IN-0305 -- display length only, no game meaning]
+SHOWN = 12  # [canonical: ED-IN-0306 -- display length only, no game meaning]
 
 __all__ = ["MilitaryMenu", "menu", "act_for", "callback", "describe", "cohorts_raisable"]
 

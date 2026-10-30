@@ -467,14 +467,14 @@ def _counts(w) -> dict:
 #: all three seeds, and the build world's old digest and content hash. Was, for seeds 0 / 1 / 2: `old` 789bc9eb... / 64276910... /
 #: b8031dc3..., `new` 41ffb48b... / 6c52b44c... / 9bb7306d..., `census` ed0c8bac... (seed 0; seeds 1 and 2 unmoved).
 BASE = {
-    # SEED 0 RE-RECORDED, ED-IN-0305 (`arrival_only_kinds`, on top of main at 59f2f97f): a computed `migrate` onto a territory
+    # SEED 0 RE-RECORDED, ED-IN-0306 (`arrival_only_kinds`, on top of main at 59f2f97f): a computed `migrate` onto a territory
     # rung is declined (migrate.refused 35->40, residence.changed 3->1, claim.deposited 8190->8233; acts 598->599). CONTROL:
     # main at 59f2f97f, probed in its own checkout by the same run, reads the previous entry exactly.
     0: {"old": "faa7f2b173ad28cc63a18b514d6d835a", "new": "873525dfb363231695cefb17ad4b17a1", "acts": 599,
         "census": "89a3fbcdb936497449f34fb9402af7568537dd3ebc57e64dcfaed248e9a970a3",
         "counts": {"persons": 82, "rungs": 411, "offices": 32, "sites": 322, "records": 118,
                    "propositions": 98, "dates": 7, "docket": 6, "tenures": 843, "log": 9378}},
-    # SEED 1 RE-RECORDED, ED-IN-0305 phases 4 and 5 (on top of main at 59f2f97f): `march_target_kinds` gained `territory`, so computed
+    # SEED 1 RE-RECORDED, ED-IN-0306 phases 4 and 5 (on top of main at 59f2f97f): `march_target_kinds` gained `territory`, so computed
     # marches on territory referents now resolve (army.arrived 5->6, field.unopposed 5->6, march.declared 21->18, march.refused
     # 16->12), and computed `move`s and `migrate`s onto a territory are declined (travel.moved 11->10, travel.blocked 22->23,
     # residence.changed 3->2; acts 643->638). CONTROL: main at 59f2f97f reads the previous entry exactly.

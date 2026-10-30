@@ -1,5 +1,5 @@
 """`season.loop.effects_army` -- the verbs that change a faction's army record: `recruit`, `form_unit`,
-`assign_troops`, `order_unit` (ED-IN-0305 phase 2), `disband_unit` and `discharge_troops` (phase 5).
+`assign_troops`, `order_unit` (ED-IN-0306 phase 2), `disband_unit` and `discharge_troops` (phase 5).
 
 Jordan ruled on 2026-10-28 that a faction's army is an order-of-battle RECORD (kind `army`, `rosters.yaml:
 record_kinds`), not only `PersonId[] at weight`. The record's CONTENT -- what it says, every operation on it, and

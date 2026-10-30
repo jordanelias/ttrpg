@@ -976,7 +976,7 @@ DEFAULT_FIXTURES = Fixtures(
     # from an act that names it). Each member must be a `verb_table.yaml` verb (`opening_set` refuses
     # another). SHIPPED naming `destroy_record` -- THE SINK ARM OFF: since IN-26 its row is formable
     # (`A-13`'s shape), and withheld it forms for nobody, as before, so every hash is today's. `()` is THE
-    # SINK ARM ON (`H-156` option (b) for that row): a holder may burn what he holds. ED-IN-0305 phase 2 adds the
+    # SINK ARM ON (`H-156` option (b) for that row): a holder may burn what he holds. ED-IN-0306 phase 2 adds the
     # four army verbs (`loop/effects_army.py`): their command is the act's payload, which no Candidate carries. [ASSUMPTION; medium;
     # Jordan to correct; the flip ON is a separate, declared hash-moving commit, IN-52's precedent.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-156 -- the formation-policy row; (a) and (b) are both defensible and lead to different corpora, so the arm ships at (a), today's state, and (b) is the declared second point]

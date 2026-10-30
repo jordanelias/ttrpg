@@ -809,7 +809,7 @@ class Record:
         ⚠ `__post_init__` AND NOT `__setattr__`, AND THE DIFFERENCE IS DELIBERATE. `Rung` is a plain
         class guarding a whitelist on every write; `Record` is a dataclass every mint constructs by
         keyword. Its `subject_matter` is written once, inside `(Record, exists)`'s gate (r2 `02` §A.4: *verbatim or
-        not at all*), and again only for the `army` kind (ED-IN-0305 phase 2: `(Record, subject_matter)`, whose
+        not at all*), and again only for the `army` kind (ED-IN-0306 phase 2: `(Record, subject_matter)`, whose
         writers are the four army verbs, each validating what it writes). So construction is the one write
         there is to refuse for every other kind, and `Office`'s roster checks sit at the same place for the same
         reason.

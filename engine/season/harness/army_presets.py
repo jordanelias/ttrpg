@@ -1,4 +1,4 @@
-"""PRESET ORDERS OF BATTLE FOR THE FACTIONS NOBODY PLAYS (ED-IN-0305 phase 5c).
+"""PRESET ORDERS OF BATTLE FOR THE FACTIONS NOBODY PLAYS (ED-IN-0306 phase 5c).
 
     from engine.season.harness.army_presets import install
     kinds = install(w, ["fac_crown", "fac_hafenmark"])         # {faction: the event kinds the fold produced}

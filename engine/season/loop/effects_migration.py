@@ -72,7 +72,7 @@ def _eff_move(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
 
 
 def _arrival_only(w: "World", dest) -> bool:
-    """ED-IN-0305 phase 5: is `dest` a rung only an arriving army is placed at (`rosters.yaml: arrival_only_kinds`)?"""
+    """ED-IN-0306 phase 5: is `dest` a rung only an arriving army is placed at (`rosters.yaml: arrival_only_kinds`)?"""
     rung = w.rungs.get(dest)
     return rung is not None and rung.kind in ARRIVAL_ONLY_KINDS
 

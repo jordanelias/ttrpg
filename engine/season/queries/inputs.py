@@ -150,7 +150,7 @@ class MassBattleInput:
                        and SHARED by every record: read-only). The module's terrain lookup and river test
                        read it here and open no file. `repr=False`: a record in an assertion message
                        prints its facts, not a 37 KB map;
-      * `orders_of_battle` -- ED-IN-0305: `(attacker, defender)`, each an `OrderOfBattle` (the module's own typed
+      * `orders_of_battle` -- ED-IN-0306: `(attacker, defender)`, each an `OrderOfBattle` (the module's own typed
                        record, `modules/mass_battle/orderofbattle.py`, held here as an opaque value: `engine/`
                        imports no module code) or `None`. `None` on both sides -- the default -- is the field as
                        it was: one headcount line per side. A side with an order of battle fights as that order
@@ -426,7 +426,7 @@ class FortInput:
 
 @dataclass(frozen=True)
 class ArmyCommand:
-    """What `mass_battle.army` (`modules/mass_battle/armyrecord.py::apply`) reads (ED-IN-0305 phase 2). Built by
+    """What `mass_battle.army` (`modules/mass_battle/armyrecord.py::apply`) reads (ED-IN-0306 phase 2). Built by
     `loop/effects_army.py`, one per army verb:
       * `record` -- the army Record's `subject_matter` (`armyrecord.KEYS`), as the world holds it;
       * `op`     -- `armyrecord.OPS`: recruit, form, assign or order;
@@ -439,7 +439,7 @@ class ArmyCommand:
 
 @dataclass(frozen=True)
 class ArmyMuster:
-    """What `mass_battle.army_order` (`modules/mass_battle/armyrecord.py::fielded`) reads (ED-IN-0305 phase 3).
+    """What `mass_battle.army_order` (`modules/mass_battle/armyrecord.py::fielded`) reads (ED-IN-0306 phase 3).
     Built by `seam/wrappers/mass_battle.py::field_input` for one side of one field:
       * `record` -- the faction's army Record's `subject_matter` (`armyrecord.KEYS`), as the world holds it;
       * `fit`    -- `((cohort id, fraction), ...)`: each cohort of the side PRESENT on the field (mustered at the
@@ -451,7 +451,7 @@ class ArmyMuster:
 
 @dataclass(frozen=True)
 class ArmyOptionsQuery:
-    """What `mass_battle.army_options` (`modules/mass_battle/armyrecord.py::options`) reads (ED-IN-0305 phase 5b). Built by
+    """What `mass_battle.army_options` (`modules/mass_battle/armyrecord.py::options`) reads (ED-IN-0306 phase 5b). Built by
     `harness/military_menu.py`, read-only:
       * `record` -- the army Record's `subject_matter`, as the world holds it;
       * `cohorts` -- `((cohort id, weight, {site kind: best condition}), ...)`, the cohorts the army's faction may raise
@@ -466,7 +466,7 @@ class ArmyOptionsQuery:
 
 @dataclass(frozen=True)
 class ArmyPresetQuery:
-    """What `mass_battle.army_preset` (`modules/mass_battle/troop_types/presets.py::plan`) reads (ED-IN-0305 phase 5c). Built
+    """What `mass_battle.army_preset` (`modules/mass_battle/troop_types/presets.py::plan`) reads (ED-IN-0306 phase 5c). Built
     by `harness/army_presets.py`: `faction` (its Proposition id), and `cohorts`, `full` and `others` as
     `ArmyOptionsQuery` has them. The entry returns the commands, in order."""
     faction: str

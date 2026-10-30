@@ -2252,12 +2252,12 @@ def test_invariant_12_refuses_a_degree_keyed_emits_with_nothing_to_key_it_on():
     # `sabotage`, `tend`, `train` (v9 IN-12 step 9), a re-record; 51 -> 52, `conceal` (v9 IN-12 step 10), a
     # re-record; 52 -> 53, `forgive` (v9 IN-12 step 13), a re-record; 53 -> 55, `arrest` and `pardon`
     # (v9 IN-12 step 5), a re-record; 55 -> 56, `raze` (v9 IN-12 step 11), a re-record; 56 -> 60, `recruit`, `form_unit`,
-    # `assign_troops`, `order_unit` (ED-IN-0305 phase 2), a re-record. This
+    # `assign_troops`, `order_unit` (ED-IN-0306 phase 2), a re-record. This
     # is a CONTROL, not a claim about
     # the roster: its job is to fail if the loader started refusing everything, so it moves with
     # the table by construction and the number is read from the file rather than chosen.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen -- the control that stops both arms above passing on a loader that refuses everything]
-    assert len(VERBS._load_verb_table()) == 62       # ED-IN-0305 phase 5: `disband_unit` and `discharge_troops` join, 60 -> 62
+    assert len(VERBS._load_verb_table()) == 62       # ED-IN-0306 phase 5: `disband_unit` and `discharge_troops` join, 60 -> 62
 
 
 def test_w2_a_planted_write_to_an_unruled_field_raises_and_names_the_pair():
@@ -9368,7 +9368,7 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
                                               "work", "restore", "examine", "commit",
                                               "argue", "dispatch",
                                               "recruit", "form_unit", "assign_troops", "order_unit",
-                                              "disband_unit", "discharge_troops"}, (    # ED-IN-0305: the SIX army verbs JOIN (the four of phase 2 and the two of phase 5) -- withheld from formation (`rosters.yaml: army_verbs`), their command is a payload no Candidate carries, so nobody forms them, by design; a re-record.       # IN-57: `dispatch` out, to `refused_only`; FI-01: back; IN-38: out again; K-3: `thread_read` in; REM-10: `speak`, `examine`, `argue` out; REM-22: `work`, `restore`, `examine` in; REM-23: `commit` in; REM-25: `comply` out; CP-T05-04: `argue` in
+                                              "disband_unit", "discharge_troops"}, (    # ED-IN-0306: the SIX army verbs JOIN (the four of phase 2 and the two of phase 5) -- withheld from formation (`rosters.yaml: army_verbs`), their command is a payload no Candidate carries, so nobody forms them, by design; a re-record.       # IN-57: `dispatch` out, to `refused_only`; FI-01: back; IN-38: out again; K-3: `thread_read` in; REM-10: `speak`, `examine`, `argue` out; REM-22: `work`, `restore`, `examine` in; REM-23: `commit` in; REM-25: `comply` out; CP-T05-04: `argue` in
         f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Five of "
         "the original six are the governance verbs no corpus overlay grants (`establish` is "
         "`remit:confer`-eligible); `march` is eligible in NPC-033/038 and WOULD form a real "
@@ -14953,10 +14953,10 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # uncontested, a re-record. 52 -> 53, `forgive` (v9 IN-12 step 13), uncontested, a re-record. 53 -> 55,
     # `arrest` (contested, the contested set above moves with it) and `pardon` (uncontested), v9 IN-12
     # step 5, a re-record. 55 -> 56, `raze` (v9 IN-12 step 11), uncontested (#453 §9.2: contests none),
-    # a re-record. 56 -> 60, `recruit`, `form_unit`, `assign_troops`, `order_unit` (ED-IN-0305 phase 2),
+    # a re-record. 56 -> 60, `recruit`, `form_unit`, `assign_troops`, `order_unit` (ED-IN-0306 phase 2),
     # uncontested (they contest nothing), a re-record.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen]
-    assert len(VERB_TABLE) == 62, len(VERB_TABLE)    # ED-IN-0305 phase 5: 60 -> 62 (`disband_unit`, `discharge_troops`)
+    assert len(VERB_TABLE) == 62, len(VERB_TABLE)    # ED-IN-0306 phase 5: 60 -> 62 (`disband_unit`, `discharge_troops`)
     # AND THE SIX ARE SIX, not a row that says six. This is the half of the pin that the old
     # count could not express: a table carrying the placeholder passed `== 32` while no act in it
     # could be formed, and `runs/CASELOG_NPC.md:64` reported the same case as a blocked one.

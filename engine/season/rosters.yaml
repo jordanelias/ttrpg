@@ -236,7 +236,7 @@ rosters:
       # anchors on the cover's id. Not a `record_sourced_operands` kind: a cover answers no operand,
       # and `ledger_names` reads nobody out of it (`ABOUT_KEYS`).
       cover:        [terms]
-      # ED-IN-0305 phase 2 (Jordan, 2026-10-28: a faction's army is an order-of-battle record, not only
+      # ED-IN-0306 phase 2 (Jordan, 2026-10-28: a faction's army is an order-of-battle record, not only
       # `PersonId[] at weight`): A FACTION'S ARMY. Its four keys are `modules/mass_battle/armyrecord.py::KEYS`
       # (`test_mass_battle_army_record.py` pins the two equal); that module owns what each key says and every
       # operation on it, and the four army verbs (`recruit`, `form_unit`, `assign_troops`, `order_unit`) call it
@@ -997,7 +997,7 @@ rosters:
     row: H-149
     note: >-
       ⚠ A CLOSED SET, NOT AN OPEN ONE, AND THE ROSTER IS CLOSED FOR A REASON BOUND ELSEWHERE. It was one member,
-      `settlement`; ED-IN-0305 phase 4 added `territory` on Jordan's ruling (a territory is marched on, occupied
+      `settlement`; ED-IN-0306 phase 4 added `territory` on Jordan's ruling (a territory is marched on, occupied
       and seized), which is the data edit this note said a second ruled kind would be.
       Person containment never terminates at a settlement rung -- every person's `contain` targets
       a `home` building beneath one (`harness/populated.py`) -- and `contain_ascends`
@@ -1010,7 +1010,7 @@ rosters:
     values: [settlement, territory]
 
   subtree_occupation_kinds:
-    source: "ED-IN-0305 phase 4. Which `march_target_kinds` are occupied by standing ANYWHERE UNDER them."
+    source: "ED-IN-0306 phase 4. Which `march_target_kinds` are occupied by standing ANYWHERE UNDER them."
     note: >-
       A settlement's people stand in buildings beneath it (`march_target_kinds`' note), so a faction is
       occupying a settlement when it is mustered anywhere in its subtree. A territory is not occupied that way:
@@ -1022,7 +1022,7 @@ rosters:
     values: [settlement]
 
   arrival_only_kinds:
-    source: "ED-IN-0305 phase 5. Which rung kinds a person is placed at ONLY by a `march`'s arrival."
+    source: "ED-IN-0306 phase 5. Which rung kinds a person is placed at ONLY by a `march`'s arrival."
     note: >-
       A territory is occupied by an army standing AT it (`subtree_occupation_kinds`), and occupation is presence, so a
       `move` or a `migrate` that could seat a person at a territory would let one member of a faction walk onto a
@@ -1031,7 +1031,7 @@ rosters:
     values: [territory]
 
   raze_target_kinds:
-    source: "ED-IN-0305 phase 4. What `raze` may end."
+    source: "ED-IN-0306 phase 4. What `raze` may end."
     note: >-
       `raze` deletes the rung and closes every edge naming it. It stays a settlement's act: `march_target_kinds`
       gained the territory (a territory is marched on, occupied and seized), and razing the land a duchy stands on
@@ -1513,7 +1513,7 @@ rosters:
       2026-09-29 (plan position `24e`): `_eff_restore` EXISTS and `restore` is resolvable, raising
       any fabric its actor stands at toward the ceiling a works allows (the full scale where none
       names it).
-    # ED-IN-0305 (Jordan, 2026-10-28: recruiting needs "specific infrastructure for specific kinds of troops"): FOUR TRAINING
+    # ED-IN-0306 (Jordan, 2026-10-28: recruiting needs "specific infrastructure for specific kinds of troops"): FOUR TRAINING
     # KINDS, `barracks`, `archery_range`, `stable`, `siege_workshop`. Each is a Site whose CONDITION is how much of its
     # troop class the place can train (`modules/mass_battle/troop_types/recruitment.py`, the one reader and the owner of
     # which troop type trains where). They take `garrison`'s treatment in every table below and for its reason: nothing
@@ -2242,7 +2242,7 @@ rosters:
 
   army_verbs:
     source: >-
-      ED-IN-0305 phase 2 (Jordan, 2026-10-28: a faction's army is an order-of-battle record the season changes
+      ED-IN-0306 phase 2 (Jordan, 2026-10-28: a faction's army is an order-of-battle record the season changes
       from a menu). `loop/effects_army.py` is their one body.
     note: >-
       THE VERBS THAT CHANGE AN `army` RECORD, a list of verbs. `data/fixtures.py` adds each to `withheld_verbs`:
@@ -3275,17 +3275,17 @@ tables:
     # 0.0); what is no longer lawful is a verb nobody considered.
     uncelled:
       recruit: >-
-        ED-IN-0305 phase 2: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above), and no person forms it (`Fixtures withheld_verbs`): it is a menu command on the army record, whose alignment lean nothing yet reads. It scores 0.0 on every axis. Revert: the seven cells, IN-08's method.
+        ED-IN-0306 phase 2: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above), and no person forms it (`Fixtures withheld_verbs`): it is a menu command on the army record, whose alignment lean nothing yet reads. It scores 0.0 on every axis. Revert: the seven cells, IN-08's method.
       form_unit: >-
-        ED-IN-0305 phase 2: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above), and no person forms it (`Fixtures withheld_verbs`): it is a menu command on the army record, whose alignment lean nothing yet reads. It scores 0.0 on every axis. Revert: the seven cells, IN-08's method.
+        ED-IN-0306 phase 2: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above), and no person forms it (`Fixtures withheld_verbs`): it is a menu command on the army record, whose alignment lean nothing yet reads. It scores 0.0 on every axis. Revert: the seven cells, IN-08's method.
       assign_troops: >-
-        ED-IN-0305 phase 2: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above), and no person forms it (`Fixtures withheld_verbs`): it is a menu command on the army record, whose alignment lean nothing yet reads. It scores 0.0 on every axis. Revert: the seven cells, IN-08's method.
+        ED-IN-0306 phase 2: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above), and no person forms it (`Fixtures withheld_verbs`): it is a menu command on the army record, whose alignment lean nothing yet reads. It scores 0.0 on every axis. Revert: the seven cells, IN-08's method.
       order_unit: >-
-        ED-IN-0305 phase 2: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above), and no person forms it (`Fixtures withheld_verbs`): it is a menu command on the army record, whose alignment lean nothing yet reads. It scores 0.0 on every axis. Revert: the seven cells, IN-08's method.
+        ED-IN-0306 phase 2: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above), and no person forms it (`Fixtures withheld_verbs`): it is a menu command on the army record, whose alignment lean nothing yet reads. It scores 0.0 on every axis. Revert: the seven cells, IN-08's method.
       disband_unit: >-
-        ED-IN-0305 phase 2: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above), and no person forms it (`Fixtures withheld_verbs`): it is a menu command on the army record, whose alignment lean nothing yet reads. It scores 0.0 on every axis. Revert: the seven cells, IN-08's method.
+        ED-IN-0306 phase 2: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above), and no person forms it (`Fixtures withheld_verbs`): it is a menu command on the army record, whose alignment lean nothing yet reads. It scores 0.0 on every axis. Revert: the seven cells, IN-08's method.
       discharge_troops: >-
-        ED-IN-0305 phase 2: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above), and no person forms it (`Fixtures withheld_verbs`): it is a menu command on the army record, whose alignment lean nothing yet reads. It scores 0.0 on every axis. Revert: the seven cells, IN-08's method.
+        ED-IN-0306 phase 2: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above), and no person forms it (`Fixtures withheld_verbs`): it is a menu command on the army record, whose alignment lean nothing yet reads. It scores 0.0 on every axis. Revert: the seven cells, IN-08's method.
       covenant: >-
         v9 IN-12 step 7: NOT CELLED BY THE PRODUCER -- authoring an alignment cell is a judgment the
         build position does not own (the plan's CLAUDE.md §0 note on IN-08's cells), and #453 §9.2
