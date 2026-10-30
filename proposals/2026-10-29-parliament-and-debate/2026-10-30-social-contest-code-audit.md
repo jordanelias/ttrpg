@@ -60,7 +60,7 @@ myself; everything else is a reader's report with its path:line. One pass; its f
 | 10 | **capability from attribute × title × office × faction by venue (R-31)** | ABSENT | no attribute field; title and office act only through bench membership; faction is not read; nothing varies by venue |
 | 11 | **sigma-leveraged engine, continuous, with named modifier sources (R-32)** | PARTIAL / CONTRADICTED | integer pool cast; leverage hard-coded 0.0 with no producer; no producer for worldly state or argument content; audience and evidence are subtracted from the obstacle |
 | 12 | **one action surface, limited by contest type (R-33)** | ABSENT as a limit | one global 56-verb table, limited only by per-verb eligibility and preconditions; the keys that would limit by contest type are unread; speech kinds are not actions |
-| 13 | **authority and its adjudicators (R-34)** | ABSENT | no concept of authority; `bench_basis` unread; no precedence between bodies; no `mutual` row |
+| 13 | **authority and its adjudicators (R-34), weighted by local legitimacy (R-36)** | ABSENT | no concept of authority; `bench_basis` unread; no precedence between bodies; no `mutual` row. The nearest parts: `person_q.legitimacy(p, holder, window)` (`queries/person_q.py:452`) is a per-person, per-holder Query over stance and deeds; by grep nothing in `loop/`, `decision/`, `state/` or `seam/` calls it (readers: `harness/storybar.py:281` and tests). There is **no piety Query** and no aggregate over a territory's persons; the engine forbids a Rung to own one (`state/carriers.py:1103`) |
 | | structures: dyadic / mutual / bench / count | PRESENT (thin) / ABSENT / PARTIAL (one judge) / ABSENT | |
 
 **What exists that the new rulings can stand on.**
@@ -99,7 +99,7 @@ Ordered by what the rulings require, not by effort.
 2. **Continuous dice and obstacle (R-32).** The pool is an `int`; the obstacle is an integer in every live roll; the fractional engine exists in `engine.dice_engine.sigma_leverage` but this path does not carry it. Leverage has no producer.
 3. **Modifier sources (R-32).** Producers exist for capability (thin), evidence and audience (`speak` only), and forgery quality (inquiries). None exists for worldly state or for argument content (`argue` is content-blind: the proposition is never read).
 4. **Action surface limited by contest type (R-33).** The limit is absent; the global table is the surface.
-5. **Authority and adjudicator basis (R-34).** No representation. Negotiation has no row; the crown-over-church modulation has no place to live.
+5. **Authority and adjudicator basis (R-34), and its weight by local legitimacy (R-36).** No representation, and no territorial Query to scale it by (only the per-person `legitimacy`, unread by the contest path). Negotiation has no row; the crown-over-church modulation has no place to live.
 6. **Count (item 4).** No licence by count; `determine` is one judge's single draw.
 7. **Partial writes the docket (R-17).** `speak` writes nothing at any band; Partial opens a disposal in `determine` but forms no docket matter.
 8. **Reasons to convene.** Sittings are empty; computed `open_case` is addressed to the subject themselves (reader's report; `reasons-to-convene.md`).
