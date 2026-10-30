@@ -24,7 +24,7 @@ Jordan's words: *"a rung has never been a place in my understanding"*, and "wher
 - **The type is a tier.** `Rung := (id, kind (ORDERED; the ordinal is rank), matter, dates[], envelope)` (`04_CODE_ARCHITECTURE.md` §B.3, `:255-258`); "`Rung` is the holon, one type at eight scales" (`holonic_ARCHITECTURE.md:58`); *"a rung is where a decision happens; a person is who makes it"* (§10.2). The eight kinds are `person < hearth < community < settlement < territory < province < duchy < realm`. ED-IN-0303 (Jordan, 2026-10-28) kept the word `rung` because Godot has no word for it, and defined it nowhere.
 - **The engine also uses the ladder as its only location system.** A building is a rung: `b_s_014_barracks` and `b_s_001_court` are **`hearth`** rungs (`Site` is a separate carrier, for harbours and seams: 322 of them). A person "stands" at the smallest rung that contains him (`presence`, `co_located`, `place_of`). There is no separate geography in the engine's state.
 
-So this analysis keeps two things apart that REM-28 and my earlier wording ran together:
+This analysis keeps two things apart that REM-28 ran together:
 
 | notion | what it is | engine surface |
 |---|---|---|
@@ -41,7 +41,7 @@ Whether the engine should keep location *as* the bottom tier, or model it separa
 - **Referent:** after REM-28 (`verb_table.yaml:292`) a `convene` Candidate forms **only on a `Rung`-classed referent** that the question carries, and the only stamps that carry one are `places_named` (every rung his own ledger names that he does not live under) and `larders_in_purview` (a stocked rung in his purview; it offers nothing to anyone, 0 of 83).
 - **Score:** the chooser scores the *verb* (`align(convene)`) plus a stance on the subject plus an inert urgency. Nothing in the score reads what a sitting would be *about*.
 - **Effect:** `_eff_convene` makes a Date `{venue, holder = the seat exercised, due_at}`; CALENDAR fires it and forms **one empty docket slot**; `convene` "puts a date on the calendar and stops" (RL5).
-- **Measured outcome (three seeds):** 23, 23 and 21 sittings scheduled, 17, 17 and 12 fired; conveners are lords' and clerics' seats **including the King's** (`off_npc_020`, seeds 1 and 2), always at a hearth-tier rung — a barracks, an inn, a court, a cottage, a market, a guildhall, a croft — and once at the territory `T13`. *(An earlier version of this design said the King never convenes. It was measured on the engine before REM-28 and was wrong for the current tree.)*
+- **Measured outcome (three seeds):** 23, 23 and 21 sittings scheduled, 17, 17 and 12 fired; conveners are lords' and clerics' seats **including the King's** (`off_npc_020`, seeds 1 and 2), always at a hearth-tier rung — a barracks, an inn, a court, a cottage, a market, a guildhall, a croft — and once at the territory `T13`.
 
 ---
 
@@ -91,7 +91,7 @@ Evidence labels: **[M]** measured · **[R]** read in code · **[I]** inferred. "
 2. **The ranking is by the convener's relation, not the matter's importance.** `attention_key` places a question in tier 0 only if its referent is one of his ambitions' referents (`aims`), tier 1 if it is one of his own tenures' objects (`mine`), tier 2 if it carries a deed he judges, tier 3 for a `need`, tier 4 for the rest. A matter earns salience through the convener's own holdings — which is AX-2-lawful and means a matter about a tier he holds ranks high *without any new meter*. A docketed person-matter, however, names a person he may not hold anything over.
 3. **A standing condition rides in by the stamped-occasion channel, not by ranking.** `_stamped` attaches classed referents to `out[0]` whatever its tier — the route `vacancies`, `seats_named`, `writs_held`, `places_named` and `larders_in_purview` already use. That is the established way to say "this condition is true for you now", and `convene` already reads its Rung class from it. **Nothing in the engine stamps the tier at which a matter waits.**
 4. **Even a stamped candidate must win the score.** `convene` is scored by verb alignment alone, so it competes with every other candidate on the same question by how much the person's pursuits like the *word* "convene". A matter-sensitive reader (the resolution design's `motion` term, I6) is what lets *this* matter prefer convening.
-5. **Attendance is the one link that is fine.** Since REM-28 so many Dates are scheduled that `date.scheduled` is held by 65, 67 and 67 of ~79 persons (≈85%); the summons reaches nearly everyone. First-hand hearing of a firing reaches 6-11 persons. *(Before REM-28, with 1-3 Dates a run, the figure was 2-69%; it measures how many sittings the engine schedules, not whether a channel is reliable.)*
+5. **Attendance is the one link that is fine.** Since REM-28 so many Dates are scheduled that `date.scheduled` is held by 65, 67 and 67 of ~79 persons (≈85%); the summons reaches nearly everyone. First-hand hearing of a firing reaches 6-11 persons.
 
 ---
 
