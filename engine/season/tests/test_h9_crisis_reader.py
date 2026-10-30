@@ -66,7 +66,11 @@ from .test_season_shape import _wd_arm9
 # RE-READ with `_wd_total` on this tree and on a `git worktree` at `e66a22ec` (the REM-22 tree): there control
 # (36, 7), 0.5 -> (36, 9), 1 -> (35, 11); here control (33, 6), 0.5 -> (33, 7), 1 -> (33, 8). The shifted arm still
 # rises above the control as a rate (8/33 = 24.2% > 6/33 = 18.2%; it was 11/35 > 7/36).
-_BASELINE_TOTAL = (33, 6)
+# 33/6 -> 33/7, v10 REM-2B (B10-06): `evade / defy`, `construe` and `exchange` are typed and resolvable again, the same move
+# `test_season_shape.py`'s `wd_a_fork` records for `total` (33, 7) -- the fork population is unmoved and the divergence count
+# rises by one. A re-record of the control, read off this test's own failing assertion; the REM-2A tree (`f23194871`) reads
+# (33, 6) here and passes.
+_BASELINE_TOTAL = (33, 7)
 
 # v10 REM-2C (B10-05): THE RISE IS READ AT SEED 1, RE-CHOSEN BY A STATED SWEEP; the control pin above stays
 # seed 0's, unmoved (33, 6). `research` declares `referent_class: Record` and the seed-0 slice's SHIFTED arm

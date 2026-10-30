@@ -12618,11 +12618,12 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # arrival shape of `carry` and `speak` on ARC-01 below. Neither is a class's doing: neither row declares one.
     # ⚠⚠ NINE -> NINE, v10 REM-2B (B10-06): `exchange` JOINS and `speak` LEAVES. MEASURED BEFORE RE-PINNING, this fixture's
     # drops by verb at the shipped default, on this tree and on a detached copy of the REM-2A tree (`f23194871`, which
-    # reads the old nine exactly), the same print on both (`BASE_DROPS` / `HERE_DROPS` in the commit body): `exchange`
-    # drops on every referent `transfer` does, BY ITS CELL (its first conjunct is `transfer`'s `stores(from, kind) >=
-    # amount`, so the `stores:grain` belief a refusal on the hearth deposits contradicts both), and `speak`, which dropped
-    # on `('hearth_ostvik', 'exists:DocketItem', 0)`, no longer takes the scene that deposited it (the act mix: `exchange`,
-    # `evade / defy` and `construe` are resolvable again).
+    # reads the old nine and 164 drops exactly), the same script on both: here 172 drops -- accept/challenge/fight/
+    # interview/tend/train 24 -> 23 each, `exchange` 0 -> 16, `speak` 2 -> 0, `sabotage` 2 and `transfer` 16 unmoved.
+    # `exchange` drops on exactly the three referents `transfer` does (`einhir_texts`, `hearth_ostvik`,
+    # `rec:2dd19669944564b8`), BY ITS CELL: its first conjunct is `transfer`'s `stores(from, kind) >= amount`, so the
+    # `stores:grain` belief a refusal on the hearth deposits contradicts both rows. `speak` leaves on the act mix:
+    # `evade / defy`, `construe` and `exchange` are resolvable again, and no `speak` is formed on the hearth to drop.
     assert {v for v, _ in hl_live} == {"accept", "challenge", "exchange", "fight",
                                        "interview", "sabotage",
                                        "tend", "train", "transfer"}, (
@@ -12870,8 +12871,14 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # `('sabotage', 'hearth_ostvik')`, `('speak', 'hearth_ostvik')` (the set assertion above's two verbs) and
     # `('transfer', 'rec:2dd19669944564b8')`, dropped once at (tick, round) (2, 1). Every one of the other 14 survives.
     # The clause still fires.
-    assert len(dropped) == 17, (
-        f"{len(dropped)} executable clause-4 drops, not 17. The drops are the channel itself; if "
+    # v10 REM-2B (B10-06): 17 -> 13, read off this test's own `dropped` (the pairs, by verb and subject, at the shipped
+    # default) on this tree and on a detached copy of the REM-2A tree (`f23194871`, which reads the old 17 exactly), the
+    # same script on both: OUT `('accept'|'challenge'|'fight'|'interview'|'tend'|'train','einhir_texts')` (six pairs) and
+    # `('speak','hearth_ostvik')` -- the set assertion above's one verb that left -- and IN `('exchange', 'einhir_texts')`,
+    # `('exchange', 'hearth_ostvik')` and `('exchange', 'rec:2dd19669944564b8')` (its three, `transfer`'s own referents).
+    # Every one of the other ten survives. The clause still fires, and `bit` below is empty on both trees.
+    assert len(dropped) == 13, (
+        f"{len(dropped)} executable clause-4 drops, not 13. The drops are the channel itself; if "
         "this falls toward zero the clause has stopped firing, which is a different and worse "
         "failure than the loss of outcome-relevance recorded above.")
     # ⚠⚠⚠ **THE BITE CAME BACK UNDER G1a, THE GUARD ABOVE DEMANDED A REASON, AND THE REASON IS
@@ -12987,8 +12994,15 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # person's act on the same pair cannot mask it (the note above has the measurement and the counterfactual).
     dropped_who = {(pid, v, subj) for pid, v, subj in hl_who_live if v in takeable}
     bite_who = {t for t in dropped_who if t in set(hl_seq_none) and t not in set(hl_seq_live)}
-    assert bite_who == {("p_carin", "transfer", "hearth_ostvik")}, (
-        f"the person-grain clause-4 bite is {sorted(bite_who)}, not `p_carin`'s `transfer` on her hearth (REM-2C). "
+    # ⚠⚠ v10 REM-2B (B10-06): `p_carin`'s `exchange` on her hearth JOINS her `transfer`, BY THE ROW'S CELL (its first conjunct is
+    # `transfer`'s `stores(from, kind) >= amount`, so the `stores:grain` belief that drops one drops the other) AND GROUNDED
+    # AS THE MESSAGE BELOW REQUIRES. THE COUNTERFACTUAL (`hl_drops`'s replica with clause 4 disabled for `('exchange',
+    # 'hearth_ostvik')` alone, scratch, not kept): the control arm has `p_carin` take it twice, the shipped arm 0 times
+    # (once by another person, so the pair is in `pairs_live` and the pair-grain `bit` above stays EMPTY), and the
+    # counterfactual 3 times -- the denial is real, not a fold-order artifact. CONTROL: on the REM-2A tree (`f23194871`) the
+    # person-grain bite is `p_carin`'s `transfer` alone, and this test passes there.
+    assert bite_who == {("p_carin", "transfer", "hearth_ostvik"), ("p_carin", "exchange", "hearth_ostvik")}, (
+        f"the person-grain clause-4 bite is {sorted(bite_who)}, not `p_carin`'s `transfer` and `exchange` on her hearth (REM-2B). "
         "Ground any change as the note above does -- disable clause 4 for the new triple's pair alone and see whether "
         "the shipped arm's person then takes it -- before re-pinning")
     assert control == [], (
@@ -13212,8 +13226,18 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # wrong-SUB-kind cost REM-2C's `research` note records, reaching clause 4. The other eight verbs STAY, their counts
     # moving with the act mix (`research` forms on a Record alone). The control arm drops 0 in both trees. `tell` and
     # `surveil` are absent.
+    # ⚠ {9 verbs} -> {12 verbs}, v10 REM-2B (B10-06): `evade / defy`, `construe` and `exchange` JOIN, nothing leaves.
+    # MEASURED BEFORE RE-PINNING, this test's own `drops(DEFAULT_FIXTURES)` replicated on this tree and on a detached copy of
+    # the REM-2A tree (`f23194871`, which reads the old 9 verbs and 141 drops exactly), the same script on both: here 105
+    # drops (accept/challenge/fight/interview/tend/train 18 -> 11, speak 20 -> 15, sabotage 12, comply 1 -> 2,
+    # `construe` 0 -> 2, `evade / defy` 0 -> 2, `exchange` 0 -> 6; 82 on `r_realm` where 129, `p_c` 17 where 11, and 6 on
+    # the petition `rec:c87ab5d1c3a66ff4` where 1). The two writ rows are `comply`'s case: they form on that PETITION
+    # (a Record, so the shared `Record` class lets them) and drop on the `('rec:c87ab5d1c3a66ff4', 'exists:dispensation',
+    # 0)` a refused `comply` there deposited -- the wrong-sub-kind cost REM-2C records, reaching clause 4 (2 + 2 + 2 = the 6
+    # on that petition); `exchange`'s 6 are on a belief a refusal deposited, its cell being `transfer`'s on the same `from`.
+    # The control arm drops 0 in both trees. `tell` and `surveil` are absent.
     assert {v for v, _ in live} == {"accept", "challenge", "comply",
-                                    "fight", "interview",
+                                    "fight", "interview", "evade / defy", "construe", "exchange",
                                     "sabotage", "speak", "tend", "train"}, (
         f"the drops are on {sorted({v for v, _ in live})}. `tell` here means a "
         "`claim.held` claim is reaching a ledger again, which is the self-refuting belief "
@@ -14015,7 +14039,12 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # hold, one fewer Candidate a fork can diverge into. The fork population is unmoved. Mechanism not isolated
     # past that; 8 > 1 holds.
     # v10 REM-23: 36/8 -> 34/5 (the `none`-arm note above gives the unit, the control and the other two arms); 5 >= 4.
-    assert (got["actor"]["genuine"], got["actor"]["diverged"]) == (34, 5), (
+    # v10 REM-2B (B10-06): 34/5 -> 34/7, a re-record read off the failing assertion's own `got` (the fork POPULATION, 34, is
+    # unmoved; `none` 4 diverged UNMOVED): `evade / defy`, `construe` and `exchange` are typed and resolvable again, so
+    # they are three more Candidates a fork can diverge into, and the scenes they take move which later decisions a fork
+    # reaches. CONTROL: the REM-2A tree (`f23194871`, a detached copy) reads 34/5 and passes this test. Mechanism not
+    # isolated past that; 7 > 4 still holds.
+    assert (got["actor"]["genuine"], got["actor"]["diverged"]) == (34, 7), (
         f"the shipped default diverged {got['actor']['diverged']} times of "
         f"{got['actor']['genuine']}: {got}. `W-D`'s acceptance was lost at `all_five` on "
         "2026-09-07 and recovered on 2026-09-10 when §F1 clause 4 got producers other than "
@@ -14057,7 +14086,9 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # [GROUNDED: measured 2026-09-30 at plan position `19c`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- `total` arm genuine 32, diverged 11; 32/10 with `migrate` unresolvable]
     # [GROUNDED: 32/11 -> 30/11 at plan position `24f`, 2026-09-30 -- divergence unmoved; mechanism in the `none`-arm `24f` block above]
     # [GROUNDED: 30/11 -> 29/6 at IN-08's cells commit (B-G) -- the re-scored ranking and the duel pair; mechanism and both trees' figures in the `none`-arm IN-08 block above]
-    assert (got["total"]["genuine"], got["total"]["diverged"]) == (33, 6), got    # v10 REM-23: 36/7 -> 33/6 (the `none`-arm note above); IN-12 `give` + Rung: -> 36/7 (the actor-arm note); IN-11: 29/6 -> 26/6 (the actor-arm note); IN-57: -> 36/10 (the attention-tier key); IN-45 `carry`: -> 36/11 (the actor-arm note); FI-01: -> 36/8 (the actor-arm note)
+    # v10 REM-2B (B10-06): `total` 33/6 -> 33/7, read off the failing assertion's own `got` (the `actor`-arm note above gives the
+    # unit and the REM-2A control; `total`'s fork population 33 is unmoved).
+    assert (got["total"]["genuine"], got["total"]["diverged"]) == (33, 7), got    # v10 REM-2B: 33/6 -> 33/7; v10 REM-23: 36/7 -> 33/6 (the `none`-arm note above); IN-12 `give` + Rung: -> 36/7 (the actor-arm note); IN-11: 29/6 -> 26/6 (the actor-arm note); IN-57: -> 36/10 (the attention-tier key); IN-45 `carry`: -> 36/11 (the actor-arm note); FI-01: -> 36/8 (the actor-arm note)
     # AND THE TWO LAYERS ARE SEPARATED. The finding is the DECISION count above; this is the layer
     # beneath it — whether the fork moved the act stream at all.
     #
@@ -14461,7 +14492,9 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # v10 REM-23 (B10-05): 8 -> 5, a re-record: the sibling test's population move (its `(34, 5)` note, the unit and the
     # REM-22 control there), read off this test's own `got`: `none` 4/4, `actor` 5/5, `total` 6/6; still equal to
     # `wide` (5 both), not 0.
-    assert got["actor"]["verbonly"] == 5, (
+    # v10 REM-2B (B10-06): 5 -> 7, a re-record: the sibling test's population move (its `(34, 7)` note, the unit and the
+    # REM-2A control there), read off this test's own `got`; still equal to `wide` (7 both), not 0.
+    assert got["actor"]["verbonly"] == 7, (
         f"the shipped default adds {got['actor']['verbonly']} VERB-SET divergences: {got}. A 0 "
         "means the clause-4 producers the six investigation acts opened are gone again and the "
         "2026-09-07 loss is back; any other number means the population moved and must be "
@@ -14559,7 +14592,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # ⚠⚠ **33/10 -> 31/7, PLAN POSITION `7a`, 2026-09-29 -- SAME MECHANISM AS THE `none`-ARM BLOCK
     # ABOVE, AND `wide` STILL EQUALS `verbonly` (7 both).**
     # [GROUNDED: measured 2026-09-29 on this tree after position `7a`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- shipped arm genuine 31, wide 7]
-    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (34, 5), got     # v10 REM-23: -> 34/5 (the sibling test's move); IN-12 `give` + Rung: -> 36/8 (the `verbonly` note); `24f`: 31/7 -> 32/7; IN-08: -> 35/9; IN-11: -> 32/9 (the hold, see `test_wd_a_fork_changes_…`); IN-57: -> 36/11; IN-45 `carry`: -> 36/12 (the `verbonly` note); FI-01: -> 36/9 (the `verbonly` note); IN-12 step 9: -> 36/10 (the `verbonly` note)
+    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (34, 7), got     # v10 REM-2B: -> 34/7 (the sibling test's move); v10 REM-23: -> 34/5 (the sibling test's move); IN-12 `give` + Rung: -> 36/8 (the `verbonly` note); `24f`: 31/7 -> 32/7; IN-08: -> 35/9; IN-11: -> 32/9 (the hold, see `test_wd_a_fork_changes_…`); IN-57: -> 36/11; IN-45 `carry`: -> 36/12 (the `verbonly` note); FI-01: -> 36/9 (the `verbonly` note); IN-12 step 9: -> 36/10 (the `verbonly` note)
     # [GROUNDED: re-measured 2026-09-10 after ED-FI-0009 -- `total` 5 of 18 under the widened (verb, subject) fingerprint]
     # [GROUNDED: re-measured 2026-09-10 under `U4` -- `total` 5 of 19 under the widened (verb, subject) fingerprint]
     # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (28, 3) at the `total` arm]
@@ -14590,7 +14623,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # formed wherever `move` is. `wide` still equals `verbonly` (11 both); 32/10 with `migrate`
     # unresolvable.
     # [GROUNDED: measured 2026-09-30 at plan position `19c`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- `total` genuine 32, wide 11 (= verbonly 11); 32/10 with `migrate`'s `@effect_for` removed]
-    assert (got["total"]["genuine"], got["total"]["wide"]) == (33, 6), got    # v10 REM-23: -> 33/6 (the sibling test's move); IN-12 `give` + Rung: -> 36/7 (the `verbonly` note); `24f`: 32/11 -> 30/11; IN-08: -> 29/6; IN-11: -> 26/6; IN-57: -> 36/10; IN-45 `carry`: -> 36/11; FI-01: -> 36/8
+    assert (got["total"]["genuine"], got["total"]["wide"]) == (33, 7), got    # v10 REM-2B: -> 33/7 (the sibling test's move); v10 REM-23: -> 33/6 (the sibling test's move); IN-12 `give` + Rung: -> 36/7 (the `verbonly` note); `24f`: 32/11 -> 30/11; IN-08: -> 29/6; IN-11: -> 26/6; IN-57: -> 36/10; IN-45 `carry`: -> 36/11; FI-01: -> 36/8
 
 
 # ===========================================================================
