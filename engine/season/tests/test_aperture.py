@@ -322,13 +322,21 @@ def _restore_on_a_person():
 
 def _migrate_into_a_full_rung():
     """The spine of `test_migrate_capacity.py`: `lr_hearth_b` houses one under one dwelling, so a
-    newcomer's `migrate` is refused at the `write` clause after clearing its whole `requires`, beside
-    a `speak` on a matter no docket names, refused at admission before the contest."""
+    newcomer's `migrate` there is refused AT ADMISSION on the row's `room` conjunct (v10 REM-29: the
+    throttle is a read the Event records, `room:<actor>` False); a `migrate` into the hearth he already
+    lives in (`lr_hearth_a`) clears its whole `requires` and is refused at the `write` clause (the
+    effect's own-residence decline) -- the post-admission refusal; and beside them a `speak` on a
+    matter no docket names, refused at admission before the contest.
+    ⚠ v10 REM-29 (B10-06): BEFORE IT the full-rung `migrate` WAS this file's post-admission refusal (the
+    throttle was the effect's hidden decline); the own-residence `migrate` takes that role, unchanged in
+    kind (`migrate.refused`, the `write` clause), and the full-rung act now reads `clause:room`."""
     from .test_migrate_capacity import _fold as mig_fold
     from .test_migrate_capacity import _world as mig_world
     w, d = mig_world(lambda: governance_spine.build(0))
     mig_fold(w, d, Act(id="a_rem11_mg", actor="lp_hearth_a", verb="migrate",
                        payload={"to": "lr_hearth_b"}))
+    mig_fold(w, d, Act(id="a_rem11_mg_home", actor="lp_hearth_a", verb="migrate",
+                       payload={"to": "lr_hearth_a"}))
     mig_fold(w, d, Act(id="a_rem11_speak", actor="lp_hearth_a", verb="speak",
                        payload={"subject": "lp_community_a"}))
     return w, d
@@ -350,13 +358,17 @@ def test_rem11_a_restore_on_a_person_id_reads_exists_site_zero():
 
 
 def test_rem11_a_migrate_into_a_full_rung_is_a_post_admission_refusal():
-    """`migrate` clears its whole `requires` (every recorded read passes) and is refused at the
-    `write` clause by the capacity throttle: counted `post-admission`, its reason the clause the row
-    keys. The `speak` refused at admission is the control: a read failed, so it is not counted."""
+    """The own-residence `migrate` clears its whole `requires` (every recorded read passes) and is
+    refused at the `write` clause: counted `post-admission`, its reason the clause the row keys. The
+    full-rung `migrate` (v10 REM-29) is refused on its `room` conjunct, a read that failed: its reason
+    is `clause:room` and it is NOT post-admission. The `speak` refused at admission is the control: a
+    read failed, so it is not counted. (Name kept for its history: the full-rung act was the
+    post-admission one until REM-29 made the throttle a conjunct.)"""
     w, d = _migrate_into_a_full_rung()
     rd = _reading(w, d)
     assert rd["post_admission"] == {"migrate": 1}, rd["post_admission"]
-    assert rd["reasons"]["migrate"] == {"clause:write": 1}, rd["reasons"]
+    assert rd["post_acts"] == {"a_rem11_mg_home"}, rd["post_acts"]
+    assert rd["reasons"]["migrate"] == {"clause:write": 1, "clause:room": 1}, rd["reasons"]
     assert "speak" in rd["reasons"] and "speak" not in rd["post_admission"], rd
 
 

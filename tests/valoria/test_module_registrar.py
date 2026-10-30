@@ -503,18 +503,36 @@ print(repr((verb, construct())))
 
 def test_every_shipped_row_dropped_on_its_precondition_says_why():
     """`SM-11`'s positive half on the shipped tree: every row `resolvable_verbs()`'s first gate drops
-    carries a `requires_decline_note:`, and the shipped tree constructs -- derived, not listed. A
-    vacuous sweep (no such row) would observe nothing, so it asserts there is at least one."""
+    carries a `requires_decline_note:`, and the shipped tree constructs -- derived, not listed. Since
+    v10 REM-2B typed the last prose precondition NO shipped row is dropped, so the sweep is vacuous on
+    the shipped tree and would observe nothing; it is kept able to observe by planting, in process, a
+    row the first gate drops -- once WITH a note (it must appear in `dropped`, say why, and construct)
+    and once WITHOUT (it must appear in `unsaid`): the sweep has to be able to see the failure it
+    excludes."""
     got = _run("""
+import dataclasses
 from engine.season.loop.driver import REQUIRES_PREDICATES
-dropped = sorted(v for v, r in VERB_TABLE.items() if not r.precondition_evaluable(REQUIRES_PREDICATES))
-unsaid = [v for v in dropped if not VERB_TABLE[v].requires_decline_note]
-print(repr((dropped, unsaid, construct())))
+def sweep():
+    dropped = sorted(v for v, r in VERB_TABLE.items() if not r.precondition_evaluable(REQUIRES_PREDICATES))
+    return dropped, [v for v in dropped if not VERB_TABLE[v].requires_decline_note]
+shipped_dropped, shipped_unsaid = sweep()
+control = construct()
+verb = sorted(v for v, r in VERB_TABLE.items()
+              if r.has_precondition and r.requires_typed is not None
+              and v not in REQUIRES_PREDICATES and not r.requires_decline_note)[0]
+row = VERB_TABLE[verb]
+VERB_TABLE[verb] = dataclasses.replace(row, requires_typed=None, requires_decline_note="planted")
+said = (sweep(), construct())
+VERB_TABLE[verb] = dataclasses.replace(row, requires_typed=None)
+unsaid_plant = sweep()
+print(repr((shipped_dropped, shipped_unsaid, control, verb, said, unsaid_plant)))
 """)
-    dropped, unsaid, control = got
-    assert dropped, "no shipped row is dropped on its precondition; this test observes nothing"
-    assert unsaid == [], unsaid
+    shipped_dropped, shipped_unsaid, control, verb, said, unsaid_plant = got
+    assert shipped_unsaid == [], shipped_unsaid
     assert control is None, control
+    (said_dropped, said_unsaid), said_construct = said
+    assert verb in said_dropped and said_unsaid == [] and said_construct is None, (verb, said)
+    assert unsaid_plant[1] == [verb], (verb, unsaid_plant)
 
 
 def test_the_populated_realm_constructs_a_driver_and_every_check_ran():

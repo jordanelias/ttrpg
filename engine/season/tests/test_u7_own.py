@@ -51,7 +51,9 @@ from engine.season.state.carriers import Act, Candidate, Claim, Question, View
 # `H-85`), the reason answered: its carrier (`Person.thread_sensitivity`, from the cast's `ts:`), and a
 # person below the gate forms no Candidate, so it is not formed-and-refused in every world
 # (`engine/season/tests/test_k3_thread_sensitivity.py`).
-DECLINED = ("exchange", "succeed", "tie / knot")
+# v10 REM-2B (restores v9 IN-33, H-58): `exchange` LEFT -- typed on its two coined operands (`return_kind`,
+# `return_amount`) with an effect, `_eff_exchange`; re-recorded.
+DECLINED = ("succeed", "tie / knot")
 
 
 def _view(w, pid):

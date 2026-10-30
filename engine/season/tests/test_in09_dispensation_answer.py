@@ -1,32 +1,41 @@
 """v9 IN-09 (`19b`, U7-disp; H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to correct]) --
-`comply`, the act that answers a dispensation, typed on THE HELD WRIT (J-2 arm A) and formed only on a
-writ the person holds. `evade / defy` and `construe` were typed beside it and REVERTED to their base
-rows (each executed 0 times through the real chooser; H-203's IN-09 OUTCOME and AMENDED, checkpoints
-`a1c83e62`, `60073e75`).
+`comply`, `evade / defy` and `construe`, the three acts that answer a dispensation, typed on THE HELD
+WRIT (J-2 arm A, one `evade / defy` row) and formed only on a writ the person holds. `evade / defy` and
+`construe` were typed beside `comply` at v9, REVERTED to their base rows (each executed 0 times through
+the real chooser; H-203's IN-09 OUTCOME and AMENDED, checkpoints `a1c83e62`, `60073e75`), and RESTORED
+at v10 REM-2B as a declared mover, with no realm execution required (P9).
 
-The cell: `existence` of `subject` kind `dispensation` + `own_ledger` of `subject`. Formation:
-`queries/world_q.py::writs_held` stamps the dispensations on a person's live `hold` edges onto the
-question he answers as `Record` (IN-53 D1's partition), and the row declares `referent_class: Record`
-+ `referent_named: true` (IN-10 (a)'s column), so a Candidate forms only on a held writ his own ledger
-names.
+The cell, all three: `existence` of `subject` kind `dispensation` + `own_ledger` of `subject`.
+(`construe` does NOT carry the checkpoint's third conjunct, `relation` `held_by`: on the current loader a
+`Record` row asking `held_by` is a HOLDING row, `data/verbs.py::HOLDING_RECORD_KINDS`, which would stamp
+every holder's dispensation for every `Record` row -- (5)'s custodian test is its control.) Formation:
+`queries/world_q.py::writs_held` stamps the dispensations on a person's live `hold` edges that NAME HIM
+onto the question he answers as `Record` (IN-53 D1's partition), and the three rows declare
+`referent_class: Record` + `referent_named: true` (IN-10 (a)'s column), so a Candidate forms only on a
+held writ his own ledger names.
 
-  (1) THE ROW: typed, resolvable, emission-only (no effect the fold would never call);
-  (2) THE CARRIED FALSIFIER, through the real fold: `comply` for a person whose ledger holds no claim
-      of the terms -> `compliance.impossible`; the control, his content claim in hand -> executed;
+  (1) THE ROWS: typed, resolvable, emission-only (no effect the fold would never call);
+  (2) THE CARRIED FALSIFIER, through the real fold: `comply` (and `evade / defy`) for a person whose
+      ledger holds no claim of the terms -> `compliance.impossible`; `construe` likewise ->
+      `construal.impossible`; the control, his content claim in hand -> executed;
   (3) a claim on a person, or on a text, answers no writ (the `existence` conjunct);
-  (4) the cell does not ask for the writ in hand: a reader of its terms complies;
-  (5) FORMATION: `writs_held`/`questions_for` stamp a held writ and nothing else; `comply` forms on it
-      only once his ledger names it; with no writ held the questions are unchanged (the control);
+  (4) the cell does not ask for the writ in hand: a reader of its terms who does not hold it is admitted
+      by the fold (formation (5) is what offers it to the holder alone in computed play);
+  (5) FORMATION: `writs_held`/`questions_for` stamp a held writ and nothing else; the three form on it
+      only once his ledger names it; a witness or a custodian who is not its addressee is offered none;
+      with no writ held the questions are unchanged (the control);
   (6) THE CROWD-OUT CONTROL AT FORMATION (`test_in53v_a_the_partition_moves_no_other_rows_formations`'
       form): every row declaring no `referent_class:` forms exactly what the question forms stripped
       (a `terms_sourced` verb, IN-12 step 7, forms that and may add the held writ's terms);
-  (7) RETIRED 2026-10-13 (the session user's "Relax exit rules"; plan §0.5): the realm falsifier
-      and exit on `build_realm(0)` at 4 seasons, each non-vacuous only when seed 0's trajectory held
-      an attempt; (2) and (5) prove the held-writ and own-ledger conditions on built worlds.
+  (7) RETIRED 2026-10-13 (the session user's "Relax exit rules"; plan §0.5), and not re-asked at v10
+      REM-2B (P9): the realm falsifier and exit on `build_realm(0)` at 4 seasons, each non-vacuous only
+      when seed 0's trajectory held an attempt; (2) and (5) prove the held-writ and own-ledger
+      conditions on built worlds. The restore's realm reading is `aperture 1 s` / `aperture 4 0`.
 
 MUTATIONS, run at the build on the unit tests (the realm half not re-run under them): `writs_held`
 returning `()` reddens (5) twice and (6); the `own_ledger` conjunct deleted from `comply` reddens (2);
-`referent_named` dropped reddens (1) and (5)'s 'not before his ledger names it'.
+`referent_named` dropped reddens (1) and (5)'s 'not before his ledger names it'. Run again at v10 REM-2B
+for the two restored rows (the commit body).
 """
 import dataclasses
 
@@ -35,7 +44,8 @@ import pytest
 from engine.season.data.matrix import Step, WriteClass
 from engine.season.data.rosters import RECORD_CONTENT
 from engine.season.data.verbs import (
-    RECORD_REFERENT_KINDS, TERMS_SOURCED, VERB_TABLE, _asks_subject_held, _record_subkinds_answered,
+    HOLDING_RECORD_KINDS, RECORD_REFERENT_KINDS, TERMS_SOURCED, VERB_TABLE, _asks_subject_held,
+    _record_subkinds_answered,
 )
 from engine.season.harness import probes as P
 from engine.season.loop.driver import SeasonDriver, mint_token, resolvable_verbs
@@ -47,7 +57,11 @@ from engine.season.state.carriers import Act, Claim
 
 from .test_in53_vacancy_need import _formed, _sig
 
-VERB, GIVEN, REFUSED = "comply", "compliance.given", "compliance.impossible"
+THREE = ("comply", "evade / defy", "construe")
+EMITS = {"comply": "compliance.given", "evade / defy": "compliance.withheld",
+         "construe": "terms.distorted"}
+REFUSAL = {"comply": "compliance.impossible", "evade / defy": "compliance.impossible",
+           "construe": "construal.impossible"}
 HOLDER, OTHER = "p_low", "p_mid"                  # `tiny_world`: both in Hh
 WRIT = "rec_writ"
 _CONTENT = RECORD_CONTENT["predicate"]
@@ -91,17 +105,19 @@ def _fold(w, d, actor, verb, subject, key):
 
 # (1) ----------------------------------------------------------------------------------------------
 
-def test_in09_the_row_is_typed_resolvable_classed_and_emission_only():
-    row = VERB_TABLE[VERB]
-    assert row.requires_typed is not None, "the cell is still untyped"
-    assert not row.requires_decline_note, "a stale `requires_decline_note:`"
-    assert VERB in resolvable_verbs(), "the fold still cannot carry it"
-    assert row.writes == (), f"declares writes {row.writes} -- not emission-only"
-    assert VERB not in EFFECTS, "an effect the fold never calls (`ID-13`)"
+@pytest.mark.parametrize("verb", THREE)
+def test_in09_each_row_is_typed_resolvable_classed_and_emission_only(verb):
+    row = VERB_TABLE[verb]
+    assert row.requires_typed is not None, f"{verb}: the cell is still untyped"
+    assert not row.requires_decline_note, f"{verb}: a stale `requires_decline_note:`"
+    assert verb in resolvable_verbs(), f"{verb}: the fold still cannot carry it"
+    assert row.writes == (), f"{verb}: declares writes {row.writes} -- not emission-only"
+    assert verb not in EFFECTS, f"{verb}: an effect the fold never calls (`ID-13`)"
     assert (row.referent_class, row.referent_named) == ("Record", True)
+    assert (row.emits, row.emits_on_refusal) == ((EMITS[verb],), (REFUSAL[verb],))
 
 
-def test_in09_the_record_class_is_declared_by_comply_alone_and_answers_dispensations():
+def test_in09_the_record_class_is_declared_by_the_three_alone_and_answers_dispensations():
     # RE-RECORDED AT v10 REM-25 (B10-05): `carry`, `found` and `build` declare `Record` too, so the rows
     # declaring it were `{comply}` and are `{comply, carry, found, build}`. WHAT THIS TEST MEANT -- the
     # writ occasion is `comply`'s alone, and `RECORD_REFERENT_KINDS` (the kinds `writs_held` stamps, with its
@@ -114,65 +130,79 @@ def test_in09_the_record_class_is_declared_by_comply_alone_and_answers_dispensat
     # `research` asks `existence` of the collection itself (any document) and names NO sub-kind
     # (`data/verbs.py::_record_subkinds_answered`), so the writ occasion is still `comply`'s alone --
     # `RECORD_REFERENT_KINDS` is `dispensation` alone on both trees.
+    # RE-RECORDED AT v10 REM-2B (restoring v9 IN-09's two rows): `evade / defy` and `construe` declare `Record`
+    # beside `comply`, on `comply`'s cell, so the rows declaring it were `{comply, carry, found, build,
+    # research}` and are those plus the two; the rows asking no `held_by` were `{comply, research}` and are
+    # `{comply, evade / defy, construe, research}`; the rows answering a writ kind were `{comply}` and are the
+    # three. The meaning stands and is asserted directly: the writ occasion is the three's alone
+    # (`RECORD_REFERENT_KINDS` is `dispensation` alone), `HOLDING_RECORD_KINDS` holds no writ kind (a
+    # `held_by` conjunct on `construe` would put `dispensation` in it: the checkpoint's third conjunct, not
+    # ported -- `test_in09_a_custodian_who_is_not_the_addressee_is_offered_none_of_the_three`).
     record_rows = {v for v, r in VERB_TABLE.items() if r.referent_class == "Record"}
-    assert record_rows == {VERB, "carry", "found", "build", "research"}
-    assert {v for v in record_rows if not _asks_subject_held(VERB_TABLE[v])} == {VERB, "research"}
-    assert {v for v in record_rows if _record_subkinds_answered(VERB_TABLE[v]) & RECORD_REFERENT_KINDS} == {VERB}
+    assert record_rows == {*THREE, "carry", "found", "build", "research"}
+    assert {v for v in record_rows if not _asks_subject_held(VERB_TABLE[v])} == {*THREE, "research"}
+    assert {v for v in record_rows if _record_subkinds_answered(VERB_TABLE[v]) & RECORD_REFERENT_KINDS} == set(THREE)
     assert not _record_subkinds_answered(VERB_TABLE["research"])
     assert RECORD_REFERENT_KINDS == frozenset({"dispensation"})
+    assert not HOLDING_RECORD_KINDS & RECORD_REFERENT_KINDS, "a writ kind is stamped by a holding row too"
 
 
+@pytest.mark.parametrize("verb", THREE)
 @pytest.mark.parametrize("cell,match", [
     ({"form": "own_ledger", "of": "subject"}, "names no `existence` kind"),    # no existence clause
     ("none", "names no `existence` kind"),                                    # untyped: no cell at all
     ({"all": [{"form": "existence", "of": "subject", "kind": "Office"},       # a kind no Record has
               {"form": "own_ledger", "of": "subject"}]}, r"names \['Office'\] `existence`"),
 ])
-def test_in09_the_loader_refuses_a_record_row_naming_no_record_kind(monkeypatch, cell, match):
+def test_in09_the_loader_refuses_a_record_row_naming_no_record_kind(monkeypatch, verb, cell, match):
     """Batch B-I close, layer-conformance (A7): a `referent_class: Record` row whose cell names no
     `existence` kind of `subject` that `rosters.yaml: record_kinds` holds would leave
     `RECORD_REFERENT_KINDS` without its kind, so `writs_held` stamps nothing for it and the row never
-    forms -- a declared row read by nothing (`04` §A.1, ID-13). Planted on `comply`; the shipped row
-    is the control (it loads, above)."""
+    forms -- a declared row read by nothing (`04` §A.1, ID-13). Planted on each of the three; the
+    shipped rows are the control (they load, above)."""
     from engine.season.data import verbs as _verbs
     from .test_in53_vacancy_need import _planted
-    _planted(monkeypatch, VERB, "requires_typed", cell)
+    _planted(monkeypatch, verb, "requires_typed", cell)
     with pytest.raises(SystemExit, match=match):
         _verbs._load_verb_table()
 
 
 # (2) THE CARRIED FALSIFIER -------------------------------------------------------------------------
 
-def test_in09_falsifier_no_claim_of_the_terms_refuses_and_holding_one_admits():
-    """*`comply` evaluable for a person whose ledger holds no claim of the terms -> fail*. The actor
+@pytest.mark.parametrize("verb", THREE)
+def test_in09_falsifier_no_claim_of_the_terms_refuses_and_holding_one_admits(verb):
+    """*A row evaluable for a person whose ledger holds no claim of the terms -> fail*. The actor
     holds the writ and it IS a dispensation, so the one conjunct left to refuse is the ledger's."""
     w, d = _with_writ()
     assert not [c for c in w.persons[HOLDER].ledger if c.subject == WRIT], "fixture: a claim held"
-    assert _fold(w, d, HOLDER, VERB, WRIT, "a1") == [REFUSED], (
-        "`comply` admitted for a person whose ledger holds no claim of the terms")
+    assert _fold(w, d, HOLDER, verb, WRIT, "a1") == [REFUSAL[verb]], (
+        f"`{verb}` admitted for a person whose ledger holds no claim of the terms")
     _read_terms(w, HOLDER)
-    assert _fold(w, d, HOLDER, VERB, WRIT, "a2") == [GIVEN]
+    assert _fold(w, d, HOLDER, verb, WRIT, "a2") == [EMITS[verb]]
 
 
 # (3) THE WRIT CONJUNCT -----------------------------------------------------------------------------
 
-def test_in09_a_claim_on_a_person_or_a_text_answers_no_writ():
+@pytest.mark.parametrize("verb", THREE)
+def test_in09_a_claim_on_a_person_or_a_text_answers_no_writ(verb):
     w, d = _with_writ()
     _claim(w, HOLDER, OTHER, "exists:Person", 1, "c_person")
-    assert _fold(w, d, HOLDER, VERB, OTHER, "p1") == [REFUSED]
+    assert _fold(w, d, HOLDER, verb, OTHER, "p1") == [REFUSAL[verb]]
     w2, d2 = _with_writ(kind="text")
     _claim(w2, HOLDER, WRIT, "record.created", True, "c_text")
-    assert _fold(w2, d2, HOLDER, VERB, WRIT, "p2") == [REFUSED]
+    assert _fold(w2, d2, HOLDER, verb, WRIT, "p2") == [REFUSAL[verb]]
 
 
 # (4) THE CELL DOES NOT ASK FOR THE WRIT IN HAND ----------------------------------------------------
 
-def test_in09_a_reader_of_the_terms_who_does_not_hold_the_writ_complies():
-    """A claim of its terms is the whole cell (§E3 `:430`); formation (5) is what offers it to the
-    holder alone in computed play."""
+@pytest.mark.parametrize("verb", THREE)
+def test_in09_a_reader_of_the_terms_who_does_not_hold_the_writ_is_admitted(verb):
+    """A claim of its terms is the whole cell (§E3 `:430`, `:431`, `:432`); formation (5) is what offers
+    it to the holder alone in computed play. `construe` is the HOLDER's reading by that formation and not
+    by a `held_by` conjunct (the checkpoint's third conjunct, not ported: the module docstring)."""
     w, d = _with_writ()
     _read_terms(w, OTHER)
-    assert _fold(w, d, OTHER, VERB, WRIT, "c3") == [GIVEN]
+    assert _fold(w, d, OTHER, verb, WRIT, "c3") == [EMITS[verb]]
 
 
 # (5) FORMATION -------------------------------------------------------------------------------------
@@ -187,26 +217,26 @@ def test_in09_writs_held_stamps_a_held_dispensation_and_nothing_else():
     assert world_q.writs_held(w, w.persons[HOLDER]) == ()
 
 
-def test_in09_comply_forms_on_the_held_writ_once_his_ledger_names_it():
+def test_in09_the_three_form_on_the_held_writ_once_his_ledger_names_it():
     w, _ = _with_writ()
     p = w.persons[HOLDER]
     qs = world_q.questions_for(w, p)
     assert qs and (WRIT, "Record") in qs[0].classes, qs[:1]
     assert all((WRIT, "Record") not in q.classes for q in qs[1:])
-    assert not [c for c in _formed(w, HOLDER, qs[0]) if c.verb == VERB], (
+    assert not [c for c in _formed(w, HOLDER, qs[0]) if c.verb in THREE], (
         "formed on a writ his own ledger does not name")
     _read_terms(w, HOLDER)
     qs = world_q.questions_for(w, p)
-    got = {(c.verb, c.subject) for c in _formed(w, HOLDER, qs[0]) if c.verb == VERB}
-    assert got == {(VERB, WRIT)}, sorted(got)
+    got = {(c.verb, c.subject) for c in _formed(w, HOLDER, qs[0]) if c.verb in THREE}
+    assert got == {(v, WRIT) for v in THREE}, sorted(got)
 
 
-def test_in09_a_witness_who_does_not_hold_the_writ_is_offered_no_comply(monkeypatch):
+def test_in09_a_witness_who_does_not_hold_the_writ_is_offered_none_of_the_three(monkeypatch):
     """B10-05 close (REM-2C released `Record` to the own-referent term): a person who merely SAW the writ
-    issued holds a claim on it (`claim_subject_rule: both`), so his question names it and `comply`'s cell
+    issued holds a claim on it (`claim_subject_rule: both`), so his question names it and each row's cell
     -- a claim on the writ, nothing about being its addressee -- would pass the fold (test (4) above).
     The own-referent term skips a Record of a writ kind, so `writs_held`'s addressee test stays the whole
-    formation. The control is the same witness with the skip switched off: he then IS offered `comply`, so
+    formation. The control is the same witness with the skip switched off: he then IS offered all three, so
     the assertion could have failed (and the non-holder control below holds an empty ledger, which has no
     question to answer at all)."""
     w, _ = _with_writ()
@@ -216,11 +246,33 @@ def test_in09_a_witness_who_does_not_hold_the_writ_is_offered_no_comply(monkeypa
     (q, *_) = world_q.questions_for(w, witness)
     assert WRIT in q.referents, "fixture: the question is not about the writ"
     assert (WRIT, "Record") not in q.classes, q.classes
-    assert not [c for c in _formed(w, OTHER, q) if c.verb == VERB]
+    assert not [c for c in _formed(w, OTHER, q) if c.verb in THREE]
     monkeypatch.setattr(world_q, "RECORD_REFERENT_KINDS", frozenset())
     (q, *_) = world_q.questions_for(w, witness)
     assert (WRIT, "Record") in q.classes, "control: the skip off still stamps nothing"
-    assert [c.subject for c in _formed(w, OTHER, q) if c.verb == VERB] == [WRIT]
+    assert sorted(c.verb for c in _formed(w, OTHER, q) if c.verb in THREE) == sorted(THREE)
+
+
+def test_in09_a_custodian_who_is_not_the_addressee_is_offered_none_of_the_three(monkeypatch):
+    """The reason `construe` carries no `held_by` conjunct (the module docstring). The MAKER holds a writ
+    naming ANOTHER person, and his own ledger names it: he holds the writ and is not its addressee, so
+    `writs_held` stamps nothing and he is offered none of the three. The control plants what a `held_by`
+    conjunct on `construe` would do on the current loader -- `dispensation` joins `HOLDING_RECORD_KINDS`, the set
+    `records_held_for_holding_rows` stamps for every holder with no addressee test -- and he is then offered
+    all three, so the assertion could have failed."""
+    w, _ = _with_writ()
+    w.records[WRIT].subject_matter = {"terms": HOLDER, "to": [OTHER], "at": None}
+    _read_terms(w, HOLDER)
+    maker = w.persons[HOLDER]
+    assert hold_force(w, WRIT).subject == HOLDER, "fixture: he does not hold the writ"
+    assert world_q.writs_held(w, maker) == (), "fixture: he is the writ's addressee"
+    (q, *_) = world_q.questions_for(w, maker)
+    assert (WRIT, "Record") not in q.classes, q.classes
+    assert not [c for c in _formed(w, HOLDER, q) if c.verb in THREE]
+    monkeypatch.setattr(world_q, "HOLDING_RECORD_KINDS", HOLDING_RECORD_KINDS | {"dispensation"})
+    (q, *_) = world_q.questions_for(w, maker)
+    assert (WRIT, "Record") in q.classes, "control: the planted holding set still stamps nothing"
+    assert sorted(c.verb for c in _formed(w, HOLDER, q) if c.verb in THREE) == sorted(THREE)
 
 
 def test_in09_with_no_writ_held_the_questions_are_unchanged():
@@ -242,7 +294,7 @@ def test_in09_with_no_writ_held_the_questions_are_unchanged():
 def test_in09_the_partition_moves_no_other_rows_formations():
     """Every person holds a writ his ledger names, and is told of a person: every row declaring no
     `referent_class:` forms exactly what the same question forms with its classed referents
-    stripped, and stripped, `comply` forms nothing."""
+    stripped, and stripped, the three form nothing."""
     classed_rows = {v for v, r in VERB_TABLE.items() if r.referent_class}
     w, d = _with_writ()
     for i, pid in enumerate(sorted(w.persons)):
@@ -267,6 +319,6 @@ def test_in09_the_partition_moves_no_other_rows_formations():
                 _sig(c for c in bare if c.verb not in TERMS_SOURCED), (pid, q.id)
             assert set(_sig(c for c in bare if c.verb in TERMS_SOURCED)) <= \
                 set(_sig(c for c in unclassed if c.verb in TERMS_SOURCED)), (pid, q.id)
-            assert not [c for c in bare if c.verb == VERB], (pid, q.id)
-            checked += sum(c.verb == VERB for c in got)
-    assert checked >= len(w.persons), checked
+            assert not [c for c in bare if c.verb in THREE], (pid, q.id)
+            checked += sum(c.verb in THREE for c in got)
+    assert checked >= 3 * len(w.persons), checked

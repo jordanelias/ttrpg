@@ -538,6 +538,24 @@ rows:
       False` at `2x3` (the unplanted `none` baseline itself diverges 9 of 34). The `none >= actor` control is a channel-open arm, not
       a null arm (the collector says so). The `--draw-seeds` arm printed no same-draw-seed repeat; that determinism control is the
       test's, not re-run here. The 30.4 % and 17.9 % are antecedent shares in `storybar`, not reconvergence; neither moves this row.
+      **B10-06 CLOSE RE-TAKE (v10 `11`, M-10; THE FINAL RUN OF THE BASELINE-PLUS-FINAL PAIR, M-7 above), 2026-10-30, tree `2ca90dce7`,
+      `PYTHONHASHSEED=0`, seed 0, four seasons, 143 cases; THE STATUS STAYS `met`.** CONJUNCT 1 (`corpus_run`, `EXIT 0`, 143 distinct
+      worlds): `check R3: 46 of 46 pass` (NPC) and `97 of 97 pass` (ARC), `not True: none` on both, planted control `False -> True`.
+      CONJUNCT 2: the 36 `wd_chunk.py` cells then `wd_collect.py` (`cases 143/143 ok, 0 failed, 0 fork rows failed` on each of the
+      nine arm-cells; the collector's completeness assertion held, rc 0). AT `2x3`: `none` 1588/1974 = 80.45 % - `actor` 1247/1937 =
+      64.38 % - `total` 1229/1969 = 62.42 %, BELOW the 96 % bar, and `none >= actor: True` is printed. Against M-7 (tree `17ba74bc`:
+      83.69 / 58.90 / 59.43 %): -3.24 / +5.48 / +2.99 pp. `default` (5 x 3): 2028/2775 = 73.08 % - 1807/2666 = 67.78 % - 1758/2673 =
+      65.77 % (M-7: 76.84 / 67.30 / 64.77); `narrow` (`2x1`): 4450/4961 = 89.70 % - 3969/4899 = 81.02 % - 3920/4933 = 79.46 % (M-7:
+      89.43 / 72.13 / 72.80), `none >= actor: True` there too. THE MOVE SITS ACROSS EVERY COMMIT BETWEEN `17ba74bc` AND `2ca90dce7`
+      (B10-02's tail and close, B10-03, B10-03b, B10-04 and B10-05 -- REM-21 to REM-25 and REM-52 among them -- the merges of `origin/main`,
+      and the eight B10-06 items); no per-item reading exists for it and it is attributed to none. NOT RE-PINNED: a reading at or above 96 % would have kept the row `not_met` and named
+      H-116 first; this one is below. DETERMINISM, OBSERVED THIS TIME: the cell `default`/`none`/`0 36` was run twice (once in the
+      working tree, once in the frozen snapshot): probed 5217, no-live-window 1230, inert 3294, genuine 693, diverged 192, equal on
+      every counter. WHAT THIS DOES NOT SHOW: one seed, one run per arm, no noise estimate; the `[POSITIVE]` line still reads
+      `detected OVER THE BASELINE on ALL 4 plants: False` at both qualifying cells (the instrument's own caveat, not part of `met`;
+      the comparator-only plant is detected). The run's tree is a `git archive` of `2ca90dce7`; the commits after it are prose, added
+      tests and behaviour-neutral refactors (the pinned digests of `test_season_weather`, `test_go07_canonical_digest` and
+      `test_governance_build` read unchanged on the final tree).
     measure: "python -m engine.season.harness.corpus_run  # check R3 rows + the planted control"
     blocks: [IN-10, IN-11, IN-13, H-116, IN-50]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1: regard is computed at read; the cross-person half is IN-10's, IN-11's, IN-13's); H-111 is FI-01's deposit half
@@ -692,6 +710,14 @@ rows:
       is not a rate of decisions reaching later decisions in a season, and 83.69 % `none` against the control carries no noise
       estimate. The four widened-clause-4 plants are still not detected over baseline at `2x3`, so the instrument has not shown it
       can see a planted widening.
+      **B10-06 CLOSE RE-TAKE (v10 `11`, M-10; the final run of the pair, M-7 above), 2026-10-30, tree `2ca90dce7`, `PYTHONHASHSEED=0`,
+      seed 0, four seasons; THE STATUS STAYS `met`.** The same run as R-01's paragraph of this date, not a second one: the 36 cells
+      then `wd_collect.py`, `cases 143/143 ok, 0 failed, 0 fork rows failed` on every arm-cell, the completeness assertion held. AT
+      `2x3`: `none` 1588/1974 = 80.45 % - `actor` 1247/1937 = 64.38 % - `total` 1229/1969 = 62.42 %: BELOW the 96 % bar, `none >=
+      actor: True` printed; against M-7 (83.69 / 58.90 / 59.43 %): -3.24 / +5.48 / +2.99 pp, attributed to no commit. `default` and
+      `narrow` are in R-01's paragraph. "The same arm twice reads equal" is observed on one cell (R-01). NOT RE-PINNED. WHAT THIS DOES
+      NOT SHOW: unchanged from M-7's paragraph (one seed, later ticks only, no noise estimate, the four widened-clause-4 plants
+      still not detected over baseline).
     measure: "python proposals/2026-09-04-degree-sweep/wd_collect.py  # after wd_chunk.py x4 per arm per cell over the 143-case corpus (slices 0 36/36 72/72 108/108 143) -- U6's command, workplans/valoria_master_workplan_v10_part2.md §`11`"
     blocks: []
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1); H-111 is FI-01's deposit half
@@ -872,6 +898,27 @@ rows:
       the absence of a Domain-Action mechanism, which no instrument counts. The two readings are
       different worlds (143 corpus cases against one populated realm and one spine) and are not
       summed. Status stays `partial`.
+      **B10-06 CLOSE (v10; CR-23 `d4738da51`, IN-45 `96f947c28` and `6831bea98`), 2026-10-30; THE STATUS STAYS `partial`.** CONJUNCT
+      (1), `requisition`: a computed `requisition` now executes with `Act.via` set. `aperture 4 0`, realm, tree `d4738da51`: formed
+      16, att 27, ex 3, ref 22 (authority), neither 2 (the aperture line's own column); the base read 16 / 23 / 0 / 23 (authority 21,
+      stores 2). The spine did not move (13 att, 0 ex). RE-READ AT THE BATCH'S LAST ENGINE TREE, after
+      the three later movers (REM-29, REM-2B, IN-45): `aperture 4 s`, realm, `PYTHONHASHSEED=0`, formed 16 / 16 / 16 at seeds 0 / 1 / 2;
+      tree `90d93384c` (after REM-2B, before IN-45) att 19 / 24 / 27, ex 4 / 6 / 9; tree `6831bea98` (IN-45 (i) and (ii)) att 18 / 22 / 29,
+      ex 4 / 6 / 8, ref 12 / 16 / 21 -- a computed `requisition` still executes at every seed (`Act.via` was counted at CR-23's tree
+      only; these lines are att / ex). SEASONS 5-8 (`crossing` ships; `season` read beside it; `hole_register.yaml`
+      H-243), candidates formed on a stamped larder per season 5-6-7-8 at seeds 0 / 1 / 2: `crossing` 64-55-33-31 / 44-39-51-40 /
+      30-22-10-30; executed at seasons 5-8: `crossing` 0 / 0 / 2, `season` 3 / 4 / 4 (the card's switch rule did not fire; that
+      `season` executes more is the call H-243 leaves open). IN-45, the settlement row's `found` / `build` / `work`: `aperture 4 s`,
+      realm, tree `96f947c28` ((i) alone), formed / attempted / executed, s0: found 69/8/0, build 69/13/0, work 0/0/0; s1: 69/13/0,
+      69/11/0, 0/0/0; s2: 70/8/1, 70/32/1, 0/0/0; `rung.founded` and `site.built` by a computed actor 0 / 0 / 1 (seed 2: the Duke
+      founds at tick 2, the Steward builds at tick 3). THE CARD'S CONDITION (`att <n>, ex <m>` with m at least 1 at `aperture 4 0`,
+      seed 0) IS NOT MET: found and build execute 0 at seeds 0 and 1, so this row's `measure:` line is NOT edited. The failed link
+      there is the chooser's choice, not formation (the Duke's `found` ranks 62-89 of 74-102 candidates at seed 0). (ii)
+      (`works_sites`, `6831bea98`, built on the card's gate read pooled over seeds 0-2) forms `work` for the Steward at all three
+      seeds (3 attempts, 0 executions at seed 2, refused `work.unavailable`); two links lie beyond it: `band_floors.dwelling` is `{}`
+      (the fold refuses every dwelling `work`, its floor read UNKNOWN), and a just-built fabric stands at condition 0 (on a kind WITH
+      floors `restore` raises the first course, then `work`). No `work` executes in any run. WHAT THIS DOES NOT SHOW: three seeds,
+      the single found / build is a draw.
     measure: "python -m engine.season.harness.aperture 4 0  # the per-verb lines: `levy` and the seat-gated rows (about 25 minutes); `corpus_run` prints no 'unrepresentable scales:' line any more, the census is empty"
     blocks: [IN-10, IN-40, FA-01, IN-49, SC-01, IN-46, IN-47]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W10 spent (declared routing landed); W13 removed (no conjunct of this row reads the ARC re-authoring lane)
@@ -1087,6 +1134,16 @@ rows:
       realm is shorter than its horizon. A verb's `ex` is not a verb built out (the clause needs the row's declared kinds emitted and a
       before-to-after receipt where the band writes); no hand-built execution is counted. No row left `VERB_TABLE` and none is
       recorded removed by this reading.
+      **B10-06 CLOSE (v10), 2026-10-30; THE STATUS STAYS `not_met`.** `corpus_run`, tree `2ca90dce7`, seed 0, 143 cases (`EXIT 0`):
+      VERBS THAT EXECUTED 20 of 56; VERBS ONLY REFUSED 12 (build, comply, construe, covenant, evade / defy, exchange, forge, found,
+      sabotage, seize, survey, train); WHERE THE 56 GO: 2 no predicate/effect - 22 foldable but never attempted - 12 attempted and
+      always refused - 20 executed; DISTINCT EXECUTED SETS 123. REM-2B's `construe`, `evade / defy` and `exchange` now sit in
+      'attempted and always refused': they are attempted in the realm and execute 0 times (`aperture 4 s`, tree `90d93384c`, attempted: `exchange`
+      127 / 149 / 154, `construe` 15 / 12 / 21, `evade / defy` 18 / 26 / 20). `found`, `build`, `work` (IN-45): R-04's paragraph of
+      this date; `work` is 0 in the realm, and the corpus builds no works (zero stores), so those lines cannot run there. H-156's
+      close question: `sabotage`, `seize`, `covenant` and `train` are STILL attempted and never executed, in the realm at
+      `aperture 4 s`, tree `96f947c28` (attempted / executed, s0 / s1 / s2: `sabotage` 72 / 85 / 77, `seize` 3 / 3 / 0, `covenant` 14 / 27 / 21, `train`
+      101 / 83 / 92; executed 0 each) and in the corpus (all four in 'only refused').
     measure: "python -m engine.season.harness.corpus_run  # the 'WHERE THE <n> GO' line, which prints len(VERB_TABLE); the denominator is len(VERB_TABLE) at measurement time (v10 REM-02, `workplans/valoria_master_workplan_v10_part2.md` §6; [ASSUMPTION; medium; Jordan to correct]): a row leaves the table only by a ruling or a ratified design decision cited in its commit, never to move R-05, and every removal is recorded in R-05's `measured:` block; a row in the table but outside resolvable_verbs() counts under 'have no predicate/effect', so a row landed dark raises n. 'Built out' = at least one act formed by the chooser in a seeded run of a shipped builder is admitted, folds its band and emits the row's declared kinds; where the admitted band declares writes, at least one minted receipt has before ≠ after; a verb whose bands write nothing (`speak`, `interrogate`) is built out on execution; a hand-built execution never counts; the aperture clause covers realm-only verbs (`found`, `build`, `work`). It was '38' as of ED-IN-0261, '32' until ED-FI-0009 made the count honest and '37' until `release` landed"
     blocks: [H-65, IN-09, IN-10, IN-33, IN-45]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W10-core removed (it gates corpus_run's R2 check, not this row's WHERE THE <n> GO); H-94 is carried by its owners IN-10, IN-09, IN-45, IN-33
@@ -1387,6 +1444,14 @@ rows:
       and not the realm's: `engine/season/tests/test_referent_class_stamps.py::test_rem27_a_a_seated_marcher_told_of_a_defended_field_marches_on_it_and_fights_it`
       (`build_realm(0)`, the marcher told of `set_s_036`) folds through ENCOUNTER to `field.lost`, and the losing side
       (the 2 attackers) gains `Person.stance` rows (4). The status stays `partial`.
+      REM-27's STOP RULE, READ AT THE B10-06 CLOSE ON THE SAME INSTRUMENT (`aperture 1 s`, s = 0-2; AM-A-13): the operative
+      trigger -- `requisition`'s formed count read before and after, a rise with no executions -- did not fire (16 / 16 / 16
+      against 16 / 16 / 16, unmoved). The card's first conjunct, 'total wrong-target refusals over `march`, `migrate` and
+      `requisition` must fall', is NOT met by REM-27's own components: `march` attempted 10 / 15 / 3 -> 8 / 24 / 10 (every one
+      still refused at ENCOUNTER, on a hearth or territory) and `migrate` attempted 59 / 144 / 104 -> 56 / 139 / 104, so by
+      attempts, which over-count refusals, the sum is -5 / +4 / +7. REM-29 (a later position) then took most of `migrate`'s
+      repeated refusals away (refused 64 / 132 / 84 -> 38 / 77 / 57). The card's base for `requisition` formed (13) is the
+      home document's figure; the tree reads 16 on both sides.
     measure: "python -m pytest engine/season/tests -k 'choose_receives_no_world or a_view or r7_two_persons'"
     blocks: [IN-38]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1); W27: `17` landed, IN-38 remains

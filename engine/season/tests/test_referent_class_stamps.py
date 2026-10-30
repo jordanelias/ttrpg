@@ -76,12 +76,12 @@ from engine.season.loop import predicates as _preds
 from engine.season.loop.driver import mint_token
 from engine.season.queries import world_q
 from engine.season.state.carriers import Act, Claim, Proposition, Question, Record, Tenure, View
-from engine.season.trace_log import TRACE
 
 from .test_g3_not_yours import _gov_world, _hold
 from .test_h134_candidate_per_seat import _with_office
 from .test_in09_dispensation_answer import HOLDER, WRIT, _with_writ
 from .test_in45_carry import PARTY as CARRY_PARTY
+from .test_rem14_predicates_trace_clause import _clause, _rows_of
 from .test_in45_carry import PETITIONER as CARRY_PETITIONER
 from .test_in45_carry import _carry, _filed
 from .test_in53_vacancy_need import _ambition, _formed, _know, _planted
@@ -328,12 +328,15 @@ def _act_of(c, p, actor=None):
                via=seat_of(p, c))
 
 
+def _classless_table(*verbs):
+    """`VERB_TABLE` with the named rows' `referent_class` blanked: the base table's formation for those rows."""
+    return {**VERB_TABLE, **{v: dataclasses.replace(VERB_TABLE[v], referent_class="") for v in verbs}}
+
+
 def _formed_without_class(w, pid, q, verb):
     """The Candidates `verb` forms on `q` if its row declared no class: the base table's formation.
     `opening_set` reads the module's `VERB_TABLE`, so one row's copy is swapped in for the call."""
-    row = VERB_TABLE[verb]
-    table = {**VERB_TABLE, verb: dataclasses.replace(row, referent_class="")}
-    with mock.patch.object(_options, "VERB_TABLE", table):
+    with mock.patch.object(_options, "VERB_TABLE", _classless_table(verb)):
         return [c for c in _formed(w, pid, q) if c.verb == verb]
 
 
@@ -624,6 +627,8 @@ def test_rem24_b_a_person_petitioning_a_person_executes_through_the_fold(monkeyp
 
 #: The rows declaring `Record` whose cell asks the actor to hold the subject; control (3) below walks them.
 HOLDING_ROWS = ("carry", "found", "build")
+#: The rows declaring `Record` on a writ (REM-2B restored the two beside `comply`): no `held_by`, `writs_held`'s occasion.
+WRIT_ROWS = ("comply", "evade / defy", "construe")
 PETITION_ID = "pet_rem25"
 #: The rows' independent statement of the data the derivation reads, spelt without `data/verbs.py`.
 HOLDING_KINDS = frozenset({"petition", "works"})
@@ -652,10 +657,18 @@ def test_rem25_the_two_record_terms_are_told_apart_by_the_cell_and_derived_from_
     stamps the dispensation alone -- holds unchanged, and is asserted on the SUB-kinds: `research` asks
     `existence` of the collection itself (`kind: Record`, any document), which `_record_subkinds_answered`
     keeps out of both sets, so neither set moved (`RECORD_REFERENT_KINDS` {dispensation},
-    `HOLDING_RECORD_KINDS` {petition, works}, the same on both trees)."""
+    `HOLDING_RECORD_KINDS` {petition, works}, the same on both trees).
+
+    RE-RECORDED AT v10 REM-2B (B10-06; control: the REM-2A tree `f23194871`, where the two rows were untyped):
+    `evade / defy` and `construe` declare `Record` on `comply`'s cell (no `held_by`), so the rows asking no
+    `held_by` were `{comply, research}` and are `{comply, evade / defy, construe, research}`; their `existence`
+    kinds are still `{dispensation, Record}`, and neither set moved. `construe` asks no `held_by` ON PURPOSE:
+    the checkpoint's third conjunct would move `dispensation` into `HOLDING_RECORD_KINDS` (`holding` would gain
+    `construe` and the two sets stop being disjoint), which this test reddens, and its formation consequence is
+    `test_in09_dispensation_answer.py::test_in09_a_custodian_who_is_not_the_addressee_is_offered_none_of_the_three`."""
     rows = {v: r for v, r in VERB_TABLE.items() if r.referent_class == "Record"}
     holding = {v for v, r in rows.items() if _verbs._asks_subject_held(r)}
-    assert holding == set(HOLDING_ROWS) and set(rows) - holding == {"comply"} | set(COLLECTION_ROWS), (
+    assert holding == set(HOLDING_ROWS) and set(rows) - holding == set(WRIT_ROWS) | set(COLLECTION_ROWS), (
         sorted(rows), sorted(holding))
     kinds = lambda vs: frozenset().union(*(_existence_kinds(rows[v].requires_typed.requirement) for v in vs))
     assert kinds(COLLECTION_ROWS) == {"Record"}
@@ -1420,13 +1433,11 @@ PREDICATE_KIND_CLAUSES = {"dispatch": "names no person the world holds"}
 def _refusal_clauses(call):
     """`(call's answer, the clause of every DECISION refusal row the call appended to the trace)`: `test_rem14_...`'s
     reader, the cluster key `harness/report.py` groups a predicate's refusals by."""
-    first = len(TRACE.rows)
-    out = call()
-    return out, [r.what.split(" -> ")[0] for r in TRACE.rows[first:]
-                 if r.channel == "DECISION" and r.detail.get("chose") == "refuse"]
+    out, rows = _rows_of(call)
+    return out, [_clause(r) for r in rows if r.detail.get("chose") == "refuse"]
 
 
-def _refuses_on_the_rows_kind(row, verdict, c, clauses=()):
+def _refuses_on_the_rows_kind(row, verdict, c, clauses):
     """The refusal is the row's own kind test: where the cell asks `existence` of a kind, an
     `exists:<kind>` read came back 0; where it asks none (`work`'s threshold), the read of the referent
     came back UNKNOWN and the verdict is not True. Anything else is a refusal for another reason, and
@@ -1440,7 +1451,7 @@ def _refuses_on_the_rows_kind(row, verdict, c, clauses=()):
     if row.requires_typed is None:
         assert any(PREDICATE_KIND_CLAUSES[row.verb] in cl for cl in clauses), (row.verb, c, clauses)
         return
-    kinds = _existence_kinds(row.requires_typed.requirement) if row.requires_typed is not None else frozenset()
+    kinds = _existence_kinds(row.requires_typed.requirement)
     if kinds:
         asked = kinds & {row.referent_class} or kinds
         assert any(o.predicate == f"exists:{k}" and o.value in (0, False)
@@ -1785,8 +1796,7 @@ def test_rem28_c_the_class_moves_no_derived_set():
     read the shipped sets. THE CONTROL, that the derivation can move: with `convene`'s `Rung` column blanked the
     remit set loses `convene`, and a table with no `Person` row at all (`dispatch`, `open_case` and `petition`
     blanked) loses `Person` from `DECLARED_CLASSES`, so neither equality is one a constant could satisfy."""
-    classless = lambda *verbs: {**VERB_TABLE, **{v: dataclasses.replace(VERB_TABLE[v], referent_class="")
-                                                  for v in verbs}}
+    classless = _classless_table
     with mock.patch.object(_verbs, "VERB_TABLE", classless("dispatch")):
         assert _verbs._derive_rung_remit_acts() == _verbs.RUNG_REMIT_ACTS
         assert _verbs._derive_declared_classes() == _verbs.DECLARED_CLASSES
@@ -1910,8 +1920,7 @@ def test_rem28_e_the_class_moves_no_derived_set():
     shipped sets (an INVARIANCE: the fold cannot differ, so this is the whole of what can be asserted). THE CONTROL,
     that the derivation can move: a table with no `Office` row at all (`revoke`, `confer`, `oblige` blanked) loses
     `Office` from `DECLARED_CLASSES`, so neither equality is one a constant could satisfy."""
-    classless = lambda *verbs: {**VERB_TABLE, **{v: dataclasses.replace(VERB_TABLE[v], referent_class="")
-                                                  for v in verbs}}
+    classless = _classless_table
     with mock.patch.object(_verbs, "VERB_TABLE", classless("revoke")):
         assert _verbs._derive_rung_remit_acts() == _verbs.RUNG_REMIT_ACTS
         assert _verbs._derive_declared_classes() == _verbs.DECLARED_CLASSES

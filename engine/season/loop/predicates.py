@@ -188,9 +188,10 @@ def office_named_by(a: "Act") -> "Optional[str]":
     read through `binding_from_act`, the fold's own binding. `office` wins where both are present,
     so no hand-built act changes meaning; `None` when the act names neither. Before this both read
     `office` alone, so a computed act passed nothing to the precondition and the effect wrote
-    nothing. ⚠ `revoke` IS NOT A CALLER (DECISION 2026-10-13 D1): it declares no referent class and
-    keeps the base's `office`-only read, so a computed `revoke` stays refused at its precondition as
-    at the base (H-207 (A): a computed `revoke` is not driven). `establish` is not a caller either:
+    nothing. ⚠ `revoke` IS NOT A CALLER (DECISION 2026-10-13 D1): it keeps the base's `office`-only read of
+    `payload['office']` (since v10 REM-28 it declares `referent_class: Office`, which changes what is
+    offered, not this read), so a computed `revoke` stays refused at its precondition as at the base
+    (H-207 (A): a computed `revoke` is not driven). `establish` is not a caller either:
     the office it names does not exist yet (`office_described_by`)."""
     d = a.payload if isinstance(a.payload, dict) else {}
     return d.get("office") or binding_from_act(a).get("subject")
