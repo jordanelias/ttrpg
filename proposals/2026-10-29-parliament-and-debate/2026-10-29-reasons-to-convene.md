@@ -111,7 +111,7 @@ Evidence labels: **[M]** measured · **[R]** read in code · **[I]** inferred. "
 
 **What this does not fix, and the engine must be given before any of it matters:** offence supply (F) — `kill`, `sabotage`, `challenge` and `forge` are refused 50-89 times each; until some execute and reach custody, trials have few accused. The analysis names the starvation; the cause is upstream of social contests.
 
-### Instruments (read-only, runnable now)
+### Instruments (read-only; **unreproduced**: out-of-tree probes at `120b3bf7`, seeds 0-2, no script in the tree)
 
 1. **Motivation rate** — fired Dates whose slot holds a matter ÷ fired Dates. *Now:* 0/17, 0/17, 1/12.
 2. **Latency** — undated person-matters ÷ person-matters. *Now:* 6/6, 4/4, 8/9.
