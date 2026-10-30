@@ -2817,7 +2817,13 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # seats over the realm's 37 newly stocked settlements are told of them and `requisition` forms on them; the realm's act
     # mix moved (seed 0, one season: 583 -> 602, `test_go07_canonical_digest.py`'s shift). CONTROL: this tree with
     # `stock_report = off` reads (583, 584) under this same test. The direct parting assertion below holds on the new counts.
-    assert (out["acts"], cout["acts"]) == (602, 603), (
+    # ⚠⚠ v10 REM-29 (B10-06): (602, 603) -> (598, 596), A RE-RECORD WITH THE UNIT THAT MOVED IT: `migrate`'s capacity
+    # throttle is a `room` conjunct (`world_q.has_room`), so a migrant refused at a full rung learns it (the read rides the
+    # Event and WITNESS deposits it to him) and does not re-form that `migrate`; the freed scenes move the realm's act mix
+    # (seed 0, one season: 602 -> 598, `test_go07_canonical_digest.py`'s shift). CONTROL: this tree with the `room`
+    # conjunct and its refusal key deleted from `migrate`'s row reads (602, 603) under this same test. The direct parting
+    # assertion below holds on the new counts.
+    assert (out["acts"], cout["acts"]) == (598, 596), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")

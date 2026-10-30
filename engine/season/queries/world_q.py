@@ -1649,6 +1649,29 @@ def capacity(w: World, rung_id: str) -> int:
     return _entry(HOUSING)(_housing_capacity_input(w, rung_id)).capacity
 
 
+def has_room(w: World, person: str, dest: str, residence: Optional[dict] = None) -> bool:
+    """IS THERE ROOM UNDER `dest` FOR `person` -- RR-2's throttle (plan `24d-ii`), the ONE owner (v10
+    REM-29, B10-06). False only for a NEWCOMER whose weight would take `population(dest)` past
+    `capacity(dest)`; a person who already lives under `dest` (settling from his hearth into its
+    settlement) is in its population before and after, so the move grows nothing and nothing
+    throttles it (`_eff_migrate`'s docstring argues the newcomer rule and the rejected coarser census).
+
+    TWO READERS, ONE RULE: `WorldReader.read` answers the `room` stem with it (`migrate`'s `room`
+    conjunct, so the fold refuses AT ADMISSION and the read `(dest, "room:<person>", False)` rides the
+    refusal's `Event.observed` -- the person learns by failing), and `_eff_migrate`'s capacity decline
+    calls it (for a caller that runs the effect without the fold's admission). The effect's inline test
+    is gone; this is that test, moved, not copied. `person` must be a Person (the reader answers UNKNOWN first otherwise).
+
+    `residence` -- a precomputed `residence_of(w)`, `population`'s parameter and for its reason
+    (`_eff_migrate` already built one for its own-residence decline). `None` computes it here."""
+    TRACE.query("has_room", "resolver")
+    residence = residence_of(w) if residence is None else residence
+    home = residence.get(person)
+    newcomer = home is None or dest not in ancestry(w, home)
+    return not (newcomer and population(w, dest, residence) + w.persons[person].weight
+                > capacity(w, dest))
+
+
 # THE RUNG KIND `hunger` IS DEFINED FOR, and its bands: `rosters.yaml: hunger_bands` is the one owner, most
 # severe first. `starving` is `unmet > 0` and `fed` is "under no floor"; the members between them are the FLOOR
 # bands, in the order `Fixtures.hunger_band_floors` lists their floors (the first floor is the first floor
@@ -3589,6 +3612,14 @@ class WorldReader:
             if subject not in w.rungs or arg not in w.persons:
                 return UNKNOWN
             return admits_audience(w, arg, subject)
+        if stem == "room":
+            # v10 REM-29 (B10-06): IS THERE ROOM UNDER THE RUNG `subject` FOR THE ACTOR (`arg`) --
+            # `audience`'s shape, through `has_room`, the one owner `_eff_migrate` calls too. UNKNOWN
+            # for a subject that is no rung or an actor who is no person (`ID-5`). NOT world-only: the
+            # read is deposited to the actor and his ledger answers it next time (`data/requires.py`).
+            if subject not in w.rungs or arg not in w.persons:
+                return UNKNOWN
+            return has_room(w, arg, subject)
         if stem == "claim.held":
             p = w.persons.get(self._actor)
             return UNKNOWN if p is None else any(c.subject == subject for c in p.ledger)

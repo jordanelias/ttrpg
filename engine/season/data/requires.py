@@ -790,10 +790,18 @@ OWN_STATE_STEMS = frozenset({"thread_sensitivity", "thread_sensitivity.gate"})
 # asked of a DESTINATION RUNG and the actor, `with`'s shape -- *may the actor enter this place* --
 # on `move` and `migrate`. `WorldReader.read` answers it through `world_q.admits_audience`; WORLD-ONLY
 # (below), so the person forms the Candidate and the fold refuses. One stem; no form, no operand.
+# ⚠ v10 REM-29 (B10-06, `-08` AM-A-15) ADDED `room`: `relation` (form 5) asked of a DESTINATION RUNG
+# and the actor, `audience`'s shape -- *is there room under this rung for the actor* (RR-2's throttle,
+# `migrate`'s `room` conjunct). `WorldReader.read` answers it through `world_q.has_room`, the one owner
+# `_eff_migrate` also calls. NOT world-only and NOT ledger-derived, so it is a `CELL_STEMS` member: the
+# refusal's read `(dest, "room:<actor>", False)` rides `Event.observed`, WITNESS deposits it to the
+# actor at `observation_deposit_mode: actor`, and `LedgerReader.read` answers the same cell from that
+# claim, so §F1 clause 4 (`epistemic.belief_contradicts`) declines his next `migrate` there. One stem;
+# no form, no operand.
 # roster-exempt: MECHANISM. The grammar's own predicate stems (what a REQUIREMENT MAY ASK), not the game's vocabulary; `rosters.yaml` says what the world contains.
 REQUIRES_STEMS = frozenset({
     "exists", "stores", "condition", "floor", "contain.path", "held_by", "present_at",
-    "claim.held", "rank", "purview", "bench", "bench.size", "quorum", "with", "audience",
+    "claim.held", "rank", "purview", "bench", "bench.size", "quorum", "with", "audience", "room",
 }) | OWN_STATE_STEMS
 
 # THE STEMS THE PERSON-SIDE READER NEVER ANSWERS: `queries/person_q.py::LedgerReader.read` returns
