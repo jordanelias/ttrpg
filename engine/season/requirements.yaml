@@ -1387,6 +1387,14 @@ rows:
       and not the realm's: `engine/season/tests/test_referent_class_stamps.py::test_rem27_a_a_seated_marcher_told_of_a_defended_field_marches_on_it_and_fights_it`
       (`build_realm(0)`, the marcher told of `set_s_036`) folds through ENCOUNTER to `field.lost`, and the losing side
       (the 2 attackers) gains `Person.stance` rows (4). The status stays `partial`.
+      REM-27's STOP RULE, READ AT THE B10-06 CLOSE ON THE SAME INSTRUMENT (`aperture 1 s`, s = 0-2; AM-A-13): the operative
+      trigger -- `requisition`'s formed count read before and after, a rise with no executions -- did not fire (16 / 16 / 16
+      against 16 / 16 / 16, unmoved). The card's first conjunct, 'total wrong-target refusals over `march`, `migrate` and
+      `requisition` must fall', is NOT met by REM-27's own components: `march` attempted 10 / 15 / 3 -> 8 / 24 / 10 (every one
+      still refused at ENCOUNTER, on a hearth or territory) and `migrate` attempted 59 / 144 / 104 -> 56 / 139 / 104, so by
+      attempts, which over-count refusals, the sum is -5 / +4 / +7. REM-29 (a later position) then took most of `migrate`'s
+      repeated refusals away (refused 64 / 132 / 84 -> 38 / 77 / 57). The card's base for `requisition` formed (13) is the
+      home document's figure; the tree reads 16 on both sides.
     measure: "python -m pytest engine/season/tests -k 'choose_receives_no_world or a_view or r7_two_persons'"
     blocks: [IN-38]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1); W27: `17` landed, IN-38 remains

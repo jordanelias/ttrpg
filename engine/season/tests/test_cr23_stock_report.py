@@ -136,6 +136,22 @@ def test_cr23_b2_a_debit_that_empties_the_larder_reports_on_the_debit_after_the_
     assert reads["crossing"] == shortfall + (Observation(HEARTH, f"stores:{KIND}", 0),)
 
 
+def test_cr23_b3_a_rung_both_debited_and_yielding_reports_on_neither_write_when_it_ends_as_stocked_as_it_began():
+    """THE DEBIT-AND-YIELD BRANCH (`loop/matter.py`: `if rid not in yielded:` on the debit). The hearth yields AND a
+    cohort eats at it, so MATTER writes it twice -- the debit, then the credit, the credit being the LAST. The
+    larder is stocked at the barrier's entry, drained to 0 by the debit and refilled by the credit, so under
+    `crossing` it is stocked before and after and NEITHER write reports a `stores:<kind>` read. A debit that
+    reported anyway would be judged at the mid-state and tell a seat a stocked larder is empty."""
+    w, d = _hearth_world("crossing", {KIND: 8})
+    w.persons["p_mid"].weight = 50                                     # a cohort: only a cohort eats (24f)
+    assert world_q.requisitionable(w, HEARTH)                          # anti-vacuity: stocked at entry
+    events = d.matter(mint_token(w, WriteClass.MATTER), [])
+    reads = _reads_on(events, HEARTH)
+    assert len(reads) == 2, reads                                      # anti-vacuity: the debit AND the credit
+    assert world_q.requisitionable(w, HEARTH)                          # stocked at exit
+    assert not [o for r in reads for o in r if str(o.predicate).startswith("stores:")], reads
+
+
 def test_cr23_c_the_report_reaches_the_seat_and_a_computed_requisition_executes_with_via():
     """THE CHAIN, ALL COMPUTED. The Duke neither stands at nor holds the hearth; the crossing's read reaches him
     by the seat route (`inferred`), `larders_in_purview` stamps the hearth, the real formation makes a

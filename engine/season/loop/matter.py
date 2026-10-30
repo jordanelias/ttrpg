@@ -547,7 +547,7 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # no MATTER step above writes `Rung.stores` (the two writes below are the barrier's only ones). The
     # act-side writers are NOT crossings by this definition and report nothing: `loop/effects_shared.py`'s
     # debit and credit (`transfer`, `requisition`) run at RESOLVE, actor-borne, between barriers (a larder
-    # an act drains or fills is compared at the next MATTER's entry, not reported at the act), and
+    # an act drains or fills enters the next MATTER at its new level, so the act's own flip is never reported), and
     # `harness/scarce.py`'s planted treasury is a builder's write before any season.
     stock_mode = w.fixtures.get("stock_report")
     require_member(stock_mode, STOCK_REPORTS, f"stock report {stock_mode!r} is not in the roster", "H-243",

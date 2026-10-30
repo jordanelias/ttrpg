@@ -372,8 +372,8 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # RE-PINNED at v10 IN-45 (B10-06), A DATA MOVE DECLARED: `venues.yaml: planned_works` authors two works (a `hearth` at Auerheim, a
 # `dwelling` at the Royal Court), minted last in `build_realm` through `create_record`'s own effect, so the BUILD hash moves (two
 # Records and their masters' `hold` edges), and so do one and two seasons (each works's terms ripen: `term.matured` Events; the
-# masters' `found` and `build` form on them and are never chosen -- `aperture 4 s`, realm: `found` and `build` attempted by others
-# only, executed 0). Was 9ff53909... / 41ffb48b... / 3afa013b... (build, one, two seasons). CONTROL, run in process on this
+# masters' `found` and `build` form on them and rank at the chooser's tail -- `aperture 4 s`, realm: executed 0 at seeds 0 and 1,
+# 1 each at seed 2: the Duke founds at tick 2, the Steward builds at tick 3). Was 9ff53909... / 41ffb48b... / 3afa013b... (build, one, two seasons). CONTROL, run in process on this
 # tree: `planned_works` emptied reads the old triple, the old `BASE_EVENTS` and the old `thread_read`-withheld arm exactly.
 BASE_HASHES = {0: "fe427626f9e91ab83ffd556c0bec4ea7",
                1: "6c26053b03c2612057515cbe3972dd91",

@@ -2824,7 +2824,7 @@ def places_named(w: World, p: Person, named: Optional[frozenset] = None) -> tupl
     is asked only which ids are rungs (`World.class_of`, the class `_stamped` stamps, so a person's
     own `person`-kind rung, classed `Person`, is never stamped as a place) and what the ladder and
     the containment walk say. ⚠ ROOM IS NOT READ HERE: whether the place has room is the fold's
-    (`loop/effects_migration.py::_eff_migrate`'s capacity decline, `verb_table.yaml`'s `migrate`
+    (`migrate`'s `room` conjunct at admission, `world_q.has_room`, v10 REM-29; `verb_table.yaml`'s `migrate`
     note), so a person who wrongly hopes a full hearth has space still tries and is refused. ⚠ WHY
     NOT WHAT HE LIVES UNDER: a settler who already lives under `dest` changes no population and
     settles nowhere new (`_eff_migrate`'s newcomer rule), and his own residence is the refusal H-168
@@ -2898,7 +2898,7 @@ def larders_in_purview(w: World, p: Person, named: Optional[frozenset] = None) -
     named, stocked rung: `purview_reaches` walks `w.tenures` for its oblige clause when the seat's own
     ground does not reach (the gate's walk, not a new one here). `()` for a person granted no such
     act, which is nearly everyone, so nothing else is read for him. REVERT: drop the term in
-    `questions_for` (or `requisition`'s `referent_class`, which empties `RUNG_REMIT_ACTS`). `named` is
+    `questions_for` (or `requisition`'s `referent_class`, which only removes `issue` from `RUNG_REMIT_ACTS`, the union over the `Rung` rows). `named` is
     `ledger_names(p.ledger)` when the caller holds it already."""
     if not RUNG_REMIT_ACTS:
         return ()
@@ -3127,17 +3127,17 @@ def standing_crossed(w: World, p: Person, since: Optional[tuple] = None) -> Opti
 
 
 def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Question]:
-    """§F1's `q` producer -- TWO sources, resolver-side, at the DELIBERATE barrier, plus FIVE
+    """§F1's `q` producer -- TWO sources, resolver-side, at the DELIBERATE barrier, plus SIX
     STANDING OCCASIONS stamped onto the first question as classed referents (`_stamped`, below the
     sort): the vacant seats the person may fill (`vacancies`, IN-53), the seats he has been told of
     (`seats_named`, v9 IN-10 (a)), the writs he holds (`writs_held`, v9 IN-09, widened at v10 REM-25 by
     the Records he holds that a row asking him to hold them answers, `records_held_for_holding_rows`:
-    the same `Record` term, not a sixth occasion), the places he has
+    the same `Record` term, not a seventh occasion), the places he has
     been told of and could settle in (`places_named`, v9 IN-45 `migrate`) and the larders his seat
     may requisition (`larders_in_purview`, v9 IN-49 `requisition`); and, since v10 IN-45 (ii), appended last, the
     Sites a works he holds names (`works_sites`, `work`'s channel). They are not
     sources: no id or source changes; a person with one of them and no question gets one `need`
-    question carrying them. Stamped last, and no occasion: that first question's own plain referents
+    question carrying them. Stamped after those, and no occasion: that first question's own plain referents
     of a class a row declares and `rosters.yaml: occasion_only_classes` does not hold back
     (`own_referents_of_class`, v10 REM-21). And, since v9 SC-01's fired-slot step, one
     `claim_landed` question per fired sitting whose docket holds a matter and whose bench he sits on (`sittings_before`; the loop
@@ -3318,11 +3318,11 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # PLACES HE HAS BEEN TOLD OF AND COULD SETTLE IN (`places_named`), as `Rung`. REVERT: drop the term.
     # v9 IN-49 `requisition` (H-163 limit 3, [ASSUMPTION; medium; Jordan to correct]): AND SO DO THE
     # LARDERS HIS SEAT MAY REQUISITION (`larders_in_purview`), last, as `Rung`, never twice. The class is
-    # `Rung` either way, so both rows declaring it (`migrate`, `requisition`) form on both: whether a place
+    # `Rung` either way, so every row declaring it (`migrate`, `requisition`, `march`, `convene`) forms on both: whether a place
     # has room, or a seat reaches it, is then the fold's (`vacancies`/`seats_named`' Office precedent,
     # H-207; H-163 records what the cross-reading costs). No source is added, so no `question_sources`
     # order moves (IN-57: the occasion rides the question he answers). REVERT: drop the term.
-    # v10 REM-21 (AM-A-06, [ASSUMPTION; medium; Jordan to correct]): AND, LAST, THE QUESTION'S OWN
+    # v10 REM-21 (AM-A-06, [ASSUMPTION; medium; Jordan to correct]): AND, AFTER THOSE, THE QUESTION'S OWN
     # PLAIN REFERENTS OF EVERY CLASS A ROW DECLARES BUT `rosters.yaml: occasion_only_classes`
     # (`own_referents_of_class`) -- no standing occasion, the question he answers read for its own
     # kinds. "Never twice" is `_stamped`'s one dedup (the first pair kept), not a filter per term

@@ -162,8 +162,8 @@ seats:
 #
 # `harness/populated.py::mint_planned_works` reads this block once, last in `build_realm`, and mints each
 # row through `create_record`'s OWN effect (`EFFECTS["create_record"]`: the Record, the master's `hold`,
-# the one-live-works-per-target decline), so a row is exactly what a master's declaring act would have
-# made at tick 0 — no second mint, no operand coined (`rosters.yaml: requires_operands` is untouched).
+# the one-live-works-per-target decline), so a row's Record and hold are what a master's declaring act would have
+# written at tick 0 (no `record.created` Event, so no witness holds its content claim) — no second mint, no operand coined (`rosters.yaml: requires_operands` is untouched).
 # Delete the block and the realm is byte-identical to the realm before it (the control arm).
 #
 #   id      the works Record's id (unique in the world).

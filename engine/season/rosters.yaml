@@ -617,8 +617,9 @@ rosters:
       `Record` (v9 IN-09, H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to correct]): the
       writs a person HOLDS (`queries/world_q.py::writs_held` -- a live `hold` on a Record of a kind
       `data/verbs.py::RECORD_REFERENT_KINDS` derives from the rows declaring this class), which
-      `questions_for` adds to the question he answers beside his seats; `comply` declares it
-      (`evade / defy` and `construe` were typed beside it and reverted, executing 0 times; H-203).
+      `questions_for` adds to the question he answers beside his seats; `comply` declares it,
+      and since v10 REM-2B `evade / defy` and `construe` do too (typed beside it at v9 IN-09, reverted at B-I,
+      restored; H-203).
       REVERT: drop the value and the row's column.
       v10 REM-25 (B10-05, AM-A-10, [ASSUMPTION; medium; Jordan to correct]): WIDENED. `carry`, `found`
       and `build` declare it too, and the term gains its second half beside the writs
@@ -653,7 +654,7 @@ rosters:
       never twice; `requisition` declares it beside `migrate`, so its `subject` binds a stocked rung in
       purview rather than whatever he was asked about. The class is shared, as `Office` is between
       `confer` and `oblige`: each row forms on both sources and the fold disposes. REVERT: `requisition`'s
-      column (which empties `RUNG_REMIT_ACTS`) and `larders_in_purview`'s splice.
+      column (which removes `issue` from `RUNG_REMIT_ACTS`, the union over the `Rung` rows) and `larders_in_purview`'s splice.
       v10 REM-21 (B10-05, AM-A-06, [ASSUMPTION; medium; Jordan to correct]): `Site`, `Proposition`
       and `Person` -- THE THINGS A QUESTION IS ITSELF ABOUT, carried as their kind. Not a standing
       occasion: `queries/world_q.py::own_referents_of_class`, one more term of `questions_for`'s
@@ -1968,7 +1969,7 @@ rosters:
       SECOND RESOLVER. A cell naming an operand outside this roster REFUSES AT LOAD. It was the
       reason `exchange` carried `requires_typed: none` rather than a typed cell: it needs the
       counterparty's side of a trade, which had no name here. Coining one is filling `H-94` by
-      keyword argument, which is the ruling `H-94` is waiting for and not a table edit.
+      keyword argument, which only the position `H-94` reserves it to (v9 IN-33, restored at v10 REM-2B, below) may do.
       (`comply`, `evade / defy` and `construe` carried the same reason, for a DISPENSATION, until v9
       IN-09 typed them without a new name: the act's `subject` IS the held writ, a `Record` of kind
       `dispensation` -- `verb_table.yaml`'s `comply` row.)
@@ -1996,7 +1997,7 @@ rosters:
       `15c`'s flat `writ_sourced_operands` (`to, kind, amount`), whose source was r2
       `02_THE_WRIT_AND_THE_WORD.md` §A.13.
     note: >-
-      PER RECORD KIND, WHICH OF THE CLOSED EIGHT OPERANDS (`requires_operands`) A RECORD OF THAT KIND
+      PER RECORD KIND, WHICH OF THE CLOSED OPERANDS (`requires_operands`) A RECORD OF THAT KIND
       ANSWERS, AND FROM WHICH OF ITS OWN CONTENT KEYS -- `operand: content key`. `data/requires.py`
       refuses at import a kind that is not a `record_kinds` member, an empty entry, an operand that is
       not one of the eight, a content key that is not one of THAT KIND's keys (`record_kinds.values`),

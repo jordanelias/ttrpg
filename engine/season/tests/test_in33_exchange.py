@@ -28,13 +28,16 @@ import dataclasses
 import pytest
 
 from engine.season.data import verbs as V
+from engine.season.data.fixtures import DEFAULT_FIXTURES
 from engine.season.data.matrix import Step, WriteClass
 from engine.season.data.requires import REQUIRES_OPERANDS, build_typed_requires
 from engine.season.data.verbs import VERB_TABLE
 from engine.season.decision.options import opening_set
 from engine.season.harness import probes as P
+from engine.season.loop.effects import EFFECTS
 from engine.season.loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from engine.season.state.carriers import Act, Claim, Question, View
+from engine.season.state.gate import NO_CHANGE
 
 VERB = "exchange"
 MADE, REFUSED = "exchange.made", "exchange.refused"
@@ -115,7 +118,8 @@ def test_in33_b_an_exchange_moves_both_sides_and_conserves_each_kind():
     ("a rung trading with itself", {"to": "Hh", "subject": "Hh"}, {"grain": 8, "salt": 5}, None),
     ("the actor's side is short", {"amount": 9}, None, None),
     ("the other side is short", {"return_amount": 6}, None, None),
-    ("a side that is no rung", {"to": "p_mid", "subject": "p_mid"}, None, None),
+    ("a person-rung that holds none of the return kind (refused at the cell: `tiny_world` gives every person a rung)",
+     {"to": "p_mid", "subject": "p_mid"}, None, None),
 ])
 def test_in33_b_the_controls_refuse_and_move_nothing(why, over, hh, s):
     w, d = _at_resolve(hh, s)
@@ -123,6 +127,20 @@ def test_in33_b_the_controls_refuse_and_move_nothing(why, over, hh, s):
     kinds = _fold(w, d, **over)
     assert REFUSED in kinds and MADE not in kinds, (why, kinds)
     assert _stores(w) == before, why
+
+
+def test_in33_b_the_effect_declines_a_side_that_is_no_rung_when_it_is_called_directly():
+    """`_eff_exchange`'s own decline (`src is None or dst is None`): the fold stops a non-rung side at the cell
+    (it reads UNKNOWN), so only a direct call reaches the effect. An id that is no rung at all returns
+    `NO_CHANGE` and moves nothing -- an exchange does not half-happen."""
+    w, _ = _at_resolve()
+    before = _stores(w)
+    assert "not_a_rung" not in w.rungs
+    act = Act(id="ex_nr", actor="p_low", verb=VERB, payload={
+        "subject": "S", "from": "Hh", "to": "not_a_rung", "kind": "grain", "amount": 2,
+        "return_kind": "salt", "return_amount": 1})
+    assert EFFECTS[VERB](w, act) is NO_CHANGE
+    assert _stores(w) == before
 
 
 # (c) FORMATION -----------------------------------------------------------------------------------
@@ -146,6 +164,23 @@ def test_in33_c_a_candidate_carries_what_comes_back_from_the_fixtures():
         assert c.operands["return_kind"] == w.fixtures.get("default_return_kind")
         assert c.operands["return_amount"] == w.fixtures.get("default_transfer_amount")
         assert c.operands["return_kind"] != c.operands["kind"], c.operands
+
+
+def test_in33_c_the_two_new_operands_follow_their_fixtures_not_a_literal():
+    """H-58's declared sweep: `default_return_kind` (salt / timber / coin) and `return_amount`, which reads
+    `default_transfer_amount` (H-94, 0 / 1 / 3). The test above compares to the SHIPPED fixtures, which a
+    literal in `_derive_operand` equal to the shipped value would also satisfy; swept fixtures do not."""
+    checked = 0
+    for kind in ("timber", "coin"):
+        w = P.tiny_world(DEFAULT_FIXTURES.sweep("default_return_kind", kind)
+                         .sweep("default_transfer_amount", 3))
+        got = [c for c in _formed(w, "p_low", ("S",)) if c.verb == VERB]
+        assert got, kind
+        for c in got:
+            assert c.operands["return_kind"] == kind, (kind, c.operands)
+            assert c.operands["return_amount"] == 3, (kind, c.operands)
+            checked += 1
+    assert checked >= 2, checked
 
 
 def test_in33_c_no_other_rows_formation_moves(monkeypatch):
