@@ -546,9 +546,9 @@ rows:
       64.38 % - `total` 1229/1969 = 62.42 %, BELOW the 96 % bar, and `none >= actor: True` is printed. Against M-7 (tree `17ba74bc`:
       83.69 / 58.90 / 59.43 %): -3.24 / +5.48 / +2.99 pp. `default` (5 x 3): 2028/2775 = 73.08 % - 1807/2666 = 67.78 % - 1758/2673 =
       65.77 % (M-7: 76.84 / 67.30 / 64.77); `narrow` (`2x1`): 4450/4961 = 89.70 % - 3969/4899 = 81.02 % - 3920/4933 = 79.46 % (M-7:
-      89.43 / 72.13 / 72.80), `none >= actor: True` there too. THE MOVE SITS ACROSS B10-02's close and the eight B10-06 items; no
-      per-item reading exists for it and it is attributed to none (the batch changed what REM-27, REM-28, REM-29, REM-2B and CR-23's
-      verbs form, and the arms read them). NOT RE-PINNED: a reading at or above 96 % would have kept the row `not_met` and named
+      89.43 / 72.13 / 72.80), `none >= actor: True` there too. THE MOVE SITS ACROSS EVERY COMMIT BETWEEN `17ba74bc` AND `2ca90dce7`
+      (B10-02's tail and close, B10-03, B10-03b, B10-04 and B10-05 -- REM-21 to REM-25 and REM-52 among them -- the merges of `origin/main`,
+      and the eight B10-06 items); no per-item reading exists for it and it is attributed to none. NOT RE-PINNED: a reading at or above 96 % would have kept the row `not_met` and named
       H-116 first; this one is below. DETERMINISM, OBSERVED THIS TIME: the cell `default`/`none`/`0 36` was run twice (once in the
       working tree, once in the frozen snapshot): probed 5217, no-live-window 1230, inert 3294, genuine 693, diverged 192, equal on
       every counter. WHAT THIS DOES NOT SHOW: one seed, one run per arm, no noise estimate; the `[POSITIVE]` line still reads
@@ -901,7 +901,11 @@ rows:
       **B10-06 CLOSE (v10; CR-23 `d4738da51`, IN-45 `96f947c28` and `6831bea98`), 2026-10-30; THE STATUS STAYS `partial`.** CONJUNCT
       (1), `requisition`: a computed `requisition` now executes with `Act.via` set. `aperture 4 0`, realm, tree `d4738da51`: formed
       16, att 27, ex 3, ref 22 (authority), neither 2 (the aperture line's own column); the base read 16 / 23 / 0 / 23 (authority 21,
-      stores 2). The spine did not move (13 att, 0 ex). SEASONS 5-8 (`crossing` ships; `season` read beside it; `hole_register.yaml`
+      stores 2). The spine did not move (13 att, 0 ex). RE-READ AT THE BATCH'S LAST ENGINE TREE, after
+      the three later movers (REM-29, REM-2B, IN-45): `aperture 4 s`, realm, `PYTHONHASHSEED=0`, formed 16 / 16 / 16 at seeds 0 / 1 / 2;
+      tree `90d93384c` (after REM-2B, before IN-45) att 19 / 24 / 27, ex 4 / 6 / 9; tree `6831bea98` (IN-45 (i) and (ii)) att 18 / 22 / 29,
+      ex 4 / 6 / 8, ref 12 / 16 / 21 -- a computed `requisition` still executes at every seed (`Act.via` was counted at CR-23's tree
+      only; these lines are att / ex). SEASONS 5-8 (`crossing` ships; `season` read beside it; `hole_register.yaml`
       H-243), candidates formed on a stamped larder per season 5-6-7-8 at seeds 0 / 1 / 2: `crossing` 64-55-33-31 / 44-39-51-40 /
       30-22-10-30; executed at seasons 5-8: `crossing` 0 / 0 / 2, `season` 3 / 4 / 4 (the card's switch rule did not fire; that
       `season` executes more is the call H-243 leaves open). IN-45, the settlement row's `found` / `build` / `work`: `aperture 4 s`,
@@ -1134,11 +1138,11 @@ rows:
       VERBS THAT EXECUTED 20 of 56; VERBS ONLY REFUSED 12 (build, comply, construe, covenant, evade / defy, exchange, forge, found,
       sabotage, seize, survey, train); WHERE THE 56 GO: 2 no predicate/effect - 22 foldable but never attempted - 12 attempted and
       always refused - 20 executed; DISTINCT EXECUTED SETS 123. REM-2B's `construe`, `evade / defy` and `exchange` now sit in
-      'attempted and always refused': they are attempted in the realm and execute 0 times (`aperture 4 s`, attempted: `exchange`
+      'attempted and always refused': they are attempted in the realm and execute 0 times (`aperture 4 s`, tree `90d93384c`, attempted: `exchange`
       127 / 149 / 154, `construe` 15 / 12 / 21, `evade / defy` 18 / 26 / 20). `found`, `build`, `work` (IN-45): R-04's paragraph of
       this date; `work` is 0 in the realm, and the corpus builds no works (zero stores), so those lines cannot run there. H-156's
       close question: `sabotage`, `seize`, `covenant` and `train` are STILL attempted and never executed, in the realm at
-      `aperture 4 s` (attempted / executed, s0 / s1 / s2: `sabotage` 72 / 85 / 77, `seize` 3 / 3 / 0, `covenant` 14 / 27 / 21, `train`
+      `aperture 4 s`, tree `96f947c28` (attempted / executed, s0 / s1 / s2: `sabotage` 72 / 85 / 77, `seize` 3 / 3 / 0, `covenant` 14 / 27 / 21, `train`
       101 / 83 / 92; executed 0 each) and in the corpus (all four in 'only refused').
     measure: "python -m engine.season.harness.corpus_run  # the 'WHERE THE <n> GO' line, which prints len(VERB_TABLE); the denominator is len(VERB_TABLE) at measurement time (v10 REM-02, `workplans/valoria_master_workplan_v10_part2.md` §6; [ASSUMPTION; medium; Jordan to correct]): a row leaves the table only by a ruling or a ratified design decision cited in its commit, never to move R-05, and every removal is recorded in R-05's `measured:` block; a row in the table but outside resolvable_verbs() counts under 'have no predicate/effect', so a row landed dark raises n. 'Built out' = at least one act formed by the chooser in a seeded run of a shipped builder is admitted, folds its band and emits the row's declared kinds; where the admitted band declares writes, at least one minted receipt has before ≠ after; a verb whose bands write nothing (`speak`, `interrogate`) is built out on execution; a hand-built execution never counts; the aperture clause covers realm-only verbs (`found`, `build`, `work`). It was '38' as of ED-IN-0261, '32' until ED-FI-0009 made the count honest and '37' until `release` landed"
     blocks: [H-65, IN-09, IN-10, IN-33, IN-45]

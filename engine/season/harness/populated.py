@@ -118,7 +118,7 @@ def _slug(text: str) -> str:
 # §5's hand-transcription hazard, one layer earlier). A seat's `rung:` is a FORM -- a one-entry
 # mapping `{<rung kind>: <key>}` -- and there is ONE resolver over all of them. The forms in use are
 #     {realm: true} · {duchy: "<faction>"} · {territory: "<code>"} · {settlement: "<code>"}
-#     · {hearth: "<settlement code>:<building slug>"} (v10 IN-45: `venues.yaml: planned_works`' `at:`)
+#     · {hearth: "<geography code>:<building slug>"} (v10 IN-45: `venues.yaml: planned_works`' `at:`)
 # and the resolver does not know that: it asks the INDEX `build_realm` fills as it mints each rung
 # (`_index_anchor`, at the mint sites, where the key is already in hand) for exactly one rung of
 # exactly that kind. It names no rung kind and no seat, so another form is a line at one more mint

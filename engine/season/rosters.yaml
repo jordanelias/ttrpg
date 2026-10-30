@@ -2325,7 +2325,7 @@ rosters:
       units after)` to that write only when `queries/world_q.py::requisitionable` before the barrier
       differs from after; `season` attaches it to every such write; `off` attaches nothing and is the
       CONTROL, the tree before CR-23 exactly. WITNESS deposits the read to the seats over the rung
-      (`world_q.governors_of`, IN-22's route). `"off"` is QUOTED: bare, YAML reads it as the boolean false.
+      (`world_q.governors_of`, IN-22's route; the fan's other witnesses of the write take it too). `"off"` is QUOTED: bare, YAML reads it as the boolean false.
     values: [crossing, season, "off"]
 
   beneficiary_kinds:

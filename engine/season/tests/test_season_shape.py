@@ -11199,7 +11199,7 @@ def test_wc_no_operand_is_defaulted_by_a_get_or_setdefault_in_shape_py_outside_e
     NAME CLAIMED MORE THAN THE BODY CHECKS. Renamed by the `W-C` adversarial pass, and the scope
     is now in the name rather than buried four paragraphs down. WHAT IT COVERS, exactly: the
     `.get("<operand>", <default>)` and `.setdefault("<operand>", <default>)` spellings, over the
-    eight names in `rosters.yaml: requires_operands` plus `harm`, IN `shape.py` ONLY.
+    the names in `rosters.yaml: requires_operands` plus `harm`, IN `shape.py` ONLY.
     WHAT IT DOES NOT COVER, and each is spellable around it today:
       * `d.get("kind") or "grain"` -- DELIBERATE, see the paragraph below, and live and correct
         in `_eff_create_record`/`_eff_utter` over payload keys that are not operands;

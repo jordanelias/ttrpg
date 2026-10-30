@@ -544,7 +544,7 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # -- v10 CR-23: THE STOCK REPORT, READ AT THE BARRIER'S ENTRY (`H-243`) ---------------------------
     # A larder's stock reaches the seats over it at a CROSSING: MATTER's LAST actorless `stores` write to
     # a rung in this barrier -- the credit write where the rung yields, else the debit write -- carries
-    # `_stock_report`'s Observation, and WITNESS deposits it to `world_q.governors_of` (IN-22's seat
+    # `_stock_report`'s Observation, and WITNESS deposits it to `world_q.governors_of` and to the write's other witnesses (IN-22's seat
     # route, unchanged). `requisitionable` is read here, before the debit, which IS the barrier's entry:
     # no MATTER step above writes `Rung.stores` (the two writes below are the barrier's only ones). The
     # act-side writers are NOT crossings by this definition and report nothing: `loop/effects_shared.py`'s
