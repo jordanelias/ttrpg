@@ -18,7 +18,7 @@ from typing import Optional
 from ..data.arrangements import ARRANGEMENTS
 from ..data.matrix import matrix_row
 from ..data.requires import RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS
-from ..data.rosters import COVER_KEY, COVER_KIND, RECORD_CONTENT, RECORD_KIND_KEYS
+from ..data.rosters import COVER_KEY, COVER_KIND, FACTION_BY_PROP, RECORD_CONTENT, RECORD_KIND_KEYS
 from ..data.verbs import VERB_TABLE, WARRANT_SOURCED
 from ..queries import faction_q
 from ..queries.person_q import ABOUT_KEYS, argued_pursuits, consequence_pursuits
@@ -97,9 +97,10 @@ def _eff_create_record(w: "World", a: "Act", res: "Resolution | None" = None) ->
 
 def _army_mintable(w: "World", content) -> bool:
     """ED-IN-0304 phase 2. An `army` Record is minted whole and well formed (`mass_battle.army`'s `validate`), for a
-    faction Proposition the world holds, and ONE PER FACTION (`world_q.army_of`): a second would leave two records
-    claiming to be one faction's army, with no rule for which the battle reads."""
-    if not isinstance(content, dict) or content.get("faction") not in w.propositions:
+    faction Proposition the world holds, and ONE PER FACTION (`world_q.army_of`, which counts HELD armies only): a second would leave two
+    records claiming to be one faction's army, with no rule for which the battle reads."""
+    if not isinstance(content, dict) or content.get("faction") not in FACTION_BY_PROP \
+            or content["faction"] not in w.propositions:
         return False
     if army_of(w, content["faction"]) is not None:
         return False
@@ -107,7 +108,9 @@ def _army_mintable(w: "World", content) -> bool:
         composition.require(ARMY)(ArmyCommand(content, "validate", {}))
     except (ValueError, KeyError, TypeError):
         return False
-    return True
+    # MINTED EMPTY: troops come in through `recruit` (its cap, its Sites, its membership) and subformations through
+    # `form_unit`, so a record minted already holding either would bypass the recruiting rule.
+    return not content["trained"] and not content["subformations"]
 
 
 def _content_of(a: "Act", kind: str) -> Optional[dict]:
@@ -978,11 +981,12 @@ def _seize_rung(w: "World", a: "Act", rid: str) -> Change:
     leaves the attacker mustered there, so the seizure is admitted (#453 exit (vii)). DECLINES
     (`NO_CHANGE` -> `seize.refused`, the `write` clause), each one change from an admitted seizure:
       * the subject is not a Rung of a `march_target_kinds` kind (a seat, a person's own rung, a
-        territory, a hearth) [ASSUMPTION; medium; Jordan to correct: occupation is defined at the
+        hearth; a territory IS one since ED-IN-0304 phase 4) [ASSUMPTION; medium; Jordan to correct: occupation is defined at the
         places a march arrives at; revert: any Rung kind, the licence still occupation];
       * the actor is not committed to the seat's faction (`faction_holding`; the title written is his own
         hold) [ASSUMPTION; medium; Jordan to correct; revert: drop the decline];
-      * the seat's faction is not mustered there (no occupation);
+      * the seat's faction does not occupy it (`world_q.occupies`: mustered beneath a settlement, standing AT a
+        territory, or holding the territory a settlement is held through);
       * nobody holds the settlement (H-166: who holds an unheld place is unruled) or the seat's own
         faction already does (nothing to take);
       * the actor already holds it, or the closure's holder is one the seat may not seize from

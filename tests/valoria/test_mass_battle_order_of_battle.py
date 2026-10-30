@@ -73,7 +73,7 @@ def test_equal_headcount_of_different_troop_types_fights_differently():
 
 
 def test_an_order_of_battle_side_and_a_headcount_side_both_deploy():
-    """A side with no order of battle, once the other has one, is a deployed light-infantry line, not a crash."""
+    """A side with no order of battle, once the other has one, is a deployed levy line, not a crash."""
     r = massbattle.resolve_field(_record(oobs=(_line('archers', 400), None), weights=((10,), (400,))),
                                  random.Random(3))
     assert set(r) >= {'attacker_wins', 'degree', 'attacker_size_pct', 'defender_size_pct'}
@@ -207,3 +207,31 @@ def test_survivor_shares_of_an_order_of_battle_never_exceed_one():
         seen += [r['attacker_size_pct'], r['defender_size_pct']]
     assert max(seen) <= 1.0 and min(seen) >= 0.0, seen
     assert min(seen) < 1.0, "vacuous if no side took a casualty in twelve fields"
+
+
+def _stance_of(sf, strategy='line'):
+    unit = build_unit(OrderOfBattle((sf,), strategy), 'x', 'A', morale_start=5)
+    return unit.subunits[0].eff_stance
+
+
+def test_a_role_sets_the_stance_its_instructions_name_unless_the_subformation_says_otherwise():
+    """Precedence: the subformation's own stance, then its role's, then the strategy's. Writing the strategy's stance
+    unconditionally made a role unable to set one. FALSIFIER: restore `stance=sf.stance or STRATEGIES[...]` in
+    `_spec_for` and the first line reads 'balanced'."""
+    wall = Subformation('w', 'heavy_infantry', 120, role='ShieldWall')
+    assert _stance_of(wall) == 'hold', "ShieldWall under the neutral strategy must hold"
+    assert _stance_of(Subformation('w', 'heavy_infantry', 120, role='ShieldWall', stance='aggressive')) == 'aggressive'
+    plain = Subformation('w', 'heavy_infantry', 120)
+    assert _stance_of(plain, 'advance') == 'aggressive' and _stance_of(plain) == 'balanced', "control: no role, the strategy"
+
+
+def test_one_site_is_shared_by_every_type_trained_at_it():
+    """A quarter-built barracks trains a quarter of the cap BETWEEN its types, not a quarter each."""
+    from modules.mass_battle.troop_types import recruitment as R
+    cap = R.under_arms_cap(12)
+    sites = {'barracks': 250}
+    first = R.recruit_limit('heavy_infantry', 12, sites, {}, 1000)
+    assert first == cap // 4
+    assert R.recruit_limit('spearmen', 12, sites, {'heavy_infantry': first}, 1000) == 0, "the barracks is spent"
+    assert R.recruit_limit('archers', 12, {**sites, 'archery_range': 250}, {'heavy_infantry': first}, 1000) == cap // 4, (
+        "control: a different kind of site is not spent by the barracks's troops")

@@ -112,6 +112,7 @@ def test_a_troop_type_needs_its_own_kind_of_training_site():
 
 def test_recruit_refuses_what_is_not_a_cohort_of_the_armys_faction():
     w, d = _armed(*_world())
+    w.add_tenure(Tenure("t_low_commit", "p_low", FACTION, "commit", since=0))      # a member, so only weight 1 refuses
     for who, why in (("p_low", "an individual (weight 1)"), ("p_nobody", "no such person")):
         out = _do(w, d, "recruit", f"r_{who}", cohort=who, troop_type="levy", count=1)
         assert "recruit.refused" in _kinds(out), (why, _kinds(out))
@@ -180,3 +181,49 @@ def test_the_four_verbs_are_withheld_from_formation_so_no_person_forms_them():
     from engine.season.data.verbs import VERB_TABLE
     assert len(ARMY_VERBS) == 4 and set(ARMY_VERBS) <= set(VERB_TABLE), "vacuous unless four real verbs"
     assert set(ARMY_VERBS) <= set(DEFAULT_FIXTURES.get("withheld_verbs"))
+
+
+# ----------------------------------------------------------------- the close's findings: mint, payload, holder
+def test_an_army_is_minted_empty_so_the_recruiting_rule_cannot_be_skipped():
+    from modules.mass_battle import armyrecord as A
+    w, d = _world()
+    full = A.raised(A.new(FACTION), COHORT, "knights_templar", 100000)             # no cap, no stable
+    out = _mint(w, d, key="army_full", content=full)
+    assert _kinds(out) == ["act.refused"] and "army_full" not in w.records, _kinds(out)
+    formed = A.form(A.new(FACTION), "wall", "levy")
+    assert _kinds(_mint(w, d, key="army_sf", content=formed)) == ["act.refused"]
+    assert _kinds(_mint(w, d, key="army_ok")) == ["record.created"], "control: the same mint, empty, is admitted"
+
+
+def test_a_proposition_that_is_not_a_faction_has_no_army():
+    w, d = _world()
+    w.propositions["prop_idea"] = Proposition("prop_idea", "HOLDS", "Idea", "is just a thought", True, 0)
+    out = _mint(w, d, key="army_idea", faction="prop_idea")
+    assert _kinds(out) == ["act.refused"] and "army_idea" not in w.records, _kinds(out)
+
+
+def test_a_missing_or_mistyped_payload_field_is_a_refusal_not_a_crash():
+    w, d = _armed(*_world())
+    before = _army(w)
+    cases = (("form_unit", dict(troop_type="levy")),                          # no name
+             ("assign_troops", dict(name="x", cohort=COHORT)),                # no count
+             ("recruit", dict(cohort=COHORT, troop_type="levy", count=None)),
+             ("order_unit", dict(stance="hold")),                             # no name
+             ("order_unit", dict(name="x", fall_back_at="soon")))
+    for i, (verb, payload) in enumerate(cases):
+        out = _do(w, d, verb, f"bad_pl{i}", **payload)
+        assert f"{verb}.refused" in _kinds(out), (verb, payload, _kinds(out))
+        assert _army(w) == before
+
+
+def test_an_army_whose_holder_is_gone_frees_its_factions_slot():
+    """A dead holder strands the army (every verb needs the holder). It must not also lock the faction out of ever
+    minting another."""
+    w, d = _armed(*_world())
+    assert world_q.army_of(w, FACTION) == "army1"
+    for t in w.tenures:                                  # the holder is gone: the hold on the army closed with him
+        if t.object == "army1" and t.kind == "hold" and t.live:
+            t.until = w.tick
+    assert world_q.army_of(w, FACTION) is None, "an army nobody holds is nobody's army"
+    out = _mint(w, d, key="army2", actor="p_mid")
+    assert _kinds(out) == ["record.created"] and world_q.army_of(w, FACTION) == "army2", _kinds(out)

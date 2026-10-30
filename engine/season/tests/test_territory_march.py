@@ -16,7 +16,9 @@ from __future__ import annotations
 from engine.season.data.rosters import MARCH_TARGET_KINDS, RAZE_TARGET_KINDS, SUBTREE_OCCUPATION_KINDS
 from engine.season.harness.populated import build_realm
 from engine.season.queries import world_q
-from engine.season.state.carriers import Act
+from engine.season.state.carriers import Act, Tenure
+
+from engine.season.loop.effects_combat import _not_yet_under
 
 from .test_march import (CHURCH, CROWN, _fold_one, _march_act, _no_resident_crown, _resolve_one, _seize_kinds)
 
@@ -88,3 +90,33 @@ def test_an_occupied_territory_is_never_razed_but_an_occupied_settlement_still_i
                                                     payload={"subject": target}, via=SEAT))]
     assert raze(UNDEFENDED, "rz_t") == ["raze.refused"] and UNDEFENDED in w.rungs
     assert raze(TOWN, "rz_s") == ["rung.razed"] and TOWN not in w.rungs
+
+
+def test_an_army_housed_inside_the_territory_still_has_to_arrive_at_it():
+    """`_not_yet_under` and `occupies` read the same fact: beneath a settlement is there, but a territory is occupied
+    only AT it. An attacker housed in one of its towns therefore makes the journey (and so occupies), where it was
+    skipped as "already there" and left the territory unoccupied. CONTROL, one change: the same man, the town as the
+    target, needs no journey."""
+    w = build_realm(0)
+    for t in w.tenures:
+        if t.subject == ACTOR and t.kind == "contain" and t.live:
+            t.until = w.tick
+    inside = sorted(world_q.descendants(w, TOWN))[0]
+    w.add_tenure(Tenure("t_d1_inside", ACTOR, inside, "contain", w.tick))
+    assert UNDEFENDED in world_q.ancestry(w, world_q.home_of(w)[ACTOR]), "fixture: the actor lives under the territory"
+    assert _not_yet_under(w, [ACTOR], UNDEFENDED, ACTOR, SEAT) == [ACTOR]
+    assert _not_yet_under(w, [ACTOR], TOWN, ACTOR, SEAT) == [], "control: under a settlement is already there"
+
+
+def test_a_settlement_with_a_hold_of_its_own_does_not_ride_with_an_occupied_territory():
+    """The settlements an occupied territory carries are the ones held THROUGH it. CONTROL first: the town is held
+    through the territory and is occupied with it; then a third faction takes a hold of its own on the town and it
+    stands alone, so the army on the territory does not reach it (and cannot seize it without a field)."""
+    w = build_realm(0)
+    _march(w, UNDEFENDED)
+    assert world_q.governing_hold(w, TOWN).object == UNDEFENDED and world_q.occupies(w, TOWN, CROWN)
+    churchman = world_q.members(w, CHURCH)[0]
+    w.add_tenure(Tenure("t_d2_own_hold", churchman, TOWN, "hold", w.tick))
+    assert world_q.governing_hold(w, TOWN).object == TOWN and world_q.holder_faction_of(w, TOWN) == CHURCH
+    assert not world_q.mustered(w, TOWN, CROWN) and not world_q.occupies(w, TOWN, CROWN)
+    assert world_q.occupies(w, UNDEFENDED, CROWN), "the territory itself is still occupied"

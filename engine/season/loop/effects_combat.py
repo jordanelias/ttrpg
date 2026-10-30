@@ -15,7 +15,7 @@ and `_operand`, the helpers `march` takes from `effects_shared.py`; its arrival 
 from __future__ import annotations
 
 from ..data.rosters import (
-    DECLARED, FELLED, FIELD_CASUALTY_MODELS, LOST, UNOPPOSED, WON, WOUND_HARM_MODELS,
+    DECLARED, FELLED, FIELD_CASUALTY_MODELS, LOST, SUBTREE_OCCUPATION_KINDS, UNOPPOSED, WON, WOUND_HARM_MODELS,
     require_member,
 )
 from ..data.verbs import VERB_TABLE, VOCATION_SOURCED, VOCATIONS
@@ -373,11 +373,14 @@ def _not_yet_under(w: "World", pids: list, target: str, actor: "str | None" = No
     homes = home_of(w)
     chains: dict = {}
     out = []
+    # ED-IN-0304 phase 4: what "already there" means is `world_q.occupies`'s, so the two cannot disagree. Beneath a
+    # settlement is there; a territory is occupied only AT it, so an army housed in one of its towns still arrives.
+    by_subtree = w.rungs[target].kind in SUBTREE_OCCUPATION_KINDS if target in w.rungs else True
     for pid in live:
         here = homes.get(pid)
         if here not in chains:
             chains[here] = ancestry(w, here)
-        if target in chains[here]:
+        if target in chains[here] and (by_subtree or here == target):
             continue
         if pid != actor and not (here is not None and may_muster(w, actor, via, pid)):
             continue

@@ -1774,18 +1774,23 @@ def occupies(w: World, rung_id: str, faction: str) -> bool:
     """ED-IN-0304 phase 4. Does `faction` OCCUPY `rung_id`? Occupation is what `seize` and `raze` license on, and
     it is presence, never a title (R-6: a won field writes presence).
       * a rung of a `subtree_occupation_kinds` kind (a settlement): the faction is `mustered` anywhere beneath it
-        -- OR it occupies a place above it (the next bullet), because an army that has taken a territory has taken
-        the settlements in it ("occupy that territory alongside its settlements");
-      * any other `march_target_kinds` kind (a territory): the faction has people standing AT the rung itself,
-        which only a `march` that arrived there puts them. Standing in one of its towns is not occupying it.
+        -- OR it occupies the place the settlement is held through (the next bullet), because an army that has taken
+        a territory has taken the settlements in it ("occupy that territory alongside its settlements");
+      * any other `march_target_kinds` kind (a territory): the faction has people standing AT the rung itself, which
+        a `march` that arrived there puts them (a `move` onto it does as well: presence is presence, as for a
+        settlement). Standing in one of its towns is not occupying it.
     A rung of no march-target kind is never occupied (occupation is defined where a march can arrive)."""
     TRACE.query("occupies", "resolver")
     rung = w.rungs.get(rung_id)
     if rung is None or rung.kind not in MARCH_TARGET_KINDS:
         return False
     if rung.kind in SUBTREE_OCCUPATION_KINDS:
-        return bool(mustered(w, rung_id, faction)) or any(
-            occupies(w, above, faction) for above in ancestry(w, rung_id) if above != rung_id)
+        if mustered(w, rung_id, faction):
+            return True
+        # An army that has taken a territory has taken the settlements held THROUGH it. A settlement with a hold of
+        # its own (a seizure, a founding) stands on its own and is occupied only by standing in it.
+        held = governing_hold(w, rung_id)
+        return held is not None and held.object != rung_id and occupies(w, held.object, faction)
     inside = set(members(w, faction))
     return any(t.kind == "contain" and t.live and t.object == rung_id and t.subject in inside for t in w.tenures)
 
@@ -1839,11 +1844,14 @@ def training_sites(w: World, person_id: str, kinds) -> dict:
 
 
 def army_of(w: World, faction: str) -> Optional[str]:
-    """ED-IN-0304 phase 2. The id of the `army` Record whose `subject_matter` names `faction`, or `None`; the
-    lowest id when several do (a second is refused at its mint, `_eff_create_record`)."""
+    """ED-IN-0304 phase 2. The id of the HELD `army` Record whose `subject_matter` names `faction`, or `None`; the
+    lowest id when several do (a second is refused at its mint, `_eff_create_record`). An army whose holder died is
+    nobody's to command (every army verb needs the holder) and so is not the faction's army: its slot is free to
+    mint again, rather than locked forever by a record no one can change."""
     TRACE.query("army_of", "resolver")
     ids = sorted(r.id for r in w.records.values()
-                 if r.kind == "army" and isinstance(r.subject_matter, dict) and r.subject_matter.get("faction") == faction)
+                 if r.kind == "army" and isinstance(r.subject_matter, dict) and r.subject_matter.get("faction") == faction
+                 and hold_force(w, r.id) is not None)
     return ids[0] if ids else None
 
 

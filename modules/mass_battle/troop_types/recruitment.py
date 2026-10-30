@@ -98,5 +98,9 @@ def recruit_limit(troop_type: str, weight: float, site_conditions: Mapping[str, 
         kind, floor = site
         frac = max(0.0, min(1.0, float(site_conditions.get(kind, 0.0)) / float(full)))
         share = 0 if frac <= 0.0 or frac < floor else int(math.floor(cap * frac))
-    room_type = share - int(raised.get(str(troop_type).strip().lower(), 0))
+    # The Site is shared by every type trained at its kind: a quarter-built barracks trains a quarter of the cap
+    # BETWEEN its types, not a quarter each. Levy has no Site, so its own count is the whole of what it shares.
+    kind_types = {t for t, (k, _f) in TRAINING_SITE.items() if site is not None and k == site[0]} or {
+        str(troop_type).strip().lower()}
+    room_type = share - sum(int(n) for t, n in raised.items() if str(t).strip().lower() in kind_types)
     return max(0, min(room_total, room_type))

@@ -253,6 +253,13 @@ def apply(cmd) -> dict:
       order    args name and any of role, stance, target, fall_back_at; or strategy alone, for the army
       validate no args -- the record unchanged if well formed
     """
+    try:
+        return _apply(cmd)
+    except (KeyError, TypeError, OverflowError) as e:    # a missing or mistyped payload field is a refusal, not a crash
+        raise ValueError(f"bad {cmd.op!r} command: {type(e).__name__} {e}") from e
+
+
+def _apply(cmd) -> dict:
     r, a = cmd.record, cmd.args
     validate(r)
     if cmd.op == 'validate':

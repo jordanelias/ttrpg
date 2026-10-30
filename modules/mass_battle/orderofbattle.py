@@ -33,7 +33,7 @@ from typing import Optional, Tuple
 from modules.mass_battle.armies import DEPLOY_GAP, SUBUNIT_CAP, _centered_line_cols, _spec_span, build_army
 from modules.mass_battle.config import BATTLEFIELD_SIZE, ROLE_SPEC, cell_cap_for
 from modules.mass_battle.geometry import footprint_for
-from modules.mass_battle.hierarchy.units import Order
+from modules.mass_battle.hierarchy.units import Order, _INSTRUCTION_STANCE
 from modules.mass_battle.troop_types.registry import is_mounted, roles_for, stats_for, unit_type_for
 
 __all__ = ['Subformation', 'OrderOfBattle', 'STRATEGIES', 'STANCES', 'TARGETINGS', 'class_of', 'build_unit',
@@ -141,8 +141,15 @@ def _spec_for(sf: Subformation, strategy: str) -> dict:
     # The type's first menu entry is NOT a safe default: a levy's menu is the 'any' fallback (Support, Reserve), and a
     # Reserve body does not advance. Roles are chosen on purpose, by the host or the menu.
     spec = dict(troop_type=sf.troop_type, troops=float(sf.troops),
-                concentration=float(cell_cap_for(sf.troop_type)),
-                stance=sf.stance or STRATEGIES[strategy][cls])
+                concentration=float(cell_cap_for(sf.troop_type)))
+    # STANCE PRECEDENCE: the subformation's own, then the one its role's instructions set (ShieldWall and Hold hold,
+    # Push presses -- `Subunit.eff_stance` reads them only while the stance was never written on purpose), then the
+    # strategy's for its class. Always writing the strategy's stance made a role unable to set it.
+    role_stance = sf.role is not None and any(k in _INSTRUCTION_STANCE for k in ROLE_SPEC[sf.role]['instructions'])
+    if sf.stance is not None:
+        spec['stance'] = sf.stance
+    elif not role_stance:
+        spec['stance'] = STRATEGIES[strategy][cls]
     if sf.role is not None:
         spec['role'] = sf.role
     else:

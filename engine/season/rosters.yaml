@@ -930,15 +930,17 @@ rosters:
     source: "M4, `ED-IN-0279` clause (a). What a `march` may target."
     row: H-149
     note: >-
-      ⚠ ONE MEMBER, NOT AN OPEN SET, AND THE ROSTER IS CLOSED FOR A REASON BOUND ELSEWHERE.
+      ⚠ A CLOSED SET, NOT AN OPEN ONE, AND THE ROSTER IS CLOSED FOR A REASON BOUND ELSEWHERE. It was one member,
+      `settlement`; ED-IN-0304 phase 4 added `territory` on Jordan's ruling (a territory is marched on, occupied
+      and seized), which is the data edit this note said a second ruled kind would be.
       Person containment never terminates at a settlement rung -- every person's `contain` targets
       a `home` building beneath one (`harness/populated.py`) -- and `contain_ascends`
       (`state/world.py`) forbids a sideways move to a foreign settlement, so "the exact rung
       marched to" is vacuous read literally. Jordan's ruling (M4 planning round 2) is "settlement
       plus everything under it", which only a `Rung` of kind `settlement` can anchor -- a subtree
       read, matching `world_q.density`'s existing composition rather than a new one. #353 names no
-      other march target and this roster does not invent one; adding a member later is a data edit
-      the moment a second target kind is ruled, not a design choice made here.
+      other march target and this roster invented none; a member is added the moment a kind is ruled, as
+      `territory` was. `subtree_occupation_kinds` below says how each is occupied.
     values: [settlement, territory]
 
   subtree_occupation_kinds:

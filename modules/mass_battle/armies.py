@@ -6,8 +6,9 @@ Moved here, byte for byte, from `systems/mass_battle/sim/engine.py` (which re-im
 `modules/mass_battle/` is the reachable closure and the canon tree (`references/module_contracts.yaml`, the
 `mass_battle` row's note); a season-facing order-of-battle builder (`orderofbattle.py`) needs this constructor,
 and a module may not import from `systems/` (the harness and workbench tree). Moving it leaves ONE owner.
-Nothing in the moved text was edited: a diff of this file against the old engine.py lines is empty but for this
-docstring and the imports."""
+The moved text was edited in ONE place: `build_army`'s spec tuple gained `'target_condition'` (a spec's targeting
+preference was silently dropped before; no caller passed one). A diff against the old engine.py lines is otherwise
+empty but for this docstring and the imports."""
 from modules.mass_battle.config import *
 from modules.mass_battle.core.exchange import *
 from modules.mass_battle.core.state import *

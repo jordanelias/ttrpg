@@ -37,14 +37,14 @@ def _module_entries_registered():
     SeasonDriver(build_realm(0))
 
 
-def _army(faction, cohort, troop_type="heavy_infantry", n=120, **order):
+def _army(faction, cohort, troop_type="heavy_infantry", n=120, role=None, **order):
     from modules.mass_battle import armyrecord as A
     r = A.raised(A.new(faction), cohort, troop_type, n)
-    r = A.assign(A.form(r, "wall", troop_type, role="ShieldWall"), "wall", cohort, n)
+    r = A.assign(A.form(r, "wall", troop_type, role=role), "wall", cohort, n)
     return A.order(r, "wall", **order) if order else r
 
 
-def _world(attacker_army=True, defender_army=True):
+def _world(attacker_army=True, defender_army=True, defender_role="ShieldWall"):
     w = build_realm(0)
     for cid, rung, fac in ((CA, ORIGIN, ATTACKER), (CD, TARGET, DEFENDER)):
         P.plant_cohort(w, cid, rung, weight=12)
@@ -53,7 +53,9 @@ def _world(attacker_army=True, defender_army=True):
     assert world_q.mustered(w, ORIGIN, ATTACKER).count(CA) == 1 and CD in world_q.mustered(w, TARGET, DEFENDER)
     for flag, rid, fac, cid in ((attacker_army, "army_a", ATTACKER, CA), (defender_army, "army_d", DEFENDER, CD)):
         if flag:
-            w.records[rid] = Record(rid, TARGET, "army", subject_matter=_army(fac, cid))
+            w.records[rid] = Record(rid, TARGET, "army", subject_matter=_army(fac, cid, role=None if fac == ATTACKER else defender_role))
+            # an army is its faction's only while somebody holds it (`world_q.army_of`)
+            w.add_tenure(Tenure(f"t_{rid}_hold", world_q.members(w, fac)[0], rid, "hold", since=0))
     return w, scale
 
 
@@ -79,7 +81,9 @@ def test_each_side_with_an_army_record_fights_as_that_records_order_of_battle():
     oob_a, oob_d = _input(w).orders_of_battle
     assert [s.name for s in oob_a.subformations] == ["wall"] and [s.name for s in oob_d.subformations] == ["wall"]
     assert (_troops(oob_a), _troops(oob_d)) == (120, 120)
-    assert oob_a.subformations[0].role == "ShieldWall" and oob_a.subformations[0].troop_type == "heavy_infantry"
+    # the defender holds its ground behind a shield wall and the attacker does not: two held lines never close
+    assert oob_a.subformations[0].role is None and oob_d.subformations[0].role == "ShieldWall"
+    assert oob_a.subformations[0].troop_type == "heavy_infantry"
 
 
 def test_a_side_without_an_army_record_is_none_while_the_other_fights_its_own():
@@ -172,7 +176,8 @@ def _fold(w, *acts):
 def test_a_fought_field_costs_the_loser_its_bodies_and_so_its_next_army():
     """THE CASUALTY LOOP, through the real fold: no write of the army Record, yet the side that lost fields fewer
     troops next time, by exactly its cohort's body fraction. The winner's cohort is untouched."""
-    w, scale = _world()
+    # two plain lines: a held shield wall against a balanced line can end with nobody having closed (no casualties)
+    w, scale = _world(defender_role=None)
     events = _fold(w, _march_act())
     kinds = {e.kind for e in events}
     assert kinds & {"field.won", "field.lost"}, sorted(kinds)
@@ -180,7 +185,8 @@ def test_a_fought_field_costs_the_loser_its_bodies_and_so_its_next_army():
     hurt = [c for c, b in bodies.items() if b < scale]
     assert len(hurt) == 1, ("exactly one side loses", bodies)
     loser, rid = (CA, "army_a") if hurt == [CA] else (CD, "army_d")
-    assert w.records[rid].subject_matter == _army(ATTACKER if loser == CA else DEFENDER, loser), (
+    assert w.records[rid].subject_matter == _army(ATTACKER if loser == CA else DEFENDER, loser,
+                                                         role=None), (
         "the fight must not rewrite the Record")
     if bodies[loser] > 0:
         oob = _input(w).orders_of_battle[0 if loser == CA else 1]

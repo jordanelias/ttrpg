@@ -82,7 +82,7 @@ def sides_of(w: World, a: Act, target: Optional[str],
     copy of a rule `seam/wrappers/*` already owns (§8)."""
     prize_row = manifest.resolve("contest", prize)
     if prize_row is not None and prize_row.get("module") == "mass_battle":
-        # ⚠ `H-149` (`march_target_kinds`, closed at `[settlement]`) IS ENFORCED HERE, NOT LEFT
+        # ⚠ `H-149` (`march_target_kinds`, `[settlement, territory]`) IS ENFORCED HERE, NOT LEFT
         # DECLARED-AND-UNREAD (found by `valoria-critic`: `_eff_march`'s own comment claimed this
         # check and it did not exist). `requires_typed` only answers *does a Rung of this id
         # exist*, never a sub-kind filter (`march`'s own `requires_typed_note` -- a sixth typed

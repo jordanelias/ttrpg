@@ -252,11 +252,11 @@ def _eff_raze(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
 
     THE LICENCE IS OCCUPATION, READ AS `seize`'s RUNG HALF READS IT (`loop/effects_information.py::
     _seize_rung`, whose inlined read this copies, the entry's instruction): the exercised seat's FACTION
-    (`seat_faction`) `mustered` at the settlement (`world_q.mustered`, the one query of who stands
-    there), the settlement held by ANOTHER faction (`holder_faction_of`). DECLINES (`NO_CHANGE` ->
+    (`seat_faction`) occupying the settlement (`world_q.occupies`, the one reading of that), the
+    settlement held by ANOTHER faction (`holder_faction_of`). DECLINES (`NO_CHANGE` ->
     `raze.refused`), each one change from an admitted razing:
-      * the subject is no Rung, or not a `march_target_kinds` kind (occupation is defined only at the
-        places a march arrives at, `_seize_rung`'s first decline) [ASSUMPTION; medium; Jordan to
+      * the subject is no Rung, or not a `raze_target_kinds` kind (a settlement: a territory is marched on
+        and seized and never razed; occupation is defined only at the places a march arrives at) [ASSUMPTION; medium; Jordan to
         correct; revert: any Rung kind, the licence still occupation];
       * the exercised seat has no faction;
       * nobody holds the settlement (H-166: who holds an unheld place is unruled, `_seize_rung`'s
@@ -284,7 +284,8 @@ def _eff_raze(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     The closed edges are the cascade and are not named, as `destroy_record`'s are not."""
     rid = _operand(a, "subject")
     # ED-IN-0304 phase 4: a territory is marched on and occupied now, and still not razed (`raze_target_kinds`).
-    if w.rungs.get(rid) is None or w.rungs[rid].kind not in RAZE_TARGET_KINDS             or occupying_faction(w, a.via, rid) is None:
+    if w.rungs.get(rid) is None or w.rungs[rid].kind not in RAZE_TARGET_KINDS \
+            or occupying_faction(w, a.via, rid) is None:
         return NO_CHANGE
 
     def perform() -> None:

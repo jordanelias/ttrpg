@@ -167,10 +167,14 @@ def _field(oob_a, oob_b):
 
 
 def test_an_army_record_fights():
-    a = A.assign(A.assign(_army(), 'wall', 'c1', 60), 'bows', 'c1', 50)
-    b = A.assign(A.raised(A.form(A.new('fac_guilds'), 'rabble', 'levy'), 'g1', 'levy', 90), 'rabble', 'g1', 90)
+    # Every subformation is at least 120 troops: under 80 a subunit routs at the first check and under 100 the unit
+    # does, so a smaller army would "fight" without anyone fighting. The assertion is that blood was drawn.
+    a = A.raised(A.raised(_army(), 'c1', 'heavy_infantry', 60), 'c1', 'archers', 70)            # c1: 120 / 120
+    a = A.assign(A.assign(a, 'wall', 'c1', 120), 'bows', 'c1', 120)
+    b = A.assign(A.raised(A.form(A.new('fac_guilds'), 'rabble', 'levy'), 'g1', 'levy', 240), 'rabble', 'g1', 240)
     r = _field(A.to_order_of_battle(a), A.to_order_of_battle(b))
     assert set(r) >= {'attacker_wins', 'degree', 'attacker_size_pct', 'defender_size_pct'}
+    assert min(r['attacker_size_pct'], r['defender_size_pct']) < 1.0, "vacuous: nobody took a casualty"
 
 
 # ---------------------------------------------------------------------------- the season's one entry, `apply`
@@ -209,6 +213,8 @@ def test_apply_runs_each_season_command_and_refuses_each_rule_it_breaks():
                 _cmd(r, 'order', name='wall'),
                 _cmd(r, 'order', name='wall', strategy='line'),
                 _cmd(r, 'march'),
+                _cmd(r, 'form', troop_type='levy'),                          # a missing field is a refusal
+                _cmd(r, 'recruit', cohort='c1', troop_type='levy', count=None, weight=12, sites=sites, full=FULL),
                 _cmd({**r, 'strategy': 'rout'}, 'validate')):
         with pytest.raises(ValueError):
             A.apply(bad)
