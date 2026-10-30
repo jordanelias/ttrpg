@@ -87,7 +87,20 @@ is a cap that R-8's "stop arbitrary fiat capping" is hostile to, though it caps 
 frequency). Neither is decided by the ladder. The question is: *at which end do you want the floor, on what a
 person brings or on what faces them?*
 
-**R-31 against Layer 1 §A.3.** R-31 (2026-10-30, newest) names *office* among the sources of capability.
+**R-31 against Layer 1 §A.3: ANSWERED by Jordan, 2026-10-30: it is both.** "A King has more actions that are
+available in some contests (e.g. a royal tribunal), and their actions also carry more weight in those contests." So
+office licenses acts **and** carries weight, both keyed to the venue. That settles the ruling and leaves the
+amendment: §A.3 ("A seat adds no verb and no modifier"), its STRUCTURAL row (`04_CODE_ARCHITECTURE.md:351`), the
+axioms table row (`01_AXIOMS.md:1635`), `06_RESOLUTION` B.0's refusal and the loader's refusal of a `capability`
+eligibility kind are all contradicted by it. Layer 1 is not edited by an agent to fit a ruling given in conversation
+without his say-so on the wording, so the amendment is held as a hunk (the same status as RH-1 and RH-3).
+*A narrow wording that keeps §A.3's concern* (that a seat which carries a modifier everywhere becomes a stat to be
+optimised) *is to put the weight in the venue row, not on the office*: "a seat adds no verb and no modifier **of
+itself**; a venue may license an office-keyed action set and weight". Then a King is weighty in a royal tribunal
+because that row says so, which is also what R-12 asks (every difference lives in the row). This is my suggestion, not
+a ruling.
+
+The record of the original question, for the trail: R-31 (2026-10-30, newest) names *office* among the sources of capability.
 `architecture/meta/03_VERBS_AND_LOOPS.md` §A.3 says "A seat adds no verb and no modifier"; `04_CODE_ARCHITECTURE.md:351`
 makes it STRUCTURAL (no bonus field, no modifier column, the loader raises on a `capability` eligibility kind); and
 `06_RESOLUTION` B.0 refused an office bonus on that ground. A newer ruling outranks the older proposal text, but a
@@ -120,7 +133,7 @@ Read in order, the rulings fix nine things. Nothing else in the corpus is requir
 
 ### 3.1a The three requirements of 2026-10-30 (R-31 to R-33), as model items
 
-10. **Capability = attribute × title × office × faction, set by venue and contest type** (R-31). Attribute gives dice; title gives rank in the ladder and so standing; faction gives alignment and the audience's disposition; office gives the licence to act (`remit_acts`) and who is heard. The venue row decides which of these the contest reads, so a trial, a council and an embassy draw on different combinations of the same four sources. **Not** a per-proceeding skill (B.0's refusal stands: that branches on the game's name). Latitude stays pool-only (R-18). The attribute roster is in flux (ten ruled, nine shipped, the tenth unnamed); the reading must go through whatever the roster is.
+10. **Capability = attribute × title × office × faction, set by venue and contest type** (R-31). Attribute gives dice; title gives rank in the ladder and so standing; faction gives alignment and the audience's disposition; office gives **both** the licence to act (`remit_acts`, who is heard) **and weight**, each keyed to the venue ("a King ... in a royal tribunal", Jordan 2026-10-30). Where the weight enters (pool, leverage, obstacle) is item 11's per-source choice; my default is the pool, so that leverage stays for evidence, argument and aptness and the obstacle for the defender's circumstance `[ASSUMPTION; medium; revert: move it to leverage]`. The weight is a venue-row value keyed by office, not a column on the office. The venue row decides which of these the contest reads, so a trial, a council and an embassy draw on different combinations of the same four sources. **Not** a per-proceeding skill (B.0's refusal stands: that branches on the game's name). Latitude stays pool-only (R-18). The attribute roster is in flux (ten ruled, nine shipped, the tenth unnamed); the reading must go through whatever the roster is.
 11. **One sigma-leveraged engine, continuous in dice and obstacle, with named modifier sources** (R-32). Channels: **pool** (capability, item 10), **leverage** (a μ-shift on the roll), **obstacle** (the defender's score ÷ 2 plus room terms, R-5). Sources: capability; worldly state (what the matter's referent now is); evidence (`proofs`); argument (the proposition's content and its aptness, priced per R-16); audience (reception); forgery quality. Every source maps to exactly one channel, once. The repo's own resolution-diagnostic skill holds that advantage is a μ-shift and never an Ob reduction; R-5 and the 2026-09-06 direction ("I'm fine with Ob being modified by things") allow terms on the obstacle. The two are reconcilable only by deciding, per source, whether it is the defender's circumstance (obstacle) or the actor's advantage (leverage).
 12. **One action surface, limited by contest type** (R-33). The same verb table and speech-kind roster serve every structure (dyadic, mutual, bench, count); the arrangement row decides which actions are *available* in it, through `floor` (who may act), `order` (when), `proofs` (what may be offered), `interposed` (who may act for whom), and the speech kinds' `apt_genre` / `apt_rung` / `reachable_bands`. This is the "consistent armature". It must not be confused with the kernel's `armature` (a hidden judge-conviction vector), which is a different object and dies with the kernel.
 
