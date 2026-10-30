@@ -392,8 +392,8 @@ class Sensation:
     REM-44 deleted `subsistence`: its only reader, `urgency`, had no candidate in it and moved no
     ranking (`H-73`). A need is now a Query (`world_q.hunger` for a settlement) plus the shortfall
     claims a person holds about it. The type stays: `sense()` computes `standing` via `standing_of`,
-    and reading it on a Sensation built without it raises rather than answering 0. S34 grades the
-    one-scalar rule `convention`."""
+    and reading it on a Sensation built without it raises rather than answering 0. 04 §B.10 grades the
+    Python one-scalar shape `convention`."""
 
     # roster-exempt: MECHANISM -- `__slots__` is a Python language construct naming this
     # class's own attributes, as on `View`.

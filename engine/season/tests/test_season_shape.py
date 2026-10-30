@@ -997,7 +997,7 @@ def test_sensation_is_constructed_by_the_loop_and_standing_raises_on_read():
     built every season and `standing` raises AT THE POINT OF USE."""
     w = _w()
     sn = sense(w.persons["p_low"], w)
-    # ONE scalar since REM-44 deleted `subsistence`: the loop builds `standing` (`H-29`) and nothing else.
+    # ONE scalar since REM-44 deleted `subsistence`: the loop builds `standing` (`H-29`).
     assert isinstance(sn, Sensation) and isinstance(sn.standing, int)
     # The refusal survives where it is still true: a Sensation built without `standing` is half a
     # Sensation, and reading the missing scalar must refuse rather than answer 0.

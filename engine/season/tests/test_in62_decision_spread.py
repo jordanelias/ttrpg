@@ -76,8 +76,8 @@ def _opposed_pair():
 
 
 def test_in62_two_persons_one_question_different_pursuits_pick_different_tops_by_pursuit():
-    """THE FALSIFIER. MUTATION (run 2026-10-15): `score_terms` returning `(0.0, stance, u)` reddens it:
-    both persons then tie on every candidate, share one top, and read `tiebreak`."""
+    """THE FALSIFIER. MUTATION (run 2026-10-30, after REM-44 dropped the third term): `score_terms` returning
+    `(0.0, stance)` reddens it: both persons then share one top (`argue` and `argue`: nothing separated them)."""
     a, b, va, vb = _opposed_pair()
     cands = _cands(va, vb)
     pa, pb = _person("p_in62_a", **{a: 1.0}), _person("p_in62_b", **{b: 1.0})

@@ -614,17 +614,12 @@ def p12():
 @probe("P13", "a person acts on a need with no stored need field", "S18.2", by="probe-model",
        tests="a character's needs must drive their choices")
 def p13():
-    w = tiny_world()
-    p = w.persons["p_low"]
     import dataclasses
     stored = [f.name for f in dataclasses.fields(Person) if "need" in f.name or "subsist" in f.name]
     assert not stored, f"a stored need field has appeared on Person: {stored}"
-    home = world_q.parent_of(w, p.id)
-    assert home in w.rungs and sum(w.rungs[home].stores.values()) > 0, (
-        "the person's need is read off their home larder by a Query, and there is no larder to read")
-    return ("PASS-WITH-A-DISCLOSURE: a need is a Query over the world (here the home larder, "
-            "`world_q.parent_of` then the rung's stores; for a settlement `world_q.hunger`), stored "
-            "on no `Person` field. REM-44 deleted the injected subsistence formula that fed "
+    return ("PASS-WITH-A-DISCLOSURE: a need is a Query (`world_q.hunger`, "
+            "`world_q.demanded` at a settlement) plus the shortfall claims a person holds "
+            "(`decision/options.py::_from_shortfall_claim`), stored on no `Person` field. REM-44 deleted the injected subsistence formula that fed "
             "`Sensation` a number; no in-chain document supplied one, and S10.4 makes MatterKind an "
             "OPEN registry, so summing kinds as if fungible is a model choice the design has not made")
 
