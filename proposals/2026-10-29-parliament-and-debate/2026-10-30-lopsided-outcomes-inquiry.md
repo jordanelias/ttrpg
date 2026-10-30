@@ -26,6 +26,21 @@ conditions sit under every such number:
 
 1. **Faculty → degree is concave.** Mean reception degree by faculty 1…7: 1.06, 1.48, 1.83, 2.13, 2.31, 2.38,
    2.49. P(failure) is 40.0% at faculty 1 and 6.8% at faculty 4. Most of the spread is below 4.
+   **The cause is a fixed obstacle.** Every roll in every proceeding faces `Venue.base_ob = 2.0`
+   (`resolver.py:157`): no proceeding sets it, and nothing derives it from the topic, the judge or the
+   audience's resistance (`wrapper.py:78,332` say so of resistance). The terrain term is hard-coded on
+   (`on_ground=True`, `resolver.py:301`), +0.5σ for both sides. The topic and the judge act on what a
+   landed degree is *worth* (resonance, tense weight), never on how hard it is to land, so the degree
+   distribution by faculty is the same in every proceeding. Mean net margin over Ob 2.0 by faculty 1…7 is
+   0.0, 1.15, 2.39, 3.68, 5.0, 6.4, 7.7: a faculty-4 roll already averages the top band, so skill above
+   about 4 has nothing to push against and skill below it decides everything. Skill enters through pool
+   size (+0.8 net per faculty point, from two extra dice) more than through σ-leverage (+0.35 to +0.55 per
+   point); leverage's terrain term cancels between sides. The only roll inputs that vary with context are
+   the armature's δσ and the genre bonus die, and both need `Bout(armature=…)`, which the wrapper's
+   `_resolve_agon` (`wrapper.py:215`) never passes: through `build_contest`/`resolve_contest` they are
+   unreachable. (The live `modules/social_contest/roll.py` does derive its obstacle: the opposition halved,
+   moved by room and proof terms, then capped; its docstring says the shipped ceiling of 2 stops a hostile
+   room raising a defaulted obstacle. Not measured here.)
 2. **Persuasion is additive.** Gain per advance is about 2.6 × degree × resonance × readiness, so a faculty-1
    advance is half a faculty-4 advance (0.25 v 0.50 in formal; 0.39 v 0.78 in casual).
 3. **Additive means more exchanges → more determinism.** Drift grows with n, noise with √n. Exchange-majority
@@ -115,12 +130,13 @@ evaluated kernel, stated because its output is what a player would read.
 ## 4. Verdict, and what is not shown
 
 Lopsidedness here has five separable causes: (a) additive persuasion (intended-looking, and standard);
-(b) gain scale unrelated to band size, which makes a proceeding's decisiveness accidental; (c) concave
-faculty, a bare-skill harness and a fixed logos policy; (d) the tribunal's start offset geared up by a small
+(b) gain scale unrelated to band size, which makes a proceeding's decisiveness accidental; (c) a fixed
+obstacle (Ob 2.0 everywhere, so faculty is the only thing that moves the roll and its curve flattens at
+about 4), a bare-skill harness and a fixed logos policy; (d) the tribunal's start offset geared up by a small
 gap sd, with its designed compensation (halved resistance) unplumbed; (e) a narrator that cannot describe a band verdict. (a) and the tribunal's direction are plausibly
 intended; (b), (c)'s harness conditions and (e) are not choices anyone made visible.
 
-Not shown: any effect of armature or style (untested); sides built from the host `World` rather than
+Not shown: any effect of armature or style (untested, and unreachable through the wrapper); sides built from the host `World` rather than
 integers; both sides holding evidence; seat swaps beyond the earlier 4 v 1 cells; what the tribunal's split
 would be with the halved-resistance compensation wired (that code does not exist, so it cannot be measured). Rates have `n` and 95% intervals in the logs;
 the narrowest is formal equal-sides decided (n = 34 decided, interval 0.37–0.69).
