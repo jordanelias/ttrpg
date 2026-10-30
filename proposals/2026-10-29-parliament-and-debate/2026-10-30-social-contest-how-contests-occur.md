@@ -67,6 +67,31 @@ The test for each is the same: *which input to which side of the draw does it su
 | **BATNA and ZOPA** (Fisher and Ury, Raiffa) | what a party can walk away to | **leverage** (circumstantial, worldly state), the imbalance R-34 names for negotiation | named once in the repo; "not designed" |
 | **commitment stores** (Hamblin; Walton and Krabbe) | what a party is held to having said | `commit` edges and claims in the ledger | RESEARCH |
 
+### 2.3a Modern outcome research already in the repo
+
+The proceedings study (`proposals/2026-09-05-proceedings-subsystem/source/`, eight findings S1 to S8, set against a
+fault catalogue of pre-modern rhetoric) and audit sources 04 and 05 hold the modern empirical work, and it is the
+better-sourced of the repo's persuasion material: peer-reviewed studies read against the classical corpus, several
+of which *correct* it. Its own apparatus marks what it verified and what it took from a critique
+(`source/08-part-VII-apparatus.md:124-130`); the figures below are the study's, not mine.
+
+| finding (study) | the evidence | lands in | effect on the model |
+|---|---|---|---|
+| **S1: the person is large and opaque** (`02-part-I-throughlines.md:15-23`) | rotating negotiators across counterparts, individual differences account for 25% of objective performance in distributive bargaining, 46% in integrative, 19% of subjective value (Elfenbein et al. 2008); existing trait batteries predicted few of those differences; field effects exceed laboratory ones (Sharma, Bottom and Elfenbein 2013) | **capability varies a great deal between persons and is stable across partners** | supports R-40 and R-31: a pool built from the person, not a constant (the live default is 2D for everyone); cautions against deriving capability from a few trait stats |
+| **S2: discretion is the join** (`:49-85`) | leaders' deaths in office as exogenous variation: the effect on growth is present in autocracies, absent in democracies (Jones and Olken 2005); 23.8% of variance in return on assets in private firms against 16.6% in public (Quigley, Chirico and Baù 2022) | **weight scales with how few constraints bind** | gives R-31 and R-38 their rule: an office's weight in a venue should grow where fewer external constraints bind, so a King weighs most in a royal tribunal and least before a parliament |
+| **S3: every move carries its failure; overshoot** (`:91-140`) | seven traditions' fault vocabularies; evidence on indirection runs both ways | a failure band reads as a signal about the mover | the repo's shape 1 (15 of 27 figures); the reactance row of §2.3 |
+| **S4: inhibition is the scarce capacity** (`:146-180`) | negotiators concede more to an angry counterpart than a happy one; **power moderates it** (low-power counterparts concede, high-power do not); authenticity moderates it; it costs impasse and relational damage (Van Kleef et al. 2004, 2006; Wang, Northcraft and Van Kleef 2012). The corpus is right that anger is costly and wrong about why: the counterpart reads it as information about your limits | a **display act** whose effect depends on the **rank gap** | the imbalance R-34 names for negotiation (differential rung) is the moderator; anger is a speech kind that lowers a lower-ranked hearer's obstacle and costs standing |
+| **denial in detail** (`:200-206`, the study's correction) | the premise that repeating a claim while denying it raises belief has repeatedly failed to replicate; corrections reduce belief in every condition tested, and detailed corrections beat brief ones | a speech kind, **detailed denial**, apt where the matter is a claim, at a cost in standing (Quintilian's ground: a long defence reads as anxiety) | **bears on open question D-7** (below) |
+| **S5: the read is made, not taken** (`:186-`) | twenty-five experiments on "adopt the other's perspective": no consistent gain in accuracy, a decrease overall; what improved accuracy was **getting** the perspective, being allowed to ask (Eyal, Steffel and Epley 2018) | reading a room is an **act** (question, interview), not a free bonus | the probe act of §2.4 (*Guiguzi*); information about the room costs an action |
+| **S6: trainability belongs to the environment** | specified charismatic tactics trained in a field experiment, mean effect about .62 on charisma ratings (Antonakis, Fenley and Liechti 2011); calibration trained (Mellers et al. 2015); expertise needs a valid environment (Kahneman and Klein 2009) | capability **grows by practice**, in venues that give feedback | the `train` verb raising capability; the person who has sat in many tribunals is better in one |
+
+**D-7 (open since the SC research file: does a detailed denial beat a brief one; does displayed anger extract
+concessions) now has an evidential answer in the repo:** detailed corrections beat brief ones, and anger extracts
+concessions from lower-ranked hearers at a cost. I propose taking it by the ladder's step 3 (a design document that
+cites peer-reviewed work) and not escalating it, with the rank-gap moderator written into the speech kinds' aptness
+rather than as a rule `[ASSUMPTION; medium; revert: D-7 returns to open]`. The classical corpus and this evidence
+disagree on *why* (standing against inference), not on whether the act is costly.
+
 ### 2.4 Other genres and traditions
 
 | tradition | what it contributes | lands in |
