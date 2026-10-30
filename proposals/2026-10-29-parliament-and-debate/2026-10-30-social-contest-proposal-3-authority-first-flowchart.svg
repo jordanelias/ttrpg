@@ -36,7 +36,7 @@
 <polygon points="590,445.0 890.0,520 590,595.0 290.0,520" fill="#e8eef4" stroke="#2f4a63" stroke-width="1.6"/>
 <text x="590" y="506" text-anchor="middle" font-size="13" font-weight="700" fill="#14283a">Does another authority already</text>
 <text x="590" y="524" text-anchor="middle" font-size="13" font-weight="400" fill="#14283a">hold this matter on its docket?</text>
-<text x="590" y="542" text-anchor="middle" font-size="13" font-weight="400" fill="#14283a">(today: case.refused, effects_information.py:340)</text>
+<text x="590" y="542" text-anchor="middle" font-size="13" font-weight="400" fill="#14283a">(today: case.refused, effects_information.py:341)</text>
 <path d="M 890 520 L 960 520 L 960 560" fill="none" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
 <text x="905" y="510" font-size="12" fill="#4a4036" font-style="italic">yes</text>
 <rect x="800" y="560" width="360" height="150" rx="10" fill="#f3e6e1" stroke="#7a3b2a" stroke-width="1.6"/>
