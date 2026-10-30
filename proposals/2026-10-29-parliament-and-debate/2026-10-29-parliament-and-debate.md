@@ -1,7 +1,7 @@
 # Parliament and debate — a motion drawn from the world, a sitting that argues it, a result the loop can feel
 
 ## Status: **PROPOSED (2026-10-29). Design only. Nothing here runs. No head, roster, verb row, arrangement row or code moves; no `ED`/`PP` is allocated; no `CURRENT.md` row moves.**
-## This file is CR-38's design file (`workplans/valoria_master_workplan_v10_part4.md:404-415`), widened to the three things Jordan asked for on 2026-10-29. **HELD BACK from ED-1094's merge default: §12's calls.** Merging this file does not ratify them.
+## This file is CR-38's design file (`workplans/valoria_master_workplan_v10_part4.md:404-415`), widened to the three things Jordan asked for on 2026-10-29. **HELD BACK from ED-1094's merge default: §12's calls.** Merging this file does not ratify them. **SUPERSEDED IN PART by `2026-10-29-resolution-design.md` (same folder).** That file withdraws this one's Speaker, `determine` on the council seat and the `resolution` it mints (§1; §2 steps 3 and 7; §4), the `evade / defy` route (§1, §6 T3b), §6 T2 and T3b, §10 B-6 and B-7, §12 calls 1, 3 and 5, and §13's PD-2 and PD-3 as written. Sections 3, 5, 7, 8 and 9 survive as reference; §11 survives only in falsifiers 2, 4, 5 and 9. CR-38's gate still names this file as approved; re-pointing that build is taken provisionally in that file (§7, RJ-bench). Stale facts corrected in place: `Claim.round` exists; the shipped `bench_quorum` is 1 and cannot refuse; Varfell's duchy bench is not empty. Folded onto this line so no cited line number moves.
 
 > **THE ASK (Jordan, 2026-10-29).** (1) two or more characters debate a topic that concerns worldly subjects
 > retrieved from the season loop; (2) the result renders impact on the game world at the seam; (3) a basis
@@ -18,7 +18,7 @@
 
 | | what | where |
 |---|---|---|
-| a | **A council is ONE seat; its members are the persons who `oblige` to it, and a join is the joiner's own act.** `hold` is one-per-object, so N parliament seats is *forbidden*; membership is a Query over live `oblige` edges, `establishment_of`. This decides the bench (§4) and removes the need for any new remit act, any new `arrangements.yaml` key, and any inverse containment in `sits_over` | `architecture/meta/01_AXIOMS.md` `AX §E.2.5` (`:1477`); `proposals/2026-09-17-governance-and-holdings-r2/03_SEATS_AND_CONTENT.md:671-698` (ruled); `world_q.hold_force` `:138-144`; `establishment_of` `world_q.py:2184` |
+| a | **A council is ONE seat; its members are the persons who `oblige` to it, and a join is the joiner's own act.** `hold` is one-per-object, so N parliament seats is *forbidden*; membership is a Query over live `oblige` edges, `establishment_of`. This decides the bench (§4) and removes the need for any new remit act, any new `arrangements.yaml` key, and any inverse containment in `sits_over` | `architecture/meta/01_AXIOMS.md` `AX §E.2.5` (`:1537`); `proposals/2026-09-17-governance-and-holdings-r2/03_SEATS_AND_CONTENT.md:671-698` (ruled); `world_q.hold_force` `:138-144`; `establishment_of` `world_q.py:2184` |
 | b | A vote is a **count of live `commit`s, computed when read and stored nowhere** (CR-34) | `part4.md:352-362` |
 | c | The assembly never acts on the world: it mints a document, and a seat that already has the power acts on it (CR-36 `resolution`, CR-37 `joint_concurrence`) | `part4.md:378-402` |
 | d | The title ladder: realm king/queen, duchy duke/duchess, province count/countess, territory lord, settlement mayor | `engine/season/offices.yaml:153-166` (Jordan, 2026-09-02, verbatim) |
@@ -38,7 +38,7 @@ Almost every motion has a person party, because persons own all edges: *cede ter
 
 ## 2. The sitting, in order
 
-Season order is fixed: CALENDAR, MATTER, then R rounds of [DELIBERATE, RESOLVE, ENCOUNTER, WITNESS], then CENSUS (`loop/driver.py:452-519`). **The sitting is season-granular, not round-granular.** `Tenure.since` is the season tick and no round is stamped on an Event or a Tenure (`effects_information.py:1166-1167`; `driver.py:531-535`), so the engine cannot tell round *r* from *r+1* in a stored record. Anything below that claims an order *within* a season is marked.
+Season order is fixed: CALENDAR, MATTER, then R rounds of [DELIBERATE, RESOLVE, ENCOUNTER, WITNESS], then CENSUS (`loop/driver.py:452-519`). **The sitting is season-granular, not round-granular.** `Tenure.since` is the season tick and no round is stamped on an Event or a Tenure (`effects_information.py:1166-1167`; `driver.py:531-535`; `Claim.round` exists, for Claims only), so the engine cannot tell round *r* from *r+1* in a stored record. Anything below that claims an order *within* a season is marked.
 
 | # | step | act / reader | season | precondition it actually reads | leaves |
 |---|---|---|---|---|---|
@@ -48,7 +48,7 @@ Season order is fixed: CALENDAR, MATTER, then R rounds of [DELIBERATE, RESOLVE, 
 | 4 | **Attendance** | the member `oblige`s and **stands at the venue** (§5) | *s+1…* | co-presence for `argue` (`verb_table.yaml:142-144`) | a member in the room |
 | 5 | **Speeches** | `speak` to the body; `argue` to one member | *s+1…* | a Proposition; for `argue`, `with` (same place) | pursuits moved; claims witnessed |
 | 6 | **Division** | `commit` (each member's own act) | counted only if made in a season **after tabling** | the motion exists | live `commit` edges |
-| 7 | **Declaration** | `determine`, `disposal: declared` | ≥ one season after step 3 | ≥ `quorum` members hold a live `commit` to **this** motion | Success: a `resolution`. Below quorum: **refused, and retried every round** |
+| 7 | **Declaration** | `determine`, `disposal: declared` | ≥ one season after step 3 | ≥ `quorum` members hold a live `commit` to **this** motion | Success: a `resolution`. Below quorum: **refused, and retried every round** (at the shipped `bench_quorum` of 1, `fixtures.py:945`, the quorum cannot refuse; this describes a raised value) |
 | 8 | **Execution or refusal** | the owner's own act | any later season | the act's precondition, plus *holds a live `resolution` naming it* | the world change, or nothing |
 | 9 | **Lapse** | MATTER (new) | *the season after the division season* | the item is still docketed | the item is cleared; `matter.lapsed` is emitted and witnessed |
 
@@ -90,7 +90,7 @@ A world fact cannot raise a proceeding (`14_THE_WORLD_IN_THE_ROOM.md` Part B). F
 | | |
 |---|---|
 | **The seat** | one `Office` per rung that sits: `body` = the roster's existing name (`office_bodies` already carries "Court Parliament" and "Jarl Council", `rosters.yaml:1725-1820`), `rung` = that rung, `remit_acts` including `determine`. Its single `hold` is the **chair** (a Speaker). |
-| **The members** | `establishment_of(w, seat)` — persons with a live `oblige` to the seat (`world_q.py:399-413` per `r2 03`). **A join is the joiner's own act** (`oblige` is `own`-eligible, `verb_table.yaml:377`), admitted when the seat's `rung` reaches his containing rung. So a duke is *eligible* for the realm council because his duchy lies inside the realm; he is *a member* only if he joins. That is the Bohemian-estates move, and it is a decision, not a fact. |
+| **The members** | `establishment_of(w, seat)` — persons with a live `oblige` to the seat (`world_q.py:399-413` per `r2 03`). **A join is the joiner's own act** (`oblige` is `own`-eligible, `verb_table.yaml:952-954`), admitted when the seat's `rung` reaches his containing rung. So a duke is *eligible* for the realm council because his duchy lies inside the realm; he is *a member* only if he joins. That is the Bohemian-estates move, and it is a decision, not a fact. |
 | **The tally** | CR-34's "distinct members of the bench" reads `judging_set` (the holders of the `determine` grant). For a council seat the bench to count is `establishment_of(seat)` and the declarant is the chair. **That is one reading to add at CR-34, not a rule.** |
 | **Estates** | the Church, a commune, an emerged creed enter the same way — by admission. CR-39's "promotion earns standing" becomes *a creed's members are admitted*, not a seat authored (the reader CR-39 waits on). |
 
@@ -99,7 +99,7 @@ A world fact cannot raise a proceeding (`14_THE_WORLD_IN_THE_ROOM.md` Part B). F
 - *`bench_basis: assembly`*: `bench_basis` is typed a remit act (`data/arrangements.py:170-172`; `gate.py:238-243`) and Layer 1 defines the judging set as *the seats whose remit covers the matter* (`04_CODE_ARCHITECTURE.md:345-347`, F.8 `:1163`). An `assembly` value would contradict both and need an amendment. `bench_basis_of` also does not exist, and the gate cannot ask which arrangement is docketed (`gate.py:251-254`). Withdrawn.
 - *A seat per member*: `hold` is one-per-object; `AX §E.2.5` says "not N seats". Withdrawn.
 
-**The interim.** Today the realm bench for `parliamentary_debate` is the King's and the Widow Regent's seats (`world_q.py:475-481`); the King also holds `off_duke_valorsmark` (NPC-020) so a duchy-scoped read puts him on Hafenmark's side too (`offices.yaml:195-203`). **The duchy bench is empty** — the only titled posts are the five at `offices.yaml:183,196,209,222,235`, and the realm build raises on a titled holder with no row (`harness/populated.py:1392-1399`). The control in §11 keeps this interim.
+**The interim.** Today the realm bench for `parliamentary_debate` is the King's and the Widow Regent's seats (`world_q.py:475-481`); the King also holds `off_duke_valorsmark` (NPC-020) so a duchy-scoped read puts him on Hafenmark's side too (`offices.yaml:195-203`). **The duchy bench is thin, not empty** (Varfell has `determine` seats NPC-073 and NPC-074, `offices.yaml:494-518`) — the only titled posts are the five at `offices.yaml:183,196,209,222,235`, and the realm build raises on a titled holder with no row (`harness/populated.py:1392-1399`). The control in §11 keeps this interim.
 
 **The chair and the ruler are separate seats.** The ruler convenes and executes (`off_king`); the Speaker declares (the council seat). That is the Lawspeaker's shape — a session-bound chair "bounded away from outcomes" (`rhetoric:516`) — and it lets CR-36's two-seat clause hold with no special case: a nomination minted through the council seat and confirmed through `off_king` are two seats (`part4.md:383` (iv)). Whether the ruler may also be a member is §12.
 
@@ -197,8 +197,8 @@ Tier-3 sources (`research/00_INDEX.md`) — input, not authority. *[R] = in the 
 | B-3 | a computed `open_case`/`carry` names **no** arrangement (**H-80**), so any rule keyed on the row never holds outside a hand-built act. CR-34 records the same reach as 0 | `effects_information.py:319-325,410`; `part4.md:357` | inherited; **a dependency of PD-2 and PD-4** |
 | B-4 | `carry` always appends a **dateless** item, which `sittings_before` skips; tabling must go through `slot_for` | `effects_information.py:414`; `world_q.py:307` | new |
 | B-5 | the sitting question ranks below every `need` | `world_q.py:2761-2764`; `fixtures.py:487` | new (§3) |
-| B-6 | no tabling season on the docket item; no round on any record | `driver.py:531-535` | new (§2) |
-| B-7 | a below-quorum `determine` is a refusal that retries forever; nothing lapses; `term_required` unread | `deliberate.py:332-340` | new (step 9) |
+| B-6 | no tabling season on the docket item; no round on a Tenure or an Event (`Claim.round` exists) | `driver.py:531-535` | new (§2) |
+| B-7 | a below-quorum `determine` is a refusal that retries forever (at the shipped `bench_quorum` of 1 it cannot refuse); nothing lapses; `term_required` unread | `deliberate.py:332-340` | new (step 9) |
 | B-8 | `argue` ignores the motion; the voter ignores the motion | §5 | new, three builds |
 | B-9 | the summons has no addressee; attendance is unmodelled | §5 | new |
 | B-10 | a `declared` determination still rolls | `verb_table.yaml:384` | **inherited — CR-34** |
