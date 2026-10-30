@@ -76,7 +76,7 @@ Ordered by whether a ruling decides it. "Step" is the ladder step that answers i
 
 ### 2.3 What survives all five steps (for Jordan)
 
-Two items survive: the **ceiling's value** (M-7, corrected below) and **R-31 against Layer 1 §A.3**, answered below it.
+Two items survived the ladder; Jordan has since answered both. **The ceiling** (M-7, corrected below): above the default (R-37). **R-31 against Layer 1 §A.3**, below it: office licenses and weighs (R-31), on both roll and obstacle (R-38). What remains for him is a measurement choice (M-7's scope) and the Layer-1 wording.
 
 **M-7. [CORRECTION: this section first called the remedy open; it is not.]** R-8 (2026-08-27) accepted "if you
 don't have enough dice you don't have enough dice"; R-18 (2026-09-06) asked "don't deprive player of a chance at
@@ -86,9 +86,26 @@ reconciliation, resolved"), explicitly "NOT a pool floor". The ladder answers th
 document and the code), so it is not a question for Jordan. What survives is narrower and was found by the code audit:
 the ceiling's value equals the default obstacle (2), so for any opposition over 4 the obstacle is the same 2 as no
 opposition at all, and a hostile room cannot raise a defaulted obstacle. R-5 asks for "score ÷ 2 plus modifiers"; at
-ceiling 2 the score term and the room's hostile half do no work in live play (see the code audit, finding B-11). The
-question for Jordan: *is a ceiling of 2 what you meant by a cap on difficulty, or should the ceiling sit above the
-default so that opposition and a hostile room can bite?*
+ceiling 2 the score term and the room's hostile half do no work in live play (see the code audit, finding B-11).
+
+**ANSWERED (R-37, Jordan 2026-10-30): "Ceiling should sit above the default so opposition can bite."** The value is
+not stated (`H-213`: "No ruling states the value"; its sweep is 1, 2, 3, and `None` is the uncapped arm). The cost is
+measured, not guessed. `sigma_leverage.p_success` (I ran it) for pool × obstacle:
+
+| pool | Ob 2 | Ob 3 | Ob 4 | Ob 5 | Ob 6 |
+|---|---|---|---|---|---|
+| 1D | .0228 | .0006 | .0000 | .0000 | .0000 |
+| 2D | .1444 | .0259 | .0023 | .0001 | .0000 |
+| 3D | .2819 | .0970 | .0217 | .0030 | .0003 |
+| 4D | .4013 | .1908 | .0668 | .0168 | .0030 |
+| 5D | .5000 | .2881 | .1318 | .0468 | .0127 |
+
+So a ceiling of 3 (the sweep's third arm) lets opposition bite but fails M-7 for a **1D** party (0.06% at Ob 3). The
+default pool is 2D and R-31 gives persons more dice, so the 1D floor becomes the rare case that R-8 ("if you don't
+have enough dice you don't have enough dice") already accepts. The reconciliation is to **re-scope M-7 to the default
+pool (2D: 2.6% at Ob 3)** rather than the 1D floor, a measurement choice for Jordan to confirm, not an agent's.
+Changing `obstacle_ceiling` moves the goldens and is a behaviour change to be re-recorded plainly (CLAUDE.md §7); it
+has not been made.
 
 **R-31 against Layer 1 §A.3: ANSWERED by Jordan, 2026-10-30: it is both.** "A King has more actions that are
 available in some contests (e.g. a royal tribunal), and their actions also carry more weight in those contests." So
@@ -136,7 +153,7 @@ Read in order, the rulings fix nine things. Nothing else in the corpus is requir
 
 ### 3.1a The three requirements of 2026-10-30 (R-31 to R-33), as model items
 
-10. **Capability = attribute × title × office × faction, set by venue and contest type** (R-31). Attribute gives dice; title gives rank in the ladder and so standing; faction gives alignment and the audience's disposition; office gives **both** the licence to act (`remit_acts`, who is heard) **and weight**, each keyed to the venue ("a King ... in a royal tribunal", Jordan 2026-10-30). Where the weight enters (pool, leverage, obstacle) is item 11's per-source choice; my default is the pool, so that leverage stays for evidence, argument and aptness and the obstacle for the defender's circumstance `[ASSUMPTION; medium; revert: move it to leverage]`. The weight is a venue-row value keyed by office, not a column on the office. The venue row decides which of these the contest reads, so a trial, a council and an embassy draw on different combinations of the same four sources. **Not** a per-proceeding skill (B.0's refusal stands: that branches on the game's name). Latitude stays pool-only (R-18). The attribute roster is in flux (ten ruled, nine shipped, the tenth unnamed); the reading must go through whatever the roster is.
+10. **Capability = attribute × title × office × faction, set by venue and contest type** (R-31). Attribute gives dice; title gives rank in the ladder and so standing; faction gives alignment and the audience's disposition; office gives **both** the licence to act (`remit_acts`, who is heard) **and weight**, each keyed to the venue ("a King ... in a royal tribunal", Jordan 2026-10-30). Where the weight enters (pool, leverage, obstacle) is item 11's per-source choice; **R-38 (Jordan 2026-10-30): the weight can affect both the roll and the obstacle.** The two sides are the actor's (a King's own roll carries his office) and the defender's circumstance (an office-holder is harder to move: the obstacle presented to whoever contests him), so item 11's per-source rule holds: an actor's advantage goes to the roll, a defender's circumstance to the obstacle. The resolution-diagnostic skill's objection (advantage is never an Ob reduction) is not breached, since the obstacle term here *raises* the defender's difficulty and is not applied as the actor's advantage. The weight is a venue-row value keyed by office, not a column on the office. The venue row decides which of these the contest reads, so a trial, a council and an embassy draw on different combinations of the same four sources. **Not** a per-proceeding skill (B.0's refusal stands: that branches on the game's name). Latitude stays pool-only (R-18). The attribute roster is in flux (ten ruled, nine shipped, the tenth unnamed); the reading must go through whatever the roster is.
 11. **One sigma-leveraged engine, continuous in dice and obstacle, with named modifier sources** (R-32). Channels: **pool** (capability, item 10), **leverage** (a μ-shift on the roll), **obstacle** (the defender's score ÷ 2 plus room terms, R-5). Sources: capability; worldly state (what the matter's referent now is); evidence (`proofs`); argument (the proposition's content and its aptness, priced per R-16); audience (reception); forgery quality. Every source maps to exactly one channel, once. The repo's own resolution-diagnostic skill holds that advantage is a μ-shift and never an Ob reduction; R-5 and the 2026-09-06 direction ("I'm fine with Ob being modified by things") allow terms on the obstacle. The two are reconcilable only by deciding, per source, whether it is the defender's circumstance (obstacle) or the actor's advantage (leverage).
 12. **One action surface, limited by contest type** (R-33). The same verb table and speech-kind roster serve every structure (dyadic, mutual, bench, count); the arrangement row decides which actions are *available* in it, through `floor` (who may act), `order` (when), `proofs` (what may be offered), `interposed` (who may act for whom), and the speech kinds' `apt_genre` / `apt_rung` / `reachable_bands`. This is the "consistent armature". It must not be confused with the kernel's `armature` (a hidden judge-conviction vector), which is a different object and dies with the kernel.
 
@@ -233,7 +250,7 @@ None adds an object, a store, a guard or a document.
 
 ## 5. What this does not do
 
-It does not decide the ceiling's value, which only Jordan can. It does not re-run any measurement. It does not test whether the
+It does not choose the ceiling's value (3 is the sweep arm; Jordan has said only "above the default"). It re-runs one measurement, the success-probability table in §2.3. It does not test whether the
 four-structure reduction survives a NERS pass on the player half of R (is each structure playable at a seat a
 player occupies?); PK §3.2 found that the season loop reaches only dyadic influence and a thin edge of adjudication,
 so the player-facing half of the other three is untested by anything that executes.
