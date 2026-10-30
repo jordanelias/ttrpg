@@ -14,12 +14,12 @@ arms) living at `Hh` and committed to it, and a full barracks at `Hh`. `p_high` 
 
 from __future__ import annotations
 
-from ..data.fixtures import DEFAULT_FIXTURES
-from ..data.matrix import WriteClass
-from ..harness import probes as P
-from ..loop.driver import SeasonDriver, mint_token
-from ..queries import world_q
-from ..state.carriers import Act, Proposition, Site, Tenure
+from engine.season.data.fixtures import DEFAULT_FIXTURES
+from engine.season.data.matrix import WriteClass
+from engine.season.harness import probes as P
+from engine.season.loop.driver import SeasonDriver, mint_token
+from engine.season.queries import world_q
+from engine.season.state.carriers import Act, Proposition, Site, Tenure
 
 FACTION, COHORT, HOME, COMMANDER = "fac_crown", "c1", "Hh", "p_high"
 
@@ -176,7 +176,7 @@ def test_each_menu_refusal_leaves_the_record_as_it_was():
 
 def test_the_four_verbs_are_withheld_from_formation_so_no_person_forms_them():
     """The command is the act's payload, which no Candidate carries: a computed act could not bind it."""
-    from ..data.rosters import ARMY_VERBS
-    from ..data.verbs import VERB_TABLE
+    from engine.season.data.rosters import ARMY_VERBS
+    from engine.season.data.verbs import VERB_TABLE
     assert len(ARMY_VERBS) == 4 and set(ARMY_VERBS) <= set(VERB_TABLE), "vacuous unless four real verbs"
     assert set(ARMY_VERBS) <= set(DEFAULT_FIXTURES.get("withheld_verbs"))

@@ -193,3 +193,17 @@ def test_the_unit_baseline_matches_the_season_adapters():
     assert ob._UNIT_POWER == massbattle._SEASON_FORCE_POWER
     assert ob._UNIT_COMMAND == massbattle._MVP_UNIT_COMMAND['command']
     assert ob._UNIT_DISCIPLINE == massbattle._MVP_UNIT_COMMAND['discipline']
+
+
+def test_survivor_shares_of_an_order_of_battle_never_exceed_one():
+    """A side's survivor share is its troops left over its troops at the start. Counted as `effective_size /
+    size_max` it passed 1.0 for an army that is not a whole number of 100-troop blocks (120 troops: 1.2 blocks against
+    a floored 1), and `march` then RAISED a loser's body. FALSIFIER: set `by_troops=False` in `resolve_field` and the
+    120-troop seeds below read above 1."""
+    seen = []
+    for seed in range(12):
+        r = massbattle.resolve_field(_record(oobs=(_line('heavy_infantry', 120), _line('heavy_infantry', 120))),
+                                     random.Random(seed))
+        seen += [r['attacker_size_pct'], r['defender_size_pct']]
+    assert max(seen) <= 1.0 and min(seen) >= 0.0, seen
+    assert min(seen) < 1.0, "vacuous if no side took a casualty in twelve fields"

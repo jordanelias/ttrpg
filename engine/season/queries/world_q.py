@@ -1069,8 +1069,11 @@ FORTIFICATION = "settlements.fortification"
 PROVISION = "settlements.provision"
 #: ED-IN-0304 phase 2: the army record's command entry, called by the four army verbs (`loop/effects_army.py`).
 ARMY = "mass_battle.army"
+#: ED-IN-0304 phase 3: the army record -> the order of battle one field fights with, called by the field adapter.
+ARMY_ORDER = "mass_battle.army_order"
 QUERY_ENTRIES = ((LARDER_DRAW, "query"), (DRAWN_UNDER, "query"), (HOUSING, "query"),
-                 (FABRIC, "query"), (FORTIFICATION, "query"), (PROVISION, "query"), (ARMY, "query"))
+                 (FABRIC, "query"), (FORTIFICATION, "query"), (PROVISION, "query"), (ARMY, "query"),
+                 (ARMY_ORDER, "query"))
 
 
 def _entry(role: str):

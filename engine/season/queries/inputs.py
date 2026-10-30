@@ -434,6 +434,18 @@ class ArmyCommand:
     args: dict
 
 
+@dataclass(frozen=True)
+class ArmyMuster:
+    """What `mass_battle.army_order` (`modules/mass_battle/armyrecord.py::fielded`) reads (ED-IN-0304 phase 3).
+    Built by `seam/wrappers/mass_battle.py::field_input` for one side of one field:
+      * `record` -- the faction's army Record's `subject_matter` (`armyrecord.KEYS`), as the world holds it;
+      * `fit`    -- `((cohort id, fraction), ...)`: each cohort of the side PRESENT on the field (mustered at the
+                    place) and its body as a fraction of the full scale, in `[0.0, 1.0]`. A cohort not listed is
+                    not there. The entry returns an `OrderOfBattle`, or None when nobody it names is present."""
+    record: dict
+    fit: tuple
+
+
 # v9 IN-52: the `settlements.provision` query's records -- the levy-to-field feed. Built per side by
 # `seam/wrappers/mass_battle.py::provision_input`, read by `modules/settlements/provision.py`; the field
 # adapter hands `troops` to the mass-battle entry and `_eff_march` debits `consumed` from the treasury.

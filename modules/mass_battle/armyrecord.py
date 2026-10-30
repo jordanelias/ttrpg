@@ -32,7 +32,7 @@ from modules.mass_battle.troop_types.recruitment import recruit_limit
 from modules.mass_battle.troop_types.registry import roles_for, stats_for
 
 __all__ = ['KEYS', 'new', 'raised', 'by_type', 'unassigned', 'form', 'assign', 'release', 'order', 'set_strategy',
-           'validate', 'to_order_of_battle', 'apply', 'OPS']
+           'validate', 'to_order_of_battle', 'apply', 'OPS', 'fielded']
 
 #: `subject_matter`'s exact key set. `engine/season/rosters.yaml: record_kinds.values.army` mirrors it and a test pins
 #: the two equal.
@@ -280,3 +280,19 @@ def apply(cmd) -> dict:
             raise ValueError("an order sets at least one of role, stance, target, fall_back_at, or a strategy")
         return order(r, a['name'], **fields)
     raise ValueError(f"unknown army command {cmd.op!r} (known: {OPS})")
+
+
+def fielded(muster) -> Optional[OrderOfBattle]:
+    """THE SECOND ENTRY THE SEASON CALLS (`mass_battle.army_order`, a `query` composition row): the order of battle an
+    army record fights with on one field, or None when none of its troops are there to fight.
+    `muster` is `engine/season/queries/inputs.py::ArmyMuster` (`record`, `fit`); `fit` is `((cohort, fraction), ...)`
+    for the cohorts that are PRESENT on this field, the fraction being the share of each still fit to fight. A
+    cohort the record names that is not in `fit` is somewhere else, and fights with nobody. A malformed record raises
+    ValueError (`validate`); an army with nobody present is not malformed, it is absent, and reads None so the host
+    fights that side as it always did."""
+    validate(muster.record)
+    here = dict(muster.fit)
+    try:
+        return to_order_of_battle(muster.record, lambda c: here.get(c, 0.0))
+    except ValueError:                  # `validate` passed, so the only refusal left is 'nobody has any strength here'
+        return None
