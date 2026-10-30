@@ -39,7 +39,8 @@ from ..data.requires import OWN_STATE_STEMS, UNKNOWN, binding_from_act
 from ..data.rosters import (
     BAN_KIND, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP, HUNGER_BANDS,
     QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, REMOVE_ORDINAL, RESTRAINT_KINDS, RUNG_KINDS,
-    SITE_KINDS, STANDING_CROSSED, TENURE_KINDS, faction_prop_id, require_member,
+    MARCH_TARGET_KINDS, SITE_KINDS, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS, faction_prop_id,
+    require_member,
 )
 # IN-09: the Record kinds a held document is an occasion for, derived off the verb table's rows;
 # v9 IN-49: the remit acts a seat exercises on a `Rung`-classed referent, the same way.
@@ -1767,6 +1768,26 @@ def mustered(w: World, rung_id: str, faction: str) -> list[str]:
     return sorted(t.subject for t in w.tenures
                   if t.kind == "contain" and t.live
                   and t.object in here and t.subject in inside)
+
+
+def occupies(w: World, rung_id: str, faction: str) -> bool:
+    """ED-IN-0304 phase 4. Does `faction` OCCUPY `rung_id`? Occupation is what `seize` and `raze` license on, and
+    it is presence, never a title (R-6: a won field writes presence).
+      * a rung of a `subtree_occupation_kinds` kind (a settlement): the faction is `mustered` anywhere beneath it
+        -- OR it occupies a place above it (the next bullet), because an army that has taken a territory has taken
+        the settlements in it ("occupy that territory alongside its settlements");
+      * any other `march_target_kinds` kind (a territory): the faction has people standing AT the rung itself,
+        which only a `march` that arrived there puts them. Standing in one of its towns is not occupying it.
+    A rung of no march-target kind is never occupied (occupation is defined where a march can arrive)."""
+    TRACE.query("occupies", "resolver")
+    rung = w.rungs.get(rung_id)
+    if rung is None or rung.kind not in MARCH_TARGET_KINDS:
+        return False
+    if rung.kind in SUBTREE_OCCUPATION_KINDS:
+        return bool(mustered(w, rung_id, faction)) or any(
+            occupies(w, above, faction) for above in ancestry(w, rung_id) if above != rung_id)
+    inside = set(members(w, faction))
+    return any(t.kind == "contain" and t.live and t.object == rung_id and t.subject in inside for t in w.tenures)
 
 
 def fortification_of(w: World, rung_id: str) -> float:

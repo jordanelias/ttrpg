@@ -18,7 +18,7 @@ from typing import Optional
 
 from ..data.rosters import MARCH_TARGET_KINDS
 from ..gaps import Forbidden, InstrumentDefect
-from ..queries.world_q import holder_faction_of, mustered
+from ..queries.world_q import holder_faction_of, occupies
 from ..state.carriers import Term
 from ..state.gate import NO_CHANGE, seat_faction
 from ..trace_log import TRACE
@@ -148,11 +148,13 @@ def _exercised_office(w: "World", a: "Act") -> Optional["Office"]:
 
 def occupying_faction(w: "World", via: str, rid: str) -> Optional[str]:
     """THE LICENCE OF OCCUPATION (#453 §10.4 steps 8 and 11), the one reading `seize` (a Rung) and `raze` share:
-    the faction of the exercised seat `via`, when it is MUSTERED at the settlement `rid` (`world_q.mustered`,
-    the one query of who stands there) and the settlement is held by ANOTHER faction (`holder_faction_of`).
+    the faction of the exercised seat `via`, when it OCCUPIES the place `rid` (`world_q.occupies`, the one
+    reading of that: mustered under a settlement, arrived at a territory, and a taken territory's settlements
+    with it) and the place is held by ANOTHER faction (`holder_faction_of`).
     `None` -- the licence fails -- for a subject that is no Rung or no `march_target_kinds` kind, a seat with
-    no faction, a settlement nobody holds (H-166: who holds an unheld place is unruled) or the seat's own
-    faction holds, or a faction with no one there. Every decline is a `NO_CHANGE` at the effect, so the
+    no faction, a place nobody holds (H-166: who holds an unheld place is unruled) or the seat's own
+    faction holds, or a faction that does not occupy it. A defended territory therefore stays its holder's:
+    a march that lost never arrived, so nothing occupies and nothing is seized. Every decline is a `NO_CHANGE` at the effect, so the
     order of these tests is not observable; a caller adds its own declines (`seize`: the actor must be
     committed to the seat's faction, and `may_seize` over the hold it replaces)."""
     rung = w.rungs.get(rid)
@@ -160,6 +162,6 @@ def occupying_faction(w: "World", via: str, rid: str) -> Optional[str]:
     if rung is None or rung.kind not in MARCH_TARGET_KINDS or mine is None:
         return None
     holder = holder_faction_of(w, rid)
-    if holder is None or holder == mine or not mustered(w, rid, mine):
+    if holder is None or holder == mine or not occupies(w, rid, mine):
         return None
     return mine

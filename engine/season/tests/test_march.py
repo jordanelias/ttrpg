@@ -808,8 +808,8 @@ def test_in13_exit_vi_seize_on_an_occupied_settlement_flips_its_holder():
     assert world_q.holder_faction_of(w, "set_s_016") == "fac_hafenmark", "an arrival wrote a title (R-6)"
     # CONTROLS, each one change from the admitted seizure below (the Crown stands at the same place,
     # the same seat and actor), each pinning an arm of `_seize_rung`'s decline: the territory above the
-    # occupied town (the Crown is mustered under it too, and Hafenmark holds it -- only the KIND test
-    # refuses), and a Crown-held town of the seizer's own faction (nothing to take). Each is refused at
+    # occupied town (the Crown is mustered under it too, and Hafenmark holds it -- since ED-IN-0304 phase 4 a
+    # territory is a march target, so only OCCUPATION refuses: standing in a town is not standing at its territory), and a Crown-held town of the seizer's own faction (nothing to take). Each is refused at
     # the `write` clause and moves no title.
     assert world_q.mustered(w, "terr_T7", CROWN), "fixture: the Crown stands under the territory"
     assert w.rungs["terr_T7"].kind == "territory"

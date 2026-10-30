@@ -939,6 +939,26 @@ rosters:
       read, matching `world_q.density`'s existing composition rather than a new one. #353 names no
       other march target and this roster does not invent one; adding a member later is a data edit
       the moment a second target kind is ruled, not a design choice made here.
+    values: [settlement, territory]
+
+  subtree_occupation_kinds:
+    source: "ED-IN-0304 phase 4. Which `march_target_kinds` are occupied by standing ANYWHERE UNDER them."
+    note: >-
+      A settlement's people stand in buildings beneath it (`march_target_kinds`' note), so a faction is
+      occupying a settlement when it is mustered anywhere in its subtree. A territory is not occupied that way:
+      standing in one town of a territory is not occupying the territory, and reading it so would let one won
+      settlement seize the land around it. A territory is occupied by an army that has ARRIVED AT IT (a won or
+      unopposed `march` on the territory), and an army occupying a territory occupies the settlements beneath
+      it as well, so it may seize them (`world_q.occupies`). Every `march_target_kinds` member not listed here
+      is occupied by standing at it.
+    values: [settlement]
+
+  raze_target_kinds:
+    source: "ED-IN-0304 phase 4. What `raze` may end."
+    note: >-
+      `raze` deletes the rung and closes every edge naming it. It stays a settlement's act: `march_target_kinds`
+      gained the territory (a territory is marched on, occupied and seized), and razing the land a duchy stands on
+      is not a thing any act in the game does.
     values: [settlement]
 
   witness_channel_predicates:

@@ -1,0 +1,90 @@
+"""ED-IN-0304 phase 4 -- A TERRITORY IS MARCHED ON, OCCUPIED AND SEIZED; A DEFENDED ONE IS NOT.
+
+Jordan: if a faction's army defends its territory successfully there is no occupation and potential seizure of it by
+the attacker; if it does not defend, the attacking army occupies the territory alongside its settlements and may seize
+it. What the position built (`rosters.yaml`: `march_target_kinds` gained `territory`, `subtree_occupation_kinds`,
+`raze_target_kinds`; `world_q.occupies`; `effects_shared.occupying_faction` reads it): the field is the same field, the
+arrival is the same arrival, and the licence `seize` asks is OCCUPATION -- which a lost march never gives.
+
+Fixture: `build_realm(0)` and `test_march.py`'s helpers. The Crown (`p_npc_033`, seat `off_npc_033`) marches on
+`terr_T7` (Hafenmark's, nobody of Hafenmark's mustered under it: unopposed) and on `terr_T9` (the Church's, defended).
+`p_npc_020` / `off_npc_020` is the Crown seat that seizes.
+"""
+
+from __future__ import annotations
+
+from engine.season.data.rosters import MARCH_TARGET_KINDS, RAZE_TARGET_KINDS, SUBTREE_OCCUPATION_KINDS
+from engine.season.harness.populated import build_realm
+from engine.season.queries import world_q
+from engine.season.state.carriers import Act
+
+from .test_march import (CHURCH, CROWN, _fold_one, _march_act, _no_resident_crown, _resolve_one, _seize_kinds)
+
+ACTOR, SEAT = "p_npc_033", "off_npc_033"
+UNDEFENDED, DEFENDED, TOWN = "terr_T7", "terr_T9", "set_s_016"      # TOWN is under UNDEFENDED, held by Hafenmark
+
+
+def _march(w, target, act_id="m1"):
+    return [e.kind for e in _fold_one(w, _march_act(ACTOR, target, SEAT, act_id=act_id))]
+
+
+def test_the_rosters_say_a_territory_is_marched_on_occupied_by_arrival_and_never_razed():
+    assert "territory" in MARCH_TARGET_KINDS and "settlement" in MARCH_TARGET_KINDS
+    assert SUBTREE_OCCUPATION_KINDS == {"settlement"} and SUBTREE_OCCUPATION_KINDS <= MARCH_TARGET_KINDS
+    assert RAZE_TARGET_KINDS == {"settlement"}
+
+
+def test_a_defended_territory_is_not_occupied_and_cannot_be_seized():
+    w = _no_resident_crown(build_realm(0))
+    assert world_q.holder_faction_of(w, DEFENDED) == CHURCH
+    assert world_q.mustered(w, DEFENDED, CHURCH), "fixture: the Church has people under its territory to defend it"
+    kinds = _march(w, DEFENDED)
+    assert "field.lost" in kinds and "army.arrived" not in kinds, kinds
+    assert not world_q.occupies(w, DEFENDED, CROWN), "a routed army occupies nothing"
+    assert _seize_kinds(w, DEFENDED, act_id="s_def") == ["seize.refused"]
+    assert world_q.holder_faction_of(w, DEFENDED) == CHURCH, "the defended territory changed hands"
+
+
+def test_an_undefended_territory_is_occupied_by_the_arrival_and_the_attacker_may_seize_it():
+    w = build_realm(0)
+    # CONTROL, one change from the admitted seizure below: before the march the Crown occupies nothing there
+    assert not world_q.occupies(w, UNDEFENDED, CROWN)
+    assert _seize_kinds(w, UNDEFENDED, act_id="s_pre") == ["seize.refused"]
+    kinds = _march(w, UNDEFENDED)
+    assert "army.arrived" in kinds, kinds
+    assert world_q.occupies(w, UNDEFENDED, CROWN)
+    assert world_q.holder_faction_of(w, UNDEFENDED) == "fac_hafenmark", "an arrival wrote a title (R-6)"
+    assert _seize_kinds(w, UNDEFENDED, act_id="s_post") == ["rung.seized"]
+    assert world_q.holder_faction_of(w, UNDEFENDED) == CROWN
+
+
+def test_the_settlements_in_an_occupied_territory_are_occupied_with_it():
+    w = build_realm(0)
+    assert world_q.holder_faction_of(w, TOWN) == "fac_hafenmark"
+    _march(w, UNDEFENDED)
+    assert not world_q.mustered(w, TOWN, CROWN), "vacuous if the army stands in the town itself"
+    assert world_q.occupies(w, TOWN, CROWN), "the territory's settlements ride with it"
+    assert _seize_kinds(w, TOWN, act_id="s_town") == ["rung.seized"]
+    assert world_q.holder_faction_of(w, TOWN) == CROWN
+
+
+def test_standing_in_one_town_does_not_occupy_the_territory_around_it():
+    """THE CONTROL OF THE ABOVE, one change: the army arrives at the town and not at the territory. Reading a
+    territory as occupied by subtree presence would let one won settlement seize the land round it."""
+    w = build_realm(0)
+    kinds = _march(w, TOWN)
+    assert "army.arrived" in kinds and world_q.mustered(w, TOWN, CROWN), kinds
+    assert world_q.occupies(w, TOWN, CROWN) and not world_q.occupies(w, UNDEFENDED, CROWN)
+    assert _seize_kinds(w, UNDEFENDED, act_id="s_terr") == ["seize.refused"]
+    assert world_q.holder_faction_of(w, UNDEFENDED) == "fac_hafenmark"
+
+
+def test_an_occupied_territory_is_never_razed_but_an_occupied_settlement_still_is():
+    w = build_realm(0)
+    _march(w, UNDEFENDED)
+
+    def raze(target, act_id):
+        return [e.kind for e in _resolve_one(w, Act(id=act_id, actor=ACTOR, verb="raze",
+                                                    payload={"subject": target}, via=SEAT))]
+    assert raze(UNDEFENDED, "rz_t") == ["raze.refused"] and UNDEFENDED in w.rungs
+    assert raze(TOWN, "rz_s") == ["rung.razed"] and TOWN not in w.rungs
