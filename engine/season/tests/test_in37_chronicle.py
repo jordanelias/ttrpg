@@ -103,7 +103,9 @@ def test_a_real_render_names_distinct_actors_and_every_answer_is_a_real_earlier_
         cited = int(m.group(7))
         assert cited < i + 1, line                       # an antecedent appears EARLIER in the output
         assert ls[cited - 1]["act"] in rows[l["act"]]["cross"], line   # and is a real cross edge
-        assert (m.group(8), m.group(9)) == (ls[cited - 1]["actor"], ls[cited - 1]["verb"])
+        # a verb may hold spaces (`evade / defy`, `tie / knot`), which `_LINE` cannot split from the actor, so the
+        # cited antecedent is compared as the joined `<actor> <verb>` text, which a wrong antecedent still fails
+        assert f"{m.group(8)} {m.group(9)}" == f'{ls[cited - 1]["actor"]} {ls[cited - 1]["verb"]}'
         checked += 1
     assert checked >= 1, "no non-first line was checked"
 

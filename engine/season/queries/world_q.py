@@ -2797,15 +2797,9 @@ def works_sites(w: World, p: Person) -> tuple:
     dwelling works is offered `work` and the fold refuses it; and a fabric `build` has just stood is at condition 0,
     which clears no floor, so on a kind WITH floors (`harbour`, `seam`) it is `restore` that raises the first course
     and `work` follows once it clears. REVERT: drop the term in `questions_for`."""
-    named = []
-    for t in p.tenures:
-        if t.kind != "hold" or not t.live or t.object not in w.records:
-            continue
-        rec = w.records[t.object]
-        plan, at = works_target(rec.kind, rec.subject_matter)
-        if plan is not None:
-            named.extend(s.id for s in w.sites.values() if s.rung == at and s.kind == plan)
-    return tuple(sorted(set(named)))
+    targets = {works_target(w.records[t.object].kind, w.records[t.object].subject_matter)
+               for t in p.tenures if t.kind == "hold" and t.live and t.object in w.records}
+    return tuple(sorted(s.id for s in w.sites.values() if (s.kind, s.rung) in targets))
 
 
 def places_named(w: World, p: Person, named: Optional[frozenset] = None) -> tuple:
@@ -2905,7 +2899,7 @@ def larders_in_purview(w: World, p: Person, named: Optional[frozenset] = None) -
     seats = [w.offices[o] for o in dict.fromkeys(
         t.object for t in p.tenures
         if t.kind == "hold" and t.live and t.object in w.offices
-        and any(a in t.granted_acts for a in RUNG_REMIT_ACTS))]
+        and not RUNG_REMIT_ACTS.isdisjoint(t.granted_acts))]
     if not seats:
         return ()
     if named is None:
@@ -3127,12 +3121,12 @@ def standing_crossed(w: World, p: Person, since: Optional[tuple] = None) -> Opti
 
 
 def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Question]:
-    """§F1's `q` producer -- TWO sources, resolver-side, at the DELIBERATE barrier, plus SIX
+    """§F1's `q` producer -- TWO sources, resolver-side, at the DELIBERATE barrier, plus the
     STANDING OCCASIONS stamped onto the first question as classed referents (`_stamped`, below the
     sort): the vacant seats the person may fill (`vacancies`, IN-53), the seats he has been told of
     (`seats_named`, v9 IN-10 (a)), the writs he holds (`writs_held`, v9 IN-09, widened at v10 REM-25 by
     the Records he holds that a row asking him to hold them answers, `records_held_for_holding_rows`:
-    the same `Record` term, not a seventh occasion), the places he has
+    the same `Record` term, not another occasion), the places he has
     been told of and could settle in (`places_named`, v9 IN-45 `migrate`) and the larders his seat
     may requisition (`larders_in_purview`, v9 IN-49 `requisition`); and, since v10 IN-45 (ii), appended last, the
     Sites a works he holds names (`works_sites`, `work`'s channel). They are not
@@ -3318,7 +3312,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # PLACES HE HAS BEEN TOLD OF AND COULD SETTLE IN (`places_named`), as `Rung`. REVERT: drop the term.
     # v9 IN-49 `requisition` (H-163 limit 3, [ASSUMPTION; medium; Jordan to correct]): AND SO DO THE
     # LARDERS HIS SEAT MAY REQUISITION (`larders_in_purview`), last, as `Rung`, never twice. The class is
-    # `Rung` either way, so every row declaring it (`migrate`, `requisition`, `march`, `convene`) forms on both: whether a place
+    # `Rung` either way, so every row declaring it forms on both: whether a place
     # has room, or a seat reaches it, is then the fold's (`vacancies`/`seats_named`' Office precedent,
     # H-207; H-163 records what the cross-reading costs). No source is added, so no `question_sources`
     # order moves (IN-57: the occasion rides the question he answers). REVERT: drop the term.

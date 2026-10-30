@@ -74,7 +74,7 @@ from ..queries.world_q import (HUNGER_KIND, RESIDE_KIND, WORKS_KIND, ancestry, c
 from ..gaps import Forbidden, Unspecified
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
 from ..data.rosters import (BODY_FACTION, FACTIONS, FOREIGN_CAST, FOREIGN_SEATS, OFFICES_BY_HOLDER,
-                            OFFICES_SEATS, ROLE_TEMPLATE_OF, RUNG_KINDS, SITE_KINDS, authored_remit,
+                            OFFICES_SEATS, ROLE_TEMPLATE_OF, authored_remit,
                             faction_prop_id, load_yaml, refuse_a_titled_post_off_its_rung,
                             remit_or_default, territory_rung_id, title_domain)
 from ..decision import make_chooser
@@ -121,7 +121,7 @@ def _slug(text: str) -> str:
 #     · {hearth: "<settlement code>:<building slug>"} (v10 IN-45: `venues.yaml: planned_works`' `at:`)
 # and the resolver does not know that: it asks the INDEX `build_realm` fills as it mints each rung
 # (`_index_anchor`, at the mint sites, where the key is already in hand) for exactly one rung of
-# exactly that kind. It names no rung kind and no seat, so a fifth form is a line at one more mint
+# exactly that kind. It names no rung kind and no seat, so another form is a line at one more mint
 # site and a row, never a branch here -- and it is why a rung kind with no minted rung (`province`,
 # which `build_realm` deliberately never builds: a province is a QUERY) refuses instead of
 # resolving to something near it.
@@ -490,6 +490,14 @@ def guard_rows(text: str | None = None) -> list:
     return rows
 
 
+def _first_holder(w: World, oid) -> "str | None":
+    """THE PERSON WHO HOLDS THE OFFICE `oid` (a seat held by two persons reads as the FIRST, `w.tenures` order), or
+    `None` when `oid` is `None` or nobody holds it: `seat_guards`' read of a guard's holder and
+    `mint_planned_works`' of a works' master (`world_q.hold_force` raises on two live holders; these post at the first)."""
+    return next((t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == oid
+                 and t.subject in w.persons), None) if oid else None
+
+
 def seat_guards(w: World, rows: list, authored: dict, partial: bool = False) -> None:
     """SEAT THE GUARD COHORTS IN A BUILT WORLD. Each row becomes a
     Person at the row's weight, its `person` rung, a `contain` edge (where it IS) at the exact rung its seat's
@@ -505,8 +513,7 @@ def seat_guards(w: World, rows: list, authored: dict, partial: bool = False) -> 
     where = home_of_q(w)
     for row in rows:
         oid = authored.get(row["seat"])
-        holder = next((t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == oid
-                       and t.subject in w.persons), None) if oid else None
+        holder = _first_holder(w, oid)
         if holder is None or holder not in where:
             if partial:
                 continue
@@ -566,8 +573,8 @@ def mint_planned_works(w: World, rows: list, anchors: dict, authored: dict, part
     (`test_in45_planned_works.py`), and why no shipped row is `kind: text`.
 
     REFUSES (`Unspecified`), each one change from a row that mints: a row that is not a mapping of exactly
-    `PLANNED_WORKS_FIELDS`; an `id` already a Record's; a `plan` that is neither a `rung_kinds` nor a `site_kinds`
-    member, or that `works_cost` does not price (a place nobody can pay for is dead data, `_cost`'s own
+    `PLANNED_WORKS_FIELDS`; an `id` already a Record's; a `plan` that `works_cost` does not price (every
+    priced key is a `rung_kinds` or `site_kinds` member, `fixtures.py::_check_works_cost`; a place nobody can pay for is dead data, `_cost`'s own
     decline arriving a season late); `terms` that is not a positive integer; an `at` or `rung` that resolves
     to no rung (`resolve_anchor`'s refusal, never a guess); a `master` seat this realm did not seat or nobody
     holds; and a second live works on one `(plan, at)` target (`create_record`'s decline). `partial` (a `cap`
@@ -589,7 +596,7 @@ def mint_planned_works(w: World, rows: list, anchors: dict, authored: dict, part
                 f"{whose} names an id that is not text, or that a Record already carries",
                 "engine/season/venues.yaml -- planned_works",
                 needs="a unique text id", law="v10 IN-45 -- one Record per id; a mint would replace it")
-        if (plan not in RUNG_KINDS and plan not in SITE_KINDS) or plan not in priced:
+        if plan not in priced:           # every priced key is a rung or site kind (`fixtures.py::_check_works_cost`)
             raise Unspecified(
                 f"{whose} plans {plan!r}, which is no priced `rung_kinds` or `site_kinds` member",
                 "engine/season/venues.yaml -- planned_works",
@@ -600,8 +607,7 @@ def mint_planned_works(w: World, rows: list, anchors: dict, authored: dict, part
                 f"{whose} declares terms {terms!r}", "engine/season/venues.yaml -- planned_works",
                 needs="a positive integer", law="r2 04 §A.6.3 -- a works with no terms bounds nothing")
         oid = authored.get(row["master"])
-        master = next((t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == oid
-                       and t.subject in w.persons), None) if oid else None
+        master = _first_holder(w, oid)
         if master is None:
             if partial:
                 continue

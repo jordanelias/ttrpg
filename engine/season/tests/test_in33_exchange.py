@@ -39,6 +39,8 @@ from engine.season.loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from engine.season.state.carriers import Act, Claim, Question, View
 from engine.season.state.gate import NO_CHANGE
 
+from .test_in53_vacancy_need import _sig
+
 VERB = "exchange"
 MADE, REFUSED = "exchange.made", "exchange.refused"
 
@@ -148,11 +150,6 @@ def test_in33_b_the_effect_declines_a_side_that_is_no_rung_when_it_is_called_dir
 def _formed(w, pid, referents):
     q = Question("q:in33", "need", tuple(referents))
     return opening_set(w.persons[pid], View(pid, [], w.fixtures.get("view_k")), q, w.fixtures)
-
-
-def _sig(cands):
-    return sorted((c.verb, str(c.subject), sorted((k, str(v)) for k, v in c.operands.items()))
-                  for c in cands)
 
 
 def test_in33_c_a_candidate_carries_what_comes_back_from_the_fixtures():

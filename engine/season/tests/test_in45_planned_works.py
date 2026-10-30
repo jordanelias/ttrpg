@@ -250,8 +250,8 @@ def test_a_well_formed_row_mints_and_each_malformed_one_refuses(monkeypatch):
         "a paying rung that names no rung": _row(rung={"hearth": "S-001:nowhere"}),
         "a row that is not a mapping": ["works_probe"],
     }
-    for why, row in bad.items():
-        w = _control(monkeypatch)
+    w = _control(monkeypatch)       # one world for the whole loop: every refusal is raised before `change.apply()`,
+    for why, row in bad.items():    # and each pass asserts the world unmoved, so a leak still fails at the row that caused it
         before = (len(w.records), len(w.tenures))
         with pytest.raises(Unspecified):
             _mint(w, row)

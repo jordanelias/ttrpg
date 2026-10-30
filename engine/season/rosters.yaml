@@ -1981,7 +1981,7 @@ rosters:
       `return_kind` back. `kind`/`amount` keep their one meaning (what moves from `from`), so no
       name carries two. Inside the old eight a two-sided cell could only bind one kind and one
       amount for both sides -- a like-for-like swap that moves nothing. The closure still binds:
-      the roster is closed over these ten, and a cell naming any other operand refuses at load
+      the roster is closed over its `values`, and a cell naming any other operand refuses at load
       (`data/requires.py::_build_clause`). Derived person-side in
       `decision/options.py::_derive_operand`.
       ⚠ WHERE AN OPERAND COMES FROM IS NOT THIS ROSTER'S QUESTION. Today it is `Act.payload`,
@@ -2000,7 +2000,7 @@ rosters:
       PER RECORD KIND, WHICH OF THE CLOSED OPERANDS (`requires_operands`) A RECORD OF THAT KIND
       ANSWERS, AND FROM WHICH OF ITS OWN CONTENT KEYS -- `operand: content key`. `data/requires.py`
       refuses at import a kind that is not a `record_kinds` member, an empty entry, an operand that is
-      not one of the eight, a content key that is not one of THAT KIND's keys (`record_kinds.values`),
+      not in the closed roster, a content key that is not one of THAT KIND's keys (`record_kinds.values`),
       and `from` on any kind. ⚠ `from` IS ON NO KIND, r2's own ruling: a document naming *where the
       actor stands* would let a Duke's writ reach into a larder the executor is not standing in. `at`
       is no operand (r2: *"I do not coin a ninth operand"*), so no kind maps it. ⚠ `kind` AND `amount`

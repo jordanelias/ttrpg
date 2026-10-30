@@ -11222,7 +11222,7 @@ def test_wc_no_operand_is_defaulted_by_a_get_or_setdefault_in_shape_py_outside_e
     route would make `kill / wound` raise on every act the loop produces. `W-E` owns it -- and it
     is not innocent, because the default is `p.body`, i.e. an act that names no harm KILLS.
 
-    ⚠ THE SCANNED NAMES COME FROM THE ROSTER, so a ninth operand is covered the day it is added
+    ⚠ THE SCANNED NAMES COME FROM THE ROSTER, so a later operand is covered the day it is added
     (`G2` -- forbid the shape, never enumerate the words). And the scan is deliberately narrow: it
     catches `.get(name, default)` and `.setdefault(name, default)` and not `.get(name) or
     fallback`. The last form survives in `_eff_create_record` (`d.get("kind") or "text"`) and

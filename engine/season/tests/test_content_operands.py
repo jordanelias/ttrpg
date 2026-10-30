@@ -25,7 +25,7 @@ What each block proves, and the control that stops it passing vacuously:
   5. THE OBSERVABLE (r2 `05:1247`): `Candidates with writ-derived operands > 0`, measured on the
      real populated corpus, not a hand-built fixture -- and every one of them resolves to a real,
      live entity, not a value the fold can only ever refuse.
-  6. NOTHING WIDENS THAT DID NOT NEED TO. `requires_operands` stays at eight names (ten since v9
+  6. NOTHING WIDENS THAT DID NOT NEED TO. `requires_operands` stays closed (v9
      IN-33's `exchange` coined `return_kind`/`return_amount`, restored at v10 REM-2B; `at` does not
      join it -- r2's own ruling, *"I do not coin a ninth operand"*); `question_sources` stays at
      two (clause 3 is not a fourth source -- r2 §A.5.4, *"one `Question` shape, one `source`
@@ -311,7 +311,7 @@ def test_record_sourced_operands_refuses_each_planted_mismatch():
     `writ_sourced_operands` to plan position IN-10's per-kind `record_sourced_operands`. The
     load-time check never fires on today's data, so nothing observed whether it could raise; it once
     could not (it named `Unspecified` without importing it). Each planted mismatch is called
-    directly: an operand outside the closed eight, a content key the kind does not carry, a kind
+    directly: an operand outside the closed roster, a content key the kind does not carry, a kind
     that is no `record_kinds` member, an empty entry, and `from` (r2's ruling) on a kind that does
     carry a `from` key."""
     ops = frozenset(REQUIRES_OPERANDS)

@@ -69,7 +69,7 @@ def _stock_claims(p, rung):
             if c.subject == rung and str(c.predicate).startswith("stores:")]
 
 
-def test_cr23_a_requisitionable_is_the_one_stocked_test():
+def test_cr23_a_requisitionable_is_the_one_stocked_test(monkeypatch):
     """THE EXTRACTED PREDICATE. `larders_in_purview` offers exactly what `requisitionable` calls stocked, and
     MATTER's report crosses on the same predicate: patch the owner and both follow. A second, inline stocked
     test in `larders_in_purview` would keep offering the stocked larder under a patched-False owner, or keep
@@ -80,24 +80,19 @@ def test_cr23_a_requisitionable_is_the_one_stocked_test():
                              "own"))
     assert world_q.requisitionable(w, HEARTH)
     assert world_q.larders_in_purview(w, duke) == (HEARTH,)           # anti-vacuity
-    real = world_q.requisitionable
-    try:
-        world_q.requisitionable = lambda w_, r, stores=None: False
+    with monkeypatch.context() as m:
+        m.setattr(world_q, "requisitionable", lambda w_, r, stores=None: False)
         assert world_q.larders_in_purview(w, duke) == ()
         w.rungs[HEARTH].stores = {}
-        world_q.requisitionable = lambda w_, r, stores=None: True
+        m.setattr(world_q, "requisitionable", lambda w_, r, stores=None: True)
         assert world_q.larders_in_purview(w, duke) == (HEARTH,)
-    finally:
-        world_q.requisitionable = real
     assert world_q.larders_in_purview(w, duke) == ()                  # the empty larder, the real owner
     # MATTER asks the same owner: an owner that calls nothing below 1000 stocked sees no crossing at the yield.
     w2, d2 = _hearth_world()
-    try:
-        world_q.requisitionable = lambda w_, r, stores=None: (
-            (w_.rungs[r].stores if stores is None else stores) or {}).get(KIND, 0) >= 1000
+    with monkeypatch.context() as m:
+        m.setattr(world_q, "requisitionable", lambda w_, r, stores=None: (
+            (w_.rungs[r].stores if stores is None else stores) or {}).get(KIND, 0) >= 1000)
         events = _barrier(w2, d2)
-    finally:
-        world_q.requisitionable = real
     assert w2.rungs[HEARTH].stores.get(KIND, 0) > 0                   # anti-vacuity: the hearth did yield
     assert _reads_on(events, HEARTH) == [()]
 
@@ -131,7 +126,7 @@ def test_cr23_b2_a_debit_that_empties_the_larder_reports_on_the_debit_after_the_
         events = SeasonDriver(w).matter(mint_token(w, WriteClass.MATTER), [])
         assert w.rungs[HEARTH].stores.get(KIND, 0) == 0
         (reads[mode],) = _reads_on(events, HEARTH)
-    shortfall = tuple(o for o in reads["off"])
+    shortfall = reads["off"]
     assert shortfall and all(o.predicate.startswith("shortfall:") for o in shortfall), shortfall
     assert reads["crossing"] == shortfall + (Observation(HEARTH, f"stores:{KIND}", 0),)
 

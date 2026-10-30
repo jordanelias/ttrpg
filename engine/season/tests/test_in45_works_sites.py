@@ -28,9 +28,10 @@ from ..decision import assemble
 from ..decision.choose import _payload_of
 from ..decision.options import opening_set, seat_of
 from ..harness import populated as POP
-from ..loop.driver import SeasonDriver, mint_token
+from ..loop.driver import mint_token
 from ..queries import world_q
 from ..state.carriers import Act
+from .test_in45_planned_works import _build, _fold, _kinds, _rows, _tick0
 
 STEWARD, DUKE, STRANGER = "p_npc_009", "p_npc_020", "p_npc_030"
 DWELLING_WORKS, SEAM_WORKS = "works_dwelling_court", "works_seam_court"
@@ -39,23 +40,6 @@ BUILT_DWELLING, BUILT_SEAM = f"dwelling:{DWELLING_WORKS}", f"seam:{SEAM_WORKS}"
 #: a probe row beside the shipped two: a `seam` (a kind WITH band floors) planned at the Court, the Steward its master
 SEAM_ROW = {"id": SEAM_WORKS, "kind": "works", "plan": "seam", "at": {"hearth": "S-001:court"},
             "rung": {"settlement": "S-001"}, "master": "off_lord_steward", "terms": 3}
-
-
-def _tick0(w):
-    d = SeasonDriver(w)
-    d.matter(mint_token(w, WriteClass.MATTER), [])
-    return d
-
-
-def _fold(w, d, *acts):
-    out = d.resolve(mint_token(w, WriteClass.ACTS), list(acts),
-                    contest_max_depth=w.fixtures.get("contest_max_depth"))
-    w.log.extend(out)
-    return out
-
-
-def _kinds(events):
-    return [e.kind for e in events]
 
 
 def _formed(w, pid):
@@ -126,10 +110,7 @@ def test_work_executes_through_the_fold_on_a_works_whose_kind_has_band_floors(mo
     the scale); the `work` his own question forms on the built seam raises it by the works' rise (`_rise`: the headroom
     to the ceiling shared among those standing at the Court) -- `site.worked`. The Court's old, full-condition seam
     (its rung is the settlement, not the Court: not named) is not offered; the built one is the only fabric named."""
-    real = POP._load
-    monkeypatch.setattr(POP, "_load", lambda rel: (
-        {**real(rel), "planned_works": real(rel)["planned_works"] + [SEAM_ROW]} if rel == POP.VENUES else real(rel)))
-    w = POP.build_realm(0)
+    w = _build(monkeypatch, _rows() + [SEAM_ROW])
     d = _tick0(w)
     assert world_q.works_sites(w, w.persons[STEWARD]) == (COURT_DWELLING,)       # the seam works names no Site yet
     assert _kinds(_fold(w, d, Act(id="b1", actor=STEWARD, verb="build", payload={"subject": SEAM_WORKS}))) \

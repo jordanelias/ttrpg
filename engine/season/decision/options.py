@@ -952,8 +952,7 @@ def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"
     the seat's rung (`treasury_of`, `H-160` limit 1); as himself, from where he stands.
 
     ⚠ THE CHAIN IS NOT THE ROUTER `G2` FORBIDS, on `WorldReader.read`'s own precedent. It
-    enumerates the CLOSED OPERAND VOCABULARY -- `rosters.yaml: requires_operands`, ten names since
-    v9 IN-33 (restored at v10 REM-2B) added `exchange`'s `return_kind`/`return_amount`, where an
+    enumerates the CLOSED OPERAND VOCABULARY -- `rosters.yaml: requires_operands`, where an
     unrostered one already refuses at load -- and not verbs, entities or outcomes. There
     is no shape to forbid instead: each name is a different question, and a per-verb table
     would be the special case `G2` is actually about.

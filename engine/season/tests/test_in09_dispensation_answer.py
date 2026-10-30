@@ -57,7 +57,6 @@ from engine.season.state.carriers import Act, Claim
 
 from .test_in53_vacancy_need import _formed, _sig
 
-VERB, GIVEN, REFUSED = "comply", "compliance.given", "compliance.impossible"
 THREE = ("comply", "evade / defy", "construe")
 EMITS = {"comply": "compliance.given", "evade / defy": "compliance.withheld",
          "construe": "terms.distorted"}

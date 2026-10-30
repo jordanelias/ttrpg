@@ -65,10 +65,11 @@ def _step_call(role: str):
 STOCK_REPORTS = roster("stock_reports")
 
 
-def _stock_report(w: "World", rid: str, stores_after: dict, mode: str, stocked_before: dict) -> tuple:
+def _stock_report(w: "World", rid: str, update: dict, mode: str, stocked_before: dict) -> tuple:
     """THE STOCK REPORT ON A RUNG'S LAST MATTER WRITE (v10 CR-23, M17 taken (a), [ASSUMPTION; medium;
     Jordan to correct; revert: `stock_report = off`]): `(Observation(rid, "stores:<kind>", units),)` or
-    `()`. `kind` is the fixtures' `default_store_kind` and `units` what the write leaves; the predicate is
+    `()`. `kind` is the fixtures' `default_store_kind` and `units` what the write leaves (the rung's stores
+    with `update` laid over them: the write is applied after this is read); the predicate is
     `stores:<kind>`, the `requires` vocabulary (`f"{scalar}:{key}"`, `data/requires.py::Observation`), so
     the read a governor holds is the one `LedgerReader` and `decision/options.py::store_kind_of` read.
     `crossing`: only when `world_q.requisitionable` at the barrier's entry (`stocked_before`) differs from
@@ -77,6 +78,7 @@ def _stock_report(w: "World", rid: str, stores_after: dict, mode: str, stocked_b
     stock from the World (`vacancies`' precedent, in tension with AX-7)."""
     if mode == "off":
         return ()
+    stores_after = {**(w.rungs[rid].stores or {}), **update}
     if mode == "crossing" and world_q.requisitionable(w, rid, stores_after) == stocked_before.get(rid):
         return ()
     kind = w.fixtures.get("default_store_kind")
@@ -712,7 +714,7 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
             # so the stock report rides it, after the shortfall.
             seen = short_seen.get(rid, ())
             if rid not in yielded:
-                seen = seen + _stock_report(w, rid, {**(r.stores or {}), **after}, stock_mode,
+                seen = seen + _stock_report(w, rid, after, stock_mode,
                                             stocked_before)
             w.write("stores", token,
                     lambda r=r, after=after: r.stores.update(after),
@@ -749,7 +751,7 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
                 record_kind="Rung", fieldname="stores", driver="Event",
                 emits="stores.changed", subject=rid,
                 causes=[prior_s] if prior_s else [ROOT],
-                observed=_stock_report(w, rid, {**(r.stores or {}), **credited}, stock_mode,
+                observed=_stock_report(w, rid, credited, stock_mode,
                                        stocked_before))
 
     # -- TRAVEL: A LEG ENDS HERE (plan position `19c`, the ride-along) --------------------------
