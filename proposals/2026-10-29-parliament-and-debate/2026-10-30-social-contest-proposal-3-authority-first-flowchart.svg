@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 1960" width="1180" height="1960" font-family="Georgia, 'Times New Roman', serif"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#4a4036"/></marker></defs><rect width="1180" height="1960" fill="#fffdf8"/><text x="590.0" y="1948" text-anchor="middle" font-size="12" fill="#6b6256">Proposal 3, authority first. PROPOSED, reference only. The roll (one draw per act) is the armature&#x27;s, unchanged; everything above and below it is the authority&#x27;s.</text><text x="590.0" y="34" text-anchor="middle" font-size="19" fill="#4a4036" >A proceeding under Proposal 3: an authority takes a matter; the dice resolve acts inside it</text>
+<rect x="390" y="60" width="400" height="76" rx="10" fill="#f4f1ea" stroke="#4a4036" stroke-width="1.6"/>
+<text x="590.0" y="84" text-anchor="middle" font-weight="700" font-size="16" fill="#1d1a16">A matter arises in the world</text>
+<text x="590.0" y="106" text-anchor="middle" font-size="13" fill="#1d1a16">a deed claim, a petition, a charge, a vacancy</text>
+<text x="590.0" y="124" text-anchor="middle" font-size="13" fill="#1d1a16">(a fact somebody holds, at the speed of news)</text>
+<line x1="590" y1="136" x2="590" y2="170" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<rect x="250" y="170" width="680" height="76" rx="10" fill="#e8eef4" stroke="#2f4a63" stroke-width="1.6"/>
+<text x="590.0" y="194" text-anchor="middle" font-weight="700" font-size="16" fill="#1d1a16">Which authority takes it?  (the row&#x27;s `authority` key)</text>
+<text x="590.0" y="216" text-anchor="middle" font-size="13" fill="#1d1a16">a person chooses where to bring it, on HIS OWN reading of each authority</text>
+<text x="590.0" y="234" text-anchor="middle" font-size="13" fill="#1d1a16">(person_q: he can be wrong about its standing, S-7)</text>
+<line x1="330" y1="246" x2="170" y2="290" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<line x1="590" y1="246" x2="590" y2="290" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<line x1="850" y1="246" x2="1010" y2="290" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<rect x="30" y="290" width="290" height="112" rx="10" fill="#f4f1ea" stroke="#4a4036" stroke-width="1.6"/>
+<text x="175.0" y="314" text-anchor="middle" font-weight="700" font-size="16" fill="#1d1a16">PARTIES (no bench)</text>
+<text x="175.0" y="336" text-anchor="middle" font-size="13" fill="#1d1a16">K1 persuasion, K2 negotiation,</text>
+<text x="175.0" y="354" text-anchor="middle" font-size="13" fill="#1d1a16">K7 display</text>
+<text x="175.0" y="372" text-anchor="middle" font-size="13" fill="#1d1a16">decider: target, or both commit</text>
+<text x="175.0" y="390" text-anchor="middle" font-size="13" fill="#1d1a16">imbalance: title gap + leverage</text>
+<rect x="445" y="290" width="290" height="112" rx="10" fill="#e9f0e4" stroke="#3b5a2e" stroke-width="1.6"/>
+<text x="590.0" y="314" text-anchor="middle" font-weight="700" font-size="16" fill="#1d1a16">POLITY</text>
+<text x="590.0" y="336" text-anchor="middle" font-size="13" fill="#1d1a16">Crown, Hafenmark, Varfell seats</text>
+<text x="590.0" y="354" text-anchor="middle" font-size="13" fill="#1d1a16">K3 royal tribunal, K4 petition,</text>
+<text x="590.0" y="372" text-anchor="middle" font-size="13" fill="#1d1a16">K5 panel, K6 parliament (count)</text>
+<text x="590.0" y="390" text-anchor="middle" font-size="13" fill="#1d1a16">19 of 31 authored seats</text>
+<rect x="860" y="290" width="290" height="112" rx="10" fill="#fbf0d9" stroke="#8a6a1c" stroke-width="1.6"/>
+<text x="1005.0" y="314" text-anchor="middle" font-weight="700" font-size="16" fill="#1d1a16">CHURCH</text>
+<text x="1005.0" y="336" text-anchor="middle" font-size="13" fill="#1d1a16">Church of Solmund seats</text>
+<text x="1005.0" y="354" text-anchor="middle" font-size="13" fill="#1d1a16">K3 heresy, excommunication</text>
+<text x="1005.0" y="372" text-anchor="middle" font-size="13" fill="#1d1a16">7 of 31 seats; the 3 that</text>
+<text x="1005.0" y="390" text-anchor="middle" font-size="13" fill="#1d1a16">determine all sit at T9</text>
+<path d="M 240 402 L 240 1395 L 380 1395" fill="none" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<text x="60" y="1385" font-size="12" fill="#4a4036" font-style="italic">parties: no forum, no bench</text>
+<line x1="590" y1="402" x2="590" y2="440" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<path d="M 1005 402 L 1005 425 L 650 425 L 650 457" fill="none" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<polygon points="590,445.0 890.0,520 590,595.0 290.0,520" fill="#e8eef4" stroke="#2f4a63" stroke-width="1.6"/>
+<text x="590" y="506" text-anchor="middle" font-size="13" font-weight="700" fill="#14283a">Does another authority already</text>
+<text x="590" y="524" text-anchor="middle" font-size="13" font-weight="400" fill="#14283a">hold this matter on its docket?</text>
+<text x="590" y="542" text-anchor="middle" font-size="13" font-weight="400" fill="#14283a">(today: case.refused, effects_information.py:340)</text>
+<path d="M 890 520 L 960 520 L 960 560" fill="none" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<text x="905" y="510" font-size="12" fill="#4a4036" font-style="italic">yes</text>
+<rect x="800" y="560" width="360" height="150" rx="10" fill="#f3e6e1" stroke="#7a3b2a" stroke-width="1.6"/>
+<text x="980.0" y="584" text-anchor="middle" font-weight="700" font-size="16" fill="#1d1a16">FORUM CONTEST (K8)</text>
+<text x="980.0" y="606" text-anchor="middle" font-size="13" fill="#1d1a16">the matter: who hears it</text>
+<text x="980.0" y="624" text-anchor="middle" font-size="13" fill="#1d1a16">a royal person is party: the polity bench</text>
+<text x="980.0" y="642" text-anchor="middle" font-size="13" fill="#1d1a16">decides (R-34 precedence)</text>
+<text x="980.0" y="660" text-anchor="middle" font-size="13" fill="#1d1a16">otherwise: both authorities&#x27; seats</text>
+<text x="980.0" y="678" text-anchor="middle" font-size="13" fill="#1d1a16">commit to one forum, or impasse (R-1)</text>
+<text x="980.0" y="696" text-anchor="middle" font-size="13" fill="#1d1a16">(Venice-Rome; Bruno; the Interdict)</text>
+<path d="M 980 710 L 980 745 L 700 745" fill="none" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<text x="820" y="738" font-size="12" fill="#4a4036" font-style="italic">winner keeps the matter</text>
+<line x1="590" y1="595" x2="590" y2="640" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<text x="600" y="622" font-size="12" fill="#4a4036" font-style="italic">no</text>
+<rect x="330" y="640" width="420" height="130" rx="10" fill="#e8eef4" stroke="#2f4a63" stroke-width="1.6"/>
+<text x="540.0" y="664" text-anchor="middle" font-weight="700" font-size="16" fill="#1d1a16">Does a seat of THIS authority sit over the venue?</text>
+<text x="540.0" y="686" text-anchor="middle" font-size="13" fill="#1d1a16">judging_set(w, venue, authority): filtered by authority,</text>
+<text x="540.0" y="704" text-anchor="middle" font-size="13" fill="#1d1a16">+ the row&#x27;s `assessors` (Venice lay Savi),</text>
+<text x="540.0" y="722" text-anchor="middle" font-size="13" fill="#1d1a16">- any holder under a live polity `ban` (expelled)</text>
+<text x="540.0" y="740" text-anchor="middle" font-size="13" fill="#1d1a16">no bench: it waits on the docket (WHETHER, WHERE)</text>
+<line x1="540" y1="770" x2="540" y2="800" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<rect x="330" y="800" width="420" height="92" rx="10" fill="#f4f1ea" stroke="#4a4036" stroke-width="1.6"/>
+<text x="540.0" y="824" text-anchor="middle" font-weight="700" font-size="16" fill="#1d1a16">Summons: the case Record reaches the party</text>
+<text x="540.0" y="846" text-anchor="middle" font-size="13" fill="#1d1a16">he complies, or defies (`evade / defy`, which today</text>
+<text x="540.0" y="864" text-anchor="middle" font-size="13" fill="#1d1a16">writes nothing and has no reader)</text>
+<line x1="540" y1="892" x2="540" y2="925" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<rect x="300" y="925" width="480" height="128" rx="10" fill="#e9f0e4" stroke="#3b5a2e" stroke-width="1.6"/>
+<text x="540.0" y="949" text-anchor="middle" font-weight="700" font-size="16" fill="#1d1a16">HEARING: acts inside the authority, ONE DRAW EACH</text>
+<text x="540.0" y="971" text-anchor="middle" font-size="13" fill="#1d1a16">speak, argue, tell, present proofs: the armature&#x27;s roll</text>
+<text x="540.0" y="989" text-anchor="middle" font-size="13" fill="#1d1a16">E[m] = 0.4N + 0.8 sqrt(N) softcap(s) - Ob</text>
+<text x="540.0" y="1007" text-anchor="middle" font-size="13" fill="#1d1a16">unchanged by this proposal (roll.py, sigma_leverage)</text>
+<text x="540.0" y="1025" text-anchor="middle" font-size="13" fill="#1d1a16">advocates move what the deciders hold (R-19, R-23)</text>
+<rect x="820" y="905" width="340" height="170" rx="10" fill="#fbf0d9" stroke="#8a6a1c" stroke-width="1.6"/>
+<text x="990.0" y="929" text-anchor="middle" font-weight="700" font-size="16" fill="#1d1a16">THE AUTHORITY IN THE DICE</text>
+<text x="990.0" y="951" text-anchor="middle" font-size="13" fill="#1d1a16">seat weight in this row (R-31, R-38)</text>
+<text x="990.0" y="969" text-anchor="middle" font-size="13" fill="#1d1a16">x L(faction of seat, territory)</text>
+<text x="990.0" y="987" text-anchor="middle" font-size="13" fill="#1d1a16">L: barrier index in queries/cache:</text>
+<text x="990.0" y="1005" text-anchor="middle" font-size="13" fill="#1d1a16">0.5 + mean over residents of</text>
+<text x="990.0" y="1023" text-anchor="middle" font-size="13" fill="#1d1a16">opinion_of(w, p, faction) / 2</text>
+<text x="990.0" y="1041" text-anchor="middle" font-size="13" fill="#1d1a16">clamped [0, 1]; never stored (S10.1)</text>
+<text x="990.0" y="1059" text-anchor="middle" font-size="13" fill="#1d1a16">seed 0, church: T9 .78, T2 .37</text>
+<line x1="820" y1="990" x2="780" y2="990" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<line x1="540" y1="1053" x2="540" y2="1085" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<rect x="300" y="1085" width="480" height="92" rx="10" fill="#e8eef4" stroke="#2f4a63" stroke-width="1.6"/>
+<text x="540.0" y="1109" text-anchor="middle" font-weight="700" font-size="16" fill="#1d1a16">DETERMINE: each seat-holder chooses, then draws</text>
+<text x="540.0" y="1131" text-anchor="middle" font-size="13" fill="#1d1a16">will picks the disposition; the draw grades its degree</text>
+<text x="540.0" y="1149" text-anchor="middle" font-size="13" fill="#1d1a16">Partial: a docket matter (R-17); Failure: undecided (R-1)</text>
+<line x1="540" y1="1177" x2="540" y2="1210" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<polygon points="540,1210.0 820.0,1280 540,1350.0 260.0,1280" fill="#e8eef4" stroke="#2f4a63" stroke-width="1.6"/>
+<text x="540" y="1266" text-anchor="middle" font-size="13" font-weight="700" fill="#14283a">Does the disposal need custody (detain)?</text>
+<text x="540" y="1284" text-anchor="middle" font-size="13" font-weight="400" fill="#14283a">then it is a WARRANT, executed by `arrest`</text>
+<text x="540" y="1302" text-anchor="middle" font-size="13" font-weight="400" fill="#14283a">by whoever&#x27;s purview reaches the party</text>
+<path d="M 820 1280 L 900 1280 L 900 1300" fill="none" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<text x="835" y="1270" font-size="12" fill="#4a4036" font-style="italic">yes</text>
+<rect x="780" y="1300" width="380" height="116" rx="10" fill="#f3e6e1" stroke="#7a3b2a" stroke-width="1.6"/>
+<text x="970.0" y="1324" text-anchor="middle" font-weight="700" font-size="16" fill="#1d1a16">THE SECULAR ARM</text>
+<text x="970.0" y="1346" text-anchor="middle" font-size="13" fill="#1d1a16">church `arrest` reaches only T9 and T1</text>
+<text x="970.0" y="1364" text-anchor="middle" font-size="13" fill="#1d1a16">(purview_reaches); elsewhere the polity&#x27;s</text>
+<text x="970.0" y="1382" text-anchor="middle" font-size="13" fill="#1d1a16">dispatch holders act, or do not:</text>
+<text x="970.0" y="1400" text-anchor="middle" font-size="13" fill="#1d1a16">the matter waits (HOW FAST)</text>
+<path d="M 970 1416 L 970 1440 L 700 1440" fill="none" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<line x1="540" y1="1350" x2="540" y2="1380" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<text x="550" y="1368" font-size="12" fill="#4a4036" font-style="italic">no: a status (ban, oblige)</text>
+<rect x="380" y="1380" width="320" height="88" rx="10" fill="#e9f0e4" stroke="#3b5a2e" stroke-width="1.6"/>
+<text x="540.0" y="1404" text-anchor="middle" font-weight="700" font-size="16" fill="#1d1a16">The world learns it</text>
+<text x="540.0" y="1426" text-anchor="middle" font-size="13" fill="#1d1a16">a Tenure edge or a Record, witnessed;</text>
+<text x="540.0" y="1444" text-anchor="middle" font-size="13" fill="#1d1a16">reach by the row (R-21, S-6, S-7)</text>
+<line x1="540" y1="1468" x2="540" y2="1500" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<polygon points="540,1500.0 840.0,1570 540,1640.0 240.0,1570" fill="#e8eef4" stroke="#2f4a63" stroke-width="1.6"/>
+<text x="540" y="1556" text-anchor="middle" font-size="13" font-weight="700" fill="#14283a">Appeal: petition + carry to the row&#x27;s `appeal_to`</text>
+<text x="540" y="1574" text-anchor="middle" font-size="13" font-weight="400" fill="#14283a">ANOTHER authority, or a higher seat;</text>
+<text x="540" y="1592" text-anchor="middle" font-size="13" font-weight="400" fill="#14283a">never the same bench again (R-2, R-35)</text>
+<path d="M 840 1570 L 900 1570 L 900 1600" fill="none" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<text x="850" y="1560" font-size="12" fill="#4a4036" font-style="italic">carried</text>
+<rect x="760" y="1600" width="400" height="110" rx="10" fill="#fbf0d9" stroke="#8a6a1c" stroke-width="1.6"/>
+<text x="960.0" y="1624" text-anchor="middle" font-weight="700" font-size="16" fill="#1d1a16">APPELLATE DETERMINATION</text>
+<text x="960.0" y="1646" text-anchor="middle" font-size="13" fill="#1d1a16">a seat of the appeal authority closes the lower</text>
+<text x="960.0" y="1664" text-anchor="middle" font-size="13" fill="#1d1a16">edge or leaves it; needs a new closure basis</text>
+<text x="960.0" y="1682" text-anchor="middle" font-size="13" fill="#1d1a16">(pardon closes only its own seat&#x27;s edges,</text>
+<text x="960.0" y="1700" text-anchor="middle" font-size="13" fill="#1d1a16">effects_governance.py:327)</text>
+<line x1="540" y1="1640" x2="540" y2="1730" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<text x="550" y="1690" font-size="12" fill="#4a4036" font-style="italic">not carried: it rides</text>
+<rect x="330" y="1730" width="420" height="76" rx="10" fill="#f4f1ea" stroke="#4a4036" stroke-width="1.6"/>
+<text x="540.0" y="1754" text-anchor="middle" font-weight="700" font-size="16" fill="#1d1a16">Later acts read the result</text>
+<text x="540.0" y="1776" text-anchor="middle" font-size="13" fill="#1d1a16">choices, opinion_of, the next barrier&#x27;s L:</text>
+<text x="540.0" y="1794" text-anchor="middle" font-size="13" fill="#1d1a16">the next proceeding starts from here (S-3)</text>
+<path d="M 960 1710 L 960 1768 L 750 1768" fill="none" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<rect x="20" y="1480" width="300" height="130" rx="10" fill="#f3e6e1" stroke="#7a3b2a" stroke-width="1.6"/>
+<text x="170.0" y="1504" text-anchor="middle" font-weight="700" font-size="16" fill="#1d1a16">EXPEL THE OFFICER</text>
+<text x="170.0" y="1526" text-anchor="middle" font-size="13" fill="#1d1a16">a polity row whose subject is the</text>
+<text x="170.0" y="1544" text-anchor="middle" font-size="13" fill="#1d1a16">church officer disposes `ban`;</text>
+<text x="170.0" y="1562" text-anchor="middle" font-size="13" fill="#1d1a16">the bench gate then drops him</text>
+<text x="170.0" y="1580" text-anchor="middle" font-size="13" fill="#1d1a16">(Toulouse 1235, Peretti 1560)</text>
+<path d="M 170 1480 L 170 1440 L 20 1440 L 20 755 L 328 755" fill="none" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<text x="70" y="1462" text-anchor="middle" font-size="11" fill="#4a4036" font-style="italic">back to the bench gate</text>
+<text x="590.0" y="1850" text-anchor="middle" font-size="13" fill="#4a4036" font-style="italic">Four sourced routes of crown over church (research 02 §3.5; 01 §3.7): deny the arm, expel the officer,</text>
+<text x="590.0" y="1870" text-anchor="middle" font-size="13" fill="#4a4036" font-style="italic">carry to another authority, refuse the summons. Hostility changed whether, where, by whom and how fast;</text>
+<text x="590.0" y="1890" text-anchor="middle" font-size="13" fill="#4a4036" font-style="italic">R-36 also scales the weight in the draw. Both are kept, in different places.</text></svg>
