@@ -333,7 +333,7 @@ rows:
     class:   "ACTS"
     social:  "true"
     by:      "ED-IN-0304 phase 2 -- AN ARMY IS WRITTEN AFTER ITS MINT, the one Record kind that is. `recruit`, `form_unit`, `assign_troops` and `order_unit` (`loop/effects_army.py`) replace an `army` Record's content with the one `modules/mass_battle/armyrecord.py` returns for that command, so the row that said `subject_matter` is written once, inside `(Record, exists)`'s gate, no longer holds for this kind. Every other kind stays write-once: each effect declines a Record that is not an `army`. [ASSUMPTION; medium; Jordan to correct; revert: delete this row and the four verbs, and mint an army afresh for every change.]"
-    emits:   "`army.recruited` · `army.formed` · `army.assigned` · `army.ordered`"
+    emits:   "`army.recruited` · `army.formed` · `army.assigned` · `army.ordered` · `army.disbanded` · `army.discharged`"
   - kind:    "Record"
     field:   "ttl"
     steps:   [MAT]

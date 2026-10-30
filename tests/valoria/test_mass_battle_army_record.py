@@ -204,12 +204,13 @@ def test_apply_runs_each_season_command_and_refuses_each_rule_it_breaks():
     assert r['subformations'][0]['stance'] == 'hold'
     assert A.apply(_cmd(r, 'order', strategy='defend'))['strategy'] == 'defend'
     assert A.apply(_cmd(r, 'validate')) == r
-    # the recruit limit is per cohort: a second cohort has its own population, the first has spent 40 of 120
+    # the recruit limit is per cohort: a second cohort has its own population, the first has spent 40 of its cap
+    cap = R.under_arms_cap(12)
     over = dict(cohort='c1', troop_type='heavy_infantry', weight=12, sites=sites, full=FULL)
-    A.apply(_cmd(r, 'recruit', count=80, **{k: v for k, v in over.items() if k != 'count'}))
-    other = A.apply(_cmd(r, 'recruit', count=120, **{**over, 'cohort': 'c2'}))
-    assert A.by_type(other, 'c2') == {'heavy_infantry': 120} and A.by_type(other, 'c1') == {'heavy_infantry': 40}
-    for bad in (_cmd(r, 'recruit', count=81, **{k: v for k, v in over.items() if k != 'count'}),   # 40 + 81 > 120
+    A.apply(_cmd(r, 'recruit', count=cap - 40, **{k: v for k, v in over.items() if k != 'count'}))
+    other = A.apply(_cmd(r, 'recruit', count=cap, **{**over, 'cohort': 'c2'}))
+    assert A.by_type(other, 'c2') == {'heavy_infantry': cap} and A.by_type(other, 'c1') == {'heavy_infantry': 40}
+    for bad in (_cmd(r, 'recruit', count=cap - 40 + 1, **{k: v for k, v in over.items() if k != 'count'}),   # over the cap
                 _cmd(r, 'recruit', count=1, cohort='c1', troop_type='archers', weight=12, sites=sites, full=FULL),
                 _cmd(r, 'assign', name='wall', cohort='c1', count=0),
                 _cmd(r, 'order', name='wall'),

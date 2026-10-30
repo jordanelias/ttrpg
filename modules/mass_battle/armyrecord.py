@@ -32,7 +32,7 @@ from modules.mass_battle.troop_types.recruitment import recruit_limit
 from modules.mass_battle.troop_types.registry import roles_for, stats_for
 
 __all__ = ['KEYS', 'new', 'raised', 'by_type', 'unassigned', 'form', 'assign', 'release', 'order', 'set_strategy',
-           'validate', 'to_order_of_battle', 'apply', 'OPS', 'fielded']
+           'validate', 'to_order_of_battle', 'apply', 'OPS', 'fielded', 'disband', 'discharge']
 
 #: `subject_matter`'s exact key set. `engine/season/rosters.yaml: record_kinds.values.army` mirrors it and a test pins
 #: the two equal.
@@ -162,6 +162,29 @@ def release(record: dict, name: str, cohort: str, count) -> dict:
     return _replace_sf({**record, 'trained': trained}, i, sf2)
 
 
+def disband(record: dict, name: str) -> dict:
+    """The record without subformation `name`; every trooper in it returns to the trained, unassigned pool, so no one is
+    lost. (A wrong type or a spare slot is no longer permanent.)"""
+    i = _sf_index(record, name)
+    sf = record['subformations'][i]
+    trained = record['trained']
+    for cohort, n in sf['assigned']:
+        trained = _merge(trained, (cohort, sf['troop_type']), n)
+    sfs = tuple(s for j, s in enumerate(record['subformations']) if j != i)
+    return {**record, 'trained': trained, 'subformations': sfs}
+
+
+def discharge(record: dict, cohort: str, troop_type: str, count) -> dict:
+    """The record with `count` trained, UNASSIGNED troops of `troop_type` from `cohort` sent home: they leave the army
+    and stop counting against the cohort's cap. Troops in a subformation are released (`assign` with a negative count,
+    or `disband`) before they can be discharged."""
+    t, n = _type(troop_type), _pos(count)
+    have = unassigned(record, cohort, t)
+    if n > have:
+        raise ValueError(f"{cohort!r} has only {have} trained {t} unassigned, asked to discharge {n}")
+    return {**record, 'trained': _merge(record['trained'], (cohort, t), -n)}
+
+
 _UNSET = object()
 
 
@@ -238,7 +261,7 @@ def to_order_of_battle(record: dict, fitness: Optional[Callable[[str], float]] =
 
 #: The commands `apply` runs: one per season verb (`recruit`, `form_unit`, `assign_troops`, `order_unit`) and
 #: `validate`, which `create_record` asks of an army it mints.
-OPS = ('recruit', 'form', 'assign', 'order', 'validate')
+OPS = ('recruit', 'form', 'assign', 'order', 'disband', 'discharge', 'validate')
 
 
 def apply(cmd) -> dict:
@@ -267,7 +290,13 @@ def _apply(cmd) -> dict:
         return r
     if cmd.op == 'recruit':
         n = _pos(a['count'])
-        room = recruit_limit(a['troop_type'], a['weight'], a['sites'], by_type(r, a['cohort']), a['full'])
+        # The cap is the cohort's population, whichever army it is raised into: what it has already given to any
+        # other army (`others`, the host's: the other armies' records) counts against it.
+        given = dict(by_type(r, a['cohort']))
+        for other in a.get('others', ()):
+            for t, k in by_type(other, a['cohort']).items():
+                given[t] = given.get(t, 0) + k
+        room = recruit_limit(a['troop_type'], a['weight'], a['sites'], given, a['full'])
         if n > room:
             raise ValueError(f"{a['cohort']!r} can raise {room} more {a['troop_type']}, asked for {n}")
         return raised(r, a['cohort'], a['troop_type'], n)
@@ -278,6 +307,10 @@ def _apply(cmd) -> dict:
         if n == 0 or int(n) != n:
             raise ValueError(f"a count must be a non-zero whole number, got {n!r}")
         return assign(r, a['name'], a['cohort'], n) if n > 0 else release(r, a['name'], a['cohort'], -n)
+    if cmd.op == 'disband':
+        return disband(r, a['name'])
+    if cmd.op == 'discharge':
+        return discharge(r, a['cohort'], a['troop_type'], a['count'])
     if cmd.op == 'order':
         if 'strategy' in a:
             if set(a) != {'strategy'}:
@@ -294,8 +327,9 @@ def fielded(muster) -> Optional[OrderOfBattle]:
     """THE SECOND ENTRY THE SEASON CALLS (`mass_battle.army_order`, a `query` composition row): the order of battle an
     army record fights with on one field, or None when none of its troops are there to fight.
     `muster` is `engine/season/queries/inputs.py::ArmyMuster` (`record`, `fit`); `fit` is `((cohort, fraction), ...)`
-    for the cohorts that are PRESENT on this field, the fraction being the share of each still fit to fight. A
-    cohort the record names that is not in `fit` is somewhere else, and fights with nobody. A malformed record raises
+    for every cohort the host knows of (not only those near this field: an army is where its commander is, and the
+    host has already decided the commander is here), the fraction being the share of each still fit to fight. A cohort
+    the record names that is not in `fit` has no body left to give, and fights with nobody. A malformed record raises
     ValueError (`validate`); an army with nobody present is not malformed, it is absent, and reads None so the host
     fights that side as it always did."""
     validate(muster.record)

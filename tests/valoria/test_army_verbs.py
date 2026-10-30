@@ -87,15 +87,17 @@ def test_an_army_is_minted_whole_one_per_faction_and_held_by_its_maker():
 # ------------------------------------------------------------------------------------------ recruit and refuse
 def test_recruit_raises_troops_up_to_the_limit_the_population_and_the_barracks_allow():
     w, d = _armed(*_world())
+    from modules.mass_battle.troop_types.recruitment import under_arms_cap
+    cap = under_arms_cap(12)                         # the cohort's weight, at the ruled scale
     out = _do(w, d, "recruit", "r1", cohort=COHORT, troop_type="heavy_infantry", count=100)
     assert "army.recruited" in _kinds(out), _kinds(out)
     assert _army(w)["trained"] == ((COHORT, "heavy_infantry", 100),)
-    # 120 may be under arms: 20 more fits, 21 does not (and the refusal leaves the record as it was)
+    # the rest of the cap fits, one more does not (and the refusal leaves the record as it was)
     before = _army(w)
-    over = _do(w, d, "recruit", "r2", cohort=COHORT, troop_type="heavy_infantry", count=21)
+    over = _do(w, d, "recruit", "r2", cohort=COHORT, troop_type="heavy_infantry", count=cap - 100 + 1)
     assert "recruit.refused" in _kinds(over) and _army(w) == before, _kinds(over)
-    ok = _do(w, d, "recruit", "r3", cohort=COHORT, troop_type="heavy_infantry", count=20)
-    assert "army.recruited" in _kinds(ok) and _army(w)["trained"] == ((COHORT, "heavy_infantry", 120),)
+    ok = _do(w, d, "recruit", "r3", cohort=COHORT, troop_type="heavy_infantry", count=cap - 100)
+    assert "army.recruited" in _kinds(ok) and _army(w)["trained"] == ((COHORT, "heavy_infantry", cap),)
 
 
 def test_a_troop_type_needs_its_own_kind_of_training_site():
@@ -176,11 +178,11 @@ def test_each_menu_refusal_leaves_the_record_as_it_was():
         assert _army(w) == before, (verb, payload)
 
 
-def test_the_four_verbs_are_withheld_from_formation_so_no_person_forms_them():
+def test_the_army_verbs_are_withheld_from_formation_so_no_person_forms_them():
     """The command is the act's payload, which no Candidate carries: a computed act could not bind it."""
     from engine.season.data.rosters import ARMY_VERBS
     from engine.season.data.verbs import VERB_TABLE
-    assert len(ARMY_VERBS) == 4 and set(ARMY_VERBS) <= set(VERB_TABLE), "vacuous unless four real verbs"
+    assert len(ARMY_VERBS) == 6 and set(ARMY_VERBS) <= set(VERB_TABLE), "vacuous unless six real verbs"
     assert set(ARMY_VERBS) <= set(DEFAULT_FIXTURES.get("withheld_verbs"))
 
 

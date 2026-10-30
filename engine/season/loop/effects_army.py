@@ -1,5 +1,5 @@
-"""`season.loop.effects_army` -- the four verbs that change a faction's army record: `recruit`, `form_unit`,
-`assign_troops` and `order_unit` (ED-IN-0304 phase 2).
+"""`season.loop.effects_army` -- the verbs that change a faction's army record: `recruit`, `form_unit`,
+`assign_troops`, `order_unit` (ED-IN-0304 phase 2), `disband_unit` and `discharge_troops` (phase 5).
 
 Jordan ruled on 2026-10-28 that a faction's army is an order-of-battle RECORD (kind `army`, `rosters.yaml:
 record_kinds`), not only `PersonId[] at weight`. The record's CONTENT -- what it says, every operation on it, and
@@ -71,19 +71,20 @@ def _eff_recruit(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
 
     The limit is the module's (`troop_types/recruitment.py::recruit_limit`): the cohort's weight bounds how many can
     be under arms, and the best Site of the troop type's own kind in the cohort's residence bounds how many of that
-    type. This effect supplies those two facts and refuses what the cohort cannot be: no Person, not a cohort
-    (`weight` of 1 is an individual, whose household is not an army's population), or not committed to the army's
-    faction. [ASSUMPTION; medium; Jordan to correct; revert: any person in `world_q.members` is a cohort.]"""
+    type, and what the cohort has already given to any OTHER army counts against it. This effect supplies those
+    facts and refuses what the cohort cannot be: no Person, not a cohort (`weight` of 1 is an individual, whose
+    household is not an army's population), or not raisable by the army's faction (`world_q.raisable_by`: it governs
+    where the cohort lives, or the cohort is committed to it)."""
     rec = _army(w, a)
     if rec is None:
         return NO_CHANGE
     args = _payload(a, "cohort", "troop_type", "count")
     cohort = w.persons.get(args.get("cohort")) if isinstance(args.get("cohort"), str) else None
     if (len(args) != 3 or cohort is None or not cohort.weight > 1
-            or cohort.id not in world_q.members(w, rec.subject_matter["faction"])):
+            or not world_q.raisable_by(w, cohort.id, rec.subject_matter["faction"])):
         return NO_CHANGE
     args = dict(args, weight=cohort.weight, sites=world_q.training_sites(w, cohort.id),
-                full=w.fixtures.get("condition_scale"))
+                full=w.fixtures.get("condition_scale"), others=world_q.other_army_records(w, rec.id))
     return _apply(w, a, "recruit", args, "army.recruited")
 
 
@@ -98,6 +99,19 @@ def _eff_assign_troops(w: "World", a: "Act", res: "Resolution | None" = None) ->
     """ASSIGN TROOPS: move `count` trained troops of `cohort` into subformation `name`, or out of it when `count` is
     negative. No trooper is created or lost."""
     return _apply(w, a, "assign", _payload(a, "name", "cohort", "count"), "army.assigned")
+
+
+@effect_for("disband_unit")
+def _eff_disband_unit(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """DISBAND A SUBFORMATION: remove subformation `name`; its troops return to the trained, unassigned pool."""
+    return _apply(w, a, "disband", _payload(a, "name"), "army.disbanded")
+
+
+@effect_for("discharge_troops")
+def _eff_discharge_troops(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """DISCHARGE TROOPS: send `count` trained, unassigned troops of `troop_type` from `cohort` home; they leave the army
+    and stop counting against the cohort's cap."""
+    return _apply(w, a, "discharge", _payload(a, "cohort", "troop_type", "count"), "army.discharged")
 
 
 @effect_for("order_unit")

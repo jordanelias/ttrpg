@@ -28,9 +28,9 @@ from __future__ import annotations
 from typing import Optional
 
 from .. import manifest
-from ..data.rosters import MARCH_TARGET_KINDS
+from ..data.rosters import MARCH_TARGET_KINDS, SUBTREE_OCCUPATION_KINDS
 from ..queries.world_q import (
-    DETAIN_KIND, ancestry, holder_faction_of, home_of, mustered, place_of, restrained,
+    DETAIN_KIND, ancestry, holder_faction_of, home_of, mustered, place_of, restrained, standing_at,
 )
 from ..state.carriers import Act
 from ..state.gate import seat_faction
@@ -117,9 +117,18 @@ def sides_of(w: World, a: Act, target: Optional[str],
         faction = seat_faction(w, a.via)
         home = home_of(w).get(a.actor)
         chain = ancestry(w, home) if home is not None else []
+        # ED-IN-0304 phase 5: the origin is the nearest place a march can reach in the actor's home chain -- a
+        # settlement for anyone housed in one, the territory itself for an army that has arrived at it and so lives
+        # there. A settlement is mustered by subtree (its people stand in buildings beneath it), a territory by who is
+        # standing AT it, so a parked army can march on and a territory does not muster its whole realm.
         origin = next((r for r in chain if w.rungs.get(r) is not None
-                       and w.rungs[r].kind == "settlement"), None)
-        claimants = mustered(w, origin, faction) if origin and faction else []
+                       and w.rungs[r].kind in MARCH_TARGET_KINDS), None)
+        if not (origin and faction):
+            claimants = []
+        elif w.rungs[origin].kind in SUBTREE_OCCUPATION_KINDS:
+            claimants = mustered(w, origin, faction)
+        else:
+            claimants = standing_at(w, origin, faction)
         # v9 SC-03a (#453 §10.4 step 3, K-53): A PRISONER IS NOT IN THE ARMY. Every claimant holding
         # a live `detain` is excluded (`world_q.restrained`, the custody's one read), order kept. ⚠
         # THE ATTACKING SIDE ONLY, AND THAT IS NAMED, NOT SETTLED: the DEFENDERS are mustered by the

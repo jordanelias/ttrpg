@@ -131,10 +131,11 @@ def test_troops_on_the_field_are_the_cohorts_body_fraction_of_its_assignment():
 # -------------------------------------------------------------------------------------------- the scale of the rest
 def test_a_side_without_an_order_of_battle_is_scaled_to_the_troops_it_could_raise():
     """A headcount side meeting an order of battle counts households against troops unless scaled: weight 12 must
-    field the 120 a weight-12 cohort can put under arms, not twelve."""
+    field what a weight-12 cohort can put under arms, not twelve."""
     from modules.mass_battle import massbattle as MBT
+    from modules.mass_battle.troop_types.recruitment import under_arms_cap
     unit = MBT._oob_unit(None, 12, "B", 5)
-    assert unit.total_troops() == 120, unit.total_troops()
+    assert unit.total_troops() == under_arms_cap(12) > 12, unit.total_troops()
     assert MBT._oob_unit(None, 0, "B", 5).total_troops() >= 1, "an empty side keeps the crash floor"
 
 

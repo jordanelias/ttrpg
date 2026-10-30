@@ -964,6 +964,7 @@ FIELD_CASUALTY_MODELS = roster("field_casualty_models")
 MARCH_TARGET_KINDS = roster("march_target_kinds")
 SUBTREE_OCCUPATION_KINDS = roster("subtree_occupation_kinds")
 RAZE_TARGET_KINDS = roster("raze_target_kinds")
+ARRIVAL_ONLY_KINDS = roster("arrival_only_kinds")
 # ⚠ BOUND AT IMPORT LIKE THE OTHERS, AND THAT IS THE POINT. `titles` was the ONE roster read
 # lazily through a bare `_ROSTERS.get(...) or {}`, so it alone got no existence refusal -- and
 # because `_req_revoke` fails OPEN into purview-for-everything when the mapping is empty, the one

@@ -1522,12 +1522,12 @@
     {
       "key": "mass_battle.TROOPS_PER_WEIGHT",
       "name": "TROOPS_PER_WEIGHT",
-      "value": 100,
+      "value": 300,
       "kind": "scalar",
       "module": "mass_battle",
       "file": "modules/mass_battle/troop_types/recruitment.py",
-      "note": "[canonical: ED-IN-0304 -- ASSUMPTION, Jordan: \"you can invent one\"; aligned to config.TROOPS_PER_TIER's 100-troop first tier]",
-      "citation": "ED-IN-0304 -- ASSUMPTION, Jordan: \"you can invent one\"; aligned to config.TROOPS_PER_TIER's 100-troop first tier",
+      "note": "[canonical: ED-IN-0304 -- ASSUMPTION, Jordan: \"you can invent one\"; sized to the engine's 100-troop unit floor and 100..800 field armies, ED-IN-0304 phase 5]",
+      "citation": "ED-IN-0304 -- ASSUMPTION, Jordan: \"you can invent one\"; sized to the engine's 100-troop unit floor and 100..800 field armies, ED-IN-0304 phase 5",
       "citation_grade": "assumption"
     },
     {

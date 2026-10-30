@@ -88,7 +88,7 @@ from typing import Any, Optional
 # import order); the entry lookup is `_entry.py`'s, which imports `registrar` and `registry` the same way.
 from ...manifest.providers import provider
 from ...data.geography import geography
-from ...data.rosters import territory_id_of
+from ...data.rosters import SUBTREE_OCCUPATION_KINDS, territory_id_of
 from ...queries.inputs import ArmyMuster, MassBattleInput, ProvisionInput
 from ...queries.person_q import stance_toward
 from ...queries import world_q
@@ -173,22 +173,27 @@ def _origin_of(w: Any, pids: list) -> Optional[str]:
 
 
 def _order_of_battle(w: Any, faction: Optional[str], side: list) -> Any:
-    """ED-IN-0304 phase 3. The order of battle `faction`'s army Record fights this field with, or `None` -- the
-    side as it always fought, one headcount line. `None` for no faction, a faction with no army Record, and an
-    army none of whose assigned troops stand on this field.
+    """ED-IN-0304 phases 3 and 5. The order of battle `faction`'s army Record fights this field with, or `None` -- the
+    side as it always fought, one headcount line. `None` for no faction, a faction with no army Record, an army whose
+    commander is not here, and an army none of whose troops has a body left.
 
-    WHO IS ON THE FIELD is `side`, the persons the adapter already mustered at the place (the attacker's at its
-    origin, the defender's at the target): an army Record names cohorts, and one that is not in `side` is
-    somewhere else and fights with nobody. HOW FIT each is = its `body` over `condition_scale`, the scale a
-    person is built at (`Person.body`); that is the whole casualty loop, with no write of its own -- `march`
-    already scales a losing side's bodies by the engine's survivor fraction (`_eff_march`), so the next field
-    this army fights is that much smaller, and `tend` restores it. What the Record turns into is the module's
-    (`mass_battle.army_order`, by role string): this reads two facts off the world and decides nothing."""
+    AN ARMY IS WHERE ITS COMMANDER IS. The Record's holder is its commander; when he is among `side` (the persons the
+    adapter already mustered at the place: the attacker's at its origin, the defender's at the target) the whole army
+    takes the field, its troops drawn from cohorts wherever they live -- a cohort is a place's population and does not
+    march, so requiring it to stand on the field capped every army at one town's levy (20 troops). A commander
+    elsewhere leaves this side to fight as it always did. HOW FIT each cohort is = its `body` over `condition_scale`,
+    the scale a person is built at (`Person.body`); that is the whole casualty loop -- `march` scales the bodies of the
+    cohorts a losing army drew from by the engine's survivor fraction (`_eff_march`, `parties["fielded"]`), so the
+    next field this army fights is that much smaller, and `tend` restores it. What the Record turns into is the
+    module's (`mass_battle.army_order`, by role string): this reads facts off the world and decides nothing."""
     rid = world_q.army_of(w, faction) if faction is not None else None
     if rid is None:
         return None
+    commander = world_q.hold_force(w, rid)
+    if commander is None or commander.subject not in side:
+        return None
     full = w.fixtures.get("condition_scale")
-    fit = tuple((pid, max(0.0, min(1.0, w.persons[pid].body / full))) for pid in side if pid in w.persons)
+    fit = tuple((pid, max(0.0, min(1.0, p.body / full))) for pid, p in w.persons.items() if p.is_cohort)
     return composition.require(world_q.ARMY_ORDER)(ArmyMuster(w.records[rid].subject_matter, fit))
 
 
@@ -217,7 +222,10 @@ def field_input(w: Any, claimants: list, other: list, rung: str,
     return MassBattleInput(
         weights=(weights(claimants), weights(other)),
         territory=_territory_of(w, rung),
-        fort_level=world_q.fortification_of(w, rung),
+        # Walls are a settlement's: a field fought AT a territory is a field battle in the territory's own terrain
+        # (`fortification_of` averages every garrison in a subtree and any value above 0 is WALLS, which overrides
+        # terrain), ED-IN-0304 phase 5.
+        fort_level=world_q.fortification_of(w, rung) if w.rungs[rung].kind in SUBTREE_OCCUPATION_KINDS else 0.0,
         stances=(_side_stance(w, claimants), _side_stance(w, other)),
         walls_dr=w.fixtures.get("field_walls_dr"),
         origin=_origin_of(w, claimants),
@@ -349,8 +357,11 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     prov = composition.require(world_q.PROVISION)
     treasuries = (_attacker_treasury(w, causes), _defender_treasury(w, rung))
     fed, eaten = [], {}
-    for t, side in zip(treasuries, inp.weights):
-        p = prov(provision_input(w, sum(side), t, eaten.get(t, ())))
+    fielded = parties.get("fielded") or (None, None)
+    for t, side, drawn in zip(treasuries, inp.weights, fielded):
+        # An army eats what it drew its troops from (the cohorts' weight), not everyone mustered beside it.
+        weight = sum(w.persons[pid].weight for pid in drawn if pid in w.persons) if drawn is not None else sum(side)
+        p = prov(provision_input(w, weight, t, eaten.get(t, ())))
         eaten[t] = p.consumed
         fed.append(p)
     result = entry.fn(inp, rng, troops_a=fed[0].troops, troops_b=fed[1].troops)

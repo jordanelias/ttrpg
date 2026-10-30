@@ -233,12 +233,12 @@ def _weighted_unit(name, weight, morale_start=_MORALE_START_BASE):
 
 
 #: The troop type a side with no order of battle fights as, once the OTHER side has one. It is the nearest canonical
-#: stand-in for `_MVP_SUBUNIT_SHAPE`'s bare 'infantry' (which has no stat preset): one line of levy -- the call-up of
-#: ordinary people, the one type that needs no training Site (`troop_types/recruitment.py`) -- sized by the side's
-#: headcount. A side that has raised no army fights as the people it could call up, not as trained troops it never paid
-#: for. [ASSUMPTION; medium; Jordan to correct -- ED-IN-0304 phase 5 gives every faction a real
+#: stand-in for `_MVP_SUBUNIT_SHAPE`'s bare 'infantry' (which has no stat preset): one line of light infantry, sized by
+#: the side's headcount. NOT `levy`, though a levy is what a side that raised nothing could call up: measured at 300 a
+#: side over twelve seeds, a levy line closes to contact in 0 of them and every other infantry or mounted type in 11-12
+#: (`Unit` discipline 1), so a levy fallback would make a field against a headcount side a standing-still draw. [ASSUMPTION; medium; Jordan to correct -- ED-IN-0304 phase 5 gives every faction a real
 #: preset order of battle, after which this fallback is reached only by a hand-built record.]
-_HEADCOUNT_LINE_TYPE = 'levy'
+_HEADCOUNT_LINE_TYPE = 'light_infantry'
 
 
 def _oob_unit(oob, weight, side, morale_start):

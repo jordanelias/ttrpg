@@ -82,7 +82,9 @@ class Subformation:
     `troops` is a headcount (the engine sizes the footprint from it). `role` is a `config.ROLE_SPEC` key from the troop
     type's gated menu (`roles_for`); None is a plain Line with no instructions. `stance` None takes the strategy's. `target`
     is `TARGETINGS`. `fall_back_at`, if set, is a fraction in (0, 1) of its own starting strength at which it
-    withdraws (an `own_strength` Order setting stance 'retreat'); None never does."""
+    withdraws (an `own_strength` Order setting stance 'retreat'); None never does. [ASSUMPTION; medium; Jordan to
+    correct: a "fall-back point" is read as a strength, since the record holds no position and a season field is one
+    18-tick engagement; revert: an `enemy_within:` or position trigger, which needs a position on the record.]"""
     name: str
     troop_type: str
     troops: float
@@ -228,7 +230,10 @@ def build_unit(oob: OrderOfBattle, name: str, side: str, *, morale_start: int):
     """The `Unit` for `oob` on `side` ('A' attacker, 'B' defender): `armies.build_army` over one spec per
     subformation, placed by `_place`. `morale_start` is the side's season morale, applied to every subunit
     (`build_army` gives each its own copy). Unit-level power/command/discipline are the season adapter's baseline;
-    the TROOP TYPE's own stats override them per subunit (`Subunit.of_type`)."""
+    the TROOP TYPE's own stats override them per subunit (`Subunit.of_type`). [ASSUMPTION; medium; Jordan to correct:
+    the side's morale is every subunit's start, so a troop type's own morale preset (levy 2, knights 6) does not apply
+    -- in the season morale is a fact about the SIDE (stance, loyalty, battle history, `massbattle._morale_start`);
+    revert: pass no `morale` here so `Subunit.of_type`'s preset applies.]"""
     if side not in _SIDE_DIR:
         raise ValueError(f"side must be 'A' or 'B', got {side!r}")
     validate(oob)

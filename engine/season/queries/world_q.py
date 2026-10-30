@@ -1791,8 +1791,37 @@ def occupies(w: World, rung_id: str, faction: str) -> bool:
         # its own (a seizure, a founding) stands on its own and is occupied only by standing in it.
         held = governing_hold(w, rung_id)
         return held is not None and held.object != rung_id and occupies(w, held.object, faction)
+    return bool(standing_at(w, rung_id, faction))
+
+
+def standing_at(w: World, rung_id: str, faction: str) -> list:
+    """ED-IN-0304 phase 5. The members of `faction` whose live `contain` is AT `rung_id` itself, not anywhere beneath it:
+    who an army that has arrived at a territory is made of. `mustered` is the subtree reading (a settlement's people
+    stand in buildings under it); a territory's is this."""
+    TRACE.query("standing_at", "resolver")
     inside = set(members(w, faction))
-    return any(t.kind == "contain" and t.live and t.object == rung_id and t.subject in inside for t in w.tenures)
+    return sorted(t.subject for t in w.tenures
+                  if t.kind == "contain" and t.live and t.object == rung_id and t.subject in inside)
+
+
+def raisable_by(w: World, cohort_id: str, faction: str) -> bool:
+    """ED-IN-0304 phase 5. May `faction` raise troops from this cohort? A faction raises the people it governs: the
+    cohort lives in a place `faction` holds (`holder_faction_of` its residence, the nearest held rung at or above), or
+    it is committed to `faction`. The shipped realm seats its cohorts with no commit, so membership alone left every
+    faction without a levy. [ASSUMPTION; medium; Jordan to correct; revert: members only.]"""
+    TRACE.query("raisable_by", "resolver")
+    if cohort_id in members(w, faction):
+        return True
+    home = residence_of(w).get(cohort_id)
+    return home is not None and holder_faction_of(w, home) == faction
+
+
+def other_army_records(w: World, rid: str) -> tuple:
+    """ED-IN-0304 phase 5. The `subject_matter` of every `army` Record but `rid`, in id order: what a recruit adds to
+    the cohort's cap so that one cohort cannot be raised to its limit into two armies."""
+    TRACE.query("other_army_records", "resolver")
+    return tuple(r.subject_matter for _id, r in sorted(w.records.items())
+                 if _id != rid and r.kind == "army" and isinstance(r.subject_matter, dict))
 
 
 def fortification_of(w: World, rung_id: str) -> float:

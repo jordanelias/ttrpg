@@ -332,19 +332,24 @@ BASE = {
     # 0->1, field.unopposed 0->1, march.declared 9->7, march.refused 9->6, claim.deposited 7005->7001,
     # finding.none 115->116 (the later options shift with the army's new place). Seeds 0 and 2 did not move.
     # Was: old 97d2d92f..., new 36ef9545..., acts 560, tenures 810, log 8128, census 997a5648...
-    1: {"old": "38e1c49edf8e6fd2b1a1127d32da07ca", "new": "80df23952bb3364cc1e55e4535c397b4", "acts": 558,
-        "census": "1fe9761f2a4d4d981d81d4fe1c25fa7d5ce4e72625ba0761124cdf94572a8b6b",
-        "counts": {"persons": 83, "rungs": 412, "offices": 32, "sites": 322, "records": 98,
-                   "propositions": 87, "dates": 0, "docket": 2, "tenures": 811, "log": 8122}},
+    # SEED 1 RE-RECORDED AGAIN, ED-IN-0304 phase 5 (`arrival_only_kinds`): computed `move`s onto a territory rung are
+    # now declined (travel.moved 8->7, travel.blocked 9->11, claim.deposited 7001->7003, cover.assumed 25->26,
+    # work.unavailable 37->38, finding.none 116->115). Before phase 5 a person could be walked onto a territory.
+    1: {"old": "ce57ea276da7275849b3234512401092", "new": "a34d0ea12a14b2899e6f51cdaa801390", "acts": 561,
+        "census": "b8fe87214755b48feec26c392aa32bb129661f43daa8978a365c0d20d13d99e0",
+        "counts": {"persons": 83, "rungs": 412, "offices": 32, "sites": 322, "records": 99,
+                   "propositions": 87, "dates": 0, "docket": 2, "tenures": 811, "log": 8126}},
     # SEED 2 RE-RECORDED, same cause: one computed territory march, `march.refused` -> `field.unopposed` +
     # `army.arrived` (army.arrived 0->1, march.declared 3->1, march.refused 3->0), and the season's later choices
     # follow (record.created 43->44, proposition.uttered 24->22, finding.none 102->105, ...).
     # Was: old 455cfe8d..., new 7e8df32a..., acts 588, records 90, propositions 91, tenures 787, log 6879,
     # census b2adbbfe...
-    2: {"old": "f6d436a4cca0a7ecc24ea45628cc55ec", "new": "e463df75d5006d310bf216f991d09cee", "acts": 583,
-        "census": "4a98cbc721d20e50b70e59ac6064f1644ebc598d92b44e88f111874b2269e8a3",
+    # SEED 2 RE-RECORDED AGAIN, same cause (travel.moved 5->4, travel.blocked 23->25, migrate.refused 65->66,
+    # claim.deposited 5767->5760).
+    2: {"old": "04f5c3333d4ea3fc0cb321b9f81551e5", "new": "a5b032804486e7d3d2dcc7cc09132fa4", "acts": 585,
+        "census": "653588cd59c34c494d8d66a2a57bdf38078efe88faecb7eed6048344ea495045",
         "counts": {"persons": 81, "rungs": 410, "offices": 32, "sites": 322, "records": 92,
-                   "propositions": 89, "dates": 1, "docket": 2, "tenures": 788, "log": 6877}},
+                   "propositions": 89, "dates": 1, "docket": 2, "tenures": 787, "log": 6872}},
 }
 
 

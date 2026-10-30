@@ -73,7 +73,7 @@ def test_equal_headcount_of_different_troop_types_fights_differently():
 
 
 def test_an_order_of_battle_side_and_a_headcount_side_both_deploy():
-    """A side with no order of battle, once the other has one, is a deployed levy line, not a crash."""
+    """A side with no order of battle, once the other has one, is a deployed light-infantry line, not a crash."""
     r = massbattle.resolve_field(_record(oobs=(_line('archers', 400), None), weights=((10,), (400,))),
                                  random.Random(3))
     assert set(r) >= {'attacker_wins', 'degree', 'attacker_size_pct', 'defender_size_pct'}

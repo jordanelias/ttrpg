@@ -2250,7 +2250,7 @@ def test_invariant_12_refuses_a_degree_keyed_emits_with_nothing_to_key_it_on():
     # the roster: its job is to fail if the loader started refusing everything, so it moves with
     # the table by construction and the number is read from the file rather than chosen.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen -- the control that stops both arms above passing on a loader that refuses everything]
-    assert len(VERBS._load_verb_table()) == 60
+    assert len(VERBS._load_verb_table()) == 62       # ED-IN-0304 phase 5: `disband_unit` and `discharge_troops` join, 60 -> 62
 
 
 def test_w2_a_planted_write_to_an_unruled_field_raises_and_names_the_pair():
@@ -8963,7 +8963,8 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
                                               "determine", "comply", "migrate", "requisition",
                                               "forgive",
                                               "arrest", "pardon", "raze", "thread_read",
-                                              "recruit", "form_unit", "assign_troops", "order_unit"}, (    # ED-IN-0304 phase 2: the four army verbs JOIN, 20 -> 24 -- withheld from formation (`rosters.yaml: army_verbs`), so nobody forms them, by design; a re-record. IN-57: `dispatch` out, to `refused_only`; FI-01: back; IN-38: out again; K-3: `thread_read` in; REM-10: `speak`, `examine`, `argue` out
+                                              "recruit", "form_unit", "assign_troops", "order_unit",
+                                              "disband_unit", "discharge_troops"}, (    # ED-IN-0304 phase 5: the two army verbs that shrink an army JOIN, 24 -> 26, for the same reason: their command is a payload and no person forms them    # ED-IN-0304 phase 2: the four army verbs JOIN, 20 -> 24 -- withheld from formation (`rosters.yaml: army_verbs`), so nobody forms them, by design; a re-record. IN-57: `dispatch` out, to `refused_only`; FI-01: back; IN-38: out again; K-3: `thread_read` in; REM-10: `speak`, `examine`, `argue` out
         f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Five of "
         "the original six are the governance verbs no corpus overlay grants (`establish` is "
         "`remit:confer`-eligible); `march` is eligible in NPC-033/038 and WOULD form a real "
@@ -14131,7 +14132,7 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # a re-record. 56 -> 60, `recruit`, `form_unit`, `assign_troops`, `order_unit` (ED-IN-0304 phase 2),
     # uncontested (they contest nothing), a re-record.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen]
-    assert len(VERB_TABLE) == 60, len(VERB_TABLE)
+    assert len(VERB_TABLE) == 62, len(VERB_TABLE)    # ED-IN-0304 phase 5: 60 -> 62 (`disband_unit`, `discharge_troops`)
     # AND THE SIX ARE SIX, not a row that says six. This is the half of the pin that the old
     # count could not express: a table carrying the placeholder passed `== 32` while no act in it
     # could be formed, and `runs/CASELOG_NPC.md:64` reported the same case as a blocked one.
