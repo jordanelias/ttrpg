@@ -214,6 +214,8 @@ CR = {
  "CR-42": ("B10-08", "No faction count is written: re-word the stale 'eight'"),
  "CR-43": ("B10-08", "`PI` names nothing; one row per meaning; the CI start value and gloss"),
  "CR-44": ("B10-08", "Case ids are series-prefixed; a collision is recorded (`CASE_SERIES`)"),
+ # the fold of 2026-10-30
+ "CR-45": ("B10-07", "An unknown verb's Unspecified is attributed from VERB_TABLE, not a prose read (names_a_verb deleted)"),
 }
 # the port gate's new positions (GO-01, GO-05 and GO-06 are v9 handles, in V9)
 GO = {
@@ -224,13 +226,15 @@ NM = {f"NM-W{n}": "B10-19" for n in range(10)}
 NM["NM-W0"] = CLOSED
 NM["NM-W2"] = CLOSED
 NM["NM-W3"] = CLOSED
-CL = {"CL-CHAR": "B10-10", "CL-ATTR": "B10-19", "CL-TROOP": "B10-19", "CL-EVENTS": "B10-18", "CL-THRUST": "B10-19"}
+CL = {"CL-CHAR": "B10-10", "CL-ATTR": "B10-19", "CL-TROOP": "B10-19", "CL-EVENTS": "B10-18", "CL-THRUST": "B10-19",
+      # the fold of 2026-10-30: DESIGN-FIRST, each HELD on its -10 questions
+      "CL-SLICE": "B10-19", "CL-OPEN": "B10-19", "CL-PERSON": "B10-19", "CL-MGMT": "B10-19"}
 
 # In-batch order of the final cut ('->' is serial; 'held:' members wait on the question named and slot in by rule R8;
 # 'landing' is a commit of a row that lives in another batch, not a member)
 ORDER = {
  'B10-06': 'REM-26 -> REM-27 -> REM-28 -> CR-23 -> REM-29 -> REM-2A -> REM-2B -> IN-45',
- 'B10-07': 'REM-44 (with L1-6 and L1-7)',
+ 'B10-07': 'REM-44 (with L1-6 and L1-7) -> CR-45',
  'B10-07b': 'SE-06 (MEASURE, then BUILD if values exist) -> CR-21 -> CR-16',
  'B10-08': 'CR-41 -> CR-42 -> CR-43 -> CR-44 -> CP-T01-03 -> CP-T01-04 -> CP-T01-06 -> CP-T01-05 -> CP-T01-01 -> CP-T01-02 -> CR-18',
  'B10-09': 'CP-T02-01 -> CP-T02-02 -> CP-T03-00 -> CP-T02-03 -> CP-T02-05 -> CP-T02-07 -> IN-12 -> CR-26 -> IN-61; close two: IN-58 -> CR-03 -> CR-10 -> CR-28 -> landing CL-THRUST B3.2 -> CR-11 -> CR-25 -> CR-17',
@@ -244,7 +248,7 @@ ORDER = {
  'B10-17': "IN-30 -> CP-T09-04 -> CP-T09-01 -> CP-T09-05 -> CP-T09-02 -> CP-T09-03 -> CP-T09-07 -> CR-09 -> CP-T09-08 -> CP-T09-09 -> CP-T09-06 -> CR-32 -> CR-35 -> CR-36 -> CR-37 -> FA-01's clause (after CR-29) -> IN-48 (two closes: close one IN-30 to CP-T09-06; close two CR-32 to IN-48); held: IN-36 (M1's residue, confirmed at the default)",
  'B10-18': "CP-T10-06 -> CP-T10-07 -> CP-T10-09 -> CP-T10-01 -> CP-T10-02 -> CP-T10-03 -> CP-T10-03's flip -> CL-EVENTS (commit 2) -> CR-08 -> CR-22 -> CL-EVENTS (commit 3) -> CL-EVENTS (commit 4) -> CP-T10-04 -> CP-T10-05 -> CP-T10-08",
  'B10-20': 'GO-09 -> GO-10 -> GO-11 -> GO-12 -> GO-16 -> GO-01 -> GO-05 -> GO-08 -> GO-15; listed: GO-06 (HELD, BLK, another repository)',
- 'B10-19': "held: NM-W1, NM-W4, NM-W5 (behind NM-W1), NM-W6, NM-W7, NM-W8, NM-W9, CL-ATTR (J-T2), CL-TROOP (M3), CL-THRUST (B4.x on its gates; B5.2 on M1's residue; B6.n content); DESIGN-FIRST: CR-38 (drafted beside B10-13; approved before B10-18 closes, else on B10-20's freeze row)",
+ 'B10-19': "held: NM-W1, NM-W4, NM-W5 (behind NM-W1), NM-W6, NM-W7, NM-W8, NM-W9, CL-ATTR (J-T2), CL-TROOP (M3), CL-THRUST (B4.x on its gates; B5.2 on M1's residue; B6.n content); DESIGN-FIRST: CR-38 (drafted beside B10-13; approved before B10-18 closes, else on B10-20's freeze row); DESIGN-FIRST, the fold of 2026-10-30: CL-OPEN (M26) -> CL-PERSON (M34-M37, M40; build after CR-17) -> CL-SLICE (M31-M33; build a landing at B10-11's head) -> CL-MGMT (M31; after CL-SLICE)",
  'B10-Z': 'held or LEAVE: FA-03, FA-07, MB-08, PC-06, PC-08, IN-44 (rows 2-16 released from M11), SC-05, SC-07, CR-39 (on CR-38), CR-07 (on H-89: via.scope missing on one registry-derived seat)',
 }
 
