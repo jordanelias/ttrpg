@@ -24,7 +24,7 @@ from __future__ import annotations
 from typing import Any
 
 from ..gaps import Forbidden, Ungraded
-from .rosters import roster, roster_map, table
+from .rosters import ARMY_VERBS, roster, roster_map, table
 
 class Fixtures:
     """S42.2.1: never invent a constant. Inject it, declare it a harness fixture at
@@ -976,8 +976,9 @@ DEFAULT_FIXTURES = Fixtures(
     # from an act that names it). Each member must be a `verb_table.yaml` verb (`opening_set` refuses
     # another). SHIPPED naming `destroy_record` -- THE SINK ARM OFF: since IN-26 its row is formable
     # (`A-13`'s shape), and withheld it forms for nobody, as before, so every hash is today's. `()` is THE
-    # SINK ARM ON (`H-156` option (b) for that row): a holder may burn what he holds. [ASSUMPTION; medium;
+    # SINK ARM ON (`H-156` option (b) for that row): a holder may burn what he holds. ED-IN-0306 phase 2 adds the
+    # four army verbs (`loop/effects_army.py`): their command is the act's payload, which no Candidate carries. [ASSUMPTION; medium;
     # Jordan to correct; the flip ON is a separate, declared hash-moving commit, IN-52's precedent.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-156 -- the formation-policy row; (a) and (b) are both defensible and lead to different corpora, so the arm ships at (a), today's state, and (b) is the declared second point]
-    withheld_verbs=("destroy_record",),   # `H-156`, swept ("destroy_record",) (control, SHIPPED) / ()
+    withheld_verbs=("destroy_record", *ARMY_VERBS),   # `H-156`, swept ("destroy_record", *ARMY_VERBS) (control, SHIPPED) / ARMY_VERBS alone (the sink arm)
 )

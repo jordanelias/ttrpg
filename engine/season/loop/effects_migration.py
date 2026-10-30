@@ -10,6 +10,7 @@ for `effect_for`, `_operand` and the shared §10-ladder refusal `_decline_ascent
 
 from __future__ import annotations
 
+from ..data.rosters import ARRIVAL_ONLY_KINDS
 from ..queries.world_q import DETAIN_KIND, RESIDE_KIND, has_room, residence_of, restrained
 from ..state.carriers import Tenure
 from ..state.gate import NO_CHANGE, Change, Subject
@@ -57,6 +58,8 @@ def _eff_move(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # so the fold emits `move`'s own `emits_on_refusal`. The rule itself is not re-implemented:
     # `World.contain_ascends` is the one owner and `add_tenure` still RAISES on it, because a
     # caller writing the edge directly is a bug where a person attempting the journey is not.
+    if _arrival_only(w, dest):
+        return _decline_ascent(f"a {a.verb}'s destination is reached only by a march's arrival -> {a.actor} into {dest!r}")
     if not w.contain_ascends(a.actor, dest):
         # ⚠ THE INSTANCE DETAIL SITS AFTER ` -> `, WHICH IS `report.py`'s CLUSTER KEY
         # (`d.what.split(" -> ")[0]`). Putting the actor and the destination in the prefix would
@@ -66,6 +69,12 @@ def _eff_move(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # ⚠ PLAN POSITION `19c`: WHAT A `move` LEAVES BEHIND IS THE MOVER'S `reside` EDGE -- it is not
     # touched here, so a traveller still lives where he lived (`_eff_migrate`'s docstring).
     return Change((Subject.entity("persons", a.actor),), lambda: _relocate(w, a, dest))
+
+
+def _arrival_only(w: "World", dest) -> bool:
+    """ED-IN-0306 phase 5: is `dest` a rung only an arriving army is placed at (`rosters.yaml: arrival_only_kinds`)?"""
+    rung = w.rungs.get(dest)
+    return rung is not None and rung.kind in ARRIVAL_ONLY_KINDS
 
 
 def _decline_custody(w: "World", a: "Act", dest: str) -> Change:
@@ -185,6 +194,8 @@ def _eff_migrate(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     dest = _operand(a, "to")
     if restrained(w, a.actor, DETAIN_KIND):
         return _decline_custody(w, a, dest)
+    if _arrival_only(w, dest):
+        return _decline_ascent(f"a {a.verb}'s destination is reached only by a march's arrival -> {a.actor} into {dest!r}")
     if not w.contain_ascends(a.actor, dest):
         return _decline_ascent(
             f"a migration's destination is not up the §10 ladder -> {a.actor} into {dest!r}")

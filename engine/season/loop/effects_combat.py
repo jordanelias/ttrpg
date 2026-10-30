@@ -15,7 +15,7 @@ and `_operand`, the helpers `march` takes from `effects_shared.py`; its arrival 
 from __future__ import annotations
 
 from ..data.rosters import (
-    DECLARED, FELLED, FIELD_CASUALTY_MODELS, LOST, UNOPPOSED, WON, WOUND_HARM_MODELS,
+    DECLARED, FELLED, FIELD_CASUALTY_MODELS, LOST, SUBTREE_OCCUPATION_KINDS, UNOPPOSED, WON, WOUND_HARM_MODELS,
     require_member,
 )
 from ..data.verbs import VERB_TABLE, VOCATION_SOURCED, VOCATIONS
@@ -262,6 +262,12 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     movers = (_not_yet_under(w, attackers, target, a.actor, a.via) if arrive else [])
     attacker_lost = res.degree == LOST
     losers = [] if res.degree == UNOPPOSED else (attackers if attacker_lost else defenders)
+    # ED-IN-0306: a side that fought as an order of battle bleeds only where it fought -- the cohorts its troops were
+    # drawn from (`parties["fielded"]`, the provider's) -- not everybody who happened to be mustered beside them. A
+    # side that fought as a headcount (None) loses all its mustered people, as before.
+    drawn = (parties.get("fielded") or (None, None))[0 if attacker_lost else 1]
+    if drawn is not None and res.degree != UNOPPOSED:
+        losers = list(drawn)             # cohorts do not stand beside their army: they are the people at home
     pct = engine_result.get("attacker_size_pct" if attacker_lost else "defender_size_pct")
     touched = [pid for pid in losers if pid in w.persons]
     debits = _ration_debits(w, res)
@@ -373,11 +379,14 @@ def _not_yet_under(w: "World", pids: list, target: str, actor: "str | None" = No
     homes = home_of(w)
     chains: dict = {}
     out = []
+    # ED-IN-0306 phase 4: what "already there" means is `world_q.occupies`'s, so the two cannot disagree. Beneath a
+    # settlement is there; a territory is occupied only AT it, so an army housed in one of its towns still arrives.
+    by_subtree = w.rungs[target].kind in SUBTREE_OCCUPATION_KINDS if target in w.rungs else True
     for pid in live:
         here = homes.get(pid)
         if here not in chains:
             chains[here] = ancestry(w, here)
-        if target in chains[here]:
+        if target in chains[here] and (by_subtree or here == target):
             continue
         if pid != actor and not (here is not None and may_muster(w, actor, via, pid)):
             continue

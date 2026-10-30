@@ -474,8 +474,8 @@ goals:
       Fortress, which `venues.yaml` seats `Altonian` at ("Primary Altonian chokepoint"): the pass the march goes
       THROUGH, not what it is aimed at; the Katepano "decides whether Altonia probes, presses, or invades"
       (NPC-089). The objective is the Crown head's seat, Valorsplatz (`set_s_001`, Crown-held and peopled by
-      Crown members, so a march on it meets a defence). A `march` needs a SETTLEMENT referent
-      (`MARCH_TARGET_KINDS`) and a realm-wide rung forms none, so the empire's conquest forms a `march` on this
+      Crown members, so a march on it meets a defence). A `march` needs a referent of a `MARCH_TARGET_KINDS` kind (a settlement or, since ED-IN-0306 phase 4, a territory)
+      and a realm-wide rung forms none, so the empire's conquest forms a `march` on this
       settlement. FINDING KEPT: the chokepoint itself (`set_s_007`) has no Crown member present as built, so a
       march on it arrives `field.unopposed` (H-233), which is why it is not the objective. [ASSUMPTION; medium;
       Jordan to correct -- Valorsplatz as the first objective; the weights. Revert: `rung: set_s_007` and the id

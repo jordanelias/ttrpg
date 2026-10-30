@@ -808,10 +808,11 @@ class Record:
 
         ⚠ `__post_init__` AND NOT `__setattr__`, AND THE DIFFERENCE IS DELIBERATE. `Rung` is a plain
         class guarding a whitelist on every write; `Record` is a dataclass every mint constructs by
-        keyword, and its `subject_matter` has NO `write_matrix.yaml` row -- it is written once,
-        inside `(Record, exists)`'s gate, and never again by anything (r2 `02` §A.4: *verbatim or
-        not at all*). So construction is the only write there is to refuse, and `Office`'s
-        roster checks sit at the same place for the same reason.
+        keyword. Its `subject_matter` is written once, inside `(Record, exists)`'s gate (r2 `02` §A.4: *verbatim or
+        not at all*), and again only for the `army` kind (ED-IN-0306 phase 2: `(Record, subject_matter)`, whose
+        writers are the four army verbs, each validating what it writes). So construction is the one write
+        there is to refuse for every other kind, and `Office`'s roster checks sit at the same place for the same
+        reason.
 
         ⚠ BOTH DIRECTIONS, because a missing key and an extra key are the same defect from two
         sides: a missing one is an operand no reader can bind, an extra one is a second vocabulary.

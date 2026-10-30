@@ -149,7 +149,12 @@ class MassBattleInput:
       * `geography` -- the parsed geography file (`data/geography.py::geography`, read once per process
                        and SHARED by every record: read-only). The module's terrain lookup and river test
                        read it here and open no file. `repr=False`: a record in an assertion message
-                       prints its facts, not a 37 KB map."""
+                       prints its facts, not a 37 KB map;
+      * `orders_of_battle` -- ED-IN-0306: `(attacker, defender)`, each an `OrderOfBattle` (the module's own typed
+                       record, `modules/mass_battle/orderofbattle.py`, held here as an opaque value: `engine/`
+                       imports no module code) or `None`. `None` on both sides -- the default -- is the field as
+                       it was: one headcount line per side. A side with an order of battle fights as that order
+                       says; the record's headcounts are authoritative and `weights` is not read for that side."""
     weights: tuple
     territory: Optional[str]
     fort_level: float
@@ -159,6 +164,7 @@ class MassBattleInput:
     loyalties: tuple
     loyalty_gain: float
     geography: Mapping = field(repr=False)
+    orders_of_battle: Optional[tuple] = None
 
 
 # ---------------------------------------------------------------------------
@@ -416,6 +422,57 @@ class FortInput:
                         body's read), else `None`. The entry returns a bare `float`."""
     conditions: tuple
     scale: Optional[int]
+
+
+@dataclass(frozen=True)
+class ArmyCommand:
+    """What `mass_battle.army` (`modules/mass_battle/armyrecord.py::apply`) reads (ED-IN-0306 phase 2). Built by
+    `loop/effects_army.py`, one per army verb:
+      * `record` -- the army Record's `subject_matter` (`armyrecord.KEYS`), as the world holds it;
+      * `op`     -- `armyrecord.OPS`: recruit, form, assign or order;
+      * `args`   -- the command's operands from the act's payload, plus for `recruit` the world's facts it needs
+                    (`weight`, `sites`, `full`). The entry returns the new `subject_matter` dict."""
+    record: dict
+    op: str
+    args: dict
+
+
+@dataclass(frozen=True)
+class ArmyMuster:
+    """What `mass_battle.army_order` (`modules/mass_battle/armyrecord.py::fielded`) reads (ED-IN-0306 phase 3).
+    Built by `seam/wrappers/mass_battle.py::field_input` for one side of one field:
+      * `record` -- the faction's army Record's `subject_matter` (`armyrecord.KEYS`), as the world holds it;
+      * `fit`    -- `((cohort id, fraction), ...)`: each cohort of the side PRESENT on the field (mustered at the
+                    place) and its body as a fraction of the full scale, in `[0.0, 1.0]`. A cohort not listed is
+                    not there. The entry returns an `OrderOfBattle`, or None when nobody it names is present."""
+    record: dict
+    fit: tuple
+
+
+@dataclass(frozen=True)
+class ArmyOptionsQuery:
+    """What `mass_battle.army_options` (`modules/mass_battle/armyrecord.py::options`) reads (ED-IN-0306 phase 5b). Built by
+    `harness/military_menu.py`, read-only:
+      * `record` -- the army Record's `subject_matter`, as the world holds it;
+      * `cohorts` -- `((cohort id, weight, {site kind: best condition}), ...)`, the cohorts the army's faction may raise
+                    (`world_q.raisable_by`);
+      * `full`   -- the condition scale (`condition_scale`);
+      * `others` -- every other army Record's `subject_matter` (`world_q.other_army_records`)."""
+    record: dict
+    cohorts: tuple
+    full: float
+    others: tuple
+
+
+@dataclass(frozen=True)
+class ArmyPresetQuery:
+    """What `mass_battle.army_preset` (`modules/mass_battle/troop_types/presets.py::plan`) reads (ED-IN-0306 phase 5c). Built
+    by `harness/army_presets.py`: `faction` (its Proposition id), and `cohorts`, `full` and `others` as
+    `ArmyOptionsQuery` has them. The entry returns the commands, in order."""
+    faction: str
+    cohorts: tuple
+    full: float
+    others: tuple
 
 
 # v9 IN-52: the `settlements.provision` query's records -- the levy-to-field feed. Built per side by
