@@ -95,7 +95,7 @@ Ranked by lines removable with no observed function lost. Each row shows its evi
 
 Ordered by what the rulings require, not by effort.
 
-1. **Capability (R-31).** Nothing varies by person: every logged roll is pool 2. No attribute, title, office or faction reaches the roll. *Decides:* a producer in `_pool_of` and a venue-keyed row.
+1. **The pool (R-31, R-40).** Jordan's scale: a pool is a total over capability, argument, evidence, leverage, standing and more, and it should be very hard for a character to have less than 5D. The code builds none of that sum: every logged roll is pool 2 (`pool_default`), which at Ob 2 gives 14% success against 50% at 5D. Nothing varies by person. No attribute, title, office or faction reaches the roll. *Decides:* a producer in `_pool_of` and a venue-keyed row.
 2. **Continuous dice and obstacle (R-32).** The pool is an `int`; the obstacle is an integer in every live roll; the fractional engine exists in `engine.dice_engine.sigma_leverage` but this path does not carry it. Leverage has no producer.
 3. **Modifier sources (R-32).** Producers exist for capability (thin), evidence and audience (`speak` only), and forgery quality (inquiries). None exists for worldly state or for argument content (`argue` is content-blind: the proposition is never read).
 4. **Action surface limited by contest type (R-33).** The limit is absent; the global table is the surface.
