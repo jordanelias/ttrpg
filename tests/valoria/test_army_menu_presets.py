@@ -220,7 +220,7 @@ def test_plan_is_pure_and_ordered():
 
 def test_the_doctrine_names_only_roles_each_type_has():
     seen = 0
-    for _cls, _share, types in PR.DOCTRINE:
+    for _cls, _share, types in PR.ARM_SHARES:
         for t in types:
             assert PR.ROLE_OF[t] is None or PR.ROLE_OF[t] in roles_for(t), t
             seen += 1
@@ -237,7 +237,7 @@ def test_plan_without_sites_is_levy_alone_and_without_people_is_empty():
 
 def test_plan_drops_a_group_that_would_rout_and_gives_its_room_to_the_levy():
     # six cohorts of weight 10, a stable in one only: its horse is one cohort's fifth of its cap, under the floor
-    share = dict((c, s) for c, s, _t in PR.DOCTRINE)["mounted"]
+    share = dict((c, s) for c, s, _t in PR.ARM_SHARES)["mounted"]
     horse = int(R.under_arms_cap(10) * share)
     assert horse < SUBUNIT_ROUT_FLOOR <= 2 * horse, "fixture: one cohort's horse routs, two cohorts' do not"
     one = _cohorts(5, 10) + (("c99", 10, {"barracks": FULL, "stable": FULL}),)
