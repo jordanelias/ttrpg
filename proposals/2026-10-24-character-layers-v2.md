@@ -22,7 +22,7 @@ One question tells each layer apart.
 | **Values** | is it a direction nothing finishes, held as a weight? | the fifteen pursuits and the readout axes |
 | **Personality** | does it vary independently of values, leave odds untouched, and have no pole that always wins? | manner |
 
-Constraint carried from the tree: ED-IN-0261 R7 says projected axes are linear in pursuit weights, so identical weights give identical axes (*"two people with identical pursuits ARE identically disposed and the variation comes from the candidates"*). v2 overrides it for the stored-offset axes (§2, §3).
+Constraint carried from the tree: ED-IN-0261's ruled sentence (R7's dissolution clause; R7 itself is a result in `proposals/2026-09-16-conviction-decision-layer/formal_analysis.md:195`) says projected axes are linear in pursuit weights, so identical weights give identical axes (*"two people with identical pursuits ARE identically disposed and the variation comes from the candidates"*). v2's stored-offset axes would contradict that sentence (§2, §3); they are held for Jordan (workplan v10 `-10` E-4).
 
 ---
 
@@ -32,7 +32,7 @@ v1 is `proposals/2026-10-24-character-layers-capability-ambition-values-personal
 
 | v1 §2 / §5 row (quoted) | v1 says | what v2 does |
 |---|---|---|
-| §2, ED-IN-0261 R7: *"two people with identical pursuits ARE identically disposed and the variation comes from the candidates"* | "**Overridden for three axes.** Persons with identical pursuits may differ on `rigid_flexible`, `grandiose_humble` and `deontological_instrumental`." | Overridden for the stored-offset axes, now six of the ten: those three plus the three new personality-only axes (`cautious_bold`, `hasty_patient`, `conciliatory_coercive`). The four value readouts stay at spread 0. |
+| §2, ED-IN-0261, R7's dissolution clause: *"two people with identical pursuits ARE identically disposed and the variation comes from the candidates"* | "**Overridden for three axes.** Persons with identical pursuits may differ on `rigid_flexible`, `grandiose_humble` and `deontological_instrumental`." | Would be contradicted on the stored-offset axes (held, `-10` E-4), now six of the ten: those three plus the three new personality-only axes (`cautious_bold`, `hasty_patient`, `conciliatory_coercive`). The four value readouts stay at spread 0. |
 | §2, the deontology gate: *"the weighting is a threshold for certain actions"* | "**Narrowed.** The gate stays and stays dormant (`refusal_axis` ships unset). Its tolerance, when armed, becomes prior plus offset. The gate's own convention is a separate matter." | The convention becomes an open owner call (§9, call 4): the dormant refusal gate refuses by `a > tolerance`, and `refusal_axis` ships unset (`fixtures.py:749`, H-146's), and that convention cannot carry the new one-signed axes. |
 | §2, Jordan 2026-09-17: *"these four are value-frames (what is right), the seven are bearing"* | "**Narrowed.** Of the live seven, three are bearing in the sense that they can vary at fixed ends." | Not restated by the digest as a change, except through open call 1, which concerns whether `selfish_selfless` becomes a stored seventh manner axis, siding with the 2026-09-17 Borgia example (`adjudication_register.yaml:242-249`). |
 | §2, SE-06 / ED-IN-0296 (cohorts hold no pursuits, `needs_jordan`) | "**Not pre-empted.** Cohorts read personality as 0 until that ruling is answered." | Unchanged in substance: cohorts and minted persons read 0 because they hold no pursuits (SE-06 / ED-IN-0296 open); the layer applies only where values exist. |
