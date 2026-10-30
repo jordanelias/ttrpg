@@ -449,6 +449,32 @@ class ArmyMuster:
     fit: tuple
 
 
+@dataclass(frozen=True)
+class ArmyOptionsQuery:
+    """What `mass_battle.army_options` (`modules/mass_battle/armyrecord.py::options`) reads (ED-IN-0305 phase 5b). Built by
+    `harness/military_menu.py`, read-only:
+      * `record` -- the army Record's `subject_matter`, as the world holds it;
+      * `cohorts` -- `((cohort id, weight, {site kind: best condition}), ...)`, the cohorts the army's faction may raise
+                    (`world_q.raisable_by`);
+      * `full`   -- the condition scale (`condition_scale`);
+      * `others` -- every other army Record's `subject_matter` (`world_q.other_army_records`)."""
+    record: dict
+    cohorts: tuple
+    full: float
+    others: tuple
+
+
+@dataclass(frozen=True)
+class ArmyPresetQuery:
+    """What `mass_battle.army_preset` (`modules/mass_battle/troop_types/presets.py::plan`) reads (ED-IN-0305 phase 5c). Built
+    by `harness/army_presets.py`: `faction` (its Proposition id), and `cohorts`, `full` and `others` as
+    `ArmyOptionsQuery` has them. The entry returns the commands, in order."""
+    faction: str
+    cohorts: tuple
+    full: float
+    others: tuple
+
+
 # v9 IN-52: the `settlements.provision` query's records -- the levy-to-field feed. Built per side by
 # `seam/wrappers/mass_battle.py::provision_input`, read by `modules/settlements/provision.py`; the field
 # adapter hands `troops` to the mass-battle entry and `_eff_march` debits `consumed` from the treasury.

@@ -104,6 +104,14 @@ composition_roles:
     target: "modules.mass_battle.armyrecord:fielded"
     entry: query
     needed_by: "engine/season/seam/wrappers/mass_battle.py — the field adapter's input builder `field_input` (ED-IN-0305 phase 3) builds the typed input record (`ArmyMuster`, `queries/inputs.py`: a faction's army Record's `subject_matter` and the cohorts of that side present on the field with their body fractions) for each side that has an army Record and calls this entry by role string through `engine.substrate.composition.require`, putting the returned order of battle on `MassBattleInput.orders_of_battle`. Declared in `world_q.QUERY_ENTRIES` and held by `manifest/registrar.py::require_entries`, as `mass_battle.army` is."
+  mass_battle.army_options:
+    target: "modules.mass_battle.armyrecord:options"
+    entry: query
+    needed_by: "engine/season/harness/military_menu.py — the headless military menu (ED-IN-0305 phase 5b) builds the typed input record (`ArmyOptionsQuery`, `queries/inputs.py`: the army Record's `subject_matter`, the cohorts its faction may raise with their weights and training Sites, `condition_scale`, and the other armies' records) and calls this entry by role string through `engine.substrate.composition.require`, listing the vocabulary `order` accepts, the most each cohort can raise of each type, and the advisories. Read-only. Declared in `world_q.QUERY_ENTRIES` and held by `manifest/registrar.py::require_entries`, as `mass_battle.army` is."
+  mass_battle.army_preset:
+    target: "modules.mass_battle.troop_types.presets:plan"
+    entry: query
+    needed_by: "engine/season/harness/army_presets.py — the preset orders of battle for factions nobody plays (ED-IN-0305 phase 5c, shipped off: nothing in the season loop calls it) build the typed input record (`ArmyPresetQuery`, `queries/inputs.py`: the faction, the cohorts it may raise with their weights and training Sites, `condition_scale`, and the other armies' records) and call this entry by role string through `engine.substrate.composition.require`, turning the returned commands into acts for the faction's leader. Declared in `world_q.QUERY_ENTRIES` and held by `manifest/registrar.py::require_entries`, as `mass_battle.army` is."
   settlements.fortification:
     target: "modules.settlements.fortification:fortification"
     entry: query

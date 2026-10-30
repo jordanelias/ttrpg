@@ -37,8 +37,10 @@ rule: every refusal is the verb's own.
 by the composition row `mass_battle.army_preset`): given what a faction can raise (per type, from its cohorts and sites)
 it returns the commands that mint-fill-organise an army — a battle line of the best heavy foot it can train, missile troops
 behind, horse on the flanks, levy filling the rest — and the engine side (`harness/army_presets.py`) turns them into acts
-for the faction's leader. Deterministic (no draw). It ships **OFF** (`Fixtures.army_presets`, default `False`), the
-`field_provisioning` precedent, so no seeded run moves; its falsifiers run on hand-built worlds. The AI general planner
+for the faction's leader. Deterministic (no draw). It ships **OFF BY CONSTRUCTION** (built: nothing in the loop calls `install`, so no seeded run moves and no `Fixtures` flag
+is needed; the `field_provisioning` flag exists because that arm sits inside the loop); its falsifiers run on the realm with
+Sites planted. The doctrine is per cohort (45% heavy foot, 25% missile, 20% horse, the rest levy), a group under the 80-troop
+floor is dropped, the army's strategy is set at the mint, and the bounds the menu lists come from the module's `options`. The AI general planner
 (who marches where) stays MB-08's.
 
 ## 3. Out of scope, named

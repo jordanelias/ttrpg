@@ -1202,9 +1202,13 @@ PROVISION = "settlements.provision"
 ARMY = "mass_battle.army"
 #: ED-IN-0305 phase 3: the army record -> the order of battle one field fights with, called by the field adapter.
 ARMY_ORDER = "mass_battle.army_order"
+#: ED-IN-0305 phase 5b: what a player may ask of an army and what is wrong with it, called by the military menu.
+ARMY_OPTIONS = "mass_battle.army_options"
+#: ED-IN-0305 phase 5c: the commands that raise and organise an army for a faction nobody plays.
+ARMY_PRESET = "mass_battle.army_preset"
 QUERY_ENTRIES = ((LARDER_DRAW, "query"), (DRAWN_UNDER, "query"), (HOUSING, "query"),
                  (FABRIC, "query"), (FORTIFICATION, "query"), (PROVISION, "query"), (ARMY, "query"),
-                 (ARMY_ORDER, "query"))
+                 (ARMY_ORDER, "query"), (ARMY_OPTIONS, "query"), (ARMY_PRESET, "query"))
 
 
 def _entry(role: str):

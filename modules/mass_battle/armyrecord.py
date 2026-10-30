@@ -27,12 +27,13 @@ from __future__ import annotations
 from typing import Callable, Optional
 
 from modules.mass_battle.armies import SUBUNIT_CAP
+from modules.mass_battle.config import BLOCK_SIZE, SUBUNIT_ROUT_FLOOR
 from modules.mass_battle.orderofbattle import STANCES, STRATEGIES, TARGETINGS, OrderOfBattle, Subformation
-from modules.mass_battle.troop_types.recruitment import recruit_limit
-from modules.mass_battle.troop_types.registry import roles_for, stats_for
+from modules.mass_battle.troop_types.recruitment import TRAINING_SITE, recruit_limit
+from modules.mass_battle.troop_types.registry import TROOP_TYPE_STATS, roles_for, stats_for
 
 __all__ = ['KEYS', 'new', 'raised', 'by_type', 'unassigned', 'form', 'assign', 'release', 'order', 'set_strategy',
-           'validate', 'to_order_of_battle', 'apply', 'OPS', 'fielded', 'disband', 'discharge']
+           'validate', 'to_order_of_battle', 'apply', 'OPS', 'fielded', 'disband', 'discharge', 'cohort_claims', 'options']
 
 #: `subject_matter`'s exact key set. `engine/season/rosters.yaml: record_kinds.values.army` mirrors it and a test pins
 #: the two equal.
@@ -92,6 +93,17 @@ def by_type(record: dict, cohort: Optional[str] = None) -> dict:
             if cohort is None or c == cohort:
                 out[sf['troop_type']] = out.get(sf['troop_type'], 0) + n
     return out
+
+
+def cohort_claims(record: Optional[dict], others, cohort: str) -> dict:
+    """Troops already under arms from `cohort`, by type, across `record` (None for no army yet) and every record in
+    `others`: the figure `recruit_limit` reads as `raised`. The cap is the cohort's population, whichever army it is
+    raised into."""
+    given: dict = dict(by_type(record, cohort)) if record is not None else {}
+    for other in others:
+        for t, k in by_type(other, cohort).items():
+            given[t] = given.get(t, 0) + k
+    return given
 
 
 def raised(record: dict, cohort: str, troop_type: str, count) -> dict:
@@ -292,10 +304,7 @@ def _apply(cmd) -> dict:
         n = _pos(a['count'])
         # The cap is the cohort's population, whichever army it is raised into: what it has already given to any
         # other army (`others`, the host's: the other armies' records) counts against it.
-        given = dict(by_type(r, a['cohort']))
-        for other in a.get('others', ()):
-            for t, k in by_type(other, a['cohort']).items():
-                given[t] = given.get(t, 0) + k
+        given = cohort_claims(r, a.get('others', ()), a['cohort'])
         room = recruit_limit(a['troop_type'], a['weight'], a['sites'], given, a['full'])
         if n > room:
             raise ValueError(f"{a['cohort']!r} can raise {room} more {a['troop_type']}, asked for {n}")
@@ -321,6 +330,50 @@ def _apply(cmd) -> dict:
             raise ValueError("an order sets at least one of role, stance, target, fall_back_at, or a strategy")
         return order(r, a['name'], **fields)
     raise ValueError(f"unknown army command {cmd.op!r} (known: {OPS})")
+
+
+def options(q) -> dict:
+    """THE THIRD ENTRY THE SEASON CALLS (`mass_battle.army_options`, a `query` composition row): what a player may ask of
+    this army, as plain data, and what is wrong with it as it stands. Read-only, and it decides nothing: a command listed
+    here is one `apply` would accept and a command not listed is one it would refuse for the reason given, because the
+    bounds are the same functions (`recruit_limit`, the registry's menus). `q` is
+    `engine/season/queries/inputs.py::ArmyOptionsQuery`: `record`, `cohorts` (`((cohort id, weight, {site kind:
+    condition}), ...)`, those the faction may raise), `full` (the condition scale), `others` (the other armies'
+    records, whose claims on a cohort count against it).
+
+      strategies, stances, targets  the vocabulary `order` accepts
+      troop_types   ((type, roles, site kind or None), ...), the types `recruit` and `form` accept
+      raise         ((cohort, type, room), ...), for each cohort and type with room above 0
+      advisories    ((kind, subject, have, floor), ...) -- a subformation under `SUBUNIT_ROUT_FLOOR` routs at the first
+                    check (`subformation_routs`), a record fielding under one `BLOCK_SIZE` block routs at once
+                    (`army_routs`), trained troops in no subformation do not fight (`unassigned`), and a levy
+                    subformation never closes to contact (`levy_never_closes`, HANDOFF_MB)."""
+    r = q.record
+    validate(r)
+    rows = []
+    for cohort, weight, sites in sorted(q.cohorts):
+        given = cohort_claims(r, q.others, cohort)
+        for t in sorted(TROOP_TYPE_STATS):
+            room = recruit_limit(t, weight, sites, given, q.full)
+            if room > 0:
+                rows.append((cohort, t, room))
+    notes, fielded_total = [], 0
+    for sf in r['subformations']:
+        n = sum(k for _c, k in sf['assigned'])
+        fielded_total += n
+        if n < SUBUNIT_ROUT_FLOOR:
+            notes.append(('subformation_routs', sf['name'], n, SUBUNIT_ROUT_FLOOR))
+        if sf['troop_type'] == 'levy':
+            notes.append(('levy_never_closes', sf['name'], n, 0))
+    if r['subformations'] and fielded_total < BLOCK_SIZE:
+        notes.append(('army_routs', None, fielded_total, BLOCK_SIZE))
+    idle = sum(n for _c, _t, n in r['trained'])
+    if idle:
+        notes.append(('unassigned', None, idle, 0))
+    return {'strategies': tuple(sorted(STRATEGIES)), 'stances': STANCES, 'targets': TARGETINGS,
+            'troop_types': tuple((t, tuple(roles_for(t)), (TRAINING_SITE.get(t) or (None,))[0])
+                                 for t in sorted(TROOP_TYPE_STATS)),
+            'raise': tuple(rows), 'advisories': tuple(notes)}
 
 
 def fielded(muster) -> Optional[OrderOfBattle]:
