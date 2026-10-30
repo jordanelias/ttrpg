@@ -63,7 +63,7 @@ def _check_record_sourced(by_kind, operands: frozenset, kind_keys: dict,
                           read_from: Optional[dict] = None) -> None:
     """Plan position IN-10 (#453 §10.1). `record_sourced_operands` -- `{record kind: {operand:
     content key}}` -- refused at import unless every kind is a `record_kinds` member, every entry a
-    non-empty map, every operand one of the closed eight, every content key one of THAT KIND's own
+    non-empty map, every operand one of the closed roster (`requires_operands`), every content key one of THAT KIND's own
     keys, and no kind maps `from` (r2's ruling: *where the actor stands* stays off a document).
     `15c`'s subset rule, tightened to the kind's keys. `read_from` (`record_kinds.content.read_from`,
     `{content key: operand}`, how the MINT reads a key) is cross-checked against this map (how a
@@ -978,6 +978,10 @@ def _build_clause(verb: str, cell: dict) -> Requirement:
     except TypeError as e:
         raise SystemExit(f"verb_table.yaml: {verb!r}'s {form!r} cell does not fit the form: {e}")
     allowed = set(REQUIRES_FORM_NEEDS.get(form) or ())
+    # THE CLOSURE. A name joins `requires_operands` only by a roster edit made at the position that
+    # owns it -- v9 IN-33 added `exchange`'s `return_kind` (the matter kind the actor receives in
+    # return) and `return_amount` (how many units), H-94's reserved coining, restored at v10 REM-2B --
+    # never by a cell.
     for o in req.operands():
         if o not in REQUIRES_OPERANDS:
             raise SystemExit(

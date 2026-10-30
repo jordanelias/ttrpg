@@ -563,6 +563,15 @@ DEFAULT_FIXTURES = Fixtures(
     # `stores >= 0` admits every giver: a run at this point shows how much of the transfer
     # behaviour rests on the default rather than on the world.
     default_transfer_amount=1,         # `H-94`, swept 0 / 1 / 3
+    # v9 IN-33 (`H-58`), restored at v10 REM-2B [ASSUMPTION; medium; Jordan to correct]. THE MATTER KIND AN
+    # `exchange` RECEIVES IN RETURN (`return_kind`). The design names an exchange's two sides and supplies no
+    # kind for the second, so it is `default_store_kind`'s shape: declare, default, sweep.
+    # `return_amount` takes `default_transfer_amount` above (one unit back per default unit given),
+    # so no second new fixture. `salt` because it is a STOCKED kind other than `kind`'s default
+    # (`rosters.yaml: site_yield`: harbours yield grain and salt). ARMS: `salt` (shipped) · `timber` (the
+    # other stocked family, a seam's) · `coin` (THE CONTROL: registered, produced by no site and held by no
+    # rung, so the second side reads 0 and every exchange refuses). REVERT: delete this fixture with IN-33.
+    default_return_kind="salt",        # `H-58`, swept salt / timber / coin
     # v10 CR-23 / `H-243` (M17 taken (a), [ASSUMPTION; medium; Jordan to correct; revert: `off`]): WHEN A
     # LARDER'S STOCK REACHES THE SEATS OVER IT. MATTER's last actorless `stores` write to a rung in the
     # barrier carries `(rung, "stores:<default_store_kind>", units after)` -- at `crossing` only when
