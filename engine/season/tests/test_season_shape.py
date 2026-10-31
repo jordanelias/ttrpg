@@ -3375,7 +3375,7 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
         # and at -0.9 negatively. What changed is that the conviction reaches the verb through
         # `Σ_axis projection[Precedent][axis] · alignment(verb, axis)` rather than through one cell.
         # ⚠ IN-08: the pursuit is `stability`, the `Precedent` conviction's successor
-        # (`candidate_pursuit_cells.md` §4.1); the claim below is unchanged.
+        # (the retired pursuit-cells draft's §4.1); the claim below is unchanged.
         for sign in (0.9, -0.9):
             p.pursuits = {"stability": sign}
             picked = ch(p, v, Sensation(), lambda: 1)[0].acts[0].verb

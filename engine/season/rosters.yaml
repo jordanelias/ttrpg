@@ -2924,7 +2924,7 @@ tables:
   # not incompatible).
   incompatible:
     source: >-
-      proposals/2026-09-26-decision-layer-execution-plan/candidate_affiliation_content.md §2 (pairs
+      the retired affiliation-content draft (its `FORK:` row in `references/restructure_ledger.md`) §2 (pairs
       1, 2, 3, 5, 6, 8 under the §1.3 roster and its renames), FOLDED INTO THE BUILD by Jordan
       2026-10-06 (RS-1, ED-IN-0291). Pair 2 is Jordan's own worked example ("devoutly Solmund but
       also believes in Threadwork and therefore experiences religious confliction").
@@ -2961,7 +2961,7 @@ tables:
   # `a` is NEGATIVE. The magnitudes are not read by the scar; only the sign is.
   affiliation_engagement:
     source: >-
-      proposals/2026-09-26-decision-layer-execution-plan/candidate_affiliation_content.md §4.2
+      the retired affiliation-content draft (its `FORK:` row in `references/restructure_ledger.md`) §4.2
       (R-C4.1, R-C4.2, R-C4.3) and §4.3 (the sketch), FOLDED INTO THE BUILD by Jordan 2026-10-06
       (RS-1, ED-IN-0291). The shared column's ten cells and their reasons are the old `sacred`
       alignment row as it stood before IN-08's cells work removed it (`git show 16faff76:engine/season/
@@ -3044,7 +3044,7 @@ tables:
       they are different objects with one shared vocabulary, and the vocabulary is the canonical
       fifteen in both cases, read from the single owner.
       ⚠ **TRANSCRIBED, THEN MIGRATED BY A STATED RULE.** Every cell is §4's own weight, carried to
-      the fifteen by `candidate_pursuit_cells.md` §4.1/§4.2 (see the comment above `cells:`).
+      the fifteen by the retired pursuit-cells draft's §4.1/§4.2 (see the comment above `cells:`).
       Nothing is normalised, rounded or filled in here, and a template's unlisted pursuits read
       `default_cell` (0.0) rather than being assigned a share.
       ⚠ **SIX TEMPLATES, AND TWO FACTIONS HAVE NONE.** `role_templates.by_faction` covers Crown,
@@ -3059,7 +3059,7 @@ tables:
       So the two factions have the SAME expectation vector and differ in who actually holds what —
       which is precisely the quantity `cast.loyalty` measures.
     # ⚠ IN-08's CELLS COMMIT (B-G): §4's thirteen-name weights migrated to the fifteen pursuits by
-    # `candidate_pursuit_cells.md` §4.1's derivation rule and §4.2's table (folded into the build,
+    # the retired pursuit-cells draft's §4.1 derivation rule and §4.2 table (folded into the build,
     # Jordan 2026-10-06, RS-1), with `doctrine` and `stewardship` as named (RS-2, RS-4). Weights are
     # §4's own and nothing is renormalised; where two old names collapse into one pursuit their
     # weights ADD (§4.2: `ecclesiastical` and `military-order`'s `stability`). TWO DROPS, BOTH IN
@@ -3108,7 +3108,7 @@ tables:
 
   pursuit_projection:
     source: >-
-      proposals/2026-09-26-decision-layer-execution-plan/candidate_pursuit_cells.md §2 (the 105
+      the retired pursuit-cells draft (its `FORK:` row in `references/restructure_ledger.md`) §2 (the 105
       cells; grid at §2.16, revision 5), FOLDED INTO THE BUILD by Jordan 2026-10-06 (RS-1,
       ED-IN-0291); `doctrine` and `stewardship` named by RS-2 and RS-4. Shape 15x7, sign per
       `references/descriptor_registry.yaml: axis_roster.scale`.
@@ -3269,7 +3269,7 @@ tables:
 
   alignment:
     source: >-
-      proposals/2026-09-26-decision-layer-execution-plan/candidate_pursuit_cells.md §3 (the re-cell
+      the retired pursuit-cells draft (its `FORK:` row in `references/restructure_ledger.md`) §3 (the re-cell
       over the seven axes), FOLDED INTO THE BUILD by Jordan 2026-10-06 (RS-1, ED-IN-0291), plus the
       six table verbs the draft does not cell (`build`, `found`, `give`, `march`, `migrate`,
       `survey`), celled in IN-08's cells commit by the draft's own method (each cell's reason
@@ -3349,7 +3349,7 @@ tables:
       tell: >-
         No cell on any axis BY DESIGN: testimony's moral weight is in WHAT is told (a claim), which
         no verb x axis cell can carry, and telling is driven by regard (the telling workplan's G1),
-        not by pursuit (`candidate_pursuit_cells.md` §3.6 `:999`, §7.4 `:1377`; G-1, [medium;
+        not by pursuit (the retired pursuit-cells draft's §3.6, §7.4; G-1, [medium;
         Jordan to correct]). `corpus_run`'s RANKING counts only candidates whose verb has a celled
         axis, so a `tell` is neither a tie nor a discrimination there.
     # §G's third term. ORDER IS SEMANTIC: `declared` is the default and the first arm, and every

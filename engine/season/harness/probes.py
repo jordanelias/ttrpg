@@ -1036,7 +1036,7 @@ def p31():
     # The SAME person, the SAME question, the SAME option set -- one variable, the motive.
     # `create_record` and `destroy_record` sit at opposite signs on `precedent_substantive` in the alignment
     # table, so a pursuit that projects onto that axis has somewhere to move the ranking TO (`stability`,
-    # the `Precedent` conviction's successor, IN-08: `candidate_pursuit_cells.md` §4.1). Rev 2 could not
+    # the `Precedent` conviction's successor, IN-08: the retired pursuit-cells draft's §4.1). Rev 2 could not
     # test this: it scored an authored roster of three verbs the table does not carry.
     inner = make_chooser(w.fixtures, lambda a, b, c: f"{a}:{b}:{c}",
                          draw=draw_factory(w.world_seed, lambda: w.tick))
@@ -2607,7 +2607,7 @@ def p37():
     # and never goes through `make_chooser`; it is corrected so the corpus does not seed a
     # conviction nobody can hold.
     # [JUSTIFIED: 0.9 is a single strong conviction, the same magnitude this probe used before `U3` under the retired name `suspicion`; P37 branches on `> 0.5` so any value above the threshold shows the same property, and the NUMBER is not what it observes]
-    # IN-08: `Order` -> `stability`, its successor pursuit (`candidate_pursuit_cells.md` §4.1).
+    # IN-08: `Order` -> `stability`, its successor pursuit (the retired pursuit-cells draft's §4.1).
     p.pursuits = {_pursuit("stability"): 0.9}  # [JUSTIFIED: any weight above the 0.5 the verb choice below tests shows the property; 0.9 is the value the probe has always used]
     chosen = []
     def choose(q, v, s, ask_budget):

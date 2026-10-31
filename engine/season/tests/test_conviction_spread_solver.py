@@ -108,7 +108,7 @@ def test_the_control_reproduces_the_figure_the_open_ledger_row_cites():
     # ⚠ RE-PINNED AT IN-08's CELLS COMMIT (B-G), A RE-RECORD WITH ITS REASON: the live basis is
     # the 15x7 now, so the control reads it. ED-IN-0214's 13x4 figure (nine of thirteen within 60
     # degrees, PR 1.85) is the superseded basis's and is no longer what `spread()` can reproduce.
-    # The new figures were NOT chosen: they are `candidate_pursuit_cells.md` §5.3's revision-5
+    # The new figures were NOT chosen: they are the retired pursuit-cells draft's §5.3 revision-5
     # reading of the draft grid (4 of 15, PR 3.81), reproduced here off the transcribed rows --
     # which is also the falsifier for a transcription slip in `tables.pursuit_projection`.
     # [canonical: the roster size is references/descriptor_registry.yaml:pursuit_roster]
