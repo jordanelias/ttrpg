@@ -16339,7 +16339,7 @@ def test_the_populated_world_has_a_governance_ladder_and_scarce_seats():
 
     ⚠ THIS TEST EXISTS BECAUSE THE FIRST CUT OF THE OFFICE BLOCK FAILED IT. It gave every placed
     person an Office named after their registry `role`, so `leaders(w, f) == members(w, f)` for all
-    eight factions: everybody a leader, nothing scarce, nothing to compete for. Nothing raised —
+    every faction: everybody a leader, nothing scarce, nothing to compete for. Nothing raised —
     a full set is a perfectly plausible answer — so the defect was visible only by asking whether
     the two sets DIFFER. That question is this test.
 
