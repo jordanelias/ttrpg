@@ -3,7 +3,7 @@
   "schema_version": 1,
   "source": "references/names_index.yaml",
   "registry_version": 3,
-  "count": 119,
+  "count": 121,
   "canonical": {
     "agg.body": "Body",
     "agg.mind": "Mind",
@@ -22,9 +22,11 @@
     "clock.ip": "IP",
     "clock.mending_stability": "Mending Stability",
     "clock.ms": "MS",
+    "clock.parliament_integrity": "Parliament Integrity",
     "clock.pi": "PI",
     "clock.tcv": "TCV",
     "clock.ts": "TS",
+    "clock.turmoil": "Turmoil",
     "conv.autonomy": "Autonomy",
     "conv.continuity": "Continuity",
     "conv.equity": "Equity",
@@ -192,7 +194,10 @@
     "Contact Rounds": "Thread Fatigue",
     "EventImpact": "Key",
     "Galbados": "Solmund",
+    "Peninsular Strain": "Turmoil",
     "Person.convictions": "pursuits",
+    "Political Instability": "Turmoil",
+    "Public Instability": "Turmoil",
     "Rendering Stability": "Mending Stability",
     "Theocracy Counter": "Church Influence",
     "conviction_axes": "pursuit_axes",
@@ -212,7 +217,9 @@
     ],
     "clock_full": [
       "Church Influence",
-      "Mending Stability"
+      "Mending Stability",
+      "Parliament Integrity",
+      "Turmoil"
     ],
     "faction": [
       "Altonia",

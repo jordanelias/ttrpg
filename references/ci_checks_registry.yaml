@@ -62,7 +62,7 @@
 # NB: the ladder below is cited to `project-architecture-valoria-v2_2.md`, which resolves nowhere on main and has no
 # references/restructure_ledger.md row. The `subject:` axis above is defined in place and depends on nothing absent.
 # Levels (from project-architecture-valoria-v2_2.md):
-#   1 — text rule in PI (low reliability)
+#   1 — text rule in the project instructions (low reliability)
 #   2 — skill description (medium)
 #   3 — pre-commit grep / heuristic check (high)
 #   5 — CI external check via GitHub Actions (highest, post-push, mirror)
@@ -443,7 +443,7 @@ ci_checks:
 
 advisory_only:
 
-  - locus: PI core_rules
+  - locus: project instructions core_rules
     level: 1
     role: "GitHub > memory; investigate don't guess; bootstrap before game-state work."
     notes: "Backed by CLAUDE.md §2/§8 and the .githooks/ local tier."

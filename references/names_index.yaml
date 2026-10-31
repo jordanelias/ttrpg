@@ -123,8 +123,12 @@ entries:
   clock.ci: {canonical: "CI", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bCI\b(?![A-Za-z])', 'Church Influence']}
   # `patterns:` is a matcher list, not a definition: canonical expansion before the recorded rival (after the abbreviation pattern).
   clock.ip: {canonical: "IP", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bIP\b(?![A-Za-z])', 'Institutional Pressure', 'Invasion Pressure']}
-  # Same shape: canonical (`Public Instability`) first, rival second.
-  clock.pi: {canonical: "PI", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bPI\b(?![A-Za-z])', 'Public Instability', 'Political Instability']}
+  # `PI` names nothing: it abbreviates Public Instability 0-10 (ED-163), replaced by Peninsular Strain
+  # (ED-744), now Turmoil (`clock.turmoil`); Parliament Integrity 0-20 (ED-376), the `PI >= n` rows of
+  # the victory tables (`clock.parliament_integrity`); and, in process files, "project instructions".
+  # Spell the quantity out. The row is kept only as the vector audit's drift matcher, so its patterns
+  # only grow: 'Parliament Integrity' is appended, nothing is removed.
+  clock.pi: {canonical: "PI", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bPI\b(?![A-Za-z])', 'Public Instability', 'Political Instability', 'Parliament Integrity']}
   clock.ts: {canonical: "TS", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bTS\b(?![A-Za-z])', 'Thread Sensitivity']}
   clock.tcv: {canonical: "TCV", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bTCV\b']}
 
@@ -154,6 +158,10 @@ entries:
   # warn-tier drift lint: flags the legacy term, suggests the canonical. Legacy strings
   # are chosen to be unambiguous at a word boundary (no bare "Strength"/abbreviations
   # that collide with live terms).
+  # Legacy-name note: "CI (Church Attention)" is an old gloss (archived fieldwork rationale), not a
+  # name. CI is Church Influence. Its starting value is owned by `canon/03_canonical_timeline.md`
+  # (Clock Starting Values, `| CI | 22 |`); the frozen capture's 28 is superseded. Nothing here is a
+  # number the engine reads.
   clock.church_influence:
     canonical: Church Influence
     aliases: []
@@ -165,6 +173,24 @@ entries:
     canonical: Mending Stability
     aliases: []
     legacy: ["Rendering Stability"]
+    category: clock
+    token_class: clock_full
+    enforce: warn
+  # Peninsular Strain (ED-744) replaced Public Instability (ED-163); the clock is now Turmoil.
+  # A name, not a mechanism.
+  clock.turmoil:
+    canonical: Turmoil
+    aliases: []
+    legacy: ["Peninsular Strain", "Public Instability", "Political Instability"]
+    category: clock
+    token_class: clock_full
+    enforce: warn
+  # Parliament Integrity 0-20 (ED-376), the `PI >= n` rows of the victory tables. A name, not a
+  # mechanism.
+  clock.parliament_integrity:
+    canonical: Parliament Integrity
+    aliases: []
+    legacy: []
     category: clock
     token_class: clock_full
     enforce: warn
