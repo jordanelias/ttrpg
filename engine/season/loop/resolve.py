@@ -18,7 +18,6 @@ write below presents it. This module constructs none and calls no minter --
 from __future__ import annotations
 
 import random
-from ..data import files
 from ..gaps import InstrumentDefect
 from ..data.rosters import (FOLD_ATTEMPT_REFUSED, PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, GRADED_INQUIRIES,
                             STRATA)
@@ -386,21 +385,16 @@ def _fold(self, w: "World", token: Token, a: Act,
     w.acts.append(a)
     row = VERB_TABLE.get(a.verb)
     if row is None:
-        # WHOSE GAP IS IT? Two different facts wear the same shape, and reporting them
-        # alike is the mis-attribution G4 forbids: a verb #353 NAMES and Part E omits is a
-        # HOLE IN THE SPECIFICATION (`utter`, `establish`, `exchange`, `succeed` were four,
-        # and W3 filled them); a verb nobody names is THE CALLER'S INVENTION. The instrument
-        # must not charge its own inventions to the design.
-        named = not names_a_verb(a.verb)
+        # WHOSE GAP IS IT? `VERB_TABLE` is the owner: it is the set of verbs the design names and the
+        # game carries, so a verb on no row is the caller's invention (register row H-64). No prose
+        # is read to decide it.
         raise Unspecified(
             f"verb {a.verb!r} is on no row of the verb table", "S27/E2",
-            needs=("a row in verb_table.yaml, ruled before it is added" if not named else
-                   f"NOTHING FROM THE DESIGN -- #353 does not name {a.verb!r} as a verb. "
+            needs=(f"NOTHING FROM THE DESIGN -- #353 does not name {a.verb!r} as a verb. "
                    "This is the CALLER'S invention and the gap is the caller's"),
             law="§E2 -- the resolver's body IS the table. A verb the table does not carry has "
                 "no semantics, and inventing them at the call site is the second resolver "
-                "§27.2 forbids" + ("" if not named else
-                ". ⚠ CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)"))
+                "§27.2 forbids. ⚠ CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)")
 
     # `W-B`. THE READS THIS ACT'S PRECONDITION MADE, ON EVERY EVENT THE ACT EMITS.
     # ⚠ DECLARED BEFORE `ev` AND REBOUND BY THE `requires` BLOCK BELOW, DELIBERATELY. `ev`
@@ -1239,34 +1233,10 @@ def _refuse_after_the_fact(self, w: "World", out: list, act_ids: list) -> None:
 
 
 # ---------------------------------------------------------------------------
-# ⚠ `names_a_verb` AND `stratum_of` LIVE HERE FOR THE SAME REASON `sense` LIVES IN `deliberate.py`:
-# RESOLVE is their only caller, and leaving them in `driver.py` made this module import the driver
+# ⚠ `stratum_of` LIVES HERE FOR THE SAME REASON `sense` LIVES IN `deliberate.py`:
+# RESOLVE is its only caller, and leaving it in `driver.py` made this module import the driver
 # that imports it back -- a cycle the tree's own count test caught on the first cut.
 # ---------------------------------------------------------------------------
-
-def names_a_verb(verb: str) -> bool:
-    """Does #353 mention this word AT ALL? Asked of the source, never of a list.
-
-    ⚠ THE FIRST VERSION WAS A HARDCODED LIST OF EIGHT, and the probe corpus invents at least
-    fifteen — `v4`, `v0`, `buy_grain`, `petition2`, `report_truthfully`, `leverage`, `purge` were
-    all missing from it. So HALF the gaps the fold reported were billed to the SPECIFICATION,
-    telling a reader that #353 owes a row for `purge`. That is the mis-attribution the branch
-    below exists to prevent, committed by the mechanism meant to prevent it. A list of names is a
-    router and routers miss (`G2`); the property is cheap and cannot be spelled around.
-
-    ⚠ IT TESTS MENTION, NOT VERBHOOD, and the weaker claim is the honest one. A backtick test was
-    tried first and is wrong: #353 writes `confer` and `transfer` in backticks but `move` and
-    `utter` bare, so the stricter property called two verbs it DOES name inventions. The
-    consequence of the weaker test is over-attribution to the design in one direction only — a
-    word #353 uses in ordinary English (`act`, `do`) reads as named — which is the SAFE direction:
-    it never tells a reader the design owes a row for `purge`.
-
-    ⚠ `speak` and `forge` occur ZERO times in #353. V2's Part E added them and declared them
-    `assumption`, which V2 §1.2 says in as many words. They are declared additions, not silent
-    inventions, and the table is where that declaration lives."""
-    import re as _re
-    return bool(_re.search(r"\b" + _re.escape(verb) + r"\b", SOURCE_353_TEXT()))
-
 
 def stratum_of(a: "Act") -> int:
     """An Act's resolution stratum: its verb table row's, by index into the `strata` roster.
@@ -1280,36 +1250,3 @@ def stratum_of(a: "Act") -> int:
     if row is None or row.stratum not in STRATA:
         return a.stratum
     return STRATA.index(row.stratum)
-
-
-_S353_CACHE: list = []
-
-# ---------------------------------------------------------------------------
-# ⚠ `SOURCE_353_TEXT` (and its cache) MOVED HERE AT L5's SECOND CUT, for the same reason `sense` sits
-# in `deliberate.py`: `names_a_verb` is its only reader and lives here, so leaving it in `driver.py`
-# left `resolve <-> driver` cycling. The tree's cycle-count test named it twice -- once for
-# `deliberate` and once for this -- which is the argument for a count over a roster: it kept naming
-# what was left rather than passing on the half that was fixed.
-# ---------------------------------------------------------------------------
-
-def SOURCE_353_TEXT() -> str:
-    if not _S353_CACHE:
-        f = files.SOURCE_353_MD
-        if not f.exists():
-            # ⚠ THIS USED TO BE `else ""`, AND IT WAS A FAIL-OPEN IN THE WORST DIRECTION.
-            # `names_a_verb` regex-searches this text; over an empty string EVERY verb reads as
-            # NOT named by the design, so every gap the fold reports is billed to the
-            # SPECIFICATION. That is the exact mis-attribution `names_a_verb`'s own docstring
-            # says it exists to prevent ("telling a reader that #353 owes a row for `purge`"),
-            # and it fired silently — measured before the fix: with the source absent,
-            # `names_a_verb("move")` returned False for a verb #353 genuinely names.
-            # An absent source is an INSTRUMENT problem, not a design gap, so it raises the
-            # kind that is deliberately NOT a `ShapeGap` and cannot reach the design-gap column.
-            raise InstrumentDefect(
-                f"the #353 design source is not at {f}, where `season.data.files` anchors it. "
-                "SOURCE_353_TEXT() has no honest answer without it: `names_a_verb` regex-searches "
-                "this text, so an empty string makes EVERY verb read as not-named-by-the-design "
-                "and bills every reported gap to the specification. Restore the file, or "
-                "re-anchor files.SOURCE_353_MD.")
-        _S353_CACHE.append(f.read_text())
-    return _S353_CACHE[0]

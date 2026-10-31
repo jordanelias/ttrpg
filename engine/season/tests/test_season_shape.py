@@ -622,6 +622,38 @@ def test_h115_the_degree_branches_raise_unspecified_not_systemexit():
         "the process ending")
 
 
+def test_cr45_an_unknown_verb_is_charged_to_the_caller_from_the_verb_table_alone(monkeypatch):
+    """CR-45 / `H-64`: `_fold` on a verb that is on no row of `VERB_TABLE` raises `Unspecified` charged
+    to the CALLER, decided by the table and nothing else. Before CR-45 the wording came from a regex
+    over the whole of `architecture/holonic_ARCHITECTURE.md` read at runtime: a word that text uses in
+    ordinary English (`do`) read as the DESIGN's, and an absent source raised `InstrumentDefect`.
+
+    FALSIFIER, planted failure: on the pre-CR-45 `resolve.py` the `do` arm reads as the design's
+    ("a row in verb_table.yaml, ruled before it is added") and the missing-source arm raises
+    `InstrumentDefect`; both assertions below redden. `purge` is the control the old read also charged
+    to the caller."""
+    from ..loop import resolve
+    # ⚠ The pre-CR-45 `resolve` cached the source text in `_S353_CACHE`; a warm cache would make the
+    # missing-source arm depend on test order. Clearing it is a no-op once the symbol is gone, hence
+    # `raising=False` (the same file must be valid on the base tree and the new one).
+    monkeypatch.setattr(resolve, "_S353_CACHE", [], raising=False)
+    monkeypatch.setattr(files, "SOURCE_353_MD", Path(tempfile.gettempdir()) / "cr45_no_such_353.md")
+    assert not files.SOURCE_353_MD.exists()
+    checked = 0
+    for verb in ("do", "purge"):
+        assert verb not in VERB_TABLE, verb
+        w = _w()
+        d = SeasonDriver(w)
+        act = Act(id=f"cr45_{verb}", actor="p_low", verb=verb, payload={})
+        with pytest.raises(Unspecified) as e:
+            d._fold(w, mint_token(w, WriteClass.ACTS), act)
+        assert f"NOTHING FROM THE DESIGN -- #353 does not name {verb!r} as a verb" in e.value.needs, e.value.needs
+        assert "CALLER'S invention" in e.value.needs, e.value.needs
+        assert "register row H-64" in e.value.law, e.value.law
+        checked += 1
+    assert checked == 2
+
+
 
 def _model_modules():
     """THE MODEL: every package module that is not the instrument.
