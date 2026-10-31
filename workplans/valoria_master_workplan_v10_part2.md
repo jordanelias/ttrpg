@@ -42,7 +42,7 @@
 
 ## 4. R-03 — seasons tick scene by scene · met
 - **`met` text:** `python -m pytest engine/season/tests -q -k test_u2_` passes **and** `python -m engine.season.harness.headless --case NPC-088 --seasons 2 --seed 0` runs.
-- **Constraint:** every position that touches the rounds loop (`loop/driver.py`, `loop/deliberate.py`) keeps `-k test_u2_` green. In v10: CR-45 (B10-07, one docstring line in `loop/driver.py`), CP-T01-05 (B10-08, `loop/deliberate.py` slot counting, if built; its NPC half at B10-10's head), IN-12 (B10-09 close one: `resolvable_verbs`' third gate in `loop/driver.py`, so `-k test_u2_` is added to IN-12's exit) and REM-31 (B10-10, `loop/driver.py`).
+- **Constraint:** every position that touches the rounds loop (`loop/driver.py`, `loop/deliberate.py`) keeps `-k test_u2_` green. In v10: CP-T01-05 (B10-08, `loop/deliberate.py` slot counting, if built; its NPC half at B10-10's head), IN-12 (B10-09 close one: `resolvable_verbs`' third gate in `loop/driver.py`, so `-k test_u2_` is added to IN-12's exit) and REM-31 (B10-10, `loop/driver.py`).
 - **After the decision round:** readings unchanged; earliest `met` holds; nothing holds it; moved by (kept green by) every position touching `loop/driver.py` or `loop/deliberate.py`.
 - Jordan, 2026-09-05: the scene is player granularity — *"only players really need the scene in its entirety"* — so an NPC needs a resolution and an event, not a played-out scene.
 
