@@ -272,8 +272,9 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             # the granary full SHOULD form the Candidate and learn otherwise -- and being alone
             # in a room is not a belief anyone can be wrong about. There is no world-read here
             # and no `World`: `p.id` against a referent the person already holds.
-            # ⚠ ONLY WHERE THE ROW NAMES NO COUNTERPARTY (telling workplan `T4`, Decision 3). A row
-            # that names its second side on its own operand contests against THAT (`tell`'s `to`),
+            # ⚠ ONLY WHERE THE ROW'S SECOND SIDE IS ITS SUBJECT (telling workplan `T4`, Decision 3;
+            # CR-16: no `counterparty:`, or `counterparty: subject`). A row that names its second
+            # side on another operand contests against THAT (`tell`'s `to`),
             # so its `subject` is a topic and a person may tell somebody about themselves; the
             # counterparty rule below still declines the person as their own second side.
             if opposes_subject and subject == p.id:
@@ -360,12 +361,16 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
 
 def subject_is_opponent(row: "VerbRow") -> bool:
     """WHETHER AN ACT OF `row` IS CONTESTED AGAINST ITS `subject` -- the row declares a prize
-    (`contests:`) and names no `counterparty:`, so its second side IS its subject (`loop/sides.py`
-    contests against `payload[row.counterparty or "subject"]`). Read off the row's own columns,
-    never a verb name. One owner for two readers: `opening_set`'s self-subject decline (a person is
-    not their own adversary) and `decision/choose.py`'s score term 2 under `stance_polarity:
-    declared` (v9 IN-18 `G2`: an act against a disliked opponent scores higher, not lower)."""
-    return bool(row.contests) and not row.counterparty
+    (`contests:`) and its second side IS its subject: it names no `counterparty:`, or names
+    `counterparty: subject` (`determine`'s party, `arrest`'s prisoner). The fold's own opponent rule,
+    `payload[row.counterparty or "subject"]` (`loop/resolve.py::_contest`, `loop/sides.py`), read the
+    same way. Read off the row's own columns, never a verb name. One owner for two readers:
+    `opening_set`'s self-subject decline (a person is not their own adversary) and
+    `decision/choose.py`'s score term 2 under `stance_polarity: declared` (v9 IN-18 `G2`: an act
+    against a disliked opponent scores higher, not lower). CR-16: it read `not row.counterparty`,
+    which is False for a row that names `counterparty: subject`, so those rows were scored on the
+    wrong side under `declared`."""
+    return bool(row.contests) and (row.counterparty or "subject") == "subject"
 
 
 # ⚠ `project` LIVES HERE, NOT IN `choose.py`, AND THE REASON IS AN IMPORT CYCLE THAT EXECUTED.
