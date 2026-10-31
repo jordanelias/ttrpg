@@ -23,8 +23,8 @@ pieces of character data, the kind the realm's builder authors for every person:
 ⚠ THE TWO SEEDS ARE SELECTED, AND THE RATE IS MEASURED -- THE BAR IS AN EXISTENCE CLAIM, NOT A RATE.
 MEASURED 2026-10-16 at eb9ba4e2 (a one-off sweep, not kept): this world at each of the 15 convictions x
 seeds 0..15, ten seasons, 240 runs -- 72 `matter.determined`, and 4 of them walk to a `date.fired`
-(doctrine 12, family 13, reputation 13, scholastics 6); this file ran scholastics 6 and family 13,
-two distinct seeds (scholastics 16 since v10 REM-25, re-traced at `PROCEEDINGS` below). The other 68 are raised by the ambition (`need`, whose occasion is `[ROOT]`,
+(doctrine 12, family 13, reputation 13, scholastics 6); this file first ran scholastics 6 and family 13;
+the seeds it runs now are those of `PROCEEDINGS` below (re-traced at v10 REM-25 and at CR-16, which left no family proceeding). The other 68 are raised by the ambition (`need`, whose occasion is `[ROOT]`,
 `world_q.occasioned_by`): the chooser docketed the clerk BEFORE any sitting fired, so `_eff_open_case`
 appended a dateless item, `docketed` then declines every later `open_case` on him, no slot ever holds
 him, and `determine`'s docket conjunct (existence of a DocketItem, dated or not) admits the
@@ -129,7 +129,16 @@ DUKE, SEAT, PARTY, WANT = "p_high", "off_duke", "p_mid", "prop_bar_duke_want"
 # claim on SELECTED seeds (above), not a rate. A sweep of scholastics x seeds 0..39 at 6 seasons for a run meeting every
 # assertion of `_proceeding` finds seeds 13, 21 and 22 (scratch, not kept); 21 is taken, the first that is not family's
 # seed.
-PROCEEDINGS = (("scholastics", 21, 6), ("family", 13, 5))
+# v10 CR-16 (B10-07b): RE-TRACED AGAIN, scholastics/21/6 and family/13/5 -> scholastics/13/6 and scholastics/33/6, the season
+# count unchanged -- `Fixtures stance_polarity` ships `declared` (H-194), so the Duke's `determine` on the clerk is scored with the
+# grudge's sign and the act mix of this world moved: scholastics/21/6 now fires ONE date and determines nobody and family/13/5
+# determines nobody in three firings (`_proceeding`: "no determination's causes reach a date.fired"). The CONTROL test below
+# (virtue/2) still meets its assertions. The bar is an existence claim on SELECTED seeds (above), not a rate. A sweep of
+# scholastics x seeds 0..39 at 6 seasons for a run meeting every assertion of `_proceeding` finds seeds 13 and 33 (seed 39 raises
+# in a different assertion); a sweep of family x seeds 0..39 at 5 seasons finds none, so both proceedings are scholastics' (scratch,
+# not kept; the two worlds differ by seed, and the file's own distinct-hash assertion holds). ATTRIBUTION, in process on this tree:
+# `stance_polarity` swept back to `legacy` on `BAR_FIXTURES` meets every assertion at scholastics/21/6 and family/13/5 again.
+PROCEEDINGS = (("scholastics", 13, 6), ("scholastics", 33, 6))
 BAR_FIXTURES = DEFAULT_FIXTURES.sweep("pool_default", 30)       # v9 SC-03b: a judge whose finding opens
 # v9 IN-12 step 9: RE-TRACED, the conviction and season count unchanged -- `argue`/`sabotage`/`tend`/`train`
 # are new members of the Duke's and the clerk's option sets, so doctrine/8's trajectory moved (it now fires

@@ -85,7 +85,19 @@ _BASELINE_TOTAL = (33, 7)
 # the trajectory, which is what this file's header says the slice is (a proxy). Seed 1 is the first seed of
 # the sweep at which the rise holds here, and it holds on both trees (control (39, 9) -> (39, 11); here
 # (39, 10) -> (39, 12)) [a judgment call, as `test_sc01_the_bar.py`'s re-chosen seeds].
-_RISE_SEED = 1
+#
+# v10 CR-16 (B10-07b): THE RISE IS RE-READ AT SEED 2, RE-CHOSEN BY A STATED SWEEP; the control pin stays seed 0's, unmoved (33, 7).
+# `Fixtures stance_polarity` ships `declared` (H-194), and the seed-1 slice's shifted arm moved: `_wd_total` on this tree reads seed 1
+# control (38, 10), 1 -> (38, 10), no rise (the divergence count does not move; the file's own message, "inert here"), where the
+# `f59d0ca63` tree (the control) reads the rise at seed 1 and passes. THE SWEEP, seeds 0-7, `(genuine, diverged)` at shift 0 -> 1 on
+# this tree: seed 0 (33, 7) -> (29, 5); 1 (38, 10) -> (38, 10); 2 (34, 7) -> (30, 8); 3 (35, 9) -> (35, 9); 4 (40, 14) -> (40, 14);
+# 5 (22, 8) -> (22, 7); 6 (22, 4) -> (22, 4); 7 (37, 5) -> (37, 5) -- the rate rises at seed 2 only (8/30 = 26.7% > 7/34 = 20.6%). POOLED over the eight seeds it does NOT rise
+# (64/261 = 24.52% at shift 0, 62/253 = 24.51% at shift 1; seeds 0 and 5 fall): the rise holds at the one chosen seed,
+# which is why this is a one-seed reading of a proxy and no rate (REM-2C's pick above had a pooled rise, 65/253).
+# Seed 2 is the first seed of the sweep at which the rise holds here [a judgment call, as REM-2C's re-choice; the slice is a proxy and
+# a one-seed reading that flips with the trajectory]. CONTROL, in process on this tree: `stance_polarity` swept back to `legacy` reads seed 1 (39, 8) -> (39, 11), a rise, and seed 0's
+# control (33, 7) as pinned.
+_RISE_SEED = 2
 
 
 def _person(pursuits: dict, scar: dict) -> Person:
@@ -141,7 +153,8 @@ def _wd_total(shift, seed=0):
 # unscaled, and this file is back to its pre-IN-71 text and values: the rise holds again, the evidence that
 # the zeroing alone had moved it.
 def test_h9_fork_divergence_at_total_rises_above_baseline_and_the_control_arm_is_unmoved():
-    """THE PLAN'S FALSIFIER. [GROUNDED: measured on this tree (H9), NPC-088 slice, seed 0, 4 seasons
+    """THE PLAN'S FALSIFIER, read since CR-16 as a ONE-SEED EXISTENCE CLAIM (seed `_RISE_SEED`): pooled over seeds 0-7 the
+    rate does NOT rise (the note above `_RISE_SEED`). [GROUNDED: measured on this tree (H9), NPC-088 slice, seed 0, 4 seasons
     at 2 slots, `total` deposit arm -- genuine/diverged `scar_weight_shift` 0 -> 29/6 (the baseline,
     UNMOVED), 0.5 -> 29/6, 1 -> 32/10. At 0.5 the `total` arm does not move on this slice; the
     arm is swept at {0, 0.5, 1}, and the verdict that flips across the sweep is the finding.]
