@@ -55,11 +55,13 @@ Entry points:
   - level(name: str) -> float  (contest modifier-level → σ lookup)
   - levels_to_net_sigma(aggressor: Sequence[str] | None = None, defender: Sequence[str] | None = None) -> float
   - p_success(base_ob: float, pool: float, net_sigma: float = 0.0, tn: int = TN_STANDARD, capped: bool = True) -> float
+  - band_odds(pool: float, ob: float, boost: float = 0.0) -> (F, P, S, O)  (exact odds of the discrete roll, CP-T01-03)
   - roll_net(pool: float, tn: int = TN_STANDARD, rng: random.Random | None = None) -> int
   - roll_net_continuous(pool: float, tn: int = TN_STANDARD, rng: random.Random | None = None) -> float
 """
 from __future__ import annotations
 
+import functools
 import math
 import random
 from typing import Sequence
@@ -277,6 +279,52 @@ def p_success(
     shifted_mean = mu * effective_pool + net_boost(net_sigma, effective_pool, tn, capped)
     z = (base_ob - shifted_mean) / (sigma * math.sqrt(effective_pool))   # [canonical: params/core.md §Continuous Engine]
     return 1.0 - _phi(z)
+
+
+# ---------------------------------------------------------------------------
+# Exact band odds of the DISCRETE roll (CP-T01-03)
+# ---------------------------------------------------------------------------
+
+@functools.lru_cache(maxsize=None)
+def _net_counts(dice: int) -> tuple:
+    """How many of the 10**dice face combinations deal each net, as sorted (net, count) pairs.
+
+    The per-die net comes from the owner's face table, `dice_engine._die_result`, called once per
+    face; the d10 is `roll_pool`'s own `rng.randint(1, 10)`. The pool's net is the sum over dice, so
+    the counts are an integer convolution -- exact, and no floating error enters until the division."""
+    per_die = [dice_engine._die_result(face) for face in range(1, 11)]      # roll_pool deals 1..10
+    counts = {0: 1}
+    for _ in range(dice):
+        step: dict[int, int] = {}
+        for net, n in counts.items():
+            for r in per_die:
+                step[net + r] = step.get(net + r, 0) + n
+        counts = step
+    return tuple(sorted(counts.items()))
+
+
+def band_odds(pool: float, ob: float, boost: float = 0.0) -> tuple:
+    """`(F, P, S, O)`: the exact chance of each of the four bands -- in the owner's order, the
+    ordinals of `dice_engine.DEGREE_ORDINAL` -- for one roll of `pool` d10s against `ob`, the roll
+    shifted by `boost`.
+
+    AN ENUMERATION OF THE DEALT ROLL, NOT A MODEL OF IT. The net of the pool is enumerated over
+    `dice_engine._die_result`'s own faces; each net plus the boost is graded by
+    `dice_engine.degree_from_net`, the one ladder. Neither the faces nor the ladder is copied here, so
+    a change to either moves this tuple with the roll (the test swaps a band edge and watches it).
+    The same shape as the roll's own composition, `roll_net(pool) + net_boost(level, pool)`: the boost
+    is the mu-shift and the obstacle is untouched -- never an Ob reduction.
+
+    `pool` is rounded and floored as `roll_net` deals it (`max(1, int(round(pool)))` whole dice), so
+    the odds are for the dice dealt. `p_success` stays the Gaussian closed form combat reads; on these
+    dice it is 10-15 points off, which is why this exists. Pure and read-only; the result is a tuple of
+    floats (integer count over 10**dice), so `band_odds(2, 2) == (0.74, 0.19, 0.07, 0.0)` exactly."""
+    dice = max(1, int(round(pool)))                 # [canonical: params/core.md §Pool Floor (all systems)]
+    tally = [0, 0, 0, 0]
+    for net, n in _net_counts(dice):
+        tally[dice_engine.DEGREE_ORDINAL[dice_engine.degree_from_net(net + boost, ob)]] += n
+    total = 10 ** dice
+    return tuple(n / total for n in tally)
 
 
 # ---------------------------------------------------------------------------

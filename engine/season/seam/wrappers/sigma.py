@@ -77,9 +77,13 @@ prize row names. NO entry is added to
 """
 from __future__ import annotations
 
+import importlib
 import random
 from dataclasses import asdict
 from typing import Any, Optional
+
+from engine.dice_engine.sigma_leverage import band_odds, net_boost
+from engine.substrate import composition
 
 from ...data.rosters import VERB_CAPABILITY
 from ...gaps import Unspecified
@@ -182,13 +186,151 @@ def contest_input(w: Any, claimants: list, *, verb: str = "",
                           proofs=proofs(w, claimants[0], subject, room),
                           proof_step=fx.get("proof_step"))
     doc = w.records.get(examined) if examined is not None else None
+    return _frame(fx, _pool_of(w.persons[claimants[0]], verb, fx), _opposition_of(w, subject, verb),
+                  doc.forgery_quality if doc is not None else 0.0, room_terms)
+
+
+def _frame(fx: Any, pool: int, opposition: Optional[float], forgery_quality: float,
+           room_terms: dict) -> SocialContestInput:
+    """THE RECORD, FILLED THE ONE WAY: what `contest_input` (the true input) and `believed_input` (a
+    person's) both hand the module. They differ in where the pool's opposition, the forgery quality
+    and the room terms COME FROM; the fixtures, the zero leverage and the record's shape are this
+    function's alone, so the two modes cannot compose different obstacles from the same fields."""
     return SocialContestInput(
-        pool=_pool_of(w.persons[claimants[0]], verb, fx),
-        opposition=_opposition_of(w, subject, verb),
+        pool=pool, opposition=opposition,
         obstacle_default=fx.get("obstacle_default"),
         obstacle_ceiling=fx.get("obstacle_ceiling"),
         obstacle_refusal_multiple=fx.get("obstacle_refusal_multiple"),
-        leverage=0.0, forgery_quality=doc.forgery_quality if doc is not None else 0.0, **room_terms)
+        leverage=0.0, forgery_quality=forgery_quality, **room_terms)
+
+
+# ---------------------------------------------------------------------------------------------
+# EXACT ODDS (CP-T01-03): what a roll of this record would deal, read and never rolled.
+# ---------------------------------------------------------------------------------------------
+# The claim a person holds about another's capability: `Claim(subject=<that person>, predicate=
+# CAPABILITY_CLAIM + <the verb's capability key>, value=<the score he believes>)`. NOTHING DEPOSITS
+# ONE TODAY (the told, seen and inferred channels carry no capability), so a believed opposition is
+# `None` for every person in a built realm until a depositor exists; this is the reading, not the writer.
+CAPABILITY_CLAIM = "capability:"
+_ROLL_ROLE = "social_contest.roll"    # the composition row whose module composes the obstacle
+
+
+def _composed_obstacle(inp: SocialContestInput) -> float:
+    """The obstacle the module composes for `inp`, through the module that owns it. Reached by the
+    composition row's target (`composition.require`), the host's own way of naming a module; the
+    attribute is read at call time, so the odds follow the owner when it changes."""
+    module = importlib.import_module(composition.require(_ROLL_ROLE).__module__)
+    return module.obstacle(inp)
+
+
+def _odds_of_input(inp: SocialContestInput) -> Optional[tuple]:
+    """`band_odds` over one record: the module's obstacle, the roll's own `net_boost`, the record's
+    pool. `None` where S27.4 refuses the attempt -- no dice are dealt, so there is no distribution
+    (`resolve` refuses on the same pair, one rule: `ob > multiple x pool`)."""
+    ob = _composed_obstacle(inp)
+    if ob > inp.obstacle_refusal_multiple * max(inp.pool, 0):
+        return None
+    return band_odds(inp.pool, ob, net_boost(inp.leverage, inp.pool))
+
+
+def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
+                   person_subject: bool, examined_record: bool = False,
+                   room: Optional[dict] = None, heard: bool = False) -> Optional[SocialContestInput]:
+    """THE PERSON'S RECORD (mode (b)): the same `SocialContestInput`, filled only from what `p` holds.
+
+    AX-2: it reads `p` (his own capability and his own ledger) and the fixtures, never the World; the
+    facts about the act's SHAPE that only a World can answer (`person_subject`: the subject is a person;
+    `examined_record`: an inquiry examines a Record; `heard`: a bench hears the contest) are the
+    caller's, not a belief. His pool is his own and held with certainty. Every other field is filled
+    only from what he holds, and WHERE A FACTOR IS UNKNOWN TO HIM THE ANSWER IS `None`, never a figure:
+      * the opposition of a person subject, on a verb that names a capability key: a claim in his
+        ledger on that subject at `CAPABILITY_CLAIM + key` (the latest, then the most confident);
+        none held -> unknown. A non-person subject, or a verb naming no key, has no opposition: the
+        module's stand-in applies, and that is known.
+      * an examined Record's forgery quality: a property of the Record, held by nobody's claim here
+        -> unknown.
+      * the room's terms (`reception`, `proofs`) read other persons' ledgers: unknown unless the caller
+        passes his own believed `room` (`{"reception": .., "proofs": ..}`)."""
+    key = VERB_CAPABILITY.get(verb)
+    opposition = None
+    if person_subject and key:
+        held = [c for c in p.ledger
+                if c.subject == subject and c.predicate == CAPABILITY_CLAIM + key]
+        if not held:
+            return None
+        said = max(held, key=lambda c: (c.when, c.round, c.confidence))
+        opposition = float(said.value)
+    if examined_record:
+        return None
+    room_terms = {}
+    if heard:
+        if room is None:
+            return None
+        room_terms = dict(reception=room["reception"], reception_gain=fx.get("reception_gain"),
+                          proofs=room["proofs"], proof_step=fx.get("proof_step"))
+    return _frame(fx, _pool_of(p, verb, fx), opposition, 0.0, room_terms)
+
+
+def _rolled_as(w: Any, act: Any) -> Optional[tuple]:
+    """`(claimants, subject, room, examined)` exactly as the fold hands the act to `resolve`, or `None`
+    when the social roll does not deal it (an uncontested act, another subsystem's prize, a party
+    gap). The derivation is the fold's own: `loop/resolve.py::_contests_of`, `loop/sides.py::sides_of`
+    and the prize row's `heard_by:` for a contest; the verb's `graded_inquiries` route for an inquiry.
+    Imported inside the function: `loop/` imports this package, so a module-level import would loop."""
+    from ...data.rosters import GRADED_INQUIRIES
+    from ...data.verbs import VERB_TABLE
+    from ...loop.resolve import _contests_of
+    from ...loop.sides import sides_of
+    row = VERB_TABLE.get(act.verb)
+    payload = act.payload if isinstance(act.payload, dict) else {}
+    contests = _contests_of(act, row)
+    if contests:
+        prize = _prize_row("contest", contests[0])
+        if prize is None or prize.get("provider") != _PROVIDER:
+            return None
+        target = payload.get(row.opponent_operand() if row is not None else "subject")
+        parties, subject, rung = sides_of(w, act, target, contests[0])
+        if not parties:
+            return None
+        return parties, subject, (rung if prize.get("heard_by") == BENCH else None), None
+    route = GRADED_INQUIRIES.get(act.verb)
+    if route is not None and route.get("provider") == _PROVIDER:
+        subject = payload.get("subject")
+        return [act.actor], subject, None, subject
+    return None
+
+
+def odds_of(w: Any, act: Any, *, believer: Any = None,
+            believed_room: Optional[dict] = None) -> Optional[tuple]:
+    """`(F, P, S, O)` for the social roll `act` would deal, or `None`. READ-ONLY; nothing is rolled.
+
+    MODE (a), `believer=None`: the TRUE input -- `contest_input` over the act as the fold would hand it
+    to `resolve`, the module's obstacle and `band_odds`. The shown number is the dealt number by
+    construction: it is the same record, the same obstacle function and the same roll composition.
+
+    MODE (b), `believer=<Person>`: the SAME function over `believed_input(believer, ...)`, the person's
+    own record. It reads the believer's own ledger and nothing of the true state (the World answers only
+    the act's shape), and returns `None` where a factor is unknown to him -- never a guessed figure.
+    `None` is also the answer where the social roll deals no dice for the act (see `_rolled_as`) or
+    S27.4 refuses it.
+
+    Mode (b) HAS NO CALLER in this change; its first reader is the chooser's alignment term (CR-17)."""
+    called = _rolled_as(w, act)
+    if called is None:
+        return None
+    parties, subject, room, examined = called
+    if w.persons.get(parties[0]) is None:
+        return None
+    if believer is not None and believer.id != act.actor:
+        return None                     # another's pool is not his own to know
+    if believer is None:
+        return _odds_of_input(contest_input(w, parties, verb=act.verb, subject=subject, room=room,
+                                            examined=examined))
+    inp = believed_input(believer, act.verb, subject, w.fixtures,
+                         person_subject=bool(subject) and subject in w.persons,
+                         examined_record=examined is not None and examined in w.records,
+                         room=believed_room, heard=room is not None)
+    return None if inp is None else _odds_of_input(inp)
 
 
 @provider("contest", _PROVIDER)

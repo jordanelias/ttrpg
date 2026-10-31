@@ -14,13 +14,27 @@ WHAT IS BUILT, and where each piece is read:
     draw independently; there is no aggregate obstacle over a bundle of matters (`H-213`'s `default:`).
 
 M-7 (`proposals/2026-09-05-proceedings-subsystem/19_PLAN.md` M-7; run at `21_RECONCILIATION.md`'s
-PHASE 0 result): at the 1D pool floor against the maximum plausible composed obstacle, `p_success`
-must not be effectively zero. "EFFECTIVELY ZERO" is named here, not left to a reader:
+PHASE 0 result): at the 1D pool floor against the maximum plausible composed obstacle, the chance of a
+non-Failure band must not be effectively zero. "EFFECTIVELY ZERO" is named here, not left to a reader:
 `EFFECTIVELY_ZERO = 0.001`, because the reconciliation's own table calls its Ob-3 row (0.0006) the
-point where the floor "reaches zero". The quantity is `sigma_leverage.p_success(ob, pool=1)` with
-`ob = obstacle(record)` for a requested obstacle of 4..11 (`opposition = 2 x Ob`), plus the EXACT
-discrete chance of a non-Failure band at 1D through the real module entry and the real ladder (each
+point where the floor "reaches zero". The quantity is `1 - F` of `sigma_leverage.band_odds(1, ob)` with
+`ob = obstacle(record)` for a requested obstacle of 4..11 (`opposition = 2 x Ob`), checked against the
+EXACT discrete count of non-Failure bands at 1D through the real module entry and the real ladder (each
 of the ten d10 faces forced in turn).
+
+RE-MEASURED AT CP-T01-03 (B10-08): the instrument moved from `p_success`, the Gaussian closed form
+(10-15 points wrong on these dice), to `band_odds`, the exact enumeration. The two disagree where the
+closed form is worst. Chance of a non-Failure band at the 1D floor, old `p_success` -> new `band_odds`:
+  ceiling 1  0.226627 -> 0.4      (4 of 10 faces)
+  ceiling 2  0.02275  -> 0.1      (1 of 10 faces; the shipped arm)
+  ceiling 3  0.000577 -> 0.0      (0 of 10 faces)
+  None       3e-06 at Ob 4, 0.0 above -> 0.0 at every Ob 4..11
+Every verdict is unchanged (the control and the ceiling-3 arm fail M-7, the shipped arm clears it), and
+`band_odds` now equals the forced-face count exactly, which `p_success` never did. ONE CLAIM DID NOT
+SURVIVE THE NEW INSTRUMENT: "the sigma-channel is live again under the ceiling" read `p_success`
+rising with the level bought; on the dealt dice no level (boost <= 0.70) moves a whole success at pool
+1, so the odds are flat at 0.1. It is live once a boost clears one success (pool 4), which is the gap
+`CP-T01-04`'s fraction rule is for; the test below says so rather than keeping the Gaussian reading.
 
 THE FALSIFIERS (each seen red before the build, 2026-10-16: the record had no `opposition` /
 `obstacle_ceiling` field, `DEFAULT_FIXTURES` no `obstacle_ceiling`, `sigma` still held `_obstacle_of`):
@@ -41,7 +55,7 @@ from dataclasses import asdict, fields
 import pytest
 
 from engine.dice_engine.dice_engine import DEGREE_LABEL, Degree
-from engine.dice_engine.sigma_leverage import LEVEL_SIGMA, OB_MIN, p_success
+from engine.dice_engine.sigma_leverage import LEVEL_SIGMA, OB_MIN, band_odds, net_boost
 from engine.substrate import composition
 
 from ..data.fixtures import DEFAULT_FIXTURES
@@ -93,13 +107,21 @@ def _discrete_hits(mod, rec) -> int:
     return sum(ladder.degree_of(asdict(mod.roll(rec, _Face(f)))) != FAILURE for f in range(1, 11))
 
 
+def _clear(pool, ob, boost=0.0) -> float:
+    """The chance of a non-Failure band: `1 - F` of the exact odds."""
+    return 1.0 - band_odds(pool, ob, boost)[0]
+
+
 def _m7(mod, ceiling) -> dict:
     """M-7 at the 1D floor for each requested obstacle in `M7_OBS`, on one ceiling arm."""
     out = {}
     for ob in M7_OBS:
         rec = _record(2 * ob, ceiling)
         eff = mod.obstacle(rec)
-        out[ob] = (eff, p_success(eff, FLOOR), _discrete_hits(mod, rec))
+        hits = _discrete_hits(mod, rec)
+        out[ob] = (eff, _clear(FLOOR, eff), hits)
+        # the instrument is the dealt dice: its chance IS the forced-face count over the ten faces
+        assert abs(out[ob][1] - hits / 10) < 1e-12, (ceiling, ob, out[ob])
     return out
 
 
@@ -116,12 +138,12 @@ def test_m7_at_the_1d_floor_clears_ob_4_and_above_under_the_ceiling_and_fails_wi
         # the reconciliation's measurement, reproduced through the owner rather than cited.
         assert eff0 == ob, (ob, eff0)
         assert p0 < EFFECTIVELY_ZERO and hits0 == 0, (
-            f"control arm: Ob {ob} at 1D gave p_success {p0:.6f} and {hits0}/10 faces -- M-7 "
+            f"control arm: Ob {ob} at 1D gave chance {p0:.6f} and {hits0}/10 faces -- M-7 "
             f"should FAIL without a ceiling; if it passes, the instrument cannot see the failure")
         # THE CLAIM: the ceiling bounds the obstacle, and the floor-pool speaker keeps a chance.
         assert eff1 == shipped, (ob, eff1)
         assert p1 >= EFFECTIVELY_ZERO and hits1 >= 1, (
-            f"Ob {ob} at the 1D floor under ceiling {shipped}: p_success {p1:.6f}, {hits1}/10 "
+            f"Ob {ob} at the 1D floor under ceiling {shipped}: chance {p1:.6f}, {hits1}/10 "
             f"faces -- M-7 still fails (`EFFECTIVELY_ZERO` = {EFFECTIVELY_ZERO})")
         checked += 1
     assert checked == len(M7_OBS)
@@ -132,9 +154,15 @@ def test_m7_at_the_1d_floor_clears_ob_4_and_above_under_the_ceiling_and_fails_wi
     # M-7's second clause: without the ceiling, BUYING ADVANTAGE does not rescue Ob 4 at the floor
     # (remedy (a) refuted, `21_RECONCILIATION.md`) -- every rostered level stays effectively zero.
     for lv, s in LEVEL_SIGMA.items():
-        assert p_success(4, FLOOR, s) < EFFECTIVELY_ZERO, (lv, p_success(4, FLOOR, s))
-        # and under the ceiling the σ-channel is live again, monotonic in the level bought.
-        assert p_success(shipped, FLOOR, s) > p_success(shipped, FLOOR, 0.0), lv
+        boost = net_boost(s, FLOOR)
+        assert _clear(FLOOR, 4, boost) < EFFECTIVELY_ZERO, (lv, _clear(FLOOR, 4, boost))
+        # under the ceiling, buying advantage never lowers the chance at the floor ...
+        assert _clear(FLOOR, shipped, boost) >= _clear(FLOOR, shipped, 0.0), lv
+    # ... but on the dealt dice it pays only once the boost clears a whole success: no level is worth
+    # one at pool 1 (the Gaussian reading said it rose), and pool 4's major level is (CP-T01-04's gap).
+    assert max(net_boost(s, FLOOR) for s in LEVEL_SIGMA.values()) < 1.0
+    major4 = net_boost(LEVEL_SIGMA["major"], 4)
+    assert major4 > 1.0 and _clear(4, shipped, major4) > _clear(4, shipped, 0.0)
 
 
 def test_the_ceiling_is_swept_and_the_sweep_straddles_m7():
