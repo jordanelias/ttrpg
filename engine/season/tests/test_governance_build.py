@@ -2834,7 +2834,12 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # column, so the realm's act mix moves again (seed 0, one season: 598 -> 606 kept, 598 -> 607 stripped, the same shift
     # `test_go07_canonical_digest.py` records). The arms part by one act again. CONTROL: the SE-06 tree (`65ea7e191`) reads
     # (598, 598) under this same test.
-    assert (out["acts"], cout["acts"]) == (606, 607), (
+    # ⚠⚠ v10 CR-16 (B10-07b): (606, 607) -> (597, 595), A RE-RECORD WITH THE UNIT THAT MOVED IT: `Fixtures stance_polarity` ships
+    # `declared` (H-194), so a grudge pulls the contested acts against its object (`fight`, `determine`, `arrest`) up instead of down
+    # and the realm's act mix moves (seed 0, one season: 606 -> 597 kept, 607 -> 595 stripped; `test_go07_canonical_digest.py` records
+    # the 597). The arms still part by two acts. CONTROL: this world with `stance_polarity` swept back to `legacy` in process reads
+    # (606, 607) under this same test's two seasons-of-one (the script on both arms).
+    assert (out["acts"], cout["acts"]) == (597, 595), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")

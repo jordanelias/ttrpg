@@ -2020,7 +2020,8 @@ def test_g2_a_grudge_raises_fight_on_its_object_under_declared_not_legacy(monkey
     from ..decision.choose import stance_term
     from ..decision.options import subject_is_opponent
     from ..state.carriers import Candidate, Person
-    assert DEFAULT_FIXTURES.get("stance_polarity") == "legacy", "the shipped arm moved: restate"
+    # v10 CR-16 shipped `declared` (was `legacy`); every arm below is swept explicitly, so this pins the shipped value only.
+    assert DEFAULT_FIXTURES.get("stance_polarity") == "declared", "the shipped arm moved: restate"
     assert subject_is_opponent(VERB_TABLE["fight"]) and not subject_is_opponent(VERB_TABLE["tell"])
     grudge = [("p_x", -1.0, 3.0)]
     cands = [Candidate("fight", "p_x"), Candidate("fight", "p_y")]
@@ -2047,6 +2048,38 @@ def test_g2_a_grudge_raises_fight_on_its_object_under_declared_not_legacy(monkey
     # the `regard` midpoint: G1's regard, no sign -- at G1's control gains it is the legacy term
     assert stance_term(p, Candidate("fight", "p_x"), ctl.sweep("stance_polarity", "regard")) == -3.0
     assert checked >= 1
+
+
+def test_g2_a_grudge_raises_determine_and_arrest_on_the_party_under_declared(monkeypatch):
+    """CR-16's FALSIFIER, the two contested rows that name `counterparty: subject`: a judge holding a
+    grudge toward a party ranks `determine` on that party ABOVE the same `determine` on a neutral one
+    under `declared`, and the same pair for `arrest`. `legacy` ranks them the other way, so the
+    ordering is the polarity's and the pair would not pass on a scorer that ignored it. Before CR-16
+    `options.subject_is_opponent` read `not row.counterparty`, which is False for exactly these two
+    rows (the party is named by the `counterparty:` column, `subject`), so the second side was scored
+    on the wrong side. Rows are read off the loaded table, not named in the predicate.
+
+    MUTATION (run 2026-10-31, CR-16): `subject_is_opponent` reverted to `bool(row.contests) and not
+    row.counterparty` reddens the first assertion (`subject_is_opponent(determine)`); with that line
+    removed, the `declared` ordering is red too (neutral party above the grudge). Restored, GREEN."""
+    from ..data.verbs import VERB_TABLE
+    from ..decision.options import subject_is_opponent
+    from ..state.carriers import Candidate
+    grudge = [("p_x", -1.0, 3.0)]
+    checked = 0
+    for verb in ("determine", "arrest"):
+        row = VERB_TABLE[verb]
+        assert row.contests and row.counterparty == "subject", f"{verb}: the row moved; restate"
+        assert subject_is_opponent(row), f"{verb}: contested against its subject, not read as opponent"
+        cands = [Candidate(verb, "p_x"), Candidate(verb, "p_y")]
+        declared = _g2_ranked("declared", cands, grudge, monkeypatch)
+        legacy = _g2_ranked("legacy", cands, grudge, monkeypatch)
+        assert declared == [(verb, "p_x"), (verb, "p_y")], (verb, declared)
+        assert legacy == [(verb, "p_y"), (verb, "p_x")], (verb, legacy)
+        checked += 1
+    # a row whose second side is NOT its subject stays off: `tell`'s counterparty is `to`
+    assert not subject_is_opponent(VERB_TABLE["tell"])
+    assert checked == 2
 
 
 def test_g2_an_unknown_polarity_arm_refuses():
