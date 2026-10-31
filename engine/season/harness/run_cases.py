@@ -267,13 +267,31 @@ def _tolerant_yaml(text: str, fname: str):
 
 CORPUS_DEFECTS: list[str] = []
 
+# CASE_SERIES -- series name -> the regex a case id of that series must fully match.
+# THE RULE: an id is its series prefix plus a label. A bare arc number is never an identifier
+# (two series once both numbered their cases 16-18, and the loader dropped the second set with
+# no trace). A colliding series takes a NEW PREFIX, never a new number; bare `ARC-19` is never
+# allocated; a new id needs a row here FIRST. `ARC\d-ORPHAN` is the loader's own synthetic id
+# for a headless fragment (`_tolerant_yaml`). Neither of the two 16-18 series is canonical
+# (both are evidence), and no cited id is renumbered.
+CASE_SERIES: dict[str, str] = {
+    "arc": r"ARC-\d{2}",
+    "arc_recovered": r"ARC-R\d{2}",
+    "arc_meta_collision": r"ARC-META-COLLISION",
+    "nsc": r"NSC-\d{2}",
+    "scn": r"SCN-\d{2}|SCN-LOOP-[A-D]",
+    "emg": r"EMG-\d{2}|EMG-[CX]\d",
+    "npc": r"NPC-\d{3}",
+    "orphan": r"ARC\d-ORPHAN",
+}
+
 
 def load_cases(kind: str) -> list[dict]:
     """`kind` in {NPC, ARC}. NPC cases come from BOTH the in-chain #351 corpus (27) and this
     session's completion of it (19) -- together the full 46 in the registry. ARC cases are
     the in-chain corpus in full."""
     out: list[dict] = []
-    seen: set[str] = set()
+    seen: dict[str, str] = {}      # case id -> the file it was first loaded from
     sources = []
     if kind == "NPC":
         sources = sorted(CHAIN.glob("NPC*.yaml")) + sorted(files.CASES_DIR.glob("NPC*.yaml"))
@@ -283,9 +301,15 @@ def load_cases(kind: str) -> list[dict]:
         data, notes = _tolerant_yaml(f.read_text(), f.name)
         CORPUS_DEFECTS.extend(notes)
         for c in data or []:
-            if c.get("id") in seen:
+            cid = str(c["id"])
+            if cid in seen:
+                CORPUS_DEFECTS.append(
+                    f"{f.name}: duplicate case id {cid!r} (first in {seen[cid]}); "
+                    "second not loaded")
                 continue
-            seen.add(c["id"])
+            if not any(re.fullmatch(p, cid) for p in CASE_SERIES.values()):
+                CORPUS_DEFECTS.append(f"{f.name}: case id {cid!r} is in no CASE_SERIES row")
+            seen[cid] = f.name
             c["_source"] = f.name
             out.append(c)
     return out

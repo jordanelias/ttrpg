@@ -1617,6 +1617,37 @@ def test_the_corpus_defects_are_reported_not_hidden():
     assert R.CORPUS_DEFECTS and any("TRUNCATED" in d for d in R.CORPUS_DEFECTS)
 
 
+def test_cr44_a_duplicate_or_unprefixed_case_id_is_recorded_not_dropped_silently(
+        monkeypatch, tmp_path):
+    """CR-44. The loader used to `continue` past a second case carrying an id already seen:
+    a collision between two series' numbers deleted a case with no trace. The second case is
+    still not loaded, but the corpus defects now SAY so, and an id in no `CASE_SERIES` row is
+    named too. Control: the shipped corpus carries neither line (`test_cr44_..._shipped`)."""
+    chain, cases = tmp_path / "chain", tmp_path / "cases"
+    chain.mkdir()
+    cases.mkdir()
+    (chain / "ARC1.yaml").write_text(
+        "- id: ARC-01\n  name: first\n- id: 19\n  name: bare number\n")
+    (cases / "ARC2.yaml").write_text("- id: ARC-01\n  name: second\n")
+    monkeypatch.setattr(R, "CHAIN", chain)
+    monkeypatch.setattr(files, "CASES_DIR", cases)
+    R.CORPUS_DEFECTS.clear()
+    out = R.load_cases("ARC")
+    assert [c["name"] for c in out if c["id"] == "ARC-01"] == ["first"], "second not loaded"
+    dups = [d for d in R.CORPUS_DEFECTS if "duplicate case id" in d]
+    unrow = [d for d in R.CORPUS_DEFECTS if "is in no CASE_SERIES row" in d]
+    assert len(dups) == 1 and "ARC2.yaml" in dups[0] and "ARC1.yaml" in dups[0], dups
+    assert len(unrow) == 1 and "ARC1.yaml" in unrow[0] and "19" in unrow[0], unrow
+
+
+def test_cr44_the_shipped_corpus_has_no_case_id_defect():
+    """CR-44's control: every shipped id sits in a `CASE_SERIES` row and none collides."""
+    R.CORPUS_DEFECTS.clear()
+    n = len(R.load_cases("ARC")) + len(R.load_cases("NPC"))
+    assert n >= 100, n
+    assert not [d for d in R.CORPUS_DEFECTS if "case id" in d], R.CORPUS_DEFECTS
+
+
 # ===========================================================================
 # W15 -- ONE WRITER PER ARTIFACT (guardrail G7)
 #
