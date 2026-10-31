@@ -6,7 +6,7 @@
 # Each `convictions:` entry's `conviction:` value is a PURSUIT from
 # `references/descriptor_registry.yaml: pursuit_roster` (fifteen; ED-IN-0261), read through
 # `engine/season/data/cast.py::pursuits_of`, which RAISES on any other name. The values were
-# migrated in IN-08's cells commit by `candidate_pursuit_cells.md` §4.1's rule and §4.3's table
+# migrated in IN-08's cells commit by the retired pursuit-cells draft's §4.1 rule and §4.3 table
 # (folded into the build, Jordan 2026-10-06, RS-1); weights are carried, never renormalised, and
 # two names that collapse into one pursuit add. Three weights had no successor and no text to read
 # one from and are DROPPED, not homed: NPC-033 Utility .30, NPC-086 Utility .20 (§4.3's own drops)

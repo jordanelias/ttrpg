@@ -466,6 +466,7 @@ def _counts(w) -> dict:
 #: and `populated.run`; CONTROL, run in process on this tree: `planned_works` emptied reads the values this block held exactly, at
 #: all three seeds, and the build world's old digest and content hash. Was, for seeds 0 / 1 / 2: `old` 789bc9eb... / 64276910... /
 #: b8031dc3..., `new` 41ffb48b... / 6c52b44c... / 9bb7306d..., `census` ed0c8bac... (seed 0; seeds 1 and 2 unmoved).
+#: (The per-seed ED-IN-0306 re-record notes this block carried before SE-06 are at `git show 4de5f994d:engine/season/tests/test_go07_canonical_digest.py`.)
 #: RE-RECORDED AGAIN at v10 SE-06 (B10-07b), A DATA MOVE DECLARED: the 37 population cohorts hold their territory's temperament as
 #: pursuits (`cohorts.yaml: temperaments:`), so the build moves (the cohorts' `pursuits` only: the counts of persons, rungs, offices and
 #: sites are unchanged) and every seeded season takes another path (`acts` 599 / 638 / 633 -> 598 / 640 / 653, `log` 9378 / 11960 /
@@ -481,7 +482,7 @@ def _counts(w) -> dict:
 #: re-read on an extracted copy of it, see `test_season_weather.BASE_HASHES`). Was, for seeds 0 / 1 / 2: `old` 7d1989f6... / ac68817f... / ed7ce0c1..., `new` 31e39c05... / 301950ee... / 83b98aac...,
 #: `census` fce1b6a7... / 4029aeb0... / 4a8f2001....
 #: RE-RECORDED AGAIN at v10 CR-16 (B10-07b), A BEHAVIOUR MOVE DECLARED: `Fixtures stance_polarity` `legacy` -> `declared`, so a grudge pulls
-#: the contested acts against its object (`fight`, `determine`, `arrest`) UP instead of down and every seeded season takes another path
+#: the contested acts against its object (every contested row whose opponent is its subject; `arrest` never forms in the realm, G-07) UP instead of down and every seeded season takes another path
 #: (`acts` 606 / 651 / 655 -> 597 / 608 / 650, `log` 9180 / 10898 / 9946 -> 9347 / 10636 / 10728). The BUILD is unmoved (`Fixtures` is not
 #: hashed: the build world's old digest and content hash below are the previous pins). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM. EVERY
 #: value below is this tree's, read with this file's own helpers and `populated.run`; CONTROL, run in process on this tree:

@@ -176,7 +176,7 @@ def test_in64_every_cast_person_holds_fifteen_pursuits_and_every_concern_and_non
 def test_in64_the_cast_holds_no_identical_full_profile(_drawn):
     w, _calls = _drawn
     r = DS.read_persons(w)
-    assert r["cast"] >= 46 and r["with_vector"] >= r["cast"], r
+    assert r["cast"] >= 46 and r["cast_with_vector"] >= r["cast"], r     # the CAST holds vectors: cohorts' do not count
     assert r["identical_groups_cast"] == 0, r
     # IN-62's base (8372ed92) read 37 pairs above 0.99; the EXIT is "not above the base's". SE-06 gives every cohort its
     # territory's vector, and cohorts of one territory are identical by declaration, so the all-persons `pairs_above`
@@ -203,6 +203,7 @@ def test_in64_the_identical_profile_reading_can_see_a_planted_duplicate(_drawn):
     finally:
         b.pursuits, b.conviction = saved
     assert r["identical_groups_cast"] == 1, (pair, r["identical_groups_cast"])
+    assert r["pairs_above_cast"] >= 1, r["pairs_above_cast"]     # the cast's pair reading sees the planted twin (cosine 1.0)
 
 
 def test_in64_a_case_with_no_row_still_falls_back_to_seed_pursuits(monkeypatch):

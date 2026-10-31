@@ -91,7 +91,9 @@ _BASELINE_TOTAL = (33, 7)
 # control (38, 10), 1 -> (38, 10), no rise (the divergence count does not move; the file's own message, "inert here"), where the
 # `f59d0ca63` tree (the control) reads the rise at seed 1 and passes. THE SWEEP, seeds 0-7, `(genuine, diverged)` at shift 0 -> 1 on
 # this tree: seed 0 (33, 7) -> (29, 5); 1 (38, 10) -> (38, 10); 2 (34, 7) -> (30, 8); 3 (35, 9) -> (35, 9); 4 (40, 14) -> (40, 14);
-# 5 (22, 8) -> (22, 7); 6 (22, 4) -> (22, 4); 7 (37, 5) -> (37, 5) -- the rate rises at seed 2 only (8/30 = 26.7% > 7/34 = 20.6%).
+# 5 (22, 8) -> (22, 7); 6 (22, 4) -> (22, 4); 7 (37, 5) -> (37, 5) -- the rate rises at seed 2 only (8/30 = 26.7% > 7/34 = 20.6%). POOLED over the eight seeds it does NOT rise
+# (64/261 = 24.52% at shift 0, 62/253 = 24.51% at shift 1; seeds 0 and 5 fall): the rise holds at the one chosen seed,
+# which is why this is a one-seed reading of a proxy and no rate (REM-2C's pick below had a pooled rise, 65/253).
 # Seed 2 is the first seed of the sweep at which the rise holds here [a judgment call, as REM-2C's re-choice; the slice is a proxy and
 # a one-seed reading that flips with the trajectory]. CONTROL, in process on this tree: `stance_polarity` swept back to `legacy` reads seed 1 (39, 8) -> (39, 11), a rise, and seed 0's
 # control (33, 7) as pinned.

@@ -23,8 +23,8 @@ pieces of character data, the kind the realm's builder authors for every person:
 ⚠ THE TWO SEEDS ARE SELECTED, AND THE RATE IS MEASURED -- THE BAR IS AN EXISTENCE CLAIM, NOT A RATE.
 MEASURED 2026-10-16 at eb9ba4e2 (a one-off sweep, not kept): this world at each of the 15 convictions x
 seeds 0..15, ten seasons, 240 runs -- 72 `matter.determined`, and 4 of them walk to a `date.fired`
-(doctrine 12, family 13, reputation 13, scholastics 6); this file ran scholastics 6 and family 13,
-two distinct seeds (scholastics 16 since v10 REM-25, re-traced at `PROCEEDINGS` below). The other 68 are raised by the ambition (`need`, whose occasion is `[ROOT]`,
+(doctrine 12, family 13, reputation 13, scholastics 6); this file first ran scholastics 6 and family 13;
+the seeds it runs now are those of `PROCEEDINGS` below (re-traced at v10 REM-25 and at CR-16, which left no family proceeding). The other 68 are raised by the ambition (`need`, whose occasion is `[ROOT]`,
 `world_q.occasioned_by`): the chooser docketed the clerk BEFORE any sitting fired, so `_eff_open_case`
 appended a dateless item, `docketed` then declines every later `open_case` on him, no slot ever holds
 him, and `determine`'s docket conjunct (existence of a DocketItem, dated or not) admits the

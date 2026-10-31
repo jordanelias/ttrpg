@@ -1,7 +1,7 @@
 """`loop/sides.py` -- WHO CONTESTS, WHEN THE PRIZE BELONGS TO `mass_battle` RATHER THAN A
 PERSON-TO-PERSON SUBSYSTEM (M4, `ED-IN-0279` clause (a)).
 
-`_target = payload[row.counterparty or "subject"]` names a PERSON for `kill / wound`'s victim
+`_target = payload[row.opponent_operand()]` (`data/verbs.py::VerbRow`) names a PERSON for `kill / wound`'s victim
 (`subject`) and `tell`'s addressee (`to`, its counterparty), and the fold's own `_parties =
 [a.actor, _target]` was never wrong for that shape.
 `march`'s subject names the settlement being marched on, and putting a Rung id into a
@@ -41,7 +41,7 @@ from ..trace_log import TRACE
 def sides_of(w: World, a: Act, target: Optional[str],
              prize: str) -> tuple[list[str], Optional[str], Optional[str]]:
     """`(claimants, subject, rung)` for `contest()`, given `target` -- the act's
-    `payload[row.counterparty or "subject"]`, its opponent -- and the PRIZE its verb row contests.
+    `payload[row.opponent_operand()]`, its opponent -- and the PRIZE its verb row contests.
 
     TWO SHAPES, dispatched on `manifest.resolve("contest", prize)["module"]`:
 

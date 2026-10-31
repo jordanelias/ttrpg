@@ -70,7 +70,7 @@ from collections import Counter, defaultdict
 from ..data import cast, files
 from ..data import goals as goals_data
 from ..queries.world_q import (HUNGER_KIND, RESIDE_KIND, WORKS_KIND, ancestry, capacity, closed_uses,
-                                home_of as home_of_q, hunger, members, subsistence_draw, uncontrolled)
+                                enclosing_territory, home_of as home_of_q, hunger, members, subsistence_draw, uncontrolled)
 from ..gaps import Forbidden, Unspecified
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
 from ..data.rosters import (BODY_FACTION, FACTIONS, FOREIGN_CAST, FOREIGN_SEATS, OFFICES_BY_HOLDER,
@@ -83,7 +83,6 @@ from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..loop.effects import EFFECTS
 from ..state.carriers import Act, Office, Person, Proposition, Rung, Site, Tenure
-from ..state.containment import parent_of
 from ..state.gate import NO_CHANGE
 from ..state.ids import H, ROOT, draw_factory
 from ..state.world import World
@@ -447,7 +446,8 @@ def seat_cohorts(w: World, rows: list, names: dict | None = None, temperaments: 
     row's weight, its `person` rung, a `contain` edge (where it IS) and a `reside` edge (where it
     LIVES, `19c`'s rule) to the row's rung. No `commit`, so it is no faction's member; no `hold`,
     so it holds nothing; no convictions -- inventing convictions for a population would be authoring a
-    creed nobody wrote, and nothing supplies one (`Person.conviction` stays `{}`). Its PURSUITS are its
+    creed nobody wrote, and the conviction half is HELD (`cohorts.yaml: temperaments:` names the residue;
+    `Person.conviction` stays `{}`). Its PURSUITS are its
     territory's temperament when `temperaments` is given (SE-06, ED-IN-0293 row 1 reading (b), taken by M1 of
     the v10 decision round: `cohorts.yaml: temperaments:`, translated by `data/pursuits.py::temperament_pursuits`),
     and none when it is `None`, so it ranks by the uniform arm a person with no authored pursuits gets. Two
@@ -502,7 +502,7 @@ def seat_cohorts(w: World, rows: list, names: dict | None = None, temperaments: 
                 law="plan position `24f` -- a cohort is seated beside the cast, never over it")
         pursuits: dict = {}
         if by_territory is not None:
-            terr = territory_id_of(parent_of(w, rung))
+            terr = territory_id_of(enclosing_territory(w, rung))
             if terr not in by_territory:
                 raise Unspecified(
                     f"cohort {pid!r} lives in the territory {terr!r}, which `cohorts.yaml: temperaments` has no row for",

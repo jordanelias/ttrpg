@@ -2367,10 +2367,11 @@ rosters:
     note: >-
       THE ARMS OF `Fixtures.stance_polarity` (`H-194`), read by `decision/choose.py::stance_term`
       (its `_stance_arm`), score term 2. `legacy` is the pre-G2 term, `+ stance_toward(p, c.subject)` for every row --
-      the CONTROL, shipped: an act against a disliked opponent then scores LOWER, the sign §F2's
+      the CONTROL (shipped until CR-16): an act against a disliked opponent then scores LOWER, the sign §F2's
       term never distinguished. `declared` reads `regard(p, c.subject)` (G1's, so its judged and
       told halves enter at their own gains) and NEGATES it where the subject is the act's OPPONENT
-      (`decision/options.py::subject_is_opponent`: the row contests and names no counterparty), so
+      (`decision/options.py::subject_is_opponent`: the row contests and its second side is its subject,
+      `VerbRow.opponent_operand()`), so
       fighting the disliked scores higher. A Rung subject reads 0 at G1's control; at live gains it
       reads the deed claims held about it (`transfer.made` on a changed rung, under
       `claim_subject_rule: both`). Its regarded party under the ROLE reading would be its HOLDER,
@@ -3440,7 +3441,7 @@ tables:
         speak:          null
         succeed:        null
         examine:        null
-        thread_read:    null    # CR-21 (M14): considered, no source and no lean (the draft's §3.7 grade `null`) -- an investigation gated by Thread Sensitivity names no direction on this axis
+        thread_read:    null    # CR-21 (M14): considered, null -- the old table gave `thread_read` no cell on any axis, and its row (a Thread Sensitivity gate that writes nothing) names no lean on this one; its moral weight is single-owned in `affiliation_engagement`, so a pursuit cell would be a second copy
         interview:      null
         research:       null
         reconstruct:    null
@@ -3492,7 +3493,7 @@ tables:
         revoke:         null
         speak:          null
         examine:        null
-        thread_read:    null    # CR-21 (M14): considered, no source and no lean (the draft's §3.7 grade `null`) -- an investigation gated by Thread Sensitivity names no direction on this axis
+        thread_read:    null    # CR-21 (M14): considered, null -- the old table gave `thread_read` no cell on any axis, and its row (a Thread Sensitivity gate that writes nothing) names no lean on this one; its moral weight is single-owned in `affiliation_engagement`, so a pursuit cell would be a second copy
         interview:      null
         surveil:        null
         transfer:       null
@@ -3539,7 +3540,7 @@ tables:
         speak:          null
         succeed:        null
         examine:        null
-        thread_read:    null    # CR-21 (M14): considered, no source and no lean (the draft's §3.7 grade `null`) -- an investigation gated by Thread Sensitivity names no direction on this axis
+        thread_read:    null    # CR-21 (M14): considered, null -- the old table gave `thread_read` no cell on any axis, and its row (a Thread Sensitivity gate that writes nothing) names no lean on this one; its moral weight is single-owned in `affiliation_engagement`, so a pursuit cell would be a second copy
         interview:      null
         research:       null
         surveil:        null
@@ -3590,7 +3591,7 @@ tables:
         succeed:        null
         survey:         null
         examine:        null
-        thread_read:    null    # CR-21 (M14): considered, no source and no lean (the draft's §3.7 grade `null`) -- an investigation gated by Thread Sensitivity names no direction on this axis
+        thread_read:    null    # CR-21 (M14): considered, null -- the old table gave `thread_read` no cell on any axis, and its row (a Thread Sensitivity gate that writes nothing) names no lean on this one; its moral weight is single-owned in `affiliation_engagement`, so a pursuit cell would be a second copy
         interview:      null
         research:       null
         surveil:        null
@@ -3645,7 +3646,7 @@ tables:
         speak:          null
         succeed:        null
         examine:        null
-        thread_read:    null    # CR-21 (M14): considered, no source and no lean (the draft's §3.7 grade `null`) -- an investigation gated by Thread Sensitivity names no direction on this axis
+        thread_read:    null    # CR-21 (M14): considered, null -- the old table gave `thread_read` no cell on any axis, and its row (a Thread Sensitivity gate that writes nothing) names no lean on this one; its moral weight is single-owned in `affiliation_engagement`, so a pursuit cell would be a second copy
         interview:      null
         research:       null
         surveil:        null
@@ -3700,7 +3701,7 @@ tables:
         revoke:         null
         succeed:        null
         examine:        null
-        thread_read:    null    # CR-21 (M14): considered, no source and no lean (the draft's §3.7 grade `null`) -- an investigation gated by Thread Sensitivity names no direction on this axis
+        thread_read:    null    # CR-21 (M14): considered, null -- the old table gave `thread_read` no cell on any axis, and its row (a Thread Sensitivity gate that writes nothing) names no lean on this one; its moral weight is single-owned in `affiliation_engagement`, so a pursuit cell would be a second copy
         interview:      null
         research:       null
         surveil:        null
@@ -3748,7 +3749,7 @@ tables:
         interview:      null    # CONFLICT resolved to null: the old -0.3 was a price ("the hand-revealing cost"), the same defect
         build:          null    # reasoned: the row weighs no outcome against a scruple; its yield arrives through `work`, which carries its own cell
         found:          null    # reasoned: as `build`
-        # no source (draft §3.7, "the other 19", and `thread_read`, whose row the draft also grades `null`)
+        # no source (the draft's "other 19" and `thread_read`: considered, null; see `thread_read`'s cells above)
         carry:          null
         confer:         null
         convene:        null
@@ -3766,5 +3767,5 @@ tables:
         speak:          null
         succeed:        null
         examine:        null
-        thread_read:    null    # CR-21 (M14): considered, no source and no lean (the draft's §3.7 grade `null`) -- an investigation gated by Thread Sensitivity names no direction on this axis
+        thread_read:    null    # CR-21 (M14): considered, null -- the old table gave `thread_read` no cell on any axis, and its row (a Thread Sensitivity gate that writes nothing) names no lean on this one; its moral weight is single-owned in `affiliation_engagement`, so a pursuit cell would be a second copy
 

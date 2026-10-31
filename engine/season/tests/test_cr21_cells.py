@@ -5,8 +5,9 @@
 roster's own 15x7 table and not through `data.pursuits`; a planted deontological witness of a `release`
 that ends a vow reads LOWER regard for the releaser with the `deed:commitment.ended` cells than without;
 the loader refuses `restore` or `thread_read` if celled and also listed `uncelled:`.
-CONTROL: the doctrine pair is unchanged by this pass (the `doctrine` row is not touched), and the
-pre-pass table reproduces 0.969 by evaluating the OLD cell.
+CONTROL: the pre-pass table reproduces 0.969 by evaluating the OLD cell. The `doctrine` row is not touched; its
+pair (+0.229 before and after the pass) is recorded in the commit body and NOT pinned here, as
+`test_in08_cells.py` records it without gating it (the row is PROVISIONAL, Jordan's).
 
 Each cell value is asserted off the shipped table it lives in, and each loader case runs on a PLANTED
 copy, so the shipped table is never edited.
@@ -24,7 +25,6 @@ from ..data.rosters import PURSUIT_AXES, PURSUITS, table, table_meta
 from ..gaps import Forbidden
 from ..queries import person_q as PQ
 from ..state.carriers import Claim, Person
-from .test_in08_cells import _doctrine_pair_cosine
 
 DI = "deontological_instrumental"
 RF = "rigid_flexible"
@@ -72,21 +72,6 @@ def test_cr21_the_aggregate_spread_figure_moves_with_the_one_cell_and_the_old_ce
     assert now["spectrum"]["effective_axes"] == pytest.approx(3.93, abs=0.01)
     assert now["spectrum"]["effective_axes"] == pytest.approx(spread()["spectrum"]["effective_axes"], abs=1e-12)
     assert (before["within_60deg"], before["total"]) == (now["within_60deg"], now["total"]) == (4, 15)
-
-
-def test_cr21_the_doctrine_pair_is_unchanged_by_the_pass(monkeypatch):
-    """The `doctrine` row is NOT changed (ED-IN-0301): the pair neither holds nor projects `happiness`, so
-    restoring the old happiness cell leaves its cosine exactly where it is, at the recorded +0.229."""
-    shipped = _doctrine_pair_cosine()
-    assert round(shipped, 3) == 0.229, shipped
-    old = copy.deepcopy(V.PURSUIT_PROJECTION)
-    old["happiness"][DI] = 0.4
-    monkeypatch.setattr(V, "PURSUIT_PROJECTION", old)
-    assert to_axes({"happiness": 1.0})[DI] == 0.4, "the planted old cell is not the one read"
-    assert _doctrine_pair_cosine() == shipped
-    rows = V.PURSUIT_PROJECTION
-    assert rows["doctrine"][DI] == -0.3 and rows["doctrine"]["partisan_equitable"] == 0.2
-    assert all(rows["doctrine"][ax] == 0.0 for ax in PURSUIT_AXES if ax not in (DI, "partisan_equitable"))
 
 
 def test_cr21_the_four_value_changes_and_the_role_template_cell_are_what_the_decision_names():
@@ -160,7 +145,7 @@ def test_cr21_the_loader_refuses_restore_or_thread_read_celled_and_also_uncelled
 
 # ---- H-146's repair (CR-21 commit 2): the refusing pole is DATA, read by `refuses` -----------------------
 from ..data import rosters as R                      # noqa: E402
-from ..decision.options import refuses               # noqa: E402
+from ..decision.options import refusal_tolerance, refuses   # noqa: E402
 from ..gaps import Unspecified                       # noqa: E402
 
 
@@ -220,3 +205,16 @@ def test_cr21_an_axis_with_no_authored_pole_or_a_malformed_one_refuses_rather_th
     with pytest.raises(Unspecified, match="not on the roster"):
         R.refusing_pole(axis)
     assert checked == 6
+
+
+def test_cr21_arming_the_gate_on_an_axis_with_no_authored_pole_refuses_before_any_verb_is_met():
+    """C3 of the batch review: the pole was read only inside `refuses`, after `bool(a)`, so an axis with no authored
+    pole and no engaged verb armed silently. `refusal_tolerance` is what an armed `refusal_axis` meets first."""
+    axis = _deontological_axis()
+    other = sorted(a for a in PURSUIT_AXES if a != axis)[0]
+    person = Person("p_cr21_arm", "an armed person")
+    person.pursuits = {"honour": 1.0}
+    assert isinstance(refusal_tolerance(person, axis), float)       # the ruled axis arms
+    with pytest.raises(Unspecified, match="authors no refusing pole"):
+        refusal_tolerance(person, other)                             # an unruled one refuses at arming
+    assert refusal_tolerance(person, None) is None                   # unarmed stays inert

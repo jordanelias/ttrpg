@@ -38,10 +38,12 @@ WHAT EACH MODE READS, AND WHETHER IT PLAYS A SEASON (each prints the answer in i
 
   --control    ARM 0: every holder of a pursuit vector gets the realm-mean vector AND the realm-mean
                `conviction` (the score projects `crisis_weights`, which scales `doctrine` by conviction,
-               IN-71); the cohorts, who hold no vector, are left so; goals unseeded
+               IN-71); since SE-06 the 37 population cohorts hold a vector too (their territory's
+               temperament), so they are in the mean and are flattened to it: this arm is NOT like-for-like
+               with dated readings taken while they held none; goals unseeded
                (`build_realm(goals=False)`, IN-68) AND the goals file read as empty (`no_goals()`; salience
-               reads `data/goals.py::expected`). Creed stance rows keep their build-time weights. Cohort temperaments
-               off is a further switch SE-06 adds; before it lands the arm prints that it is a no-op.
+               reads `data/goals.py::expected`). Creed stance rows keep their build-time weights. There is no
+               switch for cohort temperaments off: the revert is deleting `cohorts.yaml: temperaments:`.
                Applies to --persons, --decisions and --season.
   --null       `data/verbs.py::alignment_at('uniform')` (H-66, `:1407-1414`: *"`uniform` IS THE CONTROL"*)
                bound for the reading and restored after. Under it the pursuit term is one number for every
@@ -141,8 +143,10 @@ def apply_control(w) -> dict:
     """ARM 0: every person who HOLDS a pursuit vector gets the realm-mean vector, a COPY each, and the
     realm-mean `conviction` -- the score projects `person_q.crisis_weights`, which scales `doctrine` by the
     person's own conviction (IN-71), so a control that left convictions alone would keep per-person
-    variance in. A person who holds no vector (the 37 cohorts) is left as the tree has them: giving them
-    one would move their tops from draw-decided to pursuit-decided in this arm only. Returns the mean."""
+    variance in. A person who holds no vector (since SE-06 only a guard cohort, `build_realm(guards=True)`) is left as
+    the tree has them: giving them one would move their tops from draw-decided to pursuit-decided in this arm
+    only. The 37 population cohorts hold their territory's vector, so they are in the mean and flattened to
+    it. Returns the mean."""
     mean = realm_mean_pursuits(w)
     conv = realm_mean_conviction(w)
     for p in w.persons.values():
@@ -323,7 +327,7 @@ def read_persons(w) -> dict:
     return {
         "persons": len(ids), "cast": sum(1 for pid in ids if not w.persons[pid].is_cohort),
         "cohorts": sum(1 for pid in ids if w.persons[pid].is_cohort),
-        "zero_vector": len(ids) - len(live), "with_vector": len(live),
+        "zero_vector": len(ids) - len(live), "with_vector": len(live), "cast_with_vector": len(cast_live),
         "pairs": len(cos), "pairs_above": sum(1 for c in cos if c > COSINE_HIGH),
         "pairs_above_cast": sum(1 for c in cast_cos if c > COSINE_HIGH),
         "median_cos": statistics.median(cos) if cos else None,
@@ -497,6 +501,8 @@ def print_persons(r: dict, arm: str) -> None:
           f"{r['with_vector']} hold a projected vector, {r['zero_vector']} hold none")
     print(f"  pairs over the {r['with_vector']} with a vector: {r['pairs']}; above {COSINE_HIGH}: "
           f"{r['pairs_above']}; median cosine {_fmt(r['median_cos'])}")
+    print(f"  among the cast alone ({r['cast_with_vector']} with a vector): above {COSINE_HIGH}: "
+          f"{r['pairs_above_cast']}")
     print(f"  cosine to the mean vector: median {_fmt(r['cos_to_mean_median'])}, min {_fmt(r['cos_to_mean_min'])}")
     print(f"  identical full-profile groups (size > 1): {r['identical_groups']} covering "
           f"{r['identical_members']} persons ({r['identical_groups_cast']} among the cast) (largest {r['identical_largest']}); "
@@ -602,7 +608,7 @@ def main(argv=None) -> int:
         "null: alignment uniform" if a.null else "shipped")
     if a.control:
         print("--control: goals are unseeded (IN-68: `build_realm(goals=False)`; the shipped "
-              "`goals.yaml` carries rows since FA-05, FA-06); cohort temperaments off is NOT YET A SWITCH (SE-06)")
+              "`goals.yaml` carries rows since FA-05, FA-06); the 37 population cohorts now hold a vector and are flattened to the mean (SE-06; there is no switch, the revert is deleting `cohorts.yaml: temperaments:`)")
     with (null_alignment() if a.null else contextlib.nullcontext()), \
             (no_goals() if a.control else contextlib.nullcontext()):
         if a.persons:

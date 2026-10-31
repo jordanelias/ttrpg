@@ -2055,8 +2055,8 @@ def test_g2_a_grudge_raises_determine_and_arrest_on_the_party_under_declared(mon
     grudge toward a party ranks `determine` on that party ABOVE the same `determine` on a neutral one
     under `declared`, and the same pair for `arrest`. `legacy` ranks them the other way, so the
     ordering is the polarity's and the pair would not pass on a scorer that ignored it. Before CR-16
-    `options.subject_is_opponent` read `not row.counterparty`, which is False for exactly these two
-    rows (the party is named by the `counterparty:` column, `subject`), so the second side was scored
+    `options.subject_is_opponent` read `not row.counterparty`, which is False for every row that names a
+    counterparty, so a CONTESTED row whose counterparty is `subject` (these two) had its second side scored
     on the wrong side. Rows are read off the loaded table, not named in the predicate.
 
     MUTATION (run 2026-10-31, CR-16): `subject_is_opponent` reverted to `bool(row.contests) and not

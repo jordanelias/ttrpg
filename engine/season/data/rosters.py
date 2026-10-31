@@ -355,26 +355,34 @@ def refusing_pole(axis: str) -> int:
     (`deontological_instrumental`, ED-IN-0261) is authored, and gating on an unauthored one would be a
     refusal nobody ruled. A pole value other than `-1`/`+1`, or a key naming no rostered axis, REFUSES
     for the same reason."""
-    marks = roster_map("pursuit_axes", "refusing_pole")
-    axes = roster("pursuit_axes")
-    unrostered = sorted(k for k in marks if k not in axes)
-    if unrostered:
-        raise Unspecified(
-            f"pursuit_axes.refusing_pole names {unrostered}, which are not on the roster", "rosters.yaml",
-            needs="spell the axis as `axis_roster.names` does, or drop the line",
-            law="H-146 -- the refusing pole is DATA about a ROSTERED axis; a key naming none is a gate nobody can arm")
+    marks = _refusing_poles()
     if axis not in marks:
         raise Unspecified(
             f"pursuit_axes.refusing_pole authors no refusing pole for {axis!r}", "rosters.yaml",
             needs=f"a `{axis}: -1` or `{axis}: 1` line, ruled; or gate on an axis that has one ({sorted(marks)})",
             law="H-146 -- which pole refuses is read from data, not defaulted: a default is a refusal nobody ruled")
-    pole = marks[axis]
-    if isinstance(pole, bool) or pole not in (-1, 1):
+    return marks[axis]
+
+
+def _refusing_poles() -> dict:
+    """`rosters.yaml: pursuit_axes.refusing_pole`, VALIDATED: every key a rostered axis, every pole `-1` or `+1`.
+    Called once at import (below, after `PURSUIT_AXES` is bound), so a typo'd key or a malformed pole refuses at
+    load and not when a gate is first armed (`04_CODE_ARCHITECTURE.md` §B.13: *at load, not at the first act*),
+    and again by every `refusing_pole` call, which reads the roster afresh."""
+    marks = roster_map("pursuit_axes", "refusing_pole")
+    unrostered = sorted(k for k in marks if k not in PURSUIT_AXES)
+    if unrostered:
         raise Unspecified(
-            f"pursuit_axes.refusing_pole[{axis!r}] is {pole!r}, not -1 or 1", "rosters.yaml",
-            needs="-1 (the first-named pole refuses) or 1 (the second-named pole refuses)",
-            law="axis_roster.scale -- an axis is bipolar on [-1, +1]; a refusing pole is one of its two ends")
-    return int(pole)
+            f"pursuit_axes.refusing_pole names {unrostered}, which are not on the roster", "rosters.yaml",
+            needs="spell the axis as `axis_roster.names` does, or drop the line",
+            law="H-146 -- the refusing pole is DATA about a ROSTERED axis; a key naming none is a gate nobody can arm")
+    for axis, pole in marks.items():
+        if isinstance(pole, bool) or pole not in (-1, 1):
+            raise Unspecified(
+                f"pursuit_axes.refusing_pole[{axis!r}] is {pole!r}, not -1 or 1", "rosters.yaml",
+                needs="-1 (the first-named pole refuses) or 1 (the second-named pole refuses)",
+                law="axis_roster.scale -- an axis is bipolar on [-1, +1]; a refusing pole is one of its two ends")
+    return {axis: int(pole) for axis, pole in marks.items()}
 
 
 def table(name: str) -> dict:
@@ -802,6 +810,7 @@ STRATA = roster("strata", ordered=True)
 # what `roster()` and `tests/valoria/test_conviction_roster_single_owner.py` refuse.
 from engine.substrate.descriptors import PURSUITS  # noqa: E402
 PURSUIT_AXES = roster("pursuit_axes")
+_refusing_poles()      # CR-21 (H-146): refuse a typo'd or malformed refusing pole at load
 # IN-08 H10: the religious affiliations `Person.conviction` is keyed on, through the same pointer
 # (`from_descriptor: affiliation_roster`); its intensity bounds are the leaf's.
 AFFILIATIONS = roster("affiliations")

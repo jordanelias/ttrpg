@@ -40,7 +40,7 @@ def _verbs(p: Person):
 
 
 def _ranking(g: float, share: float, monkeypatch) -> tuple:
-    """`make_chooser`'s real ranking, temperature 0, `stance_polarity` shipped, `stance_gain == g`,
+    """`make_chooser`'s real ranking, temperature 0, `stance_polarity` pinned `legacy` (CR-16 ships `declared`), `stance_gain == g`,
     for a person whose stance toward the low verb's subject is `share` of the pursuit gap."""
     p = Person(id="p_in25", name="p_in25")
     p.pursuits = dict(virtue=1.0)
@@ -54,7 +54,7 @@ def _ranking(g: float, share: float, monkeypatch) -> tuple:
         seen["ranked"] = [c.verb for c in ranked]
         return []
     monkeypatch.setattr(CH, "pack_scenes", spy)
-    fx = DEFAULT_FIXTURES.sweep("choice_temperature", 0).sweep("stance_gain", g)
+    fx = DEFAULT_FIXTURES.sweep("choice_temperature", 0).sweep("stance_gain", g).sweep("stance_polarity", "legacy")
     CH.make_chooser(fx, lambda *a: "act")(p, SimpleNamespace(question=object()),
                                          SimpleNamespace(), lambda: 1)
     assert "ranked" in seen, "the chooser never ranked: the falsifier did not run"

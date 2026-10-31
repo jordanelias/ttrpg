@@ -8925,7 +8925,7 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # ⚠⚠ **122 -> 132, v10 CR-16 (B10-07b), MEASURED BY THIS TEST'S OWN `by_sig`, seed 0, AGAINST THIS TREE WITH `Fixtures
     # stance_polarity` SWEPT BACK TO `legacy` (in process, the control) WHICH READS 122; the tree before CR-16 (`f59d0ca63`,
     # a detached worktree) reads 122 too.** THE UNIT AND THE DIRECTION: variety ROSE by ten. `stance_polarity` ships `declared`
-    # (`H-194`), so a grudge or a judged deed pulls the contested acts against its object (`fight`, `determine`, `arrest`) UP and
+    # (`H-194`), so a grudge or a judged deed pulls the contested acts against its object (every contested row whose opponent is its subject; `arrest` never forms in the realm, G-07) UP and
     # the act mix of the corpus's worlds moves; more worlds take a signature of their own. Not a ranking change: `H-96` is
     # untouched. THE SAME-BREATH CHECK is the assertions below (the universal set, `ever`, `refused_only`, `varying`), which this
     # re-pin leaves as they were and which are read in the same run. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.

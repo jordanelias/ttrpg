@@ -155,8 +155,8 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                              binding_of(p.id, {})).value is not True):
             continue
         if tolerance is not None and refuses(verb, axis, tolerance):
-            TRACE.note(f"{p.id} refuses {verb!r}: its `{axis}` alignment exceeds their own "
-                       f"projected weight {tolerance:+.3f} (ED-IN-0261)", "H-146")
+            TRACE.note(f"{p.id} refuses {verb!r}: its `{axis}` alignment lies further toward the "
+                       f"other pole than their own projected weight {tolerance:+.3f} (ED-IN-0261)", "H-146")
             continue
         # v9 IN-12 step 10 (`rosters.yaml: held_document_declines`): A VERB A PERSON DOES NOT FORM WHILE HE
         # HOLDS A DOCUMENT OF A NAMED KIND ABOUT HIMSELF -- `conceal` while he holds a cover (#453 §9.3's
@@ -363,14 +363,13 @@ def subject_is_opponent(row: "VerbRow") -> bool:
     """WHETHER AN ACT OF `row` IS CONTESTED AGAINST ITS `subject` -- the row declares a prize
     (`contests:`) and its second side IS its subject: it names no `counterparty:`, or names
     `counterparty: subject` (`determine`'s party, `arrest`'s prisoner). The fold's own opponent rule,
-    `payload[row.counterparty or "subject"]` (`loop/resolve.py::_contest`, `loop/sides.py`), read the
-    same way. Read off the row's own columns, never a verb name. One owner for two readers:
+    `payload[row.opponent_operand()]` (`data/verbs.py::VerbRow`, asked by `loop/resolve.py::_contest` too). Read off the row's own columns, never a verb name. One owner for two readers:
     `opening_set`'s self-subject decline (a person is not their own adversary) and
     `decision/choose.py`'s score term 2 under `stance_polarity: declared` (v9 IN-18 `G2`: an act
     against a disliked opponent scores higher, not lower). CR-16: it read `not row.counterparty`,
     which is False for a row that names `counterparty: subject`, so those rows were scored on the
     wrong side under `declared`."""
-    return bool(row.contests) and (row.counterparty or "subject") == "subject"
+    return bool(row.contests) and row.opponent_operand() == "subject"
 
 
 # ⚠ `project` LIVES HERE, NOT IN `choose.py`, AND THE REASON IS AN IMPORT CYCLE THAT EXECUTED.
@@ -445,6 +444,7 @@ def refusal_tolerance(p: Person, axis: Optional[str]) -> Optional[float]:
     require_member(axis, PURSUIT_AXES, f"refusal axis {axis!r} is not on the pursuit_axes roster",
                    "H-146", law="ED-IN-0261 -- the gate reads a ROSTERED axis; an unrostered one "
                                 "would raise `Unspecified` rather than project to a real weight")
+    refusing_pole(axis)       # CR-21: an armed axis the roster authors no pole for refuses HERE, not at an engaged verb
     return project(p)[axis]
 
 

@@ -783,7 +783,7 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
     # (telling workplan `T4`, `ED-IN-0282`): `tell` contests against its HEARER (`to`), not its
     # topic. `fight` and `march` name no counterparty and read `subject` exactly as before.
     _row = VERB_TABLE.get(a.verb)
-    _target = ((a.payload or {}).get((_row.counterparty if _row is not None else "") or "subject")
+    _target = ((a.payload or {}).get(_row.opponent_operand() if _row is not None else "subject")
                if isinstance(a.payload, dict) else None)
     _parties, _subject, _rung = sides_of(w, a, _target, contests[0])
     # ⚠ A PARTY-GAP IS A REFUSAL HERE, NOT A RAISE (M4). `seam/contest.py`'s S39.1 -- *"claimant[]

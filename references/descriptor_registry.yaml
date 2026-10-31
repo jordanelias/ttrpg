@@ -157,7 +157,7 @@ pursuit_roster:
 # Each name spells BOTH poles, first-named pole first.
 #
 # ⚠ THE SIGN CONVENTION IS DATA, IN `scale:` BELOW: NEGATIVE = the FIRST-named pole, POSITIVE = the
-# second (`candidate_pursuit_cells.md` §0.1, accepted by Jordan's 2026-10-06 fold, RS-1). A
+# second (the retired pursuit-cells draft's §0.1, accepted by Jordan's 2026-10-06 fold, RS-1). A
 # hierarchical person projects NEGATIVE on `hierarchical_equal`, a hierarchical act aligns negative, and
 # `score = Σ axis_w · align` rewards the match. Every cell in `pursuit_projection` and `alignment` is
 # written in this convention.

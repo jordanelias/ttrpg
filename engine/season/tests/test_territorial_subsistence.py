@@ -742,7 +742,10 @@ def test_se06_every_cohort_holds_a_vector_and_two_of_one_territory_are_identical
     assert checked >= 37, f"only {checked} cohorts were checked; the file has 37 rows"
     assert any(len(v) > 1 for v in by_terr.values()), "no territory holds two cohorts; the identity claim is vacuous"
     assert all(v == [v[0]] * len(v) for v in by_terr.values()), "two cohorts of one territory differ"
-    assert len({tuple(sorted(v[0].items())) for v in by_terr.values()}) > 1, "every territory reads the same vector"
+    rows = POP.temperament_rows()
+    want = len({round(r["alpha"] / (r["alpha"] + r["beta"]), 9) for r in rows})     # equal ratio, equal vector
+    got = len({tuple(sorted(v[0].items())) for v in by_terr.values()})
+    assert got == want > 1, (got, want)         # as many distinct vectors as the source gives distinct ratios
 
 
 def _planted(tmp_path, monkeypatch, text: str) -> None:

@@ -92,8 +92,8 @@ def to_axes(weights: dict) -> dict:
 TEMPERAMENT_AXIS = "deontological_instrumental"
 # The one axis a territory's temperament is read on: `-` is the deontological pole (*"will not take a
 # disagreeable act even for a good outcome"*) and `+` the instrumental one (*"the outcome justifies the
-# means"*), per `references/descriptor_registry.yaml: axis_roster`. A NAME of a roster member, checked at
-# load by `temperament_pursuits` (a rename refuses there), not a game value.
+# means"*), per `references/descriptor_registry.yaml: axis_roster`. A NAME of a roster member, checked on
+# every call of `temperament_pursuits` (a rename refuses at world-gen, before the first act), not a game value.
 
 
 def temperament_pursuits(alpha: float, beta: float) -> dict:
@@ -114,12 +114,12 @@ def temperament_pursuits(alpha: float, beta: float) -> dict:
 
     [ASSUMPTION; medium; Jordan to correct; revert: delete `temperaments:` from `cohorts.yaml`.] The projection
     cells it reads are `PURSUIT_PROJECTION`'s, so a re-celled pursuit moves the vector with them."""
-    from .verbs import PURSUIT_PROJECTION
+    from .verbs import PURSUIT_PROJECTION, PROJECTION_DEFAULT_CELL
     require_member(TEMPERAMENT_AXIS, PURSUIT_AXES, f"temperament axis {TEMPERAMENT_AXIS!r} is not on the pursuit_axes roster",
                    "data/pursuits.py::TEMPERAMENT_AXIS", "SE-06 reads a territory's temperament on one axis")
     raw: dict = {}
     for p in sorted(PURSUITS):
-        d = float(PURSUIT_PROJECTION[p].get(TEMPERAMENT_AXIS, 0.0))
+        d = float(PURSUIT_PROJECTION[p].get(TEMPERAMENT_AXIS, PROJECTION_DEFAULT_CELL))
         raw[p] = alpha * max(0.0, d) + beta * max(0.0, -d)
     total = sum(raw.values())
     if not total:
