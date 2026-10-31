@@ -638,9 +638,10 @@ def test_cr45_an_unknown_verb_is_charged_to_the_caller_from_the_verb_table_alone
     escapes `pytest.raises`)."""
     from ..loop import resolve
     # ⚠ The pre-CR-45 `resolve` cached the source text in `_S353_CACHE`; a warm cache would make the
-    # "missing" items depend on test order. Clearing it is a no-op once the symbol is gone, hence
-    # `raising=False`: this one file runs against the base `resolve.py` and the new one, which is what
-    # lets the planted failure above be read at all.
+    # "missing" items depend on test order. Once the symbol is gone this plants an unread `_S353_CACHE`
+    # for the test's duration (monkeypatch deletes it at teardown), hence `raising=False`: this one
+    # file runs against the base `resolve.py` and the new one, which is what lets the planted failure
+    # above be read at all.
     monkeypatch.setattr(resolve, "_S353_CACHE", [], raising=False)
     if source == "missing":
         monkeypatch.setattr(files, "SOURCE_353_MD", tmp_path / "no_such_353.md")
