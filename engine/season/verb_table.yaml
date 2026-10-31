@@ -788,7 +788,7 @@ verbs:
     stratum:     "social"
     eligibility: ["own"]
     beneficiary: "actor"
-    beneficiary_note: "`fight`'s column and reason (`candidate_pursuit_cells.md` §3.4: *`challenge`: `actor`*): the challenger stands to gain by the contest he calls for, and the challenged is the one put to the question."
+    beneficiary_note: "`fight`'s column and reason (the retired pursuit-cells draft's §3.4: *`challenge`: `actor`*): the challenger stands to gain by the contest he calls for, and the challenged is the one put to the question."
     requires:    "the challenged is a living person other than the challenger, present where the challenger is"
     requires_typed:
       all:
@@ -813,7 +813,7 @@ verbs:
     stratum:     "contested_physical"
     eligibility: ["own"]
     beneficiary: "actor"
-    beneficiary_note: "`fight`'s column and reason, `candidate_pursuit_cells.md` §3.4 (*`accept`: `actor`*). As on `fight`, the writes land on the SUBJECT -- here the challenger -- and a harm is not a benefit to the person harmed."
+    beneficiary_note: "`fight`'s column and reason, the retired pursuit-cells draft's §3.4 (*`accept`: `actor`*). As on `fight`, the writes land on the SUBJECT -- here the challenger -- and a harm is not a benefit to the person harmed."
     requires:    "the challenger is a living person, present where the actor is"
     requires_typed:
       all:

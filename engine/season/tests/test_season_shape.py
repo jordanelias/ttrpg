@@ -3375,7 +3375,7 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
         # and at -0.9 negatively. What changed is that the conviction reaches the verb through
         # `Σ_axis projection[Precedent][axis] · alignment(verb, axis)` rather than through one cell.
         # ⚠ IN-08: the pursuit is `stability`, the `Precedent` conviction's successor
-        # (`candidate_pursuit_cells.md` §4.1); the claim below is unchanged.
+        # (the retired pursuit-cells draft's §4.1); the claim below is unchanged.
         for sign in (0.9, -0.9):
             p.pursuits = {"stability": sign}
             picked = ch(p, v, Sensation(), lambda: 1)[0].acts[0].verb
@@ -3426,7 +3426,10 @@ def test_t2_one_rebind_moves_score_and_gate(monkeypatch):
     formed = sorted({c.verb for c in _options.opening_set(p, v, q, w.fixtures)})
     assert len(formed) >= 2, f"only {formed} form here; the test needs two verbs"
     v0, v1 = formed[0], formed[1]
-    axis = sorted(PURSUIT_AXES)[-1]
+    # CR-21 (H-146's repair): the gate arms only on an axis `pursuit_axes.refusing_pole` authors, so the axis is
+    # read from that data and not taken by position.
+    from .test_cr21_cells import _deontological_axis
+    axis = _deontological_axis()
     monkeypatch.setattr(data_verbs, "PURSUIT_PROJECTION", {"t2_synthetic": {axis: -0.4}})
     monkeypatch.setattr(p, "pursuits", {"t2_synthetic": 1.0})
     fx0 = w.fixtures.sweep("choice_temperature", 0)
@@ -3503,8 +3506,11 @@ def test_t2_align_kind_reads_the_one_emitter_and_a_deed_key_needs_an_emitted_kin
     # emitter of `pursuit.moved` (its won bands write the hearer's pursuits), so the kind is SHARED and leaves
     # `KIND_VERB`; its authored `deed:pursuit.moved` cells stay at 0.0 and are now read by the shared-kind
     # branch below (a moved pursuit is no deed of the person moved, whoever moved it). No cell was changed.
+    # ⚠ RE-RECORDED AT v10 CR-21 (M14), THE SAME TRIPWIRE FIRED AS DESIGNED: `commitment.ended` is a single-emitter
+    # kind (`release`) and the pass authors its two `deed:` cells (H-205's vow-break: `rigid_flexible` and
+    # `deontological_instrumental`), reviewed in `test_cr21_cells.py`; every other axis falls back to `release`'s own cell.
     assert {k for k in KIND_VERB if any(authored(k, ax) is not None for ax in PURSUIT_AXES)} == {
-        "matter.undetermined"}, (
+        "matter.undetermined", "commitment.ended"}, (
         "a single-emitter kind carries an authored `deed:` cell nobody reviewed here "
         "(`pursuit.moved` left this set at v9 IN-12 step 9: `argue` and `determine` both emit it)")
     _pm = [authored("pursuit.moved", ax) for ax in PURSUIT_AXES]
@@ -8905,7 +8911,26 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # executed-world count is `reconstruct`'s 136 of 143 on both), `ever` is the same 20 verbs and the never-attempted set the
     # same 22 on both (`refused_only` gains the three, asserted above), the status census is UNMOVED (103 RUNS-UNDECLARED
     # · 40 SPAN-UNAUTHORED), and `told_redeposits` stays 0.
-    assert len(by_sig) == 123, (
+    # ⚠⚠ **123 -> 122, v10 CR-21 (M14, B10-07b), MEASURED BY `corpus_run.run_case`, seed 0, AGAINST THE SE-06 TREE
+    # (`bcaf1d519`, extracted; reads 123) AS CONTROL -- the same script on both.** THE UNIT AND THE DIRECTION: variety FELL
+    # by one, `live` did not move (143 on both sides). `happiness`'s `deontological_instrumental` cell +0.4 -> 0.0, `restore`
+    # celled (P/S -0.2) and the two `deed:commitment.ended` cells re-rank candidates: 21 worlds' executed sets change (joins
+    # `tend` 5, `tell` 4, `conceal` 4, `petition` 3, `release` 3, `surveil` 3, `utter` 2, `carry` 2, `give` 2, and 1 each of
+    # `accept`, `challenge`, `reconstruct`, `create_record`; leaves `transfer` 4, `release` 2, `tell` 1, `carry` 1), a net one
+    # FEWER distinct signature. Executed-world counts, control -> here: `tend` 42 -> 47, `conceal` 105 -> 109,
+    # `tell` 121 -> 124, `petition` 96 -> 99, `surveil` 84 -> 87, `transfer` 44 -> 40, `give` 5 -> 7, `utter` 125 -> 127,
+    # `accept` 116 -> 117, `carry` 46 -> 47, `challenge` 96 -> 97, `create_record` 134 -> 135, `reconstruct` 136 -> 137,
+    # `release` 5 -> 6; every other verb's count is unmoved. Not a ranking change: `H-96` is untouched. THE SAME-BREATH
+    # CHECK: the universal set is EMPTY on both sides (the largest executed-world count is `reconstruct`'s 137 of 143), and
+    # `ever` is the same 20 verbs on both. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+    # ⚠⚠ **122 -> 132, v10 CR-16 (B10-07b), MEASURED BY THIS TEST'S OWN `by_sig`, seed 0, AGAINST THIS TREE WITH `Fixtures
+    # stance_polarity` SWEPT BACK TO `legacy` (in process, the control) WHICH READS 122; the tree before CR-16 (`f59d0ca63`,
+    # a detached worktree) reads 122 too.** THE UNIT AND THE DIRECTION: variety ROSE by ten. `stance_polarity` ships `declared`
+    # (`H-194`), so a grudge or a judged deed pulls the contested acts against its object (every contested row whose opponent is its subject; `arrest` never forms in the realm, G-07) UP and
+    # the act mix of the corpus's worlds moves; more worlds take a signature of their own. Not a ranking change: `H-96` is
+    # untouched. THE SAME-BREATH CHECK is the assertions below (the universal set, `ever`, `refused_only`, `varying`), which this
+    # re-pin leaves as they were and which are read in the same run. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+    assert len(by_sig) == 132, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -12067,6 +12092,12 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
     # the read of a `speak` formed on the hearth, is gone, and `("hearth_ostvik", "stores:grain", 0)` leads the ledger
     # where `("einhir_texts", "exists:Person", 0)` did. `evade / defy`, `construe` and `exchange` are typed and
     # resolvable again, so their scenes move the act mix. Every other entry and its order is unchanged.
+    # v10 CR-16 (B10-07b): 13 -> 13 entries, a re-record read off the failing assertion's own output: ONE OUT, ONE IN, order
+    # otherwise unchanged -- `("rec:6095547f999b4ff8", "exists:Person", 0)` leaves (the refusal of an act formed on that Record
+    # that wants a person) and `("hearth_ostvik", "exists:DocketItem", 0)` joins at the tail (a `speak` refused on the hearth).
+    # `Fixtures stance_polarity` ships `declared` (`H-194`), so the `actor` arm's act mix moved. CONTROL: this tree with
+    # `stance_polarity` swept back to `legacy` (in process) and `f59d0ca63` both read the old 13 and pass. The property this pin
+    # is for holds: every grammar claim is held at the end and none evicted.
     assert actor_end == [("hearth_ostvik", "stores:grain", 0),
                          ("einhir_texts", "exists:Person", 0),
                          ("hearth_ostvik", "exists:Person", 0),
@@ -12077,9 +12108,9 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
                          ("hearth_ostvik", "exists:Person", 0),
                          ("hearth_ostvik", "exists:Rung", 1),
                          ("hearth_ostvik", "present_at:p_bailiff", True),
-                         ("rec:6095547f999b4ff8", "exists:Person", 0),
                          ("rec:6095547f999b4ff8", "exists:dispensation", 0),
-                         ("hearth_ostvik", "stores:grain", 0)], (
+                         ("hearth_ostvik", "stores:grain", 0),
+                         ("hearth_ostvik", "exists:DocketItem", 0)], (
         f"the `actor` arm's end-of-run grammar claims are {actor_end}, not the single surviving "
         "`stores:grain` read. Empty would mean the cap is evicting again — i.e. the fan-out "
         "default moved back toward `total`, or a new deposit channel opened — and every `H-40` / "
@@ -12625,8 +12656,14 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # `rec:2dd19669944564b8`), BY ITS CELL: its first conjunct is `transfer`'s `stores(from, kind) >= amount`, so the
     # `stores:grain` belief a refusal on the hearth deposits contradicts both rows. `speak` leaves on the act mix:
     # `evade / defy`, `construe` and `exchange` are resolvable again, and no `speak` is formed on the hearth to drop.
+    # ⚠⚠ NINE -> TEN, v10 CR-16 (B10-07b): `speak` JOINS, nothing leaves. `Fixtures stance_polarity` ships `declared` (`H-194`), so the
+    # act mix of this fixture moved and a `speak` is refused on the hearth again: the `("hearth_ostvik", "exists:DocketItem", 0)`
+    # belief that refusal deposits (the entry `test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_do` gains)
+    # is the one `speak` drops on, REM-2C's arrival shape. Neither the class column nor the cell is involved: `speak` declares
+    # none. CONTROL: this tree with `stance_polarity` swept back to `legacy` (in process) and `f59d0ca63` both read the old nine and
+    # pass. The drop counts per verb were not re-measured for this re-pin. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
     assert {v for v, _ in hl_live} == {"accept", "challenge", "exchange", "fight",
-                                       "interview", "sabotage",
+                                       "interview", "sabotage", "speak",
                                        "tend", "train", "transfer"}, (
         f"the headless drops are on {sorted({v for v, _ in hl_live})}. `examine`/`restore`/"
         "`interview`/`fight`/`research` are the `exists:` and `existence:`-cell drops the "
@@ -12878,8 +12915,12 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # `('speak','hearth_ostvik')` -- the set assertion above's one verb that left -- and IN `('exchange', 'einhir_texts')`,
     # `('exchange', 'hearth_ostvik')` and `('exchange', 'rec:2dd19669944564b8')` (its three, `transfer`'s own referents).
     # Every one of the other ten survives. The clause still fires, and `bit` below is empty on both trees.
-    assert len(dropped) == 13, (
-        f"{len(dropped)} executable clause-4 drops, not 13. The drops are the channel itself; if "
+    # v10 CR-16 (B10-07b): 13 -> 14, `('speak', 'hearth_ostvik')` back IN (the set assertion above's one verb that joined; REM-2B
+    # had it OUT); every one of the other 13 survives, by the set assertion above. `Fixtures stance_polarity` ships `declared`
+    # (`H-194`), so the act mix moved. CONTROL: this tree with `stance_polarity` swept back to `legacy` (in process) and `f59d0ca63`
+    # both read the old 13 and pass. The clause still fires.
+    assert len(dropped) == 14, (
+        f"{len(dropped)} executable clause-4 drops, not 14. The drops are the channel itself; if "
         "this falls toward zero the clause has stopped firing, which is a different and worse "
         "failure than the loss of outcome-relevance recorded above.")
     # ⚠⚠⚠ **THE BITE CAME BACK UNDER G1a, THE GUARD ABOVE DEMANDED A REASON, AND THE REASON IS
@@ -14233,7 +14274,14 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
         # arm. The floor above (`4 * acts_differ > genuine`) holds in all three: 44 > 34, 44 > 34, 44 > 33. CONTROL,
         # run: the same script on the REM-22 tree (`e66a22ec`) reads the old (18, 40), (18, 36), (18, 36) exactly.
         # [GROUNDED: measured at v10 REM-23 on this tree and on a `git worktree` at `e66a22ec` -- (acts_differ, genuine): `none` (11, 34), `actor` (11, 34), `total` (11, 33) here; (18, 40), (18, 36), (18, 36) there]
-        "none": (11, 34), "actor": (11, 34), "total": (11, 33)}, (
+        # ⚠⚠ **RE-PINNED AT v10 CR-16 (B10-07b), DELIBERATELY: RECOVERABILITY ROSE IN EVERY ARM (LESS OF A FORK MOVES THE ACT STREAM),
+        # AND THE UNIT IS `stance_polarity`'s SHIPPED ARM.** `acts_differ/genuine` moves 11/34 -> 9/34 (32% -> 26%) at `none`, 11/34 ->
+        # 9/34 (32% -> 26%) at `actor`, 11/33 -> 9/33 (33% -> 27%) at `total`: `acts_differ` falls from 11 to 9 in all three together,
+        # the genuine population is unmoved, and `hash_differ` equals `acts_differ` in every arm (asserted above). The floor above
+        # (`4 * acts_differ > genuine`) holds in all three: 36 > 34, 36 > 34, 36 > 33. CONTROL, run: this tree with `stance_polarity`
+        # swept back to `legacy` (in process) and `f59d0ca63` read the old (11, 34), (11, 34), (11, 33) exactly.
+        # [GROUNDED: measured at v10 CR-16 on this tree and on `f59d0ca63` -- (acts_differ, genuine): `none` (9, 34), `actor` (9, 34), `total` (9, 33) here; (11, 34), (11, 34), (11, 33) there]
+        "none": (9, 34), "actor": (9, 34), "total": (9, 33)}, (
         f"the recoverability figures moved: {{k: (v['acts_differ'], v['genuine']) for k, v in got.items()}}. "
         "This is a RE-PIN DECISION, not necessarily a failure — but it is one somebody has to "
         "make deliberately, because `acts_differ / genuine` is how much of a fork the scene tick "

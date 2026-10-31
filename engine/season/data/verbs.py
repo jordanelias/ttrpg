@@ -272,6 +272,13 @@ class VerbRow:
         test `opening_set` (person-side) and `loop/resolve.py::_admits` (the fold) both ask."""
         return other is None or (other == actor and not self.counterparty_may_be_self)
 
+    def opponent_operand(self) -> str:
+        """THE PAYLOAD OPERAND AN ACT OF THIS ROW CONTESTS AGAINST: its `counterparty:` when the row names one, else
+        `subject` (telling workplan `T4`, `ED-IN-0282`: `tell` contests against its hearer `to`; `fight` and `march`
+        name none and read `subject`). The one owner of that rule, asked by `loop/resolve.py` (the fold's `_target`)
+        and `decision/options.py::subject_is_opponent`, which had each written it inline (CR-16)."""
+        return self.counterparty or "subject"
+
     def known_person_operands(self) -> tuple:
         """THE OPERANDS A CANDIDATE OF THIS ROW TAKES FROM SOMEBODY THE PERSON KNOWS, one bag per
         person known (`decision/options.py::operand_bags`) -- the ONE owner, read by `operand_bags`
@@ -1675,7 +1682,8 @@ RUNG_REMIT_ACTS = _derive_rung_remit_acts()
 
 # An authored alignment cell for an EVENT KIND rather than a verb is keyed `deed:<kind>` in the same
 # axis row. Admitted only where `<kind>` is in `EMITTED_KINDS` (`_load_alignment`): a deed key for a
-# kind no verb emits is a weight on an event nobody can see. None is authored today.
+# kind no verb emits is a weight on an event nobody can see. The authored ones are the `deed:` keys of
+# `rosters.yaml: tables.alignment` (a list here would be a second copy).
 DEED_PREFIX = "deed:"
 
 

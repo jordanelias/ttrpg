@@ -513,6 +513,17 @@ rosters:
       Owned in code by descriptors.py's `axis_roster` leaf.
     open: true
     forbidden: [exposure]
+    # CR-21 (M14), H-146's repair: WHICH POLE OF AN AXIS A PERSON REFUSES THROUGH, as a sign on the axis's own
+    # scale (`axis_roster.scale`: -1 the first-named pole, +1 the second). Read by `data/rosters.py::refusing_pole`,
+    # asked by `decision/options.py::refuses`. Only the ruled axis is authored (ED-IN-0261, Jordan: deontology is a
+    # REFUSAL, "it's a refusal to take certain actions"): the deontological pole, the first-named, refuses. An axis
+    # absent here REFUSES at the gate rather than defaulting. The gate is armed nowhere (`Fixtures refusal_axis`
+    # ships unset; arming it is H-146's remaining position). [ASSUMPTION; medium; Jordan to correct; revert: restore the
+    # hardcoded `>` in `decision/options.py::refuses`, drop the `refusing_pole(axis)` call in `refusal_tolerance` and the
+    # import-time `_refusing_poles()` call in `data/rosters.py`, THEN delete this key (deleted alone it makes
+    # `roster_map` raise at import, and every import of `engine.season` fails).]
+    refusing_pole:
+      deontological_instrumental: -1
     note: >-
       ⚠⚠ **SEVEN SINCE IN-08's CELLS COMMIT (`ED-IN-0261`).** What follows is the history of the
       roster's shape; the count it argues about was four, and it is seven now.
@@ -2358,10 +2369,11 @@ rosters:
     note: >-
       THE ARMS OF `Fixtures.stance_polarity` (`H-194`), read by `decision/choose.py::stance_term`
       (its `_stance_arm`), score term 2. `legacy` is the pre-G2 term, `+ stance_toward(p, c.subject)` for every row --
-      the CONTROL, shipped: an act against a disliked opponent then scores LOWER, the sign §F2's
+      the CONTROL (shipped until CR-16): an act against a disliked opponent then scores LOWER, the sign §F2's
       term never distinguished. `declared` reads `regard(p, c.subject)` (G1's, so its judged and
       told halves enter at their own gains) and NEGATES it where the subject is the act's OPPONENT
-      (`decision/options.py::subject_is_opponent`: the row contests and names no counterparty), so
+      (`decision/options.py::subject_is_opponent`: the row contests and its second side is its subject,
+      `VerbRow.opponent_operand()`), so
       fighting the disliked scores higher. A Rung subject reads 0 at G1's control; at live gains it
       reads the deed claims held about it (`transfer.made` on a changed rung, under
       `claim_subject_rule: both`). Its regarded party under the ROLE reading would be its HOLDER,
@@ -2915,7 +2927,7 @@ tables:
   # not incompatible).
   incompatible:
     source: >-
-      proposals/2026-09-26-decision-layer-execution-plan/candidate_affiliation_content.md §2 (pairs
+      the retired affiliation-content draft (its `FORK:` row in `references/restructure_ledger.md`) §2 (pairs
       1, 2, 3, 5, 6, 8 under the §1.3 roster and its renames), FOLDED INTO THE BUILD by Jordan
       2026-10-06 (RS-1, ED-IN-0291). Pair 2 is Jordan's own worked example ("devoutly Solmund but
       also believes in Threadwork and therefore experiences religious confliction").
@@ -2952,7 +2964,7 @@ tables:
   # `a` is NEGATIVE. The magnitudes are not read by the scar; only the sign is.
   affiliation_engagement:
     source: >-
-      proposals/2026-09-26-decision-layer-execution-plan/candidate_affiliation_content.md §4.2
+      the retired affiliation-content draft (its `FORK:` row in `references/restructure_ledger.md`) §4.2
       (R-C4.1, R-C4.2, R-C4.3) and §4.3 (the sketch), FOLDED INTO THE BUILD by Jordan 2026-10-06
       (RS-1, ED-IN-0291). The shared column's ten cells and their reasons are the old `sacred`
       alignment row as it stood before IN-08's cells work removed it (`git show 16faff76:engine/season/
@@ -3035,7 +3047,7 @@ tables:
       they are different objects with one shared vocabulary, and the vocabulary is the canonical
       fifteen in both cases, read from the single owner.
       ⚠ **TRANSCRIBED, THEN MIGRATED BY A STATED RULE.** Every cell is §4's own weight, carried to
-      the fifteen by `candidate_pursuit_cells.md` §4.1/§4.2 (see the comment above `cells:`).
+      the fifteen by the retired pursuit-cells draft's §4.1/§4.2 (see the comment above `cells:`).
       Nothing is normalised, rounded or filled in here, and a template's unlisted pursuits read
       `default_cell` (0.0) rather than being assigned a share.
       ⚠ **SIX TEMPLATES, AND TWO FACTIONS HAVE NONE.** `role_templates.by_faction` covers Crown,
@@ -3050,7 +3062,7 @@ tables:
       So the two factions have the SAME expectation vector and differ in who actually holds what —
       which is precisely the quantity `cast.loyalty` measures.
     # ⚠ IN-08's CELLS COMMIT (B-G): §4's thirteen-name weights migrated to the fifteen pursuits by
-    # `candidate_pursuit_cells.md` §4.1's derivation rule and §4.2's table (folded into the build,
+    # the retired pursuit-cells draft's §4.1 derivation rule and §4.2 table (folded into the build,
     # Jordan 2026-10-06, RS-1), with `doctrine` and `stewardship` as named (RS-2, RS-4). Weights are
     # §4's own and nothing is renormalised; where two old names collapse into one pursuit their
     # weights ADD (§4.2: `ecclesiastical` and `military-order`'s `stability`). TWO DROPS, BOTH IN
@@ -3058,6 +3070,8 @@ tables:
     # ("Recommend Jordan either drops the template or names the two") and the template is held by
     # no faction; the weights are DROPPED rather than given an invented home, the draft's own
     # precedent for an orphan with nothing to read from (§4.3, NPC-033 and NPC-086).
+    # ⚠ CR-21 (M14) NAMES ONE OF THE TWO: `Identity .10` -> `community 0.10`, by §4.1's rule
+    # (Identity -> community, the `military-order` row's own reading). `Utility .30` stays DROPPED.
     # ⚠ THE READ PATH DOES NOT RAISE ON AN UNKNOWN NAME (`data/pursuits.py::to_axes` skips a pursuit
     # the projection has no row for), so these cells are VALIDATED AT LOAD against the roster:
     # `data/verbs.py::ROLE_TEMPLATE_PURSUITS`.
@@ -3082,6 +3096,7 @@ tables:
       intelligence-diplomatic:
         scholastics:  0.30
         stability:    0.30
+        community:    0.10   # CR-21 (M14) [ASSUMPTION; medium; Jordan to correct; revert: delete this cell, one re-pin for the set]: Identity .10 -> community, §4.1's rule for an orphaned Identity (S8 §2.1's categorical belonging, the `military-order` precedent). Utility .30 stays dropped
       reformist:
         justice:      0.30
         liberty:      0.25
@@ -3096,7 +3111,7 @@ tables:
 
   pursuit_projection:
     source: >-
-      proposals/2026-09-26-decision-layer-execution-plan/candidate_pursuit_cells.md §2 (the 105
+      the retired pursuit-cells draft (its `FORK:` row in `references/restructure_ledger.md`) §2 (the 105
       cells; grid at §2.16, revision 5), FOLDED INTO THE BUILD by Jordan 2026-10-06 (RS-1,
       ED-IN-0291); `doctrine` and `stewardship` named by RS-2 and RS-4. Shape 15x7, sign per
       `references/descriptor_registry.yaml: axis_roster.scale`.
@@ -3222,14 +3237,14 @@ tables:
         rigid_flexible:               0.0
         grandiose_humble:             0.0
         deontological_instrumental:  -0.3
-      happiness:         # §2.12 · reasoned: all seven
+      happiness:         # §2.12 · reasoned: six of the seven (deontological_instrumental is CR-21's) · CR-21 (M14): deontological_instrumental +0.4 -> 0.0 [ASSUMPTION; medium; Jordan to correct; revert: the old value, +0.4, one re-pin for the set] -- happiness is an END and not an instrument (the draft's §1b(b) wealth-vs-happiness pair: "wealth-seeking is instrumental reason's paradigm; happiness is an end"); the direction is the source's, the magnitude 0.0 is delegated. cos(wealth, happiness) 0.969 -> 0.818
         hierarchical_equal:           0.0
         precedent_substantive:        0.3
         partisan_equitable:          -0.2
         selfish_selfless:            -0.4
         rigid_flexible:               0.4
         grandiose_humble:             0.1
-        deontological_instrumental:   0.4
+        deontological_instrumental:   0.0
       family:            # §2.13 · reasoned: hierarchical_equal, rigid_flexible, grandiose_humble
         hierarchical_equal:          -0.3
         precedent_substantive:       -0.3
@@ -3257,7 +3272,7 @@ tables:
 
   alignment:
     source: >-
-      proposals/2026-09-26-decision-layer-execution-plan/candidate_pursuit_cells.md §3 (the re-cell
+      the retired pursuit-cells draft (its `FORK:` row in `references/restructure_ledger.md`) §3 (the re-cell
       over the seven axes), FOLDED INTO THE BUILD by Jordan 2026-10-06 (RS-1, ED-IN-0291), plus the
       six table verbs the draft does not cell (`build`, `found`, `give`, `march`, `migrate`,
       `survey`), celled in IN-08's cells commit by the draft's own method (each cell's reason
@@ -3337,23 +3352,9 @@ tables:
       tell: >-
         No cell on any axis BY DESIGN: testimony's moral weight is in WHAT is told (a claim), which
         no verb x axis cell can carry, and telling is driven by regard (the telling workplan's G1),
-        not by pursuit (`candidate_pursuit_cells.md` §3.6 `:999`, §7.4 `:1377`; G-1, [medium;
+        not by pursuit (the retired pursuit-cells draft's §3.6, §7.4; G-1, [medium;
         Jordan to correct]). `corpus_run`'s RANKING counts only candidates whose verb has a celled
         axis, so a `tell` is neither a tie nor a discrimination there.
-      thread_read: >-
-        No typed cell (`H-85`), not in `resolvable_verbs()`, and `opening_set` can never form a
-        Candidate for it, so a weight on it would be dead (`candidate_pursuit_cells.md` §3.7
-        `:1028`, carrying the old table's rule). ⚠ THE PREMISE IS STALE SINCE v9 PC-06 K-3: the row
-        is typed (the Thread Sensitivity gate) and resolvable, and it forms for a person whose own
-        sensitivity passes the gate. It stays here because the draft's declared set names it and
-        its cells are owed by the draft's method, `restore`'s case below; it scores 0.0 meanwhile.
-      restore: >-
-        The draft gives it no cell (§7.4 `:1382`) on the premise that it is unresolvable. ⚠ THE
-        PREMISE IS STALE: `restore` IS in `resolvable_verbs()` and executes in `corpus_run` (read
-        on IN-08's base commit). It is listed here because the plan's declared set names it, not
-        because the reason still holds; its cells are owed by the draft's method and it scores
-        0.0 on every axis meanwhile, exactly as it did on the old four-axis table, which gave it
-        no cell either.
     # §G's third term. ORDER IS SEMANTIC: `declared` is the default and the first arm, and every
     # point is built from it rather than from the previous one. `uniform` is THE CONTROL — every
     # (verb, axis) pair equal, so convictions cannot discriminate at all and a verdict that does
@@ -3404,6 +3405,7 @@ tables:
       # reason each so Jordan can strike any of them.
       hierarchical_equal:
         # negative = rank-bearing, status-asserting · positive = equal, peer-levelling (draft §3.1)
+        restore:        null    # CR-21 (M14): considered, no source and no lean -- raising a site's condition exercises no rank
         determine:      -1.0    # carried: the licensed judgement made by the holder licensed to make it
         "deed:matter.undetermined": 0.0   # [ASSUMPTION; medium; Jordan to correct; revert: delete this cell and its twin] a Failed `determine` writes nothing, so WITNESS's empty-changes rule (`epistemic.py`'s empty-changes rule) lands the claim on the PARTY, and a null cell would fall back to `determine`'s own (`data/verbs.py`: `_load_alignment` drops a null, `align_kind` falls back to the verb): the hearing that changed nothing is judged as no deed at all. Numeric, not null, for that reason. (`speak`'s four `matter.*` kinds share the shape: H-192 (a).)
         "deed:pursuit.moved": 0.0   # [ASSUMPTION; medium; Jordan to correct; revert: delete this cell and its twin] `determine`'s consequence write (v9 SC-02 `22b` step 24) and `argue` (v9 IN-12 step 9) both emit `pursuit.moved`, so the kind is SHARED and absent from `KIND_VERB`; before `argue` it mapped to `determine`, and a null cell would judge the judge's interior shift by `determine`'s alignment, a second time beside `matter.determined`; and `_ch_chronicle` publishes it to everyone (`determine` is a `binding_decision`). A pursuit moving is no one's deed; numeric, not null, for the same reason as `deed:matter.undetermined`. Held at 0.0 it survives the second emitter (`argue`); `train` emits `capability.raised`, not this kind.
@@ -3441,6 +3443,7 @@ tables:
         speak:          null
         succeed:        null
         examine:        null
+        thread_read:    null    # CR-21 (M14): considered, null -- the old table gave `thread_read` no cell on any axis, and its row (a Thread Sensitivity gate that writes nothing) names no lean on this one; its moral weight is single-owned in `affiliation_engagement`, so a pursuit cell would be a second copy
         interview:      null
         research:       null
         reconstruct:    null
@@ -3453,6 +3456,7 @@ tables:
 
       precedent_substantive:
         # negative = returns to previous ideas/actions · positive = forges new ones (draft §3.2)
+        restore:        -0.2    # CR-21 (M14) [ASSUMPTION; medium; Jordan to correct; revert: delete this cell and return `restore` to `uncelled:`, one re-pin for the set]: reasoned -- raising a Site's `condition` (`_eff_restore`) returns a fabric toward the state it was built to; `reconstruct`'s reading ("assembling what stands, not creating what is new", -0.4), smaller because the fabric is mended, not re-read
         seize:          null    # reasoned (IN-12 step 6): taking a document under a warrant follows a form without returning to or breaking one -- considered, no lean
         destroy_record:  1.0    # carried: unmaking the record is the anti-procedural act -- the record is what precedent is consulted in
         create_record:  -0.8    # carried: the record IS what precedent is made of
@@ -3491,6 +3495,7 @@ tables:
         revoke:         null
         speak:          null
         examine:        null
+        thread_read:    null
         interview:      null
         surveil:        null
         transfer:       null
@@ -3500,6 +3505,7 @@ tables:
 
       partisan_equitable:
         # negative = for one's own · positive = impartial treatment (draft §3.3)
+        restore:        null    # CR-21 (M14): considered, no source and no lean -- beneficiary `none`, for `build`'s reason: who holds the mended site is a world read
         seize:          null    # reasoned (IN-12 step 6): for whom the taking is done is the candidate's fact (the warrant's), not the verb's -- `give`'s and `requisition`'s reading
         determine:       0.6    # derived: the act's own form is impartial adjudication; who it favours is the `judging_set`'s
         "deed:matter.undetermined": 0.0   # as `hierarchical_equal`'s cell above: same reason, revert together
@@ -3536,6 +3542,7 @@ tables:
         speak:          null
         succeed:        null
         examine:        null
+        thread_read:    null
         interview:      null
         research:       null
         surveil:        null
@@ -3552,6 +3559,7 @@ tables:
         # the per-candidate "for whom" is `verb_table.yaml`'s `beneficiary:` column, single-owned
         # there; a cell here would be its second copy. Every verb, the six extension verbs included,
         # is `null` for that one reason.
+        restore:        null
         seize:          null
         carry:          null
         commit:         null
@@ -3585,6 +3593,7 @@ tables:
         succeed:        null
         survey:         null
         examine:        null
+        thread_read:    null
         interview:      null
         research:       null
         surveil:        null
@@ -3598,6 +3607,11 @@ tables:
 
       rigid_flexible:
         # negative = unwilling to deviate in the face of difficulties · positive = will (draft §3.5)
+        restore:        null    # CR-21 (M14): considered, no source and no lean -- the row says nothing about holding or leaving a course
+        # CR-21 (M14) [ASSUMPTION; medium; Jordan to correct; revert: delete this cell, a witnessed vow-break reads `release`'s +0.3 again, one re-pin for the set]:
+        # H-205's vow-break, priced. `commitment.ended` has one emitter (`release`), so `align_kind` read it at `release`'s own cells; a
+        # witnessed break of a live `commit` is a course left in the face of what it cost to keep: between `release`'s own +0.3 (the un-binding) and the +0.5 the cut `repudiate` carried (draft §3.5) -- the break of a binding, not a mere un-binding.
+        "deed:commitment.ended": 0.4
         seize:          null    # reasoned (IN-12 step 6): neither a course held nor one left -- considered, no lean
         construe:        0.7    # derived: bending the terms to fit
         comply:         -0.4    # derived: literal deference to the terms
@@ -3634,6 +3648,7 @@ tables:
         speak:          null
         succeed:        null
         examine:        null
+        thread_read:    null
         interview:      null
         research:       null
         surveil:        null
@@ -3645,6 +3660,7 @@ tables:
 
       grandiose_humble:
         # negative = puts oneself forward before witnesses · positive = does not (draft §3.6)
+        restore:        null    # CR-21 (M14): considered, no source and no lean -- a repair done where one stands is no showing
         seize:          null    # reasoned (IN-12 step 6): done between the seat and the holder, and broadcast to the seat's obligees only (`record.seized` rides `post_remit`) -- no lean as a display
         challenge:      -0.6    # derived: the public challenge -- putting oneself forward before witnesses
         speak:          -0.4    # derived: presses a docketed matter before a convened body (SC-01 step 12: each band emits `matter.*`, writes nothing) -- its whole content is being heard
@@ -3687,6 +3703,7 @@ tables:
         revoke:         null
         succeed:        null
         examine:        null
+        thread_read:    null
         interview:      null
         research:       null
         surveil:        null
@@ -3699,6 +3716,12 @@ tables:
       deontological_instrumental:
         # negative = will not take a disagreeable act even for a good outcome · positive = the
         # outcome justifies the means (draft §3.7)
+        restore:        null    # CR-21 (M14): considered, no source and no lean -- mending a fabric weighs no outcome against a scruple
+        # CR-21 (M14) [ASSUMPTION; medium; Jordan to correct; revert: delete this cell, a witnessed vow-break reads `release`'s null again, one re-pin for the set]:
+        # H-205's vow-break, priced. `repudiate`'s old re-homed cell (draft §3.7, +0.5: "breaks the vow itself -- the outcome over the bond")
+        # raised because a witnessed break of a live `commit` (the only `release` that earns this kind) is the deontological test case itself:
+        # `commit` is -0.8 on this axis, so +0.8 is its mirror, the bond given up for the outcome.
+        "deed:commitment.ended": 0.8
         seize:          null    # reasoned (IN-12 step 6): the warrant is what licenses it, so it is neither a disagreeable act taken for an end nor one refused -- considered, no lean
         forge:           0.8    # carried: the purest means-to-ends act on the table
         commit:         -0.8    # carried: binds regardless of what later calculation would recommend
@@ -3728,7 +3751,7 @@ tables:
         interview:      null    # CONFLICT resolved to null: the old -0.3 was a price ("the hand-revealing cost"), the same defect
         build:          null    # reasoned: the row weighs no outcome against a scruple; its yield arrives through `work`, which carries its own cell
         found:          null    # reasoned: as `build`
-        # no source (draft §3.7, "the other 19"; `thread_read` is in `uncelled:`)
+        # no source (the draft's "other 19" and `thread_read`: considered, null; see `thread_read`'s cells above)
         carry:          null
         confer:         null
         convene:        null
@@ -3746,4 +3769,5 @@ tables:
         speak:          null
         succeed:        null
         examine:        null
+        thread_read:    null
 

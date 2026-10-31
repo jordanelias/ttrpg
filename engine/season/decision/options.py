@@ -30,7 +30,7 @@ from ..data.requires import (
     SHORTFALL_SOURCED_OPERANDS, VIA, binding_of, evaluate,
 )
 from ..data.rosters import (
-    CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, REMOVE_ORDINAL, require_member,
+    CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, REMOVE_ORDINAL, refusing_pole, require_member,
 )
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
@@ -155,8 +155,8 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                              binding_of(p.id, {})).value is not True):
             continue
         if tolerance is not None and refuses(verb, axis, tolerance):
-            TRACE.note(f"{p.id} refuses {verb!r}: its `{axis}` alignment exceeds their own "
-                       f"projected weight {tolerance:+.3f} (ED-IN-0261)", "H-146")
+            TRACE.note(f"{p.id} refuses {verb!r}: its `{axis}` alignment lies further toward the "
+                       f"other pole than their own projected weight {tolerance:+.3f} (ED-IN-0261)", "H-146")
             continue
         # v9 IN-12 step 10 (`rosters.yaml: held_document_declines`): A VERB A PERSON DOES NOT FORM WHILE HE
         # HOLDS A DOCUMENT OF A NAMED KIND ABOUT HIMSELF -- `conceal` while he holds a cover (#453 §9.3's
@@ -272,8 +272,9 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             # the granary full SHOULD form the Candidate and learn otherwise -- and being alone
             # in a room is not a belief anyone can be wrong about. There is no world-read here
             # and no `World`: `p.id` against a referent the person already holds.
-            # ⚠ ONLY WHERE THE ROW NAMES NO COUNTERPARTY (telling workplan `T4`, Decision 3). A row
-            # that names its second side on its own operand contests against THAT (`tell`'s `to`),
+            # ⚠ ONLY WHERE THE ROW'S SECOND SIDE IS ITS SUBJECT (telling workplan `T4`, Decision 3;
+            # CR-16: no `counterparty:`, or `counterparty: subject`). A row that names its second
+            # side on another operand contests against THAT (`tell`'s `to`),
             # so its `subject` is a topic and a person may tell somebody about themselves; the
             # counterparty rule below still declines the person as their own second side.
             if opposes_subject and subject == p.id:
@@ -360,12 +361,15 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
 
 def subject_is_opponent(row: "VerbRow") -> bool:
     """WHETHER AN ACT OF `row` IS CONTESTED AGAINST ITS `subject` -- the row declares a prize
-    (`contests:`) and names no `counterparty:`, so its second side IS its subject (`loop/sides.py`
-    contests against `payload[row.counterparty or "subject"]`). Read off the row's own columns,
-    never a verb name. One owner for two readers: `opening_set`'s self-subject decline (a person is
-    not their own adversary) and `decision/choose.py`'s score term 2 under `stance_polarity:
-    declared` (v9 IN-18 `G2`: an act against a disliked opponent scores higher, not lower)."""
-    return bool(row.contests) and not row.counterparty
+    (`contests:`) and its second side IS its subject: it names no `counterparty:`, or names
+    `counterparty: subject` (`determine`'s party, `arrest`'s prisoner). The fold's own opponent rule,
+    `payload[row.opponent_operand()]` (`data/verbs.py::VerbRow`, asked by `loop/resolve.py::_contest` too). Read off the row's own columns, never a verb name. One owner for two readers:
+    `opening_set`'s self-subject decline (a person is not their own adversary) and
+    `decision/choose.py`'s score term 2 under `stance_polarity: declared` (v9 IN-18 `G2`: an act
+    against a disliked opponent scores higher, not lower). CR-16: it read `not row.counterparty`,
+    which is False for a row that names `counterparty: subject`, so those rows were scored on the
+    wrong side under `declared`."""
+    return bool(row.contests) and row.opponent_operand() == "subject"
 
 
 # ⚠ `project` LIVES HERE, NOT IN `choose.py`, AND THE REASON IS AN IMPORT CYCLE THAT EXECUTED.
@@ -440,6 +444,7 @@ def refusal_tolerance(p: Person, axis: Optional[str]) -> Optional[float]:
     require_member(axis, PURSUIT_AXES, f"refusal axis {axis!r} is not on the pursuit_axes roster",
                    "H-146", law="ED-IN-0261 -- the gate reads a ROSTERED axis; an unrostered one "
                                 "would raise `Unspecified` rather than project to a real weight")
+    refusing_pole(axis)       # CR-21: an armed axis the roster authors no pole for refuses HERE, not at an engaged verb
     return project(p)[axis]
 
 
@@ -448,16 +453,19 @@ def refuses(verb: str, axis: str, tolerance: float) -> bool:
     `score` cannot express: it ranks, and at `choice_temperature` 0.1 a good enough outcome
     outranks any finite penalty (`ED-IN-0261`).
 
-    Sign convention: the axis's NEG pole is the refusing one (`deontological` on
-    `deontological/instrumental`), so a verb is refused when its alignment sits further toward the
-    POS pole than the person's own weight. Only a verb the axis ENGAGES can be refused -- a zero
-    cell, including the sparse default, is not one of the *"certain actions"* the ruling gates;
-    the scar's `person_q.elements_violated_by` reads engagement the same way.
+    WHICH POLE REFUSES IS DATA (CR-21, H-146's repair): `data.rosters.refusing_pole(axis)` reads it
+    from `rosters.yaml: pursuit_axes.refusing_pole` -- `-1`, the NEG pole, for `deontological` on
+    `deontological/instrumental` (ED-IN-0261). A verb is refused when its alignment sits further toward
+    the OPPOSITE pole than the person's own weight: `sign * (cell - weight) < 0`, which for `-1` is the
+    old `cell > weight` exactly. An axis with no authored pole raises, so the gate cannot invert or
+    default silently. Only a verb the axis ENGAGES can be refused -- a zero cell, including the sparse
+    default, is not one of the *"certain actions"* the ruling gates; the scar's
+    `person_q.elements_violated_by` reads engagement the same way.
 
     Reads `data.verbs.align`, the one `choose`'s score reads too, so a rebind of
     `data.verbs.ALIGNMENT` moves the gate and the ranking together."""
     a = align(verb, axis)
-    return bool(a) and a > tolerance
+    return bool(a) and refusing_pole(axis) * (a - tolerance) < 0
 
 
 def person_side_eligible(p: Person, row: "VerbRow") -> bool:

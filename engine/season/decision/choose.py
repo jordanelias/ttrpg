@@ -54,7 +54,7 @@ STANCE_POLARITIES = roster("stance_polarities")
 def stance_term(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict] = None) -> float:
     """§F2's SECOND TERM, by `Fixtures.stance_polarity` (v9 IN-18 `G2`, `H-194`).
 
-      * `legacy` (CONTROL, shipped): `stance_toward(p, c.subject)` -- the pre-G2 term, verbatim.
+      * `legacy` (CONTROL; shipped until CR-16, which ships `declared`): `stance_toward(p, c.subject)` -- the pre-G2 term, verbatim.
       * `regard`: `regard(p, c.subject, fx)` with `+` on every row -- G1's regard and no polarity,
         the midpoint that separates what regard adds from what the sign adds.
       * `declared`: `regard(p, c.subject, fx)`, NEGATED where the subject is the act's opponent

@@ -132,7 +132,7 @@ def test_the_split_adds_challenge_and_accept_and_no_kill_or_wound_row():
 #
 # Jordan's pair (S5 `:127-129`): a devout church-of-Solmund builder against a pure-Einhir dismantler,
 # BOTH high on `doctrine`. The placements are test INPUTS -- two persons' weights, as the draft
-# `proposals/2026-09-26-decision-layer-execution-plan/candidate_pursuit_cells.md` §5.1 arm A places
+# the retired pursuit-cells draft (its `FORK:` row in `references/restructure_ledger.md`) §5.1 arm A places
 # them (`faith` there is `doctrine` here, RS-2) -- and the cosine is COMPUTED from the shipped
 # `pursuit_projection` through `to_axes`, the one owner of convictions -> axes. No cell value and no
 # expected cosine is copied into this file.

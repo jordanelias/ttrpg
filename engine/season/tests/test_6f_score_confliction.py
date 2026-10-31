@@ -70,7 +70,8 @@ def _ranking(p: Person, k: float, monkeypatch) -> list:
     # `stance_gain` (H-202) at its CONTROL 0, explicitly: the 3/4 share above is calibrated against
     # §F2's stance weight 1, and the gain ships live (Jordan, 2026-10-09), which would double the
     # stance term and flip the control arm by the stance's weight rather than by the strain's.
-    fx = (DEFAULT_FIXTURES.sweep("choice_temperature", 0).sweep("stance_gain", 0.0)
+    # `stance_polarity` pinned `legacy` too (CR-16 ships `declared`): the calibration above is the pre-G2 term's.
+    fx = (DEFAULT_FIXTURES.sweep("choice_temperature", 0).sweep("stance_gain", 0.0).sweep("stance_polarity", "legacy")
           .sweep("confliction_weight", k))
     choose = CH.make_chooser(fx, lambda *a: "act")
     choose(p, SimpleNamespace(question=object()), SimpleNamespace(), lambda: 1)
