@@ -56,6 +56,9 @@ Entry points:
   - levels_to_net_sigma(aggressor: Sequence[str] | None = None, defender: Sequence[str] | None = None) -> float
   - p_success(base_ob: float, pool: float, net_sigma: float = 0.0, tn: int = TN_STANDARD, capped: bool = True) -> float
   - band_odds(pool: float, ob: float, boost: float = 0.0) -> (F, P, S, O)  (exact odds of the discrete roll, CP-T01-03)
+  - settle_margin(raw_net: int, boost: float, ob: float, uniform) -> int  (the fraction of a margin, CP-T01-04)
+  - record_odds(pool, ob, leverage) -> (F, P, S, O) and settle_record(net, leverage, pool, ob, uniform) -> int
+    (the same two, over a contest record's fields, so a host names no boost arithmetic)
   - roll_net(pool: float, tn: int = TN_STANDARD, rng: random.Random | None = None) -> int
   - roll_net_continuous(pool: float, tn: int = TN_STANDARD, rng: random.Random | None = None) -> float
 """
@@ -64,6 +67,7 @@ from __future__ import annotations
 import functools
 import math
 import random
+from fractions import Fraction
 from typing import Sequence
 
 from engine.dice_engine import dice_engine
@@ -303,28 +307,82 @@ def _net_counts(dice: int) -> tuple:
     return tuple(sorted(counts.items()))
 
 
+def _split_margin(boost: float, ob: float) -> tuple:
+    """`(whole, fraction)` of `boost - ob`: its floor and what is left (`0.0 <= fraction < 1.0`).
+    The one place the rule's two parts are cut, read by `settle_margin` and by `band_odds`."""
+    q = boost - ob
+    whole = math.floor(q)
+    return whole, q - whole
+
+
+def settle_margin(raw_net: int, boost: float, ob: float, uniform) -> int:
+    """THE FRACTION OF A MARGIN IS WORTH ITS FRACTION (CP-T01-04): the whole margin the ladder reads.
+
+    `raw_net` is the roll's own integer net (`roll_net`), `boost` the mu-shift it was given
+    (`net_boost`), `ob` the composed obstacle, and `uniform` the act's OWN generator's `random`, a
+    zero-argument callable. With `q = boost - ob` the settled margin is
+        raw_net + floor(q) + [u < frac(q)]
+    an integer, so the ladder reads it against a zero obstacle (`degree_from_net(m, 0)`). Expected margin
+    is `raw_net + q`, unrounded: advantage stays a mu-shift in expectation, and two obstacles a fraction
+    apart (or two boosts) differ in their odds, which whole dice alone collapse.
+
+    `uniform` IS CALLED ONLY WHEN `frac(q) > 0`. A whole margin (every whole-Ob roll with no boost, which
+    is the whole realm) draws nothing, so the act's stream, and every hash behind it, is unmoved; the
+    rule is then the identity, `raw_net + q`. Base Ob and TN are never modified: the obstacle is only the
+    fraction's source. Pure but for that one call."""
+    whole, fraction = _split_margin(boost, ob)
+    if fraction > 0.0 and uniform() < fraction:
+        whole += 1
+    return int(raw_net) + whole
+
+
 def band_odds(pool: float, ob: float, boost: float = 0.0) -> tuple:
     """`(F, P, S, O)`: the exact chance of each of the four bands -- in the owner's order, the
     ordinals of `dice_engine.DEGREE_ORDINAL` -- for one roll of `pool` d10s against `ob`, the roll
-    shifted by `boost`.
+    shifted by `boost`, its margin settled by `settle_margin`.
 
     AN ENUMERATION OF THE DEALT ROLL, NOT A MODEL OF IT. The net of the pool is enumerated over
-    `dice_engine._die_result`'s own faces; each net plus the boost is graded by
-    `dice_engine.degree_from_net`, the one ladder. Neither the faces nor the ladder is copied here, so
-    a change to either moves this tuple with the roll (the test swaps a band edge and watches it).
-    The same shape as the roll's own composition, `roll_net(pool) + net_boost(level, pool)`: the boost
-    is the mu-shift and the obstacle is untouched -- never an Ob reduction.
+    `dice_engine._die_result`'s own faces; each net is settled by THE SAME RULE `settle_margin` deals
+    (`_split_margin`: the whole part with certainty, one more with probability `frac`) and graded by
+    `dice_engine.degree_from_net`, the one ladder. Neither the faces, the ladder nor the rule is copied
+    here, so a change to any of them moves this tuple with the roll (the tests swap a band edge, and
+    walk the face table through `settle_margin` itself). The boost is the mu-shift and the obstacle is
+    untouched -- never an Ob reduction.
 
     `pool` is rounded and floored as `roll_net` deals it (`max(1, int(round(pool)))` whole dice), so
     the odds are for the dice dealt. `p_success` stays the Gaussian closed form combat reads; on these
     dice it is 10-15 points off, which is why this exists. Pure and read-only; the result is a tuple of
-    floats (integer count over 10**dice), so `band_odds(2, 2) == (0.74, 0.19, 0.07, 0.0)` exactly."""
+    floats (a count over 10**dice, a whole margin weighing exactly 1), so
+    `band_odds(2, 2) == (0.74, 0.19, 0.07, 0.0)` exactly."""
     dice = max(1, int(round(pool)))                 # [canonical: params/core.md §Pool Floor (all systems)]
-    tally = [0, 0, 0, 0]
+    whole, fraction = _split_margin(boost, ob)
+    pays = Fraction(fraction)                       # exact, so the four bands sum to 1 and none exceeds it
+    tally = [Fraction(0)] * 4
     for net, n in _net_counts(dice):
-        tally[dice_engine.DEGREE_ORDINAL[dice_engine.degree_from_net(net + boost, ob)]] += n
+        if fraction > 0.0:
+            tally[dice_engine.DEGREE_ORDINAL[dice_engine.degree_from_net(net + whole, 0)]] += n * (1 - pays)
+            tally[dice_engine.DEGREE_ORDINAL[dice_engine.degree_from_net(net + whole + 1, 0)]] += n * pays
+        else:
+            tally[dice_engine.DEGREE_ORDINAL[dice_engine.degree_from_net(net + whole, 0)]] += n
     total = 10 ** dice
-    return tuple(n / total for n in tally)
+    return tuple(float(n / total) for n in tally)
+
+
+def record_odds(pool: float, ob: float, leverage: float) -> tuple:
+    """`band_odds` for a contest RECORD's own fields: its pool, its composed obstacle and its leverage
+    (net sigma), the boost being the roll's own `net_boost(leverage, pool)`. The host reads a record and
+    names no arithmetic: the boost the roll adds is derived HERE, by the owner of `net_boost`, so the
+    odds shown are the odds of the roll dealt (`band_odds` is the one enumeration)."""
+    return band_odds(pool, ob, net_boost(leverage, pool))
+
+
+def settle_record(net: float, leverage: float, pool: float, ob: float, uniform) -> int:
+    """`settle_margin` for the net an entry RETURNED: `net` is the integer roll plus the boost it was
+    given (`net_boost(leverage, pool)`), so the roll is that net less the boost, rounded back to the
+    whole it is. The host passes the record's fields and the act's `uniform`; the boost and the roll
+    are derived here, by the owner, and the fraction rule stays `settle_margin`'s alone."""
+    boost = net_boost(leverage, pool)
+    return settle_margin(round(net - boost), boost, ob, uniform)
 
 
 # ---------------------------------------------------------------------------

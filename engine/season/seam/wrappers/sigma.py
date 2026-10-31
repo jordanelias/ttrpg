@@ -82,7 +82,7 @@ import random
 from dataclasses import asdict
 from typing import Any, Optional
 
-from engine.dice_engine.sigma_leverage import band_odds, net_boost
+from engine.dice_engine.sigma_leverage import record_odds, settle_record
 from engine.substrate import composition
 
 from ...data.rosters import VERB_CAPABILITY
@@ -224,13 +224,13 @@ def _composed_obstacle(inp: SocialContestInput) -> float:
 
 
 def _odds_of_input(inp: SocialContestInput) -> Optional[tuple]:
-    """`band_odds` over one record: the module's obstacle, the roll's own `net_boost`, the record's
-    pool. `None` where S27.4 refuses the attempt -- no dice are dealt, so there is no distribution
+    """`record_odds` over one record: the module's obstacle, the record's pool and leverage (the owner
+    derives the roll's boost from them). `None` where S27.4 refuses the attempt -- no dice are dealt, so there is no distribution
     (`resolve` refuses on the same pair, one rule: `ob > multiple x pool`)."""
     ob = _composed_obstacle(inp)
     if ob > inp.obstacle_refusal_multiple * max(inp.pool, 0):
         return None
-    return band_odds(inp.pool, ob, net_boost(inp.leverage, inp.pool))
+    return record_odds(inp.pool, ob, inp.leverage)
 
 
 def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
@@ -341,7 +341,8 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     """Roll for one contested act: build the record, call the module entry, hold its return to a
     `Margin`, refuse S27.4. Returns a net/ob pair, NEVER a band and never a winner.
 
-    RESOLVED -> dict(status, module, resolver, pool, ob, net, leverage)   # the entry's Margin + the record
+    RESOLVED -> dict(status, module, resolver, pool, ob, net, leverage, settled_margin)   # the entry's Margin + the record
+                 # + the margin's fraction settled by the act's own draw (CP-T01-04), the integer `degree_of` grades
     REFUSED  -> dict(status, why, pool, ob)   # S27.4: ob > obstacle_refusal_multiple x pool
 
     ⚠ A RETURN THAT IS NOT A `Margin` RAISES, NAMING THE ENTRY (v9 SC-01 step 15, Lens B: *the provider
@@ -415,6 +416,14 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     if margin.ob > inp.obstacle_refusal_multiple * max(inp.pool, 0):
         return dict(status="REFUSED", why="S27.4", module=_PROVIDER,
                     resolver=_RESOLVER, pool=inp.pool, ob=margin.ob)
+    # CP-T01-04: the margin's fraction is settled here, AFTER the S27.4 check (a refused act draws
+    # nothing), by the act's own generator, and only when there is a fraction to settle -- a whole
+    # margin draws nothing, so the act's stream and every whole-Ob hash are unmoved. The owner derives
+    # the roll and its boost from the record's fields (`settle_record`); the host does no arithmetic.
+    # The recorded `net`, `ob` and `pool` below are unchanged: S27.4 and every reader of the pair see
+    # what they saw.
+    settled = settle_record(margin.net, inp.leverage, inp.pool, margin.ob,
+                            rng.random if rng is not None else random.random)
     # The margin's own fields, copied whole: the host reads the pair, it never computes one.
     return dict(status="RESOLVED", module=_PROVIDER, resolver=_RESOLVER, pool=inp.pool,
-                **asdict(margin), leverage=inp.leverage)
+                **asdict(margin), leverage=inp.leverage, settled_margin=settled)
