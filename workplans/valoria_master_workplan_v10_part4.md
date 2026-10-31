@@ -565,6 +565,123 @@ The fold of 2026-10-30 (Jordan: everything that can properly be folded into v10 
 - SOURCE: home `proposals/2026-10-28-content-architecture-suite/01_MAIN_REPORT_part2.md` §13 (PROPOSED, held back in full); `architecture/meta/04_CODE_ARCHITECTURE.md:853`; `architecture/meta/01_AXIOMS.md` AX-1; `engine/season/decision/budget.py:19-20`; `engine/season/data/fixtures.py:532` (`budget_office_bonus`); `engine/season/hole_register.yaml` H-92.
 
 
+### CR-46 — The R-05 reading and its definition (IN) · BATCH B10-18b (first) · STATE BUILD (harness and text; hash EQUAL) · R R-05
+- WHAT: the batch's base reading and the three definition clauses its other positions need. (1) The base reading, quoted in the commit body: `python -m engine.season.harness.aperture 4 s`, s = 0-2, per verb, with the `ex - both` column (`ex` counts an act that emitted a declared kind, and an admission refusal whose kind is also an emitted kind, `finding.none` on `examine` and `research`, reads executed and `both`), pooled and per seed, over `len(VERB_TABLE)` rows. (2) R-05's `measure:` text in `engine/season/requirements.yaml` and `-02` §6 gain: "executed" is `ex - both`; the denominator is `len(VERB_TABLE)` at measurement time and counts the six rows ED-IN-0306 added (REM-02's rule, unchanged); and the **menu-door clause** `[ASSUMPTION; medium; Jordan to correct; revert: delete the clause, and the six army verbs are named residue]`: a verb held out of formation by `Fixtures withheld_verbs` because its command is the act's payload (`rosters.yaml: army_verbs`) is built out when CR-52's shipped scripted policy drives it through `dispatching_chooser` in a seeded run and each declared kind is emitted with a minted receipt whose before differs from after. A fold made directly (`army_presets.install`) and a hand-built act never count. (3) The `len(VERB_TABLE)` asserts and the never-attempted set at `test_season_shape.py` (`:9366-9369` at `eda39a6`) re-recorded by symbol, with `-02` §6's "56" and "unchanged" read as superseded.
+- LANDED ALREADY: `aperture`'s per-verb funnel, `both` and `graded` columns (REM-10, REM-11); REM-02's denominator rule.
+- REMAINING UNBUILT: the pooled-over-seeds line (aperture prints one block per seed and a pooled report only under `--seeds`); the three text clauses.
+- GATE: B10-18 merged. NEEDS: none inside the batch.
+- EXIT and FALSIFIER: the reading prints the 62 rows (or `len(VERB_TABLE)` at the base commit) per seed with `ex - both`; a planted row whose only emission is its refusal kind reads not executed. CONTROL: `content_hash` EQUAL before and after (text and harness only).
+- HASH MOVERS: none (E).
+- HOLES AND LEDGER IDS: `engine/season/requirements.yaml` R-05 `measure:`; H-156.
+- ASKS ATTACHED: the menu-door clause, above: it narrows what "built out" asks of six verbs, which is a change to a requirement Jordan wrote, so the PR body lists it HELD BACK (ED-1094) and it reverts alone.
+- RE-BASE: re-take the reading on the batch's base commit; the figures in this file (36 of 60 resolvable rows executed, pooled over seeds 0-2; 27 of 60 not executed at seed 0; `succeed` and `tie / knot` outside `resolvable_verbs()`; HEAD `eda39a6`) come from probe runs whose output is not in the repository.
+- BUILDER: second tier.
+- SOURCE: the R-05 re-take of 2026-10-31 (this fold); `-02` §6; `engine/season/harness/aperture.py` header.
+
+### CR-47 — Works and Sites reach the chooser's ranking (IN) · BATCH B10-18b (after CR-50) · STATE BUILD (hash MOVER) · R R-05 (`build`, `found`, `work`, `restore`, `examine`; `sabotage`'s rank link)
+- WHAT: the two planned works (`venues.yaml: planned_works`, minted by `harness/populated.py::mint_planned_works`) and the realm's Sites exist, and their masters FORM `build`, `found`, `work`, `restore` and `examine` on them, yet no act is ever attempted: a candidate whose subject is a works or a Site scores near zero (`research` .17, `work` .06, `restore` 0, `examine` 0, `build` -.03, `found` -.02) against about 8 for a candidate on a Person subject, because `decision/choose.py::score_terms` is the pursuit term plus the stance term and a Record or Site carries no stance. Measured pooled over seeds 0-2, four seasons: `build` 55 attempts and 0 executed (non-masters, on a non-works Record: `exists:works=0`), `found` 0, `work`, `restore` and `examine` 0 attempted. Two routes; the builder takes the first unless the re-base shows it does not move the ranking: (a) the works or Site occasion carries its own question whose plain referent is the works or the Site (`queries/world_q.py::questions_for`, `QUESTION_SOURCES`), `question_aggregation_rule: first` stays (H-54, ruled); (b) alignment cells for `restore`, `examine`, `sabotage` and the works verbs (`data/verbs.py` `ALIGNMENT`), which is authored content and is taken only by CR-21's stated rule (P11). `sabotage` takes `referent_class: Site` from CP-T06-01 (B10-14) and its Site occasion from this position.
+- LANDED ALREADY: IN-45 (works as world data, B10-06, CLOSED), REM-22 (`Site` class, B10-05, CLOSED), `works_sites` (`world_q.py`), 322 Sites at `build_realm(0)` wearing each season (`loop/matter.py`).
+- REMAINING UNBUILT: the chooser's route to a works or Site act (a or b above); for `work`, a plan with band floors (the court dwelling's `floor` reads UNKNOWN, so `work.unavailable` refuses it even if chosen: a `venues.yaml` `planned_works` row for a harbour or seam plus its `rosters.yaml: works_cost` row, which is content and so held to P11's rule).
+- GATE: after CR-50 in B10-18b. NEEDS: IN-45, REM-22, CP-T06-01, CR-21.
+- EXIT and FALSIFIER: `aperture 4 s`, s = 0-2: `build`, `found`, `restore`, `examine` each attempted by a works master or a person at a Site, and `site.built` or `rung.founded` caused by a computed act (IN-45's own G-05 exit, met on one of its two halves at `eda39a6`: `found` executed 0, 0 and 1 across the seeds, `build` 0). `work` and `sabotage` read executed, or are recorded 0 and left named residue with the refusal that decided (the `floor` reading; `site.damaged`'s producer). CONTROL: the route switched off reproduces the pre-item hash; the stance-term share of the top candidate is printed beside the pre-item figure.
+- HASH MOVERS: declared MOVER (it changes which candidate every deliberating person ranks first); one golden re-record, stated plainly, old to new in the commit body.
+- HOLES AND LEDGER IDS: H-54, H-165, H-166 (limit 4); `-08` G-05, G-09, G-10 (authored rows are Jordan's).
+- ASKS ATTACHED: route (a) over (b) `[ASSUMPTION; medium; Jordan to correct; revert: route (b), through CR-21's cells]`.
+- RE-BASE: re-run probes that print each master's candidates and scores at tick 0; the exact slice boundary of `scene_budget` 5 by `interactions_per_scene` 3 (`data/fixtures.py`, `decision/choose.py::pack_scenes`) is not verified here.
+- BUILDER: third tier (judgment).
+- SOURCE: the R-05 re-take of 2026-10-31; `-02` §6.
+
+### CR-48 — A writ reaches its addressee (IN) · BATCH B10-18b (after CR-47) · STATE BUILD (hash MOVER) · R R-05 (`comply`, `construe`, `evade / defy`)
+- WHAT: the three obedience verbs refuse every act on `exists:dispensation=0` (seed 0, four seasons: `comply` 37 refusals, `evade / defy` 17, `construe` 14) because their referent class is the shared `Record` class, so 38 persons form them on a non-writ Record, and the right formation (`world_q.writs_held`, `queries/world_q.py`) stamps only an addressee who HOLDS a writ: none does. Twelve dispensations were minted at seed 0 and every one is held by its issuer (`_eff_issue` mints into the issuer's hold). ED-IN-0292 (1) is RULED NO (a newborn Record is not a founding basis; `registers/editorial_ledger_in.jsonl`, 2026-10-14), so the route is not a mint into the addressee's hold; it is `give`, the act the ruling's own text names: a stamped occasion in `world_q.questions_for` that offers an issuer's held writs to `give` with `to` the addressee (`give` has no `referent_class`; with a held Record `decision/options.py::operand_bags` re-aims the subject to the writ's terms, not its id, so the re-aim for a writ needs its own read), and the `with` co-location that refuses 11 of 11 `give.refused` at seed 0 must hold for the pair. Once held, `comply` forms and admits, `evade / defy` emits `compliance.withheld`, `construe` `terms.distorted`.
+- LANDED ALREADY: REM-2B (the typed cells and the class, B10-06, CLOSED, "no realm execution required", P9), REM-25 (widened the `Record` class, B10-05, CLOSED), IN-09's emission-only effects.
+- REMAINING UNBUILT: the `give` occasion for a held writ and the re-aim of `operand_bags` for it; the co-location read. H-229's `give` Rung class is a different row and a neighbour on `verb_table.yaml`'s `give` row (P13: serialise).
+- GATE: after CR-47. NEEDS: REM-2B, REM-25, IN-12 (B10-09).
+- EXIT and FALSIFIER: `aperture 4 s`: `comply`, `evade / defy` and `construe` each executed at least once, with the compliance Event caused by an act of a non-issuer; a candidate on a dispensation id is non-empty in `opening_set`; or the exit records 0 with the refusal that decided and the verb stays a named residue. CONTROL: the occasion switched off reproduces the pre-item hash; the mint route is untouched (ED-IN-0292 (1)).
+- HASH MOVERS: declared MOVER.
+- HOLES AND LEDGER IDS: ED-IN-0292 (1) (RULED NO), H-44 (LEAVE: the nine dispensation terms), H-229 (open or closed not confirmed here: it is not in `-07` §1's index), H-203.
+- ASKS ATTACHED: none new; K-24's evade-versus-defy split stays unbuilt, and `construe` stays emission-only (its row's witness-side revert is a standing `[ASSUMPTION]`).
+- RE-BASE: re-run the writ census (issuer, holder) and the `give` formation count at `give` with `with`.
+- BUILDER: third tier.
+- SOURCE: the R-05 re-take of 2026-10-31; `verb_table.yaml` `comply`, `construe`, `evade / defy` and `give` rows.
+
+### CR-49 — `exchange` names another rung (IN/SE) · BATCH B10-18b (after CR-48) · STATE BUILD (hash MOVER) · R R-05 (`exchange`), R-04 (conjunct (1) re-read)
+- WHAT: `exchange` is attempted 424 times over seeds 0-2 and never executes. `_eff_exchange` (`loop/effects_economy.py`) declines a side that is no rung and a self-trade; at seed 0, 82 of 133 acts have `from == to` on one rung, 25 have a Person as `to`, 16 a Record, 3 a Proposition, 1 a distinct rung, and the aperture reads `stores:salt=>0` for 78 post-admission refusals. Stores are not the limit (S-001's grain 40 to 144 over four seasons). The row has no `referent_class`, so `to` is whatever the question's referent is. Give it `referent_class: Rung` (the `places_named` and `larders_in_purview` precedent) and a decline in `opening_set` of `to == from` (as petition-to-self).
+- LANDED ALREADY: REM-2B's typed cell (B10-06, CLOSED); `_eff_exchange` (both sides' stores move, matter conserved).
+- REMAINING UNBUILT: the class and the self-trade decline.
+- GATE: after CR-48 (P13). NEEDS: REM-2B, REM-21.
+- EXIT and FALSIFIER: `aperture 4 s`: `exchange.made` at least once from a computed act; `confer` and `oblige` re-read at the realm line against their pre-item counts, because the reverted build of the earlier `exchange` crowded them out (REM-2B's override in `-08`: `confer` 3/3/5/1 to 3/3/0/0, `oblige` 60/60/17/17 to 0); a fall to 0 reverts this position alone.
+- HASH MOVERS: declared MOVER.
+- HOLES AND LEDGER IDS: H-58, H-229 (a different row).
+- ASKS ATTACHED: none.
+- RE-BASE: re-run the operand census for `exchange` (`from`, `to` kinds) at the base commit.
+- BUILDER: second tier.
+- SOURCE: the R-05 re-take of 2026-10-31; `loop/effects_economy.py`; `data/fixtures.py` (`exchange` kind and return kind).
+
+### CR-50 — Referent classes for `raze`, `pardon`, `train` and `arrest` (IN) · BATCH B10-18b (first mover, after CR-46 and CR-52) · STATE EDIT (data: four classes) · R R-05 (contributor)
+- WHAT: `raze`, `seize`, `pardon`, `train`, `arrest`, `covenant` and `establish` carry no `referent_class` in `verb_table.yaml`, so they form on every referent and the cell refuses what is not theirs (`train`: 37 of 86 refusals `exists:Person=0`; `raze`: 26 of 34 refusals are on a `kind=person` rung and fail `MARCH_TARGET_KINDS` in `occupying_faction`, `loop/effects_shared.py`; `seize`: all 3 on a person rung). `seize`, `covenant` and `establish` take their classes from their own owners (CP-T09-04, CP-T09-03, CR-25); this position gives `raze` a settlement-rung class (H-232's stamp), `train` and `pardon` a Person class, and `arrest` a Person class. Cuts refusals; makes none of the four execute by itself.
+- LANDED ALREADY: the class machinery (REM-21, REM-27, B10-05 and B10-06, CLOSED); `march`'s `referent_class: Rung`.
+- REMAINING UNBUILT: the four cells.
+- GATE: after CR-46, CR-52. NEEDS: REM-21, REM-27.
+- EXIT and FALSIFIER: `aperture 4 s`: the refusals of the four verbs on a wrong-kind subject read 0 (`train`'s `exists:Person=0`, `raze`'s person-rung formations); a verb whose class removes every formation reads formed 0 and is recorded, not repaired. CONTROL: classes removed reproduce the pre-item hash.
+- HASH MOVERS: declared MOVER (formation changes).
+- HOLES AND LEDGER IDS: H-232; H-228 (limit 3).
+- ASKS ATTACHED: none.
+- RE-BASE: re-read the unclassed rows by symbol; `train`'s second refusal (`with=False`, pupil not present) is not this position's.
+- BUILDER: first tier (data).
+- SOURCE: the R-05 re-take of 2026-10-31.
+
+### CR-51 — A restraint exists: `arrest` on a held warrant, `pardon` closing it (IN/FA) · BATCH B10-18b (after CR-49) · STATE MEASURE then BUILD only the gap · R R-05 (`arrest`, `pardon`)
+- WHAT: `pardon` refuses after admission: `_eff_pardon` (`loop/effects_governance.py`) returns an empty Change unless the subject holds a live `detain` or `ban` whose object is `Act.via`; at the end of four seasons at seed 0 the realm holds none. The three producers are `arrest` (formed 5, attempted 0), `determine`'s disposal (13 refused) and `revoke`'s ban (CR-54). `arrest` forms only where a held warrant names a Person (`decision/options.py`, the `WARRANT_SOURCED` block), and whether a computed `issue` ever mints a warrant whose terms name a Person is not verified here. MEASURE first: print, at the base commit, `issue`'s minted terms by kind, the warrants held, the formed-and-attempted line of `arrest`, and `determine`'s refusals by read; BUILD only the link the reading names missing (a warrant naming a Person, or the `arrest` rank). No new motive and no special case for either verb (§0). `pardon` follows with no change of its own once an edge exists.
+- LANDED ALREADY: `_eff_arrest`, `_eff_pardon`, `_RESTRAINT_ENDED`; IN-12's warrant channel (B10-09 carries IN-12).
+- REMAINING UNBUILT: the measured gap, if any.
+- GATE: after CR-49 and CR-47. NEEDS: IN-12, CR-50.
+- EXIT and FALSIFIER: `aperture 4 s`: `arrest.made` and `detention.ended` or `ban.ended` caused by computed acts; or the exit records the missing link by name and both verbs stay named residue (no position is invented to fix it). A planted `detain` on the seat: `pardon` closes it and emits (the check the effect already passes by hand).
+- HASH MOVERS: MOVER if built; EQUAL for the reading.
+- HOLES AND LEDGER IDS: H-232, H-207 (the `revoke` ban producer, CR-54).
+- ASKS ATTACHED: none.
+- RE-BASE: re-run the warrant census; CP-T05-05 (cut by the NERS fold) is not re-opened by this position.
+- BUILDER: third tier.
+- SOURCE: the R-05 re-take of 2026-10-31; `-08` CP-T05-05's cut.
+
+### CR-52 — The menu door: a shipped scripted policy for the six army verbs (IN/MB) · BATCH B10-18b (second, after CR-46) · STATE BUILD (harness and test; hash EQUAL) · R R-05 (`recruit`, `form_unit`, `assign_troops`, `order_unit`, `disband_unit`, `discharge_troops`)
+- WHAT: ED-IN-0306 (RULED, 2026-10-28) landed six verbs that a person cannot form for themselves: the command (cohort, troop type, count, subformation, tactics) is the act's payload, the operand vocabulary is closed at eight, and `Fixtures withheld_verbs` (`data/fixtures.py`, `("destroy_record", *ARMY_VERBS)`) keeps `opening_set` from forming them. The ruling's own doors are a menu API (`harness/military_menu.py`, `menu`, `act_for`, `callback` for `dispatching_chooser`) and, for non-player factions, a deterministic preset order of battle (`harness/army_presets.py::install`, off by construction: nothing in the loop calls it, `test_army_menu_presets.py::test_the_presets_are_off_by_construction`; it folds directly and emits only `recruit`, `form_unit` and `assign_troops`, `modules/mass_battle/troop_types/presets.py`). Build the one missing piece: a shipped, deterministic scripted policy that drives `military_menu.callback` through `dispatching_chooser` and `SeasonDriver.season`, one command per season, over all six verbs (a probe at `eda39a6` drove the Crown commander through all six, one per season, each emitting its declared kind, with no engine change), with a test asserting the six kinds are emitted and a control run with the policy off asserting none is. Enlarging the closed operand roster (H-94) and flipping the presets on both move the hash and reopen MB-08, so neither is taken.
+- LANDED ALREADY: ED-IN-0306 phases 1 to 5c (`HANDOFF_MB.md`'s army entry); the menu; the presets; `tests/valoria/test_army_verbs.py`.
+- REMAINING UNBUILT: the policy (a new harness file) and its test, beside `test_army_menu_presets.py`. A season-level run of the six verbs is in no test at `eda39a6`.
+- GATE: B10-18 merged. NEEDS: CR-46 (the menu-door clause).
+- EXIT and FALSIFIER: the test runs the policy through `SeasonDriver.season` and asserts `army.recruited`, `army.formed`, `army.assigned`, `army.ordered`, `army.discharged` and `army.disbanded` with a receipt before ≠ after each; policy off, none. CONTROL: `build_realm(s)` content hash EQUAL at seeds 0-2 (the policy is a separate run with its own hash); the go07 digest and the season-weather pins do not move.
+- HASH MOVERS: none (E).
+- HOLES AND LEDGER IDS: H-94, H-166 (unheld land: unruled, untouched), MB-08 (HELD, B10-Z).
+- ASKS ATTACHED: CR-46's menu-door clause. **Reconciliations this position owes and does not build:** (i) CP-T09-07 (a)'s planned `recruit` row (a contested offer of service writing a duty edge) collides with the landed army `recruit` row; `VERB_TABLE` is keyed by verb, so the planned row takes another plain word at B10-17's re-base (V1), recorded in that commit, `[ASSUMPTION; medium; Jordan to correct; revert: rename the army row]` (`-08` part 2's CP-T09-07 entry carries the note); (ii) M22, CP-T04-10 and CL-TROOP are read against ED-IN-0306 at their own entries (its ruling amends `04` §C.5.1 for armies and neither the plan nor `-10` cites it); (iii) CP-T04-10's `levy` and `disband` rows are different verbs from `recruit` and `disband_unit` and stay held on M3.
+- RE-BASE: re-run the six-verb season probe.
+- BUILDER: second tier.
+- SOURCE: ED-IN-0306 (`registers/editorial_ledger_in.jsonl`); `proposals/2026-10-29-army-phase5-design.md`.
+
+### CR-53 — `destroy_record`: the sink arm switched on (IN) · BATCH B10-18b (after CR-51) · STATE BUILD (one fixture value; hash MOVER) · R R-05 (`destroy_record`)
+- WHAT: `destroy_record` is typed, `own`-eligible and effected, and withheld (`Fixtures withheld_verbs`, H-156 option (a), taken by v9 IN-26 `[ASSUMPTION; medium; Jordan to correct]` with "the flip ON is a separate, declared hash-moving commit"). Since then `rosters.yaml: own_hold_declines` narrows its formation to a referent the person himself holds, so the scene tax H-156 measured no longer applies to this row. A probe at `eda39a6`, seed 0, two seasons: the shipped arm 0 `record.destroyed`; with `withheld_verbs=ARMY_VERBS` 5 `record.destroyed`, 0 `destroy.refused`, content hash moved (seed 1 cut off; the old H-156 figures were never re-taken). Take the sink arm: `withheld_verbs=ARMY_VERBS`. CP-T06-08 (PARKED on JA-1) is read at its entry against the flip, not built here.
+- LANDED ALREADY: the row, `_eff_destroy_record`, `test_in26_record_sink.py` (a hand-built world burns through a real season, with controls).
+- REMAINING UNBUILT: the one value, the re-pins, H-156's row text.
+- GATE: after CR-51. NEEDS: none.
+- EXIT and FALSIFIER: `aperture 1 0` and `aperture 4 s`: `destroy_record` formed and executed with a Record receipt before ≠ after; the withheld control reproduces the pre-item hash; `test_season_weather.py` `BASE_HASHES` and `BASE_EVENTS`, `test_go07_canonical_digest.py` seeds 0-2, `test_season_shape.py`'s never-attempted set, `test_u7_own.py` and `test_in26_record_sink.py` re-recorded, each old to new in the commit body, stated plainly as a re-recorded golden.
+- HASH MOVERS: declared MOVER.
+- HOLES AND LEDGER IDS: H-156 (RULING, open); A2-07 (CARRIED); M19 (TAKEN, (a)).
+- ASKS ATTACHED: `[ASSUMPTION; medium; Jordan to correct; revert: restore ("destroy_record", *ARMY_VERBS) in the fixture]`; the PR body lists it as a game change (a holder may burn a Record he holds), held back.
+- RE-BASE: re-run both arms at seeds 0-2 on the base commit.
+- BUILDER: first tier.
+- SOURCE: `data/fixtures.py` (`withheld_verbs` and its comment); `hole_register.yaml` H-156.
+
+### CR-54 — `revoke`: the vacancy motive (design-first) (IN/FA) · BATCH B10-18b (design drafted beside the batch; build after CR-53 if approved) · STATE DESIGN-FIRST, then BUILD · R R-05 (`revoke`), R-04 (conjunct (1))
+- WHAT: `revoke` is formed 17 times and attempted 8 times, pooled over seeds 0-2 at four seasons, and never executed; `loop/predicates.py::office_named_by` is not called for `revoke`, which keeps the base's read of `payload['office']`, so a computed act is refused at its precondition. H-207 (A) (`hole_register.yaml`; the recorder's reading of Jordan's 2026-10-12 ruling, "his words where quoted, the readings are mine" and an `[ASSUMPTION]`) says a computed `revoke` is not driven and none is to be special-cased in; what remains, in that row's words, is a design-first motive, a vacancy read as a need. CP-T02-04 was cut by the NERS fold and CR-37 builds a hand-built `joint_concurrence` route only, so no v10 position owns the motive until this one. Write a design under `proposals/` for a general, non-special-cased motive the chooser already scores (a vacancy read as a need; CP-T09-09's `legitimacy` occasion gaining the deposition's motive as a second named consumer is the candidate), the read of `subject` by `office_named_by`, its fit with CR-37's `REVOCATION_RULES` and `joint_concurrence`, and the falsifier its build carries. No code at this step.
+- LANDED ALREADY: `_eff_revoke` and its ban (`loop/effects_governance.py`); IN-31's cost; REM-28 (`referent_class: Office`, B10-06, CLOSED); CR-37's hand-built route (B10-17).
+- REMAINING UNBUILT: the design; its build is a successor row written when the design is approved.
+- GATE: B10-17 merged (CR-37, CP-T09-09). Approval of the design by ED-1094's merge default unless the PR lists it held back; if it is unapproved when B10-18b closes, the row moves to B10-Z as HELD and `revoke` is a named R-05 residue.
+- EXIT and FALSIFIER: the design file exists and names the motive's source, the `office_named_by` change and its guard against a special case (no entity or outcome named), and the realm reading its build must print (`aperture 4 s`: `revoke` executed with `Act.via` a seat whose `revocation` admits it). No code.
+- HASH MOVERS: none at this step.
+- HOLES AND LEDGER IDS: H-207 (A) and the hunk `-05` M8 corrected; `proposals/2026-10-14-in31-revocation-cost-provenance.md` (its reading: "not driven" means no motive scores it, not that it is never formed).
+- ASKS ATTACHED: `[ASSUMPTION; medium; Jordan to correct; revert: revoke stays a named R-05 residue]`: H-207 (A) is read as barring a special case and not a general motive, on the ledger row's own wording that the readings are the recorder's.
+- RE-BASE: re-read H-207 (A) in full at `hole_register.yaml` and the ruling's quoted words before the design is written.
+- BUILDER: third tier (judgment).
+- SOURCE: the R-05 re-take of 2026-10-31; H-207.
+
 ## 3. Carried v9 entries, part 1 (batches B10-02 to B10-16)
 
 ### IN-18 — G5, G8, the gated tail (telling workplan residue) (IN) · BATCH B10-Z (HELD; its MEASURE closed at B10-02) · STATE BLK:G5 trigger M0e (re-measured at B10-02: headline 0, the workplan's own definition above 0); G8 gated by judgment · R —
