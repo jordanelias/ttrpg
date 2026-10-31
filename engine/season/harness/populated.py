@@ -76,11 +76,14 @@ from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
 from ..data.rosters import (BODY_FACTION, FACTIONS, FOREIGN_CAST, FOREIGN_SEATS, OFFICES_BY_HOLDER,
                             OFFICES_SEATS, ROLE_TEMPLATE_OF, authored_remit,
                             faction_prop_id, load_yaml, refuse_a_titled_post_off_its_rung,
-                            remit_or_default, territory_rung_id, title_domain)
+                            remit_or_default, territory_id_of, territory_rung_id, title_domain)
+from ..data.geography import geography
+from ..data.pursuits import temperament_pursuits
 from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..loop.effects import EFFECTS
 from ..state.carriers import Act, Office, Person, Proposition, Rung, Site, Tenure
+from ..state.containment import parent_of
 from ..state.gate import NO_CHANGE
 from ..state.ids import H, ROOT, draw_factory
 from ..state.world import World
@@ -388,7 +391,54 @@ def cohort_rows(text: str | None = None) -> list:
     return rows
 
 
-def seat_cohorts(w: World, rows: list, names: dict | None = None) -> list:
+TEMPERAMENT_FIELDS = frozenset({"territory", "alpha", "beta"})
+
+
+def temperament_rows(text: str | None = None) -> list | None:
+    """THE `temperaments:` BLOCK OF `cohorts.yaml`, schema-checked: `[{territory, alpha, beta}, ...]` in file
+    order, or `None` when the file carries no such block (cohorts then stay uniform, as before SE-06: the block's
+    absence IS the revert and the control). `text` is the file's contents, for a caller that plants a block.
+
+    Refused here, without a world: a block with no row, a field the file does not declare
+    (`TEMPERAMENT_FIELDS`), an `alpha` or `beta` that is not a number in `[0, 1]` (`bool` refused: YAML's
+    `yes` is not 1), a territory that is no row of the geography file's `provinces:`, and the same territory
+    twice. What needs the built world (every cohort's territory has a row) is `seat_cohorts`'s."""
+    if text is None:
+        text = files.COHORTS_YAML.read_text(encoding="utf-8")
+    block = (load_yaml(text) or {}).get("temperaments")
+    if block is None:
+        return None
+    if not block:
+        raise Unspecified(
+            "`cohorts.yaml: temperaments` declares no row", "engine/season/cohorts.yaml",
+            needs="one `{territory, alpha, beta}` row per territory holding a cohort, or no block at all",
+            law="SE-06 -- an empty block would read as a configured realm and configure nothing")
+    provinces = set(geography()["provinces"])
+    seen: set = set()
+    for n, row in enumerate(block):
+        if not isinstance(row, dict) or set(row) != TEMPERAMENT_FIELDS:
+            raise Unspecified(
+                f"`cohorts.yaml: temperaments` row {n} is {row!r}", "engine/season/cohorts.yaml",
+                needs=f"exactly the fields {sorted(TEMPERAMENT_FIELDS)}",
+                law="SE-06 -- a temperament row is a territory and its two weights, and nothing undeclared")
+        for f in ("alpha", "beta"):
+            v = row[f]
+            if isinstance(v, bool) or not isinstance(v, (int, float)) or not 0 <= v <= 1:
+                raise Forbidden(
+                    f"`cohorts.yaml: temperaments` row {n} ({row['territory']!r}) has {f} {v!r}", "SE-06",
+                    law="SE-06 -- alpha and beta are weights, numbers in [0, 1]")
+        if row["territory"] not in provinces or row["territory"] in seen:
+            raise Unspecified(
+                f"`cohorts.yaml: temperaments` row {n} names the territory {row['territory']!r}, "
+                f"{'twice' if row['territory'] in seen else 'which the geography file does not carry'}",
+                "engine/season/cohorts.yaml",
+                needs="one row per geography `provinces:` territory",
+                law="SE-06 -- one temperament per territory; a second would be two answers to one question")
+        seen.add(row["territory"])
+    return block
+
+
+def seat_cohorts(w: World, rows: list, names: dict | None = None, temperaments: list | None = None) -> list:
     """SEAT THE AUTHORED COHORTS IN A BUILT WORLD, and return their person ids in row order. Plan
     position `24f`: the producer the design step named (`workplans/2026-09-28-the-plan-one-order-
     mc-v18-retired.md` §3.1 item 10), read at world-gen beside the case-derived cast.
@@ -396,9 +446,13 @@ def seat_cohorts(w: World, rows: list, names: dict | None = None) -> list:
     Each row becomes what every builder mints for a person, and nothing else: a `Person` at the
     row's weight, its `person` rung, a `contain` edge (where it IS) and a `reside` edge (where it
     LIVES, `19c`'s rule) to the row's rung. No `commit`, so it is no faction's member; no `hold`,
-    so it holds nothing; no pursuits, so it ranks by the uniform arm a person with no authored
-    convictions gets -- inventing convictions for a population would be authoring a creed nobody
-    wrote. It is a Person in full, though (S9.1, ONE CLASS; probe `P21`: *"a crowd must be able to
+    so it holds nothing; no convictions -- inventing convictions for a population would be authoring a
+    creed nobody wrote, and nothing supplies one (`Person.conviction` stays `{}`). Its PURSUITS are its
+    territory's temperament when `temperaments` is given (SE-06, ED-IN-0293 row 1 reading (b), taken by M1 of
+    the v10 decision round: `cohorts.yaml: temperaments:`, translated by `data/pursuits.py::temperament_pursuits`),
+    and none when it is `None`, so it ranks by the uniform arm a person with no authored pursuits gets. Two
+    cohorts of one territory hold the same vector (declared); no spread between them, and no goals.
+    It is a Person in full, though (S9.1, ONE CLASS; probe `P21`: *"a crowd must be able to
     act"*), so it witnesses, holds claims and deliberates like anyone. Nothing here stops that, and
     doing so would be special-casing an entity (`CLAUDE.md` §10's scripting drift).
 
@@ -414,10 +468,16 @@ def seat_cohorts(w: World, rows: list, names: dict | None = None) -> list:
         seat nobody and look like a quiet town.
       * A CLASH WITH AN EXISTING PERSON ID REFUSES, rather than overwriting a cast member.
 
+    `temperaments` is `temperament_rows()`'s output, or `None` for a uniform cohort. When given, EVERY
+    cohort's territory (the rung that CONTAINS its settlement, `territory_id_of`) must have a row, else
+    `Unspecified` names the territory and the cohort: a block that covered some cohorts would leave the rest
+    uniform and read as complete.
+
     `names` maps a rung to the place's canon name, so the cohort reads *"the people of
     Valorsplatz"*; a rung it does not name is named by its id. Display only: nothing resolves on a
     `Person.name`."""
     names = names or {}
+    by_territory = {r["territory"]: (r["alpha"], r["beta"]) for r in temperaments} if temperaments is not None else None
     out: list = []
     for row in rows:
         rung, wt = row["rung"], row["weight"]
@@ -440,7 +500,17 @@ def seat_cohorts(w: World, rows: list, names: dict | None = None) -> list:
                 f"cohort id {pid!r} is already taken in this world", "engine/season/cohorts.yaml",
                 needs="a rung whose cohort id no cast member or rung already uses",
                 law="plan position `24f` -- a cohort is seated beside the cast, never over it")
-        w.persons[pid] = Person(pid, f"the people of {names.get(rung, rung)}", weight=wt)
+        pursuits: dict = {}
+        if by_territory is not None:
+            terr = territory_id_of(parent_of(w, rung))
+            if terr not in by_territory:
+                raise Unspecified(
+                    f"cohort {pid!r} lives in the territory {terr!r}, which `cohorts.yaml: temperaments` has no row for",
+                    "engine/season/cohorts.yaml",
+                    needs=f"a `{{territory: {terr}, alpha, beta}}` row, or no `temperaments:` block",
+                    law="SE-06 -- a cohort's pursuits are its territory's temperament; a territory with no row is refused, not left uniform")
+            pursuits = temperament_pursuits(*by_territory[terr])
+        w.persons[pid] = Person(pid, f"the people of {names.get(rung, rung)}", weight=wt, pursuits=pursuits)
         w.rungs[pid] = Rung(pid, "person")
         w.add_tenure(Tenure(f"t_{pid}_in", pid, rung, "contain", 0))
         w.add_tenure(Tenure(f"t_{pid}_home", pid, rung, RESIDE_KIND, 0))
@@ -504,7 +574,7 @@ def seat_guards(w: World, rows: list, authored: dict, partial: bool = False) -> 
     HOLDER is present at, a `reside` edge at the nearest settlement above that rung (a guard is posted at a
     door and lives in the town, so the capacity ceiling is checked against the town's, as for any cohort),
     and a live `oblige` to the seat -- the edge `world_q.guard_weight` (IN-60) counts. No `commit`, no `hold`,
-    no pursuits: a guard is a cohort (`seat_cohorts`' rule), not a character.
+    no pursuits (SE-06's `temperaments:` covers the population rows only; a guard stands for no place): a guard is a cohort, not a character.
 
     `authored` is `_office_census["authored"]` (an `offices.yaml` seat id -> the Office id standing for it).
     A seat this world did not seat, or one nobody holds, REFUSES -- unless `partial` (a `cap` dropped the
@@ -1754,7 +1824,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     # ⚠ AND AFTER THE DWELLINGS, because the ceiling reads `capacity`, which counts them.
     names = {f"set_{_slug(sid)}": str(s.get("name") or sid)
              for sid, s in geo["settlements"].items()}
-    seat_cohorts(w, cohort_rows(), names)
+    seat_cohorts(w, cohort_rows(), names, temperament_rows())
     # v9 IN-36 (IN-60's content): AFTER the population cohorts, so a guard never lands on a population row's
     # id or capacity read, and AFTER the seats, whose holders it is posted beside. `guards=False` seats none.
     if guards:

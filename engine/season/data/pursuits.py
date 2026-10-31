@@ -34,7 +34,7 @@ from typing import Optional
 from ..gaps import Unspecified
 from engine.substrate.descriptors import resolve_pursuit
 
-from .rosters import PURSUITS, PURSUIT_AXES
+from .rosters import PURSUITS, PURSUIT_AXES, require_member
 
 
 def pursuit(name: str) -> str:
@@ -87,6 +87,46 @@ def to_axes(weights: dict) -> dict:
         for ax in PURSUIT_AXES:
             out[ax] += float(w) * float(row.get(ax, PROJECTION_DEFAULT_CELL))
     return out
+
+
+TEMPERAMENT_AXIS = "deontological_instrumental"
+# The one axis a territory's temperament is read on: `-` is the deontological pole (*"will not take a
+# disagreeable act even for a good outcome"*) and `+` the instrumental one (*"the outcome justifies the
+# means"*), per `references/descriptor_registry.yaml: axis_roster`. A NAME of a roster member, checked at
+# load by `temperament_pursuits` (a rename refuses there), not a game value.
+
+
+def temperament_pursuits(alpha: float, beta: float) -> dict:
+    """A TERRITORY'S TEMPERAMENT AS A PURSUIT VECTOR, `{pursuit: weight}` over the whole roster. THE ONE OWNER
+    of SE-06's translation (`cohorts.yaml: temperaments:`, read by `harness/populated.py::seat_cohorts`).
+
+    The source gives a territory two scalars: `alpha`, the weight on OUTCOMES, and `beta`, the weight on
+    CONDUCT. They are the weights on the two poles of `TEMPERAMENT_AXIS`, so a pursuit's raw weight is its
+    projection `d_p` on that axis (`tables.pursuit_projection`) read on the pole it points to:
+    `alpha * max(0, d_p) + beta * max(0, -d_p)`. A pursuit with `d_p == 0` takes 0 and stays in the vector
+    (the full roster, as the cast's rows are, IN-64).
+
+    THE NORMALISATION, the translation's one other free choice: the weights are divided by their sum, so the
+    vector totals 1. The scalars carry a ratio of two weights, not an intensity, and the cast's own rows total
+    0.8 to 1.5 (`references/npc_registry.yaml`), so a total of 1 sits in the range the chooser already reads
+    and no magnitude is invented for a population. The cast's rows are not scaled by this: it is the
+    cohort's total only. A territory whose raw weights are all zero (`alpha == beta == 0`) refuses.
+
+    [ASSUMPTION; medium; Jordan to correct; revert: delete `temperaments:` from `cohorts.yaml`.] The projection
+    cells it reads are `PURSUIT_PROJECTION`'s, so a re-celled pursuit moves the vector with them."""
+    from .verbs import PURSUIT_PROJECTION
+    require_member(TEMPERAMENT_AXIS, PURSUIT_AXES, f"temperament axis {TEMPERAMENT_AXIS!r} is not on the pursuit_axes roster",
+                   "data/pursuits.py::TEMPERAMENT_AXIS", "SE-06 reads a territory's temperament on one axis")
+    raw: dict = {}
+    for p in sorted(PURSUITS):
+        d = float(PURSUIT_PROJECTION[p].get(TEMPERAMENT_AXIS, 0.0))
+        raw[p] = alpha * max(0.0, d) + beta * max(0.0, -d)
+    total = sum(raw.values())
+    if not total:
+        raise Unspecified(
+            f"temperament alpha={alpha!r}, beta={beta!r} gives every pursuit weight 0", "engine/season/cohorts.yaml",
+            needs="alpha and beta not both 0", law="SE-06 -- a population with no direction has nothing to normalise")
+    return {p: w / total for p, w in raw.items()}
 
 
 _AXES = tuple(sorted(PURSUIT_AXES))
