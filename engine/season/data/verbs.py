@@ -737,7 +737,7 @@ def _load_verb_table() -> dict:
         #
         # (1) IT IS REQUIRED. A row without it is refused at load, so a verb cannot arrive
         #     carrying no declaration. `none` is how a row says the good accrues to no person the
-        #     Candidate holds; a BLANK would say the same thing to `benefits_me` and nothing at
+        #     Candidate holds; a BLANK would say the same thing to `beneficiary_of` and nothing at
         #     all to a reader, which is the state `requires_typed_note` already exists to end.
         if "beneficiary" not in r:
             raise SystemExit(

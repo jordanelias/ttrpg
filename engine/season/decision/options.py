@@ -987,8 +987,8 @@ def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"
     ⚠ S5 (round-1 `01_THE_BUILD_ORDER.md`, row S5): this widening adds no fifth carrier.
     `beneficiary_kinds` (`rosters.yaml`) stays four members (`actor, subject, to, none`) --
     CAT-2 closed the beneficiary as a STATIC verb-table column resolving to a carrier the
-    Candidate already holds, never a new operand name, so `benefits_me(c)` inherits nothing new
-    to read from this branch.
+    Candidate already holds, never a new operand name, so `beneficiary_of(p, c)` inherits nothing
+    new to read from this branch.
 
     ⚠ THE REFERENT IS WORLD-SOURCED, AND THAT IS §F1'S OWN SHAPE RATHER THAN A WIDENING OF IT.
     Raised by the `W-C` adversarial pass and closed here rather than escalated, because it is
@@ -1346,7 +1346,7 @@ def _pair(told: list[Claim], own: list[Claim], key: Callable[[Claim], Any],
 
 
 def standing_of(p: Person, fx: "Fixtures") -> int:
-    """S18.2's second scalar, PERSON-SIDE, as a fixed-point int on `condition_scale` (S48).
+    """S18.2's scalar, PERSON-SIDE, as a fixed-point int on `condition_scale` (S48).
 
         standing(p) = gap( told_by claims about p , p's own firsthand claims about p )
 

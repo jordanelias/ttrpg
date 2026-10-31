@@ -116,7 +116,6 @@ from ..state.carriers import subject_of
 from ..state.ids import H, draw_factory
 from ..state.world import World
 from . import governance_spine, populated
-from . import probes as P
 from .corpus_run import attempts, graded_loss, graded_losses, unrowed_acts
 from .decision_spread import goal_class
 
@@ -529,7 +528,7 @@ def instrumented_season(w, seasons: int) -> dict:
     marks: list = []                     # per season, at its START: (log length, seats), for the death census
     for _ in range(seasons):
         marks.append((len(w.log), seats(w)))
-        d.season(watched_choose, question=None, subsistence=P.SUBSIST,
+        d.season(watched_choose, question=None,
                  contest_max_depth=fx.get("contest_max_depth"))
 
     attempted: dict = defaultdict(Counter)

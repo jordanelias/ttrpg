@@ -197,7 +197,7 @@ def test_an_eleven_actor_case_runs(monkeypatch):
     ch = C.make_chooser(w.fixtures, mint, verbs=C.resolvable_verbs(),
                         draw=C.draw_factory(w.world_seed, lambda: w.tick))
     for _ in range(C.seasons_for(case)):
-        d.season(ch, question=None, subsistence=C.P.SUBSIST,
+        d.season(ch, question=None,
                  contest_max_depth=w.fixtures.get("contest_max_depth"))
     actors = {a.actor for a in d.resolved}
     assert len(actors) > 3 and actors <= set(w.persons) | {f"p_{c}" for c in "abcdefghijk"}, actors

@@ -3,8 +3,8 @@
 ED-IN-0293's headline expectation (*"I expect all of this to end up generating unique decisions"*) as
 three readings and three arms. Every reading that BUILDS A REALM lives here; `harness/conviction_spread.py`
 is not extended, because it declares that it *"MEASURES THE TABLE, NOT A RUN"* (`:34-37`) and builds no
-world. The score's terms have ONE owner, `decision/choose.py::score_terms` -> `(pursuit, stance,
-urgency)`; this module calls it (through the module, so a rebind of it reaches every reading) and never
+world. The score's terms have ONE owner, `decision/choose.py::score_terms` -> `(pursuit, stance)`;
+this module calls it (through the module, so a rebind of it reaches every reading) and never
 re-derives a term.
 
     python -m engine.season.harness.decision_spread --persons
@@ -61,12 +61,11 @@ THE DECIDING TERM (`attribute_top`), in the order it is tested:
                  stays one; `draw_kind` splits it: `tie` (the draw ordered a tie) against `outvoted` (the
                  draw overrode a leader). Both modes print the split, the outvoted margins' median beside
                  `choice_temperature`, and how many readings (and persons) had EVERY candidate score 0
-                 once the candidate-independent `urgency` term is set aside (`field_zero`);
+                 (`field_zero`);
   2. `tiebreak`  the top two scores are within `EPS` at temperature 0 (`(verb, subject)` ordered them);
   3. otherwise the TERMS whose removal leaves the top no longer strictly ahead of the field (it changes, or
-     collapses into a tie): `pursuit`, `stance`, `urgency`, joined by `+`; `overdetermined` if no single
-     term's removal does (two terms each separate it alone). Urgency has no candidate in it and can
-     never decide.
+     collapses into a tie): `pursuit`, `stance`, joined by `+`; `overdetermined` if no single
+     term's removal does (two terms each separate it alone).
 So the attribution CAN say "no state decided": two persons with nothing separating their candidates read
 `draw` or `tiebreak`, never `pursuit`.
 
@@ -107,12 +106,11 @@ from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries import world_q
 from ..state.carriers import Question, subject_of
 from ..state.ids import H, draw_factory
-from . import probes as P
 from .populated import build_realm
 
 # [JUSTIFIED: a float-tie tolerance for the attribution (two scores within it are a tie), an instrument constant and not a game number]
 EPS = 1e-9
-TERMS = ("pursuit", "stance", "urgency")
+TERMS = ("pursuit", "stance")
 # [JUSTIFIED: the instrument's near-identical bar for a cosine between two persons' vectors (IN-64's EXIT 'pairs above 0.99'), a reading threshold and not a game number]
 COSINE_HIGH = 0.99
 
@@ -179,7 +177,7 @@ def null_alignment():
 # THE ATTRIBUTION
 
 
-def attribute_top(p, cands: list, fx, draw=None, subsistence: float = 0.0) -> dict:
+def attribute_top(p, cands: list, fx, draw=None) -> dict:
     """Rank `cands` for `p` as the chooser does and say WHICH TERM decided the top (the module docstring
     lists the tests in order). Returns `{top, decider, margin, scores, terms, draw_kind, field_zero}`;
     `scores` and `terms` are parallel to `cands`. `cands` empty -> `top` None, `decider` `none`; one
@@ -189,15 +187,15 @@ def attribute_top(p, cands: list, fx, draw=None, subsistence: float = 0.0) -> di
     decided nothing; `tie` when the top two scores are within `EPS` and `choice_temperature` > 0 (the draw
     ordered them, and the sampled top is one of the tied); `outvoted` when the sampler's top is NOT the
     strict score top (the draw overrode a score that had a leader). `field_zero` is true when every
-    candidate's score, less the candidate-independent `urgency` term, is within `EPS` of 0: nothing the
+    candidate's score is within `EPS` of 0: nothing the
     person holds scores any candidate, so no state decided the top (the vectorless)."""
     if not cands:
         return {"top": None, "decider": "none", "margin": None, "scores": [], "terms": [],
                 "draw_kind": None, "field_zero": False}
-    memo = CH.deliberation_memo(p, subsistence, fx)
+    memo = CH.deliberation_memo(p, fx)
     terms = [CH.score_terms(p, c, fx, memo) for c in cands]
-    scores = [t[0] + t[1] + t[2] for t in terms]
-    field_zero = all(abs(s - t[2]) <= EPS for s, t in zip(scores, terms))
+    scores = [t[0] + t[1] for t in terms]
+    field_zero = all(abs(s) <= EPS for s in scores)
     if len(cands) == 1:
         return {"top": cands[0], "decider": "sole", "margin": None, "scores": scores, "terms": terms,
                 "draw_kind": None, "field_zero": field_zero}
@@ -390,7 +388,7 @@ def read_decisions(w) -> dict:
         order = sorted(common, key=lambda k: (k[0], k[1] or ""))
         for pid in keyed:
             cands = [keyed[pid][k] for k in order]
-            r = attribute_top(w.persons[pid], cands, fx, draw, P.SUBSIST(w.persons[pid], w))
+            r = attribute_top(w.persons[pid], cands, fx, draw)
             deciders[r["decider"]] += 1
             tally_split(split, pid, r)
             tally_split(total, pid, r)
@@ -450,7 +448,7 @@ def play_season(w, seasons: int = 1) -> dict:
             # the chooser's own opening set, narrowed as it narrows, scored again by `attribute_top` (pure in
             # its inputs: the draw is keyed by the candidate, not consumed); nothing is steered
             cands = [c for c in opening_set(p, v, q, w.fixtures) if c.verb in foldable]
-            tally_split(split, p.id, attribute_top(p, cands, w.fixtures, draw, s.subsistence))
+            tally_split(split, p.id, attribute_top(p, cands, w.fixtures, draw))
             key = (q.source, goal_class(q))
             answered[key] += 1
             for sc in scenes:
@@ -459,7 +457,7 @@ def play_season(w, seasons: int = 1) -> dict:
         return scenes
 
     for _ in range(seasons):
-        d.season(watched, question=None, subsistence=P.SUBSIST,
+        d.season(watched, question=None,
                  contest_max_depth=w.fixtures.get("contest_max_depth"))
     multisets: dict = {}
     per_act: Counter = Counter()
@@ -523,7 +521,7 @@ def print_split(sp: dict, tau: float) -> None:
     med = _fmt(sp["outvoted_median_margin"])
     print(f"  the draw's {sp['tie'] + sp['outvoted']} tops, split: tie {sp['tie']}, outvoted {sp['outvoted']}; "
           f"outvoted margins' median {med} against choice_temperature {tau:g}")
-    print(f"  every candidate scores 0 (urgency set aside): {sp['field_zero']} of {sp['read']} readings, "
+    print(f"  every candidate scores 0: {sp['field_zero']} of {sp['read']} readings, "
           f"{sp['zero_persons']} distinct persons")
 
 

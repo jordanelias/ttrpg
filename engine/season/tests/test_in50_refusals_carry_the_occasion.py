@@ -183,7 +183,7 @@ def _play(case):
     ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                       draw=draw_factory(w.world_seed, lambda: w.tick))
     for _ in range(C.seasons_for(case)):
-        d.season(ch, question=None, subsistence=C.P.SUBSIST,
+        d.season(ch, question=None,
                  contest_max_depth=w.fixtures.get("contest_max_depth"))
     return w, d
 

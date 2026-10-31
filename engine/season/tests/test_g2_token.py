@@ -337,7 +337,7 @@ def test_g2_deliberate_mutates_no_store_by_any_route(monkeypatch):
     for w in (P.tiny_world(), HL.build_world(0)):
         d, ch = SeasonDriver(w), _chooser(w)
         for _ in range(2):
-            d.season(ch, question=None, subsistence=P.SUBSIST,
+            d.season(ch, question=None,
                      contest_max_depth=w.fixtures.get("contest_max_depth"))
     # THE FLOOR: two worlds x two seasons x `scene_budget` rounds, and DELIBERATE must have
     # returned acts -- a map that returned nothing proves nothing about a map that decides.
@@ -355,11 +355,11 @@ def test_g2_deliberate_mutates_no_store_by_any_route(monkeypatch):
         "the plant did not leave an unhomed Tenure; the route is not being exercised")
     w.frozen = True
     d2 = SeasonDriver(w)
-    # ⚠ MERGE, 2026-09-27 (ED-IN-0206, main): `deliberate` now takes `questions` as its fourth
+    # ⚠ MERGE, 2026-09-27 (ED-IN-0206, main): `deliberate` now takes `questions` as its third
     # positional argument -- the per-person projection the driver builds at barrier 2 and used to
     # compute inside `deliberate` itself. Built the same way `season()` builds it, so the planted
     # call exercises the real shape rather than an empty stand-in.
-    d2.deliberate(_chooser(w), None, P.SUBSIST, d2._questions_at_barrier())   # the spy asserts no store moved
+    d2.deliberate(_chooser(w), None, d2._questions_at_barrier())   # the spy asserts no store moved
     assert "t_g2_orphan" in [t.id for t in w._unowned], "DELIBERATE homed the Tenure"
     assert checked["calls"] == season_calls + 1, "the planted call did not pass through the spy"
 

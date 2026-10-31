@@ -139,16 +139,6 @@ def plant_cohort(w: World, pid: str, rung: str, weight: int = 2, name: str = "")
     return pid
 
 
-# The instrument's own subsistence model, INJECTED (S42.2.1) rather than invented inside the
-# shape. No in-chain document supplies one; this is a harness fixture and is named as such.
-def SUBSIST(p: Person, w: World) -> int:
-    scale = w.fixtures.get("condition_scale")
-    home = world_q.parent_of(w, p.id)
-    if home is None or home not in w.rungs:
-        return 0
-    return min(scale, sum(w.rungs[home].stores.values()) * scale // max(1, p.weight))
-
-
 def NOCHOOSE(p, v, s, ask_budget):
     return []
 
@@ -215,7 +205,7 @@ def _run_d(w: World, choose=NOCHOOSE, n: int = 1, **kw):
     RESOLVE. `driver.resolved` is an observation surface and decides nothing."""
     d = SeasonDriver(w)
     for _ in range(n):
-        d.season(choose, question=None, subsistence=SUBSIST, **kw)
+        d.season(choose, question=None, **kw)
     return d
 
 
@@ -225,7 +215,7 @@ def _run(w: World, choose=NOCHOOSE, n: int = 1, **kw):
     d = SeasonDriver(w)
     out = None
     for _ in range(n):
-        out = d.season(choose, question=None, subsistence=SUBSIST, **kw)
+        out = d.season(choose, question=None, **kw)
     return out
 
 
@@ -624,14 +614,14 @@ def p12():
 @probe("P13", "a person acts on a need with no stored need field", "S18.2", by="probe-model",
        tests="a character's needs must drive their choices")
 def p13():
-    w = tiny_world()
-    p = w.persons["p_low"]
-    val = SUBSIST(p, w)
-    assert isinstance(val, int) and val > 0
-    return ("PASS-WITH-A-DISCLOSURE: `needs` is a Sensation plus a Query, stored nowhere. But the "
-            "subsistence FORMULA is the instrument's, injected (S42.2.1): no in-chain document "
-            "supplies one, and S10.4 makes MatterKind an OPEN registry, so summing kinds as if "
-            "fungible is a model choice the design has not made")
+    import dataclasses
+    stored = [f.name for f in dataclasses.fields(Person) if "need" in f.name or "subsist" in f.name]
+    assert not stored, f"a stored need field has appeared on Person: {stored}"
+    return ("PASS-WITH-A-DISCLOSURE: a need is a Query (`world_q.hunger`, "
+            "`world_q.demanded` at a settlement) plus the shortfall claims a person holds "
+            "(`decision/options.py::_from_shortfall_claim`), stored on no `Person` field. REM-44 deleted the injected subsistence formula that fed "
+            "`Sensation` a number; no in-chain document supplied one, and S10.4 makes MatterKind an "
+            "OPEN registry, so summing kinds as if fungible is a model choice the design has not made")
 
 
 @probe("P14", "standing is computed", "S18.2", by="construction",
@@ -1054,9 +1044,9 @@ def p31():
     # `W17`: `choose` returns SCENES now, so the pick is the first interaction of
     # the first scene. The default policy fills scenes in score order, so that is
     # still the highest-scoring candidate.
-    principled = inner(p, v, Sensation(0), ask)[0].acts[0].verb
+    principled = inner(p, v, Sensation(), ask)[0].acts[0].verb
     p.pursuits = {_pursuit("stability"): -0.9}  # [JUSTIFIED: the sign flip is the test; see the line above]
-    inverted = inner(p, v, Sensation(0), ask)[0].acts[0].verb
+    inverted = inner(p, v, Sensation(), ask)[0].acts[0].verb
     assert principled != inverted, (
         f"flipping the sign of the only conviction changed nothing: both chose {principled!r}. "
         "`pursuits` is a dead carrier -- the exact defect #353 :739-744 names")
@@ -1131,7 +1121,7 @@ def p35():
     raise Unspecified(
         "an audience-scoped second standing", "S18.2",
         needs="a second standing scalar, or an owner for an audience-scoped one",
-        law="S18.2 -- Sensation is EXACTLY TWO FLOATS and S46.1 makes widening it structural in Godot ('nobody can add a third field to Vector2'). A second, audience-scoped standing has NO CARRIER and S22 gives NO OWNER for one -- and the first standing does not compute either (see P14)",
+        law="04 §B.10 (REM-44, ED-IN-0300; S18.2 and S46.1 predate it) -- Sensation is ONE scalar, `standing`, which `sense()` computes (P14), and 04 grades widening it STRUCTURAL in Godot. A second, audience-scoped standing has NO CARRIER and S22 gives NO OWNER for one",
     )
 
 
@@ -2205,7 +2195,7 @@ def a14():
                 return [Act_(w, p, "utter")]
             return []
 
-        d.season(choose, question=None, subsistence=SUBSIST)
+        d.season(choose, question=None)
         return seen
 
     acted, control = p_mid_ledger_by_round(True), p_mid_ledger_by_round(False)
@@ -2411,7 +2401,7 @@ def a28():
     def choose(p, v, s, ask_budget):
         return [Act_(w, p, "speak")] if p.id == "p_low" else []
     for _ in range(4):
-        d.season(choose, None, SUBSIST)
+        d.season(choose, None)
     ids = {e.id for e in w.log}
     acts = {a.id for a in w.acts}
     assert len(ids) == len(w.log)

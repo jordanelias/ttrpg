@@ -173,7 +173,7 @@ def test_lb1_bo10_gate_closed_by_in11_the_utterers_hold_report_not_repair():
             formed.update((p.id, c.subject) for c in opening_set(p, v, q, w.fixtures) if c.verb == "commit")
         return chooser(p, v, s, ask_budget)
 
-    d.season(watched, question=None, subsistence=P.SUBSIST,
+    d.season(watched, question=None,
              contest_max_depth=w.fixtures.get("contest_max_depth"))
     kinds = Counter(e.kind for e in w.log)
 
@@ -790,7 +790,7 @@ def test_lb3c_death_at_body_zero_closes_every_tenure_through_the_same_owner_as_k
 # refuses a row without one), the declaration is CARRIABLE by the row that makes it, and the
 # resolution RUNS on candidates the engine actually forms. The third is the one that could have
 # been vacuous -- a column that resolves to nothing is CAT-2's dead option 1 relocated, and
-# `benefits_me` would read 0.0 forever with every test green.
+# `beneficiary_of` would read None forever with every test green.
 # =================================================================================================
 
 
@@ -990,7 +990,7 @@ def test_lb6d_none_and_an_unbound_carrier_are_different_answers():
     the verb's answer; an unbound carrier is a hole. The ROW discriminates them, which is why the
     resolver returns an id rather than a tri-state."""
     from ..data.verbs import VERB_TABLE
-    from ..decision.choose import beneficiary_of, benefits_me
+    from ..decision.choose import beneficiary_of
     from ..state.carriers import Candidate, Person
 
     p = Person(id="p1")
@@ -1004,8 +1004,6 @@ def test_lb6d_none_and_an_unbound_carrier_are_different_answers():
 
     bound = Candidate(verb="transfer", subject="r1", operands={"to": "p3"})
     assert beneficiary_of(p, bound) == "p3"
-    assert benefits_me(p, bound) == 0.0
-    assert benefits_me(p, Candidate(verb="requisition", subject="r1")) == 1.0
 
 
 def test_lb6d_the_column_resolves_on_candidates_the_engine_actually_forms():
@@ -1014,18 +1012,11 @@ def test_lb6d_the_column_resolves_on_candidates_the_engine_actually_forms():
     Every test above reads the table or a hand-built Candidate. This one runs a season, takes
     every Candidate the deliberation ACTUALLY forms, and resolves each against its row. The
     failure it excludes is the one that matters: a column that declares carriers real candidates
-    never hold resolves to `None` throughout, `benefits_me` reads 0.0 for everybody, and every
+    never hold resolves to `None` throughout, `beneficiary_of` names nobody, and every
     other assertion in this block still passes.
 
     IT ASSERTS THAT IT ASSERTED (§0.1 pt 2) -- the examined count is asserted non-trivial, so a
-    run that formed no candidates fails here instead of passing vacuously.
-
-    ⚠ THE CONTROL ON ITS OWN HEADLINE, because a number without one is not a measurement (§0.1
-    pt 4): roughly HALF of all candidates carry THE ACTOR AS THEIR OWN SUBJECT -- `opening_set`
-    offers every person themselves as a referent for every verb. So the count of candidates
-    reading `benefits_me == 1.0` is inflated by the aperture's shape and must not be read as
-    *"persons are self-interested two thirds of the time"*. That is a property of the candidate
-    former, which this item does not touch and this test does not assert a bound on."""
+    run that formed no candidates fails here instead of passing vacuously."""
     from ..data.verbs import VERB_TABLE
     from ..decision import choose as _choose
     from ..harness import populated
@@ -1074,12 +1065,6 @@ def test_lb6d_the_column_resolves_on_candidates_the_engine_actually_forms():
     assert resolved > len(seen) // 4, (
         f"only {resolved} of {len(seen)} candidates resolve any beneficiary -- the column is "
         "declared but inert, which is the failure this test exists to see")
-
-    # The term SPANS its codomain. A `benefits_me` that is constant across candidates is inert by
-    # construction (`urgency`'s own note: "a term constant across candidates is INERT BY
-    # CONSTRUCTION -- the dead-carrier complaint"), whatever `orient` later multiplies it by.
-    values = {_choose.benefits_me(p, c) for p, c in seen}
-    assert values == {0.0, 1.0}, f"`benefits_me` never varied across a season: {values}"
 
 # LB-6e -- `(Person, scar[axis])`, THE MORAL LAYER'S MISSING MOTION (§54 item 21, `H-128`)
 #
@@ -2970,7 +2955,7 @@ def test_h2_survivors_score_exactly_as_they_did_ungated():
         _choose._sample_order = spy
         try:
             _choose.make_chooser(fx, lambda a, b, c: f"{a}:{b}:{c}")(
-                p, v, Sensation(0), lambda: 1)
+                p, v, Sensation(), lambda: 1)
         finally:
             _choose._sample_order = inner
         return seen

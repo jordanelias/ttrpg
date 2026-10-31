@@ -46,7 +46,7 @@ from ..data.verbs import (
 from .. import decision
 from ..decision import (
     containing_rung_of, make_chooser, opening_set, operands_for, pack_scenes,
-    person_side_eligible, store_kind_of, urgency, view_ids,
+    person_side_eligible, store_kind_of, view_ids,
 )
 from ..epistemic import (
     CHANNEL_PREDICATES, SEEN_PREDICATE, act_refs, belief_contradicts, claim_subjects,
@@ -331,10 +331,10 @@ def test_d7_sense_does_not_return_a_constant_standing():
     a raise and a hardcoded 0 are both constants, and only one of them was ever the defect."""
     w = _w()
     p = w.persons["p_low"]
-    seen = {sense(p, w, P.SUBSIST).standing}
+    seen = {sense(p, w).standing}
     p.ledger.append(Claim("c_a", p.id, p.id, "grade", "warden", 0, "firsthand", 100, "own"))
     p.ledger.append(Claim("c_b", p.id, p.id, "grade", "warden", 0, "told_by", 100, "own"))
-    seen.add(sense(p, w, P.SUBSIST).standing)
+    seen.add(sense(p, w).standing)
     assert len(seen) > 1, (
         f"standing returned {seen.pop()} for two materially different ledgers — it is a constant, "
         "which is D7 exactly, whether the constant is 0 or a raise")
@@ -444,7 +444,7 @@ def test_d9d_the_frozen_world_is_read_not_merely_written():
     nothing ever read it."""
     with pytest.raises(Forbidden):
         d = SeasonDriver(_w())
-        d.deliberate(lambda p, v, s, ask_budget: [], None, P.SUBSIST, d._questions_at_barrier())
+        d.deliberate(lambda p, v, s, ask_budget: [], None, d._questions_at_barrier())
 
 
 def test_d9e_the_rung_guard_is_a_whitelist_not_a_blacklist():
@@ -731,7 +731,7 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     that 24 of 38 verbs are UNTYPED and can carry no operand at all. A STATIC column escapes that
     only while it declares carriers the row can actually hold, so `beneficiary: to` on an untyped
     verb is the same dead reference wearing the new column -- it would resolve to `None` for every
-    candidate ever formed, `benefits_me` would read 0.0 for everybody, and every other assertion
+    candidate ever formed, `beneficiary_of` would read None for everybody, and every other assertion
     about the column would stay green. The raise makes that unwritable at load instead of
     unobservable at run.
     ⚠ 34 -> 35, THE SAME ROW CORRECTED, 2026-09-18. Invariant 13's ROSTER check went through
@@ -975,7 +975,7 @@ def test_choose_receives_no_world():
     # what to leave undone". Pinning the literal 4-ary string was how rev 2 locked in a
     # deviation as an invariant, so this pins the PROPERTY instead.
     assert "choose(p, v, s, ask_budget)" in src and "choose(w" not in src
-    assert "sense(p, w, subsistence)" in src, "DELIBERATE must be fed a Sensation, per S26"
+    assert "sense(p, w)" in src, "DELIBERATE must be fed a Sensation, per S26"
 
 
 def test_a_view_raises_on_any_world_collection():
@@ -996,16 +996,15 @@ def test_sensation_is_constructed_by_the_loop_and_standing_raises_on_read():
     was routed around, and a test pinned the deviated call as the invariant. The type is now
     built every season and `standing` raises AT THE POINT OF USE."""
     w = _w()
-    sn = sense(w.persons["p_low"], w, P.SUBSIST)
-    assert isinstance(sn, Sensation) and isinstance(sn.subsistence, int)
-    # BOTH scalars now (`H-29`). §18.2 says EXACTLY TWO, and the loop builds both.
-    assert isinstance(sn.standing, int) and len(tuple(sn)) == 2, tuple(sn)
-    # The refusal survives where it is still true: a Sensation built with ONE scalar is half a
-    # Sensation, and reading the missing half must refuse rather than answer 0.
+    sn = sense(w.persons["p_low"], w)
+    # ONE scalar since REM-44 deleted `subsistence`: the loop builds `standing` (`H-29`).
+    assert isinstance(sn, Sensation) and isinstance(sn.standing, int)
+    # The refusal survives where it is still true: a Sensation built without `standing` is half a
+    # Sensation, and reading the missing scalar must refuse rather than answer 0.
     with pytest.raises(Unspecified):
-        _ = Sensation(5).standing
+        _ = Sensation().standing
     with pytest.raises(AttributeError):
-        sn.third = 3
+        sn.second = 3
 
 
 def test_a_proposition_cannot_be_edited():
@@ -1394,10 +1393,10 @@ def test_r3_the_l5_crossing_emits_a_witnessable_event():
     crossed_at = lambda: [e for e in w.log if e.kind == "condition.band_crossed"
                           and anchor_of(w, e) == site.id]
     for _ in range(3):
-        d.season(P.NOCHOOSE, None, P.SUBSIST)
+        d.season(P.NOCHOOSE, None)
     assert not crossed_at(), "no band was crossed yet"
     for _ in range(20):
-        d.season(P.NOCHOOSE, None, P.SUBSIST)
+        d.season(P.NOCHOOSE, None)
     mine = crossed_at()
     assert mine
     ev = mine[0]
@@ -1417,7 +1416,7 @@ def test_r3_witness_fans_to_everyone_as_specified():
         return [P.Act_(w, p, "speak")] if p.id == "p_low" else []
     def effect(w, a):
         return [P.Ev(w, a.actor, "a.shout", a.actor, [ROOT])]
-    r = d.season(choose, None, P.SUBSIST)
+    r = d.season(choose, None)
     assert r["deposits"] >= len(w.persons), (r["deposits"], len(w.persons))
 
 
@@ -1431,7 +1430,7 @@ def test_r3_choose_asks_its_own_budget():
     def choose(p, v, s, ask_budget):
         asked.append(ask_budget())
         return []
-    SeasonDriver(w).season(choose, None, P.SUBSIST)
+    SeasonDriver(w).season(choose, None)
     assert asked, "no person was asked for a budget at all"
     # ⚠ W5 REPOINTED THIS ASSERTION, AND THE OLD ONE WAS THE DEFECT. It read
     # `all(n == w.fixtures.get("scene_budget") for n in asked)` — i.e. it PINNED A FLAT BUDGET,
@@ -2739,41 +2738,6 @@ def test_w5_q_has_a_producer_across_both_sources():
     assert len(seen) == 2, seen
 
 
-def test_w5_f2s_third_term_cannot_change_any_decision():
-    """A DEFECT IN §F2, FOUND BY BUILDING IT, and reported rather than smoothed away.
-
-    §F2 scores `Σ_axis conviction·alignment(c.verb, axis) + stance_toward(c.subject) +
-    urgency(sensation.subsistence)`. The third term HAS NO `c` IN IT, so it is added identically
-    to every candidate and cannot move a ranking `choose` then slices. It is inert BY
-    CONSTRUCTION — the dead-carrier shape #353 `:739-744` names, arriving in a scoring function
-    instead of in a field.
-
-    This asserts the inertness rather than describing it, so if a later revision makes urgency
-    candidate-dependent the test goes red and the finding is retired by evidence."""
-    w = P.tiny_world()
-    p = w.persons["p_mid"]
-    pr = Proposition("pr_u", "OUGHT", "rec_writ", "x", True, 0)
-    w.propositions[pr.id] = pr
-    w.add_tenure(Tenure("t_u", p.id, pr.id, "commit", since=0))
-    q = questions_for(w, p)[0]
-    v = View(p.id, [], w.fixtures.get("view_k"), q)
-    ch = make_chooser(w.fixtures, lambda a, b, c: f"{a}:{b}:{c}",
-                         draw=draw_factory(w.world_seed, lambda: w.tick))
-    # `W17`: scenes, so flatten to the interactions inside them.
-    picks = {s: [a.verb for sc in ch(p, v, Sensation(s), lambda: 3) for a in sc.acts]
-             for s in (0, 500, 1000, 10 ** 6)}
-    distinct = {tuple(x) for x in picks.values()}
-    assert len(distinct) == 1, (
-        f"urgency moved the decision: {picks}. If that is now true the third term is no longer "
-        "inert and this finding about §F2 should be retired — but check it is candidate-DEPENDENT "
-        "and not merely numeric noise before doing so.")
-    # Only the inequality is asserted, so any pair that differs would serve.
-    # [JUSTIFIED: two far-apart inputs, to prove `urgency` reads its argument at all]
-    assert urgency(1000, w.fixtures) != urgency(0, w.fixtures), (
-        "urgency returns a constant, which would make this test vacuous — it must actually vary "
-        "with subsistence for the inertness claim to be about §F2 rather than about a stub")
-
-
 def test_u4_the_choice_is_sampling_and_the_argmax_is_its_zero_temperature_control():
     """`U4` / `H-96` — THE UNIT'S OWN ACCEPTANCE, and it did not exist until this test.
 
@@ -2807,7 +2771,7 @@ def test_u4_the_choice_is_sampling_and_the_argmax_is_its_zero_temperature_contro
         out = []
         for sd in seeds:
             ch = make_chooser(fx, mint, draw=draw_factory(sd, lambda: 0))
-            scenes = ch(p, v, Sensation(0), lambda: 3)
+            scenes = ch(p, v, Sensation(), lambda: 3)
             acts = [a.verb for sc in scenes for a in sc.acts]
             out.append(acts[0] if acts else None)
         return out
@@ -3380,7 +3344,7 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
         # (`candidate_pursuit_cells.md` §4.1); the claim below is unchanged.
         for sign in (0.9, -0.9):
             p.pursuits = {"stability": sign}
-            picked = ch(p, v, Sensation(0), lambda: 1)[0].acts[0].verb
+            picked = ch(p, v, Sensation(), lambda: 1)[0].acts[0].verb
             # ⚠ THE PROJECTION IS TAKEN AT UNIT WEIGHT, NOT AT THE PERSON'S. A first port of this
             # line used `decision.project(p)`, which already carries `sign` — so `cell` came back
             # as the person's own SCORE and `cell * sign` double-counted the sign, firing at
@@ -3443,7 +3407,7 @@ def test_t2_one_rebind_moves_score_and_gate(monkeypatch):
             return inner(ranked, score, person, fx_, draw)
         monkeypatch.setattr(_choose, "_sample_order", spy)
         try:
-            make_chooser(fx0, lambda a, b, c: f"{a}:{b}:{c}")(p, v, Sensation(0), lambda: 1)
+            make_chooser(fx0, lambda a, b, c: f"{a}:{b}:{c}")(p, v, Sensation(), lambda: 1)
         finally:
             monkeypatch.setattr(_choose, "_sample_order", inner)
         return {k: s for k, s in seen.items() if k[0] == v0}
@@ -3725,7 +3689,7 @@ def test_w17_the_budget_bounds_scenes_and_the_interaction_bound_is_separate():
 
     # ---- over budget ON SCENES ----
     with pytest.raises(Forbidden) as over:
-        SeasonDriver(_1p(_w())).season(_once(scenes(b + 1, 1)), None, P.SUBSIST)
+        SeasonDriver(_1p(_w())).season(_once(scenes(b + 1, 1)), None)
     # THE PROPERTY, not the message (G3). `ShapeGap` stores `where`, so the two refusals are
     # distinguishable by their LAW rather than by a word in their prose — and a body that still
     # counted acts would print the word "scenes" just as happily.
@@ -3733,7 +3697,7 @@ def test_w17_the_budget_bounds_scenes_and_the_interaction_bound_is_separate():
     assert "scene" in str(over.value).lower(), f"the message lost its unit: {over.value}"
 
     # ---- and the SAME NUMBER of interactions, packed into a lawful number of scenes, PASSES ----
-    SeasonDriver(_1p(_w())).season(_once(scenes(b, cap)), None, P.SUBSIST)   # must not raise
+    SeasonDriver(_1p(_w())).season(_once(scenes(b, cap)), None)   # must not raise
     assert b * cap > b + 1, (
         f"the fixture cannot demonstrate the ruling: {b} scenes x {cap} interactions is not more "
         f"than the {b + 1} acts the first arm refused, so 'more interactions, fewer scenes' is "
@@ -3741,7 +3705,7 @@ def test_w17_the_budget_bounds_scenes_and_the_interaction_bound_is_separate():
 
     # ---- too many interactions IN ONE scene: a DIFFERENT refusal, with a different law ----
     with pytest.raises(Ungraded) as many:
-        SeasonDriver(_1p(_w())).season(_once(scenes(1, cap + 1)), None, P.SUBSIST)
+        SeasonDriver(_1p(_w())).season(_once(scenes(1, cap + 1)), None)
     assert isinstance(many.value, Ungraded) and not isinstance(over.value, Ungraded), (
         f"the two refusals are the same KIND ({type(over.value).__name__} / "
         f"{type(many.value).__name__}); a swept harness bound is `Ungraded` and a law is not")
@@ -3762,7 +3726,7 @@ def test_w17_the_interaction_bound_flips_across_its_sweep_and_the_flip_is_printe
             return ([Scene("s0", p.id, [P.Act_(w, p, "speak", key=str(j)) for j in range(4)])]
                     if p.id == "p_king" else [])
         try:
-            SeasonDriver(w).season(choose, None, P.SUBSIST)
+            SeasonDriver(w).season(choose, None)
             return "ACCEPTED"
         except Ungraded as e:
             return "REFUSED" if "interactions" in str(e) else f"REFUSED-OTHER: {e}"
@@ -3820,7 +3784,7 @@ def test_w17_the_packing_rule_and_the_extended_cost_are_both_live():
         # `U4`: tau=0 is the ARGMAX control. These arms measure PACKING, so the choice must
         # not be sampled or the shape they compare moves for a reason they do not name.
         f2 = fx.sweep("scene_packing_rule", rule).sweep("choice_temperature", 0)
-        scenes = make_chooser(f2, mint)(p, v, Sensation(0), lambda: 5)
+        scenes = make_chooser(f2, mint)(p, v, Sensation(), lambda: 5)
         counts[rule] = sum(len(sc.acts) for sc in scenes)
         shapes[rule] = [len(sc.acts) for sc in scenes]
         # ⚠ THE GROUPING, NOT THE SHAPE. `by_subject` and `greedy` produce the same SHAPE
@@ -3840,7 +3804,7 @@ def test_w17_the_packing_rule_and_the_extended_cost_are_both_live():
 
     # ---- H-77: `extended` is set, so the cost sweep can move the budget. ----
     f_greedy = fx.sweep("scene_packing_rule", "greedy").sweep("choice_temperature", 0)
-    scenes = make_chooser(f_greedy, mint)(p, v, Sensation(0), lambda: 5)
+    scenes = make_chooser(f_greedy, mint)(p, v, Sensation(), lambda: 5)
     multi = [sc for sc in scenes if len(sc.acts) > 1]
     assert multi, f"no scene carries more than one interaction: {shapes} — `extended` can never " \
                   "be True and H-77's sweep is inert whatever the row says"
@@ -4189,7 +4153,7 @@ def test_w9_check4b_she_returned_at_most_budget_scenes():
                 if p.id == HL.CARIN else [])
 
     with pytest.raises(Ungraded) as caught:
-        SeasonDriver(w2).season(over, None, HL.subsistence)
+        SeasonDriver(w2).season(over, None)
     assert "interactions" in str(caught.value), caught.value
 
 
@@ -4313,7 +4277,7 @@ def _w4_run(seasons: int, seed: int = 0, condition: int | None = None):
     for _ in range(seasons):
         d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                      draw=draw_factory(w.world_seed, lambda: w.tick)),
-                 None, HL.subsistence,
+                 None,
                  contest_max_depth=w.fixtures.get("contest_max_depth"))
     return w
 
@@ -4503,7 +4467,7 @@ def test_w4_h40s_declared_sweep_is_executed_and_its_zero_arm_does_not_fabricate(
         for _ in range(3):
             d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                      draw=draw_factory(w.world_seed, lambda: w.tick)),
-                     None, HL.subsistence,
+                     None,
                      contest_max_depth=w.fixtures.get("contest_max_depth"))
         confs = [c.confidence for p in w.persons.values() for c in p.ledger]
         seen[rate] = (Counter(e.kind for e in w.log)["claim.decayed"], min(confs), max(confs))
@@ -4644,7 +4608,7 @@ def test_calendar_a_forced_corpus_date_fires_emits_and_lands_a_claim():
         ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                           draw=draw_factory(w.world_seed, lambda: w.tick))
         for _ in range(CR.seasons_for(case)):
-            d.season(ch, question=None, subsistence=P.SUBSIST,
+            d.season(ch, question=None,
                      contest_max_depth=w.fixtures.get("contest_max_depth"))
         fired = [e for e in w.log if e.kind == "date.fired"]
         if not fired:
@@ -4680,7 +4644,7 @@ def _w6_run(mode: str, seasons: int = 3, seed: int = 0):
     for _ in range(seasons):
         dep += d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                      draw=draw_factory(w.world_seed, lambda: w.tick)),
-                        None, HL.subsistence,
+                        None,
                         contest_max_depth=w.fixtures.get("contest_max_depth"))["deposits"]
     return w, dep
 
@@ -4775,7 +4739,7 @@ def test_w6_every_named_channel_has_a_predicate_and_they_are_data():
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     for _ in range(2):
         d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
-                     draw=draw_factory(w.world_seed, lambda: w.tick)), None, HL.subsistence,
+                     draw=draw_factory(w.world_seed, lambda: w.tick)), None,
                      contest_max_depth=w.fixtures.get("contest_max_depth"))
     everyone = list(w.persons)
     fires = {c: sum(1 for e in w.log if any(fn(w, e, pid) for pid in everyone))
@@ -4876,7 +4840,7 @@ def _r7_run(mode: str, seasons: int = 2, seed: int = 0):
     for _ in range(seasons):
         dep += d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                      draw=draw_factory(w.world_seed, lambda: w.tick)),
-                        None, HL.subsistence,
+                        None,
                         contest_max_depth=w.fixtures.get("contest_max_depth"))["deposits"]
     return w, d, dep
 
@@ -4926,7 +4890,7 @@ def _r7_tiny_run(mode: str, seasons: int = 2, seed: int = 0):
     for _ in range(seasons):
         dep += d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                      draw=draw_factory(w.world_seed, lambda: w.tick)),
-                        None, P.SUBSIST,
+                        None,
                         contest_max_depth=w.fixtures.get("contest_max_depth"))["deposits"]
     return w, d, dep
 
@@ -5590,7 +5554,7 @@ def _ten_seasons(w, seasons=10, verbs=None):
     for _ in range(seasons):
         # `H-87`: the CALLER supplies the depth cap. This ran uncapped until `U1` gave `tell` a
         # `contests:`; ten seasons of this world now reach a contest.
-        d.season(spy, question=None, subsistence=P.SUBSIST,
+        d.season(spy, question=None,
                  contest_max_depth=w.fixtures.get("contest_max_depth"))
         hist.append({r: dict(w.rungs[r].stores) for r in w.rungs})
     return hist, minted, d
@@ -6634,7 +6598,7 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
         for _ in range(7):
             d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                      draw=draw_factory(w.world_seed, lambda: w.tick)),
-                     None, HL.subsistence,
+                     None,
                      contest_max_depth=w.fixtures.get("contest_max_depth"))
         by_id = {e.id: e for e in w.log}
 
@@ -6667,7 +6631,7 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
             for _ in range(7):
                 d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                      draw=draw_factory(w.world_seed, lambda: w.tick)),
-                         None, HL.subsistence,
+                         None,
                          contest_max_depth=w.fixtures.get("contest_max_depth"))
             seen[n] = sum(1 for e in w.log if e.kind == "term.matured")
         matured[f"{arm}:3"], matured[f"{arm}:6"] = seen[3], seen[6]
@@ -6913,7 +6877,7 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     mint5 = lambda pid, verb, subj: H(w5.world_seed, w5.tick, pid, f"act:{verb}:{subj}")
     for _ in range(5):
         d5.season(make_chooser(w5.fixtures, mint5, verbs=resolvable_verbs(),
-                  draw=draw_factory(w5.world_seed, lambda: w5.tick)), None, HL.subsistence,
+                  draw=draw_factory(w5.world_seed, lambda: w5.tick)), None,
                   contest_max_depth=w5.fixtures.get("contest_max_depth"))
     by5 = {e.id: e for e in w5.log}
 
@@ -6962,7 +6926,7 @@ def _h79_bailiff_subjects() -> dict:
         for _ in range(2):
             d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                      draw=draw_factory(w.world_seed, lambda: w.tick)),
-                     None, HL.subsistence,
+                     None,
                      contest_max_depth=w.fixtures.get("contest_max_depth"))
         # ⚠ `seen` CLAIMS ARE EXCLUDED BECAUSE `H-79` DOES NOT GOVERN THEM. `R8.1` fixes their
         # subject (the changed thing, else the rung) whatever `claim_subject_rule` says, so they
@@ -7037,7 +7001,7 @@ def test_w9_the_sweeps_the_register_declares_are_executed():
         for _ in range(2):
             d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                      draw=draw_factory(w.world_seed, lambda: w.tick)),
-                     None, HL.subsistence,
+                     None,
                      contest_max_depth=w.fixtures.get("contest_max_depth"))
         hashes[scale] = len(w.log)
     moved["H-06 events by condition_scale"] = hashes
@@ -9644,7 +9608,7 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
     ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                      draw=draw_factory(w.world_seed, lambda: w.tick))
     for _ in range(3):
-        d.season(ch, question=None, subsistence=C.P.SUBSIST,
+        d.season(ch, question=None,
                  contest_max_depth=w.fixtures.get("contest_max_depth"))
 
     # 1 — EVERY ACT THAT CAME THROUGH DELIBERATE NAMES ITS SCENE, and every scene its occasion.
@@ -9701,7 +9665,7 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
         ch4 = make_chooser(w4.fixtures, mint4, verbs=resolvable_verbs(),
                            draw=draw_factory(w4.world_seed, lambda: w4.tick))
         for _ in range(3):
-            d4.season(ch4, question=None, subsistence=C.P.SUBSIST,
+            d4.season(ch4, question=None,
                      contest_max_depth=w4.fixtures.get("contest_max_depth"))
         # ⚠⚠ **`U1` SPLIT "A TELLING HAPPENED" FROM "A TELLING SUCCEEDED", AND THIS LINE COUNTED
         # ONLY THE SECOND.** `tell` declares `contests: "a standing"` now, so a telling is GRADED:
@@ -10276,7 +10240,7 @@ def _wc_corpus_pass():
         ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                      draw=draw_factory(w.world_seed, lambda: w.tick))
         for _ in range(n):
-            d.season(ch, question=None, subsistence=P.SUBSIST,
+            d.season(ch, question=None,
                      contest_max_depth=w.fixtures.get("contest_max_depth"))
         ids = {e.id for e in w.log}
         for a in d.resolved:
@@ -11784,7 +11748,7 @@ def test_wb_an_unknown_read_is_never_deposited_because_it_is_the_instruments_own
     for _ in range(3):
         d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                      draw=draw_factory(w.world_seed, lambda: w.tick)),
-                 None, HL.subsistence,
+                 None,
                  contest_max_depth=w.fixtures.get("contest_max_depth"))
     unknown = [(e.kind, o.predicate) for e in w.log for o in e.observed if o.value is UNKNOWN]
     assert unknown, (
@@ -11841,7 +11805,7 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
         for _ in range(3):
             d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                      draw=draw_factory(w.world_seed, lambda: w.tick)),
-                     None, HL.subsistence,
+                     None,
                      contest_max_depth=w.fixtures.get("contest_max_depth"))
             for p in w.persons.values():
                 for c in p.ledger:
@@ -12152,7 +12116,7 @@ def test_wb_a_read_computed_from_the_ledger_is_never_deposited_into_it():
     ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                      draw=draw_factory(w.world_seed, lambda: w.tick))
     for _ in range(3):
-        d.season(ch, question=None, subsistence=C.P.SUBSIST,
+        d.season(ch, question=None,
                  contest_max_depth=w.fixtures.get("contest_max_depth"))
     produced = [o for e in w.log for o in e.observed
                 if o.predicate == "claim.held" and o.value is not UNKNOWN]
@@ -12282,7 +12246,7 @@ def test_wb_the_carrier_moves_the_seeded_hash():
         for _ in range(2):
             d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                      draw=draw_factory(w.world_seed, lambda: w.tick)),
-                     None, HL.subsistence,
+                     None,
                      contest_max_depth=w.fixtures.get("contest_max_depth"))
         carried = sum(len(e.observed) for e in w.log)
         if strip:
@@ -12359,7 +12323,7 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
             ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                      draw=draw_factory(w.world_seed, lambda: w.tick))
             for _ in range(C.seasons_for(case)):
-                d.season(ch, question=None, subsistence=C.P.SUBSIST,
+                d.season(ch, question=None,
                          contest_max_depth=w.fixtures.get("contest_max_depth"))
         finally:
             decision.options.belief_contradicts = original
@@ -12392,7 +12356,7 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
             for _ in range(3):
                 acts.append(d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                      draw=draw_factory(w.world_seed, lambda: w.tick)),
-                                     None, HL.subsistence,
+                                     None,
                                      contest_max_depth=w.fixtures.get("contest_max_depth"))["acts"])
             # ⚠ THE SEQUENCE, NOT ONLY THE COUNT. See the composition assertion below: with a
             # fuller verb pool a dropped Candidate is BACKFILLED, so the count stops discriminating
@@ -13337,7 +13301,7 @@ def test_wb_h40s_decay_sweep_is_re_run_in_every_arm_and_goes_inert_at_total():
             for _ in range(3):
                 d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                      draw=draw_factory(w.world_seed, lambda: w.tick)),
-                         None, HL.subsistence,
+                         None,
                          contest_max_depth=w.fixtures.get("contest_max_depth"))
             confs = [c.confidence for p in w.persons.values() for c in p.ledger]
             ev = Counter(e.kind for e in w.log)
@@ -15370,7 +15334,7 @@ def _u2_bailiff_sets(plant: bool, at_round: int = 0, stamp: bool = True):
     try:
         d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                               draw=draw_factory(w.world_seed, lambda: w.tick)),
-                 None, HL.subsistence,
+                 None,
                  contest_max_depth=w.fixtures.get("contest_max_depth"))
     finally:
         CH.opening_set = original
@@ -15608,7 +15572,7 @@ def test_u2_the_one_round_arm_reproduces_the_pre_tick_loop():
     for _ in range(2):
         d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                               draw=draw_factory(w.world_seed, lambda: w.tick)),
-                 None, HL.subsistence,
+                 None,
                  contest_max_depth=w.fixtures.get("contest_max_depth"))
     # [GROUNDED: measured 2026-09-11 against the pre-tick loop at d0165b5, `build_world(0)`, 2 seasons, `scene_budget=1` -- the act and Event-kind multisets are identical and the content hash differs by the `Claim.round` field alone]
     kinds = dict(sorted(Counter(e.kind for e in w.log).items()))
@@ -15685,8 +15649,8 @@ def _u2_fingerprint_implication(drop=None, seeds=(0, 1, 7, 13), seasons=2):
     real = DL._inputs_fingerprint
     last = {}
 
-    def fp_fn(p, qs, s):
-        t = real(p, qs, s)
+    def fp_fn(p, qs):
+        t = real(p, qs)
         if drop is not None:
             t = tuple(v for i, v in enumerate(t) if i != drop)
         last[p.id] = t
@@ -15713,7 +15677,7 @@ def _u2_fingerprint_implication(drop=None, seeds=(0, 1, 7, 13), seasons=2):
             for _ in range(seasons):
                 d.season(wrap(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                                            draw=draw_factory(w.world_seed, lambda: w.tick))),
-                         None, HL.subsistence,
+                         None,
                          contest_max_depth=w.fixtures.get("contest_max_depth"))
             for (tick, rnd, pid), (fp, cands) in sorted(box.items()):
                 bucket = seen[(seed, tick, pid)]
@@ -15752,8 +15716,8 @@ def test_u2_the_inputs_fingerprint_is_complete_for_the_skip_it_licenses():
 
     ⚠⚠ **AND THE HONEST LIMIT IS STATED RATHER THAN LEFT FOR A READER TO ASSUME: ONLY TERM 0 IS
     FALSIFIED HERE.** Measured 2026-09-11 over seeds 0/1/7/13, 2 seasons: dropping term 0 (`q_ids`)
-    gives 5 violations; dropping ANY of terms 1-5 (`subsistence`, `tenures`, `ledger`, `body`,
-    `travel_leg`) gives 0. Those five are not thereby shown redundant — this fixture never moves
+    gives 5 violations; dropping ANY of terms 1-5 (`subsistence`, which REM-44 has since deleted, then
+    `tenures`, `ledger`, `body`, `travel_leg`) gives 0. Those five are not thereby shown redundant — this fixture never moves
     one of them without also moving `q_ids`, which is a property of a three-person world with one
     active actor, not of the enumeration. What this test establishes is that the implication HOLDS
     and that it CAN break; five of the six terms remain unfalsified until a world exercises them."""
@@ -15810,7 +15774,7 @@ def test_u2_two_acts_by_one_person_on_one_subject_in_two_rounds_have_distinct_id
         ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                           draw=draw_factory(w.world_seed, lambda: w.tick))
         for _ in range(3):
-            d.season(ch, question=None, subsistence=C.P.SUBSIST,
+            d.season(ch, question=None,
                      contest_max_depth=w.fixtures.get("contest_max_depth"))
         dup_acts = [i for i, n in Counter(a.id for a in d.resolved).items() if n > 1]
         dup_evs = [i for i, n in Counter(e.id for e in w.log).items() if n > 1]

@@ -387,33 +387,24 @@ class Said(NamedTuple):
 
 
 class Sensation:
-    """S18.2 -- EXACTLY TWO SCALARS, and it is the ONLY bridge from world truth into `choose`.
+    """S18.2 -- the bridge from world truth into `choose`; it carries ONE scalar, `standing`.
 
-    REV 3. Rev 2 made `sense()` raise outright, which was right about `standing` and wrong
-    about everything else: the driver then routed AROUND `Sensation` entirely and fed
-    DELIBERATE a bare int, so the type S26 puts in `choose`'s signature was NEVER CONSTRUCTED
-    IN ANY RUN and a regression test pinned the deviated 4-ary call as the invariant.
-
-    The honest shape is to keep the type and RAISE AT THE POINT OF USE. `subsistence` is
-    computable from an injected formula; `standing` is not computable at all, so reading it
-    raises. A `choose` that never consults standing runs; one that does gets the gap exactly
-    where the design fails to supply it.
-
-    S34's enforcement column rates the two-scalar rule `convention -- the named residual
-    risk`. `__slots__` is the nearest Python approximation to S46.1's `Vector2` argument and
-    is still a convention a determined author can spell around."""
+    REM-44 deleted `subsistence`: its only reader, `urgency`, had no candidate in it and moved no
+    ranking (`H-73`). A need is now a Query (`world_q.hunger` for a settlement) plus the shortfall
+    claims a person holds about it. The type stays: `sense()` computes `standing` via `standing_of`,
+    and reading it on a Sensation built without it raises rather than answering 0. 04 §B.10 grades the
+    Python one-scalar shape `convention`."""
 
     # roster-exempt: MECHANISM -- `__slots__` is a Python language construct naming this
     # class's own attributes, as on `View`.
-    __slots__ = ("subsistence", "_standing")
+    __slots__ = ("_standing",)
 
-    def __init__(self, subsistence: int, standing: Optional[int] = None):
-        self.subsistence = subsistence
+    def __init__(self, standing: Optional[int] = None):
         self._standing = standing
 
     @property
     def standing(self) -> int:
-        """S18.2's second scalar. COMPUTED as of `W5`; see `standing_of`.
+        """S18.2's scalar. COMPUTED as of `W5`; see `standing_of`.
 
         Rev 3 raised `Unspecified` here and its reason was half right. It said the direct route --
         reading a value off every other person -- is barred by S22.4 clause 2. V2 §F4 corrected
@@ -423,14 +414,11 @@ class Sensation:
         if self._standing is None:
             raise Unspecified(
                 "Sensation.standing", "S18.2",
-                needs="construct the Sensation through `sense()`, which computes both scalars",
-                law="S18.2 -- Sensation is EXACTLY TWO SCALARS. A Sensation built with only "
-                    "`subsistence` is half a Sensation, and reading the missing half must refuse "
-                    "rather than answer 0 -- §42.2's polarity rule applied to a constructor")
+                needs="construct the Sensation through `sense()`, which computes `standing`",
+                law="S18.2 -- a Sensation built without `standing` is half a Sensation, and "
+                    "reading the missing scalar must refuse rather than answer 0 -- §42.2's "
+                    "polarity rule applied to a constructor")
         return self._standing
-
-    def __iter__(self):
-        return iter((self.subsistence, self._standing))
 
 
 class View:

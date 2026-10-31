@@ -647,7 +647,7 @@ def test_20iii_every_sheet_the_populated_realm_makes_says_what_its_holder_holds(
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                       draw=draw_factory(w.world_seed, lambda: w.tick))
-    d.season(ch, question=None, subsistence=P.SUBSIST,
+    d.season(ch, question=None,
              contest_max_depth=w.fixtures.get("contest_max_depth"))
     kinds = _kinds(w.log)
     # v9 IN-45: A FORGED SHEET IS A SHEET TOO (`_eff_forge`, `record.forged`), so the surveys are

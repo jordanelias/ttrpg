@@ -3,7 +3,7 @@ else to the chooser the caller already built. v9 PC-06 `S-1`.
 
     from engine.season.harness.play_surface import dispatching_chooser
     choose = dispatching_chooser(make_chooser(fx, mint, verbs, draw), {"p_carin": my_callback})
-    driver.season(choose, None, subsistence, contest_max_depth=...)
+    driver.season(choose, None, contest_max_depth=...)
 
 **This is the whole single-player hook, and it edits no engine file.** `SeasonDriver.season` already
 RECEIVES its chooser (`loop/driver.py`, `season(self, choose, ...)`) and DELIBERATE calls it once per

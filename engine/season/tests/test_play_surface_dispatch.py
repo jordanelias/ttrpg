@@ -44,7 +44,7 @@ def _run(overrides_for):
     auto = make_chooser(w.fixtures, mint, verbs=foldable, draw=draw)
     choose = dispatching_chooser(auto, overrides_for(w.fixtures, mint, foldable, draw))
     for _ in range(SEASONS):
-        d.season(choose, None, headless.subsistence,
+        d.season(choose, None,
                  contest_max_depth=w.fixtures.get("contest_max_depth"))
     return w, d
 

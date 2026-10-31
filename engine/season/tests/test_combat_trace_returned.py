@@ -62,7 +62,7 @@ def _season(monkeypatch, keep_trace: bool):
 
     choose = dispatching_chooser(auto, {headless.CARIN: fight_the_bailiff})
     for _ in range(SEASONS):
-        d.season(choose, None, headless.subsistence,
+        d.season(choose, None,
                  contest_max_depth=w.fixtures.get("contest_max_depth"))
     return w, calls
 

@@ -1319,8 +1319,8 @@ def demanded(w: World, rung_id: str, draw: Optional[dict] = None) -> dict:
     asks for: the need of the population synecdoches under a rung, never a lord's. Plan position
     `19d`, the retirement plan's G3: *"two new read-only queries (`demanded`, `delivered`)"*.
 
-    ⚠ A NEED IS A QUERY, NOT A THING A PLACE HAS. `01_AXIOMS.md` §D.10 (ratified): *"a need | a
-    `Sensation` plus a Query"*, and *"every aggregate | a Query, owned by Nobody (T-a)"*. A Rung owns
+    ⚠ A NEED IS A QUERY, NOT A THING A PLACE HAS. `01_AXIOMS.md` §D.10 (ratified): *"a need | a Query (for a
+    settlement, `world_q.hunger`; REM-50) plus the shortfall claims a person holds about it"*, and *"every aggregate | a Query, owned by Nobody (T-a)"*. A Rung owns
     *"arrangements, not wants"* (probe `F19`'s law, S36.1), so this Query is not a demand the place
     makes. Nobody files it. It is the arithmetic of the mouths under a roof, and something happens
     about it only when a person learns of it and acts: `loop/matter.py` records the gap on the

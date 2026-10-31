@@ -5,7 +5,6 @@ ARM in: baseline | foreign | guards | foreign_guards | capability | exogenous | 
 import sys, json, collections
 from engine.season.harness import corpus_run as CR
 from engine.season.harness.populated import build_realm
-from engine.season.harness import probes as P
 from engine.season.decision import make_chooser
 from engine.season.state.ids import H, draw_factory
 from engine.season.loop.driver import SeasonDriver, resolvable_verbs
@@ -24,7 +23,7 @@ d = SeasonDriver(w)
 mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
 ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(), draw=draw_factory(w.world_seed, lambda: w.tick))
 for _ in range(seasons):
-    d.season(ch, question=None, subsistence=P.SUBSIST, contest_max_depth=w.fixtures.get("contest_max_depth"))
+    d.season(ch, question=None, contest_max_depth=w.fixtures.get("contest_max_depth"))
 fun = collections.defaultdict(collections.Counter)
 for a, made, refused in CR.attribute(w, d, seasons):
     fun[a.verb]["made" if made else "x"] += 1

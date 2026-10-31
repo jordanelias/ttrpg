@@ -2422,8 +2422,8 @@ rosters:
       no verb writes `Person.convictions` either, and that is term 1 of the live score. The
       missing piece is the STATE: `Person` has no `orient` field and `data/cast.py` skips the 28
       authored `self_other_initial` values in `references/npc_registry.yaml`. The term is `6f`'s.
-      This roster and its column deliver `benefits_me(c)`; nothing multiplies it yet, and
-      `decision/choose.py`'s `score` is untouched.
+      This roster and its column deliver `beneficiary_of(p, c)`, which no game code reads (tests only). (The 0/1
+      `benefits_me(c)`, never multiplied into the score, was deleted by REM-44 with `urgency`.)
     values: [actor, subject, to, none]
     # ⚠ WHICH MEMBERS NEED A CELL TO BIND, DECLARED PER MEMBER RATHER THAN DERIVED IN A BODY.
     # `structural` -- the carrier is on the Candidate no matter what the row's `requires_typed`

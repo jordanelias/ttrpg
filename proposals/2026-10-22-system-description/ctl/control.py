@@ -1,14 +1,13 @@
 import sys
 from collections import Counter, defaultdict
 sys.path.insert(0, "/home/user/ttrpg")
-from engine.season.harness import probes as P
 from engine.season.harness.populated import build_realm, SeasonDriver, make_chooser, resolvable_verbs, H, draw_factory
 seed = int(sys.argv[1]); seasons = int(sys.argv[2])
 w = build_realm(seed); d = SeasonDriver(w)
 mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
 ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(), draw=draw_factory(w.world_seed, lambda: w.tick))
 for s in range(seasons):
-    d.season(ch, question=None, subsistence=P.SUBSIST, contest_max_depth=w.fixtures.get("contest_max_depth"))
+    d.season(ch, question=None, contest_max_depth=w.fixtures.get("contest_max_depth"))
 verb_of = {a.id: a.verb for a in d.resolved}
 REF = ("refused", "unavailable", "unauthorized", "unheard", "ineligible", "untold", "none", "blocked", "undecided")
 ev = defaultdict(list)

@@ -68,7 +68,7 @@ from .. import decision
 from ..decision import (
     aggregate_questions, agreement, assemble, body_band_penalty, budget,
     containing_rung_of, make_chooser, opening_set, operands_for, pack_scenes,
-    person_side_eligible, standing_of, store_kind_of, urgency, view_ids,
+    person_side_eligible, standing_of, store_kind_of, view_ids,
 )
 from ..seam import (
     ContestError, Resolution, combat_degree, contest, contest_subsystem, degree_of,
@@ -372,7 +372,7 @@ class SeasonDriver:
                 for p in w.persons.values()}
 
     # -- one season --------------------------------------------------------
-    def season(self, choose, question, subsistence,
+    def season(self, choose, question,
                actorless: Optional[list[Event]] = None,
                contest_max_depth: Optional[int] = None) -> dict:
         """`U2` / `R-03`: **a season is R ROUNDS, and MATTER and CALENDAR are not among them.**
@@ -468,7 +468,7 @@ class SeasonDriver:
             # `budget`, `person_side_eligible` and `questions_for` read `p.tenures` directly.
             w._rehome()
             w.frozen = True
-            acts = self.deliberate(choose, question, subsistence,
+            acts = self.deliberate(choose, question,
                                    self._questions_at_barrier())        # a MAP: no token
             events = self.resolve(mint_token(w, WriteClass.ACTS), acts, contest_max_depth)
             # M4 (`ED-IN-0279` clause (a), `04 §A.2:134` as amended 2026-09-28): the SEVENTH

@@ -519,6 +519,8 @@ choose(p, view, sensation, ask_budget) -> Act[]
   return the top `ask_budget()` candidates, ORDERED by score
 ```
 
+> ⚠ **POINTER, NOT A CORRECTION, 2026-10-30.** REM-44 (Jordan 2026-10-21, L1-6 option B; landed under `ED-IN-0300`) deleted the third term and `Sensation.subsistence`; the terms are `decision/choose.py::score_terms`, the shape `04_CODE_ARCHITECTURE.md` §B.10/§C.3. The other mentions (§0.3 row 3, §F1 Q3, property 1 below, §F4, §VII.1 H-11) are not individually re-walked; H-11 stays as transcribed.
+
 **Four properties, each load-bearing:**
 
 1. **Every input is person-side.** `convictions`, `stance`, the View's claims, and the two Sensation

@@ -43,7 +43,7 @@ and applies it to the freshly built World before the chooser is made, the idiom 
 `harness/soak.py` use for a fixture sweep.
 
 THE COMPOSITION is `populated.run`'s (`build_realm`, `SeasonDriver`, `make_chooser` over
-`resolvable_verbs()`, `draw_factory`, `probes.SUBSIST`, the caller-passed `contest_max_depth`),
+`resolvable_verbs()`, `draw_factory`, the caller-passed `contest_max_depth`),
 repeated here rather than called because `populated.run` exposes no per-season boundary in the log
 -- the same reason `harness/soak.py` gives for keeping its own driver.
 
@@ -78,7 +78,6 @@ from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries.person_q import legitimacy, stability
 from ..state.ids import H, ROOT, draw_factory
-from . import probes as P
 from .aperture import seats
 from .corpus_run import attempts, graded_losses
 from .populated import build_realm
@@ -309,7 +308,7 @@ def drive(seed: int, seasons: int, arm: str, cap=None, on_season=None, world=Non
     bounds = []
     for _ in range(seasons):
         bounds.append(len(w.log))
-        summary = d.season(ch, question=None, subsistence=P.SUBSIST,
+        summary = d.season(ch, question=None,
                            contest_max_depth=w.fixtures.get("contest_max_depth"))
         if on_season is not None:
             on_season(w, summary, len(w.log) - bounds[-1])

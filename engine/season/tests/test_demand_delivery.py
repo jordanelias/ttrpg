@@ -82,7 +82,7 @@ def _shortfalls(events) -> list:
 
 def _season(w, choose=P.NOCHOOSE, question=None, d=None):
     d = d or SeasonDriver(w)
-    d.season(choose, question=question, subsistence=P.SUBSIST,
+    d.season(choose, question=question,
              contest_max_depth=w.fixtures.get("contest_max_depth"))
     return d
 

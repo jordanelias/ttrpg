@@ -76,7 +76,7 @@ def _seasons(term, n=3):
     d = P._run_d(w, choose, n=1)
     first = _hold(w, SEAT)
     for _ in range(n - 1):
-        d.season(choose, question=None, subsistence=P.SUBSIST)
+        d.season(choose, question=None)
     return w, acts["confer"], first
 
 

@@ -211,7 +211,7 @@ def test_a_march_formed_by_a_chooser_restricted_to_march_folds_to_the_mass_battl
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     chooser = make_chooser(w.fixtures, mint, verbs=frozenset({"march"}),
                            draw=draw_factory(w.world_seed, lambda: w.tick))
-    scenes = chooser(p, v, Sensation(0), lambda: 1)
+    scenes = chooser(p, v, Sensation(), lambda: 1)
     assert len(scenes) == 1 and len(scenes[0].acts) == 1, scenes
     act = scenes[0].acts[0]
     assert act.verb == "march" and act.payload["subject"] == target and act.actor == "p_npc_089"
@@ -243,7 +243,7 @@ def test_the_same_march_with_no_defender_arrives_unopposed_at_the_chokepoint():
     p, v, _ = _march_candidate(w, "set_s_007")
     act = make_chooser(w.fixtures, lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}"),
                        verbs=frozenset({"march"}), draw=draw_factory(w.world_seed, lambda: w.tick))(
-        p, v, Sensation(0), lambda: 1)[0].acts[0]
+        p, v, Sensation(), lambda: 1)[0].acts[0]
     events = _fold_one(w, act)
     assert "field.unopposed" in [e.kind for e in events]
     assert world_q.home_of(w)["p_npc_089"] == "set_s_007", "the army did not arrive"
@@ -274,7 +274,7 @@ def _first_scene_of_the_goal_question(seed: int):
     v = assemble(p, q, fx.get("view_k"))
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     chooser = make_chooser(fx, mint, verbs=resolvable_verbs(), draw=draw_factory(w.world_seed, lambda: w.tick))
-    scenes = chooser(p, v, Sensation(0), lambda: max(0, budget(p, v, fx.get("scene_budget"), fx)))
+    scenes = chooser(p, v, Sensation(), lambda: max(0, budget(p, v, fx.get("scene_budget"), fx)))
     acts = [a for a in (scenes[0].acts if scenes else ()) if a.verb == "march" and a.payload.get("subject") == "set_s_001"]
     return w, p, (acts[0] if acts else None)
 

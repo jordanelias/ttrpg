@@ -56,7 +56,7 @@ def _ranking(g: float, share: float, monkeypatch) -> tuple:
     monkeypatch.setattr(CH, "pack_scenes", spy)
     fx = DEFAULT_FIXTURES.sweep("choice_temperature", 0).sweep("stance_gain", g)
     CH.make_chooser(fx, lambda *a: "act")(p, SimpleNamespace(question=object()),
-                                         SimpleNamespace(subsistence=0), lambda: 1)
+                                         SimpleNamespace(), lambda: 1)
     assert "ranked" in seen, "the chooser never ranked: the falsifier did not run"
     return seen["ranked"], hi, lo
 

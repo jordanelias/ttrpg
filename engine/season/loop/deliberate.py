@@ -67,7 +67,7 @@ from ..trace_log import TRACE
 
 # -- DELIBERATE -- a MAP, not a barrier (S26) ---------------------------
 def deliberate(self, choose: Callable[..., list[Act]], question: Any,
-               subsistence: Callable[[Person, World], int], questions: dict) -> list[Act]:
+               questions: dict) -> list[Act]:
     w = self.w
     if not w.frozen:
         raise Forbidden("DELIBERATE entered on an unfrozen world", "S26.2",
@@ -116,7 +116,7 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
     w._in_parallel_map = True       # S51: WorkerThreadPool over persons. The one that pays.
     ext = w.fixtures.get("extended_scene_cost")
     for p in list(w.persons.values()):
-        s = sense(p, w, subsistence)            # a Sensation, per S26's signature
+        s = sense(p, w)                         # a Sensation, per S26's signature
         # §F1 / `H-04`. `q` HAS A PRODUCER NOW. Rev 3 took the question as an injected
         # parameter because §61 recorded that DELIBERATE HAD NO DECLARED ENTRY POINT; the
         # four sources are computed here, at the barrier, from the loop's own output.
@@ -164,7 +164,7 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
         # that proves it can fire. ⚠ IT WAS CITED HERE BEFORE IT EXISTED; see that test's own
         # docstring for what is and is not falsified (term 0 only, in this fixture).
         # -------------------------------------------------------------------
-        fp = _inputs_fingerprint(p, qs, s)
+        fp = _inputs_fingerprint(p, qs)
         queue = self._queued.get(p.id) or []
         if b > 0 and (self._inputs.get(p.id) != fp or not queue):
             produced = choose(p, v, s, ask_budget)
@@ -431,7 +431,7 @@ def _qualify_by_round(scenes: list, w: World, r: int) -> None:
         sc.id = H(w.world_seed, w.tick, sc.actor, f"scene:{n}:r{r}")
 
 
-def _inputs_fingerprint(p: Person, qs: list, s: Sensation) -> tuple:
+def _inputs_fingerprint(p: Person, qs: list) -> tuple:
     """`U2` / `R-03`: EVERYTHING A PERSON'S DELIBERATION READS, AS ONE COMPARABLE VALUE.
 
     The scene tick re-enters DELIBERATE `scene_budget` times a season. A person whose inputs have
@@ -462,10 +462,7 @@ def _inputs_fingerprint(p: Person, qs: list, s: Sensation) -> tuple:
                        `need` (a live `commit` to an OUGHT). A world-level change that cannot reach
                        this person cannot move this term, which is what keeps the skip from
                        degenerating into "anything happened anywhere".
-      * `subsistence` — `sense`'s first scalar, and `urgency(s.subsistence, fx)` is a term of the
-                       chooser's score. ⚠ `standing` IS DELIBERATELY ABSENT: `Sensation.standing`
-                       RAISES where the design fails to supply it (§18.2), and a fingerprint that
-                       raises would make the skip a second failure mode rather than a decision.
+      * (`Sensation` is not an input: since REM-44 no chooser term reads it, `standing` included.)
       * `tenures`    — `person_side_eligible` reads them (eligibility `own`), `budget` counts the
                        live `hold`s, and `questions_for`'s `mine` set is built from them.
                        ⚠ `live` AND NOT `until`: a tenure CLOSING is the change that matters, and
@@ -512,7 +509,6 @@ def _inputs_fingerprint(p: Person, qs: list, s: Sensation) -> tuple:
     classed = {r for q in qs for r, _ in q.classes}
     return (
         tuple((q.id, q.classes) for q in qs),
-        s.subsistence,
         tuple(sorted((t.id, t.kind, t.object, t.live) for t in p.tenures)),
         tuple((c.id, c.value, c.confidence) for c in p.ledger
               if str(c.predicate).partition(":")[0] in REQUIRES_STEMS),
@@ -522,19 +518,15 @@ def _inputs_fingerprint(p: Person, qs: list, s: Sensation) -> tuple:
     )
 
 
-def sense(p: Person, w: World, subsistence: Callable[[Person, World], int]) -> Sensation:
+def sense(p: Person, w: World) -> Sensation:
     """S18.2 / S26 -- the ONE non-decision function permitted a World, and the only bridge from
     world truth into `choose`.
 
     REV 3. It now RETURNS a Sensation, so `choose : (Person, View, Sensation) -> Act[]` is the
     signature actually exercised. Reading `.standing` raises where the design fails to supply
-    it; `.subsistence` is computed by an INJECTED formula, because no in-chain document
-    supplies one and S10.4 makes MatterKind an OPEN registry -- summing kinds as if fungible
-    is a model choice this instrument may not make on the design's behalf (S42.2.1)."""
+    it. `standing_of` computes it person-side (`H-29`); REM-44 deleted the other scalar, `subsistence`."""
     TRACE.query("sense", "bridge")
-    # BOTH scalars, as of W5. Rev 3 built a Sensation with one and let `.standing` raise; §18.2
-    # says EXACTLY TWO, and `standing_of` computes the second person-side (`H-29`).
-    return Sensation(subsistence(p, w), standing_of(p, w.fixtures))
+    return Sensation(standing_of(p, w.fixtures))
 
 
 def as_scenes(produced: list, actor: str, w: "World") -> list:

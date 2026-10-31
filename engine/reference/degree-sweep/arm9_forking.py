@@ -28,7 +28,7 @@ loop where a named alternative is passed over BY THE ENGINE ITSELF: `ranked[:L]`
 `ranked[L:]` is not, where `L` is however many of `ranked`'s own leading elements the real budget
 actually affords. Every other branch in the fold is a consequence of that pick.
 
-⚠ NO RULE IS REPLACED. `score`, the sort key, `align`, `stance_toward`, `urgency`, `ask_budget`
+⚠ NO RULE IS REPLACED. `score`, the sort key, `align`, `stance_toward`, `ask_budget`
 and `pack_scenes` all run unmodified -- BASELINE calls `pack_scenes` with the person's own full
 `ranked` list and real budget, exactly as `make_chooser` does. A fork substitutes WHICH element
 sits in the LAST IN-BUDGET SLOT, at exactly one deliberation, and lets everything downstream
@@ -46,7 +46,6 @@ itself a property of the fixture, not a fixed fact about the design.
 """
 from __future__ import annotations
 import collections, itertools
-import sweep_core as K
 from sweep_core import S, C, R, Log, PS_CHOOSE, PS_OPTIONS
 
 LOOKAHEAD = 3        # `CLAUDE.md` §0.1 pt 5 / G1: declared with its reason.
@@ -143,7 +142,7 @@ def _run(case: dict, seed: int, seasons: int, fork_at: int = -1, take: int = 0,
                 # uncapped while nothing it reached contested; `U1` gave `tell` a `contests:`, and
                 # the `except BaseException` below would SWALLOW the refusal into `ok=False` --
                 # measured, one fork silently left the population that way (`genuine` 45 -> 44).
-                d.season(ch, question=None, subsistence=K.C.P.SUBSIST,
+                d.season(ch, question=None,
                          contest_max_depth=w.fixtures.get("contest_max_depth"))
     except BaseException as e:
         return dict(ok=False, why=f"{type(e).__name__}: {e}", decisions=[], in_budget=[], acts=[])
@@ -279,7 +278,7 @@ def claim_channel(sample: int = 8, seasons: int = 3, seed: int = 0) -> dict:
         for _ in range(seasons):
             # `H-87`: the caller supplies the cap. See `fork_case` above for why this is not
             # optional since `U1`.
-            d.season(ch, question=None, subsistence=K.C.P.SUBSIST,
+            d.season(ch, question=None,
                      contest_max_depth=w.fixtures.get("contest_max_depth"))
         for p in w.persons.values():
             for c in p.ledger:

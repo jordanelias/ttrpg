@@ -421,7 +421,7 @@ def test_a_real_chooser_forms_and_folds_a_march_that_reaches_a_real_field_battle
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     chooser = make_chooser(w.fixtures, mint, verbs=frozenset({"march"}),
                            draw=draw_factory(w.world_seed, lambda: w.tick))
-    scenes = chooser(p, v, Sensation(0), lambda: 1)
+    scenes = chooser(p, v, Sensation(), lambda: 1)
     assert len(scenes) == 1 and len(scenes[0].acts) == 1, (
         f"expected exactly one scene holding exactly one march act, got {scenes}")
     act = scenes[0].acts[0]
@@ -679,7 +679,7 @@ def test_in13_exit_ii_h151_a_march_on_ones_own_occupied_settlement_is_unopposed(
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     chooser = make_chooser(w.fixtures, mint, verbs=frozenset({"march"}),
                            draw=draw_factory(w.world_seed, lambda: w.tick))
-    scenes = chooser(p, View(p.id, [], w.fixtures.get("view_k"), q), Sensation(0), lambda: 1)
+    scenes = chooser(p, View(p.id, [], w.fixtures.get("view_k"), q), Sensation(), lambda: 1)
     (act,) = [a for s in scenes for a in s.acts]
     assert act.payload["subject"] == "set_s_001" and act.via == "off_npc_033"
     attackers = world_q.mustered(w, "set_s_014", CROWN)

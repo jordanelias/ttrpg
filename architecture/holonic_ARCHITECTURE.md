@@ -632,7 +632,7 @@ A view that holds references is a masked world. **Hold ids.**
 ### §18.2 `Sensation` is exactly two floats
 
 Computed by `sense(person, frozen_world)` — **the one non-decision function permitted a `World`.**
-`standing` is the gap between what everyone reads off you and what you hold.
+`standing` is the gap between what everyone reads off you and what you hold. ⚠ **POINTER, NOT A CORRECTION, 2026-10-30: ONE SCALAR NOW.** REM-44 (Jordan 2026-10-21, L1-6 option B; landed under `ED-IN-0300`) removed `subsistence`, so `Sensation` holds `standing` only; current: `04_CODE_ARCHITECTURE.md` §B.10/§C.3 and `01_AXIOMS.md` §D.10. This document's other two-scalar mentions (§8, §18, §23, §34, §46, §46.1) are not individually re-walked; this is the one pointer.
 
 ## §19 · **`Event` — THE RECORD THAT WAS MISSING**
 
