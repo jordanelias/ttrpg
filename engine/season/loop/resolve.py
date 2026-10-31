@@ -385,9 +385,10 @@ def _fold(self, w: "World", token: Token, a: Act,
     w.acts.append(a)
     row = VERB_TABLE.get(a.verb)
     if row is None:
-        # WHOSE GAP IS IT? `VERB_TABLE` is the owner: it is the set of verbs the design names and the
-        # game carries, so a verb on no row is the caller's invention (register row H-64). No prose
-        # is read to decide it.
+        # WHOSE GAP IS IT? `VERB_TABLE` is the owner, taken to carry every verb the design names
+        # [ASSUMPTION; medium; Jordan to correct; revert: restore the branch and the prose read], so a
+        # verb on no row is the caller's invention (register row H-64). No prose is read to decide it,
+        # and nothing here reports a verb the design names that the table omits.
         raise Unspecified(
             f"verb {a.verb!r} is on no row of the verb table", "S27/E2",
             needs=(f"NOTHING FROM THE DESIGN -- #353 does not name {a.verb!r} as a verb. "
