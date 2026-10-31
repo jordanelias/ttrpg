@@ -344,6 +344,39 @@ def roster_map(name: str, key: str) -> dict:
     return dict(m)
 
 
+def refusing_pole(axis: str) -> int:
+    """WHICH POLE OF `axis` A PERSON REFUSES THROUGH, as a sign on the axis's own scale (`-1` the
+    first-named pole, `+1` the second: `references/descriptor_registry.yaml: axis_roster.scale`).
+    Read from `rosters.yaml: pursuit_axes.refusing_pole`, never from a literal in the gate.
+
+    CR-21 (M14), H-146's repair: `decision/options.py::refuses` hardcoded `>` for the NEG pole, so a
+    roster edit that reversed the poles would have inverted the gate in silence. An axis the row
+    authors no pole for REFUSES here rather than answering a default: only the ruled axis
+    (`deontological_instrumental`, ED-IN-0261) is authored, and gating on an unauthored one would be a
+    refusal nobody ruled. A pole value other than `-1`/`+1`, or a key naming no rostered axis, REFUSES
+    for the same reason."""
+    marks = roster_map("pursuit_axes", "refusing_pole")
+    axes = roster("pursuit_axes")
+    unrostered = sorted(k for k in marks if k not in axes)
+    if unrostered:
+        raise Unspecified(
+            f"pursuit_axes.refusing_pole names {unrostered}, which are not on the roster", "rosters.yaml",
+            needs="spell the axis as `axis_roster.names` does, or drop the line",
+            law="H-146 -- the refusing pole is DATA about a ROSTERED axis; a key naming none is a gate nobody can arm")
+    if axis not in marks:
+        raise Unspecified(
+            f"pursuit_axes.refusing_pole authors no refusing pole for {axis!r}", "rosters.yaml",
+            needs=f"a `{axis}: -1` or `{axis}: 1` line, ruled; or gate on an axis that has one ({sorted(marks)})",
+            law="H-146 -- which pole refuses is read from data, not defaulted: a default is a refusal nobody ruled")
+    pole = marks[axis]
+    if isinstance(pole, bool) or pole not in (-1, 1):
+        raise Unspecified(
+            f"pursuit_axes.refusing_pole[{axis!r}] is {pole!r}, not -1 or 1", "rosters.yaml",
+            needs="-1 (the first-named pole refuses) or 1 (the second-named pole refuses)",
+            law="axis_roster.scale -- an axis is bipolar on [-1, +1]; a refusing pole is one of its two ends")
+    return int(pole)
+
+
 def table(name: str) -> dict:
     """A MAPPING from `rosters.yaml`'s `tables:`, returned as `{outer: {inner: float}}`.
 

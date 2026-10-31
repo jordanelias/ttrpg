@@ -156,3 +156,67 @@ def test_cr21_the_loader_refuses_restore_or_thread_read_celled_and_also_uncelled
     # and the shipped pair is lawful as it stands: `restore` celled and not listed, `thread_read` null on every axis and not listed
     V._load_alignment(shipped_cells, uncelled)
     assert V._load_alignment(shipped_cells, uncelled)[PS]["restore"] == -0.2
+
+
+# ---- H-146's repair (CR-21 commit 2): the refusing pole is DATA, read by `refuses` -----------------------
+from ..data import rosters as R                      # noqa: E402
+from ..decision.options import refuses               # noqa: E402
+from ..gaps import Unspecified                       # noqa: E402
+
+
+def _deontological_axis() -> str:
+    """The one axis the roster authors a refusing pole for -- found in the data, not named."""
+    authored = sorted(R.roster_map("pursuit_axes", "refusing_pole"))
+    assert len(authored) == 1 and authored[0] in PURSUIT_AXES, authored
+    return authored[0]
+
+
+def _planted_cells(monkeypatch, axis: str):
+    monkeypatch.setattr(V, "ALIGNMENT", {axis: {"v_toward_pos": 0.3, "v_toward_neg": -0.6, "v_unengaged": 0.0}})
+
+
+def test_cr21_refuses_reads_the_pole_from_the_roster_the_shipped_pole_is_the_first_named(monkeypatch):
+    axis = _deontological_axis()
+    assert R.refusing_pole(axis) == -1                         # the NEG pole refuses (ED-IN-0261)
+    _planted_cells(monkeypatch, axis)
+    weight = -0.4                                              # a person weighted toward the refusing pole
+    assert refuses("v_toward_pos", axis, weight) is True       # further toward the other pole than he tolerates
+    assert refuses("v_toward_neg", axis, weight) is False      # past him on his own side: tolerated
+    assert refuses("v_unengaged", axis, weight) is False       # a zero cell is no *certain action*
+    assert refuses("v_toward_pos", axis, 0.3) is False         # equal is not past
+
+
+def test_cr21_a_roster_with_the_poles_swapped_inverts_the_verdict(monkeypatch):
+    axis = _deontological_axis()
+    _planted_cells(monkeypatch, axis)
+    weight = -0.4
+    shipped = (refuses("v_toward_pos", axis, weight), refuses("v_toward_neg", axis, weight))
+    assert shipped == (True, False)
+    monkeypatch.setitem(R._ROSTERS["pursuit_axes"], "refusing_pole", {axis: 1})
+    assert R.refusing_pole(axis) == 1
+    swapped = (refuses("v_toward_pos", axis, weight), refuses("v_toward_neg", axis, weight))
+    assert swapped == (False, True), swapped                   # inverted on both verbs
+    assert refuses("v_unengaged", axis, weight) is False       # engagement is not a pole question
+    monkeypatch.undo()
+    _planted_cells(monkeypatch, axis)
+    assert (refuses("v_toward_pos", axis, weight), refuses("v_toward_neg", axis, weight)) == shipped
+
+
+def test_cr21_an_axis_with_no_authored_pole_or_a_malformed_one_refuses_rather_than_defaulting(monkeypatch):
+    axis = _deontological_axis()
+    other = sorted(a for a in PURSUIT_AXES if a != axis)[0]
+    with pytest.raises(Unspecified, match="authors no refusing pole"):
+        R.refusing_pole(other)
+    _planted_cells(monkeypatch, other)
+    with pytest.raises(Unspecified, match="authors no refusing pole"):
+        refuses("v_toward_pos", other, -0.4)                   # the gate cannot arm on an unruled axis
+    checked = 0
+    for bad in (0, 2, -2, "negative", None, True):
+        monkeypatch.setitem(R._ROSTERS["pursuit_axes"], "refusing_pole", {axis: bad})
+        with pytest.raises(Unspecified, match="not -1 or 1"):
+            R.refusing_pole(axis)
+        checked += 1
+    monkeypatch.setitem(R._ROSTERS["pursuit_axes"], "refusing_pole", {axis: -1, "not_an_axis": 1})
+    with pytest.raises(Unspecified, match="not on the roster"):
+        R.refusing_pole(axis)
+    assert checked == 6

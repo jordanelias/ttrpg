@@ -513,6 +513,15 @@ rosters:
       Owned in code by descriptors.py's `axis_roster` leaf.
     open: true
     forbidden: [exposure]
+    # CR-21 (M14), H-146's repair: WHICH POLE OF AN AXIS A PERSON REFUSES THROUGH, as a sign on the axis's own
+    # scale (`axis_roster.scale`: -1 the first-named pole, +1 the second). Read by `data/rosters.py::refusing_pole`,
+    # asked by `decision/options.py::refuses`. Only the ruled axis is authored (ED-IN-0261, Jordan: deontology is a
+    # REFUSAL, "it's a refusal to take certain actions"): the deontological pole, the first-named, refuses. An axis
+    # absent here REFUSES at the gate rather than defaulting. The gate is armed nowhere (`Fixtures refusal_axis`
+    # ships unset; arming it is H-146's remaining position). [ASSUMPTION; medium; Jordan to correct; revert: delete
+    # this key and restore the hardcoded `>` in `refuses`.]
+    refusing_pole:
+      deontological_instrumental: -1
     note: >-
       ⚠⚠ **SEVEN SINCE IN-08's CELLS COMMIT (`ED-IN-0261`).** What follows is the history of the
       roster's shape; the count it argues about was four, and it is seven now.

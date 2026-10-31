@@ -3426,7 +3426,9 @@ def test_t2_one_rebind_moves_score_and_gate(monkeypatch):
     formed = sorted({c.verb for c in _options.opening_set(p, v, q, w.fixtures)})
     assert len(formed) >= 2, f"only {formed} form here; the test needs two verbs"
     v0, v1 = formed[0], formed[1]
-    axis = sorted(PURSUIT_AXES)[-1]
+    # CR-21 (H-146's repair): the gate arms only on an axis `pursuit_axes.refusing_pole` authors, so the axis is
+    # read from that data and not taken by position.
+    axis = sorted(roster_map("pursuit_axes", "refusing_pole"))[0]
     monkeypatch.setattr(data_verbs, "PURSUIT_PROJECTION", {"t2_synthetic": {axis: -0.4}})
     monkeypatch.setattr(p, "pursuits", {"t2_synthetic": 1.0})
     fx0 = w.fixtures.sweep("choice_temperature", 0)
