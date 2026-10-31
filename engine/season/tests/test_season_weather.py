@@ -379,9 +379,25 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # declines a computed `migrate` onto a territory, so the seed-0 realm's act mix moves (one season: `migrate.refused` 35 -> 40,
 # `residence.changed` 3 -> 1, `claim.deposited` 8190 -> 8233; 9334 -> 9378 events). Was 6c26053b... / 299f019e... (one, two
 # seasons). CONTROL: main at 59f2f97f, probed in its own checkout by the same run, reads the old pair and the old `BASE_EVENTS`.
-BASE_HASHES = {0: "fe427626f9e91ab83ffd556c0bec4ea7",
-               1: "873525dfb363231695cefb17ad4b17a1",
-               2: "9e71dfe98fcced1fdfa5b57073cd57ff"}
+# RE-PINNED at v10 SE-06 (B10-07b), A DATA MOVE DECLARED AND A TRAJECTORY MOVE: the 37 population cohorts hold their territory's
+# temperament as pursuits (`cohorts.yaml: temperaments:`), so the BUILD hash moves (the cohorts' `pursuits`), and so do one and two
+# seasons (the cohorts deliberate with a declared vector instead of the uniform arm). Was fe427626... / 873525df... / 9e71dfe9...
+# (build, one, two seasons); events 9378 -> 8913, 28665 -> 27020. CONTROL, run in process on this tree: `temperaments:` deleted from a
+# copy of `cohorts.yaml` reads the old triple, the old `BASE_EVENTS` and the old `thread_read`-withheld arm exactly.
+# RE-PINNED at v10 CR-21 (M14, B10-07b), A DATA MOVE DECLARED AND A TRAJECTORY MOVE: `happiness`'s `deontological_instrumental` cell
+# +0.4 -> 0.0, and SE-06's cohort vectors read that column of `PURSUIT_PROJECTION` (`temperament_pursuits`), so the BUILD hash moves
+# (measured alone on the SE-06 tree: that one cell moves the build; `intelligence-diplomatic`'s `community` and the `deed:commitment.ended`
+# cells do not); `restore` celled (P/S -0.2) and the deed cells re-rank candidates, so one and two seasons move with it. Was
+# aef556ac... / 31e39c05... / 329fa072... (build, one, two seasons); events 8913 -> 9180, 27020 -> 27827. CONTROL: an extracted copy of
+# the SE-06 tree (`bcaf1d519`) reads the old build and two-season hashes at seed 0 (`PYTHONHASHSEED=0`). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED at v10 CR-16 (B10-07b), A BEHAVIOUR MOVE DECLARED: `Fixtures stance_polarity` `legacy` -> `declared` (H-194), so a grudge
+# pulls the contested acts against its object UP and the act mix moves; `Fixtures` is not hashed, so the BUILD is equal and one and two
+# seasons move. Was e9f81463... / f145b1e4... (one, two seasons); events 9180 -> 9347, 27827 -> 27605. CONTROL, run in process on this tree:
+# `stance_polarity` swept back to `legacy` reads the old pair, the old `BASE_EVENTS` and the old `thread_read`-withheld arm exactly. A
+# GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+BASE_HASHES = {0: "3e31638ef6eec7082eafa9ff4db9bb2d",
+               1: "056584ed2e5c77fd02c0fcaee079f35c",
+               2: "71ac6881dc3949011fb55146700509d5"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -442,8 +458,11 @@ BASE_HASHES = {0: "fe427626f9e91ab83ffd556c0bec4ea7",
 # RE-RECORDED at v10 REM-2B with `BASE_HASHES` (9316 -> 9319, 28806 -> 28490; the three rows put back in process read the old pair).
 # RE-RECORDED at v10 IN-45 with `BASE_HASHES` (9319 -> 9334, 28490 -> 28526; `planned_works` emptied in process reads the old pair).
 # RE-RECORDED at ED-IN-0306 with `BASE_HASHES` (9334 -> 9378, 28526 -> 28665; main at 59f2f97f reads the old pair).
-BASE_EVENTS = {1: (9378, "d51c8510ef5944db51e82d4c16337ab97621ce330cb8e634c2a7f0d624abe70f"),
-               2: (28665, "0ff7f81c069914cf9c5fa52b3b5fbd9bf671083082cd215a95371b0445c3d069")}
+# RE-RECORDED at v10 SE-06 with `BASE_HASHES` (9378 -> 8913, 28665 -> 27020; `temperaments:` deleted in process reads the old pair).
+# RE-RECORDED at v10 CR-21 with `BASE_HASHES` (8913 -> 9180, 27020 -> 27827).
+# RE-RECORDED at v10 CR-16 with `BASE_HASHES` (9180 -> 9347, 27827 -> 27605; `stance_polarity` swept back to `legacy` reads the old pair).
+BASE_EVENTS = {1: (9347, "7c4519961255d9f7db80fe99ccad932018598b869fc22b60fbea19bdfc98779f"),
+               2: (27605, "4d84ed812ccf997c00e731c74e5e06b2ab5582241c25811deb6c086ee32841d0")}
 
 
 def _digest(w) -> tuple:
@@ -569,7 +588,12 @@ def test_the_give_withheld_arm_reproduces_the_one_season_pin():
 #: `planned_works` emptied in process reads the old value exactly).
 #: RE-RECORDED at ED-IN-0306 with `BASE_HASHES`: 9339 / a5cb2f02... -> 9383 / 1b8ac5b5... (the computed `migrate` onto a territory is
 #: declined; main at 59f2f97f reads the old value exactly).
-THREAD_READ_WITHHELD_EVENTS_1 = (9383, "1b8ac5b59ad796609b8a3eae47b72ec3cad1721b413908eea2732103615348d2")
+#: RE-RECORDED at v10 SE-06 with `BASE_HASHES`: 9383 / 1b8ac5b5... -> 8918 / 0e529f09... (the cohorts' territory pursuits;
+#: `temperaments:` deleted in process reads the old value exactly).
+#: RE-RECORDED at v10 CR-21 with `BASE_HASHES`: 8918 / 0e529f09... -> 9185 / b82a1ea2... (the cell-value pass).
+#: RE-RECORDED at v10 CR-16 with `BASE_HASHES`: 9185 / b82a1ea2... -> 9350 / 714b9f7f... (`stance_polarity` `declared`; swept back to
+#: `legacy` in process reads the old value exactly).
+THREAD_READ_WITHHELD_EVENTS_1 = (9350, "714b9f7f5e198d4d4f11eddc81ce1818dc5222fddabe52ae271199de3866eff0")
 
 
 def test_the_thread_read_withheld_arm_is_pinned_and_differs_from_the_shipped_season():

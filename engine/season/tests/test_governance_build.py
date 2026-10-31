@@ -2824,7 +2824,22 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # onto a territory rung is declined (`rosters.yaml: arrival_only_kinds`), so the freed scene moves the realm's act mix (seed 0,
     # one season: 598 -> 599, `test_go07_canonical_digest.py`'s shift). The stripped arm is unmoved at 597. CONTROL: main at 59f2f97f
     # reads (598, 597) under this same test.
-    assert (out["acts"], cout["acts"]) == (599, 597), (
+    # ⚠⚠ v10 SE-06 (B10-07b): (599, 597) -> (598, 598), A RE-RECORD WITH THE UNIT THAT MOVED IT: a cohort now holds its
+    # territory's pursuit vector (`cohorts.yaml: temperaments:`), so 37 persons who had no pursuit term choose on one and the
+    # realm's act mix moves (seed 0, one season: 599 -> 598 for the kept arm, 597 -> 598 for the stripped). EQUAL COUNTS, and
+    # the parting is asserted directly below, not proxied by them. CONTROL: the tree before SE-06 (`eda39a631`) reads
+    # (599, 597) under this same test.
+    # ⚠⚠ v10 CR-21 (B10-07b): (598, 598) -> (606, 607), A RE-RECORD WITH THE UNIT THAT MOVED IT: `happiness`'s
+    # `deontological_instrumental` cell falls from +0.4 to 0.0 (`rosters.yaml`), and the cohort vectors SE-06 gave read that
+    # column, so the realm's act mix moves again (seed 0, one season: 598 -> 606 kept, 598 -> 607 stripped, the same shift
+    # `test_go07_canonical_digest.py` records). The arms part by one act again. CONTROL: the SE-06 tree (`65ea7e191`) reads
+    # (598, 598) under this same test.
+    # ⚠⚠ v10 CR-16 (B10-07b): (606, 607) -> (597, 595), A RE-RECORD WITH THE UNIT THAT MOVED IT: `Fixtures stance_polarity` ships
+    # `declared` (H-194), so a grudge pulls the contested acts against its object (every contested row whose opponent is its subject; `arrest` never forms in the realm, G-07) up instead of down
+    # and the realm's act mix moves (seed 0, one season: 606 -> 597 kept, 607 -> 595 stripped; `test_go07_canonical_digest.py` records
+    # the 597). The arms part by two acts (597 / 595). CONTROL: this world with `stance_polarity` swept back to `legacy` in process reads
+    # (606, 607) under this same test's two seasons-of-one (the script on both arms).
+    assert (out["acts"], cout["acts"]) == (597, 595), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")
@@ -2841,7 +2856,7 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
 # H2 -- `ED-IN-0261`'s DEONTOLOGICAL GATE, `H-146`. A refusal at `opening_set`, not a score term:
 # the person's projected weight on the gating axis IS the threshold, and a verb that axis engages
 # past it never forms a Candidate. Roster-generic: the axis is whatever `Fixtures refusal_axis`
-# names, so these tests take a rostered axis by position and name none.
+# names, so these tests take the axis that `pursuit_axes.refusing_pole` authors (`_h2_axis`).
 #
 # Falsifier (`proposals/2026-09-26-decision-layer-execution-plan/PROPOSAL.md` §3.2): a synthetic
 # projection/alignment injected through the rebinds the readers actually resolve --
@@ -2870,6 +2885,9 @@ def _h2_base(min_verbs=3):
     assert len(verbs) >= min_verbs, (
         f"only {verbs} form here; the H-146 gate tests need >= {min_verbs}")
     return w, p, q, v, base, verbs
+
+
+from .test_cr21_cells import _deontological_axis as _h2_axis    # noqa: E402 -- the one authored refusing-pole axis
 
 
 def _h2_inject(p, axis, weight, cells):
@@ -2908,12 +2926,11 @@ def test_h2_a_verb_past_the_persons_weight_never_forms():
     """THE FALSIFIER. Person weight `-0.4` on the axis (the NEG, refusing pole). Three engaged
     verbs: `+0.3` and `-0.2` sit past `-0.4` toward the POS pole and are refused; `-0.6` does not
     and survives. Every verb the axis does not engage survives -- only *certain actions* gate."""
-    from ..data.rosters import PURSUIT_AXES
     from ..decision import options as _options
 
     w, p, q, v, base, verbs = _h2_base()
     refused_pos, refused_neg, tolerated = verbs[0], verbs[1], verbs[2]
-    axis = sorted(PURSUIT_AXES)[-1]
+    axis = _h2_axis()
     fx = w.fixtures.sweep("refusal_axis", axis)
     restore = _h2_inject(p, axis, -0.4,
                          {refused_pos: 0.3, refused_neg: -0.2, tolerated: -0.6})
@@ -2935,14 +2952,13 @@ def test_h2_survivors_score_exactly_as_they_did_ungated():
     """The gate filters and never re-weights: every Candidate that survives it reaches the score
     with the value it had with the gate unset. Observed through `_sample_order`, the one place
     `make_chooser` hands the scores on, so this reads the chooser's own numbers."""
-    from ..data.rosters import PURSUIT_AXES
     from ..decision import choose as _choose
     from ..decision import options as _options
     from ..state.carriers import Sensation
 
     w, p, q, v, base, verbs = _h2_base()
     refused, tolerated = verbs[0], verbs[1]
-    axis = sorted(PURSUIT_AXES)[0]
+    axis = _h2_axis()
     fx0 = w.fixtures.sweep("choice_temperature", 0)
 
     def scores(fx):

@@ -864,11 +864,14 @@ DEFAULT_FIXTURES = Fixtures(
     # ON IT: `legacy` adds `stance_toward(p, subject)` to every candidate (the pre-G2 term);
     # `declared` adds G1's `regard` and negates it where the subject is the act's OPPONENT, so a
     # grudge makes `fight` on its object score higher (`decision/choose.py::stance_term`;
-    # `rosters.yaml: stance_polarities`). `legacy` is the CONTROL and is SHIPPED [ASSUMPTION], on
-    # `H-190`'s precedent: the plan names `declared` against `legacy` as the falsifier and is silent
-    # on which ships, and `declared` moves the realm.
+    # `rosters.yaml: stance_polarities`). `declared` is SHIPPED by CR-16 (v10, B10-07b)
+    # [ASSUMPTION; medium; Jordan to correct; revert: set this back to "legacy" (re-pin what CR-16 re-recorded: the
+    # seeded goldens, the `test_season_shape` figures, `test_sc01_the_bar`'s proceedings, `test_h9`'s seed); the
+    # `subject_is_opponent` repair need not revert]: the sign is derived from the row's own columns
+    # and IN-25's gain (`stance_gain`, below) is inert at `legacy`. `legacy` is the CONTROL, the
+    # pre-G2 term verbatim, and stays selectable.
     # [JUSTIFIED: engine/season/hole_register.yaml H-194 -- the polarity arm; §F2 gives the term and no sign by role, so the readings are declared and swept legacy / regard / declared]
-    stance_polarity="legacy",          # `H-194`, swept legacy (control, SHIPPED) / regard / declared
+    stance_polarity="declared",        # `H-194`, swept legacy (control) / regard / declared (SHIPPED, CR-16)
     # `H-202` (v9 IN-25, BOUND-STAKES). HOW HARD §F2's STANCE TERM PULLS ON A CHOICE: the term
     # `stance_polarity` signs is read at `1 + this` (`decision/choose.py::stance_term`), so a grudge
     # or a judged deed outweighs a person's pursuits sooner as it rises. §F2 weights the term 1 and
@@ -877,10 +880,10 @@ DEFAULT_FIXTURES = Fixtures(
     # how much the written stance WEIGHS. `0` is the CONTROL: the term is the pre-IN-25 one exactly.
     # SHIPPED LIVE at the sweep's middle arm 1 (the term at twice §F2's weight), per Jordan's ruling
     # of 2026-10-09 (B-E): *"Gains are improvements and therefore ship."* [ASSUMPTION; medium; Jordan
-    # to correct; revert: set this back to 0.0 (the control)]. ⚠ At the shipped `stance_polarity`
-    # `legacy` the term is constant within every realm deliberation that carries one (`H-202`'s
-    # measurement), so this gain moves no realm outcome there until a stance row meets one
-    # candidate's subject and not another's. Must be >= 0.
+    # to correct; revert: set this back to 0.0 (the control)]. ⚠ At `stance_polarity` `legacy` the
+    # term is constant within every realm deliberation that carries one (`H-202`'s measurement), so
+    # this gain moved no realm outcome there; CR-16 ships `declared` (above), where the term varies
+    # by subject and the gain scales it. Must be >= 0.
     # [JUSTIFIED: engine/season/hole_register.yaml H-202 -- the stance term's gain; §F2 gives the term and no gain, and the dukes' and Church's rising stakes have no rate, so it is injected and swept 0 / 1 / 3; shipped live at 1 per Jordan's 2026-10-09 ruling]
     stance_gain=1.0,                   # `H-202`, swept 0 (control) / 1 (SHIPPED) / 3
     # `H-196` (v9 IN-18 `G3`, slant). WHAT A TELLER PASSES ON ABOUT A SUBJECT: `newest` is the

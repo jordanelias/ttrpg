@@ -47,10 +47,12 @@ from pathlib import Path
 
 import pytest
 
+from ..data import files
 from ..data.matrix import Step, WriteClass
+from ..data.rosters import PURSUITS, table
 from ..data.requires import SHORTFALL_PREDICATE
 from ..epistemic import _ch_co_located
-from ..gaps import Forbidden, ShapeGap
+from ..gaps import Forbidden, ShapeGap, Unspecified
 from ..harness import populated as POP
 from ..harness import probes as P
 from ..harness import register as REG
@@ -679,3 +681,127 @@ def test_se01_falsifier_a_stored_aggregate_on_a_rung_is_refused(realm):
     with pytest.raises(ShapeGap):
         w.rungs[rung].population = world_q.population(w, rung)
     assert not hasattr(w.rungs[rung], "population")
+
+
+# ======================================================================================
+# 3 -- v10 SE-06: A COHORT'S PURSUITS ARE ITS TERRITORY'S TEMPERAMENT (`cohorts.yaml: temperaments:`)
+# ======================================================================================
+#
+# The rule is `data/pursuits.py::temperament_pursuits`; every expectation below is recomputed HERE from
+# `tables.pursuit_projection` and the source's (alpha, beta), never by calling the owner. T3 (alpha = beta = 0.5)
+# cannot tell the two poles apart, so the asymmetric T6 (0.9, 0.1) carries the planted failure.
+
+_AXIS = "deontological_instrumental"            # the axis the rule reads, `-` deontological and `+` instrumental
+_PURSUIT_ROWS = table("pursuit_projection")      # {pursuit: {axis: cell}}
+
+
+def _expected(alpha: float, beta: float) -> dict:
+    d = {p: _PURSUIT_ROWS[p].get(_AXIS, 0.0) for p in PURSUITS}
+    raw = {p: alpha * max(0.0, d[p]) + beta * max(0.0, -d[p]) for p in PURSUITS}
+    total = sum(raw.values())
+    return {p: raw[p] / total for p in PURSUITS}
+
+
+def _agree(got: dict, want: dict) -> bool:
+    return set(got) == set(want) and all(abs(got[p] - want[p]) < 1e-12 for p in want)
+
+
+def test_se06_a_cohort_at_lowenskyst_holds_what_the_rule_yields_from_t3s_row(realm):
+    """`set_s_007` is in T3 (alpha = beta = 0.5). The vector is the whole roster, totals 1, and a pursuit with no
+    projection on the axis takes 0. The numbers are asserted, not just the shape."""
+    assert world_q.parent_of(realm, "set_s_007") == "terr_T3", "set_s_007 is no longer in T3; the row below is stale"
+    cohort = realm.persons[f"{POP.COHORT_PREFIX}set_s_007"]
+    assert _agree(cohort.pursuits, _expected(0.5, 0.5)), cohort.pursuits
+    assert abs(sum(cohort.pursuits.values()) - 1.0) < 1e-12
+    assert cohort.pursuits["family"] == 0.0 and cohort.pursuits["individuality"] == 0.0
+    assert cohort.conviction == {}, "a cohort was given a creed nobody wrote"
+
+
+def test_se06_the_poles_are_not_interchangeable_alpha_is_read_on_the_instrumental_pole(realm):
+    """`set_s_012` is in T6 (alpha 0.9, beta 0.1: outcomes first). `wealth` projects +0.6 on the axis (the
+    instrumental pole) and `honour` -0.7 (the deontological one), so an outcomes-first territory weights wealth
+    above honour; a rule reading alpha on the other pole, or the sign the other way, fails here and passes T3."""
+    assert world_q.parent_of(realm, "set_s_012") == "terr_T6"
+    cohort = realm.persons[f"{POP.COHORT_PREFIX}set_s_012"]
+    assert _agree(cohort.pursuits, _expected(0.9, 0.1)), cohort.pursuits
+    assert cohort.pursuits["wealth"] > cohort.pursuits["honour"]
+    assert world_q.parent_of(realm, "set_s_009") == "terr_T5"           # alpha 0.3, beta 0.7: conduct first
+    conduct = realm.persons[f"{POP.COHORT_PREFIX}set_s_009"].pursuits
+    assert _agree(conduct, _expected(0.3, 0.7)) and conduct["honour"] > conduct["wealth"]
+
+
+def test_se06_every_cohort_holds_a_vector_and_two_of_one_territory_are_identical(realm):
+    cohorts = _cohorts(realm)
+    checked = 0
+    by_terr: dict = {}
+    for pid, p in cohorts.items():
+        assert p.pursuits and set(p.pursuits) == set(PURSUITS), f"{pid} holds {p.pursuits!r}"
+        assert p.conviction == {}, f"{pid} holds a creed"
+        by_terr.setdefault(world_q.parent_of(realm, world_q.residence_of(realm)[pid]), []).append(p.pursuits)
+        checked += 1
+    assert checked >= 37, f"only {checked} cohorts were checked; the file has 37 rows"
+    assert any(len(v) > 1 for v in by_terr.values()), "no territory holds two cohorts; the identity claim is vacuous"
+    assert all(v == [v[0]] * len(v) for v in by_terr.values()), "two cohorts of one territory differ"
+    rows = POP.temperament_rows()
+    want = len({round(r["alpha"] / (r["alpha"] + r["beta"]), 9) for r in rows})     # equal ratio, equal vector
+    got = len({tuple(sorted(v[0].items())) for v in by_terr.values()})
+    assert got == want > 1, (got, want)         # as many distinct vectors as the source gives distinct ratios
+
+
+def _planted(tmp_path, monkeypatch, text: str) -> None:
+    """Point the loaders at a COPY of `cohorts.yaml`; the tracked file is never written."""
+    path = tmp_path / "cohorts.yaml"
+    path.write_text(text, encoding="utf-8")
+    monkeypatch.setattr(files, "COHORTS_YAML", path)
+
+
+def test_se06_a_block_that_omits_a_territory_a_cohort_lives_in_refuses_naming_both(tmp_path, monkeypatch):
+    text = files.COHORTS_YAML.read_text(encoding="utf-8")
+    lines = text.splitlines(keepends=True)
+    kept = [ln for ln in lines if not ln.startswith("- {territory: T3,")]
+    assert len(kept) == len(lines) - 1, "T3 has no row to remove"
+    _planted(tmp_path, monkeypatch, "".join(kept))
+    with pytest.raises(Unspecified) as e:
+        POP.build_realm(0)
+    assert "T3" in str(e.value) and "cohort_set_s_007" in str(e.value), str(e.value)[:300]
+
+
+@pytest.mark.parametrize("block", [
+    "temperaments: []\n",                                                        # an empty block configures nothing
+    "temperaments:\n- {territory: T1, alpha: 0.7}\n",                            # a field missing
+    "temperaments:\n- {territory: T1, alpha: 0.7, beta: 0.3, name: x}\n",        # a field the file does not declare
+    "temperaments:\n- {territory: T1, alpha: 1.5, beta: 0.3}\n",                 # alpha out of [0, 1]
+    "temperaments:\n- {territory: T1, alpha: 0.7, beta: -0.1}\n",                # beta out of [0, 1]
+    "temperaments:\n- {territory: T1, alpha: true, beta: 0.3}\n",                # YAML's `true` is not 1
+    "temperaments:\n- {territory: T1, alpha: 'x', beta: 0.3}\n",                 # not a number
+    "temperaments:\n- {territory: T1, alpha: 0.7, beta: 0.3}\n- {territory: T1, alpha: 0.3, beta: 0.7}\n",  # twice
+    "temperaments:\n- {territory: T99, alpha: 0.7, beta: 0.3}\n",                # no such territory
+    "temperaments:\n- {territory: [T1], alpha: 0.7, beta: 0.3}\n",                # an unhashable territory
+    "temperaments: 5\n",                                                         # not a list of rows
+])
+def test_se06_the_reader_refuses_every_shape_a_temperament_row_cannot_take(block):
+    with pytest.raises(ShapeGap):
+        POP.temperament_rows("cohorts: []\n" + block)
+
+
+def test_se06_the_shipped_block_has_one_row_per_territory_but_askeheim():
+    rows = POP.temperament_rows()
+    assert rows, "the shipped file carries no temperaments block"
+    assert sorted(r["territory"] for r in rows) == sorted(f"T{n}" for n in range(1, 18) if n != 15), "T15 holds no cohort"
+
+
+def test_se06_control_without_the_block_the_realm_is_the_uniform_one(tmp_path, monkeypatch, realm):
+    """THE REVERT. The same file less its `temperaments:` block seats every cohort with no pursuits (the pre-SE-06
+    shape), and clearing the shipped realm's cohort pursuits by hand reproduces that realm's hash exactly: the block
+    moves cohorts' pursuits and nothing else."""
+    text = files.COHORTS_YAML.read_text(encoding="utf-8")
+    _planted(tmp_path, monkeypatch, text[:text.index("temperaments:\n")] + text[text.index("# THE GUARD COHORTS"):])
+    assert POP.temperament_rows() is None
+    uniform = POP.build_realm(0)
+    assert len(_cohorts(uniform)) >= 37 and all(not p.pursuits and not p.conviction for p in _cohorts(uniform).values())
+    assert uniform.content_hash() != realm.content_hash(), "the block moved nothing"
+    monkeypatch.undo()
+    shipped = POP.build_realm(0)
+    for p in _cohorts(shipped).values():
+        p.pursuits = {}
+    assert shipped.content_hash() == uniform.content_hash()
