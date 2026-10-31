@@ -1675,7 +1675,7 @@ RUNG_REMIT_ACTS = _derive_rung_remit_acts()
 
 # An authored alignment cell for an EVENT KIND rather than a verb is keyed `deed:<kind>` in the same
 # axis row. Admitted only where `<kind>` is in `EMITTED_KINDS` (`_load_alignment`): a deed key for a
-# kind no verb emits is a weight on an event nobody can see. None is authored today.
+# kind no verb emits is a weight on an event nobody can see. Authored: `deed:commitment.ended` (CR-21, M14).
 DEED_PREFIX = "deed:"
 
 

@@ -3225,7 +3225,7 @@ tables:
         rigid_flexible:               0.0
         grandiose_humble:             0.0
         deontological_instrumental:  -0.3
-      happiness:         # §2.12 · reasoned: all seven · CR-21 (M14): deontological_instrumental +0.4 -> 0.0 [ASSUMPTION; medium; Jordan to correct; revert: the old value, +0.4, one re-pin for the set] -- happiness is an END and not an instrument (the draft's §1b(b) wealth-vs-happiness pair: "wealth-seeking is instrumental reason's paradigm; happiness is an end"); the direction is the source's, the magnitude 0.0 is delegated. cos(wealth, happiness) 0.969 -> 0.818
+      happiness:         # §2.12 · reasoned: six of the seven (deontological_instrumental is CR-21's) · CR-21 (M14): deontological_instrumental +0.4 -> 0.0 [ASSUMPTION; medium; Jordan to correct; revert: the old value, +0.4, one re-pin for the set] -- happiness is an END and not an instrument (the draft's §1b(b) wealth-vs-happiness pair: "wealth-seeking is instrumental reason's paradigm; happiness is an end"); the direction is the source's, the magnitude 0.0 is delegated. cos(wealth, happiness) 0.969 -> 0.818
         hierarchical_equal:           0.0
         precedent_substantive:        0.3
         partisan_equitable:          -0.2
@@ -3343,18 +3343,6 @@ tables:
         not by pursuit (`candidate_pursuit_cells.md` §3.6 `:999`, §7.4 `:1377`; G-1, [medium;
         Jordan to correct]). `corpus_run`'s RANKING counts only candidates whose verb has a celled
         axis, so a `tell` is neither a tie nor a discrimination there.
-      thread_read: >-
-        No typed cell (`H-85`), not in `resolvable_verbs()`, and `opening_set` can never form a
-        Candidate for it, so a weight on it would be dead (`candidate_pursuit_cells.md` §3.7
-        `:1028`, carrying the old table's rule). ⚠ THE PREMISE IS STALE SINCE v9 PC-06 K-3: the row
-        is typed (the Thread Sensitivity gate) and resolvable, and it forms for a person whose own
-        sensitivity passes the gate. It stays here because the draft's declared set names it and
-        its cells are owed; it scores 0.0 meanwhile. ⚠ CR-21 (M14) RE-RAN THE DRAFT'S METHOD ON IT
-        AND IT YIELDS NO CELL: the draft's grades are `carried` (an old-table cell, and the old
-        table gave `thread_read` none) or `derived` (a direction read off the verb row's text, and
-        the row names an investigation gated by Thread Sensitivity, with no axis lean). `restore`,
-        which stood here for the same stale premise, is celled (P/S -0.2). A `thread_read` cell
-        waits on a source.
     # §G's third term. ORDER IS SEMANTIC: `declared` is the default and the first arm, and every
     # point is built from it rather than from the previous one. `uniform` is THE CONTROL — every
     # (verb, axis) pair equal, so convictions cannot discriminate at all and a verdict that does
@@ -3443,6 +3431,7 @@ tables:
         speak:          null
         succeed:        null
         examine:        null
+        thread_read:    null    # CR-21 (M14): considered, no source and no lean (the draft's §3.7 grade `null`) -- an investigation gated by Thread Sensitivity names no direction on this axis
         interview:      null
         research:       null
         reconstruct:    null
@@ -3455,7 +3444,7 @@ tables:
 
       precedent_substantive:
         # negative = returns to previous ideas/actions · positive = forges new ones (draft §3.2)
-        restore:        -0.2    # CR-21 (M14) [ASSUMPTION; medium; Jordan to correct; revert: delete this cell and return `restore` to `uncelled:`, one re-pin for the set]: raising a Site's `condition` (`_eff_restore`) returns a fabric toward the state it was built to; `reconstruct`'s reading ("assembling what stands, not creating what is new", -0.4), smaller because the fabric is mended, not re-read
+        restore:        -0.2    # CR-21 (M14) [ASSUMPTION; medium; Jordan to correct; revert: delete this cell and return `restore` to `uncelled:`, one re-pin for the set]: reasoned -- raising a Site's `condition` (`_eff_restore`) returns a fabric toward the state it was built to; `reconstruct`'s reading ("assembling what stands, not creating what is new", -0.4), smaller because the fabric is mended, not re-read
         seize:          null    # reasoned (IN-12 step 6): taking a document under a warrant follows a form without returning to or breaking one -- considered, no lean
         destroy_record:  1.0    # carried: unmaking the record is the anti-procedural act -- the record is what precedent is consulted in
         create_record:  -0.8    # carried: the record IS what precedent is made of
@@ -3494,6 +3483,7 @@ tables:
         revoke:         null
         speak:          null
         examine:        null
+        thread_read:    null    # CR-21 (M14): considered, no source and no lean (the draft's §3.7 grade `null`) -- an investigation gated by Thread Sensitivity names no direction on this axis
         interview:      null
         surveil:        null
         transfer:       null
@@ -3540,6 +3530,7 @@ tables:
         speak:          null
         succeed:        null
         examine:        null
+        thread_read:    null    # CR-21 (M14): considered, no source and no lean (the draft's §3.7 grade `null`) -- an investigation gated by Thread Sensitivity names no direction on this axis
         interview:      null
         research:       null
         surveil:        null
@@ -3590,6 +3581,7 @@ tables:
         succeed:        null
         survey:         null
         examine:        null
+        thread_read:    null    # CR-21 (M14): considered, no source and no lean (the draft's §3.7 grade `null`) -- an investigation gated by Thread Sensitivity names no direction on this axis
         interview:      null
         research:       null
         surveil:        null
@@ -3644,6 +3636,7 @@ tables:
         speak:          null
         succeed:        null
         examine:        null
+        thread_read:    null    # CR-21 (M14): considered, no source and no lean (the draft's §3.7 grade `null`) -- an investigation gated by Thread Sensitivity names no direction on this axis
         interview:      null
         research:       null
         surveil:        null
@@ -3698,6 +3691,7 @@ tables:
         revoke:         null
         succeed:        null
         examine:        null
+        thread_read:    null    # CR-21 (M14): considered, no source and no lean (the draft's §3.7 grade `null`) -- an investigation gated by Thread Sensitivity names no direction on this axis
         interview:      null
         research:       null
         surveil:        null
@@ -3745,7 +3739,7 @@ tables:
         interview:      null    # CONFLICT resolved to null: the old -0.3 was a price ("the hand-revealing cost"), the same defect
         build:          null    # reasoned: the row weighs no outcome against a scruple; its yield arrives through `work`, which carries its own cell
         found:          null    # reasoned: as `build`
-        # no source (draft §3.7, "the other 19"; `thread_read` is in `uncelled:`)
+        # no source (draft §3.7, "the other 19", and `thread_read`, whose row the draft also grades `null`)
         carry:          null
         confer:         null
         convene:        null
@@ -3763,4 +3757,5 @@ tables:
         speak:          null
         succeed:        null
         examine:        null
+        thread_read:    null    # CR-21 (M14): considered, no source and no lean (the draft's §3.7 grade `null`) -- an investigation gated by Thread Sensitivity names no direction on this axis
 

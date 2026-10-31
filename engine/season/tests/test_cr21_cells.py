@@ -96,10 +96,14 @@ def test_cr21_the_four_value_changes_and_the_role_template_cell_are_what_the_dec
     assert [V.align("restore", ax) for ax in sorted(PURSUIT_AXES) if ax != PS] == [0.0] * (len(PURSUIT_AXES) - 1)
     assert V.ALIGNMENT[RF]["deed:commitment.ended"] == 0.4
     assert V.ALIGNMENT[DI]["deed:commitment.ended"] == 0.8
-    # `restore` now has a celled axis, so R-08's G-1 counts it; `thread_read` still has none
+    # `restore` now has a celled axis, so R-08's G-1 counts it; `thread_read` is CONSIDERED and `null` on all seven
+    # (the draft's §3.7 grade `null`: no source, no lean), so it leaves `uncelled:` and still scores 0.0 and counts as none
     assert "restore" in V.celled_verbs() and "thread_read" not in V.celled_verbs()
     uncelled = table_meta("alignment")["uncelled"]
-    assert "restore" not in uncelled and "thread_read" in uncelled
+    assert "restore" not in uncelled and "thread_read" not in uncelled
+    cells = table("alignment")
+    assert [cells[ax]["thread_read"] for ax in sorted(PURSUIT_AXES)] == [None] * len(PURSUIT_AXES)
+    assert [V.align("thread_read", ax) for ax in sorted(PURSUIT_AXES)] == [0.0] * len(PURSUIT_AXES)
 
 
 def _vow_break_regard(judge_pursuit: str, with_cells: bool, monkeypatch) -> float:
@@ -149,6 +153,6 @@ def test_cr21_the_loader_refuses_restore_or_thread_read_celled_and_also_uncelled
             V._load_alignment(planted, dict(uncelled, **{verb: "planted"}))
         checked += 1
     assert checked == 2
-    # and the shipped pair is lawful as it stands: `restore` celled and not listed, `thread_read` listed and not celled
+    # and the shipped pair is lawful as it stands: `restore` celled and not listed, `thread_read` null on every axis and not listed
     V._load_alignment(shipped_cells, uncelled)
     assert V._load_alignment(shipped_cells, uncelled)[PS]["restore"] == -0.2
