@@ -1470,7 +1470,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     #
     # ⚠ `body` IS `None` FOR ALL BUT THE THREE AUTHORED OVERLAYS, AND THAT IS HONEST RATHER THAN
     # LAZY. §11 makes `rung?` optional and `office_bodies` carries a faction's TOP organs only —
-    # `Ministries` is one row where canon names six ministries, the four Cardinals are there and
+    # `Ministries` is one row by the ruling at `rosters.yaml`'s `office_bodies` note, the four Cardinals are there and
     # the four Dicasteries under them are not, and Hafenmark's Committees and Varfell's Councils
     # are absent entirely. MEASURED: only 10 of 25 canon-named seats can construct with a body.
     # An office with a declared FACTION and no body is lawful (`office_faction(None, declared)`)
