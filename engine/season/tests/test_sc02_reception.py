@@ -161,13 +161,17 @@ def test_sc02_17_decayed_confidence_counts_less_and_a_hostile_bench_reads_negati
     hostile = _kind_with_lean(w, -1)
     w.persons[HEARER].ledger[-1] = _claim("bad", HEARER, SPEAKER, hostile)
     assert world_q.reception(w, SPEAKER, "Hh") < 0.0
-    # Under the shipped ceiling (`H-213`, 2 = `obstacle_default`) a hostile room cannot raise the
-    # obstacle; one notch up it does. Stated in `roll.obstacle`'s docstring and in H-215.
-    inp = _input(w)
-    obstacle = _module().obstacle
-    assert obstacle(inp) == inp.obstacle_ceiling
+    # Under the FIXED ceiling (`H-213`, 2 = `obstacle_default`) a hostile room cannot raise the
+    # obstacle; one notch up it does; and under the shipped per-pool arm (CP-T01-06) it raises it up to
+    # the pool's cap (pool 2: 2.842). Stated in `roll.obstacle`'s docstring and in H-215.
     from dataclasses import replace
-    assert obstacle(replace(inp, obstacle_ceiling=3.0)) > 2.0
+    inp = _input(w)
+    assert inp.ceiling_per_pool is True
+    obstacle = _module().obstacle
+    fixed = replace(inp, ceiling_per_pool=False)
+    assert obstacle(fixed) == inp.obstacle_ceiling
+    assert obstacle(replace(fixed, obstacle_ceiling=3.0)) > 2.0
+    assert 2.0 < obstacle(inp) <= 2.0 * inp.pool
 
 
 def test_sc02_17_reception_and_proofs_take_the_world_first():

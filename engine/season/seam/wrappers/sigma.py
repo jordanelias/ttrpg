@@ -200,6 +200,7 @@ def _frame(fx: Any, pool: int, opposition: Optional[float], forgery_quality: flo
         pool=pool, opposition=opposition,
         obstacle_default=fx.get("obstacle_default"),
         obstacle_ceiling=fx.get("obstacle_ceiling"),
+        ceiling_per_pool=fx.get("ceiling_per_pool"),
         obstacle_refusal_multiple=fx.get("obstacle_refusal_multiple"),
         leverage=0.0, forgery_quality=forgery_quality, **room_terms)
 

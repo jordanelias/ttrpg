@@ -217,7 +217,8 @@ def test_the_seam_has_no_second_obstacle_site(monkeypatch):
 
 
 def _arm(ceiling):
-    w = P.tiny_world(DEFAULT_FIXTURES.sweep("obstacle_ceiling", ceiling))
+    # the FIXED arm (CP-T01-06 ships the per-pool arm; the 1 / 2 / 3 sweep is read on the fixed one)
+    w = P.tiny_world(DEFAULT_FIXTURES.sweep("ceiling_per_pool", False).sweep("obstacle_ceiling", ceiling))
     SeasonDriver(w)
     # roster-exempt: TEST FIXTURE capabilities -- one matter far over every sweep point, one under.
     w.persons["p_mid"].capability = {"copying": 10}       # score/2 = 5
@@ -251,3 +252,131 @@ def test_changing_the_ceiling_changes_the_outcome():
             hits[c] = hits.get(c, 0) + (b != FAILURE)
         differ += bands[2] != bands[3]
     assert differ > 0 and hits[2] > hits[3], (hits, differ)
+
+
+# ---------------------------------------------------------------------------------------------
+# CP-T01-06 -- THE CEILING SOLVED PER POOL (the `chance_floor` arm)
+# ---------------------------------------------------------------------------------------------
+# Below one die the fixed value applies as it always did. From one die, the composed obstacle is
+# capped at the highest Ob at which THIS pool still keeps `H-213`'s chance -- Partial-or-better of
+# `band_odds(1, obstacle_ceiling)`, 10 % -- so a larger pool is never worse for the cap, and an
+# admitted roll keeps a real chance. The detector below is run on the rejected `2 * pool` cap too
+# (301 inversions measured at the base of CP-T01-06): a count of zero means something only because
+# the same count sees the others fail.
+POOLS = (0, 0.5) + tuple(range(1, 9))
+QUARTERS = tuple(q / 4 for q in range(0, 81))             # composed Ob 0 .. 20 in quarter steps
+CHANCE_FLOOR = 0.10                                       # H-213's shipped chance at the 1D floor
+EPS = 1e-12                                               # float noise on a 1 - F; not a tolerance on a rule
+
+
+def _pooled(pool, ob, *, per_pool=True, ceiling=None, fixed=True):
+    """A record whose composed obstacle, before any ceiling, is `ob` (opposition = 2 x ob)."""
+    return SocialContestInput(
+        pool=pool, opposition=2 * ob,
+        obstacle_default=DEFAULT_FIXTURES.get("obstacle_default"),
+        obstacle_ceiling=DEFAULT_FIXTURES.get("obstacle_ceiling") if fixed else ceiling,
+        obstacle_refusal_multiple=DEFAULT_FIXTURES.get("obstacle_refusal_multiple"),
+        leverage=0.0, ceiling_per_pool=per_pool)
+
+
+def _plus(pool, ob):
+    """(Partial-or-better, Success-or-better) of the exact odds."""
+    f, p, s, o = band_odds(pool, ob)
+    return 1.0 - f, s + o
+
+
+def _inversions(eff_of):
+    """Cells (pool 1..7 against the next pool, composed Ob >= OB_MIN) where the larger pool has the
+    LOWER Partial-or-better or Success-or-better. `eff_of(pool, ob)` is the capped obstacle."""
+    cells = bad = 0
+    for pool in range(1, 8):
+        for ob in QUARTERS:
+            if ob < OB_MIN:
+                continue
+            small, large = _plus(pool, eff_of(pool, ob)), _plus(pool + 1, eff_of(pool + 1, ob))
+            cells += 1
+            bad += large[0] < small[0] - EPS or large[1] < small[1] - EPS
+    assert cells == 7 * sum(q >= OB_MIN for q in QUARTERS)       # it looked at every cell
+    return bad
+
+
+def test_the_shipped_arm_is_the_chance_floor_and_the_old_arms_stay_selectable():
+    assert DEFAULT_FIXTURES.get("ceiling_per_pool") is True
+    mod = _module()
+    # the fixed arm (what shipped before) is one fixture away, and the uncapped arm is `None`
+    assert mod.obstacle(_pooled(4, 20, per_pool=False)) == DEFAULT_FIXTURES.get("obstacle_ceiling")
+    assert mod.obstacle(_pooled(4, 20, per_pool=True, ceiling=None, fixed=False)) == 20
+    assert mod.obstacle(_pooled(4, 20, per_pool=True)) > DEFAULT_FIXTURES.get("obstacle_ceiling")
+
+
+def test_the_enumeration_pools_by_composed_ob():
+    """The home's falsifier (1)-(3), over pools {0, 0.5, 1 .. 8} x composed Ob 0 .. 20 in quarters."""
+    mod = _module()
+    fixed = DEFAULT_FIXTURES.get("obstacle_ceiling")
+    multiple = DEFAULT_FIXTURES.get("obstacle_refusal_multiple")
+    below_one = at_or_above_one = 0
+    table = {}
+    for pool in POOLS:
+        for ob in QUARTERS:
+            eff = mod.obstacle(_pooled(pool, ob))
+            base = mod.obstacle(_pooled(pool, ob, per_pool=False))
+            assert base == min(ob, fixed)                                  # the control arm is today's
+            assert eff <= ob + EPS and (eff == ob or eff >= OB_MIN), (pool, ob, eff)   # (1) a cap is never under OB_MIN
+            table[(pool, ob)] = _plus(pool, eff)
+            if pool < 1:
+                assert eff == base, (pool, ob, eff, base)                  # (2) below a die: the base, refused as now
+                below_one += 1
+                continue
+            assert eff <= multiple * pool + EPS, (pool, ob, eff)           # (2) S27.4 never refuses a derived pair
+            assert table[(pool, ob)][0] >= CHANCE_FLOOR - EPS, (pool, ob, eff, table[(pool, ob)])   # (2) a real chance
+            at_or_above_one += 1
+    assert below_one == 2 * len(QUARTERS) and at_or_above_one == 8 * len(QUARTERS)
+    # (3) for every composed Ob at or above OB_MIN, both readings are non-decreasing in pool
+    checked = 0
+    for ob in QUARTERS:
+        if ob < OB_MIN:
+            continue
+        for lo, hi in zip(POOLS, POOLS[1:]):
+            assert table[(hi, ob)][0] >= table[(lo, ob)][0] - EPS, ("Partial+", lo, hi, ob)
+            assert table[(hi, ob)][1] >= table[(lo, ob)][1] - EPS, ("Success+", lo, hi, ob)
+            checked += 1
+    assert checked == len(POOLS[1:]) * sum(q >= OB_MIN for q in QUARTERS)
+
+
+def test_the_inversion_count_is_zero_and_the_detector_sees_the_rejected_caps():
+    mod = _module()
+    solved = lambda pool, ob: mod.obstacle(_pooled(pool, ob))
+    assert _inversions(solved) == 0
+    # the same detector on the cap CP-T01-06 rejected (`2 * pool`): it must see the failure it excludes
+    assert _inversions(lambda pool, ob: min(ob, 2.0 * pool)) >= 300
+
+
+def test_the_cap_is_the_floor_met_exactly_and_the_pool_below_one_keeps_the_fixed_value():
+    mod = _module()
+    caps = {p: mod.obstacle(_pooled(p, 20)) for p in range(1, 9)}
+    assert caps[1] == 2.0                                                  # the 1D floor's own value
+    assert list(caps.values()) == sorted(caps.values())                    # the cap rises with the pool
+    for pool, cap in caps.items():
+        assert _plus(pool, cap)[0] == pytest.approx(CHANCE_FLOOR, abs=1e-9)   # met, not exceeded by a step
+        assert _plus(pool, cap + 0.05)[0] < CHANCE_FLOOR - 1e-6              # and no higher Ob keeps it
+    assert round(caps[2], 3) == 2.842 and round(caps[3], 3) == 3.6 and round(caps[4], 2) == 4.23
+    # a ceiling the floor cannot be solved from (3: the 1D roll keeps nothing there) holds the fixed value
+    assert _module().obstacle(_pooled(4, 20, ceiling=3, fixed=False)) == 3
+    with pytest.raises(ValueError, match="below the Ob minimum"):
+        mod.obstacle(_pooled(4, 20, ceiling=OB_MIN - 0.5, fixed=False))
+
+
+def test_the_chance_floor_reaches_the_resolved_act_through_the_seam():
+    """The fixture is carried by the host and read by the module: pool 2 against a score/2 of 5."""
+    for per_pool in (False, True):
+        fx = DEFAULT_FIXTURES.sweep("ceiling_per_pool", per_pool)
+        w = P.tiny_world(fx)
+        SeasonDriver(w)
+        w.persons["p_mid"].capability = {"copying": 10}       # roster-exempt: TEST FIXTURE, score/2 = 5
+        out = sigma.resolve(w, ["p_low"], ["c"], "a standing", verb="tell", subject="p_mid",
+                            rng=random.Random(0))
+        assert out["status"] == "RESOLVED", out
+        if per_pool:
+            assert 2.0 < out["ob"] < 5.0
+        else:
+            assert out["ob"] == 2.0

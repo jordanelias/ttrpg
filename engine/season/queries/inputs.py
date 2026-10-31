@@ -50,6 +50,10 @@ class SocialContestInput:
       * `obstacle_default` -- the `H-127` stand-in for a subject with no score to halve;
       * `obstacle_ceiling` -- the `H-213` bound on how hard one matter can get; `None` is the
                        uncapped control arm;
+      * `ceiling_per_pool` -- the `chance_floor` arm (CP-T01-06): from one die, the module solves the
+                       cap for THIS pool from `obstacle_ceiling`'s own chance at one die, and the
+                       fixed value stays the cap below one die. `False` is the fixed arm (the default,
+                       so a record built by hand reads as it always did);
       * `obstacle_refusal_multiple` -- S27.4's multiple, the fixture the host adapter refuses on,
                        on the pair the entry returns;
       * `leverage`  -- the σ-layer μ-shift. Zero until something supplies leverage: an `assumption`
@@ -87,6 +91,7 @@ class SocialContestInput:
     proofs: float = 0.0
     proof_step: float = 0.0
     forgery_quality: float = 0.0
+    ceiling_per_pool: bool = False
 
 
 @dataclass(frozen=True)

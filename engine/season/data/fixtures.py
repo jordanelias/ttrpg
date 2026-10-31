@@ -417,6 +417,12 @@ DEFAULT_FIXTURES = Fixtures(
     obstacle_refusal_multiple=2,
     # [JUSTIFIED: engine/season/hole_register.yaml H-213 -- `site: Fixtures obstacle_ceiling`, graded `assumption`; M-7 fails at the 1D floor above 2 (p_success 0.0006 at Ob 3), and 2 = obstacle_refusal_multiple x the 1D floor; swept 1 / 2 / 3, `None` the uncapped control]
     obstacle_ceiling=2,
+    # CP-T01-06: THE `chance_floor` ARM OF THE CEILING. From one die the cap is solved per pool (the highest
+    # Ob at which this pool keeps the chance `obstacle_ceiling` leaves a one-die roll), so the fixed value
+    # above is the cap below one die and the floor's source; `False` is the fixed arm, `obstacle_ceiling`
+    # `None` the uncapped one (both still swept).
+    # [JUSTIFIED: engine/season/hole_register.yaml H-213 -- `site: Fixtures ceiling_per_pool`, graded `assumption`; the chance it holds is not a new number (band_odds(1, obstacle_ceiling)'s Partial-or-better, 10 %), swept True / False]
+    ceiling_per_pool=True,
     # v9 SC-02 `22a` (proceedings `19_PLAN.md` steps 17 and 18): THE ROOM'S TWO MAGNITUDES, carried raw by
     # `seam/wrappers/sigma.py::contest_input` and composed by `modules/social_contest/roll.py::obstacle`
     # (`room = reception_gain x reception + proof_step x proofs`, subtracted, floored at `OB_MIN`, under

@@ -269,22 +269,26 @@ def test_step25_falsifier_the_examination_reads_the_quality_into_its_obstacle():
     and against the default at quality `0`. A CONTEST naming a prize on the same Record reads no quality
     (only an examination contests it; the gate is observed by
     `test_step25_a_prize_contest_examines_nothing...`). At the SHIPPED ceiling (2, `= obstacle_default`) the forgery is
-    bounded to the default -- the stated limit, pinned so a ceiling change shows here."""
+    bounded to the default -- the stated limit, pinned so a ceiling change shows here -- ON THE FIXED ARM.
+    CP-T01-06 ships the per-pool arm (`ceiling_per_pool`): a pool whose solved cap is above the default lets
+    the quality bite (`pool_default` 30 below: the cap is far above 5), so there the forgery reads in full."""
     obs = {}
     for q in (0, 1, 3):
-        for ceiling in (None, DEFAULT_FIXTURES.get("obstacle_ceiling")):
+        for ceiling, per_pool in ((None, False), (DEFAULT_FIXTURES.get("obstacle_ceiling"), False),
+                                  (DEFAULT_FIXTURES.get("obstacle_ceiling"), True)):
             w, _d, rid = trail_world(fixtures=_fx(default_forgery_quality=q, obstacle_ceiling=ceiling,
-                                                  pool_default=30))
+                                                  ceiling_per_pool=per_pool, pool_default=30))
             out = sigma.resolve(w, [INVESTIGATOR], ["root"], None, verb="research", subject=rid,
                                 rng=random.Random(0), module_entry="social_contest.roll")
             assert out["status"] == "RESOLVED", out
-            obs[(q, ceiling)] = out["ob"]
+            obs[(q, ceiling, per_pool)] = out["ob"]
             inp = sigma.contest_input(w, [INVESTIGATOR], verb="research", subject=rid)
             assert inp.forgery_quality == 0.0, "a contest with no `examined` read the quality"
     base = DEFAULT_FIXTURES.get("obstacle_default")
     shipped = DEFAULT_FIXTURES.get("obstacle_ceiling")
-    assert [obs[(q, None)] for q in (0, 1, 3)] == [base, base + 1, base + 3], obs
-    assert [obs[(q, shipped)] for q in (0, 1, 3)] == [min(base, shipped)] * 3, obs
+    assert [obs[(q, None, False)] for q in (0, 1, 3)] == [base, base + 1, base + 3], obs
+    assert [obs[(q, shipped, False)] for q in (0, 1, 3)] == [min(base, shipped)] * 3, obs
+    assert [obs[(q, shipped, True)] for q in (0, 1, 3)] == [base, base + 1, base + 3], obs
 
 
 def test_step25_a_prize_contest_examines_nothing_and_an_inquiry_examines_its_subject(monkeypatch):
