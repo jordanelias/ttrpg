@@ -2824,7 +2824,12 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # onto a territory rung is declined (`rosters.yaml: arrival_only_kinds`), so the freed scene moves the realm's act mix (seed 0,
     # one season: 598 -> 599, `test_go07_canonical_digest.py`'s shift). The stripped arm is unmoved at 597. CONTROL: main at 59f2f97f
     # reads (598, 597) under this same test.
-    assert (out["acts"], cout["acts"]) == (599, 597), (
+    # ⚠⚠ v10 SE-06 (B10-07b): (599, 597) -> (598, 598), A RE-RECORD WITH THE UNIT THAT MOVED IT: a cohort now holds its
+    # territory's pursuit vector (`cohorts.yaml: temperaments:`), so 37 persons who had no pursuit term choose on one and the
+    # realm's act mix moves (seed 0, one season: 599 -> 598 for the kept arm, 597 -> 598 for the stripped). EQUAL COUNTS, and
+    # the parting is asserted directly below, not proxied by them. CONTROL: the tree before SE-06 (`eda39a631`) reads
+    # (599, 597) under this same test. This fix commit follows SE-06's own, which ran four covering files and missed this one.
+    assert (out["acts"], cout["acts"]) == (598, 598), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")

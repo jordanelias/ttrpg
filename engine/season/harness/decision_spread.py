@@ -306,6 +306,11 @@ def read_persons(w) -> dict:
            if (c := _cosine(vecs[a], vecs[b])) is not None]
     mean = [sum(vecs[pid][k] for pid in live) / len(live) for k in range(len(PURSUIT_AXES))] if live else []
     to_mean = [c for pid in live if mean and (c := _cosine(vecs[pid], mean)) is not None]
+    # THE CAST ALONE (SE-06): cohorts of one territory hold the same vector by declaration, so `pairs_above` over all
+    # persons with a vector counts those pairs too; the cast's own reading is the one IN-62's EXIT bounds.
+    cast_live = [pid for pid in live if not w.persons[pid].is_cohort]
+    cast_cos = [c for i, a in enumerate(cast_live) for b in cast_live[i + 1:]
+                if (c := _cosine(vecs[a], vecs[b])) is not None]
     groups: dict = {}
     for pid in ids:
         groups.setdefault(profile_key(w, w.persons[pid]), []).append(pid)
@@ -320,6 +325,7 @@ def read_persons(w) -> dict:
         "cohorts": sum(1 for pid in ids if w.persons[pid].is_cohort),
         "zero_vector": len(ids) - len(live), "with_vector": len(live),
         "pairs": len(cos), "pairs_above": sum(1 for c in cos if c > COSINE_HIGH),
+        "pairs_above_cast": sum(1 for c in cast_cos if c > COSINE_HIGH),
         "median_cos": statistics.median(cos) if cos else None,
         "cos_to_mean_median": statistics.median(to_mean) if to_mean else None,
         "cos_to_mean_min": min(to_mean) if to_mean else None,

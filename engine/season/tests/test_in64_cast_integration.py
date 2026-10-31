@@ -178,8 +178,10 @@ def test_in64_the_cast_holds_no_identical_full_profile(_drawn):
     r = DS.read_persons(w)
     assert r["cast"] >= 46 and r["with_vector"] >= r["cast"], r
     assert r["identical_groups_cast"] == 0, r
-    # IN-62's base (8372ed92) read 37 pairs above 0.99; the EXIT is "not above the base's".
-    assert r["pairs_above"] <= 37, r["pairs_above"]
+    # IN-62's base (8372ed92) read 37 pairs above 0.99; the EXIT is "not above the base's". SE-06 gives every cohort its
+    # territory's vector, and cohorts of one territory are identical by declaration, so the all-persons `pairs_above`
+    # now counts them; the bound is on the cast's own pairs, which is the reading the base took (cohorts held none).
+    assert r["pairs_above_cast"] <= 37, r["pairs_above_cast"]
 
 
 def test_in64_the_identical_profile_reading_can_see_a_planted_duplicate(_drawn):
