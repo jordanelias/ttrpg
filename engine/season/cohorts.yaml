@@ -129,6 +129,12 @@ cohorts:
 # whose ratios are equal hold equal vectors (alpha = beta = 0.5 and alpha = beta = 0.2 are the same temperament), and the
 # cohorts hold as many distinct vectors as the source gives distinct ratios (`test_territorial_subsistence`
 # computes the count from this block).
+# ALSO, said so it is not found later: the pursuits the rule picks carry the projection table's leans on the OTHER six
+# axes, which the source never stated. T9 (0.2 / 0.8) projects precedent_substantive -0.305, more than its
+# deontological_instrumental -0.277; T6 (0.9 / 0.1) projects selfish_selfless -0.251 beside D/I +0.286; alpha = beta reads
+# D/I -0.047, not 0 (the squares of the negative-D/I pursuits outweigh the positive ones'); and every cohort's D/I lies
+# between -0.42 and +0.38. `to_axes(temperament_pursuits(a, b))` reproduces these. So the "balanced" territories are not
+# neutral, and cohort choices answer to leans the source did not state: the assumption is Jordan's to correct.
 # T15 (Askeheim) is in the source and holds no cohort, so it has no row here. A cohort whose territory has
 # no row is refused at seating (`Unspecified`), never left uniform.
 #

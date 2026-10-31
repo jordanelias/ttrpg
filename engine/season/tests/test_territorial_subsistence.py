@@ -776,6 +776,8 @@ def test_se06_a_block_that_omits_a_territory_a_cohort_lives_in_refuses_naming_bo
     "temperaments:\n- {territory: T1, alpha: 'x', beta: 0.3}\n",                 # not a number
     "temperaments:\n- {territory: T1, alpha: 0.7, beta: 0.3}\n- {territory: T1, alpha: 0.3, beta: 0.7}\n",  # twice
     "temperaments:\n- {territory: T99, alpha: 0.7, beta: 0.3}\n",                # no such territory
+    "temperaments:\n- {territory: [T1], alpha: 0.7, beta: 0.3}\n",                # an unhashable territory
+    "temperaments: 5\n",                                                         # not a list of rows
 ])
 def test_se06_the_reader_refuses_every_shape_a_temperament_row_cannot_take(block):
     with pytest.raises(ShapeGap):

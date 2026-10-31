@@ -407,9 +407,9 @@ def temperament_rows(text: str | None = None) -> list | None:
     block = (load_yaml(text) or {}).get("temperaments")
     if block is None:
         return None
-    if not block:
+    if not isinstance(block, list) or not block:
         raise Unspecified(
-            "`cohorts.yaml: temperaments` declares no row", "engine/season/cohorts.yaml",
+            "`cohorts.yaml: temperaments` declares no list of rows", "engine/season/cohorts.yaml",
             needs="one `{territory, alpha, beta}` row per territory holding a cohort, or no block at all",
             law="SE-06 -- an empty block would read as a configured realm and configure nothing")
     provinces = set(geography()["provinces"])
@@ -429,7 +429,7 @@ def temperament_rows(text: str | None = None) -> list | None:
         if not isinstance(row["territory"], str) or row["territory"] not in provinces or row["territory"] in seen:
             raise Unspecified(
                 f"`cohorts.yaml: temperaments` row {n} names the territory {row['territory']!r}, "
-                f"{'twice' if row['territory'] in seen else 'which the geography file does not carry'}",
+                f"{'twice' if isinstance(row['territory'], str) and row['territory'] in seen else 'which the geography file does not carry'}",
                 "engine/season/cohorts.yaml",
                 needs="one row per geography `provinces:` territory",
                 law="SE-06 -- one temperament per territory; a second would be two answers to one question")

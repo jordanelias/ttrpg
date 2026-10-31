@@ -153,7 +153,8 @@ def _wd_total(shift, seed=0):
 # unscaled, and this file is back to its pre-IN-71 text and values: the rise holds again, the evidence that
 # the zeroing alone had moved it.
 def test_h9_fork_divergence_at_total_rises_above_baseline_and_the_control_arm_is_unmoved():
-    """THE PLAN'S FALSIFIER. [GROUNDED: measured on this tree (H9), NPC-088 slice, seed 0, 4 seasons
+    """THE PLAN'S FALSIFIER, read since CR-16 as a ONE-SEED EXISTENCE CLAIM (seed `_RISE_SEED`): pooled over seeds 0-7 the
+    rate does NOT rise (the note above `_RISE_SEED`). [GROUNDED: measured on this tree (H9), NPC-088 slice, seed 0, 4 seasons
     at 2 slots, `total` deposit arm -- genuine/diverged `scar_weight_shift` 0 -> 29/6 (the baseline,
     UNMOVED), 0.5 -> 29/6, 1 -> 32/10. At 0.5 the `total` arm does not move on this slice; the
     arm is swept at {0, 0.5, 1}, and the verdict that flips across the sweep is the finding.]

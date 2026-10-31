@@ -40,7 +40,8 @@ WHAT EACH MODE READS, AND WHETHER IT PLAYS A SEASON (each prints the answer in i
                `conviction` (the score projects `crisis_weights`, which scales `doctrine` by conviction,
                IN-71); since SE-06 the 37 population cohorts hold a vector too (their territory's
                temperament), so they are in the mean and are flattened to it: this arm is NOT like-for-like
-               with dated readings taken while they held none; goals unseeded
+               with dated readings taken while they held none, and it also writes the realm-mean `conviction` into
+               cohorts that hold `{}` in shipped play (which switches on their doctrine scaling and affiliation scars); goals unseeded
                (`build_realm(goals=False)`, IN-68) AND the goals file read as empty (`no_goals()`; salience
                reads `data/goals.py::expected`). Creed stance rows keep their build-time weights. There is no
                switch for cohort temperaments off: the revert is deleting `cohorts.yaml: temperaments:`.
