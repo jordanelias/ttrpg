@@ -231,7 +231,7 @@ def office_singly_held(w, tenures=None) -> list:
     NOT ENFORCED ON WRITE: nothing looks at the other `hold` edges when one is added. §11 makes
     an Office a SEAT — it has `conferral`, `revocation` and an upkeep — and a seat two people
     occupy is the scarcity defect this repository has already shipped once, where every person
-    got an office and `leaders() == members()` for all eight factions."""
+    got an office and `leaders() == members()` for every faction."""
     held = Counter(t.object for t in (_all_tenures(w) if tenures is None else tenures)
                    if t.kind == "hold" and t.live and t.object in w.offices)
     return [f"office_singly_held: office {oid!r} is held by {n} people at once"
