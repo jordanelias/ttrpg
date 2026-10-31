@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 1620" width="1120" height="1620" font-family="Georgia, 'Times New Roman', serif"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#4a4036"/></marker></defs><rect width="1120" height="1620" fill="#fffdf8"/><text x="560.0" y="1608" text-anchor="middle" font-size="12" fill="#6b6256">Proposal 1 (one draw, one roster). PROPOSED, reference only. Every kind of contest is this one loop with different row values.</text><text x="560.0" y="30" text-anchor="middle" font-size="20" fill="#4a4036" >Proposal 1: one draw, one roster. How a proceeding runs</text>
+<rect x="290" y="50" width="540" height="150" rx="10" fill="#e8eef4" stroke="#2f4a63" stroke-width="1.6"/>
+<text x="560.0" y="74" text-anchor="middle" font-weight="700" font-size="16" fill="#1d1a16">1. A matter is docketed under a ROW</text>
+<text x="560.0" y="96" text-anchor="middle" font-size="13" fill="#1d1a16">arrangements.yaml: authority, disposal (who decides), acts,</text>
+<text x="560.0" y="114" text-anchor="middle" font-size="13" fill="#1d1a16">order, weights, proofs, disposes, disposal_reach, appeal_basis</text>
+<text x="560.0" y="132" text-anchor="middle" font-size="13" fill="#1d1a16">computed open_case must name its row (today it names none)</text>
+<text x="560.0" y="150" text-anchor="middle" font-size="13" fill="#1d1a16">a kind of contest is a row; no row is a branch (R-12)</text>
+<text x="560.0" y="168" text-anchor="middle" font-size="13" fill="#1d1a16">a heresy charge and a royal tribunal differ only here</text>
+<rect x="20" y="245" width="320" height="160" rx="10" fill="#f4f1ea" stroke="#4a4036" stroke-width="1.6"/>
+<text x="180.0" y="269" text-anchor="middle" font-weight="700" font-size="16" fill="#1d1a16">2a. Gate: what may be done</text>
+<text x="180.0" y="291" text-anchor="middle" font-size="13" fill="#1d1a16">admitted = row.acts within the verb table</text>
+<text x="180.0" y="309" text-anchor="middle" font-size="13" fill="#1d1a16">plus floor, venue_min_rank and order (R-33)</text>
+<text x="180.0" y="327" text-anchor="middle" font-size="13" fill="#1d1a16">a speech kind is a payload of speak,</text>
+<text x="180.0" y="345" text-anchor="middle" font-size="13" fill="#1d1a16">and the wrong kind is priced, not refused</text>
+<text x="180.0" y="363" text-anchor="middle" font-size="13" fill="#1d1a16">(aptness, R-16)</text>
+<rect x="360" y="245" width="320" height="160" rx="10" fill="#e9f0e4" stroke="#3b5a2e" stroke-width="1.6"/>
+<text x="520.0" y="269" text-anchor="middle" font-weight="700" font-size="16" fill="#1d1a16">2b. The roster IS the input record</text>
+<text x="520.0" y="291" text-anchor="middle" font-size="13" fill="#1d1a16">SocialContestInput as three sub-records:</text>
+<text x="520.0" y="309" text-anchor="middle" font-size="13" fill="#1d1a16">Dice | Obstacle | Leverage</text>
+<text x="520.0" y="327" text-anchor="middle" font-size="13" fill="#1d1a16">each source is one field in one channel,</text>
+<text x="520.0" y="345" text-anchor="middle" font-size="13" fill="#1d1a16">so it cannot enter twice by construction;</text>
+<text x="520.0" y="363" text-anchor="middle" font-size="13" fill="#1d1a16">row.weights switches and scales each source</text>
+<rect x="700" y="245" width="320" height="160" rx="10" fill="#f4f1ea" stroke="#4a4036" stroke-width="1.6"/>
+<text x="860.0" y="269" text-anchor="middle" font-weight="700" font-size="16" fill="#1d1a16">2c. The decider is a Query over edges</text>
+<text x="860.0" y="291" text-anchor="middle" font-size="13" fill="#1d1a16">none: the target  /  mutual: both parties</text>
+<text x="860.0" y="309" text-anchor="middle" font-size="13" fill="#1d1a16">bench: judging_set(venue, authority)</text>
+<text x="860.0" y="327" text-anchor="middle" font-size="13" fill="#1d1a16">declared: commits counted against quorum</text>
+<text x="860.0" y="345" text-anchor="middle" font-size="13" fill="#1d1a16">(R-29 licence, R-34 authority)</text>
+<text x="860.0" y="363" text-anchor="middle" font-size="13" fill="#1d1a16">nobody seated: the date lapses (S61)</text>
+<line x1="450" y1="200" x2="180" y2="245" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<line x1="520" y1="200" x2="520" y2="245" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<line x1="670" y1="200" x2="860" y2="245" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<rect x="290" y="445" width="540" height="80" rx="10" fill="#f4f1ea" stroke="#4a4036" stroke-width="1.6"/>
+<text x="560.0" y="469" text-anchor="middle" font-weight="700" font-size="16" fill="#1d1a16">3. The next act, chosen by its actor</text>
+<text x="560.0" y="491" text-anchor="middle" font-size="13" fill="#1d1a16">the player in the container or the automated policy (R-24):</text>
+<text x="560.0" y="509" text-anchor="middle" font-size="13" fill="#1d1a16">the same act and the same draw either way</text>
+<line x1="180" y1="405" x2="330" y2="445" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<line x1="520" y1="405" x2="520" y2="445" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<line x1="860" y1="405" x2="790" y2="445" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<rect x="130" y="565" width="860" height="200" rx="10" fill="#e9f0e4" stroke="#3b5a2e" stroke-width="1.6"/>
+<text x="560.0" y="589" text-anchor="middle" font-weight="700" font-size="16" fill="#1d1a16">4. ONE DRAW for this one act (R-5, R-6, R-22, R-32)</text>
+<text x="560.0" y="611" text-anchor="middle" font-size="13" fill="#1d1a16">dice   N  = brought + conduct x latitude + max(title, seat) x L + faction + evidence held</text>
+<text x="560.0" y="629" text-anchor="middle" font-size="13" fill="#1d1a16">obstacle  Ob = the opponent&#x27;s own N / 2 (R-5) + aptness + forgery;  else default 2;  ceiling (R-37)</text>
+<text x="560.0" y="647" text-anchor="middle" font-size="13" fill="#1d1a16">leverage  s  = argument fit + circumstance, a mu-shift soft-capped at 1.5 sigma</text>
+<text x="560.0" y="665" text-anchor="middle" font-size="13" fill="#1d1a16">E[margin] = 0.4 N + 0.8 sqrt(N) softcap(s) - Ob, continuous dice and obstacle</text>
+<text x="560.0" y="683" text-anchor="middle" font-size="13" fill="#1d1a16">degree_from_net grades it: Failure / Partial / Success / Overwhelming</text>
+<text x="560.0" y="701" text-anchor="middle" font-size="13" fill="#1d1a16">L = share of the venue&#x27;s territory committed to that weight&#x27;s authority (R-36)</text>
+<text x="560.0" y="719" text-anchor="middle" font-size="13" fill="#1d1a16">every operand comes from the actor&#x27;s own holdings or from edges, never another&#x27;s ledger (F8)</text>
+<line x1="560" y1="525" x2="560" y2="565" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<rect x="230" y="805" width="660" height="115" rx="10" fill="#f4f1ea" stroke="#4a4036" stroke-width="1.6"/>
+<text x="560.0" y="829" text-anchor="middle" font-weight="700" font-size="16" fill="#1d1a16">5. The band writes into the hearers&#x27; OWN holdings</text>
+<text x="560.0" y="851" text-anchor="middle" font-size="13" fill="#1d1a16">witnessed deposit: the proposition, at a confidence set by the degree</text>
+<text x="560.0" y="869" text-anchor="middle" font-size="13" fill="#1d1a16">and a deed attributed to the speaker (each hearer forms his own regard)</text>
+<text x="560.0" y="887" text-anchor="middle" font-size="13" fill="#1d1a16">Partial: the matter stays on the docket for the next sitting (R-17)</text>
+<line x1="560" y1="765" x2="560" y2="805" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<polygon points="560,930.0 880.0,1000 560,1070.0 240.0,1000" fill="#e8eef4" stroke="#2f4a63" stroke-width="1.6"/>
+<text x="560" y="986" text-anchor="middle" font-size="13" font-weight="700" fill="#14283a">6. Does the decider act now?</text>
+<text x="560" y="1004" text-anchor="middle" font-size="13" font-weight="400" fill="#14283a">target moved / both commit / judge rules / count closes</text>
+<text x="560" y="1022" text-anchor="middle" font-size="13" font-weight="400" fill="#14283a">undecided is an outcome (R-1)</text>
+<line x1="560" y1="920" x2="560" y2="930" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<path d="M 240 1000 L 60 1000 L 60 485 L 290 485" fill="none" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<text x="68" y="760" font-size="12" fill="#4a4036" font-style="italic">no: next act</text>
+<rect x="190" y="1110" width="740" height="120" rx="10" fill="#f4f1ea" stroke="#4a4036" stroke-width="1.6"/>
+<text x="560.0" y="1134" text-anchor="middle" font-weight="700" font-size="16" fill="#1d1a16">7. The decider&#x27;s own act (R-19, R-23)</text>
+<text x="560.0" y="1156" text-anchor="middle" font-size="13" fill="#1d1a16">his choice reads only what HE holds: his ledger, his pursuits, his fears (AX-2)</text>
+<text x="560.0" y="1174" text-anchor="middle" font-size="13" fill="#1d1a16">bench: he chooses a disposition, and determine draws its degree (step 4 again)</text>
+<text x="560.0" y="1192" text-anchor="middle" font-size="13" fill="#1d1a16">count: members&#x27; commits license or block the owner&#x27;s own act (R-29)</text>
+<line x1="560" y1="1070" x2="560" y2="1110" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<text x="570" y="1095" font-size="12" fill="#4a4036" font-style="italic">yes</text>
+<rect x="190" y="1270" width="740" height="100" rx="10" fill="#f4f1ea" stroke="#4a4036" stroke-width="1.6"/>
+<text x="560.0" y="1294" text-anchor="middle" font-weight="700" font-size="16" fill="#1d1a16">8. Disposal and reach (R-21, S-6, S-7)</text>
+<text x="560.0" y="1316" text-anchor="middle" font-size="13" fill="#1d1a16">a Tenure edge, a Record or a licence, as row.disposes says</text>
+<text x="560.0" y="1334" text-anchor="middle" font-size="13" fill="#1d1a16">witnessed by those row.disposal_reach names; others learn it as news</text>
+<line x1="560" y1="1230" x2="560" y2="1270" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<polygon points="560,1385.0 860.0,1440 560,1495.0 260.0,1440" fill="#fbf0d9" stroke="#8a6a1c" stroke-width="1.6"/>
+<text x="560" y="1435" text-anchor="middle" font-size="13" font-weight="700" fill="#14283a">9. Is it taken to appeal?</text>
+<text x="560" y="1453" text-anchor="middle" font-size="13" font-weight="400" fill="#14283a">only to the OTHER authority row.appeal_basis names (R-35)</text>
+<line x1="560" y1="1370" x2="560" y2="1385" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<rect x="330" y="1525" width="460" height="60" rx="10" fill="#fbf0d9" stroke="#8a6a1c" stroke-width="1.6"/>
+<text x="560.0" y="1549" text-anchor="middle" font-weight="700" font-size="16" fill="#1d1a16">The outcome rides (R-2)</text>
+<text x="560.0" y="1571" text-anchor="middle" font-size="13" fill="#1d1a16">no retry before the same bench</text>
+<line x1="560" y1="1495" x2="560" y2="1525" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<text x="570" y="1514" font-size="12" fill="#4a4036" font-style="italic">no</text>
+<path d="M 890 862 L 1045 862 L 1045 160 L 830 160" fill="none" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<text x="1038" y="500" text-anchor="end" font-size="12" fill="#4a4036" font-style="italic">Partial: back to</text>
+<text x="1038" y="516" text-anchor="end" font-size="12" fill="#4a4036" font-style="italic">the next sitting</text>
+<path d="M 860 1440 L 1095 1440 L 1095 100 L 830 100" fill="none" stroke="#4a4036" stroke-width="1.6" marker-end="url(#a)"/>
+<text x="940" y="1430" font-size="12" fill="#4a4036" font-style="italic">yes: petition + carry</text>
+<text x="1018" y="1462" text-anchor="middle" font-size="12" fill="#4a4036" font-style="italic">a new matter under the</text>
+<text x="1018" y="1478" text-anchor="middle" font-size="12" fill="#4a4036" font-style="italic">appeal authority&#x27;s row</text></svg>
