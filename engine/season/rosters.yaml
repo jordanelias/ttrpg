@@ -1913,13 +1913,31 @@ rosters:
       # to `faction_politics_v30.md` on 2026-09-13 — which matters here, because politics §1.2c/
       # §1.3c gives these councils four and five members where behaviour gives two and two.
       # ⚠ ONLY THREE ARE ADDED, AND THE RESTRAINT IS THIS FILE'S OWN PRECEDENT. `faction_politics_v30`
-      # PART 7 names 22 more organs with quoted jurisdictions — six Crown ministries, six Hafenmark
+      # PART 7 names 22 more organs with quoted jurisdictions — seven Crown ministries (six and the proposed Hochschule), six Hafenmark
       # committees, four Church dicasteries, five Varfell councils. NOT ONE IS READ by anything that
       # builds a world: `build_realm` takes an office's body from the sub-organization
       # `references/npc_registry.yaml` packs into its `faction` cell, and these three are what it
       # contains. Adding the other 22 would repeat `governance_modes` and `power_bases`, deleted from
       # this file for exactly that — "not wrong; UNREAD", and §0.1 pt 5 forbids apparatus that is
       # load-bearing on nothing. They go in the day a seat needs one.
+      # ⚠ THE MINISTRIES RULING, WRITTEN ONCE HERE AT ITS OWNER. Three ministry lists disagree, and
+      # the source-precedence ruling at the head of this file (tier 1 `systems/world/`; tier 2
+      # `systems/factions/`, "superseded by anything in world") settles which reading stands:
+      #   * `worldbuilding_v30.md` (world, TIER 1) names the ORGAN, `Ministries` ("Execute
+      #     government services"), and, in its Ministry Collapse card, the SERVICES: Law, Taxation,
+      #     Guilds, Water/Granaries.
+      #   * PP-194 (its frozen capture is no longer in this tree) names Law, Guilds, Logothetes,
+      #     Granaries and Pure Water, which read onto those services; Logothetes is read as the
+      #     fiscal ministry, i.e. Taxation. [ASSUMPTION; medium; Jordan to correct; revert: delete
+      #     this inserted comment and restore the sentence above to its earlier wording]
+      #   * `faction_politics_v30.md` §7.1 (TIER 2) lists its own set and is superseded where it
+      #     disagrees with world: war and intelligence are Löwenritter organs in world, not Crown
+      #     ministries.
+      # RULING: ONE `Ministries` ROW STANDS until a seat needs a ministry; that ministry's row then
+      # takes a PP-194 name, and nothing else is added. `offices.yaml`'s `off_parliamentary_clerk`
+      # seats at that one row (NPC-008's authored overlay), and the Court Parliament's `function`
+      # cell below, which nominates Ministers, reads against an organ rather than a list.
+      # `harness/populated.py` points here and carries no count. ED-648 stays closed.
       "Inner Circle": "Crown"
       "Inner Council": "Hafenmark"
       "Jarl Council": "Varfell"
