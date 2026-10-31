@@ -426,7 +426,7 @@ def temperament_rows(text: str | None = None) -> list | None:
                 raise Forbidden(
                     f"`cohorts.yaml: temperaments` row {n} ({row['territory']!r}) has {f} {v!r}", "SE-06",
                     law="SE-06 -- alpha and beta are weights, numbers in [0, 1]")
-        if row["territory"] not in provinces or row["territory"] in seen:
+        if not isinstance(row["territory"], str) or row["territory"] not in provinces or row["territory"] in seen:
             raise Unspecified(
                 f"`cohorts.yaml: temperaments` row {n} names the territory {row['territory']!r}, "
                 f"{'twice' if row['territory'] in seen else 'which the geography file does not carry'}",
@@ -478,6 +478,7 @@ def seat_cohorts(w: World, rows: list, names: dict | None = None, temperaments: 
     `Person.name`."""
     names = names or {}
     by_territory = {r["territory"]: (r["alpha"], r["beta"]) for r in temperaments} if temperaments is not None else None
+    vector_of: dict = {}                    # territory -> its vector, translated once; each cohort takes its own COPY
     out: list = []
     for row in rows:
         rung, wt = row["rung"], row["weight"]
@@ -509,7 +510,9 @@ def seat_cohorts(w: World, rows: list, names: dict | None = None, temperaments: 
                     "engine/season/cohorts.yaml",
                     needs=f"a `{{territory: {terr}, alpha, beta}}` row, or no `temperaments:` block",
                     law="SE-06 -- a cohort's pursuits are its territory's temperament; a territory with no row is refused, not left uniform")
-            pursuits = temperament_pursuits(*by_territory[terr])
+            if terr not in vector_of:
+                vector_of[terr] = temperament_pursuits(*by_territory[terr])
+            pursuits = dict(vector_of[terr])
         w.persons[pid] = Person(pid, f"the people of {names.get(rung, rung)}", weight=wt, pursuits=pursuits)
         w.rungs[pid] = Rung(pid, "person")
         w.add_tenure(Tenure(f"t_{pid}_in", pid, rung, "contain", 0))

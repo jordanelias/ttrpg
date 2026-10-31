@@ -125,8 +125,9 @@ cohorts:
 # totals 1 (the cast's own rows total 0.8 to 1.5, so no magnitude is invented). A pursuit with `d == 0`
 # takes 0 (which ones is the roster's to say: read `tables.pursuit_projection`, not this comment). The rows below
 # are the source's, not 15 numbers per territory.
-# CONSEQUENCE, said so it is not found later: territories whose (alpha, beta) pairs are equal hold equal vectors, so
-# the cohorts hold as many distinct vectors as the source gives distinct pairs (`test_territorial_subsistence`
+# CONSEQUENCE, said so it is not found later: the normalisation keeps only the RATIO of alpha to beta, so territories
+# whose ratios are equal hold equal vectors (alpha = beta = 0.5 and alpha = beta = 0.2 are the same temperament), and the
+# cohorts hold as many distinct vectors as the source gives distinct ratios (`test_territorial_subsistence`
 # computes the count from this block). `happiness` projects 0.0 on the axis since CR-21, so it takes 0 here.
 # T15 (Askeheim) is in the source and holds no cohort, so it has no row here. A cohort whose territory has
 # no row is refused at seating (`Unspecified`), never left uniform.
