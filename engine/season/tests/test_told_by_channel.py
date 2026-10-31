@@ -2060,7 +2060,7 @@ def test_g2_a_grudge_raises_determine_and_arrest_on_the_party_under_declared(mon
     on the wrong side. Rows are read off the loaded table, not named in the predicate.
 
     MUTATION (run 2026-10-31, CR-16): `subject_is_opponent` reverted to `bool(row.contests) and not
-    row.counterparty` reddens the first assertion (`subject_is_opponent(determine)`); with that line
+    row.counterparty` reddens the `subject_is_opponent` assertion for `determine`; with that line
     removed, the `declared` ordering is red too (neutral party above the grudge). Restored, GREEN."""
     from ..data.verbs import VERB_TABLE
     from ..decision.options import subject_is_opponent

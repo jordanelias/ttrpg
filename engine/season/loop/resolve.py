@@ -774,8 +774,8 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
                 "and it will be cited later as though it were measured")
     # THE TARGET, AND WHICH SHAPE OF SIDES THE PRIZE NEEDS (M4). `sides_of` is the one place
     # that decides, dispatched on the PRIZE's own manifest module -- NEVER on `a.verb`, and
-    # NEVER on what `_target` happens to look like: `_target` is `payload[row.counterparty or
-    # "subject"]` (below), and a candidate's `subject` binding to a Rung id is not unique to `march`
+    # NEVER on what `_target` happens to look like: `_target` is `payload[row.opponent_operand()]`
+    # (below), and a candidate's `subject` binding to a Rung id is not unique to `march`
     # (`tell`'s TOPIC can name a place, though its `_target` is now the hearer `to`), so a
     # shape-based dispatch on `_target` is unsafe -- see `sides_of`'s own docstring for the corpus
     # case that found this.

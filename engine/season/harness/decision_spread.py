@@ -299,6 +299,11 @@ def profile_key(w, p) -> tuple:
     return (pur, aff, fac, goals)
 
 
+def _pair_cosines(vecs: dict, ids: list) -> list:
+    """The cosine of every pair among `ids`, in `ids` order; a pair with a zero vector is left out."""
+    return [c for i, a in enumerate(ids) for b in ids[i + 1:] if (c := _cosine(vecs[a], vecs[b])) is not None]
+
+
 def read_persons(w) -> dict:
     """The `--persons` figures on a built realm (no season is played)."""
     w._rehome()
@@ -306,15 +311,13 @@ def read_persons(w) -> dict:
     ids = sorted(w.persons)
     vecs = {pid: projected_vector(w.persons[pid], fx) for pid in ids}
     live = [pid for pid in ids if any(vecs[pid])]
-    cos = [c for i, a in enumerate(live) for b in live[i + 1:]
-           if (c := _cosine(vecs[a], vecs[b])) is not None]
+    cos = _pair_cosines(vecs, live)
     mean = [sum(vecs[pid][k] for pid in live) / len(live) for k in range(len(PURSUIT_AXES))] if live else []
     to_mean = [c for pid in live if mean and (c := _cosine(vecs[pid], mean)) is not None]
-    # THE CAST ALONE (SE-06): cohorts of one territory hold the same vector by declaration, so `pairs_above` over all
+    # THE CAST ALONE (SE-06): cohorts of equal temperament ratio hold the same vector by declaration, so `pairs_above` over all
     # persons with a vector counts those pairs too; the cast's own reading is the one IN-62's EXIT bounds.
     cast_live = [pid for pid in live if not w.persons[pid].is_cohort]
-    cast_cos = [c for i, a in enumerate(cast_live) for b in cast_live[i + 1:]
-                if (c := _cosine(vecs[a], vecs[b])) is not None]
+    cast_cos = _pair_cosines(vecs, cast_live)
     groups: dict = {}
     for pid in ids:
         groups.setdefault(profile_key(w, w.persons[pid]), []).append(pid)
@@ -608,7 +611,7 @@ def main(argv=None) -> int:
         "null: alignment uniform" if a.null else "shipped")
     if a.control:
         print("--control: goals are unseeded (IN-68: `build_realm(goals=False)`; the shipped "
-              "`goals.yaml` carries rows since FA-05, FA-06); the 37 population cohorts now hold a vector and are flattened to the mean (SE-06; there is no switch, the revert is deleting `cohorts.yaml: temperaments:`)")
+              "`goals.yaml` carries rows since FA-05, FA-06); the population cohorts are flattened to the mean too (SE-06; see `--control` in --help)")
     with (null_alignment() if a.null else contextlib.nullcontext()), \
             (no_goals() if a.control else contextlib.nullcontext()):
         if a.persons:

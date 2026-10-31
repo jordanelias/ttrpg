@@ -3428,7 +3428,8 @@ def test_t2_one_rebind_moves_score_and_gate(monkeypatch):
     v0, v1 = formed[0], formed[1]
     # CR-21 (H-146's repair): the gate arms only on an axis `pursuit_axes.refusing_pole` authors, so the axis is
     # read from that data and not taken by position.
-    axis = sorted(roster_map("pursuit_axes", "refusing_pole"))[0]
+    from .test_cr21_cells import _deontological_axis
+    axis = _deontological_axis()
     monkeypatch.setattr(data_verbs, "PURSUIT_PROJECTION", {"t2_synthetic": {axis: -0.4}})
     monkeypatch.setattr(p, "pursuits", {"t2_synthetic": 1.0})
     fx0 = w.fixtures.sweep("choice_temperature", 0)

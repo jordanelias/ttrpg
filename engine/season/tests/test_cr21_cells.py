@@ -20,7 +20,7 @@ import math
 import pytest
 
 from ..data import verbs as V
-from ..data.pursuits import to_axes
+from ..data.pursuits import pursuit_cosine
 from ..data.rosters import PURSUIT_AXES, PURSUITS, table, table_meta
 from ..gaps import Forbidden
 from ..queries import person_q as PQ
@@ -52,7 +52,6 @@ def test_cr21_wealth_and_happiness_read_0_818_and_the_pre_pass_table_reproduces_
     assert round(before, 3) == 0.969, before
     assert before > now                                   # the pass moved the cosine the way it was meant to
     # and the runtime reader agrees with the arithmetic above (the live binding, not the raw table)
-    from ..data.pursuits import pursuit_cosine
     assert pursuit_cosine({"wealth": 1.0}, {"happiness": 1.0}) == pytest.approx(now, abs=1e-12)
 
 

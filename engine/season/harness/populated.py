@@ -477,8 +477,8 @@ def seat_cohorts(w: World, rows: list, names: dict | None = None, temperaments: 
     Valorsplatz"*; a rung it does not name is named by its id. Display only: nothing resolves on a
     `Person.name`."""
     names = names or {}
-    by_territory = {r["territory"]: (r["alpha"], r["beta"]) for r in temperaments} if temperaments is not None else None
-    vector_of: dict = {}                    # territory -> its vector, translated once; each cohort takes its own COPY
+    vector_of = ({r["territory"]: temperament_pursuits(r["alpha"], r["beta"]) for r in temperaments}
+                 if temperaments is not None else None)      # territory -> its vector, once; a cohort takes a COPY
     out: list = []
     for row in rows:
         rung, wt = row["rung"], row["weight"]
@@ -502,16 +502,14 @@ def seat_cohorts(w: World, rows: list, names: dict | None = None, temperaments: 
                 needs="a rung whose cohort id no cast member or rung already uses",
                 law="plan position `24f` -- a cohort is seated beside the cast, never over it")
         pursuits: dict = {}
-        if by_territory is not None:
+        if vector_of is not None:
             terr = territory_id_of(enclosing_territory(w, rung))
-            if terr not in by_territory:
+            if terr not in vector_of:
                 raise Unspecified(
                     f"cohort {pid!r} lives in the territory {terr!r}, which `cohorts.yaml: temperaments` has no row for",
                     "engine/season/cohorts.yaml",
                     needs=f"a `{{territory: {terr}, alpha, beta}}` row, or no `temperaments:` block",
                     law="SE-06 -- a cohort's pursuits are its territory's temperament; a territory with no row is refused, not left uniform")
-            if terr not in vector_of:
-                vector_of[terr] = temperament_pursuits(*by_territory[terr])
             pursuits = dict(vector_of[terr])
         w.persons[pid] = Person(pid, f"the people of {names.get(rung, rung)}", weight=wt, pursuits=pursuits)
         w.rungs[pid] = Rung(pid, "person")

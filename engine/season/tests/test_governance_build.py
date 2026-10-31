@@ -2828,7 +2828,7 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # territory's pursuit vector (`cohorts.yaml: temperaments:`), so 37 persons who had no pursuit term choose on one and the
     # realm's act mix moves (seed 0, one season: 599 -> 598 for the kept arm, 597 -> 598 for the stripped). EQUAL COUNTS, and
     # the parting is asserted directly below, not proxied by them. CONTROL: the tree before SE-06 (`eda39a631`) reads
-    # (599, 597) under this same test. This fix commit follows SE-06's own, which ran four covering files and missed this one.
+    # (599, 597) under this same test.
     # ⚠⚠ v10 CR-21 (B10-07b): (598, 598) -> (606, 607), A RE-RECORD WITH THE UNIT THAT MOVED IT: `happiness`'s
     # `deontological_instrumental` cell falls from +0.4 to 0.0 (`rosters.yaml`), and the cohort vectors SE-06 gave read that
     # column, so the realm's act mix moves again (seed 0, one season: 598 -> 606 kept, 598 -> 607 stripped, the same shift
@@ -2856,7 +2856,7 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
 # H2 -- `ED-IN-0261`'s DEONTOLOGICAL GATE, `H-146`. A refusal at `opening_set`, not a score term:
 # the person's projected weight on the gating axis IS the threshold, and a verb that axis engages
 # past it never forms a Candidate. Roster-generic: the axis is whatever `Fixtures refusal_axis`
-# names, so these tests take a rostered axis by position and name none.
+# names, so these tests take the axis that `pursuit_axes.refusing_pole` authors (`_h2_axis`).
 #
 # Falsifier (`proposals/2026-09-26-decision-layer-execution-plan/PROPOSAL.md` §3.2): a synthetic
 # projection/alignment injected through the rebinds the readers actually resolve --
@@ -2887,13 +2887,7 @@ def _h2_base(min_verbs=3):
     return w, p, q, v, base, verbs
 
 
-def _h2_axis():
-    """The axis the gate may be armed on: the one `pursuit_axes.refusing_pole` authors (CR-21, H-146's
-    repair -- the refusing pole is data, so an axis with no pole refuses rather than gating)."""
-    from ..data.rosters import roster_map
-    authored = sorted(roster_map("pursuit_axes", "refusing_pole"))
-    assert authored, "no axis authors a refusing pole: the gate cannot be armed"
-    return authored[0]
+from .test_cr21_cells import _deontological_axis as _h2_axis    # noqa: E402 -- the one authored refusing-pole axis
 
 
 def _h2_inject(p, axis, weight, cells):

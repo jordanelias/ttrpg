@@ -114,12 +114,11 @@ def temperament_pursuits(alpha: float, beta: float) -> dict:
 
     [ASSUMPTION; medium; Jordan to correct; revert: delete `temperaments:` from `cohorts.yaml`.] The projection
     cells it reads are `PURSUIT_PROJECTION`'s, so a re-celled pursuit moves the vector with them."""
-    from .verbs import PURSUIT_PROJECTION, PROJECTION_DEFAULT_CELL
     require_member(TEMPERAMENT_AXIS, PURSUIT_AXES, f"temperament axis {TEMPERAMENT_AXIS!r} is not on the pursuit_axes roster",
                    "data/pursuits.py::TEMPERAMENT_AXIS", "SE-06 reads a territory's temperament on one axis")
     raw: dict = {}
     for p in sorted(PURSUITS):
-        d = float(PURSUIT_PROJECTION[p].get(TEMPERAMENT_AXIS, PROJECTION_DEFAULT_CELL))
+        d = to_axes({p: 1.0})[TEMPERAMENT_AXIS]
         raw[p] = alpha * max(0.0, d) + beta * max(0.0, -d)
     total = sum(raw.values())
     if not total:

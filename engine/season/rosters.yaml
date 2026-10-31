@@ -3493,7 +3493,7 @@ tables:
         revoke:         null
         speak:          null
         examine:        null
-        thread_read:    null    # CR-21 (M14): considered, null -- the old table gave `thread_read` no cell on any axis, and its row (a Thread Sensitivity gate that writes nothing) names no lean on this one; its moral weight is single-owned in `affiliation_engagement`, so a pursuit cell would be a second copy
+        thread_read:    null
         interview:      null
         surveil:        null
         transfer:       null
@@ -3540,7 +3540,7 @@ tables:
         speak:          null
         succeed:        null
         examine:        null
-        thread_read:    null    # CR-21 (M14): considered, null -- the old table gave `thread_read` no cell on any axis, and its row (a Thread Sensitivity gate that writes nothing) names no lean on this one; its moral weight is single-owned in `affiliation_engagement`, so a pursuit cell would be a second copy
+        thread_read:    null
         interview:      null
         research:       null
         surveil:        null
@@ -3591,7 +3591,7 @@ tables:
         succeed:        null
         survey:         null
         examine:        null
-        thread_read:    null    # CR-21 (M14): considered, null -- the old table gave `thread_read` no cell on any axis, and its row (a Thread Sensitivity gate that writes nothing) names no lean on this one; its moral weight is single-owned in `affiliation_engagement`, so a pursuit cell would be a second copy
+        thread_read:    null
         interview:      null
         research:       null
         surveil:        null
@@ -3646,7 +3646,7 @@ tables:
         speak:          null
         succeed:        null
         examine:        null
-        thread_read:    null    # CR-21 (M14): considered, null -- the old table gave `thread_read` no cell on any axis, and its row (a Thread Sensitivity gate that writes nothing) names no lean on this one; its moral weight is single-owned in `affiliation_engagement`, so a pursuit cell would be a second copy
+        thread_read:    null
         interview:      null
         research:       null
         surveil:        null
@@ -3701,7 +3701,7 @@ tables:
         revoke:         null
         succeed:        null
         examine:        null
-        thread_read:    null    # CR-21 (M14): considered, null -- the old table gave `thread_read` no cell on any axis, and its row (a Thread Sensitivity gate that writes nothing) names no lean on this one; its moral weight is single-owned in `affiliation_engagement`, so a pursuit cell would be a second copy
+        thread_read:    null
         interview:      null
         research:       null
         surveil:        null
@@ -3767,5 +3767,5 @@ tables:
         speak:          null
         succeed:        null
         examine:        null
-        thread_read:    null    # CR-21 (M14): considered, null -- the old table gave `thread_read` no cell on any axis, and its row (a Thread Sensitivity gate that writes nothing) names no lean on this one; its moral weight is single-owned in `affiliation_engagement`, so a pursuit cell would be a second copy
+        thread_read:    null
 

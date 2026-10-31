@@ -128,7 +128,7 @@ cohorts:
 # CONSEQUENCE, said so it is not found later: the normalisation keeps only the RATIO of alpha to beta, so territories
 # whose ratios are equal hold equal vectors (alpha = beta = 0.5 and alpha = beta = 0.2 are the same temperament), and the
 # cohorts hold as many distinct vectors as the source gives distinct ratios (`test_territorial_subsistence`
-# computes the count from this block). `happiness` projects 0.0 on the axis since CR-21, so it takes 0 here.
+# computes the count from this block).
 # T15 (Askeheim) is in the source and holds no cohort, so it has no row here. A cohort whose territory has
 # no row is refused at seating (`Unspecified`), never left uniform.
 #
