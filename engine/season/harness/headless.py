@@ -109,7 +109,7 @@ def build_world(seed: int = 0, fixtures: "S.Fixtures" = None) -> World:
     # not a copy. A rename in `references/descriptor_registry.yaml` now raises here by name instead
     # of silently seeding a conviction nobody holds, which is strictly more than the literals did.
     # ⚠ IN-08's CELLS COMMIT MIGRATED THE THREE TO THE FIFTEEN PURSUITS, by the rule the cast
-    # registry was migrated by (`candidate_pursuit_cells.md` §4.1, folded into the build by Jordan
+    # registry was migrated by (the retired pursuit-cells draft's §4.1, folded into the build by Jordan
     # 2026-10-06): `Precedent` and `Order` have no pursuit of their own name -- `stability` is the
     # successor for the procedural readers; `Utility` has none, and goes to the pursuit the
     # character's own goal names. Weights are carried, not renormalised.

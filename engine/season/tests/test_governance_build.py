@@ -2872,6 +2872,15 @@ def _h2_base(min_verbs=3):
     return w, p, q, v, base, verbs
 
 
+def _h2_axis():
+    """The axis the gate may be armed on: the one `pursuit_axes.refusing_pole` authors (CR-21, H-146's
+    repair -- the refusing pole is data, so an axis with no pole refuses rather than gating)."""
+    from ..data.rosters import roster_map
+    authored = sorted(roster_map("pursuit_axes", "refusing_pole"))
+    assert authored, "no axis authors a refusing pole: the gate cannot be armed"
+    return authored[0]
+
+
 def _h2_inject(p, axis, weight, cells):
     """Rebind the projection and the alignment to synthetic tables; return a restore callable."""
     from ..data import verbs as _verbs
@@ -2908,12 +2917,11 @@ def test_h2_a_verb_past_the_persons_weight_never_forms():
     """THE FALSIFIER. Person weight `-0.4` on the axis (the NEG, refusing pole). Three engaged
     verbs: `+0.3` and `-0.2` sit past `-0.4` toward the POS pole and are refused; `-0.6` does not
     and survives. Every verb the axis does not engage survives -- only *certain actions* gate."""
-    from ..data.rosters import PURSUIT_AXES
     from ..decision import options as _options
 
     w, p, q, v, base, verbs = _h2_base()
     refused_pos, refused_neg, tolerated = verbs[0], verbs[1], verbs[2]
-    axis = sorted(PURSUIT_AXES)[-1]
+    axis = _h2_axis()
     fx = w.fixtures.sweep("refusal_axis", axis)
     restore = _h2_inject(p, axis, -0.4,
                          {refused_pos: 0.3, refused_neg: -0.2, tolerated: -0.6})
@@ -2935,14 +2943,13 @@ def test_h2_survivors_score_exactly_as_they_did_ungated():
     """The gate filters and never re-weights: every Candidate that survives it reaches the score
     with the value it had with the gate unset. Observed through `_sample_order`, the one place
     `make_chooser` hands the scores on, so this reads the chooser's own numbers."""
-    from ..data.rosters import PURSUIT_AXES
     from ..decision import choose as _choose
     from ..decision import options as _options
     from ..state.carriers import Sensation
 
     w, p, q, v, base, verbs = _h2_base()
     refused, tolerated = verbs[0], verbs[1]
-    axis = sorted(PURSUIT_AXES)[0]
+    axis = _h2_axis()
     fx0 = w.fixtures.sweep("choice_temperature", 0)
 
     def scores(fx):

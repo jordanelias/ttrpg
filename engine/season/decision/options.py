@@ -30,7 +30,7 @@ from ..data.requires import (
     SHORTFALL_SOURCED_OPERANDS, VIA, binding_of, evaluate,
 )
 from ..data.rosters import (
-    CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, REMOVE_ORDINAL, require_member,
+    CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, REMOVE_ORDINAL, refusing_pole, require_member,
 )
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
@@ -448,16 +448,19 @@ def refuses(verb: str, axis: str, tolerance: float) -> bool:
     `score` cannot express: it ranks, and at `choice_temperature` 0.1 a good enough outcome
     outranks any finite penalty (`ED-IN-0261`).
 
-    Sign convention: the axis's NEG pole is the refusing one (`deontological` on
-    `deontological/instrumental`), so a verb is refused when its alignment sits further toward the
-    POS pole than the person's own weight. Only a verb the axis ENGAGES can be refused -- a zero
-    cell, including the sparse default, is not one of the *"certain actions"* the ruling gates;
-    the scar's `person_q.elements_violated_by` reads engagement the same way.
+    WHICH POLE REFUSES IS DATA (CR-21, H-146's repair): `data.rosters.refusing_pole(axis)` reads it
+    from `rosters.yaml: pursuit_axes.refusing_pole` -- `-1`, the NEG pole, for `deontological` on
+    `deontological/instrumental` (ED-IN-0261). A verb is refused when its alignment sits further toward
+    the OPPOSITE pole than the person's own weight: `sign * (cell - weight) < 0`, which for `-1` is the
+    old `cell > weight` exactly. An axis with no authored pole raises, so the gate cannot invert or
+    default silently. Only a verb the axis ENGAGES can be refused -- a zero cell, including the sparse
+    default, is not one of the *"certain actions"* the ruling gates; the scar's
+    `person_q.elements_violated_by` reads engagement the same way.
 
     Reads `data.verbs.align`, the one `choose`'s score reads too, so a rebind of
     `data.verbs.ALIGNMENT` moves the gate and the ranking together."""
     a = align(verb, axis)
-    return bool(a) and a > tolerance
+    return bool(a) and refusing_pole(axis) * (a - tolerance) < 0
 
 
 def person_side_eligible(p: Person, row: "VerbRow") -> bool:
