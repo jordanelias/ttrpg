@@ -386,7 +386,7 @@ def _fold(self, w: "World", token: Token, a: Act,
     row = VERB_TABLE.get(a.verb)
     if row is None:
         # WHOSE GAP IS IT? `VERB_TABLE` is the owner, taken to carry every verb the design names
-        # [ASSUMPTION; medium; Jordan to correct; revert: restore the branch and the prose read], so a
+        # [ASSUMPTION; medium; Jordan to correct; revert: `git revert` the commit trailed `Item: CR-45`], so a
         # verb on no row is the caller's invention (register row H-64). No prose is read to decide it,
         # and nothing here reports a verb the design names that the table omits.
         raise Unspecified(

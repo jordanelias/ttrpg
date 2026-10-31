@@ -9,7 +9,7 @@ the real body and the eight tests that read a step's source keep working. See th
 bindings.
 
 ⚠ **THIS DOCSTRING WAS STALE THE MOMENT L5 LANDED AND SAID SO FOR A DAY.** It listed `stratum_of`,
-`as_scenes`, `sense` and two helpers CR-45 later deleted as living here -- they moved to
+`as_scenes`, `sense`, `names_a_verb` and `SOURCE_353_TEXT` (the last two deleted by CR-45) as living here -- they moved to
 `resolve.py` and `deliberate.py` in L5's second cut, to break a real `driver <-> deliberate <->
 resolve` import cycle -- and it still promised that *"shape.py re-exports every name below … until
 the facade is deleted at step 10"*, of a file step 10 deleted. `resolvable_verbs` is the one module
