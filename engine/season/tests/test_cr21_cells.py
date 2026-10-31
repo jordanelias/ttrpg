@@ -1,6 +1,6 @@
 """CR-21 (M14) -- THE CELL-VALUE AND COSINE PASS, its falsifiers executed.
 
-`workplans/valoria_master_workplan_v10_part4.md` CR-21, EXIT and FALSIFIER: a test over
+CR-21's EXIT and FALSIFIER (its plan entry left the plan at B10-07b's close, P3; the commits are the record): a test over
 `PURSUIT_PROJECTION` that reads cos(wealth, happiness) 0.818 (0.969 before), computed here from the
 roster's own 15x7 table and not through `data.pursuits`; a planted deontological witness of a `release`
 that ends a vow reads LOWER regard for the releaser with the `deed:commitment.ended` cells than without;
