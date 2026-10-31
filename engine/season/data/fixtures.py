@@ -865,7 +865,8 @@ DEFAULT_FIXTURES = Fixtures(
     # `declared` adds G1's `regard` and negates it where the subject is the act's OPPONENT, so a
     # grudge makes `fight` on its object score higher (`decision/choose.py::stance_term`;
     # `rosters.yaml: stance_polarities`). `declared` is SHIPPED by CR-16 (v10, B10-07b)
-    # [ASSUMPTION; medium; Jordan to correct; revert: set this back to "legacy" (one re-pin); the
+    # [ASSUMPTION; medium; Jordan to correct; revert: set this back to "legacy" (re-pin what CR-16 re-recorded: the
+    # seeded goldens, the `test_season_shape` figures, `test_sc01_the_bar`'s proceedings, `test_h9`'s seed); the
     # `subject_is_opponent` repair need not revert]: the sign is derived from the row's own columns
     # and IN-25's gain (`stance_gain`, below) is inert at `legacy`. `legacy` is the CONTROL, the
     # pre-G2 term verbatim, and stays selectable.

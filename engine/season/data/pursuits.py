@@ -93,7 +93,9 @@ TEMPERAMENT_AXIS = "deontological_instrumental"
 # The one axis a territory's temperament is read on: `-` is the deontological pole (*"will not take a
 # disagreeable act even for a good outcome"*) and `+` the instrumental one (*"the outcome justifies the
 # means"*), per `references/descriptor_registry.yaml: axis_roster`. A NAME of a roster member, checked on
-# every call of `temperament_pursuits` (a rename refuses at world-gen, before the first act), not a game value.
+# every call of `temperament_pursuits` (a rename refuses at world-gen, before the first act). It is a literal and not
+# a Fixture because the source DEFINES alpha and beta as this axis's two poles: changing it would change the game
+# (every cohort's vector), but it is no tunable, and a sweep of it would mean nothing.
 
 
 def temperament_pursuits(alpha: float, beta: float) -> dict:

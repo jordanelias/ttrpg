@@ -518,8 +518,10 @@ rosters:
     # asked by `decision/options.py::refuses`. Only the ruled axis is authored (ED-IN-0261, Jordan: deontology is a
     # REFUSAL, "it's a refusal to take certain actions"): the deontological pole, the first-named, refuses. An axis
     # absent here REFUSES at the gate rather than defaulting. The gate is armed nowhere (`Fixtures refusal_axis`
-    # ships unset; arming it is H-146's remaining position). [ASSUMPTION; medium; Jordan to correct; revert: delete
-    # this key and restore the hardcoded `>` in `refuses`.]
+    # ships unset; arming it is H-146's remaining position). [ASSUMPTION; medium; Jordan to correct; revert: restore the
+    # hardcoded `>` in `decision/options.py::refuses`, drop the `refusing_pole(axis)` call in `refusal_tolerance` and the
+    # import-time `_refusing_poles()` call in `data/rosters.py`, THEN delete this key (deleted alone it makes
+    # `roster_map` raise at import, and every import of `engine.season` fails).]
     refusing_pole:
       deontological_instrumental: -1
     note: >-
