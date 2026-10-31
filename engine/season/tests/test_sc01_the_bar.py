@@ -129,7 +129,16 @@ DUKE, SEAT, PARTY, WANT = "p_high", "off_duke", "p_mid", "prop_bar_duke_want"
 # claim on SELECTED seeds (above), not a rate. A sweep of scholastics x seeds 0..39 at 6 seasons for a run meeting every
 # assertion of `_proceeding` finds seeds 13, 21 and 22 (scratch, not kept); 21 is taken, the first that is not family's
 # seed.
-PROCEEDINGS = (("scholastics", 21, 6), ("family", 13, 5))
+# v10 CR-16 (B10-07b): RE-TRACED AGAIN, scholastics/21/6 and family/13/5 -> scholastics/13/6 and scholastics/33/6, the season
+# count unchanged -- `Fixtures stance_polarity` ships `declared` (H-194), so the Duke's `determine` on the clerk is scored with the
+# grudge's sign and the act mix of this world moved: scholastics/21/6 now fires ONE date and determines nobody and family/13/5
+# determines nobody in three firings (`_proceeding`: "no determination's causes reach a date.fired"). The CONTROL test below
+# (virtue/2) still meets its assertions. The bar is an existence claim on SELECTED seeds (above), not a rate. A sweep of
+# scholastics x seeds 0..39 at 6 seasons for a run meeting every assertion of `_proceeding` finds seeds 13 and 33 (seed 39 raises
+# in a different assertion); a sweep of family x seeds 0..39 at 5 seasons finds none, so both proceedings are scholastics' (scratch,
+# not kept; the two worlds differ by seed, and the file's own distinct-hash assertion holds). ATTRIBUTION, in process on this tree:
+# `stance_polarity` swept back to `legacy` on `BAR_FIXTURES` meets every assertion at scholastics/21/6 and family/13/5 again.
+PROCEEDINGS = (("scholastics", 13, 6), ("scholastics", 33, 6))
 BAR_FIXTURES = DEFAULT_FIXTURES.sweep("pool_default", 30)       # v9 SC-03b: a judge whose finding opens
 # v9 IN-12 step 9: RE-TRACED, the conviction and season count unchanged -- `argue`/`sabotage`/`tend`/`train`
 # are new members of the Duke's and the clerk's option sets, so doctrine/8's trajectory moved (it now fires

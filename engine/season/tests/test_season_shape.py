@@ -8922,7 +8922,14 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # `release` 5 -> 6; every other verb's count is unmoved. Not a ranking change: `H-96` is untouched. THE SAME-BREATH
     # CHECK: the universal set is EMPTY on both sides (the largest executed-world count is `reconstruct`'s 137 of 143), and
     # `ever` is the same 20 verbs on both. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-    assert len(by_sig) == 122, (
+    # ⚠⚠ **122 -> 132, v10 CR-16 (B10-07b), MEASURED BY THIS TEST'S OWN `by_sig`, seed 0, AGAINST THIS TREE WITH `Fixtures
+    # stance_polarity` SWEPT BACK TO `legacy` (in process, the control) WHICH READS 122; the tree before CR-16 (`f59d0ca63`,
+    # a detached worktree) reads 122 too.** THE UNIT AND THE DIRECTION: variety ROSE by ten. `stance_polarity` ships `declared`
+    # (`H-194`), so a grudge or a judged deed pulls the contested acts against its object (`fight`, `determine`, `arrest`) UP and
+    # the act mix of the corpus's worlds moves; more worlds take a signature of their own. Not a ranking change: `H-96` is
+    # untouched. THE SAME-BREATH CHECK is the assertions below (the universal set, `ever`, `refused_only`, `varying`), which this
+    # re-pin leaves as they were and which are read in the same run. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+    assert len(by_sig) == 132, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -12084,6 +12091,12 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
     # the read of a `speak` formed on the hearth, is gone, and `("hearth_ostvik", "stores:grain", 0)` leads the ledger
     # where `("einhir_texts", "exists:Person", 0)` did. `evade / defy`, `construe` and `exchange` are typed and
     # resolvable again, so their scenes move the act mix. Every other entry and its order is unchanged.
+    # v10 CR-16 (B10-07b): 13 -> 13 entries, a re-record read off the failing assertion's own output: ONE OUT, ONE IN, order
+    # otherwise unchanged -- `("rec:6095547f999b4ff8", "exists:Person", 0)` leaves (the refusal of an act formed on that Record
+    # that wants a person) and `("hearth_ostvik", "exists:DocketItem", 0)` joins at the tail (a `speak` refused on the hearth).
+    # `Fixtures stance_polarity` ships `declared` (`H-194`), so the `actor` arm's act mix moved. CONTROL: this tree with
+    # `stance_polarity` swept back to `legacy` (in process) and `f59d0ca63` both read the old 13 and pass. The property this pin
+    # is for holds: every grammar claim is held at the end and none evicted.
     assert actor_end == [("hearth_ostvik", "stores:grain", 0),
                          ("einhir_texts", "exists:Person", 0),
                          ("hearth_ostvik", "exists:Person", 0),
@@ -12094,9 +12107,9 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
                          ("hearth_ostvik", "exists:Person", 0),
                          ("hearth_ostvik", "exists:Rung", 1),
                          ("hearth_ostvik", "present_at:p_bailiff", True),
-                         ("rec:6095547f999b4ff8", "exists:Person", 0),
                          ("rec:6095547f999b4ff8", "exists:dispensation", 0),
-                         ("hearth_ostvik", "stores:grain", 0)], (
+                         ("hearth_ostvik", "stores:grain", 0),
+                         ("hearth_ostvik", "exists:DocketItem", 0)], (
         f"the `actor` arm's end-of-run grammar claims are {actor_end}, not the single surviving "
         "`stores:grain` read. Empty would mean the cap is evicting again — i.e. the fan-out "
         "default moved back toward `total`, or a new deposit channel opened — and every `H-40` / "
@@ -12642,8 +12655,14 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # `rec:2dd19669944564b8`), BY ITS CELL: its first conjunct is `transfer`'s `stores(from, kind) >= amount`, so the
     # `stores:grain` belief a refusal on the hearth deposits contradicts both rows. `speak` leaves on the act mix:
     # `evade / defy`, `construe` and `exchange` are resolvable again, and no `speak` is formed on the hearth to drop.
+    # ⚠⚠ NINE -> TEN, v10 CR-16 (B10-07b): `speak` JOINS, nothing leaves. `Fixtures stance_polarity` ships `declared` (`H-194`), so the
+    # act mix of this fixture moved and a `speak` is refused on the hearth again: the `("hearth_ostvik", "exists:DocketItem", 0)`
+    # belief that refusal deposits (the entry `test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_do` gains)
+    # is the one `speak` drops on, REM-2C's arrival shape. Neither the class column nor the cell is involved: `speak` declares
+    # none. CONTROL: this tree with `stance_polarity` swept back to `legacy` (in process) and `f59d0ca63` both read the old nine and
+    # pass. The drop counts per verb were not re-measured for this re-pin. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
     assert {v for v, _ in hl_live} == {"accept", "challenge", "exchange", "fight",
-                                       "interview", "sabotage",
+                                       "interview", "sabotage", "speak",
                                        "tend", "train", "transfer"}, (
         f"the headless drops are on {sorted({v for v, _ in hl_live})}. `examine`/`restore`/"
         "`interview`/`fight`/`research` are the `exists:` and `existence:`-cell drops the "
@@ -12895,8 +12914,12 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # `('speak','hearth_ostvik')` -- the set assertion above's one verb that left -- and IN `('exchange', 'einhir_texts')`,
     # `('exchange', 'hearth_ostvik')` and `('exchange', 'rec:2dd19669944564b8')` (its three, `transfer`'s own referents).
     # Every one of the other ten survives. The clause still fires, and `bit` below is empty on both trees.
-    assert len(dropped) == 13, (
-        f"{len(dropped)} executable clause-4 drops, not 13. The drops are the channel itself; if "
+    # v10 CR-16 (B10-07b): 13 -> 14, `('speak', 'hearth_ostvik')` back IN (the set assertion above's one verb that joined; REM-2B
+    # had it OUT); every one of the other 13 survives, by the set assertion above. `Fixtures stance_polarity` ships `declared`
+    # (`H-194`), so the act mix moved. CONTROL: this tree with `stance_polarity` swept back to `legacy` (in process) and `f59d0ca63`
+    # both read the old 13 and pass. The clause still fires.
+    assert len(dropped) == 14, (
+        f"{len(dropped)} executable clause-4 drops, not 14. The drops are the channel itself; if "
         "this falls toward zero the clause has stopped firing, which is a different and worse "
         "failure than the loss of outcome-relevance recorded above.")
     # ⚠⚠⚠ **THE BITE CAME BACK UNDER G1a, THE GUARD ABOVE DEMANDED A REASON, AND THE REASON IS
@@ -14250,7 +14273,14 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
         # arm. The floor above (`4 * acts_differ > genuine`) holds in all three: 44 > 34, 44 > 34, 44 > 33. CONTROL,
         # run: the same script on the REM-22 tree (`e66a22ec`) reads the old (18, 40), (18, 36), (18, 36) exactly.
         # [GROUNDED: measured at v10 REM-23 on this tree and on a `git worktree` at `e66a22ec` -- (acts_differ, genuine): `none` (11, 34), `actor` (11, 34), `total` (11, 33) here; (18, 40), (18, 36), (18, 36) there]
-        "none": (11, 34), "actor": (11, 34), "total": (11, 33)}, (
+        # ⚠⚠ **RE-PINNED AT v10 CR-16 (B10-07b), DELIBERATELY: RECOVERABILITY ROSE IN EVERY ARM (LESS OF A FORK MOVES THE ACT STREAM),
+        # AND THE UNIT IS `stance_polarity`'s SHIPPED ARM.** `acts_differ/genuine` moves 11/34 -> 9/34 (32% -> 26%) at `none`, 11/34 ->
+        # 9/34 (32% -> 26%) at `actor`, 11/33 -> 9/33 (33% -> 27%) at `total`: `acts_differ` falls from 11 to 9 in all three together,
+        # the genuine population is unmoved, and `hash_differ` equals `acts_differ` in every arm (asserted above). The floor above
+        # (`4 * acts_differ > genuine`) holds in all three: 36 > 34, 36 > 34, 36 > 33. CONTROL, run: this tree with `stance_polarity`
+        # swept back to `legacy` (in process) and `f59d0ca63` read the old (11, 34), (11, 34), (11, 33) exactly.
+        # [GROUNDED: measured at v10 CR-16 on this tree and on `f59d0ca63` -- (acts_differ, genuine): `none` (9, 34), `actor` (9, 34), `total` (9, 33) here; (11, 34), (11, 34), (11, 33) there]
+        "none": (9, 34), "actor": (9, 34), "total": (9, 33)}, (
         f"the recoverability figures moved: {{k: (v['acts_differ'], v['genuine']) for k, v in got.items()}}. "
         "This is a RE-PIN DECISION, not necessarily a failure — but it is one somebody has to "
         "make deliberately, because `acts_differ / genuine` is how much of a fork the scene tick "

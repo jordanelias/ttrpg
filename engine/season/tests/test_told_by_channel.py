@@ -2020,7 +2020,8 @@ def test_g2_a_grudge_raises_fight_on_its_object_under_declared_not_legacy(monkey
     from ..decision.choose import stance_term
     from ..decision.options import subject_is_opponent
     from ..state.carriers import Candidate, Person
-    assert DEFAULT_FIXTURES.get("stance_polarity") == "legacy", "the shipped arm moved: restate"
+    # v10 CR-16 shipped `declared` (was `legacy`); every arm below is swept explicitly, so this pins the shipped value only.
+    assert DEFAULT_FIXTURES.get("stance_polarity") == "declared", "the shipped arm moved: restate"
     assert subject_is_opponent(VERB_TABLE["fight"]) and not subject_is_opponent(VERB_TABLE["tell"])
     grudge = [("p_x", -1.0, 3.0)]
     cands = [Candidate("fight", "p_x"), Candidate("fight", "p_y")]

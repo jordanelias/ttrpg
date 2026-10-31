@@ -85,7 +85,17 @@ _BASELINE_TOTAL = (33, 7)
 # the trajectory, which is what this file's header says the slice is (a proxy). Seed 1 is the first seed of
 # the sweep at which the rise holds here, and it holds on both trees (control (39, 9) -> (39, 11); here
 # (39, 10) -> (39, 12)) [a judgment call, as `test_sc01_the_bar.py`'s re-chosen seeds].
-_RISE_SEED = 1
+#
+# v10 CR-16 (B10-07b): THE RISE IS RE-READ AT SEED 2, RE-CHOSEN BY A STATED SWEEP; the control pin stays seed 0's, unmoved (33, 7).
+# `Fixtures stance_polarity` ships `declared` (H-194), and the seed-1 slice's shifted arm moved: `_wd_total` on this tree reads seed 1
+# control (38, 10), 1 -> (38, 10), no rise (the divergence count does not move; the file's own message, "inert here"), where the
+# `f59d0ca63` tree (the control) reads the rise at seed 1 and passes. THE SWEEP, seeds 0-7, `(genuine, diverged)` at shift 0 -> 1 on
+# this tree: seed 0 (33, 7) -> (29, 5); 1 (38, 10) -> (38, 10); 2 (34, 7) -> (30, 8); 3 (35, 9) -> (35, 9); 4 (40, 14) -> (40, 14);
+# 5 (22, 8) -> (22, 7); 6 (22, 4) -> (22, 4); 7 (37, 5) -> (37, 5) -- the rate rises at seed 2 only (8/30 = 26.7% > 7/34 = 20.6%).
+# Seed 2 is the first seed of the sweep at which the rise holds here [a judgment call, as REM-2C's re-choice; the slice is a proxy and
+# a one-seed reading that flips with the trajectory]. CONTROL, in process on this tree: `stance_polarity` swept back to `legacy` reads seed 1 (39, 8) -> (39, 11), a rise, and seed 0's
+# control (33, 7) as pinned.
+_RISE_SEED = 2
 
 
 def _person(pursuits: dict, scar: dict) -> Person:
