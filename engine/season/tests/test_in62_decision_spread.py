@@ -282,11 +282,13 @@ def test_in62_arm_0_holds_one_vector_one_conviction_and_reads_no_goals_file():
     who holds no vector keeps holding none, and `no_goals()` makes the goals FILE read empty for the
     reading and restores it."""
     from ..data import goals as goals_data
-    w = build_realm(0, goals=False)
+    # v10 SE-06: the 37 population cohorts now hold their territory's vector, so the persons who hold none are
+    # the GUARD cohorts (`guards=True`, which `temperaments:` does not cover); they keep the control's no-vector branch observed.
+    w = build_realm(0, goals=False, guards=True)
     before = {pid: bool(p.pursuits) for pid, p in w.persons.items()}
     DS.apply_control(w)
     holders = [p for p in w.persons.values() if before[p.id]]
-    assert len(holders) >= 46 and any(not v for v in before.values()), "control: cast hold vectors, cohorts none"
+    assert len(holders) >= 83 and any(not v for v in before.values()), "control: cast and cohorts hold vectors, guards none"
     assert len({tuple(sorted(p.pursuits.items())) for p in holders}) == 1
     assert len({tuple(sorted(p.conviction.items())) for p in holders}) == 1
     assert all(not p.pursuits for pid, p in w.persons.items() if not before[pid])

@@ -466,28 +466,26 @@ def _counts(w) -> dict:
 #: and `populated.run`; CONTROL, run in process on this tree: `planned_works` emptied reads the values this block held exactly, at
 #: all three seeds, and the build world's old digest and content hash. Was, for seeds 0 / 1 / 2: `old` 789bc9eb... / 64276910... /
 #: b8031dc3..., `new` 41ffb48b... / 6c52b44c... / 9bb7306d..., `census` ed0c8bac... (seed 0; seeds 1 and 2 unmoved).
+#: RE-RECORDED AGAIN at v10 SE-06 (B10-07b), A DATA MOVE DECLARED: the 37 population cohorts hold their territory's temperament as
+#: pursuits (`cohorts.yaml: temperaments:`), so the build moves (the cohorts' `pursuits` only: the counts of persons, rungs, offices and
+#: sites are unchanged) and every seeded season takes another path (`acts` 599 / 638 / 633 -> 598 / 640 / 653, `log` 9378 / 11960 /
+#: 9726 -> 8913 / 11937 / 9718). EVERY value below is this tree's, read with this file's own helpers and `populated.run`; CONTROL,
+#: run in process on this tree: `temperaments:` deleted from a copy of `cohorts.yaml` reads the values this block held exactly, at
+#: all three seeds, and the build world's old digest and content hash. Was, for seeds 0 / 1 / 2: `old` faa7f2b1... / 0be6716a... /
+#: ab260df2..., `new` 873525df... / 3c6c0de3... / 07a0c784..., `census` 89a3fbcd... / b2c3ef40... / 10f3da31....
 BASE = {
-    # SEED 0 RE-RECORDED, ED-IN-0306 (`arrival_only_kinds`, on top of main at 59f2f97f): a computed `migrate` onto a territory
-    # rung is declined (migrate.refused 35->40, residence.changed 3->1, claim.deposited 8190->8233; acts 598->599). CONTROL:
-    # main at 59f2f97f, probed in its own checkout by the same run, reads the previous entry exactly.
-    0: {"old": "faa7f2b173ad28cc63a18b514d6d835a", "new": "873525dfb363231695cefb17ad4b17a1", "acts": 599,
-        "census": "89a3fbcdb936497449f34fb9402af7568537dd3ebc57e64dcfaed248e9a970a3",
-        "counts": {"persons": 82, "rungs": 411, "offices": 32, "sites": 322, "records": 118,
-                   "propositions": 98, "dates": 7, "docket": 6, "tenures": 843, "log": 9378}},
-    # SEED 1 RE-RECORDED, ED-IN-0306 phases 4 and 5 (on top of main at 59f2f97f): `march_target_kinds` gained `territory`, so computed
-    # marches on territory referents now resolve (army.arrived 5->6, field.unopposed 5->6, march.declared 21->18, march.refused
-    # 16->12), and computed `move`s and `migrate`s onto a territory are declined (travel.moved 11->10, travel.blocked 22->23,
-    # residence.changed 3->2; acts 643->638). CONTROL: main at 59f2f97f reads the previous entry exactly.
-    1: {"old": "0be6716a18eb57d44cea06e05aaf643b", "new": "3c6c0de333bba66196eb5b76a07d75ed", "acts": 638,
-        "census": "b2c3ef40dcb036301a6b96166a104c46fb04eb9b36316b52d4a02e779b90e804",
-        "counts": {"persons": 83, "rungs": 412, "offices": 32, "sites": 322, "records": 135,
-                   "propositions": 96, "dates": 7, "docket": 2, "tenures": 868, "log": 11960}},
-    # SEED 2 RE-RECORDED, same cause (travel.moved 4->3, travel.blocked 27->29; acts 632->633). CONTROL: main at 59f2f97f reads
-    # the previous entry exactly.
-    2: {"old": "ab260df2819bdb10e12c8488fde208e2", "new": "07a0c78487abfd59764989aae839694a", "acts": 633,
-        "census": "10f3da318d1ec1d17663728e67fd2d099c45c57f59b79a3948112049b75944ad",
-        "counts": {"persons": 81, "rungs": 410, "offices": 32, "sites": 322, "records": 125,
-                   "propositions": 100, "dates": 7, "docket": 2, "tenures": 842, "log": 9726}},
+    0: {"old": "7d1989f6594c54d78cc5933dec9ec636", "new": "31e39c05fa61eb6d6227164d2717b48f", "acts": 598,
+        "census": "fce1b6a7d7acc65bb29dec21fee1073f7c9e7c1ec22da3671081a345996cb562",
+        "counts": {"persons": 82, "rungs": 411, "offices": 32, "sites": 322, "records": 124,
+                   "propositions": 103, "dates": 8, "docket": 6, "tenures": 851, "log": 8913}},
+    1: {"old": "ac68817f46961fcae33ea6b638ce45c7", "new": "301950eef88f9bbea3ca2203f8d06967", "acts": 640,
+        "census": "4029aeb0f903192734b856772522d435771f97cb9d936aa2aecd5b49c009ca34",
+        "counts": {"persons": 83, "rungs": 412, "offices": 32, "sites": 322, "records": 149,
+                   "propositions": 104, "dates": 7, "docket": 2, "tenures": 891, "log": 11937}},
+    2: {"old": "ed7ce0c15cc9ab0e048d213ab1cd1c21", "new": "83b98aac04c0f795509e131113cf257b", "acts": 653,
+        "census": "4a8f200134a355f05b06ee66cfb6c10b8597cfb5e67d0f8cdf610855fda4a2c4",
+        "counts": {"persons": 81, "rungs": 410, "offices": 32, "sites": 322, "records": 142,
+                   "propositions": 106, "dates": 6, "docket": 3, "tenures": 866, "log": 9718}},
 }
 
 
@@ -495,8 +493,8 @@ def test_go07_control_the_build_world_old_digest_is_unmoved():
     """The base commit's `repr` digest of `build_realm(0)`, before a single act, read this literal
     (`test_season_weather.BASE_HASHES[0]`'s retired value); the same world now reads the new pin."""
     w = POP.build_realm(0)
-    assert _old_content_hash(w) == "bcc59ba42cdfe4fa740e8d50c3b4f7c0"        # v10 IN-45: was 8e4032a2... (control reads it)
-    assert w.content_hash() == "fe427626f9e91ab83ffd556c0bec4ea7"            # v10 IN-45: was 9ff53909... (control reads it)
+    assert _old_content_hash(w) == "6ea9a7f2b595f95945fd89cd29808ab8"        # v10 SE-06: was bcc59ba4... (control reads it)
+    assert w.content_hash() == "aef556ac92cce4b4d0cefbd57b6ed618"            # v10 SE-06: was fe427626... (control reads it)
 
 
 def test_go07_control_the_world_did_not_move_only_its_digest():

@@ -100,6 +100,53 @@ cohorts:
 - {rung: set_s_036, weight: 2}   # S-036 Himmelenger (Cathedral-City, T9)
 - {rung: set_s_037, weight: 2}   # S-037 Schoenland (City, T16)
 
+# THE TEMPERAMENTS (v10 SE-06; ED-IN-0293 row 1 reading (b), the pursuit half; read by
+# `harness/populated.py::temperament_rows`, applied by `seat_cohorts`).
+# A cohort's PURSUITS are its TERRITORY'S TEMPERAMENT. Two cohorts of one territory hold the same vector
+# (declared: no spread between them is built), and a cohort gets NO goals and NO convictions
+# (`Person.conviction` stays `{}`: no document supplies an affiliation for a population).
+#
+# [ASSUMPTION; medium; Jordan to correct; revert: delete the `temperaments:` block below -- cohorts stay
+# uniform, and the realm hash is the pre-SE-06 value.]
+# WHAT THE SOURCE IS. `territory_temperaments_v30.md` (an archived design document, intent only: read for the
+# numbers below and for nothing else) gives each territory two scalars, alpha (the weight on OUTCOMES) and
+# beta (the weight on CONDUCT), from a faction-effective-temperament model whose drift mechanics are on the
+# retired Key substrate. It carries NO pursuit vector and NO affiliation or conviction content, so the
+# card's "15 pursuits and a member of each concern group" is not supplied. ONLY alpha and beta are read here;
+# its typology name (pragmatic, traditional, ...) and its rationale column are not.
+# THE TRANSLATION, one rule in one owner (`data/pursuits.py::temperament_pursuits`): alpha and beta are the
+# weights on the instrumental (+) and deontological (-) poles of the `deontological_instrumental` axis, and a
+# pursuit's raw weight is `alpha * max(0, d) + beta * max(0, -d)` with `d` its projection on that axis from
+# `rosters.yaml: tables.pursuit_projection`; the 15 raw weights are divided by their sum, so a cohort's vector
+# totals 1 (the cast's own rows total 0.8 to 1.5, so no magnitude is invented). A pursuit with `d == 0`
+# (individuality, family) takes 0. The rows below are the source's, not 15 numbers per territory.
+# CONSEQUENCE, said so it is not found later: the source gives five distinct (alpha, beta) pairs across 16
+# territories, so the cohorts hold five distinct vectors; territories with equal pairs hold equal vectors.
+# T15 (Askeheim) is in the source and holds no cohort, so it has no row here. A cohort whose territory has
+# no row is refused at seating (`Unspecified`), never left uniform.
+#
+# FIELDS
+#   territory  a geography `provinces:` id (T1..T17), the territory that CONTAINS the cohort's settlement.
+#   alpha      the outcomes weight, a number in [0, 1].
+#   beta       the conduct weight, a number in [0, 1].
+temperaments:
+- {territory: T1,  alpha: 0.7, beta: 0.3}
+- {territory: T2,  alpha: 0.3, beta: 0.7}
+- {territory: T3,  alpha: 0.5, beta: 0.5}
+- {territory: T4,  alpha: 0.3, beta: 0.7}
+- {territory: T5,  alpha: 0.3, beta: 0.7}
+- {territory: T6,  alpha: 0.9, beta: 0.1}
+- {territory: T7,  alpha: 0.3, beta: 0.7}
+- {territory: T8,  alpha: 0.7, beta: 0.3}
+- {territory: T9,  alpha: 0.2, beta: 0.8}
+- {territory: T10, alpha: 0.5, beta: 0.5}
+- {territory: T11, alpha: 0.3, beta: 0.7}
+- {territory: T12, alpha: 0.5, beta: 0.5}
+- {territory: T13, alpha: 0.9, beta: 0.1}
+- {territory: T14, alpha: 0.5, beta: 0.5}
+- {territory: T16, alpha: 0.7, beta: 0.3}
+- {territory: T17, alpha: 0.5, beta: 0.5}
+
 # THE GUARD COHORTS (v9 IN-36 carrying IN-60's guard content, RS-26; seated only by `build_realm(guards=True)`).
 # A guard is a cohort -- a Person at `weight > 1` -- SWORN (`oblige`) to a principal's seat and posted at the exact
 # rung that seat's HOLDER is present at, so IN-60's `guard_weight` (the sworn weight present at a rung, beside
