@@ -3503,8 +3503,11 @@ def test_t2_align_kind_reads_the_one_emitter_and_a_deed_key_needs_an_emitted_kin
     # emitter of `pursuit.moved` (its won bands write the hearer's pursuits), so the kind is SHARED and leaves
     # `KIND_VERB`; its authored `deed:pursuit.moved` cells stay at 0.0 and are now read by the shared-kind
     # branch below (a moved pursuit is no deed of the person moved, whoever moved it). No cell was changed.
+    # ⚠ RE-RECORDED AT v10 CR-21 (M14), THE SAME TRIPWIRE FIRED AS DESIGNED: `commitment.ended` is a single-emitter
+    # kind (`release`) and the pass authors its two `deed:` cells (H-205's vow-break: `rigid_flexible` and
+    # `deontological_instrumental`), reviewed in `test_cr21_cells.py`; every other axis falls back to `release`'s own cell.
     assert {k for k in KIND_VERB if any(authored(k, ax) is not None for ax in PURSUIT_AXES)} == {
-        "matter.undetermined"}, (
+        "matter.undetermined", "commitment.ended"}, (
         "a single-emitter kind carries an authored `deed:` cell nobody reviewed here "
         "(`pursuit.moved` left this set at v9 IN-12 step 9: `argue` and `determine` both emit it)")
     _pm = [authored("pursuit.moved", ax) for ax in PURSUIT_AXES]
@@ -8905,7 +8908,19 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # executed-world count is `reconstruct`'s 136 of 143 on both), `ever` is the same 20 verbs and the never-attempted set the
     # same 22 on both (`refused_only` gains the three, asserted above), the status census is UNMOVED (103 RUNS-UNDECLARED
     # · 40 SPAN-UNAUTHORED), and `told_redeposits` stays 0.
-    assert len(by_sig) == 123, (
+    # ⚠⚠ **123 -> 122, v10 CR-21 (M14, B10-07b), MEASURED BY `corpus_run.run_case`, seed 0, AGAINST THE SE-06 TREE
+    # (`bcaf1d519`, extracted; reads 123) AS CONTROL -- the same script on both.** THE UNIT AND THE DIRECTION: variety FELL
+    # by one, `live` did not move (143 on both sides). `happiness`'s `deontological_instrumental` cell +0.4 -> 0.0, `restore`
+    # celled (P/S -0.2) and the two `deed:commitment.ended` cells re-rank candidates: 21 worlds' executed sets change (joins
+    # `tend` 5, `tell` 4, `conceal` 4, `petition` 3, `release` 3, `surveil` 3, `utter` 2, `carry` 2, `give` 2, and 1 each of
+    # `accept`, `challenge`, `reconstruct`, `create_record`; leaves `transfer` 4, `release` 2, `tell` 1, `carry` 1), a net one
+    # FEWER distinct signature. Executed-world counts, control -> here: `tend` 42 -> 47, `conceal` 105 -> 109,
+    # `tell` 121 -> 124, `petition` 96 -> 99, `surveil` 84 -> 87, `transfer` 44 -> 40, `give` 5 -> 7, `utter` 125 -> 127,
+    # `accept` 116 -> 117, `carry` 46 -> 47, `challenge` 96 -> 97, `create_record` 134 -> 135, `reconstruct` 136 -> 137,
+    # `release` 5 -> 6; every other verb's count is unmoved. Not a ranking change: `H-96` is untouched. THE SAME-BREATH
+    # CHECK: the universal set is EMPTY on both sides (the largest executed-world count is `reconstruct`'s 137 of 143), and
+    # `ever` is the same 20 verbs on both. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+    assert len(by_sig) == 122, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "

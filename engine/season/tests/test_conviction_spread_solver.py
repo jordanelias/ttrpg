@@ -113,8 +113,11 @@ def test_the_control_reproduces_the_figure_the_open_ledger_row_cites():
     # which is also the falsifier for a transcription slip in `tables.pursuit_projection`.
     # [canonical: the roster size is references/descriptor_registry.yaml:pursuit_roster]
     assert s["within_60deg"] == 4 and s["total"] == 15
+    # ⚠ RE-PINNED AGAIN AT v10 CR-21 (M14, B10-07b), A GOLDEN RE-RECORDED WITH ITS REASON: `happiness`'s
+    # `deontological_instrumental` cell +0.4 -> 0.0, so the effective-axes figure reads 3.93 (was 3.81); the
+    # within-60-degree count is unmoved (4 of 15). `test_cr21_cells.py` reads 3.81 back off the old cell.
     # [JUSTIFIED: the control figure and its float tolerance — reproduced, not chosen]
-    assert s["spectrum"]["effective_axes"] == pytest.approx(3.81, abs=0.01)
+    assert s["spectrum"]["effective_axes"] == pytest.approx(3.93, abs=0.01)
 
 
 def test_a_candidate_basis_is_scored_by_the_same_rule_as_the_live_one():
