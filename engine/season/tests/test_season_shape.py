@@ -622,6 +622,40 @@ def test_h115_the_degree_branches_raise_unspecified_not_systemexit():
         "the process ending")
 
 
+@pytest.mark.parametrize("verb", ["purge", "do"])
+@pytest.mark.parametrize("source", ["present", "missing"])
+def test_cr45_an_unknown_verb_is_charged_to_the_caller_from_the_verb_table_alone(monkeypatch, tmp_path, source, verb):
+    """CR-45 / `H-64`: `_fold` on a verb that is on no row of `VERB_TABLE` raises `Unspecified` charged
+    to the CALLER, decided by the table and nothing else -- the same with `files.SOURCE_353_MD` left at
+    its real path (`source="present"`) and pointed at nothing (`source="missing"`). Before CR-45 the
+    wording came from a regex over the whole of `architecture/holonic_ARCHITECTURE.md` read at runtime.
+
+    FALSIFIER, planted failure, read per item on the pre-CR-45 `resolve.py`: ("present", "do") reddens
+    -- `do`, a word that text uses in ordinary English, read as the DESIGN's (`needs` "a row in
+    verb_table.yaml, ruled before it is added", no H-64 in `law`); ("present", "purge") stays green, the
+    control (`purge` is absent from that text, so the old read also charged it to the caller); both
+    "missing" items redden (the old read raised `InstrumentDefect`, which is not an `Unspecified` and
+    escapes `pytest.raises`)."""
+    from ..loop import resolve
+    # ⚠ The pre-CR-45 `resolve` cached the source text in `_S353_CACHE`; a warm cache would make the
+    # "missing" items depend on test order. Once the symbol is gone this plants an unread `_S353_CACHE`
+    # for the test's duration (monkeypatch deletes it at teardown), hence `raising=False`: this one
+    # file runs against the base `resolve.py` and the new one, which is what lets the planted failure
+    # above be read at all.
+    monkeypatch.setattr(resolve, "_S353_CACHE", [], raising=False)
+    if source == "missing":
+        monkeypatch.setattr(files, "SOURCE_353_MD", tmp_path / "no_such_353.md")
+        assert not files.SOURCE_353_MD.exists()
+    assert verb not in VERB_TABLE, verb
+    w = _w()
+    d = SeasonDriver(w)
+    act = Act(id=f"cr45_{verb}", actor="p_low", verb=verb, payload={})
+    with pytest.raises(Unspecified) as e:
+        d._fold(w, mint_token(w, WriteClass.ACTS), act)
+    assert "CALLER'S invention" in e.value.needs, e.value.needs
+    assert "register row H-64" in e.value.law, e.value.law
+
+
 
 def _model_modules():
     """THE MODEL: every package module that is not the instrument.
