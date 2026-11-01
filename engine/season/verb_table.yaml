@@ -1538,6 +1538,38 @@ verbs:
     emits_on_refusal: ["finding.none"]
     grade:       "assumption"
     source:      "investigation_systems_v30.md:217; fieldwork_v30.md:294 (§4.2), :318 (§4.3). ⚠ THE SINGLE-ROLL INTERVIEW IS RETIRING AND THIS ROW IS ITS BASELINE, NOT A SECOND SPEC: `fieldwork_v30.md:300` (ED-FI-0004, 2026-07-08) folds it into the Dialogue Lattice -- *'the richer object wins'* -- and retains the bare-roll row as *the current mechanical baseline* only until ED-921 and ED-IN-0016 EP-8 settle. This row is that baseline; when the Lattice is built it replaces this row rather than sitting beside it."
+  - verb:        "interrogate"
+    stratum:     "social"
+    eligibility: ["remit:determine"]
+    eligibility_note: "v10 IN-12 step 5 (#453 §9.1, the `interrogate` row): `remit:determine` via a seat -- the bench that may bind a party is the one that may question him (`interview` is the `own` row beside it; #453's CONFLICTS line: eligibility, the counterparty's state, the prize)."
+    beneficiary: "actor"
+    beneficiary_note: "#453 §9.1: `actor` -- what a confession settles is the questioner's matter, and the seat he acts through is carried on `via`, not on an operand."
+    requires:    "the subject is a person, held in a live `detain`, and a docketed petition's `terms` names him"
+    requires_typed: none
+    requires_typed_note: "v10 IN-12 step 5, H-226 ROUTE (a) [ASSUMPTION; medium; Jordan to correct; revert: route (b), `loop/resolve.py::_fold` running an effect on a band whose writes are empty]: `none` FOR THE GRAMMAR'S REASON, on `oblige`'s and `release`'s route -- a prose `requires:` read by the registered predicate `loop/predicates.py::_req_interrogate`. #453 §9.1 types `existence` of `subject` kind Person and reads custody and the charge AT THE EFFECT, but every band writes `[]` and `_fold` runs an effect only for a non-empty `writes_at`, so there is no effect to read them in (H-226); the predicate reads all three in the fold, before the seam is called. Clause 1 would type; the custody clause is a restraint the gate's own reader answers (`world_q.restrained`, the one owner, K-18: not a new stem) and the charge reads a docket item's `petition` key and that Record's `terms` (K-35, K-55), which no stem reads. A typed cell AND a predicate on one row is what `test_wa_one_owner_...` forbids, so the whole cell is the predicate's. THE `HOLDS`-PROPOSITION FORM OF THE CHARGE (the petition's `terms` a `HOLDS` Proposition whose `subject` is the prisoner) WAITS on a `mood` source for a computed `utter` (#453 §14.9)."
+    referent_class: Detainee
+    referent_class_note: "v10 IN-12 step 5, THE ELIGIBILITY DECLINE AS A CLASSED REFERENT (H-232's own named shape for a world fact the chooser cannot see, `larders_in_purview`'s and `requisition`'s; [ASSUMPTION; medium; Jordan to correct; revert: `referent_class: Person`, which forms on every person a question names -- MEASURED at the build, `build_realm(0)` two seasons: the hash moved 36d1e6c3 -> 88b0fa47 with 6 `interrogation.refused`]): FORMED ONLY ON A `Detainee`-CLASSED REFERENT -- a person held by a live `detain` whose object is a seat the asker holds granting `determine` (`queries/world_q.py::detainees_held`, stamped onto the question he answers by `questions_for`), IN-53 D1's partition. It REPLACES the plan's `referent_class: Person`: that class is filled with every person a question names (`own_referents_of_class`), so custody cannot be told apart in it, and no person-side read of another man's restraint exists (H-231 limit 3: a custody receipt names only the `detain` Tenure). So formation is declined person-side while no live `detain` names his seat, and the row is never attempted in the realm until B10-11's `capture` makes one live. REVERT: delete the class, the term, and declare `Person`."
+    counterparty: subject
+    counterparty_note: "#453 §9.1: *'counterparty `subject`'* -- THE PRISONER IS THE SECOND SIDE, `arrest`'s shape: the contest's opponent (`loop/resolve.py::_contest` reads `row.opponent_operand()`), the man who holds his tongue. On this UNTYPED row the referent is carried on `subject` (`decision/options.py::_operands`, IN-10 (a)'s `counterparty: subject` clause), so the seam has its second claimant, which is the ground on which `loop/driver.py::resolvable_verbs`' contested gate admits it. A self-interrogation is declined person-side (`subject_is_opponent`) and refused by the fold's `counterparty` clause."
+    contests:    "a proposition"
+    contests_note: "#453 §9.1: *'contests: `a proposition` (social_contest, interim `sigma_leverage`)'* -- the charge's disposition, not a finding (the Church Tribunal is accusatorial). The prize `argue` and `determine` already claim (`rosters.yaml: contest_subsystems.prizes`); no new prize, no new provider."
+    writes:
+      Overwhelming: []
+      Success:      []
+      Partial:      []
+      Failure:      []
+    writes_note: "#453 §9.1: *'`[]` at every band'* -- THIN, Layer 1 row 30a's *a contest whose outcome changes nothing* (K-56): what each band leaves is the Event a witness holds, `speak`'s and `tell`'s shape. So `_eff_interrogate` does not exist (no band writes), the custody and the charge are read by the predicate (above), and `interrogate` cannot satisfy R-09's `DEGREES RESOLVED` (its bands' writes do not differ); R-05 counts it built out on execution. No value is claimed for the deposit (#453: P58, information extracted as a held object, stays open)."
+    emits:
+      Overwhelming: ["confession.full"]
+      Success:      ["confession.made"]
+      Partial:      ["confession.partial"]
+      Failure:      ["confession.withheld"]
+    emits_note: "#453 §9.1 emits `confession.made` at the three winning bands and `confession.withheld` at `Failure`; ONE KIND PER BAND instead (`-08` CP-T05-05's carried requirement: CP-T05-02's `hearing` counts a kind emitted at several bands as 0), so `Overwhelming` is a full confession and `Partial` a partial one, `Success` keeps #453's `confession.made` and `Failure` its `confession.withheld`. Four NEW kinds, each emitted by this row alone (`data/verbs.py::KIND_VERB`). [ASSUMPTION; medium; Jordan to correct; revert: #453's `confession.made` at the three winning bands.]"
+    emits_on_refusal: ["interrogation.refused"]
+    refusal_note: "#453 §9.1: *'Refusal: `interrogation.refused` (one kind)'* -- FLAT, so the contested row's party-gap and S27.4 refusals emit it too (`loop/resolve.py::_refuse_party_gap`). Refusal conditions (`_req_interrogate`): the subject is no person; he holds no live `detain`; no docket item naming him names a petition whose `terms` is he; or (the fold's `counterparty` clause) the act names no second party or names its actor. X: `interrogation` is also an unseeded arrangement name (`arrangements.yaml`), so the kind shares the token (#453)."
+    grade:       "assumption"
+    grade_note:  "an argued addition (#453 §10.4 step 5): the row, its bands and the predicate route are v10 IN-12's, on #453 §9.1 `:1613-1660`, K-18, K-35, K-55, K-56, H-226 route (a)."
+    source:      "v10 IN-12 step 5 (`workplans/valoria_master_workplan_v10_part4.md` IN-12), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.1 `:1613-1660`"
   - verb:        "research"
     stratum:     "uncontested_material"
     eligibility: ["own", "presence:<site>"]

@@ -2321,7 +2321,7 @@ def test_invariant_12_refuses_a_degree_keyed_emits_with_nothing_to_key_it_on():
     # the roster: its job is to fail if the loader started refusing everything, so it moves with
     # the table by construction and the number is read from the file rather than chosen.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen -- the control that stops both arms above passing on a loader that refuses everything]
-    assert len(VERBS._load_verb_table()) == 62       # ED-IN-0306 phase 5: `disband_unit` and `discharge_troops` join, 60 -> 62
+    assert len(VERBS._load_verb_table()) == 63       # v10 IN-12 step 5: `interrogate` joins, 62 -> 63 (ED-IN-0306 phase 5: 60 -> 62)
 
 
 def test_w2_a_planted_write_to_an_unruled_field_raises_and_names_the_pair():
@@ -6354,10 +6354,12 @@ def test_the_generic_remit_seats_every_office_and_unblocks_the_nine():
     #  v9 IN-12 step 5 added two: `arrest` (`remit:dispatch`, #453 §9.1, `WARRANT_ACT`) and `pardon`
     #  (`remit:determine`, #453 §9.1). Re-recorded by outcome: 13 -> 15, the two rows that moved.
     #  v9 IN-12 step 11 added one: `raze` (`remit:dispatch`, #453 §9.2, `march`'s act). Re-recorded by
-    #  outcome: 15 -> 16, the one row that moved.]
-    assert len(gov) == 16, (f"{len(gov)} verbs carry a `remit:` alternative; expected H-71's nine "
+    #  outcome: 15 -> 16, the one row that moved.
+    #  v10 IN-12 step 5 added one: `interrogate` (`remit:determine`, #453 §9.1). Re-recorded by outcome:
+    #  16 -> 17, the one row that moved.]
+    assert len(gov) == 17, (f"{len(gov)} verbs carry a `remit:` alternative; expected H-71's nine "
                             "plus march plus transfer plus seize plus covenant plus arrest plus pardon "
-                            "plus raze")
+                            "plus raze plus interrogate")
     formable = set()
     for t in held:
         p = w.persons.get(t.subject)
@@ -9481,10 +9483,13 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # Propositions a person has heard of, so a corpus witness's question carries a Proposition for them: each is formed and executes
     # in some world (the `ever` note above). Never attempted -> executed, the move REM-23's and CP-T05-04's notes above declared
     # the other way. Control: the pre-item tree (`6fb4a2e75`) reads both here.
+    # ⚠⚠ v10 IN-12 step 5: `interrogate` JOINS -- a re-record, by construction and observed by this run: it forms only on
+    # a `Detainee` (`world_q.detainees_held`: a person held by a live `detain` to a seat the asker holds), and no corpus
+    # world holds a live `detain` (`arrest` is in this set), so nobody forms it.
     assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish",
                                               "destroy_record", "march", "open_case",
                                               "determine", "migrate", "requisition",
-                                              "forgive",
+                                              "forgive", "interrogate",
                                               "arrest", "pardon", "raze", "thread_read",
                                               "work", "restore", "examine",
                                               "dispatch",
@@ -15191,10 +15196,13 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # (`Overwhelming`/`Success` only); `test_in12_step9.py` block 3 folds it through the real seam over 40
     # act ids, reads the bands it reaches, and observes the hearer's pursuits move on the won bands only.
     # v9 IN-12 step 5: `arrest` IS contested (`a standing`, `tell`'s prize), the eighth entry; `pardon` is not.
+    # v10 IN-12 step 5: `interrogate` IS contested (`a proposition`, `determine`'s prize), the ninth entry, with
+    # its own measurement: `tests/test_in12_interrogate.py` folds it through the real seam on a hand-built
+    # custody and charge (one `confession.*` kind at the band reached), its bands writing nothing.
     assert contested == {"fight": "the body", "tell": "a standing", "march": "a field",
                          "accept": "the body", "speak": "a matter",
                          "determine": "a proposition", "argue": "a proposition",
-                         "arrest": "a standing"}, (
+                         "arrest": "a standing", "interrogate": "a proposition"}, (
         f"the set of contesting verbs moved: {contested}. Every claim `W-E` published about what "
         "can be graded today is scoped to this set. A SEVENTH entry is a real widening and wants "
         "its own measurement; losing one of these six means its prize row or its verb row has "
@@ -15217,9 +15225,10 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # `arrest` (contested, the contested set above moves with it) and `pardon` (uncontested), v9 IN-12
     # step 5, a re-record. 55 -> 56, `raze` (v9 IN-12 step 11), uncontested (#453 §9.2: contests none),
     # a re-record. 56 -> 60, `recruit`, `form_unit`, `assign_troops`, `order_unit` (ED-IN-0306 phase 2),
-    # uncontested (they contest nothing), a re-record.
+    # uncontested (they contest nothing), a re-record. 62 -> 63, `interrogate` (v10 IN-12 step 5), contested
+    # (the contested set above moves with it), a re-record.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen]
-    assert len(VERB_TABLE) == 62, len(VERB_TABLE)    # ED-IN-0306 phase 5: 60 -> 62 (`disband_unit`, `discharge_troops`)
+    assert len(VERB_TABLE) == 63, len(VERB_TABLE)    # v10 IN-12: 62 -> 63 (`interrogate`); ED-IN-0306 phase 5: 60 -> 62
     # AND THE SIX ARE SIX, not a row that says six. This is the half of the pin that the old
     # count could not express: a table carrying the placeholder passed `== 32` while no act in it
     # could be formed, and `runs/CASELOG_NPC.md:64` reported the same case as a blocked one.
@@ -17138,5 +17147,7 @@ def test_t4_petition_and_issue_bind_to_and_contest_exactly_as_before():
     # `tell`'s shape exactly (#453 §9.4). A re-record.
     # v9 IN-12 step 5: `arrest` joins -- contested (`a standing`) against its `counterparty: subject`, the
     # prisoner, `determine`'s shape (#453 §9.1). A re-record.
+    # v10 IN-12 step 5: `interrogate` joins -- contested (`a proposition`) against its `counterparty: subject`,
+    # the prisoner, `arrest`'s shape (#453 §9.1). A re-record.
     assert {v for v, r in VERB_TABLE.items() if r.contests and r.counterparty} == {"tell", "determine", "argue",
-                                                                                   "arrest"}
+                                                                                   "arrest", "interrogate"}

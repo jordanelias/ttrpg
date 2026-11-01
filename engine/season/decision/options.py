@@ -41,7 +41,8 @@ from ..data.verbs import (
 from ..epistemic import belief_contradicts
 from ..gaps import Forbidden
 from ..queries.person_q import (
-    LedgerReader, OwnStateReader, content_kind, content_said, held_against, known_persons, ledger_names,
+    LedgerReader, OwnStateReader, addressed_to, content_kind, content_said, held_against, known_persons,
+    ledger_names,
     projected_axes, regard, said_of,
 )
 from ..state.carriers import Candidate, Claim, Person, Question, Record, View
@@ -177,8 +178,13 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             if writs:
                 if records is None:
                     records = held_record_claims(p)
+                # v10 IN-12 step 5a: ONLY A DOCUMENT ADDRESSED TO HIM (`person_q.addressed_to`, the one
+                # owner `writs_held` asks too) -- a petitioner holding his own petition is not who it
+                # asks, and forms nothing on its `terms`. A writ reached here only through `writs_held`'s
+                # addressee stamp, so for a dispensation this narrows nothing.
                 said = (_content_answer(c, "subject") for c in records
-                        if c.subject in writs and content_kind(c) in terms_kinds)
+                        if c.subject in writs and content_kind(c) in terms_kinds
+                        and addressed_to(content_said(c), p.id))
                 refs = tuple(refs) + tuple(t for t in dict.fromkeys(said)
                                            if t is not None and t not in refs)
         # v9 IN-12 step 13 (`rosters.yaml: own_stance_declines`): A VERB A PERSON FORMS ONLY ON A REFERENT HE

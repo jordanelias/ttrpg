@@ -239,7 +239,9 @@ def test_in53v_c_the_classes_survive_the_fold_and_are_closed():
     # three-string literal here as a roster duplicated from rosters.yaml.
     # RE-RECORDED AT v10 REM-21: `Site`, `Proposition` and `Person` join (was 3), the classes the
     # own-referent term stamps once a row declares one (`test_referent_class_stamps.py`).
-    assert len(REFERENT_CLASSES) == 6 and {"Office", "Record"} <= REFERENT_CLASSES and "Rung" in REFERENT_CLASSES
+    # RE-RECORDED AT v10 IN-12 step 5: `Detainee` joins (6 -> 7), the restrained-persons class
+    # `world_q.detainees_held` stamps (`interrogate`'s, `test_in12_interrogate.py`).
+    assert len(REFERENT_CLASSES) == 7 and {"Office", "Record"} <= REFERENT_CLASSES and "Rung" in REFERENT_CLASSES
     a = Question("q:claim:x", "claim_landed", ("S",), "x")
     b = Question("q:need:off_reeve", "need", (), "off_reeve", (("off_reeve", "Office"),))
     for rule in ("all", "one_per_source"):
@@ -282,8 +284,10 @@ def test_in53v_c_the_declarations_as_built():
     # `petition` and `open_case` (eighteen rows -> nineteen; control: the convene commit `b8fd583b`, eighteen); AT v10
     # REM-28 (B10-06) `revoke` declares `Office` beside `confer` and `oblige` (nineteen rows -> twenty; control: the
     # dispatch commit `a4c508c5`, nineteen); AT v10 REM-2B (B10-06) `evade / defy` and `construe` declare `Record`
-    # beside `comply` (twenty rows -> twenty-two; control: the REM-2A tree `f23194871`, twenty).
+    # beside `comply` (twenty rows -> twenty-two; control: the REM-2A tree `f23194871`, twenty); AT v10 IN-12 step 5
+    # (B10-09) `interrogate` declares `Detainee` (twenty-two rows -> twenty-three; control: `114ae5da4`, twenty-two).
     assert {v for v, r in VERB_TABLE.items() if r.referent_class} == {"confer", "oblige", "comply", "march",
+                                                                      "interrogate",
                                                                       "evade / defy", "construe",
                                                                       "convene", "dispatch", "revoke", "migrate", "requisition",
                                                                       "restore", "work", "examine",

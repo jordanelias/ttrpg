@@ -1310,8 +1310,10 @@ def test_rem2c_c_a_record_a_standing_occasion_and_the_question_both_name_is_carr
     assert world_q.own_referents_of_class(w, q)[-1] == rec, q
     assert [k for r, k in q.classes if r == rec] == ["Record"] and q.classes[0] == (rec, "Record"), q
     assert [c.subject for c in _formed(w, pid, q) if c.verb == "research"] == [rec]
-    monkeypatch.setattr(world_q, "_stamped", lambda q_, added, w_: dataclasses.replace(
-        q_, classes=q_.classes + tuple((o, w_.class_of(o)) for o in added)))
+    # v10 IN-12: `_stamped` takes a fourth argument (the named-class pairs, `Detainee`); the planted
+    # undeduplicated stamp accepts and appends it as the real one does.
+    monkeypatch.setattr(world_q, "_stamped", lambda q_, added, w_, named=(): dataclasses.replace(
+        q_, classes=q_.classes + tuple((o, w_.class_of(o)) for o in added) + tuple(named)))
     with pytest.raises(Forbidden, match="twice"):
         world_q.questions_for(w, w.persons[pid])
 
