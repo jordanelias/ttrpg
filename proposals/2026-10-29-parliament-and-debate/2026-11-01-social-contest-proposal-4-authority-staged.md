@@ -819,3 +819,53 @@ golden moves in §7 are the stress tests' measured ones.
 `[CONFIDENCE: medium]` on the design and on the code facts, each opened at its line. `[CONFIDENCE: low-medium]` on
 magnitudes: every weight and scale in §4 is an assumption with a stated sweep, and no campaign-level instrument exists
 to set them (CLAUDE.md §7).
+
+---
+
+## The critic's pass and its reconciliation
+
+One round, by a read-only critic that could not run code: seven payoff cells were recomputed by hand from
+`p_success` and all seven match the log, and about 26 citations were checked. The faults are in what the dominance
+test counts and in how the design is built, not in the sums. Dispositions, in the critic's order:
+
+| # | severity | finding | disposition |
+|---|---|---|---|
+| 1 | MATERIAL | "ever best" ranges over 1,944 weightings × every cell and ties count as best; an option need be undominated somewhere and best somewhere, not in the same cell; each option carries a good only it can win | **accepted.** Report a stricter count (strictly best and undominated in the same cell) beside the current one |
+| 2 | MATERIAL | under the headline weights 4 of 14 choice rows are never best (come forward, cite-licence, impugn, judge challenge, forge, and inquisitorial justify at 5D and 12D); per named character the doc's own test fails three choices | **accepted.** The honest count is: **14 of 14 under the doc's own generous test; 10 of 14 under the headline weights; 3 fail per named character** |
+| 3 | MATERIAL | several survivals rest on one unswept constant: the justify two-grade cap (.143 of its .136 severity is the cap alone), the .5 arm refusal on crown appeal, the grid's top `keep` weight | **accepted.** Sweep each constant and report its break-even |
+| 4 | MATERIAL | the P2 and P3 controls cannot fail (an identity; a dominated-by-definition option) | **accepted.** Relabel them as instrument checks; they do not reproduce the stress tests' findings |
+| 5 | MATERIAL | the obstacle-routed concession reward was never computed (the cap route is set to zero), and the D-1 lift above the ceiling removes the clip that justified grade caps; grade caps rewrite the band outside `degree_from_net` (R-6, R-8) and give two methods for one quantity | **accepted.** Run an obstacle-routed concession reward under D-1 **before** adopting grade caps |
+| 6 | MATERIAL | an absentee is tried against the default Ob 2, higher than a commoner's own score ÷ 2, so evading looks like a faculty effect and is an artifact | **accepted.** An absentee resists at his own score ÷ 2 (R-5) |
+| 7 | MATERIAL | church contempt costs 0 in the model, so `defy` weakly dominates `evade` in 21 of 27 church cells: P3's defect survives | **accepted.** A church contempt needs its own edge or witnessed cost |
+| 8 | MATERIAL | defence proofs are halved like a score and lifted out of the ceiling like a modifier | **accepted.** Choose one: a modifier (unhalved, outside the ceiling) or a score (halved, clipped) |
+| 9 | MATERIAL | R-35 is narrowed without saying so: appeal exists only from church benches; a ducal sentence cannot be taken to the crown | **accepted.** Polity rows below the sovereign get `appeal_to: crown` by default |
+| 10 | MATERIAL | unauthored attributes read the registry default of 1, so every one of 83 persons rolls 1.25D, under R-40's 5D | **accepted.** Default faculty at the R-40 reference (4) until sheets land, tagged an assumption |
+| 11 | **BREAKS IT** | batch A1 deletes `VERB_CAPABILITY`, the discrete call and the H-80 labels before their replacements land (A3 to A5); `VERB_CAPABILITY` has readers at `data/verbs.py:1580`, `harness/corpus_run.py:353`, `sigma.py:143`, `tests/test_u8_cast_fields.py:277-285`; P1's stress test found `build_realm(0)` raises `SystemExit` when it is emptied | **accepted.** A1 cannot be green as ordered. Move deletes 2, 3 and 5 into the batches that land their replacements |
+| 12 | **BREAKS IT** | the plea "pops the stages its concession skips", which writes `Record.stages`, but repair (c) says only the case file's holder writes it; there are no verb rows for plea, offer-proof, speech kind, judge challenge, naming enemies, forum plea or coming forward; the existing `challenge` is a call to a duel | **accepted.** §6 must list the verb row, writer and write-matrix cell for each of the ten decisions; until it does, most of them are not acts the loop can form |
+| 13 | MATERIAL | every payoff needs a weighting and no NPC has one (R-28's source is deferred to CR-17) | **accepted.** Name a default NPC policy (headline weights scaled by appetite) as an assumption |
+| 14 | MATERIAL | the forum plea is never headline-best for anyone; scenario 1's first link is generic `tell`, which writes nothing | **accepted.** Restate as "undominated, never headline best"; mark the link unverified |
+| 15 | MATERIAL | the cut test used P2's control, which removes the cap, not the stages; the four switches were never varied singly; the forum is itself a near-corridor (church best in 153 of 162 cells at 2D) | **accepted.** Re-run with the cap fixed and each switch varied alone |
+| 16 | MATERIAL | `opinion_of` is World-side; under 04:249 `choose` cannot read world truth; a barrier cache built from residents' ledgers and read by the draw is ED-SC-0040's read routed through a cache, and a stored magnitude between barriers (S-7) | **accepted.** Route the decisions through `person_q`; argue Q2 against the ED-SC-0040 precedent |
+| 17 | NIT | Q3 is already answered by `workplans/valoria_master_workplan_v10_part6.md:33` (M2: faculty derived at read, pool only, nine stored attributes) | **accepted.** Drop or narrow Q3; the cited v9 part-5 file does not exist |
+| 18-20 | NIT | the "15 points at 2D" is mostly a lattice artifact (means agree; the switch to the continuous path is still owed under R-32; no R-22 conflict); the ceiling tally pools ceiling 3 with none; two citations are off by a line | **accepted** |
+
+**What survived the attack:** the arithmetic and the continuous controls; the diagnoses carried over from the stress
+tests and their repairs (MATTER `<=`, the citation as a writ, the second-case refusal kept, the purview split, the
+`scope:` key, keeping the contract row); `faculty_of` as a person-side query (it passes AX-2, and one table owning the
+attribute keys is a real elegance gain, though its "roster replaceability" control is circular); the golden claims;
+and the document's candour about false starts and cuts.
+
+**How many choices truly survive.** Under the document's own test, 14 of 14. Under one plausible weighting, 10 of 14.
+Per named character, three fail. Dropping those that hold only because of one constant (the plea caps, the .5 arm
+refusal, the `keep` weight, free defiance in the church row), **about five are robust**: proofs (strong against both
+bench and room), self or advocate, naming mortal enemies, the warrant duty, and appear / evade / defy in polity rows
+(that last softened by finding 6).
+
+**Critic's verdict on this proposal.** It should not replace Proposal 1 as the base: it carries every deficiency
+common to all three, adds the most apparatus, and its one distinctive gain is weaker than claimed. Its genuine
+contribution is a set of portable repairs to P2's and P3's broken carriers (b, c, g, h, i, l, m), plus the warrant
+duty, a plea with some concession reward, and the faculty table. It stands as the **target specification for the
+choice layer once Proposal 1's core and the dead core run**, cut back to a two-valued rite default, the concession
+reward re-tested through the obstacle under D-1 before grade caps, an absentee resisting at his own score ÷ 2, and
+the narrow options (judge challenge, forgery, impugn, cite-licence, the term of grace) held until the explanation
+contract shows them.
