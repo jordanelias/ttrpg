@@ -390,7 +390,7 @@ def settle_record(net: float, leverage: float, pool: float, ob: float, uniform) 
     are derived here, by the owner, and the fraction rule stays `settle_margin`'s alone."""
     boost = net_boost(leverage, pool)
     roll = net - boost
-    if abs(roll - round(roll)) > 1e-9:       # the float error on a shipped roll is ~1e-15
+    if abs(roll - round(roll)) > 1e-9:       # [JUSTIFIED: a float tolerance, not a mechanic: net minus boost carries ~1e-15 of error on a shipped roll, so 1e-9 sits six orders above it and far below a half]
         raise ValueError(
             f"settle_record: net {net!r} less the boost {boost!r} is {roll!r}, not a whole roll -- an "
             "entry's net is its integer roll plus the boost it was given (`modules/social_contest/roll.py`)")
