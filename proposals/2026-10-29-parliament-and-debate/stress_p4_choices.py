@@ -617,13 +617,18 @@ def sec_proofs(log):
             g["keep"] = 2.0 - b0["F"]   # the weak proof always kept; the strong one spent only if sitting 1 failed
             for k, v in g.items():
                 acc["strong_when_needed"][k] += v / 2
+        held = dict(acc.pop("strong_when_needed"))    # computed for the record, not an option (cut, run 4)
         opts = {k: dict(v) for k, v in acc.items()}
         par = T.add(N, opts, HEADLINE_W)
         be = {}
         for o in ("hoard", "strong_when_needed"):
+            if o == "strong_when_needed":
+                opts_be = dict(opts, strong_when_needed=held)
+            else:
+                opts_be = opts
             be[o] = None
             for wk in [x / 100 for x in range(0, 101)]:
-                if o in best_under(opts, dict(HEADLINE_W, keep=wk)):
+                if o in best_under(opts_be, dict(HEADLINE_W, keep=wk)):
                     be[o] = wk
                     break
         log.w("result", section="C4.proofs.break_even", elaboration=elab, NR=N, NA=NA, ceiling=C, keep_weight_at_which_best=be,
@@ -890,6 +895,285 @@ def sec_warrant(log):
     return T
 
 
+# ================================================================== the capability layer (addendum)
+# attribute(s) -> FACULTY (one owner: FACULTY_MAP, data) -> dice (dice_of_faculty) weighted by what the
+# rite/stage asks (ROLE_WEIGHTS, row data); title, office x L, faction and evidence add as the row says.
+# The attribute ROSTER is behind FACULTY_MAP and is replaceable: three sets below, one code path.
+FACULTIES = ("eloquence", "reasoning", "reading", "composure")      # eloquence is the CONDUCT faculty (x latitude, R-18/R-41)
+FACULTY_MAP = {
+    "registry_nine": {   # references/descriptor_registry.yaml:33-45 (scale 1-7)
+        "eloquence": {"CHA": 0.7, "BON": 0.3}, "reasoning": {"ACU": 0.6, "FOC": 0.4},
+        "reading": {"ATT": 1.0}, "composure": {"WIL": 0.7, "FOC": 0.3}},
+    "scratch_fourteen": {  # proposals/2026-10-16-attributes-from-scratch_part4.md:34-35
+        "eloquence": {"Presence": 0.7, "Warmth": 0.3}, "reasoning": {"Reasoning": 0.6, "Forethought": 0.4},
+        "reading": {"Reading people": 0.7, "Watchfulness": 0.3}, "composure": {"Composure": 0.5, "Nerve": 0.3, "Constancy": 0.2}},
+    "scratch_eight": {     # the same file :193-195, the smaller alternative
+        "eloquence": {"Bearing": 1.0}, "reasoning": {"Mind": 1.0}, "reading": {"Perception": 1.0},
+        "composure": {"Poise": 0.6, "Heart": 0.4}},
+}
+CHARACTERS = {   # the same three persons written on each roster (an author's sheet, not derived)
+    "commoner": {"registry_nine": dict(STR=3, END=3, AGI=2, FOC=2, ACU=2, WIL=2, ATT=2, CHA=2, BON=2),
+                 "scratch_fourteen": {"Presence": 2, "Warmth": 2, "Reasoning": 2, "Forethought": 2, "Reading people": 2, "Watchfulness": 2, "Composure": 2, "Nerve": 2, "Constancy": 2},
+                 "scratch_eight": {"Bearing": 2, "Mind": 2, "Perception": 2, "Poise": 2, "Heart": 2}},
+    "advocate": {"registry_nine": dict(STR=2, END=3, AGI=3, FOC=4, ACU=5, WIL=4, ATT=4, CHA=7, BON=5),
+                 "scratch_fourteen": {"Presence": 7, "Warmth": 5, "Reasoning": 5, "Forethought": 4, "Reading people": 4, "Watchfulness": 4, "Composure": 4, "Nerve": 4, "Constancy": 4},
+                 "scratch_eight": {"Bearing": 6, "Mind": 5, "Perception": 4, "Poise": 4, "Heart": 4}},
+    "scholar": {"registry_nine": dict(STR=2, END=2, AGI=2, FOC=6, ACU=7, WIL=5, ATT=6, CHA=2, BON=2),
+                "scratch_fourteen": {"Presence": 2, "Warmth": 2, "Reasoning": 7, "Forethought": 6, "Reading people": 6, "Watchfulness": 6, "Composure": 5, "Nerve": 5, "Constancy": 6},
+                "scratch_eight": {"Bearing": 2, "Mind": 7, "Perception": 6, "Poise": 5, "Heart": 5}},
+    "average": {"registry_nine": dict(STR=4, END=4, AGI=4, FOC=4, ACU=4, WIL=4, ATT=4, CHA=4, BON=4),
+                "scratch_fourteen": {k: 4 for k in ("Presence", "Warmth", "Reasoning", "Forethought", "Reading people", "Watchfulness", "Composure", "Nerve", "Constancy")},
+                "scratch_eight": {k: 4 for k in ("Bearing", "Mind", "Perception", "Poise", "Heart")}},
+}
+ROLE_WEIGHTS = {   # row data: which faculties a rite's stage weighs, per role [ASSUMPTION; sweep]
+    "accusatorial": {"prove": {"eloquence": .4, "reasoning": .4, "composure": .2}, "resist": {"eloquence": .4, "reasoning": .3, "composure": .3},
+                     "justify": {"reasoning": .5, "eloquence": .3, "composure": .2}, "bench": {"reasoning": .6, "reading": .4}},
+    "inquisitorial": {"prove": {"reading": .6, "reasoning": .4}, "resist": {"composure": .7, "reasoning": .3},
+                      "justify": {"reasoning": .7, "composure": .3}, "bench": {"reasoning": .6, "reading": .4}},
+}
+SPEECH_FACULTY = {   # a speech kind chooses which faculty carries the roll (row data) [ASSUMPTION; sweep]
+    "plain": {"reasoning": .8, "composure": .2}, "cite_licence": {"reasoning": .8, "composure": .2},
+    "hand_back": {"eloquence": .8, "composure": .2}, "impugn_motive": {"eloquence": .5, "reasoning": .5}}
+DICE_PER_FACULTY = 1.25    # [ASSUMPTION; medium; revert: the kernel's max(5, 2f+3)] faculty 4 (average) -> 5D, R-40's reference
+
+
+def faculty(sheet, roster, f, default=1.0):
+    """THE ONE OWNER of attribute -> faculty. A missing attribute reads the registry default (1)."""
+    return sum(w * sheet.get(a, default) for a, w in FACULTY_MAP[roster][f].items())
+
+
+def dice_for(sheet, roster, rite, role, latitude=1.0):
+    w = ROLE_WEIGHTS[rite][role]
+    return DICE_PER_FACULTY * sum(wt * faculty(sheet, roster, f) * (latitude if f == "eloquence" else 1.0) for f, wt in w.items())
+
+
+def char_pools(name, roster, rite, latitude=1.0):
+    sh = CHARACTERS[name][roster]
+    return {r: round(dice_for(sh, roster, rite, r, latitude), 4) for r in ("prove", "resist", "justify", "bench")}
+
+
+def sec_characters(log):
+    """C10 (addendum): the same choices, with pools BUILT FROM ATTRIBUTES; does a choice dominated for one
+    character come alive for another?"""
+    log.w("claim", section="C10.characters", text="With pools built from attributes through faculties, the same choice is a lookup for one character and live for another; which option is best follows the character's faculties and the rite's weights")
+    log.w("plan", section="C10.characters", faculty_map=FACULTY_MAP, role_weights=ROLE_WEIGHTS, dice_per_faculty=DICE_PER_FACULTY,
+          characters=CHARACTERS, opponents="accuser: the 'average' sheet in the role 'prove'; bench: 5D (the 'average' bench role) unless stated; inquisitor: average or scholar",
+          note="the pools vary by rite as well as by person: that is the faculty layer's whole effect")
+    for roster in FACULTY_MAP:
+        for nm in CHARACTERS:
+            log.w("result", section="C10.faculties", roster=roster, character=nm,
+                  faculties={f: round(faculty(CHARACTERS[nm][roster], roster, f), 3) for f in FACULTIES},
+                  pools={rite: char_pools(nm, roster, rite) for rite in ROLE_WEIGHTS})
+    roster = "registry_nine"
+    acc_pool = {rite: char_pools("average", roster, rite)["prove"] for rite in ROLE_WEIGHTS}
+    chars = ("commoner", "advocate", "scholar")
+    T = {k: Tally(f"C10.{k}", o) for k, o in (("plea_acc", PLEAS_ACC), ("plea_inq", PLEAS_INQ), ("plea_inq_scholar_bench", PLEAS_INQ),
+                                                ("defy", ["appear", "evade", "defy"]), ("challenge", ["answer", "challenge"]),
+                                                ("advocate", ["self", "advocate"]), ("speech", list(SPEECH)), ("forum", ["polity", "church"]))}
+    for nm in chars:
+        for rite in ROLE_WEIGHTS:
+            cp = char_pools(nm, roster, rite)
+            bench_proof = char_pools("scholar" if False else "average", roster, rite)["prove"] if rite == "inquisitorial" else BENCH
+            for tag, inq in (((f"plea_acc" if rite == "accusatorial" else "plea_inq"), char_pools("average", roster, "inquisitorial")["prove"]),
+                             (("plea_inq_scholar_bench" if rite == "inquisitorial" else None), char_pools("scholar", roster, "inquisitorial")["prove"])):
+                if tag is None:
+                    continue
+                pleas = PLEAS_ACC if rite == "accusatorial" else PLEAS_INQ
+                for writ, prf in itertools.product((False, True), (0.0, 1.5)):
+                    acc = defaultdict(lambda: defaultdict(float))
+                    for d_half in (0.3, 0.6, 0.9):
+                        P = base_params(5, "r37_3", rite, SA=acc_pool[rite], SR_score=cp["resist"], SR_roll=cp["justify"], DJ=BENCH, DJ_proof=inq,
+                                        proof_mod=prf, writ_mod=(1.5 if writ else 0.0), d_half=d_half, names_cost=1.0, section=f"C10.{tag}")
+                        for pl in pleas:
+                            for kk, v in goods_of(summarise(hearing(pl, P), pl, P)).items():
+                                acc[pl][kk] += v / 3
+                    opts = {k: dict(v) for k, v in acc.items()}
+                    par = T[tag].add(nm, opts, HEADLINE_W)
+                    log.w("result", section=f"C10.{tag}", character=nm, pools=cp, inquisitor_pool=inq if rite == "inquisitorial" else None, writ=writ, defence_proof=prf,
+                          goods={k: {kk: round(vv, 4) for kk, vv in v.items()} for k, v in opts.items()},
+                          weakly_dominated={k: v[0] for k, v in par.items() if v[0]}, headline_best=best_under(opts, HEADLINE_W))
+        # appear / evade / defy, both rites
+        for rite in ROLE_WEIGHTS:
+            cp = char_pools(nm, roster, rite)
+            pleas = PLEAS_ACC if rite == "accusatorial" else PLEAS_INQ
+            for q, L, ks in itertools.product((0.0, 0.5, 1.0), (0.37, 0.5, 0.78), (0.0, 0.1, 0.25)):
+                P = base_params(5, "r37_3", rite, SA=acc_pool[rite], SR_score=cp["resist"], SR_roll=cp["justify"], DJ=BENCH + L,
+                                DJ_proof=char_pools("average", roster, "inquisitorial")["prove"] + L, names_cost=1.0, section="C10.defy")
+                kind = "detain" if rite == "accusatorial" else "ban"
+                bite_p = 1.0 if kind == "detain" else L
+                _, s_app, _ = best_plea(P, pleas, bite=bite_p)
+                Pa = dict(P, SR_score=4.0)
+                p_arr = 1 - bands(5, ob_of(cp["resist"], P["C"]), 0.0, "C10.arrest")["F"]
+                s_abs = summarise(hearing("deny", Pa), "deny", Pa, bite=(q * p_arr) if kind == "detain" else L)
+                cb = bands(P["DJ"], ob_of(4.0, P["C"]), 0.0, "C10.contempt")
+                csev = (cb["O"] * SEV[3] + cb["S"] * SEV[2] + cb["P"] * SEV[1]) * L * (0.0 if kind == "ban" else 1.0)
+                g = {"appear": dict(goods_of(s_app), partisan=0.0, stand_signed=0.0, keep=-1.0),
+                     "evade": dict(goods_of(s_abs), partisan=0.0, stand_signed=0.0, keep=0.0)}
+                gd = goods_of(dict(s_abs, E_sev=s_abs["E_sev"] + csev))
+                gd.update(partisan=0.02 * ((1 - q * p_arr) if kind == "detain" else 0.5), stand_signed=ks * (1 - 2 * L), keep=0.0)
+                g["defy"] = gd
+                T["defy"].add(nm, g, HEADLINE_W)
+                log.w("result", section="C10.defy", character=nm, rite=rite, q=q, L=L, k_s=ks, headline_best=best_under(g, HEADLINE_W))
+        # forum challenge, from each rite to the other
+        for sit, royal in itertools.product(("church", "polity"), (False, True)):
+            acc = defaultdict(lambda: defaultdict(float))
+            for p_claim, p_cons in itertools.product((0.25, 0.5, 1.0), (0.0, 0.5)):
+                cpa, cpi = char_pools(nm, roster, "accusatorial"), char_pools(nm, roster, "inquisitorial")
+                Pp = base_params(5, "r37_3", "accusatorial", SA=acc_pool["accusatorial"], SR_score=cpa["resist"], SR_roll=cpa["justify"], DJ=BENCH + 1.5 * 0.74, section="C10.ch")
+                Pc = base_params(5, "r37_3", "inquisitorial", SA=acc_pool["inquisitorial"], SR_score=cpi["resist"], SR_roll=cpi["justify"], DJ=BENCH + 0.5,
+                                 DJ_proof=acc_pool["inquisitorial"] + 0.5, names_cost=1.0, section="C10.ch")
+                _, sp, _ = best_plea(Pp, PLEAS_ACC)
+                _, sc, _ = best_plea(Pc, PLEAS_INQ, bite=0.5)
+                here, there = (sc, sp) if sit == "church" else (sp, sc)
+                ptr = p_claim * p_cons if sit == "polity" else p_claim * (1.0 if royal else p_cons)
+                gh, gt = goods_of(here), goods_of(there)
+                keys = set(gh) | set(gt)
+                gc = {k: ptr * gt.get(k, 0.0) + (1 - ptr) * gh.get(k, 0.0) for k in keys}
+                gc["time"] -= 1.0
+                gc["stand"] -= (1 - ptr) * 0.25
+                for k in keys:
+                    acc["answer"][k] += gh.get(k, 0.0) / 6
+                    acc["challenge"][k] += gc[k] / 6
+            opts = {k: dict(v) for k, v in acc.items()}
+            T["challenge"].add(nm, opts, HEADLINE_W)
+            log.w("result", section="C10.challenge", character=nm, sitting=sit, royal=royal, headline_best=best_under(opts, HEADLINE_W),
+                  goods={k: {kk: round(vv, 4) for kk, vv in v.items()} for k, v in opts.items()})
+        # self or the high-presence advocate (accusatorial only), latitude 0.7 on eloquence
+        cp = char_pools(nm, roster, "accusatorial")
+        adv = char_pools("advocate", roster, "accusatorial", latitude=0.7)["resist"]
+        for d_set in ((0.3,), (0.6,), (0.9,)):
+            P = base_params(5, "r37_3", "accusatorial", SA=acc_pool["accusatorial"], SR_score=cp["resist"], SR_roll=cp["justify"], DJ=BENCH, d_half=d_set[0], section="C10.adv")
+            _, s_self, _ = best_plea(P, PLEAS_ACC)
+            gs = dict(goods_of(s_self), keep=0.0, rel=0.0)
+            Pv = dict(P, SR_score=adv)
+            sv = summarise(hearing("deny", Pv), "deny", Pv)
+            sv["E_standing_loss"] -= 0.5 * (1 - sv["P_clear"])
+            ga = dict(goods_of(sv), keep=1.0, rel=-0.5)
+            opts = {"self": gs, "advocate": ga}
+            T["advocate"].add(nm, opts, HEADLINE_W)
+            log.w("result", section="C10.advocate", character=nm, own_resist=cp["resist"], advocate_resist=adv, d_half=d_set[0],
+                  goods={k: {kk: round(vv, 4) for kk, vv in v.items()} for k, v in opts.items()}, headline_best=best_under(opts, HEADLINE_W))
+        # speech kinds at his own justification
+        for rite, writ in itertools.product(ROLE_WEIGHTS, (False, True)):
+            cp = char_pools(nm, roster, rite)
+            acc = defaultdict(lambda: defaultdict(float))
+            for gstate in (0.2, 0.5, 0.8):
+                for kind, (apt, s_good, s_bad, st_f, gain) in SPEECH.items():
+                    a = apt + (1.0 if (kind == "cite_licence" and not writ) else 0.0)
+                    sg, sb = (0.25, 0.25) if (kind == "impugn_motive" and rite == "inquisitorial") else (s_good, s_bad)
+                    for st, pw in ((sg, gstate), (sb, 1 - gstate)):
+                        kw = SPEECH_FACULTY[kind]
+                        roll = DICE_PER_FACULTY * sum(wt * faculty(CHARACTERS[nm][roster], roster, f) for f, wt in kw.items())
+                        P = base_params(5, "r37_3", rite, SA=acc_pool[rite], SR_score=cp["resist"], SR_roll=roll, DJ=BENCH,
+                                        DJ_proof=acc_pool[rite], apt_just=0.25 + a, s_q=st, names_cost=1.0, section="C10.speech")
+                        br = hearing("justify", P)
+                        s1 = summarise(br, "justify", P)
+                        pf = sum(p for p, g_, ss, h in br if h != "excused")
+                        g1 = goods_of(s1)
+                        g1["stand"] += -st_f * pf + gain * (1 - pf)
+                        g1["rel"] = -(1.0 if kind in ("cite_licence", "impugn_motive") else 0.0)
+                        for k, v in g1.items():
+                            acc[kind][k] += pw * v / 3
+            opts = {k: dict(v) for k, v in acc.items()}
+            T["speech"].add(nm, opts, HEADLINE_W)
+            log.w("result", section="C10.speech", character=nm, rite=rite, writ=writ, pools=cp, headline_best=best_under(opts, HEADLINE_W),
+                  goods={k: {kk: round(vv, 4) for kk, vv in v.items()} for k, v in opts.items()})
+        # the character as ACCUSER choosing the forum
+        for DR, Lc, qc, lam, e in itertools.product((2.5, 5.0), (0.37, 0.78), (0.0, 1.0), (0.0, 0.5), (0.0, 1.0)):
+            acc = {}
+            ap = char_pools(nm, roster, "accusatorial")["prove"]
+            for auth in ("polity", "church"):
+                tot = defaultdict(float)
+                for d_half in (0.3, 0.6, 0.9):
+                    if auth == "polity":
+                        P = base_params(DR, "r37_3", "accusatorial", SA=ap, DJ=BENCH + 1.5 * 0.74, d_half=d_half, section="C10.forum")
+                        pl, s1, _ = best_plea(P, PLEAS_ACC)
+                        br = hearing(pl, P)
+                        pf = sum(p for p, g_, ss, h in br if h == "acquitted")
+                        tot["gain"] += s1["E_sev"] / 3
+                        tot["liab"] += -lam * 0.75 * pf / 3
+                        tot["rel"] += -e / 3
+                        tot["time"] += -s1["E_seasons"] / 3
+                    else:
+                        P = base_params(DR, "r37_3", "inquisitorial", SA=ap, DJ=BENCH + Lc, DJ_proof=acc_pool["inquisitorial"] + Lc, d_half=d_half, names_cost=1.0, section="C10.forum")
+                        pl, _, _ = best_plea(P, PLEAS_INQ, bite=Lc)
+                        s1 = summarise(hearing(pl, P), pl, P)
+                        tot["gain"] += s1["E_sev"] * Lc * (0.5 + 0.5 * qc) / 3
+                        tot["time"] += -s1["E_seasons"] / 3
+                acc[auth] = dict(tot)
+            T["forum"].add(nm, acc, HEADLINE_W)
+            log.w("result", section="C10.forum", character=nm, accuser_prove_pool=ap, DR=DR, L_church=Lc, q=qc, lam=lam, e=e,
+                  headline_best=best_under(acc, HEADLINE_W), goods={k: {kk: round(vv, 4) for kk, vv in v.items()} for k, v in acc.items()})
+    for k, t in T.items():
+        log.w("summary", section=f"C10.{k}", verdict=t.verdict(), note="key = the character (pools built from its attributes), not a pool size")
+    # roster control: the same persons on the other two rosters give these pools
+    for alt in ("scratch_fourteen", "scratch_eight"):
+        d = {nm: {rite: {r: round(char_pools(nm, alt, rite)[r] - char_pools(nm, "registry_nine", rite)[r], 3) for r in ("prove", "resist", "justify")}
+                  for rite in ROLE_WEIGHTS} for nm in CHARACTERS}
+        log.w("result", section="C10.roster_control", roster=alt, pool_difference_from_registry_nine=d,
+              note="same code path, a different FACULTY_MAP table and sheet; differences are the authored sheets', not the design's")
+
+
+def hearing_p2(plea, P):
+    """CONTROL: P2 as its stress test modelled it -- deny: the accuser proves, a Failure ends the stage;
+    concede: the fact stands, straight to judgment, no reward; justify: concede, then the respondent's own
+    justification draw; no hold, no cap (the reward that the live ceiling clips away)."""
+    st = stage_p2_as_written
+    if plea == "deny":
+        return hearing("deny", P, stage_fn=st)
+    if plea == "concede":
+        return judgment(dict(P, judg_mod=0.0), 0, 1, st, SEV)
+    out = []
+    for p, o, k in st(P["SR_roll"], ob_of(P["SA"], P["C"], 0.0, P["apt_just"]), 0.0, section=P["section"]):
+        if o in ("O", "S"):
+            out.append((p, None, k, "excused"))
+        else:
+            out += [(p * q, g, s_, h) for q, g, s_, h in judgment(dict(P, judg_mod=0.0), 0, k, st, SEV)]
+    return out
+
+
+def sec_plea_p2_control(log):
+    log.w("fail", section="C3.plea.control_p2_as_written", what="run 4's in-section control (log lines near 4168-4177) is DEGENERATE: after I moved the definitional burden to the accuser, the control's 'concede' with no cap became the deny chain on another question, so deny tied and 'deny alone best' read 0 of 9. Superseded by C3c, which models P2's own plea semantics")
+    log.w("plan", section="C3c.control_p2", options=["deny", "concede", "justify"], ceiling="live 2", rule="P2 as its stress test read it: Failure ends a stage; conceding goes straight to judgment; no concession reward")
+    rows = []
+    for NA, NR in itertools.product(POOLS, POOLS):
+        P = base_params(NR, "live_2", "accusatorial", SA=NA, DJ=BENCH, section="C3c")
+        vals = {pl: goods_of(summarise(hearing_p2(pl, P), {"concede": "concede_fact"}.get(pl, pl), P)) for pl in ("deny", "concede", "justify")}
+        hb = best_under(vals, dict(HEADLINE_W, stand=0.0, time=0.0))
+        par = pareto(vals)
+        rows.append((hb, par))
+        log.w("result", section="C3c.control_p2", NA=NA, NR=NR, best_on_severity_alone=hb, weakly_dominated={k: v[0] for k, v in par.items() if v[0]},
+              goods={k: {kk: round(vv, 4) for kk, vv in v.items()} for k, v in vals.items()})
+    log.w("result", section="C3c.control_p2.summary", cells=len(rows), deny_alone_best_on_severity=sum(1 for hb, _ in rows if hb == ["deny"]),
+          concede_weakly_dominated=sum(1 for _, par in rows if par["concede"][0]),
+          note="the CONTROL for the plea repair: the same engine and pools, P2's transitions. Compare C3.plea.accusatorial.live_2 (the repaired plea under the same ceiling)")
+
+
+def sec_grace(log):
+    """C3d: the inquisitorial term of grace, a decision taken BEFORE any citation (02 1.1 rows 2-3)."""
+    log.w("plan", section="C3d.grace", options=["come_forward", "wait"],
+          rule="come forward in the term: light penance (admonition, severity 0.10), a public penance (standing 1 level, open), the cluster named (names 1); wait: denounced w.p. p_d (hidden), then cited and heard with his best in-hearing plea, and the cluster named only if he concedes",
+          hidden="p_d {.2,.5,.8} (whether someone denounces him: no one tells him)", visible="his pool x the inquisitor's pool x he holds a defence proof")
+    T = Tally("C3d.grace", ["come_forward", "wait"])
+    for N, NI, prf in itertools.product(POOLS, (5.0, 7.8), (0.0, 1.5)):
+        acc = defaultdict(lambda: defaultdict(float))
+        P = base_params(N, "r37_3", "inquisitorial", SA=5, DJ=BENCH, DJ_proof=NI, proof_mod=prf, names_cost=1.0, section="C3d")
+        _, s_h, _ = best_plea(P, PLEAS_INQ)
+        gh = goods_of(s_h)
+        for p_d in (0.2, 0.5, 0.8):
+            cf = {"sev": -0.10, "risk": 0.0, "stand": -1.0, "time": 0.0, "names": -1.0}
+            wt = {k: p_d * gh.get(k, 0.0) for k in set(gh) | {"names"}}
+            for k, v in cf.items():
+                acc["come_forward"][k] += v / 3
+            for k, v in wt.items():
+                acc["wait"][k] += v / 3
+        opts = {k: dict(v) for k, v in acc.items()}
+        T.add(N, opts, HEADLINE_W)
+        log.w("result", section="C3d.grace", N=N, inquisitor=NI, defence_proof=prf, goods={k: {kk: round(vv, 4) for kk, vv in v.items()} for k, v in opts.items()},
+              headline_best=best_under(opts, HEADLINE_W))
+    log.w("summary", section="C3d.grace", verdict=T.verdict())
+
+
 def main():
     global LOG
     ap = argparse.ArgumentParser()
@@ -912,7 +1196,8 @@ def main():
     sections = [("C0", lambda: sec_controls(log, a.mc)), ("C3", lambda: sec_plea(log)), ("C3b", lambda: sec_ceiling_for_deny(log)),
                 ("C1", lambda: sec_defy(log)), ("C2", lambda: sec_forum(log)), ("C2b", lambda: sec_forum_challenge(log)),
                 ("C4", lambda: sec_proofs(log)), ("C5", lambda: sec_advocate(log)), ("C6", lambda: sec_speech(log)),
-                ("C7", lambda: sec_procedural(log)), ("C8", lambda: sec_appeal(log)), ("C9", lambda: sec_warrant(log))]
+                ("C7", lambda: sec_procedural(log)), ("C8", lambda: sec_appeal(log)), ("C9", lambda: sec_warrant(log)), ("C10", lambda: sec_characters(log)),
+                ("C3c", lambda: sec_plea_p2_control(log)), ("C3d", lambda: sec_grace(log))]
     t0 = time.time()
     for name, fn in sections:
         if a.only and name not in a.only.split(","):
