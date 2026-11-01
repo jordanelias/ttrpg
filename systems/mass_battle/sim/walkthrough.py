@@ -29,6 +29,7 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(_HERE))))   # repo root, as bat.py does
 
 from modules.mass_battle import rngsource                                      # noqa: E402
+from modules.mass_battle.geometry import _oriented                             # noqa: E402
 from modules.mass_battle.orchestration import run_battle                       # noqa: E402
 from modules.mass_battle.orderofbattle import OrderOfBattle, Subformation, build_unit   # noqa: E402
 from modules.mass_battle.resolution import tracing                             # noqa: E402
@@ -55,6 +56,70 @@ def _subs(unit) -> list:
     return out
 
 
+def _snap_unit(u, d: int) -> dict:
+    """Full state of one side: per subunit, every node's true float position, troops and facing, plus the
+    subunit's morale, discipline, stamina, stance and rout flags. Positions are the engine's `cells_float()`
+    (the point field), not the integer-binned `cells()`."""
+    subs = []
+    for s in u.subunits:
+        ids = [(o_r, o_c) for o_r, o_c, _a, _b in _oriented(s)]
+        nodes = []
+        for cid, (r, c) in zip(ids, s.cells_float()):
+            f = s.cell_facing_vec.get(cid, getattr(s, '_node_facing', None))
+            nodes.append([round(r, d), round(c, d), round(s.cell_troops.get(cid, 0.0)),
+                          None if f is None else [round(f[0], d), round(f[1], d)]])
+        bf = getattr(s, '_node_facing', None)
+        subs.append({'type': s.troop_type, 'routed': bool(s.routed), 'broken': bool(s.broken), 'stance': s.eff_stance,
+                     'morale': round(s.eff_morale, d), 'discipline': s.eff_discipline,
+                     'stamina': round(s.eff_stamina, d),
+                     'body_facing': None if bf is None else [round(bf[0], d), round(bf[1], d)], 'nodes': nodes})
+    return {'hp': round(u.hp, d), 'morale': round(u.morale, d), 'routed': bool(u.routed), 'subs': subs}
+
+
+class _Recorder:
+    """Profiles `run_battle`'s direct callees, so what is recorded is what executed, in order. At each tick
+    boundary it snapshots both sides, which is the end of the tick before (positions are final after movement,
+    damage and the phase boundary). The last `find_contacts` return in a tick is the post-movement contact set."""
+
+    def __init__(self, a, b, d: int):
+        self.a, self.b, self.d = a, b, d
+        self.code = run_battle.__code__
+        self.t = 0
+        self.stages, self.contacts, self.snaps = {}, {}, {}
+        self.snaps[0] = {'a': _snap_unit(a, d), 'b': _snap_unit(b, d)}
+
+    def close_tick(self):
+        if self.t:
+            self.snaps[self.t] = {'a': _snap_unit(self.a, self.d), 'b': _snap_unit(self.b, self.d)}
+
+    def __call__(self, frame, event, arg):
+        par = frame.f_back
+        if par is None or par.f_code is not self.code:
+            return
+        name = frame.f_code.co_name
+        if event == 'call':
+            if name == 'trace_event' and frame.f_locals.get('cat') == 'tick':
+                self.close_tick()
+                self.t = frame.f_locals['kw']['t']
+            elif not name.startswith('<'):
+                self.stages.setdefault(self.t, []).append(name)
+        elif event == 'return' and name == 'find_contacts':
+            ia = {id(s): i for i, s in enumerate(self.a.subunits)}
+            ib = {id(s): i for i, s in enumerate(self.b.subunits)}
+            self.contacts[self.t] = [[ia[id(p['atom_a'])], ib[id(p['atom_b'])], len(p['a_cells']), len(p['b_cells'])]
+                                     for p in arg]
+
+
+def _collapse(names: list) -> list:
+    out = []
+    for n in names:
+        if out and out[-1][0] == n:
+            out[-1][1] += 1
+        else:
+            out.append([n, 1])
+    return out
+
+
 def fight(example: dict, seed: int, role=None) -> dict:
     """One seeded battle. Returns {'result', 'ticks', 'hpmax'}; `ticks` maps tick -> per-side hp, subunit
     centroids and the tick's volley / melee / casualty events, the shape the page's script reads."""
@@ -63,9 +128,16 @@ def fight(example: dict, seed: int, role=None) -> dict:
     ticks = {0: {'a': {'hp': a.hp, 'subs': _subs(a), 'routed': False},
                  'b': {'hp': b.hp, 'subs': _subs(b), 'routed': False}, 'ev': []}}
     hpmax = {'a': a.hp_max, 'b': b.hp_max}
-    with rngsource.using(random.Random(seed)):
-        with tracing() as events:
-            result = run_battle(a, b, max_turns=example['max_turns'])
+    rec = _Recorder(a, b, example['round_digits'])
+    sys.setprofile(rec)
+    try:
+        with rngsource.using(random.Random(seed)):
+            with tracing() as events:
+                result = run_battle(a, b, max_turns=example['max_turns'])
+    finally:
+        sys.setprofile(None)
+    if rec.t not in rec.snaps:
+        rec.close_tick()
     t = None
     for e in events:
         cat = e['cat']
@@ -91,7 +163,11 @@ def fight(example: dict, seed: int, role=None) -> dict:
         elif cat == 'casualty':
             ticks[t]['ev'].append(['c', e['faction'], e['source'], round(e['delta'], 1)])
     ticks = {k: v for k, v in ticks.items() if 'a' in v}      # the tick the loop exits on has no positions
-    return {'result': result, 'ticks': ticks, 'hpmax': hpmax}
+    for k, v in ticks.items():
+        v['detail'] = rec.snaps[k]
+        v['contacts'] = rec.contacts.get(k, [])
+    stages = {k: _collapse(v) for k, v in rec.stages.items()}
+    return {'result': result, 'ticks': ticks, 'hpmax': hpmax, 'stages': stages}
 
 
 def table(run: dict) -> str:
@@ -121,6 +197,7 @@ def main(argv=None) -> int:
     ap.add_argument('--role', default=None, help="role for side A's light cavalry, e.g. Flanker or Feint")
     ap.add_argument('--sweep', action='store_true', help='winner for each seed in the example')
     ap.add_argument('--json', metavar='PATH', help='write the per-tick data')
+    ap.add_argument('--log', metavar='PATH', help='write the full log: per-tick state, contacts, and the call order inside run_battle')
     ap.add_argument('--page', metavar='PATH', help='write the walkthrough page')
     args = ap.parse_args(argv)
 
@@ -141,6 +218,11 @@ def main(argv=None) -> int:
         with open(args.json, 'w', encoding='utf-8') as f:
             json.dump({'ticks': {str(k): v for k, v in run['ticks'].items()}, 'hpmax': run['hpmax']}, f)
         print('wrote', args.json)
+    if args.log:
+        with open(args.log, 'w', encoding='utf-8') as f:
+            json.dump({'stages': {str(k): v for k, v in run['stages'].items()},
+                       'ticks': {str(k): v for k, v in run['ticks'].items()}, 'hpmax': run['hpmax']}, f)
+        print('wrote', args.log)
     if args.page:
         build_page(run, args.page)
         print('wrote', args.page)

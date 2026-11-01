@@ -172,12 +172,13 @@ th { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercas
       <g id="gridlines"></g>
       <g id="deploy"></g>
     </svg>
-    <figcaption>Window of the 51×51 field: rows 19–31, columns 20–28. Each square is a cell holding up to 200 troops. Row numbers run down.</figcaption>
+    <figcaption>Window of the 51×51 field, in lattice units: rows 19–31, columns 20–28. Each square is a node at its true float position, turned to its facing, with its troops inside. The faint grid is only the integer lattice positions are binned to.</figcaption>
   </figure>
   <div class="text">
     <p>Side A advances toward lower row numbers and side B toward higher. Each army is placed by a fixed rule: melee in the front line, centred; ranged behind it; mounted on the flanks.</p>
     <ul>
-      <li><b>Scale.</b> 100 troops is one Size; a cell holds at most 200 (<code>CELL_CAP</code>). 400 spearmen are two cells.</li>
+      <li><b>Points, not squares.</b> Each cell is a node with a float position and its own facing (<code>_node_pos</code>, <code>cell_facing_vec</code>). The lattice supplies the formation’s footprint offsets and the integer binning used for contact identities; it does not place troops.</li>
+      <li><b>Scale.</b> 100 troops is one Size; a node holds at most 200 (<code>CELL_CAP</code>). 400 spearmen are two nodes.</li>
       <li><b>Gap.</b> The front faces start 3 rows apart (<code>_APPROACH_ROWS</code>), the smallest gap measured to let every melee type meet inside one 18-tick fight.</li>
       <li><b>Reach.</b> Archers fire at the nearest enemy subunit 2 to 8 cells away (<code>VOLLEY_MIN_RANGE</code>, <code>VOLLEY_MAX_RANGE</code>). A’s archers (row 29) are 6 rows from B’s spearmen (row 23), so both sides fire at tick 1.</li>
       <li><b>Stance.</b> <i>advance</i> sets A’s melee and horse to aggressive; <i>defend</i> sets B’s to hold. Archers stay balanced in both.</li>
@@ -194,7 +195,7 @@ th { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercas
       <defs><marker id="ar3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
       <g color="var(--fg)" id="tickflow"></g>
     </svg>
-    <figcaption>Outlined boxes are where both sides are computed from the same snapshot before either result is applied.</figcaption>
+    <figcaption>Outlined boxes are where both sides are computed from the same snapshot before either result is applied. Order checked by logging <code>run_battle</code>’s direct calls (<code>walkthrough.py --log</code>); rally and threadwork are empty hooks, and <code>halt_before_enemy</code> runs but does nothing.</figcaption>
   </figure>
   <div class="text">
     <p>Each tick follows the same order. Two stages are built to be fair to both sides:</p>
@@ -224,7 +225,7 @@ th { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercas
     </div>
     <div class="log" id="log"></div>
   </div>
-  <p class="note" style="margin-top:10px">Positions are subunit centroids from the engine’s per-tick trace, drawn as blocks of their cell count; numbers in a block are troops alive. Tick 0 is the deployment. The loop exits at the top of tick 16 because A has routed.</p>
+  <p class="note" style="margin-top:10px">Each square is one node at its logged float position, turned to its facing; the number is troops alive in it. Tick 0 is the deployment. The tick-end snapshots come from <code>walkthrough.py</code>’s recorder. The loop exits at the top of tick 16 because A has routed.</p>
 </section>
 
 <!-- 5 ───────────────────────────── -->
@@ -365,6 +366,7 @@ th { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercas
       <li><b>Rerun it.</b> <code>python systems/mass_battle/sim/walkthrough.py --seed 3</code> reproduces the numbers in steps 4 to 7.</li>
       <li><b>One seed shown.</b> Seeds 1 to 6 gave B, A, B, draw, draw, A. The matchup is close; seed 3 was chosen because it shows a rout.</li>
       <li><b>Not traced:</b> pool derivation (step 6), the last subunit to break, and the multi-unit path (<code>run_multi_unit_battle</code>: morale cascade, freed attackers, pursuit, feigned retreat), which this page does not follow. The example gave no roles, so A’s horse sat at row 25, column 23 from tick 3. With the <code>Flanker</code> role the same seed sends it wide and back; <code>walkthrough.py --role Flanker</code> shows it.</li>
+      <li><b>What is logged.</b> The engine’s own trace emits five event kinds (tick, volley, melee, casualty, positions). Facing, wheel, collision caps, orders and morale changes are not events; the page shows them as end-of-tick snapshots taken by the harness’s recorder. The octagon’s inputs were not traced end to end.</li>
       <li><b>Reference only.</b> Per the repo’s rule, this page explains the code; it is not a source of any value. The engine’s calibration constants carry CALIBRATED-DEBT tags in <code>config.py</code>.</li>
     </ul>
   </div>
@@ -389,23 +391,30 @@ function gridLines() {
   for (var r = 0; r < NR; r++) s += '<text class="s-mono" text-anchor="end" x="' + (X0 - 6) + '" y="' + (Y0 + r * CS + CS / 2 + 4) + '">' + (R0 + r) + '</text>';
   return s;
 }
-function block(sub, side, opts) {
-  opts = opts || {};
-  var n = sub[3], cx = X0 + (sub[2] - C0) * CS + CS / 2, cy = Y0 + (sub[1] - R0) * CS + CS / 2;
-  var w = n * CS - 4, h = CS - 4, x = cx - w / 2, y = cy - h / 2;
-  var routed = sub[5] === 1;
-  var s = '<rect class="s-' + side + '" x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '"' + (routed ? ' opacity="0.35"' : '') + '/>';
-  if (routed) s += '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="none" stroke="var(--warn)" stroke-width="2" stroke-dasharray="4 3"/>';
-  s += '<text class="s-blk-t" text-anchor="middle" x="' + cx + '" y="' + (cy + 4) + '"' + (routed ? ' style="fill:var(--fg)"' : '') + '>' + (opts.label || sub[4]) + '</text>';
+/* Nodes at their true float positions, each square rotated to its cell's facing (the engine's oriented cell box).
+   A node with no recorded facing has never turned and uses its side's advance direction. */
+function nodesSVG(det, side) {
+  var s = '';
+  det.subs.forEach(function (sub) {
+    sub.nodes.forEach(function (n) {
+      var f = n[3] || [side === 'a' ? -1 : 1, 0];
+      var cx = X0 + (n[1] - C0) * CS + CS / 2, cy = Y0 + (n[0] - R0) * CS + CS / 2;
+      var ang = Math.atan2(f[0], f[1]) * 180 / Math.PI;   /* x is the column axis, y the row axis */
+      var w = CS * 0.78, op = sub.routed ? ' opacity="0.35"' : '';
+      s += '<g transform="rotate(' + ang.toFixed(1) + ' ' + cx.toFixed(1) + ' ' + cy.toFixed(1) + ')"' + op + '>' +
+        '<rect class="s-' + side + '" x="' + (cx - w / 2).toFixed(1) + '" y="' + (cy - w / 2).toFixed(1) + '" width="' + w.toFixed(1) + '" height="' + w.toFixed(1) + '"' + (sub.routed ? ' stroke="var(--warn)" stroke-width="2" stroke-dasharray="4 3"' : '') + '/>' +
+        '<line x1="' + cx.toFixed(1) + '" y1="' + cy.toFixed(1) + '" x2="' + (cx + w / 2 + 5).toFixed(1) + '" y2="' + cy.toFixed(1) + '" stroke="var(--fg)" stroke-width="2"/></g>';
+      s += '<text class="s-blk-t" text-anchor="middle" x="' + cx.toFixed(1) + '" y="' + (cy + 4).toFixed(1) + '" style="font-size:9.5px' + (sub.routed ? ';fill:var(--fg)' : '') + '">' + n[2] + '</text>';
+    });
+  });
   return s;
 }
 
 /* step 2 deployment */
 (function () {
   document.getElementById('gridlines').innerHTML = gridLines();
-  var t0 = TICKS['0'], s = '';
-  t0.a.subs.forEach(function (u) { s += block(u, 'a', {label: u[0] === 'archers' ? 'Arch' : (u[0] === 'heavy_infantry' ? 'Heavy' : 'Cav')}); });
-  t0.b.subs.forEach(function (u) { s += block(u, 'b', {label: u[0] === 'archers' ? 'Arch' : 'Spear'}); });
+  var t0 = TICKS['0'].detail, s = '';
+  s += nodesSVG(t0.b, 'b') + nodesSVG(t0.a, 'a');
   /* direction arrows and labels */
   s += '<g color="var(--b)"><line x1="' + (X0 + 2 * CS + 6) + '" y1="' + (Y0 + 5 * CS - 2) + '" x2="' + (X0 + 2 * CS + 6) + '" y2="' + (Y0 + 6.5 * CS) + '" stroke="var(--b)" stroke-width="2" marker-end="url(#ar2)"/></g>';
   s += '<g color="var(--a)"><line x1="' + (X0 + 7 * CS + 8) + '" y1="' + (Y0 + 8.4 * CS) + '" x2="' + (X0 + 7 * CS + 8) + '" y2="' + (Y0 + 6.9 * CS) + '" stroke="var(--a)" stroke-width="2" marker-end="url(#ar2)"/></g>';
@@ -428,10 +437,10 @@ function block(sub, side, opts) {
     ['Move', 'targets read before anyone moves; then collisions', 1],
     ['Contacts and stamina', 'each cell in contact drains stamina', 0],
     ['Melee exchange', 'pool, nets, degree, damage per contact pair', 1],
-    ['Apply damage', 'melee + 3 × volley, both sides together', 1],
+    ['Apply damage', 'melee + 3 × volley together; close ranks; stamina', 1],
     ['Size and drift', 'recalculate Size; formation drift check', 0],
     ['Rout check', 'morale at 0 or under 80 troops; Unit rout', 0],
-    ['Phase boundary', 'every 6th tick: stamina, discipline, morale, rout, reform', 0]
+    ['Phase boundary', 'every 6th tick: stamina, discipline, morale, rout, rally, reform, threadwork', 0]
   ];
   var s = '', h = 46, gap = 14, x = 20, w = 420;
   items.forEach(function (it, i) {
@@ -452,8 +461,7 @@ function render(t) {
   var d = TICKS[String(t)];
   document.getElementById('tklabel').textContent = 'Tick ' + t + (t > 0 && t % 6 === 0 ? ' · phase end' : '');
   var s = '<rect class="s-field" x="' + X0 + '" y="' + Y0 + '" width="' + (NC * CS) + '" height="' + (NR * CS) + '"/>' + gridLines();
-  d.b.subs.forEach(function (u) { s += block(u, 'b'); });
-  d.a.subs.forEach(function (u) { s += block(u, 'a'); });
+  s += nodesSVG(d.detail.b, 'b') + nodesSVG(d.detail.a, 'a');
   document.getElementById('field').innerHTML = s;
   var maxA = DATA.hpmax.a, maxB = DATA.hpmax.b, pa = 100 * d.a.hp / maxA, pb = 100 * d.b.hp / maxB;
   document.getElementById('bars').innerHTML =
@@ -466,9 +474,22 @@ function render(t) {
     if (e[0] === 'c') c += '<li><span class="who-' + e[1].toLowerCase() + '">' + e[1] + '</span> −' + e[3].toFixed(1) + ' troops (' + e[2] + ')</li>';
   });
   var out = '';
+  var cn = (d.contacts || []).map(function (c) {
+    return '<li><span class="who-a">A ' + NAMES[d.detail.a.subs[c[0]].type] + '</span> ↔ <span class="who-b">B ' + NAMES[d.detail.b.subs[c[1]].type] + '</span> · ' + c[2] + ' vs ' + c[3] + ' cells</li>';
+  }).join('');
+  var st = '';
+  [['a', 'A'], ['b', 'B']].forEach(function (sd) {
+    d.detail[sd[0]].subs.forEach(function (u) {
+      var tot = 0; u.nodes.forEach(function (n) { tot += n[2]; });
+      var bf = u.body_facing ? '(' + u.body_facing[0].toFixed(2) + ', ' + u.body_facing[1].toFixed(2) + ')' : 'not turned';
+      st += '<li><span class="who-' + sd[0] + '">' + sd[1] + ' ' + NAMES[u.type] + '</span> ' + tot + ' troops · morale ' + u.morale + ' · disc ' + u.discipline + ' · stam ' + u.stamina + ' · ' + u.stance + ' · facing ' + bf + (u.routed ? ' · ROUTED' : '') + '</li>';
+    });
+  });
   out += '<h3>Volleys</h3><ul>' + (v || '<li>none: no target 2 to 8 cells away</li>') + '</ul>';
   out += '<h3>Melee exchanges</h3><ul>' + (m || '<li>none: lines not yet in contact</li>') + '</ul>';
   out += '<h3>Casualties applied</h3><ul>' + (c || '<li>none this tick</li>') + '</ul>';
+  out += '<h3>In contact after movement</h3><ul>' + (cn || '<li>none</li>') + '</ul>';
+  out += '<h3>State at end of tick</h3><ul>' + st + '</ul>';
   var sub = d.a.subs.concat(d.b.subs).filter(function (u) { return u[5] === 1; }).map(function (u) { return NAMES[u[0]]; });
   var says = NOTES[t] || '';
   if (d.a.routed) says = 'A’s Unit is routed. The loop exits at the top of tick 16 and the battle is graded.';
