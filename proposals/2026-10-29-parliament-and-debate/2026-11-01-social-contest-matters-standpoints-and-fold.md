@@ -610,7 +610,7 @@ is therefore a projection. The number of person-seasons with no first question w
 copies) are seed 0; seed 1 was not examined.
 
 **Not done.** No season was run with any proposal built. Statuses marked *(per source)* come from earlier
-measurements and were not re-run. The five persons absent from the end-state counts are the five that `person.died` records in each seed; the probe also catches and drops an `opinion_of` exception, which was not observed to fire. The event-kind table is two seeds of four seasons; a count of 0 is an absence in
+measurements and were not re-run. The five persons absent from the end-state counts are the five that `person.died` records in each seed; the intake probe also catches and drops an `opinion_of` exception; the control probe counted them and none fired, at tick 0 or at the end. The event-kind table is two seeds of four seasons; a count of 0 is an absence in
 those runs, not a proof that no seed can fire it. No full suite was run; nothing in the tree outside this folder changed.
 
 `[CONFIDENCE: medium]` on the families and the collision shapes, which are my sorting of the corpus; `[CONFIDENCE: high]`
