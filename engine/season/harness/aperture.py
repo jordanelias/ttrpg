@@ -760,7 +760,7 @@ def pools_lines(m: dict) -> list:
     """The POOLS LINE, one per verb whose RESOLVED records carried a `pool` (CR-18): `<verb>: pools rolled
     <set> over <n> actors`, the set read off the records the fold was handed (`instrumented_season`'s
     `watched_fold`), not recomputed from `faculty`. A reader: nothing here asserts, and the exit code is
-    untouched. The tail counts actors per pool and says whether two actors of the verb sit at different
+    untouched. The tail says whether two actors of the verb sit at different
     pools IN THE SAME SEASON (the tick kept with each pool), which is R-09's by-person conjunct read as
     stated in its `measure:`."""
     out = ["\n  POOLS ROLLED — per verb the seam rolled (its RESOLVED records' `pool`), the set of pools "
@@ -769,8 +769,7 @@ def pools_lines(m: dict) -> list:
     for v in sorted(pools):
         per = pools[v]
         rolled = sorted({p for c in per.values() for _, p in c})
-        by_pool = {p: sum(1 for c in per.values() if p in {q for _, q in c}) for p in rolled}
-        out.append(f"    `{v}`: pools rolled {rolled} over {len(per)} actors · actors per pool {by_pool} · "
+        out.append(f"    `{v}`: pools rolled {rolled} over {len(per)} actors · "
                    f"two actors at different pools: {'yes' if persons_separated(per) else 'no'}")
     if not pools:
         out.append("    no pooled roll in this run")

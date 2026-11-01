@@ -577,10 +577,7 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
                      [Act(mint(p.id, c.verb, act_key(c.verb, c.subject, c.operands)), p.id, c.verb,
                           payload=_payload_of(c),
                           via=seat_of(p, c)) for c in chunk],
-                     # `H-77`: a scene carrying more than one interaction is the EXTENDED one, and
-                     # `Scene.cost` prices it from its `slots` (it carried a separate `extended` flag
-                     # until the B10-08 close, which `pack_scenes` set from `len(chunk) > 1` and
-                     # nothing read once the price moved to the slots).
+                     # `H-77`: `Scene.cost` prices the scene from the `slots` it fills.
                      occasion=occasion)
 
     # ⚠ THE BOUND IS THE COST, NOT THE SCENE COUNT, and getting that wrong made the DEFAULT

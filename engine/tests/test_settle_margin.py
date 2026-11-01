@@ -150,11 +150,15 @@ def test_band_odds_equals_a_brute_force_walk_through_settle_margin():
             assert math.isclose(got, want, abs_tol=1e-12), (ob, boost, got, want)
 
 
-@pytest.mark.parametrize("pool,ob,boost", [(2, 1.5, 0.0), (3, 2.25, 0.6), (4, 2.0, 0.8), (1, 1.75, 0.3)])
-def test_the_200000_draw_arm_agrees_within_three_standard_errors(pool, ob, boost):
+# The two whole-Ob cells (no extra draw: the rule is the identity there) beside the fractional ones; 100,000
+# draws resolve a band to 0.47 points at p = 0.5 at 3 standard errors, and the band-edge mutants move a band by
+# 0.06 or more (`test_band_odds.py`). One sampling arm for the whole rule: `band_odds` and `settle_margin` share it.
+@pytest.mark.parametrize("pool,ob,boost", [(2, 1.5, 0.0), (3, 2.25, 0.6), (4, 2.0, 0.8), (1, 1.75, 0.3),
+                                           (2, 2.0, 0.0), (1, 1.0, 0.0)])
+def test_the_sampled_arm_agrees_within_three_standard_errors(pool, ob, boost):
     """The dealt distribution through the real path: `roll_pool`, then `settle_margin` with the SAME
     generator's own uniform, graded by the one ladder at a zero obstacle."""
-    n = 200_000
+    n = 100_000
     rng = random.Random(20261101)
     tally = [0, 0, 0, 0]
     for _ in range(n):

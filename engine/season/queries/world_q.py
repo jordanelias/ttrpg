@@ -3810,8 +3810,7 @@ class WorldReader:
 def practice(w: World, p: Person, verb: str) -> int:
     """Whole dice `p` has earned in `verb`'s capability key from what he did: the number of his own acts in
     that key that resolved at Success or better in the last `practice_window` CLOSED seasons, divided by
-    `practice_step` (floor), capped at `practice_cap`. A pool addend: `seam/wrappers/sigma.py` registers it
-    through `register_pool_addend` and `faculty`, the one pool reader, is its only caller.
+    `practice_step` (floor), capped at `practice_cap`. A pool addend: `seam/wrappers/sigma.py` registers it.
 
     DERIVED FROM `w.log` AND STORES NOTHING (no field on any carrier). An Event reaches its act through
     `causing_act` (the first cause that resolves to an act) and carries the roll's `degree`; one act emits
@@ -3826,11 +3825,9 @@ def practice(w: World, p: Person, verb: str) -> int:
     `[w.tick - practice_window, w.tick - 1]`.
 
     ⚠ IT RAISES THE ACTOR'S POOL ONLY. `_opposition_of` reads the held key and never `faculty`, so the Ob
-    against a practised person does not move. The arm SHIPS LIVE (CR-18: cap `pool_default`); `practice_cap` 0
-    is the control and answers 0 before the log is read: the realm is then byte-equal to the tree without this reader. A `practice_step` or
-    `practice_window` below 1 RAISES `Unspecified` (a zero step divides; a zero window is the arm off
-    spelled differently, and `practice_cap` is that switch). The three fixtures are assumptions (`H-245`,
-    `H-246`, `H-247`)."""
+    against a practised person does not move. `practice_cap` 0 is the control and answers 0 before the log is
+    read: the realm is then byte-equal to the tree without this reader. The three fixtures are assumptions
+    (`H-245`, `H-246`, `H-247`); a step or window below 1 raises `Unspecified` (below)."""
     fx = w.fixtures
     cap = int(fx.get("practice_cap"))
     key = VERB_CAPABILITY.get(verb)
@@ -3846,7 +3843,7 @@ def practice(w: World, p: Person, verb: str) -> int:
     first, good = w.tick - window, DEGREE_STEP["Success"]
     acts: set = set()
     for e in w.log:
-        if not first <= e.emitted_at < w.tick or e.degree not in DEGREE_STEP or DEGREE_STEP[e.degree] < good:
+        if not first <= e.emitted_at < w.tick or DEGREE_STEP.get(e.degree, 0) < good:
             continue
         a = causing_act(w, e)
         if a is not None and a.actor == p.id and VERB_CAPABILITY.get(a.verb) == key:

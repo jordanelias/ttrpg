@@ -242,12 +242,11 @@ def contest_input(w: Any, claimants: list, *, verb: str = "",
                           proof_step=fx.get("proof_step"))
     doc = w.records.get(examined) if examined is not None else None
     return _frame(fx, faculty(w, w.persons[claimants[0]], verb), _opposition_of(w, subject, verb),
-                  doc.forgery_quality if doc is not None else 0.0, room_terms,
-                  advantage_sigma(fx, {"effort": effort}))
+                  doc.forgery_quality if doc is not None else 0.0, room_terms, effort)
 
 
 def _frame(fx: Any, pool: int, opposition: Optional[float], forgery_quality: float,
-           room_terms: dict, leverage: float) -> SocialContestInput:
+           room_terms: dict, effort: int) -> SocialContestInput:
     """THE RECORD, FILLED THE ONE WAY: what `contest_input` (the true input) and `believed_input` (a
     person's) both hand the module. They differ in where the pool's opposition, the forgery quality
     and the room terms COME FROM; the fixtures and the record's shape are this
@@ -258,7 +257,8 @@ def _frame(fx: Any, pool: int, opposition: Optional[float], forgery_quality: flo
         obstacle_ceiling=fx.get("obstacle_ceiling"),
         ceiling_per_pool=fx.get("ceiling_per_pool"),
         obstacle_refusal_multiple=fx.get("obstacle_refusal_multiple"),
-        leverage=leverage, forgery_quality=forgery_quality, **room_terms)
+        leverage=advantage_sigma(fx, {"effort": effort}),      # the one place the operands are named
+        forgery_quality=forgery_quality, **room_terms)
 
 
 # ---------------------------------------------------------------------------------------------
@@ -330,8 +330,7 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
             return None
         room_terms = dict(reception=room["reception"], reception_gain=fx.get("reception_gain"),
                           proofs=room["proofs"], proof_step=fx.get("proof_step"))
-    return _frame(fx, pool, opposition, 0.0, room_terms,
-                  advantage_sigma(fx, {"effort": effort}))
+    return _frame(fx, pool, opposition, 0.0, room_terms, effort)
 
 
 def _rolled_as(w: Any, act: Any) -> Optional[tuple]:

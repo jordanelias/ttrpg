@@ -595,10 +595,7 @@ class Scene:
     def cost(self, extended_cost: int) -> int:
         """Scene actions this scene spends: `extended_cost` when it fills more than one slot, else
         `PLAIN_COST`. PRICED FROM THE SLOTS (CP-T01-05), not from a flag a caller sets: a scene's price is
-        what it carries, so a play-surface callback returning one effort-2 act pays for three slots. The
-        old `extended` field (set by `pack_scenes` from `len(chunk) > 1`, and read by nothing once the
-        price moved to the slots) was deleted at the B10-08 close; with every effort 0, `slots > 1` is
-        `len(acts) > 1`, which is what it held."""
+        what it carries, so a play-surface callback returning one effort-2 act pays for three slots."""
         return extended_cost if self.slots > 1 else self.PLAIN_COST
 
 

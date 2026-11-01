@@ -18,12 +18,10 @@ THE CLAIMS, AND WHAT WOULD SHOW EACH WRONG:
 """
 from __future__ import annotations
 
-import importlib
 import math
 import random
 
 from engine.dice_engine.dice_engine import DEGREE_LABEL, DEGREE_ORDINAL
-from engine.substrate import composition
 
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..harness import probes as P
@@ -31,12 +29,10 @@ from ..loop.driver import SeasonDriver
 from ..seam import ladder
 from ..seam.wrappers import sigma
 from ..state.carriers import Act
+from .test_odds_of import _within_3se
+from .test_sc01_obstacle_ceiling import _module
 
 KEY = "copying"
-
-
-def _module():
-    return importlib.import_module(composition.ROLES["social_contest.roll"]["target"].split(":", 1)[0])
 
 
 def _world(opposition):
@@ -125,9 +121,4 @@ def test_the_dealt_distribution_is_odds_of_and_a_fraction_of_a_step_is_worth_its
     tally = [0, 0, 0, 0]
     for _ in range(n):
         tally[DEGREE_ORDINAL[labels[ladder.degree_of(_resolve(w, rng))]]] += 1
-    seen = 0
-    for i, p in enumerate(odds):
-        se = math.sqrt(max(p * (1 - p), 1e-12) / n)
-        assert abs(tally[i] / n - p) <= 3 * se + 1e-9, (i, tally[i] / n, p)
-        seen += 1
-    assert seen == 4
+    _within_3se(odds, tally, n)

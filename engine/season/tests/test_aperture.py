@@ -730,7 +730,6 @@ def test_cr18_the_pools_line_reads_the_rolled_pool_and_separates_persons_not_sea
     # one person, 2 -> 3 -> 2 across seasons: still no second person
     assert not A.persons_separated({"a": {(0, 2): 1, (1, 3): 1, (2, 2): 1}})
     assert "    `tell`: pools rolled [2, 3] over 3 actors" in "\n".join(A.pools_lines({"pools": two_persons}))
-    assert "actors per pool {2: 2, 3: 1}" in "\n".join(A.pools_lines({"pools": two_persons}))
     # two actors practising 2 -> 3 in LOCKSTEP are never at different pools in one season: no separation
     # (they would read "yes" if the tick were not kept, as {2,3} vs {2,3} differ pool-wise)
     lockstep = {"tell": {"a": {(0, 2): 1, (1, 3): 1}, "b": {(0, 2): 1, (1, 3): 1}}}

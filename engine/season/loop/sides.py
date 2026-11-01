@@ -44,11 +44,11 @@ def _contests_of(a: Act, row: "VerbRow | None") -> list:
     verb row's own `contests:` cell. Extracted (M4 review pass, `/simplify` finding): `resolve()`'s
     own loop and `loop/encounter.py::encounter` each wrote this expression independently, the same
     duplication `_canonical_order`/`_survives` were extracted to end (§8). No `self`: a pure
-    function of the act and its row, not of driver state. MOVED here from `loop/resolve.py` (B10-08
-    close): `seam/wrappers/sigma.py::odds_of` derives the fold's own contest arguments through it,
-    and a function-local import of `loop.resolve` from `seam/` closes an import cycle the census
-    counts (`tests/valoria/test_import_cycle_game_state_npe.py`); this module imports nothing that
-    imports `seam`."""
+    function of the act and its row, not of driver state. It lives here, not in `loop/resolve.py`:
+    `seam/wrappers/sigma.py::odds_of` derives the fold's own contest arguments through it, and a
+    function-local import of `loop.resolve` from `seam/` closes an import cycle the census counts
+    (`tests/valoria/test_import_cycle_game_state_npe.py`); this module imports nothing that imports
+    `seam`."""
     return list(a.contests or ()) or ([row.contests] if row and row.contests else [])
 
 

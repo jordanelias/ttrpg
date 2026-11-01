@@ -289,6 +289,12 @@ def p_success(
 # Exact band odds of the DISCRETE roll (CP-T01-03)
 # ---------------------------------------------------------------------------
 
+def _dice_dealt(pool: float) -> int:
+    """The whole dice a (possibly fractional) pool deals: rounded, floored at one. `roll_net` deals this many and
+    `band_odds` enumerates this many, so the odds shown are for the dice dealt: ONE rule, read by both."""
+    return max(1, int(round(pool)))     # [canonical: params/core.md §Pool Floor (all systems)]
+
+
 @functools.lru_cache(maxsize=None)
 def _net_counts(dice: int) -> tuple:
     """How many of the 10**dice face combinations deal each net, as sorted (net, count) pairs.
@@ -355,7 +361,7 @@ def band_odds(pool: float, ob: float, boost: float = 0.0) -> tuple:
     ceiling's pair), which is why this exists. Pure and read-only; the result is a tuple of
     floats (a count over 10**dice, a whole margin weighing exactly 1), so
     `band_odds(2, 2) == (0.74, 0.19, 0.07, 0.0)` exactly."""
-    dice = max(1, int(round(pool)))                 # [canonical: params/core.md §Pool Floor (all systems)]
+    dice = _dice_dealt(pool)
     whole, fraction = _split_margin(boost, ob)
     pays = Fraction(fraction)                       # exact, so the four bands sum to 1 and none exceeds it
     tally = [Fraction(0)] * 4
@@ -403,7 +409,7 @@ def roll_net(pool: float, tn: int = TN_STANDARD, rng: random.Random | None = Non
     m1_dice_sigma_core can switch to engine.dice_engine.sigma_leverage without a call-site
     change. The authoritative implementation is dice_engine.roll_pool.
     """
-    effective_pool = max(1, int(round(pool)))       # [canonical: params/core.md §Pool Floor (all systems)]
+    effective_pool = _dice_dealt(pool)
     result = dice_engine.roll_pool(pool_size=effective_pool, tn=tn, rng=rng)
     return result.net
 

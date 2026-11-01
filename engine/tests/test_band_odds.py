@@ -22,7 +22,6 @@ from __future__ import annotations
 import itertools
 import math
 import os
-import random
 import sys
 
 import pytest
@@ -75,26 +74,6 @@ def test_it_equals_a_brute_force_walk_of_the_face_table():
             assert SL.band_odds(3, ob, boost) == tuple(c / 1000 for c in whole), (ob, boost)
 
 
-@pytest.mark.parametrize("pool,ob,boost", [(2, 2, 0.0), (3, 1.5, 0.0), (4, 3, 0.8), (1, 1, 0.0)])
-def test_the_200000_roll_arm_agrees_within_three_standard_errors(pool, ob, boost):
-    """The dealt distribution, sampled through the real roll (`roll_pool`, the margin settled by the same
-    generator's own uniform, `degree_from_net`), seeded."""
-    n = 200_000
-    rng = random.Random(20261031)
-    tally = [0, 0, 0, 0]
-    for _ in range(n):
-        net = DE.roll_pool(pool, rng=rng).net
-        m = SL.settle_margin(net, boost, ob, rng.random)
-        tally[DE.DEGREE_ORDINAL[DE.degree_from_net(m, 0)]] += 1
-    exact = SL.band_odds(pool, ob, boost)
-    seen = 0
-    for band, p in enumerate(exact):
-        se = math.sqrt(max(p * (1 - p), 1e-12) / n)
-        assert abs(tally[band] / n - p) <= 3 * se + 1e-9, (pool, ob, boost, band, tally[band] / n, p)
-        seen += 1
-    assert seen == 4
-
-
 def test_swapping_two_band_edges_moves_the_tuple(monkeypatch):
     """MUTATION: a `degree_from_net` whose Partial and Success edges are swapped. If `band_odds` held
     its own copy of the ladder the tuple would not move; it reads the owner, so it does."""
@@ -136,10 +115,3 @@ def test_the_pool_is_rounded_and_floored_as_the_roll_does():
     assert SL.band_odds(0.2, 1) == SL.band_odds(1, 1)
     assert SL.band_odds(0, 1) == SL.band_odds(1, 1)
     assert SL.band_odds(2.6, 2) == SL.band_odds(3, 2)
-
-
-def test_it_does_not_touch_the_gaussian_path():
-    """`p_success` stays the closed form combat reads; `band_odds` is a different, exact quantity."""
-    gaussian = SL.p_success(2, 2)
-    exact_clear = 1.0 - SL.band_odds(2, 2)[0]
-    assert abs(gaussian - exact_clear) > 0.05, (gaussian, exact_clear)

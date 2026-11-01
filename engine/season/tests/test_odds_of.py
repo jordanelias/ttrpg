@@ -23,7 +23,6 @@ import pytest
 
 from engine.dice_engine.dice_engine import DEGREE_LABEL, DEGREE_ORDINAL, Degree
 from engine.dice_engine.sigma_leverage import band_odds, net_boost, settle_record
-from engine.substrate import composition
 
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..harness import probes as P
@@ -31,13 +30,9 @@ from ..loop.driver import SeasonDriver
 from ..seam import ladder
 from ..seam.wrappers import sigma
 from ..state.carriers import Act, Claim
+from .test_sc01_obstacle_ceiling import _module
 
 KEY = "copying"          # the capability key `tell` draws on (`VERB_CAPABILITY`); asserted below
-
-
-def _module():
-    import importlib
-    return importlib.import_module(composition.ROLES["social_contest.roll"]["target"].split(":", 1)[0])
 
 
 def _world(*, mid=10, other=3):
@@ -95,15 +90,19 @@ def _dealt_tally(inp, n=N_DEALT, seed=7) -> list:
     return tally
 
 
-def _assert_dealt(odds, inp, n=N_DEALT) -> None:
-    """`odds` agree with `n` real rolls of `inp` within three standard errors in every one of the four bands."""
-    tally = _dealt_tally(inp, n)
+def _within_3se(odds, tally, n) -> None:
+    """`odds` agree with a dealt `tally` of `n` rolls within three standard errors in every one of the four bands."""
     seen = 0
     for i, p in enumerate(odds):
         se = math.sqrt(max(p * (1 - p), 1e-12) / n)
         assert abs(tally[i] / n - p) <= 3 * se + 1e-9, (i, tally[i] / n, p)
         seen += 1
     assert seen == 4
+
+
+def _assert_dealt(odds, inp, n=N_DEALT) -> None:
+    """`odds` agree with `n` real rolls of `inp` within three standard errors in every one of the four bands."""
+    _within_3se(odds, _dealt_tally(inp, n), n)
 
 
 def test_mode_a_grades_against_the_modules_obstacle_and_follows_it(monkeypatch):
