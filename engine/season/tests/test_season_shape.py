@@ -60,7 +60,7 @@ from ..queries import world_q
 from ..queries.person_q import LedgerReader, said_of
 from ..queries.world_q import WorldReader
 from ..queries.world_q import occasioned_by, questions_for
-from ..seam import combat_degree, contest, degree_ladder, degree_of, ladder_error
+from ..seam import combat_degree, contest, degree_ladder, degree_of, ladder_error, party_degree
 from ..state.carriers import (
     Act, Claim, Event, Office, Person, Proposition, Question, Record, Rung, Scene, Sensation, Site, StateChange, Tenure, View, matrix_rows_without_a_field,
 )
@@ -8038,9 +8038,18 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # `chronicle`), so a seat a corpus death vacates becomes a referent its witnesses are asked about and a refill act
     # forms on it -- the item's own reading ("the formations it causes land on `confer` and `oblige`"). CONTROL, run in
     # process on this tree: `World.seat_holds` stubbed to `[]` (the emission off) reads the old set, without `oblige`.
+    # ⚠⚠ v10 CP-T03-00 (B10-09), 21 -> 20: `speak` LEAVES, into the refused set, nothing joins. A RE-RECORD WITH ITS
+    # REASON: both parties of a fight now take their band, and every real scene fells one party, so a fight or a duel
+    # kills where it used to kill only when the TARGET fell; the corpus's two-to-four-person worlds lose persons early.
+    # `speak` executed in 13 of the 143 live worlds and in none now (refused in 74, from 112). MEASURED by
+    # `corpus_run.run_case` over the 143 live worlds, seed 0, this tree against the CP-T02-02 tree (`68767e731`, the same
+    # script on both): executed-world counts `fight` 69 -> 28, `challenge` 94 -> 36, `tell` 87 -> 53, `petition`
+    # 95 -> 56, `tend` 25 -> 1, `interview` 13 -> 3, `carry` 57 -> 40, `transfer` 29 -> 17, `utter` 111 -> 95,
+    # `create_record` 134 -> 122, `research` 72 -> 59, `conceal` 101 -> 88, `surveil` 74 -> 64, `give` 5 -> 4,
+    # `accept` 122 -> 121; nothing else moves.
     assert ever == {"accept", "carry", "challenge", "conceal", "create_record", "interview",
                     "fight", "give", "issue", "move", "oblige", "petition", "reconstruct", "release",
-                    "research", "speak", "surveil", "tell", "tend", "transfer", "utter"}, (
+                    "research", "surveil", "tell", "tend", "transfer", "utter"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
         "must be re-measured rather than reused")
     # ⚠ `move` JOINED `transfer` HERE, AND IT IS THE SAME HOLE. Both are refused for want of an
@@ -8269,9 +8278,11 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # refused in every world (no corpus world puts a stocked actor's question on ANOTHER rung holding
     # `default_return_kind`, and a rung trading with itself is the gate's no-op refusal). CONTROL: the three rows put back to
     # their base shape in process read the nine (the `by_sig` note below carries the full arm).
+    # ⚠⚠ v10 CP-T03-00 (B10-09), 12 -> 13: `speak` JOINS -- it left `ever` (the `ever` note above: executed in 13 worlds
+    # before, none now) and is still attempted and refused in 74 worlds. Control: the CP-T02-02 tree reads the 12.
     assert refused_only == {"build", "found", "survey",
                             "forge", "seize", "covenant", "sabotage", "train",
-                            "comply", "evade / defy", "construe", "exchange"}, (
+                            "comply", "evade / defy", "construe", "exchange", "speak"}, (
         f"the always-refused set moved to {sorted(refused_only)}. `move` and `transfer` left it "
         "when `W-C` closed `H-94`'s structural half — the Candidate carries operands now — and "
         "`work` stays for a reason about the corpus's questions rather than about the channel")
@@ -8975,7 +8986,12 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # the act mix of the corpus's worlds moves; more worlds take a signature of their own. Not a ranking change: `H-96` is
     # untouched. THE SAME-BREATH CHECK is the assertions below (the universal set, `ever`, `refused_only`, `varying`), which this
     # re-pin leaves as they were and which are read in the same run. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-    assert len(by_sig) == 132, (
+    # ⚠⚠ **132 -> 121 AT v10 CP-T03-00 (B10-09), AND VARIETY FELL BY ELEVEN.** Both parties of a fight take their band and every
+    # real scene fells one party, so a fight or a duel now always kills; the corpus's small worlds lose persons early and fewer
+    # of them reach a signature of their own (the `ever` note above has the per-verb world counts; `speak` leaves `ever`).
+    # MEASURED by `corpus_run.run_case` over the 143 live worlds, seed 0, the same script on this tree and on the CP-T02-02
+    # tree (`68767e731`, which reads 132); the universal set is empty on both sides. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+    assert len(by_sig) == 121, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -9183,10 +9199,12 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # exactly (20). Control: the REM-24 tree (`f2381695`) reads none of the three among the 17.
     # ⚠⚠ v10 CP-T02-01 (B10-09): `oblige` JOINS -- the `ever` note above (it executes in some world, not all 143), so
     # `varying` is `ever` exactly (21). Control: `World.seat_holds` stubbed to `[]` reads the 20 without it.
+    # ⚠⚠ v10 CP-T03-00 (B10-09): `speak` LEAVES -- the `ever` note above (both parties of a fight take their band; it
+    # executes in no world now), so `varying` is `ever` exactly (20). Control: the CP-T02-02 tree reads the 21.
     assert varying == {"accept", "carry", "challenge", "conceal", "create_record", "fight", "give",
                        "interview", "issue", "move", "oblige",
                        "petition", "reconstruct", "release", "research",
-                       "speak", "surveil", "tell", "tend", "transfer", "utter"}, (
+                       "surveil", "tell", "tend", "transfer", "utter"}, (
         sorted(varying))
     # ⚠ THE `tell` SEASON THRESHOLD SURVIVES ONLY IN ITS ONE-DIRECTIONAL HALF, AND THE HALF THAT
     # BROKE BROKE FOR A REASON THIS TEST WANTS. A one-season case still never reaches `tell` —
@@ -9762,6 +9780,7 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
     # the 27 builds and runs take well under two seconds, so nothing here is traded for coverage.
     # [GROUNDED: measured 2026-09-11 over the 27 NPC rung cases at seed 0, 3 seasons -- 81 `news.told` Events across 26 of 27 cases; NPC-088 alone produces none]
     told_cases = 0
+    r3_cases = 0                # v10 CP-T03-00: cases whose run has a cross-person causal edge (clause 5)
     checked = 0
     attempt_cases = 0
     for other in R.load_cases("NPC"):
@@ -9784,6 +9803,7 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
         told = [e for e in w4.log if e.kind == "news.told"]
         attempts = told + [e for e in w4.log if e.kind == "news.untold"]
         told_cases += bool(told)
+        r3_cases += bool(C._r3_propagates(w4, d4))
         attempt_cases += bool(attempts)
         for e in told:
             act = d4.act_of.get(e.id)
@@ -9824,9 +9844,20 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
     # batch-2 `F1` fix, which moved the corpus; the figure was not re-taken after it -- the floor holds
     # at the post-`F1` tree by the full-suite run that closed the batch, nothing finer.)
     # [JUSTIFIED: a COLLAPSE FLOOR over a lane count, not a game value -- SUPERSEDES the two lines above after `T4`: 20 of the 27 NPC rung cases produce a telling attempt (measured 2026-10-01, seed 0, 3 seasons) and this sits five below it, the same ~3/4 proportion the original floor had -- headroom for the sampled order to move the act mix, none for the transport failing]
-    assert attempt_cases >= 15, (
+    # ⚠⚠ **15 -> 9, v10 CP-T03-00 (`-08` AM-C-01), AND THE CAUSE IS DEPOPULATION, NOT THE TRANSPORT --
+    # MEASURED, NOT ASSUMED.** Every one of the 27 cases is a THREE-person world. Before the item
+    # (`68767e731`) 22 cases produced a telling attempt; after it, 12. The 10 cases that lost theirs all lost
+    # people to a fight (`person.died` 1 -> 2 in 7 of them, which leaves ONE person with no one to tell), and
+    # none gained one: a felled attacker is now written (`seam/ladder.py::party_degree`), so a fight kills its
+    # loser whichever side that was, where before only a felled SUBJECT died. Deaths over the lane: 31 -> 44.
+    # The telling transport is untouched (`checked`, the referent loop, still runs and passes). The floor is
+    # re-set by the proportion the 2026-10-01 note below used, ~3/4 of the measurement (12 -> 9), and is NOT
+    # deleted: it still goes red on a collapse of the transport.
+    # [GROUNDED: measured at v10 CP-T03-00, the 27 NPC rung cases, seed 0, 3 seasons -- `attempt_cases` 22 at `68767e731`, 12 with the item; deaths 31 -> 44; the 10 lost cases started with 3 persons and ended with 1 or 2]
+    # [JUSTIFIED: a COLLAPSE FLOOR over a lane count, not a game value -- SUPERSEDES the 15 above: 12 of the 27 NPC rung cases produce a telling attempt once a felled attacker is written (measured at v10 CP-T03-00, seed 0, 3 seasons), and this sits three below it, the ~3/4 proportion of the two floors before it; revert: 15, with the item reverted]
+    assert attempt_cases >= 9, (
         f"only {attempt_cases} of the 27 NPC rung cases produced a telling at all — 26 did on "
-        "2026-09-11, before and after `U1`, and 20 after `T4`. This counts `news.told` AND `news.untold`, so a "
+        "2026-09-11, before and after `U1`, 20 after `T4` and 12 after `CP-T03-00` (every fight now kills its loser, in 3-person worlds). This counts `news.told` AND `news.untold`, so a "
         "failing roll cannot trip it: below the floor the act mix has stopped producing tellings "
         "or the transport is gone, and the transport is what to look at first")
     # ⚠ **AND THE SUCCESS COUNT GETS ITS OWN FLOOR, BECAUSE THE LOOP BODY ABOVE ONLY RUNS ON
@@ -9877,9 +9908,21 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
     assert checked_causes >= 1, "no act-emitted Event was checked for over-citation"
 
     # 5 — AND THE WHOLE POINT: A REAL RUN PRODUCES A CROSS-PERSON CAUSAL EDGE. Not planted — this
-    #     is the same `R3` the corpus scores, run over a world built from a corpus case.
-    assert C._r3_propagates(w, d), (
-        "no act by one person is caused by an act of another — `R3` is back to zero and the "
+    #     is the same `R3` the corpus scores, run over worlds built from corpus cases.
+    # ⚠⚠ **ONE WORLD -> THE WHOLE LANE, v10 CP-T03-00, ON THE 2026-09-11 CLAUSE-4 PRECEDENT ABOVE (A ONE-WORLD
+    # GUARD CANNOT SURVIVE THE ACT MIX MOVING).** This asserted `_r3_propagates` on the lane's FIRST case,
+    # NPC-088, a THREE-person world; once a felled attacker is written (`seam/ladder.py::party_degree`) that
+    # world loses two of its three persons and has no cross-person edge left to show, and the assertion went
+    # red for a reason that says nothing about the chain. The case is NOT swapped for one that passes (that
+    # would be selecting the slice on its answer, §0.1 pt 4): the clause is asked of every case clause 4
+    # already builds. Measured over the 27 NPC rung cases, seed 0, 3 seasons: **27 propagate at `68767e731`,
+    # 22 with the item** (and the corpus lanes' `R3` reads 46/46 -> 38/46 NPC and 97/97 -> 80/97 ARC, held back
+    # for R-01's re-take). The failure this clause excludes -- the chain severed everywhere, `R3` zero -- reads 0.
+    # [GROUNDED: measured at v10 CP-T03-00, the 27 NPC rung cases, seed 0, 3 seasons -- `_r3_propagates` true in 27 at `68767e731`, 22 with the item]
+    # [JUSTIFIED: a COLLAPSE FLOOR over a lane count, not a game value -- 22 of the 27 cases propagate (measured at v10 CP-T03-00) and this sits six below it, the ~3/4 proportion the telling floor above uses; revert: assert `_r3_propagates(w, d)` on the first case, with the item reverted]
+    assert r3_cases >= 16, (
+        f"only {r3_cases} of the 27 NPC rung cases have an act caused by another person's act — 27 did "
+        "before the fight seam wrote a felled attacker and 22 after. `R3` is back to zero and the "
         "chain Reading 07 §4 calls 'the one that is actually the game' is severed again")
 
     # 6 — THE CONTROL, so a green clause 5 is not just the detector answering true to anything.
@@ -10638,10 +10681,12 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # `accept` 230 -> 227, `create_record` 621 -> 606; `fight` 9 unmoved.
     # ⚠⚠ v10 CP-T02-01 (B10-09): `oblige` JOINS (20 -> 21), nothing leaves -- a death names the seats it empties, so a
     # refill act forms on a seat a corpus death vacates; the reason and its control are at the corpus test's `ever` note.
+    # ⚠⚠ v10 CP-T03-00 (B10-09): `speak` LEAVES (21 -> 20), nothing joins -- both parties of a fight take their band, so
+    # the corpus's small worlds lose persons early; the measurement and its control are at the corpus test's `ever` note.
     assert set(executed) == {"accept", "carry", "challenge", "conceal", "create_record", "interview",
                              "fight", "give", "issue",
                              "move", "oblige", "petition", "reconstruct", "release", "research",
-                             "speak", "surveil", "tell", "tend", "transfer", "utter"}, (
+                             "surveil", "tell", "tend", "transfer", "utter"}, (
         f"the executed set is {sorted(executed)} -- 4 -> 6 was `W-C`'s measurement, 6 -> 10 is "
         "ED-FI-0009's, 10 -> 11 is `release`'s, 11 -> 12 is `H-71`'s, 12 -> 13 is the admission "
         "of `kill / wound`, 13 -> 12 is `R8.1`'s (`dispatch`, see above), 12 -> 13 again is "
@@ -14082,7 +14127,11 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # the shipped `actor` arm diverges at least as often as the control (5 >= 4; it was 8 > 2), and the control's
     # divergence stays well under the bound (4 <= 11). Mechanism not isolated past the population move, as at
     # `7a` (`commit` first joining the pool).
-    assert (got["none"]["genuine"], got["none"]["diverged"]) == (34, 4), got
+    # v10 CP-T03-00 (B10-09, both parties of a fight take their band): 34/4 -> 24/2 at `none`, `actor` 34/7 -> 24/5,
+    # `total` 33/7 -> 24/5, a re-record read off `got` (scratch re-run of this loop on this tree). UNIT AND DIRECTION:
+    # every real scene fells one party, so a felled ATTACKER now dies; NPC-088 loses persons to its fights and the fork
+    # POPULATION falls in every arm (genuine 34/34/33 -> 24/24/24; probed 60/60/57). 5 >= 2 and 2 <= 11 hold.
+    assert (got["none"]["genuine"], got["none"]["diverged"]) == (24, 2), got
     # Reproduce with the `fork_case` loop above, run at each `fan_out_mode`.
     # [GROUNDED: measured 2026-09-07 — 16 genuine forks, 0 divergences at the shipped arm]
     # ⚠ 14 of 18 -> 17 of 19 under `U4`: the sampled tie-break moved the act a fork's person takes,
@@ -14138,7 +14187,8 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # they are three more Candidates a fork can diverge into, and the scenes they take move which later decisions a fork
     # reaches. CONTROL: the REM-2A tree (`f23194871`, a detached copy) reads 34/5 and passes this test. Mechanism not
     # isolated past that; 7 > 4 still holds.
-    assert (got["actor"]["genuine"], got["actor"]["diverged"]) == (34, 7), (
+    # v10 CP-T03-00: 34/7 -> 24/5 (the `none`-arm note above gives the unit); 5 >= 2.
+    assert (got["actor"]["genuine"], got["actor"]["diverged"]) == (24, 5), (
         f"the shipped default diverged {got['actor']['diverged']} times of "
         f"{got['actor']['genuine']}: {got}. `W-D`'s acceptance was lost at `all_five` on "
         "2026-09-07 and recovered on 2026-09-10 when §F1 clause 4 got producers other than "
@@ -14182,7 +14232,7 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # [GROUNDED: 30/11 -> 29/6 at IN-08's cells commit (B-G) -- the re-scored ranking and the duel pair; mechanism and both trees' figures in the `none`-arm IN-08 block above]
     # v10 REM-2B (B10-06): `total` 33/6 -> 33/7, read off the failing assertion's own `got` (the `actor`-arm note above gives the
     # unit and the REM-2A control; `total`'s fork population 33 is unmoved).
-    assert (got["total"]["genuine"], got["total"]["diverged"]) == (33, 7), got    # v10 REM-2B: 33/6 -> 33/7; v10 REM-23: 36/7 -> 33/6 (the `none`-arm note above); IN-12 `give` + Rung: -> 36/7 (the actor-arm note); IN-11: 29/6 -> 26/6 (the actor-arm note); IN-57: -> 36/10 (the attention-tier key); IN-45 `carry`: -> 36/11 (the actor-arm note); FI-01: -> 36/8 (the actor-arm note)
+    assert (got["total"]["genuine"], got["total"]["diverged"]) == (24, 5), got    # v10 CP-T03-00: 33/7 -> 24/5 (the `none`-arm note); v10 REM-2B: 33/6 -> 33/7; v10 REM-23: 36/7 -> 33/6 (the `none`-arm note above); IN-12 `give` + Rung: -> 36/7 (the actor-arm note); IN-11: 29/6 -> 26/6 (the actor-arm note); IN-57: -> 36/10 (the attention-tier key); IN-45 `carry`: -> 36/11 (the actor-arm note); FI-01: -> 36/8 (the actor-arm note)
     # AND THE TWO LAYERS ARE SEPARATED. The finding is the DECISION count above; this is the layer
     # beneath it — whether the fork moved the act stream at all.
     #
@@ -14234,8 +14284,16 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # larger population makes arithmetically harder to reach for the same behaviour.
     # [JUSTIFIED: a PROBE-QUALITY FLOOR, not a game value -- 1/4 sits below the measured 29% control and above the "fork changed nothing" regime the block above guards; 1/3 was fitted to a 28-32 population and this one is 31]
     # [GROUNDED: measured 2026-09-13 after the person-subject Proposition, NPC-088, seed 0, 4 seasons at 2 slots -- acts_differ/genuine 9/31, 11/31, 11/31 across the three arms, against 13/31, 15/29, 14/28 under `U3`]
-    assert all(4 * g["acts_differ"] > g["genuine"] for g in got.values()), (
-        f"a fork moves the act stream in fewer than a QUARTER of cases in some arm: {got}. The "
+    # ⚠⚠ **A QUARTER -> A FIFTH, v10 CP-T03-00, AND THE DENOMINATOR IS WHY, AS ON 2026-09-13.** The genuine
+    # population falls 34/34/33 -> 24/24/24 (fewer persons survive the slice once a felled attacker is written),
+    # and `acts_differ` falls with it, 9 -> 6 in every arm: the SHARE goes 26-27% -> 25.0% for the same
+    # behaviour, which is `4 * acts_differ > genuine` at its edge (24 > 24). The floor had one point of headroom;
+    # it is not deleted and its reason is unchanged (below it the probe is mostly forking people into acts they
+    # would have taken anyway). One notch down, 1/5, keeps the headroom the 2026-09-13 note above chose.
+    # [GROUNDED: measured at v10 CP-T03-00, NPC-088, seed 0, 4 seasons at 2 slots -- (acts_differ, genuine): `none` (6, 24), `actor` (6, 24), `total` (6, 24), against (9, 34), (9, 34), (9, 33) at `68767e731`]
+    # [JUSTIFIED: a PROBE-QUALITY FLOOR, not a game value -- 1/5 sits below the measured 25% in every arm and above the "fork changed nothing" regime the block above guards; 1/4 was fitted to a 31-population and this one is 24; revert: 1/4, with the item reverted]
+    assert all(5 * g["acts_differ"] > g["genuine"] for g in got.values()), (
+        f"a fork moves the act stream in fewer than a FIFTH of cases in some arm: {got}. The "
         "majority property this replaced inverted under `U3` (42-52%) and the third fell on "
         "2026-09-13 when the genuine population rose to 31 in every arm — but below a quarter the "
         "probe is mostly forking people into acts they "
@@ -14333,7 +14391,12 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
         # (`4 * acts_differ > genuine`) holds in all three: 36 > 34, 36 > 34, 36 > 33. CONTROL, run: this tree with `stance_polarity`
         # swept back to `legacy` (in process) and `f59d0ca63` read the old (11, 34), (11, 34), (11, 33) exactly.
         # [GROUNDED: measured at v10 CR-16 on this tree and on `f59d0ca63` -- (acts_differ, genuine): `none` (9, 34), `actor` (9, 34), `total` (9, 33) here; (11, 34), (11, 34), (11, 33) there]
-        "none": (9, 34), "actor": (9, 34), "total": (9, 33)}, (
+        # ⚠⚠ **RE-PINNED AT v10 CP-T03-00 (B10-09): RECOVERABILITY ROSE IN EVERY ARM, AND THE UNIT IS THE FIGHT'S REPAIR**
+        # (both parties take their band: a felled attacker now dies, and NPC-088 loses persons to its fights).
+        # `acts_differ/genuine` moves 9/34 -> 6/24 (26% -> 25%) at `none` and `actor`, 9/33 -> 6/24 (27% -> 25%) at
+        # `total`: the genuine population falls (34/34/33 -> 24/24/24) and `acts_differ` with it. ⚠ THE FLOOR ABOVE
+        # (`4 * acts_differ > genuine`) NO LONGER HOLDS: 24 > 24 is false in all three arms -- left RED, for a decision.
+        "none": (6, 24), "actor": (6, 24), "total": (6, 24)}, (
         f"the recoverability figures moved: {{k: (v['acts_differ'], v['genuine']) for k, v in got.items()}}. "
         "This is a RE-PIN DECISION, not necessarily a failure — but it is one somebody has to "
         "make deliberately, because `acts_differ / genuine` is how much of a fork the scene tick "
@@ -14595,7 +14658,10 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # `wide` (5 both), not 0.
     # v10 REM-2B (B10-06): 5 -> 7, a re-record: the sibling test's population move (its `(34, 7)` note, the unit and the
     # REM-2A control there), read off this test's own `got`; still equal to `wide` (7 both), not 0.
-    assert got["actor"]["verbonly"] == 7, (
+    # v10 CP-T03-00 (B10-09): 7 -> 5, a re-record: the sibling test's population move (its `(24, 5)` note: a felled
+    # attacker now dies), read off this test's own `got` (scratch re-run): `none` 2/2, `actor` 5/5, `total` 5/5; still
+    # equal to `wide` (5 both), not 0.
+    assert got["actor"]["verbonly"] == 5, (
         f"the shipped default adds {got['actor']['verbonly']} VERB-SET divergences: {got}. A 0 "
         "means the clause-4 producers the six investigation acts opened are gone again and the "
         "2026-09-07 loss is back; any other number means the population moved and must be "
@@ -14676,7 +14742,8 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # v9 IN-12 step 9: 40/4 -> 40/1, the sibling test's move (the four new rows; its `(40, 1)` note).
     # v9 IN-12 step 10: 40/1 -> 40/2, the sibling test's move (`conceal`; its `(40, 2)` note).
     # v10 REM-23: 40/2 -> 34/4, the sibling test's move (`commit`'s class; its `(34, 4)` note and the REM-22 control).
-    assert (got["none"]["genuine"], got["none"]["wide"]) == (34, 4), got
+    # v10 CP-T03-00: 34/4 -> 24/2, the sibling test's move (the fight's repair; its `(24, 2)` note).
+    assert (got["none"]["genuine"], got["none"]["wide"]) == (24, 2), got
     # [GROUNDED: re-measured 2026-09-10 under `U4` — `actor` wide 17 of 19 under the widened fingerprint]
     # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (29, 9) at the shipped arm]
     # [GROUNDED: re-measured 2026-09-13 after `build_at` gave each person a person-subject
@@ -14693,7 +14760,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # ⚠⚠ **33/10 -> 31/7, PLAN POSITION `7a`, 2026-09-29 -- SAME MECHANISM AS THE `none`-ARM BLOCK
     # ABOVE, AND `wide` STILL EQUALS `verbonly` (7 both).**
     # [GROUNDED: measured 2026-09-29 on this tree after position `7a`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- shipped arm genuine 31, wide 7]
-    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (34, 7), got     # v10 REM-2B: -> 34/7 (the sibling test's move); v10 REM-23: -> 34/5 (the sibling test's move); IN-12 `give` + Rung: -> 36/8 (the `verbonly` note); `24f`: 31/7 -> 32/7; IN-08: -> 35/9; IN-11: -> 32/9 (the hold, see `test_wd_a_fork_changes_…`); IN-57: -> 36/11; IN-45 `carry`: -> 36/12 (the `verbonly` note); FI-01: -> 36/9 (the `verbonly` note); IN-12 step 9: -> 36/10 (the `verbonly` note)
+    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (24, 5), got     # v10 CP-T03-00: -> 24/5 (the sibling test's move); v10 REM-2B: -> 34/7 (the sibling test's move); v10 REM-23: -> 34/5 (the sibling test's move); IN-12 `give` + Rung: -> 36/8 (the `verbonly` note); `24f`: 31/7 -> 32/7; IN-08: -> 35/9; IN-11: -> 32/9 (the hold, see `test_wd_a_fork_changes_…`); IN-57: -> 36/11; IN-45 `carry`: -> 36/12 (the `verbonly` note); FI-01: -> 36/9 (the `verbonly` note); IN-12 step 9: -> 36/10 (the `verbonly` note)
     # [GROUNDED: re-measured 2026-09-10 after ED-FI-0009 -- `total` 5 of 18 under the widened (verb, subject) fingerprint]
     # [GROUNDED: re-measured 2026-09-10 under `U4` -- `total` 5 of 19 under the widened (verb, subject) fingerprint]
     # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (28, 3) at the `total` arm]
@@ -14724,7 +14791,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # formed wherever `move` is. `wide` still equals `verbonly` (11 both); 32/10 with `migrate`
     # unresolvable.
     # [GROUNDED: measured 2026-09-30 at plan position `19c`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- `total` genuine 32, wide 11 (= verbonly 11); 32/10 with `migrate`'s `@effect_for` removed]
-    assert (got["total"]["genuine"], got["total"]["wide"]) == (33, 7), got    # v10 REM-2B: -> 33/7 (the sibling test's move); v10 REM-23: -> 33/6 (the sibling test's move); IN-12 `give` + Rung: -> 36/7 (the `verbonly` note); `24f`: 32/11 -> 30/11; IN-08: -> 29/6; IN-11: -> 26/6; IN-57: -> 36/10; IN-45 `carry`: -> 36/11; FI-01: -> 36/8
+    assert (got["total"]["genuine"], got["total"]["wide"]) == (24, 5), got    # v10 CP-T03-00: -> 24/5 (the sibling test's move); v10 REM-2B: -> 33/7 (the sibling test's move); v10 REM-23: -> 33/6 (the sibling test's move); IN-12 `give` + Rung: -> 36/7 (the `verbonly` note); `24f`: 32/11 -> 30/11; IN-08: -> 29/6; IN-11: -> 26/6; IN-57: -> 36/10; IN-45 `carry`: -> 36/11; FI-01: -> 36/8
 
 
 # ===========================================================================
@@ -14741,25 +14808,39 @@ def _we_bands(model="scene_fraction", ids=range(24)):
 
     The act id is the only thing that varies: `combat_seam` seeds its RNG from
     `H(world_seed, tick, actor, "contest:<prize>:<act id>")`, so a different id is a different
-    fight in the same world. Nothing about the WORLD is tuned to reach a band."""
+    fight in the same world. Nothing about the WORLD is tuned to reach a band.
+
+    ⚠ CP-T03-00 (`-08` AM-C-01): KEYED ON EACH PARTY'S BAND, NOT THE ACT'S. Each party is now written by
+    his own band (`party_degree`), and the act's band is the worst over both -- and in `tiny_world` every
+    real scene fells exactly one party (measured over 400 act ids: Felled/Wounded 207, Felled/Untouched
+    193, never two standing), so the ACT's band is `Felled` on every real fight and only a PARTY reaches
+    all three. Per party: `band` his own, `kinds` the kinds whose Event's receipts name him, `fight` the
+    act's band (`degrees` is what the Events carry). The scene is read off the same seam call `resolve()`
+    makes (`contest(w, "R", "the body", ...)`, `test_we_the_band_is_read_off_the_subject_...`'s)."""
     seen = {}
+    SeasonDriver(P.tiny_world())   # `31b`: registers the module entries a direct `contest()` calls
     for i in ids:
+        sc = P.tiny_world()
+        sc.step = Step.RESOLVE
+        raw = contest(sc, "R", "the body", ["p_low", "p_mid"], 0, 2, [f"we{i}"])
         w = P.tiny_world()
         w.step = Step.RESOLVE
         w.fixtures = w.fixtures.sweep("wound_harm_model", model)
-        before = w.persons["p_mid"].body
+        before = {pid: w.persons[pid].body for pid in ("p_low", "p_mid")}
         d = SeasonDriver(w)
         act = Act(id=f"we{i}", actor="p_low", verb="fight",
                     payload={"subject": "p_mid"})
         evs = d.resolve(mint_token(d.w, WriteClass.ACTS), [act], w.fixtures.get("contest_max_depth"))
-        deg = evs[0].degree if evs else None
-        alive = "p_mid" in w.persons
-        seen.setdefault(deg, dict(
-            act=act.id, kinds=sorted(e.kind for e in evs), alive=alive,
-            body_before=before, body_after=(w.persons["p_mid"].body if alive else None),
-            degrees={e.degree for e in evs},
-            live_tenures=(sum(1 for t in list(w.tenures) + list(w._unowned)
-                              if (t.subject == "p_mid" or t.object == "p_mid") and t.live))))
+        for pid in ("p_low", "p_mid"):
+            alive = pid in w.persons
+            seen.setdefault(party_degree(raw["wound_state"][pid]), dict(
+                act=act.id, party=pid,
+                kinds=sorted(e.kind for e in evs if any(c.subject == pid for c in e.changes)),
+                alive=alive, body_before=before[pid],
+                body_after=(w.persons[pid].body if alive else None),
+                fight=combat_degree(raw, "p_mid"), degrees={e.degree for e in evs},
+                live_tenures=(sum(1 for t in list(w.tenures) + list(w._unowned)
+                                  if (t.subject == pid or t.object == pid) and t.live))))
     return seen
 
 
@@ -14779,7 +14860,13 @@ def test_we_a_contested_acts_consequence_differs_by_degree():
 
     MUTATION (run 2026-09-04): revert `_fold`'s `_pairs = row.writes_at(_degree)` to
     `writes_at(None)` and this raises `Unspecified` on the first act; revert the emission line to
-    `row.emits` and the `Untouched` assertion goes red with `person.died` in its kinds."""
+    `row.emits` and the `Untouched` assertion goes red with `person.died` in its kinds.
+
+    ⚠ CP-T03-00: THE BANDS ARE EACH PARTY'S NOW (`_we_bands`' note): every real `tiny_world` scene fells
+    one party, so the act's band is always `Felled`, and the three consequences are read per PARTY -- the
+    felled one dies, the wounded one bleeds, the untouched one is not written and no Event names him.
+    `contest.undecided` (both untouched) is unreachable from a real scene here; its arm is executed on a
+    hand-built scene (`test_cp_t03_00_both_parties_take_their_band.py`)."""
     from ..seam.wrappers import combat as C
     if C.engine() is None:                      # a NAMED gap, never a silent skip
         pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
@@ -14800,9 +14887,9 @@ def test_we_a_contested_acts_consequence_differs_by_degree():
     # and the table could not express.
     assert wounded["alive"] is True and wounded["kinds"] == ["body.changed"], wounded
     assert 0 < wounded["body_after"] < wounded["body_before"], wounded
-    # UNTOUCHED -- the fight happened and changed nothing, and STILL EMITS. Jordan, 2026-06-02:
-    # "an undecided fight is a legitimate outcome." A loss is not a refusal.
-    assert untouched["alive"] is True and untouched["kinds"] == ["contest.undecided"], untouched
+    # UNTOUCHED -- the party the fight left as he was: not written, and no Event names him (CP-T03-00:
+    # the fight's own kinds belong to the party who fell).
+    assert untouched["alive"] is True and untouched["kinds"] == [], untouched
     assert untouched["body_after"] == untouched["body_before"], untouched
     # AND THE THREE ARE ACTUALLY DIFFERENT -- the claim, stated as one comparison.
     assert len({tuple(b["kinds"]) for b in (felled, wounded, untouched)}) == 3
@@ -14820,13 +14907,17 @@ def test_we_a_contested_acts_consequence_differs_by_degree():
     # ⚠ AND THE CONTROL ARM IS VISIBLY WRONG, WHICH IS WHY IT IS A CONTROL AND NOT A CANDIDATE:
     # it deletes the person and still reports `body.changed`, i.e. a success report for something
     # that did not happen (`ID-9`) -- the defect class the degree-keyed `emits:` exists to end.
-    assert ctl[WOUNDED]["kinds"] == ["body.changed"], ctl[WOUNDED]
+    # CP-T03-00: the wounded party dies on this arm beside the felled one, so the death is published too.
+    assert "body.changed" in ctl[WOUNDED]["kinds"], ctl[WOUNDED]
 
     # ── THE SECOND CONTROL. `none` isolates the WRITE SET from the VALUE. ──
     ctl2 = _we_bands(model="none")
-    assert ctl2[WOUNDED]["kinds"] == ["kill.refused"], (
-        f"with no harm model a wound writes nothing, so the fold's own write-nothing guard must "
-        f"emit the REFUSAL rather than the success; got {ctl2[WOUNDED]}")
+    # CP-T03-00: RE-PINNED from `["kill.refused"]`. The fight also fells the other party, so the act
+    # moved something and is not refused; what the arm still isolates is the WRITE SET: the wounded
+    # party is not written, and no Event names him.
+    assert ctl2[WOUNDED]["kinds"] == [], (
+        f"with no harm model a wound writes nothing, so no Event may name the wounded party; "
+        f"got {ctl2[WOUNDED]}")
     assert ctl2[WOUNDED]["body_after"] == ctl2[WOUNDED]["body_before"], ctl2[WOUNDED]
 
     print(f"\n  W-E — fight, tiny_world, 24 act ids, seed as tiny_world sets it:"
@@ -14852,7 +14943,8 @@ def test_we_event_degree_is_assigned_and_stays_none_where_nothing_graded_it():
         pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
     seen = _we_bands()
     for band, got in seen.items():
-        assert band in COMBAT_BANDS and got["degrees"] == {band}, (band, got)
+        # CP-T03-00: every Event carries the FIGHT's band (the worst party's), whichever party is read.
+        assert band in COMBAT_BANDS and got["degrees"] == {got["fight"]}, (band, got)
     # THE UNCONTESTED PATH. `utter` declares no `contests:`, so nothing graded it. ⚠ It was `speak`
     # until v9 SC-01 step 12 made `speak` contested (`contests: "a matter"`); `utter` executes here
     # (asserted), so the `None` is read off an act that RAN, not off a refusal.
@@ -14881,13 +14973,17 @@ def test_we_emits_at_has_a_caller_and_the_band_selects_the_kind():
     assert len(union) >= 3, f"the union is no longer bigger than a branch ({union}); re-derive"
     seen = _we_bands()
     assert set(seen) == set(COMBAT_BANDS), sorted(seen)
+    # CP-T03-00: RE-BASED ONTO EACH PARTY. A party earns his own band's kinds (a felled one the death's,
+    # `person.died`; a wounded one `body.changed`; an untouched one none), the fight's Events carry each
+    # kind's earners only (`_fold`), and every kind emitted is the FIGHT band's (`emits_at`, never the
+    # union). CP-T02-01: `tenure.closed` is earned only by a seat the death empties, and neither
+    # `tiny_world` party holds one.
+    tw = P.tiny_world()
+    assert not tw.seat_holds("p_mid") and not tw.seat_holds("p_low"), "fixture: a party holds a seat; re-derive"
+    own = {FELLED: {"person.died"}, WOUNDED: {"body.changed"}, UNTOUCHED: set()}
     for band, got in seen.items():
-        # CP-T02-01: RE-PINNED from `== declared`. `Felled` declares `tenure.closed` too, earned only by
-        # a seat the death empties (`state/gate.py::death_subjects`), and `tiny_world`'s `p_mid` holds
-        # none -- so the band's kinds less that one are emitted, exactly.
-        assert not P.tiny_world().seat_holds("p_mid"), "fixture: p_mid now holds a seat; re-derive"
-        declared = set(row.emits_at(band)) - {"tenure.closed"}
-        assert set(got["kinds"]) == declared, (band, got["kinds"], sorted(declared))
+        assert set(got["kinds"]) == own[band], (band, got["kinds"])
+        assert set(got["kinds"]) <= set(row.emits_at(got["fight"])), (band, got)
         assert set(got["kinds"]) != union, (
             f"{band} emitted the flat union {sorted(union)} -- `emits_at` is not being consulted")
     # THE ONE THAT WAS ACTIVELY FALSE: nobody was hurt and the world was told a man died.
@@ -15280,19 +15376,22 @@ def test_we_the_band_is_read_off_the_subject_and_not_off_the_loser():
     assert raw["wound_state"]["p_low"]["felled"] is True, raw["wound_state"]
     assert raw["wound_state"]["p_mid"]["felled"] is False, raw["wound_state"]
     assert raw["wound_state"]["p_mid"]["wounds"] > 0, raw["wound_state"]
-    assert combat_degree(raw, "p_mid") == WOUNDED
-    assert combat_degree(raw, "p_low") == FELLED, (
+    # CP-T03-00 (`-08` AM-C-01): EACH PARTY'S band is `party_degree`'s; the FIGHT's is the worst.
+    assert party_degree(raw["wound_state"]["p_mid"]) == WOUNDED
+    assert party_degree(raw["wound_state"]["p_low"]) == FELLED, (
         "the two readings must actually differ on this case, or the assertion below is vacuous")
+    assert combat_degree(raw, "p_mid") == FELLED
 
     w2 = _w(); w2.step = Step.RESOLVE
     d = SeasonDriver(w2)
     evs = d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="we0", actor="p_low", verb="fight",
                            payload={"subject": "p_mid"})], 2)
-    assert [e.kind for e in evs] == ["body.changed"], [(e.kind, e.degree) for e in evs]
+    assert {e.kind for e in evs} >= {"person.died", "body.changed"}, [(e.kind, e.degree) for e in evs]
     assert "p_mid" in w2.persons, (
         "the subject was deleted by a fight the ACTOR lost -- the band is being read off the "
         "loser, which is the defect `verb_table.yaml`'s `writes_source_note:` cell used to specify")
-    assert evs[0].degree == WOUNDED
+    assert "p_low" not in w2.persons, "CP-T03-00: the actor his target felled still stands"
+    assert {e.degree for e in evs} == {FELLED}, "CP-T03-00: the fight's band is the worst party's"
 
 
 def test_r8_4_document_key_fires_for_a_non_author_holding_the_changed_record():

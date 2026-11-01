@@ -207,7 +207,10 @@ def _cross_person_refusals(w, d):
 
 
 def test_in50_real_run_refusals_cite_another_persons_act_and_r3_holds():
-    wanted = {"ARC-23", "NPC-090"}
+    # RE-PICKED at CP-T03-00 (both parties of a fight take their band): NPC-090 -> NPC-087. In NPC-090
+    # both of season 0's attackers (`p_c`, `p_a`) are now felled by their targets, one person is left,
+    # and no act remains for a refusal to cite (0 such refusals, R3 False); NPC-087 ends with three.
+    wanted = {"ARC-23", "NPC-087"}
     cases = [c for lane in ("ARC", "NPC") for c in R.load_cases(lane) if c["id"] in wanted]
     assert {c["id"] for c in cases} == wanted, "a named corpus case is gone; re-pick the cases"
     total = 0

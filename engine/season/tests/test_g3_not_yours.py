@@ -45,6 +45,8 @@ from engine.season.state.gate import (
     seat_hold)
 from engine.season.state.ids import H
 
+from ._scar_helpers import party_state
+
 _RUNG_ABOVE = "rung_above_same_faction"
 
 
@@ -134,8 +136,10 @@ def test_g3_a_revocation_through_a_seat_whose_basis_does_not_reach_is_refused():
 # 2 -- ONE REFUSAL PER LIVE VIOLATION, COUNTED, EACH WITH ITS LAWFUL TWIN
 # ======================================================================================
 
-def _felled(victim):
-    return Resolution(FELLED, {"wound_state": {victim: {}}})
+def _felled(victim, actor="p_low"):
+    """CP-T03-00: both parties on the scene (`_eff_kill` reads each one's band); the actor untouched."""
+    return Resolution(FELLED, {"wound_state": {victim: party_state(felled=True, left=0),
+                                                actor: party_state()}})
 
 
 def test_g3_every_live_violation_is_refused_without_its_basis_and_admitted_with_it(gate_only):

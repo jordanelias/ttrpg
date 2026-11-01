@@ -5,7 +5,7 @@ the three its own row: `seam/contest` dispatches and returns Events + degree or 
 own *"nothing, ever"* and return a `Margin`.
 
     contest.py            contest() · grade() · find_trail() · contest_subsystem() · ContestError · ContestRefused · Resolution
-    ladder.py             degree_of() · combat_degree() · degree_ladder() · ladder_error()
+    ladder.py             degree_of() · combat_degree() · party_degree() · degree_ladder() · ladder_error()
     wrappers/combat.py    the IN-side of the personal-combat call
     wrappers/fieldwork.py the `inquiry` role's provider (v9 FI-02 + FI-03), called by find_trail()
 
@@ -60,7 +60,7 @@ Filed as **ED-IN-0206**; this is unit **L2** of
 from . import wrappers as _wrappers   # noqa: F401
 from .contest import (ContestError, ContestRefused, Resolution, contest, contest_subsystem,
                       find_trail, grade)
-from .ladder import combat_degree, degree_ladder, degree_of, ladder_error
+from .ladder import combat_degree, degree_ladder, degree_of, ladder_error, party_degree
 
 # ⚠ DERIVED, NOT LISTED -- Jordan 2026-09-02, definitions are not hardcoded, and
 # `test_jordan_no_definition_is_hardcoded_in_a_body` reads a written-out name list in a model module
