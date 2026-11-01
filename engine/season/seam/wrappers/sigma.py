@@ -130,8 +130,10 @@ POOL_ADDENDS: list = []
 
 
 def register_pool_addend(fn: Any) -> None:
-    """Add `fn(w, person, verb) -> int` to what `faculty` sums. Registered once, at import of its owner."""
-    POOL_ADDENDS.append(fn)
+    """Add `fn(w, person, verb) -> int` to what `faculty` sums. Registered once, at import of its owner; a
+    second registration of the same function is a no-op (a module reload must not double a practised pool)."""
+    if fn not in POOL_ADDENDS:
+        POOL_ADDENDS.append(fn)
 
 
 # THE PRACTICE ADDEND (CP-T01-02), `faculty`'s first reader of `w.log`: registered here, the one door into the
@@ -368,8 +370,12 @@ def odds_of(w: Any, act: Any, *, believer: Any = None,
     """`(F, P, S, O)` for the social roll `act` would deal, or `None`. READ-ONLY; nothing is rolled.
 
     MODE (a), `believer=None`: the TRUE input -- `contest_input` over the act as the fold would hand it
-    to `resolve`, the module's obstacle and `band_odds`. The shown number is the dealt number by
-    construction: it is the same record, the same obstacle function and the same roll composition.
+    to `resolve`, the module's obstacle and `band_odds`. The shown number is the number the roll deals
+    GIVEN THAT THE FOLD DEALS IT: the same record, the same obstacle function and the same roll
+    composition. It does not say the fold will deal the act: eligibility and `requires` (`_admits`) and a
+    deferred prize's step are the fold's gates, and a World that moves between the choice and the roll
+    (`_eff_train` writes capability mid-RESOLVE; a `speak` earlier in the barrier moves reception) moves the
+    dealt odds, not the shown ones. It answers "the odds of this roll, if made, on this World."
 
     MODE (b), `believer=<Person>`: the SAME function over `believed_input(believer, ...)`, the person's
     own record. It reads the believer's own ledger and nothing else of the true state (the World answers
