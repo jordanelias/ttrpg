@@ -1,0 +1,551 @@
+<title>Mass Battle Walkthrough</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one numbered-by-sequence column of steps; each step pairs one figure (max 460px) with its explanation, stacking on phones. */
+:root {
+  --bg: #f1f4f6;
+  --surface: #ffffff;
+  --fg: #15212b;
+  --muted: #54656f;
+  --line: #ccd6dc;
+  --field: #e6ecef;
+  --a: #b4411a;      /* side A, the attacker */
+  --b: #1d5e98;      /* side B, the defender */
+  --warn: #b3261e;
+  --band: #f1d9a8;   /* highlighted range */
+  --font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-body: "Source Sans 3", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f171d; --surface: #17222a; --fg: #e4ebf0; --muted: #96a8b3; --line: #2c3c47;
+    --field: #1f2d36; --a: #ff9366; --b: #72b6f4; --warn: #ff8a80; --band: #5a4a22;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f171d; --surface: #17222a; --fg: #e4ebf0; --muted: #96a8b3; --line: #2c3c47;
+  --field: #1f2d36; --a: #ff9366; --b: #72b6f4; --warn: #ff8a80; --band: #5a4a22;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 16px; line-height: 1.55;
+  padding-block: 28px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 1040px; margin: 0 auto; display: flex; flex-direction: column; gap: 44px; }
+h1, h2 { font-family: var(--font-display); font-weight: 700; letter-spacing: 0.01em; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(2.2rem, 6vw, 3.4rem); line-height: 1; }
+h2 { font-size: 1.7rem; line-height: 1.1; }
+p { margin: 0 0 0.8em; max-width: 62ch; }
+code, .mono { font-family: var(--font-mono); font-size: 0.86em; }
+.lede { font-size: 1.08rem; max-width: 66ch; }
+.kicker { font-family: var(--font-mono); font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+.meta { display: flex; flex-wrap: wrap; gap: 6px 22px; font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); }
+.meta b { color: var(--fg); font-weight: 500; }
+.step { display: grid; grid-template-columns: minmax(0, 460px) minmax(0, 1fr); gap: 20px 36px; align-items: start; }
+.step > header { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 4px; }
+@media (max-width: 760px) { .step { grid-template-columns: minmax(0, 1fr); } }
+figure { margin: 0; }
+figure svg { display: block; width: 100%; height: auto; max-width: 460px; }
+figcaption { font-size: 0.82rem; color: var(--muted); margin-top: 6px; max-width: 460px; }
+.text { min-width: 0; }
+.text ul { margin: 0 0 0.8em; padding-left: 1.1em; max-width: 62ch; }
+.text li { margin-bottom: 0.3em; }
+.note { font-size: 0.86rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 8px; max-width: 62ch; }
+.tag { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); }
+/* svg classes */
+.s-box { fill: var(--surface); stroke: var(--line); stroke-width: 1.2; }
+.s-hi { fill: var(--surface); stroke: var(--fg); stroke-width: 1.6; }
+.s-t { fill: var(--fg); font-family: var(--font-body); font-size: 13px; font-weight: 600; }
+.s-m { fill: var(--muted); font-family: var(--font-body); font-size: 11.5px; }
+.s-mono { fill: var(--muted); font-family: var(--font-mono); font-size: 10.5px; }
+.s-num { fill: var(--fg); font-family: var(--font-mono); font-size: 11px; }
+.s-line { stroke: var(--fg); stroke-width: 1.4; fill: none; }
+.s-grid { stroke: var(--line); stroke-width: 1; fill: none; }
+.s-field { fill: var(--field); }
+.s-a { fill: var(--a); } .s-b { fill: var(--b); }
+.s-astroke { stroke: var(--a); fill: none; stroke-width: 2.4; } .s-bstroke { stroke: var(--b); fill: none; stroke-width: 2.4; }
+.s-band { fill: var(--band); }
+.s-warn { fill: var(--warn); } .s-warnline { stroke: var(--warn); stroke-width: 1.4; fill: none; }
+.s-pill { fill: none; stroke: var(--fg); stroke-width: 1; }
+.s-blk-t { fill: #fff; font-family: var(--font-mono); font-size: 10.5px; }
+/* ledger */
+.ledger { border: 1px solid var(--line); background: var(--surface); font-family: var(--font-mono); font-size: 0.84rem; max-width: 62ch; }
+.ledger .row { display: grid; grid-template-columns: 7.2em minmax(0,1fr) auto; gap: 4px 12px; padding: 7px 12px; border-bottom: 1px solid var(--line); align-items: baseline; }
+.ledger .row:last-child { border-bottom: 0; }
+.ledger .k { color: var(--muted); }
+.ledger .v { font-variant-numeric: tabular-nums; text-align: right; }
+.ledger .end { background: var(--field); font-weight: 500; }
+@media (max-width: 480px) { .ledger .row { grid-template-columns: minmax(0,1fr) auto; } .ledger .k { grid-column: 1 / -1; } }
+/* scrubber */
+.scrub { background: var(--surface); border: 1px solid var(--line); padding: 16px; display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); gap: 18px 28px; }
+@media (max-width: 760px) { .scrub { grid-template-columns: minmax(0, 1fr); } }
+.ctl { grid-column: 1 / -1; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.ctl button { font: inherit; font-family: var(--font-mono); font-size: 0.85rem; background: var(--bg); color: var(--fg); border: 1px solid var(--fg); padding: 5px 12px; cursor: pointer; }
+.ctl button:focus-visible, .ctl input:focus-visible { outline: 3px solid var(--b); outline-offset: 2px; }
+.ctl input[type=range] { flex: 1 1 200px; min-width: 120px; accent-color: var(--b); }
+.ctl .tk { font-family: var(--font-display); font-size: 1.6rem; font-weight: 700; min-width: 5.2em; }
+.bars { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+.bar { display: grid; grid-template-columns: 1.6em minmax(0,1fr) 7.2em; gap: 8px; align-items: center; font-family: var(--font-mono); font-size: 0.78rem; }
+.bar .tr { height: 12px; background: var(--field); position: relative; }
+.bar .fl { position: absolute; inset: 0 auto 0 0; }
+.bar .fl.a { background: var(--a); } .bar .fl.b { background: var(--b); }
+.log { font-size: 0.88rem; min-width: 0; }
+.log h3 { font-family: var(--font-mono); font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 6px; font-weight: 500; }
+.log ul { list-style: none; margin: 0 0 12px; padding: 0; display: flex; flex-direction: column; gap: 5px; }
+.log li { font-family: var(--font-mono); font-size: 0.8rem; line-height: 1.4; }
+.log li .who-a { color: var(--a); font-weight: 500; } .log li .who-b { color: var(--b); font-weight: 500; }
+.log .says { font-family: var(--font-body); font-size: 0.95rem; border-top: 1px solid var(--line); padding-top: 8px; }
+table { border-collapse: collapse; font-size: 0.9rem; width: 100%; max-width: 62ch; }
+th, td { text-align: left; padding: 6px 10px 6px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 500; }
+.scroll { overflow-x: auto; }
+.sw { display: inline-block; width: 0.8em; height: 0.8em; vertical-align: -1px; margin-right: 4px; }
+</style>
+
+<div class="wrap">
+
+<header style="display:flex;flex-direction:column;gap:12px">
+  <div class="kicker">Valoria · mass battle · read from the code</div>
+  <h1>Mass Battle, Tick by Tick</h1>
+  <p class="lede">One battle, followed from the data the season hands over to the grade the battle returns. The numbers in steps 4 to 7 are a real run of <code>run_battle</code>, not an illustration. Where the engine does something this page has not explained, it says so.</p>
+  <div class="meta">
+    <span>Example: <b>A</b> 400 heavy infantry, 200 archers, 100 light cavalry, <i>advance</i></span>
+    <span><b>B</b> 400 spearmen, 200 archers, <i>defend</i></span>
+    <span>morale start <b>5</b> each · seed <b>3</b> · built with <code>build_unit</code></span>
+  </div>
+</header>
+
+<!-- 1 ───────────────────────────── -->
+<section class="step">
+  <header><div class="kicker">Step 1 · the edge</div><h2>The season hands over data; the battle runs on its own</h2></header>
+  <figure>
+    <svg viewBox="0 0 460 518" role="img" aria-label="Three bands. Top: the season loop builds a typed input record from the world. Middle: the mass battle module takes that record, builds two Units, runs the battle and grades it. Bottom: the season loop folds the returned shares and degree into the world.">
+      <defs><marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+      <g color="var(--fg)">
+        <rect class="s-field" x="8" y="4" width="444" height="142"/>
+        <text class="s-mono" x="20" y="20">SEASON LOOP · provides data, content, context</text>
+        <rect class="s-box" x="20" y="30" width="420" height="44"/><text class="s-t" x="34" y="49">march</text><text class="s-m" x="34" y="66">attacker moves on a territory or settlement; prize “a field”</text><text class="s-mono" x="426" y="49" text-anchor="end">engine/season</text>
+        <line class="s-line" x1="230" y1="74" x2="230" y2="90" marker-end="url(#ar)"/>
+        <rect class="s-box" x="20" y="92" width="420" height="46"/><text class="s-t" x="34" y="111">field_input</text><text class="s-m" x="34" y="129">per side: army record, terrain row, morale from stance + loyalty</text><text class="s-mono" x="426" y="111" text-anchor="end">seam/wrappers</text>
+        <line class="s-line" x1="230" y1="146" x2="230" y2="178" marker-end="url(#ar)"/>
+        <text class="s-mono" x="244" y="166">typed input record: data in</text>
+        <rect class="s-hi" x="8" y="180" width="444" height="250" fill="var(--surface)"/>
+        <text class="s-mono" x="20" y="196">MASS BATTLE MODULE · runs on its own, holds no state</text>
+        <rect class="s-box" x="20" y="206" width="420" height="46"/><text class="s-t" x="34" y="225">resolve_field</text><text class="s-m" x="34" y="243">one Unit per side; terrain modifiers written onto the Units</text><text class="s-mono" x="426" y="225" text-anchor="end">massbattle.py</text>
+        <line class="s-line" x1="230" y1="252" x2="230" y2="266" marker-end="url(#ar)"/>
+        <rect class="s-hi" x="20" y="268" width="420" height="46"/><text class="s-t" x="34" y="287">run_battle(max_turns=18)</text><text class="s-m" x="34" y="305">18 ticks = 3 phases of 6. Steps 3 to 7 live here</text><text class="s-mono" x="426" y="287" text-anchor="end">orchestration.py</text>
+        <line class="s-line" x1="230" y1="314" x2="230" y2="328" marker-end="url(#ar)"/>
+        <rect class="s-box" x="20" y="330" width="420" height="44"/><text class="s-t" x="34" y="349">_run_and_grade</text><text class="s-m" x="34" y="366">survivor share of each side → degree (step 8)</text>
+        <text class="s-m" x="20" y="396">Also in the module, not used at this edge:</text>
+        <text class="s-mono" x="20" y="414">run_multi_turn_battle · run_multi_unit_battle (cascade, pursuit)</text>
+        <line class="s-line" x1="230" y1="430" x2="230" y2="460" marker-end="url(#ar)"/>
+        <text class="s-mono" x="244" y="450">results handed back</text>
+        <rect class="s-field" x="8" y="462" width="444" height="52"/>
+        <text class="s-mono" x="20" y="477">SEASON LOOP · writes the new state</text>
+        <rect class="s-box" x="20" y="484" width="420" height="26"/><text class="s-t" x="34" y="502">_eff_march</text><text class="s-m" x="120" y="502">writes the loser’s casualties, morale, grudge</text>
+      </g>
+    </svg>
+    <figcaption>Data, content and context go in as one typed record; survivor shares and a degree come back. The module never sees the world, and only the season loop writes state.</figcaption>
+  </figure>
+  <div class="text">
+    <p>The season loop supplies the data, content and context as one record: who stands on each side, each side’s army record, the terrain row from the territory and its fortification, and each side’s morale from stance and loyalty. It runs no part of the fight and the battle writes nothing to the world.</p>
+    <p>The module takes that record, builds one Unit per side, fights it and returns survivor shares and a degree. It never reads the world and keeps nothing between calls. The season loop then writes the new state from what comes back.</p>
+    <p>Which battle entry runs is the module’s own matter. The season edge calls <code>resolve_field</code>, which fights one engagement of at most 18 ticks. The module also has <code>run_multi_turn_battle</code> and <code>run_multi_unit_battle</code>; the workbench and the <code>bat.py</code> battery exercise those directly. This page follows the single-engagement path.</p>
+    <p>A side with an army record fights as that order of battle. If neither side has one, each fights as a single line sized by its headcount; if only one does, the other fights as one line of light infantry.</p>
+    <p class="note">Code: <code>modules/mass_battle/massbattle.py</code> (<code>resolve_field</code>, <code>_run_and_grade</code>); host side <code>engine/season/seam/wrappers/mass_battle.py</code>. A lost field’s consequence, “casualties only, decrease in morale, and a grudge token”, is quoted from the <code>massbattle.py</code> docstring (ED-IN-0279 clause b) and written by the season’s <code>_eff_march</code>.</p>
+  </div>
+</section>
+
+<!-- 2 ───────────────────────────── -->
+<section class="step">
+  <header><div class="kicker">Step 2 · the field</div><h2>Deployment: two lines, three empty rows apart</h2></header>
+  <figure>
+    <svg viewBox="0 0 360 484" role="img" aria-label="A grid window of the 51 by 51 battlefield showing side B at the top with archers behind spearmen, and side A at the bottom with cavalry and heavy infantry in front of archers, three empty rows between the front lines.">
+      <defs><marker id="ar2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+      <rect class="s-field" x="36" y="20" width="306" height="442"/>
+      <g id="gridlines"></g>
+      <g id="deploy"></g>
+    </svg>
+    <figcaption>Window of the 51×51 field: rows 19–31, columns 20–28. Each square is a cell holding up to 200 troops. Row numbers run down.</figcaption>
+  </figure>
+  <div class="text">
+    <p>Side A advances toward lower row numbers and side B toward higher. Each army is placed by a fixed rule: melee in the front line, centred; ranged behind it; mounted on the flanks.</p>
+    <ul>
+      <li><b>Scale.</b> 100 troops is one Size; a cell holds at most 200 (<code>CELL_CAP</code>). 400 spearmen are two cells.</li>
+      <li><b>Gap.</b> The front faces start 3 rows apart (<code>_APPROACH_ROWS</code>), the smallest gap measured to let every melee type meet inside one 18-tick fight.</li>
+      <li><b>Reach.</b> Archers fire at the nearest enemy subunit 2 to 8 cells away (<code>VOLLEY_MIN_RANGE</code>, <code>VOLLEY_MAX_RANGE</code>). A’s archers (row 29) are 6 rows from B’s spearmen (row 23), so both sides fire at tick 1.</li>
+      <li><b>Stance.</b> <i>advance</i> sets A’s melee and horse to aggressive; <i>defend</i> sets B’s to hold. Archers stay balanced in both.</li>
+    </ul>
+    <p class="note">The placement rule and the three strategies are marked ASSUMPTION in <code>orderofbattle.py</code>, for Jordan to correct.</p>
+  </div>
+</section>
+
+<!-- 3 ───────────────────────────── -->
+<section class="step">
+  <header><div class="kicker">Step 3 · inside <code>run_battle</code></div><h2>What happens in every tick</h2></header>
+  <figure>
+    <svg viewBox="0 0 460 630" role="img" aria-label="Ten stages of one tick in order: volley, pre-contact halt, orders and targets, simultaneous movement, contacts and stamina, melee exchange, simultaneous damage, size and drift, rout check, and every sixth tick a phase boundary.">
+      <defs><marker id="ar3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+      <g color="var(--fg)" id="tickflow"></g>
+    </svg>
+    <figcaption>Outlined boxes are where both sides are computed from the same snapshot before either result is applied.</figcaption>
+  </figure>
+  <div class="text">
+    <p>Each tick follows the same order. Two stages are built to be fair to both sides:</p>
+    <ul>
+      <li><b>Movement is simultaneous.</b> Every subunit’s target position is read before anyone moves, so A is not steering toward B’s already-moved position (a code comment cites a first-argument bias of about 10% before this fix).</li>
+      <li><b>Damage is simultaneous.</b> Melee and volley losses for both sides are computed, then subtracted together. Size is recalculated only afterward.</li>
+    </ul>
+    <p>The loop stops early the moment either Unit has routed. If neither does, the battle ends at tick 18 and the grade decides.</p>
+    <p class="note">Code: <code>run_battle</code>, <code>volley_phase</code>, <code>resolve_engagements_cascading</code>, <code>phase_boundary</code> in <code>modules/mass_battle/orchestration.py</code>. The rout check at stage 9 runs every tick; the casualty-based break check runs only in stage 10.</p>
+  </div>
+</section>
+
+<!-- 4 ───────────────────────────── -->
+<section>
+  <div class="kicker" style="margin-bottom:4px">Step 4 · the battle itself</div>
+  <h2 style="margin-bottom:12px">Scrub through the example, tick by tick</h2>
+  <div class="scrub">
+    <div class="ctl">
+      <button id="prev" type="button" aria-label="Previous tick">◀ prev</button>
+      <input id="tick" type="range" min="0" max="15" value="4" step="1" aria-label="Tick">
+      <button id="next" type="button" aria-label="Next tick">next ▶</button>
+      <span class="tk" id="tklabel">Tick 4</span>
+    </div>
+    <div>
+      <svg id="field" viewBox="0 0 330 458" role="img" aria-label="Battlefield at the selected tick" style="width:100%;height:auto;max-width:340px;display:block"></svg>
+      <div class="bars" id="bars"></div>
+    </div>
+    <div class="log" id="log"></div>
+  </div>
+  <p class="note" style="margin-top:10px">Positions are subunit centroids from the engine’s per-tick trace, drawn as blocks of their cell count; numbers in a block are troops alive. Tick 0 is the deployment. The loop exits at the top of tick 16 because A has routed.</p>
+</section>
+
+<!-- 5 ───────────────────────────── -->
+<section class="step">
+  <header><div class="kicker">Step 5 · ranged fire</div><h2>Volley arithmetic, tick 1</h2></header>
+  <div class="text">
+    <p>Archers fire before anyone moves. Each ranged subunit picks the nearest enemy subunit 2 to 8 cells away and rolls its Power as a d10 pool. B’s archers, firing at A:</p>
+    <div class="ledger" role="table" aria-label="Worked volley arithmetic">
+      <div class="row" role="row"><span class="k">pool</span><span>Power 3, minus 1 for Discipline 3</span><span class="v">2 dice</span></div>
+      <div class="row" role="row"><span class="k">net successes</span><span>d10 faces: 1 → −1, 2–6 → 0, 7–9 → +1, 10 → +2</span><span class="v">3</span></div>
+      <div class="row" role="row"><span class="k">armour, square law</span><span>minus target DR, × 0.25 × shooter Size</span><span class="v">1.0</span></div>
+      <div class="row" role="row"><span class="k">density</span><span>a dense target takes more from area fire</span><span class="v">× 2.0</span></div>
+      <div class="row" role="row"><span class="k">Size lost</span><span></span><span class="v">2.0</span></div>
+      <div class="row end" role="row"><span class="k">troops lost</span><span>× 3 (<code>VOLLEY_LETHALITY_SCALE</code>)</span><span class="v">6</span></div>
+    </div>
+  </div>
+  <div class="text">
+    <p>The trace shows A’s side losing exactly 6.0 at tick 1, which is this chain. A’s archers rolled net 2 and B lost 3.0.</p>
+    <p>A volley needs a target 2 to 8 cells away, so archers stop firing at anything that has closed inside 2 cells. Ranged units pulled into melee take a penalty (<code>RANGED_MELEE_SIGMA</code>).</p>
+    <p class="note">The volley roller hands its dice to the same <code>roll_pool</code> melee uses, so both fire at TN 7 (Jordan, 2026-08-25: “TN7 always”). A volley floors at 0 net; a melee pool never drops below one die.</p>
+  </div>
+</section>
+
+<!-- 6 ───────────────────────────── -->
+<section class="step">
+  <header><div class="kicker">Step 6 · melee</div><h2>One exchange, tick 4: first contact</h2></header>
+  <figure>
+    <svg viewBox="0 0 460 170" role="img" aria-label="Margin number line from minus 4 to plus 6 divided into Failure below 0, Partial 0 to 1, Success 1 to 3 and Overwhelming from 3. Side A's margin of minus 7.4 falls left of the scale; side B's of plus 7.4 falls right.">
+      <defs><marker id="ar6" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+      <g>
+        <rect x="30" y="34" width="160" height="40" fill="var(--field)"/>
+        <rect x="190" y="34" width="40" height="40" fill="var(--band)"/>
+        <rect x="230" y="34" width="80" height="40" fill="var(--field)"/>
+        <rect x="310" y="34" width="120" height="40" fill="var(--band)"/>
+        <g stroke="var(--fg)" stroke-width="1"><line x1="30" y1="34" x2="30" y2="84"/><line x1="190" y1="34" x2="190" y2="84"/><line x1="230" y1="34" x2="230" y2="84"/><line x1="310" y1="34" x2="310" y2="84"/><line x1="430" y1="34" x2="430" y2="84"/></g>
+        <text class="s-t" x="110" y="58" text-anchor="middle">Failure</text>
+        <text class="s-m" x="210" y="58" text-anchor="middle" style="font-size:10.5px">Partial</text>
+        <text class="s-t" x="270" y="58" text-anchor="middle">Success</text>
+        <text class="s-t" x="370" y="58" text-anchor="middle">Overwhelming</text>
+        <text class="s-num" x="110" y="102" text-anchor="middle">damage 0</text>
+        <text class="s-num" x="210" y="102" text-anchor="middle">1</text>
+        <text class="s-num" x="270" y="102" text-anchor="middle">P</text>
+        <text class="s-num" x="370" y="102" text-anchor="middle">1 + P</text>
+        <g class="s-mono" style="font-size:10.5px"><text x="30" y="124" text-anchor="middle">−4</text><text x="190" y="124" text-anchor="middle">0</text><text x="230" y="124" text-anchor="middle">1</text><text x="310" y="124" text-anchor="middle">3</text><text x="430" y="124" text-anchor="middle">6</text></g>
+        <text class="s-m" x="230" y="142" text-anchor="middle">margin = own net − opposing net (opposing floored at 1)</text>
+        <g color="var(--a)"><line x1="46" y1="20" x2="14" y2="20" stroke="var(--a)" stroke-width="2.2" marker-end="url(#ar6)"/></g>
+        <text x="52" y="24" fill="var(--a)" font-family="var(--font-mono)" font-size="11" font-weight="500">A −7.4</text>
+        <g color="var(--b)"><line x1="414" y1="20" x2="446" y2="20" stroke="var(--b)" stroke-width="2.2" marker-end="url(#ar6)"/></g>
+        <text x="408" y="24" fill="var(--b)" font-family="var(--font-mono)" font-size="11" font-weight="500" text-anchor="end">B +7.4</text>
+      </g>
+    </svg>
+    <figcaption>The degree ladder. P is the attacking subunit’s Power; DR is subtracted from the damage value afterwards.</figcaption>
+  </figure>
+  <div class="text">
+    <p>For every pair of subunits in contact, each side rolls a pool, adds a modifier, and compares nets. The two rolls are compared against each other, so a side can fail outright even with a decent roll.</p>
+    <div class="ledger" role="table" aria-label="Worked melee arithmetic">
+      <div class="row" role="row"><span class="k">pools</span><span>A heavy infantry vs B spearmen</span><span class="v">3 vs 19</span></div>
+      <div class="row" role="row"><span class="k">nets</span><span>d10 pool plus the modifier shift</span><span class="v">1.86 / 9.26</span></div>
+      <div class="row" role="row"><span class="k">degree</span><span>A: 1.86 − 9.26 · B: 9.26 − max(1, 1.86)</span><span class="v">Fail / Overwhelming</span></div>
+      <div class="row" role="row"><span class="k">damage to A</span><span>12 × contact strength × (1 + P − DR)</span><span class="v">19.6 troops</span></div>
+      <div class="row end" role="row"><span class="k">damage to B</span><span>A failed: damage value 0</span><span class="v">0</span></div>
+    </div>
+    <p style="margin-top:12px">The modifier shift folds in flanking arcs, charge shock, morale, fatigue, encirclement and intent. Casualties scale with the <b>enemy’s</b> strength in contact, capped by frontage (the Lanchester linear law, <code>K_LINEAR</code> = 12). Surrounded bodies take more: ×1.5 from two sides, ×2.0 from three.</p>
+    <p class="note">Not traced: why A’s pool is 3 against 19, and why it falls to 1 from tick 7. The trace records pools, not their derivation (<code>subunit_combat_pool</code>, <code>pair_pool_contribution</code>). [GAP: pool derivation not read]</p>
+  </div>
+</section>
+
+<!-- 7 ───────────────────────────── -->
+<section class="step">
+  <header><div class="kicker">Step 7 · attrition and rout</div><h2>Losses accumulate; the break is drawn from a band</h2></header>
+  <figure>
+    <svg viewBox="0 0 460 296" role="img" aria-label="Line chart of each side's troop share remaining from tick 0 to 15, y axis from 50 to 100 percent. B stays near 96 percent; A falls to 57.8 percent, with phase boundaries at ticks 6 and 12, the heavy infantry routing at tick 12 and the whole unit at tick 15.">
+      <g id="chart"></g>
+    </svg>
+    <figcaption>Share of starting troops alive. The y axis starts at 50%.</figcaption>
+  </figure>
+  <div class="text">
+    <p>B’s losses are almost all volleys. A fails every exchange from tick 4 and bleeds steadily: 42% of its 700 troops are gone by tick 15.</p>
+    <p>A subunit breaks one of three ways:</p>
+    <ul>
+      <li><b>Morale at zero.</b> At each phase boundary, a subunit with under 50% of its strength left loses 1 morale, and under 25% loses another; exhaustion costs more. The loss is scaled by 0.7.</li>
+      <li><b>Too few left.</b> Fewer than 80 troops (<code>SUBUNIT_ROUT_FLOOR</code>).</li>
+      <li><b>A drawn break-point.</b> Each subunit draws one casualty fraction between 15% and 30% (skewed later for disciplined, high-morale troops) and breaks at the next phase boundary after crossing it. <code>MB_STOCHASTIC_ROUT</code> is on by default.</li>
+    </ul>
+    <p>The whole Unit routs when its general is gone, its troop-weighted morale reaches zero, or the broken subunits held 60% of its <i>starting</i> strength (<code>ROUT_CASCADE_FRAC</code>).</p>
+  </div>
+</section>
+
+<section class="step">
+  <header><div class="kicker">Step 7b · the rout in the example</div><h2>Where A’s heavy infantry broke</h2></header>
+  <figure>
+    <svg viewBox="0 0 460 190" role="img" aria-label="Casualty scale for A's heavy infantry from 0 to 60 percent. The 15 to 30 percent break window is shaded; the unit stood at 18.3 percent at tick 6 and 47.8 percent at tick 12, when it had routed.">
+      <g id="band"></g>
+    </svg>
+    <figcaption>The break-point is checked only at phase boundaries (ticks 6, 12, 18).</figcaption>
+  </figure>
+  <div class="text">
+    <p>At the tick-6 boundary the heavy infantry had lost 18.3% and held. By tick 12 it had lost 47.8% and was routed. So its drawn break-point lay between 18.3% and 30%. That is inferred from two observations; the draw itself is not in the trace.</p>
+    <p>The whole Unit routed at tick 15. Its morale read 5 at tick 14 and 2.32 at tick 15, so the morale path was not the trigger; by elimination the broken share reached 60%. <span class="tag">[CONFIDENCE: medium · which subunit broke last is not visible in the trace]</span></p>
+    <p>From tick 12 the heavy infantry’s pool is 0: a routed subunit deals no damage (its net is forced to 0).</p>
+  </div>
+</section>
+
+<!-- 8 ───────────────────────────── -->
+<section class="step">
+  <header><div class="kicker">Step 8 · grading and terrain</div><h2>What the battle returns</h2></header>
+  <div class="text">
+    <p>The engine produces survivor shares, not a winner’s margin. <code>_run_and_grade</code> turns them into the degree the season receives, with the attacker as side A:</p>
+    <div class="scroll"><table>
+      <tr><th>Degree</th><th>Condition</th></tr>
+      <tr><td>Overwhelming</td><td>A wins, keeps ≥ 75%, B left with ≤ 25%</td></tr>
+      <tr><td>Success</td><td>A wins: A has not routed, and B routed or A’s share is higher</td></tr>
+      <tr><td>Partial</td><td>A not routed, no win, A’s share ≥ 50%</td></tr>
+      <tr><td>Failure</td><td>anything else, including any A rout</td></tr>
+    </table></div>
+    <p style="margin-top:12px">The example: A routed, so <b>Failure</b>, with A at 57.8% and B at 96.5% of starting troops. These bands are the older adapter’s own, not the canonical margin ladder in step 6, and the code says so; reconciling them is open lane work.</p>
+  </div>
+  <div class="text">
+    <p>Terrain is a single row chosen from the territory and its fortification, and it changes the Units before tick 1:</p>
+    <div class="scroll"><table>
+      <tr><th>Row</th><th>Effect</th></tr>
+      <tr><td>Walls</td><td>Defender DR +3</td></tr>
+      <tr><td>Uphill</td><td>Attacker −1D offence; defender +1D defence</td></tr>
+      <tr><td>River crossing</td><td>Attacker −1D offence (its speed-tier drop is inert)</td></tr>
+      <tr><td>Broken forest</td><td>Fast becomes Standard (inert: <code>run_battle</code> never reads speed)</td></tr>
+      <tr><td>Narrow pass</td><td>Identified, applies nothing</td></tr>
+    </table></div>
+    <p class="note" style="margin-top:12px">Walls outrank a river crossing. Flat ground applies nothing.</p>
+  </div>
+</section>
+
+<!-- 9 ───────────────────────────── -->
+<section class="step">
+  <header><div class="kicker">Limits of this page</div><h2>What was and was not checked</h2></header>
+  <div class="text" style="grid-column:1/-1">
+    <ul>
+      <li><b>Constructed matchup.</b> The armies were built directly with <code>build_unit</code> and fought with <code>run_battle</code>, the engine path <code>resolve_field</code> uses. No season world was involved, so nothing here says how often a realm fields these armies.</li>
+      <li><b>Rerun it.</b> <code>python systems/mass_battle/sim/walkthrough.py --seed 3</code> reproduces the numbers in steps 4 to 7.</li>
+      <li><b>One seed shown.</b> Seeds 1 to 6 gave B, A, B, draw, draw, A. The matchup is close; seed 3 was chosen because it shows a rout.</li>
+      <li><b>Not traced:</b> pool derivation (step 6), the last subunit to break, and the multi-unit path (<code>run_multi_unit_battle</code>: morale cascade, freed attackers, pursuit, feigned retreat), which this page does not follow. The example gave no roles, so A’s horse sat at row 25, column 23 from tick 3. With the <code>Flanker</code> role the same seed sends it wide and back; <code>walkthrough.py --role Flanker</code> shows it.</li>
+      <li><b>Reference only.</b> Per the repo’s rule, this page explains the code; it is not a source of any value. The engine’s calibration constants carry CALIBRATED-DEBT tags in <code>config.py</code>.</li>
+    </ul>
+  </div>
+</section>
+
+</div>
+
+<script>
+var DATA = /*DATA*/;
+var TICKS = DATA.ticks;
+var NAMES = {heavy_infantry:'heavy infantry', archers:'archers', light_cavalry:'light cavalry', spearmen:'spearmen'};
+var X0 = 36, Y0 = 20, CS = 34, R0 = 19, C0 = 20, NR = 13, NC = 9;
+
+function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+
+/* grid helpers */
+function gridLines() {
+  var s = '';
+  for (var i = 0; i <= NC; i++) s += '<line class="s-grid" x1="' + (X0 + i * CS) + '" y1="' + Y0 + '" x2="' + (X0 + i * CS) + '" y2="' + (Y0 + NR * CS) + '"/>';
+  for (var j = 0; j <= NR; j++) s += '<line class="s-grid" x1="' + X0 + '" y1="' + (Y0 + j * CS) + '" x2="' + (X0 + NC * CS) + '" y2="' + (Y0 + j * CS) + '"/>';
+  for (var c = 0; c < NC; c++) s += '<text class="s-mono" text-anchor="middle" x="' + (X0 + c * CS + CS / 2) + '" y="' + (Y0 - 6) + '">' + (C0 + c) + '</text>';
+  for (var r = 0; r < NR; r++) s += '<text class="s-mono" text-anchor="end" x="' + (X0 - 6) + '" y="' + (Y0 + r * CS + CS / 2 + 4) + '">' + (R0 + r) + '</text>';
+  return s;
+}
+function block(sub, side, opts) {
+  opts = opts || {};
+  var n = sub[3], cx = X0 + (sub[2] - C0) * CS + CS / 2, cy = Y0 + (sub[1] - R0) * CS + CS / 2;
+  var w = n * CS - 4, h = CS - 4, x = cx - w / 2, y = cy - h / 2;
+  var routed = sub[5] === 1;
+  var s = '<rect class="s-' + side + '" x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '"' + (routed ? ' opacity="0.35"' : '') + '/>';
+  if (routed) s += '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="none" stroke="var(--warn)" stroke-width="2" stroke-dasharray="4 3"/>';
+  s += '<text class="s-blk-t" text-anchor="middle" x="' + cx + '" y="' + (cy + 4) + '"' + (routed ? ' style="fill:var(--fg)"' : '') + '>' + (opts.label || sub[4]) + '</text>';
+  return s;
+}
+
+/* step 2 deployment */
+(function () {
+  document.getElementById('gridlines').innerHTML = gridLines();
+  var t0 = TICKS['0'], s = '';
+  t0.a.subs.forEach(function (u) { s += block(u, 'a', {label: u[0] === 'archers' ? 'Arch' : (u[0] === 'heavy_infantry' ? 'Heavy' : 'Cav')}); });
+  t0.b.subs.forEach(function (u) { s += block(u, 'b', {label: u[0] === 'archers' ? 'Arch' : 'Spear'}); });
+  /* direction arrows and labels */
+  s += '<g color="var(--b)"><line x1="' + (X0 + 2 * CS + 6) + '" y1="' + (Y0 + 5 * CS - 2) + '" x2="' + (X0 + 2 * CS + 6) + '" y2="' + (Y0 + 6.5 * CS) + '" stroke="var(--b)" stroke-width="2" marker-end="url(#ar2)"/></g>';
+  s += '<g color="var(--a)"><line x1="' + (X0 + 7 * CS + 8) + '" y1="' + (Y0 + 8.4 * CS) + '" x2="' + (X0 + 7 * CS + 8) + '" y2="' + (Y0 + 6.9 * CS) + '" stroke="var(--a)" stroke-width="2" marker-end="url(#ar2)"/></g>';
+  s += '<text x="' + (X0 + 3.4 * CS) + '" y="' + (Y0 + 0.62 * CS) + '" fill="var(--b)" font-family="var(--font-mono)" font-size="11" font-weight="500">B defender</text>';
+  s += '<text x="' + (X0 + 3.4 * CS) + '" y="' + (Y0 + 12.62 * CS) + '" fill="var(--a)" font-family="var(--font-mono)" font-size="11" font-weight="500">A attacker</text>';
+  /* gap bracket between row 23 (B front) and row 27 (A front) */
+  var yb = Y0 + (23 - R0 + 1) * CS, ya = Y0 + (27 - R0) * CS, bx = X0 + 6.25 * CS;
+  s += '<line class="s-warnline" x1="' + bx + '" y1="' + yb + '" x2="' + bx + '" y2="' + ya + '"/>';
+  s += '<line class="s-warnline" x1="' + (bx - 5) + '" y1="' + yb + '" x2="' + (bx + 5) + '" y2="' + yb + '"/><line class="s-warnline" x1="' + (bx - 5) + '" y1="' + ya + '" x2="' + (bx + 5) + '" y2="' + ya + '"/>';
+  s += '<text x="' + (bx + 8) + '" y="' + ((yb + ya) / 2 + 4) + '" fill="var(--warn)" font-family="var(--font-mono)" font-size="11">3 rows</text>';
+  document.getElementById('deploy').innerHTML = s;
+})();
+
+/* step 3 tick flow */
+(function () {
+  var items = [
+    ['Volley', 'ranged subunits fire before anyone moves', 0],
+    ['Halt on contact', 'cells already touching stop', 0],
+    ['Orders and targets', 'check_orders, then nearest / weakest / in range', 0],
+    ['Move', 'targets read before anyone moves; then collisions', 1],
+    ['Contacts and stamina', 'each cell in contact drains stamina', 0],
+    ['Melee exchange', 'pool, nets, degree, damage per contact pair', 1],
+    ['Apply damage', 'melee + 3 × volley, both sides together', 1],
+    ['Size and drift', 'recalculate Size; formation drift check', 0],
+    ['Rout check', 'morale at 0 or under 80 troops; Unit rout', 0],
+    ['Phase boundary', 'every 6th tick: stamina, discipline, morale, rout, reform', 0]
+  ];
+  var s = '', h = 46, gap = 14, x = 20, w = 420;
+  items.forEach(function (it, i) {
+    var y = 6 + i * (h + gap);
+    s += '<rect class="' + (it[2] ? 's-hi' : 's-box') + '" x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '"/>';
+    s += '<text class="s-mono" x="' + (x + 12) + '" y="' + (y + 28) + '" style="font-size:12px">' + (i + 1) + '</text>';
+    s += '<text class="s-t" x="' + (x + 40) + '" y="' + (y + 20) + '">' + it[0] + '</text>';
+    s += '<text class="s-m" x="' + (x + 40) + '" y="' + (y + 37) + '">' + it[1] + '</text>';
+    if (it[2]) s += '<text class="s-mono" x="' + (x + w - 10) + '" y="' + (y + 20) + '" text-anchor="end">both sides at once</text>';
+    if (i < items.length - 1) s += '<line class="s-line" x1="230" y1="' + (y + h) + '" x2="230" y2="' + (y + h + gap - 1) + '" marker-end="url(#ar3)"/>';
+  });
+  document.getElementById('tickflow').innerHTML = s;
+})();
+
+/* step 4 scrubber */
+var range = document.getElementById('tick');
+function render(t) {
+  var d = TICKS[String(t)];
+  document.getElementById('tklabel').textContent = 'Tick ' + t + (t > 0 && t % 6 === 0 ? ' · phase end' : '');
+  var s = '<rect class="s-field" x="' + X0 + '" y="' + Y0 + '" width="' + (NC * CS) + '" height="' + (NR * CS) + '"/>' + gridLines();
+  d.b.subs.forEach(function (u) { s += block(u, 'b'); });
+  d.a.subs.forEach(function (u) { s += block(u, 'a'); });
+  document.getElementById('field').innerHTML = s;
+  var maxA = DATA.hpmax.a, maxB = DATA.hpmax.b, pa = 100 * d.a.hp / maxA, pb = 100 * d.b.hp / maxB;
+  document.getElementById('bars').innerHTML =
+    '<div class="bar"><span style="color:var(--a)">A</span><span class="tr"><span class="fl a" style="width:' + pa + '%"></span></span><span>' + Math.round(d.a.hp) + '/' + maxA + ' · ' + pa.toFixed(1) + '%</span></div>' +
+    '<div class="bar"><span style="color:var(--b)">B</span><span class="tr"><span class="fl b" style="width:' + pb + '%"></span></span><span>' + Math.round(d.b.hp) + '/' + maxB + ' · ' + pb.toFixed(1) + '%</span></div>';
+  var v = '', m = '', c = '';
+  d.ev.forEach(function (e) {
+    if (e[0] === 'v') v += '<li><span class="who-' + e[1].toLowerCase() + '">' + e[1] + '</span> volley at range ' + e[2] + ': pool ' + e[3] + ', net ' + e[4] + ' → ' + e[5] + ' × ' + e[6] + ' = ' + e[7] + ' Size</li>';
+    if (e[0] === 'm') m += '<li>pool <span class="who-a">A ' + e[1] + '</span> vs <span class="who-b">B ' + e[2] + '</span> · nets ' + e[3] + ' / ' + e[4] + ' · <span class="who-a">' + e[5] + '</span> / <span class="who-b">' + e[6] + '</span></li>';
+    if (e[0] === 'c') c += '<li><span class="who-' + e[1].toLowerCase() + '">' + e[1] + '</span> −' + e[3].toFixed(1) + ' troops (' + e[2] + ')</li>';
+  });
+  var out = '';
+  out += '<h3>Volleys</h3><ul>' + (v || '<li>none: no target 2 to 8 cells away</li>') + '</ul>';
+  out += '<h3>Melee exchanges</h3><ul>' + (m || '<li>none: lines not yet in contact</li>') + '</ul>';
+  out += '<h3>Casualties applied</h3><ul>' + (c || '<li>none this tick</li>') + '</ul>';
+  var sub = d.a.subs.concat(d.b.subs).filter(function (u) { return u[5] === 1; }).map(function (u) { return NAMES[u[0]]; });
+  var says = NOTES[t] || '';
+  if (d.a.routed) says = 'A’s Unit is routed. The loop exits at the top of tick 16 and the battle is graded.';
+  out += '<div class="says">' + esc(says) + '</div>';
+  document.getElementById('log').innerHTML = out;
+}
+var NOTES = {
+  0: 'Deployment: B’s spearmen face A’s heavy infantry across three empty rows.',
+  1: 'Both archer lines fire from range 6. B’s volley does 6 troops of damage to A; A’s does 3 to B.',
+  3: 'Front lines are two rows apart. Volleys continue; no melee yet.',
+  4: 'First contact. A’s heavy infantry rolls a 3-die pool against 19 and fails; it takes 19.6 troops and deals none.',
+  6: 'End of the first phase: stamina, discipline, morale and rout checks run. A’s heavy infantry is at 18% casualties and still standing.',
+  7: 'A’s pool in the main exchange is now 1, down from 3. The trace does not say why.',
+  10: 'A’s best volley of the battle: net 3.',
+  12: 'End of the second phase. A’s heavy infantry has lost 48% and its subunit routs.',
+  13: 'The routed subunit’s pool is 0, so it deals nothing, but it still takes casualties.',
+  14: 'A’s archers and cavalry start taking losses as the line collapses.'
+};
+function setTick(t) { t = Math.max(0, Math.min(15, t)); range.value = t; render(t); }
+range.addEventListener('input', function () { render(parseInt(range.value, 10)); });
+document.getElementById('prev').addEventListener('click', function () { setTick(parseInt(range.value, 10) - 1); });
+document.getElementById('next').addEventListener('click', function () { setTick(parseInt(range.value, 10) + 1); });
+render(4);
+
+/* step 7 chart: every point read from DATA */
+var LAST = 0;
+Object.keys(TICKS).forEach(function (k) { LAST = Math.max(LAST, +k); });
+function pct(side, tk) { return 100 * TICKS[String(tk)][side].hp / DATA.hpmax[side]; }
+function firstTick(test) { for (var i = 0; i <= LAST; i++) { if (test(TICKS[String(i)])) return i; } return -1; }
+(function () {
+  var x0 = 48, x1 = 440, y0 = 20, y1 = 250, dx = (x1 - x0) / LAST;
+  var X = function (t) { return x0 + t * dx; }, Y = function (p) { return y1 - (p - 50) / 50 * (y1 - y0); };
+  var s = '';
+  [50, 60, 70, 80, 90, 100].forEach(function (p) {
+    s += '<line class="s-grid" x1="' + x0 + '" y1="' + Y(p) + '" x2="' + x1 + '" y2="' + Y(p) + '"/><text class="s-mono" x="' + (x0 - 8) + '" y="' + (Y(p) + 4) + '" text-anchor="end">' + p + '%</text>';
+  });
+  for (var tt = 0; tt <= LAST; tt += 3) s += '<text class="s-mono" x="' + X(tt) + '" y="' + (y1 + 18) + '" text-anchor="middle">' + tt + '</text>';
+  s += '<text class="s-m" x="' + ((x0 + x1) / 2) + '" y="' + (y1 + 36) + '" text-anchor="middle">tick</text>';
+  [6, 12].forEach(function (t) {
+    if (t > LAST) return;
+    s += '<line x1="' + X(t) + '" y1="' + y0 + '" x2="' + X(t) + '" y2="' + y1 + '" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 4"/>';
+    s += '<text class="s-mono" x="' + (X(t) + 4) + '" y="' + (y0 + 10) + '">phase end</text>';
+  });
+  function path(side) { var d = ''; for (var i = 0; i <= LAST; i++) d += (i ? 'L' : 'M') + X(i).toFixed(1) + ',' + Y(pct(side, i)).toFixed(1) + ' '; return d; }
+  s += '<path class="s-bstroke" d="' + path('b') + '"/><path class="s-astroke" d="' + path('a') + '"/>';
+  var heavy = firstTick(function (d) { return d.a.subs[0][5] === 1; });
+  var whole = firstTick(function (d) { return d.a.routed; });
+  if (heavy >= 0) {
+    s += '<circle class="s-warn" cx="' + X(heavy) + '" cy="' + Y(pct('a', heavy)) + '" r="4.5"/>';
+    s += '<text class="s-m" x="' + (X(heavy) - 8) + '" y="' + (Y(pct('a', heavy)) - 10) + '" text-anchor="end">heavy infantry routs</text>';
+  }
+  if (whole >= 0) {
+    s += '<circle class="s-warn" cx="' + X(whole) + '" cy="' + Y(pct('a', whole)) + '" r="4.5"/>';
+    s += '<text class="s-m" x="' + (X(whole) - 8) + '" y="' + (Y(pct('a', whole)) + 22) + '" text-anchor="end">whole unit routs (A ' + pct('a', whole).toFixed(1) + '%)</text>';
+  }
+  s += '<text x="' + X(8) + '" y="' + (Y(pct('b', 8)) - 8) + '" fill="var(--b)" font-family="var(--font-mono)" font-size="11" font-weight="500">B</text>';
+  s += '<text x="' + X(8) + '" y="' + (Y(pct('a', 8)) + 18) + '" fill="var(--a)" font-family="var(--font-mono)" font-size="11" font-weight="500">A</text>';
+  document.getElementById('chart').innerHTML = s;
+})();
+
+/* step 7b band: the heavy infantry's casualty share at the two phase boundaries, read from DATA */
+(function () {
+  var start = TICKS['0'].a.subs[0][4];
+  var lossAt = function (t) { return 100 * (1 - TICKS[String(t)].a.subs[0][4] / start); };
+  var l6 = lossAt(6), l12 = lossAt(12);
+  var x0 = 30, x1 = 430, k = (x1 - x0) / 60, X = function (p) { return x0 + p * k; };
+  var s = '';
+  s += '<rect class="s-field" x="' + x0 + '" y="70" width="' + (x1 - x0) + '" height="36"/>';
+  s += '<rect class="s-band" x="' + X(15) + '" y="70" width="' + (X(30) - X(15)) + '" height="36"/>';
+  s += '<text class="s-t" x="' + ((X(15) + X(30)) / 2) + '" y="92" text-anchor="middle">break window</text>';
+  [0, 10, 20, 30, 40, 50, 60].forEach(function (p) { s += '<line x1="' + X(p) + '" y1="106" x2="' + X(p) + '" y2="112" stroke="var(--fg)" stroke-width="1"/><text class="s-mono" x="' + X(p) + '" y="126" text-anchor="middle">' + p + '%</text>'; });
+  s += '<text class="s-m" x="' + ((x0 + x1) / 2) + '" y="146" text-anchor="middle">casualties as a share of the subunit’s starting strength</text>';
+  s += '<line x1="' + X(50) + '" y1="62" x2="' + X(50) + '" y2="106" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="4 3"/>';
+  s += '<text class="s-mono" x="' + (X(50) + 4) + '" y="58">Size &lt; 50%: −1 morale</text>';
+  s += '<circle class="s-a" cx="' + X(l6) + '" cy="88" r="5"/><text class="s-mono" x="' + X(l6) + '" y="54" text-anchor="middle" style="fill:var(--a)">tick 6: ' + l6.toFixed(1) + '%</text><line x1="' + X(l6) + '" y1="58" x2="' + X(l6) + '" y2="80" stroke="var(--a)" stroke-width="1"/>';
+  s += '<circle class="s-warn" cx="' + X(l12) + '" cy="88" r="5"/><text class="s-mono" x="' + (X(l12) - 6) + '" y="30" text-anchor="end" style="fill:var(--warn)">tick 12: ' + l12.toFixed(1) + '%, routed</text><line x1="' + X(l12) + '" y1="34" x2="' + X(l12) + '" y2="80" stroke="var(--warn)" stroke-width="1"/>';
+  s += '<text class="s-m" x="' + ((x0 + x1) / 2) + '" y="176" text-anchor="middle">break-point drawn once per subunit, skewed later by discipline and morale</text>';
+  document.getElementById('band').innerHTML = s;
+})();
+</script>

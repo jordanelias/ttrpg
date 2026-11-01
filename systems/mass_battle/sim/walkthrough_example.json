@@ -1,0 +1,22 @@
+{
+  "_what": "The example battle behind the mass battle walkthrough page. Data, not code: every number in walkthrough.py lives here.",
+  "side_a": {
+    "strategy": "advance",
+    "subformations": [
+      {"name": "line", "troop_type": "heavy_infantry", "troops": 400},
+      {"name": "bows", "troop_type": "archers", "troops": 200},
+      {"name": "horse", "troop_type": "light_cavalry", "troops": 100}
+    ]
+  },
+  "side_b": {
+    "strategy": "defend",
+    "subformations": [
+      {"name": "line", "troop_type": "spearmen", "troops": 400},
+      {"name": "bows", "troop_type": "archers", "troops": 200}
+    ]
+  },
+  "morale_start": 5,
+  "max_turns": 18,
+  "page_seed": 3,
+  "sweep_seeds": [1, 2, 3, 4, 5, 6]
+}
