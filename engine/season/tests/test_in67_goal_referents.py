@@ -240,7 +240,11 @@ def test_in67_a_paired_kind_engages_only_where_every_row_emitting_it_does(monkey
     cells["einhir_restoration"] = {"fight": 1.0}
     monkeypatch.setattr(AFF, "ENGAGEMENT", cells)
     assert PQ.deed_doers(ledger, spec, "p_obs") == (), "one emitter engaging is not all of them"
+    # CP-T02-01 / HR-1: RE-PINNED -- `march`'s `Won`/`Lost` now emit `person.died` too (a `total`-arm death),
+    # so the rows emitting it are three and two engaging is still not all of them.
     cells["einhir_restoration"] = {"fight": 1.0, "accept": 1.0}
+    assert PQ.deed_doers(ledger, spec, "p_obs") == (), "two of three emitters engaging is not all of them"
+    cells["einhir_restoration"] = {"fight": 1.0, "accept": 1.0, "march": 1.0}
     assert PQ.deed_doers(ledger, spec, "p_obs") == ("p_k",), "all engage: the DOER, not the patient"
 
 

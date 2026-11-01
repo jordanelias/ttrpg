@@ -796,8 +796,8 @@ def test_the_realm_seed_twice_in_one_process_gives_one_hash_and_reaches_no_find(
     equal `content_hash()`. IT REACHES NO FIND, asserted rather than assumed: its inquiries do draw finding
     bands (so the entry is called), every call of the provider returned an EMPTY `Findings` (so "no trail"
     is told apart from a trail found and then lost before its deposit), and no finding deposits anything.
-    THE STATED REASON IS PINNED TOO: the realm gives no Record (`record.given` absent), which is why a
-    `research` there reaches no forged Record (`epistemic.trail_of`'s docstring points here). If that ever
+    THE STATED REASON IS PINNED TOO: the realm gives no FORGED Record (no `record.given` of a Record a
+    `record.forged` wrote; since CP-T02-01 it gives others), which is why a `research` there reaches no forged Record (`epistemic.trail_of`'s docstring points here). If that ever
     stops holding, the realm reaches the trail and is a candidate subject for the find's twice-identical
     test above."""
     seen = count_finds(monkeypatch)
@@ -808,7 +808,15 @@ def test_the_realm_seed_twice_in_one_process_gives_one_hash_and_reaches_no_find(
         return w
     a, b = realm(), realm()
     assert a.content_hash() == b.content_hash(), "build_realm(0) twice in one process gave two hashes"
-    assert not [e for e in a.log if e.kind == "record.given"], "the realm now gives a Record"
+    # ⚠ RE-PINNED at v10 CP-T02-01 (B10-09) TO THE REASON `epistemic.trail_of` GIVES, A FORGED Record handed on:
+    # this read `not [record.given]`, and the CP-T02-01 trajectory gives two Records in two seasons (a `text` and a
+    # `cover`, neither forged; `World.seat_holds` stubbed to `[]` reads none given). A forged Record given on is what
+    # lets a `research` by someone else reach the trail, so that is what is pinned.
+    acts = {x.id: x for x in a.acts}
+    forged = {c.subject for e in a.log if e.kind == "record.forged" for c in e.changes}
+    given = [acts[e.causes[0]].payload.get("subject") for e in a.log if e.kind == "record.given"]
+    assert forged, "the realm forged nothing: the pin below would hold vacuously"
+    assert not [r for r in given if r in forged], "the realm now gives a forged Record"
     finds = [e for e in a.log if e.kind == "finding.made" and FINDING_TERMS.get(e.degree)]
     assert finds, "the realm drew no finding band: the entry was never called"
     assert seen and not any(seen), f"the realm's provider calls uncovered items: {seen}"

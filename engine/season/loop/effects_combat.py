@@ -22,7 +22,9 @@ from ..data.verbs import VERB_TABLE, VOCATION_SOURCED, VOCATIONS
 from ..gaps import Unspecified
 from ..queries.person_q import held_against
 from ..queries.world_q import ancestry, holder_faction_of, home_of
-from ..state.gate import NO_CHANGE, Change, Subject, may_muster, seat_faction
+from ..state.gate import (
+    NO_CHANGE, Change, Subject, death_subjects, may_muster, own_kinds, seat_faction,
+)
 
 from .effects_migration import _relocate
 from .effects_shared import _debit, _operand, effect_for
@@ -45,8 +47,11 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     effect at IN-08 H3: the fold writes it on the act's observers AFTER the outcome, as its own
     gated write, so a wound the gate refuses scars nobody):
       * the CASCADE (`remove_person`'s closures). A consequence of the existence change, which IS
-        judged; F3 admits each closure as `destroy's cascade`; never reported, so never named. If
-        existence did not move the cascade did not run.
+        judged; F3 admits each closure as `destroy's cascade`. If existence did not move the cascade
+        did not run. ⚠ CP-T02-01: ONE PART OF IT IS NOW NAMED -- each SEAT `hold` the death closes,
+        as a `Subject.seat` earning `tenure.closed` and receipted under the Office's id
+        (`state/gate.py::death_subjects`), so the death names the seats it empties. The other edges
+        are still not named.
       * the dead person's own `person`-kind rung, popped by the same owner -- the same reasoning.
     THE NEW NO-OP THIS MAKES VISIBLE: a `Wounded` outcome under `scene_fraction` whose fraction
     rounds back to the body it started from (`max(1, body * left // full)` at `body == 1`, or a
@@ -176,7 +181,14 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         # -- and nothing else. A cascade that closed the edges and left the person standing would
         # be refused and put back.
         w.remove_person(who)
-    return Change((Subject.entity("persons", who, fields=("body",)),), perform)
+    # CP-T02-01 / HR-1: EVERY SUBJECT NAMES ITS KINDS. The person earns his band's own kinds
+    # (`own_kinds`: `body.changed` on `Wounded`), plus `person.died` where this write takes his body to
+    # 0; each seat his death empties earns `tenure.closed`, its receipt naming the Office
+    # (`death_subjects`). A band that does not declare a kind still does not emit it (`_fold`).
+    own = own_kinds(VERB_TABLE[a.verb].emits_at(res.degree))
+    if body == 0:
+        return Change(death_subjects(w, who, own, fields=("body",)), perform)
+    return Change((Subject.entity("persons", who, earns=own, fields=("body",)),), perform)
 
 
 @effect_for("march")
@@ -288,13 +300,22 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
             return NO_CHANGE
     morale_w = w.fixtures.get("field_morale_weight")
     grudge_w = w.fixtures.get("field_grudge_weight")
-    # The fold emits the kinds its subjects EARN, and a subject earning `None` earns nothing on its
-    # own (`loop/resolve.py`: an empty `earned` set means *every* declared kind, a non-empty one means
-    # *only* those). So the kinds are earned as a whole: with an army that moves, every subject earns
-    # `None` and the band publishes both its kind and the arrival; with nobody moving (`Lost`, or a
-    # `Won` whose army already stood there), the losers earn the band's own kind alone and no arrival
-    # is published.
-    loser_earns = None if movers else _band_kind(res.degree)
+    # The fold emits the kinds its subjects EARN (`loop/resolve.py`: an empty `earned` set means
+    # *every* declared kind, a non-empty one means *only* those). So the kinds are earned as a whole:
+    # with an army that moves, the band publishes both its kind and the arrival; with nobody moving
+    # (`Lost`, or a `Won` whose army already stood there), the losers earn the band's own kind alone and
+    # no arrival is published. Before CP-T02-01 every subject earned `None` beside a moving army.
+    # CP-T02-01 / HR-1: THE SAME RULE WITH EVERY SUBJECT'S KINDS NAMED. `Won` and `Lost` declare
+    # `person.died` and `tenure.closed` too, so a subject earning `None` (every declared kind) would
+    # publish a death on every fought field; and a dead loser naming `person.died` beside subjects
+    # earning `None` would silence the band's kind and the arrival (`_fold` keeps only named kinds once
+    # any is named). So a mover earns the band's own kinds (`own_kinds`: the band's kind and the
+    # arrival), a loser and a treasury the same beside a moving army and the band's kind alone when
+    # nobody moves -- the kinds `None` and `_band_kind` earned before -- and a loser the `total` arm
+    # kills earns `person.died` beside them, his seats `tenure.closed` (`death_subjects`).
+    own = own_kinds(VERB_TABLE["march"].emits_at(res.degree))
+    loser_earns = own if movers else (_band_kind(res.degree),)
+    dies = model == "total"
 
     def perform() -> None:
         _casualties()
@@ -335,10 +356,14 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # WHOLE, `move`'s reason (a `contain` leg is stored on its Person, so his digest carries the legs
     # and `travel_leg`).
     # v9 IN-52: each debited treasury is a subject by its `stores`, earning what the losers earn
-    # (`loser_earns`): `None` beside a moving army, the band's own kind when nobody moves.
-    return Change(tuple(Subject.entity("persons", pid, earns=loser_earns, fields=fields)
-                        for pid in touched)
-                  + tuple(Subject.entity("persons", pid) for pid in movers)
+    # (`loser_earns`): the band's own kinds beside a moving army, the band's kind alone when nobody
+    # moves.
+    losers_named = tuple(
+        s for pid in touched
+        for s in (death_subjects(w, pid, loser_earns, fields=fields) if dies
+                  else (Subject.entity("persons", pid, earns=loser_earns, fields=fields),)))
+    return Change(losers_named
+                  + tuple(Subject.entity("persons", pid, earns=own) for pid in movers)
                   + tuple(Subject.entity("rungs", rid, earns=loser_earns, fields=("stores",))
                           for rid in dict.fromkeys(rid for rid, _ in debits)), perform)
 

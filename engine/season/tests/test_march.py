@@ -312,7 +312,11 @@ def test_declared_is_no_change_and_unopposed_changes_only_with_claimants_in_the_
     change = eff(w, act, with_claimants)
     assert change is not G.NO_CHANGE
     assert [s.id for s in change.subjects] == attackers
-    assert all(s.ref[3] is None and s.earns is None for s in change.subjects), (
+    # CP-T02-01 / HR-1: RE-PINNED from `s.earns is None` -- a mover now NAMES the band's own kinds
+    # (every kind `Unopposed` declares; no death kind is among them), so a dead loser's `person.died`
+    # beside him cannot silence them.
+    assert all(s.ref[3] is None and s.kinds == ("field.unopposed", "army.arrived")
+               for s in change.subjects), (
         "a mover is named whole and earns every kind the band declares")
     # CONTROL, one change (the destination is where the army already stands): no journey, no change.
     home = _march_act("p_npc_033", "set_s_014", "off_npc_033")

@@ -395,9 +395,14 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # seasons move. Was e9f81463... / f145b1e4... (one, two seasons); events 9180 -> 9347, 27827 -> 27605. CONTROL, run in process on this tree:
 # `stance_polarity` swept back to `legacy` reads the old pair, the old `BASE_EVENTS` and the old `thread_read`-withheld arm exactly. A
 # GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED at v10 CP-T02-01 (B10-09), A BEHAVIOUR MOVE DECLARED: a death names the seats it empties (one `tenure.closed`
+# per death write, its receipts the Offices), so every witness's ledger gains a claim on each vacated seat and the act mix
+# moves; the BUILD is equal. Was 056584ed... / 71ac6881... (one, two seasons); events 9347 -> 9138, 27605 -> 27154. CONTROL,
+# run in process on this tree: `World.seat_holds` stubbed to `[]` (no seat named, the emission off) reads the old pair, the
+# old `BASE_EVENTS`, the old `give`- and `thread_read`-withheld arms exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 BASE_HASHES = {0: "3e31638ef6eec7082eafa9ff4db9bb2d",
-               1: "056584ed2e5c77fd02c0fcaee079f35c",
-               2: "71ac6881dc3949011fb55146700509d5"}
+               1: "b4aa3024e03c3410a92e0ad6f0a45c2a",
+               2: "8d535aabcfbdbdda34bb251b4a98ba2b"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -461,8 +466,9 @@ BASE_HASHES = {0: "3e31638ef6eec7082eafa9ff4db9bb2d",
 # RE-RECORDED at v10 SE-06 with `BASE_HASHES` (9378 -> 8913, 28665 -> 27020; `temperaments:` deleted in process reads the old pair).
 # RE-RECORDED at v10 CR-21 with `BASE_HASHES` (8913 -> 9180, 27020 -> 27827).
 # RE-RECORDED at v10 CR-16 with `BASE_HASHES` (9180 -> 9347, 27827 -> 27605; `stance_polarity` swept back to `legacy` reads the old pair).
-BASE_EVENTS = {1: (9347, "7c4519961255d9f7db80fe99ccad932018598b869fc22b60fbea19bdfc98779f"),
-               2: (27605, "4d84ed812ccf997c00e731c74e5e06b2ab5582241c25811deb6c086ee32841d0")}
+# RE-RECORDED at v10 CP-T02-01 with `BASE_HASHES` (9347 -> 9138, 27605 -> 27154; `World.seat_holds` stubbed to `[]` reads the old pair).
+BASE_EVENTS = {1: (9138, "058d0f609fe57ba0ced94a4fdaf1bbbf9468ff35131adb59316b792babc906c4"),
+               2: (27154, "7f692a79a176e2c5512474c0882cc9d8e3781f5f8d98e1a48e8c38f9c40b72de")}
 
 
 def _digest(w) -> tuple:
@@ -593,7 +599,9 @@ def test_the_give_withheld_arm_reproduces_the_one_season_pin():
 #: RE-RECORDED at v10 CR-21 with `BASE_HASHES`: 8918 / 0e529f09... -> 9185 / b82a1ea2... (the cell-value pass).
 #: RE-RECORDED at v10 CR-16 with `BASE_HASHES`: 9185 / b82a1ea2... -> 9350 / 714b9f7f... (`stance_polarity` `declared`; swept back to
 #: `legacy` in process reads the old value exactly).
-THREAD_READ_WITHHELD_EVENTS_1 = (9350, "714b9f7f5e198d4d4f11eddc81ce1818dc5222fddabe52ae271199de3866eff0")
+#: RE-RECORDED at v10 CP-T02-01 with `BASE_HASHES`: 9350 / 714b9f7f... -> 9137 / 6ba88aae... (a death names its seats;
+#: `World.seat_holds` stubbed to `[]` in process reads the old value exactly).
+THREAD_READ_WITHHELD_EVENTS_1 = (9137, "6ba88aaea2ebb611bdb55579b8aa1a56dcbcdfe5f640ec9fa0304e84c47dae5c")
 
 
 def test_the_thread_read_withheld_arm_is_pinned_and_differs_from_the_shipped_season():

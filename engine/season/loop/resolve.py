@@ -936,9 +936,10 @@ def _apply_write(self, w: "World", token: Token, a: Act, kind: str, fld: str, ef
     # fabricated-`person.died` class committed INSIDE the fix for it. Found by the
     # governance-slice adversarial pass. G4: a kind is earned by a subject that MOVED, which the
     # gate decides, not by one the effect listed.
+    # CP-T02-01 / HR-1: a subject may name several kinds (`Subject.kinds`): a dead loser earns his
+    # band's kind AND `person.died`, which one kind per subject could not say.
     for s, _r in got:
-        if s.earns:
-            earned.add(s.earns)
+        earned.update(s.kinds)
     # G1a -> G4. THE GATE MINTED THESE, INSIDE THE WRITE, FOR THE SUBJECTS THAT MOVED AND NO OTHER.
     # They were minted here, after `w.write` returned, for every id the effect REPORTED -- which is
     # how a no-op receipt (`before == after`) came to be issued by the gate and admitted by the log.

@@ -8033,9 +8033,14 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # `research` 21, `tell` 103 and `transfer` 45 unmoved. (The act store: `carry` executes 42 acts, `petition` 167 ->
     # 169.) The executions of `carry` are a reading of seeded trajectories -- the held petitions the corpus's own
     # `petition` acts filed -- and not a claim that the row's cell or its eligibility moved: neither is touched.
+    # ⚠⚠ v10 CP-T02-01 (B10-09), 20 -> 21: `oblige` JOINS, nothing leaves. A RE-RECORD WITH ITS REASON: a death now
+    # names the seats it empties (a `tenure.closed` receipted under each Office, deposited in every ledger through
+    # `chronicle`), so a seat a corpus death vacates becomes a referent its witnesses are asked about and a refill act
+    # forms on it -- the item's own reading ("the formations it causes land on `confer` and `oblige`"). CONTROL, run in
+    # process on this tree: `World.seat_holds` stubbed to `[]` (the emission off) reads the old set, without `oblige`.
     assert ever == {"accept", "carry", "challenge", "conceal", "create_record", "interview",
-                    "fight", "give", "issue", "move", "petition", "reconstruct", "release", "research",
-                    "speak", "surveil", "tell", "tend", "transfer", "utter"}, (
+                    "fight", "give", "issue", "move", "oblige", "petition", "reconstruct", "release",
+                    "research", "speak", "surveil", "tell", "tend", "transfer", "utter"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
         "must be re-measured rather than reused")
     # ⚠ `move` JOINED `transfer` HERE, AND IT IS THE SAME HOLE. Both are refused for want of an
@@ -9176,8 +9181,10 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # ⚠⚠ v10 REM-25 (B10-05): `carry`, `release` AND `speak` JOIN -- the `ever` and `by_sig` notes above (each executes in
     # some world now, none in all 143). Nothing leaves; `universal` is empty on both sides, so `varying` is `ever`
     # exactly (20). Control: the REM-24 tree (`f2381695`) reads none of the three among the 17.
+    # ⚠⚠ v10 CP-T02-01 (B10-09): `oblige` JOINS -- the `ever` note above (it executes in some world, not all 143), so
+    # `varying` is `ever` exactly (21). Control: `World.seat_holds` stubbed to `[]` reads the 20 without it.
     assert varying == {"accept", "carry", "challenge", "conceal", "create_record", "fight", "give",
-                       "interview", "issue", "move",
+                       "interview", "issue", "move", "oblige",
                        "petition", "reconstruct", "release", "research",
                        "speak", "surveil", "tell", "tend", "transfer", "utter"}, (
         sorted(varying))
@@ -9423,8 +9430,11 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # attempted-and-always-refused -> never attempted, the same sideways, declared move as `commit`'s and `argue`'s.
     # MEASURED by `corpus_run.run_case`, seed 0, the convene commit (`b8fd583b`) as control (the same script on both): the
     # never-attempted set there is the 21 without `dispatch`.
+    # ⚠⚠ v10 CP-T02-01 (B10-09): `oblige` LEAVES this set -- a death now names the seats it empties, so a seat a corpus
+    # death vacates is a referent its one operand binds, and it is attempted and executes (the `ever` note above).
+    # Control: `World.seat_holds` stubbed to `[]` reads `oblige` here again.
     assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish",
-                                              "destroy_record", "march", "oblige", "open_case",
+                                              "destroy_record", "march", "open_case",
                                               "determine", "migrate", "requisition",
                                               "forgive",
                                               "arrest", "pardon", "raze", "thread_read",
@@ -9439,11 +9449,10 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
         "referent (no kind filter applies) -- WHY no `questions_for` source ever supplies one in "
         "THIS corpus (`corpus_run`'s 143-case set) is unmeasured (`hole_register.yaml` H-175) -- "
         "march DOES get one naturally in `populated.run`/`build_realm(0)`, measured via "
-        "`harness/aperture.py`, a different corpus; `oblige` is an untyped row whose Candidate "
-        "never forms in this corpus at all (`give` left this set at plan position `14`). `H-71` "
-        "is CLOSED, so the governance five's reason is the corpus's offices, march's is the "
-        "unmeasured H-175 gap (scoped to this corpus only), and oblige's is that its one "
-        "operand, a seat, never has a referent to bind here")
+        "`harness/aperture.py`, a different corpus; `oblige` left this set at CP-T02-01 (a seat a "
+        "death vacates is now a referent; `give` left it at plan position `14`). `H-71` "
+        "is CLOSED, so the governance five's reason is the corpus's offices, and march's is the "
+        "unmeasured H-175 gap (scoped to this corpus only)")
 
 
 
@@ -10627,9 +10636,11 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # `research` 29 -> 35, `surveil` 262 -> 286, `tell` 362 -> 371, `utter` 423 -> 439, `reconstruct` 368 -> 382, `move`
     # 73 -> 80, `challenge` 159 -> 166, `conceal` 131 -> 135, `issue` 5 -> 7, `tend` 39 -> 41, `transfer` 74 -> 77,
     # `accept` 230 -> 227, `create_record` 621 -> 606; `fight` 9 unmoved.
+    # ⚠⚠ v10 CP-T02-01 (B10-09): `oblige` JOINS (20 -> 21), nothing leaves -- a death names the seats it empties, so a
+    # refill act forms on a seat a corpus death vacates; the reason and its control are at the corpus test's `ever` note.
     assert set(executed) == {"accept", "carry", "challenge", "conceal", "create_record", "interview",
                              "fight", "give", "issue",
-                             "move", "petition", "reconstruct", "release", "research",
+                             "move", "oblige", "petition", "reconstruct", "release", "research",
                              "speak", "surveil", "tell", "tend", "transfer", "utter"}, (
         f"the executed set is {sorted(executed)} -- 4 -> 6 was `W-C`'s measurement, 6 -> 10 is "
         "ED-FI-0009's, 10 -> 11 is `release`'s, 11 -> 12 is `H-71`'s, 12 -> 13 is the admission "
@@ -10644,7 +10655,8 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
         "is `14`'s (`give` in, see above), 17 -> 20 is IN-08's cells commit's (`challenge`, "
         "`accept`, `requisition` in, see above), 20 -> 21 is v9 IN-11's (`commit` in, see above), 21 -> 17 "
         "is v9 IN-57's (`commit`, `examine`, `requisition`, `restore` out, see above), 17 -> 16 is v9 "
-        "SC-01 step 12's (`speak` out, see above), and any further movement is a fresh one")
+        "SC-01 step 12's (`speak` out, see above), 20 -> 21 is v10 CP-T02-01's (`oblige` in, see above), "
+        "and any further movement is a fresh one")
     # ⚠ `dispatch` JOINED `work` UNDER `R8.1` FOR A DIFFERENT REASON, stated above the executed-set
     # assertion: its precondition needs a PERSON referent, and the question that used to supply
     # one in NPC-033 is now outranked (hash order, `H-54`) by a `seen` claim about a rung. It is
@@ -14870,7 +14882,11 @@ def test_we_emits_at_has_a_caller_and_the_band_selects_the_kind():
     seen = _we_bands()
     assert set(seen) == set(COMBAT_BANDS), sorted(seen)
     for band, got in seen.items():
-        declared = set(row.emits_at(band))
+        # CP-T02-01: RE-PINNED from `== declared`. `Felled` declares `tenure.closed` too, earned only by
+        # a seat the death empties (`state/gate.py::death_subjects`), and `tiny_world`'s `p_mid` holds
+        # none -- so the band's kinds less that one are emitted, exactly.
+        assert not P.tiny_world().seat_holds("p_mid"), "fixture: p_mid now holds a seat; re-derive"
+        declared = set(row.emits_at(band)) - {"tenure.closed"}
         assert set(got["kinds"]) == declared, (band, got["kinds"], sorted(declared))
         assert set(got["kinds"]) != union, (
             f"{band} emitted the flat union {sorted(union)} -- `emits_at` is not being consulted")

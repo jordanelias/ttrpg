@@ -2839,7 +2839,11 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # and the realm's act mix moves (seed 0, one season: 606 -> 597 kept, 607 -> 595 stripped; `test_go07_canonical_digest.py` records
     # the 597). The arms part by two acts (597 / 595). CONTROL: this world with `stance_polarity` swept back to `legacy` in process reads
     # (606, 607) under this same test's two seasons-of-one (the script on both arms).
-    assert (out["acts"], cout["acts"]) == (597, 595), (
+    # ⚠⚠ v10 CP-T02-01 (B10-09): (597, 595) -> (608, 608), A RE-RECORD WITH THE UNIT THAT MOVED IT: a death names the seats it
+    # empties (one `tenure.closed` per death write, receipted under the Offices), so every witness holds a claim on each vacated
+    # seat and the realm's act mix moves (seed 0, one season: 597 -> 608 kept, 595 -> 608 stripped; `test_go07_canonical_digest.py`
+    # records the 608). CONTROL: this world with `World.seat_holds` stubbed to `[]` (the emission off) in process reads (597, 595).
+    assert (out["acts"], cout["acts"]) == (608, 608), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")

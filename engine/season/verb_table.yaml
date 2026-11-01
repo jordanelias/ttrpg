@@ -766,8 +766,12 @@ verbs:
     # outcome that writes nothing has no other home. It is required because the act still
     # happened: it was attempted, witnessed, and cost a scene. Jordan, 2026-06-02: *an undecided
     # fight is a legitimate outcome.* An outcome nothing emits is an outcome nobody can witness.
+    # CP-T02-01 (H-230 limit 1): `Felled` gains `tenure.closed` beside `person.died` -- the death names
+    # each seat it empties, one `tenure.closed` earned by the seat `hold`s the cascade closes and
+    # receipted under the Office's id (`state/gate.py::death_subjects`), so it reaches every person
+    # through `chronicle` as a claim about the seat. A death emptying no seat earns none.
     emits:
-      Felled:      ["person.died"]
+      Felled:      ["person.died", "tenure.closed"]
       Wounded:     ["body.changed"]
       Untouched:   ["contest.undecided"]
     # ⚠ WAS `[]`. Under #358 rev.2 loader invariant 4 (widened, F7) every failable clause needs a
@@ -835,7 +839,7 @@ verbs:
       Wounded:      ["Person.body"]
       Untouched:    []
     emits:
-      Felled:      ["person.died"]
+      Felled:      ["person.died", "tenure.closed"]
       Wounded:     ["body.changed"]
       Untouched:   ["contest.undecided"]
     emits_on_refusal: ["accept.refused"]
@@ -904,10 +908,10 @@ verbs:
     writes_grade_note: "M4 (`ED-IN-0279` clause (a)), Jordan's ruling on the second open clause: a loss writes \"casualties only, decrease in morale, and a grudge token\" -- nothing else, and nothing on the WINNING side. `Won`/`Lost` here are the ATTACKER's own outcome (`seam/ladder.py::field_degree`), so `_eff_march` reads which SIDE actually lost from `resolution.result`'s `parties` and writes there -- the defenders on `Won`, the attacker's own claimants on `Lost` -- never the winner, on either band. `Declared` writes nothing: it is RESOLVE's own deferral fold (`loop/resolve.py::_contest`). ⚠ SINCE v9 IN-13 an unopposed march, which has no losing side to write on, writes the ARRIVAL (`writes_note`), as `Won` does beside its casualties. v9 IN-52: the ration debit on `Won`/`Lost` (`writes_provision_note`) is not a loss effect: both sides of a fought field eat (LF-2/LF-3, delegated-ruled, `_part5` section J.2), and the sentence above, nothing on the WINNING side, governs casualties, morale and the grudge token."
     emits:
       Declared:  ["march.declared"]
-      Won:       ["field.won", "army.arrived"]
-      Lost:      ["field.lost"]
+      Won:       ["field.won", "army.arrived", "person.died", "tenure.closed"]
+      Lost:      ["field.lost", "person.died", "tenure.closed"]
       Unopposed: ["field.unopposed", "army.arrived"]
-    emits_note: "v9 IN-13: `army.arrived` beside the band's kind on the two bands where the army arrives (#453 §9.6). ORDER IS READ: the band's own kind FIRST (`loop/effects_combat.py::_band_kind` takes `emits[band][0]` as the kind the losers earn when NOBODY MOVES, so a `Won` whose army already stood at the target publishes `field.won` and no arrival; with an army that moves, both kinds are published). A band whose army moves nobody and fells nobody declines to `march.refused`."
+    emits_note: "v9 IN-13: `army.arrived` beside the band's kind on the two bands where the army arrives (#453 §9.6). ORDER IS READ: the band's own kind FIRST (`loop/effects_combat.py::_band_kind` takes `emits[band][0]` as the kind the losers earn when NOBODY MOVES, so a `Won` whose army already stood at the target publishes `field.won` and no arrival; with an army that moves, both kinds are published). A band whose army moves nobody and fells nobody declines to `march.refused`. CP-T02-01 / HR-1 (H-152): `Won` and `Lost` -- the bands whose `field_casualty_model: total` arm calls `remove_person` -- declare `person.died` and `tenure.closed`, earned only by a loser that arm kills and by each seat his death empties (`state/gate.py::death_subjects`); every other subject names the band's own kinds (`own_kinds`), so a fought field with no death publishes exactly what it did before."
     emits_on_refusal: ["march.refused"]
     grade:       "ruled"
     source:      "M4 of the driver-retirement plan (`ED-IN-0279`), Jordan's ruling on both open clauses of that row (verb name: `march`; loss effects: casualties/morale/grudge). No `ARCHITECTURE_V2.md` cell -- this verb does not exist in the chain."

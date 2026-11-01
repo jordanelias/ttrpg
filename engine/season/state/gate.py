@@ -1446,6 +1446,14 @@ ENTITY = "entity"
 EDGE = "edge"
 STAGED = "staged"
 
+# CP-T02-01: THE TWO KINDS A DEATH EARNS PER SUBJECT -- the dead person's `person.died` and each emptied
+# seat's `tenure.closed` (`death_subjects`). Spelt once here, as `loop/effects_governance.py` spells the
+# kinds its subjects earn; the fold's derived roster (`data/verbs.py::EVENT_KINDS`) still refuses either
+# at emission if no column declares it.
+PERSON_DIED = "person.died"
+TENURE_CLOSED = "tenure.closed"
+DEATH_KINDS = (PERSON_DIED, TENURE_CLOSED)
+
 
 @dataclass(frozen=True, eq=False)
 class Subject:
@@ -1458,20 +1466,49 @@ class Subject:
     office must not publish a closure that did not happen.
 
     `eq=False`: a subject holding a Tenure compares by identity, as the Tenure store does (two
-    Tenures may share an `id`; `World._tenure_changes` says so)."""
+    Tenures may share an `id`; `World._tenure_changes` says so).
+
+    ⚠ CP-T02-01 / HR-1: `earns` MAY NAME SEVERAL KINDS (a tuple), AND THAT IS THE FORM HR-1's SENTINEL
+    TOOK. A non-empty `earned` set drops every declared kind no subject named (`loop/resolve.py::_fold`),
+    so once a death names its own kinds (`person.died`, and `tenure.closed` on each seat it empties,
+    `death_subjects`) every OTHER subject of the same write must name its kinds too, or a dead loser's
+    `person.died` silences `field.lost`, `field.won` and `army.arrived`. An "all kinds" sentinel cannot be
+    that name: a band declaring `person.died` would then publish a death on every write a sentinel
+    subject moved, dead or not. So every subject of a death-capable write names its kinds, and a dead
+    loser names two (`field.lost` and `person.died`), which one kind per subject cannot say.
+    [ASSUMPTION; medium; Jordan to correct; revert: the plan's "explicit all-kinds sentinel" form.]"""
 
     id: str
     ref: tuple
-    earns: Optional[str] = None
+    earns: Optional[str | tuple] = None
+
+    @property
+    def kinds(self) -> tuple:
+        """The kinds this subject earns if it moves, as a tuple: `()` for `None` (the plain-list
+        contract: it narrows nothing), one kind, or the several it names."""
+        if not self.earns:
+            return ()
+        return (self.earns,) if isinstance(self.earns, str) else tuple(self.earns)
 
     @classmethod
-    def entity(cls, store: str, eid: str, earns: Optional[str] = None,
+    def entity(cls, store: str, eid: str, earns: Optional[str | tuple] = None,
                fields: Optional[tuple] = None) -> "Subject":
         return cls(eid, (ENTITY, store, eid, tuple(fields) if fields else None), earns)
 
     @classmethod
-    def edge(cls, t: Tenure, earns: Optional[str] = None) -> "Subject":
+    def edge(cls, t: Tenure, earns: Optional[str | tuple] = None) -> "Subject":
         return cls(t.id, (EDGE, t), earns)
+
+    @classmethod
+    def seat(cls, t: Tenure) -> "Subject":
+        """CP-T02-01: A SEAT `hold` CLOSED BY A DEATH, read as an edge (it moved iff G3's observation
+        lists it, `edge`'s rule) and NAMED BY THE OFFICE IT WAS ON (`t.object`), not by the Tenure's
+        own id. THE CARRIER CHOICE: the receipt is what WITNESS deposits a claim about
+        (`epistemic.claim_subjects`), and a dead holder's `hold` leaves the owner-first store with him
+        (`World.tenures` iterates `persons`), so `_hold_tenure_ends` can no longer expand its id into
+        the seat. The Office id on the receipt is the seat itself: no Claim field, no Event field and
+        no world stamp is added. It earns `tenure.closed` alone."""
+        return cls(t.object, (EDGE, t), TENURE_CLOSED)
 
     @classmethod
     def staged(cls, record_kind: str, eid: str, fieldname: str) -> "Subject":
@@ -1516,6 +1553,29 @@ def _nothing() -> None:
 # effect ran and changed nothing" reach the fold through ONE channel and emit ONE refusal. Before G4
 # they were two (a falsy return, and -- for `work` -- nothing at all).
 NO_CHANGE = Change((), _nothing)
+
+
+def death_subjects(w: "World", who: str, earns, fields: Optional[tuple] = None) -> tuple:
+    """CP-T02-01: WHAT A DEATH WRITE NAMES, ONCE FOR ITS THREE WRITERS (`_eff_kill`, `_eff_march`'s
+    `total` arm, MATTER's `_die`): the dying person, earning `earns` plus `person.died`, and every
+    seat `hold` of his that the cascade will close (`World.seat_holds`), each a `Subject.seat` earning
+    `tenure.closed`. Named BEFORE the write, as every subject is (G4); `World.remove_person` closes
+    exactly these holds inside the same `apply()` and returns them. Only Office holds earn: Records,
+    Rungs and the other edges the cascade closes are not named (R4).
+
+    `earns` is the person's OWN kinds besides the death (a band's kinds, `own_kinds`), `None` or `()`
+    for none."""
+    own = (earns,) if isinstance(earns, str) else tuple(earns or ())
+    person = Subject.entity("persons", who, earns=tuple(dict.fromkeys(own + (PERSON_DIED,))),
+                            fields=fields)
+    return (person,) + tuple(Subject.seat(t) for t in w.seat_holds(who))
+
+
+def own_kinds(declared) -> tuple:
+    """A band's declared kinds less the two a death earns per subject (`DEATH_KINDS`): what a subject
+    that moved earns as the band's own outcome, so a band declaring `person.died` publishes it only
+    where `death_subjects` named a death (HR-1)."""
+    return tuple(k for k in declared if k not in DEATH_KINDS)
 
 
 def no_op(still: list, actor: Optional[str], record_kind: str, fieldname: str) -> NoOpReceipt:
