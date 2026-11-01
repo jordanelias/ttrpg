@@ -1,0 +1,172 @@
+{
+ "A_act_id": 3,
+ "A_events": {
+  "open": [
+   "case.opened"
+  ],
+  "determine": [
+   "matter.determined"
+  ],
+  "band": "Partial"
+ },
+ "A_disposal_edges_on_party": [
+  [
+   "oblige",
+   "p_mid",
+   "off_duke"
+  ]
+ ],
+ "A_judge_pursuits_moved": false,
+ "A_holders_of_determination_claim": {
+  "p_low": [
+   "told_by"
+  ],
+  "p_mid": [
+   "told_by"
+  ],
+  "p_high": [
+   "firsthand"
+  ],
+  "p_king": [
+   "told_by"
+  ],
+  "p_other": [
+   "told_by"
+  ]
+ },
+ "A_next_round_questions": {
+  "p_low": [
+   "claim_landed:p_high"
+  ],
+  "p_mid": [
+   "claim_landed:p_high",
+   "claim_landed:p_high",
+   "claim_landed:rec:oc"
+  ],
+  "p_high": [
+   "claim_landed:p_mid",
+   "claim_landed:p_mid",
+   "claim_landed:p_mid"
+  ],
+  "p_king": [],
+  "p_other": [
+   "claim_landed:p_high"
+  ]
+ },
+ "A_estimates_changed": {},
+ "A_second_determine_same_party": [
+  "determine.refused"
+ ],
+ "A_nonperson_matter": {
+  "open": [
+   "case.opened"
+  ],
+  "determine": [
+   "determine.refused"
+  ],
+  "docket": [
+   "S"
+  ]
+ },
+ "B_by_band": {
+  "Partial": {
+   "act_id": 3,
+   "kinds": [
+    "matter.determined"
+   ],
+   "judge_pursuits_moved": false,
+   "regard_and_legitimacy_changed": {
+    "p_low": [
+     [
+      0.0,
+      0.0
+     ],
+     [
+      0.010000000000000023,
+      0.020000000000000046
+     ]
+    ],
+    "p_mid": [
+     [
+      0.0,
+      0.0
+     ],
+     [
+      0.03300000000000003,
+      0.06600000000000006
+     ]
+    ],
+    "p_king": [
+     [
+      0.0,
+      0.0
+     ],
+     [
+      0.010000000000000023,
+      0.020000000000000046
+     ]
+    ],
+    "p_other": [
+     [
+      0.0,
+      0.0
+     ],
+     [
+      0.010000000000000023,
+      0.020000000000000046
+     ]
+    ]
+   }
+  },
+  "Success": {
+   "act_id": 8,
+   "kinds": [
+    "matter.determined",
+    "pursuit.moved"
+   ],
+   "judge_pursuits_moved": true,
+   "regard_and_legitimacy_changed": {
+    "p_low": [
+     [
+      0.0,
+      0.0
+     ],
+     [
+      0.010000000000000023,
+      0.020000000000000046
+     ]
+    ],
+    "p_mid": [
+     [
+      0.0,
+      0.0
+     ],
+     [
+      0.03300000000000003,
+      0.06600000000000006
+     ]
+    ],
+    "p_king": [
+     [
+      0.0,
+      0.0
+     ],
+     [
+      0.010000000000000023,
+      0.020000000000000046
+     ]
+    ],
+    "p_other": [
+     [
+      0.0,
+      0.0
+     ],
+     [
+      0.010000000000000023,
+      0.020000000000000046
+     ]
+    ]
+   }
+  }
+ }
+}
