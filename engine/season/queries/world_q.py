@@ -3826,9 +3826,9 @@ def practice(w: World, p: Person, verb: str) -> int:
     `[w.tick - practice_window, w.tick - 1]`.
 
     ⚠ IT RAISES THE ACTOR'S POOL ONLY. `_opposition_of` reads the held key and never `faculty`, so the Ob
-    against a practised person does not move. `practice_cap` 0 is the SHIPPED arm and answers 0 before the
-    log is read: the realm is byte-equal to the tree without this reader. A `practice_step` or
-    `practice_window` below 1 RAISES `Unspecified` (a zero step divides; a zero window is the shipped arm
+    against a practised person does not move. The arm SHIPS LIVE (CR-18: cap `pool_default`); `practice_cap` 0
+    is the control and answers 0 before the log is read: the realm is then byte-equal to the tree without this reader. A `practice_step` or
+    `practice_window` below 1 RAISES `Unspecified` (a zero step divides; a zero window is the arm off
     spelled differently, and `practice_cap` is that switch). The three fixtures are assumptions (`H-245`,
     `H-246`, `H-247`)."""
     fx = w.fixtures

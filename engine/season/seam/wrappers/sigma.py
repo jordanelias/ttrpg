@@ -135,8 +135,8 @@ def register_pool_addend(fn: Any) -> None:
 
 
 # THE PRACTICE ADDEND (CP-T01-02), `faculty`'s first reader of `w.log`: registered here, the one door into the
-# pool, and called from nowhere else. Its reader is `queries/world_q.py::practice`; `practice_cap` 0 ships, so
-# it answers 0 without reading the log and every pool is what it was before it was registered.
+# pool, and called from nowhere else. Its reader is `queries/world_q.py::practice`; the arm ships live (CR-18);
+# `practice_cap` 0 is the control and answers 0 without reading the log, every pool then what it was before it was registered.
 register_pool_addend(practice)
 
 

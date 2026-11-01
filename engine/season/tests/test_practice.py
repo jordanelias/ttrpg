@@ -12,7 +12,8 @@ THE CLAIMS, AND WHAT WOULD SHOW EACH WRONG:
     (3 // 2 = 1). Wrong if the pool ignores the window or the step, or exceeds `pool_default + practice_cap`.
   * THE OB AGAINST HIM DOES NOT MOVE: the person practised holds no key, so the opposition is `None` and the
     module composes `obstacle_default` (2.0) before and after. Wrong if practice reached `_opposition_of`.
-  * THE SHIPPED ARM IS OFF: `practice_cap` 0 reads `pool_default` for every pool whatever the log holds.
+  * THE ARM SHIPS LIVE (CR-18) AT `pool_default`; `practice_cap` 0 is the control and reads `pool_default` for
+    every pool whatever the log holds.
   * WHAT COUNTS: his own acts (another's do not), in the verb's KEY (`speak` shares `copying` with `tell`;
     `research` is `inquiry`), at Success or Overwhelming (Partial and Failure do not), in CLOSED seasons (an act
     of this tick does not: a pool must not depend on the order a barrier resolves its acts).
@@ -33,7 +34,7 @@ ACTOR = "p_a"          # NPC-088's Carin holds `copying`; the practised person b
 
 def _world():
     """NPC-088's realm at tick 0, a person holding no capability key, and the swept arm (window 4, step 2,
-    cap `pool_default`) installed on its fixtures."""
+    cap `pool_default`, the shipped values) installed on its fixtures."""
     w, _d = T9._npc088()
     who = next(pid for pid, p in sorted(w.persons.items()) if pid != ACTOR and not p.capability)
     w.tick = 10                                           # room behind the window; nothing below reads it
@@ -64,12 +65,15 @@ def _pool(w, who, verb="tell"):
     return sigma.faculty(w, w.persons[who], verb)
 
 
-def test_the_shipped_arm_is_off_and_reads_pool_default_whatever_the_log_holds():
+def test_the_arm_ships_live_at_pool_default_and_cap_0_is_the_control_reading_pool_default():
     w, who = _world()
     fx = w.fixtures
-    assert fx.get("practice_cap") == 0, "the arm ships off (CR-18 ships it live)"
+    assert (fx.get("practice_window"), fx.get("practice_step"), fx.get("practice_cap")) == (
+        4, 2, fx.get("pool_default")), "CR-18 ships the arm live: window 4, step 2, cap pool_default"
     for s in range(6, 10):
         _plant(w, who, "tell", s, "Success")
+    assert _pool(w, who) == fx.get("pool_default") + 2          # four good results at step 2: the shipped arm pays
+    _swept(w, cap=0)                                            # the control: the arm off, whatever the log holds
     assert _pool(w, who) == fx.get("pool_default")
 
 
@@ -166,6 +170,7 @@ def test_odds_of_reads_the_same_pool():
     act = Act(id="pr_odds", actor=who, verb="tell", payload={"to": ACTOR})
     for s in (6, 7, 8, 9, 9):
         _plant(w, who, "tell", s, "Success")
+    _swept(w, cap=0)                                         # the control: the shipped arm is live, so "off" is swept
     off = sigma.odds_of(w, act)
     _swept(w)
     on = sigma.odds_of(w, act)

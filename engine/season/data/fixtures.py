@@ -431,15 +431,17 @@ DEFAULT_FIXTURES = Fixtures(
     effort_level="moderate",           # `H-244`, swept minor / moderate (SHIPPED) / strong
     # CP-T01-02: THE PRACTICE ARM (`queries/world_q.py::practice`, a pool addend `faculty` sums). A person's pool in
     # a verb's key rises by the count of his own Success-or-better acts in it within the last `practice_window`
-    # closed seasons, divided by `practice_step` (floor), capped at `practice_cap` dice. `practice_cap` 0 is SHIPPED:
-    # the arm is off and the realm is byte-equal to the tree without it. The swept arm (window 4, step 2, cap
-    # `pool_default`) is v10 CR-18's to ship live; the three numbers are no document's.
+    # closed seasons, divided by `practice_step` (floor), capped at `practice_cap` dice. THE ARM SHIPS LIVE (v10 CR-18,
+    # window 4, step 2, cap `pool_default` = 2): a delegated choice at CLAUDE.md §0's ladder step 5, a capped positive
+    # loop (success -> dice -> success) and not a gain; the window damps it and the cap bounds it. `practice_cap` 0 is
+    # the control: the arm off, the realm byte-equal to the tree without it. The three numbers are no document's.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `practice_cap` 0]
     # [JUSTIFIED: engine/season/hole_register.yaml H-245 -- `site: Fixtures practice_window`, graded `assumption`; how long a good result keeps a person better is no document's, so it is injected and swept 2 / 4 / 8]
     practice_window=4,                 # `H-245`, swept 2 / 4 / 8 (seasons; read only when `practice_cap` > 0)
     # [JUSTIFIED: engine/season/hole_register.yaml H-246 -- `site: Fixtures practice_step`, graded `assumption`; how many good results buy one die is no document's, so it is injected and swept 1 / 2 / 4]
     practice_step=2,                   # `H-246`, swept 1 / 2 / 4 (good results per die)
-    # [JUSTIFIED: engine/season/hole_register.yaml H-247 -- `site: Fixtures practice_cap`, graded `assumption`; the most dice practice can add is no document's, so it is injected and swept 0 (SHIPPED, the arm off) / 1 / pool_default]
-    practice_cap=0,                    # `H-247`, swept 0 (SHIPPED, off) / 1 / pool_default
+    # [JUSTIFIED: engine/season/hole_register.yaml H-247 -- `site: Fixtures practice_cap`, graded `assumption`; the most dice practice can add is no document's, so it is injected and swept 0 (the control, the arm off) / 1 / 2 (SHIPPED, = pool_default)]
+    practice_cap=2,                    # `H-247`, swept 0 (control, off) / 1 / 2 (SHIPPED, = pool_default)
     # v9 SC-02 `22a` (proceedings `19_PLAN.md` steps 17 and 18): THE ROOM'S TWO MAGNITUDES, carried raw by
     # `seam/wrappers/sigma.py::contest_input` and composed by `modules/social_contest/roll.py::obstacle`
     # (`room = reception_gain x reception + proof_step x proofs`, subtracted, floored at `OB_MIN`, under
