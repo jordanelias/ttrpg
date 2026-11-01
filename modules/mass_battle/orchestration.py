@@ -2273,7 +2273,9 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         if t % TICKS_PER_PHASE == 0:
             current_phase += 1
             phase_boundary(unit_a, unit_b, current_phase)
-        # No two bodies interpenetrate at the end of any tick, whatever step last wrote a position.
+        # A cell with enemies on it turns toward them (per cell, rate-limited); then no two bodies interpenetrate at the
+        # end of any tick, whatever step last wrote a position.
+        turn_to_face_aggressors(unit_a, unit_b)
         separate_all_bodies(unit_a, unit_b)
         if tracing_on():
             trace_event('positions', t=t, a=_unit_snapshot(unit_a), b=_unit_snapshot(unit_b))

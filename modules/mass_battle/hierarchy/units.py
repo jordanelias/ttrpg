@@ -116,7 +116,7 @@ def unit_lures(unit):
 __all__ = ['Subunit', 'Unit', 'Order', 'Officer', 'clamp_command', 'MB_ENVELOP_PATH', 'MB_SWEEP', 'FIELD_MOVEMENT', 'FIELD_CONTACT', 'CONTACT_REACH', 'COL_WIDTH',
            'MB_FACING_MODEL', 'MB_FACING_ATTENTION', 'MB_FACING_SLEW_BASE', 'MB_FACING_FOV_GATE', 'MB_FACING_ROUT',
            'MB_ROLE_INSTRUCTIONS', 'ROLE_INSTRUCTION_PRIMITIVES', 'unit_lures',
-           'CELL_RADIUS', 'standoff_from_reach', 'standoff', 'MB_REACH_FACING_GATE', 'resolve_toi_and_commit', 'separate_all_bodies']
+           'CELL_RADIUS', 'standoff_from_reach', 'standoff', 'MB_REACH_FACING_GATE', 'resolve_toi_and_commit', 'separate_all_bodies', 'turn_to_face_aggressors']
 
 # [Stage A — true-adjacency halt] Per-cell physical-body radius, distinct from core.contact._cell_radius
 # (a whole-FORMATION bounding radius used by the FIELD_CONTACT centroid bound). Grounded the same way
@@ -2574,6 +2574,54 @@ def separate_all_bodies(unit_a, unit_b):
             atom._node_pos[cid] = (min(BATTLEFIELD_SIZE - 1, max(0, p[0])), min(BATTLEFIELD_SIZE - 1, max(0, p[1])))
             moved += 1
     return moved
+
+
+_FACE_BALANCE_TOL = 0.1  # [canonical: ED-MB-0081 -- an ASSUMPTION of this module, not canon; Jordan to correct: aggressors whose centroid lies within a tenth of a pitch of the cell are balanced (one each side), so it holds its facing]
+
+
+def turn_to_face_aggressors(unit_a, unit_b):
+    """Per-cell facing under attack. Every cell with enemy cells within OCTAGON_LOCAL_REACH (the same local set the
+    octagon zone is judged against) turns toward the centroid of those cells, at most _slew_facing's disciplined rate
+    per tick. A cell caught between enemies on opposite sides has a centroid on top of itself and keeps its facing; a
+    cell whose aggressors lie in its rear blind arc does not see them and does not turn (MB_FACING_FOV_GATE, the same
+    arc `_octagon_cell_mods` uses). Routed bodies are left alone (MB_FACING_ROUT owns theirs). It writes
+    cell_facing_vec for held cells and `hold` stances too, which `_node_advance` never reaches: a cell in contact is
+    halted, and a body on hold returns before it commits anything. Run once at the end of a tick, so the damage step
+    reads the facing the cell had turned to by the tick before. Only on the field path. Returns the number turned."""
+    if not (FIELD_MOVEMENT and MB_NODE_COHESION and MB_FACING_MODEL and MB_FACING_ATTENTION):
+        return 0
+    items = []
+    for side, u in ((0, unit_a), (1, unit_b)):
+        for atom in u.subunits:
+            if not hasattr(atom, '_node_pos') or getattr(atom, 'routed', False):
+                continue
+            ids = [(o_r, o_c) for o_r, o_c, _x, _y in _oriented(atom)]
+            for cid, (r, c) in zip(ids, atom.cells_float()):
+                items.append((atom, cid, side, (float(r), float(c))))
+    pos = [it[3] for it in items]
+    near = {}
+    for i, j in _pairs_within(pos, OCTAGON_LOCAL_REACH):
+        if items[i][2] != items[j][2]:
+            near.setdefault(i, []).append(j)
+            near.setdefault(j, []).append(i)
+    turned = 0
+    for i in sorted(near):
+        atom, cid, _side, p = items[i]
+        js = near[i]
+        dr = sum(pos[j][0] for j in js) / len(js) - p[0]
+        dc = sum(pos[j][1] for j in js) / len(js) - p[1]
+        if math.hypot(dr, dc) < _FACE_BALANCE_TOL:
+            continue
+        cur = atom.cell_facing_vec.get(cid, (atom.advance_dir, 0))
+        if MB_FACING_FOV_GATE:
+            seen = math.degrees(abs(math.atan2(cur[0] * dc - cur[1] * dr, cur[0] * dr + cur[1] * dc)))
+            if seen > FOV_HALF_DEG:
+                continue
+        new = _slew_facing(cur, (dr, dc), atom.eff_discipline)
+        if new != cur:
+            atom.cell_facing_vec[cid] = new
+            turned += 1
+    return turned
 
 
 def resolve_toi_and_commit(all_atoms_a, all_atoms_b):
