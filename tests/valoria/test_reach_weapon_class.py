@@ -5,7 +5,7 @@ carried with the ruled per-troop-type front-face reach: non-pole melee 0.1, pole
 cavalry/knights lance 0.2, ranged = projectile band + 0.1 melee sidearm. It also authors a `pike`
 troop type (stats mirror heavy_infantry so reach 0.3 is the sole differentiator; pike weapon + roles).
 
-The reach values feed geometry.obb_front_reach_overlap (contact, Stage B) and resolve_toi_and_commit
+The reach values feed geometry.reach_reaches (contact) and resolve_toi_and_commit
 (the TOI halt, Stage C). Two measured facts this file pins:
 
   * The reach ADVANTAGE emerges through the already-wired charge-recoil reach gate

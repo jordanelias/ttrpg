@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from modules.mass_battle.config import *
 from modules.mass_battle.troop_types.registry import support_weight
 
-__all__ = ['arrowhead_cells', 'line_cells', 'gapped_line_cells', 'column_cells', 'CELL_PATTERN_FN', 'footprint_for', 'oriented_pattern', 'cell_facing', 'octagon_angle', '_support_along_vector', 'atom_max_width', 'cells_to_orig_coords', '_oriented_abs_map', 'support_engage_frac', 'cell_speed', '_oriented', 'CellBox', 'cellbox_from', 'obb_overlap', 'obb_front_reach_overlap', '_normalize_heading', '_rotate90', '_cellbox_axes', '_cellbox_corners', '_sat_separated', 'engaged_frontage', '_project_interval', '_merge_intervals', '_interval_union_length']
+__all__ = ['arrowhead_cells', 'line_cells', 'gapped_line_cells', 'column_cells', 'CELL_PATTERN_FN', 'footprint_for', 'oriented_pattern', 'cell_facing', 'octagon_angle', '_support_along_vector', 'atom_max_width', 'cells_to_orig_coords', '_oriented_abs_map', 'support_engage_frac', 'cell_speed', '_oriented', 'CELL_RADIUS', 'CellBody', 'cellbody_from', 'body_depth', 'body_overlap', 'reach_reaches', '_normalize_heading', '_rotate90', 'engaged_frontage', '_project_interval', '_merge_intervals', '_interval_union_length']
 
 def arrowhead_cells(tier):
     cells = []
@@ -358,14 +358,27 @@ def _oriented(su):
     return oriented_pattern(su.shape, su.tier, su.advance_dir)
 
 
-# ─── OBB (ORIENTED BOUNDING BOX) CELL PRIMITIVE ──────────────────────────────
-# [spatial-model upgrade, circle->box foundation] Pure, deterministic geometry.
-# NOTHING calls this yet -- zero behaviour change to any existing code path.
-# Lattice conventions this matches (see hierarchy/units.py): COL_WIDTH = 1.0
-# (pitch), CELL_RADIUS = 0.5 (half pitch) -> a body-only CellBox (w=d=1.0,
-# reach_front=0) has the same footprint diameter as the legacy circle model.
-# Facing is the raw movement vector (dr, dc), not snapped -- see cell_facing/
-# octagon_angle above. Positions and extents are floats throughout.
+# ─── CELL BODY: A CIRCLE OF DIAMETER ONE LATTICE PITCH ─────────────────────────────────────────────────────
+# Jordan, 2026-11-01: "troops have geometry. they cannot overlap." and, on the shape, "it has to be octagon due
+# to the facing ... or circle ... you can do circle".
+#
+# THE BODY IS A CIRCLE of radius CELL_RADIUS (0.5), so its diameter is the formation pitch (COL_WIDTH = 1.0).
+# It is the one shape for which two cells at the formation's OWN spacing cannot overlap at ANY relative rotation:
+# a cell turning to face an enemy can never push its body into a neighbour's. Measured (systems/mass_battle/sim/
+# stress.py, then a direct SAT of two bodies one pitch apart, the second turned by theta): a unit square turned to
+# its own facing overlapped its neighbour by 0.079 at 10 degrees, 0.153 at 22.5 and 0.207 at 45; a regular
+# octagon of the same apothem still by up to 0.041; a circle by none. The unit square this replaces (CellBox) was
+# the cause of overlap inside every wheeling formation, which no tolerance could fix without freezing it.
+#
+# FACING IS NOT THE BODY'S SHAPE. The octagon is the partition of the directions a cell is struck FROM
+# (`octagon_angle`: front under 45 degrees, flank 45 to 90, rear beyond), turned with the cell's facing vector;
+# it needs no octagonal footprint. Facing also gives weapon reach its direction: reach extends the body's FRONT
+# only (the body swept forward along its heading), never its back or sides.
+#
+# Lattice conventions (hierarchy/units.py): COL_WIDTH = 1.0 (pitch), so CELL_RADIUS = 0.5 is half the pitch and
+# the body has the footprint diameter of the legacy circle model. Positions and extents are floats throughout.
+
+CELL_RADIUS = 0.5
 
 def _normalize_heading(heading):
     """Unit-length (dr, dc). Zero (or near-zero) vector guards to the default
@@ -388,23 +401,15 @@ def _rotate90(v):
     return (-v[1], v[0])
 
 
+
 @dataclass(frozen=True)
-class CellBox:
-    """Oriented bounding box for one cell. cr,cc = centre (row, col). w = full
-    width across the frontage axis (perpendicular to facing); d = full depth
-    along the facing axis (front-to-back); standard w=d=1.0 (matches the
-    legacy CELL_RADIUS=0.5 circle's footprint). heading = raw (dr, dc) facing
-    vector, normalized to unit length in __post_init__ (zero vector -> the
-    default (-1.0, 0.0) "up-field" heading -- see _normalize_heading).
-    reach_front >= 0 extends the FRONT face only (weapon reach); the back and
-    side faces are unaffected, so a box with reach_front > 0 is asymmetric
-    front-to-back. Half-extents: d/2 back, d/2 + reach_front front, w/2 each
-    side. Local axes: depth axis = heading; width axis = heading rotated 90
-    degrees (_rotate90)."""
+class CellBody:
+    """One cell's body: centre (cr, cc), the unit heading it faces (a zero vector -> the default (-1.0, 0.0)
+    "up-field" heading, see _normalize_heading) and its weapon reach. The body is the circle of radius
+    CELL_RADIUS about the centre. reach_front >= 0 extends it forward along `heading` only: the reach body is
+    the circle swept along the segment from the centre to centre + reach_front * heading."""
     cr: float
     cc: float
-    w: float = 1.0
-    d: float = 1.0
     heading: tuple = (-1.0, 0.0)
     reach_front: float = 0.0
 
@@ -412,102 +417,48 @@ class CellBox:
         object.__setattr__(self, 'heading', _normalize_heading(self.heading))
 
 
-def cellbox_from(cr, cc, heading, w=1.0, d=1.0, reach_front=0.0):
-    """Convenience constructor mirroring CellBox's fields in a call-site-friendly
-    positional order (heading before the sizing kwargs)."""
-    return CellBox(cr=cr, cc=cc, w=w, d=d, heading=heading, reach_front=reach_front)
+def cellbody_from(cr, cc, heading, reach_front=0.0):
+    """Call-site-friendly constructor for CellBody (heading before reach)."""
+    return CellBody(cr=cr, cc=cc, heading=heading, reach_front=reach_front)
 
 
-def _cellbox_axes(box):
-    """The box's 2 local unit axes (depth, width) as (dr, dc) tuples -- the
-    SAT candidate separating axes contributed by this box."""
-    dr, dc = box.heading
-    return [(dr, dc), _rotate90((dr, dc))]
+def _dist_point_to_segment(pr, pc, ar, ac, br, bc):
+    """Distance from point (pr, pc) to the segment (ar, ac)-(br, bc); a zero-length segment is its point."""
+    sr, sc = br - ar, bc - ac
+    len2 = sr * sr + sc * sc
+    t = 0.0 if len2 <= 0.0 else max(0.0, min(1.0, ((pr - ar) * sr + (pc - ac) * sc) / len2))
+    return math.hypot(pr - (ar + t * sr), pc - (ac + t * sc))
 
 
-def _cellbox_corners(box, use_reach):
-    """World-space (r, c) corners of the box's rectangle. use_reach=False is
-    the pure body (front half-extent = d/2, symmetric with the back); use_reach
-    =True extends the front half-extent by reach_front (back/sides unchanged)
-    -- this is what makes reach directional: it only pushes the FRONT corners
-    forward along heading, never the back corners."""
-    dr, dc = box.heading
-    wr, wc = _rotate90((dr, dc))
-    half_back = box.d / 2.0
-    half_front = box.d / 2.0 + (box.reach_front if use_reach else 0.0)
-    half_w = box.w / 2.0
-    return [
-        (box.cr - half_back * dr + half_w * wr, box.cc - half_back * dc + half_w * wc),
-        (box.cr - half_back * dr - half_w * wr, box.cc - half_back * dc - half_w * wc),
-        (box.cr + half_front * dr + half_w * wr, box.cc + half_front * dc + half_w * wc),
-        (box.cr + half_front * dr - half_w * wr, box.cc + half_front * dc - half_w * wc),
-    ]
+def body_depth(a, b):
+    """How far two bodies interpenetrate along the line of their centres: 2*CELL_RADIUS minus the distance
+    between the centres, floored at 0.0. Bodies one pitch apart (tangent) have depth 0.0."""
+    return max(0.0, 2.0 * CELL_RADIUS - math.hypot(a.cr - b.cr, a.cc - b.cc))
 
 
-def _sat_separated(corners_a, corners_b, axis):
-    """True iff `axis` is a separating axis for the two corner sets (SAT):
-    their projections onto `axis` touch-or-don't-overlap. Strict overlap only
-    -- touching exactly (interval boundaries equal) counts as separated, so
-    two unit boxes at centre-distance exactly 1.0 do NOT overlap (documented
-    boundary; matches the legacy circle test's strict `<`)."""
-    ar, ac = axis
-    proj_a = [p[0] * ar + p[1] * ac for p in corners_a]
-    proj_b = [p[0] * ar + p[1] * ac for p in corners_b]
-    min_a, max_a = min(proj_a), max(proj_a)
-    min_b, max_b = min(proj_b), max(proj_b)
-    return max_a <= min_b or max_b <= min_a
+def body_overlap(a, b):
+    """True iff the two bodies strictly interpenetrate: centres closer than one pitch (2*CELL_RADIUS).
+    Touching exactly (centres one pitch apart) is separated, so a lattice at pitch 1.0 does not overlap.
+    Symmetric, rotation-invariant (heading plays no part), translation-invariant. `reach_front` is ignored
+    (use reach_reaches for the reach-aware engagement test)."""
+    return body_depth(a, b) > 0.0
 
 
-def _sat_overlap(corners_a, axes_a, corners_b, axes_b):
-    """Core SAT test over two corner sets and their combined candidate axes
-    (2 per box == 4 total for two rectangles -- sufficient since each box is
-    a rectangle, even the front-reach-extended asymmetric one: it is still a
-    quadrilateral with two pairs of parallel faces, so its face normals are
-    still exactly its depth/width axes). Overlap iff NO candidate axis
-    separates the two corner sets."""
-    for axis in axes_a:
-        if _sat_separated(corners_a, corners_b, axis):
-            return False
-    for axis in axes_b:
-        if _sat_separated(corners_a, corners_b, axis):
-            return False
-    return True
+def _reach_body_overlap(a, b):
+    """True iff a's reach body (its circle swept forward by a.reach_front along a.heading) strictly meets b's
+    plain body."""
+    ar, ac = a.cr + a.reach_front * a.heading[0], a.cc + a.reach_front * a.heading[1]
+    return _dist_point_to_segment(b.cr, b.cc, a.cr, a.cc, ar, ac) < 2.0 * CELL_RADIUS
 
 
-def obb_overlap(a, b):
-    """Pure body-vs-body OBB overlap (Separating Axis Theorem, 2D): project
-    both boxes onto each box's 2 local axes (depth, width) -- 4 candidate
-    separating axes total -- and overlap iff none of them separates the
-    boxes. `reach_front` is ignored on both sides (ADR: use
-    obb_front_reach_overlap for the reach-aware engagement test). Symmetric
-    (obb_overlap(a,b) == obb_overlap(b,a)), translation-invariant, and
-    rotation-consistent by construction (SAT is a geometric fact about the
-    two shapes, independent of which box's axes are listed first)."""
-    corners_a = _cellbox_corners(a, use_reach=False)
-    corners_b = _cellbox_corners(b, use_reach=False)
-    return _sat_overlap(corners_a, _cellbox_axes(a), corners_b, _cellbox_axes(b))
-
-
-def obb_front_reach_overlap(a, b):
-    """Reach-aware engagement test: True iff EITHER box's reach-extended body
-    meets the OTHER box's plain body -- a's reach reaching b's body, OR b's
-    reach reaching a's body (a longer weapon reaches first; contact fires if
-    either side can reach the other). Reach is directional: `reach_front`
-    only extends a box's FRONT face along ITS OWN heading (see
-    _cellbox_corners), so a target directly ahead of a reaching box can be
-    engaged within reach_front even with no body overlap, while the identical
-    target placed directly BEHIND that box at the same distance is not
-    (reach never extends the back face). reach_front=0 on both sides makes
-    both extended corner sets identical to the plain-body corner sets, so
-    this collapses exactly to obb_overlap(a, b). Symmetric by construction
-    (both directions are checked explicitly)."""
-    a_ext = _cellbox_corners(a, use_reach=True)
-    b_body = _cellbox_corners(b, use_reach=False)
-    if _sat_overlap(a_ext, _cellbox_axes(a), b_body, _cellbox_axes(b)):
-        return True
-    b_ext = _cellbox_corners(b, use_reach=True)
-    a_body = _cellbox_corners(a, use_reach=False)
-    return _sat_overlap(b_ext, _cellbox_axes(b), a_body, _cellbox_axes(a))
+def reach_reaches(a, b):
+    """Reach-aware engagement test: True iff EITHER body's reach body meets the OTHER's plain body: a's weapon
+    reaching b's body, or b's reaching a's (a longer weapon reaches first; contact fires if either side can
+    reach the other). Reach is directional: it extends a body's FRONT along its own heading only, so a target
+    directly ahead of a reaching body can be engaged within reach_front of touching with no body overlap,
+    while the same target placed directly BEHIND it at the same distance cannot. reach_front = 0 on both
+    sides collapses this exactly to body_overlap(a, b). Symmetric (both directions are checked explicitly)."""
+    return _reach_body_overlap(a, b) or _reach_body_overlap(b, a)
 
 
 # ─── CONTINUOUS ENGAGED FRONTAGE (v2 Stage D — the last live integer removed) ──
@@ -523,10 +474,10 @@ def obb_front_reach_overlap(a, b):
 # limit is recovered; the gauge shift comes only from offset/partial/rotated
 # meetings that integer snapping used to round to a whole file.
 
-def _project_interval(corners, axis):
-    """[Stage D] Min/max scalar projection of a corner set onto a (unit) axis."""
-    ps = [p[0] * axis[0] + p[1] * axis[1] for p in corners]
-    return (min(ps), max(ps))
+def _project_interval(body, axis):
+    """[Stage D] The (lo, hi) scalar projection of a body (a circle of radius CELL_RADIUS) onto a unit axis."""
+    p = body.cr * axis[0] + body.cc * axis[1]
+    return (p - CELL_RADIUS, p + CELL_RADIUS)
 
 
 def _merge_intervals(intervals):
@@ -551,7 +502,7 @@ def _interval_union_length(intervals):
     return sum(hi - lo for lo, hi in _merge_intervals(intervals))
 
 
-def engaged_frontage(a_boxes, b_boxes, heading):
+def engaged_frontage(a_bodies, b_bodies, heading):
     """[Stage D] Continuous engaged frontage WIDTH of side A (the `a_boxes` side).
 
     A's frontage axis is perpendicular to `heading` (A's representative facing).
@@ -565,18 +516,18 @@ def engaged_frontage(a_boxes, b_boxes, heading):
       * frontage-capped: can never exceed the enemy's covered span (the Lanchester
         linear-law guarantee -- numerical superiority is a linear edge via overlap,
         never square).
-    `a_boxes`/`b_boxes` are the ENGAGED cell boxes (those whose reach-box met an
+    `a_bodies`/`b_bodies` are the ENGAGED cell bodies (those whose reach body met an
     enemy body); empty on either side -> 0.0."""
-    if not a_boxes or not b_boxes:
+    if not a_bodies or not b_bodies:
         return 0.0
     axis = _rotate90(_normalize_heading(heading))
     b_ivals = _merge_intervals(
-        [_project_interval(_cellbox_corners(b, use_reach=False), axis) for b in b_boxes])
+        [_project_interval(b, axis) for b in b_bodies])
     if not b_ivals:
         return 0.0
     pieces = []
-    for a in a_boxes:
-        a_lo, a_hi = _project_interval(_cellbox_corners(a, use_reach=False), axis)
+    for a in a_bodies:
+        a_lo, a_hi = _project_interval(a, axis)
         for b_lo, b_hi in b_ivals:
             lo = max(a_lo, b_lo)
             hi = min(a_hi, b_hi)

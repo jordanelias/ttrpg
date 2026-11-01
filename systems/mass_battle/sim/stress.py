@@ -8,8 +8,8 @@ does; no season world is involved. Every tunable number is in the JSON; this fil
 
 WHAT IT MEASURES, per battle, from end-of-tick snapshots (`walkthrough._Recorder`: every node's float position,
 facing and troops, plus the post-movement contact set):
-  overlap   body-box interpenetration by the engine's own `obb_overlap` test, with penetration depth (the metric
-            ED-MB-0060 requires; a raw boolean over-counts), split into same subunit / same side other subunit /
+  overlap   body interpenetration by the engine's own `body_depth` (bodies are circles one pitch across), with penetration
+            depth (the metric ED-MB-0060 requires; a raw boolean over-counts), split into same subunit / same side other subunit /
             opposing sides.
   idle      subunit-ticks a live, not-holding subunit did not move and was not in contact; and of those, the ones
             where a same-side subunit WAS in contact (an ally watching an ally fight).
@@ -56,14 +56,14 @@ def _load(arm_env: dict, grid) -> None:
     from modules.mass_battle import rngsource
     from modules.mass_battle.armies import ENVELOP_WING_GAP, _centered_line_cols, _spec_span
     from modules.mass_battle.config import cell_cap_for
-    from modules.mass_battle.geometry import _cellbox_axes, _cellbox_corners, cellbox_from, footprint_for
+    from modules.mass_battle.geometry import body_depth, cellbody_from, footprint_for
     from modules.mass_battle.orchestration import run_battle
     from modules.mass_battle.orderofbattle import OrderOfBattle, Subformation, build_unit
     from systems.mass_battle.sim.engine import REFUSE_ECHELON, build_army, build_envelopment, build_refused_flank
     import walkthrough
     M.update(rngsource=rngsource, ENVELOP_WING_GAP=ENVELOP_WING_GAP, _centered_line_cols=_centered_line_cols,
-             _spec_span=_spec_span, cell_cap_for=cell_cap_for, _cellbox_axes=_cellbox_axes,
-             _cellbox_corners=_cellbox_corners, cellbox_from=cellbox_from, footprint_for=footprint_for,
+             _spec_span=_spec_span, cell_cap_for=cell_cap_for, body_depth=body_depth,
+             cellbody_from=cellbody_from, footprint_for=footprint_for,
              run_battle=run_battle, OrderOfBattle=OrderOfBattle, Subformation=Subformation, build_unit=build_unit,
              REFUSE_ECHELON=REFUSE_ECHELON, build_army=build_army, build_envelopment=build_envelopment,
              build_refused_flank=build_refused_flank, Recorder=walkthrough._Recorder, cfg=cfg)
@@ -160,17 +160,9 @@ def _build_side(desc: dict, side: str, ex: dict, P: dict):
 # ─── measurement ─────────────────────────────────────────────────────────────────────────────────────────────────
 
 def _penetration(a, b):
-    """Penetration depth of two oriented unit boxes by SAT (the engine's own box and axes), or None if separated."""
-    ca, cb = M['_cellbox_corners'](a, False), M['_cellbox_corners'](b, False)
-    best = None
-    for axis in M['_cellbox_axes'](a) + M['_cellbox_axes'](b):
-        pa = [p[0] * axis[0] + p[1] * axis[1] for p in ca]
-        pb = [p[0] * axis[0] + p[1] * axis[1] for p in cb]
-        ov = min(max(pa), max(pb)) - max(min(pa), min(pb))
-        if ov <= 0:
-            return None
-        best = ov if best is None else min(best, ov)
-    return best
+    """Penetration depth of two circular bodies (the engine's own `body_depth`), or None if they do not overlap."""
+    d = M['body_depth'](a, b)
+    return d if d > 0.0 else None
 
 
 def _nodes(det: dict, side: str) -> list:
@@ -193,6 +185,7 @@ def analyse(rec, res: dict, P: dict, field: int) -> dict:
     per_tick, prev_c, idle_run = [], {}, {}
     tot = {'deep_same_sub': 0, 'deep_same_side': 0, 'deep_cross': 0}
     mx = {'same_sub': 0.0, 'same_side': 0.0, 'cross': 0.0}
+    dep = {'same_sub': 0.0, 'same_side': 0.0, 'cross': 0.0}
     idle_st = idle_watch = live_st = 0
     idle_troops = live_troops = 0
     edge_max = pinned_max = 0
@@ -201,7 +194,7 @@ def analyse(rec, res: dict, P: dict, field: int) -> dict:
     for t in ticks:
         snap = rec.snaps[t]
         nodes = _nodes(snap, 'A') + _nodes(snap, 'B')
-        boxes = [M['cellbox_from'](n[2], n[3], n[4]) for n in nodes]
+        boxes = [M['cellbody_from'](n[2], n[3], n[4]) for n in nodes]
         cnt = {'deep_same_sub': 0, 'deep_same_side': 0, 'deep_cross': 0}
         for i in range(len(nodes)):
             for j in range(i + 1, len(nodes)):
@@ -216,6 +209,9 @@ def analyse(rec, res: dict, P: dict, field: int) -> dict:
                     key, mk = 'deep_same_sub', 'same_sub'
                 else:
                     key, mk = 'deep_same_side', 'same_side'
+                if t == 0:
+                    dep[mk] = max(dep[mk], d)       # the deployment, before the battle's first separation pass
+                    continue
                 mx[mk] = max(mx[mk], d)
                 if d >= deep:
                     cnt[key] += 1
@@ -270,6 +266,7 @@ def analyse(rec, res: dict, P: dict, field: int) -> dict:
         'start': ext,
         'peak_deep_pairs': tot,
         'max_depth': {k: round(v, P['round_digits']) for k, v in mx.items()},
+        'deploy_depth': {k: round(v, P['round_digits']) for k, v in dep.items()},
         'idle_subunit_ticks': idle_st, 'idle_while_ally_engaged': idle_watch, 'live_subunit_ticks': live_st,
         'idle_troop_share': round(idle_troops / live_troops, P['round_digits']) if live_troops else 0.0,
         'edge_nodes_peak': edge_max, 'pinned_nodes_peak': pinned_max, 'closest_to_edge': round(min_edge, P['round_digits']),

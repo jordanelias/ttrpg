@@ -177,11 +177,13 @@ def test_capped_pike_out_retains_heavy_after_repelling_a_charge(field_path, monk
 @pytest.mark.slow
 def test_capped_pike_outfights_levy_in_standing_melee(field_path, monkeypatch):
     """With the cap ON the pike side (3 ranks) out-retains the levy side (1 rank) on either side of the
-    field: pike-vs-levy (0.9646, 0.9421), levy-vs-pike (0.9296, 0.9746), levy-vs-levy (0.963, 0.9634).
-    Uncapped all three read (0.9273, 0.9457): the reach VALUE alone does not change standing melee."""
+    field: pike-vs-levy (0.9639, 0.9461), levy-vs-pike (0.934, 0.9762), levy-vs-levy (0.9653, 0.9662).
+    Uncapped all three read (0.9219, 0.9619): the reach VALUE alone does not change standing melee.
+    RE-RECORDED 2026-11-01 (ED-MB-0079) when the cell body became a circle one pitch across: the ordering held and
+    the retentions moved by up to 0.014 (before: 0.9646/0.9421, 0.9296/0.9746, 0.963/0.9634; uncapped 0.9273/0.9457)."""
     monkeypatch.setattr(C, 'MB_SUPPORT_RANK_CAP', False)
     assert _standing('pike', 'levy') == _standing('levy', 'levy') == _standing('levy', 'pike')
     monkeypatch.setattr(C, 'MB_SUPPORT_RANK_CAP', True)
     pl, lp, ll = _standing('pike', 'levy'), _standing('levy', 'pike'), _standing('levy', 'levy')
     assert pl[0] > pl[1] and lp[1] > lp[0], (pl, lp)
-    assert (pl, lp, ll) == ((0.9646, 0.9421), (0.9296, 0.9746), (0.963, 0.9634))
+    assert (pl, lp, ll) == ((0.9639, 0.9461), (0.934, 0.9762), (0.9653, 0.9662))

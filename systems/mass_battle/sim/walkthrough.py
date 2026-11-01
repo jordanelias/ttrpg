@@ -13,8 +13,8 @@ these armies. The module is its own system; this file is a harness for it, in th
     python systems/mass_battle/sim/walkthrough.py --json out.json  # the per-tick data the page embeds
     python systems/mass_battle/sim/walkthrough.py --page out.html  # rebuild the page from walkthrough_template.html
 
-`--page` is refused for any seed but the example's `page_seed`, because the page's prose and annotations quote
-that seed's numbers. Every tunable number is in the JSON; this file holds none. Reference only, not a source of
+The page reads every number from the run's data, so `--page` works for any seed or role. Every tunable number is in
+the JSON; this file holds none. Reference only, not a source of
 any value (CLAUDE.md section 0.05).
 """
 from __future__ import annotations
@@ -29,6 +29,7 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(_HERE))))   # repo root, as bat.py does
 
 from modules.mass_battle import rngsource                                      # noqa: E402
+from modules.mass_battle.massbattle import _grade                              # noqa: E402
 from modules.mass_battle.geometry import _oriented                             # noqa: E402
 from modules.mass_battle.orchestration import run_battle                       # noqa: E402
 from modules.mass_battle.orderofbattle import OrderOfBattle, Subformation, build_unit   # noqa: E402
@@ -41,7 +42,7 @@ TEMPLATE = os.path.join(_HERE, 'walkthrough_template.html')
 def _oob(side: dict, role) -> OrderOfBattle:
     subs = []
     for sf in side['subformations']:
-        r = role if (role and sf['troop_type'] == 'light_cavalry') else None
+        r = role if (role and sf['troop_type'] == 'light_cavalry') else sf.get('role')
         subs.append(Subformation(sf['name'], sf['troop_type'], sf['troops'], role=r))
     return OrderOfBattle(tuple(subs), strategy=side['strategy'])
 
@@ -167,7 +168,7 @@ def fight(example: dict, seed: int, role=None) -> dict:
         v['detail'] = rec.snaps[k]
         v['contacts'] = rec.contacts.get(k, [])
     stages = {k: _collapse(v) for k, v in rec.stages.items()}
-    return {'result': result, 'ticks': ticks, 'hpmax': hpmax, 'stages': stages}
+    return {'result': result, 'ticks': ticks, 'hpmax': hpmax, 'stages': stages, 'grade': _grade(a, b, by_troops=True)}
 
 
 def table(run: dict) -> str:
@@ -181,10 +182,34 @@ def table(run: dict) -> str:
     return '\n'.join(rows)
 
 
-def build_page(run: dict, out: str) -> None:
+def _summary(example: dict) -> dict:
+    """What the page says about the two armies, straight from the example file."""
+    def side(d):
+        return {'strategy': d['strategy'], 'subformations': [
+            {'name': sf['name'], 'type': sf['troop_type'], 'troops': sf['troops'], 'role': sf.get('role')}
+            for sf in d['subformations']]}
+    return {'a': side(example['side_a']), 'b': side(example['side_b']), 'seed': None,
+            'morale_start': example['morale_start'], 'max_turns': example['max_turns']}
+
+
+def build_page(run: dict, out: str, example: dict, seed: int, role=None) -> None:
+    """Write the walkthrough page: the template with this run's data. Every number on the page is read from DATA, so
+    the page cannot disagree with the engine it was built from; the sweep over the example's seeds is fought here."""
     with open(TEMPLATE, encoding='utf-8') as f:
         html = f.read()
-    data = {'ticks': {str(k): v for k, v in run['ticks'].items()}, 'hpmax': run['hpmax']}
+    sweep = []
+    for sd in example['sweep_seeds']:
+        r = fight(example, sd, role)
+        sweep.append({'seed': sd, 'winner': r['result']['winner'], 'ticks': r['result']['turns'],
+                      'a': r['result']['a_hp_pct'], 'b': r['result']['b_hp_pct'], 'degree': r['grade']['degree']})
+    armies = _summary(example)
+    armies['seed'] = seed
+    from modules.mass_battle import config as cfg
+    consts = {'volley_scale': cfg.VOLLEY_LETHALITY_SCALE, 'k_square': cfg.K_SQUARE, 'k_linear': cfg.K_LINEAR,
+              'ticks_per_phase': cfg.TICKS_PER_PHASE, 'rout_onset': cfg.ROUT_ONSET_FRAC, 'rout_cap': cfg.ROUT_CAP_FRAC,
+              'rout_floor': cfg.SUBUNIT_ROUT_FLOOR, 'cascade_frac': cfg.ROUT_CASCADE_FRAC}
+    data = {'ticks': {str(k): v for k, v in run['ticks'].items()}, 'hpmax': run['hpmax'], 'grade': run['grade'],
+            'result': run['result'], 'sweep': sweep, 'armies': armies, 'consts': consts}
     with open(out, 'w', encoding='utf-8') as f:
         f.write(html.replace('/*DATA*/', json.dumps(data)))
 
@@ -208,8 +233,6 @@ def main(argv=None) -> int:
                   f"A {r['a_hp_pct']}% B {r['b_hp_pct']}% of starting troops")
         return 0
 
-    if args.page and (args.seed != example['page_seed'] or args.role):
-        ap.error(f"--page is built for seed {example['page_seed']} with no role: its prose quotes that run")
     run = fight(example, args.seed, args.role)
     print(table(run))
     r = run['result']
@@ -224,7 +247,7 @@ def main(argv=None) -> int:
                        'ticks': {str(k): v for k, v in run['ticks'].items()}, 'hpmax': run['hpmax']}, f)
         print('wrote', args.log)
     if args.page:
-        build_page(run, args.page)
+        build_page(run, args.page, example, args.seed, args.role)
         print('wrote', args.page)
     return 0
 

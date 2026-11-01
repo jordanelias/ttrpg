@@ -423,18 +423,16 @@ def _find_contacts_standoff(unit_a, unit_b):
     PREDICATE is continuous; the reported cell identities stay on the existing snap convention."""
     import modules.mass_battle.hierarchy.units as _u
     pairs = []
-    # [v2 Stage B] Each cell is now an oriented unit box (CellBox) grown by its melee reach on the FRONT
-    # face; contact fires on obb_front_reach_overlap (the boxed engagement surface) instead of the
-    # isotropic circle math.hypot(Δ) <= standoff_from_reach. reach unchanged this stage (reach_for ->
-    # REACH_SHORT=0.5); this is a pure CIRCLE->BOX shape swap at unchanged reach. The boxes are built by
-    # _u.cell_boxes_for, index-aligned with cells_float() and orientation/reach-identical to the boxes
-    # resolve_toi_and_commit halts on (Stage C), so contact and halt share one touch surface exactly.
-    af = {id(a): (a.cells_float(), _u.cell_boxes_for(a, _u.reach_for(a.troop_type))) for a in unit_a.subunits}
-    bf = {id(b): (b.cells_float(), _u.cell_boxes_for(b, _u.reach_for(b.troop_type))) for b in unit_b.subunits}
+    # Each cell is a circular body (CellBody) whose weapon reach extends its FRONT along its own heading; contact
+    # fires on reach_reaches (a's reach body meets b's body, or b's meets a's). The bodies are built by
+    # _u.cell_bodies_for, index-aligned with cells_float() and heading/reach-identical to the bodies
+    # resolve_toi_and_commit stops on, so contact and the collision stop share one touch surface exactly.
+    af = {id(a): (a.cells_float(), _u.cell_bodies_for(a, _u.reach_for(a.troop_type))) for a in unit_a.subunits}
+    bf = {id(b): (b.cells_float(), _u.cell_bodies_for(b, _u.reach_for(b.troop_type))) for b in unit_b.subunits}
     for atom_a in unit_a.subunits:
-        fa, boxes_a = af[id(atom_a)]
+        fa, bodies_a = af[id(atom_a)]
         for atom_b in unit_b.subunits:
-            fb, boxes_b = bf[id(atom_b)]
+            fb, bodies_b = bf[id(atom_b)]
             # Sets, not lists: the engagement envelope is wide enough that one cell can meet several
             # enemy cells at once, which would otherwise append the SAME snapped identity multiple times
             # -- confirmed by adversarial review to silently over-count stamina drain downstream
@@ -449,33 +447,30 @@ def _find_contacts_standoff(unit_a, unit_b):
             # the engaged boxes below feed engaged_frontage() -> a CONTINUOUS front-overlap width that
             # replaces len(set(int_col)) in the Lanchester term (the last integer on the live contact
             # path, per backwards_analysis.md).
-            eng_boxes_a, eng_boxes_b = [], []
+            eng_bodies_a, eng_bodies_b = [], []
             seen_a, seen_b = set(), set()
-            for ia, ((ar, ac), box_a) in enumerate(zip(fa, boxes_a)):
-                for ib, ((br, bc), box_b) in enumerate(zip(fb, boxes_b)):
-                    # [v2 Stage B perf reconcile, ED-MB-0011] Cheap bounding-circle reject before the
-                    # full SAT: two unit boxes (half-diagonal √2/2 ≈ 0.707) each grown by ≤ reach on the
-                    # front face can only engage if their centres are within 2·(0.707 + reach). With the
-                    # widest melee reach in play (REACH_SHORT=0.5 this stage) that bound is ≤ ~2.42; 2.6
-                    # is a safe, conservative cap. Far pairs (the vast majority) skip the SAT in O(1).
-                    # [canonical: geometry — derived bounding-circle reject bound 2·(CELL_RADIUS·√2 + REACH_SHORT) ≈ 2.42; 2.6 = conservative superset, never wrongly skips (perf-only, not a game value)]
-                    if (ar - br) * (ar - br) + (ac - bc) * (ac - bc) > 2.6 * 2.6:
+            for ia, ((ar, ac), body_a) in enumerate(zip(fa, bodies_a)):
+                for ib, ((br, bc), body_b) in enumerate(zip(fb, bodies_b)):
+                    # Cheap reject: a's reach body reaches b's body only if their centres are within the two radii plus
+                    # the longer reach (exact bound, never skips a pair that engages). Far pairs skip the test in O(1).
+                    _lim = 2.0 * _u.CELL_RADIUS + max(body_a.reach_front, body_b.reach_front)
+                    if (ar - br) * (ar - br) + (ac - bc) * (ac - bc) >= _lim * _lim:
                         continue
-                    if obb_front_reach_overlap(box_a, box_b):
+                    if reach_reaches(body_a, body_b):
                         contact_cells_a.add((int(round(ar)), int(round(ac / _u.COL_WIDTH))))
                         contact_cells_b.add((int(round(br)), int(round(bc / _u.COL_WIDTH))))
                         contact_cols.add(round(((ac + bc) / 2.0) / _u.COL_WIDTH))
                         if ia not in seen_a:
-                            seen_a.add(ia); eng_boxes_a.append(box_a)
+                            seen_a.add(ia); eng_bodies_a.append(body_a)
                         if ib not in seen_b:
-                            seen_b.add(ib); eng_boxes_b.append(box_b)
+                            seen_b.add(ib); eng_bodies_b.append(body_b)
             if contact_cols:
                 # Representative frontage axis per side = perpendicular to the atom's live facing
-                # (matches _cell_facing_for_box's fallback chain: node facing, else advance_dir).
+                # (matches _cell_heading's fallback chain: node facing, else advance_dir).
                 head_a = getattr(atom_a, '_node_facing', None) or (atom_a.advance_dir, 0)
                 head_b = getattr(atom_b, '_node_facing', None) or (atom_b.advance_dir, 0)
-                a_front = engaged_frontage(eng_boxes_a, eng_boxes_b, head_a)
-                b_front = engaged_frontage(eng_boxes_b, eng_boxes_a, head_b)
+                a_front = engaged_frontage(eng_bodies_a, eng_bodies_b, head_a)
+                b_front = engaged_frontage(eng_bodies_b, eng_bodies_a, head_b)
                 pairs.append({"atom_a": atom_a, "atom_b": atom_b,
                                "a_cells": sorted(contact_cells_a), "b_cells": sorted(contact_cells_b),
                                "cols": sorted(contact_cols),

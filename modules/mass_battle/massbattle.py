@@ -308,6 +308,12 @@ def _run_and_grade(unit_a, unit_b, terrain, rng, walls_dr=None, by_troops=False)
         # [canonical: mass_battle_v30.md §A.7 — 18-tick battle (3 phases x 6), the canon engine's own default]
         run_battle(unit_a, unit_b, max_turns=18)
 
+    return _grade(unit_a, unit_b, by_troops)
+
+
+def _grade(unit_a, unit_b, by_troops=False):
+    """The survivor-ratio classification of a FINISHED battle, split out of `_run_and_grade` so the one rule has one owner
+    (the walkthrough harness grades a run it has already fought through this, not a copy). `unit_a` is the attacker."""
     if by_troops:
         # ED-IN-0306 phase 3: the survivor share counted in TROOPS (`hp` over `hp_max`), the quantity `march` scales a
         # losing side's bodies by. `effective_size / size_max` is not that for an army that is not a whole number

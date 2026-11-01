@@ -242,6 +242,12 @@ def trial_vector(ua, ub, r):
 #   cell_legacy_mor1   fbe2d87f02b4… -> 4cff46a32a54…
 # ─────────────────────────────────────────────────────────────────────────────────────────────
 EXPECTED = {
+    # [2026-11-01, ED-MB-0079, Jordan: "troops have geometry. they cannot overlap."] RE-RECORDED the two FIELD modes
+    # (unit_field_mor0 af70014961a9... -> 1007244bba52..., cell_field_mor0 d1399c9cb66a... -> b1fc76288320...), a
+    # deliberate behaviour change measured under Python 3.11 (CI's interpreter; the digests differ under 3.13). The cell
+    # body is now a circle one pitch across (geometry.CellBody) and no two bodies interpenetrate at the end of any tick
+    # (hierarchy.units._separate_bodies in the movement step, separate_all_bodies at the end of every tick). The three
+    # GRID modes are untouched: the new code is field-gated, and test_mass_battle_byte_exact (the two legacy-lattice modes) and the golden-modes gate (cell_legacy_mor1) confirm their digests unchanged.
     # [2026-07-08, ED-MB-0004, partition-invariance fix, Jordan-ruled "genuine defect -- fix it"]
     # re-recorded a final time, all 4 modes -- orchestration.py's new `_convergence_scale` renormalizes
     # >=2 of one side's atoms simultaneously, fully engaging the SAME single opposing atom (this
@@ -468,7 +474,7 @@ EXPECTED = {
     # predicted this breakage; I checked it against the wrapper, saw skip/xfail, and recorded the
     # finding as overturned. It was not. CHECK THE GATE THAT GATES THE THING, not a neighbour.
     # was 0194efcc72118de125ed176b6e6d22d1f56f54dc9c9a76337953b6854d59cf0c
-    'unit_field_mor0': 'af70014961a9a16ff9c6a328d5e5fbf58deea4ae2ca8533d4929558ce3527a2f',
+    'unit_field_mor0': '1007244bba522061b9a8a23c59c227f8d68a7d32845b31444a81a6ba61164555',
     # [2026-07-04, re-recorded a second time] cell_field alone moved again after the adversarial-
     # review fixes above (pair_pool_contribution's cell_troops iteration bug; the sibling-morale-pull
     # reorder/snapshot fix) -- unit/cell/unit_field all re-confirmed BYTE-IDENTICAL to their
@@ -564,7 +570,7 @@ EXPECTED = {
     # Verified by direct execution (before/after): OLD digest [BYTE-EXACT FAIL] confirms the move (the
     # falsifier this row's own re-record discipline requires), NEW digest [BYTE-EXACT OK] below.
     # was 41a2e98485f31420d70e248238d93a24695684dde33a04791ffbd2697ecffecd
-    'cell_field_mor0': 'd1399c9cb66a380ffadaec9aefc8b09b0026a19310973876ee626c3004399686',
+    'cell_field_mor0': 'b1fc76288320dc2f3c7d2c65d1e231f9148feadf3d81d0942707458f788ea7cf',
     # ─── [ED-MB-0053 / plan-v2 §4a, 2026-07-29] THE FIFTH MODE — freshly recorded ───────────────
     # PER_CELL=1 + MB_CELL_MORALE=1 (grid). The other four all run at MB_CELL_MORALE=0, where the
     # three cell-morale maps are EMPTY, so they verify float-order over every per-cell map EXCEPT

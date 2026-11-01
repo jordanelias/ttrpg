@@ -46,7 +46,7 @@ the calling chain through `systems/factions/sim/faction_action.py` and `engine/m
 | **ENGINE** (`systems/mass_battle/sim/`, the canon cell-scale engine) | | |
 | `orchestration.run_battle(unit_a, unit_b, max_turns)` | `systems/mass_battle/sim/orchestration.py:1821 run_battle` | (a) `systems/mass_battle/sim/engine.py:294 run_battle` (router branch); (b) `tests/valoria/test_deployment_geometry.py:183 run_battle` |
 | `orchestration.run_multi_turn_battle(unit_a, unit_b, shape_a, shape_b, anchor_map, max_battle_turns)` | `systems/mass_battle/sim/orchestration.py:2480 run_multi_turn_battle` | (a) `systems/mass_battle/sim/engine.py:296 run_multi_turn_battle` (router branch); (b) `tests/valoria/test_deployment_geometry.py:107 run_multi_turn_battle` |
-| `orchestration.run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b, anchor_map, max_battle_turns)` | `systems/mass_battle/sim/orchestration.py:2681 run_multi_unit_battle` | (a) `systems/mass_battle/sim/engine.py:288 run_multi_unit_battle` (router branch); (b) `tests/valoria/test_reserve_commit.py:42 run_multi_unit_battle` |
+| `orchestration.run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b, anchor_map, max_battle_turns)` | `systems/mass_battle/sim/orchestration.py:2686 run_multi_unit_battle` | (a) `systems/mass_battle/sim/engine.py:288 run_multi_unit_battle` (router branch); (b) `tests/valoria/test_reserve_commit.py:42 run_multi_unit_battle` |
 | `engine.resolve_battle(*args, kind='multi', **kwargs)` | `systems/mass_battle/sim/engine.py:284 resolve_battle` | `systems/mass_battle/sim/workbench/trace.py:89 resolve_battle` (and `:92`) |
 | `engine.build_unit` / `build_army` / `build_envelopment` / `build_refused_flank` | `systems/mass_battle/sim/engine.py:90 build_unit`, `modules/mass_battle/armies.py:118 build_army` (moved there, ED-IN-0306), `systems/mass_battle/sim/engine.py:127 build_envelopment`, `:224 build_refused_flank` | `systems/mass_battle/sim/bat.py:62 build_unit`, `:89 build_envelopment`, `:101 build_refused_flank`; `tests/sim/gauge_mb.py:162 build_army` |
 
@@ -62,7 +62,7 @@ the calling chain through `systems/factions/sim/faction_action.py` and `engine/m
 | **ENGINE** | | | |
 | `unit_a`, `unit_b` (`Unit` dataclass instances) | arg | constructed by `engine.build_unit`/`build_army`/`build_envelopment`/`build_refused_flank` | `systems/mass_battle/sim/engine.py:90-181` |
 | `shape_a`, `shape_b`, `anchor_map` | arg | caller-supplied deployment geometry | `systems/mass_battle/sim/orchestration.py:2480-2537 run_multi_turn_battle` |
-| `pairings`, `shapes_a`, `shapes_b` | arg | caller-supplied multi-unit roster | `systems/mass_battle/sim/orchestration.py:2681-2985 run_multi_unit_battle` |
+| `pairings`, `shapes_a`, `shapes_b` | arg | caller-supplied multi-unit roster | `systems/mass_battle/sim/orchestration.py:2686-2990 run_multi_unit_battle` |
 | `max_turns` / `max_battle_turns` | param (default) | function signature default | `systems/mass_battle/sim/orchestration.py:1821 run_battle`, `:2426 run_multi_turn_battle` |
 | engine mode toggles read from `os.environ` at import time (`PER_CELL`, `LANCHESTER_ENABLED`, `REFORM_CHECK_ENABLED`, `MB_RESERVE_COMMIT`, and dozens more) | flag | env var, defaulted | `systems/mass_battle/sim/config.py:345 PER_CELL`, `systems/mass_battle/sim/config.py:514 LANCHESTER_ENABLED`, `systems/mass_battle/sim/orchestration.py:294 REFORM_CHECK_ENABLED`, `systems/mass_battle/sim/config.py:256 MB_RESERVE_COMMIT` |
 | `CASCADING_ENABLED` | flag | hardcoded module constant, not env-read (see §7) | `systems/mass_battle/sim/config.py:152 CASCADING_ENABLED` |
@@ -161,9 +161,9 @@ the return value is consumed):
 | `world.battle_count` | W | `systems/factions/sim/faction_action.py` (outside this subsystem's own folder — see §6) | `systems/factions/sim/faction_action.py:525` |
 | **ENGINE** | | | |
 | `unit.hp` | RW | `systems/mass_battle/sim/hierarchy/units.py` (`Unit`) | write `systems/mass_battle/sim/orchestration.py:2064-2065` |
-| `unit.morale` | RW | `systems/mass_battle/sim/hierarchy/units.py` (`Unit.set_morale`, `Unit.cascade_morale_hit`) | `systems/mass_battle/sim/hierarchy/units.py:2896 set_morale` |
-| `unit.routed` / `atom.routed` | RW | `systems/mass_battle/sim/hierarchy/units.py` (`Unit.derive_rout`) | `systems/mass_battle/sim/hierarchy/units.py:2875 derive_rout`; write site `systems/mass_battle/sim/orchestration.py:2154-2161` |
-| `unit.stamina` | RW | `systems/mass_battle/sim/hierarchy/units.py` (`Subunit.drain_stamina`) | `systems/mass_battle/sim/hierarchy/units.py:872 drain_stamina` |
+| `unit.morale` | RW | `systems/mass_battle/sim/hierarchy/units.py` (`Unit.set_morale`, `Unit.cascade_morale_hit`) | `systems/mass_battle/sim/hierarchy/units.py:2900 set_morale` |
+| `unit.routed` / `atom.routed` | RW | `systems/mass_battle/sim/hierarchy/units.py` (`Unit.derive_rout`) | `systems/mass_battle/sim/hierarchy/units.py:2879 derive_rout`; write site `systems/mass_battle/sim/orchestration.py:2154-2161` |
+| `unit.stamina` | RW | `systems/mass_battle/sim/hierarchy/units.py` (`Subunit.drain_stamina`) | `systems/mass_battle/sim/hierarchy/units.py:786 drain_stamina` |
 | `unit.col_grid` (per-column grid, `PER_CELL` only) | RW | `systems/mass_battle/sim/percell.py` | `systems/mass_battle/sim/orchestration.py:2201-2202 sync_col_grid` |
 
 ## 6. Seams

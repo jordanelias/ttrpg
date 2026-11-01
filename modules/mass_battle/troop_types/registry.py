@@ -93,8 +93,8 @@ def stats_for(troop_type):
 REACH_SHORT = 0.5  # [canonical: params/core.md §Reach Terminology (PP-290) — "Short Reach... <=1 metre"]
 
 # [v2 Stage E, ED-MB-0014, Jordan P-DEC-1 2026-07-22] Per-troop-type FRONT-FACE weapon reach, in
-# lattice units (COL_WIDTH=1.0 pitch), feeding the OBB front-reach envelope (hierarchy/units.cell_boxes_for
-# -> geometry.obb_front_reach_overlap). Jordan-ruled weapon-class map: non-pole melee 0.1, pole/spear
+# lattice units (COL_WIDTH=1.0 pitch), feeding the front-reach body (hierarchy/units.cell_bodies_for
+# -> geometry.reach_reaches). Jordan-ruled weapon-class map: non-pole melee 0.1, pole/spear
 # 0.2, PIKE 0.3, cavalry/knights lance 0.2, ranged = projectile band (VOLLEY_MAX_RANGE, handled
 # separately) + a 0.1 melee sidearm. This SUPERSEDES the flat REACH_SHORT=0.5 placeholder that Stages
 # B/C carried while the shape swap (circle->OBB) was validated at unchanged reach. NOTE (flagged for
