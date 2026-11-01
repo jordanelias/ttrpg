@@ -131,7 +131,7 @@ POOL_ADDENDS: list = []
 
 def register_pool_addend(fn: Any) -> None:
     """Add `fn(w, person, verb) -> int` to what `faculty` sums. Registered once, at import of its owner; a
-    second registration of the same function is a no-op (a module reload must not double a practised pool)."""
+    second registration of the same function is a no-op (an addend counts once however often its owner registers it)."""
     if fn not in POOL_ADDENDS:
         POOL_ADDENDS.append(fn)
 
@@ -380,8 +380,11 @@ def odds_of(w: Any, act: Any, *, believer: Any = None,
     own record. It reads the believer's own ledger and nothing else of the true state (the World answers
     only the act's shape), and returns `None` where a factor is unknown to him -- never a guessed figure.
     ONE STATED EXCEPTION, his own pool: `faculty(w, believer, verb)` sums the registered addends, and the
-    practice addend derives from `w.log` the results of HIS OWN acts. His own results are his to know, and
-    no ledger-side practice reader exists to read them from (ladder step 5, B10-08 close; CR-17 may move it).
+    practice addend derives from `w.log` the results of HIS OWN acts. His own results are his to know, but
+    this departs from 04 (§A.2 table, `loop/deliberate`: frozen `World` for `sense` only; §A.3 row 13: `Act`
+    persists resolver-side, unreachable from a person-side surface), so CR-17's chooser must not call this
+    from `decision/`: a ledger route exists (WITNESS stamps `doer?` on a holder's deposits about his own
+    acts, §B.9) and CR-17 may move the read there (ladder step 5, B10-08 close).
     `None` is also the answer where the social roll deals no dice for the act (see `_rolled_as`) or
     S27.4 refuses it.
 

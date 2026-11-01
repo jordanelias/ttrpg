@@ -3831,11 +3831,11 @@ def test_w17_the_interaction_bound_flips_across_its_sweep_and_the_flip_is_printe
 def test_w17_the_packing_rule_and_the_extended_cost_are_both_live():
     """`H-78` and `H-77`, and both existed as declared-but-dead before the W17 adversarial pass.
 
-    ⚠ `H-77` WAS INERT AND PASSED `R2` ANYWAY. Nothing anywhere set `Scene.extended`, so
+    ⚠ `H-77` WAS INERT AND PASSED `R2` ANYWAY. Nothing priced a scene by what it carried, so
     `Scene.cost()` returned 1 at every sweep point and the row's declared `1 · 2 · 3` could not
     move any verdict — a row satisfying the injectable rule by being WRITTEN, which is exactly the
-    laundering `R2` exists to stop. A scene carrying more than one interaction is now the extended
-    one, which is what the word means.
+    laundering `R2` exists to stop. A scene carrying more than one interaction slot is the extended
+    one (`Scene.cost` prices it from its `slots`), which is what the word means.
 
     ⚠ `H-78` WAS A COMMENT. `make_chooser` packed scenes greedily in score order with no row, and
     that decides how many interactions a season produces at all — `greedy` gives a five-scene
@@ -15171,7 +15171,8 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     producers = _producers(files.package_modules(), files.PACKAGE_DIR)
     assert producers == set(), (
         f"the season package produces a margin in {sorted(producers)}. Since `31a` the host builds "
-        "the typed input record and calls the module entry; the roll is the module's. `S27.2` names "
+        "the typed input record and calls the module entry; the dice and the net are the module's (the "
+        "fraction of a margin is settled host-side by `settle_record`, PLAN CP-T01-04). `S27.2` names "
         "a second resolver as this architecture's highest-value refusal -- adjudicate before it lands")
     # v9 FI-01: THE SCAN SEES A PLANTED SECOND RESOLVER FOR AN INQUIRY. The graded inquiries roll through
     # the module entry (`seam/contest.py::grade`), so a host-side inquiry roll is exactly what this pin

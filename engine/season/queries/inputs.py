@@ -56,12 +56,12 @@ class SocialContestInput:
                        so a record built by hand reads as it always did);
       * `obstacle_refusal_multiple` -- S27.4's multiple, the fixture the host adapter refuses on,
                        on the pair the entry returns;
-      * `leverage`  -- the σ-layer μ-shift. Zero until something supplies leverage: an `assumption`
-                       reading with no producer, stated as zero rather than fabricated.
+      * `leverage`  -- the σ-layer μ-shift: the host's `advantage_sigma` sums the act's advantage sources
+                       (`rosters.yaml: advantage_sources`; today `effort`), zero where none is taken.
 
     ⚠ NO `ob` FIELD, ON PURPOSE (v9 SC-01 step 14; ED-SC-0033 clause (3), *the obstacle has a single
     owner*). The obstacle is COMPOSED by the module (`modules/social_contest/roll.py::obstacle`) from
-    the three operands above; the host carries them and composes nothing, so a host-side obstacle has
+    the operands above; the host carries them and composes nothing, so a host-side obstacle has
     no field to travel in. `engine/season/tests/test_sc01_obstacle_ceiling.py` fails if one returns.
     ONE RECORD IS ONE MATTER'S DRAW: the ceiling bounds each matter's obstacle on its own and nothing
     aggregates obstacles across a bundle (ED-SC-0038's per-matter pick, `H-213`).

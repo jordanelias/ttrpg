@@ -110,7 +110,7 @@ def obstacle(inp: SocialContestInput) -> float:
     larger pool is never worse for the cap (it is an equality: each pool's chance at its own cap is the
     same 10 %), and at the shipped ceiling (2) S27.4's `ob > multiple x pool` never holds on a derived
     pair. With an `effort` boost the chance at each pool's own cap is NOT monotone in the pool (B10-08
-    close, measured: Partial-or-better at effort 1 reads 21.57 / 20.37 / 18.76 / 20.56 % at pools 1 to 4:
+    close, measured, not pinned by a test: Partial-or-better at effort 1 reads 21.57 / 20.37 / 18.76 / 20.56 % at pools 1 to 4:
     the boost grows with the root of the pool while the cap sits where the unboosted chance is 10 %);
     and a ceiling of 3 or more has floor 0 and falls back to the fixed ceiling, which is tighter than the
     solved cap at ceiling 2 for pools of 3 and up (H-213). Below one
