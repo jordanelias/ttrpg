@@ -1,0 +1,211 @@
+{
+ "seed": 0,
+ "seasons": 4,
+ "persons_at_build": 83,
+ "opinion_t0": {
+  "Guilds": {
+   "n": 83,
+   "neg": 63,
+   "pos": 20,
+   "sd": 0.473,
+   "min": -0.82,
+   "max": 0.84
+  },
+  "Church of Solmund": {
+   "n": 83,
+   "neg": 30,
+   "pos": 53,
+   "sd": 0.459,
+   "min": -0.89,
+   "max": 1.12
+  },
+  "faction x": {
+   "n": 83,
+   "neg": 0,
+   "pos": 0,
+   "sd": 0.0,
+   "min": 0.0,
+   "max": 0.0
+  },
+  "L\u00f6wenritter": {
+   "n": 83,
+   "neg": 17,
+   "pos": 66,
+   "sd": 0.438,
+   "min": -0.56,
+   "max": 1.18
+  },
+  "Varfell": {
+   "n": 83,
+   "neg": 10,
+   "pos": 73,
+   "sd": 0.435,
+   "min": -0.5,
+   "max": 0.99
+  },
+  "Altonia": {
+   "n": 83,
+   "neg": 33,
+   "pos": 50,
+   "sd": 0.492,
+   "min": -0.8,
+   "max": 0.88
+  },
+  "Crown": {
+   "n": 83,
+   "neg": 17,
+   "pos": 66,
+   "sd": 0.486,
+   "min": -0.63,
+   "max": 1.38
+  },
+  "Restoration Movement": {
+   "n": 83,
+   "neg": 56,
+   "pos": 27,
+   "sd": 0.472,
+   "min": -0.68,
+   "max": 1.15
+  },
+  "Hafenmark": {
+   "n": 83,
+   "neg": 40,
+   "pos": 43,
+   "sd": 0.471,
+   "min": -0.55,
+   "max": 0.94
+  },
+  "Schoenland": {
+   "n": 83,
+   "neg": 0,
+   "pos": 0,
+   "sd": 0.0,
+   "min": 0.0,
+   "max": 0.0
+  }
+ },
+ "opinion_t0_exceptions": {},
+ "stance_rows_t0": 79,
+ "persons_at_end": 78,
+ "C3_docket_items_with_date_and_matter_at_each_season_end": [
+  0,
+  0,
+  0,
+  0
+ ],
+ "opinion_end": {
+  "Guilds": {
+   "n": 78,
+   "neg": 58,
+   "pos": 20,
+   "sd": 0.481,
+   "min": -0.82,
+   "max": 0.85
+  },
+  "Church of Solmund": {
+   "n": 78,
+   "neg": 30,
+   "pos": 48,
+   "sd": 0.433,
+   "min": -0.88,
+   "max": 1.02
+  },
+  "faction x": {
+   "n": 78,
+   "neg": 0,
+   "pos": 0,
+   "sd": 0.0,
+   "min": 0.0,
+   "max": 0.0
+  },
+  "L\u00f6wenritter": {
+   "n": 78,
+   "neg": 17,
+   "pos": 61,
+   "sd": 0.449,
+   "min": -0.56,
+   "max": 1.18
+  },
+  "Varfell": {
+   "n": 78,
+   "neg": 10,
+   "pos": 68,
+   "sd": 0.445,
+   "min": -0.5,
+   "max": 0.99
+  },
+  "Altonia": {
+   "n": 78,
+   "neg": 29,
+   "pos": 49,
+   "sd": 0.484,
+   "min": -0.8,
+   "max": 0.88
+  },
+  "Crown": {
+   "n": 78,
+   "neg": 17,
+   "pos": 61,
+   "sd": 0.475,
+   "min": -0.63,
+   "max": 1.12
+  },
+  "Restoration Movement": {
+   "n": 78,
+   "neg": 54,
+   "pos": 24,
+   "sd": 0.458,
+   "min": -0.68,
+   "max": 1.15
+  },
+  "Hafenmark": {
+   "n": 78,
+   "neg": 39,
+   "pos": 39,
+   "sd": 0.458,
+   "min": -0.55,
+   "max": 0.93
+  },
+  "Schoenland": {
+   "n": 78,
+   "neg": 0,
+   "pos": 0,
+   "sd": 0.0,
+   "min": 0.0,
+   "max": 0.0
+  }
+ },
+ "opinion_end_exceptions": {},
+ "C1_comply_evade_by_subject": {
+  "comply|record:petition": 13,
+  "comply|record:faction_sheet": 5,
+  "comply|record:text": 26,
+  "evade / defy|record:text": 7,
+  "evade / defy|record:petition": 3,
+  "comply|record:cover": 8,
+  "evade / defy|record:cover": 1,
+  "evade / defy|record:faction_sheet": 4
+ },
+ "C1_held": {
+  "comply|record:petition|actor_holds": 13,
+  "comply|record:faction_sheet|actor_holds": 5,
+  "comply|record:text|actor_holds": 26,
+  "evade / defy|record:text|actor_holds": 5,
+  "evade / defy|record:petition|actor_holds": 3,
+  "comply|record:cover|actor_does_not_hold": 4,
+  "evade / defy|record:cover|actor_does_not_hold": 1,
+  "evade / defy|record:faction_sheet|actor_holds": 4,
+  "comply|record:cover|actor_holds": 4,
+  "evade / defy|record:text|actor_does_not_hold": 2
+ },
+ "C1_dispensation_addressee": {},
+ "C1_dispensations_in_world": 13,
+ "C2_forged_records": 45,
+ "C2_holders_per_forged_record": {
+  "1": 44,
+  "0": 1
+ },
+ "C5_same_season_copy_groups": 1122,
+ "C5_of_which_confidence_differs": 59,
+ "C5_of_which_source_differs": 59
+}
