@@ -73,19 +73,19 @@ def test_a_rung_shaped_subject_on_a_non_mass_battle_prize_does_not_route_to_the_
 
 
 def test_mass_battle_branch_derives_a_real_army_and_a_real_defender():
-    """`p_npc_033` holds `off_npc_033` (`fac_crown`, display value `'Crown'`), lives at
+    """`p_npc_033` holds `off_spymaster` (`fac_crown`, display value `'Crown'`), lives at
     `set_s_014`, and `set_s_014` musters exactly `p_npc_033`/`p_npc_035` under `fac_crown` --
     verified against the live fixture, not assumed from the office's own `remit_acts`.
     `set_s_002` is held (via `terr_T1`) by `p_npc_020`, who commits to `fac_crown` alone -- a
     DIFFERENT settlement's holder, so this is not the same faction answering by coincidence."""
     w = build_realm(0)
     actor = "p_npc_033"
-    office = w.offices["off_npc_033"]
+    office = w.offices["off_spymaster"]
     assert "dispatch" in office.remit_acts
     assert office.faction == "Crown", "the fixture's office no longer carries this display value"
     origin_army = world_q.mustered(w, "set_s_014", "fac_crown")
     assert origin_army, "set_s_014 no longer musters anyone under fac_crown"
-    a = Act(id="a1", actor=actor, verb="march", payload={"subject": "set_s_002"}, via="off_npc_033")
+    a = Act(id="a1", actor=actor, verb="march", payload={"subject": "set_s_002"}, via="off_spymaster")
     claimants, subject, rung = sides_of(w, a, "set_s_002", "a field")
     assert set(claimants) == set(origin_army)
     # RE-PINNED AT v9 IN-13 (H-151 closed, #453 §9.6 code edit (i)): `set_s_002` is held by the
@@ -95,7 +95,7 @@ def test_mass_battle_branch_derives_a_real_army_and_a_real_defender():
     assert subject is None
     assert rung == "set_s_002"
     # CONTROL, one change (the target's holder): a settlement ANOTHER faction holds names it.
-    a2 = Act(id="a2", actor=actor, verb="march", payload={"subject": "set_s_036"}, via="off_npc_033")
+    a2 = Act(id="a2", actor=actor, verb="march", payload={"subject": "set_s_036"}, via="off_spymaster")
     assert sides_of(w, a2, "set_s_036", "a field")[1] == "fac_church_of_solmund"
 
 
@@ -117,7 +117,7 @@ def test_an_unheld_target_gives_no_defending_faction():
     w = build_realm(0)
     assert world_q.holder_faction_of(w, "r_valoria") is None
     a = Act(id="a1", actor="p_npc_033", verb="march", payload={"subject": "r_valoria"},
-            via="off_npc_033")
+            via="off_spymaster")
     claimants, subject, rung = sides_of(w, a, "r_valoria", "a field")
     assert subject is None
     assert rung == "r_valoria"
@@ -132,7 +132,7 @@ def test_an_unheld_settlement_gives_no_defender_but_a_real_army():
     assert w.rungs["set_s_037"].kind == "settlement"
     assert world_q.holder_faction_of(w, "set_s_037") is None
     a = Act(id="a1", actor="p_npc_033", verb="march", payload={"subject": "set_s_037"},
-            via="off_npc_033")
+            via="off_spymaster")
     claimants, subject, rung = sides_of(w, a, "set_s_037", "a field")
     assert subject is None and rung == "set_s_037"
     assert claimants and claimants == world_q.mustered(w, "set_s_014", "fac_crown")

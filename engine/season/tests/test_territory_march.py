@@ -6,9 +6,9 @@ it. What the position built (`rosters.yaml`: `march_target_kinds` gained `territ
 `raze_target_kinds`; `world_q.occupies`; `effects_shared.occupying_faction` reads it): the field is the same field, the
 arrival is the same arrival, and the licence `seize` asks is OCCUPATION -- which a lost march never gives.
 
-Fixture: `build_realm(0)` and `test_march.py`'s helpers. The Crown (`p_npc_033`, seat `off_npc_033`) marches on
+Fixture: `build_realm(0)` and `test_march.py`'s helpers. The Crown (`p_npc_033`, seat `off_spymaster`) marches on
 `terr_T7` (Hafenmark's, nobody of Hafenmark's mustered under it: unopposed) and on `terr_T9` (the Church's, defended).
-`p_npc_020` / `off_npc_020` is the Crown seat that seizes.
+`p_npc_020` / `off_king` is the Crown seat that seizes.
 """
 
 from __future__ import annotations
@@ -22,7 +22,7 @@ from engine.season.loop.effects_combat import _not_yet_under
 
 from .test_march import (CHURCH, CROWN, _fold_one, _march_act, _no_resident_crown, _resolve_one, _seize_kinds)
 
-ACTOR, SEAT = "p_npc_033", "off_npc_033"
+ACTOR, SEAT = "p_npc_033", "off_spymaster"
 UNDEFENDED, DEFENDED, TOWN = "terr_T7", "terr_T9", "set_s_016"      # TOWN is under UNDEFENDED, held by Hafenmark
 
 

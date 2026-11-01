@@ -2163,19 +2163,21 @@ def test_13d_iii_a_stale_index_entry_is_refused_not_trusted(_realm13):
 def test_13d_iii_a_minted_row_may_not_reuse_a_standing_seat_id(_realm13, monkeypatch):
     """A MINTED seat is one no loop-built seat stands for, so its id must be fresh. A row carrying
     the id of a seat the loop already built used to REPLACE that seat without a sound. The probe
-    renames the first minted row to the id of the loop-built `off_npc_031` (the seat NPC-031's
-    `off_heir` row overlays); the realm must refuse, naming the id. The build with the real rows
+    renames the first minted row to the id of the loop-built `off_npc_084` (NPC-084's `guild leader`, the
+    one seat no row stands for, so the one loop-built seat that still carries a slug id; since CP-T02-02 a
+    seat a row overlays stands under the ROW's id, and a minted row carrying that id is skipped as authored);
+    the realm must refuse, naming the id. The build with the real rows
     is the control (`_realm13`, and every other test here, build it)."""
     from ..harness import populated
 
     real = populated.OFFICES_SEATS
     minted_id = _realm13._office_census["minted"][0]
-    rows = [dict(r, id="off_npc_031") if r["id"] == minted_id else r for r in real]
-    assert sum(r["id"] == "off_npc_031" for r in rows) == 1
+    rows = [dict(r, id="off_npc_084") if r["id"] == minted_id else r for r in real]
+    assert sum(r["id"] == "off_npc_084" for r in rows) == 1
     monkeypatch.setattr(populated, "OFFICES_SEATS", rows)
     with pytest.raises(Forbidden) as red:
         build_realm(seed=0)
-    assert "off_npc_031" in str(red.value) and "minted" in str(red.value), str(red.value)
+    assert "off_npc_084" in str(red.value) and "minted" in str(red.value), str(red.value)
 
 
 def test_13d_iii_a_seat_may_not_list_its_own_holder_among_its_obligees(monkeypatch):
@@ -2430,7 +2432,7 @@ def test_13d_iii_an_authored_obligee_serves_the_seat_with_no_term(_realm13):
     withs = [r for r in _seat_rows() if r.get("obligees")]
     assert [r["id"] for r in withs] == ["off_king", "off_restoration_leader"], withs
     for row_id, sworn in (("off_king", "p_npc_070"), ("off_restoration_leader", "p_npc_041")):
-        seat = w._office_census["authored"][row_id]   # `off_king` is a row id; its loop-built seat is `off_npc_020`
+        seat = w._office_census["authored"][row_id]   # a seat a row overlays keeps the row's id (CP-T02-02), so this is the identity
         assert world_q.establishment_of(w, seat) == [sworn]
         t = next(t for t in w.tenures if t.kind == "oblige" and t.object == seat)
         assert t.term is None and t.live
@@ -2843,7 +2845,11 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # empties (one `tenure.closed` per death write, receipted under the Offices), so every witness holds a claim on each vacated
     # seat and the realm's act mix moves (seed 0, one season: 597 -> 608 kept, 595 -> 608 stripped; `test_go07_canonical_digest.py`
     # records the 608). CONTROL: this world with `World.seat_holds` stubbed to `[]` (the emission off) in process reads (597, 595).
-    assert (out["acts"], cout["acts"]) == (608, 608), (
+    # ⚠⚠ v10 CP-T02-02 (B10-09): (608, 608) -> (596, 596), A RE-RECORD WITH THE UNIT THAT MOVED IT: a loop-built seat keeps its
+    # `offices.yaml` row's id (`populated._seat_id`), the ids seed the draws, and the realm's act mix moves (seed 0, one season:
+    # 608 -> 596 in both arms; `test_go07_canonical_digest.py` records the 596). CONTROL: this tree with `_seat_id` replaced by the
+    # slug rule (`off_<case slug>`) in process reads (608, 608) under this same test.
+    assert (out["acts"], cout["acts"]) == (596, 596), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")

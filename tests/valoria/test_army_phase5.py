@@ -4,7 +4,7 @@
 differs from it in one thing. The realm is the fixture on purpose: phases 1-4 passed their tests on hand-planted
 weight-12 cohorts the realm never ships, and that is how a chain that could not field an army went unseen.
 
-The Crown's seat holder `p_npc_033` (seat `off_npc_033`, home under `set_s_014`) commands; the Crown governs 15 cohorts of
+The Crown's seat holder `p_npc_033` (seat `off_spymaster`, home under `set_s_014`) commands; the Crown governs 15 cohorts of
 weight 2; the Church's `set_s_036` is defended by six individuals; `terr_T7` is Hafenmark's and empty of it.
 """
 
@@ -23,7 +23,7 @@ from engine.season.state.carriers import Act, Site, Tenure
 from modules.mass_battle import armyrecord as A
 from modules.mass_battle.troop_types import recruitment as R
 
-ACTOR, SEAT, ORIGIN = "p_npc_033", "off_npc_033", "set_s_014"
+ACTOR, SEAT, ORIGIN = "p_npc_033", "off_spymaster", "set_s_014"
 CROWN, CHURCH, HAFEN = "fac_crown", "fac_church_of_solmund", "fac_hafenmark"
 DEFENDED_TOWN, UNDEFENDED, DEFENDED_TERR = "set_s_036", "terr_T7", "terr_T9"
 

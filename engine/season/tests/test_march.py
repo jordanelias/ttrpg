@@ -103,7 +103,7 @@ def test_a_lost_field_writes_casualties_and_stance_on_the_attacker_only():
     before_a = {pid: w.persons[pid].body for pid in attackers}
     before_d = {pid: w.persons[pid].body for pid in defenders}
 
-    act = _march_act("p_npc_033", "set_s_036", "off_npc_033")
+    act = _march_act("p_npc_033", "set_s_036", "off_spymaster")
     events = _fold_one(w, act, contest_max_depth=2)
     kinds = [(e.kind, e.degree) for e in events]
     assert ("march.declared", "Declared") in kinds
@@ -154,7 +154,7 @@ def test_an_unopposed_march_arrives_and_writes_no_casualty_or_stance():
     # `stance_from_loyalty`), so "no new row" is what this checks, not "an empty list".
     before_stance = {pid: list(w.persons[pid].stance or []) for pid in attackers}
 
-    act = _march_act("p_npc_033", "set_s_003", "off_npc_033")
+    act = _march_act("p_npc_033", "set_s_003", "off_spymaster")
     events = _fold_one(w, act, contest_max_depth=2)
     kinds = [(e.kind, e.degree) for e in events]
     assert ("march.declared", "Declared") in kinds
@@ -183,7 +183,7 @@ def test_a_march_on_a_non_settlement_rung_refuses_h149_is_enforced():
     the fight rather than running a battle scoped to one building."""
     w = build_realm(0)
     hearth = next(rid for rid, r in w.rungs.items() if r.kind == "hearth")
-    act = _march_act("p_npc_033", hearth, "off_npc_033")
+    act = _march_act("p_npc_033", hearth, "off_spymaster")
     events = _fold_one(w, act, contest_max_depth=2)
     kinds = [(e.kind, e.degree) for e in events]
     assert ("march.declared", "Declared") in kinds
@@ -200,7 +200,7 @@ def test_a_march_act_reaches_self_resolved_exactly_once_across_both_folds():
     every march inflated that report by one. `_fold` now dedupes by id, matching `w.acts`'s own
     precedent."""
     w = build_realm(0)
-    act = _march_act("p_npc_033", "set_s_036", "off_npc_033")
+    act = _march_act("p_npc_033", "set_s_036", "off_spymaster")
     d = SeasonDriver(w)
     w.step = Step.RESOLVE
     w.frozen = False
@@ -241,7 +241,7 @@ def test_a_march_on_an_unheld_settlement_arrives_rather_than_crashing_the_season
     assert world_q.holder_faction_of(w, "set_s_037") is None, (
         "set_s_037 is held after all; pick a genuinely unheld settlement")
     attackers = world_q.mustered(w, "set_s_014", "fac_crown")
-    act = _march_act("p_npc_033", "set_s_037", "off_npc_033")
+    act = _march_act("p_npc_033", "set_s_037", "off_spymaster")
     events = _fold_one(w, act, contest_max_depth=2)
     kinds = [(e.kind, e.degree) for e in events]
     assert ("march.declared", "Declared") in kinds
@@ -270,7 +270,7 @@ def test_a_won_field_writes_casualties_and_stance_on_the_defender_only():
     defenders = world_q.mustered(w, "set_s_036", "fac_church_of_solmund")
     before_a = {pid: w.persons[pid].body for pid in attackers}
     before_d = {pid: w.persons[pid].body for pid in defenders}
-    act = _march_act("p_npc_033", "set_s_036", "off_npc_033")
+    act = _march_act("p_npc_033", "set_s_036", "off_spymaster")
     res = Resolution("Won", {
         "parties": {"claimants": attackers, "subject_members": defenders},
         "result": {"defender_size_pct": 0.4},
@@ -303,7 +303,7 @@ def test_declared_is_no_change_and_unopposed_changes_only_with_claimants_in_the_
     and writes no casualty; a claimant already present under the destination makes no journey."""
     eff = EFFECTS["march"]
     w = build_realm(0)
-    act = _march_act("p_npc_033", "set_s_003", "off_npc_033")
+    act = _march_act("p_npc_033", "set_s_003", "off_spymaster")
     attackers = world_q.mustered(w, "set_s_014", "fac_crown")
     assert eff(w, act, Resolution("Declared", {})) is G.NO_CHANGE
     assert eff(w, act, Resolution("Unopposed", {})) is G.NO_CHANGE
@@ -319,7 +319,7 @@ def test_declared_is_no_change_and_unopposed_changes_only_with_claimants_in_the_
                for s in change.subjects), (
         "a mover is named whole and earns every kind the band declares")
     # CONTROL, one change (the destination is where the army already stands): no journey, no change.
-    home = _march_act("p_npc_033", "set_s_014", "off_npc_033")
+    home = _march_act("p_npc_033", "set_s_014", "off_spymaster")
     assert eff(w, home, with_claimants) is G.NO_CHANGE
 
 
@@ -334,7 +334,7 @@ def test_the_total_casualty_model_zeroes_the_losing_side():
     w = build_realm(0)
     w.fixtures = w.fixtures.sweep("field_casualty_model", "total")
     attackers = world_q.mustered(w, "set_s_014", "fac_crown")
-    act = _march_act("p_npc_033", "set_s_036", "off_npc_033")
+    act = _march_act("p_npc_033", "set_s_036", "off_spymaster")
     _fold_one(w, act, contest_max_depth=2)
     for pid in attackers:
         assert pid not in w.persons, f"{pid} still recorded, at body 0, instead of removed"
@@ -356,7 +356,7 @@ def test_the_none_casualty_model_writes_stance_only():
     attackers = world_q.mustered(w, "set_s_014", "fac_crown")
     before_body = {pid: w.persons[pid].body for pid in attackers}
     before_stance = {pid: list(w.persons[pid].stance or []) for pid in attackers}
-    act = _march_act("p_npc_033", "set_s_036", "off_npc_033")
+    act = _march_act("p_npc_033", "set_s_036", "off_spymaster")
     _fold_one(w, act, contest_max_depth=2)
     grudge_w = w.fixtures.get("field_grudge_weight")
     morale_w = w.fixtures.get("field_morale_weight")
@@ -376,11 +376,11 @@ def test_a_real_chooser_forms_and_folds_a_march_that_reaches_a_real_field_battle
     path). Every other test in this file hand-authors its `Act`, including its `payload` and its
     `via`. This one does neither -- CORRECTED per the BATCH-CLOSE Phase-1 antagonist: the first
     writing of this test built `payload` off a real `Candidate` but then hand-set
-    `Act(..., via="off_npc_033")`, which is exactly the hand-built-`Act` shape the retirement
+    `Act(..., via="off_spymaster")`, which is exactly the hand-built-`Act` shape the retirement
     plan's gate sought to rule OUT, not demonstrate. `via` is now read off the real chooser's own
     derivation and asserted as a computed fact.
 
-    `p_npc_033` (Crown, `off_npc_033`, `remit:dispatch`) is asked a real `Question` whose referent
+    `p_npc_033` (Crown, `off_spymaster`, `remit:dispatch`) is asked a real `Question` whose referent
     is `set_s_036` (Church of Solmund) -- the SAME cross-faction pair `test_a_lost_field_...`
     above hand-builds, chosen here so the falsifier is comparable rather than novel. Clause 3's
     PRE-EXISTING `q.referents` reading -- no march-specific arm, nothing added -- is what carries
@@ -435,13 +435,13 @@ def test_a_real_chooser_forms_and_folds_a_march_that_reaches_a_real_field_battle
     # `pack_scenes` names it through `exercised_seat`, the SAME walk `person_side_eligible`
     # admitted march through -- the first live `hold` Tenure of `p_npc_033`'s that grants
     # `dispatch` (march's own `remit:dispatch` eligibility cell, `verb_table.yaml`), which this
-    # fixture seats at `off_npc_033`.
-    assert act.via == "off_npc_033", (
+    # fixture seats at `off_spymaster`.
+    assert act.via == "off_spymaster", (
         f"expected march to exercise the dispatch-granting seat, got {act.via!r}")
 
     # `/simplify`, BATCH-CLOSE Phase 2: NO before/after casualty loop here (dropped). This
     # chooser-formed act is NOT byte-identical to what `_march_act("p_npc_033", "set_s_036",
-    # "off_npc_033")` would build -- the payload carries an extra `to` key (`{"subject", "to"}`
+    # "off_spymaster")` would build -- the payload carries an extra `to` key (`{"subject", "to"}`
     # vs. `{"subject"}`) and the id is chooser-minted, not the literal `"m1"` -- but it reaches
     # the SAME two-settlement (`set_s_014`/`set_s_036`) mismatch and the same `field.lost`
     # outcome kind that `test_a_lost_field_writes_casualties_and_stance_on_the_attacker_only`
@@ -480,7 +480,7 @@ def test_a_real_fold_reads_the_targets_fortification_on_the_battle_path(monkeypa
 
     monkeypatch.setattr(world_q, "fortification_of", counting)
     w = build_realm(0)
-    events = _fold_one(w, _march_act("p_npc_033", "set_s_036", "off_npc_033"), contest_max_depth=2)
+    events = _fold_one(w, _march_act("p_npc_033", "set_s_036", "off_spymaster"), contest_max_depth=2)
     assert ("field.lost", "Lost") in [(e.kind, e.degree) for e in events], "no field was fought"
     assert calls == ["set_s_036"], f"fortification_of was called {calls!r} on the battle path"
 
@@ -520,7 +520,7 @@ def _resolve_one(w, act):
     return out
 
 
-def _seize_act(target, actor="p_npc_020", via="off_npc_020", act_id="z1"):
+def _seize_act(target, actor="p_npc_020", via="off_king", act_id="z1"):
     return Act(id=act_id, actor=actor, verb="seize", payload={"subject": target}, via=via)
 
 
@@ -563,7 +563,7 @@ def test_in13_exit_i_won_through_the_gate_leaves_the_claimants_mustered_at_the_t
     attackers = world_q.mustered(w, "set_s_014", CROWN)
     defenders = world_q.mustered(w, "set_s_036", CHURCH)
     assert world_q.mustered(w, "set_s_036", CROWN) == [], "fixture: the Crown already stands there"
-    act = _march_act("p_npc_033", "set_s_036", "off_npc_033")
+    act = _march_act("p_npc_033", "set_s_036", "off_spymaster")
     res = Resolution("Won", {"parties": {"claimants": attackers, "subject_members": defenders},
                              "result": {"attacker_size_pct": 1.0, "defender_size_pct": 0.5}})
     w.step = Step.ENCOUNTER
@@ -594,7 +594,7 @@ def test_in13_exit_i_a_won_whose_army_already_stands_there_fells_without_an_arri
     w.step = Step.ENCOUNTER
     w.frozen = False
     kinds = [(e.kind, e.degree) for e in d._fold(w, mint_token(w, WriteClass.ACTS),
-                                                 _march_act("p_npc_033", "set_s_036", "off_npc_033"), res)]
+                                                 _march_act("p_npc_033", "set_s_036", "off_spymaster"), res)]
     assert ("field.won", "Won") in kinds, kinds
     assert not any(k == "army.arrived" for k, _ in kinds), kinds
     assert any(w.persons[pid].body < before[pid] for pid in defenders), "no defender was touched"
@@ -611,7 +611,7 @@ def _won_fold(w, claimants):
     w.step = Step.ENCOUNTER
     w.frozen = False
     return [(e.kind, e.degree) for e in d._fold(w, mint_token(w, WriteClass.ACTS),
-                                                _march_act("p_npc_033", "set_s_036", "off_npc_033"), res)]
+                                                _march_act("p_npc_033", "set_s_036", "off_spymaster"), res)]
 
 
 def test_in13_exit_i_a_won_never_moves_a_claimant_the_muster_basis_would_refuse():
@@ -631,7 +631,7 @@ def test_in13_exit_i_a_won_never_moves_a_claimant_the_muster_basis_would_refuse(
     attackers = world_q.mustered(w, "set_s_014", CROWN)
     assert attackers == ["p_npc_033", "p_npc_035"], "fixture moved: re-read it"
     outsider = "p_npc_001"      # housed elsewhere (a claimant already under the target is no mover)
-    assert not G.may_muster(w, "p_npc_033", "off_npc_033", outsider)
+    assert not G.may_muster(w, "p_npc_033", "off_spymaster", outsider)
     assert "set_s_036" not in world_q.ancestry(w, world_q.home_of(w)[outsider]), "fixture moved"
     kinds = _won_fold(w, attackers + [outsider])
     assert ("field.won", "Won") in kinds and ("army.arrived", "Won") in kinds, kinds
@@ -659,7 +659,7 @@ def test_in13_exit_i_lost_leaves_the_claimants_at_their_origin_r7():
     `set_s_036` leaves `mustered(w, set_s_014, fac_crown)` equal to the claimants, and nobody arrives."""
     w = _no_resident_crown(build_realm(0))
     attackers = world_q.mustered(w, "set_s_014", CROWN)
-    events = _fold_one(w, _march_act("p_npc_033", "set_s_036", "off_npc_033"))
+    events = _fold_one(w, _march_act("p_npc_033", "set_s_036", "off_spymaster"))
     kinds = [e.kind for e in events]
     assert "field.lost" in kinds and "army.arrived" not in kinds, kinds
     assert world_q.mustered(w, "set_s_014", CROWN) == attackers
@@ -685,7 +685,7 @@ def test_in13_exit_ii_h151_a_march_on_ones_own_occupied_settlement_is_unopposed(
                            draw=draw_factory(w.world_seed, lambda: w.tick))
     scenes = chooser(p, View(p.id, [], w.fixtures.get("view_k"), q), Sensation(), lambda: 1)
     (act,) = [a for s in scenes for a in s.acts]
-    assert act.payload["subject"] == "set_s_001" and act.via == "off_npc_033"
+    assert act.payload["subject"] == "set_s_001" and act.via == "off_spymaster"
     attackers = world_q.mustered(w, "set_s_014", CROWN)
     before = {pid: (w.persons[pid].body, list(w.persons[pid].stance or [])) for pid in present}
     kinds = [(e.kind, e.degree) for e in _fold_one(w, act)]
@@ -704,12 +704,12 @@ def test_in13_exit_iii_an_arrived_army_intercepts_a_later_march():
     arrives); a Church march on it in a second meets that army -- `Won` or `Lost`, not `Unopposed`.
     CONTROL, one change (no first fold): the same Church march on the empty `set_s_003` is
     `Unopposed`, so the interception is the arrival's doing."""
-    church = _march_act("p_npc_013", "set_s_003", "off_npc_013", act_id="m_church")
+    church = _march_act("p_npc_013", "set_s_003", "off_cardinal_prudence", act_id="m_church")
     ctrl = build_realm(0)
     ctrl_kinds = [e.kind for e in _fold_one(ctrl, church)]
     assert "field.unopposed" in ctrl_kinds, ctrl_kinds
     w = build_realm(0)
-    first = [e.kind for e in _fold_one(w, _march_act("p_npc_033", "set_s_003", "off_npc_033"))]
+    first = [e.kind for e in _fold_one(w, _march_act("p_npc_033", "set_s_003", "off_spymaster"))]
     assert "army.arrived" in first, first
     assert world_q.mustered(w, "set_s_003", CROWN), "nobody stands at set_s_003 after the arrival"
     second = [(e.kind, e.degree) for e in _fold_one(w, church)]
@@ -738,17 +738,17 @@ def test_in13_the_muster_basis_admits_a_member_and_refuses_everyone_else():
     faction (`muster`), and each one-change control is `NotYours` with the store put back -- a
     non-member, a seat with no `dispatch` grant, and no seat at all."""
     w = build_realm(0)
-    assert G.may_muster(w, "p_npc_033", "off_npc_033", "p_npc_035")
-    _rehome(w, "p_npc_033", "off_npc_033", "p_npc_035", "set_s_003")
+    assert G.may_muster(w, "p_npc_033", "off_spymaster", "p_npc_035")
+    _rehome(w, "p_npc_033", "off_spymaster", "p_npc_035", "set_s_003")
     assert world_q.mustered(w, "set_s_003", CROWN) == ["p_npc_035"]
     # CONTROL for the "no `dispatch` grant" row below: `p_npc_036` is committed to the very faction
-    # `off_npc_008` belongs to, so the grant is the ONLY thing that row changes (actor, seat and subject
+    # `off_parliamentary_clerk` belongs to, so the grant is the ONLY thing that row changes (actor, seat and subject
     # move together, and would otherwise confound it with a faction mismatch).
     assert (world_q.faction_holding(w, "p_npc_036")
-            == faction_prop_id(w.offices["off_npc_008"].faction) == CROWN)
+            == faction_prop_id(w.offices["off_parliamentary_clerk"].faction) == CROWN)
     checked = 0
-    for actor, via, pid, why in (("p_npc_033", "off_npc_033", "p_npc_013", "not a Crown member"),
-                                 ("p_npc_008", "off_npc_008", "p_npc_036", "no `dispatch` grant"),
+    for actor, via, pid, why in (("p_npc_033", "off_spymaster", "p_npc_013", "not a Crown member"),
+                                 ("p_npc_008", "off_parliamentary_clerk", "p_npc_036", "no `dispatch` grant"),
                                  ("p_npc_033", None, "p_npc_036", "no seat exercised")):
         before = world_q.home_of(w).get(pid)
         try:
@@ -768,7 +768,7 @@ def test_in13_the_muster_basis_admits_a_member_and_refuses_everyone_else():
         w.step = Step.ENCOUNTER
         w.frozen = False
         return w.write("travel_leg", mint_token(w, WriteClass.ACTS), None, record_kind="Person",
-                       fieldname="travel_leg", driver="Act", actor="p_npc_033", via="off_npc_033",
+                       fieldname="travel_leg", driver="Act", actor="p_npc_033", via="off_spymaster",
                        change=G.Change((G.Subject.entity("persons", pid),), perform))
 
     def _close(pid):
@@ -777,7 +777,7 @@ def test_in13_the_muster_basis_admits_a_member_and_refuses_everyone_else():
                 t.until = w.tick
 
     pid = "p_npc_035"
-    assert G.may_muster(w, "p_npc_033", "off_npc_033", pid)
+    assert G.may_muster(w, "p_npc_033", "off_spymaster", pid)
     before = [(t.id, t.until) for t in w.tenures if t.subject == pid and t.kind == "contain"]
     try:
         _gate_contain(pid, lambda: _close(pid))
@@ -805,7 +805,7 @@ def test_in13_the_muster_basis_admits_a_member_and_refuses_everyone_else():
 def test_in13_exit_vi_seize_on_an_occupied_settlement_flips_its_holder():
     """EXIT (vi): the Crown marches on Hafenmark-held `set_s_016`, which no Hafenmark member defends
     (`Unopposed`: a capture, occupation); a Crown seat granted `issue` whose purview reaches it
-    (`off_npc_020`, the realm) then seizes it -- `rung.seized`, and `holder_faction_of` reads the
+    (`off_king`, the realm) then seizes it -- `rung.seized`, and `holder_faction_of` reads the
     Crown there, the territory above untouched. CONTROL, one change (no march, so no occupation): the
     same seizure is refused and the holder stays."""
     ctrl = build_realm(0)
@@ -814,7 +814,7 @@ def test_in13_exit_vi_seize_on_an_occupied_settlement_flips_its_holder():
     assert world_q.holder_faction_of(ctrl, "set_s_016") == "fac_hafenmark"
 
     w = build_realm(0)
-    _occupy(w, "set_s_016", "p_npc_033", "off_npc_033")
+    _occupy(w, "set_s_016", "p_npc_033", "off_spymaster")
     assert world_q.holder_faction_of(w, "set_s_016") == "fac_hafenmark", "an arrival wrote a title (R-6)"
     # CONTROLS, each one change from the admitted seizure below (the Crown stands at the same place,
     # the same seat and actor), each pinning an arm of `_seize_rung`'s decline: the territory above the
@@ -845,7 +845,7 @@ def test_in13_exit_vi_control_an_occupied_unheld_settlement_is_nobodys_to_seize(
     unheld, held = build_realm(0), build_realm(0)
     assert world_q.holder_faction_of(unheld, "set_s_037") is None
     for w, town in ((unheld, "set_s_037"), (held, "set_s_016")):
-        _occupy(w, town, "p_npc_033", "off_npc_033")
+        _occupy(w, town, "p_npc_033", "off_spymaster")
         assert world_q.mustered(w, town, CROWN), "the Crown does not stand there"
     assert EFFECTS["seize"](held, _seize_act("set_s_016")) is not G.NO_CHANGE
     assert EFFECTS["seize"](unheld, _seize_act("set_s_037")) is G.NO_CHANGE
@@ -853,21 +853,21 @@ def test_in13_exit_vi_control_an_occupied_unheld_settlement_is_nobodys_to_seize(
 
 def test_in13_exit_vi_control_a_seat_holder_committed_to_another_faction_takes_nothing():
     """`_seize_rung`'s fourth decline [ASSUMPTION; medium]: the title it writes is the ACTOR'S OWN hold,
-    read back as `faction_holding(actor)`. `p_npc_020` sits in the Crown seat `off_npc_020` and the Crown
+    read back as `faction_holding(actor)`. `p_npc_020` sits in the Crown seat `off_king` and the Crown
     occupies `set_s_016` (exit (vi)'s path), but his `commit` is moved to Hafenmark: the effect declines
     and the act is refused with the holder unmoved. CONTROL, one change (his commit left on the Crown):
     the same act is `rung.seized`."""
     def occupied(commit_to):
         w = build_realm(0)
-        _occupy(w, "set_s_016", "p_npc_033", "off_npc_033")
+        _occupy(w, "set_s_016", "p_npc_033", "off_spymaster")
         if commit_to != CROWN:
             for t in w.persons["p_npc_020"].tenures:
                 if t.kind == "commit" and t.object == CROWN and t.live:
                     t.until = w.tick
             w.add_tenure(Tenure("t_in13_020_commit", "p_npc_020", commit_to, "commit", w.tick))
         assert world_q.faction_holding(w, "p_npc_020") == commit_to
-        assert w.offices["off_npc_020"].faction == "Crown" and G.may_seize(
-            w, "p_npc_020", "off_npc_020", "p_npc_050", "set_s_016")
+        assert w.offices["off_king"].faction == "Crown" and G.may_seize(
+            w, "p_npc_020", "off_king", "p_npc_050", "set_s_016")
         return w
     w = occupied("fac_hafenmark")
     assert _seize_kinds(w, "set_s_016") == ["seize.refused"]
@@ -880,15 +880,15 @@ def test_in13_a_retaking_closes_the_seizers_hold_under_the_seizure_basis(monkeyp
     """THE CLOSURE HALF OF THE RUNG SEIZURE (the gate's `seizure` clause widened to a Rung): after the
     Crown occupies and seizes `set_s_016` (exit (vi)'s path), Hafenmark marches back (`p_npc_050`, the
     module entry patched to a `Won`: the Crown army there is opposed and stays, `scaled_by_degree`),
-    and its seat `off_npc_050` (granted `issue`, purview over its duchy) seizes the town again: the
+    and its seat `off_duchess_hafenmark` (granted `issue`, purview over its duchy) seizes the town again: the
     Crown seizer's `hold` CLOSES under `seizure` -- not `T-m`, he is not the actor -- and Hafenmark's
     opens. One live `hold` on the settlement after."""
     w = build_realm(0)
-    _fold_one(w, _march_act("p_npc_033", "set_s_016", "off_npc_033"))
+    _fold_one(w, _march_act("p_npc_033", "set_s_016", "off_spymaster"))
     assert _seize_kinds(w, "set_s_016") == ["rung.seized"]
     first = world_q.hold_force(w, "set_s_016")
     _patch_won(monkeypatch)
-    _occupy(w, "set_s_016", "p_npc_050", "off_npc_050", act_id="m_back")
+    _occupy(w, "set_s_016", "p_npc_050", "off_duchess_hafenmark", act_id="m_back")
     bases = []
     real = G.tenure_write_basis
 
@@ -897,7 +897,7 @@ def test_in13_a_retaking_closes_the_seizers_hold_under_the_seizure_basis(monkeyp
         bases.append((args[1].subject, args[2] is None, out))
         return out
     monkeypatch.setattr(G, "tenure_write_basis", spy)
-    out = _resolve_one(w, _seize_act("set_s_016", actor="p_npc_050", via="off_npc_050", act_id="z2"))
+    out = _resolve_one(w, _seize_act("set_s_016", actor="p_npc_050", via="off_duchess_hafenmark", act_id="z2"))
     assert [e.kind for e in out] == ["rung.seized"], [e.kind for e in out]
     assert ("p_npc_020", False, G.SEIZURE) in bases, bases
     assert not first.live and world_q.hold_force(w, "set_s_016").subject == "p_npc_050"
@@ -912,7 +912,7 @@ def test_in13_exit_vii_an_opposed_won_removes_no_defender_and_the_seizure_is_adm
     and the same seizure is refused."""
     assert build_realm(0).fixtures.get("field_casualty_model") == "scaled_by_degree"
     ctrl = _no_resident_crown(build_realm(0))
-    lost = [e.kind for e in _fold_one(ctrl, _march_act("p_npc_033", "set_s_036", "off_npc_033"))]
+    lost = [e.kind for e in _fold_one(ctrl, _march_act("p_npc_033", "set_s_036", "off_spymaster"))]
     assert "field.lost" in lost, lost
     assert _seize_kinds(ctrl, "set_s_036") == ["seize.refused"]
 
@@ -920,7 +920,7 @@ def test_in13_exit_vii_an_opposed_won_removes_no_defender_and_the_seizure_is_adm
     w = _no_resident_crown(build_realm(0))
     defenders = world_q.mustered(w, "set_s_036", CHURCH)
     kinds = [(e.kind, e.degree)
-             for e in _fold_one(w, _march_act("p_npc_033", "set_s_036", "off_npc_033"))]
+             for e in _fold_one(w, _march_act("p_npc_033", "set_s_036", "off_spymaster"))]
     assert ("field.won", "Won") in kinds and ("army.arrived", "Won") in kinds, kinds
     assert world_q.mustered(w, "set_s_036", CHURCH) == defenders, "a won field removed a defender"
     assert _seize_kinds(w, "set_s_036") == ["rung.seized"]
@@ -930,7 +930,7 @@ def test_in13_exit_vii_an_opposed_won_removes_no_defender_and_the_seizure_is_adm
 def test_in13_h212_a_resident_occupies_the_church_seat_at_seed_0_with_no_field_fought():
     """H-212's cite, EXECUTED rather than inspected: on an UNMODIFIED `build_realm(0)` (no
     `_no_resident_crown` edit) the Crown is already `mustered` at the Church's `set_s_036` through its
-    resident `p_npc_037`, so the Crown seat granted `issue` whose purview reaches the town (`off_npc_020`,
+    resident `p_npc_037`, so the Crown seat granted `issue` whose purview reaches the town (`off_king`,
     the realm) seizes it with no march and no field. CONTROL, one change (the resident re-housed away, the
     fixture edit the exits above use): the same act is refused."""
     w = build_realm(0)
@@ -978,7 +978,7 @@ def _witnessed_field(monkeypatch, won):
     d = SeasonDriver(w)
     w.step = Step.RESOLVE
     w.frozen = False
-    act = _march_act("p_npc_033", "set_s_036", "off_npc_033")
+    act = _march_act("p_npc_033", "set_s_036", "off_spymaster")
     evs = d.resolve(mint_token(w, WriteClass.ACTS), [act], 2)
     evs = evs + d.encounter(mint_token(w, WriteClass.ACTS), evs, 2)
     assert kind in [e.kind for e in evs], [e.kind for e in evs]

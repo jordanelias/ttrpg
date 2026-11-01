@@ -127,9 +127,10 @@
 #     decision, not a resolver's.
 #   * `obligees` become `oblige` Tenures on the seat, with no term (`04 §B.8`'s `term?`, lawful
 #     null): a seat seeded at world-gen has no opening act to declare one.
-#   * A loop-built seat keeps its `off_<holder>` id and its derived post/body/faction (a post
-#     normalisation is a separate unit -- `rosters.yaml: remit_default`'s own note); only a MINTED
-#     seat carries this file's `id`, `post`, `body` and `faction`.
+#   * A loop-built seat keeps its derived post/body/faction (a post normalisation is a separate unit --
+#     `rosters.yaml: remit_default`'s own note); only a MINTED seat carries this file's `post`, `body`
+#     and `faction`. Every seat a row stands for, loop-built or minted, is under the row's `id`
+#     (`harness/populated.py::_seat_id`, CP-T02-02); a seat with no row keeps `off_<holder>`.
 
 meta:
   source: "engine/season/offices.yaml -- the governance ladder's titles, and 31 authored seats (29, then the two Riskbreakers rows at v9 IN-64)."

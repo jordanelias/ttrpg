@@ -1548,7 +1548,7 @@ def test_rem22_c_every_candidate_a_class_removes_force_admitted_refuses_on_the_r
 # it is not in the tree. MUTATION, executed below in REM-22's shape: the column deleted, and the march no
 # longer forms on the field.
 
-MARCHER, MARCHER_SEAT, ORIGIN, FIELD = "p_npc_033", "off_npc_033", "set_s_014", "set_s_036"
+MARCHER, MARCHER_SEAT, ORIGIN, FIELD = "p_npc_033", "off_spymaster", "set_s_014", "set_s_036"
 
 
 def _told_of_field():
