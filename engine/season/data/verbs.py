@@ -1583,7 +1583,7 @@ def _load_vocation_sourced(values: dict) -> dict:
 VOCATION_SOURCED = _load_vocation_sourced(roster_map("vocation_sourced", "values"))
 # THE VOCATIONS: the capability keys some verb draws dice from -- `rosters.yaml: verb_capability`'s
 # VALUES (its keys are verbs), derived here and never spelt, so a key `train` may raise is exactly a key
-# `_pool_of` reads (#453 K-20: the range is `verb_capability`'s names; Thread Sensitivity is outside it).
+# `faculty` reads (#453 K-20: the range is `verb_capability`'s names; Thread Sensitivity is outside it).
 VOCATIONS = frozenset(VERB_CAPABILITY.values())
 
 

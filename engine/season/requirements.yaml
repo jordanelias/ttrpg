@@ -1583,7 +1583,7 @@ rows:
       persons the 143 corpus cases build (MEASURED 2026-10-02 with `corpus_run.cast_overlay()` and
       `build_at`; the last paragraph of this row carries the run) and holds `{copying: 3}` on one,
       NPC-088's `p_a`. Its one corpus writer is `build_at`'s seating of a cast entry's own authored
-      `capability` (`corpus_run.py:537-540`), so `_pool_of` returns `pool_default` for those 429 and
+      `capability` (`corpus_run.py:537-540`), so `faculty` returns `pool_default` for those 429 and
       `modules/social_contest/roll.py::obstacle` reads `obstacle_default` for every non-person subject. `lev` is 0.0 with no
       producer, stated as zero because a fabricated leverage would be a number nobody chose. It
       varies by person only where capability is written, which is character development and out of
@@ -1631,7 +1631,7 @@ rows:
       one case of 143.
       READING @287ac3d9 (IN-38's re-measure): `headless --seasons 2 --seed 0` content hash d3bcc94411c9b1138c9555a0c5725df3, 50 of 56 verbs
       the fold can execute; `test_we_only_a_verb_that_declares_contests_can_be_graded_today` 1 passed. The by-person conjunct is unmoved:
-      IN-38 authored no `capability`, so `_pool_of` varies by person only in the cases that already carried one.
+      IN-38 authored no `capability`, so `faculty` varies by person only in the cases that already carried one.
     measure: "python -m engine.season.harness.headless --seasons 2 --seed 0 ; python -m pytest engine/season/tests -k test_we_only_a_verb_that_declares_contests_can_be_graded_today"
     blocks: [H-98]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W23 spent in substance (`fight` resolves through the combat seam and is graded)

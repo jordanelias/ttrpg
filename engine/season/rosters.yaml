@@ -1240,7 +1240,7 @@ rosters:
     row: H-111
     note: >-
       ⚠ A ROUTE, NOT A PRIZE. Each row names the provider registered under `@provider("contest", …)`
-      and the composition role that provider calls; the pool is `seam/wrappers/sigma.py::_pool_of`
+      and the composition role that provider calls; the pool is `seam/wrappers/sigma.py::faculty`
       (`verb_capability`, else the swept `pool_default`) and the obstacle the module's own
       (`modules/social_contest/roll.py::obstacle`: `obstacle_default`, swept, while no
       `verb_capability` row names an inquiry -- an inquiry's subject can be a person-kind Rung). The pair must be one a `contest_subsystems` prize row already
@@ -1332,7 +1332,7 @@ rosters:
       actor's capability is the design's; WHICH capability key each verb draws on is stated
       nowhere, so this table is an `assumption` row before it is a lookup -- `08 §3`'s
       inject-declare-sweep, and never a refusal of the whole corpus for a missing key.
-      ⚠ A VERB WITH NO ROW HERE IS NOT AN ERROR. `seam/wrappers/sigma.py::_pool_of` falls through
+      ⚠ A VERB WITH NO ROW HERE IS NOT AN ERROR. `seam/wrappers/sigma.py::faculty` falls through
       to `pool_default`, which is the `assumption` grade's own polarity: `absent` refuses, and this
       is not one. The table is therefore OPEN in the sense that matters -- adding a contested verb
       does not require adding a row before the seam will run it.

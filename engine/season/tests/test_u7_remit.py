@@ -1231,7 +1231,7 @@ def test_sc03b_a_judge_under_one_die_is_refused_not_a_crash_and_opens_nothing():
     """S27.4 (`Ob > 2 x Pool`) reached by a contested `determine`: a judge whose pool is under 1D comes
     back as the row's one refusal kind with NO degree -- never an aborted season -- exactly as `speak`'s
     does (`test_sc01_speak.py`), and the matter stays docketed. CONTROL: pool 1 resolves to a band."""
-    for pool, refused in ((0, True), (1, False)):  # `_pool_of` int()s the pool, so 0.5 would be the 0 arm
+    for pool, refused in ((0, True), (1, False)):  # `faculty` int()s the pool, so 0.5 would be the 0 arm
         w, d = _ready("determine", pool_default=pool)
         out = _fold(w, d, _determine(f"zpool{pool}"))
         assert bool(out) and (_kinds(out) == ["determine.refused"]) is refused, (pool, _kinds(out))

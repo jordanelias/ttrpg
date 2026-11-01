@@ -437,7 +437,7 @@ def _eff_train(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     correct]: it writes `Person.capability` ONLY WHERE A CASE NAMES A VOCATION -- so the key must be a
     `verb_capability` value (K-20's range: Thread Sensitivity has no carrier, H-85, P-08) and the SUBJECT
     must ALREADY hold it: a key is never minted, because a minted `{copying: 1}` would replace
-    `pool_default` and LOWER his pool (`seam/wrappers/sigma.py::_pool_of`). The ACTOR's own capability is
+    `pool_default` and LOWER his pool (`seam/wrappers/sigma.py::faculty`). The ACTOR's own capability is
     NOT read: capability gates nothing (#353 §9.2), here as at formation. ONE whole point, the unit of a
     dice count [ASSUMPTION; medium; Jordan to correct; revert: a swept fixture step].
 

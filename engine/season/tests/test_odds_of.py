@@ -170,15 +170,30 @@ def test_mode_b_for_a_non_person_subject_needs_no_claim_and_a_record_or_room_is_
     p = w.persons["p_low"]
     fx = w.fixtures
     # a non-person subject: the module's stand-in obstacle is known to him
-    inp = sigma.believed_input(p, "tell", "somewhere", fx, person_subject=False)
+    inp = sigma.believed_input(p, "tell", "somewhere", fx, pool=4, person_subject=False)
     assert inp is not None and inp.opposition is None
     assert sigma._odds_of_input(inp) == band_odds(4, fx.get("obstacle_default"), 0.0)
     # an examined Record's forgery quality, and a bench's terms, are unknown unless he supplies them
-    assert sigma.believed_input(p, "tell", "r1", fx, person_subject=False, examined_record=True) is None
-    assert sigma.believed_input(p, "tell", "x", fx, person_subject=False, heard=True) is None
-    room = sigma.believed_input(p, "tell", "x", fx, person_subject=False, heard=True,
+    assert sigma.believed_input(p, "tell", "r1", fx, pool=4, person_subject=False, examined_record=True) is None
+    assert sigma.believed_input(p, "tell", "x", fx, pool=4, person_subject=False, heard=True) is None
+    room = sigma.believed_input(p, "tell", "x", fx, pool=4, person_subject=False, heard=True,
                                 room={"reception": 1.0, "proofs": 0.0})
     assert room is not None and room.reception == 1.0
+
+
+def test_mode_b_pool_is_faculty_and_an_addend_moves_it(monkeypatch):
+    """The believer's own pool is `faculty(w, believer, verb)`, the one reader: a registered addend moves
+    mode (b) as it moves mode (a), while his belief about the opposition still comes from his ledger."""
+    w = _world()
+    p = w.persons["p_low"]
+    p.ledger.append(_claim("p_low", "p_other", 3))
+    act = _tell("p_other")
+    before = sigma.odds_of(w, act, believer=p)
+    assert before == sigma.odds_of(w, act)
+    monkeypatch.setattr(sigma, "POOL_ADDENDS", list(sigma.POOL_ADDENDS))
+    sigma.register_pool_addend(lambda w_, who, verb: 2 if who.id == "p_low" else 0)
+    after = sigma.odds_of(w, act, believer=p)
+    assert after == band_odds(6, 1.5, 0.0) == sigma.odds_of(w, act) and after != before
 
 
 def test_mode_b_is_only_the_actors_own_odds():

@@ -44,7 +44,7 @@ class SocialContestInput:
     """What the `social_contest` module's σ-leverage roll reads, and nothing else.
 
     Built by `seam/wrappers/sigma.py::contest_input` (the host input builder) from `World`:
-      * `pool`      -- dice, from what the actor genuinely has (`sigma.py::_pool_of`);
+      * `pool`      -- dice, from what the actor genuinely has (`sigma.py::faculty`);
       * `opposition` -- the subject's score on the verb's capability key when the subject is a person
                        carrying one, else `None`. A RAW OPERAND, not an obstacle;
       * `obstacle_default` -- the `H-127` stand-in for a subject with no score to halve;

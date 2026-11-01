@@ -109,7 +109,7 @@ _RESOLVER = "d10_sigma"
 def _capability(entity: Any, verb: str):
     """What `entity` brings to `verb`'s capability key, or `None` if it brings nothing.
 
-    ⚠ ONE READ, TWO CALLERS. `_pool_of` and `_opposition_of` each map the verb through
+    ⚠ ONE READ, TWO CALLERS. `faculty` and `_opposition_of` each map the verb through
     `VERB_CAPABILITY`, guard a missing key, and guard a missing entry — the same three steps,
     differing only in WHOSE dict they read and what default they fall to. Those differences are the
     callers'; the read is not. Returning `None` rather than a default is what keeps it that way:
@@ -121,19 +121,34 @@ def _capability(entity: Any, verb: str):
     return (getattr(entity, "capability", None) or {}).get(key)
 
 
-def _pool_of(person: Any, verb: str, fx: Any) -> int:
-    """Dice, from what the actor genuinely has. `03 §A.2` — *"Rank supplies dice and gates nothing"*.
+# THE POOL'S ADDENDS (CP-T01-01): each `(w, person, verb) -> int` is summed into `faculty`, the one pool
+# reader. EMPTY AT HEAD -- nothing registers one until CP-T01-02's practice (the first reader of `w.log`)
+# and T07's addends; this is the place they land, so none grows its own pool rule. An addend reads
+# only what it is handed (`w`, the actor, the verb) and returns whole dice; it never replaces the
+# capability read, it adds to it.
+POOL_ADDENDS: list = []
+
+
+def register_pool_addend(fn: Any) -> None:
+    """Add `fn(w, person, verb) -> int` to what `faculty` sums. Registered once, at import of its owner."""
+    POOL_ADDENDS.append(fn)
+
+
+def faculty(w: Any, p: Any, verb: str) -> int:
+    """Dice, from what the actor genuinely has: THE ONE POOL READER. `03 §A.2` -- *"Rank supplies dice and
+    gates nothing"*. Reached by `contest_input` (the dealt record) and by `odds_of` (the believer's own
+    pool, which is known to him; `believed_input` takes it as an argument and has no World).
 
     `VERB_CAPABILITY` maps a verb to the capability key it draws on; `Person.capability` is the
-    person's own dict. ⚠ IT IS EMPTY ON EVERY CORPUS PERSON TODAY — its writers are a `cast:` overlay and (v9 IN-12 step 9) `train`, which raises a key only a person already holds —
-    so in practice this returns `pool_default` for everybody, which is why R-09 reads `partial`
-    after this unit and not `met`: the roll varies by SEED and by FIXTURE, not by PERSON. It varies
-    by person the day capability is written, and that is character development, out of this arc.
+    person's own dict, written by a `cast:` overlay and (v9 IN-12 step 9) `train`, which raises a key
+    only a person already holds. Where he holds the key the pool is that score; otherwise it is
+    `pool_default`; then the registered addends (`POOL_ADDENDS`) are summed on.
     ⚠ `08 §3` GIVES THE POLARITY: an `assumption` grade means *inject the default, declare the site,
-    sweep three points* — never refuse the whole corpus for a missing key. `absent` is the grade
+    sweep three points* -- never refuse the whole corpus for a missing key. `absent` is the grade
     that refuses, and this is not one."""
-    have = _capability(person, verb)
-    return int(have if have is not None else fx.get("pool_default"))
+    have = _capability(p, verb)
+    base = int(have if have is not None else w.fixtures.get("pool_default"))
+    return base + sum(int(add(w, p, verb)) for add in POOL_ADDENDS)
 
 
 def _opposition_of(w: Any, subject: Optional[str], verb: str) -> Optional[float]:
@@ -218,7 +233,7 @@ def contest_input(w: Any, claimants: list, *, verb: str = "",
                           proofs=proofs(w, claimants[0], subject, room),
                           proof_step=fx.get("proof_step"))
     doc = w.records.get(examined) if examined is not None else None
-    return _frame(fx, _pool_of(w.persons[claimants[0]], verb, fx), _opposition_of(w, subject, verb),
+    return _frame(fx, faculty(w, w.persons[claimants[0]], verb), _opposition_of(w, subject, verb),
                   doc.forgery_quality if doc is not None else 0.0, room_terms,
                   advantage_sigma(fx, {"effort": effort}))
 
@@ -268,15 +283,16 @@ def _odds_of_input(inp: SocialContestInput) -> Optional[tuple]:
 
 
 def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
-                   person_subject: bool, examined_record: bool = False,
+                   pool: int, person_subject: bool, examined_record: bool = False,
                    room: Optional[dict] = None, heard: bool = False,
                    effort: int = 0) -> Optional[SocialContestInput]:
     """THE PERSON'S RECORD (mode (b)): the same `SocialContestInput`, filled only from what `p` holds.
 
-    AX-2: it reads `p` (his own capability and his own ledger) and the fixtures, never the World; the
+    AX-2: it reads `p` (his own ledger) and the fixtures, never the World; the
     facts about the act's SHAPE that only a World can answer (`person_subject`: the subject is a person;
     `examined_record`: an inquiry examines a Record; `heard`: a bench hears the contest) are the
-    caller's, not a belief. His pool is his own and held with certainty. Every other field is filled
+    caller's, not a belief. His pool is his own and held with certainty: the caller passes it as `pool`
+    (`odds_of` computes it with `faculty(w, believer, verb)`), so `faculty` stays the one pool reader. Every other field is filled
     only from what he holds, and WHERE A FACTOR IS UNKNOWN TO HIM THE ANSWER IS `None`, never a figure:
       * the opposition of a person subject, on a verb that names a capability key: a claim in his
         ledger on that subject at `CAPABILITY_CLAIM + key` (the latest, then the most confident);
@@ -304,7 +320,7 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
             return None
         room_terms = dict(reception=room["reception"], reception_gain=fx.get("reception_gain"),
                           proofs=room["proofs"], proof_step=fx.get("proof_step"))
-    return _frame(fx, _pool_of(p, verb, fx), opposition, 0.0, room_terms,
+    return _frame(fx, pool, opposition, 0.0, room_terms,
                   advantage_sigma(fx, {"effort": effort}))
 
 
@@ -365,6 +381,7 @@ def odds_of(w: Any, act: Any, *, believer: Any = None,
         return _odds_of_input(contest_input(w, parties, verb=act.verb, subject=subject, room=room,
                                             examined=examined, effort=effort))
     inp = believed_input(believer, act.verb, subject, w.fixtures,
+                         pool=faculty(w, believer, act.verb),
                          person_subject=bool(subject) and subject in w.persons,
                          examined_record=examined is not None and examined in w.records,
                          room=believed_room, heard=room is not None, effort=effort)
