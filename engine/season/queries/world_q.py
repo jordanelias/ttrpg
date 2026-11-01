@@ -43,6 +43,7 @@ from ..data.rosters import (
     VERB_CAPABILITY,
     faction_prop_id,
     require_member,
+    roster_map,
 )
 # IN-09: the Record kinds a held document is an occasion for, derived off the verb table's rows;
 # v9 IN-49: the remit acts a seat exercises on a `Rung`-classed referent, the same way.
@@ -2657,6 +2658,44 @@ def current_stage(w: World, p: Person, ambition) -> Optional[dict]:
     return out or None
 
 
+def _aim_held_by_org_member(w: World, goal) -> bool:
+    """`rung`'s aim rule: the goal's rung is governed (`governing_hold`, the nearest held rung at or above it) by a
+    person committed to the goal's organization's faction (`faction_holding`, the one owner of *which faction a person
+    coheres under*; `data/goals.py::org_faction` the org's faction). A faction held by `None` (no commit, or two) or
+    an org with no faction is never met. The two readers `endings_reached` and the march path already share."""
+    t = governing_hold(w, goal.object["rung"])
+    fac = _goals.org_faction(goal.org_kind, goal.org)
+    return t is not None and fac is not None and faction_holding(w, t.subject) == faction_prop_id(fac)
+
+
+#: `rosters.yaml: goal_object_kinds.aim` names a rule per kind; these are the rules. A rule is a predicate over
+#: `(w, goal)` and reads live `hold`s and `commit`s only (T-a): nothing stored, so a rung lost un-meets the aim.
+AIM_RULES = {"held_by_org_member": _aim_held_by_org_member}
+
+
+def aim_state(w: World, p: Person, prop) -> str:
+    """CP-T02-03 (B10-09; v10 AM-B-09, which narrowed the home to rung goals): `"met"` or `"open"` for the ambition
+    `prop` (a Proposition, as `questions_for` reads it) -- whether it still has work. `"met"` only where the goal's
+    object kind has a row in `rosters.yaml: goal_object_kinds.aim` (`rung` alone) and that kind's rule holds; EVERY
+    OTHER KIND, and every Proposition no goal names (a creed, a tie, a want), is `"open"`. There is no `"breached"`:
+    a vacated seat reaches a person as `tenure.closed` (CP-T02-01), not as a state of the aim.
+
+    `p` is the asker; the shipped rule reads the world alone. No state is stored and no TRACE row is written
+    (Q4 asks once per ambition per person, `goal_referents`' reason). AX-6 clause 3: the rule reads live edges and
+    is undone by an act (a rung lost), so it is not monotone in the ended-edge set. An unknown rule name REFUSES."""
+    goal = _goals.goal(prop.id)
+    if goal is None:
+        return "open"
+    rule = roster_map("goal_object_kinds", "aim").get(goal.object["kind"])
+    if rule is None:
+        return "open"
+    if rule not in AIM_RULES:
+        raise Unspecified(
+            f"rosters.yaml: goal_object_kinds.aim names the rule {rule!r}", "rosters.yaml -- goal_object_kinds.aim",
+            needs=f"one of {sorted(AIM_RULES)}", law="CP-T02-03 -- a kind's aim rule is a named rule of world_q.AIM_RULES")
+    return "met" if AIM_RULES[rule](w, goal) else "open"
+
+
 # A `deed_doers` goal's referents are the doers it acts AGAINST: every authored form names them so --
 # "threats" (`against:`), "corruption" (`kinds:`), "heresy" (`engaging:`) -- and the row carries no
 # `stance:` of its own. So a goal engaging a pole without a `stance:` takes the opposed side.
@@ -3345,7 +3384,9 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     for pid in ambs:
         refs = goal_referents(w, p, w.propositions[pid])
         refs_of[pid] = set(refs) - {None}
-        if refs:
+        # CP-T02-03: a MET aim (a rung goal whose rung its org already governs) has no work to ask for. Its
+        # referents stay in `refs_of`: they still orient `attention_key`; only the standing question is not formed.
+        if refs and aim_state(w, p, w.propositions[pid]) != "met":
             out.append(Question(f"q:need:{pid}", "need", refs, pid))
 
     # v9 SC-01 FIRED-SLOT STEP (H-163 limit 2, #453 pass-1 step 4): A JUDGE IS ASKED ABOUT THE

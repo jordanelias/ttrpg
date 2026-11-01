@@ -409,9 +409,14 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # dies; each kind's Event carries only its earners' changes), so the deaths and the deposits move; the BUILD is equal. Was
 # ebe18510... / 6f2ec528... (one, two seasons); events 9760 -> 9338, 28883 -> 24224. CONTROL: the pre-item tree (`68767e731`)
 # reads the old two-season hash (measured, `build_realm(0)` + `populated.run(seasons=2)`). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED at v10 CP-T02-03 (B10-09), A BEHAVIOUR MOVE DECLARED: a `rung` goal whose rung its org's member governs is MET
+# (`world_q.aim_state`) and forms no `need`; `goal_varfell_oastad_gate` is met at build, so its five Varfell members stop asking
+# it and the act mix moves; the BUILD is equal. Was 921de777... / cdeb64c2... (one, two seasons); events 9338 -> 9154, 24224 -> 24039.
+# CONTROL, run in process on this tree: `aim_state` reading `open` always (`AIM_RULES` cleared) reads the old pair, the old
+# `BASE_EVENTS` and the old `thread_read`-withheld arm exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 BASE_HASHES = {0: "4ab812ba77c1c5d94fc3e2c59b0bba99",
-               1: "921de777938cc0e81efa1747e1cb5eaa",
-               2: "cdeb64c29ab69937d9b26d2097cbd2e3"}
+               1: "b09a95da383fc5b87211e405ea8cfb8e",
+               2: "68ca1303136da61da552abd358fdd4f7"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -479,8 +484,8 @@ BASE_HASHES = {0: "4ab812ba77c1c5d94fc3e2c59b0bba99",
 # RE-RECORDED at v10 CP-T02-02 with `BASE_HASHES` (9138 -> 9760, 27154 -> 28883; `populated._seat_id` replaced by the slug
 # rule in process reads the old pair and the old build hash).
 # RE-RECORDED at v10 CP-T03-00 with `BASE_HASHES` (9760 -> 9338, 28883 -> 24224; both parties of a fight take their band).
-BASE_EVENTS = {1: (9338, "dcc4448c2a08d527abccd7b48dd83cca04e4cd6ea26c56da781aff4fa3914bbd"),
-               2: (24224, "2c5ee956410e5887c7be5bedf2528e8c2a9c1f81d5f523e6788f2a0ab331d631")}
+BASE_EVENTS = {1: (9154, "b61230128005bfeebbe368030b4075d4f390d9cf216e69d2933d5a3c9b4d450a"),
+               2: (24039, "b9e083a2fc5cb68e2554f8949599dcffeb6b5dcd078924b16485016b6324171c")}
 
 
 def _digest(w) -> tuple:
@@ -617,7 +622,9 @@ def test_the_give_withheld_arm_reproduces_the_one_season_pin():
 #: `populated._seat_id` replaced by the slug rule in process reads the old value exactly).
 #: RE-RECORDED at v10 CP-T03-00 with `BASE_HASHES`: 9759 / e17367f6... -> 9337 / c50d4c47... (both parties of a fight take
 #: their band); still differs from `BASE_EVENTS[1]` (9338).
-THREAD_READ_WITHHELD_EVENTS_1 = (9337, "c50d4c4728a8cc851c382e64a446168067eccef49ea90df43d7b5228cfe43d4e")
+#: RE-RECORDED at v10 CP-T02-03 with `BASE_HASHES`: 9337 / c50d4c47... -> 9143 / 2a17f775... (a met rung goal forms no `need`;
+#: `aim_state` reading `open` always reads the old value exactly); still differs from `BASE_EVENTS[1]` (9154).
+THREAD_READ_WITHHELD_EVENTS_1 = (9143, "2a17f775b83ec5ed5780d23398bf45664d53a5a281dca971cafe17f0f8c005e5")
 
 
 def test_the_thread_read_withheld_arm_is_pinned_and_differs_from_the_shipped_season():

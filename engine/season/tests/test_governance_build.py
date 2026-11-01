@@ -2853,7 +2853,11 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # their band (a felled attacker dies), so the realm's first-season deaths and act mix move (seed 0, one season: 596 -> 590 in
     # both arms; `test_go07_canonical_digest.py` records the 590). CONTROL: the pre-item tree (`68767e731`) is the tree that read
     # (596, 596).
-    assert (out["acts"], cout["acts"]) == (590, 590), (
+    # ⚠⚠ v10 CP-T02-03 (B10-09): (590, 590) -> (589, 589), A RE-RECORD WITH THE UNIT THAT MOVED IT: a `rung` goal whose rung its org
+    # governs is met (`world_q.aim_state`) and forms no `need` (`goal_varfell_oastad_gate`), so the realm's act mix moves (seed 0, one
+    # season: 590 -> 589 in both arms; `test_go07_canonical_digest.py` records the 589). CONTROL: `aim_state` reading `open` always
+    # (`AIM_RULES` cleared) in process reads (590, 590) at seed 0 (`test_go07_canonical_digest.BASE[0]`).
+    assert (out["acts"], cout["acts"]) == (589, 589), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")
