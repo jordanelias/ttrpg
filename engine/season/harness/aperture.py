@@ -511,13 +511,14 @@ def instrumented_season(w, seasons: int) -> dict:
     # the record passes, on the instance (`self._fold` finds this before the class's), and the original is
     # called with the same arguments and its return untouched. A record with no `pool` (combat's, mass
     # battle's, an uncontested act's `None`) is no pooled roll and is not counted.
-    pools: dict = defaultdict(lambda: defaultdict(Counter))   # verb -> actor -> Counter(pool)
+    # The key is `(season tick, pool)`: two persons are apart only in a season they both rolled in.
+    pools: dict = defaultdict(lambda: defaultdict(Counter))   # verb -> actor -> Counter((tick, pool))
     base_fold = d._fold
 
     def watched_fold(w_, token, a, resolution=None):
         rec = getattr(resolution, "result", None)
         if isinstance(rec, dict) and rec.get("pool") is not None:
-            pools[a.verb][a.actor][rec["pool"]] += 1
+            pools[a.verb][a.actor][(w_.tick, rec["pool"])] += 1
         return base_fold(w_, token, a, resolution)
     d._fold = watched_fold
 
@@ -747,10 +748,12 @@ def verb_totals(vc: dict) -> dict:
 
 
 def persons_separated(per_actor: dict) -> bool:
-    """Do two DIFFERENT actors of one verb roll at different pools? `per_actor` is `{actor: {pool: n}}`.
-    One actor rolling two pools across seasons is practice at work on one person, not two persons apart."""
-    held = [(a, p) for a, c in per_actor.items() for p in c]
-    return any(a != b and p != q for a, p in held for b, q in held)
+    """Do two DIFFERENT actors of one verb roll at different pools IN THE SAME SEASON? `per_actor` is
+    `{actor: {(tick, pool): n}}`. One actor rolling two pools across seasons is practice at work on one
+    person, and two actors who practise in lockstep (2 then 3, both) are never apart in any season: neither
+    is two persons apart."""
+    held = [(a, t, p) for a, c in per_actor.items() for t, p in c]
+    return any(a != b and t == u and p != q for a, t, p in held for b, u, q in held)
 
 
 def pools_lines(m: dict) -> list:
@@ -758,14 +761,15 @@ def pools_lines(m: dict) -> list:
     <set> over <n> actors`, the set read off the records the fold was handed (`instrumented_season`'s
     `watched_fold`), not recomputed from `faculty`. A reader: nothing here asserts, and the exit code is
     untouched. The tail counts actors per pool and says whether two actors of the verb sit at different
-    pools, which is R-09's by-person conjunct read as stated in its `measure:`."""
+    pools IN THE SAME SEASON (the tick kept with each pool), which is R-09's by-person conjunct read as
+    stated in its `measure:`."""
     out = ["\n  POOLS ROLLED — per verb the seam rolled (its RESOLVED records' `pool`), the set of pools "
            "rolled and the distinct actors who rolled it; a reader, no pass or fail"]
     pools = m.get("pools", {})
     for v in sorted(pools):
         per = pools[v]
-        rolled = sorted({p for c in per.values() for p in c})
-        by_pool = {p: sum(1 for c in per.values() if p in c) for p in rolled}
+        rolled = sorted({p for c in per.values() for _, p in c})
+        by_pool = {p: sum(1 for c in per.values() if p in {q for _, q in c}) for p in rolled}
         out.append(f"    `{v}`: pools rolled {rolled} over {len(per)} actors · actors per pool {by_pool} · "
                    f"two actors at different pools: {'yes' if persons_separated(per) else 'no'}")
     if not pools:
