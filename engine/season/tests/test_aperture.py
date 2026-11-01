@@ -716,3 +716,32 @@ def test_cr14_the_original_positional_form_and_the_seeds_form_parse():
         with pytest.raises(ValueError):
             A.parse_args(bad)
     assert A.main(["2", "--seeds"]) == 2
+
+
+def test_cr18_the_pools_line_reads_the_rolled_pool_and_separates_persons_not_seasons(realm):
+    """A planted per-verb dict: the line names the set and the distinct-actor count in the block's
+    shape, and one actor at two pools (practice at work on one person) is no separation while two
+    actors at two pools is. Then the measured realm: the fold's records reached the reader (an empty
+    reader would print `no pooled roll`), and a season-1 run reads only `pool_default` (no good result
+    in the window yet)."""
+    one_person = {"tell": {"a": {(0, 2): 1, (1, 3): 2}}}
+    two_persons = {"tell": {"a": {(0, 2): 1}, "b": {(0, 3): 1}, "c": {(0, 2): 4}}}
+    assert not A.persons_separated(one_person["tell"]) and A.persons_separated(two_persons["tell"])
+    # one person, 2 -> 3 -> 2 across seasons: still no second person
+    assert not A.persons_separated({"a": {(0, 2): 1, (1, 3): 1, (2, 2): 1}})
+    assert "    `tell`: pools rolled [2, 3] over 3 actors" in "\n".join(A.pools_lines({"pools": two_persons}))
+    # two actors practising 2 -> 3 in LOCKSTEP are never at different pools in one season: no separation
+    # (they would read "yes" if the tick were not kept, as {2,3} vs {2,3} differ pool-wise)
+    lockstep = {"tell": {"a": {(0, 2): 1, (1, 3): 1}, "b": {(0, 2): 1, (1, 3): 1}}}
+    assert not A.persons_separated(lockstep["tell"])
+    assert "different pools: no" in "\n".join(A.pools_lines({"pools": lockstep}))
+    # the same two actors one season apart (a at 3 in season 1, b at 2 in season 1) ARE apart in season 1
+    same_tick = {"tell": {"a": {(0, 2): 1, (1, 3): 1}, "b": {(0, 2): 1, (1, 2): 1}}}
+    assert A.persons_separated(same_tick["tell"])
+    assert "different pools: yes" in "\n".join(A.pools_lines({"pools": same_tick}))
+    # different pools but never in the same season (a only in season 0, b only in season 1): not apart
+    assert not A.persons_separated({"a": {(0, 2): 1}, "b": {(1, 3): 1}})
+    assert "no pooled roll" in "\n".join(A.pools_lines({"pools": {}}))
+    assert realm["pools"], "the fold's records never reached the pools reader"
+    default = populated.build_realm(0).fixtures.get("pool_default")
+    assert {p for per in realm["pools"].values() for c in per.values() for _, p in c} == {default}

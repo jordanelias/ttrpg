@@ -79,7 +79,7 @@ lanes:
     entry_items: ["LB-1", "LB-2", "LB-3", "LB-4", "LB-5", "LB-6", "LB-7", "LB-8", "LB-9", "LB-10", "LB-11", "LB-12", "LB-13", "LB-14", "LB-15", "LB-16", "LB-17", "LB-18"]   # v4 §5; sequencing/gates per v4 §9
     solo_items: ["LB-6"]              # structural rewrites of shared infra — run OUTSIDE the parallel window (former 5.3 SHA-split; former 5.1A SQLite-wire shipped as the enshrined SQL index pipeline, architecture V2.5)
     notes: >
-      PI / architecture text edits are Jordan-applied: propose, do not self-commit.
+      Project-instruction / architecture text edits are Jordan-applied: propose, do not self-commit.
       5.7 (session-log revive) optional — handoffs already give disjointness + visibility.
       5.1A (SQLite wire) and 5.3 (canonical_sources SHA-split) are full-file restructures of
       shared infra: sequence solo (before/after the parallel phase), never during it.

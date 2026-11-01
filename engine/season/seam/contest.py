@@ -116,7 +116,7 @@ def _returned(out: dict, what: str, called: str):
 
 
 def grade(w: World, claimants: list[str], causes: list[str], route: dict, *,
-          verb: str, subject: Optional[str] = None, rng: Optional[Any] = None):
+          verb: str, subject: Optional[str] = None, rng: Optional[Any] = None, effort: int = 0):
     """v9 FI-01 (`ED-FI-0009`, J-22 option (A)): AN INQUIRY'S ROLL, ROUTED WITHOUT A PRIZE.
 
     `route` is the verb's `graded_inquiries` row (`rosters.yaml`): the provider registered under
@@ -139,7 +139,7 @@ def grade(w: World, claimants: list[str], causes: list[str], route: dict, *,
             law="S43 -- a missing provider is a STARTUP FAILURE WITH A NAME IN IT; "
                 "`check_graded_inquiries` refuses it at driver construction")
     out = _run(w, claimants, causes, None, verb=verb, subject=subject, rng=rng,
-               module_entry=route.get("module_entry"))
+               module_entry=route.get("module_entry"), effort=effort)
     return _returned(out, f"the inquiry {verb!r}", f"inquiry {verb!r}")
 
 
@@ -183,10 +183,16 @@ def contest(w: World, rung: Optional[str], prize: Any, claimants: list[str],
             depth: int, max_depth: int, causes: list[str],
             extension: Optional[Callable[[str], bool]] = None,
             *, verb: str = "", subject: Optional[str] = None,
-            rng: Optional[Any] = None):
-    """S39. EVERY ARGUMENT IS LOAD-BEARING. Attaches at EXACTLY ONE PLACE -- RESOLVE.
+            rng: Optional[Any] = None, effort: int = 0):
+    """S39. EVERY ARGUMENT IS LOAD-BEARING.
 
-    ⚠ `U1` ADDED THREE KEYWORD-ONLY PARAMETERS AND CHANGED NO EXISTING CALL. `verb` and `subject`
+    `effort` (CP-T01-05) is the act's own, read off its payload by the caller (`state/carriers.py::
+    effort_of`) and passed to the provider with `verb` and `subject`; the social roll turns it into named
+    levels (`rosters.yaml: advantage_sources`), the other providers accept and ignore it, as `rung`.
+
+    Every argument attaches at EXACTLY ONE PLACE -- RESOLVE.
+
+    ⚠ `U1` ADDED THREE KEYWORD-ONLY PARAMETERS (`verb`, `subject`, `rng`) AND CHANGED NO EXISTING CALL. `verb` and `subject`
     are what a provider needs to derive a pool and an obstacle from the act rather than from the
     prize; `rng` is the generator `04 §C.12`'s rejection 4 requires the DRIVER to construct — *"its
     generator must be constructed by the driver from the run seed and passed down exactly as
@@ -268,7 +274,8 @@ def contest(w: World, rung: Optional[str], prize: Any, claimants: list[str],
             # `22a` `social_contest` reads it too, as the room whose bench hears the speaker, for a prize
             # row saying `heard_by: bench`; every other provider accepts and ignores it, a deliberate non-change (`combat.py`'s own
             # note on `rng` is the precedent for what that comment looks like).
-            out = _run(w, claimants, causes, prize, verb=verb, subject=subject, rng=rng, rung=rung)
+            out = _run(w, claimants, causes, prize, verb=verb, subject=subject, rng=rng, rung=rung,
+                       effort=effort)
             return _returned(out, f"a contest for {prize!r}", f"contest for {prize!r}")
         raise Unspecified(
             f"a contest for {prize!r} belongs to the `{_sub['module']}` subsystem "

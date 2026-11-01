@@ -296,7 +296,7 @@ def test_token_classes_sourced_from_names_index_byte_identical():
            # the rival, so the matcher missed 100 'Institutional Pressure' and 68 'Public
            # Instability' occurrences while catching 28 and 3 of names no registry blesses.
            'IP': [r'\bIP\b(?![A-Za-z])', 'Institutional Pressure', 'Invasion Pressure'],
-           'PI': [r'\bPI\b(?![A-Za-z])', 'Public Instability', 'Political Instability'],
+           'PI': [r'\bPI\b(?![A-Za-z])', 'Public Instability', 'Political Instability', 'Parliament Integrity'],
            'TS': [r'\bTS\b(?![A-Za-z])', 'Thread Sensitivity'], 'TCV': [r'\bTCV\b']}
     assert set(va.CLASSES['clock']) == set(CLK)
     for disp, pats in CLK.items():

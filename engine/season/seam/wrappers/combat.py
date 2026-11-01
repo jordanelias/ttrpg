@@ -179,8 +179,12 @@ def _wound_state(lifted: Optional[dict]) -> dict:
 @provider("contest", _PROVIDER)
 def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
             verb: str = "", subject: Optional[str] = None,
-            rng: Optional[random.Random] = None, rung: Optional[str] = None) -> dict:
+            rng: Optional[random.Random] = None, rung: Optional[str] = None,
+            effort: int = 0) -> dict:
     """CALL the personal-combat engine. Returns what it said; decides nothing itself.
+
+    `effort` (CP-T01-05) is accepted and NOT USED HERE, as `rung`: the seam's call is uniform, and combat
+    sums its own sigma (`modules/combat/core.py`), outside `rosters.yaml: advantage_sources`.
 
     ⚠ `rung` IS ACCEPTED AND NOT USED HERE, THE SAME DELIBERATE NON-CHANGE AS `rng` BELOW (M4,
     `ED-IN-0279` clause (a)). The seam's call is uniform; two duellists need no place to scope

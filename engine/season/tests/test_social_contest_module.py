@@ -98,7 +98,8 @@ def test_s27_4_refuses_on_the_derived_pair_strictly_above_the_multiple():
     from engine.season.seam.wrappers import sigma
     SeasonDriver(P.tiny_world(DEFAULT_FIXTURES))      # the registrar fills MODULE_ENTRIES
     fx = {"pool_default": 2, "obstacle_default": 4, "obstacle_ceiling": None,
-          "obstacle_refusal_multiple": 2}
+          "obstacle_refusal_multiple": 2,
+          "practice_cap": 0}       # `faculty` reads the practice addend (CP-T01-02), which reads this key
     w = SimpleNamespace(persons={"p": SimpleNamespace(capability={})}, fixtures=fx)
     at = sigma.resolve(w, ["p"], ["c"], "a standing", rng=random.Random(0))
     assert at["status"] == "RESOLVED", f"ob 4 == 2 x pool 2 was refused: {at}"

@@ -18,9 +18,9 @@ The four EXIT clauses (#453 §10.4 step 9, verbatim), one block each:
   3. `argue` -- *"`Person.pursuits` moves"*: a won argument moves the hearer's held pursuits toward the
      arguer's; a lost one moves nothing. CONTROLS: `pursuit_shift` 0 moves nothing at any band; a subject
      that is no Proposition is refused.
-  4. `train` -- *"`sigma._pool_of` varies by person"* [under J-13 (iii): only where a case names a
+  4. `train` -- *"`sigma.faculty` varies by person"* [under J-13 (iii): only where a case names a
      vocation]: in NPC-088's case world, Carin (`p_a`, `{copying: 3}`) forms `train` carrying `copying`,
-     the fold raises it to 4, and `_pool_of` reads 4 for her and `pool_default` for the others. CONTROLS:
+     the fold raises it to 4, and `faculty` reads 4 for her and `pool_default` for the others. CONTROLS:
      a pupil holding none is refused at the effect and nothing is minted; the formation is the same
      whatever the actor's capability (#353 §9.2, probe P11) -- J-13 (iii)'s *"forms ... only where"*
      half is NOT built, because it would be a capability gate (the receipt names this).
@@ -344,7 +344,7 @@ def _npc088():
 CARIN = "p_a"
 
 
-def test_pool_of_varies_by_person_once_train_raises_carins_vocation():
+def test_faculty_varies_by_person_once_train_raises_carins_vocation():
     w, d = _npc088()
     fx = w.fixtures
     carin = w.persons[CARIN]
@@ -357,10 +357,27 @@ def test_pool_of_varies_by_person_once_train_raises_carins_vocation():
     assert act.payload["kind"] == "copying"
     assert _kinds(_resolve(w, d, act)) == ["capability.raised"]
     assert carin.capability == {"copying": 4}
-    pools = {p.id: sigma._pool_of(p, "tell", fx) for p in [carin, *others]}
+    pools = {p.id: sigma.faculty(w, p, "tell") for p in [carin, *others]}
     assert pools[CARIN] == 4, pools
     assert {pools[p.id] for p in others} == {fx.get("pool_default")}, pools
     assert len(set(pools.values())) > 1, pools
+
+
+def test_a_planted_addend_registered_through_faculty_is_read_by_the_roll_and_the_odds(monkeypatch):
+    """CP-T01-01's falsifier: the registry is what `faculty` sums, so a rename that ignored it would
+    not see this addend. It is read by the dealt record (`contest_input`) and by the person's own odds
+    (`odds_of` mode (b)), the two ways the pool is read; and it moves nobody who is not its subject."""
+    w, _d = _npc088()
+    carin = w.persons[CARIN]
+    other = next(p for pid, p in sorted(w.persons.items()) if pid != CARIN and not p.capability)
+    base = {p.id: sigma.faculty(w, p, "tell") for p in (carin, other)}
+    monkeypatch.setattr(sigma, "POOL_ADDENDS", list(sigma.POOL_ADDENDS))
+    sigma.register_pool_addend(lambda w_, p, verb: 2 if (p.id == CARIN and verb == "tell") else 0)
+    assert sigma.faculty(w, carin, "tell") == base[CARIN] + 2
+    assert sigma.faculty(w, other, "tell") == base[other.id]            # keyed by the person it names
+    assert sigma.faculty(w, carin, "determine") == w.fixtures.get("pool_default")   # the addend names a verb
+    inp = sigma.contest_input(w, [CARIN], verb="tell", subject=other.id, room=None, examined=None)
+    assert inp.pool == base[CARIN] + 2, inp.pool
 
 
 def test_capability_gates_no_train_the_formation_never_reads_the_actors_capability():

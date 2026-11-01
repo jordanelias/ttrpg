@@ -9139,7 +9139,7 @@
    "section": "S26.3",
    "title": "several interactions inside one budgeted scene are lawful",
    "by": "construction",
-   "tests": "a character must be able to do several things inside one scene without spending a second scene action"
+   "tests": "a character must be able to do several things inside one scene without spending a second scene action (at H-77's control cost of 1, which isolates the interaction bound; at the shipped extended cost of 2 such a scene is priced and the budget refuses the same return)"
   },
   "P3": {
    "id": "P3",
@@ -10226,7 +10226,7 @@
   "A32": {
    "id": "A32",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION: 5 scenes carrying 15 interactions, costing 5 at an extended cost of 2. \u26a0 REVISIONS 1-4 RAISED A `Collision` HERE -- 'THE BUDGET IS SETTLED AT ~5; THE IDENTITY IS NOT' -- and that was true when written. JORDAN RULED IT 2026-09-02: '5 scenes for a character to play per season'. The budgeted unit is the SCENE and #353's verbs are what happens INSIDE one, so the two readings the collision named are no longer both open. What the ruling did NOT settle is `H-76` (how many interactions a scene admits), `H-77` (what an extended one costs) and `H-78` (which interactions share one) -- three swept rows, because a ruling on the unit is not a ruling on its contents",
+   "detail": "PASS BY CONSTRUCTION: 5 scenes carrying 15 interactions, costing 10 at an extended cost of 2. \u26a0 REVISIONS 1-4 RAISED A `Collision` HERE -- 'THE BUDGET IS SETTLED AT ~5; THE IDENTITY IS NOT' -- and that was true when written. JORDAN RULED IT 2026-09-02: '5 scenes for a character to play per season'. The budgeted unit is the SCENE and #353's verbs are what happens INSIDE one, so the two readings the collision named are no longer both open. What the ruling did NOT settle is `H-76` (how many interactions a scene admits), `H-77` (what an extended one costs) and `H-78` (which interactions share one) -- three swept rows, because a ruling on the unit is not a ruling on its contents",
    "kind": null,
    "section": "S62",
    "title": "the scene/act identity is settled",
