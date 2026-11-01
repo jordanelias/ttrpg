@@ -41,7 +41,7 @@ def test_a_folded_march_across_the_river_hands_the_entry_its_origin(monkeypatch)
     d = SeasonDriver(w)
     w.step = Step.RESOLVE
     w.frozen = False
-    act = Act(id="m1", actor="p_npc_082", verb="march", payload={"subject": target}, via="off_npc_082")
+    act = Act(id="m1", actor="p_npc_082", verb="march", payload={"subject": target}, via="off_military_jarl")
     events = d.resolve(mint_token(w, WriteClass.ACTS), [act], 2)
     events = events + d.encounter(mint_token(w, WriteClass.ACTS), events, 2)
 

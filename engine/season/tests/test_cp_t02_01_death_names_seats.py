@@ -126,7 +126,7 @@ def test_a_a_matter_death_of_a_two_seat_holder_emits_one_tenure_closed_naming_bo
     w = build_realm(0)
     pid = "p_npc_020"
     seats = sorted(t.object for t in w.seat_holds(pid))
-    assert seats == ["off_duke_valorsmark", "off_npc_020"], f"fixture moved: {seats}"
+    assert seats == ["off_duke_valorsmark", "off_king"], f"fixture moved: {seats}"
     far = "p_npc_008"
     assert world_q.home_of(w)[far] != world_q.home_of(w)[pid], "fixture: the far person stands with him"
     assert not set(seats) & set(world_q.seats_named(w, w.persons[far])), "control: already told"
@@ -191,7 +191,7 @@ def _march(w, res):
     w.frozen = False
     return d._fold(w, mint_token(w, WriteClass.ACTS),
                    Act(id="m1", actor="p_npc_033", verb="march", payload={"subject": "set_s_036"},
-                       via="off_npc_033"), res)
+                       via="off_spymaster"), res)
 
 
 def _won_total(w):

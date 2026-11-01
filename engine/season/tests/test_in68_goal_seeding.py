@@ -108,7 +108,7 @@ def test_in68_a_body_goal_reaches_the_holders_of_the_seats_in_the_body_and_no_on
     assert CIRCLE_HOLDERS <= crown and SPYMASTER in crown, "control: the faction holds more than the body"
     assert _committed(w, "g_king") == CIRCLE_HOLDERS
     prop = w.propositions["g_king"]
-    assert prop.subject == "off_npc_020", "the first seat's OFFICE (offices.yaml's `off_king` is seated as this)"
+    assert prop.subject == "off_king", "the first seat's OFFICE (a seat keeps its offices.yaml row id, CP-T02-02)"
     assert prop.value == "Inner Circle"
 
 
@@ -276,7 +276,7 @@ def test_in68_a_goal_id_that_is_already_a_proposition_refuses(monkeypatch, tmp_p
 def test_in68_a_cap_that_drops_the_person_or_the_seats_drops_the_goal_and_counts_it(monkeypatch, tmp_path):
     w = _realm(monkeypatch, tmp_path, _heir(), _king(), _row("g_spy", SPY, {"kind": "rung", "rung": "terr_T9"}),
                cap=10)
-    assert HEIR not in w.persons and "off_npc_020" not in w.offices, "control: the cap dropped both"
+    assert HEIR not in w.persons and "off_king" not in w.offices, "control: the cap dropped both"
     assert "g_heir" not in w.propositions and "g_king" not in w.propositions
     assert _committed(w, "g_spy") == {SPYMASTER}, "a goal whose referent the cap kept is seeded"
     c = P.census(w)
@@ -315,15 +315,15 @@ def test_in68_an_empty_goals_file_builds_the_control_arms_realm(monkeypatch, tmp
 
 
 def test_in68_a_seat_holders_goal_reads_the_seat_a_loop_built_realm_built_it_as(monkeypatch, tmp_path):
-    """(g) IN-67's reader on the REAL realm. `off_king` is `offices.yaml`'s id; NPC-020's seat is
-    loop-built and keeps `off_npc_020`, so a reader matching the listed ids to `Tenure.object` names
-    nobody. Seeding records the built Office ids in the Proposition's `scope`. MUTATION (run): seeding
-    without the scope turns the first assert red; the control is a hand-built world with no scope, where
-    the listed ids are the Office ids."""
+    """(g) IN-67's reader on the REAL realm. Since CP-T02-02 NPC-020's loop-built seat keeps `offices.yaml`'s
+    row id `off_king`, so the id the goal lists IS the Office id and the census map is the identity (before it,
+    the seat was `off_npc_020` and seeding had to record the built id in the Proposition's `scope`; that
+    mutation, seeding without the scope, is no longer observable here -- the scope is now the listed ids).
+    The reader names the holder and FOLLOWS the hold."""
     from ..queries import world_q
     w = _realm(monkeypatch, tmp_path, _king())
     seat = w._office_census["authored"]["off_king"]
-    assert seat != "off_king" and "off_king" not in w.offices, "the premise: the authored id is no Office"
+    assert seat == "off_king" and "off_king" in w.offices, "the premise: the authored id IS the Office (CP-T02-02)"
     prop = w.propositions["g_king"]
     assert prop.scope == (seat,)
     onlooker = w.persons[HEIR]

@@ -569,6 +569,13 @@ def _first_holder(w: World, oid) -> "str | None":
                  and t.subject in w.persons), None) if oid else None
 
 
+def _seat_id(row, cid: str) -> str:
+    """The Office id a loop-built seat is minted under: its `offices.yaml` row's id where a row stands for
+    it (the throne is `off_king`), else the registry slug (`off_<case>`; NPC-084's `guild leader` has no
+    row). One owner of the choice, so a test can read the pre-CP-T02-02 ids by replacing it."""
+    return row["id"] if row is not None else f"off_{_slug(cid)}"
+
+
 def seat_guards(w: World, rows: list, authored: dict, partial: bool = False) -> None:
     """SEAT THE GUARD COHORTS IN A BUILT WORLD. Each row becomes a
     Person at the row's weight, its `person` rung, a `contain` edge (where it IS) at the exact rung its seat's
@@ -861,9 +868,8 @@ def seed_goals(w: World, rows: tuple, authored: dict, cid_of: dict, partial: boo
             subject, referents = built[0], tuple(holders(built))
         else:                                   # deed_doers: read from the holder's ledger at the question
             subject = g.org
-        # A `seat_holders` goal carries the Office ids its listed seats BUILT as (`scope`): a loop-built seat
-        # keeps its `off_<holder>` id, so `queries/world_q.goal_referents` cannot match the authored ids
-        # `goals.yaml` lists (`_office_census` is the harness's, and the loop never reads it).
+        # A `seat_holders` goal carries the Office ids its listed seats BUILT as (`scope`), read through
+        # `authored`; a seat that stands for a row keeps the row's id (`_seat_id`), so the map is the identity.
         w.propositions[g.id] = Proposition(g.id, "OUGHT", subject, g.text, g.org, 0,
                                            tuple(built) if kind == "seat_holders" else None)
         minted.append((g, referents))
@@ -1569,7 +1575,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
             _off_row = _off_candidates[0]
         else:
             _off_row = next((cand for cand in _off_candidates if cand.get("post") == post), None)
-        oid = f"off_{_slug(cid)}"
+        oid = _seat_id(_off_row, cid)
         if _off_row is not None:
             rung = seat_anchor(w, anchors, _off_row)
             # `held` is what this seat would have had without the overlay: the acts `offices.yaml:

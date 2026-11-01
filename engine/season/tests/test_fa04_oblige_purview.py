@@ -5,9 +5,8 @@ world-gen pass over `obligees:` (`harness/populated.py`) turns it into one `obli
 from her to the King's seat. "Under" is that edge and nothing else (`IN-40`, `H-101`): no parent is stored.
 Each fact below is asked of the real build, the real `faction_q` queries and the real fold.
 
-⚠ THE SEAT'S ID IS `off_npc_020`, NOT `off_king`. `off_king` is the ROW's id; NPC-020's seat is
-LOOP-BUILT, and a loop-built seat keeps its `off_<holder>` id (`offices.yaml`'s header), so the edge's
-object is `w._office_census["authored"]["off_king"]`, which this file resolves rather than assumes.
+THE SEAT'S ID IS `off_king`, THE ROW'S (CP-T02-02: a loop-built seat that a row overlays keeps the row's
+id, `populated._seat_id`); this file still resolves it through `w._office_census["authored"]["off_king"]`.
 
 THE EXIT AND THE FALSIFIER, each with the mutation that turns it red:
   1. `faction_q.superiors(w, "p_npc_070") == [the King's seat]` and `subordinates(w, <it>)` holds her.
@@ -35,7 +34,7 @@ GRAND_MASTER = "p_npc_070"
 
 def _kings_seat(w) -> str:
     seat = w._office_census["authored"]["off_king"]
-    assert w.offices[seat].post == "King" and seat == "off_npc_020", seat
+    assert w.offices[seat].post == "King" and seat == "off_king", seat
     return seat
 
 

@@ -493,16 +493,23 @@ def _counts(w) -> dict:
 #: seeded first seasons of seeds 0 and 1 take another path (seed 2's first season reads its old values unmoved). CONTROL, run in process on this tree: `World.seat_holds` stubbed to `[]` (the emission
 #: off) reads the values this block held exactly. Was, for seeds 0 / 1: `old` 95068857... / 303810a3..., `new` 056584ed... /
 #: 48e59dc4..., `census` f8f221e0... / f864b5ae..., `acts` 597 / 608, `log` 9347 / 10636. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+#: RE-RECORDED AGAIN at v10 CP-T02-02 (B10-09), AN ID MOVE DECLARED: a loop-built seat keeps its `offices.yaml` row's id
+#: (`populated._seat_id`: the throne is `off_king`, no longer `off_npc_020`), so every hash that folds an Office id moves, and the ids
+#: seed the draws, so the seeded first seasons of seeds 0 and 1 take another path (`acts` 608 / 616 -> 596 / 621, `log` 9138 / 11007 ->
+#: 9760 / 11149; seed 2 keeps its acts, census, counts and log and re-hashes only). CONTROL, run in process on this tree: `_seat_id` replaced
+#: by the slug rule (`off_<case slug>`) reads the values this block held exactly, at all three seeds, and the build world's old digest and
+#: content hash. Was, for seeds 0 / 1 / 2: `old` e6f28fc9... / 85e94055... / 8a2d9108..., `new` b4aa3024... / 4687d35a... / 31f199ea...,
+#: `census` 3c5fb2de... / 298a3ea5... (seed 2 unmoved). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 BASE = {
-    0: {"old": "e6f28fc94d55adade43a43adbd9ab02a", "new": "b4aa3024e03c3410a92e0ad6f0a45c2a", "acts": 608,
-        "census": "3c5fb2de5412ef612004608cf303aabd4e8964d45c2015b7b4e2e93db264dbdf",
-        "counts": {"persons": 80, "rungs": 409, "offices": 32, "sites": 322, "records": 128,
-                   "propositions": 111, "dates": 4, "docket": 5, "tenures": 889, "log": 9138}},
-    1: {"old": "85e9405590f5ff02678a98772827aa1c", "new": "4687d35aa0736250fa89efae04a63a1b", "acts": 616,
-        "census": "298a3ea58d94aff882cf14e2b47815512178b866c1d362bfedc8cd9482c59d5c",
-        "counts": {"persons": 81, "rungs": 410, "offices": 32, "sites": 322, "records": 149,
-                   "propositions": 106, "dates": 8, "docket": 3, "tenures": 901, "log": 11007}},
-    2: {"old": "8a2d9108f1a7faca866b4187e64097ea", "new": "31f199ea18bdb3b7b86419b151bb2b70", "acts": 650,
+    0: {"old": "bc4d8440913eda72dcee8164f35d0cf6", "new": "ebe1851005ae3114d873b3ff78a94a51", "acts": 596,
+        "census": "bd2b200cb4d21cdb211362d75ef36cd99a670d49757aaf0b8c5758dd772f7548",
+        "counts": {"persons": 80, "rungs": 409, "offices": 32, "sites": 322, "records": 125,
+                   "propositions": 112, "dates": 6, "docket": 5, "tenures": 883, "log": 9760}},
+    1: {"old": "d5b68b41bd3fa1d3b9cf6cc0fa81a384", "new": "507a9bedb45bc07f5fd2542cfabc1b9f", "acts": 621,
+        "census": "54df699ba139e06f57159da9c0c7ff32a24be2d1b665263a2425469ba9259204",
+        "counts": {"persons": 81, "rungs": 410, "offices": 32, "sites": 322, "records": 146,
+                   "propositions": 105, "dates": 7, "docket": 2, "tenures": 906, "log": 11149}},
+    2: {"old": "3168fab606f0cf02b00762b71a69da9e", "new": "c38c332d5925b301e349c991f89c7e88", "acts": 650,
         "census": "b34f3210de31f89f0a0bc2f4bd1e0577755657971507b3a56b7786669100bd71",
         "counts": {"persons": 82, "rungs": 411, "offices": 32, "sites": 322, "records": 147,
                    "propositions": 113, "dates": 6, "docket": 7, "tenures": 895, "log": 10728}},
@@ -513,8 +520,8 @@ def test_go07_control_the_build_world_old_digest_is_unmoved():
     """The base commit's `repr` digest of `build_realm(0)`, before a single act, read this literal
     (`test_season_weather.BASE_HASHES[0]`'s retired value); the same world now reads the new pin."""
     w = POP.build_realm(0)
-    assert _old_content_hash(w) == "798b938eb72b789d71a3fa4938e57cc8"        # v10 CR-21: was 6ea9a7f2... (SE-06); before that bcc59ba4...
-    assert w.content_hash() == "3e31638ef6eec7082eafa9ff4db9bb2d"            # v10 CR-21: was aef556ac... (SE-06); before that fe427626...
+    assert _old_content_hash(w) == "26c255acf3672adb1bd9afca36461b28"        # v10 CP-T02-02: was 798b938e... (CR-21); before that 6ea9a7f2... (SE-06)
+    assert w.content_hash() == "4ab812ba77c1c5d94fc3e2c59b0bba99"            # v10 CP-T02-02: was 3e31638e... (CR-21); before that aef556ac... (SE-06)
 
 
 def test_go07_control_the_world_did_not_move_only_its_digest():

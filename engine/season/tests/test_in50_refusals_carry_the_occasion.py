@@ -116,7 +116,7 @@ def test_in50_route_4_party_gap_refusal_cites_the_occasion():
     # reached) answers PARTY-GAP and `_refuse_party_gap` emits
     # (test_march.py, `test_a_march_on_a_non_settlement_rung_refuses_h149_is_enforced`).
     a = Act(id="a_march", actor=ACTOR, verb="march", payload={"subject": "b_s_014_barracks"},
-            via="off_npc_033", scene=SCENE)
+            via="off_spymaster", scene=SCENE)
     # `march` defers its contest to ENCOUNTER (test_march.py `_fold_one`), which is where it refuses.
     out = _resolve(w, d, a)
     out = out + d.encounter(mint_token(w, WriteClass.ACTS), out, 2)
