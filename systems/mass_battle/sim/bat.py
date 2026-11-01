@@ -243,7 +243,7 @@ def trial_vector(ua, ub, r):
 # ─────────────────────────────────────────────────────────────────────────────────────────────
 EXPECTED = {
     # [2026-11-01, ED-MB-0079, Jordan: "troops have geometry. they cannot overlap."] RE-RECORDED the two FIELD modes
-    # (unit_field_mor0 af70014961a9... -> 1007244bba52..., cell_field_mor0 d1399c9cb66a... -> b1fc76288320...), a
+    # (unit_field_mor0 af70014961a9... -> 034e4896e01b..., cell_field_mor0 d1399c9cb66a... -> 65710a268f45...), a
     # deliberate behaviour change measured under Python 3.11 (CI's interpreter; the digests differ under 3.13). The cell
     # body is now a circle one pitch across (geometry.CellBody) and no two bodies interpenetrate at the end of any tick
     # (hierarchy.units._separate_bodies in the movement step, separate_all_bodies at the end of every tick). The three
@@ -474,7 +474,7 @@ EXPECTED = {
     # predicted this breakage; I checked it against the wrapper, saw skip/xfail, and recorded the
     # finding as overturned. It was not. CHECK THE GATE THAT GATES THE THING, not a neighbour.
     # was 0194efcc72118de125ed176b6e6d22d1f56f54dc9c9a76337953b6854d59cf0c
-    'unit_field_mor0': '1007244bba522061b9a8a23c59c227f8d68a7d32845b31444a81a6ba61164555',
+    'unit_field_mor0': '034e4896e01b9a27c77220cccf567857301fc48f1a1cff018f45d2364b9bd5a4',
     # [2026-07-04, re-recorded a second time] cell_field alone moved again after the adversarial-
     # review fixes above (pair_pool_contribution's cell_troops iteration bug; the sibling-morale-pull
     # reorder/snapshot fix) -- unit/cell/unit_field all re-confirmed BYTE-IDENTICAL to their
@@ -570,7 +570,7 @@ EXPECTED = {
     # Verified by direct execution (before/after): OLD digest [BYTE-EXACT FAIL] confirms the move (the
     # falsifier this row's own re-record discipline requires), NEW digest [BYTE-EXACT OK] below.
     # was 41a2e98485f31420d70e248238d93a24695684dde33a04791ffbd2697ecffecd
-    'cell_field_mor0': 'b1fc76288320dc2f3c7d2c65d1e231f9148feadf3d81d0942707458f788ea7cf',
+    'cell_field_mor0': '65710a268f4546c3e11f811879977c406045a5df12873c081a255f5377f86ef9',
     # ─── [ED-MB-0053 / plan-v2 §4a, 2026-07-29] THE FIFTH MODE — freshly recorded ───────────────
     # PER_CELL=1 + MB_CELL_MORALE=1 (grid). The other four all run at MB_CELL_MORALE=0, where the
     # three cell-morale maps are EMPTY, so they verify float-order over every per-cell map EXCEPT
