@@ -35,6 +35,7 @@ from ..queries import world_q
 from ..seam.contest import Resolution
 from ..state.carriers import Act, Person, Rung, Tenure
 from ..state.world import World
+from ._scar_helpers import party_state
 
 HOLDER, OFFICE = "p_high", "off_duke"          # `tiny_world`: p_high holds off_duke and stands at S
 CROWN, CHURCH = "fac_crown", "fac_church_of_solmund"
@@ -56,8 +57,8 @@ def _felled(w, actor, victim, aid="cp01_kill"):
     d = SeasonDriver(w)
     w.step = Step.RESOLVE
     w.frozen = False
-    res = Resolution("Felled", {"wound_state": {victim: {"felled": True, "health_full": 10,
-                                                         "health_remaining": 0}}})
+    res = Resolution("Felled", {"wound_state": {victim: party_state(felled=True, left=0),
+                                                actor: party_state()}})
     out = d._fold(w, mint_token(w, WriteClass.ACTS),
                   Act(id=aid, actor=actor, verb="fight", payload={"subject": victim}), res)
     for e in out:

@@ -2849,7 +2849,11 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # `offices.yaml` row's id (`populated._seat_id`), the ids seed the draws, and the realm's act mix moves (seed 0, one season:
     # 608 -> 596 in both arms; `test_go07_canonical_digest.py` records the 596). CONTROL: this tree with `_seat_id` replaced by the
     # slug rule (`off_<case slug>`) in process reads (608, 608) under this same test.
-    assert (out["acts"], cout["acts"]) == (596, 596), (
+    # ⚠⚠ v10 CP-T03-00 (B10-09): (596, 596) -> (590, 590), A RE-RECORD WITH THE UNIT THAT MOVED IT: both parties of a fight take
+    # their band (a felled attacker dies), so the realm's first-season deaths and act mix move (seed 0, one season: 596 -> 590 in
+    # both arms; `test_go07_canonical_digest.py` records the 590). CONTROL: the pre-item tree (`68767e731`) is the tree that read
+    # (596, 596).
+    assert (out["acts"], cout["acts"]) == (590, 590), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")

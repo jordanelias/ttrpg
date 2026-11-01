@@ -422,6 +422,9 @@ def _fold(self, w: "World", token: Token, a: Act,
     # Which of `emits:` the effect actually earned. Empty means "all of them", which is the
     # contract every effect returning a plain list keeps.
     earned: set = set()
+    # CP-T03-00: each receipt beside the kinds its subject earned (`()` = every kind, the plain-list
+    # contract), so each kind's Event carries only its earners' changes (below).
+    earners: dict = {}
     # ⚠ `writes_at(degree)`, NOT `row.writes` (#358 rev.2 §C.4 / invariant 12, 2026-09-03).
     # An UNCONTESTED verb has no `writes_by_degree`, so this returns the flat tuple and the
     # behaviour is identical -- the call is here so the new column HAS A READER. A column no
@@ -465,7 +468,7 @@ def _fold(self, w: "World", token: Token, a: Act,
                 # The effect runs ONCE, on the first pair: a verb writing three cells is ONE
                 # operation, and running it per pair minted three Tenures for one `move`.
                 made = self._apply_write(w, token, a, kind, fld, eff if n == 0 else None,
-                                         earned=earned, resolution=resolution)
+                                         earned=earned, resolution=resolution, earners=earners)
                 changed.extend(c for c in made if c not in changed)
         # ⚠ AN EFFECT THAT TOUCHED NOTHING DID NOT DO THE THING, AND MUST NOT EMIT THE
         # SUCCESS. `kill / wound`'s effect returns early when its payload names no subject --
@@ -532,7 +535,19 @@ def _fold(self, w: "World", token: Token, a: Act,
     # The fold's own kinds are the declared column `rosters.yaml: fold_kinds` (`act.refused`, `attempt.refused`).
     kinds = tuple(k for k in kinds if k != CONFIDENCE_BROKEN or _confidence_broken(w, a, row))
     # Causes: the act and its occasion, both stamped by `_act_events` (IN-50).
-    out = ev(kinds, list(a.changes) + changed)
+    # ⚠ CP-T03-00 (`-08` AM-C-01), FOLD-WIDE: EACH KIND'S EVENT CARRIES ONLY THE CHANGES OF THE SUBJECTS
+    # THAT EARNED IT -- a receipt whose subject named kinds rides only those kinds' Events; one whose
+    # subject named none (`earns=None`, every kind) rides all of them, as do the act's own `changes`.
+    # Every Event of one fold carried EVERY receipt before, so WITNESS's `both`/`per_change` deposit
+    # minted each kind about every changed subject: a felled actor beside a wounded subject would have
+    # put `(subject, person.died, True)` -- about a living man -- in every ledger, and IN-58's pairing
+    # would have named the actor his killer (the ID-9 class). `world.py`'s MATTER emission already
+    # carries per kind (CP-T02-01's `extra` loop); this is the same rule on the act's path. Where no
+    # subject names a kind every Event carries every receipt, byte-identical to before.
+    out = []
+    for k in kinds:
+        out.extend(ev((k,), list(a.changes)
+                      + [r for r in changed if not earners.get(id(r)) or k in earners[id(r)]]))
     # IN-08 H3: THE SCAR, AFTER THE ACT'S EVENTS ARE FORMED, BY THE OUTCOME. `changed` is the
     # gate's own receipts for this act's writes, so it is empty on every path that is not a deed:
     # each refusal above returned early, and a band that declares no writes (`tell`'s `Failure`,
@@ -864,7 +879,8 @@ def _grade(self, w: "World", token: Token, a: Act, route: dict) -> list:
 
 def _apply_write(self, w: "World", token: Token, a: Act, kind: str, fld: str, eff=None,
                  earned: Optional[set] = None,
-                 resolution: "Resolution | None" = None) -> list:
+                 resolution: "Resolution | None" = None,
+                 earners: Optional[dict] = None) -> list:
     """The fold's write. It carries no per-verb behaviour -- the effect of a write is the
     matrix row's business, and what a verb writes is the verb table's.
 
@@ -938,8 +954,12 @@ def _apply_write(self, w: "World", token: Token, a: Act, kind: str, fld: str, ef
     # gate decides, not by one the effect listed.
     # CP-T02-01 / HR-1: a subject may name several kinds (`Subject.kinds`): a dead loser earns his
     # band's kind AND `person.died`, which one kind per subject could not say.
+    # CP-T03-00: and, where the caller asks (`_fold`'s `earners`), WHICH kinds each receipt's subject
+    # earned, keyed by the receipt's identity, so each kind's Event carries only its earners' changes.
     for s, _r in got:
         earned.update(s.kinds)
+        if earners is not None:
+            earners[id(_r)] = s.kinds
     # G1a -> G4. THE GATE MINTED THESE, INSIDE THE WRITE, FOR THE SUBJECTS THAT MOVED AND NO OTHER.
     # They were minted here, after `w.write` returned, for every id the effect REPORTED -- which is
     # how a no-op receipt (`before == after`) came to be issued by the gate and admitted by the log.

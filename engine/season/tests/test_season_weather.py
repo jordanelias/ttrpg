@@ -405,9 +405,13 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # seasons move further. Was 3e31638e... / b4aa3024... / 8d535aab... (build, one, two seasons); events 9138 -> 9760, 27154 -> 28883.
 # CONTROL, run in process on this tree: `_seat_id` replaced by the slug rule reads the old triple and the old `BASE_EVENTS`
 # exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED at v10 CP-T03-00 (B10-09), A BEHAVIOUR MOVE DECLARED: both parties of a fight take their band (a felled attacker
+# dies; each kind's Event carries only its earners' changes), so the deaths and the deposits move; the BUILD is equal. Was
+# ebe18510... / 6f2ec528... (one, two seasons); events 9760 -> 9338, 28883 -> 24224. CONTROL: the pre-item tree (`68767e731`)
+# reads the old two-season hash (measured, `build_realm(0)` + `populated.run(seasons=2)`). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 BASE_HASHES = {0: "4ab812ba77c1c5d94fc3e2c59b0bba99",
-               1: "ebe1851005ae3114d873b3ff78a94a51",
-               2: "6f2ec528637d1061fcbb3276d91852ea"}
+               1: "921de777938cc0e81efa1747e1cb5eaa",
+               2: "cdeb64c29ab69937d9b26d2097cbd2e3"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -474,8 +478,9 @@ BASE_HASHES = {0: "4ab812ba77c1c5d94fc3e2c59b0bba99",
 # RE-RECORDED at v10 CP-T02-01 with `BASE_HASHES` (9347 -> 9138, 27605 -> 27154; `World.seat_holds` stubbed to `[]` reads the old pair).
 # RE-RECORDED at v10 CP-T02-02 with `BASE_HASHES` (9138 -> 9760, 27154 -> 28883; `populated._seat_id` replaced by the slug
 # rule in process reads the old pair and the old build hash).
-BASE_EVENTS = {1: (9760, "c7eacae68b384b0217c79dda38e8c76e6a82edabd2e709e35d557bde782c502f"),
-               2: (28883, "11299d5ff95f78383e262119cca96f77fe23374596b571a1e564a10c3e48506a")}
+# RE-RECORDED at v10 CP-T03-00 with `BASE_HASHES` (9760 -> 9338, 28883 -> 24224; both parties of a fight take their band).
+BASE_EVENTS = {1: (9338, "dcc4448c2a08d527abccd7b48dd83cca04e4cd6ea26c56da781aff4fa3914bbd"),
+               2: (24224, "2c5ee956410e5887c7be5bedf2528e8c2a9c1f81d5f523e6788f2a0ab331d631")}
 
 
 def _digest(w) -> tuple:
@@ -610,7 +615,9 @@ def test_the_give_withheld_arm_reproduces_the_one_season_pin():
 #: `World.seat_holds` stubbed to `[]` in process reads the old value exactly).
 #: RE-RECORDED at v10 CP-T02-02 with `BASE_HASHES`: 9137 / 6ba88aae... -> 9759 / e17367f6... (a loop-built seat keeps its row's id;
 #: `populated._seat_id` replaced by the slug rule in process reads the old value exactly).
-THREAD_READ_WITHHELD_EVENTS_1 = (9759, "e17367f6b06b2c70d593e8c4e0176d05f74ec267d63874a7b4c9841d7f339c82")
+#: RE-RECORDED at v10 CP-T03-00 with `BASE_HASHES`: 9759 / e17367f6... -> 9337 / c50d4c47... (both parties of a fight take
+#: their band); still differs from `BASE_EVENTS[1]` (9338).
+THREAD_READ_WITHHELD_EVENTS_1 = (9337, "c50d4c4728a8cc851c382e64a446168067eccef49ea90df43d7b5228cfe43d4e")
 
 
 def test_the_thread_read_withheld_arm_is_pinned_and_differs_from_the_shipped_season():
