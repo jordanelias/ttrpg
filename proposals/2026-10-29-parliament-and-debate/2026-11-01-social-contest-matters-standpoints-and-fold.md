@@ -34,7 +34,8 @@ play), **NEVER** (exists, never fires), **ABSENT** (does not exist).
 2. **The world pours in; matter-shaped content does not.** Over four seasons at seed 0 the shipped chooser's persons
    held 15,600 claims and faced 15,642 `claim_landed` questions against 495 `need` questions. Of the 261 Propositions
    in that world, 258 are OUGHT and 3 are HOLDS, so a past fact in dispute has almost no carrier in computed play. 28
-   items sat on the docket and none named the arrangement row it is heard under (§2.3).
+   items sat on the docket, 18 of them empty sitting slots, and none of the 10 that held a matter named the arrangement
+   row it is heard under (§2.3).
 3. **Fifteen families of matter can be discussed** (§3.3). Each reduces to *a person-party and a thing someone can
    lose*. Six have a disposal the gate writes today (families 1, 2, 3, 7, 11 and 15: `oblige`, `detain`, `ban`, a
    moved pursuit, a moved claim); four lack a disposal site or conjunct that does not exist (a `hold` transfer, a
@@ -42,12 +43,12 @@ play), **NEVER** (exists, never fires), **ABSENT** (does not exist).
    wait on a producer.
 4. **A standpoint is computed, never stored** (R-20, S-7). It is a person's claims about the object, his edges to it,
    his dispositions, his role in the occasion, his authority and his capability, each read from his own interior.
-   Eight sources make two persons differ on one matter (§4.2). At seed 0 the 78 persons who answered split in sign on
+   Eight sources make two persons differ on one matter (§4.2). At seed 0 the 78 persons alive at the end split in sign on
    their opinion of Hafenmark 39 to 39, and (positive to negative) of the Guilds 20 to 58 and the Crown 61 to 17.
 5. **A decision rejoins the season as a witnessed fact, never as a number pushed at anyone** (S-3, S-6, S-7). A
    contest outcome is a degree on the one ladder; the verb row's band says what is written; the gate writes it; the
    Event is witnessed; every standpoint receives it through its own channel and refraction. Six return routes carry it
-   back into later questions (§5.5). **In the probe only the first of the six closes.** In both seeds `determine` never
+   back into later questions (§5.5). **In the probe only the first of the six closes end to end; the fourth has readers that run on a thin supply.** In both seeds `determine` never
    executed (`matter.determined` 0, `determine.refused` 8 and 13), no pursuit moved (`pursuit.moved` 0), and all 67 and
    43 attempts to answer a writ were `compliance.impossible`. That is the dead core the comparison names (§3, items 1
    to 6), seen from the fold's side.
@@ -72,23 +73,24 @@ world change ─► Event (gate-emitted) ─► WITNESS fan-out ─► Claim in 
    RESOLVE writes ◄── Act ◄── Candidate ◄── Question (questions_for, world_q.py:3217)
 ```
 
-Each holder's copy carries its own `source` (`firsthand`, `told_by`, `inferred`; `rosters.yaml:438`), its own
+Each holder's copy carries its own `source` (`firsthand`, `told_by`, `inferred`, `firsthand_via_knot`; `rosters.yaml:438`), its own
 confidence after refraction (`decision/options.py:1456`), and, for a told claim, the chain of tellers (`Claim.chain`,
-`state/carriers.py:292`). Jordan, 2026-09-02: *"our understanding of all other words and actions is subjective and
+`state/carriers.py:339`). Jordan, 2026-09-02: *"our understanding of all other words and actions is subjective and
 singular"* (`rosters.yaml:438` note). Two persons in one room therefore hold one matter as two claims.
 
 ### 2.2 The seven doors
 
-All seven are producers inside `questions_for` (`queries/world_q.py:3217`). None adds a question source; the sources
-stay `claim_landed` and `need` (`rosters.yaml:585`).
+Doors 1 to 6 are readers inside `questions_for` (`queries/world_q.py:3217`); door 3 is a stamp on the first question
+and door 7 is an upstream feeder, reaching a ledger through `reach` and through content clause 3. None adds a question
+source; the sources stay `claim_landed` and `need` (`rosters.yaml:585`).
 
 | # | door | what the person is handed | reads | state |
 |---|---|---|---|---|
 | 1 | **A claim landed** | a Question about the claim's subject, admitted if the subject, the subject's place or a name inside the claim's content lies in his `reach` | his ledger; `reach` (`world_q.py:907`) | **FIRES** (the bulk: §2.3) |
 | 2 | **An ambition** (`need`) | a standing Question each season for every live `commit` to an OUGHT Proposition | his `commit` edges | **FIRES** (495 in four seasons) |
 | 3 | **A standing occasion** | classed referents stamped on the Question he answers: seats vacant (`vacancies`, `:2776`) or named to him, writs he holds, Records he holds that a row asks him to hold, places named to him, larders his seat may requisition, works sites | his tenures and seat | **FIRES**: in the probe the stamped referents are mostly buildings and settlements; Records (writs, petitions) are few |
-| 4 | **A sitting** | one Question per fired sitting whose docket holds a matter and whose bench he sits on | the docket; `judging_set` (`:290`, `:568`) | mostly **NEVER** *(per source: empty sittings; reasons-to-convene §0)*; 18 and 15 Dates fired |
-| 5 | **A docketed matter** | one Question on matters whose docketing Event his own ledger holds a claim of | the docket; his ledger (`docket_question`, `:374`) | formable (28 and 20 docket items); **firing not measured** |
+| 4 | **A sitting** | one Question per fired sitting whose docket holds a matter and whose bench he sits on | the docket; `sittings_before` (`:290`), `judging_set` (`:568`) | mostly **NEVER** *(per source: empty sittings; reasons-to-convene §0)*; 18 and 15 Dates fired |
+| 5 | **A docketed matter** | one Question on matters whose docketing Event his own ledger holds a claim of | the docket; his ledger (`docket_question`, `:374`) | formable (10 and 5 docketed matters); **firing not measured** |
 | 6 | **A standing crossing** | one Question on his own standing crossing a band, about the people who told | his windowed estimate (`standing_crossed`, `:3192`) | **NEVER** in realm play (H-222, per reasons-to-convene §4 J) |
 | 7 | **A thing he said** | `utter` mints a Proposition and the utterer's own `hold` on it, so later Questions can be *about* it; a document he holds deposits `content:<kind>` into his ledger | `Proposition`; `Record.subject_matter` (`rosters.yaml:179`; `ABOUT_KEYS`, `person_q.py:1213`) | **FIRES** (`proposition.uttered` 194 events, seed 0) |
 
@@ -97,19 +99,19 @@ which key it is about (`petition.terms`, `dispensation.terms`, `works.plan`), an
 content into the holder's ledger, so a petition naming an accused makes the accused a referent for everyone who
 holds or hears of it.
 
-### 2.3 What the pipe carries (probe, seed 0, four seasons, 83 persons)
+### 2.3 What the pipe carries (probe, seed 0, four seasons; 83 persons at the build, 78 at the end, since `person.died` is 5 in each seed)
 
 | quantity | value |
 |---|---|
 | claims held at the end, all ledgers | 15,600 (firsthand 11,712 · told 3,866 · inferred 22) |
-| largest claim stems | `seen` 6,421 · `term.matured` 1,086 · `dispensation.issued` 935 · `date.scheduled` 739 · `tenure.closed` 642 · `record.created` 596 · `proposition.uttered` 298 · `duty.refused` 260 · `finding.made` 233 |
+| the larger claim stems about social matters (`exists` 504 and `condition.worn` 376 are larger and not listed) | `seen` 6,421 · `term.matured` 1,086 · `dispensation.issued` 935 · `date.scheduled` 739 · `tenure.closed` 642 · `record.created` 596 · `proposition.uttered` 298 · `duty.refused` 260 · `finding.made` 233 |
 | Questions at the four season starts, summed over persons | `claim_landed` 15,642 · `need` 495 |
 | first question of a person-season was `claim_landed` / `need` | 226 / 56 |
 | `claim.deposited` / `claim.decayed` Events | 35,700 / 37,049 (a ledger turns over; the end state is a remainder) |
 | Propositions by mood | OUGHT 258 · HOLDS 3; live `commit` edges: OUGHT 128 · HOLDS 5 (seed 0) |
 | Records by kind | `text` 342 · `faction_sheet` 76 · `cover` 52 · `petition` 27 · `dispensation` 13 · `works` 2 |
 | live edges | `hold` 731 · `contain` 405 · `commit` 133 · `reside` 78 · `oblige` 52 |
-| docket items / of which name an arrangement row | seed 0: 28 / 0 · seed 1: 20 / 0 |
+| docket items / empty sitting slots / items holding a matter / of those naming an arrangement row | seed 0: 28 / 18 / 10 / 0 · seed 1: 20 / 15 / 5 / 0 |
 
 One Event reaches many ledgers: 13 `dispensation.issued` Events at seed 0 stand behind 935 claim copies. That is
 the fan-out, and it is why "how a matter is pulled in" is mostly a question of *who* each Event is deposited with.
@@ -151,14 +153,16 @@ by a person:
 
 P4 changes the first row (a case file of kind `case`, a citation as a writ, the row named by the opener) and adds the
 rite. A computed `open_case` today names no arrangement row (`effects_information.py:346, 355`), which the probe
-confirms: 28 and 20 docket items, none naming one. `open_case` was attempted 16 and 11 times and opened 5 and 3
+confirms: of 28 and 20 docket items, 10 and 5 hold a matter and none names a row (the rest are empty sitting slots). `open_case` was attempted 16 and 11 times and opened 5 and 3
 cases (`case.unauthorized` 3 and 1, `case.refused` 8 and 7).
 
 ### 2.6 What cannot enter
 
-- **A matter with no person-party.** `determine` refuses a non-person matter at its `party` conjunct (parliament
-  design §10 B-1). Pure policy ("raise the levy") is carried only as a motion *about its holder*. This is the precedent,
-  taken here; §7 gives the revert.
+- **A matter with no person-party cannot be disposed.** `open_case` accepts any id (`world_q.py:270-272`), and a
+  `cohort_set` was docketed in each probe seed (`cohort_set_s_026`, `cohort_set_s_017`). But `determine` refuses a
+  non-person matter at its `party` conjunct (parliament design §10 B-1), and only a person's determination empties a
+  slot, so such an item holds its slot for ever. Pure policy ("raise the levy") is carried only as a motion *about its
+  holder*. This is the precedent, taken here; §7 gives the revert.
 - **A fact nobody holds a claim of.** A shortage no ledger records raises no question. The chronicle channel
   (`binding_decision` emissions) is the one public record, and it reaches only decisions.
 - **A possible future** (P-24, open in the parliament design §3).
@@ -187,13 +191,14 @@ Four tests, each from a ruling. A candidate that fails one is not a matter of th
 lies: a sitting at a hearth-tier rung can hear only matters at that hearth (`slot_for` walks up from the matter's
 place; reasons-to-convene §0). **Authority** (the parties, the polity, the church; R-34) says whose force the venue
 carries and so who may sit. The eight seeded arrangement rows give the disposals available (`arrangements.yaml`).
-The rows carry no authority key today; the last column is the reading their own comments give (`arrangements.yaml`
-:160-172), which P4 §3.1 would make a key:
+The rows carry no authority key today. The last column is what the comments give where they give one (`arrangements.yaml`
+:99 for arbitration, :160-172 for the four SC-03a rows, :257 for excommunication); "the polity" for the two councils is
+my reading. P4 §3.1 would make it a key:
 
-| row | disposes | authority, as the row's comment reads it |
+| row | disposes | authority |
 |---|---|---|
 | `arbitration` | `oblige` | the parties |
-| `parliamentary_debate`, `council_of_state` | `Record` | the polity |
+| `parliamentary_debate`, `council_of_state` | `Record` | the polity (my reading; no comment says so) |
 | `legal_trial`, `interrogation` | `detain` | a secular bench |
 | `tribunal` | `ban` | a body over its own membership (*"binds the order"*) |
 | `inquisition_hearing`, `excommunication_deliberation` | `ban` | the church |
@@ -206,9 +211,9 @@ measurements of 2026-10-29 at `120b3bf7` and not re-run.
 | # | family: what is before the room | mood · party | a disposal can write today | state |
 |---|---|---|---|---|
 | 1 | **A wrong done**: a killing, wound, theft, sabotage, forgery, breach of duty, broken vow | HOLDS · the accused | `detain`, `ban`, `oblige` (penance) | offences are attempted and mostly refused: `kill.refused` 51, `sabotage.refused` 81, `challenge.refused` 125, `forge.refused` 86; `record.forged` 45 executes. `case.opened` 5 (seed 1: 3); `arrest.made` 0 |
-| 2 | **Heresy and creed**: deviation from orthodoxy, schism, excommunication | HOLDS or OUGHT · the accused, or the preacher | `ban` | five affiliations authored and 42 of 83 hold a conviction; no producer for a charge; the church seat's reach stops at T9 (P4 §5 K3b, §11 Q1) |
+| 2 | **Heresy and creed**: deviation from orthodoxy, schism, excommunication | HOLDS or OUGHT · the accused, or the preacher | `ban` | five affiliations authored and 42 of 78 survivors hold a conviction; no producer for a charge; the church seat's reach stops at T9 (P4 §5 K3b, §11 Q1) |
 | 3 | **Contempt and defiance**: a writ or summons refused | HOLDS · the defier | `ban` (no arm needed) | `comply` and `evade / defy` are emission-only (`verb_table.yaml`: `writes: []`); all 67 attempts were `compliance.impossible` (seed 1: 43); `compliance.withheld` 0 |
-| 4 | **A dispute over a holding**: land, stores, a record, a title claimed by two | HOLDS · the holder | **a `hold` transfer: ABSENT** (`_disposal` has no `hold` site; no `succession` row) | 731 live `hold` edges; rival commits to rival HOLDS on one object are formable *(per source)* |
+| 4 | **A dispute over a holding**: land, stores, a record, a title claimed by two | HOLDS · the holder | **a `hold` transfer: ABSENT** (`_disposal` has no `hold` site; no `succession` row) | 731 live `hold` edges; no producer of a dispute over holdings *(per source: reasons-to-convene §4 G)*; the 5 live `commit` edges on HOLDS Propositions are all on faction Propositions |
 | 5 | **Office**: appointment, vacancy, deposition, revocation | OUGHT · the nominee or holder | `confer`, `revoke` (a `ban` on the stripped man); the licence is a `resolution` Record: **ABSENT** | `vacancies` stamped; every seat offered vacant is appointed *(per source)* |
 | 6 | **A grant**: cession of land, fief, privilege, writ | OUGHT · the granting holder | `give` of a `hold`; `issue` a `dispensation`; the consent conjunct (CR-36 T3a) is **ABSENT** | 13 `dispensation.issued` Events, 935 claim copies; `give` 7 acts *(H-229: no computed `give` completes a transfer)* |
 | 7 | **Obligation and service**: oath, tribute, levy, renewal | OUGHT · the obligor | `oblige` with a term | 52 live `oblige`; `term.matured` 762 events, subjects not decoded |
@@ -219,7 +224,7 @@ measurements of 2026-10-29 at `120b3bf7` and not re-run.
 | 12 | **Fact-finding itself**: what happened, whether a document is genuine, who acted under a cover | HOLDS · the subject of inquiry | claims, with a finding's quality | `finding.made` 210 · `cover.assumed` 52; feeds the other families |
 | 13 | **A bargain**: offer, exchange, alliance, marriage, patronage | OUGHT · the counterparty | a `commit` pair, then `give` or `oblige`; `tie`, `knot` have no opener | `exchange` attempted 106, refused 106; `covenant` 17 acts; `tie / knot` have no opener |
 | 14 | **Procedure itself**: forum, jurisdiction, the bench's composition, a challenge to a judge, an appeal, a pardon | HOLDS or OUGHT · the bench or the case | the docket item's row (P4 forum stage); `pardon` closes `detain` and `ban`; an appeal closure basis: **ABSENT** | `pardon` exists; one case per matter, a second refused (`effects_information.py:368`) |
-| 15 | **Opinion on a subject**: the debate whose only result is a changed mind | neither · a person or faction | `Person.pursuits` (`argue`); `speak` emits only | `argue` 0 acts at both seeds, as at seeds 0 to 2 *(per source)*: no Proposition reaches an arguer's question |
+| 15 | **Opinion on a subject**: the debate whose only result is a changed mind | neither · a person or faction | `Person.pursuits` (`argue`); `speak` emits only | `argue` 0 folded acts at both seeds; one executed in three earlier two-season seeds *(per source: code audit §8)*; no Proposition reaches an arguer's question |
 
 Three notes on the table.
 
@@ -255,9 +260,9 @@ P4 §5's kinds are the *shapes* of contest; the families are the *content*. A fa
 
 ### 4.1 What a standpoint is, and is not
 
-A **standpoint** is the position from which one person meets one matter. It has no carrier. R-20: a role is *"a
-relation to an occasion, never a field"*. S-7: *"no magnitude carrier at any scale."* Jordan, 2026-09-02, on legitimacy:
-*"a ruler can be wrong about their own standing."* Each part is a Query over the person's own interior, so two persons
+A **standpoint** is the position from which one person meets one matter. It has no carrier. R-20 (primitives §1, gloss): a role is a
+relation to an occasion, never a field. S-7: *"no magnitude carrier at any scale."* The 2026-09-06 rulings file, on legitimacy:
+*"a ruler can be wrong about their own standing"* (`design_rulings_2026-09-06.md`, consequence 3 under S-7). Each part is a Query over the person's own interior, so two persons
 holding different ledgers read different values from the same function (`person_q.legitimacy`, `person_q.py:452`).
 
 A **side** is likewise derived: the persons holding a live `commit` to the same Proposition, counted when read and
@@ -269,14 +274,14 @@ stored nowhere (R-29; parliament design §0 b). No code asks a person which side
 |---|---|---|---|---|
 | 1 | **What they know** | different channel (presence, a held document, the public record, a remit); different source (firsthand, told, inferred); a told claim passes through tellers | `epistemic.observers_for`; `Claim.chain` | of 1,915 (subject, predicate-stem) pairs held by two or more persons, 317 differ in value, 1,197 in confidence, 67 in source *(a coarse count of differing copies, grouped by stem, not of disagreements)* |
 | 2 | **How much they credit it** | refraction lowers confidence by the channel's distance and by dissent from what the holder already holds; the teller's weight depends on the hearer's regard | `refracted_confidence` (`decision/options.py:1456`); `teller_weight` (`:1559`) | confidence differs in 1,197 of 1,915 pairs |
-| 3 | **What they want** | fifteen pursuit weights, projected on seven bipolar axes; one deed is virtue to one and offence to another | `descriptor_registry.yaml`; `pursuit_projection`; `deed_valence` (`person_q.py:371`) | `stability` weights run .02 to .80 (sd .20); `community` sd .14; `stewardship` sd .12; 78 of 83 hold pursuits |
-| 4 | **What they believe** | five affiliations on a 0 to 5 scale; a stored 0 is a held rejection; scars move a conviction at threshold 3 | `Person.conviction`; `affiliation_roster` | 42 of 83 hold a conviction |
+| 3 | **What they want** | fifteen pursuit weights, projected on seven bipolar axes; one deed is virtue to one and offence to another | `descriptor_registry.yaml`; `pursuit_projection`; `deed_valence` (`person_q.py:371`) | `stability` weights run .02 to .80 (sd .20); `community` sd .14; `stewardship` sd .12; all 78 survivors hold pursuits |
+| 4 | **What they believe** | five affiliations on a 0 to 5 scale; a stored 0 is a held rejection; scars move a conviction at threshold 3 | `Person.conviction`; `affiliation_roster` | 42 of 78 hold a conviction |
 | 5 | **Whom they regard** | stance rows plus the deeds they judge and were told of; opinion of a faction on `[-3, +3]`, from the faction's expectations, the poles it engages and the members the person regards | `person_q.regard` (`:393`); `world_q.opinion_of` (`:2684`) | eight factions: sd .43 to .48; signs split (see below) |
 | 6 | **What they hold** | the edges a matter touches: holdings, obligations, commitments, seats | `Tenure`; `own_purview`, `reach` | 731 `hold` · 133 `commit` · 52 `oblige` · 32 offices |
 | 7 | **Where they sit** | a seat adds purview and, under R-31, venue-keyed weight; a person's faction adds an authority | `Office.scope_rung`; `authority.by_faction` (P4) | 32 offices in the realm |
-| 8 | **What they can bring** | attributes through faculties into the pool (P4 §3.2) | `Person.capability` | **0 of 83 hold any**; every roll is `pool_default` |
+| 8 | **What they can bring** | attributes through faculties into the pool (P4 §3.2) | `Person.capability` | **0 of 78 hold any**; every roll is `pool_default` |
 
-Opinion of a faction across the 78 persons who answered (sign counts; a person at 0.0 counts in neither):
+Opinion of a faction across the 78 persons alive at the end (sign counts; a person at 0.0 counts in neither):
 
 | faction | negative | positive | min | max |
 |---|---|---|---|---|
@@ -386,7 +391,8 @@ witnessed fact. Nothing pushes a stance onto him (R-19, R-23).
 | RESOLVE | `ACTS` | admits each act (`_admits`), dispatches a contested one to the seam, folds the result |
 | ENCOUNTER | `ACTS` | fights the field battles RESOLVE declared; no social contest here |
 | WITNESS | `INTERIOR` | fans every Event out to ledgers by channel; this is the only writer of claims |
-| CENSUS | `MATTER` | individuates cohorts; reads the endings |
+| after the rounds: | | |
+| CENSUS | `MATTER` | once per season, after the last round (`driver.py:519`): individuates cohorts; the endings are then read (`:523`) |
 
 Two timing rules bind a contest. **A staged hearing is season-granular**: `Tenure.since` is the season tick and no
 round is stamped on an Event or a Tenure, so order *within* a season is not enforceable (parliament design §2). **MATTER
@@ -399,7 +405,7 @@ never matures (P4 repair b).
 Question ─► Candidate (chooser, person-side) ─► Act
    RESOLVE:  _admits (eligibility · requires · budget)
              └► contested verb? ── yes ─► sides_of ─► contest() seam ─► provider roll ─► Margin
-                                                   (R-24: the same Act and draw whether played or auto-resolved)
+                                                   (R-24 routes a non-player contest through the automated route; the same-draw-at-both-fidelities rule is the armature's, comparison §6 item 7)
              degree_of(Margin) ─► the one ladder (degree_from_net; R-5, R-6) ─► Overwhelming/Success/Partial/Failure
              _fold: the verb row's band says what is WRITTEN and what is EMITTED
              effect(w, a, res) ─► Change   (the effect writes nothing; it returns the change)
@@ -424,7 +430,7 @@ fans out.
 | `tell` | a standing | nothing by itself; the hearer's claim lands at WITNESS | `news.told` and `confidence.broken` (any band but Failure), `news.untold` on Failure | the hearer; those present |
 | `argue` | a proposition | the hearer's `Person.pursuits`, moved toward the arguer's (`argued_pursuits`, `person_q.py:638`); Partial and Failure write nothing | `argument.won` · `pursuit.moved`; `argument.lost` | those present |
 | `speak` | a matter | **nothing at any band** (`writes` empty) | `matter.carried` · `advanced` · `held` · `turned`; `speech.unheard` on refusal | the room |
-| `determine` | a proposition | the disposal edge (`oblige` / `detain` / `ban`, with the band as its `degree`), the docket item cleared (`matter: None`), **and the judge's own pursuits** by `consequence_pursuits` (`effects_information.py:446`); Failure writes nothing | `matter.determined` · `pursuit.moved`; `matter.undetermined` | the reach of the row |
+| `determine` | a proposition | the disposal edge (`oblige` / `detain` / `ban`, with the band as its `degree`), the docket item cleared (`matter: None`), **and the judge's own pursuits** by `consequence_pursuits` (`person_q.py:615`, called at `effects_information.py:561`); Failure writes nothing | `matter.determined` · `pursuit.moved`; `matter.undetermined` | the reach of the row |
 | `arrest` | a standing | a `detain` on the seat that issued the warrant | `arrest.made`; `arrest.resisted` | those present |
 | `open_case` | none | case file (kind `text`), docket item | `case.opened` | those present |
 | `carry` | none | the petition's stages; docket item | `petition.carried` | those present |
@@ -471,8 +477,8 @@ folded.)*
 The pattern is the comparison's dead core (§3 there), read from the other end. The front of the fold runs: petitions
 are filed, cases open, Dates fire, claims land. **Nothing downstream of `determine` runs in either seed**: no
 judgment, no moved pursuit, no arrest, no pardon that frees anyone, no writ answered. Every `pardon` (8 of 8, 9 of 9)
-is `pardon.refused`, since no `detain` or `ban` exists to close, and every `comply` and `evade / defy` is
-`compliance.impossible`. `determine.refused` was emitted 8 and 13 times, yet `determine` is not among the folded acts
+is `pardon.refused`, and no `detain` or `ban` is live at the end; the cause of each refusal was not isolated. Every `comply` and `evade / defy` is
+`compliance.impossible`. The same gap holds for `speak` (4 folded acts, 59 `speech.unheard`). `determine.refused` was emitted 8 and 13 times, yet `determine` is not among the folded acts
 (`d.resolved`) of either seed, so those refusals came before the fold or are not counted there; which, I did not
 examine.
 
@@ -505,7 +511,7 @@ The fold closes only if some reader of the next season consumes what this one wr
 | 5 | a held writ or warrant | `writs_held` stamp; `comply` and `evade / defy` | the addressee must answer; a decline is a deed others judge | writs are issued (13 and 19 Events) and answered 67 and 43 times, **every one `compliance.impossible`**; a price for defiance: **ABSENT** (P4 repair i) |
 | 6 | an unanswered stage | MATTER on the stage; a witnessed lapse | the matter is held, then lapses visibly (parliament step 9) | **ABSENT** (MATTER matures only `due == tick`) |
 
-Only route 1 closes in the probe. **The route that would make a contest matter to a third party is route 4**, because
+Only route 1 closes end to end in the probe. **The route that would make a contest matter to a third party is route 4**, because
 a decision changes what the neighbours think of the authority that made it, and that is R-36's legitimacy arrived at
 by persons rather than by a stored number. It has readers and a thin supply, since a decision must first be made and
 told.
@@ -516,8 +522,9 @@ told.
   acts on the world.
 - **No immediate re-contest of a rendered outcome** (R-35). Appeal goes to another authority.
 - **No magnitude carrier** (S-7). Legitimacy, standing and morale are read, never written.
-- **Not every contest is played** (R-24). A non-player contest takes the same Act and the same draw through the
-  module's automated route; the fold is identical, which is why a player's trial and an NPC's trial are one path.
+- **Not every contest is played** (R-24). A non-player contest takes the module's automated route; the armature's rule is the same Act and the same
+  draw at both fidelities (comparison §6 item 7), so the fold is identical and a player's trial and an NPC's trial are
+  one path.
 - **No special case for an entity or an outcome** (scripting drift, `04_CODE_ARCHITECTURE.md` G.1.6). A new family of
   matter is a row, a Record kind or a Proposition predicate, never a branch.
 
@@ -554,7 +561,7 @@ decision (a precedent first, then what the architecture implies), each with its 
 ## 8. Limits and fidelity
 
 **Real:** every citation to `engine/season/` was opened at its line; the verb-table writes and emits in §5.3 were read
-from `verb_table.yaml` by loading it; the probe counts are the scripts' own output. **Taken from other documents, not
+from `verb_table.yaml` by loading it, except three cells that come from the effect and not the row (`utter`'s `hold`, `arrest`'s `detain`, `open_case`'s kind `text`: `effects_information.py:1110`, `:1029`, `:370`); the probe counts are the scripts' own output. **Taken from other documents, not
 re-opened:** citations to `04_CODE_ARCHITECTURE.md` (via `CLAUDE.md` and P4), the rulings (via primitives §1) and the
 cells marked *(per source)*. **Model:** none. This file proposes no number.
 
@@ -570,8 +577,7 @@ first questions, not classes; the script was left as run.
 with different sub-predicates count as differing. It measures spread, not disagreement.
 
 **Not done.** No season was run with any proposal built. Statuses marked *(per source)* come from earlier
-measurements and were not re-run. The five persons who did not answer `opinion_of` were not examined (the probe
-catches and drops an exception). The event-kind table is two seeds of four seasons; a count of 0 is an absence in
+measurements and were not re-run. The five persons absent from the end-state counts are the five that `person.died` records in each seed; the probe also catches and drops an `opinion_of` exception, which was not observed to fire. The event-kind table is two seeds of four seasons; a count of 0 is an absence in
 those runs, not a proof that no seed can fire it. No full suite was run; nothing in the tree outside this folder changed.
 
 `[CONFIDENCE: medium]` on the families and the collision shapes, which are my sorting of the corpus; `[CONFIDENCE: high]`
