@@ -46,7 +46,7 @@ THE FALSIFIERS, each seen red before it was trusted (2026-10-16, mutations run a
   * A BROKEN CAUSE LINK REDDENS THE BAR: the sitting question built with `about=None` in
     `world_q.questions_for` -- scholastics/6 *no determination's causes reach a date.fired (1
     determined, 1 fired)*.
-  * THE CONTROL beside them, kept as a test (virtue, seed 2 since v10 CP-T05-04; doctrine/8 until it; community/13 until SC-03b): a held date fires and, after it,
+  * THE CONTROL beside them, kept as a test (scholastics, seed 6 since v10 CP-T02-05, virtue/2 before it back to CP-T05-04; doctrine/8 until it; community/13 until SC-03b): a held date fires and, after it,
     the Duke determines the clerk out of his ambition -- the walk is False there, so THE BAR's walk is
     not satisfied by a firing merely preceding a determination.
   * THE CLOSURE TEST: the planted `if arrangement.id == "tribunal":` written into the real
@@ -161,7 +161,14 @@ BAR_FIXTURES = DEFAULT_FIXTURES.sweep("pool_default", 30)       # v9 SC-03b: a j
 # seed 8 two dates fire, `f, = ...` raises; most seeds fire none). A sweep of all 15 convictions x seeds 0..24 at 5
 # seasons finds justice/8, virtue/2, virtue/6 and virtue/15 (scratch, not kept); the lowest seed, virtue/2, is taken.
 # CONTROL, run: on the REM-25 tree (the same script) doctrine/8 meets every assertion.
-CONTROL = ("virtue", 2, 5)      # was ("community", 13, 5) until v9 SC-03b; ("doctrine", 8, 5) until IN-12 step 9; 22 until step 10; 83 until REM-22; 8 until CP-T05-04
+# v10 CP-T02-05 (B10-09): RE-TRACED AGAIN, virtue/2 -> scholastics/6, the season count unchanged --
+# `oughts_named` stamps the OUGHT Propositions a person has heard of (less any he already holds a live `commit` on; `commit`
+# and `argue` declare `Proposition`), so the act mix of this world moved and virtue/2 no longer meets the assertions below
+# (measured: it is absent from a sweep of the control test's assertions on this tree). A sweep of virtue x seeds 0..41 at 5
+# seasons finds no run meeting every assertion of the control test below; a sweep of the other fourteen convictions x seeds
+# 0..24 at 5 seasons finds doctrine/7 and scholastics/6 (scratch, not kept); the lowest seed, scholastics/6, is taken
+# (the conviction moves, as at CP-T05-04). The two PROCEEDINGS are unmoved (they meet every assertion on this tree).
+CONTROL = ("scholastics", 6, 5)     # was ("community", 13, 5) until v9 SC-03b; ("doctrine", 8, 5) until IN-12 step 9; 22 until step 10; 83 until REM-22; 8 until CP-T05-04; ("virtue", 2, 5) until CP-T02-05
 
 
 def _world(conviction: str, seed: int):
@@ -291,7 +298,7 @@ def test_an_injected_act_reddens_the_bar(verb):
 
 
 def test_the_walk_is_false_for_a_determination_the_ambition_raised_beside_a_fired_date():
-    """THE CONTROL. Same world, virtue at seed 2 (re-traced at v10 CP-T05-04 against the assertions below only, from
+    """THE CONTROL. Same world, scholastics at seed 6 (re-traced from virtue at seed 2 at v10 CP-T02-05; re-traced at v10 CP-T05-04 against the assertions below only, from
     doctrine at seed 8; doctrine at 83 and at 22 before it, re-traced at IN-12 step 10 and step 9; the narrative that
     follows was traced at seed 8, SC-03b; community at seed 13 before it): the Duke convenes at `S` AND
     opens the clerk's case in the same season, so the case is docketed dateless before the sitting

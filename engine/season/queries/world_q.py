@@ -2855,6 +2855,33 @@ def seats_named(w: World, p: Person, named: Optional[frozenset] = None) -> tuple
     return tuple(sorted(o for o in named if o in w.offices))
 
 
+def oughts_named(w: World, p: Person, named: Optional[frozenset] = None) -> tuple:
+    """THE CAUSES `p` HAS HEARD OF (v10 CP-T02-05, B10-09; `-08` AM-B-11, [ASSUMPTION; medium; Jordan to
+    correct; revert: drop the term in `questions_for`, and `commit` forms on a Proposition only where the
+    question he answers names one]), sorted by id: the OUGHT Propositions among
+    `person_q.ledger_names(p.ledger)` -- a witnessed `proposition.uttered`, a told claim naming one, a held
+    document whose terms name one. `seats_named`'s shape one class over: a person can take up any cause he
+    has heard of. `()` for nearly everyone at the build (no ledger names a creed before a season is witnessed).
+
+    Reads `p`'s OWN LEDGER, never the store's Records (AX-2); the World is asked only which ids are
+    Propositions and of what mood (`w.propositions`, the mood `ambitions` filters on), the class `_stamped`
+    stamps. Resolver-side and read-only. It supplies Proposition IDS, which `questions_for` adds to the
+    question the person answers as CLASSED referents, so only a row declaring `referent_class: Proposition`
+    (`commit`, `argue`) forms on them; whether an act on one passes is the fold's. `release` declares no
+    class and is not among them. `named` is `ledger_names(p.ledger)` when the caller already holds it.
+
+    NOT ONE HE ALREADY COMMITS TO ([ASSUMPTION; medium; Jordan to correct; revert: drop the `held` clause]): a Proposition on
+    which `p` holds a LIVE `commit` Tenure (read person-side from `p.tenures`) is not offered. `_eff_commit` always opens a
+    fresh Tenure, so a repeat is a duplicate live edge and a spurious `commitment.made`: formation must not outrun
+    feasibility. The utterer's own Proposition is covered by the same clause once he commits to it. This makes the offer
+    smaller than the plan's text states (every OUGHT he has heard of)."""
+    if named is None:
+        named = ledger_names(p.ledger)
+    held = {t.object for t in p.tenures if t.kind == "commit" and t.live}
+    return tuple(sorted(o for o in named
+                        if o in w.propositions and w.propositions[o].mood == "OUGHT" and o not in held))
+
+
 def writs_held(w: World, p: Person) -> tuple:
     """THE WRITS `p` HOLDS (v9 IN-09, H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to
     correct]), sorted by id: the Records on `p`'s own live `hold` edges whose kind a row declaring
@@ -3459,11 +3486,15 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # v10 IN-45 (ii) (B10-06; M5 option (B), [ASSUMPTION; medium; Jordan to correct]): AND, APPENDED, THE SITES A
     # WORKS HE HOLDS NAMES (`works_sites`), as `Site` -- the channel from a held works to the fabric `work` raises,
     # which no question a master answers carried. REVERT: drop the term.
+    # v10 CP-T02-05 (B10-09; `-08` AM-B-11, [ASSUMPTION; medium; Jordan to correct]): AND, LAST, THE OUGHT
+    # PROPOSITIONS HE HAS HEARD OF (`oughts_named`), as `Proposition` -- a cause he may take up. A named
+    # term here and no registry (REM-21 as amended has none): only a row declaring `Proposition` (`commit`,
+    # `argue`) forms on them. REVERT: drop the term.
     told = ledger_names(p.ledger)
     added = (vacancies(w, p) + seats_named(w, p, told) + writs_held(w, p) + records_held_for_holding_rows(w, p)
              + places_named(w, p, told) + larders_in_purview(w, p, told)
              + (own_referents_of_class(w, out[0]) if out else ())
-             + works_sites(w, p))
+             + works_sites(w, p) + oughts_named(w, p, told))
     if added:
         head = out[0] if out else Question(f"q:need:{added[0]}", "need", (), added[0])
         out[:1] = [_stamped(head, added, w)]
