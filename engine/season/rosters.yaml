@@ -1996,6 +1996,13 @@ rosters:
     values: [person, seat_holders, rung, deed_doers, orientation]
     forms:
       deed_doers: [against, engaging, kinds]
+    # CP-T02-03 (B10-09; v10 AM-B-09): `aim:` -- WHICH KIND CAN BE MET, and by what rule, read by
+    # `world_q.aim_state` (the rule) and refused-if-absent by `data/goals.py`. `rung` ONLY: a rung goal is MET when the
+    # rung's `governing_hold` is held by a person committed to the goal's organization's faction. EVERY OTHER KIND HAS NO
+    # ROW and reads `open` always: a vacant seat is `tenure.closed`'s claim (CP-T02-01), not an aim state. A new row here
+    # is a new rule in `world_q.AIM_RULES`, not a table edit.
+    aim:
+      rung: held_by_org_member
 
   goal_derivations:
     source: "v9 IN-66 (`workplans/valoria_master_workplan_v9_part5.md` A-31, A-32; ED-IN-0293 (8)) -- how a goal at one organizational level derives from a goal at the level above."
