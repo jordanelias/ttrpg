@@ -124,7 +124,7 @@ def test_the_boost_shifts_the_roll_and_never_the_obstacle():
         prev = clear
     assert SL.band_odds(2, 2, 1.0)[0] < SL.band_odds(2, 2, 0.0)[0]
     # the roll's own composition, `net_boost(level, pool)`, is what a caller passes
-    # (at pool 2 the whole boost is 0.98 -- under one success: the whole-dice roll alone paid it nothing,
+    # (at pool 2 the whole boost is 0.989 -- under one success: the whole-dice roll alone paid it nothing,
     #  the gap CP-T01-04's fraction rule closes -- so it now pays in proportion; pool 4 pays as before.)
     b = SL.net_boost(SL.LEVEL_SIGMA["major"], 4)
     assert b > 1.0 and SL.band_odds(4, 2, b)[0] < SL.band_odds(4, 2)[0]

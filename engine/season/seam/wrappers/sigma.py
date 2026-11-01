@@ -298,7 +298,9 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
     facts about the act's SHAPE that only a World can answer (`person_subject`: the subject is a person;
     `examined_record`: an inquiry examines a Record; `heard`: a bench hears the contest) are the
     caller's, not a belief. His pool is his own and held with certainty: the caller passes it as `pool`
-    (`odds_of` computes it with `faculty(w, believer, verb)`), so `faculty` stays the one pool reader. Every other field is filled
+    (`odds_of` computes it with `faculty(w, believer, verb)`, which reads the log of his OWN acts for the
+    practice addend: the one World read mode (b) makes, and it is of himself), so `faculty` stays the one
+    pool reader. Every other field is filled
     only from what he holds, and WHERE A FACTOR IS UNKNOWN TO HIM THE ANSWER IS `None`, never a figure:
       * the opposition of a person subject, on a verb that names a capability key: a claim in his
         ledger on that subject at `CAPABILITY_CLAIM + key` (the latest, then the most confident);
@@ -333,13 +335,15 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
 def _rolled_as(w: Any, act: Any) -> Optional[tuple]:
     """`(claimants, subject, room, examined)` exactly as the fold hands the act to `resolve`, or `None`
     when the social roll does not deal it (an uncontested act, another subsystem's prize, a party
-    gap). The derivation is the fold's own: `loop/resolve.py::_contests_of`, `loop/sides.py::sides_of`
-    and the prize row's `heard_by:` for a contest; the verb's `graded_inquiries` route for an inquiry.
-    Imported inside the function: `loop/` imports this package, so a module-level import would loop."""
+    gap). The derivation is the fold's own: `loop/sides.py::_contests_of` and `::sides_of` and the prize
+    row's `heard_by:` for a contest; the verb's `graded_inquiries` route for an inquiry. `loop.sides` is
+    imported inside the function: `loop/` imports this package, so a module-level import would loop at
+    import time. It imports nothing that imports `seam`, so it closes no cycle the census counts;
+    `loop.resolve` would (`tests/valoria/test_import_cycle_game_state_npe.py`), which is why the
+    contest-of-an-act helper lives in `sides.py`."""
     from ...data.rosters import GRADED_INQUIRIES
     from ...data.verbs import VERB_TABLE
-    from ...loop.resolve import _contests_of
-    from ...loop.sides import sides_of
+    from ...loop.sides import _contests_of, sides_of
     row = VERB_TABLE.get(act.verb)
     payload = act.payload if isinstance(act.payload, dict) else {}
     contests = _contests_of(act, row)
@@ -368,8 +372,11 @@ def odds_of(w: Any, act: Any, *, believer: Any = None,
     construction: it is the same record, the same obstacle function and the same roll composition.
 
     MODE (b), `believer=<Person>`: the SAME function over `believed_input(believer, ...)`, the person's
-    own record. It reads the believer's own ledger and nothing of the true state (the World answers only
-    the act's shape), and returns `None` where a factor is unknown to him -- never a guessed figure.
+    own record. It reads the believer's own ledger and nothing else of the true state (the World answers
+    only the act's shape), and returns `None` where a factor is unknown to him -- never a guessed figure.
+    ONE STATED EXCEPTION, his own pool: `faculty(w, believer, verb)` sums the registered addends, and the
+    practice addend derives from `w.log` the results of HIS OWN acts. His own results are his to know, and
+    no ledger-side practice reader exists to read them from (ladder step 5, B10-08 close; CR-17 may move it).
     `None` is also the answer where the social roll deals no dice for the act (see `_rolled_as`) or
     S27.4 refuses it.
 
@@ -468,6 +475,10 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     entry, refusal = entry_for(prize, _PROVIDER, module_entry)
     if entry is None:
         return refusal
+    # ONE generator for the act's whole roll: the dice (`entry.fn`) and the margin's fraction (below)
+    # draw from it. An absent `rng` is a fresh `random.Random()`, as `roll_pool` makes one; the process-global
+    # stream is never touched (04 §C.12: the RNG is threaded, never global). The shipped path always passes one.
+    rng = rng if rng is not None else random.Random()
     margin = entry.fn(inp, rng)
     if not isinstance(margin, Margin):
         raise Unspecified(
@@ -486,8 +497,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     # the roll and its boost from the record's fields (`settle_record`); the host does no arithmetic.
     # The recorded `net`, `ob` and `pool` below are unchanged: S27.4 and every reader of the pair see
     # what they saw.
-    settled = settle_record(margin.net, inp.leverage, inp.pool, margin.ob,
-                            rng.random if rng is not None else random.random)
+    settled = settle_record(margin.net, inp.leverage, inp.pool, margin.ob, rng.random)
     # The margin's own fields, copied whole: the host reads the pair, it never computes one.
     return dict(status="RESOLVED", module=_PROVIDER, resolver=_RESOLVER, pool=inp.pool,
                 **asdict(margin), leverage=inp.leverage, settled_margin=settled)

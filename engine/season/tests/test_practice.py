@@ -25,6 +25,7 @@ import pytest
 
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.rosters import VERB_CAPABILITY
+from ..gaps import Unspecified
 from ..seam.wrappers import sigma
 from ..state.carriers import Act, Event
 from . import test_in12_step9 as T9
@@ -161,7 +162,8 @@ def test_the_reader_is_registered_through_faculty_and_called_nowhere_else():
     names = [getattr(f, "__name__", "") for f in S.POOL_ADDENDS]
     assert "practice" in names, names
     src = inspect.getsource(S)
-    assert src.count("practice(") == 0 or "register_pool_addend(practice)" in src
+    assert src.count("practice(") == 0, "sigma.py calls `practice(` directly: it is read through `faculty`"
+    assert "register_pool_addend(practice)" in src
 
 
 def test_odds_of_reads_the_same_pool():
@@ -181,7 +183,10 @@ def test_odds_of_reads_the_same_pool():
 
 
 def test_an_unregistered_or_nonsense_fixture_is_refused_not_defaulted():
-    w, who = _world()
-    _swept(w, step=0)
-    with pytest.raises(Exception):
-        _pool(w, who)
+    # Unspecified specifically: a bare `Exception` also passes on the ZeroDivisionError a deleted guard would
+    # leave (`len(acts) // 0`), so the designed refusal and the accident would read the same.
+    for kw in (dict(step=0), dict(step=-1), dict(window=0), dict(window=-3)):
+        w, who = _world()
+        _swept(w, **kw)
+        with pytest.raises(Unspecified, match="practice_window"):
+            _pool(w, who)

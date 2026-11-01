@@ -99,11 +99,11 @@ def test_slots_equal_len_acts_when_no_act_carries_effort_and_cost_follows_the_sl
         sc = Scene("s", p.id, [_tell(w, p, f"t{i}") for i in range(n)])
         assert sc.slots == len(sc.acts) == n
         assert sc.cost(2) == (2 if n > 1 else 1)
-    # the caller's `extended` flag is no longer the price: it is derived from the slots
-    sc = Scene("s", p.id, [_tell(w, p, "t0", effort=1)], extended=False)
+    # the price is derived from the slots (the scene carries no flag a caller could set)
+    sc = Scene("s", p.id, [_tell(w, p, "t0", effort=1)])
     assert sc.cost(2) == 2
-    assert Scene("s", p.id, [_tell(w, p, "t0"), _tell(w, p, "t1")], extended=False).cost(2) == 2
-    assert Scene("s", p.id, [_tell(w, p, "t0")], extended=True).cost(2) == 1
+    assert Scene("s", p.id, [_tell(w, p, "t0"), _tell(w, p, "t1")]).cost(2) == 2
+    assert Scene("s", p.id, [_tell(w, p, "t0")]).cost(2) == 1
 
 
 # ---------------------------------------------------------------------------------------------

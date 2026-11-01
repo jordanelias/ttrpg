@@ -6,7 +6,8 @@ THE RULE UNDER TEST: the roll's net is an integer (`roll_net`) plus the mu-shift
 may be fractional. With `q = boost - ob`, the settled margin is
     m = raw_net + floor(q) + [u < frac(q)]
 an integer, and the ladder reads `degree_from_net(m, 0)`. The extra uniform `u` is drawn ONLY when
-`frac(q) > 0`, so every whole-Ob roll (the whole realm) keeps its stream.
+`frac(q) > 0`, so every whole-Ob roll with no boost (the corpus, and the realm but for the few draws at
+a capped fractional Ob) keeps its stream.
 
 THE CLAIMS, AND WHAT WOULD SHOW EACH WRONG:
   * expected margin is preserved exactly: over pools 1-8, Ob 1 to 4 in quarter steps, boost 0 to 3,

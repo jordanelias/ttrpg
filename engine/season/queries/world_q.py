@@ -3841,7 +3841,7 @@ def practice(w: World, p: Person, verb: str) -> int:
         raise Unspecified(
             f"practice_window {window} / practice_step {step}", "CP-T01-02",
             needs="a window of at least one season and a step of at least one good result per die",
-            law="ID-5 -- refuse, don't default: a zero step divides and a zero window is the shipped arm "
+            law="ID-5 -- refuse, don't default: a zero step divides and a zero window is the arm off "
                 "under another name, which is `practice_cap` 0's to say")
     first, good = w.tick - window, DEGREE_STEP["Success"]
     acts: set = set()

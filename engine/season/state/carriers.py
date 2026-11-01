@@ -558,13 +558,12 @@ class Scene:
     is exactly the triage the budget exists to create. The noun changes; the spray argument does
     not.
 
-    `extended` costs more than one scene action (`H-77`, swept). Both that cost and the
-    interactions bound are FIXTURES and register rows -- Jordan ruled the UNIT and the NUMBER and
-    ruled neither of these."""
+    A scene filling more than one interaction slot (`slots`) costs more than one scene action
+    (`H-77`, swept). Both that cost and the interactions bound are FIXTURES and register rows --
+    Jordan ruled the UNIT and the NUMBER and ruled neither of these."""
     id: str
     actor: str
     acts: list = field(default_factory=list)
-    extended: bool = False
     # ⚠ `occasion` IS THE QUESTION THE SCENE IS ABOUT, and it is the field that binds DELIBERATE
     # into the causal graph. `N3` (PR #357) measured the absence: *60 act-Events, 0 resolving to
     # a question* — an act never cited what made it, so `causes[]` could not walk from one
@@ -595,10 +594,11 @@ class Scene:
 
     def cost(self, extended_cost: int) -> int:
         """Scene actions this scene spends: `extended_cost` when it fills more than one slot, else
-        `PLAIN_COST`. PRICED FROM THE SLOTS, NOT FROM THE `extended` FLAG (CP-T01-05): the flag is the
-        CALLER's statement (`pack_scenes` derives it from `len(chunk) > 1`), so a play-surface callback
-        returning one effort-2 act in a scene it left unflagged would have paid 1 for three slots. With
-        every effort 0, `slots > 1` is `len(acts) > 1`, which is what `pack_scenes` sets."""
+        `PLAIN_COST`. PRICED FROM THE SLOTS (CP-T01-05), not from a flag a caller sets: a scene's price is
+        what it carries, so a play-surface callback returning one effort-2 act pays for three slots. The
+        old `extended` field (set by `pack_scenes` from `len(chunk) > 1`, and read by nothing once the
+        price moved to the slots) was deleted at the B10-08 close; with every effort 0, `slots > 1` is
+        `len(acts) > 1`, which is what it held."""
         return extended_cost if self.slots > 1 else self.PLAIN_COST
 
 

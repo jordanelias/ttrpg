@@ -379,7 +379,6 @@ def _drop_what_was_already_done(scenes: list, taken: set) -> list:
                 keep.append(a)
         if keep:
             sc.acts = keep
-            sc.extended = sc.slots > 1      # the caller's flag follows the slots (`Scene.cost` prices from them)
             out.append(sc)
     return out
 

@@ -9139,7 +9139,7 @@
    "section": "S26.3",
    "title": "several interactions inside one budgeted scene are lawful",
    "by": "construction",
-   "tests": "a character must be able to do several things inside one scene without spending a second scene action"
+   "tests": "a character must be able to do several things inside one scene without spending a second scene action (at H-77's control cost of 1, which isolates the interaction bound; at the shipped extended cost of 2 such a scene is priced and the budget refuses the same return)"
   },
   "P3": {
    "id": "P3",

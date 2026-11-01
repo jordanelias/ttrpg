@@ -23,18 +23,20 @@ EXACT discrete count of non-Failure bands at 1D through the real module entry an
 of the ten d10 faces forced in turn).
 
 RE-MEASURED AT CP-T01-03 (B10-08): the instrument moved from `p_success`, the Gaussian closed form
-(10-15 points wrong on these dice), to `band_odds`, the exact enumeration. The two disagree where the
-closed form is worst. Chance of a non-Failure band at the 1D floor, old `p_success` -> new `band_odds`:
+(up to 17 points wrong on these dice: 17.3 at the ceiling-1 pair, 7.7 at the shipped one), to
+`band_odds`, the exact enumeration. The two disagree where the closed form is worst. Chance of a non-Failure band at the 1D floor, old `p_success` -> new `band_odds`:
   ceiling 1  0.226627 -> 0.4      (4 of 10 faces)
   ceiling 2  0.02275  -> 0.1      (1 of 10 faces; the shipped arm)
   ceiling 3  0.000577 -> 0.0      (0 of 10 faces)
   None       3e-06 at Ob 4, 0.0 above -> 0.0 at every Ob 4..11
 Every verdict is unchanged (the control and the ceiling-3 arm fail M-7, the shipped arm clears it), and
-`band_odds` now equals the forced-face count exactly, which `p_success` never did. ONE CLAIM DID NOT
-SURVIVE THE NEW INSTRUMENT: "the sigma-channel is live again under the ceiling" read `p_success`
-rising with the level bought; on the dealt dice no level (boost <= 0.70) moves a whole success at pool
-1, so the odds are flat at 0.1. It is live once a boost clears one success (pool 4), which is the gap
-`CP-T01-04`'s fraction rule is for; the test below says so rather than keeping the Gaussian reading.
+`band_odds` now equals the forced-face count exactly, which `p_success` never did. ONE CLAIM WAS
+WRONG IN ITS FIRST FORM, and CP-T01-04 undid the correction: at CP-T01-03 (whole successes only) no
+level's boost (<= 0.70) moved a whole success at pool 1, so the odds read flat at 0.1. With the
+fraction rule (CP-T01-04) a boost `b` under one success is worth its fraction: at pool 1 against Ob 2
+the chance of a non-Failure band is 0.1 + 0.3 * b, that is 0.1595 / 0.2157 / 0.2664 / 0.3098 at
+minor / moderate / strong / major. So the sigma-channel IS live under the ceiling, strictly, and the
+test below asserts it strictly (a dead channel reads 0.1 at every level and fails).
 
 THE FALSIFIERS (each seen red before the build, 2026-10-16: the record had no `opposition` /
 `obstacle_ceiling` field, `DEFAULT_FIXTURES` no `obstacle_ceiling`, `sigma` still held `_obstacle_of`):
@@ -156,10 +158,10 @@ def test_m7_at_the_1d_floor_clears_ob_4_and_above_under_the_ceiling_and_fails_wi
     for lv, s in LEVEL_SIGMA.items():
         boost = net_boost(s, FLOOR)
         assert _clear(FLOOR, 4, boost) < EFFECTIVELY_ZERO, (lv, _clear(FLOOR, 4, boost))
-        # under the ceiling, buying advantage never lowers the chance at the floor ...
-        assert _clear(FLOOR, shipped, boost) >= _clear(FLOOR, shipped, 0.0), lv
-    # ... but on the dealt dice it pays only once the boost clears a whole success: no level is worth
-    # one at pool 1 (the Gaussian reading said it rose), and pool 4's major level is (CP-T01-04's gap).
+        # under the ceiling, buying advantage RAISES the chance at the floor, strictly (the fraction rule
+        # makes a boost under one success worth its fraction: 0.1 + 0.3 * b at pool 1, Ob 2) ...
+        assert boost > 0 and _clear(FLOOR, shipped, boost) > _clear(FLOOR, shipped, 0.0), lv
+    # ... and no level clears a whole success at pool 1, while pool 4's major level does.
     assert max(net_boost(s, FLOOR) for s in LEVEL_SIGMA.values()) < 1.0
     major4 = net_boost(LEVEL_SIGMA["major"], 4)
     assert major4 > 1.0 and _clear(4, shipped, major4) > _clear(4, shipped, 0.0)
@@ -259,7 +261,7 @@ def test_changing_the_ceiling_changes_the_outcome():
 # ---------------------------------------------------------------------------------------------
 # Below one die the fixed value applies as it always did. From one die, the composed obstacle is
 # capped at the highest Ob at which THIS pool still keeps `H-213`'s chance -- Partial-or-better of
-# `band_odds(1, obstacle_ceiling)`, 10 % -- so a larger pool is never worse for the cap, and an
+# `band_odds(1, obstacle_ceiling)`, 10 % -- so, at no advantage, a larger pool is never worse for the cap, and an
 # admitted roll keeps a real chance. The detector below is run on the rejected `2 * pool` cap too
 # (301 inversions measured at the base of CP-T01-06): a count of zero means something only because
 # the same count sees the others fail.

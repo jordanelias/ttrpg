@@ -188,9 +188,11 @@ def contest(w: World, rung: Optional[str], prize: Any, claimants: list[str],
 
     `effort` (CP-T01-05) is the act's own, read off its payload by the caller (`state/carriers.py::
     effort_of`) and passed to the provider with `verb` and `subject`; the social roll turns it into named
-    levels (`rosters.yaml: advantage_sources`), the other providers accept and ignore it, as `rung`. Attaches at EXACTLY ONE PLACE -- RESOLVE.
+    levels (`rosters.yaml: advantage_sources`), the other providers accept and ignore it, as `rung`.
 
-    ⚠ `U1` ADDED THREE KEYWORD-ONLY PARAMETERS AND CHANGED NO EXISTING CALL. `verb` and `subject`
+    Every argument attaches at EXACTLY ONE PLACE -- RESOLVE.
+
+    ⚠ `U1` ADDED THREE KEYWORD-ONLY PARAMETERS (`verb`, `subject`, `rng`) AND CHANGED NO EXISTING CALL. `verb` and `subject`
     are what a provider needs to derive a pool and an obstacle from the act rather than from the
     prize; `rng` is the generator `04 §C.12`'s rejection 4 requires the DRIVER to construct — *"its
     generator must be constructed by the driver from the run seed and passed down exactly as

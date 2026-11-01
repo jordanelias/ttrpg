@@ -3769,8 +3769,8 @@ def test_w17_the_budget_bounds_scenes_and_the_interaction_bound_is_separate():
 
     # ---- and the SAME NUMBER of interactions, packed into a lawful number of scenes, PASSES ----
     # ⚠ AT `extended_scene_cost` 1, H-77's control arm (CP-T01-05): `Scene.cost` prices a scene from the
-    # interaction slots it fills, not from the caller's `extended` flag, so these `b` scenes of `cap`
-    # interactions cost `b x cap` at the shipped cost of 2 and are refused for the BUDGET. This arm is about
+    # interaction slots it fills, not from the caller's `extended` flag, so these `b` multi-interaction
+    # scenes cost `b x 2` at the shipped extended cost of 2 and are refused for the BUDGET. This arm is about
     # the INTERACTION bound being separate from the scene count, which the control cost isolates.
     SeasonDriver(_1p(P.tiny_world(DEFAULT_FIXTURES.sweep("extended_scene_cost", 1)))).season(
         _once(scenes(b, cap)), None)   # must not raise
@@ -3887,7 +3887,8 @@ def test_w17_the_packing_rule_and_the_extended_cost_are_both_live():
     multi = [sc for sc in scenes if len(sc.acts) > 1]
     assert multi, f"no scene carries more than one interaction: {shapes} — `extended` can never " \
                   "be True and H-77's sweep is inert whatever the row says"
-    assert all(sc.extended for sc in multi), "a multi-interaction scene is not marked extended"
+    assert all(sc.slots > 1 and sc.cost(2) == 2 for sc in multi), \
+        "a multi-interaction scene is not priced as the extended one"
     spend = {c: sum(sc.cost(c) for sc in scenes) for c in (1, 2, 3)}
     print(f"  H-77 cost sweep — total spend at extended_scene_cost 1/2/3: {spend}")
     assert len(set(spend.values())) == 3, (

@@ -30,7 +30,7 @@ from ..data.verbs import (COUNTERPARTY_CLAUSE, ELIGIBILITY_CLAUSE, EVENT_KINDS, 
 from ..gaps import Forbidden, Unspecified
 from ..loop.effects import EFFECTS
 from ..loop.predicates import REQUIRES_PREDICATES
-from ..loop.sides import sides_of
+from ..loop.sides import _contests_of, sides_of     # `_contests_of` lives in sides.py (B10-08 close)
 from .. import manifest
 from ..epistemic import observers_for
 from ..queries.person_q import (broken_by, confided_outside, conviction_after_crisis,
@@ -88,15 +88,6 @@ def _survives(self, w: "World", a: Act) -> list:
     for _e in gone:
         self.act_of[_e.id] = a
     return gone
-
-
-def _contests_of(a: Act, row: "VerbRow | None") -> list:
-    """Which prize (if any) `a` contests: `a.contests` if the act itself names one, else the
-    verb row's own `contests:` cell. Extracted (M4 review pass, `/simplify` finding): `resolve()`'s
-    own loop and `loop/encounter.py::encounter` each wrote this expression independently, the same
-    duplication `_canonical_order`/`_survives` were extracted to end (§8). No `self`: a pure
-    function of the act and its row, not of driver state."""
-    return list(a.contests or ()) or ([row.contests] if row and row.contests else [])
 
 
 def _eligible(self, w: "World", a: Act, row: "VerbRow") -> bool:

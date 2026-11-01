@@ -106,8 +106,14 @@ def obstacle(inp: SocialContestInput) -> float:
     nothing composes obstacles across a bundle. `None` is the uncapped control arm. THE SHIPPED ARM IS
     SOLVED PER POOL (CP-T01-06, `chance_floor`; `ceiling_per_pool`): from one die the cap is the highest
     Ob at which that pool keeps the chance of Partial-or-better the fixed ceiling leaves a one-die roll
-    (`_chance_floor_cap`; 2.0 at pool 1, 2.842 at pool 2, rising with the pool), so a larger pool is
-    never worse for the cap and S27.4's `ob > multiple x pool` never holds on a derived pair; below one
+    (`_chance_floor_cap`; 2.0 at pool 1, 2.842 at pool 2, rising with the pool), so, AT NO ADVANTAGE, a
+    larger pool is never worse for the cap (it is an equality: each pool's chance at its own cap is the
+    same 10 %), and at the shipped ceiling (2) S27.4's `ob > multiple x pool` never holds on a derived
+    pair. With an `effort` boost the chance at each pool's own cap is NOT monotone in the pool (B10-08
+    close, measured: Partial-or-better at effort 1 reads 21.57 / 20.37 / 18.76 / 20.56 % at pools 1 to 4:
+    the boost grows with the root of the pool while the cap sits where the unboosted chance is 10 %);
+    and a ceiling of 3 or more has floor 0 and falls back to the fixed ceiling, which is tighter than the
+    solved cap at ceiling 2 for pools of 3 and up (H-213). Below one
     die the fixed ceiling applies as before and S27.4 refuses as before. `ceiling_per_pool` off is the
     fixed arm, which the sentences below describe at ceiling 2. A ceiling below
     the Ob minimum (`OB_MIN`, PP-232) is refused rather than read: it would breach the floor. Nothing floors the composed obstacle itself: a score under 2 composes

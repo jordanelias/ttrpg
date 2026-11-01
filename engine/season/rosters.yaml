@@ -1937,7 +1937,8 @@ rosters:
       # takes a PP-194 name, and nothing else is added. `offices.yaml`'s `off_parliamentary_clerk`
       # seats at that one row (NPC-008's authored overlay), and the Court Parliament's `function`
       # cell below, which nominates Ministers, reads against an organ rather than a list.
-      # `harness/populated.py` points here and carries no count. ED-648 stays closed.
+      # `harness/populated.py` points here and carries no count. ED-648 is not acted on here
+      # (it reads `open` in the editorial ledger; the plan treats it as closed, and this note is the ruling's home).
       "Inner Circle": "Crown"
       "Inner Council": "Hafenmark"
       "Jarl Council": "Varfell"

@@ -326,9 +326,9 @@ def settle_margin(raw_net: int, boost: float, ob: float, uniform) -> int:
     is `raw_net + q`, unrounded: advantage stays a mu-shift in expectation, and two obstacles a fraction
     apart (or two boosts) differ in their odds, which whole dice alone collapse.
 
-    `uniform` IS CALLED ONLY WHEN `frac(q) > 0`. A whole margin (every whole-Ob roll with no boost, which
-    is the whole realm) draws nothing, so the act's stream, and every hash behind it, is unmoved; the
-    rule is then the identity, `raw_net + q`. Base Ob and TN are never modified: the obstacle is only the
+    `uniform` IS CALLED ONLY WHEN `frac(q) > 0`. A whole margin (every whole-Ob roll with no boost: the corpus,
+    and the realm but for the few draws at a capped fractional Ob, H-213) draws nothing, so the act's
+    stream, and every hash behind it, is unmoved; the rule is then the identity, `raw_net + q`. Base Ob and TN are never modified: the obstacle is only the
     fraction's source. Pure but for that one call."""
     whole, fraction = _split_margin(boost, ob)
     if fraction > 0.0 and uniform() < fraction:
@@ -351,7 +351,8 @@ def band_odds(pool: float, ob: float, boost: float = 0.0) -> tuple:
 
     `pool` is rounded and floored as `roll_net` deals it (`max(1, int(round(pool)))` whole dice), so
     the odds are for the dice dealt. `p_success` stays the Gaussian closed form combat reads; on these
-    dice it is 10-15 points off, which is why this exists. Pure and read-only; the result is a tuple of
+    dice it is up to 17 points off (17.3 at pool 1 / Ob 1, 11.6 at pool 2 / Ob 2, 7.7 at the shipped
+    ceiling's pair), which is why this exists. Pure and read-only; the result is a tuple of
     floats (a count over 10**dice, a whole margin weighing exactly 1), so
     `band_odds(2, 2) == (0.74, 0.19, 0.07, 0.0)` exactly."""
     dice = max(1, int(round(pool)))                 # [canonical: params/core.md §Pool Floor (all systems)]
@@ -382,7 +383,12 @@ def settle_record(net: float, leverage: float, pool: float, ob: float, uniform) 
     whole it is. The host passes the record's fields and the act's `uniform`; the boost and the roll
     are derived here, by the owner, and the fraction rule stays `settle_margin`'s alone."""
     boost = net_boost(leverage, pool)
-    return settle_margin(round(net - boost), boost, ob, uniform)
+    roll = net - boost
+    if abs(roll - round(roll)) > 1e-9:       # the float error on a shipped roll is ~1e-15
+        raise ValueError(
+            f"settle_record: net {net!r} less the boost {boost!r} is {roll!r}, not a whole roll -- an "
+            "entry's net is its integer roll plus the boost it was given (`modules/social_contest/roll.py`)")
+    return settle_margin(round(roll), boost, ob, uniform)
 
 
 # ---------------------------------------------------------------------------
