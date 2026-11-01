@@ -1632,6 +1632,18 @@ rows:
       READING @287ac3d9 (IN-38's re-measure): `headless --seasons 2 --seed 0` content hash d3bcc94411c9b1138c9555a0c5725df3, 50 of 56 verbs
       the fold can execute; `test_we_only_a_verb_that_declares_contests_can_be_graded_today` 1 passed. The by-person conjunct is unmoved:
       IN-38 authored no `capability`, so `faculty` varies by person only in the cases that already carried one.
-    measure: "python -m engine.season.harness.headless --seasons 2 --seed 0 ; python -m pytest engine/season/tests -k test_we_only_a_verb_that_declares_contests_can_be_graded_today"
+      **THE BY-PERSON CONJUNCT, AS RE-POINTED AT CR-18: two persons resolve the same contested verb at different
+      `faculty` pools, beside the practice-off control** `[ASSUMPTION; medium; Jordan to correct]` (looser than the
+      plan's met text: pools may differ by seeded history, not capability; it stays within the row statement, which
+      names no person). `measure:` is now `aperture 4 0`, whose POOLS ROLLED line reads the `pool` of each RESOLVED
+      record the fold was handed. READING @600482c70 (CR-18 commit (2); `PYTHONHASHSEED=0`, seed 0, 4 seasons, the
+      arm live at window 4 / step 2 / cap `pool_default`, beside `practice_cap` swept to 0; both runs `EXIT 0`,
+      4 m 26 s each): realm `research` [2] over 45 actors, `speak` [2] over 2, `surveil` [2] over 22, `tell` [2]
+      over 20; spine `research` [2] over 3, `surveil` [2] over 2, `tell` [2] over 1. `pool_default` is 2. **NO TWO
+      PERSONS SEPARATE, in the live arm or the control, and the two reports are byte-identical** (`cmp` over the
+      whole 671-line output), so the arm moved nothing in four seasons at this seed: the realm hash is unmoved
+      through season 5 and first moves at season 6. The conjunct is NOT met and this row stays `partial`; the
+      reading is recorded and the criterion is not widened. Seed 0 only: other seeds were not run.
+    measure: "python -m engine.season.harness.aperture 4 0"
     blocks: [H-98]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W23 spent in substance (`fight` resolves through the combat seam and is graded)

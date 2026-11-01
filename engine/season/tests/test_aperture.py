@@ -716,3 +716,19 @@ def test_cr14_the_original_positional_form_and_the_seeds_form_parse():
         with pytest.raises(ValueError):
             A.parse_args(bad)
     assert A.main(["2", "--seeds"]) == 2
+
+
+def test_cr18_the_pools_line_reads_the_rolled_pool_and_separates_persons_not_seasons(realm):
+    """A planted per-verb dict: the line names the set and the distinct-actor count in the block's
+    shape, and one actor at two pools (practice at work on one person) is no separation while two
+    actors at two pools is. Then the measured realm: the fold's records reached the reader (an empty
+    reader would print `no pooled roll`), and a season-1 run reads only `pool_default` (no good result
+    in the window yet)."""
+    one_person = {"tell": {"a": {2: 1, 3: 2}}}
+    two_persons = {"tell": {"a": {2: 1}, "b": {3: 1}, "c": {2: 4}}}
+    assert not A.persons_separated(one_person["tell"]) and A.persons_separated(two_persons["tell"])
+    assert "    `tell`: pools rolled [2, 3] over 3 actors" in "\n".join(A.pools_lines({"pools": two_persons}))
+    assert "no pooled roll" in "\n".join(A.pools_lines({"pools": {}}))
+    assert realm["pools"], "the fold's records never reached the pools reader"
+    default = populated.build_realm(0).fixtures.get("pool_default")
+    assert {p for per in realm["pools"].values() for c in per.values() for p in c} == {default}

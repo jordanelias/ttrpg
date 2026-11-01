@@ -90,6 +90,12 @@ lines pooled, and three blocks read off every run (per seed too):
 
 "Goal class" is `decision_spread.goal_class`, imported; this module classifies no question itself.
 
+**THE POOLS LINE (CR-18).** Per verb the seam rolled for, the set of pools its RESOLVED records carried
+and the number of distinct actors who rolled it: "`tell`: pools rolled [2, 3] over 7 actors". It answers
+whether the practice addend (`faculty`) separates persons in one verb, beside the same run with
+`practice_cap` swept to 0, where every pool reads `pool_default`. Read where the record passes
+(`watched_fold`), never recomputed from `faculty`.
+
 **WHAT THIS DOES NOT DO.** It grades nothing, pins nothing and is wired into no gate. Its output is a
 measurement of one seeded season, re-runnable: `python -m engine.season.harness.aperture [seasons]
 [seed]` or `... <seasons> --seeds S [S ...]`.
@@ -499,6 +505,22 @@ def instrumented_season(w, seasons: int) -> dict:
         return qmap
     d._questions_at_barrier = watched_barrier
 
+    # THE POOLS LINE'S SOURCE (CR-18). The seam's RESOLVED record carries `pool` (`seam/wrappers/sigma.py`
+    # `resolve`) and `_contest`/`_grade` hand it whole to `_fold` on the `Resolution`, which keeps it for
+    # the effects and then drops it: the log holds the degree, not the pool. So the read is taken where
+    # the record passes, on the instance (`self._fold` finds this before the class's), and the original is
+    # called with the same arguments and its return untouched. A record with no `pool` (combat's, mass
+    # battle's, an uncontested act's `None`) is no pooled roll and is not counted.
+    pools: dict = defaultdict(lambda: defaultdict(Counter))   # verb -> actor -> Counter(pool)
+    base_fold = d._fold
+
+    def watched_fold(w_, token, a, resolution=None):
+        rec = getattr(resolution, "result", None)
+        if isinstance(rec, dict) and rec.get("pool") is not None:
+            pools[a.verb][a.actor][rec["pool"]] += 1
+        return base_fold(w_, token, a, resolution)
+    d._fold = watched_fold
+
     shipped = fx.get("question_aggregation_rule")
     k_view = fx.get("view_k")
     formed: dict = defaultdict(set)
@@ -559,6 +581,7 @@ def instrumented_season(w, seasons: int) -> dict:
             "formed": dict(formed), "attempted": dict(attempted),
             "executed": dict(executed), "refused": dict(refused), "neither": dict(neither),
             "both": dict(both), "graded": dict(graded), "unrowed": unrowed_acts(w),
+            "pools": {v: {a: dict(c) for a, c in per.items()} for v, per in pools.items()},
             "refusal_kinds": {v: dict(c) for v, c in refusal_kinds.items()},
             "wrong_kind": wrong_kind(w, d, rows, why["post_acts"], cast),
             "deaths": death_census(w, d, marks), "answered": dict(answered),
@@ -721,6 +744,33 @@ def _verb_line(v: str, c: dict, foldable) -> str:
 def verb_totals(vc: dict) -> dict:
     """Every PER VERB column summed over the verbs."""
     return {k: sum(c[k] for c in vc.values()) for k in VERB_COLUMNS}
+
+
+def persons_separated(per_actor: dict) -> bool:
+    """Do two DIFFERENT actors of one verb roll at different pools? `per_actor` is `{actor: {pool: n}}`.
+    One actor rolling two pools across seasons is practice at work on one person, not two persons apart."""
+    held = [(a, p) for a, c in per_actor.items() for p in c]
+    return any(a != b and p != q for a, p in held for b, q in held)
+
+
+def pools_lines(m: dict) -> list:
+    """The POOLS LINE, one per verb whose RESOLVED records carried a `pool` (CR-18): `<verb>: pools rolled
+    <set> over <n> actors`, the set read off the records the fold was handed (`instrumented_season`'s
+    `watched_fold`), not recomputed from `faculty`. A reader: nothing here asserts, and the exit code is
+    untouched. The tail counts actors per pool and says whether two actors of the verb sit at different
+    pools, which is R-09's by-person conjunct read as stated in its `measure:`."""
+    out = ["\n  POOLS ROLLED — per verb the seam rolled (its RESOLVED records' `pool`), the set of pools "
+           "rolled and the distinct actors who rolled it; a reader, no pass or fail"]
+    pools = m.get("pools", {})
+    for v in sorted(pools):
+        per = pools[v]
+        rolled = sorted({p for c in per.values() for p in c})
+        by_pool = {p: sum(1 for c in per.values() if p in c) for p in rolled}
+        out.append(f"    `{v}`: pools rolled {rolled} over {len(per)} actors · actors per pool {by_pool} · "
+                   f"two actors at different pools: {'yes' if persons_separated(per) else 'no'}")
+    if not pools:
+        out.append("    no pooled roll in this run")
+    return out
 
 
 def _verb_total_line(vc: dict) -> str:
@@ -988,6 +1038,7 @@ def report(res: dict) -> list:
         for v in verbs:
             out.append(_verb_line(v, vc[v], foldable))
         out.append(_verb_total_line(vc))
+        out.extend(pools_lines(m))
         # -- why each refusal refused (REM-11) ----------------------------------------------
         out.extend(_refusal_blocks(m))
         # -- questions by source ----------------------------------------------------------
