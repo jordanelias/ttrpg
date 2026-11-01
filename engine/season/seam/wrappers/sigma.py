@@ -96,7 +96,7 @@ from ...manifest.registry import BENCH, resolve as _prize_row
 from ...queries.inputs import Margin, SocialContestInput
 # v9 SC-02 `22a`: the room's two resolver-side reads, the precedent `seam/wrappers/mass_battle.py`'s
 # `world_q.mustered` set. The host READS them; the module composes the obstacle they move.
-from ...queries.world_q import proofs, reception
+from ...queries.world_q import practice, proofs, reception
 from ...state.carriers import effort_of
 from ._entry import entry_for
 
@@ -122,8 +122,8 @@ def _capability(entity: Any, verb: str):
 
 
 # THE POOL'S ADDENDS (CP-T01-01): each `(w, person, verb) -> int` is summed into `faculty`, the one pool
-# reader. EMPTY AT HEAD -- nothing registers one until CP-T01-02's practice (the first reader of `w.log`)
-# and T07's addends; this is the place they land, so none grows its own pool rule. An addend reads
+# reader. Holds the practice addend (CP-T01-02, the first reader of `w.log`, registered below `register_pool_addend`)
+# and takes T07's; this is the place they land, so none grows its own pool rule. An addend reads
 # only what it is handed (`w`, the actor, the verb) and returns whole dice; it never replaces the
 # capability read, it adds to it.
 POOL_ADDENDS: list = []
@@ -132,6 +132,12 @@ POOL_ADDENDS: list = []
 def register_pool_addend(fn: Any) -> None:
     """Add `fn(w, person, verb) -> int` to what `faculty` sums. Registered once, at import of its owner."""
     POOL_ADDENDS.append(fn)
+
+
+# THE PRACTICE ADDEND (CP-T01-02), `faculty`'s first reader of `w.log`: registered here, the one door into the
+# pool, and called from nowhere else. Its reader is `queries/world_q.py::practice`; `practice_cap` 0 ships, so
+# it answers 0 without reading the log and every pool is what it was before it was registered.
+register_pool_addend(practice)
 
 
 def faculty(w: Any, p: Any, verb: str) -> int:

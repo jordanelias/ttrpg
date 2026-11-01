@@ -5007,6 +5007,45 @@ rows:
     cite:      "BUILT at CP-T01-05 (B10-08), hash EQUAL at the shipped chooser, which forms no effort (the channel sums to 0.0 and `Scene.slots == len(acts)`). FIGURES RE-COMPUTED ON THIS TREE with `band_odds` (fraction rule, per-pool ceiling): pool 2 against Ob 2, F / P / S / O in % at effort 0 / 1 / 2: 74.00 / 19.00 / 7.00 / 0.00; 56.54 / 26.09 / 16.82 / 0.55; 42.35 / 31.86 / 24.80 / 0.99. Success-or-better 7.00 / 17.37 / 25.79; three stacked effort-0 acts 19.56; Partial-or-better at effort 2 57.65 against 59.48 stacked (so at `tell` and the inquiries, where Partial writes, stacking matches or beats effort and no N-line is claimed there). Falsifiers: `engine/season/tests/test_effort.py`, seen red before the build."
     source:    "v10 CP-T01-05 (`proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-build-B10-08.md` §2; AM-B-04), batch B10-08"
 
+  - id:        H-245
+    tier:      1
+    hole:      "HOW LONG A GOOD RESULT KEEPS A PERSON BETTER (CP-T01-02, B10-08). The practice arm raises a person's pool in a verb's capability key by the count of his own Success-or-better acts in that key within the last `practice_window` CLOSED seasons (divided by `practice_step`, capped at `practice_cap`). The window is what damps the loop success -> dice -> success: old results leave it. No document says how many seasons a result lasts."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `queries/world_q.py::practice`, the one reader, registered through `seam/wrappers/sigma.py::register_pool_addend` and summed by `faculty`"
+    grade:     "assumption"
+    default:   "4 seasons -- the swept arm's starting point, read only when `practice_cap` is above 0 (SHIPPED 0, so the arm is off and the realm is byte-equal to the tree without it) [ASSUMPTION; medium; Jordan to correct; revert: `practice_cap` 0]. The window is `[w.tick - practice_window, w.tick - 1]`: a pool is a function of the closed past, so an act resolved earlier in the same barrier does not raise a later one's pool and the odds shown while choosing are the odds dealt. A window below 1 RAISES (the shipped arm is `practice_cap` 0's to say)"
+    site:      "Fixtures practice_window (`data/fixtures.py`, CP-T01-02), read ONLY by `queries/world_q.py::practice`, whose only caller is `seam/wrappers/sigma.py::faculty` through `POOL_ADDENDS`, and only when `practice_cap` is above 0"
+    sweep:     [2, 4, 8]
+    unblocks:  "the practice arm's swept distribution (CR-18 ships it live); the character sheet's practice figure (REM-30)"
+    cite:      "BUILT at CP-T01-02 (B10-08), SHIPPED OFF with `practice_cap` (H-247). Falsifier: `engine/season/tests/test_practice.py` (five Success-or-better `tell`s in a window of 4 give pool 4, the window passing two of them gives 3, all out gives 2, the Ob against him stays 2.0 throughout), seen red before the build (pool 2 against 4)."
+    source:    "v10 CP-T01-02 (`proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-build-B10-08.md` §2; AM-B-02; home `proposals/2026-10-23-subsystem-completion/2026-10-23-subsystem-completion-01-resolution-and-dice.md` §2 CP-T01-02), batch B10-08"
+
+  - id:        H-246
+    tier:      1
+    hole:      "HOW MANY GOOD RESULTS BUY ONE DIE (CP-T01-02, B10-08). The practice addend is the count of a person's Success-or-better acts in the window divided by `practice_step`, floored. No document says what a die of practice costs."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `queries/world_q.py::practice`, the one reader"
+    grade:     "assumption"
+    default:   "2 good results per die -- the swept arm's starting point, read only when `practice_cap` is above 0 (SHIPPED 0, the arm off) [ASSUMPTION; medium; Jordan to correct; revert: `practice_cap` 0]: five good results are two dice, four are two, three are one. A step below 1 RAISES (a zero step divides)"
+    site:      "Fixtures practice_step (`data/fixtures.py`, CP-T01-02), read ONLY by `queries/world_q.py::practice`, whose only caller is `seam/wrappers/sigma.py::faculty` through `POOL_ADDENDS`, and only when `practice_cap` is above 0"
+    sweep:     [1, 2, 4]
+    unblocks:  "the practice arm's swept distribution (CR-18 ships it live)"
+    cite:      "BUILT at CP-T01-02 (B10-08), SHIPPED OFF with `practice_cap` (H-247). Falsifier: `engine/season/tests/test_practice.py` (`test_the_step_floors_and_the_window_is_the_fixture`: five good results at step 3 are one die, at step 1 five), seen red before the build."
+    source:    "v10 CP-T01-02 (`proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-build-B10-08.md` §2; AM-B-02), batch B10-08"
+
+  - id:        H-247
+    tier:      1
+    hole:      "THE MOST DICE PRACTICE CAN ADD (CP-T01-02, B10-08), AND THE SWITCH. `practice_cap` bounds the practice addend, which is what keeps a positive loop (success -> dice -> success) capped: a pool is never above `pool_default` (or the held key) plus the cap. Its value 0 is the arm OFF. No document says how far practice can carry a person."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `queries/world_q.py::practice`, the one reader. CR-18 (B10-08, last) ships the arm live"
+    grade:     "assumption"
+    default:   "0 -- SHIPPED, THE CONTROL [ASSUMPTION; medium; Jordan to correct; revert: this value]: the reader answers 0 before it reads the log, every pool is what `faculty` read before the addend was registered, and every seeded realm hash is the base tree's. The swept arm is `pool_default` (window 4, step 2): a person with two or more dice of practice rolls up to double the default pool, and the opposition against him never moves (`_opposition_of` reads the held key only)"
+    site:      "Fixtures practice_cap (`data/fixtures.py`, CP-T01-02), read ONLY by `queries/world_q.py::practice`, whose only caller is `seam/wrappers/sigma.py::faculty` through `POOL_ADDENDS`"
+    sweep:     [0, 1, 2]
+    unblocks:  "persons' pools varying by what they did rather than by an authored number per person (R-09's by-person conjunct, with CR-18 shipping it live)"
+    cite:      "BUILT at CP-T01-02 (B10-08), SHIPPED OFF. Falsifier: `engine/season/tests/test_practice.py` (the swept arm gives pool 4 for five good `tell`s; the shipped arm reads `pool_default` for the same log; the pool never exceeds `pool_default` plus the cap), seen red before the build. CONTROL: realm `content_hash()` at build / 1 / 2 seasons, seeds 0-2, equal to the tree before the reader; `aperture 1 0` byte-identical. THE SWEPT ARM IS REPORTED, NOT SHIPPED (`build_realm(0)`, `PYTHONHASHSEED=0`, window 4, step 2, cap `pool_default`, pools read at `contest_input` on the resolve path; the addend counted by a wrapper): TWO SEASONS, every pool stays 2 (tell 17 rolls, speak 1, research 47, surveil 18; the addend called 83 times, nonzero 0) and the content hash equals the cap-0 hash at build / 1 / 2 seasons, because the realm dealt one Success-or-better `tell` in two seasons and no person repeats a good act inside the window. THE READER IS REACHED, not absent: EIGHT SEASONS, the addend called 566 times and nonzero 13 -- `tell` 172 rolls at pools {2: 162, 3: 10} (one actor at 3), `speak` 8 rolls at {2: 5, 3: 2, 4: 1}, the maximum pool 4 = `pool_default` + cap; the swept hash first leaves the cap-0 hash at season 6 (seasons 1-5 equal). `research` and `surveil` stay at pool 2 in every swept run (304 and 82 rolls at eight seasons) BECAUSE THEY NAME NO KEY AT HEAD: `rosters.yaml: verb_capability` holds `tell` and `speak` only (the `inquiry` rows wait for REM-30, `-08` AM-B-01), so `practice` answers 0 for them although 30 `research` and 9 `surveil` acts resolved Success-or-better; `argue` is never attempted in the realm and `examine` is never attempted either, both UNOBSERVED. The arm separates pools only on `copying`, and only after about five seasons of the realm's play."
+    source:    "v10 CP-T01-02 (`proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-build-B10-08.md` §2; AM-B-02), batch B10-08"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"
