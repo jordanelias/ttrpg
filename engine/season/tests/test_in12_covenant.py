@@ -46,6 +46,7 @@ from ..decision import options as OPT
 from ..decision.options import opening_set
 from ..gaps import Forbidden
 from ..harness import probes as P
+from ..queries import world_q
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..queries.world_q import hold_force, questions_for
 from ..state.carriers import Act
@@ -193,8 +194,13 @@ def test_the_addressees_commit_to_the_covenants_proposition_forms_from_the_held_
 
 def test_mutation_without_the_terms_sourced_line_the_addressee_forms_no_commit(monkeypatch):
     """THE NAMED MUTATION, RUN IN-TEST: `terms_sourced` emptied (the reader in `opening_set` then
-    widens nothing) and the falsifier's formation is gone -- the route is that line, nothing else."""
+    widens nothing) and the falsifier's formation is gone -- the route is that line, nothing else.
+    Since v10 CP-T02-05 a SECOND route reaches the same addressee: the held dispensation names the covenant's
+    OUGHT Proposition, so `world_q.oughts_named` stamps it as a cause he has heard of and `commit` forms on it
+    from that stamp too. This test isolates the `terms_sourced` route by stubbing the OTHER one for both its
+    arms; the heard-of route has its own falsifier (`test_cp_t02_05_oughts_named.py`)."""
     w, d = _world()
+    monkeypatch.setattr(world_q, "oughts_named", lambda *a, **k: ())
     pid = _covenant_then_give(w, d)
     assert _commits_formed(w, pid), "precondition: the shipped route forms it"
     monkeypatch.setattr(OPT, "TERMS_SOURCED", {})
