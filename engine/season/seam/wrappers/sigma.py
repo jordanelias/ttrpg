@@ -82,10 +82,10 @@ import random
 from dataclasses import asdict
 from typing import Any, Optional
 
-from engine.dice_engine.sigma_leverage import record_odds, settle_record
+from engine.dice_engine.sigma_leverage import levels_to_net_sigma, record_odds, settle_record
 from engine.substrate import composition
 
-from ...data.rosters import VERB_CAPABILITY
+from ...data.rosters import VERB_CAPABILITY, roster
 from ...gaps import Unspecified
 # ⚠ THE LEAF, NOT THE PACKAGE'S RE-EXPORT. `manifest/providers.py` imports nothing, so no import
 # here closes a loop back into this package (`_entry.py` says the same of the entry lookup);
@@ -97,6 +97,7 @@ from ...queries.inputs import Margin, SocialContestInput
 # v9 SC-02 `22a`: the room's two resolver-side reads, the precedent `seam/wrappers/mass_battle.py`'s
 # `world_q.mustered` set. The host READS them; the module composes the obstacle they move.
 from ...queries.world_q import proofs, reception
+from ...state.carriers import effort_of
 from ._entry import entry_for
 
 # The prize rows' `provider:` string (`rosters.yaml` `contest_subsystems`): the module's one identity
@@ -150,9 +151,39 @@ def _opposition_of(w: Any, subject: Optional[str], verb: str) -> Optional[float]
     return None
 
 
+def _effort_levels(fx: Any, operands: dict) -> list:
+    """`effort`'s levels (CP-T01-05): an act at effort `e` brings `e` copies of the `effort_level` fixture
+    (a `sigma_leverage.LEVEL_SIGMA` name, shipped `moderate`) -- one named level per slot of effort. None at
+    effort 0, so the shipped chooser, which forms no effort, adds nothing."""
+    return [fx.get("effort_level")] * int(operands.get("effort", 0))
+
+
+# THE ADVANTAGE CHANNEL'S BINDING: each member of `rosters.yaml: advantage_sources` -> the function that
+# returns the named levels it brings to an act, `fn(fixtures, operands) -> [level name, ...]`. THE ROSTER IS
+# THE CLOSED SET AND THIS IS ITS BINDING: refused at import if the two disagree, so a member with no function
+# (it would silently add nothing) and a function with no member (it would silently never run) are both loud.
+ADVANTAGE_SOURCES = {"effort": _effort_levels}
+if set(ADVANTAGE_SOURCES) != set(roster("advantage_sources")):
+    raise Unspecified(
+        f"`advantage_sources` members {sorted(roster('advantage_sources'))} and "
+        f"`ADVANTAGE_SOURCES` functions {sorted(ADVANTAGE_SOURCES)} differ", "rosters.yaml",
+        needs="a function for every member and a member for every function",
+        law="CP-T01-05 -- the roster is the only door into the social roll's sigma term")
+
+
+def advantage_sigma(fx: Any, operands: dict) -> float:
+    """The social roll's net sigma: every `advantage_sources` member's named levels for this act, summed
+    through `levels_to_net_sigma` (a mu-shift the roll applies as `net_boost`; never a flat bonus on the net,
+    never an Ob reduction). `operands` is what the act brings (`{"effort": e}`); 0.0 when nothing does."""
+    levels = []
+    for name in roster("advantage_sources", ordered=True):
+        levels.extend(ADVANTAGE_SOURCES[name](fx, operands))
+    return levels_to_net_sigma(levels)
+
+
 def contest_input(w: Any, claimants: list, *, verb: str = "",
                   subject: Optional[str] = None, room: Optional[str] = None,
-                  examined: Optional[str] = None) -> SocialContestInput:
+                  examined: Optional[str] = None, effort: int = 0) -> SocialContestInput:
     """THE HOST INPUT BUILDER (plan position `31a`, A-25): `World` -> the frozen record the roll reads.
 
     Reads `w.persons` (the actor, `claimants[0]`, and a person subject), `w.fixtures`, `w.records` (the
@@ -161,9 +192,10 @@ def contest_input(w: Any, claimants: list, *, verb: str = "",
     `World`. §A.2's wrapper row types the column *"the projection"*: this builder reads `World`, the
     deviation named above (`combat.resolve` is its precedent), CONVENTION. Its precondition is the adapter's
     PARTY-GAP checks (`resolve`, below): at least one claimant, and the first a person.
-    `leverage` is zero until something supplies leverage -- an `assumption` reading with no
-    producer, and stating it as zero is the honest form: a fabricated leverage would be a number
-    nobody chose. The obstacle's operands are carried RAW (`opposition`, `obstacle_default`,
+    `leverage` is the sum of the named levels the `advantage_sources` roster brings to the act
+    (`advantage_sigma`; CP-T01-05's `effort` is the first member) and is 0.0 when nothing does -- the
+    honest form while nothing supplies it: a fabricated leverage would be a number nobody chose.
+    `effort` is the act's own (`state/carriers.py::effort_of`), passed by the adapter. The obstacle's operands are carried RAW (`opposition`, `obstacle_default`,
     `obstacle_ceiling`); the module composes them (step 14).
 
     `room` (v9 SC-02 `22a`) is the rung whose bench hears the contest, or `None`: the adapter passes the
@@ -187,14 +219,15 @@ def contest_input(w: Any, claimants: list, *, verb: str = "",
                           proof_step=fx.get("proof_step"))
     doc = w.records.get(examined) if examined is not None else None
     return _frame(fx, _pool_of(w.persons[claimants[0]], verb, fx), _opposition_of(w, subject, verb),
-                  doc.forgery_quality if doc is not None else 0.0, room_terms)
+                  doc.forgery_quality if doc is not None else 0.0, room_terms,
+                  advantage_sigma(fx, {"effort": effort}))
 
 
 def _frame(fx: Any, pool: int, opposition: Optional[float], forgery_quality: float,
-           room_terms: dict) -> SocialContestInput:
+           room_terms: dict, leverage: float) -> SocialContestInput:
     """THE RECORD, FILLED THE ONE WAY: what `contest_input` (the true input) and `believed_input` (a
     person's) both hand the module. They differ in where the pool's opposition, the forgery quality
-    and the room terms COME FROM; the fixtures, the zero leverage and the record's shape are this
+    and the room terms COME FROM; the fixtures and the record's shape are this
     function's alone, so the two modes cannot compose different obstacles from the same fields."""
     return SocialContestInput(
         pool=pool, opposition=opposition,
@@ -202,7 +235,7 @@ def _frame(fx: Any, pool: int, opposition: Optional[float], forgery_quality: flo
         obstacle_ceiling=fx.get("obstacle_ceiling"),
         ceiling_per_pool=fx.get("ceiling_per_pool"),
         obstacle_refusal_multiple=fx.get("obstacle_refusal_multiple"),
-        leverage=0.0, forgery_quality=forgery_quality, **room_terms)
+        leverage=leverage, forgery_quality=forgery_quality, **room_terms)
 
 
 # ---------------------------------------------------------------------------------------------
@@ -236,7 +269,8 @@ def _odds_of_input(inp: SocialContestInput) -> Optional[tuple]:
 
 def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
                    person_subject: bool, examined_record: bool = False,
-                   room: Optional[dict] = None, heard: bool = False) -> Optional[SocialContestInput]:
+                   room: Optional[dict] = None, heard: bool = False,
+                   effort: int = 0) -> Optional[SocialContestInput]:
     """THE PERSON'S RECORD (mode (b)): the same `SocialContestInput`, filled only from what `p` holds.
 
     AX-2: it reads `p` (his own capability and his own ledger) and the fixtures, never the World; the
@@ -251,7 +285,8 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
       * an examined Record's forgery quality: a property of the Record, held by nobody's claim here
         -> unknown.
       * the room's terms (`reception`, `proofs`) read other persons' ledgers: unknown unless the caller
-        passes his own believed `room` (`{"reception": .., "proofs": ..}`)."""
+        passes his own believed `room` (`{"reception": .., "proofs": ..}`).
+    His `effort` is his own act's, held with certainty like his pool (CP-T01-05)."""
     key = VERB_CAPABILITY.get(verb)
     opposition = None
     if person_subject and key:
@@ -269,7 +304,8 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
             return None
         room_terms = dict(reception=room["reception"], reception_gain=fx.get("reception_gain"),
                           proofs=room["proofs"], proof_step=fx.get("proof_step"))
-    return _frame(fx, _pool_of(p, verb, fx), opposition, 0.0, room_terms)
+    return _frame(fx, _pool_of(p, verb, fx), opposition, 0.0, room_terms,
+                  advantage_sigma(fx, {"effort": effort}))
 
 
 def _rolled_as(w: Any, act: Any) -> Optional[tuple]:
@@ -320,17 +356,18 @@ def odds_of(w: Any, act: Any, *, believer: Any = None,
     if called is None:
         return None
     parties, subject, room, examined = called
+    effort = effort_of(act)                 # the act's own, as the fold hands it to `resolve`
     if w.persons.get(parties[0]) is None:
         return None
     if believer is not None and believer.id != act.actor:
         return None                     # another's pool is not his own to know
     if believer is None:
         return _odds_of_input(contest_input(w, parties, verb=act.verb, subject=subject, room=room,
-                                            examined=examined))
+                                            examined=examined, effort=effort))
     inp = believed_input(believer, act.verb, subject, w.fixtures,
                          person_subject=bool(subject) and subject in w.persons,
                          examined_record=examined is not None and examined in w.records,
-                         room=believed_room, heard=room is not None)
+                         room=believed_room, heard=room is not None, effort=effort)
     return None if inp is None else _odds_of_input(inp)
 
 
@@ -338,9 +375,12 @@ def odds_of(w: Any, act: Any, *, believer: Any = None,
 def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
             verb: str = "", subject: Optional[str] = None,
             rng: Optional[random.Random] = None, rung: Optional[str] = None,
-            module_entry: Optional[str] = None) -> dict:
+            module_entry: Optional[str] = None, effort: int = 0) -> dict:
     """Roll for one contested act: build the record, call the module entry, hold its return to a
     `Margin`, refuse S27.4. Returns a net/ob pair, NEVER a band and never a winner.
+
+    `effort` is the act's own (CP-T01-05, `state/carriers.py::effort_of`, passed by `seam/contest.py`): it
+    reaches only `contest_input`, where it becomes `leverage`; the act's draw is unchanged (one id, one draw).
 
     RESOLVED -> dict(status, module, resolver, pool, ob, net, leverage, settled_margin)   # the entry's Margin + the record
                  # + the margin's fraction settled by the act's own draw (CP-T01-04), the integer `degree_of` grades
@@ -401,7 +441,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     # v9 SC-02 `22b` step 25: an inquiry (no prize) examines its subject; a Record's forgery quality
     # enters the obstacle (`contest_input`'s `examined`). A prize names a contest, which examines nothing.
     inp = contest_input(w, claimants, verb=verb, subject=subject, room=heard,
-                        examined=subject if prize is None else None)
+                        examined=subject if prize is None else None, effort=effort)
     entry, refusal = entry_for(prize, _PROVIDER, module_entry)
     if entry is None:
         return refusal

@@ -3768,7 +3768,12 @@ def test_w17_the_budget_bounds_scenes_and_the_interaction_bound_is_separate():
     assert "scene" in str(over.value).lower(), f"the message lost its unit: {over.value}"
 
     # ---- and the SAME NUMBER of interactions, packed into a lawful number of scenes, PASSES ----
-    SeasonDriver(_1p(_w())).season(_once(scenes(b, cap)), None)   # must not raise
+    # ⚠ AT `extended_scene_cost` 1, H-77's control arm (CP-T01-05): `Scene.cost` prices a scene from the
+    # interaction slots it fills, not from the caller's `extended` flag, so these `b` scenes of `cap`
+    # interactions cost `b x cap` at the shipped cost of 2 and are refused for the BUDGET. This arm is about
+    # the INTERACTION bound being separate from the scene count, which the control cost isolates.
+    SeasonDriver(_1p(P.tiny_world(DEFAULT_FIXTURES.sweep("extended_scene_cost", 1)))).season(
+        _once(scenes(b, cap)), None)   # must not raise
     assert b * cap > b + 1, (
         f"the fixture cannot demonstrate the ruling: {b} scenes x {cap} interactions is not more "
         f"than the {b + 1} acts the first arm refused, so 'more interactions, fewer scenes' is "
@@ -3792,7 +3797,10 @@ def test_w17_the_interaction_bound_flips_across_its_sweep_and_the_flip_is_printe
     that does not move between `3` and `unbounded` is a verdict this bound was never deciding."""
     def run_at(bound):
         w = _w()
-        w.fixtures = w.fixtures.sweep("interactions_per_scene", bound)
+        # `extended_scene_cost` 1 (H-77's control): the scene is priced from its slots (CP-T01-05), so at the
+        # shipped cost of 2 this 4-interaction scene would be refused for the BUDGET before the bound under
+        # test is read; the control cost leaves the interaction bound the only thing the sweep moves.
+        w.fixtures = w.fixtures.sweep("interactions_per_scene", bound).sweep("extended_scene_cost", 1)
         def choose(p, v, s, ask_budget):
             return ([Scene("s0", p.id, [P.Act_(w, p, "speak", key=str(j)) for j in range(4)])]
                     if p.id == "p_king" else [])

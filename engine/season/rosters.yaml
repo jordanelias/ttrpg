@@ -2854,6 +2854,34 @@ rosters:
           a person who coheres under the Church of Solmund (a Church man crowned, or a king converted).
           The land half ("seize lands") is not a condition. Revert: Jordan names the Church's endpoint.
 
+  # ── CP-T01-05 (v10, B10-08): THE SOCIAL ROLL'S ADVANTAGE CHANNEL ─────────────────────────────────
+  # Appended last in `rosters:` (the T01 members add closed rosters here and serialise on this file).
+  advantage_sources:
+    source: >-
+      CP-T01-05 (`proposals/2026-10-23-subsystem-completion/2026-10-23-subsystem-completion-01-resolution-
+      and-dice.md` §2), read as INTENT; the form is `resolution-diagnostic` §2's: advantage reaches a roll
+      only as named levels through `levels_to_net_sigma` -> `net_boost`, a mu-shift, never a flat bonus on
+      the net and never an Ob reduction.
+    cite: "CP-T01-05"
+    open: true
+    ordered: true
+    note: >-
+      THE ONLY DOOR INTO THE SOCIAL ROLL'S SIGMA TERM. `seam/wrappers/sigma.py::contest_input` sums the
+      named levels each member returns for the act and hands the sum to `levels_to_net_sigma`; with no
+      member contributing (the shipped chooser forms no `effort`) the term is 0.0 and the roll is as it
+      was. A later source (a threat, a held secret, a held finding, a bribe) is a ROW HERE plus its
+      function in `sigma.ADVANTAGE_SOURCES`, never a flat bonus on the net and never an inline
+      re-derivation of `net_boost`. `seam/wrappers/sigma.py` refuses at import a member with no
+      function and a function with no member, so the roster is the closed set and the table is its
+      binding.
+      `effort`: an act carrying `effort` e in its payload (0, 1 or 2) contributes e levels named by the
+      `effort_level` fixture (`Fixtures`, shipped `moderate`) and fills `1 + e` of its scene's
+      interaction slots (`state/carriers.py::Scene.slots`), so effort's whole cost is the acts the
+      person does not take in that scene.
+      [ASSUMPTION; medium; Jordan to correct; revert: delete this row and `sigma.ADVANTAGE_SOURCES`'
+      `effort` entry -- the channel then sums to 0.0 and `Scene.slots` counts every act as one slot].
+    values: [effort]
+
 tables:
 
   site_yield:

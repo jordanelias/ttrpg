@@ -423,6 +423,12 @@ DEFAULT_FIXTURES = Fixtures(
     # `None` the uncapped one (both still swept).
     # [JUSTIFIED: engine/season/hole_register.yaml H-213 -- `site: Fixtures ceiling_per_pool`, graded `assumption`; the chance it holds is not a new number (band_odds(1, obstacle_ceiling)'s Partial-or-better, 10 %), swept True / False]
     ceiling_per_pool=True,
+    # CP-T01-05: THE NAMED LEVEL ONE SLOT OF `effort` IS WORTH (`sigma_leverage.LEVEL_SIGMA`: minor / moderate /
+    # strong / major). An act carrying `effort` e contributes e of these to the social roll's sigma term through
+    # `rosters.yaml: advantage_sources` (a mu-shift, `net_boost`), and fills `1 + e` scene slots. The magnitude is
+    # Jordan's to tune (`resolution-diagnostic` section 7: the levels are Class B draft sim-seeds).
+    # [JUSTIFIED: engine/season/hole_register.yaml H-244 -- `site: Fixtures effort_level`, graded `assumption`; the magnitude of one slot of effort is no document's, so it is injected and swept minor / moderate / strong]
+    effort_level="moderate",           # `H-244`, swept minor / moderate (SHIPPED) / strong
     # v9 SC-02 `22a` (proceedings `19_PLAN.md` steps 17 and 18): THE ROOM'S TWO MAGNITUDES, carried raw by
     # `seam/wrappers/sigma.py::contest_input` and composed by `modules/social_contest/roll.py::obstacle`
     # (`room = reception_gain x reception + proof_step x proofs`, subtracted, floored at `OB_MIN`, under

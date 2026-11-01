@@ -389,7 +389,12 @@ def p2x():
        tests="a character must be able to do several things inside one scene without spending a second scene action")
 def p2y():
     # `U2`: ONE PASS — the claim counts every interaction the person's `b` scenes carry.
-    w = _one_pass(tiny_world())
+    # ⚠ AT `extended_scene_cost` 1, H-77's CONTROL ARM (CP-T01-05): a scene is priced from the interaction
+    # slots it fills, not from a flag its caller sets, so `b` scenes of `cap` interactions cost `b x cap` at
+    # the shipped cost of 2 and are refused. The claim here is that the INTERACTION BOUND is separate from the
+    # scene count ("several interactions inside one scene"); at the control cost an extended scene is one
+    # scene action, which is the arm that isolates it.
+    w = _one_pass(tiny_world(DEFAULT_FIXTURES.sweep("extended_scene_cost", 1)))
     cap = w.fixtures.get("interactions_per_scene")
     counted = {}
     def choose(p, v, s, ask_budget):
