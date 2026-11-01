@@ -690,7 +690,15 @@ rosters:
       REM-28 `dispatch`. While no row declares one of the three, the term stamps
       nothing for it and no formation moves; a row's `referent_class:` naming it is what makes the
       term stamp it. REVERT: drop the three values and the term.
-    values: [Office, Record, Rung, Site, Proposition, Person]
+      `Detainee` (v10 IN-12 step 5, H-226 route (a) with the decline H-232 names [ASSUMPTION; medium;
+      Jordan to correct; revert: drop the value, `interrogate` declares `Person`]): THE RESTRAINED-PERSONS
+      CLASS -- a person held by a live `detain` whose object is a seat the asker holds, stamped by the
+      standing occasion `queries/world_q.py::detainees_held` onto the question he answers. THE ONE CLASS
+      THAT IS NO COLLECTION: the id is a `Person`, so `World.class_of` never answers it and the stamp names
+      it (`data/verbs.py::DETAINEE_CLASS`); it is occasion-only (below). It exists because `Person` is filled
+      with every person a question names, so custody could not be told apart in it. `interrogate`
+      declares it. Empty while no live `detain` exists.
+    values: [Office, Record, Rung, Site, Proposition, Person, Detainee]
 
   occasion_only_classes:
     source: "v10 REM-21 (B10-05, AM-A-06's exclusion)"
@@ -721,7 +729,9 @@ rosters:
       (`data/verbs.py::RECORD_REFERENT_KINDS`), which only `writs_held`'s addressee test stamps, so a
       bystander who saw a writ issued is offered no `comply`. REVERT: put `Record` back here (with
       `research`'s column).
-    values: [Office, Rung]
+      v10 IN-12 step 5: `Detainee` joins -- only `detainees_held` stamps it (no collection is named
+      `Detainee`, so the own-referent term could never match it; listed so the roster says so).
+    values: [Office, Rung, Detainee]
 
   person_predicates:
     source: "#353 §14 `:331` — `marks[]` … \"heritage · grade · Church standing · office · residence\""
@@ -2206,7 +2216,10 @@ rosters:
       its loader and its reader in `opening_set`, and `commit` forms on its question's referents
       only -- a covenant's addressee then never accepts it.]
     values:
-      commit: [dispensation]
+      # v10 IN-12 step 5a (H-227 [ASSUMPTION; medium; Jordan to correct; revert: `[dispensation]`]): a
+      # witness ADDRESSED by a petition he holds forms `commit` on the charge its `terms` names; the
+      # loader admits the kind by derivation (`data/verbs.py::_load_terms_sourced`).
+      commit: [dispensation, petition]
 
   vocation_sourced:
     source: >-
@@ -3389,6 +3402,11 @@ tables:
         row no lean on any axis (*"the row takes the default alignment cell, 0.0"*). It scores 0.0 on
         every axis until a cell is authored, so no witness is scarred by a forgiveness and its one
         emission, `stance.moved`, judges as no deed. Revert: the seven cells, IN-08's method.
+      interrogate: >-
+        v10 IN-12 step 5: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above); #453 §9.1 gives the
+        row no lean on any axis. It scores 0.0 on every axis until a cell is authored, so no witness
+        is scarred by an interrogation and the four `confession.*` kinds judge as no deed. Revert: the
+        seven cells, IN-08's method.
       arrest: >-
         v9 IN-12 step 5: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above); #453 §9.1 gives the
         row no lean on any axis. It scores 0.0 on every axis until a cell is authored, so no witness

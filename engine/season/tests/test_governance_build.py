@@ -905,7 +905,9 @@ def test_lb6d_every_verb_declares_a_rostered_beneficiary():
     # one (a re-record); 56 -> 60, `recruit`, `form_unit`, `assign_troops`, `order_unit` (ED-IN-0306 phase 2)
     # -- each `beneficiary: none`, so `kinds["none"]` grows by four (a re-record).
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen -- the control that stops this census passing over a loader that returned a subset]
-    assert len(VERB_TABLE) == 62, "the verb count moved; this row's census is stale"       # 60 -> 62, ED-IN-0306 phase 5
+    # 62 -> 63, `interrogate` (v10 IN-12 step 5) -- `beneficiary: actor` (#453 §9.1), so `kinds["actor"]`
+    # grows by one (a re-record).
+    assert len(VERB_TABLE) == 63, "the verb count moved; this row's census is stale"       # 62 -> 63, v10 IN-12
     undeclared = [v for v, r in VERB_TABLE.items() if not r.beneficiary]
     assert not undeclared, f"verbs with no `beneficiary:`: {undeclared}"
     off_roster = [(v, r.beneficiary) for v, r in VERB_TABLE.items()

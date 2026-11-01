@@ -30,7 +30,8 @@ from typing import Optional
 from ..data.requires import binding_from_act
 from ..data.rosters import BINDS_BASES, RELEASABLE_KINDS, RUNG_KINDS
 from ..gaps import Forbidden, Unowned, Unspecified
-from ..queries.world_q import BAN_KIND, restrained
+from ..queries.person_q import ABOUT_KEYS
+from ..queries.world_q import BAN_KIND, DETAIN_KIND, DOCKET_PETITION, docketed, restrained
 from ..state.carriers import Office, subject_of
 from ..trace_log import TRACE
 # G3: THE SEAT-AUTHORITY RULES LIVE WITH THE GATE THAT ENFORCES THEM. `seated_on_the_rung_above`,
@@ -416,6 +417,44 @@ def _req_oblige(w: "World", a: "Act") -> bool:
     if any(t.kind == "oblige" for t in mine):
         return False                       # 4. one edge per (person, seat)
     return not restrained(w, a.actor, BAN_KIND)   # 5. v9 SC-03a: a banned man serves no seat
+
+
+@requires_predicate("interrogate")
+def _req_interrogate(w: "World", a: "Act") -> bool:
+    """v10 IN-12 step 5, H-226 ROUTE (a) [ASSUMPTION; medium; Jordan to correct; revert: route (b), the
+    fold running an effect on a band whose writes are empty]: #453 §9.1, *the subject is a person; custody
+    is read ... which declines a subject holding no live `detain` edge; the charge is read ... once the
+    docket item names the petition*. #453 puts both reads AT THE EFFECT, but the row writes `[]` at every
+    band and `loop/resolve.py::_fold` runs an effect only for a non-empty `writes_at` (H-226), so they are
+    read HERE, in the fold's `requires` step -- which runs before the seam is called (`loop/resolve.py::
+    resolve`'s contest branch asks `_admits` first), so a refused act costs no draw.
+
+    THREE CLAUSES, EACH A REFUSAL (`interrogation.refused`, the row's one kind) AND NONE A RAISE:
+      1. the subject is a person -- `w.persons`. A rung, a Record, a Proposition or nothing refuses.
+      2. CUSTODY: he owns a live `detain` (`world_q.restrained`, the restraint's one read, K-18: not a new
+         stem). ANY SEAT, `restrained`'s own [ASSUMPTION]: the predicate does not ask that the custody
+         is the interrogating seat's.
+      3. THE CHARGE: a docket item naming him (`world_q.docketed`, the one owner) names a petition
+         (`world_q.DOCKET_PETITION`, K-55) whose `terms` -- what the document is ABOUT,
+         `person_q.ABOUT_KEYS` for its kind, the one owner of that key -- is he: the accusation
+         `carry` put before the room (K-35; #453 §8.1, Charge). THE `HOLDS`-PROPOSITION FORM (a
+         petition whose `terms` is a `HOLDS` Proposition whose `subject` is the prisoner) WAITS: a
+         computed `utter` mints `OUGHT` only (#453 §14.9's `mood` source), and the plan's decided
+         route reads the accused alone.
+    The record kind is not compared: a Record named under the docket's petition key is one `carry`
+    docketed, and `carry` docketed only a petition (`_eff_carry`)."""
+    subj = subject_of(a)
+    if subj not in w.persons:
+        return _refuse("an interrogation of no person the world holds", f"{a.actor} on {subj!r}")
+    if not restrained(w, subj, DETAIN_KIND):
+        return _refuse("an interrogation of a man held in no custody", f"{a.actor} on {subj!r}")
+    for item in docketed(w, subj):
+        rec = w.records.get(item.get(DOCKET_PETITION))
+        said = rec.subject_matter if rec is not None and isinstance(rec.subject_matter, dict) else {}
+        if said.get(ABOUT_KEYS.get(rec.kind) if rec is not None else None) == subj:
+            return True
+    return _refuse("an interrogation with no docketed petition naming the prisoner",
+                   f"{a.actor} on {subj!r}")
 
 
 @requires_predicate("revoke")

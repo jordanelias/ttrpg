@@ -211,9 +211,15 @@ def test_a_terms_sourced_line_naming_no_held_writ_kind_is_refused_at_load():
     """The loader `TERMS_SOURCED` is built by (`data/verbs.py::_load_terms_sourced`), on planted maps.
     `petition` is a kind `record_sourced_operands` maps `subject` for but `writs_held` never stamps (no
     row declaring `referent_class: Record` asks for it), so a commit routed through it would form for
-    nobody. CONTROL: the shipped line loads to what the module holds."""
-    assert VERBS._load_terms_sourced({"commit": ["dispensation"]}) == VERBS.TERMS_SOURCED
-    assert VERBS.TERMS_SOURCED == {"commit": ("dispensation",)}
-    for planted in ({"commit": ["petition"]}, {"commit": []}, {"no_such_verb": ["dispensation"]}):
+    nobody. CONTROL: the shipped line loads to what the module holds.
+    ⚠ RE-RECORDED AT v10 IN-12 step 5a (H-227): `petition` IS LIVE NOW -- the loader admits a kind either
+    Record term stamps held (`RECORD_REFERENT_KINDS | HOLDING_RECORD_KINDS`; `carry` asks `held_by` of a
+    petition, so `records_held_for_holding_rows` stamps one), and the shipped line names it. OLD: the
+    shipped line `[dispensation]`, `petition` planted as the dead kind; NEW: `[dispensation, petition]`, and
+    the dead kind planted is `faction_sheet` (`record_sourced_operands` maps its `subject`, and no Record
+    row asks for it, so neither term stamps it)."""
+    assert VERBS._load_terms_sourced({"commit": ["dispensation", "petition"]}) == VERBS.TERMS_SOURCED
+    assert VERBS.TERMS_SOURCED == {"commit": ("dispensation", "petition")}
+    for planted in ({"commit": ["faction_sheet"]}, {"commit": []}, {"no_such_verb": ["dispensation"]}):
         with pytest.raises(Forbidden, match="terms_sourced"):
             VERBS._load_terms_sourced(planted)

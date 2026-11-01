@@ -51,13 +51,13 @@ from ..data.rosters import (
 # (`OPENERS-DERIVE`); `endings_reached` evaluates the `ENDINGS` vocabulary imported above.
 # v10 REM-21: `DECLARED_CLASSES`, the referent classes some row declares, the same way.
 from ..data.verbs import (
-    DECLARED_CLASSES, HOLDING_RECORD_KINDS, RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS, VERB_TABLE,
-    _OPENERS_FROM_EFFECTS,
+    DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, HOLDING_RECORD_KINDS, RECORD_REFERENT_KINDS,
+    RUNG_REMIT_ACTS, VERB_TABLE, _OPENERS_FROM_EFFECTS,
 )
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
 # the asker-first module (which may not import this one; this edge runs the other way).
-from .person_q import LedgerReader, OwnStateReader, content_said, intent_named, ledger_names
+from .person_q import LedgerReader, OwnStateReader, addressed_to, content_said, intent_named, ledger_names
 # v9 IN-57: `attention_key`'s tier 2 scores a deed claim by `deed_valence`, one owner per factor.
 from .person_q import (
     _seen_index, crisis_weights, deed_valence, paired_deed_term, projected_axes)
@@ -2898,13 +2898,12 @@ def writs_held(w: World, p: Person) -> tuple:
     the writ). It reads `p`'s own edges and the store only for the kinds of the Records they name.
     ⚠ NO 'ALREADY ANSWERED' DECLINE: a holder who complied once is offered the writ again while he
     holds it -- the scene tax IN-10 (a) recorded for a repeated `oblige` (H-203)."""
-    def _addressees_of(rec) -> tuple:
-        sm = rec.subject_matter
-        return tuple(sm.get(RECORD_CONTENT.get("addressee")) or ()) if isinstance(sm, dict) else ()
+    # v10 IN-12 step 5a: the addressee test is `person_q.addressed_to`'s, its one owner (the terms-sourced
+    # reader in `decision/options.py` asks the same rule of the holder's content claim).
     return tuple(sorted({t.object for t in p.tenures
                          if t.kind == "hold" and t.live and t.object in w.records
                          and w.records[t.object].kind in RECORD_REFERENT_KINDS
-                         and p.id in _addressees_of(w.records[t.object])}))
+                         and addressed_to(w.records[t.object].subject_matter, p.id)}))
 
 
 def records_held_for_holding_rows(w: World, p: Person) -> tuple:
@@ -3074,6 +3073,33 @@ def larders_in_purview(w: World, p: Person, named: Optional[frozenset] = None) -
     return tuple(out)
 
 
+def detainees_held(w: World, p: Person) -> tuple:
+    """THE PRISONERS `p`'s SEATS HOLD (v10 IN-12 step 5, H-226 route (a) with H-232's formation-filter
+    shape [ASSUMPTION; medium; Jordan to correct; revert: drop the term in `questions_for`, and
+    `interrogate` declares `Person`]), sorted by id: every living person who owns a LIVE `detain`
+    (`DETAIN_KIND`, `restrained`'s kind) whose object is a seat `p` holds a live `hold` on that grants
+    one of `data/verbs.py::DETAINEE_REMIT_ACTS` (the remit acts of the rows declaring the class:
+    `interrogate`'s `determine`). A STANDING OCCASION, `larders_in_purview`'s and `vacancies`' shape:
+    world-read, gated on the seat's grant, resolver-side and read-only. It supplies Person ids, which
+    `questions_for` stamps onto the question he answers as the `Detainee` class (`DETAINEE_CLASS`, named
+    there because no collection answers it), so only a row declaring that class forms on them; whether
+    the act then passes is the fold's (`loop/predicates.py::_req_interrogate`: custody again, and the
+    charge). THE SEAT IS THE CUSTODY'S OWN OBJECT: a man detained to another seat is not offered (the
+    predicate's custody clause is `restrained`'s, any seat). `()` for a person granted no such act, or
+    whose seats hold nobody -- every person in the realm while `arrest` executes 0 and `capture` is
+    unbuilt, which is what keeps the realm's formation unchanged."""
+    if not DETAINEE_REMIT_ACTS:
+        return ()
+    seats = {t.object for t in p.tenures
+             if t.kind == "hold" and t.live and t.object in w.offices
+             and not DETAINEE_REMIT_ACTS.isdisjoint(t.granted_acts)}
+    if not seats:
+        return ()
+    return tuple(sorted({t.subject for t in w.tenures
+                         if t.kind == DETAIN_KIND and t.live and t.object in seats
+                         and t.subject in w.persons and t.subject != p.id}))
+
+
 def own_referents_of_class(w: World, q: Question, classes: Optional[frozenset] = None) -> tuple:
     """THE QUESTION'S OWN REFERENTS OF A STAMPED CLASS (v10 REM-21, AM-A-06, [ASSUMPTION; medium;
     Jordan to correct]): the plain `referents` of `q` -- the question the person answers, `out[0]`
@@ -3105,7 +3131,7 @@ def own_referents_of_class(w: World, q: Question, classes: Optional[frozenset] =
                  and not (r in w.records and w.records[r].kind in RECORD_REFERENT_KINDS))
 
 
-def _stamped(q: Question, added: tuple, w: World) -> Question:
+def _stamped(q: Question, added: tuple, w: World, named: tuple = ()) -> Question:
     """`q` carrying the ids in `added` as CLASSED referents (IN-53, DECISION 2026-10-13 D1) -- the
     one stamp site. Each id's class is the collection the World holds it in (`World.class_of`:
     `Office` for a seat in `w.offices`, `Record` for a document in `w.records` since IN-09), never a
@@ -3116,8 +3142,11 @@ def _stamped(q: Question, added: tuple, w: World) -> Question:
     told of; a place he could settle in that is also a larder in purview; a question's own referent
     beside a standing occasion's stamp), so each pair is kept at its first position -- `q`'s own,
     then `added` in splice order -- and never refused. REVERT: the concatenation, and every term
-    pair that can overlap filters by hand again."""
-    return replace(q, classes=tuple(dict.fromkeys(q.classes + tuple((o, w.class_of(o)) for o in added))))
+    pair that can overlap filters by hand again.
+    `named` (v10 IN-12): `(id, class)` pairs whose class is NO collection (`Detainee`), appended after
+    `added`; the class is the term's, since `class_of` cannot answer it. Empty: the stamp is unchanged."""
+    return replace(q, classes=tuple(dict.fromkeys(
+        q.classes + tuple((o, w.class_of(o)) for o in added) + tuple(named))))
 
 
 _SOURCE_ORDER = {src: i for i, src in enumerate(QUESTION_SOURCES)}
@@ -3495,9 +3524,15 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
              + places_named(w, p, told) + larders_in_purview(w, p, told)
              + (own_referents_of_class(w, out[0]) if out else ())
              + works_sites(w, p) + oughts_named(w, p, told))
-    if added:
-        head = out[0] if out else Question(f"q:need:{added[0]}", "need", (), added[0])
-        out[:1] = [_stamped(head, added, w)]
+    # v10 IN-12 step 5 ([ASSUMPTION; medium; Jordan to correct]): AND, LAST, THE PRISONERS HIS SEATS HOLD
+    # (`detainees_held`), as `Detainee` -- the restrained-persons class, named here because it is no
+    # collection; only `interrogate` declares it. Empty while no live `detain` names his seat, and then
+    # the output is byte-identical. REVERT: drop the term.
+    held = tuple((d, DETAINEE_CLASS) for d in detainees_held(w, p))
+    if added or held:
+        first = added[0] if added else held[0][0]
+        head = out[0] if out else Question(f"q:need:{first}", "need", (), first)
+        out[:1] = [_stamped(head, added, w, held)]
     return out
 
 

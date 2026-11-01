@@ -164,7 +164,11 @@ def test_14_no_declined_row_is_resolvable_and_no_unbindable_counterparty_row_for
     unbindable = sorted(v for v, r in VERB_TABLE.items()
                         if r.counterparty and r.requires_typed is None
                         and not r.known_person_operands())
-    assert unbindable == ["oblige"], unbindable
+    # RE-RECORDED AT v10 IN-12 step 5: `interrogate` joins (`["oblige"]` -> `["interrogate", "oblige"]`) --
+    # untyped, `counterparty: subject`, no known-person fan; like `oblige` since IN-10 (a) its second party
+    # is the CLASSED referent carried on `subject` (`Detainee`, `world_q.detainees_held`), so it forms only
+    # for a custodian, never on these plain referents (the loop below).
+    assert unbindable == ["interrogate", "oblige"], unbindable
     w = P.tiny_world()
     referents = ("off_duke", "off_dicastery", "p_mid", "Hh")
     for v in unbindable:
