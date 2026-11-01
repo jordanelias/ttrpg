@@ -19,7 +19,8 @@ from ..gaps import InstrumentDefect
 from ..state.carriers import Person, Question, View
 
 
-def assemble(p: Person, question: Any, k: int, rule: str = "recent") -> View:
+def assemble(p: Person, question: Any, k: int, rule: str = "recent",
+             questions: tuple = ()) -> View:
     # ⚠ W5 REMOVED A `NoProducer` HERE, AND THE REMOVAL IS THE DISCHARGE OF §61, NOT A
     # SOFTENING OF IT. It read: "`assemble(person, question)` and `view(person, question)`
     # are UNSATISFIABLE; DELIBERATE HAS NO DECLARED ENTRY POINT." That was TRUE while nothing
@@ -39,7 +40,14 @@ def assemble(p: Person, question: Any, k: int, rule: str = "recent") -> View:
             "Question from questions_for(), or None for a person with no question this "
             "season. §F1's `q` has a producer now (`H-04`); accepting any object here would "
             "make a stale injected fixture indistinguishable from an absent question.")
-    return View(p.id, view_ids(p, question, k, rule), k, question)
+    # CP-T02-07: `questions` is the person's SEPARATE list, in `attention_key` order, carried beside the
+    # one `question` (which the aggregation rule picked or merged). Nothing in `decision/` reads it, so
+    # what `auto` proposes is unchanged; it is for the seated person's callback to build a View on any one.
+    for q in questions:
+        if not isinstance(q, Question):
+            raise InstrumentDefect(
+                f"assemble() was given a {type(q).__name__} in `questions`, not a Question")
+    return View(p.id, view_ids(p, question, k, rule), k, question, questions)
 
 
 def aggregate_questions(qs: list, rule: str):

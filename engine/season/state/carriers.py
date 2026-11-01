@@ -429,9 +429,12 @@ class View:
     # class's own attributes and the interpreter reads it, so changing it changes how the code
     # works, never what the game is. It crossed the guard's three-element threshold only when W5
     # added `question`, which is the guard behaving correctly on a shape it cannot distinguish.
-    __slots__ = ("holder", "claim_ids", "question")
+    # CP-T02-07 added `questions` as a FOURTH element of the SAME tuple: the guard counts the
+    # tuple once, as one declared site (`EXEMPT_CEILING` in `test_season_shape.py` is unmoved).
+    __slots__ = ("holder", "claim_ids", "question", "questions")
 
-    def __init__(self, holder: str, claim_ids: list[str], k: int, question: Any = None):
+    def __init__(self, holder: str, claim_ids: list[str], k: int, question: Any = None,
+                 questions: tuple = ()):
         if len(claim_ids) > k:
             raise Forbidden(f"View built with {len(claim_ids)} ids against cap K={k}", "S18",
                             law="S18 -- at most K claim ids from the holder's OWN ledger")
@@ -445,6 +448,13 @@ class View:
         # `assemble(person, question) -> View` builds the View FROM the question, so the View is
         # the thing that knows which question it was built for. No signature changes.
         object.__setattr__(self, "question", question)
+        # CP-T02-07: THE SEPARATE QUESTIONS, in `attention_key` order (`questions_for` sorts them), beside
+        # the one `question`. `question` is what `question_aggregation_rule` selected and, at `all` or
+        # `one_per_source`, a MERGE -- the union of the referents under the first one's source -- so it
+        # cannot name the throne apart from the cause. This is the list the merge folded. `auto` reads
+        # `question` and never this, so the shipped run is unchanged; a callback may `assemble` a View on
+        # any one of these and ask `auto` for its proposal there. Question ids, not World references.
+        object.__setattr__(self, "questions", tuple(questions))
 
     def __getattr__(self, name: str) -> Any:
         raise Forbidden(
