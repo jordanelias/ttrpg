@@ -3820,8 +3820,8 @@ def practice(w: World, p: Person, verb: str) -> int:
     "Success or better" is `DEGREE_STEP` at or above the `Success` band's, read off the ladder's owner.
 
     ⚠ ONLY SEASONS BEFORE `w.tick` COUNT, so a pool is a function of the closed past: an act resolved earlier
-    in THIS barrier does not raise the pool of one resolved later in it, and the odds a person is shown while
-    choosing (`odds_of`) are the odds dealt (nothing in the barrier moves between the two). The window is
+    in THIS barrier does not raise the pool of one resolved later in it, so THIS ADDEND does not move between a
+    choice and its roll (what else can, `odds_of` lists). The window is
     `[w.tick - practice_window, w.tick - 1]`.
 
     ⚠ IT RAISES THE ACTOR'S POOL ONLY. `_opposition_of` reads the held key and never `faculty`, so the Ob

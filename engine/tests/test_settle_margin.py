@@ -17,7 +17,7 @@ THE CLAIMS, AND WHAT WOULD SHOW EACH WRONG:
     in (0, 1) -- a cell flat across a fraction step is the integer collapse this rule exists to end.
   * the identity on a whole q: no uniform is drawn and the margin is `raw_net + q`.
   * `band_odds` is the same rule enumerated, not a second copy: it equals a brute-force walk of the face
-    table graded through `settle_margin` itself, and agrees with 200,000 seeded draws of the real
+    table graded through `settle_margin` itself, and agrees with 100,000 seeded draws of the real
     path (`roll_pool` then `settle_margin` with the generator's own uniform).
 """
 from __future__ import annotations

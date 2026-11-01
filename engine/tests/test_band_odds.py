@@ -6,10 +6,12 @@ THE CLAIMS, AND WHAT WOULD SHOW EACH WRONG:
   * the worked case `band_odds(2, 2) == (0.74, 0.19, 0.07, 0.0)` -- hand-derived from the face table
     (-1 / 0 / +1 / +2 at 10 / 50 / 30 / 10 per cent), exact because the arithmetic is integer counts
     over 10**pool.
-  * it IS the dealt distribution: 200,000 seeded `roll_pool` rolls settled by `settle_margin` (CP-T01-04:
+  * it IS the dealt distribution: 100,000 seeded `roll_pool` rolls settled by `settle_margin` (CP-T01-04:
     the margin's fraction paid by the act's own draw) and graded by `degree_from_net` agree in every band
-    within three standard errors. A wrong face table, a wrong pool rounding or a wrong boost shift moves
-    a band by many standard errors.
+    within three standard errors; that sampling arm lives in `test_settle_margin.py` (one arm for the whole
+    rule, whole-Ob cells included) and `test_odds_of.py` repeats it at 20,000 draws through the host's
+    chain. A wrong face table, a wrong pool rounding or a wrong boost shift moves a band by many standard
+    errors.
   * it is an enumeration and not a copy: it equals a brute-force walk of every face combination
     (`_die_result` over 10**3) with the fraction rule written out here independently, and when the
     ladder's edges are swapped (a mutant `degree_from_net`) the tuple MOVES -- so the test can observe a

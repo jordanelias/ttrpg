@@ -442,7 +442,9 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     declaring `heard_by: bench` (`a matter`, `speak`'s) has the bench sitting over it read the speaker
     (`contest_input`'s `room`). Every other prize still derives its obstacle from the parties alone.
 
-    ⚠ THE RNG IS A PARAMETER AND IS NOT CONSTRUCTED HERE, WHICH IS `04 §C.12`'s REJECTION 4 BECOMING
+    ⚠ THE RNG IS A PARAMETER: THE DRIVER'S GENERATOR IS PASSED ON EVERY SHIPPED PATH (`loop/resolve.py`), AND A
+    HAND CALL WITH NONE GETS A FRESH UNSEEDED `random.Random()` (never the process-global stream, never a
+    seeded one made here). THAT IS `04 §C.12`'s REJECTION 4 BECOMING
     LOAD-BEARING FOR THE FIRST TIME: *"When R-09's producer is built … its generator must be
     constructed by the driver from the run seed and passed down exactly as `World` is. This is the
     one rejection that is not yet load-bearing, because no roll exists yet."* It exists now.
