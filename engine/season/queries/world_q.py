@@ -2868,10 +2868,18 @@ def oughts_named(w: World, p: Person, named: Optional[frozenset] = None) -> tupl
     stamps. Resolver-side and read-only. It supplies Proposition IDS, which `questions_for` adds to the
     question the person answers as CLASSED referents, so only a row declaring `referent_class: Proposition`
     (`commit`, `argue`) forms on them; whether an act on one passes is the fold's. `release` declares no
-    class and is not among them. `named` is `ledger_names(p.ledger)` when the caller already holds it."""
+    class and is not among them. `named` is `ledger_names(p.ledger)` when the caller already holds it.
+
+    NOT ONE HE ALREADY COMMITS TO ([ASSUMPTION; medium; Jordan to correct; revert: drop the `held` clause]): a Proposition on
+    which `p` holds a LIVE `commit` Tenure (read person-side from `p.tenures`) is not offered. `_eff_commit` always opens a
+    fresh Tenure, so a repeat is a duplicate live edge and a spurious `commitment.made`: formation must not outrun
+    feasibility. The utterer's own Proposition is covered by the same clause once he commits to it. This makes the offer
+    smaller than the plan's text states (every OUGHT he has heard of)."""
     if named is None:
         named = ledger_names(p.ledger)
-    return tuple(sorted(o for o in named if o in w.propositions and w.propositions[o].mood == "OUGHT"))
+    held = {t.object for t in p.tenures if t.kind == "commit" and t.live}
+    return tuple(sorted(o for o in named
+                        if o in w.propositions and w.propositions[o].mood == "OUGHT" and o not in held))
 
 
 def writs_held(w: World, p: Person) -> tuple:

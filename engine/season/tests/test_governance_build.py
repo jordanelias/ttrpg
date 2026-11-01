@@ -2857,11 +2857,11 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # governs is met (`world_q.aim_state`) and forms no `need` (`goal_varfell_oastad_gate`), so the realm's act mix moves (seed 0, one
     # season: 590 -> 589 in both arms; `test_go07_canonical_digest.py` records the 589). CONTROL: `aim_state` reading `open` always
     # (`AIM_RULES` cleared) in process reads (590, 590) at seed 0 (`test_go07_canonical_digest.BASE[0]`).
-    # ⚠⚠ v10 CP-T02-05 (B10-09): (589, 589) -> (579, 579), A RE-RECORD WITH THE UNIT THAT MOVED IT: `world_q.oughts_named` stamps the
-    # OUGHT Propositions a person has heard of, so `commit` and `argue` form on a cause he witnessed uttered and the realm's act mix
-    # moves (seed 0, one season: 589 -> 579 in both arms; `test_go07_canonical_digest.py` records the 579). CONTROL: `oughts_named`
+    # ⚠⚠ v10 CP-T02-05 (B10-09): (589, 589) -> (582, 582), A RE-RECORD WITH THE UNIT THAT MOVED IT: `world_q.oughts_named` stamps the
+    # OUGHT Propositions a person has heard of (less any he already holds a live `commit` on), so `commit` and `argue` form on a cause he witnessed uttered and the realm's act mix
+    # moves (seed 0, one season: 589 -> 582 in both arms; `test_go07_canonical_digest.py` records the 582). CONTROL: `oughts_named`
     # stubbed to `()` in process reads (589, 589) at seed 0 (`test_go07_canonical_digest.BASE[0]` before this unit).
-    assert (out["acts"], cout["acts"]) == (579, 579), (
+    assert (out["acts"], cout["acts"]) == (582, 582), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")

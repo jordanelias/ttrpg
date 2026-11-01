@@ -87,6 +87,25 @@ def test_cp_t02_05_a_a_witness_of_an_utter_forms_commit_on_it_and_the_act_execut
     assert not [t for t in p.tenures if t.object == prop and t.kind == "hold"]
 
 
+def test_cp_t02_05_a_a_person_with_a_live_commit_on_the_heard_of_proposition_is_offered_nothing():
+    """[ASSUMPTION; medium; Jordan to correct; revert: drop the `held` clause in `oughts_named`.] `_eff_commit` always opens a
+    fresh Tenure, so a second `commit` on a Proposition he already commits to is a duplicate live edge: it is not offered. The
+    arm before it is the control (the same person, not yet committed, IS offered it); a released commit offers it again."""
+    w, d, prop = _heard()
+    p = w.persons[WITNESS]
+    assert world_q.oughts_named(w, p) == (prop,)                     # control: not yet committed
+    (c,) = _commits_on(w, WITNESS, prop)
+    assert [e.kind for e in _fold(w, d, dataclasses.replace(_act_of(c, p), id="t0205_c1"))] == ["commitment.made"]
+    assert world_q.oughts_named(w, p) == ()
+    qs, classes = _classes(w, WITNESS)
+    assert (prop, "Proposition") not in classes, qs
+    assert not [c for q in qs for c in _formed(w, WITNESS, q) if c.verb == "commit" and c.subject == prop]
+    for t in p.tenures:                                               # ended: a cause he has let go is on offer again
+        if t.kind == "commit" and t.object == prop:
+            t.until = w.tick
+    assert world_q.oughts_named(w, p) == (prop,)
+
+
 def test_cp_t02_05_a_mutation_without_the_splice_term_the_witness_is_offered_nothing(monkeypatch):
     """THE FALSIFIER (a) CAN OBSERVE ITS FAILURE: with the term stubbed out, REM-21's own-referent term does
     not carry the heard-of Proposition (the cut condition does not hold), and `commit` forms on nothing."""

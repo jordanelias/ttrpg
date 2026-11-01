@@ -6916,19 +6916,20 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     # is two links shorter at both arms. The two arms are EQUAL, so the depth clause is still not discriminating (the case
     # the message below does not ask to be walked). The COUNT still discriminates (matured {0: 0, 3: 53, 6: 76}; `actor`
     # 56 < 77, `total` 56 < 76). CONTROL: the same test on the REM-2A tree (`f23194871`) reads (13, 13) and passes.
-    # v10 CP-T02-05 (B10-09): (11, 11) -> (14, 17), a re-record with the unit that moved it: `oughts_named` offers a person the OUGHT
-    # Propositions he has heard of, `commit` and `argue` form on them, and the act mix moves. THE ARMS SEPARATE (17 > 14), the case the
-    # message below asks to be walked; walked (`none`, 7 seasons, deepest maturation chain, oldest first): n=3 (14 links) runs
-    # `term.matured, record.created, kill.refused, transfer.refused, survey.refused, transfer.refused, finding.made,
-    # transfer.refused, accept.refused, travel.blocked, kill.refused, finding.made, train.refused, exchange.refused`; n=6 (17 links)
-    # runs `term.matured, cover.assumed, sabotage.refused, finding.made, term.matured, record.created, transfer.refused,
-    # survey.refused, transfer.refused, finding.made, transfer.refused, accept.refused, travel.blocked, kill.refused, finding.made,
-    # train.refused, exchange.refused`. Both are still act-mixed (refusals and findings between their links, no run of stage links
-    # alone), and neither runs through `proposition.uttered`; the n=6 chain carries a second `term.matured` after a `cover.assumed`
-    # (a conceal's cover Record maturing), three links the n=3 arm lacks. So the depth clause is a measurement of the act mix that
-    # happens to separate at this trajectory, not a discriminator: the COUNT still discriminates (matured 43 < 63 at `none`), and the
-    # five-season chain (9) is still below the seven-season figure. CONTROL: the pre-item tree (`6fb4a2e75`) reads (11, 11) and passes.
-    assert (depths[3], depths[6]) == (14, 17), (
+    # v10 CP-T02-05 (B10-09): (11, 11) -> (14, 21), a re-record with the unit that moved it: `oughts_named` offers a person the OUGHT
+    # Propositions he has heard of (less any he already holds a live `commit` on), `commit` and `argue` form on them, and the act mix
+    # moves. THE ARMS SEPARATE (21 > 14), the case the message below asks to be walked; walked (`none`, 7 seasons, deepest
+    # maturation chain, oldest first): n=3 (14 links) runs `term.matured, record.created, kill.refused, transfer.refused,
+    # survey.refused, transfer.refused, survey.refused, transfer.refused, accept.refused, travel.blocked, kill.refused,
+    # finding.made, train.refused, exchange.refused`; n=6 (21 links) runs `term.matured, cover.assumed, sabotage.refused,
+    # exchange.refused, sabotage.refused, news.untold, transfer.refused, kill.refused, transfer.refused, kill.refused,
+    # transfer.refused, survey.refused, transfer.refused, survey.refused, transfer.refused, accept.refused, travel.blocked,
+    # kill.refused, finding.made, train.refused, exchange.refused`. Both are act-mixed (refusals, findings and a `news.untold`
+    # between their links, no run of stage links alone), and neither runs through `proposition.uttered`; the n=6 chain is seven
+    # links longer by `cover.assumed ... transfer.refused` refusal runs, not by a second maturation. So the depth clause is a
+    # measurement of the act mix that happens to separate at this trajectory, not a discriminator: the COUNT still discriminates
+    # (matured 43 < 62 at `none`). CONTROL: the pre-item tree (`6fb4a2e75`) reads (11, 11) and passes.
+    assert (depths[3], depths[6]) == (14, 21), (
         f"the maturation depth ceiling moved: {depths}. This is a MEASUREMENT of a mixed chain "
         "whose length the act mix sets, not a discriminator — `H-80`'s discriminator is the COUNT, "
         "asserted below and still live. Re-pin these two numbers with the unit that moved them. "
@@ -6993,7 +6994,8 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     # [GROUNDED: re-measured at v10 REM-23 -- the five-season chain reads 10 against the seven-season arm's 14 (`depths[3]`, re-pinned above), 9 and 10 at its base (the REM-22 tree), moved by the same unit (`commit` forming on a Proposition alone, the act mix); the RELATION still holds]
     # [GROUNDED: re-measured at v10 REM-2C -- the five-season chain reads 11 against the seven-season arm's 13 (`depths[3]`, re-pinned above), 10 and 14 at its base (the CP-T05-04 tree `ea6f1dba`), moved by the same unit (`research` forming on a Record alone, the act mix); it is the seven-season chain above less its last two `term.matured` links; the RELATION still holds]
     # [GROUNDED: re-measured at v10 REM-2B -- the five-season chain reads 9 against the seven-season arm's 11 (`depths[3]`, re-pinned above), 11 and 13 at its base (the REM-2A tree `f23194871`), moved by the same unit (`evade / defy`, `construe` and `exchange` restored: their refusals take scenes)]
-    assert max(depth5(e) for e in mats5) == 9 < depths[3], (
+    # [GROUNDED: re-measured at v10 CP-T02-05 -- the five-season chain reads 8 against the seven-season arm's 14 (`depths[3]`, re-pinned above), 9 and 11 at its base (the CP-T02-03 tree `6fb4a2e75`), moved by the same unit (`oughts_named`, the act mix); the RELATION still holds]
+    assert max(depth5(e) for e in mats5) == 8 < depths[3], (
         f"the longest maturation chain over FIVE seasons is {max(depth5(e) for e in mats5)}, not "
         "the 9 measured under `U2`, or it is not below the seven-season figure above. The ceiling "
         "MOVING with the season count is what makes the 3-stage and 6-stage arms saturated there "
@@ -9008,12 +9010,12 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # of them reach a signature of their own (the `ever` note above has the per-verb world counts; `speak` leaves `ever`).
     # MEASURED by `corpus_run.run_case` over the 143 live worlds, seed 0, the same script on this tree and on the CP-T02-02
     # tree (`68767e731`, which reads 132); the universal set is empty on both sides. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-    # ⚠⚠ **121 -> 127 AT v10 CP-T02-05 (B10-09), AND VARIETY ROSE BY SIX.** `oughts_named` offers a person the OUGHT Propositions he has
+    # ⚠⚠ **121 -> 125 AT v10 CP-T02-05 (B10-09), AND VARIETY ROSE BY FOUR.** `oughts_named` offers a person the OUGHT Propositions he has
     # heard of; `commit` and `argue` declare `referent_class: Proposition` and now form, and execute, in worlds where a witnessed
     # `utter` or a told claim reaches a ledger, so more worlds take a signature of their own (`commit` and `argue` join `ever`). MEASURED
     # by this test's own `by_sig` over the 143 live worlds, seed 0; the pre-item tree (`6fb4a2e75`) reads 121. THE SAME-BREATH CHECK is the
     # assertions below (the universal set, `ever`, `varying`), read in the same run. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-    assert len(by_sig) == 127, (
+    assert len(by_sig) == 125, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -13187,15 +13189,8 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # (once by another person, so the pair is in `pairs_live` and the pair-grain `bit` above stays EMPTY), and the
     # counterfactual 3 times -- the denial is real, not a fold-order artifact. CONTROL: on the REM-2A tree (`f23194871`) the
     # person-grain bite is `p_carin`'s `transfer` alone, and this test passes there.
-    # ⚠⚠ v10 CP-T02-05 (B10-09): `p_carin`'s `transfer` LEAVES the bite, her `exchange` stays, NAMED AND GROUNDED AS THE MESSAGE BELOW
-    # REQUIRES. READ, in process on this tree (the replica's own sets, scratch, not kept): `("p_carin", "transfer", "hearth_ostvik")` is
-    # STILL DROPPED in the shipped arm (12 drops, on her own `stores:grain` belief, the denial of REM-2C's note) but the `none`
-    # CONTROL ARM no longer takes it (0 takings, the pair was taken at REM-2B), and the bite is a pair the control takes and the shipped
-    # arm does not -- so it leaves because `oughts_named` moved the control's act mix (which act took her scene there was not
-    # traced), not because the drop became recoverable. `("p_carin", "exchange", "hearth_ostvik")` is unmoved.
-    # CONTROL: the pre-item tree (`6fb4a2e75`) reads both triples and passes.
-    assert bite_who == {("p_carin", "exchange", "hearth_ostvik")}, (
-        f"the person-grain clause-4 bite is {sorted(bite_who)}, not `p_carin`'s `exchange` on her hearth (REM-2B; `transfer` left at CP-T02-05). "
+    assert bite_who == {("p_carin", "transfer", "hearth_ostvik"), ("p_carin", "exchange", "hearth_ostvik")}, (
+        f"the person-grain clause-4 bite is {sorted(bite_who)}, not `p_carin`'s `transfer` and `exchange` on her hearth (REM-2B). "
         "Ground any change as the note above does -- disable clause 4 for the new triple's pair alone and see whether "
         "the shipped arm's person then takes it -- before re-pinning")
     assert control == [], (

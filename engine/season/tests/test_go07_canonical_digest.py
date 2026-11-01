@@ -513,24 +513,24 @@ def _counts(w) -> dict:
 #: 2453fa53... / 9c7fdb69..., `census` 04e36dfe... / 3e1bbbef... / 8ba7fe46.... CONTROL, run in process on this tree: `aim_state` reading
 #: `open` always (`AIM_RULES` cleared) reads the values this block held exactly, at all three seeds. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 #: RE-RECORDED AGAIN at v10 CP-T02-05 (B10-09), A BEHAVIOUR MOVE DECLARED: `world_q.oughts_named` stamps the OUGHT Propositions a
-#: person has heard of onto the question he answers (`commit` and `argue` declare `Proposition`), so the first season moves at all
-#: three seeds (`acts` 589 / 628 / 637 -> 579 / 625 / 641, `log` 9154 / 11338 / 9817 -> 8923 / 11027 / 10106, `persons` 76 / 81 / 81
-#: -> 77 / 80 / 81). Was, for seeds 0 / 1 / 2: `old` c99aac10... / b7f87636... / 96383c0f..., `new` b09a95da... / 11d0ce78... /
+#: person has heard of, less any he already holds a live `commit` on, onto the question he answers (`commit` and `argue` declare `Proposition`), so the first season moves at all
+#: three seeds (`acts` 589 / 628 / 637 -> 582 / 619 / 645, `log` 9154 / 11338 / 9817 -> 8940 / 11052 / 10141, `persons` 76 / 81 / 81
+#: -> 77 / 81 / 81). Was, for seeds 0 / 1 / 2: `old` c99aac10... / b7f87636... / 96383c0f..., `new` b09a95da... / 11d0ce78... /
 #: 6e009a7e..., `census` 2b0cf87c... / c083f206... / 3464955d.... CONTROL, run in process on this tree: `oughts_named` stubbed to `()`
 #: reads seed 0's `new` (b09a95da...) exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 BASE = {
-    0: {"old": "201d1091272cc2138c943244acf9acb0", "new": "d37c71aadc7eb4a67d7fa0cd4315876d", "acts": 579,
-        "census": "717b570d93b97f58cebb3de89a11ac15e796807611142353d6a636a2edae70ba",
+    0: {"old": "76409cd058fb1e4468ee9bc7c5e6d983", "new": "f699c1d4ae78a615539350a8e423de26", "acts": 582,
+        "census": "f8ba303a0eb34388e24bdd74429145a44eb310b6bca50be32bdceb03dec17cf6",
         "counts": {"persons": 77, "rungs": 406, "offices": 32, "sites": 322, "records": 116,
-                   "propositions": 102, "dates": 4, "docket": 3, "tenures": 870, "log": 8923}},
-    1: {"old": "12e65ce4e62f312d51e639779df5b084", "new": "38128f77c61e5a4be56e0f9aaeb8ac54", "acts": 625,
-        "census": "9588b45d01ee5d5ec5e540aeeca51df5f3bf675f0d8bc69231db0a6e0e0dea9b",
-        "counts": {"persons": 80, "rungs": 409, "offices": 32, "sites": 322, "records": 145,
-                   "propositions": 104, "dates": 7, "docket": 2, "tenures": 917, "log": 11027}},
-    2: {"old": "e4e080b21bf975c04bc7643f930d4b0c", "new": "a2f53ca11939c65f97328ed96af1679c", "acts": 641,
-        "census": "bd63ece5c27a79549e26dd1db992a2c05ecb1db47e9573e93f626051dbebbb4e",
+                   "propositions": 102, "dates": 4, "docket": 3, "tenures": 872, "log": 8940}},
+    1: {"old": "f5081f07c5843bc33881c984405574cd", "new": "5c577efd5ee789f689b705de7c195a35", "acts": 619,
+        "census": "705bb1f1442eb6f8273b99d385a59679e5f35ad68d19be7f6a5e7ebd24b6082a",
+        "counts": {"persons": 81, "rungs": 410, "offices": 32, "sites": 322, "records": 146,
+                   "propositions": 102, "dates": 7, "docket": 2, "tenures": 922, "log": 11052}},
+    2: {"old": "25fe49f55a4dc25598a96915a36bed28", "new": "5f914de5ac2ec800e3049ec96fc06671", "acts": 645,
+        "census": "347f9c3873ec072e9f223752b6bc3a77105573ce810b82cddca31dfa83ac5e93",
         "counts": {"persons": 81, "rungs": 410, "offices": 32, "sites": 322, "records": 134,
-                   "propositions": 109, "dates": 3, "docket": 3, "tenures": 919, "log": 10106}},
+                   "propositions": 110, "dates": 3, "docket": 3, "tenures": 921, "log": 10141}},
 }
 
 
