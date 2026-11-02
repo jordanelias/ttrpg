@@ -11,6 +11,8 @@ Format: `### <handle> — <title> (<lane>) · BATCH <B10-nn> · STATE <…> · R
 
 **After the second decision round** (Jordan's six items of 2026-10-26, `-05` §1b): the round added 15 positions, CR-30 to CR-44 (§2 below, after CR-29), and two commits of CL-EVENTS, (3) and (4), written into its cluster entry; it changed the entries it names in place, each under a SECOND DECISION ROUND line or inside the text it replaces (IN-61, SC-04, CR-11, CR-19, CR-20, CR-22, CR-27, CL-CHAR, CL-EVENTS, CL-THRUST here; IN-30, IN-48, FA-07 and GO-15 in part 2). A new entry cites its item as "item n" of that round (`-05` §1b); each taken decision carries its `[ASSUMPTION; medium; Jordan to correct; revert: …]`.
 
+**After the build-all fold of 2026-11-02** (Jordan: "ratify implement all into workplan"; ED-IN-0308): the fold added 13 positions, CR-55 to CR-67 (§2 below, after CR-54). CR-55 and CR-56 are appended to B10-13 after SC-04; CR-57 to CR-65 are the new batch B10-18c; CR-66 and CR-67 are design-first rows of B10-19. They come from `proposals/2026-10-29-parliament-and-debate/2026-11-02-social-contest-build-all-plan.md`, which found that the plan already owned eleven of that document's twenty-eight items (CP-T05-01 and -02, SC-04, IN-61, CR-20, CR-35 to CR-37, CR-48, CR-51, PC-10 (with its PC-10b season side), SC-05 and B10-08; the motion source is `-10` M39 with CR-38) and so adds only the rest. Two items are LEAVE rows (`-12`, after H-90). Nothing earlier moved except by cross-reference lines under CR-48, CR-51 and SC-05.
+
 ## 2. New positions
 
 
@@ -508,7 +510,7 @@ The fold of 2026-10-30 (Jordan: everything that can properly be folded into v10 
 - EXIT and FALSIFIER: `aperture 4 s`: `comply`, `evade / defy` and `construe` each executed at least once, with the compliance Event caused by an act of a non-issuer; a candidate on a dispensation id is non-empty in `opening_set`; or the exit records 0 with the refusal that decided and the verb stays a named residue. CONTROL: the occasion switched off reproduces the pre-item hash; the mint route is untouched (ED-IN-0292 (1)).
 - HASH MOVERS: declared MOVER.
 - HOLES AND LEDGER IDS: ED-IN-0292 (1) (RULED NO), H-44 (LEAVE: the nine dispensation terms), H-229 (open or closed not confirmed here: it is not in `-07` §1's index), H-203.
-- ASKS ATTACHED: none new; K-24's evade-versus-defy split stays unbuilt, and `construe` stays emission-only (its row's witness-side revert is a standing `[ASSUMPTION]`).
+- ASKS ATTACHED: none new; K-24's evade-versus-defy split stays unbuilt, and `construe` stays emission-only (its row's witness-side revert is a standing `[ASSUMPTION]`). The build-all fold of 2026-11-02 adds CR-57 (a petition is addressable and deliverable), which reuses this position's `give` occasion; serialise on `verb_table.yaml`'s `give` row.
 - RE-BASE: re-run the writ census (issuer, holder) and the `give` formation count at `give` with `with`. The figures in this entry come from probe runs whose output is not in the repository (the R-05 re-take of 2026-10-31); none is quoted until re-taken at the re-base.
 - BUILDER: third tier.
 - SOURCE: the R-05 re-take of 2026-10-31; `verb_table.yaml` `comply`, `construe`, `evade / defy` and `give` rows.
@@ -542,7 +544,7 @@ The fold of 2026-10-30 (Jordan: everything that can properly be folded into v10 
 ### CR-51 — A restraint exists: `arrest` on a held warrant, `pardon` closing it (IN/FA) · BATCH B10-18b (after CR-49) · STATE MEASURE then BUILD only the gap · R R-05 (`arrest`, `pardon`)
 - WHAT: `pardon` refuses after admission: `_eff_pardon` (`loop/effects_governance.py`) returns an empty Change unless the subject holds a live `detain` or `ban` whose object is `Act.via`; at the end of four seasons at seed 0 the realm holds none. The three producers are `arrest` (formed 5, attempted 0), `determine`'s disposal (13 refused) and `revoke`'s ban (CR-54). `arrest` forms only where a held warrant names a Person (`decision/options.py`, the `WARRANT_SOURCED` block), and whether a computed `issue` ever mints a warrant whose terms name a Person is not verified here. MEASURE first: print, at the base commit, `issue`'s minted terms by kind, the warrants held, the formed-and-attempted line of `arrest`, and `determine`'s refusals by read; BUILD only the link the reading names missing (a warrant naming a Person, or the `arrest` rank). No new motive and no special case for either verb (§0). `pardon` follows with no change of its own once an edge exists.
 - LANDED ALREADY: `_eff_arrest`, `_eff_pardon`, `_RESTRAINT_ENDED`; IN-12's warrant channel (B10-09 carries IN-12).
-- REMAINING UNBUILT: the measured gap, if any.
+- REMAINING UNBUILT: the measured gap, if any. The church-custody warrant branch (a custody disposal becomes a warrant to a `dispatch` holder, who serves or declines, and a warrant that matures unserved is a witnessed decline) is this position's gap if the measure shows it, and is then built with CR-63's warrant duty (the build-all fold of 2026-11-02).
 - GATE: after CR-49 and CR-47. NEEDS: IN-12, CR-50.
 - EXIT and FALSIFIER: `aperture 4 s`: `arrest.made` and `detention.ended` or `ban.ended` caused by computed acts; or the exit records the missing link by name and both verbs stay named residue (no position is invented to fix it). A planted `detain` on the seat: `pardon` closes it and emits (the check the effect already passes by hand).
 - HASH MOVERS: MOVER if built; EQUAL for the reading.
@@ -590,6 +592,175 @@ The fold of 2026-10-30 (Jordan: everything that can properly be folded into v10 
 - RE-BASE: re-read H-207 (A) in full at `hole_register.yaml` and the ruling's quoted words before the design is written. The figures in this entry come from probe runs whose output is not in the repository (the R-05 re-take of 2026-10-31); none is quoted until re-taken at the re-base.
 - BUILDER: third tier (judgment).
 - SOURCE: the R-05 re-take of 2026-10-31; H-207.
+
+### CR-55 — A matter lapses visibly: a dead party, a venue with no bench, an overdue stage (SC/IN) · BATCH B10-13 (after SC-04) · STATE BUILD (hash MOVER: new Events) · R R-04 (contributor), R-01
+- WHAT: three docket facts hold a matter for ever with no Event. (1) `remove_person` closes a dead man's edges and removes him but never touches `w.docket` (`state/world.py`), so a slot he filled is held, `determine` refuses at its `party` conjunct, and `docket_question` still names him. (2) A venue with no bench waits for ever. (3) MATTER matures a stage only on `due == w.tick` (`loop/matter.py:340`), so a stage that missed its due tick never matures. Give each a lapse: `matter.lapsed`, an Event no code emits today (it is a proposal of the parliament design, step 9), written through the gate by MATTER with `causes` chained to the docketing Event, witnessed like any other, and the item cleared. Change `due != w.tick` to `due > w.tick` so an overdue stage matures once. A non-person matter (`open_case` accepts any id, `world_q.py:270-272`) lapses the same way; no new refusal is added at `open_case`.
+- LANDED ALREADY: `docket_question`, `sittings_before`, `slot_for` (`world_q.py`); MATTER's term maturation and its gate write (`loop/matter.py`); `determine`'s `party` conjunct.
+- REMAINING UNBUILT: the lapse rule (a number of seasons, a swept `Fixtures` row, default stated at build and registered as a hole row); the `matter.lapsed` kind in `verb_table.yaml`/`rosters.yaml` emits; the `<=` change (`due > w.tick` skips; a stage that has already matured must not mature again, so the rule needs a per-stage marker or the last-emission check `w.last_emission_of("term.matured", ...)`, since the record-level `matured` flag is one bool for all stages); a test per case.
+- GATE: after SC-04 (it shares `arrangements.yaml` and the docket readers) and CR-45. NEEDS: none. A dead party and a bench-less venue are read, not run, at drafting: the first commit builds both worlds by hand (a person removed inside a gate window, as `_eff_kill` does; a venue with no `determine` seat) before changing anything.
+- EXIT and FALSIFIER: a seeded run at seeds 0-2, four seasons: `matter.lapsed` is emitted for an item held beyond the lapse rule and no docket item outlives it; the 28 and 20 items of the 2026-11-01 probe (18 and 15 of them empty sitting slots) are read per item, not counted. CONTROL: the lapse rule at never reproduces the pre-item hash; a planted overdue stage matures once and not twice.
+- HASH MOVERS: declared MOVER (new Events join the log and the claim deposits); one golden re-record, old to new, stated plainly in the commit body.
+- HOLES AND LEDGER IDS: H-80, H-94 (residue), H-222; `engine/season/hole_register.yaml` gains the lapse-rule row.
+- ASKS ATTACHED: the lapse number is an `[ASSUMPTION; medium; Jordan to correct; revert: never]` swept 2 / 4 / 8.
+- RE-BASE: re-run `python proposals/2026-10-29-parliament-and-debate/probe_event_kinds.py 0 4` on the base commit first: the docket counts and the zero `matter.determined` are the base reading.
+- BUILDER: second tier.
+- SOURCE: the build-all fold of 2026-11-02 (`proposals/2026-10-29-parliament-and-debate/2026-11-02-social-contest-build-all-plan.md`, with `2026-11-01-social-contest-matters-standpoints-and-fold.md`, whose probes are in that folder).
+
+### CR-56 — The matter is stamped where it waits: a convener is offered the tier that can hear it (SC/IN) · BATCH B10-13 (after CR-55) · STATE BUILD (hash MOVER) · R R-04 (contributor)
+- WHAT: sittings fire and hear nothing: 18 and 15 Dates fired at seeds 0 and 1 and at no season end did any docket item hold both a date and a matter (control, `probe_controls.py`). `convene` forms only on a `Rung` referent that `places_named` offers, a place a lord has heard of at the smallest tier, with no matter behind it (reasons-to-convene §2). Build levers RL1 and RL2 of `2026-10-29-reasons-to-convene.md` §6: a standing occasion `matters_awaiting(w, p)` that stamps, beside `vacancies` and `places_named`, the lowest rung of the convener's seat tier that contains each undated person-matter on the docket; stop offering places-to-settle as venues; and a re-slot step, because no act back-fills a matter that is already waiting (`open_case` and `carry` both decline a docketed matter, `effects_information.py:368`). RL5, a matter-sensitive term in the convene score (the resolution design's `motion` term), is MEASURED after RL1 and built only if the share of convenes holding a matter is still 0.
+- LANDED ALREADY: REM-28 (the `Rung`-classed referent for `convene`), `_stamped` and the stamped occasions (`world_q.py`), `slot_for`, the fired-slot step of `open_case` (v9 SC-01).
+- REMAINING UNBUILT: `matters_awaiting`; the `convene` row's referent source; the re-slot step; RL5 only on the measured gap.
+- GATE: after CR-55. NEEDS: SC-01's fired-slot step (landed), REM-28 (landed). `CR-38 after #527` (the motion source, `-10` M39) is a neighbour and is not a dependency: this position stamps matters that exist, it makes none.
+- EXIT and FALSIFIER: seeds 0-2: fired Dates whose slot holds a matter, now 0 of 18 and 0 of 15, rise above 0; `convene.refused` does not rise. CONTROL: a world with no docketed person-matter forms no such Candidate; a matter outside every convener's scope stays undated.
+- HASH MOVERS: declared MOVER (it changes the question a convener answers first); one re-record, stated plainly.
+- HOLES AND LEDGER IDS: H-163 (limit 2), H-203; reasons-to-convene RL1, RL2, RL5.
+- ASKS ATTACHED: RL2 changes REM-28, which `proposals/2026-10-29-parliament-and-debate/2026-10-29-reasons-to-convene.md` §6 flags as a plan change and not an edit; it is taken here `[ASSUMPTION; medium; Jordan to correct; revert: keep `places_named` as a venue source, drop RL2]`.
+- RE-BASE: the stamp's tier comes from containment (`ancestry`), read by symbol on the landed tree.
+- BUILDER: third tier (judgment).
+- SOURCE: the build-all fold of 2026-11-02 (`proposals/2026-10-29-parliament-and-debate/2026-11-02-social-contest-build-all-plan.md`, with `2026-11-01-social-contest-matters-standpoints-and-fold.md`, whose probes are in that folder).
+
+### CR-57 — A petition is addressable and deliverable (SC/IN) · BATCH B10-18c (first) · STATE BUILD (hash MOVER) · R R-04 (contributor), R-05
+- WHAT: a computed `petition` has `terms` and `to` bound to the same person (H-94: the row keeps the single-referent limit that `issue` left at IN-10), so no non-player petitions someone about another; and a petition is minted into the petitioner's hold (`_eff_petition`) and reaches its addressee only by `give`, which was refused 7 of 7 at seed 0 (`record.given` 0). Make `to` fan over the persons the petitioner knows, as `issue`'s does, with `terms` the referent; and give a held petition the same `give` occasion CR-48 gives a held writ. No mint into the addressee's hand (ED-IN-0292 (1), RULED NO, is untouched).
+- LANDED ALREADY: IN-10 (`issue`'s fan), IN-45 (`carry`), REM-25 (the `Record` class widened), CR-48 (planned, the writ's `give` occasion).
+- REMAINING UNBUILT: the `petition` row's addressee fan; the `give` occasion for a held petition; the co-location read.
+- GATE: after CR-48 (the same row and the same occasion; serialise on `verb_table.yaml`'s `give` row). NEEDS: IN-10, REM-25, CR-48.
+- EXIT and FALSIFIER: seeds 0-2: a petition whose `to` differs from its `terms` is filed; a `give` of a held petition executes (`record.given` above 0 for a petition); a petition reaches a seat that can `carry` it. CONTROL: the fan switched off reproduces the pre-item hash.
+- HASH MOVERS: declared MOVER; one re-record.
+- HOLES AND LEDGER IDS: H-94, H-229 (the Record half), ED-IN-0292 (1) (RULED NO).
+- ASKS ATTACHED: none. Stop if the route needs an eleventh operand name (the operand vocabulary is closed, H-94).
+- RE-BASE: re-run the petition census (`petition.filed` 27, `petition.carried` 5 and 2, `carry.refused` 19 and 16 at the 2026-11-01 probe) on the base commit.
+- BUILDER: third tier (judgment).
+- SOURCE: the build-all fold of 2026-11-02 (`proposals/2026-10-29-parliament-and-debate/2026-11-02-social-contest-build-all-plan.md`, with `2026-11-01-social-contest-matters-standpoints-and-fold.md`, whose probes are in that folder).
+
+### CR-58 — Consent: some acts are admitted only on a council's count, and a refusal says why (SC/IN) · BATCH B10-18c (after CR-57) · STATE BUILD (hash MOVER) · R R-04 (contributor)
+- WHAT: no verb row carries a consent conjunct, so no act needs a sitting's count and nothing gives a ruler a reason to convene (reasons-to-convene §4 C; RL3). Add the licence conjunct to the owner's act (*the actor holds a live `resolution` naming this act's object*, CR-36's and CR-37's form) with its discriminator held at a data owner (a rung-kind or hold-kind row saying which cessions need consent), never in the effect (that would be scripting drift); and give a refusal on that conjunct its own kind (`<verb>.unlicensed`) so the refused owner holds a claim that says why, and that claim stamps the council's tier as his convene referent (CR-56's route).
+- LANDED ALREADY: CR-36 (the `resolution` Record kind and `nominated`) and CR-37 (`joint_concurrence`), if landed by B10-17; `<verb>.refused` already deposits a claim.
+- REMAINING UNBUILT: the conjunct for `give` of a hold and for `requisition`; the data owner; the new refusal kinds and their `verb_table.yaml` emits.
+- GATE: after CR-57 and B10-17. NEEDS: CR-36, CR-37, CR-56. `warrant_sourced` maps one kind per verb and a listed verb then forms only on a subject a held Record names (`rosters.yaml:1931-1961`); the discriminator must live at a data owner, or `give: resolution` would gate every `give`.
+- EXIT and FALSIFIER: seeds 0-2: an owner's act is refused for want of a held resolution, its refusal kind is `<verb>.unlicensed`, and a convening follows from it above 0 times. CONTROL: an owner whose act needs no count never convenes for it; the discriminator empty reproduces the pre-item hash.
+- HASH MOVERS: declared MOVER.
+- HOLES AND LEDGER IDS: H-90 (`hole_register.yaml:1126`), H-229.
+- ASKS ATTACHED: which acts need consent is content (Jordan's, P11): the position builds the mechanism and one data row per act that the plan already rules (a cession of land, a requisition); no other row is authored.
+- RE-BASE: the parliament design T3a (`2026-10-29-parliament-and-debate.md` §6) names the limit; read `warrant_sourced` first.
+- BUILDER: third tier (judgment).
+- SOURCE: the build-all fold of 2026-11-02 (`proposals/2026-10-29-parliament-and-debate/2026-11-02-social-contest-build-all-plan.md`, with `2026-11-01-social-contest-matters-standpoints-and-fold.md`, whose probes are in that folder).
+
+### CR-59 — An appeal goes to another authority: the appellate closure basis (SC/IN) · BATCH B10-18c (after CR-58) · STATE BUILD (hash EQUAL: no computed route) · R R-04 (contributor)
+- WHAT: R-35 wants an appeal to an authority, never back to the same bench. `pardon` closes a restraint only through the seat that is the edge's object (`state/gate.py`'s `determination` basis), so a crown seat cannot void a church custody or a ban (P4 stress claim 21). Add an appellate closure basis beside `pardon`'s: a seat named by the row's `appeal_to` may void, or commute one grade, a restraint opened under that row, on the record. Polity rows below the sovereign default `appeal_to: crown` (P4 critic finding 9).
+- LANDED ALREADY: `pardon` (`loop/effects_governance.py`), `may_determine`, `detain` and `ban` as `RESTRAINT_KINDS`, SC-03a's rows.
+- REMAINING UNBUILT: the basis in `gate.py`; the `appeal_to` key in `arrangements.yaml` and `data/arrangements.py`; a hand-built test.
+- GATE: after CR-58 and SC-04, CR-35. NEEDS: SC-04, CR-35, CR-51 (a restraint exists).
+- EXIT and FALSIFIER: a hand-built world: a crown seat voids a church `detain`; the same seat is refused on a restraint under a row with no `appeal_to`. No computed route is claimed. CONTROL: with no row carrying `appeal_to` the hash is EQUAL.
+- HASH MOVERS: none (E).
+- HOLES AND LEDGER IDS: H-90; R-35 (primitives §1).
+- ASKS ATTACHED: none.
+- RE-BASE: re-read `gate.py`'s `determination` and `warrant` bases by symbol on SC-04's landed tree.
+- BUILDER: third tier (judgment).
+- SOURCE: the build-all fold of 2026-11-02 (`proposals/2026-10-29-parliament-and-debate/2026-11-02-social-contest-build-all-plan.md`, with `2026-11-01-social-contest-matters-standpoints-and-fold.md`, whose probes are in that folder).
+
+### CR-60 — Authority, scope and a two-valued rite default (SC/IN) · BATCH B10-18c (after CR-59) · STATE BUILD (hash MOVER: case-opening purview) · R R-04 (contributor)
+- WHAT: R-34 gives a venue its force from the parties, the polity or the church; no row carries an authority, and the church cannot open or judge a case outside T9 because `offices.yaml` has one anchor that sets both `rung` and `scope_rung`. Add `authority.by_faction` to `rosters.yaml` (a mapping, the precedent of `role_templates.by_faction`); a `scope:` key on offices that `build_realm` passes as `scope_rung` (P4 repair m); case-opening that reads `scope_rung` as `sits_over` does, while `arrest`, `seize` and `issue` keep `rung` (repair g); and a rites block of two values, accusatorial and inquisitorial, that a row picks (P4 §3.4 cut back as its critic directed). One `may_determine`, with the authority conjunct inside the predicate (repair l).
+- LANDED ALREADY: SC-03a and SC-04's rows and `disposes`; `bench_basis`; `judging_set`; the `titles` ladder; `faction_q`.
+- REMAINING UNBUILT: the mapping, the `scope:` key and its loader, the case-opening read, the rite block and the authority conjunct.
+- GATE: after CR-59. NEEDS: SC-04, CR-35, CR-38's interim two-seat bench (the interim bench stands until CR-38 lands). P4 Q1, whether the church may judge realm-wide while acting only where its `rung` reaches, is taken (§ASKS).
+- EXIT and FALSIFIER: seeds 0-2: a church seat opens a case on a resident of a territory other than T9; the same accused under two rows gets two benches; the King is neither on a church bench nor admitted by the gate to judge a church-row matter. CONTROL: no `scope:` key reproduces the pre-item hash.
+- HASH MOVERS: declared MOVER (which seat may open a case); one re-record.
+- HOLES AND LEDGER IDS: H-80, H-90; the two `scope_rung`/`rung` anchors.
+- ASKS ATTACHED: P4 Q1 taken: the church may judge realm-wide while acting only where its `rung` reaches `[ASSUMPTION; medium; Jordan to correct; revert: no `scope:` key, and R-36's own heresy example cannot occur]`; the reasoning is that without it the example in R-36 is impossible.
+- RE-BASE: read `state/gate.py`'s `may_determine` and `sits_over` on the landed tree; the line numbers in P4 §6 were taken at `5c0e25ec`.
+- BUILDER: third tier (judgment).
+- SOURCE: the build-all fold of 2026-11-02 (`proposals/2026-10-29-parliament-and-debate/2026-11-02-social-contest-build-all-plan.md`, with `2026-11-01-social-contest-matters-standpoints-and-fold.md`, whose probes are in that folder).
+
+### CR-61 — The case file: a Record of kind `case`, held, forgeable, burnable (SC/IN) · BATCH B10-18c (after CR-60) · STATE BUILD (hash MOVER) · R R-04 (contributor)
+- WHAT: a computed `open_case` writes a case file of kind `text` with no content and the H-80 default stage labels, and a second case on a docketed matter is refused (`effects_information.py:368`). Mint kind `case` whose stages are the rite's stage list (CR-60), with its readers landing in the same change: `determine`'s precondition asks for the held case file (a fifth conjunct), only its holder writes `stages`, `_mint_document` declines an existing id, `forge` accepts kind `case`, and the citation is a `dispensation` addressed to the party and served by CR-57's and CR-48's `give` (the writ-to-addressee mint stays refused). Defiance is a witnessed deed and a contempt ban needs no arm; an unserved warrant lapses visibly (CR-55's lapse).
+- LANDED ALREADY: `_mint_document`, `_eff_open_case`, `_eff_forge`, `destroy_record`, `comply` and `evade / defy` (emission-only), CR-55's lapse.
+- REMAINING UNBUILT: the `case` kind in `record_kinds`; the fifth `determine` conjunct (`verb_table.yaml:360`); the mint decline; `forge` on `case`; the citation; the stage list from the rite.
+- GATE: after CR-60. NEEDS: CR-55 (`<=`, the lapse), CR-57, CR-48. A kind lands with its readers (`rosters.yaml: record_kinds`' own note).
+- EXIT and FALSIFIER: seeds 0-2: `docket_named_arrangement` above 0; burning the case file stalls `determine` and a restart is a new case; an overdue stage matures once when its holder returns; a citation unanswered emits a witnessed lapse. CONTROL: the `text` kind reproduces the pre-item hash; the H-80 labels move `BASE_HASHES[1, 2]` (`test_season_weather.py`) and the go07 `BASE` seeds, re-pinned and said plainly.
+- HASH MOVERS: declared MOVER.
+- HOLES AND LEDGER IDS: H-80, H-210, H-229.
+- ASKS ATTACHED: none. P4's earlier batch A1 (deleting `VERB_CAPABILITY`, the discrete call and the H-80 labels first) is NOT taken: P4's critic showed A1 cannot be green as ordered (finding 11); each deletion lands with its replacement.
+- RE-BASE: the H-80 default labels are deleted here, with the rite's stage list that replaces them.
+- BUILDER: third tier (judgment).
+- SOURCE: the build-all fold of 2026-11-02 (`proposals/2026-10-29-parliament-and-debate/2026-11-02-social-contest-build-all-plan.md`, with `2026-11-01-social-contest-matters-standpoints-and-fold.md`, whose probes are in that folder).
+
+### CR-62 — A plea with a concession reward, tested through the obstacle before any grade cap (SC/IN) · BATCH B10-18c (after CR-61) · STATE BUILD (hash MOVER) · R R-04 (contributor)
+- WHAT: P4's plea fixes which question is tried (deny, concede the fact, concede the definition). Its critic found two methods for one quantity: grade caps rewrite the band outside `degree_from_net` (R-6, R-8), and the D-1 obstacle composition (the ceiling bounds the opponent's score, not the proofs and the aptness price added after it) removes the clip that justified the caps. First verify B10-08's closed form (see RE-BASE); then route the concession reward through the obstacle under D-1 and run the plea's dominance test against the control (deny alone best), and adopt grade caps only if the obstacle route fails it. An absentee resists at his own score ÷ 2 (R-5), not at the default 2.
+- LANDED ALREADY: B10-08 (CLOSED): one faculty, one odds function, one ceiling; `roll.py::obstacle`; `degree_from_net`.
+- REMAINING UNBUILT: the plea act's stage transitions (data); the D-1 composition in `obstacle()`; the absentee rule; the test.
+- GATE: after CR-61. NEEDS: B10-08 (landed), CR-61, CR-20 (attributes, so that pools differ).
+- EXIT and FALSIFIER: a hand-built hearing and a seeded sweep: with the concession reward through the obstacle, deny is not best alone in more than 6 of 9 cells and a bare concession is not weakly dominated in 9 of 9 (the P2 control reading, `stress_p4_choices.py` log:6090). CONTROL: reward off reproduces P2's finding.
+- HASH MOVERS: declared MOVER (every computed roll that composes an obstacle).
+- HOLES AND LEDGER IDS: H-127, H-213.
+- ASKS ATTACHED: none new; the cap route is held until the obstacle route has been tested.
+- RE-BASE: FIRST: confirm B10-08's `p_success` equals P4's closed form at 2D and 12D (P4 §3.3: the live discrete roll read .581 against .430 at 2D) and that the ceiling bounds the score only. If not, this position waits for that edit and says so.
+- BUILDER: third tier (judgment).
+- SOURCE: the build-all fold of 2026-11-02 (`proposals/2026-10-29-parliament-and-debate/2026-11-02-social-contest-build-all-plan.md`, with `2026-11-01-social-contest-matters-standpoints-and-fold.md`, whose probes are in that folder).
+
+### CR-63 — The five robust decisions as verb rows (SC/IN) · BATCH B10-18c (after CR-64) · STATE BUILD (hash MOVER) · R R-04 (contributor), R-05
+- WHAT: P4's critic kept five of its ten decisions as robust: which proofs to offer, self or advocate, naming mortal enemies, the warrant-holder's duty, and appear / evade / defy. Most of the ten are not acts the loop can form: there is no verb row for plea, offer-proof, speech kind, challenge a judge, name enemies, forum plea or come forward (P4 critic finding 12, accepted as BREAKS). Write the rows for the five, each with its writer, its `write_matrix.yaml` cell and its band writes, and price the defiance: a witnessed `compliance.withheld` deposits a deed claim and a warrant left unserved lapses visibly. The narrow options (judge challenge, forgery, impugn, cite-licence, the term of grace) stay held until the explanation contract can show a player why they matter.
+- LANDED ALREADY: `comply`, `evade / defy`, `arrest`, `pardon`, `oblige`, `utter`; CR-48, CR-51, CR-57, CR-61.
+- REMAINING UNBUILT: the verb rows and cells; the chooser's formation for each; the defiance deed.
+- GATE: after CR-64. NEEDS: CR-48, CR-51, CR-57, CR-61, CR-64, CR-20.
+- EXIT and FALSIFIER: seeds 0-2, an `aperture`-style run: each of the five is taken above 0; `compliance.given` and `compliance.withheld` are above 0; `arrest.made` above 0. CONTROL: each row switched off forms nothing and reproduces the pre-item hash.
+- HASH MOVERS: declared MOVER.
+- HOLES AND LEDGER IDS: H-94 (the operand vocabulary is closed: a row that needs an eleventh name is a stop), H-229.
+- ASKS ATTACHED: none.
+- RE-BASE: re-read P4 §4 for each choice's options and cost; the 2026-11-01 stress log is reference.
+- BUILDER: third tier (judgment).
+- SOURCE: the build-all fold of 2026-11-02 (`proposals/2026-10-29-parliament-and-debate/2026-11-02-social-contest-build-all-plan.md`, with `2026-11-01-social-contest-matters-standpoints-and-fold.md`, whose probes are in that folder).
+
+### CR-64 — The forum is a stage of the same case (SC/IN) · BATCH B10-18c (after CR-62) · STATE BUILD (hash EQUAL until computed play opens it) · R R-04 (contributor)
+- WHAT: a forum plea (Clarendon c. 3; Bruno) moves the docket item's row in place, decided by the other authority's seat by its own choice, with R-34's precedence (a royal party gives the matter to the polity if the polity claims it; otherwise the sitting bench keeps it by prevention). A second case on a docketed matter stays refused. P3's mutual forum contest is not adopted (its only equilibrium is impasse).
+- LANDED ALREADY: the docket item's `arrangement` key (CR-61), `judging_set`, R-34.
+- REMAINING UNBUILT: the forum transition and its precedence rule; the test.
+- GATE: after CR-62. NEEDS: CR-60, CR-61. P4 Q5 ("a royal person is involved") is taken as a party `[ASSUMPTION; medium; Jordan to correct; revert: a bench member or the territory's ruler]`.
+- EXIT and FALSIFIER: a hand-built hearing: a forum plea changes the item's row with no second case; the sitting bench keeps the matter when no royal party is involved. CONTROL: no forum plea reproduces the hash.
+- HASH MOVERS: none until computed play forms it (E).
+- HOLES AND LEDGER IDS: H-80.
+- ASKS ATTACHED: P4 Q5 taken as above.
+- RE-BASE: read CR-61's landed docket shape by symbol.
+- BUILDER: third tier (judgment).
+- SOURCE: the build-all fold of 2026-11-02 (`proposals/2026-10-29-parliament-and-debate/2026-11-02-social-contest-build-all-plan.md`, with `2026-11-01-social-contest-matters-standpoints-and-fold.md`, whose probes are in that folder).
+
+### CR-65 — The legitimacy index (design-first, held on P4 Q2) (SC/IN) · BATCH B10-18c (last) · STATE DESIGN-FIRST, then BUILD only on approval · R R-04 (contributor)
+- WHAT: R-36 scales an authority's weight in a territory by its legitimacy there. P4 reads it as a barrier index in `queries/cache`, built from residents' ledgers and read by the draw: its own critic calls that ED-SC-0040's read routed through a cache and *a stored magnitude between barriers* (S-7; P4 critic finding 16). Draft the design, argued against ED-SC-0040's precedent, with the L ≡ 1 control arm and the defined cases (an empty territory and a zero denominator read 0.5; NaN is refused, not clamped; `opinion_full <= 0` refused at load). Alternatively the effects of hostility (summons obedience, warrant service, a ban's bite) emerge from persons' own choices and the draw takes no L term at all, which the research (02 §3.5) supports.
+- LANDED ALREADY: `world_q.opinion_of`, `person_q.legitimacy`, SC-02 `22b` step 23 (`standing_crossed`).
+- REMAINING UNBUILT: the design file; the build only on approval.
+- GATE: design drafted beside B10-18c; build after CR-60 if approved. NEEDS: the answer to P4 Q2 (may the draw read an index built from residents' ledgers, Layer-1 F8), which survives the answer-first ladder only if this position is built.
+- EXIT and FALSIFIER: design approved by ED-1094's merge default unless held back; a built index shows an L ≡ 1 arm with no draw difference at control.
+- HASH MOVERS: none at the design step (E).
+- HOLES AND LEDGER IDS: H-222; ED-SC-0040.
+- ASKS ATTACHED: P4 Q2 is the ask; the position does not build without it.
+- RE-BASE: none.
+- BUILDER: second tier (design).
+- SOURCE: the build-all fold of 2026-11-02 (`proposals/2026-10-29-parliament-and-debate/2026-11-02-social-contest-build-all-plan.md`, with `2026-11-01-social-contest-matters-standpoints-and-fold.md`, whose probes are in that folder).
+
+### CR-66 — Membership contests: admission, expulsion, precedence (design-first) (SC) · BATCH B10-19 · STATE DESIGN-FIRST, then BUILD only on approval · R R-04 (contributor)
+- WHAT: the `tribunal` row *binds the order* (`disposes: ban`) and a guild, an order or a council admits and excludes, yet no matter family holds it. Today admission is a self-sworn `oblige` (255 acts at seed 0). Design what contests a membership: the party (the applicant or the member), the disposal (`ban` for exclusion; admission is a `confer` or an `oblige` accepted), the bench, and what is witnessed.
+- LANDED ALREADY: `tribunal`, `oblige`, `confer`, `establishment_of`.
+- REMAINING UNBUILT: the design file.
+- GATE: drafted beside B10-19; build only on approval. NEEDS: CR-60.
+- EXIT and FALSIFIER: design approved by ED-1094's merge default unless held back.
+- HASH MOVERS: none at the design step (E).
+- HOLES AND LEDGER IDS: H-90.
+- ASKS ATTACHED: content (which bodies admit by contest) is Jordan's, P11.
+- RE-BASE: none.
+- BUILDER: second tier (design).
+- SOURCE: the build-all fold of 2026-11-02 (`proposals/2026-10-29-parliament-and-debate/2026-11-02-social-contest-build-all-plan.md`, with `2026-11-01-social-contest-matters-standpoints-and-fold.md`, whose probes are in that folder).
+
+### CR-67 — Trade and levy: a market, a toll, a price, a tax (design-first) (SC/SE) · BATCH B10-19 · STATE DESIGN-FIRST, then BUILD only on approval · R R-04 (contributor)
+- WHAT: no tax or levy verb exists beyond `requisition` (parliament design §8), so a matter about a market, a toll or a tax has no disposal and no party. Design whether the matter is a motion about the holder of the market or the rung, what the owner's act is, and whether it needs CR-58's consent conjunct.
+- LANDED ALREADY: `requisition`, `exchange` (CR-49), CR-58.
+- REMAINING UNBUILT: the design file.
+- GATE: drafted beside B10-19; build only on approval. NEEDS: CR-58.
+- EXIT and FALSIFIER: design approved by ED-1094's merge default unless held back.
+- HASH MOVERS: none at the design step (E).
+- HOLES AND LEDGER IDS: H-163.
+- ASKS ATTACHED: which taxes exist is content, Jordan's, P11.
+- RE-BASE: none.
+- BUILDER: second tier (design).
+- SOURCE: the build-all fold of 2026-11-02 (`proposals/2026-10-29-parliament-and-debate/2026-11-02-social-contest-build-all-plan.md`, with `2026-11-01-social-contest-matters-standpoints-and-fold.md`, whose probes are in that folder).
 
 ## 3. Carried v9 entries, part 1 (batches B10-02 to B10-16)
 
