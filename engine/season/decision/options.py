@@ -194,7 +194,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         # (`_eff_commit` always opens a fresh Tenure). After every widening above, so it covers each route
         # that carried the referent. His own live Tenures, no World. It NARROWS and widens nothing.
         edge_kind = HELD_EDGE_DECLINES.get(verb)
-        if edge_kind is not None:
+        if edge_kind is not None and refs:
             on = {t.object for t in p.tenures if t.kind == edge_kind and t.live}
             refs = tuple(r for r in refs if r not in on)
         # v9 IN-12 step 13 (`rosters.yaml: own_stance_declines`): A VERB A PERSON FORMS ONLY ON A REFERENT HE

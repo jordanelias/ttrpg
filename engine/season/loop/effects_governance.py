@@ -19,7 +19,7 @@ from ..gaps import InstrumentDefect
 from ..loop.predicates import office_described_by, office_named_by
 from ..queries.world_q import BAN_KIND, DETAIN_KIND, restrained
 from ..state.carriers import Tenure, Term
-from ..state.gate import (NO_CHANGE, Change, Subject, claimable_seats, has_revocation_disposal,
+from ..state.gate import (NO_CHANGE, TENURE_CLOSED, Change, Subject, claimable_seats, has_revocation_disposal,
                           revocation_disposal)
 from ..state.ids import H
 
@@ -139,7 +139,7 @@ def _eff_confer(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     # connects, on the same read `_ch_document_key` already does. One reader rule serves `confer`,
     # `revoke` and `release` alike, rather than three effects each inventing their own legible id.
     return Change((Subject.edge(nt, "tenure.opened"),)
-                  + tuple(Subject.edge(t, "tenure.closed") for t in closed), perform)
+                  + tuple(Subject.edge(t, TENURE_CLOSED) for t in closed), perform)
 
 
 @effect_for("succeed")
@@ -179,7 +179,7 @@ def _eff_succeed(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     # `succession.claimed`, the row's own kind, never `confer`'s `tenure.opened` (the row's `emits_note`:
     # a second emitter would dissolve `KIND_VERB["tenure.opened"]` and re-weigh every such claim).
     return Change(tuple(Subject.edge(nt, "succession.claimed") for nt in opened)
-                  + tuple(Subject.edge(t, "tenure.closed") for t in held), perform)
+                  + tuple(Subject.edge(t, TENURE_CLOSED) for t in held), perform)
 
 
 @effect_for("establish")
@@ -292,7 +292,7 @@ def _eff_release(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
                  and t.kind in RELEASABLE_KINDS and t.live)]
     # Whole-act earning keyed on a tenure-kind literal: the data-driven form is a conditional-emission
     # column, which `04 §A.3` allows no seventh of; the same forced choice as `_fold`'s `CONFIDENCE_BROKEN`.
-    earns = None if any(t.kind == "commit" for t in edges) else "tenure.closed"
+    earns = None if any(t.kind == "commit" for t in edges) else TENURE_CLOSED
     return _closing(w, edges, earns)
 
 
