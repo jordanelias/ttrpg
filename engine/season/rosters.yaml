@@ -2343,6 +2343,25 @@ rosters:
       question carries.]
     values: [succeed]
 
+  held_edge_declines:
+    source: >-
+      B10-09 close one, D3 (the batch-close antagonist's ruling on CP-T02-05's live-commit exclusion);
+      `held_document_declines`' shape (above), one carrier over: a live Tenure instead of a held document.
+    note: >-
+      WHICH VERBS A PERSON DOES NOT FORM ON AN OBJECT HE ALREADY HOLDS A LIVE EDGE OF A NAMED KIND ON --
+      `verb: tenure kind`. Read in `decision/options.py::opening_set`, person-side and World-free (AX-2):
+      the objects of his OWN live Tenures of that kind (`p.tenures`), any mood, any route that carried the
+      referent -- `oughts_named`'s stamp, the terms-sourced reader and REM-21's own-referent term alike.
+      `_eff_commit` always opens a fresh Tenure, so a repeat would be a duplicate live edge and a spurious
+      `commitment.made`: formation must not outrun feasibility. It NARROWS the referents a question carries
+      and widens nothing; `argue` on the same Proposition is untouched. It is not `world_q.ambitions` (a
+      live commit to an OUGHT, the ambition): it reads a live edge on THIS object, of any mood. ONE LOADER,
+      `data/verbs.py::HELD_EDGE_DECLINES`, refused at import when a line names a verb the table lacks or a
+      kind `tenure_kinds` does not carry. [ASSUMPTION; medium; Jordan to correct; revert: drop the line,
+      and restore the live-commit clause in `world_q.oughts_named`.]
+    values:
+      commit: commit
+
   shortfall_sourced_operands:
     source: >-
       plan position `19d` (DEMAND · DELIVERY), `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md`

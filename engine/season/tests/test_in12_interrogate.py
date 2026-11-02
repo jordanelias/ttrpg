@@ -210,3 +210,18 @@ def test_in12_5a_control_the_petitioner_holding_his_own_petition_forms_no_commit
     _hold_document(w, w.persons[FAR], "petition",
                    {"terms": "prop_charge", "to": [WATCHMAN], "from": "S"}, rec_id="rec:pt2")
     assert "prop_charge" not in _commits(w, FAR, "rec:pt2")
+
+
+def test_in12_5a_a_committed_watchman_forms_no_second_commit_from_the_held_petition():
+    """B10-09 close one, D3: the terms-sourced reader is a route the old `oughts_named` live-commit clause never
+    covered. Once the addressed witness commits to the charge, the person-side decline (`rosters.yaml:
+    held_edge_declines`) forms no second `commit(prop_charge)` off `rec:pt1`; the arm before it is the control."""
+    w, d = _world()
+    _charge_proposition(w, d)
+    _hold_document(w, w.persons[WATCHMAN], "petition",
+                   {"terms": "prop_charge", "to": [WATCHMAN], "from": "S"}, rec_id="rec:pt1")
+    assert "prop_charge" in _commits(w, WATCHMAN, "rec:pt1")              # control: not yet committed
+    assert _kinds(_fold(w, d, _act("c1", "commit", WATCHMAN, None, subject="prop_charge"))) \
+        == ["commitment.made"]
+    assert [t.kind for t in w.persons[WATCHMAN].tenures if t.object == "prop_charge" and t.live] == ["commit"]
+    assert "prop_charge" not in _commits(w, WATCHMAN, "rec:pt1"), "a second live commit edge would form"

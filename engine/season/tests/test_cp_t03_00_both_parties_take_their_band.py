@@ -183,6 +183,43 @@ def test_a_wounded_actor_beside_an_untouched_subject_is_the_one_written():
     assert w.persons[ACTOR].body < bodies[ACTOR] and w.persons[SUBJECT].body == bodies[SUBJECT]
 
 
+def test_a_felled_actors_own_death_reaches_the_co_located_subject_at_the_shipped_fan():
+    """B10-09 close one, D2: at the SHIPPED `all_five` the felled attacker's `person.died` -- an Event of the
+    act that removed its own actor, carrying his receipt -- is placed where he stood when the act took him out
+    (`world_q.event_place`, `World.departed_from`), so the untouched subject beside him holds it. Before the
+    limb the Event had no place and reached no co-located witness. The total-fan arms above cannot see this."""
+    w, out, _b = _fight(FELLED, UNTOUCHED, fan="all_five")
+    assert w.fixtures.get("fan_out_mode") == "all_five"
+    assert ACTOR not in w.persons and SUBJECT in w.persons
+    (died,) = [e for e in out if e.kind == "person.died"]
+    assert ACTOR in [c.subject for c in died.changes], "fixture: the death carries no receipt of the actor"
+    assert world_q.place_of(w, ACTOR) is None, "`place_of` was widened; `reach` reads it about the dead"
+    assert world_q.event_place(w, died) == w.departed_from(ACTOR, died.emitted_at) is not None
+    assert SUBJECT in {pid for pid, _c in _claims(w, ACTOR, "person.died")}, (
+        "the co-located subject does not hold the attacker's death")
+
+
+def test_a_confer_onto_a_held_seat_puts_each_hold_on_its_own_kind_only():
+    """Per-kind carriage beyond `fight`/`march` (item 4): a `confer` displacing an incumbent emits
+    `tenure.opened` carrying ONLY the new hold and `tenure.closed` carrying ONLY the closed one. Before
+    CP-T03-00 both Events carried both receipts."""
+    from .test_g3_not_yours import _gov_world, _hold
+    w, d = _gov_world()
+    old = _hold(w, "off_duke")
+    assert old is not None and old.subject == "p_high", "fixture: the duke's seat is not held"
+    w.step = Step.RESOLVE
+    out = d.resolve(mint_token(w, WriteClass.ACTS),
+                    [Act(id="cp300_cf", actor="p_king", verb="confer", via="off_crown",
+                         payload={"subject": "off_duke", "office": "off_duke", "to": "p_mid"})],
+                    contest_max_depth=w.fixtures.get("contest_max_depth"))
+    new = _hold(w, "off_duke")
+    assert new is not None and new.subject == "p_mid" and not old.live, [e.kind for e in out]
+    by = {e.kind: [c.subject for c in e.changes] for e in out}
+    assert sorted(by) == ["tenure.closed", "tenure.opened"], by
+    assert by["tenure.opened"] == [new.id], by
+    assert by["tenure.closed"] == [old.id], by
+
+
 def test_march_each_kinds_event_carries_its_earners_only_on_the_total_arm():
     """`march`'s deposits, declared: a total-arm `Won` kills every defender and moves the army. The
     `person.died` Event names the dead defenders only (no mover), `tenure.closed` the seats only, and

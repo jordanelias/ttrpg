@@ -36,7 +36,8 @@ from ..data.rosters import (
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
 from ..data.verbs import (
-    ELIGIBILITY_KINDS, HELD_DOCUMENT_DECLINES, OWN_HOLD_DECLINES, OWN_STANCE_DECLINES, OWN_TITLE_DECLINES,
+    ELIGIBILITY_KINDS, HELD_DOCUMENT_DECLINES, HELD_EDGE_DECLINES, OWN_HOLD_DECLINES, OWN_STANCE_DECLINES,
+    OWN_TITLE_DECLINES,
     TERMS_SOURCED, VERB_TABLE, VOCATION_SOURCED, VOCATIONS, WARRANT_SOURCED, align,
 )
 from ..epistemic import belief_contradicts
@@ -188,6 +189,14 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                         and addressed_to(content_said(c), p.id))
                 refs = tuple(refs) + tuple(t for t in dict.fromkeys(said)
                                            if t is not None and t not in refs)
+        # B10-09 close one, D3 (`rosters.yaml: held_edge_declines`): A VERB A PERSON DOES NOT FORM ON AN OBJECT
+        # HE ALREADY HOLDS A LIVE EDGE OF THE NAMED KIND ON -- `commit` on a Proposition he commits to
+        # (`_eff_commit` always opens a fresh Tenure). After every widening above, so it covers each route
+        # that carried the referent. His own live Tenures, no World. It NARROWS and widens nothing.
+        edge_kind = HELD_EDGE_DECLINES.get(verb)
+        if edge_kind is not None:
+            on = {t.object for t in p.tenures if t.kind == edge_kind and t.live}
+            refs = tuple(r for r in refs if r not in on)
         # v9 IN-12 step 13 (`rosters.yaml: own_stance_declines`): A VERB A PERSON FORMS ONLY ON A REFERENT HE
         # HOLDS A ROW AGAINST -- `forgive` (#453 §9.4's person-side own-state decline). His own stance rows
         # (`person_q.held_against`, the reader the effect reads too), no World. It NARROWS the referents the

@@ -9021,7 +9021,17 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # `utter` or a told claim reaches a ledger, so more worlds take a signature of their own (`commit` and `argue` join `ever`). MEASURED
     # by this test's own `by_sig` over the 143 live worlds, seed 0; the pre-item tree (`6fb4a2e75`) reads 121. THE SAME-BREATH CHECK is the
     # assertions below (the universal set, `ever`, `varying`), read in the same run. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-    assert len(by_sig) == 125, (
+    # ⚠⚠ **125 -> 127 AT B10-09 CLOSE ONE (D2 + D3), AND VARIETY ROSE BY TWO.** `oughts_named` no longer drops a cause he already
+    # commits to (a second `commit` on it is declined person-side, `rosters.yaml: held_edge_declines`), so `argue` keeps the cause
+    # it argues for; and a felled attacker's own death is placed where he fell (`world_q.event_place`). MEASURED by
+    # `corpus_run.run_case` over the 143 live worlds, seed 0, the same script on this tree and on the pre-item tree (`755ec6ca2`,
+    # which reads 125): 40 worlds' executed sets change (joins `argue` 6, `research` 3, `give` 2, and 1 each of `tell`,
+    # `challenge`, `fight`; leaves `conceal` 11, `tell` 9, `reconstruct` 6, `surveil` 6, `move` 4, `research` 3, and 2 or 1 of
+    # `create_record`, `commit`, `release`, `argue`, `fight`, `give`, `interview`, `petition`). Executed-world counts, before ->
+    # here: `argue` 32 -> 36, `conceal` 82 -> 71, `tell` 51 -> 43, `reconstruct` 118 -> 112, `surveil` 63 -> 57, `move` 47 -> 43,
+    # `commit` 68 -> 66. THE SAME-BREATH CHECK: the universal set is EMPTY on both sides, `ever` is the same 22 verbs on both, and
+    # R3 reads NPC 38/46 and ARC 80/97 on both. Not a ranking change: `H-96` is untouched. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+    assert len(by_sig) == 127, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
