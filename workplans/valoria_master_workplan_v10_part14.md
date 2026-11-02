@@ -119,6 +119,7 @@
 - **Taken:** [ASSUMPTION; medium; Jordan to correct; revert: add `rosters.yaml: unrest_signs` with the hunger predicate at `hungry`/`starving`]
 - **Because:** YES — `queries/person_q.py:481-505` `stability` = minus the count of claims at the rung that are deed claims of an `UNREST_KINDS` kind (`person.died`, `body.changed`, `field.won`, `rung.seized`, `record.seized`, `requisition.taken`) OR a `shortfall:<kind>` claim.
 - **After the attack:** Same banding method as REM-50 and CP-T07-07 (a tuple fixture); the REM-51 premise is struck.
+- **Story-telling fold of 2026-11-02 (ED-IN-0309):** STOP RULE: if CP-T08-07's gate (H-163 limit 3(a), owned by CR-23) is not met at B10-16's entry (re-based by symbol; CR-23 closed in B10-06, so the condition is known before the batch opens), CP-T08-06 moves to B10-Z as HELD with it, because alone it is a gauge whose only reader is a census line. It does not merge into CP-T08-07's commit (P5: one position, one commit). `[ASSUMPTION; medium; Jordan to correct; revert: delete the stop rule]`
 
 ### CP-T08-07 — RESEQUENCE (B10-16) · AM-E-18
 
@@ -160,6 +161,7 @@
 - **Taken:** [ASSUMPTION; medium; Jordan to correct; revert: the home's formation-only falsifier.]
 - **Because:** YES — the home's falsifier (2) (T09 file `:212-215`) reads: *"With W live, a Crown `dispatch` seat forms `march` on a Hafenmark-held settlement its ledger never named"*: a formation test; its realm reading is `war.declared`, `field.won + field.lost` "base 0, 0, 0" with no pass condition.
 - **After the attack:** The clause was written for four items and printed in one; the batch Exit now carries it.
+- **Story-telling fold of 2026-11-02 (ED-IN-0309):** at re-base confirm that `declare`'s `referent_class: Proposition` has a stamper beside `seats_named` in `queries/world_q.py::questions_for`'s stamped occasions (the stamped classes today are Office, Record, Rung, Site, Detainee; `opening_set` iterates only referents carried AS the row's class, so a classed row with no stamper forms nothing). If absent, the stamper is part of CP-T09-02's commit, not a new position. `[ASSUMPTION; medium; Jordan to correct; revert: delete the re-base check]`
 
 ### CP-T09-03 — LIMIT (B10-17) · AM-F-12
 
@@ -168,6 +170,7 @@
 - **Taken:** [ASSUMPTION; medium; Jordan to correct; revert: none needed, the clause only restricts what is reported done.]
 - **Because:** YES — `verb_table.yaml:292-312`: the `covenant` row declares `requires_typed` (`existence` of `subject` kind Proposition) and no `referent_class:` (the only classed rows are at `:226, :266, :820, :892, :943`; none is `covenant`), and its note says *"A computed covenant forms on a Proposition referent … on any other referent the `subject` conjunct refuses it in the fold"*: an unclassed row forms on every plain referent, so the 41 refusals are the wrong-kind class REM-23 removed from `commit`.
 - **After the attack:** Wording only.
+- **Story-telling fold of 2026-11-02 (ED-IN-0309):** CP-T09-03's commit also adds `referent_class: Proposition` to `covenant` in `verb_table.yaml`, instead of waiting for the realm reading to name it (the residue clause above, "names `referent_class` on `covenant`", becomes this position's own edit; REM-23 and CR-50 are the shape). Reason: `covenant` forms on every plain referent today and 3 of its 4 realm refusals read `exists:Proposition = 0`; the war Proposition `declare` mints is its only computed producer of a lawful subject besides `utter`. "Done" for computed alliance or peace still requires a seeded run that executes `covenant` >= 1 with a W subject. `[ASSUMPTION; medium; Jordan to correct; revert: leave `covenant` unclassed and wait for the realm reading]`
 
 ### CP-T09-04 — REPAIR (B10-17) · AM-F-13
 
@@ -193,6 +196,7 @@
 - **Override:** CP-T09-07 has two exits. (b) the union (`world_q.seat_people_at`, AM-F-13) and `may_muster`'s `oblige` clause: done on an executed hand-built march plus the obligee-only plurality arm; independent of H-213 and of CP-T01-06. (a) `recruit`: reported done only on the uncapped arm with a won `recruit` in a seeded run, and "not shown at the shipped ceiling" otherwise; its obstacle terms are demands on `roll.py::obstacle` and are clipped there at the shipped ceiling. The realm reading counts won recruits of seat-holders separately, as the home's stopping rules ask. **Name collision (R-05 fold of 2026-10-31):** ED-IN-0306 landed a `recruit` row (army troop raising, `recruit` in `rosters.yaml: army_verbs`) after this entry was written, and `VERB_TABLE` is keyed by verb, so (a)'s planned row, the contested offer of service, takes another plain word at B10-17's re-base (V1), named in that commit `[ASSUMPTION; medium; Jordan to correct; revert: rename the army row]`; (b) also edits `loop/sides.py::sides_of`, which ED-IN-0306 changed, so the re-base re-reads it.
 - **Taken (ladder step 4):** [ASSUMPTION as AM-F-13.]
 - **Because:** YES — the home (T09 file `:379-383`): at the shipped ceiling (default 2, `data/fixtures.py:416-419`) an added obstacle term is clipped, so falsifier (1) runs on H-213's uncapped arm, owner CP-T01-06; the plan's `-03` row names `CP-T01-06`, `H-213` as needs. `loop/sides.py` is edited by this item (b), by CP-T04-01 and by CP-T04-04 (the same file). The count split is AM-F-13.
+- **Story-telling fold of 2026-11-02 (ED-IN-0309):** the commit that lands exit (b)'s union (`world_q.seat_people_at`, `may_muster`'s `oblige` clause) ALSO flips `build_realm`'s `guards` default to `True`. Reason: the guard cohorts (`harness/populated.py` `seat_guards`) hold a live `oblige` to their seat and NO `commit`, so they are not `mustered` and cannot defend; the union is what puts them in an army, so the flip is inert before it. Declared mover (re-pin; read on both arms; the batch's earlier note "read on that arm only (default OFF)" is superseded). `foreign` is CR-70's, in B10-12. `[ASSUMPTION; medium; Jordan to correct; revert: `guards=False`]` RE-BASE DUTIES are CR-70's, applied again: the same pins re-recorded (`BASE_HASHES`, `test_go07_canonical_digest.py`, `test_in27_endings.py` (it imports and asserts `BASE_HASHES`)), and `test_in36_foreign.py`'s control arms pointed at an explicit `guards=False` (`seat_guards` adds Persons, so its person-count assertion moves).
 
 ### CP-T09-09 — LIMIT (B10-17) · AM-F-17
 
