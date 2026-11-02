@@ -1560,7 +1560,7 @@ verbs:
       Success:      []
       Partial:      []
       Failure:      []
-    writes_note: "#453 §9.1: *'`[]` at every band'* -- THIN, Layer 1 row 30a's *a contest whose outcome changes nothing* (K-56): what each band leaves is the Event a witness holds, `speak`'s and `tell`'s shape. So `_eff_interrogate` does not exist (no band writes), the custody and the charge are read by the predicate (above), and `interrogate` cannot satisfy R-09's `DEGREES RESOLVED` (its bands' writes do not differ); R-05 counts it built out on execution. No value is claimed for the deposit (#453: P58, information extracted as a held object, stays open)."
+    writes_note: "#453 §9.1: *'`[]` at every band'* -- THIN, Layer 1 row 30a's *a contest whose outcome changes nothing* (K-56; §C.4 F6 (:724) says `[]` is correct only at Failure, so the two rows disagree and 30a is taken, as `speak` and `tell` take it): what each band leaves is the Event a witness holds, `speak`'s and `tell`'s shape. So `_eff_interrogate` does not exist (no band writes), the custody and the charge are read by the predicate (above), and `interrogate` cannot satisfy R-09's `DEGREES RESOLVED` (its bands' writes do not differ); R-05 counts it built out on execution. No value is claimed for the deposit (#453: P58, information extracted as a held object, stays open)."
     emits:
       Overwhelming: ["confession.full"]
       Success:      ["confession.made"]

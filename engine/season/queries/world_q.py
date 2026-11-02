@@ -2687,6 +2687,27 @@ def _aim_held_by_org_member(w: World, goal) -> bool:
 AIM_RULES = {"held_by_org_member": _aim_held_by_org_member}
 
 
+def _aim_rule(rule):
+    """`AIM_RULES[rule]`, or REFUSED: a kind's aim rule is a named rule of `AIM_RULES` (the one raise site)."""
+    if not isinstance(rule, str) or rule not in AIM_RULES:
+        raise Unspecified(
+            f"rosters.yaml: goal_object_kinds.aim names the rule {rule!r}", "rosters.yaml -- goal_object_kinds.aim",
+            needs=f"one of {sorted(AIM_RULES)}", law="CP-T02-03 -- a kind's aim rule is a named rule of world_q.AIM_RULES")
+    return AIM_RULES[rule]
+
+
+def check_aim_rules() -> None:
+    """REFUSED AT IMPORT (04 §B.13: a declared value that reaches no code is refused at load, not at the first
+    ask): every rule `rosters.yaml: goal_object_kinds.aim` names is a rule of `AIM_RULES`. `data/goals.py::_aim_kinds`
+    checks the kind side at parse; the rule side is here because `AIM_RULES` is a `queries/` fact `data/` cannot
+    import, as `state/gate.py::check_successions` does for `SUCCESSIONS`. Callable again so a test can watch it refuse."""
+    for rule in roster_map("goal_object_kinds", "aim").values():
+        _aim_rule(rule)
+
+
+check_aim_rules()
+
+
 def aim_state(w: World, p: Person, prop) -> str:
     """CP-T02-03 (B10-09; v10 AM-B-09, which narrowed the home to rung goals): `"met"` or `"open"` for the ambition
     `prop` (a Proposition, as `questions_for` reads it) -- whether it still has work. `"met"` only where the goal's
@@ -2703,11 +2724,7 @@ def aim_state(w: World, p: Person, prop) -> str:
     rule = roster_map("goal_object_kinds", "aim").get(goal.object["kind"])
     if rule is None:
         return "open"
-    if rule not in AIM_RULES:
-        raise Unspecified(
-            f"rosters.yaml: goal_object_kinds.aim names the rule {rule!r}", "rosters.yaml -- goal_object_kinds.aim",
-            needs=f"one of {sorted(AIM_RULES)}", law="CP-T02-03 -- a kind's aim rule is a named rule of world_q.AIM_RULES")
-    return "met" if AIM_RULES[rule](w, goal) else "open"
+    return "met" if _aim_rule(rule)(w, goal) else "open"
 
 
 # A `deed_doers` goal's referents are the doers it acts AGAINST: every authored form names them so --

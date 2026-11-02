@@ -142,6 +142,17 @@ def test_cp_t02_03_an_aim_row_naming_no_rule_refuses_when_asked(monkeypatch, tmp
         world_q.aim_state(w, obs, w.propositions["g_rung"])
 
 
+def test_cp_t02_03_an_aim_row_naming_no_rule_refuses_at_load(monkeypatch):
+    """04 §B.13: the rule side of the column is refused at import, not at the first ask. CONTROL: the shipped column
+    passes the same call; the planted row (a rule no `AIM_RULES` entry implements) does not."""
+    world_q.check_aim_rules()
+    row = copy.deepcopy(rosters._ROSTERS["goal_object_kinds"])
+    row["aim"]["rung"] = "no_such_rule"
+    monkeypatch.setitem(rosters._ROSTERS, "goal_object_kinds", row)
+    with pytest.raises(Unspecified, match="no_such_rule"):
+        world_q.check_aim_rules()
+
+
 # ------------------------------------------------------------------------------------------------ (d)
 
 def test_cp_t02_03_the_shipped_roster_gives_rung_the_only_row():

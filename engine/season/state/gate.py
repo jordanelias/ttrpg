@@ -243,11 +243,13 @@ FOUNDING = "founding"
 # `may_claim` and the block in `tenure_write_basis`.
 # ⚠ LAYER 1 DECIDES THIS TWO WAYS, AND THIS NAMES WHICH IS TAKEN (`layer-conformance` B4; the spec is not edited
 # to match the code, `CLAUDE.md` §0.05): `architecture/meta/04_CODE_ARCHITECTURE.md` §B.7 (:329) lists `succeed`
-# among the acts that fill a seat by its `conferral`, while §C.2's pseudocode (:600-620) calls itself the
-# complete enumeration of gate bases and has one inheritance arm only, the determination's election arm,
-# "any claimant" (CR-35, B10-17). The heir's claim is taken from §B.7: a seat with `conferral: inheritance`
-# is filled by `succeed`, which needs a gate basis, so `claim` is that basis. IN-44 row 14 (B10-Z) is where
-# the Layer 1 wording is reconciled; it is not landed here.
+# among the acts that fill a seat by its `conferral`, while §B.8 (:377) calls §C.2's pseudocode (:600-620) "the
+# current, complete enumeration of every basis" and that pseudocode has one inheritance arm only, the
+# determination's election arm, "any claimant" (CR-35, B10-17). (It was already short of the code before `claim`:
+# `warrant`, `seizure`, `muster` and T-o's ban arm below are in neither it nor D-10a's nine.) The heir's claim is
+# taken from §B.7: a seat with `conferral: inheritance` is filled by `succeed`, which needs a gate basis, so `claim`
+# is that basis. The Layer 1 wording is IN-44 row 14 (`workplans/valoria_master_workplan_v10_part7.md` A1-81:
+# CLOSED-SUPERSEDED, "lands with IN-61's build"); NOT landed by B10-09 close one, which edits no `architecture/` file.
 CLAIM = "claim"
 
 # THE REMIT ACT THAT MAKES A SEAT A JUDGING SEAT -- `H-32`'s swept default, and the `bench_basis` of
