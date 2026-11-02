@@ -809,8 +809,23 @@ class World:
                 law="holonic §15 -- `hold : Person -> Office | Rung | Record | Proposition`. A "
                     "`hold` on a Site is the class the table excludes and nothing refused")
 
+    def seat_holds(self, who: str) -> list:
+        """CP-T02-01: `who`'s live `hold` Tenures whose object is an OFFICE, in store order -- the seats
+        his death empties. The one read both halves of a death share: `state/gate.py::death_subjects`
+        names them before the write, and `remove_person` closes them and returns them."""
+        # A Tenure is owned by its subject (S15.1), so his own list is the whole answer; `self.tenures` would
+        # sort and concatenate EVERY person's edges per call (a death, a `succeed` precondition, its effect).
+        # `_unowned` is appended for exactness with the aggregate: an unhomed edge of his is still his.
+        own = self.persons[who].tenures if who in self.persons else ()
+        return [t for t in (*own, *self._unowned)
+                if t.kind == "hold" and t.subject == who and t.live and t.object in self.offices]
+
     def remove_person(self, who: str) -> list:
         """THE ONE DEATH CASCADE: every live edge naming this person closes, then they are gone.
+
+        CP-T02-01: IT RETURNS THE SEAT `hold`s IT CLOSED (`seat_holds`, read before the closures), not
+        `[who]`. No caller read the old return; the death writes name these holds as earning subjects
+        (`state/gate.py::death_subjects`), so the seats the death empties are on its receipts.
 
         ⚠⚠ IT IS FACTORED OUT OF `_eff_kill` BECAUSE IT NOW HAS THREE CALLERS, AND A SECOND COPY IS
         HOW THEY WOULD DRIFT. `kill / wound` (now `fight`) at RESOLVE was the only way to die;
@@ -827,10 +842,10 @@ class World:
         in `tiny_world`: a live `tie` from `p_low` to `p_mid` survived `p_mid`'s death and then
         DANGLED. §15.3 is explicit that the tenure ends THROUGH the death.
 
-        ⚠ IT MUTATES AND RETURNS THE IDS IT TOUCHED; IT DOES NOT CALL `write`. Every caller is
+        ⚠ IT MUTATES AND RETURNS THE SEAT `hold`s IT CLOSED (v10 CP-T02-01; not ids); IT DOES NOT CALL `write`. Every caller is
         already inside a gated write when it reaches here — `_eff_kill` and `_eff_march` through
         their own `Change`'s `apply`, which the gate calls (G4; neither effect reads the return
-        value, the gate reads the victim instead), MATTER through its own `w.write` closure — and
+        value, the gate reads the victim instead), MATTER through its own `w.write(..., change=Change(death_subjects(...), ...))` — and
         a nested write would be a write inside a write. ⚠ CORRECTED (antagonist pass, 2026-09-27):
         this said "which the gate refuses" and nothing did -- `World.write` has no re-entrancy
         check of any kind, so the property held only because every caller was careful to call this
@@ -915,10 +930,12 @@ class World:
                 "'one write path that applies the write and returns a receipt') requires every "
                 "mutation to happen inside `World.write`'s window -- call this from inside an "
                 "effect's `Change` (`_eff_kill`/`_eff_march`'s own pattern: return a `Change` whose "
-                "`perform()` calls `w.remove_person(...)`) or a `world.write(..., apply=lambda: "
-                "w.remove_person(...))` closure (`loop/matter.py`'s own pattern), never bare. This "
+                "`perform()` calls `w.remove_person(...)`) or `world.write(..., change=Change("
+                "death_subjects(...), lambda: w.remove_person(...)))` (`loop/matter.py`'s own pattern; a bare "
+                "`apply=` closure writes the death but names no seat), never bare. This "
                 "is a CALL-SITE BUG, exactly `NoToken`'s reasoning (`state/gate.py`): whoever called "
                 "this was never handed an open write to mutate inside of.")
+        seats = self.seat_holds(who)
         for t in list(self.tenures):
             if (t.subject == who or t.object == who) and t.live:
                 if t.kind == "contain" and t.subject == who:
@@ -947,7 +964,7 @@ class World:
         _node = self.rungs.get(who)
         if _node is not None and _node.kind == "person":
             self.rungs.pop(who, None)
-        return [who]
+        return seats
 
     def departed_from(self, who: str, tick: int) -> Optional[str]:
         """The rung `who` stood in when `remove_person` took him out at `tick`, else `None` -- a
@@ -1234,6 +1251,17 @@ class World:
         else:
             self._refuse_undeclared_kind(thing, wclass, sname, record_kind, fieldname,
                                          emits, declared)
+        # CP-T02-01: AN EMITTING WRITE HANDED A `Change` EMITS, BESIDE ITS OWN KIND, EACH FURTHER KIND
+        # ITS SUBJECTS NAME (`Subject.kinds`) -- the fold's per-subject earning (`loop/resolve.py::
+        # _apply_write`) at the gate's own emission. MATTER's death (`loop/matter.py::_die`) is the one
+        # writer: `person.died` as before, and `tenure.closed` carrying the receipt of each seat the
+        # death empties. Each further kind is refused here exactly as the write's own kind is.
+        extra = ()
+        if change is not None and emits is not None:
+            extra = tuple(dict.fromkeys(k for s in change.subjects for k in s.kinds if k != emits))
+            for k in extra:
+                self._refuse_undeclared_kind(thing, wclass, sname, record_kind, fieldname,
+                                             k, declared)
 
         # G1a. THE WINDOW OPENS HERE -- after every refusal above has had its chance and
         # immediately before the mutation, so a write that is going to be refused never
@@ -1383,6 +1411,21 @@ class World:
                 # accelerating. The buffer is MATTER's, so only MATTER fills it.
                 if step is Step.MATTER:
                     self._emitted_by_write.append(ev)
+                # CP-T02-01: one Event per further kind a MOVED subject earned, carrying those
+                # subjects' receipts, after the write's own and with the same causes. A kind no
+                # moved subject earned is not emitted (G4: earned by what moved).
+                for k in extra:
+                    got = [r for s, r in before if k in s.kinds]
+                    if not got:
+                        continue
+                    ev_k = Event(id=H(self.world_seed, self.tick, subj, f"emit:{k}#{self.new_draw()}"),
+                                 kind=k, changes=got,
+                                 causes=list(causes if causes is not None else []),
+                                 emitted_at=self.tick)
+                    self.log.append(ev_k)
+                    TRACE.event(ev_k.id, ev_k.kind, ev_k.causes)
+                    if step is Step.MATTER:
+                        self._emitted_by_write.append(ev_k)
         finally:
             # H-131 / GATE-REMOVE-PERSON, TWICE (methodology close, 2026-09-29). FIRST PASS: the
             # two refusal branches above closed the window by hand (`not_yours`, `no_op`); the

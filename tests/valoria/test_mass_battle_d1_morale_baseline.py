@@ -167,7 +167,7 @@ def test_a_lost_field_lowers_the_next_fields_morale_start_end_to_end(monkeypatch
     d = SeasonDriver(w)
     w.step, w.frozen = Step.RESOLVE, False
     act = Act(id="m1", actor="p_npc_033", verb="march", payload={"subject": "set_s_036"},
-              via="off_npc_033")
+              via="off_spymaster")
     events = d.resolve(mint_token(w, WriteClass.ACTS), [act], 2)
     events = events + d.encounter(mint_token(w, WriteClass.ACTS), events, 2)
     assert ("field.lost", "Lost") in [(e.kind, e.degree) for e in events], (

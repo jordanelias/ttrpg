@@ -63,7 +63,7 @@ from ..state.carriers import Act, Question
 from ..state.gate import seat_faction
 
 LOSER, OTHER_LOSER = "p_npc_033", "p_npc_035"     # Crown, mustered at set_s_014: the 2 of the 2-v-6
-TARGET, VIA = "set_s_036", "off_npc_033"          # the Church of Solmund holds it with 6 defenders
+TARGET, VIA = "set_s_036", "off_spymaster"          # the Church of Solmund holds it with 6 defenders
 WINNER, OWN = "fac_church_of_solmund", "fac_crown"
 SEEDED = "p_npc_020"                              # LOSER's seeded rows name him negative, OTHER_LOSER's positive
 FIELD_KINDS = ("field.won", "field.lost")

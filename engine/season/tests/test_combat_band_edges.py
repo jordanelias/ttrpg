@@ -37,7 +37,7 @@ from engine.season.data.rosters import (
 from engine.season.gaps import Forbidden, Unspecified
 from engine.season.harness import probes as P
 from engine.season.loop.driver import SeasonDriver, mint_token
-from engine.season.seam import combat_degree, contest, degree_of
+from engine.season.seam import combat_degree, contest, degree_of, party_degree
 from engine.season.seam.wrappers import combat as C
 from engine.season.state.carriers import Act
 
@@ -66,6 +66,11 @@ def _old_literal(st: dict) -> str:
     if st["felled"]:
         return FELLED
     return WOUNDED if st["wounds"] > 0 else UNTOUCHED
+
+
+def _worst(bands) -> str:
+    """CP-T03-00: the fight's band is the WORST party's, by `combat_degree_bands`' severity order."""
+    return min(bands, key=COMBAT_BANDS.index)
 
 
 @functools.lru_cache(maxsize=None)
@@ -164,16 +169,21 @@ def test_the_shipped_edges_reproduce_the_old_literal_exactly_over_a_grid():
 
 @needs_engine
 def test_the_shipped_edges_reproduce_the_old_literal_on_real_fights():
-    """FALSIFIER (iii), part 2: real scenes, every fought subject, both the direct and the
-    fixture-carrying route. `fought` counts subjects actually graded."""
+    """FALSIFIER (iii), part 2: real scenes, every fought party, both the direct and the
+    fixture-carrying route. `fought` counts parties actually graded. CP-T03-00: each PARTY's band is
+    `party_degree`'s (the old literal per party); the FIGHT's band, which every route returns for every
+    party named as the subject, is the worst of them."""
     fought, bands = 0, set()
     for n in range(12):
         raw = _scene(f"we{n}")
+        fight = _worst(_old_literal(st) for st in raw["wound_state"].values())
         for subject, st in raw["wound_state"].items():
             want = _old_literal(st)
-            assert combat_degree(raw, subject) == want
-            assert degree_of(raw, subject, DEFAULT_FIXTURES) == want
-            assert degree_of(raw, subject, DEFAULT_FIXTURES.sweep("combat_wounded_above", 0)) == want
+            assert party_degree(st) == want
+            assert party_degree(st, 0) == want
+            assert combat_degree(raw, subject) == fight
+            assert degree_of(raw, subject, DEFAULT_FIXTURES) == fight
+            assert degree_of(raw, subject, DEFAULT_FIXTURES.sweep("combat_wounded_above", 0)) == fight
             fought += 1
             bands.add(want)
     assert fought == 24
@@ -201,16 +211,17 @@ def test_an_edge_at_max_wounds_grades_the_standing_subject_below_the_cap_untouch
     standing = 0
     for subject, st in raw["wound_state"].items():
         if st["felled"]:
-            assert degree_of(raw, subject, fx) == FELLED, st
+            assert party_degree(st, "max_wounds") == FELLED, st
             continue
         assert st["wounds"] > 0, "the control: this subject is Wounded at the shipped edge"
-        assert degree_of(raw, subject, DEFAULT_FIXTURES) == WOUNDED
+        assert party_degree(st) == WOUNDED
         assert not st["wounds"] > st["max_wounds"], "the precondition: below the cap"
-        assert degree_of(raw, subject, fx) == UNTOUCHED, st
-        assert combat_degree(raw, subject, "max_wounds") == UNTOUCHED
+        assert party_degree(st, "max_wounds") == UNTOUCHED, st
         standing += 1
     assert standing >= 1, "no standing fought subject was graded -- the assertions above were vacuous"
     assert len(raw["wound_state"]) == 2
+    # CP-T03-00: the FIGHT stays `Felled` at either arm (its felled party is the engine's verdict).
+    assert degree_of(raw, "p_mid", fx) == degree_of(raw, "p_mid", DEFAULT_FIXTURES) == FELLED
 
 
 @needs_engine
@@ -245,12 +256,14 @@ def test_an_unreachable_arm_grades_every_standing_fought_subject_untouched():
             fought += 1
             assert st["wounds"] <= 4, f"the precondition: wounds never exceeds the cap + 1: {st}"
             if st["felled"]:
-                assert degree_of(raw, subject, fx) == FELLED, st
+                assert party_degree(st, 4) == FELLED, st
                 felled += 1
                 continue
-            assert degree_of(raw, subject, fx) == UNTOUCHED, st
-            assert combat_degree(raw, subject, 4) == UNTOUCHED, st
+            assert party_degree(st, 4) == UNTOUCHED, st
             standing += 1
+        # CP-T03-00: the fight's band at the arm is the worst party's, through the fixture route too.
+        fight = _worst(party_degree(st, 4) for st in raw["wound_state"].values())
+        assert all(degree_of(raw, s, fx) == fight for s in raw["wound_state"])
     assert fought == 24
     assert standing >= 1 and felled >= 1, (standing, felled)
 
@@ -267,13 +280,15 @@ def test_the_swept_arms_move_the_band_and_the_default_arm_is_the_roster():
         for subject, st in raw["wound_state"].items():
             if st["felled"]:
                 continue
-            base = degree_of(raw, subject, DEFAULT_FIXTURES)
-            assert degree_of(raw, subject, DEFAULT_FIXTURES.sweep("combat_wounded_above", 0)) == base
+            base = party_degree(st)
+            assert party_degree(st, 0) == base
+            assert degree_of(raw, subject, DEFAULT_FIXTURES.sweep("combat_wounded_above", 0)) == \
+                degree_of(raw, subject, DEFAULT_FIXTURES)
             if st["wounds"] == 1:
                 one_wound += 1
                 assert base == WOUNDED
-                assert combat_degree(raw, subject, 1) == UNTOUCHED     # one wound is not enough
-                assert combat_degree(raw, subject, 0) == WOUNDED
+                assert party_degree(st, 1) == UNTOUCHED     # one wound is not enough
+                assert party_degree(st, 0) == WOUNDED
     assert one_wound >= 1, "no scene gave a standing subject exactly one wound; the arm is unobserved"
 
 
@@ -304,8 +319,11 @@ def test_a_scene_that_does_not_lift_a_quantity_an_edge_reads_refuses():
 @needs_engine
 def test_the_swept_fixture_reaches_the_fold():
     """The same act folded at two arms writes at two bands: through the driver, so the fixture is read
-    where `loop/resolve.py` hands it to `degree_of`, not only where a test hands it directly."""
-    degrees = {}
+    where `loop/resolve.py` hands it to `degree_of` and `_eff_kill` hands it to `party_degree`, not only
+    where a test hands it directly. CP-T03-00: on `we0` the ACTOR (`p_low`) is felled and the subject
+    (`p_mid`) bled, so the fight is `Felled` at both arms; what the arm moves is the SUBJECT's band --
+    `Wounded` (a `body.changed` about him) at the shipped edge, `Untouched` (none) at `max_wounds`."""
+    degrees, kinds = {}, {}
     for arm in (None, "max_wounds"):
         w = P.tiny_world()
         w.step = Step.RESOLVE
@@ -313,10 +331,12 @@ def test_the_swept_fixture_reaches_the_fold():
         d = SeasonDriver(w)
         evs = d.resolve(mint_token(d.w, WriteClass.ACTS),
                         [Act(id="we0", actor="p_low", verb="fight", payload={"subject": "p_mid"})], 2)
-        degrees[arm] = [e.degree for e in evs]
+        degrees[arm] = {e.degree for e in evs}
+        kinds[arm] = {e.kind for e in evs}
         assert w.fixtures.reads.get("combat_wounded_above", 0) >= 1, "the fixture was never read"
-    assert degrees[None] == [WOUNDED], degrees
-    assert degrees["max_wounds"] != degrees[None], degrees
+        assert "p_low" not in w.persons and "p_mid" in w.persons, arm
+    assert degrees[None] == degrees["max_wounds"] == {FELLED}, degrees
+    assert "body.changed" in kinds[None] and "body.changed" not in kinds["max_wounds"], kinds
 
 
 @needs_engine

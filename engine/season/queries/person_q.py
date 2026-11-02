@@ -1205,6 +1205,19 @@ def content_kind(c) -> "str | None":
     return kind or None
 
 
+def addressed_to(said, pid) -> bool:
+    """IS `pid` AMONG THE ADDRESSEES OF A DOCUMENT SAYING `said` -- the id list under the addressee key
+    (`rosters.yaml: record_kinds.content.addressee`, `to`), which the mint stores as a list
+    (`loop/effects_information.py::_addressed`). v10 IN-12 step 5a: the ONE owner of the addressee test,
+    lifted out of `world_q.writs_held` (which asks it of a Record's `subject_matter`) so
+    `decision/options.py::opening_set`'s terms-sourced reader asks the same rule of the holder's own
+    content claim (`content_said`), World-free. `False` for anything that is not a dict."""
+    if not isinstance(said, dict):
+        return False
+    v = said.get(RECORD_CONTENT.get("addressee"))
+    return pid in (tuple(v) if isinstance(v, (list, tuple)) else ())
+
+
 #: THE CONTENT KEY THAT SAYS WHAT A DOCUMENT IS ABOUT, PER RECORD KIND -- the key `rosters.yaml:
 #: record_sourced_operands` maps `subject` to for that kind (`terms` for a dispensation or petition,
 #: `proposition` for a faction sheet). B-K close (ARC 5): the ONE owner of "what a document is

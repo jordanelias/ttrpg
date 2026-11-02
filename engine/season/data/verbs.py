@@ -1535,21 +1535,33 @@ DECLARED_CLASSES = _derive_declared_classes()
 
 # v9 IN-12 step 7: `{verb: (record kinds)}` -- the verbs that may ALSO form on what a held writ of one of
 # those kinds says (`rosters.yaml: terms_sourced`; `commit` on a covenant dispensation's Proposition).
-# REFUSED AT IMPORT, `WARRANT_SOURCED`'s reason: a verb the table lacks, a kind `writs_held` never stamps
-# (not in `RECORD_REFERENT_KINDS`), or a kind whose `subject` no held Record answers would each form for
+# REFUSED AT IMPORT, `WARRANT_SOURCED`'s reason: a verb the table lacks, a kind no record term stamps
+# (neither `writs_held`'s `RECORD_REFERENT_KINDS` nor a holding row's `HOLDING_RECORD_KINDS`, v10 IN-12 step 5a),
+# or a kind whose `subject` no held Record answers would each form for
 # nobody, and a stale line must not read as a live route. Read here, beside the set it is checked against.
 def _load_terms_sourced(values: dict) -> dict:
-    """`rosters.yaml: terms_sourced`'s `values`, checked and frozen -- refused per line (above)."""
+    """`rosters.yaml: terms_sourced`'s `values`, checked and frozen -- refused per line (above).
+
+    v10 IN-12 step 5a (H-227 [ASSUMPTION; medium; Jordan to correct; revert: `RECORD_REFERENT_KINDS`
+    alone, and `commit: [dispensation]`]): A KIND IS LIVE WHERE EITHER RECORD TERM STAMPS A HELD ONE --
+    `RECORD_REFERENT_KINDS` (`writs_held`, the addressee's writ) OR `HOLDING_RECORD_KINDS`
+    (`records_held_for_holding_rows`, a document he holds, a petition among them) -- both read off the
+    rows, so the union is derived and names no verb. Before this the check named the first term alone and
+    refused `petition` at import, so a witness holding a petition never formed `commit` on the charge it
+    names. `opening_set`'s reader reads a held document's `terms` only where it is ADDRESSED to the holder
+    (`person_q.addressed_to`, `writs_held`'s rule), so a petitioner holding his own petition forms nothing."""
     out = {v: tuple(ks or ()) for v, ks in values.items()}
+    live = RECORD_REFERENT_KINDS | HOLDING_RECORD_KINDS
     for v, ks in out.items():
-        dead = [k for k in ks if k not in RECORD_REFERENT_KINDS
+        dead = [k for k in ks if k not in live
                 or "subject" not in RECORD_SOURCED_OPERANDS.get(k, {})]
         if v not in VERB_TABLE or not ks or dead:
             raise Forbidden(
                 f"`rosters.yaml: terms_sourced` names {v!r}: {list(ks)}, and the verb table carries no "
-                f"such verb, the line names no kind, or {dead} is no held-writ occasion "
-                f"(`RECORD_REFERENT_KINDS`) whose `subject` a held Record answers", "rosters.yaml",
-                needs="a `verb_table.yaml` verb, and record kinds `writs_held` stamps and "
+                f"such verb, the line names no kind, or {dead} is no record kind a term stamps "
+                f"(`RECORD_REFERENT_KINDS` or `HOLDING_RECORD_KINDS`) whose `subject` a held Record answers",
+                "rosters.yaml",
+                needs="a `verb_table.yaml` verb, and record kinds `writs_held` or a holding row stamps and "
                       "`record_sourced_operands` maps `subject` for",
                 law="IN-12 step 7 -- a terms-sourced verb forms on what a held writ says, or on nothing new")
     return out
@@ -1658,6 +1670,51 @@ def _load_own_hold_declines(values) -> frozenset:
 OWN_HOLD_DECLINES = _load_own_hold_declines(roster("own_hold_declines"))
 
 
+# v10 IN-61 (RS-27): the verbs a person forms only on a seat whose `successions` title he himself holds
+# (`rosters.yaml: own_title_declines`, read in `opening_set`; `succeed`). `own_hold_declines`' shape one read
+# over, REFUSED AT IMPORT when a member names a verb the table lacks or one whose row declares no
+# `referent_class: Office` -- a title is a seat's, so a row forming on anything but a seat has no title.
+_TITLE_CLASS = "Office"
+
+
+def _load_own_title_declines(values) -> frozenset:
+    """`rosters.yaml: own_title_declines`' `values`, checked and frozen -- refused per member (above)."""
+    out = frozenset(str(v or "") for v in (values or ()))
+    for v in sorted(out):
+        row = VERB_TABLE.get(v)
+        if row is None or row.referent_class != _TITLE_CLASS:
+            raise Forbidden(
+                f"`rosters.yaml: own_title_declines` names {v!r}, and the verb table carries no such verb "
+                f"or its row declares no `referent_class: {_TITLE_CLASS}`", "rosters.yaml",
+                needs=f"a `verb_table.yaml` verb formed on `{_TITLE_CLASS}` referents",
+                law="IN-61 -- an own-title decline reads the title a seat passes to")
+    return out
+
+
+OWN_TITLE_DECLINES = _load_own_title_declines(roster("own_title_declines"))
+
+
+# B10-09 close one, D3: `{verb: tenure kind}` -- the verbs a person does not form on an object he already
+# holds a LIVE Tenure of that kind on (`rosters.yaml: held_edge_declines`, read in `opening_set`; `commit` on a
+# Proposition he commits to). `held_document_declines`' shape, one carrier over. REFUSED AT IMPORT, its reason:
+# a verb the table lacks or a kind `tenure_kinds` does not carry would decline for nobody, and a stale line
+# must not read as a live decline.
+def _load_held_edge_declines(values: dict) -> dict:
+    """`rosters.yaml: held_edge_declines`' `values`, checked and frozen -- refused per line (above)."""
+    out = {v: str(k or "") for v, k in (values or {}).items()}
+    for v, k in out.items():
+        if v not in VERB_TABLE or k not in TENURE_KINDS:
+            raise Forbidden(
+                f"`rosters.yaml: held_edge_declines` names {v!r}: {k!r}, and the verb table carries no "
+                f"such verb, or {k!r} is no `tenure_kinds` member ({sorted(TENURE_KINDS)})", "rosters.yaml",
+                needs="a `verb_table.yaml` verb, and a Tenure kind an edge can be",
+                law="B10-09 -- a person-side decline reads a live edge he holds, of a kind that exists")
+    return out
+
+
+HELD_EDGE_DECLINES = _load_held_edge_declines(roster_map("held_edge_declines", "values"))
+
+
 def _derive_rung_remit_acts() -> frozenset:
     """v9 IN-49 `requisition` (H-163 limit 3, [ASSUMPTION; medium; Jordan to correct]): THE REMIT ACTS A
     SEAT EXERCISES ON A `Rung`-CLASSED REFERENT -- the act of every `remit:` eligibility alternative
@@ -1673,12 +1730,32 @@ def _derive_rung_remit_acts() -> frozenset:
     prevented). Its current value is pinned in `tests/test_referent_class_stamps.py` (asserted three times there); each widening's
     measurement is in that row's `referent_class_note:` and its commit. REVERT: a row's column, and the set
     loses that row's act unless another `Rung` row grants it."""
-    return frozenset(raw.strip() for row in VERB_TABLE.values() if row.referent_class == "Rung"
+    return _remit_acts_of_class("Rung")
+
+
+def _remit_acts_of_class(cls: str) -> frozenset:
+    """The act of every `remit:` eligibility alternative on a row declaring `referent_class: <cls>` --
+    the ONE reading `RUNG_REMIT_ACTS` and `DETAINEE_REMIT_ACTS` are both taken by (v10 IN-12)."""
+    return frozenset(raw.strip() for row in VERB_TABLE.values() if row.referent_class == cls
                      for kind, _, raw in (alt.partition(":") for alt in row.eligibility)
                      if kind.strip() == "remit" and raw.strip())
 
 
 RUNG_REMIT_ACTS = _derive_rung_remit_acts()
+
+# v10 IN-12 step 5 (H-226 route (a), the decline by H-232's shape [ASSUMPTION; medium; Jordan to correct;
+# revert: `interrogate` back to `referent_class: Person`, which forms on every person a question names]):
+# THE RESTRAINED-PERSONS CLASS. Not a collection, so `World.class_of` never answers it and only the
+# standing occasion `queries/world_q.py::detainees_held` stamps it, naming it explicitly; refused at import
+# off `rosters.yaml: referent_classes`, so a stamp of it can never be a class nobody declared.
+DETAINEE_CLASS = "Detainee"
+if DETAINEE_CLASS not in REFERENT_CLASSES:
+    raise Forbidden(f"{DETAINEE_CLASS!r} is not a `rosters.yaml: referent_classes` value", "rosters.yaml",
+                    needs="the restrained-persons class in the closed roster",
+                    law="v10 IN-12 -- a class stamped by name must be one the roster declares")
+# The remit acts a seat exercises on a `Detainee`: the union over the rows declaring the class
+# (`interrogate`: `determine`), so the stamp offers a prisoner only to a holder of a seat granting one.
+DETAINEE_REMIT_ACTS = _remit_acts_of_class(DETAINEE_CLASS)
 
 # An authored alignment cell for an EVENT KIND rather than a verb is keyed `deed:<kind>` in the same
 # axis row. Admitted only where `<kind>` is in `EMITTED_KINDS` (`_load_alignment`): a deed key for a

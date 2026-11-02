@@ -30,18 +30,21 @@ from ..data.requires import (
     SHORTFALL_SOURCED_OPERANDS, VIA, binding_of, evaluate,
 )
 from ..data.rosters import (
-    CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, REMOVE_ORDINAL, refusing_pole, require_member,
+    CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, REMOVE_ORDINAL, SUCCESSIONS, refusing_pole,
+    require_member,
 )
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
 from ..data.verbs import (
-    ELIGIBILITY_KINDS, HELD_DOCUMENT_DECLINES, OWN_HOLD_DECLINES, OWN_STANCE_DECLINES, TERMS_SOURCED,
-    VERB_TABLE, VOCATION_SOURCED, VOCATIONS, WARRANT_SOURCED, align,
+    ELIGIBILITY_KINDS, HELD_DOCUMENT_DECLINES, HELD_EDGE_DECLINES, OWN_HOLD_DECLINES, OWN_STANCE_DECLINES,
+    OWN_TITLE_DECLINES,
+    TERMS_SOURCED, VERB_TABLE, VOCATION_SOURCED, VOCATIONS, WARRANT_SOURCED, align,
 )
 from ..epistemic import belief_contradicts
 from ..gaps import Forbidden
 from ..queries.person_q import (
-    LedgerReader, OwnStateReader, content_kind, content_said, held_against, known_persons, ledger_names,
+    LedgerReader, OwnStateReader, addressed_to, content_kind, content_said, held_against, known_persons,
+    ledger_names,
     projected_axes, regard, said_of,
 )
 from ..state.carriers import Candidate, Claim, Person, Question, Record, View
@@ -177,10 +180,23 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             if writs:
                 if records is None:
                     records = held_record_claims(p)
+                # v10 IN-12 step 5a: ONLY A DOCUMENT ADDRESSED TO HIM (`person_q.addressed_to`, the one
+                # owner `writs_held` asks too) -- a petitioner holding his own petition is not who it
+                # asks, and forms nothing on its `terms`. A writ reached here only through `writs_held`'s
+                # addressee stamp, so for a dispensation this narrows nothing.
                 said = (_content_answer(c, "subject") for c in records
-                        if c.subject in writs and content_kind(c) in terms_kinds)
+                        if c.subject in writs and content_kind(c) in terms_kinds
+                        and addressed_to(content_said(c), p.id))
                 refs = tuple(refs) + tuple(t for t in dict.fromkeys(said)
                                            if t is not None and t not in refs)
+        # B10-09 close one, D3 (`rosters.yaml: held_edge_declines`): A VERB A PERSON DOES NOT FORM ON AN OBJECT
+        # HE ALREADY HOLDS A LIVE EDGE OF THE NAMED KIND ON -- `commit` on a Proposition he commits to
+        # (`_eff_commit` always opens a fresh Tenure). After every widening above, so it covers each route
+        # that carried the referent. His own live Tenures, no World. It NARROWS and widens nothing.
+        edge_kind = HELD_EDGE_DECLINES.get(verb)
+        if edge_kind is not None and refs:
+            on = {t.object for t in p.tenures if t.kind == edge_kind and t.live}
+            refs = tuple(r for r in refs if r not in on)
         # v9 IN-12 step 13 (`rosters.yaml: own_stance_declines`): A VERB A PERSON FORMS ONLY ON A REFERENT HE
         # HOLDS A ROW AGAINST -- `forgive` (#453 §9.4's person-side own-state decline). His own stance rows
         # (`person_q.held_against`, the reader the effect reads too), no World. It NARROWS the referents the
@@ -195,6 +211,14 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             if held is None:
                 held = _held_objects(p)
             refs = tuple(r for r in refs if r in held)
+        # v10 IN-61 (`rosters.yaml: own_title_declines`, RS-27): A VERB A PERSON FORMS ONLY ON A SEAT WHOSE
+        # `successions` TITLE HE HIMSELF HOLDS -- `succeed`, the person-side reading of the claim's title
+        # conjunct (`state/gate.py::may_claim`). His own live `hold` objects against the roster (the law,
+        # not world state), no World. It NARROWS and widens nothing; the seat's vacancy stays the fold's.
+        if verb in OWN_TITLE_DECLINES:
+            if held is None:
+                held = _held_objects(p)
+            refs = tuple(r for r in refs if SUCCESSIONS.get(r) in held)
         if not refs:
             continue
         # v9 IN-12 step 9 (`rosters.yaml: vocation_sourced`): A VERB THAT CARRIES A VOCATION forms one

@@ -176,6 +176,17 @@ def resolvable_verbs() -> frozenset:
         #     `operands_for` returns `{}` for an untyped row, so a computed contested act would
         #     reach the seam with ONE claimant and every case producing one would become a
         #     whole-case DESIGN-GAP.
+        #   * ⚠ v10 IN-12 step 5 (H-226 route (a) [ASSUMPTION; medium; Jordan to correct; revert:
+        #     `row.requires_typed is not None` alone]): **OR the untyped row names `counterparty:
+        #     subject`.** The clause's reason -- an untyped row carries no `subject` -- IN-10 (a) made
+        #     false for exactly that row: `decision/options.py::_operands` carries the referent on
+        #     `subject` when the row names it as its counterparty, so the seam has its second
+        #     claimant. NARROWED TO A ROW DECLARING A REGISTERED PREDICATE, because an untyped row
+        #     with a precondition reaches here only through `REQUIRES_PREDICATES` (the first gate) and
+        #     one with none would contest with no custody or party read at all. ROWS IT NEWLY ADMITS,
+        #     ENUMERATED AT THE EDIT over the shipped table: `interrogate` alone -- no other contested
+        #     row is untyped (`oblige`, the one other untyped `counterparty: subject` row, contests
+        #     nothing and was resolvable before).
         # `kill / wound` still fails the second clause — its `requires` is `—` — which is what
         # keeps Jordan's *"you can't just kill or wound imo."* true. Admitting it is `H-80`'s item.
         #
@@ -194,7 +205,9 @@ def resolvable_verbs() -> frozenset:
             # case in the row shape, silently stops reaching the verb set.
             from ..manifest import resolve as _resolve_row
             _mod = (_resolve_row("contest", row.contests) or {}).get("provider")
-            resolvable_contest = bool(_mod) and row.requires_typed is not None
+            resolvable_contest = bool(_mod) and (
+                row.requires_typed is not None
+                or (row.counterparty == "subject" and v in REQUIRES_PREDICATES))
         if gated and effected and (not contested or resolvable_contest):
             out.add(v)
     return frozenset(out)

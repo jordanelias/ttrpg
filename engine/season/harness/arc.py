@@ -16,7 +16,9 @@ distinct Receipts `r_self`, `r_world` the gate minted satisfy:
       (`causes*` = the transitive closure of `Event.causes` through the log; an act id is a leaf);
   (5) `r_self` is not `r_world` (two Receipts, compared by identity).
 A death is counted apart: `ArcReading.deaths` lists, per person, the acts that are in the `causes*` of a
-`person.died` Event, and no death Receipt is ever a self or a world write.
+`person.died` Event, and no death Receipt is ever a self or a world write. That includes the SEAT Receipts a
+death mints on its `tenure.closed` Event (v10 CP-T02-01, `state/gate.py::Subject.seat`): they name the OFFICE
+the dead holder held, which is no record the death wrote, so `read_arcs` skips them (below).
 
 WHY THE ROSTERS EXIST (the failure the planted worlds observe). Every witnessed act deposits a claim
 (`loop/witness.py`: `w.write("claim_ledger", ... emits="claim.deposited", subject=c.id, ...)`), so a
@@ -84,8 +86,9 @@ masks this for that producer and for no other. [ASSUMPTION; medium; Jordan to co
 NOT DONE HERE, AND SAID: the roster is by CELL, so a MATTER-driven write of an ACTS cell (the wear that
 chains `Site.condition` after an act's last emission, a term maturing) counts when it is in the act's
 `causes*`. TL §1.2 states the roster by cell and this reader follows it; `Receipt.driver` would tell the
-two apart. A fight or accept kill's cascade (the victim's tenures closing) mints no Receipt to
-subtract: `_eff_kill` names only `Person.body`, and the gate mints for the subjects a change names. `deaths`
+two apart. A fight or accept kill's cascade (the victim's tenures closing) mints no Receipt
+for the closed edges themselves, and since v10 CP-T02-01 the seats it empties are named by `Subject.seat`
+Receipts on a `tenure.closed` Event (skipped by `read_arcs`, not subtracted). `deaths`
 names the acts that reach a death, so a reader can set them apart. [ASSUMPTION; medium; Jordan to
 correct.] No stage, deadline, closing, successor or deal is read.
 """
@@ -99,6 +102,7 @@ from collections import defaultdict
 from ..data.matrix import MATRIX, Step
 from ..queries import world_q
 from ..state.carriers import Receipt
+from ..state.gate import TENURE_CLOSED
 from ..state.ids import ROOT
 from .aperture import DEATH_KIND
 from .soak import _occasion_row
@@ -321,6 +325,13 @@ def read_arcs(w, d, on_thrust=None, *, n=None, refused=None, log=None, unrestric
             continue
         for r in ev.changes:
             if not isinstance(r, Receipt):
+                continue
+            # v10 CP-T02-01 (B10-09 close, antagonist D1): a death's SEAT Receipt names the OFFICE (its subject) with the
+            # write's own field (`body`/`exists`), the one Receipt whose subject is not the record written
+            # (`Subject.seat`); `records.of` would read it as a Person write owned by an Office id, or an
+            # `(Office, exists)` world write. It is a death's, never a self or a world write. Only `Subject.seat`
+            # mints one; every other `tenure.closed` Receipt names a Tenure id.
+            if ev.kind == TENURE_CLOSED and r.subject in w.offices:
                 continue
             pair, owner = records.of(r, ev)
             for aid in hit:

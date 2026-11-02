@@ -395,9 +395,40 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # seasons move. Was e9f81463... / f145b1e4... (one, two seasons); events 9180 -> 9347, 27827 -> 27605. CONTROL, run in process on this tree:
 # `stance_polarity` swept back to `legacy` reads the old pair, the old `BASE_EVENTS` and the old `thread_read`-withheld arm exactly. A
 # GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-BASE_HASHES = {0: "3e31638ef6eec7082eafa9ff4db9bb2d",
-               1: "056584ed2e5c77fd02c0fcaee079f35c",
-               2: "71ac6881dc3949011fb55146700509d5"}
+# RE-PINNED at v10 CP-T02-01 (B10-09), A BEHAVIOUR MOVE DECLARED: a death names the seats it empties (one `tenure.closed`
+# per death write, its receipts the Offices), so every witness's ledger gains a claim on each vacated seat and the act mix
+# moves; the BUILD is equal. Was 056584ed... / 71ac6881... (one, two seasons); events 9347 -> 9138, 27605 -> 27154. CONTROL,
+# run in process on this tree: `World.seat_holds` stubbed to `[]` (no seat named, the emission off) reads the old pair, the
+# old `BASE_EVENTS`, the old `give`- and `thread_read`-withheld arms exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED at v10 CP-T02-02 (B10-09), AN ID MOVE DECLARED: a loop-built seat keeps its `offices.yaml` row's id (`populated._seat_id`;
+# the throne is `off_king`), so the BUILD moves with every hash that folds an Office id, and the ids seed the draws, so one and two
+# seasons move further. Was 3e31638e... / b4aa3024... / 8d535aab... (build, one, two seasons); events 9138 -> 9760, 27154 -> 28883.
+# CONTROL, run in process on this tree: `_seat_id` replaced by the slug rule reads the old triple and the old `BASE_EVENTS`
+# exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED at v10 CP-T03-00 (B10-09), A BEHAVIOUR MOVE DECLARED: both parties of a fight take their band (a felled attacker
+# dies; each kind's Event carries only its earners' changes), so the deaths and the deposits move; the BUILD is equal. Was
+# ebe18510... / 6f2ec528... (one, two seasons); events 9760 -> 9338, 28883 -> 24224. CONTROL: the pre-item tree (`68767e731`)
+# reads the old two-season hash (measured, `build_realm(0)` + `populated.run(seasons=2)`). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED at v10 CP-T02-03 (B10-09), A BEHAVIOUR MOVE DECLARED: a `rung` goal whose rung its org's member governs is MET
+# (`world_q.aim_state`) and forms no `need`; `goal_varfell_oastad_gate` is met at build, so its five Varfell members stop asking
+# it and the act mix moves; the BUILD is equal. Was 921de777... / cdeb64c2... (one, two seasons); events 9338 -> 9154, 24224 -> 24039.
+# CONTROL, run in process on this tree: `aim_state` reading `open` always (`AIM_RULES` cleared) reads the old pair, the old
+# `BASE_EVENTS` and the old `thread_read`-withheld arm exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# CP-T02-05 (B10-09) added a stamp, `world_q.oughts_named`, and B10-09 close one REVERTED it (falsified on HR-9 control (4), `Falsified:
+# CP-T02-05`): the BASE_HASHES pins below are the reading with the stamp reverted; the build is equal throughout.
+# RE-PINNED at v10 IN-61 (B10-09), A DATA MOVE DECLARED: `off_king`'s conferral `null` -> `inheritance` and `off_heir`'s `null` ->
+# `appointed` (RS-27), and `Office.conferral` folds into the content hash, so the build and both seasons move; NOTHING ELSE DOES:
+# the act sequence (582 / 1230 acts) and the event kinds are equal. Was 4ab812ba... / f699c1d4... / 36d1e6c3... (build, one, two
+# seasons). CONTROL, run in process on this tree: the two seats' `conferral` set back to `None` on the built world reads the old
+# two-season hash exactly, at seeds 0, 1 and 2. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED at B10-09 close one (D2 + D3, then the CP-T02-05 revert), A BEHAVIOUR MOVE DECLARED: a felled attacker's own `person.died` is
+# placed where he fell (`world_q.event_place`), and a second `commit` on a held cause is declined person-side (`rosters.yaml:
+# held_edge_declines`); the `oughts_named` stamp is reverted, so this is the reading with the stamp reverted. The BUILD is equal. Was
+# 763402... (one season) / a7ad6b62... (two seasons); events 8958 -> 9172, 24959 -> 24060. CONTROL, run in process on the pre-revert tree
+# (`f28c3f33c`): `oughts_named` stubbed to `()` reads the new two-season hash exactly at seeds 0-2 (8195c6e3... / d44e4b85... / 7d5e3643...; seed 0 is the pin).
+BASE_HASHES = {0: "c7ca8d505cc1741f9e54e1fdd0c55292",
+               1: "53469c5c8afc81c2368300d34afd37fa",
+               2: "8195c6e3520c4b9d6c2423b52bd98cf0"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -461,8 +492,13 @@ BASE_HASHES = {0: "3e31638ef6eec7082eafa9ff4db9bb2d",
 # RE-RECORDED at v10 SE-06 with `BASE_HASHES` (9378 -> 8913, 28665 -> 27020; `temperaments:` deleted in process reads the old pair).
 # RE-RECORDED at v10 CR-21 with `BASE_HASHES` (8913 -> 9180, 27020 -> 27827).
 # RE-RECORDED at v10 CR-16 with `BASE_HASHES` (9180 -> 9347, 27827 -> 27605; `stance_polarity` swept back to `legacy` reads the old pair).
-BASE_EVENTS = {1: (9347, "7c4519961255d9f7db80fe99ccad932018598b869fc22b60fbea19bdfc98779f"),
-               2: (27605, "4d84ed812ccf997c00e731c74e5e06b2ab5582241c25811deb6c086ee32841d0")}
+# RE-RECORDED at v10 CP-T02-01 with `BASE_HASHES` (9347 -> 9138, 27605 -> 27154; `World.seat_holds` stubbed to `[]` reads the old pair).
+# RE-RECORDED at v10 CP-T02-02 with `BASE_HASHES` (9138 -> 9760, 27154 -> 28883; `populated._seat_id` replaced by the slug
+# rule in process reads the old pair and the old build hash).
+# RE-RECORDED at v10 CP-T03-00 with `BASE_HASHES` (9760 -> 9338, 28883 -> 24224; both parties of a fight take their band).
+# RE-RECORDED at B10-09 close one (D2 + D3, the CP-T02-05 stamp reverted) with `BASE_HASHES` (9154 -> 9172, 24039 -> 24060).
+BASE_EVENTS = {1: (9172, "5bb360c6d88f1f8efe332a1b7f5bfa21bfae3da76126150e47be6f2ea3bd1ba9"),
+               2: (24060, "2d321ca63ff41b6904b07a325c25d82143c46994e7c2dfc6069c2cf62e669760")}
 
 
 def _digest(w) -> tuple:
@@ -593,7 +629,17 @@ def test_the_give_withheld_arm_reproduces_the_one_season_pin():
 #: RE-RECORDED at v10 CR-21 with `BASE_HASHES`: 8918 / 0e529f09... -> 9185 / b82a1ea2... (the cell-value pass).
 #: RE-RECORDED at v10 CR-16 with `BASE_HASHES`: 9185 / b82a1ea2... -> 9350 / 714b9f7f... (`stance_polarity` `declared`; swept back to
 #: `legacy` in process reads the old value exactly).
-THREAD_READ_WITHHELD_EVENTS_1 = (9350, "714b9f7f5e198d4d4f11eddc81ce1818dc5222fddabe52ae271199de3866eff0")
+#: RE-RECORDED at v10 CP-T02-01 with `BASE_HASHES`: 9350 / 714b9f7f... -> 9137 / 6ba88aae... (a death names its seats;
+#: `World.seat_holds` stubbed to `[]` in process reads the old value exactly).
+#: RE-RECORDED at v10 CP-T02-02 with `BASE_HASHES`: 9137 / 6ba88aae... -> 9759 / e17367f6... (a loop-built seat keeps its row's id;
+#: `populated._seat_id` replaced by the slug rule in process reads the old value exactly).
+#: RE-RECORDED at v10 CP-T03-00 with `BASE_HASHES`: 9759 / e17367f6... -> 9337 / c50d4c47... (both parties of a fight take
+#: their band); still differs from `BASE_EVENTS[1]` (9338).
+#: RE-RECORDED at v10 CP-T02-03 with `BASE_HASHES`: 9337 / c50d4c47... -> 9143 / 2a17f775... (a met rung goal forms no `need`;
+#: `aim_state` reading `open` always reads the old value exactly); still differs from `BASE_EVENTS[1]` (9154).
+#: RE-RECORDED at B10-09 close one (D2 + D3, the CP-T02-05 stamp reverted) with `BASE_HASHES`: 9143 / 2a17f775... -> 9161 /
+#: c808dea8...; still differs from `BASE_EVENTS[1]` (9172).
+THREAD_READ_WITHHELD_EVENTS_1 = (9161, "c808dea8b0c0bc3dfcc22f04b54cb86e7a91ef75dfe5b1c4b26ea66927f7dbdd")
 
 
 def test_the_thread_read_withheld_arm_is_pinned_and_differs_from_the_shipped_season():

@@ -285,6 +285,18 @@ def test_a_death_is_counted_apart_and_is_not_the_arcs_world_effect():
     assert not _read(w, d, log, _on(*ids), unrestricted=True).holds("p_low")
 
 
+def test_a_seat_receipt_on_a_tenure_closed_event_is_a_deaths_and_is_not_the_arcs_world_effect():
+    # v10 CP-T02-01: a death's `tenure.closed` Event carries a SEAT Receipt, subject the OFFICE the dead holder held
+    # and the write's own field (`body` on a fight, `exists` at MATTER). `_Records.of` reads that pair as a write on
+    # the Office id, a world write; the reader skips it. PLANTED FAILURE: with the skip gone this reads True.
+    w, d, log, ids = _chain(world_subject="off_duke", world_field="body", world_kind="tenure.closed")
+    assert "off_duke" in w.offices
+    assert not _read(w, d, log, _on(*ids)).holds("p_low")
+    # CONTROL: the same Receipt on any other Event kind is read as before (the chain is a world write)
+    w, d, log, ids = _chain(world_subject="off_duke", world_field="body", world_kind="body.changed")
+    assert _read(w, d, log, _on(*ids)).holds("p_low")
+
+
 def test_a_receipt_is_read_as_the_record_it_wrote():
     w = P.tiny_world()
     rec = A._Records(w)

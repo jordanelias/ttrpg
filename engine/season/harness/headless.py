@@ -143,7 +143,7 @@ def run(seasons: int = 2, seed: int = 0) -> dict:
         # needs both a `requires:` predicate and, if it writes, an effect. Without this the season
         # HALTS on the first verb whose precondition is prose (`comply`, `evade / defy`, `construe` and
         # `exchange` were the examples until v9 IN-09 and IN-33 typed their cells, restored at v10
-        # REM-2B; `succeed` and `tie / knot` are the rows still left out, for want of an effect), which
+        # REM-2B; `tie / knot` is the row still left out, for want of an effect; `succeed` has had one since v10 IN-61), which
         # is a true finding about the specification and a different one from whether her season runs.
         #
         # ⚠ THIS IS THE HONEST CEILING ON ARTIFACT 2 AND IT IS REPORTED RATHER THAN HIDDEN:

@@ -44,7 +44,7 @@ CHURCH = R.faction_prop_id("Church of Solmund")
 CROWN = R.faction_prop_id("Crown")
 #: A row naming the governance world's unheld appointed seat (`off_reeve`, post `Reeve`), planted where
 #: the Query reads its rows: the shipped rows name a King, whose seat no act can confer (its conferral is
-#: hereditary, `offices.yaml: off_king`).
+#: `inheritance` since v10 IN-61, claimed by the heir's `succeed`, never conferred: `offices.yaml: off_king`).
 REEVE_ROW = {"crowned_reeve": R.EndingRow(False, ("post", "Reeve"), "Crown", "a test fixture")}
 
 

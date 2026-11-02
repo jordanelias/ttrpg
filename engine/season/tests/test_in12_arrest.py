@@ -373,8 +373,17 @@ def test_in12_5a_a_hand_built_charge_a_petition_naming_it_and_a_witness_commit()
     q_charge = Question("q:charge_prop", "claim_landed", ("prop_charge",), None, (("prop_charge", "Proposition"),))
     assert [c.subject for c in _formed(w, witness, q_charge) if c.verb == "commit"] == ["prop_charge"], \
         "CONTROL: no `commit` formed on the charge even when the question carries it as a Proposition"
-    assert not [c for c in commits if c.subject == "prop_charge"], \
-        "H-227 closed? a witness now forms `commit` on the charge from a held petition -- update the hole"
+    # v10 IN-12 step 5a (H-227): THE TRIPWIRE, RE-POINTED SO IT OBSERVES. It read `commits` (formed on `q`,
+    # whose `rec:pt1` is a PLAIN referent, which the terms-sourced reader never reads), so it could not redden
+    # when the hole closed. The held petition reaches a question as a `Record`-classed referent
+    # (`records_held_for_holding_rows`); carried so, the witness it is ADDRESSED to (`to=witness`) now
+    # forms `commit` on the charge its `terms` names. OLD: `prop_charge` not among `commits` (H-227 open);
+    # NEW: `prop_charge` formed from the held petition (H-227's route built, `terms_sourced.commit:
+    # [dispensation, petition]`, the addressee test `person_q.addressed_to`).
+    assert not [c for c in commits if c.subject == "prop_charge"], "a plain referent formed a terms commit"
+    q_held = Question("q:charge_held", "claim_landed", (), None, (("rec:pt1", "Record"),))
+    assert "prop_charge" in [c.subject for c in _formed(w, witness, q_held) if c.verb == "commit"], \
+        "H-227: the witness addressed by the held petition forms no `commit` on the charge it names"
     out = _fold(w, d, _act("c1", "commit", witness, None, subject="prop_charge"))
     assert _kinds(out) == ["commitment.made"], _kinds(out)
     assert [t for t in w.tenures if t.kind == "commit" and t.subject == witness

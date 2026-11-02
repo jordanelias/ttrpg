@@ -258,7 +258,7 @@ def test_in31_ban_is_opened_by_determine_and_revoke_and_kind_verb_is_unmoved():
 
 # 11 -- THE EXIT, ON THE BUILT REALM ---------------------------------------------------------------------
 
-_STEWARD, _VARFELL, _HAFEN = "off_lord_steward", "off_npc_052", "off_npc_050"
+_STEWARD, _VARFELL, _HAFEN = "off_lord_steward", "off_duke_varfell", "off_duchess_hafenmark"
 
 
 def _realm(place=True):
@@ -277,13 +277,13 @@ def _realm(place=True):
 def _exit_run(place=True):
     """NPC-020 revokes, by hand-built acts through the fold: the appointed Lord Steward through
     `off_duke_valorsmark` (non-judging), the elected Duke of Varfell and the `None` Duchess of Hafenmark
-    through `off_npc_020`. `{office: (kinds, opened)}`."""
+    through `off_king`. `{office: (kinds, opened)}`."""
     w, d = _realm(place)
     assert {o: w.offices[o].conferral for o in (_STEWARD, _VARFELL, _HAFEN)} == {
         _STEWARD: "appointed", _VARFELL: "elected", _HAFEN: None}
     out = {o: _fold(w, d, _revoke(f"rv_in31_{o}", "p_npc_020", o, via))
-           for o, via in ((_STEWARD, "off_duke_valorsmark"), (_VARFELL, "off_npc_020"),
-                          (_HAFEN, "off_npc_020"))}
+           for o, via in ((_STEWARD, "off_duke_valorsmark"), (_VARFELL, "off_king"),
+                          (_HAFEN, "off_king"))}
     return w, out
 
 

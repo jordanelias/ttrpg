@@ -53,7 +53,12 @@ from engine.season.state.carriers import Act, Candidate, Claim, Question, View
 # (`engine/season/tests/test_k3_thread_sensitivity.py`).
 # v10 REM-2B (restores v9 IN-33, H-58): `exchange` LEFT -- typed on its two coined operands (`return_kind`,
 # `return_amount`) with an effect, `_eff_exchange`; re-recorded.
-DECLINED = ("succeed", "tie / knot")
+# v10 IN-61 (RS-27): `succeed` LEFT (`("succeed", "tie / knot")` -> `("tie / knot",)`) -- re-specified as the
+# heir's claim (`_req_succeed`, `_eff_succeed`), the reason answered: the reader is the claim itself (it opens
+# the seat), and the heir is the actor, not an unbound operand; formed only on a seat whose `successions` title
+# he holds (`rosters.yaml: own_title_declines`), so it is not formed-and-refused in every world
+# (`engine/season/tests/test_in61_succession.py`).
+DECLINED = ("tie / knot",)
 
 
 def _view(w, pid):
@@ -164,7 +169,11 @@ def test_14_no_declined_row_is_resolvable_and_no_unbindable_counterparty_row_for
     unbindable = sorted(v for v, r in VERB_TABLE.items()
                         if r.counterparty and r.requires_typed is None
                         and not r.known_person_operands())
-    assert unbindable == ["oblige"], unbindable
+    # RE-RECORDED AT v10 IN-12 step 5: `interrogate` joins (`["oblige"]` -> `["interrogate", "oblige"]`) --
+    # untyped, `counterparty: subject`, no known-person fan; like `oblige` since IN-10 (a) its second party
+    # is the CLASSED referent carried on `subject` (`Detainee`, `world_q.detainees_held`), so it forms only
+    # for a custodian, never on these plain referents (the loop below).
+    assert unbindable == ["interrogate", "oblige"], unbindable
     w = P.tiny_world()
     referents = ("off_duke", "off_dicastery", "p_mid", "Hh")
     for v in unbindable:

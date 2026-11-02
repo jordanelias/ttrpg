@@ -70,7 +70,10 @@ from .test_season_shape import _wd_arm9
 # `test_season_shape.py`'s `wd_a_fork` records for `total` (33, 7) -- the fork population is unmoved and the divergence count
 # rises by one. A re-record of the control, read off this test's own failing assertion; the REM-2A tree (`f23194871`) reads
 # (33, 6) here and passes.
-_BASELINE_TOTAL = (33, 7)
+# 33/7 -> 24/5, B10-09 close one: the pin is the reading with the CP-T02-05 `oughts_named` stamp reverted (falsified on HR-9
+# control (4), `Falsified: CP-T02-05`). The file's pin was already stale at v10 CP-T03-00 (24/5, which `test_season_shape.py`'s
+# `wd_a_fork` records for `total` and this file did not follow). Read with `_wd_total` in process on this tree.
+_BASELINE_TOTAL = (24, 5)
 
 # v10 REM-2C (B10-05): THE RISE IS READ AT SEED 1, RE-CHOSEN BY A STATED SWEEP; the control pin above stays
 # seed 0's, unmoved (33, 6). `research` declares `referent_class: Record` and the seed-0 slice's SHIFTED arm
