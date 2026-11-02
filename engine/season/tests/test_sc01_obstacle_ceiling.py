@@ -14,13 +14,29 @@ WHAT IS BUILT, and where each piece is read:
     draw independently; there is no aggregate obstacle over a bundle of matters (`H-213`'s `default:`).
 
 M-7 (`proposals/2026-09-05-proceedings-subsystem/19_PLAN.md` M-7; run at `21_RECONCILIATION.md`'s
-PHASE 0 result): at the 1D pool floor against the maximum plausible composed obstacle, `p_success`
-must not be effectively zero. "EFFECTIVELY ZERO" is named here, not left to a reader:
+PHASE 0 result): at the 1D pool floor against the maximum plausible composed obstacle, the chance of a
+non-Failure band must not be effectively zero. "EFFECTIVELY ZERO" is named here, not left to a reader:
 `EFFECTIVELY_ZERO = 0.001`, because the reconciliation's own table calls its Ob-3 row (0.0006) the
-point where the floor "reaches zero". The quantity is `sigma_leverage.p_success(ob, pool=1)` with
-`ob = obstacle(record)` for a requested obstacle of 4..11 (`opposition = 2 x Ob`), plus the EXACT
-discrete chance of a non-Failure band at 1D through the real module entry and the real ladder (each
+point where the floor "reaches zero". The quantity is `1 - F` of `sigma_leverage.band_odds(1, ob)` with
+`ob = obstacle(record)` for a requested obstacle of 4..11 (`opposition = 2 x Ob`), checked against the
+EXACT discrete count of non-Failure bands at 1D through the real module entry and the real ladder (each
 of the ten d10 faces forced in turn).
+
+RE-MEASURED AT CP-T01-03 (B10-08): the instrument moved from `p_success`, the Gaussian closed form
+(up to 17 points wrong on these dice: 17.3 at the ceiling-1 pair, 7.7 at the shipped one), to
+`band_odds`, the exact enumeration. The two disagree where the closed form is worst. Chance of a non-Failure band at the 1D floor, old `p_success` -> new `band_odds`:
+  ceiling 1  0.226627 -> 0.4      (4 of 10 faces)
+  ceiling 2  0.02275  -> 0.1      (1 of 10 faces; the shipped arm)
+  ceiling 3  0.000577 -> 0.0      (0 of 10 faces)
+  None       3e-06 at Ob 4, 0.0 above -> 0.0 at every Ob 4..11
+Every verdict is unchanged (the control and the ceiling-3 arm fail M-7, the shipped arm clears it), and
+`band_odds` now equals the forced-face count exactly, which `p_success` never did. ONE CLAIM WAS
+WRONG IN ITS FIRST FORM, and CP-T01-04 undid the correction: at CP-T01-03 (whole successes only) no
+level's boost (<= 0.70) moved a whole success at pool 1, so the odds read flat at 0.1. With the
+fraction rule (CP-T01-04) a boost `b` under one success is worth its fraction: at pool 1 against Ob 2
+the chance of a non-Failure band is 0.1 + 0.3 * b, that is 0.1595 / 0.2157 / 0.2664 / 0.3098 at
+minor / moderate / strong / major. So the sigma-channel IS live under the ceiling, strictly, and the
+test below asserts it strictly (a dead channel reads 0.1 at every level and fails).
 
 THE FALSIFIERS (each seen red before the build, 2026-10-16: the record had no `opposition` /
 `obstacle_ceiling` field, `DEFAULT_FIXTURES` no `obstacle_ceiling`, `sigma` still held `_obstacle_of`):
@@ -41,7 +57,7 @@ from dataclasses import asdict, fields
 import pytest
 
 from engine.dice_engine.dice_engine import DEGREE_LABEL, Degree
-from engine.dice_engine.sigma_leverage import LEVEL_SIGMA, OB_MIN, p_success
+from engine.dice_engine.sigma_leverage import LEVEL_SIGMA, OB_MIN, band_odds, net_boost
 from engine.substrate import composition
 
 from ..data.fixtures import DEFAULT_FIXTURES
@@ -93,13 +109,21 @@ def _discrete_hits(mod, rec) -> int:
     return sum(ladder.degree_of(asdict(mod.roll(rec, _Face(f)))) != FAILURE for f in range(1, 11))
 
 
+def _clear(pool, ob, boost=0.0) -> float:
+    """The chance of a non-Failure band: `1 - F` of the exact odds."""
+    return 1.0 - band_odds(pool, ob, boost)[0]
+
+
 def _m7(mod, ceiling) -> dict:
     """M-7 at the 1D floor for each requested obstacle in `M7_OBS`, on one ceiling arm."""
     out = {}
     for ob in M7_OBS:
         rec = _record(2 * ob, ceiling)
         eff = mod.obstacle(rec)
-        out[ob] = (eff, p_success(eff, FLOOR), _discrete_hits(mod, rec))
+        hits = _discrete_hits(mod, rec)
+        out[ob] = (eff, _clear(FLOOR, eff), hits)
+        # the instrument is the dealt dice: its chance IS the forced-face count over the ten faces
+        assert abs(out[ob][1] - hits / 10) < 1e-12, (ceiling, ob, out[ob])
     return out
 
 
@@ -116,12 +140,12 @@ def test_m7_at_the_1d_floor_clears_ob_4_and_above_under_the_ceiling_and_fails_wi
         # the reconciliation's measurement, reproduced through the owner rather than cited.
         assert eff0 == ob, (ob, eff0)
         assert p0 < EFFECTIVELY_ZERO and hits0 == 0, (
-            f"control arm: Ob {ob} at 1D gave p_success {p0:.6f} and {hits0}/10 faces -- M-7 "
+            f"control arm: Ob {ob} at 1D gave chance {p0:.6f} and {hits0}/10 faces -- M-7 "
             f"should FAIL without a ceiling; if it passes, the instrument cannot see the failure")
         # THE CLAIM: the ceiling bounds the obstacle, and the floor-pool speaker keeps a chance.
         assert eff1 == shipped, (ob, eff1)
         assert p1 >= EFFECTIVELY_ZERO and hits1 >= 1, (
-            f"Ob {ob} at the 1D floor under ceiling {shipped}: p_success {p1:.6f}, {hits1}/10 "
+            f"Ob {ob} at the 1D floor under ceiling {shipped}: chance {p1:.6f}, {hits1}/10 "
             f"faces -- M-7 still fails (`EFFECTIVELY_ZERO` = {EFFECTIVELY_ZERO})")
         checked += 1
     assert checked == len(M7_OBS)
@@ -132,9 +156,15 @@ def test_m7_at_the_1d_floor_clears_ob_4_and_above_under_the_ceiling_and_fails_wi
     # M-7's second clause: without the ceiling, BUYING ADVANTAGE does not rescue Ob 4 at the floor
     # (remedy (a) refuted, `21_RECONCILIATION.md`) -- every rostered level stays effectively zero.
     for lv, s in LEVEL_SIGMA.items():
-        assert p_success(4, FLOOR, s) < EFFECTIVELY_ZERO, (lv, p_success(4, FLOOR, s))
-        # and under the ceiling the σ-channel is live again, monotonic in the level bought.
-        assert p_success(shipped, FLOOR, s) > p_success(shipped, FLOOR, 0.0), lv
+        boost = net_boost(s, FLOOR)
+        assert _clear(FLOOR, 4, boost) < EFFECTIVELY_ZERO, (lv, _clear(FLOOR, 4, boost))
+        # under the ceiling, buying advantage RAISES the chance at the floor, strictly (the fraction rule
+        # makes a boost under one success worth its fraction: 0.1 + 0.3 * b at pool 1, Ob 2) ...
+        assert boost > 0 and _clear(FLOOR, shipped, boost) > _clear(FLOOR, shipped, 0.0), lv
+    # ... and no level clears a whole success at pool 1, while pool 4's major level does.
+    assert max(net_boost(s, FLOOR) for s in LEVEL_SIGMA.values()) < 1.0
+    major4 = net_boost(LEVEL_SIGMA["major"], 4)
+    assert major4 > 1.0 and _clear(4, shipped, major4) > _clear(4, shipped, 0.0)
 
 
 def test_the_ceiling_is_swept_and_the_sweep_straddles_m7():
@@ -189,7 +219,8 @@ def test_the_seam_has_no_second_obstacle_site(monkeypatch):
 
 
 def _arm(ceiling):
-    w = P.tiny_world(DEFAULT_FIXTURES.sweep("obstacle_ceiling", ceiling))
+    # the FIXED arm (CP-T01-06 ships the per-pool arm; the 1 / 2 / 3 sweep is read on the fixed one)
+    w = P.tiny_world(DEFAULT_FIXTURES.sweep("ceiling_per_pool", False).sweep("obstacle_ceiling", ceiling))
     SeasonDriver(w)
     # roster-exempt: TEST FIXTURE capabilities -- one matter far over every sweep point, one under.
     w.persons["p_mid"].capability = {"copying": 10}       # score/2 = 5
@@ -223,3 +254,131 @@ def test_changing_the_ceiling_changes_the_outcome():
             hits[c] = hits.get(c, 0) + (b != FAILURE)
         differ += bands[2] != bands[3]
     assert differ > 0 and hits[2] > hits[3], (hits, differ)
+
+
+# ---------------------------------------------------------------------------------------------
+# CP-T01-06 -- THE CEILING SOLVED PER POOL (the `chance_floor` arm)
+# ---------------------------------------------------------------------------------------------
+# Below one die the fixed value applies as it always did. From one die, the composed obstacle is
+# capped at the highest Ob at which THIS pool still keeps `H-213`'s chance -- Partial-or-better of
+# `band_odds(1, obstacle_ceiling)`, 10 % -- so, at no advantage, a larger pool is never worse for the cap, and an
+# admitted roll keeps a real chance. The detector below is run on the rejected `2 * pool` cap too
+# (301 inversions measured at the base of CP-T01-06): a count of zero means something only because
+# the same count sees the others fail.
+POOLS = (0, 0.5) + tuple(range(1, 9))
+QUARTERS = tuple(q / 4 for q in range(0, 81))             # composed Ob 0 .. 20 in quarter steps
+CHANCE_FLOOR = 0.10                                       # H-213's shipped chance at the 1D floor
+EPS = 1e-12                                               # float noise on a 1 - F; not a tolerance on a rule
+
+
+def _pooled(pool, ob, *, per_pool=True, ceiling=None, fixed=True):
+    """A record whose composed obstacle, before any ceiling, is `ob` (opposition = 2 x ob)."""
+    return SocialContestInput(
+        pool=pool, opposition=2 * ob,
+        obstacle_default=DEFAULT_FIXTURES.get("obstacle_default"),
+        obstacle_ceiling=DEFAULT_FIXTURES.get("obstacle_ceiling") if fixed else ceiling,
+        obstacle_refusal_multiple=DEFAULT_FIXTURES.get("obstacle_refusal_multiple"),
+        leverage=0.0, ceiling_per_pool=per_pool)
+
+
+def _plus(pool, ob):
+    """(Partial-or-better, Success-or-better) of the exact odds."""
+    f, p, s, o = band_odds(pool, ob)
+    return 1.0 - f, s + o
+
+
+def _inversions(eff_of):
+    """Cells (pool 1..7 against the next pool, composed Ob >= OB_MIN) where the larger pool has the
+    LOWER Partial-or-better or Success-or-better. `eff_of(pool, ob)` is the capped obstacle."""
+    cells = bad = 0
+    for pool in range(1, 8):
+        for ob in QUARTERS:
+            if ob < OB_MIN:
+                continue
+            small, large = _plus(pool, eff_of(pool, ob)), _plus(pool + 1, eff_of(pool + 1, ob))
+            cells += 1
+            bad += large[0] < small[0] - EPS or large[1] < small[1] - EPS
+    assert cells == 7 * sum(q >= OB_MIN for q in QUARTERS)       # it looked at every cell
+    return bad
+
+
+def test_the_shipped_arm_is_the_chance_floor_and_the_old_arms_stay_selectable():
+    assert DEFAULT_FIXTURES.get("ceiling_per_pool") is True
+    mod = _module()
+    # the fixed arm (what shipped before) is one fixture away, and the uncapped arm is `None`
+    assert mod.obstacle(_pooled(4, 20, per_pool=False)) == DEFAULT_FIXTURES.get("obstacle_ceiling")
+    assert mod.obstacle(_pooled(4, 20, per_pool=True, ceiling=None, fixed=False)) == 20
+    assert mod.obstacle(_pooled(4, 20, per_pool=True)) > DEFAULT_FIXTURES.get("obstacle_ceiling")
+
+
+def test_the_enumeration_pools_by_composed_ob():
+    """The home's falsifier (1)-(3), over pools {0, 0.5, 1 .. 8} x composed Ob 0 .. 20 in quarters."""
+    mod = _module()
+    fixed = DEFAULT_FIXTURES.get("obstacle_ceiling")
+    multiple = DEFAULT_FIXTURES.get("obstacle_refusal_multiple")
+    below_one = at_or_above_one = 0
+    table = {}
+    for pool in POOLS:
+        for ob in QUARTERS:
+            eff = mod.obstacle(_pooled(pool, ob))
+            base = mod.obstacle(_pooled(pool, ob, per_pool=False))
+            assert base == min(ob, fixed)                                  # the control arm is today's
+            assert eff <= ob + EPS and (eff == ob or eff >= OB_MIN), (pool, ob, eff)   # (1) a cap is never under OB_MIN
+            table[(pool, ob)] = _plus(pool, eff)
+            if pool < 1:
+                assert eff == base, (pool, ob, eff, base)                  # (2) below a die: the base, refused as now
+                below_one += 1
+                continue
+            assert eff <= multiple * pool + EPS, (pool, ob, eff)           # (2) S27.4 never refuses a derived pair
+            assert table[(pool, ob)][0] >= CHANCE_FLOOR - EPS, (pool, ob, eff, table[(pool, ob)])   # (2) a real chance
+            at_or_above_one += 1
+    assert below_one == 2 * len(QUARTERS) and at_or_above_one == 8 * len(QUARTERS)
+    # (3) for every composed Ob at or above OB_MIN, both readings are non-decreasing in pool
+    checked = 0
+    for ob in QUARTERS:
+        if ob < OB_MIN:
+            continue
+        for lo, hi in zip(POOLS, POOLS[1:]):
+            assert table[(hi, ob)][0] >= table[(lo, ob)][0] - EPS, ("Partial+", lo, hi, ob)
+            assert table[(hi, ob)][1] >= table[(lo, ob)][1] - EPS, ("Success+", lo, hi, ob)
+            checked += 1
+    assert checked == len(POOLS[1:]) * sum(q >= OB_MIN for q in QUARTERS)
+
+
+def test_the_inversion_count_is_zero_and_the_detector_sees_the_rejected_caps():
+    mod = _module()
+    solved = lambda pool, ob: mod.obstacle(_pooled(pool, ob))
+    assert _inversions(solved) == 0
+    # the same detector on the cap CP-T01-06 rejected (`2 * pool`): it must see the failure it excludes
+    assert _inversions(lambda pool, ob: min(ob, 2.0 * pool)) >= 300
+
+
+def test_the_cap_is_the_floor_met_exactly_and_the_pool_below_one_keeps_the_fixed_value():
+    mod = _module()
+    caps = {p: mod.obstacle(_pooled(p, 20)) for p in range(1, 9)}
+    assert caps[1] == 2.0                                                  # the 1D floor's own value
+    assert list(caps.values()) == sorted(caps.values())                    # the cap rises with the pool
+    for pool, cap in caps.items():
+        assert _plus(pool, cap)[0] == pytest.approx(CHANCE_FLOOR, abs=1e-9)   # met, not exceeded by a step
+        assert _plus(pool, cap + 0.05)[0] < CHANCE_FLOOR - 1e-6              # and no higher Ob keeps it
+    assert round(caps[2], 3) == 2.842 and round(caps[3], 3) == 3.6 and round(caps[4], 2) == 4.23
+    # a ceiling the floor cannot be solved from (3: the 1D roll keeps nothing there) holds the fixed value
+    assert _module().obstacle(_pooled(4, 20, ceiling=3, fixed=False)) == 3
+    with pytest.raises(ValueError, match="below the Ob minimum"):
+        mod.obstacle(_pooled(4, 20, ceiling=OB_MIN - 0.5, fixed=False))
+
+
+def test_the_chance_floor_reaches_the_resolved_act_through_the_seam():
+    """The fixture is carried by the host and read by the module: pool 2 against a score/2 of 5."""
+    for per_pool in (False, True):
+        fx = DEFAULT_FIXTURES.sweep("ceiling_per_pool", per_pool)
+        w = P.tiny_world(fx)
+        SeasonDriver(w)
+        w.persons["p_mid"].capability = {"copying": 10}       # roster-exempt: TEST FIXTURE, score/2 = 5
+        out = sigma.resolve(w, ["p_low"], ["c"], "a standing", verb="tell", subject="p_mid",
+                            rng=random.Random(0))
+        assert out["status"] == "RESOLVED", out
+        if per_pool:
+            assert 2.0 < out["ob"] < 5.0
+        else:
+            assert out["ob"] == 2.0

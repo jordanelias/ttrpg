@@ -1,0 +1,269 @@
+{
+ "seed": 0,
+ "seasons": 4,
+ "event_kinds": {
+  "claim.decayed": 37049,
+  "claim.deposited": 35700,
+  "condition.worn": 1288,
+  "term.matured": 762,
+  "record.created": 337,
+  "finding.none": 260,
+  "stores.changed": 253,
+  "finding.made": 210,
+  "duty.refused": 202,
+  "proposition.uttered": 194,
+  "yield.taken": 148,
+  "migrate.refused": 129,
+  "challenge.refused": 125,
+  "exchange.refused": 106,
+  "travel.blocked": 105,
+  "transfer.refused": 104,
+  "train.refused": 101,
+  "news.untold": 90,
+  "accept.refused": 88,
+  "tend.refused": 86,
+  "forge.refused": 86,
+  "sabotage.refused": 81,
+  "march.declared": 78,
+  "release.refused": 74,
+  "compliance.impossible": 67,
+  "march.refused": 67,
+  "speech.unheard": 59,
+  "duty.taken": 53,
+  "cover.assumed": 52,
+  "kill.refused": 51,
+  "travel.ended": 49,
+  "survey.refused": 46,
+  "record.forged": 45,
+  "travel.moved": 41,
+  "body.changed": 40,
+  "faction.surveyed": 31,
+  "petition.filed": 27,
+  "raze.refused": 25,
+  "date.scheduled": 20,
+  "carry.refused": 19,
+  "date.fired": 18,
+  "docket.formed": 18,
+  "covenant.refused": 17,
+  "construal.impossible": 16,
+  "order.given": 15,
+  "residence.changed": 15,
+  "news.told": 14,
+  "dispensation.issued": 13,
+  "build.refused": 13,
+  "found.refused": 12,
+  "field.unopposed": 11,
+  "army.arrived": 11,
+  "requisition.unauthorized": 10,
+  "act.ineligible": 9,
+  "determine.refused": 8,
+  "issue.unauthorized": 8,
+  "pardon.refused": 8,
+  "confer.refused": 8,
+  "case.refused": 8,
+  "tenure.closed": 7,
+  "give.refused": 7,
+  "commitment.made": 6,
+  "establish.refused": 6,
+  "seize.refused": 6,
+  "case.opened": 5,
+  "person.died": 5,
+  "petition.carried": 5,
+  "contest.undecided": 5,
+  "transfer.made": 5,
+  "body.tended": 4,
+  "challenge.issued": 4,
+  "case.unauthorized": 3,
+  "matter.turned": 3,
+  "requisition.taken": 2,
+  "tenure.opened": 1,
+  "matter.advanced": 1
+ },
+ "resolved_acts_by_verb": {
+  "create_record": 337,
+  "oblige": 255,
+  "utter": 194,
+  "migrate": 147,
+  "move": 143,
+  "reconstruct": 140,
+  "forge": 131,
+  "challenge": 129,
+  "research": 122,
+  "transfer": 109,
+  "exchange": 106,
+  "train": 101,
+  "tend": 90,
+  "release": 81,
+  "sabotage": 81,
+  "march": 78,
+  "survey": 77,
+  "interview": 72,
+  "tell": 55,
+  "conceal": 52,
+  "comply": 52,
+  "surveil": 43,
+  "petition": 27,
+  "raze": 25,
+  "carry": 24,
+  "issue": 21,
+  "convene": 20,
+  "covenant": 17,
+  "open_case": 16,
+  "construe": 16,
+  "dispatch": 15,
+  "evade / defy": 15,
+  "build": 13,
+  "requisition": 12,
+  "found": 12,
+  "confer": 9,
+  "fight": 8,
+  "pardon": 8,
+  "give": 7,
+  "commit": 6,
+  "establish": 6,
+  "seize": 6,
+  "accept": 5,
+  "thread_read": 4,
+  "speak": 4
+ },
+ "docket": [
+  {
+   "date": null,
+   "matter": "p_npc_020",
+   "arrangement": null,
+   "petition": null
+  },
+  {
+   "date": null,
+   "matter": "p_npc_010",
+   "arrangement": null,
+   "petition": "rec:d9bf332075459859"
+  },
+  {
+   "date": null,
+   "matter": "p_npc_040",
+   "arrangement": null,
+   "petition": null
+  },
+  {
+   "date": null,
+   "matter": "p_npc_052",
+   "arrangement": null,
+   "petition": null
+  },
+  {
+   "date": null,
+   "matter": "p_npc_039",
+   "arrangement": null,
+   "petition": null
+  },
+  {
+   "date": "31fadf6f02a00611",
+   "matter": null
+  },
+  {
+   "date": "d979d8f2c3a92a97",
+   "matter": null
+  },
+  {
+   "date": "114bb8bbbda2797c",
+   "matter": null
+  },
+  {
+   "date": "5de9d4d9201e9282",
+   "matter": null
+  },
+  {
+   "date": "eab949cc147d95ae",
+   "matter": null
+  },
+  {
+   "date": "4779b6ec1bd89101",
+   "matter": null
+  },
+  {
+   "date": "8af7254dfa74d7df",
+   "matter": null
+  },
+  {
+   "date": null,
+   "matter": "cohort_set_s_026",
+   "arrangement": null,
+   "petition": null
+  },
+  {
+   "date": "d8fac0f025ab26a9",
+   "matter": null
+  },
+  {
+   "date": "8244d7bfc6ecfd30",
+   "matter": null
+  },
+  {
+   "date": "d47373929c7e6edb",
+   "matter": null
+  },
+  {
+   "date": "ea1c6b2c4113885e",
+   "matter": null
+  },
+  {
+   "date": "ae562b5aef6463ec",
+   "matter": null
+  },
+  {
+   "date": "8d414cbacc07b865",
+   "matter": null
+  },
+  {
+   "date": "08e406a421f71617",
+   "matter": null
+  },
+  {
+   "date": null,
+   "matter": "p_npc_089",
+   "arrangement": null,
+   "petition": "rec:2fd9b08e3b758f21"
+  },
+  {
+   "date": null,
+   "matter": "p_npc_082",
+   "arrangement": null,
+   "petition": "rec:b6bf04be9e3e9727"
+  },
+  {
+   "date": null,
+   "matter": "p_npc_004",
+   "arrangement": null,
+   "petition": "rec:182aeb1f3e4f51a7"
+  },
+  {
+   "date": "b07f3ee3f244d5df",
+   "matter": null
+  },
+  {
+   "date": "66bd153448126f80",
+   "matter": null
+  },
+  {
+   "date": "35ac33aa6bc03e76",
+   "matter": null
+  },
+  {
+   "date": "afd785791abf9736",
+   "matter": null
+  },
+  {
+   "date": null,
+   "matter": "p_npc_032",
+   "arrangement": null,
+   "petition": "rec:5518a682852c8e23"
+  }
+ ],
+ "dates": 20,
+ "commits_live": 133,
+ "commit_objects_mood": {
+  "OUGHT": 128,
+  "HOLDS": 5
+ }
+}

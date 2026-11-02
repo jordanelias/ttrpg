@@ -1245,7 +1245,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     # Q4 (`world_q.questions_for`) raises a standing question from every live `commit` to an OUGHT,
     # with `referents = (prop.subject,)`, and `decision/options.py`'s clause 3 is
     # `subject in referents(q)` — so a Proposition's subject becomes the SUBJECT OF EVERY CANDIDATE
-    # it generates. Subject the creed on a faction NAME and all eight factions' members deliberate
+    # it generates. Subject the creed on a faction NAME and every faction's members deliberate
     # each season about a string naming no entity in the world. That is the defect `build_at`
     # demonstrated from the other side: its one Proposition pointed at a RUNG and produced **0 of
     # 4,870 acts naming another person** (ED-IN-0210 Ruling 1 — *"verbs invoke mechanisms or
@@ -1348,7 +1348,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         #
         # ⚠ **AND THE ANSWER DEPENDS ON A FIXTURE NOBODY HAS RULED ON.** Control arm = the same
         # build with `cast.faction_leader`
-        # stubbed to `None`, so all eight factions fall back to `HOLDS` and no stance row is
+        # stubbed to `None`, so every faction falls back to `HOLDS` and no stance row is
         # written; two seasons each.
         #
         #     creed  rule    seed   acts   other   self   not-a-person   told_by
@@ -1470,7 +1470,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     #
     # ⚠ `body` IS `None` FOR ALL BUT THE THREE AUTHORED OVERLAYS, AND THAT IS HONEST RATHER THAN
     # LAZY. §11 makes `rung?` optional and `office_bodies` carries a faction's TOP organs only —
-    # `Ministries` is one row where canon names six ministries, the four Cardinals are there and
+    # `Ministries` is one row by the ruling at `rosters.yaml`'s `office_bodies` note, the four Cardinals are there and
     # the four Dicasteries under them are not, and Hafenmark's Committees and Varfell's Councils
     # are absent entirely. MEASURED: only 10 of 25 canon-named seats can construct with a body.
     # An office with a declared FACTION and no body is lawful (`office_faction(None, declared)`)
@@ -1515,7 +1515,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         governs = title_domain(title) if title else None
         # ⚠⚠ **AN OFFICE IS A SEAT, NOT AN OCCUPATION, AND THE FIRST CUT OF THIS BLOCK CONFLATED
         # THEM.** It gave every placed person an Office named after their registry `role`, which
-        # made `leaders(w, faction) == members(w, faction)` for all eight factions — everybody a
+        # made `leaders(w, faction) == members(w, faction)` for every faction — everybody a
         # leader, the word meaning nothing, and no seat scarce enough to be worth competing for.
         # §11 is the corrective: an Office carries `conferral`, `revocation`, `establishment[]` and
         # `upkeep`. A copyist and a hedge-school teacher have none of those; they have work.

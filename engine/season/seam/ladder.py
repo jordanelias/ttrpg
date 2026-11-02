@@ -248,6 +248,12 @@ def degree_of(result: Any, subject: Optional[str] = None, fixtures: Any = None) 
                     "into this file would be the second resolver, and would keep answering "
                     "after the owner changed its mind")
         degree_from_net, label = lad
+        # CP-T01-04: a record carrying `settled_margin` (the provider settled the margin's fraction by
+        # the act's own draw) is graded on it, against a zero obstacle -- integers on both sides, so
+        # the ladder's no-epsilon comparison is exact. A pair without one (a planted result, a caller
+        # that never settled) is graded as it always was.
+        if "settled_margin" in result:
+            return label[degree_from_net(result["settled_margin"], 0)]
         return label[degree_from_net(result["net"], result["ob"])]
     raise Unspecified(
         f"a contest for {result.get('prize', result.get('module'))!r} resolved and returned "

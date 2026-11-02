@@ -1617,6 +1617,37 @@ def test_the_corpus_defects_are_reported_not_hidden():
     assert R.CORPUS_DEFECTS and any("TRUNCATED" in d for d in R.CORPUS_DEFECTS)
 
 
+def test_cr44_a_duplicate_or_unprefixed_case_id_is_recorded_not_dropped_silently(
+        monkeypatch, tmp_path):
+    """CR-44. The loader used to `continue` past a second case carrying an id already seen:
+    a collision between two series' numbers deleted a case with no trace. The second case is
+    still not loaded, but the corpus defects now SAY so, and an id in no `CASE_SERIES` row is
+    named too. Control: the shipped corpus carries neither line (`test_cr44_..._shipped`)."""
+    chain, cases = tmp_path / "chain", tmp_path / "cases"
+    chain.mkdir()
+    cases.mkdir()
+    (chain / "ARC1.yaml").write_text(
+        "- id: ARC-01\n  name: first\n- id: 19\n  name: bare number\n")
+    (cases / "ARC2.yaml").write_text("- id: ARC-01\n  name: second\n")
+    monkeypatch.setattr(R, "CHAIN", chain)
+    monkeypatch.setattr(files, "CASES_DIR", cases)
+    R.CORPUS_DEFECTS.clear()
+    out = R.load_cases("ARC")
+    assert [c["name"] for c in out if c["id"] == "ARC-01"] == ["first"], "second not loaded"
+    dups = [d for d in R.CORPUS_DEFECTS if "duplicate case id" in d]
+    unrow = [d for d in R.CORPUS_DEFECTS if "is in no CASE_SERIES row" in d]
+    assert len(dups) == 1 and "ARC2.yaml" in dups[0] and "ARC1.yaml" in dups[0], dups
+    assert len(unrow) == 1 and "ARC1.yaml" in unrow[0] and "19" in unrow[0], unrow
+
+
+def test_cr44_the_shipped_corpus_has_no_case_id_defect():
+    """CR-44's control: every shipped id sits in a `CASE_SERIES` row and none collides."""
+    R.CORPUS_DEFECTS.clear()
+    n = len(R.load_cases("ARC")) + len(R.load_cases("NPC"))
+    assert n >= 100, n
+    assert not [d for d in R.CORPUS_DEFECTS if "case id" in d], R.CORPUS_DEFECTS
+
+
 # ===========================================================================
 # W15 -- ONE WRITER PER ARTIFACT (guardrail G7)
 #
@@ -3737,7 +3768,12 @@ def test_w17_the_budget_bounds_scenes_and_the_interaction_bound_is_separate():
     assert "scene" in str(over.value).lower(), f"the message lost its unit: {over.value}"
 
     # ---- and the SAME NUMBER of interactions, packed into a lawful number of scenes, PASSES ----
-    SeasonDriver(_1p(_w())).season(_once(scenes(b, cap)), None)   # must not raise
+    # ⚠ AT `extended_scene_cost` 1, H-77's control arm (CP-T01-05): `Scene.cost` prices a scene from the
+    # interaction slots it fills, not from the caller's `extended` flag, so these `b` multi-interaction
+    # scenes cost `b x 2` at the shipped extended cost of 2 and are refused for the BUDGET. This arm is about
+    # the INTERACTION bound being separate from the scene count, which the control cost isolates.
+    SeasonDriver(_1p(P.tiny_world(DEFAULT_FIXTURES.sweep("extended_scene_cost", 1)))).season(
+        _once(scenes(b, cap)), None)   # must not raise
     assert b * cap > b + 1, (
         f"the fixture cannot demonstrate the ruling: {b} scenes x {cap} interactions is not more "
         f"than the {b + 1} acts the first arm refused, so 'more interactions, fewer scenes' is "
@@ -3761,7 +3797,10 @@ def test_w17_the_interaction_bound_flips_across_its_sweep_and_the_flip_is_printe
     that does not move between `3` and `unbounded` is a verdict this bound was never deciding."""
     def run_at(bound):
         w = _w()
-        w.fixtures = w.fixtures.sweep("interactions_per_scene", bound)
+        # `extended_scene_cost` 1 (H-77's control): the scene is priced from its slots (CP-T01-05), so at the
+        # shipped cost of 2 this 4-interaction scene would be refused for the BUDGET before the bound under
+        # test is read; the control cost leaves the interaction bound the only thing the sweep moves.
+        w.fixtures = w.fixtures.sweep("interactions_per_scene", bound).sweep("extended_scene_cost", 1)
         def choose(p, v, s, ask_budget):
             return ([Scene("s0", p.id, [P.Act_(w, p, "speak", key=str(j)) for j in range(4)])]
                     if p.id == "p_king" else [])
@@ -3792,11 +3831,11 @@ def test_w17_the_interaction_bound_flips_across_its_sweep_and_the_flip_is_printe
 def test_w17_the_packing_rule_and_the_extended_cost_are_both_live():
     """`H-78` and `H-77`, and both existed as declared-but-dead before the W17 adversarial pass.
 
-    ⚠ `H-77` WAS INERT AND PASSED `R2` ANYWAY. Nothing anywhere set `Scene.extended`, so
+    ⚠ `H-77` WAS INERT AND PASSED `R2` ANYWAY. Nothing priced a scene by what it carried, so
     `Scene.cost()` returned 1 at every sweep point and the row's declared `1 · 2 · 3` could not
     move any verdict — a row satisfying the injectable rule by being WRITTEN, which is exactly the
-    laundering `R2` exists to stop. A scene carrying more than one interaction is now the extended
-    one, which is what the word means.
+    laundering `R2` exists to stop. A scene carrying more than one interaction slot is the extended
+    one (`Scene.cost` prices it from its `slots`), which is what the word means.
 
     ⚠ `H-78` WAS A COMMENT. `make_chooser` packed scenes greedily in score order with no row, and
     that decides how many interactions a season produces at all — `greedy` gives a five-scene
@@ -3848,7 +3887,8 @@ def test_w17_the_packing_rule_and_the_extended_cost_are_both_live():
     multi = [sc for sc in scenes if len(sc.acts) > 1]
     assert multi, f"no scene carries more than one interaction: {shapes} — `extended` can never " \
                   "be True and H-77's sweep is inert whatever the row says"
-    assert all(sc.extended for sc in multi), "a multi-interaction scene is not marked extended"
+    assert all(sc.slots > 1 and sc.cost(2) == 2 for sc in multi), \
+        "a multi-interaction scene is not priced as the extended one"
     spend = {c: sum(sc.cost(c) for sc in scenes) for c in (1, 2, 3)}
     print(f"  H-77 cost sweep — total spend at extended_scene_cost 1/2/3: {spend}")
     assert len(set(spend.values())) == 3, (
@@ -15131,7 +15171,8 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     producers = _producers(files.package_modules(), files.PACKAGE_DIR)
     assert producers == set(), (
         f"the season package produces a margin in {sorted(producers)}. Since `31a` the host builds "
-        "the typed input record and calls the module entry; the roll is the module's. `S27.2` names "
+        "the typed input record and calls the module entry; the dice and the net are the module's (the "
+        "fraction of a margin is settled host-side by `settle_record`, PLAN CP-T01-04). `S27.2` names "
         "a second resolver as this architecture's highest-value refusal -- adjudicate before it lands")
     # v9 FI-01: THE SCAN SEES A PLANTED SECOND RESOLVER FOR AN INQUIRY. The graded inquiries roll through
     # the module entry (`seam/contest.py::grade`), so a host-side inquiry roll is exactly what this pin
@@ -16338,8 +16379,8 @@ def test_the_populated_world_has_a_governance_ladder_and_scarce_seats():
     """Offices, titles and holdings — and the one property that makes `leaders` mean anything.
 
     ⚠ THIS TEST EXISTS BECAUSE THE FIRST CUT OF THE OFFICE BLOCK FAILED IT. It gave every placed
-    person an Office named after their registry `role`, so `leaders(w, f) == members(w, f)` for all
-    eight factions: everybody a leader, nothing scarce, nothing to compete for. Nothing raised —
+    person an Office named after their registry `role`, so `leaders(w, f) == members(w, f)` for
+    every faction (eight rows at the time): everybody a leader, nothing scarce, nothing to compete for. Nothing raised —
     a full set is a perfectly plausible answer — so the defect was visible only by asking whether
     the two sets DIFFER. That question is this test.
 

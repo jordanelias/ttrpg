@@ -77,11 +77,15 @@ prize row names. NO entry is added to
 """
 from __future__ import annotations
 
+import importlib
 import random
 from dataclasses import asdict
 from typing import Any, Optional
 
-from ...data.rosters import VERB_CAPABILITY
+from engine.dice_engine.sigma_leverage import levels_to_net_sigma, record_odds, settle_record
+from engine.substrate import composition
+
+from ...data.rosters import VERB_CAPABILITY, roster
 from ...gaps import Unspecified
 # ⚠ THE LEAF, NOT THE PACKAGE'S RE-EXPORT. `manifest/providers.py` imports nothing, so no import
 # here closes a loop back into this package (`_entry.py` says the same of the entry lookup);
@@ -92,7 +96,8 @@ from ...manifest.registry import BENCH, resolve as _prize_row
 from ...queries.inputs import Margin, SocialContestInput
 # v9 SC-02 `22a`: the room's two resolver-side reads, the precedent `seam/wrappers/mass_battle.py`'s
 # `world_q.mustered` set. The host READS them; the module composes the obstacle they move.
-from ...queries.world_q import proofs, reception
+from ...queries.world_q import practice, proofs, reception
+from ...state.carriers import effort_of
 from ._entry import entry_for
 
 # The prize rows' `provider:` string (`rosters.yaml` `contest_subsystems`): the module's one identity
@@ -104,7 +109,7 @@ _RESOLVER = "d10_sigma"
 def _capability(entity: Any, verb: str):
     """What `entity` brings to `verb`'s capability key, or `None` if it brings nothing.
 
-    ⚠ ONE READ, TWO CALLERS. `_pool_of` and `_opposition_of` each map the verb through
+    ⚠ ONE READ, TWO CALLERS. `faculty` and `_opposition_of` each map the verb through
     `VERB_CAPABILITY`, guard a missing key, and guard a missing entry — the same three steps,
     differing only in WHOSE dict they read and what default they fall to. Those differences are the
     callers'; the read is not. Returning `None` rather than a default is what keeps it that way:
@@ -116,19 +121,42 @@ def _capability(entity: Any, verb: str):
     return (getattr(entity, "capability", None) or {}).get(key)
 
 
-def _pool_of(person: Any, verb: str, fx: Any) -> int:
-    """Dice, from what the actor genuinely has. `03 §A.2` — *"Rank supplies dice and gates nothing"*.
+# THE POOL'S ADDENDS (CP-T01-01): each `(w, person, verb) -> int` is summed into `faculty`, the one pool
+# reader. Holds the practice addend (CP-T01-02, the first reader of `w.log`, registered below `register_pool_addend`)
+# and takes T07's; this is the place they land, so none grows its own pool rule. An addend reads
+# only what it is handed (`w`, the actor, the verb) and returns whole dice; it never replaces the
+# capability read, it adds to it.
+POOL_ADDENDS: list = []
+
+
+def register_pool_addend(fn: Any) -> None:
+    """Add `fn(w, person, verb) -> int` to what `faculty` sums. Registered once, at import of its owner; a
+    second registration of the same function is a no-op (an addend counts once however often its owner registers it)."""
+    if fn not in POOL_ADDENDS:
+        POOL_ADDENDS.append(fn)
+
+
+# THE PRACTICE ADDEND (CP-T01-02), `faculty`'s first reader of `w.log`: registered here, the one door into the
+# pool, and called from nowhere else. Its reader is `queries/world_q.py::practice`; the arm ships live (CR-18);
+# `practice_cap` 0 is the control and answers 0 without reading the log, every pool then what it was before it was registered.
+register_pool_addend(practice)
+
+
+def faculty(w: Any, p: Any, verb: str) -> int:
+    """Dice, from what the actor genuinely has: THE ONE POOL READER. `03 §A.2` -- *"Rank supplies dice and
+    gates nothing"*. Reached by `contest_input` (the dealt record) and by `odds_of` (the believer's own
+    pool, which is known to him; `believed_input` takes it as an argument and has no World).
 
     `VERB_CAPABILITY` maps a verb to the capability key it draws on; `Person.capability` is the
-    person's own dict. ⚠ IT IS EMPTY ON EVERY CORPUS PERSON TODAY — its writers are a `cast:` overlay and (v9 IN-12 step 9) `train`, which raises a key only a person already holds —
-    so in practice this returns `pool_default` for everybody, which is why R-09 reads `partial`
-    after this unit and not `met`: the roll varies by SEED and by FIXTURE, not by PERSON. It varies
-    by person the day capability is written, and that is character development, out of this arc.
+    person's own dict, written by a `cast:` overlay and (v9 IN-12 step 9) `train`, which raises a key
+    only a person already holds. Where he holds the key the pool is that score; otherwise it is
+    `pool_default`; then the registered addends (`POOL_ADDENDS`) are summed on.
     ⚠ `08 §3` GIVES THE POLARITY: an `assumption` grade means *inject the default, declare the site,
-    sweep three points* — never refuse the whole corpus for a missing key. `absent` is the grade
+    sweep three points* -- never refuse the whole corpus for a missing key. `absent` is the grade
     that refuses, and this is not one."""
-    have = _capability(person, verb)
-    return int(have if have is not None else fx.get("pool_default"))
+    have = _capability(p, verb)
+    base = int(have if have is not None else w.fixtures.get("pool_default"))
+    return base + sum(int(add(w, p, verb)) for add in POOL_ADDENDS)
 
 
 def _opposition_of(w: Any, subject: Optional[str], verb: str) -> Optional[float]:
@@ -146,9 +174,39 @@ def _opposition_of(w: Any, subject: Optional[str], verb: str) -> Optional[float]
     return None
 
 
+def _effort_levels(fx: Any, operands: dict) -> list:
+    """`effort`'s levels (CP-T01-05): an act at effort `e` brings `e` copies of the `effort_level` fixture
+    (a `sigma_leverage.LEVEL_SIGMA` name, shipped `moderate`) -- one named level per slot of effort. None at
+    effort 0, so the shipped chooser, which forms no effort, adds nothing."""
+    return [fx.get("effort_level")] * int(operands.get("effort", 0))
+
+
+# THE ADVANTAGE CHANNEL'S BINDING: each member of `rosters.yaml: advantage_sources` -> the function that
+# returns the named levels it brings to an act, `fn(fixtures, operands) -> [level name, ...]`. THE ROSTER IS
+# THE CLOSED SET AND THIS IS ITS BINDING: refused at import if the two disagree, so a member with no function
+# (it would silently add nothing) and a function with no member (it would silently never run) are both loud.
+ADVANTAGE_SOURCES = {"effort": _effort_levels}
+if set(ADVANTAGE_SOURCES) != set(roster("advantage_sources")):
+    raise Unspecified(
+        f"`advantage_sources` members {sorted(roster('advantage_sources'))} and "
+        f"`ADVANTAGE_SOURCES` functions {sorted(ADVANTAGE_SOURCES)} differ", "rosters.yaml",
+        needs="a function for every member and a member for every function",
+        law="CP-T01-05 -- the roster is the only door into the social roll's sigma term")
+
+
+def advantage_sigma(fx: Any, operands: dict) -> float:
+    """The social roll's net sigma: every `advantage_sources` member's named levels for this act, summed
+    through `levels_to_net_sigma` (a mu-shift the roll applies as `net_boost`; never a flat bonus on the net,
+    never an Ob reduction). `operands` is what the act brings (`{"effort": e}`); 0.0 when nothing does."""
+    levels = []
+    for name in roster("advantage_sources", ordered=True):
+        levels.extend(ADVANTAGE_SOURCES[name](fx, operands))
+    return levels_to_net_sigma(levels)
+
+
 def contest_input(w: Any, claimants: list, *, verb: str = "",
                   subject: Optional[str] = None, room: Optional[str] = None,
-                  examined: Optional[str] = None) -> SocialContestInput:
+                  examined: Optional[str] = None, effort: int = 0) -> SocialContestInput:
     """THE HOST INPUT BUILDER (plan position `31a`, A-25): `World` -> the frozen record the roll reads.
 
     Reads `w.persons` (the actor, `claimants[0]`, and a person subject), `w.fixtures`, `w.records` (the
@@ -157,9 +215,10 @@ def contest_input(w: Any, claimants: list, *, verb: str = "",
     `World`. §A.2's wrapper row types the column *"the projection"*: this builder reads `World`, the
     deviation named above (`combat.resolve` is its precedent), CONVENTION. Its precondition is the adapter's
     PARTY-GAP checks (`resolve`, below): at least one claimant, and the first a person.
-    `leverage` is zero until something supplies leverage -- an `assumption` reading with no
-    producer, and stating it as zero is the honest form: a fabricated leverage would be a number
-    nobody chose. The obstacle's operands are carried RAW (`opposition`, `obstacle_default`,
+    `leverage` is the sum of the named levels the `advantage_sources` roster brings to the act
+    (`advantage_sigma`; CP-T01-05's `effort` is the first member) and is 0.0 when nothing does -- the
+    honest form while nothing supplies it: a fabricated leverage would be a number nobody chose.
+    `effort` is the act's own (`state/carriers.py::effort_of`), passed by the adapter. The obstacle's operands are carried RAW (`opposition`, `obstacle_default`,
     `obstacle_ceiling`); the module composes them (step 14).
 
     `room` (v9 SC-02 `22a`) is the rung whose bench hears the contest, or `None`: the adapter passes the
@@ -182,24 +241,187 @@ def contest_input(w: Any, claimants: list, *, verb: str = "",
                           proofs=proofs(w, claimants[0], subject, room),
                           proof_step=fx.get("proof_step"))
     doc = w.records.get(examined) if examined is not None else None
+    return _frame(fx, faculty(w, w.persons[claimants[0]], verb), _opposition_of(w, subject, verb),
+                  doc.forgery_quality if doc is not None else 0.0, room_terms, effort)
+
+
+def _frame(fx: Any, pool: int, opposition: Optional[float], forgery_quality: float,
+           room_terms: dict, effort: int) -> SocialContestInput:
+    """THE RECORD, FILLED THE ONE WAY: what `contest_input` (the true input) and `believed_input` (a
+    person's) both hand the module. They differ in where the pool's opposition, the forgery quality
+    and the room terms COME FROM; the fixtures and the record's shape are this
+    function's alone, so the two modes cannot compose different obstacles from the same fields."""
     return SocialContestInput(
-        pool=_pool_of(w.persons[claimants[0]], verb, fx),
-        opposition=_opposition_of(w, subject, verb),
+        pool=pool, opposition=opposition,
         obstacle_default=fx.get("obstacle_default"),
         obstacle_ceiling=fx.get("obstacle_ceiling"),
+        ceiling_per_pool=fx.get("ceiling_per_pool"),
         obstacle_refusal_multiple=fx.get("obstacle_refusal_multiple"),
-        leverage=0.0, forgery_quality=doc.forgery_quality if doc is not None else 0.0, **room_terms)
+        leverage=advantage_sigma(fx, {"effort": effort}),      # the one place the operands are named
+        forgery_quality=forgery_quality, **room_terms)
+
+
+# ---------------------------------------------------------------------------------------------
+# EXACT ODDS (CP-T01-03): what a roll of this record would deal, read and never rolled.
+# ---------------------------------------------------------------------------------------------
+# The claim a person holds about another's capability: `Claim(subject=<that person>, predicate=
+# CAPABILITY_CLAIM + <the verb's capability key>, value=<the score he believes>)`. NOTHING DEPOSITS
+# ONE TODAY (the told, seen and inferred channels carry no capability), so a believed opposition is
+# `None` for every person in a built realm until a depositor exists; this is the reading, not the writer.
+CAPABILITY_CLAIM = "capability:"
+_ROLL_ROLE = "social_contest.roll"    # the composition row whose module composes the obstacle
+
+
+def _composed_obstacle(inp: SocialContestInput) -> float:
+    """The obstacle the module composes for `inp`, through the module that owns it. Reached by the
+    composition row's target (`composition.require`), the host's own way of naming a module; the
+    attribute is read at call time, so the odds follow the owner when it changes."""
+    module = importlib.import_module(composition.require(_ROLL_ROLE).__module__)
+    return module.obstacle(inp)
+
+
+def _odds_of_input(inp: SocialContestInput) -> Optional[tuple]:
+    """`record_odds` over one record: the module's obstacle, the record's pool and leverage (the owner
+    derives the roll's boost from them). `None` where S27.4 refuses the attempt -- no dice are dealt, so there is no distribution
+    (`resolve` refuses on the same pair, one rule: `ob > multiple x pool`)."""
+    ob = _composed_obstacle(inp)
+    if ob > inp.obstacle_refusal_multiple * max(inp.pool, 0):
+        return None
+    return record_odds(inp.pool, ob, inp.leverage)
+
+
+def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
+                   pool: int, person_subject: bool, examined_record: bool = False,
+                   room: Optional[dict] = None, heard: bool = False,
+                   effort: int = 0) -> Optional[SocialContestInput]:
+    """THE PERSON'S RECORD (mode (b)): the same `SocialContestInput`, filled only from what `p` holds.
+
+    AX-2: it reads `p` (his own ledger) and the fixtures, never the World; the
+    facts about the act's SHAPE that only a World can answer (`person_subject`: the subject is a person;
+    `examined_record`: an inquiry examines a Record; `heard`: a bench hears the contest) are the
+    caller's, not a belief. His pool is his own and held with certainty: the caller passes it as `pool`
+    (`odds_of` computes it with `faculty(w, believer, verb)`, which reads the log of his OWN acts for the
+    practice addend: the one World read mode (b) makes, and it is of himself), so `faculty` stays the one
+    pool reader. Every other field is filled
+    only from what he holds, and WHERE A FACTOR IS UNKNOWN TO HIM THE ANSWER IS `None`, never a figure:
+      * the opposition of a person subject, on a verb that names a capability key: a claim in his
+        ledger on that subject at `CAPABILITY_CLAIM + key` (the latest, then the most confident);
+        none held -> unknown. A non-person subject, or a verb naming no key, has no opposition: the
+        module's stand-in applies, and that is known.
+      * an examined Record's forgery quality: a property of the Record, held by nobody's claim here
+        -> unknown.
+      * the room's terms (`reception`, `proofs`) read other persons' ledgers: unknown unless the caller
+        passes his own believed `room` (`{"reception": .., "proofs": ..}`).
+    His `effort` is his own act's, held with certainty like his pool (CP-T01-05)."""
+    key = VERB_CAPABILITY.get(verb)
+    opposition = None
+    if person_subject and key:
+        held = [c for c in p.ledger
+                if c.subject == subject and c.predicate == CAPABILITY_CLAIM + key]
+        if not held:
+            return None
+        said = max(held, key=lambda c: (c.when, c.round, c.confidence))
+        opposition = float(said.value)
+    if examined_record:
+        return None
+    room_terms = {}
+    if heard:
+        if room is None:
+            return None
+        room_terms = dict(reception=room["reception"], reception_gain=fx.get("reception_gain"),
+                          proofs=room["proofs"], proof_step=fx.get("proof_step"))
+    return _frame(fx, pool, opposition, 0.0, room_terms, effort)
+
+
+def _rolled_as(w: Any, act: Any) -> Optional[tuple]:
+    """`(claimants, subject, room, examined)` exactly as the fold hands the act to `resolve`, or `None`
+    when the social roll does not deal it (an uncontested act, another subsystem's prize, a party
+    gap). The derivation is the fold's own: `loop/sides.py::_contests_of` and `::sides_of` and the prize
+    row's `heard_by:` for a contest; the verb's `graded_inquiries` route for an inquiry. `loop.sides` is
+    imported inside the function: `loop/` imports this package, so a module-level import would loop at
+    import time. It imports nothing that imports `seam`, so it closes no cycle the census counts;
+    `loop.resolve` would (`tests/valoria/test_import_cycle_game_state_npe.py`), which is why the
+    contest-of-an-act helper lives in `sides.py`."""
+    from ...data.rosters import GRADED_INQUIRIES
+    from ...data.verbs import VERB_TABLE
+    from ...loop.sides import _contests_of, sides_of
+    row = VERB_TABLE.get(act.verb)
+    payload = act.payload if isinstance(act.payload, dict) else {}
+    contests = _contests_of(act, row)
+    if contests:
+        prize = _prize_row("contest", contests[0])
+        if prize is None or prize.get("provider") != _PROVIDER:
+            return None
+        target = payload.get(row.opponent_operand() if row is not None else "subject")
+        parties, subject, rung = sides_of(w, act, target, contests[0])
+        if not parties:
+            return None
+        return parties, subject, (rung if prize.get("heard_by") == BENCH else None), None
+    route = GRADED_INQUIRIES.get(act.verb)
+    if route is not None and route.get("provider") == _PROVIDER:
+        subject = payload.get("subject")
+        return [act.actor], subject, None, subject
+    return None
+
+
+def odds_of(w: Any, act: Any, *, believer: Any = None,
+            believed_room: Optional[dict] = None) -> Optional[tuple]:
+    """`(F, P, S, O)` for the social roll `act` would deal, or `None`. READ-ONLY; nothing is rolled.
+
+    MODE (a), `believer=None`: the TRUE input -- `contest_input` over the act as the fold would hand it
+    to `resolve`, the module's obstacle and `band_odds`. The shown number is the number the roll deals
+    GIVEN THAT THE FOLD DEALS IT: the same record, the same obstacle function and the same roll
+    composition. It does not say the fold will deal the act: eligibility and `requires` (`_admits`) and a
+    deferred prize's step are the fold's gates, and a World that moves between the choice and the roll
+    (`_eff_train` writes capability mid-RESOLVE; a `speak` earlier in the barrier moves reception) moves the
+    dealt odds, not the shown ones. It answers "the odds of this roll, if made, on this World."
+
+    MODE (b), `believer=<Person>`: the SAME function over `believed_input(believer, ...)`, the person's
+    own record. It reads the believer's own ledger and nothing else of the true state (the World answers
+    only the act's shape), and returns `None` where a factor is unknown to him -- never a guessed figure.
+    ONE STATED EXCEPTION, his own pool: `faculty(w, believer, verb)` sums the registered addends, and the
+    practice addend derives from `w.log` the results of HIS OWN acts. His own results are his to know, but
+    this departs from 04 (§A.2 table, `loop/deliberate`: frozen `World` for `sense` only; §A.3 row 13: `Act`
+    persists resolver-side, unreachable from a person-side surface), so CR-17's chooser must not call this
+    from `decision/`: a ledger route exists (WITNESS stamps `doer?` on a holder's deposits about his own
+    acts, §B.9) and CR-17 may move the read there (ladder step 5, B10-08 close).
+    `None` is also the answer where the social roll deals no dice for the act (see `_rolled_as`) or
+    S27.4 refuses it.
+
+    Mode (b) HAS NO CALLER in this change; its first reader is the chooser's alignment term (CR-17)."""
+    called = _rolled_as(w, act)
+    if called is None:
+        return None
+    parties, subject, room, examined = called
+    effort = effort_of(act)                 # the act's own, as the fold hands it to `resolve`
+    if w.persons.get(parties[0]) is None:
+        return None
+    if believer is not None and believer.id != act.actor:
+        return None                     # another's pool is not his own to know
+    if believer is None:
+        return _odds_of_input(contest_input(w, parties, verb=act.verb, subject=subject, room=room,
+                                            examined=examined, effort=effort))
+    inp = believed_input(believer, act.verb, subject, w.fixtures,
+                         pool=faculty(w, believer, act.verb),
+                         person_subject=bool(subject) and subject in w.persons,
+                         examined_record=examined is not None and examined in w.records,
+                         room=believed_room, heard=room is not None, effort=effort)
+    return None if inp is None else _odds_of_input(inp)
 
 
 @provider("contest", _PROVIDER)
 def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
             verb: str = "", subject: Optional[str] = None,
             rng: Optional[random.Random] = None, rung: Optional[str] = None,
-            module_entry: Optional[str] = None) -> dict:
+            module_entry: Optional[str] = None, effort: int = 0) -> dict:
     """Roll for one contested act: build the record, call the module entry, hold its return to a
     `Margin`, refuse S27.4. Returns a net/ob pair, NEVER a band and never a winner.
 
-    RESOLVED -> dict(status, module, resolver, pool, ob, net, leverage)   # the entry's Margin + the record
+    `effort` is the act's own (CP-T01-05, `state/carriers.py::effort_of`, passed by `seam/contest.py`): it
+    reaches only `contest_input`, where it becomes `leverage`; the act's draw is unchanged (one id, one draw).
+
+    RESOLVED -> dict(status, module, resolver, pool, ob, net, leverage, settled_margin)   # the entry's Margin + the record
+                 # + the margin's fraction settled by the act's own draw (CP-T01-04), the integer `degree_of` grades
     REFUSED  -> dict(status, why, pool, ob)   # S27.4: ob > obstacle_refusal_multiple x pool
 
     ⚠ A RETURN THAT IS NOT A `Margin` RAISES, NAMING THE ENTRY (v9 SC-01 step 15, Lens B: *the provider
@@ -220,7 +442,9 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     declaring `heard_by: bench` (`a matter`, `speak`'s) has the bench sitting over it read the speaker
     (`contest_input`'s `room`). Every other prize still derives its obstacle from the parties alone.
 
-    ⚠ THE RNG IS A PARAMETER AND IS NOT CONSTRUCTED HERE, WHICH IS `04 §C.12`'s REJECTION 4 BECOMING
+    ⚠ THE RNG IS A PARAMETER: THE DRIVER'S GENERATOR IS PASSED ON EVERY SHIPPED PATH (`loop/resolve.py`), AND A
+    HAND CALL WITH NONE GETS A FRESH UNSEEDED `random.Random()` (never the process-global stream, never a
+    seeded one made here). THAT IS `04 §C.12`'s REJECTION 4 BECOMING
     LOAD-BEARING FOR THE FIRST TIME: *"When R-09's producer is built … its generator must be
     constructed by the driver from the run seed and passed down exactly as `World` is. This is the
     one rejection that is not yet load-bearing, because no roll exists yet."* It exists now.
@@ -257,10 +481,14 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     # v9 SC-02 `22b` step 25: an inquiry (no prize) examines its subject; a Record's forgery quality
     # enters the obstacle (`contest_input`'s `examined`). A prize names a contest, which examines nothing.
     inp = contest_input(w, claimants, verb=verb, subject=subject, room=heard,
-                        examined=subject if prize is None else None)
+                        examined=subject if prize is None else None, effort=effort)
     entry, refusal = entry_for(prize, _PROVIDER, module_entry)
     if entry is None:
         return refusal
+    # ONE generator for the act's whole roll: the dice (`entry.fn`) and the margin's fraction (below)
+    # draw from it. An absent `rng` is a fresh `random.Random()`, as `roll_pool` makes one; the process-global
+    # stream is never touched (04 §C.12: the RNG is threaded, never global). The shipped path always passes one.
+    rng = rng if rng is not None else random.Random()
     margin = entry.fn(inp, rng)
     if not isinstance(margin, Margin):
         raise Unspecified(
@@ -273,6 +501,13 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     if margin.ob > inp.obstacle_refusal_multiple * max(inp.pool, 0):
         return dict(status="REFUSED", why="S27.4", module=_PROVIDER,
                     resolver=_RESOLVER, pool=inp.pool, ob=margin.ob)
+    # CP-T01-04: the margin's fraction is settled here, AFTER the S27.4 check (a refused act draws
+    # nothing), by the act's own generator, and only when there is a fraction to settle -- a whole
+    # margin draws nothing, so the act's stream and every whole-Ob hash are unmoved. The owner derives
+    # the roll and its boost from the record's fields (`settle_record`); the host does no arithmetic.
+    # The recorded `net`, `ob` and `pool` below are unchanged: S27.4 and every reader of the pair see
+    # what they saw.
+    settled = settle_record(margin.net, inp.leverage, inp.pool, margin.ob, rng.random)
     # The margin's own fields, copied whole: the host reads the pair, it never computes one.
     return dict(status="RESOLVED", module=_PROVIDER, resolver=_RESOLVER, pool=inp.pool,
-                **asdict(margin), leverage=inp.leverage)
+                **asdict(margin), leverage=inp.leverage, settled_margin=settled)

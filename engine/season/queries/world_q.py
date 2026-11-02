@@ -37,9 +37,10 @@ from typing import Callable, Optional
 
 from ..data.requires import OWN_STATE_STEMS, UNKNOWN, binding_from_act, binding_of, evaluate
 from ..data.rosters import (
-    BAN_KIND, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP, HUNGER_BANDS,
+    BAN_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP, HUNGER_BANDS,
     MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, REMOVE_ORDINAL,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS,
+    VERB_CAPABILITY,
     faction_prop_id,
     require_member,
 )
@@ -3800,3 +3801,51 @@ class WorldReader:
             p = w.persons.get(self._actor)
             return UNKNOWN if p is None else OwnStateReader(p, w.fixtures).read(subject, predicate)
         return UNKNOWN
+
+
+# ---------------------------------------------------------------------------
+# CP-T01-02 (B10-08): THE PRACTICE ADDEND -- doing well makes you better, for a while.
+# ---------------------------------------------------------------------------
+
+def practice(w: World, p: Person, verb: str) -> int:
+    """Whole dice `p` has earned in `verb`'s capability key from what he did: the number of his own acts in
+    that key that resolved at Success or better in the last `practice_window` CLOSED seasons, divided by
+    `practice_step` (floor), capped at `practice_cap`. A pool addend: `seam/wrappers/sigma.py` registers it.
+
+    DERIVED FROM `w.log` AND STORES NOTHING (no field on any carrier). An Event reaches its act through
+    `causing_act` (the first cause that resolves to an act) and carries the roll's `degree`; one act emits
+    several Events, so the acts are counted by id, not the Events. The key is `VERB_CAPABILITY[verb]`, so
+    `tell` and `speak` (`copying`) count toward each other; a verb that names no key has none to practise, and
+    answers 0 (`research`, `surveil`, `examine` and `argue` name none until REM-30 lands their rows).
+    "Success or better" is `DEGREE_STEP` at or above the `Success` band's, read off the ladder's owner.
+
+    ⚠ ONLY SEASONS BEFORE `w.tick` COUNT, so a pool is a function of the closed past: an act resolved earlier
+    in THIS barrier does not raise the pool of one resolved later in it, so THIS ADDEND does not move between a
+    choice and its roll (what else can, `odds_of` lists). The window is
+    `[w.tick - practice_window, w.tick - 1]`.
+
+    ⚠ IT RAISES THE ACTOR'S POOL ONLY. `_opposition_of` reads the held key and never `faculty`, so the Ob
+    against a practised person does not move. `practice_cap` 0 is the control and answers 0 before the log is
+    read: the realm is then byte-equal to the tree without this reader. The three fixtures are assumptions
+    (`H-245`, `H-246`, `H-247`); a step or window below 1 raises `Unspecified` (below)."""
+    fx = w.fixtures
+    cap = int(fx.get("practice_cap"))
+    key = VERB_CAPABILITY.get(verb)
+    if cap <= 0 or not key:
+        return 0
+    window, step = int(fx.get("practice_window")), int(fx.get("practice_step"))
+    if window < 1 or step < 1:
+        raise Unspecified(
+            f"practice_window {window} / practice_step {step}", "CP-T01-02",
+            needs="a window of at least one season and a step of at least one good result per die",
+            law="ID-5 -- refuse, don't default: a zero step divides and a zero window is the arm off "
+                "under another name, which is `practice_cap` 0's to say")
+    first, good = w.tick - window, DEGREE_STEP["Success"]
+    acts: set = set()
+    for e in w.log:
+        if not first <= e.emitted_at < w.tick or DEGREE_STEP.get(e.degree, 0) < good:
+            continue
+        a = causing_act(w, e)
+        if a is not None and a.actor == p.id and VERB_CAPABILITY.get(a.verb) == key:
+            acts.add(a.id)
+    return min(cap, len(acts) // step)

@@ -209,8 +209,11 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
             # interactions than the swept bound". Folding them into one check would make the
             # ruling's whole distinction unobservable.
             cap = w.fixtures.get("interactions_per_scene")
+            # ⚠ THE BOUND COUNTS SLOTS, NOT ACTS (CP-T01-05): an act at effort `e` fills `1 + e` of the
+            # scene's interactions (`Scene.slots`), so one effort-2 act plus one more is 4 against a cap of 3.
+            # With every effort 0 (the shipped chooser) `slots` is `len(sc.acts)` and this is the check it was.
             for sc in (chosen if cap is not None else ()):
-                if len(sc.acts) > cap:
+                if sc.slots > cap:
                     # ⚠ `Ungraded`, NOT `Forbidden`. `Forbidden`'s own docstring is "a law
                     # forbids what the case requires", and this bound is a SWEPT HARNESS
                     # DEFAULT that Jordan explicitly did not rule. Filing it as `Forbidden`
@@ -218,7 +221,7 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
                     # THE SHAPE ITSELF", i.e. charged a harness choice to the design. This
                     # file already uses `Ungraded` for exactly that polarity on numbers.
                     raise Ungraded(
-                        f"scene {sc.id} carries {len(sc.acts)} interactions against a bound "
+                        f"scene {sc.id} carries {sc.slots} interactions against a bound "
                         f"of {cap}", "S26.3",
                         needs="a scene carries 1-3 verb applications; the bound is swept, not constant",
                         law="`H-76`, `assumption`. `player_agency_v30.md` §6.3 -- 'A scene contains 1-3 mechanical interactions' -- which is CANONICAL but pre-#337, so under CLAUDE.md §0.05 it is REFERENCE and this is a swept default, not a rule of the design. Jordan ruled the UNIT and the NUMBER of scenes; he did not rule this")
@@ -376,7 +379,6 @@ def _drop_what_was_already_done(scenes: list, taken: set) -> list:
                 keep.append(a)
         if keep:
             sc.acts = keep
-            sc.extended = len(keep) > 1
             out.append(sc)
     return out
 

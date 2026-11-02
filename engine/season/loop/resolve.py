@@ -30,14 +30,14 @@ from ..data.verbs import (COUNTERPARTY_CLAUSE, ELIGIBILITY_CLAUSE, EVENT_KINDS, 
 from ..gaps import Forbidden, Unspecified
 from ..loop.effects import EFFECTS
 from ..loop.predicates import REQUIRES_PREDICATES
-from ..loop.sides import sides_of
+from ..loop.sides import _contests_of, sides_of     # `_contests_of` lives in sides.py (B10-08 close)
 from .. import manifest
 from ..epistemic import observers_for
 from ..queries.person_q import (broken_by, confided_outside, conviction_after_crisis,
                                  elements_violated_by)
 from ..queries.world_q import WorldReader, ceiling, demanded_person, occasioned_by
 from ..seam import ContestError, ContestRefused, Resolution, contest, degree_of, find_trail, grade
-from ..state.carriers import Act, Event, StateChange, subject_of
+from ..state.carriers import Act, Event, StateChange, effort_of, subject_of
 from ..state.gate import Change, NoOpReceipt, Subject, Token, seat_hold
 from ..state.ids import SeatId, draw_factory, H
 from ..state.world import World
@@ -88,15 +88,6 @@ def _survives(self, w: "World", a: Act) -> list:
     for _e in gone:
         self.act_of[_e.id] = a
     return gone
-
-
-def _contests_of(a: Act, row: "VerbRow | None") -> list:
-    """Which prize (if any) `a` contests: `a.contests` if the act itself names one, else the
-    verb row's own `contests:` cell. Extracted (M4 review pass, `/simplify` finding): `resolve()`'s
-    own loop and `loop/encounter.py::encounter` each wrote this expression independently, the same
-    duplication `_canonical_order`/`_survives` were extracted to end (§8). No `self`: a pure
-    function of the act and its row, not of driver state."""
-    return list(a.contests or ()) or ([row.contests] if row and row.contests else [])
 
 
 def _eligible(self, w: "World", a: Act, row: "VerbRow") -> bool:
@@ -801,6 +792,8 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
     # ⚠⚠ `U1`: THE DRIVER CONSTRUCTS THE GENERATOR, AND `04 §C.12`'s REJECTION 4 IS LOAD-BEARING.
     # `purpose` stays `roll:<prize>:<act id>`, provider-specific by design -- see `resolve()`'s
     # own history (`git log` on this file) for the fuller account of why.
+    # ⚠ AN `effort` ACT IS ONE ACT, SO IT IS ONE ID AND ONE DRAW (CP-T01-05): the effort is read off the act
+    # at the `contest()` call below and reaches the roll as named levels; it spends slots, never a second draw.
     _rng = draw_factory(w.world_seed, lambda: w.tick)(a.actor, f"roll:{contests[0]}:{a.id}")
     # ⚠ A WRAPPER'S PARTY-GAP REACHES HERE TOO, AND IT IS THE SAME SHAPE OF GAP AS EMPTY `_parties`
     # (M4, found by `valoria-critic`'s adversarial pass, not anticipated in the build). It was first
@@ -817,7 +810,7 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
     # them to stay in sync.
     r = contest(w, rung=_rung, prize=contests[0], claimants=_parties, depth=0,
                 max_depth=contest_max_depth, causes=[a.id], verb=a.verb, subject=_subject,
-                rng=_rng)
+                rng=_rng, effort=effort_of(a))
     if isinstance(r, ContestRefused):
         # `04 §A.2`'s typed refusal (`seam/contest.py::REFUSAL_STATUSES`): `PARTY-GAP` (a missing
         # party) and `REFUSED` (`sigma.py`'s S27.4, `Ob > 2x Pool`). `speak` is contested, so a
@@ -862,7 +855,8 @@ def _grade(self, w: "World", token: Token, a: Act, route: dict) -> list:
     other act's draw (`04 PART D row 35`)."""
     _subject = a.payload.get("subject") if isinstance(a.payload, dict) else None
     _rng = draw_factory(w.world_seed, lambda: w.tick)(a.actor, f"roll:{a.verb}:{a.id}")
-    r = grade(w, [a.actor], [a.id], route, verb=a.verb, subject=_subject, rng=_rng)
+    r = grade(w, [a.actor], [a.id], route, verb=a.verb, subject=_subject, rng=_rng,
+              effort=effort_of(a))
     if isinstance(r, ContestRefused):
         return _refuse_party_gap(self, w, a)
     return self._fold(w, token, a, Resolution(degree_of(r, _subject, w.fixtures), r))

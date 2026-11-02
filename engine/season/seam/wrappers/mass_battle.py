@@ -280,8 +280,12 @@ def provision_input(w: Any, weight: int, treasury: Optional[str], eaten: tuple =
 @provider("contest", _PROVIDER)
 def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
             verb: str = "", subject: Optional[str] = None,
-            rng: Optional[random.Random] = None, rung: Optional[str] = None) -> dict:
+            rng: Optional[random.Random] = None, rung: Optional[str] = None,
+            effort: int = 0) -> dict:
     """CALL the mass-battle engine. Returns what it said; decides nothing itself.
+
+    `effort` (CP-T01-05) is accepted and NOT USED HERE: the seam's call is uniform (as `rung` was before
+    this provider read it), and a field battle has no scene slots to spend.
 
     `claimants`: one side's `PersonId[]`, expected already resolved (§C.5.1) by whoever called
     `contest()`: `loop/sides.py::sides_of` builds them for a `march`.

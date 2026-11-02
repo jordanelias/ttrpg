@@ -181,13 +181,13 @@ world_clocks:
     loss_threshold: 75/80 = Altonian Vanguard (BG)
   public_instability:
     canonical: Public Instability
-    abbreviations:
-    - PI
+    abbreviations: []
     standalone_ok: false
     category: clock
     range: 0-10
     mode: BG
-    loss_threshold: 0 = Parliament dissolved + Löwenritter coup
+    collision_note: PI also abbreviates Parliament Integrity (ED-376), whose 0 dissolves Parliament; spell
+      both out. Replaced by Peninsular Strain (ED-744), now Turmoil.
 debate_system:
   conviction_track:
     canonical: Conviction Track

@@ -48,6 +48,7 @@ from engine.substrate import composition
 
 from .. import epistemic
 from ..data import files, rosters, verbs
+from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.goals import goals
 from ..data.matrix import Step, WriteClass
 from ..data.rosters import COVERT_KINDS, FINDING_TERMS, faction_prop_id
@@ -98,8 +99,16 @@ def trail_world(verb="forge", kind="record.forged", second=None, fixtures=None):
     mints the same Record id (the id is the act's) into the same hand by the same body (`_mint_sheet`).
     `second`: an act id for a SECOND such act by the same man at tick 0 (its own Record, which stays in
     his hand; `second_record` reads it back) -- the C1 test's second forging. `fixtures`: the arm the
-    world is built at (v9 SC-02 `22b` step 25's sweeps), else `tiny_world`'s default."""
-    w = P.tiny_world() if fixtures is None else P.tiny_world(fixtures)
+    world is built at (v9 SC-02 `22b` step 25's sweeps), else `tiny_world`'s default AT THE FIXED CEILING
+    ARM. ⚠ `ceiling_per_pool` (CP-T01-06, shipped True) is swept OFF here: these tests draw until a band
+    lands, and they test the trail's closure and deposits, which no arm moves. Examining a forged Record
+    composes an obstacle above 2 for a pool-2 investigator, and the per-pool cap lets it stand (2.842 at
+    pool 2, against the fixed 2.0), so the draw odds F / P / S / O read 74 / 19 / 7 / 0 % at the fixed
+    arm and 90 / 8.05 / 1.95 / 0 % at the shipped one: a hand band (Success or better) is 1.95 % per
+    act, and the 60-id sweep, being seeded, does not reach one."""
+    if fixtures is None:
+        fixtures = DEFAULT_FIXTURES.sweep("ceiling_per_pool", False)
+    w = P.tiny_world(fixtures)
     w.propositions[FAC] = Proposition(FAC, "HOLDS", "Crown", "is a faction of this world", True, 0)
     for pid in (INVESTIGATOR, ABOUT):
         w.add_tenure(Tenure(f"t_commit_{pid}", pid, FAC, "commit", since=0))

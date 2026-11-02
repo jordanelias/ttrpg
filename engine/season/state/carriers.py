@@ -558,13 +558,12 @@ class Scene:
     is exactly the triage the budget exists to create. The noun changes; the spray argument does
     not.
 
-    `extended` costs more than one scene action (`H-77`, swept). Both that cost and the
-    interactions bound are FIXTURES and register rows -- Jordan ruled the UNIT and the NUMBER and
-    ruled neither of these."""
+    A scene filling more than one interaction slot (`slots`) costs more than one scene action
+    (`H-77`, swept). Both that cost and the interactions bound are FIXTURES and register rows --
+    Jordan ruled the UNIT and the NUMBER and ruled neither of these."""
     id: str
     actor: str
     acts: list = field(default_factory=list)
-    extended: bool = False
     # ⚠ `occasion` IS THE QUESTION THE SCENE IS ABOUT, and it is the field that binds DELIBERATE
     # into the causal graph. `N3` (PR #357) measured the absence: *60 act-Events, 0 resolving to
     # a question* — an act never cited what made it, so `causes[]` could not walk from one
@@ -584,8 +583,39 @@ class Scene:
     # a body, and because naming it is what makes the distinction from `extended_cost` visible.
     PLAIN_COST = 1
 
+    @property
+    def slots(self) -> int:
+        """THE INTERACTION SLOTS THIS SCENE FILLS: `sum(1 + effort_of(a))` over its acts (CP-T01-05). An act
+        at effort `e` fills `1 + e` of the scene's `interactions_per_scene`, so effort's whole cost is the acts
+        the person does not take in that scene. With no act carrying effort (the shipped chooser) this is
+        `len(self.acts)`. DERIVED FROM THE ACTS EVERY TIME, never stored: a filter that rewrites `acts` (`loop/
+        deliberate.py::_drop_what_was_already_done`) cannot leave it stale."""
+        return sum(1 + effort_of(a) for a in self.acts)
+
     def cost(self, extended_cost: int) -> int:
-        return extended_cost if self.extended else self.PLAIN_COST
+        """Scene actions this scene spends: `extended_cost` when it fills more than one slot, else
+        `PLAIN_COST`. PRICED FROM THE SLOTS (CP-T01-05), not from a flag a caller sets: a scene's price is
+        what it carries, so a play-surface callback returning one effort-2 act pays for three slots."""
+        return extended_cost if self.slots > 1 else self.PLAIN_COST
+
+
+def effort_of(act: "Act") -> int:
+    """The `effort` an act carries in its payload: a whole number of extra scene slots, `0` when it carries
+    none (CP-T01-05). The one reader of the field -- `Scene.slots` counts it and `loop/resolve.py` hands it
+    to the roll. A payload that is not a mapping, or has no `effort`, carries none. A negative or non-whole
+    effort is REFUSED: it would shrink a scene below its acts, and an engine that quietly clamped it would
+    be deciding for the caller. The upper bound is not here: it is the scene's own, `interactions_per_scene`
+    (an act at effort `e` needs `1 + e` of them), checked in DELIBERATE."""
+    payload = act.payload if isinstance(act.payload, dict) else {}
+    e = payload.get("effort")
+    if e is None:
+        return 0
+    if isinstance(e, bool) or not isinstance(e, int) or e < 0:
+        raise Forbidden(f"act {act.id!r} carries effort {e!r}", "CP-T01-05",
+                        needs="`effort` a non-negative whole number of extra scene slots",
+                        law="an act at effort e fills 1 + e interaction slots; a negative or fractional "
+                            "effort would fill fewer slots than the act itself")
+    return e
 
 
 @dataclass

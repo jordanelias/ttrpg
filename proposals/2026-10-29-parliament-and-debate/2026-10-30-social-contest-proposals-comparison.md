@@ -126,3 +126,32 @@ No assessor ran code; every "moves" and "fires" is by reading, the audit's secti
 `verb_table.yaml`. P3's legitimacy figures are unreproduced. The three assessors disagree on rank by criterion; this
 document weighs them, and the weighting (NERS and fit over emergent narrative while every scenario is paper) is mine
 `[CONFIDENCE: medium]`. The proposals' own text overran their 3,500-word brief (4,450 to 5,100 words).
+
+---
+
+## 9. Proposal 4 added (2026-11-01), and the revised recommendation
+
+Jordan asked for the real player choices of Proposal 2 inside Proposal 3's framework, and that capabilities allow
+for attributes like faculty and presence. `2026-11-01-social-contest-proposal-4-authority-staged.md` is that design:
+authorities with default rites, a staged hearing in which the plea fixes the question tried, ten player decisions
+computed with controls, and attributes reaching the pool through four faculties in one table. A read-only critic
+attacked it once (its reconciliation is at the end of that file).
+
+| | P1 one draw | P2 staged | P3 authority first | **P4 authority-staged** |
+|---|---|---|---|---|
+| real player choices, computed | none computed | the plea is dominated (stress) | `defy` dominates (stress) | 14 of 14 under its own generous test; **10 of 14 under headline weights; about 5 robust** |
+| attributes into the pool | no authored capability | no | no | a faculty table over three plausible rosters; 1.25D default must become 4 |
+| distinctive cost | fewest objects | stage roster | authority grouping, index | rites, four switches, faculty table, term of grace: the most apparatus |
+| verdict | base | wait | institutional readers | **target spec for the choice layer, cut back** |
+
+**Revised recommendation, in build order.**
+1. **The dead core**, then **Proposal 1's core**, with batch A1 re-ordered so that `VERB_CAPABILITY`, the discrete call and the H-80 labels are deleted only in the batches that land their replacements.
+2. **The portable repairs** from P2, P3 and P4: MATTER `due <= tick`; `determine` requires a held case file; case-opening reads `scope_rung` and acting verbs keep `rung`; the citation as an `issue`d writ; a witnessed defiance with a world price; one `may_determine` predicate; a `scope` key; and the warrant duty for holders of a warrant.
+3. **The choice layer, cut back from Proposal 4:** a plea with some concession reward, tested through the obstacle under D-1 before grade caps are adopted; an absentee resisting at his own score ÷ 2; a two-valued rite default; the attribute-to-faculty table with a faculty default at the R-40 reference.
+4. **The narrow options** (judge challenge, forgery, impugn, cite-licence, the term of grace) only after the explanation contract can show a player why they matter.
+
+**On the question of engagement.** If the repairs hold, the authority layer gives the deepest emergent narrative
+(conflict between independent authorities, with legitimacy as a world variable), and the staged plea and proof
+choices give the richest single hearing; the critic's count says the robust part of that choice set is smaller
+than Proposal 4 claims, about five choices, and those five (proofs, self or advocate, naming enemies, the warrant
+duty, appear / evade / defy in polity rows) are the ones to build first.

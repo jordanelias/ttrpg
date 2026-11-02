@@ -72,7 +72,7 @@ above were seen at SC-01's shipped fixtures and are not re-run at 30.
 The `Failure` band and the shipped judge are observed in `test_u7_remit.py` (section 10), not here.
 
 v9 FI-01 (RE-TRACED 2026-10-17, NOT RE-PINNED): `research`, `examine` and `surveil` are graded through
-`sigma._pool_of` too, so at `BAR_FIXTURES` every graded inquiry these runs reach draws `Overwhelming`
+`sigma.faculty` too, so at `BAR_FIXTURES` every graded inquiry these runs reach draws `Overwhelming`
 (scholastics/6: 3 `surveil`; family/13: 4 `surveil`, 1 `research`; doctrine/8: 2 `surveil`), and the
 skip arm deposits nothing for `finding.none` (15 / 11 / 19 `finding.none` claims held at the base, 0
 now). Each run's hash moved (213c3aca... -> faf13c18..., 7e3578b5... -> 07ed5a02..., b1a4c665... ->

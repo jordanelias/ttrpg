@@ -577,13 +577,8 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
                      [Act(mint(p.id, c.verb, act_key(c.verb, c.subject, c.operands)), p.id, c.verb,
                           payload=_payload_of(c),
                           via=seat_of(p, c)) for c in chunk],
-                     # `H-77`: a scene carrying more than one interaction is the EXTENDED one.
-                     # This is what `extended` MEANS, and until W17's adversarial pass nothing
-                     # ever set it -- so `Scene.cost` returned 1 unconditionally, H-77's sweep
-                     # could not move any verdict, and the row passed R2 while being
-                     # unexecutable. That is the laundering R2 exists to stop, in the row that
-                     # was added the same day the rule was written.
-                     extended=len(chunk) > 1, occasion=occasion)
+                     # `H-77`: `Scene.cost` prices the scene from the `slots` it fills.
+                     occasion=occasion)
 
     # ⚠ THE BOUND IS THE COST, NOT THE SCENE COUNT, and getting that wrong made the DEFAULT
     # chooser overspend by construction: once `extended` was actually set, five greedy scenes
