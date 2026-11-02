@@ -813,7 +813,11 @@ class World:
         """CP-T02-01: `who`'s live `hold` Tenures whose object is an OFFICE, in store order -- the seats
         his death empties. The one read both halves of a death share: `state/gate.py::death_subjects`
         names them before the write, and `remove_person` closes them and returns them."""
-        return [t for t in self.tenures
+        # A Tenure is owned by its subject (S15.1), so his own list is the whole answer; `self.tenures` would
+        # sort and concatenate EVERY person's edges per call (a death, a `succeed` precondition, its effect).
+        # `_unowned` is appended for exactness with the aggregate: an unhomed edge of his is still his.
+        own = self.persons[who].tenures if who in self.persons else ()
+        return [t for t in (*own, *self._unowned)
                 if t.kind == "hold" and t.subject == who and t.live and t.object in self.offices]
 
     def remove_person(self, who: str) -> list:

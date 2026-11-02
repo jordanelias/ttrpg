@@ -164,8 +164,7 @@ def _eff_succeed(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     title = SUCCESSIONS.get(seat) if isinstance(seat, str) else None
     if title is None:
         return NO_CHANGE
-    held = [t for t in w.tenures
-            if t.kind == "hold" and t.live and t.subject == a.actor and t.object == title]
+    held = [t for t in w.seat_holds(a.actor) if t.object == title]   # the title is a seat (`check_successions`)
     seats = claimable_seats(w, a.actor, title) if held else ()
     if seat not in seats:
         return NO_CHANGE
