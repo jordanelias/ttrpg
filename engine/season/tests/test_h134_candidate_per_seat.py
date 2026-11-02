@@ -249,7 +249,14 @@ def test_h134_two_seats_are_two_acts_ids_opportunities_and_the_store():
 # with the three rows put back to their base shape in `decision.options.VERB_TABLE` in-process (`requires_typed`
 # None, no `referent_class`, no `referent_named`) re-hashes to `(48, 48, "2ecfb27d...")` exactly, the Candidates that
 # differ are those six and no others, and each row alone removes two (46).
-_CONTROL = (42, 42, "0842fe64db0c6aaf96d5ec7c33e63f02ee3e8517dcf4b2d11c822ee41b97c0d3")
+# RE-PINNED AT v10 IN-61 (B10-09 close one): 42 -> 40, `0842fe64...` -> `2ca25626...`. Exactly two Candidates (and their two
+# acts) leave and none is added: `succeed` (`referent_class: Office`, `own_title_declines`) formed on `off_duke` and `Hh` (the
+# question's plain referents) and forms on neither now -- the question carries no Office, and `p_one` holds no title that
+# `successions` names for either. CONTROL, run (scratch, not kept): the same candidate and act lists on a detached worktree at
+# the CR-26 tree (`59e5cf45`) differ from this tree's by those two Candidates and those two acts and by nothing else; either
+# IN-61 gate alone (the row's `referent_class` blanked in `decision.options.VERB_TABLE`, or `options.OWN_TITLE_DECLINES`
+# emptied, in-process) still reads (40, 40, "2ca25626..."), and both blanked together read 42 Candidates again.
+_CONTROL = (40, 40, "2ca2562638512b7b1585b5392b263ad156431f8326855967ff2ddfd892b2bfd4")
 
 
 def _control_reading():
