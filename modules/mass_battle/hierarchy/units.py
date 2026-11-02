@@ -116,12 +116,12 @@ def unit_lures(unit):
 __all__ = ['Subunit', 'Unit', 'Order', 'Officer', 'clamp_command', 'MB_ENVELOP_PATH', 'MB_SWEEP', 'FIELD_MOVEMENT', 'FIELD_CONTACT', 'CONTACT_REACH', 'COL_WIDTH',
            'MB_FACING_MODEL', 'MB_FACING_ATTENTION', 'MB_FACING_SLEW_BASE', 'MB_FACING_FOV_GATE', 'MB_FACING_ROUT',
            'MB_ROLE_INSTRUCTIONS', 'ROLE_INSTRUCTION_PRIMITIVES', 'unit_lures',
-           'CELL_RADIUS', 'standoff_from_reach', 'standoff', 'MB_REACH_FACING_GATE', 'resolve_toi_and_commit']
+           'CELL_RADIUS', 'standoff_from_reach', 'standoff', 'MB_REACH_FACING_GATE', 'resolve_toi_and_commit', 'separate_all_bodies', 'turn_to_face_aggressors']
 
 # [Stage A — true-adjacency halt] Per-cell physical-body radius, distinct from core.contact._cell_radius
 # (a whole-FORMATION bounding radius used by the FIELD_CONTACT centroid bound). Grounded the same way
 # that function already is: half the existing COL_WIDTH=1.0 lattice pitch.
-CELL_RADIUS = 0.5
+# CELL_RADIUS (0.5, the body circle) is owned by geometry.py and arrives by the star import above.
 
 
 def standoff_from_reach(reach_a, reach_b):
@@ -139,29 +139,26 @@ def standoff(troop_type_a, troop_type_b):
     return standoff_from_reach(reach_for(troop_type_a), reach_for(troop_type_b))
 
 
-def _cell_facing_for_box(atom, cid):
-    """[v2 Stage B/C] The heading used to orient a cell's CellBox -- the SAME expression
-    resolve_toi_and_commit._flat uses for its _ToiCell.facing, so the contact predicate (Stage B) and
-    the TOI halt (Stage C) build byte-identical boxes for the same cell/position and therefore agree on
-    the touch surface exactly. Committed cell facing (cell_facing_vec) if present, else the sub-unit's
-    live node facing, else the raw advance direction (advance_dir, 0). NOT get_cell_facing: the
-    MB_FACING_ROUT away-facing flip is a targeting/reach-adjudication concern, deliberately NOT applied
-    to the physical-body box geometry (a fleeing body still occupies its square)."""
+def _cell_heading(atom, cid):
+    """The heading a cell's body faces -- the SAME expression resolve_toi_and_commit._flat uses for its _ToiCell.facing,
+    so the contact predicate and the collision step build identical bodies for the same cell and position and agree
+    on the touch surface exactly. Committed cell facing (cell_facing_vec) if present, else the sub-unit's live node
+    facing, else the raw advance direction (advance_dir, 0). NOT get_cell_facing: the MB_FACING_ROUT away-facing flip
+    is a targeting/reach-adjudication concern, deliberately NOT applied to the physical body (a fleeing body still
+    occupies its circle)."""
     return atom.cell_facing_vec.get(cid, getattr(atom, '_node_facing', None) or (atom.advance_dir, 0))
 
 
-def cell_boxes_for(atom, reach_front):
-    """[v2 Stage B] One CellBox per cell of `atom`, aligned index-for-index with atom.cells_float()
-    (both iterate _oriented(atom) order, so zip() pairs each float centre with its own box). Standard
-    unit square (w=d=1.0); heading = the cell's facing (_cell_facing_for_box); reach_front = the atom's
-    melee reach, passed in by the caller (reach_for(troop_type) this stage -- REACH_SHORT=0.5) so contact
-    and TOI feed the identical value. Pure/deterministic; no mutation of atom."""
-    boxes = []
+def cell_bodies_for(atom, reach_front):
+    """One CellBody per cell of `atom`, aligned index-for-index with atom.cells_float() (both iterate _oriented(atom)
+    order, so zip() pairs each float centre with its own body). The body is the circle of radius CELL_RADIUS; heading =
+    the cell's facing (_cell_heading); reach_front = the atom's melee reach, passed in by the caller (reach_for(troop_type))
+    so contact and collision feed the identical value. Pure/deterministic; no mutation of atom."""
+    bodies = []
     for (orig_r, orig_c, _o_r, _o_c), (r, c) in zip(_oriented(atom), atom.cells_float()):
-        fv = _cell_facing_for_box(atom, (orig_r, orig_c))
-        boxes.append(cellbox_from(float(r), float(c), (float(fv[0]), float(fv[1])),
-                                  w=1.0, d=1.0, reach_front=reach_front))
-    return boxes
+        fv = _cell_heading(atom, (orig_r, orig_c))
+        bodies.append(cellbody_from(float(r), float(c), (float(fv[0]), float(fv[1])), reach_front=reach_front))
+    return bodies
 
 
 # [TOI refactor] Reach bonus only projects within the forward FOV arc (reuses Stage B's FOV_HALF_DEG) --
@@ -239,89 +236,6 @@ def _pair_toi_scale(start_a, start_b, proposed_a, proposed_b, rho_a, rho_b, targ
     if hi <= 0.0 or lo > 1.0:
         return None  # the violation window (if any) falls entirely outside this tick
     return max(0.0, lo)
-
-
-# [v2 Stage C, ED-MB-0011] ANALYTIC swept-SAT time-of-impact on the OBB touch predicate -- the closed-
-# form replacement for the original scan+bisection (which called obb_front_reach_overlap ~178x per near-
-# contact pair per tick and made the field path ~60x slower, stalling the byte-exact battery). Over one
-# tick the box axes and corner-offsets are CONSTANT -- Euclidean motion translates only the centre --
-# so on each SAT axis the strict-overlap band is a linear-in-s inequality, i.e. an s-interval;
-# intersecting the <=4 axes' intervals gives the overlap window and its left edge is the first touch.
-# No iteration, no tolerance knobs. Verified against the reference scan+bisection to machine epsilon
-# (max_err 1.7e-15 over 700 seeded fuzzed pairs, 281 genuine touches) -- see test_obb_contact_toi.py /
-# the scratch verify probe. ~15 us/pair (was several hundred us under bisection).
-
-
-def _swept_first_overlap_s(a0, va, off_a, b0, vb, off_b, axes):
-    """First s in [0,1] at which the two moving boxes overlap (strict SAT) on ALL candidate `axes`,
-    or None. Box A occupies {a0 + s*va + corner : corner in off_a}; B likewise. Over one tick the box
-    axes and corner-offsets are CONSTANT (Euclidean motion translates only the centre), so on each axis
-    n the SAT overlap condition `bmin-amax < P(s) < bmax-amin` (P(s)=(A_centre-B_centre)·n, LINEAR in s)
-    is a half-open band -> an s-interval. Intersecting the ≤4 axes' intervals gives the overlap window
-    (lo, hi); the first touch is its left edge. O(len(axes)) analytic -- replaces the per-pair scan+
-    bisection (~30 SAT calls/pair) that made the field path ~20-60x slower. Deterministic, no iteration."""
-    lo, hi = 0.0, 1.0
-    for (nr, nc) in axes:
-        amin = amax = off_a[0][0] * nr + off_a[0][1] * nc
-        for o in off_a[1:]:
-            p = o[0] * nr + o[1] * nc
-            if p < amin: amin = p
-            elif p > amax: amax = p
-        bmin = bmax = off_b[0][0] * nr + off_b[0][1] * nc
-        for o in off_b[1:]:
-            p = o[0] * nr + o[1] * nc
-            if p < bmin: bmin = p
-            elif p > bmax: bmax = p
-        p0 = (a0[0] - b0[0]) * nr + (a0[1] - b0[1]) * nc
-        dp = (va[0] - vb[0]) * nr + (va[1] - vb[1]) * nc
-        band_lo = bmin - amax   # P must be strictly ABOVE this to overlap on n
-        band_hi = bmax - amin   # ...and strictly BELOW this
-        if band_hi <= band_lo:
-            return None          # degenerate (zero-area box) -> never overlaps
-        if -1e-15 < dp < 1e-15:  # P constant on this axis
-            if not (band_lo < p0 < band_hi):
-                return None
-            continue             # overlaps for all s on this axis -> no constraint
-        s1 = (band_lo - p0) / dp
-        s2 = (band_hi - p0) / dp
-        axlo, axhi = (s1, s2) if s1 <= s2 else (s2, s1)
-        if axlo > lo: lo = axlo
-        if axhi < hi: hi = axhi
-        if lo >= hi:
-            return None
-    if hi <= 0.0:
-        return None              # overlap window is entirely in the past (already separating)
-    if lo <= 0.0:
-        return 0.0               # already overlapping at s=0
-    if lo > 1.0:
-        return None              # first overlap beyond this tick's motion
-    return lo                    # first touch = the overlap band's left edge
-
-
-def _pair_toi_box_scale(start_a, prop_a, start_b, prop_b, rho_a, rho_b, head_a, reach_a, head_b, reach_b):
-    """[v2 Stage C] Smallest tick-fraction s in [0,1] at which cell A (centre gliding start_a->prop_a,
-    throttled by rho_a) and cell B (start_b->prop_b, rho_b) first bring their OBB engagement surfaces
-    into contact (obb_front_reach_overlap = a's reach-extended box meets b's body OR vice-versa), or
-    None if they never touch across this tick's throttled motion. Analytic swept-SAT (see
-    _swept_first_overlap_s): O(1) per pair, no iteration. Headings/reach fixed over the tick (motion is
-    Euclidean -- only the centre translates); each box is the unit square grown by reach_front on its
-    FRONT face. Deterministic. Returns 0.0 if already touching at s=0 (a pre-existing contact). Verified
-    to match the reference scan+bisection to <1e-6 over fuzzed pairs (see test_obb_contact_toi.py)."""
-    _ba0 = cellbox_from(0.0, 0.0, head_a, w=1.0, d=1.0, reach_front=reach_a)  # centre at origin
-    _bb0 = cellbox_from(0.0, 0.0, head_b, w=1.0, d=1.0, reach_front=reach_b)
-    axes = _cellbox_axes(_ba0) + _cellbox_axes(_bb0)   # 4 candidates: A depth/width + B depth/width
-    off_a_reach = _cellbox_corners(_ba0, use_reach=True)   # config 1: a extended vs b plain
-    off_b_plain = _cellbox_corners(_bb0, use_reach=False)
-    off_a_plain = _cellbox_corners(_ba0, use_reach=False)  # config 2: a plain vs b extended
-    off_b_reach = _cellbox_corners(_bb0, use_reach=True)
-    a0 = (start_a[0], start_a[1]); b0 = (start_b[0], start_b[1])
-    va = (rho_a * (prop_a[0] - start_a[0]), rho_a * (prop_a[1] - start_a[1]))
-    vb = (rho_b * (prop_b[0] - start_b[0]), rho_b * (prop_b[1] - start_b[1]))
-    s1 = _swept_first_overlap_s(a0, va, off_a_reach, b0, vb, off_b_plain, axes)
-    s2 = _swept_first_overlap_s(a0, va, off_a_plain, b0, vb, off_b_reach, axes)
-    if s1 is None: return s2
-    if s2 is None: return s1
-    return s1 if s1 <= s2 else s2
 
 
 def _slew_facing(cur, desired, discipline):
@@ -2497,6 +2411,219 @@ class _ToiCell:
         self.movable = movable
 
 
+# Float tolerance on a distance between body centres. Two bodies one pitch apart are TANGENT, and the last ulp of
+# a position must not read as overlap; it is not a game magnitude and no body is allowed closer than this.
+_BODY_TOL = 1e-9  # [canonical: epsilon: float magnitude guard]
+_SEPARATE_PASSES = 400  # [CALIBRATED-DEBT: bound on the push-apart passes of the end-of-tick pass, where every body can move. Measured on the byte-exact battery it settles in 11 passes at the median and 38 at the worst, so the bound is a guard, not a cost]
+_MOVE_PASSES = 24  # [CALIBRATED-DEBT: bound on the push-apart passes while cells move. A cell in a pocket exactly two pitches wide between fixed bodies has one feasible point that pushing only approaches, and half the calls on the byte-exact battery ran a 400-pass budget out on such pockets; the end-of-tick pass, where every body can move, settles what this leaves]
+_SEPARATE_ROUNDS = 6  # [CALIBRATED-DEBT: how many times the end-of-tick pass rebuilds its candidate pairs after a push carries a cell toward bodies it was not near]
+
+
+def _pairs_within(pos, radius):
+    """Every index pair (i, j), i < j, whose points are closer than `radius`, in the order a double loop over i then j
+    would give them, found through a spatial hash so the cost follows the number of neighbours, not n squared.
+    Deterministic: buckets are visited by index and the result is sorted."""
+    cell = max(radius, _BODY_TOL)
+    grid = {}
+    for k, p in enumerate(pos):
+        grid.setdefault((math.floor(p[0] / cell), math.floor(p[1] / cell)), []).append(k)
+    out = []
+    r2 = radius * radius
+    for k, p in enumerate(pos):
+        kr, kc = math.floor(p[0] / cell), math.floor(p[1] / cell)
+        for gr in (kr - 1, kr, kr + 1):
+            for gc in (kc - 1, kc, kc + 1):
+                for j in grid.get((gr, gc), ()):
+                    if j > k and (p[0] - pos[j][0]) ** 2 + (p[1] - pos[j][1]) ** 2 < r2:
+                        out.append((k, j))
+    out.sort()
+    return out
+
+
+def _relax_bodies(pos, near, moving, passes, depth=None):
+    """Push interpenetrating body pairs apart along the line of their centres, in place, Gauss-Seidel. `near` is a
+    list of (i, j, floor): the smallest centre distance allowed for that pair. The whole push goes to the cell that is
+    moving if the other is static, half each if both move. Returns True once no pair is closer than its floor (less
+    _BODY_TOL), False if `passes` ran out first. Deterministic: pairs are examined in a fixed order, no RNG. Compares
+    squared distances and takes a square root only for a pair it pushes.
+
+    `depth`, if given, is each cell's number of contacts away from a fixed body. Pairs are then examined nearest the
+    fixed bodies first, and in a pair of two moving cells the one nearer the fixed bodies holds while the one behind it
+    gives way, so a compression wave crosses a block in one pass instead of being passed back and forth. Without it
+    the order is the order of `near` and a pair of two moving cells shares the push equally."""
+    if depth is not None:
+        near = sorted(near, key=lambda t: (min(depth[t[0]], depth[t[1]]), max(depth[t[0]], depth[t[1]]), t[0], t[1]))
+
+    def share(i, j):
+        if moving[i] and not moving[j]:
+            return 1.0
+        if not (moving[i] and moving[j]):
+            return 0.0
+        if depth is None or depth[i] == depth[j]:
+            return 0.5
+        return 1.0 if depth[i] > depth[j] else 0.0   # the cell behind gives way
+
+    pairs = [(i, j, floor, (floor - _BODY_TOL) ** 2, share(i, j)) for i, j, floor in near]
+    for _ in range(passes):
+        pushed = False
+        for i, j, floor, lo2, share_i in pairs:
+            pi, pj = pos[i], pos[j]
+            dr, dc = pi[0] - pj[0], pi[1] - pj[1]
+            d2 = dr * dr + dc * dc
+            if d2 >= lo2:
+                continue
+            dist = math.sqrt(d2)
+            ur, uc = (dr / dist, dc / dist) if dist > _BODY_TOL else (1.0, 0.0)
+            gap = floor - dist
+            share_j = 1.0 - share_i
+            pi[0] += ur * gap * share_i; pi[1] += uc * gap * share_i
+            pj[0] -= ur * gap * share_j; pj[1] -= uc * gap * share_j
+            pushed = True
+        if not pushed:
+            return True
+    return False
+
+
+def _separate_bodies(cells_a, cells_b, same_side):
+    """The COMMITTED position of every moving cell. Starts from each cell's own capped position (start + best_t *
+    (proposed - start)) and pushes interpenetrating pairs apart the way contact does (_relax_bodies), so a cell SLIDES
+    along a body it presses on instead of stopping dead, and a follower that overruns a blocked leader closes up
+    behind it.
+
+    Allowed distance for a pair = min(one pitch, the distance it started at): bodies already interpenetrating must not
+    interpenetrate MORE, and a pair tangent at the start and at the end (a formation wheeling about a pivot) is
+    untouched. The pushes are bounded by _MOVE_PASSES: this is the movement's own approximation, and what it leaves
+    (a cell squeezed where only one position fits) is settled by separate_all_bodies at the end of the tick, where
+    every body can move. same_side False restricts it to opposing pairs (MB_CELL_EXCLUSION off)."""
+    cells = cells_a + cells_b
+    n_a = len(cells_a)
+    D = 2.0 * CELL_RADIUS
+    mv = [e.movable and e.cid not in e.atom.halted_cells for e in cells]
+    start = [[e.sr, e.sc] for e in cells]
+    capped = [[e.sr + e.best_t * (e.pr - e.sr), e.sc + e.best_t * (e.pc - e.sc)] if mv[k] else [e.sr, e.sc]
+              for k, e in enumerate(cells)]
+    travel = [math.hypot(c[0] - s0[0], c[1] - s0[1]) for c, s0 in zip(capped, start)]
+    near = []
+    reach = 2.0 * D + 2.0 * max(travel, default=0.0)   # one pitch of slack beyond the two bodies and their travel
+    for i, j in _pairs_within(start, reach):
+        if not (mv[i] or mv[j]):
+            continue
+        if not same_side and (i < n_a) == (j < n_a):
+            continue
+        d0 = math.hypot(start[i][0] - start[j][0], start[i][1] - start[j][1])
+        if d0 > 2.0 * D + travel[i] + travel[j]:   # one pitch of slack: a push can carry a cell past its own travel
+            continue
+        near.append((i, j, min(D, d0) - _BODY_TOL))
+    # How many contacts each cell is from a fixed (halted or static) body; the cell behind gives way to the one in front.
+    depth = [len(cells)] * len(cells)
+    reach_from = [k for k in range(len(cells)) if not mv[k]]
+    for k in reach_from:
+        depth[k] = 0
+    around = {}
+    for i, j, _f in near:
+        around.setdefault(i, []).append(j)
+        around.setdefault(j, []).append(i)
+    frontier = reach_from
+    while frontier:
+        step = []
+        for k in frontier:
+            for m in around.get(k, ()):
+                if depth[m] > depth[k] + 1:
+                    depth[m] = depth[k] + 1
+                    step.append(m)
+        frontier = step
+    pos = [list(c) for c in capped]
+    _relax_bodies(pos, near, mv, _MOVE_PASSES, depth)
+    return {id(e): (pos[k][0], pos[k][1]) for k, e in enumerate(cells) if mv[k]}
+
+
+def separate_all_bodies(unit_a, unit_b):
+    """The end-of-tick guarantee: no two bodies on the field interpenetrate. Movement already keeps them apart
+    (_separate_bodies), but position is written by other steps too: a Column or Arrowhead that drops below its
+    minimum discipline is re-laid as a Line around its anchor (check_drift), the ranks close up behind casualties,
+    contention reverts a mover, and an army is deployed where its builder put it. This pass takes every body of both
+    sides, pushes any pair closer than one pitch apart along the line of its centres (_relax_bodies) and writes the
+    cells it moved back. Only on the field path (FIELD_MOVEMENT and MB_NODE_COHESION); it moves nothing that is
+    already clear, so a tick that overlaps nowhere is untouched. Returns the number of cells it moved."""
+    if not (FIELD_MOVEMENT and MB_NODE_COHESION):
+        return 0
+    items = []
+    for u in (unit_a, unit_b):
+        for atom in u.subunits:
+            if not hasattr(atom, '_node_pos'):
+                continue
+            ids = [(o_r, o_c) for o_r, o_c, _x, _y in _oriented(atom)]
+            for cid, (r, c) in zip(ids, atom.cells_float()):
+                items.append((atom, cid, [float(r), float(c)]))
+    pos = [it[2] for it in items]
+    before = [list(p) for p in pos]
+    D = 2.0 * CELL_RADIUS
+    mv = [True] * len(pos)
+    clear = False
+    for _ in range(_SEPARATE_ROUNDS):
+        # Every pair within two pitches is a candidate, not only the pairs overlapping now: pushing one body
+        # apart carries it toward its other neighbours, and the pairs are rebuilt each round for the same reason.
+        near = [(i, j, D - _BODY_TOL) for i, j in _pairs_within(pos, 2.0 * D)]
+        if not any(math.hypot(pos[i][0] - pos[j][0], pos[i][1] - pos[j][1]) < f - _BODY_TOL for i, j, f in near):
+            clear = True
+            break
+        _relax_bodies(pos, near, mv, _SEPARATE_PASSES)
+    moved = 0
+    for (atom, cid, p), b in zip(items, before):
+        if p[0] != b[0] or p[1] != b[1]:
+            atom._node_pos[cid] = (min(BATTLEFIELD_SIZE - 1, max(0, p[0])), min(BATTLEFIELD_SIZE - 1, max(0, p[1])))
+            moved += 1
+    return moved
+
+
+_FACE_BALANCE_TOL = 0.1  # [canonical: ED-MB-0081 -- an ASSUMPTION of this module, not canon; Jordan to correct: aggressors whose centroid lies within a tenth of a pitch of the cell are balanced (one each side), so it holds its facing]
+
+
+def turn_to_face_aggressors(unit_a, unit_b):
+    """Per-cell facing under attack. Every cell with enemy cells within OCTAGON_LOCAL_REACH (the same local set the
+    octagon zone is judged against) turns toward the centroid of those cells, at most _slew_facing's disciplined rate
+    per tick. A cell caught between enemies on opposite sides has a centroid on top of itself and keeps its facing; a
+    cell whose aggressors lie in its rear blind arc does not see them and does not turn (MB_FACING_FOV_GATE, the same
+    arc `_octagon_cell_mods` uses). Routed bodies are left alone (MB_FACING_ROUT owns theirs). It writes
+    cell_facing_vec for held cells and `hold` stances too, which `_node_advance` never reaches: a cell in contact is
+    halted, and a body on hold returns before it commits anything. Run once at the end of a tick, so the damage step
+    reads the facing the cell had turned to by the tick before. Only on the field path. Returns the number turned."""
+    if not (FIELD_MOVEMENT and MB_NODE_COHESION and MB_FACING_MODEL and MB_FACING_ATTENTION):
+        return 0
+    items = []
+    for side, u in ((0, unit_a), (1, unit_b)):
+        for atom in u.subunits:
+            if not hasattr(atom, '_node_pos') or getattr(atom, 'routed', False):
+                continue
+            ids = [(o_r, o_c) for o_r, o_c, _x, _y in _oriented(atom)]
+            for cid, (r, c) in zip(ids, atom.cells_float()):
+                items.append((atom, cid, side, (float(r), float(c))))
+    pos = [it[3] for it in items]
+    near = {}
+    for i, j in _pairs_within(pos, OCTAGON_LOCAL_REACH):
+        if items[i][2] != items[j][2]:
+            near.setdefault(i, []).append(j)
+            near.setdefault(j, []).append(i)
+    turned = 0
+    for i in sorted(near):
+        atom, cid, _side, p = items[i]
+        js = near[i]
+        dr = sum(pos[j][0] for j in js) / len(js) - p[0]
+        dc = sum(pos[j][1] for j in js) / len(js) - p[1]
+        if math.hypot(dr, dc) < _FACE_BALANCE_TOL:
+            continue
+        cur = atom.cell_facing_vec.get(cid, (atom.advance_dir, 0))
+        if MB_FACING_FOV_GATE:
+            seen = math.degrees(abs(math.atan2(cur[0] * dc - cur[1] * dr, cur[0] * dr + cur[1] * dc)))
+            if seen > FOV_HALF_DEG:
+                continue
+        new = _slew_facing(cur, (dr, dc), atom.eff_discipline)
+        if new != cur:
+            atom.cell_facing_vec[cid] = new
+            turned += 1
+    return turned
+
+
 def resolve_toi_and_commit(all_atoms_a, all_atoms_b):
     """[TOI refactor] Cross-side time-of-impact resolve + commit. Call once per tick with EVERY
     subunit of both sides (moving or not) -- an atom that called _node_advance this tick (FIELD_MOVEMENT
@@ -2509,9 +2636,8 @@ def resolve_toi_and_commit(all_atoms_a, all_atoms_b):
     subset would silently let an enemy pass into/through a not-yet-targeting friendly formation for a
     tick, an adversarial-review-caught regression versus the pre-refactor behaviour.
 
-    For every cross-side cell pair the stop surface is BODY vs BODY (two unit squares, reach 0 -- see
-    the ED-MB-0012 note at the pair loop): a circular reject on the body circumscribed circles skips
-    far pairs O(1), then an analytic swept-SAT (_pair_toi_box_scale at reach 0 -> _swept_first_overlap_s)
+    For every cross-side cell pair the stop surface is BODY vs BODY (two circles one pitch across, reach 0): an
+    exact circular time-of-impact solve (_pair_toi_scale)
     gives the first tick-fraction s at which the two bodies touch across their full (rho=1,1) proposed
     motion -- using the actual full endpoints, not a nearer intermediate one, so it catches paths that
     CROSS (both endpoints apart, bodies meeting in between). None -> no cap this pair. The stop is
@@ -2550,126 +2676,51 @@ def resolve_toi_and_commit(all_atoms_a, all_atoms_b):
 
     cells_a = _flat(all_atoms_a)
     cells_b = _flat(all_atoms_b)
+    D = 2.0 * CELL_RADIUS   # bodies are circles one pitch across: two touch when their centres are D apart
+    # (1) CROSS-SIDE first contact. The stop is BODY vs BODY, reach-independent: reach is a weapon envelope that
+    #     engages across a gap (contact fires on the reach body, see reach_reaches), not a wall two bodies decelerate
+    #     against. Both cells cap at the SAME fraction s at which their centres first reach D. A cross-side pair
+    #     already touching at s == 0 is caught upstream by halted_cells, so s == 0.0 is accepted here as a defensive
+    #     floor (both stop).
     for ea in cells_a:
         a_halted = ea.cid in ea.atom.halted_cells
         for eb in cells_b:
             b_halted = eb.cid in eb.atom.halted_cells
             if a_halted and b_halted:
                 continue  # both frozen -- nothing to resolve between two static cells
-            # [v2 Stage C reconcile, ED-MB-0011 -- "why decelerate instead of collide?"] The hard
-            # geometric stop is BODY vs BODY: two unit squares that must never interpenetrate -- NOT the
-            # reach-extended engagement box. Reach is a WEAPON envelope that engages ACROSS a gap
-            # (find_contacts / Stage B fires contact on the reach box); it is not a wall two bodies
-            # decelerate against. Halting on the reach surface parked closing cells EXACTLY on the
-            # obb_front_reach_overlap TOUCH boundary, where the strict-overlap contact predicate returns
-            # False -- a permanent standoff at gap = 2*(CELL_RADIUS+reach) with ZERO casualties: contact
-            # never fired, so engagement/charge-shock never triggered (the whole battle drew at range 1.5).
-            # Stopping on the BODY lets cells close until their bodies meet; the reach surfaces overlap on
-            # the way in, so contact fires (and halts the pair) BEFORE bodies touch whenever reach>0 --
-            # bodies collide, weapons reach across the closing gap. Charge is preserved: cell_last_speed
-            # (read by _momentum_speed at contact) is the PRE-cap step, so a charge's shock reflects its
-            # closing velocity, not the throttled crawl. The stop is symmetric and reach-independent, so
-            # there is no reach throttle here any more -- both cells cap at the SAME body-touch fraction s;
-            # reach asymmetry (a longer weapon engaging first) is expressed by contact firing earlier for
-            # the longer-reach box, not by a movement handicap. (_effective_reach/_reach_throttle retained
-            # as defined helpers but no longer called; the reach-standoff model they served is retired.)
-            start_a, proposed_a = (ea.sr, ea.sc), (ea.pr, ea.pc)
-            start_b, proposed_b = (eb.sr, eb.sc), (eb.pr, eb.pc)
-            # (1) circular REJECT on the two BODY circumscribed circles (radius hypot(CELL_RADIUS,
-            #     CELL_RADIUS) = √2/2 about each centre, reach-INDEPENDENT). A superset of body-box touch,
-            #     so it never wrongly skips a pair whose bodies actually meet across this tick's full
-            #     (un-throttled) motion. Uses the exact circular quadratic already proven here.
-            R_body = math.hypot(CELL_RADIUS, CELL_RADIUS)
-            if _pair_toi_scale(start_a, start_b, proposed_a, proposed_b, 1.0, 1.0, 2.0 * R_body) is None:
-                continue
-            # (2) exact BODY-box swept-SAT -- first fraction s at which the two unit-square bodies touch
-            #     (reach 0 on BOTH sides -> _pair_toi_box_scale collapses to pure body-OBB touch). None ->
-            #     a glancing near-miss the circle over-approximated; no cap this pair.
-            s = _pair_toi_box_scale(start_a, proposed_a, start_b, proposed_b, 1.0, 1.0,
-                                    ea.facing, 0.0, eb.facing, 0.0)
+            s = _pair_toi_scale((ea.sr, ea.sc), (eb.sr, eb.sc), (ea.pr, ea.pc), (eb.pr, eb.pc), 1.0, 1.0, D)
             if s is None:
                 continue
-            # A cap IS needed: both cells stop at the SHARED body-touch fraction (symmetric, no throttle).
-            # A halted cell's proposed==start (zero motion), so it never needs (nor receives) a cap -- but
-            # it still acted as a fixed obstacle for the other, still-moving side via this same pair solve.
             if not a_halted and s < ea.best_t: ea.best_t = s
             if not b_halted and s < eb.best_t: eb.best_t = s
-    # ─── [ED-MB-0059] SAME-SIDE EXCLUSION — the invariant this function's own docstring states ──
-    # "two unit squares that must never interpenetrate". That rule was only ever applied to
-    # CROSS-SIDE pairs, so a cell of one subunit walked straight through a cell of another on its
-    # own side. Measured before this pass, over 140 historical-scale snapshots / 79,226 cell
-    # placements, as DEEP body-box interpenetration (obb_overlap AND penetration depth >= 0.1):
-    # 43,068 within a subunit, 13,477 ACROSS subunits of the same side, 875 across opposing sides.
-    # (An earlier draft of this comment quoted "a 17.31% overlap rate" from a ROUNDED-SQUARE metric
-    # that ED-MB-0060 retracts in the very commit that introduced this block. Do not reintroduce it.)
-    #
-    # Jordan's framing (2026-07-29) is the design here: "we are using a field system so there
-    # shouldn't even be any assignment issues so long as cell boundaries are respected." So this is
-    # NOT a new mechanism and NOT the grid-era `resolve_internal_collisions` discipline roll — it is
-    # the SAME swept-SAT body-box solve the cross-side loop above already runs, applied to the pairs
-    # it was never applied to. No new constant, no RNG, no third definition of "these two bodies
-    # touch": `_pair_toi_scale` (circular pre-reject, keeps this tractable) then
-    # `_pair_toi_box_scale` (exact body-box TOI), exactly as above.
-    #
-    # Symmetric and order-independent: each unordered pair is solved once, and each cell keeps the
-    # MOST restrictive cap across every pair it is party to — the same monotone rule the cross-side
-    # pass uses, so a cell's final position does not depend on the order pairs were visited.
-    #
-    # ⚠ s > 0 IS LOAD-BEARING, AND IT IS THE WHOLE DIFFERENCE BETWEEN THIS PASS WORKING AND
-    # DEADLOCKING THE ENGINE. A cross-side pair that is ALREADY in contact when the tick opens is
-    # rare and is caught upstream by halted_cells (see _pair_toi_scale's "defensive floor" note), so
-    # the cross-side loop above can afford to accept s == 0.0. Same-side pairs invert that completely:
-    # a formation is a LATTICE at spacing 1.0 and the bodies are unit squares (0.5 + 0.5 half-widths),
-    # so every adjacent cell in every formation is touching BY CONSTRUCTION, permanently, and no cell
-    # is ever halted against its own neighbour. Accepting s == 0.0 here therefore caps essentially the
-    # whole army to zero motion on essentially every tick.
-    #
-    # MEASURED, on the cell_field battery at 2 seeds (the falsifier for this claim, §0.1 point 3):
-    # turning the pass on added 1,213,199 body-box solves, of which 568,785 — 46.9% — returned
-    # exactly 0.0, against a 9.84% zero rate on the cross-side pairs. Downstream, halted cells FELL
-    # 20,356 -> 3,300 and resolve_toi_and_commit calls ROSE 1,482 -> 11,934: frozen formations never
-    # close, never make contact, never halt, and every battle runs to the 20-turn cap. That 8.05x
-    # tick inflation — not pair-solve cost — is the entire 8.2x runtime regression first seen on
-    # unit_field (47s -> 386s), which is why the swept-AABB broad phase written to "fix the cost"
-    # bought nothing (386s -> 370s): it correctly culled pairs in a loop whose ITERATION COUNT was
-    # the actual defect. The broad phase is therefore removed as well — it was an optimisation for a
-    # problem that did not exist, and all-pairs over one side is the simpler owner.
-    #
-    # The rule is not a tolerance and introduces no constant: capping at s == 0.0 cannot UN-overlap a
-    # pre-existing overlap — it freezes the pair exactly where it already sits, for zero corrective
-    # benefit and total motion cost. The invariant this pass enforces is "no pair may BECOME
-    # interpenetrating during this tick", i.e. a disjoint -> overlapping transition, which is exactly
-    # s > 0. Pairs that begin the tick in contact are the formation lattice and are left alone.
+    # (2) SAME-SIDE first contact [ED-MB-0059]. s > 0 IS LOAD-BEARING: a formation is a lattice at pitch D, so every
+    #     adjacent cell is touching BY CONSTRUCTION and no cell is halted against its own neighbour; accepting
+    #     s == 0.0 here capped essentially the whole army to zero motion (measured: 46.9% of same-side solves).
+    #     A pair already touching at the start is therefore left to (3), which holds it from getting closer.
     if MB_CELL_EXCLUSION:
-        _R_body_same = math.hypot(CELL_RADIUS, CELL_RADIUS)
         for entries in (cells_a, cells_b):
-            _n = len(entries)
-            for _i in range(_n):
-                ea = entries[_i]
+            for i, ea in enumerate(entries):
                 a_halted = ea.cid in ea.atom.halted_cells
-                for _j in range(_i + 1, _n):
-                    eb = entries[_j]
+                for eb in entries[i + 1:]:
                     b_halted = eb.cid in eb.atom.halted_cells
                     if a_halted and b_halted:
                         continue
-                    start_a, proposed_a = (ea.sr, ea.sc), (ea.pr, ea.pc)
-                    start_b, proposed_b = (eb.sr, eb.sc), (eb.pr, eb.pc)
-                    if _pair_toi_scale(start_a, start_b, proposed_a, proposed_b,
-                                       1.0, 1.0, 2.0 * _R_body_same) is None:
-                        continue
-                    s = _pair_toi_box_scale(start_a, proposed_a, start_b, proposed_b, 1.0, 1.0,
-                                            ea.facing, 0.0, eb.facing, 0.0)
+                    s = _pair_toi_scale((ea.sr, ea.sc), (eb.sr, eb.sc), (ea.pr, ea.pc), (eb.pr, eb.pc), 1.0, 1.0, D)
                     if s is None or s <= 0.0:
                         continue
                     if not a_halted and s < ea.best_t: ea.best_t = s
                     if not b_halted and s < eb.best_t: eb.best_t = s
-
+    # (3) COMMITTED POSITIONS. (1) and (2) cap each cell at the first fraction at which one of its OWN pairs would
+    #     touch, assuming both cells move at that same fraction. Each cell then keeps its own smallest cap, so two
+    #     cells commit at DIFFERENT fractions of their paths and the pairwise guarantee no longer holds: a cell
+    #     blocked by an enemy stops early while the cell behind it still moves its full step into it. (3) checks the
+    #     positions actually committed and separates any bodies that would interpenetrate.
+    finals = _separate_bodies(cells_a, cells_b, MB_CELL_EXCLUSION)
     for entries in (cells_a, cells_b):
         for e in entries:
             if not e.movable or e.cid in e.atom.halted_cells:
                 continue
-            final_r = e.sr + e.best_t * (e.pr - e.sr)
-            final_c = e.sc + e.best_t * (e.pc - e.sc)
+            final_r, final_c = finals[id(e)]
             e.atom._commit_cell_position(e.cid, final_r, final_c, e.atom._node_pending_target_centroid,
                                           e.atom._node_pending_discipline)
     for atom in list(all_atoms_a) + list(all_atoms_b):

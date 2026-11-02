@@ -1,0 +1,75 @@
+{
+  "_what": "The example battle behind the mass battle walkthrough page: two armies of 5,200 troops, roles set. Data, not code: every number in walkthrough.py lives here.",
+  "side_a": {
+    "strategy": "advance",
+    "subformations": [
+      {
+        "name": "line",
+        "troop_type": "heavy_infantry",
+        "troops": 2400
+      },
+      {
+        "name": "spear",
+        "troop_type": "spearmen",
+        "troops": 1200
+      },
+      {
+        "name": "bows",
+        "troop_type": "archers",
+        "troops": 1000,
+        "role": "VolleyLine"
+      },
+      {
+        "name": "horse",
+        "troop_type": "light_cavalry",
+        "troops": 600,
+        "role": "Flanker"
+      }
+    ]
+  },
+  "side_b": {
+    "strategy": "defend",
+    "subformations": [
+      {
+        "name": "line",
+        "troop_type": "heavy_infantry",
+        "troops": 2400
+      },
+      {
+        "name": "spear",
+        "troop_type": "spearmen",
+        "troops": 1200
+      },
+      {
+        "name": "bows",
+        "troop_type": "archers",
+        "troops": 1000,
+        "role": "VolleyLine"
+      },
+      {
+        "name": "horse",
+        "troop_type": "light_cavalry",
+        "troops": 600,
+        "role": "Flanker"
+      }
+    ]
+  },
+  "morale_start": 5,
+  "max_turns": 72,
+  "page_seed": 3,
+  "sweep_seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+  ],
+  "round_digits": 3
+}

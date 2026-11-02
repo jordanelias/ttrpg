@@ -1841,6 +1841,7 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
     _draw_friction(unit_b)
     turns = 0
     current_phase = 0
+    separate_all_bodies(unit_a, unit_b)   # an army is deployed clear of itself and of the enemy
     # [ED-MB-0048 / A3] battle-scoped totals for the sub-phase truncation counter; see
     # resolve_engagements_cascading. Zero on every shipped workload measured so far — the
     # value of carrying them is that a non-zero is now READABLE rather than needing a probe.
@@ -2272,6 +2273,10 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         if t % TICKS_PER_PHASE == 0:
             current_phase += 1
             phase_boundary(unit_a, unit_b, current_phase)
+        # A cell with enemies on it turns toward them (per cell, rate-limited); then no two bodies interpenetrate at the
+        # end of any tick, whatever step last wrote a position.
+        turn_to_face_aggressors(unit_a, unit_b)
+        separate_all_bodies(unit_a, unit_b)
         if tracing_on():
             trace_event('positions', t=t, a=_unit_snapshot(unit_a), b=_unit_snapshot(unit_b))
     winner = ("A" if not unit_a.routed and unit_b.routed else

@@ -41,10 +41,6 @@ KNOWN_RED = {
         'rally clears yielding below the rally fraction — DG2 residual (ED-MB-0061)',
     'test_intent_resolution.py::test_holder_survives_better_with_intent':
         'intent-on holder no longer survives better — flags-ON residual (ED-MB-0061)',
-    'test_obb_contact_toi.py::test_head_on_no_interpenetration_no_stall':
-        'OBB commit permits body interpenetration — geometry spec residual (ED-MB-0061)',
-    'test_obb_contact_toi.py::test_cavalry_charge_reaches_contact':
-        'charge drives bodies into interpenetration — geometry spec residual (ED-MB-0061)',
     'test_mass_battle_byte_exact.py::test_byte_exact_unit_mode':
         'unit-mode golden digest drifted and has not been re-recorded (ED-MB-0061)',
     'test_mass_battle_byte_exact.py::test_byte_exact_cell_mode':

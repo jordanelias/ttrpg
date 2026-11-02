@@ -37,7 +37,7 @@ valoria_conftest = _load_conftest()
 
 # Pinned deliberately. Raising it requires a commit that says which failure joined the set and why
 # it is not a regression. Lowering it is what happens when the MB lane fixes one.
-EXPECTED_KNOWN_RED = 9
+EXPECTED_KNOWN_RED = 7
 
 
 def test_the_register_has_not_grown_by_accretion():

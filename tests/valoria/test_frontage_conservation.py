@@ -19,7 +19,7 @@ This file is the Stage D gate the plan (spatial_model_v2_plan.md §3 Stage D / �
   * determinism (I2).
 
 Deterministic + seeded. Movement toggles saved/restored in fixtures (same discipline as
-test_obb_contact_toi.py) so node/grid state never leaks between tests.
+test_body_contact_toi.py) so node/grid state never leaks between tests.
 """
 import math
 import os
@@ -32,7 +32,7 @@ import modules.mass_battle.hierarchy.units as _hu  # noqa: E402
 import modules.mass_battle.orchestration as _orch  # noqa: E402
 import modules.mass_battle.core.contact as _contact  # noqa: E402
 from modules.mass_battle.geometry import (  # noqa: E402
-    cellbox_from, engaged_frontage, _project_interval, _cellbox_corners,
+    cellbody_from, engaged_frontage, _project_interval,
     _normalize_heading, _rotate90,
 )
 from modules.mass_battle.core.attrition import _lanchester_strength  # noqa: E402
@@ -58,7 +58,7 @@ def field_path():
 
 def _row(c, cols, heading):
     """A single rank: one unit box per file in `cols`, at row `c`, facing `heading`."""
-    return [cellbox_from(float(c), float(k), heading) for k in cols]
+    return [cellbody_from(float(c), float(k), heading) for k in cols]
 
 
 # ─── frontage geometry properties (pure) ─────────────────────────────────────
@@ -77,7 +77,7 @@ def test_frontage_continuous_on_offset():
     """A half-file lateral offset yields a FRACTIONAL frontage -- the shape-fidelity gain integer
     snapping used to lose (it would have rounded the meeting up to whole files)."""
     A = _row(0, range(-1, 2), (1.0, 0.0))
-    B = [cellbox_from(1.0, k + 0.5, (-1.0, 0.0)) for k in range(-1, 2)]
+    B = [cellbody_from(1.0, k + 0.5, (-1.0, 0.0)) for k in range(-1, 2)]
     f = engaged_frontage(A, B, (1.0, 0.0))
     assert 2.0 < f < 3.0 and math.isclose(f, 2.5, abs_tol=1e-9)
 
@@ -101,8 +101,8 @@ def test_frontage_capped_by_meeting_width():
     wide = _row(0, range(-5, 6), (1.0, 0.0))     # 11 files
     narrow = _row(1, range(-1, 2), (-1.0, 0.0))  # 3 files
     axis = _rotate90(_normalize_heading((1.0, 0.0)))
-    narrow_span = max(_project_interval(_cellbox_corners(b, use_reach=False), axis)[1] for b in narrow) - \
-        min(_project_interval(_cellbox_corners(b, use_reach=False), axis)[0] for b in narrow)
+    narrow_span = max(_project_interval(b, axis)[1] for b in narrow) - \
+        min(_project_interval(b, axis)[0] for b in narrow)
     f = engaged_frontage(wide, narrow, (1.0, 0.0))
     assert f <= narrow_span + 1e-9, f"{f} exceeded meeting width {narrow_span}"
     assert math.isclose(f, 3.0, abs_tol=1e-9)    # capped at the 3-file enemy

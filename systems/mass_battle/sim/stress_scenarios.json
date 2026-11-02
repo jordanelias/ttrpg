@@ -1,0 +1,850 @@
+{
+ "_what": "Parameters for stress.py. Data, not code. Every army here has at least troops_floor troops.",
+ "field": 51,
+ "approach_rows": 15,
+ "troops_floor": 5000,
+ "seeds": [
+  1,
+  2,
+  3
+ ],
+ "tick_caps": [
+  18,
+  72
+ ],
+ "round_digits": 3,
+ "morale_start": 5,
+ "deep_depth": 0.1,
+ "idle_window": 3,
+ "move_eps": 0.001,
+ "edge_margin": 1.0,
+ "arms": {
+  "shipped": {},
+  "all_on": {
+   "MB_SUPPORT_RANK_CAP": "1"
+  },
+  "diagnostic_no_friction": {
+   "MB_FRICTION": "0"
+  }
+ },
+ "scenarios": [
+  {
+   "id": "S01_mirror_lines",
+   "note": "three heavy lines and two archer blocks behind, each side",
+   "a": {
+    "kind": "army",
+    "subunits": [
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 1400
+     },
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 1400
+     },
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 1400
+     },
+     {
+      "shape": "Line",
+      "troop_type": "archers",
+      "troops": 500,
+      "echelon": 4
+     },
+     {
+      "shape": "Line",
+      "troop_type": "archers",
+      "troops": 500,
+      "echelon": 4
+     }
+    ]
+   },
+   "b": {
+    "kind": "army",
+    "subunits": [
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 1400
+     },
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 1400
+     },
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 1400
+     },
+     {
+      "shape": "Line",
+      "troop_type": "archers",
+      "troops": 500,
+      "echelon": 4
+     },
+     {
+      "shape": "Line",
+      "troop_type": "archers",
+      "troops": 500,
+      "echelon": 4
+     }
+    ]
+   }
+  },
+  {
+   "id": "S02_wedge_vs_line",
+   "note": "an Arrowhead and two Lines against three Lines",
+   "a": {
+    "kind": "army",
+    "subunits": [
+     {
+      "shape": "Line",
+      "troop_type": "spearmen",
+      "troops": 1200
+     },
+     {
+      "shape": "Arrowhead",
+      "troop_type": "heavy_infantry",
+      "troops": 3000
+     },
+     {
+      "shape": "Line",
+      "troop_type": "spearmen",
+      "troops": 1200
+     }
+    ]
+   },
+   "b": {
+    "kind": "army",
+    "subunits": [
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 1800
+     },
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 1800
+     },
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 1800
+     }
+    ]
+   }
+  },
+  {
+   "id": "S03_cannae_double_envelopment",
+   "note": "held centre and two cavalry wings released into envelop at tick 4, against a deep Roman mass",
+   "a": {
+    "kind": "envelopment",
+    "center": [
+     {
+      "shape": "Line",
+      "troop_type": "spearmen",
+      "troops": 1600,
+      "stance": "hold"
+     },
+     {
+      "shape": "Line",
+      "troop_type": "spearmen",
+      "troops": 1600,
+      "stance": "hold"
+     }
+    ],
+    "wings": [
+     {
+      "shape": "Line",
+      "troop_type": "cavalry",
+      "troops": 1000
+     },
+     {
+      "shape": "Line",
+      "troop_type": "cavalry",
+      "troops": 1000
+     }
+    ]
+   },
+   "b": {
+    "kind": "army",
+    "subunits": [
+     {
+      "shape": "Column",
+      "troop_type": "heavy_infantry",
+      "troops": 2400
+     },
+     {
+      "shape": "Column",
+      "troop_type": "heavy_infantry",
+      "troops": 2400
+     },
+     {
+      "shape": "Column",
+      "troop_type": "heavy_infantry",
+      "troops": 2400
+     }
+    ]
+   }
+  },
+  {
+   "id": "S04_leuctra_oblique",
+   "note": "deep strong wing and a refused wing against five Lines",
+   "a": {
+    "kind": "refused",
+    "strong": [
+     {
+      "shape": "Column",
+      "troop_type": "heavy_infantry",
+      "troops": 1500
+     },
+     {
+      "shape": "Column",
+      "troop_type": "heavy_infantry",
+      "troops": 1500
+     },
+     {
+      "shape": "Column",
+      "troop_type": "heavy_infantry",
+      "troops": 1500
+     }
+    ],
+    "refused": [
+     {
+      "shape": "Line",
+      "troop_type": "spearmen",
+      "troops": 600
+     },
+     {
+      "shape": "Line",
+      "troop_type": "spearmen",
+      "troops": 600
+     }
+    ]
+   },
+   "b": {
+    "kind": "army",
+    "subunits": [
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 1500
+     },
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 1500
+     },
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 1500
+     },
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 1500
+     },
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 1500
+     }
+    ]
+   }
+  },
+  {
+   "id": "S05_horse_against_pike",
+   "note": "cavalry shock and archers against a pike block",
+   "a": {
+    "kind": "army",
+    "subunits": [
+     {
+      "shape": "Line",
+      "troop_type": "cavalry",
+      "troops": 1000,
+      "role": "Shock"
+     },
+     {
+      "shape": "Line",
+      "troop_type": "cavalry",
+      "troops": 1000,
+      "role": "Shock"
+     },
+     {
+      "shape": "Line",
+      "troop_type": "cavalry",
+      "troops": 1000,
+      "role": "Shock"
+     },
+     {
+      "shape": "Line",
+      "troop_type": "light_cavalry",
+      "troops": 1000
+     },
+     {
+      "shape": "Line",
+      "troop_type": "archers",
+      "troops": 1000,
+      "echelon": 4
+     }
+    ]
+   },
+   "b": {
+    "kind": "army",
+    "subunits": [
+     {
+      "shape": "Line",
+      "troop_type": "pike",
+      "troops": 1500,
+      "role": "ShieldWall"
+     },
+     {
+      "shape": "Line",
+      "troop_type": "pike",
+      "troops": 1500,
+      "role": "ShieldWall"
+     },
+     {
+      "shape": "Line",
+      "troop_type": "pike",
+      "troops": 1500,
+      "role": "ShieldWall"
+     },
+     {
+      "shape": "Line",
+      "troop_type": "archers",
+      "troops": 1000,
+      "echelon": 4
+     }
+    ]
+   }
+  },
+  {
+   "id": "S06_missile_against_foot",
+   "note": "four archer blocks behind two lines against heavy foot with no missile troops",
+   "a": {
+    "kind": "army",
+    "subunits": [
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 1400
+     },
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 1400
+     },
+     {
+      "shape": "Line",
+      "troop_type": "archers",
+      "troops": 700,
+      "echelon": 4
+     },
+     {
+      "shape": "Line",
+      "troop_type": "archers",
+      "troops": 700,
+      "echelon": 4
+     },
+     {
+      "shape": "Line",
+      "troop_type": "archers",
+      "troops": 700,
+      "echelon": 4
+     },
+     {
+      "shape": "Line",
+      "troop_type": "archers",
+      "troops": 700,
+      "echelon": 4
+     }
+    ]
+   },
+   "b": {
+    "kind": "army",
+    "subunits": [
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 1900
+     },
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 1900
+     },
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 1900
+     }
+    ]
+   }
+  },
+  {
+   "id": "S07_season_path_mirror",
+   "note": "order of battle through build_unit, the season's own path, both sides the same",
+   "a": {
+    "kind": "oob",
+    "strategy": "advance",
+    "subformations": [
+     {
+      "name": "line",
+      "troop_type": "heavy_infantry",
+      "troops": 2400
+     },
+     {
+      "name": "spear",
+      "troop_type": "spearmen",
+      "troops": 1200
+     },
+     {
+      "name": "bows",
+      "troop_type": "archers",
+      "troops": 1000,
+      "role": "VolleyLine"
+     },
+     {
+      "name": "horse",
+      "troop_type": "light_cavalry",
+      "troops": 600,
+      "role": "Flanker"
+     }
+    ]
+   },
+   "b": {
+    "kind": "oob",
+    "strategy": "defend",
+    "subformations": [
+     {
+      "name": "line",
+      "troop_type": "heavy_infantry",
+      "troops": 2400
+     },
+     {
+      "name": "spear",
+      "troop_type": "spearmen",
+      "troops": 1200
+     },
+     {
+      "name": "bows",
+      "troop_type": "archers",
+      "troops": 1000,
+      "role": "VolleyLine"
+     },
+     {
+      "name": "horse",
+      "troop_type": "light_cavalry",
+      "troops": 600,
+      "role": "Flanker"
+     }
+    ]
+   }
+  },
+  {
+   "id": "S08_season_path_two_to_one",
+   "note": "an order of battle against one twice its size",
+   "a": {
+    "kind": "oob",
+    "strategy": "advance",
+    "subformations": [
+     {
+      "name": "line",
+      "troop_type": "heavy_infantry",
+      "troops": 2400
+     },
+     {
+      "name": "spear",
+      "troop_type": "spearmen",
+      "troops": 1200
+     },
+     {
+      "name": "bows",
+      "troop_type": "archers",
+      "troops": 1000,
+      "role": "VolleyLine"
+     },
+     {
+      "name": "horse",
+      "troop_type": "light_cavalry",
+      "troops": 600,
+      "role": "Flanker"
+     }
+    ]
+   },
+   "b": {
+    "kind": "oob",
+    "strategy": "defend",
+    "subformations": [
+     {
+      "name": "line",
+      "troop_type": "heavy_infantry",
+      "troops": 4000
+     },
+     {
+      "name": "spear",
+      "troop_type": "spearmen",
+      "troops": 2400
+     },
+     {
+      "name": "bows",
+      "troop_type": "archers",
+      "troops": 2000,
+      "role": "VolleyLine"
+     },
+     {
+      "name": "horse",
+      "troop_type": "light_cavalry",
+      "troops": 1600,
+      "role": "Flanker"
+     }
+    ]
+   }
+  },
+  {
+   "id": "S09_eleven_subunits",
+   "note": "the subunit cap, eleven bodies a side",
+   "a": {
+    "kind": "army",
+    "subunits": [
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 500
+     },
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 500
+     },
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 500
+     },
+     {
+      "shape": "Line",
+      "troop_type": "spearmen",
+      "troops": 500
+     },
+     {
+      "shape": "Line",
+      "troop_type": "spearmen",
+      "troops": 500
+     },
+     {
+      "shape": "Line",
+      "troop_type": "pike",
+      "troops": 500
+     },
+     {
+      "shape": "Line",
+      "troop_type": "light_infantry",
+      "troops": 500
+     },
+     {
+      "shape": "Line",
+      "troop_type": "cavalry",
+      "troops": 500
+     },
+     {
+      "shape": "Line",
+      "troop_type": "cavalry",
+      "troops": 500
+     },
+     {
+      "shape": "Line",
+      "troop_type": "archers",
+      "troops": 500,
+      "echelon": 4
+     },
+     {
+      "shape": "Line",
+      "troop_type": "archers",
+      "troops": 500,
+      "echelon": 4
+     }
+    ]
+   },
+   "b": {
+    "kind": "army",
+    "subunits": [
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 500
+     },
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 500
+     },
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 500
+     },
+     {
+      "shape": "Line",
+      "troop_type": "spearmen",
+      "troops": 500
+     },
+     {
+      "shape": "Line",
+      "troop_type": "spearmen",
+      "troops": 500
+     },
+     {
+      "shape": "Line",
+      "troop_type": "pike",
+      "troops": 500
+     },
+     {
+      "shape": "Line",
+      "troop_type": "light_infantry",
+      "troops": 500
+     },
+     {
+      "shape": "Line",
+      "troop_type": "cavalry",
+      "troops": 500
+     },
+     {
+      "shape": "Line",
+      "troop_type": "cavalry",
+      "troops": 500
+     },
+     {
+      "shape": "Line",
+      "troop_type": "archers",
+      "troops": 500,
+      "echelon": 4
+     },
+     {
+      "shape": "Line",
+      "troop_type": "archers",
+      "troops": 500,
+      "echelon": 4
+     }
+    ]
+   }
+  },
+  {
+   "id": "S10_unit_ceiling",
+   "note": "the largest unit the engine allows, ten thousand a side in eleven bodies",
+   "a": {
+    "kind": "army",
+    "subunits": [
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 1000
+     },
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 1000
+     },
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 1000
+     },
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 1000
+     },
+     {
+      "shape": "Line",
+      "troop_type": "spearmen",
+      "troops": 1000
+     },
+     {
+      "shape": "Line",
+      "troop_type": "spearmen",
+      "troops": 1000
+     },
+     {
+      "shape": "Line",
+      "troop_type": "pike",
+      "troops": 1000
+     },
+     {
+      "shape": "Line",
+      "troop_type": "cavalry",
+      "troops": 1000
+     },
+     {
+      "shape": "Line",
+      "troop_type": "cavalry",
+      "troops": 1000
+     },
+     {
+      "shape": "Line",
+      "troop_type": "archers",
+      "troops": 500,
+      "echelon": 4
+     },
+     {
+      "shape": "Line",
+      "troop_type": "archers",
+      "troops": 500,
+      "echelon": 4
+     }
+    ]
+   },
+   "b": {
+    "kind": "army",
+    "subunits": [
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 1000
+     },
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 1000
+     },
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 1000
+     },
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 1000
+     },
+     {
+      "shape": "Line",
+      "troop_type": "spearmen",
+      "troops": 1000
+     },
+     {
+      "shape": "Line",
+      "troop_type": "spearmen",
+      "troops": 1000
+     },
+     {
+      "shape": "Line",
+      "troop_type": "pike",
+      "troops": 1000
+     },
+     {
+      "shape": "Line",
+      "troop_type": "cavalry",
+      "troops": 1000
+     },
+     {
+      "shape": "Line",
+      "troop_type": "cavalry",
+      "troops": 1000
+     },
+     {
+      "shape": "Line",
+      "troop_type": "archers",
+      "troops": 500,
+      "echelon": 4
+     },
+     {
+      "shape": "Line",
+      "troop_type": "archers",
+      "troops": 500,
+      "echelon": 4
+     }
+    ]
+   }
+  },
+  {
+   "id": "S11_wide_double_envelopment",
+   "note": "ten thousand a side: a held centre and two cavalry wings sent around, against six lines across the field",
+   "a": {
+    "kind": "envelopment",
+    "center": [
+     {
+      "shape": "Line",
+      "troop_type": "spearmen",
+      "troops": 1500,
+      "stance": "hold"
+     },
+     {
+      "shape": "Line",
+      "troop_type": "spearmen",
+      "troops": 1500,
+      "stance": "hold"
+     },
+     {
+      "shape": "Line",
+      "troop_type": "spearmen",
+      "troops": 1500,
+      "stance": "hold"
+     },
+     {
+      "shape": "Line",
+      "troop_type": "spearmen",
+      "troops": 1500,
+      "stance": "hold"
+     }
+    ],
+    "wings": [
+     {
+      "shape": "Line",
+      "troop_type": "cavalry",
+      "troops": 2000
+     },
+     {
+      "shape": "Line",
+      "troop_type": "cavalry",
+      "troops": 2000
+     }
+    ]
+   },
+   "b": {
+    "kind": "army",
+    "subunits": [
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 1666
+     },
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 1666
+     },
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 1666
+     },
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 1666
+     },
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 1666
+     },
+     {
+      "shape": "Line",
+      "troop_type": "heavy_infantry",
+      "troops": 1670
+     }
+    ]
+   }
+  }
+ ],
+ "pair_reach": 2.0
+}
