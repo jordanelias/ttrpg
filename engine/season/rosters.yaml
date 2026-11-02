@@ -2208,8 +2208,9 @@ rosters:
       loss, `verb_table.yaml`'s `commit` note): a row declaring a class forms ONLY on that class
       (`Question.referents_for`), so `commit` would lose the plain referents IN-11's utterer route
       forms on. ONE LOADER, `data/verbs.py::TERMS_SOURCED`,
-      refused at import when a line names a verb the table lacks, or a kind that is no held-writ
-      occasion (`RECORD_REFERENT_KINDS`, which `writs_held` stamps) or whose `subject` no held Record
+      refused at import when a line names a verb the table lacks, or a kind that is no record term's occasion
+      (`RECORD_REFERENT_KINDS`, which `writs_held` stamps, or `HOLDING_RECORD_KINDS`, a held document a holding
+      row asks for; v10 IN-12 step 5a) or whose `subject` no held Record
       answers -- either would form for nobody. Whether the act then passes is the fold's (`commit`'s
       own cell: the terms exist and are a Proposition; a writ whose terms name a person is refused
       there, `commitment.refused`). [ASSUMPTION; medium; Jordan to correct; revert: drop this roster,
@@ -2336,8 +2337,9 @@ rosters:
       person-side reading of the claim's title conjunct (`state/gate.py::may_claim`): without it every
       person told of any seat would form a claim on it, refused in the fold every time (the always-refused
       set `test_u7_own.py` polices). It NARROWS the referents a question carries and widens nothing; the
-      seat's vacancy is still the fold's to read (the heir who forms a claim on a seat he wrongly believes
-      vacant is refused and learns it). ONE LOADER, `data/verbs.py::OWN_TITLE_DECLINES`, refused at import
+      seat's vacancy is still the fold's to read. FORMATION IS GATED ON THE TITLE AND THE SEAT BEING NAMED IN
+      THE HEIR'S LEDGER, NOT ON HIS BELIEF IN A VACANCY: an untyped row's refusal does not decay, so an heir told
+      of the throne (any claim naming it) re-forms `succeed` on it while a King sits, and is refused each time. ONE LOADER, `data/verbs.py::OWN_TITLE_DECLINES`, refused at import
       when a member names a verb the table lacks or one whose row declares no `referent_class: Office`.
       [ASSUMPTION; medium; Jordan to correct; revert: drop the member, and `succeed` forms on every seat a
       question carries.]
@@ -2880,8 +2882,8 @@ rosters:
       `peninsular_sovereignty` unreachable by construction (every seeded territory hold re-opened by an
       act, and `terr_T15`'s, unheld at build, by a verb that does not exist, `H-186`). A `holds:`
       selects by a world field, EXACTLY ONE of `{post: <an offices.yaml seat post>}` (every Office with
-      that post; a loop-built seat keeps its `off_<holder>` id, so an `offices.yaml` id names nothing
-      the loop holds) or `{rung_kind: <a rung_kinds member>}` (every rung of that kind UNDER A `realm`
+      that post; since v10 CP-T02-02 a seat an `offices.yaml` row stands for is built under that row's id,
+      and a seat with no row keeps its `off_<holder>` slug) or `{rung_kind: <a rung_kinds member>}` (every rung of that kind UNDER A `realm`
       RUNG, held at or above it, `holder_faction_of`'s walk; `terr_T16`, Schoenland's foreign root, is
       outside the realm and not selected).
       `under:` is a `factions` member, or `one_faction` (every selected holder under the same faction,
@@ -3579,7 +3581,7 @@ tables:
         destroy_record:  1.0    # carried: unmaking the record is the anti-procedural act -- the record is what precedent is consulted in
         create_record:  -0.8    # carried: the record IS what precedent is made of
         research:       -0.7    # carried: archives, oral histories, institutional records -- looking to prior cases
-        succeed:        -0.6    # carried: heir designation is dynastic continuity in one act
+        succeed:        -0.6    # carried: the heir's claim is dynastic continuity in one act (since v10 IN-61 this cell also weighs `succession.claimed`)
         tie / knot:     -0.5    # carried (a weaker fit, the draft flags it): the ancestral social technology
         evade / defy:    0.5    # carried: breaks with the expected, established course
         reconstruct:    -0.4    # carried: assembling what stands, not creating what is new

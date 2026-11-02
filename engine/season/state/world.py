@@ -838,7 +838,7 @@ class World:
         in `tiny_world`: a live `tie` from `p_low` to `p_mid` survived `p_mid`'s death and then
         DANGLED. §15.3 is explicit that the tenure ends THROUGH the death.
 
-        ⚠ IT MUTATES AND RETURNS THE IDS IT TOUCHED; IT DOES NOT CALL `write`. Every caller is
+        ⚠ IT MUTATES AND RETURNS THE SEAT `hold`s IT CLOSED (v10 CP-T02-01; not ids); IT DOES NOT CALL `write`. Every caller is
         already inside a gated write when it reaches here — `_eff_kill` and `_eff_march` through
         their own `Change`'s `apply`, which the gate calls (G4; neither effect reads the return
         value, the gate reads the victim instead), MATTER through its own `w.write` closure — and

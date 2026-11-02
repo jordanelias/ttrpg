@@ -1535,8 +1535,9 @@ DECLARED_CLASSES = _derive_declared_classes()
 
 # v9 IN-12 step 7: `{verb: (record kinds)}` -- the verbs that may ALSO form on what a held writ of one of
 # those kinds says (`rosters.yaml: terms_sourced`; `commit` on a covenant dispensation's Proposition).
-# REFUSED AT IMPORT, `WARRANT_SOURCED`'s reason: a verb the table lacks, a kind `writs_held` never stamps
-# (not in `RECORD_REFERENT_KINDS`), or a kind whose `subject` no held Record answers would each form for
+# REFUSED AT IMPORT, `WARRANT_SOURCED`'s reason: a verb the table lacks, a kind no record term stamps
+# (neither `writs_held`'s `RECORD_REFERENT_KINDS` nor a holding row's `HOLDING_RECORD_KINDS`, v10 IN-12 step 5a),
+# or a kind whose `subject` no held Record answers would each form for
 # nobody, and a stale line must not read as a live route. Read here, beside the set it is checked against.
 def _load_terms_sourced(values: dict) -> dict:
     """`rosters.yaml: terms_sourced`'s `values`, checked and frozen -- refused per line (above).
@@ -1557,9 +1558,10 @@ def _load_terms_sourced(values: dict) -> dict:
         if v not in VERB_TABLE or not ks or dead:
             raise Forbidden(
                 f"`rosters.yaml: terms_sourced` names {v!r}: {list(ks)}, and the verb table carries no "
-                f"such verb, the line names no kind, or {dead} is no held-writ occasion "
-                f"(`RECORD_REFERENT_KINDS`) whose `subject` a held Record answers", "rosters.yaml",
-                needs="a `verb_table.yaml` verb, and record kinds `writs_held` stamps and "
+                f"such verb, the line names no kind, or {dead} is no record kind a term stamps "
+                f"(`RECORD_REFERENT_KINDS` or `HOLDING_RECORD_KINDS`) whose `subject` a held Record answers",
+                "rosters.yaml",
+                needs="a `verb_table.yaml` verb, and record kinds `writs_held` or a holding row stamps and "
                       "`record_sourced_operands` maps `subject` for",
                 law="IN-12 step 7 -- a terms-sourced verb forms on what a held writ says, or on nothing new")
     return out

@@ -42,7 +42,7 @@ from ..trace_log import TRACE
 # here and the gate there cannot disagree (`CLAUDE.md` §8) -- and a `monkeypatch` of this module's
 # `has_conferral_basis` still reaches both preconditions that call it by that name.
 from ..state.gate import (  # noqa: F401 -- `REVOCATION_RULES`, `in_holdings`, `seated_on_the_rung_above` re-exported
-    REVOCATION_RULES, has_conferral_basis, has_revocation_disposal, in_holdings, may_claim, may_fill,
+    REVOCATION_RULES, has_conferral_basis, has_filler, has_revocation_disposal, in_holdings, may_claim, may_fill,
     may_revoke, seated_on_the_rung_above)
 
 
@@ -190,8 +190,9 @@ def _req_succeed(w: "World", a: "Act") -> bool:
     seat = binding_from_act(a).get("subject")
     if not isinstance(seat, str) or seat not in w.offices:
         return False                       # (a list `subject` is unhashable: refuse, never raise)
-    titles = {t.object for t in w.tenures
-              if t.kind == "hold" and t.live and t.subject == a.actor and t.object in w.offices}
+    if restrained(w, a.actor, BAN_KIND):
+        return False                       # a banned man is seated by no route (`confer` declines him, `_req_oblige` 5)
+    titles = {t.object for t in w.seat_holds(a.actor)}
     return may_claim(w, a.actor, w.offices[seat], titles)
 
 
@@ -307,6 +308,8 @@ def _req_establish(w: "World", a: "Act") -> bool:
         return False                       # "a rung to establish it at"
     if not has_conferral_basis(off):
         return False                       # "the establishing office's conferral basis"
+    if not has_filler(off):
+        return False                       # a seat only the heir's claim opens, with no title passing it (v10 IN-61)
     held_as = w.class_of(off.id)
     if held_as is not None:
         if held_as != "Office":
@@ -460,7 +463,7 @@ def _req_interrogate(w: "World", a: "Act") -> bool:
     The record kind is not compared: a Record named under the docket's petition key is one `carry`
     docketed, and `carry` docketed only a petition (`_eff_carry`)."""
     subj = subject_of(a)
-    if subj not in w.persons:
+    if not isinstance(subj, str) or subj not in w.persons:      # (a list `subject` is unhashable: refuse, never raise)
         return _refuse("an interrogation of no person the world holds", f"{a.actor} on {subj!r}")
     if not restrained(w, subj, DETAIN_KIND):
         return _refuse("an interrogation of a man held in no custody", f"{a.actor} on {subj!r}")

@@ -687,7 +687,7 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # the season is today's. A NaN or negative rate is truthy, enters, and `body_hazard` refuses it.
     # ⚠ WHAT THE DEATH REACHES: an actorless `person.died` is placed where `remove_person` took him
     # out (`world_q.event_place`, H-206), so persons standing there hold claims naming the dead
-    # holder. NOT BUILT: claims naming his OFFICE or closed HOLD (H-206's NOT DONE).
+    # holder. A `tenure.closed` naming each seat he held is emitted by `_die` itself (v10 CP-T02-01).
     if float(w.fixtures.get("age_step")) or float(w.fixtures.get("illness_rate")):
         keyed = draw_factory(w.world_seed, lambda: w.tick)
         for pid in sorted(w.persons):

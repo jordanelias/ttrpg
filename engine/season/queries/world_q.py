@@ -2594,8 +2594,9 @@ def _goal_referents(w: World, p: Person, goal, prop, path: frozenset) -> tuple:
     if kind in ("person", "rung"):
         return (subject,) if subject is not None else ()
     if kind == "seat_holders":
-        # The Office ids seeding recorded (`Proposition.scope`: a loop-built seat is not named by its
-        # `offices.yaml` id); a world that minted no scope reads the listed ids as Office ids.
+        # The Office ids seeding recorded (`Proposition.scope`; since v10 CP-T02-02 a seat a row stands for
+        # is built under that row's id, so the scope is the listed ids; a seat with no row keeps its slug);
+        # a world that minted no scope reads the listed ids as Office ids.
         seats = set(prop.scope) if prop is not None and prop.scope else set(obj["seats"])
         return tuple(dict.fromkeys(t.subject for t in w.tenures
                                    if t.kind == "hold" and t.live and t.object in seats
@@ -2669,7 +2670,8 @@ def _aim_held_by_org_member(w: World, goal) -> bool:
 
 
 #: `rosters.yaml: goal_object_kinds.aim` names a rule per kind; these are the rules. A rule is a predicate over
-#: `(w, goal)` and reads live `hold`s and `commit`s only (T-a): nothing stored, so a rung lost un-meets the aim.
+#: `(w, goal)` and reads live `hold`s, `commit`s and the `contain` walk `governing_hold` takes (T-a): nothing stored,
+#: so a rung lost un-meets the aim.
 AIM_RULES = {"held_by_org_member": _aim_held_by_org_member}
 
 
@@ -3079,8 +3081,11 @@ def detainees_held(w: World, p: Person) -> tuple:
     `interrogate` declares `Person`]), sorted by id: every living person who owns a LIVE `detain`
     (`DETAIN_KIND`, `restrained`'s kind) whose object is a seat `p` holds a live `hold` on that grants
     one of `data/verbs.py::DETAINEE_REMIT_ACTS` (the remit acts of the rows declaring the class:
-    `interrogate`'s `determine`). A STANDING OCCASION, `larders_in_purview`'s and `vacancies`' shape:
-    world-read, gated on the seat's grant, resolver-side and read-only. It supplies Person ids, which
+    `interrogate`'s `determine`). A STANDING OCCASION, `vacancies`' shape: world-read, gated on the seat's
+    grant and NOT on what the asker was told (`larders_in_purview` is ledger-gated; this is not), resolver-side
+    and read-only. That shape is the tree's own `in tension with AX-7` list (`loop/matter.py`, `vacancies`):
+    no ledger deposit occurs, so AX-7's falsifier (a deposit) is not tripped; the reason it is a world stamp and
+    not a claim is H-231 limit 3 (a custody Receipt names no one, so no claim can carry the prisoner). It supplies Person ids, which
     `questions_for` stamps onto the question he answers as the `Detainee` class (`DETAINEE_CLASS`, named
     there because no collection answers it), so only a row declaring that class forms on them; whether
     the act then passes is the fold's (`loop/predicates.py::_req_interrogate`: custody again, and the
@@ -3131,7 +3136,7 @@ def own_referents_of_class(w: World, q: Question, classes: Optional[frozenset] =
                  and not (r in w.records and w.records[r].kind in RECORD_REFERENT_KINDS))
 
 
-def _stamped(q: Question, added: tuple, w: World, named: tuple = ()) -> Question:
+def _stamped(q: Question, added: tuple, w: World, classed: tuple = ()) -> Question:
     """`q` carrying the ids in `added` as CLASSED referents (IN-53, DECISION 2026-10-13 D1) -- the
     one stamp site. Each id's class is the collection the World holds it in (`World.class_of`:
     `Office` for a seat in `w.offices`, `Record` for a document in `w.records` since IN-09), never a
@@ -3143,10 +3148,10 @@ def _stamped(q: Question, added: tuple, w: World, named: tuple = ()) -> Question
     beside a standing occasion's stamp), so each pair is kept at its first position -- `q`'s own,
     then `added` in splice order -- and never refused. REVERT: the concatenation, and every term
     pair that can overlap filters by hand again.
-    `named` (v10 IN-12): `(id, class)` pairs whose class is NO collection (`Detainee`), appended after
+    `classed` (v10 IN-12): `(id, class)` pairs whose class is NO collection (`Detainee`), appended after
     `added`; the class is the term's, since `class_of` cannot answer it. Empty: the stamp is unchanged."""
     return replace(q, classes=tuple(dict.fromkeys(
-        q.classes + tuple((o, w.class_of(o)) for o in added) + tuple(named))))
+        q.classes + tuple((o, w.class_of(o)) for o in added) + tuple(classed))))
 
 
 _SOURCE_ORDER = {src: i for i, src in enumerate(QUESTION_SOURCES)}

@@ -751,7 +751,8 @@ def seed_goals(w: World, rows: tuple, authored: dict, cid_of: dict, partial: boo
                complete: bool = True) -> dict:
     """SEED THE ORGANIZATIONS' GOALS IN A BUILT WORLD (v9 IN-68, A-32; ED-IN-0293 (8), (10)). `rows` are
     `data/goals.py` `Goal`s, `authored` is `_office_census["authored"]` (an `offices.yaml` seat id -> the
-    Office id that stands for it: NOT the same string for a loop-built seat), `cid_of` the built cast's
+    Office id that stands for it: since v10 CP-T02-02 the SAME string wherever a row stands for the seat,
+    `_seat_id`), `cid_of` the built cast's
     person id -> case id, `partial` true when `cap` dropped part of the cast. Returns the counts
     `census` reports (never read by the loop).
 

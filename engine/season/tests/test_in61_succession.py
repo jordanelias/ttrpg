@@ -212,6 +212,68 @@ def test_a_throne_released_by_its_holder_reaches_the_heir_and_he_forms_the_claim
         assert not _live_hold(w, heir, TITLE)
 
 
+# --- B10-09 CLOSE (antagonist, Phase 1): THE CLAIM'S REMAINING GUARDS ---------------------------------
+
+def test_a_banned_heir_is_refused_the_claim_and_admitted_once_the_ban_ends():
+    """C-F1: both existing seat-opening routes refuse a man under a live `ban` (`_eff_confer` declines him,
+    `_req_oblige` clause 5); the claim route read no restraint. FALSIFIER: the banned heir's `succeed` on the
+    vacant throne is refused and moves nothing. CONTROL: the same heir, the ban ended, is seated."""
+    from ..queries.world_q import BAN_KIND
+    w, d, king, heir = _realm()
+    _vacate_by_release(w, d, king)
+    ban = Tenure("t_ban_heir", heir, "off_duke_valorsmark", BAN_KIND, 0)
+    w.add_tenure(ban)
+    assert _act(w, d, heir, "succeed", "banned", subject=THRONE) == ["succession.refused"]
+    assert _holder(w, THRONE) is None and _live_hold(w, heir, TITLE)
+    ban.until = w.tick                                    # the ban ends
+    kinds = _act(w, d, heir, "succeed", "freed", subject=THRONE)
+    assert "succession.refused" not in kinds and _holder(w, THRONE) == heir, kinds
+
+
+def test_the_openers_derivation_credits_succeed_with_opening_a_hold():
+    """FIDELITY-F4: `succeed` opens the throne with a LITERAL `Tenure(..., "hold")` so `data/verbs.py::
+    _OPENERS_FROM_EFFECTS` derives it (else a claimed seat is never credited to its ending in
+    `world_q.endings_reached`). Every sibling opener asserts its membership; a later edit that
+    parameterised the kind would otherwise drop it silently."""
+    from ..data.verbs import _OPENERS_FROM_EFFECTS
+    assert "succeed" in _OPENERS_FROM_EFFECTS["hold"], sorted(_OPENERS_FROM_EFFECTS["hold"])
+
+
+def test_establish_refuses_a_seat_only_the_claim_opens_that_no_title_passes():
+    """C-F3: `_req_establish` exists to refuse "an office that exists and can never be filled". A new seat
+    whose conferral is `inheritance`, filled by the claim alone, with no `successions` title, is exactly that;
+    `check_successions` reads `offices.yaml` rows only, so it never sees a runtime-founded one. FALSIFIER:
+    `has_filler` is False for it. CONTROL: the shipped throne (a title passes it) and an `appointed` seat
+    both have a filler."""
+    import dataclasses
+    w, d, king, heir = _realm()
+    throne = w.offices[THRONE]
+    assert G.has_filler(throne) and G.has_filler(w.offices[TITLE])
+    orphan = dataclasses.replace(throne, id="off_orphan_claim_seat")
+    assert orphan.conferral == "inheritance" and orphan.id not in SUCCESSIONS
+    assert not G.has_filler(orphan)
+
+
+def test_a_computed_or_hand_built_establish_of_an_unfillable_inheritance_seat_is_refused():
+    """C-F3, THROUGH THE PREDICATE: the same defect reached by `_req_establish`. A founding act whose
+    `conferral` is `inheritance` names a seat only the claim opens, and no `successions` title passes a new
+    id, so it is refused; the identical founding with `appointed` is admitted (the control). PLANTED FAILURE:
+    with `has_filler` patched to True the refusal goes."""
+    from ..loop import predicates as _preds
+    from .test_governance_build import _establish_world, _founding
+    w, d = _establish_world()
+    control = Act(id="e_ok", actor="p_high", verb="establish", payload=_founding(), via="off_duke")
+    orphan = Act(id="e_orphan", actor="p_high", verb="establish", payload=_founding(conferral="inheritance"),
+                 via="off_duke")
+    assert _preds._req_establish(w, control), "control: the appointed founding is not admitted"
+    assert not _preds._req_establish(w, orphan), "an unfillable inheritance seat was admitted"
+    _preds.has_filler, was = (lambda off: True), _preds.has_filler
+    try:
+        assert _preds._req_establish(w, orphan), "planted failure: the refusal does not come from has_filler"
+    finally:
+        _preds.has_filler = was
+
+
 # --- THE IMPORT CHECKS: TOTAL OVER `conferral_bases`, REFUSED OTHERWISE ----------------------------
 
 def test_the_shipped_mappings_pass_their_import_checks():

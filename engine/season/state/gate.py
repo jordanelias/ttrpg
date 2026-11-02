@@ -241,6 +241,13 @@ FOUNDING = "founding"
 # no ledger. CAUSATION-BOUND like `handover` (the licence is the actor's own title, ended in the same
 # act), never authority-bound: no seat is exercised (`succeed` is `own`-eligible, `via` is `None`). See
 # `may_claim` and the block in `tenure_write_basis`.
+# ⚠ LAYER 1 DECIDES THIS TWO WAYS, AND THIS NAMES WHICH IS TAKEN (`layer-conformance` B4; the spec is not edited
+# to match the code, `CLAUDE.md` §0.05): `architecture/meta/04_CODE_ARCHITECTURE.md` §B.7 (:329) lists `succeed`
+# among the acts that fill a seat by its `conferral`, while §C.2's pseudocode (:600-620) calls itself the
+# complete enumeration of gate bases and has one inheritance arm only, the determination's election arm,
+# "any claimant" (CR-35, B10-17). The heir's claim is taken from §B.7: a seat with `conferral: inheritance`
+# is filled by `succeed`, which needs a gate basis, so `claim` is that basis. IN-44 row 14 (B10-Z) is where
+# the Layer 1 wording is reconciled; it is not landed here.
 CLAIM = "claim"
 
 # THE REMIT ACT THAT MAKES A SEAT A JUDGING SEAT -- `H-32`'s swept default, and the `bench_basis` of
@@ -592,7 +599,8 @@ if set(REVOCATION_RULES) != set(REVOCATION_BASES):
 # A `hold`'s provenance is its SEAT's declared conferral basis (`Office.conferral`, `rosters.yaml:
 # conferral_bases`, ED-IN-0256 (2)), read at revoke time: no act changes it on a live seat
 # (`_req_establish` refuses a re-founding that does), so the read equals a stamp taken at seating.
-# ⚠ IT IS THE SEAT'S BASIS, NOT THE ROUTE BY WHICH THIS MAN CAME TO SIT (`confer` fills all three).
+# ⚠ IT IS THE SEAT'S BASIS, NOT THE ROUTE BY WHICH THIS MAN CAME TO SIT (`confer` fills `appointed`, `elected` and
+# `annex`; the heir's `succeed` fills `inheritance`, v10 IN-61).
 # The value is the restraint kind `revoke` opens on him, owned by him and objected on the revoking
 # seat (`Act.via`), or `None` for nothing. JORDAN, 2026-10-21 (B-Q, answering the IN-31 design's A1
 # box, *"Design's answer"*): an `appointed` seat revoked -> a PERMANENT `ban` (SC-03a's restraint; it
@@ -692,6 +700,15 @@ def filled_by(off: Office) -> frozenset:
     return FILLED_BY.get(off.conferral, frozenset())
 
 
+def has_filler(off: Office) -> bool:
+    """CAN ANY ACT EVER FILL `off`? (v10 IN-61, B10-09 close.) `confer` fills a seat whose `FILLED_BY` names
+    `conferral`; the heir's claim fills a seat it names only if a title passes it (`successions`). A seat whose
+    basis only the claim opens and that no title passes is a seat nobody can ever fill, the defect
+    `_req_establish` exists to prevent (`check_successions` refuses it at import for the authored rows)."""
+    f = filled_by(off)
+    return CONFERRAL in f or (CLAIM in f and off.id in SUCCESSIONS)
+
+
 def check_successions() -> None:
     """REFUSED AT IMPORT: `rosters.yaml: successions` against `offices.yaml` and `FILLED_BY`. A key or a
     value that is no `offices.yaml` row names a seat that cannot exist; a key whose row's basis the claim
@@ -764,7 +781,8 @@ def has_conferral_basis(off: Office) -> bool:
     `_req_confer` asks it of the office being conferred, `_req_establish` of the office being
     founded, and the gate's `conferral` basis of the seat an opened `hold` is on -- three readers,
     one test. It is ROSTER MEMBERSHIP (`13d-i`): `conferral` must be one of `rosters.yaml:
-    conferral_bases`, `ED-IN-0256` ruling (2) -- *appointed · elected · annex*. `None` refuses; so
+    conferral_bases`, `ED-IN-0256` ruling (2) -- *appointed · elected · annex*, and `inheritance` since v10 IN-61.
+    `None` refuses; so
     does a string off the roster, which `Office.__post_init__` refuses to construct, so that arm is
     reached only by a hand-mutated office. Moved here from `loop/predicates.py` (G3), because the
     gate asks it and the gate may not import the loop; `predicates` imports the name, so a
@@ -1638,7 +1656,18 @@ class Subject:
         (`epistemic.claim_subjects`), and a dead holder's `hold` leaves the owner-first store with him
         (`World.tenures` iterates `persons`), so `_hold_tenure_ends` can no longer expand its id into
         the seat. The Office id on the receipt is the seat itself: no Claim field, no Event field and
-        no world stamp is added. It earns `tenure.closed` alone."""
+        no world stamp is added. It earns `tenure.closed` alone.
+
+        ⚠ THE ONE RECEIPT WHOSE SUBJECT IS NOT THE RECORD WRITTEN, AND IT DEPARTS FROM A PINNED RULE ON
+        PURPOSE (B10-09 close, antagonist D1). `loop/effects_governance.py::_eff_confer` keeps its Receipts on
+        the TENURE'S OWN ID "after a rejected alternative" (a Receipt must name what was ACTUALLY written;
+        `epistemic.py` states the same, `tests/test_season_shape.py` pins it for `confer`). A seat Receipt
+        names the OFFICE with the write's own field (`body`/`exists`), which is no write on an Office. The
+        reason is the plan's (`2026-10-24-v10-09-build-B10-09.md` CP-T02-01) and the alternative's cost: a
+        dead man's Tenures leave `World.tenures` with him, so a Receipt on a Tenure id cannot be expanded to
+        the seat by `_hold_tenure_ends`; that is H-206's option (b), which the plan keeps at LEAVE.
+        Its one known misreader is `harness/arc.py::_Records.of`; `read_arcs` skips a seat Receipt on a
+        `tenure.closed` Event (nothing in the game reads it, so no hash depends on it)."""
         return cls(t.object, (EDGE, t), TENURE_CLOSED)
 
     @classmethod

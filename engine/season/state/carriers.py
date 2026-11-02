@@ -450,10 +450,15 @@ class View:
         object.__setattr__(self, "question", question)
         # CP-T02-07: THE SEPARATE QUESTIONS, in `attention_key` order (`questions_for` sorts them), beside
         # the one `question`. `question` is what `question_aggregation_rule` selected and, at `all` or
-        # `one_per_source`, a MERGE -- the union of the referents under the first one's source -- so it
-        # cannot name the throne apart from the cause. This is the list the merge folded. `auto` reads
-        # `question` and never this, so the shipped run is unchanged; a callback may `assemble` a View on
-        # any one of these and ask `auto` for its proposal there. Question ids, not World references.
+        # `one_per_source`, a MERGE -- the union of the referents under the first one's source (at
+        # `one_per_source` the first question PER SOURCE) -- so it cannot name the throne apart from the
+        # cause. This is the whole list. `auto` reads `question` and never this, so the shipped run is
+        # unchanged; a callback may `assemble` a View on any one of these and ask `auto` for its proposal
+        # there. It holds `Question` objects, as `question` does (carriers of ids, no World reference).
+        # ⚠ THE STANDING-OCCASION STAMPS RIDE THE HEAD QUESTION ALONE (`world_q.questions_for`: vacancies,
+        # heard-of OUGHTs, `Detainee`, ... are attached to `out[0]`), so a View built on a later question
+        # carries no classed referents and the rows that form on a class (`confer`, `succeed`, `commit`,
+        # `interrogate`) form nothing there.
         object.__setattr__(self, "questions", tuple(questions))
 
     def __getattr__(self, name: str) -> Any:

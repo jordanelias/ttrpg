@@ -935,7 +935,7 @@ WOUND_QUANTITIES = roster("wound_quantities", ordered=True)
 def check_edge_above(above, quantities, what: str, where: str) -> None:
     """THE ONE GRAMMAR OF AN EDGE'S THRESHOLD: a non-negative count, or the NAME of a quantity.
 
-    Read by `load_combat_band_edges` for the authored edges and by `seam/ladder.py::combat_degree`
+    Read by `load_combat_band_edges` for the authored edges and by `seam/ladder.py::party_degree`
     for the swept `Fixtures.combat_wounded_above`, so the data and the injected value cannot come to
     disagree about what a threshold may be (§8). `bool` is an `int` in Python and `above: true` is
     a typo for a count, so it is refused by name rather than read as 1."""
