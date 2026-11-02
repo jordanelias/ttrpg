@@ -446,7 +446,7 @@ def _ch_co_located(w: "World", e, pid) -> bool:
     `witness`'s own rev-2 retraction records the identical conflation. `world_q.place_of` carries
     the same order forward (its own docstring names the hazard) and adds the Record/Date limbs
     `ARCH §F.14` promotion asked for; nothing about the person-before-rung guarantee moved."""
-    place = world_q.event_place(w, e)
+    place = world_q.event_place(w, e, homes=cache.home_index(w))
     if place is None:
         return False
     index = cache.presence_index(w)

@@ -122,7 +122,10 @@ def temperament_pursuits(alpha: float, beta: float) -> dict:
     for p in sorted(PURSUITS):
         d = to_axes({p: 1.0})[TEMPERAMENT_AXIS]
         raw[p] = alpha * max(0.0, d) + beta * max(0.0, -d)
-    total = sum(raw.values())
+    # `math.fsum`, NOT `sum`: CPython 3.12 changed `sum()` of floats to compensated summation, so a bare sum
+    # moves in the last bit between 3.11 and 3.12+ and every cohort's pursuits (hence the realm's content hash)
+    # moved with the interpreter. `fsum` is correctly rounded on every version, and in any language.
+    total = math.fsum(raw.values())
     if not total:
         raise Unspecified(
             f"temperament alpha={alpha!r}, beta={beta!r} gives every pursuit weight 0", "engine/season/cohorts.yaml",

@@ -88,6 +88,13 @@ def home_of(w: "World") -> dict:
     does not forbid. That is the incumbent behaviour of every site this replaces, preserved
     deliberately rather than quietly tightened here."""
     TRACE.query("home_of", "resolver")
+    return home_map(w)
+
+
+def home_map(w: "World") -> dict:
+    """`home_of`'s map WITHOUT its trace row: the one place the rule lives, read by `home_of` (which traces) and
+    by `queries/cache.py::home_index` (the barrier-scoped copy, whose readers trace per read instead, so the
+    row stream is the one `home_of` per call wrote). Same last-write-wins as `home_of`."""
     return {t.subject: t.object for t in w.tenures
             if t.kind == "contain" and t.live and t.subject in w.persons}
 

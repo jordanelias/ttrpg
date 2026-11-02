@@ -63,6 +63,8 @@ from __future__ import annotations
 
 from typing import NamedTuple
 
+from ..state import containment
+from ..trace_log import TRACE
 from . import world_q
 
 
@@ -108,4 +110,21 @@ def presence_index(w: "World") -> dict:
     imports `presence_index` (`decision/options.py` imports `epistemic.belief_contradicts`, a
     `Person`-side function, and nothing here). Annotating this parameter trips nothing.
     """
-    return w.cache_at_barrier("presence", lambda: {r: world_q.presence(w, r) for r in w.rungs})
+    def build() -> dict:
+        for _ in w.rungs:
+            TRACE.query("presence", "resolver")      # the row `world_q.presence` wrote per rung, so the trace is unchanged
+        return world_q.presence_map(w)
+    return w.cache_at_barrier("presence", build)
+
+
+def home_index(w: "World") -> dict:
+    """The barrier-scoped `{person id: containing rung id}` map, built once per barrier: `containment.home_of`'s
+    map, filed the way `presence_index` is. It exists for WITNESS, whose co-location channel asked
+    `place_of` -> `home_of(w)` once per (event, person) pair and rebuilt the whole map from every Tenure each
+    time (80,000 builds in one season at `build_realm(0)`).
+
+    VALID FOR THE SAME REASON AND ONLY WHERE `presence_index` IS: the barrier is the invalidation
+    (`World.discard_caches()` at each step's entry), WITNESS writes no Tenure, and a direct caller that moves a
+    person between two asks must `w.discard_caches()` between them. It is NOT a replacement for `home_of(w)`
+    at a mid-step reader, which must keep the live scan."""
+    return w.cache_at_barrier("homes", lambda: containment.home_map(w))
