@@ -845,7 +845,7 @@ class World:
         ⚠ IT MUTATES AND RETURNS THE SEAT `hold`s IT CLOSED (v10 CP-T02-01; not ids); IT DOES NOT CALL `write`. Every caller is
         already inside a gated write when it reaches here — `_eff_kill` and `_eff_march` through
         their own `Change`'s `apply`, which the gate calls (G4; neither effect reads the return
-        value, the gate reads the victim instead), MATTER through its own `w.write` closure — and
+        value, the gate reads the victim instead), MATTER through its own `w.write(..., change=Change(death_subjects(...), ...))` — and
         a nested write would be a write inside a write. ⚠ CORRECTED (antagonist pass, 2026-09-27):
         this said "which the gate refuses" and nothing did -- `World.write` has no re-entrancy
         check of any kind, so the property held only because every caller was careful to call this
@@ -930,8 +930,9 @@ class World:
                 "'one write path that applies the write and returns a receipt') requires every "
                 "mutation to happen inside `World.write`'s window -- call this from inside an "
                 "effect's `Change` (`_eff_kill`/`_eff_march`'s own pattern: return a `Change` whose "
-                "`perform()` calls `w.remove_person(...)`) or a `world.write(..., apply=lambda: "
-                "w.remove_person(...))` closure (`loop/matter.py`'s own pattern), never bare. This "
+                "`perform()` calls `w.remove_person(...)`) or `world.write(..., change=Change("
+                "death_subjects(...), lambda: w.remove_person(...)))` (`loop/matter.py`'s own pattern; a bare "
+                "`apply=` closure writes the death but names no seat), never bare. This "
                 "is a CALL-SITE BUG, exactly `NoToken`'s reasoning (`state/gate.py`): whoever called "
                 "this was never handed an open write to mutate inside of.")
         seats = self.seat_holds(who)

@@ -840,13 +840,16 @@ def event_place(w: World, e) -> Optional[str]:
     (`act.ineligible`, `travel.blocked`, ... anchored on the dead ACTOR, tier 1); the class is reproduced by
     `test_h206_an_act_caused_event_of_the_dead_actor...`. `None` otherwise, exactly as before.
 
-    ONE ACT-CAUSED CASE IS PLACED (B10-09 close one, D2): an Event of the act that REMOVED ITS OWN ACTOR --
-    one of the Event's `changes` names the actor as its subject (a felled attacker's `person.died`,
-    CP-T03-00's per-party band) -- is placed where he stood when that act took him out, by the same
+    ONE ACT-CAUSED CASE IS PLACED (B10-09 close one, D2): an Event one of whose `changes` names a
+    removed actor as its subject (a felled attacker's `person.died`, CP-T03-00's per-party band; also an earlier act
+    of his in that tick that moved him) -- is placed where he stood when he was taken out, by the same
     `departed_from`. That is the discriminator: a refusal carries no receipt (`Act.changes` defaults to
-    `[]`), so the victim's later refusals stay unplaced. LIMIT: in a mixed fight the wounded subject's
-    `body.changed` carries only his own receipt (per-kind carriage), so it names no dead actor and stays
-    unplaced when its actor is gone.
+    `[]`), so the victim's later refusals stay unplaced. LIMIT, MEASURED (B10-09 close, Phase 3): an Event of
+    such an act that carries no receipt OF THE ACTOR -- the wounded subject's `body.changed` in a mixed fight, the
+    felled attacker's seat `tenure.closed` (per-kind carriage) -- stays unplaced when its actor is gone, so no
+    co-located person witnesses it at `all_five`. Placing every executed act's Event (`e.changes` non-empty, not
+    only one naming the actor) was tried: it moves `test_go07_canonical_digest` and `test_season_weather`'s pins
+    (4 tests red), a declared hash mover with its controls, so it is not taken here.
 
     The limb places every ACTORLESS Event anchored on a person removed in that Event's own tick, so
     at MATTER also the same dying cohort's `body.changed` and its tier-3 `condition.band_crossed`
