@@ -414,24 +414,21 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # it and the act mix moves; the BUILD is equal. Was 921de777... / cdeb64c2... (one, two seasons); events 9338 -> 9154, 24224 -> 24039.
 # CONTROL, run in process on this tree: `aim_state` reading `open` always (`AIM_RULES` cleared) reads the old pair, the old
 # `BASE_EVENTS` and the old `thread_read`-withheld arm exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-# RE-PINNED at v10 CP-T02-05 (B10-09), A BEHAVIOUR MOVE DECLARED: `world_q.oughts_named` stamps the OUGHT Propositions a
-# person has heard of onto the question he answers, so `commit` and `argue` form on a cause he witnessed uttered (one he already holds a live `commit` on is not offered); the BUILD is
-# equal (no ledger names a creed before a season is witnessed). Was b09a95da... / 68ca1303... (one, two seasons); events
-# 9154 -> 8940, 24039 -> 24454. CONTROL, run in process on this tree: the term stubbed out (`oughts_named` returning `()`)
-# reads the old pair.
+# CP-T02-05 (B10-09) added a stamp, `world_q.oughts_named`, and B10-09 close one REVERTED it (falsified on HR-9 control (4), `Falsified:
+# CP-T02-05`): the BASE_HASHES pins below are the reading with the stamp reverted; the build is equal throughout.
 # RE-PINNED at v10 IN-61 (B10-09), A DATA MOVE DECLARED: `off_king`'s conferral `null` -> `inheritance` and `off_heir`'s `null` ->
 # `appointed` (RS-27), and `Office.conferral` folds into the content hash, so the build and both seasons move; NOTHING ELSE DOES:
 # the act sequence (582 / 1230 acts) and the event kinds are equal. Was 4ab812ba... / f699c1d4... / 36d1e6c3... (build, one, two
 # seasons). CONTROL, run in process on this tree: the two seats' `conferral` set back to `None` on the built world reads the old
 # two-season hash exactly, at seeds 0, 1 and 2. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-# RE-PINNED at B10-09 close one (D2 + D3), A BEHAVIOUR MOVE DECLARED: a felled attacker's own `person.died` is placed where he
-# fell (`world_q.event_place`), and a held cause stays stamped while a second `commit` on it is declined person-side
-# (`rosters.yaml: held_edge_declines`), so `argue` forms on it; the BUILD is equal. Was 4b5e5133... / 15f4a86d... (one, two
-# seasons); events 8940 -> 8958, 24454 -> 24959. CONTROL: the pre-item tree (`755ec6ca2`) reads the old pair (measured,
-# `build_realm(0)` + `populated.run(seasons=2)`). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED at B10-09 close one (D2 + D3, then the CP-T02-05 revert), A BEHAVIOUR MOVE DECLARED: a felled attacker's own `person.died` is
+# placed where he fell (`world_q.event_place`), and a second `commit` on a held cause is declined person-side (`rosters.yaml:
+# held_edge_declines`); the `oughts_named` stamp is reverted, so this is the reading with the stamp reverted. The BUILD is equal. Was
+# 763402... (one season) / a7ad6b62... (two seasons); events 8958 -> 9172, 24959 -> 24060. CONTROL, run in process on the pre-revert tree
+# (`f28c3f33c`): `oughts_named` stubbed to `()` reads the new two-season hash exactly at seeds 0-2 (8195c6e3... / d44e4b85... / 7d5e3643...; seed 0 is the pin).
 BASE_HASHES = {0: "c7ca8d505cc1741f9e54e1fdd0c55292",
-               1: "763402557280bdadcae494bc3f3a0623",
-               2: "a7ad6b62daf5149dbff36e694aa04064"}
+               1: "53469c5c8afc81c2368300d34afd37fa",
+               2: "8195c6e3520c4b9d6c2423b52bd98cf0"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -499,10 +496,9 @@ BASE_HASHES = {0: "c7ca8d505cc1741f9e54e1fdd0c55292",
 # RE-RECORDED at v10 CP-T02-02 with `BASE_HASHES` (9138 -> 9760, 27154 -> 28883; `populated._seat_id` replaced by the slug
 # rule in process reads the old pair and the old build hash).
 # RE-RECORDED at v10 CP-T03-00 with `BASE_HASHES` (9760 -> 9338, 28883 -> 24224; both parties of a fight take their band).
-# RE-RECORDED at v10 CP-T02-05 with `BASE_HASHES` (9154 -> 8940, 24039 -> 24454; `oughts_named` stubbed to `()` reads the old pair).
-# RE-RECORDED at B10-09 close one (D2 + D3) with `BASE_HASHES` (8940 -> 8958, 24454 -> 24959; `755ec6ca2` reads the old pair).
-BASE_EVENTS = {1: (8958, "ffd5969aca8d06cd32f9d51f7fc5e32516cc9054eed343bacae1dfd8d84b63b1"),
-               2: (24959, "b5a7ed5aa9db06fdec5e026f83ee98ee1a4a1b86741d59f85a420d7c7c022311")}
+# RE-RECORDED at B10-09 close one (D2 + D3, the CP-T02-05 stamp reverted) with `BASE_HASHES` (9154 -> 9172, 24039 -> 24060).
+BASE_EVENTS = {1: (9172, "5bb360c6d88f1f8efe332a1b7f5bfa21bfae3da76126150e47be6f2ea3bd1ba9"),
+               2: (24060, "2d321ca63ff41b6904b07a325c25d82143c46994e7c2dfc6069c2cf62e669760")}
 
 
 def _digest(w) -> tuple:
@@ -641,10 +637,9 @@ def test_the_give_withheld_arm_reproduces_the_one_season_pin():
 #: their band); still differs from `BASE_EVENTS[1]` (9338).
 #: RE-RECORDED at v10 CP-T02-03 with `BASE_HASHES`: 9337 / c50d4c47... -> 9143 / 2a17f775... (a met rung goal forms no `need`;
 #: `aim_state` reading `open` always reads the old value exactly); still differs from `BASE_EVENTS[1]` (9154).
-#: RE-RECORDED at v10 CP-T02-05 with `BASE_HASHES`: 9143 / 2a17f775... -> 8929 / 3019d725... (`oughts_named` stubbed to `()` reads the
-#: old value); still differs from `BASE_EVENTS[1]` (8940).
-#: RE-RECORDED at B10-09 close one (D2 + D3) with `BASE_HASHES`: 8929 / 3019d725... -> 8947 / 5d89acca....
-THREAD_READ_WITHHELD_EVENTS_1 = (8947, "5d89accabc127953ce89e6c879dac259a1229ec36c3e13504b06d55f89b0fae0")
+#: RE-RECORDED at B10-09 close one (D2 + D3, the CP-T02-05 stamp reverted) with `BASE_HASHES`: 9143 / 2a17f775... -> 9161 /
+#: c808dea8...; still differs from `BASE_EVENTS[1]` (9172).
+THREAD_READ_WITHHELD_EVENTS_1 = (9161, "c808dea8b0c0bc3dfcc22f04b54cb86e7a91ef75dfe5b1c4b26ea66927f7dbdd")
 
 
 def test_the_thread_read_withheld_arm_is_pinned_and_differs_from_the_shipped_season():

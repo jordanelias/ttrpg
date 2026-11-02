@@ -1836,12 +1836,23 @@ def test_13d_i_an_off_roster_conferral_on_establish_refuses_and_raises_nothing()
     out = d.resolve(mint_token(d.w, WriteClass.ACTS), [act], contest_max_depth=w.fixtures.get("contest_max_depth"))
     assert [e.kind for e in out] == ["establish.refused"], [e.kind for e in out]
     assert "off_reeve" not in w.offices
-    founded = 0
+    # v10 IN-61 (B10-09 close): a seat only the heir's claim opens is founded only as the seat a title passes
+    # (`SUCCESSIONS`, `gate.has_filler`); the same basis on a seat no title passes is refused (CONTROL below).
+    from ..data.rosters import SUCCESSIONS
+    from ..state.gate import CONFERRAL, FILLED_BY
+    founded = refused = 0
     for i, basis in enumerate(sorted(CONFERRAL_BASES)):
-        out = _establish(w, d, f"e_ok_{i}", _founding(office=f"off_reeve_{i}", conferral=basis))
-        assert [e.kind for e in out] == ["office.established"], (basis, [e.kind for e in out])
+        claim_only = CONFERRAL not in FILLED_BY[basis]
+        seat = next(iter(SUCCESSIONS)) if claim_only else f"off_reeve_{i}"
+        out = _establish(w, d, f"e_ok_{i}", _founding(office=seat, conferral=basis))
+        assert [e.kind for e in out] == ["office.established"], (basis, seat, [e.kind for e in out])
         founded += 1
-    assert founded == len(CONFERRAL_BASES) >= 3
+        if claim_only:
+            out = _establish(w, d, f"e_orphan_{i}", _founding(office=f"off_orphan_{i}", conferral=basis))
+            assert [e.kind for e in out] == ["establish.refused"], (basis, [e.kind for e in out])
+            assert f"off_orphan_{i}" not in w.offices
+            refused += 1
+    assert founded == len(CONFERRAL_BASES) >= 3 and refused >= 1, (founded, refused)
 
 
 def test_13d_i_the_title_in_a_body_refusal_is_rehomed_not_dropped():
@@ -2868,11 +2879,10 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # governs is met (`world_q.aim_state`) and forms no `need` (`goal_varfell_oastad_gate`), so the realm's act mix moves (seed 0, one
     # season: 590 -> 589 in both arms; `test_go07_canonical_digest.py` records the 589). CONTROL: `aim_state` reading `open` always
     # (`AIM_RULES` cleared) in process reads (590, 590) at seed 0 (`test_go07_canonical_digest.BASE[0]`).
-    # ⚠⚠ v10 CP-T02-05 (B10-09): (589, 589) -> (582, 582), A RE-RECORD WITH THE UNIT THAT MOVED IT: `world_q.oughts_named` stamps the
-    # OUGHT Propositions a person has heard of (every one; a second `commit` on one he already holds is declined person-side, `held_edge_declines`), so `commit` and `argue` form on a cause he witnessed uttered and the realm's act mix
-    # moves (seed 0, one season: 589 -> 582 in both arms; `test_go07_canonical_digest.py` records the 582). CONTROL: `oughts_named`
-    # stubbed to `()` in process reads (589, 589) at seed 0 (`test_go07_canonical_digest.BASE[0]` before this unit).
-    assert (out["acts"], cout["acts"]) == (582, 582), (
+    # ⚠⚠ v10 CP-T02-05 (B10-09) added the `world_q.oughts_named` stamp (589 -> 582) and B10-09 close one reverted it (falsified on HR-9
+    # control (4), `Falsified: CP-T02-05`): the pin is the reading with the stamp reverted, (589, 589) again (seed 0, one season;
+    # `test_go07_canonical_digest.py` records the 589).
+    assert (out["acts"], cout["acts"]) == (589, 589), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")

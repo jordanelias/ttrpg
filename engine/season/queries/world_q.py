@@ -2520,12 +2520,6 @@ def upkeep_of(w: World, office_id: str) -> int:
 # code called it and no committed run artifact traced it.
 
 
-def _is_ought(prop) -> bool:
-    """Whether a Proposition is of mood OUGHT -- the one spelling of that test, read by `ambitions` and
-    `oughts_named` (B10-09 close one, D3)."""
-    return str(prop.mood).upper() == "OUGHT"
-
-
 def ambitions(w: World, p: Person) -> list:
     """WHAT THIS PERSON IS COMMITTED TO AS AN OUGHT: the Proposition ids on `p`'s own LIVE `commit`
     edges whose Proposition (looked up in `w.propositions`) is mood OUGHT, in the order the edges
@@ -2560,7 +2554,7 @@ def ambitions(w: World, p: Person) -> list:
         if t.kind != "commit" or not t.live or t.object in out:
             continue
         prop = w.propositions.get(t.object)
-        if prop is not None and _is_ought(prop):
+        if prop is not None and str(prop.mood).upper() == "OUGHT":
             out.append(t.object)
     return out
 
@@ -2873,30 +2867,6 @@ def seats_named(w: World, p: Person, named: Optional[frozenset] = None) -> tuple
     if named is None:
         named = ledger_names(p.ledger)
     return tuple(sorted(o for o in named if o in w.offices))
-
-
-def oughts_named(w: World, p: Person, named: Optional[frozenset] = None) -> tuple:
-    """THE CAUSES `p` HAS HEARD OF (v10 CP-T02-05, B10-09; `-08` AM-B-11, [ASSUMPTION; medium; Jordan to
-    correct; revert: drop the term in `questions_for`, and `commit` forms on a Proposition only where the
-    question he answers names one]), sorted by id: the OUGHT Propositions among
-    `person_q.ledger_names(p.ledger)` -- a witnessed `proposition.uttered`, a told claim naming one, a held
-    document whose terms name one. `seats_named`'s shape one class over: a person can take up any cause he
-    has heard of. `()` for nearly everyone at the build (no ledger names a creed before a season is witnessed).
-
-    Reads `p`'s OWN LEDGER, never the store's Records (AX-2); the World is asked only which ids are
-    Propositions and of what mood (`w.propositions`, the mood `ambitions` filters on), the class `_stamped`
-    stamps. Resolver-side and read-only. It supplies Proposition IDS, which `questions_for` adds to the
-    question the person answers as CLASSED referents, so only a row declaring `referent_class: Proposition`
-    (`commit`, `argue`) forms on them; whether an act on one passes is the fold's. `release` declares no
-    class and is not among them. `named` is `ledger_names(p.ledger)` when the caller already holds it.
-
-    EVERY OUGHT HE HAS HEARD OF, the plan's text -- including one he already commits to, so `argue` (he
-    argues for what he holds right) keeps the cause. A second `commit` on a Proposition he holds a live
-    `commit` on is declined person-side in `decision/options.py::opening_set` (`rosters.yaml:
-    held_edge_declines`), for every route that carries the Proposition, not here (B10-09 close one, D3)."""
-    if named is None:
-        named = ledger_names(p.ledger)
-    return tuple(sorted(o for o in named if o in w.propositions and _is_ought(w.propositions[o])))
 
 
 def writs_held(w: World, p: Person) -> tuple:
@@ -3535,15 +3505,11 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # v10 IN-45 (ii) (B10-06; M5 option (B), [ASSUMPTION; medium; Jordan to correct]): AND, APPENDED, THE SITES A
     # WORKS HE HOLDS NAMES (`works_sites`), as `Site` -- the channel from a held works to the fabric `work` raises,
     # which no question a master answers carried. REVERT: drop the term.
-    # v10 CP-T02-05 (B10-09; `-08` AM-B-11, [ASSUMPTION; medium; Jordan to correct]): AND, LAST, THE OUGHT
-    # PROPOSITIONS HE HAS HEARD OF (`oughts_named`), as `Proposition` -- a cause he may take up. A named
-    # term here and no registry (REM-21 as amended has none): only a row declaring `Proposition` (`commit`,
-    # `argue`) forms on them. REVERT: drop the term.
     told = ledger_names(p.ledger)
     added = (vacancies(w, p) + seats_named(w, p, told) + writs_held(w, p) + records_held_for_holding_rows(w, p)
              + places_named(w, p, told) + larders_in_purview(w, p, told)
              + (own_referents_of_class(w, out[0]) if out else ())
-             + works_sites(w, p) + oughts_named(w, p, told))
+             + works_sites(w, p))
     # v10 IN-12 step 5 ([ASSUMPTION; medium; Jordan to correct]): AND, LAST, THE PRISONERS HIS SEATS HOLD
     # (`detainees_held`), as `Detainee` -- the restrained-persons class, named here because it is no
     # collection; only `interrogate` declares it. Empty while no live `detain` names his seat, and then

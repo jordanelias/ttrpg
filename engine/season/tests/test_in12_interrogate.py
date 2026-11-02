@@ -213,9 +213,9 @@ def test_in12_5a_control_the_petitioner_holding_his_own_petition_forms_no_commit
 
 
 def test_in12_5a_a_committed_watchman_forms_no_second_commit_from_the_held_petition():
-    """B10-09 close one, D3: the terms-sourced reader is a route the old `oughts_named` live-commit clause never
-    covered. Once the addressed witness commits to the charge, the person-side decline (`rosters.yaml:
-    held_edge_declines`) forms no second `commit(prop_charge)` off `rec:pt1`; the arm before it is the control."""
+    """B10-09 close one, D3: the terms-sourced reader carries the charge to the addressed witness. Once he commits to
+    it, the person-side decline (`rosters.yaml: held_edge_declines`) forms no second `commit(prop_charge)` off
+    `rec:pt1`; the arm before it is the control."""
     w, d = _world()
     _charge_proposition(w, d)
     _hold_document(w, w.persons[WATCHMAN], "petition",
@@ -225,3 +225,19 @@ def test_in12_5a_a_committed_watchman_forms_no_second_commit_from_the_held_petit
         == ["commitment.made"]
     assert [t.kind for t in w.persons[WATCHMAN].tenures if t.object == "prop_charge" and t.live] == ["commit"]
     assert "prop_charge" not in _commits(w, WATCHMAN, "rec:pt1"), "a second live commit edge would form"
+
+
+def test_in12_a_held_edge_declines_line_naming_no_verb_or_no_tenure_kind_is_refused_at_load():
+    """`rosters.yaml: held_edge_declines`' one loader (`data/verbs.py::_load_held_edge_declines`), on a COPY of the
+    shipped roster: the shipped line loads; a verb the table lacks, a kind `tenure_kinds` lacks, and an empty kind
+    are each refused."""
+    import pytest
+    from ..data import verbs as VERBS
+    from ..data.rosters import roster_map
+    from ..gaps import Forbidden
+    shipped = dict(roster_map("held_edge_declines", "values"))
+    assert VERBS._load_held_edge_declines(dict(shipped)) == VERBS.HELD_EDGE_DECLINES == {"commit": "commit"}
+    for planted in ({**shipped, "no_such_verb": "commit"}, {**shipped, "commit": "no_such_kind"},
+                    {**shipped, "commit": ""}):
+        with pytest.raises(Forbidden, match="held_edge_declines"):
+            VERBS._load_held_edge_declines(planted)
