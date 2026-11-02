@@ -2869,7 +2869,7 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # season: 590 -> 589 in both arms; `test_go07_canonical_digest.py` records the 589). CONTROL: `aim_state` reading `open` always
     # (`AIM_RULES` cleared) in process reads (590, 590) at seed 0 (`test_go07_canonical_digest.BASE[0]`).
     # ⚠⚠ v10 CP-T02-05 (B10-09): (589, 589) -> (582, 582), A RE-RECORD WITH THE UNIT THAT MOVED IT: `world_q.oughts_named` stamps the
-    # OUGHT Propositions a person has heard of (less any he already holds a live `commit` on), so `commit` and `argue` form on a cause he witnessed uttered and the realm's act mix
+    # OUGHT Propositions a person has heard of (every one; a second `commit` on one he already holds is declined person-side, `held_edge_declines`), so `commit` and `argue` form on a cause he witnessed uttered and the realm's act mix
     # moves (seed 0, one season: 589 -> 582 in both arms; `test_go07_canonical_digest.py` records the 582). CONTROL: `oughts_named`
     # stubbed to `()` in process reads (589, 589) at seed 0 (`test_go07_canonical_digest.BASE[0]` before this unit).
     assert (out["acts"], cout["acts"]) == (582, 582), (

@@ -87,23 +87,46 @@ def test_cp_t02_05_a_a_witness_of_an_utter_forms_commit_on_it_and_the_act_execut
     assert not [t for t in p.tenures if t.object == prop and t.kind == "hold"]
 
 
-def test_cp_t02_05_a_a_person_with_a_live_commit_on_the_heard_of_proposition_is_offered_nothing():
-    """[ASSUMPTION; medium; Jordan to correct; revert: drop the `held` clause in `oughts_named`.] `_eff_commit` always opens a
-    fresh Tenure, so a second `commit` on a Proposition he already commits to is a duplicate live edge: it is not offered. The
-    arm before it is the control (the same person, not yet committed, IS offered it); a released commit offers it again."""
+def test_cp_t02_05_a_a_person_with_a_live_commit_on_the_heard_of_proposition_forms_no_second_commit_and_argues_it():
+    """B10-09 close one, D3 ([ASSUMPTION; medium; Jordan to correct; revert: drop `rosters.yaml: held_edge_declines`
+    and restore the live-commit clause in `oughts_named`]). `_eff_commit` always opens a fresh Tenure, so a second
+    `commit` on a Proposition he already commits to is a duplicate live edge: `opening_set`'s person-side decline does
+    not form it. The STAMP is unnarrowed -- the cause he holds still rides his question -- so `argue` (he argues for what
+    he holds right) forms on it toward the utterer he knows. The arm before it is the control (the same person, not yet
+    committed, IS offered `commit`); a released commit offers it again."""
     w, d, prop = _heard()
     p = w.persons[WITNESS]
     assert world_q.oughts_named(w, p) == (prop,)                     # control: not yet committed
     (c,) = _commits_on(w, WITNESS, prop)
     assert [e.kind for e in _fold(w, d, dataclasses.replace(_act_of(c, p), id="t0205_c1"))] == ["commitment.made"]
-    assert world_q.oughts_named(w, p) == ()
+    assert world_q.oughts_named(w, p) == (prop,), "the stamp was narrowed by his own commitment"
     qs, classes = _classes(w, WITNESS)
-    assert (prop, "Proposition") not in classes, qs
-    assert not [c for q in qs for c in _formed(w, WITNESS, q) if c.verb == "commit" and c.subject == prop]
+    assert (prop, "Proposition") in classes, qs
+    formed = [c for q in qs for c in _formed(w, WITNESS, q) if c.subject == prop]
+    assert not [c for c in formed if c.verb == "commit"], "a second commit on a cause he holds formed"
+    argued_to = {(c.operands or {}).get("to") for c in formed if c.verb == "argue"}
+    assert UTTERER in argued_to, ("he no longer argues for the cause he holds", argued_to)
     for t in p.tenures:                                               # ended: a cause he has let go is on offer again
         if t.kind == "commit" and t.object == prop:
             t.until = w.tick
     assert world_q.oughts_named(w, p) == (prop,)
+    assert _commits_on(w, WITNESS, prop), "a released commit is not offered again"
+
+
+def test_cp_t02_05_a_held_edge_declines_line_naming_no_verb_or_no_tenure_kind_is_refused_at_load():
+    """`rosters.yaml: held_edge_declines`' one loader (`data/verbs.py::_load_held_edge_declines`), on a COPY of the
+    shipped roster: the shipped line loads; a verb the table lacks, a kind `tenure_kinds` lacks, and an empty kind
+    are each refused."""
+    import pytest
+    from engine.season.data import verbs as VERBS
+    from engine.season.data.rosters import roster_map
+    from engine.season.gaps import Forbidden
+    shipped = dict(roster_map("held_edge_declines", "values"))
+    assert VERBS._load_held_edge_declines(dict(shipped)) == VERBS.HELD_EDGE_DECLINES == {"commit": "commit"}
+    for planted in ({**shipped, "no_such_verb": "commit"}, {**shipped, "commit": "no_such_kind"},
+                    {**shipped, "commit": ""}):
+        with pytest.raises(Forbidden, match="held_edge_declines"):
+            VERBS._load_held_edge_declines(planted)
 
 
 def test_cp_t02_05_a_mutation_without_the_splice_term_the_witness_is_offered_nothing(monkeypatch):

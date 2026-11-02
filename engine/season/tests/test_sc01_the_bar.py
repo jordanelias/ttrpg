@@ -162,7 +162,7 @@ BAR_FIXTURES = DEFAULT_FIXTURES.sweep("pool_default", 30)       # v9 SC-03b: a j
 # seasons finds justice/8, virtue/2, virtue/6 and virtue/15 (scratch, not kept); the lowest seed, virtue/2, is taken.
 # CONTROL, run: on the REM-25 tree (the same script) doctrine/8 meets every assertion.
 # v10 CP-T02-05 (B10-09): RE-TRACED AGAIN, virtue/2 -> scholastics/6, the season count unchanged --
-# `oughts_named` stamps the OUGHT Propositions a person has heard of (less any he already holds a live `commit` on; `commit`
+# `oughts_named` stamps the OUGHT Propositions a person has heard of (every one; a second `commit` on one he already holds is declined person-side, `held_edge_declines`; `commit`
 # and `argue` declare `Proposition`), so the act mix of this world moved and virtue/2 no longer meets the assertions below
 # (measured: it is absent from a sweep of the control test's assertions on this tree). A sweep of virtue x seeds 0..41 at 5
 # seasons finds no run meeting every assertion of the control test below; a sweep of the other fourteen convictions x seeds

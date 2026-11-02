@@ -827,17 +827,26 @@ def event_place(w: World, e) -> Optional[str]:
     that needs a place, and a dead seat-holder was reported to nobody. A death at RESOLVE anchors on
     the killer, who is alive, which is why only the MATTER-written one was lost.
 
-    The limb, for an ACTORLESS Event only (no act among its causes): when the anchor is a person the
+    The limb, for an ACTORLESS Event (no act among its causes; one act-caused case, below): when the
+    anchor is a person the
     world NO LONGER HOLDS, his place is where he stood when
     `remove_person` took him out, if that was this Event's own tick (`World.departed_from`) -- the
     enclosing rung on the `contain` edge the cascade closed. It cannot be read off `w.tenures`: a Tenure is
     owned by its subject, so his own edge left the store with him (probed on `build_realm(0)`).
     It is NOT `place_of`'s person limb, deliberately: `place_of` is also asked about the dead by
     `reach` (a claim about a dead man), and answering there would move every reader of an old
-    claim; only an EVENT's own tick has a place for him. ⚠ ACTORLESS ONLY, MEASURED: without that clause
-    the limb also placed the refusals of a victim's own acts later in the killing tick (`act.ineligible`,
-    `travel.blocked`, ... anchored on the dead ACTOR, tier 1); the class is reproduced by
+    claim; only an EVENT's own tick has a place for him. ⚠ NOT FOR EVERY ACT-CAUSED EVENT, MEASURED: without
+    a clause the limb also placed the refusals of a victim's own acts later in the killing tick
+    (`act.ineligible`, `travel.blocked`, ... anchored on the dead ACTOR, tier 1); the class is reproduced by
     `test_h206_an_act_caused_event_of_the_dead_actor...`. `None` otherwise, exactly as before.
+
+    ONE ACT-CAUSED CASE IS PLACED (B10-09 close one, D2): an Event of the act that REMOVED ITS OWN ACTOR --
+    one of the Event's `changes` names the actor as its subject (a felled attacker's `person.died`,
+    CP-T03-00's per-party band) -- is placed where he stood when that act took him out, by the same
+    `departed_from`. That is the discriminator: a refusal carries no receipt (`Act.changes` defaults to
+    `[]`), so the victim's later refusals stay unplaced. LIMIT: in a mixed fight the wounded subject's
+    `body.changed` carries only his own receipt (per-kind carriage), so it names no dead actor and stays
+    unplaced when its actor is gone.
 
     The limb places every ACTORLESS Event anchored on a person removed in that Event's own tick, so
     at MATTER also the same dying cohort's `body.changed` and its tier-3 `condition.band_crossed`
@@ -852,7 +861,10 @@ def event_place(w: World, e) -> Optional[str]:
     # actor (tier 1), so this is the old answer.
     a = causing_act(w, e)
     if a is not None:
-        return place_of(w, a.actor)
+        here = place_of(w, a.actor)
+        if here is None and any(c.subject == a.actor for c in e.changes):
+            return w.departed_from(a.actor, e.emitted_at)     # the act's own receipt on a felled actor
+        return here
     who = anchor_of(w, e)
     here = place_of(w, who)
     if here is not None:
@@ -2508,6 +2520,12 @@ def upkeep_of(w: World, office_id: str) -> int:
 # code called it and no committed run artifact traced it.
 
 
+def _is_ought(prop) -> bool:
+    """Whether a Proposition is of mood OUGHT -- the one spelling of that test, read by `ambitions` and
+    `oughts_named` (B10-09 close one, D3)."""
+    return str(prop.mood).upper() == "OUGHT"
+
+
 def ambitions(w: World, p: Person) -> list:
     """WHAT THIS PERSON IS COMMITTED TO AS AN OUGHT: the Proposition ids on `p`'s own LIVE `commit`
     edges whose Proposition (looked up in `w.propositions`) is mood OUGHT, in the order the edges
@@ -2542,7 +2560,7 @@ def ambitions(w: World, p: Person) -> list:
         if t.kind != "commit" or not t.live or t.object in out:
             continue
         prop = w.propositions.get(t.object)
-        if prop is not None and str(prop.mood).upper() == "OUGHT":
+        if prop is not None and _is_ought(prop):
             out.append(t.object)
     return out
 
@@ -2872,16 +2890,13 @@ def oughts_named(w: World, p: Person, named: Optional[frozenset] = None) -> tupl
     (`commit`, `argue`) forms on them; whether an act on one passes is the fold's. `release` declares no
     class and is not among them. `named` is `ledger_names(p.ledger)` when the caller already holds it.
 
-    NOT ONE HE ALREADY COMMITS TO ([ASSUMPTION; medium; Jordan to correct; revert: drop the `held` clause]): a Proposition on
-    which `p` holds a LIVE `commit` Tenure (read person-side from `p.tenures`) is not offered. `_eff_commit` always opens a
-    fresh Tenure, so a repeat is a duplicate live edge and a spurious `commitment.made`: formation must not outrun
-    feasibility. The utterer's own Proposition is covered by the same clause once he commits to it. This makes the offer
-    smaller than the plan's text states (every OUGHT he has heard of)."""
+    EVERY OUGHT HE HAS HEARD OF, the plan's text -- including one he already commits to, so `argue` (he
+    argues for what he holds right) keeps the cause. A second `commit` on a Proposition he holds a live
+    `commit` on is declined person-side in `decision/options.py::opening_set` (`rosters.yaml:
+    held_edge_declines`), for every route that carries the Proposition, not here (B10-09 close one, D3)."""
     if named is None:
         named = ledger_names(p.ledger)
-    held = {t.object for t in p.tenures if t.kind == "commit" and t.live}
-    return tuple(sorted(o for o in named
-                        if o in w.propositions and w.propositions[o].mood == "OUGHT" and o not in held))
+    return tuple(sorted(o for o in named if o in w.propositions and _is_ought(w.propositions[o])))
 
 
 def writs_held(w: World, p: Person) -> tuple:

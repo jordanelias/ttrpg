@@ -1694,6 +1694,27 @@ def _load_own_title_declines(values) -> frozenset:
 OWN_TITLE_DECLINES = _load_own_title_declines(roster("own_title_declines"))
 
 
+# B10-09 close one, D3: `{verb: tenure kind}` -- the verbs a person does not form on an object he already
+# holds a LIVE Tenure of that kind on (`rosters.yaml: held_edge_declines`, read in `opening_set`; `commit` on a
+# Proposition he commits to). `held_document_declines`' shape, one carrier over. REFUSED AT IMPORT, its reason:
+# a verb the table lacks or a kind `tenure_kinds` does not carry would decline for nobody, and a stale line
+# must not read as a live decline.
+def _load_held_edge_declines(values: dict) -> dict:
+    """`rosters.yaml: held_edge_declines`' `values`, checked and frozen -- refused per line (above)."""
+    out = {v: str(k or "") for v, k in (values or {}).items()}
+    for v, k in out.items():
+        if v not in VERB_TABLE or k not in TENURE_KINDS:
+            raise Forbidden(
+                f"`rosters.yaml: held_edge_declines` names {v!r}: {k!r}, and the verb table carries no "
+                f"such verb, or {k!r} is no `tenure_kinds` member ({sorted(TENURE_KINDS)})", "rosters.yaml",
+                needs="a `verb_table.yaml` verb, and a Tenure kind an edge can be",
+                law="B10-09 -- a person-side decline reads a live edge he holds, of a kind that exists")
+    return out
+
+
+HELD_EDGE_DECLINES = _load_held_edge_declines(roster_map("held_edge_declines", "values"))
+
+
 def _derive_rung_remit_acts() -> frozenset:
     """v9 IN-49 `requisition` (H-163 limit 3, [ASSUMPTION; medium; Jordan to correct]): THE REMIT ACTS A
     SEAT EXERCISES ON A `Rung`-CLASSED REFERENT -- the act of every `remit:` eligibility alternative
