@@ -50,6 +50,11 @@
 #        six seats already carry in the live build today. Heredity is `ARCH §B.8`'s separate
 #        `succeed` Tenure/verb (`own`-eligible, a typed `relation` cell, no `@effect_for` body yet)
 #        -- outside `Office.conferral`'s ruled roster, not silently folded into it.
+#        ⚠ v10 IN-61 (RS-27, Jordan 2026-10-14: *"designated heir is not a verb but a status or title.
+#        the heir still has to claim their throne"*) MOVED TWO OF THE SIX: `off_king` -> `inheritance`
+#        (a fourth `conferral_bases` member, filled only by the claim of the `rosters.yaml: successions`
+#        title's holder) and `off_heir` -> `appointed` (the title, designated by an ordinary `confer`).
+#        The other four keep `null`. [ASSUMPTION; medium; Jordan to correct; revert: both `null`.]
 #      * `purview`/`holdings` (old: purview alone for an office, purview+holdings+rank for a title)
 #        -> `rung_above_same_faction` wherever a rung above could in principle hold a same-faction
 #        seat (15 of 29 rows; at build only the six Crown T1 seats are satisfiable, H-207) -- the
@@ -186,7 +191,7 @@ seats:
     body:       null
     faction:    "Crown"
     remit_acts: [issue, determine, confer, revoke, convene]
-    conferral:  null   # hereditary succession; see the header's translation note
+    conferral:  inheritance   # v10 IN-61 (RS-27): claimed by the holder of `rosters.yaml: successions`' title (`off_heir`), never conferred [ASSUMPTION; medium; Jordan to correct; revert: null]
     revocation: null   # no rung above the realm
     holder:     "NPC-020"
     obligees:   ["NPC-070"]   # FA-04 (ED-IN-0293 (7)): the Grand Master's oath makes the Löwenritter a subfaction of the Crown; her `release` of it is the Split
@@ -251,7 +256,7 @@ seats:
     body:       null
     faction:    "Crown"
     remit_acts: []
-    conferral:  null
+    conferral:  appointed   # v10 IN-61 (RS-27): the heir is a TITLE, designated by an ordinary `confer` [ASSUMPTION; medium; Jordan to correct; revert: null]
     revocation: null
     holder:     "NPC-031"
     obligees:   []

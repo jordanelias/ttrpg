@@ -1668,6 +1668,30 @@ def _load_own_hold_declines(values) -> frozenset:
 OWN_HOLD_DECLINES = _load_own_hold_declines(roster("own_hold_declines"))
 
 
+# v10 IN-61 (RS-27): the verbs a person forms only on a seat whose `successions` title he himself holds
+# (`rosters.yaml: own_title_declines`, read in `opening_set`; `succeed`). `own_hold_declines`' shape one read
+# over, REFUSED AT IMPORT when a member names a verb the table lacks or one whose row declares no
+# `referent_class: Office` -- a title is a seat's, so a row forming on anything but a seat has no title.
+_TITLE_CLASS = "Office"
+
+
+def _load_own_title_declines(values) -> frozenset:
+    """`rosters.yaml: own_title_declines`' `values`, checked and frozen -- refused per member (above)."""
+    out = frozenset(str(v or "") for v in (values or ()))
+    for v in sorted(out):
+        row = VERB_TABLE.get(v)
+        if row is None or row.referent_class != _TITLE_CLASS:
+            raise Forbidden(
+                f"`rosters.yaml: own_title_declines` names {v!r}, and the verb table carries no such verb "
+                f"or its row declares no `referent_class: {_TITLE_CLASS}`", "rosters.yaml",
+                needs=f"a `verb_table.yaml` verb formed on `{_TITLE_CLASS}` referents",
+                law="IN-61 -- an own-title decline reads the title a seat passes to")
+    return out
+
+
+OWN_TITLE_DECLINES = _load_own_title_declines(roster("own_title_declines"))
+
+
 def _derive_rung_remit_acts() -> frozenset:
     """v9 IN-49 `requisition` (H-163 limit 3, [ASSUMPTION; medium; Jordan to correct]): THE REMIT ACTS A
     SEAT EXERCISES ON A `Rung`-CLASSED REFERENT -- the act of every `remit:` eligibility alternative

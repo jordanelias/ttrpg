@@ -42,7 +42,7 @@ from ..trace_log import TRACE
 # here and the gate there cannot disagree (`CLAUDE.md` §8) -- and a `monkeypatch` of this module's
 # `has_conferral_basis` still reaches both preconditions that call it by that name.
 from ..state.gate import (  # noqa: F401 -- `REVOCATION_RULES`, `in_holdings`, `seated_on_the_rung_above` re-exported
-    REVOCATION_RULES, has_conferral_basis, has_revocation_disposal, in_holdings, may_fill,
+    REVOCATION_RULES, has_conferral_basis, has_revocation_disposal, in_holdings, may_claim, may_fill,
     may_revoke, seated_on_the_rung_above)
 
 
@@ -177,6 +177,22 @@ def _req_confer(w: "World", a: "Act") -> bool:
         return False
     # G3: displacing the holder CLOSES HIS EDGE -- T-o, through the seat exercised.
     return holder == a.actor or may_revoke(w, a.actor, a.via, off)
+
+
+@requires_predicate("succeed")
+def _req_succeed(w: "World", a: "Act") -> bool:
+    """v10 IN-61 (RS-27): THE HEIR'S CLAIM -- *admitted iff the throne has no live `hold` and the actor
+    holds `successions[throne]`*. The seat is the act's `subject` (the classed `Office` referent of the
+    question he answers: `world_q.seats_named`, the vacancy he was told of). The whole test is the write
+    gate's own `may_claim`, asked with the seats the actor holds live -- so a claim the gate would refuse
+    is refused here first and EMITS (`succession.refused`) rather than raising `NotYours` out of the fold.
+    Untyped: the closed grammar has no cell for *no live `hold` on the subject* nor for a roster lookup."""
+    seat = binding_from_act(a).get("subject")
+    if not isinstance(seat, str) or seat not in w.offices:
+        return False                       # (a list `subject` is unhashable: refuse, never raise)
+    titles = {t.object for t in w.tenures
+              if t.kind == "hold" and t.live and t.subject == a.actor and t.object in w.offices}
+    return may_claim(w, a.actor, w.offices[seat], titles)
 
 
 def office_named_by(a: "Act") -> "Optional[str]":

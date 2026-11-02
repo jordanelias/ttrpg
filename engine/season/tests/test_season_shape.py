@@ -1292,12 +1292,16 @@ def test_a_blocker_outranks_an_unaimed_row():
     name is resolvable and none gaps on a precondition. `succeed` replaces it -- one of the two rows
     `resolvable_verbs()` still excludes (the other is `tie / knot`), here for want of an effect
     (`effect_decline_note:`) rather than a precondition; the rule reads `resolvable_verbs()`. Same guard, same
-    assertion."""
+    assertion.
+
+    ⚠ RE-RECORDED AT v10 IN-61: `succeed` -> `tie / knot`. IN-61 re-specified `succeed` as the heir's claim
+    with an effect (`_eff_succeed`), so it is resolvable; `tie / knot` is now the one row `resolvable_verbs()`
+    excludes. Same guard, same assertion."""
     from engine.season.loop.driver import resolvable_verbs
-    assert "succeed" not in resolvable_verbs(), (
-        "`succeed` became resolvable: plant another verb `resolvable_verbs()` excludes")
+    assert "tie / knot" not in resolvable_verbs(), (
+        "`tie / knot` became resolvable: plant another verb `resolvable_verbs()` excludes")
     planted = {"T": {EX.need_sha("a declared row that gaps"): {
-        "need": "a declared row that gaps", "exercises": ["succeed"]}}}
+        "need": "a declared row that gaps", "exercises": ["tie / knot"]}}}
     saved, R.OVERLAY = R.OVERLAY, planted
     try:
         got = R.grade({"id": "T", "season_requires": [
@@ -1308,7 +1312,7 @@ def test_a_blocker_outranks_an_unaimed_row():
         R.OVERLAY = saved
     assert got["verdict"] == "BLOCKED", got
     assert got["core_unmapped"] == 1, got          # the undeclared row is still reported
-    assert got["blockers"] == ["succeed"], got["blockers"]
+    assert got["blockers"] == ["tie / knot"], got["blockers"]
 
 
 def test_no_playable_case_has_an_unmapped_core_row():
@@ -9486,10 +9490,14 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # ⚠⚠ v10 IN-12 step 5: `interrogate` JOINS -- a re-record, by construction and observed by this run: it forms only on
     # a `Detainee` (`world_q.detainees_held`: a person held by a live `detain` to a seat the asker holds), and no corpus
     # world holds a live `detain` (`arrest` is in this set), so nobody forms it.
+    # ⚠⚠ v10 IN-61 (B10-09): `succeed` JOINS -- a re-record, by construction: it became foldable (`_req_succeed`,
+    # `_eff_succeed`), and it forms only on a seat whose `successions` title the asker holds and which his question
+    # carries as an `Office` (`own_title_declines`), and no corpus world forms it (observed by this run). Before it was
+    # not foldable, so it was in no set this assertion reads.
     assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish",
                                               "destroy_record", "march", "open_case",
                                               "determine", "migrate", "requisition",
-                                              "forgive", "interrogate",
+                                              "forgive", "interrogate", "succeed",
                                               "arrest", "pardon", "raze", "thread_read",
                                               "work", "restore", "examine",
                                               "dispatch",
@@ -11911,7 +11919,13 @@ def test_wb_a_refusals_reads_land_as_a_claim_that_contradicts_and_the_candidate_
     # RE-DERIVED, not adjusted: the REM-2A tree (`f23194871`, a detached copy) reads (23, 22) there with the drop
     # `['transfer']`, and the two missing verbs before the deposit are `evade / defy` and `construe`.
     # [GROUNDED: measured at v10 REM-2B -- (21, 19) as built, (23, 22) on the REM-2A tree; the two missing verbs `evade / defy`/`construe`, the drop `['exchange', 'transfer']` here and `['transfer']` there]
-    assert (len(before), len(after)) == (21, 19), (
+    # ⚠ 21 -> 20 BEFORE AND 19 -> 18 AFTER, v10 IN-61 (B10-09): `succeed` declares `referent_class: Office` and forms
+    # only on a seat whose `successions` title the person holds (`own_title_declines`), so it no longer forms on a plain
+    # referent like `S`; under its retired W3 cell (`held_by` of `subject`) it formed one Candidate on `S` though it was not
+    # resolvable. The drop is still `['exchange', 'transfer']`. RE-DERIVED, not adjusted: the CR-26 tree (`59e5cf452`, a
+    # detached worktree) lists 21 verbs before, and this tree the same 20 less `succeed`.
+    # [GROUNDED: measured at v10 IN-61 -- (20, 18) as built, 21 before on the CR-26 tree; the one missing verb `succeed`]
+    assert (len(before), len(after)) == (20, 18), (
         f"the absolute counts moved to {(len(before), len(after))}. They are the denominator the "
         "delta above is read against, and the delta alone does not reproduce them — re-derive "
         "`H-122`'s reading rather than adjusting this line")

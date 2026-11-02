@@ -688,6 +688,13 @@ LADDER_RUNGS = roster("ladder_rungs", ordered=True)
 # pass, 2026-09-27 -- this said `loop/predicates.py`).
 CONFERRAL_BASES = roster("conferral_bases")
 REVOCATION_BASES = roster("revocation_bases")
+# v10 IN-61 (RS-27): `{seat: title}` -- which title a seat of conferral basis `inheritance` passes to
+# (`rosters.yaml: successions`). Read IN PLACE (never copied) by `state/gate.py`'s claim basis,
+# `loop/predicates.py::_req_succeed`, `loop/effects_governance.py::_eff_succeed` and
+# `decision/options.py::opening_set`, so one dict answers all four. Its cross-check against `offices.yaml`
+# and `state/gate.py::FILLED_BY` is the gate's (`check_successions`), since the claim basis lives there
+# and `data/` may not import `state/`.
+SUCCESSIONS = {str(k): str(v) for k, v in roster_map("successions", "values").items()}
 # Plan position `17a` (r2 `05` RULED (b), `ARCH F.17`): HOW A SEAT TAKES ON THOSE WHO SERVE IT, the
 # third basis beside the two above and bound the same way. `Office.__post_init__` refuses a value
 # off it; `loop/predicates.py::_req_oblige` admits an `oblige` only to a seat whose `binds` is on it.
