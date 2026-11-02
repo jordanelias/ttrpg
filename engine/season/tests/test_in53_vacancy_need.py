@@ -285,9 +285,11 @@ def test_in53v_c_the_declarations_as_built():
     # REM-28 (B10-06) `revoke` declares `Office` beside `confer` and `oblige` (nineteen rows -> twenty; control: the
     # dispatch commit `a4c508c5`, nineteen); AT v10 REM-2B (B10-06) `evade / defy` and `construe` declare `Record`
     # beside `comply` (twenty rows -> twenty-two; control: the REM-2A tree `f23194871`, twenty); AT v10 IN-12 step 5
-    # (B10-09) `interrogate` declares `Detainee` (twenty-two rows -> twenty-three; control: `114ae5da4`, twenty-two).
+    # (B10-09) `interrogate` declares `Detainee` (twenty-two rows -> twenty-three; control: `114ae5da4`, twenty-two);
+    # AT v10 IN-61 (B10-09) `succeed` declares `Office` beside `confer`, `oblige` and `revoke` (twenty-three rows ->
+    # twenty-four; control: the CR-26 tree `59e5cf452`, twenty-three).
     assert {v for v, r in VERB_TABLE.items() if r.referent_class} == {"confer", "oblige", "comply", "march",
-                                                                      "interrogate",
+                                                                      "interrogate", "succeed",
                                                                       "evade / defy", "construe",
                                                                       "convene", "dispatch", "revoke", "migrate", "requisition",
                                                                       "restore", "work", "examine",

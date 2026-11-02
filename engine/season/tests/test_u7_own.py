@@ -53,7 +53,12 @@ from engine.season.state.carriers import Act, Candidate, Claim, Question, View
 # (`engine/season/tests/test_k3_thread_sensitivity.py`).
 # v10 REM-2B (restores v9 IN-33, H-58): `exchange` LEFT -- typed on its two coined operands (`return_kind`,
 # `return_amount`) with an effect, `_eff_exchange`; re-recorded.
-DECLINED = ("succeed", "tie / knot")
+# v10 IN-61 (RS-27): `succeed` LEFT (`("succeed", "tie / knot")` -> `("tie / knot",)`) -- re-specified as the
+# heir's claim (`_req_succeed`, `_eff_succeed`), the reason answered: the reader is the claim itself (it opens
+# the seat), and the heir is the actor, not an unbound operand; formed only on a seat whose `successions` title
+# he holds (`rosters.yaml: own_title_declines`), so it is not formed-and-refused in every world
+# (`engine/season/tests/test_in61_succession.py`).
+DECLINED = ("tie / knot",)
 
 
 def _view(w, pid):

@@ -2325,6 +2325,24 @@ rosters:
       the `existence` conjunct.]
     values: [destroy_record, give]
 
+  own_title_declines:
+    source: >-
+      v10 IN-61 (RS-27, B10-09); `own_hold_declines`' shape (above), one read over: the seat's title instead
+      of the seat.
+    note: >-
+      WHICH VERBS A PERSON FORMS ONLY ON A SEAT WHOSE `successions` TITLE HE HIMSELF HOLDS -- a list of
+      verbs. Read in `decision/options.py::opening_set`, person-side and World-free (AX-2): the objects of
+      his OWN live `hold` Tenures, against `successions` (a roster, the law, not world state). It is the
+      person-side reading of the claim's title conjunct (`state/gate.py::may_claim`): without it every
+      person told of any seat would form a claim on it, refused in the fold every time (the always-refused
+      set `test_u7_own.py` polices). It NARROWS the referents a question carries and widens nothing; the
+      seat's vacancy is still the fold's to read (the heir who forms a claim on a seat he wrongly believes
+      vacant is refused and learns it). ONE LOADER, `data/verbs.py::OWN_TITLE_DECLINES`, refused at import
+      when a member names a verb the table lacks or one whose row declares no `referent_class: Office`.
+      [ASSUMPTION; medium; Jordan to correct; revert: drop the member, and `succeed` forms on every seat a
+      question carries.]
+    values: [succeed]
+
   shortfall_sourced_operands:
     source: >-
       plan position `19d` (DEMAND · DELIVERY), `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md`
@@ -2572,7 +2590,35 @@ rosters:
       declaring any of them. Which act fills an `elected` or an `annex` seat is not ruled, and no
       election or annexation verb exists; narrowing `confer` to `appointed` would leave the other
       two seats fillable by nothing.
-    values: [appointed, elected, annex]
+      v10 IN-61 (RS-27, B10-09) ADDS A FOURTH, `inheritance`: Jordan 2026-10-14, *"designated heir is
+      not a verb but a status or title. the heir still has to claim their throne"*. A seat declaring it
+      is filled by the claim of the holder of its `successions` title (below), never by `confer`. WHICH
+      GATE BASIS MAY OPEN A HOLD ON A SEAT OF EACH CONFERRAL BASIS is `state/gate.py::FILLED_BY` (the first
+      narrowing: `inheritance` to the claim basis alone; the other three keep `conferral`), and what a
+      revocation of one costs is `REVOCATION_DISPOSAL["inheritance"]` (nothing); both are refused at import
+      unless total over this list. [ASSUMPTION; medium; Jordan to correct; revert: drop the member, the two
+      mappings' keys, `successions` and `off_king`'s basis (back to `null`).]
+    values: [appointed, elected, annex, inheritance]
+
+  successions:
+    source: >-
+      v10 IN-61 (RS-27, B10-09; `workplans/valoria_master_workplan_v10_part4.md` IN-61, part (1)): Jordan
+      2026-10-14, *"designated heir is not a verb but a status or title. the heir still has to claim their
+      throne"*. RS-29 ratified the title carrier (2026-10-14).
+    note: >-
+      WHICH TITLE A SEAT OF CONFERRAL BASIS `inheritance` PASSES TO -- a mapping, `{seat: title}`, both
+      `offices.yaml` row ids (realm seat ids equal their row ids since CP-T02-02). The title is an ordinary
+      seat, filled by `confer` (`off_heir`, `appointed`): designation is no verb. The seat is claimed by the
+      title's holder through `succeed` (`loop/predicates.py::_req_succeed`, `loop/effects_governance.py::
+      _eff_succeed`, the write gate's claim basis), admitted only while the seat has no live `hold`; the claim
+      opens EVERY vacant seat this mapping gives the same title and closes the title, in one act. LIMITS: the
+      route only awards a vacant seat; the first valid claim wins; one title deep (the heir's own title,
+      closed by his claim, passes to nobody). READ BY `data/rosters.py::SUCCESSIONS`, refused at import when
+      a key or value is no `offices.yaml` row, a key's row is not `inheritance`, or an `inheritance` row has
+      no key (a seat nobody could ever fill). `off_duke_valorsmark` gets its row at CP-T09-06 (B10-17), not
+      here. [ASSUMPTION; medium; Jordan to correct; revert: drop the row, `inheritance` and `succeed`'s row
+      back to its decline.]
+    values: {off_king: off_heir}
 
   revocation_bases:
     source: "JORDAN, ED-IN-0256 ruling (3), 2026-09-18, VERBATIM: *\"rung above of same faction\"* -- WHO MAY STRIP A SEAT. Plan position `13d-i`; closes the `is_title` branch (`H-109`)."

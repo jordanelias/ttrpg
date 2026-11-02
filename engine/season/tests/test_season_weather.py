@@ -419,9 +419,14 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # equal (no ledger names a creed before a season is witnessed). Was b09a95da... / 68ca1303... (one, two seasons); events
 # 9154 -> 8940, 24039 -> 24454. CONTROL, run in process on this tree: the term stubbed out (`oughts_named` returning `()`)
 # reads the old pair.
-BASE_HASHES = {0: "4ab812ba77c1c5d94fc3e2c59b0bba99",
-               1: "f699c1d4ae78a615539350a8e423de26",
-               2: "36d1e6c3323f5f81379bb70b0018fb60"}
+# RE-PINNED at v10 IN-61 (B10-09), A DATA MOVE DECLARED: `off_king`'s conferral `null` -> `inheritance` and `off_heir`'s `null` ->
+# `appointed` (RS-27), and `Office.conferral` folds into the content hash, so the build and both seasons move; NOTHING ELSE DOES:
+# the act sequence (582 / 1230 acts) and the event kinds are equal. Was 4ab812ba... / f699c1d4... / 36d1e6c3... (build, one, two
+# seasons). CONTROL, run in process on this tree: the two seats' `conferral` set back to `None` on the built world reads the old
+# two-season hash exactly, at seeds 0, 1 and 2. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+BASE_HASHES = {0: "c7ca8d505cc1741f9e54e1fdd0c55292",
+               1: "4b5e5133d79fc231e5e4edd16d4f7aab",
+               2: "15f4a86d0ef01bc9c05f19969bc45f78"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base

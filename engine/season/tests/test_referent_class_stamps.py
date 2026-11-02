@@ -1921,11 +1921,13 @@ def test_rem28_e_the_class_moves_no_derived_set():
     column moves neither derived set: both are re-derived over the table with `revoke`'s column blanked and read the
     shipped sets (an INVARIANCE: the fold cannot differ, so this is the whole of what can be asserted). THE CONTROL,
     that the derivation can move: a table with no `Office` row at all (`revoke`, `confer`, `oblige` blanked) loses
-    `Office` from `DECLARED_CLASSES`, so neither equality is one a constant could satisfy."""
+    `Office` from `DECLARED_CLASSES`, so neither equality is one a constant could satisfy. RE-RECORDED AT v10 IN-61:
+    `succeed` declares `Office` too, so the control blanks four rows (`revoke`, `confer`, `oblige`, `succeed`) where it
+    blanked three."""
     classless = _classless_table
     with mock.patch.object(_verbs, "VERB_TABLE", classless("revoke")):
         assert _verbs._derive_rung_remit_acts() == _verbs.RUNG_REMIT_ACTS
         assert _verbs._derive_declared_classes() == _verbs.DECLARED_CLASSES
-    with mock.patch.object(_verbs, "VERB_TABLE", classless("revoke", "confer", "oblige")):
+    with mock.patch.object(_verbs, "VERB_TABLE", classless("revoke", "confer", "oblige", "succeed")):
         assert "Office" not in _verbs._derive_declared_classes()
     assert _verbs.RUNG_REMIT_ACTS == frozenset({"issue", "dispatch", "convene"}), _verbs.RUNG_REMIT_ACTS

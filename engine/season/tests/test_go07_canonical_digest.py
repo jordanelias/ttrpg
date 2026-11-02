@@ -518,16 +518,21 @@ def _counts(w) -> dict:
 #: -> 77 / 81 / 81). Was, for seeds 0 / 1 / 2: `old` c99aac10... / b7f87636... / 96383c0f..., `new` b09a95da... / 11d0ce78... /
 #: 6e009a7e..., `census` 2b0cf87c... / c083f206... / 3464955d.... CONTROL, run in process on this tree: `oughts_named` stubbed to `()`
 #: reads seed 0's `new` (b09a95da...) exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+#: RE-RECORDED AGAIN at v10 IN-61 (B10-09), A DATA MOVE DECLARED: `off_king` `conferral` `null` -> `inheritance`, `off_heir` `null` ->
+#: `appointed` (RS-27); `Office.conferral` folds into both digests, so `old` and `new` move at all three seeds and NOTHING ELSE DOES
+#: (`acts`, `census` and every count equal). Was, for seeds 0 / 1 / 2: `old` 76409cd0... / f5081f07... / 25fe49f5..., `new`
+#: f699c1d4... / 5c577efd... / 5f914de5.... CONTROL, run in process on this tree: the two seats' `conferral` set back to `None` on the
+#: built world reads the old two-season realm hashes exactly at seeds 0-2. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 BASE = {
-    0: {"old": "76409cd058fb1e4468ee9bc7c5e6d983", "new": "f699c1d4ae78a615539350a8e423de26", "acts": 582,
+    0: {"old": "ec2947b6f11aa3c6db82f499b904b16c", "new": "4b5e5133d79fc231e5e4edd16d4f7aab", "acts": 582,
         "census": "f8ba303a0eb34388e24bdd74429145a44eb310b6bca50be32bdceb03dec17cf6",
         "counts": {"persons": 77, "rungs": 406, "offices": 32, "sites": 322, "records": 116,
                    "propositions": 102, "dates": 4, "docket": 3, "tenures": 872, "log": 8940}},
-    1: {"old": "f5081f07c5843bc33881c984405574cd", "new": "5c577efd5ee789f689b705de7c195a35", "acts": 619,
+    1: {"old": "43635d12a1b041ac6743324621935ce2", "new": "040570fb1f91b60e4da9352e61e3d8ee", "acts": 619,
         "census": "705bb1f1442eb6f8273b99d385a59679e5f35ad68d19be7f6a5e7ebd24b6082a",
         "counts": {"persons": 81, "rungs": 410, "offices": 32, "sites": 322, "records": 146,
                    "propositions": 102, "dates": 7, "docket": 2, "tenures": 922, "log": 11052}},
-    2: {"old": "25fe49f55a4dc25598a96915a36bed28", "new": "5f914de5ac2ec800e3049ec96fc06671", "acts": 645,
+    2: {"old": "38f722bd5c9e745aafacdf5940fdf37f", "new": "b628542927d47946a897538e07494333", "acts": 645,
         "census": "347f9c3873ec072e9f223752b6bc3a77105573ce810b82cddca31dfa83ac5e93",
         "counts": {"persons": 81, "rungs": 410, "offices": 32, "sites": 322, "records": 134,
                    "propositions": 110, "dates": 3, "docket": 3, "tenures": 921, "log": 10141}},
@@ -538,8 +543,8 @@ def test_go07_control_the_build_world_old_digest_is_unmoved():
     """The base commit's `repr` digest of `build_realm(0)`, before a single act, read this literal
     (`test_season_weather.BASE_HASHES[0]`'s retired value); the same world now reads the new pin."""
     w = POP.build_realm(0)
-    assert _old_content_hash(w) == "26c255acf3672adb1bd9afca36461b28"        # v10 CP-T02-02: was 798b938e... (CR-21); before that 6ea9a7f2... (SE-06)
-    assert w.content_hash() == "4ab812ba77c1c5d94fc3e2c59b0bba99"            # v10 CP-T02-02: was 3e31638e... (CR-21); before that aef556ac... (SE-06)
+    assert _old_content_hash(w) == "919faacba3a5b83184266f454f6989d3"        # v10 IN-61: was 26c255ac... (CP-T02-02); before that 798b938e... (CR-21)
+    assert w.content_hash() == "c7ca8d505cc1741f9e54e1fdd0c55292"            # v10 IN-61: was 4ab812ba... (CP-T02-02); before that 3e31638e... (CR-21)
 
 
 def test_go07_control_the_world_did_not_move_only_its_digest():

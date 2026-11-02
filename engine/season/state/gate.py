@@ -50,8 +50,8 @@ from typing import Any, Callable, Optional
 from ..data.arrangements import ARRANGEMENTS
 from ..data.matrix import MATRIX, WriteClass
 from ..data.rosters import (
-    BAN_KIND, CONFERRAL_BASES, DETAIN_KIND, RESTRAINT_KINDS, REVOCATION_BASES, TENURE_KINDS,
-    faction_prop_id,
+    BAN_KIND, CONFERRAL_BASES, DETAIN_KIND, RESTRAINT_KINDS, REVOCATION_BASES, SEAT_ROW_BY_ID,
+    SUCCESSIONS, TENURE_KINDS, faction_prop_id,
 )
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 from .carriers import Office, Receipt, Tenure
@@ -234,6 +234,14 @@ DETERMINATION = "determination"
 # (`holonic §15.3`), so what closes an edge through a death may also open one through a birth -- and
 # nothing else. See the block in `tenure_write_basis`.
 FOUNDING = "founding"
+# v10 IN-61 (RS-27, Jordan 2026-10-14: *"the heir still has to claim their throne"*): AN OPENING of the
+# actor's OWN `hold` on a VACANT seat whose `rosters.yaml: successions` title the actor ended under `T-m`
+# in this same write -- the heir's claim (`succeed`). Named in Jordan's own word for the act. ⚠ NOT
+# `Claim`, the epistemic carrier (a belief in a ledger): this is the basis that admits a write, and reads
+# no ledger. CAUSATION-BOUND like `handover` (the licence is the actor's own title, ended in the same
+# act), never authority-bound: no seat is exercised (`succeed` is `own`-eligible, `via` is `None`). See
+# `may_claim` and the block in `tenure_write_basis`.
+CLAIM = "claim"
 
 # THE REMIT ACT THAT MAKES A SEAT A JUDGING SEAT -- `H-32`'s swept default, and the `bench_basis` of
 # every seeded `arrangements.yaml` row. ONE OWNER, read by `queries/world_q.py::judging_set` (which
@@ -596,7 +604,12 @@ if set(REVOCATION_RULES) != set(REVOCATION_BASES):
 # every reader. `None` IS A VALUE (a seat declaring no ruled way of being filled -- Hafenmark's is
 # strippable, Jordan 2026-10-12), not "unreadable" [ASSUMPTION; medium; Jordan to correct; revert:
 # drop the `None` key, so a `None` revocation refuses -- which overwrites the Hafenmark ruling].
-REVOCATION_DISPOSAL = {"appointed": BAN_KIND, "elected": None, "annex": None, None: None}
+# v10 IN-61 (RS-27): `inheritance` -> nothing. An inherited seat is revoked by nobody today (`off_king`'s
+# `revocation` is `null`); were one revocable, the deposed heir is not banned from a seat he never held
+# by appointment [ASSUMPTION; medium; Jordan to correct; revert: drop the key -- the import check then
+# refuses `inheritance` until it has one].
+REVOCATION_DISPOSAL = {"appointed": BAN_KIND, "elected": None, "annex": None, "inheritance": None,
+                       None: None}
 
 
 def check_revocation_disposal() -> None:
@@ -626,6 +639,111 @@ def check_revocation_disposal() -> None:
 check_revocation_disposal()
 
 
+# v10 IN-61 (RS-27; the second decision round's item 3 (a), `-05` §1b): WHICH GATE BASIS MAY OPEN A
+# `hold` ON A SEAT OF EACH CONFERRAL BASIS -- the one owner. KEYED BY GATE BASIS, NEVER BY VERB:
+# `tenure_write_basis` receives no verb, and `may_fill` is the conferral basis every seat-hold-opening act
+# passes, so the narrowing is asked where the basis is judged and every precondition that asks `may_fill`
+# (`_req_confer`, `_req_establish`, `world_q.vacancies`) inherits it. THE FIRST NARROWING ONLY:
+# `inheritance` opens by the claim basis alone and is refused to `conferral` (so no seat confers a
+# throne); `appointed` and `annex` keep `conferral`; `elected` keeps `conferral` until CR-35 (B10-17)
+# narrows it to the determination's election arm. `None` IS A KEY, `REVOCATION_DISPOSAL`'s shape: a
+# seat declaring no basis is filled by NOTHING (the empty set; `has_conferral_basis` refuses it too), so
+# the mapping is total over every value `Office.conferral` can hold. READERS ASK IT IN PLACE
+# (`filled_by`, or this module's attribute), `REVOCATION_DISPOSAL`'s rule, so an in-place mutation
+# reaches every reader [ASSUMPTION; medium; Jordan to correct; revert: no `FILLED_BY` (every basis
+# passes `confer`); the claim opens the throne only].
+FILLED_BY = {"appointed": frozenset({CONFERRAL}), "elected": frozenset({CONFERRAL}),
+             "annex": frozenset({CONFERRAL}), "inheritance": frozenset({CLAIM}), None: frozenset()}
+
+# The gate bases that OPEN a `hold` on a seat -- what a `FILLED_BY` value may name. Every other basis
+# refuses a seat-hold opening by construction (`T-m`'s seat carve-out; `handover` is non-seat only).
+_SEAT_OPENERS = frozenset({CONFERRAL, CLAIM})
+
+
+def check_filled_by() -> None:
+    """REFUSED AT IMPORT, `check_revocation_disposal`'s shape: `FILLED_BY` must be TOTAL over
+    `CONFERRAL_BASES` plus `None` (a basis with no opener would be a seat nobody can fill, and a key off
+    the roster a rule for no seat), every rostered basis's value a NON-EMPTY set of the bases that open a
+    seat-`hold`, and `None`'s the empty set. Callable again so a test can observe it refuse."""
+    want = set(CONFERRAL_BASES) | {None}
+    if set(FILLED_BY) != want:
+        raise Unspecified(
+            f"seat openers {sorted(map(str, FILLED_BY))} and conferral bases {sorted(map(str, want))} "
+            "disagree", "rosters.yaml -- conferral_bases",
+            needs="give every rostered conferral basis the gate bases that may open its seat's `hold` in "
+                  "`state/gate.py::FILLED_BY`, `None` the empty set, and no other key",
+            law="`04 §B.13` ID-12 -- a declared row that reaches no code is the defect the loader's "
+                "cross-validation exists to catch; v10 IN-61 (RS-27)")
+    bad = {str(k): sorted(v) for k, v in FILLED_BY.items()
+           if not set(v) <= _SEAT_OPENERS or (not v) != (k is None)}
+    if bad:
+        raise Unspecified(
+            f"seat openers {bad!r} name no basis that opens a seat-`hold` (only {sorted(_SEAT_OPENERS)})",
+            "state/gate.py -- FILLED_BY",
+            needs=f"each conferral basis maps to a non-empty subset of {sorted(_SEAT_OPENERS)}",
+            law="v10 IN-61 (RS-27) -- a seat is filled by a basis that can open its `hold`, or by nothing")
+
+
+check_filled_by()
+
+
+def filled_by(off: Office) -> frozenset:
+    """The gate bases that may open a `hold` on `off` -- empty for a seat declaring no basis."""
+    return FILLED_BY.get(off.conferral, frozenset())
+
+
+def check_successions() -> None:
+    """REFUSED AT IMPORT: `rosters.yaml: successions` against `offices.yaml` and `FILLED_BY`. A key or a
+    value that is no `offices.yaml` row names a seat that cannot exist; a key whose row's basis the claim
+    does not open (`FILLED_BY`) is a title that passes nothing; and a row whose basis ONLY the claim opens,
+    with no key, is a seat nobody can ever fill. Callable again so a test can observe it refuse."""
+    rows = SEAT_ROW_BY_ID
+    bad = sorted(f"{k}: {v}" for k, v in SUCCESSIONS.items() if k not in rows or v not in rows)
+    bad += sorted(f"{k} (conferral {rows[k].get('conferral')!r}): the claim does not open it"
+                  for k in SUCCESSIONS if k in rows
+                  and CLAIM not in FILLED_BY.get(rows[k].get("conferral"), ()))
+    bad += sorted(f"{i} (conferral {r.get('conferral')!r}): no title passes it"
+                  for i, r in rows.items() if FILLED_BY.get(r.get("conferral")) == frozenset({CLAIM})
+                  and i not in SUCCESSIONS)
+    if bad:
+        raise Unspecified(
+            f"`rosters.yaml: successions` disagrees with `offices.yaml`: {bad}", "rosters.yaml -- successions",
+            needs="map each seat whose basis only the claim opens to the `offices.yaml` row of its title, "
+                  "and no other seat",
+            law="v10 IN-61 (RS-27) -- the heir is a title and the throne is the title-holder's claim")
+
+
+check_successions()
+
+
+def may_claim(w: "World", actor: Optional[str], off: Office, titles,
+              besides: Optional[Tenure] = None) -> bool:
+    """THE CLAIM, AS ONE PREDICATE (v10 IN-61, RS-27): may `actor` take `off` by the claim of its title?
+
+    Three conjuncts: `off`'s conferral basis is opened by the claim (`FILLED_BY`); `off`'s `successions`
+    title is among `titles` -- the seats the CALLER says the actor holds the title by; and `off` has no
+    live `hold` but `besides`. Two readers, `may_fill`'s shape: `_req_succeed` asks it BEFORE the write
+    with the actor's live seat-holds and `besides=None`; the gate asks it AFTER the write -- which closed
+    the title in the same act -- with `released` (the objects of the `hold`s this actor ended under `T-m`
+    in this write) and `besides` the opened edge itself. So the vacancy and the title are asked once, here,
+    and the precondition and the gate cannot disagree. ⚠ "First valid claim wins" is this conjunct: the
+    first claim opens the seat, and every later one meets a live `hold`."""
+    title = SUCCESSIONS.get(off.id)
+    if actor is None or title is None or title not in titles or CLAIM not in filled_by(off):
+        return False
+    return not any(t is not besides and t.kind == "hold" and t.object == off.id and t.live
+                   for t in w.tenures)
+
+
+def claimable_seats(w: "World", actor: Optional[str], title: str) -> tuple:
+    """Every seat `actor` may take by the claim of `title` (`may_claim`, so vacancy and basis are asked
+    once), sorted -- what ONE claim opens (v10 IN-61's one-act write, *"opens every vacant seat whose
+    `successions` value is the claimant's title, then closes that title"*). The seat the act names is in
+    the set whenever `_req_succeed` admitted it. The caller says the actor holds `title`."""
+    return tuple(sorted(s for s, ti in SUCCESSIONS.items()
+                        if ti == title and s in w.offices and may_claim(w, actor, w.offices[s], {title})))
+
+
 def has_revocation_disposal(off: Office) -> bool:
     """Does `off`'s conferral basis have a revocation disposal? False only for a value off the roster,
     which `Office.__post_init__` refuses to construct -- reached by a hand-mutated office alone.
@@ -652,8 +770,8 @@ def has_conferral_basis(off: Office) -> bool:
     gate asks it and the gate may not import the loop; `predicates` imports the name, so a
     `monkeypatch` of `predicates.has_conferral_basis` still reaches both preconditions.
 
-    ⚠ MEMBERSHIP ONLY: every rostered basis passes. Which act fills an `elected` or an `annex` seat
-    is not ruled, and `confer` is the only act that fills any seat (`rosters.yaml`'s note)."""
+    ⚠ MEMBERSHIP ONLY: every rostered basis passes, `inheritance` included (v10 IN-61). WHICH gate
+    basis may open the seat's `hold` is `FILLED_BY`'s, asked by `may_fill` and `may_claim`, not here."""
     return off.conferral in CONFERRAL_BASES
 
 
@@ -684,13 +802,13 @@ def may_fill(w: "World", actor: Optional[str], via: Optional[str], off: Office) 
     `via` is not `off` itself: reflexive on the RUNG, exclusive on the SEAT, so a holder does not
     fill the seat he is exercising (r2 `03` §A.6).
 
-    ⚠ WHAT IT DOES NOT DECIDE: WHICH conferral basis each act may exercise. `appointed`, `elected`
-    and `annex` all pass today, because the mapping from basis to act is unruled (`13d-i`'s open
-    question: should `confer` narrow to `appointed`?). If that is ruled, it narrows HERE, and the
-    precondition inherits it by asking this."""
+    ⚠ WHICH conferral basis this basis may fill IS `FILLED_BY`'s (v10 IN-61): it narrowed HERE, as this
+    docstring said it would, and the preconditions inherit it by asking this. `appointed`, `elected`
+    and `annex` pass; `inheritance` is refused -- a throne is claimed by its title's holder
+    (`may_claim`), never conferred by any seat."""
     if seat_hold(w, actor, via) is None or via == off.id:
         return False
-    if not has_conferral_basis(off):
+    if not has_conferral_basis(off) or CONFERRAL not in filled_by(off):
         return False
     return purview_reaches(w, w.offices[via], off.rung)
 
@@ -999,6 +1117,12 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
       `conferral` an OPENING of a `hold` on a SEAT, or a change to that `hold`'s grant (`payload`)
                   alone, by `may_fill`. The re-grant is `establish`'s re-stamp (`13f`): the grant a
                   seat confers on its holder, written by the authority that may fill the seat.
+                  Never on a seat whose `FILLED_BY` lacks it (v10 IN-61: an `inheritance` seat).
+      `claim`     an OPENING of the ACTOR'S OWN `hold` on a seat whose `FILLED_BY` names it, which
+                  has no other live `hold`, and whose `successions` title is in `released` -- the
+                  actor ended his own `hold` on that title under `T-m` in this same write (v10 IN-61,
+                  RS-27: the heir's `succeed`). `may_claim`; causation-bound like `handover`, no seat
+                  exercised. Not spent: one title opens every vacant seat naming it.
       `handover`  an OPENING of a `hold` on something that is NOT a seat, whose object is in
                   `released` -- the actor ended their own live `hold` on that object under `T-m`
                   in this same write. `give` (plan position 16) is the verb; the basis is general
@@ -1238,6 +1362,12 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
         return None
     if closed and may_revoke(w, actor, via, seat):
         return T_O
+    # v10 IN-61 (RS-27): THE CLAIM. The actor's OWN `hold` opened on a vacant seat whose title he ended
+    # under `T-m` in this same write (`released`, `refuse_unauthored`'s first pass) -- so it is reached on
+    # the second pass only, `handover`'s licence read for a seat. Not spent: one title opens every vacant
+    # seat that names it (`claimable_seats`), and the seat's own vacancy (`besides=t`) bars a second.
+    if opened and owner == actor and may_claim(w, actor, seat, released, besides=t):
+        return CLAIM
     if (opened or moved == {"payload"}) and may_fill(w, actor, via, seat):
         return CONFERRAL
     return None
@@ -1361,9 +1491,10 @@ def not_yours(refused: list, actor: Optional[str], via: Optional[str], record_ki
               f"Record or a Rung closed, by a holder granted `{SEIZURE_ACT}` whose exercised "
               f"seat's purview reaches the object's place), {MUSTER} (another person's "
               f"`contain` re-homed, by a holder granted `{MUSTER_ACT}`, for a member of the "
-              f"exercised seat's faction), or "
+              f"exercised seat's faction), "
               f"{FOUNDING} (a `contain` opened for a thing this same write brought into "
-              f"existence, its only parent)",
+              f"existence, its only parent), or {CLAIM} (the actor's own `hold` opened on a vacant "
+              f"seat whose `successions` title he ended in the same write)",
         law="04 §C.2 F3 / AX-4 clause 2 -- the owner is the value's ONLY writer, and a non-owner "
             "writes only under a declared basis. Per-verb eligibility enforced this by "
             "CONVENTION until G3; a revocation with no seat in Act.via is refused here, so 'a "

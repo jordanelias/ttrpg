@@ -30,13 +30,14 @@ from ..data.requires import (
     SHORTFALL_SOURCED_OPERANDS, VIA, binding_of, evaluate,
 )
 from ..data.rosters import (
-    CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, REMOVE_ORDINAL, refusing_pole, require_member,
+    CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, REMOVE_ORDINAL, SUCCESSIONS, refusing_pole,
+    require_member,
 )
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
 from ..data.verbs import (
-    ELIGIBILITY_KINDS, HELD_DOCUMENT_DECLINES, OWN_HOLD_DECLINES, OWN_STANCE_DECLINES, TERMS_SOURCED,
-    VERB_TABLE, VOCATION_SOURCED, VOCATIONS, WARRANT_SOURCED, align,
+    ELIGIBILITY_KINDS, HELD_DOCUMENT_DECLINES, OWN_HOLD_DECLINES, OWN_STANCE_DECLINES, OWN_TITLE_DECLINES,
+    TERMS_SOURCED, VERB_TABLE, VOCATION_SOURCED, VOCATIONS, WARRANT_SOURCED, align,
 )
 from ..epistemic import belief_contradicts
 from ..gaps import Forbidden
@@ -201,6 +202,14 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             if held is None:
                 held = _held_objects(p)
             refs = tuple(r for r in refs if r in held)
+        # v10 IN-61 (`rosters.yaml: own_title_declines`, RS-27): A VERB A PERSON FORMS ONLY ON A SEAT WHOSE
+        # `successions` TITLE HE HIMSELF HOLDS -- `succeed`, the person-side reading of the claim's title
+        # conjunct (`state/gate.py::may_claim`). His own live `hold` objects against the roster (the law,
+        # not world state), no World. It NARROWS and widens nothing; the seat's vacancy stays the fold's.
+        if verb in OWN_TITLE_DECLINES:
+            if held is None:
+                held = _held_objects(p)
+            refs = tuple(r for r in refs if SUCCESSIONS.get(r) in held)
         if not refs:
             continue
         # v9 IN-12 step 9 (`rosters.yaml: vocation_sourced`): A VERB THAT CARRIES A VOCATION forms one

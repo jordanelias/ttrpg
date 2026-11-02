@@ -1804,12 +1804,18 @@ def test_13d_i_the_conferral_basis_is_roster_membership_not_a_nonempty_string():
     off.rung = "S"               # G3: ground inside the duke's purview, or nobody may confer it
     conf = Act(id="c_b", actor="p_high", verb="confer",
                payload={"office": "off_dicastery", "to": "p_mid"}, via="off_duke")
-    checked = 0
+    # RE-RECORDED AT v10 IN-61 (RS-27): every member still passes the MEMBERSHIP test, and `_req_confer`
+    # now admits exactly the members `state/gate.py::FILLED_BY` opens by `conferral` -- `inheritance` is a
+    # member `confer` refuses (a throne is claimed, never conferred). Was: every member admitted by both.
+    from ..state.gate import CONFERRAL, FILLED_BY
+    checked = refused = 0
     for basis in sorted(CONFERRAL_BASES):
         off.conferral = basis
-        assert _preds.has_conferral_basis(off) and _preds._req_confer(w, conf), basis
+        assert _preds.has_conferral_basis(off), basis
+        assert _preds._req_confer(w, conf) == (CONFERRAL in FILLED_BY[basis]), basis
         checked += 1
-    assert checked == len(CONFERRAL_BASES) >= 3, checked
+        refused += CONFERRAL not in FILLED_BY[basis]
+    assert checked == len(CONFERRAL_BASES) >= 4 and refused == 1, (checked, refused)
     for basis in (None, "something-not-on-the-roster", "the duke's remit (harness fixture)", ""):
         off.conferral = basis
         assert not _preds.has_conferral_basis(off), f"{basis!r} passed the basis test"
@@ -1960,7 +1966,9 @@ def test_8a_every_authored_seat_constructs_against_the_live_rosters():
     cnf = Counter(s["conferral"] for s in seats)
     rvk = Counter(s["revocation"] for s in seats)
     assert sum(cnf.values()) == 31 and sum(rvk.values()) == 31
-    assert cnf == Counter({"appointed": 17, "elected": 8, None: 6}), cnf
+    # RE-RECORDED AT v10 IN-61 (RS-27): `off_king` null -> `inheritance`, `off_heir` null -> `appointed`.
+    # Was `{"appointed": 17, "elected": 8, None: 6}`.
+    assert cnf == Counter({"appointed": 18, "elected": 8, "inheritance": 1, None: 4}), cnf
     assert rvk == Counter({"rung_above_same_faction": 13, "rung_above_in_holdings": 2, None: 16}), rvk
 
 
@@ -1994,7 +2002,8 @@ def test_8a_every_authored_seat_carries_its_authored_basis_after_the_overlay():
     matched to the one its per-case loop built or minted from the row (`13d-iii`). Before `8a` every
     seat carried `conferral=None, revocation=None`, the dataclass default, regardless of what
     `ED-IN-0256` says of it. This asserts the overlay actually ran: each seat matches its row, the
-    four hereditary/no-revoker seats (King, Queen, Heir, Princess) correctly keep `None`, and --
+    `null`-conferral seats correctly keep `None` (v10 IN-61 moved the King to `inheritance` and the
+    Heir to `appointed`), and --
     a passing test that could not tell 'overlaid with None' from 'never overlaid' would not
     observe the failure it excludes (`CLAUDE.md` §0.1 pt 2) -- a NON-None seat on each axis is
     checked too. (Was nineteen seats and skipped the `[NEW]` rows; four of those are seated by the

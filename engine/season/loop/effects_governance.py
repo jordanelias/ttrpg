@@ -13,13 +13,13 @@ from __future__ import annotations
 
 from typing import Optional
 
-from ..data.rosters import RELEASABLE_KINDS, RESTRAINT_KINDS
+from ..data.rosters import RELEASABLE_KINDS, RESTRAINT_KINDS, SUCCESSIONS
 from ..data.verbs import VERB_TABLE
 from ..gaps import InstrumentDefect
 from ..loop.predicates import office_described_by, office_named_by
 from ..queries.world_q import BAN_KIND, DETAIN_KIND, restrained
 from ..state.carriers import Tenure, Term
-from ..state.gate import (NO_CHANGE, Change, Subject, has_revocation_disposal,
+from ..state.gate import (NO_CHANGE, Change, Subject, claimable_seats, has_revocation_disposal,
                           revocation_disposal)
 from ..state.ids import H
 
@@ -140,6 +140,47 @@ def _eff_confer(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     # `revoke` and `release` alike, rather than three effects each inventing their own legible id.
     return Change((Subject.edge(nt, "tenure.opened"),)
                   + tuple(Subject.edge(t, "tenure.closed") for t in closed), perform)
+
+
+@effect_for("succeed")
+def _eff_succeed(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """v10 IN-61 (RS-27): THE HEIR'S CLAIM, ONE ACT, ONE WRITE. Opens the claimant's `hold` on EVERY vacant
+    seat whose `successions` title is the one he claims by (`state/gate.py::claimable_seats` -- the King
+    who dies holding two such seats leaves both to one claim), then closes his `hold` on that title.
+
+    THE GATE ADMITS EACH EDGE BY NAME: the title's closure is `T-m` (his own seat-`hold`, laid down -- a
+    pure closure, which `T-m`'s seat carve-out keeps), and each opened seat-`hold` is the CLAIM basis,
+    licensed by that closure in the same write (`refuse_unauthored`'s second pass). Split across two writes
+    the opening would be refused (no title ended in its write) -- so it is one. `_req_succeed` asked the
+    same `may_claim` first; an act that skipped it opens nothing the gate would refuse, because a seat
+    `claimable_seats` returns is one the gate's conjuncts admit.
+
+    ⚠ THE `Tenure(..., "hold")` IS A LITERAL, DELIBERATELY: `data/verbs.py::_derive_openers_from_effects`
+    reads the kind off this construction, so `succeed` joins `hold`'s openers and `world_q.endings_reached`
+    credits a seat taken by claim as it credits one conferred. The grant (`Tenure.granted_acts`) is
+    stamped by `World.add_tenure`, as for every seat-`hold`. Limits: one title deep -- the title it
+    closes passes to nobody; the first valid claim wins (a later one finds the seat held)."""
+    seat = _operand(a, "subject")
+    title = SUCCESSIONS.get(seat) if isinstance(seat, str) else None
+    if title is None:
+        return NO_CHANGE
+    held = [t for t in w.tenures
+            if t.kind == "hold" and t.live and t.subject == a.actor and t.object == title]
+    seats = claimable_seats(w, a.actor, title) if held else ()
+    if seat not in seats:
+        return NO_CHANGE
+    opened = [Tenure(H(w.world_seed, w.tick, a.actor, f"hold:{s}"), a.actor, s, "hold", w.tick)
+              for s in seats]
+
+    def perform() -> None:
+        for t in held:
+            t.until = w.tick
+        for nt in opened:
+            w.add_tenure(nt)
+    # `succession.claimed`, the row's own kind, never `confer`'s `tenure.opened` (the row's `emits_note`:
+    # a second emitter would dissolve `KIND_VERB["tenure.opened"]` and re-weigh every such claim).
+    return Change(tuple(Subject.edge(nt, "succession.claimed") for nt in opened)
+                  + tuple(Subject.edge(t, "tenure.closed") for t in held), perform)
 
 
 @effect_for("establish")
