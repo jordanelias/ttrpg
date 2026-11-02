@@ -37,7 +37,7 @@ Part 1 §2 holds CR-01 to CR-45 (CR-02's entry left at B10-01's close; CR-30 to 
 - LANDED ALREADY: the refusal Events.
 - REMAINING UNBUILT: the control-flow `except` sites that turn an exception into a game outcome (`loop/resolve.py:276`, `:502`, `:1137`; `loop/predicates.py:267`; re-derive by symbol) return a typed record `{code, needs, law}` whose `code` is a closed roster. The §C.12 Result-shape hunk (Layer 1, `04_CODE_ARCHITECTURE.md:993`) lands with GO-10 (B10-20), in that PR, listed under "Layer 0/1 hunks" (independently revertible; M11 answered (a), ED-IN-0300); a (RULED) mark at its anchor stops the hunk, and the code proceeds without it.
 - GATE: B10-20, after GO-09. NEEDS: none.
-- EXIT and FALSIFIER: a planted no-op write still yields its refusal Event; `grep` finds no `except NoOpReceipt` left on the fold. CONTROL: seed 0, two seasons, realm hash equal before and after (B10-20 declares no mover, so seeds 1 and 2 are not read, P10).
+- EXIT and FALSIFIER: a planted no-op write still yields its refusal Event; `grep` finds no `except NoOpReceipt` left on the fold. CONTROL: seeds 0-2, four seasons, realm hash equal before and after.
 - HASH MOVERS: EQUAL.
 - HOLES AND LEDGER IDS: none. ASKS ATTACHED: M11 ANSWERED (a), for the §C.12 hunk only (`-05`; ED-IN-0300).
 - RE-BASE: re-derive the `except` sites by symbol.
@@ -62,7 +62,7 @@ Part 1 §2 holds CR-01 to CR-45 (CR-02's entry left at B10-01's close; CR-30 to 
 - LANDED ALREADY: `engine/substrate/composition.py`; `registry.resolve`.
 - REMAINING UNBUILT: an explicit provider list (ED-IN-0017 F2); `modules/mass_battle/rngsource.py`'s fallback to the process-global `random` refuses (F5), so every draw goes through a keyed generator; provider `status` a closed roster (F7); `registry.resolve` refuses a missing contract and the fields it reads are exported to `composition.json` (F8); `os.environ`-read module flags (`modules/mass_battle/config.py:113`, `hierarchy/units.py:33`) frozen into exported values.
 - GATE: B10-20, after GO-11. NEEDS: GO-11.
-- EXIT and FALSIFIER: a provider module not on the list reds driver construction; a `None` rng in `mass_battle` raises instead of drawing. CONTROL: the realm hash at seed 0, two seasons, equal (B10-20 declares no mover, so seeds 1 and 2 are not read, P10).
+- EXIT and FALSIFIER: a provider module not on the list reds driver construction; a `None` rng in `mass_battle` raises instead of drawing. CONTROL: the realm hash at seeds 0-2, four seasons, equal.
 - HASH MOVERS: EQUAL.
 - HOLES AND LEDGER IDS: ED-IN-0017 F2, F5, F7, F8. ASKS ATTACHED: none.
 - RE-BASE: re-read `rngsource.py` and the flag reads by symbol.
