@@ -13,6 +13,7 @@ This file does that for the existing decks and the Goldenfurt slice. It is a rew
 - Every row below is accepted by `data/goals.py::parse` on top of the 38 rows of `goals.yaml`: 27 of 27 (each alone, and all together: 65 rows).
 - The nine Goldenfurt rows each mint a Proposition and each has exactly one committed person: `gf_commune_against_guild_toll` → NPC-081 (Falkenrath), `gf_guild_holds_the_ford` → NPC-007 (Feldhaus), `gf_law_sides_with_commons` → NPC-074 (Stenskald), `gf_crown_wants_men` → NPC-036, `gf_crown_wants_grain` → NPC-037, `gf_crown_watches_the_comptroller` → NPC-033, `gf_church_draws_near` → NPC-021, `gf_old_rite_in_the_hamlets` → NPC-003, `gf_levy_grievance` → NPC-081.
 - The content hash moves with the rows on (`3e31638ef6ee` → `2e7f4f3d01da`): as an on-arm they are a declared mover.
+- **Executed (§5):** a three-arm attention reading with a placebo, seeds 0 and 1, three seasons. The rung-aimed rows redirect those persons' acts toward the target settlement; whether that is a story is not shown.
 - **Not executed:** the `yield_scale` cards (no loader), the seed Records (no carrier), the docket (no deal effect). They are specified, not tested.
 
 ## 1. The six Tensions cards (CL-EVENTS commit 4), in the goals schema
@@ -229,6 +230,19 @@ The same rows are dealt in play: a named seat-holder's `convene` draws one card 
 
 ## 5. What this does not do
 
-- Rows make people **attend**; acts decide. A stance row of −1 makes `fight` form on the referent (`goals.yaml` header). Whether the Goldenfurt trio produces a story is NOT yet measured: the with/without comparison (seeds 0 and 1, three seasons, rows on against rows off) was still running when this file was written, and §0 reports only build-time facts.
+- Rows make people **attend**; acts decide. A stance row of −1 makes `fight` form on the referent (`goals.yaml` header). Whether the Goldenfurt rows produce a story is NOT shown. What was measured is attention (below); no one has yet classified the acts it produced, counted cross-person chains, or separated executed acts from refused ones.
+
+**Attention reading (executed, `populated`'s own `SeasonDriver` and chooser, three seasons, rows swapped in through `goals.rows_replaced`).** Three arms per seed: rows off; the nine Goldenfurt rows on; a placebo that keeps every row but aims the five rung-targeted rows (Guild comptroller, Royal Marshal, Lord Treasurer, Confessor, Restoration leader) at S-007 instead of S-006. Count: acts by those five persons whose subject is S-006 (the rung, its buildings, or a person homed there) or S-007.
+
+| seed | arm | all acts | the five persons' acts | subject in S-006 | subject in S-007 |
+|---|---|---|---|---|---|
+| 0 | off | 2088 | 127 | 11 | 0 |
+| 0 | on | 2059 | 131 | **29** | 0 |
+| 0 | placebo | 2072 | 133 | 9 | **23** |
+| 1 | off | 2080 | 118 | 4 | 0 |
+| 1 | on | 2143 | 130 | **21** | 0 |
+| 1 | placebo | 2170 | 129 | 3 | **17** |
+
+Reading: the rows move where those persons act. S-006 falls back to its baseline when the target moves, and S-007 takes the attention: the effect follows the target, not the presence of rows. Their total acts barely change, so the rows redirect and do not add. Limits: two seeds and three seasons; the S-006 count includes acts on persons homed there (the comptroller among them, so some are self-acts, present in every arm); the verbs are not classified; the thresholds for "enough" are Jordan's.
 - The 12 unexpressed cards stay unexpressed until the engine has the writer, the verb or the field they need.
 - The settlement template needs a loader (`settlement_openings`) and the corrected goals visibility before it generates anything.
