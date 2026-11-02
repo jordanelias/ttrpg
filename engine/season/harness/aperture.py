@@ -119,6 +119,7 @@ from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries import world_q
 from ..queries.world_q import DOCKET_KIND
 from ..state.carriers import subject_of
+from ..state.gate import PERSON_DIED
 from ..state.ids import H, draw_factory
 from ..state.world import World
 from . import governance_spine, populated
@@ -294,7 +295,7 @@ def kind_census(w, d) -> dict:
 #: A death is the Event kind `person.died`, whichever of `Person.body` or `Person.exists` carries its
 #: Receipt (the realm's carries `body`): the one kind both rows emit, asserted against the matrix. THE ONE
 #: HOME of the fact for the harness; `harness/arc.py` imports it (`arc` -> `storybar` -> this module).
-DEATH_KIND = "person.died"
+DEATH_KIND = PERSON_DIED       # `state/gate.py`'s spelling: one owner, the matrix assertion below stays
 assert DEATH_KIND in MATRIX[("Person", "exists")].emits and DEATH_KIND in MATRIX[("Person", "body")].emits
 
 #: The classes of the wrong-kind columns, in print order. The first two together are THE wrong-kind

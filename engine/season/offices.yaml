@@ -50,6 +50,11 @@
 #        six seats already carry in the live build today. Heredity is `ARCH §B.8`'s separate
 #        `succeed` Tenure/verb (`own`-eligible, a typed `relation` cell, no `@effect_for` body yet)
 #        -- outside `Office.conferral`'s ruled roster, not silently folded into it.
+#        ⚠ v10 IN-61 (RS-27, Jordan 2026-10-14: *"designated heir is not a verb but a status or title.
+#        the heir still has to claim their throne"*) MOVED TWO OF THE SIX: `off_king` -> `inheritance`
+#        (a fourth `conferral_bases` member, filled only by the claim of the `rosters.yaml: successions`
+#        title's holder) and `off_heir` -> `appointed` (the title, designated by an ordinary `confer`).
+#        The other four keep `null`. [ASSUMPTION; medium; Jordan to correct; revert: both `null`.]
 #      * `purview`/`holdings` (old: purview alone for an office, purview+holdings+rank for a title)
 #        -> `rung_above_same_faction` wherever a rung above could in principle hold a same-faction
 #        seat (15 of 29 rows; at build only the six Crown T1 seats are satisfiable, H-207) -- the
@@ -74,8 +79,7 @@
 #        operands today). `null` (strippable by nobody) is what they already did; the ruling
 #        writes it down and closes that route, and `_req_establish` refuses changing `revocation`
 #        at runtime.
-#        (Loop-built, those rows' seats are `off_npc_038`, `off_npc_013`, `off_npc_034`, `off_npc_070`;
-#        the other three are minted under the row id.) The seven duchy-rung council/guild seats are NOT in
+#        (Since v10 CP-T02-02 every one of those rows' seats is built under the row's id, loop-built or minted.) The seven duchy-rung council/guild seats are NOT in
 #        this ruling and stay `rung_above_same_faction`, though at build they fail the same way: their
 #        parent rung is `r_valoria`, Crown only (H-207 cause 1). THE TWO DUCHY HEADS (`off_duchess_
 #        hafenmark`, `off_duke_varfell`) declare `rung_above_in_holdings` (Jordan, 2026-10-12, H-207
@@ -127,9 +131,10 @@
 #     decision, not a resolver's.
 #   * `obligees` become `oblige` Tenures on the seat, with no term (`04 §B.8`'s `term?`, lawful
 #     null): a seat seeded at world-gen has no opening act to declare one.
-#   * A loop-built seat keeps its `off_<holder>` id and its derived post/body/faction (a post
-#     normalisation is a separate unit -- `rosters.yaml: remit_default`'s own note); only a MINTED
-#     seat carries this file's `id`, `post`, `body` and `faction`.
+#   * A loop-built seat keeps its derived post/body/faction (a post normalisation is a separate unit --
+#     `rosters.yaml: remit_default`'s own note); only a MINTED seat carries this file's `post`, `body`
+#     and `faction`. Every seat a row stands for, loop-built or minted, is under the row's `id`
+#     (`harness/populated.py::_seat_id`, CP-T02-02); a seat with no row keeps `off_<holder>`.
 
 meta:
   source: "engine/season/offices.yaml -- the governance ladder's titles, and 31 authored seats (29, then the two Riskbreakers rows at v9 IN-64)."
@@ -185,7 +190,7 @@ seats:
     body:       null
     faction:    "Crown"
     remit_acts: [issue, determine, confer, revoke, convene]
-    conferral:  null   # hereditary succession; see the header's translation note
+    conferral:  inheritance   # v10 IN-61 (RS-27): claimed by the holder of `rosters.yaml: successions`' title (`off_heir`), never conferred [ASSUMPTION; medium; Jordan to correct; revert: null]
     revocation: null   # no rung above the realm
     holder:     "NPC-020"
     obligees:   ["NPC-070"]   # FA-04 (ED-IN-0293 (7)): the Grand Master's oath makes the Löwenritter a subfaction of the Crown; her `release` of it is the Split
@@ -250,7 +255,7 @@ seats:
     body:       null
     faction:    "Crown"
     remit_acts: []
-    conferral:  null
+    conferral:  appointed   # v10 IN-61 (RS-27): the heir is a TITLE, designated by an ordinary `confer` [ASSUMPTION; medium; Jordan to correct; revert: null]
     revocation: null
     holder:     "NPC-031"
     obligees:   []

@@ -31,7 +31,7 @@ from ..gaps import Unspecified
 from ..queries import world_q
 from ..queries.person_q import LedgerReader
 from ..state.carriers import Event
-from ..state.gate import Token
+from ..state.gate import PERSON_DIED, Change, Token, death_subjects
 from ..state.ids import H, ROOT, draw_factory
 from ..trace_log import TRACE
 
@@ -269,12 +269,16 @@ def _die(w: "World", token: Token, pid: str) -> None:
     `World.remove_person` is `_eff_kill`'s cascade, factored. Chained to the death WRITTEN about
     `pid` (`written=True`, H-129): a RESOLVE `person.died` anchors on the killer, so the anchor read
     would hand a killer who later dies here his victim's death as his cause."""
-    prior_d = w.last_emission_of("person.died", pid, written=True)
-    w.write("exists", token,
-            lambda pid=pid: w.remove_person(pid),
+    prior_d = w.last_emission_of(PERSON_DIED, pid, written=True)
+    # CP-T02-01: THE PER-SUBJECT FORM, `_eff_kill`'s. The write is handed a `Change` naming the person
+    # and every seat his death empties (`death_subjects`), so the gate emits `person.died` as before
+    # and one `tenure.closed` carrying each seat's receipt (`World.write`'s MATTER emission); the
+    # closures and the pop stay in one `apply()`.
+    w.write("exists", token, None,
             record_kind="Person", fieldname="exists", driver="Event",
-            emits="person.died", subject=pid,
-            causes=[prior_d] if prior_d else [ROOT])
+            emits=PERSON_DIED, subject=pid,
+            causes=[prior_d] if prior_d else [ROOT],
+            change=Change(death_subjects(w, pid, ()), lambda pid=pid: w.remove_person(pid)))
 
 
 def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[Event]:
@@ -683,7 +687,7 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # the season is today's. A NaN or negative rate is truthy, enters, and `body_hazard` refuses it.
     # ⚠ WHAT THE DEATH REACHES: an actorless `person.died` is placed where `remove_person` took him
     # out (`world_q.event_place`, H-206), so persons standing there hold claims naming the dead
-    # holder. NOT BUILT: claims naming his OFFICE or closed HOLD (H-206's NOT DONE).
+    # holder. A `tenure.closed` naming each seat he held is emitted by `_die` itself (v10 CP-T02-01).
     if float(w.fixtures.get("age_step")) or float(w.fixtures.get("illness_rate")):
         keyed = draw_factory(w.world_seed, lambda: w.tick)
         for pid in sorted(w.persons):

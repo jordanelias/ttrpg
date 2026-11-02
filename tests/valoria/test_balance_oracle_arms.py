@@ -88,7 +88,7 @@ def test_the_total_arm_actually_changes_the_casualty_write():
             "pick an origin/target pair that still does")
         if attackers_before is None:
             attackers_before = {pid: w.persons[pid].body for pid in attackers}
-        act = _march_act("p_npc_033", "set_s_036", "off_npc_033")
+        act = _march_act("p_npc_033", "set_s_036", "off_spymaster")
         events = _fold_one(w, act, contest_max_depth=2)
         kinds = [(e.kind, e.degree) for e in events]
         assert ("field.lost", "Lost") in kinds, (

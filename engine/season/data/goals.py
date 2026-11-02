@@ -249,6 +249,25 @@ def _thrust_axes() -> frozenset:
     return axes
 
 
+_AIM_LAW = ("CP-T02-03 (v10 AM-B-09) -- which goal kind can be met is a column of `goal_object_kinds`, "
+            "read by `world_q.aim_state`; a roster without the column would read every goal `open` in silence")
+
+
+def _aim_kinds() -> dict:
+    """`{kind: rule}`, the `aim:` column of `goal_object_kinds`, REFUSED where it is absent or names a kind the
+    roster does not (`roster_map` raises on a missing or non-mapping column). Read on every parse, as
+    `_thrust_axes` is, so a roster that lost its column refuses at the one entry. A kind with NO row is a
+    kind that is never met (the shipped state is `rung` alone); the rule a row names is `world_q.AIM_RULES`'s."""
+    aim = roster_map("goal_object_kinds", "aim")
+    for kind, rule in aim.items():
+        if not _in(kind, roster("goal_object_kinds")) or not isinstance(rule, str) or not rule.strip():
+            raise Unspecified(
+                f"rosters.yaml: goal_object_kinds.aim pairs {kind!r} with {rule!r}",
+                "rosters.yaml -- goal_object_kinds.aim",
+                needs="a `values:` member of `goal_object_kinds` and the name of one aim rule", law=_AIM_LAW)
+    return aim
+
+
 def _axis(gid, row: dict, obj: dict, axes: frozenset) -> Optional[str]:
     """The row's optional `axis:`: a `thrust_axes` member, and never on an `orientation` row (it mints no
     Proposition, so nobody can be committed to it -- a thrust about nobody). `None` where the row has none."""
@@ -458,6 +477,7 @@ def parse(doc) -> tuple:
                               f"not `ladders`)", law=_STAGES_LAW)
     seats = SEAT_ROW_BY_ID
     axes = _thrust_axes()
+    _aim_kinds()
     ids = []
     for i, row in enumerate(rows):
         if not isinstance(row, dict) or not isinstance(row.get("id"), str) or not row["id"].strip():

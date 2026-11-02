@@ -171,7 +171,9 @@ rows:
     class:   "MATTER/ACTS"
     social:  "false"
     by:      "DR-1"
-    emits:   "`body.changed` · `person.died`"
+    emits:   "`body.changed` · `person.died` · `tenure.closed`"
+    # CP-T02-01: `tenure.closed` -- a death written on this cell (`fight`/`accept` `Felled`, `march`'s
+    # `total` arm) earns one for the seats it empties (`state/gate.py::death_subjects`).
     # ⚠ `ENC` ADDED BY M4 (`ED-IN-0279` clause (a), 2026-09-28): a lost field battle writes body
     # loss at the ENCOUNTER step, not RESOLVE -- `march`'s prize row defers there. `ENCOUNTER`
     # shares RESOLVE's write class (`data/matrix.py`), so `class:` above is unchanged.
@@ -236,7 +238,9 @@ rows:
     class:   "MATTER/ACTS"
     social:  "false"
     by:      "DR-1, D8; bounded by §15.3's causation rule"
-    emits:   "`person.died` · `person.individuated`"
+    emits:   "`person.died` · `person.individuated` · `tenure.closed`"
+    # CP-T02-01: `tenure.closed` -- MATTER's death on this cell (`loop/matter.py::_die`) emits one for
+    # the seats it empties beside `person.died` (`World.write`'s per-subject MATTER emission).
   - kind:    "Person"
     field:   "scar"
     steps:   [RES, ENC]

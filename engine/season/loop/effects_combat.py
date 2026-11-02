@@ -15,14 +15,17 @@ and `_operand`, the helpers `march` takes from `effects_shared.py`; its arrival 
 from __future__ import annotations
 
 from ..data.rosters import (
-    DECLARED, FELLED, FIELD_CASUALTY_MODELS, LOST, SUBTREE_OCCUPATION_KINDS, UNOPPOSED, WON, WOUND_HARM_MODELS,
-    require_member,
+    DECLARED, FELLED, FIELD_CASUALTY_MODELS, LOST, SUBTREE_OCCUPATION_KINDS, UNOPPOSED, UNTOUCHED, WON,
+    WOUND_HARM_MODELS, require_member,
 )
 from ..data.verbs import VERB_TABLE, VOCATION_SOURCED, VOCATIONS
 from ..gaps import Unspecified
 from ..queries.person_q import held_against
 from ..queries.world_q import ancestry, holder_faction_of, home_of
-from ..state.gate import NO_CHANGE, Change, Subject, may_muster, seat_faction
+from ..seam.ladder import party_degree
+from ..state.gate import (
+    NO_CHANGE, Change, Subject, death_subjects, may_muster, own_kinds, seat_faction,
+)
 
 from .effects_migration import _relocate
 from .effects_shared import _debit, _operand, effect_for
@@ -36,7 +39,9 @@ from .effects_shared import _debit, _operand, effect_for
 @effect_for("fight")
 @effect_for("accept")
 def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
-    """§E3: writes `(Person, body)`, `(Person, exists)` and `(Tenure, until)`.
+    """§E3: writes `(Person, body)`, `(Person, exists)` and `(Tenure, until)` -- ON EACH PARTY, by his
+    own band (CP-T03-00, `-08` AM-C-01): the actor as well as the subject. Where this docstring says
+    "the subject" below, read "each party"; the rules are unchanged, and each runs per party.
 
     ⚠⚠ G4 -- WHAT IT NAMES, AND THE ONE EFFECT THAT NARROWS ITS SUBJECT TO A FIELD. The subject is
     the person wounded, read as PRESENCE and `body` (`fields=("body",)`) -- the two cells the
@@ -45,8 +50,11 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     effect at IN-08 H3: the fold writes it on the act's observers AFTER the outcome, as its own
     gated write, so a wound the gate refuses scars nobody):
       * the CASCADE (`remove_person`'s closures). A consequence of the existence change, which IS
-        judged; F3 admits each closure as `destroy's cascade`; never reported, so never named. If
-        existence did not move the cascade did not run.
+        judged; F3 admits each closure as `destroy's cascade`. If existence did not move the cascade
+        did not run. ⚠ CP-T02-01: ONE PART OF IT IS NOW NAMED -- each SEAT `hold` the death closes,
+        as a `Subject.seat` earning `tenure.closed` and receipted under the Office's id
+        (`state/gate.py::death_subjects`), so the death names the seats it empties. The other edges
+        are still not named.
       * the dead person's own `person`-kind rung, popped by the same owner -- the same reasoning.
     THE NEW NO-OP THIS MAKES VISIBLE: a `Wounded` outcome under `scene_fraction` whose fraction
     rounds back to the body it started from (`max(1, body * left // full)` at `body == 1`, or a
@@ -106,8 +114,7 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     (*"a dying person still fights"*), followed rather than reinvented."""
     d = a.payload if isinstance(a.payload, dict) else {}
     who = d.get("subject")
-    p = w.persons.get(who)
-    if p is None:
+    if who not in w.persons:
         return NO_CHANGE
     # ⚠ NO SCENE, NO HARM -- AND THIS IS A REFUSAL TO INVENT, NOT A MISSING FEATURE. `kill / wound`
     # declares `contests: the body`, so the only lawful route into this effect is through the
@@ -122,7 +129,7 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
             law="Jordan 2026-09-03 -- kill/wound degrees are taken directly from scene combat. A "
                 "harm this function chose would be the number `H-114` measured: the old default "
                 "was the person's whole body, so an act naming no harm killed")
-    st = (res.result.get("wound_state") or {}).get(who) or {}
+    states = res.result.get("wound_state") or {}
     model = w.fixtures.get("wound_harm_model")
     require_member(
         model,
@@ -131,30 +138,30 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         "H-123",
         law="`observers_for`'s precedent and its reason -- *an unrecognised mode silently "
             "falling back would make every measurement of this sweep read the control*")
-    if res.degree == FELLED:
-        # The scene says this person went down, and the table says that is the kill. The body
-        # goes to 0 on every arm: the arms grade a WOUND, and a felling is not one.
-        body = 0
-    elif model == "none":
-        body = None                             # the control arm: the body is not written
-    elif model == "total":
-        body = 0
-    else:                                       # `scene_fraction`
-        full = int(st.get("health_full") or 0)
-        left = int(st.get("health_remaining") or 0)
-        if full <= 0:
-            raise Unspecified(
-                f"the scene reports no health scale for {who!r} ({st!r})", "S39.4/H-123",
-                needs="`health_full` on the subject's wound state",
-                law="the magnitude is READ from the scene; a scene that carries none cannot be "
-                    "read, and choosing a number here is what this arm exists not to do")
-        body = max(1, p.body * max(0, left) // full)
+    # CP-T03-00 (`-08` AM-C-01): BOTH PARTIES TAKE THEIR BAND. The actor and the subject are each read
+    # off the scene by his OWN band (`seam/ladder.py::party_degree`, the walk `combat_degree` takes the
+    # worst of) and written by it: `Felled` -> body 0 and `World.remove_person`; `Wounded` ->
+    # `wound_harm_model`; `Untouched` -> nothing. Before this item only the subject was read, so an
+    # attacker his target felled walked away and `person.died` was never his. A party who is no
+    # longer a person is not written (the subject's case is the `NO_CHANGE` above).
+    above = w.fixtures.get("combat_wounded_above")
+    bands = {}
+    for pid in dict.fromkeys((a.actor, who)):
+        if pid in w.persons:
+            band = party_degree(states.get(pid), above)
+            if band != UNTOUCHED:
+                bands[pid] = band
+    bodies = {pid: _harm(w.persons[pid], band, model, states[pid])
+              for pid, band in bands.items()}
 
     def perform() -> None:
-        if body is None:
-            return
-        p.body = body
-        if p.body > 0:
+        for pid, body in bodies.items():
+            if body is not None:
+                _wound(pid, body)
+
+    def _wound(pid: str, body: int) -> None:
+        w.persons[pid].body = body
+        if body > 0:
             return
         # ⚠ `w.tenures`, NOT `p.tenures + w._unowned`, AND THAT IS A FIX `W-E`'s OWN TEST FOUND.
         # `p.tenures` is the tenures this person is the SUBJECT of (§15.1 -- a Tenure is owned by
@@ -175,8 +182,46 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         # `apply()`, and the gate admits a closure of an edge naming an id THE SAME WRITE removed
         # -- and nothing else. A cascade that closed the edges and left the person standing would
         # be refused and put back.
-        w.remove_person(who)
-    return Change((Subject.entity("persons", who, fields=("body",)),), perform)
+        w.remove_person(pid)
+    # CP-T02-01 / HR-1: EVERY SUBJECT NAMES ITS KINDS. Each party earns HIS band's own kinds
+    # (`own_kinds`: `body.changed` on `Wounded`), plus `person.died` where this write takes his body to
+    # 0; each seat his death empties earns `tenure.closed`, its receipt naming the Office
+    # (`death_subjects`). A band that does not declare a kind still does not emit it (`_fold`).
+    # CP-T03-00: A FELLED PARTY EARNS THE DEATH'S KINDS ALONE, as before this item. The `Felled` cell's
+    # `body.changed` is there for the OTHER party of a mixed fight -- the cell is the ACT's band, the
+    # worst over both, so it must license what a Wounded party earns beside a felled one -- and is not
+    # the felled man's own kind. And because `_fold` gives each kind's Event only its earners' changes,
+    # the person.died Event of a felled actor names him, never the standing subject.
+    row = VERB_TABLE[a.verb]
+    named: tuple = ()
+    for pid, band in bands.items():
+        own = () if band == FELLED else own_kinds(row.emits_at(band))
+        named += (death_subjects(w, pid, own, fields=("body",)) if bodies[pid] == 0
+                  else (Subject.entity("persons", pid, earns=own, fields=("body",)),))
+    return Change(named, perform)
+
+
+def _harm(p: "Person", band: str, model: str, st: dict) -> "int | None":
+    """THE BODY ONE PARTY OF A FIGHT IS LEFT WITH, by his own band (CP-T03-00; `_eff_kill`'s three arms,
+    unchanged): `0` on `Felled` (every arm -- the arms grade a WOUND, and a felling is not one); on
+    `Wounded`, `None` (not written) under `none`, `0` under `total`, else the scene's fraction
+    `max(1, body x health_remaining // health_full)`."""
+    if band == FELLED:
+        # The scene says this person went down, and the table says that is the kill.
+        return 0
+    if model == "none":
+        return None                             # the control arm: the body is not written
+    if model == "total":
+        return 0
+    full = int(st.get("health_full") or 0)      # `scene_fraction`
+    left = int(st.get("health_remaining") or 0)
+    if full <= 0:
+        raise Unspecified(
+            f"the scene reports no health scale for {p.id!r} ({st!r})", "S39.4/H-123",
+            needs="`health_full` on the party's wound state",
+            law="the magnitude is READ from the scene; a scene that carries none cannot be "
+                "read, and choosing a number here is what this arm exists not to do")
+    return max(1, p.body * max(0, left) // full)
 
 
 @effect_for("march")
@@ -288,13 +333,22 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
             return NO_CHANGE
     morale_w = w.fixtures.get("field_morale_weight")
     grudge_w = w.fixtures.get("field_grudge_weight")
-    # The fold emits the kinds its subjects EARN, and a subject earning `None` earns nothing on its
-    # own (`loop/resolve.py`: an empty `earned` set means *every* declared kind, a non-empty one means
-    # *only* those). So the kinds are earned as a whole: with an army that moves, every subject earns
-    # `None` and the band publishes both its kind and the arrival; with nobody moving (`Lost`, or a
-    # `Won` whose army already stood there), the losers earn the band's own kind alone and no arrival
-    # is published.
-    loser_earns = None if movers else _band_kind(res.degree)
+    # The fold emits the kinds its subjects EARN (`loop/resolve.py`: an empty `earned` set means
+    # *every* declared kind, a non-empty one means *only* those). So the kinds are earned as a whole:
+    # with an army that moves, the band publishes both its kind and the arrival; with nobody moving
+    # (`Lost`, or a `Won` whose army already stood there), the losers earn the band's own kind alone and
+    # no arrival is published. Before CP-T02-01 every subject earned `None` beside a moving army.
+    # CP-T02-01 / HR-1: THE SAME RULE WITH EVERY SUBJECT'S KINDS NAMED. `Won` and `Lost` declare
+    # `person.died` and `tenure.closed` too, so a subject earning `None` (every declared kind) would
+    # publish a death on every fought field; and a dead loser naming `person.died` beside subjects
+    # earning `None` would silence the band's kind and the arrival (`_fold` keeps only named kinds once
+    # any is named). So a mover earns the band's own kinds (`own_kinds`: the band's kind and the
+    # arrival), a loser and a treasury the same beside a moving army and the band's kind alone when
+    # nobody moves -- the kinds `None` and `_band_kind` earned before -- and a loser the `total` arm
+    # kills earns `person.died` beside them, his seats `tenure.closed` (`death_subjects`).
+    own = own_kinds(VERB_TABLE["march"].emits_at(res.degree))
+    loser_earns = own if movers else (_band_kind(res.degree),)
+    dies = model == "total"
 
     def perform() -> None:
         _casualties()
@@ -335,10 +389,14 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # WHOLE, `move`'s reason (a `contain` leg is stored on its Person, so his digest carries the legs
     # and `travel_leg`).
     # v9 IN-52: each debited treasury is a subject by its `stores`, earning what the losers earn
-    # (`loser_earns`): `None` beside a moving army, the band's own kind when nobody moves.
-    return Change(tuple(Subject.entity("persons", pid, earns=loser_earns, fields=fields)
-                        for pid in touched)
-                  + tuple(Subject.entity("persons", pid) for pid in movers)
+    # (`loser_earns`): the band's own kinds beside a moving army, the band's kind alone when nobody
+    # moves.
+    losers_named = tuple(
+        s for pid in touched
+        for s in (death_subjects(w, pid, loser_earns, fields=fields) if dies
+                  else (Subject.entity("persons", pid, earns=loser_earns, fields=fields),)))
+    return Change(losers_named
+                  + tuple(Subject.entity("persons", pid, earns=own) for pid in movers)
                   + tuple(Subject.entity("rungs", rid, earns=loser_earns, fields=("stores",))
                           for rid in dict.fromkeys(rid for rid, _ in debits)), perform)
 

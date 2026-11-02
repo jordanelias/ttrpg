@@ -133,7 +133,7 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
         # what every NPC does first. The rule is data now; `first` is the incumbent kept as
         # the sweep's control.
         q_p = question if question is not None else aggregate_questions(qs, q_rule)
-        v = decision.assemble(p, q_p, k_view)
+        v = decision.assemble(p, q_p, k_view, questions=qs)
         # S26.3: the PERSON asks their own budget. `choose` receives the QUERY, not the
         # answer -- rev 2 computed it in the engine and handed the number down, which is
         # the half of retraction 5 that never landed.

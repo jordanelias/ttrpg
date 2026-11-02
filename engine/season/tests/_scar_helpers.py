@@ -16,10 +16,18 @@ from ..seam import Resolution
 from ..state.carriers import Act
 
 
-def wounded(victim="p_mid", full=10, left=5) -> Resolution:
-    """A `WOUNDED` scene result leaving `victim` at `left` of `full` health."""
-    return Resolution(WOUNDED, {"wound_state": {victim: {"health_full": full,
-                                                         "health_remaining": left}}})
+def party_state(felled=False, wounds=0, full=10, left=10, max_wounds=3) -> dict:
+    """ONE PARTY's `wound_state` entry in the shape `seam/wrappers/combat.py::_wound_state` lifts it
+    (`available` and every `wound_quantities` member). CP-T03-00: `_eff_kill` reads EACH party's band off
+    the scene (`party_degree`), so a hand-built scene carries both parties, as the real seam does."""
+    return dict(available=True, felled=felled, wounds=wounds, max_wounds=max_wounds,
+                health_remaining=left, health_full=full)
+
+
+def wounded(victim="p_mid", full=10, left=5, actor="p_low") -> Resolution:
+    """A `WOUNDED` scene result leaving `victim` bled at `left` of `full` health and `actor` untouched."""
+    return Resolution(WOUNDED, {"wound_state": {victim: party_state(wounds=1, full=full, left=left),
+                                                actor: party_state()}})
 
 
 def fight(w, aid: str):

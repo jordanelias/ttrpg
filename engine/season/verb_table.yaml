@@ -680,7 +680,7 @@ verbs:
     stratum:     "contested_physical"
     eligibility: ["own"]
     beneficiary: "actor"
-    beneficiary_note: "⚠⚠ THE ROW THAT PROVES THIS COLUMN CANNOT BE DERIVED FROM `writes:`. It writes `Person.body` and `Person.exists` ON THE SUBJECT, and the good does not accrue to the person felled. A write can be a HARM, so a rule reading the write column would name the victim as the beneficiary of their own killing. `CAT-2`'s *declare it* is what this row is evidence for."
+    beneficiary_note: "⚠⚠ THE ROW THAT PROVES THIS COLUMN CANNOT BE DERIVED FROM `writes:`. It writes `Person.body` and `Person.exists` ON EACH PARTY (the actor as well as the subject, v10 CP-T03-00), and the good does not accrue to the person felled. A write can be a HARM, so a rule reading the write column would name the victim as the beneficiary of their own killing. `CAT-2`'s *declare it* is what this row is evidence for."
     requires:    "the subject is a living person, present where the actor is"
     requires_typed:
       all:
@@ -748,8 +748,8 @@ verbs:
       Felled:       ["Person.body", "Person.exists", "Tenure.until"]
       Wounded:      ["Person.body"]
       Untouched:    []
-    writes_grade_note: "ruled -- the SPLIT is read from scene combat (Jordan 2026-09-03); H-98 keeps only the question of whether a decisive win is distinguishable from a narrow one, which the engine currently does not answer. ⚠ EXECUTED 2026-09-04 (`W-E`): all three branches now run end to end through `SeasonDriver.resolve` -> `contest()` -> `combat_seam` -> `wrapper.fight`, and their consequences differ -- Felled deletes the subject and emits `person.died`, Wounded leaves them alive with a lower body and emits `body.changed`, Untouched writes nothing and emits `contest.undecided`. Falsifier: `test_we_a_contested_acts_consequence_differs_by_degree`."
-    writes_source_note: "combat_seam.resolve -> wound_state[THE ACT'S SUBJECT]: felled | wounds. ⚠ CORRECTED 2026-09-04 BY `W-E`, AND THE OLD CELL SAID `wound_state[loser]`, WHICH WOULD KILL THE WRONG PERSON. This verb's writes land on `payload[\"subject\"]` (`_eff_kill`), so if the ACTOR is the one felled, reading `[loser]` selects the `Felled` branch and the fold deletes the TARGET -- who is standing. The band is read off the person the writes land on. `health_remaining`/`health_full` are still read, but for the MAGNITUDE (`wound_harm_model`, `H-123`), not for the band."
+    writes_grade_note: "ruled -- the SPLIT is read from scene combat (Jordan 2026-09-03); H-98 keeps only the question of whether a decisive win is distinguishable from a narrow one, which the engine currently does not answer. ⚠ EXECUTED 2026-09-04 (`W-E`): all three branches now run end to end through `SeasonDriver.resolve` -> `contest()` -> `combat_seam` -> `wrapper.fight`, and their consequences differ -- Felled deletes the party and emits `person.died`, Wounded leaves them alive with a lower body and emits `body.changed`, Untouched writes nothing and emits `contest.undecided`; since v10 CP-T03-00 each band is read PER PARTY and the act's band is the worst over both. Falsifier: `test_we_a_contested_acts_consequence_differs_by_degree`."
+    writes_source_note: "combat_seam.resolve -> wound_state[EACH PARTY]: felled | wounds. ⚠ CP-T03-00 (`-08` AM-C-01): EACH PARTY -- the actor and the subject -- is written by HIS OWN band (`seam/ladder.py::party_degree`, read per party in `_eff_kill`), and the act's band, the token these cells key on, is the WORST over both (`combat_degree`): a felled attacker makes the fight `Felled` though his target stands. Before it the band was read off `wound_state[THE ACT'S SUBJECT]` alone and a felled actor was never written. ⚠ THE 2026-09-04 `W-E` CORRECTION STANDS: the old cell said `wound_state[loser]`, which would kill the wrong person -- reading the loser's band onto the subject deletes a standing TARGET when the ACTOR is felled; each party's band now lands on that party only. `health_remaining`/`health_full` are still read, but for the MAGNITUDE (`wound_harm_model`, `H-123`), not for the band."
     # ⚠ `emits:` IS DEGREE-KEYED TOO, AND THE FLAT VERSION WAS A LIVE `ID-9` DEFECT.
     # This read `["person.died"]` for every band. With the bands above that means A WOUND EMITS
     # `person.died` -- a success report for something that did not happen, in the verb whose own
@@ -766,8 +766,17 @@ verbs:
     # outcome that writes nothing has no other home. It is required because the act still
     # happened: it was attempted, witnessed, and cost a scene. Jordan, 2026-06-02: *an undecided
     # fight is a legitimate outcome.* An outcome nothing emits is an outcome nobody can witness.
+    # CP-T02-01 (H-230 limit 1): `Felled` gains `tenure.closed` beside `person.died` -- the death names
+    # each seat it empties, one `tenure.closed` earned by the seat `hold`s the cascade closes and
+    # receipted under the Office's id (`state/gate.py::death_subjects`), so it reaches every person
+    # through `chronicle` as a claim about the seat. A death emptying no seat earns none.
+    # CP-T03-00 (`-08` AM-C-01): `Felled` gains `body.changed` -- the band is the WORST over both
+    # parties, so a felled party beside a WOUNDED one is a `Felled` fight in which the wounded party
+    # earns `body.changed`; the cell licenses it, and a fight felling one party and leaving the other
+    # untouched still emits no `body.changed` (kinds are earned by what moved, `_fold`).
+    # `contest.undecided` is therefore emitted only when BOTH parties are untouched.
     emits:
-      Felled:      ["person.died"]
+      Felled:      ["person.died", "tenure.closed", "body.changed"]
       Wounded:     ["body.changed"]
       Untouched:   ["contest.undecided"]
     # ⚠ WAS `[]`. Under #358 rev.2 loader invariant 4 (widened, F7) every failable clause needs a
@@ -827,15 +836,16 @@ verbs:
     requires_typed_note: "`fight`'s cell exactly, and for `fight`'s reason: typing it binds `subject`, the second claimant the seam needs, so a computed `accept` reaches `combat_seam` with two parties rather than returning `PARTY-GAP`. Since v9 IN-59 (a) (RS-26) the cell carries `fight`'s second conjunct too, `relation` of `subject`, `with` (WORLD-ONLY: the Candidate forms and the fold refuses a challenger who is not where the actor is, `accept.refused`) [ASSUMPTION; medium; Jordan to correct; revert: the single `existence` cell]. `contests: \"the body\"` is ED-IN-0261's own words for this row."
     requires_note: "⚠ WHAT THIS CELL CANNOT YET ASK: *the subject has challenged me*. `challenge` writes nothing (its `writes_note`), so no state holds a standing challenge for the fold to read, and the cell refuses only a dead challenger or one not where the actor is (IN-59 (a)). An `accept` formed with no challenge behind it resolves as a duel all the same -- the fold cannot tell the difference. Recorded as a residue rather than closed by inventing a carrier [ASSUMPTION; Jordan to correct]. MEASURED at IN-08's cells commit (populated realm, seed 0, four seasons, 142 `accept` acts attempted): 12 executed, and in 0 of the 12 did the acceptor's ledger hold a `challenge` claim about the subject at choice time (6 `challenge.issued` events in the log) -- the chooser's link between the two is not there yet."
     # The SAME degree-keyed writes and emits as `fight`, read off the SAME scene (`combat_seam` ->
-    # `wound_state[THE ACT'S SUBJECT]`), by the SAME effect (`loop/effects_combat.py::_eff_kill`,
-    # registered for both rows). A duel is a fight both sides agreed to; what the scene can
-    # distinguish about its outcome is exactly what it distinguishes for `fight`.
+    # `wound_state[EACH PARTY]`, the act's band the worst over both, CP-T03-00), by the SAME effect
+    # (`loop/effects_combat.py::_eff_kill`, registered for both rows). A duel is a fight both sides
+    # agreed to; what the scene can distinguish about its outcome is exactly what it distinguishes
+    # for `fight`, and `Felled` gains `body.changed` for `fight`'s reason.
     writes:
       Felled:       ["Person.body", "Person.exists", "Tenure.until"]
       Wounded:      ["Person.body"]
       Untouched:    []
     emits:
-      Felled:      ["person.died"]
+      Felled:      ["person.died", "tenure.closed", "body.changed"]
       Wounded:     ["body.changed"]
       Untouched:   ["contest.undecided"]
     emits_on_refusal: ["accept.refused"]
@@ -904,10 +914,10 @@ verbs:
     writes_grade_note: "M4 (`ED-IN-0279` clause (a)), Jordan's ruling on the second open clause: a loss writes \"casualties only, decrease in morale, and a grudge token\" -- nothing else, and nothing on the WINNING side. `Won`/`Lost` here are the ATTACKER's own outcome (`seam/ladder.py::field_degree`), so `_eff_march` reads which SIDE actually lost from `resolution.result`'s `parties` and writes there -- the defenders on `Won`, the attacker's own claimants on `Lost` -- never the winner, on either band. `Declared` writes nothing: it is RESOLVE's own deferral fold (`loop/resolve.py::_contest`). ⚠ SINCE v9 IN-13 an unopposed march, which has no losing side to write on, writes the ARRIVAL (`writes_note`), as `Won` does beside its casualties. v9 IN-52: the ration debit on `Won`/`Lost` (`writes_provision_note`) is not a loss effect: both sides of a fought field eat (LF-2/LF-3, delegated-ruled, `_part5` section J.2), and the sentence above, nothing on the WINNING side, governs casualties, morale and the grudge token."
     emits:
       Declared:  ["march.declared"]
-      Won:       ["field.won", "army.arrived"]
-      Lost:      ["field.lost"]
+      Won:       ["field.won", "army.arrived", "person.died", "tenure.closed"]
+      Lost:      ["field.lost", "person.died", "tenure.closed"]
       Unopposed: ["field.unopposed", "army.arrived"]
-    emits_note: "v9 IN-13: `army.arrived` beside the band's kind on the two bands where the army arrives (#453 §9.6). ORDER IS READ: the band's own kind FIRST (`loop/effects_combat.py::_band_kind` takes `emits[band][0]` as the kind the losers earn when NOBODY MOVES, so a `Won` whose army already stood at the target publishes `field.won` and no arrival; with an army that moves, both kinds are published). A band whose army moves nobody and fells nobody declines to `march.refused`."
+    emits_note: "v9 IN-13: `army.arrived` beside the band's kind on the two bands where the army arrives (#453 §9.6). ORDER IS READ: the band's own kind FIRST (`loop/effects_combat.py::_band_kind` takes `emits[band][0]` as the kind the losers earn when NOBODY MOVES, so a `Won` whose army already stood at the target publishes `field.won` and no arrival; with an army that moves, both kinds are published). A band whose army moves nobody and fells nobody declines to `march.refused`. CP-T02-01 / HR-1 (H-152): `Won` and `Lost` -- the bands whose `field_casualty_model: total` arm calls `remove_person` -- declare `person.died` and `tenure.closed`, earned only by a loser that arm kills and by each seat his death empties (`state/gate.py::death_subjects`); every other subject names the band's own kinds (`own_kinds`), so a fought field with no death publishes exactly what it did before."
     emits_on_refusal: ["march.refused"]
     grade:       "ruled"
     source:      "M4 of the driver-retirement plan (`ED-IN-0279`), Jordan's ruling on both open clauses of that row (verb name: `march`; loss effects: casualties/morale/grudge). No `ARCHITECTURE_V2.md` cell -- this verb does not exist in the chain."
@@ -1263,20 +1273,22 @@ verbs:
     scale_note: "succession is one person taking another's tenure; the office's rung does not change"
     stratum:     "binding_decision"
     eligibility: ["own"]
-    beneficiary: "subject"
-    requires:    "the actor holds the office or estate whose heir is being designated"
-    requires_typed:
-      form:      relation
-      of:        subject
-      relation:  held_by
-    requires_typed_note: "W3's cell — *the actor holds the office or estate whose heir is being designated* (`succeed` is a W3 addition; #353 `:371`, `:542` name it and Part E omits it). §F.24a form 5, whose named live cell is this one. The relation is a live `hold` Tenure from the actor to the subject."
-    writes:      ["Tenure.since"]
-    emits:       ["heir.designated"]
+    beneficiary: "actor"
+    beneficiary_note: "v10 IN-61: THE CLAIMANT -- he takes the seat; the seat (`subject`) is what he claims, and acts for nobody."
+    referent_class: Office
+    referent_class_note: "v10 IN-61 (RS-27, B10-09): FORMED ONLY ON AN `Office`-CLASSED REFERENT -- `confer`'s machinery (IN-53): the seats the question he answers carries as `Office`, which for the heir is the vacant throne he was told of (`queries/world_q.py::seats_named`, the death's or the release's `tenure.closed` claim naming the seat, CP-T02-01; executed by `engine/season/tests/test_in61_heir_hears_vacancy.py`). NARROWED person-side to the seats whose `successions` title he holds (`rosters.yaml: own_title_declines`), so nobody else told of a seat forms a claim on it."
+    requires:    "the seat has no live hold, its conferral basis is opened by the claim (`FILLED_BY`), and the actor holds the title `successions` names for it"
+    requires_typed: none
+    requires_typed_note: "⚠ `none` FOR THE GRAMMAR'S REASON, `oblige`'s and `confer`'s route (v10 IN-61): a prose `requires:` read by the registered predicate `loop/predicates.py::_req_succeed`, which asks the write gate's own `state/gate.py::may_claim`. The closed grammar has no cell for the ABSENCE of a live `hold` on the subject (it has no negation), nor for a `successions` lookup from the subject to the title the actor must hold, so neither conjunct types."
+    requires_note: "v10 IN-61 (RS-27; Jordan 2026-10-14: *'designated heir is not a verb but a status or title. the heir still has to claim their throne'*): RE-SPECIFIED AS THE HEIR'S CLAIM -- admitted iff the throne has no live `hold` and the actor holds `successions[throne]` (the heir's title, `off_heir`, itself filled by an ordinary `confer`). UNTYPED (`requires_typed_note`). The W3 cell it replaces (`relation` of `subject` `held_by` -- the actor holds the office whose heir he designates) is retired with the designation reading: a title is designated by `confer`, not by this verb. LIMITS: the route only awards a vacant seat; the first valid claim wins; one title deep; `off_duke_valorsmark` has no `successions` row yet (CP-T09-06, B10-17). The contested-succession arms and H-217's `succession` arrangement are CR-35's (B10-17). [ASSUMPTION; medium; Jordan to correct; revert: the W3 cell and the effect decline below.]"
+    writes:      ["Tenure.until", "Tenure.since"]
+    writes_note: "v10 IN-61: ONE ACT, ONE WRITE (`loop/effects_governance.py::_eff_succeed`): it opens the claimant's `hold` on EVERY vacant seat whose `successions` title is the one he claims by (`state/gate.py::claimable_seats`) -- `Tenure.since`, the write gate's claim basis -- and closes his `hold` on that title -- `Tenure.until`, `T-m`. The claim basis is licensed by that closure in the same write, so the two cannot be split. The opened `hold` is a literal `Tenure(..., \"hold\")`, so `data/verbs.py::_derive_openers_from_effects` lists `succeed` among `hold`'s openers and `world_q.endings_reached` credits a seat taken by claim. It writes no `succeed` Tenure: that kind (`rosters.yaml: tenure_kinds`) keeps no opener."
+    emits:       ["succession.claimed", "tenure.closed"]
+    emits_note:  "v10 IN-61: each earned per edge (`Subject.edge`): `succession.claimed` by each seat taken, `tenure.closed` by the title laid down. A `binding_decision` row's kinds are broadcast by `epistemic.py::_ch_chronicle`, and WITNESS expands each `hold` Tenure id to the seat it is on (keyed on the Tenure's kind, never the event's), so the realm hears who took the throne. ⚠ ITS OWN SUCCESS KIND, NOT `confer`'s `tenure.opened`, AND THAT IS MEASURED: `data/verbs.py::KIND_VERB` maps a kind to a verb only where ONE row emits it, so a second emitter of `tenure.opened` would zero the deed alignment of every `tenure.opened` claim in every ledger (`align_kind`) -- measured at seed 0, two seasons: `regard` of a told-of seat changed, `oblige` re-ranked and the realm hash moved with no claim executed. `tenure.closed` is already shared (seven rows), so the title's closure moves nothing. `heir.designated` is retired with the designation reading (no reader named it)."
     emits_on_refusal: ["succession.refused"]
+    refusal_note: "one flat kind for the predicate's conjuncts: a held seat, a seat the claim does not open, a title he does not hold, or a seat with no `successions` row."
     grade:       "assumption"
-    writes_note: "a `succeed` Tenure -- the kind is in `rosters.yaml`"
-    effect_decline_note: "PLAN POSITION `14` (U7-own) STOPPED ON IT, AND THE GROUND IS `ID-13` -- A CARRIER NOBODY READS -- TOGETHER WITH THE HEIR OPERAND THE ROW DOES NOT BIND (both are given below). ⚠ AN EARLIER READING OF THIS NOTE WAS FALSE AND IS CORRECTED HERE: it rested on `holonic §15` (a `succeed` edge is `Rung -> Person`, a Tenure its subject's), so *no gate basis admits the holder's write* and `release` *cannot end one*. `architecture/meta/04_CODE_ARCHITECTURE.md` §A.3 row 8 (`:190`) overrides §15 -- `succeed : Person -> Person`, owned by the holder -- so `state/gate.py`'s `T-m` (`:707-710`) admits the owner opening one, and `release`'s `domain:` includes `succeed` (that row), so the holder can also end it. WHAT STOPS IT: (1) its one reader, transmission at death (#353 `:542`), is unbuilt (`state/carriers.py:938-941` deleted the `transmission` field for want of a reader), so an executed `succeed` would write an edge nothing reads; a MATTER death transmission reading the live `succeed` edge is the reader that would make it live. (2) the row binds no operand for the HEIR: the typed cell names the actor and a `subject` he holds, and the edge's other end has no operand in this row. The decline stands."
-    source:      "W3 -- heir designation. #353 `:371`, `:542` name `succeed` as a Tenure kind and `transmission` as the mechanism, and Part E carries no verb that CREATES one. Without it F13's contested-succession cases have no producer."
+    source:      "W3 -- `succeed`, a W3 addition (#353 `:371`, `:542`); RE-SPECIFIED by v10 IN-61 (`workplans/valoria_master_workplan_v10_part4.md` IN-61; RS-27, RS-29) as the heir's claim of a vacant seat by his title."
   # ===========================================================================================
   # PLAN POSITION `20-iii` -- THE INFORMATION CLUSTER (narrative #14 §F, `D1-a`). A person cannot
   # read a faction: a `View` holds his own claims, and `AX-2` puts world truth nowhere inside a
@@ -1528,6 +1540,38 @@ verbs:
     emits_on_refusal: ["finding.none"]
     grade:       "assumption"
     source:      "investigation_systems_v30.md:217; fieldwork_v30.md:294 (§4.2), :318 (§4.3). ⚠ THE SINGLE-ROLL INTERVIEW IS RETIRING AND THIS ROW IS ITS BASELINE, NOT A SECOND SPEC: `fieldwork_v30.md:300` (ED-FI-0004, 2026-07-08) folds it into the Dialogue Lattice -- *'the richer object wins'* -- and retains the bare-roll row as *the current mechanical baseline* only until ED-921 and ED-IN-0016 EP-8 settle. This row is that baseline; when the Lattice is built it replaces this row rather than sitting beside it."
+  - verb:        "interrogate"
+    stratum:     "social"
+    eligibility: ["remit:determine"]
+    eligibility_note: "v10 IN-12 step 5 (#453 §9.1, the `interrogate` row): `remit:determine` via a seat -- the bench that may bind a party is the one that may question him (`interview` is the `own` row beside it; #453's CONFLICTS line: eligibility, the counterparty's state, the prize)."
+    beneficiary: "actor"
+    beneficiary_note: "#453 §9.1: `actor` -- what a confession settles is the questioner's matter, and the seat he acts through is carried on `via`, not on an operand."
+    requires:    "the subject is a person, held in a live `detain`, and a docketed petition's `terms` names him"
+    requires_typed: none
+    requires_typed_note: "v10 IN-12 step 5, H-226 ROUTE (a) [ASSUMPTION; medium; Jordan to correct; revert: route (b), `loop/resolve.py::_fold` running an effect on a band whose writes are empty]: `none` FOR THE GRAMMAR'S REASON, on `oblige`'s and `release`'s route -- a prose `requires:` read by the registered predicate `loop/predicates.py::_req_interrogate`. #453 §9.1 types `existence` of `subject` kind Person and reads custody and the charge AT THE EFFECT, but every band writes `[]` and `_fold` runs an effect only for a non-empty `writes_at`, so there is no effect to read them in (H-226); the predicate reads all three in the fold, before the seam is called. Clause 1 would type; the custody clause is a restraint the gate's own reader answers (`world_q.restrained`, the one owner, K-18: not a new stem) and the charge reads a docket item's `petition` key and that Record's `terms` (K-35, K-55), which no stem reads. A typed cell AND a predicate on one row is what `test_wa_one_owner_...` forbids, so the whole cell is the predicate's. THE `HOLDS`-PROPOSITION FORM OF THE CHARGE (the petition's `terms` a `HOLDS` Proposition whose `subject` is the prisoner) WAITS on a `mood` source for a computed `utter` (#453 §14.9)."
+    referent_class: Detainee
+    referent_class_note: "v10 IN-12 step 5, THE ELIGIBILITY DECLINE AS A CLASSED REFERENT (H-232's own named shape for a world fact the chooser cannot see, `larders_in_purview`'s and `requisition`'s; [ASSUMPTION; medium; Jordan to correct; revert: `referent_class: Person`, which forms on every person a question names -- MEASURED at the build, `build_realm(0)` two seasons: the hash moved 36d1e6c3 -> 88b0fa47 with 6 `interrogation.refused`]): FORMED ONLY ON A `Detainee`-CLASSED REFERENT -- a person held by a live `detain` whose object is a seat the asker holds granting `determine` (`queries/world_q.py::detainees_held`, stamped onto the question he answers by `questions_for`), IN-53 D1's partition. It REPLACES the plan's `referent_class: Person`: that class is filled with every person a question names (`own_referents_of_class`), so custody cannot be told apart in it, and no person-side read of another man's restraint exists (H-231 limit 3: a custody receipt names only the `detain` Tenure). So formation is declined person-side while no live `detain` names his seat, and the row is never attempted in the realm until B10-11's `capture` makes one live. REVERT: delete the class, the term, and declare `Person`."
+    counterparty: subject
+    counterparty_note: "#453 §9.1: *'counterparty `subject`'* -- THE PRISONER IS THE SECOND SIDE, `arrest`'s shape: the contest's opponent (`loop/resolve.py::_contest` reads `row.opponent_operand()`), the man who holds his tongue. On this UNTYPED row the referent is carried on `subject` (`decision/options.py::_operands`, IN-10 (a)'s `counterparty: subject` clause), so the seam has its second claimant, which is the ground on which `loop/driver.py::resolvable_verbs`' contested gate admits it. A self-interrogation is declined person-side (`subject_is_opponent`) and refused by the fold's `counterparty` clause."
+    contests:    "a proposition"
+    contests_note: "#453 §9.1: *'contests: `a proposition` (social_contest, interim `sigma_leverage`)'* -- the charge's disposition, not a finding (the Church Tribunal is accusatorial). The prize `argue` and `determine` already claim (`rosters.yaml: contest_subsystems.prizes`); no new prize, no new provider."
+    writes:
+      Overwhelming: []
+      Success:      []
+      Partial:      []
+      Failure:      []
+    writes_note: "#453 §9.1: *'`[]` at every band'* -- THIN, Layer 1 row 30a's *a contest whose outcome changes nothing* (K-56; §C.4 F6 (:724) says `[]` is correct only at Failure, so the two rows disagree and 30a is taken, as `speak` and `tell` take it): what each band leaves is the Event a witness holds, `speak`'s and `tell`'s shape. So `_eff_interrogate` does not exist (no band writes), the custody and the charge are read by the predicate (above), and `interrogate` cannot satisfy R-09's `DEGREES RESOLVED` (its bands' writes do not differ); R-05 counts it built out on execution. No value is claimed for the deposit (#453: P58, information extracted as a held object, stays open)."
+    emits:
+      Overwhelming: ["confession.full"]
+      Success:      ["confession.made"]
+      Partial:      ["confession.partial"]
+      Failure:      ["confession.withheld"]
+    emits_note: "#453 §9.1 emits `confession.made` at the three winning bands and `confession.withheld` at `Failure`; ONE KIND PER BAND instead (`-08` CP-T05-05's carried requirement: CP-T05-02's `hearing` counts a kind emitted at several bands as 0), so `Overwhelming` is a full confession and `Partial` a partial one, `Success` keeps #453's `confession.made` and `Failure` its `confession.withheld`. Four NEW kinds, each emitted by this row alone (`data/verbs.py::KIND_VERB`). [ASSUMPTION; medium; Jordan to correct; revert: #453's `confession.made` at the three winning bands.]"
+    emits_on_refusal: ["interrogation.refused"]
+    refusal_note: "#453 §9.1: *'Refusal: `interrogation.refused` (one kind)'* -- FLAT, so the contested row's party-gap and S27.4 refusals emit it too (`loop/resolve.py::_refuse_party_gap`). Refusal conditions (`_req_interrogate`): the subject is no person; he holds no live `detain`; no docket item naming him names a petition whose `terms` is he; or (the fold's `counterparty` clause) the act names no second party or names its actor. X: `interrogation` is also an unseeded arrangement name (`arrangements.yaml`), so the kind shares the token (#453)."
+    grade:       "assumption"
+    grade_note:  "an argued addition (#453 §10.4 step 5): the row, its bands and the predicate route are v10 IN-12's, on #453 §9.1 `:1613-1660`, K-18, K-35, K-55, K-56, H-226 route (a)."
+    source:      "v10 IN-12 step 5 (`workplans/valoria_master_workplan_v10_part4.md` IN-12), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.1 `:1613-1660`"
   - verb:        "research"
     stratum:     "uncontested_material"
     eligibility: ["own", "presence:<site>"]

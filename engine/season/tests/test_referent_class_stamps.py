@@ -1310,8 +1310,10 @@ def test_rem2c_c_a_record_a_standing_occasion_and_the_question_both_name_is_carr
     assert world_q.own_referents_of_class(w, q)[-1] == rec, q
     assert [k for r, k in q.classes if r == rec] == ["Record"] and q.classes[0] == (rec, "Record"), q
     assert [c.subject for c in _formed(w, pid, q) if c.verb == "research"] == [rec]
-    monkeypatch.setattr(world_q, "_stamped", lambda q_, added, w_: dataclasses.replace(
-        q_, classes=q_.classes + tuple((o, w_.class_of(o)) for o in added)))
+    # v10 IN-12: `_stamped` takes a fourth argument (the named-class pairs, `Detainee`); the planted
+    # undeduplicated stamp accepts and appends it as the real one does.
+    monkeypatch.setattr(world_q, "_stamped", lambda q_, added, w_, named=(): dataclasses.replace(
+        q_, classes=q_.classes + tuple((o, w_.class_of(o)) for o in added) + tuple(named)))
     with pytest.raises(Forbidden, match="twice"):
         world_q.questions_for(w, w.persons[pid])
 
@@ -1548,7 +1550,7 @@ def test_rem22_c_every_candidate_a_class_removes_force_admitted_refuses_on_the_r
 # it is not in the tree. MUTATION, executed below in REM-22's shape: the column deleted, and the march no
 # longer forms on the field.
 
-MARCHER, MARCHER_SEAT, ORIGIN, FIELD = "p_npc_033", "off_npc_033", "set_s_014", "set_s_036"
+MARCHER, MARCHER_SEAT, ORIGIN, FIELD = "p_npc_033", "off_spymaster", "set_s_014", "set_s_036"
 
 
 def _told_of_field():
@@ -1919,11 +1921,13 @@ def test_rem28_e_the_class_moves_no_derived_set():
     column moves neither derived set: both are re-derived over the table with `revoke`'s column blanked and read the
     shipped sets (an INVARIANCE: the fold cannot differ, so this is the whole of what can be asserted). THE CONTROL,
     that the derivation can move: a table with no `Office` row at all (`revoke`, `confer`, `oblige` blanked) loses
-    `Office` from `DECLARED_CLASSES`, so neither equality is one a constant could satisfy."""
+    `Office` from `DECLARED_CLASSES`, so neither equality is one a constant could satisfy. RE-RECORDED AT v10 IN-61:
+    `succeed` declares `Office` too, so the control blanks four rows (`revoke`, `confer`, `oblige`, `succeed`) where it
+    blanked three."""
     classless = _classless_table
     with mock.patch.object(_verbs, "VERB_TABLE", classless("revoke")):
         assert _verbs._derive_rung_remit_acts() == _verbs.RUNG_REMIT_ACTS
         assert _verbs._derive_declared_classes() == _verbs.DECLARED_CLASSES
-    with mock.patch.object(_verbs, "VERB_TABLE", classless("revoke", "confer", "oblige")):
+    with mock.patch.object(_verbs, "VERB_TABLE", classless("revoke", "confer", "oblige", "succeed")):
         assert "Office" not in _verbs._derive_declared_classes()
     assert _verbs.RUNG_REMIT_ACTS == frozenset({"issue", "dispatch", "convene"}), _verbs.RUNG_REMIT_ACTS

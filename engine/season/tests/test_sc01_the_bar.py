@@ -46,7 +46,7 @@ THE FALSIFIERS, each seen red before it was trusted (2026-10-16, mutations run a
   * A BROKEN CAUSE LINK REDDENS THE BAR: the sitting question built with `about=None` in
     `world_q.questions_for` -- scholastics/6 *no determination's causes reach a date.fired (1
     determined, 1 fired)*.
-  * THE CONTROL beside them, kept as a test (virtue, seed 2 since v10 CP-T05-04; doctrine/8 until it; community/13 until SC-03b): a held date fires and, after it,
+  * THE CONTROL beside them, kept as a test (virtue, seed 0 since B10-09 close one, scholastics/6 at CP-T02-05, virtue/2 before it back to CP-T05-04; doctrine/8 until it; community/13 until SC-03b): a held date fires and, after it,
     the Duke determines the clerk out of his ambition -- the walk is False there, so THE BAR's walk is
     not satisfied by a firing merely preceding a determination.
   * THE CLOSURE TEST: the planted `if arrangement.id == "tribunal":` written into the real
@@ -161,7 +161,13 @@ BAR_FIXTURES = DEFAULT_FIXTURES.sweep("pool_default", 30)       # v9 SC-03b: a j
 # seed 8 two dates fire, `f, = ...` raises; most seeds fire none). A sweep of all 15 convictions x seeds 0..24 at 5
 # seasons finds justice/8, virtue/2, virtue/6 and virtue/15 (scratch, not kept); the lowest seed, virtue/2, is taken.
 # CONTROL, run: on the REM-25 tree (the same script) doctrine/8 meets every assertion.
-CONTROL = ("virtue", 2, 5)      # was ("community", 13, 5) until v9 SC-03b; ("doctrine", 8, 5) until IN-12 step 9; 22 until step 10; 83 until REM-22; 8 until CP-T05-04
+# B10-09 close one (D2 + D3, the CP-T02-05 `oughts_named` stamp reverted -- falsified on HR-9 control (4), `Falsified: CP-T02-05`):
+# RE-TRACED AGAIN, virtue/2 -> virtue/0, the season count unchanged -- a felled attacker's death is placed where he fell
+# (`world_q.event_place`) and a second `commit` on a held cause is declined person-side (`rosters.yaml: held_edge_declines`), so the
+# act mix of this world moved. A sweep of all 15 convictions x seed 0 at 5 seasons for a run meeting every assertion of the control
+# test below finds doctrine/0 and virtue/0 (scratch, not kept); seed 0 is the lowest seed, and the tie is broken by keeping the
+# conviction the control had before CP-T02-05 (virtue), so virtue/0 is taken. The two PROCEEDINGS are unmoved (they meet every assertion on this tree).
+CONTROL = ("virtue", 0, 5)     # was ("scholastics", 6, 5) from CP-T02-05 to its revert; ("virtue", 2, 5) before it; ("community", 13, 5) until v9 SC-03b; ("doctrine", 8, 5) until IN-12 step 9; 22 until step 10; 83 until REM-22; 8 until CP-T05-04; ("virtue", 2, 5) until CP-T02-05
 
 
 def _world(conviction: str, seed: int):
@@ -291,7 +297,7 @@ def test_an_injected_act_reddens_the_bar(verb):
 
 
 def test_the_walk_is_false_for_a_determination_the_ambition_raised_beside_a_fired_date():
-    """THE CONTROL. Same world, virtue at seed 2 (re-traced at v10 CP-T05-04 against the assertions below only, from
+    """THE CONTROL. Same world, virtue at seed 0 (re-traced at B10-09 close one from scholastics at seed 6, which CP-T02-05 had taken from virtue at seed 2; re-traced at v10 CP-T05-04 against the assertions below only, from
     doctrine at seed 8; doctrine at 83 and at 22 before it, re-traced at IN-12 step 10 and step 9; the narrative that
     follows was traced at seed 8, SC-03b; community at seed 13 before it): the Duke convenes at `S` AND
     opens the clerk's case in the same season, so the case is docketed dateless before the sitting

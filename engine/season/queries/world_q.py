@@ -43,6 +43,7 @@ from ..data.rosters import (
     VERB_CAPABILITY,
     faction_prop_id,
     require_member,
+    roster_map,
 )
 # IN-09: the Record kinds a held document is an occasion for, derived off the verb table's rows;
 # v9 IN-49: the remit acts a seat exercises on a `Rung`-classed referent, the same way.
@@ -50,13 +51,13 @@ from ..data.rosters import (
 # (`OPENERS-DERIVE`); `endings_reached` evaluates the `ENDINGS` vocabulary imported above.
 # v10 REM-21: `DECLARED_CLASSES`, the referent classes some row declares, the same way.
 from ..data.verbs import (
-    DECLARED_CLASSES, HOLDING_RECORD_KINDS, RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS, VERB_TABLE,
-    _OPENERS_FROM_EFFECTS,
+    DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, HOLDING_RECORD_KINDS, RECORD_REFERENT_KINDS,
+    RUNG_REMIT_ACTS, VERB_TABLE, _OPENERS_FROM_EFFECTS,
 )
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
 # the asker-first module (which may not import this one; this edge runs the other way).
-from .person_q import LedgerReader, OwnStateReader, content_said, intent_named, ledger_names
+from .person_q import LedgerReader, OwnStateReader, addressed_to, content_said, intent_named, ledger_names
 # v9 IN-57: `attention_key`'s tier 2 scores a deed claim by `deed_valence`, one owner per factor.
 from .person_q import (
     _seen_index, crisis_weights, deed_valence, paired_deed_term, projected_axes)
@@ -832,17 +833,29 @@ def event_place(w: World, e, homes: Optional[dict] = None) -> Optional[str]:
     that needs a place, and a dead seat-holder was reported to nobody. A death at RESOLVE anchors on
     the killer, who is alive, which is why only the MATTER-written one was lost.
 
-    The limb, for an ACTORLESS Event only (no act among its causes): when the anchor is a person the
+    The limb, for an ACTORLESS Event (no act among its causes; one act-caused case, below): when the
+    anchor is a person the
     world NO LONGER HOLDS, his place is where he stood when
     `remove_person` took him out, if that was this Event's own tick (`World.departed_from`) -- the
     enclosing rung on the `contain` edge the cascade closed. It cannot be read off `w.tenures`: a Tenure is
     owned by its subject, so his own edge left the store with him (probed on `build_realm(0)`).
     It is NOT `place_of`'s person limb, deliberately: `place_of` is also asked about the dead by
     `reach` (a claim about a dead man), and answering there would move every reader of an old
-    claim; only an EVENT's own tick has a place for him. ⚠ ACTORLESS ONLY, MEASURED: without that clause
-    the limb also placed the refusals of a victim's own acts later in the killing tick (`act.ineligible`,
-    `travel.blocked`, ... anchored on the dead ACTOR, tier 1); the class is reproduced by
+    claim; only an EVENT's own tick has a place for him. ⚠ NOT FOR EVERY ACT-CAUSED EVENT, MEASURED: without
+    a clause the limb also placed the refusals of a victim's own acts later in the killing tick
+    (`act.ineligible`, `travel.blocked`, ... anchored on the dead ACTOR, tier 1); the class is reproduced by
     `test_h206_an_act_caused_event_of_the_dead_actor...`. `None` otherwise, exactly as before.
+
+    ONE ACT-CAUSED CASE IS PLACED (B10-09 close one, D2): an Event one of whose `changes` names a
+    removed actor as its subject (a felled attacker's `person.died`, CP-T03-00's per-party band; also an earlier act
+    of his in that tick that moved him) -- is placed where he stood when he was taken out, by the same
+    `departed_from`. That is the discriminator: a refusal carries no receipt (`Act.changes` defaults to
+    `[]`), so the victim's later refusals stay unplaced. LIMIT, MEASURED (B10-09 close, Phase 3): an Event of
+    such an act that carries no receipt OF THE ACTOR -- the wounded subject's `body.changed` in a mixed fight, the
+    felled attacker's seat `tenure.closed` (per-kind carriage) -- stays unplaced when its actor is gone, so no
+    co-located person witnesses it at `all_five`. Placing every executed act's Event (`e.changes` non-empty, not
+    only one naming the actor) was tried: it moves `test_go07_canonical_digest` and `test_season_weather`'s pins
+    (4 tests red), a declared hash mover with its controls, so it is not taken here.
 
     The limb places every ACTORLESS Event anchored on a person removed in that Event's own tick, so
     at MATTER also the same dying cohort's `body.changed` and its tier-3 `condition.band_crossed`
@@ -857,7 +870,10 @@ def event_place(w: World, e, homes: Optional[dict] = None) -> Optional[str]:
     # actor (tier 1), so this is the old answer.
     a = causing_act(w, e)
     if a is not None:
-        return place_of(w, a.actor, homes)
+        here = place_of(w, a.actor, homes)
+        if here is None and any(c.subject == a.actor for c in e.changes):
+            return w.departed_from(a.actor, e.emitted_at)     # the act's own receipt on a felled actor
+        return here
     who = anchor_of(w, e)
     here = place_of(w, who, homes)
     if here is not None:
@@ -2611,8 +2627,9 @@ def _goal_referents(w: World, p: Person, goal, prop, path: frozenset) -> tuple:
     if kind in ("person", "rung"):
         return (subject,) if subject is not None else ()
     if kind == "seat_holders":
-        # The Office ids seeding recorded (`Proposition.scope`: a loop-built seat is not named by its
-        # `offices.yaml` id); a world that minted no scope reads the listed ids as Office ids.
+        # The Office ids seeding recorded (`Proposition.scope`; since v10 CP-T02-02 a seat a row stands for
+        # is built under that row's id, so the scope is the listed ids; a seat with no row keeps its slug);
+        # a world that minted no scope reads the listed ids as Office ids.
         seats = set(prop.scope) if prop is not None and prop.scope else set(obj["seats"])
         return tuple(dict.fromkeys(t.subject for t in w.tenures
                                    if t.kind == "hold" and t.live and t.object in seats
@@ -2673,6 +2690,62 @@ def current_stage(w: World, p: Person, ambition) -> Optional[dict]:
                 out[referent] = stage
                 break
     return out or None
+
+
+def _aim_held_by_org_member(w: World, goal) -> bool:
+    """`rung`'s aim rule: the goal's rung is governed (`governing_hold`, the nearest held rung at or above it) by a
+    person committed to the goal's organization's faction (`faction_holding`, the one owner of *which faction a person
+    coheres under*; `data/goals.py::org_faction` the org's faction). A faction held by `None` (no commit, or two) or
+    an org with no faction is never met. The two readers `endings_reached` and the march path already share."""
+    t = governing_hold(w, goal.object["rung"])
+    fac = _goals.org_faction(goal.org_kind, goal.org)
+    return t is not None and fac is not None and faction_holding(w, t.subject) == faction_prop_id(fac)
+
+
+#: `rosters.yaml: goal_object_kinds.aim` names a rule per kind; these are the rules. A rule is a predicate over
+#: `(w, goal)` and reads live `hold`s, `commit`s and the `contain` walk `governing_hold` takes (T-a): nothing stored,
+#: so a rung lost un-meets the aim.
+AIM_RULES = {"held_by_org_member": _aim_held_by_org_member}
+
+
+def _aim_rule(rule):
+    """`AIM_RULES[rule]`, or REFUSED: a kind's aim rule is a named rule of `AIM_RULES` (the one raise site)."""
+    if not isinstance(rule, str) or rule not in AIM_RULES:
+        raise Unspecified(
+            f"rosters.yaml: goal_object_kinds.aim names the rule {rule!r}", "rosters.yaml -- goal_object_kinds.aim",
+            needs=f"one of {sorted(AIM_RULES)}", law="CP-T02-03 -- a kind's aim rule is a named rule of world_q.AIM_RULES")
+    return AIM_RULES[rule]
+
+
+def check_aim_rules() -> None:
+    """REFUSED AT IMPORT (04 §B.13: a declared value that reaches no code is refused at load, not at the first
+    ask): every rule `rosters.yaml: goal_object_kinds.aim` names is a rule of `AIM_RULES`. `data/goals.py::_aim_kinds`
+    checks the kind side at parse; the rule side is here because `AIM_RULES` is a `queries/` fact `data/` cannot
+    import, as `state/gate.py::check_successions` does for `SUCCESSIONS`. Callable again so a test can watch it refuse."""
+    for rule in roster_map("goal_object_kinds", "aim").values():
+        _aim_rule(rule)
+
+
+check_aim_rules()
+
+
+def aim_state(w: World, p: Person, prop) -> str:
+    """CP-T02-03 (B10-09; v10 AM-B-09, which narrowed the home to rung goals): `"met"` or `"open"` for the ambition
+    `prop` (a Proposition, as `questions_for` reads it) -- whether it still has work. `"met"` only where the goal's
+    object kind has a row in `rosters.yaml: goal_object_kinds.aim` (`rung` alone) and that kind's rule holds; EVERY
+    OTHER KIND, and every Proposition no goal names (a creed, a tie, a want), is `"open"`. There is no `"breached"`:
+    a vacated seat reaches a person as `tenure.closed` (CP-T02-01), not as a state of the aim.
+
+    `p` is the asker; the shipped rule reads the world alone. No state is stored and no TRACE row is written
+    (Q4 asks once per ambition per person, `goal_referents`' reason). AX-6 clause 3: the rule reads live edges and
+    is undone by an act (a rung lost), so it is not monotone in the ended-edge set. An unknown rule name REFUSES."""
+    goal = _goals.goal(prop.id)
+    if goal is None:
+        return "open"
+    rule = roster_map("goal_object_kinds", "aim").get(goal.object["kind"])
+    if rule is None:
+        return "open"
+    return "met" if _aim_rule(rule)(w, goal) else "open"
 
 
 # A `deed_doers` goal's referents are the doers it acts AGAINST: every authored form names them so --
@@ -2850,13 +2923,12 @@ def writs_held(w: World, p: Person) -> tuple:
     the writ). It reads `p`'s own edges and the store only for the kinds of the Records they name.
     ⚠ NO 'ALREADY ANSWERED' DECLINE: a holder who complied once is offered the writ again while he
     holds it -- the scene tax IN-10 (a) recorded for a repeated `oblige` (H-203)."""
-    def _addressees_of(rec) -> tuple:
-        sm = rec.subject_matter
-        return tuple(sm.get(RECORD_CONTENT.get("addressee")) or ()) if isinstance(sm, dict) else ()
+    # v10 IN-12 step 5a: the addressee test is `person_q.addressed_to`'s, its one owner (the terms-sourced
+    # reader in `decision/options.py` asks the same rule of the holder's content claim).
     return tuple(sorted({t.object for t in p.tenures
                          if t.kind == "hold" and t.live and t.object in w.records
                          and w.records[t.object].kind in RECORD_REFERENT_KINDS
-                         and p.id in _addressees_of(w.records[t.object])}))
+                         and addressed_to(w.records[t.object].subject_matter, p.id)}))
 
 
 def records_held_for_holding_rows(w: World, p: Person) -> tuple:
@@ -3026,6 +3098,36 @@ def larders_in_purview(w: World, p: Person, named: Optional[frozenset] = None) -
     return tuple(out)
 
 
+def detainees_held(w: World, p: Person) -> tuple:
+    """THE PRISONERS `p`'s SEATS HOLD (v10 IN-12 step 5, H-226 route (a) with H-232's formation-filter
+    shape [ASSUMPTION; medium; Jordan to correct; revert: drop the term in `questions_for`, and
+    `interrogate` declares `Person`]), sorted by id: every living person who owns a LIVE `detain`
+    (`DETAIN_KIND`, `restrained`'s kind) whose object is a seat `p` holds a live `hold` on that grants
+    one of `data/verbs.py::DETAINEE_REMIT_ACTS` (the remit acts of the rows declaring the class:
+    `interrogate`'s `determine`). A STANDING OCCASION, `vacancies`' shape: world-read, gated on the seat's
+    grant and NOT on what the asker was told (`larders_in_purview` is ledger-gated; this is not), resolver-side
+    and read-only. That shape is the tree's own `in tension with AX-7` list (`loop/matter.py`, `vacancies`):
+    no ledger deposit occurs, so AX-7's falsifier (a deposit) is not tripped; the reason it is a world stamp and
+    not a claim is H-231 limit 3 (a custody Receipt names no one, so no claim can carry the prisoner). It supplies Person ids, which
+    `questions_for` stamps onto the question he answers as the `Detainee` class (`DETAINEE_CLASS`, named
+    there because no collection answers it), so only a row declaring that class forms on them; whether
+    the act then passes is the fold's (`loop/predicates.py::_req_interrogate`: custody again, and the
+    charge). THE SEAT IS THE CUSTODY'S OWN OBJECT: a man detained to another seat is not offered (the
+    predicate's custody clause is `restrained`'s, any seat). `()` for a person granted no such act, or
+    whose seats hold nobody -- every person in the realm while `arrest` executes 0 and `capture` is
+    unbuilt, which is what keeps the realm's formation unchanged."""
+    if not DETAINEE_REMIT_ACTS:
+        return ()
+    seats = {t.object for t in p.tenures
+             if t.kind == "hold" and t.live and t.object in w.offices
+             and not DETAINEE_REMIT_ACTS.isdisjoint(t.granted_acts)}
+    if not seats:
+        return ()
+    return tuple(sorted({t.subject for t in w.tenures
+                         if t.kind == DETAIN_KIND and t.live and t.object in seats
+                         and t.subject in w.persons and t.subject != p.id}))
+
+
 def own_referents_of_class(w: World, q: Question, classes: Optional[frozenset] = None) -> tuple:
     """THE QUESTION'S OWN REFERENTS OF A STAMPED CLASS (v10 REM-21, AM-A-06, [ASSUMPTION; medium;
     Jordan to correct]): the plain `referents` of `q` -- the question the person answers, `out[0]`
@@ -3057,7 +3159,7 @@ def own_referents_of_class(w: World, q: Question, classes: Optional[frozenset] =
                  and not (r in w.records and w.records[r].kind in RECORD_REFERENT_KINDS))
 
 
-def _stamped(q: Question, added: tuple, w: World) -> Question:
+def _stamped(q: Question, added: tuple, w: World, classed: tuple = ()) -> Question:
     """`q` carrying the ids in `added` as CLASSED referents (IN-53, DECISION 2026-10-13 D1) -- the
     one stamp site. Each id's class is the collection the World holds it in (`World.class_of`:
     `Office` for a seat in `w.offices`, `Record` for a document in `w.records` since IN-09), never a
@@ -3068,8 +3170,11 @@ def _stamped(q: Question, added: tuple, w: World) -> Question:
     told of; a place he could settle in that is also a larder in purview; a question's own referent
     beside a standing occasion's stamp), so each pair is kept at its first position -- `q`'s own,
     then `added` in splice order -- and never refused. REVERT: the concatenation, and every term
-    pair that can overlap filters by hand again."""
-    return replace(q, classes=tuple(dict.fromkeys(q.classes + tuple((o, w.class_of(o)) for o in added))))
+    pair that can overlap filters by hand again.
+    `classed` (v10 IN-12): `(id, class)` pairs whose class is NO collection (`Detainee`), appended after
+    `added`; the class is the term's, since `class_of` cannot answer it. Empty: the stamp is unchanged."""
+    return replace(q, classes=tuple(dict.fromkeys(
+        q.classes + tuple((o, w.class_of(o)) for o in added) + tuple(classed))))
 
 
 _SOURCE_ORDER = {src: i for i, src in enumerate(QUESTION_SOURCES)}
@@ -3363,7 +3468,9 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     for pid in ambs:
         refs = goal_referents(w, p, w.propositions[pid])
         refs_of[pid] = set(refs) - {None}
-        if refs:
+        # CP-T02-03: a MET aim (a rung goal whose rung its org already governs) has no work to ask for. Its
+        # referents stay in `refs_of`: they still orient `attention_key`; only the standing question is not formed.
+        if refs and aim_state(w, p, w.propositions[pid]) != "met":
             out.append(Question(f"q:need:{pid}", "need", refs, pid))
 
     # v9 SC-01 FIRED-SLOT STEP (H-163 limit 2, #453 pass-1 step 4): A JUDGE IS ASKED ABOUT THE
@@ -3441,9 +3548,15 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
              + places_named(w, p, told) + larders_in_purview(w, p, told)
              + (own_referents_of_class(w, out[0]) if out else ())
              + works_sites(w, p))
-    if added:
-        head = out[0] if out else Question(f"q:need:{added[0]}", "need", (), added[0])
-        out[:1] = [_stamped(head, added, w)]
+    # v10 IN-12 step 5 ([ASSUMPTION; medium; Jordan to correct]): AND, LAST, THE PRISONERS HIS SEATS HOLD
+    # (`detainees_held`), as `Detainee` -- the restrained-persons class, named here because it is no
+    # collection; only `interrogate` declares it. Empty while no live `detain` names his seat, and then
+    # the output is byte-identical. REVERT: drop the term.
+    held = tuple((d, DETAINEE_CLASS) for d in detainees_held(w, p))
+    if added or held:
+        first = added[0] if added else held[0][0]
+        head = out[0] if out else Question(f"q:need:{first}", "need", (), first)
+        out[:1] = [_stamped(head, added, w, held)]
     return out
 
 

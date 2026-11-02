@@ -23,7 +23,7 @@ from engine.season.state.carriers import Act
 
 CROWN = "fac_crown"
 TOWN = "set_s_016"            # Hafenmark-held; no Crown member stands there at build
-ACTOR, SEAT = "p_npc_033", "off_npc_033"   # a Crown seat granted `dispatch`; his army stands at `set_s_014`
+ACTOR, SEAT = "p_npc_033", "off_spymaster"   # a Crown seat granted `dispatch`; his army stands at `set_s_014`
 
 
 def _fold(w, act, encounter=False):

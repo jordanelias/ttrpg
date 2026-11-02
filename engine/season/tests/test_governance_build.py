@@ -905,7 +905,9 @@ def test_lb6d_every_verb_declares_a_rostered_beneficiary():
     # one (a re-record); 56 -> 60, `recruit`, `form_unit`, `assign_troops`, `order_unit` (ED-IN-0306 phase 2)
     # -- each `beneficiary: none`, so `kinds["none"]` grows by four (a re-record).
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen -- the control that stops this census passing over a loader that returned a subset]
-    assert len(VERB_TABLE) == 62, "the verb count moved; this row's census is stale"       # 60 -> 62, ED-IN-0306 phase 5
+    # 62 -> 63, `interrogate` (v10 IN-12 step 5) -- `beneficiary: actor` (#453 §9.1), so `kinds["actor"]`
+    # grows by one (a re-record).
+    assert len(VERB_TABLE) == 63, "the verb count moved; this row's census is stale"       # 62 -> 63, v10 IN-12
     undeclared = [v for v, r in VERB_TABLE.items() if not r.beneficiary]
     assert not undeclared, f"verbs with no `beneficiary:`: {undeclared}"
     off_roster = [(v, r.beneficiary) for v, r in VERB_TABLE.items()
@@ -1802,12 +1804,18 @@ def test_13d_i_the_conferral_basis_is_roster_membership_not_a_nonempty_string():
     off.rung = "S"               # G3: ground inside the duke's purview, or nobody may confer it
     conf = Act(id="c_b", actor="p_high", verb="confer",
                payload={"office": "off_dicastery", "to": "p_mid"}, via="off_duke")
-    checked = 0
+    # RE-RECORDED AT v10 IN-61 (RS-27): every member still passes the MEMBERSHIP test, and `_req_confer`
+    # now admits exactly the members `state/gate.py::FILLED_BY` opens by `conferral` -- `inheritance` is a
+    # member `confer` refuses (a throne is claimed, never conferred). Was: every member admitted by both.
+    from ..state.gate import CONFERRAL, FILLED_BY
+    checked = refused = 0
     for basis in sorted(CONFERRAL_BASES):
         off.conferral = basis
-        assert _preds.has_conferral_basis(off) and _preds._req_confer(w, conf), basis
+        assert _preds.has_conferral_basis(off), basis
+        assert _preds._req_confer(w, conf) == (CONFERRAL in FILLED_BY[basis]), basis
         checked += 1
-    assert checked == len(CONFERRAL_BASES) >= 3, checked
+        refused += CONFERRAL not in FILLED_BY[basis]
+    assert checked == len(CONFERRAL_BASES) >= 4 and refused == 1, (checked, refused)
     for basis in (None, "something-not-on-the-roster", "the duke's remit (harness fixture)", ""):
         off.conferral = basis
         assert not _preds.has_conferral_basis(off), f"{basis!r} passed the basis test"
@@ -1828,12 +1836,23 @@ def test_13d_i_an_off_roster_conferral_on_establish_refuses_and_raises_nothing()
     out = d.resolve(mint_token(d.w, WriteClass.ACTS), [act], contest_max_depth=w.fixtures.get("contest_max_depth"))
     assert [e.kind for e in out] == ["establish.refused"], [e.kind for e in out]
     assert "off_reeve" not in w.offices
-    founded = 0
+    # v10 IN-61 (B10-09 close): a seat only the heir's claim opens is founded only as the seat a title passes
+    # (`SUCCESSIONS`, `gate.has_filler`); the same basis on a seat no title passes is refused (CONTROL below).
+    from ..data.rosters import SUCCESSIONS
+    from ..state.gate import CONFERRAL, FILLED_BY
+    founded = refused = 0
     for i, basis in enumerate(sorted(CONFERRAL_BASES)):
-        out = _establish(w, d, f"e_ok_{i}", _founding(office=f"off_reeve_{i}", conferral=basis))
-        assert [e.kind for e in out] == ["office.established"], (basis, [e.kind for e in out])
+        claim_only = CONFERRAL not in FILLED_BY[basis]
+        seat = next(iter(SUCCESSIONS)) if claim_only else f"off_reeve_{i}"
+        out = _establish(w, d, f"e_ok_{i}", _founding(office=seat, conferral=basis))
+        assert [e.kind for e in out] == ["office.established"], (basis, seat, [e.kind for e in out])
         founded += 1
-    assert founded == len(CONFERRAL_BASES) >= 3
+        if claim_only:
+            out = _establish(w, d, f"e_orphan_{i}", _founding(office=f"off_orphan_{i}", conferral=basis))
+            assert [e.kind for e in out] == ["establish.refused"], (basis, [e.kind for e in out])
+            assert f"off_orphan_{i}" not in w.offices
+            refused += 1
+    assert founded == len(CONFERRAL_BASES) >= 3 and refused >= 1, (founded, refused)
 
 
 def test_13d_i_the_title_in_a_body_refusal_is_rehomed_not_dropped():
@@ -1958,7 +1977,9 @@ def test_8a_every_authored_seat_constructs_against_the_live_rosters():
     cnf = Counter(s["conferral"] for s in seats)
     rvk = Counter(s["revocation"] for s in seats)
     assert sum(cnf.values()) == 31 and sum(rvk.values()) == 31
-    assert cnf == Counter({"appointed": 17, "elected": 8, None: 6}), cnf
+    # RE-RECORDED AT v10 IN-61 (RS-27): `off_king` null -> `inheritance`, `off_heir` null -> `appointed`.
+    # Was `{"appointed": 17, "elected": 8, None: 6}`.
+    assert cnf == Counter({"appointed": 18, "elected": 8, "inheritance": 1, None: 4}), cnf
     assert rvk == Counter({"rung_above_same_faction": 13, "rung_above_in_holdings": 2, None: 16}), rvk
 
 
@@ -1992,7 +2013,8 @@ def test_8a_every_authored_seat_carries_its_authored_basis_after_the_overlay():
     matched to the one its per-case loop built or minted from the row (`13d-iii`). Before `8a` every
     seat carried `conferral=None, revocation=None`, the dataclass default, regardless of what
     `ED-IN-0256` says of it. This asserts the overlay actually ran: each seat matches its row, the
-    four hereditary/no-revoker seats (King, Queen, Heir, Princess) correctly keep `None`, and --
+    `null`-conferral seats correctly keep `None` (v10 IN-61 moved the King to `inheritance` and the
+    Heir to `appointed`), and --
     a passing test that could not tell 'overlaid with None' from 'never overlaid' would not
     observe the failure it excludes (`CLAUDE.md` §0.1 pt 2) -- a NON-None seat on each axis is
     checked too. (Was nineteen seats and skipped the `[NEW]` rows; four of those are seated by the
@@ -2163,19 +2185,21 @@ def test_13d_iii_a_stale_index_entry_is_refused_not_trusted(_realm13):
 def test_13d_iii_a_minted_row_may_not_reuse_a_standing_seat_id(_realm13, monkeypatch):
     """A MINTED seat is one no loop-built seat stands for, so its id must be fresh. A row carrying
     the id of a seat the loop already built used to REPLACE that seat without a sound. The probe
-    renames the first minted row to the id of the loop-built `off_npc_031` (the seat NPC-031's
-    `off_heir` row overlays); the realm must refuse, naming the id. The build with the real rows
+    renames the first minted row to the id of the loop-built `off_npc_084` (NPC-084's `guild leader`, the
+    one seat no row stands for, so the one loop-built seat that still carries a slug id; since CP-T02-02 a
+    seat a row overlays stands under the ROW's id, and a minted row carrying that id is skipped as authored);
+    the realm must refuse, naming the id. The build with the real rows
     is the control (`_realm13`, and every other test here, build it)."""
     from ..harness import populated
 
     real = populated.OFFICES_SEATS
     minted_id = _realm13._office_census["minted"][0]
-    rows = [dict(r, id="off_npc_031") if r["id"] == minted_id else r for r in real]
-    assert sum(r["id"] == "off_npc_031" for r in rows) == 1
+    rows = [dict(r, id="off_npc_084") if r["id"] == minted_id else r for r in real]
+    assert sum(r["id"] == "off_npc_084" for r in rows) == 1
     monkeypatch.setattr(populated, "OFFICES_SEATS", rows)
     with pytest.raises(Forbidden) as red:
         build_realm(seed=0)
-    assert "off_npc_031" in str(red.value) and "minted" in str(red.value), str(red.value)
+    assert "off_npc_084" in str(red.value) and "minted" in str(red.value), str(red.value)
 
 
 def test_13d_iii_a_seat_may_not_list_its_own_holder_among_its_obligees(monkeypatch):
@@ -2430,7 +2454,7 @@ def test_13d_iii_an_authored_obligee_serves_the_seat_with_no_term(_realm13):
     withs = [r for r in _seat_rows() if r.get("obligees")]
     assert [r["id"] for r in withs] == ["off_king", "off_restoration_leader"], withs
     for row_id, sworn in (("off_king", "p_npc_070"), ("off_restoration_leader", "p_npc_041")):
-        seat = w._office_census["authored"][row_id]   # `off_king` is a row id; its loop-built seat is `off_npc_020`
+        seat = w._office_census["authored"][row_id]   # a seat a row overlays keeps the row's id (CP-T02-02), so this is the identity
         assert world_q.establishment_of(w, seat) == [sworn]
         t = next(t for t in w.tenures if t.kind == "oblige" and t.object == seat)
         assert t.term is None and t.live
@@ -2839,7 +2863,26 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # and the realm's act mix moves (seed 0, one season: 606 -> 597 kept, 607 -> 595 stripped; `test_go07_canonical_digest.py` records
     # the 597). The arms part by two acts (597 / 595). CONTROL: this world with `stance_polarity` swept back to `legacy` in process reads
     # (606, 607) under this same test's two seasons-of-one (the script on both arms).
-    assert (out["acts"], cout["acts"]) == (597, 595), (
+    # ⚠⚠ v10 CP-T02-01 (B10-09): (597, 595) -> (608, 608), A RE-RECORD WITH THE UNIT THAT MOVED IT: a death names the seats it
+    # empties (one `tenure.closed` per death write, receipted under the Offices), so every witness holds a claim on each vacated
+    # seat and the realm's act mix moves (seed 0, one season: 597 -> 608 kept, 595 -> 608 stripped; `test_go07_canonical_digest.py`
+    # records the 608). CONTROL: this world with `World.seat_holds` stubbed to `[]` (the emission off) in process reads (597, 595).
+    # ⚠⚠ v10 CP-T02-02 (B10-09): (608, 608) -> (596, 596), A RE-RECORD WITH THE UNIT THAT MOVED IT: a loop-built seat keeps its
+    # `offices.yaml` row's id (`populated._seat_id`), the ids seed the draws, and the realm's act mix moves (seed 0, one season:
+    # 608 -> 596 in both arms; `test_go07_canonical_digest.py` records the 596). CONTROL: this tree with `_seat_id` replaced by the
+    # slug rule (`off_<case slug>`) in process reads (608, 608) under this same test.
+    # ⚠⚠ v10 CP-T03-00 (B10-09): (596, 596) -> (590, 590), A RE-RECORD WITH THE UNIT THAT MOVED IT: both parties of a fight take
+    # their band (a felled attacker dies), so the realm's first-season deaths and act mix move (seed 0, one season: 596 -> 590 in
+    # both arms; `test_go07_canonical_digest.py` records the 590). CONTROL: the pre-item tree (`68767e731`) is the tree that read
+    # (596, 596).
+    # ⚠⚠ v10 CP-T02-03 (B10-09): (590, 590) -> (589, 589), A RE-RECORD WITH THE UNIT THAT MOVED IT: a `rung` goal whose rung its org
+    # governs is met (`world_q.aim_state`) and forms no `need` (`goal_varfell_oastad_gate`), so the realm's act mix moves (seed 0, one
+    # season: 590 -> 589 in both arms; `test_go07_canonical_digest.py` records the 589). CONTROL: `aim_state` reading `open` always
+    # (`AIM_RULES` cleared) in process reads (590, 590) at seed 0 (`test_go07_canonical_digest.BASE[0]`).
+    # ⚠⚠ v10 CP-T02-05 (B10-09) added the `world_q.oughts_named` stamp (589 -> 582) and B10-09 close one reverted it (falsified on HR-9
+    # control (4), `Falsified: CP-T02-05`): the pin is the reading with the stamp reverted, (589, 589) again (seed 0, one season;
+    # `test_go07_canonical_digest.py` records the 589).
+    assert (out["acts"], cout["acts"]) == (589, 589), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")

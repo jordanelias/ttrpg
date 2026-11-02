@@ -488,19 +488,57 @@ def _counts(w) -> dict:
 #: value below is this tree's, read with this file's own helpers and `populated.run`; CONTROL, run in process on this tree:
 #: `stance_polarity` swept back to `legacy` reads the values this block held exactly, at all three seeds. Was, for seeds 0 / 1 / 2: `old`
 #: a70f7a83... / f51795a7... / 60507c37..., `new` e9f81463... / 4516fc49... / d2138e3a..., `census` 711e456d... / 6d9bd351... / a5adac42....
+#: RE-RECORDED AGAIN at v10 CP-T02-01 (B10-09), A BEHAVIOUR MOVE DECLARED: a death names the seats it empties (one
+#: `tenure.closed` per death write, receipted under the Offices), so every witness holds a claim on each vacated seat and the
+#: seeded first seasons of seeds 0 and 1 take another path (seed 2's first season reads its old values unmoved). CONTROL, run in process on this tree: `World.seat_holds` stubbed to `[]` (the emission
+#: off) reads the values this block held exactly. Was, for seeds 0 / 1: `old` 95068857... / 303810a3..., `new` 056584ed... /
+#: 48e59dc4..., `census` f8f221e0... / f864b5ae..., `acts` 597 / 608, `log` 9347 / 10636. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+#: RE-RECORDED AGAIN at v10 CP-T02-02 (B10-09), AN ID MOVE DECLARED: a loop-built seat keeps its `offices.yaml` row's id
+#: (`populated._seat_id`: the throne is `off_king`, no longer `off_npc_020`), so every hash that folds an Office id moves, and the ids
+#: seed the draws, so the seeded first seasons of seeds 0 and 1 take another path (`acts` 608 / 616 -> 596 / 621, `log` 9138 / 11007 ->
+#: 9760 / 11149; seed 2 keeps its acts, census, counts and log and re-hashes only). CONTROL, run in process on this tree: `_seat_id` replaced
+#: by the slug rule (`off_<case slug>`) reads the values this block held exactly, at all three seeds, and the build world's old digest and
+#: content hash. Was, for seeds 0 / 1 / 2: `old` e6f28fc9... / 85e94055... / 8a2d9108..., `new` b4aa3024... / 4687d35a... / 31f199ea...,
+#: `census` 3c5fb2de... / 298a3ea5... (seed 2 unmoved). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+#: RE-RECORDED AGAIN at v10 CP-T03-00 (B10-09), A BEHAVIOUR MOVE DECLARED: both parties of a fight take their band (a felled
+#: attacker dies; each kind's Event carries only its earners' changes), so the first season's deaths and deposits move at all
+#: three seeds (`acts` 596 / 621 / 650 -> 590 / 620 / 651, `log` 9760 / 11149 / 10728 -> 9338 / 11060 / 10125, `persons`
+#: 80 / 81 / 82 -> 77 / 81 / 81). Was, for seeds 0 / 1 / 2: `old` bc4d8440... / d5b68b41... / 3168fab6..., `new` ebe18510... /
+#: 507a9bed... / c38c332d..., `census` bd2b200c... / 54df699b... / b34f3210.... CONTROL: the pre-item tree (`68767e731`) is the
+#: tree this block was green on. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+#: RE-RECORDED AGAIN at v10 CP-T02-03 (B10-09), A BEHAVIOUR MOVE DECLARED: a `rung` goal whose rung its org's member governs is met
+#: (`world_q.aim_state`) and forms no `need` (`goal_varfell_oastad_gate`, met at build, is the one shipped case), so the first season
+#: moves at all three seeds (`acts` 590 / 620 / 651 -> 589 / 628 / 637, `log` 9338 / 11060 / 10125 -> 9154 / 11338 / 9817, `persons`
+#: 77 / 81 / 81 -> 76 / 81 / 81). Was, for seeds 0 / 1 / 2: `old` 3c66f569... / 2fed7c77... / dd9b3a2a..., `new` 921de777... /
+#: 2453fa53... / 9c7fdb69..., `census` 04e36dfe... / 3e1bbbef... / 8ba7fe46.... CONTROL, run in process on this tree: `aim_state` reading
+#: `open` always (`AIM_RULES` cleared) reads the values this block held exactly, at all three seeds. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+#: CP-T02-05 (B10-09) added a stamp, `world_q.oughts_named`, and B10-09 close one REVERTED it (falsified on HR-9 control (4),
+#: `Falsified: CP-T02-05`): the pins below are the reading with the stamp reverted; the build is equal throughout.
+#: RE-RECORDED AGAIN at v10 IN-61 (B10-09), A DATA MOVE DECLARED: `off_king` `conferral` `null` -> `inheritance`, `off_heir` `null` ->
+#: `appointed` (RS-27); `Office.conferral` folds into both digests, so `old` and `new` move at all three seeds and NOTHING ELSE DOES
+#: (`acts`, `census` and every count equal). Was, for seeds 0 / 1 / 2: `old` 76409cd0... / f5081f07... / 25fe49f5..., `new`
+#: f699c1d4... / 5c577efd... / 5f914de5.... CONTROL, run in process on this tree: the two seats' `conferral` set back to `None` on the
+#: built world reads the old two-season realm hashes exactly at seeds 0-2. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+#: RE-RECORDED AGAIN at B10-09 close one (D2 + D3, then the CP-T02-05 revert), A BEHAVIOUR MOVE DECLARED: a felled attacker's own
+#: `person.died` is placed where he fell (`world_q.event_place`), and a second `commit` on a held cause is declined person-side
+#: (`rosters.yaml: held_edge_declines`); the `oughts_named` stamp is reverted, so this is the reading with the stamp reverted (`acts`
+#: 589 / 628 / 637, equal to CP-T02-03's, `log` 9154 / 11338 / 9817 -> 9172 / 11338 / 9831). Was, for seeds 0 / 1 / 2:
+#: `acts` 582 / 617 / 645, `old` 5675a99d... / 31188d9f... / ed1009cd..., `new` 76340255... / c7c14a9f... / e149edb1..., `census` 93eb8633... /
+#: 67cda841... / 149c94a4.... CONTROL, run in process on the pre-revert tree (`f28c3f33c`): `oughts_named` stubbed to `()` reads the
+#: two-season realm hash this block's tree reads, at seeds 0-2. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 BASE = {
-    0: {"old": "9506885765d92392d4a303edc286eaf7", "new": "056584ed2e5c77fd02c0fcaee079f35c", "acts": 597,
-        "census": "f8f221e0263fa1ed2876adb4743704db2e8f3c9a73ceb4a2e083f1937b870d58",
-        "counts": {"persons": 80, "rungs": 409, "offices": 32, "sites": 322, "records": 130,
-                   "propositions": 120, "dates": 7, "docket": 5, "tenures": 862, "log": 9347}},
-    1: {"old": "303810a3ec623ca105e31e88d1c4c87d", "new": "48e59dc458d89c4c3d16cdb2570bd9d7", "acts": 608,
-        "census": "f864b5ae2f2e82cb73e5b4fd37a68f92b2966c4c0b34d54a2cbd2fb84f8f37c9",
-        "counts": {"persons": 81, "rungs": 410, "offices": 32, "sites": 322, "records": 147,
-                   "propositions": 106, "dates": 8, "docket": 2, "tenures": 878, "log": 10636}},
-    2: {"old": "8a2d9108f1a7faca866b4187e64097ea", "new": "31f199ea18bdb3b7b86419b151bb2b70", "acts": 650,
-        "census": "b34f3210de31f89f0a0bc2f4bd1e0577755657971507b3a56b7786669100bd71",
-        "counts": {"persons": 82, "rungs": 411, "offices": 32, "sites": 322, "records": 147,
-                   "propositions": 113, "dates": 6, "docket": 7, "tenures": 895, "log": 10728}},
+    0: {"old": "8504cdb74f35a41894a7ea534303d037", "new": "53469c5c8afc81c2368300d34afd37fa", "acts": 589,
+        "census": "344505e38e0815eb1190c0f576ba07457954cc407d76e98d96416c2e52533867",
+        "counts": {"persons": 76, "rungs": 405, "offices": 32, "sites": 322, "records": 121,
+                   "propositions": 104, "dates": 4, "docket": 3, "tenures": 858, "log": 9172}},
+    1: {"old": "596bd4226381967e22717479ac455b60", "new": "adf07857430702a512fa792f91785134", "acts": 628,
+        "census": "c083f206a44416b48c87ad277e3150586b4ee0b9fa6aac752e66b92e87f105c4",
+        "counts": {"persons": 81, "rungs": 410, "offices": 32, "sites": 322, "records": 150,
+                   "propositions": 106, "dates": 8, "docket": 2, "tenures": 912, "log": 11338}},
+    2: {"old": "c0e7b96cd46b3c7277b0d63d57f82f69", "new": "8059ca33b123db7ebeb6132a8ec25a4c", "acts": 637,
+        "census": "82194530d0fbc8408e5dac1a4c74cc55e88b24bc76b1c3e65946b172801c4614",
+        "counts": {"persons": 81, "rungs": 410, "offices": 32, "sites": 322, "records": 132,
+                   "propositions": 110, "dates": 4, "docket": 2, "tenures": 899, "log": 9831}},
 }
 
 
@@ -508,8 +546,8 @@ def test_go07_control_the_build_world_old_digest_is_unmoved():
     """The base commit's `repr` digest of `build_realm(0)`, before a single act, read this literal
     (`test_season_weather.BASE_HASHES[0]`'s retired value); the same world now reads the new pin."""
     w = POP.build_realm(0)
-    assert _old_content_hash(w) == "798b938eb72b789d71a3fa4938e57cc8"        # v10 CR-21: was 6ea9a7f2... (SE-06); before that bcc59ba4...
-    assert w.content_hash() == "3e31638ef6eec7082eafa9ff4db9bb2d"            # v10 CR-21: was aef556ac... (SE-06); before that fe427626...
+    assert _old_content_hash(w) == "919faacba3a5b83184266f454f6989d3"        # v10 IN-61: was 26c255ac... (CP-T02-02); before that 798b938e... (CR-21)
+    assert w.content_hash() == "c7ca8d505cc1741f9e54e1fdd0c55292"            # v10 IN-61: was 4ab812ba... (CP-T02-02); before that 3e31638e... (CR-21)
 
 
 def test_go07_control_the_world_did_not_move_only_its_digest():

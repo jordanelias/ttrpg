@@ -2,7 +2,8 @@
 `degree(margin, veto?) -> Degree"*, reading *"the exported band edges"*.
 
 Everything that turns a subsystem's return into the token `writes_at` / `emits_at` key on:
-`degree_of` (the dispatcher, which decides nothing), `combat_degree` (the band read off the scene),
+`degree_of` (the dispatcher, which decides nothing), `combat_degree` (the fight's band read off the
+scene, the worst over its parties) and `party_degree` (one party's band, the walk both read),
 and the deferred import of the tree's single-owner ladder -- `_LADDER`, `_LADDER_ERROR`,
 `degree_ladder()`, `ladder_error()`.
 
@@ -88,6 +89,11 @@ from ..gaps import Unspecified
 # ACTOR is the one felled: A attacks B, B fells A, `wound_state[A].felled` is True, and the fold
 # would delete B. The subject is the person the writes land on, so the subject is the person
 # whose state decides which branch of the writes applies. The table's cell is corrected there.
+# ⚠ CP-T03-00 (`-08` AM-C-01) CORRECTS THE CORRECTION'S REACH, NOT ITS POINT: reading the SUBJECT ALONE
+# left the felled ACTOR unwritten (A attacks B, B fells A: the band read off B, and A stood). Each
+# party is now written by HIS OWN band (`party_degree`, read in `_eff_kill`), so the loser-reading
+# defect stays closed -- B is never deleted for A's felling -- and the act's band, which the cells key
+# on, is the WORST over both (`combat_degree`).
 # ---------------------------------------------------------------------------
 
 # ⚠ THE THREE BANDS AND THE HARM MODEL ARE DATA, NOT LITERALS HERE — `rosters.yaml:
@@ -133,16 +139,18 @@ def ladder_error() -> str:
     return _LADDER_ERROR
 
 
-def combat_degree(result: dict, subject: Optional[str], wounded_above=None) -> str:
-    """The band, READ off the scene the engine just fought (Jordan, 2026-09-03). Invents nothing:
-    every quantity below is a field of the engine's own `WoundTracker`, on the Combatants
-    `combat_seam` constructed and still holds after `wrapper.fight` collapsed them to an int.
+def party_degree(st: Optional[dict], wounded_above=None) -> str:
+    """ONE PARTY'S band, READ off the scene the engine just fought (Jordan, 2026-09-03). Invents
+    nothing: every quantity below is a field of the engine's own `WoundTracker`, on the Combatants
+    `combat_seam` constructed and still holds after `wrapper.fight` collapsed them to an int. `st` is
+    that party's `wound_state` entry.
 
     The bands read `felled`, never `result`: `wrapper.fight` sets a non-zero result on a felling AND
-    on any §11.4 yield the engine did not refuse, accepted or not (PC-01), so the three bands are: the subject went down; the subject is
-    standing and bled; the subject is standing and untouched. ⚠ A YIELDER IS STANDING, so this walk
-    reads him `Untouched`/`Wounded` and the surrender rides on `result["surrender"]` -- NO FOURTH BAND:
-    a yield sets no quantity in `wound_quantities` that a fourth edge could be drawn over.
+    on any §11.4 yield the engine did not refuse, accepted or not (PC-01), so the three bands are: the
+    party went down; the party is standing and bled; the party is standing and untouched. ⚠ A YIELDER
+    IS STANDING, so this walk reads him `Untouched`/`Wounded` and the surrender rides on
+    `result["surrender"]` -- NO FOURTH BAND: a yield sets no quantity in `wound_quantities` that a
+    fourth edge could be drawn over.
 
     ⚠ WHERE THE BANDS FALL IS DATA, NOT TWO LITERALS (`H-98`, plan position `8`; Jordan 2026-09-02:
     definitions are not hardcoded). `rosters.yaml: combat_band_edges` carries one `{quantity, above}`
@@ -151,16 +159,18 @@ def combat_degree(result: dict, subject: Optional[str], wounded_above=None) -> s
     band is what is left. The shipped edges reproduce `if felled: Felled; elif wounds > 0: Wounded;
     else: Untouched` exactly. `wounded_above` is `Fixtures.combat_wounded_above` -- the ONE swept
     edge, on the `Wounded` band; `None` is the roster's own value. The `Felled` edge is the engine's
-    verdict accepted, never swept (`combat_band_edges`' note)."""
-    states = result.get("wound_state") or {}
-    st = states.get(subject)
-    if not subject or st is None or not st.get("available"):
+    verdict accepted, never swept (`combat_band_edges`' note).
+
+    CP-T03-00 (`-08` AM-C-01): SPLIT OUT OF `combat_degree`, UNCHANGED, so the walk lives once and both
+    readers ask it: `combat_degree` (the act's band, the worst over every party) and
+    `loop/effects_combat.py::_eff_kill` (each party written by his own band)."""
+    if st is None or not st.get("available"):
         raise Unspecified(
-            f"personal combat resolved and the scene carries no wound state for the act's "
-            f"subject ({subject!r}); it has {sorted(states)}", "S39.4/H-98",
-            needs="a `wound_state` entry for the person the act writes on",
-            law="Jordan 2026-09-03 -- the degree is READ OFF THE SCENE. A subject the scene never "
-                "fought has no band, and picking one would be the mapping that ruling removed")
+            f"personal combat resolved and a party's wound state is unavailable ({st!r})",
+            "S39.4/H-98",
+            needs="a `wound_state` entry, lifted off the party's own WoundTracker",
+            law="Jordan 2026-09-03 -- the degree is READ OFF THE SCENE. A party the scene carries no "
+                "tracker for has no band, and picking one would be the mapping that ruling removed")
     if wounded_above is not None:
         # An injected threshold is held to the grammar the authored one is, so a bad arm REFUSES
         # rather than reading off a name the tracker never returned (§42.2.1 polarity).
@@ -172,7 +182,7 @@ def combat_degree(result: dict, subject: Optional[str], wounded_above=None) -> s
         for q in (quantity, above):
             if isinstance(q, str) and q not in st:
                 raise Unspecified(
-                    f"the scene's wound state for {subject!r} carries no {q!r} "
+                    f"the scene's wound state for a party carries no {q!r} "
                     f"(it has {sorted(st)})", "S39.4/H-98",
                     needs=f"`wound_state` to lift {q!r}, which `combat_band_edges` reads",
                     law="Jordan 2026-09-03 -- the degree is READ OFF THE SCENE; an edge over a "
@@ -180,6 +190,30 @@ def combat_degree(result: dict, subject: Optional[str], wounded_above=None) -> s
         if int(st[quantity]) > (int(st[above]) if isinstance(above, str) else above):
             return band
     return COMBAT_BANDS[-1]
+
+
+def combat_degree(result: dict, subject: Optional[str], wounded_above=None) -> str:
+    """THE FIGHT'S band: the WORST `party_degree` over every `wound_state` entry (CP-T03-00, `-08`
+    AM-C-01), worst by `combat_degree_bands`' own order (SEVERITY, worst first). It is the token the
+    fold keys `writes_at` / `emits_at` on, so the band's cells cover whatever any party took: a felled
+    attacker makes the fight `Felled` though his target stands, and `contest.undecided` (`Untouched`'s
+    kind) is reached only when every party is untouched. Who is written by which band is not this
+    function's: `_eff_kill` reads `party_degree` per party.
+
+    ⚠ THE SUBJECT IS STILL REQUIRED TO BE A PARTY. Before CP-T03-00 this read `states.get(subject)`
+    alone, so a felled ACTOR left the fight graded by his standing target and was never written; the
+    refusal for a subject the scene never fought is kept, unchanged, because the act's writes land on
+    him and a scene without him is not the act's scene."""
+    states = result.get("wound_state") or {}
+    st = states.get(subject)
+    if not subject or st is None or not st.get("available"):
+        raise Unspecified(
+            f"personal combat resolved and the scene carries no wound state for the act's "
+            f"subject ({subject!r}); it has {sorted(states)}", "S39.4/H-98",
+            needs="a `wound_state` entry for the person the act writes on",
+            law="Jordan 2026-09-03 -- the degree is READ OFF THE SCENE. A subject the scene never "
+                "fought has no band, and picking one would be the mapping that ruling removed")
+    return min((party_degree(s, wounded_above) for s in states.values()), key=COMBAT_BANDS.index)
 
 
 def field_degree(result: dict) -> str:

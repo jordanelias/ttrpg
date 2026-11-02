@@ -27,7 +27,7 @@ from engine.season.queries import world_q
 from engine.season.seam.wrappers.mass_battle import field_input, resolve
 from engine.season.state.carriers import Act, Record, Tenure
 
-ACTOR, SEAT, ORIGIN, TARGET = "p_npc_033", "off_npc_033", "set_s_014", "set_s_036"
+ACTOR, SEAT, ORIGIN, TARGET = "p_npc_033", "off_spymaster", "set_s_014", "set_s_036"
 ATTACKER, DEFENDER = "fac_crown", "fac_church_of_solmund"
 CA, CD = "c_att", "c_def"
 

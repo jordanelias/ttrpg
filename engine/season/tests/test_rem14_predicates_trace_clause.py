@@ -129,12 +129,12 @@ def test_march_at_a_non_marchable_target_traces_its_clause():
     marchable settlement reaches the same function and traces nothing."""
     w = build_realm(0)
     a = Act(id="m1", actor="p_npc_033", verb="march", payload={"subject": "r_valoria"},
-            via="off_npc_033")
+            via="off_spymaster")
     (sides, rows) = _rows_of(lambda: sides_of(w, a, "r_valoria", "a field"))
     assert sides[0] == [] and len(rows) == 1, rows
     assert _clause(rows[0]) == "a march at a target that is not a rung of a marchable kind"
     assert rows[0].what.endswith("p_npc_033 on 'r_valoria'") and rows[0].detail["chose"] == "refuse"
     ok = Act(id="m2", actor="p_npc_033", verb="march", payload={"subject": "set_s_002"},
-             via="off_npc_033")
+             via="off_spymaster")
     (sides, rows) = _rows_of(lambda: sides_of(w, ok, "set_s_002", "a field"))
     assert sides[0] and rows == [], rows
