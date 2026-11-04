@@ -108,7 +108,7 @@
   - *What still holds it:* the first conjunct (a sparse table); SE-06's conviction half is HELD (B10-Z; `-04` part 2); the fifth conjunct has its pursuit vectors.
   - *Who moves it:* REM-05, REM-12, SE-06, CR-21, CR-16, CR-17.
 - **Text changes, stated as assumptions (at CR-17's exit, B10-09; at SE-06's exit, B10-07b):** the fourth conjunct's `measured:` = `python -m engine.season.harness.decision_spread --decisions` (seeds 0-2) printing, for vectored persons, a strict-top-decided share above one half at the chosen τ, beside the τ = 0.1 control share; the fifth = `decision_spread --persons` printing 83 of 83 acting persons with a non-empty vector at `build_realm(0)` (SE-06's pursuit half built at B10-07b). **[ASSUMPTION; medium; Jordan to correct]**
-- **Moved by:** REM-05, REM-12 (instruments); IN-38 landed; SE-06, CR-21, CR-16, CR-17 (M1 narrowed; its residue, H-233 and IN-36's defaults, stayed Jordan's, `-05`; answered 2026-11-02, ED-IN-0309: `foreign` ON at CR-70, `guards` ON at CP-T09-07 (b)).
+- **Moved by:** REM-05, REM-12 (instruments); IN-38 landed; SE-06, CR-21, CR-16, CR-17 (M1 narrowed; its residue, H-233 and IN-36's defaults, stayed Jordan's, `-05`; answered 2026-11-02, ED-IN-0311: `foreign` ON at CR-70, `guards` ON at CP-T09-07 (b)).
 - **After the second decision round:** none. No conjunct reads descent, standing or a lifepath, and the Tensions cards (CL-EVENTS (4)) add attention and pursuits, not alignment cells.
 
 ## 8. R-07 — memories, feelings, attitudes, relationships; imperfect knowledge · partial
