@@ -41,12 +41,6 @@ KNOWN_RED = {
         'rally clears yielding below the rally fraction — DG2 residual (ED-MB-0061)',
     'test_intent_resolution.py::test_holder_survives_better_with_intent':
         'intent-on holder no longer survives better — flags-ON residual (ED-MB-0061)',
-    'test_mass_battle_byte_exact.py::test_byte_exact_unit_mode':
-        'unit-mode golden digest drifted and has not been re-recorded (ED-MB-0061)',
-    'test_mass_battle_byte_exact.py::test_byte_exact_cell_mode':
-        'cell-mode golden digest drifted (ED-MB-0061). Note this test ALSO self-skips off the '
-        'reference platform, so it reports SKIPPED locally and xfail on CI — a runtime skip wins '
-        'over an xfail marker, so strict=True is safe here rather than a latent xpass.',
     'test_stochastic_rout.py::test_per_cell_break_subsumes_the_body_level_one':
         'per-cell and body-level break points have separated again (ED-MB-0061)',
 }
