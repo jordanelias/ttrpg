@@ -3,7 +3,8 @@
 THE EXIT (#453/#457, verbatim): *with the cast on, a foreign `march` reaches the mass-battle seam against a
 realm settlement through the real chooser, with no hand-built act; off, byte-identical to today.*
 
-  (a) THE CONTROL ARM is the realm before the empire existed: `build_realm(0)` seats no Altonian entity of any
+  (ED-IN-0310: `foreign` now defaults to True, so "the control arm" below is `build_realm(0, foreign=False)`.)
+  (a) THE CONTROL ARM is the realm before the empire existed: `build_realm(0, foreign=False)` seats no Altonian entity of any
       kind, leaves the three cast rows unplaced exactly as before, and its content hash is the pre-change
       `d3edd90a` (read on the base commit; a hash is not pinned in this file, because a later position that
       moves the default realm would turn a pin into a false alarm - the structural assertions are the guard).
@@ -71,7 +72,8 @@ def _told_of_the_capital(w):
 
 @pytest.fixture(scope="module")
 def control():
-    return POP.build_realm(0)
+    # ED-IN-0310: `foreign` now defaults to True, so the control arm (the realm before the empire was authored) is asked for by name.
+    return POP.build_realm(0, foreign=False)
 
 
 @pytest.fixture(scope="module")
@@ -100,6 +102,14 @@ def test_the_control_arm_seats_no_altonian_entity_and_leaves_the_cast_rows_unpla
         "NPC-011": "Altonia", "NPC-089": "Altonia", "NPC-090": "Altonia"}, unplaced
     # three in the foreign arm are placed
     assert FID not in control.propositions
+
+
+def test_the_shipped_default_seats_the_empire():
+    """ED-IN-0310 (Jordan, 2026-11-04): `build_realm(0)` with no argument is the foreign arm, byte for byte, and the control arm is only
+    reached by `foreign=False`. FALSIFIER: the two worlds hash differently, so a default that silently reverted would fail here."""
+    shipped, on, off = POP.build_realm(0), POP.build_realm(0, foreign=True), POP.build_realm(0, foreign=False)
+    assert shipped.content_hash() == on.content_hash() != off.content_hash()
+    assert FID in shipped.propositions and FID not in off.propositions
 
 
 def test_the_empire_is_a_faction_in_both_arms_and_its_cast_resolves_with_no_edit(control, foreign):
