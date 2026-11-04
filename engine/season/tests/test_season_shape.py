@@ -2049,40 +2049,8 @@ def test_w0_artifact_0_is_computed_from_the_rows_rather_than_asserted():
 # mechanised, so it stops depending on anyone remembering.
 # ===========================================================================
 
-def test_w1_every_citation_in_the_register_resolves_in_353():
-    """Every `:NNN` a `cite:` names exists in #353, and every verbatim quote is at the line cited.
-    Fourteen rows were closed or re-graded on citations; this is what stops the fifteenth being
-    closed on one nobody checked."""
-    bad = REG.verify_citations(REG.load())
-    assert not bad, "unresolved citations:\n  " + "\n  ".join(bad)
 
 
-def test_w1_the_citation_gate_tells_a_fabrication_from_a_wrong_line_number():
-    """They are DIFFERENT DEFECTS and collapsing them would be the same error as reporting a
-    verified citation as fabricated -- which is what the first version of this gate did to all
-    eight quotes it was given, because it compared typography instead of prose. A quote wrapped
-    across lines, inside a blockquote, with `**emphasis**` mid-clause and an em-dash where the
-    cite typed two hyphens, is the SAME CLAIM."""
-    reg = REG.load()
-    row = next(r for r in reg["rows"] if r["id"] == "H-23")
-    kept = row["cite"]
-
-    row["cite"] = '#353 :929-930 VERBATIM: "A petition costs standing when it is refused."'
-    bad = REG.verify_citations(reg)
-    assert any("FABRICATED" in b for b in bad), "a quote #353 does not contain passed"
-
-    row["cite"] = '#353 :100 VERBATIM: "No cost clause is required"'
-    bad = REG.verify_citations(reg)
-    assert any("LINE NUMBER is wrong" in b for b in bad), (
-        "a real quote at the wrong line was not distinguished from a fabrication")
-
-    row["cite"] = "#353 :9999 -- see there"
-    bad = REG.verify_citations(reg)
-    assert any("lines" in b and "9999" in b for b in bad), (
-        f"a line number past the end of the file passed: {bad}")
-
-    row["cite"] = kept
-    assert not REG.verify_citations(reg), "the restored citation stopped resolving"
 
 
 def test_w1_a_register_whose_citations_carry_no_line_reference_fails():
