@@ -18,7 +18,7 @@ count is 0, UNOBSERVED when it is declared and 0 with no switch to blame, and GA
 produces it. A count of 0 over a few seeds is a finding about default play, not a proof of absence;
 the same run at more seeds is the control.
 
-    python -m engine.season.harness.strife [seasons] [seed ...]
+    python -m engine.season.harness.strife <seasons> <seed> [seed ...]
 """
 from __future__ import annotations
 
@@ -44,7 +44,7 @@ def grade(row: dict, seen: Counter) -> tuple:
     return ("DARK" if row.get("dark") else "UNOBSERVED"), 0
 
 
-def measure(seasons: int = 4, seeds: tuple = (0,)) -> dict:
+def measure(seasons: int, seeds: tuple) -> dict:
     """Run each seed through the owner (`populated.run`) and pool the kind counts."""
     seen = Counter()
     for s in seeds:
@@ -70,8 +70,10 @@ def report(m: dict) -> str:
 
 def main(argv=None) -> int:
     a = list(sys.argv[1:] if argv is None else argv)
-    seasons = int(a[0]) if a else 4
-    seeds = tuple(int(x) for x in a[1:]) or (0,)
+    if len(a) < 2:
+        print("usage: python -m engine.season.harness.strife <seasons> <seed> [seed ...]")
+        return 2
+    seasons, seeds = int(a[0]), tuple(int(x) for x in a[1:])
     print(report(measure(seasons, seeds)))
     return 0
 
