@@ -8,7 +8,7 @@ Pins: `python tools/freshness_gate.py` (over `references/canonical_sources.yaml`
 (read its output). Old paths: `python tools/pathres.py` (over `references/restructure_ledger.md`). A
 ledger id's LAST row is its current state.
 
-_Last reconciled: 2026-11-01._
+_Last reconciled: 2026-11-04._
 
 A row naming a quarantined `.designs/` document gives its **bare filename only**: reference, not a head.
 
@@ -16,11 +16,11 @@ A row naming a quarantined `.designs/` document gives its **bare filename only**
 |---|---|---|
 | **THE SEASON LOOP (game code)** | `engine/season/` — RATIFIED, ED-IN-0204 | `python -m engine.season.harness.register --requirements`; runtime registries `engine/season/data/`; lane `registers/handoffs/HANDOFF_IN.md` |
 | **THE CODE ARCHITECTURE (Layer 1)** | `architecture/` — RATIFIED, ED-IN-0204 | indexes `architecture/00_ADOPTION_README.md`, `architecture/meta/README.md`; scope: `architecture/meta/04_CODE_ARCHITECTURE.md`'s Status line; check: `skills/layer-conformance/SKILL.md` (Lens B) |
-| **The plan** | `workplans/valoria_master_workplan_v10.md` (+ `_part2`…`_part15`) — RATIFIED, `ED-IN-0299`, except `_part15` (the design-resolution plan), PROPOSED (its Status line); the one active plan for every lane; no carve-out | short forms: the head's legend; state index and batch cards `_part3` §1; build instructions and the dependency sequence `proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-*.md`; Jordan's questions `_part6` §1a, §1c (M22 to M40: `_part15`); v9's files: their `FORK:` rows; THE NINE: `python -m engine.season.harness.register --requirements` |
+| **The plan** | `workplans/valoria_master_workplan_v11.md` (+ `_part2`…`_part16`) — ratified on merge, `ED-IN-0312` (v10's carried parts `ED-IN-0299`), except `_part15` (the design-resolution plan), PROPOSED (its Status line); the one active plan for every lane; no carve-out | short forms: the head's legend; state index and batch cards `_part3` §1; strife positions `_part16`; build instructions and the dependency sequence `proposals/2026-10-24-master-workplan-v10/2026-10-24-v10-09-*.md`; strife design `proposals/2026-11-04-strife-flows/`; Jordan's questions `_part6` §1a, §1c (M22 to M40: `_part15`); v10's and v9's files: their `MOVED` and `FORK:` rows; THE NINE: `python -m engine.season.harness.register --requirements` |
 | **Character model / decision layer** | `proposals/2026-09-20-pursuit-basis-worksheet.yaml` — ruled, ED-IN-0261 | ED-IN-0261; conviction split ED-IN-0251 |
 | **Personal combat** | `modules/combat/`; typed export `engine/engine_params/combat_engine_v1.json` (round-trip checked in CI) | `registers/handoffs/HANDOFF_PC.md`; design reference `combat_reference_v1.md`, lineage `combat_currency_v1.md` |
 | **Mass battle** | `mass_battle_v30.md` + `mass_battle_integration_v30.md` | `registers/handoffs/HANDOFF_MB.md` |
-| **Social contest** | `social_contest_v30.md`; kernel `systems/social_contest/sim/contest/` | successor `proposals/2026-09-05-proceedings-subsystem/` ratified as intent (ED-SC-0039; ownership ED-SC-0033), SC-01 built, its residue in `workplans/valoria_master_workplan_v10_part4.md` (SC-02, SC-04); `registers/handoffs/HANDOFF_SC.md` |
+| **Social contest** | `social_contest_v30.md`; kernel `systems/social_contest/sim/contest/` | successor `proposals/2026-09-05-proceedings-subsystem/` ratified as intent (ED-SC-0039; ownership ED-SC-0033), SC-01 built, its residue in `workplans/valoria_master_workplan_v11_part4.md` (SC-02, SC-04); `registers/handoffs/HANDOFF_SC.md` |
 | **Faction / political** | `faction_canon_v30.md`, `faction_layer_v30.md`, `faction_behavior_v30.md`, `faction_state_authoring_v30.md`, `faction_politics_v30.md` | `registers/handoffs/HANDOFF_FA.md`; ED-FA-0008..0023 |
 | **Settlement / territory** | `settlement_layer_v30.md` + `settlement_adjacency_v30.md`, `territory_temperaments_v30.md`, `geography_v30.md` | `registers/handoffs/HANDOFF_SE.md`; proposed redesign `governance_play_redesign_v1.md`; hierarchy ruling `scale_hierarchy_v1.md` |
 | **Clocks & tracks** | `clock_registry_v30.md` | Truth → Conviction: ED-IN-0251 (supersedes ED-IN-0075 for the per-character axis) |

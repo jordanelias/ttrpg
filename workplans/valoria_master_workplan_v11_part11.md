@@ -1,6 +1,6 @@
-# Valoria master workplan v10 — the row ledger, part 4: PR #506's gap register and the thrust-layer design (T06 · lane IN)
-## Status: RATIFIED on merge (ED-1094, ED-IN-0299).
-## Lane: IN (cross-cutting). Continues `workplans/valoria_master_workplan_v10_part8.md`, `workplans/valoria_master_workplan_v10_part9.md` and `workplans/valoria_master_workplan_v10_part10.md`.
+# Valoria master workplan v11 — the row ledger, part 4: PR #506's gap register and the thrust-layer design (T06 · lane IN)
+## Status: RATIFIED on merge (ED-1094, ED-IN-0299); carried into v11 (ED-IN-0312).
+## Lane: IN (cross-cutting). Continues `workplans/valoria_master_workplan_v11_part8.md`, `workplans/valoria_master_workplan_v11_part9.md` and `workplans/valoria_master_workplan_v11_part10.md`.
 ## Grade under `CLAUDE.md` §0.2: `paper`. IDs allocated: none.
 
 ## 1. How to read

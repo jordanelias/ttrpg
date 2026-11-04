@@ -1,5 +1,5 @@
-# Valoria master workplan v10 — the row ledger: every unfixed row the v9 work produced, and where it went (T06 · lane IN)
-## Status: RATIFIED on merge (ED-1094, ED-IN-0299).
+# Valoria master workplan v11 — the row ledger: every unfixed row the v9 work produced, and where it went (T06 · lane IN)
+## Status: RATIFIED on merge (ED-1094, ED-IN-0299); carried into v11 (ED-IN-0312).
 ## Lane: IN (cross-cutting).
 ## Grade under `CLAUDE.md` §0.2: `paper`. IDs allocated: none.
 
@@ -7,7 +7,7 @@
 
  it
 
-- Three tables. The first cell of every data row is exactly the id. Table 1 has 62 rows, Table 2 has 19, Table 3 has 42. The other 171 hole-register rows, and the work v9 names that is not a hole row, are in `workplans/valoria_master_workplan_v10_part9.md`. The 113 other open editorial ids are in `workplans/valoria_master_workplan_v10_part10.md`.
+- Three tables. The first cell of every data row is exactly the id. Table 1 has 62 rows, Table 2 has 19, Table 3 has 42. The other 171 hole-register rows, and the work v9 names that is not a hole row, are in `workplans/valoria_master_workplan_v11_part9.md`. The 113 other open editorial ids are in `workplans/valoria_master_workplan_v11_part10.md`.
 - `[INFERRED]` marks inference. Where I name a position because its subject matches the row and its own text does not cite the row's id, the cell says so.
 - A handle is a key of REM, CP, V9, CR, NM or CL in `ctl/batch_map.py`. A v9 alias (IN-09, IN-33, IN-46, IN-47, SE-05, FA-02, FI-05) is never a position; it is named only where it explains a target.
 - The H-nnn column "ladder" names the ask row (A1-nn from L1, A2-nn from L2) and the merged question (M-nn) only where an ask is attached. Where L1 and L2 disagree on one subject, both are shown and nothing is decided here (H-219); the decision round has since decided H-198 (M9) and left H-214 and H-234 on M11, which Jordan has since answered (a), 2026-10-26 (ED-IN-0300); both ride CR-29 and FA-01.
@@ -91,7 +91,7 @@ Sections: §2 hole rows · §3 editorial-ledger ids · §4 the state index · §
 
 ## 3. The editorial-ledger ids open since v9
 
-These are the ids v9 names. The 113 other open ids, which no earlier file named, are in `workplans/valoria_master_workplan_v10_part10.md`.
+These are the ids v9 names. The 113 other open ids, which no earlier file named, are in `workplans/valoria_master_workplan_v11_part10.md`.
 
 | id | last row date and status | what it asks | ladder outcome | v10 handle(s) | question |
 |---|---|---|---|---|---|
@@ -162,7 +162,7 @@ These are the ids v9 names. The 113 other open ids, which no earlier file named,
 
 ## 5. The nine requirements, the failing tests, and v9's self-contradictions
 
-**THE NINE.** R-01 to R-09 are the rows of `engine/season/requirements.yaml`. Their v10 readings, falsifiers and owners are `workplans/valoria_master_workplan_v10_part2.md`; the board is in the head (`-00`). Nothing in this ledger restates them.
+**THE NINE.** R-01 to R-09 are the rows of `engine/season/requirements.yaml`. Their v10 readings, falsifiers and owners are `workplans/valoria_master_workplan_v11_part2.md`; the board is in the head (`-00`). Nothing in this ledger restates them.
 
 **The three failing tests** (`pytest tests/valoria -n auto`, 3 failed, 1,960 passed; `-01` §2):
 

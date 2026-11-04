@@ -1,5 +1,5 @@
-# Valoria master workplan v10 — carried entries and new positions, part 2 (T04 · lane IN)
-## Status: RATIFIED on merge (ED-1094, ED-IN-0299).
+# Valoria master workplan v11 — carried entries and new positions, part 2 (T04 · lane IN)
+## Status: RATIFIED on merge (ED-1094, ED-IN-0299); carried into v11 (ED-IN-0312).
 ## Lane: IN (cross-cutting).
 ## Grade under `CLAUDE.md` §0.2: `paper`. IDs allocated: none.
 
