@@ -1,6 +1,6 @@
-# Valoria master workplan v10 — the row ledger, part 3: the other open editorial ids (T06 · lane IN)
-## Status: RATIFIED on merge (ED-1094, ED-IN-0299).
-## Lane: IN (cross-cutting). Continues `workplans/valoria_master_workplan_v10_part8.md` (§3 holds the 11 editorial ids v9 named) and `workplans/valoria_master_workplan_v10_part9.md`.
+# Valoria master workplan v11 — the row ledger, part 3: the other open editorial ids (T06 · lane IN)
+## Status: RATIFIED on merge (ED-1094, ED-IN-0299); carried into v11 (ED-IN-0315).
+## Lane: IN (cross-cutting). Continues `workplans/valoria_master_workplan_v11_part8.md` (§3 holds the 11 editorial ids v9 named) and `workplans/valoria_master_workplan_v11_part9.md`.
 ## Grade under `CLAUDE.md` §0.2: `paper`. IDs allocated: none.
 
 ## 1. How to read

@@ -1,6 +1,6 @@
-# Valoria master workplan v10 — the Jordan queue, after the five-step ladder (T04 · lane IN)
-## Status: RATIFIED on merge (ED-1094, ED-IN-0299). Every answer below that an agent *took*, including each decision of the decision round (§1's DECISION blocks) and of the second decision round (§1b), is [ASSUMPTION; medium; Jordan to correct] and reverts alone; Jordan's answers to the twelve narrow questions (M11 answered, the other eleven confirmed at their defaults, 2026-10-26) are §1a.
-## Lane: IN (cross-cutting). The full ladder tables are in `workplans/valoria_master_workplan_v10_part7.md`.
+# Valoria master workplan v11 — the Jordan queue, after the five-step ladder (T04 · lane IN)
+## Status: RATIFIED on merge (ED-1094, ED-IN-0299); carried into v11 (ED-IN-0315). Every answer below that an agent *took*, including each decision of the decision round (§1's DECISION blocks) and of the second decision round (§1b), is [ASSUMPTION; medium; Jordan to correct] and reverts alone; Jordan's answers to the twelve narrow questions (M11 answered, the other eleven confirmed at their defaults, 2026-10-26) are §1a.
+## Lane: IN (cross-cutting). The full ladder tables are in `workplans/valoria_master_workplan_v11_part7.md`.
 ## Grade under `CLAUDE.md` §0.2: `paper`. IDs allocated: none. No `needs_jordan` ledger row is written by this file; the questions ride the positions they block, and adoption step 4b (head §9) writes a closing row for each ledger id the ladder answered.
 
 ## 0. What this is
@@ -239,7 +239,7 @@ Jordan's six items of 2026-10-26, each taken through the five steps by its own d
 
 ## 1c. Design-resolution questions M22 to M40 (the fold of 2026-10-30)
 
-These nineteen questions were added by the fold of 2026-10-30 (the content-architecture suite of 2026-10-28, the layers-v2 design, PR #527 and ED-IN-0304); they are not among the 147 asks and none was asked on 2026-10-26, so Jordan's "Confirm all" (ED-IN-0301) did not confirm any of them. **Their ladder, verdicts and design lanes are `-10`** (`workplans/valoria_master_workplan_v10_part15.md` §1 to §4); no DECISION block is written here. This section states only the default in force for each until `-10`'s lane closes and, where it escalates, Jordan answers. A default below is what the tree ships or what an earlier answer confirmed; it is not a new decision. The rows each blocks are `-04` CL-SLICE, CL-OPEN, CL-PERSON, CL-MGMT, CL-ATTR, CL-TROOP, CR-17 and CR-38 (M38, M39).
+These nineteen questions were added by the fold of 2026-10-30 (the content-architecture suite of 2026-10-28, the layers-v2 design, PR #527 and ED-IN-0304); they are not among the 147 asks and none was asked on 2026-10-26, so Jordan's "Confirm all" (ED-IN-0301) did not confirm any of them. **Their ladder, verdicts and design lanes are `-10`** (`workplans/valoria_master_workplan_v11_part15.md` §1 to §4); no DECISION block is written here. This section states only the default in force for each until `-10`'s lane closes and, where it escalates, Jordan answers. A default below is what the tree ships or what an earlier answer confirmed; it is not a new decision. The rows each blocks are `-04` CL-SLICE, CL-OPEN, CL-PERSON, CL-MGMT, CL-ATTR, CL-TROOP, CR-17 and CR-38 (M38, M39).
 
 | M | item | default in force |
 |---|---|---|
@@ -263,9 +263,13 @@ These nineteen questions were added by the fold of 2026-10-30 (the content-archi
 | M39 | the motion source (#527's RJ-11 / RM2) | none in computed play: a motion is hand-built only (CR-37's specification) |
 | M40 | ED-IN-0304's undecided residue | CR-17's FOLLOW-ON as written: unbuilt and undesigned; CL-PERSON HELD |
 
+## 1d. The strife fold (v11): nothing queued
+
+The strife fold (`-11`, CR-71 to CR-80) adds no question. What `proposals/2026-11-04-strife-flows/00_MASTER.md` §10 left for Jordan is ANSWERED: he ratified that master and the kind list (`01_STRIFE_KINDS_DRAFT.md`) on 2026-11-04 (*"Ratify strife master and kind list, fold them into workplan v11 carefully in correct sequence as I had requested. I don't know what regime_gain is, but give it a value?"*; ED-IN-0316), with the assumptions A1 to A12 and the list's five rulings, each keeping its revert, and `regime_gain` was given a value, 0.5 (CR-79's commit (2), `[ASSUMPTION; medium; Jordan to correct; revert: 0.0]`). Still his, and not questions: a four-season strife-guard reading, on his call (P10; CR-78); the values he has not set (the march frequency, `age_step`, `illness_rate`). A3's cross-check against the study is work for the session that runs CR-78's flip.
+
 ## 2. Answers taken (each [ASSUMPTION; medium; Jordan to correct], each reverts alone)
 
-The NERS fold took further answers under step 5, each with its revert; they are the **Taken** lines of `workplans/valoria_master_workplan_v10_part13.md` and its `_part2`, and are not repeated here. The decision round's decisions are recorded once, in §1's DECISION blocks; the rows M1 to M21 below point there. The second decision round's are recorded once, in §1b; its six rows below point there.
+The NERS fold took further answers under step 5, each with its revert; they are the **Taken** lines of `workplans/valoria_master_workplan_v11_part13.md` and its `_part2`, and are not repeated here. The decision round's decisions are recorded once, in §1's DECISION blocks; the rows M1 to M21 below point there. The second decision round's are recorded once, in §1b; its six rows below point there.
 
 | ask | source ids | question | reason (shortened; the part-2 table has it whole) | revert |
 |---|---|---|---|---|
