@@ -9,6 +9,21 @@ What this adds to `engine/season/`: one pure query module (`queries/situation_q.
 
 ---
 
+## 0. The accepted tension
+
+Jordan, 2026-11-04: the design holds a top-down, universal conditioning at the level of narrative against bottom-up, granular awareness and decision by characters. The tension is accepted. The flows exist to condition the rungs of play into legible narratives with subplots (the realm's one flow, a duchy's tributary and isolate, the hearth's own quarrel) without determining outcomes.
+
+Where each side acts, so that neither swallows the other:
+
+| top-down (the flow) | bottom-up (the person) |
+|---|---|
+| which events are read as one chain, at which rung, and how many a reading holds | what a person witnessed, was told and believes (AX-7) |
+| how a person's told claims are graded, by the regime he is within (§5a) | which verb he forms and which he chooses, by his own convictions and ambitions |
+| which referents appear among his occasions (§5) | what he does with them |
+| nothing else | everything else, including every terminal outcome |
+
+The flow writes no state, names no next move and fires nothing; it changes the order and weight of what a person already holds. Where it could harden into a determinant is a loop: flows condition choices, choices make the moves that define the flows, and the realm's one slot makes the loop tightest at the top. The guard against it is measured, not declared: with the conditioning on, each concluding class of §4 that is reachable with it off must remain reachable, and the spread of classes reached across seeds must not narrow to one. A conditioning arm that closes a route or collapses the spread is a defect to remove (§8 step 4).
+
 ## 1. What the study licenses
 
 A space of chains, not a script. Cases share 40 moves and 16 recurring links, spend about a quarter of their moves on those links, and leave and rejoin them constantly; 93 of 102 end off the links, which says where on the chain they stop and not that they stop without an ending: every dossier records one (each category section's "Endings" line). Categories differ in how they open and how they end, and in almost nothing between (only A's natural shock and B's death, regime change and claim are distinctive, and those are what the labels name). So: **a flow is an open chain of moves around shared referents; its category is only the kind of event that opened it.** Membership must not require the 16 links, or a detour would end a flow.
@@ -140,7 +155,7 @@ From the draft instrument's first run (upper bounds; see PR 553 for its defects)
 1. **Instrument, side-aware** (no hash change). Classify by act, add the 16 links and the leave-and-rejoin profile. Control: the same log with moves shuffled within each case must complete the links no more often than chance. Falsifier: a planted log that completes a known link must read as completing it. Add the terminus check: for each opening kind, run seeds forward and report which of the six classes any flow reached; a class never reached over several seeds is a finding about default play, not proof of absence, and the same run at more seeds is its control.
 2. **Gaps in §7**, each through its own existing position, each a hash mover declared as such.
 3. **`flows_known`** as a pure query with no consumer. Falsifiers: a witness and a hearsay holder of the same events read different flows; a person with an empty ledger reads none; two realm-wide flows planted in one ledger read as one realm flow with the second inside it; the same ledger with a terminal claim added reads the flow as concluded and frees the realm slot; a ledger with the claim missing still reads it open; a person within the realm flow whose ledger holds none of its moves reads no realm flow (he can place none), yet the world reading lists him as within it, and the §5a credit term (when built) grades his told claims by it.
-4. **The stamp** in `questions_for`, switch shipped off. Control: switch off reproduces the base hash. Measure: the stamp changes which verbs form for a person in a held flow, and the `confer` and `oblige` counts CR-49 watches do not fall to 0.
+4. **The stamp** in `questions_for`, switch shipped off. Control: switch off reproduces the base hash. Guard of §0: over the same seeds, the set of concluding classes reached with the stamp on contains the set reached with it off, and the number of distinct classes reached does not fall. Measure: the stamp changes which verbs form for a person in a held flow, and the `confer` and `oblige` counts CR-49 watches do not fall to 0.
 5. **Deck**: world-build seeds per category through the CL-EVENTS commit (3) schema, measured by step 1.
 
 ## Needs Jordan
