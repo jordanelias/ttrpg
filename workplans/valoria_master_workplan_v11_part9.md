@@ -1,5 +1,5 @@
 # Valoria master workplan v11 — the row ledger, part 2: the other hole-register rows, and the v9 residue (T06 · lane IN)
-## Status: RATIFIED on merge (ED-1094, ED-IN-0299); carried into v11 (ED-IN-0312).
+## Status: RATIFIED on merge (ED-1094, ED-IN-0299); carried into v11 (ED-IN-0315).
 ## Lane: IN (cross-cutting). Continues `workplans/valoria_master_workplan_v11_part8.md` (§2 holds the first 60 hole rows).
 ## Grade under `CLAUDE.md` §0.2: `paper`. IDs allocated: none.
 

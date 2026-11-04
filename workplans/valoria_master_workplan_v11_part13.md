@@ -1,5 +1,5 @@
 # Valoria master workplan v11 — NERS amendments: where the plan overrides a home (T08 · lane IN)
-## Status: RATIFIED on merge (ED-1094, ED-IN-0299); carried into v11 (ED-IN-0312).
+## Status: RATIFIED on merge (ED-1094, ED-IN-0299); carried into v11 (ED-IN-0315).
 ## Lane: IN (cross-cutting). Continued in `workplans/valoria_master_workplan_v11_part14.md`.
 ## Grade under `CLAUDE.md` §0.2: `paper`. IDs allocated: none.
 

@@ -1,5 +1,5 @@
 # Valoria master workplan v11 — NERS amendments, part 2 (T08 · lane IN)
-## Status: RATIFIED on merge (ED-1094, ED-IN-0299); carried into v11 (ED-IN-0312).
+## Status: RATIFIED on merge (ED-1094, ED-IN-0299); carried into v11 (ED-IN-0315).
 ## Lane: IN (cross-cutting). Continues `workplans/valoria_master_workplan_v11_part13.md` (§1 how to read, §2 the table, §3 the entries from B10-01).
 ## Grade under `CLAUDE.md` §0.2: `paper`. IDs allocated: none.
 

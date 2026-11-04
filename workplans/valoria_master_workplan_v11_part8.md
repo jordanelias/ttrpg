@@ -1,5 +1,5 @@
 # Valoria master workplan v11 — the row ledger: every unfixed row the v9 work produced, and where it went (T06 · lane IN)
-## Status: RATIFIED on merge (ED-1094, ED-IN-0299); carried into v11 (ED-IN-0312).
+## Status: RATIFIED on merge (ED-1094, ED-IN-0299); carried into v11 (ED-IN-0315).
 ## Lane: IN (cross-cutting).
 ## Grade under `CLAUDE.md` §0.2: `paper`. IDs allocated: none.
 
