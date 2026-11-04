@@ -19,10 +19,9 @@ failure, so the MB lane would get no signal when its work lands. Strict means: t
 if one starts passing, the suite goes red and this register must be updated in the same commit
 that fixed it. The register is therefore self-retiring — it cannot rot in the passing direction.
 
-**It cannot rot in the other direction either**: `test_known_red_register.py` asserts every id
-below was actually collected, so a renamed or deleted test fails loudly rather than leaving a
-stale entry that quietly excuses nothing. Without that, this file would be a way to make the
-suite green by naming tests that no longer exist.
+**The other direction is unguarded since 2026-11-04** (ED-IN-0311): `test_known_red_register.py`, which asserted
+every id below was actually collected, was dropped. A renamed or deleted test now leaves a stale entry that
+excuses nothing (the entry is strict xfail on a nodeid that no longer exists, so it never matches).
 
 **This is not MB work.** No mass-battle code, config, golden or threshold is touched by anything
 here; the failures stay failures and stay ED-MB-0061's to fix. It is gate hygiene for every OTHER

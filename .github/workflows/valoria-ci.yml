@@ -343,7 +343,7 @@ jobs:
       # `-m "not sim"` so an infrastructure PR skips the mass-battle suite, is FORBIDDEN:
       # pytest.ini's "ONE RULE" says a -m filter here is "a SHIPPING-GATE COVERAGE CUT, not
       # an optimisation ... Jordan's call, made loudly, never a side effect of a speed
-      # change", and tests/valoria/test_pytest_marker_discipline.py fails on it.
+      # change" (a reader's rule: the guard test, test_pytest_marker_discipline.py, was dropped 2026-11-04, ED-IN-0311).
       #
       # `-n auto` is a categorically different thing, and the distinction is the point: it
       # changes WHERE tests run, never WHICH. The collection is identical, so the gate is
@@ -413,8 +413,8 @@ jobs:
       # gate is the state this adoption exists to end.
       #
       # `-n auto` and no `-m`, for the reason `unit-tests` records: it changes WHERE tests run, never
-      # WHICH, and a `-m` filter here is a shipping-gate coverage cut that
-      # tests/valoria/test_pytest_marker_discipline.py::test_ci_invocation_is_unfiltered rejects.
+      # WHICH, and a `-m` filter here is a shipping-gate coverage cut (the
+      # guard test_pytest_marker_discipline.py::test_ci_invocation_is_unfiltered was dropped 2026-11-04, ED-IN-0311).
       # `--dist worksteal` changes only the ORDER tests reach workers, never which run: the default hands
       # tests out in collection order, so the 100-second tests that sit late leave the other workers idle
       # behind them. Measured on 4 cores, same 2,295 tests: 489-505 s -> 398 s (the same flag on
