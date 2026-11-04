@@ -85,6 +85,32 @@ Effect: a person aware of a rising at his settlement finds that rung and its hol
 
 The flow's opening kind and last move are not read by any chooser in this design. Whether they should weight options (fear on a quiet rung, hope on a petition) is a second step, after the stamp is measured.
 
+## 5a. People exist within flows: a regime of truth
+
+Jordan, 2026-11-04: people exist within flows as in Foucault's hypothesis of a regime of truth. In that account a society holds a regime: the discourse it accepts and makes function as true, the means of telling true from false, how each is sanctioned, the techniques valued for obtaining truth, and the standing of those charged with saying what counts. It is produced by relations of power, not laid over them. For this design:
+
+**Within and aware are different relations.**
+
+| relation | what makes it so | what it does |
+|---|---|---|
+| **within** | structural: the flow's rung is `p`'s own rung or an ancestor of it (`ancestry`) | the regime bears on `p` whether or not he knows the flow exists |
+| **aware** | epistemic: `p`'s ledger holds the flow's moves | `p` can place events in it (§5) |
+
+Everyone is within the realm's flow (§4). A hearth-dweller who has heard nothing of the war is still within it, and the war reaches him as a regime reaches anyone: through other people. The tax-collector, the recruiter, the neighbour who was told and tells him are aware, and their acts and words arrive as witnessed events and told claims. AX-7 is kept: nothing pushes the flow into him.
+
+**The regime is immanent.** It is made of what the flow's participants say and do and of the seats that pronounce (`determine`, `issue`, a held `dispensation`), not stored anywhere. A flow has at least two, authority's and the challengers', and each credits its own speakers: the side the study gives every move (A, R, O, N) is what separates them. The side-aware classification of §8 step 1 is therefore load-bearing here, not cosmetic.
+
+**The engine already has the mechanism, dark.** `decision/options.py::teller_weight` grades a told claim when it is read, by the hearer's relation to the teller (rank, regard, track record) and by the retelling count; at its shipped control values (`told_weight` 1.0, all gains 0) every claim weighs 1.0 and nothing is conditioned. The four parts of a regime map onto it as follows:
+
+| part of a regime | where it already stands |
+|---|---|
+| what is accepted as true | `weigh`: how far a hearer credits a claim; the noisy-OR over distinct origins |
+| telling true from false | the inquiry verbs (`examine`, `interview`, `interrogate`, `research`) and `confidence.broken` |
+| standing of those who pronounce | `rank(p, teller)`; the seat a speaker acts through |
+| what is valued | the verbs a seat can form and the remits it holds |
+
+The proposed addition is one term in `relation`: the teller's standing in the flow `p` is within, which sets whether `p` credits him more or less. It is a **second step**, after the stamp (§5) is measured, for three reasons: it reorders every told claim in the loop and so moves the hash widely; its effect cannot be told apart from the stamp's until the stamp is measured alone; and AX-2 binds `decision/`, so the flow's standing must arrive there as data (as `fx` and the stamped questions do), never as a read of the World. `layer-conformance` Lens B settles that placement before any code.
+
 ## 6. What it refuses
 
 - No stored flow, state, phase or counter (T-a; ED-IN-0225: no arc carrier). Recomputed from claims each time.
@@ -120,3 +146,4 @@ From the draft instrument's first run (upper bounds; see PR 553 for its defects)
 1. Capacities for the rungs below the duchy: territory, settlement, community, hearth and person (§4). Realm 1 and duchy 2 are ruled; nothing else depends on the others' values.
 2. The terminal moves (§4): confirm or change the six classes, and which moves show each. Nothing is built on a class until this is answered.
 3. Execution (§7): a `determine` sentence or a new verb.
+4. Whether the credit term of §5a is a second step as proposed or part of the first build.
