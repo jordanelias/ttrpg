@@ -2655,7 +2655,8 @@ def current_stage(w: World, p: Person, ambition) -> Optional[dict]:
 
     COMPUTED WHEN ASKED AND STORED NOWHERE (`ambitions`' discipline): no stage counter, no progress
     field, no TRACE row (Q4 calls `goal_referents` once per ambition per person, and so would this).
-    NOTHING CALLS IT YET -- the stage's referents joining the person's own `need` question is R2/B3.2.
+    ITS ONE CALLER IS `open_stages` (CL-THRUST B3.2, R2), which `stage_referents` (the question's classed
+    referents) and `attention_key`'s `salience` (the stage's pursuits) both read; B3.2 passes no closure in.
 
     ⚠ PERSON-SIDE, AND THAT IS THE POINT (AX-2): the stage's cell is evaluated through `data/requires.py::
     evaluate` against `LedgerReader(p.ledger)` -- the reader `epistemic.belief_contradicts` asks the same
@@ -3178,13 +3179,55 @@ def own_referents_of_class(w: World, q: Question, classes: Optional[frozenset] =
     works kinds are NOT skipped: `carry`, `found` and `build` form on an unheld one and the fold refuses
     it on `held_by`, REM-2C's measured shared-class cost. REVERT: drop the term in `questions_for`
     (or, for the writ alone, the `RECORD_REFERENT_KINDS` test below)."""
+    return _of_stamped_class(w, q.referents, classes)
+
+
+def _of_stamped_class(w: World, referents: tuple, classes: Optional[frozenset] = None) -> tuple:
+    """`own_referents_of_class`'s body over a bare `referents` tuple (CL-THRUST B3.2 reads a stage's referents
+    through it, so a stage referent meets the SAME class test and the SAME writ skip as a question's own, never
+    a second copy of them): those of `referents` whose collection is in `classes` (default: every class a row
+    declares less `occasion_only_classes`) and that are no writ."""
     if classes is None:
         classes = DECLARED_CLASSES - OCCASION_ONLY_CLASSES
     if not classes:
         return ()
-    return tuple(r for r in q.referents
+    return tuple(r for r in referents
                  if w.class_of(r) in classes
                  and not (r in w.records and w.records[r].kind in RECORD_REFERENT_KINDS))
+
+
+def open_stages(w: World, p: Person, ambition) -> dict:
+    """THE STAGES `p` HAS NOT PASSED ON AN AMBITION HE STILL HAS WORK ON (CL-THRUST B3.2, R2): `current_stage`'s
+    `{referent: Stage}`, or `{}` where it reads `None` or the ambition's aim is met (`aim_state` gates first:
+    a met aim asks nothing, so it carries no stage either). The ONE read both consumers below take, so the
+    referents a stage adds and the pursuits it weighs are never of two different stages. Person-side
+    (`current_stage`'s reader): no World fact beyond the aim rule Q4 already asks."""
+    cur = current_stage(w, p, ambition)
+    if not cur or aim_state(w, p, w.propositions[ambition]) == "met":
+        return {}
+    return cur
+
+
+def stage_referents(w: World, p: Person, ambs: Optional[list] = None) -> tuple:
+    """THE REFERENTS OF THE STAGES `p` HAS NOT PASSED, AS CLASSED REFERENTS OF THE QUESTION HE ANSWERS (CL-THRUST
+    B3.2, R2 only; [ASSUMPTION; medium; Jordan to correct; revert: drop the term in `questions_for` and
+    `open_stages`' use in `attention_key`, delete the `goal_stages` and `axis:` keys and the roster]). In
+    `ambs`' order (default `ambitions(w, p)`), each ambition's `open_stages` referents, never twice, kept to those
+    `_of_stamped_class` keeps: a class some verb row declares, no occasion-only class, no writ -- a stage
+    referent reaches `_stamped` on the SAME test a question's own referent does, so an unclassed verb does not form
+    on it and `confer` forms only on an Office-classed one.
+
+    WHAT A STAGE'S REFERENT IS, WITH THE SCHEMA AS BUILT (`data/goals.py::Stage` carries `id`, `term`, `predicate`
+    and `pursuits`, and no referent field): the referent `current_stage` keyed it by, which is a referent of the
+    ambition (`goal_referents`). The plain referents of his `need` question already name it; what this adds is
+    that it is stamped (as the class `World.class_of` gives it) onto the question he answers, `out[0]`, which
+    is the ambition's own `need` question only when that one sorts first (tier 3, `attention_key`). `()` for
+    everyone while `goal_stages` is `[]`, the shipped state. Resolver-side and read-only: it reads `p`'s own
+    ledger through `current_stage` and asks the World only for ids' classes."""
+    out: list = []
+    for pid in (ambitions(w, p) if ambs is None else ambs):
+        out.extend(r for r in open_stages(w, p, pid) if r not in out)
+    return _of_stamped_class(w, tuple(out))
 
 
 def _stamped(q: Question, added: tuple, w: World, classed: tuple = ()) -> Question:
@@ -3301,6 +3344,12 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None,
             target = _goals.expected(goal.org_kind, goal.org)
             for name, wt in goal.pursuits.items():
                 target[name] = target.get(name, 0.0) + float(wt)
+            # CL-THRUST B3.2 (R2): the stages he has not passed weigh in as the goal's own pursuits do, each
+            # distinct stage once (two referents at one stage are one stage). [ASSUMPTION; medium; Jordan to
+            # correct; revert: drop this loop.] No ladder, no stage: the target is the goal's alone.
+            for stage in {s.id: s for s in open_stages(w, p, pid).values()}.values():
+                for name, wt in stage.pursuits.items():
+                    target[name] = target.get(name, 0.0) + float(wt)
         elif pid in FACTION_BY_PROP:
             target = _goals.expected("faction", FACTION_BY_PROP[pid])
         else:
@@ -3584,11 +3633,14 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # PROPOSITIONS HE HAS HEARD OF FROM ANOTHER (`propositions_heard`), as `Proposition` -- `commit` and `argue`
     # form on them; `commit` is declined on a cause he already holds (`rosters.yaml: held_edge_declines`).
     # REVERT: drop the term.
+    # CL-THRUST B3.2 (R2; [ASSUMPTION; medium; Jordan to correct; revert: drop the term]): AND, APPENDED LAST, THE
+    # REFERENTS OF THE STAGES HE HAS NOT PASSED (`stage_referents`), through the same class test as a question's own
+    # referent. `()` while `goal_stages` is `[]`, so with no ladder the output is byte-identical.
     told = ledger_names(p.ledger)
     added = (vacancies(w, p) + seats_named(w, p, told) + writs_held(w, p) + records_held_for_holding_rows(w, p)
              + places_named(w, p, told) + larders_in_purview(w, p, told)
              + (own_referents_of_class(w, out[0]) if out else ())
-             + works_sites(w, p) + propositions_heard(w, p))
+             + works_sites(w, p) + propositions_heard(w, p) + stage_referents(w, p, ambs))
     # v10 IN-12 step 5 ([ASSUMPTION; medium; Jordan to correct]): AND, LAST, THE PRISONERS HIS SEATS HOLD
     # (`detainees_held`), as `Detainee` -- the restrained-persons class, named here because it is no
     # collection; only `interrogate` declares it. Empty while no live `detain` names his seat, and then
