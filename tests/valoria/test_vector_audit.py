@@ -489,19 +489,6 @@ def test_cascade_mode_d_is_deterministic_across_neighbor_order():
     assert a['D_cascade_truncated_calls'] == b['D_cascade_truncated_calls']
 
 
-@pytest.mark.skip(reason="subject retired: tools/observability/build_incompleteness.py went with "
-                         "tools/observability/ in culling wave 1 (ED-IN-0194, 2026-08-21)")
-def test_every_emitted_ledger_category_has_an_explicit_severity():
-    """RETIRED WITH ITS SUBJECT, and kept as a skip rather than deleted for one reason: the
-    invariant it pinned is real and would matter again if an incompleteness feed is ever rebuilt.
-
-    `build_incompleteness.finding()` defaulted an unmapped category to 'med' SILENTLY, so a new
-    scanner category shipped unranked and nobody noticed. That is a live-by-default failure, and
-    the fix was to pin every emitted category to an explicit SEVERITY entry. If you rebuild that
-    generator, restore this test with it — do not rediscover the defect.
-    """
-
-
 @pytest.mark.slow
 def test_emit_findings_surfaces_never_culls_and_backlinks(tmp_path):
     """SURFACE-NEVER-CULL (SKILL.md doctrine): the structural-findings feed must EMIT every Mode-B
