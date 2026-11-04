@@ -911,22 +911,22 @@ def seed_goals(w: World, rows: tuple, authored: dict, cid_of: dict, partial: boo
 
 
 def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
-                goals: bool = True, goals_complete: bool = True, foreign: bool = False,
+                goals: bool = True, goals_complete: bool = True, foreign: bool = True,
                 guards: bool = False) -> World:
     """The whole map, its buildings, and one person per season loop.
 
     `foreign` (v9 IN-36) seats the EXTERNAL EMPIRE: the factions `rosters.yaml: foreign_cast` names get their
     root rung, their settlement (no parent, so outside the realm), a Proposition, their cast rows' persons
-    homed there, their `offices.yaml: foreign_seats` and their goal rows. `False` (the shipped default) is the
-    CONTROL ARM: none of it exists, and the world is byte-identical to the realm before the empire was authored
-    (the `foreign_cast` roster says why a faction is a `factions` member in both arms and a world's member in
-    one). [ASSUMPTION; medium; Jordan to correct -- the default stays `False` so every golden pinned on the
-    default realm stands; flipping it is this one default, plus those goldens' re-record.]
+    homed there, their `offices.yaml: foreign_seats` and their goal rows. `True` is the shipped default since
+    ED-IN-0310 (Jordan, 2026-11-04: the Altonian Empire and Schoenland are external nations, spoilers and limits on the game
+    world). `False` is the CONTROL ARM: none of it exists, and the world is byte-identical to the realm before the empire
+    was authored (the `foreign_cast` roster says why a faction is a `factions` member in both arms and a world's member in
+    one); the goldens pinned on the default realm were re-recorded with the flip, each against that control.
 
     `guards` (v9 IN-36, carrying IN-60's guard content) seats `cohorts.yaml: guards` -- a cohort of `weight > 1`
     sworn (`oblige`) to a principal's seat, posted at the exact rung the seat's holder is present at. `False`
     (the default) is its control arm, for the same reason. The two switches are independent.
-    [ASSUMPTION; medium; Jordan to correct] `guards` ships OFF (as `foreign` does): the on arm moves the realm hash
+    [ASSUMPTION; medium; Jordan to correct] `guards` ships OFF: the on arm moves the realm hash
     and switches on an unmeasured side effect (the guards enter the obligee witness channel and the larder draw),
     so IN-60's EXIT reads on `build_realm(0, guards=True)` until a position flips the default as its own declared
     mover. Revert: the default is `True` and the realm hashes and 1-/2-season pins are re-recorded.
