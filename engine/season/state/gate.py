@@ -495,9 +495,16 @@ def seated_on_the_rung_above(w: "World", seat: Office, off: Office) -> bool:
 def seated_on_the_rung_above_structure(w: "World", seat: Office, off: Office) -> bool:
     """THE STRUCTURAL CONJUNCT BOTH REVOCATION BASES SHARE, ONCE: `seat` is on the rung DIRECTLY above
     `off`'s rung (`parent_of`). A rungless seat has no rung above it; a seat on a top rung has none."""
-    if off.rung is None or off.rung not in w.rungs or seat.rung is None:
+    return seat_on_parent_of(w, seat, off.rung)
+
+
+def seat_on_parent_of(w: "World", seat: Office, rung: Optional[str]) -> bool:
+    """`seated_on_the_rung_above_structure`'s body over a bare rung id (v11 CR-25), so a founding asks the
+    SAME conjunct of a rung no office stands on yet (`queries/world_q.py::founds_over`, conjunct (iv)) and
+    the rule stays in one place. Unchanged in behaviour for every caller of the Office form."""
+    if rung is None or rung not in w.rungs or seat.rung is None:
         return False
-    above = parent_of(w, off.rung)
+    above = parent_of(w, rung)
     return above is not None and seat.rung == above
 
 

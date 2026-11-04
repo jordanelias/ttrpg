@@ -674,6 +674,15 @@ rosters:
       purview rather than whatever he was asked about. The class is shared, as `Office` is between
       `confer` and `oblige`: each row forms on both sources and the fold disposes. REVERT: `requisition`'s
       column (which removes `issue` from `RUNG_REMIT_ACTS`, the union over the `Rung` rows) and `larders_in_purview`'s splice.
+      v11 CR-25 (CR-11's design, [ASSUMPTION; medium; Jordan to correct; revert: `establish`'s column and
+      `holdings_to_found`'s splice]): AND the holdings a seat may found an office over
+      (`queries/world_q.py::holdings_to_found` -- a rung on one of his own live `hold` edges that
+      `founds_over` admits through a seat of his granting an act `establish` is eligible by,
+      `data/verbs.py::FOUNDING_REMIT_ACTS`: held, in that seat's purview, below its rank, the seat on its
+      parent), stamped directly after the larders and never twice; `establish` declares the class, so its
+      `subject` binds the holding `loop/predicates.py::office_founded_by` derives the office from. Shared, as
+      above: the other `Rung` rows form on a stamped holding too, and `establish` on a place named or a
+      larder; the fold disposes. `RUNG_REMIT_ACTS` gains `confer`.
       v10 REM-21 (B10-05, AM-A-06, [ASSUMPTION; medium; Jordan to correct]): `Site`, `Proposition`
       and `Person` -- THE THINGS A QUESTION IS ITSELF ABOUT, carried as their kind. Not a standing
       occasion: `queries/world_q.py::own_referents_of_class`, one more term of `questions_for`'s

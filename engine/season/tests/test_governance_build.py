@@ -1569,7 +1569,12 @@ def _remit_acts_attribute_reads_outside_allowlist() -> list:
         tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
         allowed_spans = []
         for node in ast.walk(tree):
-            if isinstance(node, ast.FunctionDef) and node.name in ("_grant_remit", "_eff_establish"):
+            # v11 CR-25: `_req_establish` joins `_eff_establish` for `_eff_establish`'s reason -- it reads the
+            # remit of the office THE ACT DESCRIBES (clause 5's H-132 (b) reduction test, against the sitting
+            # holders' `granted_acts`), never a stored office's remit as an eligibility fact. Its derivation
+            # (`office_founded_by`) reads the founder's grant, not `remit_acts`, and stays outside the list.
+            if isinstance(node, ast.FunctionDef) and node.name in ("_grant_remit", "_eff_establish",
+                                                                   "_req_establish"):
                 allowed_spans.append((node.lineno, node.end_lineno))
             elif isinstance(node, ast.ClassDef) and node.name == "Office":
                 allowed_spans += [(sub.lineno, sub.end_lineno) for sub in node.body
@@ -2905,7 +2910,12 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # ⚠⚠ v11 CR-81 (ED-IN-0318): (623, 623) -> (630, 630), A RE-RECORD WITH THE UNIT THAT MOVED IT: `build_realm` writes the realm's
     # starting acquaintances, so the act mix moves (seed 0, one season: 623 -> 630 in both arms; `test_go07_canonical_digest.py`
     # records the 630). CONTROL: `build_realm` forced to `acquaintances=False` in process reads (623, 623) under this same test.
-    assert (out["acts"], cout["acts"]) == (630, 630), (
+    # ⚠⚠ v11 CR-25 (B10-09 close two): (630, 630) -> (619, 619), A RE-RECORD WITH THE UNIT THAT MOVED IT: a computed `establish`
+    # founds an office over a holding, so the act mix moves (seed 0, one season: 630 -> 619 in both arms;
+    # `test_go07_canonical_digest.py` records the 619). CONTROL: `holdings_to_found` stubbed to `()` and `establish`'s
+    # `referent_class` dropped reads 630 acts on the shipped arm (`test_go07_canonical_digest.BASE[0]` before this row, read in
+    # process); the second arm was not run under the control.
+    assert (out["acts"], cout["acts"]) == (619, 619), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")

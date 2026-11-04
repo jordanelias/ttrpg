@@ -51,8 +51,8 @@ from ..data.rosters import (
 # (`OPENERS-DERIVE`); `endings_reached` evaluates the `ENDINGS` vocabulary imported above.
 # v10 REM-21: `DECLARED_CLASSES`, the referent classes some row declares, the same way.
 from ..data.verbs import (
-    DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, HOLDING_RECORD_KINDS, RECORD_REFERENT_KINDS,
-    RUNG_REMIT_ACTS, VERB_TABLE, _OPENERS_FROM_EFFECTS,
+    DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, FOUNDING_REMIT_ACTS, HOLDING_RECORD_KINDS,
+    RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS, VERB_TABLE, _OPENERS_FROM_EFFECTS,
 )
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
@@ -89,13 +89,15 @@ from ..state.containment import ancestry, home_of  # noqa: F401 -- re-exported
 # `19`: the bench's two rules, owned by the gate that enforces them (`judging_set` asks both), and
 # the seat-authority predicates the `basis` form's stems read (`WorldReader.read`, below).
 from ..state.gate import BENCH_BASIS, may_determine, may_fill, purview_reaches, sits_over
+# v11 CR-25: conjuncts (i) and (iv) of a founding, asked by `founds_over` below.
+from ..state.gate import in_holdings, seat_on_parent_of
 # ⚠ AND `sworn_to` BY THE SAME ROUTE (v9 IN-40, `H-101`): THE QUERY OF THE LIVE `oblige` EDGES SWORN
 # TO A SEAT. `purview_reaches`' oblige clause asks it, and the gate may not import this module, so
 # its one body lives in `state/gate.py`; `world_q.sworn_to is gate.sworn_to`. `establishment_of`
 # (below) composes on it.
 from ..state.gate import sworn_to
 from ..state.ids import H, ROOT, draw_factory
-from ..state.world import World
+from ..state.world import World, rung_kind_ascends
 from ..trace_log import TRACE
 # v9 IN-07 E1: the `settlements` module's records (the one host leaf a module imports) and the
 # role-string resolver its entries are reached through. Neither pulls in module code at import.
@@ -3127,6 +3129,59 @@ def larders_in_purview(w: World, p: Person, named: Optional[frozenset] = None) -
     return tuple(out)
 
 
+def founds_over(w: World, actor: Optional[str], seat, rung: Optional[str]) -> bool:
+    """MAY `actor`, EXERCISING `seat`, FOUND AN OFFICE OVER `rung`? (v11 CR-25, CR-11's design §1; [ASSUMPTION;
+    medium; Jordan to correct; revert: drop `holdings_to_found` and the derivation].) The four conjuncts, each a
+    refusal, ONE owner with two readers: `loop/predicates.py::office_founded_by` (the precondition and the
+    effect) and `holdings_to_found` (the stamp), so what a person is offered and what the fold admits cannot
+    disagree. It lives here and not in `state/gate.py` because (iii) is `state/world.py::rung_kind_ascends` and
+    the gate may not import the World module; every conjunct is still the gate's or the World's own function.
+
+      (i)   `rung` is one of the actor's HOLDINGS (`state/gate.py::in_holdings`);
+      (ii)  it lies inside the seat's PURVIEW (`purview_reaches`, asked of the seat exercised, `04:332`);
+      (iii) its kind is strictly below the seat's rung's kind (`rung_kind_ascends`, the §10 ladder's one owner);
+      (iv)  the seat sits on its PARENT (`seat_on_parent_of`, `seated_on_the_rung_above_structure`'s body), so
+            `rung_above_in_holdings` is satisfiable by the founder through this same seat (H-90 message 2).
+
+    ⚠ (iv) IS ASKED OF THE SEAT EXERCISED, NOT OF ANY SEAT OF THE HOLDER (the design's 'card and tree differ'
+    section): the card's prose accepts any of his seats on the parent, the named function the seat alone. Under
+    it (ii) and (iii) follow from (iv) -- the parent is the seat's own ground, and `contain` ascends strictly --
+    and they stay named refusals, as the card lists them. A rungless seat founds nothing."""
+    if seat is None or seat.rung is None or seat.rung not in w.rungs or rung is None or rung not in w.rungs:
+        return False
+    return (in_holdings(w, actor, rung)                                                  # (i)
+            and purview_reaches(w, seat, rung)                                           # (ii)
+            and rung_kind_ascends(w.rungs[rung].kind, w.rungs[seat.rung].kind)           # (iii)
+            and seat_on_parent_of(w, seat, rung))                                        # (iv)
+
+
+def holdings_to_found(w: World, p: Person) -> tuple:
+    """THE HOLDINGS `p` MAY FOUND AN OFFICE OVER (v11 CR-25, CR-11's design; [ASSUMPTION; medium; Jordan to
+    correct; revert: drop the term in `questions_for` and `establish`'s `referent_class`]), sorted by id: every
+    rung his own live `hold` edges name (his HOLDINGS, `in_holdings`' relation read off his edges) that
+    `founds_over` admits through some seat of his own live `hold`s whose grant carries an act `establish` is
+    eligible by (`data/verbs.py::FOUNDING_REMIT_ACTS`). A `Rung` stamper term, `larders_in_purview`'s shape and
+    `vacancies`' standing-occasion reading: world-read over his own edges and NOT gated on his ledger (a man knows
+    his own lands), resolver-side and read-only. `questions_for` stamps the ids onto the question he answers as
+    `Rung` (`_stamped`), so `establish` (`referent_class: Rung`) forms on them with the holding as `subject`, and
+    `loop/predicates.py::office_founded_by` derives the office from that subject and `Act.via`.
+    ⚠ THE CLASS IS SHARED (the `Rung` note in `rosters.yaml: referent_classes`): `migrate`, `requisition`,
+    `march` and `convene` form on a stamped holding too, and the fold disposes. ⚠ A HOLDING ALREADY FOUNDED IS
+    STILL OFFERED: the derived office's id is the derivation's (`loop/`), not this module's, and a repeat
+    founding writes nothing, so the fold emits `establish.refused` (G4's `NoOpReceipt`). Not filtered here: that
+    would be a second copy of the id rule. `()` for a person whose seats grant none of the acts, which is nearly
+    everyone, so nothing else is read for him."""
+    if not FOUNDING_REMIT_ACTS:
+        return ()
+    live = [t for t in p.tenures if t.kind == "hold" and t.live]
+    seats = [w.offices[o] for o in dict.fromkeys(
+        t.object for t in live if t.object in w.offices and not FOUNDING_REMIT_ACTS.isdisjoint(t.granted_acts))]
+    if not seats:
+        return ()
+    held = sorted({t.object for t in live if t.object in w.rungs})
+    return tuple(r for r in held if any(founds_over(w, p.id, s, r) for s in seats))
+
+
 def detainees_held(w: World, p: Person) -> tuple:
     """THE PRISONERS `p`'s SEATS HOLD (v10 IN-12 step 5, H-226 route (a) with H-232's formation-filter
     shape [ASSUMPTION; medium; Jordan to correct; revert: drop the term in `questions_for`, and
@@ -3621,6 +3676,10 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # has room, or a seat reaches it, is then the fold's (`vacancies`/`seats_named`' Office precedent,
     # H-207; H-163 records what the cross-reading costs). No source is added, so no `question_sources`
     # order moves (IN-57: the occasion rides the question he answers). REVERT: drop the term.
+    # v11 CR-25 (CR-11's design; [ASSUMPTION; medium; Jordan to correct; revert: drop the term]): AND, DIRECTLY
+    # AFTER THE LARDERS, THE HOLDINGS HE MAY FOUND AN OFFICE OVER (`holdings_to_found`), as `Rung` --
+    # `establish` forms on them; "never twice" is `_stamped`'s REM-21 (iv-b) dedup, so a holding that is also
+    # a larder in purview or a place named keeps its first pair.
     # v10 REM-21 (AM-A-06, [ASSUMPTION; medium; Jordan to correct]): AND, AFTER THOSE, THE QUESTION'S OWN
     # PLAIN REFERENTS OF EVERY CLASS A ROW DECLARES BUT `rosters.yaml: occasion_only_classes`
     # (`own_referents_of_class`) -- no standing occasion, the question he answers read for its own
@@ -3638,7 +3697,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # referent. `()` while `goal_stages` is `[]`, so with no ladder the output is byte-identical.
     told = ledger_names(p.ledger)
     added = (vacancies(w, p) + seats_named(w, p, told) + writs_held(w, p) + records_held_for_holding_rows(w, p)
-             + places_named(w, p, told) + larders_in_purview(w, p, told)
+             + places_named(w, p, told) + larders_in_purview(w, p, told) + holdings_to_found(w, p)
              + (own_referents_of_class(w, out[0]) if out else ())
              + works_sites(w, p) + propositions_heard(w, p) + stage_referents(w, p, ambs))
     # v10 IN-12 step 5 ([ASSUMPTION; medium; Jordan to correct]): AND, LAST, THE PRISONERS HIS SEATS HOLD
