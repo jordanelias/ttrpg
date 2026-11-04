@@ -1,6 +1,6 @@
 # Strife kinds for S3's person reading: a draft for Jordan to edit
 
-## Status: PROPOSED (2026-11-04), DRAFT FOR JORDAN'S EDIT, HELD BACK IN FULL. Reference under CLAUDE.md §0.05, not a mechanism. Nothing reads this file; it is the content S3 needs before code is written.
+## Status: PROPOSED (2026-11-04). The five open calls were resolved the same day, on the ground of which answer yields the better emergent narrative, at Jordan's instruction (§6); the rest stands as drafted. Reference under CLAUDE.md §0.05, not a mechanism. Nothing reads this file; it is the content S3 needs before code is written.
 ## Lane: IN
 
 **What this is.** The Opus critic's finding F1 on the Fable plan: the person reading sees an Event *kind* and nothing else, and the registry's `kinds` columns are upper bounds (PR #553, `harness/strife_moves.yaml`; PR #554 added the residue and the `accept` and foreign-field signatures). Used as the definition of a move, they would make everyday kinds (`news.told`, `travel.moved`, `duty.taken`) into strife, and strands into ordinary life. S3 therefore needs an explicit list of which kinds may **open** a strand and which may only **join** one. This draft proposes it from three sources: the study's own tests for each code (the artifact, "Mechanics of Strife to c. 1600", primitives table), what PR #553's master says each kind is (master §3 openings, §4 terminal codes, §9), and what the shipped realm actually emits (measured below).
@@ -67,13 +67,15 @@ The table's seven plus two more, because a coercive levy and a sabotage meet the
 
 ## 3. What the draft changes in PR #553's master
 
-1. **§3 openings table.** It names `dispensation.issued`, `requisition.taken`, `duty.taken` as a tax opening. By this draft only `requisition.taken` opens; `dispensation.issued` joins and `duty.taken` is never. In default play `requisition.taken` is 2 or 3 per seed, so a **tax raised is mostly invisible to the person reading by kind**. Reading it needs a content test on the writ's terms, not a kind. That is a real gap in the openings the master promised; flagged, not closed.
+1. **§3 openings table.** It names `dispensation.issued`, `requisition.taken`, `duty.taken` as a tax opening. By this draft only `requisition.taken` opens; `dispensation.issued` joins and `duty.taken` is never. In default play `requisition.taken` is 2 or 3 per seed, so a **tax raised is mostly invisible to the person reading by kind**. Reading it needs a content test on the writ's terms, not a kind. That is a real gap in the openings the master promised, closed by ruling 5 in §6 (the world reading opens it on the writ's terms).
 2. **§4 conclusion.** A strand concludes at the person reading only on a kind that can attach: `rung.ceded`, `detention.ended`, `ban.ended`, `covenant.offered`, `matter.determined`, `dispensation.issued`, `record.given`, `transfer.made` or a field outcome. A kind is terminal only if every code it maps to is terminal (F1's rule); `dispensation.issued` maps to CO IM PC XS and IM is terminal in the study (4 cases), so check it against the S3 tests before relying on it.
 3. **Default play opens almost nothing.** With these nine openers, seeds 0 and 1 give 3 and 4 opening Events in four seasons (`field.lost` 1 and 1, `requisition.taken` 2 and 3; the rest 0). The shipped realm is quiet at the kind level; the foreign and challenger marches (H-233: they do march in natural play) are visible only to the world reading. This is a finding about the openers, not a defect to patch by widening the list.
 
 ## 4. The world reading's openers (for contrast)
 
 Side-aware: Tier OPENS, plus `march.declared` by side R or O (a challenger or foreign march), plus `person.died` by a lethal `fight` or `accept` of a free victim (KL) or a held one (XE). It has the act, the verb and the faction; the person reading has the kind.
+
+It also carries the three **content openers** that rulings 4 and 5 (§6) assign to it, because the non-violent flow types (a rival succession, a petition movement, a levy) cannot open on a kind: a second `succession.claimed` on one seat; a second `petition.filed` on one matter; a `dispensation.issued` whose terms are a burden. Each reads the *record's* `subject_matter` (`Record.subject_matter`, the field `queries/world_q.py::writs_held` already reads), not the Event: measured, 22 of 22 and 25 of 25 `petition.filed` Events carry a distinct change subject (the freshly minted record), and 44 of 44 and 86 of 86 `march.declared` Events carry no change at all, so no test on an Event's own change can say *same matter* or *toward what*.
 
 ## 5. The machine-readable form S3 would load
 
@@ -89,12 +91,16 @@ strife_kinds:
 ```
 Every other kind is NEVER. A loader check refuses a kind absent from `EVENT_KINDS`, a kind in both lists, and any kind the registry names that appears in neither list (a deliberate decision per kind, not a default).
 
-## 6. Calls that are Jordan's to edit
+## 6. Rulings (2026-11-04): the five calls, resolved for emergent narrative
 
-1. Is `march.declared` an opener at the person reading? Draft: no (joins), because a person cannot tell a garrison move from an invasion, and 44 to 86 marches per seed would open strands everywhere. Cost: a person hears of an invasion only once something else opens.
-2. Is `requisition.taken` an opener? Draft: yes (a levy is a burden by construction), at a rate of 2 or 3 per seed.
-3. Is `compliance.withheld` an opener? Draft: yes (defiance of a writ); it never occurred in these runs.
-4. The rule "joins, never opens" itself.
-5. Tax and burden: accept that a burden is invisible by kind and plan a content test (the writ's terms), or accept `dispensation.issued` as an opener with its false positives.
+The test applied to each: which answer makes a flow the characters can *live inside, mishear, resist and be surprised by*, without flows becoming the weather of every season. Three consequences of the user's rulings carry the argument: awareness of a flow is not required for it to condition a person (R7), so what the person reading admits governs only what a person can *know and say*, not whether the flow acts on them; a flow folds when too many are live (R3), so an opener that fires in every season starves the flows that matter; and every type of strife must be able to occur (R1).
+
+1. **`march.declared`: joins at the person reading; opens in the world reading by side R or O.** Narratively the lag is a gain: a province learns of the invasion from the first burned granary or the first refugee, not from the muster, which is how rumour, denial and late warning arise. The kind cannot say where a march goes (44 of 44 and 86 of 86 carry no change) or whose it is, and 44 to 86 openers per run would fold every era into the last march. Foreign and challenger marches still condition people, factions and offices at once through the world reading.
+2. **`requisition.taken`: opens.** A collector at the door is the moment a tax becomes a person's own grievance; at 2 or 3 per run it cannot saturate, and each is a hook with a named victim.
+3. **`compliance.withheld`: opens.** Verified at `verb_table.yaml` (`evade / defy`) and `queries/world_q.py::writs_held`: the verb forms only on a writ the person holds and is addressed by, so it is defiance of a writ by construction, not a skipped errand. Its count of 0 is a fact about supply: a writ reaches its addressee only by a `give`, and `writs_held` is `()` for nearly everyone. Refusal of an order is the study's own hinge (RU, RF), the best seed of a personal drama, and it must remain able to start a flow when the supply grows.
+4. **"Joins, never opens": kept for the person reading, but not as the only route.** Kept because a petition, a treaty or a death would otherwise manufacture strands from ordinary life. Corrected because, taken alone, it makes a rival succession and a petition movement unopenable except through an act of violence, which breaks R1. Those open in the **world reading by content** (§4): two claims on one seat; two petitions on one matter. A lone claim or a lone petition stays civic life; the second is the movement. The person then knows of the movement once a joining kind reaches their ledger while the world holds the strand open. `[GAP: person-side attachment of a joining claim to a world-held strand — S3 must confirm the ledger carries enough to link them; if it does not, the person learns of these flows only from a terminal or an opening kind]`
+5. **Tax and burden: invisible by kind at the person reading; opened in the world reading on the writ's terms; known to a person when it bites.** The tax then arrives as the study's taxes do: first as a rumour and a decree, then as the collector (`requisition.taken`), then as defiance (`compliance.withheld`), then as the rising. Making `dispensation.issued` an opener instead would fire on every grant, 12 and 21 times per run, so that gifts and levies would be indistinguishable and the fold would be busy with charity. `[GAP: which term in a writ's `subject_matter` marks it a burden — S3 reads the record and names the field before coding the test]`
+
+`[ASSUMPTION; medium; revert: rulings 1 to 5 reverse independently, each by moving one kind between the §5 lists or striking one §4 content opener]`
 
 `[UNVERIFIED]`: the study's test phrases are quoted from the artifact's primitives table as I read it earlier in this session, not re-opened for this draft.
