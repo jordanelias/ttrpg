@@ -156,9 +156,14 @@ def _written_fields(t: Tenure, copy: bool) -> tuple:
     return (t.subject, t.object, t.kind, t.since, t.until, t.degree, p, t.term)
 
 
+# `_written_fields`' order, as one C call. A fixed pair with it: `Tenure(t.id, *fields)` rebuilds.
 _WRITTEN = _attrgetter("subject", "object", "kind", "since", "until", "degree", "payload", "term")
 _FIRST, _SECOND = _itemgetter(0), _itemgetter(1)
-# `_written_fields`' order, as one C call. A fixed pair with it: `Tenure(t.id, *fields)` rebuilds.
+
+
+def _snapshot_fields(t: Tenure) -> tuple:
+    """`_written_fields(t, copy=True)`, taking the C-level read when there is no payload to copy."""
+    return _written_fields(t, copy=True) if t.payload is not None else _WRITTEN(t)
 
 
 def rung_kind_ascends(child_kind: str, parent_kind: str) -> bool:
@@ -570,18 +575,8 @@ class World:
         Each Tenure's fields are read in one C-level call (`_WRITTEN`, `_written_fields`' order) and
         only a non-None payload is copied. This and `_tenure_changes` walk every Tenure in the store
         once per watched write: the season loop's largest per-write cost, linear in the store."""
-        out = []
-        for p in self.persons.values():
-            for t in p.tenures:
-                f = _WRITTEN(t)
-                if f[6] is not None:
-                    f = f[:6] + (_copymod.deepcopy(f[6]),) + f[7:]
-                out.append((t, f))
-        for t in self._unowned:
-            f = _WRITTEN(t)
-            if f[6] is not None:
-                f = f[:6] + (_copymod.deepcopy(f[6]),) + f[7:]
-            out.append((t, f))
+        out = [(t, _snapshot_fields(t)) for p in self.persons.values() for t in p.tenures]
+        out.extend((t, _snapshot_fields(t)) for t in self._unowned)
         return out
 
     def _tenure_changes(self, snap: list) -> list:
