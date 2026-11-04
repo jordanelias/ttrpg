@@ -92,7 +92,7 @@ moves:
   - {code: RT,   name: Rising retreats,         verbs: [move, migrate],                   kinds: [travel.moved, residence.changed],                  needs: [side, context], ends: 0}
   - {code: SB,   name: Surrender,               verbs: [give, covenant],                  kinds: [rung.ceded, field.unopposed],                      needs: [side], ends: 3}
   - {code: DA,   name: Defection or split,      verbs: [release, commit, forgive],        kinds: [commitment.ended, stance.moved],                 needs: [side], ends: 0}
-  - {code: KL,   name: Leader killed,           verbs: [fight],                           kinds: [person.died],                                     needs: [side, office], ends: 5}
+  - {code: KL,   name: Leader killed,           verbs: [fight, march, accept],                           kinds: [person.died],                                     needs: [side, office], ends: 5}
   - {code: CA,   name: Leader captured,         verbs: [arrest],                          kinds: [arrest.made],                                      needs: [side, office], ends: 1}
   - {code: XA,   name: Outside power,           verbs: [march, tell, petition],           kinds: [march.declared, news.told],                       needs: [side], ends: 1}
   - {code: AM,   name: Pardon or amnesty,       verbs: [pardon],                          kinds: [detention.ended, ban.ended], ends: 0}

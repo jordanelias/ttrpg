@@ -206,8 +206,8 @@ def report(m: dict) -> str:
         if not rt:
             why = r.get("gap") or r.get("dark") or "kinds come from matter or the gate, not a verb"
             out.append(f"  {r['code']:<3} {r['name']:<22} {why}")
-    term = terminal_codes(r for r, _, _, _ in m["rows"])
-    bare = [r["code"] for r, _, _, rt in m["rows"] if r["code"] in term and not rt]
+    rows = [r for r, _, _, _ in m["rows"]]
+    term, bare = terminal_codes(rows), routeless_terminals(rows)
     out.append("")
     out.append(f"Terminal codes with no static route ({len(bare)} of {len(term)}): " + (", ".join(bare) or "none"))
     out.append("")

@@ -23,9 +23,11 @@ STRIFE_MOVES_YAML = HARNESS_DIR / "strife_moves.yaml"
 def declared_kinds() -> frozenset:
     """Every Event kind the loop declares: `data/verbs.py::EVENT_KINDS`, the one owner (loader invariant 7).
 
-    WIDER THAN THE ROSTER THIS FUNCTION USED TO BUILD. It re-derived only the verb rows' `emits:` and the
-    write matrix's `emits:`. `EVENT_KINDS` also holds the per-degree and per-clause emission columns,
-    `fold_kinds` and `logged_kinds`, so the loader now accepts a kind it would once have refused."""
+    A STRICT SUPERSET OF THE ROSTER THIS FUNCTION USED TO BUILD. That one (`EMITTED_KINDS` and the write matrix's
+    `emits:`) already held the per-degree and per-clause emission columns, since `VerbRow.emits` and
+    `emits_on_refusal` are flat unions over them. What `EVENT_KINDS` adds is `fold_kinds` and `logged_kinds`
+    (`act.ineligible`, `act.refused`, `attempt.refused`, `standing.band_crossed`), so the loader now accepts
+    those four; no kind it accepted is refused, and none of the four is named in the registry."""
     return EVENT_KINDS
 
 

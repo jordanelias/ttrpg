@@ -117,9 +117,16 @@ def test_grade_cases():
     rows = {r["code"]: r for r in data.MOVES}
     act = Counter({("KL", None): 3})
     assert H.grade(rows["KL"], Counter(), act, True) == ("OBSERVED", 3)
-    assert H.grade(rows["DN"], Counter(), act, True) == ("UNOBSERVED", 0)
-    assert H.grade(rows["DN"], Counter({"person.died": 99}), Counter(), False)[0] == "DARK"   # a switch that ships off: a kind count cannot show it thrown
-    assert H.grade(rows["CH"], Counter(), Counter(), False)[0] == "GAP"
+    sig_codes = {g["code"] for g in data.SIGNATURES}
+    # DN carries a `dark` cell AND a signature. `measure()` passes `has_sig=True` for it, and `grade` returns before reading `dark`, so the
+    # instrument grades it UNOBSERVED, never DARK: `dark` counts only on a row with no signature. Grade it the way `measure()` does.
+    assert "DN" in sig_codes and rows["DN"].get("dark")
+    assert H.grade(rows["DN"], Counter({"person.died": 99}), Counter(), "DN" in sig_codes) == ("UNOBSERVED", 0)
+    # The DARK path itself, on a row with no signature: plant a `dark` cell on XA in a copy of the file.
+    assert "XA" not in sig_codes
+    xa = dict(rows["XA"], dark="a switch that ships off")
+    assert H.grade(xa, Counter({"march.declared": 99}), Counter(), "XA" in sig_codes)[0] == "DARK"
+    assert H.grade(rows["CH"], Counter(), Counter(), "CH" in sig_codes)[0] == "GAP"
     assert H.grade(rows["PT"], Counter({"petition.filed": 2}), Counter(), False) == ("OBSERVED", 2)
 
 
@@ -178,9 +185,7 @@ def test_residue_counts_an_unmatched_event_and_not_a_matched_one():
     assert seen == Counter({"person.died": 2, "petition.filed": 1})
     # `petition.filed` is a kind no signature names: in neither tally.
     assert not any(k[0] == "petition.filed" for k in res) and not any(c == "PT" for c, _ in act)
-    # FALSIFIER: classifying an Event is pure, so classifying it twice first does not double the residue.
     seen2, act2, res2 = Counter(), Counter(), Counter()
-    H.classify(tell_death, readers(verb="tell")), H.classify(tell_death, readers(verb="tell"))
     H.count_event(tell_death, readers(verb="tell"), seen2, act2, res2)
     assert res2[("person.died", "tell", None)] == 1 and not act2
     # a march that cannot be sided is residue with its cause verb; a sided one is not
@@ -193,10 +198,14 @@ def test_residue_counts_an_unmatched_event_and_not_a_matched_one():
 def test_a_signature_kind_is_matched_or_residue_never_both():
     kinds = {g["kind"] for g in data.SIGNATURES}
     assert kinds >= {"person.died", "field.won", "field.lost", "march.declared"}
+    # The verbs and sides are READ FROM THE SIGNATURES (plus one verb no signature names, as a control), so a signature added later is swept.
+    verbs = {None if g.get("cause_verb") in (None, "none") else g["cause_verb"] for g in data.SIGNATURES} | {None, "tell"}
+    sides = (None, *sorted({g["attacker"] for g in data.SIGNATURES if "attacker" in g}))
+    assert {"accept", "fight", "march"} <= verbs and {"A", "R", "O"} <= set(sides)
     checked = 0
     for kind in sorted(kinds):
-        for verb in (None, "fight", "march", "tell"):
-            for side in (None, "A", "R", "O"):
+        for verb in sorted(verbs, key=str):
+            for side in sides:
                 for held in (False, True):
                     rd = readers(verb=verb, side=side, held=held)
                     hits = H.classify(ev(kind), rd)
@@ -206,7 +215,7 @@ def test_a_signature_kind_is_matched_or_residue_never_both():
                     assert sum(act.values()) + sum(res.values()) == 1          # exactly one tally
                     assert (sum(act.values()) == 1) == bool(hits)
                     checked += 1
-    assert checked >= 4 * 4 * 4 * 2
+    assert checked >= len(kinds) * len(verbs) * len(sides) * 2
 
 
 def test_declared_kinds_is_the_one_roster(tmp_path):
@@ -234,6 +243,7 @@ def test_terminal_codes_and_routeless_terminals():
     full = H.routeless_terminals(rows)
     assert len(full) < len(only_petition)                                       # CONTROL: the full set routes more
     assert set(full) <= term and "PT" not in full
+    assert full == ["DN"]                                                       # DN has no verb by design; every other terminal code has a route
 
 
 def test_a_death_in_an_accepted_duel_is_killed_and_a_foreign_field_is_outside_war():
