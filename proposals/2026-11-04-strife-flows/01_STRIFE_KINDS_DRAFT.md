@@ -68,7 +68,7 @@ The table's seven plus two more, because a coercive levy and a sabotage meet the
 ## 3. What the draft changes in PR #553's master
 
 1. **§3 openings table.** It names `dispensation.issued`, `requisition.taken`, `duty.taken` as a tax opening. By this draft only `requisition.taken` opens; `dispensation.issued` joins and `duty.taken` is never. In default play `requisition.taken` is 2 or 3 per seed, so a **tax raised is mostly invisible to the person reading by kind**. Reading it needs a content test on the writ's terms, not a kind. That is a real gap in the openings the master promised, closed by ruling 5 in §6 (the world reading opens it on the writ's terms).
-2. **§4 conclusion.** A strand concludes at the person reading only on a kind that can attach: `rung.ceded`, `detention.ended`, `ban.ended`, `covenant.offered`, `matter.determined`, `dispensation.issued`, `record.given`, `transfer.made` or a field outcome. A kind is terminal only if every code it maps to is terminal (F1's rule); `dispensation.issued` maps to CO IM PC XS and IM is terminal in the study (4 cases), so check it against the S3 tests before relying on it.
+2. **§4 conclusion.** A kind is terminal only if every code it maps to is terminal (F1's rule). Applied to the registry at `79419b7`, the kinds that may conclude a strand at the person reading are `army.arrived`, `succession.claimed`, `petition.filed`, `petition.carried`, `covenant.offered`, `matter.determined`, `dispensation.issued` (CO, IM, PC and XS are all terminal), `rung.ceded`, `record.given`, `transfer.made`, `record.destroyed` and `tenure.opened`. **Corrected 2026-11-04 (workplan v11, `-11` CR-75):** this item earlier also listed `detention.ended`, `ban.ended` and the field outcomes. Each maps to a code that ends no case (AM; WR), so none concludes at the person reading; they conclude a strand only in the world reading, which knows the code through the verb and side. Top-down, the world sees a war end; bottom-up, a person who holds only a field's outcome may still doubt it.
 3. **Default play opens almost nothing.** With these nine openers, seeds 0 and 1 give 3 and 4 opening Events in four seasons (`field.lost` 1 and 1, `requisition.taken` 2 and 3; the rest 0). The shipped realm is quiet at the kind level; the foreign and challenger marches (H-233: they do march in natural play) are visible only to the world reading. This is a finding about the openers, not a defect to patch by widening the list.
 
 ## 4. The world reading's openers (for contrast)
@@ -88,8 +88,10 @@ strife_kinds:
           covenant.offered, matter.determined, dispensation.issued, rung.ceded, detention.ended, ban.ended, record.given,
           transfer.made, record.destroyed, tenure.closed, tenure.opened, office.established, rung.founded,
           army.recruited, army.formed, army.assigned]
+  never: [argument.lost, argument.won, commitment.ended, commitment.made, date.scheduled, duty.refused, duty.taken,
+          news.told, order.given, residence.changed, stance.moved, travel.moved]
 ```
-Every other kind is NEVER. A loader check refuses a kind absent from `EVENT_KINDS`, a kind in both lists, and any kind the registry names that appears in neither list (a deliberate decision per kind, not a default).
+`never` is explicit (the twelve registry kinds of §2's NEVER table); a kind no move row names is outside all three lists and is not a move. A check refuses a kind absent from `EVENT_KINDS` and a kind in more than one list; a test refuses any kind the registry names that is in none of the three lists (a deliberate decision per kind, not a default). Workplan v11 (`-11` CR-75) adds a fourth list, `concludes`, derived by §3 item 2's rule.
 
 ## 6. Rulings (2026-11-04): the five calls, resolved for emergent narrative
 
