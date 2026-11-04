@@ -248,6 +248,16 @@ These have no earlier home, so they are written out in full. Format as in §1. C
 - BUILDER: opus.
 - SOURCE: `ED-IN-0319`; CR-81's measured fade.
 
+### CR-83 — Familiarity sets inference: what a holder can infer of another person (SC, IN) · BATCH B10-13 (drafted beside it, as CR-38 is) · STATE DESIGN-FIRST · R R-07
+- WHAT: `ED-IN-0324` (Jordan, 2026-11-04): *"the more you know someone, the more you can intuit/understand their pursuits and convictions and ambitions and goals and obligations and demands"*. Today `person_q.py::known_persons` says whether a holder knows a person (a set), `regard` scores a referent's deeds by the holder's own pursuits and his stance rows, and no reader gives a graded estimate of another person's pursuits, convictions, ambitions, goals, obligations or demands; familiarity is not a degree. Write ONE design file under `proposals/` that says what a holder may read of another person and how the reading grows with what he holds of him (his `seen` and told claims, his own tenures with the other, shared faction membership, CR-81's acquaintance claims), by composing on what exists and coining no carrier; names its consumers (`teller_weight`'s relation term through CR-31, CR-27's `lie`, CR-17's believed odds, the tellings); its cost; and its falsifier (a seeded run in which a holder who knows another better infers more of the other's pursuits, and equal at no acquaintance). The five rulings on the claim model (`ED-IN-0319` to `ED-IN-0323`, CR-82) are its inputs: familiarity feeds on the same ledger CR-82 keeps.
+- GATE: B10-13's entry; the design reads CR-82 (B10-09 close two) and CR-17's believed odds (B10-09). Approval by ED-1094's merge default unless the design PR lists it as held back.
+- EXIT and FALSIFIER: the design file exists and states the three things above; no code.
+- HASH MOVERS: none at this step; its build is a declared mover and is scheduled by the design.
+- HOLES AND LEDGER IDS: `ED-IN-0324`.
+- ASKS ATTACHED: none open; Jordan's answer is `ED-IN-0324`. [ASSUMPTION; medium; Jordan to correct; revert: delete the design file]
+- BUILDER: opus; `valoria-author`.
+- SOURCE: `ED-IN-0324`.
+
 ### CR-29 — REACH: the event-kind reach channel, then `chronicle`'s paired deletion (IN/FA) · BATCH B10-14 (after CP-T06-09, before CP-T06-01) · STATE BUILD (released from M11) · R R-07 (conjunct 1 re-read), R-04 (the grand-strategy row's input)
 - WHAT: news of an event reaches persons by the event's kind, at a stated reach, instead of through `chronicle`'s special channel; then `chronicle` is deleted. FA-01's clause and the coercive kinds H-234 names need it. It adds a row to ratified Layer 1 §C.6, which M11 answered (a) allows for an unmarked anchor: the superseding row of ED-IN-0300 (2026-10-26, ratified) confirms D-1 and reads M11's second half as yes `[ASSUMPTION; medium; Jordan to correct; revert: ED-IN-0300 reopened]`. The row lands in this position's PR, listed under "Layer 0/1 hunks"; a (RULED) mark at the anchor still stops that row.
 - LANDED ALREADY: the witness-channel roster and `CHANNEL_PREDICATES`; IN-18's told channel; `_ch_chronicle`.
