@@ -56,7 +56,7 @@ corroboration twice under two owners. (c) A deed judgment written to `stance` is
    raised (H-09's value is injected and unruled, so this overturns no doctrine), or (ii) `known_persons` also reads the
    holder's own person-to-person `p.tenures`, which eviction never reaches (CR-83 already names "his own tenures with the
    other"). Faction co-membership cannot be read person-side (`person_q.py:528`: membership is world truth), so (ii) alone
-   does not keep CR-81's faction acquaintances. Falsifier: CR-81's 0/11/0 of 236 at cap 200 against the lever; planted
+   does not keep CR-81's faction acquaintances. Falsifier: the tip's 0/6/0 of 236 at cap 200 against the lever; planted
    failure: the cap back to 200 reddens the retention test. Declared mover of every hash that reaches the cap.
 3. **Commit 3, readers list** (the old commit 4's measurement half): every reader of `Claim.confidence` and age (the
    integration read's section B is most of it). Hash EQUAL.
@@ -107,7 +107,7 @@ Charisma → **Presence** (Charisma); **Perception** added; **Grace/Composure** 
 - **The Godot bar stays**: `descriptor_registry.yaml:31` ("until the tenth is named") is literally lifted, but the ruling is
   hedged ("I think") and CLAUDE.md §5 binds Godot fields only to confirmed keys. IN FLUX stays until Jordan confirms.
 
-**Where it lands: the FIRST commit of B10-10, before CR-20** (CR-20 asserts nine keys and a pending tenth slot that refuses a
+**Where it lands: before CR-20 in B10-10** (CR-20 asserts nine keys and a pending tenth slot that refuses a
 value; at ten the exporter clears the sentinel itself, `tools/export_descriptors.py:217-221`, and that exit cannot run).
 Hash: EQUAL for the game (no `engine/season` or `modules` file reads `ATTRIBUTES`). Files: `descriptor_registry.yaml`;
 `names_index.yaml` (checked by `tools/ci_names_consistency.py:12`); `engine/engine_params/names.json` and `descriptors.json`
@@ -170,12 +170,11 @@ CP-T07-02 re-depends on it (`part14.md:42-43`): re-base; PC-14 makes `history` a
 machinery that exists: `goals.yaml`/`seed_goals` (`populated.py:818`), CL-OPEN's role-bound goal rows (`part4.md:460-472`),
 CR-30 `heritage` (feeding `_term_marks`, `epistemic.py:918-924`). `Person.marks` is deleted. No `hook`/`life_path` code.
 
-**New position CR-85, DESIGN-FIRST, in B10-10 beside CR-33 and CL-CHAR** (they are one lane): one design file, no code, naming
+**New position CR-85, DESIGN-FIRST, in B10-10 before CR-33 and CL-CHAR** (they are one lane): one design file, no code, naming
 (1) what replaces combat's `history` in `pool`/`Ob` (the `faculty`/capability route that other scales use, or a
 combat-specific bundle) and the season-loop hash cost; (2) what a hook is, where a lifepath writes it, how it reaches play,
 from the carriers above with none coined; (3) the oracles' fate (`systems/*/sim`), which are Python oracles the port
-validates against, so a change is made at the owner and re-exported (CLAUDE.md §6). Its build is scheduled by the design,
-into B10-10b/B10-11 (PC), not here.
+validates against, so a change is made at the owner and re-exported (CLAUDE.md §6). Its build lands in B10-11 (§11), not here.
 
 ## 7. The derived values, traced (the census and the duplicate survey)
 
@@ -204,14 +203,14 @@ dropped, CLAUDE.md §0):
 
 | step | where | files | hash | control |
 |---|---|---|---|---|
-| CR-82 commit 1 measure | B10-09 close two, after CR-25 | none | EQUAL | cap 200 reproduces 0/11/0 of 236; told count first |
+| CR-82 commit 1 measure | B10-09 close two, after CR-25 | none | EQUAL | cap 200 reproduces 0/6/0 of 236 at the tip; told count first |
 | CR-82 commit 2 lever | same | `fixtures.py` or `person_q.py::known_persons` | MOVER | retention test, planted failure |
 | CR-82 commit 3 readers list | same | none | EQUAL | — |
 | CR-17 | B10-09, last | `options.py`, `choose.py`, `fixtures.py` | MOVER | τ re-derived last |
-| CR-84 attribute roster | B10-10, first commit | registry, mirrors, 9 test files | EQUAL (game) | aliases resolve as before |
-| CR-85 design (histories, hooks, combat input) | B10-10, beside CR-33/CL-CHAR | one `proposals/` file | none | its own falsifier |
+| CR-84 attribute roster | B10-10, before CR-20 (the card puts CR-68 and CR-69 first) | registry, mirrors, 9 test files | EQUAL (game) | aliases resolve as before |
+| CR-85 design (histories, hooks, combat input) | B10-10, before CR-33; build in B10-11 (§11) | one `proposals/` file | none | its own falsifier |
 | REM-45 dropped; CP-T07-02, PC-14 re-based | at their batches | plan rows | — | — |
-| CR-83 design (knowledge, fit, truth, `said_of`, opinion measurement) | beside B10-13, before CR-27/CR-31 | one `proposals/` file | none | its own falsifier |
+| CR-83 design (knowledge, fit, truth, `said_of`, opinion measurement) | drafted beside B10-13; v11's needs cell (CR-31, CR-17) stands | one `proposals/` file | none | its own falsifier |
 
 File edges: `witness.py` (CR-79, maybe CR-29), `person_q.py` (CR-27, CR-31, CR-83), `options.py` (CR-17, CR-19, CR-27, CR-31,
 CR-79), `fixtures.py` (nearly all). No two of the building steps are in flight together (P13).
@@ -235,3 +234,48 @@ CR3; the live clash is the knot damage track); ED-IN-0328, 0330 and 0331 cite th
 **Could not verify** (from the readers): the current chained-told-claim
 count (H-237 is a session probe); REM-30's creation sheet (not opened); the cast's 29 `stats:` blocks; run time and memory
 (the measurement is running).
+
+## 11. Corrections applied after the sequencing check (2026-11-04; one round, then folded into v11)
+
+A read-only check of this plan's order, gates and counts found the plan sound on facts and defective in these places; each
+is taken by the ladder and tagged `[ASSUMPTION; medium; Jordan to correct]`.
+
+1. **CR-82 commit 2 is the cap alone.** Lever (ii) (`known_persons` reads own tenures) is dropped: it cannot keep CR-81's
+   faction acquaintances (its own test would fail by construction), it makes later tenure writers (CP-T10-06 `kin`, CP-T10-08
+   `marry`, CP-T03-09 `capture`) undeclared hash movers, it falsifies IN-32's "`known_persons` keeps its three sources"
+   (`part3.md:241`), and `said_of` runs per known entity so it costs time too. Commit 2 therefore also states: (a) a **run-time
+   ceiling**: the chosen cap is the smallest value at which the acquaintance claims survive the horizon (eight seasons, two
+   years, ED-IN-0332), and the commit records the measured wall time of `engine/season/tests` and of `corpus_run` against the
+   `season-tests` CI job's 30-minute timeout (`.github/workflows/valoria-ci.yml:368,390`); if no cap keeps both the horizon
+   and the ceiling the commit **stops and reports**, because the ruling and the run cost then conflict and that is Jordan's;
+   (b) the **HR-9 controls (2) and (4)** on seeds 0-4 at two seasons, new against base, as CR-28 read them (v11's CR-82 exit
+   already carries them): a larger ledger feeds the CR-28 stamper more Propositions and can undo the pass B11-S4 assumes
+   (`v11.md:111`); (c) the retention reading on seeds 0-2 (v11's seeds), not 0-1; (d) the control line is 0/6/0 at the tip.
+   Readings already taken at cap 200 (CR-28's, CR-81's) stay valid as their own bases.
+2. **CR-85's build lands in B10-11, not B10-10b** (B10-10b is declared EQUAL throughout and its identity control would read a
+   season-fight move as a defect): design approved (ED-1094's merge default, like CR-83 and CR-38) before B10-11 opens;
+   build after CP-T03-02 and before CP-T03-05. **More conflicts than §6 listed:** CP-T03-04 feeds an `arms` skill into the pool
+   term `round(history) + 6` and its falsifier reproduces "the history-5 row" (a candidate host or a conflict: re-based as
+   CR-85's consumer); CP-T03-05 exports `pc_matchup.json` with history at its default (it would stale); PC-14 item (5) adds a
+   typed `attributes` export to `combat_engine_v1.json`, `history` included; PC-17 calibrates its tempo constant against
+   `INIT_HISTORY_K`. Each gets a re-base line naming CR-85.
+3. **CR-83 keeps v11's needs cell (CR-31, CR-17)**; it is *drafted beside B10-13*. The words "before CR-27 and CR-31" are
+   struck: CR-27 builds as written (§5) and needs nothing from CR-83.
+4. **CR-19 ships its factor at gain 0** until CR-83's design gives a separator between a lie and a truth; the flip to a live
+   gain is a declared mover scheduled by that design. CR-19 is then EQUAL (the function in place, which is all B11-S5 needs,
+   `part3.md:411`). CR-27's exit gains the falsifier: a lie told to receivers at Attunement 2 and 6, where the 6 does not
+   hold it higher. In the realm CR-19 is latent today (the cast's `stats:` carry no Attunement key).
+5. **CR-33 is gated on CR-85's design** (the lifepath id is stored nowhere, `part4.md:314,316`, which is where a hook writer
+   goes); if CR-85 is unapproved at CR-33's turn, CR-33 builds as written and records the re-pin it owes. CL-CHAR's piece
+   check also reads CR-85.
+6. **CR-84:** "before CR-20", not "first commit". The mirror list adds `engine/engine_params/value_pointer_links.json` (links
+   `PERCEPTION_BANDS` to Attunement and `KNOT_BONDS_MIN` to Bonds) and `tests/valoria/test_link_values_pointers.py`; the
+   test-file count is as named in §3, not "9". **CL-ATTR narrows to M24 (the training composition); it is not closed.**
+   Whether `tools/ci_names_consistency.py` refuses the new aliases (for example Reason, also a conviction) is **not verified**
+   and is read first in the build.
+7. **REM-45 dropped:** CP-T07-02's needs cell, B10-15's order, exit and hash lines and M18 "TAKEN (b)" (`part6.md:152,299,351`)
+   change; CP-T07-02's re-base revives HR-7's superseded override without its "waits on M18" clause: the actor adapter reads
+   `_actor_pool`'s `min(3, history + 3)` as the code has it, and the term's fate goes to CR-85.
+8. **The fold lands before B10-10 opens**, because B11-S2 runs in a parallel worktree on the premise that it edits no file
+   B10-10 edits (`part3.md:88`).
+9. **ED-IN-0333 (the correcting row)** also re-points ED-IN-0320 to 0323's "drop commits 3 and 4" reverts to CR-83.
