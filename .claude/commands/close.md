@@ -17,6 +17,10 @@ edit (CLAUDE.md §0.4).
    - **First decide whether to run it at all** (`CLAUDE.md` §0.4 cl.1): name what it can observe
      that CI's run on push will not. Prose, ledger, skill or link changes run only the test files
      that read what changed (`grep -rl <path> tests/`); CI is the full gate.
+   - **Run `python tools/tests_for_diff.py`** (add `--run` to execute it): it reads what this session changed and names the
+     narrowest suites. An edit confined to `modules/` or `systems/` of combat, mass battle or social contest runs `-m <subsystem>`
+     across all three trees; anything else (engine core, tools, registries) gets the full gates below. It cannot see a
+     realm-level effect of a module edit (the season suite executes the modules too); CI's full run is that check.
    - Red? Re-run **the failing file only** while you fix it. The full suite comes back once, when
      you believe you are done.
    - Touched `engine/season/`? Add `python -m pytest engine/season/tests -q -n auto --dist worksteal`. Touched
