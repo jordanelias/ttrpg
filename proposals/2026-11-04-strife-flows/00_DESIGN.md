@@ -5,7 +5,7 @@
 
 Source: the study "Mechanics of Strife to c. 1600" (102 cases, nine filing categories A to I, 40 move codes, 16 recurring links; claude.ai artifact XDjCCRvbxiPS6sumpRtnte). Jordan's rulings of 2026-11-04, in conversation: outcomes must be possible, never triggered; the flows are a meta-narrative that conditions how people choose; they begin from events that arise in play (taxes raised, drought then famine, a succession crisis); too many live strifes would be illegible to a player, so new events fold into existing flows.
 
-What this adds to `engine/season/`: one pure query module (`queries/situation_q.py`), one roster (rung capacities, terminal moves) in `rosters.yaml`, one stamp in `questions_for`. Nothing is stored, no step is added, no clock runs.
+What this adds to `engine/season/`: one pure query module (`queries/situation_q.py`), one count per code in `strife_moves.yaml` (capacity is read from the order of `rung_kinds`), one stamp in `questions_for`. Nothing is stored, no step is added, no clock runs.
 
 ---
 
@@ -57,38 +57,42 @@ Its **opening kind** is the category of the oldest move in it:
 
 Opening conditions are read off state the loop already holds; nothing fires on them.
 
-## 4. Stakes, scarcity and subsumption
+## 4. Stakes, scarcity, eras and strands
 
-**A flow's rung is its stakes.** A succession crisis at a territory is a small event; at a duchy it is larger; at the realm it is the largest there is. Scarcity follows from where a rung sits in the hierarchy: the higher the rung, the fewer flows it can hold in a reading. Jordan's rulings of 2026-11-04, in conversation:
+**A flow's rung is its stakes.** A succession crisis at a territory is a small event; at a duchy a larger one; at the realm the largest there is. Scarcity follows from where a rung sits in the ladder: the higher the rung, the fewer flows a reading holds.
 
-- **Realm: one flow.** It conditions every flow beneath it.
-- **Duchy: up to two** (a *tributary* flow, which belongs to the realm's flow, and a *discrete* or *isolate* flow, which does not).
-- Rungs below the duchy hold more; their capacity is not yet ruled (see Needs Jordan).
+**Capacity.** Jordan's rulings of 2026-11-04: the realm holds one flow, which conditions every flow beneath it; a duchy holds up to two, a *tributary* strand that drains into the realm's flow and an *isolate* that does not. Below the duchy, "n+1", read as each rung holding one more than the rung above. By the order of the existing `rung_kinds` roster (`person, hearth, community, settlement, territory, province, duchy, realm`) read from the top: realm 1, duchy 2, province 3, territory 4, settlement 5, community 6, hearth 7, person 8. So capacity is a function of a kind's position in a roster that already exists, not a second table of numbers. No slots are typed below the duchy. The built realm has no province rung (census), so 3 binds nothing yet. `[ASSUMPTION; medium; Jordan to correct; revert: delete the rule and §4's fold]` Capacity limits what a *reading* holds at a rung, never an event.
 
-Capacity is a roster in `rosters.yaml` keyed by `RUNG_KINDS` (the closed list), `[ASSUMPTION; medium; Jordan to correct; revert: delete the roster and §4's fold]`. It replaces the earlier per-person limit `K`. It limits what a *reading* holds at a rung; it limits no event.
+**Era and strand.** A succession crisis, a foreign invasion, a famine and a tax crisis can all be open at once, and those living through them do not parse them apart: the realm was very turbulent, and eventually things happened. They are comorbid, tributaries into a river, the river into a funnel. So the realm's one flow is an **era**: a *confluence* whose opening kind is not one category but the set of them open beneath it. A **strand** is a narrative chain of the kind the study's cases are: specific, with its own opening, moves and conclusion, and always at a lower rung than the era it feeds, because specifics are the opposite of a universal. The era is read generally (few referents: the crown, the realm's seats); strands carry the particulars. The study's 102 cases are strands. Both are flows by §3.
 
-**Which flow takes a scarce slot.** The one whose moves reach the most distinct rungs below, then the most recent; ties by claim order. A rule, with no number invented. [ASSUMPTION; medium; Jordan to correct; revert: any other ordering of the same kind.]
+**Which flow takes a scarce slot.** The one whose moves reach the most distinct rungs below, then the most recent; ties by claim order. A rule with no number invented. `[ASSUMPTION; medium; Jordan to correct; revert: any other ordering of the same kind]`
 
-**Overflow is subsumed, not dropped.** A flow that finds no slot at its rung is read as part of the flow at the nearest ancestor rung that has one. At the realm, a second realm-wide event (a foreign invasion during a succession war) is read inside the realm's one flow. At a duchy, a flow that shares referents with the realm flow takes the tributary slot; one that does not takes the isolate slot; a third folds into the realm flow. Nothing is deleted: the moves stay in the ledger as claims, and the person has placed them in a larger picture.
+**Overflow is subsumed, not dropped.** A flow that finds no slot at its rung is read as part of the flow at the nearest ancestor rung that has one. At the realm, a second realm-wide event is read inside the era. At a duchy, a strand that shares referents with the era takes the tributary slot; one that does not takes the isolate slot; a third folds into the era. Nothing is deleted: the moves stay in ledgers as claims.
 
-**A flow grows up the ladder.** A flow is read at the lowest rung covering its moves (§3). A grain dispute at a hearth is a hearth flow; when other moves at other hearths of the same settlement join it, it is read at the settlement; when it spreads across territories it is read at the duchy and contests for a duchy slot. Its stakes rise as its reach does, and the capacity at each rung is what a player meets.
+**A strand grows up the ladder.** It is read at the lowest rung covering its moves (§3). A grain dispute at a hearth is a hearth strand; when other hearths of the settlement join it, it is read at the settlement; across territories, at the duchy, where it contests for a slot. Its stakes rise with its reach.
 
-**The larger flow frames the smaller, for everyone within it.** Every flow beneath the realm's is lived inside it. Whoever lives at a rung the realm flow covers is within it (§5a), aware of it or not. Awareness adds something different: it lets him place his local events in the larger chain and act on its referents (§5). A person with no concept of the war still has his grain requisitioned, his neighbours conscripted and his market shut. Those are his own firsthand claims, and they are moves of the flow whether or not he reads them as one.
+**The larger flow frames the smaller, for everyone within it** (§5a), aware of it or not.
 
-**A flow ends by a concluding outcome, never by quiet.** No timer retires a flow, so a slot frees only when its flow concludes. Reading the study's category "Endings" lines, the outcomes that conclude a case fall into six classes:
+**Conclusion.** No timer retires a flow. A strand concludes on a terminal move; an era concludes when every strand draining into it has concluded. The terminal moves are the artifact's own: the last substantive move (NOTE and OTH set aside) of each of its 102 cases, read by me from the nine case-mapping tables and tallied by script. The study does not state them. `[UNVERIFIED: transcription of 102 final moves from the tables]`
 
-| class | the study's cases | moves that show it |
-|---|---|---|
-| settlement | a charter reissued, a Dictum, treaties, the Compactata, the Edict of Nantes, the Pacification of Ghent, a shared title by agreement | XS, with CO or IN |
-| change of regime or border | a new dynasty, independence, annexation, a ruler deposed and killed | XN, with IN or CL |
-| defeat of the challengers | main force beaten, leaders executed or dead, a city taken, bands broken | WA with CA, XE, KL or DN of the leader; SB; PC |
-| defeat of the authority | the Company took Athens, a challenger held or gained control, a commander independent for seventeen years | WR with KL, FA or XN |
-| relief of the cause | rations arrive or the shortage eases, unpunished; a burden repealed; a reform annulled | the cause's own state: hunger fed, the levy withdrawn, RV |
-| withdrawal or extinction | a retreat to Vilcabamba, removal to Naupactus, a partition of the contest, the rung razed or emptied | RT with the parties gone; PC on a rung that no longer holds the quarrel |
+| ends the most cases | cases |
+|---|---|
+| XP trouble persists | 20 |
+| PC penalty on place | 12 |
+| CO concession | 10 |
+| WA authority wins | 7 |
+| XE leader executed (rebel side 5) | 5 |
+| RV grant revoked | 5 |
+| KL leader killed (rebel side 4, other 1) | 5 |
+| XN regime or border | 4 |
+| XS settlement | 4 |
+| IM new burden | 4 |
 
-The classes are a reading of the study. Which moves are terminal, and whether a class is one outcome or several, is Jordan's (Needs Jordan). A concluded flow may be followed by another whose first move shares its referents (the study's XP, later trouble). That is two flows, and nothing links them but the shared referents.
+and a further fifteen base codes end fewer: OW, IN, SB, PU (3 each); FA, NG, FR (2 each); DN, CL, CP, RF, WN, PT, CA, XA (1 each). Twenty-five base codes end at least one case. The other fifteen never do and cannot conclude a strand: SH, DR, BR, MO, OP, RU, VI, SZ, RG, SP, CH, WR, RT, DA, AM. `strife_moves.yaml` carries the count per code, so the codes ending a single case read as single cases.
 
-What a person can place is open until a claim of a terminal move lands in his ledger. Someone who has not heard the war is over still believes it on and acts on that belief; that follows from AX-7. What binds him by where he lives is the world reading's, and ends when the flow does.
+Two notes on reading these. **XP is not a move the loop produces:** it is the study's mark that later risings are linked to the case. In the loop a strand concludes by persistence when a new strand opens on its referents, and that opening is the event. **A terminal move is not always final in the study:** F-2 holds seven settlements and B-4 follows a settlement with a refusal, a capture and a further settlement. Two rules are candidates: (a) the first terminal move closes the strand, and later conflict on its referents is a new strand; (b) a strand is concluded while its latest move is terminal and reopens if a conflict move follows. They are chosen by measurement, not argument: replay the study's 102 coded paths through each and keep the rule that draws one strand per case most often (§8 step 1).
+
+A person's reading of a strand is open until a claim of a terminal move lands in his ledger. Someone who has not heard that the war is over still believes it on and acts on that belief (AX-7). What binds him by where he lives is the world reading's, and ends when the flow does.
 
 Because a witness and a person who was only told hold different claims, they read different flows from the same events. That is deliberate.
 
@@ -128,6 +132,24 @@ Everyone is within the realm's flow (§4). A hearth-dweller who has heard nothin
 
 The proposed addition is one term in `relation`: the teller's standing in the flow `p` is within, which sets whether `p` credits him more or less. It reads the world reading, not `p`'s ledger, so it binds an unaware `p` as it binds an aware one. It is a **second step**, after the stamp (§5) is measured, for three reasons: it reorders every told claim in the loop and so moves the hash widely; its effect cannot be told apart from the stamp's until the stamp is measured alone; and AX-2 binds `decision/`, so the flow's standing must arrive there as data (as `fx` and the stamped questions do), never as a read of the World. `layer-conformance` Lens B settles that placement before any code.
 
+**The era is a regime's unity.** Simultaneous crises are not parsed apart by those inside them; "the realm was turbulent" is how the regime makes them one. That unity is itself a reading produced within the regime (what is named, what is said to have caused it, who is entitled to say), so persons, offices and factions can hold different accounts of one era and the engine holds none as the true one. The world reading's confluence is the instrument's. A person's era is as much of it as his ledger and his regime give him.
+
+## 5b. Offices and factions are within flows too
+
+Jordan, 2026-11-04: flows condition factions at whatever scale is relevant, and offices, as well as persons. The engine already places all three on the ladder:
+
+| entity | its rung | precedent |
+|---|---|---|
+| person | `home_of`, with the ladder above it | `world_q.reach`, limbs 1 to 3 |
+| office | `Office.rung`; its purview is that rung and its descendants | `reach` limb 4; `faction_q.purview` |
+| faction | the rungs it holds (`faction_q.holdings`, `holder_faction_of`), and its relations (`at_war`) | `queries/faction_q.py` |
+
+So *within* (§5a) is one structural test for all three: the flow's rung is the entity's rung or an ancestor of it (for a faction, of any rung it holds). Only a person acts (AX-1), so offices and factions are conditioned through the persons who act for them, by existing channels:
+
+- **Offices** condition their holder in his capacity. His `reach` already admits claims about his purview; a flow at a rung in his purview or above puts that rung's referents among his occasions, and the seat's remit decides which verbs can answer (a mayor's `requisition`, a duke's `march`). An office is the institutional form of awareness: the holder knows what his claims cover, no more (AX-7).
+- **Factions** are conditioned through their heads and seat-holders. A faction's *position* in a flow (authority, challengers or outside power: the study's side) is read from its holdings, its `at_war` relations and its members' moves. The position grades what its members credit (§5a: a member credits a co-faction teller more) and puts the opposing faction's rungs among its leaders' occasions. Flows do not write a faction's goal rows: they change what a leader attends to, not what the organisation wants.
+- **Scale** is the rung. A guild's strand at a settlement and the Crown's era at the realm are one relation at two rungs, and a faction in several flows holds a position in each.
+
 ## 6. What it refuses
 
 - No stored flow, state, phase or counter (T-a; ED-IN-0225: no arc carrier). Recomputed from claims each time.
@@ -145,22 +167,31 @@ From the draft instrument's first run (upper bounds; see PR 553 for its defects)
 | natural death (DR, DN) | `age_step`, `illness_rate` set by Jordan (CP-T10-05) |
 | outside war and power (OW, XA) | the `foreign` switch (IN-36) |
 | church sanction (CH) | a church seat issuing ban or detain tenures: data, and the seat |
-| execution of a held person (XE) | **a design choice, Jordan's if no precedent answers it**: a sentence through `determine`, or a new verb |
+| execution of a held person (XE) | defined in §9; a verb row `execute`, taken by precedent |
 | declared, none seen (RF, RG, CL, NG, CA, AM, DA, XN) | the aperture funnel per verb first (which clause refuses it); change nothing before that |
 | a later rising linked to this case (XP) | read by `flows_known` itself; no verb |
-| **a terminus from every opening** | for each opening kind and each of the six classes in §4, an act route exists whose last move is terminal. Where none does the flow can never conclude and holds its slot for good: the realm's single slot is the worst case. This is a requirement of the loop, checked by the instrument (§8 step 1) |
+| **a conclusion from every opening** | for each opening kind and each of the 25 terminal base codes in §4, an act route exists whose last move is that code. Where none does the flow can never conclude and holds its slot for good: the realm's single slot is the worst case. This is a requirement of the loop, checked by the instrument (§8 step 1) |
 
 ## 8. Build order, each with its falsifier
 
-1. **Instrument, side-aware** (no hash change). Classify by act, add the 16 links and the leave-and-rejoin profile. Control: the same log with moves shuffled within each case must complete the links no more often than chance. Falsifier: a planted log that completes a known link must read as completing it. Add the terminus check: for each opening kind, run seeds forward and report which of the six classes any flow reached; a class never reached over several seeds is a finding about default play, not proof of absence, and the same run at more seeds is its control.
+1. **Instrument, side-aware** (no hash change). Classify by act, add the 16 links and the leave-and-rejoin profile. Control: the same log with moves shuffled within each case must complete the links no more often than chance. Falsifier: a planted log that completes a known link must read as completing it. Add the conclusion check: for each opening kind, run seeds forward and report which terminal codes any strand reached; a code never reached over several seeds is a finding about default play, not proof of absence, and the same run at more seeds is its control. Classify `person.died` by its causing act (`execute` is XE, a felling `fight` or `march` is KL, no act is DN; DR and the study's second code are a role the death plays in a strand, not another event). Replay the study's 102 coded paths through §4's two strand rules and keep the one that draws one strand per case most often. Add the per-code count of cases ending on it to `strife_moves.yaml`.
 2. **Gaps in §7**, each through its own existing position, each a hash mover declared as such.
 3. **`flows_known`** as a pure query with no consumer. Falsifiers: a witness and a hearsay holder of the same events read different flows; a person with an empty ledger reads none; two realm-wide flows planted in one ledger read as one realm flow with the second inside it; the same ledger with a terminal claim added reads the flow as concluded and frees the realm slot; a ledger with the claim missing still reads it open; a person within the realm flow whose ledger holds none of its moves reads no realm flow (he can place none), yet the world reading lists him as within it, and the §5a credit term (when built) grades his told claims by it.
 4. **The stamp** in `questions_for`, switch shipped off. Control: switch off reproduces the base hash. Guard of §0: over the same seeds, the set of concluding classes reached with the stamp on contains the set reached with it off, and the number of distinct classes reached does not fall. Measure: the stamp changes which verbs form for a person in a held flow, and the `confer` and `oblige` counts CR-49 watches do not fall to 0.
 5. **Deck**: world-build seeds per category through the CL-EVENTS commit (3) schema, measured by step 1.
 
+## 9. Executed, defined (XE)
+
+The study's code is "leader executed; side is the side of the person executed". Its uses: a captured rebel leader put to death by the authority (Ball, Kett, Dózsa, Cade, Egmont and Horn, Aske), a captured authority figure put to death by the challengers (the five XE-A), a rebel leader put to death by another rebel (Bato), and a purge inside the challengers' own side (Želivský, beheaded by the Hussite council of Prague). The robust link is capture then execution (19 of 35 cases). What these share: **a person in custody is put to death by the deliberate act of those holding him, as sentence or order.** The side is the dead person's.
+
+It is not the neighbouring moves. *Killed* (KL) is a death outside custody: in battle, by assassination, by a crowd (Artevelde), by one's own followers. *Died* (DN) is a death with no act of another. *Punished* (PU) is repression short of death.
+
+**In the engine:** a death is an execution when the act that caused it (found by `causes*` into the act store, as `attribution.actor_of` does) is an `execute` act, by a person acting through a seat, on a person who held a live `detain` tenure when it resolved. Any seat with the remit can do it, a rival government's included, so both XE-R and XE-A are producible. A mass execution is one act per person.
+
+**The verb:** a new row `execute`, on the shape of `interrogate` (eligibility `remit:determine`, referent class `Detainee`, the subject a person held in a live `detain`) and `pardon` (`remit:determine`, the subject a person over whom the seat sits as a bench). The pair is deliberate: `pardon` ends the detention, `execute` ends the life. It writes the same death path as a felled combatant (`person.died`, the dead person's seats closed per CP-T02-01). It is a hash mover and is built through its own position, not here. Taken by precedent and by what the architecture allows (CLAUDE.md §0, steps 4 and 5), not put to Jordan. `[ASSUMPTION; medium; Jordan to correct; revert: delete the verb row]`
+
 ## Needs Jordan
 
-1. Capacities for the rungs below the duchy: territory, settlement, community, hearth and person (§4). Realm 1 and duchy 2 are ruled; nothing else depends on the others' values.
-2. The terminal moves (§4): confirm or change the six classes, and which moves show each. Nothing is built on a class until this is answered.
-3. Execution (§7): a `determine` sentence or a new verb.
-4. Whether the credit term of §5a is a second step as proposed or part of the first build.
+1. Whether the credit term of §5a is a second step as proposed, or part of the first build.
+
+Taken by precedent or from the artifact, with the reasoning above: capacities (§4: n+1), terminal moves (§4: the artifact's own), execution (§9). Each carries an `[ASSUMPTION]` and a revert.
