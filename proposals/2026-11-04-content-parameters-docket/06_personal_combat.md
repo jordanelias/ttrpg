@@ -152,7 +152,7 @@ Belongs elsewhere: mass-battle `ARMOURY` (see ENTITY 5).
 Population now: none   Status: EMPTY
 | # | group | parameter | domain | req | now | called for by |
 |---|---|---|---|---|---|---|
-| 1 | shield | any shield/buckler record or field | — | — | NONE (grep `shield|buckler` in modules/combat hits only comments about armour "shielding") | measured grep |
+| 1 | shield | any shield/buckler record or field | — | — | NONE (grep `shield / buckler` in modules/combat hits only comments about armour "shielding") | measured grep |
 | 2 | kit | `arms_kinds` roster (kind -> one of `weapon`/`armor` field, key, `rank`) | roster in `rosters.yaml`, validated at load vs typed export of WEAPONS keys + armour tiers | PLAN | NONE (grep `arms_kinds` in engine/season/*.yaml: 0) | CP-T03-03 (…-03-personal-combat.md:140-157) |
 | 3 | kit | `arms_at_build` (seeding arms into stores by holding rung kind) | map; [ASSUMPTION; medium] | PLAN | NONE | CP-T03-03 |
 | 4 | kit | arms as `matter_kinds` members | open registry members | PLAN | NONE | CP-T03-03 (ROS:1423) |

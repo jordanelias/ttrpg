@@ -25,6 +25,10 @@ Authority order used throughout: (1) code that reads the field (loader, dataclas
 | 10 | `10_season_loop_choices.md` | season phases, decision questions, option sets, the NPC chooser, budget, deliberation, contest and ladder seams, the player-facing seam, every choice point |
 | 11 | `11_workplan_owed.md` | every position, question or gate in the v10 plan where content is owed by Jordan or by authoring |
 
+## Workbooks (for review and editing in Excel or Google Sheets)
+
+`workbooks/` holds one workbook per chapter (`01_characters.xlsx` and so on), each with one sheet per data type and a `Notes` sheet carrying the chapter's non-table lines, plus `00_master_index.xlsx` (the file list, every sheet, and the overlaps). Every table row has a `row_id` in column A. Edit cells, rows, columns or sheets freely; keep `row_id` on existing rows and leave it blank on rows you add. The markdown remains the source until edits are adopted into it.
+
 ## How to read an entity table
 
 `#` suggested supply order (identity first, then the layers that depend on it). `group` the layer. `domain` the type, with the closed set or bounds where code states one and the path that owns it. `req`: **REQ** a loader or validator refuses without it; **OPT**; **DERIVED** the engine computes it, so it is not authored; **PLAN** the plan calls for it and no carrier exists; **PROPOSED-ONLY** only a proposal names it; **RETIRED-KEY** only the retired substrate names it. `now`: **HAS** a value is in the tree; **STUB** a placeholder, default or `[ASSUMPTION]`; **NONE**. Entity `Status`: **AUTHORED**, **PARTIAL**, **EMPTY**, **PLACEHOLDER**. `[ASSUMPTION; medium; Jordan to correct]` is the repo's own tag for values an earlier session supplied; it means Jordan has not ruled them.

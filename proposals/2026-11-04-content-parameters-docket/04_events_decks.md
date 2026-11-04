@@ -52,7 +52,7 @@ Population now: 0 in code; 9 `gf_*` goal rows drafted in 08 §2 (parse-tested pe
 | 5 | content | goal rows | goals schema | PROPOSED-ONLY | 9 drafted | 08 §2 |
 | 6 | content | seed Record | Record held from build (carrier owed) | PROPOSED-ONLY | NONE | 08 §2 G505 |
 | 7 | content | opens_with | existing verb name, loader-verified | PLAN | NONE | part4 CL-OPEN |
-| 8 | draw | deal | `build | convene` | PROPOSED-ONLY | NONE | 08 §4 |
+| 8 | draw | deal | `build / convene` | PROPOSED-ONLY | NONE | 08 §4 |
 Owed: 12 of 28 cards have no engine form (G205, G301, G302, G401, G403, G404, G501, G504, G601, G604, G701, G702); loader `settlement_openings`; pool size P>=36 (first slice 8) per A5 §2.
 Conflicts: A5 "each world draws 6 (2 Tensions + 4 openable)" vs plan CL-OPEN "a few bundles" (unspecified).
 

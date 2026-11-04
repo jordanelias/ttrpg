@@ -207,7 +207,7 @@ Population now: arrangement `parliamentary_debate` and `council_of_state` only (
 | 2 | bench | judging set = live `hold` Tenures granted the bench basis whose Office `scope_rung` contains venue | derived | DERIVED | — | queries/world_q.py:569 |
 | 3 | sitting | `convene` Date + slots `{date, matter:None}` | derived | DERIVED | — | loop/calendar.py; world_q.py:266 |
 | 4 | vote | `vote` position / declared-disposal reader | — | PLAN | NONE | plan part12:301 (H-90, unscheduled); CR-34 part3:175 |
-| 5 | Parliament as constraint / sovereign power | — | PLAN (held) | NONE | part12:301 |
+| 5 | — | Parliament as constraint / sovereign power | — | PLAN (held) | NONE | part12:301 |
 Owed: PROPOSED-ONLY content in proposals/2026-10-29-parliament-and-debate/2026-10-29-parliament-and-debate.md, `...reasons-to-convene.md`, `...resolution-design.md` — not extracted in this pass (files not opened).
 
 ## Stance / audience inputs  — carrier/loader: carriers.py:703 (`Person.stance`), queries/world_q.py:676 (`reception`), :736 (`proofs`), :660 (`remove_weight`)
