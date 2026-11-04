@@ -5,13 +5,13 @@
 
 Source: the study "Mechanics of Strife to c. 1600" (102 cases, nine filing categories A to I, 40 move codes, 16 recurring links; claude.ai artifact XDjCCRvbxiPS6sumpRtnte). Jordan's rulings of 2026-11-04, in conversation: outcomes must be possible, never triggered; the flows are a meta-narrative that conditions how people choose; they begin from events that arise in play (taxes raised, drought then famine, a succession crisis); too many live strifes would be illegible to a player, so new events fold into existing flows.
 
-What this adds to `engine/season/`: one pure query module (`queries/situation_q.py`), one roster (rung capacities, quiet interval) in `rosters.yaml`, one stamp in `questions_for`. Nothing is stored, no step is added, no clock runs.
+What this adds to `engine/season/`: one pure query module (`queries/situation_q.py`), one roster (rung capacities, terminal moves) in `rosters.yaml`, one stamp in `questions_for`. Nothing is stored, no step is added, no clock runs.
 
 ---
 
 ## 1. What the study licenses
 
-A space of chains, not a script. Cases share 40 moves and 16 recurring links, spend about a quarter of their moves on those links, and leave and rejoin them constantly; 93 of 102 end off the links. Categories differ in how they open and how they end, and in almost nothing between (only A's natural shock and B's death, regime change and claim are distinctive, and those are what the labels name). So: **a flow is an open chain of moves around shared referents; its category is only the kind of event that opened it.** Membership must not require the 16 links, or a detour would end a flow.
+A space of chains, not a script. Cases share 40 moves and 16 recurring links, spend about a quarter of their moves on those links, and leave and rejoin them constantly; 93 of 102 end off the links, which says where on the chain they stop and not that they stop without an ending: every dossier records one (each category section's "Endings" line). Categories differ in how they open and how they end, and in almost nothing between (only A's natural shock and B's death, regime change and claim are distinctive, and those are what the labels name). So: **a flow is an open chain of moves around shared referents; its category is only the kind of event that opened it.** Membership must not require the 16 links, or a detour would end a flow.
 
 ## 2. Two readings, and where each may be read
 
@@ -27,6 +27,8 @@ Both are pure functions: same input, same output, nothing written. The person re
 A **move** is a ledger claim whose Event kind and act classify to one of the 40 codes (`strife_moves.yaml`, to be made side-aware by classifying on the act: verb, degree, and the actor's faction against the holder of the rung). Non-strife claims never join a flow.
 
 A **flow** is a maximal set of moves linked by shared referents, with referents compared through the rung ladder (`ancestry`, `place_of`, `holder_faction_of`): two moves are linked if their referents are the same, or one is an ancestor of the other, or they share a faction. It sits at the lowest rung that covers its moves, so a flow zooms: a hearth's grain dispute is a flow at the hearth; when its referents join others' under one territory it is read at the territory.
+
+A flow has a **terminus**: a concluding outcome (§4). A chain of moves that has not reached one is an **open** flow, still unfolding, and is read as such; one that has is **concluded**. A chain that could never reach one is not a flow. That is a defect in the loop, not a state (§7).
 
 Its **opening kind** is the category of the oldest move in it:
 
@@ -58,7 +60,20 @@ Capacity is a roster in `rosters.yaml` keyed by `RUNG_KINDS` (the closed list), 
 
 **The larger flow frames the smaller.** Every flow beneath the realm's is read within it: the realm flow's referents are stamped among a person's occasions (§5) alongside the local flow's, so an isolate flow is still understood in its larger context. This holds only for a person whose ledger holds the realm flow's moves. Someone who has not heard of the war frames his hearth's quarrel by nothing; that follows from AX-7 and is intended.
 
-**Quiet retires.** A flow with no new move in `T` seasons is no longer active in the reading. The study ends 93 of 102 cases without a closing move, so retiring by quiet is the case, not the exception. `T` is a roster value with no value proposed here; it can be measured from the dates in the 102 dossiers.
+**A flow ends by a concluding outcome, never by quiet.** No timer retires a flow, so a slot frees only when its flow concludes. Reading the study's category "Endings" lines, the outcomes that conclude a case fall into six classes:
+
+| class | the study's cases | moves that show it |
+|---|---|---|
+| settlement | a charter reissued, a Dictum, treaties, the Compactata, the Edict of Nantes, the Pacification of Ghent, a shared title by agreement | XS, with CO or IN |
+| change of regime or border | a new dynasty, independence, annexation, a ruler deposed and killed | XN, with IN or CL |
+| defeat of the challengers | main force beaten, leaders executed or dead, a city taken, bands broken | WA with CA, XE, KL or DN of the leader; SB; PC |
+| defeat of the authority | the Company took Athens, a challenger held or gained control, a commander independent for seventeen years | WR with KL, FA or XN |
+| relief of the cause | rations arrive or the shortage eases, unpunished; a burden repealed; a reform annulled | the cause's own state: hunger fed, the levy withdrawn, RV |
+| withdrawal or extinction | a retreat to Vilcabamba, removal to Naupactus, a partition of the contest, the rung razed or emptied | RT with the parties gone; PC on a rung that no longer holds the quarrel |
+
+The classes are a reading of the study. Which moves are terminal, and whether a class is one outcome or several, is Jordan's (Needs Jordan). A concluded flow may be followed by another whose first move shares its referents (the study's XP, later trouble). That is two flows, and nothing links them but the shared referents.
+
+A person's reading is open until a claim of a terminal move lands in his ledger. Someone who has not heard the war is over still reads it as on, and acts accordingly; that follows from AX-7.
 
 Because a witness and a person who was only told hold different claims, they read different flows from the same events. That is deliberate.
 
@@ -73,7 +88,7 @@ The flow's opening kind and last move are not read by any chooser in this design
 ## 6. What it refuses
 
 - No stored flow, state, phase or counter (T-a; ED-IN-0225: no arc carrier). Recomputed from claims each time.
-- No date, deadline, firing condition or outcome on anything (T-c, M16(b)). A flow has no next move.
+- No date, deadline, firing condition or outcome on anything (T-c, M16(b)). A flow has no next move. A terminus is recognized when persons' acts produce it; nothing authors it and nothing makes it happen, so it is not an outcome in M16(b)'s sense.
 - No self-worsening condition (M16's fourth motion, ED-IN-0301). Drought is weather on matter, famine is bodies, the rest is persons acting.
 - No backbone required for membership (§1).
 
@@ -90,17 +105,18 @@ From the draft instrument's first run (upper bounds; see PR 553 for its defects)
 | execution of a held person (XE) | **a design choice, Jordan's if no precedent answers it**: a sentence through `determine`, or a new verb |
 | declared, none seen (RF, RG, CL, NG, CA, AM, DA, XN) | the aperture funnel per verb first (which clause refuses it); change nothing before that |
 | a later rising linked to this case (XP) | read by `flows_known` itself; no verb |
+| **a terminus from every opening** | for each opening kind and each of the six classes in §4, an act route exists whose last move is terminal. Where none does the flow can never conclude and holds its slot for good: the realm's single slot is the worst case. This is a requirement of the loop, checked by the instrument (§8 step 1) |
 
 ## 8. Build order, each with its falsifier
 
-1. **Instrument, side-aware** (no hash change). Classify by act, add the 16 links and the leave-and-rejoin profile. Control: the same log with moves shuffled within each case must complete the links no more often than chance. Falsifier: a planted log that completes a known link must read as completing it.
+1. **Instrument, side-aware** (no hash change). Classify by act, add the 16 links and the leave-and-rejoin profile. Control: the same log with moves shuffled within each case must complete the links no more often than chance. Falsifier: a planted log that completes a known link must read as completing it. Add the terminus check: for each opening kind, run seeds forward and report which of the six classes any flow reached; a class never reached over several seeds is a finding about default play, not proof of absence, and the same run at more seeds is its control.
 2. **Gaps in §7**, each through its own existing position, each a hash mover declared as such.
-3. **`flows_known`** as a pure query with no consumer. Falsifiers: a witness and a hearsay holder of the same events read different flows; a person with an empty ledger reads none; two realm-wide flows planted in one ledger read as one realm flow with the second inside it; a hearth flow planted beside a realm flow it shares no referent with, in the ledger of someone who has not heard of the realm flow, reads without the frame.
+3. **`flows_known`** as a pure query with no consumer. Falsifiers: a witness and a hearsay holder of the same events read different flows; a person with an empty ledger reads none; two realm-wide flows planted in one ledger read as one realm flow with the second inside it; the same ledger with a terminal claim added reads the flow as concluded and frees the realm slot; a ledger with the claim missing still reads it open; a hearth flow planted beside a realm flow it shares no referent with, in the ledger of someone who has not heard of the realm flow, reads without the frame.
 4. **The stamp** in `questions_for`, switch shipped off. Control: switch off reproduces the base hash. Measure: the stamp changes which verbs form for a person in a held flow, and the `confer` and `oblige` counts CR-49 watches do not fall to 0.
 5. **Deck**: world-build seeds per category through the CL-EVENTS commit (3) schema, measured by step 1.
 
 ## Needs Jordan
 
 1. Capacities for the rungs below the duchy: territory, settlement, community, hearth and person (§4). Realm 1 and duchy 2 are ruled; nothing else depends on the others' values.
-2. `T`, the quiet interval (§4).
+2. The terminal moves (§4): confirm or change the six classes, and which moves show each. Nothing is built on a class until this is answered.
 3. Execution (§7): a `determine` sentence or a new verb.
