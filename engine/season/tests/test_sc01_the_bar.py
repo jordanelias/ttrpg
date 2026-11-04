@@ -24,7 +24,7 @@ pieces of character data, the kind the realm's builder authors for every person:
 MEASURED 2026-10-16 at eb9ba4e2 (a one-off sweep, not kept): this world at each of the 15 convictions x
 seeds 0..15, ten seasons, 240 runs -- 72 `matter.determined`, and 4 of them walk to a `date.fired`
 (doctrine 12, family 13, reputation 13, scholastics 6); this file first ran scholastics 6 and family 13;
-the seeds it runs now are those of `PROCEEDINGS` below (re-traced at v10 REM-25 and at CR-16, which left no family proceeding). The other 68 are raised by the ambition (`need`, whose occasion is `[ROOT]`,
+the seeds it runs now are those of `PROCEEDINGS` below (re-traced at v10 REM-25, at CR-16 which left no family proceeding, and at v11 CR-10/CR-28). The other 68 are raised by the ambition (`need`, whose occasion is `[ROOT]`,
 `world_q.occasioned_by`): the chooser docketed the clerk BEFORE any sitting fired, so `_eff_open_case`
 appended a dateless item, `docketed` then declines every later `open_case` on him, no slot ever holds
 him, and `determine`'s docket conjunct (existence of a DocketItem, dated or not) admits the
@@ -46,7 +46,7 @@ THE FALSIFIERS, each seen red before it was trusted (2026-10-16, mutations run a
   * A BROKEN CAUSE LINK REDDENS THE BAR: the sitting question built with `about=None` in
     `world_q.questions_for` -- scholastics/6 *no determination's causes reach a date.fired (1
     determined, 1 fired)*.
-  * THE CONTROL beside them, kept as a test (virtue, seed 0 since B10-09 close one, scholastics/6 at CP-T02-05, virtue/2 before it back to CP-T05-04; doctrine/8 until it; community/13 until SC-03b): a held date fires and, after it,
+  * THE CONTROL beside them, kept as a test (stability, seed 8 since B10-09 close two; virtue, seed 0 from B10-09 close one, scholastics/6 at CP-T02-05, virtue/2 before it back to CP-T05-04; doctrine/8 until it; community/13 until SC-03b): a held date fires and, after it,
     the Duke determines the clerk out of his ambition -- the walk is False there, so THE BAR's walk is
     not satisfied by a firing merely preceding a determination.
   * THE CLOSURE TEST: the planted `if arrangement.id == "tribunal":` written into the real
@@ -138,7 +138,14 @@ DUKE, SEAT, PARTY, WANT = "p_high", "off_duke", "p_mid", "prop_bar_duke_want"
 # in a different assertion); a sweep of family x seeds 0..39 at 5 seasons finds none, so both proceedings are scholastics' (scratch,
 # not kept; the two worlds differ by seed, and the file's own distinct-hash assertion holds). ATTRIBUTION, in process on this tree:
 # `stance_polarity` swept back to `legacy` on `BAR_FIXTURES` meets every assertion at scholastics/21/6 and family/13/5 again.
-PROCEEDINGS = (("scholastics", 13, 6), ("scholastics", 33, 6))
+# v11 CR-10 + CR-28 (B10-09 close two): RE-TRACED AGAIN, scholastics/13/6 and scholastics/33/6 -> virtue/30/6 and
+# scholastics/115/6, the season counts unchanged -- CR-10's own-act screen (CR-10 left both proceedings red: scholastics/13
+# "no determination's causes reach a date.fired (0 determined, 1 fired)") and CR-28's `propositions_heard` term moved the act
+# mix of these worlds. A sweep of the 15 convictions x seeds 0..120 at 6 seasons for a run meeting every assertion of
+# `_proceeding` found two in 1815 runs, virtue/30 and scholastics/115 (the producer's scratch, not kept; the base rate was not
+# measured); both were re-run here twice, byte-identical, hashes db518c5d and 108f5d6d. The bar is an existence claim on
+# SELECTED seeds (above), not a rate. [GAP: the sweep's lowest-seed claim is the producer's, not re-run by the orchestrator]
+PROCEEDINGS = (("virtue", 30, 6), ("scholastics", 115, 6))
 BAR_FIXTURES = DEFAULT_FIXTURES.sweep("pool_default", 30)       # v9 SC-03b: a judge whose finding opens
 # v9 IN-12 step 9: RE-TRACED, the conviction and season count unchanged -- `argue`/`sabotage`/`tend`/`train`
 # are new members of the Duke's and the clerk's option sets, so doctrine/8's trajectory moved (it now fires
@@ -167,7 +174,11 @@ BAR_FIXTURES = DEFAULT_FIXTURES.sweep("pool_default", 30)       # v9 SC-03b: a j
 # act mix of this world moved. A sweep of all 15 convictions x seed 0 at 5 seasons for a run meeting every assertion of the control
 # test below finds doctrine/0 and virtue/0 (scratch, not kept); seed 0 is the lowest seed, and the tie is broken by keeping the
 # conviction the control had before CP-T02-05 (virtue), so virtue/0 is taken. The two PROCEEDINGS are unmoved (they meet every assertion on this tree).
-CONTROL = ("virtue", 0, 5)     # was ("scholastics", 6, 5) from CP-T02-05 to its revert; ("virtue", 2, 5) before it; ("community", 13, 5) until v9 SC-03b; ("doctrine", 8, 5) until IN-12 step 9; 22 until step 10; 83 until REM-22; 8 until CP-T05-04; ("virtue", 2, 5) until CP-T02-05
+# v11 CR-10 + CR-28 (B10-09 close two): the CONTROL moves too, virtue/0 -> stability/8, the season count unchanged -- the
+# same two moves took virtue/0's pattern (ONE date fires, the Duke determines the clerk out of his ambition after it). The
+# producer's sweep of the 15 convictions at 5 seasons found stability/8 and stability/111 (scratch, not kept); stability/8
+# was re-run here and meets every assertion of the control test below.
+CONTROL = ("stability", 8, 5)  # was ("virtue", 0, 5) until CR-10/CR-28; was ("scholastics", 6, 5) from CP-T02-05 to its revert; ("virtue", 2, 5) before it; ("community", 13, 5) until v9 SC-03b; ("doctrine", 8, 5) until IN-12 step 9; 22 until step 10; 83 until REM-22; 8 until CP-T05-04; ("virtue", 2, 5) until CP-T02-05
 
 
 def _world(conviction: str, seed: int):
