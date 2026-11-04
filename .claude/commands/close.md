@@ -19,7 +19,7 @@ edit (CLAUDE.md §0.4).
      that read what changed (`grep -rl <path> tests/`); CI is the full gate.
    - Red? Re-run **the failing file only** while you fix it. The full suite comes back once, when
      you believe you are done.
-   - Touched `engine/season/`? Add `python -m pytest engine/season/tests -q -n auto`. Touched
+   - Touched `engine/season/`? Add `python -m pytest engine/season/tests -q -n auto --dist worksteal`. Touched
      nothing it can reach? Do not run it.
 
 4. **The lane's validator**, not all of them. `python tools/valoria_local.py --staged` runs the

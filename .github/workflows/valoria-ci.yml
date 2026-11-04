@@ -414,7 +414,11 @@ jobs:
       # `-n auto` and no `-m`, for the reason `unit-tests` records: it changes WHERE tests run, never
       # WHICH, and a `-m` filter here is a shipping-gate coverage cut that
       # tests/valoria/test_pytest_marker_discipline.py::test_ci_invocation_is_unfiltered rejects.
-      - run: python -m pytest engine/season/tests -q -n auto
+      # `--dist worksteal` changes only the ORDER tests reach workers, never which run: the default hands
+      # tests out in collection order, so the 100-second tests that sit late leave the other workers idle
+      # behind them. Measured on 4 cores, same 2,295 tests: 489-505 s -> 398 s (the same flag on
+      # `tests/valoria` gained nothing, 189 s against 187-216 s, so that job keeps `-n auto`).
+      - run: python -m pytest engine/season/tests -q -n auto --dist worksteal
       # The nine acceptance requirements (Jordan, 2026-09-05) — fails a row claiming a status
       # with no measurement behind it, or naming a measure command that resolves to nothing.
       # ⚠ `-m`, AND UNDER `harness/`. The decomposition (ED-IN-0203) made this a package

@@ -15,11 +15,14 @@ THE CHAIN, FOUR LINKS, AND WHICH ONE A RED NAMES (`_failing_link`):
         `question_aggregation_rule`, `first`) carries no `Office` class pair for `off_king`.
 
 TWO KINDS OF ARM, AND THEY ARE NOT THE SAME CLAIM:
-  * the SEEDED arm (`build_realm(s)`, s = 0-2, four seasons) RECORDS its reading -- which seed, which
-    season, or none -- and asserts only that it looked (`checked`). It passes with "none".
+  * the SEEDED arm (`build_realm(s)`, s = 0-2, four seasons) is a READING, and it lives in
+    `harness/heir_hears.py` (`python -m engine.season.harness.heir_hears --seeds 0 1 2 --seasons 4`): which
+    seed, which season, or none. It was a test here that passed with "none" and cost about 220 CPU-seconds
+    of the suite; the plan (V2) says a reading is a harness reader.
   * the PLANTED arms (a death of the throne-holder at MATTER's death write; a `release` of the throne by
-    its holder through the real fold) must pass whatever the seeds do. A planted arm passing alone does
-    NOT make `succeed` executed in computed play: that is the seeded reading's, a residue if it is none.
+    its holder through the real fold) must pass whatever the seeds do, and they are this file's tests. A
+    planted arm passing alone does NOT make `succeed` executed in computed play: that is the seeded
+    reading's, a residue if it is none.
 
 FALSIFIER: `World.seat_holds` returning nothing (CP-T02-01's emission helper off) turns the planted
 death red at link (i). CONTROL: the same arm before the death (the throne held), and the stubbed arm
@@ -30,41 +33,18 @@ from __future__ import annotations
 import pytest
 
 from ..data.matrix import Step, WriteClass
-from ..decision import make_chooser
-from ..decision.questions import aggregate_questions
+from ..harness.heir_hears import HEIR_SEAT, THRONE
+from ..harness.heir_hears import HeirSpy as _HeirSpy      # the names stay: `test_in61_succession.py`
+from ..harness.heir_hears import holder as _holder        # imports `_holder` and `_one_season` from here
+from ..harness.heir_hears import one_season as _one_season
+from ..harness.heir_hears import reading as _reading
 from ..harness.populated import build_realm
-from ..loop import driver as DRV
-from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
+from ..loop.driver import SeasonDriver, mint_token
 from ..loop.matter import _die
 from ..queries import world_q
 from ..queries.person_q import ledger_names
 from ..state.carriers import Act
-from ..state.ids import H, draw_factory
 from ..state.world import World
-
-THRONE, HEIR_SEAT = "off_king", "off_heir"
-SEEDS, SEASONS = (0, 1, 2), 4
-
-
-def _holder(w, seat):
-    """The one live holder of `seat` (`None` when it is vacant): a live `hold` edge on it."""
-    held = [t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == seat]
-    assert len(held) <= 1, f"{seat} has {len(held)} live holders: {held}"
-    return held[0] if held else None
-
-
-def _classed(q):
-    return ("off_king", "Office") in q.classes if q is not None else False
-
-
-def _reading(w, heir, qs):
-    """What the four links read at ONE question set handed to `heir` (the barrier-2 projection)."""
-    rule = w.fixtures.get("question_aggregation_rule")
-    answered = aggregate_questions(qs, rule) if qs else None
-    return {"in_ledger": THRONE in ledger_names(heir.ledger),
-            "seats_named": THRONE in world_q.seats_named(w, heir),
-            "stamped": any(_classed(q) for q in qs),
-            "answered": _classed(answered) and THRONE in answered.referents_for("Office")}
 
 
 def _failing_link(deposited_at_witness, readings):
@@ -83,85 +63,11 @@ def _failing_link(deposited_at_witness, readings):
     return None
 
 
-class _HeirSpy:
-    """A spy on `loop.driver.questions_for` (the barrier-2 call site), recording every question set handed
-    to the heir with the tick, whether the throne was held and whether he lived. `questions_for` is
-    imported by name into `loop.driver`, which is why the spy names that module (its docstring says so)."""
-
-    def __init__(self, heir_id):
-        self.heir_id, self.sets = heir_id, []
-
-    def install(self, monkeypatch):
-        orig = DRV.questions_for
-
-        def spy(w, p, since=None):
-            out = orig(w, p, since)
-            if p.id == self.heir_id:
-                self.sets.append({"tick": w.tick, "throne_held": _holder(w, THRONE) is not None,
-                                  "reading": _reading(w, p, out), "n": len(out)})
-            return out
-        monkeypatch.setattr(DRV, "questions_for", spy)
-
-
-def _one_season(w, d):
-    """One real season: MATTER, CALENDAR, the rounds of DELIBERATE, RESOLVE and WITNESS."""
-    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
-                      draw=draw_factory(w.world_seed, lambda: w.tick))
-    return d.season(ch, question=None, contest_max_depth=w.fixtures.get("contest_max_depth"))
-
-
-# --- THE SEEDED ARM ------------------------------------------------------------------------------
-
-@pytest.fixture(scope="module", params=SEEDS, ids=[f"seed{n}" for n in SEEDS])
-def seeded(request):
-    """`build_realm(s)` for ONE seed, four seasons, the heir's question sets recorded. PARAMETRIZED BY SEED
-    (orchestrator, v10 CR-26): the three seeds were one serial fixture of about seven minutes, the critical
-    path of a parallel run; as three params they are three tests a worker each. The reading the plan's PASS
-    clause asks (\"in at least one of s = 0-2\") is the union of the three printed lines. The module's
-    monkeypatch is hand-made (the fixture outlives a test's)."""
-    seed = request.param
-    mp = pytest.MonkeyPatch()
-    try:
-        w = build_realm(seed)
-        heir_id = _holder(w, HEIR_SEAT)
-        assert heir_id and _holder(w, THRONE) and heir_id != _holder(w, THRONE), "fixture moved"
-        spy = _HeirSpy(heir_id)
-        spy.install(mp)
-        d = SeasonDriver(w)
-        vacated = None
-        for season in range(SEASONS):
-            _one_season(w, d)
-            if vacated is None and _holder(w, THRONE) is None:
-                vacated = {"season": season + 1, "heir_alive": heir_id in w.persons}
-        mp.undo()
-        return {"seed": seed, "heir": heir_id, "sets": spy.sets, "vacated": vacated,
-                "ever_classed": [s["tick"] for s in spy.sets if s["reading"]["answered"]]}
-    finally:
-        mp.undo()
-
-
-def test_seeded_arm_records_which_seed_and_season_vacates_the_throne_under_a_living_heir(seeded):
-    """RECORDS, does not assert, the reading; passes with 'none'. It asserts that it looked (§0.1 pt 2):
-    this seed handed the heir a question set at every season's DELIBERATE, and what it checks is the sets it
-    read. THE THRONE VACATED WHILE THE HEIR LIVES, then the heir hearing it at a later DELIBERATE is the PASS
-    reading; a vacancy he did not hear is printed as UNHEARD, not hidden."""
-    r = seeded
-    checked = len(r["sets"])
-    assert checked >= SEASONS, f"the heir was handed only {checked} question sets"
-    assert len({s["tick"] for s in r["sets"]}) >= SEASONS, "the seed skipped a season"
-    vac = r["vacated"]
-    heard = bool(vac and vac["heir_alive"] and any(
-        s["reading"]["answered"] and not s["throne_held"] for s in r["sets"]))
-    unheard = bool(vac and vac["heir_alive"] and not heard)
-    pre = sum(1 for s in r["sets"] if s["throne_held"] and s["reading"]["answered"])
-    print(f"\nCR-26 SEEDED READING seed {r['seed']} x {SEASONS} seasons: checked={checked} heir "
-          f"question sets; throne vacated: {vac or 'none'}; heard by a living heir: "
-          f"{'yes' if heard else 'none'}; vacated but UNHEARD: {'yes' if unheard else 'none'}; "
-          f"classed off_king while the throne was HELD: {pre} (control, expected 0)")
-    # The control half is an assertion, not a record: with the throne held no set names it classed.
-    assert pre == 0, "a set named the held throne as a classed referent: the control is not clean"
-
+# --- THE SEEDED ARM: A READING, NOT A TEST -------------------------------------------------------
+# `python -m engine.season.harness.heir_hears --seeds 0 1 2 --seasons 4` prints which seed and season
+# vacates the throne under a living heir, and whether he hears it. It was a test of three four-season
+# realms that passed with "none" by design (about 220 CPU-seconds of the suite); the plan's V2 says a
+# reading is a harness reader, and the plan (CR-26) already said the seeded arm is "never asserted".
 
 # --- THE PLANTED ARMS ----------------------------------------------------------------------------
 
