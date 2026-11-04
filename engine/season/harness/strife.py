@@ -32,21 +32,24 @@ import sys
 from collections import Counter
 from typing import Callable, NamedTuple, Optional
 
-from ..data.strife import MOVES, SIGNATURES
+from ..data.rosters import DETAIN_KIND
 from ..data.verbs import VERB_TABLE
 from ..loop.driver import resolvable_verbs
 from ..queries.world_q import faction_holding, faction_of, hold_force
 from ..state.attribution import causing_act
 from ..state.containment import ancestry
 from . import populated
+from .strife_data import MOVES, SIGNATURES
 
 
 class Readers(NamedTuple):
     """What a signature needs to know about an Event, as functions, so a planted test can stand in
     for a World. `cause_verb` is the verb of the act that caused the Event, or `None` when no act did.
-    `attacker_side` is `A` or `R` for a march and `None` otherwise or when it cannot be told."""
+    `attacker_side` is `A` or `R` for a march and `None` otherwise or when it cannot be told.
+    `victim_held` is true when the person the Event reports dead held a live `detain` tenure at its tick."""
     cause_verb: Callable
     attacker_side: Callable
+    victim_held: Callable = staticmethod(lambda e: False)
 
 
 def governors(w, rung: Optional[str]) -> list:
@@ -81,7 +84,12 @@ def readers_for(w) -> Readers:
         rung = (a.payload or {}).get("subject") if isinstance(a.payload, dict) else None
         return side_against(faction_of(w, a.actor), governors(w, rung))
 
-    return Readers(cause_verb, attacker_side)
+    def victim_held(e):
+        victims = {c.subject for c in e.changes if c.field == "exists"}
+        return any(t.kind == DETAIN_KIND and t.subject in victims and t.since <= e.emitted_at
+                   and (t.until is None or t.until >= e.emitted_at) for t in w.tenures)
+
+    return Readers(cause_verb, attacker_side, victim_held)
 
 
 def classify(e, rd: Readers, signatures=SIGNATURES) -> list:
@@ -100,6 +108,8 @@ def classify(e, rd: Readers, signatures=SIGNATURES) -> list:
         if cv not in (None, "none") and verb != cv:
             continue
         if "attacker" in g and side != g["attacker"]:
+            continue
+        if "victim_held" in g and bool(rd.victim_held(e)) != g["victim_held"]:
             continue
         out.append((g["code"], side))
     return out
@@ -157,12 +167,13 @@ def report(m: dict) -> str:
     tally = Counter(st for _, st, _, _ in m["rows"])
     out.append("  ".join(f"{k} {tally[k]}" for k in ("OBSERVED", "UNOBSERVED", "KIND-ONLY", "DARK", "GAP")))
     out.append("")
-    out.append(f"{'code':<4} {'move':<24} {'status':<11} {'n':>6}  {'A':>4} {'R':>4}  route")
+    out.append(f"{'code':<4} {'move':<24} {'status':<11} {'n':>6}  {'A':>4} {'R':>4}  {'ends':>4}  route")
     for r, st, n, rt in m["rows"]:
         a = m["act"].get((r["code"], "A"), 0)
         rr = m["act"].get((r["code"], "R"), 0)
         rtxt = ", ".join(v for v, _ in rt) if rt else "NONE"
-        out.append(f"{r['code']:<4} {r['name']:<24} {st:<11} {n:>6}  {a:>4} {rr:>4}  {rtxt}")
+        ends = r.get("ends", 0) if r.get("terminal", True) else 0
+        out.append(f"{r['code']:<4} {r['name']:<24} {st:<11} {n:>6}  {a:>4} {rr:>4}  {ends:>4}  {rtxt}")
     out.append("")
     out.append("No verb route (a condition of possibility is missing):")
     for r, st, n, rt in m["rows"]:

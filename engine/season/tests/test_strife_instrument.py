@@ -24,17 +24,17 @@ from types import SimpleNamespace
 
 import pytest
 
-from engine.season.data import strife as data
-from engine.season.data.files import STRIFE_MOVES_YAML
 from engine.season.harness import strife as H
+from engine.season.harness import strife_data as data
+from engine.season.harness.strife_data import STRIFE_MOVES_YAML
 
 
 def ev(kind):
     return SimpleNamespace(kind=kind)
 
 
-def readers(verb=None, side=None):
-    return H.Readers(lambda e: verb, lambda e: side)
+def readers(verb=None, side=None, held=False):
+    return H.Readers(lambda e: verb, lambda e: side, lambda e: held)
 
 
 def codes(e, rd):
@@ -65,6 +65,8 @@ def test_loader_refuses_a_bad_signature(tmp_path, bad):
 def test_a_death_is_told_by_its_cause():
     assert codes(ev("person.died"), readers(verb=None)) == ["DN"]
     assert codes(ev("person.died"), readers(verb="fight")) == ["KL"]
+    assert codes(ev("person.died"), readers(verb="fight", held=True)) == ["XE"]   # a held person killed by a fight is executed
+    assert codes(ev("person.died"), readers(verb=None, held=True)) == ["DN"]       # held, but no act of anyone: died, not executed
     assert codes(ev("person.died"), readers(verb="march")) == ["KL"]
     assert codes(ev("person.died"), readers(verb="tell")) == []      # control: another verb is neither
 
@@ -94,7 +96,8 @@ def test_side_against_the_governors():
 def test_the_route_check_finds_a_route_and_a_planted_gap():
     rows = {r["code"]: r for r in data.MOVES}
     assert [v for v, _ in H.route(rows["PT"])] and "petition" in [v for v, _ in H.route(rows["PT"])]
-    assert H.route(rows["XE"]) == [] and H.route(rows["CH"]) == []     # no verb and no kind: a gap
+    assert H.route(rows["CH"]) == []                                    # no verb and no kind: a gap
+    assert "fight" in [v for v, _ in H.route(rows["XE"])]               # XE composes on `fight`; formation on a held party is open
     only = {"carry"}                                                    # CONTROL: drop `petition` from the resolvable set
     assert "petition" not in [v for v, _ in H.route(rows["PT"], resolvable=only)]
     assert "carry" in [v for v, _ in H.route(rows["PT"], resolvable=only)]
@@ -107,5 +110,21 @@ def test_grade_cases():
     assert H.grade(rows["KL"], Counter(), act, True) == ("OBSERVED", 3)
     assert H.grade(rows["DN"], Counter(), act, True) == ("UNOBSERVED", 0)
     assert H.grade(rows["OW"], Counter({"march.declared": 99}), Counter(), False)[0] == "DARK"   # kinds shared: not readable
-    assert H.grade(rows["XE"], Counter(), Counter(), False)[0] == "GAP"
+    assert H.grade(rows["CH"], Counter(), Counter(), False)[0] == "GAP"
     assert H.grade(rows["PT"], Counter({"petition.filed": 2}), Counter(), False) == ("OBSERVED", 2)
+
+
+def test_endings_total_the_study_and_yield_24_terminal_codes():
+    rows = data.MOVES
+    assert sum(r.get("ends", 0) for r in rows) == 102
+    terminal = {r["code"] for r in rows if r.get("ends", 0) > 0 and r.get("terminal", True)}
+    assert len(terminal) == 24 and "XP" not in terminal and {"PC", "CO", "WA", "XE"} <= terminal
+    assert all(r.get("ends", 0) == 0 for r in rows if r["code"] in {"SH", "DR", "BR", "MO", "OP", "RU", "VI", "SZ"})
+
+
+def test_loader_refuses_ends_that_do_not_total_102(tmp_path):
+    text = STRIFE_MOVES_YAML.read_text(encoding="utf-8").replace("ends: 20", "ends: 21", 1)
+    p = tmp_path / "strife_moves.yaml"
+    p.write_text(text, encoding="utf-8")
+    with pytest.raises(ValueError):
+        data.load_moves(p)

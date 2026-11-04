@@ -1,0 +1,98 @@
+# The 40 move codes of the strife study (the artifact "Mechanics of Strife to c. 1600"), as a READING
+# of what the season loop can produce. It resolves nothing: `harness/strife.py` reads it to report
+# which codes the loop can reach, and which it did reach, in a seeded run.
+#
+# Each row:
+#   code        the study's two-letter code (NOTE and OTH are not moves and are not rows)
+#   name        the study's name for the move
+#   verbs       verbs of `verb_table.yaml` whose act can produce the move (loader refuses a name not there)
+#   kinds       Event kinds whose presence in the log counts as an instance (loader refuses a kind the
+#               loop does not declare)
+#   needs       what a kind alone cannot tell, so the count is an upper bound:
+#                 side     the study splits the move by side (authority / rebels / outside power)
+#                 office   the kind covers any person or seat, the move only an office-holder
+#                 context  the move is defined by what precedes it (first outbreak, later trouble)
+#   dark        a switch or value that ships off and so keeps the move out of default play
+#   gap         no verb or kind in the tree produces the move
+#
+# `ends` is the number of the study's 102 cases whose last substantive move (NOTE and OTH set aside) is this code,
+# by base code (KL-R and KL-O are KL), hand-read from the nine case-mapping tables [UNVERIFIED]; the loader
+# checks only that they total 102. `terminal: false` marks XP: the study's mark of later linked trouble, not an
+# ending the loop produces (master §4).
+#
+# [ASSUMPTION; medium; Jordan to correct; revert: delete this file, `harness/strife_data.py` and
+# `harness/strife.py`] Every `verbs` and `kinds` entry is a reading of `verb_table.yaml`'s `emits:`
+# column by name, not an execution. The instrument's observed count is the check, and a count of 0
+# over several seeds is a finding about default play, not about the table.
+
+row_keys: [code, name, verbs, kinds, needs, dark, gap, ends, terminal]
+study_cases: 102
+needs_vocabulary: [side, office, context]
+signature_keys: [kind, cause_verb, attacker, victim_held, code]
+attacker_values: [A, R]
+
+# ACT-LEVEL SIGNATURES. A kind alone cannot tell a death in battle from a death by no act of anyone,
+# nor a field won by the authority from one won by its challengers. A signature reads the ACT that
+# caused the Event: `cause_verb` is its verb (`none` = no act caused it), `attacker` is the side of
+# the faction that marched, read against the factions that govern the rung marched on, nearest first:
+#   A  the attacker is the nearest governor, or a governor above it (the authority acting or sending force)
+#   R  the attacker governs nothing up that chain (a challenger)
+# `victim_held` is true when the person who died held a live `detain` tenure at the Event's tick. A death by
+# `fight` of a held person is an execution (XE, master §9: a sentence determined, then carried out through
+# the combat seam, as Jordan's 2026-09-02 ruling on kills requires); a death by `fight` of anyone else is KL.
+# A code with a signature is graded on signature matches alone. An Event matching none is not guessed at.
+# [ASSUMPTION; medium; Jordan to correct; revert: delete `signatures:` and the side-aware grade falls
+# back to kind-only upper bounds.]
+signatures:
+  - {kind: person.died,    cause_verb: none,  code: DN}
+  - {kind: person.died,    cause_verb: fight, victim_held: true,  code: XE}
+  - {kind: person.died,    cause_verb: fight, victim_held: false, code: KL}
+  - {kind: person.died,    cause_verb: march, code: KL}
+  - {kind: field.won,      attacker: A, code: WA}
+  - {kind: field.won,      attacker: R, code: WR}
+  - {kind: field.lost,     attacker: A, code: WR}
+  - {kind: field.lost,     attacker: R, code: WA}
+  - {kind: march.declared, attacker: A, code: FR}
+  - {kind: march.declared, attacker: R, code: WN}
+
+moves:
+  - {code: SH,   name: Natural shock,           verbs: [],                                kinds: [],                                              gap: "season_factor_draw ships () and calamity bands are unbuilt (CP-T10-02); no Event is emitted for a shock", ends: 0}
+  - {code: DR,   name: Ruler dies,              verbs: [fight],                           kinds: [person.died],                                     needs: [office], ends: 0}
+  - {code: IN,   name: Successor installed,     verbs: [succeed, confer, establish],      kinds: [succession.claimed, tenure.opened], ends: 3}
+  - {code: IM,   name: New burden,              verbs: [issue, requisition, transfer, oblige], kinds: [dispensation.issued, requisition.taken, duty.taken], needs: [context], ends: 4}
+  - {code: BR,   name: Breach of right,         verbs: [revoke, arrest, seize],           kinds: [tenure.closed, arrest.made, record.seized],      needs: [side, office], ends: 0}
+  - {code: OW,   name: Outside war,             verbs: [march],                           kinds: [march.declared, field.won, field.lost],           needs: [side], dark: "build_realm foreign=False", ends: 3}
+  - {code: PT,   name: Petition or demand,      verbs: [petition, carry],                 kinds: [petition.filed, petition.carried], ends: 1}
+  - {code: MO,   name: Mobilization,            verbs: [recruit, form_unit, assign_troops, convene], kinds: [army.recruited, army.formed, army.assigned, date.scheduled], needs: [side], ends: 0}
+  - {code: OP,   name: Rising begins,           verbs: [march, fight, raze, seize],       kinds: [march.declared, rung.seized, rung.razed],       needs: [side, context], ends: 0}
+  - {code: RF,   name: Refusal or mutiny,       verbs: ["evade / defy"],                  kinds: [compliance.withheld],                              needs: [side], ends: 1}
+  - {code: VI,   name: Violence or plunder,     verbs: [fight, raze, sabotage, requisition], kinds: [rung.razed, site.damaged, requisition.taken],  needs: [side], ends: 0}
+  - {code: SZ,   name: Seizure,                 verbs: [seize, march],                    kinds: [rung.seized, record.seized, field.unopposed], ends: 0}
+  - {code: RG,   name: Rival government,        verbs: [establish, found, convene],       kinds: [office.established, rung.founded],                 needs: [side], ends: 0}
+  - {code: CL,   name: Claim or deposition,     verbs: [succeed, revoke],                 kinds: [succession.claimed],                               needs: [side], ends: 1}
+  - {code: SP,   name: Spread or joining,       verbs: [march, recruit, commit],          kinds: [army.recruited, commitment.made],               needs: [context], ends: 0}
+  - {code: FR,   name: Force sent,              verbs: [march, dispatch, order_unit],     kinds: [march.declared, army.arrived, order.given],     needs: [side], ends: 2}
+  - {code: NG,   name: Talks,                   verbs: [speak, argue, convene, covenant, determine], kinds: [argument.won, argument.lost, covenant.offered, matter.determined], needs: [context], ends: 2}
+  - {code: CO,   name: Concession,              verbs: [issue, give, transfer, pardon],  kinds: [dispensation.issued, record.given, transfer.made], needs: [side], ends: 10}
+  - {code: CP,   name: Co-option,               verbs: [transfer, give, confer],          kinds: [transfer.made, record.given, tenure.opened],   needs: [side], ends: 1}
+  - {code: RU,   name: Refusal or inaction,     verbs: ["evade / defy", comply],          kinds: [compliance.withheld, duty.refused],               needs: [office], ends: 0}
+  - {code: RV,   name: Grant revoked,           verbs: [revoke, destroy_record],          kinds: [tenure.closed, record.destroyed],                  needs: [context], ends: 5}
+  - {code: CH,   name: Religious sanction,      verbs: [],                                kinds: [],                                                 gap: "no verb or Event kind names a church sanction; ban/detain tenures exist but no church seat issues them", ends: 0}
+  - {code: WN,   name: Siege or battle,         verbs: [march, fight, raze],              kinds: [march.declared, field.won, field.lost], ends: 1}
+  - {code: WA,   name: Authority wins,          verbs: [march, fight],                    kinds: [field.won, field.lost],                            needs: [side], ends: 7}
+  - {code: WR,   name: Rising wins,             verbs: [march, fight],                    kinds: [field.won, field.lost],                            needs: [side], ends: 0}
+  - {code: FA,   name: Authority flees,         verbs: [move, migrate],                   kinds: [travel.moved, residence.changed],                  needs: [side, context], ends: 2}
+  - {code: RT,   name: Rising retreats,         verbs: [move, migrate],                   kinds: [travel.moved, residence.changed],                  needs: [side, context], ends: 0}
+  - {code: SB,   name: Surrender,               verbs: [give, covenant],                  kinds: [rung.ceded, field.unopposed],                      needs: [side], ends: 3}
+  - {code: DA,   name: Defection or split,      verbs: [release, commit, forgive],        kinds: [commitment.ended, stance.moved],                 needs: [side], ends: 0}
+  - {code: KL,   name: Leader killed,           verbs: [fight],                           kinds: [person.died],                                     needs: [side, office], ends: 5}
+  - {code: CA,   name: Leader captured,         verbs: [arrest],                          kinds: [arrest.made],                                      needs: [side, office], ends: 1}
+  - {code: XA,   name: Outside power,           verbs: [march, tell, petition],           kinds: [march.declared, news.told],                       needs: [side], dark: "build_realm foreign=False", ends: 1}
+  - {code: AM,   name: Pardon or amnesty,       verbs: [pardon],                          kinds: [detention.ended, ban.ended], ends: 0}
+  - {code: DN,   name: Leader dies,             verbs: [],                                kinds: [person.died],                                     needs: [side, office], dark: "age_step and illness_rate ship 0.0", ends: 1}
+  - {code: XS,   name: Settlement,              verbs: [covenant, determine, issue],      kinds: [covenant.offered, matter.determined, dispensation.issued], needs: [context], ends: 4}
+  - {code: XN,   name: Regime or border,        verbs: [seize, give, succeed],            kinds: [rung.seized, rung.ceded, succession.claimed],     needs: [context], ends: 4}
+  - {code: XE,   name: Leader executed,         verbs: [fight, determine],        kinds: [person.died],                                     needs: [side], ends: 5}
+  - {code: PU,   name: Punishment,              verbs: [arrest, raze, determine],         kinds: [arrest.made, rung.razed, matter.determined],       needs: [side], ends: 3}
+  - {code: PC,   name: Penalty on place,        verbs: [requisition, issue, raze],        kinds: [requisition.taken, dispensation.issued, rung.razed], needs: [side], ends: 12}
+  - {code: XP,   name: Trouble persists,        verbs: [],                                kinds: [],                                                 needs: [context], gap: "defined by later risings the dossier links; a reading over the log, not a verb", ends: 20, terminal: false}

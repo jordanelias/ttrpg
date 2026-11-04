@@ -1,17 +1,24 @@
-"""`season.data.strife` -- THE ONE LOADER for `strife_moves.yaml`.
+"""`harness.strife_data` -- THE ONE LOADER for `strife_moves.yaml`.
 
 The file reads the 40 move codes of the strife study against what the season loop can produce.
 This module refuses a row naming a verb that is not in `verb_table.yaml`, an Event kind the loop
-does not declare, a key the row does not define, or a code listed twice. It resolves nothing and
-no step of the loop reads it; `harness/strife.py` is its reader.
+does not declare, a key the row does not define, a code listed twice, or per-code ending counts that
+do not total the study's 102 cases. It resolves nothing and no step of the loop reads it;
+`harness/strife.py` is its reader.
+
+WHY IT LIVES UNDER `harness/` AND NOT `data/`. The port gate (plan position GO-09) exports every
+file `data/files.py` names that a loader reads. A registry only the harness reads must not reach the
+port, so its path is anchored here from `HARNESS_DIR` and `files.py` does not name it.
 """
 
 from __future__ import annotations
 
-from .files import STRIFE_MOVES_YAML
-from .matrix import MATRIX
-from .rosters import load_yaml
-from .verbs import EMITTED_KINDS, VERB_TABLE
+from ..data.files import HARNESS_DIR
+from ..data.matrix import MATRIX
+from ..data.rosters import load_yaml
+from ..data.verbs import EMITTED_KINDS, VERB_TABLE
+
+STRIFE_MOVES_YAML = HARNESS_DIR / "strife_moves.yaml"
 
 
 def declared_kinds() -> frozenset:
@@ -43,6 +50,11 @@ def load_moves(path=STRIFE_MOVES_YAML) -> tuple:
             raise ValueError(f"strife_moves.yaml: {code} has needs {sorted(bad_needs)} outside side/office/context")
         if not r["kinds"] and not r.get("gap"):
             raise ValueError(f"strife_moves.yaml: {code} has no kinds and states no gap")
+        if not isinstance(r.get("ends", 0), int) or r.get("ends", 0) < 0:
+            raise ValueError(f"strife_moves.yaml: {code} has `ends` that is not a count")
+    total = sum(r.get("ends", 0) for r in rows)
+    if total != doc["study_cases"]:
+        raise ValueError(f"strife_moves.yaml: per-code `ends` total {total}, not the study's {doc['study_cases']} cases")
     sig_keys, sides = set(doc["signature_keys"]), set(doc["attacker_values"])
     sigs = doc.get("signatures", [])
     for g in sigs:
@@ -56,6 +68,8 @@ def load_moves(path=STRIFE_MOVES_YAML) -> tuple:
         cv = g.get("cause_verb")
         if cv is not None and cv != "none" and cv not in VERB_TABLE:
             raise ValueError(f"strife_moves.yaml: signature {g} names verb {cv!r} not in verb_table.yaml")
+        if "victim_held" in g and not isinstance(g["victim_held"], bool):
+            raise ValueError(f"strife_moves.yaml: signature {g} has `victim_held` that is not a boolean")
         if "attacker" in g and g["attacker"] not in sides:
             raise ValueError(f"strife_moves.yaml: signature {g} has attacker outside {sorted(sides)}")
     return tuple(rows), tuple(sigs)
