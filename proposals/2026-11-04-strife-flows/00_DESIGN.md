@@ -39,7 +39,7 @@ Both are pure functions: same input, same output, nothing written. The person re
 
 ## 3. How a flow is read
 
-A **move** is a ledger claim whose Event kind and act classify to one of the 40 codes (`strife_moves.yaml`, to be made side-aware by classifying on the act: verb, degree, and the actor's faction against the holder of the rung). Non-strife claims never join a flow.
+A **move** is a ledger claim whose Event kind and act classify to one of the 40 codes (`strife_moves.yaml`, to be made side-aware by classifying on the act: verb, degree, and the actor's faction against the holder of the rung). Non-strife claims never join a strand; they are still of the era beneath whose rung they fall (§4).
 
 A **flow** is a maximal set of moves linked by shared referents, with referents compared through the rung ladder (`ancestry`, `place_of`, `holder_faction_of`): two moves are linked if their referents are the same, or one is an ancestor of the other, or they share a faction. It sits at the lowest rung that covers its moves, so a flow zooms: a hearth's grain dispute is a flow at the hearth; when its referents join others' under one territory it is read at the territory.
 
@@ -64,6 +64,8 @@ Opening conditions are read off state the loop already holds; nothing fires on t
 **Capacity.** Jordan's rulings of 2026-11-04: the realm holds one flow, which conditions every flow beneath it; a duchy holds up to two, a *tributary* strand that drains into the realm's flow and an *isolate* that does not. Below the duchy, "n+1", read as each rung holding one more than the rung above. By the order of the existing `rung_kinds` roster (`person, hearth, community, settlement, territory, province, duchy, realm`) read from the top: realm 1, duchy 2, province 3, territory 4, settlement 5, community 6, hearth 7, person 8. So capacity is a function of a kind's position in a roster that already exists, not a second table of numbers. No slots are typed below the duchy. The built realm has no province rung (census), so 3 binds nothing yet. `[ASSUMPTION; medium; Jordan to correct; revert: delete the rule and §4's fold]` Capacity limits what a *reading* holds at a rung, never an event.
 
 **Era and strand.** A succession crisis, a foreign invasion, a famine and a tax crisis can all be open at once, and those living through them do not parse them apart: the realm was very turbulent, and eventually things happened. They are comorbid, tributaries into a river, the river into a funnel. So the realm's one flow is an **era**: a *confluence* whose opening kind is not one category but the set of them open beneath it. A **strand** is a narrative chain of the kind the study's cases are: specific, with its own opening, moves and conclusion, and always at a lower rung than the era it feeds, because specifics are the opposite of a universal. The era is read generally (few referents: the crown, the realm's seats); strands carry the particulars. The study's 102 cases are strands. Both are flows by §3.
+
+**Everything operating within an era is of the era.** The era is not a container with things inside it. Membership of an era is by scope: every act, claim and institution beneath the realm's rung, strife or not, is of it. A merchant's trade, a marriage and a harvest in a famine-and-war era are of that era, conditioned by its regime as a raid is. Strand membership is narrower: strife moves linked by referents (§3). So the era's *moves*, which rank it and conclude it, are strife moves; its *conditioning* reaches everything beneath it (§5a).
 
 **Which flow takes a scarce slot.** The one whose moves reach the most distinct rungs below, then the most recent; ties by claim order. A rule with no number invented. `[ASSUMPTION; medium; Jordan to correct; revert: any other ordering of the same kind]`
 
@@ -106,7 +108,22 @@ The flow's opening kind and last move are not read by any chooser in this design
 
 ## 5a. People exist within flows: a regime of truth
 
-Jordan, 2026-11-04: people exist within flows as in Foucault's hypothesis of a regime of truth. In that account a society holds a regime: the discourse it accepts and makes function as true, the means of telling true from false, how each is sanctioned, the techniques valued for obtaining truth, and the standing of those charged with saying what counts. It is produced by relations of power, not laid over them. For this design:
+Jordan, 2026-11-04: people exist within flows as in Foucault's hypothesis of a regime of truth. In that account a society holds a regime: the discourse it accepts and makes function as true, the means of telling true from false, how each is sanctioned, the techniques valued for obtaining truth, and the standing of those charged with saying what counts. It is produced by relations of power, not laid over them.
+
+**A regime is not a political regime.** Jordan, 2026-11-04: in Foucault's sense it is an assemblage of institutions with commensurate dominant modes of understanding the world and behaving, not a form of governance. In the engine's own terms:
+
+| part of the definition | where the engine has it |
+|---|---|
+| institutions | offices, factions, venues and arrangements |
+| a mode of understanding | the affiliations a person holds and how intensely (`Person.conviction`); a faction's creed, committed to by its leader |
+| a mode of behaving | what an affiliation engages or condemns (`affiliation_engagement`: the acts that scar an observer holding it) and the remit a seat holds |
+| commensurate | not `incompatible` in the strain matrix (`true` strains, `false` is compatible, `null` has no source and is read as not incompatible) |
+
+Operationally: two institutions are linked where they share a holder, a conferral or remit grant, a bond (`tie`, `knot`) or a venue; a **regime** is a set of linked institutions whose dominant affiliations (the one most held among their holders, by intensity) are pairwise not incompatible. Five affiliations are rostered, so a handful of regimes at most. `[ASSUMPTION; medium; Jordan to correct; revert: delete this paragraph and the term in §5a's credit step]`
+
+A regime is therefore not a side. The authority and the challengers may share one, and two regimes may stand in a realm without strife. Strife between regimes is where their affiliations strain; strife inside one is a contest over what its own terms require. As a reading of the study's categories (not a finding): a quarrel over a charter or a privilege (D) is fought inside a shared understanding of what a charter is, and a quarrel over doctrine (F) between understandings. The instrument can report, for each strand, whether its parties stand in one regime or two.
+
+For this design:
 
 **Within and aware are different relations.**
 
@@ -119,7 +136,7 @@ Awareness is not required to be within a flow, and requiring it would put a pers
 
 Everyone is within the realm's flow (§4). A hearth-dweller who has heard nothing of the war is within it by two routes, neither of which hands him the flow as a fact. The first is **lived events**: matter and bodies reach him as they reach anyone (stores requisitioned, hunger, a neighbour dead), together with the acts and words of those who are aware (the tax-collector, the recruiter, the neighbour who was told), which arrive as witnessed events and told claims. The second is **grading**: the engine grades what he credits by the regime he is within (below). Neither deposits a claim in his ledger; AX-7 is kept.
 
-**The regime is immanent.** It is made of what the flow's participants say and do and of the seats that pronounce (`determine`, `issue`, a held `dispensation`), not stored anywhere. A flow has at least two, authority's and the challengers', and each credits its own speakers: the side the study gives every move (A, R, O, N) is what separates them. The side-aware classification of §8 step 1 is therefore load-bearing here, not cosmetic.
+**The regime is immanent.** It is made of what its institutions accept and do and of the seats that pronounce (`determine`, `issue`, a held `dispensation`), and is stored nowhere. The side the study gives every move (A, R, O, N) is a different fact. Side-aware classification (§8 step 1) is needed to tell WA from WR and to read a strand; it does not grade what anyone credits.
 
 **The engine already has the mechanism, dark.** `decision/options.py::teller_weight` grades a told claim when it is read, by the hearer's relation to the teller (rank, regard, track record) and by the retelling count; at its shipped control values (`told_weight` 1.0, all gains 0) every claim weighs 1.0 and nothing is conditioned. The four parts of a regime map onto it as follows:
 
@@ -130,7 +147,7 @@ Everyone is within the realm's flow (§4). A hearth-dweller who has heard nothin
 | standing of those who pronounce | `rank(p, teller)`; the seat a speaker acts through |
 | what is valued | the verbs a seat can form and the remits it holds |
 
-The proposed addition is one term in `relation`: the teller's standing in the flow `p` is within, which sets whether `p` credits him more or less. It reads the world reading, not `p`'s ledger, so it binds an unaware `p` as it binds an aware one. It is a **second step**, after the stamp (§5) is measured, for three reasons: it reorders every told claim in the loop and so moves the hash widely; its effect cannot be told apart from the stamp's until the stamp is measured alone; and AX-2 binds `decision/`, so the flow's standing must arrive there as data (as `fx` and the stamped questions do), never as a read of the World. `layer-conformance` Lens B settles that placement before any code.
+The proposed addition is one term in `relation`: whether the teller stands in the regime `p` stands in, or in a regime commensurate with it. A commensurate teller is credited more, an incommensurate one less. It reads the world reading, not `p`'s ledger, so it binds an unaware `p` as it binds an aware one. It is a **second step**, after the stamp (§5) is measured, for three reasons: it reorders every told claim in the loop and so moves the hash widely; its effect cannot be told apart from the stamp's until the stamp is measured alone; and AX-2 binds `decision/`, so the flow's standing must arrive there as data (as `fx` and the stamped questions do), never as a read of the World. `layer-conformance` Lens B settles that placement before any code.
 
 **The era is a regime's unity.** Simultaneous crises are not parsed apart by those inside them; "the realm was turbulent" is how the regime makes them one. That unity is itself a reading produced within the regime (what is named, what is said to have caused it, who is entitled to say), so persons, offices and factions can hold different accounts of one era and the engine holds none as the true one. The world reading's confluence is the instrument's. A person's era is as much of it as his ledger and his regime give him.
 
@@ -147,7 +164,7 @@ Jordan, 2026-11-04: flows condition factions at whatever scale is relevant, and 
 So *within* (§5a) is one structural test for all three: the flow's rung is the entity's rung or an ancestor of it (for a faction, of any rung it holds). Only a person acts (AX-1), so offices and factions are conditioned through the persons who act for them, by existing channels:
 
 - **Offices** condition their holder in his capacity. His `reach` already admits claims about his purview; a flow at a rung in his purview or above puts that rung's referents among his occasions, and the seat's remit decides which verbs can answer (a mayor's `requisition`, a duke's `march`). An office is the institutional form of awareness: the holder knows what his claims cover, no more (AX-7).
-- **Factions** are conditioned through their heads and seat-holders. A faction's *position* in a flow (authority, challengers or outside power: the study's side) is read from its holdings, its `at_war` relations and its members' moves. The position grades what its members credit (§5a: a member credits a co-faction teller more) and puts the opposing faction's rungs among its leaders' occasions. Flows do not write a faction's goal rows: they change what a leader attends to, not what the organisation wants.
+- **Factions** are conditioned through their heads and seat-holders. A faction belongs to a regime through its creed and the institutions it is linked to (§5a). Its *side* in a strand (authority, challengers or outside power: the study's A, R, O) is a separate fact, read from its holdings, its `at_war` relations and its members' moves; it classifies moves and does not grade credit. A strand's referents, the opposing faction's rungs among them, are put among its leaders' occasions. Flows do not write a faction's goal rows: they change what a leader attends to, not what the organisation wants.
 - **Scale** is the rung. A guild's strand at a settlement and the Crown's era at the realm are one relation at two rungs, and a faction in several flows holds a position in each.
 
 ## 6. What it refuses
