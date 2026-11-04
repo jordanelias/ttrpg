@@ -25,13 +25,13 @@
 | CP-T01-04 | B10-08 (CLOSED) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T01-05 | B10-08 (CLOSED) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T01-06 | B10-08 (CLOSED) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
-| CP-T02-01 | B10-09 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
-| CP-T02-02 | B10-09 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
-| CP-T02-03 | B10-09 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
+| CP-T02-01 | B10-09 (close one CLOSED, `f9e4cef`) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
+| CP-T02-02 | B10-09 (close one CLOSED, `f9e4cef`) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
+| CP-T02-03 | B10-09 (close one CLOSED, `f9e4cef`) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T02-05 | B10-09 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T02-06 | B10-10 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
-| CP-T02-07 | B10-09 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
-| CP-T03-00 | B10-09 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
+| CP-T02-07 | B10-09 (close one CLOSED, `f9e4cef`) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
+| CP-T03-00 | B10-09 (close one CLOSED, `f9e4cef`) | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T03-01 | B10-11 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T03-02 | B10-11 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
 | CP-T03-03 | B10-11 | completion item (home: `proposals/2026-10-23-subsystem-completion/`) |
@@ -128,7 +128,7 @@
 | CR-23 | B10-06 (CLOSED) | new from the decision round (`-04`; M17): a larder's stock reaches the seats over it, at its crossings |
 | CR-24 | B10-12 | new from the decision round (`-04`; M4 Ask B (b)): winners take their engine casualties |
 | CR-25 | B10-09 | new from the decision round (`-04`; CR-11's build, M8): a computed `establish` founds an office over a holding (close two, after CR-11) |
-| CR-26 | B10-09 | new from the decision round (`-04`; IN-61 check (4)): the heir hears the vacancy; MEASURE (a test), directly before IN-61 |
+| CR-26 | B10-09 (close one CLOSED, `f9e4cef`) | new from the decision round (`-04`; IN-61 check (4)): the heir hears the vacancy; MEASURE (a test), directly before IN-61 |
 | CR-27 | B10-13 | new from the decision round (`-04`; M9): `lie`, a spoken falsehood on a held cell claim |
 | CR-28 | B10-09 (moved from B10-05 at its close: built, falsified and reverted there, H-156; re-taken behind CR-10) | new from the decision round (`-04`; M19): G-04(a), own-ledger Propositions stamp as class `Proposition` |
 | CR-29 | B10-14 | new from the decision round (`-04`; M11): the event-kind reach channel, then `chronicle`'s paired deletion; released from M11 (its other needs stay) |
@@ -206,7 +206,7 @@
 | GO-14 | B10-03 (CLOSED) | port gate (`-04`): retire `godot/skeleton/` and close PC-05; released from M11 with DEF-9 (the `CLAUDE.md` §6 hunk H-L0-5 lands in its PR, after the tree is deleted) |
 | GO-15 | B10-20 | port gate (`-04`): FREEZE |
 | GO-16 | B10-20 | port gate (`-04`): the oracle-side draw recorder and its export (`--check`) |
-| IN-12 | B10-09 | carried v9 position (`-04`) |
+| IN-12 | B10-09 (close one CLOSED, `f9e4cef`) | carried v9 position (`-04`) |
 | IN-14 | B10-16 | carried v9 position (`-04`) |
 | IN-18 | B10-Z (HELD; its MEASURE closed at B10-02) | carried v9 position (`-04`), narrowed |
 | IN-30 | B10-17 | carried v9 position (`-04`) |
@@ -217,7 +217,7 @@
 | IN-48 | B10-17 | carried v9 position (`-04`) |
 | IN-52 | B10-16 | carried v9 position (`-04`) |
 | IN-58 | B10-09 | carried v9 position (`-04`) |
-| IN-61 | B10-09 | carried v9 position (`-04`) |
+| IN-61 | B10-09 (close one CLOSED, `f9e4cef`) | carried v9 position (`-04`) |
 | MB-07r | B10-12 | carried v9 position (`-04`) |
 | MB-08 | B10-Z | carried v9 position (`-04`) |
 | NM-W0 | B10-02 (CLOSED) | narration package (`proposals/2026-10-13-narration-mechanisms.md` §4); subsumed, an EDIT: the row left `-03` at B10-02's close |
