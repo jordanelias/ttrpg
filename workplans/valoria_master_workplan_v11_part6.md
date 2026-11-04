@@ -263,6 +263,10 @@ These nineteen questions were added by the fold of 2026-10-30 (the content-archi
 | M39 | the motion source (#527's RJ-11 / RM2) | none in computed play: a motion is hand-built only (CR-37's specification) |
 | M40 | ED-IN-0304's undecided residue | CR-17's FOLLOW-ON as written: unbuilt and undesigned; CL-PERSON HELD |
 
+## 1d. The strife fold (v11): nothing queued
+
+The strife fold (`-11`, CR-71 to CR-80) adds no question. What `proposals/2026-11-04-strife-flows/00_MASTER.md` §10 left for Jordan is ANSWERED: he ratified that master and the kind list (`01_STRIFE_KINDS_DRAFT.md`) on 2026-11-04 (*"Ratify strife master and kind list, fold them into workplan v11 carefully in correct sequence as I had requested. I don't know what regime_gain is, but give it a value?"*; ED-IN-0313), with the assumptions A1 to A12 and the list's five rulings, each keeping its revert, and `regime_gain` was given a value, 0.5 (CR-79's commit (2), `[ASSUMPTION; medium; Jordan to correct; revert: 0.0]`). Still his, and not questions: a four-season strife-guard reading, on his call (P10; CR-78); the values he has not set (the march frequency, `age_step`, `illness_rate`). A3's cross-check against the study is work for the session that runs CR-78's flip.
+
 ## 2. Answers taken (each [ASSUMPTION; medium; Jordan to correct], each reverts alone)
 
 The NERS fold took further answers under step 5, each with its revert; they are the **Taken** lines of `workplans/valoria_master_workplan_v11_part13.md` and its `_part2`, and are not repeated here. The decision round's decisions are recorded once, in §1's DECISION blocks; the rows M1 to M21 below point there. The second decision round's are recorded once, in §1b; its six rows below point there.
