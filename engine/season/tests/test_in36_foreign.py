@@ -61,9 +61,9 @@ def _told_of_the_capital(w):
     SUFFICES. `march` declares `referent_class: Rung` (`verb_table.yaml`), so it forms only on a Rung the question
     carries as `Rung`, which `world_q.places_named` stamps from the person's OWN ledger; his goal Question names
     `CAPITAL` only as a plain referent, and `Rung` is a `rosters.yaml: occasion_only_classes` member. Before REM-27
-    the plain referent formed the march; now he must know of the place. No world builder seats a belief at build
-    (every ledger is empty in both arms; `harness/corpus_run.py`'s `knows:` is refused by name, an AX-7 Layer-1
-    question), so the claim is planted here, in `test_referent_class_stamps.py::_told_of_field`'s shape. CONTROL:
+    the plain referent formed the march; now he must know of the place. No world builder seats a belief about a PLACE
+    at build (since v11 CR-81 `build_realm` writes only `exists:Person` acquaintance claims; `harness/corpus_run.py`'s
+    `knows:` is refused by name, an AX-7 Layer-1 question), so the claim is planted here, in `test_referent_class_stamps.py::_told_of_field`'s shape. CONTROL:
     without it the goal Question carries no `Rung` pair and no march forms (the witness tests below go red)."""
     w.persons[KATEPANO].ledger.append(
         Claim("c_in36_capital", KATEPANO, CAPITAL, "exists:Rung", 1, 0, "firsthand", 100, "own"))
@@ -198,11 +198,22 @@ def test_the_natural_goal_question_forms_a_march_candidate_on_the_capital_for_th
     capital), and clause 3 forms a march Candidate on it for the Katepano - and for nobody else of the empire
     (no `dispatch`). Since v10 REM-27 the capital rides that Question as a `Rung` pair, stamped by `places_named`
     from the claim `_told_of_the_capital` plants (the `foreign` fixture), and the no-dispatch control's Question
-    carries the same pair, so it still observes the seat being what withholds the march."""
+    carries the same pair, so it still observes the seat being what withholds the march.
+
+    ⚠ v11 CR-81: with the realm's starting acquaintances the Katepano's first question at build is a claim he holds
+    (`q:claim:c_acq_p_npc_089_p_npc_011`, `attention_key`'s order), and the standing occasions -- the capital's `Rung`
+    pair among them -- ride `out[0]`, the question he answers (`questions_for`). So the goal Question is still delivered
+    and still names the capital, but the march forms on the question he answers. With `acquaintances=False` the goal
+    Question is `out[0]` and carries the pair, as before (asserted below, the control)."""
     p = foreign.persons["p_npc_089"]
-    qs = {q.id: q for q in world_q.questions_for(foreign, p)}
-    q = qs["q:need:goal_katepano_press_the_capital"]
-    assert q.referents == ("set_s_001",), q.referents
+    out = world_q.questions_for(foreign, p)
+    qs = {q.id: q for q in out}
+    assert qs["q:need:goal_katepano_press_the_capital"].referents == ("set_s_001",)
+    q = out[0]
+    assert ("set_s_001", "Rung") in q.classes, q
+    off = _told_of_the_capital(POP.build_realm(0, foreign=True, acquaintances=False))
+    off_first = world_q.questions_for(off, off.persons["p_npc_089"])[0]
+    assert off_first.id == "q:need:goal_katepano_press_the_capital" and ("set_s_001", "Rung") in off_first.classes
     cands = opening_set(p, View(p.id, [], foreign.fixtures.get("view_k"), q), q, foreign.fixtures)
     assert any(c.verb == "march" and c.subject == "set_s_001" for c in cands)
     for pid in ("p_npc_011", "p_npc_090"):
@@ -268,7 +279,11 @@ def test_the_same_march_with_no_defender_arrives_unopposed_at_the_chokepoint():
 #: scene holds the march at 10 of 80 seeds (7, 16, 38, 39, 44, 53, 63, 65, 67, 72), each of the 10 folds alone to the
 #: seam at `field.lost` and reaches it in a full one-season run, and none of the 10 holds it without the claim. The two
 #: witnesses kept are two of those ten.
-WITNESS_SEEDS = (39, 53)
+#: RE-SCANNED at v11 CR-81 (the realm starts with acquaintances; same helpers, seeds 0-79, `PYTHONHASHSEED=0`): the
+#: Katepano's first question is now an acquaintance claim carrying the capital as `Rung` (see the helper), and the first
+#: scene holds the march at 4 of 80 seeds (27, 44, 53, 63), each folding alone to the seam and reaching it in a full
+#: one-season run. Was (39, 53); 39 is no longer a witness. Fewer witnesses (10 -> 4 of 80) is RECORDED, not targeted.
+WITNESS_SEEDS = (44, 53)
 
 
 def _first_scene_of_the_goal_question(seed: int):
@@ -279,8 +294,14 @@ def _first_scene_of_the_goal_question(seed: int):
     w = _told_of_the_capital(POP.build_realm(seed, foreign=True))
     w._rehome()
     p, fx = w.persons["p_npc_089"], w.fixtures
-    q = aggregate_questions(world_q.questions_for(w, p, None), fx.get("question_aggregation_rule"))
-    assert q is not None and q.id == "q:need:goal_katepano_press_the_capital", q
+    qs = world_q.questions_for(w, p, None)
+    assert "q:need:goal_katepano_press_the_capital" in {x.id for x in qs}, [x.id for x in qs]
+    q = aggregate_questions(qs, fx.get("question_aggregation_rule"))
+    # v11 CR-81: the realm starts with acquaintances, so the Katepano's FIRST question at tick 0 is a claim he holds at
+    # build (`q:claim:c_acq_p_npc_089_p_npc_011`, ranked first by `attention_key`), not his goal's `need`. The capital rides
+    # the question he answers as a `Rung` pair (`questions_for`'s standing occasions are stamped onto `out[0]`), so the
+    # march is read on THAT question; before CR-81 it was the goal Question (`acquaintances=False` still reads so).
+    assert q is not None and ("set_s_001", "Rung") in q.classes, q
     v = assemble(p, q, fx.get("view_k"))
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     chooser = make_chooser(fx, mint, verbs=resolvable_verbs(), draw=draw_factory(w.world_seed, lambda: w.tick))

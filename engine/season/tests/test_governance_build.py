@@ -2902,7 +2902,10 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # ⚠⚠ CR-10 (B10-09 close two, arm D2): (601, 601) -> (623, 623), A RE-RECORD WITH THE UNIT THAT MOVED IT: `attention_key` spares a
     # tier-1 own-act echo, so the act mix moves (seed 0, one season: 601 -> 623 in both arms; `test_go07_canonical_digest.py` records
     # the 623). CONTROL: the tier-1 branch returning tier 4 for an own-act claim reads the 601.
-    assert (out["acts"], cout["acts"]) == (623, 623), (
+    # ⚠⚠ v11 CR-81 (ED-IN-0318): (623, 623) -> (630, 630), A RE-RECORD WITH THE UNIT THAT MOVED IT: `build_realm` writes the realm's
+    # starting acquaintances, so the act mix moves (seed 0, one season: 623 -> 630 in both arms; `test_go07_canonical_digest.py`
+    # records the 630). CONTROL: `build_realm` forced to `acquaintances=False` in process reads (623, 623) under this same test.
+    assert (out["acts"], cout["acts"]) == (630, 630), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")

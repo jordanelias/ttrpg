@@ -88,10 +88,10 @@ def _age_to_certain(w, pid, arm):
         w.fixtures = fixtures
 
 
-def _realm_with_an_old_holder(arm):
-    """`build_realm(0)` with its first seat-holder who has company (found by the realm, not named) aged
+def _realm_with_an_old_holder(arm, **build):
+    """`build_realm(0, **build)` with its first seat-holder who has company (found by the realm, not named) aged
     to certain death at `age_step = arm`; the world's `age_step` is left at the shipped control."""
-    w = POP.build_realm(0)
+    w = POP.build_realm(0, **build)
     seats = _seats(w)
     assert seats, "nobody is seated on the realm; the falsifier is vacuous"
     home = world_q.home_of(w)
@@ -180,6 +180,10 @@ def test_in34_a_seat_holders_death_by_age_deposits_claims_naming_him_where_he_st
                     and (only is None or c.predicate == only)] for p in who if p in w.persons}
 
     w, holder, office, place, home = _realm_with_an_old_holder(arm)
+    # v11 CR-81: the realm starts with acquaintances, so a co-member away from his place holds a BUILD-TIME `exists:Person`
+    # claim naming him (`populated.seed_acquaintances`). That claim is no news of the death; the reach asserted below is
+    # what the SEASON deposited, so the claims held at build are set aside (`acquaintances=False` reads 0 of them).
+    at_build = {c.id for p in w.persons.values() for c in p.ledger}
     w.fixtures = w.fixtures.sweep("age_step", arm)
     here = {p for p in w.persons if p != holder and home.get(p) == place}
     away = {p for p in w.persons if p != holder and home.get(p) != place}
@@ -198,22 +202,36 @@ def test_in34_a_seat_holders_death_by_age_deposits_claims_naming_him_where_he_st
     assert len(on_here) >= 1, (
         f"no one at {place} holds a `person.died` claim naming the dead holder: the death reached "
         "nobody (H-206 not holding)")
-    on_away = {p: cs for p, cs in named(w, holder, away).items() if cs}
+    on_away = {p: [c for c in cs if c.id not in at_build] for p, cs in named(w, holder, away).items()}
+    on_away = {p: cs for p, cs in on_away.items() if cs}
     assert not on_away, f"{len(on_away)} persons out of reach hold a claim naming him: {sorted(on_away)}"
     assert world_q.event_place(w, died[0]) == place, "the death is not placed where he stood"
 
 
 def test_in34_control_the_same_holder_as_old_at_step_0_lives_and_deposits_no_death_claim():
     """THE CONTROL ARM of the test above, run once: the holder aged to certain death at an `age_step`
-    arm, but the world's rates left at the shipped 0. No `person.died` for him, no `person.died` claim."""
+    arm, but the world's rates left at the shipped 0. No MATTER `person.died` for him (no act, chained to ROOT).
+
+    ⚠ v11 CR-81: on the realm with its starting acquaintances the same holder (`p_npc_004`, the Senior Inquisitor) is
+    KILLED in this season by an act -- a `fight` by `p_npc_013`, measured 2026-11-04 -- so "he lives" no longer holds and
+    death claims about him are lawful. What this control is about still holds and is asserted: the hazard at the shipped
+    rates kills nobody, so every `person.died` naming him has a causing act and none is chained to ROOT. With the step off
+    (`acquaintances=False`) he lives and no death claim is deposited, the reading this test held before; that arm is
+    asserted too."""
     c, holder, _office, _place, _home = _realm_with_an_old_holder(AGE_ARMS[1])
     assert c.fixtures.get("age_step") == 0 and c.fixtures.get("illness_rate") == 0
     POP.run(seasons=1, seed=0, w=c)
-    assert holder in c.persons
-    assert not [e for e in c.log if e.kind == "person.died"
-                and any(ch.subject == holder for ch in e.changes)]
-    assert not [cl for p in c.persons.values() for cl in p.ledger
-                if cl.subject == holder and cl.predicate == "person.died"], (
+    deaths = [e for e in c.log if e.kind == "person.died" and any(ch.subject == holder for ch in e.changes)]
+    assert all(causing_act(c, e) is not None and e.causes != [ROOT] for e in deaths), "the shipped rates killed him at MATTER"
+    if holder in c.persons:
+        assert not deaths
+    off, off_holder, _o, _p, _h = _realm_with_an_old_holder(AGE_ARMS[1], acquaintances=False)
+    POP.run(seasons=1, seed=0, w=off)
+    assert off_holder in off.persons
+    assert not [e for e in off.log if e.kind == "person.died"
+                and any(ch.subject == off_holder for ch in e.changes)]
+    assert not [cl for p in off.persons.values() for cl in p.ledger
+                if cl.subject == off_holder and cl.predicate == "person.died"], (
         "the control deposited a death claim about a man who lives")
 
 
