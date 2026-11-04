@@ -51,10 +51,13 @@ signatures:
   - {kind: person.died,    cause_verb: fight, victim_held: true,  code: XE}
   - {kind: person.died,    cause_verb: fight, victim_held: false, code: KL}
   - {kind: person.died,    cause_verb: march, code: KL}
+  - {kind: person.died,    cause_verb: accept, victim_held: false, code: KL}
   - {kind: field.won,      attacker: A, code: WA}
   - {kind: field.won,      attacker: R, code: WR}
   - {kind: field.lost,     attacker: A, code: WR}
   - {kind: field.lost,     attacker: R, code: WA}
+  - {kind: field.won,      attacker: O, code: OW}
+  - {kind: field.lost,     attacker: O, code: OW}
   - {kind: march.declared, attacker: A, code: FR}
   - {kind: march.declared, attacker: R, code: WN}
   - {kind: march.declared, attacker: O, code: OW}
@@ -65,7 +68,7 @@ moves:
   - {code: IN,   name: Successor installed,     verbs: [succeed, confer, establish],      kinds: [succession.claimed, tenure.opened], ends: 3}
   - {code: IM,   name: New burden,              verbs: [issue, requisition, transfer, oblige], kinds: [dispensation.issued, requisition.taken, duty.taken], needs: [context], ends: 4}
   - {code: BR,   name: Breach of right,         verbs: [revoke, arrest, seize],           kinds: [tenure.closed, arrest.made, record.seized],      needs: [side, office], ends: 0}
-  - {code: OW,   name: Outside war,             verbs: [march],                           kinds: [march.declared, field.won, field.lost],           needs: [side], dark: "build_realm foreign=False", ends: 3}
+  - {code: OW,   name: Outside war,             verbs: [march],                           kinds: [march.declared, field.won, field.lost],           needs: [side], ends: 3}
   - {code: PT,   name: Petition or demand,      verbs: [petition, carry],                 kinds: [petition.filed, petition.carried], ends: 1}
   - {code: MO,   name: Mobilization,            verbs: [recruit, form_unit, assign_troops, convene], kinds: [army.recruited, army.formed, army.assigned, date.scheduled], needs: [side], ends: 0}
   - {code: OP,   name: Rising begins,           verbs: [march, fight, raze, seize],       kinds: [march.declared, rung.seized, rung.razed],       needs: [side, context], ends: 0}
@@ -91,7 +94,7 @@ moves:
   - {code: DA,   name: Defection or split,      verbs: [release, commit, forgive],        kinds: [commitment.ended, stance.moved],                 needs: [side], ends: 0}
   - {code: KL,   name: Leader killed,           verbs: [fight],                           kinds: [person.died],                                     needs: [side, office], ends: 5}
   - {code: CA,   name: Leader captured,         verbs: [arrest],                          kinds: [arrest.made],                                      needs: [side, office], ends: 1}
-  - {code: XA,   name: Outside power,           verbs: [march, tell, petition],           kinds: [march.declared, news.told],                       needs: [side], dark: "build_realm foreign=False", ends: 1}
+  - {code: XA,   name: Outside power,           verbs: [march, tell, petition],           kinds: [march.declared, news.told],                       needs: [side], ends: 1}
   - {code: AM,   name: Pardon or amnesty,       verbs: [pardon],                          kinds: [detention.ended, ban.ended], ends: 0}
   - {code: DN,   name: Leader dies,             verbs: [],                                kinds: [person.died],                                     needs: [side, office], dark: "age_step and illness_rate ship 0.0", ends: 1}
   - {code: XS,   name: Settlement,              verbs: [covenant, determine, issue],      kinds: [covenant.offered, matter.determined, dispensation.issued], needs: [context], ends: 4}

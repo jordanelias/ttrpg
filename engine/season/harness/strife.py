@@ -1,7 +1,7 @@
 """`harness.strife` -- WHICH OF THE STUDY'S 40 STRIFE MOVES THE SEASON LOOP CAN REACH, AND WHICH IT DID.
 
 An INSTRUMENT, like `harness/aperture.py`: it reads the Event log and writes nothing, so it moves no
-hash. The vocabulary is `strife_moves.yaml` (loaded by `data/strife.py`), a reading of the study
+hash. The vocabulary is `strife_moves.yaml` (loaded by `harness/strife_data.py`), a reading of the study
 "Mechanics of Strife to c. 1600". Each code is graded on separate things, because one number would
 hide which owner closed it:
 
@@ -147,23 +147,45 @@ def grade(row: dict, seen: Counter, act: Counter, has_sig: bool) -> tuple:
     return ("OBSERVED" if n else "UNOBSERVED"), n
 
 
+def terminal_codes(rows) -> frozenset:
+    """Codes a case can END on: `ends > 0` and `terminal` not false (XP is the study's mark of later linked trouble)."""
+    return frozenset(r["code"] for r in rows if r.get("ends", 0) > 0 and r.get("terminal", True))
+
+
+def routeless_terminals(rows, resolvable=None) -> list:
+    """Terminal codes with no static route, in file order. Master section 7 wants a conclusion route per terminal
+    code; until strands exist (S3) the check is per terminal code, not per opening-to-conclusion pair."""
+    term = terminal_codes(rows)
+    return [r["code"] for r in rows if r["code"] in term and not route(r, resolvable)]
+
+
+def count_event(e, rd: Readers, seen: Counter, act: Counter, residue: Counter, signatures=SIGNATURES) -> None:
+    """Count one Event once: `seen` by kind; `act` by each signature it matches; and, when its kind is named by
+    some signature but it matched none, `residue` by `(kind, cause_verb, side)`. The signatures for one kind are
+    mutually exclusive, so an Event lands in `act` or `residue`, never both (a test holds that)."""
+    seen[e.kind] += 1
+    hits = classify(e, rd, signatures)
+    for hit in hits:
+        act[hit] += 1
+    if not hits and any(g["kind"] == e.kind for g in signatures):
+        residue[(e.kind, rd.cause_verb(e), rd.attacker_side(e))] += 1
+
+
 def measure(seasons: int, seeds: tuple) -> dict:
     """Run each seed through the owner (`populated.run`), classify its log, and pool the counts."""
-    seen, act = Counter(), Counter()
+    seen, act, residue = Counter(), Counter(), Counter()
     for s in seeds:
         w = populated.build_realm(s)
         populated.run(seasons, s, w=w)
         rd = readers_for(w)
         for e in w.log:
-            seen[e.kind] += 1
-            for hit in classify(e, rd):
-                act[hit] += 1
+            count_event(e, rd, seen, act, residue)
     sig_codes = {g["code"] for g in SIGNATURES}
     rows = []
     for r in MOVES:
         st, n = grade(r, seen, act, r["code"] in sig_codes)
         rows.append((r, st, n, route(r)))
-    return {"seasons": seasons, "seeds": tuple(seeds), "seen": seen, "act": act, "rows": rows}
+    return {"seasons": seasons, "seeds": tuple(seeds), "seen": seen, "act": act, "residue": residue, "rows": rows}
 
 
 def report(m: dict) -> str:
@@ -184,6 +206,17 @@ def report(m: dict) -> str:
         if not rt:
             why = r.get("gap") or r.get("dark") or "kinds come from matter or the gate, not a verb"
             out.append(f"  {r['code']:<3} {r['name']:<22} {why}")
+    term = terminal_codes(r for r, _, _, _ in m["rows"])
+    bare = [r["code"] for r, _, _, rt in m["rows"] if r["code"] in term and not rt]
+    out.append("")
+    out.append(f"Terminal codes with no static route ({len(bare)} of {len(term)}): " + (", ".join(bare) or "none"))
+    out.append("")
+    out.append("Residue: Events of a kind some signature names that matched NO signature, by (kind, cause verb, side):")
+    res = m.get("residue", Counter())
+    for (kind, verb, side), n in sorted(res.items(), key=lambda kv: (-kv[1], str(kv[0]))):
+        out.append(f"  {n:>5}  {kind:<16} cause={verb}  side={side}")
+    if not res:
+        out.append("  none")
     return "\n".join(out)
 
 
