@@ -180,8 +180,8 @@
 | CR-76 | B11-S3 | new from the strife fold (v11; `-11`): the world reading (`flows_in`, `concluded`, the opening-to-terminal route check, `commensurate` over `INCOMPATIBILITY`, the content openers) in `queries/world_q.py`; no consumer; hash EQUAL |
 | CR-77 | B11-S3 | new from the strife fold (v11; `-11`): the person reading (`flows_known`, `concluded_known`); no consumer; hash EQUAL |
 | CR-78 | B11-S4 | new from the strife fold (v11; `-11`): the stamp in `questions_for`, shipped off; its flip a declared mover on the strife guard, HR-9 (2) and (4) and A3 |
-| CR-79 | B11-S5 | new from the strife fold (v11; `-11`): the credit term at WITNESS, after Lens B, in two commits: `regime_gain` 0 (hash EQUAL), then 0.5 (ED-IN-0313; a declared mover) |
-| CR-80 | B10-Z (HELD) | new from the strife fold (v11; `-11`): the deck, world-build seeds per strife category through CL-EVENTS (3)'s schema; HELD on CL-OPEN's build, slotted by R8; hash EQUAL (switch off) |
+| CR-79 | B11-S5 | new from the strife fold (v11; `-11`): the credit term at WITNESS, after Lens B, in two commits: `regime_gain` 0 with its register row and range check (hash EQUAL), then 0.5 (ED-IN-0313; a declared mover made only if the strife guard passes and is not blind); decoupled from `refraction_gain`; ceiling max(`confidence_default`, the uncredited value) |
+| CR-80 | B10-Z (HELD) | new from the strife fold (v11; `-11`): the deck, world-build seeds per strife category through CL-EVENTS (3)'s schema; HELD on CL-OPEN's build, slotted by the plan's R8 (head §7); hash EQUAL (switch off) |
 | PC-11 | B10-10b | new from the personal-combat fold of 2026-11-01 (`-04`): the control, then the module's dead code |
 | PC-12 | B10-10b | new from the personal-combat fold of 2026-11-01 (`-04`): retire the v30 combat owner; the port's two constants |
 | PC-13 | B10-10b | new from the personal-combat fold of 2026-11-01 (`-04`): the trace is complete |
