@@ -58,6 +58,9 @@ Jordan, 2026-11-04, in conversation. These are rulings in that conversation, not
 | R12 | Flows condition factions at their relevant scale, and offices, as well as persons. | §5 |
 | R13 | A regime in Foucault's sense is an assemblage of institutions with commensurate dominant modes of understanding and behaving, not a political regime. | §5 |
 | R14 | Apply the recommendations, so long as they come from the Opus or the Fable critic. Taken to cover the WITNESS landing of the credit term and the determination-based reading of execution, and not the alternatives that conflict with R3, R4, R5 and R11 `[A11]`. | §5, §9 |
+| R15 | A6: a derived reading is permitted under ED-IN-0225, because it is not an arc carrier. Yes (my reading of "yes a6": the question was framed so that a "no" withdrew the design). | §6 |
+| R16 | The foreign nations are the Altonian Empire and Schoenland: external nations that function as spoilers and limits on the game world. | §4, §7 |
+| R17 | The word `regime` may stand. | §5 |
 
 ## 4. Flows: strands, eras, stakes, capacity, conclusion
 
@@ -76,6 +79,8 @@ Jordan, 2026-11-04, in conversation. These are rulings in that conversation, not
 | burden on a subject people, foreign rule, religious or status grievance (D, E, F, G, I) | the same moves, opened by a foreign actor or a church or caste seat | foreign off; no church seat issues sanctions |
 
 **The era.** The era is a **scope**, not a connected component. It opens at the first strife move in the realm and holds the realm's one slot. Its moves are the strife moves at the realm rung and the strands beneath; its opening kind is the set of categories open beneath it. A succession crisis, a foreign invasion, a famine and a tax crisis can all be open at once and are read as one era. A strand is always at a lower rung than the era it feeds. The era is read generally (the crown, the realm's seats); strands carry the particulars. **Everything operating within an open era is of the era**: every act, claim and institution beneath the realm's rung, strife or not (a merchant's trade, a marriage, a harvest), is conditioned by it as a raid is. After the era concludes nothing is of an era until a new one opens.
+
+**Outside powers.** Jordan (R16): the foreign nations are the Altonian Empire and Schoenland, external nations that function as spoilers and limits on the game world. They sit outside every realm rung (the foreign root is a territory with no parent in the realm, and `endings_reached` and `census` already leave it out), so they are never *within* an era. They act on it from outside, and what they do is read at the realm rung it touches, with side O. As **spoilers** they can open or break a strand: an invasion is OW, an appeal to or from them XA. As **limits** they bound what a strand can end in: canon gives Schoenland the T16 root and Altonian naval passage, so a border or a sea route can close an ending the realm would otherwise reach. Schoenland is in the realm as built; Altonia is seated only by `build_realm(foreign=True)`.
 
 **Stakes and capacity.** A succession crisis at a territory is small; at a duchy larger; at the realm the largest. The realm holds 1 flow; a duchy 2 (a *tributary* strand that drains into the era and an *isolate* that does not). Below the duchy "n+1": each rung holds one more than the rung above. By the order of the existing `rung_kinds` roster (`person, hearth, community, settlement, territory, province, duchy, realm`) read from the top: realm 1, duchy 2, province 3, territory 4, settlement 5, community 6, hearth 7, person 8. Capacity is a function of position in a roster that exists, not a second table. No slots are typed below the duchy. The built realm has no province rung (census), so 3 binds nothing yet. Capacity 8 at the person rung is inert (one entity sits there) and stays because "n+1" is the ruling. A person's ladder sums to 33 such slots, but he holds only what his ledger holds, so the cap binds chiefly the world reading and the instrument. `[A1]`
 
@@ -142,7 +147,7 @@ Awareness is not required to be within a flow; requiring it would put a person o
 
 Operationally, and person-side: **the regime a person stands in is his own held affiliations and the institutions he holds seats in.** Two persons are commensurate when no pair across their held affiliations is `incompatible`, the shape `person_q.confliction` already computes. An institution is described by the affiliations of its holders, as counts, with no single "dominant" one. `null` is read as not incompatible, which settles pair 6 that the roster leaves to Jordan. Corpus worlds hold no `conviction`, so the report is empty there. `[A4]` This replaces an earlier clique reading, which was not a partition: with `null` read as compatible, `altonian_civics` joins every set. A regime is not a side. The authority and the challengers may share one, and strife between regimes is where their affiliations strain; strife inside one is a contest over what its own terms require. The instrument reports, for each strand, whether any incompatible pair spans its parties. `[A5]`
 
-**The word.** Layer 1 refuses `regime` in the governance sense ("a coinage for a thing `band` already covers", `01_AXIOMS.md:719-721`). This design uses Foucault's sense, defined here. CLAUDE.md §4 requires a defined term to be defined where it is invoked; no code identifier is named `regime`, and the identifier is chosen at build. Whether the term stands is a Jordan item (§10).
+**The word.** Layer 1 refuses `regime` in the governance sense ("a coinage for a thing `band` already covers", `01_AXIOMS.md:719-721`). This design uses Foucault's sense, defined here. CLAUDE.md §4 requires a defined term to be defined where it is invoked; no code identifier is named `regime`, and the identifier is chosen at build. Jordan ruled that the term may stand (R17).
 
 **The era is a regime's unity.** "The realm was turbulent" is how a regime makes simultaneous crises one. That is a reading, so persons, offices and factions can hold different accounts of one era and the engine holds none as the true one.
 
@@ -178,7 +183,7 @@ The flow writes no state, names no next move and fires nothing. **Loops** (ID-16
 L1 is the loop that could harden into a determinant, tightest at the realm's single slot. **The guard is measured:** over the same seeds, with the stamp on and off, report the histogram of terminal codes reached per arm. Every code reached with it off must still be reached with it on, **and** no code's share may rise by more than the seed-to-seed spread of the off arm (the spread comes from the control, not from a number set here). A reachability-only guard sees narrowing and not concentration; this sees both. An arm that closes a route or concentrates the endings is a defect to remove. The shipped stamp is off, so the guard is equal by construction until a flip; the on arm is a test arm in S4, run beside the off arm, and a guard that ran only the shipped configuration would observe nothing. S5 runs the same two arms for the credit term.
 
 **Refused, to stay inside ratified rulings:**
-- No stored flow, state, phase or counter (T-a; ED-IN-0225: no arc carrier). Recomputed from the log and ledgers each time. `[A6]`
+- No stored flow, state, phase or counter (T-a; ED-IN-0225: no arc carrier). Recomputed from the log and ledgers each time. Jordan ruled that a derived reading is inside ED-IN-0225 (R15).
 - No date, deadline, firing condition or outcome on anything (T-c, M16(b)). A flow has no next move. A terminus is recognized when persons' acts produce it; nothing authors it and nothing makes it happen.
 - No self-worsening condition (M16's fourth motion, ED-IN-0301). Drought is weather on matter, famine is bodies, the rest is persons acting.
 - No backbone required for membership.
@@ -196,7 +201,7 @@ From the side-aware instrument (S1; 4 seasons, seeds 0 and 1, the shipped config
 |---|---|
 | natural shock (SH) | CL-EVENTS commit (2), the live weather arm; CP-T10-02 calamity bands |
 | natural death (DR, DN) | `age_step`, `illness_rate` set by Jordan (CP-T10-05) |
-| outside war and power (OW, XA) | the `foreign` switch (IN-36), whose default Jordan holds (ED-IN-0301) |
+| outside war and power (OW, XA) | R16: Altonia and Schoenland. OW is graded by signature, a march by a foreign faction (side O). Schoenland is in the realm as built; Altonia is seated by `build_realm(foreign=True)` (IN-36), whose default Jordan holds (ED-IN-0301). XA, an appeal to or from them, has no signature yet |
 | church sanction (CH) | a church seat issuing ban or detain tenures: data, and the seat |
 | execution of a held person (XE) | §9: no new verb; a lethal `fight` on a held party, recognised by signature. Whether `fight` forms on a held party is open, and there is no live `detain` until CP-T03-09's `capture` (B10-11) |
 | declared, none seen (RF, RG, CL, NG, WA, WR, DA, CA, AM, XN) | the aperture funnel per verb first (which clause refuses it); change nothing before that |
@@ -239,7 +244,7 @@ Each assumption carries a revert. All are `[ASSUMPTION; medium; Jordan to correc
 | A3 | The 102 final moves in §4 and the per-code `ends` counts, transcribed by me from the case-mapping tables; `[UNVERIFIED]` until cross-checked against the study. The loader checks only that they total 102. Only the harness reads `strife_moves.yaml`; if any step of the loop ever does, these counts become a fact code reads and need a verified source first | rebuild the counts from the study |
 | A4 | The person-side reading of a regime (own held affiliations; commensurate means no incompatible pair; `null` as not incompatible) | delete that paragraph |
 | A5 | Strife inside a regime (a charter quarrel, category D) against between regimes (doctrine, category F) is a reading of the categories, not a finding | drop the sentence; the instrument still reports whether an incompatible pair spans a strand's parties |
-| A6 | A derived reading is outside the refusals of T-a, ED-IN-0225 and M16's fourth motion, because it stores nothing and acts only through persons | the plan's owner rules otherwise and the design is withdrawn |
+| A6 | **Ruled yes by Jordan, 2026-11-04 (R15).** A derived reading is permitted under T-a, ED-IN-0225 and M16's fourth motion, because it stores nothing and acts only through persons | none |
 | A7 | XE is a lethal `fight` on a held party, recognised by signature, with no new verb row (Fable F10's alternative) | add an `execute` row on `interrogate`'s and `pardon`'s shape, acting only through the custody seat and reaching death only through the combat seam |
 | A8 | `strife_moves.yaml` readings: each verb and kind is a reading of `verb_table.yaml` by name, not an execution | delete the file, `harness/strife_data.py` and `harness/strife.py` |
 | A9 | The linking rule of §4 (shared referent, one rung step, same person; never through the realm; never by holder) | any other bounded rule, tested by S1's planted strands |
@@ -247,9 +252,6 @@ Each assumption carries a revert. All are `[ASSUMPTION; medium; Jordan to correc
 | A11 | R14's reading: the instruction to apply the critics' recommendations covers the WITNESS landing of the credit term and the determination-based execution, and not the alternatives that conflict with R3, R4, R5 and R11 (delete the era, cap only duchy and realm) or that add apparatus no batch needs (a side-aware coded deposit) | withdraw the credit term to its blocked state and restore the `execute` verb |
 | A12 | The credit factor: `1 + regime_gain × c` with `c` in {−1, 0, +1} from the hearer's and the teller's held affiliations, `null` as 0, applied to told claims only, `regime_gain` a fixture shipped at 0 | any other monotone form; or delete the factor |
 
-**Needs Jordan** (what survives precedent, the critics and the architecture):
-1. **A6**: whether a derived reading is inside ED-IN-0225, which answered "what is an arc, as a thing the engine holds" and bound no future session to answer it. A "no" withdraws the design.
-2. **The `foreign` default** (IN-36, held under ED-IN-0301). The OW and XA lane waits on it.
-3. **The word `regime`**: Layer 1 refuses it in the governance sense. Confirm the Foucault sense, defined here, may stand, or name another term.
+**Needs Jordan: one item.** Whether `build_realm(foreign=True)` becomes the default (IN-36, held under ED-IN-0301). R16 gives the foreign nations their role as spoilers and limits, which I read as wanting Altonia seated; the switch is a hash mover and stays off until you say so. Whether Schoenland's persons can march in the realm as built, so the OW lane could be exercised on it meanwhile, is not checked.
 
 Taken by precedent, from the study, or from the critics, with reasons above: capacities, terminal moves (XP excepted), execution by `fight` on a held party, the linking rule, the reopening rule, and the credit term at WITNESS (R14; it departs from CAT-3 for one factor).

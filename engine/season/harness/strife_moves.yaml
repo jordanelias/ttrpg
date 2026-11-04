@@ -29,7 +29,8 @@ row_keys: [code, name, verbs, kinds, needs, dark, gap, ends, terminal]
 study_cases: 102
 needs_vocabulary: [side, office, context]
 signature_keys: [kind, cause_verb, attacker, victim_held, code]
-attacker_values: [A, R]
+attacker_values: [A, R, O]
+foreign_factions: [Altonia, Schoenland]
 
 # ACT-LEVEL SIGNATURES. A kind alone cannot tell a death in battle from a death by no act of anyone,
 # nor a field won by the authority from one won by its challengers. A signature reads the ACT that
@@ -37,6 +38,8 @@ attacker_values: [A, R]
 # the faction that marched, read against the factions that govern the rung marched on, nearest first:
 #   A  the attacker is the nearest governor, or a governor above it (the authority acting or sending force)
 #   R  the attacker governs nothing up that chain (a challenger)
+#   O  the attacker is a foreign faction, whatever it governs. Jordan, 2026-11-04: the foreign nations are
+#      the Altonian Empire and Schoenland, external, functioning as spoilers and limits on the game world.
 # `victim_held` is true when the person who died held a live `detain` tenure at the Event's tick. A death by
 # `fight` of a held person is an execution (XE, master §9: a sentence determined, then carried out through
 # the combat seam, as Jordan's 2026-09-02 ruling on kills requires); a death by `fight` of anyone else is KL.
@@ -54,6 +57,7 @@ signatures:
   - {kind: field.lost,     attacker: R, code: WA}
   - {kind: march.declared, attacker: A, code: FR}
   - {kind: march.declared, attacker: R, code: WN}
+  - {kind: march.declared, attacker: O, code: OW}
 
 moves:
   - {code: SH,   name: Natural shock,           verbs: [],                                kinds: [],                                              gap: "season_factor_draw ships () and calamity bands are unbuilt (CP-T10-02); no Event is emitted for a shock", ends: 0}

@@ -13,8 +13,8 @@ hide which owner closed it:
     act-level  an Event matched by a SIGNATURE: the Event's kind AND the verb of the act that caused it
                AND, for a march, the side of the marching faction. Side is read against the factions
                that govern the rung marched on, nearest first: the attacker is the authority (A) when
-               it is the nearest governor or a governor above it, and a challenger (R) when it governs
-               nothing up that chain. An Event matching no signature is not guessed at
+               it is the nearest governor or a governor above it, a challenger (R) when it governs
+               nothing up that chain, and an outside power (O) when it is a foreign faction. An Event matching no signature is not guessed at
 
 A code with a signature is graded on signature matches alone. A code with a `dark` switch and no
 signature is DARK: its kinds are shared with other codes (`march.declared` is also an ordinary march),
@@ -39,13 +39,13 @@ from ..queries.world_q import faction_holding, faction_of, hold_force
 from ..state.attribution import causing_act
 from ..state.containment import ancestry
 from . import populated
-from .strife_data import MOVES, SIGNATURES
+from .strife_data import FOREIGN, MOVES, SIGNATURES
 
 
 class Readers(NamedTuple):
     """What a signature needs to know about an Event, as functions, so a planted test can stand in
     for a World. `cause_verb` is the verb of the act that caused the Event, or `None` when no act did.
-    `attacker_side` is `A` or `R` for a march and `None` otherwise or when it cannot be told.
+    `attacker_side` is `A`, `R` or `O` (a foreign faction) for a march and `None` otherwise or when it cannot be told.
     `victim_held` is true when the person the Event reports dead held a live `detain` tenure at its tick."""
     cause_verb: Callable
     attacker_side: Callable
@@ -64,10 +64,14 @@ def governors(w, rung: Optional[str]) -> list:
     return out
 
 
-def side_against(attacker: Optional[str], gov: list) -> Optional[str]:
-    """`A` if `attacker` is the nearest governor or a governor above it, `R` if it governs nothing in
-    `gov`, `None` when there is no governor or no attacker to compare."""
-    if attacker is None or not gov:
+def side_against(attacker: Optional[str], gov: list, foreign=()) -> Optional[str]:
+    """`O` if `attacker` is a foreign faction; else `A` if it is the nearest governor or a governor above
+    it, `R` if it governs nothing in `gov`, `None` when there is no governor or no attacker to compare."""
+    if attacker is None:
+        return None
+    if attacker in foreign:
+        return "O"
+    if not gov:
         return None
     return "A" if attacker in gov else "R"
 
@@ -82,7 +86,7 @@ def readers_for(w) -> Readers:
         if a is None or a.verb != "march":
             return None
         rung = (a.payload or {}).get("subject") if isinstance(a.payload, dict) else None
-        return side_against(faction_of(w, a.actor), governors(w, rung))
+        return side_against(faction_of(w, a.actor), governors(w, rung), FOREIGN)
 
     def victim_held(e):
         victims = {c.subject for c in e.changes if c.field == "exists"}

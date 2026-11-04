@@ -42,7 +42,8 @@ def codes(e, rd):
 
 
 def test_registry_loads_forty_codes_and_signatures():
-    rows, sigs = data.load_moves()
+    rows, sigs, foreign = data.load_moves()
+    assert foreign and len(foreign) == 2
     assert len(rows) == 40 and len({r["code"] for r in rows}) == 40
     assert len(sigs) >= 1
 
@@ -79,6 +80,7 @@ def test_a_field_is_told_by_who_marched_and_the_codes_swap_on_a_loss():
     assert codes(ev("field.won"), readers(side=None)) == []           # a side that cannot be told is not guessed
     assert codes(ev("march.declared"), readers(side="A")) == ["FR"]
     assert codes(ev("march.declared"), readers(side="R")) == ["WN"]
+    assert codes(ev("march.declared"), readers(side="O")) == ["OW"]             # an invasion by a foreign nation
 
 
 def test_an_event_matching_no_signature_is_left_alone():
@@ -91,6 +93,9 @@ def test_side_against_the_governors():
     assert H.side_against("f_rebel", ["f_crown", "f_realm"]) == "R"
     assert H.side_against("f_rebel", []) is None                       # nobody governs: no authority to compare
     assert H.side_against(None, ["f_crown"]) is None
+    assert H.side_against("f_altonia", ["f_crown"], {"f_altonia"}) == "O"       # a foreign faction is an outside power
+    assert H.side_against("f_altonia", [], {"f_altonia"}) == "O"                 # whether or not anything governs the rung
+    assert H.side_against("f_rebel", ["f_crown"], {"f_altonia"}) == "R"          # control: a non-foreign challenger stays R
 
 
 def test_the_route_check_finds_a_route_and_a_planted_gap():
@@ -128,3 +133,8 @@ def test_loader_refuses_ends_that_do_not_total_102(tmp_path):
     p.write_text(text, encoding="utf-8")
     with pytest.raises(ValueError):
         data.load_moves(p)
+
+
+def test_the_foreign_nations_are_altonia_and_schoenland():
+    from engine.season.data.rosters import faction_prop_id
+    assert data.FOREIGN == {faction_prop_id("Altonia"), faction_prop_id("Schoenland")}
