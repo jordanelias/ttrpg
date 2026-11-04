@@ -1,0 +1,156 @@
+"""`World._tenure_snapshot` / `_tenure_changes` answer as the reference walk they replaced.
+
+WHY. The gate's F3 and F9 read one observation of the Tenure store around every watched write
+(`state/gate.py`), so the diff is load-bearing: a Tenure it fails to list is a write nobody judged.
+The fast path (`_tenure_changes`: the store in the snapshot's own order, identity-checked, fields
+compared in C) is a rewrite of the per-Tenure loop, and this file holds the loop it replaced as the
+reference and compares the two on every shape a write can leave the store in.
+
+Clauses: (a) nothing moved -> no change; (b) one field assigned; (c) the payload mutated IN PLACE
+(the case the deep copy exists for); (d) a Tenure opened; (e) a Tenure removed with its person;
+(f) one removed and one opened, the store's length unchanged; (g) the store reordered; (h) a Tenure
+with a non-None payload and a `term` moved. Each compares the full `(tenure, was)` list, order
+included. MUTATION (run): make `_ne` always False in `state/world.py` -> (b), (c) and (h) go red.
+"""
+
+from __future__ import annotations
+
+import copy
+
+import pytest
+
+from ..harness import populated as POP
+from ..state.carriers import Tenure
+
+
+def _ref_snapshot(w):
+    out = []
+    for p in w.persons.values():
+        for t in p.tenures:
+            out.append((t, _fields(t, True)))
+    for t in w._unowned:
+        out.append((t, _fields(t, True)))
+    return out
+
+
+def _fields(t, cp):
+    p = copy.deepcopy(t.payload) if cp and t.payload is not None else t.payload
+    return (t.subject, t.object, t.kind, t.since, t.until, t.degree, p, t.term)
+
+
+def _ref_changes(w, snap):
+    seen = {id(t) for t, _ in snap}
+    out = []
+    for t, f in snap:
+        if _fields(t, False) != f:
+            out.append((t, Tenure(t.id, *f)))
+    for p in w.persons.values():
+        out.extend((t, None) for t in p.tenures if id(t) not in seen)
+    out.extend((t, None) for t in w._unowned if id(t) not in seen)
+    return out
+
+
+def _same(a, b):
+    assert len(a) == len(b)
+    for (ta, wa), (tb, wb) in zip(a, b):
+        assert ta is tb
+        assert (wa is None) == (wb is None)
+        if wa is not None:
+            assert wa == wb
+
+
+@pytest.fixture(scope="module")
+def realm():
+    return POP.build_realm(0)
+
+
+def _holder(w):
+    for p in w.persons.values():
+        if len(p.tenures) >= 2:
+            return p
+    raise AssertionError("no person holds two Tenures")
+
+
+def _check(w, mutate, expect_n):
+    ref_snap, snap = _ref_snapshot(w), w._tenure_snapshot()
+    undo = mutate(w)
+    try:
+        got, ref = w._tenure_changes(snap), _ref_changes(w, ref_snap)
+        _same(got, ref)
+        assert len(got) == expect_n, f"expected {expect_n} changes, saw {len(got)}"
+    finally:
+        undo()
+
+
+def test_a_nothing_moved(realm):
+    _check(realm, lambda w: (lambda: None), 0)
+
+
+def test_b_one_field_assigned(realm):
+    def m(w):
+        t = _holder(w).tenures[0]
+        old = t.until
+        t.until = 9999
+        return lambda: setattr(t, "until", old)
+    _check(realm, m, 1)
+
+
+def test_c_the_payload_mutated_in_place(realm):
+    # the in-place mutation happens AFTER the snapshot, on a payload the snapshot copied
+    p = _holder(realm)
+    t = p.tenures[0]
+    old = t.payload
+    t.payload = {"remit_acts": ("a",)}
+    ref_snap, snap = _ref_snapshot(realm), realm._tenure_snapshot()
+    t.payload["remit_acts"] = ("a", "b")
+    try:
+        got, ref = realm._tenure_changes(snap), _ref_changes(realm, ref_snap)
+        _same(got, ref)
+        assert [x for x, _ in got] == [t], "the in-place payload change was not seen"
+    finally:
+        t.payload = old
+
+
+def test_d_a_tenure_opened(realm):
+    def m(w):
+        p = _holder(w)
+        n = Tenure("t_diff_open", p.id, "x", "hold", since=0)
+        p.tenures.append(n)
+        return lambda: p.tenures.remove(n)
+    _check(realm, m, 1)
+
+
+def test_e_a_tenure_removed_with_its_holder(realm):
+    def m(w):
+        p = _holder(w)
+        gone = p.tenures.pop()
+        return lambda: p.tenures.append(gone)
+    _check(realm, m, 0)
+
+
+def test_f_one_removed_one_opened_at_equal_length(realm):
+    def m(w):
+        p = _holder(w)
+        gone = p.tenures.pop()
+        n = Tenure("t_diff_swap", p.id, "x", "hold", since=0)
+        p.tenures.append(n)
+        return lambda: (p.tenures.remove(n), p.tenures.append(gone))
+    _check(realm, m, 1)
+
+
+def test_g_the_store_reordered(realm):
+    def m(w):
+        p = _holder(w)
+        p.tenures[0], p.tenures[1] = p.tenures[1], p.tenures[0]
+        return lambda: p.tenures.__setitem__(slice(0, 2), [p.tenures[1], p.tenures[0]])
+    _check(realm, m, 0)
+
+
+def test_h_term_and_payload_together(realm):
+    def m(w):
+        t = _holder(w).tenures[0]
+        old = (t.payload, t.since)
+        t.payload = {"k": 1}
+        t.since = t.since + 1
+        return lambda: (setattr(t, "payload", old[0]), setattr(t, "since", old[1]))
+    _check(realm, m, 1)

@@ -36,6 +36,8 @@ import hashlib
 import struct
 from dataclasses import fields as _dc_fields
 from enum import Enum
+from itertools import compress as _compress
+from operator import attrgetter as _attrgetter, is_ as _is, itemgetter as _itemgetter, ne as _ne
 from typing import Any, Callable, Optional
 
 from ..data.fixtures import DEFAULT_FIXTURES, Fixtures
@@ -152,6 +154,11 @@ def _written_fields(t: Tenure, copy: bool) -> tuple:
     if copy and p is not None:
         p = _copymod.deepcopy(p)
     return (t.subject, t.object, t.kind, t.since, t.until, t.degree, p, t.term)
+
+
+_WRITTEN = _attrgetter("subject", "object", "kind", "since", "until", "degree", "payload", "term")
+_FIRST, _SECOND = _itemgetter(0), _itemgetter(1)
+# `_written_fields`' order, as one C call. A fixed pair with it: `Tenure(t.id, *fields)` rebuilds.
 
 
 def rung_kind_ascends(child_kind: str, parent_kind: str) -> bool:
@@ -558,13 +565,23 @@ class World:
 
         The payload is DEEP-copied: `_grant_remit(force=True)` re-stamps `payload["remit_acts"]`
         IN PLACE, so a reference would compare equal to itself after the write and the re-stamp
-        -- `establish`'s write on another person's edge -- would be invisible."""
+        -- `establish`'s write on another person's edge -- would be invisible.
+
+        Each Tenure's fields are read in one C-level call (`_WRITTEN`, `_written_fields`' order) and
+        only a non-None payload is copied. This and `_tenure_changes` walk every Tenure in the store
+        once per watched write: the season loop's largest per-write cost, linear in the store."""
         out = []
         for p in self.persons.values():
             for t in p.tenures:
-                out.append((t, _written_fields(t, copy=True)))
+                f = _WRITTEN(t)
+                if f[6] is not None:
+                    f = f[:6] + (_copymod.deepcopy(f[6]),) + f[7:]
+                out.append((t, f))
         for t in self._unowned:
-            out.append((t, _written_fields(t, copy=True)))
+            f = _WRITTEN(t)
+            if f[6] is not None:
+                f = f[:6] + (_copymod.deepcopy(f[6]),) + f[7:]
+            out.append((t, f))
         return out
 
     def _tenure_changes(self, snap: list) -> list:
@@ -572,15 +589,23 @@ class World:
         fields as they stood, or `None` for one the write opened. Identity, not id strings: two
         Tenures may share an `id` (nothing refuses it), and a Tenure the write moved out of the
         store -- a dead person's, popped with them -- is still compared, because the snapshot
-        holds the object."""
+        holds the object.
+
+        The common write opens and closes no Tenure, so the store walks in the snapshot's own
+        order and its objects are the snapshot's, one for one. That is checked by identity and
+        then the fields are compared in C (`map(ne, ...)`); any other shape (an opened Tenure, one
+        removed, a reordering) takes the identity-set path that always answered."""
+        cur = [t for p in self.persons.values() for t in p.tenures]
+        cur.extend(self._unowned)
+        if len(cur) == len(snap) and all(map(_is, cur, map(_FIRST, snap))):
+            return [(t, Tenure(t.id, *f))
+                    for (t, f) in _compress(snap, map(_ne, map(_WRITTEN, cur), map(_SECOND, snap)))]
         seen = {id(t) for t, _ in snap}
         out = []
         for t, f in snap:
             if _written_fields(t, copy=False) != f:
                 out.append((t, Tenure(t.id, *f)))
-        for p in self.persons.values():
-            out.extend((t, None) for t in p.tenures if id(t) not in seen)
-        out.extend((t, None) for t in self._unowned if id(t) not in seen)
+        out.extend((t, None) for t in cur if id(t) not in seen)
         return out
 
     def _restore_tenures(self, changes: list) -> None:
