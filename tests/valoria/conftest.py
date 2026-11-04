@@ -38,8 +38,6 @@ KNOWN_RED = {
         'own_strength order never advances _order_idx — flags-ON residual (ED-MB-0061 Track F)',
     'test_dg2_yield_residuals.py::test_rally_keeps_pressured_yielding_subunit':
         'rally clears yielding below the rally fraction — DG2 residual (ED-MB-0061)',
-    'test_intent_resolution.py::test_holder_survives_better_with_intent':
-        'intent-on holder no longer survives better — flags-ON residual (ED-MB-0061)',
     'test_stochastic_rout.py::test_per_cell_break_subsumes_the_body_level_one':
         'per-cell and body-level break points have separated again (ED-MB-0061)',
 }
