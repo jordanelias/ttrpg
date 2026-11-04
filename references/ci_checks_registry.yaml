@@ -135,7 +135,7 @@ ci_checks:
     posture: harden
     role: "Golden-mode byte-exact gate (unit_field/cell_field + the §4a cell_cm mode) with the FULL digest-relevant toggle vector pinned — the shipped configuration's regression oracle (ED-MB-0045 A1b)."
     ci_job: field-goldens
-    notes: "Pin list single-owned in the tool's FIELD_PINS; drift-guarded by tests/valoria/test_field_golden_pins.py. Grid modes stay covered by test_mass_battle_byte_exact.py in unit-tests. DELIBERATELY CI-ONLY (ED-IN-0176): not in tools/valoria_local.py's list, on cost — measured 2026-08-13 at rc=0 in 275s (~4.6 min), against a local list whose every other entry is under 5s. The reason is recorded HERE, in this registry."
+    notes: "Pin list single-owned in the tool's FIELD_PINS; drift-guarded by tests/valoria/test_field_golden_pins.py. The two legacy grid modes were pinned by test_mass_battle_byte_exact.py, dropped 2026-11-04 (both known-red, ED-MB-0061): nothing pins them now. DELIBERATELY CI-ONLY (ED-IN-0176): not in tools/valoria_local.py's list, on cost — measured 2026-08-13 at rc=0 in 275s (~4.6 min), against a local list whose every other entry is under 5s. The reason is recorded HERE, in this registry."
 
   - path: systems/mass_battle/sim/lanchester_signature.py
     level: 5

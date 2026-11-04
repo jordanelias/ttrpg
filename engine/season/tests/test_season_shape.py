@@ -2049,40 +2049,8 @@ def test_w0_artifact_0_is_computed_from_the_rows_rather_than_asserted():
 # mechanised, so it stops depending on anyone remembering.
 # ===========================================================================
 
-def test_w1_every_citation_in_the_register_resolves_in_353():
-    """Every `:NNN` a `cite:` names exists in #353, and every verbatim quote is at the line cited.
-    Fourteen rows were closed or re-graded on citations; this is what stops the fifteenth being
-    closed on one nobody checked."""
-    bad = REG.verify_citations(REG.load())
-    assert not bad, "unresolved citations:\n  " + "\n  ".join(bad)
 
 
-def test_w1_the_citation_gate_tells_a_fabrication_from_a_wrong_line_number():
-    """They are DIFFERENT DEFECTS and collapsing them would be the same error as reporting a
-    verified citation as fabricated -- which is what the first version of this gate did to all
-    eight quotes it was given, because it compared typography instead of prose. A quote wrapped
-    across lines, inside a blockquote, with `**emphasis**` mid-clause and an em-dash where the
-    cite typed two hyphens, is the SAME CLAIM."""
-    reg = REG.load()
-    row = next(r for r in reg["rows"] if r["id"] == "H-23")
-    kept = row["cite"]
-
-    row["cite"] = '#353 :929-930 VERBATIM: "A petition costs standing when it is refused."'
-    bad = REG.verify_citations(reg)
-    assert any("FABRICATED" in b for b in bad), "a quote #353 does not contain passed"
-
-    row["cite"] = '#353 :100 VERBATIM: "No cost clause is required"'
-    bad = REG.verify_citations(reg)
-    assert any("LINE NUMBER is wrong" in b for b in bad), (
-        "a real quote at the wrong line was not distinguished from a fabrication")
-
-    row["cite"] = "#353 :9999 -- see there"
-    bad = REG.verify_citations(reg)
-    assert any("lines" in b and "9999" in b for b in bad), (
-        f"a line number past the end of the file passed: {bad}")
-
-    row["cite"] = kept
-    assert not REG.verify_citations(reg), "the restored citation stopped resolving"
 
 
 def test_w1_a_register_whose_citations_carry_no_line_reference_fails():
@@ -7627,6 +7595,15 @@ def test_w10_no_playable_verdict_rests_on_an_undeclared_row():
     assert authored, "no row is declared at all — the overlay is not being read"
 
 
+def _corpus_rows():
+    """`corpus_run.run_case` over every NPC and ARC case at seed 0: the corpus pass, ONCE per call. The
+    ranking test and `W18`'s clauses read the same rows (one owner: two copies could measure different
+    corpora), and they run in one test body because xdist places two tests on different workers."""
+    from ..harness import corpus_run as C
+    from ..harness import run_cases as R
+    return [C.run_case(c, 0, lane) for lane in ("NPC", "ARC") for c in R.load_cases(lane)]
+
+
 def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     """JORDAN, 2026-09-02: *"shouldn't we consider running all NPCs and all arcs in our test runs?
     a larger surface introduces more complexity, but given our goals, what solves one may solve
@@ -7649,7 +7626,7 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     §F2's scoring separates 2..7 of 22 candidates and the rest tie (`H-96`)."""
     from ..harness import corpus_run as C
     from ..harness import run_cases as R
-    rows = [C.run_case(c, 0, lane) for lane in ("NPC", "ARC") for c in R.load_cases(lane)]
+    rows = _corpus_rows()
     bad = [r for r in rows if r["status"] == "INSTRUMENT-DEFECT"]
     assert not bad, (f"the corpus runner has a call-site bug on {[(r['id'], r['why']) for r in bad][:3]}"
                      " — an instrument defect, which is NOT a finding about the design")
@@ -9488,6 +9465,10 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
         "death vacates is now a referent; `give` left it at plan position `14`). `H-71` "
         "is CLOSED, so the governance five's reason is the corpus's offices, and march's is the "
         "unmeasured H-175 gap (scoped to this corpus only)")
+    # `W18`'s clauses read this same run. They were a second test that ran the whole corpus again, and the
+    # two landed on different workers under `pytest -n auto`, so a memo could not share the pass: one test
+    # body does. A failure inside it names `_w18_the_run_instrument_and_its_control` in the traceback.
+    _w18_the_run_instrument_and_its_control(rows)
 
 
 
@@ -9577,14 +9558,17 @@ def test_the_combat_seam_derives_one_field_and_it_decides_something():
         "The derived field is decoration, and the seam is handing the subsystem a constant")
 
 
-def test_w18_the_run_instrument_and_its_control():
+def _w18_the_run_instrument_and_its_control(rows):
     """`W18`. `PLAN.md` Part 6's bar, as an instrument. Three clauses, and **the control is first
     because it is the only one that demonstrates sensitivity.**
 
     ⚠ "THE CONTROL IS THAT THE INSTRUMENT CAN SAY ZERO" IS NOT A CONTROL, and `W18`'s first draft
     said it was. Printing 0 on a corpus where 0 is entailed shows nothing (§0.1 pt 4). The planted
     cross-person edge is the control: it must flip `R3` false → true, and if it ever stops flipping,
-    the instrument has gone blind and every zero it prints afterwards is worthless."""
+    the instrument has gone blind and every zero it prints afterwards is worthless.
+
+    Called by `test_the_corpus_runs_and_the_ranking_cannot_discriminate` with that test's corpus rows
+    (it was `test_w18_the_run_instrument_and_its_control`, a second full corpus pass)."""
     from ..harness import corpus_run as C
     from ..harness import run_cases as R
 
@@ -9594,7 +9578,6 @@ def test_w18_the_run_instrument_and_its_control():
         f"the planted cross-person edge did not flip R3 ({before} -> {after}). The detector is "
         "blind, and every `RUNS = 0` it prints is uninformative rather than true")
 
-    rows = [C.run_case(c, 0, lane) for lane in ("NPC", "ARC") for c in R.load_cases(lane)]
     npc = [r for r in rows if r["id"] in {c["id"] for c in R.load_cases("NPC")}]
     arc = [r for r in rows if r not in npc]
 

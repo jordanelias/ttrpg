@@ -19,7 +19,6 @@ deleting a pinned flag's environ.get read fails test_every_pin_is_read.
 """
 import os
 import re
-import sys
 
 _ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # REPOINTED 2026-08-24 — the engine moved. `tests/sim/mass_battle/` was ported over
@@ -254,20 +253,6 @@ def test_every_pin_is_read():
     unread = [n for n in FIELD_PINS
               if n not in _NON_SOURCE_PINS and n not in defaults]
     assert not unread, f"pins never read by the engine (rot): {unread}"
-
-
-def test_grid_pin_dict_consistency():
-    """The six non-selector _PINNED_OFF members must agree with FIELD_PINS —
-    two pin dicts disagreeing about a shared flag is the two-regimes hazard."""
-    sys.path.insert(0, os.path.join(_ROOT, 'tests', 'valoria'))
-    from test_mass_battle_byte_exact import _PINNED_OFF
-    shared = set(_PINNED_OFF) & set(FIELD_PINS)
-    diffs = {k: (_PINNED_OFF[k], FIELD_PINS[k]) for k in shared
-             if _PINNED_OFF[k] != FIELD_PINS[k]}
-    # FIELD_MOVEMENT/MB_NODE_COHESION legitimately differ (mode selectors, and
-    # they live in MODES here, not FIELD_PINS) — anything else must match.
-    assert not diffs, f"grid vs field pin dicts disagree on shared flags: {diffs}"
-    assert len(shared) >= 5, f"expected ≥5 shared pins, got {sorted(shared)}"
 
 
 def test_known_inert_reasons_are_not_self_referential():

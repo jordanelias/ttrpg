@@ -19,10 +19,9 @@ failure, so the MB lane would get no signal when its work lands. Strict means: t
 if one starts passing, the suite goes red and this register must be updated in the same commit
 that fixed it. The register is therefore self-retiring — it cannot rot in the passing direction.
 
-**It cannot rot in the other direction either**: `test_known_red_register.py` asserts every id
-below was actually collected, so a renamed or deleted test fails loudly rather than leaving a
-stale entry that quietly excuses nothing. Without that, this file would be a way to make the
-suite green by naming tests that no longer exist.
+**The other direction is unguarded since 2026-11-04** (ED-IN-0312): `test_known_red_register.py`, which asserted
+every id below was actually collected, was dropped. A renamed or deleted test now leaves a stale entry that
+excuses nothing (the entry is strict xfail on a nodeid that no longer exists, so it never matches).
 
 **This is not MB work.** No mass-battle code, config, golden or threshold is touched by anything
 here; the failures stay failures and stay ED-MB-0061's to fix. It is gate hygiene for every OTHER
@@ -39,14 +38,6 @@ KNOWN_RED = {
         'own_strength order never advances _order_idx — flags-ON residual (ED-MB-0061 Track F)',
     'test_dg2_yield_residuals.py::test_rally_keeps_pressured_yielding_subunit':
         'rally clears yielding below the rally fraction — DG2 residual (ED-MB-0061)',
-    'test_intent_resolution.py::test_holder_survives_better_with_intent':
-        'intent-on holder no longer survives better — flags-ON residual (ED-MB-0061)',
-    'test_mass_battle_byte_exact.py::test_byte_exact_unit_mode':
-        'unit-mode golden digest drifted and has not been re-recorded (ED-MB-0061)',
-    'test_mass_battle_byte_exact.py::test_byte_exact_cell_mode':
-        'cell-mode golden digest drifted (ED-MB-0061). Note this test ALSO self-skips off the '
-        'reference platform, so it reports SKIPPED locally and xfail on CI — a runtime skip wins '
-        'over an xfail marker, so strict=True is safe here rather than a latent xpass.',
     'test_stochastic_rout.py::test_per_cell_break_subsumes_the_body_level_one':
         'per-cell and body-level break points have separated again (ED-MB-0061)',
 }

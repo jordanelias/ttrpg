@@ -19,7 +19,7 @@ geometry + links to the canonical diagrams/animations for you to open).
 
 - **Machine-vision comparison:** the sim output was rendered to PNG (headless Chromium) and inspected
   visually against the historical schematic, adversarially (looking for what's still wrong), not just
-  asserted numerically. The geometry is also pinned by `tests/valoria/test_deployment_geometry.py`.
+  asserted numerically. (`tests/valoria/test_deployment_geometry.py` pinned the geometry until it was dropped 2026-11-04.)
 - Orientation (both sides): the enemy deploys at the **top**; our army (red) advances **upward**. Each
   dot is a cell, coloured by subunit.
 

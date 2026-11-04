@@ -106,6 +106,20 @@ class Tenure:
     # the `Office.establishment` deletion's shape in reverse, not a behaviour change.
     term: Optional[Term] = None
 
+    # THE VERSION OF THIS EDGE: it counts every attribute assignment, so `World._tenure_snapshot` and
+    # `_tenure_changes` can tell an unmoved Tenure from a possibly-moved one by comparing one int
+    # instead of reading eight fields. A class attribute and NOT a dataclass field (no annotation), so it
+    # is in no repr, no `==`, no `content_hash` encoding. It counts SETS and not changes: a set to the same
+    # value costs one comparison of the eight fields, never a missed change. What it cannot see is a write
+    # that bypasses `__setattr__` (`t.__dict__[...]`, `object.__setattr__`); `World.discard_caches` checks
+    # for exactly that at every barrier and raises `InstrumentDefect`. An in-place edit of a payload dict
+    # is not an assignment either; the diff compares every non-None payload by value.
+    _v = 0
+
+    def __setattr__(self, name, value):
+        object.__setattr__(self, name, value)
+        object.__setattr__(self, "_v", self._v + 1)
+
     @property
     def live(self) -> bool:
         return self.until is None

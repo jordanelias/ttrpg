@@ -9,17 +9,21 @@ edit (CLAUDE.md §0.4).
    idempotent, installs `pyyaml pytest numpy pytest-xdist` only if absent. Without it step 3
    cannot run.
 
-2. **Learn the container's known-red before debugging anything.** `cat .git/shallow` — if this is a
-   shallow clone, `tests/valoria/test_forked_status.py` fails on arrival because the
-   commits its `FORK:` rows name are out of reach. That is the clone, not `main`. Do not debug it.
+2. **Learn the container's known-red before debugging anything.** run the failing file on `main`'s tree
+   first, and `cat .git/shallow` — a shallow clone cannot reach the commits `FORK:` rows name. That is the
+   clone, not `main`.
 
 3. **The full suite, ONCE.** `python -m pytest tests/valoria -q -n auto`.
    - **First decide whether to run it at all** (`CLAUDE.md` §0.4 cl.1): name what it can observe
      that CI's run on push will not. Prose, ledger, skill or link changes run only the test files
      that read what changed (`grep -rl <path> tests/`); CI is the full gate.
+   - **Run `python tools/tests_for_diff.py`** (add `--run` to execute it): it reads what this session changed and names the
+     narrowest suites. An edit confined to `modules/` or `systems/` of combat, mass battle or social contest runs `-m <subsystem>`
+     across all three trees; anything else (engine core, tools, registries) gets the full gates below. It cannot see a
+     realm-level effect of a module edit (the season suite executes the modules too); CI's full run is that check.
    - Red? Re-run **the failing file only** while you fix it. The full suite comes back once, when
      you believe you are done.
-   - Touched `engine/season/`? Add `python -m pytest engine/season/tests -q -n auto`. Touched
+   - Touched `engine/season/`? Add `python -m pytest engine/season/tests -q -n auto --dist worksteal`. Touched
      nothing it can reach? Do not run it.
 
 4. **The lane's validator**, not all of them. `python tools/valoria_local.py --staged` runs the

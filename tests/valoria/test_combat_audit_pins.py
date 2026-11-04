@@ -169,8 +169,7 @@ def _versatile_cells():
     return out
 
 
-@pytest.mark.parametrize('weapon', CUT_THRUST)
-@pytest.mark.parametrize('armor', list(TIERS))
+@pytest.mark.parametrize('weapon,armor', [(w, a) for w, a, _ in _versatile_cells()])
 def test_cut_thrust_label_matches_the_arm_actually_paid(weapon, armor):
     """ED-PC-0036 (F12). `coupling` resolves a cut-and-thrust weapon as max(cut arm, half-sword thrust arm), and
     `select_mode` reports the damage-mode that legibility scores (thrust reads HARD 0.80, swing EASY 1.25). Those two
@@ -181,11 +180,14 @@ def test_cut_thrust_label_matches_the_arm_actually_paid(weapon, armor):
 
     Both now come from core.cut_thrust_arm, their single owner. This pins that they agree for every cut_thrust weapon
     at every tier — the property, not the values, so a future re-grading of DELIVERY/RESIST stays free to move which
-    arm wins as long as the label follows it."""
+    arm wins as long as the label follows it.
+
+    PARAMETRISED OVER THE CELLS THAT SELECT THE VERSATILE HEAD (`_versatile_cells`), not over every weapon x tier
+    with a runtime `pytest.skip` on the rest: the 24 cells that skipped never tested anything, and the floor test
+    below bounds how many survive, which is what the skips were standing in for."""
     c = Combatant('X', weapon=weapon)
     dm, head, gap, perc, pc, eff = S.select_mode(c, armor, True, CFG, measure_gap=0.0)
-    if head != 'cut_thrust':
-        pytest.skip(f"{weapon} selects {head!r} at {armor}, not the versatile head")
+    assert head == 'cut_thrust', f"{weapon}@{armor}: `_versatile_cells` listed this cell, so it selects the versatile head"
     _geo = c.w.get('geo', {})
     # [ED-PC-0050] the arm core.strike pays is priced on DAMAGE with the wielder's impact pair — read it that way.
     _value, mode = core.cut_thrust_arm(core.TIER2MAT[armor], gap, _geo.get('cut'), _geo.get('thrust'),
