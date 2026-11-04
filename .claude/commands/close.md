@@ -9,9 +9,9 @@ edit (CLAUDE.md §0.4).
    idempotent, installs `pyyaml pytest numpy pytest-xdist` only if absent. Without it step 3
    cannot run.
 
-2. **Learn the container's known-red before debugging anything.** `cat .git/shallow` — if this is a
-   shallow clone, `tests/valoria/test_forked_status.py` fails on arrival because the
-   commits its `FORK:` rows name are out of reach. That is the clone, not `main`. Do not debug it.
+2. **Learn the container's known-red before debugging anything.** run the failing file on `main`'s tree
+   first, and `cat .git/shallow` — a shallow clone cannot reach the commits `FORK:` rows name. That is the
+   clone, not `main`.
 
 3. **The full suite, ONCE.** `python -m pytest tests/valoria -q -n auto`.
    - **First decide whether to run it at all** (`CLAUDE.md` §0.4 cl.1): name what it can observe

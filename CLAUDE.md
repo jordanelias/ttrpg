@@ -272,9 +272,9 @@ Timings: `CLAUDE_RATIONALE.md` §0.4 — re-measure rather than quote them.
    it freely. The expensive thing is pytest, and only pytest.
 
 **This governs EVERY pytest gate** — `engine/season/tests` and `engine/tests` too: at the close, once,
-only the ones your change can reach. ⚠ **Learn your container's known-red BEFORE you debug it:** a
-**shallow** checkout cannot reach the commits `FORK:` rows name, so `tests/valoria/test_forked_status.py`
-fails on arrival — the clone, not `main`; `cat .git/shallow` settles it. **NO GUARD MAY BE BUILT FOR
+only the ones your change can reach. ⚠ **Learn your container's known-red BEFORE you debug it:** run
+the failing file on `main`'s tree first; `cat .git/shallow` says whether the clone can reach the commits
+`FORK:` rows name. **NO GUARD MAY BE BUILT FOR
 THIS SUBSECTION** (§0.1 pt 5).
 
 ---

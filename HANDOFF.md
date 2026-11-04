@@ -36,7 +36,6 @@ what happened goes in the commit message and the PR body.
 | cache a count in any file read at session start | run the instrument instead |
 | write a tracked data file from a test and restore it in a `finally` | under `pytest -n` another worker that builds a realm inside the window reads the doctored file. Point the loader at a `tmp_path` copy. Swept in `engine/season/tests` only; `tests/valoria` is NOT swept (unread candidates: `tests/valoria/test_module_shape_check.py`, `tests/valoria/conftest.py`) |
 | edit `architecture/holonic_ARCHITECTURE.md` and assume `register --check` is the gate | the `#353 :NNN` line cites in `engine/season/hole_register.yaml` (H-04, H-20, H-37) move when lines are added above them, and `register --check` does not read them: run `pytest engine/season/tests/test_season_shape.py -k test_w1` after any edit to that file, and re-point each cite to the EXACT line, not within the six-line tolerance |
-| debug `tests/valoria/test_forked_status.py` on a shallow clone | `cat .git/shallow` — its `FORK:` rows name commits the clone cannot reach |
 
 ## Rulings — do not re-raise
 

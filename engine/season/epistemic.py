@@ -767,7 +767,7 @@ def changes_only_held_claims(w: "World", e: "Event", held: frozenset, mode: str)
     anchor is the claim, `place_of` answers `None` (`co_located` admits nobody), `witness_key`'s
     `pid == anchor` and its knot test have no person to match, and `document_key` needs a `hold`
     whose object is that claim id; `chronicle` filters on a verb's `emits:` and no verb emits a
-    claim-changing kind. `test_in55_held_claim_fan_skip.py` executes that over a season.
+    claim-changing kind. The test that executed that over a season, `test_in55_held_claim_fan_skip.py`, was dropped 2026-11-04 (Jordan).
 
     ⚠ NOT "EVERY CHANGE SUBJECT RESOLVES IN NO WORLD STORE". That also matches a MATTER death:
     `loop/matter.py::_die` routes through `World.remove_person`, which pops the person before

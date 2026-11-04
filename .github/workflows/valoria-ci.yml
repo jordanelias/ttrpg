@@ -316,9 +316,10 @@ jobs:
           # tests/valoria/test_retired_tree_apparatus.py, which culling wave 3 retired — so the
           # justification pointed at a file that does not exist, and someone tidying that comment
           # could have dropped the setting with it. The LIVE reason is stronger:
-          # tests/valoria/test_forked_status.py runs `git cat-file -e <ref>:<path>` against 242
+          # tests/valoria/test_forked_status.py (dropped 2026-11-04) ran `git cat-file -e <ref>:<path>` against 242
           # restructure-ledger FORK rows. At the default depth-1 those refs are unreachable and all
-          # 242 read as unfollowable at once. DO NOT LOWER THIS.
+          # 242 read as unfollowable at once. Nothing was shown to need the depth after the drop; it was
+          # left as it was (a change to a blocking job's checkout is its own measurement).
           #
           # The original reason also still holds, via the surviving half of that test's subject:
           # currency_consistency_check.check_current_stamp in BOTH directions — an
@@ -398,7 +399,7 @@ jobs:
       # `harness/delta.py` (`git show <rev>:<path>`, a CLI differ no test imports), and
       # test_season_shape.py::_run, whose subprocess is `python -m engine.season.harness.<module>`.
       # `register --requirements` spawns nothing. `unit-tests` above is the opposite case and keeps
-      # `fetch-depth: 0` for test_forked_status.py; if a season test ever shells out to git, give THIS
+      # `fetch-depth: 0` (it was for test_forked_status.py, dropped 2026-11-04); if a season test ever shells out to git, give THIS
       # job `fetch-depth: 0` and name the test here.
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
