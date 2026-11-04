@@ -32,6 +32,8 @@ from collections import Counter
 import pytest
 import yaml
 
+from engine.substrate.descriptors import PURSUITS
+
 from ..data import files, goals
 from ..data.requires import binding_of, evaluate
 from ..decision import make_chooser, opening_set
@@ -229,12 +231,14 @@ def test_with_goal_stages_empty_the_realm_stamps_nothing_and_its_questions_are_e
 LADDER_GOALS = ["goal_crown_peninsular_sovereignty", "goal_church_suppress_restoration"]
 
 
+# `PURSUITS[1]`, `[7]` are honour and stability, the roster's own order: the roster is read, never retyped
+# (`tests/valoria/test_conviction_roster_single_owner.py`).
 def authored_realm_doc() -> dict:
     """The shipped goals plus ONE authored ladder, in the doc only (never in `goals.yaml`): a stage a person's own claims
     must answer on the referent (a Person exists, in his ledger) and then one that asks he hold it."""
     doc = yaml.safe_load(files.GOALS_YAML.read_text(encoding="utf-8"))
     doc["goal_stages"] = [{"id": "gs_b32_test", "for": list(LADDER_GOALS),
-                           "stages": [_stage("s1", "short", S1), _stage("s2", "long", S2, {"honour": 1, "stability": 1})]}]
+                           "stages": [_stage("s1", "short", S1), _stage("s2", "long", S2, {PURSUITS[1]: 1, PURSUITS[7]: 1})]}]
     return doc
 
 
