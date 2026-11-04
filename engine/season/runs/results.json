@@ -9496,7 +9496,7 @@
   "P36": {
    "id": "P36",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 20 candidates were OFFERED from the computed option set and only 62 of 63 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['challenge', 'forge', 'move'] -- 3 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
+   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 20 candidates were OFFERED from the computed option set and only 62 of 63 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['challenge', 'exchange', 'forge', 'move', 'sabotage', 'utter'] -- 6 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
    "kind": null,
    "section": "S17",
    "title": "a choice branches three ways",
@@ -10767,24 +10767,6 @@
   },
   {
    "kind": "FORBIDDEN",
-   "what": "a (Record, exists) write by p_mid changed nothing: it named no subject",
-   "where": "F9",
-   "needs": "a write that moves at least one subject it names",
-   "law": "04 \u00a7C.2 / PART D row 5 (F9) -- `before == after` is refused AT THE WRITE, so the receipt is never minted: a success Event for a write that did not happen is ID-9, and a receipt minted by the gate for it passes every append-side check",
-   "case": "probe:P36",
-   "expected": false
-  },
-  {
-   "kind": "FORBIDDEN",
-   "what": "a (Record, exists) write by p_mid changed nothing: it named no subject",
-   "where": "F9",
-   "needs": "a write that moves at least one subject it names",
-   "law": "04 \u00a7C.2 / PART D row 5 (F9) -- `before == after` is refused AT THE WRITE, so the receipt is never minted: a success Event for a write that did not happen is ID-9, and a receipt minted by the gate for it passes every append-side check",
-   "case": "probe:P36",
-   "expected": false
-  },
-  {
-   "kind": "FORBIDDEN",
    "what": "a (Tenure, until) write by p_high exercising no seat wrote Tenures it has no basis for: th_dead (hold owned by p_low on S, changed)",
    "where": "F3",
    "needs": "T-m (the actor owns the edge), T-o (via present, the actor seated in it, the seat's revocation basis reaching it; or a `ban` on via opened in the same write that so closed the man's `hold` on a seat whose revocation disposal is a ban -- one ban per closure), conferral (via's purview over a seat that declares a conferral basis), cascade (the edge names something this same write removed), handover (a `hold` on something that is not a seat, opened in the same write that ended the actor's own live `hold` on it -- one opening per ending), T-n (an actorless closure of an edge whose own declared term has matured), renewal (a live `oblige` edge's term pushed later, by its seat's own seated holder exercising it), determination (an edge of a kind some arrangement disposes opened -- or a `detain`/`ban` closed -- on the judging seat exercised, for a person its bench's ground holds), warrant (a `detain` opened on a seat, for a person the exercised seat's purview reaches, by a holder granted `dispatch`), seizure (another person's `hold` on a Record or a Rung closed, by a holder granted `issue` whose exercised seat's purview reaches the object's place), muster (another person's `contain` re-homed, by a holder granted `dispatch`, for a member of the exercised seat's faction), founding (a `contain` opened for a thing this same write brought into existence, its only parent), or claim (the actor's own `hold` opened on a vacant seat whose `successions` title he ended in the same write)",
@@ -11237,13 +11219,13 @@
  "_trace_counts": {
   "STEP": 7231,
   "BARRIER": 1904,
-  "DECISION": 1950,
-  "QUERY": 30278,
-  "WRITE": 15540,
-  "EVENT": 15303,
-  "ACT": 97,
-  "CLAIM": 1753,
-  "GAP": 90,
+  "DECISION": 1949,
+  "QUERY": 30300,
+  "WRITE": 15562,
+  "EVENT": 15324,
+  "ACT": 98,
+  "CLAIM": 1773,
+  "GAP": 88,
   "NOTE": 182
  },
  "_corpus_defects": [

@@ -3204,7 +3204,8 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None,
          in play this tier scores wound (`body.changed`) and `contest.undecided` claims;
       3. the `need` question -- the standing ambition question, PLAN `W5`'s quiet-season fallback;
       4. the rest -- AND every question whose claim records HIS OWN act (`Claim.doer == p.id`,
-         stamped by WITNESS), whatever its referent: the echo of his own deed is not news.
+         stamped by WITNESS) that would otherwise be tier 0, 2 or 4: the echo of his own deed is not
+         news. A tier-1 own-act claim (CR-10, arm D2, A1-05) is spared the screen and stays tier 1.
 
     SALIENCE ORDERS WITHIN TIERS 0 AND 3, DESCENDING, NEVER ACROSS TIERS (v9 IN-69, ED-IN-0293 (10)): the
     key's second slot is `-salience`, the cosine (`data/pursuits.py::pursuit_cosine`, the owner `cast.loyalty`
@@ -3240,7 +3241,11 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None,
     still shows combat high (felled 82, wounded 116 against base 47/66), through `accept` forming
     with no challenge behind it (HANDOFF_IN's accept residue): the screen did not restore that.
     Revert: the screen off (B), the
-    entry's tier 0 literal (`need` in tier 0), or before IN-57 the `(source, id)` key.]"""
+    entry's tier 0 literal (`need` in tier 0), or before IN-57 the `(source, id)` key.]
+    [CR-10, A1-05's arm D2 (answered): the screen's scope is tiers 0, 2 and 4; tier 1 (his own
+    tenure's object or his seat's purview) is spared. [ASSUMPTION; medium; Jordan to correct: tier 2
+    own-act claims stay screened, since A1-05 names tier 0 as demoted and tier 1 as spared and no
+    more. Revert: the screen first again, before the tier-0 test (every tier screened).]]"""
     if ambs is None:
         ambs = ambitions(w, p)
     if refs_of is None:
@@ -3282,14 +3287,18 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None,
         if q.source == "need":
             return (3, -salience(q.about) if q.about in refs_of else 0.0) + tie
         held = held_by_id.get(q.about)
-        if held is not None and held.doer == p.id:
-            return (4, 0.0) + tie
+        own = held is not None and held.doer == p.id
+        # CR-10, arm D2 (A1-05): the own-act screen demotes a tier-0 echo and tiers 2 and 4 as ever, and
+        # SPARES a tier-1 one -- a claim recording his own act on his own tenure's object or inside his
+        # seat's purview is answered as tier 1.
         if any(r in aims for r in q.referents):
+            if own:
+                return (4, 0.0) + tie
             return (0, -max(salience(pid) for pid, refs in refs_of.items()
                             if any(r in refs for r in q.referents))) + tie
         if any(r in mine for r in q.referents):
             return (1, 0.0) + tie
-        if held is None:
+        if own or held is None:
             return (4, 0.0) + tie
         # IN-72: a paired claim (death, wound) scores `|lean · bond|` for the doer its `seen.who`
         # pairing names, `person_q.paired_deed_term` -- the scorer `deeds_judged` sums; unpaired: 0.
