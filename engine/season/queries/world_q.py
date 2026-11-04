@@ -3023,6 +3023,34 @@ def places_named(w: World, p: Person, named: Optional[frozenset] = None) -> tupl
     return tuple(sorted(r for r in cands if r not in under))
 
 
+def propositions_heard(w: World, p: Person) -> tuple:
+    """THE PROPOSITIONS `p` HAS HEARD OF FROM ANOTHER (v11 CR-28, G-04 (a); CP-T02-05's re-take folded in;
+    [ASSUMPTION; medium; Jordan to correct; revert: drop the term in `questions_for`]), sorted by id: the
+    Propositions (`World.class_of`) among `person_q.ledger_names` of the claims in `p`'s OWN ledger that
+    do NOT record his own act (`Claim.doer != p.id`) -- an `utter` he witnessed or was told of, another's
+    `commitment.made`, a held document whose `terms` name one, a goal or creed some claim of his names.
+    `seats_named`' shape, one class over: his own ledger, the World asked only which ids are Propositions.
+
+    WHAT DIFFERS FROM THE FAILED TERM (B10-05's `propositions_named`, reverted `Falsified: CR-28`, H-156):
+    (1) THE LEDGER IS THE ONE SOURCE. The failed term also offered every goal and creed he is committed to
+    off his own edges; a Proposition reaches this term only through a claim he holds. (2) THE OWN-ACT
+    SCREEN'S TEST (`attention_key`'s, CR-10): a claim recording his own act is not news, so it does not
+    feed this term -- what he uttered he holds (`_eff_utter`'s maker's hold), and its claim reaches him as
+    a tier-1 question CR-10 spares, whose own Proposition REM-21's own-referent term already stamps.
+    (3) THE 'ALREADY COMMITTED' DECLINE is NOT here and need not be: `rosters.yaml: held_edge_declines`
+    (B10-09 close one, D3) declines `commit` person-side on any object he holds a live `commit` edge on,
+    over every route that carries the referent, which the failed term had no decline for (`commit`
+    executed 612 times at two seasons over seeds 0-4, chiefly repeats). `argue`, the other row declaring
+    the class, forms on a cause he holds too, as D3 intends.
+
+    Resolver-side and read-only: it supplies Proposition IDS, which `questions_for` adds to the question
+    the person answers as CLASSED referents (`_stamped`), so only a row declaring `Proposition` (`commit`,
+    `argue`) forms on them; whether the act then passes is the fold's (`commit`'s `existence` cell).
+    `()` for everyone at build: no ledger names a Proposition before a season is witnessed."""
+    heard = ledger_names([c for c in p.ledger if c.doer != p.id])
+    return tuple(sorted(o for o in heard if w.class_of(o) == "Proposition"))
+
+
 def requisitionable(w: World, rung_id: str, stores: Optional[dict] = None) -> bool:
     """IS THIS LARDER WORTH A REQUISITION (v10 CR-23, M17 taken (a), [ASSUMPTION; medium; Jordan to
     correct]): it holds a positive amount of the matter a computed requisition carries, and at least
@@ -3552,11 +3580,15 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # v10 IN-45 (ii) (B10-06; M5 option (B), [ASSUMPTION; medium; Jordan to correct]): AND, APPENDED, THE SITES A
     # WORKS HE HOLDS NAMES (`works_sites`), as `Site` -- the channel from a held works to the fabric `work` raises,
     # which no question a master answers carried. REVERT: drop the term.
+    # v11 CR-28 (G-04 (a); CP-T02-05's re-take; [ASSUMPTION; medium; Jordan to correct]): AND, APPENDED, THE
+    # PROPOSITIONS HE HAS HEARD OF FROM ANOTHER (`propositions_heard`), as `Proposition` -- `commit` and `argue`
+    # form on them; `commit` is declined on a cause he already holds (`rosters.yaml: held_edge_declines`).
+    # REVERT: drop the term.
     told = ledger_names(p.ledger)
     added = (vacancies(w, p) + seats_named(w, p, told) + writs_held(w, p) + records_held_for_holding_rows(w, p)
              + places_named(w, p, told) + larders_in_purview(w, p, told)
              + (own_referents_of_class(w, out[0]) if out else ())
-             + works_sites(w, p))
+             + works_sites(w, p) + propositions_heard(w, p))
     # v10 IN-12 step 5 ([ASSUMPTION; medium; Jordan to correct]): AND, LAST, THE PRISONERS HIS SEATS HOLD
     # (`detainees_held`), as `Detainee` -- the restrained-persons class, named here because it is no
     # collection; only `interrogate` declares it. Empty while no live `detain` names his seat, and then

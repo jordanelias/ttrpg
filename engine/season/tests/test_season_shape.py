@@ -6902,7 +6902,11 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     # `record.created` between the stage links), neither a run of stage links alone, so the depth clause is not discriminating. The
     # COUNT still discriminates (matured {0: 0, 3: 73, 6: 104}). CONTROL: the every-tier screen (the tier-1 branch returning tier 4
     # for an own-act claim) reads (11, 11) and passes.
-    assert (depths[3], depths[6]) == (13, 15), (
+    # v11 CR-28 (B10-09 close two; CP-T02-05's re-take): (13, 15) -> (17, 14), a re-record with the unit that moved it: the
+    # Propositions a person heard of from another are stamped onto his question (`world_q.propositions_heard`), so `commit` and
+    # `argue` form on them and the act mix moves. `depths[6]` does NOT exceed `depths[3]`, so the walk the message below asks for
+    # is not triggered. CONTROL: `propositions_heard` stubbed to `()` reads (13, 15), CR-10's pin.
+    assert (depths[3], depths[6]) == (17, 14), (
         f"the maturation depth ceiling moved: {depths}. This is a MEASUREMENT of a mixed chain "
         "whose length the act mix sets, not a discriminator — `H-80`'s discriminator is the COUNT, "
         "asserted below and still live. Re-pin these two numbers with the unit that moved them. "
@@ -8051,7 +8055,14 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # loses `issue` holds at seed 2), `speak` seeds 1 and 2 -> seeds 0, 1 and 2; `argue` joins at seeds 1 and 2. R3: NPC 38 / 43 / 39 of
     # 46 -> 38 / 43 / 39, ARC 80 / 93 / 87 of 97 -> 80 / 93 / 86 (ARC-27 at seed 2). CONTROL: the every-tier screen reads the old
     # 20 and passes.
-    assert ever == {"accept", "carry", "challenge", "commit", "conceal", "create_record", "interview",
+    # ⚠⚠ v11 CR-28 (B10-09 close two; CP-T02-05's re-take), 22 -> 23: `argue` JOINS, nothing leaves. A RE-RECORD WITH ITS REASON: the
+    # Propositions a person heard of from another ride his question (`world_q.propositions_heard`), so `argue` (and `commit`) form on
+    # a cause another uttered; `argue` executed in no live world before. MEASURED by `_corpus_rows` and `_wc_corpus_pass` (seed 0), this
+    # tree against the CR-10 tree (a copy of `253011c8`, the same script on both): executed-world counts `argue` 0 -> 19, `commit` 21 ->
+    # 45, `tell` 46 -> 43, `accept` 122 -> 120, `conceal` 97 -> 94, `give` 14 -> 10, `release` 16 -> 13, `move` 52 -> 50, `petition`
+    # 56 -> 55, `fight` 30 -> 29, `interview` 1 -> 2, `research` 61 -> 62; nothing else moves. CONTROL: `propositions_heard` stubbed
+    # to `()` in process reads the CR-10 tree's readings exactly.
+    assert ever == {"accept", "argue", "carry", "challenge", "commit", "conceal", "create_record", "interview",
                     "fight", "give", "issue", "move", "oblige", "petition", "reconstruct", "release",
                     "research", "speak", "surveil", "tell", "tend", "transfer", "utter"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
@@ -8288,8 +8299,10 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # spares a tier-1 own-act echo, so the act mix moves. MEASURED by `python -m engine.season.harness.corpus_run 0` (PYTHONHASHSEED=0),
     # VERBS ONLY REFUSED, base -> D2: 13 -> 12; `speak` EXECUTES now (it is in `ever` above), `seize` is no longer attempted at all (it
     # moves to the foldable-never-attempted set), `argue` is attempted and refused. CONTROL: the every-tier screen reads the 13 and passes.
+    # ⚠⚠ v11 CR-28 (B10-09 close two), 12 -> 11: `argue` LEAVES, into `ever` (the `ever` note above: executed in 19 worlds, from none).
+    # CONTROL: `propositions_heard` stubbed to `()` in process reads the 12.
     assert refused_only == {"build", "found", "survey",
-                            "forge", "covenant", "sabotage", "train", "argue",
+                            "forge", "covenant", "sabotage", "train",
                             "comply", "evade / defy", "construe", "exchange"}, (
         f"the always-refused set moved to {sorted(refused_only)}. `move` and `transfer` left it "
         "when `W-C` closed `H-94`'s structural half — the Candidate carries operands now — and "
@@ -9223,7 +9236,9 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # executes in no world now), so `varying` is `ever` exactly (20). Control: the CP-T02-02 tree reads the 21.
     # ⚠⚠ CR-10 (B10-09 close two, arm D2): `commit` AND `speak` JOIN -- the `ever` note above (each executes in some world, not all 143), so
     # `varying` is `ever` exactly (22). Control: the every-tier screen reads the 20 without them.
-    assert varying == {"accept", "carry", "challenge", "commit", "conceal", "create_record", "fight", "give",
+    # ⚠⚠ v11 CR-28 (B10-09 close two): `argue` JOINS -- the `ever` note above (it executes in 19 worlds, not all 143), so `varying`
+    # is `ever` exactly (23). Control: `propositions_heard` stubbed to `()` reads the 22 without it.
+    assert varying == {"accept", "argue", "carry", "challenge", "commit", "conceal", "create_record", "fight", "give",
                        "interview", "issue", "move", "oblige",
                        "petition", "reconstruct", "release", "research", "speak",
                        "surveil", "tell", "tend", "transfer", "utter"}, (
@@ -10728,7 +10743,11 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # every-tier screen demoted them. Corpus, seed 0, `corpus_run`: VERBS THAT EXECUTED 20 -> 22. CONTROL: the every-tier screen (the
     # tier-1 branch returning tier 4 for an own-act claim) reads the old 20 and passes; `commit` also executes at seeds 1 and 2 (it executed
     # at none of the three before), `issue` stops executing at seed 2 (v9's D2 reading).
-    assert set(executed) == {"accept", "carry", "challenge", "commit", "conceal", "create_record", "interview",
+    # ⚠⚠ v11 CR-28 (B10-09 close two): `argue` JOINS (22 -> 23), nothing leaves -- `argue` forms on a Proposition a person heard
+    # another utter (`world_q.propositions_heard`). This pass, by emission id, the CR-10 tree (a copy of `253011c8`) -> this tree:
+    # `argue` 0 executions -> 63 (1 refusal), `commit` 26 -> 98, `tell` 113 -> 98, `utter` 259 -> 253, `release` 28 -> 22, `give`
+    # 17 -> 11, `petition` 100 -> 95, `research` 339 -> 331; the reason and its control are at the corpus test's `ever` note.
+    assert set(executed) == {"accept", "argue", "carry", "challenge", "commit", "conceal", "create_record", "interview",
                              "fight", "give", "issue",
                              "move", "oblige", "petition", "reconstruct", "release", "research", "speak",
                              "surveil", "tell", "tend", "transfer", "utter"}, (
@@ -12256,18 +12275,23 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
     # "exists:dispensation", 0)` are out; `("rec:9b32617aeeb0003f", "exists:dispensation", 0)` and `("rec:30a013a313fa2ee0",
     # "exists:dispensation", 0)` are in (a `comply` formed on other Records); the rest and the order are unchanged. The property this
     # pin is for holds: every grammar claim is held at the end and none evicted.
+    # v11 CR-28 (B10-09 close two; CP-T02-05's re-take): 12 -> 10 entries, a re-record read off the failing assertion's own output
+    # and RE-READ with `propositions_heard` stubbed to `()` in process, which reads the old 12 exactly: the Propositions a person heard
+    # of from another ride his question, so `commit` and `argue` take scenes and the `actor` arm's act mix moved. Against the 12:
+    # both `exists:Rung`, both `present_at:`, `exists:Site` and `exists:DocketItem` are out; `("rec:fec7059a48676496",
+    # "exists:petition", 0)`, `("rec:2dd19669944564b8", "exists:dispensation", 0)` and two `exists:Proposition` = 1 reads (the
+    # cell `commit` and `argue` share, read on an uttered Proposition) are in. The property this pin is for holds: 10 grammar claims were ever
+    # deposited and all 10 are held at the end, none evicted.
     assert actor_end == [("hearth_ostvik", "stores:grain", 0),
                          ("hearth_ostvik", "exists:Person", 0),
                          ("rec:9b32617aeeb0003f", "exists:dispensation", 0),
-                         ("hearth_ostvik", "exists:Rung", 1),
-                         ("hearth_ostvik", "present_at:p_carin", True),
-                         ("hearth_ostvik", "exists:Site", 0),
+                         ("rec:fec7059a48676496", "exists:petition", 0),
                          ("hearth_ostvik", "exists:Person", 0),
                          ("rec:30a013a313fa2ee0", "exists:dispensation", 0),
-                         ("hearth_ostvik", "exists:Rung", 1),
-                         ("hearth_ostvik", "present_at:p_bailiff", True),
-                         ("hearth_ostvik", "stores:grain", 0),
-                         ("hearth_ostvik", "exists:DocketItem", 0)], (
+                         ("prop:a1b7e22481160c2e", "exists:Proposition", 1),
+                         ("rec:2dd19669944564b8", "exists:dispensation", 0),
+                         ("prop:f6fdea694f4a5da7", "exists:Proposition", 1),
+                         ("hearth_ostvik", "stores:grain", 0)], (
         f"the `actor` arm's end-of-run grammar claims are {actor_end}, not the single surviving "
         "`stores:grain` read. Empty would mean the cap is evicting again — i.e. the fan-out "
         "default moved back toward `total`, or a new deposit channel opened — and every `H-40` / "
@@ -12827,8 +12851,13 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # `comply` 2, `sabotage` 1) and the three new verbs drop on Records a `comply` was formed on (the `exists:dispensation` read); `sabotage`
     # forms once and drops on no belief. None of the four declares a class. CONTROL: the every-tier screen (the tier-1 branch returning
     # tier 4 for an own-act claim) reads the old ten and passes.
+    # ⚠⚠ TWELVE -> ELEVEN, v11 CR-28 (B10-09 close two; CP-T02-05's re-take): `speak` LEAVES, nothing joins. The Propositions a person
+    # heard of from another ride his question (`world_q.propositions_heard`), so `commit` and `argue` take scenes and the act mix
+    # moves: the `("hearth_ostvik", "exists:DocketItem", 0)` belief `speak` dropped on is no longer deposited (it leaves the `actor`
+    # arm's end-of-run list, `test_wb_the_control_arm_...`). Neither row declaring `Proposition` drops here. CONTROL: `propositions_heard`
+    # stubbed to `()` in process reads the old twelve and passes. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
     assert {v for v, _ in hl_live} == {"accept", "challenge", "comply", "construe", "evade / defy", "exchange", "fight",
-                                       "interview", "speak",
+                                       "interview",
                                        "tend", "train", "transfer"}, (
         f"the headless drops are on {sorted({v for v, _ in hl_live})}. `examine`/`restore`/"
         "`interview`/`fight`/`research` are the `exists:` and `existence:`-cell drops the "
@@ -13089,8 +13118,14 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # `hearth_ostvik` (nine), `comply|construe|evade / defy` on `rec:30a013a313fa2ee0` (three), and `exchange` and `transfer` each on
     # `rec:2dd19669944564b8`, `rec:6793bf781be64133`, `rec:6bf46a143f347c12`, `rec:9b32617aeeb0003f` (eight). CONTROL: the every-tier
     # screen (the tier-1 branch returning tier 4 for an own-act claim) reads the old 14 and passes. The clause still fires.
-    assert len(dropped) == 20, (
-        f"{len(dropped)} executable clause-4 drops, not 20. The drops are the channel itself; if "
+    # v11 CR-28 (B10-09 close two; CP-T02-05's re-take): 20 -> 24, read off this test's own `dropped` on this tree and with
+    # `propositions_heard` stubbed to `()` in process (which reads the old 20 exactly), the same script on both: OUT `('speak',
+    # 'hearth_ostvik')` (the set assertion above's one verb that left); IN `comply|construe|evade / defy` on `rec:2dd19669944564b8`
+    # and `exchange|transfer` on `rec:fec7059a48676496` (a petition, the `exists:petition` read in the `actor` arm's list above), by
+    # the act mix the stamped Propositions move. Every one of the other 19 survives; `bit` below is the same two pairs on both. The
+    # clause still fires.
+    assert len(dropped) == 24, (
+        f"{len(dropped)} executable clause-4 drops, not 24. The drops are the channel itself; if "
         "this falls toward zero the clause has stopped firing, which is a different and worse "
         "failure than the loss of outcome-relevance recorded above.")
     # ⚠⚠⚠ **THE BITE CAME BACK UNDER G1a, THE GUARD ABOVE DEMANDED A REASON, AND THE REASON IS
@@ -14220,7 +14255,12 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # `total` 33/7 -> 24/5, a re-record read off `got` (scratch re-run of this loop on this tree). UNIT AND DIRECTION:
     # every real scene fells one party, so a felled ATTACKER now dies; NPC-088 loses persons to its fights and the fork
     # POPULATION falls in every arm (genuine 34/34/33 -> 24/24/24; probed 60/60/57). 5 >= 2 and 2 <= 11 hold.
-    assert (got["none"]["genuine"], got["none"]["diverged"]) == (24, 2), got
+    # v11 CR-28 (B10-09 close two; CP-T02-05's re-take): 24/2 -> 34/5 at `none`, `actor` 24/5 -> 34/8, `total` 24/5 -> 33/8, a
+    # re-record read off `got` (a scratch copy of this loop on this tree). UNIT AND DIRECTION: the Propositions a person heard of
+    # from another ride his question (`world_q.propositions_heard`), so `commit` and `argue` form on them; the option sets gain
+    # Candidates and the fork POPULATION rises in every arm (probed 60/60/57 -> 63/63/63, genuine 24/24/24 -> 34/34/33). 8 >= 5
+    # and 5 <= 11 hold. CONTROL: `propositions_heard` stubbed to `()` in process reads the old 24/2, 24/5, 24/5 exactly.
+    assert (got["none"]["genuine"], got["none"]["diverged"]) == (34, 5), got
     # Reproduce with the `fork_case` loop above, run at each `fan_out_mode`.
     # [GROUNDED: measured 2026-09-07 — 16 genuine forks, 0 divergences at the shipped arm]
     # ⚠ 14 of 18 -> 17 of 19 under `U4`: the sampled tie-break moved the act a fork's person takes,
@@ -14277,7 +14317,8 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # reaches. CONTROL: the REM-2A tree (`f23194871`, a detached copy) reads 34/5 and passes this test. Mechanism not
     # isolated past that; 7 > 4 still holds.
     # v10 CP-T03-00: 34/7 -> 24/5 (the `none`-arm note above gives the unit); 5 >= 2.
-    assert (got["actor"]["genuine"], got["actor"]["diverged"]) == (24, 5), (
+    # v11 CR-28: 24/5 -> 34/8 (the `none`-arm note above gives the unit and the control); 8 >= 5.
+    assert (got["actor"]["genuine"], got["actor"]["diverged"]) == (34, 8), (
         f"the shipped default diverged {got['actor']['diverged']} times of "
         f"{got['actor']['genuine']}: {got}. `W-D`'s acceptance was lost at `all_five` on "
         "2026-09-07 and recovered on 2026-09-10 when §F1 clause 4 got producers other than "
@@ -14321,7 +14362,7 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # [GROUNDED: 30/11 -> 29/6 at IN-08's cells commit (B-G) -- the re-scored ranking and the duel pair; mechanism and both trees' figures in the `none`-arm IN-08 block above]
     # v10 REM-2B (B10-06): `total` 33/6 -> 33/7, read off the failing assertion's own `got` (the `actor`-arm note above gives the
     # unit and the REM-2A control; `total`'s fork population 33 is unmoved).
-    assert (got["total"]["genuine"], got["total"]["diverged"]) == (24, 5), got    # v10 CP-T03-00: 33/7 -> 24/5 (the `none`-arm note); v10 REM-2B: 33/6 -> 33/7; v10 REM-23: 36/7 -> 33/6 (the `none`-arm note above); IN-12 `give` + Rung: -> 36/7 (the actor-arm note); IN-11: 29/6 -> 26/6 (the actor-arm note); IN-57: -> 36/10 (the attention-tier key); IN-45 `carry`: -> 36/11 (the actor-arm note); FI-01: -> 36/8 (the actor-arm note)
+    assert (got["total"]["genuine"], got["total"]["diverged"]) == (33, 8), got    # v11 CR-28: 24/5 -> 33/8 (the `none`-arm note); v10 CP-T03-00: 33/7 -> 24/5 (the `none`-arm note); v10 REM-2B: 33/6 -> 33/7; v10 REM-23: 36/7 -> 33/6 (the `none`-arm note above); IN-12 `give` + Rung: -> 36/7 (the actor-arm note); IN-11: 29/6 -> 26/6 (the actor-arm note); IN-57: -> 36/10 (the attention-tier key); IN-45 `carry`: -> 36/11 (the actor-arm note); FI-01: -> 36/8 (the actor-arm note)
     # AND THE TWO LAYERS ARE SEPARATED. The finding is the DECISION count above; this is the layer
     # beneath it — whether the fork moved the act stream at all.
     #
@@ -14485,7 +14526,14 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
         # `acts_differ/genuine` moves 9/34 -> 6/24 (26% -> 25%) at `none` and `actor`, 9/33 -> 6/24 (27% -> 25%) at
         # `total`: the genuine population falls (34/34/33 -> 24/24/24) and `acts_differ` with it. ⚠ THE FLOOR ABOVE
         # (`4 * acts_differ > genuine`) NO LONGER HOLDS: 24 > 24 is false in all three arms -- left RED, for a decision.
-        "none": (6, 24), "actor": (6, 24), "total": (6, 24)}, (
+        # ⚠⚠ **RE-PINNED AT v11 CR-28 (B10-09 close two; CP-T02-05's re-take): THE POPULATION ROSE AND THE SHARE BARELY MOVED, AND
+        # THE UNIT IS THE HEARD-OF PROPOSITION STAMP** (`world_q.propositions_heard`: `commit` and `argue` form on what a person heard
+        # another utter). `acts_differ/genuine` moves 6/24 -> 9/34 (25% -> 26%) at `none` and `actor`, 6/24 -> 9/33 (25% -> 27%) at
+        # `total`: a fork moves the act stream in about the same share of a larger population; `hash_differ` equals `acts_differ` in
+        # every arm. The floor above (`5 * acts_differ > genuine`)
+        # holds in all three: 45 > 34, 45 > 34, 45 > 33. CONTROL, run: `propositions_heard` stubbed to `()` in process reads the old
+        # (6, 24) in all three exactly.
+        "none": (9, 34), "actor": (9, 34), "total": (9, 33)}, (
         f"the recoverability figures moved: {{k: (v['acts_differ'], v['genuine']) for k, v in got.items()}}. "
         "This is a RE-PIN DECISION, not necessarily a failure — but it is one somebody has to "
         "make deliberately, because `acts_differ / genuine` is how much of a fork the scene tick "
@@ -14750,7 +14798,10 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # v10 CP-T03-00 (B10-09): 7 -> 5, a re-record: the sibling test's population move (its `(24, 5)` note: a felled
     # attacker now dies), read off this test's own `got` (scratch re-run): `none` 2/2, `actor` 5/5, `total` 5/5; still
     # equal to `wide` (5 both), not 0.
-    assert got["actor"]["verbonly"] == 5, (
+    # v11 CR-28 (B10-09 close two; CP-T02-05's re-take): 5 -> 8, a re-record: the sibling test's population move (its `(34, 8)`
+    # note: the heard-of Proposition stamp), read off this test's own `got` (scratch re-run): `none` 5/5, `actor` 8/8, `total`
+    # 8/8; still equal to `wide` (8 both), not 0. CONTROL: `propositions_heard` stubbed to `()` in process reads 2/2, 5/5, 5/5.
+    assert got["actor"]["verbonly"] == 8, (
         f"the shipped default adds {got['actor']['verbonly']} VERB-SET divergences: {got}. A 0 "
         "means the clause-4 producers the six investigation acts opened are gone again and the "
         "2026-09-07 loss is back; any other number means the population moved and must be "
@@ -14832,7 +14883,8 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # v9 IN-12 step 10: 40/1 -> 40/2, the sibling test's move (`conceal`; its `(40, 2)` note).
     # v10 REM-23: 40/2 -> 34/4, the sibling test's move (`commit`'s class; its `(34, 4)` note and the REM-22 control).
     # v10 CP-T03-00: 34/4 -> 24/2, the sibling test's move (the fight's repair; its `(24, 2)` note).
-    assert (got["none"]["genuine"], got["none"]["wide"]) == (24, 2), got
+    # v11 CR-28: 24/2 -> 34/5, the sibling test's move (the heard-of Proposition stamp; its `(34, 5)` note and its control).
+    assert (got["none"]["genuine"], got["none"]["wide"]) == (34, 5), got
     # [GROUNDED: re-measured 2026-09-10 under `U4` — `actor` wide 17 of 19 under the widened fingerprint]
     # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (29, 9) at the shipped arm]
     # [GROUNDED: re-measured 2026-09-13 after `build_at` gave each person a person-subject
@@ -14849,7 +14901,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # ⚠⚠ **33/10 -> 31/7, PLAN POSITION `7a`, 2026-09-29 -- SAME MECHANISM AS THE `none`-ARM BLOCK
     # ABOVE, AND `wide` STILL EQUALS `verbonly` (7 both).**
     # [GROUNDED: measured 2026-09-29 on this tree after position `7a`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- shipped arm genuine 31, wide 7]
-    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (24, 5), got     # v10 CP-T03-00: -> 24/5 (the sibling test's move); v10 REM-2B: -> 34/7 (the sibling test's move); v10 REM-23: -> 34/5 (the sibling test's move); IN-12 `give` + Rung: -> 36/8 (the `verbonly` note); `24f`: 31/7 -> 32/7; IN-08: -> 35/9; IN-11: -> 32/9 (the hold, see `test_wd_a_fork_changes_…`); IN-57: -> 36/11; IN-45 `carry`: -> 36/12 (the `verbonly` note); FI-01: -> 36/9 (the `verbonly` note); IN-12 step 9: -> 36/10 (the `verbonly` note)
+    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (34, 8), got     # v11 CR-28: -> 34/8 (the sibling test's move); v10 CP-T03-00: -> 24/5 (the sibling test's move); v10 REM-2B: -> 34/7 (the sibling test's move); v10 REM-23: -> 34/5 (the sibling test's move); IN-12 `give` + Rung: -> 36/8 (the `verbonly` note); `24f`: 31/7 -> 32/7; IN-08: -> 35/9; IN-11: -> 32/9 (the hold, see `test_wd_a_fork_changes_…`); IN-57: -> 36/11; IN-45 `carry`: -> 36/12 (the `verbonly` note); FI-01: -> 36/9 (the `verbonly` note); IN-12 step 9: -> 36/10 (the `verbonly` note)
     # [GROUNDED: re-measured 2026-09-10 after ED-FI-0009 -- `total` 5 of 18 under the widened (verb, subject) fingerprint]
     # [GROUNDED: re-measured 2026-09-10 under `U4` -- `total` 5 of 19 under the widened (verb, subject) fingerprint]
     # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (28, 3) at the `total` arm]
@@ -14880,7 +14932,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # formed wherever `move` is. `wide` still equals `verbonly` (11 both); 32/10 with `migrate`
     # unresolvable.
     # [GROUNDED: measured 2026-09-30 at plan position `19c`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- `total` genuine 32, wide 11 (= verbonly 11); 32/10 with `migrate`'s `@effect_for` removed]
-    assert (got["total"]["genuine"], got["total"]["wide"]) == (24, 5), got    # v10 CP-T03-00: -> 24/5 (the sibling test's move); v10 REM-2B: -> 33/7 (the sibling test's move); v10 REM-23: -> 33/6 (the sibling test's move); IN-12 `give` + Rung: -> 36/7 (the `verbonly` note); `24f`: 32/11 -> 30/11; IN-08: -> 29/6; IN-11: -> 26/6; IN-57: -> 36/10; IN-45 `carry`: -> 36/11; FI-01: -> 36/8
+    assert (got["total"]["genuine"], got["total"]["wide"]) == (33, 8), got    # v11 CR-28: -> 33/8 (the sibling test's move); v10 CP-T03-00: -> 24/5 (the sibling test's move); v10 REM-2B: -> 33/7 (the sibling test's move); v10 REM-23: -> 33/6 (the sibling test's move); IN-12 `give` + Rung: -> 36/7 (the `verbonly` note); `24f`: 32/11 -> 30/11; IN-08: -> 29/6; IN-11: -> 26/6; IN-57: -> 36/10; IN-45 `carry`: -> 36/11; FI-01: -> 36/8
 
 
 # ===========================================================================

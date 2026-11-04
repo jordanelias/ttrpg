@@ -47,6 +47,7 @@ from ..decision.options import opening_set
 from ..gaps import Forbidden
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
+from ..queries import world_q
 from ..queries.world_q import hold_force, questions_for
 from ..state.carriers import Act
 from .test_in10_record_operands import _acts, _resolve
@@ -193,7 +194,11 @@ def test_the_addressees_commit_to_the_covenants_proposition_forms_from_the_held_
 
 def test_mutation_without_the_terms_sourced_line_the_addressee_forms_no_commit(monkeypatch):
     """THE NAMED MUTATION, RUN IN-TEST: `terms_sourced` emptied (the reader in `opening_set` then
-    widens nothing) and the falsifier's formation is gone -- the route is that line, nothing else."""
+    widens nothing) and the falsifier's formation is gone -- the route is that line, nothing else.
+    v11 CR-28: `world_q.propositions_heard` is a SECOND ROUTE to the same `commit` (the addressee's content claim names
+    the covenant's Proposition), so it is stubbed to `()` in both arms; this isolates the terms-sourced route and weakens
+    nothing (CP-T02-05's precedent for `oughts_named`, reverted with it)."""
+    monkeypatch.setattr(world_q, "propositions_heard", lambda w_, p_: ())
     w, d = _world()
     pid = _covenant_then_give(w, d)
     assert _commits_formed(w, pid), "precondition: the shipped route forms it"

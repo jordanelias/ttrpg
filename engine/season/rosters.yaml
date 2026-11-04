@@ -690,6 +690,15 @@ rosters:
       REM-28 `dispatch`. While no row declares one of the three, the term stamps
       nothing for it and no formation moves; a row's `referent_class:` naming it is what makes the
       term stamp it. REVERT: drop the three values and the term.
+      v11 CR-28 (G-04 (a), B10-09 close two; CP-T02-05's re-take, [ASSUMPTION; medium; Jordan to correct;
+      revert: drop the term in `questions_for`]): `Proposition` GAINS A STANDING OCCASION beside the
+      own-referent term -- `queries/world_q.py::propositions_heard`, the Propositions among
+      `person_q.ledger_names` of the claims in a person's own ledger that do not record his own act
+      (`Claim.doer`, the own-act screen's test): an `utter` he witnessed or was told of, another's
+      commitment, a document whose terms name one. `questions_for` appends it last to its splice;
+      `commit` and `argue` form on what it stamps, and `held_edge_declines` (below) declines `commit` on
+      a cause he already holds. The class stays out of `occasion_only_classes`, so a question's own
+      Propositions are still stamped by the own-referent term.
       `Detainee` (v10 IN-12 step 5, H-226 route (a) with the decline H-232 names [ASSUMPTION; medium;
       Jordan to correct; revert: drop the value, `interrogate` declares `Person`]): THE RESTRAINED-PERSONS
       CLASS -- a person held by a live `detain` whose object is a seat the asker holds, stamped by the

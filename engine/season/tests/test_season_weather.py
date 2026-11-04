@@ -438,9 +438,14 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # 5e4d77d3... / 3cfe6b39... (one, two seasons); events 9929 -> 9739, 26090 -> 26934. CONTROL, run in process on this tree: the tier-1
 # branch returning tier 4 for an own-act claim (the every-tier screen) reads the old pair and the old `BASE_EVENTS`. A GOLDEN
 # RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED at v11 CR-28 (B10-09 close two; CP-T02-05's re-take), A BEHAVIOUR MOVE DECLARED: `questions_for` stamps the
+# Propositions a person heard of from another (`world_q.propositions_heard`) as `Proposition`, so `commit` and `argue` form on
+# them; the BUILD is equal. Was a2ff6dfe... / 01203898... (one, two seasons); events 9739 -> 9741, 26934 -> 27396. CONTROL, run
+# in process on this tree: `propositions_heard` stubbed to `()` reads the old pair (two seasons, seeds 0-2: 01203898... /
+# fb576b8a... / 39a03ca8..., CR-10's). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 BASE_HASHES = {0: "70ea49cbf580a33c82485f84235df525",
-               1: "a2ff6dfec41bec7f3228f615197701a6",
-               2: "012038983395267000e94076b327b12f"}
+               1: "1f573c4c1bf469656fe2dee598eb06dd",
+               2: "5cfba712401808caeec413e2471714e3"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -510,8 +515,9 @@ BASE_HASHES = {0: "70ea49cbf580a33c82485f84235df525",
 # RE-RECORDED at v10 CP-T03-00 with `BASE_HASHES` (9760 -> 9338, 28883 -> 24224; both parties of a fight take their band).
 # RE-RECORDED at B10-09 close one (D2 + D3, the CP-T02-05 stamp reverted) with `BASE_HASHES` (9154 -> 9172, 24039 -> 24060).
 # RE-RECORDED at CR-10 with `BASE_HASHES` (9929 -> 9739, 26090 -> 26934).
-BASE_EVENTS = {1: (9739, "184273be58d793d80c9780125d47c1870ccc569120ae10f1013f89a8f9d2f9fe"),
-               2: (26934, "89d52bd36c8c10289f8c0823253d065ab9dc2aa841ab65655e3ff1c5d2252342")}
+# RE-RECORDED at v11 CR-28 with `BASE_HASHES` (9739 -> 9741, 26934 -> 27396; `propositions_heard` stubbed reads the old pair).
+BASE_EVENTS = {1: (9741, "8eefa8b60bf41b4ba86dc37dc23fb8c9bff17370fc929ad4d87b5e567a9a6a19"),
+               2: (27396, "90deafd542b2fa25d7aad2666ec00637b25c76b9bc6d9683bed9e3b51aabca6c")}
 
 
 def _digest(w) -> tuple:
@@ -654,7 +660,9 @@ def test_the_give_withheld_arm_reproduces_the_one_season_pin():
 #: c808dea8...; still differs from `BASE_EVENTS[1]` (9172).
 #: RE-RECORDED at CR-10 (arm D2) with `BASE_HASHES`: 9918 / 37fa2d30... -> 9739 / fde8ab3f... (same count as `BASE_EVENTS[1]`, a
 #: different digest); the tier-1 branch returning tier 4 for an own-act claim reads the old value exactly.
-THREAD_READ_WITHHELD_EVENTS_1 = (9739, "fde8ab3f468c9d63f4492ca65c78bdd47f1b988e96e6f0b747ce3e2cd4658522")   # ED-IN-0310: was 9161 / c808dea8...
+#: RE-RECORDED at v11 CR-28 with `BASE_HASHES`: 9739 / fde8ab3f... -> 9741 / 1e77a5a4... (same count as `BASE_EVENTS[1]`, a
+#: different digest).
+THREAD_READ_WITHHELD_EVENTS_1 = (9741, "1e77a5a461049d89f8d902d518b5eead540ac996ec06ac5a05ac3683b09061df")   # ED-IN-0310: was 9161 / c808dea8...
 
 
 def test_the_thread_read_withheld_arm_is_pinned_and_differs_from_the_shipped_season():
