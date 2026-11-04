@@ -14,16 +14,21 @@ port, so its path is anchored here from `HARNESS_DIR` and `files.py` does not na
 from __future__ import annotations
 
 from ..data.files import HARNESS_DIR
-from ..data.matrix import MATRIX
 from ..data.rosters import faction_prop_id, load_yaml
-from ..data.verbs import EMITTED_KINDS, VERB_TABLE
+from ..data.verbs import EVENT_KINDS, VERB_TABLE
 
 STRIFE_MOVES_YAML = HARNESS_DIR / "strife_moves.yaml"
 
 
 def declared_kinds() -> frozenset:
-    """Every Event kind the loop declares: the verb rows' `emits:` columns and the write matrix's."""
-    return frozenset(EMITTED_KINDS) | {k for m in MATRIX.values() for k in m.emits}
+    """Every Event kind the loop declares: `data/verbs.py::EVENT_KINDS`, the one owner (loader invariant 7).
+
+    A STRICT SUPERSET OF THE ROSTER THIS FUNCTION USED TO BUILD. That one (`EMITTED_KINDS` and the write matrix's
+    `emits:`) already held the per-degree and per-clause emission columns, since `VerbRow.emits` and
+    `emits_on_refusal` are flat unions over them. What `EVENT_KINDS` adds is `fold_kinds` and `logged_kinds`
+    (`act.ineligible`, `act.refused`, `attempt.refused`, `standing.band_crossed`), so the loader now accepts
+    those four; no kind it accepted is refused, and none of the four is named in the registry."""
+    return EVENT_KINDS
 
 
 def load_moves(path=STRIFE_MOVES_YAML) -> tuple:

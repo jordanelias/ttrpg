@@ -19,7 +19,7 @@ failure, so the MB lane would get no signal when its work lands. Strict means: t
 if one starts passing, the suite goes red and this register must be updated in the same commit
 that fixed it. The register is therefore self-retiring — it cannot rot in the passing direction.
 
-**The other direction is unguarded since 2026-11-04** (ED-IN-0311): `test_known_red_register.py`, which asserted
+**The other direction is unguarded since 2026-11-04** (ED-IN-0312): `test_known_red_register.py`, which asserted
 every id below was actually collected, was dropped. A renamed or deleted test now leaves a stale entry that
 excuses nothing (the entry is strict xfail on a nodeid that no longer exists, so it never matches).
 
