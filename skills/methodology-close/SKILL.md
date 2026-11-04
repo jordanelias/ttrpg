@@ -75,6 +75,8 @@ and inside no phase: the first run starts as Phase 1 opens, on the diff under re
 reconciled beside Phases 1–3's findings (1.5, 3.7); the second runs on the commit carrying every fix,
 after Phase 3 and `/close`, and confirms. Neither run replaces a phase, and a green run is not evidence
 about any of them. Which commits start no run is `methodology-execute`'s CHECKPOINTS AND BASELINES.
+**Which tests the close runs is `python tools/tests_for_diff.py`'s answer for the diff under review** (a subsystem-confined
+diff runs that subsystem's `-m` suite; anything else, the full gates of `CLAUDE.md` §0.4), not a fixed command.
 [ASSUMPTION; medium; the user to correct — the first run's place; revert: it runs after Phase 3.]
 
 ---

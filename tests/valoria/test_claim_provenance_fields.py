@@ -81,7 +81,7 @@ def test_an_instrument_in_measured_by_now_satisfies_the_gate():
     unnecessary rather than mandatory.
     """
     entry = {'id': 'ED-IN-9999', 'description': 'files went from 1 -> 11.',
-             'measured_by': 'MEASURED-BY: tests/valoria/test_tool_input_paths_resolve.py'}
+             'measured_by': 'MEASURED-BY: tests/valoria/test_names_chain.py'}
     blob = ' '.join(str(entry.get(k, '')) for k in _blob_fields())
     assert [why for pat, why in cpc.CLAIM_PATTERNS if pat.search(blob)], 'fixture must make a claim'
     found = cpc.MARKER.findall(blob)

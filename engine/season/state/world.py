@@ -36,6 +36,9 @@ import hashlib
 import struct
 from dataclasses import fields as _dc_fields
 from enum import Enum
+from itertools import compress as _compress, count as _count, repeat as _repeat
+from operator import (attrgetter as _attrgetter, is_ as _is, is_not as _is_not,
+                      itemgetter as _itemgetter, ne as _ne)
 from typing import Any, Callable, Optional
 
 from ..data.fixtures import DEFAULT_FIXTURES, Fixtures
@@ -152,6 +155,42 @@ def _written_fields(t: Tenure, copy: bool) -> tuple:
     if copy and p is not None:
         p = _copymod.deepcopy(p)
     return (t.subject, t.object, t.kind, t.since, t.until, t.degree, p, t.term)
+
+
+# `_written_fields`' order, as one C call. A fixed pair with it: `Tenure(t.id, *fields)` rebuilds.
+_WRITTEN_NAMES = tuple(f.name for f in _dc_fields(Tenure))[1:]   # every field after `id`, in constructor order
+_WRITTEN = _attrgetter(*_WRITTEN_NAMES)
+_PAY = _WRITTEN_NAMES.index("payload")       # where `payload` sits in a fields tuple
+_PAYLOAD_OF = _attrgetter("payload")
+_VERSION_OF = _attrgetter("_v")              # `Tenure._v`: how many attribute sets it has had
+_FIRST, _SECOND = _itemgetter(0), _itemgetter(1)
+
+
+def _snapshot_fields(t: Tenure) -> tuple:
+    """`_written_fields(t, copy=True)`, taking the C-level read when there is no payload to copy."""
+    return _written_fields(t, copy=True) if t.payload is not None else _WRITTEN(t)
+
+
+class _TenureSnap:
+    """What `World._tenure_snapshot` returns and `_tenure_changes` takes: the store's Tenures in walk
+    order (`ts`, shared and never mutated), each one's eight fields as they stood (`fs`, a copy of the
+    world's shadow), each one's version then (`vers`), which of them hold a payload (`pidx`), and the
+    shadow it was cut from (`origin`, so the diff can bring the shadow up to date). Iterating it yields
+    `(tenure, fields)` pairs, the shape the snapshot always had."""
+
+    def __init__(self, ts, fs, vers, pidx, origin=None):
+        self.ts, self.fs, self.vers, self.pidx, self.origin = ts, fs, vers, pidx, origin
+
+    def __iter__(self):
+        return zip(self.ts, self.fs)
+
+    def __len__(self):
+        return len(self.ts)
+
+
+def _payload_holders(ts) -> tuple:
+    """The indices of the Tenures in `ts` whose payload is not None."""
+    return tuple(_compress(_count(), map(_is_not, map(_PAYLOAD_OF, ts), _repeat(None))))
 
 
 def rung_kind_ascends(child_kind: str, parent_kind: str) -> bool:
@@ -329,6 +368,9 @@ class World:
         # S15.1 -- the store is the SUBJECT'S. `_unowned` holds only the Tenures whose subject
         # is not a person (`contain : Rung -> Rung` is the bulk of them). See the `tenures` view.
         self._unowned: list[Tenure] = []
+        # The gate's shadow of the Tenure store (`_tenure_snapshot`). Underscore: derived, never folded into
+        # `content_hash`.
+        self._tshadow: Optional[_TenureSnap] = None
         # G1a. THE GATE, THE ACT STORE AND THE LOG ARE ONE UNIT (`04:1024` step 3) and are built
         # together because each is what makes the next checkable: the gate mints receipts, the
         # act store is what `causes[]` resolves against, and the log is where both are verified
@@ -553,35 +595,100 @@ class World:
     # into `Change.apply`, which this observation does cover. CR-06: `effect_body_observed` (below)
     # takes this snapshot around the effect call too and refuses a Tenure an effect's own body
     # moved. TENURES ONLY -- an eager write to an entity field is still bound by the convention.
-    def _tenure_snapshot(self) -> list:
-        """`(tenure, its eight written fields)` for every Tenure in the store, owner-first.
+    def _tenure_walk(self) -> list:
+        """Every Tenure in the store, owner-first: the order `_tenure_snapshot` reads them in."""
+        cur = [t for p in self.persons.values() for t in p.tenures]
+        cur.extend(self._unowned)
+        return cur
+
+    def _tenure_snapshot(self) -> _TenureSnap:
+        """Every Tenure in the store, owner-first, with the eight fields a write can change.
 
         The payload is DEEP-copied: `_grant_remit(force=True)` re-stamps `payload["remit_acts"]`
         IN PLACE, so a reference would compare equal to itself after the write and the re-stamp
-        -- `establish`'s write on another person's edge -- would be invisible."""
-        out = []
-        for p in self.persons.values():
-            for t in p.tenures:
-                out.append((t, _written_fields(t, copy=True)))
-        for t in self._unowned:
-            out.append((t, _written_fields(t, copy=True)))
-        return out
+        -- `establish`'s write on another person's edge -- would be invisible.
 
-    def _tenure_changes(self, snap: list) -> list:
+        THE STORE IS NOT RE-READ FIELD BY FIELD ON EVERY WRITE. This and `_tenure_changes` ran over every
+        Tenure twice per watched write, the season loop's largest per-write cost, linear in the store
+        and paid whether or not the write touched a Tenure. The world keeps a SHADOW (`_tshadow`): the
+        walk, each Tenure's fields and each one's `Tenure._v`. A snapshot walks the store again (cheap:
+        nothing is read from a Tenure but its version), takes the shadow when the same objects stand in
+        the same order, and re-reads only the Tenures whose version moved since the shadow was cut and
+        the payloads that no longer equal their copy. A store that is not the shadow's (a Tenure opened,
+        removed or reordered, or no shadow yet) is read in full, as it always was. What the shadow
+        trusts is that every field set goes through `Tenure.__setattr__`; `discard_caches` checks that at
+        each barrier against a full read."""
+        cur = self._tenure_walk()
+        sh = self._tshadow
+        if sh is not None and len(sh.ts) == len(cur) and all(map(_is, cur, sh.ts)):
+            vers = list(map(_VERSION_OF, cur))
+            moved = set() if vers == sh.vers else {
+                i for i, (a, b) in enumerate(zip(vers, sh.vers)) if a != b}
+            moved.update(i for i in sh.pidx if cur[i].payload != sh.fs[i][_PAY])
+            if moved:
+                self._refresh_shadow(sh, cur, vers, moved)
+        else:
+            sh = self._tshadow = _TenureSnap(
+                cur, [_snapshot_fields(t) for t in cur], list(map(_VERSION_OF, cur)),
+                _payload_holders(cur))
+        return _TenureSnap(sh.ts, list(sh.fs), list(sh.vers), sh.pidx, sh)
+
+    @staticmethod
+    def _refresh_shadow(sh: _TenureSnap, cur: list, vers: list, indices) -> None:
+        """Re-read the Tenures at `indices` into the shadow, in place."""
+        for i in indices:
+            sh.fs[i] = _snapshot_fields(cur[i])
+            sh.vers[i] = vers[i]
+        sh.pidx = _payload_holders(cur)
+
+    def _tenure_changes(self, snap: _TenureSnap) -> list:
         """`(t, was)` for every Tenure the write changed: `was` a DETACHED `Tenure` holding the
         fields as they stood, or `None` for one the write opened. Identity, not id strings: two
         Tenures may share an `id` (nothing refuses it), and a Tenure the write moved out of the
         store -- a dead person's, popped with them -- is still compared, because the snapshot
-        holds the object."""
-        seen = {id(t) for t, _ in snap}
+        holds the object.
+
+        When the same objects stand in the snapshot's order (checked by identity, so a Tenure opened,
+        removed or moved is never missed), only a Tenure whose version moved or whose payload no longer
+        equals its copy can have changed, and those are compared field by field; the shadow is brought up
+        to date with them. Any other shape of the store takes the identity-set walk that always answered,
+        and the shadow is dropped to be read in full at the next snapshot."""
+        cur = self._tenure_walk()
+        sh = snap.origin
+        if len(cur) == len(snap.ts) and all(map(_is, cur, snap.ts)):
+            vers = list(map(_VERSION_OF, cur))
+            moved = set() if vers == snap.vers else {
+                i for i, (a, b) in enumerate(zip(vers, snap.vers)) if a != b}
+            moved.update(i for i in snap.pidx if cur[i].payload != snap.fs[i][_PAY])
+            out = [(cur[i], Tenure(cur[i].id, *snap.fs[i])) for i in sorted(moved)
+                   if _written_fields(cur[i], copy=False) != snap.fs[i]]
+            if moved and sh is not None and sh is self._tshadow:
+                self._refresh_shadow(sh, cur, vers, moved)
+            return out
+        self._tshadow = None
+        seen = {id(t) for t in snap.ts}
         out = []
         for t, f in snap:
             if _written_fields(t, copy=False) != f:
                 out.append((t, Tenure(t.id, *f)))
-        for p in self.persons.values():
-            out.extend((t, None) for t in p.tenures if id(t) not in seen)
-        out.extend((t, None) for t in self._unowned if id(t) not in seen)
+        out.extend((t, None) for t in cur if id(t) not in seen)
         return out
+
+    def _verify_tenure_shadow(self) -> None:
+        """Raise `InstrumentDefect` if the shadow, brought up to date the way a snapshot does it, differs
+        from a full read of the store: a Tenure field moved without `Tenure.__setattr__` seeing it
+        (`__dict__`, `object.__setattr__`), the one thing the version cannot count. The shadow is the
+        gate's evidence of what a write changed, so a store it cannot see is a gate that cannot see it;
+        this makes that loud at the barrier instead of silent."""
+        if self._tshadow is None:
+            return
+        snap = self._tenure_snapshot()
+        full = [_snapshot_fields(t) for t in snap.ts]
+        if snap.fs != full:
+            bad = [t.id for t, a, b in zip(snap.ts, snap.fs, full) if a != b]
+            raise InstrumentDefect(
+                f"{len(bad)} Tenure(s) moved without `Tenure.__setattr__` counting it ({bad[:3]}): the "
+                "gate's snapshot of the Tenure store is stale, so a write to them would go unjudged")
 
     def _restore_tenures(self, changes: list) -> None:
         """PUT THE TENURE STORE BACK: every changed Tenure's fields as they were, every opened one
@@ -1522,6 +1629,7 @@ class World:
 
     def discard_caches(self) -> None:
         self._barrier_cache.clear()
+        self._verify_tenure_shadow()
 
     # -- S33/S45.2/S66: THE ARTIFACT IS A CONTENT HASH OVER THE LOG. Rev 1 had none, and it is
     # the one execution artifact the architecture names as its done-condition.

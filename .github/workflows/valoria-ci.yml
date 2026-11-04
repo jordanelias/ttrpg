@@ -302,7 +302,7 @@ jobs:
     # reads as a red check, not as "the runner was slow", so the cap is moved clear of the observed spread. The CAUSE OF
     # THE SPREAD (11 to 16+ minutes on one commit, 4 minutes locally) IS NOT KNOWN: the heaviest single test locally is
     # `test_engine_does_not_import_systems.py::test_the_one_declared_path_seam_is_still_the_only_one` (about 3 minutes,
-    # a subprocess import), then `test_mass_battle_byte_exact.py` (about 80 s). A real hang now costs 24 minutes
+    # a subprocess import). A real hang now costs 24 minutes
     # before CI goes red; read the step's own timings before raising this again.
     timeout-minutes: 24
     permissions:
@@ -316,9 +316,10 @@ jobs:
           # tests/valoria/test_retired_tree_apparatus.py, which culling wave 3 retired — so the
           # justification pointed at a file that does not exist, and someone tidying that comment
           # could have dropped the setting with it. The LIVE reason is stronger:
-          # tests/valoria/test_forked_status.py runs `git cat-file -e <ref>:<path>` against 242
+          # tests/valoria/test_forked_status.py (dropped 2026-11-04) ran `git cat-file -e <ref>:<path>` against 242
           # restructure-ledger FORK rows. At the default depth-1 those refs are unreachable and all
-          # 242 read as unfollowable at once. DO NOT LOWER THIS.
+          # 242 read as unfollowable at once. Nothing was shown to need the depth after the drop; it was
+          # left as it was (a change to a blocking job's checkout is its own measurement).
           #
           # The original reason also still holds, via the surviving half of that test's subject:
           # currency_consistency_check.check_current_stamp in BOTH directions — an
@@ -342,7 +343,7 @@ jobs:
       # `-m "not sim"` so an infrastructure PR skips the mass-battle suite, is FORBIDDEN:
       # pytest.ini's "ONE RULE" says a -m filter here is "a SHIPPING-GATE COVERAGE CUT, not
       # an optimisation ... Jordan's call, made loudly, never a side effect of a speed
-      # change", and tests/valoria/test_pytest_marker_discipline.py fails on it.
+      # change" (a reader's rule: the guard test, test_pytest_marker_discipline.py, was dropped 2026-11-04, ED-IN-0312).
       #
       # `-n auto` is a categorically different thing, and the distinction is the point: it
       # changes WHERE tests run, never WHICH. The collection is identical, so the gate is
@@ -352,8 +353,8 @@ jobs:
       #     serial     416.97s  ->  9 failed, 1282 passed, 22 skipped
       #     -n auto    138.15s  ->  9 failed, 1282 passed, 22 skipped
       # 3.02x, with failure AND pass AND skip counts identical — the control that separates
-      # "faster" from "ran less". (The 9-vs-CI's-10 delta is the documented local skip of
-      # test_byte_exact_cell_mode, ED-MB-0061 §3.1b, not a difference this change caused.)
+      # "faster" from "ran less". (The 9-vs-CI's-10 delta was the documented local skip of
+      # test_byte_exact_cell_mode, ED-MB-0061 §3.1b; that file was dropped 2026-11-04.)
       #
       # IF THIS EVER NEEDS TO BE FASTER STILL: split into JOBS whose union is the full
       # collection. Do not select a subset of it.
@@ -398,7 +399,7 @@ jobs:
       # `harness/delta.py` (`git show <rev>:<path>`, a CLI differ no test imports), and
       # test_season_shape.py::_run, whose subprocess is `python -m engine.season.harness.<module>`.
       # `register --requirements` spawns nothing. `unit-tests` above is the opposite case and keeps
-      # `fetch-depth: 0` for test_forked_status.py; if a season test ever shells out to git, give THIS
+      # `fetch-depth: 0` (it was for test_forked_status.py, dropped 2026-11-04); if a season test ever shells out to git, give THIS
       # job `fetch-depth: 0` and name the test here.
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -412,9 +413,13 @@ jobs:
       # gate is the state this adoption exists to end.
       #
       # `-n auto` and no `-m`, for the reason `unit-tests` records: it changes WHERE tests run, never
-      # WHICH, and a `-m` filter here is a shipping-gate coverage cut that
-      # tests/valoria/test_pytest_marker_discipline.py::test_ci_invocation_is_unfiltered rejects.
-      - run: python -m pytest engine/season/tests -q -n auto
+      # WHICH, and a `-m` filter here is a shipping-gate coverage cut (the
+      # guard test_pytest_marker_discipline.py::test_ci_invocation_is_unfiltered was dropped 2026-11-04, ED-IN-0312).
+      # `--dist worksteal` changes only the ORDER tests reach workers, never which run: the default hands
+      # tests out in collection order, so the 100-second tests that sit late leave the other workers idle
+      # behind them. Measured on 4 cores, same 2,295 tests: 489-505 s -> 398 s (the same flag on
+      # `tests/valoria` gained nothing, 189 s against 187-216 s, so that job keeps `-n auto`).
+      - run: python -m pytest engine/season/tests -q -n auto --dist worksteal
       # The nine acceptance requirements (Jordan, 2026-09-05) — fails a row claiming a status
       # with no measurement behind it, or naming a measure command that resolves to nothing.
       # ⚠ `-m`, AND UNDER `harness/`. The decomposition (ED-IN-0203) made this a package
@@ -481,7 +486,8 @@ jobs:
         with:
           python-version: '3.11'
       # [ED-MB-0045 A1b, 2026-07-29] The shipped configuration's regression oracle.
-      # test_mass_battle_byte_exact.py (in unit-tests above) covers only the two
+      # test_mass_battle_byte_exact.py (in unit-tests above; dropped 2026-11-04, both of its modes were
+      # known-red, ED-MB-0061) covered only the two
       # FIELD_MOVEMENT=0 grid modes; before this job existed the two field goldens
       # sat RED for 5 days undetected (#235/#236 re-recorded grid only — bisected
       # and re-recorded in A1a, PR #260). Own job, not inside the unit-tests

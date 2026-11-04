@@ -416,7 +416,10 @@ against a working-tree diff, since nothing is left uncommitted by the time a bat
   against the batch's full cumulative diff. **The test suite is CLAUDE.md §0.4's, not
   `methodology-close`'s:** it runs at most once per batch, here, and only if it can observe
   something CI will not (cl.1), over only the files and suites the batch's diff can reach (§0.4's
-  closing paragraph); a
+  closing paragraph). **Name them with `python tools/tests_for_diff.py --base <batch-start-sha>`**: a batch confined to one
+  subsystem's `modules/` or `systems/` (combat, mass battle, social contest) runs `-m <subsystem>`, not the trees; a batch that
+  touches engine core, tools or a registry gets the full gates; it cannot see a realm-level effect of a module edit, which
+  is CI's full run to catch. A
   batch of prose or ledger edits runs just the files that read what it touched. No item inside the
   batch runs it. CI's two runs per batch — one at its end, one confirming its fixes — are CHECKPOINTS
   AND BASELINES'.
