@@ -19,9 +19,9 @@ def declared_kinds() -> frozenset:
     return frozenset(EMITTED_KINDS) | {k for m in MATRIX.values() for k in m.emits}
 
 
-def load_moves() -> tuple:
-    """The rows of `strife_moves.yaml`, validated, in file order."""
-    doc = load_yaml(STRIFE_MOVES_YAML.read_text(encoding="utf-8"))
+def load_moves(path=STRIFE_MOVES_YAML) -> tuple:
+    """`(rows, signatures)` of `strife_moves.yaml`, validated, in file order."""
+    doc = load_yaml(path.read_text(encoding="utf-8"))
     rows, row_keys, needs_vocabulary = doc["moves"], set(doc["row_keys"]), set(doc["needs_vocabulary"])
     kinds, seen = declared_kinds(), set()
     for r in rows:
@@ -43,7 +43,22 @@ def load_moves() -> tuple:
             raise ValueError(f"strife_moves.yaml: {code} has needs {sorted(bad_needs)} outside side/office/context")
         if not r["kinds"] and not r.get("gap"):
             raise ValueError(f"strife_moves.yaml: {code} has no kinds and states no gap")
-    return tuple(rows)
+    sig_keys, sides = set(doc["signature_keys"]), set(doc["attacker_values"])
+    sigs = doc.get("signatures", [])
+    for g in sigs:
+        unknown = set(g) - sig_keys
+        if unknown:
+            raise ValueError(f"strife_moves.yaml: signature {g} carries unknown key(s) {sorted(unknown)}")
+        if g["code"] not in seen:
+            raise ValueError(f"strife_moves.yaml: signature {g} names code {g['code']!r} that has no row")
+        if g["kind"] not in kinds:
+            raise ValueError(f"strife_moves.yaml: signature {g} names Event kind {g['kind']!r} the loop does not declare")
+        cv = g.get("cause_verb")
+        if cv is not None and cv != "none" and cv not in VERB_TABLE:
+            raise ValueError(f"strife_moves.yaml: signature {g} names verb {cv!r} not in verb_table.yaml")
+        if "attacker" in g and g["attacker"] not in sides:
+            raise ValueError(f"strife_moves.yaml: signature {g} has attacker outside {sorted(sides)}")
+    return tuple(rows), tuple(sigs)
 
 
-MOVES = load_moves()
+MOVES, SIGNATURES = load_moves()
