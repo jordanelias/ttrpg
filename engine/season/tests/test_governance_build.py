@@ -2408,7 +2408,8 @@ def test_13d_iii_every_seat_the_realm_builds_has_a_rung_but_the_one_declared_exc
     assert cen["unauthored"] == ["off_npc_084"], cen["unauthored"]
     # 30 -> 32 seated, 29 -> 31 anchored at v9 IN-64: the cast's `Löwenritter (Riskbreakers)` cells
     # (NPC-005, NPC-080) seat two Riskbreakers seats, each authored a row in `offices.yaml`.
-    assert len(w.offices) == cen["seated"] == 32
+    # 32 -> 34 at ED-IN-0310: the Altonian Empire is seated by default, with `off_katepano` and `off_kommerkiarios` (`offices.yaml: foreign_seats`).
+    assert len(w.offices) == cen["seated"] == 34
     anchored = 0
     for oid, off in w.offices.items():
         if oid in cen["unauthored"]:
@@ -2417,7 +2418,7 @@ def test_13d_iii_every_seat_the_realm_builds_has_a_rung_but_the_one_declared_exc
         assert off.rung is not None and off.scope_rung == off.rung, (
             f"{oid} ({off.post!r}): rung {off.rung!r}, scope {off.scope_rung!r}")
         anchored += 1
-    assert anchored == 31 == len(cen["authored"]), anchored
+    assert anchored == 33 == len(cen["authored"]), anchored      # 31 -> 33 at ED-IN-0310: the two Altonian seats are authored rows too
 
 
 def test_13d_iii_the_six_rows_no_loop_seat_stands_for_are_minted_from_the_row_alone(_realm13):
@@ -2426,11 +2427,15 @@ def test_13d_iii_the_six_rows_no_loop_seat_stands_for_are_minted_from_the_row_al
     a live `hold` granting exactly that remit. (Four more `[NEW]`-marked holders -- NPC-007, 013,
     021, 070 -- are seated by the loop already, so they are overlaid and are NOT in this list.)"""
     w = _realm13
-    rows = {r["id"]: r for r in _seat_rows()}
+    from ..data.rosters import FOREIGN_SEATS
+    foreign_ids = {r["id"] for r in FOREIGN_SEATS}
+    rows = {r["id"]: r for r in (*_seat_rows(), *FOREIGN_SEATS)}
     minted = w._office_census["minted"]
-    assert set(minted) == {"off_duke_valorsmark", "off_lord_steward", "off_cardinal_fortitude",
-                           "off_cardinal_temperance", "off_senior_inquisitor",
-                           "off_restoration_leader"}, minted
+    # ED-IN-0310: the Altonian seats (`offices.yaml: foreign_seats`) are minted from their rows too; the six realm rows are unchanged.
+    assert set(minted) - foreign_ids == {"off_duke_valorsmark", "off_lord_steward", "off_cardinal_fortitude",
+                                          "off_cardinal_temperance", "off_senior_inquisitor",
+                                          "off_restoration_leader"}, minted
+    assert set(minted) & foreign_ids == {"off_katepano", "off_kommerkiarios"}, minted
     checked = 0
     for rid in minted:
         row, off = rows[rid], w.offices[rid]
@@ -2442,7 +2447,7 @@ def test_13d_iii_the_six_rows_no_loop_seat_stands_for_are_minted_from_the_row_al
         assert [t.subject for t in holds] == [f"p_{row['holder'].lower().replace('-', '_')}"], rid
         assert holds[0].granted_acts == tuple(off.remit_acts), rid
         checked += 1
-    assert checked == 6
+    assert checked == 8      # 6 -> 8 at ED-IN-0310: the six realm rows and the two Altonian rows
 
 
 def test_13d_iii_an_authored_obligee_serves_the_seat_with_no_term(_realm13):
@@ -2573,11 +2578,20 @@ def test_24d_i_the_realm_mint_adds_sites_and_displaces_no_producing_site():
     with a producing Site's would overwrite it, and the first count would drop."""
     from ..data.fixtures import SITE_YIELD
     w = build_realm(0)
-    settlements = [r for r in w.rungs.values() if r.kind == "settlement"]
+    # ED-IN-0310: the Altonian settlement (`foreign_cast`) sits outside every realm rung and the realm mint gives it no Site of any kind (MEASURED
+    # at seed 0, asserted below as a control), so it is not counted here. Schoenland's settlement is outside the realm too and IS minted its Sites,
+    # in both arms, so it stays in the count: this excludes the Altonian town by name, not "everything outside the realm".
+    from ..data.rosters import FOREIGN_CAST
+    from ..harness import populated as _POP
+    alt = {f"set_{_POP._slug(p['settlement']['code'])}" for p in FOREIGN_CAST.values()}
+    settlements = [r for r in w.rungs.values() if r.kind == "settlement" and r.id not in alt]
+    outside = [r for r in w.rungs.values() if r.id in alt]
     producing = [k for k in sorted(SITE_YIELD) if SITE_YIELD[k]]
     assert settlements and producing, "fixture: no settlement or no producing kind"
     others = Counter(s.kind for s in w.sites.values() if s.kind not in ("dwelling", "garrison"))
     assert others == Counter({k: len(settlements) for k in producing}), others
+    assert len(outside) == 1, "control: the Altonian settlement is seated by default (ED-IN-0310)"
+    assert not [x for x in w.sites.values() if x.id.startswith(outside[0].id)], "the Altonian settlement was minted Sites"
     garrisons = [s for s in w.sites.values() if s.kind == "garrison"]
     assert len(garrisons) == len(settlements), (
         f"{len(garrisons)} garrison Sites for {len(settlements)} settlements -- not one each")
@@ -2882,7 +2896,10 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # ⚠⚠ v10 CP-T02-05 (B10-09) added the `world_q.oughts_named` stamp (589 -> 582) and B10-09 close one reverted it (falsified on HR-9
     # control (4), `Falsified: CP-T02-05`): the pin is the reading with the stamp reverted, (589, 589) again (seed 0, one season;
     # `test_go07_canonical_digest.py` records the 589).
-    assert (out["acts"], cout["acts"]) == (589, 589), (
+    # ⚠⚠ ED-IN-0310 (Jordan, 2026-11-04): (589, 589) -> (601, 601), A RE-RECORD WITH THE UNIT THAT MOVED IT: `build_realm`'s `foreign` default is True, the
+    # Altonian cast joins the realm and the act mix moves (seed 0, one season: 589 -> 601 in both arms; `test_go07_canonical_digest.py` records the 601).
+    # CONTROL: `build_realm(0, foreign=False)` reads the 589 (`test_go07_canonical_digest.BASE` before this row).
+    assert (out["acts"], cout["acts"]) == (601, 601), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")

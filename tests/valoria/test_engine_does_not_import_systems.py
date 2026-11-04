@@ -324,6 +324,29 @@ def _relative_module_files(text, path):
     return files
 
 
+_LINE_RE = re.compile(r'[^\r\n]*\r\n|[^\r\n]*[\r\n]|[^\r\n]+')
+
+
+def _source_lines(text):
+    """`text` split as `ast.get_source_segment` splits it (on \\r\\n, \\r and \\n only, never on a form feed)."""
+    return _LINE_RE.findall(text)
+
+
+def _segment(lines, node):
+    """`ast.get_source_segment(text, node)` for pre-split `lines`. The stdlib call re-splits the whole source on
+    EVERY call, one Python-level character loop each, so a scan that asks for a segment per assignment cost
+    nodes x file size (212 s over `engine/`, the slowest test in `tests/valoria`). Same text out, split once."""
+    if getattr(node, 'end_lineno', None) is None or getattr(node, 'end_col_offset', None) is None:
+        return None
+    lineno, end_lineno = node.lineno - 1, node.end_lineno - 1
+    col, end_col = node.col_offset, node.end_col_offset
+    if end_lineno == lineno:
+        return lines[lineno].encode()[col:end_col].decode()
+    first = lines[lineno].encode()[col:].decode()
+    last = lines[end_lineno].encode()[:end_col].decode()
+    return ''.join([first, *lines[lineno + 1:end_lineno], last])
+
+
 def _inserts_a_systems_path(text, path=None):
     """True iff this module puts a path NAMING a code root onto `sys.path` — which is the seam.
     Reads the inserted expression, not the file's word soup, and follows one level of local
@@ -335,11 +358,12 @@ def _inserts_a_systems_path(text, path=None):
     except SyntaxError:
         return False
     assigned = {}
+    lines = _source_lines(text)
     for node in ast.walk(tree):
         if isinstance(node, ast.Assign):
             for t in node.targets:
                 if isinstance(t, ast.Name):
-                    assigned[t.id] = ast.get_source_segment(text, node.value) or ""
+                    assigned[t.id] = _segment(lines, node.value) or ""
     names_re = _ROOT_NAME_RE
     # ONE HOP OUTWARD: `alias.CONST` resolves to that module's own top-level `CONST`, and the
     # resolution happens IN THAT MODULE'S NAMESPACE. ⚠ THE FIRST WRITING OF THIS HOP GOT THAT
@@ -354,11 +378,12 @@ def _inserts_a_systems_path(text, path=None):
         except (OSError, SyntaxError):
             continue
         mod_assigned = {}
+        mod_lines = _source_lines(mod_text)
         for node in ast.walk(mod_tree):
             if isinstance(node, ast.Assign):
                 for t in node.targets:
                     if isinstance(t, ast.Name):
-                        mod_assigned[t.id] = ast.get_source_segment(mod_text, node.value) or ""
+                        mod_assigned[t.id] = _segment(mod_lines, node.value) or ""
         for const, expr in mod_assigned.items():
             assigned[f'{alias}.{const}'] = (
                 _ROOT_LITERAL if _chain_hits(expr, mod_assigned, names_re) else '')
@@ -370,7 +395,7 @@ def _inserts_a_systems_path(text, path=None):
         if ast.unparse(node.func.value).replace(" ", "") not in ("sys.path", "path"):
             continue
         for arg in node.args:
-            if _chain_hits(ast.get_source_segment(text, arg) or "", assigned, names_re):
+            if _chain_hits(_segment(lines, arg) or "", assigned, names_re):
                 return True
     return False
 

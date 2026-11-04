@@ -770,7 +770,7 @@ def proofs(w: World, speaker: str, opponent: Optional[str], venue: Optional[str]
 # `state/` may not import `queries/`: `parent_of`/`descendants`' G3 route.
 
 
-def place_of(w: World, x: Optional[str]) -> Optional[str]:
+def place_of(w: World, x: Optional[str], homes: Optional[dict] = None) -> Optional[str]:
     """`ARCH §F.14`'s OWN NAME, PROMOTED (position `11a`, r2 `01_ATTENTION_AND_REACH.md` §A.3).
     The rung a THING is at, for ANY id -- moved in from `epistemic._event_place`, which took only
     an Event. That caller becomes `event_place(w, e)`, below (`epistemic.py`'s two sites).
@@ -801,12 +801,18 @@ def place_of(w: World, x: Optional[str]) -> Optional[str]:
     intersection, and widening the signature is `ARCH §F.14`'s own ruling text to amend, not an
     edit to make here."""
     if x in w.persons:
-        return home_of(w).get(x)
+        if homes is None:
+            return home_of(w).get(x)
+        # `homes` is the barrier's `cache.home_index(w)`: the same map `home_of(w)` would build, read without
+        # rebuilding it per call (80,000 times a season at WITNESS). The row `home_of` would have traced is
+        # still written, so the trace is byte-for-byte what it was.
+        TRACE.query("home_of", "resolver")
+        return homes.get(x)
     if x in w.sites:
         return getattr(w.sites[x], "rung", None)
     if x in w.records:
         h = hold_force(w, x)
-        return place_of(w, h.subject) if h is not None else w.records[x].rung
+        return place_of(w, h.subject, homes) if h is not None else w.records[x].rung
     if x in w.dates:
         return w.dates[x].get("venue")
     if x in w.rungs:
@@ -814,7 +820,7 @@ def place_of(w: World, x: Optional[str]) -> Optional[str]:
     return None
 
 
-def event_place(w: World, e) -> Optional[str]:
+def event_place(w: World, e, homes: Optional[dict] = None) -> Optional[str]:
     """WHERE AN EVENT HAPPENED -- `place_of` of the causing act's actor for an act-caused Event, else of
     `anchor_of(w, e)` (v9 IN-12 step 10: a cover's anchor is not where anyone stood), the one expression the tree used for
     it at WITNESS (`epistemic._ch_co_located` and `epistemic.seen_subject`), now owned once, plus one
@@ -864,12 +870,12 @@ def event_place(w: World, e) -> Optional[str]:
     # actor (tier 1), so this is the old answer.
     a = causing_act(w, e)
     if a is not None:
-        here = place_of(w, a.actor)
+        here = place_of(w, a.actor, homes)
         if here is None and any(c.subject == a.actor for c in e.changes):
             return w.departed_from(a.actor, e.emitted_at)     # the act's own receipt on a felled actor
         return here
     who = anchor_of(w, e)
-    here = place_of(w, who)
+    here = place_of(w, who, homes)
     if here is not None:
         return here
     return w.departed_from(who, e.emitted_at)     # `departed_from(None, t)` is None
@@ -1404,6 +1410,18 @@ def presence(w: World, rung_id: str) -> list[str]:
     return [t.subject for t in w.tenures
             if t.kind == "contain" and t.object == rung_id and t.live
             and t.subject in w.persons]
+
+
+def presence_map(w: World) -> dict:
+    """`{rung: presence(w, rung)}` for every rung of `w.rungs`, from ONE scan of `w.tenures` instead of one per
+    rung (412 scans per build on `build_realm(0)`). Same predicate as `presence`, same order (tenure order), a
+    fresh list per rung. It writes no trace row: `queries/cache.py::presence_index`, its one caller, writes the
+    rows `presence` per rung wrote, so the stream is unchanged."""
+    by: dict = {}
+    for t in w.tenures:
+        if t.kind == "contain" and t.live and t.subject in w.persons:
+            by.setdefault(t.object, []).append(t.subject)
+    return {r: by.get(r, []) for r in w.rungs}
 
 
 def guard_weight(w: World, rung_id: str) -> int:

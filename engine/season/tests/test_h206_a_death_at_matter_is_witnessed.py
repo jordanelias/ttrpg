@@ -37,7 +37,7 @@ from ..state.carriers import Act, Event, Person, Rung, Tenure
 from ..state.ids import ROOT
 
 HOLDER, OFFICE = "p_high", "off_duke"
-_OLD_PLACE = lambda w, e: world_q.place_of(w, anchor_of(w, e))       # `event_place` before H-206
+_OLD_PLACE = lambda w, e, homes=None: world_q.place_of(w, anchor_of(w, e))       # `event_place` before H-206
 NEAR, FAR = ("p_near",), ("p_low", "p_mid", "p_other", "p_king")     # S is where p_high stands
 
 
