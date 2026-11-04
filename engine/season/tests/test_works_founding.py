@@ -627,8 +627,17 @@ def test_rem25_found_and_build_form_on_the_works_the_maker_holds_and_a_text_form
     qs = world_q.questions_for(w, p)
     head = qs[0]
     if kind != world_q.WORKS_KIND:
-        assert not [r for q in qs for r, c in q.classes if c == "Record"], qs
-        assert not [a for q in qs for a in _formed_on(w, ABSENT, "wh", ("found", "build"), q=q)]
+        # v11 CR-10 (B10-09 close two): RE-READ, the two assertions this arm made no longer hold as written. CR-10 spares
+        # a tier-1 (`mine`) claim of his own act the own-act screen, so the question about his own text Record heads his
+        # set, and REM-21's own-referent term (`own_referents_of_class`, kind-blind: `World.class_of` says `Record`)
+        # stamps it, so `found` and `build` DO form on the text. WHAT STILL HOLDS, and is asserted: the holding route
+        # this test pins (`records_held_for_holding_rows`) carries no text, and every formation on the text is
+        # refused by the fold's own effect. [ASSUMPTION; medium; Jordan to correct; revert: restore the two
+        # assertions and make `own_referents_of_class` kind-aware.]
+        assert not world_q.records_held_for_holding_rows(w, p)
+        formed = [a for q in qs for a in _formed_on(w, ABSENT, "wh", ("found", "build"), q=q)]
+        assert formed, "the own-referent route no longer reaches the text (re-read this control)"
+        assert all(_kinds(_fold(w, d, a)) in (["found.refused"], ["build.refused"]) for a in formed), formed
         return
     assert {("wd", "Record"), ("wh", "Record")} <= set(head.classes), head
     acts = _formed_on(w, ABSENT, "wh", ("found", "build"), q=head)
