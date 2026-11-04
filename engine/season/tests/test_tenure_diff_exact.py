@@ -9,8 +9,10 @@ reference and compares the two on every shape a write can leave the store in.
 Clauses: (a) nothing moved -> no change; (b) one field assigned; (c) the payload mutated IN PLACE
 (the case the deep copy exists for); (d) a Tenure opened; (e) a Tenure removed with its person;
 (f) one removed and one opened, the store's length unchanged; (g) the store reordered; (h) a Tenure
-with a non-None payload and a `term` moved. Each compares the full `(tenure, was)` list, order
-included. MUTATION (run): make `_ne` always False in `state/world.py` -> (b), (c) and (h) go red.
+with a non-None payload and a `term` moved; (i) one opened, and (j) one removed, at the very end of the
+store. Each compares the full `(tenure, was)` list, order included. MUTATIONS (run, each alone, in
+`state/world.py`): `_ne` always False -> (b), (c), (h) red; the identity walk always true -> (f), (g)
+red; the length check dropped -> (i) red; the snapshot's payload copy dropped -> (c) red.
 """
 
 from __future__ import annotations
@@ -154,3 +156,27 @@ def test_h_term_and_payload_together(realm):
         t.since = t.since + 1
         return lambda: (setattr(t, "payload", old[0]), setattr(t, "since", old[1]))
     _check(realm, m, 1)
+
+
+def test_i_a_tenure_opened_at_the_very_end_of_the_store(realm):
+    """The identity walk sees only the snapshot's length of the store: an opened Tenure last in the
+    walk leaves every earlier one aligned, so only the length check catches it."""
+    def m(w):
+        n = Tenure("t_diff_tail_open", "nobody", "x", "hold", since=0)
+        w._unowned.append(n)
+        return lambda: w._unowned.remove(n)
+    _check(realm, m, 1)
+
+
+def test_j_a_tenure_removed_from_the_very_end_of_the_store(realm):
+    w = realm
+    n = Tenure("t_diff_tail_gone", "nobody", "x", "hold", since=0)
+    w._unowned.append(n)
+    try:
+        ref_snap, snap = _ref_snapshot(w), w._tenure_snapshot()
+        w._unowned.remove(n)
+        _same(w._tenure_changes(snap), _ref_changes(w, ref_snap))
+        assert w._tenure_changes(snap) == [], "a removed Tenure's fields did not move: no change"
+    finally:
+        if n in w._unowned:
+            w._unowned.remove(n)
