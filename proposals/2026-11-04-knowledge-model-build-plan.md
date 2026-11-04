@@ -42,8 +42,9 @@ corroboration twice under two owners. (c) A deed judgment written to `stance` is
 1. **Commit 1, measurement** (a producer is running it; first report 2026-11-04). Findings so far: (a) the control at the
    tip reads **0, 6, 0** of 236 acquaintance claims at season 4 and cap 200 (CR-81's 0, 11, 0 reproduces at `c35f6599`; the
    seed-1 move is CR-25's and B3.2's re-pinned hashes), so the exit's control line is re-based to the tip; (b) the code
-   carries **no year**: `year_length` and `season_terms` exist only in CP-T10-03's prose (designed at four seasons a year,
-   shipped as `year_length` 0), so "years" in Jordan's ruling has no unit in code and the horizon is stated in seasons;
+   carries **no year** (`year_length` and `season_terms` exist only in CP-T10-03's prose, shipped as `year_length` 0), and
+   **Jordan has ruled a year is four seasons (ED-IN-0332)**, which confirms CP-T10-03's planned flip to 4 and moves nothing:
+   the horizon is stated in seasons at four to the year (eight seasons is two years, twelve three);
    (c) the told arm is **near empty** at cap 200 (1 and 0 told claims held at seed 0, 8 and 4 at seed 1), which confirms
    the integration read: a told column cannot separate caps; (d) season cost grows with the season at cap 200 (4.1, 7.8,
    11.2, 20.4 s at seed 0, two processes) and peak memory was 522 MB at four seasons, so the first limit at large caps is
@@ -229,8 +230,8 @@ CR-79), `fixtures.py` (nearly all). No two of the building steps are in flight t
 ED-IN-0328 cites no ED-IN-0304 and says Composure is "also a derived debate damage track" (the debate track was retired at
 CR3; the live clash is the knot damage track); ED-IN-0328, 0330 and 0331 cite this file, which now exists. ED-IN-0330's
 "PRA" wording conflates the history fields with the capability carrier that already replaces them. A correcting row
-(ED-IN-0332) records these when the plan is accepted.
+(ED-IN-0333) records these when the plan is accepted.
 
-**Could not verify** (from the readers): seasons per year (no constant in `engine/season/**`); the current chained-told-claim
+**Could not verify** (from the readers): the current chained-told-claim
 count (H-237 is a session probe); REM-30's creation sheet (not opened); the cast's 29 `stats:` blocks; run time and memory
 (the measurement is running).
