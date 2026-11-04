@@ -66,7 +66,8 @@ def test_fa06_the_shipped_file_covers_every_seated_organization(shipped):
     have = {(g.org_kind, g.org) for g in goals.goals()}
     assert all(("faction", f) in have for f in heads) and all(("body", b) in have for b in bodies)
     c = P.census(shipped)
-    assert (c["goals"], c["goal_orientation"], c["goal_dropped"]) == (12, 23, 0)
+    # ED-IN-0310: (12, 23, 0) -> (14, 24, 0), the two Altonian goal rows (`goal_altonia_conquer_valoria`, `goal_katepano_press_the_capital`) now seated by default.
+    assert (c["goals"], c["goal_orientation"], c["goal_dropped"]) == (14, 24, 0)
 
 
 @pytest.mark.parametrize("gone, named", [

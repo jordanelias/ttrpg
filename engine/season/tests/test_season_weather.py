@@ -426,9 +426,16 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # held_edge_declines`); the `oughts_named` stamp is reverted, so this is the reading with the stamp reverted. The BUILD is equal. Was
 # 763402... (one season) / a7ad6b62... (two seasons); events 8958 -> 9172, 24959 -> 24060. CONTROL, run in process on the pre-revert tree
 # (`f28c3f33c`): `oughts_named` stubbed to `()` reads the new two-season hash exactly at seeds 0-2 (8195c6e3... / d44e4b85... / 7d5e3643...; seed 0 is the pin).
-BASE_HASHES = {0: "c7ca8d505cc1741f9e54e1fdd0c55292",
-               1: "53469c5c8afc81c2368300d34afd37fa",
-               2: "8195c6e3520c4b9d6c2423b52bd98cf0"}
+# RE-PINNED at ED-IN-0310, A DATA MOVE AND A TRAJECTORY MOVE DECLARED: Jordan, 2026-11-04, "Set foreign=True as the default"
+# (ED-IN-0301 had held it off), so `build_realm` seats the Altonian Empire by default: its Proposition, three persons, two seats
+# (`off_katepano`, `off_kommerkiarios`), its root territory and settlement outside the realm, and its two goal rows. The BUILD hash
+# moves, and so do one and two seasons. Was c7ca8d50... / 53469c5c... / 8195c6e3... (build, one, two seasons); events 9172 -> 9929,
+# 24060 -> 26090; the `thread_read`-withheld arm 9161 -> 9918. CONTROL, run in process on this tree: `build_realm(0, foreign=False)`
+# reads the old triple, the old `BASE_EVENTS`, the old `thread_read`-withheld arm and `test_go07_canonical_digest.BASE` exactly. A GOLDEN
+# RE-RECORDED, NOT A BALANCE CLAIM.
+BASE_HASHES = {0: "70ea49cbf580a33c82485f84235df525",
+               1: "5e4d77d33b2ac40bda208e34327c212d",
+               2: "3cfe6b3988804d18b6f0178fd7f24d80"}
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -497,8 +504,8 @@ BASE_HASHES = {0: "c7ca8d505cc1741f9e54e1fdd0c55292",
 # rule in process reads the old pair and the old build hash).
 # RE-RECORDED at v10 CP-T03-00 with `BASE_HASHES` (9760 -> 9338, 28883 -> 24224; both parties of a fight take their band).
 # RE-RECORDED at B10-09 close one (D2 + D3, the CP-T02-05 stamp reverted) with `BASE_HASHES` (9154 -> 9172, 24039 -> 24060).
-BASE_EVENTS = {1: (9172, "5bb360c6d88f1f8efe332a1b7f5bfa21bfae3da76126150e47be6f2ea3bd1ba9"),
-               2: (24060, "2d321ca63ff41b6904b07a325c25d82143c46994e7c2dfc6069c2cf62e669760")}
+BASE_EVENTS = {1: (9929, "72d5bbb2157e66bebbcd9f307bea078660b232dcfed14bdd57aa2d3cb52bf18b"),
+               2: (26090, "6430f9733a61fef390454b5348c7daa206e8fdbb8672d5ffb7d962a7019fb610")}
 
 
 def _digest(w) -> tuple:
@@ -639,7 +646,7 @@ def test_the_give_withheld_arm_reproduces_the_one_season_pin():
 #: `aim_state` reading `open` always reads the old value exactly); still differs from `BASE_EVENTS[1]` (9154).
 #: RE-RECORDED at B10-09 close one (D2 + D3, the CP-T02-05 stamp reverted) with `BASE_HASHES`: 9143 / 2a17f775... -> 9161 /
 #: c808dea8...; still differs from `BASE_EVENTS[1]` (9172).
-THREAD_READ_WITHHELD_EVENTS_1 = (9161, "c808dea8b0c0bc3dfcc22f04b54cb86e7a91ef75dfe5b1c4b26ea66927f7dbdd")
+THREAD_READ_WITHHELD_EVENTS_1 = (9918, "37fa2d30f5127aa4c1324d3c7991450581d5e8773e2ddd386ba95777b9c2c9ef")   # ED-IN-0310: was 9161 / c808dea8...
 
 
 def test_the_thread_read_withheld_arm_is_pinned_and_differs_from_the_shipped_season():

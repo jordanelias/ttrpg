@@ -1840,7 +1840,7 @@ rosters:
     row: IN-36
     note: >-
       WHAT THIS IS. The factions whose persons and places `build_realm(foreign=True)` seats and
-      `foreign=False` (the shipped default) leaves out of the world: a faction named here has no
+      `foreign=False` (the control arm; the shipped default is `True` since ED-IN-0310) leaves out of the world: a faction named here has no
       Proposition, no member, no seat, no goal and no rung in the control arm, so that arm is byte-identical
       to the realm before the empire existed. A foreign faction is still a `factions` member in BOTH arms
       (`names_index.yaml: token_class: faction` is its owner), which is what puts it in
