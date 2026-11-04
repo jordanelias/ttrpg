@@ -17,10 +17,10 @@ A space of chains, not a script. Cases share 40 moves and 16 recurring links, sp
 
 | reading | over | read by | AX |
 |---|---|---|---|
-| **world reading** `flows_in(log)` | the whole Event log | the harness and the port's debug views only | an instrument, never an input to any person |
+| **world reading** `flows_in(log)` | the whole Event log | the harness; and the engine, as data, when it grades what a person within a flow credits (§5a) | never deposited in anyone's ledger as a claim, and never read by a chooser |
 | **person reading** `flows_known(w, p)` | `p.ledger` alone: claims `p` witnessed or was told | `questions_for`, so the person's choices | AX-7: a character has a reading of the world, never the world |
 
-Both are pure functions: same input, same output, nothing written. The person reading is the design. The world reading exists so the instrument can check the person reading against what happened.
+Both are pure functions: same input, same output, nothing written. The person reading is what a person can place and act on. The world reading is what binds a person whether or not he can: the engine uses it as it uses the rung tree, to condition how his own readings are graded. The instrument also checks the person reading against it.
 
 ## 3. How a flow is read
 
@@ -58,7 +58,7 @@ Capacity is a roster in `rosters.yaml` keyed by `RUNG_KINDS` (the closed list), 
 
 **A flow grows up the ladder.** A flow is read at the lowest rung covering its moves (§3). A grain dispute at a hearth is a hearth flow; when other moves at other hearths of the same settlement join it, it is read at the settlement; when it spreads across territories it is read at the duchy and contests for a duchy slot. Its stakes rise as its reach does, and the capacity at each rung is what a player meets.
 
-**The larger flow frames the smaller.** Every flow beneath the realm's is read within it: the realm flow's referents are stamped among a person's occasions (§5) alongside the local flow's, so an isolate flow is still understood in its larger context. This holds only for a person whose ledger holds the realm flow's moves. Someone who has not heard of the war frames his hearth's quarrel by nothing; that follows from AX-7 and is intended.
+**The larger flow frames the smaller, for everyone within it.** Every flow beneath the realm's is lived inside it. Whoever lives at a rung the realm flow covers is within it (§5a), aware of it or not. Awareness adds something different: it lets him place his local events in the larger chain and act on its referents (§5). A person with no concept of the war still has his grain requisitioned, his neighbours conscripted and his market shut. Those are his own firsthand claims, and they are moves of the flow whether or not he reads them as one.
 
 **A flow ends by a concluding outcome, never by quiet.** No timer retires a flow, so a slot frees only when its flow concludes. Reading the study's category "Endings" lines, the outcomes that conclude a case fall into six classes:
 
@@ -73,7 +73,7 @@ Capacity is a roster in `rosters.yaml` keyed by `RUNG_KINDS` (the closed list), 
 
 The classes are a reading of the study. Which moves are terminal, and whether a class is one outcome or several, is Jordan's (Needs Jordan). A concluded flow may be followed by another whose first move shares its referents (the study's XP, later trouble). That is two flows, and nothing links them but the shared referents.
 
-A person's reading is open until a claim of a terminal move lands in his ledger. Someone who has not heard the war is over still reads it as on, and acts accordingly; that follows from AX-7.
+What a person can place is open until a claim of a terminal move lands in his ledger. Someone who has not heard the war is over still believes it on and acts on that belief; that follows from AX-7. What binds him by where he lives is the world reading's, and ends when the flow does.
 
 Because a witness and a person who was only told hold different claims, they read different flows from the same events. That is deliberate.
 
@@ -93,10 +93,12 @@ Jordan, 2026-11-04: people exist within flows as in Foucault's hypothesis of a r
 
 | relation | what makes it so | what it does |
 |---|---|---|
-| **within** | structural: the flow's rung is `p`'s own rung or an ancestor of it (`ancestry`) | the regime bears on `p` whether or not he knows the flow exists |
-| **aware** | epistemic: `p`'s ledger holds the flow's moves | `p` can place events in it (§5) |
+| **within** | structural: the flow's rung is `p`'s own rung or an ancestor of it (`ancestry`) | the regime bears on `p` whether or not he has any concept of the flow: what happens to him is a move of it, and what he credits is graded by it |
+| **aware** | epistemic: `p`'s ledger holds the flow's moves | `p` can place events in it and act on its referents (§5) |
 
-Everyone is within the realm's flow (§4). A hearth-dweller who has heard nothing of the war is still within it, and the war reaches him as a regime reaches anyone: through other people. The tax-collector, the recruiter, the neighbour who was told and tells him are aware, and their acts and words arrive as witnessed events and told claims. AX-7 is kept: nothing pushes the flow into him.
+Awareness is not required to be within a flow, and requiring it would put a person outside the events he is living through. Someone who has never heard of a pandemic still falls ill, finds the market closed and is told what to do by someone who has; the concept is not what exposes him to it. Having the concept changes what he can do about it, not whether it reaches him.
+
+Everyone is within the realm's flow (§4). A hearth-dweller who has heard nothing of the war is within it by two routes, neither of which hands him the flow as a fact. The first is **lived events**: matter and bodies reach him as they reach anyone (stores requisitioned, hunger, a neighbour dead), together with the acts and words of those who are aware (the tax-collector, the recruiter, the neighbour who was told), which arrive as witnessed events and told claims. The second is **grading**: the engine grades what he credits by the regime he is within (below). Neither deposits a claim in his ledger; AX-7 is kept.
 
 **The regime is immanent.** It is made of what the flow's participants say and do and of the seats that pronounce (`determine`, `issue`, a held `dispensation`), not stored anywhere. A flow has at least two, authority's and the challengers', and each credits its own speakers: the side the study gives every move (A, R, O, N) is what separates them. The side-aware classification of §8 step 1 is therefore load-bearing here, not cosmetic.
 
@@ -109,7 +111,7 @@ Everyone is within the realm's flow (§4). A hearth-dweller who has heard nothin
 | standing of those who pronounce | `rank(p, teller)`; the seat a speaker acts through |
 | what is valued | the verbs a seat can form and the remits it holds |
 
-The proposed addition is one term in `relation`: the teller's standing in the flow `p` is within, which sets whether `p` credits him more or less. It is a **second step**, after the stamp (§5) is measured, for three reasons: it reorders every told claim in the loop and so moves the hash widely; its effect cannot be told apart from the stamp's until the stamp is measured alone; and AX-2 binds `decision/`, so the flow's standing must arrive there as data (as `fx` and the stamped questions do), never as a read of the World. `layer-conformance` Lens B settles that placement before any code.
+The proposed addition is one term in `relation`: the teller's standing in the flow `p` is within, which sets whether `p` credits him more or less. It reads the world reading, not `p`'s ledger, so it binds an unaware `p` as it binds an aware one. It is a **second step**, after the stamp (§5) is measured, for three reasons: it reorders every told claim in the loop and so moves the hash widely; its effect cannot be told apart from the stamp's until the stamp is measured alone; and AX-2 binds `decision/`, so the flow's standing must arrive there as data (as `fx` and the stamped questions do), never as a read of the World. `layer-conformance` Lens B settles that placement before any code.
 
 ## 6. What it refuses
 
@@ -137,7 +139,7 @@ From the draft instrument's first run (upper bounds; see PR 553 for its defects)
 
 1. **Instrument, side-aware** (no hash change). Classify by act, add the 16 links and the leave-and-rejoin profile. Control: the same log with moves shuffled within each case must complete the links no more often than chance. Falsifier: a planted log that completes a known link must read as completing it. Add the terminus check: for each opening kind, run seeds forward and report which of the six classes any flow reached; a class never reached over several seeds is a finding about default play, not proof of absence, and the same run at more seeds is its control.
 2. **Gaps in §7**, each through its own existing position, each a hash mover declared as such.
-3. **`flows_known`** as a pure query with no consumer. Falsifiers: a witness and a hearsay holder of the same events read different flows; a person with an empty ledger reads none; two realm-wide flows planted in one ledger read as one realm flow with the second inside it; the same ledger with a terminal claim added reads the flow as concluded and frees the realm slot; a ledger with the claim missing still reads it open; a hearth flow planted beside a realm flow it shares no referent with, in the ledger of someone who has not heard of the realm flow, reads without the frame.
+3. **`flows_known`** as a pure query with no consumer. Falsifiers: a witness and a hearsay holder of the same events read different flows; a person with an empty ledger reads none; two realm-wide flows planted in one ledger read as one realm flow with the second inside it; the same ledger with a terminal claim added reads the flow as concluded and frees the realm slot; a ledger with the claim missing still reads it open; a person within the realm flow whose ledger holds none of its moves reads no realm flow (he can place none), yet the world reading lists him as within it, and the §5a credit term (when built) grades his told claims by it.
 4. **The stamp** in `questions_for`, switch shipped off. Control: switch off reproduces the base hash. Measure: the stamp changes which verbs form for a person in a held flow, and the `confer` and `oblige` counts CR-49 watches do not fall to 0.
 5. **Deck**: world-build seeds per category through the CL-EVENTS commit (3) schema, measured by step 1.
 
