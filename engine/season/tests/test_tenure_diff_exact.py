@@ -180,3 +180,101 @@ def test_j_a_tenure_removed_from_the_very_end_of_the_store(realm):
     finally:
         if n in w._unowned:
             w._unowned.remove(n)
+
+
+# --- THE SHADOW AND THE VERSION -------------------------------------------------------------------
+# `World._tenure_snapshot` no longer reads every Tenure on every write: it keeps a shadow of the store and
+# trusts `Tenure._v` (a count of attribute sets) to say which Tenures to re-read. What that trusts, and what
+# each clause below observes of it:
+#   (k) a seeded random walk of every edit a store takes (a field set, the same value set again, a payload
+#       edited in place, a payload rebound, a Tenure opened, removed, reordered, or nothing), with the
+#       snapshot taken BEFORE each edit and the diff AFTER it, equals the reference at every step. Because
+#       each step's snapshot is cut after the last step's edit, it also observes edits that land BETWEEN
+#       writes: they are the next write's baseline, never its change.
+#   (l) the blind channel, the one thing a version cannot count: a field set through `__dict__` is not seen
+#       by the diff, and `discard_caches` raises `InstrumentDefect` for it at the barrier.
+#   (m) a clean realm's barrier check passes.
+# MUTATIONS (run, each alone): `Tenure.__setattr__` not counting -> (b), (c), (h), (k), (m) red; the payload
+# comparison dropped from `_tenure_changes` -> (c), (k) red; `_verify_tenure_shadow` returning early -> (l) red;
+# `_tenure_snapshot` never refreshing a moved entry -> (c), (d), (i), (k) red.
+
+def test_k_a_random_walk_of_edits_agrees_with_the_reference_at_every_step():
+    import random
+    from ..state.carriers import Tenure as T
+    w = POP.build_realm(0)
+    rng = random.Random(0)
+    owners = [p for p in w.persons.values() if p.tenures]
+    for p in owners[:6]:                      # some payloads to edit in place
+        p.tenures[0].payload = {"remit_acts": ("a",), "n": 1}
+    steps, moved, fresh, between = 300, 0, 0, 0
+
+    def pick():
+        p = rng.choice(owners)
+        return p, rng.randrange(len(p.tenures))
+
+    def edit(step):
+        nonlocal fresh
+        op = rng.choice(["set", "same", "inplace", "rebind", "open", "remove", "swap", "none", "two"])
+        if op in ("set", "two"):
+            p, i = pick()
+            p.tenures[i].until = rng.choice([None, step, step + 1])
+        if op == "same":
+            p, i = pick()
+            t = p.tenures[i]
+            t.since = t.since
+        if op in ("inplace", "two"):
+            held = [t for p in owners for t in p.tenures if isinstance(t.payload, dict)]
+            if held:
+                rng.choice(held).payload["n"] = rng.randrange(1000)
+        if op == "rebind":
+            p, i = pick()
+            p.tenures[i].payload = rng.choice([None, {"n": step}])
+        if op == "open":
+            where = rng.choice(owners).tenures if rng.random() < 0.5 else w._unowned
+            where.insert(rng.randrange(len(where) + 1), T(f"t_walk_{step}", "x", "y", "hold", since=step))
+            fresh += 1
+        if op == "remove":
+            p, i = pick()
+            if len(p.tenures) > 1:
+                p.tenures.pop(i)
+        if op == "swap":
+            p, i = pick()
+            j = rng.randrange(len(p.tenures))
+            p.tenures[i], p.tenures[j] = p.tenures[j], p.tenures[i]
+
+    for step in range(steps):
+        ref_snap, snap = _ref_snapshot(w), w._tenure_snapshot()
+        edit(step)                            # inside the write's window: the diff must list it
+        got, ref = w._tenure_changes(snap), _ref_changes(w, ref_snap)
+        _same(got, ref)
+        moved += bool(got)
+        if rng.random() < 0.5:                # BETWEEN writes: nobody diffs it; the next snapshot
+            edit(step)                        # must take it as the baseline, not hand it back as a change
+            between += 1
+        if step % 7 == 0:
+            w.discard_caches()                # the barrier check must stay quiet on every honest edit
+    assert moved >= steps // 4, f"only {moved} of {steps} steps changed the store: the walk barely moved"
+    assert fresh > 0 and between > steps // 4
+
+
+def test_l_a_field_moved_behind_setattr_is_invisible_to_the_diff_and_loud_at_the_barrier():
+    from ..gaps import InstrumentDefect
+    w = POP.build_realm(0)
+    w._tenure_snapshot()                       # cut the shadow
+    t = _holder(w).tenures[0]
+    old = t.__dict__["until"]
+    t.__dict__["until"] = 424242               # no `__setattr__`: no version count
+    try:
+        with pytest.raises(InstrumentDefect):
+            w.discard_caches()
+    finally:
+        t.__dict__["until"] = old
+
+
+def test_m_a_clean_realm_passes_the_barrier_check_before_and_after_a_season():
+    w = POP.build_realm(0)
+    w._tenure_snapshot()
+    w.discard_caches()
+    POP.run(1, 0, w=w)
+    w.discard_caches()
+    assert w._tshadow is not None, "the shadow was never cut: the check observed nothing"
