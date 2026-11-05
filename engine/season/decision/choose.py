@@ -49,6 +49,7 @@ from ..state.carriers import Act, Candidate, Person, Question, Scene, Sensation,
 from .options import opening_set, project, seat_of, subject_is_opponent
 
 STANCE_POLARITIES = roster("stance_polarities")
+ODDS_WEIGHTINGS = roster("odds_weightings")
 
 
 def stance_term(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict] = None) -> float:
@@ -126,15 +127,53 @@ def deliberation_memo(p: Person, fx: "Fixtures") -> dict:
             _DAMP: 1.0 if k == 0 else 1.0 / (1.0 + k * confliction(p))}
 
 
-def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict) -> tuple:
+def odds_weight(p: Person, c: Candidate, fx: "Fixtures", odds: Optional[Callable]) -> float:
+    """THE FACTOR `Fixtures.odds_weighting` PUTS ON A CONTESTED CANDIDATE'S PURSUIT TERM (CR-17, `H-248`;
+    M1, AQ-X1 (b)): the person's believed chance of the bands that write what the term prices.
+
+      * `none` (CONTROL) -- 1.0 for every candidate: the term as it stood before CR-17;
+      * `believed` -- for a candidate whose verb CONTESTS something (`row.contests`) and writes in at least
+        one band (`row.writes_by_degree`, a map from band to its write list), `odds(p, act, bands)` over
+        the bands whose list is non-empty: the sum of the person's believed chances of those bands, which is
+        what his pursuit-priced cells are worth if the roll lands there and nothing if it does not. An
+        uncontested verb, a contested one that writes in no band, and an answer of `None` (a factor he
+        cannot know, no dice dealt, S27.4's refusal, another module's prize) are 1.0: the term as it was.
+
+    THE BANDS ARE READ OFF THE ROW'S OWN `writes:` MAP, never a verb name: `argue` writes in two bands, so its
+    cells are weighted by P(those two); `determine` in three; a verb that writes in every band is weighted by
+    1 (its cells are certain whichever way the dice fall). `odds` is the QUERY on the View (`View.odds`,
+    `seam/wrappers/sigma.py::believed_chance`): `decision/` holds a callable and the act's shape, never the
+    store behind it. A candidate is probed as the act it would become (`pack_scenes`' payload and seat), so
+    the figure is the one for the roll the fold would deal that act."""
+    arm = fx.get("odds_weighting")
+    require_member(arm, ODDS_WEIGHTINGS, f"odds weighting {arm!r} is not in the roster", "H-248",
+                   law="CR-17 -- declare it, default it, sweep it; an unknown arm silently reading "
+                       "`none` would make the sweep report the control twice")
+    if arm == "none" or odds is None:
+        return 1.0
+    row = VERB_TABLE.get(c.verb)
+    if row is None or not row.contests:
+        return 1.0
+    bands = tuple(b for b, written in row.writes_by_degree.items() if written)
+    if not bands:
+        return 1.0
+    chance = odds(p, Act(f"odds:{c.verb}", p.id, c.verb, payload=_payload_of(c), via=seat_of(p, c)), bands)
+    return 1.0 if chance is None else float(chance)
+
+
+def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optional[Callable] = None) -> tuple:
     """§F2's score, term by term: `(pursuit, stance)`, and `score(c)` is their sum (IN-62).
     The ONE owner of the formula (`CLAUDE.md` §8): `make_chooser`'s `score` calls this and adds, and
     a reading that wants to know WHICH TERM decided a ranking calls this and never re-derives one.
 
-      * `pursuit` -- `damp * Σ_axis axis_w[axis] * align(c.verb, axis)`, `axis_w` the person's
-        projected pursuits and `damp` the `confliction_weight` arm's factor (exactly 1.0 at 0);
+      * `pursuit` -- `damp * Σ_axis axis_w[axis] * align(c.verb, axis) * odds_weight(...)`, `axis_w` the
+        person's projected pursuits, `damp` the `confliction_weight` arm's factor (exactly 1.0 at 0) and
+        `odds_weight` CR-17's believed-chance factor on a contested candidate (exactly 1.0 at
+        `odds_weighting` `none`, for an uncontested candidate, and when `odds` is `None`);
       * `stance` -- `stance_term(p, c, fx, memo)`, by `Fixtures.stance_polarity`, at gain `1 + g`.
 
+    `odds` is the believed-odds query a View carries (`View.odds`); a reading that scores a person outside
+    `choose` passes the same query or leaves it `None` and reads the score without CR-17's factor.
     `memo` is a `deliberation_memo(...)` (it also caches `regard` per subject for the call). A memo
     without the two hoisted factors is refused, not defaulted: a missing factor read as 0 or 1
     would score a different person than the one asked about."""
@@ -144,7 +183,7 @@ def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict) -> tuple:
         raise ValueError("score_terms needs a memo from `deliberation_memo(p, fx)` "
                          "(or `make_chooser`'s): the pursuit weights and damp are "
                          "hoisted per deliberation") from None
-    return (damp * sum(axis_w[ax] * align(c.verb, ax) for ax in PURSUIT_AXES),
+    return (damp * sum(axis_w[ax] * align(c.verb, ax) for ax in PURSUIT_AXES) * odds_weight(p, c, fx, odds),
             stance_term(p, c, fx, memo))
 
 
@@ -397,9 +436,12 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
         # pre-G2 `stance_toward(p, c.subject)`). `memo` holds one regard per subject per call, and
         # the two hoisted per-deliberation factors under tuple keys (`score_terms`).
         memo: dict = deliberation_memo(p, fx)
+        # CR-17: the person's believed-odds query rides his View (`View.odds`); a View built without one
+        # (a test's, a callback's) answers None and the pursuit term stays as it was.
+        odds = getattr(v, "odds", None)
         def score(c: Candidate) -> float:
             # IN-62: the terms have ONE owner, `score_terms`; the score is their left-to-right sum.
-            pursuit, stance = score_terms(p, c, fx, memo)
+            pursuit, stance = score_terms(p, c, fx, memo, odds)
             return pursuit + stance
         # ⚠ SCORED ONCE, NOT TWICE. `score` was passed to `_sample_order` and re-invoked there for
         # every candidate it had just been invoked for in this sort key — measured by a `/simplify`

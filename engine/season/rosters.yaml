@@ -2477,6 +2477,22 @@ rosters:
       what the sign adds.
     values: [legacy, regard, declared]
 
+  odds_weightings:
+    source: >-
+      v10 CR-17 (M1, AQ-X1 (b), taken at `CLAUDE.md` section 0's ladder step 5): whether the chooser's pursuit
+      term for a CONTESTED candidate is weighted by the person's own believed chance of the band that writes
+      what the term prices.
+    note: >-
+      THE ARMS OF `Fixtures.odds_weighting` (`H-248`), read by `decision/choose.py::odds_weight`, the factor
+      `score_terms` multiplies the pursuit term by. `none` is the CONTROL: the factor is 1 for every
+      candidate, the term as it stood before CR-17. `believed` multiplies a contested candidate's pursuit term
+      by the sum, over the bands the verb's `writes:` map gives a non-empty write, of the person's believed
+      chance of that band (`seam/wrappers/sigma.py::believed_chance`, CP-T01-03's mode (b), passed to the
+      chooser on the View as `View.odds`); a candidate whose verb contests nothing, whose verb writes in
+      no band, or whose believed chance is `None` (a factor he cannot know, no dice dealt, S27.4 refuses the
+      attempt, a prize another module rolls) keeps the term as it was.
+    values: [none, believed]
+
   said_slants:
     source: >-
       v9 IN-18 `G3` (telling workplan §5, `ED-IN-0282`): *"slant -- the strongly valenced older

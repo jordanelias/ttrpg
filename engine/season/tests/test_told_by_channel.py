@@ -293,7 +293,12 @@ def test_15d_falsifier_the_realm_holds_hearsay_no_telling_minted(monkeypatch):
     # season minted no chained told claim (it passes at 664986ee). The same quantity over seeds 0-39, on
     # the tree after: chained > 0 at seeds 28 (3) and 38 (4) only. Seed 28 is the lowest with more than
     # one; the mechanism per seed is NOT isolated. The assertions below are unmoved.
-    SEED = 28
+    # ⚠ RE-PINNED SEED 28 -> 0 AT v11 CR-17 (B10-09 close two; `choice_temperature` 0.1 -> 0.05, H-96), BY THE SAME RULE: the sampler's
+    # change moved the act mix and seed 28's first season minted no chained told claim. The same quantity, this test's own (chained
+    # `told_by` claims after `build_realm(s)` and `run(1, s)`), over seeds 0-39 on this tree: chained > 0 at seeds 0 (5), 1 (9), 2 (2), 3 (5), 5 (15),
+    # 6 (2), 8 (8), 9 (2), 11 (11), 12 (8), 14 (3), 17 (7), 18 (3), 19 (7), 20 (7), 21 (6), 22 (11), 23 (1), 25 (7), 27 (6), 30 (10), 31 (7), 32 (9), 35 (6),
+    # 36 (6), 37 (6), 39 (6). Seed 0 is the lowest with more than one; the mechanism per seed is NOT isolated. The assertions below are unmoved.
+    SEED = 0
 
     def told_by_count() -> tuple:
         w = populated.build_realm(SEED)

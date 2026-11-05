@@ -1367,6 +1367,15 @@ rows:
       bear on the fifth conjunct REM-05 proposes (every acting person carries a pursuit vector), which this row's `measure:` does not
       yet state; `pytest -k 'ambitions or cast'` and `conviction_spread.py` were not run for this paragraph. One build and one draw
       per seed, 83 persons at tick 0: it is a reading of the chooser's ranking, not of play.
+
+      **CR-17 READING (v11 B10-09 close two, ED-IN-0296), 2026-11-05; THE ROW STAYS `partial`.** The fourth conjunct is read at the chosen
+      τ. `decision_spread --decisions`, seeds 0 / 1 / 2 (498 readings each, every person vectored, `every candidate scores 0`: 0 of
+      498), strict-top-decided (the readings the draw did not decide): τ = 0.1 (control) 142 / 162 / 141 = 28.5 / 32.5 / 28.3 %; τ = 0.05
+      (chosen, the largest grid value above one half that also passes U4) 271 / 297 / 273 = 54.4 / 59.6 / 54.8 %; the other grid values 0.03:
+      74.3 / 78.1 / 75.7, 0.02: 85.5 / 87.6 / 87.2, 0.01: 93.4 / 93.8 / 93.2, 0: 100 (argmax). The share above one half is an ASSUMPTION
+      (H-96), not a figure the row's `met` text states. `odds_weighting: believed` reaches only `determine`'s pursuit term in the realm and
+      moves this split by nothing at any grid value (`none` and `believed` read identical counts in every cell). The first and fifth
+      conjuncts are not moved by this commit.
     measure: "python -m engine.season.harness.corpus_run  # 'RANKING DISCRIMINATION' line"
     blocks: [IN-38, IN-08, IN-18, IN-12]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W27: `17` landed (build_at seats a `cast:`), IN-38 remains; H-62 re-scoped to IN-08, IN-18, IN-12 step 9
@@ -1529,6 +1538,11 @@ rows:
       Inclination breaking a tie remains unbuilt (the alignment table is sparse), so nothing here is an inclination: the draw breaks
       the 222. Ties are counted at tick 0 of one build per seed, not over a played season. The U4 test was not re-run for this
       paragraph.
+
+      **CR-17 READING (v11 B10-09 close two), 2026-11-05; THE ROW STAYS `partial`.** At τ = 0.05 the sampler overrules the score leader
+      in 223 / 196 / 220 of the 498 readings (it was 353 / 331 / 353 at τ = 0.1), with the outvoted margins' median 0.0590 / 0.0566 / 0.0590
+      (0.0648 / 0.0634 / 0.0648 at τ = 0.1); `tie` 4 / 5 / 5 (3 / 5 / 4 at τ = 0.1). The tie conjunct is still not read: no tie is
+      broken by inclination, the table being sparse. U4 passes at every grid value.
     measure: "python -m engine.season.harness.corpus_run  # 'RANKING DISCRIMINATION' + tie ordering"
     blocks: [SC-01, IN-08, IN-18, IN-12]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W26 is SC-01's; H-62 re-scoped to IN-08, IN-18, IN-12 step 9

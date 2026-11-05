@@ -20,7 +20,7 @@ from ..state.carriers import Person, Question, View
 
 
 def assemble(p: Person, question: Any, k: int, rule: str = "recent",
-             questions: tuple = ()) -> View:
+             questions: tuple = (), odds: Any = None) -> View:
     # ⚠ W5 REMOVED A `NoProducer` HERE, AND THE REMOVAL IS THE DISCHARGE OF §61, NOT A
     # SOFTENING OF IT. It read: "`assemble(person, question)` and `view(person, question)`
     # are UNSATISFIABLE; DELIBERATE HAS NO DECLARED ENTRY POINT." That was TRUE while nothing
@@ -47,7 +47,8 @@ def assemble(p: Person, question: Any, k: int, rule: str = "recent",
         if not isinstance(q, Question):
             raise InstrumentDefect(
                 f"assemble() was given a {type(q).__name__} in `questions`, not a Question")
-    return View(p.id, view_ids(p, question, k, rule), k, question, questions)
+    # CR-17: `odds` is the believed-odds query the loop hands the person (`View.odds`); `None` is none.
+    return View(p.id, view_ids(p, question, k, rule), k, question, questions, odds)
 
 
 def aggregate_questions(qs: list, rule: str):

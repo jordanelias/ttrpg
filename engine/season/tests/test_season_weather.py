@@ -462,9 +462,20 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # (the season-1 sequence is byte-identical), 29399 -> 29401. CONTROL, run in process on this tree: the cap swept back to 200
 # after `build_realm` reads the old pair, the old `BASE_EVENTS` and the old `STEP_OFF_ONE_SEASON` exactly (and
 # `test_go07_canonical_digest.BASE`, seeds 0-2). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-PINNED at v11 CR-17 (B10-09 close two, the series' last item), TWO BEHAVIOUR MOVES DECLARED: commit 1 ships
+# `Fixtures odds_weighting` `believed` (H-248: a contested candidate's pursuit term is weighted by the person's believed
+# chance of the bands its verb writes in) and commit 2 re-derives `choice_temperature` 0.1 -> 0.05 (H-96, the largest grid
+# value at which REM-12's split reads strict-top-decided above one half at seeds 0-2). `Fixtures` is not hashed, so the BUILD is
+# equal. AT COMMIT 1 ALONE seed 0 does not move at all (one and two seasons, events and sequence hashes read the old pins: the
+# weighting reaches `determine`'s pursuit term only and no seed-0 top changes; seeds 1 and 2 DO move at two seasons, 02a72390...
+# and e9bec19c..., measured on a scratch harness, and the `give`-withheld arm below moves). AT COMMIT 2 everything moves.
+# Was bdff0832... / a75b8227... (one, two seasons); events 10316 -> 11775, 29401 -> 30477. CONTROL, run in process on this
+# tree: `odds_weighting` swept to `none` and `choice_temperature` to 0.1 reads the old triple, the old `BASE_EVENTS`, the old
+# `STEP_OFF_ONE_SEASON` and the old `thread_read`-withheld arm exactly; `believed` at 0.1 reads the old triple and the old
+# `BASE_EVENTS` and only the step-off arm moves. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 BASE_HASHES = {0: "3ae970a172c9c0122adaab552a921eca",
-               1: "bdff0832849c22a42d21237b867ab6cc",
-               2: "a75b822793b26385ca844b0e743fa148"}
+               1: "4761e5cac3069d78279d3f03657c8007",
+               2: "7d2adfc5d424ce87d34f5a6fa34f07df"}
 
 # THE ONE-SEASON PIN WITH CR-81'S STEP OFF (`build_realm(0, acquaintances=False)`: the hash and the event count and digest
 # `BASE_HASHES[1]` / `BASE_EVENTS[1]` held before CR-81). The `give`-withheld arm's control, below.
@@ -472,8 +483,11 @@ BASE_HASHES = {0: "3ae970a172c9c0122adaab552a921eca",
 # the CR-25 control (the term stubbed and the column dropped) reads the old value exactly.
 # RE-RECORDED at v11 CR-82 (`ledger_cap` 200 -> 3200): the hash moves, the event count and digest do not. Was 9368bffe...;
 # the cap swept back to 200 reads it exactly.
-STEP_OFF_ONE_SEASON = ("f5987a4ba2df5a07d10342f48730f2d6",
-                       (9952, "631608170ca865b00290f972a413c79d255bf4fdfbd3b64cf2c5a7b30dd4162d"))
+# RE-RECORDED at v11 CR-17: commit 1 (`odds_weighting` `believed`) moves this arm alone of the pins at tau 0.1 (f5987a4b... ->
+# 0aa9d2e1..., events 9952 -> 9952, sequence hash 63160817... -> 33632f41...); commit 2 (tau 0.05) moves it again: f5987a4b... ->
+# b82178e8..., events 9952 -> 11808. The two fixtures swept to `none` and 0.1 read the old value exactly.
+STEP_OFF_ONE_SEASON = ("b82178e877e9831e72df39e113409a06",
+                       (11808, "ffbcfc5049db09ecbda438c70e8edaa035df96f6d889cf43fa1b6d3e0327ed0b"))
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its
 # ordered `kind|id` lines after one season and after two. FIRST RECORDED on the pre-IN-34 base
@@ -548,8 +562,10 @@ STEP_OFF_ONE_SEASON = ("f5987a4ba2df5a07d10342f48730f2d6",
 # RE-RECORDED at v11 CR-25 with `BASE_HASHES` (10847 -> 10316, 29286 -> 29399; the CR-25 control reads the old pair).
 # RE-RECORDED at v11 CR-82 with `BASE_HASHES` (season 2 only: 29399 / 356dba1b... -> 29401 / 77ef3d40...; season 1 unmoved,
 # 10316; `ledger_cap` swept back to 200 reads the old pair).
-BASE_EVENTS = {1: (10316, "788369e0dbab0613db382075ba49ac72858d1392c153aa384758c95b769d29c4"),
-               2: (29401, "77ef3d40d119cc45568d3b8bb5935d92767dcd35caecd377748036e9566632f0")}
+# RE-RECORDED at v11 CR-17 with `BASE_HASHES` (10316 -> 11775, 29401 -> 30477; commit 1 `believed` alone moves neither at seed 0;
+# `odds_weighting` `none` and `choice_temperature` 0.1 in process read the old pair).
+BASE_EVENTS = {1: (11775, "87c51e925ddf5d1f6245f12638d09fae865c137e41a588c64a894612f4551661"),
+               2: (30477, "e30bb78fed04cca537b7c0e411b1d7087793e21949aba6107159c6bb0a2e3d16")}
 
 
 def _digest(w) -> tuple:
@@ -638,7 +654,10 @@ def test_the_give_withheld_arm_reproduces_the_one_season_pin():
     season one, so withholding `give` now moves the shipped season (measured: b3fd7f90... / 10849 events against the pin's
     5fece5d9... / 10847). The equality is kept where it still holds -- on the step-off arm (`acquaintances=False`), whose
     one-season reading is `STEP_OFF_ONE_SEASON` -- and the shipped arm is asserted to DIFFER, so `give` forming in season
-    one is what the step changed."""
+    one is what the step changed.
+
+    ⚠ v11 CR-17 (`choice_temperature` 0.1 -> 0.05): `give` no longer forms in season one at the shipped arm, so the
+    shipped-arm half reads the equality again (hash, count and digest of `BASE_HASHES[1]` / `BASE_EVENTS[1]`)."""
     for acq in (False, True):
         w = POP.build_realm(0, acquaintances=acq)
         shipped = tuple(w.fixtures.get("withheld_verbs"))
@@ -648,7 +667,10 @@ def test_the_give_withheld_arm_reproduces_the_one_season_pin():
         if not acq:
             assert (w.content_hash(), _digest(w)) == STEP_OFF_ONE_SEASON, (w.content_hash(), _digest(w))
         else:
-            assert w.content_hash() != BASE_HASHES[1] and _digest(w) != BASE_EVENTS[1], (w.content_hash(), _digest(w))
+            # v11 CR-17 (tau 0.1 -> 0.05): `give` no longer forms in season one at the shipped arm, so withholding it
+            # moves nothing and the equality holds on BOTH arms again (it was a difference from CR-81 to CR-82; swept
+            # back to tau 0.1 the shipped arm differs again: e6dc2911... / 10310 events against 10316, measured in process).
+            assert (w.content_hash(), _digest(w)) == (BASE_HASHES[1], BASE_EVENTS[1]), (w.content_hash(), _digest(w))
 
 
 #: The one-season event sequence BEFORE v9 PC-06 K-3 (`BASE_EVENTS[1]` at `26884a93`), kept as the K-3
@@ -707,7 +729,10 @@ def test_the_give_withheld_arm_reproduces_the_one_season_pin():
 #: different digest); `acquaintances=False` in process reads the old value exactly.
 #: RE-RECORDED at v11 CR-25 with `BASE_HASHES`: 10847 / 83f4c9a2... -> 10316 / af2eb292... (same count as `BASE_EVENTS[1]`, a
 #: different digest); the CR-25 control (the term stubbed and the column dropped) reads the old value exactly.
-THREAD_READ_WITHHELD_EVENTS_1 = (10316, "af2eb292357dbc389bfe482f39a46d79f24fa21c2aec7fb8ce343c3afafc5730")   # CR-25: was 10847 / 83f4c9a2...; CR-81: was 9741 / 1e77a5a4...
+#: RE-RECORDED at v11 CR-17 with `BASE_HASHES`: 10316 / af2eb292... -> 11781 / 43774342... (commit 1 `believed` alone moves it not
+#: at all; commit 2, tau 0.05, moves it, and the count now differs from `BASE_EVENTS[1]` too); `none` and 0.1 in process read the
+#: old value exactly.
+THREAD_READ_WITHHELD_EVENTS_1 = (11781, "437743422f8d395be785833b656144cc7d7ca11581b9a6a94480beec8b0dddbe")   # CR-17: was 10316 / af2eb292...; CR-25: was 10847 / 83f4c9a2...; CR-81: was 9741 / 1e77a5a4...
 
 
 def test_the_thread_read_withheld_arm_is_pinned_and_differs_from_the_shipped_season():

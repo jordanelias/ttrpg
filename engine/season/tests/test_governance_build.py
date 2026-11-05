@@ -2915,7 +2915,12 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # `test_go07_canonical_digest.py` records the 619). CONTROL: `holdings_to_found` stubbed to `()` and `establish`'s
     # `referent_class` dropped reads 630 acts on the shipped arm (`test_go07_canonical_digest.BASE[0]` before this row, read in
     # process); the second arm was not run under the control.
-    assert (out["acts"], cout["acts"]) == (619, 619), (
+    # ⚠⚠ v11 CR-17 (B10-09 close two): (619, 619) -> (685, 685), A RE-RECORD WITH THE UNIT THAT MOVED IT: `choice_temperature`
+    # 0.1 -> 0.05 (H-96's re-derivation; `odds_weighting` `believed` alone leaves seed 0 at 619), so the act mix moves (seed 0, one
+    # season: 619 -> 685 in both arms; `test_go07_canonical_digest.py` records the 685). CONTROL: `choice_temperature` swept
+    # back to 0.1 reads 619 on the shipped arm (`test_go07_canonical_digest.BASE[0]` before this row, read in process); the
+    # second arm was not run under the control.
+    assert (out["acts"], cout["acts"]) == (685, 685), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")

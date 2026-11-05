@@ -270,7 +270,8 @@ def run(seed: int, seasons: int, acquaintances: bool = True, observe: bool = Tru
             return scenes
         cands = [c for c in opening_set(p, v, q, fx) if c.verb in foldable]
         memo = CH.deliberation_memo(p, fx)
-        terms = [CH.score_terms(p, c, fx, memo) for c in cands]
+        odds = getattr(v, "odds", None)          # CR-17: the View's believed-odds query, as the chooser reads it
+        terms = [CH.score_terms(p, c, fx, memo, odds) for c in cands]
         scores = {id(c): t[0] + t[1] for c, t in zip(cands, terms)}
         ranked = CH.score_order(cands, scores)
         sampled = CH.sample_order(ranked, lambda c: scores[id(c)], p, fx, draw)
@@ -304,7 +305,7 @@ def run(seed: int, seasons: int, acquaintances: bool = True, observe: bool = Tru
                 "pursuit": t[0], "stance": t[1], "score": t[0] + t[1], "p_first": prob[id(c)],
                 "score_rank": rank[id(c)], "sample_rank": srank[id(c)],
                 "chosen": k in chosen, "act": chosen.get(k)})
-        r = attribute_top(p, cands, fx, draw)
+        r = attribute_top(p, cands, fx, draw, odds)
         row["decider"] = {"decider": r["decider"], "margin": r["margin"], "draw_kind": r["draw_kind"]}
         tol = refusal_tolerance(p, axis)
         row["refusal_gate"] = ("unarmed (refusal_axis unset)" if tol is None else

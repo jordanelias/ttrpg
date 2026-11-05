@@ -231,8 +231,8 @@ def season_pairs():
     pairs: list = []
     real_terms, real_order = CH.score_terms, CH._sample_order
 
-    def terms_spy(p, c, fx, memo):
-        t = real_terms(p, c, fx, memo)
+    def terms_spy(p, c, fx, memo, odds=None):         # CR-17: the View's believed-odds query is the fifth argument
+        t = real_terms(p, c, fx, memo, odds)
         pending.append((id(c), t))
         return t
 
