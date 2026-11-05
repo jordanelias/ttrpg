@@ -17,12 +17,13 @@
       "attr.mind.focus",
       "attr.mind.acuity",
       "attr.mind.will",
+      "attr.mind.perception",
       "attr.social.attunement",
       "attr.social.charisma",
-      "attr.social.bonds"
+      "attr.social.grace"
     ],
-    "count": 9,
-    "pending_tenth": "Jordan ruled 2026-08-14 that the roster WILL BE 10 attributes. The registry ships 9 and the tenth is UNNAMED. This sentinel exists so a reader cannot mistake the current roster for a closed one; delete it in the commit that names the tenth."
+    "count": 10,
+    "pending_tenth": null
   },
   "pursuit_roster": {
     "source": "ED-IN-0261 (2026-09-20 ruling; the fifteen as read by its 2026-10-06 row)",

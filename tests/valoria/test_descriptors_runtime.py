@@ -28,16 +28,31 @@ def test_the_registry_reader_reads_the_cooked_artifact_not_the_yaml():
         'the reader must not reach for the YAML outside its docstring'
 
 
-def test_the_attribute_roster_declares_itself_open_until_the_tenth_is_named():
-    """Jordan ruled 2026-08-14 that the roster will be ten. Nine ship. The sentinel must persist
-    until the tenth is named, so no reader mistakes the current roster for a closed one."""
-    if len(descriptors.ATTRIBUTES) < 10:
-        assert descriptors.ATTRIBUTES_PENDING_TENTH, (
-            'the roster is short of ten and the pending_tenth sentinel is gone — either the tenth '
-            'was named (add it and drop the sentinel) or the sentinel was dropped by accident'
-        )
-    else:
-        assert not descriptors.ATTRIBUTES_PENDING_TENTH
+def test_the_attribute_roster_is_the_ten_and_carries_no_pending_sentinel():
+    """Jordan ruled the count at ten (2026-08-14) and named the ten (ED-IN-0328, CR-84). At ten the
+    exporter clears its `pending_tenth` sentinel; a roster short of ten must bring it back, so the
+    sentinel can never be dropped by accident -- the exporter's own branch is exercised below."""
+    assert len(descriptors.ATTRIBUTES) == 10
+    assert descriptors.ATTRIBUTES_PENDING_TENTH is None
+    assert 'attr.mind.perception' in descriptors.ATTRIBUTES and 'attr.social.grace' in descriptors.ATTRIBUTES
+    assert 'attr.social.bonds' not in descriptors.ATTRIBUTES      # retired, resolved with a flag elsewhere
+
+
+def test_a_roster_short_of_ten_brings_the_sentinel_back(monkeypatch):
+    """The falsifier for the test above: the exporter, fed a nine-attribute registry, emits the
+    sentinel; so `is None` at ten is the exporter's verdict and not an absent field."""
+    import sys
+    sys.path.insert(0, str(REPO / 'tools'))
+    import export_descriptors as ed
+    real = ed.ci_common.load_yaml
+
+    def nine(path, default=None):
+        reg = real(path, default=default)
+        reg['attributes']['social'] = reg['attributes']['social'][:-1]      # drop Grace
+        return reg
+    monkeypatch.setattr(ed.ci_common, 'load_yaml', nine)
+    out = ed.build()['attributes']
+    assert out['count'] == 9 and out['pending_tenth']
 
 
 #: The ratified-but-unimplemented rows expected on disk. A row leaves this set ONLY by being
