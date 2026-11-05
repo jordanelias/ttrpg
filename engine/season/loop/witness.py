@@ -275,7 +275,7 @@ require_member(HAND_TERM, OBSERVATION_TERMS,
                    "does not carry would mask nothing and show every finder the hand")
 
 
-def _found_claims(self, w, e: Event, claim_rule: str, conf, mode: str, gain):
+def _found_claims(self, w, e: Event, claim_rule: str, conf, mode: str, gain, cgain):
     """v9 FI-03 (`ED-FI-0002`): THE CLAIMS A FINDING DEPOSITS -- `(finder, trail Event, Claim)` per claim,
     yielded per uncovered trail Event so each re-check sees the deposits already written.
 
@@ -289,7 +289,6 @@ def _found_claims(self, w, e: Event, claim_rule: str, conf, mode: str, gain):
     if p is None:
         return
     src = CHANNEL_CLAIM_SOURCE[FOUND_CHANNEL]
-    cgain = float(w.fixtures.get("competence_gain"))   # `H-200`, as `witness` reads it
     for fid, terms in found:
         f = event_by_id(w, fid)
         if f is None or holds_trail(w, p, f, claim_rule):
@@ -991,7 +990,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
     # with no graded finding of a covert trail -- deposits nothing, so this block is inert.
     if self.findings:
         for e in events:
-            for p, f, c in _found_claims(self, w, e, claim_rule, conf, mode, gain):
+            for p, f, c in _found_claims(self, w, e, claim_rule, conf, mode, gain, cgain):
                 w.write("claim_ledger", token,
                         lambda p=p, c=c: p.ledger.append(c),
                         record_kind="Person", fieldname="claim_ledger", driver="Event",

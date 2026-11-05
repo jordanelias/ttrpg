@@ -150,8 +150,10 @@ def head(w: World, prop: str) -> "str | None":
     # seat's live holder -- the King for Valorsmark. A graded `commit` (above) stays the more specific
     # reading and wins where one exists [CHOICE: none is built today, so the order moves nothing].
     seat = HEAD_SEAT.get(FACTION_BY_PROP.get(prop))
+    if seat is None:
+        return None
     held = [t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == seat]
-    return held[-1] if seat and held else None
+    return held[-1] if held else None
 
 
 def holdings(w: World, prop: str) -> list:

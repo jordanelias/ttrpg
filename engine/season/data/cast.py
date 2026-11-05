@@ -35,7 +35,7 @@ import re
 from typing import Optional
 
 from . import files
-from .rosters import FACTIONS, LIFEPATH_TEMPLATES, _FACTION_ALIAS, load_yaml
+from .rosters import FACTION_ALIAS, FACTIONS, LIFEPATH_TEMPLATES, load_yaml
 from ..gaps import Unspecified
 from ...substrate.descriptors import (
     ATTRIBUTE_CEILING, ATTRIBUTE_FLOOR, ATTRIBUTES, HERITAGES, PRACTITIONER_STATS, attribute_key,
@@ -75,7 +75,6 @@ NPC_REGISTRY_YAML = files.NPC_REGISTRY_YAML
 #: Schoenland was invisible here until 2026-09-16: its `names_index.yaml` row is filed with the
 #: PLACES and simply never carried `token_class: faction`, so this map saw seven of eight. The
 #: class is set now and the eighth resolves.
-_ALIAS_MAP = _FACTION_ALIAS   # one relation, one owner: `rosters.py` derives it from the naming leaf
 
 
 
@@ -164,7 +163,7 @@ def faction_of(r: dict) -> tuple[Optional[str], Optional[str], str]:
     for candidate in (base, inner):
         if not candidate:
             continue
-        resolved = _ALIAS_MAP.get(candidate, candidate)
+        resolved = FACTION_ALIAS.get(candidate, candidate)
         if resolved in FACTIONS:
             return resolved, (inner if candidate == base else None), raw
     return None, inner, raw
@@ -183,7 +182,7 @@ def resolve_faction(name: Optional[str]) -> Optional[str]:
     mechanism reporting an unheld place rather than a lookup quietly failing."""
     if not name:
         return None
-    resolved = _ALIAS_MAP.get(str(name).strip(), str(name).strip())
+    resolved = FACTION_ALIAS.get(str(name).strip(), str(name).strip())
     return resolved if resolved in FACTIONS else None
 
 
@@ -313,7 +312,7 @@ def thread_sensitivity_of(r: dict) -> Optional[int]:
             "being read as a plausible number")
 
 
-_ATTR_RANGE = re.compile(r"^\s*(?P<n>\d+)\s*[-–—]\s*(?P<hi>\d+)\s*$")
+_ATTR_RANGE = re.compile(r"^\s*(?P<n>\d+)\s*[-–—]\s*(?P<hi>\d+)\s*$")   # `_TS_RANGE`'s pattern with the upper bound kept, so a backwards or out-of-scale range can refuse
 
 
 def attributes_of(r: dict) -> dict:
@@ -349,11 +348,8 @@ def attributes_of(r: dict) -> dict:
                               "references/npc_registry.yaml", needs="one spelling per attribute",
                               law="CR-20 -- a duplicate would be read by whichever came last")
         m = _ATTR_RANGE.match(v) if isinstance(v, str) else None
-        if m and not int(m.group("n")) <= int(m.group("hi")) <= ATTRIBUTE_CEILING:
-            m = None                        # a range that runs backwards or past the scale is no range: refused below
-            n = v
-        else:
-            n = int(m.group("n")) if m else v
+        # a range reads as its lower bound; one that runs backwards or past the scale is no range and refuses below
+        n = int(m["n"]) if m and int(m["n"]) <= int(m["hi"]) <= ATTRIBUTE_CEILING else v
         if not isinstance(n, int) or isinstance(n, bool) or not ATTRIBUTE_FLOOR <= n <= ATTRIBUTE_CEILING:
             raise Unspecified(
                 f"cast row {who}: stats {name!r}: {v!r} is no whole number from {ATTRIBUTE_FLOOR} to "

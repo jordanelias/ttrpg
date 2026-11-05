@@ -53,7 +53,7 @@ from .requires import (
 )
 from .rosters import (
     COVERT_KINDS, DOMINANCE_KINDS, FOLD_KINDS, LOGGED_KINDS, GRADED_INQUIRIES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
-    RESTRAINT_KINDS, VERB_CAPABILITY,
+    RESTRAINT_KINDS, VERB_CAPABILITY, VOCATIONS,
     is_event_kind,
     RUNG_KINDS, STRATA, TENURE_KINDS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
     roster_map,
@@ -1602,10 +1602,7 @@ def _load_vocation_sourced(values: dict) -> dict:
 
 
 VOCATION_SOURCED = _load_vocation_sourced(roster_map("vocation_sourced", "values"))
-# THE VOCATIONS: the capability keys some verb draws dice from -- `rosters.yaml: verb_capability`'s
-# VALUES (its keys are verbs), derived here and never spelt, so a key `train` may raise is exactly a key
-# `faculty` reads (#453 K-20: the range is `verb_capability`'s names; Thread Sensitivity is outside it).
-VOCATIONS = frozenset(VERB_CAPABILITY.values())
+# THE VOCATIONS (`rosters.VOCATIONS`, imported above): `verb_capability`'s VALUES, derived once in `rosters.py`.
 
 
 # v9 IN-12 step 10: `{verb: record kind}` -- the verbs a person does not form while he holds a document

@@ -567,6 +567,10 @@ if RECORD_KINDS & TENURE_KINDS:
 # polarity that function exists to hold. A verb with no row falls through to `pool_default` inside
 # the wrapper, which is the `assumption` grade's own reading (`08 §3`) and not a refusal.
 VERB_CAPABILITY = roster_map("verb_capability", "values")
+# THE VOCATIONS: the capability keys some verb draws dice from -- `verb_capability`'s VALUES (its keys are verbs),
+# derived here once and never spelt, so a key `train` may raise is exactly a key `faculty` reads (#453 K-20: the
+# range is `verb_capability`'s names; Thread Sensitivity is outside it). `data/verbs.py` re-exports it.
+VOCATIONS = frozenset(VERB_CAPABILITY.values())
 
 
 def _load_vocation_attribute(values: dict, vocations) -> dict:
@@ -587,8 +591,7 @@ def _load_vocation_attribute(values: dict, vocations) -> dict:
     return out
 
 
-VOCATION_ATTRIBUTE = _load_vocation_attribute(roster_map("vocation_attribute", "values"),
-                                               set(VERB_CAPABILITY.values()))
+VOCATION_ATTRIBUTE = _load_vocation_attribute(roster_map("vocation_attribute", "values"), VOCATIONS)
 
 
 def _load_lifepath_templates(cells: dict, lifepaths, vocations) -> dict:
@@ -619,8 +622,7 @@ def _load_lifepath_templates(cells: dict, lifepaths, vocations) -> dict:
 
 
 LIFEPATHS = roster("lifepaths")
-LIFEPATH_TEMPLATES = _load_lifepath_templates(table("lifepath_templates"), LIFEPATHS,
-                                              set(VERB_CAPABILITY.values()))
+LIFEPATH_TEMPLATES = _load_lifepath_templates(table("lifepath_templates"), LIFEPATHS, VOCATIONS)
 # v9 FI-01 (`ED-FI-0009`, J-22 (A)): inquiry verb -> `{provider, module_entry}`, the roll that grades
 # it with no prize. Validated against the verb table at load (`data/verbs.py`) and against the prize
 # rows at driver construction (`manifest/registry.py::check_graded_inquiries`); read by
@@ -1294,9 +1296,9 @@ ENDINGS = _load_endings(roster_map("endings", "members"), FACTIONS, RUNG_KINDS, 
 
 
 #: `{alias: canonical}` over the `token_class: faction` rows -- the naming leaf's map, read where an authored
-#: `faction:` string meets the roster (`cast.py::_ALIAS_MAP` is the same relation for a cast cell).
+#: `faction:` string meets the roster (`cast.py` reads this same relation for a cast cell).
 from engine.substrate import names as _faction_names  # noqa: E402
-_FACTION_ALIAS = {a: c for a, c in _faction_names.ALIASES.items() if c in _faction_names.FACTIONS}
+FACTION_ALIAS = {a: c for a, c in _faction_names.ALIASES.items() if c in _faction_names.FACTIONS}
 
 
 def office_faction(body: str | None, declared: str | None) -> str:
@@ -1316,7 +1318,7 @@ def office_faction(body: str | None, declared: str | None) -> str:
     # BEFORE it is compared with a body's derived faction, so `body: "Imperial Court"` with `faction: Crown`, legal
     # before CR-86, stays legal; the many corpus cases that say `faction: Crown` keep saying it.
     if isinstance(declared, str):
-        declared = _FACTION_ALIAS.get(declared, declared)
+        declared = FACTION_ALIAS.get(declared, declared)
     if body is not None:
         require_member(
             body,

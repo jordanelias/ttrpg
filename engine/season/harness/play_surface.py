@@ -33,7 +33,7 @@ moves it.
 """
 from __future__ import annotations
 
-from typing import Any, Callable, MutableMapping, Mapping, Optional, Sequence
+from typing import Any, Callable, MutableMapping, Mapping, Sequence
 
 from ..gaps import Forbidden
 from ..queries.world_q import continuations

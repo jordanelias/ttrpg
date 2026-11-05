@@ -45,13 +45,16 @@ def resolve(reg, name_or_key):
     resolves too, to its entry with `deprecated: True` -- never silently None, never counted in the
     roster (`all_attributes`/`by_category` read the live lists only)."""
     n = str(name_or_key).strip().lower()
+
+    def hit(e):
+        return (e['key'].lower() == n or e['name'].lower() == n
+                or any(a.lower() == n for a in e.get('aliases', [])))
+
     for e in all_attributes(reg):
-        if (e['key'].lower() == n or e['name'].lower() == n
-                or any(a.lower() == n for a in e.get('aliases', []))):
+        if hit(e):
             return e
     for e in (reg['attributes'].get('retired') or []):
-        if (e['key'].lower() == n or e['name'].lower() == n
-                or any(a.lower() == n for a in e.get('aliases', []))):
+        if hit(e):
             return {**e, 'domain': 'actor', 'kind': 'attribute_scalar', 'deprecated': is_deprecated(reg, e['key'])}
     return None
 

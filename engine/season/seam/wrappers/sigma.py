@@ -98,7 +98,7 @@ from ...queries.inputs import Margin, SocialContestInput
 # v9 SC-02 `22a`: the room's two resolver-side reads, the precedent `seam/wrappers/mass_battle.py`'s
 # `world_q.mustered` set. The host READS them; the module composes the obstacle they move.
 from ...queries.world_q import practice, proofs, reception
-from ...state.carriers import effort_of
+from ...state.carriers import EFFORT, effort_of
 from ._entry import entry_for
 
 # The prize rows' `provider:` string (`rosters.yaml` `contest_subsystems`): the module's one identity
@@ -201,14 +201,14 @@ def _effort_levels(fx: Any, operands: dict) -> list:
     """`effort`'s levels (CP-T01-05): an act at effort `e` brings `e` copies of the `effort_level` fixture
     (a `sigma_leverage.LEVEL_SIGMA` name, shipped `moderate`) -- one named level per slot of effort. None at
     effort 0, so the shipped chooser, which forms no effort, adds nothing."""
-    return [fx.get("effort_level")] * int(operands.get("effort", 0))
+    return [fx.get("effort_level")] * int(operands.get(EFFORT, 0))
 
 
 # THE ADVANTAGE CHANNEL'S BINDING: each member of `rosters.yaml: advantage_sources` -> the function that
 # returns the named levels it brings to an act, `fn(fixtures, operands) -> [level name, ...]`. THE ROSTER IS
 # THE CLOSED SET AND THIS IS ITS BINDING: refused at import if the two disagree, so a member with no function
 # (it would silently add nothing) and a function with no member (it would silently never run) are both loud.
-ADVANTAGE_SOURCES = {"effort": _effort_levels}
+ADVANTAGE_SOURCES = {EFFORT: _effort_levels}
 if set(ADVANTAGE_SOURCES) != set(roster("advantage_sources")):
     raise Unspecified(
         f"`advantage_sources` members {sorted(roster('advantage_sources'))} and "
@@ -280,7 +280,7 @@ def _frame(fx: Any, pool: int, opposition: Optional[float], forgery_quality: flo
         obstacle_ceiling=fx.get("obstacle_ceiling"),
         ceiling_per_pool=fx.get("ceiling_per_pool"),
         obstacle_refusal_multiple=fx.get("obstacle_refusal_multiple"),
-        leverage=advantage_sigma(fx, {"effort": effort}),      # the one place the operands are named
+        leverage=advantage_sigma(fx, {EFFORT: effort}),      # the one place the operands are named
         forgery_quality=forgery_quality, **room_terms)
 
 
