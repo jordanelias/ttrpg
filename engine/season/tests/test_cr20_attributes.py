@@ -149,9 +149,12 @@ def test_the_loader_refuses_a_vocation_with_no_row_a_non_vocation_row_and_a_non_
 # ======================================================================================
 
 def test_a_legacy_spelling_resolves_to_its_key_and_a_range_reads_its_lower_bound():
-    got = cast.attributes_of({"id": "X", "stats": {"cognition": 5, "focus": 5, "endurance": 4, "social": "3–4"}})
+    got = cast.attributes_of({"id": "X", "stats": {"cognition": 5, "focus": 5, "endurance": 4, "presence": "3–4"}})
     assert got == {"attr.mind.acuity": 5, "attr.mind.focus": 5, "attr.body.endurance": 4,
                    "attr.social.charisma": 3}
+    # `social` is the category (`agg.social`), not an attribute: it refuses rather than guessing one of three
+    with pytest.raises(Exception):
+        cast.attributes_of({"id": "X", "stats": {"social": "3–4"}})
     assert cast.attributes_of({"id": "X", "stats": {"Reason": 2, "Spirit": 7, "attr.social.grace": 1}}) == {
         "attr.mind.acuity": 2, "attr.mind.will": 7, "attr.social.grace": 1}
 
@@ -174,7 +177,7 @@ def test_no_row_and_no_stats_are_absent_and_the_shipped_cast_parses():
     every = {cid: cast.attributes_of(r) for cid, r in cast.load().items()}
     assert len(every) == 46 and sum(bool(v) for v in every.values()) >= 1, "the registry read no value at all"
     assert every["NPC-001"] == {"attr.mind.acuity": 5, "attr.mind.focus": 5, "attr.body.endurance": 4,
-                                "attr.social.charisma": 3}
+                                "attr.social.attunement": 3, "attr.social.charisma": 3, "attr.social.grace": 3}
     assert all(set(v) <= set(descriptors.ATTRIBUTES) for v in every.values())
 
 

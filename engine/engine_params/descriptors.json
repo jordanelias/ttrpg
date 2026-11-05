@@ -51,7 +51,6 @@
       "presence": "attr.social.charisma",
       "reason": "attr.mind.acuity",
       "reasoning": "attr.mind.acuity",
-      "social": "attr.social.charisma",
       "spirit": "attr.mind.will",
       "strength": "attr.body.strength",
       "vitality": "attr.body.endurance",

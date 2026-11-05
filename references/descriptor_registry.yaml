@@ -49,7 +49,7 @@ attributes:
   social:
     - {key: attr.social.attunement, name: Attunement, aliases: []}                 # reading people
     # `Influence` is not an attribute (it was `fac.influence`'s name); see names_index.yaml.
-    - {key: attr.social.charisma,   name: Presence,   aliases: [Charisma, Social]}   # 'Social': the cast's legacy four-stat spelling (npc_registry.yaml NPC-001 `social:`), which resolved to nothing until CR-20 [ASSUMPTION; medium; Jordan to correct; revert: drop the alias, and NPC-001's `social:` refuses at build]
+    - {key: attr.social.charisma,   name: Presence,   aliases: [Charisma]}   # NOT 'Social': that is `agg.social`'s name (names_index.yaml), and NPC-001's legacy `social: 3-4` is the whole category, not this attribute (see her row)
     - {key: attr.social.grace,      name: Grace,      aliases: []}                 # composure, calm, etiquette, manners; NOT the alias 'Composure' (the knot track)
   # RETIRED attribute: NOT in the roster (the count is ten) and still RESOLVED -- `tools/descriptor_registry.resolve`
   # returns it with `deprecated: true` (read from the `deprecated:` list below, the one retirement mechanism), so a

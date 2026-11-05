@@ -1405,22 +1405,31 @@ rosters:
       EACH ROW'S GROUND, so a reviewer can check it against the vocation's own text and not against taste:
       `copying` -> Focus (`attr.mind.focus`): the vocation is `tell`/`speak` (a claim relayed as it was
       held) and NPC-088's case, a repeated multi-week task of copying a text (`cases/exercises/NPC-088.yaml`),
-      i.e. sustained, exact attention to a thing so that it is reproduced unchanged; no other of the ten
-      names that. `argue` -> Presence (`attr.social.charisma`): `argue` MOVES THE HEARER'S `Person.pursuits`
-      toward the arguer's by the contest's degree, and the verb row holds that a pursuit is *"moved by
-      argument and consequence, never by evidence"* (`verb_table.yaml` `argue` `writes_note`, #353 §9.3 /
-      AX-3), so the faculty that decides it is the arguer's bearing before a hearer, not the proof he holds
-      (proof is the room's term, `proofs`, composed into the obstacle already). `inquiry` -> Reason
-      (`attr.mind.acuity`): its three verbs are the fieldwork inquiries whose source rows are headed
-      *Examine · Cognition*, *Research · Recall*, *Surveil · Cognition* (`verb_table.yaml` `examine` /
-      `research` / `surveil` `requires_typed_note`, `fieldwork_v30.md:293-296`), and `Cognition` is
-      Reason's registry alias.
+      i.e. sustained, exact attention to a thing so that it is reproduced unchanged. `argue` -> Attunement
+      (`attr.social.attunement`, "reading people"): `argue` MOVES THE HEARER'S `Person.pursuits` toward the
+      arguer's by the contest's degree, and the verb row holds that a pursuit is *"moved by argument and
+      consequence, never by evidence"* (`verb_table.yaml` `argue`, #353 section 9.3 / AX-3); the subsystem's
+      own design sets the Argue pool's attribute by adjudicator -- an expert or panel Cognition, a crowd
+      Charisma, and NO adjudicator, a private appeal to one counterparty, Attunement
+      (`.designs/systems/social_contest/reference/social_contest_v30.md:40-47`) -- and the engine's `argue`
+      is the last shape: the hearer is the counterparty and his pursuits are what move. (Proof is the
+      room's term, `proofs`, composed into the obstacle already.) `inquiry` -> Reason (`attr.mind.acuity`):
+      its three verbs are the fieldwork inquiries whose source rows are headed *Examine · Cognition*,
+      *Research · Recall*, *Surveil · Cognition*
+      (`.designs/systems/fieldwork/reference/fieldwork_v30.md:301,303,304`; `verb_table.yaml` `examine` /
+      `research` / `surveil` `requires_typed_note`), and `Cognition` is Reason's registry alias; `Recall`
+      is not among the ten.
       [ASSUMPTION; medium; Jordan to correct; revert: delete this roster and the loader, and `faculty` /
-      `_opposition_of` read the held capability key alone, as before CR-20.] The closest competitor for
-      `copying` is Coordination (a copyist's hand) and for `argue` is Reason; each is the cheap swap.
+      `_opposition_of` read the held capability key alone, as before CR-20.] The competitors, each the
+      cheap swap: `copying` -- Coordination (a copyist's hand) or Presence (`tell` is thrown against the
+      hearer's standing, `verb_table.yaml` `tell`); `argue` -- Presence (a crowd) or Reason (a judge);
+      `inquiry` -- Perception for `surveil` ("awareness of surroundings, noticing information",
+      `references/descriptor_registry.yaml`). Focus, Reason and Presence carry no registry description, so
+      no row rests on one. Checked by a read-only pass at CR-20's close; the pass changed `argue` and the
+      two citations.
     values:
       copying: "attr.mind.focus"
-      argue:   "attr.social.charisma"
+      argue:   "attr.social.attunement"
       inquiry: "attr.mind.acuity"
 
   contest_subsystems:

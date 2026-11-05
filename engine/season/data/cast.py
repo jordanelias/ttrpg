@@ -324,11 +324,11 @@ def attributes_of(r: dict) -> dict:
     registry's default.
 
     A spelling is read through the registry's own names (`substrate.descriptors.attribute_key`): the
-    cast's legacy `cognition` is Reason's `attr.mind.acuity`, `social` is Presence's. A name that is NONE
+    cast's legacy `cognition` is Reason's `attr.mind.acuity`; `social` is the category `agg.social`, not an attribute, and resolves to nothing. A name that is NONE
     OF THE TEN (a retired `bonds` included), two spellings of one key, or a value that is no whole number
     inside the attribute scale REFUSES, naming the row -- this module reads and validates, it does not
     guess. A range `A–B` reads as its lower bound (`thread_sensitivity_of`'s rule, the registry's own
-    NPC-001 `social: 3–4`); a float, a bool and a numeric string refuse."""
+    NPC-001 `attunement: 3–4`); a float, a bool and a numeric string refuse."""
     raw = (r or {}).get("stats")
     if raw is None:
         return {}

@@ -62,7 +62,9 @@ characters:
       cognition: 5
       focus: 5
       endurance: 4
-      social: 3–4
+      attunement: 3–4   # edeyja_npc.md:33 "All social attributes: moderate (3–4)": the whole category, so all three of its keys
+      presence: 3–4
+      grace: 3–4
     convictions:
       primary:
         - {conviction: stewardship, weight: 0.40}
@@ -461,7 +463,7 @@ characters:
     title: Doux
     age: null  # [GAP]
     birthplace: Altonia
-    heritage: altonian  # this row's own `birthplace: Altonia`
+    heritage: altonian  # this row's own text: `birthplace: Altonia`, title "Doux (Altonian Prince)"; birthplace alone is not descent
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
@@ -501,7 +503,7 @@ characters:
     status: canonical
     age: null  # [GAP]
     birthplace: Schoenland
-    heritage: schoenlander  # this row's own `birthplace: Schoenland`
+    heritage: schoenlander  # this row's own text: `birthplace: Schoenland`, "Return home eventually" and homesickness; birthplace alone is not descent
     territory: T16 (Schoenland)
     ts: null  # [GAP]
     coherence: null  # [GAP]
