@@ -18,8 +18,10 @@ WHAT IT HASHES
 Families vary kits, armour, skills/traditions/equipped abilities, duel terms and a declared yield. Every fight
 has its own `random.Random(seed)`, so a family's rows do not depend on its neighbours. Stdlib only.
 
-BLIND TO: a draw that moves no outcome (a trailing draw no later roll reads). An inserted mid-fight draw shifts every
-later draw in that fight's own `Random` and is visible.
+BLIND TO: code no family reaches, and state that moves no outcome (stamina, poise, initiative, concentration, trace
+content), and a draw that moves no outcome (a trailing draw no later roll reads). Equality says no REACHED fight moved,
+not that deleted code was dead: that is the static argument's job. An inserted mid-fight draw shifts every later draw
+in that fight's own `Random` and is almost always visible.
 
 THE FALSIFIER: two runs on an unchanged tree must print the same identity hash; if they differ the instrument
 cannot see, and nothing measured with it means anything.
@@ -83,11 +85,11 @@ def run_family(index, fam, n):
             kw['yield_decl'] = wrapper.Yield(A if fk['yield_by'] == 'A' else B, turn=fk['yield_turn'])
         rng = random.Random(1000003 * (index + 1) + i)
         trace = []
-        wrapper._TRACE = trace.append
+        prev_trace, wrapper._TRACE = wrapper._TRACE, trace.append
         try:
             result = wrapper.fight(A, B, rng=rng, **kw)
         finally:
-            wrapper._TRACE = None
+            wrapper._TRACE = prev_trace
         kinds.update(e['kind'] for e in trace)
         rows.append(dict(family=name, i=i, result=result,
                          A_damage=A.wt.cumulative_damage, B_damage=B.wt.cumulative_damage,

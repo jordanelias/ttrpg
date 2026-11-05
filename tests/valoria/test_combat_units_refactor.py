@@ -11,7 +11,8 @@ identity-sweep fixture built ONCE pre-edit on the post-#72 tree (the §4 process
 mechanism; later byte-identical increments reuse the same fixture). The fixture stores all
 lengths in METRES (unit-invariant), so it compares directly on both sides of the conversion.
 NEVER hand-edit the fixture; a deliberate re-baseline increment (U1/U2/U9) regenerates it with
-recorded reasons.
+recorded reasons. PC-11 removed the `can_choke` key (54 rows, no value changed): a key REMOVAL for a deleted
+primitive is the one hand-edit this fixture has had.
 """
 import json
 import math
@@ -113,7 +114,7 @@ def test_units_refactor_byte_identical():
         _cmp(errs, n, 'systems.lunge_quality', g['systems']['lunge_quality'], S.lunge_quality(c2, CFG))
         _cmp(errs, n, 'systems.grip_target_closed', g['systems']['grip_target_closed'], S.grip_target(c2, True, CFG))
         # PC-11: `systems.can_choke` (a bool over this primitive) is deleted with its golden row; the golden's
-        # `grip_choke_max` is the pinned fact and "can gather in" is its sign, so the sign is what is compared.
+        # `grip_choke_max` is the pinned fact and "can gather in" is its sign, so the sign is what is compared (implied by the exact `grip_choke_max` compare above; kept because the plan retargets it).
         _cmp(errs, n, 'grip_choke_max>0', bool(g['grip_choke_max'] > 0.0), WP.grip_choke_max(c2.w) > 0.0)
         _cmp(errs, n, 'systems.grab_short_reach', g['systems']['grab_short_reach'],
              bool(w['head_len'] <= CFG['GRAB_SHORT_REACH_M']))
