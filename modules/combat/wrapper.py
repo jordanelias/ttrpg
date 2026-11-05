@@ -25,7 +25,7 @@ def _wound(source, by, victim, damage):
     displace_graze, exchange, bind); `by` is the striker. Draws nothing and keeps no state: concentration drain,
     stagger and every other per-site effect stay at their sites."""
     victim.apply_wound(damage)
-    if _TRACE is not None and damage > 0 and int(damage) > 0:
+    if _TRACE is not None and int(damage) > 0:
         _emit('wound', by=by.label, victim=victim.label, damage=int(damage), source=source,
               wounds=victim.wt.wounds, cumulative=victim.wt.cumulative_damage, felled=bool(victim.felled))
 

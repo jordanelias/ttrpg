@@ -224,17 +224,10 @@ if __name__ == '__main__':
             _, ev = run_traced_fight(A, B, seed=s)
             fired |= fired_states_from_events(ev); reasons |= separation_reasons_from_events(ev)
     # PC-13: the duel-terms fight ('terms' separation + the terms yield) and the decider's withdraw (Withdrawal), both
-    # through wrapper.fight, which run_traced_fight does not expose.
-    import random as _random
+    # through run_traced_fight's `**fight_kw`.
     import wrapper as _W
     def _traced(A, B, seed, **kw):
-        ev, prev = [], _W._TRACE
-        _W._TRACE = ev.append
-        try:
-            _W.fight(A, B, None, _random.Random(seed), **kw)
-        finally:
-            _W._TRACE = prev
-        return ev
+        return run_traced_fight(A, B, seed=seed, **kw)[1]
     for s in range(30):
         ev = _traced(Combatant('A', weapon='arming'), Combatant('B', weapon='sabre'), s, terms='blood')
         fired |= fired_states_from_events(ev); reasons |= separation_reasons_from_events(ev)
