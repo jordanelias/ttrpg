@@ -636,6 +636,9 @@ class Scene:
         return extended_cost if self.slots > 1 else self.PLAIN_COST
 
 
+EFFORT = "effort"       # the payload key (`Candidate.operands` -> `Act.payload`) `effort_of` reads and `decision/choose.py` forms
+
+
 def effort_of(act: "Act") -> int:
     """The `effort` an act carries in its payload: a whole number of extra scene slots, `0` when it carries
     none (CP-T01-05). The one reader of the field -- `Scene.slots` counts it and `loop/resolve.py` hands it
@@ -644,7 +647,7 @@ def effort_of(act: "Act") -> int:
     be deciding for the caller. The upper bound is not here: it is the scene's own, `interactions_per_scene`
     (an act at effort `e` needs `1 + e` of them), checked in DELIBERATE."""
     payload = act.payload if isinstance(act.payload, dict) else {}
-    e = payload.get("effort")
+    e = payload.get(EFFORT)
     if e is None:
         return 0
     if isinstance(e, bool) or not isinstance(e, int) or e < 0:

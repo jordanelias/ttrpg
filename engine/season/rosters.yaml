@@ -2502,6 +2502,17 @@ rosters:
       attempt, a prize another module rolls) keeps the term as it was.
     values: [none, believed]
 
+  npc_efforts:
+    source: >-
+      v10 CP-T01-05, the NPC half (B10-10; `H-249`, taken at `CLAUDE.md` section 0's ladder step 5: the plan is silent on
+      the rule): whether the computed chooser may form an `effort` act.
+    note: >-
+      THE ARMS OF `Fixtures.npc_effort`, read by `decision/choose.py::settle_efforts`. `off` is the CONTROL: the chooser
+      forms no effort (the pre-NPC-half tree). `on` offers, for a contested candidate a believed chance can price,
+      the variants at effort 1 .. `interactions_per_scene` - 1 beside the base, scored by the same score (so by CR-17's
+      believed chance, `odds_weighting`) and priced by the acts they displace; the best of base and variants is kept.
+    values: ["off", "on"]
+
   said_slants:
     source: >-
       v9 IN-18 `G3` (telling workplan §5, `ED-IN-0282`): *"slant -- the strongly valenced older
