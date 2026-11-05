@@ -231,15 +231,17 @@ def _told_value(w, pid: str, e: Event, held, told_hash: str = None, stem: str = 
     return held.value  # nothing either mechanism can act on -- deposited verbatim, honestly
 
 
-def _refract(c: Claim, p, channel: str, gain: float, act=None, weigh=None) -> Claim:
+def _refract(c: Claim, p, channel: str, gain: float, act=None, weigh=None,
+             competence_gain: float = 0.0) -> Claim:
     """`c` AS THIS WITNESS RECEIVES IT: `c` with `decision/options.py::refracted_confidence`'s
     confidence (v9 IN-15, `AX-7`'s divergence formula; `H-199`). The one place every deposit below
     passes through, so the six `Claim` constructions share one rule rather than six. The caller
     decides WHETHER to refract (the gain is live and the witness is not the act's own actor); this
     decides HOW MUCH, and only the confidence moves -- id, value, source and chain are `c`'s.
     `act`/`weigh` reach `dissents`' act-level term (`H-201`): passed by the two deposits that report
-    an act happening (event-kind and `seen`), `None` from the other three."""
-    return replace(c, confidence=refracted_confidence(p, c, channel, gain, act, weigh))
+    an act happening (event-kind and `seen`), `None` from the other three. `competence_gain` is `H-200`'s
+    (CR-19), read once per barrier by the caller and passed to every site alike."""
+    return replace(c, confidence=refracted_confidence(p, c, channel, gain, act, weigh, competence_gain))
 
 
 def _happened(act, e: Event):
@@ -287,6 +289,7 @@ def _found_claims(self, w, e: Event, claim_rule: str, conf, mode: str, gain):
     if p is None:
         return
     src = CHANNEL_CLAIM_SOURCE[FOUND_CHANNEL]
+    cgain = float(w.fixtures.get("competence_gain"))   # `H-200`, as `witness` reads it
     for fid, terms in found:
         f = event_by_id(w, fid)
         if f is None or holds_trail(w, p, f, claim_rule):
@@ -310,7 +313,7 @@ def _found_claims(self, w, e: Event, claim_rule: str, conf, mode: str, gain):
             out.append(Claim(H(w.world_seed, w.tick, pid, f"found_seen:{e.id}:{fid}"), pid, subj,
                              SEEN_PREDICATE, masked, w.tick, src, conf, "own", self.round, doer=None))
         for c in out:
-            yield p, f, (_refract(c, p, FOUND_CHANNEL, gain, prior_act, prior_weigh)
+            yield p, f, (_refract(c, p, FOUND_CHANNEL, gain, prior_act, prior_weigh, cgain)
                          if refracting else c)
 
 
@@ -384,6 +387,9 @@ def witness(self, token: Token, events: list[Event]) -> int:
     # is. `0` is the control (0.5 ships, H-199): no deposit is refracted and the barrier is the
     # pre-IN-15 one exactly (no `actor_of` call, no ledger scan).
     gain = w.fixtures.get("refraction_gain")
+    # v10 CR-19 / `H-200`: THE COMPETENCE GAIN, read once per barrier beside `gain` and passed to every
+    # `_refract` alike. `0` is the control and SHIPS: the receiver's Attunement scales nothing.
+    cgain = float(w.fixtures.get("competence_gain"))
     # v9 IN-18 `G6` / `H-197`: THE CONFIDENCE CHANCE, read and range-checked once per barrier,
     # beside `gain`, for the same reason; `_circle_of` (its docstring) owns what it does.
     privacy = float(w.fixtures.get("telling_privacy"))
@@ -643,7 +649,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
             c = Claim(cid, pid, subj, e.kind, True, w.tick, src, conf, "own", self.round,
                       doer=doer)
             if refracting:
-                c = _refract(c, p, channel, gain, prior_act, prior_weigh)
+                c = _refract(c, p, channel, gain, prior_act, prior_weigh, cgain)
             # `W4`. THE DEPOSIT EMITS, AND THAT IS WHAT GIVES A DECAY AN ANTECEDENT.
             # Part D declares `claim.deposited` on this row and NOTHING EMITTED IT, so a
             # claim entered the world uncaused — and every later `claim.decayed` would have
@@ -762,7 +768,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
                            pid, o.subject, o.predicate, o.value, w.tick, src, conf, "own",
                            self.round, doer=doer)   # `U2`: see the deposit above
                 if refracting:
-                    oc = _refract(oc, p, channel, gain)
+                    oc = _refract(oc, p, channel, gain, competence_gain=cgain)
                 w.write("claim_ledger", token,
                         lambda p=p, c=oc: p.ledger.append(c),
                         record_kind="Person", fieldname="claim_ledger", driver="Event",
@@ -785,7 +791,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
                        pid, _seen[0], SEEN_PREDICATE, _seen[1], w.tick, src, conf, "own",
                        self.round, doer=doer)   # `U2`: see the first deposit
             if refracting:
-                sc = _refract(sc, p, channel, gain, prior_act, prior_weigh)
+                sc = _refract(sc, p, channel, gain, prior_act, prior_weigh, cgain)
             w.write("claim_ledger", token,
                     lambda p=p, c=sc: p.ledger.append(c),
                     record_kind="Person", fieldname="claim_ledger", driver="Event",
@@ -814,7 +820,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
                        pid, rec.id, pred, said, w.tick, src, conf,
                        "own", self.round, doer=doer)   # `U2`: see the first deposit
             if refracting:
-                dc = _refract(dc, p, channel, gain)
+                dc = _refract(dc, p, channel, gain, competence_gain=cgain)
             w.write("claim_ledger", token,
                     lambda p=p, c=dc: p.ledger.append(c),
                     record_kind="Person", fieldname="claim_ledger", driver="Event",
@@ -965,7 +971,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
                                "told_by", _held.confidence, _circle or "own", self.round,
                                chain=_held.chain + (_act.actor,))
                     if refracting:
-                        tc = _refract(tc, p, channel, gain)
+                        tc = _refract(tc, p, channel, gain, competence_gain=cgain)
                     w.write("claim_ledger", token,
                             lambda p=p, c=tc: p.ledger.append(c),
                             record_kind="Person", fieldname="claim_ledger", driver="Event",

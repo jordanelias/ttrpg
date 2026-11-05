@@ -987,6 +987,15 @@ DEFAULT_FIXTURES = Fixtures(
     # outside it).
     # [JUSTIFIED: engine/season/hole_register.yaml H-199 -- the refraction gain; AX-7 rules THAT channel, competence and prior belief govern divergence and H-36 that it is receiver-side, and no document gives how much, so it is injected and swept 0 / 0.5 / 1.0; shipped live at 0.5 per Jordan's 2026-10-09 ruling]
     refraction_gain=0.5,               # `H-199`, swept 0 (control) / 0.5 (SHIPPED) / 1.0
+    # `H-200` (v10 CR-19, `AX-7`'s competence; `ED-IN-0327`). HOW FAR THE RECEIVER'S ATTUNEMENT SCALES THE
+    # CONFIDENCE A TOLD CLAIM LANDS AT: `decision/options.py::refracted_confidence`'s `competence` factor =
+    # `min(1, 1 + g*(attunement - mid)/(mid - floor))`, `mid`/`floor` the attribute scale's (`descriptors.py`),
+    # a receiver with no authored Attunement reading 1. `0` is the CONTROL AND IT SHIPS (the knowledge-model
+    # fold, `proposals/2026-11-04-knowledge-model-build-plan.md` §11 item 4): the factor is in place and the
+    # flip to a live gain waits on CR-83's design, because a person-side gain cannot tell a lie from a truth
+    # (`H-200`'s cite). Read only where `refraction_gain` refracts a deposit. Must lie in [0, 1].
+    # [JUSTIFIED: engine/season/hole_register.yaml H-200 -- the competence gain; AX-7 rules THAT the reader's competence governs divergence and ED-IN-0327 that Attunement helps judge truthfulness, and no document gives how much, so it is injected and swept 0 / 0.5 / 1.0; shipped at the control 0 until CR-83's design gives a lie/truth separator]
+    competence_gain=0.0,               # `H-200`, swept 0 (control, SHIPPED) / 0.5 / 1.0
     # `H-159` (plan position `17b`, `04 §B.8`'s `term?`; `T-n`, `architecture/meta/01_AXIOMS.md`:
     # *"the opening act declares the terms"*). HOW MANY SEASONS AN `oblige` RUNS BEFORE IT MATURES
     # UNPAID -- the term `_eff_oblige` declares on the edge it opens (`matures_at = tick + this`),
