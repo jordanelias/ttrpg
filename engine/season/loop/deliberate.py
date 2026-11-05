@@ -139,11 +139,18 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
         # act's shape, so the chooser holds a callable answering for its holder and never the store (AX-2), and
         # `choose` keeps its four parameters. Whether it is ASKED is `Fixtures.odds_weighting`'s
         # (`decision/choose.py::odds_weight`); at `none` nothing calls it and the closure costs a lambda.
-        # `04` §A.2 gives this loop the frozen store "for `sense` only" and §C.11 says the View adds nothing:
-        # the two rows are read here as admitting a host-made query on the View, the pick `layer-conformance` B4
-        # asks to be named at the site; a per-person projection built at barrier 2 would have to enumerate
-        # the candidates before the chooser forms them. [ASSUMPTION; medium; revert: `odds_weighting` -> `none`,
-        # one re-pin (H-248)]
+        # B4, NAMED AT THE SITE (`layer-conformance`): `04` §C.11's "split that holds is on what is shown" decides this
+        # symbol in two rows. "what the person holds | `AX-2`, absolutely. The `View` is `ClaimId[]`; nothing is added and
+        # no resolver-side Query becomes visible" -- and "why what they hold says what it says | not information about
+        # the world. It is the derivation of a value the character already has, and displaying it adds no world truth".
+        # §A.2's `loop/deliberate` row adds "frozen `World`, for `sense` only". A believed chance is the arithmetic of
+        # the pool and the capability claims he holds (`believed_input`), the second row's case; its act-shape reads
+        # (`sides_of`, `person_subject`) and his own-acts `practice` addend are the departure, declared in `sigma.odds_of`.
+        # PICKED: the second row governs, as a host-made query on the View bound to its holder. Grade: CONVENTION (no
+        # scan sees a callable on a View; `test_season_shape.py`'s AX-2 scans match the token `World` only), columns
+        # read: §A.2's `decision/` and `loop/deliberate` may-read cells, §C.11's two rows. The code-side alternative
+        # (a per-person projection at barrier 2) would enumerate candidates before the chooser forms them.
+        # [ASSUMPTION; medium; revert: `odds_weighting` -> `none`, one re-pin (H-248)]
         v = decision.assemble(p, q_p, k_view, questions=qs, odds=believed_odds_query(w, p))
         # S26.3: the PERSON asks their own budget. `choose` receives the QUERY, not the
         # answer -- rev 2 computed it in the engine and handed the number down, which is
