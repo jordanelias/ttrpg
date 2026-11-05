@@ -32,11 +32,13 @@ v9 IN-07 E3 adds `ProduceInput` in, `ProduceRow`/`ProduceOutcome` out, for `sett
 v9 IN-07 E4..E6 add `HousingInput`/`Housing`, `FabricInput`/`Fabric` and `FortInput` (its entry returns a
 `float`), for `settlements.housing`, `settlements.fabric` and `settlements.fortification`.
 v9 IN-52 adds `ProvisionInput` in, `Provision` out, for `settlements.provision` (the levy-to-field feed).
+v10 REM-31 (IN-46) adds, beside `PersonalCombatInput`, the PLAYABLE fight's pair: `PlayHost` (the host's one
+optional argument) and `CombatTurnView` (what its per-turn decider reads, handed outward by the module entry).
 """
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Mapping, Optional
+from typing import Callable, Mapping, Optional
 
 
 @dataclass(frozen=True)
@@ -124,6 +126,40 @@ class PersonalCombatInput:
     claimants: tuple
     ends: tuple
     wound_quantities: tuple
+
+
+@dataclass(frozen=True)
+class CombatTurnView:
+    """What a PLAYABLE fight's per-turn decider reads, and nothing else (v10 REM-31, IN-46).
+
+    Built by the `combat` module entry (`modules/combat/fight.py::fight`) at the top of each turn, before
+    any draw of that turn, and handed OUTWARD to the host's decider -- the one record that crosses the
+    module boundary in that direction. It names the quantities the input record already names and the
+    turn index, never a `Combatant` (the design's `## Re-read at B-L`, [ASSUMPTION]):
+      * `turn`        -- the 1-based turn about to be fought;
+      * `claimants`   -- `PersonalCombatInput.claimants`, `(A, B)`;
+      * `wound_state` -- `{id: {quantity: value}}` over `PersonalCombatInput.wound_quantities`, a fresh copy
+                         per call, so a decider that mutates it moves nothing in the engine."""
+    turn: int
+    claimants: tuple
+    wound_state: Mapping
+
+
+@dataclass(frozen=True)
+class PlayHost:
+    """THE HOST'S ONE OPTIONAL ARGUMENT for PLAYABLE (v10 REM-31, IN-46; A-25's *"a `game/` scene for which
+    the driver suspends"*). `SeasonDriver.season(..., host=)` threads it to ENCOUNTER alone, through
+    `_contest` and `seam/contest.py::contest` to the provider, the path `contest_max_depth` already takes.
+      * `persons` -- the ids the host plays. The mode is a PARTY TEST at the provider
+                     (`seam/wrappers/combat.py::resolve`): a fight either of whose claimants is in this
+                     set is PLAYABLE; every other fight, and every fight with no host, is AUTOMATED;
+      * `decide`  -- `(CombatTurnView) -> str`, one member of the engine's closed per-turn set
+                     (`modules/combat/wrapper.py::TURN_CHOICES`). It draws nothing, writes nothing and
+                     holds no token: it is called inside the provider's frame, with the driver below it on
+                     the stack (a call-out, not a return), and its return is the only resume.
+    Nothing records the mode: no Event, id purpose, carrier or `RESOLVED` field names it."""
+    persons: frozenset
+    decide: Callable
 
 
 @dataclass(frozen=True)

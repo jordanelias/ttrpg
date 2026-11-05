@@ -2922,7 +2922,11 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # season: 619 -> 685 in both arms; `test_go07_canonical_digest.py` records the 685). CONTROL: `choice_temperature` swept
     # back to 0.1 reads 619 on the shipped arm (`test_go07_canonical_digest.BASE[0]` before this row, read in process); the
     # second arm was not run under the control.
-    assert (out["acts"], cout["acts"]) == (685, 685), (
+    # ⚠⚠ v10 REM-31 (IN-46): (685, 685) -> (700, 700), A RE-RECORD WITH THE UNIT THAT MOVED IT: `the body` defers every fight to
+    # ENCOUNTER (`march`'s pair), so each fight is declared at RESOLVE and fought on the round's settled world, and the act mix moves
+    # (seed 0, one season: 685 -> 700 in both arms; `test_go07_canonical_digest.py` records the 700). CONTROL: `the body`'s
+    # `step:`/`declares:` popped in process reads (685, 685) under this same test.
+    assert (out["acts"], cout["acts"]) == (700, 700), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")

@@ -67,6 +67,13 @@ from ..trace_log import TRACE
 
 
 # -- DELIBERATE -- a MAP, not a barrier (S26) ---------------------------
+def deliberation_order(w: World) -> list[Person]:
+    """The order DELIBERATE's per-person map visits persons: the store's own. NOTHING MAY DEPEND ON IT
+    (`04` PART D row 41a; S51, the map is a WorkerThreadPool in the port), so the order is named once, here,
+    for the permutation falsifier to vary (v10 REM-31) -- never for a caller to choose an order by."""
+    return list(w.persons.values())
+
+
 def deliberate(self, choose: Callable[..., list[Act]], question: Any,
                questions: dict) -> list[Act]:
     w = self.w
@@ -116,7 +123,12 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
     per_round = w.fixtures.get("scenes_per_round")
     w._in_parallel_map = True       # S51: WorkerThreadPool over persons. The one that pays.
     ext = w.fixtures.get("extended_scene_cost")
-    for p in list(w.persons.values()):
+    # v10 REM-31 (`04` PART D row 41a): `choose` -- and through it a PLAYABLE host's own callback, which may
+    # block for its player's person (`harness/play_surface.py`) -- runs INSIDE this map. The map is a map only if
+    # what it returns does not depend on the order it visits persons, so the visit order is one named function
+    # and the permutation falsifier varies it (`tests/test_rem31_grid_suspension.py`: the `Scene` set and the
+    # season hash identical under a shuffle, PLAYABLE on and off; a callback writing shared state reds it).
+    for p in deliberation_order(w):
         s = sense(p, w)                         # a Sensation, per S26's signature
         # §F1 / `H-04`. `q` HAS A PRODUCER NOW. Rev 3 took the question as an injected
         # parameter because §61 recorded that DELIBERATE HAD NO DECLARED ENTRY POINT; the

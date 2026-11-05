@@ -124,7 +124,12 @@ def test_the_split_adds_challenge_and_accept_and_no_kill_or_wound_row():
     assert not V.VERB_TABLE["challenge"].contests
     # `accept` carries `fight`'s degree-keyed writes and emits by hand (the YAML has no inheritance)
     fight, accept = V.VERB_TABLE["fight"], V.VERB_TABLE["accept"]
-    assert accept.writes == fight.writes and accept.emits == fight.emits
+    assert accept.writes == fight.writes
+    # v10 REM-31: the `Declared` band (`the body` deferred to ENCOUNTER) names each verb's own declaration, as each
+    # names its own refusal; every band the scene reads is carried by hand, identical.
+    fe, ae = fight.emits_by_degree, accept.emits_by_degree
+    assert {b: k for b, k in ae.items() if b != "Declared"} == {b: k for b, k in fe.items() if b != "Declared"}
+    assert (fe["Declared"], ae["Declared"]) == (["fight.declared"], ["accept.declared"])
     assert not {"kill", "wound", "kill / wound"} & set(V.VERB_TABLE)
 
 

@@ -451,9 +451,12 @@ def believed_odds_query(w: Any, holder: Any):
 def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
             verb: str = "", subject: Optional[str] = None,
             rng: Optional[random.Random] = None, rung: Optional[str] = None,
-            module_entry: Optional[str] = None, effort: int = 0) -> dict:
+            module_entry: Optional[str] = None, effort: int = 0, host: Any = None) -> dict:
     """Roll for one contested act: build the record, call the module entry, hold its return to a
     `Margin`, refuse S27.4. Returns a net/ob pair, NEVER a band and never a winner.
+
+    `host` (v10 REM-31) is accepted and NOT USED HERE, as `rung` was: the seam's call is uniform, and only the
+    personal-combat provider has a PLAYABLE mode today (`seam/wrappers/combat.py::resolve`).
 
     `effort` is the act's own (CP-T01-05, `state/carriers.py::effort_of`, passed by `seam/contest.py`): it
     reaches only `contest_input`, where it becomes `leverage`; the act's draw is unchanged (one id, one draw).

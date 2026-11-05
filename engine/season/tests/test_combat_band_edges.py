@@ -329,8 +329,10 @@ def test_the_swept_fixture_reaches_the_fold():
         w.step = Step.RESOLVE
         w.fixtures = DEFAULT_FIXTURES.sweep("combat_wounded_above", arm)
         d = SeasonDriver(w)
-        evs = d.resolve(mint_token(d.w, WriteClass.ACTS),
-                        [Act(id="we0", actor="p_low", verb="fight", payload={"subject": "p_mid"})], 2)
+        # v10 REM-31: RESOLVE declares the fight (`the body`'s `step: ENCOUNTER`); the fight's Events are ENCOUNTER's.
+        evs = d.encounter(mint_token(d.w, WriteClass.ACTS),
+                          d.resolve(mint_token(d.w, WriteClass.ACTS),
+                                    [Act(id="we0", actor="p_low", verb="fight", payload={"subject": "p_mid"})], 2), 2)
         degrees[arm] = {e.degree for e in evs}
         kinds[arm] = {e.kind for e in evs}
         assert w.fixtures.reads.get("combat_wounded_above", 0) >= 1, "the fixture was never read"

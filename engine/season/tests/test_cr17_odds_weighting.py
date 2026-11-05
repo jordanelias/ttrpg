@@ -300,5 +300,6 @@ def test_none_and_tau_point_one_reproduce_the_parent_world_exactly():
     w = POP.build_realm(0)
     w.fixtures = w.fixtures.sweep("odds_weighting", "none").sweep("choice_temperature", 0.1)
     POP.run(seasons=1, seed=0, w=w)
-    assert w.content_hash().startswith("60a80834"), w.content_hash()   # CR-86 re-pin: was bdff0832... / 10316
-    assert len(w.log) == 10323
+    # REM-31 re-pin (every fight deferred to ENCOUNTER; `the body`'s `step:`/`declares:` popped in process reads the old pair): was 60a80834... / 10323
+    assert w.content_hash().startswith("543e1e43"), w.content_hash()   # CR-86 re-pin: was bdff0832... / 10316
+    assert len(w.log) == 10421
