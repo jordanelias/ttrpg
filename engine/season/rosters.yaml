@@ -1767,6 +1767,15 @@ rosters:
       an OFFICE BELONGS TO; the actor is always the person holding the office.
     # NO `values:` -- the members ARE `names_index.yaml`'s `token_class: faction` rows, read
     from_names: faction   # via engine/substrate/names.py. Edit the naming index, not here.
+    # CR-86 (ED-IN-0342): the seat whose live holder heads the faction (`queries/faction_q.py::head`). Keyed by the
+    # canonical faction name (Valorsmark is the Crown's: "Crown" is its alias). A faction absent here has no head
+    # seat authored (the Löwenritter, the Guilds, the Restoration Movement, Altonia, Schoenland) and `head` is None.
+    # [ASSUMPTION; medium; Jordan to correct; revert: the Church's head a Holy See seat if one is authored]
+    head_seat:
+      "Valorsmark": off_king
+      "Hafenmark": off_duchess_hafenmark
+      "Varfell": off_duke_varfell
+      "Church of Solmund": off_confessor
 
   role_templates:
     source: "`systems/factions/reference/faction_canon_v30.md` §4 'Role Templates and Expected Convictions', per PP-686 §3.3.1 over the PP-684 13-Conviction taxonomy."
@@ -1803,7 +1812,7 @@ rosters:
       # ⚠ `Varfell` AND `Löwenritter` SHARE `military-order`, WHICH IS CANON AND NOT A COLLISION.
       # §4: *"Both Varfell and Löwenritter use military-order template; their differentiation comes
       # from Mission, leader Convictions, and stat profile, not role template."*
-      "Crown": sovereign
+      "Valorsmark": sovereign
       "Church of Solmund": ecclesiastical
       "Hafenmark": mercantile-procedural
       "Varfell": military-order
@@ -1837,7 +1846,7 @@ rosters:
       vector. That is consistent rather than coincidental: a faction canon gives no head and no
       expectations has no creed to commit to, and this file does not invent one for it.
     by_faction:
-      "Crown": "NPC-020"                    # Almud Almqvist
+      "Valorsmark": "NPC-020"                    # Almud Almqvist
       "Church of Solmund": "NPC-021"        # Arne Himlensendt
       "Hafenmark": "NPC-050"                # Inge Baralta
       "Varfell": "NPC-052"                  # Magnus Vaynard
@@ -1914,11 +1923,11 @@ rosters:
     # which also carries its membership in its mapping. A body with no faction is not a body.
     faction:
       # --- Crown / realm government · worldbuilding_v30.md §6.1 ---
-      "Imperial Court": "Crown"
-      "Court Parliament": "Crown"
-      "Ministries": "Crown"
-      "Rectorates": "Crown"
-      "Praefectures": "Crown"
+      "Imperial Court": "Valorsmark"
+      "Court Parliament": "Valorsmark"
+      "Ministries": "Valorsmark"
+      "Rectorates": "Valorsmark"
+      "Praefectures": "Valorsmark"
       # --- Church of Solmund · worldbuilding_v30.md §3.1 ---
       "Holy See": "Church of Solmund"
       "Cardinal of Fortitude": "Church of Solmund"
@@ -1967,7 +1976,7 @@ rosters:
       # cell below, which nominates Ministers, reads against an organ rather than a list.
       # `harness/populated.py` points here and carries no count. ED-648 is not acted on here
       # (it reads `open` in the editorial ledger; the plan treats it as closed, and this note is the ruling's home).
-      "Inner Circle": "Crown"
+      "Inner Circle": "Valorsmark"
       "Inner Council": "Hafenmark"
       "Jarl Council": "Varfell"
     function:

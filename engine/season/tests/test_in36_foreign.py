@@ -177,7 +177,7 @@ def test_the_foreign_root_is_outside_the_realm_for_endings_and_the_uncontrolled_
     # would make the one-faction condition fail and `selected` would come back empty.
     sel = POP.build_realm(0, foreign=True)
     last = _all_but_one_under_the_crown(sel)
-    sel.add_tenure(Tenure("t_in36_last_crown", last, faction_prop_id("Crown"), "commit", 0))
+    sel.add_tenure(Tenure("t_in36_last_crown", last, faction_prop_id("Valorsmark"), "commit", 0))
     assert world_q.governing_hold(sel, root) is not None, "the empire's root must be HELD for this to bite"
     selected = {t.object for t in world_q._ending_edges(sel, ENDINGS["peninsular_sovereignty"]) if t.kind == "hold"}
     assert root not in selected and selected == set(_realm_territories(sel)) and len(selected) >= 15, selected
@@ -226,7 +226,7 @@ def test_the_natural_goal_question_forms_a_march_candidate_on_the_capital_for_th
 def test_a_march_formed_by_a_chooser_restricted_to_march_folds_to_the_mass_battle_entry():
     w = POP.build_realm(0, foreign=True)       # its own world: the driver below relocates the three Altonians
     target = "set_s_001"                  # Valorsplatz: Crown-held and peopled by Crown members (a fought field)
-    assert world_q.holder_faction_of(w, target) == "fac_crown" and world_q.mustered(w, target, "fac_crown")
+    assert world_q.holder_faction_of(w, target) == "fac_valorsmark" and world_q.mustered(w, target, "fac_valorsmark")
     p, v, cands = _march_candidate(w, target)
     assert [c.subject for c in cands] == [target], "the head forms no march on a realm settlement"
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
@@ -260,7 +260,7 @@ def test_the_same_march_with_no_defender_arrives_unopposed_at_the_chokepoint():
     Katepano's goal is aimed at the capital behind it and not at the pass. Recorded as a FINDING, not a design
     (H-233): the realm's defence of its chokepoint is garrison Site and nobody."""
     w = POP.build_realm(0, foreign=True)
-    assert world_q.mustered(w, "set_s_007", "fac_crown") == []
+    assert world_q.mustered(w, "set_s_007", "fac_valorsmark") == []
     p, v, _ = _march_candidate(w, "set_s_007")
     act = make_chooser(w.fixtures, lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}"),
                        verbs=frozenset({"march"}), draw=draw_factory(w.world_seed, lambda: w.tick))(
@@ -333,7 +333,7 @@ def test_the_unrestricted_chooser_picks_the_march_at_a_witness_seed_and_the_fold
         f"set_s_001. RE-SCAN seeds 0-79 for new WITNESS_SEEDS (draws are keyed on (verb, subject), so any upstream "
         f"move re-rolls them); do not skip this test.")
     assert act.actor == "p_npc_089" and act.via == "off_katepano", f"the chooser did not name the empire's seat: {act.via!r}"
-    assert world_q.holder_faction_of(w, "set_s_001") == "fac_crown" and world_q.mustered(w, "set_s_001", "fac_crown")
+    assert world_q.holder_faction_of(w, "set_s_001") == "fac_valorsmark" and world_q.mustered(w, "set_s_001", "fac_valorsmark")
     records = []
     real = wrapper.field_input
     wrapper.field_input = lambda *a, **k: records.append(real(*a, **k)) or records[-1]

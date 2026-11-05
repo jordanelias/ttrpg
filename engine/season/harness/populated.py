@@ -1087,7 +1087,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     # says *"Duke of Varfell"*. The rung is a place on a containment ladder and asserts nothing about
     # how the Jarls choose him.
     duchy_of: dict = {}
-    for fac_name, duchy_name in (("Crown", "Valorsmark"), ("Hafenmark", "Hafenmark"),
+    for fac_name, duchy_name in (("Valorsmark", "Valorsmark"), ("Hafenmark", "Hafenmark"),
                                  ("Varfell", "Varfell")):
         did = f"duchy_{_slug(duchy_name)}"
         w.rungs[did] = Rung(did, "duchy")
@@ -1099,7 +1099,9 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         rid = territory_rung_id(tid)                    # one owner: data/rosters.py
         w.rungs[rid] = Rung(rid, "territory")
         _index_anchor(w, anchors, tid, rid)
-        holder = str(terr.get("faction") or "")
+        # CR-86: the geography's `faction: Crown` is Valorsmark's alias; `resolve_faction` is the one owner of
+        # alias -> canonical, so the Crown's territories still hang off its duchy. `Uncontrolled` -> "".
+        holder = cast.resolve_faction(terr.get("faction")) or ""
         # ⚠ A FOREIGN TERRITORY GETS NO PARENT, AND THAT IS THE POINT RATHER THAN A GAP. Schoenland
         # is on the faction roster and is FOREIGN — `rosters.yaml` records it as not
         # player-eligible, holding its territory and granting or refusing Altonian naval passage —

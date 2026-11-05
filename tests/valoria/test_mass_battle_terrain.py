@@ -459,7 +459,7 @@ def test_resolve_field_carries_the_river_crossing_signal_to_the_engine():
                        stances=(0.0, 0.0), walls_dr=None, **facts)
 
     w = build_realm(0)
-    att = world_q.mustered(w, 'set_s_014', 'fac_crown')
+    att = world_q.mustered(w, 'set_s_014', 'fac_valorsmark')
     dfn = world_q.mustered(w, 'set_s_036', 'fac_church_of_solmund')
     assert att and dfn, "the provider's fixture sides no longer muster"
     assert terrain_row_for_territory('T3', fort_level=0, geography=_geography()) == OPEN_FLAT, "T3's polygon row moved"

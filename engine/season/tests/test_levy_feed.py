@@ -134,7 +134,7 @@ def _provider_field(w, act):
     """The adapter called directly, the act planted in `w.acts` as the fold plants it before folding."""
     from engine.season.seam.wrappers.mass_battle import resolve
     w.acts.append(act)
-    attackers = world_q.mustered(w, ORIGIN, "fac_crown")
+    attackers = world_q.mustered(w, ORIGIN, "fac_valorsmark")
     assert len(attackers) == 2, attackers
     return resolve(w, attackers, [act.id], "a field", subject=DEFENDER, rung=TARGET,
                    rng=random.Random(11))
@@ -171,7 +171,7 @@ def test_off_the_field_is_the_none_keyword_field():
     so `resolve_field` with them returns exactly what it returns with `troops_a=troops_b=None` (today)."""
     from engine.season.seam.wrappers.mass_battle import field_input
     w = _world(False)
-    attackers = world_q.mustered(w, ORIGIN, "fac_crown")
+    attackers = world_q.mustered(w, ORIGIN, "fac_valorsmark")
     defenders = world_q.mustered(w, TARGET, DEFENDER)
     inp = field_input(w, attackers, defenders, TARGET)
     fn = MODULE_ENTRIES["mass_battle.resolve_field"].fn

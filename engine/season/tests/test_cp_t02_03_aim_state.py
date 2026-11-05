@@ -75,7 +75,7 @@ def test_cp_t02_03_a_rung_its_org_holds_forms_no_need_and_the_same_world_with_it
     assert _need(met, obs) == {}, "the org's member holds the rung: the aim is met and asks for nothing"
 
     for lost, why in ((_world("g_rung", lost=True), "the hold ended"),
-                      (_world("g_rung", holder_faction="fac_crown"), "held by another faction's member")):
+                      (_world("g_rung", holder_faction="fac_valorsmark"), "held by another faction's member")):
         w, o = lost
         assert world_q.aim_state(w, o, w.propositions["g_rung"]) == "open", why
         assert _need(w, o) == {"g_rung": (RUNG,)}, f"{why}: the same goal forms its question again"
@@ -95,7 +95,7 @@ def test_cp_t02_03_a_holder_committed_to_two_factions_does_not_meet_it(monkeypat
     """A holder committed to the org's faction AND another reads `faction_holding` None: not met, not guessed."""
     _rung_goal(monkeypatch, tmp_path)
     w, obs = _world("g_rung")
-    w.persons["p_h"].tenures.append(Tenure("t_h_commit2", "p_h", "fac_crown", "commit", 0))
+    w.persons["p_h"].tenures.append(Tenure("t_h_commit2", "p_h", "fac_valorsmark", "commit", 0))
     assert world_q.aim_state(w, obs, w.propositions["g_rung"]) == "open"
     assert set(_need(w, obs)) == {"g_rung"}
 

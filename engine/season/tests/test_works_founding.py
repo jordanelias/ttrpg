@@ -818,10 +818,10 @@ def test_in28_a_founders_hold_stops_holder_faction_of_at_his_hearth_pinned_as_it
     CONTROL, one change: the same founder committed to the Crown -> the hearth reads the Crown."""
     from ..data.rosters import faction_prop_id
     from ..state.carriers import Proposition, Tenure
-    fac = faction_prop_id("Crown")
+    fac = faction_prop_id("Valorsmark")
     for committed in (False, True):
         w, d = _world()
-        w.propositions[fac] = Proposition(fac, "HOLDS", "Crown", "is a faction of this world",
+        w.propositions[fac] = Proposition(fac, "HOLDS", "Valorsmark", "is a faction of this world",
                                           True, 0)
         w.add_tenure(Tenure("t_commit_p_mid", "p_mid", fac, "commit", since=0))
         w.add_tenure(Tenure("t_hold_S", "p_mid", SETTLEMENT, "hold", since=0))

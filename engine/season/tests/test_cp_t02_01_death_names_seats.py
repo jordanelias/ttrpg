@@ -38,7 +38,7 @@ from ..state.world import World
 from ._scar_helpers import party_state
 
 HOLDER, OFFICE = "p_high", "off_duke"          # `tiny_world`: p_high holds off_duke and stands at S
-CROWN, CHURCH = "fac_crown", "fac_church_of_solmund"
+CROWN, CHURCH = "fac_valorsmark", "fac_church_of_solmund"
 
 
 def _tiny():

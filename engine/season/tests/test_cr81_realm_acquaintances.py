@@ -46,9 +46,9 @@ from ..queries.person_q import KNOWN_PERSON_CLAIM, known_persons
 from ..queries.world_q import faction_holding
 
 SEEDS = (0, 1, 2)
-# `build_realm(s).content_hash()` at the PARENT tree (67f5b086, read 2026-11-04): the control arm reproduces them.
-PARENT_HASHES = {0: "70ea49cbf580a33c82485f84235df525", 1: "af5f8b9714bc01a36e388284385eb1c8",
-                 2: "b836647f073b98b7c052b0d3c010277e"}
+# `build_realm(s, acquaintances=False).content_hash()`, the control arm = the parent tree's build with CR-86's rename and vassals (read 2026-11-05; before CR-86 the PARENT tree 67f5b086 read 70ea49cb... / af5f8b97... / b836647f...): the control arm reproduces them.
+PARENT_HASHES = {0: "876820336e2259604acb280ab3452a71", 1: "ca9698d7033f5e106bcc1ec78ba3dd1a",   # CR-86 re-pin: was 70ea49cb... / af5f8b97... / b836647f...
+                 2: "c77d3b277f42ec57d3a073dd751287b1"}
 KNOW_NONE_AT_BUILD = 41          # of 83, every seed (read, see the docstring)
 JORDANS_EXAMPLE = frozenset({"King", "Queen", "Duke", "Duchess"})   # his words, an independent pin on the floor
 

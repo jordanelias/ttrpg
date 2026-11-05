@@ -52,8 +52,8 @@ from engine.season.state.containment import descendants
 
 def test_resolve_returns_the_five_fields_with_proposition_echoed():
     w = build_realm(0)
-    f = faction_q.resolve(w, "fac_crown")
-    assert f.proposition == "fac_crown"
+    f = faction_q.resolve(w, "fac_valorsmark")
+    assert f.proposition == "fac_valorsmark"
     assert set(vars(f)) == {"proposition", "members", "holdings", "seats", "head"}
 
 
@@ -64,14 +64,14 @@ def test_members_is_world_q_members_not_a_second_definition():
 
 def test_holdings_and_seats_match_an_independently_computed_set():
     w = build_realm(0)
-    f = faction_q.resolve(w, "fac_crown")
+    f = faction_q.resolve(w, "fac_valorsmark")
     # ⚠ RE-DERIVED FROM `w.tenures` DIRECTLY, NOT VIA `world_q.members` -- test 2 proves
     # `faction_q.members is world_q.members`, so calling it here would test the code against
     # itself. §14.2: "Membership is `commit`."
     inside = {t.subject for t in w.tenures
-              if t.kind == "commit" and t.object == "fac_crown" and t.live
+              if t.kind == "commit" and t.object == "fac_valorsmark" and t.live
               and t.subject in w.persons}
-    assert inside, "fac_crown has no live members in this corpus -- the fixture changed"
+    assert inside, "fac_valorsmark has no live members in this corpus -- the fixture changed"
 
     held = [t for t in w.tenures if t.kind == "hold" and t.live and t.subject in inside]
     expect_holdings = sorted({t.object for t in held if t.object in w.rungs})
@@ -85,7 +85,7 @@ def test_holdings_and_seats_match_an_independently_computed_set():
 
 def test_holdings_and_seats_vary_with_membership_not_a_fixed_stub():
     w = build_realm(0)
-    crown = faction_q.resolve(w, "fac_crown")
+    crown = faction_q.resolve(w, "fac_valorsmark")
     guilds = faction_q.resolve(w, "fac_guilds")
     assert crown.members != guilds.members
     assert (crown.holdings, crown.seats) != (guilds.holdings, guilds.seats)
@@ -93,8 +93,8 @@ def test_holdings_and_seats_vary_with_membership_not_a_fixed_stub():
 
 def test_holdings_standalone_is_resolve_dot_holdings():
     w = build_realm(0)
-    assert faction_q.holdings(w, "fac_crown") == faction_q.resolve(w, "fac_crown").holdings
-    assert faction_q.holdings(w, "fac_crown"), "control is vacuous if Crown holds no territory"
+    assert faction_q.holdings(w, "fac_valorsmark") == faction_q.resolve(w, "fac_valorsmark").holdings
+    assert faction_q.holdings(w, "fac_valorsmark"), "control is vacuous if Crown holds no territory"
 
 
 def test_purview_is_the_set_form_of_purview_reaches_over_every_seated_office():
@@ -158,20 +158,24 @@ def test_head_control_no_live_commit_carries_a_degree_in_a_real_world():
     assert live_commits, "fixture changed -- no live commit Tenure exists to check at all"
     assert not any(t.degree is not None for t in live_commits), (
         "a live `commit` Tenure now carries a degree -- `head`'s vacuity reasoning is stale")
-    for prop in ("fac_crown", "fac_schoenland", "fac_guilds"):
+    # CR-86 (ED-IN-0342): a faction with a `head_seat` is headed by that seat's holder, degree or no degree (the King
+    # for Valorsmark: `test_cr86_realm_structure.py`); the two with none authored are still `None`, so the graded
+    # reader above stays the only thing this control observes.
+    for prop in ("fac_schoenland", "fac_guilds"):
         assert faction_q.resolve(w, prop).head is None
         assert faction_q.head(w, prop) is None
+    assert faction_q.head(w, "fac_valorsmark") == "p_npc_020"
 
 
 def test_head_reads_a_hand_graded_live_commit():
-    """(b) A REAL READER, NOT A LITERAL. Grades ONE live `commit` Tenure to `fac_crown` with a
+    """(b) A REAL READER, NOT A LITERAL. Grades ONE live `commit` Tenure to `fac_valorsmark` with a
     real `Degree` string (`FELLED`, combat's own vocabulary -- `head`'s docstring: no cross-domain
     rank is invented, so any non-`None` string must be picked up) and checks `head` names its
     subject."""
     w = build_realm(0)
-    t0 = next(t for t in w.tenures if t.kind == "commit" and t.object == "fac_crown" and t.live)
+    t0 = next(t for t in w.tenures if t.kind == "commit" and t.object == "fac_valorsmark" and t.live)
     t0.degree = "FELLED"
-    assert faction_q.head(w, "fac_crown") == t0.subject
+    assert faction_q.head(w, "fac_valorsmark") == t0.subject
 
 
 def test_head_last_write_wins_over_two_graded_live_commits():
@@ -179,14 +183,14 @@ def test_head_last_write_wins_over_two_graded_live_commits():
     precedent for the identical ambiguity. Grades the FIRST live commit, then appends a SECOND,
     later one for a different member; `head` must name the later one's subject."""
     w = build_realm(0)
-    members = world_q.members(w, "fac_crown")
-    t0 = next(t for t in w.tenures if t.kind == "commit" and t.object == "fac_crown" and t.live)
+    members = world_q.members(w, "fac_valorsmark")
+    t0 = next(t for t in w.tenures if t.kind == "commit" and t.object == "fac_valorsmark" and t.live)
     t0.degree = "WON"
     other = next(m for m in members if m != t0.subject)
-    t1 = Tenure(id="hand_second_commit_20ii", subject=other, object="fac_crown", kind="commit",
+    t1 = Tenure(id="hand_second_commit_20ii", subject=other, object="fac_valorsmark", kind="commit",
                 since=0, degree="LOST")
     w.persons[other].tenures.append(t1)
-    assert faction_q.head(w, "fac_crown") == t1.subject
+    assert faction_q.head(w, "fac_valorsmark") == t1.subject
 
 
 def test_head_a_closed_graded_edge_does_not_count():
@@ -194,17 +198,17 @@ def test_head_a_closed_graded_edge_does_not_count():
     (`until` set -- an owner's own discretion, `T-m`) must drop it, falling back to the earlier
     still-live graded edge."""
     w = build_realm(0)
-    members = world_q.members(w, "fac_crown")
-    t0 = next(t for t in w.tenures if t.kind == "commit" and t.object == "fac_crown" and t.live)
+    members = world_q.members(w, "fac_valorsmark")
+    t0 = next(t for t in w.tenures if t.kind == "commit" and t.object == "fac_valorsmark" and t.live)
     t0.degree = "WON"
     other = next(m for m in members if m != t0.subject)
-    t1 = Tenure(id="hand_second_commit_closed_20ii", subject=other, object="fac_crown",
+    t1 = Tenure(id="hand_second_commit_closed_20ii", subject=other, object="fac_valorsmark",
                 kind="commit", since=0, degree="LOST")
     w.persons[other].tenures.append(t1)
-    assert faction_q.head(w, "fac_crown") == t1.subject   # control: still last-write-wins
+    assert faction_q.head(w, "fac_valorsmark") == t1.subject   # control: still last-write-wins
     t1.until = 5
     assert not t1.live
-    assert faction_q.head(w, "fac_crown") == t0.subject
+    assert faction_q.head(w, "fac_valorsmark") == t0.subject
 
 
 # ---------------------------------------------------------------------------------------------
@@ -220,27 +224,27 @@ def _resolve_one(w, d, act):
 def test_at_war_through_the_real_fold_utter_then_commit_then_release():
     w = build_realm(0)
     d = SeasonDriver(w)
-    declarer = world_q.members(w, "fac_crown")[0]
+    declarer = world_q.members(w, "fac_valorsmark")[0]
 
-    assert faction_q.at_war(w, "fac_crown", "fac_guilds") is False, (
-        "control failed -- fac_crown/fac_guilds already read at_war before anything was uttered")
+    assert faction_q.at_war(w, "fac_valorsmark", "fac_guilds") is False, (
+        "control failed -- fac_valorsmark/fac_guilds already read at_war before anything was uttered")
 
     kinds = _resolve_one(w, d, Act(id="c_20ii_atwar_utter", actor=declarer, verb="utter",
-                                   payload={"mood": "WAR", "subject": "fac_crown",
+                                   payload={"mood": "WAR", "subject": "fac_valorsmark",
                                             "value": "fac_guilds"}))
     assert kinds == ["proposition.uttered"], f"the WAR utterance did not mint cleanly: {kinds}"
     prop_id = "prop:c_20ii_atwar_utter"
     assert w.propositions[prop_id].mood == "WAR"
 
     # Not yet at war: the Proposition exists but nobody has committed to it.
-    assert faction_q.at_war(w, "fac_crown", "fac_guilds") is False
+    assert faction_q.at_war(w, "fac_valorsmark", "fac_guilds") is False
 
     kinds = _resolve_one(w, d, Act(id="c_20ii_atwar_commit", actor=declarer, verb="commit",
                                    payload={"subject": prop_id}))
     assert kinds == ["commitment.made"], f"the declaring commit did not mint cleanly: {kinds}"
 
-    assert faction_q.at_war(w, "fac_crown", "fac_guilds") is True
-    assert faction_q.at_war(w, "fac_guilds", "fac_crown") is True, (
+    assert faction_q.at_war(w, "fac_valorsmark", "fac_guilds") is True
+    assert faction_q.at_war(w, "fac_guilds", "fac_valorsmark") is True, (
         "at_war is not symmetric -- {subject, value} must be compared as an unordered pair")
 
     kinds = _resolve_one(w, d, Act(id="c_20ii_atwar_release", actor=declarer, verb="release",
@@ -252,6 +256,6 @@ def test_at_war_through_the_real_fold_utter_then_commit_then_release():
         f"peace (release) did not close cleanly: {kinds}")
     assert not [t for t in w.persons[declarer].tenures if t.object == prop_id and t.live]
 
-    assert faction_q.at_war(w, "fac_crown", "fac_guilds") is False, (
+    assert faction_q.at_war(w, "fac_valorsmark", "fac_guilds") is False, (
         "at_war stayed True after the declaring commit was released -- peace is not being read")
-    assert faction_q.at_war(w, "fac_guilds", "fac_crown") is False
+    assert faction_q.at_war(w, "fac_guilds", "fac_valorsmark") is False

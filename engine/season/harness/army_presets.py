@@ -1,7 +1,7 @@
 """PRESET ORDERS OF BATTLE FOR THE FACTIONS NOBODY PLAYS (ED-IN-0306 phase 5c).
 
     from engine.season.harness.army_presets import install
-    kinds = install(w, ["fac_crown", "fac_hafenmark"])         # {faction: the event kinds the fold produced}
+    kinds = install(w, ["fac_valorsmark", "fac_hafenmark"])         # {faction: the event kinds the fold produced}
 
 A faction with no player still needs an army when the battle looks for one. `install` gives it the one the module's
 doctrine builds from what it can raise (`modules/mass_battle/troop_types/presets.py`, reached by the `mass_battle.army_preset`

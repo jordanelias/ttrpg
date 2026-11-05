@@ -41,11 +41,11 @@ from .test_governance_build import _establish, _establish_world, _founding, _sea
 from .test_season_weather import BASE_HASHES
 
 CHURCH = R.faction_prop_id("Church of Solmund")
-CROWN = R.faction_prop_id("Crown")
+CROWN = R.faction_prop_id("Valorsmark")
 #: A row naming the governance world's unheld appointed seat (`off_reeve`, post `Reeve`), planted where
 #: the Query reads its rows: the shipped rows name a King, whose seat no act can confer (its conferral is
 #: `inheritance` since v10 IN-61, claimed by the heir's `succeed`, never conferred: `offices.yaml: off_king`).
-REEVE_ROW = {"crowned_reeve": R.EndingRow(False, ("post", "Reeve"), "Crown", "a test fixture")}
+REEVE_ROW = {"crowned_reeve": R.EndingRow(False, ("post", "Reeve"), "Valorsmark", "a test fixture")}
 
 
 def _fold(w, d, *acts):
@@ -268,7 +268,7 @@ def test_in27_nothing_selected_reaches_nothing(monkeypatch):
     w, d = _gov_world()
     _fold(w, d, Act(id="in27_cf", actor="p_king", verb="confer", via="off_crown",
                     payload={"subject": "off_reeve", "office": "off_reeve", "to": "p_mid"}))
-    monkeypatch.setattr(Q, "ENDINGS", {"none_such": R.EndingRow(False, ("post", "Pope"), "Crown",
+    monkeypatch.setattr(Q, "ENDINGS", {"none_such": R.EndingRow(False, ("post", "Pope"), "Valorsmark",
                                                                 "a test fixture")})
     assert Q._ending_edges(w, Q.ENDINGS["none_such"]) == () and Q.endings_reached(w) == []
 

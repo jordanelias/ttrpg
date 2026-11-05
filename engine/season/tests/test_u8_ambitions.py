@@ -61,7 +61,7 @@ def _ambitions_of(p: Person, props=None) -> list:
 PROPS = {
     "o1": Proposition("o1", "OUGHT", "p_y", "a first ambition", True, 0),
     "o2": Proposition("o2", "OUGHT", "p_z", "a second ambition", True, 0),
-    "fac": Proposition("fac", "HOLDS", "Crown", "is a faction of this world", True, 0),
+    "fac": Proposition("fac", "HOLDS", "Valorsmark", "is a faction of this world", True, 0),
 }
 
 # Every shape of edge that is NOT an ambition, one per row. A distractor held alone must answer [].
@@ -114,7 +114,7 @@ def test_ambitions_returns_a_faction_creed_and_reads_the_world_it_is_given():
     p = _person_with(edge)
     assert _ambitions_of(p, {"fac_Crown": creed}) == ["fac_Crown"]
     assert _ambitions_of(p, {}) == []
-    held = Proposition("fac_Crown", "HOLDS", "Crown", "a creedless faction", True, 0)
+    held = Proposition("fac_Crown", "HOLDS", "Valorsmark", "a creedless faction", True, 0)
     assert _ambitions_of(p, {"fac_Crown": held}) == []
 
 
@@ -281,7 +281,7 @@ def test_q4_fires_once_per_ambition_for_one_person_and_through_ambitions():
     # A SECOND ambition, a commit to a HOLDS Proposition (not an ambition: the three creedless
     # factions' shape -- the other six creeds ARE ambitions) and an ended one.
     w.propositions["o2"] = Proposition("o2", "OUGHT", "p_c", "a second cause", True, 0)
-    w.propositions["fac"] = Proposition("fac", "HOLDS", "Crown", "is a faction", True, 0)
+    w.propositions["fac"] = Proposition("fac", "HOLDS", "Valorsmark", "is a faction", True, 0)
     w.add_tenure(Tenure("t_o2", "p_a", "o2", "commit", 0))
     w.add_tenure(Tenure("t_fac", "p_a", "fac", "commit", 0))
     w.add_tenure(Tenure("t_dead", "p_a", "prop_p_b", "commit", 0, until=1))

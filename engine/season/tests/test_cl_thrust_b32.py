@@ -64,7 +64,7 @@ def _stage(sid, term, cell, pursuits=None):
 
 
 def _doc(*, with_row=True, pursuits=None) -> dict:
-    doc = {"goals": [_goal(THRONE, {"faction": "Crown"}, {"kind": "seat_holders", "seats": [SEAT]}, stance=1),
+    doc = {"goals": [_goal(THRONE, {"faction": "Valorsmark"}, {"kind": "seat_holders", "seats": [SEAT]}, stance=1),
                      _goal(OTHER, {"faction": "Hafenmark"}, {"kind": "rung", "rung": "terr_T9"})]}
     if with_row:
         doc["goal_stages"] = [{"id": "gs_throne", "for": [THRONE],

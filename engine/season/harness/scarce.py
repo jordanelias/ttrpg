@@ -124,7 +124,7 @@ MARCH, FAR_TERRITORY = "terr_march", "terr_far"
 REEVE_HEARTH, FAR_HEARTH = "hh_reeve", "hh_far_reeve"
 # Every office names its faction (`H-99`); `probes.tiny_world`'s generic Duke is the Crown's, and a
 # generic reeve is too. Test data, not a claim about who governs a march.
-GOVERNING_FACTION = "Crown"
+GOVERNING_FACTION = "Valorsmark"
 # What each reeve's seat grants. `issue` is the act `transfer`'s seat alternative names
 # (`verb_table.yaml`, `remit:issue`, `requisition`'s precedent), so a seat granting nothing could pay
 # nobody. Test data, not a claim about what a reeve may do.

@@ -188,20 +188,20 @@ seats:
     post:       "King"
     rung:       {realm: true}
     body:       null
-    faction:    "Crown"
+    faction:    "Valorsmark"
     remit_acts: [issue, determine, confer, revoke, convene]
     conferral:  inheritance   # v10 IN-61 (RS-27): claimed by the holder of `rosters.yaml: successions`' title (`off_heir`), never conferred [ASSUMPTION; medium; Jordan to correct; revert: null]
     revocation: null   # no rung above the realm
     holder:     "NPC-020"
-    obligees:   ["NPC-070"]   # FA-04 (ED-IN-0293 (7)): the Grand Master's oath makes the Löwenritter a subfaction of the Crown; her `release` of it is the Split
+    obligees:   ["NPC-070", "NPC-050", "NPC-052"]   # FA-04 (ED-IN-0293 (7)): the Grand Master's oath makes the Löwenritter a subfaction of the Crown; her `release` of it is the Split. CR-86 (ED-IN-0342): the Duchess of Hafenmark (NPC-050) and the Duke of Varfell (NPC-052) are the King's vassals, sworn by the same path
     source:     "systems/world/reference/worldbuilding_v30.md:24"
     note:       "[LIVE]. draft `titles:` row 1 (r2 03 §A.15 row 1)."
 
   - id:         off_duke_valorsmark
     post:       "Duke"
-    rung:       {duchy: "Crown"}
+    rung:       {duchy: "Valorsmark"}
     body:       null
-    faction:    "Crown"
+    faction:    "Valorsmark"
     remit_acts: [issue, confer, revoke, convene]
     conferral:  null
     revocation: null
@@ -240,7 +240,7 @@ seats:
     post:       "Queen"
     rung:       {realm: true}
     body:       null
-    faction:    "Crown"
+    faction:    "Valorsmark"
     remit_acts: [issue, determine, confer, revoke, convene]
     conferral:  null
     revocation: null
@@ -253,7 +253,7 @@ seats:
     post:       "Prince (Heir Apparent)"
     rung:       {realm: true}
     body:       null
-    faction:    "Crown"
+    faction:    "Valorsmark"
     remit_acts: []
     conferral:  appointed   # v10 IN-61 (RS-27): the heir is a TITLE, designated by an ordinary `confer` [ASSUMPTION; medium; Jordan to correct; revert: null]
     revocation: null
@@ -266,7 +266,7 @@ seats:
     post:       "Princess"
     rung:       {realm: true}
     body:       null
-    faction:    "Crown"
+    faction:    "Valorsmark"
     remit_acts: []
     conferral:  null
     revocation: null
@@ -305,7 +305,7 @@ seats:
     post:       "Crown's Spymaster"
     rung:       {territory: "T1"}
     body:       null
-    faction:    "Crown"
+    faction:    "Valorsmark"
     remit_acts: [issue]
     conferral:  appointed
     revocation: rung_above_same_faction
@@ -331,7 +331,7 @@ seats:
     post:       "Royal Guard Captain"
     rung:       {territory: "T1"}
     body:       null
-    faction:    "Crown"
+    faction:    "Valorsmark"
     remit_acts: []
     conferral:  appointed
     revocation: rung_above_same_faction
@@ -344,7 +344,7 @@ seats:
     post:       "Lord Steward"
     rung:       {territory: "T1"}
     body:       null
-    faction:    "Crown"
+    faction:    "Valorsmark"
     remit_acts: [issue]
     conferral:  appointed
     revocation: rung_above_same_faction

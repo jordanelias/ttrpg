@@ -99,7 +99,7 @@ def tiny_world(fixtures: Fixtures = DEFAULT_FIXTURES) -> World:
     #   `Dicastery` -> Church of Solmund. Unambiguous.
     w.offices["off_duke"] = Office("off_duke", "Duke", "D",
                                    ["issue", "determine", "confer", "dispatch", "convene"],
-                                   faction="Crown")
+                                   faction="Valorsmark")
     w.offices["off_dicastery"] = Office("off_dicastery", "Dicastery", None,
                                         ["issue", "determine"], faction="Church of Solmund")
     n = [0]
@@ -1515,7 +1515,7 @@ def f12():
     # seats a King on the realm, gives the duke's seat the two ruled bases (`ED-IN-0256` (2), (3)),
     # and writes as him, through his seat. It was fixed by giving it a seat, not by loosening the
     # gate -- the plan's instruction for every hand-built non-owner write.
-    w.offices["off_crown"] = Office("off_crown", "King", "R", ["confer", "revoke"], faction="Crown")
+    w.offices["off_crown"] = Office("off_crown", "King", "R", ["confer", "revoke"], faction="Valorsmark")
     w.add_tenure(Tenure("t_crown", "p_king", "off_crown", "hold", since=0))
     w.offices["off_duke"].conferral = "appointed"
     w.offices["off_duke"].revocation = "rung_above_same_faction"

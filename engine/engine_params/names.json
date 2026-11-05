@@ -3,7 +3,7 @@
   "schema_version": 1,
   "source": "references/names_index.yaml",
   "registry_version": 3,
-  "count": 123,
+  "count": 122,
   "canonical": {
     "agg.body": "Body",
     "agg.mind": "Mind",
@@ -78,7 +78,6 @@
     "world.cardinal_osten_jarnstal": "Cardinal Osten Jarnstal",
     "world.church": "Church of Solmund",
     "world.confessor_arne_himlensendt": "Confessor Arne Himlensendt",
-    "world.crown": "Crown",
     "world.dalla_virke": "Dalla Virke",
     "world.doux_alexios_laskaris": "Doux Alexios Laskaris",
     "world.duchess_inge_baralta": "Duchess Inge Baralta",
@@ -142,6 +141,7 @@
     "Church": "Church of Solmund",
     "Cognition": "Reason",
     "Confessor": "Confessor Arne Himlensendt",
+    "Crown": "Valorsmark",
     "Dexterity": "Coordination",
     "Duke": "Duke Magnus Vaynard",
     "Ehrenwall": "Grandmaster Ehrenwall",
@@ -231,12 +231,12 @@
     "faction": [
       "Altonia",
       "Church of Solmund",
-      "Crown",
       "Guilds",
       "Hafenmark",
       "Löwenritter",
       "Restoration Movement",
       "Schoenland",
+      "Valorsmark",
       "Varfell",
       "faction x"
     ],

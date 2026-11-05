@@ -571,16 +571,21 @@ def _counts(w) -> dict:
 # CONTROL, run in process on this tree: `odds_weighting` swept to `none` and `choice_temperature` to 0.1 reads the old three
 # entries' `new`, `acts` and `log` at seeds 0 / 1 / 2 (bdff0832... / 1081dd4f... / 37db6d14...; 619 / 657 / 658; 10316 / 13085 /
 # 12898). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+# RE-RECORDED at v11 CR-86 (ED-IN-0342, a declared MOVER of every world hash: Valorsmark a faction and `fac_crown` ->
+# `fac_valorsmark`, the Duchess's and the Duke's sworn `oblige` to `off_king`, the head seats). Was, for seeds 0 / 1 / 2: `old`
+# 5250cd3f... / 0458835b... / 0a3e374e..., `new` 4761e5ca... / 033474f7... / 3217d743..., `census` e3e7b893... / 26d2bc88... /
+# 395fe953..., `tenures` 989 / 1002 / 1003, `log` 11775 / 10540 / 10566; `acts` do not move (685 / 673 / 715).
+# CONTROL, run in process on this tree at seed 0: the two vassals' obligees dropped read the old `log` (11775) and event digest.
 BASE = {
-    0: {"old": "5250cd3f5d66ec83e5e2a21d874ed4b2", "new": "4761e5cac3069d78279d3f03657c8007", "acts": 685,
-        "census": "e3e7b893df883b4391b32134c9d1badcae52eb2a1cf02f4215db120374a61e72",
-        "counts": {"persons": 77, "rungs": 408, "offices": 34, "sites": 322, "records": 172, "propositions": 125, "dates": 3, "docket": 4, "tenures": 989, "log": 11775}},
-    1: {"old": "0458835bc8ef4f4ae0ab5b5d68d9a839", "new": "033474f7402586963ff1aeb73a3889e1", "acts": 673,
-        "census": "26d2bc8898a0b0baf6c3c74a75404e410eb11cd8b3b6dad38b53cc0e32965978",
-        "counts": {"persons": 80, "rungs": 411, "offices": 34, "sites": 322, "records": 192, "propositions": 118, "dates": 3, "docket": 6, "tenures": 1002, "log": 10540}},
-    2: {"old": "0a3e374ec6891fcfe845350df79e18ac", "new": "3217d7437134c019a47e966a879f07bc", "acts": 715,
-        "census": "395fe9535f7b8d734bff84260c2096b4df80573db616c79adc12e0b618aa8334",
-        "counts": {"persons": 80, "rungs": 411, "offices": 34, "sites": 322, "records": 188, "propositions": 142, "dates": 4, "docket": 4, "tenures": 1003, "log": 10566}},
+    0: {"old": "da44a46a8e69985513da6add34b71a03", "new": "87b9d1f1dc5547928352429a87011e29", "acts": 685,
+        "census": "64681b4600021dd078a76bc660cbd011b1909156a1cd7473c5e18ff8a3080dc4",
+        "counts": {"persons": 77, "rungs": 408, "offices": 34, "sites": 322, "records": 172, "propositions": 125, "dates": 3, "docket": 4, "tenures": 991, "log": 11793}},
+    1: {"old": "4e5791b2e2cfeaea2393d26e8928cee0", "new": "86ebc9846a1ffe3175b7afa5a66ac724", "acts": 673,
+        "census": "54968fb48f81db30dd641299f67ffdb68f72c25f103fae117d8a389c74d7a2a0",
+        "counts": {"persons": 80, "rungs": 411, "offices": 34, "sites": 322, "records": 192, "propositions": 118, "dates": 3, "docket": 6, "tenures": 1004, "log": 10566}},
+    2: {"old": "0f9fd8c4a2670083a2b794f25f6d0e30", "new": "888a08cb4093d9d5fd8e5e9463c23cbc", "acts": 715,
+        "census": "041e9f1dc1e9b359f11e5628717c9703669b92c213014a21106ef4321c92436c",
+        "counts": {"persons": 80, "rungs": 411, "offices": 34, "sites": 322, "records": 188, "propositions": 142, "dates": 4, "docket": 4, "tenures": 1005, "log": 10584}},
 }
 
 
@@ -589,13 +594,13 @@ def test_go07_control_the_build_world_old_digest_is_unmoved():
     (`test_season_weather.BASE_HASHES[0]`'s retired value); the same world now reads the new pin."""
     w = POP.build_realm(0)
     c = POP.build_realm(0, foreign=False, acquaintances=False)   # ED-IN-0310 + CR-81: the realm before the empire and the acquaintances
-    assert (_old_content_hash(c), c.content_hash()) == ("919faacba3a5b83184266f454f6989d3", "c7ca8d505cc1741f9e54e1fdd0c55292")
+    assert (_old_content_hash(c), c.content_hash()) == ("970d0b5ba2380d22ca6947ae918e7667", "060d8901135365dcc10f0e9875a1740b")   # CR-86: was 919faacb... / c7ca8d50...
     a = POP.build_realm(0, acquaintances=False)                  # CR-81's control arm: the parent tree's build
-    assert (_old_content_hash(a), a.content_hash()) == ("f78bcaf40ff7c29647779ffc3a6cc9e9", "70ea49cbf580a33c82485f84235df525")
+    assert (_old_content_hash(a), a.content_hash()) == ("be420f6771394931732fc2f14724fc8a", "876820336e2259604acb280ab3452a71")   # CR-86: was f78bcaf4... / 70ea49cb...
     f = POP.build_realm(0, foreign=False)                        # CR-81: was 919faacb... / c7ca8d50... (acquaintances off reads it)
-    assert (_old_content_hash(f), f.content_hash()) == ("42f55a5fc93d6a4612ebbcdaca01c45b", "e12a710be33b5da266444497b3a6e3f7")
-    assert _old_content_hash(w) == "47c172b04028e86b982a454a8e82c15e"        # CR-81: was f78bcaf4... (acquaintances=False reads it); ED-IN-0310: was 919faacb...; v10 IN-61: was 26c255ac...
-    assert w.content_hash() == "3ae970a172c9c0122adaab552a921eca"            # CR-81: was 70ea49cb... (acquaintances=False reads it); v10 IN-61: was 4ab812ba... (CP-T02-02); before that 3e31638e... (CR-21)
+    assert (_old_content_hash(f), f.content_hash()) == ("a7628b4e4208ab8a98d850a78fa6182f", "7b7992f7ae967e8e36bffb33abc44ba3")   # CR-86: was 42f55a5f... / e12a710b...
+    assert _old_content_hash(w) == "da08203b55c02938215548bce174b9bb"        # CR-86: was 47c172b0... (ED-IN-0342). CR-81: was f78bcaf4... (acquaintances=False reads it); ED-IN-0310: was 919faacb...; v10 IN-61: was 26c255ac...
+    assert w.content_hash() == "b4bc2df0d507aeb086d79cb8636ca9e0"            # CR-86: was 3ae970a1... (ED-IN-0342). CR-81: was 70ea49cb... (acquaintances=False reads it); v10 IN-61: was 4ab812ba... (CP-T02-02); before that 3e31638e... (CR-21)
 
 
 def test_go07_control_the_world_did_not_move_only_its_digest():
