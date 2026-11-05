@@ -1328,6 +1328,14 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         # v10 CR-30: DESCENT, from the same row's `heritage:`, set here and NEVER written in play. No fallback and
         # no draw: a row that states none leaves `None`, which `epistemic._term_marks` deposits as `()`.
         w.persons[pid].heritage = cast.heritage_of(cast.row(cid) or {})
+        # v10 CR-33: the row's `lifepath:` EXPANDED into the capability keys its template names, each at
+        # `pool_default` (the grant changes no pool; it makes the key one `train` can raise), set here and
+        # written in play only by `train`. The lifepath id is stored on NO Person: `capability_of` reads it and
+        # drops it. No fallback and no draw: a row with no `lifepath:`, or one whose template names no key, leaves
+        # `capability` as it was, `{}`.
+        held = cast.capability_of(cast.row(cid) or {}, w.fixtures.get("pool_default"))
+        if held:
+            w.persons[pid].capability = {**held, **w.persons[pid].capability}
 
     # -- WHO BELONGS TO WHAT ----------------------------------------------------
     #

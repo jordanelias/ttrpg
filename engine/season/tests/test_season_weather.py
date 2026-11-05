@@ -491,9 +491,13 @@ DEFAULT = POP.P.DEFAULT_FIXTURES
 # (3ce1f08e) and this one: the ordered (kind, id) event list over two seasons is EQUAL at seeds 0 / 1 / 2 (31452 / 30075 / 31432
 # events), and so is every ledger's claim list with the heritage rows removed; with them present only `seen` claims differ, in
 # their `marks` term alone (158 / 143 / 124 claims). So `BASE_EVENTS` below do not move. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-BASE_HASHES = {0: "d61848d3a174464f9c96fe81fe0204f2",
-               1: "f2e5e265012d1d96333a43ff514d2b13",
-               2: "7fbfbe54dcfa51f0a7f1663acf6550b8"}
+# RE-PINNED ONCE at v10 CR-33 (NPC-088's `lifepath: 3-CF4` holds `inquiry` at `pool_default`: a Person repr; the event list does not
+# move): build d61848d3... -> 6ad7b832..., 1 season f2e5e265... -> 69783660..., 2 seasons 7fbfbe54... -> be2c7f0f.... CONTROL, run in
+# process: `data/cast.py::capability_of` stubbed to `{}` reads the old three exactly; the ordered (kind, id) event list over one season
+# equals the parent tree's (`d5358a9a`) at seeds 0 / 1 / 2 and `BASE_EVENTS` below do not move. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
+BASE_HASHES = {0: "6ad7b832e1e60d3e09724b5043640dff",
+               1: "69783660ea3ca2163bd346ee7e29e711",
+               2: "be2c7f0f1d82d8f785a43f14b1273c2c"}
 
 # THE ONE-SEASON PIN WITH CR-81'S STEP OFF (`build_realm(0, acquaintances=False)`: the hash and the event count and digest
 # `BASE_HASHES[1]` / `BASE_EVENTS[1]` held before CR-81). The `give`-withheld arm's control, below.
@@ -511,7 +515,8 @@ BASE_HASHES = {0: "d61848d3a174464f9c96fe81fe0204f2",
 # commit's four source files reverted read the old value exactly.
 # RE-PINNED ONCE at v10 CR-30 for CR-20 + CR-30 (the Person repr, the heritage rows): 38b4ff49... -> 4cb09ae3...; the event count and
 # digest do not move.
-STEP_OFF_ONE_SEASON = ("4cb09ae32ace132838ae3e723ea21516",
+# RE-PINNED ONCE at v10 CR-33 (NPC-088 holds `inquiry`, a Person repr): 4cb09ae3... -> 8aa6e2e7...; the event count and digest do not move.
+STEP_OFF_ONE_SEASON = ("8aa6e2e785553c4aa679eec170be1c84",
                        (11807, "8dc5b5fb3768ca1fbd9a790a646e32ca7dcc95037972a1aa7579764170415ff0"))
 
 # `build_realm(0)` driven by `POP.run`, seed 0: the whole log's event count and the sha256 of its

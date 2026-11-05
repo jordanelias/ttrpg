@@ -33,9 +33,15 @@ from ..queries import world_q
 from ..state.carriers import Tenure
 from ..state.ids import H, draw_factory
 
-PRE_BUILD = {0: "f2e5e265012d1d96333a43ff514d2b13",
-             1: "0d25717b85d52c4f156136fa724ae46e",
-             2: "05f065f4c917faf3d970f2c50cfd792f"}
+# Re-recorded by CR-33 (it lands after this item, in one batch): carin's `capability` now holds {inquiry: 2},
+# so every Person repr moved. Old (this item's own commit) -> new:
+#   f2e5e265012d1d96333a43ff514d2b13 -> 69783660ea3ca2163bd346ee7e29e711
+#   0d25717b85d52c4f156136fa724ae46e -> d81d7a7377008ddbe4000624e259f4b2
+#   05f065f4c917faf3d970f2c50cfd792f -> 43d2c5249670a51c24c1a102517e9567
+# the same three pins as `test_rem30_character_sheet.py::PRE_BUILD`.
+PRE_BUILD = {0: "69783660ea3ca2163bd346ee7e29e711",
+             1: "d81d7a7377008ddbe4000624e259f4b2",
+             2: "43d2c5249670a51c24c1a102517e9567"}
 
 
 def _realm(retainers=2):
