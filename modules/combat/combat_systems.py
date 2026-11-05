@@ -284,10 +284,6 @@ def close_unwieldiness(c, cfg, grip=None):
     swords move 0 -> 0.27..0.51. `grip` forwards to forward_extent (I3, D3, JD-9); grip_target passes an explicit
     0.0 for its OWN drive input. Pure."""
     return max(0.0, forward_extent(c, cfg, grip) - cfg['CLOSE_ENGAGE_M'])
-def can_choke(c, cfg):
-    """Can the fighter gather in (regrip toward the centre)? DERIVED from the grippable length — a long shaft/grip
-    yes, a short hilt or a block-headed club no. Thin bool over WP.grip_choke_max (the continuous primitive)."""
-    return WP.grip_choke_max(c.w) > 0.0
 def grip_target(c, closed, cfg):
     """The CONTINUOUS grip-position g* in [0,1] the fighter adopts (The Approach — footwork & stance), fully DERIVED
     from morphology — replaces the discrete adopt_stance string ('choke' was g>0, 'normal' g=0). Once the measure is
@@ -1446,7 +1442,3 @@ def bind_dominance_p(bsig):
     """Logistic of the bind net-sigma: P(aggressor dominates this bind iteration). Pure."""
     return core.logistic(bsig)
 
-def disrupt_resist_p(c, cfg):
-    """Concentration disruption-resistance: P(the fighter completes a simultaneous strike despite being hit),
-    logistic in Focus. Pure."""
-    return core.logistic(cfg['DISRUPT_K']*(c.focus-3))
