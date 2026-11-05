@@ -257,9 +257,9 @@ def settle_efforts(cands: list, scores: dict, score: Callable, fx: "Fixtures") -
                 if others is None:
                     others = sorted(scores[id(o)] for o in cands if o is not c)         # ascending
                 beneath = [max(0.0, x) for x in others if x <= raw]
-                net = raw - sum(beneath[-e:])                                   # the `e` best beneath it
-                if net > best_net:
-                    best, best_net, best_score = v, net, raw
+                priced = raw - sum(beneath[-e:])                                   # the `e` best beneath it
+                if priced > best_net:
+                    best, best_net, best_score = v, priced, raw
         kept.append(best)
         kept_scores[id(best)] = best_score
     return kept, kept_scores
