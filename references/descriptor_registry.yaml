@@ -52,9 +52,10 @@ attributes:
     - {key: attr.social.charisma,   name: Presence,   aliases: [Charisma]}
     - {key: attr.social.grace,      name: Grace,      aliases: []}                 # composure, calm, etiquette, manners; NOT the alias 'Composure' (the knot track)
   # RETIRED attribute: NOT in the roster (the count is ten) and still RESOLVED -- `tools/descriptor_registry.resolve`
-  # returns it with `deprecated: true`, so a legacy reference learns it is retired instead of failing silently.
+  # returns it with `deprecated: true` (read from the `deprecated:` list below, the one retirement mechanism), so a
+  # legacy reference learns it is retired instead of failing silently.
   retired:
-    - {key: attr.social.bonds, name: Bonds, aliases: [Sincerity, Affability], deprecated: true, reason: "Not among Jordan's ten (ED-IN-0328); CR-84 dropped it. The oracle systems/fieldwork/sim/knots.py still reads `bonds`."}
+    - {key: attr.social.bonds, name: Bonds, aliases: [Sincerity, Affability]}
 
 # AGGREGATES (W2.8 PLACEHOLDERS) -- computed from category members; NOT yet wired into derived values.
 aggregates:
@@ -242,6 +243,7 @@ by_reference:
 # DEPRECATED.
 # ============================================================================
 deprecated:
+  - {key: attr.social.bonds, reason: "Not among Jordan's ten (ED-IN-0328); CR-84 dropped it. It stays in `attributes.retired` so its names still resolve. The oracle systems/fieldwork/sim/knots.py still reads `bonds`."}
   - {key: resonance_style, reason: "Was the 'most-persuasive mode of argument'. Superseded by contest_style (social_contest Step 2-3) + Conviction-driven interpretation. Never canonically enumerated (player_agency §2 references but does not define it). Retired 2026-06-06 (Jordan). ⚠️ CORRECTION (ED-IN-0025, 2026-07-07, C-VERIFY-20): the 'never canonically enumerated' premise is factually FALSE — npc_behavior_v30.md §1.3's Resonant Style Taxonomy is CANONICAL (approved 2026-04-17) and player_agency_v30.md:71 treats it as live, bidirectional, load-bearing. Whether the retirement should stand given this is a Jordan design call (NEEDS-JORDAN), not re-litigated here; retirement status left unchanged."}
 
 # ============================================================================

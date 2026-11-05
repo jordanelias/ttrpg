@@ -79,8 +79,8 @@ entries:
   attr.body.agility:     {canonical: Coordination, aliases: [Agility, Dexterity], legacy: [], category: attribute, enforce: warn}
   attr.mind.focus:       {canonical: Focus,      aliases: [],                     legacy: [], category: attribute, enforce: warn}
   # `Reason` is ALSO the conviction `conv.reason`: a recorded display collision (names.json `ambiguous`, like `Order`);
-  # the KEY disambiguates, and `context:` is the prose gate's co-occurrence rule for the attribute.
-  attr.mind.acuity:      {canonical: Reason,     aliases: [Acuity, Faculty, Forecasting, Predicting, Reasoning, Cognition], legacy: [], category: attribute, enforce: warn, context: ['\bAttribute\b', '\bFocus\b', '\bPerception\b', '\bAttunement\b', '\bSpirit\b']}
+  # the KEY disambiguates.
+  attr.mind.acuity:      {canonical: Reason,     aliases: [Acuity, Faculty, Forecasting, Predicting, Reasoning, Cognition], legacy: [], category: attribute, enforce: warn}
   attr.mind.will:        {canonical: Spirit,     aliases: [Will, Willpower],      legacy: [], category: attribute, enforce: warn}
   attr.mind.perception:  {canonical: Perception, aliases: [],                     legacy: [], category: attribute, enforce: warn}
   attr.social.attunement: {canonical: Attunement, aliases: [],                    legacy: [], category: attribute, enforce: warn}
@@ -88,7 +88,7 @@ entries:
   attr.social.charisma:  {canonical: Presence,   aliases: [Charisma],  legacy: [], category: attribute, enforce: warn}
   attr.social.grace:     {canonical: Grace,      aliases: [],          legacy: [], category: attribute, enforce: warn}
   # RETIRED by CR-84 (not among the ten): the row stays so the names still resolve; the deprecation flag is the
-  # descriptor_registry's `attributes.retired` (tools/descriptor_registry.resolve), not a field here.
+  # descriptor_registry's `deprecated:` list (read by tools/descriptor_registry.resolve), not a field here.
   attr.social.bonds:     {canonical: Bonds,      aliases: [Sincerity, Affability], legacy: [], category: attribute, enforce: warn}
 
   # ── AGGREGATES (mirror: descriptor_registry.yaml aggregates; placeholders) ────

@@ -32,7 +32,8 @@ surfacing as a wrong faction in a generated NPC:
 THE REMAINING ONE -- check (3) in the body, and the numbering is worth saying out loud because
 the four refused are (1), (2), (4) and (5) -- IS RECORDED, NOT REFUSED, and the asymmetry is the
 honest part. Two entries claiming one
-display string is real here and not a typo: `Order` is a Conviction AND a settlement stat,
+display string is real here and not a typo: `Order` is a Conviction AND a settlement stat, and `Reason`
+is a Conviction AND an attribute (CR-84),
 (`Stability` was a faction stat AND a mechanic until `29b`.) Refusing would force a merge that deletes a real
 quantity, so they go into an `ambiguous` block and `engine/substrate/names.py` raises on resolving
 one -- `descriptors.json`'s `unimplemented` precedent, which records a gap where an instrument

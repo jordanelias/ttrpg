@@ -52,7 +52,7 @@ def resolve(reg, name_or_key):
     for e in (reg['attributes'].get('retired') or []):
         if (e['key'].lower() == n or e['name'].lower() == n
                 or any(a.lower() == n for a in e.get('aliases', []))):
-            return {**e, 'domain': 'actor', 'kind': 'attribute_scalar', 'deprecated': True}
+            return {**e, 'domain': 'actor', 'kind': 'attribute_scalar', 'deprecated': is_deprecated(reg, e['key'])}
     return None
 
 

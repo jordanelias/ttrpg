@@ -75,6 +75,34 @@ def _names_lost():
     return lost
 
 
+def _index_rows():
+    """`names_index.yaml`'s rows by key, wherever they sit in the file."""
+    import yaml
+    found = {}
+
+    def walk(node):
+        if isinstance(node, dict):
+            for k, v in node.items():
+                if isinstance(v, dict) and 'canonical' in v:
+                    found[k] = v
+                else:
+                    walk(v)
+    walk(yaml.safe_load((REPO / 'references' / 'names_index.yaml').read_text()))
+    return found
+
+
+def test_the_reason_group_is_held_by_the_attribute_row_and_not_the_conviction_row():
+    """`Reason` is two rows' display string, so the display-level check above cannot tell which row
+    holds `Acuity` (both display 'Reason'): a name moved onto `conv.reason` would stay green there.
+    This one reads the KEY: every pre-CR-84 name of `attr.mind.acuity` sits on that row."""
+    rows = _index_rows()
+    held = {rows['attr.mind.acuity']['canonical'], *rows['attr.mind.acuity']['aliases']}
+    for name, key in _PRE_CR84.items():
+        if key == 'attr.mind.acuity':
+            assert name in held, name
+            assert name not in {rows['conv.reason']['canonical'], *rows['conv.reason']['aliases']}, name
+
+
 def test_every_attribute_name_that_resolved_before_still_resolves_to_the_same_key():
     assert _names_lost() == []
     assert N.canonical_for('Perception') == N.CANONICAL['attr.mind.perception'] == 'Perception'
