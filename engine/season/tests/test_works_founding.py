@@ -620,8 +620,9 @@ def test_rem25_found_and_build_form_on_the_works_the_maker_holds_and_a_text_form
     the unclassed formation's did: `rung.founded` for the hearth under `found`, `site.built` for the
     dwelling under `build`, each verb's other works refused by its own effect. A question merely ABOUT a
     Record (a later question) carries no class and forms neither. THE CONTROL, the same body with the
-    Records declared `text`: a text is no holding kind, no question carries a `Record` and neither verb
-    forms for anyone on any question."""
+    Records declared `text`: a text is no holding kind, so the Record is no holding-record referent; since CR-10 the
+    maker's own tier-1 act claim about his text still stamps it (REM-21's kind-blind own-referent term), so a formation
+    can exist and is REFUSED by the fold (`found.refused` / `build.refused`), and nothing is founded or built."""
     w, d = _maker_declares_two_works(kind)
     p = w.persons[ABSENT]
     qs = world_q.questions_for(w, p)

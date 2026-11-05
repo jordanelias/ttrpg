@@ -116,15 +116,6 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
     per_round = w.fixtures.get("scenes_per_round")
     w._in_parallel_map = True       # S51: WorkerThreadPool over persons. The one that pays.
     ext = w.fixtures.get("extended_scene_cost")
-    # CR-17: THE BELIEVED-ODDS QUERY each person is handed on his View (`View.odds`). One closure over the
-    # frozen store for the whole map (`believed_odds_query`): `believed_chance` is read-only and reads only the asker's own record
-    # (mode (b) of `odds_of`) beside the act's shape, so the chooser holds a callable and never the store
-    # (AX-2), and `choose` keeps its four parameters. Whether it is ASKED is `Fixtures.odds_weighting`'s
-    # (`decision/choose.py::odds_weight`); at `none` nothing calls it and the closure costs a lambda.
-    # [ASSUMPTION; medium; Jordan to correct: a frozen-store read made during DELIBERATE, as `sense` makes
-    # one (`04` §A.2: "for `sense` only"); the alternative, a per-person projection built at barrier 2 as
-    # `questions_for` is, would have to enumerate the candidates before the chooser forms them]
-    odds = believed_odds_query(w)
     for p in list(w.persons.values()):
         s = sense(p, w)                         # a Sensation, per S26's signature
         # §F1 / `H-04`. `q` HAS A PRODUCER NOW. Rev 3 took the question as an injected
@@ -143,7 +134,17 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
         # what every NPC does first. The rule is data now; `first` is the incumbent kept as
         # the sweep's control.
         q_p = question if question is not None else aggregate_questions(qs, q_rule)
-        v = decision.assemble(p, q_p, k_view, questions=qs, odds=odds)
+        # CR-17: THE BELIEVED-ODDS QUERY on his View (`View.odds`), bound to him (`believed_odds_query(w, p)`):
+        # `believed_chance` is read-only and reads only the asker's own record (mode (b) of `odds_of`) beside the
+        # act's shape, so the chooser holds a callable answering for its holder and never the store (AX-2), and
+        # `choose` keeps its four parameters. Whether it is ASKED is `Fixtures.odds_weighting`'s
+        # (`decision/choose.py::odds_weight`); at `none` nothing calls it and the closure costs a lambda.
+        # `04` §A.2 gives this loop the frozen store "for `sense` only" and §C.11 says the View adds nothing:
+        # the two rows are read here as admitting a host-made query on the View, the pick `layer-conformance` B4
+        # asks to be named at the site; a per-person projection built at barrier 2 would have to enumerate
+        # the candidates before the chooser forms them. [ASSUMPTION; medium; revert: `odds_weighting` -> `none`,
+        # one re-pin (H-248)]
+        v = decision.assemble(p, q_p, k_view, questions=qs, odds=believed_odds_query(w, p))
         # S26.3: the PERSON asks their own budget. `choose` receives the QUERY, not the
         # answer -- rev 2 computed it in the engine and handed the number down, which is
         # the half of retraction 5 that never landed.

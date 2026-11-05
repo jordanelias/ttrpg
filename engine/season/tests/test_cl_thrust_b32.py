@@ -304,3 +304,26 @@ def test_the_authored_ladder_reaches_the_realm_and_its_stage_referent_hit_rate_i
                           f"(stage {r['stage']}, formed {r['formed']}, refusals {dict(r['refused'])})")
     print(f"\nstage-referent hit rate: {r['hit']}/{r['stage']} stage deliberations "
           f"({r['formed']} formed a candidate), over {r['deliberations']} deliberations; refusals {dict(r['refused'])}")
+
+
+def test_the_realm_reading_sees_the_term_stubbed_and_news_told_is_read_against_no_ladder(ladder_run):
+    """THE CONTROLS THE FALSIFIER NAMES, run on the realm. (i) `stage_referents` stubbed to `()` (the ladder kept): the
+    stage deliberations and the hits FALL (measured at seed 0, one season: stage 89 -> 51, hit 67 -> 48), so the count
+    observes the term and not the ambition's plain `need` question alone. (ii) `news.told` against `goal_stages: []`
+    (measured 4 against 3 at the same world): the card reads it as within the seed spread, so it is asserted to differ
+    by at most one telling, not as a mover."""
+    r = ladder_run
+    orig = world_q.stage_referents
+    world_q.stage_referents = lambda w, p, ambs=None: ()
+    try:
+        with goals.rows_replaced(goals.parse(authored_realm_doc())):
+            stubbed = stage_run(populated.build_realm(0), 1)
+    finally:
+        world_q.stage_referents = orig
+    assert stubbed["stage"] < r["stage"] and stubbed["hit"] < r["hit"], (
+        f"the stub moved neither count: the realm reading cannot see the stamp ({stubbed['stage']}/{stubbed['hit']} "
+        f"against {r['stage']}/{r['hit']})")
+    with goals.rows_replaced(goals.parse(yaml.safe_load(files.GOALS_YAML.read_text(encoding="utf-8")))):
+        bare = stage_run(populated.build_realm(0), 1)
+    assert bare["stage"] == 0, "no ladder, so no stage referent: the control must read zero"
+    assert abs(r["told"] - bare["told"]) <= 1, (r["told"], bare["told"])

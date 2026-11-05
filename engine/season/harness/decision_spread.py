@@ -393,7 +393,6 @@ def read_decisions(w) -> dict:
     w._rehome()
     fx = w.fixtures
     draw = draw_factory(w.world_seed, lambda: w.tick)
-    odds = believed_odds_query(w)          # CR-17: the query the chooser's View carries, so the reading scores as it does
     rows = []
     foldable = resolvable_verbs()
     total = new_split()
@@ -408,7 +407,8 @@ def read_decisions(w) -> dict:
         order = sorted(common, key=lambda k: (k[0], k[1] or ""))
         for pid in keyed:
             cands = [keyed[pid][k] for k in order]
-            r = attribute_top(w.persons[pid], cands, fx, draw, odds)
+            r = attribute_top(w.persons[pid], cands, fx, draw,
+                              believed_odds_query(w, w.persons[pid]))   # CR-17: the query his View carries
             deciders[r["decider"]] += 1
             tally_split(split, pid, r)
             tally_split(total, pid, r)

@@ -434,12 +434,14 @@ def believed_chance(w: Any, believer: Any, act: Any, bands: Any) -> Optional[flo
     return sum(odds[n] for n in held)
 
 
-def believed_odds_query(w: Any):
-    """THE QUERY THE CHOOSER IS HANDED (`View.odds`): `believed_chance` closed over `w`, as `(person, act, bands)
-    -> chance or None`. The ONE place the closure is made -- `loop/deliberate.py` hands it to every person's View
-    and the harness readings that score a person outside `choose` (`harness/decision_spread.py`,
+def believed_odds_query(w: Any, holder: Any):
+    """THE QUERY THE CHOOSER IS HANDED (`View.odds`): `believed_chance` closed over `w` and BOUND TO `holder`, as
+    `(act, bands) -> chance or None`. The query answers for its holder alone (`04` §20, the own-ledger rule: a
+    person's View carries his own record): it takes no person, so nothing downstream can ask it for another's
+    belief. The ONE place the closure is made -- `loop/deliberate.py` hands it to every person's View and the
+    harness readings that score a person outside `choose` (`harness/decision_spread.py`,
     `harness/interactions.py`) take it from here, so the figure they read is the figure the chooser reads."""
-    return lambda person, act, bands: believed_chance(w, person, act, bands)
+    return lambda act, bands: believed_chance(w, holder, act, bands)
 
 
 @provider("contest", _PROVIDER)

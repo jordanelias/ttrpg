@@ -564,7 +564,9 @@ def _counts(w) -> dict:
 # and commit 2 re-derives `choice_temperature` 0.1 -> 0.05 (H-96). AT COMMIT 1 ALONE (measured on a scratch harness) seed 0 reads
 # the block below it held exactly, seed 1 moves (`new` 1081dd4f... -> f9ac3028..., `acts` 657 -> 658, `log` 13085 -> 13083) and seed 2
 # reads the old block. AT COMMIT 2 all three seeds move: for seeds 0 / 1 / 2 `acts` 619 / 657 / 658 -> 685 / 673 / 715, `log`
-# 10316 / 13085 / 12898 -> 11775 / 10540 / 10566, `persons` 79 / 80 / 80 -> 77 / 80 / 80. Was, for seeds 0 / 1 / 2: `old` e700e9ef... /
+# 10316 / 13085 / 12898 -> 11775 / 10540 / 10566, `persons` 79 / 80 / 80 -> 77 / 80 / 80, and seed 0's `offices` 35 -> 34: CR-25's season-1 founding no longer
+# occurs on seed 0 at tau 0.05, so no realm run shows a computed `establish` executing at HEAD (CR-25's falsifier is the
+# hand-built world). Was, for seeds 0 / 1 / 2: `old` e700e9ef... /
 # 4f06a8fe... / 8f4851b1..., `new` bdff0832... / 1081dd4f... / 37db6d14..., `census` bdce26ba... / 264d73dd... / b60a0405....
 # CONTROL, run in process on this tree: `odds_weighting` swept to `none` and `choice_temperature` to 0.1 reads the old three
 # entries' `new`, `acts` and `log` at seeds 0 / 1 / 2 (bdff0832... / 1081dd4f... / 37db6d14...; 619 / 657 / 658; 10316 / 13085 /

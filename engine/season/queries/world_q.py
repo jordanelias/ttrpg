@@ -3353,7 +3353,9 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None,
     ⚠ READS ONLY THE QUESTION AND `p`'S OWN STATE: his edges, ledger (a held claim's `doer` among it)
     and pursuits, the stores those edges name (a proposition's subject, a seat's rung and its
     descendants) and the scar-shift arm (`Fixtures.scar_weight_shift`, the value `choose` projects
-    with). Never the log, never another person, never how important an event is (intent:
+    with). Never the log, never another person EXCEPT through the aim rule of an open stage (B3.2:
+    `salience` -> `open_stages` -> `aim_state` reads who holds the rung; dormant while `goal_stages` is empty), never how
+    important an event is (intent:
     `07_DYNAMICS.md` §7).
     [ASSUMPTION; medium; Jordan to correct -- the five membership tests and the own-act screen.
     The entry's tier 0 put the `need` question first; that arm (measured, `build_realm(0)`, two
@@ -3363,7 +3365,7 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None,
     on his ambition's subject -- chiefly its refusal (`release.refused`, `migrate.refused`,
     `travel.blocked`) -- and acted on that subject again: 80% of first claim questions were his own
     act's echo (34% before IN-57), and the corpus's R3 propagation fell 46 -> 43 of 46 NPC cases and
-    97 -> 91 of 97 ARC cases; the screen restores 46/46 and 97/97. With the screen the corpus
+    97 -> 91 of 97 ARC cases; the screen restored 46/46 and 97/97 at IN-57; with CR-10's arm D2 the corpus reads 38 / 43 / 39 of 46 at seeds 0-2 (R3 ARC 87 -> 86 at seed 2). With the screen the corpus
     still shows combat high (felled 82, wounded 116 against base 47/66), through `accept` forming
     with no challenge behind it (HANDOFF_IN's accept residue): the screen did not restore that.
     Revert: the screen off (B), the

@@ -90,8 +90,8 @@ def _query(chance):
     """A believed-odds query that answers `chance` for every act and remembers what it was asked."""
     asked = []
 
-    def odds(person, act, bands):
-        asked.append((person.id, act.verb, tuple(bands)))
+    def odds(act, bands):
+        asked.append((act.actor, act.verb, tuple(bands)))
         return chance
     odds.asked = asked
     return odds
@@ -208,17 +208,21 @@ def test_two_pools_give_two_believed_chances_and_two_rankings(cells, monkeypatch
     # the rival's cell sits between the two chances (the pursuit weight scales both sides alike), so the real
     # figures part the rankings
     cells[AXIS][RIVAL] = (chance[sure.id] + chance[unsure.id]) / 2
-    query = lambda person, act, bands_: sigma.believed_chance(w, person, act, bands_)
-    ranks = {p.id: _ranked(p, "believed", query, monkeypatch) for p in (sure, unsure)}
+    query = {p.id: sigma.believed_odds_query(w, p) for p in (sure, unsure)}       # each bound to its holder
+    ranks = {p.id: _ranked(p, "believed", query[p.id], monkeypatch) for p in (sure, unsure)}
     assert ranks[sure.id] == ["argue", RIVAL] and ranks[unsure.id] == [RIVAL, "argue"], (chance, ranks)
-    assert _ranked(sure, "none", query, monkeypatch) == _ranked(unsure, "none", query, monkeypatch)
+    assert (_ranked(sure, "none", query[sure.id], monkeypatch)
+            == _ranked(unsure, "none", query[unsure.id], monkeypatch))
+    # a holder-bound query answers for its holder alone: asked about another's act it is `None`, not his belief
+    other = Act("a:other", unsure.id, "argue", payload={"subject": "prop_x", "to": HEARER})
+    assert query[sure.id](other, bands) is None
 
 
 def test_another_modules_prize_and_a_foreign_actor_are_unknown_not_a_figure():
     w = _world()
     p = w.persons["p_low"]
     fight = Act("a:fight", p.id, "fight", payload={"subject": "p_mid"})
-    assert sigma.believed_chance(w, p, fight, ("Felled",)) is None            # the body is combat's, not the dice here
+    assert sigma.believed_chance(w, p, fight, (DEGREE_LABEL[Degree.SUCCESS],)) is None   # the body is combat's, not the dice here
     argue = Act("a:argue", "p_mid", "argue", payload={"subject": "prop_x", "to": HEARER})
     assert sigma.believed_chance(w, p, argue, (DEGREE_LABEL[Degree.SUCCESS],)) is None          # another's pool is not his to know
     own = Act("a:argue2", p.id, "argue", payload={"subject": "prop_x", "to": HEARER})
@@ -241,7 +245,7 @@ def test_a_driver_season_hands_every_view_a_working_query():
     for p, v in views:
         assert callable(v.odds)
         act = Act(f"a:{p.id}", p.id, "argue", payload={"subject": "prop_x", "to": HEARER})
-        got = v.odds(p, act, (DEGREE_LABEL[Degree.SUCCESS],))
+        got = v.odds(act, (DEGREE_LABEL[Degree.SUCCESS],))
         assert got is None or 0.0 <= got <= 1.0
         answered += got is not None
     assert answered >= 1, "the query never answered a figure: it may be wired to a constant None"

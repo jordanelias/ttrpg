@@ -51,6 +51,24 @@ def test_the_re_read_table_is_the_choosers(season_one):
     assert acts and all(r["deliberation"] is not None for r in acts)
 
 
+def test_the_logged_scores_carry_the_believed_odds_factor(monkeypatch):
+    """The membership check cannot see a score: a reader that dropped `View.odds` would pass it. Planted: the reader's
+    `score_terms` call made with no query (the game's own chooser is left alone) moves the logged scores of some
+    deliberations (28 of 328 at seed 0, one season), so the shipped log is sensitive to the query it reads."""
+    import types
+    from ..decision import choose as CH
+    shipped = [r for r in I.run(0, 1)[2] if r["kind"] == "deliberation" and r["candidates"]]
+    real = CH.score_terms
+    shim = types.SimpleNamespace(**{k: v for k, v in vars(CH).items() if not k.startswith("__")})
+    shim.score_terms = lambda p, c, fx, memo, odds=None: real(p, c, fx, memo, None)
+    monkeypatch.setattr(I, "CH", shim)
+    dropped = [r for r in I.run(0, 1)[2] if r["kind"] == "deliberation" and r["candidates"]]
+    assert len(shipped) == len(dropped) > 0
+    moved = sum(1 for a, b in zip(shipped, dropped)
+                if [c["score"] for c in a["candidates"]] != [c["score"] for c in b["candidates"]])
+    assert moved >= 1, "a reader that dropped the believed-odds query logs the same scores: the log cannot see it"
+
+
 def test_a_planted_wrong_relation_reading_is_seen(monkeypatch):
     real = I.same_faction
     monkeypatch.setattr(I, "same_faction", lambda w, a, t: not real(w, a, t))

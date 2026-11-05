@@ -9966,8 +9966,8 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
     # [GROUNDED: measured at v10 CP-T03-00, the 27 NPC rung cases, seed 0, 3 seasons -- `attempt_cases` 22 at `68767e731`, 12 with the item; deaths 31 -> 44; the 10 lost cases started with 3 persons and ended with 1 or 2]
     # [JUSTIFIED: a COLLAPSE FLOOR over a lane count, not a game value -- SUPERSEDES the 15 above: 12 of the 27 NPC rung cases produce a telling attempt once a felled attacker is written (measured at v10 CP-T03-00, seed 0, 3 seasons), and this sits three below it, the ~3/4 proportion of the two floors before it; revert: 15, with the item reverted]
     # ⚠⚠ **9 -> 6, v11 CR-17 (B10-09 close two; `choice_temperature` 0.1 -> 0.05, H-96), AND THE CAUSE IS THE SAMPLER, NOT THE TRANSPORT -- READ OFF THE
-    # SHAPE, NOT ISOLATED.** MEASURED on this tree: `attempt_cases` 8 of the 27 NPC rung cases (12 at CP-T03-00 per the note above; the parent
-    # tree passed the floor of 9 and its own figure was not printed). `tell` is an UNCELLED verb (score 0 for every person), and a colder draw lifts a
+    # SHAPE, NOT ISOLATED.** MEASURED on this tree: `attempt_cases` 8 of the 27 NPC rung cases (12 at CP-T03-00 per the note above and 12 at the parent, the CR-82 note below;
+    # the parent tree passed the floor of 9). `tell` is an UNCELLED verb (score 0 for every person), and a colder draw lifts a
     # zero-scored verb above the celled ones less often [ASSUMPTION; low: not isolated; corpus-wide, `tell` executes in 44 -> 34 live worlds and
     # `speak` in 1 -> 0, the `ever` note above]. The telling transport is untouched (`checked`, the referent loop, still runs). The floor is
     # re-set by the proportion the CP-T03-00 note above used, ~3/4 of the measurement (8 -> 6), and is NOT deleted. THIS IS A FINDING FOR THE
@@ -10002,10 +10002,10 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
     # 3, 12, 4 against 32, deaths 44, longest ledger 455. Attempts barely move (40 -> 36) and H-126/H-127 are not in the
     # diff; two fewer successes out of ~40 rolls at ~13% is within the sampling the 2026-09-29 note above describes. The
     # floor keeps that note's proportion (about half the measurement) and still goes red at zero successes, which is the
-    # vacuity it exists for. [ASSUMPTION; medium; orchestrator to confirm; revert: 4, with the cap back to 200]
+    # vacuity it exists for. [ASSUMPTION; medium; Jordan to correct; revert: 4, with the cap back to 200. The floor is 2 of a measured 3 at 12 attempts; at CR-17 the attempts fell to 8 and `told_cases` was not re-read]
     assert told_cases >= 2, (
         f"only {told_cases} of the 27 NPC rung cases produced a SUCCESSFUL telling — 7 did on "
-        "2026-09-29 under position `11a` (down from 15 pre-`11a`), 16 after `T4`. The referent checks above run only "
+        "2026-09-29 under position `11a` (down from 15 pre-`11a`), 16 after `T4`, 3 at v11 CR-82 (floor 2). The referent checks above run only "
         "on `news.told`, so this is "
         "what keeps them from asserting nothing. A fall here is the σ roll getting harder, not "
         "the transport breaking: look at `H-126` (`pool_default`) and `H-127` (`obstacle_default`) "
@@ -13216,7 +13216,7 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # `comply|construe|evade / defy|exchange|transfer` on `rec:d9d40b704618a215` (five), by the act mix the colder draw moves. The 15 others
     # survive. The clause still fires.
     assert len(dropped) == 26, (
-        f"{len(dropped)} executable clause-4 drops, not 24. The drops are the channel itself; if "
+        f"{len(dropped)} executable clause-4 drops, not 26. The drops are the channel itself; if "
         "this falls toward zero the clause has stopped firing, which is a different and worse "
         "failure than the loss of outcome-relevance recorded above.")
     # ⚠⚠⚠ **THE BITE CAME BACK UNDER G1a, THE GUARD ABOVE DEMANDED A REASON, AND THE REASON IS
@@ -13825,7 +13825,7 @@ def _wd_arm9():
     return A9
 
 
-def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_at_the_control():
+def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default():
     """**`W-D`'s ACCEPTANCE, PINNED ON A DETERMINISTIC SLICE.**
 
     THE QUESTION. The forking exercise (`runs/arm9.json`, seed 0, 4 seasons, 89 worlds) flipped
@@ -14109,10 +14109,8 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # lose more of them]. THE ASSERTION IS WEAKENED to the acceptance's original floor
     # (`actor` > 0, the form this test carried before position `11a`), not to a count; the inversion is CR-17's finding, and whether it
     # wants an arm that holds the sampler's noise fixed is not decided here. CONTROL: the parent tree (`f4b74ffa`) passes the `>=`.
-    assert got["actor"]["diverged"] > 0, (
-        f"`W-B`'s channel diverges no fork at the shipped arm: {got}. The deposit channel reaches no later "
-        "decision in this slice; the inequality against the control that stood here was given up at v11 CR-17 "
-        "(see the block above), the floor was not")
+    # (the `> 0` floor that stood here is entailed by the exact `== (24, 1)` pin below, so it is not asserted twice; the
+    # inequality against the control was given up at v11 CR-17 and is owned by H-96's cite)
     # ⛔⛔ THE ACCEPTANCE ASSERTED `got["actor"]["diverged"] > 0` AND IT FIRED ON THE `R7` FAN-OUT
     # FLIP (2026-09-07). **THIS IS THE ONE PLACE THE FLIP COSTS SOMETHING, AND IT IS RECORDED AS A
     # LOSS RATHER THAN RE-PINNED AS A FACT.** Measured, same slice, same seed, both variables:
@@ -14800,12 +14798,12 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # changes on top of it, `W-B` has stopped reaching a decision"* — and it has, at this
     # resolution, on this 16-fork slice. It is recorded rather than relaxed, and the arm is not
     # re-chosen on it: see the reasoning at
-    # `test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_at_the_control`,
+    # `test_wd_a_fork_changes_a_later_decision_at_the_shipped_default`,
     # where the same loss is pinned and `H-54`'s hash-ordering result is why 16 forks cannot
     # overturn `19_PLAN.md` step 1's choice of arm.
     # ⚠⚠⚠ **EXACT PARITY, POSITION `11a` (`reach`/`place_of`), 2026-09-29 — `>` BECOMES `>=`, THE
     # SAME FINDING AND THE SAME FIX AS THE SIBLING TEST'S NEGATIVE-CONTROL BLOCK
-    # (`test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_at_the_control`),
+    # (`test_wd_a_fork_changes_a_later_decision_at_the_shipped_default`),
     # RE-ARGUED RATHER THAN QUIETLY RE-PINNED AS THIS MESSAGE DEMANDS.** This instrument shares
     # `NPC-088`, seed 0, the same cell and the same Q2/Q4 mechanism with that test — `11a` widens
     # `claim_landed`'s own admission test, and at this slice it now supplies exactly as much
@@ -14825,9 +14823,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # `wide` reads `none` 5 · `actor` 1 · `total` 1 and `verbonly` the same 5 / 1 / 1 (genuine forks 33 / 24 / 22). The assertion is
     # WEAKENED to `actor` `wide` > 0, the acceptance's original floor, and the inversion is recorded as CR-17's finding. CONTROL: the
     # parent tree (`f4b74ffa`, tau 0.1) passes the `>=`.
-    assert got["actor"]["wide"] > 0, (
-        f"the shipped default diverges no fork at SUBJECT-level: {got}. The inequality against the control "
-        "was given up at v11 CR-17 (see the block above); the floor was not")
+    # (the `> 0` floor is entailed by the exact pin below; the inequality against the control is owned by H-96's cite)
     # ✅ **0 -> 14, ED-FI-0009, 2026-09-10 — THE VERB-SET HALF IS BACK, AND THE TWO HALVES HAVE
     # CONVERGED.** This test's guard is *"if `actor` ever stops adding VERB-SET changes on top of
     # it, `W-B` has stopped reaching a decision"*, and what restored it is what the sibling test's

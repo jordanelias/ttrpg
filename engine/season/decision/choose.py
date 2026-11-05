@@ -133,7 +133,7 @@ def odds_weight(p: Person, c: Candidate, fx: "Fixtures", odds: Optional[Callable
 
       * `none` (CONTROL) -- 1.0 for every candidate: the term as it stood before CR-17;
       * `believed` -- for a candidate whose verb CONTESTS something (`row.contests`) and writes in at least
-        one band (`row.writes_by_degree`, a map from band to its write list), `odds(p, act, bands)` over
+        one band (`row.writes_by_degree`, a map from band to its write list), `odds(act, bands)` over
         the bands whose list is non-empty: the sum of the person's believed chances of those bands, which is
         what his pursuit-priced cells are worth if the roll lands there and nothing if it does not. An
         uncontested verb, a contested one that writes in no band, and an answer of `None` (a factor he
@@ -157,7 +157,7 @@ def odds_weight(p: Person, c: Candidate, fx: "Fixtures", odds: Optional[Callable
     bands = tuple(b for b, written in row.writes_by_degree.items() if written)
     if not bands:
         return 1.0
-    chance = odds(p, Act(f"odds:{c.verb}", p.id, c.verb, payload=_payload_of(c), via=seat_of(p, c)), bands)
+    chance = odds(Act(f"odds:{c.verb}", p.id, c.verb, payload=_payload_of(c), via=seat_of(p, c)), bands)
     return 1.0 if chance is None else float(chance)
 
 

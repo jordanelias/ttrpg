@@ -13,9 +13,10 @@ terms), `choose.score_order` + `choose.sample_order` (the ranking and the Gumbel
 `decision_spread.attribute_top` (the deciding term). `harness/decision_spread.py::play_season` is the same
 shape. NO HOOK IS ADDED TO `decision/choose.py`: the draw is keyed per candidate (`state/ids.py::draw_factory`
 re-seeds from `(seed, tick, person, purpose)`), so a second reading consumes nothing. Whether the
-re-read table IS the chooser's table is checked, not assumed: every act the chooser returned must match a
+re-read table IS the chooser's table is checked for MEMBERSHIP, not assumed: every act the chooser returned must match a
 candidate of the re-read table by its minted id (`table_check`), and `test_interactions_log.py` asserts zero
-misses. `World.content_hash()` with the observer on equals the hash with it off (same test).
+misses. The SCORES are the reader's own composition of the same owners (it reads `View.odds` as the chooser does); a
+test pins that they respond to the believed-odds query, not that they equal the chooser's, which exposes no score. `World.content_hash()` with the observer on equals the hash with it off (same test).
 
 ROWS (JSONL, one object per line, `kind` first):
   * `deliberation` -- every call of `choose` (a person with no question gets a row with `question: null`):

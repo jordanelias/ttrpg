@@ -1586,10 +1586,10 @@ def _remit_acts_attribute_reads_outside_allowlist() -> list:
     return violations
 
 
-def test_13e_no_remit_acts_attribute_read_outside_the_three_allow_listed_sites():
+def test_13e_no_remit_acts_attribute_read_outside_the_allow_listed_sites():
     """**THE POSITION'S FALSIFIER, AST CLAUSE.** Before this position, `loop/resolve.py`'s
     `_eligible` and `epistemic.py`'s `_ch_post_remit` were a fourth and fifth reader of
-    `Office.remit_acts`, beyond the three this scan allow-lists; this test observes their absence
+    `Office.remit_acts`, beyond the four this scan allow-lists (the fourth is CR-25's `_req_establish`, which reads the DESCRIBED office); this test observes their absence
     now that both read `t.granted_acts` instead. A fourth reader is PLANNED
     (`budget()` counting `t.granted_acts`, not `Office.remit_acts` -- not this position's job), so
     this pins the CURRENT set to catch a future regression back onto the office-side field rather
@@ -1597,7 +1597,7 @@ def test_13e_no_remit_acts_attribute_read_outside_the_three_allow_listed_sites()
     violations = _remit_acts_attribute_reads_outside_allowlist()
     assert violations == [], (
         f"`Office.remit_acts` read as an attribute outside `_grant_remit`/`Office.__post_init__`/"
-        f"`_eff_establish` at {violations} -- position `13e` consolidated every consumer onto "
+        f"`_eff_establish`/`_req_establish` at {violations} -- position `13e` consolidated every consumer onto "
         f"`Tenure.granted_acts`")
 
 

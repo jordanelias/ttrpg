@@ -236,7 +236,7 @@ DEFAULT_FIXTURES = Fixtures(
     # the year (ED-IN-0332): 202 and 196 of 236 (1600 holds 75 and 116); seed 2, read at 3200
     # only, holds 185. ⚠ 3200 BUYS TIME, NOT
     # RETENTION: the ledger grows with the horizon and does not plateau (longest 2506, 2074 and
-    # 2178 at season 8, 3988 at season 12 on seed 0), so at this value the cap is not reached through
+    # 2178 at season 8, 3988 at season 12 on seed 0 at cap 6400), so at this value the cap is not reached through
     # season 8 and eviction does not run; on the measured growth it binds near season ten, and
     # then the comparator forgets the oldest first again. That figure is extrapolated, not
     # measured. The next lever is a selective eviction rule (a change to the S20/S34
@@ -299,7 +299,7 @@ DEFAULT_FIXTURES = Fixtures(
     # to express. ⚠ RE-DERIVE THIS IF `U3` LANDS: a denser alignment table means fewer ties, which
     # moves what tau is doing.
     #
-    # ⚠ RE-DERIVED AT v10 CR-17 (B10-09 close two, its last commit), 0.1 -> 0.05, BY THE RULE THE CARD STATES AND NOT
+    # ⚠ RE-DERIVED AT v11 CR-17 (B10-09 close two, its last commit), 0.1 -> 0.05, BY THE RULE THE CARD STATES AND NOT
     # BY TUNING: H-96's `sweep:` gained 0.01 / 0.02 / 0.03 / 0.05, and tau is the LARGEST grid value at which REM-12's
     # split (`harness/decision_spread.py --decisions`, the built realm, seeds 0-2) reads the sampler's top as the strict
     # score leader in MORE THAN ONE HALF of the readings, among persons holding a pursuit vector (every person since
